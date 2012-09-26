@@ -9,7 +9,7 @@
         </Reference>
       </ItemGroup>
     </When>
-	<When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' == 'Release' ">
+    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' == 'Release' ">
       <ItemGroup>
         <Reference Include="Qorpent.Bxl">
           <SpecificVersion>False</SpecificVersion>

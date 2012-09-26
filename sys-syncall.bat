@@ -1,3 +1,9 @@
+set sys=%~n0
+if '%sys%' == 'sys-syncall' (
+	cd ..
+) 
+
+
 for /D %%1 in (*) do (
 	cd %%1
 	git pull
@@ -22,3 +28,7 @@ for /D %%1 in (*) do (
 
 
 )
+
+if '%sys%' == 'sys-syncall' (
+	cd qorpent.sys
+) 

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Choose>
-    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' != 'Release' and Exists('$(AllBinPath)\Qorpent.IoC.dll')  ">
+    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' != 'Release'  and Exists('$(AllBinPath)\Qorpent.IoC.dll')">
       <ItemGroup>
         <Reference Include="Qorpent.IoC">
           <SpecificVersion>False</SpecificVersion>
@@ -9,7 +9,7 @@
         </Reference>
       </ItemGroup>
     </When>
-	<When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' == 'Release' ">
+    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' == 'Release' ">
       <ItemGroup>
         <Reference Include="Qorpent.IoC">
           <SpecificVersion>False</SpecificVersion>
