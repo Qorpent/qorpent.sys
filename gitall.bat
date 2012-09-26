@@ -16,7 +16,7 @@ if '%1' == 'push' (
 
 for /D %%1 in (*) do (
 	cd %%1
-	git push
+	git push --all
 	cd ..
 )
 
