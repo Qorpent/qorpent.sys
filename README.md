@@ -13,6 +13,9 @@ Enjoy Qorpent, and make your solution clear!
 
 qorpent.sys is a kernel, main package of Qorpent that must existed in Qorpent-based solution
 
+To simplify managing u can setup some usefull build/install utils with:
+* on windows (7/2008S and higher) - run win-init.bat
+
 
 
 
@@ -32,3 +35,7 @@ Qorpent - эффективный и современный программны�
 
 qorpent.sys это корневой, обязательный к установке пакет Qorpent, включающий в себя основные библиотеки ядра и инфраструктуру
 для построения приложений и их развертывания
+
+Для облегчения процесса разработки и развертывания:
+
+* Для Windows (7/2008S и выше) - запустите win-init.bat
