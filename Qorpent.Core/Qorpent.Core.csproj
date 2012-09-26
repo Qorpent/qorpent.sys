@@ -213,7 +213,7 @@
     </When>
   </Choose>
   <ItemGroup />
-  <Import Project="..\commons\build.targets" />
+  <Import Project="..\..\qorpent.sys\commons\build.targets" />
   <Import Project="*.import" />
   <ItemGroup>
     <None Include="*.import" />

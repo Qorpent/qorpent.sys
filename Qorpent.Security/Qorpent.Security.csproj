@@ -7,7 +7,7 @@
     <RootNamespace>Qorpent.Security</RootNamespace>
     <AssemblyName>Qorpent.Security</AssemblyName>
   </PropertyGroup>
-  <Import Project="..\commons\build.targets" />
+  <Import Project="..\..\qorpent.sys\commons\build.targets" />
   <Import Project="*.import" />
   <ItemGroup>
     <None Include="*.import" />

@@ -177,7 +177,7 @@
 		
 		<Otherwise>
 		<ItemGroup>
-		<ProjectReference Include="$(qptsys)\$(AssemblyNameBase)\$(AssemblyNameBase).csproj">
+		<ProjectReference Include="..\$(AssemblyNameBase)\$(AssemblyNameBase).csproj">
 		 <Name>$(AssemblyNameBase)</Name>
 		</ProjectReference>
 		</ItemGroup>

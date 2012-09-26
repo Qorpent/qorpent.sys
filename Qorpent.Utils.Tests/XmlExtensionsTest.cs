@@ -54,20 +54,7 @@ namespace Qorpent.Utils.Tests {
 			public string Name;
 		}
 
-		[Test]
-		public void ApplyArrayTest() {
-			var xml = new XElement("root",
-			                       new XElement("item", new XAttribute("name", "a")),
-			                       new XElement("item", new XAttribute("name", "b")),
-			                       new XElement("item", new XAttribute("name", "c")));
-			var result = xml.Apply<IEnumerable<ArrayItem>>();
-			Assert.NotNull(result);
-			Assert.AreEqual(3, result.Count());
-			Assert.AreEqual("a", result.ElementAt(0).Name);
-			Assert.AreEqual("b", result.ElementAt(1).Name);
-			Assert.AreEqual("c", result.ElementAt(2).Name);
-		}
-
+		
 		[Test, TestCaseSource("XmlSources")]
 		public void XmlFromAnyTest(object src) {
 			var result = XmlExtensions.GetXmlFromAny(src);

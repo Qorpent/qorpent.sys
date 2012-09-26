@@ -23,6 +23,7 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -66,6 +67,8 @@ namespace Qorpent.Mvc.QView {
 		public void Apply(IQViewContext context, IQView view) {
 			foreach (var bind in bindattributes) {
 				var value = bind.Key.GetDataToBeBound(context);
+				if(null==value)continue;
+				if(value.GetType().IsValueType && value == Activator.CreateInstance(value.GetType()))continue;
 				bind.Value.Set(view, value);
 			}
 		}

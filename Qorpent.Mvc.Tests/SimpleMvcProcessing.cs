@@ -59,7 +59,7 @@ namespace Qorpent.Mvc.Tests {
 			}
 		}
 
-		[Action("test.act2")]
+		[Action("test.act2",Role = "DEFAULT")]
 		public class Action2 : IAction {
 			public object Process(IMvcContext context) {
 				return X;

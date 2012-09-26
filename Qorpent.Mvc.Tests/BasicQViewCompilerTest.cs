@@ -54,7 +54,7 @@ namespace Qorpent.Mvc.Tests {
 		private IQViewCompiler compiler;
 		private Application app;
 
-		[Action("my.test")]
+		[Action("my.test",Role="DEFAULT")]
 		private class MyTest : IAction {
 			public object Process(IMvcContext context) {
 				return 45;

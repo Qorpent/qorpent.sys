@@ -8,7 +8,7 @@
     <RootNamespace>Qorpent.Mvc.Tests</RootNamespace>
     <AssemblyName>Qorpent.Mvc.Tests</AssemblyName><AssemblyNameBase>Qorpent.Mvc</AssemblyNameBase>
   </PropertyGroup>
-  <Import Project="..\commons\build.targets" />
+  <Import Project="..\..\qorpent.sys\commons\build.targets" />
   <Import Project="*.import" />
   <ItemGroup>
     <None Include="*.import" />
