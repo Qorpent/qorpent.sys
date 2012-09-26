@@ -19,7 +19,7 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <ProjectReference Include="..\@PACKAGE@\@NAME@\@NAME@.csproj">
+        <ProjectReference Include="..\..\@PACKAGE@\@NAME@\@NAME@.csproj">
           <Name>@NAME@</Name>
         </ProjectReference>
       </ItemGroup>

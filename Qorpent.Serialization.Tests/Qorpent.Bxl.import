@@ -19,7 +19,7 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <ProjectReference Include="..\Qorpent.Bxl\Qorpent.Bxl.csproj">
+        <ProjectReference Include="..\..\qorpent.sys\Qorpent.Bxl\Qorpent.Bxl.csproj">
           <Name>Qorpent.Bxl</Name>
         </ProjectReference>
       </ItemGroup>
