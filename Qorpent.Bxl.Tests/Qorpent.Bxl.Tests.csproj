@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<IsTest>True</IsTest>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{E1FDF85D-C016-4136-B42F-565598341058}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Bxl.Tests</RootNamespace>
+    <AssemblyName>Qorpent.Bxl.Tests</AssemblyName><AssemblyNameBase>Qorpent.Bxl</AssemblyNameBase>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SQL2008|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\SQL2008\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NV3</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationAccessToBxl.cs" />
+    <Compile Include="BxlGeneratorTest.cs" />
+    <Compile Include="BxlParserTest.cs" />
+    <Compile Include="BxlTokenizerTestComplex.cs" />
+    <Compile Include="BxlTokenizerTest_L0.cs" />
+    <Compile Include="BxlTokenTest.cs" />
+    <Compile Include="BxlXmlGeneratorTest.cs" />
+    <Compile Include="ByLineParsingTest.cs" />
+    <Compile Include="TokenizerTestHelper.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)'!='SQL2008'">
+    <Reference Include="Comdiv.UXmlDiff">
+      <HintPath>..\dependency\Comdiv.UXmlDiff.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Import Project="..\commons\build.targets" />
+  <Import Project="*.import" />
+<ItemGroup><None Include="*.import" /><None Include="*.export" /></ItemGroup></Project>

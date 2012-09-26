@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<IsTest>True</IsTest>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{0403B026-5047-41A4-98EE-62F2D92B812C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.IoC.Tests</RootNamespace>
+    <AssemblyName>Qorpent.IoC.Tests</AssemblyName><AssemblyNameBase>Qorpent.IoC</AssemblyNameBase>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SQL2008|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\SQL2008\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NV3</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ComponentDefinitionTest.cs" />
+    <Compile Include="ComponentManifestTest.cs" />
+    <Compile Include="ContainerExtendedLifecycleTest.cs" />
+    <Compile Include="ContainerInterfaceTest.cs" />
+    <Compile Include="ContainerInternalsTest.cs" />
+    <Compile Include="ContainerLoaderTest.cs" />
+    <Compile Include="EnvironmentTest.cs" />
+    <Compile Include="ExportedTestService1.cs" />
+    <Compile Include="ExportedTestService2.cs" />
+    <Compile Include="ExportedTestService2_2.cs" />
+    <Compile Include="ExtensionTestService.cs" />
+    <Compile Include="ExtensionTestServiceExtension_CreateRelease.cs" />
+    <Compile Include="IExtensionTestService.cs" />
+    <Compile Include="InjectionsTest.cs" />
+    <Compile Include="ITestService1.cs" />
+    <Compile Include="ITestService2.cs" />
+    <Compile Include="TestService1.cs" />
+    <Compile Include="TestService2.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Import Project="..\commons\build.targets" />
+  <Import Project="*.import" />
+<ItemGroup><None Include="*.import" /><None Include="*.export" /></ItemGroup></Project>

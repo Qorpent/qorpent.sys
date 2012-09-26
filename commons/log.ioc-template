@@ -1,0 +1,60 @@
+# Copyright 2007-2012 Comdiv (F. Sadykov) - http://code.google.com/u/fagim.sadykov/
+# Supported by Media Technology LTD 
+ 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+ 
+# http://www.apache.org/licenses/LICENSE-2.0
+ 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+
+# Шаблоны для настройки ведения журналов
+
+
+# Шаблон типового файлового аппендера
+# Пример использования
+# logfile file1 filename="~/tmp/${host}-${level}.log" customformat="${Message}", level = Error
+qxi::template logfile
+	transient name='Qorpent.Log.TextFileWriter, Qorpent.Log' : 'Qorpent.Log.ILogWriter, Qorpent.Core'
+	
+# Шаблон логгера для регистратора ошибок
+# Пример использования
+# errorreg mainerr, registryname=mytrack
+qxi::template errorreg
+	transient name='Qorpent.Log.ExceptionRegistryWriter, Qorpent.Log' : 'Qorpent.Log.ILogWriter, Qorpent.Core'
+	
+# Шаблон подключения реестра ошибок YouTrack
+# youtrackexreg
+# youtrackexreg connectionname="..." projectname="..."
+qxi::template youtrackexreg
+	transient default.exception.registry  "Qorpent.Integration.YouTrack.YouTrackExceptionRegistry, Qorpent.Integration.YouTrack", priority=-1 : "Qorpent.Log.IExceptionRegistry, Qorpent.Core"
+		connectionname=exreg
+		projectname=ER
+
+#Шаблон соединания с YouTrack 
+qxi::template ytconnection
+	transient "Qorpent.Integration.YouTrack.YouTrackConnection, Qorpent.Integration.YouTrack", priority=-1 : "Qorpent.Integration.YouTrack.IYouTrackConnection, Qorpent.Integration.YouTrack"
+		
+#Шаблон соединания с YouTrack для регистрации ошибок
+qxi::template erytconnection
+	transient exreg.youtrack.connection, "Qorpent.Integration.YouTrack.YouTrackConnection, Qorpent.Integration.YouTrack", priority=-1 : "Qorpent.Integration.YouTrack.IYouTrackConnection, Qorpent.Integration.YouTrack"
+		User=exreg
+		Password='gfhjkm#1'
+	
+
+
+# Шаблон типового логера
+# Пример использования
+# logger logger1 mask=FileNameResolver level=Warning
+#	writer file1
+#	writer file2
+#	writer mainerr
+qxi::template logger
+	transient name='Qorpent.Log.Logger, Qorpent.Log' : 'Qorpent.Log.ILogger, Qorpent.Core'

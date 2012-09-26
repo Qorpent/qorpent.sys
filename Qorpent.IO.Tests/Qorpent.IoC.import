@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Choose>
+    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' != 'Release' ">
+      <ItemGroup>
+        <Reference Include="Qorpent.IoC">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(AllBinPath)\Qorpent.IoC.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
+	<When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' == 'Release' ">
+      <ItemGroup>
+        <Reference Include="Qorpent.IoC">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(AllReleasePath)\Qorpent.IoC.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <ProjectReference Include="..\Qorpent.IoC\Qorpent.IoC.csproj">
+          <Name>Qorpent.IoC</Name>
+        </ProjectReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+</Project>

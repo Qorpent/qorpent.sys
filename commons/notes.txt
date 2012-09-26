@@ -1,0 +1,1 @@
+1. Some changes in build.dat file requires total solution reload under VS

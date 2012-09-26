@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{96885C8F-AD20-41B4-86EE-BC9B3D47D9F9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Mvc</RootNamespace>
+    <AssemblyName>Qorpent.Mvc</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Actions\GetResourceAction.cs" />
+    <Compile Include="Actions\ImpersonateAction.cs" />
+    <Compile Include="MimeMapper.cs" />
+    <Compile Include="Actions\MyActions.cs" />
+    <Compile Include="Actions\MyRenders.cs" />
+    <Compile Include="OutputFileContent.cs" />
+    <Compile Include="Actions\QviewCompileAction.cs" />
+    <Compile Include="Actions\ReadManifestAction.cs" />
+    <Compile Include="Actions\WhoAmIAction.cs" />
+    <Compile Include="Binding\BindExecutor.cs" />
+    <Compile Include="Actions\BxlParseAction.cs" />
+    <Compile Include="HttpHandler\ErrorApplicationStartupHandler.cs" />
+    <Compile Include="HttpHandler\MvcHandlerFactory.cs" />
+    <Compile Include="HttpHandler\StubHandlerBase.cs" />
+    <Compile Include="HttpHandler\WaitApplicationStartupHandler.cs" />
+    <Compile Include="MvcContext.cs" />
+    <Compile Include="HttpApplicationReloader.cs" />
+    <Compile Include="UI\ButtonSize.cs" />
+    <Compile Include="UI\DefaultLayout.cs" />
+    <Compile Include="QView\QViewCompilerHelper.cs" />
+    <Compile Include="QView\QViewResourceProvider.cs" />
+    <Compile Include="QView\QViewXmlPreprocessor.cs" />
+    <Compile Include="QView\QViewXsltExtension.cs" />
+    <Compile Include="QView\QViewBase.cs" />
+    <Compile Include="QView\QViewBinder.cs" />
+    <Compile Include="QView\QViewCompiler.cs" />
+    <Compile Include="QView\QViewContext.cs" />
+    <Compile Include="QView\QViewMonitor.cs" />
+    <Compile Include="ContainerInfo.cs" />
+    <Compile Include="UI\Widget.cs" />
+    <Compile Include="UI\WidgetType.cs" />
+    <Compile Include="Renders\ActionFormViews\ActionFormMain.cs" />
+    <Compile Include="Renders\ActionFormViews\ActionFormParameter.cs" />
+    <Compile Include="Renders\BxlRender.cs" />
+    <Compile Include="Renders\FileDescriptorRender.cs" />
+    <Compile Include="Renders\FormRender.cs" />
+    <Compile Include="Renders\JsonRender.cs" />
+    <Compile Include="Renders\Md5Render.cs" />
+    <Compile Include="Renders\QViewRender.cs" />
+    <Compile Include="Renders\SerializerRenderBase.cs" />
+    <Compile Include="Renders\XmlRender.cs" />
+    <Compile Include="Security\DefaultActionAuthorizer.cs" />
+    <Compile Include="Binding\DefaultActionBinder.cs" />
+    <Compile Include="Renders\EmbedJsonRender.cs" />
+    <Compile Include="Renders\EmbedJsRender.cs" />
+    <Compile Include="Renders\EmptyRender.cs" />
+    <Compile Include="Renders\FileRender.cs" />
+    <Compile Include="Security\IFormAuthenticationProvider.cs" />
+    <Compile Include="IViewEngine.cs" />
+    <Compile Include="Renders\JsRender.cs" />
+    <Compile Include="Remoting\LocalConnection.cs" />
+    <Compile Include="Actions\LoginAction.cs" />
+    <Compile Include="Actions\LogoutAction.cs" />
+    <Compile Include="Actions\EchoAction.cs" />
+    <Compile Include="MvcFactory.cs" />
+    <Compile Include="Actions\FileResolveAction.cs" />
+    <Compile Include="Actions\GetResourceUrlAction.cs" />
+    <Compile Include="HttpHandler\MvcHandler.cs" />
+    <Compile Include="Actions\ResetAction.cs" />
+    <Compile Include="Actions\ResetHandlersAction.cs" />
+    <Compile Include="Remoting\RemoteConnection.cs" />
+    <Compile Include="Renders\StringRender.cs" />
+    <Compile Include="Security\TestFormAuthenticationProvider.cs" />
+    <Compile Include="Renders\ViewRender.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="QView\vbxlcompiler.xslt">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Renders\ActionFormViews\qvexr_actionform.css" />
+    <EmbeddedResource Include="Renders\ActionFormViews\qvexr_actionform.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Renders\ActionFormViews\ActionFormMain.0_en_resb" />
+    <EmbeddedResource Include="Renders\ActionFormViews\ActionFormMain.1_ru_resb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Import Project="..\commons\build.targets" />
+  <Import Project="*.import" />
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+  </ItemGroup>
+  <ItemGroup />
+</Project>

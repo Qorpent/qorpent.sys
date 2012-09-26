@@ -1,0 +1,15 @@
+# Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
+bin
+obj
+
+_ReSharper*
+sqlbin
+msbuild
+tmp
+*.bak
+*.user
+*.dotCover
+*.suo
+
+# mstest test results
+TestResults

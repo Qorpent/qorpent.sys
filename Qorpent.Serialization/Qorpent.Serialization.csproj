@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Serialization</RootNamespace>
+    <AssemblyName>Qorpent.Serialization</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="bxlSerializer.cs" />
+    <Compile Include="bxlSerializerImpl.cs" />
+    <Compile Include="ContainerInfo.cs" />
+    <Compile Include="ISerializerImpl.cs" />
+    <Compile Include="jsonSerializer.cs" />
+    <Compile Include="jsonSerializerImpl.cs" />
+    <Compile Include="JsRaw.cs" />
+    <Compile Include="JsSerializer.cs" />
+    <Compile Include="jsSerializerImpl.cs" />
+    <Compile Include="md5serializer.cs" />
+    <Compile Include="objectSerializerState.cs" />
+    <Compile Include="serializableItem.cs" />
+    <Compile Include="serializer.cs" />
+    <Compile Include="xmlSerializer.cs" />
+    <Compile Include="xmlSerializerImpl.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Import Project="..\commons\build.targets" />
+  <Import Project="*.import" />
+<ItemGroup><None Include="*.import" /><None Include="*.export" /></ItemGroup></Project>

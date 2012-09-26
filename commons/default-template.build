@@ -1,0 +1,115 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="CreateProject" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\dependency\MSBuild.Community.Tasks.Targets"/>
+  <PropertyGroup>
+    <Probe>False</Probe>
+    <Name>DEFAULT</Name>
+    <RootNs>Qorpent</RootNs>
+    <Namespace>$(RootNs).$(Name)</Namespace>
+    <AssemblyName>$(RootNs).$(Name)</AssemblyName>
+    <QorpentImports></QorpentImports>
+    <MainQorpentImports>Core;Utils</MainQorpentImports>
+    <TestAssemblyName>$(AssemblyName).Tests</TestAssemblyName>
+    <RootDir>..</RootDir>
+    <ProjectDir>$(RootDir)\$(AssemblyName)</ProjectDir>
+    <TestProjectDir>$(RootDir)\$(TestAssemblyName)</TestProjectDir>
+    <ProjectDirProps>$(ProjectDir)\Properties</ProjectDirProps>
+    <TestProjectDirProps>$(TestProjectDir)\Properties</TestProjectDirProps>
+    <ProjectFile>$(ProjectDir)\$(AssemblyName).csproj</ProjectFile>
+    <ProjectExportFile>$(ProjectDir)\$(AssemblyName).export</ProjectExportFile>
+    
+    <TestProjectFile>$(TestProjectDir)\$(TestAssemblyName).csproj</TestProjectFile>
+    
+    <FullSolution>$(RootDir)\Qorpent.Full.sln</FullSolution>
+    <Sln>True</Sln>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="'$(Name)'=='DEFAULT'">
+      <PropertyGroup>
+        <Probe>True</Probe>
+      </PropertyGroup>
+    </When>
+  </Choose>
+
+  <ItemGroup>
+    <QRefs Include="$(MainQorpentImports)" />
+    <QRefs Include="$(QorpentImports)" />
+  </ItemGroup>
+
+  <Target Name="CreateProject">
+    <PropertyGroup>
+      <GuidGenFunction>
+        <![CDATA[ 
+      public static string ScriptMain() { 
+          return System.Guid.NewGuid().ToString().ToUpper(); 
+      } 
+      ]]>
+      </GuidGenFunction>
+
+ 
+    </PropertyGroup>
+
+    <Script Language="C#" Code="$(GuidGenFunction)">
+      <Output TaskParameter="ReturnValue" PropertyName="GUID1" />
+    </Script>
+    <Script Language="C#" Code="$(GuidGenFunction)">
+      <Output TaskParameter="ReturnValue" PropertyName="GUID2" />
+    </Script>
+
+
+    <Message Text="Create folder structure"/>
+
+    <MakeDir Directories="$(ProjectDir)"/>
+    <!--<MakeDir Directories="$(ProjectDirProps)"/>-->
+    <MakeDir Directories="$(TestProjectDir)"/>
+    <MakeDir Directories="$(TestProjectDirProps)"/>
+
+    
+    
+    <Message Text="Copy project and export files"/>
+    <Copy SourceFiles="LIBRARY.csproj" DestinationFiles="$(ProjectDir)\$(AssemblyName).csproj"/>
+    <Copy SourceFiles="TESTLIBRARY.csproj" DestinationFiles="$(TestProjectDir)\$(TestAssemblyName).csproj"/>
+    <Copy SourceFiles="LIBRARY.export" DestinationFiles="$(ProjectDir)\$(AssemblyName).export"/>
+    <!--<Copy SourceFiles="AssemblyInfo.cs" DestinationFiles="$(ProjectDirProps)\AssemblyInfo.cs"/>
+    <Copy SourceFiles="AssemblyInfo.cs" DestinationFiles="$(TestProjectDirProps)\AssemblyInfo.cs"/>-->
+
+    <Message Text="Prepare prject files"/>
+    <FileUpdate Files="$(ProjectFile);$(ProjectExportFile)" Regex="@NAME@" ReplacementText="$(AssemblyName)" />
+    <FileUpdate Files="$(ProjectFile)" Regex="@GUID@" ReplacementText="$(GUID1)" />
+    <FileUpdate Files="$(TestProjectFile)" Regex="@GUID@" ReplacementText="$(GUID2)" />
+    <FileUpdate Files="$(TestProjectFile)" Regex="@NAME@" ReplacementText="$(TestAssemblyName)" />
+    <FileUpdate Files="$(ProjectFile);$(ProjectExportFile);$(TestProjectFile)" Regex="@NAMESPACE@" ReplacementText="$(Namespace)" />
+
+    <Message Text="Import  references" />
+    <RegexReplace Input="@(Qrefs)" Expression="(\w+)" Replacement="..\$(RootNs).$1\$(RootNs).$1.export" >
+      <Output ItemName ="Qref" TaskParameter="Output" />
+    </RegexReplace>
+
+    <Copy SourceFiles="@(Qref)" DestinationFiles="$(ProjectDir)\%(Filename).import"/>
+    <Copy SourceFiles="@(Qref)" DestinationFiles="$(TestProjectDir)\%(Filename).import"/>
+
+    <Message Text="Update solution file"  Condition="$(Sln) and !$(Probe)"/>
+    <FileUpdate  Condition="$(Sln) and !$(Probe)" Files="$(FullSolution)" Regex="([\r\n]+Global[\r\n]+)" ReplacementText='
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$(AssemblyName)", "$(AssemblyName)\$(AssemblyName).csproj", "{$(GUID1)}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$(TestAssemblyName)", "$(TestAssemblyName)\$(TestAssemblyName).csproj", "{$(GUID2)}"
+EndProject$1' />
+
+    <FileUpdate  Condition="$(Sln) and !$(Probe)" Files="$(FullSolution)" Regex="(postSolution[\r\n]+)" ReplacementText='$1
+    {$(GUID1)}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{$(GUID1)}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{$(GUID1)}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{$(GUID1)}.Release|Any CPU.Build.0 = Release|Any CPU
+    
+    {$(GUID2)}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{$(GUID2)}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{$(GUID2)}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{$(GUID2)}.Release|Any CPU.Build.0 = Release|Any CPU
+    ' />
+
+
+    <Message Condition="$(Probe)" Text="It's just a probe cleanup all!"/>
+    <RemoveDir  Condition="$(Probe)" Directories="$(ProjectDir)" />
+    <RemoveDir  Condition="$(Probe)" Directories="$(TestProjectDir)" />
+
+  </Target>
+</Project>

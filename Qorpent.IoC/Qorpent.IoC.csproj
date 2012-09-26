@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{62F22FFA-A1CF-4A74-838C-9AB33A9442EA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.IoC</RootNamespace>
+    <AssemblyName>Qorpent.IoC</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SQL2008|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\SQL2008\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NV3</DefineConstants>
+    <DocumentationFile>\Qorpent.IoC.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyManifestDefinition.cs" />
+    <Compile Include="ComponentDefinition.cs" />
+    <Compile Include="Container.cs" />
+    <Compile Include="ManifestClassDefinition.cs" />
+    <Compile Include="ManifestComponentDefinition.cs" />
+    <Compile Include="ContainerLoader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Import Project="..\commons\build.targets" />
+  <Import Project="*.import" />
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+  </ItemGroup>
+</Project>

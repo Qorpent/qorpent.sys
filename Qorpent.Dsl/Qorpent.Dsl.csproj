@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{B758E220-22F5-47DF-A73B-BC9B1A3DBDC3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Dsl</RootNamespace>
+    <AssemblyName>Qorpent.Dsl</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="CompilerProviderBase.cs" />
+    <Compile Include="CSharpDslCompiler.cs" />
+    <Compile Include="DefaultDslProviderService.cs" />
+    <Compile Include="DslCSharpXsltExtensions.cs" />
+    <Compile Include="DslSqlXsltExtensions.cs" />
+    <Compile Include="FileSplitWriter.cs" />
+    <Compile Include="JsonToXmlParser.cs" />
+    <Compile Include="LogicalExpressions\ConjunctionNode.cs" />
+    <Compile Include="LogicalExpressions\ContainerInfo.cs" />
+    <Compile Include="LogicalExpressions\DisjunctionNode.cs" />
+    <Compile Include="LogicalExpressions\EqualNode.cs" />
+    <Compile Include="LogicalExpressions\EqualValueNode.cs" />
+    <Compile Include="LogicalExpressions\LiteralNode.cs" />
+    <Compile Include="LogicalExpressions\LogicalExpressionEvaluator.cs" />
+    <Compile Include="LogicalExpressions\LogicalExpressionParser.cs" />
+    <Compile Include="ReplaceDescriptor.cs" />
+    <Compile Include="SmartXslt\FileNameResolverXmlUrlResolver.cs" />
+    <Compile Include="SmartXslt\SmartXsltTransform.cs" />
+    <Compile Include="SmartXslt\XsltHelper.cs" />
+    <Compile Include="SqlScriptDslCompiler.cs" />
+    <Compile Include="XmlIncludeProcessor.cs" />
+    <Compile Include="XmlInterpolationPreprocessor.cs" />
+    <Compile Include="XsltDslDefinition.cs" />
+    <Compile Include="XsltBasedDslProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+  </ItemGroup>
+  <Import Project="..\commons\build.targets" />
+  <Import Project="*.import" />
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+  </ItemGroup>
+</Project>

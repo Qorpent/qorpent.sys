@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<IsTest>True</IsTest>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{880F65EA-1A22-4672-A137-FFC912902046}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Core.Tests</RootNamespace>
+    <AssemblyName>Qorpent.Core.Tests</AssemblyName><AssemblyNameBase>Qorpent.Core</AssemblyNameBase>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SQL2008|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\SQL2008\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NV3</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Dsl\LexInfoTest.cs" />
+    <Compile Include="EnvironmentInfoTest.cs" />
+    <Compile Include="Events\ResetEventDataTest.cs" />
+    <Compile Include="Log\DefaultLogManagerTest.cs" />
+    <Compile Include="Log\LoggerTest.cs" />
+    <Compile Include="Security\StubIWithRole.cs" />
+    <Compile Include="Security\StubPrincipalSource.cs" />
+    <Compile Include="Security\StubRoleResolver.cs" />
+    <Compile Include="TestSupport\QorpentFixture.cs" />
+    <Compile Include="TestSupport\QorpentFixtureAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Application\" />
+  </ItemGroup>
+  <Import Project="..\commons\build.targets" />
+  <Import Project="*.import" />
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+  </ItemGroup>
+</Project>
