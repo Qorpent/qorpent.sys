@@ -15,6 +15,7 @@ qorpent.sys is a kernel, main package of Qorpent that must existed in Qorpent-ba
 
 To simplify managing u can setup some usefull build/install utils with:
 * on windows (7/2008S and higher) - run win-init.bat
+                                  - 
 
 
 
