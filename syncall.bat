@@ -1,6 +1,6 @@
 for /D %%1 in (*) do (
 	cd %%1
-	git fetch
+	git pull
 	cd ..
 )
 

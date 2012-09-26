@@ -2,11 +2,11 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<root>..\..</root>
-		<qptsys>$(root)\qorpent.sys</qptsys>
-		<artroot>$(root)\.build</artroot>
-		<BinPath>$(artroot)\bin</BinPath>
-		<TmpPath>$(artroot)\tmp</TmpPath>
-		<SqlBinPath>$(artroot)\sqlbin</SqlBinPath>
+		<qptsys>..\..\qorpent.sys</qptsys>
+		<artpath>$(root)\.build</artpath>
+		<TmpPath>$(artpath)\tmp</TmpPath>
+		<BinPath>$(artpath)\bin</BinPath>
+		<SqlBinPath>$(artpath)\sqlbin</SqlBinPath>
 		<AssemblyBinPath>$(BinPath)\$(AssemblyName)</AssemblyBinPath>
 		<SqlAssemblyBinPath>$(SqlBinPath)\$(AssemblyName)</SqlAssemblyBinPath>
 		<AllBinPath>$(BinPath)\all</AllBinPath>
@@ -17,7 +17,6 @@
 		<SqlToolBinPath>$(SqlBinPath)\tools</SqlToolBinPath>
 		<AllReleasePath>$(BinPath)\release</AllReleasePath>
 		<CommonsPath>$(qptsys)\commons</CommonsPath>
-		
 	</PropertyGroup>
 	
   <Import Project="$(qptsys)\dependency\MSBuild.Community.Tasks.Targets" />	
@@ -44,6 +43,8 @@
 	<UseManifest>False</UseManifest>
 </PropertyGroup>
 
+	
+
 	<UsingTask AssemblyFile="$(ToolsPath)" TaskName="QorpentDsl" Condition="$(UseDsl)" />
 	<UsingTask AssemblyFile="$(ToolsPath)" TaskName="QorpentLibraryManifest" Condition="$(UseManifest)" />
 	
@@ -67,7 +68,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    
+   
     <IsTest Condition=" '$(IsTest)' !=  'True' ">False</IsTest>
     <IsTool Condition=" '$(IsTool)' !=  'True' ">False</IsTool>
 	<RunTest>False</RunTest>
@@ -137,7 +138,7 @@
 
  <ItemGroup>
     <!--<Compile Include="Properties\AssemblyInfo.cs" />-->
-    <Compile Include="..\PackageAssemblyInfo.cs" Condition="Exists('..\PackageAssemblyInfo.cs')"/>
+    <Compile Include="..\PackageAssemblyInfo.cs" Condition="Exists('..\PackageAssemblyInfo.cs')" />
     <Compile Include="$(TmpPath)\$(AssemblyName)_VersionInfo.cs" />
   </ItemGroup>
   
@@ -221,7 +222,7 @@
 			<MakeDir Directories="$(SqlTestBinPath)" Condition="$(IsTest) and '$(Configuration)'=='SQL2008'" />
     <MakeDir Directories="$(SqlToolBinPath)" Condition="$(IsTool) and !$(IsTest) and '$(Configuration)'=='SQL2008'" />
 			<Copy Condition="$(IsTest) and '$(Configuration)'=='SQL2008'" SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles-&gt;'$(SqlTestBinPath)\%(Filename)%(Extension)')" />
-			 <Dir Directories="$(SqlAllBinPath)" Condition="!$(IsTest) and '$(Configuration)'=='SQL2008'" />
+			 <MakeDir Directories="$(SqlAllBinPath)" Condition="!$(IsTest) and '$(Configuration)'=='SQL2008'" />
 			<Copy Condition="!$(IsTest) and '$(Configuration)'=='SQL2008'" SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles-&gt;'$(SqlAllBinPath)\%(Filename)%(Extension)')" />
     <Copy Condition="$(IsTool) and !$(IsTest)  and '$(Configuration)'=='SQL2008'" SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles-&gt;'$(SqlToolBinPath)\%(Filename)%(Extension)')" />
   </Target>
