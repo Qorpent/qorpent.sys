@@ -9,7 +9,8 @@
     <QorpentImports></QorpentImports>
     <MainQorpentImports>Core;Utils</MainQorpentImports>
     <TestAssemblyName>$(AssemblyName).Tests</TestAssemblyName>
-    <RootDir>..</RootDir>
+	<Package Condition=" '$(Package)' == '' ">usr.tmp</Package>
+    <RootDir>..\..\$(Package)</RootDir>
     <ProjectDir>$(RootDir)\$(AssemblyName)</ProjectDir>
     <TestProjectDir>$(RootDir)\$(TestAssemblyName)</TestProjectDir>
     <ProjectDirProps>$(ProjectDir)\Properties</ProjectDirProps>
@@ -78,6 +79,7 @@
     <FileUpdate Files="$(TestProjectFile)" Regex="@GUID@" ReplacementText="$(GUID2)" />
     <FileUpdate Files="$(TestProjectFile)" Regex="@NAME@" ReplacementText="$(TestAssemblyName)" />
     <FileUpdate Files="$(ProjectFile);$(ProjectExportFile);$(TestProjectFile)" Regex="@NAMESPACE@" ReplacementText="$(Namespace)" />
+	<FileUpdate Files="$(ProjectFile);$(ProjectExportFile);$(TestProjectFile)" Regex="@PACKAGE@" ReplacementText="$(Package)" />
 
     <Message Text="Import  references" />
     <RegexReplace Input="@(Qrefs)" Expression="(\w+)" Replacement="..\$(RootNs).$1\$(RootNs).$1.export" >

@@ -1,14 +1,31 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<root>..\..</root>
+		<qptsys>$(root)\qorpent.sys</qptsys>
+		<artroot>$(root)\.build</artroot>
+		<BinPath>$(artroot)\bin</BinPath>
+		<TmpPath>$(artroot)\tmp</TmpPath>
+		<SqlBinPath>$(artroot)\sqlbin</SqlBinPath>
+		<AssemblyBinPath>$(BinPath)\$(AssemblyName)</AssemblyBinPath>
+		<SqlAssemblyBinPath>$(SqlBinPath)\$(AssemblyName)</SqlAssemblyBinPath>
+		<AllBinPath>$(BinPath)\all</AllBinPath>
+		<ToolBinPath>$(BinPath)\tools</ToolBinPath>
+		<SqlAllBinPath>$(SqlBinPath)\all</SqlAllBinPath>
+		<TestBinPath>$(BinPath)\tests</TestBinPath>
+		<SqlTestBinPath>$(SqlBinPath)\tests</SqlTestBinPath>
+		<SqlToolBinPath>$(SqlBinPath)\tools</SqlToolBinPath>
+		<AllReleasePath>$(BinPath)\release</AllReleasePath>
+		<CommonsPath>$(qptsys)\commons</CommonsPath>
+		
+	</PropertyGroup>
 	
-
-
-  <Import Project="..\dependency\MSBuild.Community.Tasks.Targets" />	
+  <Import Project="$(qptsys)\dependency\MSBuild.Community.Tasks.Targets" />	
   <PropertyGroup>
   <MSBuildEmitSolution>1</MSBuildEmitSolution>
     <OS Condition=" '$(OS)' == '' ">UNIX</OS>
-    <ApplicationIcon>..\commons\qorpent-dllicon.ico</ApplicationIcon>
-    <AssemblyOriginatorKeyFile>..\commons\qorpent.snk</AssemblyOriginatorKeyFile>
+    <ApplicationIcon>$(qptsys)\commons\qorpent-dllicon.ico</ApplicationIcon>
+    <AssemblyOriginatorKeyFile>$(qptsys)\commons\qorpent.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
@@ -16,27 +33,27 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	 <DefineConstants>DEBUG;TRACE;$(OS)</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;$(OS)</DefineConstants>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-	 <UseDsl>False</UseDsl> 
-	 <UseManifest Condition=" '$(UseMainfest)' == '' ">True</UseManifest> 
-	<ToolsPath>$(MSBuildProjectDirectory)\..\msbuild\Qorpent.Tools.MsBuildTasks.dll</ToolsPath>
+	<UseDsl>False</UseDsl> 
+	<UseManifest Condition=" '$(UseMainfest)' == '' ">True</UseManifest> 
+	<ToolsPath>$(root)\msbuild\Qorpent.Tools.MsBuildTasks.dll</ToolsPath>
   </PropertyGroup>
 
 	<PropertyGroup Condition="!Exists('$(ToolsPath)')">
 	<UseManifest>False</UseManifest>
 </PropertyGroup>
 
-	<UsingTask AssemblyFile ="$(ToolsPath)" TaskName="QorpentDsl" Condition="$(UseDsl)"/>
-	<UsingTask AssemblyFile ="$(ToolsPath)" TaskName="QorpentLibraryManifest" Condition="$(UseManifest)"/>
+	<UsingTask AssemblyFile="$(ToolsPath)" TaskName="QorpentDsl" Condition="$(UseDsl)" />
+	<UsingTask AssemblyFile="$(ToolsPath)" TaskName="QorpentLibraryManifest" Condition="$(UseManifest)" />
 	
 	<PropertyGroup Condition="$(UseDsl)">
 		<DslOutCodeDir Condition="'$(DslOutCodeDir)'==''">$(MSBuildProjectDirectory)</DslOutCodeDir>
 		<DslDir Condition="'$(DslDir)'==''">$(MSBuildProjectDirectory)\dsl</DslDir>
 		<DslType Condition="'$(DslType)'==''">Library</DslType>
-		<DslPreprocess  Condition="'$(DslPreprocess)'==''">True</DslPreprocess>
-		<DslTraceOnly  Condition="'$(DslTraceOnly)'==''">False</DslTraceOnly>
-		<ExecuteDsl  Condition="'$(ExecuteDsl)'==''">True</ExecuteDsl>
+		<DslPreprocess Condition="'$(DslPreprocess)'==''">True</DslPreprocess>
+		<DslTraceOnly Condition="'$(DslTraceOnly)'==''">False</DslTraceOnly>
+		<ExecuteDsl Condition="'$(ExecuteDsl)'==''">True</ExecuteDsl>
 	</PropertyGroup>
   
   
@@ -50,22 +67,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <BinPath>..\bin</BinPath>
-	<SqlBinPath>..\sqlbin</SqlBinPath>
-    <AssemblyBinPath>$(BinPath)\$(AssemblyName)</AssemblyBinPath>
-	<SqlAssemblyBinPath>$(SqlBinPath)\$(AssemblyName)</SqlAssemblyBinPath>
-    <AllBinPath>$(BinPath)\all</AllBinPath>
-    <ToolBinPath>$(BinPath)\tools</ToolBinPath>
-	<SqlAllBinPath>$(SqlBinPath)\all</SqlAllBinPath>
-    <TestBinPath>$(BinPath)\tests</TestBinPath>
-    <SqlTestBinPath>$(SqlBinPath)\tests</SqlTestBinPath>
-    <SqlToolBinPath>$(SqlBinPath)\tools</SqlToolBinPath>
-    <AllReleasePath>$(BinPath)\release</AllReleasePath>
-    <CommonsPath>..\commons</CommonsPath>
-    <IsTest Condition = " '$(IsTest)' !=  'True' " >False</IsTest>
-    <IsTool Condition = " '$(IsTool)' !=  'True' " >False</IsTool>
+    
+    <IsTest Condition=" '$(IsTest)' !=  'True' ">False</IsTest>
+    <IsTool Condition=" '$(IsTool)' !=  'True' ">False</IsTool>
 	<RunTest>False</RunTest>
-	<AssemblyNameBase Condition= " '$(AssemblyNameBase)' == '' " >$(AssemblyName)</AssemblyNameBase>
+	<AssemblyNameBase Condition=" '$(AssemblyNameBase)' == '' ">$(AssemblyName)</AssemblyNameBase>
 	<DocumentationFile Condition="!$(IsTest)">$(BinPath)\$(AssemblyName).XML</DocumentationFile>
   </PropertyGroup>
 
@@ -118,31 +124,21 @@
   
 
   <Target Name="BeforeBuild">
-	<Message Text="Use manifest: $(UseManifest)  $(ToolsPath)"/>
-	  <QorpentDsl
-		   TraceOnly="$(DslTraceOnly)"
-		   Sources="@(DslSource)"
-		  Preprocess="$(DslPreprocess)"
-		  OutputCodeDir="$(DslOutCodeDir)"
-		  DslDir="$(DslDir)"
-		  DslType="$(DslType)"
-		  Lang="$(DslLang)"
-
-		 Condition="$(UseDsl) and $(ExecuteDsl)"
-		 />
-	<MakeDir Directories="..\tmp"/>
-	<Copy 	SourceFiles="..\commons\Auto_AssemblyInfo.cs" DestinationFiles="..\tmp\$(AssemblyName)_VersionInfo.cs" SkipUnchangedFiles="True" />
-	<FileUpdate Files="..\tmp\$(AssemblyName)_VersionInfo.cs" Regex="@ASSEMBLYNAME@" ReplacementText="$(AssemblyName)" />
-	<FileUpdate Files="..\tmp\$(AssemblyName)_VersionInfo.cs" Regex="@CONFIGURATION@" ReplacementText="$(Configuration)" />
-	<FileUpdate Files="..\tmp\$(AssemblyName)_VersionInfo.cs" Regex="@VERSION@" ReplacementText="$(MainVersion).$(MinorVersion).$(Revision).$(BuildNumber)" />
-    <MakeDir Directories="$(BinPath)"/>
+	<Message Text="Use manifest: $(UseManifest)  $(ToolsPath)" />
+	  <QorpentDsl TraceOnly="$(DslTraceOnly)" Sources="@(DslSource)" Preprocess="$(DslPreprocess)" OutputCodeDir="$(DslOutCodeDir)" DslDir="$(DslDir)" DslType="$(DslType)" Lang="$(DslLang)" Condition="$(UseDsl) and $(ExecuteDsl)" />
+	<MakeDir Directories="$(TmpPath)" />
+	<Copy SourceFiles="$(qptsys)\commons\Auto_AssemblyInfo.cs" DestinationFiles="$(TmpPath)\$(AssemblyName)_VersionInfo.cs" SkipUnchangedFiles="True" />
+	<FileUpdate Files="$(TmpPath)\$(AssemblyName)_VersionInfo.cs" Regex="@ASSEMBLYNAME@" ReplacementText="$(AssemblyName)" />
+	<FileUpdate Files="$(TmpPath)\$(AssemblyName)_VersionInfo.cs" Regex="@CONFIGURATION@" ReplacementText="$(Configuration)" />
+	<FileUpdate Files="$(TmpPath)\$(AssemblyName)_VersionInfo.cs" Regex="@VERSION@" ReplacementText="$(MainVersion).$(MinorVersion).$(Revision).$(BuildNumber)" />
+    <MakeDir Directories="$(BinPath)" />
   </Target>
 
 
  <ItemGroup>
     <!--<Compile Include="Properties\AssemblyInfo.cs" />-->
-    <Compile Include="$(CommonsPath)\CommonAssemblyInfo.cs" />
-    <Compile Include="..\tmp\$(AssemblyName)_VersionInfo.cs" />
+    <Compile Include="..\PackageAssemblyInfo.cs" Condition="Exists('..\PackageAssemblyInfo.cs')"/>
+    <Compile Include="$(TmpPath)\$(AssemblyName)_VersionInfo.cs" />
   </ItemGroup>
   
   <Choose>
@@ -150,7 +146,7 @@
 	  <ItemGroup>
 		<Reference Include="nunit.framework">
 		  <SpecificVersion>False</SpecificVersion>
-		  <HintPath>..\dependency\nunit.framework.dll</HintPath>
+		  <HintPath>$(qptsys)\dependency\nunit.framework.dll</HintPath>
 		</Reference>
 		
 	  </ItemGroup>
@@ -180,7 +176,7 @@
 		
 		<Otherwise>
 		<ItemGroup>
-		<ProjectReference Include="..\$(AssemblyNameBase)\$(AssemblyNameBase).csproj">
+		<ProjectReference Include="$(qptsys)\$(AssemblyNameBase)\$(AssemblyNameBase).csproj">
 		 <Name>$(AssemblyNameBase)</Name>
 		</ProjectReference>
 		</ItemGroup>
@@ -191,65 +187,43 @@
 	</Choose>
 
 	<!-- not depend on build due to MSBUILD issue on SLN compilation with advanced targets -->
-  <Target Name="Test" >
+  <Target Name="Test">
     <CreateItem Include="$(AssemblyBinPath)\*.Tests.dll">
       <Output TaskParameter="Include" ItemName="TestAssembly" />
     </CreateItem>
-	<NUnit Assemblies="@(TestAssembly)" ContinueOnError="False" OutputXmlFile="$(AssemblyBinPath)\$(AssemblyName).nunit.result.xml"/> 
+	<NUnit Assemblies="@(TestAssembly)" ContinueOnError="False" OutputXmlFile="$(AssemblyBinPath)\$(AssemblyName).nunit.result.xml" /> 
   </Target>
 
 
 	<ItemGroup Condition="'$(Configuration)'!='SQL2008'">
-		<MySourceFiles Include="$(AssemblyBinPath)\*.*" Exclude="*.tmp"/>
+		<MySourceFiles Include="$(AssemblyBinPath)\*.*" Exclude="*.tmp" />
 	</ItemGroup>
   <Target Name="AfterBuild">
 		
 			<!-- call on such way due to MSBUILD issue on SLN compilation with advanced targets -->
-			<CallTarget Condition="$(RunTest) and $(IsTest) and '$(Configuration)'!='SQL2008'" Targets="Test"/>
-	<Message Text="Real use manifest $(UseManifest) and !$(IsTest) and !$(IsTool) and '$(Configuration)'!='SQL2008'"/>
-	  <QorpentLibraryManifest 
-			Condition="$(UseManifest) and !$(IsTest) and !$(IsTool) and '$(Configuration)'!='SQL2008'"
-			AssemblyPath="$(OutputPath)\$(AssemblyName).dll"
-			ManifestPath="$(OutputPath)\m-$(AssemblyName).ioc-manifest.bxl"
-	  />
-			<MakeDir Directories="$(TestBinPath)" Condition="$(IsTest)  and '$(Configuration)'!='SQL2008'"/>
-      <MakeDir Directories="$(AllBinPath)"  Condition="!$(IsTest)  and '$(Configuration)'!='SQL2008'"/>
-      <MakeDir Directories="$(ToolBinPath)"  Condition="!$(IsTest)  and '$(Configuration)'!='SQL2008'"/>
-			<Copy  Condition="$(IsTest)  and '$(Configuration)'!='SQL2008'"
-				SourceFiles="@(MySourceFiles)"
-				DestinationFiles="@(MySourceFiles->'$(TestBinPath)\%(Filename)%(Extension)')"
-				/>
+			<CallTarget Condition="$(RunTest) and $(IsTest) and '$(Configuration)'!='SQL2008'" Targets="Test" />
+	<Message Text="Real use manifest $(UseManifest) and !$(IsTest) and !$(IsTool) and '$(Configuration)'!='SQL2008'" />
+	  <QorpentLibraryManifest Condition="$(UseManifest) and !$(IsTest) and !$(IsTool) and '$(Configuration)'!='SQL2008'" AssemblyPath="$(OutputPath)\$(AssemblyName).dll" ManifestPath="$(OutputPath)\m-$(AssemblyName).ioc-manifest.bxl" />
+			<MakeDir Directories="$(TestBinPath)" Condition="$(IsTest)  and '$(Configuration)'!='SQL2008'" />
+      <MakeDir Directories="$(AllBinPath)" Condition="!$(IsTest)  and '$(Configuration)'!='SQL2008'" />
+      <MakeDir Directories="$(ToolBinPath)" Condition="!$(IsTest)  and '$(Configuration)'!='SQL2008'" />
+			<Copy Condition="$(IsTest)  and '$(Configuration)'!='SQL2008'" SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles-&gt;'$(TestBinPath)\%(Filename)%(Extension)')" />
 		
-			<Copy  Condition="!$(IsTest)  and '$(Configuration)'!='SQL2008'"
-				SourceFiles="@(MySourceFiles)"
-				DestinationFiles="@(MySourceFiles->'$(AllBinPath)\%(Filename)%(Extension)')"
-				/>
+			<Copy Condition="!$(IsTest)  and '$(Configuration)'!='SQL2008'" SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles-&gt;'$(AllBinPath)\%(Filename)%(Extension)')" />
 
-    <Copy  Condition="$(IsTool) and !$(IsTest)  and '$(Configuration)'!='SQL2008'"
-				SourceFiles="@(MySourceFiles)"
-				DestinationFiles="@(MySourceFiles->'$(ToolBinPath)\%(Filename)%(Extension)')"
-				/>
+    <Copy Condition="$(IsTool) and !$(IsTest)  and '$(Configuration)'!='SQL2008'" SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles-&gt;'$(ToolBinPath)\%(Filename)%(Extension)')" />
 
 
-    <CallTarget Condition="$(RunTest) and $(IsTest)  and '$(Configuration)'=='SQL2008'" Targets="Test"/>
+    <CallTarget Condition="$(RunTest) and $(IsTest)  and '$(Configuration)'=='SQL2008'" Targets="Test" />
 			<ItemGroup Condition="'$(Configuration)'=='SQL2008'">
-			  <MySourceFiles Include="$(SqlAssemblyBinPath)\*.*"/>
+			  <MySourceFiles Include="$(SqlAssemblyBinPath)\*.*" />
 			</ItemGroup>
-			<MakeDir Directories="$(SqlTestBinPath)" Condition="$(IsTest) and '$(Configuration)'=='SQL2008'"/>
-    <MakeDir Directories="$(SqlToolBinPath)" Condition="$(IsTool) and !$(IsTest) and '$(Configuration)'=='SQL2008'"/>
-			<Copy  Condition="$(IsTest) and '$(Configuration)'=='SQL2008'"
-				SourceFiles="@(MySourceFiles)"
-				DestinationFiles="@(MySourceFiles->'$(SqlTestBinPath)\%(Filename)%(Extension)')"
-				/>
-			 <MakeDir Directories="$(SqlAllBinPath)"  Condition="!$(IsTest) and '$(Configuration)'=='SQL2008'"/>
-			<Copy  Condition="!$(IsTest) and '$(Configuration)'=='SQL2008'"
-				SourceFiles="@(MySourceFiles)"
-				DestinationFiles="@(MySourceFiles->'$(SqlAllBinPath)\%(Filename)%(Extension)')"
-				/>
-    <Copy  Condition="$(IsTool) and !$(IsTest)  and '$(Configuration)'=='SQL2008'"
-     SourceFiles="@(MySourceFiles)"
-     DestinationFiles="@(MySourceFiles->'$(SqlToolBinPath)\%(Filename)%(Extension)')"
-				/>
+			<MakeDir Directories="$(SqlTestBinPath)" Condition="$(IsTest) and '$(Configuration)'=='SQL2008'" />
+    <MakeDir Directories="$(SqlToolBinPath)" Condition="$(IsTool) and !$(IsTest) and '$(Configuration)'=='SQL2008'" />
+			<Copy Condition="$(IsTest) and '$(Configuration)'=='SQL2008'" SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles-&gt;'$(SqlTestBinPath)\%(Filename)%(Extension)')" />
+			 <Dir Directories="$(SqlAllBinPath)" Condition="!$(IsTest) and '$(Configuration)'=='SQL2008'" />
+			<Copy Condition="!$(IsTest) and '$(Configuration)'=='SQL2008'" SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles-&gt;'$(SqlAllBinPath)\%(Filename)%(Extension)')" />
+    <Copy Condition="$(IsTool) and !$(IsTest)  and '$(Configuration)'=='SQL2008'" SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles-&gt;'$(SqlToolBinPath)\%(Filename)%(Extension)')" />
   </Target>
   
   
