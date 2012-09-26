@@ -157,7 +157,7 @@
 	<When Condition="$(IsTest)">
   <Choose>
   
-		<When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' != 'Release' ">
+		<When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' != 'Release' and Exists('$(AllBinPath)\$(AssemblyNameBase).dll') ">
 		<ItemGroup>	
 		<Reference Include="$(AssemblyNameBase)">
 		  <SpecificVersion>False</SpecificVersion>
