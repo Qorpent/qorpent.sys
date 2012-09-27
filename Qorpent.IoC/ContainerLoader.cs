@@ -78,7 +78,7 @@ namespace Qorpent.IoC {
 						ExistedOnly = true,
 						PathType = FileSearchResultType.FullPath,
 						ProbeFiles = new[] {"*.ioc-manifest.xml", "*.ioc-manifest.bxl"},
-						ProbePaths = new[] {"~/", "~/bin", "~/sys", "~/usr"}
+						ProbePaths = new[] {"~/", "~/.config", "~/bin", "~/sys", "~/usr" }
 					});
 
 			var fullmanifest = new XElement("root");

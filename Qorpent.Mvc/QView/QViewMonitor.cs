@@ -42,7 +42,7 @@ namespace Qorpent.Mvc.QView {
 		/// <summary>
 		/// </summary>
 		public QViewMonitor() {
-			Path = "~/qviewbin";
+			Path = "~/.qviewbin";
 			MainExtension = "all.dll";
 			DiffExtension = "diff.dll";
 		}

@@ -21,7 +21,7 @@
 
 qxi::include log.ioc-template
 
-logfile default.file.writer, filename = '~/log/${date}/${host}.log', level=Warning
+logfile default.file.writer, filename = '~/.log/${date}/${host}.log', level=Warning
 errorreg default.error.writer, registryname = 'default.exception.registry'
 
 logger default.logger, level=Info

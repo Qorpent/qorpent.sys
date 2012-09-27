@@ -42,8 +42,8 @@ namespace Qorpent.Mvc.QView {
 		/// <summary>
 		/// </summary>
 		public QViewCompiler() {
-			DllPath = "~/qviewbin";
-			OutCodePath = "~/qviewcode";
+			DllPath = "~/.qviewbin";
+			OutCodePath = "~/tmp/.qviewcode";
 		}
 
 		/// <summary>

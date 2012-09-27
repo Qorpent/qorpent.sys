@@ -102,7 +102,7 @@ namespace Qorpent.Mvc.QView {
 			if (null == ext) {
 				throw new NullReferenceException("ext");
 			}
-			if (null == ViewContext.Context || prepared) {
+			if (null == ViewContext.Context || prepared && url.IsEmpty()) {
 				//embeded or autnome mode
 				url = name;
 			}

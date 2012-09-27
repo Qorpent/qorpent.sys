@@ -14,19 +14,16 @@ for /D %%1 in (*) do (
 for /D %%1 in (*) do (
 	cd %%1
 	git add --all
-	git commit -a
+	git commit -a -m "%1"
 	cd ..
 )
 
-if '%1' == 'push' (
+
 
 for /D %%1 in (*) do (
 	cd %%1
 	git push --all
 	cd ..
-)
-
-
 )
 
 if '%sys%' == 'sys-syncall' (
