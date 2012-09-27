@@ -196,9 +196,7 @@
   </Target>
 
 
-	<ItemGroup Condition="'$(Configuration)'!='SQL2008'">
-		<MySourceFiles Include="$(AssemblyBinPath)\*.*" Exclude="*.tmp" />
-	</ItemGroup>
+
   <Target Name="AfterBuild">
 		
 			<!-- call on such way due to MSBUILD issue on SLN compilation with advanced targets -->
@@ -208,6 +206,8 @@
 			<MakeDir Directories="$(TestBinPath)" Condition="$(IsTest)  and '$(Configuration)'!='SQL2008'" />
       <MakeDir Directories="$(AllBinPath)" Condition="!$(IsTest)  and '$(Configuration)'!='SQL2008'" />
       <MakeDir Directories="$(ToolBinPath)" Condition="!$(IsTest)  and '$(Configuration)'!='SQL2008'" />
+
+		<CreateItem Include="$(AssemblyBinPath)\*.*" Exclude="*.tmp" ><Output TaskParameter="Include" ItemName="MySourceFiles"/></CreateItem>
 			<Copy Condition="$(IsTest)  and '$(Configuration)'!='SQL2008'" SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles-&gt;'$(TestBinPath)\%(Filename)%(Extension)')" />
 		
 			<Copy Condition="!$(IsTest)  and '$(Configuration)'!='SQL2008'" SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles-&gt;'$(AllBinPath)\%(Filename)%(Extension)')" />

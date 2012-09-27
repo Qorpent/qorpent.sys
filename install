@@ -1,0 +1,21 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="..\qorpent.sys\commons\install.targets" />	
+	<PropertyGroup>
+		<PackageCondition Condition="'$(no_qorpent_sys)'!='True'">True</PackageCondition>
+	</PropertyGroup>
+	<ItemGroup>
+		<Library Include="Qorpent.Core"/>
+		<Library Include="Qorpent.Utils"/>
+		<Library Include="Qorpent.IO"/>
+		<Library Include="Qorpent.IoC"/>
+		<Library Include="Qorpent.Dsl"/>
+		<Library Include="Qorpent.Bxl"/>
+		<Library Include="Qorpent.Serialization"/>
+		<Library Include="Qorpent.Security"/>
+		<Library Include="Qorpent.Mvc"/>
+		<Library Include="Qorpent.Log"/>
+		<Config Include="commons\default-log.ioc-manifest.bxl" />
+		<Config Include="commons\log.ioc-template"  />
+		<RootFile Include="commons\web.config" Condition="$(IsWeb) and '$(no_rewrite_web_config)' != 'True'" />
+	</ItemGroup>
+</Project>
