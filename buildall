@@ -2,10 +2,10 @@
 	<Import Condition="Exists('..\qorpent.sys')" Project="..\qorpent.sys\commons\install.targets" />	
 	<Import Condition="Exists('qorpent.sys')" Project="qorpent.sys\commons\install.targets" />	
 	<ItemGroup>
-		<Project Condition="Exists('..\qorpent.sys')" Include="..\qorpent.sys\install" />
-		<Project Condition="Exists('qorpent.sys')" Include=".\qorpent.sys\install" />
-		<Project Condition="Exists('..\qorpent.sys')" Include="..\*\install" Exclude="..\qorpent.sys\install" />
-		<Project Condition="Exists('qorpent.sys')" Include=".\*\install" Exclude="..\qorpent.sys\install" />
+		<Project Condition="Exists('..\qorpent.sys')" Include="..\qorpent.sys\build" />
+		<Project Condition="Exists('qorpent.sys')" Include=".\qorpent.sys\build" />
+		<Project Condition="Exists('..\qorpent.sys')" Include="..\*\build" Exclude="..\qorpent.sys\build" />
+		<Project Condition="Exists('qorpent.sys')" Include=".\*\build" Exclude="..\qorpent.sys\build" />
 	</ItemGroup>
 	<Target Name="Build">
 		<MSBuild Projects="@(Project)" Properties="NoProjRef=True" />
