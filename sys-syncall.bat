@@ -14,7 +14,7 @@ for /D %%1 in (*) do (
 for /D %%1 in (*) do (
 	cd %%1
 	git add --all
-	git commit -a -m "%1"
+	git commit -m %1
 	cd ..
 )
 
