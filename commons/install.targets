@@ -29,6 +29,7 @@
 		<Copy SourceFiles="@(LibraryRef)" DestinationFolder="$(BinDir)"  SkipUnchangedFiles="true"  />
 		<Copy SourceFiles="@(RootFile)" DestinationFolder="$(AppDir)" SkipUnchangedFiles="true" />
 		<Copy SourceFiles="@(Config)"  DestinationFolder="$(ConfigDir)"  SkipUnchangedFiles="true"  />	
+		<Copy SourceFiles="@(SafeConfig)"  DestinationFolder="$(ConfigDir)" Condition="!Exists('$(ConfigDir)\%(SafeConfig.filename)%(SafeConfig.extension)')" />	
 		<Copy Condition="$(IsWeb)"  SourceFiles="@(Style)"  DestinationFolder="$(StyleDir)"  SkipUnchangedFiles="true"  />	
 		<Copy Condition="$(IsWeb)"  SourceFiles="@(Script)"  DestinationFolder="$(ScriptDir)"  SkipUnchangedFiles="true"  />	
 

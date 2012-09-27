@@ -82,36 +82,12 @@
 	<FileUpdate Files="$(ProjectFile);$(ProjectExportFile);$(TestProjectFile)" Regex="@PACKAGE@" ReplacementText="$(Package)" />
 
     <Message Text="Import  references" />
-    <RegexReplace Input="@(Qrefs)" Expression="(\w+)" Replacement="..\$(RootNs).$1\$(RootNs).$1.export" >
+    <RegexReplace Input="@(Qrefs)" Expression="(\w+)" Replacement="..\..\qorpent.sys\Qorpent.$1\Qorpent.$1.export" >
       <Output ItemName ="Qref" TaskParameter="Output" />
     </RegexReplace>
 
     <Copy SourceFiles="@(Qref)" DestinationFiles="$(ProjectDir)\%(Filename).import"/>
     <Copy SourceFiles="@(Qref)" DestinationFiles="$(TestProjectDir)\%(Filename).import"/>
-
-    <Message Text="Update solution file"  Condition="$(Sln) and !$(Probe)"/>
-    <FileUpdate  Condition="$(Sln) and !$(Probe)" Files="$(FullSolution)" Regex="([\r\n]+Global[\r\n]+)" ReplacementText='
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$(AssemblyName)", "$(AssemblyName)\$(AssemblyName).csproj", "{$(GUID1)}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$(TestAssemblyName)", "$(TestAssemblyName)\$(TestAssemblyName).csproj", "{$(GUID2)}"
-EndProject$1' />
-
-    <FileUpdate  Condition="$(Sln) and !$(Probe)" Files="$(FullSolution)" Regex="(postSolution[\r\n]+)" ReplacementText='$1
-    {$(GUID1)}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{$(GUID1)}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{$(GUID1)}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{$(GUID1)}.Release|Any CPU.Build.0 = Release|Any CPU
-    
-    {$(GUID2)}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{$(GUID2)}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{$(GUID2)}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{$(GUID2)}.Release|Any CPU.Build.0 = Release|Any CPU
-    ' />
-
-
-    <Message Condition="$(Probe)" Text="It's just a probe cleanup all!"/>
-    <RemoveDir  Condition="$(Probe)" Directories="$(ProjectDir)" />
-    <RemoveDir  Condition="$(Probe)" Directories="$(TestProjectDir)" />
 
   </Target>
 </Project>
