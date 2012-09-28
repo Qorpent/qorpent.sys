@@ -1,0 +1,18 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!-- it's informational manifest for @PACKAGE@ package can be used in documentation tools or in custom build/install processes -->
+	<PropertyGroup>
+		<PackageCode>qorpent.sys</PackageCode>
+		<PackageInstallCode>@qorpent_sys@</PackageInstallCode>
+		<PackageName>Qorpent Framework (IoC,Bxl,MVC,DSL)</PackageName>
+		<PackageComment>This package is core of Qorpent Application Framework (QAF) </PackageComment>
+		<PackageAuthor>Comdiv</PackageAuthor>
+		<PackageLicense>Apache 2.0</PackageLicense>
+		<PackageUrl>https://github.com/comdiv/qorpent.sys</PackageUrl>
+		<PackageAnnotation><![CDATA[
+Qorpent Framework is very effitient framework for buiding distributed , scaled informational
+systems and can be used for quick creating web facades to existed API's.
+Qorpent based applications are package-oriented, autoconfigurable and can serves
+any request as AJAX server, XML web service or HTML generator.
+		]]></PackageAnnotation>
+	</PropertyGroup>
+</Project>

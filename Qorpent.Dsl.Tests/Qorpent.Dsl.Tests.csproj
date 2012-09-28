@@ -60,8 +60,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Dsl\trysql.xslt" />
   </ItemGroup>
-  <Import Project="..\..\qorpent.sys\commons\build.targets" />
-  <Import Project="*.import" />
+   <Import Project="..\..\qorpent.kernel\build.targets" />
+  
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />

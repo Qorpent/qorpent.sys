@@ -6,200 +6,12 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Qorpent</RootNamespace>
     <AssemblyName>Qorpent.Core</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SQL2008|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\SQL2008\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NV3</DefineConstants>
-    <DocumentationFile>\Qorpent.Core.XML</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DocumentationFile>
     </DocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="Applications\ApplicationBoundContainerExtension.cs" />
-    <Compile Include="Applications\DefaultApplicationBuilder.cs" />
-    <Compile Include="Applications\IApplication.cs" />
-    <Compile Include="Applications\IApplicationStartup.cs" />
-    <Compile Include="Bxl\BxlException.cs" />
-    <Compile Include="Dsl\DslContext.cs" />
-    <Compile Include="Dsl\DslException.cs" />
-    <Compile Include="Dsl\DslMessage.cs" />
-    <Compile Include="Dsl\DslProject.cs" />
-    <Compile Include="Dsl\DslProjectType.cs" />
-    <Compile Include="Dsl\DslProviderBase.cs" />
-    <Compile Include="Dsl\IDslProvider.cs" />
-    <Compile Include="Dsl\IDslProviderService.cs" />
-    <Compile Include="Dsl\IDslResourceProvider.cs" />
-    <Compile Include="Dsl\IDslXmlPreprocessor.cs" />
-    <Compile Include="Dsl\ISpecialXmlParser.cs" />
-    <Compile Include="Dsl\IXmlInterpolationPreprocessor.cs" />
-    <Compile Include="Dsl\LogicalExpressions\DictionaryTermSource.cs" />
-    <Compile Include="Dsl\LogicalExpressions\ILogicalExpressionEvaluator.cs" />
-    <Compile Include="Dsl\LogicalExpressions\ILogicTermSource.cs" />
-    <Compile Include="Dsl\LogicalExpressions\LogicalExpressionNode.cs" />
-    <Compile Include="Dsl\LogicalExpressions\LogicTermSource.cs" />
-    <Compile Include="Dsl\SmartXslt\ISmartXsltTransform.cs" />
-    <Compile Include="Dsl\SmartXslt\XsltExtensionDefinition.cs" />
-    <Compile Include="Dsl\SmartXslt\XsltExtenstionType.cs" />
-    <Compile Include="Dsl\XmlInclude\IXmlIncludeProcessor.cs" />
-    <Compile Include="EnvironmentInfo.cs" />
-    <Compile Include="Applications\Application.cs" />
-    <Compile Include="Bxl\BxlGeneratorOptions.cs" />
-    <Compile Include="Bxl\BxlParserOptions.cs" />
-    <Compile Include="Bxl\IBxlParser.cs" />
-    <Compile Include="Bxl\IBxlService.cs" />
-    <Compile Include="Dsl\LexInfo.cs" />
-    <Compile Include="EnvironmentInfoTestObject.cs" />
-    <Compile Include="ErrorLevel.cs" />
-    <Compile Include="Events\IEvent.cs" />
-    <Compile Include="Events\IEventData.cs" />
-    <Compile Include="Events\IEventHandler.cs" />
-    <Compile Include="Events\IEventInvoker.cs" />
-    <Compile Include="Events\IEventManager.cs" />
-    <Compile Include="Events\IEventResult.cs" />
-    <Compile Include="Events\IResetable.cs" />
-    <Compile Include="Events\RequireResetAttribute.cs" />
-    <Compile Include="Events\ResetEventResult.cs" />
-    <Compile Include="Events\Event.cs" />
-    <Compile Include="Events\EventHandlerBase.cs" />
-    <Compile Include="Events\EventManager.cs" />
-    <Compile Include="Events\ResetEvent.cs" />
-    <Compile Include="Events\ResetEventData.cs" />
-    <Compile Include="Applications\IApplicationBound.cs" />
-    <Compile Include="Events\ResetResultInfo.cs" />
-    <Compile Include="Events\StandardResetHandler.cs" />
-    <Compile Include="IExceptionRegistryDataException.cs" />
-    <Compile Include="ILogBound.cs" />
-    <Compile Include="IWithIdx.cs" />
-    <Compile Include="IoC\ContainerComponentAttribute.cs" />
-    <Compile Include="IoC\ContainerContext.cs" />
-    <Compile Include="IoC\ContainerException.cs" />
-    <Compile Include="IoC\ContainerAttribute.cs" />
-    <Compile Include="IoC\ContainerExportAttribute.cs" />
-    <Compile Include="IoC\ContainerOperation.cs" />
-    <Compile Include="IoC\ContainerFactory.cs" />
-    <Compile Include="IoC\IComponentDefinition.cs" />
-    <Compile Include="IoC\IContainer.cs" />
-    <Compile Include="IoC\IContainerBound.cs" />
-    <Compile Include="IoC\IContainerExtension.cs" />
-    <Compile Include="IoC\IContainerLoader.cs" />
-    <Compile Include="IoC\IContainerSetup.cs" />
-    <Compile Include="IoC\InjectAttribute.cs" />
-    <Compile Include="IoC\WellKnownAttachedComponentDefinition.cs" />
-    <Compile Include="IWithRole.cs" />
-    <Compile Include="LicenseAttribute.cs" />
-    <Compile Include="Log\BaseLogWriter.cs" />
-    <Compile Include="Log\BaseTextWriterLogWriter.cs" />
-    <Compile Include="Log\IExceptionRegistry.cs" />
-    <Compile Include="Log\ConsoleLogWriter.cs" />
-    <Compile Include="Log\DefaultLogManager.cs" />
-    <Compile Include="Log\ILogger.cs" />
-    <Compile Include="Log\ILogManager.cs" />
-    <Compile Include="Log\ILogWriter.cs" />
-    <Compile Include="Log\InternalLoggerErrorBehavior.cs" />
-    <Compile Include="Log\BaseLogger.cs" />
-    <Compile Include="Log\LoggerBasedUserLog.cs" />
-    <Compile Include="Log\LogHelper.cs" />
-    <Compile Include="Log\LogMessage.cs" />
-    <Compile Include="Mvc\ActionAttribute.cs" />
-    <Compile Include="Mvc\ActionBase.cs" />
-    <Compile Include="Mvc\ActionDescriptor.cs" />
-    <Compile Include="Mvc\ActionNotFoundException.cs" />
-    <Compile Include="Mvc\Binding\BindAttribute.cs" />
-    <Compile Include="IoC\ContainerObjectWrapper.cs" />
-    <Compile Include="IoC\Lifestyle.cs" />
-    <Compile Include="IoC\SimpleContainer.cs" />
-    <Compile Include="IO\FileSearchQuery.cs" />
-    <Compile Include="IO\FileSearchResultType.cs" />
-    <Compile Include="IO\IFileNameResolver.cs" />
-    <Compile Include="IO\IFileService.cs" />
-    <Compile Include="IO\IOException.cs" />
-    <Compile Include="Log\IUserLog.cs" />
-    <Compile Include="IoC\WellKnownService.cs" />
-    <Compile Include="Log\LogException.cs" />
-    <Compile Include="Log\LogLevel.cs" />
-    <Compile Include="Log\StubUserLog.cs" />
-    <Compile Include="Mvc\Binding\BindException.cs" />
-    <Compile Include="Mvc\IAction.cs" />
-    <Compile Include="Mvc\IContextualRender.cs" />
-    <Compile Include="Mvc\IFileDescriptor.cs" />
-    <Compile Include="Mvc\IMvcHandler.cs" />
-    <Compile Include="Mvc\IMvcHandlerExtension.cs" />
-    <Compile Include="Mvc\MvcHandlerPhase.cs" />
-    <Compile Include="Mvc\MvcObjectType.cs" />
-    <Compile Include="Mvc\MvcStandardRender.cs" />
-    <Compile Include="Mvc\QView\IQView.cs" />
-    <Compile Include="Mvc\QView\IQViewBinder.cs" />
-    <Compile Include="Mvc\QView\IQViewCompiler.cs" />
-    <Compile Include="Mvc\QView\IQViewContext.cs" />
-    <Compile Include="Mvc\QView\IQViewExtended.cs" />
-    <Compile Include="Mvc\QView\IQViewMonitor.cs" />
-    <Compile Include="Mvc\QView\QViewAttribute.cs" />
-    <Compile Include="Mvc\QView\QViewBindAttribute.cs" />
-    <Compile Include="Mvc\QView\QViewCompileType.cs" />
-    <Compile Include="Mvc\QView\QViewInvariantBase.cs" />
-    <Compile Include="Mvc\QView\QViewLevel.cs" />
-    <Compile Include="Mvc\QView\ViewDataAttribute.cs" />
-    <Compile Include="Mvc\Remoting\ConnectionBase.cs" />
-    <Compile Include="Mvc\Remoting\IMvcConnection.cs" />
-    <Compile Include="Mvc\Remoting\IMvcConnectionFactory.cs" />
-    <Compile Include="Mvc\Remoting\MvcConnectionFactory.cs" />
-    <Compile Include="Mvc\Remoting\MvcQuery.cs" />
-    <Compile Include="Mvc\Remoting\MvcResult.cs" />
-    <Compile Include="Mvc\RenderBase.cs" />
-    <Compile Include="Mvc\RenderNotFoundException.cs" />
-    <Compile Include="Mvc\Security\IActionAuthorizer.cs" />
-    <Compile Include="Mvc\Binding\IActionBinder.cs" />
-    <Compile Include="Mvc\IContextualAction.cs" />
-    <Compile Include="Mvc\IMvcFactory.cs" />
-    <Compile Include="Mvc\INotModifiedStateProvider.cs" />
-    <Compile Include="Mvc\IRender.cs" />
-    <Compile Include="Mvc\MvcCallInfo.cs" />
-    <Compile Include="Mvc\MvcContextBase.cs" />
-    <Compile Include="Mvc\MvcExecption.cs" />
-    <Compile Include="Mvc\MvcStepDescriptor.cs" />
-    <Compile Include="Mvc\RenderAttribute.cs" />
-    <Compile Include="Mvc\RenderDescriptor.cs" />
-    <Compile Include="Security\AccessProvider.cs" />
-    <Compile Include="Security\AccessResult.cs" />
-    <Compile Include="Security\AccessResultType.cs" />
-    <Compile Include="Security\AccessRole.cs" />
-    <Compile Include="Security\DefaultImpersonationProvider.cs" />
-    <Compile Include="Security\IAccessProvider.cs" />
-    <Compile Include="Security\IAccessProviderExtension.cs" />
-    <Compile Include="Security\IAccessProviderService.cs" />
-    <Compile Include="Security\IImpersonationProvider.cs" />
-    <Compile Include="Security\QorpentSecurityException.cs" />
-    <Compile Include="Security\RoleBasedAccessProviderForIWithRole.cs" />
-    <Compile Include="Security\RoleResolverTermAdapter.cs" />
-    <Compile Include="ServiceBase.cs" />
-    <Compile Include="QorpentConst.cs" />
-    <Compile Include="QorpentException.cs" />
-    <Compile Include="Mvc\IMvcContext.cs" />
-    <Compile Include="Mvc\SimpleMvcContext.cs" />
-    <Compile Include="Security\AuthorizationResult.cs" />
-    <Compile Include="Security\DefaultPrincipalSource.cs" />
-    <Compile Include="Security\DefaultRoleResolver.cs" />
-    <Compile Include="Security\IPrincipalSource.cs" />
-    <Compile Include="Security\IRoleResolver.cs" />
-    <Compile Include="Security\IRoleResolverExtension.cs" />
-    <Compile Include="Serialization\DefaultSerializerFactory.cs" />
-    <Compile Include="Serialization\IgnoreSerializeAttribute.cs" />
-    <Compile Include="Serialization\ISerializer.cs" />
-    <Compile Include="Serialization\ISerializerFactory.cs" />
-    <Compile Include="Serialization\SerializationFormat.cs" />
-    <Compile Include="Serialization\SerializeNotNullOnlyAttribute.cs" />
-    <Compile Include="Serialization\SerializeAttribute.cs" />
-  </ItemGroup>
+  
   <ItemGroup>
     <Reference Include="System.Configuration" />
     <Reference Include="System.XML" />
@@ -212,11 +24,14 @@
       </ItemGroup>
     </When>
   </Choose>
-  <ItemGroup />
-  <Import Project="..\..\qorpent.sys\commons\build.targets" />
-  <Import Project="*.import" />
+  <ItemGroup />  
   <ItemGroup>
-    <None Include="*.import" />
-    <None Include="*.export" />
-  </ItemGroup>
+	<None Include="*.import" />
+	<None Include="*.export" />
+	<Compile Include=".\**\*.cs"/>
+	<EmbeddedResource Include=".\**\*.*resource"/>
+	<QorpentReference Include="*.import"/>
+ </ItemGroup>
+ 
+  <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

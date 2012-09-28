@@ -1,7 +1,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Import Project="..\qorpent.sys\commons\install.targets" />	
+	<Import Project="..\qorpent.kernel\package-install.targets" />	
 	<PropertyGroup>
-		<PackageCondition Condition="'$(no_qorpent_sys)'!='True'">True</PackageCondition>
+		<PackageCondition Condition="'$(qorpent_sys)'=='True'">True</PackageCondition>
 	</PropertyGroup>
 	<ItemGroup>
 		<Library Include="Qorpent.Core"/>
@@ -16,6 +16,6 @@
 		<Library Include="Qorpent.Log"/>
 		<Config Include="commons\default-log.ioc-manifest.bxl" />
 		<Config Include="commons\log.ioc-template"  />
-		<RootFile Include="commons\web.config" Condition="$(IsWeb) and '$(no_rewrite_web_config)' != 'True'" />
+		<Handler Include="qweb" />
 	</ItemGroup>
 </Project>

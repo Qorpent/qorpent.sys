@@ -1,0 +1,2 @@
+﻿<add name="QWeb" path="*.qweb" verb="*" type="Qorpent.Mvc.HttpHandler.MvcHandlerFactory, Qorpent.Mvc"   resourceType="Unspecified" requireAccess="Script" />
+		
