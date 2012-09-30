@@ -160,6 +160,11 @@ namespace Qorpent.IoC {
 			return result;
 		}
 			
+		/// <summary>
+		/// DUMP all cantainer component info to file
+		/// </summary>
+		/// <param name="container"></param>
+		/// <param name="filename"></param>
 		public static void DumpContainer(IContainer container, string filename =  "./container.dump") {
 			var file = System.IO.Path.GetFullPath(filename);
 			System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(file));

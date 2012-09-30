@@ -67,11 +67,15 @@ namespace Qorpent.Mvc {
 		/// <param name="uri"> </param>
 		/// <returns> </returns>
 		public static string GetActionName(Uri uri) {
+			var appname = "";
+			if(Applications.Application.HasCurrent && !string.IsNullOrEmpty(Applications.Application.Current.ApplicationName)) {
+				appname = Applications.Application.Current.ApplicationName + "/";
+			}
 			if (null == uri) {
 				return "qweb.none";
 			}
 			var result =
-				Regex.Match(uri.ToString(), @"https?\://[^/]+/[^/]+/((\w+/)?\w+?)(\.\w+)?\.qweb", RegexOptions.Compiled).Groups[1].
+				Regex.Match(uri.ToString(), @"https?\://[^/]+/"+appname+@"([\w/]+?)(\.\w+)?\.qweb", RegexOptions.Compiled).Groups[1].
 					Value;
 			if (string.IsNullOrEmpty(result)) {
 				return "qweb.none";

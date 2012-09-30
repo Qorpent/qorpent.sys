@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-	<IsTest>True</IsTest>
+    <IsTest>True</IsTest>
     <Configuration>Debug</Configuration>
     <ProjectGuid>{880F65EA-1A22-4672-A137-FFC912902046}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Qorpent.Core.Tests</RootNamespace>
-    <AssemblyName>Qorpent.Core.Tests</AssemblyName><AssemblyNameBase>Qorpent.Core</AssemblyNameBase>
+    <AssemblyName>Qorpent.Core.Tests</AssemblyName>
+    <AssemblyNameBase>Qorpent.Core</AssemblyNameBase>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SQL2008|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +27,7 @@
     <Compile Include="Events\ResetEventDataTest.cs" />
     <Compile Include="Log\DefaultLogManagerTest.cs" />
     <Compile Include="Log\LoggerTest.cs" />
+    <Compile Include="Mvc\MvcCallInfoTest.cs" />
     <Compile Include="Security\StubIWithRole.cs" />
     <Compile Include="Security\StubPrincipalSource.cs" />
     <Compile Include="Security\StubRoleResolver.cs" />
@@ -38,8 +40,7 @@
   <ItemGroup>
     <Folder Include="Application\" />
   </ItemGroup>
-   <Import Project="..\..\qorpent.kernel\build.targets" />
-  
+  <Import Project="..\..\qorpent.kernel\build.targets" />
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
