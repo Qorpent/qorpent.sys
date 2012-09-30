@@ -49,7 +49,7 @@ namespace Qorpent.Applications {
 		}
 
 		private void DumpApplicationContainer(IContainer container) {
-			try {
+			
 				var files = container.Get<IFileNameResolver>();
 				if(null!=files) {
 					var file = files.Resolve(FileSearchQuery.Leveled("~/tmp/container.dump"));
@@ -61,9 +61,7 @@ namespace Qorpent.Applications {
 						s.Flush();
 					}
 				}
-			}catch {
-				
-			}
+		
 		}
 
 		/// <summary>
