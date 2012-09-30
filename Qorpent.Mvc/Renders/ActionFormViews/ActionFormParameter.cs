@@ -50,7 +50,7 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 				                         new XAttribute("value", p.Default ?? ""));
 				if (p.IsLargeText) {
 					inner.Name = "textarea";
-					inner.Add(new XText("\r\n"));
+					inner.Add(new XText("&nbsp;"));
 				}
 				if (p.IsBool) {
 					inner.SetAttributeValue("type", "checkbox");
