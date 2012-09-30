@@ -99,7 +99,7 @@ namespace Qorpent.Log {
 				}
 				if (null == wr) {
 					var tmpfile = Path.GetTempFileName() + ".failsafelog." +
-					              Convert.ToDouble(DateTime.Now, CultureInfo.InvariantCulture) + ".txt";
+					              DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss", CultureInfo.InvariantCulture) + ".txt";
 					wr = new StreamWriter(tmpfile, true, Encoding.UTF8);
 				}
 				using (wr) {
