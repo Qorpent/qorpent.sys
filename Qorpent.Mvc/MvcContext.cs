@@ -29,6 +29,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml.Linq;
@@ -121,6 +122,7 @@ namespace Qorpent.Mvc {
 						if(auth.StartsWith("Basic")) {
 							var namepass = auth.Split(' ')[1].Trim();
 							var name = namepass.Split(':')[0].Trim();
+							name = Encoding.UTF8.GetString(Convert.FromBase64String(name));
 							_logonuser = new GenericPrincipal(new GenericIdentity("local\\"+name),new[]{"DEFAULT"} );
 						}
 					}
