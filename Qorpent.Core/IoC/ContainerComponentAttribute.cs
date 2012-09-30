@@ -29,7 +29,7 @@ namespace Qorpent.IoC {
 	/// <summary>
 	/// 	Marks classes to be exposed as components for container throug mainfest
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
 	public class ContainerComponentAttribute : ContainerAttribute {
 		/// <summary>
 		/// </summary>
