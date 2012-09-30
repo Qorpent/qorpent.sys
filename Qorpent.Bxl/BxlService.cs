@@ -30,7 +30,7 @@ namespace Qorpent.Bxl {
 	/// <summary>
 	/// 	Default BxlService implementation
 	/// </summary>
-	[ContainerComponent(Lifestyle.Singleton)]
+	[ContainerComponent(Lifestyle.Singleton,ServiceType = typeof(IBxlService))]
 	public class BxlService : IBxlService {
 		/// <summary>
 		/// 	Perform Bxl parsing of given code

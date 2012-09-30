@@ -35,7 +35,7 @@ namespace Qorpent.Bxl {
 	/// <summary>
 	/// 	Main gate to complexy access to Bxl parsing modes
 	/// </summary>
-	[ContainerComponent(Lifestyle.Transient)]
+	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof(IBxlParser))]
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISpecialXmlParser), Name = "bxl.xml.parser")]
 	public class BxlParser : IBxlParser, ISpecialXmlParser {
 		/// <summary>
