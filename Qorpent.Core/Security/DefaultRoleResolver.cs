@@ -124,7 +124,7 @@ namespace Qorpent.Security {
 			}
 
 			//HACK TO USE SHORT ADMIN NAME IN TEST ENVIRONMENT FOR ALL ROLES
-			if (!exact && principal.Identity.Name == "local\\MONO_MOD_ROOT")
+			if (!exact && principal.Identity.Name == "local\\MOD_MONO_ROOT")
 			{
 				return true;
 			}
