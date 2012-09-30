@@ -77,7 +77,7 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 					             new XElement("td", p.Name),
 					             new XElement("td", inner),
 					             new XElement("td", p.Help)
-						).ToString()
+						).ToString(SaveOptions.DisableFormatting)
 					);
 			}
 		}

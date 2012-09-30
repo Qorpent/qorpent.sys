@@ -87,7 +87,7 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 				                          new XElement("iframe", new XAttribute("id", "formresult"),
 				                                       new XAttribute("name", "formresult"))
 					             )
-					).ToString()
+					).ToString(SaveOptions.DisableFormatting)
 				);
 		}
 
