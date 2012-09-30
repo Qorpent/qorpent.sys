@@ -25,6 +25,8 @@
 
 using System;
 using System.Configuration;
+using System.IO;
+using Qorpent.IO;
 using Qorpent.IoC;
 
 namespace Qorpent.Applications {
@@ -42,7 +44,26 @@ namespace Qorpent.Applications {
 			var applicationtype = applicationImplementationType ?? ResolveApplicationType();
 			var application = (IApplication) Activator.CreateInstance(applicationtype);
 			application.Container = ContainerFactory.CreateDefault();
+			DumpApplicationContainer(application.Container);
 			return application;
+		}
+
+		private void DumpApplicationContainer(IContainer container) {
+			try {
+				var files = container.Get<IFileNameResolver>();
+				if(null!=files) {
+					var file = files.Resolve(FileSearchQuery.Leveled("~/tmp/container.dump"));
+					using(var s = new StreamWriter(file)) {
+						foreach (var componentDefinition in container.GetComponents()) {
+							s.Write(componentDefinition);
+							s.WriteLine();
+						}
+						s.Flush();
+					}
+				}
+			}catch {
+				
+			}
 		}
 
 		/// <summary>
