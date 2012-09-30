@@ -44,26 +44,11 @@ namespace Qorpent.Applications {
 			var applicationtype = applicationImplementationType ?? ResolveApplicationType();
 			var application = (IApplication) Activator.CreateInstance(applicationtype);
 			application.Container = ContainerFactory.CreateDefault();
-			DumpApplicationContainer(application.Container);
+			ContainerFactory.DumpContainer(application.Container, application.Container.Get<IFileNameResolver>().Resolve(FileSearchQuery.Leveled("~/.tmp/container.dump")));
 			return application;
 		}
 
-		private void DumpApplicationContainer(IContainer container) {
-			
-				var files = container.Get<IFileNameResolver>();
-				if(null!=files) {
-					var file = files.Resolve(FileSearchQuery.Leveled("~/tmp/container.dump"));
-					System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(file));
-					using(var s = new StreamWriter(file)) {
-						foreach (var componentDefinition in container.GetComponents()) {
-							s.Write(componentDefinition);
-							s.WriteLine();
-						}
-						s.Flush();
-					}
-				}
 		
-		}
 
 		/// <summary>
 		/// 	Gets the type of the container.

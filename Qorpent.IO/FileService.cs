@@ -31,7 +31,7 @@ namespace Qorpent.IO {
 	/// <summary>
 	/// 	Default implementation of Application-wide File service
 	/// </summary>
-	[ContainerComponent(Lifestyle.Singleton)]
+	[ContainerComponent(Lifestyle.Singleton, ServiceType=typeof(IFileService) )]
 	public class FileService : IFileService, IApplicationBound {
 		/// <summary>
 		/// 	Default Fileresolver instance

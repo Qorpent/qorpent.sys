@@ -45,6 +45,15 @@ namespace Qorpent.IoC.Tests {
 		public interface IMyService {}
 
 		public class MyClass : IMyService {}
+		
+		[Test]
+		public void FileNameResolver_Returned_On_IFileNameResolve(){
+			var container = new Container();
+			container.GetLoader().LoadAssembly(typeof(Qorpent.IO.FileNameResolver).Assembly);
+			ContainerFactory.DumpContainer(container);
+			var res = container.Get<Qorpent.IO.IFileNameResolver>();
+			Assert.True(res is FileNameResolver);
+		}
 
 		[Test]
 		public void CanLoadAssembly() {
@@ -86,6 +95,8 @@ namespace Qorpent.IoC.Tests {
 			                                         x.ImplementationType == typeof (ExportedTestService2_2)
 				               ));
 		}
+		
+		
 
 		[Test]
 		public void CanLoadDefaultManifest() {

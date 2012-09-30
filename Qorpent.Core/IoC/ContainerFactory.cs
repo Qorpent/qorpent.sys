@@ -159,6 +159,18 @@ namespace Qorpent.IoC {
 			}
 			return result;
 		}
+			
+		public static void DumpContainer(IContainer container, string filename =  "./container.dump") {
+			var file = System.IO.Path.GetFullPath(filename);
+			System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(file));
+			using(var s = new System.IO.StreamWriter(file)) {
+				foreach (var componentDefinition in container.GetComponents()) {
+					s.Write(componentDefinition);
+					s.WriteLine();
+				}
+				s.Flush();
+			}
+		}
 
 		/// <summary>
 		/// 	Загружает все сконфигурированные при помощи <see cref="ContainerComponentAttribute" /> компоненты из сборки в указанный контейнер
