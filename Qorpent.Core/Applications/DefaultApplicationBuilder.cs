@@ -53,6 +53,7 @@ namespace Qorpent.Applications {
 				var files = container.Get<IFileNameResolver>();
 				if(null!=files) {
 					var file = files.Resolve(FileSearchQuery.Leveled("~/tmp/container.dump"));
+					System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(file));
 					using(var s = new StreamWriter(file)) {
 						foreach (var componentDefinition in container.GetComponents()) {
 							s.Write(componentDefinition);
