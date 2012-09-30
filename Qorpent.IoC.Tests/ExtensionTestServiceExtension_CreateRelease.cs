@@ -39,7 +39,7 @@ namespace Qorpent.IoC.Tests {
 				var obj = (IExtensionTestService) context.Object;
 				if (context.Operation == ContainerOperation.AfterCreate) {
 					Assert.True(obj.ContainerBoundCalled);
-					obj.ExtensionBoundTest = context.Component.Parameters.GetValue("ebt", -1);
+					obj.ExtensionBoundTest = context.Component.Parameters.GetValue<int>("ebt", -1);
 				}
 				else {
 					obj.ExtensionRelease = true;

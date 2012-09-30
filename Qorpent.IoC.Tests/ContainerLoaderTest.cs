@@ -89,7 +89,7 @@ namespace Qorpent.IoC.Tests {
 
 		[Test]
 		public void CanLoadDefaultManifest() {
-			var manfile = Application.Current.Files.Write("~/main.ioc-manifest.bxl", @"
+			/*var manfile = Application.Current.Files.Write("~/main.ioc-manifest.bxl", @"
 ref	Qorpent.IoC.Tests
 using Qorpent.IoC.Tests
 using Qorpent.IoC.Tests.InnerNs
@@ -100,7 +100,7 @@ ref	Qorpent.IoC.Tests
 using Qorpent.IoC.Tests
 using Qorpent.IoC.Tests.InnerNs
 transient 'name2', ManifestTestService  : ITestService2
-");
+");*/
 			var c = new Container();
 			c.Register(c.NewComponent<IFileNameResolver, FileNameResolver>());
 			c.Register(c.NewComponent<ILogManager, DefaultLogManager>(Lifestyle.Singleton));

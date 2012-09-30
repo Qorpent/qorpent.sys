@@ -37,7 +37,7 @@ namespace Qorpent.IoC.Tests {
 
 
 		public void SetContainerContext(IContainer container, IComponentDefinition component) {
-			ContainerBoundTest = component.Parameters.GetValue("cbt", -1);
+			ContainerBoundTest = component.Parameters.GetValue<int>("cbt", -1);
 			ContainerBoundCalled = true;
 		}
 

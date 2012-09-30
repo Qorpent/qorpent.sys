@@ -10,6 +10,11 @@ tmp
 *.user
 *.dotCover
 *.suo
+*.sln
+*.~*
+*.*~
+*.pidb
+*.user*
 
 # mstest test results
 TestResults
