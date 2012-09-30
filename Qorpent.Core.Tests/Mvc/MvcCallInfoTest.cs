@@ -21,5 +21,10 @@ namespace Qorpent.Core.Tests.Mvc
 			Application.Current = app;
 			Assert.AreEqual(testaction,MvcCallInfo.GetActionName(new Uri(url)));
 		}
+
+		[Test]
+		public void decode() {
+			Console.WriteLine(Encoding.UTF8.GetString( Convert.FromBase64String("Y29tZGl2OnphcTEhUUFa")));
+		}
 	}
 }

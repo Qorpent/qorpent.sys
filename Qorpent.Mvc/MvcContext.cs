@@ -109,11 +109,24 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		public override IPrincipal LogonUser {
 			get {
-				return _logonuser ??
-				       (_logonuser =
-				        null != NativeASPContext
-					        ? NativeASPContext.User
-					        : new GenericPrincipal(new GenericIdentity("local\\guest"), new[] {"DEFAULT"}));
+				if(null==_logonuser) {
+
+					_logonuser =
+						null != NativeASPContext
+							? NativeASPContext.User
+							: new GenericPrincipal(new GenericIdentity("local\\guest"), new[] { "DEFAULT" });
+					//SETUP USER FROM APACHE BASIC AUTHORIZATION HEADER
+					if(string.IsNullOrEmpty(_logonuser.Identity.Name) && NativeASPContext!=null && NativeASPContext.Request.Headers.AllKeys.Any(x=>x=="Authorization")) {
+						var auth = NativeASPContext.Request.Headers["Authorization"];
+						if(auth.StartsWith("Basic")) {
+							var namepass = auth.Split(' ')[1].Trim();
+							var name = namepass.Split(':')[0].Trim();
+							_logonuser = new GenericPrincipal(new GenericIdentity("local\\"+name),new[]{"DEFAULT"} );
+						}
+					}
+					
+				}
+				return _logonuser;
 			}
 			set { _logonuser = value; }
 		}
