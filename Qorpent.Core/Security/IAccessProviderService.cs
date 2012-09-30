@@ -41,7 +41,7 @@ namespace Qorpent.Security {
 	/// <summary>
 	/// 	–еализаи€ <see cref="IAccessProviderService" /> по умолчанию
 	/// </summary>
-	[ContainerComponent(Lifestyle.Singleton)]
+	[ContainerComponent(Lifestyle.Singleton, ServiceType = typeof(IAccessProviderService))]
 	public class AccessProviderService : ServiceBase, IAccessProviderService {
 		/// <summary>
 		/// 	»Ќстанци€ провайдера по умолчанию

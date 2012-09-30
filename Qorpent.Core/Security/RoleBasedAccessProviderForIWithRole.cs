@@ -33,7 +33,7 @@ namespace Qorpent.Security {
 	/// 	Использует <see cref="IWithRole" /> и <see cref="IRoleResolver" /> для определения соответвия
 	/// 	Поддерживается
 	/// </summary>
-	[ContainerComponent(Lifestyle.Transient)]
+	[ContainerComponent(Lifestyle.Transient,ServiceType = typeof(IAccessProviderExtension))]
 	public class RoleBasedAccessProviderForIWithRole : IAccessProviderExtension {
 		/// <summary>
 		/// </summary>
