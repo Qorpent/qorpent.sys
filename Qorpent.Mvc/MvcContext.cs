@@ -121,8 +121,9 @@ namespace Qorpent.Mvc {
 						var auth = NativeASPContext.Request.Headers["Authorization"];
 						if(auth.StartsWith("Basic")) {
 							var namepass = auth.Split(' ')[1].Trim();
-							var name = namepass.Split(':')[0].Trim();
-							name = Encoding.UTF8.GetString(Convert.FromBase64String(name));
+							
+							var name = Encoding.UTF8.GetString(Convert.FromBase64String(namepass));
+							name = name.Split(':')[0].Trim();
 							_logonuser = new GenericPrincipal(new GenericIdentity("local\\"+name),new[]{"DEFAULT"} );
 						}
 					}
