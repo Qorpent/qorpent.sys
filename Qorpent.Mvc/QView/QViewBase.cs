@@ -93,6 +93,7 @@ namespace Qorpent.Mvc.QView {
 				var r = urlp.Split('/')[1];
 				ext = Path.GetExtension(r);
 				url = "/" + Application.ApplicationName + "/_sys/getresource.filedesc.qweb?a=" + a + "&amp;r=" + r;
+				url = url.Replace("//", "/");
 			}
 			else {
 				ext = Path.GetExtension(name);
