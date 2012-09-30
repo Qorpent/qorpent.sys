@@ -23,6 +23,8 @@
 
 #endregion
 
+using System.Collections.Generic;
+
 namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// 	Вызывает регистрацию записи об имперсонации текущей (Logon) учетной записи
@@ -45,8 +47,21 @@ namespace Qorpent.Mvc.Actions {
 			var logondeveloper = Application.Roles.IsInRole(logon, "DEVELOPER");
 			var logondatamaster = Application.Roles.IsInRole(logon, "DATAMASTER");
 
+			var data = new Dictionary<string, string>();
+			
+			foreach (var h in ((MvcContext)Context).NativeASPContext.Request.Headers.AllKeys) {
+				data["header:"+h] = ((MvcContext) Context).NativeASPContext.Request.Headers[h];
+			}
+			foreach (var h in ((MvcContext)Context).NativeASPContext.Request.Cookies.AllKeys)
+			{
+				data["cookie:"+h] = ((MvcContext)Context).NativeASPContext.Request.Cookies[h].Value;
+			}
+
 			if (imp == logon) {
-				return new {logonname, logonadmin, logondeveloper, logondatamaster};
+				return new {logonname, logonadmin, logondeveloper, logondatamaster,data
+
+				
+				};
 			}
 
 			var impadmin = Application.Roles.IsInRole(imp, "ADMIN");
@@ -54,7 +69,8 @@ namespace Qorpent.Mvc.Actions {
 			var impdatamaster = Application.Roles.IsInRole(imp, "DATAMASTER");
 
 			return
-				new {impersonation, impadmin, impdeveloper, impdatamaster, logonname, logonadmin, logondeveloper, logondatamaster};
+				new {impersonation, impadmin, impdeveloper, impdatamaster, logonname, logonadmin, logondeveloper, logondatamaster
+				};
 		}
 	}
 }
