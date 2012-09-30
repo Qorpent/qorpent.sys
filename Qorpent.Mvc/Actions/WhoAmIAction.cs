@@ -49,7 +49,7 @@ namespace Qorpent.Mvc.Actions {
 
 			var data = new Dictionary<string, string>();
 
-			if(string.IsNullOrEmpty(logonname)) return data;
+			
 			
 			foreach (var h in ((MvcContext)Context).NativeASPContext.Request.Headers.AllKeys) {
 				data["header:"+h] = ((MvcContext) Context).NativeASPContext.Request.Headers[h];
