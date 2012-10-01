@@ -336,11 +336,23 @@ namespace Qorpent.IoC {
 				yield break;
 			}
 
+			public IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly, bool requreManifest = false) {
+				throw new NotImplementedException();
+			}
+
 			public IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly) {
 				yield break;
 			}
 
 			public XElement ReadDefaultManifest() {
+				throw new NotImplementedException();
+			}
+
+			public IEnumerable<IComponentDefinition> LoadType(Type type) {
+				throw new NotImplementedException();
+			}
+
+			public IEnumerable<IComponentDefinition> Load<T>() {
 				throw new NotImplementedException();
 			}
 		}

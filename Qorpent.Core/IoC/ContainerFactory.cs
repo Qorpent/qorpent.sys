@@ -70,6 +70,7 @@ namespace Qorpent.IoC {
 									new WellKnownService<ILogManager>(null, typeof (DefaultLogManager), Lifestyle.Singleton),
 									new WellKnownService<IEventManager>(null, typeof (EventManager), Lifestyle.Singleton),
 									new WellKnownService<Assembly>("Qorpent.Core"),
+									new WellKnownService<Assembly>("Qorpent.Data"),
 									new WellKnownService<Assembly>("Qorpent.Log"),
 									new WellKnownService<Assembly>("Qorpent.IO"),
 									new WellKnownService<Assembly>("Qorpent.Serialization"),

@@ -50,8 +50,9 @@ namespace Qorpent.IoC {
 		/// 	Configures assembly to container if ContainerExport attribute defined
 		/// </summary>
 		/// <param name="assembly"> </param>
+		/// <param name="requreManifest"> </param>
 		/// <returns> </returns>
-		IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly);
+		IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly, bool requreManifest = false);
 
 		/// <summary>
 		/// Читает манифетсы приложения и конструирует единый 
@@ -59,5 +60,18 @@ namespace Qorpent.IoC {
 		/// <returns></returns>
 		/// <exception cref="Exception"></exception>
 		XElement ReadDefaultManifest();
+
+		/// <summary>
+		/// Loads all components defined on type
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		IEnumerable<IComponentDefinition> LoadType(Type type);
+
+		/// <summary>
+		/// Loads all components defined on type
+		/// </summary>
+		/// <returns></returns>
+		IEnumerable<IComponentDefinition> Load<T>();
 	}
 }
