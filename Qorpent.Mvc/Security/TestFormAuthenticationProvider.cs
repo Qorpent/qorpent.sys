@@ -36,6 +36,11 @@ namespace Qorpent.Mvc.Security {
 		/// <param name="context"> </param>
 		/// <returns> </returns>
 		public bool IsAuthenticated(string name, string password, IMvcContext context) {
+#if !Unix
+			if(Applications.Application.Current.SysLogon!=null) {
+				return Applications.Application.Current.SysLogon.Logon(name, password);
+			}
+#endif
 			var key = name + ":" + password;
 			if (null == context) {
 				return false;
@@ -47,6 +52,7 @@ namespace Qorpent.Mvc.Security {
 				return true;
 			}
 			return false;
+
 		}
 	}
 }

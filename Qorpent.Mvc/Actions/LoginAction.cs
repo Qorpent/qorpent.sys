@@ -53,10 +53,10 @@ namespace Qorpent.Mvc.Actions {
 
 		/// <summary>
 		/// </summary>
-		[Bind(Name = "_l_o_g_i_n_", Required = true, ValidatePattern = @"^[\w\.-\\]+$")] protected string login;
+		[Bind(Name = "_l_o_g_i_n_", Required = false, ValidatePattern = @"^[\w\.-\\]+$")] protected string login;
 
 		/// <summary>
 		/// </summary>
-		[Bind(Name = "_p_a_s_s_", Required = true, ValidatePattern = @"^[\w\S]{2,}$")] protected string pass;
+		[Bind(Name = "_p_a_s_s_", Required = false, ValidatePattern = @"^[\w\S]{2,}$")] protected string pass;
 	}
 }

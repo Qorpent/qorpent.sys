@@ -68,6 +68,7 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 				                          new XAttribute("id", "formcall"),
 				                          new XAttribute("actionname", name),
 				                          new XAttribute("target", "formresult"),
+										  new XAttribute("method", "POST"),
 				                          new XElement("table",
 				                                       binders.SelectMany(p => XhtmlSubview("actionformparameter", new {p})))
 					             ),

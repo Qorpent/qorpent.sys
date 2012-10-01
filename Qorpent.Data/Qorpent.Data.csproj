@@ -12,6 +12,9 @@
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
+    <Compile Include="REST\AddConnection.cs" />
+    <Compile Include="REST\ConnectionsAction.cs" />
+    <Compile Include="REST\RemoveConnection.cs" />
     <None Include="*.import" />
     <None Include="*.export" />
     <Compile Include="Connections\DatabaseConnectionProvider.cs" />

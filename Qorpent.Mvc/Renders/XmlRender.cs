@@ -56,8 +56,8 @@ namespace Qorpent.Mvc.Renders {
 		/// <param name="context"> </param>
 		public override void RenderError(Exception error, IMvcContext context) {
 			context.ContentType = "text/xml";
-			var x = new XElement("error", new XCData(error.ToString()));
-			context.Output.Write(x.ToString());
+			//var x = new XElement("error", new XCData(error.ToString()));
+			//context.Output.Write(x.ToString());
 			base.RenderError(error, context);
 		}
 	}

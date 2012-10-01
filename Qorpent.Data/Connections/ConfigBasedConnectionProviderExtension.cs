@@ -18,6 +18,7 @@ namespace Qorpent.Data.Connections {
 			foreach (ConnectionStringSettings connection in connections) {
 				var con = new ConnectionDescriptor
 					{Name = connection.Name, ConnectionString = connection.ConnectionString, ConnectionType = typeof (SqlConnection)};
+				con.Evidence = "config:" + connection.ElementInformation.Source + ":" + connection.ElementInformation.LineNumber;
 				yield return con;
 			}
 		}

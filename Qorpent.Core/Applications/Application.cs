@@ -123,6 +123,27 @@ namespace Qorpent.Applications {
 		}
 
 		/// <summary>
+		/// 	Access to Bxl service
+		/// </summary>
+		/// <remarks>
+		/// </remarks>
+		public ISysLogon SysLogon
+		{
+			get
+			{
+				if (null == _syslogon)
+				{
+					lock (this)
+					{
+						return _syslogon = ResolveService<ISysLogon>();
+					}
+				}
+				return _syslogon;
+			}
+			set { _syslogon = value; }
+		}
+
+		/// <summary>
 		/// 	Access to <see cref="IAccessProviderService" /> service
 		/// </summary>
 		/// <remarks>
@@ -573,5 +594,6 @@ namespace Qorpent.Applications {
 
 		private ISerializerFactory _serializerfactory;
 		private IDatabaseConnectionProvider _dbconnecitons;
+		private ISysLogon _syslogon;
 	}
 }

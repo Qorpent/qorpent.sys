@@ -193,6 +193,13 @@ namespace Qorpent.Applications {
 		IDatabaseConnectionProvider DatabaseConnections { get; set; }
 
 		/// <summary>
+		/// 	Access to Bxl service
+		/// </summary>
+		/// <remarks>
+		/// </remarks>
+		ISysLogon SysLogon { get; set; }
+
+		/// <summary>
 		/// 	simple synchronization method, waits wile Application lock released
 		/// </summary>
 		/// <remarks>

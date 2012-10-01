@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Qorpent.Events;
 using Qorpent.IoC;
 
@@ -113,7 +114,18 @@ namespace Qorpent.Data.Connections {
 				return Registry.ContainsKey(name);
 			}
 		}
-		
+
+		/// <summary>
+		/// Возвращает список всех имеющихся конфигураций подключений
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<ConnectionDescriptor> Enlist() {
+			lock(this) {
+				Reload();
+				return Registry.Values.ToArray();
+			}
+		}
+
 
 		/// <summary>
 		/// Зарегистрировать новое соединение

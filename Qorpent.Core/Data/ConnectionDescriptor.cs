@@ -1,4 +1,5 @@
 using System;
+using System.Data.SqlClient;
 using Qorpent.IoC;
 using Qorpent.Serialization;
 
@@ -8,6 +9,12 @@ namespace Qorpent.Data {
 	/// </summary>
 	[Serialize]
 	public class ConnectionDescriptor {
+		/// <summary>
+		/// 
+		/// </summary>
+		public ConnectionDescriptor() {
+			ConnectionType = typeof (SqlConnection);
+		}
 		/// <summary>
 		/// Имя соединения
 		/// </summary>
@@ -21,6 +28,12 @@ namespace Qorpent.Data {
 		/// Тип подключения
 		/// </summary>
 		public Type ConnectionType { get; set; }
+
+		/// <summary>
+		/// Свойство для сериализации
+		/// </summary>
+		public string ConnectionTypeName {get { return ConnectionType.AssemblyQualifiedName; }}
+
 		/// <summary>
 		/// Имя подключения в контейнере
 		/// </summary>
@@ -36,5 +49,10 @@ namespace Qorpent.Data {
 		/// </summary>
 		[SerializeNotNullOnly]
 		public IContainer Container { get; set; }
+
+		/// <summary>
+		/// Происхождение строки в провайдере
+		/// </summary>
+		public string Evidence { get; set; }
 	}
 }

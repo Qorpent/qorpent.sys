@@ -25,6 +25,7 @@
     <Compile Include="HttpHandler\WaitApplicationStartupHandler.cs" />
     <Compile Include="MvcContext.cs" />
     <Compile Include="HttpApplicationReloader.cs" />
+    <Compile Include="Renders\LoginViews\LoginView.cs" />
     <Compile Include="UI\ButtonSize.cs" />
     <Compile Include="UI\DefaultLayout.cs" />
     <Compile Include="QView\QViewCompilerHelper.cs" />
@@ -89,8 +90,7 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-   <Import Project="..\..\qorpent.kernel\build.targets" />
-  
+  <Import Project="..\..\qorpent.kernel\build.targets" />
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />

@@ -26,6 +26,8 @@
   </Choose>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Security\ISysLogon.cs" />
+    <Compile Include="Security\WinLogonType.cs" />
     <None Include="*.import" />
     <None Include="*.export" />
     <Compile Include=".\Applications\Application.cs" />

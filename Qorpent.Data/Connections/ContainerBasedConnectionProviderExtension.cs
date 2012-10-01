@@ -23,6 +23,7 @@ namespace Qorpent.Data.Connections {
 				con.InstantiateWithContainer = true;
 				con.Container = this.Container;
 				con.ContainerName = source.Name;
+				con.Evidence = "app.container";
 				yield return con;
 			}
 		}

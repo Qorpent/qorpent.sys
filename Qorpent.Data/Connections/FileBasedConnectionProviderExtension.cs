@@ -64,6 +64,7 @@ namespace Qorpent.Data.Connections {
 					{
 						desc.ConnectionType = Type.GetType(connectiontype);
 					}
+					desc.Evidence = e.Attr("_file");
 					yield return desc;
 				}
 				

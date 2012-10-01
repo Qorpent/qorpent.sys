@@ -7,10 +7,13 @@
     <RootNamespace>Qorpent.Security</RootNamespace>
     <AssemblyName>Qorpent.Security</AssemblyName>
   </PropertyGroup>
-   <Import Project="..\..\qorpent.kernel\build.targets" />
-  
+  <Import Project="..\..\qorpent.kernel\build.targets" />
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="NativeWindowsFunctions.cs" />
+    <Compile Include="SysLogon.cs" />
   </ItemGroup>
 </Project>

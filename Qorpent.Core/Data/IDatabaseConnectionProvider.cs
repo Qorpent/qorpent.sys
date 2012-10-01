@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -40,5 +41,11 @@ namespace Qorpent.Data
 		/// <param name="name"></param>
 		/// <returns></returns>
 		bool Exists(string name);
+
+		/// <summary>
+		/// Возвращает список всех имеющихся конфигураций подключений
+		/// </summary>
+		/// <returns></returns>
+		IEnumerable<ConnectionDescriptor> Enlist();
 	}
 }
