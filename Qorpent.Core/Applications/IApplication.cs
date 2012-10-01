@@ -25,6 +25,7 @@
 
 using System;
 using Qorpent.Bxl;
+using Qorpent.Data;
 using Qorpent.Dsl;
 using Qorpent.Events;
 using Qorpent.IO;
@@ -183,6 +184,13 @@ namespace Qorpent.Applications {
 		/// Время реального старта приложения
 		/// </summary>
 		DateTime StartTime { get; set; }
+
+		/// <summary>
+		/// 	Access to <see cref="IDatabaseConnectionProvider" /> service
+		/// </summary>
+		/// <remarks>
+		/// </remarks>
+		IDatabaseConnectionProvider DatabaseConnections { get; set; }
 
 		/// <summary>
 		/// 	simple synchronization method, waits wile Application lock released

@@ -28,6 +28,7 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using Qorpent.Bxl;
+using Qorpent.Data;
 using Qorpent.Dsl;
 using Qorpent.Events;
 using Qorpent.IO;
@@ -136,6 +137,28 @@ namespace Qorpent.Applications {
 				return _access;
 			}
 			set { _access = value; }
+		}
+
+
+		/// <summary>
+		/// 	Access to <see cref="IDatabaseConnectionProvider" /> service
+		/// </summary>
+		/// <remarks>
+		/// </remarks>
+		public IDatabaseConnectionProvider DatabaseConnections
+		{
+			get
+			{
+				if (null == _dbconnecitons)
+				{
+					lock (this)
+					{
+						return _dbconnecitons = ResolveService<IDatabaseConnectionProvider>();
+					}
+				}
+				return _dbconnecitons;
+			}
+			set { _dbconnecitons = value; }
 		}
 
 		/// <summary>
@@ -549,5 +572,6 @@ namespace Qorpent.Applications {
 		private string _rootdirectory;
 
 		private ISerializerFactory _serializerfactory;
+		private IDatabaseConnectionProvider _dbconnecitons;
 	}
 }

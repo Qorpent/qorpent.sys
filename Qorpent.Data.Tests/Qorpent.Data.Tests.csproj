@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IsTest>True</IsTest>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{16ABD509-8E84-46F5-9F56-1E5E4B5B3913}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Data.Tests</RootNamespace>
+    <AssemblyName>Qorpent.Data.Tests</AssemblyName>
+    <AssemblyNameBase>Qorpent.Data</AssemblyNameBase>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ConnectionLoaderTest.cs" />
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <Compile Include=".\**\*.cs" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+    <QorpentReference Include="*.import" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>

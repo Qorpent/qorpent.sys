@@ -17,8 +17,13 @@ limitations under the License.
 -->
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<!-- 
-		main qorpent.sys bundle of must have libraries - usefull for tests and very low level solutions
+		main qorpent.sys bundle of core libraries - all that need to be used at system level or in console 
+		mvc/serialization/security not provided because they not tended to use directly any way
 	-->
 	<Import Project="..\..\qorpent.sys\Qorpent.Core\*.export" />
 	<Import Project="..\..\qorpent.sys\Qorpent.Utils\*.export" />
+	<Import Project="..\..\qorpent.sys\Qorpent.IO\*.export" />
+	<Import Project="..\..\qorpent.sys\Qorpent.IoC\*.export" />
+	<Import Project="..\..\qorpent.sys\Qorpent.Bxl\*.export" />
+	<Import Project="..\..\qorpent.sys\Qorpent.Dsl\*.export" />
 </Project>

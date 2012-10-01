@@ -7,6 +7,7 @@
 		<Library Include="Qorpent.Core"/>
 		<Library Include="Qorpent.Utils"/>
 		<Library Include="Qorpent.IO"/>
+		<Library Include="Qorpent.Data"/>
 		<Library Include="Qorpent.IoC"/>
 		<Library Include="Qorpent.Dsl"/>
 		<Library Include="Qorpent.Bxl"/>

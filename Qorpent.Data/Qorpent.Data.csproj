@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{E762ABB0-9982-444C-A2B5-23B5866954F3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Data</RootNamespace>
+    <AssemblyName>Qorpent.Data</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ConfigBasedConnectionProviderExtension.cs" />
+    <Compile Include="ContainerBasedConnectionProviderExtension.cs" />
+    <Compile Include="FileBasedConnectionProviderExtension.cs" />
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <Compile Include=".\DatabaseConnectionProvider.cs" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+    <QorpentReference Include="*.import" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>
