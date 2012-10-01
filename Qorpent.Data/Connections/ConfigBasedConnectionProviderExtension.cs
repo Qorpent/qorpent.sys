@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using Qorpent.IoC;
 
-namespace Qorpent.Data {
+namespace Qorpent.Data.Connections {
 	/// <summary>
 	/// —читывает информацию из штатного конфига
 	/// </summary>

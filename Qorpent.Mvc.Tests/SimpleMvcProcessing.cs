@@ -85,28 +85,28 @@ namespace Qorpent.Mvc.Tests {
 
 		[Test]
 		public void action1_executed() {
-			var ctx = app.CreateContext("http://localhost/app/action1.xml.qweb");
+			var ctx = app.CreateContext("http://localhost/action1.xml.qweb");
 			handler.ProcessRequest(ctx);
 			Assert.AreEqual(1, ctx.ActionResult);
 		}
 
 		[Test]
 		public void action1_rendered() {
-			var ctx = app.CreateContext("http://localhost/app/action1.xml.qweb");
+			var ctx = app.CreateContext("http://localhost/action1.xml.qweb");
 			handler.ProcessRequest(ctx);
 			Assert.AreEqual("<value>1</value>", ctx.Output.ToString());
 		}
 
 		[Test]
 		public void action2_executed() {
-			var ctx = app.CreateContext("http://localhost/app/test/act2.xml.qweb");
+			var ctx = app.CreateContext("http://localhost/test/act2.xml.qweb");
 			handler.ProcessRequest(ctx);
 			Assert.AreEqual(2, ctx.ActionResult);
 		}
 
 		[Test]
 		public void action2_executed_with_binding() {
-			var ctx = app.CreateContext("http://localhost/app/test/act2.xml.qweb?x=33");
+			var ctx = app.CreateContext("http://localhost/test/act2.xml.qweb?x=33");
 			handler.ProcessRequest(ctx);
 			Assert.AreEqual(33, ctx.ActionResult);
 		}
@@ -114,7 +114,7 @@ namespace Qorpent.Mvc.Tests {
 
 		[Test]
 		public void action2_executed_with_qview() {
-			var ctx = app.CreateContext("http://localhost/app/test/act2.qview.qweb?x=33");
+			var ctx = app.CreateContext("http://localhost/test/act2.qview.qweb?x=33");
 			handler.ProcessRequest(ctx);
 			Assert.AreEqual(33, ctx.ActionResult);
 			Console.WriteLine(ctx.Output.ToString());
@@ -124,7 +124,7 @@ namespace Qorpent.Mvc.Tests {
 
 		[Test]
 		public void action2_rendered() {
-			var ctx = app.CreateContext("http://localhost/app/test/act2.xml.qweb");
+			var ctx = app.CreateContext("http://localhost/test/act2.xml.qweb");
 			handler.ProcessRequest(ctx);
 			Console.WriteLine(ctx.Output.ToString());
 			Assert.AreEqual("<value>2</value>", ctx.Output.ToString());

@@ -81,36 +81,36 @@ namespace Qorpent.Mvc.Tests {
 
 		[Test]
 		public void Action_And_Render_Name_Was_SetedUp_Normally() {
-			var ctx = new MvcContext {Uri = new Uri("http://localhost/test/mY/echo.bXl.qweb?x=1")};
+			var ctx = new MvcContext {Uri = new Uri("http://localhost/mY/echo.bXl.qweb?x=1")};
 			Assert.AreEqual("my.echo", ctx.ActionName);
 			Assert.AreEqual("bxl", ctx.RenderName);
 		}
 
 		[Test]
 		public void Parameters_Can_Be_Evaluated_From_Query_String() {
-			var ctx = new MvcContext {Uri = new Uri("http://localhost/test/mY/echo.bXl.qweb?x=1&y=2")};
+			var ctx = new MvcContext {Uri = new Uri("http://localhost/mY/echo.bXl.qweb?x=1&y=2")};
 			Assert.AreEqual(1, ctx.Get<int>("x"));
 			Assert.AreEqual(2, ctx.Get<int>("y"));
 		}
 
 		[Test]
 		public void bug_not_well_action_render_specification() {
-			var ctx = new MvcContext("http://localhost/app/test/act2.xml.qweb");
+			var ctx = new MvcContext("http://localhost/test/act2.xml.qweb");
 			Assert.AreEqual("test.act2", ctx.ActionName);
 			Assert.AreEqual("xml", ctx.RenderName);
 		}
 
 		[Test]
 		public void bug_not_well_action_render_specification2() {
-			var ctx = new MvcContext("http://localhost/app/action1.xml.qweb");
+			var ctx = new MvcContext("http://localhost/action1.xml.qweb");
 			Assert.AreEqual("action1", ctx.ActionName);
 			Assert.AreEqual("xml", ctx.RenderName);
 		}
 
 		[Test]
 		public void command_parsed() {
-			Assert.AreEqual("start.end", new MvcContext("http://server/app/start/end.qweb?param").ActionName);
-			Assert.AreEqual("start.end", new MvcContext("http://server/app/start/end.json.qweb?param").ActionName);
+			Assert.AreEqual("start.end", new MvcContext("http://server/start/end.qweb?param").ActionName);
+			Assert.AreEqual("start.end", new MvcContext("http://server/start/end.json.qweb?param").ActionName);
 		}
 
 		[Test]
@@ -140,7 +140,7 @@ namespace Qorpent.Mvc.Tests {
 
 		[Test]
 		public void works_with_httpcontext() {
-			var req = new HttpRequest("", "http://server/app/start/end.wiki.qweb?param", "x=1&y=2");
+			var req = new HttpRequest("", "http://server/start/end.wiki.qweb?param", "x=1&y=2");
 			var ctx = new HttpContext(req, new HttpResponse(null));
 			var context = new MvcContext(new HttpContextWrapper(ctx));
 			Assert.AreEqual("start.end", context.ActionName);

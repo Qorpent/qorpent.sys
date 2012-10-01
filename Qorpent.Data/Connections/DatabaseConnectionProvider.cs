@@ -4,7 +4,7 @@ using System.Data;
 using Qorpent.Events;
 using Qorpent.IoC;
 
-namespace Qorpent.Data {
+namespace Qorpent.Data.Connections {
 	/// <summary>
 	/// Основная реализация резольвера строк соединений
 	/// </summary>
@@ -64,6 +64,7 @@ namespace Qorpent.Data {
 					Register(connection,false);
 				}
 			}
+			_loaded = true;
 		}
 
 		/// <summary>

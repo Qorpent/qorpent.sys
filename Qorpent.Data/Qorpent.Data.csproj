@@ -8,12 +8,13 @@
     <AssemblyName>Qorpent.Data</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ConfigBasedConnectionProviderExtension.cs" />
-    <Compile Include="ContainerBasedConnectionProviderExtension.cs" />
-    <Compile Include="FileBasedConnectionProviderExtension.cs" />
+    <Compile Include="Connections\ConfigBasedConnectionProviderExtension.cs" />
+    <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
+    <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
+    <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
     <None Include="*.import" />
     <None Include="*.export" />
-    <Compile Include=".\DatabaseConnectionProvider.cs" />
+    <Compile Include="Connections\DatabaseConnectionProvider.cs" />
     <EmbeddedResource Include=".\**\*.*resource" />
     <QorpentReference Include="*.import" />
   </ItemGroup>

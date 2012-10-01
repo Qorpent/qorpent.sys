@@ -174,7 +174,7 @@ p : @after
 			factory.Register(ass);
 
 			var h = factory.CreateHandler();
-			var ctx = factory.CreateContext("http://localhost/app/my/test.qview.qweb?layout=test");
+			var ctx = factory.CreateContext("http://localhost/my/test.qview.qweb?layout=test");
 			var sw = new StringWriter();
 			ctx.Output = sw;
 			h.ProcessRequest(ctx);

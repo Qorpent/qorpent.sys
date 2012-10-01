@@ -4,7 +4,7 @@ using System.Linq;
 using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Data {
+namespace Qorpent.Data.Connections {
 	/// <summary>
 	/// —читывает информацию из контейнера по типу IDbConnection
 	/// </summary>
