@@ -154,14 +154,15 @@ namespace Qorpent.IoC {
 		/// 	Configures assembly to container if ContainerExport attribute defined
 		/// </summary>
 		/// <param name="assembly"> </param>
+		/// <param name="requireManifest"> </param>
 		/// <returns> </returns>
-		public IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly) {
+		public IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly, bool requireManifest = false) {
 			if (assembly == null) {
 				throw new ArgumentNullException("assembly");
 			}
 			var am = new AssemblyManifestDefinition(assembly, needExportAttribute: false);
 			var result = new List<IComponentDefinition>();
-			if (null != am.Descriptor) {
+			if (null != am.Descriptor || !requireManifest) {
 				foreach (var definition in am.ComponentDefinitions) {
 					var component = definition.GetComponent();
 					_container.Register(component);
@@ -169,6 +170,34 @@ namespace Qorpent.IoC {
 				}
 			}
 			return result.ToArray();
+		}
+
+		/// <summary>
+		/// Loads all components defined on type
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public IEnumerable<IComponentDefinition> LoadType(Type type) {
+			var mcd = ManifestClassDefinition.GetAllClassManifests(type).ToArray();
+			IList<IComponentDefinition> components = new List<IComponentDefinition>();
+			foreach (var classDefinition in mcd) {
+				var component = classDefinition.GetComponent();
+				
+				_container.Register(component);
+				components.Add(component);
+			}
+
+			return components.ToArray();
+
+
+		}
+
+		/// <summary>
+		/// Loads all components defined on type
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<IComponentDefinition> Load<T>() {
+			return LoadType(typeof (T));
 		}
 
 		private readonly IContainer _container;

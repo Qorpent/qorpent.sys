@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Utils.Extensions;
 
@@ -64,6 +65,63 @@ namespace Qorpent.IoC {
 				}
 			}
 		}
+
+
+
+		/// <summary>
+		/// Создает манифест для указанного типа и атрибута
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="predesc"></param>
+		public ManifestClassDefinition(Type type, Attribute predesc)
+		{
+			// we use indirect attribute usage to avoid msbuild context problems - we have to make compoents even in different versions of system
+			Type = type;
+		
+			if (null != predesc)
+			{
+				Descriptor = new ContainerComponentAttribute();
+				Descriptor.Lifestyle = predesc.GetValue<Lifestyle>("Lifestyle");
+				Descriptor.Name = predesc.GetValue<string>("Name");
+				Descriptor.Help = predesc.GetValue<string>("Help");
+				Descriptor.Role = predesc.GetValue<string>("Role");
+				Descriptor.ServiceType = predesc.GetValue<Type>("ServiceType");
+				Descriptor.Priority = predesc.GetValue<int>("Priority");
+			}
+
+			if (null != Descriptor)
+			{
+				if (null == Descriptor.ServiceType)
+				{
+					AutoDetectedServiceType =
+						type.GetInterfaces().Except(type.BaseType.GetInterfaces()).FirstOrDefault(x => x != typeof(IContainerBound));
+					if (null == AutoDetectedServiceType)
+					{
+						AutoDetectedServiceType = type;
+					}
+				}
+			}
+		}
+
+
+		/// <summary>
+		/// Retrieves all components for all attributes
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static IEnumerable<ManifestClassDefinition> GetAllClassManifests(Type type) {
+			var attributes =
+				type.GetCustomAttributes(true).Where(x => x.GetType().Name == typeof (ContainerComponentAttribute).Name
+				                                          ||
+				                                          x.GetType().BaseType.Name == typeof (ContainerComponentAttribute).Name).
+					OfType<Attribute>().ToArray();
+			foreach (var attribute in attributes) {
+				yield return new ManifestClassDefinition(type, attribute);
+			}
+
+		}
+
+
 
 
 		/// <summary>
