@@ -43,7 +43,14 @@ namespace Qorpent.IoC {
 	///	среды для тестирования
 	///</remarks>
 	///<source>Qorpent/Qorpent.Core/IoC/ContainerFactory.cs</source>
-	public static class ContainerFactory {
+	public static class ContainerFactory
+	{
+#if PARANOID
+		static ContainerFactory() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
+
 		/// <summary>
 		/// </summary>
 		private static WellKnownService[] _registry;

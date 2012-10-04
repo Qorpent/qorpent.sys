@@ -38,7 +38,15 @@ namespace Qorpent.Mvc {
 	/// <summary>
 	/// 	Base MVC
 	/// </summary>
-	public abstract class MvcContextBase : ServiceBase, IMvcContext {
+	public abstract class MvcContextBase : ServiceBase, IMvcContext
+	{
+
+#if PARANOID
+		static MvcContextBase() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
+
 		/// <summary>
 		/// 	Regex to retrieve mvc call info from url
 		/// </summary>

@@ -50,7 +50,15 @@ namespace Qorpent.IoC {
 	/// <remarks>
 	/// </remarks>
 	[RequireReset(Role = "DEVELOPER", All = false, Options = new[] {QorpentConst.ContainerResetCode})]
-	public class Container : IContainer, IApplicationBound, IResetable {
+	public class Container : IContainer, IApplicationBound, IResetable
+	{
+
+#if PARANOID
+		static Container() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
+
 		/// <summary>
 		/// 	Журнал контейнера
 		/// </summary>

@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration>Debug</Configuration>
     <ProjectGuid>{880F65EA-1A22-4672-A137-FFC91290A209}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Qorpent</RootNamespace>
@@ -26,7 +25,13 @@
   </Choose>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Security\Watchdog\IParanoidProvider.cs" />
     <Compile Include="Security\ISysLogon.cs" />
+    <Compile Include="Security\Watchdog\ParanoidException.cs" />
+    <Compile Include="Security\Watchdog\Paranoid.cs" />
+    <Compile Include="Security\Watchdog\ParanoidState.cs" />
+    <Compile Include="Security\Watchdog\Paranoid_DEVEL.cs" />
+    <Compile Include="Security\Watchdog\Paranoid_USER.cs" />
     <Compile Include="Security\WinLogonType.cs" />
     <None Include="*.import" />
     <None Include="*.export" />

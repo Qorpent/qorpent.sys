@@ -55,6 +55,12 @@ namespace Qorpent.Mvc.QView {
 			}
 		}
 
+#if PARANOID
+		static QViewBase() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
+
 		/// <summary>
 		/// </summary>
 		protected ActionDescriptor MyAction {

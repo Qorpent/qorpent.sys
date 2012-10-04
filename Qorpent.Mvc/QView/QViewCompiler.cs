@@ -46,6 +46,12 @@ namespace Qorpent.Mvc.QView {
 			OutCodePath = "~/tmp/.qviewcode";
 		}
 
+#if PARANOID
+		static QViewCompiler() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
+
 		/// <summary>
 		/// </summary>
 		[Inject] public IFileNameResolver FileNameResolver { get; set; }

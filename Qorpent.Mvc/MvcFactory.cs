@@ -41,7 +41,11 @@ namespace Qorpent.Mvc {
 	[RequireReset(Role = "DEVELOPER", Options = new[] {QorpentConst.MvcFactoryResetCode})]
 	public class MvcFactory : ServiceBase, IMvcFactory {
 		private static readonly string[] ViewLevels = new[] {"usr", "mod", "sys", "root", "code"};
-
+#if PARANOID
+		static MvcFactory() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
 		/// <summary>
 		/// 	Reference to QView monitor instance
 		/// </summary>

@@ -10,10 +10,16 @@
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <ItemGroup>
     <None Include="*.import" />
-    <None Include="*.export" />
+    <None Include="Qorpent.Security.export" />
+    <None Include="Qorpent.Security.QISD.export" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NativeWindowsFunctions.cs" />
+    <Compile Include="Watchdog\ParanoidProvider.cs" />
     <Compile Include="SysLogon.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
 </Project>

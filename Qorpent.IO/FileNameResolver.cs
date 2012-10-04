@@ -47,7 +47,11 @@ namespace Qorpent.IO {
 		/// </summary>
 		private static int _id;
 
-
+#if PARANOID
+		static FileNameResolver() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
 		/// <summary>
 		/// 	Creates new filename resolver
 		/// </summary>

@@ -32,6 +32,8 @@ namespace Qorpent {
 	/// 	Contains adapted environment information
 	/// </summary>
 	public static class EnvironmentInfo {
+
+
 		private static bool? _isWeb;
 
 

@@ -34,7 +34,15 @@ namespace Qorpent.Mvc.HttpHandler {
 	/// 	Main handler for QorpentMvc
 	/// </summary>
 	[ContainerComponent(Lifestyle.Transient)]
-	public class MvcHandler : ServiceBase, IMvcHandler {
+	public class MvcHandler : ServiceBase, IMvcHandler
+	{
+#if PARANOID
+		static MvcHandler() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
+
+
 		/// <summary>
 		/// 	Authorizer service
 		/// </summary>

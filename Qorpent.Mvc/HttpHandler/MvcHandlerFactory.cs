@@ -36,6 +36,11 @@ namespace Qorpent.Mvc.HttpHandler {
 		private static readonly object sync = new object();
 		private static IApplication Application { get; set; }
 
+#if PARANOID
+		static MvcHandlerFactory() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
 
 		/// <summary>
 		/// 	Возвращает экземпляр класса, который реализует интерфейс <see cref="T:System.Web.IHttpHandler" />.

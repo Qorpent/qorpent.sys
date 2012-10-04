@@ -55,6 +55,12 @@ namespace Qorpent {
 		/// </summary>
 		protected IApplication Application { get; set; }
 
+#if PARANOID
+		static ServiceBase() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
+
 
 		/// <summary>
 		/// 	Максимально релевантный для экземпляра контейнер, не NULL

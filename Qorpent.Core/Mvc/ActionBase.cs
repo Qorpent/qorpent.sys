@@ -36,7 +36,16 @@ namespace Qorpent.Mvc {
 	/// <summary>
 	/// 	Base for custom actions - wraps most of subsystems and context to simplify acess from user code + templated lifecycle to implement
 	/// </summary>
-	public abstract class ActionBase : ServiceBase, IContextualAction, IWithRole, INotModifiedStateProvider {
+	public abstract class ActionBase : ServiceBase, IContextualAction, IWithRole, INotModifiedStateProvider
+	{
+
+#if PARANOID
+		static ActionBase() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
+
+
 		/// <summary>
 		/// 	Back reference to Descriptor
 		/// </summary>

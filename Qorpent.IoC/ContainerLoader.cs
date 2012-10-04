@@ -38,7 +38,15 @@ namespace Qorpent.IoC {
 	/// <summary>
 	/// 	Applys manifest to Givent container
 	/// </summary>
-	public class ContainerLoader : IContainerLoader {
+	public class ContainerLoader : IContainerLoader
+	{
+
+#if PARANOID
+		static ContainerLoader() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
+
 		/// <summary>
 		/// 	Creates loader, that targets specified container
 		/// </summary>

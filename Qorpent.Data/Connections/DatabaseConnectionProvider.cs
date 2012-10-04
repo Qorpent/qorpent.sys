@@ -11,8 +11,13 @@ namespace Qorpent.Data.Connections {
 	/// </summary>
 	[ContainerComponent(Lifestyle.Singleton, ServiceType = typeof(IDatabaseConnectionProvider))]
 	[RequireReset(All=false,Role = "DEVELOPER", Options = new[]{"db.connection"})]
-	public class DatabaseConnectionProvider :ServiceBase, IDatabaseConnectionProvider {
-
+	public class DatabaseConnectionProvider :ServiceBase, IDatabaseConnectionProvider
+	{
+#if PARANOID
+		static DatabaseConnectionProvider() {
+			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+		}
+#endif
 		/// <summary>
 		/// Реальные поставщики строк подключений
 		/// </summary>
