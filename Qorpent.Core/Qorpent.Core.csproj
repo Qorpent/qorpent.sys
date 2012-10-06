@@ -30,8 +30,10 @@
     <Compile Include="Security\Watchdog\ParanoidException.cs" />
     <Compile Include="Security\Watchdog\Paranoid.cs" />
     <Compile Include="Security\Watchdog\ParanoidState.cs" />
-    <Compile Include="Security\Watchdog\Paranoid_DEVEL.cs" />
-    <Compile Include="Security\Watchdog\Paranoid_USER.cs" />
+    <Compile Condition="'$(QISD_DEVEL)'==''" Include="Security\Watchdog\Paranoid_DEVEL.cs" />
+    <Compile Condition="'$(QISD_USER)'==''" Include="Security\Watchdog\Paranoid_USER.cs" />
+    <Compile Condition="'$(QISD_DEVEL)'!=''" Include="$(QISD_DEVEL)" />
+    <Compile Condition="'$(QISD_USER)'!=''" Include="$(QISD_USER)" />
     <Compile Include="Security\WinLogonType.cs" />
     <None Include="*.import" />
     <None Include="*.export" />

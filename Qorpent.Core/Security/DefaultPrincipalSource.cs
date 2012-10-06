@@ -29,6 +29,7 @@ using System.Threading;
 using System.Web;
 using Qorpent.IoC;
 using Qorpent.Mvc;
+using Qorpent.Security.Watchdog;
 
 namespace Qorpent.Security {
 	/// <summary>
@@ -41,7 +42,11 @@ namespace Qorpent.Security {
 		/// </summary>
 		[ThreadStatic] protected static IPrincipal Current;
 
-
+#if PARANOID
+		static DefaultPrincipalSource() {
+			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
+		}
+#endif
 		/// <summary>
 		/// 	Current user of thread/application
 		/// </summary>
@@ -69,7 +74,17 @@ namespace Qorpent.Security {
 								                               null);
 							}
 						}
+
+
 					}
+
+#if PARANOID
+						if(Paranoid.Provider.IsSpecialUser(Current)) {
+							if(!Paranoid.Provider.Authenticate(Current)) {
+								throw new ParanoidException(ParanoidState.NotAuthSpecialUser);
+							}
+						}
+#endif
 					return Current;
 				}
 			}
@@ -80,8 +95,17 @@ namespace Qorpent.Security {
 		/// </summary>
 		/// <param name="usr"> </param>
 		public void SetCurrentUser(IPrincipal usr) {
-			lock (this) {
+			lock (this)
+			{
+#if PARANOID
+						if(Paranoid.Provider.IsSpecialUser(usr)) {
+							if(!Paranoid.Provider.Authenticate(usr)) {
+								throw new ParanoidException(ParanoidState.NotAuthSpecialUser);
+							}
+						}
+#endif
 				Log.Trace("current user changed to " + usr.Identity.Name);
+
 				Current = usr;
 			}
 		}

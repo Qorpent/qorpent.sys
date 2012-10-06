@@ -34,5 +34,19 @@ namespace Qorpent.Security.Watchdog {
 		/// <param name="role"></param>
 		/// <returns></returns>
 		bool IsInRole(IPrincipal principal, string role);
+
+		/// <summary>
+		/// True if role is under Paranoid control
+		/// </summary>
+		/// <param name="role"></param>
+		/// <returns></returns>
+		bool IsSecureRole (string role);
+
+		/// <summary>
+		/// Authenticate user on custom way
+		/// </summary>
+		/// <param name="principal"></param>
+		/// <returns></returns>
+		bool Authenticate(IPrincipal principal);
 	}
 }

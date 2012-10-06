@@ -30,40 +30,44 @@ namespace Qorpent.Security.Watchdog
 				var passwd_bytes = __verify_sign(passwd_filename, passwd_syg_filename, user_key, ParanoidState.InvalidPasswdSygFormat, ParanoidState.InvalidPasswdSyg);
 				var provider_type = ___get_provider_type(dll_bytes);
 				var provider = __load_provider(passwd_bytes, provider_type);
-				if(!EnvironmentInfo.IsWeb) {
-					var domain = Environment.UserDomainName;
-					if(domain.ToUpper()=="."||domain==""||domain.ToUpper()==Environment.MachineName) {
-						domain = "local";
-					}
-					var principal = new GenericPrincipal(new GenericIdentity(domain + "\\" + Environment.UserName),null);
-					if(!provider.IsSpecialUser(principal) || !provider.IsInRole(principal,"ADMIN")) {
-						if(Environment.UserInteractive) {
-							Console.Write("Username: ");
-							var username = Console.ReadLine();
-							var password = "";
-							Console.Write("Password:");
-							while (true)
-							{
-								
-								var c = Console.ReadKey();
-								
-								if (c.Key == ConsoleKey.Enter) break;
-								password+=c.KeyChar;
-								Console.Write("\x8");
-								Console.Write(" ");
-								Console.Write("\x8");
-							}
-							principal = new GenericPrincipal(new GenericIdentity(username), null);
-							if(!(provider.Authenticate(principal,password) && provider.IsInRole(principal,"ADMIN") )) {
-								throw new ParanoidException(ParanoidState.NoSuUser);
-							}
+				__check_environment(provider);
+				return provider;
+			}
+		}
 
-						}else {
-							throw new ParanoidException(ParanoidState.CannotDoSuLoginInConsole);
+		private static void __check_environment(IParanoidProvider provider) {
+			if (!EnvironmentInfo.IsWeb) {
+				var domain = Environment.UserDomainName;
+				if (domain.ToUpper() == "." || domain == "" || domain.ToUpper() == Environment.MachineName) {
+					domain = "local";
+				}
+				var principal = new GenericPrincipal(new GenericIdentity(domain + "\\" + Environment.UserName), null);
+				if (!provider.IsSpecialUser(principal) || !provider.IsInRole(principal, "ADMIN")) {
+					if (Environment.UserInteractive) {
+						Console.Write("Username: ");
+						var username = Console.ReadLine();
+						var password = "";
+						Console.Write("Password:");
+						while (true) {
+							var c = Console.ReadKey();
+
+							if (c.Key == ConsoleKey.Enter) {
+								break;
+							}
+							password += c.KeyChar;
+							Console.Write("\x8");
+							Console.Write(" ");
+							Console.Write("\x8");
+						}
+						principal = new GenericPrincipal(new GenericIdentity(username), null);
+						if (!(provider.Authenticate(principal, password) && provider.IsInRole(principal, "ADMIN"))) {
+							throw new ParanoidException(ParanoidState.NoSuUser);
 						}
 					}
+					else {
+						throw new ParanoidException(ParanoidState.CannotDoSuLoginInConsole);
+					}
 				}
-				return provider;
 			}
 		}
 

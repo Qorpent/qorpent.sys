@@ -22,9 +22,19 @@ namespace Qorpent.Security.Watchdog
 		public ParanoidProvider(XElement suxml) {
 			_state = ParanoidState.Verified;
 			_xml = suxml.ToString(); //prevent changing
-			if(!suxml.Elements().Any(x=>x.Attr("user").IsNotEmpty() && x.Attr("role").Contains("/ADMIN/"))) {
+			if(!suxml.Elements("user").Any(x=>x.Attr("name").IsNotEmpty() && x.Attr("role").Contains("/ADMIN/"))) {
 				_state = ParanoidState.NoSuDefined;
 			}
+		}
+
+		/// <summary>
+		/// True if role is under Paranoid control
+		/// </summary>
+		/// <param name="role"></param>
+		/// <returns></returns>
+		public bool IsSecureRole (string role) {
+			if("ADMIN"==role) return true;
+			return XElement.Parse(_xml).Elements("role").Any(x => x.Attr("name").ToUpper() == role.ToUpper());
 		}
 
 		/// <summary>
@@ -43,7 +53,7 @@ namespace Qorpent.Security.Watchdog
 		/// <param name="principal"></param>
 		/// <returns></returns>
 		public bool IsSpecialUser(IPrincipal principal) {
-			return XElement.Parse(_xml).Elements().Any(x => x.Attr("user").ToLower() == principal.Identity.Name.ToLower());
+			return XElement.Parse(_xml).Elements("user").Any(x => x.Attr("name").ToLower() == principal.Identity.Name.ToLower());
 		}
 
 		/// <summary>
@@ -53,9 +63,21 @@ namespace Qorpent.Security.Watchdog
 		/// <param name="password"></param>
 		/// <returns></returns>
 		public bool Authenticate(IPrincipal principal, string password) {
-			return XElement.Parse(_xml).Elements().Any(x => x.Attr("user").ToLower() == principal.Identity.Name.ToLower()
+			return XElement.Parse(_xml).Elements("user").Any(x => x.Attr("name").ToLower() == principal.Identity.Name.ToLower()
 			 && x.Attr("password") == Convert.ToBase64String( MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(password)))
 			 && x.Attr("deny").ToLower()!="true"
+			);
+		}
+
+		/// <summary>
+		/// Authenticate user on custom way
+		/// </summary>
+		/// <param name="principal"></param>
+		/// <returns></returns>
+		public bool Authenticate(IPrincipal principal)
+		{
+			return XElement.Parse(_xml).Elements("user").Any(x => x.Attr("name").ToLower() == principal.Identity.Name.ToLower()
+			 && x.Attr("deny").ToLower() != "true"
 			);
 		}
 
@@ -67,7 +89,7 @@ namespace Qorpent.Security.Watchdog
 		/// <returns></returns>
 		public bool IsInRole(IPrincipal principal, string role) {
 			if(!IsSpecialUser(principal)) return false;
-			var usr = XElement.Parse(_xml).Elements().First(x => x.Attr("user").ToLower() == principal.Identity.Name.ToLower());
+			var usr = XElement.Parse(_xml).Elements("user").First(x => x.Attr("name").ToLower() == principal.Identity.Name.ToLower());
 			return usr.Attr("role").ToUpper().Contains("/" + role.ToUpper() + "/");
 		}
 	}

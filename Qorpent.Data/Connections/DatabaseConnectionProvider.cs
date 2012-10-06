@@ -15,7 +15,7 @@ namespace Qorpent.Data.Connections {
 	{
 #if PARANOID
 		static DatabaseConnectionProvider() {
-			if(!Qorpent.Security.Paranoid.Paranoid.Provider.OK) throw new  Qorpent.Security.Paranoid.ParanoidException(Qorpent.Security.Paranoid.ParanoidState.GeneralError);
+			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
 		}
 #endif
 		/// <summary>

@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Security.Principal;
 using Qorpent.IoC;
 using Qorpent.Mvc;
+using Qorpent.Security.Watchdog;
 
 namespace Qorpent.Security {
 	/// <summary>
@@ -36,7 +37,14 @@ namespace Qorpent.Security {
 	/// 	3) For all other principals it returns NATIVE IsInRole
 	/// </summary>
 	[ContainerComponent(Lifestyle.Singleton)]
-	public class DefaultRoleResolver : ServiceBase, IRoleResolver {
+	public class DefaultRoleResolver : ServiceBase, IRoleResolver
+	{
+#if PARANOID
+		static DefaultRoleResolver() {
+			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
+		}
+#endif
+
 		/// <summary>
 		/// 	Real role resolvers to be used
 		/// </summary>
@@ -54,7 +62,15 @@ namespace Qorpent.Security {
 		/// <returns> </returns>
 		public bool IsInRole(IPrincipal principal, string role, bool exact = false, IMvcContext callcontext = null,
 		                     object customcontext = null) {
-			lock (this) {
+			lock (this)
+			{
+#if PARANOID
+				if(Paranoid.Provider.IsSecureRole(role)) {
+					return Paranoid.Provider.IsInRole(principal, role);
+				}		
+#endif
+
+
 				var result = false;
 				var cachekey = principal.Identity.Name + ";" + role + ";" + exact;
 				Log.Debug("start check " + cachekey, this);

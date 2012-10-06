@@ -79,6 +79,10 @@ namespace Qorpent.Security.Watchdog {
 		/// <summary>
 		/// Console login from not su
 		/// </summary>
-		NoSuUser
+		NoSuUser,
+		/// <summary>
+		/// If special user trys get current, but not authenticated with Paranoid
+		/// </summary>
+		NotAuthSpecialUser
 	}
 }
