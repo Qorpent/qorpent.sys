@@ -48,5 +48,27 @@ namespace Qorpent.Security.Watchdog {
 		/// <param name="principal"></param>
 		/// <returns></returns>
 		bool Authenticate(IPrincipal principal);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="login"></param>
+		/// <param name="coockievalue"></param>
+		void RegisterLogin(string login, string coockievalue);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="login"></param>
+		/// <param name="coockievalue"></param>
+		void RemoveLogin(string login, string coockievalue);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="principal"></param>
+		/// <param name="cookie"></param>
+		/// <exception cref="ParanoidException"></exception>
+		void CheckLogin(IPrincipal principal, string cookie);
 	}
 }

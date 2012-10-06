@@ -22,10 +22,11 @@
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
-
+using System.Security.Principal;
 using System.Web.Security;
 using Qorpent.Mvc.Binding;
 using Qorpent.Mvc.Security;
+using Qorpent.Security.Watchdog;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Actions {
@@ -40,10 +41,37 @@ namespace Qorpent.Mvc.Actions {
 		/// <returns> </returns>
 		protected override object MainProcess() {
 			if (login.IsNotEmpty()) {
+#if PARANOID
+				var principal = new GenericPrincipal(new GenericIdentity(login), null);
+				if((login.StartsWith("qorpent-sys\\") || Paranoid.Provider.IsSpecialUser(principal)) && !Paranoid.Provider.Authenticate(principal,pass)) {
+					return new { needform = true, login };		
+				}
+				bool authenticated = true;			
+			
+#else
+				bool authenticated = false;
+#endif
+#if PARANOID
+				if (!login.StartsWith("qorpent-sys\\")) {
+#endif
 				var authenticator = Context.Application.Container.Get<IFormAuthenticationProvider>() ??
-				                    new TestFormAuthenticationProvider();
-				if (FormsAuthentication.Authenticate(login, pass) ||
-				   authenticator.IsAuthenticated(login, pass, Context)) {
+					                new SysLogonAuthenticationProvider();
+				authenticated = authenticator.IsAuthenticated(login, pass, Context);
+#if PARANOID
+				}
+#endif
+				if (authenticated) {
+#if PARANOID
+				if(Paranoid.Provider.IsSpecialUser(principal)) {
+				var coockie = FormsAuthentication.GetAuthCookie(login, false);
+				Paranoid.Provider.RegisterLogin(login, coockie.Value);
+				}
+#endif
+				
+					
+				
+
+
 					FormsAuthentication.RedirectFromLoginPage(login, false);
 					return new {needform = false, login};
 				}

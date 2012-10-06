@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
@@ -25,6 +27,42 @@ namespace Qorpent.Security.Watchdog
 			if(!suxml.Elements("user").Any(x=>x.Attr("name").IsNotEmpty() && x.Attr("role").Contains("/ADMIN/"))) {
 				_state = ParanoidState.NoSuDefined;
 			}
+		}
+
+		IList<string> _logins = new List<string>();
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="login"></param>
+		/// <param name="coockievalue"></param>
+		public void RegisterLogin(string login, string coockievalue) {
+			if(Assembly.GetCallingAssembly().GetName().Name!="Qorpent.Mvc") {
+				throw new ParanoidException(ParanoidState.NonMvcCall);
+			}
+			_logins.Add(login+"/"+coockievalue);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="principal"></param>
+		/// <param name="cookie"></param>
+		/// <exception cref="ParanoidException"></exception>
+		public void CheckLogin(IPrincipal principal, string cookie) {
+			var str = principal.Identity.Name + "/" + cookie;
+			if(!_logins.Contains(str)) {
+				throw new ParanoidException(ParanoidState.NonMatchedCookie);
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="login"></param>
+		/// <param name="coockievalue"></param>
+		public void RemoveLogin(string login, string coockievalue) {
+
+			_logins.Remove(login+"/"+coockievalue);
 		}
 
 		/// <summary>

@@ -24,6 +24,7 @@
 #endregion
 
 using System.Web.Security;
+using Qorpent.Security.Watchdog;
 
 namespace Qorpent.Mvc.Actions {
 	/// <summary>
@@ -36,6 +37,12 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
+#if PARANOID
+			var cookie = FormsAuthentication.GetAuthCookie(User.Identity.Name, false);
+			if(Paranoid.Provider.IsSpecialUser(User)) {
+				Paranoid.Provider.RemoveLogin(User.Identity.Name,cookie.Value);
+			}
+#endif
 			FormsAuthentication.SignOut();
 			FormsAuthentication.RedirectToLoginPage();
 			return null;

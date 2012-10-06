@@ -1,4 +1,4 @@
-namespace Qorpent.Security.Watchdog {
+	namespace Qorpent.Security.Watchdog {
 	/// <summary>
 	/// “екущее состо€ние параноидного режима
 	/// </summary>
@@ -83,6 +83,34 @@ namespace Qorpent.Security.Watchdog {
 		/// <summary>
 		/// If special user trys get current, but not authenticated with Paranoid
 		/// </summary>
-		NotAuthSpecialUser
+		NotAuthSpecialUser,
+		/// <summary>
+		/// 
+		/// </summary>
+		NonMvcCall,
+		/// <summary>
+		/// 
+		/// </summary>
+		NonMatchedCookie,
+		/// <summary>
+		///		
+		/// </summary>
+		NoFormAuthEnabled,
+		/// <summary>
+		/// 
+		/// </summary>
+		NoQorpentLoginUrl,
+		/// <summary>
+		/// 
+		/// </summary>
+		NoFormAuthUsed,
+		/// <summary>
+		/// 
+		/// </summary>
+		NotSecureConnection,
+		/// <summary>
+		/// 
+		/// </summary>
+		InvalidCookieSet
 	}
 }

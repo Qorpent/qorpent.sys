@@ -163,7 +163,7 @@ namespace Qorpent.Serialization {
 			}
 			else {
 				if (_refcache.Contains(value)) {
-					serializeClass("SERIALIZEPROBLEM", new {SERIALIZEPROBLEM = "circular reference"});
+					serializeClass("SERIALIZEPROBLEM", new {SERIALIZEPROBLEM = "pcircular reference"});
 					return;
 				}
 				_refcache.Add(value);

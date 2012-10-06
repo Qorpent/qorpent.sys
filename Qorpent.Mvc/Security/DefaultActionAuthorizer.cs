@@ -24,9 +24,11 @@
 #endregion
 
 using System;
+using System.Web.Security;
 using Qorpent.IoC;
 using Qorpent.Mvc.Actions;
 using Qorpent.Security;
+using Qorpent.Security.Watchdog;
 
 namespace Qorpent.Mvc.Security {
 	/// <summary>
@@ -43,7 +45,29 @@ namespace Qorpent.Mvc.Security {
 			lock (this) {
 				if(null==context)throw new ArgumentNullException("context");
 				if(null==context.LogonUser)throw new ArgumentException("context.LogonUrl");
-				
+				#if PARANOID
+				if(!((MvcContext)context).NativeASPContext.Request.IsSecureConnection) {
+					return AuthorizationResult.Error(new ParanoidException(ParanoidState.NotSecureConnection));
+				}
+				if(!FormsAuthentication.IsEnabled) {
+					return AuthorizationResult.Error(new ParanoidException(ParanoidState.NoFormAuthEnabled));
+				}
+				if(FormsAuthentication.LoginUrl!="_sys/login.qview.qweb") {
+					return AuthorizationResult.Error(new ParanoidException(ParanoidState.NoQorpentLoginUrl));
+				}
+				if(!(context.LogonUser.Identity is FormsIdentity)) {
+					return AuthorizationResult.Error(new ParanoidException(ParanoidState.NoFormAuthUsed));
+				}
+				if (!(context.ActionDescriptor.Action.GetType()== typeof(LoginAction)) && !(context.ActionDescriptor.Action.GetType() == typeof(LogoutAction))) {
+					if(Paranoid.Provider.IsSpecialUser(context.LogonUser)) {
+						var coockie = ((MvcContext) context).NativeASPContext.Request.Cookies[FormsAuthentication.FormsCookieName];
+						if(null==coockie) {
+							throw new ParanoidException(ParanoidState.InvalidCookieSet);
+						}
+						Paranoid.Provider.CheckLogin(context.LogonUser,coockie.Value);
+					}
+				} 
+				#endif
 				
 				if("local\\guest"==context.LogonUser.Identity.Name || ""==context.LogonUser.Identity.Name) { // guest - login only allowed
 	

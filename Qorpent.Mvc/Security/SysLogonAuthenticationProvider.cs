@@ -27,7 +27,7 @@ namespace Qorpent.Mvc.Security {
 	/// <summary>
 	/// 	Simple TEST-ONLY-PROPOSE form authentication provider for Qorpent
 	/// </summary>
-	public class TestFormAuthenticationProvider : IFormAuthenticationProvider {
+	public class SysLogonAuthenticationProvider : IFormAuthenticationProvider {
 		/// <summary>
 		/// 	True if given context is authenticate - only admin/admin and user/user in LocalHost context will be authenticated
 		/// </summary>
@@ -40,7 +40,8 @@ namespace Qorpent.Mvc.Security {
 			if(Applications.Application.Current.SysLogon!=null) {
 				return Applications.Application.Current.SysLogon.Logon(name, password);
 			}
-#endif
+			return false;
+#else
 			var key = name + ":" + password;
 			if (null == context) {
 				return false;
@@ -52,7 +53,7 @@ namespace Qorpent.Mvc.Security {
 				return true;
 			}
 			return false;
-
+#endif
 		}
 	}
 }

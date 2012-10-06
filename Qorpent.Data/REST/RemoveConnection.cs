@@ -5,7 +5,7 @@ namespace Qorpent.Data.REST {
 	/// <summary>
 	/// Удаляет соединение из списка соединений
 	/// </summary>
-	[Action("_db.addconnection", Role = "DEVELOPER")]
+	[Action("_db.removeconnection", Role = "DEVELOPER")]
 	public class RemoveConnection : ActionBase
 	{
 		[Bind]private bool temporal = false;
