@@ -111,6 +111,14 @@
 		/// <summary>
 		/// 
 		/// </summary>
-		InvalidCookieSet
+		InvalidCookieSet,
+		/// <summary>
+		/// Подмена IRoleResolver
+		/// </summary>
+		InvalidRoleResolver,
+		/// <summary>
+		/// Подмена IPrincipalSource
+		/// </summary>
+		InvalidPrincipalSource
 	}
 }

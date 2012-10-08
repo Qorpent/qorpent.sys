@@ -34,6 +34,8 @@ using System.Threading;
 using Qorpent.Applications;
 using Qorpent.Events;
 using Qorpent.Log;
+using Qorpent.Security;
+using Qorpent.Security.Watchdog;
 using Qorpent.Utils.Extensions;
 
 [assembly:
@@ -439,6 +441,22 @@ namespace Qorpent.IoC {
 		/// </summary>
 		public void Register(IComponentDefinition component) {
 			lock (this) {
+			#if PARANOID
+				if(component.ServiceType==typeof(IRoleResolver)) {
+					if(component.ImplementationType!=typeof(DefaultRoleResolver)) {
+						throw new ParanoidException(ParanoidState.InvalidRoleResolver);
+					}
+				}
+
+				if (component.ServiceType == typeof(IPrincipalSource))
+				{
+					if (component.ImplementationType != typeof(DefaultPrincipalSource))
+					{
+						throw new ParanoidException(ParanoidState.InvalidPrincipalSource);
+					}
+				}
+				#endif
+
 				Log.Debug("Start register " + component, this);
 				// redirect logic for container extensions - they are processed on their own manner
 				// and container extensions don't trigger RegisterComponent event

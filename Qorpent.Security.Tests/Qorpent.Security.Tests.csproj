@@ -17,11 +17,16 @@
   <ItemGroup>
     <Compile Include="LogonTest.cs" />
     <Compile Include="RoleResolverRoleExtensionTest.cs" />
+    <Compile Include="XmlRoleResolverTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.Core.Tests\Qorpent.Core.Tests.csproj">
       <Project>{880F65EA-1A22-4672-A137-FFC912902046}</Project>
       <Name>Qorpent.Core.Tests</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
 </Project>

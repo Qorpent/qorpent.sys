@@ -14,6 +14,7 @@
     <None Include="Qorpent.Security.QISD.export" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileBasedRoleProvider.cs" />
     <Compile Include="NativeWindowsFunctions.cs" />
     <Compile Include="Watchdog\ParanoidProvider.cs" />
     <Compile Include="SysLogon.cs" />

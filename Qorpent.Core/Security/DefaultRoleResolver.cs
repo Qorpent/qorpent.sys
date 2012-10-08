@@ -24,7 +24,9 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Principal;
+using Qorpent.Events;
 using Qorpent.IoC;
 using Qorpent.Mvc;
 using Qorpent.Security.Watchdog;
@@ -37,6 +39,7 @@ namespace Qorpent.Security {
 	/// 	3) For all other principals it returns NATIVE IsInRole
 	/// </summary>
 	[ContainerComponent(Lifestyle.Singleton)]
+	[RequireReset(Role = "DEVELOPER",All = true,Options = new[]{"roles"})]
 	public class DefaultRoleResolver : ServiceBase, IRoleResolver
 	{
 #if PARANOID
@@ -161,5 +164,32 @@ namespace Qorpent.Security {
 		}
 
 		private readonly IDictionary<string, bool> _cache = new Dictionary<string, bool>();
+
+
+		/// <summary>
+		/// Сбрасывает кэш ролей и вызывает очистку у всех расширений
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public override object Reset(ResetEventData data) {
+			var _cachesize = _cache.Count;
+			IList<string> _resetedextensions = new List<string>();
+			base.Reset(data);
+			foreach (var extension in Extensions) {
+				if(extension is IResetable) {
+					((IResetable) extension).Reset(data);
+					_resetedextensions.Add(extension.GetType().Name);
+				}
+			}
+			return new {dropped = _cachesize, reseted = _resetedextensions.ToArray()};
+		}
+
+		/// <summary>
+		/// 	Возващает объект, описывающий состояние до очистки
+		/// </summary>
+		/// <returns> </returns>
+		public override object GetPreResetInfo() {
+			return _cache.Count;
+		}
 	}
 }

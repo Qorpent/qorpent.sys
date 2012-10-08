@@ -23,6 +23,11 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Collections\IMap.cs" />
+    <Compile Include="Collections\IMapItem.cs" />
+    <Compile Include="Collections\Map.cs" />
+    <Compile Include="Collections\MapItem.cs" />
+    <Compile Include="Collections\StringMap.cs" />
     <Compile Include="ComplexStringHelper.cs" />
     <Compile Include="ConsoleArgumentHelper.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />
@@ -42,6 +47,10 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-   <Import Project="..\..\qorpent.kernel\build.targets" />
-  
-<ItemGroup><None Include="*.import" /><None Include="*.export" /></ItemGroup></Project>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+  </ItemGroup>
+  <ItemGroup />
+</Project>
