@@ -15,7 +15,7 @@ using Qorpent.Utils.Extensions;
 namespace Qorpent.Security
 {
 	/// <summary>
-	/// 
+	/// Разроешает роли относительно XML/BXL файлов конфигурации с элементами role, user
 	/// </summary>
 	[ContainerComponent(Lifestyle.Extension,"filebased.roleresolver.provider",ServiceType =typeof(IRoleResolverExtension))]
 	public class FileBasedRoleProvider:ServiceBase,IRoleResolverExtension
