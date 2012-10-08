@@ -176,6 +176,11 @@ namespace Qorpent.Mvc {
 		HttpCookieCollection RequestCookies { get; }
 
 		/// <summary>
+		/// Признак того, что контекст вызвал Redirect
+		/// </summary>
+		bool IsRedirected { get; set; }
+
+		/// <summary>
 		/// 	Extract call only information from context (for serialization propose)
 		/// </summary>
 		MvcCallInfo GetCallInfo();

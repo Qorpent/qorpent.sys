@@ -97,6 +97,7 @@ namespace Qorpent.Mvc.HttpHandler {
 			try {
 				BeforeAuthorize(context);
 				context.AuthrizeResult = Authorizer.Authorize(context);
+				if(context.IsRedirected) return context;
 				AfterAuthorize(context);
 				if (context.AuthrizeResult.Authorized) {
 					if (!context.IgnoreActionResult) {

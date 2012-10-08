@@ -52,6 +52,8 @@ namespace Qorpent.Mvc {
 			SetNativeContext(httpContextWrapper);
 		}
 
+
+
 		/// <summary>
 		/// Cookie отклика
 		/// </summary>
@@ -76,7 +78,9 @@ namespace Qorpent.Mvc {
 				localurl = prefix + localurl;
 			}
 			NativeASPContext.Response.Redirect(localurl,false);
+			IsRedirected = true;
 		}
+	
 
 		/// <summary>
 		/// Cookie отклика

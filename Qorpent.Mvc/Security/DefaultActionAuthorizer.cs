@@ -45,6 +45,7 @@ namespace Qorpent.Mvc.Security {
 			lock (this) {
 				if(null==context)throw new ArgumentNullException("context");
 				if(null==context.LogonUser)throw new ArgumentException("context.LogonUrl");
+				
 				#if PARANOID
 				if(!((MvcContext)context).NativeASPContext.Request.IsSecureConnection) {
 					return AuthorizationResult.Error(new ParanoidException(ParanoidState.NotSecureConnection));
@@ -65,7 +66,12 @@ namespace Qorpent.Mvc.Security {
 						if(null==coockie) {
 							throw new ParanoidException(ParanoidState.InvalidCookieSet);
 						}
-						Paranoid.Provider.CheckLogin(context.LogonUser,coockie.Value);
+						try{
+							Paranoid.Provider.CheckLogin(context.LogonUser,coockie.Value);
+						}catch(ParanoidException){
+							context.Redirect("_sys/login.qview.qweb?ReturnUrl="+context.Uri.PathAndQuery);
+							return AuthorizationResult.OK;
+						}
 					}
 				} 
 #endif

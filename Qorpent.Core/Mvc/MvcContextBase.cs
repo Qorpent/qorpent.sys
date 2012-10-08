@@ -405,6 +405,11 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		public abstract HttpCookieCollection RequestCookies { get; }
 
+		/// <summary>
+		/// Признак того, что контекст вызвал Redirect
+		/// </summary>
+		public bool IsRedirected { get; set; }
+
 
 		/// <summary>
 		/// 	Generates parameters from underlined context
