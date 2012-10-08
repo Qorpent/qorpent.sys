@@ -27,6 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Principal;
+using System.Web;
 using System.Xml.Linq;
 using Qorpent.Applications;
 using Qorpent.Dsl;
@@ -394,6 +395,16 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		[SerializeNotNullOnly] public abstract string Language { get; set; }
 
+		/// <summary>
+		/// Cookie отклика
+		/// </summary>
+		public abstract HttpCookieCollection ResponseCookies { get; }
+
+		/// <summary>
+		/// Cookie отклика
+		/// </summary>
+		public abstract HttpCookieCollection RequestCookies { get; }
+
 
 		/// <summary>
 		/// 	Generates parameters from underlined context
@@ -408,5 +419,12 @@ namespace Qorpent.Mvc {
 		private IDictionary<string, string> _parameters;
 		private RenderDescriptor _renderDescriptor;
 		private string _renderName;
+
+		/// <summary>
+		/// Response redirect
+		/// </summary>
+		/// <param name="localurl"></param>
+		/// <returns></returns>
+		public abstract void Redirect(string localurl);
 	}
 }

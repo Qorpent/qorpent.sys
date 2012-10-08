@@ -8,6 +8,7 @@ using Qorpent.Events;
 using Qorpent.IO;
 using Qorpent.IoC;
 using Qorpent.Mvc;
+using Qorpent.Security.Watchdog;
 using Qorpent.Utils.Collections;
 using Qorpent.Utils.Extensions;
 
@@ -88,13 +89,20 @@ namespace Qorpent.Security
 				var desc = element.Describe();
 				var subroles = desc.Name.SmartSplit();
 				foreach (var subrole in subroles) {
+					#if PARANOID
+					if(Paranoid.Provider.IsSecureRole(subrole))continue;
+					#endif
 					map.Add(desc.Code.ToUpper(), subrole.ToUpper());
 				}
 			}
 			foreach (var element in usermaps) {
 				var desc = element.Describe();
 				var subroles = desc.Name.SmartSplit();
-				foreach (var subrole in subroles) {
+				foreach (var subrole in subroles)
+				{
+#if PARANOID
+					if(Paranoid.Provider.IsSecureRole(subrole))continue;
+#endif
 					map.Add("USER:" + desc.Code.ToUpper(), subrole.ToUpper());
 				}
 			}

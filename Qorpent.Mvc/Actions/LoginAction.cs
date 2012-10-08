@@ -41,9 +41,15 @@ namespace Qorpent.Mvc.Actions {
 		/// <returns> </returns>
 		protected override object MainProcess() {
 			if (login.IsNotEmpty()) {
+				var plogin = login;
+				if (login.ToUpper().StartsWith(System.Environment.MachineName.ToUpper() + "\\"))
+				{
+					plogin = "local\\" + login.Split('\\')[1];
+				}
 #if PARANOID
-				var principal = new GenericPrincipal(new GenericIdentity(login), null);
-				if((login.StartsWith("qorpent-sys\\") || Paranoid.Provider.IsSpecialUser(principal)) && !Paranoid.Provider.Authenticate(principal,pass)) {
+				
+				var principal = new GenericPrincipal(new GenericIdentity(plogin), null);
+				if((plogin.StartsWith("qorpent-sys\\") || Paranoid.Provider.IsSpecialUser(principal)) && !Paranoid.Provider.Authenticate(principal,pass)) {
 					return new { needform = true, login };		
 				}
 				bool authenticated = true;			
@@ -61,18 +67,25 @@ namespace Qorpent.Mvc.Actions {
 				}
 #endif
 				if (authenticated) {
+					FormsAuthentication.SetAuthCookie(plogin, false);
 #if PARANOID
-				if(Paranoid.Provider.IsSpecialUser(principal)) {
-				var coockie = FormsAuthentication.GetAuthCookie(login, false);
-				Paranoid.Provider.RegisterLogin(login, coockie.Value);
-				}
+				if (Paranoid.Provider.IsSpecialUser(principal))
+					{
+						
+
+						var coockie = Context.ResponseCookies[FormsAuthentication.FormsCookieName];
+						Paranoid.Provider.RegisterLogin(plogin, coockie.Value);
+					}	
 #endif
-				
-					
-				
 
 
-					FormsAuthentication.RedirectFromLoginPage(login, false);
+
+
+					var url = returl;
+					if(url.IsEmpty()) {
+						url = FormsAuthentication.DefaultUrl;
+					}
+					Context.Redirect(url);
 					return new {needform = false, login};
 				}
 			}
@@ -86,5 +99,9 @@ namespace Qorpent.Mvc.Actions {
 		/// <summary>
 		/// </summary>
 		[Bind(Name = "_p_a_s_s_", Required = false, ValidatePattern = @"^[\w\S]{2,}$")] protected string pass;
+		/// <summary>
+		/// 
+		/// </summary>
+		[Bind(Name = "ReturnUrl", Required = false)] protected string returl;
 	}
 }

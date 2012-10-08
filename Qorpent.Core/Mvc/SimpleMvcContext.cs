@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Principal;
+using System.Web;
 using System.Xml.Linq;
 
 namespace Qorpent.Mvc {
@@ -76,6 +77,20 @@ namespace Qorpent.Mvc {
 		/// 	Language of request
 		/// </summary>
 		public override string Language { get; set; }
+
+		/// <summary>
+		/// Cookie отклика
+		/// </summary>
+		public override HttpCookieCollection ResponseCookies {
+			get { throw new NotImplementedException(); }
+		}
+
+		/// <summary>
+		/// Cookie отклика
+		/// </summary>
+		public override HttpCookieCollection RequestCookies {
+			get { throw new NotImplementedException(); }
+		}
 
 		/// <summary>
 		/// 	Set system/server defined execution context
@@ -158,6 +173,15 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <param name="filename"> </param>
 		public override void WriteOutFile(string filename) {
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Response redirect
+		/// </summary>
+		/// <param name="localurl"></param>
+		/// <returns></returns>
+		public override void Redirect(string localurl) {
 			throw new NotImplementedException();
 		}
 	}

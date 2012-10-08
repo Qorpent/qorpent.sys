@@ -65,14 +65,23 @@ namespace Qorpent.Security {
 		/// <returns> </returns>
 		public bool IsInRole(IPrincipal principal, string role, bool exact = false, IMvcContext callcontext = null,
 		                     object customcontext = null) {
-			lock (this)
-			{
+			lock (this) {
 #if PARANOID
+				bool isadmin =  Paranoid.Provider.IsInRole(principal, "ADMIN");
 				if(Paranoid.Provider.IsSecureRole(role)) {
-					return Paranoid.Provider.IsInRole(principal, role);
-				}		
+					var presult = Paranoid.Provider.IsInRole(principal, role);
+					if(presult)return presult;
+					if(!exact){
+						return isadmin;
+					}
+					return false;
+				}	
+				if(!exact){
+					return isadmin;
+				}
+					
 #endif
-
+			
 
 				var result = false;
 				var cachekey = principal.Identity.Name + ";" + role + ";" + exact;

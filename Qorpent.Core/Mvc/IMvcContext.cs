@@ -27,6 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Principal;
+using System.Web;
 using System.Xml.Linq;
 using Qorpent.Applications;
 using Qorpent.Security;
@@ -165,6 +166,16 @@ namespace Qorpent.Mvc {
 		[SerializeNotNullOnly] string Language { get; set; }
 
 		/// <summary>
+		/// Cookie отклика
+		/// </summary>
+		HttpCookieCollection ResponseCookies { get; }
+
+		/// <summary>
+		/// Cookie отклика
+		/// </summary>
+		HttpCookieCollection RequestCookies { get; }
+
+		/// <summary>
 		/// 	Extract call only information from context (for serialization propose)
 		/// </summary>
 		MvcCallInfo GetCallInfo();
@@ -274,5 +285,12 @@ namespace Qorpent.Mvc {
 		/// <param name="filename"> </param>
 		/// <exception cref="NotSupportedException"></exception>
 		void WriteOutFile(string filename);
+
+		/// <summary>
+		/// Response redirect
+		/// </summary>
+		/// <param name="localurl"></param>
+		/// <returns></returns>
+		void Redirect(string localurl);
 	}
 }

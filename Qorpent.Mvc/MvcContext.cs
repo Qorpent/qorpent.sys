@@ -53,6 +53,48 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
+		/// Cookie отклика
+		/// </summary>
+		public override HttpCookieCollection ResponseCookies {
+			get {
+				
+				if(null!=NativeASPContext) {
+					return NativeASPContext.Response.Cookies;
+				}
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Response redirect
+		/// </summary>
+		/// <param name="localurl"></param>
+		/// <returns></returns>
+		public override void Redirect(string localurl) {
+			var prefix = "/" + Application.ApplicationName+"/";
+			if(!localurl.StartsWith(prefix)) {
+				localurl = prefix + localurl;
+			}
+			NativeASPContext.Response.Redirect(localurl,false);
+		}
+
+		/// <summary>
+		/// Cookie отклика
+		/// </summary>
+		public override HttpCookieCollection RequestCookies
+		{
+			get
+			{
+
+				if (null != NativeASPContext)
+				{
+					return NativeASPContext.Request.Cookies;
+				}
+				return null;
+			}
+		}
+
+		/// <summary>
 		/// </summary>
 		public MvcContext() {}
 

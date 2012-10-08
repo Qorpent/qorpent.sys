@@ -23,6 +23,8 @@
 
 #endregion
 
+using System;
+using System.Web;
 using System.Web.Security;
 using Qorpent.Security.Watchdog;
 
@@ -30,7 +32,7 @@ namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// 	Simple action for form authentication
 	/// </summary>
-	[Action("_sys.logout", Help = "EN: used to logout if forms used")]
+	[Action("_sys.logout", Help = "EN: used to logout if forms used",Role = "DEFAULT")]
 	public class LogoutAction : ActionBase {
 		/// <summary>
 		/// 	processing of execution - main method of action
@@ -43,8 +45,11 @@ namespace Qorpent.Mvc.Actions {
 				Paranoid.Provider.RemoveLogin(User.Identity.Name,cookie.Value);
 			}
 #endif
+			var cookie1 = new HttpCookie(FormsAuthentication.FormsCookieName, "");
+			cookie1.Expires = DateTime.Now.AddYears(-1);
+			Context.ResponseCookies.Add(cookie1);
 			FormsAuthentication.SignOut();
-			FormsAuthentication.RedirectToLoginPage();
+			Context.Redirect("_sys/login.qview.qweb");
 			return null;
 		}
 	}
