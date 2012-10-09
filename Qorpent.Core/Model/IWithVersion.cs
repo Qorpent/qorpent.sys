@@ -16,24 +16,23 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IApplicationStartup.cs
+// Original file : IWithVersion.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
 
-using Qorpent.Model;
+using System;
 
-namespace Qorpent.Applications {
+namespace Qorpent.Model {
 	/// <summary>
-	/// 	Application startup extension
+	/// 	Model Interface - что-то с версией-датой
 	/// </summary>
-	public interface IApplicationStartup : IWithIdx {
+	public interface IWithVersion {
 		/// <summary>
-		/// 	Executes some startup logic against given application
+		/// 	Название
 		/// </summary>
-		/// <param name="application"> </param>
-		void Execute(IApplication application);
+		DateTime Version { get; set; }
 	}
 }

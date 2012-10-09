@@ -16,21 +16,21 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IWithRole.cs
+// Original file : IWithCode.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
 
-namespace Qorpent {
+namespace Qorpent.Model {
 	/// <summary>
-	/// 	Общий интерфейс по предоставлению роли доступа
+	/// 	Model Interface - что-то с уникальным строковым идентификатором
 	/// </summary>
-	public interface IWithRole {
+	public interface IWithCode {
 		/// <summary>
-		/// 	Роль (список ролей), которые необходимы для доступа
+		/// 	Строковый уникальный идентификатор
 		/// </summary>
-		string Role { get; set; }
+		string Code { get; set; }
 	}
 }

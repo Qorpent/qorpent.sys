@@ -16,24 +16,33 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IApplicationStartup.cs
+// Original file : IWithHierarchy.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
 
-using Qorpent.Model;
+using System.Collections.Generic;
 
-namespace Qorpent.Applications {
+namespace Qorpent.Model {
 	/// <summary>
-	/// 	Application startup extension
+	/// 	Модельный интерфейс - Нечто с иерархией, понимаемой как родитель, путь, дочерние
 	/// </summary>
-	public interface IApplicationStartup : IWithIdx {
+	public interface IWithHierarchy<TEntity> {
 		/// <summary>
-		/// 	Executes some startup logic against given application
+		/// 	Прямой идентификатор родителя
 		/// </summary>
-		/// <param name="application"> </param>
-		void Execute(IApplication application);
+		int ParentId { get; set; }
+
+		/// <summary>
+		/// 	Ссылка на родительский объект
+		/// </summary>
+		TEntity Parent { get; set; }
+
+		/// <summary>
+		/// 	Коллекция дочерних объектов
+		/// </summary>
+		ICollection<TEntity> Children { get; set; }
 	}
 }

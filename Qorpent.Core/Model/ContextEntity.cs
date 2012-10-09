@@ -16,24 +16,38 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IApplicationStartup.cs
+// Original file : ContextEntity.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
 
-using Qorpent.Model;
+using System;
 
-namespace Qorpent.Applications {
+namespace Qorpent.Model {
 	/// <summary>
-	/// 	Application startup extension
+	/// 	Плоская реализация IContextEntity
 	/// </summary>
-	public interface IApplicationStartup : IWithIdx {
+	public class ContextEntity : Entity, IContextEntity {
 		/// <summary>
-		/// 	Executes some startup logic against given application
+		/// 	True - объект активен
 		/// </summary>
-		/// <param name="application"> </param>
-		void Execute(IApplication application);
+		public bool Active { get; set; }
+
+		/// <summary>
+		/// 	Дата начала
+		/// </summary>
+		public DateTime Start { get; set; }
+
+		/// <summary>
+		/// 	Дата окончания
+		/// </summary>
+		public DateTime Finish { get; set; }
+
+		/// <summary>
+		/// 	Роль (список ролей), которые необходимы для доступа
+		/// </summary>
+		public string Role { get; set; }
 	}
 }

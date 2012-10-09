@@ -27,6 +27,7 @@ using System;
 using System.Security.Principal;
 using Qorpent.Dsl.LogicalExpressions;
 using Qorpent.IoC;
+using Qorpent.Model;
 
 namespace Qorpent.Security {
 	/// <summary>

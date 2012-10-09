@@ -24,6 +24,7 @@
 #endregion
 
 using System.Security.Principal;
+using Qorpent.Model;
 using Qorpent.Mvc;
 
 namespace Qorpent.Security {

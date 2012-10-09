@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using Qorpent.Model;
 
 namespace Qorpent.Mvc {
 	/// <summary>

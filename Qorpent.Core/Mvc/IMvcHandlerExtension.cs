@@ -23,6 +23,8 @@
 
 #endregion
 
+using Qorpent.Model;
+
 namespace Qorpent.Mvc {
 	/// <summary>
 	/// 	Extension point to setup hooks for MvcHttpHandler

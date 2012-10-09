@@ -16,24 +16,21 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IApplicationStartup.cs
+// Original file : IWithRole.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
 
-using Qorpent.Model;
-
-namespace Qorpent.Applications {
+namespace Qorpent.Model {
 	/// <summary>
-	/// 	Application startup extension
+	/// 	Общий интерфейс по предоставлению роли доступа
 	/// </summary>
-	public interface IApplicationStartup : IWithIdx {
+	public interface IWithRole {
 		/// <summary>
-		/// 	Executes some startup logic against given application
+		/// 	Роль (список ролей), которые необходимы для доступа
 		/// </summary>
-		/// <param name="application"> </param>
-		void Execute(IApplication application);
+		string Role { get; set; }
 	}
 }

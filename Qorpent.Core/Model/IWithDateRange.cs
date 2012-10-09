@@ -1,4 +1,4 @@
-п»ї#region LICENSE
+#region LICENSE
 
 // Copyright 2007-2012 Comdiv (F. Sadykov) - http://code.google.com/u/fagim.sadykov/
 // Supported by Media Technology LTD 
@@ -16,21 +16,28 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IWithIdx.cs
+// Original file : IWithDateRange.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
 
-namespace Qorpent {
+using System;
+
+namespace Qorpent.Model {
 	/// <summary>
-	/// 	Describes that object has an int Idx property (used for ordering)
+	/// 	Модельный интерфейс - что-то с датой начала и окончания
 	/// </summary>
-	public interface IWithIdx {
+	public interface IWithDateRange {
 		/// <summary>
-		/// 	An index of object
+		/// 	Дата начала
 		/// </summary>
-		int Idx { get; set; }
+		DateTime Start { get; set; }
+
+		/// <summary>
+		/// 	Дата окончания
+		/// </summary>
+		DateTime Finish { get; set; }
 	}
 }

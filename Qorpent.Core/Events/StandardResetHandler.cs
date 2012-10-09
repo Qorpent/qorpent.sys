@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Model;
 using Qorpent.Serialization;
 
 namespace Qorpent.Events {

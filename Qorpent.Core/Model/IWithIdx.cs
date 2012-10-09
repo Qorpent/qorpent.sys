@@ -1,4 +1,4 @@
-#region LICENSE
+﻿#region LICENSE
 
 // Copyright 2007-2012 Comdiv (F. Sadykov) - http://code.google.com/u/fagim.sadykov/
 // Supported by Media Technology LTD 
@@ -16,24 +16,21 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IApplicationStartup.cs
+// Original file : IWithIdx.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
 
-using Qorpent.Model;
-
-namespace Qorpent.Applications {
+namespace Qorpent.Model {
 	/// <summary>
-	/// 	Application startup extension
+	/// 	Describes that object has an int Idx property (used for ordering)
 	/// </summary>
-	public interface IApplicationStartup : IWithIdx {
+	public interface IWithIdx {
 		/// <summary>
-		/// 	Executes some startup logic against given application
+		/// 	An index of object
 		/// </summary>
-		/// <param name="application"> </param>
-		void Execute(IApplication application);
+		int Idx { get; set; }
 	}
 }

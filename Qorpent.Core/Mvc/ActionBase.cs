@@ -29,6 +29,7 @@ using System.Xml.Linq;
 using Qorpent.Events;
 using Qorpent.IO;
 using Qorpent.IoC;
+using Qorpent.Model;
 using Qorpent.Security;
 using Qorpent.Serialization;
 

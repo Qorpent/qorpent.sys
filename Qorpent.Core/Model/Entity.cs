@@ -16,24 +16,53 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IApplicationStartup.cs
+// Original file : Entity.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
 
-using Qorpent.Model;
+using System;
 
-namespace Qorpent.Applications {
+namespace Qorpent.Model {
 	/// <summary>
-	/// 	Application startup extension
+	/// 	Плоская реализация IEntity, может использоваться как универсальный промежуточный класс
 	/// </summary>
-	public interface IApplicationStartup : IWithIdx {
+	public class Entity : IEntity {
 		/// <summary>
-		/// 	Executes some startup logic against given application
+		/// 	Целочисленный уникальный идентификатор
 		/// </summary>
-		/// <param name="application"> </param>
-		void Execute(IApplication application);
+		public int Id { get; set; }
+
+		/// <summary>
+		/// 	Строковый уникальный идентификатор
+		/// </summary>
+		public string Code { get; set; }
+
+		/// <summary>
+		/// 	Название/имя
+		/// </summary>
+		public string Name { get; set; }
+
+		/// <summary>
+		/// 	An index of object
+		/// </summary>
+		public int Idx { get; set; }
+
+		/// <summary>
+		/// 	Строка тегов
+		/// </summary>
+		public string Tags { get; set; }
+
+		/// <summary>
+		/// 	Комментарий
+		/// </summary>
+		public string Comment { get; set; }
+
+		/// <summary>
+		/// 	Название
+		/// </summary>
+		public DateTime Version { get; set; }
 	}
 }

@@ -1,4 +1,4 @@
-#region LICENSE
+﻿#region LICENSE
 
 // Copyright 2007-2012 Comdiv (F. Sadykov) - http://code.google.com/u/fagim.sadykov/
 // Supported by Media Technology LTD 
@@ -16,24 +16,16 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IApplicationStartup.cs
+// Original file : IEntity.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
 
-using Qorpent.Model;
-
-namespace Qorpent.Applications {
+namespace Qorpent.Model {
 	/// <summary>
-	/// 	Application startup extension
+	/// 	Базовый интерфейс для классов данных
 	/// </summary>
-	public interface IApplicationStartup : IWithIdx {
-		/// <summary>
-		/// 	Executes some startup logic against given application
-		/// </summary>
-		/// <param name="application"> </param>
-		void Execute(IApplication application);
-	}
+	public interface IEntity : IWithId, IWithCode, IWithName, IWithIdx, IWithTags, IWithComment, IWithVersion {}
 }

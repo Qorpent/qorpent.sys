@@ -25,6 +25,19 @@
   </Choose>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Model\ContextEntity.cs" />
+    <Compile Include="Model\Entity.cs" />
+    <Compile Include="Model\IContextEntity.cs" />
+    <Compile Include="Model\IEntity.cs" />
+    <Compile Include="Model\IWithActive.cs" />
+    <Compile Include="Model\IWithCode.cs" />
+    <Compile Include="Model\IWithComment.cs" />
+    <Compile Include="Model\IWithDateRange.cs" />
+    <Compile Include="Model\IWithHierarchy.cs" />
+    <Compile Include="Model\IWithId.cs" />
+    <Compile Include="Model\IWithName.cs" />
+    <Compile Include="Model\IWithTags.cs" />
+    <Compile Include="Model\IWithVersion.cs" />
     <Compile Include="Security\Watchdog\IParanoidProvider.cs" />
     <Compile Include="Security\ISysLogon.cs" />
     <Compile Include="Security\Watchdog\ParanoidException.cs" />
@@ -119,8 +132,8 @@
     <Compile Include=".\IO\IFileNameResolver.cs" />
     <Compile Include=".\IO\IFileService.cs" />
     <Compile Include=".\IO\IOException.cs" />
-    <Compile Include=".\IWithIdx.cs" />
-    <Compile Include=".\IWithRole.cs" />
+    <Compile Include="Model\IWithIdx.cs" />
+    <Compile Include="Model\IWithRole.cs" />
     <Compile Include=".\LicenseAttribute.cs" />
     <Compile Include=".\Log\BaseLogger.cs" />
     <Compile Include=".\Log\BaseLogWriter.cs" />

@@ -16,24 +16,21 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IApplicationStartup.cs
+// Original file : IWithActive.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
 
-using Qorpent.Model;
-
-namespace Qorpent.Applications {
+namespace Qorpent.Model {
 	/// <summary>
-	/// 	Application startup extension
+	/// 	Модельный интерфейс - что-то с признаком активности
 	/// </summary>
-	public interface IApplicationStartup : IWithIdx {
+	public interface IWithActive {
 		/// <summary>
-		/// 	Executes some startup logic against given application
+		/// 	True - объект активен
 		/// </summary>
-		/// <param name="application"> </param>
-		void Execute(IApplication application);
+		bool Active { get; set; }
 	}
 }
