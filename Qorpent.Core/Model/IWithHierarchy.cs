@@ -44,5 +44,10 @@ namespace Qorpent.Model {
 		/// 	Коллекция дочерних объектов
 		/// </summary>
 		ICollection<TEntity> Children { get; set; }
+
+		/// <summary>
+		/// Cached path of entity
+		/// </summary>
+		string Path { get; set; }
 	}
 }

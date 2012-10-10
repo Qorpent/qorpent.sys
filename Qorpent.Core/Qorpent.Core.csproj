@@ -33,6 +33,7 @@
     <Compile Include="Model\IWithCode.cs" />
     <Compile Include="Model\IWithComment.cs" />
     <Compile Include="Model\IWithDateRange.cs" />
+    <Compile Include="Model\IWithFormula.cs" />
     <Compile Include="Model\IWithHierarchy.cs" />
     <Compile Include="Model\IWithId.cs" />
     <Compile Include="Model\IWithName.cs" />

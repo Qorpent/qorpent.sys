@@ -12,6 +12,7 @@
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
+    <Compile Include="Mapping\EntityMap.cs" />
     <Compile Include="REST\AddConnection.cs" />
     <Compile Include="REST\ConnectionsAction.cs" />
     <Compile Include="REST\RemoveConnection.cs" />
@@ -28,9 +29,12 @@
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Entity" >
+		<HintPath>..\..\..\exras\corelib\System.Data.Entity.dll</HintPath>
+	</Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>
