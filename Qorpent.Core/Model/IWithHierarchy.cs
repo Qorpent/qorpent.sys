@@ -33,7 +33,7 @@ namespace Qorpent.Model {
 		/// <summary>
 		/// 	Прямой идентификатор родителя
 		/// </summary>
-		int ParentId { get; set; }
+		int? ParentId { get; set; }
 
 		/// <summary>
 		/// 	Ссылка на родительский объект

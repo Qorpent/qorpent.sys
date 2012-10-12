@@ -53,7 +53,7 @@ namespace Qorpent.Model {
 		/// <summary>
 		/// 	Строка тегов
 		/// </summary>
-		public string Tags { get; set; }
+		public string Tag { get; set; }
 
 		/// <summary>
 		/// 	Комментарий

@@ -25,12 +25,16 @@
 
 using System;
 using System.Linq;
+using System.Security;
 using Qorpent.Applications;
 using Qorpent.Events;
 using Qorpent.IoC;
 using Qorpent.Log;
 
 namespace Qorpent {
+
+	
+
 	///<summary>
 	///	Ѕазовый класс сервисов - обеспечивает св€зь с контейнером и приложением.
 	///</summary>
@@ -48,7 +52,7 @@ namespace Qorpent {
 	///	выполнени€ дополнительных действий на момент прив€зки к генерирующему контексту.
 	///</remarks>
 	///<source>Qorpent/Qorpent.Core/ServiceBase.cs</source>
-	public abstract class ServiceBase : IContainerBound, IApplicationBound, IDisposable, IResetable, ILogBound {
+	public abstract class ServiceBase :MarshalByRefObject, IContainerBound, IApplicationBound, IDisposable, IResetable, ILogBound {
 		/// <summary>
 		/// 	ќбратна€ ссылка на приложение, в составе которого создан данный экземпл€р (может быть NULL, если 
 		/// 	объект был создан из контейнера без св€зи с приложением)

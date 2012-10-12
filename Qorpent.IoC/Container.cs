@@ -34,6 +34,7 @@ using System.Threading;
 using Qorpent.Applications;
 using Qorpent.Events;
 using Qorpent.Log;
+using Qorpent.Model;
 using Qorpent.Security;
 using Qorpent.Security.Watchdog;
 using Qorpent.Utils.Extensions;

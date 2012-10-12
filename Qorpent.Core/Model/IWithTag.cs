@@ -27,10 +27,10 @@ namespace Qorpent.Model {
 	/// <summary>
 	/// 	Модельный интерфейс - что-то с тегами (комплексная строка или традиционные теги)
 	/// </summary>
-	public interface IWithTags {
+	public interface IWithTag {
 		/// <summary>
 		/// 	Строка тегов
 		/// </summary>
-		string Tags { get; set; }
+		string Tag { get; set; }
 	}
 }

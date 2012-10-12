@@ -15,6 +15,6 @@ namespace Qorpent.Model {
 		/// <summary>
 		/// Признак активности формулы
 		/// </summary>
-		string IsFormula { get; set; }
+		bool IsFormula { get; set; }
 	}
 }

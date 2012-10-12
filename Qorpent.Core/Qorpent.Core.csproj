@@ -37,7 +37,7 @@
     <Compile Include="Model\IWithHierarchy.cs" />
     <Compile Include="Model\IWithId.cs" />
     <Compile Include="Model\IWithName.cs" />
-    <Compile Include="Model\IWithTags.cs" />
+    <Compile Include="Model\IWithTag.cs" />
     <Compile Include="Model\IWithVersion.cs" />
     <Compile Include="Security\Watchdog\IParanoidProvider.cs" />
     <Compile Include="Security\ISysLogon.cs" />
