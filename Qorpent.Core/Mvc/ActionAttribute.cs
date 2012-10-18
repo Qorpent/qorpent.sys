@@ -88,6 +88,23 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
+		/// 	Возвращает контекст применения роли
+		/// </summary>
+		/// <param name="action"> </param>
+		/// <returns> </returns>
+		public static string GetRoleContext(IAction action)
+		{
+			var type = action.GetType();
+			var attr =
+				type.GetCustomAttributes(typeof(ActionAttribute), true).OfType<ActionAttribute>().FirstOrDefault();
+			if (null == attr)
+			{
+				return "";
+			}
+			return attr.RoleContext;
+		}
+
+		/// <summary>
 		/// 	Get help string - attribute based
 		/// </summary>
 		/// <param name="action"> </param>

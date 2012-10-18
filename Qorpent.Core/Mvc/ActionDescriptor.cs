@@ -45,6 +45,7 @@ namespace Qorpent.Mvc {
 			Name = ActionAttribute.GetName(action);
 			DirectRole = ActionAttribute.GetRole(action);
 			Help = ActionAttribute.GetHelp(action);
+			RoleContext = ActionAttribute.GetRoleContext(action);
 			if (action is IContextualAction) {
 				((IContextualAction) action).SetDescriptor(this);
 			}

@@ -27,7 +27,15 @@ namespace Qorpent.Data.Connections {
 		/// </summary>
 		[Inject] public IDatabaseConnectionRegistryExtension[] Persisters { get; set; }
 
-
+		/// <summary>
+		/// Статическая резолюция соединений в масштабе приложения
+		/// </summary>
+		/// <param name="nameOrConnection"></param>
+		/// <returns></returns>
+		public static string Resolve(string nameOrConnection) {
+			if(nameOrConnection.Contains(";")) return nameOrConnection;
+			return Applications.Application.Current.DatabaseConnections.GetConnectionString(nameOrConnection);
+		}
 		/// <summary>
 		/// 
 		/// </summary>

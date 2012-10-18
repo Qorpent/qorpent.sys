@@ -25,6 +25,7 @@
 
 using System;
 using Qorpent.Model;
+using Qorpent.Security;
 using Qorpent.Serialization;
 
 namespace Qorpent.Mvc {
@@ -32,7 +33,7 @@ namespace Qorpent.Mvc {
 	/// 	Basis for mvc descriptors
 	/// </summary>
 	[Serialize]
-	public abstract class MvcStepDescriptor : INotModifiedStateProvider, IWithRole {
+	public abstract class MvcStepDescriptor : INotModifiedStateProvider, IWithRole,IWithRoleContext {
 		/// <summary>
 		/// 	Name of step implementation
 		/// </summary>
@@ -85,5 +86,10 @@ namespace Qorpent.Mvc {
 		protected abstract string PrepareRole();
 
 		private string _role;
+
+		/// <summary>
+		/// Дополнительный контекст проверки роли
+		/// </summary>
+		public string RoleContext { get; set; }
 	}
 }

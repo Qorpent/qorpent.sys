@@ -23,6 +23,7 @@
 
 #endregion
 
+using Qorpent.Model;
 using Qorpent.Mvc.QView;
 
 namespace Qorpent.Mvc.UI {

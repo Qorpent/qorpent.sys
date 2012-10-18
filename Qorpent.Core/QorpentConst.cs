@@ -93,7 +93,7 @@ namespace Qorpent {
 			/// <summary>
 			/// 	Logical finish (max date) , conformant to sql limitations and reasonable max (3000-1-1)
 			/// </summary>
-			public static readonly DateTime End = new DateTime(1900, 1, 1);
+			public static readonly DateTime End = new DateTime(3000, 1, 1);
 
 			/// <summary>
 			/// 	Standard date formats for usage when standard DateTime.Parse fails

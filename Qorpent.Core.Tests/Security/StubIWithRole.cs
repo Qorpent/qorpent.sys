@@ -23,6 +23,8 @@
 
 #endregion
 
+using Qorpent.Model;
+
 namespace Qorpent.Core.Tests.Security {
 	public class StubIWithRole : IWithRole {
 		public string Role { get; set; }

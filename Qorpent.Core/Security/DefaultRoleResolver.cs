@@ -84,7 +84,7 @@ namespace Qorpent.Security {
 			
 
 				var result = false;
-				var cachekey = principal.Identity.Name + ";" + role + ";" + exact;
+				var cachekey = principal.Identity.Name + ";" + role + ";" + exact+";"+customcontext;
 				Log.Debug("start check " + cachekey, this);
 				if (_cache.ContainsKey(cachekey)) {
 					result = _cache[cachekey];

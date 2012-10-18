@@ -71,5 +71,10 @@ namespace Qorpent.IoC {
 		/// 	Access role for action
 		/// </summary>
 		public string Role { get; set; }
+
+		/// <summary>
+		/// Role checking context
+		/// </summary>
+		public string RoleContext { get; set; }
 	}
 }

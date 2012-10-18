@@ -229,7 +229,7 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public void BeginArrayEntry(int idx) {
-			var e = new XElement("item", new XAttribute("idx", idx));
+			var e = new XElement("item", new XAttribute("__idx", idx));
 			Current.Add(e);
 			_stack.Push(e);
 		}
@@ -241,14 +241,14 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public void EndArrayEntry(bool last) {
-			var e = _stack.Pop();
-			if (e.Elements("item").Count() == 1 && e.Elements().Count() == 1) {
-				var subst = e.Elements().FirstOrDefault();
-				if (subst != null) {
-					subst.Add(e.Attribute("idx"));
-					e.ReplaceWith(subst);
-				}
-			}
+			_stack.Pop();
+			//if (e.Elements("item").Count() == 1 && e.Elements().Count() == 1) {
+			//    var subst = e.Elements().FirstOrDefault();
+			//    if (subst != null) {
+			//        subst.SetAttributeValue("__idx",e.Attribute("__idx"));
+			//        e.ReplaceWith(subst);
+			//    }
+			//}
 		}
 
 		/// <summary>

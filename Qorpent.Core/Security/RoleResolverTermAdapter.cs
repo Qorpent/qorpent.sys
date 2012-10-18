@@ -37,9 +37,11 @@ namespace Qorpent.Security {
 		/// </summary>
 		/// <param name="resolver"> </param>
 		/// <param name="principal"> </param>
-		public RoleResolverTermAdapter(IRoleResolver resolver, IPrincipal principal) {
+		/// <param name="customcontext"> </param>
+		public RoleResolverTermAdapter(IRoleResolver resolver, IPrincipal principal, string customcontext) {
 			_resolver = resolver;
 			_principal = principal;
+			_customcontext = customcontext;
 		}
 
 
@@ -56,7 +58,7 @@ namespace Qorpent.Security {
 				exact = true;
 				name = name.Substring(8);
 			}
-			return _resolver.IsInRole(_principal, name, exact);
+			return _resolver.IsInRole(_principal, name, exact,customcontext:_customcontext);
 		}
 
 		/// <summary>
@@ -87,5 +89,6 @@ namespace Qorpent.Security {
 
 		private readonly IPrincipal _principal;
 		private readonly IRoleResolver _resolver;
+		private string _customcontext;
 	}
 }

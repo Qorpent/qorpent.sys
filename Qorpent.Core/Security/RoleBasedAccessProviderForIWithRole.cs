@@ -53,13 +53,17 @@ namespace Qorpent.Security {
 		/// <returns> true - указанный пользователь имеет указанные права доступа к объекту </returns>
 		public AccessResult IsAccessible(object target, AccessRole accessRole, IPrincipal principal, IRoleResolver resolver) {
 			var role = ((IWithRole) target).Role.Trim();
+			string customcontext = null;
+			if(target is IWithRoleContext) {
+				customcontext = ((IWithRoleContext) target).RoleContext;
+			}
 			if (string.IsNullOrEmpty(role)) {
 				return "no role defined";
 			}
 			if (role == "DEFAULT") {
 				return "Allow DEFAULT role is always true";
 			}
-			var adapter = new RoleResolverTermAdapter(resolver, principal);
+			var adapter = new RoleResolverTermAdapter(resolver, principal,customcontext);
 			if ((role.Contains("&") || role.Contains("!") || role.Contains("|")) && !(role.Contains(","))) {
 				if (null == FormulaEvaluator) {
 					throw new Exception(

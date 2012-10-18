@@ -23,6 +23,7 @@
 
 #endregion
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -84,5 +85,102 @@ namespace Qorpent.Utils.Extensions {
 		public static IList<string> SmartSplit(this string str, bool empty = false, bool trim = true, params char[] splitters) {
 			return _helper.SmartSplit(str, empty, trim, splitters);
 		}
+
+
+		/// <summary>
+		/// Для строк формата SCESCE (S!=E) или SCSCS (S==E) возвращает True если элемент есть в списке
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="value"> </param>
+		/// <param name="start"></param>
+		/// <param name="end"></param>
+		/// <param name="ignorecase"> </param>
+		/// <returns></returns>
+		public static bool ListContains(this string str, string value, string start = "/", string end= "/", bool ignorecase= true) {
+			if(str.IsEmpty()) return false;
+			if(value.IsEmpty()) return false;
+			if(start.IsEmpty())throw new QorpentException("start cannot be empty");
+			if (end.IsEmpty()) throw new QorpentException("end cannot be empty");
+			if (value.Contains(end)||value.Contains(start)) throw new QorpentException(string.Format("cannot apply ListContains if find contains start or end: {0},{1},{2} ",value,start,end));
+			var realsearch = start + value + end;
+			var wheresearch = str;
+			if(ignorecase) {
+				realsearch = realsearch.ToUpperInvariant();
+				wheresearch = wheresearch.ToUpperInvariant();
+			}
+			return wheresearch.Contains(realsearch);
+		}
+
+		/// <summary>
+		/// Для строк формата SCESCE (S!=E) или SCSCS (S==E) дописывает элемент списка при отсутствии
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="value"> </param>
+		/// <param name="start"></param>
+		/// <param name="end"></param>
+		/// <param name="ignorecase"> </param>
+		/// <returns></returns>
+		public static string ListAppend(this string str, string value, string start = "/", string end = "/", bool ignorecase = true)
+		{
+			if (start.IsEmpty()) throw new QorpentException("start cannot be empty");
+			if (end.IsEmpty()) throw new QorpentException("end cannot be empty");
+			if (value.Contains(end) || value.Contains(start)) throw new QorpentException(string.Format("cannot apply ListAppend if find contains start or end: {0},{1},{2} ", value, start, end));
+			if (value.IsEmpty()||ListContains(str,value,start,end,ignorecase)) return str;
+
+			var appendablevalue = start + value + end;
+			
+			if (str.IsEmpty()) return appendablevalue;
+
+			var newvalue = str;
+			
+			newvalue += appendablevalue;
+
+
+			newvalue = newvalue.Replace(start + start, start);
+			newvalue = newvalue.Replace(end + end, end);
+
+			return newvalue;
+		}
+
+
+		/// <summary>
+		/// Для строк формата SCESCE (S!=E) или SCSCS (S==E) убирает элемент из списка при наличии
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="value"> </param>
+		/// <param name="start"></param>
+		/// <param name="end"></param>
+		/// <param name="ignorecase"> </param>
+		/// <returns></returns>
+		public static string ListRemove(this string str, string value, string start = "/", string end = "/", bool ignorecase = true)
+		{
+			if (start.IsEmpty()) throw new QorpentException("start cannot be empty");
+			if (end.IsEmpty()) throw new QorpentException("end cannot be empty");
+			if (value.Contains(end) || value.Contains(start)) throw new QorpentException(string.Format("cannot apply ListRemove if find contains start or end: {0},{1},{2} ", value, start, end));
+			if (value.IsEmpty() || str.IsEmpty() || !ListContains(str, value, start, end, ignorecase)) return str;
+
+			var removevalue = start + value + end;
+			var newvalue = str;
+			var index = newvalue.IndexOf(removevalue,
+			                             ignorecase
+				                             ? StringComparison.InvariantCultureIgnoreCase
+				                             : StringComparison.InvariantCulture);
+			while (index!=-1) {
+				newvalue = newvalue.Substring(0, index ) + start + end + newvalue.Substring(index + removevalue.Length);
+				index = newvalue.IndexOf(removevalue,
+										 ignorecase
+											 ? StringComparison.InvariantCultureIgnoreCase
+											 : StringComparison.InvariantCulture);
+			}
+
+			newvalue = newvalue.Replace(end + start + end, end);
+			newvalue = newvalue.Replace(start + start, start);
+			newvalue = newvalue.Replace(end + end, end);
+			if(newvalue==start+end||newvalue==start||newvalue==end) {
+				newvalue = "";
+			}
+			return newvalue;
+		}
+
 	}
 }

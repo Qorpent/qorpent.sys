@@ -1,6 +1,8 @@
 ﻿var actionform = {
-    submit: function(target) {
+    submit: function (target) {
         target.setAttribute("action", location.href.replace("form", document.querySelector('#formrender').value));
-        target.submit();
+        if (target.checkValidity()) {
+            target.submit();
+        }
     }
 }

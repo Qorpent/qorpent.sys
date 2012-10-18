@@ -116,5 +116,43 @@ namespace Qorpent.Utils.Tests {
 		public void WsStringIsFalseIsNotEmpty() {
 			Assert.False(" \t \r\n".IsNotEmpty());
 		}
+
+
+
+		[TestCase("/A/B/B/C/", "B", true)]
+		[TestCase("/A/B/C/","B",true)]
+		[TestCase("/A/B/C/", "C", true)]
+		[TestCase("/A/B/C/", "A", true)]
+		[TestCase("A/B/C/", "A", false)]
+		[TestCase("A/B/C/", "B", true)]
+		[TestCase("/A/B/C", "C", false)]
+		[TestCase("/A/BC/", "B", false)]
+		[TestCase("/A/B/C/", "D", false)]
+		[TestCase("", "D", false)]
+		[TestCase("/A/B/C/", "", false)]
+		public void ListContainsSingleStartEndTest(string src, string val, bool result) {
+			Assert.AreEqual(result,src.ListContains(val));
+		}
+
+		[TestCase("", "A", "/A/")]
+		[TestCase("/a/B/c/", "A", "/a/B/c/")]
+		[TestCase("/A/B/C/", "A", "/A/B/C/")]
+		[TestCase("/A/B/C/", "D", "/A/B/C/D/")]
+		[TestCase("/A/B/C/", "", "/A/B/C/")]
+		public void ListAppendSingleStartEndTest(string src, string val, string result) {
+			Assert.AreEqual(result,src.ListAppend(val));
+		}
+
+		[TestCase("/a/b/C/", "c", "/a/b/")]
+		[TestCase("/a/b/c/", "B", "/a/c/")]
+		[TestCase("/A/B/C/", "B", "/A/C/")]
+		[TestCase("/A/", "A", "")]
+		[TestCase("", "A", "")]
+		[TestCase("/A/B/C/", "A", "/B/C/")]
+		[TestCase("/A/B/C/", "", "/A/B/C/")]
+		public void ListRemoveSingleStartEndTest(string src, string val, string result)
+		{
+			Assert.AreEqual(result, src.ListRemove(val));
+		}
 	}
 }

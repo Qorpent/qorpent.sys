@@ -45,12 +45,15 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 			{
 				var inner = new XElement("input",
 				                         new XAttribute("name", p.Name ?? ""),
-				                         new XAttribute("required", p.Required),
+				                         
 				                         new XAttribute("pattern", p.ValidatePattern ?? ""),
 				                         new XAttribute("value", p.Default ?? ""));
+				if(p.Required) {
+					inner.Add(new XAttribute("required", p.Required));
+				}
 				if (p.IsLargeText) {
 					inner.Name = "textarea";
-					inner.Add(new XText("&nbsp;"));
+					inner.Add(new XText("   "));
 				}
 				if (p.IsBool) {
 					inner.SetAttributeValue("type", "checkbox");

@@ -43,6 +43,6 @@ namespace Qorpent {
 		/// <summary>
 		/// Дополнительные параметры
 		/// </summary>
-		public IDictionary<string, string> ExceptionRegisryData { get; set; }
+		public virtual IDictionary<string, string> ExceptionRegisryData { get; set; }
 	}
 }
