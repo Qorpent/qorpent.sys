@@ -37,7 +37,7 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// </summary>
 		/// <param name="source"> </param>
 		/// <returns> </returns>
-		protected override bool internalEval(ILogicTermSource source) {
+		protected override bool InternalEval(ILogicTermSource source) {
 			return source.Get(Literal);
 		}
 	}

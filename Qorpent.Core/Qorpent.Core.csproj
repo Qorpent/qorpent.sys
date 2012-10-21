@@ -25,6 +25,7 @@
   </Choose>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="IoC\BasicComponentDefinition.cs" />
     <Compile Include="Model\ContextEntity.cs" />
     <Compile Include="Model\Entity.cs" />
     <Compile Include="Model\IContextEntity.cs" />

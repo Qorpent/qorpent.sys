@@ -30,7 +30,7 @@ namespace Qorpent.Serialization.Tests {
 	[TestFixture]
 	public class bxl_serializer_test {
 		private void test(object obj, string expected) {
-			var result = new BxlSerializer().serialize("result", obj);
+			var result = new BxlSerializer().DoSerialize("result", obj);
 			Console.WriteLine(result);
 			Assert.AreEqual(expected, result);
 		}

@@ -372,7 +372,9 @@ namespace Qorpent.Mvc {
 		/// <param name="setup"> </param>
 		/// <typeparam name="T"> </typeparam>
 		/// <returns> </returns>
-		public override T Get<T>(string name, T def, bool setup = false) {
+// ReSharper disable OptionalParameterHierarchyMismatch
+		public override T Get<T>(string name, T def = default(T), bool setup = false) {
+// ReSharper restore OptionalParameterHierarchyMismatch
 			if (Parameters.ContainsKey(name) || null == XData) {
 				return Parameters.GetValue(name, def, initialize: setup);
 			}

@@ -32,8 +32,8 @@ namespace Qorpent.Serialization.Tests {
 	[TestFixture]
 	public class xml_serializer_test {
 		private void test(object obj, string expected) {
-			Console.WriteLine(new XmlSerializer().serialize(null, obj).Trim());
-			Assert.AreEqual(expected, new XmlSerializer().serialize(null, obj).Trim());
+			Console.WriteLine(new XmlSerializer().DoSerialize(null, obj).Trim());
+			Assert.AreEqual(expected, new XmlSerializer().DoSerialize(null, obj).Trim());
 		}
 
 		public enum testEnum {

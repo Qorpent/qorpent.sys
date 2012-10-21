@@ -42,7 +42,7 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// </summary>
 		/// <param name="source"> </param>
 		/// <returns> </returns>
-		protected override bool internalEval(ILogicTermSource source) {
+		protected override bool InternalEval(ILogicTermSource source) {
 			if (FirstLiteral.StartsWith("$") && SecondLiteral.StartsWith("$")) {
 				return source.Value(FirstLiteral.Substring(1)) == source.Value(SecondLiteral.Substring(1));
 			}

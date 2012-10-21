@@ -32,7 +32,7 @@ namespace Qorpent.Serialization.Tests {
 	[TestFixture]
 	public class js_serializer_test {
 		private void test(object obj, string expected) {
-			Assert.AreEqual(expected, new JsSerializer().serialize(null, obj));
+			Assert.AreEqual(expected, new JsSerializer().DoSerialize(null, obj));
 		}
 
 

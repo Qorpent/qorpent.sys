@@ -23,6 +23,8 @@
 
 #endregion
 
+using System.Linq;
+
 namespace Qorpent.Dsl.LogicalExpressions {
 	/// <summary>
 	/// 	operator that describes evaluation of disjuntion
@@ -32,14 +34,8 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// </summary>
 		/// <param name="source"> </param>
 		/// <returns> </returns>
-		protected override bool internalEval(ILogicTermSource source) {
-			foreach (var e in Children) {
-				var r = e.Eval(source);
-				if (r) {
-					return true;
-				}
-			}
-			return false;
+		protected override bool InternalEval(ILogicTermSource source) {
+			return Children.Select(e => e.Eval(source)).Any(r => r);
 		}
 	}
 }

@@ -30,7 +30,7 @@ namespace Qorpent.Serialization.Tests {
 	public class exceptions_need_to_be_fixed {
 		[Test]
 		public void bug_bxl_serializer_must_correctly_serilize_nulls() {
-			Assert.AreEqual("value : null", new BxlSerializer().serialize("value", null));
+			Assert.AreEqual("value : null", new BxlSerializer().DoSerialize("value", null));
 		}
 	}
 }

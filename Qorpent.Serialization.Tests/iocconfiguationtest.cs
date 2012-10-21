@@ -44,7 +44,7 @@ namespace Qorpent.Serialization.Tests {
 		[TestCase(typeof (ISerializer), "xml.serializer", typeof (XmlSerializer))]
 		[TestCase(typeof (ISerializer), "js.serializer", typeof (JsSerializer))]
 		[TestCase(typeof (ISerializer), "json.serializer", typeof (JsonSerializer))]
-		[TestCase(typeof (ISerializer), "md5.serializer", typeof (MD5Serializer))]
+		[TestCase(typeof (ISerializer), "md5.serializer", typeof (Md5Serializer))]
 		public void ClassesAreWellConfigured(Type type, string name, Type resultType) {
 			var result = container.Get(type, name);
 			Assert.NotNull(result);

@@ -9,7 +9,7 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' == 'Release'   and Exists('$(AllReleasePath)\Qorpent.Core.dll'">
+    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' == 'Release'   and Exists('$(AllReleasePath)\Qorpent.Core.dll')">
       <ItemGroup>
         <Reference Include="Qorpent.Core">
           <SpecificVersion>False</SpecificVersion>
