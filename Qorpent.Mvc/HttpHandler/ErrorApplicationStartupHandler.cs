@@ -37,9 +37,9 @@ namespace Qorpent.Mvc.HttpHandler {
 		/// <param name="context"> ќбъект <see cref="T:System.Web.HttpContext" /> , предоставл€ющий ссылки на внутренние серверные объекты (например, Request, Response, Session и Server), используемые дл€ обслуживани€ HTTP-запросов. </param>
 		public void ProcessRequest(HttpContext context) {
 			var enstring = Application.StartupError.ToString();
-			var rustring = "";
-			var statestring = "";
-			var statecode = 500;
+			const string rustring = "";
+			const string statestring = "";
+			const int statecode = 500;
 			Writeout(context, statestring, statecode, enstring, rustring);
 		}
 

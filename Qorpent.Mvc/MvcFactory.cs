@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Qorpent.Events;
@@ -46,6 +47,7 @@ namespace Qorpent.Mvc {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
 		}
 #endif
+
 		/// <summary>
 		/// 	Reference to QView monitor instance
 		/// </summary>
@@ -113,31 +115,34 @@ namespace Qorpent.Mvc {
 		/// 	clears all resolution caches
 		/// </summary>
 		public void ClearCaches(MvcObjectType type = MvcObjectType.All, string name = null) {
-			lock (this) {
+			lock (Sync) {
 				if (0 != (type | MvcObjectType.Action)) {
 					if (name.IsNotEmpty()) {
-						actionPool.Remove(NormalizeActionName(name));
+						_actionPool.Remove(NormalizeActionName(name));
 					}
 					else {
-						actionPool.Clear();
+						_actionPool.Clear();
 					}
 				}
 				if (0 != (type | MvcObjectType.Render)) {
 					if (name.IsNotEmpty()) {
-						renderPool.Remove(NormalizeRenderName(name));
+						_renderPool.Remove(NormalizeRenderName(name));
 					}
 					else {
-						renderPool.Clear();
+						_renderPool.Clear();
 					}
 				}
 				if (0 != (type | MvcObjectType.View)) {
 					if (name.IsNotEmpty()) {
-						viewPool.Remove(name);
-						viewContainerNameCache.Remove(name);
+						Debug.Assert(name != null, "name != null");
+						if (_viewPool.ContainsKey(name)) {
+							_viewPool.Remove(name);
+						}
+						_viewContainerNameCache.Remove(name);
 					}
 					else {
-						viewPool.Clear();
-						viewContainerNameCache.Clear();
+						_viewPool.Clear();
+						_viewContainerNameCache.Clear();
 					}
 				}
 			}
@@ -149,11 +154,8 @@ namespace Qorpent.Mvc {
 		/// <param name="context"> </param>
 		/// <returns> </returns>
 		public ActionDescriptor GetAction(IMvcContext context) {
-			lock (this) {
-				var result = TryResolveActionFromPool(context.ActionName);
-				if (null == result) {
-					result = GenerateNewActionDescriptor(context.ActionName);
-				}
+			lock (Sync) {
+				var result = TryResolveActionFromPool(context.ActionName) ?? GenerateNewActionDescriptor(context.ActionName);
 
 				return result;
 			}
@@ -164,7 +166,7 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <param name="context"> </param>
 		public void ReleaseAction(IMvcContext context) {
-			lock (this) {
+			lock (Sync) {
 				if (null != context.ActionDescriptor) {
 					PushActionToPool(context.ActionDescriptor);
 				}
@@ -177,11 +179,8 @@ namespace Qorpent.Mvc {
 		/// <param name="context"> </param>
 		/// <returns> </returns>
 		public RenderDescriptor GetRender(IMvcContext context) {
-			lock (this) {
-				var result = TryResolveRenderFromPool(context.RenderName);
-				if (null == result) {
-					result = GenerateNewRenderDescriptor(context.RenderName);
-				}
+			lock (Sync) {
+				var result = TryResolveRenderFromPool(context.RenderName) ?? GenerateNewRenderDescriptor(context.RenderName);
 
 				return result;
 			}
@@ -192,7 +191,7 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <param name="context"> </param>
 		public void ReleaseRender(IMvcContext context) {
-			lock (this) {
+			lock (Sync) {
 				if (null != context.RenderDescriptor) {
 					PushRenderPool(context.RenderDescriptor);
 				}
@@ -213,12 +212,9 @@ namespace Qorpent.Mvc {
 		/// <param name="name"> </param>
 		/// <returns> </returns>
 		public IQView GetView(string name) {
-			lock (this) {
+			lock (Sync) {
 				name = NormalizeQviewName(name);
-				var result = TryResolveViewPool(name);
-				if (null == result) {
-					result = GenerateNewView(name);
-				}
+				var result = TryResolveViewPool(name) ?? GenerateNewView(name);
 
 				return result;
 			}
@@ -239,9 +235,11 @@ namespace Qorpent.Mvc {
 		/// <param name="viewname"> </param>
 		/// <returns> </returns>
 		public bool ViewExists(string viewname) {
-			if(viewname.IsEmpty()) return false;
+			if (viewname.IsEmpty()) {
+				return false;
+			}
 			var name = NormalizeQviewName(viewname);
-			if (viewContainerNameCache.ContainsKey(name)) {
+			if (_viewContainerNameCache.ContainsKey(name)) {
 				return true;
 			}
 			foreach (var viewLevel in ViewLevels) {
@@ -249,7 +247,7 @@ namespace Qorpent.Mvc {
 				var view = ResolveService<IQView>(componentname);
 				if (null != view) {
 					ReleaseView(name, view);
-					viewContainerNameCache[viewname] = name;
+					_viewContainerNameCache[viewname] = name;
 					return true;
 				}
 			}
@@ -298,8 +296,10 @@ namespace Qorpent.Mvc {
 		/// <param name="data"> </param>
 		/// <returns> </returns>
 		public override object Reset(ResetEventData data) {
-			ClearCaches();
-			return null;
+			lock (Sync) {
+				ClearCaches();
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -307,7 +307,7 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <returns> </returns>
 		public override object GetPreResetInfo() {
-			return new {actions = actionPool.Count, renders = renderPool.Count, views = viewPool.Count};
+			return new {actions = _actionPool.Count, renders = _renderPool.Count, views = _viewPool.Count};
 		}
 
 
@@ -338,23 +338,24 @@ namespace Qorpent.Mvc {
 				throw new ActionNotFoundException("cannot find " + name);
 			}
 			var result = new ActionDescriptor(implementation) {Factory = this};
-			if (implementation is IContextualAction) {
-				((IContextualAction) implementation).SetDescriptor(result);
+			var contextualAction = implementation as IContextualAction;
+			if (contextualAction != null) {
+				contextualAction.SetDescriptor(result);
 			}
 			return result;
 		}
 
 		private IQView GenerateNewView(string viewname) {
 			IQView view = null;
-			if (viewContainerNameCache.ContainsKey(viewname)) {
-				view = ResolveService<IQView>(viewContainerNameCache[viewname]);
+			if (_viewContainerNameCache.ContainsKey(viewname)) {
+				view = ResolveService<IQView>(_viewContainerNameCache[viewname]);
 			}
 			else {
 				foreach (var viewLevel in ViewLevels) {
 					var name = viewname + "." + viewLevel + ".view";
 					view = ResolveService<IQView>(name);
 					if (null != view) {
-						viewContainerNameCache[viewname] = name;
+						_viewContainerNameCache[viewname] = name;
 						break;
 					}
 				}
@@ -368,32 +369,32 @@ namespace Qorpent.Mvc {
 
 		private ActionDescriptor TryResolveActionFromPool(string actionName) {
 			var name = NormalizeActionName(actionName);
-			if (actionPool.ContainsKey(name) && actionPool[name].Count != 0) {
-				return actionPool[name].Pop();
+			if (_actionPool.ContainsKey(name) && _actionPool[name].Count != 0) {
+				return _actionPool[name].Pop();
 			}
 			return null;
 		}
 
 		private IQView TryResolveViewPool(string viewname) {
-			if (viewPool.ContainsKey(viewname) && viewPool[viewname].Count != 0) {
-				return viewPool[viewname].Pop();
+			if (_viewPool.ContainsKey(viewname) && _viewPool[viewname].Count != 0) {
+				return _viewPool[viewname].Pop();
 			}
 			return null;
 		}
 
 		private void PushViewToPool(string viewname, IQView view) {
-			if (!viewPool.ContainsKey(viewname)) {
-				viewPool[viewname] = new Stack<IQView>();
+			if (!_viewPool.ContainsKey(viewname)) {
+				_viewPool[viewname] = new Stack<IQView>();
 			}
-			viewPool[viewname].Push(view);
+			_viewPool[viewname].Push(view);
 		}
 
 		private void PushActionToPool(ActionDescriptor action) {
 			var name = NormalizeRenderName(action.Name);
-			if (!actionPool.ContainsKey(name)) {
-				actionPool[name] = new Stack<ActionDescriptor>();
+			if (!_actionPool.ContainsKey(name)) {
+				_actionPool[name] = new Stack<ActionDescriptor>();
 			}
-			actionPool[name].Push(action);
+			_actionPool[name].Push(action);
 		}
 
 		private RenderDescriptor GenerateNewRenderDescriptor(string renderName) {
@@ -408,18 +409,18 @@ namespace Qorpent.Mvc {
 
 		private RenderDescriptor TryResolveRenderFromPool(string renderName) {
 			var name = NormalizeRenderName(renderName);
-			if (renderPool.ContainsKey(name) && renderPool[name].Count != 0) {
-				return renderPool[name].Pop();
+			if (_renderPool.ContainsKey(name) && _renderPool[name].Count != 0) {
+				return _renderPool[name].Pop();
 			}
 			return null;
 		}
 
 		private void PushRenderPool(RenderDescriptor renderDescriptor) {
 			var name = NormalizeRenderName(renderDescriptor.Name);
-			if (!renderPool.ContainsKey(name)) {
-				renderPool[name] = new Stack<RenderDescriptor>();
+			if (!_renderPool.ContainsKey(name)) {
+				_renderPool[name] = new Stack<RenderDescriptor>();
 			}
-			renderPool[name].Push(renderDescriptor);
+			_renderPool[name].Push(renderDescriptor);
 		}
 
 		/// <summary>
@@ -455,7 +456,7 @@ namespace Qorpent.Mvc {
 		/// <param name="name"> </param>
 		/// <returns> </returns>
 		public static string NormalizeQviewName(string name) {
-			if (name == null ) {
+			if (name == null) {
 				throw new ArgumentNullException("name");
 			}
 			var result = name;
@@ -465,13 +466,13 @@ namespace Qorpent.Mvc {
 			return result;
 		}
 
-		private readonly IDictionary<string, Stack<ActionDescriptor>> actionPool =
+		private readonly IDictionary<string, Stack<ActionDescriptor>> _actionPool =
 			new Dictionary<string, Stack<ActionDescriptor>>();
 
-		private readonly IDictionary<string, Stack<RenderDescriptor>> renderPool =
+		private readonly IDictionary<string, Stack<RenderDescriptor>> _renderPool =
 			new Dictionary<string, Stack<RenderDescriptor>>();
 
-		private readonly IDictionary<string, string> viewContainerNameCache = new Dictionary<string, string>();
-		private readonly IDictionary<string, Stack<IQView>> viewPool = new Dictionary<string, Stack<IQView>>();
+		private readonly IDictionary<string, string> _viewContainerNameCache = new Dictionary<string, string>();
+		private readonly IDictionary<string, Stack<IQView>> _viewPool = new Dictionary<string, Stack<IQView>>();
 	}
 }

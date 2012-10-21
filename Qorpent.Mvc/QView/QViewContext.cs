@@ -126,6 +126,7 @@ namespace Qorpent.Mvc.QView {
 		/// <returns> </returns>
 		public IQViewContext CreateSubviewContext(string name, object advanceddata) {
 			var result = MemberwiseClone() as QViewContext;
+			Debug.Assert(result != null, "result != null");
 			result.Root = Name;
 			result.Name = name;
 			result.AdvancedData = advanceddata;
@@ -162,7 +163,8 @@ namespace Qorpent.Mvc.QView {
 		/// <param name="resourceName"> </param>
 		public void Require(string resourceName) {
 			if (IsLayout) {
-				requirements = Requirements ?? new List<string>();
+				_requirements = Requirements ?? new List<string>();
+				Debug.Assert(Requirements != null, "Requirements != null");
 				if (Requirements.Contains(resourceName)) {
 					return;
 				}
@@ -194,15 +196,15 @@ namespace Qorpent.Mvc.QView {
 		/// 	Список потребностей видов в ресурсах на уровне Layout
 		/// </summary>
 		public IList<string> Requirements {
-			get { return requirements; }
+			get { return _requirements; }
 		}
 
 		private QViewContext GetLayoutedContext() {
-			var mastercontext = MemberwiseClone() as QViewContext;
+			var mastercontext = (QViewContext) MemberwiseClone();			
 			mastercontext.RealOutPut = mastercontext.Output;
 			mastercontext.Output = new StringWriter();
 			mastercontext.IsLayout = true;
-			var childcontext = MemberwiseClone() as QViewContext;
+			var childcontext =(QViewContext) MemberwiseClone();		
 			childcontext.Output = mastercontext.Output;
 			Debug.Assert(childcontext != null, "childcontext != null");
 			childcontext.Master = null;
@@ -233,6 +235,6 @@ namespace Qorpent.Mvc.QView {
 			Name = result;
 		}
 
-		private IList<string> requirements;
+		private IList<string> _requirements;
 	}
 }

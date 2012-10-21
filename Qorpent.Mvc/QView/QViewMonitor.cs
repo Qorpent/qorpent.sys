@@ -84,12 +84,7 @@ namespace Qorpent.Mvc.QView {
 		/// 	Evaluated path to DLL dir
 		/// </summary>
 		public string TargetDirectory {
-			get {
-				if (null == _targetDirectory) {
-					_targetDirectory = Resolver.Resolve(Path, false);
-				}
-				return _targetDirectory;
-			}
+			get { return _targetDirectory ?? (_targetDirectory = Resolver.Resolve(Path, false)); }
 		}
 
 		/// <summary>
@@ -133,7 +128,7 @@ namespace Qorpent.Mvc.QView {
 		/// 	Pause minitoring process
 		/// </summary>
 		public void EndMonitoring() {
-			lock (this) {
+			lock (Sync) {
 				Active = false;
 			}
 		}
@@ -171,7 +166,7 @@ namespace Qorpent.Mvc.QView {
 		/// 	Main sync logic -
 		/// </summary>
 		protected void Syncronize() {
-			lock (this) {
+			lock (Sync) {
 				var oldactive = Active;
 				Active = false;
 				LoadMainFile(); //then load full compilation
@@ -190,7 +185,7 @@ namespace Qorpent.Mvc.QView {
 				               orderby v
 				               select new {f, v};
 				foreach (var diffile in diffiles) {
-					loadLibraryFromFile(diffile.f);
+					LoadLibraryFromFile(diffile.f);
 					LastDiffFileLoadedVersion = diffile.v;
 				}
 			}
@@ -201,11 +196,11 @@ namespace Qorpent.Mvc.QView {
 			var findmask = "*." + MainExtension;
 			var lastmain =
 				Directory.GetFiles(TargetDirectory, findmask, SearchOption.TopDirectoryOnly).OrderByDescending(
-					x => File.GetLastWriteTime(x)).FirstOrDefault();
+					File.GetLastWriteTime).FirstOrDefault();
 			if (null != lastmain) {
 				var version = File.GetLastWriteTime(lastmain);
 				if (version > MainFileVersion) {
-					loadLibraryFromFile(lastmain);
+					LoadLibraryFromFile(lastmain);
 					MainFileVersion = version;
 					LastDiffFileLoadedVersion = version;
 				}
@@ -216,7 +211,7 @@ namespace Qorpent.Mvc.QView {
 		/// <summary>
 		/// </summary>
 		/// <param name="libfile"> </param>
-		private void loadLibraryFromFile(string libfile) {
+		private void LoadLibraryFromFile(string libfile) {
 			Thread.Sleep(100);
 			var libdata = File.ReadAllBytes(libfile);
 			byte[] symbols = null;
@@ -225,14 +220,14 @@ namespace Qorpent.Mvc.QView {
 				symbols = File.ReadAllBytes(pdbfile);
 			}
 			var assembly = Assembly.Load(libdata, symbols, SecurityContextSource.CurrentAppDomain);
-			loadLibrary(assembly);
+			LoadLibrary(assembly);
 		}
 
 		/// <summary>
 		/// 	Main method which loads classes into container and call factory refreshing
 		/// </summary>
 		/// <param name="assembly"> </param>
-		private void loadLibrary(Assembly assembly) {
+		private void LoadLibrary(Assembly assembly) {
 			Factory.Register(assembly);
 		}
 

@@ -41,26 +41,26 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
-			name = name.Replace("~", ""); //remove QJS path extras
-			var probes = getProbes(name, type);
+			ResourceName = ResourceName.Replace("~", ""); //remove QJS path extras
+			var probes = GetProbes(ResourceName, ResourceType);
 			var url = Context.Application.Files.Resolve(probes.ToArray(), true, pathtype: FileSearchResultType.LocalUrl);
 			return url;
 		}
 
-		private IEnumerable<string> getProbes(string name, string type) {
+		private IEnumerable<string> GetProbes(string name, string type) {
 			if (type == "js") {
-				return getProbes(name, new[] {"js"}, true);
+				return GetProbes(name, new[] {"js"}, true);
 			}
 			if (type == "css") {
-				return getProbes(name, new[] {"css"}, true);
+				return GetProbes(name, new[] {"css"}, true);
 			}
 			if (type == "img") {
-				return getProbes(name, new[] {"png", "gif", "jpg", "jpeg"}, true);
+				return GetProbes(name, new[] {"png", "gif", "jpg", "jpeg"}, true);
 			}
 			throw new Exception("unknouwn resource type " + type);
 		}
 
-		private IEnumerable<string> getProbes(string name, string[] extensions, bool useculture) {
+		private IEnumerable<string> GetProbes(string name, IEnumerable<string> extensions, bool useculture) {
 			var culture = "";
 			if (useculture) {
 				culture = Context.Language;
@@ -87,10 +87,10 @@ namespace Qorpent.Mvc.Actions {
 
 		/// <summary>
 		/// </summary>
-		[Bind(Required = true)] protected string name;
+		[Bind(Required = true,Name = "name")] protected string ResourceName;
 
 		/// <summary>
 		/// </summary>
-		[Bind("js", Constraint = new object[] {"js", "css", "img"})] protected string type;
+		[Bind("js", Name="type", Constraint = new object[] {"js", "css", "img"})] protected string ResourceType;
 	}
 }

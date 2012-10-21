@@ -44,7 +44,10 @@ namespace Qorpent.Mvc.Renders {
 			if (!File.Exists(filename)) {
 				throw new Exception("file not existed " + filename);
 			}
-			context.ContentType = resoleMimeType(Path.GetExtension(filename).Substring(1));
+			var extension = Path.GetExtension(filename);
+			if (extension != null) {
+				context.ContentType = resoleMimeType(extension.Substring(1));
+			}
 			if (context.ContentType == "application/bin") {
 				context.WriteOutFile(filename);
 			}

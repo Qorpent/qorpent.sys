@@ -49,21 +49,26 @@ namespace Qorpent.Mvc.Actions {
 
 			var data = new Dictionary<string, string>();
 
-			
-			
-			foreach (var h in ((MvcContext)Context).NativeASPContext.Request.Headers.AllKeys) {
-				data["header:"+h] = ((MvcContext) Context).NativeASPContext.Request.Headers[h];
+
+			foreach (var h in ((MvcContext) Context).NativeAspContext.Request.Headers.AllKeys) {
+				data["header:" + h] = ((MvcContext) Context).NativeAspContext.Request.Headers[h];
 			}
-			foreach (var h in ((MvcContext)Context).NativeASPContext.Request.Cookies.AllKeys)
-			{
-				data["cookie:"+h] = ((MvcContext)Context).NativeASPContext.Request.Cookies[h].Value;
+			foreach (var h in ((MvcContext) Context).NativeAspContext.Request.Cookies.AllKeys) {
+				var httpCookie = ((MvcContext) Context).NativeAspContext.Request.Cookies[h];
+				if (httpCookie != null) {
+					data["cookie:" + h] = httpCookie.Value;
+				}
 			}
 
 			if (imp == logon) {
-				return new {logonname, logonadmin, logondeveloper, logondatamaster,data
-
-				
-				};
+				return new
+					{
+						logonname,
+						logonadmin,
+						logondeveloper,
+						logondatamaster,
+						data
+					};
 			}
 
 			var impadmin = Application.Roles.IsInRole(imp, "ADMIN");
@@ -71,8 +76,17 @@ namespace Qorpent.Mvc.Actions {
 			var impdatamaster = Application.Roles.IsInRole(imp, "DATAMASTER");
 
 			return
-				new {impersonation, impadmin, impdeveloper, impdatamaster, logonname, logonadmin, logondeveloper, logondatamaster
-				};
+				new
+					{
+						impersonation,
+						impadmin,
+						impdeveloper,
+						impdatamaster,
+						logonname,
+						logonadmin,
+						logondeveloper,
+						logondatamaster
+					};
 		}
 	}
 }

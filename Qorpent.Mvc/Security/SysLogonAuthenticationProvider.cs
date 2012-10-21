@@ -16,12 +16,14 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : TestFormAuthenticationProvider.cs
+// Original file : SysLogonAuthenticationProvider.cs
 // Project: Qorpent.Mvc
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
+
+using Qorpent.Applications;
 
 namespace Qorpent.Mvc.Security {
 	/// <summary>
@@ -37,8 +39,8 @@ namespace Qorpent.Mvc.Security {
 		/// <returns> </returns>
 		public bool IsAuthenticated(string name, string password, IMvcContext context) {
 #if !Unix
-			if(Applications.Application.Current.SysLogon!=null) {
-				return Applications.Application.Current.SysLogon.Logon(name, password);
+			if (Application.Current.SysLogon != null) {
+				return Application.Current.SysLogon.Logon(name, password);
 			}
 			return false;
 #else

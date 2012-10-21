@@ -38,9 +38,9 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 	[ContainerComponent(Name = "_sys/actionform.code.view", Lifestyle = Lifestyle.Transient, ServiceType = typeof (IQView))
 	]
 	public class ActionFormMain : QViewBase {
-		private static bool _resource_loaded;
-		private static readonly object _resource_lock = new object();
-		private static readonly IDictionary<string, string> _static_resources = new Dictionary<string, string>();
+		private static bool _resourceLoaded;
+		private static readonly object ResourceLock = new object();
+		private static readonly IDictionary<string, string> StaticResources = new Dictionary<string, string>();
 
 		/// <summary>
 		/// 	Отрисовывает форму с параметрами действия и результатом выполнения
@@ -48,13 +48,13 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 		protected override void Render() {
 			Require("res:Qorpent.Mvc/actionform.css");
 			Require("res:Qorpent.Mvc/actionform.js");
-			binders = data.GetBindings().ToArray();
-			help = help ?? "";
-			name = name ?? "";
+			_binders = Data.GetBindings().ToArray();
+			Help = Help ?? "";
+			Name = Name ?? "";
 			write(
 				new XElement("header",
 				             new XElement("h1",
-				                          string.Format(GetResource("titlestart"), name)
+				                          string.Format(GetResource("titlestart"), Name)
 					             )
 					).ToString()
 				);
@@ -63,17 +63,17 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 			write(
 				new XElement("section",
 				             new XElement("h2", GetResource("helptitle")),
-				             new XElement("p", help.Replace(";", "<BR/>")),
+				             new XElement("p", Help.Replace(";", "<BR/>")),
 				             new XElement("form",
 				                          new XAttribute("id", "formcall"),
-				                          new XAttribute("actionname", name),
+				                          new XAttribute("actionname", Name),
 				                          new XAttribute("target", "formresult"),
-										  new XAttribute("method", "POST"),
+				                          new XAttribute("method", "POST"),
 				                          new XElement("table",
-				                                       binders.SelectMany(p => XhtmlSubview("actionformparameter", new {p})))
+				                                       _binders.SelectMany(p => XhtmlSubview("actionformparameter", new {p})))
 					             ),
 				             new XElement("select", new XAttribute("id", "formrender"),
-				                          from item in Container.All<IRender>().OrderBy(x => RenderAttribute.GetName(x))
+				                          from item in Container.All<IRender>().OrderBy(RenderAttribute.GetName)
 				                          select
 					                          new XElement("option",
 					                                       new XAttribute("value",
@@ -97,7 +97,7 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 		/// </summary>
 		/// <returns> </returns>
 		protected override IDictionary<string, string> _getResources() {
-			return _static_resources;
+			return StaticResources;
 		}
 
 		/// <summary>
@@ -105,7 +105,7 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 		/// </summary>
 		/// <returns> </returns>
 		protected override bool _getResourceLoaded() {
-			return _resource_loaded;
+			return _resourceLoaded;
 		}
 
 		/// <summary>
@@ -113,7 +113,7 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 		/// </summary>
 		/// <returns> </returns>
 		protected override void _setResourceLoaded() {
-			_resource_loaded = true;
+			_resourceLoaded = true;
 		}
 
 		/// <summary>
@@ -121,17 +121,22 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 		/// </summary>
 		/// <returns> </returns>
 		protected override object _getResourceLock() {
-			return _resource_lock;
+			return ResourceLock;
 		}
 
-		[QViewBind] private BindAttribute[] binders;
+		[QViewBind] private BindAttribute[] _binders;
 
 		/// <summary>
 		/// 	Содержит данные по дескриптору в целом
 		/// </summary>
-		[ViewData] protected ActionDescriptor data;
-
-		[QViewBind] private string help;
-		[QViewBind] private string name;
+		[ViewData] protected ActionDescriptor Data;
+		/// <summary>
+		/// Строка помощи действия
+		/// </summary>
+		[QViewBind] protected string Help;
+		/// <summary>
+		/// Имя действия
+		/// </summary>
+		[QViewBind] protected string Name;
 	}
 }

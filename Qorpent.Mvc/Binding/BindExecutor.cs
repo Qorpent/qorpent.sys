@@ -74,23 +74,23 @@ namespace Qorpent.Mvc.Binding {
 					return;
 				}
 
-				setupValue(action, context);
-				validateBinding(action, context);
+				SetupValue(action, context);
+				ValidateBinding(action, context);
 			}
 		}
 
-		private void validateBinding(IAction action, IMvcContext context) {
+		private void ValidateBinding(IAction action, IMvcContext context) {
 			if (!_bindattribute.RequireValidation) {
 				return;
 			}
 			var val = GetCurrent(action);
-			var isValid = getIsValid(context, val);
+			var isValid = GetIsValid(context, val);
 			if (!isValid) {
 				throw new BindException(_bindattribute, context, val);
 			}
 		}
 
-		private bool getIsValid(IMvcContext context, object val) {
+		private bool GetIsValid(IMvcContext context, object val) {
 			var isValid = true;
 			if (_bindattribute.Required) {
 				if (TargetType == typeof (string)) {
@@ -129,7 +129,7 @@ namespace Qorpent.Mvc.Binding {
 			return isValid;
 		}
 
-		private void setupValue(IAction action, IMvcContext context) {
+		private void SetupValue(IAction action, IMvcContext context) {
 			var paramname = Name;
 			if (TargetType == typeof (XElement)) {
 				var val = context.GetXml(Name);

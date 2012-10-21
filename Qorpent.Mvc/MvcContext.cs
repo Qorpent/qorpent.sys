@@ -25,7 +25,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
@@ -49,54 +48,14 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <param name="httpContextWrapper"> </param>
 		public MvcContext(HttpContextWrapper httpContextWrapper) {
+			InitializeContext(httpContextWrapper);
+			
+		}
+
+		private void InitializeContext(HttpContextWrapper httpContextWrapper) {
 			SetNativeContext(httpContextWrapper);
 		}
 
-
-
-		/// <summary>
-		/// Cookie отклика
-		/// </summary>
-		public override HttpCookieCollection ResponseCookies {
-			get {
-				
-				if(null!=NativeASPContext) {
-					return NativeASPContext.Response.Cookies;
-				}
-				return null;
-			}
-		}
-
-		/// <summary>
-		/// Response redirect
-		/// </summary>
-		/// <param name="localurl"></param>
-		/// <returns></returns>
-		public override void Redirect(string localurl) {
-			var prefix = "/" + Application.ApplicationName+"/";
-			if(!localurl.StartsWith(prefix)) {
-				localurl = prefix + localurl;
-			}
-			NativeASPContext.Response.Redirect(localurl,false);
-			IsRedirected = true;
-		}
-	
-
-		/// <summary>
-		/// Cookie отклика
-		/// </summary>
-		public override HttpCookieCollection RequestCookies
-		{
-			get
-			{
-
-				if (null != NativeASPContext)
-				{
-					return NativeASPContext.Request.Cookies;
-				}
-				return null;
-			}
-		}
 
 		/// <summary>
 		/// </summary>
@@ -110,9 +69,33 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
+		/// 	Cookie отклика
+		/// </summary>
+		public override HttpCookieCollection ResponseCookies {
+			get {
+				if (null != NativeAspContext) {
+					return NativeAspContext.Response.Cookies;
+				}
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// 	Cookie отклика
+		/// </summary>
+		public override HttpCookieCollection RequestCookies {
+			get {
+				if (null != NativeAspContext) {
+					return NativeAspContext.Request.Cookies;
+				}
+				return null;
+			}
+		}
+
+		/// <summary>
 		/// 	IIS-based HTTP context (mostly used)
 		/// </summary>
-		[IgnoreSerialize] public HttpContextBase NativeASPContext { get; protected set; }
+		[IgnoreSerialize] public HttpContextBase NativeAspContext { get; protected set; }
 
 		/// <summary>
 		/// 	Retrievs xml-data parameter
@@ -121,13 +104,13 @@ namespace Qorpent.Mvc {
 			get {
 				if (null == _xdata && !_xdatachecked) {
 					if (Parameters.ContainsKey("_xdata")) {
-						var x = Get("_xdata", "");
+						var x = Get("_xdata");
 						if (!string.IsNullOrEmpty(x)) {
 							_xdata = XElement.Parse(x);
 						}
 					}
 					else if (Parameters.ContainsKey("_jdata")) {
-						var j = Get("_jdata", "");
+						var j = Get("_jdata");
 						if (!string.IsNullOrEmpty(j)) {
 							_xdata = ResolveService<ISpecialXmlParser>("json.xml.parser").Parse(j);
 						}
@@ -156,24 +139,23 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		public override IPrincipal LogonUser {
 			get {
-				if(null==_logonuser) {
-
+				if (null == _logonuser) {
 					_logonuser =
-						null != NativeASPContext
-							? NativeASPContext.User
-							: new GenericPrincipal(new GenericIdentity("local\\guest"), new[] { "DEFAULT" });
+						null != NativeAspContext
+							? NativeAspContext.User
+							: new GenericPrincipal(new GenericIdentity("local\\guest"), new[] {"DEFAULT"});
 					//SETUP USER FROM APACHE BASIC AUTHORIZATION HEADER
-					if((string.IsNullOrEmpty(_logonuser.Identity.Name) || _logonuser.Identity.Name=="local\\guest") && NativeASPContext!=null && NativeASPContext.Request.Headers.AllKeys.Any(x=>x=="Authorization")) {
-						var auth = NativeASPContext.Request.Headers["Authorization"];
-						if(auth.StartsWith("Basic")) {
+					if ((string.IsNullOrEmpty(_logonuser.Identity.Name) || _logonuser.Identity.Name == "local\\guest") &&
+					    NativeAspContext != null && NativeAspContext.Request.Headers.AllKeys.Any(x => x == "Authorization")) {
+						var auth = NativeAspContext.Request.Headers["Authorization"];
+						if (auth.StartsWith("Basic")) {
 							var namepass = auth.Split(' ')[1].Trim();
-							
+
 							var name = Encoding.UTF8.GetString(Convert.FromBase64String(namepass));
 							name = name.Split(':')[0].Trim();
-							_logonuser = new GenericPrincipal(new GenericIdentity("local\\"+name),new[]{"DEFAULT"} );
+							_logonuser = new GenericPrincipal(new GenericIdentity("local\\" + name), new[] {"DEFAULT"});
 						}
 					}
-					
 				}
 				return _logonuser;
 			}
@@ -190,14 +172,14 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		public override int StatusCode {
 			get {
-				if (null != NativeASPContext) {
-					return NativeASPContext.Response.StatusCode;
+				if (null != NativeAspContext) {
+					return NativeAspContext.Response.StatusCode;
 				}
 				return _statusCode;
 			}
 			set {
-				if (null != NativeASPContext) {
-					NativeASPContext.Response.StatusCode = value;
+				if (null != NativeAspContext) {
+					NativeAspContext.Response.StatusCode = value;
 				}
 				_statusCode = value;
 			}
@@ -211,7 +193,7 @@ namespace Qorpent.Mvc {
 			set {
 				_lastModified = value;
 				if (SupportHeaders) {
-					NativeASPContext.Response.Headers["Last-Modified"] = value.ToUniversalTime().ToString("R",
+					NativeAspContext.Response.Headers["Last-Modified"] = value.ToUniversalTime().ToString("R",
 					                                                                                      CultureInfo.InvariantCulture);
 				}
 			}
@@ -226,7 +208,7 @@ namespace Qorpent.Mvc {
 			set {
 				_etag = value ?? "";
 				if (SupportHeaders) {
-					NativeASPContext.Response.Headers["Etag"] = value ?? "";
+					NativeAspContext.Response.Headers["Etag"] = value ?? "";
 				}
 			}
 		}
@@ -238,8 +220,8 @@ namespace Qorpent.Mvc {
 			get {
 				if (_ifModifiedSince == DateTime.MinValue) {
 					_ifModifiedSince = new DateTime(1900, 1, 1);
-					if (NativeASPContext != null) {
-						var header = NativeASPContext.Request.Headers["If-Modified-Since"];
+					if (NativeAspContext != null) {
+						var header = NativeAspContext.Request.Headers["If-Modified-Since"];
 						if (header.IsNotEmpty()) {
 							_ifModifiedSince =
 								DateTime.ParseExact(header, "R", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
@@ -261,7 +243,7 @@ namespace Qorpent.Mvc {
 				if (_ifNoneMatch == null) {
 					_ifNoneMatch = "";
 					if (SupportHeaders) {
-						var header = NativeASPContext.Request.Headers["If-None-Match"];
+						var header = NativeAspContext.Request.Headers["If-None-Match"];
 						if (header.IsNotEmpty()) {
 							_ifNoneMatch = header;
 						}
@@ -278,8 +260,8 @@ namespace Qorpent.Mvc {
 		[SerializeNotNullOnly] public override string Language {
 			get {
 				if (null == _language) {
-					if (null != NativeASPContext && SupportHeaders) {
-						_language = NativeASPContext.Request.Headers["Accept-Language"];
+					if (null != NativeAspContext && SupportHeaders) {
+						_language = NativeAspContext.Request.Headers["Accept-Language"];
 					}
 				}
 				return _language;
@@ -292,17 +274,31 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		public override string ContentType {
 			get {
-				if (null != NativeASPContext) {
-					return NativeASPContext.Response.ContentType;
+				if (null != NativeAspContext) {
+					return NativeAspContext.Response.ContentType;
 				}
 				return _contentType;
 			}
 			set {
 				_contentType = value;
-				if (null != NativeASPContext) {
-					NativeASPContext.Response.ContentType = value;
+				if (null != NativeAspContext) {
+					NativeAspContext.Response.ContentType = value;
 				}
 			}
+		}
+
+		/// <summary>
+		/// 	Response redirect
+		/// </summary>
+		/// <param name="localurl"> </param>
+		/// <returns> </returns>
+		public override void Redirect(string localurl) {
+			var prefix = "/" + Application.ApplicationName + "/";
+			if (!localurl.StartsWith(prefix)) {
+				localurl = prefix + localurl;
+			}
+			NativeAspContext.Response.Redirect(localurl, false);
+			IsRedirected = true;
 		}
 
 		/// <summary>
@@ -311,10 +307,10 @@ namespace Qorpent.Mvc {
 		/// <param name="filename"> </param>
 		/// <exception cref="NotSupportedException"></exception>
 		public override void WriteOutFile(string filename) {
-			if (null == NativeASPContext) {
+			if (null == NativeAspContext) {
 				throw new NotSupportedException("only for attached to native Context");
 			}
-			NativeASPContext.Response.WriteFile(filename);
+			NativeAspContext.Response.WriteFile(filename);
 		}
 
 		/// <summary>
@@ -322,7 +318,7 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <param name="nativecontext"> </param>
 		public override void SetNativeContext(object nativecontext) {
-			NativeASPContext = (HttpContextWrapper) nativecontext;
+			NativeAspContext = (HttpContextWrapper) nativecontext;
 			SupportHeaders = true;
 			try {
 				//try call headers - here we see does underlined host support headers
@@ -331,14 +327,9 @@ namespace Qorpent.Mvc {
 				SupportHeaders = false;
 			}
 
-			Uri = NativeASPContext.Request.Url;
-			if (null != NativeASPContext.Request.UserLanguages) {
-				Language = NativeASPContext.Request.UserLanguages.FirstOrDefault();
-			}
-			else {
-				Language = CultureInfo.CurrentCulture.Name;
-			}
-			Output = NativeASPContext.Response.Output;
+			Uri = NativeAspContext.Request.Url;
+			Language = null != NativeAspContext.Request.UserLanguages ? NativeAspContext.Request.UserLanguages.FirstOrDefault() : CultureInfo.CurrentCulture.Name;
+			Output = NativeAspContext.Response.Output;
 		}
 
 		/// <summary>
@@ -347,15 +338,15 @@ namespace Qorpent.Mvc {
 		/// <returns> </returns>
 		protected override IDictionary<string, string> RetrieveParameters() {
 			var result = new Dictionary<string, string>();
-			if (null != NativeASPContext) {
-				foreach (var v in NativeASPContext.Request.Form.AllKeys) {
+			if (null != NativeAspContext) {
+				foreach (var v in NativeAspContext.Request.Form.AllKeys) {
 					if (null != v) {
-						result[v.ToLower()] = NativeASPContext.Request.Form[v];
+						result[v.ToLower()] = NativeAspContext.Request.Form[v];
 					}
 				}
-				foreach (var v in NativeASPContext.Request.QueryString.AllKeys) {
+				foreach (var v in NativeAspContext.Request.QueryString.AllKeys) {
 					if (null != v) {
-						result[v.ToLower()] = NativeASPContext.Request.QueryString[v];
+						result[v.ToLower()] = NativeAspContext.Request.QueryString[v];
 					}
 				}
 			}
@@ -381,9 +372,9 @@ namespace Qorpent.Mvc {
 		/// <param name="setup"> </param>
 		/// <typeparam name="T"> </typeparam>
 		/// <returns> </returns>
-		public override T Get<T>(string name, T def = default(T), bool setup = false) {
+		public override T Get<T>(string name, T def, bool setup = false) {
 			if (Parameters.ContainsKey(name) || null == XData) {
-				return Parameters.GetValue<T>(name, def, initialize: setup);
+				return Parameters.GetValue(name, def, initialize: setup);
 			}
 			var a = XData.Attribute(name);
 			if (null != a) {
@@ -433,18 +424,16 @@ namespace Qorpent.Mvc {
 				if (null != a) {
 					return a.Value.SmartSplit(false, true, splitters).ToArray();
 				}
-				var e = XData.Elements(name);
-				if (e.Count() > 1) {
-					return e.Select(x => x.Value).ToArray();
+				var elements = XData.Elements(name).ToArray();
+				if (elements.Count() > 1) {
+					return elements.Select(x => x.Value).ToArray();
 				}
-				if (e.Count() == 1) {
-					var e_ = e.First();
-					if (e_.Elements().Count() > 0) {
-						return e_.Elements().Select(x => x.Value).ToArray();
+				if (elements.Count() == 1) {
+					var e = elements.First(x=>null!=x);
+					if (e.Elements().Any()) {
+						return e.Elements().Select(x => x.Value).ToArray();
 					}
-					else {
-						return new[] {e_.Value};
-					}
+					return new[] {e.Value};
 				}
 			}
 			return new string[] {};
@@ -485,26 +474,33 @@ namespace Qorpent.Mvc {
 					foreach (var element in XData.Elements()) {
 						if (element.Name.LocalName == paramname) {
 							var key = element.Attr("id");
-							string val;
-							val = null != element.Attribute("value") ? element.Attr("value") : element.Value;
+							string val = null != element.Attribute("value") ? element.Attr("value") : element.Value;
 							result[key] = val;
 						}
 					}
 				}
-				else if (null != XData.Elements().FirstOrDefault(x => x.Name == paramname && x.Elements().Count() > 0)) {
+				else if (null != XData.Elements().FirstOrDefault(x => x.Name == paramname && x.Elements().Any())) {
 					//elements as name or src
 					var dictsrs = XData.Element(paramname);
-					foreach (var element in dictsrs.Elements()) {
-						var key = element.Name.LocalName;
-						if (null != element.Attribute("id")) {
-							key = element.Attribute("id").Value;
-						}
-						var val = element.Value;
-						if (null != element.Attribute("value")) {
-							val = element.Attribute("value").Value;
-						}
+					if (dictsrs != null) {
+						foreach (var element in dictsrs.Elements()) {
+							var key = element.Name.LocalName;
+							if (null != element.Attribute("id")) {
+								var xAttribute = element.Attribute("id");
+								if (xAttribute != null) {
+									key = xAttribute.Value;
+								}
+							}
+							var val = element.Value;
+							if (null != element.Attribute("value")) {
+								var xAttribute = element.Attribute("value");
+								if (xAttribute != null) {
+									val = xAttribute.Value;
+								}
+							}
 
-						result[key] = val;
+							result[key] = val;
+						}
 					}
 				}
 			}
@@ -517,14 +513,14 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <returns> </returns>
 		public override bool IsLocalHost() {
-			if (NativeASPContext == null && Uri.Host == "localhost") {
+			if (NativeAspContext == null && Uri.Host == "localhost") {
 				return true; //called in embeded mode - no role checking needed by default if specially local url used
 			}
-			if (NativeASPContext != null
+			if (NativeAspContext != null
 			    &&
 			    (
-				    NativeASPContext.Request.UserHostAddress == "127.0.0.1" ||
-				    NativeASPContext.Request.UserHostAddress == "::1"
+				    NativeAspContext.Request.UserHostAddress == "127.0.0.1" ||
+				    NativeAspContext.Request.UserHostAddress == "::1"
 			    )
 				) {
 				return true;

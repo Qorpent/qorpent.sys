@@ -34,7 +34,7 @@ namespace Qorpent.Mvc.Renders {
 		/// <summary>
 		/// </summary>
 		protected IViewEngine ViewEngine {
-			get { return viewEngine; }
+			get { return _viewEngine; }
 		}
 
 
@@ -60,8 +60,8 @@ namespace Qorpent.Mvc.Renders {
 		/// </summary>
 		/// <param name="context"> </param>
 		public override void SetContext(IMvcContext context) {
-			if (null == viewEngine) {
-				viewEngine = ResolveService<IViewEngine>();
+			if (null == _viewEngine) {
+				_viewEngine = ResolveService<IViewEngine>();
 			}
 		}
 
@@ -76,6 +76,6 @@ namespace Qorpent.Mvc.Renders {
 			                     error.ToString().Replace("<", "&lt;") + "</textarea></div>");
 		}
 
-		private IViewEngine viewEngine;
+		private IViewEngine _viewEngine;
 	}
 }

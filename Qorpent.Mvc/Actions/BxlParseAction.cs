@@ -38,25 +38,25 @@ namespace Qorpent.Mvc.Actions {
 		/// <returns> </returns>
 		protected override object MainProcess() {
 			var opts = BxlParserOptions.None;
-			if (nolexdata) {
+			if (NoLexData) {
 				opts = opts | BxlParserOptions.NoLexData;
 			}
-			if (safeattributes) {
+			if (SafeAttributes) {
 				opts = opts | BxlParserOptions.SafeAttributeNames;
 			}
-			return Context.Application.Bxl.Parse(text, "bxlparse.action", opts);
+			return Context.Application.Bxl.Parse(Text, "bxlparse.action", opts);
 		}
 
 		/// <summary>
 		/// </summary>
-		[Bind] protected bool nolexdata;
+		[Bind] protected bool NoLexData;
 
 		/// <summary>
 		/// </summary>
-		[Bind] protected bool safeattributes;
+		[Bind] protected bool SafeAttributes;
 
 		/// <summary>
 		/// </summary>
-		[Bind(IsLargeText = true)] protected string text;
+		[Bind(IsLargeText = true)] protected string Text;
 	}
 }

@@ -33,7 +33,7 @@ namespace Qorpent.Mvc.HttpHandler {
 	/// 	Main factory, that manages handlers and perform applicaition startup
 	/// </summary>
 	public class MvcHandlerFactory : IHttpHandlerFactory {
-		private static readonly object sync = new object();
+		private static readonly object Sync = new object();
 		private static IApplication Application { get; set; }
 
 #if PARANOID
@@ -81,8 +81,9 @@ namespace Qorpent.Mvc.HttpHandler {
 		/// <param name="handler"> Объект <see cref="T:System.Web.IHttpHandler" /> для повторного использования. </param>
 		public void ReleaseHandler(IHttpHandler handler) {
 			lock (this) {
-				if (handler is IMvcHandler) {
-					_handlers.Push((IMvcHandler) handler);
+				var mvcHandler = handler as IMvcHandler;
+				if (mvcHandler != null) {
+					_handlers.Push(mvcHandler);
 				}
 			}
 		}
@@ -126,10 +127,12 @@ namespace Qorpent.Mvc.HttpHandler {
 		}
 
 		private static void CheckInitializeApplication(HttpContext context) {
-			lock (sync) {
+			lock (Sync) {
 				if (null == Application) {
 					Application = Applications.Application.Current;
-					Application.ApplicationName = context.Request.ApplicationPath.Replace("/", "");
+					if (context.Request.ApplicationPath != null) {
+						Application.ApplicationName = context.Request.ApplicationPath.Replace("/", "");
+					}
 				}
 			}
 		}

@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -86,10 +87,7 @@ namespace Qorpent.Mvc.Remoting {
 		/// <param name="query"> </param>
 		/// <returns> </returns>
 		protected override MvcResult InternalCall(MvcQuery query) {
-			var u = Url;
-			if (!u.EndsWith("/")) {
-				u += "/";
-			}
+
 			var req = CreateWebRequest(query);
 			if (null != Credentials) {
 				req.Credentials = Credentials;
@@ -110,6 +108,7 @@ namespace Qorpent.Mvc.Remoting {
 				result.Status = (int) resp.StatusCode;
 				try {
 					using (var r = resp.GetResponseStream()) {
+						Debug.Assert(r != null, "r != null");
 						result.Content = new StreamReader(r).ReadToEnd();
 					}
 				}
@@ -122,6 +121,7 @@ namespace Qorpent.Mvc.Remoting {
 				result.Status = (int) errorResponse.StatusCode;
 				try {
 					using (var resst = errorResponse.GetResponseStream()) {
+						Debug.Assert(resst != null, "resst != null");
 						var sr = new StreamReader(resst);
 						result.ErrorString = sr.ReadToEnd();
 					}

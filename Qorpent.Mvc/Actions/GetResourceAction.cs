@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -66,10 +67,10 @@ namespace Qorpent.Mvc.Actions {
 		/// 	Загружает сборку и ресурс по имени
 		/// </summary>
 		protected override void Initialize() {
-			assembly = Assembly.Load(a);
-			if (null != assembly) {
-				resourcename =
-					assembly.GetManifestResourceNames().FirstOrDefault(x => x.ToLowerInvariant().EndsWith(r.ToLowerInvariant()));
+			_assembly = System.Reflection.Assembly.Load(Assembly);
+			if (null != _assembly) {
+				_resourcename =
+					_assembly.GetManifestResourceNames().FirstOrDefault(x => x.ToLowerInvariant().EndsWith(ResourceName.ToLowerInvariant()));
 			}
 		}
 
@@ -77,11 +78,11 @@ namespace Qorpent.Mvc.Actions {
 		/// 	Проверяет наличие сборки и ресурса
 		/// </summary>
 		protected override void Validate() {
-			if (null == assembly) {
-				throw new QorpentException("Сборка не найдера - " + a);
+			if (null == _assembly) {
+				throw new QorpentException("Сборка не найдера - " + Assembly);
 			}
-			if (null == resourcename) {
-				throw new QorpentException("Не найдено ресурса с именем - " + r);
+			if (null == _resourcename) {
+				throw new QorpentException("Не найдено ресурса с именем - " + ResourceName);
 			}
 		}
 
@@ -91,7 +92,7 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		protected override void Authorize() {
 			base.Authorize();
-			if (!resourcename.Contains("qvexr")) {
+			if (!_resourcename.Contains("qvexr")) {
 				if (!IsInRole("DEVELOPER")) {
 					throw new QorpentSecurityException("Недостаточно полномочий для доступа к закрытым ресурасм ");
 				}
@@ -103,30 +104,31 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
-			var result = new FileDescriptor();
-			result.Name = assembly.GetName().Name + "/" + resourcename;
-			result.LastWriteTime = Application.StartTime;
-			result.Role = "";
-			using (var sr = new StreamReader(assembly.GetManifestResourceStream(resourcename))) {
+			var result = new FileDescriptor
+				{Name = _assembly.GetName().Name + "/" + _resourcename, LastWriteTime = Application.StartTime, Role = ""};
+			using (var stream = _assembly.GetManifestResourceStream(_resourcename)) {
+				Debug.Assert(stream != null, "stream != null");
+				var sr = new StreamReader(stream);
 				result.Content = sr.ReadToEnd();
 			}
+
 			result.Length = result.Content.Length;
-			result.MimeType = MimeMapper.Get(resourcename);
+			result.MimeType = MimeMapper.Get(_resourcename);
 			return result;
 		}
 
 		/// <summary>
 		/// 	Параметр - имя сборки
 		/// </summary>
-		[Bind(Help = "Имя сборки")] public string a;
+		[Bind(Help = "Имя сборки", Name = "a")] public string Assembly;
 
-		private Assembly assembly;
+		private Assembly _assembly;
 
 		/// <summary>
 		/// 	Паарметр - имя ресурса
 		/// </summary>
-		[Bind(Help = "Имя ресурса (можно суффикс)")] public string r;
+		[Bind(Help = "Имя ресурса (можно суффикс)",Name="r")] public string ResourceName;
 
-		private string resourcename;
+		private string _resourcename;
 	}
 }

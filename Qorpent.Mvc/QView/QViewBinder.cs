@@ -49,13 +49,13 @@ namespace Qorpent.Mvc.QView {
 				let ba = m.GetFirstAttribute<QViewBindAttribute>()
 				where null != ba
 				select new {m, ba};
-			bindattributes = new Dictionary<QViewBindAttribute, ValueMember>();
+			_bindattributes = new Dictionary<QViewBindAttribute, ValueMember>();
 			foreach (var bind in binds) {
 				if (bind.ba.Name.IsEmpty()) {
 					bind.ba.Name = bind.m.Name;
 				}
 				bind.ba.Member = bind.m;
-				bindattributes[bind.ba] = new ValueMember(bind.m, false);
+				_bindattributes[bind.ba] = new ValueMember(bind.m, false);
 			}
 		}
 
@@ -65,14 +65,18 @@ namespace Qorpent.Mvc.QView {
 		/// <param name="context"> </param>
 		/// <param name="view"> </param>
 		public void Apply(IQViewContext context, IQView view) {
-			foreach (var bind in bindattributes) {
+			foreach (var bind in _bindattributes) {
 				var value = bind.Key.GetDataToBeBound(context);
-				if(null==value)continue;
-				if(value.GetType().IsValueType && value == Activator.CreateInstance(value.GetType()))continue;
+				if (null == value) {
+					continue;
+				}
+				if (value.GetType().IsValueType && value == Activator.CreateInstance(value.GetType())) {
+					continue;
+				}
 				bind.Value.Set(view, value);
 			}
 		}
 
-		private Dictionary<QViewBindAttribute, ValueMember> bindattributes;
+		private Dictionary<QViewBindAttribute, ValueMember> _bindattributes;
 	}
 }

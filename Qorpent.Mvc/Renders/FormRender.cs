@@ -23,10 +23,6 @@
 
 #endregion
 
-using System.Collections.Generic;
-using System.Threading;
-using Qorpent.IO;
-using Qorpent.Mvc.QView;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Renders {
@@ -42,7 +38,6 @@ namespace Qorpent.Mvc.Renders {
 			get { return false; }
 		}
 
-	
 
 		/// <summary>
 		/// </summary>

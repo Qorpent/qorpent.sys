@@ -24,11 +24,8 @@
 #endregion
 
 using System;
-using System.Web.Security;
 using Qorpent.IoC;
-using Qorpent.Mvc.Actions;
 using Qorpent.Security;
-using Qorpent.Security.Watchdog;
 
 namespace Qorpent.Mvc.Security {
 	/// <summary>
@@ -42,11 +39,15 @@ namespace Qorpent.Mvc.Security {
 		/// <param name="context"> </param>
 		/// <returns> </returns>
 		public AuthorizationResult Authorize(IMvcContext context) {
-			lock (this) {
-				if(null==context)throw new ArgumentNullException("context");
-				if(null==context.LogonUser)throw new ArgumentException("context.LogonUrl");
-				
-				#if PARANOID
+			lock (Sync) {
+				if (null == context) {
+					throw new ArgumentNullException("context");
+				}
+				if (null == context.LogonUser) {
+					throw new ArgumentException("context.LogonUrl");
+				}
+
+#if PARANOID
 				if(!((MvcContext)context).NativeASPContext.Request.IsSecureConnection) {
 					return AuthorizationResult.Error(new ParanoidException(ParanoidState.NotSecureConnection));
 				}
@@ -76,15 +77,16 @@ namespace Qorpent.Mvc.Security {
 				} 
 #endif
 
-				if ("local\\guest"==context.LogonUser.Identity.Name || ""==context.LogonUser.Identity.Name) { // guest - login only allowed
-	
-						if(context.ActionDescriptor.DirectRole=="DEFAULT" || context.ActionDescriptor.DirectRole=="") {
-							return AuthorizationResult.OK;
-						}
-						return AuthorizationResult.Error(new QorpentSecurityException("гостевой доступ разрешен только для DEFAULT действий"));
-						 
+				if ("local\\guest" == context.LogonUser.Identity.Name || "" == context.LogonUser.Identity.Name) {
+					// guest - login only allowed
+
+					if (context.ActionDescriptor.DirectRole == "DEFAULT" || context.ActionDescriptor.DirectRole == "") {
+						return AuthorizationResult.OK;
+					}
+					return
+						AuthorizationResult.Error(new QorpentSecurityException("гостевой доступ разрешен только для DEFAULT действий"));
 				}
-					var renderAuthorized = true;
+				var renderAuthorized = true;
 				if (context.RenderDescriptor.UseAuthorization) {
 					renderAuthorized = Application.Access.IsAccessible(context.RenderDescriptor, AccessRole.Execute);
 				}
@@ -100,8 +102,8 @@ namespace Qorpent.Mvc.Security {
 				else {
 					return AuthorizationResult.OK;
 				}
-				return AuthorizationResult.Error(new QorpentSecurityException("action role checking against current user don't match")); 
-				 
+				return
+					AuthorizationResult.Error(new QorpentSecurityException("action role checking against current user don't match"));
 			}
 		}
 	}

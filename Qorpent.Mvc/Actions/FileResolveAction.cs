@@ -39,15 +39,15 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
-			return FileNameResolver.Resolve(name, existed);
+			return FileNameResolver.Resolve(FileName, Existed);
 		}
 
 		/// <summary>
 		/// </summary>
-		[Bind(true)] protected bool existed;
+		[Bind(true)] protected bool Existed;
 
 		/// <summary>
 		/// </summary>
-		[Bind] protected string name;
+		[Bind(Name = "name")] protected string FileName;
 	}
 }

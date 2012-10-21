@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -43,11 +44,18 @@ namespace Qorpent.Mvc.QView {
 		/// <summary>
 		/// 	При старте вызывает конструктор статических ресурсов
 		/// </summary>
-		public QViewBase() {
+		protected QViewBase() {
+			InitializeResources();
+			
+		}
+
+		private void InitializeResources() {
 			Resources = _getResources();
-			lock (_getResourceLock()) {
-				if (!_getResourceLoaded()) {
-					loadFromResourceFiles();
+			lock (_getResourceLock())
+			{
+				if (!_getResourceLoaded())
+				{
+					LoadFromResourceFiles();
 					buildResources();
 					buildResourcesAdvanced();
 					_setResourceLoaded();
@@ -90,7 +98,7 @@ namespace Qorpent.Mvc.QView {
 		/// <exception cref="NullReferenceException"></exception>
 		public override void RenderLink(string name, bool prepared = false) {
 			var url = "";
-			var ext = "";
+			string ext;
 			if (name.StartsWith("res:")) {
 				//resource Request
 				prepared = true;
@@ -146,6 +154,7 @@ namespace Qorpent.Mvc.QView {
 		public override string GetResource(string name, string lang = null) {
 			//if (lang == null) throw new ArgumentNullException("lang");
 			lang = lang.IsNotEmpty() ? lang : GetCurrentLang();
+			Debug.Assert(!string.IsNullOrWhiteSpace(lang), "lang != null");
 			lang = lang.Split('-')[0].ToLower();
 
 			var key = lang + "_" + name;
@@ -172,13 +181,17 @@ namespace Qorpent.Mvc.QView {
 		/// 	INTERNAL USAGE: OVERRIDET INTERNALLY IN VBXL
 		/// </summary>
 		/// <returns> </returns>
+// ReSharper disable InconsistentNaming
 		protected virtual void _setResourceLoaded() {}
+// ReSharper restore InconsistentNaming
 
 		/// <summary>
 		/// 	INTERNAL USAGE: OVERRIDET INTERNALLY IN VBXL
 		/// </summary>
 		/// <returns> </returns>
+// ReSharper disable InconsistentNaming
 		protected virtual IDictionary<string, string> _getResources() {
+// ReSharper restore InconsistentNaming
 			return new Dictionary<string, string>();
 		}
 
@@ -186,7 +199,9 @@ namespace Qorpent.Mvc.QView {
 		/// 	INTERNAL USAGE: OVERRIDET INTERNALLY IN VBXL
 		/// </summary>
 		/// <returns> </returns>
+// ReSharper disable InconsistentNaming
 		protected virtual object _getResourceLock() {
+// ReSharper restore InconsistentNaming
 			return GetType();
 		}
 
@@ -194,13 +209,15 @@ namespace Qorpent.Mvc.QView {
 		/// 	INTERNAL USAGE: OVERRIDET INTERNALLY IN VBXL
 		/// </summary>
 		/// <returns> </returns>
+// ReSharper disable InconsistentNaming
 		protected virtual bool _getResourceLoaded() {
+// ReSharper restore InconsistentNaming
 			return false;
 		}
 
 		/// <summary>
 		/// </summary>
-		protected void loadFromResourceFiles() {
+		protected void LoadFromResourceFiles() {
 			var ass = GetType().Assembly;
 			var resources =
 				ass.GetManifestResourceNames().Where(x => x.Contains(GetType().Name)).OrderBy(x => x).ToArray();
@@ -210,12 +227,13 @@ namespace Qorpent.Mvc.QView {
 					deflang = QorpentConst.DefaultLanguage;
 				}
 				using (var s = ass.GetManifestResourceStream(resource)) {
+					Debug.Assert(s != null, "s != null");
 					var content = new StreamReader(s).ReadToEnd();
 					var x = ResolveService<IBxlParser>().Parse(content, resource, BxlParserOptions.NoLexData);
 					foreach (var e in x.Elements()) {
 						var name = e.Name.LocalName;
 						foreach (var a in e.Attributes()) {
-							addResource(name, a.Name.LocalName == "code" ? deflang : a.Name.LocalName, a.Value);
+							AddResource(name, a.Name.LocalName == "code" ? deflang : a.Name.LocalName, a.Value);
 						}
 					}
 				}
@@ -228,9 +246,9 @@ namespace Qorpent.Mvc.QView {
 		/// <param name="name"> </param>
 		/// <param name="lang"> </param>
 		/// <param name="value"> </param>
-		protected void addResource(string name, string lang, string value) {
-			var name_ = lang.ToLower() + "_" + name;
-			Resources[name_] = value;
+		protected void AddResource(string name, string lang, string value) {
+			string resourceName = lang.ToLower() + "_" + name;
+			Resources[resourceName] = value;
 			if (!_resourcenames.Contains(name)) {
 				Resources["default_" + name] = value;
 				_resourcenames.Add(name);
@@ -239,13 +257,17 @@ namespace Qorpent.Mvc.QView {
 
 		/// <summary>
 		/// </summary>
+// ReSharper disable InconsistentNaming
 		protected virtual void buildResources() {
+// ReSharper restore InconsistentNaming
 			//in VBXL
 		}
 
 		/// <summary>
 		/// </summary>
+// ReSharper disable InconsistentNaming
 		protected virtual void buildResourcesAdvanced() // in codebehind
+// ReSharper restore InconsistentNaming
 		{}
 
 
@@ -266,7 +288,7 @@ namespace Qorpent.Mvc.QView {
 		/// </summary>
 		protected override void CustomSetViewContext() {
 			base.CustomSetViewContext();
-			mainout = ViewContext.Output;
+			_mainout = ViewContext.Output;
 		}
 
 
@@ -274,7 +296,9 @@ namespace Qorpent.Mvc.QView {
 		/// </summary>
 		/// <param name="s"> </param>
 		/// <returns> </returns>
+// ReSharper disable InconsistentNaming
 		protected string esc(object s) {
+// ReSharper restore InconsistentNaming
 			return s.ToStr()
 				.Replace("\"", "&quot;")
 				.Replace("'", "&apos;")
@@ -312,7 +336,9 @@ namespace Qorpent.Mvc.QView {
 		/// </summary>
 		/// <param name="roles"> </param>
 		/// <returns> </returns>
+// ReSharper disable InconsistentNaming
 		protected bool inroles(params string[] roles) {
+// ReSharper restore InconsistentNaming
 			return roles.Any(role => inrole(role));
 		}
 
@@ -320,9 +346,9 @@ namespace Qorpent.Mvc.QView {
 		/// 	allows to catch content in temporal stream
 		/// </summary>
 		public override void EnterTemporaryOutput(TextWriter output = null) {
-			tempout = output ?? new StringWriter();
-			mainout = ViewContext.Output;
-			ViewContext.Output = tempout;
+			_tempout = output ?? new StringWriter();
+			_mainout = ViewContext.Output;
+			ViewContext.Output = _tempout;
 		}
 
 
@@ -332,7 +358,7 @@ namespace Qorpent.Mvc.QView {
 		/// <returns> </returns>
 		public override string GetTemporaryOutput() {
 			RestoreOutput();
-			return tempout.ToString();
+			return _tempout.ToString();
 		}
 
 		/// <summary>
@@ -340,7 +366,7 @@ namespace Qorpent.Mvc.QView {
 		/// </summary>
 		/// <returns> </returns>
 		public override void RestoreOutput() {
-			ViewContext.Output = mainout;
+			ViewContext.Output = _mainout;
 		}
 
 		/// <summary>
@@ -350,7 +376,9 @@ namespace Qorpent.Mvc.QView {
 		/// <param name="usr"> </param>
 		/// <param name="exact"> </param>
 		/// <returns> </returns>
+// ReSharper disable InconsistentNaming
 		protected bool inrole(string role, string usr = null, bool exact = false) {
+// ReSharper restore InconsistentNaming
 			var u = ViewContext.Context.Application.Principal.CurrentUser;
 			if (!string.IsNullOrWhiteSpace(usr)) {
 				u = new GenericPrincipal(new GenericIdentity(usr), new string[] {});
@@ -379,7 +407,9 @@ namespace Qorpent.Mvc.QView {
 		/// </summary>
 		/// <param name="obj"> </param>
 		/// <returns> </returns>
+// ReSharper disable InconsistentNaming
 		protected bool asbool(object obj) {
+// ReSharper restore InconsistentNaming
 			return obj.ToBool();
 		}
 
@@ -387,14 +417,18 @@ namespace Qorpent.Mvc.QView {
 		/// </summary>
 		/// <param name="str"> </param>
 		/// <param name="parameters"> </param>
+// ReSharper disable InconsistentNaming
 		protected void writef(string str, params object[] parameters) {
+// ReSharper restore InconsistentNaming
 			write(string.Format(str, parameters));
 		}
 
 		/// <summary>
 		/// </summary>
 		/// <param name="s1"> </param>
+// ReSharper disable InconsistentNaming
 		protected void write(string s1) {
+// ReSharper restore InconsistentNaming
 			ViewContext.Output.Write(s1);
 		}
 
@@ -402,7 +436,9 @@ namespace Qorpent.Mvc.QView {
 		/// </summary>
 		/// <param name="s1"> </param>
 		/// <param name="s2"> </param>
+// ReSharper disable InconsistentNaming
 		protected void write(string s1, string s2) {
+// ReSharper restore InconsistentNaming
 			ViewContext.Output.Write(s1);
 			ViewContext.Output.Write(s2);
 		}
@@ -412,7 +448,9 @@ namespace Qorpent.Mvc.QView {
 		/// <param name="s1"> </param>
 		/// <param name="s2"> </param>
 		/// <param name="s3"> </param>
+// ReSharper disable InconsistentNaming
 		protected void write(string s1, string s2, string s3) {
+// ReSharper restore InconsistentNaming
 			ViewContext.Output.Write(s1);
 			ViewContext.Output.Write(s2);
 			ViewContext.Output.Write(s3);
@@ -421,7 +459,9 @@ namespace Qorpent.Mvc.QView {
 		/// <summary>
 		/// </summary>
 		/// <param name="data"> </param>
+// ReSharper disable InconsistentNaming
 		protected void write(params object[] data) {
+// ReSharper restore InconsistentNaming
 			if (null != data) {
 				foreach (var o in data) {
 					ViewContext.Output.Write(o.ToStr());
@@ -432,7 +472,9 @@ namespace Qorpent.Mvc.QView {
 		/// <summary>
 		/// </summary>
 		/// <param name="data"> </param>
+// ReSharper disable InconsistentNaming
 		protected void write(params string[] data) {
+// ReSharper restore InconsistentNaming
 			if (null != data) {
 				foreach (var o in data) {
 					ViewContext.Output.Write(o);
@@ -454,8 +496,8 @@ namespace Qorpent.Mvc.QView {
 		}
 
 		private readonly IList<string> _resourcenames = new List<string>();
-		private TextWriter mainout;
+		private TextWriter _mainout;
 
-		private TextWriter tempout;
+		private TextWriter _tempout;
 	}
 }

@@ -106,9 +106,8 @@ namespace Qorpent.Mvc.QView {
 		/// <summary>
 		/// </summary>
 		/// <returns> </returns>
-		public string attr_value(string name, string value , XPathNodeIterator iter)
-		{
-			return iter.Count == 0 ? outa(name,value) : outaf(name, value, iter);
+		public string attr_value(string name, string value, XPathNodeIterator iter) {
+			return iter.Count == 0 ? outa(name, value) : outaf(name, value, iter);
 		}
 
 		/// <summary>

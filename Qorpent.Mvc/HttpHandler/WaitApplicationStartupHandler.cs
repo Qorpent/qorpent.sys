@@ -36,11 +36,10 @@ namespace Qorpent.Mvc.HttpHandler {
 		/// </summary>
 		/// <param name="context"> ќбъект <see cref="T:System.Web.HttpContext" /> , предоставл€ющий ссылки на внутренние серверные объекты (например, Request, Response, Session и Server), используемые дл€ обслуживани€ HTTP-запросов. </param>
 		public void ProcessRequest(HttpContext context) {
-			var enstring = "application you requested now is in startup mode, please retry access after minute";
-			var rustring =
-				"приложение на данный момент находитс€ в режиме загрузки, попробуйте запросить его снова через минуту";
-			var statestring = "application startup";
-			var statecode = 200;
+			const string enstring = "application you requested now is in startup mode, please retry access after minute";
+			const string rustring = "приложение на данный момент находитс€ в режиме загрузки, попробуйте запросить его снова через минуту";
+			const string statestring = "application startup";
+			const int statecode = 200;
 			Writeout(context, statestring, statecode, enstring, rustring);
 		}
 

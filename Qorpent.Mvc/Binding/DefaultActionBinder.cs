@@ -24,7 +24,7 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Qorpent.IoC;
 using Qorpent.Utils;
@@ -45,8 +45,10 @@ namespace Qorpent.Mvc.Binding {
 				if (null == _binders) {
 					Setup(action.ActionType);
 				}
-				foreach (var binder in _binders) {
-					binder.Bind(action.Action, context);
+				if (_binders != null) {
+					foreach (var binder in _binders) {
+						binder.Bind(action.Action, context);
+					}
 				}
 			}
 		}
@@ -57,17 +59,14 @@ namespace Qorpent.Mvc.Binding {
 		/// <param name="type"> </param>
 		public void Setup(Type type) {
 			if (null == _binders) {
-				var binders = new List<BindExecutor>();
 				var members = type.GetMembers(BindingFlags.SetField | BindingFlags.SetProperty |
 				                              BindingFlags.Instance |
 				                              BindingFlags.Public | BindingFlags.NonPublic);
-				foreach (var m in members) {
-					if (m.GetCustomAttributes(typeof (BindAttribute), true).Length != 0) {
-						var a = m.GetCustomAttributes(typeof (BindAttribute), true)[0] as BindAttribute;
-						binders.Add(new BindExecutor(a, new ValueMember(m, false)));
-					}
-				}
-				_binders = binders.ToArray();
+				_binders = (
+					from m in members 
+					where m.GetCustomAttributes(typeof (BindAttribute), true).Length != 0 
+					let a = m.GetCustomAttributes(typeof (BindAttribute), true)[0] as BindAttribute 
+					select new BindExecutor(a, new ValueMember(m, false))).ToArray();
 			}
 		}
 

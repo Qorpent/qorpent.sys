@@ -44,32 +44,31 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 		protected override void Render() {
 			{
 				var inner = new XElement("input",
-				                         new XAttribute("name", p.Name ?? ""),
-				                         
-				                         new XAttribute("pattern", p.ValidatePattern ?? ""),
-				                         new XAttribute("value", p.Default ?? ""));
-				if(p.Required) {
-					inner.Add(new XAttribute("required", p.Required));
+				                         new XAttribute("name", Parameter.Name ?? ""),
+				                         new XAttribute("pattern", Parameter.ValidatePattern ?? ""),
+				                         new XAttribute("value", Parameter.Default ?? ""));
+				if (Parameter.Required) {
+					inner.Add(new XAttribute("required", Parameter.Required));
 				}
-				if (p.IsLargeText) {
+				if (Parameter.IsLargeText) {
 					inner.Name = "textarea";
 					inner.Add(new XText("   "));
 				}
-				if (p.IsBool) {
+				if (Parameter.IsBool) {
 					inner.SetAttributeValue("type", "checkbox");
 					inner.SetAttributeValue("value", "true");
 				}
-				if (p.Constraint.IsNotEmpty()) {
+				if (Parameter.Constraint.IsNotEmpty()) {
 					inner.Name = "select";
 					inner.Add(new XElement("option", new XAttribute("value", "--не выбрано--")));
-					foreach (var c in p.Constraint) {
+					foreach (var c in Parameter.Constraint) {
 						inner.Add(new XElement("option", c));
 					}
 				}
-				if (p.TargetType.IsEnum) {
+				if (Parameter.TargetType.IsEnum) {
 					inner.Name = "select";
 					inner.Add(new XElement("option", new XAttribute("value", ""), "--не выбрано--"));
-					foreach (var c in Enum.GetNames(p.TargetType)) {
+					foreach (var c in Enum.GetNames(Parameter.TargetType)) {
 						inner.Add(new XElement("option", c));
 					}
 				}
@@ -77,9 +76,9 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 
 				write(
 					new XElement("tr",
-					             new XElement("td", p.Name),
+					             new XElement("td", Parameter.Name),
 					             new XElement("td", inner),
-					             new XElement("td", p.Help)
+					             new XElement("td", Parameter.Help)
 						).ToString(SaveOptions.DisableFormatting)
 					);
 			}
@@ -88,6 +87,6 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 		/// <summary>
 		/// 	Переданный на отрисовку параметр
 		/// </summary>
-		[QViewBind] protected BindAttribute p;
+		[QViewBind(Name="p")] protected BindAttribute Parameter;
 	}
 }

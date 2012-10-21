@@ -23,6 +23,7 @@
 
 #endregion
 
+using System.Diagnostics;
 using System.IO;
 using Qorpent.Dsl;
 using Qorpent.IoC;
@@ -47,6 +48,7 @@ namespace Qorpent.Mvc.QView {
 				var outdir = context.Project.NativeCodeDirectory;
 				var localdir = Path.GetDirectoryName(srcfile);
 				var localname = Path.GetFileNameWithoutExtension(srcfile);
+				Debug.Assert(!string.IsNullOrWhiteSpace(localdir), "localdir != null");
 				var localresources = Directory.GetFiles(localdir, localname + ".*");
 				foreach (var localresource in localresources) {
 					var ext = Path.GetExtension(localresource);

@@ -56,6 +56,7 @@ namespace Qorpent.Utils.Extensions {
 		/// </summary>
 		/// <param name="stringToTest"> string to test if it's empty </param>
 		/// <returns> </returns>
+		
 		public static bool IsNotEmpty(this string stringToTest) {
 			return _helper.IsNotEmpty(stringToTest);
 		}

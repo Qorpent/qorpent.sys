@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -90,7 +91,7 @@ namespace Qorpent.Mvc.QView {
 		/// <param name="directSource"> </param>
 		/// <returns> Full path to generated assembly </returns>
 		public string Compile(QViewCompileType compileType, string directSource = null) {
-			lock (this) {
+			lock (Sync) {
 				var proj = CreateProject(compileType, directSource);
 				if (proj.FileSources.Count == 0 && proj.DirectSources.Count == 0) {
 					return "";
@@ -140,6 +141,7 @@ namespace Qorpent.Mvc.QView {
 				foreach (var file in files) {
 					var dir = Path.GetDirectoryName(file);
 					var search = Path.GetFileNameWithoutExtension(file) + ".*";
+					Debug.Assert(dir != null, "dir != null");
 					var allmatchedfiled = Directory.GetFiles(dir, search);
 					if (compileType == QViewCompileType.Full || allmatchedfiled.Any(x => File.GetLastWriteTime(x) > lastdate)) {
 						proj.FileSources.Add(file);
@@ -157,13 +159,13 @@ namespace Qorpent.Mvc.QView {
 				return DateTime.MinValue;
 			}
 			var lastall =
-				Directory.GetFiles(FullDllPath, "*.all.dll").OrderByDescending(x => File.GetLastWriteTime(x)).FirstOrDefault();
+				Directory.GetFiles(FullDllPath, "*.all.dll").OrderByDescending(File.GetLastWriteTime).FirstOrDefault();
 			if (null == lastall) {
 				return DateTime.MinValue;
 			}
 			var lastalltime = File.GetLastWriteTime(lastall);
 			var lastdif =
-				Directory.GetFiles(FullDllPath, "*.diff.dll").OrderByDescending(x => File.GetLastWriteTime(x)).FirstOrDefault();
+				Directory.GetFiles(FullDllPath, "*.diff.dll").OrderByDescending(File.GetLastWriteTime).FirstOrDefault();
 			if (null == lastdif) {
 				return lastalltime;
 			}
@@ -181,9 +183,12 @@ namespace Qorpent.Mvc.QView {
 			//if (!File.Exists(Path.Combine(DslDir, "default.xslt"))) {
 			var resource =
 				Assembly.GetExecutingAssembly().GetManifestResourceNames().FirstOrDefault(x => x.Contains("vbxlcompiler"));
-			using (var se = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(resource))) {
+			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource)) {
+				Debug.Assert(stream != null, "stream != null");
+				var se = new StreamReader(stream);
 				File.WriteAllText(Path.Combine(DslDir, "default.xslt"), se.ReadToEnd());
 			}
+
 			//}
 		}
 	}

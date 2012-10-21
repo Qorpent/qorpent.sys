@@ -22,11 +22,11 @@
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
-using System.Security.Principal;
+
+using System;
 using System.Web.Security;
 using Qorpent.Mvc.Binding;
 using Qorpent.Mvc.Security;
-using Qorpent.Security.Watchdog;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Actions {
@@ -40,11 +40,10 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
-			if (login.IsNotEmpty()) {
-				var plogin = login;
-				if (login.ToUpper().StartsWith(System.Environment.MachineName.ToUpper() + "\\"))
-				{
-					plogin = "local\\" + login.Split('\\')[1];
+			if (Login.IsNotEmpty()) {
+				var plogin = Login;
+				if (Login.ToUpper().StartsWith(Environment.MachineName.ToUpper() + "\\")) {
+					plogin = "local\\" + Login.Split('\\')[1];
 				}
 #if PARANOID
 				
@@ -55,14 +54,13 @@ namespace Qorpent.Mvc.Actions {
 				bool authenticated = true;			
 			
 #else
-				bool authenticated = false;
 #endif
 #if PARANOID
 				if (!login.StartsWith("qorpent-sys\\")) {
 #endif
 				var authenticator = Context.Application.Container.Get<IFormAuthenticationProvider>() ??
-					                new SysLogonAuthenticationProvider();
-				authenticated = authenticator.IsAuthenticated(login, pass, Context);
+				                    new SysLogonAuthenticationProvider();
+				bool authenticated = authenticator.IsAuthenticated(Login, Pass, Context);
 #if PARANOID
 				}
 #endif
@@ -79,29 +77,27 @@ namespace Qorpent.Mvc.Actions {
 #endif
 
 
-
-
-					var url = returl;
-					if(url.IsEmpty()) {
+					var url = RetUrl;
+					if (url.IsEmpty()) {
 						url = FormsAuthentication.DefaultUrl;
 					}
 					Context.Redirect(url);
-					return new {needform = false, login};
+					return new {needform = false, login = Login};
 				}
 			}
-			return new {needform = true, login};
+			return new {needform = true, login = Login};
 		}
 
 		/// <summary>
 		/// </summary>
-		[Bind(Name = "_l_o_g_i_n_", Required = false, ValidatePattern = @"^[\w\.-\\]+$")] protected string login;
+		[Bind(Name = "_l_o_g_i_n_", Required = false, ValidatePattern = @"^[\w\.-\\]+$")] protected string Login;
 
 		/// <summary>
 		/// </summary>
-		[Bind(Name = "_p_a_s_s_", Required = false, ValidatePattern = @"^[\w\S]{2,}$")] protected string pass;
+		[Bind(Name = "_p_a_s_s_", Required = false, ValidatePattern = @"^[\w\S]{2,}$")] protected string Pass;
+
 		/// <summary>
-		/// 
 		/// </summary>
-		[Bind(Name = "ReturnUrl", Required = false)] protected string returl;
+		[Bind(Name = "ReturnUrl", Required = false)] protected string RetUrl;
 	}
 }

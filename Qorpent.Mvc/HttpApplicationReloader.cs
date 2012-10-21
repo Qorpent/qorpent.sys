@@ -41,7 +41,7 @@ namespace Qorpent.Mvc {
 		public HttpApplicationReloader() {
 			_timer = new Timer {Enabled = false, Interval = TimeSpan.FromSeconds(2).TotalMilliseconds};
 			_timer.Stop();
-			_timer.Elapsed += timer_Elapsed;
+			_timer.Elapsed += TimerElapsed;
 		}
 
 
@@ -77,7 +77,7 @@ namespace Qorpent.Mvc {
 		}
 
 
-		private void timer_Elapsed(object sender, ElapsedEventArgs e) {
+		private void TimerElapsed(object sender, ElapsedEventArgs e) {
 			_timer.Stop();
 			AppDomain.Unload(AppDomain.CurrentDomain);
 		}

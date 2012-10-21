@@ -71,12 +71,7 @@ namespace Qorpent.Mvc.Actions {
 				result = new GenericPrincipal(new GenericIdentity(Target), null);
 			}
 			Application.Impersonation.Impersonate(Context.LogonUser, result);
-			if (null != result) {
-				Application.Principal.SetCurrentUser(result);
-			}
-			else {
-				Application.Principal.SetCurrentUser(Context.LogonUser);
-			}
+			Application.Principal.SetCurrentUser(result ?? Context.LogonUser);
 			return Application.Principal.CurrentUser.Identity.Name;
 		}
 	}

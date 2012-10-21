@@ -34,8 +34,7 @@ namespace Qorpent.Mvc.HttpHandler {
 	/// 	Main handler for QorpentMvc
 	/// </summary>
 	[ContainerComponent(Lifestyle.Transient)]
-	public class MvcHandler : ServiceBase, IMvcHandler
-	{
+	public class MvcHandler : ServiceBase, IMvcHandler {
 #if PARANOID
 		static MvcHandler() {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
@@ -97,7 +96,9 @@ namespace Qorpent.Mvc.HttpHandler {
 			try {
 				BeforeAuthorize(context);
 				context.AuthrizeResult = Authorizer.Authorize(context);
-				if(context.IsRedirected) return context;
+				if (context.IsRedirected) {
+					return context;
+				}
 				AfterAuthorize(context);
 				if (context.AuthrizeResult.Authorized) {
 					if (!context.IgnoreActionResult) {
@@ -176,7 +177,7 @@ namespace Qorpent.Mvc.HttpHandler {
 		}
 
 		private void CheckNotModified(IMvcContext context) {
-			context.NotModified = canReturnNotModifiedStatus(context);
+			context.NotModified = CanReturnNotModifiedStatus(context);
 		}
 
 		private static void SetModifiedHeader(IMvcContext context) {
@@ -195,11 +196,11 @@ namespace Qorpent.Mvc.HttpHandler {
 			context.Etag = cp.ETag;
 		}
 
-		private void ProcessNotModified(IMvcContext context) {
+		private static void ProcessNotModified(IMvcContext context) {
 			context.StatusCode = 304;
 		}
 
-		private bool canReturnNotModifiedStatus(IMvcContext context) {
+		private static bool CanReturnNotModifiedStatus(IMvcContext context) {
 			if (context.IfModifiedSince.Year <= 1900) {
 				return false;
 			}
