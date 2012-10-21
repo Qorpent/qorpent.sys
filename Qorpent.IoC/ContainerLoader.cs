@@ -38,9 +38,7 @@ namespace Qorpent.IoC {
 	/// <summary>
 	/// 	Applys manifest to Givent container
 	/// </summary>
-	public class ContainerLoader : IContainerLoader
-	{
-
+	public class ContainerLoader : IContainerLoader {
 #if PARANOID
 		static ContainerLoader() {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
@@ -70,28 +68,28 @@ namespace Qorpent.IoC {
 		}
 
 		/// <summary>
-		/// Читает манифетсы приложения и конструирует единый 
+		/// 	Читает манифетсы приложения и конструирует единый
 		/// </summary>
-		/// <returns></returns>
+		/// <returns> </returns>
 		/// <exception cref="Exception"></exception>
 		public XElement ReadDefaultManifest() {
-			var _resolver = _container.Get<IFileNameResolver>();
-			if (null == _resolver) {
+			var resolver = _container.Get<IFileNameResolver>();
+			if (null == resolver) {
 				return new XElement("root");
 			}
 			var includer = _container.Get<IXmlIncludeProcessor>();
-			var manifestfiles = _resolver.ResolveAll(
+			var manifestfiles = resolver.ResolveAll(
 				new FileSearchQuery
 					{
 						ExistedOnly = true,
 						PathType = FileSearchResultType.FullPath,
 						ProbeFiles = new[] {"*.ioc-manifest.xml", "*.ioc-manifest.bxl"},
-						ProbePaths = new[] {"~/", "~/.config", "~/bin", "~/sys", "~/usr" }
+						ProbePaths = new[] {"~/", "~/.config", "~/bin", "~/sys", "~/usr"}
 					});
 
 			var fullmanifest = new XElement("root");
 			foreach (var manifestfile in manifestfiles) {
-				XElement manifestxml = null;
+				XElement manifestxml;
 				if (manifestfile.EndsWith(".xml")) {
 					manifestxml = XElement.Load(manifestfile);
 				}
@@ -119,39 +117,22 @@ namespace Qorpent.IoC {
 			if (manifest == null) {
 				throw new ArgumentNullException("manifest");
 			}
-			var result = new List<IComponentDefinition>();
-			IList<string> dlls = new List<string>();
-			IList<string> ns = new List<string>();
+			IList<string> dlls = manifest.Elements("ref").Select(element => element.Attr("code")).ToList();
 
 
-			foreach (var element in manifest.Elements("ref")) {
-				dlls.Add(element.Attr("code"));
-			}
-			foreach (var element in manifest.Elements("using")) {
-				ns.Add(element.Attr("code"));
-			}
+			IList<string> ns = manifest.Elements("using").Select(element => element.Attr("code")).ToList();
 
 			dlls = dlls.Distinct().ToList();
 			ns = ns.Distinct().ToList();
 			//extensions must be load first
-			foreach (var extensionxml in manifest.Elements("containerextension")) {
-				var component = new ManifestComponentDefinition(extensionxml, allowErrors, dlls, ns);
-				result.Add(component);
-			}
+			var result = manifest.Elements("containerextension").Select(extensionxml => new ManifestComponentDefinition(extensionxml, allowErrors, dlls, ns)).Cast<IComponentDefinition>().ToList();
+			result.AddRange((
+				from componentxml in manifest.Elements() 
+				where componentxml.Name.LocalName != "ref" 
+				where componentxml.Name.LocalName != "using" 
+				where componentxml.Name.LocalName != "containerextension" 
+				select new ManifestComponentDefinition(componentxml, allowErrors, dlls, ns)));
 			//usual components must be load after extensions
-			foreach (var componentxml in manifest.Elements()) {
-				if (componentxml.Name.LocalName == "ref") {
-					continue;
-				}
-				if (componentxml.Name.LocalName == "using") {
-					continue;
-				}
-				if (componentxml.Name.LocalName == "containerextension") {
-					continue;
-				}
-				var component = new ManifestComponentDefinition(componentxml, allowErrors, dlls, ns);
-				result.Add(component);
-			}
 			foreach (var component in result) {
 				_container.Register(component);
 			}
@@ -181,29 +162,27 @@ namespace Qorpent.IoC {
 		}
 
 		/// <summary>
-		/// Loads all components defined on type
+		/// 	Loads all components defined on type
 		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
+		/// <param name="type"> </param>
+		/// <returns> </returns>
 		public IEnumerable<IComponentDefinition> LoadType(Type type) {
 			var mcd = ManifestClassDefinition.GetAllClassManifests(type).ToArray();
 			IList<IComponentDefinition> components = new List<IComponentDefinition>();
 			foreach (var classDefinition in mcd) {
 				var component = classDefinition.GetComponent();
-				
+
 				_container.Register(component);
 				components.Add(component);
 			}
 
 			return components.ToArray();
-
-
 		}
 
 		/// <summary>
-		/// Loads all components defined on type
+		/// 	Loads all components defined on type
 		/// </summary>
-		/// <returns></returns>
+		/// <returns> </returns>
 		public IEnumerable<IComponentDefinition> Load<T>() {
 			return LoadType(typeof (T));
 		}

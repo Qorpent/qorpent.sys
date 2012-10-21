@@ -50,8 +50,12 @@ namespace Qorpent.IoC {
 			try {
 				var predesc =
 					assembly.GetCustomAttributes(true).FirstOrDefault(
-						x => x.GetType().Name == typeof (ContainerExportAttribute).Name ||
-						     x.GetType().BaseType.Name == typeof (ContainerExportAttribute).Name);
+						x =>
+							{
+								var baseType = x.GetType().BaseType;
+								return baseType != null && (x.GetType().Name == typeof (ContainerExportAttribute).Name ||
+							                                 baseType.Name == typeof (ContainerExportAttribute).Name);
+							});
 				if (null != predesc) {
 					Descriptor = new ContainerExportAttribute
 						{
@@ -64,7 +68,7 @@ namespace Qorpent.IoC {
 				AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
 			}
 			if (null == Descriptor && !needExportAttribute) {
-				Descriptor = new ContainerExportAttribute(-1, Lifestyle.Transient);
+				Descriptor = new ContainerExportAttribute(-1);
 			}
 			if (null != Descriptor) {
 				foreach (var type in assembly.GetTypes()) {
@@ -92,11 +96,13 @@ namespace Qorpent.IoC {
 
 		private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args) {
 			var dir = Path.GetDirectoryName(args.RequestingAssembly.CodeBase.Replace("file:///", ""));
-			var filename = Path.Combine(dir, args.Name.Split(',')[0] + ".dll");
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.WriteLine(filename);
-			if (File.Exists(filename)) {
-				return Assembly.LoadFile(filename);
+			if (dir != null) {
+				var filename = Path.Combine(dir, args.Name.Split(',')[0] + ".dll");
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.WriteLine(filename);
+				if (File.Exists(filename)) {
+					return Assembly.LoadFile(filename);
+				}
 			}
 			return null;
 		}

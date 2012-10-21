@@ -41,87 +41,70 @@ namespace Qorpent.IoC {
 			// we use indirect attribute usage to avoid msbuild context problems - we have to make compoents even in different versions of system
 			Type = type;
 			var predesc =
-				type.GetCustomAttributes(true).Where(x => x.GetType().Name == typeof (ContainerComponentAttribute).Name
-				                                          ||
-				                                          x.GetType().BaseType.Name == typeof (ContainerComponentAttribute).Name).
+				type.GetCustomAttributes(true).Where(x =>
+					{
+						var baseType = x.GetType().BaseType;
+						return baseType != null && (x.GetType().Name == typeof (ContainerComponentAttribute).Name
+					                                                                      ||
+					                                                                      baseType.Name == typeof (ContainerComponentAttribute).Name);
+					}).
 					FirstOrDefault();
 			if (null != predesc) {
-				Descriptor = new ContainerComponentAttribute();
-				Descriptor.Lifestyle = predesc.GetValue<Lifestyle>("Lifestyle");
-				Descriptor.Name = predesc.GetValue<string>("Name");
-				Descriptor.Help = predesc.GetValue<string>("Help");
-				Descriptor.Role = predesc.GetValue<string>("Role");
-				Descriptor.ServiceType = predesc.GetValue<Type>("ServiceType");
-				Descriptor.Priority = predesc.GetValue<int>("Priority");
+				Descriptor = new ContainerComponentAttribute
+					{
+						Lifestyle = predesc.GetValue<Lifestyle>("Lifestyle"),
+						Name = predesc.GetValue<string>("Name"),
+						Help = predesc.GetValue<string>("Help"),
+						Role = predesc.GetValue<string>("Role"),
+						ServiceType = predesc.GetValue<Type>("ServiceType"),
+						Priority = predesc.GetValue<int>("Priority")
+					};
+			}
+
+			if (null != Descriptor) {
+				if (null == Descriptor.ServiceType) {
+					
+					AutoDetectedServiceType =
+// ReSharper disable PossibleNullReferenceException
+						type.GetInterfaces().Except(type.BaseType.GetInterfaces()).FirstOrDefault(x => x != typeof (IContainerBound)) ??
+						type;
+// ReSharper restore PossibleNullReferenceException
+				}
+			}
+		}
+
+
+		/// <summary>
+		/// 	Создает манифест для указанного типа и атрибута
+		/// </summary>
+		/// <param name="type"> </param>
+		/// <param name="predesc"> </param>
+		public ManifestClassDefinition(Type type, Attribute predesc) {
+			// we use indirect attribute usage to avoid msbuild context problems - we have to make compoents even in different versions of system
+			Type = type;
+
+			if (null != predesc) {
+				Descriptor = new ContainerComponentAttribute
+					{
+						Lifestyle = predesc.GetValue<Lifestyle>("Lifestyle"),
+						Name = predesc.GetValue<string>("Name"),
+						Help = predesc.GetValue<string>("Help"),
+						Role = predesc.GetValue<string>("Role"),
+						ServiceType = predesc.GetValue<Type>("ServiceType"),
+						Priority = predesc.GetValue<int>("Priority")
+					};
 			}
 
 			if (null != Descriptor) {
 				if (null == Descriptor.ServiceType) {
 					AutoDetectedServiceType =
-						type.GetInterfaces().Except(type.BaseType.GetInterfaces()).FirstOrDefault(x => x != typeof (IContainerBound));
-					if (null == AutoDetectedServiceType) {
-						AutoDetectedServiceType = type;
-					}
+// ReSharper disable PossibleNullReferenceException
+						type.GetInterfaces().Except(type.BaseType.GetInterfaces()).FirstOrDefault(x => x != typeof (IContainerBound)) ??
+						type;
+// ReSharper restore PossibleNullReferenceException
 				}
 			}
 		}
-
-
-
-		/// <summary>
-		/// Создает манифест для указанного типа и атрибута
-		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="predesc"></param>
-		public ManifestClassDefinition(Type type, Attribute predesc)
-		{
-			// we use indirect attribute usage to avoid msbuild context problems - we have to make compoents even in different versions of system
-			Type = type;
-		
-			if (null != predesc)
-			{
-				Descriptor = new ContainerComponentAttribute();
-				Descriptor.Lifestyle = predesc.GetValue<Lifestyle>("Lifestyle");
-				Descriptor.Name = predesc.GetValue<string>("Name");
-				Descriptor.Help = predesc.GetValue<string>("Help");
-				Descriptor.Role = predesc.GetValue<string>("Role");
-				Descriptor.ServiceType = predesc.GetValue<Type>("ServiceType");
-				Descriptor.Priority = predesc.GetValue<int>("Priority");
-			}
-
-			if (null != Descriptor)
-			{
-				if (null == Descriptor.ServiceType)
-				{
-					AutoDetectedServiceType =
-						type.GetInterfaces().Except(type.BaseType.GetInterfaces()).FirstOrDefault(x => x != typeof(IContainerBound));
-					if (null == AutoDetectedServiceType)
-					{
-						AutoDetectedServiceType = type;
-					}
-				}
-			}
-		}
-
-
-		/// <summary>
-		/// Retrieves all components for all attributes
-		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		public static IEnumerable<ManifestClassDefinition> GetAllClassManifests(Type type) {
-			var attributes =
-				type.GetCustomAttributes(true).Where(x => x.GetType().Name == typeof (ContainerComponentAttribute).Name
-				                                          ||
-				                                          x.GetType().BaseType.Name == typeof (ContainerComponentAttribute).Name).
-					OfType<Attribute>().ToArray();
-			foreach (var attribute in attributes) {
-				yield return new ManifestClassDefinition(type, attribute);
-			}
-
-		}
-
-
 
 
 		/// <summary>
@@ -145,6 +128,22 @@ namespace Qorpent.IoC {
 		public Type AutoDetectedServiceType { get; private set; }
 
 		/// <summary>
+		/// 	Retrieves all components for all attributes
+		/// </summary>
+		/// <param name="type"> </param>
+		/// <returns> </returns>
+		public static IEnumerable<ManifestClassDefinition> GetAllClassManifests(Type type) {
+			var attributes =
+				type.GetCustomAttributes(true).Where(x => x.GetType().Name == typeof (ContainerComponentAttribute).Name
+				                                          ||
+// ReSharper disable PossibleNullReferenceException
+				                                          x.GetType().BaseType.Name == typeof (ContainerComponentAttribute).Name).
+// ReSharper restore PossibleNullReferenceException
+					OfType<Attribute>().ToArray();
+			return attributes.Select(attribute => new ManifestClassDefinition(type, attribute));
+		}
+
+		/// <summary>
 		/// 	generates ioc component definition
 		/// </summary>
 		/// <returns> </returns>
@@ -157,9 +156,8 @@ namespace Qorpent.IoC {
 			var priority = (Descriptor.Priority == -1 && null != AssemblyManifest)
 				               ? AssemblyManifest.Descriptor.Priority
 				               : Descriptor.Priority;
-			var result = new ComponentDefinition(stype, impltype, lifestyle, Descriptor.Name, priority, null);
-			result.Role = Descriptor.Role;
-			result.Help = Descriptor.Help;
+			var result = new ComponentDefinition(stype, impltype, lifestyle, Descriptor.Name, priority)
+				{Role = Descriptor.Role, Help = Descriptor.Help};
 			return result;
 		}
 	}

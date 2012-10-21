@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
@@ -40,7 +41,7 @@ namespace Qorpent.IoC {
 		                                   IEnumerable<string> namespaces) {
 			Source = manifestElement;
 			try {
-				prepare(references, namespaces);
+				Prepare(references, namespaces);
 			}
 			catch (Exception ex) {
 				if (allowerrors) {
@@ -60,20 +61,24 @@ namespace Qorpent.IoC {
 
 		public Exception Exception { get; set; }
 
-		private void prepare(IEnumerable<string> references, IEnumerable<string> namespaces) {
-			readFromXml();
+		private void Prepare(IEnumerable<string> references, IEnumerable<string> namespaces) {
+			ReadFromXml();
+			IEnumerable<string> correctedReferences = references as string[] ?? references.ToArray();
+			IEnumerable<string> correctedNamespaces = namespaces as string[] ?? namespaces.ToArray();
 			if (SericeTypeName.IsNotEmpty()) {
-				ServiceType = ResolveType(SericeTypeName, references, namespaces);
+				ServiceType = ResolveType(SericeTypeName, correctedReferences, correctedNamespaces);
 			}
 			if (ImplementationTypeName.IsNotEmpty()) {
-				ImplementationType = ResolveType(ImplementationTypeName, references, namespaces);
+				ImplementationType = ResolveType(ImplementationTypeName, correctedReferences, correctedNamespaces);
 			}
 		}
 
 		private Type ResolveType(string basename, IEnumerable<string> references, IEnumerable<string> namespaces) {
+			
 			if (FullyQualifiedTypeName.IsMatch(basename)) {
 				return Type.GetType(basename, true);
 			}
+			IEnumerable<string> correctedNamespaces = namespaces as string[] ?? namespaces.ToArray();
 			Type resolved = null;
 			foreach (var reference in references) {
 				var typename = basename + ", " + reference;
@@ -84,7 +89,8 @@ namespace Qorpent.IoC {
 					}
 				}
 				else {
-					foreach (var ns in namespaces) {
+					
+					foreach (var ns in correctedNamespaces) {
 						typename = ns + "." + basename + ", " + reference;
 						resolved = Type.GetType(typename, false);
 						if (null != resolved) {
@@ -102,7 +108,7 @@ namespace Qorpent.IoC {
 			return resolved;
 		}
 
-		private void readFromXml() {
+		private void ReadFromXml() {
 			if (null != Source.Attribute("nobxl")) {
 				//marks auto generated xml
 				Name = Source.Attr("componentname");

@@ -35,8 +35,6 @@ using Qorpent.Applications;
 using Qorpent.Events;
 using Qorpent.Log;
 using Qorpent.Model;
-using Qorpent.Security;
-using Qorpent.Security.Watchdog;
 using Qorpent.Utils.Extensions;
 
 [assembly:
@@ -53,9 +51,7 @@ namespace Qorpent.IoC {
 	/// <remarks>
 	/// </remarks>
 	[RequireReset(Role = "DEVELOPER", All = false, Options = new[] {QorpentConst.ContainerResetCode})]
-	public class Container : IContainer, IApplicationBound, IResetable
-	{
-
+	public class Container : IContainer, IApplicationBound, IResetable {
 #if PARANOID
 		static Container() {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
@@ -70,12 +66,7 @@ namespace Qorpent.IoC {
 				lock (this) {
 					if (null == _log) {
 						var manager = Get<ILogManager>();
-						if (null != manager) {
-							_log = manager.GetLog(GetType().FullName + ";" + GetType().Assembly.GetName().Name, this);
-						}
-						else {
-							_log = new StubUserLog();
-						}
+						_log = null != manager ? manager.GetLog(GetType().FullName + ";" + GetType().Assembly.GetName().Name, this) : new StubUserLog();
 					}
 					return _log;
 				}
@@ -145,8 +136,8 @@ namespace Qorpent.IoC {
 							break;
 						}
 						result = CreateInstance(component, ctorArguments);
-						if(component.CacheInstanceOfExtension) {
-								component.Implementation = result;
+						if (component.CacheInstanceOfExtension) {
+							component.Implementation = result;
 						}
 						break;
 					case Lifestyle.Transient:
@@ -166,7 +157,7 @@ namespace Qorpent.IoC {
 							ThreadOutgoingCache[Thread.CurrentThread] = new Dictionary<object, IComponentDefinition>();
 						}
 						if (ThreadOutgoingCache[Thread.CurrentThread].ContainsValue(component)) {
-							result = ThreadOutgoingCache[Thread.CurrentThread].First(x => x.Value == component).Key;
+							result = ThreadOutgoingCache[Thread.CurrentThread].First(x => Equals(x.Value, component)).Key;
 						}
 						else {
 							result = CreateInstance(component, ctorArguments);
@@ -356,12 +347,7 @@ namespace Qorpent.IoC {
 					var result = new List<object>();
 					foreach (var component in extensions) {
 						component.ActivationCount++;
-						if (component.Implementation != null) {
-							result.Add(component.Implementation);
-						}
-						else {
-							result.Add(CreateInstance(component, ctorArguments));
-						}
+						result.Add(component.Implementation ?? CreateInstance(component, ctorArguments));
 					}
 					foreach (var obj in result.OfType<IWithIdx>().OrderBy(x => x.Idx)) {
 						yield return obj;
@@ -442,7 +428,7 @@ namespace Qorpent.IoC {
 		/// </summary>
 		public void Register(IComponentDefinition component) {
 			lock (this) {
-			#if PARANOID
+#if PARANOID
 				if(component.ServiceType==typeof(IRoleResolver)) {
 					if(component.ImplementationType!=typeof(DefaultRoleResolver)) {
 						throw new ParanoidException(ParanoidState.InvalidRoleResolver);
@@ -521,7 +507,7 @@ namespace Qorpent.IoC {
 					ByNameCache[component.Name].Remove(component);
 				}
 				foreach (var componentDefinition in OutgoingCache.ToArray()) {
-					if (componentDefinition.Value == component) {
+					if (Equals(componentDefinition.Value, component)) {
 						DropObject(componentDefinition.Key);
 						OutgoingCache.Remove(componentDefinition.Key);
 					}
@@ -529,7 +515,7 @@ namespace Qorpent.IoC {
 				if (Lifestyle.PerThread == component.Lifestyle) {
 					foreach (var threadCache in ThreadOutgoingCache.ToArray()) {
 						foreach (var componentDefinition in threadCache.Value.ToArray()) {
-							if (componentDefinition.Value == component) {
+							if (Equals(componentDefinition.Value, component)) {
 								DropObject(componentDefinition.Key);
 								OutgoingCache.Remove(componentDefinition.Key);
 							}
@@ -610,13 +596,11 @@ namespace Qorpent.IoC {
 		/// </remarks>
 		protected internal object CreateInstance(IComponentDefinition component, object[] arguments) {
 			try {
-				object result = null;
-
-				result = Activator.CreateInstance(component.ImplementationType,
-				                                  BindingFlags.Instance | BindingFlags.CreateInstance | BindingFlags.Public |
-				                                  BindingFlags.NonPublic,
-				                                  null,
-				                                  arguments, CultureInfo.InvariantCulture);
+				object result = Activator.CreateInstance(component.ImplementationType,
+				                                         BindingFlags.Instance | BindingFlags.CreateInstance | BindingFlags.Public |
+				                                         BindingFlags.NonPublic,
+				                                         null,
+				                                         arguments, CultureInfo.InvariantCulture);
 
 				component.CreationCount++;
 				ProcessAttributedInjections(result);
@@ -714,29 +698,21 @@ namespace Qorpent.IoC {
 		/// </remarks>
 		public IComponentDefinition FindComponent(Type type, string name) {
 			if (name.IsEmpty()) {
-				Type key = null;
 				//firstly try to direct match
 				if (ByTypeCache.ContainsKey(type)) {
 					return ByTypeCache[type].FirstOrDefault();
 				}
 
-				foreach (var t in ByTypeCache.Keys) {
-					if (type.IsAssignableFrom(t)) {
-						key = t;
-						break;
-					}
-				}
+				var key = ByTypeCache.Keys.FirstOrDefault(type.IsAssignableFrom);
 				if (null == key) {
 					return null;
 				}
 				return ByTypeCache[key].FirstOrDefault();
 			}
-			else {
-				if (!ByNameCache.ContainsKey(name)) {
-					return null;
-				}
-				return ByNameCache[name].FirstOrDefault(x => type.IsAssignableFrom(x.ServiceType));
+			if (!ByNameCache.ContainsKey(name)) {
+				return null;
 			}
+			return ByNameCache[name].FirstOrDefault(x => type.IsAssignableFrom(x.ServiceType));
 		}
 
 		/// <summary>
@@ -758,16 +734,14 @@ namespace Qorpent.IoC {
 						x =>
 						((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0).Reverse().ToArray();
 			}
-			else {
-				if (!ByNameCache.ContainsKey(name)) {
-					return new IComponentDefinition[] {};
-				}
-				return ByNameCache[name].Where(
-					x =>
-					type.IsAssignableFrom(x.ServiceType) &&
-					((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0
-					).Reverse().ToArray();
+			if (!ByNameCache.ContainsKey(name)) {
+				return new IComponentDefinition[] {};
 			}
+			return ByNameCache[name].Where(
+				x =>
+				type.IsAssignableFrom(x.ServiceType) &&
+				((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0
+				).Reverse().ToArray();
 		}
 
 		/// <summary>
