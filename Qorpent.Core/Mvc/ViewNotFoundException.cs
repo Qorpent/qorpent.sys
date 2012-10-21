@@ -1,23 +1,24 @@
 using System;
 
-namespace Qorpent.Security.Watchdog {
+namespace Qorpent.Mvc {
 	/// <summary>
-	/// Any exception in paranoid environment
+	/// 	Occures where QView was not found
 	/// </summary>
 	[Serializable]
-	public class ParanoidException : QorpentSecurityException {
+	public class ViewNotFoundException : MvcExecption {
 		/// <summary>
-		/// 
 		/// </summary>
-		/// <param name="state"></param>
-		public ParanoidException(ParanoidState state):base(state.ToString()) {
-			this.State = state;
+		/// <param name="viewname"> </param>
+		/// <param name="context"> </param>
+		public ViewNotFoundException(string viewname, IMvcContext context = null)
+			: base("view not found " + viewname, context) {
+			ViewName = viewname;
 		}
 
 		/// <summary>
-		/// State of paranoid
+		/// 	Name of view havenot found
 		/// </summary>
-		public ParanoidState State { get;private set; }
+		public string ViewName { get; protected set; }
 
 		/// <summary>
 		/// ѕри переопределении в производном классе задает сведени€ об исключении дл€ <see cref="T:System.Runtime.Serialization.SerializationInfo"/>.
@@ -26,7 +27,7 @@ namespace Qorpent.Security.Watchdog {
 		public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
 		{
 			base.GetObjectData(info, context);
-			info.AddValue("_State",State);
+			info.AddValue("_ViewName",ViewName);
 		}
 	}
 }

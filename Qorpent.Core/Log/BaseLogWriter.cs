@@ -41,7 +41,7 @@ namespace Qorpent.Log {
 		/// </summary>
 		/// <param name="message"> </param>
 		public void Write(LogMessage message) {
-			lock (this) {
+			lock (Sync) {
 				InternalWrite(message);
 			}
 		}

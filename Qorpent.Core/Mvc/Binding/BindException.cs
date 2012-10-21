@@ -23,10 +23,13 @@
 
 #endregion
 
+using System;
+
 namespace Qorpent.Mvc.Binding {
 	/// <summary>
 	/// 	General binding exception
 	/// </summary>
+	[Serializable]
 	public class BindException : MvcExecption {
 		/// <summary>
 		/// </summary>
@@ -55,5 +58,17 @@ namespace Qorpent.Mvc.Binding {
 		private readonly BindAttribute _bindInfo;
 
 		private readonly object _val;
+
+
+		/// <summary>
+		/// При переопределении в производном классе задает сведения об исключении для <see cref="T:System.Runtime.Serialization.SerializationInfo"/>.
+		/// </summary>
+		/// <param name="info">Объект <see cref="T:System.Runtime.Serialization.SerializationInfo"/>, содержащий сериализованные данные объекта о выбрасываемом исключении. </param><param name="context">Объект <see cref="T:System.Runtime.Serialization.StreamingContext"/>, содержащий контекстные сведения об источнике или назначении. </param><exception cref="T:System.ArgumentNullException">Параметр <paramref name="info"/>  — указатель NULL (Nothing в Visual Basic). </exception><filterpriority>2</filterpriority><PermissionSet><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Read="*AllFiles*" PathDiscovery="*AllFiles*"/><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="SerializationFormatter"/></PermissionSet>
+		public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+		{
+			base.GetObjectData(info, context);
+			info.AddValue("_Val",Val);
+			info.AddValue("_BindInfo",BindInfo);
+		}
 	}
 }

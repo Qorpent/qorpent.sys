@@ -82,14 +82,14 @@ namespace Qorpent.Mvc {
 		/// Cookie отклика
 		/// </summary>
 		public override HttpCookieCollection ResponseCookies {
-			get { throw new NotImplementedException(); }
+			get { return null; }
 		}
 
 		/// <summary>
 		/// Cookie отклика
 		/// </summary>
 		public override HttpCookieCollection RequestCookies {
-			get { throw new NotImplementedException(); }
+			get { return null; }
 		}
 
 		/// <summary>

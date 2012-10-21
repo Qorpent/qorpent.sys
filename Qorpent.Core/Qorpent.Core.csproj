@@ -39,6 +39,8 @@
     <Compile Include="Model\IWithName.cs" />
     <Compile Include="Model\IWithTag.cs" />
     <Compile Include="Model\IWithVersion.cs" />
+    <Compile Include="Mvc\ViewNotFoundException.cs" />
+    <Compile Include="Security\AccessProviderService.cs" />
     <Compile Include="Security\IWithRoleContext.cs" />
     <Compile Include="Security\Watchdog\IParanoidProvider.cs" />
     <Compile Include="Security\ISysLogon.cs" />

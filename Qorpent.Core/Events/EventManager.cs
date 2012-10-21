@@ -43,7 +43,7 @@ namespace Qorpent.Events {
 		/// </summary>
 		/// <returns> </returns>
 		public IEventInvoker Prepare(Type eventType, IPrincipal user = null, bool syslock = true) {
-			lock (this) {
+			lock (Sync) {
 				return new Invoker(
 					eventType,
 					Application,
@@ -66,7 +66,7 @@ namespace Qorpent.Events {
 		/// <returns> </returns>
 		public TResult Call<TEvent, TData, TResult>(TData data, IPrincipal user = null, bool syslock = true)
 			where TEvent : IEvent<TData, TResult> where TData : IEventData, new() where TResult : IEventResult, new() {
-			lock (this) {
+			lock (Sync) {
 				var invoker = Prepare(typeof (TEvent), user, syslock);
 				var result = invoker.Invoke(data);
 				return (TResult) result;
@@ -83,7 +83,7 @@ namespace Qorpent.Events {
 		/// <returns> </returns>
 		public TResult Call<TResult>(IEventData data, IPrincipal user = null, bool syslock = true)
 			where TResult : IEventResult, new() {
-			lock (this) {
+			lock (Sync) {
 				//находим среди всех поддерживаемых сообщений первое, которое возвращает запрошенный TResult
 				var eventType =
 					_handlers.Keys.Where(type => type.BaseType.IsGenericType)
@@ -105,7 +105,7 @@ namespace Qorpent.Events {
 		/// <typeparam name="TEvent"> </typeparam>
 		public void Add<TEvent>(IEventHandler<TEvent> handler, IUserLog userLog = null)
 			where TEvent : IEvent {
-			lock (this) {
+			lock (Sync) {
 				if (!_handlers.ContainsKey(typeof (TEvent))) {
 					_handlers[typeof (TEvent)] = new List<IEventHandler>();
 				}
@@ -122,7 +122,7 @@ namespace Qorpent.Events {
 		/// <param name="userLog"> </param>
 		public void Remove<TEvent>(IEventHandler<TEvent> handler, IUserLog userLog = null)
 			where TEvent : IEvent {
-			lock (this) {
+			lock (Sync) {
 				if (!_handlers.ContainsKey(typeof (TEvent))) {
 					return;
 				}

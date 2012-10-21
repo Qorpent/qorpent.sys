@@ -38,7 +38,7 @@ namespace Qorpent.Serialization {
 		/// <param name="customFormatName"> </param>
 		/// <returns> </returns>
 		public ISerializer GetSerializer(SerializationFormat format, string customFormatName = null) {
-			lock (this) {
+			lock (Sync) {
 				var name = format.ToString().ToLower();
 				if (format == SerializationFormat.Default) {
 					name = "xml";

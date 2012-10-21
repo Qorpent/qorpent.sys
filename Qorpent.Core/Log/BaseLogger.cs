@@ -88,14 +88,14 @@ namespace Qorpent.Log {
 		/// 	Behavior on error occured in logger - if None - Manager behavior will be used
 		/// </summary>
 		public InternalLoggerErrorBehavior ErrorBehavior { get; set; }
-
+		
 		/// <summary>
 		/// 	check's if this logger is applyable to given context
 		/// </summary>
 		/// <param name="context"> </param>
 		/// <returns> </returns>
 		public virtual bool IsApplyable(object context) {
-			lock (this) {
+			lock (Sync) {
 				if (string.IsNullOrEmpty(Mask) || "*" == Mask) {
 					return true; //logger supports all contexts
 				}
@@ -113,7 +113,7 @@ namespace Qorpent.Log {
 		/// </summary>
 		/// <param name="message"> </param>
 		public void StartWrite(LogMessage message) {
-			lock (this) {
+			lock (Sync) {
 				if (InvalidMessageText(message)) {
 					return;
 				}
@@ -138,7 +138,7 @@ namespace Qorpent.Log {
 		/// 	Synchronizes calling context to logger
 		/// </summary>
 		public void Join() {
-			lock (this) {
+			lock (Sync) {
 				while (busy) {
 					if (_start != DateTime.MinValue && busy) {
 						if ((DateTime.Now - _start).TotalMilliseconds > WriteTimeOut) {

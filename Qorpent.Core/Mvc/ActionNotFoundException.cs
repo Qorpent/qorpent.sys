@@ -41,25 +41,4 @@ namespace Qorpent.Mvc {
 		public ActionNotFoundException(string message, IMvcContext context = null, Exception innerexception = null)
 			: base(message, context, innerexception) {}
 	}
-
-
-	/// <summary>
-	/// 	Occures where QView was not found
-	/// </summary>
-	[Serializable]
-	public class ViewNotFoundException : MvcExecption {
-		/// <summary>
-		/// </summary>
-		/// <param name="viewname"> </param>
-		/// <param name="context"> </param>
-		public ViewNotFoundException(string viewname, IMvcContext context = null)
-			: base("view not found " + viewname, context) {
-			ViewName = viewname;
-		}
-
-		/// <summary>
-		/// 	Name of view havenot found
-		/// </summary>
-		public string ViewName { get; protected set; }
-	}
 }

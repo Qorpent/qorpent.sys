@@ -65,7 +65,7 @@ namespace Qorpent.Security {
 		/// <returns> </returns>
 		public bool IsInRole(IPrincipal principal, string role, bool exact = false, IMvcContext callcontext = null,
 		                     object customcontext = null) {
-			lock (this) {
+			lock (Sync) {
 #if PARANOID
 				bool isadmin =  Paranoid.Provider.IsInRole(principal, "ADMIN");
 				if(Paranoid.Provider.IsSecureRole(role)) {

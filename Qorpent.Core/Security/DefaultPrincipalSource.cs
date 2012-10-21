@@ -52,7 +52,7 @@ namespace Qorpent.Security {
 		/// </summary>
 		public IPrincipal CurrentUser {
 			get {
-				lock (this) {
+				lock (Sync) {
 					if (null == Current) {
 						if (IsWeb()) {
 							if (null != MvcContextBase.Current && null != MvcContextBase.Current.LogonUser) {
@@ -95,7 +95,7 @@ namespace Qorpent.Security {
 		/// </summary>
 		/// <param name="usr"> </param>
 		public void SetCurrentUser(IPrincipal usr) {
-			lock (this)
+			lock (Sync)
 			{
 #if PARANOID
 						if(Paranoid.Provider.IsSpecialUser(usr)) {
@@ -113,7 +113,7 @@ namespace Qorpent.Security {
 
 		private bool IsWeb() {
 			if (null == _isweb) {
-				lock (this) {
+				lock (Sync) {
 					_isweb = EnvironmentInfo.IsWeb;
 					if (null != Application) {
 						_isweb = Application.IsWeb;

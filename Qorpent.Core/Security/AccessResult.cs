@@ -90,7 +90,7 @@ namespace Qorpent.Security {
 		/// <returns> </returns>
 		public static implicit operator AccessResult(string quickDescriptor) {
 			if (quickDescriptor == null) {
-				throw new ArgumentNullException("quickDescriptor");
+				return new AccessResult {ResultType = AccessResultType.NotDefined, Description = "null descriptor"};
 			}
 			var result = new AccessResult();
 			if (quickDescriptor.StartsWith("Allow")) {

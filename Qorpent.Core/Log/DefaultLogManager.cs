@@ -49,7 +49,7 @@ namespace Qorpent.Log {
 		[Inject] public IList<ILogger> Loggers {
 			get {
 				if (null == _loggers) {
-					lock (this) {
+					lock (Sync) {
 						//тут нельзя использовать напрямую свойство Container, так как LogManager -
 						//инфраструктурный сервис с созависимостями на время загрузки
 						_loggers = new List<ILogger>();
@@ -61,7 +61,7 @@ namespace Qorpent.Log {
 				return _loggers;
 			}
 			set {
-				lock (this) {
+				lock (Sync) {
 					_loggers = value;
 					if (null != _loggers) {}
 				}
@@ -119,7 +119,7 @@ namespace Qorpent.Log {
 		/// <param name="host"> </param>
 		/// <returns> </returns>
 		public IUserLog GetLog(string context, object host) {
-			lock (this) {
+			lock (Sync) {
 				var usableloggers = Loggers.Where(x => x.IsApplyable(context));
 				if (usableloggers.Any()) {
 					return new LoggerBasedUserLog(usableloggers.ToArray(), this, (context ?? "NONAME")) {HostObject = host};

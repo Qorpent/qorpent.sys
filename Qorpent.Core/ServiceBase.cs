@@ -135,8 +135,16 @@ namespace Qorpent {
 		/// 	Реализует интерфейс <see cref="IDisposable" />, по умолчанию вызывает <see cref="IContainer.Release" />, относительно
 		/// 	<see cref="SourceContainer" />
 		/// </summary>
-		public virtual void Dispose() {
-			if (null != SourceContainer) {
+		public void Dispose() {
+			Dispose(true);
+		}
+		/// <summary>
+		/// CA1063 recomendation match
+		/// </summary>
+		/// <param name="full"></param>
+		protected virtual void Dispose(bool full) {
+			if (null != SourceContainer)
+			{
 				SourceContainer.Release(this);
 			}
 		}
@@ -149,7 +157,7 @@ namespace Qorpent {
 		/// </summary>
 		public IUserLog Log {
 			get {
-				lock (this) {
+				lock (Sync) {
 					if (null == _log) {
 						var name = GetType().FullName + ";" + GetType().Assembly.GetName().Name;
 						var suffix = GetLoggerNameSuffix();
@@ -268,5 +276,10 @@ namespace Qorpent {
 		protected IContainer SourceContainer;
 
 		private IUserLog _log;
+
+		/// <summary>
+		///Объект для синхронизации
+		/// </summary>
+		protected object Sync = new object();
 	}
 }

@@ -50,7 +50,6 @@ namespace Qorpent.Security {
 		/// </summary>
 		[Inject] public IRoleResolver RoleResolver { get; set; }
 
-
 		/// <summary>
 		/// 	Возвращает наличие прав на определенное использование объекта
 		/// </summary>
@@ -64,7 +63,7 @@ namespace Qorpent.Security {
 			if (target == null) {
 				throw new ArgumentNullException("target");
 			}
-			lock (this) {
+			lock (Sync) {
 				Log.Debug("start acl");
 				try {
 					if (null == SubProviders) {

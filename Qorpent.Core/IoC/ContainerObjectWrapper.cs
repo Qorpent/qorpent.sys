@@ -63,8 +63,17 @@ namespace Qorpent.IoC {
 		/// 	Frees object to container
 		/// </summary>
 		public void Dispose() {
+			Dispose(true);
+		}
+		/// <summary>
+		/// MS recomendation
+		/// </summary>
+		/// <param name="all"></param>
+		protected virtual void Dispose(bool all) {
 			Container.Release(Object);
 		}
+
+		
 
 		/// <summary>
 		/// 	wrapped container
