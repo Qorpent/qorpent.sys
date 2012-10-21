@@ -46,8 +46,9 @@ namespace Qorpent.Mvc {
 			DirectRole = ActionAttribute.GetRole(action);
 			Help = ActionAttribute.GetHelp(action);
 			RoleContext = ActionAttribute.GetRoleContext(action);
-			if (action is IContextualAction) {
-				((IContextualAction) action).SetDescriptor(this);
+			var contextualAction = action as IContextualAction;
+			if (contextualAction != null) {
+				contextualAction.SetDescriptor(this);
 			}
 		}
 
@@ -87,8 +88,9 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		[IgnoreSerialize] public override DateTime LastModified {
 			get {
-				if (Action is INotModifiedStateProvider) {
-					return ((INotModifiedStateProvider) Action).LastModified;
+				var notModifiedStateProvider = Action as INotModifiedStateProvider;
+				if (notModifiedStateProvider != null) {
+					return notModifiedStateProvider.LastModified;
 				}
 				return new DateTime();
 			}
@@ -110,8 +112,9 @@ namespace Qorpent.Mvc {
 				if (null == Action) {
 					return false;
 				}
-				if (Action is INotModifiedStateProvider) {
-					return ((INotModifiedStateProvider) Action).SupportNotModifiedState;
+				var notModifiedStateProvider = Action as INotModifiedStateProvider;
+				if (notModifiedStateProvider != null) {
+					return notModifiedStateProvider.SupportNotModifiedState;
 				}
 				return false;
 			}

@@ -44,7 +44,7 @@ namespace Qorpent.Mvc.QView {
 		/// 	При старте вызывает конструктор статических ресурсов
 		/// </summary>
 		public QViewBase() {
-			_resources = _getResources();
+			Resources = _getResources();
 			lock (_getResourceLock()) {
 				if (!_getResourceLoaded()) {
 					loadFromResourceFiles();
@@ -149,12 +149,12 @@ namespace Qorpent.Mvc.QView {
 			lang = lang.Split('-')[0].ToLower();
 
 			var key = lang + "_" + name;
-			if (_resources.ContainsKey(key)) {
-				return _resources[key];
+			if (Resources.ContainsKey(key)) {
+				return Resources[key];
 			}
 			key = "default_" + name;
-			if (_resources.ContainsKey(key)) {
-				return _resources[key];
+			if (Resources.ContainsKey(key)) {
+				return Resources[key];
 			}
 
 			if (null != ViewContext.ParentView) {
@@ -230,9 +230,9 @@ namespace Qorpent.Mvc.QView {
 		/// <param name="value"> </param>
 		protected void addResource(string name, string lang, string value) {
 			var name_ = lang.ToLower() + "_" + name;
-			_resources[name_] = value;
+			Resources[name_] = value;
 			if (!_resourcenames.Contains(name)) {
-				_resources["default_" + name] = value;
+				Resources["default_" + name] = value;
 				_resourcenames.Add(name);
 			}
 		}

@@ -91,11 +91,11 @@ namespace Qorpent.Log {
 				for (var i = 0; i < 100; i++) {
 					try {
 						wr = new StreamWriter(Path.Combine(EnvironmentInfo.RootDirectory, "failsafelog" + i + ".txt"), true, Encoding.UTF8);
-						if (null != wr) {
-							break;
-						}
+						break;
 					}
-					catch {}
+// ReSharper disable EmptyGeneralCatchClause
+					catch (Exception) {}
+// ReSharper restore EmptyGeneralCatchClause
 				}
 				if (null == wr) {
 					var tmpfile = Path.GetTempFileName() + ".failsafelog." +
@@ -121,12 +121,11 @@ namespace Qorpent.Log {
 		public IUserLog GetLog(string context, object host) {
 			lock (Sync) {
 				var usableloggers = Loggers.Where(x => x.IsApplyable(context));
-				if (usableloggers.Any()) {
-					return new LoggerBasedUserLog(usableloggers.ToArray(), this, (context ?? "NONAME")) {HostObject = host};
+				var enumerable = usableloggers as ILogger[] ?? usableloggers.ToArray();
+				if (enumerable.Any()) {
+					return new LoggerBasedUserLog(enumerable.ToArray(), this, (context ?? "NONAME")) {HostObject = host};
 				}
-				else {
-					return new StubUserLog {HostObject = host};
-				}
+				return new StubUserLog {HostObject = host};
 			}
 		}
 
@@ -157,8 +156,11 @@ namespace Qorpent.Log {
 		#region Nested type: LogManagerContainerExtension
 
 		private class LogManagerContainerExtension : IContainerExtension {
-			public LogManagerContainerExtension(DefaultLogManager target) {
-				manager = target;
+			public LogManagerContainerExtension(DefaultLogManager target) : this(target, 0) {}
+
+			private LogManagerContainerExtension(DefaultLogManager target, int order) {
+				_manager = target;
+				Order = order;
 			}
 
 
@@ -171,16 +173,16 @@ namespace Qorpent.Log {
 			public void Process(ContainerContext context) {
 				if (context.Component.ServiceType == typeof (ILogger)) {
 					if (context.Component.Lifestyle == Lifestyle.Extension && null != context.Component.Implementation) {
-						manager.Loggers.Add((ILogger) context.Component.Implementation);
+						_manager.Loggers.Add((ILogger) context.Component.Implementation);
 					}
 					else if (!string.IsNullOrEmpty(context.Component.Name)) {
-						manager.Loggers.Add(Container.Get<ILogger>(context.Component.Name));
+						_manager.Loggers.Add(Container.Get<ILogger>(context.Component.Name));
 					}
 				}
 			}
 
-			public int Order { get; private set; }
-			private readonly DefaultLogManager manager;
+			public int Order { get; set; }
+			private readonly DefaultLogManager _manager;
 		}
 
 		#endregion

@@ -34,7 +34,7 @@ namespace Qorpent.Security {
 	/// 	Использует <see cref="IWithRole" /> и <see cref="IRoleResolver" /> для определения соответвия
 	/// 	Поддерживается
 	/// </summary>
-	[ContainerComponent(Lifestyle.Transient,ServiceType = typeof(IAccessProviderExtension))]
+	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (IAccessProviderExtension))]
 	public class RoleBasedAccessProviderForIWithRole : IAccessProviderExtension {
 		/// <summary>
 		/// </summary>
@@ -54,8 +54,9 @@ namespace Qorpent.Security {
 		public AccessResult IsAccessible(object target, AccessRole accessRole, IPrincipal principal, IRoleResolver resolver) {
 			var role = ((IWithRole) target).Role.Trim();
 			string customcontext = null;
-			if(target is IWithRoleContext) {
-				customcontext = ((IWithRoleContext) target).RoleContext;
+			var withRoleContext = target as IWithRoleContext;
+			if (withRoleContext != null) {
+				customcontext = withRoleContext.RoleContext;
 			}
 			if (string.IsNullOrEmpty(role)) {
 				return "no role defined";
@@ -63,7 +64,7 @@ namespace Qorpent.Security {
 			if (role == "DEFAULT") {
 				return "Allow DEFAULT role is always true";
 			}
-			var adapter = new RoleResolverTermAdapter(resolver, principal,customcontext);
+			var adapter = new RoleResolverTermAdapter(resolver, principal, customcontext);
 			if ((role.Contains("&") || role.Contains("!") || role.Contains("|")) && !(role.Contains(","))) {
 				if (null == FormulaEvaluator) {
 					throw new Exception(
@@ -72,20 +73,20 @@ namespace Qorpent.Security {
 				return FormulaEvaluator.Eval(role, adapter);
 			}
 			var roles = role.Split(',', ';', '/');
-			foreach (var r in roles) {
-				if (r == "DEFAULT") {
+			foreach (var roleInList in roles) {
+				if (roleInList == "DEFAULT") {
 					return "Allow разрешено для роли DEFAULT";
 				}
-				var r_ = r;
-				if (r_.StartsWith("!")) {
+				var correctedRole = roleInList;
+				if (correctedRole.StartsWith("!")) {
 					//special deny role, must be first
-					r_ = "exact___" + r_.Substring(1);
-					if (adapter.Get(r_)) {
-						return "Deny явно назначен запрет на " + r_;
+					correctedRole = "exact___" + correctedRole.Substring(1);
+					if (adapter.Get(correctedRole)) {
+						return "Deny явно назначен запрет на " + correctedRole;
 					}
 				}
-				else if (adapter.Get(r_)) {
-					return "Allow соответствие роли " + r_;
+				else if (adapter.Get(correctedRole)) {
+					return "Allow соответствие роли " + correctedRole;
 				}
 			}
 			return "Deny нет соответствия";

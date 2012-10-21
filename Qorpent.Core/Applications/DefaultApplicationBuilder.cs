@@ -25,7 +25,6 @@
 
 using System;
 using System.Configuration;
-using System.IO;
 using Qorpent.IO;
 using Qorpent.IoC;
 
@@ -33,8 +32,7 @@ namespace Qorpent.Applications {
 	/// <summary>
 	/// 	generates default application instance for current process
 	/// </summary>
-	public class DefaultApplicationBuilder
-	{
+	public class DefaultApplicationBuilder {
 #if PARANOID
 		static DefaultApplicationBuilder() {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
@@ -52,14 +50,14 @@ namespace Qorpent.Applications {
 			var application = (IApplication) Activator.CreateInstance(applicationtype);
 			application.Container = ContainerFactory.CreateDefault();
 			var files = application.Container.Get<IFileNameResolver>();
-			if(null!=files){		
-			ContainerFactory.DumpContainer(application.Container, application.Container.Get<IFileNameResolver>().Resolve(FileSearchQuery.Leveled("~/.tmp/container.dump"))); 
-
+			if (null != files) {
+				ContainerFactory.DumpContainer(application.Container,
+				                               application.Container.Get<IFileNameResolver>().Resolve(
+					                               FileSearchQuery.Leveled("~/.tmp/container.dump")));
 			}
 			return application;
 		}
 
-		
 
 		/// <summary>
 		/// 	Gets the type of the container.

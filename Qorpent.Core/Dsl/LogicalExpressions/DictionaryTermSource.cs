@@ -36,7 +36,7 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// </summary>
 		/// <param name="dict"> </param>
 		public DictionaryTermSource(IDictionary<string, string> dict) {
-			all = dict;
+			_all = dict;
 		}
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// <param name="name"> </param>
 		/// <returns> </returns>
 		public override string Value(string name) {
-			return all.ContainsKey(name) ? all[name] : "";
+			return _all.ContainsKey(name) ? _all[name] : "";
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// </summary>
 		/// <returns> </returns>
 		public override IDictionary<string, string> GetAll() {
-			return all;
+			return _all;
 		}
 
 		/// <summary>
@@ -62,14 +62,13 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// <param name="name"> </param>
 		/// <returns> </returns>
 		public override bool Get(string name) {
-			return all.ContainsKey(name) &&
+			return _all.ContainsKey(name) &&
 #if !SQL2008
-			       !string.IsNullOrWhiteSpace(all[name])
+			       !string.IsNullOrWhiteSpace(_all[name])
 #else
 						!string.IsNullOrEmpty(all[name])
 #endif
-			       && all[name] != "0" && all[name].ToUpperInvariant() != "FALSE";
-			;
+			       && _all[name] != "0" && _all[name].ToUpperInvariant() != "FALSE";
 		}
 
 		/// <summary>
@@ -79,9 +78,9 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// <param name="value"> </param>
 		/// <returns> </returns>
 		public override bool Equal(string name, string value) {
-			return all.ContainsKey(name) && Equals(value, all[name]);
+			return _all.ContainsKey(name) && Equals(value, _all[name]);
 		}
 
-		private readonly IDictionary<string, string> all;
+		private readonly IDictionary<string, string> _all;
 	}
 }

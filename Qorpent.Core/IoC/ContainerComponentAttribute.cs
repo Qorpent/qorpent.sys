@@ -33,7 +33,10 @@ namespace Qorpent.IoC {
 	public class ContainerComponentAttribute : ContainerAttribute {
 		/// <summary>
 		/// </summary>
+// ReSharper disable RedundantArgumentDefaultValue
 		public ContainerComponentAttribute() : this(null, Lifestyle.Default, "", -1) {}
+
+// ReSharper restore RedundantArgumentDefaultValue
 
 		/// <summary>
 		/// 	Configures component with default service type (first not-IConrainerBound interface) with no name and default Priority/Lifestyle
@@ -73,7 +76,7 @@ namespace Qorpent.IoC {
 		public string Role { get; set; }
 
 		/// <summary>
-		/// Role checking context
+		/// 	Role checking context
 		/// </summary>
 		public string RoleContext { get; set; }
 	}

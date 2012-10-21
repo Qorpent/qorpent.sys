@@ -23,7 +23,7 @@
 
 #endregion
 
-namespace Qorpent.Utils {
+namespace Qorpent.Dsl.SmartXslt {
 	/// <summary>
 	/// 	Type of X
 	/// </summary>

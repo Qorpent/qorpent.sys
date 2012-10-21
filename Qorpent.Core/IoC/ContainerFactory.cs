@@ -25,6 +25,8 @@
 
 using System;
 using System.Configuration;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Qorpent.Applications;
@@ -43,8 +45,7 @@ namespace Qorpent.IoC {
 	///	среды для тестирования
 	///</remarks>
 	///<source>Qorpent/Qorpent.Core/IoC/ContainerFactory.cs</source>
-	public static class ContainerFactory
-	{
+	public static class ContainerFactory {
 #if PARANOID
 		static ContainerFactory() {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
@@ -57,7 +58,7 @@ namespace Qorpent.IoC {
 
 		/// <summary>
 		/// </summary>
-		private static readonly object sync = new object();
+		private static readonly object Sync = new object();
 
 		/// <summary>
 		/// 	Gets the registry.
@@ -67,7 +68,7 @@ namespace Qorpent.IoC {
 		public static WellKnownService[] WellKnownRegistry {
 			get {
 				if (null == _registry) {
-					lock (sync) {
+					lock (Sync) {
 						_registry =
 							new WellKnownService[]
 								{
@@ -84,7 +85,7 @@ namespace Qorpent.IoC {
 									new WellKnownService<Assembly>("Qorpent.Bxl"),
 									new WellKnownService<Assembly>("Qorpent.Dsl"),
 									new WellKnownService<Assembly>("Qorpent.Mvc"),
-									new WellKnownService<Assembly>("Qorpent.Security"),
+									new WellKnownService<Assembly>("Qorpent.Security")
 								};
 					}
 				}
@@ -168,16 +169,18 @@ namespace Qorpent.IoC {
 			}
 			return result;
 		}
-			
+
 		/// <summary>
-		/// DUMP all cantainer component info to file
+		/// 	DUMP all cantainer component info to file
 		/// </summary>
-		/// <param name="container"></param>
-		/// <param name="filename"></param>
-		public static void DumpContainer(IContainer container, string filename =  "./container.dump") {
-			var file = System.IO.Path.GetFullPath(filename);
-			System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(file));
-			using(var s = new System.IO.StreamWriter(file)) {
+		/// <param name="container"> </param>
+		/// <param name="filename"> </param>
+		public static void DumpContainer(IContainer container, string filename = "./container.dump") {
+			var file = Path.GetFullPath(filename);
+			var dir = Path.GetDirectoryName(file);
+			Debug.Assert(!string.IsNullOrWhiteSpace(dir), "dir != null");
+			Directory.CreateDirectory(dir);
+			using (var s = new StreamWriter(file)) {
 				foreach (var componentDefinition in container.GetComponents()) {
 					s.Write(componentDefinition);
 					s.WriteLine();
@@ -205,14 +208,15 @@ namespace Qorpent.IoC {
 			foreach (var c in components) {
 				foreach (var a in c.a) {
 					var component = container.EmptyComponent();
-					var stype = a.ServiceType;
-					if (null == stype) {
-						stype = c.t.GetInterfaces().Except(c.t.BaseType.GetInterfaces()).FirstOrDefault(x => x != typeof (IContainerBound));
+					if (c.t != null && c.t.BaseType != null) {
+						var stype = (a.ServiceType ??
+// ReSharper disable PossibleNullReferenceException
+						             c.t.GetInterfaces().Except(c.t.BaseType.GetInterfaces()).FirstOrDefault(
+							             x => x != typeof (IContainerBound))) ??
+// ReSharper restore PossibleNullReferenceException
+						            c.t;
+						component.ServiceType = stype;
 					}
-					if (null == stype) {
-						stype = c.t;
-					}
-					component.ServiceType = stype;
 					component.ImplementationType = c.t;
 					component.Lifestyle = a.Lifestyle;
 					if (a.Lifestyle == Lifestyle.Default) {
@@ -248,13 +252,15 @@ namespace Qorpent.IoC {
 						result = Activator.CreateInstance(wktype) as T;
 					}
 				}
-				catch {}
+// ReSharper disable EmptyGeneralCatchClause
+				catch (Exception) {}
+// ReSharper restore EmptyGeneralCatchClause
 				if (null == result) {
 					if (null != record.DefaultType) {
 						result = Activator.CreateInstance(record.DefaultType) as T;
 					}
 				}
-				if (null != result && result is IApplicationBound && null != context) {
+				if (result is IApplicationBound && null != context) {
 					((IApplicationBound) result).SetApplication(context);
 				}
 				return result;
@@ -290,7 +296,9 @@ namespace Qorpent.IoC {
 				try {
 					assembly = Assembly.Load(plugAssembly.WellKnownTypeName);
 				}
-				catch {
+// ReSharper disable EmptyGeneralCatchClause
+				catch (Exception) {
+// ReSharper restore EmptyGeneralCatchClause
 					//No means NO
 				}
 				if (null != assembly) {

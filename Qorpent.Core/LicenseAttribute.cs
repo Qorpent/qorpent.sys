@@ -26,7 +26,6 @@
 using System;
 
 namespace Qorpent {
-
 	/// <summary>
 	/// 	Маркер лицензии сборки
 	/// </summary>

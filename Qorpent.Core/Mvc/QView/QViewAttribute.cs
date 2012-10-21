@@ -59,7 +59,7 @@ namespace Qorpent.Mvc.QView {
 
 
 		/// <summary>
-		/// Имя файла на диске, с которого ведется компиляция
+		/// 	Имя файла на диске, с которого ведется компиляция
 		/// </summary>
 		public string Filename { get; set; }
 

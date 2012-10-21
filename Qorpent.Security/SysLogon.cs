@@ -19,7 +19,7 @@ namespace Qorpent.Security
 		/// <param name="password"></param>
 		/// <param name="logontype"></param>
 		/// <returns></returns>
-		public bool Logon(string username, string password, int logontype = WinLogonType.LOGON32_LOGON_NETWORK)
+		public bool Logon(string username, string password, int logontype = WinLogonType.Logon32LogonNetwork)
 		{
 			lock(this) {
 				IntPtr token = new IntPtr();
@@ -36,7 +36,7 @@ namespace Qorpent.Security
 		/// <param name="token"></param>
 		/// <param name="logontype"></param>
 		/// <returns></returns>
-		public  bool Logon(string username, string password, ref IntPtr token, int logontype = WinLogonType.LOGON32_LOGON_NETWORK) {
+		public  bool Logon(string username, string password, ref IntPtr token, int logontype = WinLogonType.Logon32LogonNetwork) {
 			lock(this) {
 #if Unix
 			throw new NotImplementedException("Not implemented for Unix now");

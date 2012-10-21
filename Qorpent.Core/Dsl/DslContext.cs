@@ -44,6 +44,7 @@ namespace Qorpent.Dsl {
 		public DslContext() {
 			GeneratedNativeCode = new Dictionary<string, string>();
 			Messages = new List<DslMessage>();
+			Parameters = new Dictionary<string, object>();
 		}
 
 		/// <summary>
@@ -127,10 +128,7 @@ namespace Qorpent.Dsl {
 		/// </summary>
 		/// <returns> </returns>
 		public Assembly LoadAssembly() {
-			if (null == _assembly) {
-				_assembly = Assembly.Load(File.ReadAllBytes(GetProductionFileName()));
-			}
-			return _assembly;
+			return _assembly ?? (_assembly = Assembly.Load(File.ReadAllBytes(GetProductionFileName())));
 		}
 
 		/// <summary>

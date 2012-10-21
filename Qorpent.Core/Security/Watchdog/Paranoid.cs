@@ -1,4 +1,30 @@
-﻿using System;
+﻿#region LICENSE
+
+// Copyright 2007-2012 Comdiv (F. Sadykov) - http://code.google.com/u/fagim.sadykov/
+// Supported by Media Technology LTD 
+//  
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//  
+// http://www.apache.org/licenses/LICENSE-2.0
+//  
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// 
+// Solution: Qorpent
+// Original file : Paranoid.cs
+// Project: Qorpent.Core
+// 
+// ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
+
+#endregion
+
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -6,36 +32,47 @@ using System.Security.Principal;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Qorpent.Security.Watchdog
-{
+namespace Qorpent.Security.Watchdog {
 	/// <summary>
-	/// Загружает систему в режиме параноидального использования
+	/// 	Загружает систему в режиме параноидального использования
 	/// </summary>
-	public  static partial class Paranoid {
+	public static partial class Paranoid {
+// ReSharper disable InconsistentNaming
 		private static readonly IParanoidProvider _provider;
+// ReSharper restore InconsistentNaming
+
+		private static readonly object Sync = new object();
+
+		static Paranoid() {
+			_provider = GetProvider();
+		}
+
 		/// <summary>
-		/// Provider of paranoid mode
+		/// 	Provider of paranoid mode
 		/// </summary>
-		public static IParanoidProvider Provider {get { return _provider; }}
-		private static object sync = new object();
-		
+		public static IParanoidProvider Provider {
+			get { return _provider; }
+		}
+
 		private static IParanoidProvider GetProvider() {
-			lock(sync) {
-				var qorpent_security_dll_filename = Path.Combine(EnvironmentInfo.BinDirectory, "Qorpent.Security.dll");
-				var qorpent_security_dll_syg_filename = qorpent_security_dll_filename + ".sygnature";
-				var passwd_filename = Path.Combine(EnvironmentInfo.RootDirectory, ".passwd");
-				var passwd_syg_filename = passwd_filename + ".sygnature";
-				___checkout_files_existence(qorpent_security_dll_filename, qorpent_security_dll_syg_filename, passwd_filename, passwd_syg_filename);
-				var dll_bytes = __verify_sign(qorpent_security_dll_filename, qorpent_security_dll_syg_filename, developer_key, ParanoidState.InvalidAssemblySygFormat, ParanoidState.InvalidAssemblySyg);
-				var passwd_bytes = __verify_sign(passwd_filename, passwd_syg_filename, user_key, ParanoidState.InvalidPasswdSygFormat, ParanoidState.InvalidPasswdSyg);
-				var provider_type = ___get_provider_type(dll_bytes);
-				var provider = __load_provider(passwd_bytes, provider_type);
-				__check_environment(provider);
+			lock (Sync) {
+				var qorpentSecurityDllFilename = Path.Combine(EnvironmentInfo.BinDirectory, "Qorpent.Security.dll");
+				var qorpentSecurityDllSygFilename = qorpentSecurityDllFilename + ".sygnature";
+				var passwdFilename = Path.Combine(EnvironmentInfo.RootDirectory, ".passwd");
+				var passwdSygFilename = passwdFilename + ".sygnature";
+				CheckoutFilesExistence(qorpentSecurityDllFilename, qorpentSecurityDllSygFilename, passwdFilename, passwdSygFilename);
+				var dllBytes = VerifySign(qorpentSecurityDllFilename, qorpentSecurityDllSygFilename, DeveloperKey,
+				                          ParanoidState.InvalidAssemblySygFormat, ParanoidState.InvalidAssemblySyg);
+				var passwdBytes = VerifySign(passwdFilename, passwdSygFilename, UserKey, ParanoidState.InvalidPasswdSygFormat,
+				                             ParanoidState.InvalidPasswdSyg);
+				var providerType = GetProviderType(dllBytes);
+				var provider = LoadProvider(passwdBytes, providerType);
+				CheckEnvironment(provider);
 				return provider;
 			}
 		}
 
-		private static void __check_environment(IParanoidProvider provider) {
+		private static void CheckEnvironment(IParanoidProvider provider) {
 			if (!EnvironmentInfo.IsWeb) {
 				var domain = Environment.UserDomainName;
 				if (domain.ToUpper() == "." || domain == "" || domain.ToUpper() == Environment.MachineName) {
@@ -46,6 +83,7 @@ namespace Qorpent.Security.Watchdog
 					if (Environment.UserInteractive) {
 						Console.Write("Username: ");
 						var username = Console.ReadLine();
+						Debug.Assert(!string.IsNullOrWhiteSpace(username), "username != null");
 						var password = "";
 						Console.Write("Password:");
 						while (true) {
@@ -59,6 +97,8 @@ namespace Qorpent.Security.Watchdog
 							Console.Write(" ");
 							Console.Write("\x8");
 						}
+
+
 						principal = new GenericPrincipal(new GenericIdentity(username), null);
 						if (!(provider.Authenticate(principal, password) && provider.IsInRole(principal, "ADMIN"))) {
 							throw new ParanoidException(ParanoidState.NoSuUser);
@@ -71,17 +111,17 @@ namespace Qorpent.Security.Watchdog
 			}
 		}
 
-		private static IParanoidProvider __load_provider(byte[] passwd_bytes, Type provider_type) {
-			IParanoidProvider provider = null;
-			XElement xpasswd = null;
+		private static IParanoidProvider LoadProvider(byte[] passwdBytes, Type providerType) {
+			IParanoidProvider provider;
+			XElement xpasswd;
 			try {
-				xpasswd = XElement.Parse(Encoding.UTF8.GetString(passwd_bytes));
+				xpasswd = XElement.Parse(Encoding.UTF8.GetString(passwdBytes));
 			}
 			catch {
 				throw new ParanoidException(ParanoidState.InvalidPasswdFormat);
 			}
 			try {
-				provider = (IParanoidProvider) Activator.CreateInstance(provider_type, xpasswd);
+				provider = (IParanoidProvider) Activator.CreateInstance(providerType, xpasswd);
 			}
 			catch {
 				throw new ParanoidException(ParanoidState.CannotCreateProvider);
@@ -92,42 +132,39 @@ namespace Qorpent.Security.Watchdog
 			return provider;
 		}
 
-		static Paranoid() {
-			_provider = GetProvider();
-		}
-
-		private static Type ___get_provider_type(byte[] dll) {
-			Assembly qorpent_security_dll = null;
+		private static Type GetProviderType(byte[] dll) {
+			Assembly qorpentSecurityDll;
 			try {
-				qorpent_security_dll = Assembly.Load(dll);
+				qorpentSecurityDll = Assembly.Load(dll);
 			}
 			catch {
-				throw new ParanoidException(ParanoidState.InvalidDLL);
+				throw new ParanoidException(ParanoidState.InvalidDll);
 			}
 
-			Type provider_type = null;
+			Type providerType;
 			try {
-				provider_type = qorpent_security_dll.GetType("Qorpent.Security.Watchdog.ParanoidProvider", true, false);
+				providerType = qorpentSecurityDll.GetType("Qorpent.Security.Watchdog.ParanoidProvider", true, false);
 			}
 			catch {
-				throw new ParanoidException(ParanoidState.InvalidDLLContent);
+				throw new ParanoidException(ParanoidState.InvalidDllContent);
 			}
 
-			if (!typeof (IParanoidProvider).IsAssignableFrom(provider_type)) {
+			if (!typeof (IParanoidProvider).IsAssignableFrom(providerType)) {
 				throw new ParanoidException(ParanoidState.InvalidProviderType);
 			}
-			return provider_type;
+			return providerType;
 		}
 
-		private static byte[] __verify_sign(string secure_file, string sygnature_file, string key, ParanoidState invalidFormat, ParanoidState invalidSyg) {
-			var content = File.ReadAllBytes(secure_file);
-			var file_hash = SHA1.Create().ComputeHash(content);
-			var sygnature = Convert.FromBase64String(File.ReadAllText(sygnature_file));
-			var sygnature_checker = DSA.Create();
-			sygnature_checker.FromXmlString(key);
+		private static byte[] VerifySign(string secureFile, string sygnatureFile, string key, ParanoidState invalidFormat,
+		                                 ParanoidState invalidSyg) {
+			var content = File.ReadAllBytes(secureFile);
+			var fileHash = SHA1.Create().ComputeHash(content);
+			var sygnature = Convert.FromBase64String(File.ReadAllText(sygnatureFile));
+			var sygnatureChecker = DSA.Create();
+			sygnatureChecker.FromXmlString(key);
 			bool verified;
 			try {
-				verified = sygnature_checker.VerifySignature(file_hash,sygnature);
+				verified = sygnatureChecker.VerifySignature(fileHash, sygnature);
 			}
 			catch {
 				throw new ParanoidException(invalidFormat);
@@ -138,19 +175,19 @@ namespace Qorpent.Security.Watchdog
 			return content;
 		}
 
-		private static void ___checkout_files_existence(string qorpent_security_dll_filename,
-		                                                string qorpent_security_dll_syg_filename, string passwd_filename, string passwd_syg_filename) {
-			
-			if (!File.Exists(qorpent_security_dll_filename)) {
+		private static void CheckoutFilesExistence(string qorpentSecurityDllFilename,
+		                                           string qorpentSecurityDllSygFilename, string passwdFilename,
+		                                           string passwdSygFilename) {
+			if (!File.Exists(qorpentSecurityDllFilename)) {
 				throw new ParanoidException(ParanoidState.NoAssembly);
 			}
-			if (!File.Exists(qorpent_security_dll_syg_filename)) {
+			if (!File.Exists(qorpentSecurityDllSygFilename)) {
 				throw new ParanoidException(ParanoidState.NoAssemblySyg);
 			}
-			if (!File.Exists(passwd_filename)) {
+			if (!File.Exists(passwdFilename)) {
 				throw new ParanoidException(ParanoidState.NoPasswd);
 			}
-			if (!File.Exists(passwd_syg_filename)) {
+			if (!File.Exists(passwdSygFilename)) {
 				throw new ParanoidException(ParanoidState.NoPasswdSyg);
 			}
 		}

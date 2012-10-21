@@ -42,7 +42,7 @@ namespace Qorpent.Mvc.Remoting {
 		/// <param name="query"> </param>
 		/// <returns> </returns>
 		protected WebRequest CreateWebRequest(MvcQuery query) {
-			var resulturl = url + "/" + query.Action.Replace(".", "/") + "." + query.RenderName.ToLower() + ".qweb";
+			var resulturl = Url + "/" + query.Action.Replace(".", "/") + "." + query.RenderName.ToLower() + ".qweb";
 			if (null != query.Parameters) {
 				var sb = new StringBuilder();
 				sb.Append("?");
@@ -85,14 +85,14 @@ namespace Qorpent.Mvc.Remoting {
 		/// </summary>
 		/// <param name="query"> </param>
 		/// <returns> </returns>
-		protected override MvcResult internalCall(MvcQuery query) {
-			var u = url;
+		protected override MvcResult InternalCall(MvcQuery query) {
+			var u = Url;
 			if (!u.EndsWith("/")) {
 				u += "/";
 			}
 			var req = CreateWebRequest(query);
-			if (null != credentials) {
-				req.Credentials = credentials;
+			if (null != Credentials) {
+				req.Credentials = Credentials;
 			}
 			else {
 				req.UseDefaultCredentials = true;

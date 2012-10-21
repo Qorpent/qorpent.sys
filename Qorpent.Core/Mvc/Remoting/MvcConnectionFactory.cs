@@ -40,12 +40,7 @@ namespace Qorpent.Mvc.Remoting {
 		/// <returns> </returns>
 		public IMvcConnection Create(string url, ICredentials credentials = null) {
 			IMvcConnection result;
-			if (url == "(local)") {
-				result = ResolveService<IMvcConnection>("local.mvc.connection");
-			}
-			else {
-				result = ResolveService<IMvcConnection>("remote.mvc.connection");
-			}
+			result = ResolveService<IMvcConnection>(url == "(local)" ? "local.mvc.connection" : "remote.mvc.connection");
 			result.SetUrl(url);
 			result.SetCredentials(credentials);
 			return result;

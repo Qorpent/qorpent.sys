@@ -25,7 +25,7 @@
 
 using System;
 
-namespace Qorpent.Utils {
+namespace Qorpent.Dsl.SmartXslt {
 	/// <summary>
 	/// 	Describes extension or parameter from Xslt
 	/// </summary>
@@ -93,15 +93,17 @@ namespace Qorpent.Utils {
 			if (null == extension) {
 				throw new ArgumentException("extension");
 			}
-			var _name = name;
-			if (string.IsNullOrEmpty(name)) {
-				_name = extension.GetType().Name.ToLower();
+
+			var correctedName = name;
+
+			if (string.IsNullOrEmpty(correctedName)) {
+				correctedName = extension.GetType().Name.ToLower();
 			}
-			var _ns = ns;
-			if (string.IsNullOrEmpty(ns)) {
-				_ns = extension.GetType().FullName;
+			var correctedNs = ns;
+			if (string.IsNullOrEmpty(correctedNs)) {
+				correctedNs = extension.GetType().FullName;
 			}
-			return new XsltExtensionDefinition(XsltExtenstionType.Extension, _ns, _name, extension);
+			return new XsltExtensionDefinition(XsltExtenstionType.Extension, correctedNs, correctedName, extension);
 		}
 
 		/// <summary>
@@ -116,8 +118,8 @@ namespace Qorpent.Utils {
 			if (string.IsNullOrEmpty(name)) {
 				throw new ArgumentException("name is null or empty");
 			}
-			var _value = value ?? "";
-			return new XsltExtensionDefinition(XsltExtenstionType.Parameter, "", name, _value);
+			var correctedValue = value ?? "";
+			return new XsltExtensionDefinition(XsltExtenstionType.Parameter, "", name, correctedValue);
 		}
 
 		/// <summary>
@@ -132,8 +134,8 @@ namespace Qorpent.Utils {
 			if (string.IsNullOrEmpty(name)) {
 				throw new ArgumentException("name is null or empty");
 			}
-			var _value = value ?? "";
-			return new XsltExtensionDefinition(XsltExtenstionType.ParameterSelect, "", name, _value);
+			var correctedValue = value ?? "";
+			return new XsltExtensionDefinition(XsltExtenstionType.ParameterSelect, "", name, correctedValue);
 		}
 
 

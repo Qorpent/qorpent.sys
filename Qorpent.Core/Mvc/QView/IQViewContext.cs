@@ -82,22 +82,22 @@ namespace Qorpent.Mvc.QView {
 		IQView ParentView { get; set; }
 
 		/// <summary>
-		/// Для лейаутов - реальный исходящий контекст
+		/// 	Для лейаутов - реальный исходящий контекст
 		/// </summary>
 		TextWriter RealOutPut { get; set; }
 
 		/// <summary>
-		/// Признк нахождения в контексте Layout
+		/// 	Признк нахождения в контексте Layout
 		/// </summary>
 		bool IsLayout { get; set; }
 
 		/// <summary>
-		/// Ссылка на родительский контекст для дочерних по отношению к Layout видов
+		/// 	Ссылка на родительский контекст для дочерних по отношению к Layout видов
 		/// </summary>
 		IQViewContext ParentContext { get; set; }
 
 		/// <summary>
-		/// Набор ресурсов, необходимых видам от Layout
+		/// 	Набор ресурсов, необходимых видам от Layout
 		/// </summary>
 		IList<string> Requirements { get; }
 
@@ -129,10 +129,11 @@ namespace Qorpent.Mvc.QView {
 		/// </summary>
 		/// <returns> </returns>
 		IQViewContext GetNormalizedContext();
+
 		/// <summary>
-		/// Регистриует потребность дочернего вида в ресурсе
+		/// 	Регистриует потребность дочернего вида в ресурсе
 		/// </summary>
-		/// <param name="resourceName"></param>
+		/// <param name="resourceName"> </param>
 		void Require(string resourceName);
 	}
 }

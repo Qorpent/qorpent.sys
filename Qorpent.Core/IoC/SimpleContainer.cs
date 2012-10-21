@@ -67,7 +67,7 @@ namespace Qorpent.IoC {
 			lock (this) {
 				var context = new ContainerContext
 					{Operation = ContainerOperation.BeforeGet, RequestedType = type, RequestedName = name};
-				process(context);
+				Process(context);
 				object o1;
 				if (PrepareResolvedObject(context, out o1)) {
 					return o1;
@@ -82,7 +82,7 @@ namespace Qorpent.IoC {
 					}
 
 					context.Operation = ContainerOperation.AfterGet;
-					process(context);
+					Process(context);
 					return context.Object;
 				}
 
@@ -116,7 +116,7 @@ namespace Qorpent.IoC {
 		public IEnumerable All(Type type, string name = null, params object[] ctorArguments) {
 			var context = new ContainerContext
 				{Operation = ContainerOperation.BeforeAll, RequestedType = type, RequestedName = name};
-			process(context);
+			Process(context);
 			if (null != context.Object) {
 				return (IEnumerable) context.Object;
 			}
@@ -264,19 +264,19 @@ namespace Qorpent.IoC {
 			o1 = null;
 			if (null != context.ResolvedType) {
 				context.Operation = ContainerOperation.BeforeCreate;
-				process(context);
+				Process(context);
 				if (null == context.Object) {
 					context.Object = Activator.CreateInstance(context.ResolvedType);
 				}
 				if (context.Object != null) {
 					context.Operation = ContainerOperation.AfterCreate;
-					process(context);
+					Process(context);
 				}
 			}
 			//if Object fully created from facility - we do not call any creation 
 			if (null != context.Object) {
 				context.Operation = ContainerOperation.BeforeActivate;
-				process(context);
+				Process(context);
 				context.Operation = ContainerOperation.AfterGet;
 				{
 					o1 = context.Object;
@@ -286,43 +286,14 @@ namespace Qorpent.IoC {
 			return false;
 		}
 
-		private ContainerContext process(ContainerContext context) {
-			foreach (var containerExtension in getExtensions(context.Operation)) {
+		private void Process(ContainerContext context) {
+			foreach (var containerExtension in InternalGetExtensions(context.Operation)) {
 				containerExtension.Process(context);
 			}
-			return context;
 		}
 
-		private IEnumerable<IContainerExtension> getExtensions(ContainerOperation operation) {
+		private IEnumerable<IContainerExtension> InternalGetExtensions(ContainerOperation operation) {
 			return _extensions.Where(x => 0 != (x.SupportedOperations & operation)).OrderBy(x => x.Order);
-		}
-
-		/// <summary>
-		/// 	empty method - do nothing
-		/// </summary>
-		/// <param name="obj"> </param>
-		/// <param name="name"> </param>
-		public void Release(object obj, string name = null) {}
-
-		/// <summary>
-		/// 	Creates (but not register) new component definition
-		/// </summary>
-		/// <param name="lifestyle"> </param>
-		/// <param name="name"> </param>
-		/// <param name="priority"> </param>
-		/// <typeparam name="TService"> </typeparam>
-		/// <typeparam name="TImplementation"> </typeparam>
-		/// <returns> </returns>
-		public IComponentDefinition NewComponent<TService, TImplementation>(Lifestyle lifestyle = Lifestyle.Transient,
-		                                                                    string name = "", int priority = 10000)
-			where TService : class where TImplementation : class, TService, new() {
-			var result = EmptyComponent();
-			result.ServiceType = typeof (TService);
-			result.ImplementationType = typeof (TImplementation);
-			result.Lifestyle = Lifestyle.Extension;
-			result.Name = name;
-			result.Priority = priority;
-			return result;
 		}
 
 		#region Nested type: EmptyLoader
@@ -337,12 +308,9 @@ namespace Qorpent.IoC {
 			}
 
 			public IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly, bool requreManifest = false) {
-				throw new NotImplementedException();
-			}
-
-			public IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly) {
 				yield break;
 			}
+
 
 			public XElement ReadDefaultManifest() {
 				throw new NotImplementedException();

@@ -58,7 +58,7 @@ namespace Qorpent.Security {
 				exact = true;
 				name = name.Substring(8);
 			}
-			return _resolver.IsInRole(_principal, name, exact,customcontext:_customcontext);
+			return _resolver.IsInRole(_principal, name, exact, customcontext: _customcontext);
 		}
 
 		/// <summary>
@@ -87,8 +87,9 @@ namespace Qorpent.Security {
 			throw new NotSupportedException();
 		}
 
+		private readonly string _customcontext;
+
 		private readonly IPrincipal _principal;
 		private readonly IRoleResolver _resolver;
-		private string _customcontext;
 	}
 }

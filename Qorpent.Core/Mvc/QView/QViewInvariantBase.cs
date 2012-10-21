@@ -36,44 +36,39 @@ namespace Qorpent.Mvc.QView {
 	/// 	Abstract qview with invariant behavior - u have to inherit it even on main abstract base of view
 	/// </summary>
 	public abstract class QViewInvariantBase : ServiceBase, IQViewExtended {
-
-	/// <summary>
-	/// Общий код для регистратора ошибок
-	/// </summary>
-	/// <returns></returns>
-		protected override string GetLoggerNameSuffix() {
-			return "MvcQView";
-		}
 		/// <summary>
-		/// Создает вид и предоставляет ссылку на исходный файл
+		/// 	Создает вид и предоставляет ссылку на исходный файл
 		/// </summary>
-		public QViewInvariantBase() {
+		protected QViewInvariantBase() {
 			var attr =
-				this.GetType().GetCustomAttributes(typeof (QViewAttribute), true).OfType<QViewAttribute>().FirstOrDefault();
-			if(null!=attr) {
-				this.SourceFileName = attr.Filename;
-				if(!string.IsNullOrEmpty(SourceFileName)) {
-					var mydir = Path.GetDirectoryName(SourceFileName).Replace("\\", "/").ToLower();
-					mydir = Regex.Match(mydir, @"\w+/views/[\s\S]+$").Value;
-					if (mydir.StartsWith("sys") || mydir.StartsWith("usr") || mydir.StartsWith("mod")) {
-						mydir = "~/" + mydir;
+				GetType().GetCustomAttributes(typeof (QViewAttribute), true).OfType<QViewAttribute>().FirstOrDefault();
+			if (null != attr) {
+				SourceFileName = attr.Filename;
+				if (!string.IsNullOrEmpty(SourceFileName)) {
+					var directoryName = Path.GetDirectoryName(SourceFileName);
+					if (directoryName != null) {
+						var mydir = directoryName.Replace("\\", "/").ToLower();
+						mydir = Regex.Match(mydir, @"\w+/views/[\s\S]+$").Value;
+						if (mydir.StartsWith("sys") || mydir.StartsWith("usr") || mydir.StartsWith("mod")) {
+							mydir = "~/" + mydir;
+						}
+						else {
+							mydir = "~" + Regex.Match(mydir, @"/views/[\s\S]+$").Value;
+						}
+						BaseDir = (mydir + "/").Replace("//", "/");
 					}
-					else {
-						mydir = "~" + Regex.Match(mydir, @"/views/[\s\S]+$").Value;
-					}
-					BaseDir = (mydir + "/").Replace("//", "/");
 				}
 			}
 		}
 
 		/// <summary>
-		/// Ссылка на исходный файл
+		/// 	Ссылка на исходный файл
 		/// </summary>
 		protected string SourceFileName { get; set; }
 
 
 		/// <summary>
-		/// Базовая папка для резольвера
+		/// 	Базовая папка для резольвера
 		/// </summary>
 		protected string BaseDir { get; set; }
 
@@ -81,36 +76,6 @@ namespace Qorpent.Mvc.QView {
 		/// </summary>
 		protected IQViewContext ViewContext { get; set; }
 
-		/// <summary>
-		/// Запрашивает наличие привязки к ресурсу, ресурс должен быть локальным по отношению к виду, либо начинаться с "/","~" ".." не допускаются
-		/// </summary>
-		/// <param name="resource"></param>
-		protected virtual void Require(string resource) {
-			if(ViewContext.IsLayout || ViewContext.ParentContext!=null) {
-				var resourceName = GetExternalResourceLocalUrl(resource);			
-				if(!string.IsNullOrEmpty(resourceName)) {
-					ViewContext.Require(resourceName);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Метод определения ресурса по пути
-		/// </summary>
-		/// <param name="resource"></param>
-		protected virtual string GetExternalResourceLocalUrl(string resource) {
-			if(resource.StartsWith("res:")) return resource;
-			if (resource.Contains(".."))throw new QorpentSecurityException("В видах запрещены пути вида ../");
-			if(resource.StartsWith("/")|| resource.StartsWith("~")) return Application.Files.Resolve(FileSearchQuery.Leveled(resource, true, FileSearchResultType.LocalUrl));
-			if (string.IsNullOrEmpty(BaseDir)) return ""; //отсуствует локальный контекст
-			var filetofind = BaseDir + resource;
-			return Application.Files.Resolve(FileSearchQuery.Leveled(filetofind, true, FileSearchResultType.LocalUrl));
-		}
-		/// <summary>
-		/// Mark to avoid buferrized Layout with post process
-		/// </summary>
-		protected bool UseDirectLayout;
-		
 		/// <summary>
 		/// 	Executes view
 		/// </summary>
@@ -128,7 +93,7 @@ namespace Qorpent.Mvc.QView {
 				Render();
 				OutAfterMainRender();
 
-				if(ViewContext.IsLayout  && !UseDirectLayout) {
+				if (ViewContext.IsLayout && !UseDirectLayout) {
 					WriteOutLayout();
 				}
 
@@ -150,37 +115,115 @@ namespace Qorpent.Mvc.QView {
 		}
 
 		/// <summary>
-		/// Поддержка буферизованногов вывода Layout (для обеспечения Require и т.д.)
+		/// 	allows to catch content in temporal stream
+		/// </summary>
+		public abstract void EnterTemporaryOutput(TextWriter output = null);
+
+		/// <summary>
+		/// 	retrieves catched content
+		/// </summary>
+		/// <returns> </returns>
+		public abstract string GetTemporaryOutput();
+
+		/// <summary>
+		/// 	восстанавливает стандартный оутпут
+		/// </summary>
+		/// <returns> </returns>
+		public abstract void RestoreOutput();
+
+		/// <summary>
+		/// 	Renders local url to named resource with file resolution
+		/// </summary>
+		/// <param name="name"> </param>
+		/// <param name="prepared"> True - если ссылка полностью подготовлена </param>
+		/// <exception cref="NullReferenceException"></exception>
+		public abstract void RenderLink(string name, bool prepared = false);
+
+		/// <summary>
+		/// 	Retrieves resource string from special-formed resources
+		/// </summary>
+		/// <param name="name"> </param>
+		/// <param name="lang"> </param>
+		/// <returns> </returns>
+		public abstract string GetResource(string name, string lang = null);
+
+		/// <summary>
+		/// 	Общий код для регистратора ошибок
+		/// </summary>
+		/// <returns> </returns>
+		protected override string GetLoggerNameSuffix() {
+			return "MvcQView";
+		}
+
+		/// <summary>
+		/// 	Запрашивает наличие привязки к ресурсу, ресурс должен быть локальным по отношению к виду, либо начинаться с "/","~" ".." не допускаются
+		/// </summary>
+		/// <param name="resource"> </param>
+		protected virtual void Require(string resource) {
+			if (ViewContext.IsLayout || ViewContext.ParentContext != null) {
+				var resourceName = GetExternalResourceLocalUrl(resource);
+				if (!string.IsNullOrEmpty(resourceName)) {
+					ViewContext.Require(resourceName);
+				}
+			}
+		}
+
+		/// <summary>
+		/// 	Метод определения ресурса по пути
+		/// </summary>
+		/// <param name="resource"> </param>
+		protected virtual string GetExternalResourceLocalUrl(string resource) {
+			if (resource.StartsWith("res:")) {
+				return resource;
+			}
+			if (resource.Contains("..")) {
+				throw new QorpentSecurityException("В видах запрещены пути вида ../");
+			}
+			if (resource.StartsWith("/") || resource.StartsWith("~")) {
+				return Application.Files.Resolve(FileSearchQuery.Leveled(resource, true, FileSearchResultType.LocalUrl));
+			}
+			if (string.IsNullOrEmpty(BaseDir)) {
+				return ""; //отсуствует локальный контекст
+			}
+			var filetofind = BaseDir + resource;
+			return Application.Files.Resolve(FileSearchQuery.Leveled(filetofind, true, FileSearchResultType.LocalUrl));
+		}
+
+		/// <summary>
+		/// 	Поддержка буферизованногов вывода Layout (для обеспечения Require и т.д.)
 		/// </summary>
 		protected virtual void WriteOutLayout() {
 			var content = ViewContext.Output.ToString();
 			content = PostProcessLayout(content);
 			ViewContext.RealOutPut.Write(content);
 		}
+
 		/// <summary>
-		/// Поддержка пост-процессора для Layout (обычные виды идут без буфера)
+		/// 	Поддержка пост-процессора для Layout (обычные виды идут без буфера)
 		/// </summary>
-		/// <param name="content"></param>
-		/// <returns></returns>
+		/// <param name="content"> </param>
+		/// <returns> </returns>
 		protected string PostProcessLayout(string content) {
-			if(content.Contains("<!-- __REQUIREMENTS__ -->") && ViewContext.Requirements!=null) {
+			if (content.Contains("<!-- __REQUIREMENTS__ -->") && ViewContext.Requirements != null) {
 				content = PostProcessRequirements(content);
 			}
 			return content;
 		}
+
 		/// <summary>
-		/// Выполняет вставку ссылок на ресурсы
+		/// 	Выполняет вставку ссылок на ресурсы
 		/// </summary>
-		/// <param name="content"></param>
-		/// <returns></returns>
+		/// <param name="content"> </param>
+		/// <returns> </returns>
 		protected string PostProcessRequirements(string content) {
 			var output = new StringWriter();
 			EnterTemporaryOutput(output);
 			try {
 				foreach (var x in ViewContext.Requirements) {
-					RenderLink(x,true);
+					RenderLink(x, true);
 				}
-			}finally {
+			}
+			finally {
 				RestoreOutput();
 			}
 			var result = content.Replace("<!-- __REQUIREMENTS__ -->", output.ToString());
@@ -219,7 +262,7 @@ namespace Qorpent.Mvc.QView {
 		protected IQViewBinder GetBinder() {
 			if (null == _binder) {
 				_binder = ResolveService<IQViewBinder>();
-				if(null!=_binder) {
+				if (null != _binder) {
 					_binder.SetView(this);
 				}
 			}
@@ -229,7 +272,7 @@ namespace Qorpent.Mvc.QView {
 		private void WriteOutError(Exception ex) {
 			var output = ViewContext.IsLayout ? ViewContext.RealOutPut : ViewContext.Output;
 			output.WriteLine("<div class='qview_error'>Error in " + ViewContext.Name + " view : " +
-			                             ex.ToString().Replace("<", "&lt;").Replace("\n", "").Replace("\r", "<br/>") + "</div>");
+			                 ex.ToString().Replace("<", "&lt;").Replace("\n", "").Replace("\r", "<br/>") + "</div>");
 		}
 
 		/// <summary>
@@ -295,44 +338,16 @@ namespace Qorpent.Mvc.QView {
 			OutView(ViewContext.ChildContext);
 		}
 
+		/// <summary>
+		/// 	Подготовленный реестр ресурсов
+		/// </summary>
+		protected IDictionary<string, string> Resources;
+
+		/// <summary>
+		/// 	Mark to avoid buferrized Layout with post process
+		/// </summary>
+		protected bool UseDirectLayout;
+
 		private IQViewBinder _binder;
-
-		/// <summary>
-		/// Подготовленный реестр ресурсов
-		/// </summary>
-		protected  IDictionary<string, string> _resources;
-
-		/// <summary>
-		/// 	allows to catch content in temporal stream
-		/// </summary>
-		public abstract void EnterTemporaryOutput(TextWriter output = null);
-
-		/// <summary>
-		/// 	retrieves catched content
-		/// </summary>
-		/// <returns> </returns>
-		public abstract string GetTemporaryOutput();
-
-		/// <summary>
-		/// восстанавливает стандартный оутпут
-		/// </summary>
-		/// <returns> </returns>
-		public abstract void RestoreOutput();
-
-		/// <summary>
-		/// 	Renders local url to named resource with file resolution
-		/// </summary>
-		/// <param name="name"> </param>
-		/// <param name="prepared">True - если ссылка полностью подготовлена </param>
-		/// <exception cref="NullReferenceException"></exception>
-		public abstract void RenderLink(string name, bool prepared = false);
-
-		/// <summary>
-		/// 	Retrieves resource string from special-formed resources
-		/// </summary>
-		/// <param name="name"> </param>
-		/// <param name="lang"> </param>
-		/// <returns> </returns>
-		public abstract string GetResource(string name, string lang = null);
 	}
 }

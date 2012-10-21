@@ -24,6 +24,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Xml.Linq;
 using Qorpent.Bxl;
@@ -223,6 +224,7 @@ namespace Qorpent.Dsl {
 						resolver.Resolve(new FileSearchQuery
 							{ExistedOnly = true, PathType = FileSearchResultType.FullPath, ProbeFiles = new[] {dir}});
 					if (null != dir) {
+						Debug.Assert(!string.IsNullOrWhiteSpace(mask), "mask != null");
 						foreach (var file in Directory.GetFiles(dir, mask)) {
 							yield return file;
 						}

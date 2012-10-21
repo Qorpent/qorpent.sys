@@ -26,7 +26,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Qorpent.Utils {
+namespace Qorpent.Dsl.SmartXslt {
 	/// <summary>
 	/// 	Xslt transform with addition preprocessing ability
 	/// </summary>

@@ -28,7 +28,9 @@ namespace Qorpent.Log {
 	/// 	mute out logging
 	/// </summary>
 	public class StubUserLog : IUserLog {
+// ReSharper disable InconsistentNaming
 		private static readonly IUserLog _default = new StubUserLog();
+// ReSharper restore InconsistentNaming
 
 		/// <summary>
 		/// 	Default pseudo logger

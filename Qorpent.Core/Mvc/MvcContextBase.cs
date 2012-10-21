@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using System.Xml.Linq;
@@ -39,9 +40,7 @@ namespace Qorpent.Mvc {
 	/// <summary>
 	/// 	Base MVC
 	/// </summary>
-	public abstract class MvcContextBase : ServiceBase, IMvcContext
-	{
-
+	public abstract class MvcContextBase : ServiceBase, IMvcContext {
 #if PARANOID
 		static MvcContextBase() {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
@@ -71,11 +70,8 @@ namespace Qorpent.Mvc {
 		/// <summary>
 		/// </summary>
 		public MvcCallInfo GetCallInfo() {
-			var result = new MvcCallInfo();
-			result.ActionName = ActionName;
-			result.RenderName = RenderName;
-			result.Url = Uri.ToString();
-			result.Parameters = Parameters;
+			var result = new MvcCallInfo
+				{ActionName = ActionName, RenderName = RenderName, Url = Uri.ToString(), Parameters = Parameters};
 			return result;
 		}
 
@@ -185,7 +181,7 @@ namespace Qorpent.Mvc {
 		/// <param name="name"> </param>
 		/// <returns> </returns>
 		public XElement GetXml(string name) {
-			var datax = Get(name, "").Trim();
+			var datax = Get(name).Trim();
 			if (string.IsNullOrEmpty(datax)) {
 				datax = "<empty></empty>";
 			}
@@ -234,11 +230,9 @@ namespace Qorpent.Mvc {
 		/// <param name="prefix"> </param>
 		/// <returns> </returns>
 		public IEnumerable<KeyValuePair<string, string>> GetAll(string prefix) {
-			foreach (var parameter in Parameters) {
-				if (parameter.Key.StartsWith(prefix)) {
-					yield return new KeyValuePair<string, string>(parameter.Key.Substring(prefix.Length), parameter.Value);
-				}
-			}
+			return from parameter in Parameters
+			       where parameter.Key.StartsWith(prefix)
+			       select new KeyValuePair<string, string>(parameter.Key.Substring(prefix.Length), parameter.Value);
 		}
 
 		/// <summary>
@@ -396,17 +390,17 @@ namespace Qorpent.Mvc {
 		[SerializeNotNullOnly] public abstract string Language { get; set; }
 
 		/// <summary>
-		/// Cookie отклика
+		/// 	Cookie отклика
 		/// </summary>
 		public abstract HttpCookieCollection ResponseCookies { get; }
 
 		/// <summary>
-		/// Cookie отклика
+		/// 	Cookie отклика
 		/// </summary>
 		public abstract HttpCookieCollection RequestCookies { get; }
 
 		/// <summary>
-		/// Признак того, что контекст вызвал Redirect
+		/// 	Признак того, что контекст вызвал Redirect
 		/// </summary>
 		public bool IsRedirected { get; set; }
 
@@ -426,10 +420,10 @@ namespace Qorpent.Mvc {
 		private string _renderName;
 
 		/// <summary>
-		/// Response redirect
+		/// 	Response redirect
 		/// </summary>
-		/// <param name="localurl"></param>
-		/// <returns></returns>
+		/// <param name="localurl"> </param>
+		/// <returns> </returns>
 		public abstract void Redirect(string localurl);
 	}
 }

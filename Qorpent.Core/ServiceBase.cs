@@ -25,16 +25,12 @@
 
 using System;
 using System.Linq;
-using System.Security;
 using Qorpent.Applications;
 using Qorpent.Events;
 using Qorpent.IoC;
 using Qorpent.Log;
 
 namespace Qorpent {
-
-	
-
 	///<summary>
 	///	Базовый класс сервисов - обеспечивает связь с контейнером и приложением.
 	///</summary>
@@ -52,7 +48,8 @@ namespace Qorpent {
 	///	выполнения дополнительных действий на момент привязки к генерирующему контексту.
 	///</remarks>
 	///<source>Qorpent/Qorpent.Core/ServiceBase.cs</source>
-	public abstract class ServiceBase :MarshalByRefObject, IContainerBound, IApplicationBound, IDisposable, IResetable, ILogBound {
+	public abstract class ServiceBase : MarshalByRefObject, IContainerBound, IApplicationBound, IDisposable, IResetable,
+	                                    ILogBound {
 		/// <summary>
 		/// 	Обратная ссылка на приложение, в составе которого создан данный экземпляр (может быть NULL, если 
 		/// 	объект был создан из контейнера без связи с приложением)
@@ -138,13 +135,13 @@ namespace Qorpent {
 		public void Dispose() {
 			Dispose(true);
 		}
+
 		/// <summary>
-		/// CA1063 recomendation match
+		/// 	CA1063 recomendation match
 		/// </summary>
-		/// <param name="full"></param>
+		/// <param name="full"> </param>
 		protected virtual void Dispose(bool full) {
-			if (null != SourceContainer)
-			{
+			if (null != SourceContainer) {
 				SourceContainer.Release(this);
 			}
 		}
@@ -164,16 +161,8 @@ namespace Qorpent {
 						if (string.IsNullOrEmpty(suffix)) {
 							name += ";" + suffix;
 						}
-						var _manager = ResolveService<ILogManager>();
-						if (null == _manager) {
-							_log = new StubUserLog();
-						}
-						else {
-							_log = _manager.GetLog(name, this);
-						}
-						if (null == _log) {
-							_log = new StubUserLog();
-						}
+						var manager = ResolveService<ILogManager>();
+						_log = (null == manager ? new StubUserLog() : manager.GetLog(name, this)) ?? new StubUserLog();
 					}
 					return _log;
 				}
@@ -277,9 +266,9 @@ namespace Qorpent {
 
 		private IUserLog _log;
 
-		/// <summary>
-		///Объект для синхронизации
-		/// </summary>
+		///<summary>
+		///	Объект для синхронизации
+		///</summary>
 		protected object Sync = new object();
-	}
+	                                    }
 }

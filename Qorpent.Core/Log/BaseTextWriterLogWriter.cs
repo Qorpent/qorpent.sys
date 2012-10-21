@@ -37,20 +37,20 @@ namespace Qorpent.Log {
 		/// </summary>
 		/// <param name="writer"> </param>
 		public BaseTextWriterLogWriter(TextWriter writer) {
-			this.writer = writer;
+			_writer = writer;
 		}
 
 		/// <summary>
 		/// </summary>
 		/// <param name="message"> </param>
 		protected override void InternalWrite(LogMessage message) {
-			if (null == writer) {
+			if (null == _writer) {
 				return;
 			}
 
 			var text = GetText(message);
-			writer.WriteLine(text);
-			writer.Flush();
+			_writer.WriteLine(text);
+			_writer.Flush();
 		}
 
 		/// <summary>
@@ -69,7 +69,7 @@ namespace Qorpent.Log {
 					{
 						new BaseLogger
 							{
-								Writers = new[] {new BaseTextWriterLogWriter(writer) {CustomFormat = customFormat}},
+								Writers = new ILogWriter[] {new BaseTextWriterLogWriter(writer) {CustomFormat = customFormat}},
 								Synchronized = synchronized,
 							}
 					}, null, logname) {Level = level};
@@ -90,11 +90,11 @@ namespace Qorpent.Log {
 				{
 					Mask = regex,
 					Level = level,
-					Writers = new[] {new BaseTextWriterLogWriter(writer) {CustomFormat = customFormat},},
+					Writers = new ILogWriter[] {new BaseTextWriterLogWriter(writer) {CustomFormat = customFormat}},
 					Synchronized = synchronized
 				};
 		}
 
-		private readonly TextWriter writer;
+		private readonly TextWriter _writer;
 	}
 }

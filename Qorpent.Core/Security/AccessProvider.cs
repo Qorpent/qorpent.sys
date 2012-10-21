@@ -79,10 +79,7 @@ namespace Qorpent.Security {
 					if (null == resolver) {
 						resolver = RoleResolver;
 					}
-					var result = new AccessResult();
-					result.Provider = this;
-					result.ResultType = AccessResultType.NotDefined;
-					result.Description = "";
+					var result = new AccessResult {Provider = this, ResultType = AccessResultType.NotDefined, Description = ""};
 					foreach (var extension in activeProviders) {
 						var subresult = extension.IsAccessible(target, accessRole, principal, resolver);
 						if (null == subresult.Provider) {

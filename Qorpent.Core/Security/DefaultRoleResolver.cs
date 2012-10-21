@@ -29,7 +29,6 @@ using System.Security.Principal;
 using Qorpent.Events;
 using Qorpent.IoC;
 using Qorpent.Mvc;
-using Qorpent.Security.Watchdog;
 
 namespace Qorpent.Security {
 	/// <summary>
@@ -39,9 +38,8 @@ namespace Qorpent.Security {
 	/// 	3) For all other principals it returns NATIVE IsInRole
 	/// </summary>
 	[ContainerComponent(Lifestyle.Singleton)]
-	[RequireReset(Role = "DEVELOPER",All = true,Options = new[]{"roles"})]
-	public class DefaultRoleResolver : ServiceBase, IRoleResolver
-	{
+	[RequireReset(Role = "DEVELOPER", All = true, Options = new[] {"roles"})]
+	public class DefaultRoleResolver : ServiceBase, IRoleResolver {
 #if PARANOID
 		static DefaultRoleResolver() {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
@@ -81,10 +79,10 @@ namespace Qorpent.Security {
 				}
 					
 #endif
-			
 
-				var result = false;
-				var cachekey = principal.Identity.Name + ";" + role + ";" + exact+";"+customcontext;
+
+				bool result;
+				var cachekey = principal.Identity.Name + ";" + role + ";" + exact + ";" + customcontext;
 				Log.Debug("start check " + cachekey, this);
 				if (_cache.ContainsKey(cachekey)) {
 					result = _cache[cachekey];
@@ -123,11 +121,8 @@ namespace Qorpent.Security {
 			}
 
 			if (null != Extensions) {
-				foreach (var ext in Extensions) {
-					var result = ext.IsInRole(principal, role, exact, callcontext, customcontext);
-					if (result) {
-						return true;
-					}
+				if (Extensions.Select(ext => ext.IsInRole(principal, role, exact, callcontext, customcontext)).Any(result => result)) {
+					return true;
 				}
 			}
 
@@ -152,8 +147,7 @@ namespace Qorpent.Security {
 			}
 
 			//HACK TO USE SHORT ADMIN NAME IN TEST ENVIRONMENT FOR ALL ROLES
-			if (!exact && principal.Identity.Name == "local\\MOD_MONO_ROOT")
-			{
+			if (!exact && principal.Identity.Name == "local\\MOD_MONO_ROOT") {
 				return true;
 			}
 
@@ -176,21 +170,23 @@ namespace Qorpent.Security {
 
 
 		/// <summary>
-		/// Сбрасывает кэш ролей и вызывает очистку у всех расширений
+		/// 	Сбрасывает кэш ролей и вызывает очистку у всех расширений
 		/// </summary>
-		/// <param name="data"></param>
-		/// <returns></returns>
+		/// <param name="data"> </param>
+		/// <returns> </returns>
 		public override object Reset(ResetEventData data) {
-			var _cachesize = _cache.Count;
-			IList<string> _resetedextensions = new List<string>();
+			var cachesize = _cache.Count;
+			IList<string> resetedextensions = new List<string>();
 			base.Reset(data);
 			foreach (var extension in Extensions) {
-				if(extension is IResetable) {
-					((IResetable) extension).Reset(data);
-					_resetedextensions.Add(extension.GetType().Name);
+				var resetable = extension as IResetable;
+				if (resetable == null) {
+					continue;
 				}
+				resetable.Reset(data);
+				resetedextensions.Add(extension.GetType().Name);
 			}
-			return new {dropped = _cachesize, reseted = _resetedextensions.ToArray()};
+			return new {dropped = cachesize, reseted = resetedextensions.ToArray()};
 		}
 
 		/// <summary>

@@ -79,14 +79,14 @@ namespace Qorpent.Mvc {
 		public override string Language { get; set; }
 
 		/// <summary>
-		/// Cookie отклика
+		/// 	Cookie отклика
 		/// </summary>
 		public override HttpCookieCollection ResponseCookies {
 			get { return null; }
 		}
 
 		/// <summary>
-		/// Cookie отклика
+		/// 	Cookie отклика
 		/// </summary>
 		public override HttpCookieCollection RequestCookies {
 			get { return null; }
@@ -177,10 +177,10 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// Response redirect
+		/// 	Response redirect
 		/// </summary>
-		/// <param name="localurl"></param>
-		/// <returns></returns>
+		/// <param name="localurl"> </param>
+		/// <returns> </returns>
 		public override void Redirect(string localurl) {
 			throw new NotImplementedException();
 		}

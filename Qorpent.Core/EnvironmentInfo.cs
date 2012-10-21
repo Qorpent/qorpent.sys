@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Web;
 
@@ -32,8 +33,6 @@ namespace Qorpent {
 	/// 	Contains adapted environment information
 	/// </summary>
 	public static class EnvironmentInfo {
-
-
 		private static bool? _isWeb;
 
 
@@ -55,7 +54,8 @@ namespace Qorpent {
 			get {
 				if (!_isWeb.HasValue) {
 					lock (Sync) {
-						_isWeb = Path.GetFileName(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile).ToLowerInvariant() ==
+						var fileName = Path.GetFileName(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+						_isWeb = fileName != null && fileName.ToLowerInvariant() ==
 						         "web.config";
 					}
 				}
@@ -81,7 +81,9 @@ namespace Qorpent {
 							if (!string.IsNullOrEmpty(codebase))
 							{
 #endif
-								var webconfig = Path.Combine(Path.GetDirectoryName(codebase), "web.config");
+								var basepath = Path.GetDirectoryName(codebase);
+								Debug.Assert(!string.IsNullOrWhiteSpace(basepath), "basepath empty");
+								var webconfig = Path.Combine(basepath, "web.config");
 								_isWebUtility = (dir1 == codebase) && File.Exists(webconfig);
 							}
 						}

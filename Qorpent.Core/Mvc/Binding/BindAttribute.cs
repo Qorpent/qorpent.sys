@@ -145,11 +145,13 @@ namespace Qorpent.Mvc.Binding {
 			get {
 				if (null == _targettype) {
 					lock (this) {
-						if (Member is FieldInfo) {
-							_targettype = ((FieldInfo) Member).FieldType;
+						var fieldInfo = Member as FieldInfo;
+						if (fieldInfo != null) {
+							_targettype = fieldInfo.FieldType;
 						}
-						if (Member is PropertyInfo) {
-							_targettype = ((PropertyInfo) Member).PropertyType;
+						var propertyInfo = Member as PropertyInfo;
+						if (propertyInfo != null) {
+							_targettype = propertyInfo.PropertyType;
 						}
 					}
 				}

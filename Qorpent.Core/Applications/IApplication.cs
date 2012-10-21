@@ -181,7 +181,7 @@ namespace Qorpent.Applications {
 		IImpersonationProvider Impersonation { get; set; }
 
 		/// <summary>
-		/// Время реального старта приложения
+		/// 	Время реального старта приложения
 		/// </summary>
 		DateTime StartTime { get; set; }
 

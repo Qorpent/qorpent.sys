@@ -185,7 +185,9 @@ namespace Qorpent.Log {
 							logger.Available = false;
 						}
 						if (0 != (errorlogic & InternalLoggerErrorBehavior.Log)) {
-							_manager.LogFailSafe(new LogMessage {Error = logerror});
+							if (_manager != null) {
+								_manager.LogFailSafe(new LogMessage {Error = logerror});
+							}
 						}
 						if (0 != (errorlogic & InternalLoggerErrorBehavior.Throw)) {
 							throw;

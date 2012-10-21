@@ -49,12 +49,11 @@ namespace Qorpent.Applications {
 		/// </summary>
 		[ThreadStatic] private static IMvcContext _threadCurrentMvcContext;
 
-		#if PARANOID
+#if PARANOID
 		static Application() {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
 		}
 		#endif
-
 
 
 		private static IApplication _current;
@@ -135,14 +134,10 @@ namespace Qorpent.Applications {
 		/// </summary>
 		/// <remarks>
 		/// </remarks>
-		public ISysLogon SysLogon
-		{
-			get
-			{
-				if (null == _syslogon)
-				{
-					lock (this)
-					{
+		public ISysLogon SysLogon {
+			get {
+				if (null == _syslogon) {
+					lock (this) {
 						return _syslogon = ResolveService<ISysLogon>();
 					}
 				}
@@ -174,14 +169,10 @@ namespace Qorpent.Applications {
 		/// </summary>
 		/// <remarks>
 		/// </remarks>
-		public IDatabaseConnectionProvider DatabaseConnections
-		{
-			get
-			{
-				if (null == _dbconnecitons)
-				{
-					lock (this)
-					{
+		public IDatabaseConnectionProvider DatabaseConnections {
+			get {
+				if (null == _dbconnecitons) {
+					lock (this) {
 						return _dbconnecitons = ResolveService<IDatabaseConnectionProvider>();
 					}
 				}
@@ -228,8 +219,9 @@ namespace Qorpent.Applications {
 				}
 				_container = value;
 				_container.RegisterExtension(new ApplicationBoundContainerExtension(this));
-				if (_container is IApplicationBound) {
-					((IApplicationBound) _container).SetApplication(this);
+				var applicationBound = _container as IApplicationBound;
+				if (applicationBound != null) {
+					applicationBound.SetApplication(this);
 				}
 			}
 		}
@@ -428,11 +420,10 @@ namespace Qorpent.Applications {
 				lock (this) {
 					if (null == _applicationName) {
 						if (IsWeb) {
-							if (HttpContext.Current != null) {
-								_applicationName = HttpContext.Current.Request.ApplicationPath.Replace("/", "");
-							}
-							else {
-								_applicationName = "NOTDEFINED";
+							if (HttpContext.Current.Request.ApplicationPath != null) {
+								_applicationName = HttpContext.Current != null
+									                   ? HttpContext.Current.Request.ApplicationPath.Replace("/", "")
+									                   : "NOTDEFINED";
 							}
 						}
 					}
@@ -535,7 +526,7 @@ namespace Qorpent.Applications {
 		}
 
 		/// <summary>
-		/// Время реального старта приложения (может использоваться для установки различных меток времени)
+		/// 	Время реального старта приложения (может использоваться для установки различных меток времени)
 		/// </summary>
 		public DateTime StartTime { get; set; }
 

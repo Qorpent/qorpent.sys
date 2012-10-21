@@ -34,7 +34,7 @@ namespace Qorpent.Mvc.Remoting {
 		/// <summary>
 		/// </summary>
 		public MvcQuery() {
-			Render = MvcStandardRender.XML;
+			Render = MvcStandardRender.Xml;
 			Headers = new Dictionary<string, string>();
 		}
 

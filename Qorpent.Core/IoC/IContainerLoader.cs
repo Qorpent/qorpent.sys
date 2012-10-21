@@ -55,23 +55,23 @@ namespace Qorpent.IoC {
 		IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly, bool requreManifest = false);
 
 		/// <summary>
-		/// Читает манифетсы приложения и конструирует единый 
+		/// 	Читает манифетсы приложения и конструирует единый
 		/// </summary>
-		/// <returns></returns>
+		/// <returns> </returns>
 		/// <exception cref="Exception"></exception>
 		XElement ReadDefaultManifest();
 
 		/// <summary>
-		/// Loads all components defined on type
+		/// 	Loads all components defined on type
 		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
+		/// <param name="type"> </param>
+		/// <returns> </returns>
 		IEnumerable<IComponentDefinition> LoadType(Type type);
 
 		/// <summary>
-		/// Loads all components defined on type
+		/// 	Loads all components defined on type
 		/// </summary>
-		/// <returns></returns>
+		/// <returns> </returns>
 		IEnumerable<IComponentDefinition> Load<T>();
 	}
 }

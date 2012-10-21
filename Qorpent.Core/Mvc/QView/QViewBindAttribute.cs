@@ -33,7 +33,7 @@ namespace Qorpent.Mvc.QView {
 	/// 	Describes bind behavior for QView properties to calling context
 	/// </summary>
 	public class QViewBindAttribute : Attribute {
-		private const BindingFlags allattr = BindingFlags.NonPublic | BindingFlags.Public |
+		private const BindingFlags Allattr = BindingFlags.NonPublic | BindingFlags.Public |
 		                                     BindingFlags.Instance |
 		                                     BindingFlags.SetProperty | BindingFlags.SetField
 		                           ;
@@ -74,13 +74,15 @@ namespace Qorpent.Mvc.QView {
 					}
 				}
 				else {
-					var member = context.AdvancedData.GetType().GetMember(GetName(), allattr).FirstOrDefault();
+					var member = context.AdvancedData.GetType().GetMember(GetName(), Allattr).FirstOrDefault();
 					if (null != member) {
-						if (member is PropertyInfo) {
-							return ((PropertyInfo) member).GetValue(context.AdvancedData, null);
+						var propertyInfo = member as PropertyInfo;
+						if (propertyInfo != null) {
+							return propertyInfo.GetValue(context.AdvancedData, null);
 						}
-						if (member is FieldInfo) {
-							return ((FieldInfo) member).GetValue(context.AdvancedData);
+						var fieldInfo = member as FieldInfo;
+						if (fieldInfo != null) {
+							return fieldInfo.GetValue(context.AdvancedData);
 						}
 					}
 				}
@@ -89,19 +91,17 @@ namespace Qorpent.Mvc.QView {
 
 			if (context.ViewData != null) {
 				var member =
-					context.ViewData.GetType().GetMembers(allattr)
-						.Where(x => x.Name == GetName()).FirstOrDefault();
-				if(null==member) {
-					member =
-					context.ViewData.GetType().GetMembers(allattr)
-						.Where(x => x.Name.ToLowerInvariant() == GetName().ToLowerInvariant()).FirstOrDefault();
-				}
+					context.ViewData.GetType().GetMembers(Allattr).FirstOrDefault(x => x.Name == GetName()) ??
+					context.ViewData.GetType().GetMembers(Allattr).FirstOrDefault(
+						x => x.Name.ToLowerInvariant() == GetName().ToLowerInvariant());
 				if (null != member) {
-					if (member is FieldInfo) {
-						return ((FieldInfo) member).GetValue(context.ViewData);
+					var fieldInfo = member as FieldInfo;
+					if (fieldInfo != null) {
+						return fieldInfo.GetValue(context.ViewData);
 					}
-					if (member is PropertyInfo) {
-						return ((PropertyInfo) member).GetValue(context.ViewData, null);
+					var propertyInfo = member as PropertyInfo;
+					if (propertyInfo != null) {
+						return propertyInfo.GetValue(context.ViewData, null);
 					}
 				}
 			}

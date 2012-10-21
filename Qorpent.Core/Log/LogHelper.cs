@@ -41,17 +41,16 @@ namespace Qorpent.Log {
 		/// <returns> </returns>
 		/// <exception cref="NotImplementedException"></exception>
 		public LogMessage CreateMessage(LogLevel level, string message, object context) {
-			if (context is LogMessage) {
-				var lm = ((LogMessage) context);
+			var logMessage = context as LogMessage;
+			if (logMessage != null) {
+				var lm = logMessage;
 				lm.Message += message;
 				if (lm.Level < level) {
 					lm.Level = level;
 				}
 				return lm;
 			}
-			var result = new LogMessage();
-			result.Level = level;
-			result.Message = message;
+			var result = new LogMessage {Level = level, Message = message};
 			if (context is Exception) {
 				result.Error = (Exception) context;
 			}
@@ -60,9 +59,9 @@ namespace Qorpent.Log {
 			}
 			else if (context is IMvcContext) {
 				result.MvcContext = ((IMvcContext) context);
-                if(null==result.Error) {
-                    result.Error = ((IMvcContext) context).Error;
-                }
+				if (null == result.Error) {
+					result.Error = ((IMvcContext) context).Error;
+				}
 			}
 			return result;
 		}

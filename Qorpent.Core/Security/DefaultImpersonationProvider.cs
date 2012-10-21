@@ -41,7 +41,7 @@ namespace Qorpent.Security {
 		public void Impersonate(IPrincipal srcUser, IPrincipal resultUser) {
 			lock (this) {
 				var key = GetKey(srcUser);
-				impersonationMap[key] = resultUser;
+				_impersonationMap[key] = resultUser;
 			}
 		}
 
@@ -53,10 +53,10 @@ namespace Qorpent.Security {
 		public bool IsImpersonated(IPrincipal usr) {
 			lock (this) {
 				var key = GetKey(usr);
-				if (!impersonationMap.ContainsKey(key)) {
+				if (!_impersonationMap.ContainsKey(key)) {
 					return false;
 				}
-				if (null == impersonationMap[key]) {
+				if (null == _impersonationMap[key]) {
 					return false;
 				}
 				return true;
@@ -71,7 +71,7 @@ namespace Qorpent.Security {
 		public IPrincipal GetImpersonation(IPrincipal usr) {
 			lock (this) {
 				if (IsImpersonated(usr)) {
-					return impersonationMap[GetKey(usr)];
+					return _impersonationMap[GetKey(usr)];
 				}
 				return usr;
 			}
@@ -83,6 +83,6 @@ namespace Qorpent.Security {
 			return key;
 		}
 
-		private readonly Dictionary<string, IPrincipal> impersonationMap = new Dictionary<string, IPrincipal>();
+		private readonly Dictionary<string, IPrincipal> _impersonationMap = new Dictionary<string, IPrincipal>();
 	}
 }

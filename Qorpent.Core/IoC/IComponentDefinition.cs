@@ -96,7 +96,7 @@ namespace Qorpent.IoC {
 		XElement Source { get; set; }
 
 		/// <summary>
-		/// При первом создании и при наличии стиля жизни Extension - объекты будут сохраняться в <see cref="Implementation"/>
+		/// 	При первом создании и при наличии стиля жизни Extension - объекты будут сохраняться в <see cref="Implementation" />
 		/// </summary>
 		bool CacheInstanceOfExtension { get; set; }
 	}
@@ -177,7 +177,8 @@ namespace Qorpent.IoC {
 		public XElement Source { get; set; }
 
 		/// <summary>
-		/// При первом создании и при наличии стиля жизни Extension - объекты будут сохраняться в <see cref="IComponentDefinition.Implementation"/>
+		/// 	При первом создании и при наличии стиля жизни Extension - объекты будут сохраняться в <see
+		/// 	 cref="IComponentDefinition.Implementation" />
 		/// </summary>
 		public bool CacheInstanceOfExtension { get; set; }
 	}

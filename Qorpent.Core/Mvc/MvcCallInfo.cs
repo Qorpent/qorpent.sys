@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Qorpent.Applications;
 
 namespace Qorpent.Mvc {
 	/// <summary>
@@ -68,14 +69,15 @@ namespace Qorpent.Mvc {
 		/// <returns> </returns>
 		public static string GetActionName(Uri uri) {
 			var appname = "";
-			if(Applications.Application.HasCurrent && !string.IsNullOrEmpty(Applications.Application.Current.ApplicationName)) {
-				appname = Applications.Application.Current.ApplicationName + "/";
+			if (Application.HasCurrent && !string.IsNullOrEmpty(Application.Current.ApplicationName)) {
+				appname = Application.Current.ApplicationName + "/";
 			}
 			if (null == uri) {
 				return "qweb.none";
 			}
 			var result =
-				Regex.Match(uri.ToString(), @"https?\://[^/]+/"+appname+@"([\w/]+?)(\.\w+)?\.qweb", RegexOptions.Compiled).Groups[1].
+				Regex.Match(uri.ToString(), @"https?\://[^/]+/" + appname + @"([\w/]+?)(\.\w+)?\.qweb", RegexOptions.Compiled).
+					Groups[1].
 					Value;
 			if (string.IsNullOrEmpty(result)) {
 				return "qweb.none";

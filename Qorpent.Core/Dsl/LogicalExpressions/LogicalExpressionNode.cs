@@ -52,7 +52,7 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// <param name="source"> </param>
 		/// <returns> </returns>
 		public bool Eval(ILogicTermSource source) {
-			var result = internalEval(source);
+			var result = InternalEval(source);
 			if (Negative) {
 				result = !result;
 			}
@@ -64,6 +64,6 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// </summary>
 		/// <param name="source"> </param>
 		/// <returns> </returns>
-		protected abstract bool internalEval(ILogicTermSource source);
+		protected abstract bool InternalEval(ILogicTermSource source);
 	}
 }

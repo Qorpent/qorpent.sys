@@ -86,8 +86,9 @@ namespace Qorpent.Events {
 			lock (Sync) {
 				//находим среди всех поддерживаемых сообщений первое, которое возвращает запрошенный TResult
 				var eventType =
-					_handlers.Keys.Where(type => type.BaseType.IsGenericType)
-						.FirstOrDefault(type => typeof (TResult).IsAssignableFrom(type.BaseType.GetGenericArguments()[1]));
+					_handlers.Keys.Where(type => type.BaseType != null && type.BaseType.IsGenericType)
+						.FirstOrDefault(
+							type => type.BaseType != null && typeof (TResult).IsAssignableFrom(type.BaseType.GetGenericArguments()[1]));
 				if (null == eventType) {
 					return new TResult();
 				}

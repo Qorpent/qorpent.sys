@@ -16,7 +16,7 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IWithTags.cs
+// Original file : IWithTag.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN

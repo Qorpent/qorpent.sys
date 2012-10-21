@@ -37,9 +37,7 @@ namespace Qorpent.Mvc {
 	/// <summary>
 	/// 	Base for custom actions - wraps most of subsystems and context to simplify acess from user code + templated lifecycle to implement
 	/// </summary>
-	public abstract class ActionBase : ServiceBase, IContextualAction, IWithRole, INotModifiedStateProvider
-	{
-
+	public abstract class ActionBase : ServiceBase, IContextualAction, IWithRole, INotModifiedStateProvider {
 #if PARANOID
 		static ActionBase() {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
@@ -252,17 +250,17 @@ namespace Qorpent.Mvc {
 		/// <param name="role"> </param>
 		/// <returns> </returns>
 		public AccessResult IsAccessible(object obj, AccessRole role = AccessRole.Access) {
-			IAccessProvider _provider;
+			IAccessProvider provider;
 			IPrincipal principal;
 			if (null != Context) {
-				_provider = Context.Application.Access;
+				provider = Context.Application.Access;
 				principal = Context.User;
 			}
 			else {
-				_provider = Application.Access;
+				provider = Application.Access;
 				principal = Application.Principal.CurrentUser;
 			}
-			return _provider.IsAccessible(obj, role, principal, Roles);
+			return provider.IsAccessible(obj, role, principal, Roles);
 		}
 
 		/// <summary>

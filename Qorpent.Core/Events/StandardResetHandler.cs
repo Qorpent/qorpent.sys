@@ -81,9 +81,7 @@ namespace Qorpent.Events {
 					result.Add(_target.GetType().Name.ToLowerInvariant());
 				}
 				if (null != _info.Options) {
-					foreach (var opt in _info.Options) {
-						result.Add(opt);
-					}
+					result.AddRange(_info.Options);
 				}
 				return result.ToArray();
 			}
@@ -107,9 +105,7 @@ namespace Qorpent.Events {
 		public override void Process(ResetEvent e) {
 			if (Proceed(e.Data)) {
 				var customResult = _target.Reset(e.Data);
-				var result = new ResetResultInfo();
-				result.Name = _target.ToString();
-				result.Info = customResult;
+				var result = new ResetResultInfo {Name = _target.ToString(), Info = customResult};
 				e.Result.InvokeList.Add(result);
 			}
 		}

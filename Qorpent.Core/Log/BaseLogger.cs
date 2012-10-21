@@ -41,7 +41,6 @@ namespace Qorpent.Log {
 			WriteTimeOut = 5000;
 			ErrorBehavior = InternalLoggerErrorBehavior.Log | InternalLoggerErrorBehavior.Ignore;
 			Available = true;
-			new Thread(InternalWrite);
 		}
 
 		/// <summary>
@@ -58,7 +57,7 @@ namespace Qorpent.Log {
 		/// 	Low level writer of UserLog
 		/// </summary>
 		public ILogWriter[] Writers {
-			get { return _writers ?? (_writers = loadFromXmlSource()); }
+			get { return _writers ?? (_writers = LoadFromXmlSource()); }
 			set { _writers = value; }
 		}
 
@@ -88,7 +87,7 @@ namespace Qorpent.Log {
 		/// 	Behavior on error occured in logger - if None - Manager behavior will be used
 		/// </summary>
 		public InternalLoggerErrorBehavior ErrorBehavior { get; set; }
-		
+
 		/// <summary>
 		/// 	check's if this logger is applyable to given context
 		/// </summary>
@@ -120,11 +119,11 @@ namespace Qorpent.Log {
 				if (InvalidUser(message)) {
 					return;
 				}
-				while (busy) {
+				while (Busy) {
 					Thread.Sleep(10);
 				}
-				busy = true;
-				_start = DateTime.Now;
+				Busy = true;
+				Start = DateTime.Now;
 				if (Synchronized) {
 					InternalWrite(message);
 				}
@@ -139,15 +138,15 @@ namespace Qorpent.Log {
 		/// </summary>
 		public void Join() {
 			lock (Sync) {
-				while (busy) {
-					if (_start != DateTime.MinValue && busy) {
-						if ((DateTime.Now - _start).TotalMilliseconds > WriteTimeOut) {
+				while (Busy) {
+					if (Start != DateTime.MinValue && Busy) {
+						if ((DateTime.Now - Start).TotalMilliseconds > WriteTimeOut) {
 							throw new LogException("logger timeout " + Name);
 						}
 					}
 					Thread.Sleep(20);
 				}
-				busy = false;
+				Busy = false;
 
 				if (_internalThreadError != null) {
 					var ex = _internalThreadError;
@@ -170,7 +169,7 @@ namespace Qorpent.Log {
 		public bool Available { get; set; }
 
 
-		private ILogWriter[] loadFromXmlSource() {
+		private ILogWriter[] LoadFromXmlSource() {
 			if (null == Container) {
 				return null;
 			}
@@ -185,12 +184,7 @@ namespace Qorpent.Log {
 
 		private IEnumerable<ILogWriter> GetAppendersFromXml(XElement src) {
 			var elements = src.DescendantsAndSelf("writer");
-			foreach (var element in elements) {
-				var result = GetWriter(element);
-				if (null != result) {
-					yield return result;
-				}
-			}
+			return elements.Select(GetWriter).Where(result => null != result);
 		}
 
 		/// <summary>
@@ -203,7 +197,7 @@ namespace Qorpent.Log {
 		}
 
 		private void InternalWrite(object message) {
-			lock (busylock) {
+			lock (_busylock) {
 				try {
 					var lm = (LogMessage) message;
 
@@ -212,7 +206,7 @@ namespace Qorpent.Log {
 							w.Write((LogMessage) message);
 						}
 					}
-					_finish = DateTime.Now;
+					Finish = DateTime.Now;
 				}
 				catch (LogException ex) {
 					_internalThreadError = ex;
@@ -221,7 +215,7 @@ namespace Qorpent.Log {
 					_internalThreadError = new LogException("error in logger " + Name, ex);
 				}
 				finally {
-					busy = false;
+					Busy = false;
 				}
 			}
 		}
@@ -256,12 +250,12 @@ namespace Qorpent.Log {
 			return false;
 		}
 
-		private readonly object busylock = new object();
-		internal DateTime _finish;
-		private Exception _internalThreadError;
+		private readonly object _busylock = new object();
+		internal bool Busy = false;
+		internal DateTime Finish;
 
-		internal DateTime _start;
+		internal DateTime Start;
+		private Exception _internalThreadError;
 		private ILogWriter[] _writers;
-		internal bool busy = false;
 	}
 }

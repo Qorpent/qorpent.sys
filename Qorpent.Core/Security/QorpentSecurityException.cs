@@ -52,7 +52,5 @@ namespace Qorpent.Security {
 		/// <param name="message"> </param>
 		/// <param name="inner"> </param>
 		public QorpentSecurityException(string message, Exception inner) : base(message, inner) {}
-
-		
 	}
 }

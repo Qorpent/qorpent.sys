@@ -63,7 +63,7 @@ namespace Qorpent.Mvc {
 			var attr =
 				type.GetCustomAttributes(typeof (ActionAttribute), true).OfType<ActionAttribute>().FirstOrDefault();
 			if (null == attr) {
-				var result = type.Name.Replace("_", ".").Replace("/",".");
+				var result = type.Name.Replace("_", ".").Replace("/", ".");
 				if (result.EndsWith(".action")) {
 					result = result.Substring(0, type.Name.Length - 7);
 				}
@@ -92,13 +92,11 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <param name="action"> </param>
 		/// <returns> </returns>
-		public static string GetRoleContext(IAction action)
-		{
+		public static string GetRoleContext(IAction action) {
 			var type = action.GetType();
 			var attr =
-				type.GetCustomAttributes(typeof(ActionAttribute), true).OfType<ActionAttribute>().FirstOrDefault();
-			if (null == attr)
-			{
+				type.GetCustomAttributes(typeof (ActionAttribute), true).OfType<ActionAttribute>().FirstOrDefault();
+			if (null == attr) {
 				return "";
 			}
 			return attr.RoleContext;

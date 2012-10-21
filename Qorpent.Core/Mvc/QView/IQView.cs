@@ -27,7 +27,7 @@ namespace Qorpent.Mvc.QView {
 	/// <summary>
 	/// 	Abstract view instance
 	/// </summary>
-	public interface IQView  {
+	public interface IQView {
 		/// <summary>
 		/// 	Executes view
 		/// </summary>

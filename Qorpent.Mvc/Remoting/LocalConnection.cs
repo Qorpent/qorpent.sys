@@ -59,7 +59,7 @@ namespace Qorpent.Mvc.Remoting {
 		/// </summary>
 		/// <param name="query"> </param>
 		/// <returns> </returns>
-		protected override MvcResult internalCall(MvcQuery query) {
+		protected override MvcResult InternalCall(MvcQuery query) {
 			var ctx = new MvcContext();
 			var sw = new StringWriter();
 			ctx.Output = sw;

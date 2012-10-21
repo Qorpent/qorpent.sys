@@ -37,7 +37,7 @@ namespace Qorpent.Mvc.Remoting {
 		/// </summary>
 		/// <param name="credentials"> </param>
 		public void SetCredentials(ICredentials credentials) {
-			this.credentials = credentials;
+			Credentials = credentials;
 		}
 
 		/// <summary>
@@ -47,7 +47,7 @@ namespace Qorpent.Mvc.Remoting {
 		/// <returns> </returns>
 		public MvcResult Call(MvcQuery query) {
 			lock (this) {
-				return internalCall(query);
+				return InternalCall(query);
 			}
 		}
 
@@ -59,10 +59,10 @@ namespace Qorpent.Mvc.Remoting {
 		public void Call(MvcQuery query, Action<MvcResult> callback) {
 			ThreadPool.QueueUserWorkItem(s =>
 				{
-					var ac = (asynccall) s;
-					var result = Call(ac.query);
-					ac.callback(result);
-				}, new asynccall {query = query, callback = callback});
+					var ac = (Asynccall) s;
+					var result = Call(ac.Query);
+					ac.Callback(result);
+				}, new Asynccall {Query = query, Callback = callback});
 		}
 
 		/// <summary>
@@ -70,7 +70,7 @@ namespace Qorpent.Mvc.Remoting {
 		/// </summary>
 		/// <param name="url"> </param>
 		public void SetUrl(string url) {
-			this.url = url;
+			Url = url;
 		}
 
 
@@ -79,13 +79,13 @@ namespace Qorpent.Mvc.Remoting {
 		/// </summary>
 		/// <param name="query"> </param>
 		/// <returns> </returns>
-		protected abstract MvcResult internalCall(MvcQuery query);
+		protected abstract MvcResult InternalCall(MvcQuery query);
 
-		#region Nested type: asynccall
+		#region Nested type: Asynccall
 
-		private struct asynccall {
-			public Action<MvcResult> callback;
-			public MvcQuery query;
+		private struct Asynccall {
+			public Action<MvcResult> Callback;
+			public MvcQuery Query;
 		}
 
 		#endregion
@@ -93,11 +93,11 @@ namespace Qorpent.Mvc.Remoting {
 		/// <summary>
 		/// 	credentials for calling
 		/// </summary>
-		protected ICredentials credentials;
+		protected ICredentials Credentials;
 
 		/// <summary>
 		/// 	request base url
 		/// </summary>
-		protected string url;
+		protected string Url;
 	}
 }

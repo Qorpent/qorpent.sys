@@ -47,7 +47,7 @@ namespace Qorpent.Events {
 			if (null != data) {
 				_data = (TData) data;
 			}
-			if (null == _data) {
+			if (Equals(null, _data)) {
 				_data = new TData();
 				if (null != context) {
 					_data.Build(context);

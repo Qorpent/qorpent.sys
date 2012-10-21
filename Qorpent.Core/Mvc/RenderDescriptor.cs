@@ -40,8 +40,9 @@ namespace Qorpent.Mvc {
 			Render = render;
 			Name = RenderAttribute.GetName(render);
 			DirectRole = RenderAttribute.GetRole(render);
-			if (render is IContextualRender) {
-				((IContextualRender) render).SetDescriptor(this);
+			var contextualRender = render as IContextualRender;
+			if (contextualRender != null) {
+				contextualRender.SetDescriptor(this);
 			}
 		}
 
@@ -54,14 +55,18 @@ namespace Qorpent.Mvc {
 		/// 	Last modified header wrapper
 		/// </summary>
 		[IgnoreSerialize] public override DateTime LastModified {
+// ReSharper disable SuspiciousTypeConversion.Global
 			get { return ((INotModifiedStateProvider) Render).LastModified; }
+// ReSharper restore SuspiciousTypeConversion.Global
 		}
 
 		/// <summary>
 		/// 	Etag header wrapper
 		/// </summary>
 		[IgnoreSerialize] public override string ETag {
+// ReSharper disable SuspiciousTypeConversion.Global
 			get { return ((INotModifiedStateProvider) Render).ETag; }
+// ReSharper restore SuspiciousTypeConversion.Global
 		}
 
 
@@ -73,11 +78,16 @@ namespace Qorpent.Mvc {
 				if (null == Render) {
 					return false;
 				}
-				if (Render is INotModifiedStateProvider) {
-					return ((INotModifiedStateProvider) Render).SupportNotModifiedState;
-				}
-				return false;
+				// ReSharper disable SuspiciousTypeConversion.Global
+				// ReSharper disable ExpressionIsAlwaysNull	
+				// ReSharper disable ConditionIsAlwaysTrueOrFalse
+				var notModifiedStateProvider = Render as INotModifiedStateProvider;
+
+				return notModifiedStateProvider != null && notModifiedStateProvider.SupportNotModifiedState;
 			}
+			// ReSharper restore ConditionIsAlwaysTrueOrFalse
+			// ReSharper restore ExpressionIsAlwaysNull
+			// ReSharper restore SuspiciousTypeConversion.Global
 		}
 
 		/// <summary>

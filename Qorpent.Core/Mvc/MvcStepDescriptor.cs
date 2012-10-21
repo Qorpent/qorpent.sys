@@ -33,7 +33,7 @@ namespace Qorpent.Mvc {
 	/// 	Basis for mvc descriptors
 	/// </summary>
 	[Serialize]
-	public abstract class MvcStepDescriptor : INotModifiedStateProvider, IWithRole,IWithRoleContext {
+	public abstract class MvcStepDescriptor : INotModifiedStateProvider, IWithRole, IWithRoleContext {
 		/// <summary>
 		/// 	Name of step implementation
 		/// </summary>
@@ -70,14 +70,14 @@ namespace Qorpent.Mvc {
 		/// 	Wrapper fo Descritor.Role
 		/// </summary>
 		[Serialize] public string Role {
-			get {
-				if (null == _role) {
-					_role = PrepareRole();
-				}
-				return _role;
-			}
+			get { return _role ?? (_role = PrepareRole()); }
 			set { throw new NotSupportedException(); }
 		}
+
+		/// <summary>
+		/// 	Дополнительный контекст проверки роли
+		/// </summary>
+		public string RoleContext { get; set; }
 
 		/// <summary>
 		/// 	Подготовка полной строки с описанием роли
@@ -86,10 +86,5 @@ namespace Qorpent.Mvc {
 		protected abstract string PrepareRole();
 
 		private string _role;
-
-		/// <summary>
-		/// Дополнительный контекст проверки роли
-		/// </summary>
-		public string RoleContext { get; set; }
 	}
 }

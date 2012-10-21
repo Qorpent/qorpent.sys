@@ -51,7 +51,7 @@ namespace Qorpent.Events {
 		/// </summary>
 		/// <param name="all"> </param>
 		public ResetEventData(bool all) {
-			All = true;
+			All = all;
 		}
 
 		/// <summary>

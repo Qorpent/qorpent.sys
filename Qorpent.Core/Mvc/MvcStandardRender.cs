@@ -39,7 +39,7 @@ namespace Qorpent.Mvc {
 
 		/// <summary>
 		/// </summary>
-		XML,
+		Xml,
 
 		/// <summary>
 		/// </summary>

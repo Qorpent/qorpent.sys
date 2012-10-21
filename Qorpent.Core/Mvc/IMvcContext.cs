@@ -166,17 +166,17 @@ namespace Qorpent.Mvc {
 		[SerializeNotNullOnly] string Language { get; set; }
 
 		/// <summary>
-		/// Cookie отклика
+		/// 	Cookie отклика
 		/// </summary>
 		HttpCookieCollection ResponseCookies { get; }
 
 		/// <summary>
-		/// Cookie отклика
+		/// 	Cookie отклика
 		/// </summary>
 		HttpCookieCollection RequestCookies { get; }
 
 		/// <summary>
-		/// Признак того, что контекст вызвал Redirect
+		/// 	Признак того, что контекст вызвал Redirect
 		/// </summary>
 		bool IsRedirected { get; set; }
 
@@ -292,10 +292,10 @@ namespace Qorpent.Mvc {
 		void WriteOutFile(string filename);
 
 		/// <summary>
-		/// Response redirect
+		/// 	Response redirect
 		/// </summary>
-		/// <param name="localurl"></param>
-		/// <returns></returns>
+		/// <param name="localurl"> </param>
+		/// <returns> </returns>
 		void Redirect(string localurl);
 	}
 }

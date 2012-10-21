@@ -112,10 +112,10 @@ namespace Qorpent.Mvc {
 		IMvcContext CreateContext(string url = null);
 
 		/// <summary>
-		/// Проверяет наличие вида и кэширует его экземпляр
+		/// 	Проверяет наличие вида и кэширует его экземпляр
 		/// </summary>
-		/// <param name="viewname"></param>
-		/// <returns></returns>
+		/// <param name="viewname"> </param>
+		/// <returns> </returns>
 		bool ViewExists(string viewname);
 	}
 }
