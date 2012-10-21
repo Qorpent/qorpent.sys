@@ -35,7 +35,7 @@ namespace Qorpent.Bxl {
 	/// <summary>
 	/// 	Main gate to complexy access to Bxl parsing modes
 	/// </summary>
-	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof(IBxlParser))]
+	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (IBxlParser))]
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISpecialXmlParser), Name = "bxl.xml.parser")]
 	public class BxlParser : IBxlParser, ISpecialXmlParser {
 		/// <summary>
@@ -45,8 +45,12 @@ namespace Qorpent.Bxl {
 		/// <param name="filename"> </param>
 		/// <param name="options"> </param>
 		/// <returns> </returns>
-		public XElement Parse(string code = null, string filename = "code.bxl",
-		                      BxlParserOptions options = BxlParserOptions.None) {
+// ReSharper disable MethodOverloadWithOptionalParameter (other is implicit interface)
+		public XElement Parse(string code = null, string filename = "code.bxl",BxlParserOptions options = BxlParserOptions.None) {
+// ReSharper restore MethodOverloadWithOptionalParameter
+			if (filename == null) {
+				throw new ArgumentNullException("filename");
+			}
 			if (code.IsEmpty()) {
 				code = File.ReadAllText(filename);
 			}
@@ -140,7 +144,7 @@ namespace Qorpent.Bxl {
 					state = tokenizer.GetFinishState();
 				}
 				catch (Exception ex) {
-					result[linenumber] = new[] {new BxlToken(BxlTokenType.Error) {Value = ex.ToString()},};
+					result[linenumber] = new[] {new BxlToken(BxlTokenType.Error) {Value = ex.ToString()}};
 					state = 1;
 				}
 				linenumber++;

@@ -225,12 +225,12 @@ namespace Qorpent.Bxl {
 		public string Convert(XElement e, BxlGeneratorOptions options = null) {
 			var sw = new StringWriter();
 			_output = sw;
-			ExtractAndWriteNamespaces(e, options);
+			ExtractAndWriteNamespaces(e);
 			Write(e, sw, options);
 			return sw.ToString();
 		}
 
-		private void ExtractAndWriteNamespaces(XElement xElement, BxlGeneratorOptions options) {
+		private void ExtractAndWriteNamespaces(XElement xElement) {
 			_ns = new Dictionary<string, string>();
 			foreach (var xAttribute in xElement.Attributes().Where(x => x.Name.Namespace == XNamespace.Xmlns).ToArray()) {
 				var prefix = xAttribute.Name.LocalName;

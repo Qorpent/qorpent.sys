@@ -136,7 +136,7 @@ namespace Qorpent.Bxl {
 			if (null == _adaptedname) {
 				if (Name.Contains("::")) {
 					if (Name.EndsWith("::")) {
-						throw new BxlException("illegal namespace declaration", lexinfo: LexInfo);
+						throw new BxlException("illegal namespace declaration", LexInfo);
 					}
 					var nameparts = Name.SmartSplit(false, true, ':');
 					if (nameparts.Count == 2) {
@@ -166,10 +166,9 @@ namespace Qorpent.Bxl {
 								}
 							}
 							if (ns.IsEmpty()) {
-								throw new BxlException("unknown ns prefix", lexinfo: LexInfo);
+								throw new BxlException("unknown ns prefix", LexInfo);
 							}
 						}
-						else {}
 						_adaptedname = "{" + ns + "}" + localname;
 					}
 					else {
