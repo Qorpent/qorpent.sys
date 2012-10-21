@@ -45,22 +45,22 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public virtual void Serialize(string name, object value, TextWriter output) {
-			s = createImpl(name, value);
+			_s = CreateImpl(name, value);
 			if (null == output) {
 				throw new ArgumentNullException("output");
 			}
-			s.Output = output;
+			_s.Output = output;
 			if (value is XElement) {
 				var x = (XElement) value;
-				s.Begin(x.Name.LocalName);
-				serializeElement((XElement) value);
-				s.End();
+				_s.Begin(x.Name.LocalName);
+				SerializeElement((XElement) value);
+				_s.End();
 			}
 			else {
-				s.Begin(name);
-				_serialize(name, value);
-				s.End();
-				s.Flush();
+				_s.Begin(name);
+				InternalSerialize(name, value);
+				_s.End();
+				_s.Flush();
 			}
 		}
 
@@ -71,53 +71,55 @@ namespace Qorpent.Serialization {
 		/// <param name="value"> The value. </param>
 		/// <remarks>
 		/// </remarks>
-		private void serializeElement(XElement value) {
-			s.BeginObject(value.Name.LocalName);
+		private void SerializeElement(XElement value) {
+			_s.BeginObject(value.Name.LocalName);
 			var c = value.Attributes().OfType<XObject>().Union(
 				value.Nodes().Where(z => z is XText)
 				).Union(
 					value.Elements()).Count();
 			foreach (var a in value.Attributes()) {
 				c--;
-				s.BeginObjectItem(a.Name.LocalName, true);
-				s.WriteFinal(a.Value);
-				s.EndObjectItem(c == 0);
+				_s.BeginObjectItem(a.Name.LocalName, true);
+				_s.WriteFinal(a.Value);
+				_s.EndObjectItem(c == 0);
 			}
 			var set = value.Nodes().Where(z => z is XText);
 			foreach (var x in set) {
 				c--;
-				s.BeginObjectItem("_text", true);
-				if (x is XText) {
-					s.WriteFinal(((XText) x).Value);
+				_s.BeginObjectItem("_text", true);
+				var xText = x as XText;
+				if (xText != null) {
+					_s.WriteFinal(xText.Value);
 				}
-				s.EndObjectItem(c == 0);
+				_s.EndObjectItem(c == 0);
 			}
 			IList<string> checkedx = new List<string>();
+			IEnumerable<XElement> elements;
 			foreach (var e in value.Elements()) {
 				c--;
 				if (checkedx.Contains(e.Name.LocalName)) {
 					continue;
 				}
 				checkedx.Add(e.Name.LocalName);
-				var e_ = value.Elements(e.Name);
-				s.BeginObjectItem(e.Name.LocalName, false);
-				if (e_.Count() == 1 && value.Attribute("isarray") == null) {
-					serializeElement(e);
+				elements = value.Elements(e.Name).ToArray();
+				_s.BeginObjectItem(e.Name.LocalName, false);
+				if (elements.Count() == 1 && value.Attribute("isarray") == null) {
+					SerializeElement(e);
 				}
 				else {
-					s.BeginArray(e.Name.LocalName);
+					_s.BeginArray(e.Name.LocalName);
 					var i = 0;
-					foreach (var x in e_) {
-						s.BeginArrayEntry(i++);
-						serializeElement(x);
-						s.EndArrayEntry(i == c);
+					foreach (var x in elements) {
+						_s.BeginArrayEntry(i++);
+						SerializeElement(x);
+						_s.EndArrayEntry(i == c);
 					}
-					s.EndArray();
+					_s.EndArray();
 				}
-				s.EndObjectItem(c == 0);
+				_s.EndObjectItem(c == 0);
 			}
 
-			s.EndObject();
+			_s.EndObject();
 		}
 
 		/// <summary>
@@ -128,7 +130,7 @@ namespace Qorpent.Serialization {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		protected abstract ISerializerImpl createImpl(string name, object value);
+		protected abstract ISerializerImpl CreateImpl(string name, object value);
 
 		/// <summary>
 		/// 	_serializes the specified name.
@@ -137,37 +139,37 @@ namespace Qorpent.Serialization {
 		/// <param name="value"> The value. </param>
 		/// <remarks>
 		/// </remarks>
-		private void _serialize(string name, object value) {
+		private void InternalSerialize(string name, object value) {
 			name = name ?? (null == value ? "null" : value.GetType().Name);
 			if (null == value) {
-				s.WriteFinal(null);
+				_s.WriteFinal(null);
 			}
-			else if (value.GetType().IsValueType || value.GetType() == typeof (string)) {
-				s.WriteFinal(value);
+			else if (value.GetType().IsValueType || value is string) {
+				_s.WriteFinal(value);
 			}
 			else if (value is Uri) {
-				s.WriteFinal(value.ToString());
+				_s.WriteFinal(value.ToString());
 			}
 			else if (value is Exception) {
-				serializeClass(name,
+				SerializeClass(name,
 				               new {type = value.GetType().Name, message = ((Exception) value).Message, text = value.ToString()});
 			}
 			else if (typeof (Array).IsAssignableFrom(value.GetType())) {
-				serializeArray(name, (Array) value);
+				SerializeArray(name, (Array) value);
 			}
 			else if (typeof (IDictionary).IsAssignableFrom(value.GetType())) {
-				serializeDictionary(name, (IDictionary) value);
+				SerializeDictionary(name, (IDictionary) value);
 			}
 			else if (typeof (IEnumerable).IsAssignableFrom(value.GetType())) {
-				serializeArray(name, ((IEnumerable) value).OfType<object>().ToArray());
+				SerializeArray(name, ((IEnumerable) value).OfType<object>().ToArray());
 			}
 			else {
 				if (_refcache.Contains(value)) {
-					serializeClass("SERIALIZEPROBLEM", new {SERIALIZEPROBLEM = "pcircular reference"});
+					SerializeClass("SERIALIZEPROBLEM", new {SERIALIZEPROBLEM = "pcircular reference"});
 					return;
 				}
 				_refcache.Add(value);
-				serializeClass(name, value);
+				SerializeClass(name, value);
 				_refcache.Remove(value);
 			}
 		}
@@ -179,17 +181,17 @@ namespace Qorpent.Serialization {
 		/// <param name="value"> The value. </param>
 		/// <remarks>
 		/// </remarks>
-		private void serializeClass(string name, object value) {
-			var items = SerializableItem.GetSerializableItems(value);
-			s.BeginObject(name);
+		private void SerializeClass(string name, object value) {
+			var items = SerializableItem.GetSerializableItems(value).ToArray();
+			_s.BeginObject(name);
 			var c = items.Count();
 			foreach (var i in items) {
-				s.BeginObjectItem(i.Name, i.IsFinal);
-				_serialize(i.Name, i.Value);
-				s.EndObjectItem(c == 1);
+				_s.BeginObjectItem(i.Name, i.IsFinal);
+				InternalSerialize(i.Name, i.Value);
+				_s.EndObjectItem(c == 1);
 				c--;
 			}
-			s.EndObject();
+			_s.EndObject();
 		}
 
 		/// <summary>
@@ -199,16 +201,16 @@ namespace Qorpent.Serialization {
 		/// <param name="value"> The value. </param>
 		/// <remarks>
 		/// </remarks>
-		private void serializeDictionary(string name, IDictionary value) {
-			s.BeginDictionary(name);
+		private void SerializeDictionary(string name, IDictionary value) {
+			_s.BeginDictionary(name);
 			var c = value.Keys.Count;
 			foreach (var k in value.Keys) {
-				s.BeginDictionaryEntry(k.ToString());
-				_serialize("value", value[k]);
-				s.EndDictionaryEntry(c == 1);
+				_s.BeginDictionaryEntry(k.ToString());
+				InternalSerialize("value", value[k]);
+				_s.EndDictionaryEntry(c == 1);
 				c--;
 			}
-			s.EndDictionary();
+			_s.EndDictionary();
 		}
 
 		/// <summary>
@@ -218,16 +220,16 @@ namespace Qorpent.Serialization {
 		/// <param name="value"> The value. </param>
 		/// <remarks>
 		/// </remarks>
-		private void serializeArray(string name, Array value) {
-			s.BeginArray(name);
+		private void SerializeArray(string name, Array value) {
+			_s.BeginArray(name);
 			var i = 0;
 			foreach (var val in value) {
-				s.BeginArrayEntry(i);
-				_serialize(i.ToString(), val);
-				s.EndArrayEntry(i == value.Length - 1);
+				_s.BeginArrayEntry(i);
+				InternalSerialize(i.ToString(), val);
+				_s.EndArrayEntry(i == value.Length - 1);
 				i++;
 			}
-			s.EndArray();
+			_s.EndArray();
 		}
 
 		/// <summary>
@@ -238,7 +240,7 @@ namespace Qorpent.Serialization {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		public string serialize(string name, object obj) {
+		public string DoSerialize(string name, object obj) {
 			var sw = new StringWriter();
 			Serialize(name, obj, sw);
 			return sw.ToString();
@@ -250,6 +252,6 @@ namespace Qorpent.Serialization {
 
 		/// <summary>
 		/// </summary>
-		private ISerializerImpl s;
+		private ISerializerImpl _s;
 	}
 }

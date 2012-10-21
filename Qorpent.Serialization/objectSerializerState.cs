@@ -28,21 +28,21 @@ namespace Qorpent.Serialization {
 	/// </summary>
 	/// <remarks>
 	/// </remarks>
-	internal enum objectSerializerState {
+	internal enum ObjectSerializerState {
 		/// <summary>
 		/// </summary>
-		undef,
+		Undef,
 
 		/// <summary>
 		/// </summary>
-		obj,
+		Obj,
 
 		/// <summary>
 		/// </summary>
-		dict,
+		Dict,
 
 		/// <summary>
 		/// </summary>
-		array,
+		Array,
 	}
 }

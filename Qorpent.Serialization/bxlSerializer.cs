@@ -41,8 +41,8 @@ namespace Qorpent.Serialization {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		protected override ISerializerImpl createImpl(string name, object value) {
-			return new bxlSerializerImpl();
+		protected override ISerializerImpl CreateImpl(string name, object value) {
+			return new BxlSerializerImpl();
 		}
 
 		/// <summary>

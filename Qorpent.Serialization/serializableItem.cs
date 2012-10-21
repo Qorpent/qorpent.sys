@@ -26,6 +26,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -49,6 +50,7 @@ namespace Qorpent.Serialization {
 			Value = value;
 			Type = type ?? (null == value ? typeof (object) : value.GetType());
 			Name = string.IsNullOrEmpty(name) ? Type.Name : name;
+			Debug.Assert(type != null, "type != null");
 			IsFinal = (type.IsValueType || type == typeof (string));
 		}
 
@@ -62,7 +64,7 @@ namespace Qorpent.Serialization {
 		public SerializableItem(FieldInfo field, object target)
 			: this(field.Name, field.GetValue(target), field.FieldType) {
 			Member = field;
-			valueprepared = true;
+			_valueprepared = true;
 			var sa = Member.DeclaringType.GetFirstAttribute<SerializeAttribute>();
 			if (null != sa && sa.CamelNames) {
 				Name = Name.Substring(0, 1).ToLower() + Name.Substring(1);
@@ -79,8 +81,8 @@ namespace Qorpent.Serialization {
 		public SerializableItem(PropertyInfo property, object target)
 			: this(property.Name, null, property.PropertyType) {
 			Member = property;
-			this.target = target;
-			valueprepared = false;
+			_target = target;
+			_valueprepared = false;
 			var sa = Member.DeclaringType.GetFirstAttribute<SerializeAttribute>();
 			if (null != sa && sa.CamelNames) {
 				Name = Name.Substring(0, 1).ToLower() + Name.Substring(1);
@@ -105,13 +107,13 @@ namespace Qorpent.Serialization {
 				if (Member.Name == "__interceptors") {
 					return false; //ioc includes
 				}
-				if (Member.DeclaringType.GetCustomAttributes(typeof (CompilerGeneratedAttribute), true)
-					    .Count() > 0) {
+				if (Member.DeclaringType != null && Member.DeclaringType.GetCustomAttributes(typeof (CompilerGeneratedAttribute), true)
+					                                    .Count() > 0) {
 					return true; //anonymous class property|field
 				}
-				if (checkIgnore()) {
-					if (checkType()) {
-						if (checkNull()) {
+				if (CheckIgnore()) {
+					if (CheckType()) {
+						if (CheckNull()) {
 							return true;
 						}
 					}
@@ -127,8 +129,8 @@ namespace Qorpent.Serialization {
 		/// </remarks>
 		public object Value {
 			get {
-				if (!valueprepared) {
-					_value = ((PropertyInfo) Member).GetValue(target, null);
+				if (!_valueprepared) {
+					_value = ((PropertyInfo) Member).GetValue(_target, null);
 				}
 				return _value;
 			}
@@ -164,10 +166,7 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public static IEnumerable<SerializableItem> GetSerializableItems(object target) {
-			var result = new List<SerializableItem>();
-			foreach (var field in target.GetType().GetFields()) {
-				result.Add(new SerializableItem(field, target));
-			}
+			var result = target.GetType().GetFields().Select(field => new SerializableItem(field, target)).ToList();
 			foreach (var field in target.GetType().GetProperties()) {
 				try {
 					result.Add(new SerializableItem(field, target));
@@ -184,11 +183,11 @@ namespace Qorpent.Serialization {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		private bool checkNull() {
+		private bool CheckNull() {
 			if (null == Member) {
 				return true;
 			}
-			if (!isattrsetted<SerializeNotNullOnlyAttribute>(Member)) {
+			if (!IsAttrSetted<SerializeNotNullOnlyAttribute>(Member)) {
 				return true;
 			}
 			if (IsFinal) {
@@ -206,9 +205,7 @@ namespace Qorpent.Serialization {
 				}
 				return !Equals(Value, Activator.CreateInstance(Type));
 			}
-			else {
-				return null != Value;
-			}
+			return null != Value;
 		}
 
 		/// <summary>
@@ -219,16 +216,11 @@ namespace Qorpent.Serialization {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		private bool isattrsetted<T>(Type type) where T : Attribute {
+		private static bool IsAttrSetted<T>(Type type) where T : Attribute {
 			if (0 != type.GetCustomAttributes(typeof (T), true).Length) {
 				return true;
 			}
-			foreach (var i in type.GetInterfaces()) {
-				if (0 != i.GetCustomAttributes(typeof (T), true).Length) {
-					return true;
-				}
-			}
-			return false;
+			return type.GetInterfaces().Any(i => 0 != i.GetCustomAttributes(typeof (T), true).Length);
 		}
 
 		/// <summary>
@@ -239,17 +231,12 @@ namespace Qorpent.Serialization {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		private bool isattrsetted<T>(MemberInfo member) where T : Attribute {
+		private bool IsAttrSetted<T>(MemberInfo member) where T : Attribute {
 			if (0 != member.GetCustomAttributes(typeof (T), true).Length) {
 				return true;
 			}
-			foreach (var i in member.DeclaringType.GetInterfaces()) {
-				var im = i.GetMember(member.Name).FirstOrDefault(x => x.GetType() == member.GetType());
-				if (null != im && 0 != im.GetCustomAttributes(typeof (T), true).Length) {
-					return true;
-				}
-			}
-			return false;
+			Debug.Assert(member.DeclaringType != null, "member.DeclaringType != null");
+			return member.DeclaringType.GetInterfaces().Select(i => i.GetMember(member.Name).FirstOrDefault(x => x.GetType() == member.GetType())).Any(im => null != im && 0 != im.GetCustomAttributes(typeof (T), true).Length);
 		}
 
 		/// <summary>
@@ -258,33 +245,33 @@ namespace Qorpent.Serialization {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		private bool checkType() {
+		private bool CheckType() {
 			try {
-				if (Member is PropertyInfo) {
+				var propertyInfo = Member as PropertyInfo;
+				if (propertyInfo != null) {
 					//no support for indexers
-					var idx = ((PropertyInfo) Member).GetIndexParameters();
-					if (null != idx && 0 != idx.Length) {
+					var idx = propertyInfo.GetIndexParameters();
+					if (0 == idx.Length) {
 						return false;
 					}
 				}
 				if (IsFinal) {
 					return true;
 				}
-				if (isattrsetted<SerializeAttribute>(Member)) {
+				if (IsAttrSetted<SerializeAttribute>(Member)) {
 					return true;
 				}
-				if (typeof (IDictionary).IsAssignableFrom(Type) ||
-				    (Value != null && typeof (IDictionary).IsAssignableFrom(Value.GetType()))) {
+				if (!typeof (IDictionary).IsAssignableFrom(Type) && (Value == null || !(Value is IDictionary))) {
 					return true;
 				}
 				if (typeof (Array).IsAssignableFrom(Type) ||
-				    (Value != null && typeof (Array).IsAssignableFrom(Value.GetType()))) {
+				    (Value is Array)) {
 					return true;
 				}
 				if (Value != null && Value.GetType().Name.StartsWith("<")) {
 					return true;
 				}
-				return isattrsetted<SerializeAttribute>(Type);
+				return IsAttrSetted<SerializeAttribute>(Type);
 			}
 			catch (Exception) {
 				return false;
@@ -297,20 +284,20 @@ namespace Qorpent.Serialization {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		private bool checkIgnore() {
+		private bool CheckIgnore() {
 			if (null == Member) {
 				return true;
 			}
-			return !isattrsetted<IgnoreSerializeAttribute>(Member);
+			return !IsAttrSetted<IgnoreSerializeAttribute>(Member);
 		}
 
 		/// <summary>
 		/// </summary>
-		private readonly object target;
+		private readonly object _target;
 
 		/// <summary>
 		/// </summary>
-		private readonly bool valueprepared;
+		private readonly bool _valueprepared;
 
 		/// <summary>
 		/// </summary>

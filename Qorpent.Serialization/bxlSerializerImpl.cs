@@ -27,7 +27,7 @@ using System.Linq;
 using Qorpent.Applications;
 
 namespace Qorpent.Serialization {
-	internal class bxlSerializerImpl : XmlSerializerImpl {
+	internal class BxlSerializerImpl : XmlSerializerImpl {
 		public override void End() {
 			var e = Root;
 			if (e.Elements().Count() == 1) {

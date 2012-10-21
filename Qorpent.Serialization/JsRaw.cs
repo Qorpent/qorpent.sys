@@ -36,7 +36,7 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public JsRaw(string js) {
-			this.js = js;
+			_js = js;
 		}
 
 		/// <summary>
@@ -47,7 +47,7 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public static implicit operator string(JsRaw js) {
-			return js.js;
+			return js._js;
 		}
 
 		/// <summary>
@@ -68,11 +68,11 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public override string ToString() {
-			return js;
+			return _js;
 		}
 
 		/// <summary>
 		/// </summary>
-		private readonly string js;
+		private readonly string _js;
 	}
 }

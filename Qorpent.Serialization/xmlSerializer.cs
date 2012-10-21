@@ -42,7 +42,7 @@ namespace Qorpent.Serialization {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		protected override ISerializerImpl createImpl(string name, object value) {
+		protected override ISerializerImpl CreateImpl(string name, object value) {
 			return new XmlSerializerImpl();
 		}
 

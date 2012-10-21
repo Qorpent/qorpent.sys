@@ -35,7 +35,7 @@ namespace Qorpent.Serialization {
 	/// <remarks>
 	/// </remarks>
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISerializer), Name = "md5.serializer")]
-	public class MD5Serializer : Serializer {
+	public class Md5Serializer : Serializer {
 		/// <summary>
 		/// 	Creates the impl.
 		/// </summary>
@@ -44,7 +44,7 @@ namespace Qorpent.Serialization {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		protected override ISerializerImpl createImpl(string name, object value) {
+		protected override ISerializerImpl CreateImpl(string name, object value) {
 			return new JsonSerializerImpl();
 		}
 

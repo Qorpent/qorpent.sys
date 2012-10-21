@@ -30,8 +30,8 @@ using System.IO;
 
 namespace Qorpent.Serialization {
 	internal class JsonSerializerImpl : ISerializerImpl {
-		private objectSerializerState Current {
-			get { return 0 == _statestack.Count ? objectSerializerState.undef : _statestack.Peek(); }
+		private ObjectSerializerState Current {
+			get { return 0 == _statestack.Count ? ObjectSerializerState.Undef : _statestack.Peek(); }
 		}
 
 
@@ -42,21 +42,21 @@ namespace Qorpent.Serialization {
 		public void End() {}
 
 		public void BeginObject(string name) {
-			_statestack.Push(objectSerializerState.obj);
+			_statestack.Push(ObjectSerializerState.Obj);
 
 			Output.Write("{");
 		}
 
 		public void EndObject() {
 			var s = _statestack.Pop();
-			if (s != objectSerializerState.obj) {
+			if (s != ObjectSerializerState.Obj) {
 				throw new Exception("cannot close object here");
 			}
 			Output.Write("}");
 		}
 
 		public void BeginObjectItem(string name, bool isfinal) {
-			if (Current == objectSerializerState.obj) {
+			if (Current == ObjectSerializerState.Obj) {
 				Output.Write(Literal(name) + ": ");
 			}
 			else {
@@ -65,7 +65,7 @@ namespace Qorpent.Serialization {
 		}
 
 		public void EndObjectItem(bool last) {
-			if (Current == objectSerializerState.obj) {
+			if (Current == ObjectSerializerState.Obj) {
 				if (!last) {
 					Output.Write(", ");
 				}
@@ -80,12 +80,11 @@ namespace Qorpent.Serialization {
 				Output.Write("null");
 			}
 			else if (value is string) {
-				Output.Write("\"" + escape((string) value).Replace("\"", "\\\"") + "\"");
+				Output.Write("\"" + Escape((string) value).Replace("\"", "\\\"") + "\"");
 			}
 			else if (value is DateTime) {
 				var d = (DateTime) value;
-				Output.Write(string.Format("\"##new Date({0},{1},{2},{3},{4},{5})\"", d.Year, d.Month - 1, d.Day, d.Hour, d.Minute,
-				                           d.Second));
+				Output.Write("\"##new Date({0},{1},{2},{3},{4},{5})\"", d.Year, d.Month - 1, d.Day, d.Hour, d.Minute,d.Second);
 			}
 			else if (value is int || value is long) {
 				Output.Write(value.ToString());
@@ -97,7 +96,7 @@ namespace Qorpent.Serialization {
 				Output.Write(value.ToString().ToLower());
 			}
 			else {
-				Output.Write("\"" + escape(value.ToString()) + "\"");
+				Output.Write("\"" + Escape(value.ToString()) + "\"");
 			}
 		}
 
@@ -119,13 +118,13 @@ namespace Qorpent.Serialization {
 		}
 
 		public void BeginArray(string name) {
-			_statestack.Push(objectSerializerState.array);
+			_statestack.Push(ObjectSerializerState.Array);
 			Output.Write("{");
 		}
 
 		public void EndArray() {
 			var r = _statestack.Pop();
-			if (r != objectSerializerState.array) {
+			if (r != ObjectSerializerState.Array) {
 				throw new Exception("cannot close array here");
 			}
 			Output.Write("}");
@@ -136,7 +135,7 @@ namespace Qorpent.Serialization {
 		}
 
 		public void EndArrayEntry(bool last) {
-			if (Current == objectSerializerState.array) {
+			if (Current == ObjectSerializerState.Array) {
 				if (!last) {
 					Output.Write(", ");
 				}
@@ -151,15 +150,15 @@ namespace Qorpent.Serialization {
 		}
 
 
-		private string Literal(string name) {
-			var esc = escape(name);
+		private static string Literal(string name) {
+			var esc = Escape(name);
 			return "\"" + esc + "\"";
 		}
 
-		private string escape(string str) {
+		private static string Escape(string str) {
 			return str.Replace("\\", "\\\\").Replace("\r", "\\r").Replace("\t", "\\t").Replace("\n", "\\n");
 		}
 
-		private readonly Stack<objectSerializerState> _statestack = new Stack<objectSerializerState>();
+		private readonly Stack<ObjectSerializerState> _statestack = new Stack<ObjectSerializerState>();
 	}
 }
