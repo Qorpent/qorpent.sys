@@ -52,6 +52,7 @@ namespace Qorpent.IO {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
 		}
 #endif
+
 		/// <summary>
 		/// 	Creates new filename resolver
 		/// </summary>
@@ -187,7 +188,7 @@ namespace Qorpent.IO {
 		/// <remarks>
 		/// </remarks>
 		protected string[] InternalCachedResolve(FileSearchQuery query) {
-			lock (this) {
+			lock (Sync) {
 				if (query.ProbeFiles.Length == 1 && query.PathType == FileSearchResultType.FullPath) {
 					//quick return of existed/non existed full path
 					if (Path.IsPathRooted(query.ProbeFiles[0])) {
@@ -281,7 +282,7 @@ namespace Qorpent.IO {
 					var fileName = Path.GetFileName(full);
 					if (directoryName != null && Directory.Exists(directoryName)) {
 						if (fileName != null) {
-							result.AddRange(Directory.GetFiles(directoryName, fileName).Select(file => adaptFilePath(query.PathType, file)));
+							result.AddRange(Directory.GetFiles(directoryName, fileName).Select(file => AdaptFilePath(query.PathType, file)));
 						}
 					}
 				}
@@ -305,7 +306,7 @@ namespace Qorpent.IO {
 					query.UserLog.Debug("try " + path, this);
 					if (File.Exists(path) || Directory.Exists(path)) {
 						query.UserLog.Debug("existed", this);
-						result.Add(adaptFilePath(query.PathType,path));
+						result.Add(AdaptFilePath(query.PathType, path));
 						break;
 					}
 				}
@@ -316,7 +317,7 @@ namespace Qorpent.IO {
 					query.UserLog.Debug("try " + probe, Root);
 					if (File.Exists(probe) || Directory.Exists(probe)) {
 						query.UserLog.Debug("existed", this);
-						result.Add(adaptFilePath(query.PathType, probe));
+						result.Add(AdaptFilePath(query.PathType, probe));
 						break;
 					}
 				}
@@ -340,7 +341,7 @@ namespace Qorpent.IO {
 			}
 			var path = "/" + dir + "/" + file;
 			var resolved = (Root + path).NormalizePath();
-			var result = adaptFilePath(type, resolved);
+			var result = AdaptFilePath(type, resolved);
 			userLog.Debug("resolved to best possible  " + result, Application);
 			return result;
 		}
@@ -353,7 +354,7 @@ namespace Qorpent.IO {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		private string adaptFilePath(FileSearchResultType type, string resolved) {
+		private string AdaptFilePath(FileSearchResultType type, string resolved) {
 			switch (type) {
 				case FileSearchResultType.FullPath:
 					return resolved.NormalizePath();
