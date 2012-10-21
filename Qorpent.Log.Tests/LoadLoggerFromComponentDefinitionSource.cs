@@ -42,7 +42,7 @@ namespace Qorpent.Log.Tests {
 			var sw = new StringWriter();
 			var writeComponent = c.NewComponent<ILogWriter, BaseTextWriterLogWriter>(Lifestyle.Transient,
 			                                                                         "def.writer");
-			writeComponent.Parameters["writer"] = sw;
+			writeComponent.Parameters["_writer"] = sw;
 			writeComponent.Parameters["level"] = LogLevel.Error;
 			writeComponent.Parameters["customformat"] = "${Message}";
 			var loggerComponent = c.NewComponent<ILogger, Logger>(Lifestyle.Transient, "logger");

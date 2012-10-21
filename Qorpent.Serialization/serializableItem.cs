@@ -166,7 +166,9 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public static IEnumerable<SerializableItem> GetSerializableItems(object target) {
-			var result = target.GetType().GetFields().Select(field => new SerializableItem(field, target)).ToList();
+			var result = target.GetType().GetFields()
+				.Select(field => new SerializableItem(field, target))
+				.ToList();
 			foreach (var field in target.GetType().GetProperties()) {
 				try {
 					result.Add(new SerializableItem(field, target));
@@ -251,7 +253,7 @@ namespace Qorpent.Serialization {
 				if (propertyInfo != null) {
 					//no support for indexers
 					var idx = propertyInfo.GetIndexParameters();
-					if (0 == idx.Length) {
+					if (0 != idx.Length) {
 						return false;
 					}
 				}
@@ -261,7 +263,7 @@ namespace Qorpent.Serialization {
 				if (IsAttrSetted<SerializeAttribute>(Member)) {
 					return true;
 				}
-				if (!typeof (IDictionary).IsAssignableFrom(Type) && (Value == null || !(Value is IDictionary))) {
+				if (typeof (IDictionary).IsAssignableFrom(Type) && Value is IDictionary) {
 					return true;
 				}
 				if (typeof (Array).IsAssignableFrom(Type) ||

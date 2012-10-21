@@ -420,10 +420,12 @@ namespace Qorpent.Applications {
 				lock (this) {
 					if (null == _applicationName) {
 						if (IsWeb) {
-							if (HttpContext.Current.Request.ApplicationPath != null) {
-								_applicationName = HttpContext.Current != null
-									                   ? HttpContext.Current.Request.ApplicationPath.Replace("/", "")
-									                   : "NOTDEFINED";
+							if(null!=HttpContext.Current) {
+								if (HttpContext.Current.Request.ApplicationPath != null) {
+									_applicationName = HttpContext.Current != null
+										                   ? HttpContext.Current.Request.ApplicationPath.Replace("/", "")
+										                   : "NOTDEFINED";
+								}
 							}
 						}
 					}

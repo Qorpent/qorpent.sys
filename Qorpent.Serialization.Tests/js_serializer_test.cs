@@ -48,7 +48,7 @@ namespace Qorpent.Serialization.Tests {
 			public child child1;
 			[SerializeNotNullOnly] public child child2;
 			[Serialize] public nschild child3;
-			public nschild child4;
+			[SerializeNotNullOnly]public nschild child4;
 		}
 
 		[Serialize]

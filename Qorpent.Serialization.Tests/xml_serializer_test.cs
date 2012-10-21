@@ -48,7 +48,7 @@ namespace Qorpent.Serialization.Tests {
 			public child child1;
 			[SerializeNotNullOnly] public child child2;
 			[Serialize] public nschild child3;
-			public nschild child4;
+			[SerializeNotNullOnly]public nschild child4;
 		}
 
 		[Serialize]
@@ -66,7 +66,7 @@ namespace Qorpent.Serialization.Tests {
 		public void array_serialized() {
 			var a = new object[] {1, true, "test!"};
 
-			test(a, @"<Object__><item idx=""0"">1</item><item idx=""1"">true</item><item idx=""2"">test!</item></Object__>");
+			test(a, @"<Object__><item __idx=""0"">1</item><item __idx=""1"">true</item><item __idx=""2"">test!</item></Object__>");
 		}
 
 		[Test]
@@ -110,7 +110,7 @@ namespace Qorpent.Serialization.Tests {
 			var a = new object[] {1, true, "test!"};
 			var obj = new {name = "x", dict, a};
 			test(obj,
-			     @"<anonymous name=""x""><dict><item key=""x"">1</item><item key=""y'x"">true</item><item key=""z"">test!</item></dict><a><item idx=""0"">1</item><item idx=""1"">true</item><item idx=""2"">test!</item></a></anonymous>");
+			     @"<anonymous name=""x""><dict><item key=""x"">1</item><item key=""y'x"">true</item><item key=""z"">test!</item></dict><a><item __idx=""0"">1</item><item __idx=""1"">true</item><item __idx=""2"">test!</item></a></anonymous>");
 		}
 
 		[Test]

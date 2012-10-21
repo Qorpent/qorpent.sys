@@ -70,7 +70,7 @@ namespace Qorpent.Mvc {
 		public static string GetActionName(Uri uri) {
 			var appname = "";
 			if (Application.HasCurrent && !string.IsNullOrEmpty(Application.Current.ApplicationName)) {
-				appname = Application.Current.ApplicationName + "/";
+				appname = (Application.Current.ApplicationName ?? "") + "/";
 			}
 			if (null == uri) {
 				return "qweb.none";
