@@ -16,7 +16,7 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : IComponentDefinition.cs
+// Original file : BasicComponentDefinition.cs
 // Project: Qorpent.Core
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
@@ -26,78 +26,87 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using Qorpent.Model;
 
 namespace Qorpent.IoC {
 	/// <summary>
-	/// 	Component definition interface
 	/// </summary>
-	public interface IComponentDefinition : IWithRole {
+	public class BasicComponentDefinition : IComponentDefinition {
+		/// <summary>
+		/// </summary>
+		public BasicComponentDefinition() {
+			Parameters = new Dictionary<string, object>();
+		}
+
+
 		/// <summary>
 		/// 	Singleton, manual made object
 		/// </summary>
-		Object Implementation { get; set; }
-
+		public object Implementation { get; set; }
 
 		/// <summary>
 		/// 	Lifestyle of object
 		/// </summary>
-		Lifestyle Lifestyle { get; set; }
+		public Lifestyle Lifestyle { get; set; }
 
 		/// <summary>
 		/// 	Type that implements Service
 		/// </summary>
-		Type ImplementationType { get; set; }
+		public Type ImplementationType { get; set; }
 
 		/// <summary>
 		/// 	Type of Service
 		/// </summary>
-		Type ServiceType { get; set; }
+		public Type ServiceType { get; set; }
 
 		/// <summary>
 		/// 	Individual Name of component
 		/// </summary>
-		string Name { get; set; }
+		public string Name { get; set; }
 
 		/// <summary>
 		/// 	Priority hint for Best component resolution
 		/// </summary>
-		int Priority { get; set; }
+		public int Priority { get; set; }
 
 		/// <summary>
 		/// 	Some custom parameters for component
 		/// </summary>
-		IDictionary<string, object> Parameters { get; }
+		public IDictionary<string, object> Parameters { get; private set; }
 
 		/// <summary>
 		/// 	Container-side Id (must be supplied by container)
 		/// </summary>
-		int ContainerId { get; set; }
+		public int ContainerId { get; set; }
 
 		/// <summary>
 		/// 	Container-side statistic of Activations (Gets) on component
 		/// </summary>
-		int ActivationCount { get; set; }
+		public int ActivationCount { get; set; }
 
 		/// <summary>
 		/// 	Container-side statistic of Activations (Gets) on component which cause creation of object
 		/// </summary>
-		int CreationCount { get; set; }
+		public int CreationCount { get; set; }
 
+		/// <summary>
+		/// 	(reserved) - defined to setup role security on access container
+		/// </summary>
+		public string Role { get; set; }
 
 		/// <summary>
 		/// 	Help string on component - to provide addition information about configured component
 		/// </summary>
-		string Help { get; set; }
+		public string Help { get; set; }
 
 		/// <summary>
 		/// 	Опицональный элемент XML из которого произведена загрузка компонента (при манифестах)
 		/// </summary>
-		XElement Source { get; set; }
+		public XElement Source { get; set; }
 
 		/// <summary>
-		/// 	При первом создании и при наличии стиля жизни Extension - объекты будут сохраняться в <see cref="Implementation" />
+		/// 	При первом создании и при наличии стиля жизни Extension - объекты будут сохраняться в <see
+		/// 	 cref="IComponentDefinition.Implementation" />
 		/// </summary>
-		bool CacheInstanceOfExtension { get; set; }
+		public bool CacheInstanceOfExtension { get; set; }
 	}
 }

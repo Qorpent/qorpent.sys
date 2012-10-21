@@ -16,7 +16,7 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : OutputFileContent.cs
+// Original file : FileDescriptor.cs
 // Project: Qorpent.Mvc
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
