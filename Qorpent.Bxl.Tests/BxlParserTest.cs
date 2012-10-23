@@ -28,6 +28,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml.Linq;
 using NUnit.Framework;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Bxl.Tests {
 	[TestFixture]
@@ -132,7 +133,7 @@ e1 :
     <qxi:import _file=""code.bxl"" _line=""5"" code=""direct//impA"" id=""direct//impA"" />
     <qxi:import _file=""code.bxl"" _line=""6"" code=""direct//impD"" id=""direct//impD"" name=""delay"" />
   </e1>
-</root>", res.ToString());
+</root>".LfOnly(), res.ToString().LfOnly());
 		}
 
 		[Test]
@@ -152,7 +153,7 @@ e1 :
     <qxi:import _file=""code.bxl"" _line=""6"" code=""direct//impA"" id=""direct//impA"" />
     <qxi:import _file=""code.bxl"" _line=""7"" code=""direct//impD"" id=""direct//impD"" name=""delay"" />
   </e1>
-</root>", res.ToString());
+</root>".LfOnly(), res.ToString().LfOnly());
 		}
 
 
@@ -165,7 +166,7 @@ b::e1", "myfile", BxlParserOptions.NoLexData);
 			Assert.AreEqual(@"<root xmlns:a=""namespace::myfile_X"" xmlns:b=""namespace::myfile_XX"">
   <a:e1 />
   <b:e1 />
-</root>", res.ToString());
+</root>".LfOnly(), res.ToString().LfOnly());
 		}
 
 		[Test]
@@ -248,7 +249,7 @@ ns::test ns::attr=2");
 			Console.WriteLine(res.ToString());
 			Assert.AreEqual(@"<root xmlns:ns=""http://myns"">
   <ns:test _file=""code.bxl"" _line=""3"" ns:attr=""2"" />
-</root>", res.ToString());
+</root>".LfOnly(), res.ToString().LfOnly());
 		}
 
 		[Test]
@@ -259,7 +260,7 @@ ns::test");
 			Console.WriteLine(res.ToString());
 			Assert.AreEqual(@"<root xmlns:ns=""http://myns"">
   <ns:test _file=""code.bxl"" _line=""3"" />
-</root>", res.ToString());
+</root>".LfOnly(), res.ToString().LfOnly());
 		}
 
 		[Test]

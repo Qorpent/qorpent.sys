@@ -25,6 +25,7 @@
 
 using System.Xml.Linq;
 using NUnit.Framework;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Bxl.Tests {
 	[TestFixture]
@@ -35,9 +36,9 @@ namespace Qorpent.Bxl.Tests {
 				@"
 x=""html://testns""
 x::e1
-".Trim(), MyBxl.Convert(
+".Trim().LfOnly(), MyBxl.Convert(
 					XElement.Parse("<root xmlns:x='html://testns'><x:e1 /></root>"),
-					new BxlGeneratorOptions {NoRootElement = true}).Trim()
+					new BxlGeneratorOptions {NoRootElement = true}).Trim().LfOnly()
 				);
 		}
 
@@ -48,9 +49,9 @@ x::e1
 x=testns
 x::root
 	x::e1
-".Trim(), MyBxl.Convert(
+".Trim().LfOnly(), MyBxl.Convert(
 					XElement.Parse("<x:root xmlns:x='testns'><x:e1 /></x:root>"),
-					new BxlGeneratorOptions {NoRootElement = false}).Trim()
+					new BxlGeneratorOptions {NoRootElement = false}).Trim().LfOnly()
 				);
 		}
 
@@ -59,9 +60,9 @@ x::root
 			Assert.AreEqual(
 				@"
 qxi::include
-".Trim(), MyBxl.Convert(
+".Trim().LfOnly(), MyBxl.Convert(
 					XElement.Parse("<root xmlns:qxi='http://qorpent/xml/include'><qxi:include /></root>"),
-					new BxlGeneratorOptions {NoRootElement = true}).Trim()
+					new BxlGeneratorOptions {NoRootElement = true}).Trim().LfOnly()
 				);
 		}
 	}
