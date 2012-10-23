@@ -25,6 +25,7 @@
 
 using System;
 using NUnit.Framework;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Bxl.Tests {
 	[TestFixture]
@@ -124,7 +125,7 @@ namespace Qorpent.Bxl.Tests {
 			var x = new BxlParser().Parse("x a=1 b=2");
 			Assert.AreEqual(@"<root>
   <x _file=""code.bxl"" _line=""1"" a=""1"" b=""2"" />
-</root>", x.ToString());
+</root>".LfOnly(), x.ToString().LfOnly());
 //			Console.WriteLine(x);
 		}
 

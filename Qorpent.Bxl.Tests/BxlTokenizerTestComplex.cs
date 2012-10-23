@@ -27,6 +27,7 @@ using System;
 using System.Xml.Linq;
 using Comdiv.UXmlDiff;
 using NUnit.Framework;
+using Qorpent.Utils.Extensions;
 
 #if !SQL2008
 #endif
@@ -224,7 +225,7 @@ a 1= :
 			Console.WriteLine(xml);
 			Assert.AreEqual(@"<root>
   <x _file=""code.bxl"" _line=""1"" code=""(y == a &amp;&amp; z='ddd'&#xD;&#xA;|| (a!= 3))"" id=""(y == a &amp;&amp; z='ddd'&#xD;&#xA;|| (a!= 3))"" />
-</root>", xml);
+</root>".LfOnly(), xml.LfOnly());
 		}
 
 		[Test]
@@ -236,7 +237,7 @@ a 1= :
 			Assert.AreEqual(@"<root>
   <x _file=""code.bxl"" _line=""1"">(y == a &amp;&amp; z='ddd'
 || (a!= 3))</x>
-</root>", xml);
+</root>".LfOnly(), xml.LfOnly());
 		}
 
 		[Test]

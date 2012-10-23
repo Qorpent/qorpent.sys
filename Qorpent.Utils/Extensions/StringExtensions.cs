@@ -62,6 +62,17 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		/// <summary>
+		/// \r\n and \r приводятся к \n
+		/// </summary>
+		/// <param name="stringToFixCrLf"></param>
+		/// <returns></returns>
+		public static string LfOnly(this string stringToFixCrLf) {
+			var result = stringToFixCrLf.Replace("\r", "\n");
+			result = result.Replace("\n\n", "\n");
+			return result;
+		}
+
+		/// <summary>
 		/// 	Concatenates any given IEnumerable to joined string, null-ignorance
 		/// </summary>
 		/// <param name="objects"> any set of objects of any type </param>

@@ -27,6 +27,7 @@ using System;
 using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Bxl.Tests {
 	[TestFixture]
@@ -40,8 +41,8 @@ test +a = 1
 ");
 			var xml = new BxlXmlGenerator().Generate(tokens);
 			Console.WriteLine(xml.ToString());
-			Assert.AreEqual(@"<root><test _line=""2"" __PLUS__a=""1"" __MINUS__b=""2"" _1x=""3"" /></root>",
-			                xml.ToString(SaveOptions.DisableFormatting));
+			Assert.AreEqual(@"<root><test _line=""2"" __PLUS__a=""1"" __MINUS__b=""2"" _1x=""3"" /></root>".LfOnly(),
+			                xml.ToString(SaveOptions.DisableFormatting).LfOnly());
 		}
 
 		[Test]
@@ -67,8 +68,8 @@ test a = 0A3@$%&^?*()[]02
 ");
 			var xml = new BxlXmlGenerator().Generate(tokens);
 			Console.WriteLine(xml.ToString());
-			Assert.AreEqual(@"<root><test _line=""2"" a=""0A3@$%&amp;^?*()[]02"" /></root>",
-			                xml.ToString(SaveOptions.DisableFormatting));
+			Assert.AreEqual(@"<root><test _line=""2"" a=""0A3@$%&amp;^?*()[]02"" /></root>".LfOnly(),
+			                xml.ToString(SaveOptions.DisableFormatting).LfOnly());
 		}
 
 		[Test]
@@ -111,7 +112,7 @@ a x = ?x
 				);
 			var xml = new BxlXmlGenerator().Generate(tokens, "test", false);
 			Console.WriteLine(xml.ToString());
-			Assert.AreEqual(@"<root><a code=""x"" id=""x"" /></root>", xml.ToString(SaveOptions.DisableFormatting));
+			Assert.AreEqual(@"<root><a code=""x"" id=""x"" /></root>".LfOnly(), xml.ToString(SaveOptions.DisableFormatting).LfOnly());
 		}
 
 		[Test]
@@ -121,7 +122,7 @@ a x = ?x
 				);
 			var xml = new BxlXmlGenerator().Generate(tokens, "test", false, true);
 			Console.WriteLine(xml.ToString());
-			Assert.AreEqual(@"<root><a __code=""x"" __id=""x"" /></root>", xml.ToString(SaveOptions.DisableFormatting));
+			Assert.AreEqual(@"<root><a __code=""x"" __id=""x"" /></root>".LfOnly(), xml.ToString(SaveOptions.DisableFormatting).LfOnly());
 		}
 
 		[Test]

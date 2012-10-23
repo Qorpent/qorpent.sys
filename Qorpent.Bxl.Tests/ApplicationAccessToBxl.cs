@@ -25,6 +25,7 @@
 
 using NUnit.Framework;
 using Qorpent.Applications;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Bxl.Tests {
 	[TestFixture]
@@ -35,8 +36,8 @@ namespace Qorpent.Bxl.Tests {
 			Assert.IsInstanceOf<BxlService>(Application.Current.Bxl);
 			Assert.AreEqual(@"<root>
   <x _file=""code.bxl"" _line=""1"" />
-</root>"
-			                , Application.Current.Bxl.Parse("x").ToString());
+</root>".LfOnly()
+			                , Application.Current.Bxl.Parse("x").ToString().LfOnly());
 		}
 	}
 }
