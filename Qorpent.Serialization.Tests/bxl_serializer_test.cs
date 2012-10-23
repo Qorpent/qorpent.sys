@@ -25,6 +25,7 @@
 
 using System;
 using NUnit.Framework;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests {
 	[TestFixture]
@@ -32,7 +33,7 @@ namespace Qorpent.Serialization.Tests {
 		private void test(object obj, string expected) {
 			var result = new BxlSerializer().DoSerialize("result", obj);
 			Console.WriteLine(result);
-			Assert.AreEqual(expected, result);
+			Assert.AreEqual(expected.Trim().LfOnly(), result.Trim().LfOnly());
 		}
 
 
