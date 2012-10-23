@@ -33,7 +33,7 @@ using Qorpent.Security;
 namespace Qorpent.Core.Tests.Security {
 	[TestFixture]
 	public class RoleResolverRoleExtensionTest {
-		[TestCase("TEMP & exact___ZET2", new[] {"ADMIN", "ZET2"}, false)]
+		[TestCase("TEMP & exact___ZET3", new[] {"ADMIN", "ZET3"}, true)]
 		[TestCase("TEMP & exact___ZET2", new[] {"ADMIN"}, false)]
 		[TestCase("TEMP & ZET2", new[] {"ADMIN"}, true)]
 		[TestCase("TEMP & ZET2", new[] {"ZET2", "TEMP"}, true)]
