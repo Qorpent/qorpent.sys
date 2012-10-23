@@ -142,7 +142,7 @@ e1 code1, 'name 1', x.z = 1 : val #comment
 			Console.WriteLine(xml.ToString());
 			Assert.AreEqual(@"<root>
   <e1 _line=""3"" code=""code1"" id=""code1"" name=""name 1"" x.z=""1"" x=""34"" z=""x"" y=""46"">val<e11 _line=""6"" code=""code2"" id=""code2"" y=""35"" /><e12 _line=""8"" code=""code3"" id=""code3"" /></e1>
-</root>", xml.ToString());
+</root>".LfOnly(), xml.ToString().LfOnly());
 		}
 
 

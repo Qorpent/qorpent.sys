@@ -31,6 +31,7 @@ using Qorpent.Bxl;
 using Qorpent.Dsl;
 using Qorpent.Dsl.XmlInclude;
 using Qorpent.IoC;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Log.Tests {
 	[TestFixture]
@@ -90,7 +91,7 @@ logger main
 	host='''Qorpent.Log.Tests.LoadLoggerFromComponentDefinitionSource'''
 	message='''
 x
-	'''", File.ReadAllText(tmpfile).Trim());
+	'''".LfOnly(), File.ReadAllText(tmpfile).Trim().LfOnly());
 		}
 	}
 }

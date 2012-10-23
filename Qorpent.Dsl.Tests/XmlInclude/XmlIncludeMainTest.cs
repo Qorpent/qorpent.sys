@@ -28,6 +28,7 @@ using System.IO;
 using System.Xml.Linq;
 using NUnit.Framework;
 using Qorpent.Bxl;
+using Qorpent.Utils.Extensions;
 using Qorpent.Utils.TestSupport;
 
 namespace Qorpent.Dsl.Tests.XmlInclude {
@@ -94,7 +95,7 @@ e1 :
 near
 ext2
 near2
-".Trim(), bxlresult.Trim());
+".Trim().LfOnly(), bxlresult.Trim().LfOnly());
 		}
 
 		[Test]
@@ -111,7 +112,7 @@ e : ZB
 	t=ZA
 	b
 		u=ZC
-".Trim(), bxlresult.Trim());
+".Trim().LfOnly(), bxlresult.Trim().LfOnly());
 		}
 
 		[Test]
@@ -127,7 +128,7 @@ e y
 e x
 e y
 	e x
-".Trim(), bxlresult.Trim());
+".Trim().LfOnly(), bxlresult.Trim().LfOnly());
 		}
 
 
@@ -140,7 +141,7 @@ e y
 e1 w=2, z=1
 	inclA x=1
 	inclD x=2
-".Trim(), bxlresult.Trim());
+".Trim().LfOnly(), bxlresult.Trim().LfOnly());
 		}
 
 
@@ -154,7 +155,7 @@ e1 z=1
 	inclA x=1
 	qxi::include ""direct//inclD"", delay
 	qxi::import ""direct//impD"", delay : ""//impD""
-".Trim(), bxlresult.Trim());
+".Trim().LfOnly(), bxlresult.Trim().LfOnly());
 		}
 
 		[Test]
@@ -167,7 +168,7 @@ e1
 	rec1 w=2
 	inclA x=1
 	qxi::include ""direct//inclD"", delay
-".Trim(), bxlresult.Trim());
+".Trim().LfOnly(), bxlresult.Trim().LfOnly());
 		}
 
 
@@ -181,7 +182,7 @@ e1
 	rec1 w=2
 	inclA x=1
 	inclD x=2
-".Trim(), bxlresult.Trim());
+".Trim().LfOnly(), bxlresult.Trim().LfOnly());
 		}
 
 
@@ -200,7 +201,7 @@ t1 X
 el1 X, z=2 : test
 	el2
 	el3
-".Trim(), bxlresult.Trim());
+".Trim().LfOnly(), bxlresult.Trim().LfOnly());
 		}
 	}
 }

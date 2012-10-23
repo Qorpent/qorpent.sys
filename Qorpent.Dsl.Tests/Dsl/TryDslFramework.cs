@@ -163,7 +163,7 @@ GO
 
 
 GO
-".Trim(), script.Trim());
+".Trim().LfOnly(), script.Trim().LfOnly());
 		}
 
 		[Test]
@@ -194,7 +194,7 @@ GO
 		select 'C'
 
 GO
-".Trim(), script.Trim());
+".Trim().LfOnly(), script.Trim().LfOnly());
 		}
 
 
@@ -230,7 +230,7 @@ GO
     
 
 GO
-".Trim(), script.Trim());
+".Trim().LfOnly(), script.Trim().LfOnly());
 		}
 	}
 }

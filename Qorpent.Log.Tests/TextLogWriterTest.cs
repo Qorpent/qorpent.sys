@@ -27,6 +27,7 @@ using System;
 using System.IO;
 using System.Threading;
 using NUnit.Framework;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Log.Tests {
 	[TestFixture]
@@ -98,13 +99,13 @@ namespace Qorpent.Log.Tests {
 			Assert.AreEqual(@"ZZZ1:Error
 ZZZ2:Error
 ZZZ2:Error
-".Trim(), f1.Trim());
+".Trim().LfOnly(), f1.Trim().LfOnly());
 			Assert.AreEqual(@"ZZZ1:Warning
 ZZZ2:Warning
 ZZZ2:Warning
 ZZZ1:Error
 ZZZ2:Error
-ZZZ2:Error".Trim(), f2.Trim());
+ZZZ2:Error".Trim().LfOnly(), f2.Trim().LfOnly());
 			Assert.AreEqual(@"ZZZ2:Trace
 ZZZ1:Info
 ZZZ2:Info
@@ -114,7 +115,7 @@ ZZZ2:Warning
 ZZZ2:Warning
 ZZZ1:Error
 ZZZ2:Error
-ZZZ2:Error".Trim(), f3.Trim());
+ZZZ2:Error".Trim().LfOnly(), f3.Trim().LfOnly());
 		}
 	}
 }

@@ -26,6 +26,7 @@
 using System;
 using System.IO;
 using NUnit.Framework;
+using Qorpent.Utils.Extensions;
 using Qorpent.Utils.TestSupport;
 
 namespace Qorpent.Log.Tests {
@@ -103,9 +104,9 @@ namespace Qorpent.Log.Tests {
 			Console.WriteLine(seclog);
 
 			Assert.AreEqual(@"02.05.2010 0:00:00 : message1
-02.05.2010 0:00:00 : message1_2", fstlog.Trim());
+02.05.2010 0:00:00 : message1_2".LfOnly(), fstlog.Trim().LfOnly());
 			Assert.AreEqual(@"03.05.2010 0:00:00 : message2
-03.05.2010 0:00:00 : message2_1", seclog.Trim());
+03.05.2010 0:00:00 : message2_1".LfOnly(), seclog.Trim().LfOnly());
 		}
 	}
 }
