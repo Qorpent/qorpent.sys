@@ -261,7 +261,7 @@ e1 code1, 'name 1', x.z = 1 : val #comment
 1EL
 2A
 1EL
-1A}", TokenizerTestHelper.GetShortTypedNotation(tokens)
+1A}".LfOnly(), TokenizerTestHelper.GetShortTypedNotation(tokens).LfOnly()
 				);
 		}
 
@@ -284,7 +284,7 @@ dsds"""""""
 1EL
 2A
 1EL
-1A}", TokenizerTestHelper.GetShortTypedNotation(tokens)
+1A}".LfOnly(), TokenizerTestHelper.GetShortTypedNotation(tokens).LfOnly()
 				);
 		}
 

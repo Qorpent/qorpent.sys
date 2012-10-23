@@ -114,7 +114,7 @@ test");
 			Console.WriteLine(res.ToString());
 			Assert.AreEqual(@"<root xmlns:ns=""http://myns"">
   <test _file=""code.bxl"" _line=""3"" />
-</root>", res.ToString());
+</root>".LfOnly(), res.ToString().LfOnly());
 		}
 
 		[Test]

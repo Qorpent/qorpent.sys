@@ -102,7 +102,7 @@ a x = ?x
       <c _file=""test"" _line=""4"" code=""?x"" id=""?x"" />
     </b>
   </a>
-</root>", xml.ToString());
+</root>".LfOnly(), xml.ToString().LfOnly());
 		}
 
 		[Test]

@@ -69,6 +69,8 @@ namespace Qorpent.Utils.Extensions {
 		public static string LfOnly(this string stringToFixCrLf) {
 			var result = stringToFixCrLf.Replace("\r", "\n");
 			result = result.Replace("\n\n", "\n");
+			result = result.Replace("&#xD;", "&#xA;");
+			result = result.Replace("&#xA;&#xA;", "&#xA;");
 			return result;
 		}
 
