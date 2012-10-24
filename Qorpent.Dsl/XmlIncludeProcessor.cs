@@ -103,7 +103,7 @@ namespace Qorpent.Dsl {
 		/// </summary>
 		/// <remarks>
 		/// </remarks>
-		protected IBxlParser Bxl {
+		public IBxlParser Bxl {
 			get {
 				if (null != _bxl) {
 					return _bxl;
