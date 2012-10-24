@@ -25,6 +25,7 @@
 
 using System.Linq;
 using Qorpent.Applications;
+using Qorpent.Bxl;
 
 namespace Qorpent.Serialization {
 	internal class BxlSerializerImpl : XmlSerializerImpl {
@@ -33,7 +34,7 @@ namespace Qorpent.Serialization {
 			if (e.Elements().Count() == 1) {
 				e = e.Elements().First();
 			}
-			Output.Write(Application.Current.Bxl.GetParser().Generate(e));
+			Output.Write(Application.Current.Bxl.GetParser().Generate(e,new BxlGeneratorOptions{NoRootElement = true}));
 		}
 	}
 }
