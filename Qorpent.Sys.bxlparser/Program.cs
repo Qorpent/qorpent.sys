@@ -24,8 +24,10 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Qorpent.Bxl;
 using Qorpent.Dsl;
 using Qorpent.IO;
@@ -57,33 +59,68 @@ namespace bxlparser {
 				}
 				else {
 					EnlistSourcesIfNeeded(consoleargs, render, sources);
-					var bxl = new BxlParser();
-					var serializer = GetSerializer(consoleargs);
-					var options = BxlParserOptions.None;
-					var includer = new XmlIncludeProcessor(new FileNameResolver {Root = Environment.CurrentDirectory}) {Bxl = bxl};
-
-					if (consoleargs.NoLexInfo) {
-						options = options | BxlParserOptions.NoLexData;
-					}
-					if (!consoleargs.ToConsole) {
-						throw new NotSupportedException("not console output not supported for now");
-					}
-					foreach (var source in sources) {
-						var xmlresult = includer.Load(source, true, options);
-						if (consoleargs.ToConsole) {
-							var comment = CreateComment(consoleargs.OutputFormat, "SOURCE: " + source);
-							render.Render(comment, ConsoleColor.Green);
-							var sw = new StringWriter();
-							serializer.Serialize("sourcefile", xmlresult, sw);
-							render.Render(sw.ToString(), ConsoleColor.Yellow);
-						}
-					}
+					ProcessConversion(consoleargs, sources, render);
 				}
 			}catch(Exception ex) {
 				render.Render(ex.ToString(),ConsoleColor.Red);
 				return -2;
 			}
 			return 0;
+		}
+
+		private static void ProcessConversion(BxlParserConsoleArgs consoleargs, IEnumerable<string> sources, ConsoleRenderHelper render) {
+			var bxl = new BxlParser();
+			var serializer = GetSerializer(consoleargs);
+			var options = BxlParserOptions.None;
+			var includer = new XmlIncludeProcessor(new FileNameResolver {Root = Environment.CurrentDirectory}) {Bxl = bxl};
+			if (consoleargs.NoLexInfo) {
+				options = options | BxlParserOptions.NoLexData;
+			}
+			foreach (var source in sources) {
+				var serializedresult = ConvertFile(includer, source, options, serializer);
+				if (consoleargs.ToConsole) {
+					var comment = CreateComment(consoleargs.OutputFormat, "SOURCE: " + source);
+					render.Render(comment, ConsoleColor.Green);
+					render.Render(serializedresult, ConsoleColor.Yellow);
+				}else {
+					var outfilename = GetOutputFileName(source, consoleargs);
+					if (outfilename.NormalizePath().ToLower() == source.NormalizePath().ToLower())
+					{
+						throw new Exception("cannot execute because result filename " + outfilename + " will overwrite source with same name");
+					}
+					File.WriteAllText(outfilename,serializedresult);
+					render.Render("Write: "+outfilename,ConsoleColor.Yellow);
+				}
+			}
+		}
+
+		private static string GetOutputFileName(string source, BxlParserConsoleArgs consoleargs) {
+			var sourcefilename = Path.GetFileName(source);
+			var sourcedirname = Path.GetDirectoryName(source);
+			var outputdir = sourcedirname;
+			var outfilename = sourcefilename + ".bxl-parse." + consoleargs.OutputFormat.ToString().ToLower();
+			if(!string.IsNullOrWhiteSpace(consoleargs.OutputDirectory)) {
+				outputdir = consoleargs.OutputDirectory;
+			}
+
+			if(!string.IsNullOrWhiteSpace(consoleargs.OutputRename)) {
+				var regex = consoleargs.OutputRename.Split(';')[0];
+				var replace = consoleargs.OutputRename.Split(';')[1];
+				outfilename = Regex.Replace(sourcefilename, regex, replace);
+			}
+			
+			var resultfilename = Path.Combine(outputdir, outfilename);
+			Directory.CreateDirectory(Path.GetDirectoryName(resultfilename));			
+			return resultfilename;
+		}
+
+		private static string ConvertFile(XmlIncludeProcessor includer, string source, BxlParserOptions options,
+		                                  ISerializer serializer) {
+			var xmlresult = includer.Load(source, true, options);
+			var sw = new StringWriter();
+			serializer.Serialize("sourcefile", xmlresult, sw);
+			var serializedresult = sw.ToString();
+			return serializedresult;
 		}
 
 		private static string CreateComment(BxlParserOutputFormat outputFormat, string comment) {
