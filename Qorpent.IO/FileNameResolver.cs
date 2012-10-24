@@ -190,15 +190,28 @@ namespace Qorpent.IO {
 		protected string[] InternalCachedResolve(FileSearchQuery query) {
 			lock (Sync) {
 				if (query.ProbeFiles.Length == 1 && query.PathType == FileSearchResultType.FullPath) {
+					var directpath = query.ProbeFiles[0];
 					//quick return of existed/non existed full path
 					if (Path.IsPathRooted(query.ProbeFiles[0])) {
-						var directpath = query.ProbeFiles[0];
+						
+						if(query.All && directpath.Contains("*")) {
+							var dir = Path.GetDirectoryName(directpath);
+							var mask = Path.GetFileName(directpath);
+							return Directory.GetFiles(dir, mask);
+						}
 						if (query.ExistedOnly) {
 							if (!(File.Exists(directpath) || Directory.Exists(directpath))) {
 								return new string[] {};
 							}
 						}
 						return new[] {directpath};
+					}else if(directpath.Contains("..")) {
+						if(!EnvironmentInfo.IsWeb) {
+							var dir = Path.GetDirectoryName(directpath);
+							dir = Path.Combine(Root, dir);
+							var mask = Path.GetFileName(directpath);
+							return Directory.GetFiles(dir, mask);
+						}
 					}
 				}
 				query.UserLog = query.UserLog ?? Log;
