@@ -63,6 +63,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Data.Tests", "Qorpe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.IO.Tests", "Qorpent.IO.Tests\Qorpent.IO.Tests.csproj", "{4F6F2194-F11D-4CC6-8BB1-7D20F97EC082}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Sys.bxlparser", "Qorpent.Sys.bxlparser\Qorpent.Sys.bxlparser.csproj", "{46E8AE7D-FCFA-4C13-8659-F73F1E76F556}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Sys.bxlparser.Tests", "Qorpent.Sys.bxlparser.Tests\Qorpent.Sys.bxlparser.Tests.csproj", "{89AFB34A-B439-41C0-BBAA-2DD4DA1B08E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -202,6 +206,18 @@ Global
 		{4F6F2194-F11D-4CC6-8BB1-7D20F97EC082}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F6F2194-F11D-4CC6-8BB1-7D20F97EC082}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{4F6F2194-F11D-4CC6-8BB1-7D20F97EC082}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{46E8AE7D-FCFA-4C13-8659-F73F1E76F556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46E8AE7D-FCFA-4C13-8659-F73F1E76F556}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46E8AE7D-FCFA-4C13-8659-F73F1E76F556}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46E8AE7D-FCFA-4C13-8659-F73F1E76F556}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46E8AE7D-FCFA-4C13-8659-F73F1E76F556}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{46E8AE7D-FCFA-4C13-8659-F73F1E76F556}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{89AFB34A-B439-41C0-BBAA-2DD4DA1B08E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89AFB34A-B439-41C0-BBAA-2DD4DA1B08E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89AFB34A-B439-41C0-BBAA-2DD4DA1B08E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89AFB34A-B439-41C0-BBAA-2DD4DA1B08E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89AFB34A-B439-41C0-BBAA-2DD4DA1B08E9}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{89AFB34A-B439-41C0-BBAA-2DD4DA1B08E9}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

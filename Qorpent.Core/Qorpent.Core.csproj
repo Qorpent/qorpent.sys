@@ -234,7 +234,6 @@
     <Compile Include=".\Serialization\SerializeNotNullOnlyAttribute.cs" />
     <Compile Include=".\ServiceBase.cs" />
     <EmbeddedResource Include=".\**\*.*resource" />
-    <None Include="ClassDiagram1.cd" />
     <QorpentReference Include="*.import" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />

@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{46E8AE7D-FCFA-4C13-8659-F73F1E76F556}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>bxlparser</RootNamespace>
+    <AssemblyName>bxlparser</AssemblyName>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'SQL2008'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>bxlparser.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Bxl\Qorpent.Bxl.csproj">
+      <Project>{381dec86-5709-4a64-bd9f-462e792884ce}</Project>
+      <Name>Qorpent.Bxl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
+      <Project>{880f65ea-1a22-4672-a137-ffc91290a209}</Project>
+      <Name>Qorpent.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Dsl\Qorpent.Dsl.csproj">
+      <Project>{b758e220-22f5-47df-a73b-bc9b1a3dbdc3}</Project>
+      <Name>Qorpent.Dsl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IoC\Qorpent.IoC.csproj">
+      <Project>{62f22ffa-a1cf-4a74-838c-9ab33a9442ea}</Project>
+      <Name>Qorpent.IoC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IO\Qorpent.IO.csproj">
+      <Project>{426c92df-3c40-426c-b0be-40a1df9044c2}</Project>
+      <Name>Qorpent.IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
+      <Project>{21971f28-8ed8-4f50-b623-e9db2658af54}</Project>
+      <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
+      <Project>{880f65ea-1a22-4672-a137-ffc912902112}</Project>
+      <Name>Qorpent.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BxlParserConsoleArgs.cs" />
+    <Compile Include="BxlParserOutputFormat.cs" />
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="help.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+  <PropertyGroup>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+</Project>
