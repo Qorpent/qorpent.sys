@@ -30,6 +30,7 @@
     <Compile Include="Collections\StringMap.cs" />
     <Compile Include="ComplexStringHelper.cs" />
     <Compile Include="ConsoleArgumentHelper.cs" />
+    <Compile Include="ConsoleRenderHelper.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="Extensions\FileNameResolverExtensions.cs" />
@@ -50,7 +51,9 @@
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <ItemGroup>
     <None Include="*.import" />
-    <None Include="*.export" />
+    <None Include="*.export">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup />
 </Project>
