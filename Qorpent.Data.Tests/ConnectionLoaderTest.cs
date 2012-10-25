@@ -24,7 +24,7 @@ namespace Qorpent.Data.Tests
 			var files = container.Get<IFileNameResolver>();
 			var file = files.Resolve(FileSearchQuery.Leveled("~/usr/mycon.db-connection"));
 			Directory.CreateDirectory(Path.GetDirectoryName(file));
-			File.WriteAllText(file,"con1 'Data Source=(local1);Initial Catalog=db;'\r\ncon2 'Data Source=(local2);Initial Catalog=db2;'");
+			File.WriteAllText(file,"con1 mssql 'Data Source=(local1);Initial Catalog=db;'\r\ncon2 'Data Source=(local2);Initial Catalog=db2;'");
 			var conp = container.Get<IDatabaseConnectionProvider>();
 			var c1 = conp.GetConnection("con1");
 			Assert.AreEqual("Data Source=(local1);Initial Catalog=db;", c1.ConnectionString);
@@ -32,6 +32,24 @@ namespace Qorpent.Data.Tests
 			Assert.AreEqual("Data Source=(local2);Initial Catalog=db2;", c2.ConnectionString);
 			File.Delete(file);
 		}
+
+		[Test]
+		public void FilePostgresResolutionWorks()
+		{
+			var container = getcontainer();
+			container.GetLoader().Load<FileBasedConnectionProviderExtension>();
+			var files = container.Get<IFileNameResolver>();
+			var file = files.Resolve(FileSearchQuery.Leveled("~/usr/mycon.db-connection"));
+			Directory.CreateDirectory(Path.GetDirectoryName(file));
+			File.WriteAllText(file, "con1 pgsql 'Server=127.0.0.1;Port=5432;User Id=zetatest;Password=zaxs;Database=zetatest;'");
+			var conp = container.Get<IDatabaseConnectionProvider>();
+			var c1 = conp.GetConnection("con1");
+			Console.WriteLine(c1.ConnectionString);
+
+			Assert.IsInstanceOf<Npgsql.NpgsqlConnection>(c1);
+			File.Delete(file);
+		}
+
 
 		[Test]
 		public void ContainerBasedResolutionWorks()

@@ -60,6 +60,10 @@ namespace Qorpent.Data.Connections {
 					{
 						desc.ConnectionType = typeof(SqlConnection);
 					}
+					else if(connectiontype=="pgsql") {
+						var type = Type.GetType("Npgsql.NpgsqlConnection, Npgsql");
+						desc.ConnectionType = type;
+					}
 					else
 					{
 						desc.ConnectionType = Type.GetType(connectiontype);

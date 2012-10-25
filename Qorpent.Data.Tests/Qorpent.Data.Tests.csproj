@@ -13,11 +13,12 @@
     <Compile Include="ConnectionLoaderTest.cs" />
     <None Include="*.import" />
     <None Include="*.export" />
-    <Compile Include=".\**\*.cs" />
     <EmbeddedResource Include=".\**\*.*resource" />
-    <QorpentReference Include="*.import" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Npgsql">
+      <HintPath>..\commons\npgsql\Npgsql.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
