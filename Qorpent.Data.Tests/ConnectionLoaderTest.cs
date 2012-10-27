@@ -41,9 +41,10 @@ namespace Qorpent.Data.Tests
 			var files = container.Get<IFileNameResolver>();
 			var file = files.Resolve(FileSearchQuery.Leveled("~/usr/mycon.db-connection"));
 			Directory.CreateDirectory(Path.GetDirectoryName(file));
-			File.WriteAllText(file, "con1 pgsql 'Server=127.0.0.1;Port=5432;User Id=zetatest;Password=zaxs;Database=zetatest;'");
+			File.WriteAllText(file, "con1 pgsql 'Server=127.0.0.1;Port=5432;Integrated Security=True;Database=zetatest;'");
 			var conp = container.Get<IDatabaseConnectionProvider>();
 			var c1 = conp.GetConnection("con1");
+			c1.Open();
 			Console.WriteLine(c1.ConnectionString);
 
 			Assert.IsInstanceOf<Npgsql.NpgsqlConnection>(c1);

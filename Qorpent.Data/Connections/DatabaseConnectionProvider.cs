@@ -1,7 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 using Qorpent.Events;
 using Qorpent.IoC;
 
@@ -33,7 +39,11 @@ namespace Qorpent.Data.Connections {
 		/// <param name="nameOrConnection"></param>
 		/// <returns></returns>
 		public static string Resolve(string nameOrConnection) {
-			if(nameOrConnection.Contains(";")) return nameOrConnection;
+		
+			if(nameOrConnection.Contains(";")) {
+				
+				return nameOrConnection;
+			}
 			return Applications.Application.Current.DatabaseConnections.GetConnectionString(nameOrConnection);
 		}
 		/// <summary>
@@ -41,6 +51,7 @@ namespace Qorpent.Data.Connections {
 		/// </summary>
 		public DatabaseConnectionProvider() {
 			Registry = new Dictionary<string, ConnectionDescriptor>();
+			
 		}
 		/// <summary>
 		/// Сам реестр подключений
@@ -82,12 +93,19 @@ namespace Qorpent.Data.Connections {
 		}
 
 		/// <summary>
+		/// Default connection provider instance
+		/// </summary>
+		public static IDatabaseConnectionProvider Default {
+			get { return Applications.Application.Current.DatabaseConnections; }
+		}
+
+		/// <summary>
 		/// Получить соединение по имени
 		/// </summary>
 		/// <param name="name">Имя соединения</param>
 		/// <returns>Содениение</returns>
 		public IDbConnection GetConnection(string name) {
-			lock(this) {
+			lock(Sync) {
 				Reload();
 				if(Registry.ContainsKey(name)) {
 					var component = Registry[name];
@@ -96,9 +114,60 @@ namespace Qorpent.Data.Connections {
 					}else {
 						return Activator.CreateInstance(component.ConnectionType, component.ConnectionString) as IDbConnection;
 					}
+				}else if(name.Contains(";")) { //full connection string
+					var connectionString = name;
+					if (connectionString.StartsWith("ProviderName"))
+					{
+						var parsematch = Regex.Match(connectionString, @"^ProviderName=([^;]+);([\s\S]+)$");
+						var providername = parsematch.Groups[1].Value;
+						var connstring = parsematch.Groups[2].Value;
+						if(providername.ToUpper()=="NPGSQL") {
+							if(File.Exists(Path.Combine(EnvironmentInfo.BinDirectory,"Npgsql.dll"))) {
+								return GetPostGresConnection(connstring);
+							}else {
+								throw new QorpentException("cannot connect to PostGres because Npgsql not exists in application");
+							}
+						}
+						var provider = System.Data.Common.DbProviderFactories.GetFactory(providername);
+						var result = provider.CreateConnection();
+						result.ConnectionString = connstring;
+						return result;
+					}
+					else {
+						return new SqlConnection(connectionString);
+					}
 				}
 				return null;
 			}
+		}
+
+		private Assembly _npgsqlassembly = null;
+		private Type _npgsqlconnectiontype;
+
+		Assembly NpgSQLAssembly {
+			get {
+				if(null==_npgsqlassembly) {
+					_npgsqlassembly =
+						AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.ToLower().StartsWith("npgsql"));
+					if(null==_npgsqlassembly) {
+						_npgsqlassembly = Assembly.LoadFrom("Npgsql.dll");
+					}
+				}
+				return _npgsqlassembly;
+			}
+		}
+
+		Type NpgSQLConnectionType {
+			get {
+				if(_npgsqlconnectiontype==null) {
+					_npgsqlconnectiontype = NpgSQLAssembly.GetType("Npgsql.NpgsqlConnection");
+				}
+				return _npgsqlconnectiontype;
+			}
+		}
+
+		private IDbConnection GetPostGresConnection(string connstring) {
+			return (IDbConnection)Activator.CreateInstance(NpgSQLConnectionType, connstring);
 		}
 
 		/// <summary>
