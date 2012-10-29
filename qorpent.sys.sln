@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Sys.bxlparser", "Qo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Sys.bxlparser.Tests", "Qorpent.Sys.bxlparser.Tests\Qorpent.Sys.bxlparser.Tests.csproj", "{89AFB34A-B439-41C0-BBAA-2DD4DA1B08E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Npgsql2012", "..\Npgsql2\src\Npgsql2012.csproj", "{25CEA8E8-3CF4-42F5-BDB6-11018F839CA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -218,6 +220,12 @@ Global
 		{89AFB34A-B439-41C0-BBAA-2DD4DA1B08E9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89AFB34A-B439-41C0-BBAA-2DD4DA1B08E9}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{89AFB34A-B439-41C0-BBAA-2DD4DA1B08E9}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{25CEA8E8-3CF4-42F5-BDB6-11018F839CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25CEA8E8-3CF4-42F5-BDB6-11018F839CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25CEA8E8-3CF4-42F5-BDB6-11018F839CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25CEA8E8-3CF4-42F5-BDB6-11018F839CA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25CEA8E8-3CF4-42F5-BDB6-11018F839CA3}.SQL2008|Any CPU.ActiveCfg = Release|Any CPU
+		{25CEA8E8-3CF4-42F5-BDB6-11018F839CA3}.SQL2008|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

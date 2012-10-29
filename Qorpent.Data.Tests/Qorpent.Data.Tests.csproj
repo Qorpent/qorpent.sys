@@ -16,10 +16,13 @@
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Npgsql">
-      <HintPath>..\commons\npgsql\Npgsql.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Npgsql2\src\Npgsql2012.csproj">
+      <Project>{25cea8e8-3cf4-42f5-bdb6-11018f839ca3}</Project>
+      <Name>Npgsql2012</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

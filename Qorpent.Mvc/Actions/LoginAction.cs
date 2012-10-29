@@ -41,10 +41,11 @@ namespace Qorpent.Mvc.Actions {
 		/// <returns> </returns>
 		protected override object MainProcess() {
 			if (Login.IsNotEmpty()) {
-				var plogin = Login;
-				if (Login.ToUpper().StartsWith(Environment.MachineName.ToUpper() + "\\")) {
-					plogin = "local\\" + Login.Split('\\')[1];
-				}
+				try {
+					var plogin = Login;
+					if (Login.ToUpper().StartsWith(Environment.MachineName.ToUpper() + "\\")) {
+						plogin = "local\\" + Login.Split('\\')[1];
+					}
 #if PARANOID
 				
 				var principal = new GenericPrincipal(new GenericIdentity(plogin), null);
@@ -58,14 +59,14 @@ namespace Qorpent.Mvc.Actions {
 #if PARANOID
 				if (!login.StartsWith("qorpent-sys\\")) {
 #endif
-				var authenticator = Context.Application.Container.Get<IFormAuthenticationProvider>() ??
-				                    new SysLogonAuthenticationProvider();
-				bool authenticated = authenticator.IsAuthenticated(Login, Pass, Context);
+					var authenticator = Context.Application.Container.Get<IFormAuthenticationProvider>() ??
+					                    new SysLogonAuthenticationProvider();
+					bool authenticated = authenticator.IsAuthenticated(Login, Pass, Context);
 #if PARANOID
 				}
 #endif
-				if (authenticated) {
-					FormsAuthentication.SetAuthCookie(plogin, false);
+					if (authenticated) {
+						FormsAuthentication.SetAuthCookie(plogin, false);
 #if PARANOID
 				if (Paranoid.Provider.IsSpecialUser(principal))
 					{
@@ -77,15 +78,30 @@ namespace Qorpent.Mvc.Actions {
 #endif
 
 
-					var url = RetUrl;
-					if (url.IsEmpty()) {
-						url = FormsAuthentication.DefaultUrl;
+						var url = RetUrl;
+						if (url.IsEmpty()) {
+							url = FormsAuthentication.DefaultUrl;
+						}
+						return new {authenticated = true, login = plogin, returl=url};
 					}
-					Context.Redirect(url);
-					return new {needform = false, login = Login};
+
+				}catch(Exception ex) {
+					return new {authenticated = false, login = Login, errortype = ex.GetType().Name, errormessage = ex.Message};
 				}
+				return
+					new
+						{
+							authenticated = false,
+							login = Login,
+							errortype = "unknown",
+							errormessage = "Sys auth not proceed, in most cases it's because password problem"
+						};
 			}
-			return new {needform = true, login = Login};
+			if(Context.LogonUser.Identity.Name=="" || Context.LogonUser.Identity.Name=="guest") {
+				return new {authenticated = false, login = "", errormessage = "Не указан логин"};
+			}else {
+				return new { authenticated = true, login = Context.LogonUser.Identity.Name, user=Context.User.Identity.Name};
+			}
 		}
 
 		/// <summary>
@@ -99,5 +115,6 @@ namespace Qorpent.Mvc.Actions {
 		/// <summary>
 		/// </summary>
 		[Bind(Name = "ReturnUrl", Required = false)] protected string RetUrl;
+
 	}
 }
