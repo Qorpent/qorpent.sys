@@ -6,7 +6,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Qorpent.Bxl</RootNamespace>
     <AssemblyName>Qorpent.Bxl</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SQL2008|AnyCPU'">
