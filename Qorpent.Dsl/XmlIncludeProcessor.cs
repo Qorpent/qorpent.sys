@@ -24,6 +24,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -125,9 +126,9 @@ namespace Qorpent.Dsl {
 		/// <param name="options"> </param>
 		/// <returns> </returns>
 		public XElement Load(string path, bool applyDelayed = true, BxlParserOptions options = BxlParserOptions.None) {
-			var ext = Path.GetExtension(path);
+			var ext = Path.GetExtension(path) ?? "bxl";
 			var fullpath = Resolver.Resolve(path);
-			XElement result = null;
+			XElement result;
 			if (ext.EndsWith("bxl") || ext.EndsWith("hql") /*hack to match old zeta usage */) {
 				var bxl = File.ReadAllText(fullpath);
 				result = Bxl.Parse(bxl, fullpath, options);
@@ -150,13 +151,14 @@ namespace Qorpent.Dsl {
 		/// </remarks>
 		public XElement Include(XElement document, string codebase, bool applyDelayed = true,
 		                        BxlParserOptions options = BxlParserOptions.None) {
-			var processable = getProcessable(document, applyDelayed);
+			var processable = getProcessable(document, applyDelayed).ToArray();
 			while (processable.Any()) {
 				ApplyIncludes(document, codebase, options, processable);
 				ApplyImports(document, codebase, options, processable);
+				ApplySafeImports(document, codebase, options, processable);
 				ApplyReplaces(document, codebase, options, processable);
 				ApplyTemplates(document, codebase, options, processable);
-				processable = getProcessable(document, applyDelayed);
+				processable = getProcessable(document, applyDelayed).ToArray();
 			}
 			return document;
 		}
@@ -181,7 +183,39 @@ namespace Qorpent.Dsl {
 						if (NoImportedAttributes.Any(x => x == xAttribute.Name.LocalName)) {
 							continue;
 						}
-						i.Parent.SetAttributeValue(xAttribute.Name, xAttribute.Value);
+						if(null!=i.Parent) {
+							i.Parent.SetAttributeValue(xAttribute.Name, xAttribute.Value);
+						}
+					}
+					i.ReplaceWith(importElement.Elements());
+				}
+			}
+		}
+
+		/// <summary>
+		/// 	Примеяет элементы IMPORT
+		/// </summary>
+		/// <param name="document"> </param>
+		/// <param name="codebase"> </param>
+		/// <param name="options"> </param>
+		/// <param name="processable"> </param>
+		protected virtual void ApplySafeImports(XElement document, string codebase, BxlParserOptions options,
+		                                        IEnumerable<XElement> processable) {
+			foreach (var i in processable.Where(x => x.Name == QorpentConst.Xml.XmlIncludeSafeImportElementName)) {
+				var importElement = getImport(document, i, codebase, options);
+				if (null == importElement) {
+					i.Remove();
+				}
+				else {
+					foreach (var xAttribute in importElement.Attributes()) {
+						if (NoImportedAttributes.Any(x => x == xAttribute.Name.LocalName)) {
+							continue;
+						}
+
+						Debug.Assert(i.Parent != null, "i.Parent != null");
+						if (null == i.Parent.Attribute(xAttribute.Name)) {
+							i.Parent.SetAttributeValue(xAttribute.Name, xAttribute.Value);
+						}
 					}
 					i.ReplaceWith(importElement.Elements());
 				}
@@ -432,11 +466,11 @@ namespace Qorpent.Dsl {
 		private IEnumerable<XElement> getProcessable(XElement document, bool applyDelayed) {
 			var normalII = new List<XElement>(); // список элементов импорта/инклуда обычного порядка
 			normalII.AddRange(
-				document.DescendantsAndSelf().Where(x => IsProcessAble(x, applyDelayed, false, "include,import")).Reverse());
+				document.DescendantsAndSelf().Where(x => IsProcessAble(x, applyDelayed, false)).Reverse());
 			var selfII = new List<XElement>(); // список элементов импорта/инклуда типа self
 			if (applyDelayed) {
 				normalII.AddRange(
-					document.DescendantsAndSelf().Where(x => IsProcessAble(x, applyDelayed, true, "include,import")).Reverse());
+					document.DescendantsAndSelf().Where(x => IsProcessAble(x, applyDelayed, true)).Reverse());
 			}
 			var templates = new List<XElement>();
 			if (applyDelayed) {
@@ -457,7 +491,7 @@ namespace Qorpent.Dsl {
 		/// <remarks>
 		/// </remarks>
 		protected virtual bool IsProcessAble(XElement xElement, bool applyDelayed, bool selfs,
-		                                     string elementNameFilter = "include,import") {
+		                                     string elementNameFilter = "include,import,safeimport") {
 			if (!applyDelayed && selfs) {
 				return false;
 			}

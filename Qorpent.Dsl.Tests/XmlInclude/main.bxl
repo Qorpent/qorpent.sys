@@ -1,2 +1,6 @@
 qxi::include near.bxl
 qxi::include ../ext/ext.bxl
+Z x=3 :
+	qxi::import import.bxl : "*[@code='A']"
+Z2 x=3 :
+	qxi::safeimport import.bxl : "*[@code='A']"

@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-	<IsTest>True</IsTest>
+    <IsTest>True</IsTest>
     <Configuration>Debug</Configuration>
     <ProjectGuid>{7A163EB3-715F-4D13-B720-1E6645380E20}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Qorpent.Dsl.Tests</RootNamespace>
-    <AssemblyName>Qorpent.Dsl.Tests</AssemblyName><AssemblyNameBase>Qorpent.Dsl</AssemblyNameBase>
+    <AssemblyName>Qorpent.Dsl.Tests</AssemblyName>
+    <AssemblyNameBase>Qorpent.Dsl</AssemblyNameBase>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bug_XmlInterpolationInContainer.cs" />
@@ -60,11 +61,13 @@
   <ItemGroup>
     <EmbeddedResource Include="Dsl\trysql.xslt" />
   </ItemGroup>
-   <Import Project="..\..\qorpent.kernel\build.targets" />
-  
+  <Import Project="..\..\qorpent.kernel\build.targets" />
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
+    <EmbeddedResource Include="XmlInclude\import.bxl">
+      <LastGenOutput>main1.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.Core.Tests\Qorpent.Core.Tests.csproj">

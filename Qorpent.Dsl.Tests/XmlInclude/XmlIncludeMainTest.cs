@@ -36,6 +36,7 @@ namespace Qorpent.Dsl.Tests.XmlInclude {
 	[QorpentFixture(UseTemporalFileSystem = true,
 		PrepareFileSystemMap = @"
 main.bxl~main/main.bxl,
+import.bxl~main/import.bxl,
 near.bxl~main/near.bxl,
 near2.bxl~main/near2.bxl,
 ext.bxl~ext/ext.bxl,
@@ -47,6 +48,7 @@ ext2.bxl~ext/ext2.bxl
 			includer = new XmlIncludeProcessor(FileResover);
 			includer.DirectImports["inclA"] = Bxl.Parse(@"inclA x=1");
 			includer.DirectImports["inclD"] = Bxl.Parse(@"inclD x=2");
+			includer.DirectImports["simp"] = Bxl.Parse(@"imp A x=2 y=2");
 			includer.DirectImports["impA"] = Bxl.Parse(@"impA z=1");
 			includer.DirectImports["impD"] = Bxl.Parse(@"impD w=2");
 			includer.DirectImports["recA"] = Bxl.Parse(@"
@@ -54,6 +56,7 @@ rec1 w=2
 qxi::include direct//inclA
 qxi::include direct//inclD delay
 ");
+			Safe_Import_And_Import = Bxl.Parse(Safe_Import_And_Import_);
 			Simple_Include_And_Import = Bxl.Parse(Simple_Include_And_Import_);
 			Simple_Rec_Include = Bxl.Parse(Simple_Rec_Include_);
 			mainfile = Path.Combine(Tmpdir, "main/main.bxl");
@@ -72,6 +75,7 @@ qxi::include direct//inclD delay
 
 		private XElement Simple_Rec_Include;
 		private string mainfile;
+		private XElement Safe_Import_And_Import;
 
 		private const string Simple_Include_And_Import_ = @"
 e1 :
@@ -80,11 +84,19 @@ e1 :
 	qxi::import direct//impA : //impA
 	qxi::import direct//impD delay : //impD
 ";
+		private const string Safe_Import_And_Import_ = @"
+e1 x=3
+	qxi::import direct//simp : ""//*[@code='A']""
+e2 x=3
+	qxi::safeimport direct//simp : ""//*[@code='A']""
+";
+
 
 		private const string Simple_Rec_Include_ = @"
 e1 :
 	qxi::include direct//recA
 ";
+		
 
 		[Test]
 		public void OnDiskTest() {
@@ -133,7 +145,21 @@ e y
 
 
 		[Test]
-		public void SimpleIncludeWithBxlAndDirectContent() {
+		public void SafeImportAndCommonImport() {
+			var result = includer.Include(Safe_Import_And_Import, "~/test.bxl");
+			var bxlresult = Bxl.Generate(result, genopt);
+			Console.WriteLine(bxlresult);
+			Assert.AreEqual(@"
+e1 x=2
+	y=2
+e2 x=3
+	y=2
+".Trim().LfOnly(), bxlresult.Trim().LfOnly());
+		}
+
+		[Test]
+		public void SimpleIncludeWithBxlAndDirectContent()
+		{
 			var result = includer.Include(Simple_Include_And_Import, "~/test.bxl");
 			var bxlresult = Bxl.Generate(result, genopt);
 			Console.WriteLine(bxlresult);

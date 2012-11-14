@@ -147,6 +147,7 @@ namespace Qorpent.Log {
 			lock (this) {
 				var logmessage = _helper.CreateMessage(level, message, context);
 				if (Application.HasCurrent) {
+				    logmessage.User = Application.Current.Principal.CurrentUser.Identity.Name;
 					logmessage.ApplicationName = Application.Current.ApplicationName;
 				}
 				logmessage.HostObject = host ?? HostObject;

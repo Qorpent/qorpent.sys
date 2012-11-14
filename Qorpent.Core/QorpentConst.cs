@@ -147,9 +147,15 @@ namespace Qorpent {
 
 			/// <summary>
 			/// 	name for qxi:import element - import behavior imports inner content of single element into containing element,
-			/// 	include attribute merging
+			/// 	include attribute merging child-win
 			/// </summary>
 			public static readonly XName XmlIncludeImportElementName = "{" + XmlIncludeNamespace + "}" + "import";
+
+			/// <summary>
+			/// 	name for qxi:safeimport element - import behavior imports inner content of single element into containing element,
+			/// 	include attribute merging parent-win
+			/// </summary>
+			public static readonly XName XmlIncludeSafeImportElementName = "{" + XmlIncludeNamespace + "}" + "safeimport";
 
 			/// <summary>
 			/// 	name for qxi:template элемент - позволяет описывать шаблоны элементов по имени для последущей замены
