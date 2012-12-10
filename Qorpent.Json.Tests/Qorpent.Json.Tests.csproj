@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<IsTest>True</IsTest>
+    <Configuration>Debug</Configuration>
+	<ProjectGuid>D959EFBC-B062-4FAB-8330-E64F60ED23FC</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Json.Tests</RootNamespace>
+    <AssemblyName>Qorpent.Json.Tests</AssemblyName>
+	<AssemblyNameBase>Qorpent.Json</AssemblyNameBase>
+  </PropertyGroup>
+   <ItemGroup>
+	<None Include="*.import" />
+	<None Include="*.export" />
+	<EmbeddedResource Include=".\**\*.*resource"/>
+ </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+
+</Project>

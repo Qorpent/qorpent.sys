@@ -120,14 +120,24 @@ namespace Qorpent.Log {
 					{"action", action},
 					{"render", render},
 				};
-			var exerror = message.Error as IExceptionRegistryDataException;
-			if(null!=exerror) {
-				if(null!=exerror.ExceptionRegisryData) {
-					foreach (var p in exerror.ExceptionRegisryData) {
-						result[p.Key] = p.Value;
+
+			var ex = message.Error;
+			while (ex!=null) {
+				var exerror = ex as IExceptionRegistryDataException;
+				if (null != exerror)
+				{
+					if (null != exerror.ExceptionRegisryData)
+					{
+						foreach (var p in exerror.ExceptionRegisryData)
+						{
+							result[p.Key] = p.Value;
+						}
 					}
 				}
+				ex = ex.InnerException;
 			}
+
+			
 			return result;
 		}
 

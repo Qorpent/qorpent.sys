@@ -28,6 +28,7 @@
     <Compile Include="Collections\Map.cs" />
     <Compile Include="Collections\MapItem.cs" />
     <Compile Include="Collections\StringMap.cs" />
+    <Compile Include="ComplexStringExtension.cs" />
     <Compile Include="ComplexStringHelper.cs" />
     <Compile Include="ConsoleArgumentHelper.cs" />
     <Compile Include="ConsoleRenderHelper.cs" />

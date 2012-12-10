@@ -151,14 +151,14 @@ namespace Qorpent.Dsl {
 		/// </remarks>
 		public XElement Include(XElement document, string codebase, bool applyDelayed = true,
 		                        BxlParserOptions options = BxlParserOptions.None) {
-			var processable = getProcessable(document, applyDelayed).ToArray();
+			var processable = GetProcessableElements(document, applyDelayed).ToArray();
 			while (processable.Any()) {
 				ApplyIncludes(document, codebase, options, processable);
 				ApplyImports(document, codebase, options, processable);
 				ApplySafeImports(document, codebase, options, processable);
 				ApplyReplaces(document, codebase, options, processable);
 				ApplyTemplates(document, codebase, options, processable);
-				processable = getProcessable(document, applyDelayed).ToArray();
+				processable = GetProcessableElements(document, applyDelayed).ToArray();
 			}
 			return document;
 		}
@@ -174,7 +174,7 @@ namespace Qorpent.Dsl {
 		protected virtual void ApplyImports(XElement document, string codebase, BxlParserOptions options,
 		                                    IEnumerable<XElement> processable) {
 			foreach (var i in processable.Where(x => x.Name == QorpentConst.Xml.XmlIncludeImportElementName)) {
-				var importElement = getImport(document, i, codebase, options);
+				var importElement = GetImportSource(document, i, codebase, options);
 				if (null == importElement) {
 					i.Remove();
 				}
@@ -202,7 +202,7 @@ namespace Qorpent.Dsl {
 		protected virtual void ApplySafeImports(XElement document, string codebase, BxlParserOptions options,
 		                                        IEnumerable<XElement> processable) {
 			foreach (var i in processable.Where(x => x.Name == QorpentConst.Xml.XmlIncludeSafeImportElementName)) {
-				var importElement = getImport(document, i, codebase, options);
+				var importElement = GetImportSource(document, i, codebase, options);
 				if (null == importElement) {
 					i.Remove();
 				}
@@ -232,7 +232,7 @@ namespace Qorpent.Dsl {
 		protected virtual void ApplyIncludes(XElement document, string codebase, BxlParserOptions options,
 		                                     IEnumerable<XElement> processable) {
 			foreach (var i in processable.Where(x => x.Name == QorpentConst.Xml.XmlIncludeIncludeElementName)) {
-				var includeElements = getInclude(document, i, codebase, options);
+				var includeElements = GetIncludeSource(document, i, codebase, options);
 				i.ReplaceWith(includeElements);
 			}
 		}
@@ -294,9 +294,8 @@ namespace Qorpent.Dsl {
 			foreach (
 				var replaceElement in processable.Where(x => x.Name == QorpentConst.Xml.XmlIncludeReplaceElementName).ToArray()
 				) {
-				var replacer = new ReplaceDescriptor();
-				replacer.Pattern = replaceElement.ChooseAttr("__code", "code");
-				replacer.Replacer = replaceElement.SelfValue();
+				var replacer = new ReplaceDescriptor
+					{Pattern = replaceElement.ChooseAttr("__code", "code"), Replacer = replaceElement.SelfValue()};
 				replacers.Add(replacer);
 				replaceElement.Remove();
 			}
@@ -324,12 +323,8 @@ namespace Qorpent.Dsl {
 			}
 		}
 
-		private string ApplyReplaces(string str, List<ReplaceDescriptor> replacers) {
-			var result = str;
-			foreach (var replaceDescriptor in replacers) {
-				result = replaceDescriptor.Execute(result);
-			}
-			return result;
+		private string ApplyReplaces(string str, IEnumerable<ReplaceDescriptor> replacers) {
+			return replacers.Aggregate(str, (current, replaceDescriptor) => replaceDescriptor.Execute(current));
 		}
 
 		/// <summary>
@@ -342,8 +337,8 @@ namespace Qorpent.Dsl {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		private XElement getImport(XElement document, XElement xElement, string codebase, BxlParserOptions options) {
-			var importDocument = getImportedDocument(document, xElement, codebase, options);
+		private XElement GetImportSource(XElement document, XElement xElement, string codebase, BxlParserOptions options) {
+			var importDocument = GetImportedDocument(document, xElement, codebase, options);
 			if (null == importDocument) {
 				return null;
 			}
@@ -368,13 +363,13 @@ namespace Qorpent.Dsl {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		protected virtual XElement getImportedDocument(XElement document, XElement xElement, string codebase,
+		protected virtual XElement GetImportedDocument(XElement document, XElement xElement, string codebase,
 		                                               BxlParserOptions options) {
 			var href = xElement.ChooseAttr(QorpentConst.Xml.XmlIncludeHrefAttributeName.ToString(), "__code", "code");
 			if (href.IsEmpty()) {
 				throw new QorpentException("href is empty");
 			}
-			var docpath = "";
+			string docpath;
 			if (href == "self") {
 				return new XElement(document);
 			}
@@ -385,7 +380,7 @@ namespace Qorpent.Dsl {
 				}
 				return DirectImports[directcode];
 			}
-			else if (href.StartsWith("~")) {
+			if (href.StartsWith("~")) {
 				docpath = Resolver.Resolve(href);
 			}
 			else if (Path.IsPathRooted(href)) {
@@ -399,6 +394,7 @@ namespace Qorpent.Dsl {
 					dir = Path.GetDirectoryName(dir);
 					relative = relative.Substring(3);
 				}
+				Debug.Assert(dir != null, "dir != null");
 				docpath = Path.Combine(dir, relative);
 				if (!File.Exists(docpath)) {
 					if (!href.Contains("..")) {
@@ -412,13 +408,7 @@ namespace Qorpent.Dsl {
 				}
 				throw new QorpentException("cannot find " + docpath + " resolved from href: " + href + " on codebase: " + codebase);
 			}
-			XElement result = null;
-			if (docpath.EndsWith(".xml")) {
-				result = XElement.Load(docpath);
-			}
-			else {
-				result = Bxl.Parse(File.ReadAllText(docpath), docpath);
-			}
+			var result = docpath.EndsWith(".xml") ? XElement.Load(docpath) : Bxl.Parse(File.ReadAllText(docpath), docpath);
 
 			//recursively call to includes (not delayed)
 			result = new XmlIncludeProcessor(this).Include(result, docpath, false, options);
@@ -435,9 +425,9 @@ namespace Qorpent.Dsl {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		private IEnumerable<XElement> getInclude(XElement document, XElement xElement, string codebase,
+		private IEnumerable<XElement> GetIncludeSource(XElement document, XElement xElement, string codebase,
 		                                         BxlParserOptions options) {
-			var importDocument = getImportedDocument(document, xElement, codebase, options);
+			var importDocument = GetImportedDocument(document, xElement, codebase, options);
 			if (null == importDocument) {
 				return new XElement[] {};
 			}
@@ -463,21 +453,21 @@ namespace Qorpent.Dsl {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		private IEnumerable<XElement> getProcessable(XElement document, bool applyDelayed) {
-			var normalII = new List<XElement>(); // список элементов импорта/инклуда обычного порядка
-			normalII.AddRange(
+		private IEnumerable<XElement> GetProcessableElements(XElement document, bool applyDelayed) {
+			var normalIi = new List<XElement>(); // список элементов импорта/инклуда обычного порядка
+			normalIi.AddRange(
 				document.DescendantsAndSelf().Where(x => IsProcessAble(x, applyDelayed, false)).Reverse());
-			var selfII = new List<XElement>(); // список элементов импорта/инклуда типа self
+			var selfIi = new List<XElement>(); // список элементов импорта/инклуда типа self
 			if (applyDelayed) {
-				normalII.AddRange(
-					document.DescendantsAndSelf().Where(x => IsProcessAble(x, applyDelayed, true)).Reverse());
+				normalIi.AddRange(
+					document.DescendantsAndSelf().Where(x => IsProcessAble(x, true, true)).Reverse());
 			}
 			var templates = new List<XElement>();
 			if (applyDelayed) {
 				templates.AddRange(
-					document.DescendantsAndSelf().Where(x => IsProcessAble(x, applyDelayed, false, "template,replace")).Reverse());
+					document.DescendantsAndSelf().Where(x => IsProcessAble(x, true, false, "template,replace")).Reverse());
 			}
-			return normalII.Union(selfII).Union(templates).ToArray();
+			return normalIi.Union(selfIi).Union(templates).ToArray();
 		}
 
 		/// <summary>

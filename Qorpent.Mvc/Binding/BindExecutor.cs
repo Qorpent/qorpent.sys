@@ -149,7 +149,7 @@ namespace Qorpent.Mvc.Binding {
 				IDictionary<string, string> val;
 				if (IsComplexString) {
 					var str = context.Get(paramname);
-					val = ComplexStringHelper.Parse(str);
+					val = ComplexStringExtension.Parse(str);
 				}
 				else {
 					val = context.GetDict(paramname);

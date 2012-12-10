@@ -39,7 +39,7 @@ namespace Qorpent.Dsl {
 		/// <returns> </returns>
 		public override DslContext Initialize(DslProject project) {
 			var result = base.Initialize(project);
-			var cmplx = ComplexStringHelper.Parse(project.CompilerOptions);
+			var cmplx = ComplexStringExtension.Parse(project.CompilerOptions);
 			foreach (var p in cmplx) {
 				result.Parameters[p.Key] = p.Value;
 			}
