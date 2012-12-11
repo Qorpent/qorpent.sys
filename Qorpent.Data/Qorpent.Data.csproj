@@ -12,6 +12,13 @@
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
+    <Compile Include="MetaStorage\IMetaFacade.cs" />
+    <Compile Include="MetaStorage\IMetaStorage.cs" />
+    <Compile Include="MetaStorage\IMetaSynchronizer.cs" />
+    <Compile Include="MetaStorage\MetaFacadeBase.cs" />
+    <Compile Include="MetaStorage\MetaStorageBase.cs" />
+    <Compile Include="MetaStorage\MetaSynchronizerBase.cs" />
+    <Compile Include="MetaStorage\MetaStorageException.cs" />
     <Compile Include="REST\AddConnection.cs" />
     <Compile Include="REST\ConnectionsAction.cs" />
     <Compile Include="REST\RemoveConnection.cs" />
@@ -22,15 +29,8 @@
     <QorpentReference Include="*.import" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Web Tools\Packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity">
-      <HintPath>..\..\..\exras\corelib\System.Data.Entity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
