@@ -25,9 +25,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Xsl;
+using Qorpent.Applications;
+using Qorpent.Dsl.XmlInclude;
+using Qorpent.IO;
+using Qorpent.IoC;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
@@ -37,7 +42,87 @@ namespace Qorpent.Dsl.SmartXslt {
 	/// </summary>
 	/// <remarks>
 	/// </remarks>
-	public class XsltHelper {
+	[ContainerComponent(Lifestyle.Transient,ServiceType = typeof(IXsltHelper))]
+	public class XsltHelper : ServiceBase, IXsltHelper {
+		/// <summary>
+		/// Automatically loads source file and applys given transform
+		/// </summary>
+		public void Process(string source, TextWriter output, string transformFile = null) {
+			if(null==output) {
+				throw new ArgumentNullException("output");
+			}
+			var filename = ResolveService<IFileNameResolver>().Resolve(source);
+			if(null==filename) {
+				throw new DslException("cannot find source file "+source);
+			}
+			var includereader = ResolveService<IXmlIncludeProcessor>();
+			var xml = includereader.Load(filename);
+			if(null==transformFile) {
+				var transformElement = xml.Element("transform");
+				transformFile = transformElement.ChooseAttr("__code", "code");
+			}
+			Process(xml,output,transformFile);
+		}
+
+		/// <summary>
+		/// Automatically loads source file and applys given transform
+		/// </summary>
+		public void Process(XElement source, TextWriter output, string transformFile) {
+			if(null==output) {
+				throw new ArgumentNullException("output");
+			}
+			if(transformFile.IsEmpty()) {
+				throw new ArgumentNullException("transformFile");
+			}
+			var realTransformFileName = ResolveService<IFileNameResolver>().Resolve(transformFile + ".xslt", true,
+						                                                              new[]
+							                                                              {
+								                                                              "usr/dsl", "usr", "mod/dsl", "mod", "sys/dsl",
+								                                                              "sys", ""
+							                                                              });
+			if(null==realTransformFileName) {
+				throw new DslException("cannot find XSLT file for "+transformFile+" dsl XSLT lang");
+			}
+
+			var transformbase = XElement.Load(realTransformFileName);
+			var extensions = ExtractExtensions(source);
+			var xslttransform = PrepareXsltStylesheet(transformbase, extensions);
+			var args = new XsltArgumentList();
+			args = PrepareXsltArguments(args, extensions);
+			Process(source, xslttransform, args,extensions, new Uri(transformFile),  output);
+		}
+
+		/// <summary>
+		/// Automatically loads source file and applys given transform
+		/// </summary>
+		public void Process(XElement source, XElement transform, XsltArgumentList args, IEnumerable<XsltExtensionDefinition> extensions, Uri transformUri, TextWriter output) {
+			if (source == null) {
+				throw new ArgumentNullException("source");
+			}
+			if (transform == null) {
+				throw new ArgumentNullException("transform");
+			}
+			if (output == null) {
+				throw new ArgumentNullException("output");
+			}
+			
+			var dictionary = new Dictionary<string, string>();
+			if(null!=extensions) {
+				foreach (XsltExtensionDefinition e in extensions) {
+					if ((e.Type == XsltExtenstionType.Import || e.Type == XsltExtenstionType.Include) &&
+					    (e.Value != null && e.Value is string && ((string) e.Value).Contains("<xsl:"))) {
+						dictionary.Add(e.Name, (string) e.Value);
+					}
+				}
+			}
+			var compiled = new XslCompiledTransform();
+			compiled.Load(transform.CreateReader(),XsltSettings.TrustedXslt,new FileNameResolverXmlUrlResolver(transformUri,ResolveService<IFileNameResolver>(),dictionary));
+
+			compiled.Transform(source.CreateReader(),args,output);
+
+		}
+
+
 		/// <summary>
 		/// </summary>
 		public static readonly string ImportElementName = "{" + QorpentConst.Xml.XsltNameSpace + "}import";

@@ -6,7 +6,7 @@ namespace Qorpent.Data.MetaStorage {
 	/// 
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public abstract class MetaSynchronizerBase<T> : IMetaSynchronizer<T> where T : class, new() {
+	public abstract class MetaSynchronizerBase<T> :ServiceBase, IMetaSynchronizer<T> where T : class, new() {
 		/// <summary>
 		/// Целевое хранилище
 		/// </summary>

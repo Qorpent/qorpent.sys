@@ -12,6 +12,7 @@
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="MetaStorage\IMetaFacade.cs" />
     <Compile Include="MetaStorage\IMetaStorage.cs" />
     <Compile Include="MetaStorage\IMetaSynchronizer.cs" />
