@@ -37,6 +37,9 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-    <Import Project="..\..\qorpent.kernel\build.targets" />
-  
-<ItemGroup><None Include="*.import" /><None Include="*.export" /></ItemGroup></Project>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+  </ItemGroup>
+</Project>

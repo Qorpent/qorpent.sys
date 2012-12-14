@@ -1,12 +1,13 @@
 using System;
 using System.Threading;
+using Qorpent.Model;
 
 namespace Qorpent.Data.MetaStorage {
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public abstract class MetaSynchronizerBase<T> :ServiceBase, IMetaSynchronizer<T> where T : class, new() {
+	public abstract class MetaSynchronizerBase<T> :ServiceBase, IMetaSynchronizer<T> where T : class, IWithId, IWithCode, new() {
 		/// <summary>
 		/// Целевое хранилище
 		/// </summary>

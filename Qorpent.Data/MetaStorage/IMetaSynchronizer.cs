@@ -1,11 +1,12 @@
 using System;
+using Qorpent.Model;
 
 namespace Qorpent.Data.MetaStorage {
 	/// <summary>
 	/// Синхронизатор локального кэша с БД
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public interface IMetaSynchronizer<T> where T:class ,new() {
+	public interface IMetaSynchronizer<T> where T:class , IWithId, IWithCode, new() {
 
 		/// <summary>
 		/// Целевое хранилище

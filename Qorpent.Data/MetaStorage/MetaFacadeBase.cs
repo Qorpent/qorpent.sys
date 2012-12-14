@@ -39,7 +39,7 @@ namespace Qorpent.Data.MetaStorage {
 		/// </summary>
 		/// <param name="criteria"> </param>
 		/// <returns> </returns>
-		public T Get(object criteria) {
+		public virtual T Get(object criteria) {
 			if (null == criteria) {
 				throw new MetaStorageException("Критерий поиска строки не может быть null");
 			}

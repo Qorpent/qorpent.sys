@@ -213,6 +213,7 @@ namespace Qorpent.Utils.Extensions {
 		/// </summary>
 		/// <param name="element"> </param>
 		/// <param name="result"> </param>
+
 		public static T Apply<T>(this XElement element, T result = default(T)) {
 			//if (typeof(T).FullName.StartsWith("System.Collections.Generic.IEnumerable")) {
 

@@ -29,11 +29,9 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Xsl;
-using Qorpent.Applications;
 using Qorpent.Dsl.XmlInclude;
 using Qorpent.IO;
 using Qorpent.IoC;
-using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dsl.SmartXslt {
@@ -59,7 +57,13 @@ namespace Qorpent.Dsl.SmartXslt {
 			var xml = includereader.Load(filename);
 			if(null==transformFile) {
 				var transformElement = xml.Element("transform");
-				transformFile = transformElement.ChooseAttr("__code", "code");
+				if(transformElement!=null) {
+					transformFile = transformElement.ChooseAttr("__code", "code");
+				}
+			}
+			if(null==transformFile) {
+				output.Write(xml.ToString());
+				return;
 			}
 			Process(xml,output,transformFile);
 		}
@@ -89,7 +93,7 @@ namespace Qorpent.Dsl.SmartXslt {
 			var xslttransform = PrepareXsltStylesheet(transformbase, extensions);
 			var args = new XsltArgumentList();
 			args = PrepareXsltArguments(args, extensions);
-			Process(source, xslttransform, args,extensions, new Uri(transformFile),  output);
+			Process(source, xslttransform, args,extensions, new Uri("file:///"+transformFile),  output);
 		}
 
 		/// <summary>

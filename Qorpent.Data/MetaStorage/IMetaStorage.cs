@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Qorpent.Model;
 
 namespace Qorpent.Data.MetaStorage {
 	/// <summary>
 	/// Abstract meta storage interface
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public interface IMetaStorage<T> where T : class, new() {
+	public interface IMetaStorage<T> where T : class, IWithId, IWithCode, new() {
 		/// <summary>
 		/// Кэш ID - сущность
 		/// </summary>
@@ -72,5 +73,18 @@ namespace Qorpent.Data.MetaStorage {
 		/// Очистка хранилища
 		/// </summary>
 		void Clear();
+
+		/// <summary>
+		/// Со
+		/// </summary>
+		/// <returns></returns>
+		IMetaSynchronizer<T> GetSynchronizer();
+
+		/// <summary>
+		/// Создает новые экземпляр стандартного фасада
+		/// </summary>
+		/// <returns></returns>
+		/// <exception cref="NotImplementedException"></exception>
+		IMetaFacade<T> CreateFacade();
 	}
 }

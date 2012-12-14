@@ -466,5 +466,16 @@ namespace Qorpent.IoC {
 		/// <returns> </returns>
 		IComponentDefinition NewExtension<TService>(TService implementation, string name = "", int priority = 10000)
 			where TService : class;
+
+		/// <summary>
+		/// 	Find best matched component for type/name or null for
+		/// </summary>
+		/// <param name="type"> The type. </param>
+		/// <param name="name"> The name. </param>
+		/// <returns> </returns>
+		/// <exception cref="NotImplementedException"></exception>
+		/// <remarks>
+		/// </remarks>
+		IComponentDefinition FindComponent(Type type, string name);
 	}
 }

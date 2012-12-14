@@ -259,6 +259,19 @@ namespace Qorpent.IoC {
 			return result;
 		}
 
+		/// <summary>
+		/// 	Find best matched component for type/name or null for
+		/// </summary>
+		/// <param name="type"> The type. </param>
+		/// <param name="name"> The name. </param>
+		/// <returns> </returns>
+		/// <exception cref="NotImplementedException"></exception>
+		/// <remarks>
+		/// </remarks>
+		public IComponentDefinition FindComponent(Type type, string name) {
+			throw new NotImplementedException();
+		}
+
 
 		private bool PrepareResolvedObject(ContainerContext context, out object o1) {
 			o1 = null;
