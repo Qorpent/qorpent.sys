@@ -96,7 +96,10 @@ namespace Qorpent.Dsl {
 			foreach (var filepair in fileContent.ToArray()) {
 				if (writeEmptyFiles || filepair.Value.IsNotEmpty()) {
 				    try {
-					    Directory.CreateDirectory(Path.GetDirectoryName(filepair.Key));
+					    var dirname = Path.GetDirectoryName(filepair.Key);
+						if(dirname.IsNotEmpty()) {
+							Directory.CreateDirectory(dirname);
+						}
 				        using (var sw = new StreamWriter(filepair.Key, false, Encoding.UTF8)) {
 				            sw.Write(filepair.Value);
 				            sw.Flush();

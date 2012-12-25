@@ -119,7 +119,7 @@ namespace Qorpent.Dsl.SmartXslt {
 					}
 				}
 			}
-			var compiled = new XslCompiledTransform();
+			var compiled = new XslCompiledTransform(true);
 			compiled.Load(transform.CreateReader(),XsltSettings.TrustedXslt,new FileNameResolverXmlUrlResolver(transformUri,ResolveService<IFileNameResolver>(),dictionary));
 
 			compiled.Transform(source.CreateReader(),args,output);

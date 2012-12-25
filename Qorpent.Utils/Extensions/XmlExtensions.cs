@@ -138,7 +138,6 @@ namespace Qorpent.Utils.Extensions {
 			if (-1 != adaptedname.IndexOfAny(Nonnames)) {
 				adaptedname = adaptedname
 					.Replace("+", "__PLUS__")
-					.Replace("-", "__MINUS__")
 					.Replace("?", "__ASK__")
 					.Replace("!", "__EXC__")
 					.Replace("~", "__TILD__")
@@ -161,6 +160,9 @@ namespace Qorpent.Utils.Extensions {
 					.Replace("<", "__LT__")
 					.Replace(">", "__GT__")
 					;
+				if(adaptedname.StartsWith("-")) {
+					adaptedname = "__MINUS__" + adaptedname.Substring(1);
+				}
 			}
 			if (0 != adaptedname.Length && -1 != Array.IndexOf(Digits, adaptedname[0])) {
 				adaptedname = "_" + adaptedname;
