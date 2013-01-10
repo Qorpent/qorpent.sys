@@ -27,5 +27,5 @@ namespace Qorpent.Model {
 	/// <summary>
 	/// 	Базовый интерфейс для классов данных, с поддержкой отнесенности к контексту
 	/// </summary>
-	public interface IContextEntity : IEntity, IWithActive, IWithDateRange, IWithRole {}
+	public interface IContextEntity : IEntity, IWithActive, IWithDateRange {}
 }

@@ -32,6 +32,7 @@
     <Compile Include="Model\IContextEntity.cs" />
     <Compile Include="Model\IEntity.cs" />
     <Compile Include="Model\IWithActive.cs" />
+    <Compile Include="Model\IWithAsFileInfo.cs" />
     <Compile Include="Model\IWithCode.cs" />
     <Compile Include="Model\IWithComment.cs" />
     <Compile Include="Model\IWithDateRange.cs" />
