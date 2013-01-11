@@ -34,6 +34,10 @@ namespace Qorpent.Security {
 		/// 	Current user of thread/application
 		/// </summary>
 		IPrincipal CurrentUser { get; }
+		/// <summary>
+		///  Base principal used before impersonation
+		/// </summary>
+		IPrincipal BasePrincipal { get; set; }
 
 		/// <summary>
 		/// 	Manually set current user for thread

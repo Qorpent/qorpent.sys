@@ -89,6 +89,44 @@ namespace Qorpent.Security {
 		}
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public IPrincipal BasePrincipal {
+			get {
+				if (IsWeb())
+				{
+					if (null != MvcContextBase.Current && null != MvcContextBase.Current.LogonUser)
+					{
+						return MvcContextBase.Current.LogonUser;
+					}
+					else if (null != HttpContext.Current && null != HttpContext.Current.User)
+					{
+						return HttpContext.Current.User;
+					}
+					else
+					{
+						return new GenericPrincipal(new GenericIdentity("local\\guest"), null);
+					}
+				}
+				else
+				{
+					if (null != Thread.CurrentPrincipal && Thread.CurrentPrincipal.Identity.IsAuthenticated)
+					{
+						return Thread.CurrentPrincipal;
+					}
+					else
+					{
+						return new GenericPrincipal(new GenericIdentity(Environment.UserDomainName + "\\" + Environment.UserName),
+													   null);
+					}
+				}
+			}
+			set {
+				
+			}
+		}
+
+		/// <summary>
 		/// 	Manually set current user for thread
 		/// </summary>
 		/// <param name="usr"> </param>

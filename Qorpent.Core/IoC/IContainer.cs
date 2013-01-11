@@ -23,8 +23,6 @@
 
 #endregion
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Qorpent.IoC {
@@ -74,7 +72,7 @@ namespace Qorpent.IoC {
 	///				(см.:
 	///				<see cref="IComponentDefinition" />
 	///				,
-	///				<see cref="EmptyComponent" />
+	///				<see cref="IComponentRegistry.EmptyComponent" />
 	///				)</description>
 	///		</item>
 	///		<item>
@@ -164,222 +162,12 @@ namespace Qorpent.IoC {
 	///		
 	///		}</code>
 	///</example>
-	public interface IContainer {
+	public interface IContainer : ITypeResolver, IComponentRegistry {
 		///<summary>
 		///	Если <c>true</c> - то при отсутствии запрашиваемого сервиса будет возвращаться не Null, а <see
 		///	 cref="ContainerException" />
 		///</summary>
 		bool ThrowErrorOnNotExistedComponent { get; set; }
-
-		/// <summary>
-		/// 	Возвращает сервис указанного типа. (обобщенный)
-		/// </summary>
-		/// <typeparam name="T"> Тип сервиса </typeparam>
-		/// <param name="name"> опциональное имя компонента, если указано - поиск будет производиться только среди с компонентов с указаным именем </param>
-		/// <param name="ctorArguments"> Параметры для вызова конструктора, если не указано - будет использован конструктор по умолчанию. </param>
-		/// <returns> Сервис указанного типа или <c>null</c> , если подходящий компонент не обнаружен </returns>
-		/// <exception cref="ContainerException">При ошибках в конструировании объектов</exception>
-		/// <remarks>
-		/// 	<invariant>Данный метод является простой оболочкой над
-		/// 		<see cref="Get" />
-		/// 		, см. документацию данного метода для более подробной информации</invariant>
-		/// </remarks>
-		T Get<T>(string name = null, params object[] ctorArguments) where T : class;
-
-		///<summary>
-		///	Возвращает сервис указанного типа. (прямое указание типа)
-		///</summary>
-		///<param name="type"> Тип сервиса </param>
-		///<param name="ctorArguments"> Параметры для вызова конструктора, если не указано - будет использован конструктор по умолчанию. </param>
-		///<param name="name"> опциональное имя компонента, если указано - поиск будет производиться только среди с компонентов с указаным именем </param>
-		///<returns> Сервис указанного типа или <c>null</c> , если подходящий компонент не обнаружен </returns>
-		///<exception cref="ContainerException">При ошибках в конструировании объектов</exception>
-		///<remarks>
-		///	При вызове метода, контейнер осуществляет поиск в своей конфигурации и находит компонент, максимаольно соответствующий условию на класс сервиса 
-		///	и имя. Если компонент не находится, то возвращается null. <note>При включении параметра
-		///		                                                          <see cref="ThrowErrorOnNotExistedComponent" />
-		///		                                                          =
-		///		                                                          <c>true</c>
-		///		                                                          ,
-		///		                                                          вместо возврата null будет осуществлятся генерация исключения
-		///		                                                          <see cref="ContainerException" />
-		///		                                                          .</note>
-		///	<invariant>
-		///		<h3>Разрешение компонентов</h3>
-		///		<list type="bullet">
-		///			<item>В качестве класса сервиса можно указывать как напрямую интерфейс требуемого сервиса,  так и базовый класс/интерфейс</item>
-		///			<item>Поиск сервиса ведется среди зарегистрированных (см.
-		///				<see cref="Register" />
-		///				,
-		///				<see cref="ContainerFactory" />
-		///				,
-		///				<see cref="GetComponents" />
-		///				) компонентов.</item>
-		///			<item>Если имя не указано то поиск ведется
-		///				<strong>игнорируя имя</strong>
-		///				компонента (а не среди компонентов с именем "" или null)</item>
-		///			<item>Так как за одним типом/именем может быть закреплено несколько компонентов, то производится отбор наиболее релевантного:
-		///				<list type="number">
-		///					<item>Если один из компонентов явно эквивалентен по типу сервиса запрашиваемому, то он имеет приоритет перед теми, которые сконфигурированы через унаследованный интерфейс
-		///						<note>На первый взгляд это кажется нелогичным, однако на деле типы сервисов являются явным ключем компонента и запроса, тогда
-		///							как поиск по дополнительным сервисам - это дополнительая "фича" контейнера. Соответственно под разрешением типов следует понимать
-		///							не "разрешение самого последнего в иерархии", а как "разрешение сначала точного, а затем лишь частично совпадаюшего ключа".
-		///							Это помимо всего прочего избавляет от проблем при которых интерфейс наследуется от интерфейса сервиса для решения внутренних задач совместимости,
-		///							но при этом он не должен использоваться как комонент для обслуживания базовго сервиса как такового</note>
-		///					</item>
-		///					<item>Если у компонента явно указан приоритет (см.
-		///						<see cref="IComponentDefinition.Priority" />
-		///						,
-		///						<see cref="ContainerAttribute.Priority" />
-		///						,
-		///						<see cref="ContainerAttribute.Priority" />
-		///						),
-		///						то используется компонент с
-		///						<strong>большим</strong>
-		///						приоритетом</item>
-		///					<item>При равенстве или отсутствии приоритетов, используется компонент зарегистрированные
-		///						<strong>последним</strong>
-		///					</item>
-		///				</list>
-		///			</item>
-		///		</list>
-		///		<h3>Возвращаемое значение и циклы жизни</h3>
-		///		<para> Циклы жизни настраиваются в составе компонентов ( <see cref="IComponentDefinition.Lifestyle" /> ). И документацию по ним смотрите в <see
-		///	 cref="Lifestyle" /> </para>
-		///		<para> Циклы жизни влияют на поведение контейнера и метода Get. </para>
-		///		<list type="number">
-		///			<listheader>Порядок работы контейнера</listheader>
-		///			<item>Поиск компонента (описано выше), вызов расширений определения компонента</item>
-		///			<item>Идентификация или создание экземпляра (зависит от цикла жизни компонента)</item>
-		///			<item>Если это новый экземпляр, то дополнительно производится впрыск зависимостей</item>
-		///			<item>Активация компонента (формируется статистика вызова, вызываются расширения активации)</item>
-		///			<item>Возврат экземпляра вызываемому коду</item>
-		///		</list>
-		///		<h3>Создание экземпляров</h3>
-		///		Если цикл жизни подразумевает создание нового экземпляра, то его создание производится по следующему алгоритму:
-		///		<list type="number">
-		///			<item>Вызывается
-		///				<see
-		///					cref="Activator.CreateInstance(System.Type,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)" />
-		///				,
-		///				с поддержкой приватных конструкторов и передачей
-		///				<paramref name="ctorArguments" />
-		///			</item>
-		///			<item>Производися впрыск параметров компонента
-		///				<see cref="IComponentDefinition.Parameters" />
-		///				, впрыск производится в защищенном режиме 
-		///				(если свойство не найдено или тип не соответствует, то ничего не производится)</item>
-		///			<item>Производится впрыск сервисов на основе
-		///				<see cref="ContainerComponentAttribute" />
-		///			</item>
-		///			<item>Если экземпляр - наследник
-		///				<see cref="IContainerBound" />
-		///				(см. также
-		///				<see cref="ServiceBase" />
-		///				), то производится
-		///				вызова
-		///				<see cref="IContainerBound.SetContainerContext" />
-		///				, для выполнения пользовательской настройки на контейнер</item>
-		///		</list>
-		///	</invariant>
-		///</remarks>
-		object Get(Type type, string name = null, params object[] ctorArguments);
-
-		///<summary>
-		///	Возвращает все объекты указаннго типа (обобщенииый)
-		///</summary>
-		///<typeparam name="T"> тип сервиса </typeparam>
-		///<param name="ctorArguments"> Параметры для вызова конструктора, если не указано - будет использован конструктор по умолчанию. </param>
-		///<param name="name"> опциональное имя компонента, если указано - поиск будет производиться только среди с компонентов с указаным именем </param>
-		///<returns> Все экземпляры указанного сервиса </returns>
-		///<remarks>
-		///	<invariant>Метод All применим только для компонентов с циклом жизни
-		///		<see cref="Lifestyle.Transient" />
-		///		и
-		///		<see cref="Lifestyle.Extension" />
-		///		.
-		///		<note>Не пытайтесь таким образом получить все экземпляры сервисов с другим циклом жизни</note>
-		///		<para> Остальные особенности поведения контейнера при поиске и создании компонентов описаны в документации к <see
-		///	 cref="Get" /> </para>
-		///	</invariant>
-		///</remarks>
-		IEnumerable<T> All<T>(string name = null, params object[] ctorArguments) where T : class;
-
-		/// <summary>
-		/// 	Возвращает все объекты указаннго типа (прямое указание типа)
-		/// </summary>
-		/// <param name="ctorArguments"> Параметры для вызова конструктора, если не указано - будет использован конструктор по умолчанию. </param>
-		/// <param name="type"> тип сервиса </param>
-		/// <param name="name"> опциональное имя компонента, если указано - поиск будет производиться только среди с компонентов с указаным именем </param>
-		/// <returns> Все экземпляры указанного сервиса </returns>
-		/// <remarks>
-		/// 	<invariant>Метод All применим только для компонентов с циклом жизни
-		/// 		<see cref="Lifestyle.Transient" />
-		/// 		и
-		/// 		<see cref="Lifestyle.Extension" />
-		/// 		.
-		/// 		<note>Не пытайтесь таким образом получить все экземпляры сервисов с другим циклом жизни</note>
-		/// 	</invariant>
-		/// </remarks>
-		IEnumerable All(Type type, string name = null, params object[] ctorArguments);
-
-		/// <summary>
-		/// 	Возвращает объект контейнеру
-		/// </summary>
-		/// <param name="obj"> Объект, ранее созданнй контейнером </param>
-		/// <remarks>
-		/// 	<invariant>Метод позволяет контейнеру высвобождать собственные ресурсы и вызывает
-		/// 		<see cref="IContainerBound.OnContainerRelease" />
-		/// 		метод,
-		/// 		работает это только для
-		/// 		<see cref="Lifestyle.Pooled" />
-		/// 		и
-		/// 		<see cref="Lifestyle.PerThread" />
-		/// 		, для остальных данный метод игнорируется</invariant>
-		/// </remarks>
-		void Release(object obj);
-
-		/// <summary>
-		/// 	Регистрирует новый компонент в контейнере
-		/// </summary>
-		/// <param name="component"> Компонент для регистрации </param>
-		/// <remarks>
-		/// 	Вы можете, но не обязаны использовать компоненты ранее созданные при помощи <see cref="EmptyComponent" />, <see
-		/// 	 cref="NewExtension{TService}" />,
-		/// 	<see cref="NewComponent{TService,TImplementation}" />, однако использование данных методов позволит ваше приложение от необходимости знать классы - наследники
-		/// 	<see cref="IComponentDefinition" />.<br />
-		/// 	<invariant>В Qorpent новые компоененты не вытесняют старые, а кладутся в стек, соответственно при
-		/// 		<see cref="Unregister" />
-		/// 		тип сервиса из контейнера не исчезает, 
-		/// 		а возвращается к более ранней версии.
-		/// 		<br />
-		/// 		Разрешение компонентов при этом ведется по логике "самый подходящий" исходя из порядка появления в контейнере, имени и явно указанного
-		/// 		<see cref="IComponentDefinition.Priority" />
-		/// 		.
-		/// 		<br />
-		/// 		Соответственно
-		/// 		<see cref="GetComponents" />
-		/// 		возвращает все версии всех компонентов.
-		/// 		<br />
-		/// 		При указании в компоненте
-		/// 		<see cref="Lifestyle.ContainerExtension" />
-		/// 		, компонент перенаправляется на регистрацию в
-		/// 		<see cref="RegisterExtension" />
-		/// 	</invariant>
-		/// </remarks>
-		void Register(IComponentDefinition component);
-
-		/// <summary>
-		/// 	Отменяет регистрацию компонента
-		/// </summary>
-		/// <param name="component"> компонент, который должен быть убран из контейнера </param>
-		/// <remarks>
-		/// 	<note>Очевидно что, такой метод обязан присутствовать в интерфейсе контейнера, однако его использование в задачах помимо тестирования,
-		/// 		обозначает недостатки архитектуры приложения, так как в нормальном варианте использования контейнер меняет свое поведение по принципу наращивания
-		/// 		обслуживаемых классов и компонентов, тогда как удаление части компонент может привести к неожиданным эффектам в случае кэширования более
-		/// 		ранеей выдвачи клиентской стороной</note>
-		/// </remarks>
-		void Unregister(IComponentDefinition component);
 
 		/// <summary>
 		/// 	Вызыает очистку контейнера
@@ -388,23 +176,6 @@ namespace Qorpent.IoC {
 		/// 	<invariant>Очистка очищает внутрненнее состояние и кэши контейнера, регистрации компонент это не касается, компоненты остаются в прежней конфигурации</invariant>
 		/// </remarks>
 		void CleanUp();
-
-		/// <summary>
-		/// 	Получить все зарегистрированные компоненты
-		/// </summary>
-		/// <returns> Все компоненты контейнера </returns>
-		IEnumerable<IComponentDefinition> GetComponents();
-
-		/// <summary>
-		/// 	Возвращает класс-загрузчик контейнера из манифеста
-		/// </summary>
-		/// <returns> </returns>
-		/// <remarks>
-		/// 	Этот фабричный метод включен в интерфейс <see cref="IContainer" />, а не
-		/// 	производится поиск в самом контейнере, так как загрузка манифеста относится к инициализации контейнера
-		/// 	и соответственно использование его метода <see cref="Get{T}" /> считается небезопасным
-		/// </remarks>
-		IContainerLoader GetLoader();
 
 
 		///<summary>
@@ -419,38 +190,17 @@ namespace Qorpent.IoC {
 		/// <param name="extension"> </param>
 		void UnRegisterExtension(IContainerExtension extension);
 
+		/// <summary>
+		/// Регистрирует дочерний резольвер типов, может использоваться для объединения нескольких IOC
+		/// </summary>
+		/// <param name="resolver"></param>
+		void RegisterSubResolver(ITypeResolver resolver);
+
 		///<summary>
 		///	Получить список всех расширений контейнера
 		///</summary>
 		///<returns> Перечисление всех расширений контейнера </returns>
 		IEnumerable<IContainerExtension> GetExtensions();
-
-		/// <summary>
-		/// 	Создает пустой компонент для настройки (регистрации не производится!)
-		/// </summary>
-		/// <returns> Пустой экземпляр <see cref="IComponentDefinition" /> </returns>
-		/// <remarks>
-		/// 	Используйте этот метод и затем вызывайте <see cref="Register" />
-		/// </remarks>
-		IComponentDefinition EmptyComponent();
-
-		/// <summary>
-		/// 	Создает новый компонент с указанными настройками
-		/// </summary>
-		/// <param name="lifestyle"> Цикл жизни компонента </param>
-		/// <param name="name"> Имя </param>
-		/// <param name="priority"> Приоритетность </param>
-		/// <param name="implementation"> Готовый экземпляр </param>
-		/// <typeparam name="TService"> Тип сервиса </typeparam>
-		/// <typeparam name="TImplementation"> Тип реализации </typeparam>
-		/// <returns> Пред-настроенный экземпляр <see cref="IComponentDefinition" /> </returns>
-		/// <remarks>
-		/// 	Используйте этот метод и затем вызывайте <see cref="Register" />
-		/// </remarks>
-		IComponentDefinition NewComponent<TService, TImplementation>(Lifestyle lifestyle = Lifestyle.Transient,
-		                                                             string name = "", int priority = 10000,
-		                                                             TImplementation implementation = null)
-			where TService : class where TImplementation : class, TService, new();
 
 		/// <summary>
 		/// 	Создает преднастроенный компонент для регистрации расширений с <see cref="Lifestyle.Extension" /> из заранее подготовленных объектов
@@ -460,22 +210,11 @@ namespace Qorpent.IoC {
 		/// <param name="implementation"> Готовый объект </param>
 		/// <typeparam name="TService"> Тип сервиса </typeparam>
 		/// <remarks>
-		/// 	Используйте этот метод и затем вызывайте <see cref="Register" />.<br />
+		/// 	Используйте этот метод и затем вызывайте <see cref="IComponentRegistry.Register" />.<br />
 		/// 	метод удобен в случаях пользовательской настройки контейна из дополнительных конфигурационных файлов
 		/// </remarks>
 		/// <returns> </returns>
 		IComponentDefinition NewExtension<TService>(TService implementation, string name = "", int priority = 10000)
 			where TService : class;
-
-		/// <summary>
-		/// 	Find best matched component for type/name or null for
-		/// </summary>
-		/// <param name="type"> The type. </param>
-		/// <param name="name"> The name. </param>
-		/// <returns> </returns>
-		/// <exception cref="NotImplementedException"></exception>
-		/// <remarks>
-		/// </remarks>
-		IComponentDefinition FindComponent(Type type, string name);
 	}
 }

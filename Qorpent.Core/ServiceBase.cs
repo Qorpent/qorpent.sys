@@ -114,12 +114,12 @@ namespace Qorpent {
 		}
 
 		/// <summary>
-		/// 	Выполняется если объект возвращается в контейнер методом <see cref="IContainer.Release" />.
+		/// 	Выполняется если объект возвращается в контейнер методом <see cref="ITypeResolver.Release" />.
 		/// </summary>
 		/// <remarks>
-		/// 	Метод <see cref="IContainer.Release" /> по сути сделан с резервом на использованние
+		/// 	Метод <see cref="ITypeResolver.Release" /> по сути сделан с резервом на использованние
 		/// 	совместно <see cref="Lifestyle.Pooled" />,<see cref="Lifestyle.PerThread" /> и практически не
-		/// 	используется на практике. Также <see cref="IContainer.Release" /> вызывается при удалении
+		/// 	используется на практике. Также <see cref="ITypeResolver.Release" /> вызывается при удалении
 		/// 	имеющихся компонентов. То есть по сути данный метод следует перекрывать и реализовывать
 		/// 	только в случае острой необходимости, так как гарантий его вызова в момент уничтожения
 		/// 	объекта нет и соответственно перекрывать надо только в случае реальных
@@ -129,7 +129,7 @@ namespace Qorpent {
 
 
 		/// <summary>
-		/// 	Реализует интерфейс <see cref="IDisposable" />, по умолчанию вызывает <see cref="IContainer.Release" />, относительно
+		/// 	Реализует интерфейс <see cref="IDisposable" />, по умолчанию вызывает <see cref="ITypeResolver.Release" />, относительно
 		/// 	<see cref="SourceContainer" />
 		/// </summary>
 		public void Dispose() {

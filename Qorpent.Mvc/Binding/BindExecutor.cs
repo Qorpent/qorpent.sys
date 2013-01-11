@@ -163,6 +163,10 @@ namespace Qorpent.Mvc.Binding {
 				if (((string) val).IsEmpty()) {
 					val = _bindattribute.Default;
 				}
+				var customBindConverter = _bindattribute as ICustomBindConverter;
+				if (customBindConverter != null) {
+					customBindConverter.SetConverted(action,(string)val,context,SetDirectly);
+				}
 				SetConverted(action, val);
 			}
 		}

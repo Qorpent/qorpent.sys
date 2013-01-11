@@ -27,6 +27,9 @@
   <ItemGroup>
     <Compile Include="Dsl\SmartXslt\IXsltHelper.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
+    <Compile Include="IoC\IComponentRegistry.cs" />
+    <Compile Include="IoC\IComponentSource.cs" />
+    <Compile Include="IoC\ITypeResolver.cs" />
     <Compile Include="Model\ContextEntity.cs" />
     <Compile Include="Model\Entity.cs" />
     <Compile Include="Model\IContextEntity.cs" />
@@ -42,6 +45,7 @@
     <Compile Include="Model\IWithName.cs" />
     <Compile Include="Model\IWithTag.cs" />
     <Compile Include="Model\IWithVersion.cs" />
+    <Compile Include="Mvc\Binding\ICustomBindConverter.cs" />
     <Compile Include="Mvc\ViewNotFoundException.cs" />
     <Compile Include="Security\AccessProviderService.cs" />
     <Compile Include="Security\IWithRoleContext.cs" />

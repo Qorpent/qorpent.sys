@@ -101,7 +101,10 @@ namespace Qorpent.IoC {
 			}
 		}
 
-
+		/// <summary>
+		/// Приоритет при разрешении типов
+		/// </summary>
+		public int Idx { get; set; }
 		/// <summary>
 		/// 	Возвращает сервис указанного типа. (прямое указание типа)
 		/// </summary>
@@ -118,8 +121,17 @@ namespace Qorpent.IoC {
 				if (type.IsValueType) {
 					throw new ArgumentException("type must be interface or reference type");
 				}
+
+				var preresolved = PreResolveWithSubResolvers(type, name, ctorArguments);
+				if(null!=preresolved) return preresolved;
+
+
 				var component = FindComponent(type, name);
 				if (null == component) {
+					var postresolved = PostResolveWithSubResolvers(type, name, (object[]) ctorArguments);
+					if(postresolved!=null) {
+						return postresolved;
+					}
 					if (ThrowErrorOnNotExistedComponent) {
 						throw new ContainerException(string.Format("cannot find component for {0} {1}", type, name));
 					}
@@ -184,6 +196,14 @@ namespace Qorpent.IoC {
 				ProcessExtensions(context);
 				return result;
 			}
+		}
+
+		private object PreResolveWithSubResolvers(Type type, string name, object[] ctorArguments) {
+			return SubResolvers.Where(x => x.Idx <= this.Idx).OrderBy(x => x.Idx).Select(preresolver => preresolver.Get(type, name, (object[]) ctorArguments)).FirstOrDefault(resolved => null != resolved);
+		}
+		private object PostResolveWithSubResolvers(Type type, string name, object[] ctorArguments)
+		{
+			return SubResolvers.Where(x => x.Idx > this.Idx).OrderBy(x => x.Idx).Select(preresolver => preresolver.Get(type, name, (object[])ctorArguments)).FirstOrDefault(resolved => null != resolved);
 		}
 
 		/// <summary>
@@ -281,6 +301,15 @@ namespace Qorpent.IoC {
 			}
 		}
 
+		private IList<ITypeResolver> SubResolvers = new List<ITypeResolver>();
+		/// <summary>
+		/// Регистрирует дочерний резольвер типов, может использоваться для объединения нескольких IOC
+		/// </summary>
+		/// <param name="resolver"></param>
+		public void RegisterSubResolver(ITypeResolver resolver) {
+			SubResolvers.Add(resolver);
+		}
+
 		/// <summary>
 		/// 	returns array of all configured extensions
 		/// </summary>
@@ -341,6 +370,13 @@ namespace Qorpent.IoC {
 				if (type.IsValueType) {
 					throw new ArgumentException("type must be interface or reference type");
 				}
+
+				foreach (var typeResolver in SubResolvers.Where(x=>x.Idx<=this.Idx).OrderBy(x=>x.Idx)) {
+					foreach (var obj in typeResolver.All(type,name,(object[])ctorArguments)) {
+						yield return obj;
+					}
+				}
+
 				var extensions = FindExtensions(type, name);
 				if (typeof (IWithIdx).IsAssignableFrom(type)) {
 //have to order result
@@ -362,6 +398,15 @@ namespace Qorpent.IoC {
 						else {
 							yield return CreateInstance(component, null);
 						}
+					}
+				}
+
+
+				foreach (var typeResolver in SubResolvers.Where(x => x.Idx > this.Idx).OrderBy(x => x.Idx))
+				{
+					foreach (var obj in typeResolver.All(type, name, (object[])ctorArguments))
+					{
+						yield return obj;
 					}
 				}
 			}

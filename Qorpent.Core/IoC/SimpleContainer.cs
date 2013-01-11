@@ -46,6 +46,11 @@ namespace Qorpent.IoC {
 	/// </summary>
 	public sealed class SimpleContainer : IContainer {
 		/// <summary>
+		/// Приоритет при разрешении типов
+		/// </summary>
+		public int Idx { get; set; }
+
+		/// <summary>
 		/// 	Returns single object of given type (generic) - NAME IGNORED IN SIMPLE CONTAINER (EXTENSION STILL CAN USE)
 		/// </summary>
 		/// <typeparam name="T"> </typeparam>
@@ -196,6 +201,14 @@ namespace Qorpent.IoC {
 		public void UnRegisterExtension(IContainerExtension extension) {
 			_extensions.Remove(extension);
 			extension.Container = null;
+		}
+
+		/// <summary>
+		/// Регистрирует дочерний резольвер типов, может использоваться для объединения нескольких IOC
+		/// </summary>
+		/// <param name="resolver"></param>
+		public void RegisterSubResolver(ITypeResolver resolver) {
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
