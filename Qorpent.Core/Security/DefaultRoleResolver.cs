@@ -111,6 +111,19 @@ namespace Qorpent.Security {
 			                customcontext);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="principal"></param>
+		/// <param name="callcontext"> </param>
+		/// <param name="customcontext"> </param>
+		/// <returns></returns>
+		public IEnumerable<string> GetRoles(IPrincipal principal, IMvcContext callcontext = null, object customcontext = null) {
+			if(IsInRole(principal,"ADMIN",false,callcontext,customcontext)) yield return "ADMIN";
+			if(IsInRole(principal,"SECURITYMANAGER",true,callcontext,customcontext)) yield return "SECURITYMANAGER";
+			if (IsInRole(principal, "DEVELOPER", true,callcontext,customcontext)) yield return "SECURITYMANAGER";
+		}
+
 
 		private bool EvaluateIsInRole(IPrincipal principal, string role, bool exact, IMvcContext callcontext,
 		                              object customcontext) {

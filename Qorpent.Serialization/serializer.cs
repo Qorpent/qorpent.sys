@@ -36,6 +36,18 @@ namespace Qorpent.Serialization {
 	/// <remarks>
 	/// </remarks>
 	public abstract class Serializer : ISerializer {
+
+		/// <summary>
+		/// Serializes given object to string
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public string Serialize(string name, object value) {
+			var sw = new StringWriter();
+			Serialize(name,value,sw);
+			return sw.ToString();
+		}
 		/// <summary>
 		/// 	Serializes the specified name.
 		/// </summary>

@@ -742,6 +742,10 @@ namespace Qorpent.IoC {
 		/// <remarks>
 		/// </remarks>
 		public IComponentDefinition FindComponent(Type type, string name) {
+			var preresult = PreFindComponentWithSubResolvers(type, name);
+			if(null!=preresult) {
+				return preresult;
+			}
 			if (name.IsEmpty()) {
 				//firstly try to direct match
 				if (ByTypeCache.ContainsKey(type)) {
@@ -750,14 +754,23 @@ namespace Qorpent.IoC {
 
 				var key = ByTypeCache.Keys.FirstOrDefault(type.IsAssignableFrom);
 				if (null == key) {
-					return null;
+					return PostFindComponentWithSubResolvers(type,name);
 				}
 				return ByTypeCache[key].FirstOrDefault();
 			}
 			if (!ByNameCache.ContainsKey(name)) {
-				return null;
+				return PostFindComponentWithSubResolvers(type,name);
 			}
 			return ByNameCache[name].FirstOrDefault(x => type.IsAssignableFrom(x.ServiceType));
+		}
+
+		private IComponentDefinition PreFindComponentWithSubResolvers(Type type, string name) {
+			return SubResolvers.Where(x => x.Idx <= this.Idx).OrderBy(x => x.Idx).OfType<IComponentSource>().Select(csource => csource.FindComponent(type, name)).FirstOrDefault(subcomponent => null != subcomponent);
+		}
+
+		private IComponentDefinition PostFindComponentWithSubResolvers(Type type, string name)
+		{
+			return SubResolvers.Where(x => x.Idx > this.Idx).OrderBy(x => x.Idx).OfType<IComponentSource>().Select(csource => csource.FindComponent(type, name)).FirstOrDefault(subcomponent => null != subcomponent);
 		}
 
 		/// <summary>

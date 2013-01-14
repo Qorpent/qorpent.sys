@@ -23,6 +23,7 @@
 
 #endregion
 
+using System.Collections.Generic;
 using System.Security.Principal;
 using Qorpent.Mvc;
 
@@ -54,5 +55,14 @@ namespace Qorpent.Security {
 		/// <returns> </returns>
 		bool IsInRole(string username, string role, bool exact = false, IMvcContext callcontext = null,
 		              object customcontext = null);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="principal"></param>
+		/// <param name="callcontext"> </param>
+		/// <param name="customcontext"> </param>
+		/// <returns></returns>
+		IEnumerable<string> GetRoles(IPrincipal principal, IMvcContext callcontext = null, object customcontext = null);
 	}
 }
