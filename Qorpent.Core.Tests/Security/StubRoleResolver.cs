@@ -57,6 +57,10 @@ namespace Qorpent.Core.Tests.Security {
 			return IsInRole(principal, role, exact, callcontext, customcontext);
 		}
 
-		private readonly List<string> rolemaps;
+	    public IEnumerable<string> GetRoles(IPrincipal principal, IMvcContext callcontext = null, object customcontext = null) {
+	        throw new System.NotImplementedException();
+	    }
+
+	    private readonly List<string> rolemaps;
 	}
 }

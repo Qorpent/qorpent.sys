@@ -32,6 +32,7 @@ using System.Xml.Linq;
 using Qorpent.Bxl;
 using Qorpent.Dsl.XmlInclude;
 using Qorpent.IO;
+using Qorpent.Mvc;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.IoC {
@@ -117,24 +118,41 @@ namespace Qorpent.IoC {
 			if (manifest == null) {
 				throw new ArgumentNullException("manifest");
 			}
-			IList<string> dlls = manifest.Elements("ref").Select(element => element.Attr("code")).ToList();
+			IList<string> dlls = manifest.Elements("ref").Select(element => element.Attr("code")).Distinct().ToList();
 
 
-			IList<string> ns = manifest.Elements("using").Select(element => element.Attr("code")).ToList();
+			IList<string> ns = manifest.Elements("using").Select(element => element.Attr("code")).Distinct().ToList();
 
-			dlls = dlls.Distinct().ToList();
-			ns = ns.Distinct().ToList();
+			IList<string> mvcs = manifest.Elements("mvc").Select(element => element.Attr("code")).Distinct().ToList();
+
+
+			
 			//extensions must be load first
 			var result = manifest.Elements("containerextension").Select(extensionxml => new ManifestComponentDefinition(extensionxml, allowErrors, dlls, ns)).Cast<IComponentDefinition>().ToList();
+
 			result.AddRange((
 				from componentxml in manifest.Elements() 
 				where componentxml.Name.LocalName != "ref" 
 				where componentxml.Name.LocalName != "using" 
 				where componentxml.Name.LocalName != "containerextension" 
+				where componentxml.Name.LocalName != "mvc"
 				select new ManifestComponentDefinition(componentxml, allowErrors, dlls, ns)));
 			//usual components must be load after extensions
 			foreach (var component in result) {
 				_container.Register(component);
+			}
+
+			//now we can load mvc-friendly assemblies
+			if(mvcs.Count!=0) {
+				var _mvcfactory = _container.Get<IMvcFactory>();
+				if (null != _mvcfactory) {
+					foreach (var mvca in mvcs) {
+						var assembly = Assembly.Load(mvca);
+						if(null!=assembly) {
+							_mvcfactory.Register(assembly);
+						}
+					}
+				}
 			}
 			return result;
 		}

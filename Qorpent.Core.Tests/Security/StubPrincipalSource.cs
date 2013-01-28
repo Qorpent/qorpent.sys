@@ -29,8 +29,9 @@ using Qorpent.Security;
 namespace Qorpent.Core.Tests.Security {
 	public class StubPrincipalSource : IPrincipalSource {
 		public IPrincipal CurrentUser { get; set; }
+	    public IPrincipal BasePrincipal { get; set; }
 
-		public void SetCurrentUser(IPrincipal usr) {
+	    public void SetCurrentUser(IPrincipal usr) {
 			CurrentUser = usr;
 		}
 	}
