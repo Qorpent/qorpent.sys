@@ -91,8 +91,9 @@ namespace Qorpent.Data.Tests
 			container.GetLoader().Load<FileBasedConnectionProviderExtension>();
 
 			var conp = container.Get<IDatabaseConnectionProvider>();
-			conp.UnRegister("con1",true);
 			((IResetable)conp).Reset(null);
+			conp.UnRegister("con1",true);
+			
 			Assert.Null(conp.GetConnection("con1"));
 			conp.Register(new ConnectionDescriptor
 			{

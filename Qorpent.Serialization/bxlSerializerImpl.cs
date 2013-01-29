@@ -31,9 +31,6 @@ namespace Qorpent.Serialization {
 	internal class BxlSerializerImpl : XmlSerializerImpl {
 		public override void End() {
 			var e = Root;
-			if (e.Elements().Count() == 1) {
-				e = e.Elements().First();
-			}
 			Output.Write(Application.Current.Bxl.GetParser().Generate(e,new BxlGeneratorOptions{NoRootElement = true}));
 		}
 	}

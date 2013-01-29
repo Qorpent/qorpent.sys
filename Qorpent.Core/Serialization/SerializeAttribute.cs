@@ -30,7 +30,7 @@ namespace Qorpent.Serialization {
 	/// 	Marks that given class is have to be serialized
 	/// </summary>
 	[AttributeUsage(
-		AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Property | AttributeTargets.Field,
+		AttributeTargets.Class | AttributeTargets.Struct| AttributeTargets.Interface | AttributeTargets.Property | AttributeTargets.Field,
 		AllowMultiple = false, Inherited = true)]
 	public class SerializeAttribute : Attribute {
 		/// <summary>

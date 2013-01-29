@@ -70,6 +70,14 @@ namespace Qorpent.Serialization.Tests {
 		}
 
 		[Test]
+		public void array_serialized_anonym()
+		{
+			var a = new object[] { new{x=1},new{y=2} };
+
+			test(a, @"<Object__><item x=""1"" __idx=""0"" /><item y=""2"" __idx=""1"" /></Object__>");
+		}
+
+		[Test]
 		public void bool_serialized() {
 			test(true, "<value>true</value>");
 			test(false, "<value>false</value>");

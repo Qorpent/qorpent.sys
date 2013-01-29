@@ -31,7 +31,10 @@ namespace Qorpent.Dsl.Tests {
 	[TestFixture]
 	public class MainTest {
 		private void test(bool expectedresult, string options, string expression) {
-			var termsrc = LogicTermSource.Create(ComplexStringHelper.AutoDetect(options).Parse(options));
+			var optionsparser = ComplexStringHelper.AutoDetect(options);
+			//optionsparser.EmptyValue = "1";
+			var toptions = optionsparser.Parse(options);
+			var termsrc = LogicTermSource.Create(toptions);
 			var expr = new LogicalExpressionParser().Parse(expression);
 			var result = expr.Eval(termsrc);
 			Assert.AreEqual(expectedresult, result);

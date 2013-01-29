@@ -294,7 +294,7 @@ namespace Qorpent.Utils {
 					ItemDelimiter = "|",
 					ValueDelimiter = ":",
 					NotExistedValue = "",
-					EmptyValue = "",
+					EmptyValue = "1",
 					ItemDelimiterSubstitution = "`",
 					ValueDelimiterSubstitution = "~"
 				};
@@ -313,7 +313,7 @@ namespace Qorpent.Utils {
 				ItemDelimiter = " ",
 				ValueDelimiter = ":",
 				NotExistedValue = "",
-				EmptyValue = "",
+				EmptyValue = "1",
 				ItemDelimiterSubstitution = "`",
 				ValueDelimiterSubstitution = "~"
 			};

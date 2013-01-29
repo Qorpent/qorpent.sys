@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Security.Principal;
 
 namespace Qorpent.Applications {
@@ -34,7 +35,11 @@ namespace Qorpent.Applications {
 		/// </summary>
 		/// <returns></returns>
 		public string GetAppDomainAppPath() {
-			return Environment.CurrentDirectory;
+			var result = Environment.CurrentDirectory;
+			if(EnvironmentInfo.IsWeb) {
+				return Path.GetDirectoryName(result);
+			}
+			return result;
 		}
 	}
 }

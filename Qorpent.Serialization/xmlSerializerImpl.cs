@@ -241,7 +241,12 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public void EndArrayEntry(bool last) {
-			_stack.Pop();
+			var item = _stack.Pop();
+			if(item.Elements().Count()==1 ) {
+				var subst = item.Elements().First();
+				subst.SetAttributeValue("__idx",item.Attribute("__idx").Value);
+				item.ReplaceWith(subst);
+			}
 			//if (e.Elements("item").Count() == 1 && e.Elements().Count() == 1) {
 			//    var subst = e.Elements().FirstOrDefault();
 			//    if (subst != null) {

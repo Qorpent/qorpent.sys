@@ -107,6 +107,10 @@ e1 :
 near
 ext2
 near2
+Z x=1
+	y=2
+Z2 x=3
+	y=2
 ".Trim().LfOnly(), bxlresult.Trim().LfOnly());
 		}
 
