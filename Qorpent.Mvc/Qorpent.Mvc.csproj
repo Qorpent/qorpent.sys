@@ -10,6 +10,7 @@
   <ItemGroup>
     <Compile Include="Actions\GetResourceAction.cs" />
     <Compile Include="Actions\ImpersonateAction.cs" />
+    <Compile Include="HttpContextWrapper.cs" />
     <Compile Include="MimeMapper.cs" />
     <Compile Include="Actions\MyActions.cs" />
     <Compile Include="Actions\MyRenders.cs" />

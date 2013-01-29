@@ -34,7 +34,7 @@ namespace Qorpent.Mvc.HttpHandler {
 	/// 	Main handler for QorpentMvc
 	/// </summary>
 	[ContainerComponent(Lifestyle.Transient)]
-	public class MvcHandler : ServiceBase, IMvcHandler {
+	public class MvcHandler : ServiceBase, IMvcHandler,IHttpHandler {
 #if PARANOID
 		static MvcHandler() {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
@@ -74,7 +74,7 @@ namespace Qorpent.Mvc.HttpHandler {
 		public void ProcessRequest(HttpContext context) {
 			_isDefaultHandler = true;
 			var ctx = ResolveService<IMvcContext>();
-			ctx.SetNativeContext(new HttpContextWrapper(context));
+			ctx.SetNativeContext(new System.Web.HttpContextWrapper(context));
 			ProcessRequest(ctx);
 		}
 
@@ -128,6 +128,18 @@ namespace Qorpent.Mvc.HttpHandler {
 			}
 			OnFinish(context);
 			return context;
+		}
+
+		/// <summary>
+		/// return native http handler with given interface
+		/// </summary>
+		/// <typeparam name="TIhandler"></typeparam>
+		/// <returns></returns>
+		public TIhandler AsNative<TIhandler>() {
+			if(typeof(IHttpHandler)==typeof(TIhandler)) {
+				return (TIhandler) (object) this;
+			}
+			return default(TIhandler);
 		}
 
 

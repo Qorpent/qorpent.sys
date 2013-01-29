@@ -78,19 +78,7 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		public override string Language { get; set; }
 
-		/// <summary>
-		/// 	Cookie отклика
-		/// </summary>
-		public override HttpCookieCollection ResponseCookies {
-			get { return null; }
-		}
-
-		/// <summary>
-		/// 	Cookie отклика
-		/// </summary>
-		public override HttpCookieCollection RequestCookies {
-			get { return null; }
-		}
+		
 
 		/// <summary>
 		/// 	Set system/server defined execution context

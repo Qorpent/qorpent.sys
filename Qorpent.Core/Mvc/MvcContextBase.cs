@@ -389,15 +389,26 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		[SerializeNotNullOnly] public abstract string Language { get; set; }
 
-		/// <summary>
-		/// 	Cookie отклика
-		/// </summary>
-		public abstract HttpCookieCollection ResponseCookies { get; }
 
 		/// <summary>
-		/// 	Cookie отклика
+		/// Due to remove System.Web dependency we choose to use this style of
+		/// cookie support - calling site MUST use HttpCookie as object
 		/// </summary>
-		public abstract HttpCookieCollection RequestCookies { get; }
+		/// <param name="cookieObject"></param>
+		public virtual void SetCookie(object cookieObject) {
+			//stub
+		}
+
+		/// <summary>
+		/// Due to remove System.Web dependency we choose use such ambigous
+		/// method to retrieve request cookie, HttpCookie will be returned
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public virtual object GetCookie(string name) {
+			//stub
+			return null;
+		}
 
 		/// <summary>
 		/// 	Признак того, что контекст вызвал Redirect

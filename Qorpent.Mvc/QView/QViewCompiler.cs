@@ -134,7 +134,8 @@ namespace Qorpent.Mvc.QView {
 					ResultName = DateTime.Now.ToString("yyyyMMddhhmmss") + "." + suffix,
 					BxlOptions = BxlParserOptions.SafeAttributeNames
 				};
-			proj.Extensions["http://qorpent/qview"] = new QViewXsltExtension();
+			//notice: c~ is a key-value construction, no any error
+			proj.Extensions["c~http://qorpent/qview"] = new QViewXsltExtension();
 			if (directSource.IsEmpty()) {
 				var files =
 					Directory.GetFiles(FileNameResolver.Root, "*.vbxl", SearchOption.AllDirectories)

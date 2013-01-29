@@ -144,12 +144,12 @@ namespace Qorpent.IoC {
 
 			//now we can load mvc-friendly assemblies
 			if(mvcs.Count!=0) {
-				var _mvcfactory = _container.Get<IMvcFactory>();
-				if (null != _mvcfactory) {
+				var mvcfactory = _container.Get<IMvcFactory>();
+				if (null != mvcfactory) {
 					foreach (var mvca in mvcs) {
 						var assembly = Assembly.Load(mvca);
 						if(null!=assembly) {
-							_mvcfactory.Register(assembly);
+							mvcfactory.Register(assembly);
 						}
 					}
 				}

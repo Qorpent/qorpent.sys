@@ -47,12 +47,12 @@ namespace Qorpent.Mvc {
 		/// <summary>
 		/// </summary>
 		/// <param name="httpContextWrapper"> </param>
-		public MvcContext(HttpContextWrapper httpContextWrapper) {
+		public MvcContext(System.Web.HttpContextWrapper httpContextWrapper) {
 			InitializeContext(httpContextWrapper);
 			
 		}
 
-		private void InitializeContext(HttpContextWrapper httpContextWrapper) {
+		private void InitializeContext(System.Web.HttpContextWrapper httpContextWrapper) {
 			SetNativeContext(httpContextWrapper);
 		}
 
@@ -71,7 +71,7 @@ namespace Qorpent.Mvc {
 		/// <summary>
 		/// 	Cookie отклика
 		/// </summary>
-		public override HttpCookieCollection ResponseCookies {
+		public HttpCookieCollection ResponseCookies {
 			get {
 				if (null != NativeAspContext) {
 					return NativeAspContext.Response.Cookies;
@@ -83,13 +83,31 @@ namespace Qorpent.Mvc {
 		/// <summary>
 		/// 	Cookie отклика
 		/// </summary>
-		public override HttpCookieCollection RequestCookies {
+		public HttpCookieCollection RequestCookies {
 			get {
 				if (null != NativeAspContext) {
 					return NativeAspContext.Request.Cookies;
 				}
 				return null;
 			}
+		}
+
+		/// <summary>
+		/// real implementation that works with response cookies
+		/// </summary>
+		/// <param name="cookieObject"></param>
+		public override void SetCookie(object cookieObject)
+		{
+			ResponseCookies.Set((HttpCookie)cookieObject);
+		}
+
+		/// <summary>
+		/// real implementation that works with request cookies
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public override object GetCookie(string name) {
+			return RequestCookies.Get(name);
 		}
 
 		/// <summary>
@@ -318,7 +336,7 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <param name="nativecontext"> </param>
 		public override void SetNativeContext(object nativecontext) {
-			NativeAspContext = (HttpContextWrapper) nativecontext;
+			NativeAspContext = (System.Web.HttpContextWrapper) nativecontext;
 			SupportHeaders = true;
 			try {
 				//try call headers - here we see does underlined host support headers

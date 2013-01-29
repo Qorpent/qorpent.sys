@@ -112,6 +112,23 @@ namespace Qorpent.Applications {
 			set { _threadCurrentMvcContext = value; }
 		}
 
+		private IHttpContextWrapper _httpContextWrapper;
+		/// <summary>
+		/// Access to HTTP context wrapper
+		/// </summary>
+		public IHttpContextWrapper HttpWrapper { 
+			get {
+				lock(this) {
+					if (null == _httpContextWrapper) {
+						var wrapper = EnvironmentInfo.GetHttpWrapper();
+						_httpContextWrapper = wrapper;
+					}
+					return _httpContextWrapper;
+				}
+
+			}
+		}
+
 		/// <summary>
 		/// 	Access to Bxl service
 		/// </summary>
@@ -420,12 +437,12 @@ namespace Qorpent.Applications {
 				lock (this) {
 					if (null == _applicationName) {
 						if (IsWeb) {
-							if(null!=HttpContext.Current) {
-								if (HttpContext.Current.Request.ApplicationPath != null) {
-									_applicationName = HttpContext.Current != null
-										                   ? HttpContext.Current.Request.ApplicationPath.Replace("/", "")
-										                   : "NOTDEFINED";
+							if(HttpWrapper.HasCurrent()) {
+								var apppath = HttpWrapper.GetCurrentApplicationPath();
+								if(null!=apppath) {
+									_applicationName = apppath.Replace("/", "");
 								}
+								
 							}
 						}
 					}
@@ -434,6 +451,9 @@ namespace Qorpent.Applications {
 			}
 			set { _applicationName = value; }
 		}
+
+
+
 
 
 		/// <summary>

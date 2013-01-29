@@ -45,7 +45,7 @@ namespace Qorpent.Mvc.Actions {
 			}
 #endif
 			var cookie1 = new HttpCookie(FormsAuthentication.FormsCookieName, "") {Expires = DateTime.Now.AddYears(-1)};
-			Context.ResponseCookies.Add(cookie1);
+			Context.SetCookie(cookie1);
 			FormsAuthentication.SignOut();
 			Context.Redirect("_sys/login.qview.qweb");
 			return null;

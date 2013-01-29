@@ -71,7 +71,7 @@ namespace Qorpent.Mvc.HttpHandler {
 					((MvcHandler) handler).SetApplication(Application);
 				}
 
-				return handler;
+				return handler.AsNative<IHttpHandler>();
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace Qorpent.Mvc.HttpHandler {
 
 		private IHttpHandler TryGetFromPool() {
 			if (_handlers.Count != 0) {
-				return _handlers.Pop();
+				return _handlers.Pop().AsNative<IHttpHandler>();
 			}
 			return null;
 		}

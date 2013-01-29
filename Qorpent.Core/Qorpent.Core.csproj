@@ -17,14 +17,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Choose>
-    <When Condition="'$(Configuration)'!='SQL2008'">
-      <ItemGroup>
-        <Reference Include="System.Web" />
-      </ItemGroup>
-    </When>
+    <When Condition="'$(Configuration)'!='SQL2008'" />
   </Choose>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Applications\IHttpContextWrapper.cs" />
+    <Compile Include="Applications\StubHttpContextWrapper.cs" />
     <Compile Include="Dsl\SmartXslt\IXsltHelper.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
     <Compile Include="IoC\IComponentRegistry.cs" />

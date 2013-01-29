@@ -28,12 +28,19 @@ using System.Web;
 namespace Qorpent.Mvc {
 	/// <summary>
 	/// </summary>
-	public interface IMvcHandler : IHttpHandler {
+	public interface IMvcHandler  {
 		/// <summary>
 		/// 	Executes given mvc context
 		/// </summary>
 		/// <param name="context"> </param>
 		/// <returns> </returns>
 		IMvcContext ProcessRequest(IMvcContext context);
+
+		/// <summary>
+		/// return native http handler with given interface
+		/// </summary>
+		/// <typeparam name="TIhandler"></typeparam>
+		/// <returns></returns>
+		TIhandler AsNative<TIhandler>();
 	}
 }

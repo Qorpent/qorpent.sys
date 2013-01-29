@@ -27,6 +27,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Web;
+using Qorpent.Applications;
 
 namespace Qorpent {
 	/// <summary>
@@ -82,7 +83,7 @@ namespace Qorpent {
 							{
 #endif
 								var basepath = Path.GetDirectoryName(codebase);
-								Debug.Assert(!string.IsNullOrWhiteSpace(basepath), "basepath empty");
+								Debug.Assert(!String.IsNullOrWhiteSpace(basepath), "basepath empty");
 								var webconfig = Path.Combine(basepath, "web.config");
 								_isWebUtility = (dir1 == codebase) && File.Exists(webconfig);
 							}
@@ -103,7 +104,7 @@ namespace Qorpent {
 						if (IsWeb) {
 							try {
 #if !SQL2008
-								_rootDirectory = HttpRuntime.AppDomainAppPath;
+								_rootDirectory = GetHttpWrapper().GetAppDomainAppPath();
 #else
 								_rootDirectory = Environment.CurrentDirectory;
 #endif
@@ -152,6 +153,23 @@ namespace Qorpent {
 			_isWeb = null;
 			_isWebUtility = null;
 			_rootDirectory = null;
+		}
+
+		/// <summary>
+		/// Helper method to access httpcontext wrapper without native System.Web access
+		/// must be used by system core services
+		/// </summary>
+		/// <returns></returns>
+		public static IHttpContextWrapper GetHttpWrapper() {
+			IHttpContextWrapper wrapper = null;
+			var mvctype = Type.GetType("Qorpent.Mvc.HttpContextWrapper, Qorpent.Mvc", false);
+			if (null != mvctype) {
+				wrapper = (IHttpContextWrapper) Activator.CreateInstance(mvctype);
+			}
+			else {
+				wrapper = new StubHttpContextWrapper();
+			}
+			return wrapper;
 		}
 	}
 }

@@ -58,8 +58,8 @@ namespace Qorpent.Security {
 							if (null != MvcContextBase.Current && null != MvcContextBase.Current.LogonUser) {
 								Current = MvcContextBase.Current.LogonUser;
 							}
-							else if (null != HttpContext.Current && null != HttpContext.Current.User) {
-								Current = HttpContext.Current.User;
+							else if (null!=Application.HttpWrapper.GetCurrentUser()) {
+								Current = Application.HttpWrapper.GetCurrentUser();
 							}
 							else {
 								Current = new GenericPrincipal(new GenericIdentity("local\\guest"), null);
@@ -99,9 +99,9 @@ namespace Qorpent.Security {
 					{
 						return MvcContextBase.Current.LogonUser;
 					}
-					else if (null != HttpContext.Current && null != HttpContext.Current.User)
+					else if (null!=Application.HttpWrapper.GetCurrentUser())
 					{
-						return HttpContext.Current.User;
+						return Application.HttpWrapper.GetCurrentUser();
 					}
 					else
 					{

@@ -127,7 +127,7 @@ namespace Qorpent.Mvc.Tests {
 		public void multiple_name_param() {
 			var req = new HttpRequest("", "http://server/app/start/end.wiki.qweb", "y=1&y=2");
 			var ctx = new HttpContext(req, new HttpResponse(null));
-			var context = new MvcContext(new HttpContextWrapper(ctx));
+			var context = new MvcContext(new System.Web.HttpContextWrapper(ctx));
 			Assert.AreEqual("1,2", context.Parameters["y"]);
 		}
 
@@ -142,7 +142,7 @@ namespace Qorpent.Mvc.Tests {
 		public void works_with_httpcontext() {
 			var req = new HttpRequest("", "http://server/start/end.wiki.qweb?param", "x=1&y=2");
 			var ctx = new HttpContext(req, new HttpResponse(null));
-			var context = new MvcContext(new HttpContextWrapper(ctx));
+			var context = new MvcContext(new System.Web.HttpContextWrapper(ctx));
 			Assert.AreEqual("start.end", context.ActionName);
 			Assert.AreEqual("wiki", context.RenderName);
 			Assert.AreEqual("1", context.Parameters["x"]);

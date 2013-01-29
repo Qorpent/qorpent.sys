@@ -48,6 +48,11 @@ namespace Qorpent.Applications {
 		IMvcContext CurrentMvcContext { get; set; }
 
 		/// <summary>
+		/// Access to HTTP context wrapper
+		/// </summary>
+		IHttpContextWrapper HttpWrapper { get; }
+
+		/// <summary>
 		/// 	Access to Bxl service
 		/// </summary>
 		/// <remarks>
