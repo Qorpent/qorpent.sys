@@ -161,9 +161,13 @@ namespace Qorpent.Mvc.QView {
 		/// <param name="resource"> </param>
 		protected virtual void Require(string resource) {
 			if (ViewContext.IsLayout || ViewContext.ParentContext != null) {
-				var resourceName = GetExternalResourceLocalUrl(resource);
-				if (!string.IsNullOrEmpty(resourceName)) {
-					ViewContext.Require(resourceName);
+				if(resource.StartsWith("res:")) {
+					var resourceName = GetExternalResourceLocalUrl(resource);
+					if (!string.IsNullOrEmpty(resourceName)) {
+						ViewContext.Require(resourceName);
+					}
+				}else {
+					ViewContext.Require(resource);
 				}
 			}
 		}
@@ -220,7 +224,7 @@ namespace Qorpent.Mvc.QView {
 			EnterTemporaryOutput(output);
 			try {
 				foreach (var x in ViewContext.Requirements) {
-					RenderLink(x, true);
+					RenderLink(x, x.StartsWith("res:"));
 				}
 			}
 			finally {

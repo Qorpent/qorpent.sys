@@ -79,7 +79,7 @@ namespace Qorpent.Mvc.UI {
 			}
 			if (null != ViewContext.Requirements) {
 				foreach (var requirement in ViewContext.Requirements) {
-					RenderLink(requirement, true);
+					RenderLink(requirement, requirement.StartsWith("res:"));
 				}
 			}
 			if (BasicHeaderEndExists) {

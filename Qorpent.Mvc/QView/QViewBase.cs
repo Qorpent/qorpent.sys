@@ -132,16 +132,16 @@ namespace Qorpent.Mvc.QView {
 			}
 
 			if (url.IsEmpty()) {
-				writef("<!-- lost link to {0} no resource found on server -->", name);
+				writef("\r\n<!-- lost link to {0} no resource found on server -->\r\n", name);
 			}
 			else if (ext.ToUpper() == ".JS") {
-				writef("<script type='text/javascript' src='{0}'></script>", url);
+				writef("\r\n<script type='text/javascript' src='{0}'></script>\r\n", url);
 			}
 			else if (ext.ToUpper() == ".CSS") {
-				writef("<link rel='stylesheet' href='{0}' />", url);
+				writef("\r\n<link rel='stylesheet' href='{0}' />\r\n", url);
 			}
 			else {
-				writef("<link type='text/{0}' href='{1}' />", ext.Substring(1), url);
+				writef("\r\n<link type='text/{0}' href='{1}' />\r\n", ext.Substring(1), url);
 			}
 		}
 

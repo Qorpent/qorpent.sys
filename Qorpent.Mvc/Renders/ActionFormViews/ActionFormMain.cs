@@ -48,6 +48,8 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 		protected override void Render() {
 			Require("res:Qorpent.Mvc/actionform.css");
 			Require("res:Qorpent.Mvc/actionform.js");
+			Require("actionform-ex.css");
+			Require("actionform-ex.js");
 			_binders = Data.GetBindings().ToArray();
 			Help = Help ?? "";
 			Name = Name ?? "";
