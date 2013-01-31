@@ -166,6 +166,7 @@ namespace Qorpent.Mvc.Binding {
 				var customBindConverter = _bindattribute as ICustomBindConverter;
 				if (customBindConverter != null) {
 					customBindConverter.SetConverted(action,(string)val,context,SetDirectly);
+					return;
 				}
 				SetConverted(action, val);
 			}
