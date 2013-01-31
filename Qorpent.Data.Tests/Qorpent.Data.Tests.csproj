@@ -20,6 +20,6 @@
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy ..\..\..\Npgsql2\src\bin\Debug4\*.dll $(OutDir) /s/d/y</PostBuildEvent>
+    <PostBuildEvent>if exist "..\..\..\Npgsql2\src\bin\Debug4\npgsql.dl" xcopy ..\..\..\Npgsql2\src\bin\Debug4\npgsql.dll $(OutDir) /s/d/y</PostBuildEvent>
   </PropertyGroup>
 </Project>
