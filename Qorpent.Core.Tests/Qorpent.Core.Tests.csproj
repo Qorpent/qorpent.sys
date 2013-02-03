@@ -28,6 +28,7 @@
     <Compile Include="Log\DefaultLogManagerTest.cs" />
     <Compile Include="Log\LoggerTest.cs" />
     <Compile Include="Mvc\MvcCallInfoTest.cs" />
+    <Compile Include="Qlaood\SimpleQlaoodHostingTest.cs" />
     <Compile Include="Security\StubIWithRole.cs" />
     <Compile Include="Security\StubPrincipalSource.cs" />
     <Compile Include="Security\StubRoleResolver.cs" />
@@ -36,6 +37,8 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\" />
