@@ -23,6 +23,7 @@
   <ItemGroup>
     <Compile Include="Applications\IHttpContextWrapper.cs" />
     <Compile Include="Applications\StubHttpContextWrapper.cs" />
+    <Compile Include="Applications\TaskWrapper.cs" />
     <Compile Include="Dsl\SmartXslt\IXsltHelper.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
     <Compile Include="Qlaood\ApplicationQlaoodMode.cs" />

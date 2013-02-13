@@ -52,8 +52,10 @@ namespace Qorpent.Bxl {
 				throw new ArgumentNullException("filename");
 			}
 			if (code.IsEmpty()) {
+				if(string.IsNullOrWhiteSpace(filename))return new XElement("root");
 				code = File.ReadAllText(filename);
 			}
+			if(string.IsNullOrWhiteSpace(filename)) filename = "code.bxl";
 			var tokens = ParseTokens(code, filename, options);
 			var generator = new BxlXmlGenerator();
 #if !SQL2008

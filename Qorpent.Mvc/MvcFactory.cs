@@ -60,17 +60,22 @@ namespace Qorpent.Mvc {
 		/// <param name="assembly"> </param>
 		/// <returns> </returns>
 		public IMvcFactory Register(Assembly assembly) {
-			var types = from t in assembly.GetTypes()
-			            where
-				            (typeof (IAction).IsAssignableFrom(t) ||
-				             typeof (IRender).IsAssignableFrom(t) ||
-				             typeof (IQView).IsAssignableFrom(t)) &&
-				            !t.IsAbstract
-			            select t;
-			foreach (var type in types) {
-				Register(type);
+			try {
+				var types = from t in assembly.GetTypes()
+				            where
+					            (typeof (IAction).IsAssignableFrom(t) ||
+					             typeof (IRender).IsAssignableFrom(t) ||
+					             typeof (IQView).IsAssignableFrom(t)) &&
+					            !t.IsAbstract
+				            select t;
+				foreach (var type in types) {
+					Register(type);
+				}
+				return this;
+			}catch(ReflectionTypeLoadException e) {
+				var strings = e.LoaderExceptions.Select(x => x.ToString());
+				throw new Exception("assembly loader exception in "+assembly.FullName+ "\r\n"+string.Join("\r\n=====\r\n",strings));
 			}
-			return this;
 		}
 
 		/// <summary>
