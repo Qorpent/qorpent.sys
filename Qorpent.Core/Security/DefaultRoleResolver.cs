@@ -80,7 +80,11 @@ namespace Qorpent.Security {
 					
 #endif
 
-
+				if(!exact && role!="ADMIN") {
+					if(IsInRole(principal,"ADMIN",true,callcontext,customcontext)) {
+						return true;
+					}
+				}
 				bool result;
 				var cachekey = principal.Identity.Name + ";" + role + ";" + exact + ";" + customcontext;
 				Log.Debug("start check " + cachekey, this);

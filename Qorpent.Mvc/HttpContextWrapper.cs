@@ -23,6 +23,7 @@
 
 #endregion
 
+using System;
 using System.Security.Principal;
 using System.Web;
 using Qorpent.Applications;
@@ -48,7 +49,11 @@ namespace Qorpent.Mvc {
 			if (!HasCurrent()) {
 				return null;
 			}
-			return HttpContext.Current.Request.ApplicationPath;
+			try {
+				return HttpContext.Current.Request.ApplicationPath;
+			}catch(Exception) {
+				return "unknown";
+			}
 		}
 
 		/// <summary>

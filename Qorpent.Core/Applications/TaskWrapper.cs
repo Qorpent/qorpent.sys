@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,15 +15,39 @@ namespace Qorpent.Applications {
 		public TaskWrapper(Task task, params TaskWrapper[] dependency) {
 			_task = task;
 			_dependency = dependency;
-			
+			SelfWait = -1;
+			DependencyWait = -1;
+
 		}
 
 		/// <summary>
 		/// Синхронизация
 		/// </summary>
 		public void Wait() {
-			_task.Wait();
+			if (null != _dependency && 0 != _dependency.Length)
+			{
+				Task.WaitAll(_dependency.Select(_ => _._task).ToArray(),DependencyWait);
+			}
+			_task.Wait(SelfWait);
 		}
+
+
+		/// <summary>
+		/// Ожидание предшественников
+		/// </summary>
+		public int DependencyWait { get; set; }
+		/// <summary>
+		/// Ожидание собственной задачи
+		/// </summary>
+		public int SelfWait { get; set; }
+
+		/// <summary>
+		/// Доступ к ошибке
+		/// </summary>
+		public Exception Error {
+			get { return _task.Exception; }
+		}
+
 
 		/// <summary>
 		/// Запуск задачи

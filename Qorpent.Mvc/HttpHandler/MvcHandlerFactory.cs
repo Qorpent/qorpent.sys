@@ -23,7 +23,9 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Web;
 using Qorpent.Applications;
@@ -52,23 +54,26 @@ namespace Qorpent.Mvc.HttpHandler {
 		/// <param name="pathTranslated"> —войство <see cref="P:System.Web.HttpRequest.PhysicalApplicationPath" /> , задающее путь к запрошенному ресурсу. </param>
 		public IHttpHandler GetHandler(HttpContext context, string requestType, string url, string pathTranslated) {
 			lock (this) {
-				// firstly
+				//Debugger.Break();
 				var httpHandler = TryGetFromPool();
-				if (httpHandler != null) {
+				if (httpHandler != null)
+				{
 					return httpHandler;
 				}
 				CheckInitializeApplication(context);
 
 				IHttpHandler waitApplicationStartupHandler;
-				if (ApplicationNotStarted(out waitApplicationStartupHandler)) {
+				if (ApplicationNotStarted(out waitApplicationStartupHandler))
+				{
 					return waitApplicationStartupHandler;
 				}
 
 
 				var handler = Application.Container.Get<IMvcHandler>();
-				if (null == handler) {
+				if (null == handler)
+				{
 					handler = new MvcHandler();
-					((MvcHandler) handler).SetApplication(Application);
+					((MvcHandler)handler).SetApplication(Application);
 				}
 
 				return handler.AsNative<IHttpHandler>();

@@ -23,6 +23,8 @@
 
 #endregion
 
+using System;
+using System.Collections.Generic;
 using System.Security.Principal;
 using Qorpent.Model;
 using Qorpent.Mvc;
@@ -40,5 +42,19 @@ namespace Qorpent.Security {
 		/// <returns> </returns>
 		bool IsInRole(IPrincipal principal, string role, bool exact = false, IMvcContext callcontext = null,
 		              object customcontext = null);
+
+		/// <summary>
+		/// Returns registered roles of this extension
+		/// </summary>
+		/// <returns></returns>
+		[Obsolete("обеспечение совместимости с Comdiv.Core")]
+		IEnumerable<string> GetRoles();
+
+		/// <summary>
+		/// ¬озвращает признак обслуживани€ учетных записей суперпользовател€
+		/// </summary>
+		[Obsolete("обеспечение совместимости с Comdiv.Core")]
+		bool IsExclusiveSuProvider { get; }
+
 	}
 }

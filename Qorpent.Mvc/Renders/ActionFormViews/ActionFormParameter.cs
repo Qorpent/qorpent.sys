@@ -50,7 +50,7 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 				if(!string.IsNullOrWhiteSpace(Parameter.ValidatePattern)) {
 					inner.Add(new XAttribute("pattern", Parameter.ValidatePattern));
 				}
-				if (Parameter.Required) {
+				if (Parameter.Required && !Parameter.IsBool) {
 					inner.Add(new XAttribute("required", Parameter.Required));
 				}
 				if (Parameter.IsLargeText) {

@@ -1,33 +1,38 @@
-﻿using System;
+﻿#region LICENSE
+
+// Copyright 2012-2013 Media Technology LTD 
+// Original file : FileBasedRoleProvider.cs
+// Project: Qorpent.Security
+// This code cannot be used without agreement from 
+// Media Technology LTD 
+
+#endregion
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
-using System.Text;
 using System.Xml.Linq;
 using Qorpent.Events;
 using Qorpent.IO;
 using Qorpent.IoC;
 using Qorpent.Mvc;
-using Qorpent.Security.Watchdog;
 using Qorpent.Utils.Collections;
 using Qorpent.Utils.Extensions;
 
-
-namespace Qorpent.Security
-{
+namespace Qorpent.Security {
 	/// <summary>
-	/// Разроешает роли относительно XML/BXL файлов конфигурации с элементами role, user
+	/// 	Разроешает роли относительно XML/BXL файлов конфигурации с элементами role, user
 	/// </summary>
-	[ContainerComponent(Lifestyle.Extension,"filebased.roleresolver.provider",ServiceType =typeof(IRoleResolverExtension))]
-	public class FileBasedRoleProvider:ServiceBase,IRoleResolverExtension
-	{
+	[ContainerComponent(Lifestyle.Extension, "filebased.roleresolver.provider",
+		ServiceType = typeof (IRoleResolverExtension))]
+	public class FileBasedRoleProvider : ServiceBase, IRoleResolverExtension {
 		/// <summary>
-		/// Файловая система
+		/// 	Файловая система
 		/// </summary>
-		[Inject] public IFileNameResolver FileNameResolver { get;set; }
+		[Inject] public IFileNameResolver FileNameResolver { get; set; }
 
 		/// <summary>
-		/// Прямой реестр ролей и пользователей
+		/// 	Прямой реестр ролей и пользователей
 		/// </summary>
 		public XElement DirectXml { get; set; }
 
@@ -36,33 +41,53 @@ namespace Qorpent.Security
 		/// </summary>
 		public int Idx { get; set; }
 
-		/// <summary>Resolves roles with config files</summary>
-		///  <param name="principal"> </param>
+		/// <summary>
+		/// 	Resolves roles with config files
+		/// </summary>
+		/// <param name="principal"> </param>
 		/// <param name="role"> </param>
 		/// <param name="exact"> </param>
 		/// <param name="callcontext"> </param>
 		/// <param name="customcontext"> </param>
 		/// <returns> </returns>
-		public bool IsInRole(IPrincipal principal, string role, bool exact = false, IMvcContext callcontext = null, object customcontext = null) {
-			if(!_initialized) initialize();			
+		public bool IsInRole(IPrincipal principal, string role, bool exact = false, IMvcContext callcontext = null,
+		                     object customcontext = null) {
+			if (!_initialized) {
+				initialize();
+			}
 			var usr = "USER:" + principal.Identity.Name.ToUpper();
 			var roletofind = role.ToUpper();
-			#if PARANOID
+#if PARANOID
 			if (roletofind=="ADMIN") return false;
 			#endif
 			var exactresult = map.ForwardAll(usr).Any(x => x == roletofind);
-			#if !PARANOID
+#if !PARANOID
 			//in paranoid mode we have not check admins
-			if(!exactresult && roletofind!="ADMIN" && !exact) {
+			if (!exactresult && roletofind != "ADMIN" && !exact) {
 				return map.ForwardAll(usr).Any(x => x == "ADMIN");
 			}
-			#endif
+#endif
 			return exactresult;
+		}
+
+		/// <summary>
+		/// 	Returns registered roles of this extension
+		/// </summary>
+		/// <returns> </returns>
+		public IEnumerable<string> GetRoles() {
+			yield break;
+		}
+
+		/// <summary>
+		/// 	Возвращает признак обслуживания учетных записей суперпользователя
+		/// </summary>
+		public bool IsExclusiveSuProvider {
+			get { return false; }
 		}
 
 		private void initialize() {
 			Reset(null);
-			if(null==DirectXml) {
+			if (null == DirectXml) {
 				var rolefiles = FileNameResolver.ResolveAll(
 					new FileSearchQuery
 						{
@@ -75,7 +100,8 @@ namespace Qorpent.Security
 					var xml = XmlExtensions.GetXmlFromAny(rolefile);
 					ReadXml(xml);
 				}
-			}else {
+			}
+			else {
 				ReadXml(DirectXml);
 			}
 
@@ -89,7 +115,7 @@ namespace Qorpent.Security
 				var desc = element.Describe();
 				var subroles = desc.Name.SmartSplit();
 				foreach (var subrole in subroles) {
-					#if PARANOID
+#if PARANOID
 					if(Paranoid.Provider.IsSecureRole(subrole))continue;
 					#endif
 					map.Add(desc.Code.ToUpper(), subrole.ToUpper());
@@ -98,8 +124,7 @@ namespace Qorpent.Security
 			foreach (var element in usermaps) {
 				var desc = element.Describe();
 				var subroles = desc.Name.SmartSplit();
-				foreach (var subrole in subroles)
-				{
+				foreach (var subrole in subroles) {
 #if PARANOID
 					if(Paranoid.Provider.IsSecureRole(subrole))continue;
 #endif
@@ -107,9 +132,6 @@ namespace Qorpent.Security
 				}
 			}
 		}
-
-		readonly StringMap map  = new StringMap();
-		private bool _initialized = false;
 
 		/// <summary>
 		/// 	Вызывается при вызове Reset
@@ -120,11 +142,13 @@ namespace Qorpent.Security
 		/// 	При использовании стандартной настройки из <see cref="ServiceBase" /> не требует фильтрации опций,
 		/// 	настраивается на основе атрибута <see cref="RequireResetAttribute" />
 		/// </remarks>
-		public override object Reset(Events.ResetEventData data)
-		{
+		public override object Reset(ResetEventData data) {
 			map.Clear();
 			_initialized = false;
 			return null;
 		}
+
+		private readonly StringMap map = new StringMap();
+		private bool _initialized;
 	}
 }
