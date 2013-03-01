@@ -219,7 +219,7 @@ namespace Qorpent.Serialization {
 			if (null == Member) {
 				return true;
 			}
-			if (!IsAttrSetted<SerializeNotNullOnlyAttribute>(Member)) {
+			if (!IsNotNullSetted()) {
 				return true;
 			}
 			if (IsFinal) {
@@ -239,6 +239,17 @@ namespace Qorpent.Serialization {
 			}
 			return null != Value;
 		}
+
+		private bool IsNotNullSetted() {
+			if(!_notnullonlycache.ContainsKey(Member)) {
+				var result =  IsAttrSetted<SerializeNotNullOnlyAttribute>(Member);
+				_notnullonlycache[Member] = result;
+				return result;
+			}
+			return _notnullonlycache[Member];
+		}
+
+		static IDictionary<MemberInfo,bool> _notnullonlycache =  new Dictionary<MemberInfo, bool>();
 
 		/// <summary>
 		/// 	Isattrsetteds the specified type.
