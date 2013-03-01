@@ -83,13 +83,23 @@ namespace Qorpent.Data.Connections {
 		/// </summary>
 		protected void Reload() {
 			if(_loaded) return;
-			Registry.Clear();
-			foreach (var provider in SubProviders) {
-				foreach (var connection in provider.GetConnections()) {
-					Register(connection,false);
+			Cleanup();
+			if(SubProviders!=null) {
+				foreach (var provider in SubProviders) {
+					foreach (var connection in provider.GetConnections()) {
+						Register(connection, false);
+					}
 				}
 			}
 			_loaded = true;
+		}
+
+		private void Cleanup() {
+			foreach (var p in Registry.ToArray()) {
+				if (!p.Value.PresereveCleanup) {
+					Registry.Remove(p.Key);
+				}
+			}
 		}
 
 		/// <summary>

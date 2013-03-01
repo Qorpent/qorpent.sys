@@ -65,11 +65,23 @@ namespace Qorpent.Serialization {
 			: this(field.Name, field.GetValue(target), field.FieldType) {
 			Member = field;
 			_valueprepared = true;
-			var sa = Member.DeclaringType.GetFirstAttribute<SerializeAttribute>();
+			var sa = GetSerializeableAttribute();
 			if (null != sa && sa.CamelNames) {
 				Name = Name.Substring(0, 1).ToLower() + Name.Substring(1);
 			}
 		}
+
+		private SerializeAttribute GetSerializeableAttribute() {
+			if (!_typesercache.ContainsKey(Member.DeclaringType))
+			{
+				var result = Member.DeclaringType.GetFirstAttribute<SerializeAttribute>();
+				_typesercache[Member.DeclaringType] = result;
+				return result;
+			}
+			return _typesercache[Member.DeclaringType];
+		}
+
+		private static IDictionary<Type, SerializeAttribute> _typesercache = new Dictionary<Type, SerializeAttribute>();
 
 		/// <summary>
 		/// 	Initializes a new instance of the <see cref="SerializableItem" /> class.
@@ -96,7 +108,7 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public MemberInfo Member { get; set; }
-
+		static IDictionary<MemberInfo,bool> _issercache = new Dictionary<MemberInfo, bool>();
 		/// <summary>
 		/// 	Gets a value indicating whether this instance is serializable.
 		/// </summary>
@@ -104,22 +116,40 @@ namespace Qorpent.Serialization {
 		/// </remarks>
 		public bool IsSerializable {
 			get {
-				if (Member.Name == "__interceptors") {
-					return false; //ioc includes
+				var result = false;
+				if(!_issercache.ContainsKey(Member)) {
+					result = InternalGetIsSerializable();
+					_issercache[Member] = result;	
+				}else {
+					result = _issercache[Member];
 				}
-				if (Member.DeclaringType != null && Member.DeclaringType.GetCustomAttributes(typeof (CompilerGeneratedAttribute), true)
-					                                    .Count() > 0) {
-					return true; //anonymous class property|field
-				}
-				if (CheckIgnore()) {
-					if (CheckType()) {
-						if (CheckNull()) {
-							return true;
-						}
-					}
+				if(!result) return false;
+				
+				if (CheckNull())
+				{
+					return true;
 				}
 				return false;
 			}
+		}
+
+		private bool InternalGetIsSerializable() {
+			if (Member.Name == "__interceptors") {
+				return false; //ioc includes
+			}
+			if (Member.DeclaringType != null && Member.DeclaringType.GetCustomAttributes(typeof (CompilerGeneratedAttribute), true)
+				                                    .Count() > 0) {
+				return true; //anonymous class property|field
+			}
+
+			if (CheckIgnore())
+			{
+				if (CheckType())
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		/// <summary>

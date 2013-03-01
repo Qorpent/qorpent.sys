@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -42,6 +43,11 @@ namespace Qorpent.Applications {
 		public int SelfWait { get; set; }
 
 		/// <summary>
+		/// Время выполнения
+		/// </summary>
+		public TimeSpan ExecuteTime { get; set; }
+
+		/// <summary>
 		/// Доступ к ошибке
 		/// </summary>
 		public Exception Error {
@@ -53,21 +59,31 @@ namespace Qorpent.Applications {
 		/// Запуск задачи
 		/// </summary>
 		public void Run() {
+			_sw = Stopwatch.StartNew();
 			Task.Run(() =>
 				{
-					lock (this)
-					{
+					lock (this) {
+						
+						
 						if (null != _dependency && 0 != _dependency.Length)
 						{
 							Task.WaitAll(_dependency.Select(_ => _._task).ToArray());
 						}
-						_task.Start();
+						_task.ContinueWith(t =>
+						{
+							_sw.Stop();
+							ExecuteTime = _sw.Elapsed;
+						});
+						if(!_task.IsCompleted||!_task.IsFaulted) {
+							_task.Start();
+						}
 					}
 				});
 		}
 
 		private Task _task;
 		private TaskWrapper[] _dependency;
+		private Stopwatch _sw;
 
 		/// <summary>
 		/// Признак завершенности задачи

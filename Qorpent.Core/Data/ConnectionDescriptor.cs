@@ -81,5 +81,9 @@ namespace Qorpent.Data {
 		/// 	ѕроисхождение строки в провайдере
 		/// </summary>
 		public string Evidence { get; set; }
+		/// <summary>
+		/// «ащищает соединение от очистки при перезагрузке компонента реестра
+		/// </summary>
+		public bool PresereveCleanup { get; set; }
 	}
 }
