@@ -320,6 +320,19 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
+		/// Being implemented must retur HttpPostedFile, not typed because System.Web is bad dependency
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <returns></returns>
+		public override object GetFile(string filename) {
+			if(null==NativeAspContext) return null;
+			if(NativeAspContext.Request.Files.AllKeys.Any(_=>_==filename)) {
+				return NativeAspContext.Request.Files[filename];
+			}
+			return null;
+		}
+
+		/// <summary>
 		/// 	Write out a file
 		/// </summary>
 		/// <param name="filename"> </param>

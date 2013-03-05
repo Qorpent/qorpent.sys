@@ -172,5 +172,14 @@ namespace Qorpent.Mvc {
 		public override void Redirect(string localurl) {
 			throw new NotImplementedException();
 		}
+
+		/// <summary>
+		/// Being implemented must retur HttpPostedFile, not typed because System.Web is bad dependency
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <returns></returns>
+		public override object GetFile(string filename) {
+			throw new NotImplementedException();
+		}
 	}
 }

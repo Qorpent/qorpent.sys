@@ -15,6 +15,7 @@ tmp
 *.*~
 *.pidb
 *.user*
+/qorpent.sys
 
 # mstest test results
 TestResults

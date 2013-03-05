@@ -302,5 +302,11 @@ namespace Qorpent.Mvc {
 		/// <param name="localurl"> </param>
 		/// <returns> </returns>
 		void Redirect(string localurl);
+		/// <summary>
+		/// Being implemented must retur HttpPostedFile, not typed because System.Web is bad dependency
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <returns></returns>
+		object GetFile(string filename);
 	}
 }

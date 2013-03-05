@@ -26,6 +26,7 @@
     <Compile Include="Applications\TaskWrapper.cs" />
     <Compile Include="Dsl\SmartXslt\IXsltHelper.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
+    <Compile Include="IO\MimeHelper.cs" />
     <Compile Include="Qlaood\ApplicationQlaoodMode.cs" />
     <Compile Include="Qlaood\AssemblyLoaderBehavior.cs" />
     <Compile Include="Qlaood\IAssemblyLoader.cs" />

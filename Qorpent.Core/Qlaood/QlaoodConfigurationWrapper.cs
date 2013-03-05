@@ -10,10 +10,12 @@ namespace Qorpent.Qlaood {
 		/// <summary>
 		/// Reference to working instance for configuration (preserved)
 		/// </summary>
+		[NonSerialized]
 		protected readonly XElement Config;
 		/// <summary>
 		/// Reference to not-changed copy of config (not totally preserved)
 		/// </summary>
+		[NonSerialized]
 		private readonly XElement _srcconfig;
 		/// <summary>
 		/// Access to native source configuration
