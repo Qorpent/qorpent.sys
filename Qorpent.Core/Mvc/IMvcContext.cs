@@ -184,6 +184,10 @@ namespace Qorpent.Mvc {
 		/// 	Признак того, что контекст вызвал Redirect
 		/// </summary>
 		bool IsRedirected { get; set; }
+		/// <summary>
+		/// Обеспечивает признак выходящего запроса - место расположения файла
+		/// </summary>
+		string FileDisposition { get; set; }
 
 		/// <summary>
 		/// 	Extract call only information from context (for serialization propose)
@@ -308,5 +312,11 @@ namespace Qorpent.Mvc {
 		/// <param name="filename"></param>
 		/// <returns></returns>
 		object GetFile(string filename);
+
+		/// <summary>
+		/// Выводит в исходящий поток исходный поток
+		/// </summary>
+		/// <param name="sourceStream"></param>
+		void WriteOutStream(Stream sourceStream);
 	}
 }

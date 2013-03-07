@@ -65,37 +65,35 @@ namespace Qorpent.IO {
 			switch (normalizedmime)
 			{
 				case "text/plain":
-					return "txt";
-				case "xls":
-					return "application/vnd.ms-excel";
-				case "doc":
-					return "application/vnd.ms-word";
-				case "docx":
-					return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-				case "xlsx":
-					return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+					return ".txt";
+				case "application/vnd.ms-excel":
+					return ".xls";
+				case "application/vnd.ms-word":
+					return ".doc";
+				case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+					return ".docx";
+				case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+					return ".xlsx";
 				case "text/css":
-					return "css";
+					return ".css";
 				case "text/javascript":
-					return "js";
+					return ".js";
 				case "image/png":
-					return "png";
-
+					return ".png";
 				case "image/jpeg":
-					return "jpeg";
+					return ".jpeg";
 				case "image/gif":
-					return "gif";
+					return ".gif";
 				case "application/pdf":
-					return "pdf";
+					return ".pdf";
 				case "text/html":
-					return "html";
-
-				case "zip":
-					return "multipart/x-zip";
-				case "rar":
-					return "application/x-rar-compressed";
+					return ".html";
+				case "multipart/x-zip":
+					return ".zip";
+				case  "application/x-rar-compressed":
+					return ".rar";
 				case "text/xml":
-					return "xml";
+					return ".xml";
 			}
 
 			return "";

@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.IO;
 using Qorpent.Model;
 
 namespace Qorpent.Mvc {
@@ -55,5 +56,19 @@ namespace Qorpent.Mvc {
 		/// 	Время последнего изменения
 		/// </summary>
 		DateTime LastWriteTime { get; set; }
+		/// <summary>
+		/// Признак того что надо использовать хидер расположения файла
+		/// </summary>
+		bool NeedDisposition { get; set; }
+
+		/// <summary>
+		/// Признак потокового файла
+		/// </summary>
+		bool IsStream { get; set; }
+		/// <summary>
+		/// Возвращает поток данных файла
+		/// </summary>
+		/// <returns></returns>
+		Stream GetStream();
 	}
 }

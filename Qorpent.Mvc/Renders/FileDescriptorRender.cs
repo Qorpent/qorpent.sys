@@ -24,6 +24,8 @@
 #endregion
 
 using System;
+using System.IO;
+using Qorpent.IO;
 using Qorpent.Security;
 using Qorpent.Utils.Extensions;
 
@@ -48,8 +50,22 @@ namespace Qorpent.Mvc.Renders {
 					throw new QorpentSecurityException("Доступ к файлу не авторизован " + auth);
 				}
 			}
+			if(descriptor.NeedDisposition) {
+				var filename = descriptor.Name;
+				var extension = Path.GetExtension(filename);
+				if(string.IsNullOrWhiteSpace(extension)) {
+					extension = MimeHelper.GetExtensionByMime(descriptor.MimeType);
+					filename = filename + extension;
+				}
+				context.FileDisposition = filename;
+			}
+			
 			context.ContentType = descriptor.MimeType;
-			context.Output.Write(descriptor.Content);
+			if(descriptor.IsStream) {
+				context.WriteOutStream(descriptor.GetStream());
+			}else {
+				context.Output.Write(descriptor.Content);
+			}
 		}
 
 		/// <summary>

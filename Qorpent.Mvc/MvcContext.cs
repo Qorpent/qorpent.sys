@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
@@ -108,6 +109,38 @@ namespace Qorpent.Mvc {
 		/// <returns></returns>
 		public override object GetCookie(string name) {
 			return RequestCookies.Get(name);
+		}
+
+		/// <summary>
+		/// Обеспечивает признак выходящего запроса - место расположения файла
+		/// </summary>
+		public override string FileDisposition {
+			get {
+				if(null!=NativeAspContext) {
+					//Берем хидер с удалением из него обвязки
+					return NativeAspContext.Response.Headers["Content-Disposition"].Replace("filename=\"","").Replace("\"","").Replace("'","\"");
+
+					 
+				}
+				return _fileDisposition;
+			}
+			set {
+				if(null!=NativeAspContext) {
+					NativeAspContext.Response.Headers["Content-Disposition"] = "filename=\"" + value.Replace("\"", "'")+"\"";
+					return;
+				}
+				_fileDisposition = value;
+			}
+		}
+		/// <summary>
+		/// Выводит в исходящий поток исходный поток
+		/// </summary>
+		/// <param name="sourceStream"></param>
+		public override void WriteOutStream(Stream sourceStream) {
+			if(null==NativeAspContext) {
+				throw new Exception("cannot write out stream without native context");
+			}
+			sourceStream.CopyTo(NativeAspContext.Response.OutputStream);
 		}
 
 		/// <summary>
@@ -571,5 +604,6 @@ namespace Qorpent.Mvc {
 		private int _statusCode;
 		private XElement _xdata;
 		private bool _xdatachecked;
+		private string _fileDisposition;
 	}
 }

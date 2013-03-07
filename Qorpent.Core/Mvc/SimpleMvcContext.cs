@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Principal;
 using System.Web;
 using System.Xml.Linq;
@@ -78,7 +79,10 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		public override string Language { get; set; }
 
-		
+		/// <summary>
+		/// Место расположения файлов
+		/// </summary>
+		public override string FileDisposition { get; set; }
 
 		/// <summary>
 		/// 	Set system/server defined execution context
@@ -179,6 +183,14 @@ namespace Qorpent.Mvc {
 		/// <param name="filename"></param>
 		/// <returns></returns>
 		public override object GetFile(string filename) {
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Выводит в исходящий поток исходный поток
+		/// </summary>
+		/// <param name="sourceStream"></param>
+		public override void WriteOutStream(Stream sourceStream) {
 			throw new NotImplementedException();
 		}
 	}

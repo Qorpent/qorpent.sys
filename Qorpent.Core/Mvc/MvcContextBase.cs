@@ -68,6 +68,11 @@ namespace Qorpent.Mvc {
 
 
 		/// <summary>
+		/// ќбеспечивает признак выход€щего запроса - место расположени€ файла
+		/// </summary>
+		public abstract string FileDisposition { get; set; }
+
+		/// <summary>
 		/// </summary>
 		public MvcCallInfo GetCallInfo() {
 			var result = new MvcCallInfo
@@ -443,5 +448,11 @@ namespace Qorpent.Mvc {
 		/// <param name="filename"></param>
 		/// <returns></returns>
 		public abstract object GetFile(string filename);
+
+		/// <summary>
+		/// ¬ыводит в исход€щий поток исходный поток
+		/// </summary>
+		/// <param name="sourceStream"></param>
+		public abstract void WriteOutStream(Stream sourceStream);
 	}
 }
