@@ -12,7 +12,7 @@ namespace Qorpent.IO {
 		public static string GetMimeByExtension(string extension)
 		{
 			
-			var ext = extension.Replace(".", "");
+			var ext = extension.Replace(".", "").ToLower();
 			switch (ext)
 			{
 				case "txt":
