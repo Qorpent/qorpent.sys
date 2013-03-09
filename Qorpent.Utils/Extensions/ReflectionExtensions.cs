@@ -73,7 +73,7 @@ namespace Qorpent.Utils.Extensions {
 					object val = src.GetValue(from, null);
 					if (null != val)
 					{
-						target.SetValue(src.Name, val);
+						target.SetValue(src.Name, val, ignoreNotFound:true);
 					}
 				}
 			}
