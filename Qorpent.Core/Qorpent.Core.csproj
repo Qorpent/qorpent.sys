@@ -24,9 +24,17 @@
     <Compile Include="Applications\IHttpContextWrapper.cs" />
     <Compile Include="Applications\StubHttpContextWrapper.cs" />
     <Compile Include="Applications\TaskWrapper.cs" />
+    <Compile Include="Data\IParametersProvider.cs" />
+    <Compile Include="Data\ParamAttribute.cs" />
     <Compile Include="Dsl\SmartXslt\IXsltHelper.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
+    <Compile Include="IO\IXmlReadable.cs" />
+    <Compile Include="IO\IXmlWriteable.cs" />
     <Compile Include="IO\MimeHelper.cs" />
+    <Compile Include="Model\IWithGetParameter.cs" />
+    <Compile Include="Model\IWithProperties.cs" />
+    <Compile Include="Mvc\ValidationException.cs" />
+    <Compile Include="Mvc\ValidationResult.cs" />
     <Compile Include="Qlaood\ApplicationQlaoodMode.cs" />
     <Compile Include="Qlaood\AssemblyLoaderBehavior.cs" />
     <Compile Include="Qlaood\IAssemblyLoader.cs" />
@@ -58,6 +66,7 @@
     <Compile Include="Qlaood\QlaoodException.cs" />
     <Compile Include="Security\AccessProviderService.cs" />
     <Compile Include="Security\IWithRoleContext.cs" />
+    <Compile Include="Security\UserName.cs" />
     <Compile Include="Security\Watchdog\IParanoidProvider.cs" />
     <Compile Include="Security\ISysLogon.cs" />
     <Compile Include="Security\Watchdog\ParanoidException.cs" />

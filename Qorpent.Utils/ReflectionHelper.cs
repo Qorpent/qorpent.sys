@@ -84,7 +84,7 @@ namespace Qorpent.Utils {
 			var targettype = classvalue.Type;
 
 			// get converted Value
-			var assignvalue = value.ToType(targettype, ignoreTypeConversionError);
+			var assignvalue = value.ToTargetType(targettype, ignoreTypeConversionError);
 
 			if (value != null && assignvalue == null) {
 				return target; // if conversation gives safely null (non converted) we silently skip assigning

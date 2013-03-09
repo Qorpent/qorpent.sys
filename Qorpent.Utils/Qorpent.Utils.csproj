@@ -33,9 +33,15 @@
     <Compile Include="ConsoleArgumentHelper.cs" />
     <Compile Include="ConsoleRenderHelper.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />
+    <Compile Include="Extensions\DbExtensions.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
+    <Compile Include="Extensions\DateExtensions.cs" />
     <Compile Include="Extensions\FileNameResolverExtensions.cs" />
+    <Compile Include="Extensions\SecurityExtensions.cs" />
+    <Compile Include="Extensions\SlashListHelper.cs" />
+    <Compile Include="ParamMappingHelper.cs" />
     <Compile Include="StringHelper.cs" />
+    <Compile Include="Extensions\TagHelper.cs" />
     <Compile Include="ValueMember.cs" />
     <Compile Include="Extensions\ConvertExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -46,6 +52,7 @@
     <Compile Include="Extensions\XmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.Data" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>

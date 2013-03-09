@@ -173,7 +173,7 @@ namespace Qorpent.Mvc.Binding {
 		}
 
 		private void SetConverted(IAction action, object val) {
-			var converted = val.ToType(TargetType);
+			var converted = val.ToTargetType(TargetType);
 			if (TargetType == typeof (string)) {
 				var s = (string) converted;
 				if (null != s) {

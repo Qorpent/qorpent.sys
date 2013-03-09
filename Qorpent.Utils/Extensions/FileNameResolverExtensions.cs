@@ -250,7 +250,7 @@ namespace Qorpent.Utils.Extensions {
 				}
 			}
 			probePaths = probePaths ?? new string[] {};
-			probePaths = probePaths.IsEmpty()
+			probePaths = probePaths.IsEmptyCollection()
 				             ? GetDefaultProbesPaths(Path.GetExtension(name))
 				             : probePaths.Select(x => NormalizePath(x)).ToArray();
 			return resolver.Resolve(new FileSearchQuery
@@ -280,7 +280,7 @@ namespace Qorpent.Utils.Extensions {
 				throw new IOException("cannot resolve empty names");
 			}
 			names = names.Select(x => x.NormalizePath()).ToArray();
-			if (probePaths.IsEmpty()) {
+			if (probePaths.IsEmptyCollection()) {
 				probePaths = DEFAULT_USRFILE_RESOLVE_PROBE_PATHS;
 			}
 			else {
@@ -314,7 +314,7 @@ namespace Qorpent.Utils.Extensions {
 			}
 			name = name.NormalizePath();
 			probePaths = probePaths ?? new string[] {};
-			probePaths = probePaths.IsEmpty()
+			probePaths = probePaths.IsEmptyCollection()
 				             ? GetDefaultProbesPaths(Path.GetExtension(name))
 				             : probePaths.Select(x => x.NormalizePath()).ToArray();
 			return resolver.Resolve(new FileSearchQuery
@@ -343,7 +343,7 @@ namespace Qorpent.Utils.Extensions {
 				throw new IOException("cannot resolve empty names");
 			}
 			names = names.Select(x => x.NormalizePath()).ToArray();
-			if (probePaths.IsEmpty()) {
+			if (probePaths.IsEmptyCollection()) {
 				probePaths = DEFAULT_USRFILE_RESOLVE_PROBE_PATHS;
 			}
 			else {
@@ -377,7 +377,7 @@ namespace Qorpent.Utils.Extensions {
 			}
 			name = name.NormalizePath();
 			probePaths = probePaths ?? new string[] {};
-			probePaths = probePaths.IsEmpty()
+			probePaths = probePaths.IsEmptyCollection()
 				             ? GetDefaultProbesPaths(Path.GetExtension(name))
 				             : probePaths.Select(x => x.NormalizePath()).ToArray();
 			return resolver.Resolve(new FileSearchQuery
@@ -405,7 +405,7 @@ namespace Qorpent.Utils.Extensions {
 				throw new IOException("cannot resolve empty names");
 			}
 			names = names.Select(x => x.NormalizePath()).ToArray();
-			if (probePaths.IsEmpty()) {
+			if (probePaths.IsEmptyCollection()) {
 				probePaths = DEFAULT_USRFILE_RESOLVE_PROBE_PATHS;
 			}
 			else {
@@ -433,6 +433,26 @@ namespace Qorpent.Utils.Extensions {
 				return null;
 			}
 			return path.Replace("\\", "/").Replace("//", "/").Replace("//", "/").ToLower();
+		}
+
+		/// <summary>
+		/// Повторяет поведение ResolveAll из старого ядра
+		/// </summary>
+		/// <param name="resolver"></param>
+		/// <param name="rootdir"></param>
+		/// <param name="mask"></param>
+		/// <param name="existedOnly"></param>
+		/// <returns></returns>
+		public static string[] ResolveAll(this IFileNameResolver resolver, string rootdir, string mask, bool existedOnly) {
+			return
+				resolver.ResolveAll(new FileSearchQuery
+					{
+						All = true,
+						ExistedOnly = existedOnly,
+						PathType = FileSearchResultType.FullPath,
+						ProbeFiles = new[] {mask},
+						ProbePaths = new[] {rootdir}
+					});
 		}
 
 

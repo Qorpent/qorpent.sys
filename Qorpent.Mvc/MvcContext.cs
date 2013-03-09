@@ -467,7 +467,7 @@ namespace Qorpent.Mvc {
 		/// <param name="splitters"> </param>
 		/// <returns> </returns>
 		public override Array GetArray(Type elementtype, string name, params char[] splitters) {
-			var strarray = GetArray(name, splitters).Select(x => x.ToType(elementtype)).ToArray();
+			var strarray = GetArray(name, splitters).Select(x => x.ToTargetType(elementtype)).ToArray();
 			var result = Array.CreateInstance(elementtype, strarray.Length);
 			Array.Copy(strarray, result, strarray.Length);
 			return result;

@@ -67,7 +67,40 @@ namespace Qorpent.Utils.Extensions {
 		public static XmlElementDescriptor Describe(this XElement x) {
 			return new XmlElementDescriptor(x);
 		}
+		/// <summary>
+		/// Получает значение атрибута id, code или само значение элемента
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="def"></param>
+		/// <returns></returns>
+		public static string IdCodeOrValue(this XElement xml, string def = "")
+		{
+			var a = xml.Attribute("id");
+			if (null != a) return a.Value;
+			a = xml.Attribute("code");
+			if (null != a) return a.Value;
+			return def;
+		}
 
+		/// <summary>
+		/// Читает либо элемент либо атрибут с именем
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="xml"></param>
+		/// <param name="name"></param>
+		/// <param name="def"></param>
+		/// <returns></returns>
+		public static T ElementOrAttr<T>(this XElement xml, string name, T def = default(T))
+		{
+			if (xml == null) return def;
+			var e = xml.Element(name);
+			if (e != null) return e.Value.To<T>();
+			var val = xml.Attr(name);
+			if(val.IsNotEmpty()) return val.To<T>();
+			return def;
+		}
+
+		
 		/// <summary>
 		/// 	resolves firstly matched attribute or returns empty string
 		/// </summary>
@@ -178,7 +211,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="attributeName"> attribute to use (for Value types) if empty - Object will be used </param>
 		/// <returns> </returns>
 		/// <exception cref="ArgumentNullException"></exception>
-		public static T Deserialize<T>(this XElement element, string attributeName) {
+		public static T Deserialize<T>(this XElement element, string attributeName = "") {
 			return (T) Deserialize(element, typeof (T), attributeName);
 		}
 
@@ -200,10 +233,10 @@ namespace Qorpent.Utils.Extensions {
 			}
 			if (type.IsValueType) {
 				if (attributeName.IsEmpty()) {
-					return element.Value.ToType(type);
+					return element.Value.ToTargetType(type);
 				}
 				var xAttribute = element.Attribute(attributeName);
-				return xAttribute != null ? xAttribute.Value.ToType(type) : Activator.CreateInstance(type);
+				return xAttribute != null ? xAttribute.Value.ToTargetType(type) : Activator.CreateInstance(type);
 			}
 			var result = Activator.CreateInstance(type);
 			Apply(element, result);
@@ -327,6 +360,32 @@ namespace Qorpent.Utils.Extensions {
 			var ext = Path.GetExtension(filename);
 			return ext == ".bxl" || ext == ".hql" || ext == ".tbxl";
 		}
+
+		/// <summary>
+		/// Берет содержимое дочернего элемента если есть
+		/// </summary>
+		/// <param name="nav"></param>
+		/// <param name="elementName"></param>
+		/// <returns></returns>
+		public static string GetTextElement(this XElement nav, string elementName)
+		{
+			return GetTextElement(nav, elementName, "");
+		}
+
+		/// <summary>
+		/// Берет содержимое дочернего элемента если есть
+		/// </summary>
+		/// <param name="nav"></param>
+		/// <param name="elementName"></param>
+		/// <param name="def"> </param>
+		/// <returns></returns>
+		public static string GetTextElement(this XElement nav, string elementName, string def)
+		{
+			var e = nav.Element(elementName);
+			if (null == e) return def;
+			return e.Value;
+		}
+
 
 		#region Nested type: ICustomXmlApplyer
 

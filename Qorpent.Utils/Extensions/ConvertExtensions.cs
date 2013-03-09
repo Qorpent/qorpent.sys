@@ -43,6 +43,22 @@ namespace Qorpent.Utils.Extensions {
 		public static string ToStr(this object x) {
 			return x == null ? String.Empty : x.ToString();
 		}
+		/// <summary>
+		/// Checks that value is in range
+		/// </summary>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="testValue"></param>
+		/// <param name="minValue"></param>
+		/// <param name="maxValue"></param>
+		/// <returns></returns>
+		public static bool Between<TValue>(this TValue testValue, TValue minValue, TValue maxValue)
+		   where TValue : struct
+		{
+			decimal it = testValue.ToDecimal();
+			decimal min = minValue.ToDecimal();
+			decimal max = maxValue.ToDecimal();
+			return it >= min && it <= max;
+		}
 
 		/// <summary>
 		/// 	Null-safe (in) conversion to bool of any object
@@ -117,7 +133,7 @@ namespace Qorpent.Utils.Extensions {
 			if (null != defgen) {
 				objdefgen = () => defgen();
 			}
-			return (T) x.ToType(typeof (T), safe, def, objdefgen);
+			return (T) x.ToTargetType(typeof (T), safe, def, objdefgen);
 		}
 
 		/// <summary>
@@ -130,7 +146,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="def"> default Value to return instead of default of type </param>
 		/// <param name="defgen"> default generator to call and return result instead of default of type </param>
 		/// <returns> </returns>
-		public static object ToType(this object x, Type type, bool safe = false, object def = null, Func<object> defgen = null) {
+		public static object ToTargetType(this object x, Type type, bool safe = false, object def = null, Func<object> defgen = null) {
 			try {
 				bool converted;
 				var result = TryConvert(x, type, out converted);

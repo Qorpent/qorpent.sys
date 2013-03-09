@@ -26,6 +26,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Qorpent.Utils.Extensions {
 	/// <summary>
@@ -198,6 +200,278 @@ namespace Qorpent.Utils.Extensions {
 				newvalue = "";
 			}
 			return newvalue;
+		}
+
+		/// <summary>
+		/// Выполняет Regex.IsMatch относительно переданной строки, null-safe
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <param name="compiled"></param>
+		/// <returns></returns>
+		public static bool Like (this string str, string pattern, bool compiled = false) {
+			if(str.IsEmpty()) return false;
+			if(pattern.IsEmpty()) return false;
+			return Regex.IsMatch(str, pattern, compiled ? RegexOptions.Compiled : RegexOptions.None);
+		}
+
+
+		/// <summary>
+		/// Простой шоткат для Regex.Replace в виде расширения
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <param name="substitute"></param>
+		/// <returns></returns>
+		public static string RegexReplace(this string str, string pattern, string substitute)
+		{
+			return RegexReplace(str, pattern, substitute,
+						   RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
+		}
+
+		/// <summary>
+		/// Простой шоткат для Regex.Replace в виде расширения
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <param name="substitute"></param>
+		/// <param name="options"> </param>
+		/// <returns></returns>
+		public static string RegexReplace(this string str, string pattern, string substitute, RegexOptions options)
+		{
+			if (null == str || null == pattern || null == substitute)
+			{
+				return String.Empty;
+			}
+			return Regex.Replace(str, pattern, substitute, options);
+		}
+
+		/// <summary>
+		/// Простой шоткат для Regex.Replace в виде расширения
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <param name="evaluator"> </param>
+		/// <returns></returns>
+		public static string RegexReplace(this string str, string pattern, MatchEvaluator evaluator)
+		{
+			return RegexReplace(str, pattern, evaluator,
+						   RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
+		}
+
+		/// <summary>
+		/// Простой шоткат для Regex.Replace в виде расширения
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <param name="evaluator"> </param>
+		/// <param name="options"> </param>
+		/// <returns></returns>
+		public static string RegexReplace(this string str, string pattern, MatchEvaluator evaluator, RegexOptions options)
+		{
+			if (null == str || null == pattern || null == evaluator)
+			{
+				return String.Empty;
+			}
+			return Regex.Replace(str, pattern, evaluator, options);
+		}
+
+		/// <summary>
+		/// Оболочка над Regex.Match с возвратом найденного значения, игнорируется регистр и пробельные символы
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <returns></returns>
+		public static string RegexFind(this string str, string pattern)
+		{
+			return RegexFind(str, pattern,
+						RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
+		}
+
+		/// <summary>
+		/// Оболочка над Regex.Match с возвратом найденного значения, игнорируется регистр и пробельные символы
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <param name="options"> </param>
+		/// <returns></returns>
+		public static string RegexFind(this string str, string pattern, RegexOptions options)
+		{
+			if (null == str || null == pattern)
+			{
+				return String.Empty;
+			}
+			var m = Regex.Match(str, pattern, options);
+			if (m.Success)
+			{
+				return m.Value;
+			}
+			return String.Empty;
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <param name="groupname"></param>
+		/// <returns></returns>
+		public static string RegexFind(this string str, string pattern, string groupname)
+		{
+			return RegexFind(str, pattern, groupname, RegexOptions.Compiled);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <param name="groupname"></param>
+		/// <param name="options"></param>
+		/// <returns></returns>
+		public static string RegexFind(this string str, string pattern, string groupname, RegexOptions options)
+		{
+			if (null == str || null == pattern)
+			{
+				return String.Empty;
+			}
+			var m = Regex.Match(str, pattern, options);
+			if (m.Success)
+			{
+				return m.Groups[groupname].Value;
+			}
+			return String.Empty;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <param name="groupidx"></param>
+		/// <returns></returns>
+		public static string RegexFind(this string str, string pattern, int groupidx)
+		{
+			return RegexFind(str, pattern, groupidx, RegexOptions.Compiled);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <param name="groupidx"></param>
+		/// <param name="options"></param>
+		/// <returns></returns>
+		public static string RegexFind(this string str, string pattern, int groupidx, RegexOptions options)
+		{
+			if (null == str || null == pattern)
+			{
+				return String.Empty;
+			}
+			var m = Regex.Match(str, pattern, options);
+			if (m.Success)
+			{
+				return m.Groups[groupidx].Value;
+			}
+			return String.Empty;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <returns></returns>
+		public static IEnumerable<Match> RegexFindAll(this string str, string pattern)
+		{
+			return RegexFindAll(str, pattern, RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="pattern"></param>
+		/// <param name="options"></param>
+		/// <returns></returns>
+		public static IEnumerable<Match> RegexFindAll(this string str, string pattern, RegexOptions options)
+		{
+			if (str.IsEmpty())
+			{
+				yield break;
+			}
+			if (pattern.IsEmpty())
+			{
+				yield break;
+			}
+			foreach (Match m in Regex.Matches(str, pattern, options))
+			{
+				yield return m;
+			}
+		}
+
+		/// <summary>
+		/// Выполняет подстановки в строке (без учета регистра)
+		/// </summary>
+		/// <param name="str">Исходная строка</param>
+		/// <param name="from">Массив заменяемых строк</param>
+		/// <param name="to">Массив строк - замен, null означает пропуск</param>
+		/// <returns>Строка с выполненным</returns>
+		public static string Translate(this string str, IEnumerable<string> from, IEnumerable<string> to)
+		{
+			return Translate(str, from, to, true);
+		}
+
+		/// <summary>
+		/// Выполняет подстановки в строке
+		/// </summary>
+		/// <param name="str">Исходная строка</param>
+		/// <param name="from">Массив заменяемых строк</param>
+		/// <param name="to">Массив строк - замен, null означает пропуск</param>
+		/// <param name="ignoreCase"> </param>
+		/// <returns>Строка с выполненным</returns>
+		public static string Translate(this string str, IEnumerable<string> from, IEnumerable<string> to,
+									   bool ignoreCase)
+		{
+			if (String.IsNullOrEmpty(str))
+			{
+				return String.Empty;
+			}
+			if (null == from || null == to)
+			{
+				return str;
+			}
+			var f = from.ToList();
+			var t = to.ToList();
+
+
+			var result = str;
+
+			for (var i = 0; i < Math.Min(f.Count(), t.Count()); i++)
+			{
+				var _f = f[i];
+				if (String.IsNullOrEmpty(_f))
+				{
+					continue;
+				}
+				var _t = t[i];
+				if (null == _t)
+				{
+					continue;
+				}
+				if (ignoreCase)
+				{
+					result = result.RegexReplace(_f, _t);
+				}
+				else
+				{
+					result = result.RegexReplace(_f, _t, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
+				}
+			}
+
+			return result;
 		}
 
 	}

@@ -38,12 +38,136 @@ namespace Qorpent.Utils.Extensions {
 			_helper = new ReflectionHelper();
 		}
 
+
+		/// <summary>
+		/// Копирует свойства одного объкта в другой по имени
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="from"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static T BindFrom<T>(this T target, object from)
+		{
+			return BindFrom(target, from, false);
+		}
+
+		/// <summary>
+		/// Копирует свойства одного объкта в другой по имени
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="from"></param>
+		/// <param name="primitivesOnly"></param>
+		/// <param name="excludes"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static T BindFrom<T>(this T target, object from, bool primitivesOnly, params string[] excludes)
+		{
+			excludes = excludes ?? new string[] { };
+			PropertyInfo[] props = from.GetType().GetProperties();
+			foreach (PropertyInfo src in props)
+			{
+				if (excludes.ToBool() && src.Name.IsIn(excludes)) continue;
+
+				if (!primitivesOnly || src.PropertyType == typeof(string) || src.PropertyType.IsValueType)
+				{
+					object val = src.GetValue(from, null);
+					if (null != val)
+					{
+						target.SetValue(src.Name, val);
+					}
+				}
+			}
+			return target;
+		}
+
+		/// <summary>
+		/// Конвертирует общеизвестное имя типа в тип
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public static Type ResolveTypeByWellKnownName(string name)
+		{
+			switch (name)
+			{
+				case "int":
+					return typeof(int);
+				case "str":
+					return typeof(string);
+				case "date":
+					return typeof(DateTime);
+				case "bool":
+					return typeof(bool);
+				case "decimal":
+					return typeof(decimal);
+			}
+			return null;
+		}
+		/// <summary>
+		/// Конвертирует тип в общеизвестное короткое имя
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static string ResolveWellKnownName(Type type)
+		{
+			switch (type.Name)
+			{
+				case "Int32":
+					return "int";
+				case "String":
+					return "str";
+				case "DateTime":
+					return "date";
+				case "Boolean":
+					return "bool";
+				case "Decimal":
+					return "decimal";
+			}
+			return null;
+		}
+
+
 		/// <summary>
 		/// 	Default domain wide helper
 		/// </summary>
 		public static ReflectionHelper DefaultHelper {
 			get { return _helper; }
 			set { _helper = value; }
+		}
+		/// <summary>
+		/// Converts given type reference string to Type object
+		/// </summary>
+		/// <param name="str"></param>
+		/// <returns></returns>
+		public static Type ToTypeDefinition(this string str)
+		{
+			return ToTypeDefinition(str, null);
+		}
+
+		/// <summary>
+		/// Converts given type reference string to Type object using mapping
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="map"></param>
+		/// <returns></returns>
+		/// <exception cref="NullReferenceException"></exception>
+		public static Type ToTypeDefinition(this string str, IDictionary<string, Type> map = null)
+		{
+			if (string.IsNullOrWhiteSpace(str)) return null;
+
+			if (str == "string") return typeof(string);
+			if (str == "int") return typeof(int);
+			if (str == "decimal") return typeof(decimal);
+			if (str == "date") return typeof(DateTime);
+			if (str == "bool") return typeof(bool);
+
+			if (str.EndsWith(".dll")) str = str.Substring(0, str.Length - 4);
+			if (null != map && map.ContainsKey(str))
+			{
+				return map[str];
+			}
+			Type result = Type.GetType(str);
+			if (null == result) throw new NullReferenceException(str + " maps to non-correct or unavailable type");
+			return result;
 		}
 
 		/// <summary>
