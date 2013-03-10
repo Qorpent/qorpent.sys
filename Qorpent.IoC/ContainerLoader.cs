@@ -74,12 +74,38 @@ namespace Qorpent.IoC {
 		/// <returns> </returns>
 		/// <exception cref="Exception"></exception>
 		public XElement ReadDefaultManifest() {
-			var resolver = _container.Get<IFileNameResolver>();
-			if (null == resolver) {
-				return new XElement("root");
+			PrepareServices();
+			var result = new XElement("root");	
+			if (null == _resolver) {
+				return result;
 			}
-			var includer = _container.Get<IXmlIncludeProcessor>();
-			var manifestfiles = resolver.ResolveAll(
+			var manifestfiles = GetManifestFileList();
+			
+			foreach (var manifestxml in manifestfiles.Select(LoadManifesFile)) {
+				result.Add(manifestxml.Elements());
+			}
+			return result;
+		}
+
+		private XElement LoadManifesFile(string manifestfile) {
+			XElement manifestxml;
+			if (manifestfile.EndsWith(".xml")) {
+				manifestxml = XElement.Load(manifestfile);
+			}
+			else {
+				if (null == _bxl) {
+					throw new Exception("cannot ProcessExtensions bxl manifests, because Bxl not configured");
+				}
+				manifestxml = _bxl.Parse(File.ReadAllText(manifestfile), manifestfile);
+			}
+			if (null != _includer) {
+				_includer.Include(manifestxml, manifestfile);
+			}
+			return manifestxml;
+		}
+
+		private string[] GetManifestFileList() {
+			var manifestfiles = _resolver.ResolveAll(
 				new FileSearchQuery
 					{
 						ExistedOnly = true,
@@ -87,26 +113,13 @@ namespace Qorpent.IoC {
 						ProbeFiles = new[] {"*.ioc-manifest.xml", "*.ioc-manifest.bxl"},
 						ProbePaths = new[] {"~/", "~/.config", "~/bin", "~/sys", "~/usr"}
 					});
+			return manifestfiles;
+		}
 
-			var fullmanifest = new XElement("root");
-			foreach (var manifestfile in manifestfiles) {
-				XElement manifestxml;
-				if (manifestfile.EndsWith(".xml")) {
-					manifestxml = XElement.Load(manifestfile);
-				}
-				else {
-					var bxl = _container.Get<IBxlParser>();
-					if (null == bxl) {
-						throw new Exception("cannot ProcessExtensions bxl manifests, because Bxl not configured");
-					}
-					manifestxml = bxl.Parse(File.ReadAllText(manifestfile), manifestfile);
-				}
-				if (null != includer) {
-					includer.Include(manifestxml, manifestfile);
-				}
-				fullmanifest.Add(manifestxml.Elements());
-			}
-			return fullmanifest;
+		private void PrepareServices() {
+			_resolver = _container.Get<IFileNameResolver>();
+			_includer = _container.Get<IXmlIncludeProcessor>();
+			_bxl = _container.Get<IBxlParser>();
 		}
 
 		/// <summary>
@@ -118,43 +131,60 @@ namespace Qorpent.IoC {
 			if (manifest == null) {
 				throw new ArgumentNullException("manifest");
 			}
-			IList<string> dlls = manifest.Elements("ref").Select(element => element.Attr("code")).Distinct().ToList();
-
-
-			IList<string> ns = manifest.Elements("using").Select(element => element.Attr("code")).Distinct().ToList();
-
-			IList<string> mvcs = manifest.Elements("mvc").Select(element => element.Attr("code")).Distinct().ToList();
-
-
-			
-			//extensions must be load first
-			var result = manifest.Elements("containerextension").Select(extensionxml => new ManifestComponentDefinition(extensionxml, allowErrors, dlls, ns)).Cast<IComponentDefinition>().ToList();
-
-			result.AddRange((
-				from componentxml in manifest.Elements() 
-				where componentxml.Name.LocalName != "ref" 
-				where componentxml.Name.LocalName != "using" 
-				where componentxml.Name.LocalName != "containerextension" 
-				where componentxml.Name.LocalName != "mvc"
-				select new ManifestComponentDefinition(componentxml, allowErrors, dlls, ns)));
-			//usual components must be load after extensions
-			foreach (var component in result) {
-				_container.Register(component);
+			PrepareAliases(manifest);
+			foreach (var containerExtension in LoadContainerExtensions(manifest, allowErrors)) {
+				yield return containerExtension;
 			}
+			foreach (var component in RegisterCommonComponents(manifest, allowErrors)) {
+				yield return component;
+			}
+			//result components  for MVC are hidden by API for now //TODO: bad design
+			RegisterMvcLibraries();
+		}
 
-			//now we can load mvc-friendly assemblies
-			if(mvcs.Count!=0) {
+		private void RegisterMvcLibraries() {
+//now we can load mvc-friendly assemblies
+			if (_mvcassemblies.Count != 0) {
 				var mvcfactory = _container.Get<IMvcFactory>();
 				if (null != mvcfactory) {
-					foreach (var mvca in mvcs) {
+					foreach (var mvca in _mvcassemblies) {
 						var assembly = Assembly.Load(mvca);
-						if(null!=assembly) {
+						if (null != assembly) {
 							mvcfactory.Register(assembly);
 						}
 					}
 				}
 			}
-			return result;
+		}
+
+		private IEnumerable<IComponentDefinition> RegisterCommonComponents(XElement manifest, bool allowErrors) {
+			var components = (
+				                from componentxml in manifest.Elements()
+				                where componentxml.Name.LocalName != "ref"
+				                where componentxml.Name.LocalName != "using"
+				                where componentxml.Name.LocalName != "containerextension"
+				                where componentxml.Name.LocalName != "mvc"
+				                select new ManifestComponentDefinition(componentxml, allowErrors, _dlls, _namespaces)).ToArray();
+			//usual components must be load after extensions
+			foreach (var component in components) {
+				_container.Register(component);
+				yield return component;
+			}
+		}
+
+		private IEnumerable<IComponentDefinition> LoadContainerExtensions(XElement manifest, bool allowErrors) {
+			return
+				manifest.Elements("containerextension").Select(
+					extensionxml => new ManifestComponentDefinition(extensionxml, allowErrors, _dlls, _namespaces));
+		}
+
+		private void PrepareAliases(XElement manifest) {
+			_dlls = manifest.Elements("ref").Select(element => element.Attr("code")).Distinct().ToList();
+
+
+			_namespaces = manifest.Elements("using").Select(element => element.Attr("code")).Distinct().ToList();
+
+			_mvcassemblies = manifest.Elements("mvc").Select(element => element.Attr("code")).Distinct().ToList();
 		}
 
 		/// <summary>
@@ -206,5 +236,11 @@ namespace Qorpent.IoC {
 		}
 
 		private readonly IContainer _container;
+		private IFileNameResolver _resolver;
+		private IXmlIncludeProcessor _includer;
+		private IBxlParser _bxl;
+		private List<string> _dlls;
+		private List<string> _namespaces;
+		private List<string> _mvcassemblies;
 	}
 }

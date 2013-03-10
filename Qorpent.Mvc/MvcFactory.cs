@@ -59,7 +59,7 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <param name="assembly"> </param>
 		/// <returns> </returns>
-		public IMvcFactory Register(Assembly assembly) {
+		public IMvcFactory Register(Assembly assembly ) {
 			try {
 				var types = from t in assembly.GetTypes()
 				            where
