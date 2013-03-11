@@ -61,7 +61,8 @@ namespace Qorpent.IoC {
 		public IEnumerable<IComponentDefinition> LoadDefaultManifest(bool allowErrors) {
 			try {
 				var fullmanifest = ReadDefaultManifest();
-				return LoadManifest(fullmanifest, allowErrors);
+				var result = LoadManifest(fullmanifest, allowErrors).ToArray();
+				return result;
 			}
 			catch (NotImplementedException) {
 				return new IComponentDefinition[] {};
