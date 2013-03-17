@@ -1,4 +1,5 @@
-// Copyright 2007-2010 Comdiv (F. Sadykov) - http://code.google.com/u/fagim.sadykov/
+#region LICENSE
+// Copyright 2007-2013 Qorpent Team - http://github.com/Qorpent
 // Supported by Media Technology LTD 
 //  
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +14,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // 
-// MODIFICATIONS HAVE BEEN MADE TO THIS FILE
+// PROJECT ORIGIN: Qorpent.Utils/MapItem.cs
+#endregion
 namespace Qorpent.Utils.Collections{
     /// <summary>
     /// Ёлемент карты
