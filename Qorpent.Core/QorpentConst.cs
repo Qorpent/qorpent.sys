@@ -210,5 +210,10 @@ namespace Qorpent {
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Not defined message
+		/// </summary>
+		public const string NODEF = "Не определено";
 	}
 }

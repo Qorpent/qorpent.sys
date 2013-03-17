@@ -18,11 +18,11 @@
 #endregion
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Model Interface - что-то с уникальным строковым идентификатором
+	/// Concern of having MEMO code
 	/// </summary>
 	public interface IWithCode {
 		/// <summary>
-		/// 	Строковый уникальный идентификатор
+		/// Unique memo-code
 		/// </summary>
 		string Code { get; set; }
 	}

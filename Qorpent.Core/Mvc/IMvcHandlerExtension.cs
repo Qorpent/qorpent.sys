@@ -22,7 +22,7 @@ namespace Qorpent.Mvc {
 	/// <summary>
 	/// 	Extension point to setup hooks for MvcHttpHandler
 	/// </summary>
-	public interface IMvcHandlerExtension : IWithIdx {
+	public interface IMvcHandlerExtension : IWithIndex {
 		/// <summary>
 		/// 	Implement to execute some logic in MvcHttpHandler context
 		/// </summary>

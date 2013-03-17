@@ -18,12 +18,12 @@
 #endregion
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Describes that object has an int Idx property (used for ordering)
+	/// Describes entity with user-defined order
 	/// </summary>
-	public interface IWithIdx {
+	public interface IWithIndex {
 		/// <summary>
-		/// 	An index of object
+		/// User-defined order index
 		/// </summary>
-		int Idx { get; set; }
+		int Index { get; set; }
 	}
 }

@@ -18,21 +18,21 @@
 #endregion
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Модельный интерфейс - что-то с формулой
+	/// Describes formula of an entity
 	/// </summary>
 	public interface IWithFormula {
 		/// <summary>
-		/// 	Строка формулы
+		/// Formula's definition
 		/// </summary>
 		string Formula { get; set; }
 
 		/// <summary>
-		/// 	Тип формулы
+		/// Formula's type
 		/// </summary>
 		string FormulaType { get; set; }
 
 		/// <summary>
-		/// 	Признак активности формулы
+		/// Formula's activity flag
 		/// </summary>
 		bool IsFormula { get; set; }
 	}

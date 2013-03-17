@@ -20,41 +20,44 @@ using System;
 
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Плоская реализация IEntity, может использоваться как универсальный промежуточный класс
+	/// Simple <see cref="IEntity"/> implementation
 	/// </summary>
 	public class Entity : IEntity {
 		/// <summary>
-		/// 	Целочисленный уникальный идентификатор
+		/// PK ID in database terms
 		/// </summary>
 		public int Id { get; set; }
 
 		/// <summary>
-		/// 	Строковый уникальный идентификатор
+		/// Unique memo-code
 		/// </summary>
 		public string Code { get; set; }
 
 		/// <summary>
-		/// 	Название/имя
+		///Name of the entity
 		/// </summary>
 		public string Name { get; set; }
 
-		/// <summary>
-		/// 	An index of object
-		/// </summary>
-		public int Idx { get; set; }
 
 		/// <summary>
-		/// 	Строка тегов
+		/// User-defined order index
+		/// </summary>
+		public int Index { get; set; }
+
+
+		/// <summary>
+		///The TAG string
 		/// </summary>
 		public string Tag { get; set; }
 
+
 		/// <summary>
-		/// 	Комментарий
+		/// User's comment string
 		/// </summary>
 		public string Comment { get; set; }
 
 		/// <summary>
-		/// 	Название
+		/// User's or system's time stamp
 		/// </summary>
 		public DateTime Version { get; set; }
 	}

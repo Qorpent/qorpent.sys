@@ -18,11 +18,11 @@
 #endregion
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Model Interface - что-то с целочисленным уникальным идентификатором
+	/// Being with DB PK concern
 	/// </summary>
 	public interface IWithId {
 		/// <summary>
-		/// 	Целочисленный уникальный идентификатор
+		/// PK ID in database terms
 		/// </summary>
 		int Id { get; set; }
 	}

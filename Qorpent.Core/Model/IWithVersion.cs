@@ -20,11 +20,11 @@ using System;
 
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Model Interface - что-то с версией-датой
+	/// Describes entity with time-stamp
 	/// </summary>
 	public interface IWithVersion {
 		/// <summary>
-		/// 	Название
+		/// User's or system's time stamp
 		/// </summary>
 		DateTime Version { get; set; }
 	}

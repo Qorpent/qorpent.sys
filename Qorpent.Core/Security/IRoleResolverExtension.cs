@@ -26,7 +26,7 @@ namespace Qorpent.Security {
 	/// <summary>
 	/// 	Extension point interface to extend DefaultRoleResolver with custom logic of resolution
 	/// </summary>
-	public interface IRoleResolverExtension : IWithIdx {
+	public interface IRoleResolverExtension : IWithIndex {
 		/// <param name="principal"> </param>
 		/// <param name="role"> </param>
 		/// <param name="exact"> </param>

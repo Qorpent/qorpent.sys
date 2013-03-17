@@ -371,14 +371,14 @@ namespace Qorpent.IoC {
 				}
 
 				var extensions = FindExtensions(type, name);
-				if (typeof (IWithIdx).IsAssignableFrom(type)) {
+				if (typeof (IWithIndex).IsAssignableFrom(type)) {
 //have to order result
 					var result = new List<object>();
 					foreach (var component in extensions) {
 						component.ActivationCount++;
 						result.Add(component.Implementation ?? CreateInstance(component, ctorArguments));
 					}
-					foreach (var obj in result.OfType<IWithIdx>().OrderBy(x => x.Idx)) {
+					foreach (var obj in result.OfType<IWithIndex>().OrderBy(x => x.Index)) {
 						yield return obj;
 					}
 				}

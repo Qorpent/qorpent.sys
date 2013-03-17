@@ -18,11 +18,11 @@
 #endregion
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Модельный интерфейс - Нечто с комментариями
+	///Entity with comment concern
 	/// </summary>
 	public interface IWithComment {
 		/// <summary>
-		/// 	Комментарий
+		/// User's comment string
 		/// </summary>
 		string Comment { get; set; }
 	}

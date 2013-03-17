@@ -18,11 +18,11 @@
 #endregion
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Модельный интерфейс - что-то с тегами (комплексная строка или традиционные теги)
+	/// Being with TAG string concern
 	/// </summary>
 	public interface IWithTag {
 		/// <summary>
-		/// 	Строка тегов
+		///The TAG string
 		/// </summary>
 		string Tag { get; set; }
 	}

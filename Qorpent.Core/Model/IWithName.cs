@@ -18,11 +18,11 @@
 #endregion
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Model Interface - что-то с названием или именем
+	/// Named entity concern
 	/// </summary>
 	public interface IWithName {
 		/// <summary>
-		/// 	Ќазвание/им€
+		///Name of the entity
 		/// </summary>
 		string Name { get; set; }
 	}

@@ -26,6 +26,6 @@ namespace Qorpent.Model{
 		/// <summary>
 		/// Словарь дополнительных свойств объекта
 		/// </summary>
-        IDictionary<string, object> Properties { get; }
+        IDictionary<string, object> LocalProperties { get; }
     }
 }

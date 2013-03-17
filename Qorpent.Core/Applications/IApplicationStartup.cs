@@ -22,7 +22,7 @@ namespace Qorpent.Applications {
 	/// <summary>
 	/// 	Application startup extension
 	/// </summary>
-	public interface IApplicationStartup : IWithIdx {
+	public interface IApplicationStartup : IWithIndex {
 		/// <summary>
 		/// 	Executes some startup logic against given application
 		/// </summary>

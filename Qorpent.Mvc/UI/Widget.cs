@@ -23,7 +23,7 @@ namespace Qorpent.Mvc.UI {
 	/// <summary>
 	/// 	Визуальный виджет при использовании в составле Layout (система виджетов предназначена именно для отрисовки общих страниц)
 	/// </summary>
-	public class Widget : IWithRole, IWithIdx {
+	public class Widget : IWithRole, IWithIndex {
 		/// <summary>
 		/// 	Код виджета
 		/// </summary>
@@ -92,7 +92,7 @@ namespace Qorpent.Mvc.UI {
 		/// <summary>
 		/// 	Индекс виджета
 		/// </summary>
-		public int Idx { get; set; }
+		public int Index { get; set; }
 
 		/// <summary>
 		/// 	Роль доступа к виджету

@@ -41,7 +41,7 @@ namespace Qorpent.Mvc {
 		/// <summary>
 		/// 	An index of object
 		/// </summary>
-		public int Idx { get; set; }
+		public int Index { get; set; }
 
 		/// <summary>
 		/// 	Executes some startup logic against given application
