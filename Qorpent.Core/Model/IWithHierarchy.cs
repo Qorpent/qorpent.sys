@@ -42,5 +42,17 @@ namespace Qorpent.Model {
 		/// 	Cached path of entity
 		/// </summary>
 		string Path { get; set; }
+
+		/// <summary>
+		///		Checks if children existed
+		/// </summary>
+		/// <returns></returns>
+		bool HasChildren();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		bool HasParent();
 	}
 }
