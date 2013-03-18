@@ -11,6 +11,7 @@ namespace Qorpent.Model {
 		private int? _parentId;
 		private T _parent;
 		private string _path;
+		private string _parentCode;
 
 		/// <summary>
 		/// 	Прямой идентификатор родителя
@@ -28,12 +29,32 @@ namespace Qorpent.Model {
 			}
 		}
 
+
+		/// <summary>
+		///		CODE of parent
+		/// </summary>
+		/// <exception cref="Exception">cannot set ParentCode when <see cref="Parent"/> is defined</exception>
+		public string ParentCode {
+			get { return null != _parent ? _parent.Code : _parentCode; }
+			set {
+				if (null != _parent)
+				{
+					throw new Exception("cannot set ParentCode when Parent is defined");
+				}
+				_parentCode = value;
+			}
+		}
+
 		/// <summary>
 		/// 	Ссылка на родительский объект
 		/// </summary>
 		public T Parent {
-			get { return _parent; }
-			set { _parent = value; }
+			get {
+				return _parent;
+			}
+			set {
+				_parent = value;
+			}
 		}
 
 		/// <summary>
@@ -58,12 +79,7 @@ namespace Qorpent.Model {
 		/// <returns></returns>
 		/// <exception cref="Exception">cannot evaluate path when code is not defined</exception>
 		protected virtual string EvaluatePath() {
-			var selfcode = Code;
-			if (string.IsNullOrWhiteSpace(selfcode)) {
-				throw new Exception("cannot evaluate path when code is not defined");
-			}
-			if (null == _parent) return "/" + selfcode + "/";
-			return _parent.Path + selfcode + "/";
+			return this.EvaluateDefaultPath();
 		}
 
 		/// <summary>
@@ -71,7 +87,7 @@ namespace Qorpent.Model {
 		/// </summary>
 		/// <returns></returns>
 		public bool HasChildren() {
-			return null != _children;
+			return null != _children && 0!=_children.Count;
 		}
 
 		/// <summary>
@@ -80,6 +96,14 @@ namespace Qorpent.Model {
 		/// <returns></returns>
 		public bool HasParent() {
 			return null != _parent;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public bool IsParentDefined() {
+			return  _parentId.HasValue || null!=_parent || !string.IsNullOrWhiteSpace(_parentCode);
 		}
 	}
 }

@@ -22,11 +22,15 @@ namespace Qorpent.Model {
 	/// <summary>
 	/// 	Модельный интерфейс - Нечто с иерархией, понимаемой как родитель, путь, дочерние
 	/// </summary>
-	public interface IWithHierarchy<TEntity> {
+	public interface IWithHierarchy<TEntity> where TEntity: IWithCode {
 		/// <summary>
 		/// 	Прямой идентификатор родителя
 		/// </summary>
 		int? ParentId { get; set; }
+		/// <summary>
+		///		CODE of parent
+		/// </summary>
+		string ParentCode { get; set; }
 
 		/// <summary>
 		/// 	Ссылка на родительский объект
@@ -50,9 +54,15 @@ namespace Qorpent.Model {
 		bool HasChildren();
 
 		/// <summary>
-		/// 
+		///  Check that <see cref="Parent"/> is fully set
 		/// </summary>
 		/// <returns></returns>
 		bool HasParent();
+
+		/// <summary>
+		///  Check that <see cref="Parent"/> is somehow defined (with Id or Code may be)
+		/// </summary>
+		/// <returns></returns>
+		bool IsParentDefined();
 	}
 }

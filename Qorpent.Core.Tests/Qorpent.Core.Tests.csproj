@@ -27,6 +27,7 @@
     <Compile Include="Events\ResetEventDataTest.cs" />
     <Compile Include="Log\DefaultLogManagerTest.cs" />
     <Compile Include="Log\LoggerTest.cs" />
+    <Compile Include="Model\HierarchyExtensionTest.cs" />
     <Compile Include="Mvc\MvcCallInfoTest.cs" />
     <Compile Include="Qlaood\SimpleQlaoodHostingTest.cs" />
     <Compile Include="Security\StubIWithRole.cs" />
