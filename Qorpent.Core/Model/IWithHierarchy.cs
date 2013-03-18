@@ -64,5 +64,17 @@ namespace Qorpent.Model {
 		/// </summary>
 		/// <returns></returns>
 		bool IsParentDefined();
+
+		/// <summary>
+		/// Get shallow hierarchy copy ,started with current node as root
+		/// </summary>	
+		/// <returns></returns>
+		/// <remarks>upper nodes are not cloned</remarks>
+		IWithHierarchy<TEntity> GetCopyOfHierarchy();
+
+		/// <summary>
+		/// Marks that current node doesn't allow further up propagation
+		/// </summary>
+		bool IsPropagationRoot { get; set; }
 	}
 }

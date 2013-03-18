@@ -105,5 +105,39 @@ namespace Qorpent.Model {
 		public bool IsParentDefined() {
 			return  _parentId.HasValue || null!=_parent || !string.IsNullOrWhiteSpace(_parentCode);
 		}
+
+		/// <summary>
+		/// Get shallow hierarchy copy ,started with current node as root
+		/// </summary>	
+		/// <returns></returns>
+		/// <remarks>upper nodes are not cloned</remarks>
+		IWithHierarchy<T> IWithHierarchy<T>.GetCopyOfHierarchy() {
+			var result = GetHierarchicalCopyBase();
+			if (HasChildren())
+			{
+				(result as Hierarchy<T>)._children = new List<T>();
+				foreach (var child in Children)
+				{
+					var childcopy = child.GetCopyOfHierarchy();
+					childcopy.Parent = result;
+					result.Children.Add((T)childcopy);
+				}
+
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Marks that current node doesn't allow further up propagation
+		/// </summary>
+		public bool IsPropagationRoot { get; set; }
+
+		/// <summary>
+		/// Prepares shallow non hierarchical copy of this node
+		/// </summary>
+		/// <returns></returns>
+		protected virtual T GetHierarchicalCopyBase() {
+			return (T)MemberwiseClone();
+		}
 	}
 }
