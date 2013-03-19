@@ -2,6 +2,8 @@
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.Model;
+using Qorpent.Utils.Extensions;
+
 namespace Qorpent.Core.Tests.Model
 {
 	/// <summary>

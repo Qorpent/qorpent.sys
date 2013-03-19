@@ -79,7 +79,13 @@ namespace Qorpent.Model {
 		/// <returns></returns>
 		/// <exception cref="Exception">cannot evaluate path when code is not defined</exception>
 		protected virtual string EvaluatePath() {
-			return this.EvaluateDefaultPath();
+			var selfcode = Code;
+			if (string.IsNullOrWhiteSpace(selfcode))
+			{
+				throw new Exception("cannot evaluate path when code is not defined");
+			}
+			if (!HasParent()) return "/" + selfcode + "/";
+			return Parent.Path + selfcode + "/";
 		}
 
 		/// <summary>
