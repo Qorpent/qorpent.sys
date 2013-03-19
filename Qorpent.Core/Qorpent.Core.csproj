@@ -32,7 +32,6 @@
     <Compile Include="IO\IXmlWriteable.cs" />
     <Compile Include="IO\MimeHelper.cs" />
     <Compile Include="Model\Hierarchy.cs" />
-    <Compile Include="Model\HierarchyExtensions.cs" />
     <Compile Include="Model\IWithGetParameter.cs" />
     <Compile Include="Model\IWithProperties.cs" />
     <Compile Include="Mvc\ValidationException.cs" />
