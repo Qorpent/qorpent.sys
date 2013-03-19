@@ -49,23 +49,7 @@ namespace Qorpent.Model {
 			}
 		}	
 
-		/// <summary>
-		/// Evaluates default path as full code based path /CODE1/.../SELF/
-		/// </summary>
-		/// <param name="item"></param>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
-		/// <exception cref="Exception">cannot evaluate path when code is not defined</exception>
-		public static string EvaluateDefaultPath<T>(this Hierarchy<T> item)
-			where T : class, IWithHierarchy<T>, IWithCode, IWithId {
-			var selfcode = item.Code;
-			if (string.IsNullOrWhiteSpace(selfcode))
-			{
-				throw new Exception("cannot evaluate path when code is not defined");
-			}
-			if (!item.HasParent()) return "/" + selfcode + "/";
-			return item.Parent.Path + selfcode + "/";
-		}
+	
 
 		/// <summary>
 		///     Normalizes <see cref="IWithHierarchy{TEntity}.Parent" /> and <see cref="IWithHierarchy{TEntity}.Children" />  in set
