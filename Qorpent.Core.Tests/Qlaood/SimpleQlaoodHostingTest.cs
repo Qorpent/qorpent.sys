@@ -12,7 +12,7 @@ namespace Qorpent.Core.Tests.Qlaood
 			;
 		}
 	}
-	
+	[Ignore]
 	public class SimpleQlaoodHostingTest
 	{
 

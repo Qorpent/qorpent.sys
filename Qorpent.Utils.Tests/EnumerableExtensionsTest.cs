@@ -32,25 +32,25 @@ namespace Qorpent.Utils.Tests {
 	public class EnumerableExtensionsTest {
 		[Test]
 		public void EmptyArrayIsEmpty() {
-			Assert.True(new string[] {}.IsEmpty());
+			Assert.True(new string[] {}.IsEmptyCollection());
 			Assert.False(new string[] {}.IsNotEmpty());
 		}
 
 		[Test]
 		public void NotNullOnlyArrayIsNotEmpty() {
-			Assert.False(new[] {null, "", null}.IsEmpty());
+			Assert.False(new[] {null, "", null}.IsEmptyCollection());
 			Assert.True(new[] {null, "", null}.IsNotEmpty());
 		}
 
 		[Test]
 		public void NullArrayIsEmpty() {
-			Assert.True(((Array) null).IsEmpty());
+			Assert.True(((Array) null).IsEmptyCollection());
 			Assert.False(((Array) null).IsNotEmpty());
 		}
 
 		[Test]
 		public void NullOnlyArrayIsEmpty() {
-			Assert.True(new string[] {null, null}.IsEmpty());
+			Assert.True(new string[] {null, null}.IsEmptyCollection());
 			Assert.False(new string[] {null, null}.IsNotEmpty());
 		}
 	}
