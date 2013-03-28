@@ -572,19 +572,24 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <returns> </returns>
 		public override bool IsLocalHost() {
-			if (NativeAspContext == null && Uri.Host == "localhost") {
-				return true; //called in embeded mode - no role checking needed by default if specially local url used
+			try {
+				if (NativeAspContext == null && Uri.Host == "localhost") {
+					return true; //called in embeded mode - no role checking needed by default if specially local url used
+				}
+				if (NativeAspContext != null
+				    &&
+				    (
+					    NativeAspContext.Request.UserHostAddress == "127.0.0.1" ||
+					    NativeAspContext.Request.UserHostAddress == "::1"
+				    )
+					) {
+					return true;
+				}
+				return false;
 			}
-			if (NativeAspContext != null
-			    &&
-			    (
-				    NativeAspContext.Request.UserHostAddress == "127.0.0.1" ||
-				    NativeAspContext.Request.UserHostAddress == "::1"
-			    )
-				) {
-				return true;
+			catch {
+				return false;
 			}
-			return false;
 		}
 
 		private string _contentType;

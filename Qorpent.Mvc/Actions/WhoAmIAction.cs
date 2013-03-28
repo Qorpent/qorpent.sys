@@ -39,6 +39,8 @@ namespace Qorpent.Mvc.Actions {
 
 			var logondeveloper = Application.Roles.IsInRole(logon, "DEVELOPER");
 			var logondatamaster = Application.Roles.IsInRole(logon, "DATAMASTER");
+			var logondesigner = Application.Roles.IsInRole(logon, "DESIGNER");
+			var logontester = Application.Roles.IsInRole(logon, "TESTER");
 
 			var data = new Dictionary<string, string>();
 
@@ -60,6 +62,8 @@ namespace Qorpent.Mvc.Actions {
 						logonadmin,
 						logondeveloper,
 						logondatamaster,
+						logondesigner,
+						logontester,
 						data
 					};
 			}
