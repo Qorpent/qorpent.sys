@@ -85,6 +85,7 @@ namespace Qorpent.Mvc.HttpHandler {
 				MvcContextBase.Current = context;
 			}
 			context.NotModified = false;
+			
 			OnStart(context);
 			try {
 				BeforeAuthorize(context);
@@ -93,7 +94,9 @@ namespace Qorpent.Mvc.HttpHandler {
 					return context;
 				}
 				AfterAuthorize(context);
+
 				if (context.AuthrizeResult.Authorized) {
+					BindContext(context);
 					if (!context.IgnoreActionResult) {
 						EvaluateActionResult(context);
 					}
@@ -121,6 +124,10 @@ namespace Qorpent.Mvc.HttpHandler {
 			}
 			OnFinish(context);
 			return context;
+		}
+
+		private void BindContext(IMvcContext context) {
+			context.Bind();
 		}
 
 		/// <summary>
@@ -169,6 +176,7 @@ namespace Qorpent.Mvc.HttpHandler {
 		private void EvaluateActionResult(IMvcContext context) {
 			var s = Stopwatch.StartNew();
 			try {
+
 				CheckNotModified(context);
 				if (!context.NotModified) {
 					BeforeAction(context);
@@ -182,8 +190,10 @@ namespace Qorpent.Mvc.HttpHandler {
 		}
 
 		private void CheckNotModified(IMvcContext context) {
+
 			context.NotModified = CanReturnNotModifiedStatus(context);
 		}
+
 
 		private static void SetModifiedHeader(IMvcContext context) {
 			INotModifiedStateProvider cp = null;

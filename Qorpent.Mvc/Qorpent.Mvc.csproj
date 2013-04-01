@@ -8,6 +8,7 @@
     <AssemblyName>Qorpent.Mvc</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Actions\GetJsAction.cs" />
     <Compile Include="Actions\GetResourceAction.cs" />
     <Compile Include="Actions\ImpersonateAction.cs" />
     <Compile Include="Actions\IsInRoleAction.cs" />
