@@ -41,19 +41,20 @@ namespace Qorpent.Mvc.Actions {
 			var logondatamaster = Application.Roles.IsInRole(logon, "DATAMASTER");
 			var logondesigner = Application.Roles.IsInRole(logon, "DESIGNER");
 			var logontester = Application.Roles.IsInRole(logon, "TESTER");
+			var logonbudget = Application.Roles.IsInRole(logon, "BUDGET");
 
-			var data = new Dictionary<string, string>();
+			//var data = new Dictionary<string, string>();
 
 
-			foreach (var h in ((MvcContext) Context).NativeAspContext.Request.Headers.AllKeys) {
-				data["header:" + h] = ((MvcContext) Context).NativeAspContext.Request.Headers[h];
-			}
-			foreach (var h in ((MvcContext) Context).NativeAspContext.Request.Cookies.AllKeys) {
-				var httpCookie = ((MvcContext) Context).NativeAspContext.Request.Cookies[h];
-				if (httpCookie != null) {
-					data["cookie:" + h] = httpCookie.Value;
-				}
-			}
+			//foreach (var h in ((MvcContext) Context).NativeAspContext.Request.Headers.AllKeys) {
+			//	data["header:" + h] = ((MvcContext) Context).NativeAspContext.Request.Headers[h];
+			//}
+			//foreach (var h in ((MvcContext) Context).NativeAspContext.Request.Cookies.AllKeys) {
+			//	var httpCookie = ((MvcContext) Context).NativeAspContext.Request.Cookies[h];
+			//	if (httpCookie != null) {
+			//		data["cookie:" + h] = httpCookie.Value;
+			//	}
+			//}
 
 			if (imp == logon) {
 				return new
@@ -64,13 +65,15 @@ namespace Qorpent.Mvc.Actions {
 						logondatamaster,
 						logondesigner,
 						logontester,
-						data
+						logonbudget,
 					};
 			}
 
 			var impadmin = Application.Roles.IsInRole(imp, "ADMIN");
 			var impdeveloper = Application.Roles.IsInRole(imp, "DEVELOPER");
 			var impdatamaster = Application.Roles.IsInRole(imp, "DATAMASTER");
+			var impdatatester = Application.Roles.IsInRole(imp, "TESTER");
+			var impbudget = Application.Roles.IsInRole(imp, "BUDGET");
 
 			return
 				new
@@ -79,10 +82,15 @@ namespace Qorpent.Mvc.Actions {
 						impadmin,
 						impdeveloper,
 						impdatamaster,
+						impdatatester,
+						impbudget,
 						logonname,
 						logonadmin,
 						logondeveloper,
-						logondatamaster
+						logondatamaster,
+						logontester,
+						logonbudget,
+						
 					};
 		}
 	}
