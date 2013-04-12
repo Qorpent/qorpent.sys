@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Qorpent.Utils.Extensions {
 	/// <summary>
@@ -279,6 +280,20 @@ namespace Qorpent.Utils.Extensions {
 			var resourcename = assembly.GetManifestResourceNames().FirstOrDefault(_ => _.ToUpper().EndsWith(pathpart.ToUpper()));
 			if(null==resourcename)throw new Exception("resource for "+pathpart+" not found");
 			return assembly.GetManifestResourceStream(resourcename);
+		}
+
+		/// <summary>
+		/// Shortcut to read data from named resource as string
+		/// </summary>
+		/// <param name="assembly"></param>
+		/// <param name="pathpart"></param>
+		/// <returns></returns>
+		public static string ReadManifestResource(this Assembly assembly, string pathpart) {
+			string result = null;
+			using (var sr = new StreamReader(assembly.OpenManifestResource(pathpart), Encoding.UTF8)) {
+				result = sr.ReadToEnd();
+			}
+			return result;
 		}
 	}
 }
