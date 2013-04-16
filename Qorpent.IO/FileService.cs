@@ -103,10 +103,25 @@ namespace Qorpent.IO {
 		private IApplication _application;
 		private IFileNameResolver _fileresolver;
 		private string _root;
+
+		/// <summary>
+		/// 	Вызывается при вызове Reset
+		/// </summary>
+		/// <param name="data"> </param>
+		/// <returns> любой объект - будет включен в состав результатов <see cref="ResetEventResult" /> </returns>
+		/// <remarks>
+		/// 	При использовании стандартной настройки из <see cref="ServiceBase" /> не требует фильтрации опций,
+		/// 	настраивается на основе атрибута <see cref="RequireResetAttribute" />
+		/// </remarks>
 		public object Reset(ResetEventData data) {
 			((IResetable) Fileresolver).Reset(data);
+			return null;
 		}
 
+		/// <summary>
+		/// 	Возващает объект, описывающий состояние до очистки
+		/// </summary>
+		/// <returns> </returns>
 		public object GetPreResetInfo() {
 			return null;
 		}
