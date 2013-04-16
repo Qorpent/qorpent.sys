@@ -18,6 +18,7 @@
 #endregion
 using System;
 using Qorpent.Applications;
+using Qorpent.Events;
 using Qorpent.IoC;
 
 namespace Qorpent.IO {
@@ -25,7 +26,7 @@ namespace Qorpent.IO {
 	/// 	Default implementation of Application-wide File service
 	/// </summary>
 	[ContainerComponent(Lifestyle.Singleton, ServiceType = typeof (IFileService))]
-	public class FileService : IFileService, IApplicationBound {
+	public class FileService :IResetable, IFileService, IApplicationBound {
 		/// <summary>
 		/// 	Default Fileresolver instance
 		/// </summary>
@@ -102,5 +103,12 @@ namespace Qorpent.IO {
 		private IApplication _application;
 		private IFileNameResolver _fileresolver;
 		private string _root;
+		public object Reset(ResetEventData data) {
+			((IResetable) Fileresolver).Reset(data);
+		}
+
+		public object GetPreResetInfo() {
+			return null;
+		}
 	}
 }
