@@ -13,6 +13,7 @@
     <Compile Include="Actions\GetResourceAction.cs" />
     <Compile Include="Actions\ImpersonateAction.cs" />
     <Compile Include="Actions\IsInRoleAction.cs" />
+    <Compile Include="Actions\SysInfoAction.cs" />
     <Compile Include="HttpContextWrapper.cs" />
     <Compile Include="MimeMapper.cs" />
     <Compile Include="Actions\MyActions.cs" />

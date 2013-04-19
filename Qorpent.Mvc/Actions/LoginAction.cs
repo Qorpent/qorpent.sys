@@ -17,6 +17,8 @@
 // PROJECT ORIGIN: Qorpent.Mvc/LoginAction.cs
 #endregion
 using System;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Web.Security;
 using Qorpent.Mvc.Binding;
 using Qorpent.Mvc.Security;
@@ -33,12 +35,10 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
+			string plogin = "";
 			if (Login.IsNotEmpty()) {
 				try {
-					var plogin = Login;
-					if (Login.ToUpper().StartsWith(Environment.MachineName.ToUpper() + "\\")) {
-						plogin = "local\\" + Login.Split('\\')[1];
-					}
+					plogin = GetNormalizedLogin();		
 #if PARANOID
 				
 				var principal = new GenericPrincipal(new GenericIdentity(plogin), null);
@@ -54,7 +54,11 @@ namespace Qorpent.Mvc.Actions {
 #endif
 					var authenticator = Context.Application.Container.Get<IFormAuthenticationProvider>() ??
 					                    new SysLogonAuthenticationProvider();
-					bool authenticated = authenticator.IsAuthenticated(Login, Pass, Context);
+					bool authenticated = 
+						authenticator.IsAuthenticated(plogin, Pass, Context) 
+						||
+						authenticator.IsAuthenticated("local\\"+plogin.Split('\\')[1], Pass, Context) 
+						;
 #if PARANOID
 				}
 #endif
@@ -79,7 +83,7 @@ namespace Qorpent.Mvc.Actions {
 					}
 
 				}catch(Exception ex) {
-					return new {authenticated = false, login = Login, errortype = ex.GetType().Name, errormessage = ex.Message};
+					return new {authenticated = false, login = plogin, errortype = ex.GetType().Name, errormessage = ex.Message};
 				}
 				return
 					new
@@ -97,9 +101,21 @@ namespace Qorpent.Mvc.Actions {
 			}
 		}
 
+		private string GetNormalizedLogin() {
+			var plogin = Login.Trim();
+			if (Login.ToUpper().StartsWith(Environment.MachineName.ToUpper() + "\\")) {
+				plogin = "local\\" + Login.Split('\\')[1];
+			}
+
+			if (!plogin.Contains("\\")) {
+				plogin = SysInfoAction.GetLocalDomain().Split('.')[0] + "\\" + plogin;
+			}
+			return plogin;
+		}
+
 		/// <summary>
 		/// </summary>
-		[Bind(Name = "_l_o_g_i_n_", Required = false, ValidatePattern = @"^[\w\.-\\]+$")] protected string Login;
+		[Bind(Name = "_l_o_g_i_n_", Required = false, ValidatePattern = @"^[\w\.\d\-\\]+$")] protected string Login;
 
 		/// <summary>
 		/// </summary>
