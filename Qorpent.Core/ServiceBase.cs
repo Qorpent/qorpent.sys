@@ -48,7 +48,6 @@ namespace Qorpent {
 		/// 	объект был создан из контейнера без связи с приложением)
 		/// </summary>
 		protected IApplication Application { get; set; }
-
 #if PARANOID
 		static ServiceBase() {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);

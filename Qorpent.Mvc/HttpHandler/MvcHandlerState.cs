@@ -18,6 +18,14 @@ namespace Qorpent.Mvc.HttpHandler {
         /// </summary>
         public MvcHandlerState() {
             StartTime = DateTime.Now;
+            ServiceState.CurrentHandlers++;
+        }
+
+        /// <summary>
+        ///     Default destructor
+        /// </summary>
+        ~MvcHandlerState() {
+            ServiceState.CurrentHandlers--;
         }
 
         /// <summary>
@@ -57,13 +65,6 @@ namespace Qorpent.Mvc.HttpHandler {
         /// </summary>
         public void FailedRequestsCountIncrease() {
             FailedRequestsCount++;
-        }
-
-        /// <summary>
-        ///     Match all statistics
-        /// </summary>
-        public void Checkout() {
-            
         }
     }
 }

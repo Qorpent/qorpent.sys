@@ -40,13 +40,6 @@ namespace Qorpent.Mvc.HttpHandler {
             HandlerState = new MvcHandlerState();
         }
 
-        /// <summary>
-        ///     Default destructor
-        /// </summary>
-        ~MvcHandler() {
-            HandlerState.Checkout();
-        }
-
 		/// <summary>
 		/// 	Authorizer service
 		/// </summary>
