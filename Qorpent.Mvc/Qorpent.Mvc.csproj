@@ -15,6 +15,7 @@
     <Compile Include="Actions\IsInRoleAction.cs" />
     <Compile Include="Actions\SysInfoAction.cs" />
     <Compile Include="HttpContextWrapper.cs" />
+    <Compile Include="HttpHandler\MvcHandlerState.cs" />
     <Compile Include="MimeMapper.cs" />
     <Compile Include="Actions\MyActions.cs" />
     <Compile Include="Actions\MyRenders.cs" />
