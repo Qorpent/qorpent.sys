@@ -4,7 +4,7 @@ namespace Qorpent.Mvc.HttpHandler {
     /// <summary>
     ///     Class represents state of a MvcHandler instance
     /// </summary>
-    public class MvcHandlerState {
+    public class MvcHandlerState : IDisposable {
         /// <summary>
         ///     MvcHandler start time
         /// </summary>
@@ -22,9 +22,9 @@ namespace Qorpent.Mvc.HttpHandler {
         }
 
         /// <summary>
-        ///     Default destructor
+        ///     Destructor
         /// </summary>
-        ~MvcHandlerState() {
+        public void Dispose() {
             ServiceState.CurrentHandlers--;
         }
 

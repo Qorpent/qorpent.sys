@@ -40,6 +40,13 @@ namespace Qorpent.Mvc.HttpHandler {
             HandlerState = new MvcHandlerState();
         }
 
+        /// <summary>
+        ///     Destructor
+        /// </summary>
+        public new void Dispose() {
+            HandlerState.Dispose();
+        }
+
 		/// <summary>
 		/// 	Authorizer service
 		/// </summary>

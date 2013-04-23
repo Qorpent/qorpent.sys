@@ -21,6 +21,8 @@ namespace Qorpent.Core.Tests {
             Assert.AreEqual(0, ServiceState.CurrentHandlers);
             _mvcHandler = new MvcHandler();
             Assert.AreNotEqual(0, ServiceState.CurrentHandlers);
+            _mvcHandler.Dispose();
+            Assert.AreEqual(0, ServiceState.CurrentHandlers);
         }
     }
 }

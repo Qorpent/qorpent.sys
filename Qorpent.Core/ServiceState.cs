@@ -13,9 +13,9 @@ namespace Qorpent {
         public static Int64 CurrentHandlers { get; set; }
 
         /// <summary>
-        ///     Count of current IO Operations
+        ///     Count of current opened forms
         /// </summary>
-        public static Int64 CurrentIoOperations { get; set; }
+        public static Int64 CurrentForms { get; set; }
 
         /// <summary>
         ///     Count of current sessions
