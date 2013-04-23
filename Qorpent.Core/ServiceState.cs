@@ -13,6 +13,16 @@ namespace Qorpent {
         public static Int64 CurrentHandlers { get; set; }
 
         /// <summary>
+        ///     Count of current IO Operations
+        /// </summary>
+        public static Int64 CurrentIoOperations { get; set; }
+
+        /// <summary>
+        ///     Count of current sessions
+        /// </summary>
+        public static Int64 CurrentSessions { get; set; }
+
+        /// <summary>
         ///     Uptime of the service
         /// </summary>
         public static TimeSpan Uptime {
