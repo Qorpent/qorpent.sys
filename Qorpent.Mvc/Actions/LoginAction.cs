@@ -19,6 +19,8 @@
 using System;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Security;
 using Qorpent.Mvc.Binding;
 using Qorpent.Mvc.Security;
@@ -63,7 +65,8 @@ namespace Qorpent.Mvc.Actions {
 				}
 #endif
 					if (authenticated) {
-						FormsAuthentication.SetAuthCookie(plogin, false);
+						
+						SetupAuthCookie(plogin);
 #if PARANOID
 				if (Paranoid.Provider.IsSpecialUser(principal))
 					{
@@ -100,6 +103,24 @@ namespace Qorpent.Mvc.Actions {
 				return new { authenticated = true, login = Context.LogonUser.Identity.Name, user=Context.User.Identity.Name};
 			}
 		}
+
+		/// <summary>
+		/// Подготавливает куки аутентификации с учетом аутентификации в под-доменах
+		/// </summary>
+		/// <param name="plogin"></param>
+		private void SetupAuthCookie(string plogin) {
+			var cookie = FormsAuthentication.GetAuthCookie(plogin, false);
+			if (cookie.Domain == null) {
+				cookie.Domain = ((MvcContext) Context).NativeAspContext.Request.Url.Host;
+			}
+			var domainparts = cookie.Domain.Split('.');
+			if (domainparts.Length > 2) {
+				cookie.Domain = domainparts[domainparts.Length - 2] + "." + domainparts[domainparts.Length - 1];
+			}
+			((MvcContext) Context).NativeAspContext.Response.SetCookie(cookie);
+			
+		}
+
 
 		private string GetNormalizedLogin() {
 			var plogin = Login.Trim();
