@@ -66,6 +66,18 @@ namespace Qorpent.Mvc.HttpHandler {
 		/// <param name="context"> Объект <see cref="T:System.Web.HttpContext" /> , предоставляющий ссылки на внутренние серверные объекты (например, Request, Response, Session и Server), используемые для обслуживания HTTP-запросов. </param>
 		public void ProcessRequest(HttpContext context) {
 			_isDefaultHandler = true;
+
+			if (null != context.Request.UrlReferrer) {
+				if (context.Request.Url.Host != context.Request.UrlReferrer.Host) {
+					var origindomainparts = context.Request.UrlReferrer.Host.Split('.');
+					var currentdomainparts = context.Request.Url.Host.Split('.');
+					if (origindomainparts.Length == 3 && currentdomainparts.Length == 3) {
+						if (origindomainparts[1] == currentdomainparts[1] && origindomainparts[2] == currentdomainparts[2]) {
+							context.Response.Headers.Add("Access-Control-Allow-Origin","https://"+context.Request.UrlReferrer.Host);
+						}
+					}
+				}
+			}
 			var ctx = ResolveService<IMvcContext>();
 			ctx.SetNativeContext(new System.Web.HttpContextWrapper(context));
 			ProcessRequest(ctx);
@@ -85,6 +97,7 @@ namespace Qorpent.Mvc.HttpHandler {
 				MvcContextBase.Current = context;
 			}
 			context.NotModified = false;
+			
 			OnStart(context);
 			try {
 				BeforeAuthorize(context);
@@ -93,7 +106,9 @@ namespace Qorpent.Mvc.HttpHandler {
 					return context;
 				}
 				AfterAuthorize(context);
+
 				if (context.AuthrizeResult.Authorized) {
+					BindContext(context);
 					if (!context.IgnoreActionResult) {
 						EvaluateActionResult(context);
 					}
@@ -121,6 +136,10 @@ namespace Qorpent.Mvc.HttpHandler {
 			}
 			OnFinish(context);
 			return context;
+		}
+
+		private void BindContext(IMvcContext context) {
+			context.Bind();
 		}
 
 		/// <summary>
@@ -169,6 +188,7 @@ namespace Qorpent.Mvc.HttpHandler {
 		private void EvaluateActionResult(IMvcContext context) {
 			var s = Stopwatch.StartNew();
 			try {
+
 				CheckNotModified(context);
 				if (!context.NotModified) {
 					BeforeAction(context);
@@ -182,8 +202,10 @@ namespace Qorpent.Mvc.HttpHandler {
 		}
 
 		private void CheckNotModified(IMvcContext context) {
+
 			context.NotModified = CanReturnNotModifiedStatus(context);
 		}
+
 
 		private static void SetModifiedHeader(IMvcContext context) {
 			INotModifiedStateProvider cp = null;

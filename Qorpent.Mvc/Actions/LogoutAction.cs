@@ -37,9 +37,18 @@ namespace Qorpent.Mvc.Actions {
 				Paranoid.Provider.RemoveLogin(User.Identity.Name,cookie.Value);
 			}
 #endif
-			var cookie1 = new HttpCookie(FormsAuthentication.FormsCookieName, "") {Expires = DateTime.Now.AddYears(-1)};
-			Context.SetCookie(cookie1);
-			FormsAuthentication.SignOut();
+			var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, "") {Expires = DateTime.Now.AddYears(-1)};
+			if (cookie.Domain == null)
+			{
+				cookie.Domain = ((MvcContext)Context).NativeAspContext.Request.Url.Host;
+			}
+			var domainparts = cookie.Domain.Split('.');
+			if (domainparts.Length > 2)
+			{
+				cookie.Domain = domainparts[domainparts.Length - 2] + "." + domainparts[domainparts.Length - 1];
+			}
+			Context.SetCookie(cookie);
+			//FormsAuthentication.SignOut();
 			Context.Redirect("_sys/login.qview.qweb");
 			return null;
 		}

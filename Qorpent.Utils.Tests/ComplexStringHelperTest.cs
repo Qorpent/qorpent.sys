@@ -23,8 +23,8 @@ namespace Qorpent.Utils.Tests
 		}
 
 
-		[TestCase("`a:1~~`z|b", "|a", "1::|z","b","")]
-		[TestCase("a:1|b|c|dx:xxx", "a", "1", "b", "", "c", "", "dx", "xxx")]
+		[TestCase("`a:1~~`z|b", "|a", "1::|z","b","1")]
+		[TestCase("a:1|b|c|dx:xxx", "a", "1", "b", "1", "c", "1", "dx", "xxx")]
 		public void CsParserTest(string s, params string[] tests)
 		{
 			var dict = ComplexStringHelper.CreateComplexStringParser().Parse(s);
@@ -36,8 +36,8 @@ namespace Qorpent.Utils.Tests
 			}
 		}
 
-		[TestCase("`a:1~~`z b", " a", "1:: z", "b", "")]
-		[TestCase("a:1 b c dx:xxx", "a", "1", "b", "", "c", "", "dx", "xxx")]
+		[TestCase("`a:1~~`z b", " a", "1:: z", "b", "1")]
+		[TestCase("a:1 b c dx:xxx", "a", "1", "b", "1", "c", "1", "dx", "xxx")]
 		public void WsCsParserTest(string s, params string[] tests)
 		{
 			var dict = ComplexStringHelper.CreateWSComplexStringParser().Parse(s);
@@ -50,10 +50,10 @@ namespace Qorpent.Utils.Tests
 		}
 
 
-		[TestCase("`a:1~~`z b", " a", "1:: z", "b", "")]
-		[TestCase("a:1 b c dx:xxx", "a", "1", "b", "", "c", "", "dx", "xxx")]
+		[TestCase("`a:1~~`z b", " a", "1:: z", "b", "1")]
+		[TestCase("a:1 b c dx:xxx", "a", "1", "b", "1", "c", "1", "dx", "xxx")]
 		[TestCase("`a:1~~`z|b", "|a", "1::|z")]
-		[TestCase("a:1|b|c|dx:xxx", "a", "1", "b", "", "c", "", "dx", "xxx")]
+		[TestCase("a:1|b|c|dx:xxx", "a", "1", "b", "1", "c", "1", "dx", "xxx")]
 		[TestCase("/`a:1~~`z/ ", "/a", "1::/z")]
 		[TestCase("/a:1/ /b/ /c:/ /dx:xxx/", "a", "1", "b", "", "c", "", "dx", "xxx")]
 		public void AutoDetectParserTest(string s, params string[] tests)

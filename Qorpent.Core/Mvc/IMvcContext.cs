@@ -311,5 +311,9 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <param name="sourceStream"></param>
 		void WriteOutStream(Stream sourceStream);
+		/// <summary>
+		/// Выполнить настройку действия на контекст
+		/// </summary>
+		void Bind();
 	}
 }

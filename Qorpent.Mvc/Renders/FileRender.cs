@@ -18,12 +18,13 @@
 #endregion
 using System;
 using System.IO;
+using System.Security;
 
 namespace Qorpent.Mvc.Renders {
 	/// <summary>
 	/// 	Write out file, with using action result as file name
 	/// </summary>
-	[Render("file", Role = "DEVELOPER")]
+	[Render("file", Role = "DEFAULT")]
 	public class FileRender : RenderBase {
 		/// <summary>
 		/// 	Renders given context
@@ -42,6 +43,9 @@ namespace Qorpent.Mvc.Renders {
 				context.ContentType = resoleMimeType(extension.Substring(1));
 			}
 			if (context.ContentType == "application/bin") {
+				if (!Application.Roles.IsInRole(context.User, "DEVELOPER")) {
+					throw new SecurityException("only developers can access this file");
+				}
 				context.WriteOutFile(filename);
 			}
 			else {

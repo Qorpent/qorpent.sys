@@ -72,7 +72,9 @@ namespace Qorpent.Security {
 #if !PARANOID
 			//in paranoid mode we have not check admins
 			if (!exactresult && roletofind != "ADMIN" && !exact) {
-				return map.ForwardAll(usr).Any(x => x == "ADMIN");
+				//return map.ForwardAll(usr).Any(x => x == "ADMIN");
+				return
+					map.ReverseAll(roletofind).Any(_ => (Application ?? Applications.Application.Current).Roles.IsInRole(principal, _, false, callcontext, customcontext));
 			}
 #endif
 			return exactresult;

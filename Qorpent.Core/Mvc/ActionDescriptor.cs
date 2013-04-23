@@ -157,7 +157,6 @@ namespace Qorpent.Mvc {
 		/// <param name="context"> </param>
 		/// <returns> </returns>
 		public object Process(IMvcContext context) {
-			Bind(context);
 			return Action.Process(context);
 		}
 

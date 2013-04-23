@@ -333,6 +333,7 @@ namespace Qorpent.Mvc {
 		public object Process() {
 			try {
 				if (null != ActionDescriptor) {
+					Bind();
 					return ActionResult = ActionDescriptor.Process(this);
 				}
 				return null;
@@ -447,5 +448,18 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <param name="sourceStream"></param>
 		public abstract void WriteOutStream(Stream sourceStream);
+
+		private bool _isbinded = false;
+		/// <summary>
+		/// Выполнить настройку действия на контекст
+		/// </summary>
+		public void Bind() {
+			
+			if (null != ActionDescriptor && !_isbinded)
+			{
+				ActionDescriptor.Bind(this);
+				_isbinded = true;
+			}
+		}
 	}
 }

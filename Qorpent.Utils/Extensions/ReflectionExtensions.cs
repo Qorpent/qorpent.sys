@@ -18,7 +18,10 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Qorpent.Utils.Extensions {
 	/// <summary>
@@ -262,6 +265,35 @@ namespace Qorpent.Utils.Extensions {
 		public static IEnumerable<ValueMember> FindAllValueMembers(this Type type, Type attributeType, bool publicOnly = false,
 		                                                           bool readableOnly = false, bool assignableOnly = false) {
 			return _helper.FindAllValueMembers(type, attributeType, publicOnly, readableOnly, assignableOnly);
+		}
+
+
+		
+		/// <summary>
+		/// Shortcut to <paramref name="assembly"/> manifest resource stream with path finding
+		/// </summary>
+		/// <param name="assembly"></param>
+		/// <param name="pathpart"></param>
+		/// <returns></returns>
+		/// <exception cref="Exception"></exception>
+		public static Stream OpenManifestResource(this Assembly assembly, string pathpart) {
+			var resourcename = assembly.GetManifestResourceNames().FirstOrDefault(_ => _.ToUpper().EndsWith(pathpart.ToUpper()));
+			if(null==resourcename)throw new Exception("resource for "+pathpart+" not found");
+			return assembly.GetManifestResourceStream(resourcename);
+		}
+
+		/// <summary>
+		/// Shortcut to read data from named resource as string
+		/// </summary>
+		/// <param name="assembly"></param>
+		/// <param name="pathpart"></param>
+		/// <returns></returns>
+		public static string ReadManifestResource(this Assembly assembly, string pathpart) {
+			string result = null;
+			using (var sr = new StreamReader(assembly.OpenManifestResource(pathpart), Encoding.UTF8)) {
+				result = sr.ReadToEnd();
+			}
+			return result;
 		}
 	}
 }

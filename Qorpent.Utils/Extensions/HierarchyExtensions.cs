@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Model;
 
-namespace Qorpent.Model {
+namespace Qorpent.Utils.Extensions {
 	/// <summary>
 	///     Extensions for working with hierarchy
 	/// </summary>

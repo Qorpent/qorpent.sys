@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Model {
+﻿using Qorpent.Model;
+
+namespace Qorpent.Utils.Extensions {
 	/// <summary>
 	/// Behavior of temporal property apply
 	/// </summary>

@@ -119,7 +119,7 @@ namespace Qorpent.Mvc.Tests
 			data.UseReq = true;
 			view.Process(ctx);
 			Console.WriteLine(output);
-			Assert.AreEqual("<!DOCTYPE html><html><head><script type='text/javascript' src='my.js'></script></head><body class='qorpent'>2</body></html>",
+			Assert.AreEqual("<!DOCTYPE html><html><head>\r\n<script type='text/javascript' src='my.js'></script>\r\n</head><body class='qorpent'>2</body></html>",
 			 output.ToString());
 		}
 
@@ -159,7 +159,7 @@ namespace Qorpent.Mvc.Tests
 			data.UseReq = true;
 			view.Process(ctx);
 			Console.WriteLine(output);
-			Assert.AreEqual("<!DOCTYPE html><html><head><script type='text/javascript' src='my.js'></script><!-- my header end --></head><body class='qorpent'>2</body></html>",
+			Assert.AreEqual("<!DOCTYPE html><html><head>\r\n<script type='text/javascript' src='my.js'></script>\r\n<!-- my header end --></head><body class='qorpent'>2</body></html>",
 				 output.ToString());
 		}
 

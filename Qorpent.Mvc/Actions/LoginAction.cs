@@ -17,6 +17,10 @@
 // PROJECT ORIGIN: Qorpent.Mvc/LoginAction.cs
 #endregion
 using System;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Security;
 using Qorpent.Mvc.Binding;
 using Qorpent.Mvc.Security;
@@ -33,12 +37,10 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
+			string plogin = "";
 			if (Login.IsNotEmpty()) {
 				try {
-					var plogin = Login;
-					if (Login.ToUpper().StartsWith(Environment.MachineName.ToUpper() + "\\")) {
-						plogin = "local\\" + Login.Split('\\')[1];
-					}
+					plogin = GetNormalizedLogin();		
 #if PARANOID
 				
 				var principal = new GenericPrincipal(new GenericIdentity(plogin), null);
@@ -54,12 +56,17 @@ namespace Qorpent.Mvc.Actions {
 #endif
 					var authenticator = Context.Application.Container.Get<IFormAuthenticationProvider>() ??
 					                    new SysLogonAuthenticationProvider();
-					bool authenticated = authenticator.IsAuthenticated(Login, Pass, Context);
+					bool authenticated = 
+						authenticator.IsAuthenticated(plogin, Pass, Context) 
+						||
+						authenticator.IsAuthenticated("local\\"+plogin.Split('\\')[1], Pass, Context) 
+						;
 #if PARANOID
 				}
 #endif
 					if (authenticated) {
-						FormsAuthentication.SetAuthCookie(plogin, false);
+						
+						SetupAuthCookie(plogin);
 #if PARANOID
 				if (Paranoid.Provider.IsSpecialUser(principal))
 					{
@@ -79,7 +86,7 @@ namespace Qorpent.Mvc.Actions {
 					}
 
 				}catch(Exception ex) {
-					return new {authenticated = false, login = Login, errortype = ex.GetType().Name, errormessage = ex.Message};
+					return new {authenticated = false, login = plogin, errortype = ex.GetType().Name, errormessage = ex.Message};
 				}
 				return
 					new
@@ -98,8 +105,38 @@ namespace Qorpent.Mvc.Actions {
 		}
 
 		/// <summary>
+		/// Подготавливает куки аутентификации с учетом аутентификации в под-доменах
 		/// </summary>
-		[Bind(Name = "_l_o_g_i_n_", Required = false, ValidatePattern = @"^[\w\.-\\]+$")] protected string Login;
+		/// <param name="plogin"></param>
+		private void SetupAuthCookie(string plogin) {
+			var cookie = FormsAuthentication.GetAuthCookie(plogin, false);
+			if (cookie.Domain == null) {
+				cookie.Domain = ((MvcContext) Context).NativeAspContext.Request.Url.Host;
+			}
+			var domainparts = cookie.Domain.Split('.');
+			if (domainparts.Length > 2) {
+				cookie.Domain = domainparts[domainparts.Length - 2] + "." + domainparts[domainparts.Length - 1];
+			}
+			((MvcContext) Context).NativeAspContext.Response.SetCookie(cookie);
+			
+		}
+
+
+		private string GetNormalizedLogin() {
+			var plogin = Login.Trim();
+			if (Login.ToUpper().StartsWith(Environment.MachineName.ToUpper() + "\\")) {
+				plogin = "local\\" + Login.Split('\\')[1];
+			}
+
+			if (!plogin.Contains("\\")) {
+				plogin = SysInfoAction.GetLocalDomain().Split('.')[0] + "\\" + plogin;
+			}
+			return plogin;
+		}
+
+		/// <summary>
+		/// </summary>
+		[Bind(Name = "_l_o_g_i_n_", Required = false, ValidatePattern = @"^[\w\.\d\-\\]+$")] protected string Login;
 
 		/// <summary>
 		/// </summary>
