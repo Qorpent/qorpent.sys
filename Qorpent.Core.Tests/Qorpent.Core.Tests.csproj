@@ -33,6 +33,7 @@
     <Compile Include="Security\StubIWithRole.cs" />
     <Compile Include="Security\StubPrincipalSource.cs" />
     <Compile Include="Security\StubRoleResolver.cs" />
+    <Compile Include="ServiceStateTests.cs" />
     <Compile Include="TestSupport\QorpentFixture.cs" />
     <Compile Include="TestSupport\QorpentFixtureAttribute.cs" />
   </ItemGroup>
@@ -50,6 +51,10 @@
     <None Include="*.export" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Mvc\Qorpent.Mvc.csproj">
+      <Project>{96885c8f-ad20-41b4-86ee-bc9b3d47d9f9}</Project>
+      <Name>Qorpent.Mvc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
       <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
       <Name>Qorpent.Utils</Name>
