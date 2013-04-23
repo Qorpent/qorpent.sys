@@ -66,6 +66,18 @@ namespace Qorpent.Mvc.HttpHandler {
 		/// <param name="context"> Объект <see cref="T:System.Web.HttpContext" /> , предоставляющий ссылки на внутренние серверные объекты (например, Request, Response, Session и Server), используемые для обслуживания HTTP-запросов. </param>
 		public void ProcessRequest(HttpContext context) {
 			_isDefaultHandler = true;
+
+			if (null != context.Request.UrlReferrer) {
+				if (context.Request.Url.Host != context.Request.UrlReferrer.Host) {
+					var origindomainparts = context.Request.UrlReferrer.Host.Split('.');
+					var currentdomainparts = context.Request.Url.Host.Split('.');
+					if (origindomainparts.Length == 3 && currentdomainparts.Length == 3) {
+						if (origindomainparts[1] == currentdomainparts[1] && origindomainparts[2] == currentdomainparts[2]) {
+							context.Response.Headers.Add("Access-Control-Allow-Origin","https://"+context.Request.UrlReferrer.Host);
+						}
+					}
+				}
+			}
 			var ctx = ResolveService<IMvcContext>();
 			ctx.SetNativeContext(new System.Web.HttpContextWrapper(context));
 			ProcessRequest(ctx);
