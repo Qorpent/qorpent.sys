@@ -30,6 +30,7 @@ namespace Qorpent.Mvc.HttpHandler {
 	public class MvcHandlerFactory : IHttpHandlerFactory {
 		private static readonly object Sync = new object();
 		private static IApplication Application { get; set; }
+        private readonly Stack<IMvcHandler> _handlers = new Stack<IMvcHandler>();
 
 #if PARANOID
 		static MvcHandlerFactory() {
@@ -49,31 +50,24 @@ namespace Qorpent.Mvc.HttpHandler {
 			lock (this) {
 				//Debugger.Break();
 				var httpHandler = TryGetFromPool();
-				if (httpHandler != null)
-				{
+				if (httpHandler != null) {
 					return httpHandler;
 				}
+
 				CheckInitializeApplication(context);
 
 				IHttpHandler waitApplicationStartupHandler;
-				if (ApplicationNotStarted(out waitApplicationStartupHandler))
-				{
+				if (ApplicationNotStarted(out waitApplicationStartupHandler)) {
 					return waitApplicationStartupHandler;
 				}
 
-
-				var handler = Application.Container.Get<IMvcHandler>();
-				if (null == handler)
-				{
-					handler = new MvcHandler();
-					((MvcHandler)handler).SetApplication(Application);
-				}
+			    var handler = InitMVCHandlerInstance();
 
 				return handler.AsNative<IHttpHandler>();
 			}
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// 	Разрешает фабрике повторное использование существующего экземпляра обработчика.
 		/// </summary>
 		/// <param name="handler"> Объект <see cref="T:System.Web.IHttpHandler" /> для повторного использования. </param>
@@ -135,6 +129,23 @@ namespace Qorpent.Mvc.HttpHandler {
 			}
 		}
 
-		private readonly Stack<IMvcHandler> _handlers = new Stack<IMvcHandler>();
+                /// <summary>
+        ///     Initialize a MVCHandler instance
+        /// </summary>
+        /// <returns></returns>
+        private IMvcHandler InitMVCHandlerInstance() {
+            return Application.Container.Get<IMvcHandler>() ?? CreateMVCHandlerManually();
+        }
+
+	    /// <summary>
+        ///     Returns a MVCHandler instance
+        /// </summary>
+        /// <returns></returns>
+	    private MvcHandler CreateMVCHandlerManually() {
+            var handler = new MvcHandler();
+            handler.SetApplication(Application);
+
+	        return handler;
+	    }
 	}
 }
