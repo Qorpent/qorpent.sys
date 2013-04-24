@@ -114,8 +114,8 @@ namespace Qorpent.Mvc.Actions {
 				cookie.Domain = ((MvcContext) Context).NativeAspContext.Request.Url.Host;
 			}
 			var domainparts = cookie.Domain.Split('.');
-			if (domainparts.Length > 2) {
-				cookie.Domain = domainparts[domainparts.Length - 2] + "." + domainparts[domainparts.Length - 1];
+			if (domainparts.Length == 3) {
+				cookie.Domain = domainparts[1] + "." + domainparts[2];
 			}
 			((MvcContext) Context).NativeAspContext.Response.SetCookie(cookie);
 			
