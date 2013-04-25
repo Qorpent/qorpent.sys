@@ -2,7 +2,7 @@
     /// <summary>
     ///     Возвращает информацию о текущей нагрузке сервера
     /// </summary>
-    [Action("_sys.nodeload")]
+    [Action("_sys.nodeload",Role="DEFAULT")]
     public class GetClusterNodeLoad : ActionBase {
         /// <summary>
         /// main process
