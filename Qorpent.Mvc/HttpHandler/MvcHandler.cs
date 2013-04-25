@@ -37,14 +37,7 @@ namespace Qorpent.Mvc.HttpHandler {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
             #endif
 
-            HandlerState = new MvcHandlerState();
-        }
-
-        /// <summary>
-        ///     Destructor
-        /// </summary>
-        public new void Dispose() {
-            HandlerState.Dispose();
+            ServiceState.TotalQueriesHandledIncrease();
         }
 
 		/// <summary>
@@ -54,14 +47,6 @@ namespace Qorpent.Mvc.HttpHandler {
 			get { return _authorizer ?? (ResolveService<IActionAuthorizer>()); }
 			set { _authorizer = value; }
 		}
-
-        /// <summary>
-        ///     Work state of this MvcHandler
-        /// </summary>
-	    public MvcHandlerState HandlerState {
-	        get;
-            private set;
-	    }
 
 		/// <summary>
 		/// 	Extensions to be executed as hooks of handler
@@ -108,8 +93,6 @@ namespace Qorpent.Mvc.HttpHandler {
 		/// <param name="context"> </param>
 		/// <returns> </returns>
 		public IMvcContext ProcessRequest(IMvcContext context) {
-            HandlerState.RequestsCountIncrease();
-
 			Application.CurrentMvcContext = context;
 			Application.Principal.SetCurrentUser(
 				Application.Impersonation.GetImpersonation(context.LogonUser)
@@ -150,7 +133,6 @@ namespace Qorpent.Mvc.HttpHandler {
 				}
 			}
 			catch (Exception ex) {
-                HandlerState.FailedRequestsCountIncrease();
 				ProcessError(context, ex);
 			}
 			finally {
