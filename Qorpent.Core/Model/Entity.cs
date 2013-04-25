@@ -26,39 +26,39 @@ namespace Qorpent.Model {
 		/// <summary>
 		/// PK ID in database terms
 		/// </summary>
-		public int Id { get; set; }
+		public virtual int Id { get; set; }
 
 		/// <summary>
 		/// Unique memo-code
 		/// </summary>
-		public string Code { get; set; }
+		public virtual string Code { get; set; }
 
 		/// <summary>
 		///Name of the entity
 		/// </summary>
-		public string Name { get; set; }
+		public virtual string Name { get; set; }
 
 
 		/// <summary>
 		/// User-defined order index
 		/// </summary>
-		public int Index { get; set; }
+		public virtual int Index { get; set; }
 
 
 		/// <summary>
 		///The TAG string
 		/// </summary>
-		public string Tag { get; set; }
+		public virtual string Tag { get; set; }
 
 
 		/// <summary>
 		/// User's comment string
 		/// </summary>
-		public string Comment { get; set; }
+		public virtual string Comment { get; set; }
 
 		/// <summary>
 		/// User's or system's time stamp
 		/// </summary>
-		public DateTime Version { get; set; }
+		public virtual DateTime Version { get; set; }
 	}
 }
