@@ -47,6 +47,7 @@ namespace Qorpent.Mvc.HttpHandler {
 		/// <param name="url"> Свойство <see cref="P:System.Web.HttpRequest.RawUrl" /> запрошенного ресурса. </param>
 		/// <param name="pathTranslated"> Свойство <see cref="P:System.Web.HttpRequest.PhysicalApplicationPath" /> , задающее путь к запрошенному ресурсу. </param>
 		public IHttpHandler GetHandler(HttpContext context, string requestType, string url, string pathTranslated) {
+            ServiceState.TotalQueriesHandledIncrease();
 			lock (this) {
 				//Debugger.Break();
 				var httpHandler = TryGetFromPool();
@@ -55,7 +56,7 @@ namespace Qorpent.Mvc.HttpHandler {
 				}
 
 				CheckInitializeApplication(context);
-
+                
 				IHttpHandler waitApplicationStartupHandler;
 				if (ApplicationNotStarted(out waitApplicationStartupHandler)) {
 					return waitApplicationStartupHandler;
