@@ -14,11 +14,11 @@ namespace Qorpent.Mvc {
             Int64 age = 0;
 
             age += (ServiceState.TotalQueriesHandled) * (ClusterNodeLoadPoints.POINT_PER_HANDLED_QUERY);
-            age += (ServiceState.CpuMinutes) * (ClusterNodeLoadPoints.POINT_PER_CPU_MINUTE);
+            age += Convert.ToInt64((ServiceState.CpuTime.TotalMinutes) * (ClusterNodeLoadPoints.POINT_PER_CPU_MINUTE));
 
-            var ageInfo = new Dictionary<string, Int64> {
+            var ageInfo = new Dictionary<string, object> {
                 {"TotalQueriesHandled", (ServiceState.TotalQueriesHandled) * (ClusterNodeLoadPoints.POINT_PER_HANDLED_QUERY)},
-                {"TotalCpuTime", (ServiceState.CpuMinutes) * (ClusterNodeLoadPoints.POINT_PER_CPU_MINUTE)},
+                {"TotalCpuTime", ServiceState.CpuTime},
                 {"Age", age}
             };
 
