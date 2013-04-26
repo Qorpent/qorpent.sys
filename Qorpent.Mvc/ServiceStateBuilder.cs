@@ -18,8 +18,8 @@ namespace Qorpent.Mvc {
 
             var ageInfo = new Dictionary<string, Int64> {
                 {"TotalQueriesHandled", (ServiceState.TotalQueriesHandled) * (ClusterNodeLoadPoints.POINT_PER_HANDLED_QUERY)},
-                {"CpuTime", (ServiceState.CpuMinutes) * (ClusterNodeLoadPoints.POINT_PER_CPU_MINUTE)},
-                {"Summary", age}
+                {"TotalCpuTime", (ServiceState.CpuMinutes) * (ClusterNodeLoadPoints.POINT_PER_CPU_MINUTE)},
+                {"Age", age}
             };
 
             return ageInfo;

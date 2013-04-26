@@ -10,7 +10,7 @@ namespace Qorpent {
         ///     Время, затраченное процессором в минутах
         /// </summary>
         public static Int64 CpuMinutes {
-            get {return Process.GetCurrentProcess().TotalProcessorTime.Ticks;}
+            get {return Process.GetCurrentProcess().TotalProcessorTime.Minutes;}
         }
 
         /// <summary>
