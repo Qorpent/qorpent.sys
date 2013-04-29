@@ -75,7 +75,7 @@ namespace Qorpent.Mvc.HttpHandler {
 					var currentdomainparts = context.Request.Url.Host.Split('.');
 					if (origindomainparts.Length == 3 && currentdomainparts.Length == 3) {
 						if (origindomainparts[1] == currentdomainparts[1] && origindomainparts[2] == currentdomainparts[2]) {
-							context.Response.Headers.Add("Access-Control-Allow-Origin","https://"+context.Request.UrlReferrer.Host);
+							context.Response.Headers.Add("Access-Control-Allow-Origin",context.Request.Url.Scheme+"://"+context.Request.UrlReferrer.Host);
 						}
 					}
 				}
