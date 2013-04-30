@@ -9,14 +9,14 @@ namespace Qorpent {
         /// <summary>
         ///     Время, затраченное процессором в минутах
         /// </summary>
-        public static Int64 CpuMinutes {
-            get {return Convert.ToInt64(Process.GetCurrentProcess().TotalProcessorTime.Minutes);}
+        public static int CpuMinutes {
+            get {return Convert.ToInt32(Process.GetCurrentProcess().TotalProcessorTime.Minutes);}
         }
 
         /// <summary>
         ///     Count of current opened forms
         /// </summary>
-        public static Int64 TotalQueriesHandled { get; set; }
+        public static int TotalQueriesHandled { get; set; }
 
         /// <summary>
         ///     Увеличение счётчика общего количества обработанных запросов
