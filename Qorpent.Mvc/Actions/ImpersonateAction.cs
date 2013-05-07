@@ -60,6 +60,7 @@ namespace Qorpent.Mvc.Actions {
 		/// <returns> </returns>
 		protected override object MainProcess() {
 			IPrincipal result = null;
+			Target = Target.Trim();
 			if (Target.IsNotEmpty()) {
 				result = new GenericPrincipal(new GenericIdentity(Target), null);
 			}
