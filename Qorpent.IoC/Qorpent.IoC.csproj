@@ -31,6 +31,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
+   <Import Project="..\..\qorpent.kernel\build.targets" />
+   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
+   
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
