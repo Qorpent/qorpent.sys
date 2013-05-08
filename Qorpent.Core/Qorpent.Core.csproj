@@ -263,4 +263,5 @@
     <QorpentReference Include="*.import" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
+
 </Project>

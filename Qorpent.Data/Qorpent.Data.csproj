@@ -37,4 +37,6 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
+  <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Core.import"/>
+   <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Utils.import"/>
 </Project>
