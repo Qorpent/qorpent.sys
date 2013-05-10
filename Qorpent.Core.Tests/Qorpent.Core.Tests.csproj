@@ -46,6 +46,7 @@
     <Folder Include="Application\" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
+    <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Core.import"/>
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
