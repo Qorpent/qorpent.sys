@@ -322,10 +322,12 @@ namespace Qorpent.Utils.Extensions
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static T[] 
-            ExecuteOrm<T>(this IDbConnection connection, string command,IDictionary<string, object> parameters) where T:new(){
+            ExecuteOrm<T>(this IDbConnection connection, string command,IDictionary<string, object> parameters=null) where T:new(){
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
             var result = new List<T>();
+	        var cmd = connection.CreateCommand(command, parameters);
+	        cmd.CommandTimeout = 0;
             var reader = connection.CreateCommand(command, parameters).ExecuteReader();
             try
             {
