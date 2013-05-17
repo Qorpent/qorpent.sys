@@ -42,19 +42,8 @@ namespace Qorpent.Mvc.Actions {
 			var logondesigner = Application.Roles.IsInRole(logon, "DESIGNER");
 			var logontester = Application.Roles.IsInRole(logon, "TESTER");
 			var logonbudget = Application.Roles.IsInRole(logon, "BUDGET");
+			var logondocwriter = Application.Roles.IsInRole(logon, "DOCWRITER");
 
-			//var data = new Dictionary<string, string>();
-
-
-			//foreach (var h in ((MvcContext) Context).NativeAspContext.Request.Headers.AllKeys) {
-			//	data["header:" + h] = ((MvcContext) Context).NativeAspContext.Request.Headers[h];
-			//}
-			//foreach (var h in ((MvcContext) Context).NativeAspContext.Request.Cookies.AllKeys) {
-			//	var httpCookie = ((MvcContext) Context).NativeAspContext.Request.Cookies[h];
-			//	if (httpCookie != null) {
-			//		data["cookie:" + h] = httpCookie.Value;
-			//	}
-			//}
 
 			if (imp == logon) {
 				return new
@@ -66,6 +55,7 @@ namespace Qorpent.Mvc.Actions {
 						logondesigner,
 						logontester,
 						logonbudget,
+						logondocwriter
 					};
 			}
 
@@ -74,6 +64,7 @@ namespace Qorpent.Mvc.Actions {
 			var impdatamaster = Application.Roles.IsInRole(imp, "DATAMASTER");
 			var impdatatester = Application.Roles.IsInRole(imp, "TESTER");
 			var impbudget = Application.Roles.IsInRole(imp, "BUDGET");
+			var impdocwriter = Application.Roles.IsInRole(imp, "DOCWRITER");
 
 			return
 				new
@@ -84,6 +75,7 @@ namespace Qorpent.Mvc.Actions {
 						impdatamaster,
 						impdatatester,
 						impbudget,
+						impdocwriter,
 						logonname,
 						logonadmin,
 						logondeveloper,

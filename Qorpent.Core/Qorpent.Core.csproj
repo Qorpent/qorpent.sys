@@ -79,6 +79,13 @@
     <Compile Condition="'$(QISD_USER)'!=''" Include="$(QISD_USER)" />
     <Compile Include="Security\WinLogonType.cs" />
     <Compile Include="ServiceState.cs" />
+    <Compile Include="Wiki\DefaultWikiSource.cs" />
+    <Compile Include="Wiki\IWikiEmptyFilter.cs" />
+    <Compile Include="Wiki\IWikiGetFilter.cs" />
+    <Compile Include="Wiki\IWikiSaveFilter.cs" />
+    <Compile Include="Wiki\IWikiPersister.cs" />
+    <Compile Include="Wiki\IWikiSource.cs" />
+    <Compile Include="Wiki\WikiPage.cs" />
     <None Include="*.import" />
     <None Include="*.export" />
     <Compile Include=".\Applications\Application.cs" />
@@ -263,5 +270,4 @@
     <QorpentReference Include="*.import" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
-
 </Project>

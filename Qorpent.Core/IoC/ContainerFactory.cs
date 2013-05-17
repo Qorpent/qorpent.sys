@@ -25,6 +25,7 @@ using System.Reflection;
 using Qorpent.Applications;
 using Qorpent.Events;
 using Qorpent.Log;
+using Qorpent.Wiki;
 
 namespace Qorpent.IoC {
 	///<summary>
