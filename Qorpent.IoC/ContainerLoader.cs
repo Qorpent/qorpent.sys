@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.Bxl;
 using Qorpent.Dsl.XmlInclude;
@@ -129,6 +130,7 @@ namespace Qorpent.IoC {
 			{
 				throw new ArgumentNullException("manifest");
 			}
+			ResolveDefines(manifest);
 			PrepareAliases(manifest);
 			foreach (var containerExtension in LoadContainerExtensions(manifest, allowErrors))
 			{
@@ -143,6 +145,62 @@ namespace Qorpent.IoC {
 			return result.ToArray();
 
 		}
+		/// <summary>
+		/// Регекс глобальных констант
+		/// </summary>
+		public const string DEFINE_REGEX = @"\{?@([\p{Lu}_\d]+)\}?";
+		private void ResolveDefines(XElement manifest) {
+			
+			IDictionary<string,string> defines  = new Dictionary<string, string>();
+			foreach (var e in manifest.Elements("define").ToArray()) {
+				var desc = e.Describe();
+				var code = desc.Code;
+				var value = desc.Name;
+				if (string.IsNullOrWhiteSpace(value)) {
+					value = desc.Value;
+				}
+				defines[code] = value;
+				e.Remove();
+			}
+			if (0 == defines.Count) return;
+			var r = new Regex(DEFINE_REGEX, RegexOptions.Compiled);
+			foreach (var define in defines.ToArray()) {
+				if (define.Value.Contains("@")) {
+					var current = ReplaceDefines(define.Value, r, defines);
+					defines[define.Key] = current;
+				}
+			}
+			
+			foreach (var descendant in manifest.Descendants().ToArray())
+			{
+				foreach (var attr in descendant.Attributes())
+				{
+					if (attr.Value.Contains("@")) {
+						attr.Value = ReplaceDefines(attr.Value, r, defines);
+					}
+				}
+			}
+			foreach (var text in manifest.DescendantNodes().OfType<XText>().ToArray())
+			{
+				if (text.Value.Contains("@")) {
+					text.Value = ReplaceDefines(text.Value, r, defines);
+				}
+			}
+		}
+
+		private static string ReplaceDefines(string currentValue, Regex r, IDictionary<string, string> defines) {
+			currentValue = r.Replace(currentValue, m =>
+				{
+					var code = m.Groups[1].Value;
+					if (defines.ContainsKey(code)) {
+						return defines[code];
+					}
+					else {
+						return m.Value;
+					}
+				});
+			return currentValue;
+		}
 
 		private void RegisterMvcLibraries() {
 //now we can load mvc-friendly assemblies
@@ -150,7 +208,7 @@ namespace Qorpent.IoC {
 				var mvcfactory = _container.Get<IMvcFactory>();
 				if (null != mvcfactory) {
 					foreach (var mvca in _mvcassemblies) {
-						var assembly = Assembly.Load(mvca);
+					var assembly = Assembly.Load(mvca);
 						if (null != assembly) {
 							mvcfactory.Register(assembly);
 						}
