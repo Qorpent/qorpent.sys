@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Qorpent.Serialization;
 
 namespace Qorpent.Wiki {
@@ -33,5 +34,21 @@ namespace Qorpent.Wiki {
 		/// </summary>
 		[Serialize]
 		public string Text { get; set; }
+		/// <summary>
+		/// Время последней редакции
+		/// </summary>
+		[Serialize]
+		public DateTime LastWriteTime { get; set; }
+		/// <summary>
+		/// Владелец
+		/// </summary>
+		[Serialize]
+		public string Owner { get; set; }
+
+		/// <summary>
+		///  Автор последней редакции
+		/// </summary>
+		[Serialize]
+		public string Editor { get; set; }
 	}
 }

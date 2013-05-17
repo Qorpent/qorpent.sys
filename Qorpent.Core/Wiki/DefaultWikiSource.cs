@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Qorpent.IoC;
 
 namespace Qorpent.Wiki {
@@ -35,7 +36,12 @@ namespace Qorpent.Wiki {
 		/// <returns></returns>
 		public IEnumerable<WikiPage> Get(params string[] codes) {
 			CheckPersister();
-			foreach (var wikiPage in Persister.Get(codes)) {
+			var dict = codes.ToDictionary(_ => _, _ => new WikiPage { Code = _ });
+			foreach (var page in Persister.Get(codes)) {
+				page.Existed = true;
+				dict[page.Code] = page;
+			}
+			foreach (var wikiPage in dict.Values) {
 				if (!wikiPage.Existed) {
 					if (null != WikiEmptyFilters && 0 != WikiEmptyFilters.Length) {
 						foreach (var emptyFilter in WikiEmptyFilters) {
@@ -65,7 +71,13 @@ namespace Qorpent.Wiki {
 		/// <returns></returns>
 		public IEnumerable<WikiPage> Exists(params string[] codes) {
 			CheckPersister();
-			return Persister.Exists(codes);
+			var dict = codes.ToDictionary(_ => _, _ => new WikiPage { Code = _ });
+			foreach (var page in Persister.Exists(codes))
+			{
+				page.Existed = true;
+				dict[page.Code] = page;
+			}
+			return dict.Values;
 		}
 		/// <summary>
 		/// Производит сохранение страницы в хранилище с предварительной фильтрацией

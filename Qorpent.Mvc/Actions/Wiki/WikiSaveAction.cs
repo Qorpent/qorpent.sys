@@ -17,7 +17,7 @@ namespace Qorpent.Mvc.Actions {
 		/// <summary>
 		/// Новый текст страницы
 		/// </summary>
-		[Bind(Required = true)] public string Text;
+		[Bind] public string Text;
 
 		/// <summary>
 		/// Возвращает страницы Wiki по запросу
@@ -25,6 +25,11 @@ namespace Qorpent.Mvc.Actions {
 		/// <returns></returns>
 		protected override object MainProcess() {
 			var page = new WikiPage {Code = Code, Text = Text};
+			foreach (var parameter in Context.Parameters) {
+				if (parameter.Key.ToUpper() != "CODE" && parameter.Key.ToUpper() != "TEXT") {
+					page.Propeties[parameter.Key] = parameter.Value;
+				}
+			}
 			WikiSource.Save(page);
 			return WikiSource.Get(Code).First();
 		}
