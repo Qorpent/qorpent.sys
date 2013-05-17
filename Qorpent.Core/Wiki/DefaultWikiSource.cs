@@ -71,13 +71,7 @@ namespace Qorpent.Wiki {
 		/// <returns></returns>
 		public IEnumerable<WikiPage> Exists(params string[] codes) {
 			CheckPersister();
-			var dict = codes.ToDictionary(_ => _, _ => new WikiPage { Code = _ });
-			foreach (var page in Persister.Exists(codes))
-			{
-				page.Existed = true;
-				dict[page.Code] = page;
-			}
-			return dict.Values;
+			return Persister.Exists(codes);
 		}
 		/// <summary>
 		/// Производит сохранение страницы в хранилище с предварительной фильтрацией

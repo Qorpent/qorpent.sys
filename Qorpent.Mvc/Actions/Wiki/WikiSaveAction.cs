@@ -32,7 +32,11 @@ namespace Qorpent.Mvc.Actions {
 		protected override object MainProcess() {
 			var page = new WikiPage {Code = Code, Title = Title,Text = Text};
 			foreach (var parameter in Context.Parameters) {
-				if (parameter.Key.ToUpper() != "CODE" && parameter.Key.ToUpper() != "TEXT") {
+				if (
+					parameter.Key.ToUpper() != "CODE" 
+					&& parameter.Key.ToUpper() != "TEXT"
+					&& parameter.Key.ToUpper() != "TITLE"
+					) {
 					page.Propeties[parameter.Key] = parameter.Value;
 				}
 			}
