@@ -14,6 +14,12 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		[Bind(Required = true)]
 		public string Code;
+
+		/// <summary>
+		/// Заголовок страницы, имя
+		/// </summary>
+		[Bind]
+		public string Title;
 		/// <summary>
 		/// Новый текст страницы
 		/// </summary>
@@ -24,7 +30,7 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns></returns>
 		protected override object MainProcess() {
-			var page = new WikiPage {Code = Code, Text = Text};
+			var page = new WikiPage {Code = Code, Title = Title,Text = Text};
 			foreach (var parameter in Context.Parameters) {
 				if (parameter.Key.ToUpper() != "CODE" && parameter.Key.ToUpper() != "TEXT") {
 					page.Propeties[parameter.Key] = parameter.Value;

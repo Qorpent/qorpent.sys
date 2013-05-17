@@ -20,7 +20,7 @@ namespace Qorpent.Mvc.Actions {
 		/// <returns></returns>
 		protected override object MainProcess()
 		{
-			return WikiSource.Exists(Code.SmartSplit().ToArray()).ToArray();
+			return WikiSource.Exists(Code.SmartSplit(false, true, ',').ToArray()).ToArray();
 		}
 	}
 }

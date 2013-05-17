@@ -17,38 +17,44 @@ namespace Qorpent.Wiki {
 		/// <summary>
 		/// Код страницы
 		/// </summary>
-		[Serialize]
+		[SerializeNotNullOnly]
 		public string Code { get; set; }
 		/// <summary>
 		/// Признак того, что страница существует
 		/// </summary>
-		[Serialize]
+		[SerializeNotNullOnly]
 		public bool Existed { get; set; }
 		/// <summary>
 		/// Метаданные Wiki
 		/// </summary>
-		[Serialize]
+		[SerializeNotNullOnly]
 		public IDictionary<string,string> Propeties { get; private set; }
 		/// <summary>
 		/// Собственно текст страницы
 		/// </summary>
-		[Serialize]
+		[SerializeNotNullOnly]
 		public string Text { get; set; }
 		/// <summary>
 		/// Время последней редакции
 		/// </summary>
-		[Serialize]
+		[SerializeNotNullOnly]
 		public DateTime LastWriteTime { get; set; }
 		/// <summary>
 		/// Владелец
 		/// </summary>
-		[Serialize]
+		[SerializeNotNullOnly]
 		public string Owner { get; set; }
 
 		/// <summary>
 		///  Автор последней редакции
 		/// </summary>
-		[Serialize]
+		[SerializeNotNullOnly]
 		public string Editor { get; set; }
+
+		/// <summary>
+		/// Заголовок, имя страницы
+		/// </summary>
+		[SerializeNotNullOnly]
+		public string Title { get; set; }
 	}
 }

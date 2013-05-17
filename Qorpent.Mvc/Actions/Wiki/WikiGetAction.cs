@@ -17,7 +17,7 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns></returns>
 		protected override object MainProcess() {
-			return WikiSource.Get(Code.SmartSplit().ToArray()).ToArray();
+			return WikiSource.Get(Code.SmartSplit(false,true,',').ToArray()).ToArray();
 		}
 	}
 }
