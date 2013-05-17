@@ -123,12 +123,15 @@ transient 'name2', ManifestTestService  : ITestService2
 		[Test]
 		public void CanLoadFromBxlManifestWithResolution() {
 			var c = new Container();
-			c.GetLoader().LoadManifest(new BxlParser().Parse(@"
+			var manifest = new BxlParser().Parse(@"
 ref	Qorpent.IoC.Tests
 using Qorpent.IoC.Tests
 using Qorpent.IoC.Tests.InnerNs
 pooled 'name1', ManifestTestService  : ITestService2
-", "test"), false);
+", "test");
+			var loader = c.GetLoader();
+			loader.LoadManifest(manifest, false);
+			
 			var component = c.Components.First();
 			Assert.AreEqual(typeof (ITestService2), component.ServiceType);
 			Assert.AreEqual(typeof (ManifestTestService), component.ImplementationType);

@@ -18,6 +18,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -122,18 +123,25 @@ namespace Qorpent.IoC {
 		/// <param name="allowErrors"> </param>
 		/// <returns> </returns>
 		public IEnumerable<IComponentDefinition> LoadManifest(XElement manifest, bool allowErrors) {
-			if (manifest == null) {
+			var result = new List<IComponentDefinition>();
+			//throw new Exception("im here");
+			if (manifest == null)
+			{
 				throw new ArgumentNullException("manifest");
 			}
 			PrepareAliases(manifest);
-			foreach (var containerExtension in LoadContainerExtensions(manifest, allowErrors)) {
-				yield return containerExtension;
+			foreach (var containerExtension in LoadContainerExtensions(manifest, allowErrors))
+			{
+				result.Add(containerExtension);
 			}
-			foreach (var component in RegisterCommonComponents(manifest, allowErrors)) {
-				yield return component;
+			foreach (var component in RegisterCommonComponents(manifest, allowErrors))
+			{
+				result.Add(component);
 			}
-			//result components  for MVC are hidden by API for now //TODO: bad design
+
 			RegisterMvcLibraries();
+			return result.ToArray();
+
 		}
 
 		private void RegisterMvcLibraries() {
@@ -173,12 +181,14 @@ namespace Qorpent.IoC {
 		}
 
 		private void PrepareAliases(XElement manifest) {
+			
 			_dlls = manifest.Elements("ref").Select(element => element.Attr("code")).Distinct().ToList();
 
 
 			_namespaces = manifest.Elements("using").Select(element => element.Attr("code")).Distinct().ToList();
 
 			_mvcassemblies = manifest.Elements("mvc").Select(element => element.Attr("code")).Distinct().ToList();
+
 		}
 
 		/// <summary>
