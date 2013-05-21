@@ -29,12 +29,14 @@ namespace Qorpent.Wiki {
 		/// </summary>
 		[Inject]
 		public IWikiEmptyFilter[] WikiEmptyFilters { get; set; }
+
 		/// <summary>
 		/// Получает страницы из хранилища, фильтрует перед выдачей и формирует шаблон в случае пустой страницы
 		/// </summary>
+		/// <param name="usage">Варинат использования</param>
 		/// <param name="codes"></param>
 		/// <returns></returns>
-		public IEnumerable<WikiPage> Get(params string[] codes) {
+		public IEnumerable<WikiPage> Get(string usage,params string[] codes) {
 			CheckPersister();
 			var dict = codes.ToDictionary(_ => _, _ => new WikiPage { Code = _ });
 			foreach (var page in Persister.Get(codes)) {
@@ -52,7 +54,7 @@ namespace Qorpent.Wiki {
 				if (null != WikiGetFilters && 0 != WikiGetFilters.Length) {
 					foreach (var getFilter in WikiGetFilters)
 					{
-						getFilter.Execute(wikiPage);
+						getFilter.Execute(wikiPage,usage);
 					}
 				}
 				yield return wikiPage;

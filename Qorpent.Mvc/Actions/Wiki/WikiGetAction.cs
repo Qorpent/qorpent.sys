@@ -13,11 +13,15 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		[Bind(Required = true)] public string Code;
 		/// <summary>
+		/// Вариант использования
+		/// </summary>
+		[Bind] public string Usage;
+		/// <summary>
 		/// Возвращает страницы Wiki по запросу
 		/// </summary>
 		/// <returns></returns>
 		protected override object MainProcess() {
-			return WikiSource.Get(Code.SmartSplit(false,true,',').ToArray()).ToArray();
+			return WikiSource.Get(Usage,Code.SmartSplit(false,true,',').ToArray()).ToArray();
 		}
 	}
 }

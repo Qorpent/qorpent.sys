@@ -9,9 +9,10 @@ namespace Qorpent.Wiki
 		/// <summary>
 		/// Возвращает полностью загруженные страницы Wiki
 		/// </summary>
+		/// <param name="usage">Варинат использования </param>
 		/// <param name="codes"></param>
 		/// <returns></returns>
-		IEnumerable<WikiPage> Get(params string[] codes);
+		IEnumerable<WikiPage> Get(string usage, params string[] codes);
 		/// <summary>
 		/// Возвращает страницы, только с загруженным признаком хранения в БД
 		/// </summary>

@@ -9,6 +9,7 @@ namespace Qorpent.Wiki {
 		/// Выполняет фильтрацию страницы перед отправкой пользователю
 		/// </summary>
 		/// <param name="page"></param>
-		void Execute(WikiPage page);
+		/// <param name="usage">Вариант использования</param>
+		void Execute(WikiPage page, string usage);
 	}
 }
