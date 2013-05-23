@@ -335,7 +335,7 @@ namespace Qorpent.Utils.Extensions
                     var item = new T();
                     for(int i=0;i<reader.FieldCount;i++) {
                         var name = reader.GetName(i);
-                        item.SetValue(name, reader[i] is DBNull ? null : reader[i]);
+                        item.SetValue(name, reader[i] is DBNull ? null : reader[i],ignoreNotFound:true);
                     }
                     result.Add(item);
                 }
