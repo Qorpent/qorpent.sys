@@ -110,7 +110,6 @@ namespace Qorpent.Core.Tests {
 				var dllpath = Path.GetFileName(assembly.CodeBase);
 				dllpath = Path.Combine(binpath, dllpath);
 				Directory.CreateDirectory(binpath);
-				throw new Exception(Environment.OSVersion.Platform + " " + assembly.CodeBase + " " + EnvironmentInfo.FULL_FILE_NAME_START + " " + dllpath + " " + assembly.CodeBase.Replace(EnvironmentInfo.FULL_FILE_NAME_START, ""));
 				File.Copy(assembly.CodeBase.Replace(EnvironmentInfo.FULL_FILE_NAME_START, ""), dllpath);
 				File.WriteAllText(webconfig, "<web/>");
 				var setup = new AppDomainSetup();
