@@ -66,7 +66,7 @@ namespace Qorpent.Core.Tests {
 				var dllpath = Path.GetFileName(assembly.CodeBase);
 				dllpath = Path.Combine(binpath, dllpath);
 				Directory.CreateDirectory(binpath);
-				File.Copy(assembly.CodeBase.Replace("file:///", ""), dllpath);
+				File.Copy(assembly.CodeBase.Replace(EnvironmentInfo.FULL_FILE_NAME_START, ""), dllpath);
 				File.WriteAllText(webconfig, "<web/>");
 				var setup = new AppDomainSetup();
 				setup.ApplicationBase = binpath;
@@ -110,7 +110,8 @@ namespace Qorpent.Core.Tests {
 				var dllpath = Path.GetFileName(assembly.CodeBase);
 				dllpath = Path.Combine(binpath, dllpath);
 				Directory.CreateDirectory(binpath);
-				File.Copy(assembly.CodeBase.Replace("file:///", ""), dllpath);
+				throw new Exception(assembly.CodeBase);
+				File.Copy(assembly.CodeBase.Replace(EnvironmentInfo.FULL_FILE_NAME_START, ""), dllpath);
 				File.WriteAllText(webconfig, "<web/>");
 				var setup = new AppDomainSetup();
 				setup.ApplicationBase = binpath;

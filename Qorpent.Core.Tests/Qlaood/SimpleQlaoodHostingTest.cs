@@ -56,7 +56,7 @@ namespace Qorpent.Core.Tests.Qlaood
 			public BinaryAssemblyData GetAssemblyData(string name, AssemblyLoaderBehavior behavior = AssemblyLoaderBehavior.Default) {
 				if (name.Contains("Qorpent.Core.Tests")) {
 					WasCalled = true;
-					var path = Assembly.GetExecutingAssembly().CodeBase.Replace("file:///","");
+					var path = Assembly.GetExecutingAssembly().CodeBase.Replace(EnvironmentInfo.FULL_FILE_NAME_START, "");
 					var data = File.ReadAllBytes(path);
 					var result = new BinaryAssemblyData { Assembly = data, Name = "Qorpent.Core.Tests" };
 					return result;
@@ -73,7 +73,7 @@ namespace Qorpent.Core.Tests.Qlaood
 			var root = Path.Combine(Path.GetTempPath(), "qlaood");
 			Directory.CreateDirectory(root);
 			var maina = Path.Combine(root, "Qorpent.Core.dll");
-			if (!File.Exists(maina) || File.GetLastWriteTime(maina) < File.GetLastWriteTime(Assembly.GetAssembly(typeof(QlaoodBridge)).CodeBase.Replace("file:///", "")))
+			if (!File.Exists(maina) || File.GetLastWriteTime(maina) < File.GetLastWriteTime(Assembly.GetAssembly(typeof(QlaoodBridge)).CodeBase.Replace(EnvironmentInfo.FULL_FILE_NAME_START, "")))
 			{
 				File.Copy(Assembly.GetAssembly(typeof(QlaoodBridge)).CodeBase.Replace("file:///", ""), maina, true);
 			}

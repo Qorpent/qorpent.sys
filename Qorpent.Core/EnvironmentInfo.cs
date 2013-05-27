@@ -56,6 +56,16 @@ namespace Qorpent {
 				return _isWeb.Value;
 			}
 		}
+		/// <summary>
+		/// Начало полного имения файла на замену
+		/// </summary>
+		public static readonly string FULL_FILE_NAME_START = "file:///";
+
+		static EnvironmentInfo() {
+			if (Environment.OSVersion.Platform == PlatformID.Unix) {
+				FULL_FILE_NAME_START = "file://";
+			}
+		}
 
 		/// <summary>
 		/// 	True if it's console exe, runed from WEBAPP/bin folder with WEBAPP/bin as CurrentDirectory folder

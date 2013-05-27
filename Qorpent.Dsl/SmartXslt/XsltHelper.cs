@@ -86,7 +86,7 @@ namespace Qorpent.Dsl.SmartXslt {
 			var xslttransform = PrepareXsltStylesheet(transformbase, extensions);
 			var args = new XsltArgumentList();
 			args = PrepareXsltArguments(args, extensions);
-			Process(source, xslttransform, args,extensions, new Uri("file:///"+realTransformFileName),  output);
+			Process(source, xslttransform, args, extensions, new Uri(EnvironmentInfo.FULL_FILE_NAME_START + realTransformFileName), output);
 		}
 
 		/// <summary>

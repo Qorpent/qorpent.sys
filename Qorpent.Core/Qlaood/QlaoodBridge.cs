@@ -212,7 +212,7 @@ namespace Qorpent.Qlaood {
 
 		static byte[] ReloadAssembly(AssemblyName a) {
 			var ass = Assembly.Load(a);
-			return File.ReadAllBytes(ass.GetName().CodeBase.Replace("file:///", ""));
+			return File.ReadAllBytes(ass.GetName().CodeBase.Replace(EnvironmentInfo.FULL_FILE_NAME_START, ""));
 		}
 	}
 }

@@ -88,7 +88,7 @@ namespace Qorpent.IoC {
 		public IList<ManifestClassDefinition> ComponentDefinitions { get; private set; }
 
 		private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args) {
-			var dir = Path.GetDirectoryName(args.RequestingAssembly.CodeBase.Replace("file:///", ""));
+			var dir = Path.GetDirectoryName(args.RequestingAssembly.CodeBase.Replace(EnvironmentInfo.FULL_FILE_NAME_START, ""));
 			if (dir != null) {
 				var filename = Path.Combine(dir, args.Name.Split(',')[0] + ".dll");
 				Console.ForegroundColor = ConsoleColor.Yellow;
