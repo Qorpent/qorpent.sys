@@ -29,9 +29,11 @@
     <Compile Include="ReflectionHelperTest.cs" />
     <Compile Include="StaticInstanceTest.cs" />
     <Compile Include="StringExtensionsTest.cs" />
+    <Compile Include="UniSqlTest.cs" />
     <Compile Include="XmlExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.Data" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>

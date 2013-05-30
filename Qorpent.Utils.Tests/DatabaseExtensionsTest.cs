@@ -30,23 +30,4 @@ namespace Qorpent.Utils.Tests
 			Assert.AreEqual(result,DbExtensions.RewriteSql(src,dbtype));
 		}
 	}
-
-	[TestFixture]
-	public class UniSqlTest {
-
-		[TestCase(SqlCommandType.Select, DatabaseEngineType.MySql, "CALL ALL `x_y` ( ?x, ?b, 23, 'u' )")]
-		[TestCase(SqlCommandType.Select, DatabaseEngineType.Oracle, "SELECT * FROM \"x\".\"y\" ( a => :x, b => :b, c => 23, d => 'u' )")]
-		[TestCase(SqlCommandType.Select, DatabaseEngineType.Postgres, "SELECT * FROM \"x\".\"y\" ( a := :x, b := :b, c := 23, d := 'u' )")]
-		[TestCase(SqlCommandType.Select, DatabaseEngineType.SqlServer, "EXEC [x].[y] @a = @x, @b = @b, @c = 23, @d = 'u'")]
-		[TestCase(SqlCommandType.Call, DatabaseEngineType.MySql, "CALL `x_y` ( ?x, ?b, 23, 'u' )")]
-		[TestCase(SqlCommandType.Call, DatabaseEngineType.Oracle, "SELECT \"x\".\"y\" ( a => :x, b => :b, c => 23, d => 'u' )")]
-		[TestCase(SqlCommandType.Call, DatabaseEngineType.Postgres, "SELECT \"x\".\"y\" ( a := :x, b := :b, c := 23, d := 'u' )")]
-		[TestCase(SqlCommandType.Call, DatabaseEngineType.SqlServer, "EXEC [x].[y] @a = @x, @b = @b, @c = 23, @d = 'u'")]
-		public void CanCreateValidQueryOnAnyDatabaseCall(SqlCommandType calltype, DatabaseEngineType dbtype, string result) {
-			var q = new UniSqlQuery(
-				"x","y",calltype,new{a="~x",b="~",c=23,d="u"}
-			);
-			Assert.AreEqual(result,q.PrepareQueryText(dbtype));
-		}
-	}
 }

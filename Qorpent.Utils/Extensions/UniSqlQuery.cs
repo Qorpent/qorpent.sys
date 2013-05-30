@@ -72,7 +72,7 @@ namespace Qorpent.Utils.Extensions {
 						var strparam = _paramdict[o.Key] as string;
 						if (null!=strparam) {
 							if (strparam.StartsWith("~")) {
-								var extname = strparam.Substring(1).ToUpper();
+								var extname = strparam.Substring(1).ToLower();
 								if (!extparams.Contains(extname)) {
 									extparams.Add(extname);
 								}
@@ -235,7 +235,7 @@ namespace Qorpent.Utils.Extensions {
 			if (null != parameters) {
 				var extdict = parameters.ToDict();
 				foreach (var p in extdict) {
-					if (-1 != Array.IndexOf(_extparams, p.Key.ToUpper())) {
+					if (-1 != Array.IndexOf(_extparams, p.Key.ToLower())) {
 						var parameter = result.CreateParameter();
 						parameter.ParameterName = p.Key;
 						if (null == p.Value) {
@@ -244,8 +244,18 @@ namespace Qorpent.Utils.Extensions {
 						else {
 							parameter.Value = p.Value;
 						}
+						result.Parameters.Add(parameter);
 					}
 				}
+				foreach (var e in _extparams) {
+					if (extdict.All(_ => _.Key.ToLower() != e)) {
+						var parameter = result.CreateParameter();
+						parameter.ParameterName = e.ToLower();
+						parameter.Value = DBNull.Value;
+						result.Parameters.Add(parameter);
+					}
+				}
+
 			}
 			return result;
 		}
