@@ -19,54 +19,62 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Qorpent.Data;
 
 namespace Qorpent.Utils.Extensions
 {
-    /// <summary>
+	/// <summary>
     /// Расширения для работы с командами и соединениями БД
     /// </summary>
     public static class DbExtensions
     {
-		
-
-        /// <summary>
-        /// Выполняет запрос без результатов
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="command"></param>
-        /// <param name="provider"></param>
-        public static void ExecuteNonQuery(this IDbConnection connection, string command,IParametersProvider provider) {
-            var dict = null == provider ? null : new ParamMappingHelper().GetParameters(provider);
-            ExecuteNonQuery(connection, command, dict);
-        }
 		/// <summary>
-		/// Вызывает запрос на скалярное значение
+		/// Определение типа целевой БД по классу DbCommand
+		/// </summary>
+		/// <param name="command"></param>
+		/// <returns></returns>
+		public static DatabaseEngineType DetermineDbType(this IDbCommand command) {
+			if (null != command.Connection) {
+				return command.Connection.DetermineDbType();
+			}
+			var typename = command.GetType().Name;
+			switch (typename) {
+				case "SqlCommand":
+					return DatabaseEngineType.SqlServer;
+				case "NpgsqlCommand":
+					return DatabaseEngineType.Postgres;
+				case "MySqlCommand":
+					return DatabaseEngineType.MySql;
+				case "OracleCommand":
+					return DatabaseEngineType.Oracle;
+				default:
+					return DatabaseEngineType.Undefined;
+			}
+		}
+		/// <summary>
+		/// Определение типа целевой БД по классу DbConnection
 		/// </summary>
 		/// <param name="connection"></param>
-		/// <param name="command"></param>
-		/// <param name="provider"></param>
-		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static T ExecuteScalar<T>(this IDbConnection connection, string command, IParametersProvider provider)
-		{
-			var dict = null == provider ? null : new ParamMappingHelper().GetParameters(provider);
-			return ExecuteScalar<T>(connection, command, dict);
+		public static DatabaseEngineType DetermineDbType(this IDbConnection connection) {
+			var typename = connection.GetType().Name;
+			switch (typename)
+			{
+				case "SqlConnection":
+					return DatabaseEngineType.SqlServer;
+				case "NpgsqlConnection":
+					return DatabaseEngineType.Postgres;
+				case "MySqlConnection":
+					return DatabaseEngineType.MySql;
+				case "OracleConnection":
+					return DatabaseEngineType.Oracle;
+				default:
+					return DatabaseEngineType.Undefined;
+			}
 		}
-
-        /// <summary>
-		/// Выполняет запрос без результатов
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="command"></param>
-        /// <param name="parameters"></param>
-        public static void ExecuteNonQuery(this IDbConnection connection, string command,
-                                           IDictionary<string, object> parameters)
-        {
-           ExecuteNonQuery(connection,command,parameters,30);
-        }
+       
 
 		/// <summary>
 		/// Выполняет запрос без результатов
@@ -77,10 +85,10 @@ namespace Qorpent.Utils.Extensions
 		/// <param name="timeout"></param>
 		/// <exception cref="Exception"></exception>
 		public static void ExecuteNonQuery(this IDbConnection connection, string command,
-										   IDictionary<string, object> parameters, int timeout)
+										   object parameters, int timeout=30)
 		{
 			connection.WellOpen();
-			IDbCommand cmd = connection.CreateCommand(command, parameters);
+			IDbCommand cmd = connection.CreateCommand(command, parameters,timeout);
 			cmd.CommandTimeout = timeout;
 			try
 			{
@@ -93,53 +101,41 @@ namespace Qorpent.Utils.Extensions
 		}
 
 
-        /// <summary>
-		/// Вызывает запрос на скалярное значение
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="command"></param>
-        /// <param name="parameters"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static T ExecuteScalar<T>(this IDbConnection connection, string command,
-                                         IDictionary<string, object> parameters)
-        {
-            return connection.ExecuteScalar(command, parameters, default(T));
-        }
-
-        /// <summary>
-		/// Вызывает запрос на скалярное значение
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="command"></param>
-        /// <param name="parameters"></param>
-        /// <param name="defValue"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public static T ExecuteScalar<T>(this IDbConnection connection, string command,
-                                         IDictionary<string, object> parameters, T defValue)
+	    /// <summary>
+	    /// Вызывает запрос на скалярное значение
+	    /// </summary>
+	    /// <param name="connection"></param>
+	    /// <param name="command"></param>
+	    /// <param name="parameters"></param>
+	    /// <param name="defValue"></param>
+	    /// <param name="timeout"></param>
+	    /// <typeparam name="T"></typeparam>
+	    /// <returns></returns>
+	    /// <exception cref="ArgumentNullException"></exception>
+	    public static T ExecuteScalar<T>(this IDbConnection connection, string command,
+                                         object parameters, T defValue, int timeout = 30)
         {
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
-            var result = connection.CreateCommand(command, parameters).ExecuteScalar();
+            var result = connection.CreateCommand(command, parameters, timeout).ExecuteScalar();
             if (null == result) return defValue;
             if (result is DBNull) return defValue;
             return result.To<T>();
         }
-		/// <summary>
-		/// Выполняет запрос на "строку" - сериализованный массив объектов
-		/// </summary>
-		/// <param name="connection"></param>
-		/// <param name="command"></param>
-		/// <param name="parameters"></param>
-		/// <returns></returns>
-        public static object[] ExecuteRow(this IDbConnection connection, string command,
-                                          IDictionary<string, object> parameters)
+
+	    /// <summary>
+	    /// Выполняет запрос на "строку" - сериализованный массив объектов
+	    /// </summary>
+	    /// <param name="connection"></param>
+	    /// <param name="command"></param>
+	    /// <param name="parameters"></param>
+	    /// <param name="timeout"></param>
+	    /// <returns></returns>
+	    public static object[] ExecuteRow(this IDbConnection connection, string command,object parameters, int timeout=30)
         {
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
-            var reader = connection.CreateCommand(command, parameters).ExecuteReader(CommandBehavior.SingleRow);
+            var reader = connection.CreateCommand(command, parameters, timeout).ExecuteReader(CommandBehavior.SingleRow);
             try
             {
                 if (reader.Read())
@@ -178,71 +174,273 @@ namespace Qorpent.Utils.Extensions
             throw new InvalidOperationException("Insuficient connection state " + connection.State);
         }
 
-     
 
-        /// <summary>
-        /// Создает команлу с параметрами
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="command"></param>
-        /// <param name="parameters_"></param>
-        /// <returns></returns>
-        public static IDbCommand CreateCommand(this IDbConnection connection, string command,
-                                               object parameters_){
+	    /// <summary>
+	    /// Создает команлу с параметрами
+	    /// </summary>
+	    /// <param name="connection"></param>
+	    /// <param name="command"></param>
+	    /// <param name="parameters"></param>
+	    /// <param name="timeout"></param>
+	    /// <returns></returns>
+	    public static IDbCommand CreateCommand(this IDbConnection connection, string command, object parameters, int timeout =30){
             var query = connection.CreateCommand();
-	        query.CommandText = command;
-			if(null!=parameters_) {
-				if (parameters_ is IDictionary<string, object>) {
-					PrepareParametersFromDictionary(command, parameters_, query);
-				}
-				else {
-					PrepareParametersFromProperties(command, parameters_, query);
+		    query.CommandTimeout = timeout;
+		    var realcommand = RewriteSql(command, DetermineDbType(connection));
+	        query.CommandText = realcommand;
+			if(null!=parameters) {
+				if (parameters is IDictionary<string, object>) {
+					PrepareParameters(command, parameters.ToDict(), query);
 				}
 			}
 	        return query;
         }
 
-	    private static void PrepareParametersFromProperties(string command, object parameters_, IDbCommand query) {
-		    var parameters = parameters_.GetType().GetProperties();
-		    if (parameters.Length != 0 && !command.Contains("@")) {
-			    command = command + " " +
-			              parameters.Select(x => x.Name).Select(x => x.StartsWith("@") ? x : "@" + x).Select(x => x + "=" + x).
-				              ConcatString(",");
-		    }
-		    query.CommandText = command;
-		    foreach (var pair in parameters) {
-			    var parameter = query.CreateParameter();
-			    parameter.ParameterName = pair.Name;
-			    var val = pair.GetValue(parameters_);
-			    if (val is DbType) {
-				    parameter.DbType = (DbType) val;
-			    }
-			    else {
-				    if (null == val) {
-					    parameter.Value = DBNull.Value;
-				    }
-				    else {
-					    parameter.Value = val;
-					    if (parameter.Value is XElement) {
-						    parameter.DbType = DbType.Xml;
-						    parameter.Value = ((XElement) parameter.Value).ToString();
-					    }
-				    }
-			    }
+		/// <summary>
+		/// Rewrites unified sql to match different database notations
+		/// </summary>
+		/// <param name="command"></param>
+		/// <param name="dbtype"></param>
+		/// <returns></returns>
+		/// <remarks>
+		/// source
+		/// UNICALL MY.NAME | a = ~x , b = ~x , ~z  
+		/// where tilda ~ marks named parameters
+		/// will be converted to :
+		/// exec MY.NAME @a=@x, @b=@y, @z in T-SQL
+		/// select MY.NAME ( a := :x, b := :y, :z ) in PG 
+		/// select MY.NAME ( a => :x, b=>:y, :z) in ORACLE
+		/// CALL MY.NAME ( ?x, ?y, ?z) in MySQL (doesn't support named)
+		/// </remarks>
+		public static string RewriteSql(string command, DatabaseEngineType dbtype) {
+			if (command.StartsWith("UNI")) {
+				return RewriteSqlByUniNotation(command, dbtype);
+			}
+			else {
+				return RewriteWithSimpleUniNotation(command, dbtype);
+			}
+		}
 
+		private static string RewriteWithSimpleUniNotation(string command, DatabaseEngineType dbtype) {
+			var paramchar = GetPrefixOfOuterParameter(dbtype);
+			var realcommand = command;
+			if (realcommand.Contains("~")) {
+				realcommand = command.Replace("~", paramchar.ToString());
+			}
+			switch (dbtype) {
+				case DatabaseEngineType.Postgres:
+					goto case DatabaseEngineType.Oracle;
+				case DatabaseEngineType.Oracle:
+					realcommand = realcommand.Replace("[", "\"");
+					realcommand = realcommand.Replace("]", "\"");
+					break;
+				case DatabaseEngineType.MySql:
+					realcommand = realcommand.Replace("[", "`");
+					realcommand = realcommand.Replace("]", "`");
+					break;
+			}
+			return realcommand;
+		}
 
-			    query.Parameters.Add(parameter);
-		    }
+		private static string RewriteSqlByUniNotation(string command, DatabaseEngineType dbtype) {
+			var mainsplit = command.Split('|');
+			var commandAndName = mainsplit[0].Split(' ');
+			var paramlist = "";
+			if (mainsplit.Length == 2) {
+				paramlist =mainsplit[1].Trim();
+			}
+			var requireBraces = IsRequireBracesToCall(dbtype);
+			var cmdbuilder = new StringBuilder();
+			cmdbuilder.Append(GetCallCommandPrefix(DetermineCommandType(commandAndName[0].Trim()), dbtype));
+			cmdbuilder.Append(" ");
+			cmdbuilder.Append(GetQuotedName(commandAndName[1].Trim(), dbtype));
+			if (requireBraces) {
+				cmdbuilder.Append(" ( ");
+			}
+			else {
+				cmdbuilder.Append(" ");
+			}
+			if (!string.IsNullOrWhiteSpace(paramlist)) {
+				cmdbuilder.Append(RewriteParamList(paramlist, IsSupportInnerNamedParameters(dbtype),
+				                                   GetPrefixOfInnerParameter(dbtype),
+				                                   GetPrefixOfOuterParameter(dbtype), GetAssignOperator(dbtype)));
+			}
+			if (requireBraces) {
+				cmdbuilder.Append(" )");
+			}
+			return cmdbuilder.ToString();
+		}
+
+		private static string RewriteParamList(string paramlist, bool supportNamedInnerParameters, string namedParameterLeftChar, char namedParameterRightChar, string assignOperator) {
+			var result = new StringBuilder();
+			var parameters = paramlist.Split(',');
+			bool first = true;
+			foreach (var parameter in parameters) {
+				if (!first) {
+					result.Append(", ");
+				}
+				first = false;
+				var pair = parameter.Split('=');
+
+				if (pair.Length == 1) {
+					var item = pair[0].Trim();
+					if (item.StartsWith("~")) {
+						item = namedParameterRightChar + item.Substring(1);
+					}
+					result.Append(item);
+				}
+				else {
+					var item = pair[1].Trim();
+					if (item.StartsWith("~"))
+					{
+						item = namedParameterRightChar + item.Substring(1);
+					}
+					if (supportNamedInnerParameters) {
+						result.Append(namedParameterLeftChar + pair[0].Trim());
+						result.Append(" ");
+						result.Append(assignOperator);
+						result.Append(" ");
+						result.Append(item);
+					}
+					else {
+						result.Append(item);
+					}
+				}
+			}
+			return result.ToString();
+		}
+
+		private static string GetQuotedName(string name, DatabaseEngineType dbtype) {
+			if (name.Contains(".")) {
+				var sandn = name.Split('.');
+				return sandn[0] + "." + QuoteIdentifier(sandn[1],dbtype);
+			}
+			else {
+				return QuoteIdentifier(name,dbtype);
+			}
+
+		}
+
+		private static string QuoteIdentifier(string name, DatabaseEngineType dbtype) {
+			switch (dbtype) {
+					case DatabaseEngineType.SqlServer:
+					return "[" + name + "]";
+					case DatabaseEngineType.Postgres:
+					return "\"" + name + "\"";
+					case DatabaseEngineType.MySql:
+					return "`" + name + "`";
+					case DatabaseEngineType.Oracle:
+					return "\"" + name + "\"";
+					default:
+					return name; //no quoting for unknown db
+			}
+		}
+
+		private static SqlCommandType DetermineCommandType(string selcommand) {
+			if(selcommand=="UNICALL")return SqlCommandType.Call;
+			return SqlCommandType.Select;
+		}
+
+		private static string GetAssignOperator(DatabaseEngineType dbtype) {
+			switch (dbtype)
+			{
+				case DatabaseEngineType.SqlServer:
+					return "=";
+				case DatabaseEngineType.Postgres:
+					return ":=";
+				case DatabaseEngineType.MySql:
+					return "=";
+				case DatabaseEngineType.Oracle:
+					return "=>";
+				default:
+					return "=";
+			}
 	    }
 
-	    private static void PrepareParametersFromDictionary(string command, object parameters_, IDbCommand query) {
-		    var parameters = parameters_ as IDictionary<string, object>;
-		    if (parameters.Count != 0 && !command.Contains("@")) {
-			    command = command + " " +
-			              parameters.Keys.Select(x => x.StartsWith("@") ? x : "@" + x).Select(x => x + "=" + x).ConcatString(",");
-		    }
+	    private static char GetPrefixOfOuterParameter(DatabaseEngineType dbtype) {
+			switch (dbtype)
+			{
+				case DatabaseEngineType.SqlServer:
+					return '@';
+				case DatabaseEngineType.Postgres:
+					return ':';
+				case DatabaseEngineType.MySql:
+					return '?';
+				case DatabaseEngineType.Oracle:
+					return ':';
+				default:
+					return ':';
+			}
+	    }
+
+	    private static string GetPrefixOfInnerParameter(DatabaseEngineType dbtype) {
+			switch (dbtype)
+			{
+				case DatabaseEngineType.SqlServer:
+					return "@";
+				case DatabaseEngineType.Postgres:
+					return string.Empty;
+				case DatabaseEngineType.MySql:
+					return string.Empty;
+				case DatabaseEngineType.Oracle:
+					return string.Empty;
+				default:
+					return string.Empty;
+			}
+	    }
+
+	    private static string GetCallCommandPrefix(SqlCommandType cmdtype, DatabaseEngineType dbtype) {
+		    if (dbtype == DatabaseEngineType.SqlServer) return "EXEC";
+		    if (cmdtype == SqlCommandType.Call) return "SELECT";
+		    if (dbtype == DatabaseEngineType.MySql) return "CALL ALL";
+		    return "SELECT * FROM";
+	    }
+
+		private static bool IsRequireBracesToCall(DatabaseEngineType dbtype) {
+			switch (dbtype) {
+				case DatabaseEngineType.SqlServer:
+					return false;
+				case DatabaseEngineType.Postgres:
+					return true;
+				case DatabaseEngineType.MySql:
+					return true;
+				case DatabaseEngineType.Oracle:
+					return true;
+				default:
+					return true;
+			}
+		}
+
+		private static bool IsSupportInnerNamedParameters(DatabaseEngineType dbtype) {
+			switch (dbtype)
+			{
+				case DatabaseEngineType.SqlServer:
+					return true;
+				case DatabaseEngineType.Postgres:
+					return true;
+				case DatabaseEngineType.MySql:
+					return false;
+				case DatabaseEngineType.Oracle:
+					return true;
+				default:
+					return true;
+			}
+		}
+	    /// <summary>
+	    /// Формирует перечень параметров в команду по переданному источнику, в случае отсутствия параметра в строке запроса, он игнорируется
+	    /// </summary>
+	    /// <param name="command"></param>
+	    /// <param name="parameters"></param>
+	    /// <param name="query"></param>
+	    private static void PrepareParameters(string command, IEnumerable<KeyValuePair<string, object>> parameters, IDbCommand query) {
+		    var paramchar = GetPrefixOfOuterParameter(DetermineDbType(query));  
 		    query.CommandText = command;
 		    foreach (var pair in parameters) {
+			    var name = pair.Key;
+			    var paramregex = @"[^\w\d]" + paramchar + name + @"\b";
+				if (!Regex.IsMatch(command, paramregex, RegexOptions.IgnoreCase)) {
+					continue;
+				}
 			    var parameter = query.CreateParameter();
 			    parameter.ParameterName = pair.Key;
 			    if (pair.Value is DbType) {
@@ -256,30 +454,31 @@ namespace Qorpent.Utils.Extensions
 					    parameter.Value = pair.Value;
 					    if (parameter.Value is XElement) {
 						    parameter.DbType = DbType.Xml;
-						    parameter.Value = ((XElement) parameter.Value).ToString();
+						    parameter.Value = parameter.Value.ToString();
 					    }
 				    }
 			    }
-
-
 			    query.Parameters.Add(parameter);
 		    }
 	    }
 
-	    /// <summary>
-	    ///Сериализует результат команды как словарь - имя поле - ключ, второе - значение - одна строка
-	    /// </summary>
-	    /// <param name="connection"></param>
-	    /// <param name="command"></param>
-	    /// <param name="parameters"></param>
+	    
+
+	    ///  <summary>
+	    /// Сериализует результат команды как словарь - имя поле - ключ, второе - значение - одна строка
+	    ///  </summary>
+	    ///  <param name="connection"></param>
+	    ///  <param name="command"></param>
+	    ///  <param name="parameters"></param>
+	    /// <param name="timeout"></param>
 	    /// <returns></returns>
-	    /// <exception cref="ArgumentNullException"></exception>
+	    ///  <exception cref="ArgumentNullException"></exception>
 	    public static IDictionary<string, object> ExecuteDictionary(this IDbConnection connection, string command,
-                                                                    IDictionary<string, object> parameters)
+                                                                    IDictionary<string, object> parameters, int timeout = 30)
         {
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
-            var reader = connection.CreateCommand(command, parameters).ExecuteReader(CommandBehavior.SingleRow);
+            var reader = connection.CreateCommand(command, parameters, timeout).ExecuteReader(CommandBehavior.SingleRow);
             try
             {
                 if (reader.Read())
@@ -298,37 +497,25 @@ namespace Qorpent.Utils.Extensions
             return null;
         }
 
-        /// <summary>
-        /// Эмулирует работу ORM - прошивает именованными полями свойства объектов
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="command"></param>
-        /// <param name="provider"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static T[] ExecuteOrm<T>(this IDbConnection connection, string command, IParametersProvider provider) where T:new() {
-        	connection.WellOpen();
-            var dict = null == provider ? null : new ParamMappingHelper().GetParameters(provider);
-            return ExecuteOrm<T>(connection, command, dict);
-        }
 
-        /// <summary>
-		///  Эмулирует работу ORM - прошивает именованными полями свойства объектов
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="command"></param>
-        /// <param name="parameters"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public static T[] 
-            ExecuteOrm<T>(this IDbConnection connection, string command,IDictionary<string, object> parameters=null) where T:new(){
+	    /// <summary>
+	    ///  Эмулирует работу ORM - прошивает именованными полями свойства объектов
+	    /// </summary>
+	    /// <param name="connection"></param>
+	    /// <param name="command"></param>
+	    /// <param name="parameters"></param>
+	    /// <param name="timeout"></param>
+	    /// <typeparam name="T"></typeparam>
+	    /// <returns></returns>
+	    /// <exception cref="ArgumentNullException"></exception>
+	    public static T[] 
+            ExecuteOrm<T>(this IDbConnection connection, string command,IDictionary<string, object> parameters=null,int timeout = 30) where T:new(){
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
             var result = new List<T>();
-	        var cmd = connection.CreateCommand(command, parameters);
+	        var cmd = connection.CreateCommand(command, parameters, timeout);
 	        cmd.CommandTimeout = 0;
-            var reader = connection.CreateCommand(command, parameters).ExecuteReader();
+            var reader = cmd.ExecuteReader();
             try
             {
                 while (reader.Read()||reader.NextResult()) {
@@ -347,19 +534,21 @@ namespace Qorpent.Utils.Extensions
             }
             return result.ToArray();
         }
-		/// <summary>
-		/// Возвращает все строки запроса как словарь - первое поле- ключ, второе - значение
-		/// </summary>
-		/// <param name="connection"></param>
-		/// <param name="command"></param>
-		/// <param name="parameters"></param>
-		/// <returns></returns>
-        public static IDictionary<string, object> ExecuteDictionaryReader(this IDbConnection connection, string command,
-                                                                    IDictionary<string, object> parameters)
+
+	    /// <summary>
+	    /// Возвращает все строки запроса как словарь - первое поле- ключ, второе - значение
+	    /// </summary>
+	    /// <param name="connection"></param>
+	    /// <param name="command"></param>
+	    /// <param name="parameters"></param>
+	    /// <param name="timeout"></param>
+	    /// <returns></returns>
+	    public static IDictionary<string, object> ExecuteDictionaryReader(this IDbConnection connection, string command,
+                                                                    IDictionary<string, object> parameters,int timeout)
         {
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
-            var reader = connection.CreateCommand(command, parameters).ExecuteReader(CommandBehavior.SingleResult);
+            var reader = connection.CreateCommand(command, parameters, timeout).ExecuteReader(CommandBehavior.SingleResult);
             try
             {
                 var result = new Dictionary<string, object>();
@@ -383,20 +572,22 @@ namespace Qorpent.Utils.Extensions
                 connection.Close();
             }
         }
-		/// <summary>
-		/// Формирует из запроса сгруппированный словарь - повторные ключи не вытесняют друг дргуа а дополняют коллекцию
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="connection"></param>
-		/// <param name="command"></param>
-		/// <param name="parameters"></param>
-		/// <returns></returns>
-		public static IDictionary<string, IList<T>> ExecuteDictionaryReaderList<T>(this IDbConnection connection, string command,
-																   IDictionary<string, object> parameters) where T:struct 
+
+	    /// <summary>
+	    /// Формирует из запроса сгруппированный словарь - повторные ключи не вытесняют друг дргуа а дополняют коллекцию
+	    /// </summary>
+	    /// <typeparam name="T"></typeparam>
+	    /// <param name="connection"></param>
+	    /// <param name="command"></param>
+	    /// <param name="parameters"></param>
+	    /// <param name="timeout"></param>
+	    /// <returns></returns>
+	    public static IDictionary<string, IList<T>> ExecuteDictionaryReaderList<T>(this IDbConnection connection, string command,
+																  object parameters,int timeout=30) where T:struct 
 		{
 			if (null == connection) throw new ArgumentNullException("connection");
 			connection.WellOpen();
-			var reader = connection.CreateCommand(command, parameters).ExecuteReader(CommandBehavior.SingleResult);
+			var reader = connection.CreateCommand(command, parameters, timeout).ExecuteReader(CommandBehavior.SingleResult);
 			try
 			{
 				var result = new Dictionary<string,  IList<T>>();
@@ -421,21 +612,22 @@ namespace Qorpent.Utils.Extensions
 
 		}
 
-        /// <summary>
-        /// Выполняет запрос как типизированный список (используется только первое поле)
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="command"></param>
-        /// <param name="parameters"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public static IList<T> ExecuteList<T>(this IDbConnection connection, string command,
-                                                                   IDictionary<string, object> parameters) {
+	    /// <summary>
+	    /// Выполняет запрос как типизированный список (используется только первое поле)
+	    /// </summary>
+	    /// <param name="connection"></param>
+	    /// <param name="command"></param>
+	    /// <param name="parameters"></param>
+	    /// <param name="timeout"></param>
+	    /// <typeparam name="T"></typeparam>
+	    /// <returns></returns>
+	    /// <exception cref="ArgumentNullException"></exception>
+	    public static IList<T> ExecuteList<T>(this IDbConnection connection, string command,
+                                                                   object parameters,int timeout = 30) {
             var result = new List<T>();
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
-            var reader = connection.CreateCommand(command, parameters).ExecuteReader(CommandBehavior.SingleResult);
+            var reader = connection.CreateCommand(command, parameters, timeout).ExecuteReader(CommandBehavior.SingleResult);
             try
             {
                 while (reader.Read()) {
