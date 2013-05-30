@@ -213,12 +213,18 @@ namespace Qorpent.Utils.Extensions
 		/// CALL MY.NAME ( ?x, ?y, ?z) in MySQL (doesn't support named)
 		/// </remarks>
 		public static string RewriteSql(string command, DatabaseEngineType dbtype) {
+			var result = "";
 			if (command.StartsWith("UNI")) {
-				return RewriteSqlByUniNotation(command, dbtype);
+				result = RewriteSqlByUniNotation(command, dbtype);
 			}
 			else {
-				return RewriteWithSimpleUniNotation(command, dbtype);
+				result = RewriteWithSimpleUniNotation(command, dbtype);
 			}
+			//for MySql need correction due it's not support schemas
+			if (dbtype == DatabaseEngineType.MySql) {
+				result = Regex.Replace(result,@"(\w+)\.`([^`]+)`", "`$1_$2`", RegexOptions.Compiled);
+			}
+			return result;
 		}
 
 		private static string RewriteWithSimpleUniNotation(string command, DatabaseEngineType dbtype) {
@@ -290,13 +296,17 @@ namespace Qorpent.Utils.Extensions
 					result.Append(item);
 				}
 				else {
+					var invar = pair[0].Trim();
 					var item = pair[1].Trim();
+					if (item == "~") {
+						item = "~" + invar;
+					}
 					if (item.StartsWith("~"))
 					{
 						item = namedParameterRightChar + item.Substring(1);
 					}
 					if (supportNamedInnerParameters) {
-						result.Append(namedParameterLeftChar + pair[0].Trim());
+						result.Append(namedParameterLeftChar + invar);
 						result.Append(" ");
 						result.Append(assignOperator);
 						result.Append(" ");
