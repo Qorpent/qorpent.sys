@@ -197,9 +197,9 @@ namespace Qorpent.Utils.Extensions
 				var realcommand = RewriteSql(strcommand, DetermineDbType(connection));
 			    query.CommandText = realcommand;
 			    if (null != parameters) {
-				    if (parameters is IDictionary<string, object>) {
-						PrepareParameters(strcommand, parameters.ToDict(), query);
-				    }
+				    
+						PrepareParameters(realcommand, parameters.ToDict(), query);
+				    
 			    }
 			    return query;
 		    }
@@ -494,9 +494,11 @@ namespace Qorpent.Utils.Extensions
 	    /// <param name="query"></param>
 	    private static void PrepareParameters(string command, IEnumerable<KeyValuePair<string, object>> parameters, IDbCommand query) {
 		    var paramchar = GetPrefixOfOuterParameter(DetermineDbType(query));  
-		    query.CommandText = command;
 		    foreach (var pair in parameters) {
 			    var name = pair.Key;
+				if (name.StartsWith("@")) {
+					name = name.Substring(1);
+				}
 			    var paramregex = @"[^\w\d]" + paramchar + name + @"\b";
 				if (!Regex.IsMatch(command, paramregex, RegexOptions.IgnoreCase)) {
 					continue;
@@ -569,7 +571,7 @@ namespace Qorpent.Utils.Extensions
 	    /// <returns></returns>
 	    /// <exception cref="ArgumentNullException"></exception>
 	    public static T[] 
-            ExecuteOrm<T>(this IDbConnection connection, string command,IDictionary<string, object> parameters=null,int timeout = 30) where T:new(){
+            ExecuteOrm<T>(this IDbConnection connection, object command,object parameters=null,int timeout = 30) where T:new(){
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
             var result = new List<T>();
@@ -603,8 +605,8 @@ namespace Qorpent.Utils.Extensions
 	    /// <param name="parameters"></param>
 	    /// <param name="timeout"></param>
 	    /// <returns></returns>
-	    public static IDictionary<string, object> ExecuteDictionaryReader(this IDbConnection connection, string command,
-                                                                    IDictionary<string, object> parameters,int timeout)
+	    public static IDictionary<string, object> ExecuteDictionaryReader(this IDbConnection connection, object command,
+                                                                   object parameters=null,int timeout=30)
         {
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
