@@ -84,8 +84,8 @@ namespace Qorpent.Utils.Extensions
 		/// <param name="parameters"></param>
 		/// <param name="timeout"></param>
 		/// <exception cref="Exception"></exception>
-		public static void ExecuteNonQuery(this IDbConnection connection, string command,
-										   object parameters, int timeout=30)
+		public static void ExecuteNonQuery(this IDbConnection connection, object command,
+										   object parameters = null, int timeout=30)
 		{
 			connection.WellOpen();
 			IDbCommand cmd = connection.CreateCommand(command, parameters,timeout);
@@ -112,8 +112,8 @@ namespace Qorpent.Utils.Extensions
 	    /// <typeparam name="T"></typeparam>
 	    /// <returns></returns>
 	    /// <exception cref="ArgumentNullException"></exception>
-	    public static T ExecuteScalar<T>(this IDbConnection connection, string command,
-                                         object parameters, T defValue, int timeout = 30)
+	    public static T ExecuteScalar<T>(this IDbConnection connection, object command,
+                                         object parameters=null, T defValue=default(T) , int timeout = 30)
         {
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
@@ -131,7 +131,7 @@ namespace Qorpent.Utils.Extensions
 	    /// <param name="parameters"></param>
 	    /// <param name="timeout"></param>
 	    /// <returns></returns>
-	    public static object[] ExecuteRow(this IDbConnection connection, string command,object parameters, int timeout=30)
+	    public static object[] ExecuteRow(this IDbConnection connection, object command,object parameters=null, int timeout=30)
         {
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
@@ -183,18 +183,27 @@ namespace Qorpent.Utils.Extensions
 	    /// <param name="parameters"></param>
 	    /// <param name="timeout"></param>
 	    /// <returns></returns>
-	    public static IDbCommand CreateCommand(this IDbConnection connection, string command, object parameters, int timeout =30){
-            var query = connection.CreateCommand();
-		    query.CommandTimeout = timeout;
-		    var realcommand = RewriteSql(command, DetermineDbType(connection));
-	        query.CommandText = realcommand;
-			if(null!=parameters) {
-				if (parameters is IDictionary<string, object>) {
-					PrepareParameters(command, parameters.ToDict(), query);
-				}
+	    public static IDbCommand CreateCommand(this IDbConnection connection, object command, object parameters=null, int timeout =30){
+            
+			if (command is UniSqlQuery) {
+				var query =  ((UniSqlQuery) command).PrepareCommand(connection, parameters);
+				query.CommandTimeout = timeout;
+				return query;
 			}
-	        return query;
-        }
+		    else {
+				var query = connection.CreateCommand();
+				query.CommandTimeout = timeout;
+			    var strcommand = command.ToString();
+				var realcommand = RewriteSql(strcommand, DetermineDbType(connection));
+			    query.CommandText = realcommand;
+			    if (null != parameters) {
+				    if (parameters is IDictionary<string, object>) {
+						PrepareParameters(strcommand, parameters.ToDict(), query);
+				    }
+			    }
+			    return query;
+		    }
+	    }
 
 		/// <summary>
 		/// Rewrites unified sql to match different database notations
@@ -267,7 +276,7 @@ namespace Qorpent.Utils.Extensions
 				cmdbuilder.Append(" ");
 			}
 			if (!string.IsNullOrWhiteSpace(paramlist)) {
-				cmdbuilder.Append(RewriteParamList(paramlist, IsSupportInnerNamedParameters(dbtype),
+				cmdbuilder.Append(RewriteParamList(paramlist, IsSupportNamedParameters(dbtype),
 				                                   GetPrefixOfInnerParameter(dbtype),
 				                                   GetPrefixOfOuterParameter(dbtype), GetAssignOperator(dbtype)));
 			}
@@ -330,8 +339,13 @@ namespace Qorpent.Utils.Extensions
 			}
 
 		}
-
-		private static string QuoteIdentifier(string name, DatabaseEngineType dbtype) {
+		/// <summary>
+		/// Делает защищенное имя идентификатора
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="dbtype"></param>
+		/// <returns></returns>
+		public static string QuoteIdentifier(string name, DatabaseEngineType dbtype) {
 			switch (dbtype) {
 					case DatabaseEngineType.SqlServer:
 					return "[" + name + "]";
@@ -350,8 +364,12 @@ namespace Qorpent.Utils.Extensions
 			if(selcommand=="UNICALL")return SqlCommandType.Call;
 			return SqlCommandType.Select;
 		}
-
-		private static string GetAssignOperator(DatabaseEngineType dbtype) {
+		/// <summary>
+		/// Возвращает оператор присвоения параметров
+		/// </summary>
+		/// <param name="dbtype"></param>
+		/// <returns></returns>
+		public static string GetAssignOperator(DatabaseEngineType dbtype) {
 			switch (dbtype)
 			{
 				case DatabaseEngineType.SqlServer:
@@ -367,7 +385,12 @@ namespace Qorpent.Utils.Extensions
 			}
 	    }
 
-	    private static char GetPrefixOfOuterParameter(DatabaseEngineType dbtype) {
+		/// <summary>
+		/// Возвращает префикс для именованного внешнего параметра
+		/// </summary>
+		/// <param name="dbtype"></param>
+		/// <returns></returns>
+		public static char GetPrefixOfOuterParameter(DatabaseEngineType dbtype) {
 			switch (dbtype)
 			{
 				case DatabaseEngineType.SqlServer:
@@ -382,8 +405,12 @@ namespace Qorpent.Utils.Extensions
 					return ':';
 			}
 	    }
-
-	    private static string GetPrefixOfInnerParameter(DatabaseEngineType dbtype) {
+		/// <summary>
+		/// Возвращает префикс для именованного (внутреннего) параметра
+		/// </summary>
+		/// <param name="dbtype"></param>
+		/// <returns></returns>
+		public static string GetPrefixOfInnerParameter(DatabaseEngineType dbtype) {
 			switch (dbtype)
 			{
 				case DatabaseEngineType.SqlServer:
@@ -399,14 +426,33 @@ namespace Qorpent.Utils.Extensions
 			}
 	    }
 
-	    private static string GetCallCommandPrefix(SqlCommandType cmdtype, DatabaseEngineType dbtype) {
+		/// <summary>
+		/// Возвращает префикс всей команды до собственно имени процедуры/функции
+		/// </summary>
+		/// <param name="cmdtype"></param>
+		/// <param name="dbtype"></param>
+		/// <returns></returns>
+		public static string GetCallCommandPrefix(SqlCommandType cmdtype, DatabaseEngineType dbtype) {
 		    if (dbtype == DatabaseEngineType.SqlServer) return "EXEC";
-		    if (cmdtype == SqlCommandType.Call) return "SELECT";
-		    if (dbtype == DatabaseEngineType.MySql) return "CALL ALL";
+			if (dbtype == DatabaseEngineType.MySql) {
+				if (cmdtype == SqlCommandType.Call) {
+					return "CALL";	
+				}
+				return "CALL ALL";
+			}
+		    if (cmdtype == SqlCommandType.Call) {
+			    return "SELECT";
+		    }
 		    return "SELECT * FROM";
 	    }
 
-		private static bool IsRequireBracesToCall(DatabaseEngineType dbtype) {
+
+		/// <summary>
+		/// True - параметры запроса должны закрываться скобками
+		/// </summary>
+		/// <param name="dbtype"></param>
+		/// <returns></returns>
+		public static bool IsRequireBracesToCall(DatabaseEngineType dbtype) {
 			switch (dbtype) {
 				case DatabaseEngineType.SqlServer:
 					return false;
@@ -420,8 +466,12 @@ namespace Qorpent.Utils.Extensions
 					return true;
 			}
 		}
-
-		private static bool IsSupportInnerNamedParameters(DatabaseEngineType dbtype) {
+		/// <summary>
+		/// True - если движок поддерживает именованные параметры в вызове функций
+		/// </summary>
+		/// <param name="dbtype"></param>
+		/// <returns></returns>
+		public static bool IsSupportNamedParameters(DatabaseEngineType dbtype) {
 			switch (dbtype)
 			{
 				case DatabaseEngineType.SqlServer:

@@ -6,22 +6,22 @@ namespace Qorpent.Utils.Extensions {
 		/// <summary>
 		/// Microsoft SQL Server
 		/// </summary>
-		SqlServer,
+		SqlServer = 0,
 		/// <summary>
 		/// PostgreSQL
 		/// </summary>
-		Postgres,
+		Postgres =1 ,
 		/// <summary>
 		/// Oracle DBE
 		/// </summary>
-		Oracle,
+		Oracle =2 ,
 		/// <summary>
 		/// MySQL 
 		/// </summary>
-		MySql,
+		MySql =3 ,
 		/// <summary>
 		/// UnknownEngine
 		/// </summary>
-		Undefined
+		Undefined = 4
 	}
 }

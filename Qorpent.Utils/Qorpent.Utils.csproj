@@ -43,6 +43,7 @@
     <Compile Include="Extensions\HierarchyExtensions.cs" />
     <Compile Include="Extensions\HierarchyPropagation.cs" />
     <Compile Include="Extensions\SqlCommandType.cs" />
+    <Compile Include="Extensions\UniSqlQuery.cs" />
     <Compile Include="ParamMappingHelper.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="Extensions\TagHelper.cs" />
