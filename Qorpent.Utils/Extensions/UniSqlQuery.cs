@@ -24,7 +24,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="name"></param>
 		/// <param name="calltype"></param>
 		/// <param name="parameters"></param>
-		public UniSqlQuery(string schema, string name, SqlCommandType calltype = SqlCommandType.Call, object parameters = null) {
+		public UniSqlQuery(string schema, string name, object parameters = null,SqlCommandType calltype = SqlCommandType.Call ) {
 			Schema = schema;
 			Name = name;
 			CommandType = calltype;
@@ -144,12 +144,12 @@ namespace Qorpent.Utils.Extensions {
 
 		private string InternalPrepareQueryText(DatabaseEngineType dbtype) {
 			var result = new StringBuilder();
-			result.Append(DbExtensions.GetCallCommandPrefix(CommandType, dbtype));
+			result.Append(DatabaseExtensions.GetCallCommandPrefix(CommandType, dbtype));
 			result.Append(" ");
 			AppendQuotedName(dbtype, result);
 			result.Append(" ");
 			
-			var writeBraces = DbExtensions.IsRequireBracesToCall(dbtype);
+			var writeBraces = DatabaseExtensions.IsRequireBracesToCall(dbtype);
 			
 			if (writeBraces) {
 				result.Append("( ");
@@ -164,10 +164,10 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		private void WriteParameters(DatabaseEngineType dbtype, StringBuilder result) {
-			var writeAssigns = DbExtensions.IsSupportNamedParameters(dbtype);
-			var innerPrefix = DbExtensions.GetPrefixOfInnerParameter(dbtype);
-			var outerPrefix = DbExtensions.GetPrefixOfOuterParameter(dbtype);
-			var assignSymbol = DbExtensions.GetAssignOperator(dbtype);
+			var writeAssigns = DatabaseExtensions.IsSupportNamedParameters(dbtype);
+			var innerPrefix = DatabaseExtensions.GetPrefixOfInnerParameter(dbtype);
+			var outerPrefix = DatabaseExtensions.GetPrefixOfOuterParameter(dbtype);
+			var assignSymbol = DatabaseExtensions.GetAssignOperator(dbtype);
 			bool first = true;
 			foreach (var pair in _paramdict) {
 				if (!first) {
@@ -208,16 +208,16 @@ namespace Qorpent.Utils.Extensions {
 		private void AppendQuotedName(DatabaseEngineType dbtype, StringBuilder result) {
 			if (!string.IsNullOrWhiteSpace(Schema)) {
 				if (dbtype == DatabaseEngineType.MySql) {
-					result.Append(DbExtensions.QuoteIdentifier(Schema + "_" + Name, dbtype));
+					result.Append(DatabaseExtensions.QuoteIdentifier(Schema + "_" + Name, dbtype));
 				}
 				else {
-					result.Append(DbExtensions.QuoteIdentifier(Schema, dbtype));
+					result.Append(DatabaseExtensions.QuoteIdentifier(Schema, dbtype));
 					result.Append(".");
-					result.Append(DbExtensions.QuoteIdentifier(Name, dbtype));
+					result.Append(DatabaseExtensions.QuoteIdentifier(Name, dbtype));
 				}
 			}
 			else {
-				result.Append(DbExtensions.QuoteIdentifier(Name, dbtype));
+				result.Append(DatabaseExtensions.QuoteIdentifier(Name, dbtype));
 			}
 			
 		}

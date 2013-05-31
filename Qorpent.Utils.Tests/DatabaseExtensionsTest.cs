@@ -27,7 +27,7 @@ namespace Qorpent.Utils.Tests
 		[TestCase("UNICALL x.y | a=~x, b=~z, c=23, d='u'", DatabaseEngineType.Postgres, "SELECT x.\"y\" ( a := :x, b := :z, c := 23, d := 'u' )")]
 		[TestCase("UNICALL x.y | a=~x, b=~z, c=23, d='u'",DatabaseEngineType.SqlServer,"EXEC x.[y] @a = @x, @b = @z, @c = 23, @d = 'u'")]
 		public void UnifiedSqlRewritingTest(string src, DatabaseEngineType dbtype, string result) {
-			Assert.AreEqual(result,DbExtensions.RewriteSql(src,dbtype));
+			Assert.AreEqual(result,DatabaseExtensions.RewriteSql(src,dbtype));
 		}
 	}
 }

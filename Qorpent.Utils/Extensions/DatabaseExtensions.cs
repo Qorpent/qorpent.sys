@@ -28,7 +28,7 @@ namespace Qorpent.Utils.Extensions
 	/// <summary>
     /// Расширения для работы с командами и соединениями БД
     /// </summary>
-    public static class DbExtensions
+    public static class DatabaseExtensions
     {
 		/// <summary>
 		/// Определение типа целевой БД по классу DbCommand
