@@ -170,10 +170,14 @@ namespace Qorpent.Utils.Extensions {
 		private static object TryConvert(object x, Type type, out bool converted) {
 			converted = false; //default state is not valid convert
 			if (null == x) {
+				if (type.IsValueType) {
+					return Activator.CreateInstance(type);
+				}
 				var constructorInfo = type.GetConstructor(Type.EmptyTypes);
 				if (constructorInfo != null) {
-					return type.IsValueType ? constructorInfo.Invoke(null) : null;
+					return  constructorInfo.Invoke(null);
 				}
+				return null;
 			}
 			if (type.IsInstanceOfType(x)) {
 				// null conversion - return object itself, it's final
@@ -192,7 +196,11 @@ namespace Qorpent.Utils.Extensions {
 					return Enum.Parse(type, name, true);
 				}
 				if (x is string) {
+					
 					converted = true;
+					if (string.IsNullOrWhiteSpace(x as string)) {
+						return Activator.CreateInstance(type);
+					}
 					return Enum.Parse(type, x as string, true);
 				}
 			}

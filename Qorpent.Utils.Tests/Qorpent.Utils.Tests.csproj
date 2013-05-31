@@ -24,6 +24,7 @@
   <ItemGroup>
     <Compile Include="ComplexStringHelperTest.cs" />
     <Compile Include="ConsoleArgumentHelperTest.cs" />
+    <Compile Include="ConvertExtensionsTest.cs" />
     <Compile Include="DatabaseExtensionsTest.cs" />
     <Compile Include="EnumerableExtensionsTest.cs" />
     <Compile Include="ReflectionHelperTest.cs" />
