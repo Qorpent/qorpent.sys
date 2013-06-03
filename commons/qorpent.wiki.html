@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<script type='text/javascript' src='qorpent.wiki.js'></script>
+		<link rel='stylesheet' type='text/css' href='qorpent.wiki.css'></link>
+		<script type='text/javascript'><!--
+			function test(){
+				document.getElementById('testZone').innerHTML =  window.qwiki.toHTML( document.getElementById('srcdata').value );
+			}
+		--></script>
+	</head>
+	<body>
+		<div id='src'>
+			<textarea id="srcdata" rows="10" cols="30">
+= Глава 1
+Вот текст с ***жирным***
+
+! А тут нет ***жирного***
+
+А тут и ***жирное*** и **кривое** и __подчеркнутое__ и --перечеркнутое-- и ::надстрочное:: и ,,подстрочное,, и {style:color:red;font-size:14pt;}стилизованное{style}
+
+[http://yandex.ru ; Yandex ; target='blank']
+
+параграф 2
+% список 1
+%% список 1.1
+%% список 1.2
+== Часть 2
+			</textarea>
+			<br/>
+			<input type='button' onclick='test()' value='WIKI-&gt;HTML' />
+		</div>
+		<div id='testZone'>
+		
+		</div>
+	</body>
+</html>

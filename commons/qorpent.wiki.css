@@ -1,0 +1,33 @@
+﻿.wiki .wiki-list-1:before {
+	content : "●    ";
+}
+.wiki .wiki-list-2:before {
+	content : "○    ";
+}
+.wiki .wiki-list-2 {
+	padding-left : 20px;
+}
+.wiki .wiki-list-3:before {
+	content : "¤    ";
+}
+.wiki .wiki-list-3 {
+	padding-left : 40px;
+}
+.wiki .wiki-list-4:before {
+	content : "●    ";
+}
+.wiki .wiki-list-4 {
+	padding-left : 60px;
+}
+.wiki .wiki-list-5:before {
+	content : "○    ";
+}
+.wiki .wiki-list-4 {
+	padding-left : 80px;
+}
+.wiki .wiki-list-6:before {
+	content : "¤    ";
+}
+.wiki .wiki-list-6 {
+	padding-left : 100px;
+}
