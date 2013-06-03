@@ -168,7 +168,7 @@ qwiki.create = function(text, logwriter){
 			preprocessedText = preprocessedText.replace(/\n\n+/g,"\n\n[BR]\n\n");
 			preprocessedText = preprocessedText.replace(/\n([\=\%\!\-\|])([^\n]+)/g,'\n\n$1$2\n\n');
 			// then we must split lines for block elements
-			preprocessedText = preprocessedText.replace(/(\[\[\/?\w+\]\])/g,"\n\n$1\n\n");
+			preprocessedText = preprocessedText.replace(/(\[\[\/?\w+\]\])/g,"\n\n\n\n$1\n\n\n\n");
 			
 			
 			
@@ -216,15 +216,7 @@ qwiki.create = function(text, logwriter){
 					continue;
 				}
 				
-				if (curline=="[[sample]]") {
-					this.processed.push("<div class='sample'>");
-					continue;
-				}
 				
-				if (curline=="[[/sample]]") {
-					this.processed.push("</div>");
-					continue;
-				}
 				
 				if (curline.match(/^\|/)) {
 					if (!this.table) {
@@ -288,7 +280,16 @@ qwiki.create = function(text, logwriter){
 					this.firstrow = false;
 					continue;
 				}
+				if (curline=="[[sample]]") {
+						this.processed.push("<div class='sample'>");
+						continue;
+					}
 				
+					if (curline=="[[/sample]]") {
+						this.processed.push("</div>");
+						continue;
+					}
+					
 				
 				if (curline=="----"){
 					this.processed.push("<hr/>");
