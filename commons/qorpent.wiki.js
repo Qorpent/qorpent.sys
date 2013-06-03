@@ -39,14 +39,16 @@ qwiki.create = function(text, logwriter){
 			return "<a href='" + addr + "' "+tail+" >" + name + "</a>";
 		},
 		processReference : function(match, addr, p2, name, p3, tail) {
-			return this.defaultReference((addr||"").trim(),(name||"").trim(),(tail||"").trim());
+			return this.defaultReference((addr||"").trim(),(name||addr||"").trim(),(tail||"").trim());
 		},
 		processCode : function(curline ) {
 			curline = curline.replace(/\&nbsp;/g,' __BR__ ');
+			curline = curline.replace(/\[BR\]/g,'');
 			curline = curline.replace(/\s{4}/g,' __TAB__ ');
+			curline = curline.replace(/\t/g,' __TAB__ ');
 			//CODE BLOCKS
 			curline = curline.replace(
-				/([!=+\-*\.\\\/;<>\&\^\:\|]+)/g,
+				/([!=+\-*\.\\\/;<>%\&\^\:\|]+)/g,
 				"<span _CLASS_ATTR_'operator'>$1</span>");
 			curline = curline.replace(/\/\*/g,"<span _CLASS_ATTR_'comment'>");
 			curline = curline.replace(/\*\//g,"</span>");
@@ -59,7 +61,7 @@ qwiki.create = function(text, logwriter){
 				"<span _CLASS_ATTR_'type'>$1</span>");
 			
 			curline = curline.replace(
-				/([\{\}\[\]\(\),])/g,
+				/([\{\}\[\]\(\),]+)/g,
 				"<span _CLASS_ATTR_'delimiter'>$1</span>");
 			
 			curline = curline.replace(/\\"/g,'_EQ_');
@@ -162,7 +164,7 @@ qwiki.create = function(text, logwriter){
 			preprocessedText = preprocessedText.replace(/\r/g,'');
 			// firstly we must meet 1-st feature - we unify and process line delimiters
 			preprocessedText = preprocessedText.replace(/\n\n+/g,"\n\n[BR]\n\n");
-			preprocessedText = preprocessedText.replace(/\n([\=\%\!])([^\n]+)/g,'\n\n$1$2\n\n');
+			preprocessedText = preprocessedText.replace(/\n([\=\%\!\-])([^\n]+)/g,'\n\n$1$2\n\n');
 			// then we must split lines for block elements
 			preprocessedText = preprocessedText.replace(/(\[\[\/?\w+\]\])/g,"\n\n$1\n\n");
 			
@@ -211,6 +213,22 @@ qwiki.create = function(text, logwriter){
 					this.processed.push(curline);
 					continue;
 				}
+				
+				if (curline=="[[sample]]") {
+					this.processed.push("<div class='sample'>");
+					continue;
+				}
+				
+				if (curline=="[[/sample]]") {
+					this.processed.push("</div>");
+					continue;
+				}
+				
+				if (curline=="----"){
+					this.processed.push("<hr/>");
+					continue;
+				}
+				
 				var defaultLine = this. processDefault( curline );
 				if(defaultLine ){
 					this.processed.push( defaultLine);
@@ -220,8 +238,10 @@ qwiki.create = function(text, logwriter){
 			
 			this.html = "";
 			for (var i=0;i<this.processed.length;i++){
-				this.html+=this.processed[i];
+				var str = this.processed[i].replace(/__BLOCK__/g,'[[');
+				this.html+=str;
 			}
+			
 		},
 	};
 	this.setup(result);

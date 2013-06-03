@@ -1,4 +1,44 @@
-﻿.wiki .wiki-list-1:before {
+﻿.wiki .sample {
+	background-color: #fafacc;
+	border : solid 1px gray;
+	padding : 5px;
+}
+
+.wiki h1 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 18pt;
+}
+.wiki h2 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 16pt;
+}
+.wiki h3 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 14pt;
+}
+.wiki h4 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 14pt;
+	font-style :italic;
+}
+.wiki h5 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 12pt;
+	font-style :italic;
+}
+.wiki h6 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 10pt;
+	font-style :italic;
+}
+
+.wiki .wiki-list-1:before {
 	content : "●    ";
 }
 .wiki .wiki-list-2:before {
@@ -22,7 +62,7 @@
 .wiki .wiki-list-5:before {
 	content : "○    ";
 }
-.wiki .wiki-list-4 {
+.wiki .wiki-list-5 {
 	padding-left : 80px;
 }
 .wiki .wiki-list-6:before {
