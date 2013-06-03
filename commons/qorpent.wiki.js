@@ -232,6 +232,7 @@ qwiki.create = function(text, logwriter){
 						this.processed.push("<thead>");
 						this.table = true;
 						this.firstrow = true;
+						this.headclosed = false;
 					}
 				}else{
 					if(this.table){
@@ -243,10 +244,22 @@ qwiki.create = function(text, logwriter){
 								
 				if ( this.table ) {
 					var tde = this.firstrow ? "th" : "td" ;
-					var suffix = this.firstrow ? "</thead><tbody>" : "" ;
-					this.firstrow = false;
+					var keephead  = false;
+					if(!this.firstrow){
+						if(curline.match(/^\|\{\+\}/)){
+							curline = curline.replace(/^\|\{\+\}/,'|');
+							this.firstrow = true;
+							suffix = "";
+							tde = "th";
+						}
+					}
 					var items = curline.split(/\|/);
-					var row = "<tr>";
+					var row = "";
+					if(!this.firstrow && this.headclosed){
+						row+="</thead></tbody>";
+						this.headclosed = true;
+					}
+					row += "<tr>";
 					for(var i = 0;i<items.length;i++){
 						if(i==0||i==items.length-1)continue; //ignore left-right starters
 						var cell = items[i].trim();
@@ -268,9 +281,11 @@ qwiki.create = function(text, logwriter){
 							row += "<"+tde+">" + cell+"</"+tde+">";
 						}
 					}
+					
+					
 					row+="</tr>";
-					row+=suffix;
 					this.processed.push(row);
+					this.firstrow = false;
 					continue;
 				}
 				
