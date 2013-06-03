@@ -31,3 +31,42 @@
 .wiki .wiki-list-6 {
 	padding-left : 100px;
 }
+
+.wiki .wiki-code {
+	padding : 5pt;
+	background-color : #ffffAA;
+	font-family : consolas;
+	font-size:8pt;
+}
+
+.wiki .wiki-code .comment {
+	color : green;
+	font-style : italic;
+}
+
+.wiki .wiki-code .string {
+	color : brown;
+	font-weight : bold;
+}
+
+.wiki .wiki-code .number {
+	color : black;
+	font-weight : bold;
+}
+
+.wiki .wiki-code .delimiter {
+	color : darkgreen;
+	font-weight : bold;
+}
+
+.wiki .wiki-code .operator {
+	color : darkgreen;
+}
+
+.wiki .wiki-code .keyword {
+	color : blue;
+}
+.wiki .wiki-code .type {
+	color : brown;
+}
+

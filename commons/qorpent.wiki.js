@@ -42,7 +42,40 @@ qwiki.create = function(text, logwriter){
 			return this.defaultReference((addr||"").trim(),(name||"").trim(),(tail||"").trim());
 		},
 		processCode : function(curline ) {
-			return line;
+			curline = curline.replace(/\&nbsp;/g,' __BR__ ');
+			curline = curline.replace(/\s{4}/g,' __TAB__ ');
+			//CODE BLOCKS
+			curline = curline.replace(
+				/([!=+\-*\.\\\/;<>\&\^\:\|]+)/g,
+				"<span _CLASS_ATTR_'operator'>$1</span>");
+			curline = curline.replace(/\/\*/g,"<span _CLASS_ATTR_'comment'>");
+			curline = curline.replace(/\*\//g,"</span>");
+			curline = curline.replace (/(\#[^"']+)$/g,"<span _CLASS_ATTR_'comment'>$1</span>");
+			curline = curline.replace(
+				/\b((var)|(for)|(return)|(foreach)|(while)|(case)|(switch)|(in)|(out)|(private)|(public)|(protected)|(void)|(function)|(class)|(namespace)|(using)|(select)|(where)|(group by)|(order by)|(null)|(true)|(false))\b/g,
+				"<span _CLASS_ATTR_'keyword'>$1</span>");
+			curline = curline.replace(
+				/\b((int)|(string)|(DateTime)|(decimal)|(bool)|(nvarchar)|(datetime)|(bit)|(byte)|(float)|(long)|(bigint))\b/g,
+				"<span _CLASS_ATTR_'type'>$1</span>");
+			
+			curline = curline.replace(
+				/([\{\}\[\]\(\),])/g,
+				"<span _CLASS_ATTR_'delimiter'>$1</span>");
+			
+			curline = curline.replace(/\\"/g,'_EQ_');
+			curline = curline.replace(/""/g,'_DQ_');
+			curline = curline.replace(/"([\s\S]+?)"/g,"<span _CLASS_ATTR_'string'>$1</span>");
+			curline = curline.replace(/_EQ_/g,'\\"');
+			curline = curline.replace(/_DQ_/g,'""');
+			
+			curline = curline.replace(/(\b-?\d+(\.\d+)?)/g,"<span _CLASS_ATTR_'number'>$1</span>");
+			
+			
+			curline+="<br/>";
+			curline = curline.replace(/_CLASS_ATTR_/g,'class=');
+			curline = curline.replace(/__TAB__/g,'&nbsp;&nbsp;&nbsp;&nbsp;');
+			curline = curline.replace(/__BR__/g,'<br/>');
+			return curline;
 		},
 		processDefault : function( curline ) {
 			
@@ -77,7 +110,7 @@ qwiki.create = function(text, logwriter){
 				curline = curline.replace(/\{style:([\s\S]+?)\}([\s\S]+?)\{style\}/,'<span style="$1">$2</span>');
 				// references
 				var self = this;
-				curline = curline.replace(/\[([^\s]+?)(\s+([^|]+?))?(|([\s\S]+?))?\]/, function(match, addr, p2, name, p3, tail){
+				curline = curline.replace(/\[([^\s]+?)(\s+([^|]+?))?(\|([\s\S]+?))?\]/, function(match, addr, p2, name, p3, tail){
 					return self.processReference(match, addr, p2, name, p3, tail);
 				});
 				
@@ -132,9 +165,12 @@ qwiki.create = function(text, logwriter){
 			preprocessedText = preprocessedText.replace(/\n([\=\%\!])([^\n]+)/g,'\n\n$1$2\n\n');
 			// then we must split lines for block elements
 			preprocessedText = preprocessedText.replace(/(\[\[\/?\w+\]\])/g,"\n\n$1\n\n");
+			
+			
+			
 			// and finally remove ambigous lines
 			preprocessedText = preprocessedText.replace(/\n\n+/g,"__LINER__");
-			preprocessedText = preprocessedText.replace(/\n/g," ");
+			preprocessedText = preprocessedText.replace(/\n/g,"&nbsp;");
 			preprocessedText = preprocessedText.replace(/__LINER__/g,"\n");
 			
 			this.log(this,"lines merged");
@@ -156,7 +192,9 @@ qwiki.create = function(text, logwriter){
 				}
 				
 				if (this.codeblock) {
+					
 					this.processed.push( this.processCode( curline)) ;
+					continue;
 				}
 				
 				
