@@ -41,7 +41,7 @@ namespace Qorpent.Mvc.Actions {
 				}
 			}
 			WikiSource.Save(page);
-			return WikiSource.Get(Code).First();
+			return WikiSource.Get(null,Code).First();
 		}
 	}
 }

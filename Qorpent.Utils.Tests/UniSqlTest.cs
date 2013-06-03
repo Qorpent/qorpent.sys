@@ -20,14 +20,14 @@ namespace Qorpent.Utils.Tests {
 		[TestCase(SqlCommandType.Call, DatabaseEngineType.SqlServer, "EXEC [x].[y] @a = @x, @b = @b, @c = 23, @d = 'u'")]
 		public void CanCreateValidQueryOnAnyDatabaseCall(SqlCommandType calltype, DatabaseEngineType dbtype, string result) {
 			var q = new UniSqlQuery(
-				"x","y",calltype,new{a="~x",b="~",c=23,d="u"}
+				"x", "y", new { a = "~x", b = "~", c = 23, d = "u" }, calltype
 				);
 			Assert.AreEqual(result,q.PrepareQueryText(dbtype));
 		}
 		[Test]
 		public void CanSupplyValidParameters() {
 			var q = new UniSqlQuery(
-				"x", "y", SqlCommandType.Call, new { a = "~x", b = "~", c = 23, d = "u" }
+				"x", "y", new { a = "~x", b = "~", c = 23, d = "u" }, SqlCommandType.Call
 				);
 
 			var con = new SqlConnection();

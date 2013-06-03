@@ -34,7 +34,7 @@
     <Compile Include="ConsoleRenderHelper.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />
     <Compile Include="Extensions\DatabaseEngineType.cs" />
-    <Compile Include="Extensions\DbExtensions.cs" />
+    <Compile Include="Extensions\DatabaseExtensions.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="Extensions\DateExtensions.cs" />
     <Compile Include="Extensions\FileNameResolverExtensions.cs" />
@@ -43,6 +43,7 @@
     <Compile Include="Extensions\HierarchyExtensions.cs" />
     <Compile Include="Extensions\HierarchyPropagation.cs" />
     <Compile Include="Extensions\SqlCommandType.cs" />
+    <Compile Include="Extensions\UniSqlConst.cs" />
     <Compile Include="Extensions\UniSqlQuery.cs" />
     <Compile Include="ParamMappingHelper.cs" />
     <Compile Include="StringHelper.cs" />
