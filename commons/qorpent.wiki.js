@@ -154,6 +154,8 @@ qwiki.create = function(text, logwriter){
 		curline : "",
 		nowikiblock : false,
 		codeblock : false,
+		table : false,
+		firstrow : false,
 		// main function
 		process : function(){
 			this.processed = [];
@@ -164,7 +166,7 @@ qwiki.create = function(text, logwriter){
 			preprocessedText = preprocessedText.replace(/\r/g,'');
 			// firstly we must meet 1-st feature - we unify and process line delimiters
 			preprocessedText = preprocessedText.replace(/\n\n+/g,"\n\n[BR]\n\n");
-			preprocessedText = preprocessedText.replace(/\n([\=\%\!\-])([^\n]+)/g,'\n\n$1$2\n\n');
+			preprocessedText = preprocessedText.replace(/\n([\=\%\!\-\|])([^\n]+)/g,'\n\n$1$2\n\n');
 			// then we must split lines for block elements
 			preprocessedText = preprocessedText.replace(/(\[\[\/?\w+\]\])/g,"\n\n$1\n\n");
 			
@@ -223,6 +225,55 @@ qwiki.create = function(text, logwriter){
 					this.processed.push("</div>");
 					continue;
 				}
+				
+				if (curline.match(/^\|/)) {
+					if (!this.table) {
+						this.processed.push("<table>");
+						this.processed.push("<thead>");
+						this.table = true;
+						this.firstrow = true;
+					}
+				}else{
+					if(this.table){
+						this.processed.push("</tbody>");
+						this.processed.push("</table>");
+						this.table = false;
+					}
+				}
+								
+				if ( this.table ) {
+					var tde = this.firstrow ? "th" : "td" ;
+					var suffix = this.firstrow ? "</thead><tbody>" : "" ;
+					this.firstrow = false;
+					var items = curline.split(/\|/);
+					var row = "<tr>";
+					for(var i = 0;i<items.length;i++){
+						if(i==0||i==items.length-1)continue; //ignore left-right starters
+						var cell = items[i].trim();
+						cell = this.processDefault(cell).trim();
+						var spanmatch = cell.match(/^\{(\d+)?(,(\d+))?\}/);
+						if(spanmatch){
+							cell = cell.replace(/^\{(\d+)?(,(\d+))?\}/,'');
+							var rowspan = 1;
+							var colspan = 1;
+							
+							if(spanmatch[1]){
+								colspan = spanmatch[1];
+							}
+							if (spanmatch[3]){
+								rowspan = spanmatch[3];
+							}
+							row += "<"+tde+" rowspan='"+rowspan+"' colspan='"+colspan+"' >" + cell+"</"+tde+">";
+						}else {
+							row += "<"+tde+">" + cell+"</"+tde+">";
+						}
+					}
+					row+="</tr>";
+					row+=suffix;
+					this.processed.push(row);
+					continue;
+				}
+				
 				
 				if (curline=="----"){
 					this.processed.push("<hr/>");
