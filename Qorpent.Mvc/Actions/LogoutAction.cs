@@ -50,7 +50,7 @@ namespace Qorpent.Mvc.Actions {
 			Context.SetCookie(cookie);
 			//FormsAuthentication.SignOut();
 			Context.Redirect("_sys/login.qview.qweb");
-			return null;
+			return true;
 		}
 	}
 }
