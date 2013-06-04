@@ -7,6 +7,9 @@
 			function test(){
 				document.getElementById('testZone').innerHTML =  window.qwiki.toHTML( document.getElementById('srcdata').value );
 			}
+			function testTOC(){
+				document.getElementById('testZone').innerHTML = JSON.stringify(  window.qwiki.toTOC( document.getElementById('srcdata').value )).replace(/\n/g,'<br/>');
+			}
 		--></script>
 	</head>
 	<body>
@@ -36,6 +39,7 @@ public void MyFunc (int x, int y) {
 			</textarea>
 			<br/>
 			<input type='button' onclick='test()' value='WIKI-&gt;HTML' />
+			<input type='button' onclick='testTOC()' value='WIKI-&gt;TOC' />
 		</div>
 		<div id='testZone'>
 		

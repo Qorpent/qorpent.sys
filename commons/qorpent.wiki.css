@@ -25,29 +25,34 @@
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 16pt;
+	padding-left : 10px;
 }
 .wiki h3 {
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 14pt;
+	padding-left : 20px;
 }
 .wiki h4 {
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 14pt;
 	font-style :italic;
+	padding-left : 30px;
 }
 .wiki h5 {
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 12pt;
 	font-style :italic;
+	padding-left : 40px;
 }
 .wiki h6 {
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 10pt;
 	font-style :italic;
+	padding-left : 50px;
 }
 
 .wiki .wiki-list-1:before {

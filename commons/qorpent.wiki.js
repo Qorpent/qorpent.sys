@@ -28,6 +28,143 @@ Features
 (function(){
 var qwiki = window.qwiki = window.qwiki || {};
 qwiki.setup  = function(wikiprocessor){};
+qwiki.createTOC = function(text, logwriter){
+	var result = {
+		text : text,
+		lines /* as string[] */: null,
+		processed : [],
+		html /* as string */: null,
+		log : logwriter||function(sender,text){},
+
+		processReference : function(match, addr, p2, name, p3, tail,newitem) {
+			var addr = (addr || "").trim();
+			var title = (name || addr|| "").trim();
+			var tail = (tail||"").trim();
+			newitem.addr = addr;
+			newitem.title = title;
+			newitem.extension = tail;
+		},
+		
+		processDefault : function( curline ) {
+				var level = 0;
+				//HEADERS SUPPORT
+				if (curline.match(/^======/)){
+					level = 6;
+					curline = curline.substring(6).trim();
+				}else if (curline.match(/^=====/)){
+					level = 5;
+					curline = curline.substring(5).trim();
+				}else if (curline.match(/^====/)){
+					level = 4;
+					curline = curline.substring(4).trim();
+				}else if (curline.match(/^===/)){
+					level = 3;
+					curline = curline.substring(3).trim();
+				}else if (curline.match(/^==/)){
+					level = 2;
+					curline = curline.substring(2).trim();
+				}else if (curline.match(/^=/)){
+					level = 1;
+					curline = curline.substring(1).trim();
+				}
+				if(level == 0 ) return null;
+				//LETER STYLE SUPPORT
+				//bold
+				curline = curline.replace(/\*\*\*([\s\S]+?)\*\*\*/,'<strong>$1</strong>');
+				//italic
+				curline = curline.replace(/\*\*([\s\S]+?)\*\*/,'<em>$1</em>');
+				//underline
+				curline = curline.replace(/__([\s\S]+?)__/,'<ins>$1</ins>');
+				//strikeout
+				curline = curline.replace(/--([\s\S]+?)--/,'<del>$1</del>');
+				//subtext
+				curline = curline.replace(/,,([\s\S]+?),,/,'<sub>$1</sub>');
+				//supertext
+				curline = curline.replace(/::([\s\S]+?)::/,'<sup>$1</sup>');
+				//custom style
+				curline = curline.replace(/\{style:([\s\S]+?)\}([\s\S]+?)\{style\}/,'<span style="$1">$2</span>');
+				
+				var newitem = { level : level, raw : curline, items : []  };
+				// references
+				
+				var self = this;
+				curline = curline.replace(/\[([^\s]+?)(\s+([^|~]+?))?([\|~]([\s\S]+?))?\]/, function(match, addr, p2, name, p3, tail){
+					return self.processReference(match, addr, p2, name, p3, tail,newitem);
+				});
+				
+				
+				if (1==level) {
+					this.json.items.push(newitem);
+					newitem.parent = this.json;
+				}else{
+					if (null!=this.last) {
+						if ( level == this.last.level ) {
+							this.last.parent.items.push(newitem);
+							newitem.parent = this.last.parent;
+						}else if( level == this.last.level + 1) {
+							this.last.items.push(newitem);
+							newitem.parent = this.last;
+						}else if (level < this.last.level) {
+							var target = this.last;
+							while (level <= target.level) {
+								target = target.parent;
+							}
+							target.items.push(newitem);
+							newitem.parent = target;
+						}
+					}
+				}
+				
+				this.currentLevel = level;
+				this.last = newitem;
+				this.json.all = this.json.all || [];
+				this.json.all.push(newitem);
+		},
+		
+		//state control
+		idx : 0,
+		curline : "",
+		currentLevel : 0,
+		last : null,
+		process : function(){
+			this.processed = [];
+			this.json = {items:[]};
+			this.log(this,"start");
+			var preprocessedText = '\n'+this.text.trim()+'\n';
+			preprocessedText = preprocessedText.replace(/\r/g,'');
+			// firstly we must meet 1-st feature - we unify and process line delimiters
+			preprocessedText = preprocessedText.replace(/\n\n+/g,"\n\n[BR]\n\n");
+			preprocessedText = preprocessedText.replace(/\n([\=\%\!\-\|])([^\n]+)/g,'\n\n$1$2\n\n');
+			// then we must split lines for block elements
+			preprocessedText = preprocessedText.replace(/(\[\[\/?\w+\]\])/g,"\n\n\n\n$1\n\n\n\n");
+			
+			// and finally remove ambigous lines
+			preprocessedText = preprocessedText.replace(/\n\n+/g,"__LINER__");
+			preprocessedText = preprocessedText.replace(/\n/g,"&nbsp;");
+			preprocessedText = preprocessedText.replace(/__LINER__/g,"\n");
+			
+			this.log(this,"lines merged");
+			// then we setup array of 
+			this.lines = preprocessedText.split(/\n/);
+			this.log(this,"text splited");
+			for (this.idx = 0; this.idx < this.lines.length; this.idx++){
+				this. processDefault( this.lines[this.idx] );
+				
+			}
+
+			if(this.json.all){
+				for(var i = 0;i<this.json.all.length;i++){
+					delete(this.json.all[i].parent);
+				}
+			
+			}
+			delete (this.json.all);
+			
+		},
+	};
+	this.setup(result);
+	return result;
+}
 qwiki.create = function(text, logwriter){
 	var result = {
 		text : text,
@@ -36,7 +173,11 @@ qwiki.create = function(text, logwriter){
 		html /* as string */: null,
 		log : logwriter||function(sender,text){},
 		defaultReference: function(addr,name,tail){
-			return "<a href='" + addr + "' "+tail+" >" + name + "</a>";
+			if(addr.match(/\.((png)|(gif)|(jpg)|(jpeg))$/)){
+				return "<img src='"+addr+"' title='"+name+"' "+tail+" />";
+			}else{
+				return "<a href='" + addr + "' "+tail+" >" + name + "</a>";
+			}
 		},
 		processReference : function(match, addr, p2, name, p3, tail) {
 			return this.defaultReference((addr||"").trim(),(name||addr||"").trim(),(tail||"").trim());
@@ -112,7 +253,7 @@ qwiki.create = function(text, logwriter){
 				curline = curline.replace(/\{style:([\s\S]+?)\}([\s\S]+?)\{style\}/,'<span style="$1">$2</span>');
 				// references
 				var self = this;
-				curline = curline.replace(/\[([^\s]+?)(\s+([^|]+?))?(\|([\s\S]+?))?\]/, function(match, addr, p2, name, p3, tail){
+				curline = curline.replace(/\[([^\s]+?)(\s+([^|~]+?))?([\|~]([\s\S]+?))?\]/, function(match, addr, p2, name, p3, tail){
 					return self.processReference(match, addr, p2, name, p3, tail);
 				});
 				
@@ -320,6 +461,14 @@ qwiki.toHTML = function(text){
 	var result = processor.html;
 	delete(processor);
 	return result;
+}
+qwiki.toTOC = function(text) {
+	var processor = this.createTOC(text);
+	processor.process();
+	var result = processor.json;
+	delete(processor);
+	return result;
+
 }
 
 })();
