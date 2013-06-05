@@ -245,7 +245,7 @@ qwiki.create = function(text, logwriter){
 				curline = curline.replace(/__([\s\S]+?)__/,'<ins>$1</ins>');
 				//strikeout
 				curline = curline.replace(/--([\s\S]+?)--/,'<del>$1</del>');
-				//subtext
+				//subtext new version
 				curline = curline.replace(/,,([\s\S]+?),,/,'<sub>$1</sub>');
 				//supertext
 				curline = curline.replace(/::([\s\S]+?)::/,'<sup>$1</sup>');

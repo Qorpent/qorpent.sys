@@ -92,5 +92,24 @@ namespace Qorpent.Wiki {
 			}
 			Persister.Save(pages);
 		}
+
+		/// <summary>
+		/// Сохраняет в Wiki файл с указанным кодом
+		/// </summary>
+		public void SaveBinary(WikiBinary binary) {
+			CheckPersister();
+			Persister.SaveBinary(binary);
+		}
+
+		/// <summary>
+		/// Загружает бинарный контент
+		/// </summary>
+		/// <param name="code"></param>
+		/// <param name="withData">Флаг, что требуется подгрузка бинарных данных</param>
+		/// <returns></returns>
+		public WikiBinary LoadBinary(string code, bool withData = true) {
+			CheckPersister();
+			return Persister.LoadBinary(code, withData);
+		}
 	}
 }

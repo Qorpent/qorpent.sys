@@ -2,6 +2,8 @@
 
 namespace Qorpent.Wiki
 {
+
+
 	/// <summary>
 	/// Интерфейс, описывающий простеший репозиторий Wiki
 	/// </summary>
@@ -24,5 +26,19 @@ namespace Qorpent.Wiki
 		/// </summary>
 		/// <param name="pages"></param>
 		void Save(params WikiPage[] pages);
+
+		/// <summary>
+		/// Сохраняет в Wiki файл с указанным кодом
+		/// </summary>
+	
+		void SaveBinary(WikiBinary binary);
+
+		/// <summary>
+		/// Загружает бинарный контент
+		/// </summary>
+		/// <param name="code"></param>
+		/// <param name="withData">Флаг, что требуется подгрузка бинарных данных</param>
+		/// <returns></returns>
+		WikiBinary LoadBinary(string code, bool withData = true);
 	}
 }
