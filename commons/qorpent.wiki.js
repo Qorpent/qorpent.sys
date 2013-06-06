@@ -88,7 +88,7 @@ qwiki.createTOC = function(text, logwriter){
 				// references
 				
 				var self = this;
-				curline = curline.replace(/\[([^\s]+?)(\s+([^|~]+?))?([\|~]([\s\S]+?))?\]/, function(match, addr, p2, name, p3, tail){
+				curline = curline.replace(/\[([^\s\]]+?)(\s+([^|~\]]+?))?([\|~]([\s\S]+?))?\]/, function(match, addr, p2, name, p3, tail){
 					return self.processReference(match, addr, p2, name, p3, tail,newitem);
 				});
 				
@@ -173,10 +173,41 @@ qwiki.create = function(text, logwriter){
 		html /* as string */: null,
 		log : logwriter||function(sender,text){},
 		defaultReference: function(addr,name,tail){
-			if(addr.match(/\.((png)|(gif)|(jpg)|(jpeg))$/)){
-				return "<img src='"+addr+"' title='"+name+"' "+tail+" />";
+			if ( window.zefs.api.wiki ) {
+				//move this to extension
+				
+				// reference to another wiki page
+				if(addr.match(/^\//)){
+					return "<span class='wiki-link' onclick='window.zefs.api.wiki.getsync.execute({code:\""+addr+"\"})' >"+name+"</a>";
+				}
+				//reference to wiki-image
+				else if(addr.match(/^img\:/)){
+					var imgcode = addr.match(/^img\:([\s\S]+)$/)[1];
+					var imgaddr = "./wiki/getfile.filedesc.qweb?code="+imgcode;
+					return "<img src='"+imgaddr+"' title='"+name+"' "+tail+" />";
+				}
+				//reference to wiki-filedesc
+				else if (addr.match(/^file\:/)){
+					var filecode = addr.match(/^file\:([\s\S]+)$/)[1];
+					var fileaddr = "./wiki/getfile.filedesc.qweb?asfile=true&code="+filecode;
+					return "<a href='"+fileaddr+"' "+tail+" target='_blank' >"+name+"</a>";				
+				}// native urls 
+				else{
+					if(addr.match(/\.((png)|(gif)|(jpg)|(jpeg))$/)){
+						//case of usual image
+						return "<img src='"+addr+"' title='"+name+"' "+tail+" />";
+					}else{
+						//case of usual ref
+						return "<a href='" + addr + "' "+tail+" >" + name + "</a>";
+					}
+				}
+				
 			}else{
-				return "<a href='" + addr + "' "+tail+" >" + name + "</a>";
+				if(addr.match(/\.((png)|(gif)|(jpg)|(jpeg))$/)){
+					return "<img src='"+addr+"' title='"+name+"' "+tail+" />";
+				}else{
+					return "<a href='" + addr + "' "+tail+" >" + name + "</a>";
+				}
 			}
 		},
 		processReference : function(match, addr, p2, name, p3, tail) {
@@ -253,7 +284,7 @@ qwiki.create = function(text, logwriter){
 				curline = curline.replace(/\{style:([\s\S]+?)\}([\s\S]+?)\{style\}/,'<span style="$1">$2</span>');
 				// references
 				var self = this;
-				curline = curline.replace(/\[([^\s]+?)(\s+([^|~]+?))?([\|~]([\s\S]+?))?\]/, function(match, addr, p2, name, p3, tail){
+				curline = curline.replace(/\[([^\s\]]+?)(\s+([^|~\]]+?))?([\|~]([\s\S]+?))?\]/g, function(match, addr, p2, name, p3, tail){
 					return self.processReference(match, addr, p2, name, p3, tail);
 				});
 				

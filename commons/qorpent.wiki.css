@@ -8,6 +8,14 @@
 	border-collapse : collapse;
 }
 
+.wiki .wiki-link { 	
+	color : #0088CC;
+	cursor : pointer;
+}
+.wiki .wiki-link:hover{ 	
+	text-decoration : underline;
+}
+
 .wiki table td,  .wiki table th {
 	border: solid 1px gray;
 	padding : 2px;

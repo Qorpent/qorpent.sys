@@ -58,6 +58,12 @@ namespace Qorpent.Mvc {
 		/// Признак потокового файла
 		/// </summary>
 		bool IsStream { get; set; }
+
+		/// <summary>
+		/// Прямое указание данных
+		/// </summary>
+		byte[] Data { get; set; }
+
 		/// <summary>
 		/// Возвращает поток данных файла
 		/// </summary>

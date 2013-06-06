@@ -57,7 +57,12 @@ namespace Qorpent.Mvc.Renders {
 			if(descriptor.IsStream) {
 				context.WriteOutStream(descriptor.GetStream());
 			}else {
-				context.Output.Write(descriptor.Content);
+				if (descriptor.Data != null) {
+					context.WriteOutStream(new MemoryStream(descriptor.Data));
+				}
+				else {
+					context.Output.Write(descriptor.Content);
+				}
 			}
 		}
 

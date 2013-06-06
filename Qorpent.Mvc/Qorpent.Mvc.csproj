@@ -18,7 +18,9 @@
     <Compile Include="Actions\Wiki\WikiActionBase.cs" />
     <Compile Include="Actions\Wiki\WikiExistsAction.cs" />
     <Compile Include="Actions\Wiki\WikiGetAction.cs" />
+    <Compile Include="Actions\Wiki\WikiGetFileAction.cs" />
     <Compile Include="Actions\Wiki\WikiSaveAction.cs" />
+    <Compile Include="Actions\Wiki\WikiSaveFileAction.cs" />
     <Compile Include="ClusterNodeLoadPoints.cs" />
     <Compile Include="HttpContextWrapper.cs" />
     <Compile Include="MimeMapper.cs" />

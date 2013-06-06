@@ -35,6 +35,11 @@ namespace Qorpent.Mvc {
 		public string Content { get; set; }
 
 		/// <summary>
+		/// Прямое указание данных
+		/// </summary>
+		public byte[] Data { get; set; }
+
+		/// <summary>
 		/// 	Mime-Type файла
 		/// </summary>
 		public string MimeType { get; set; }
