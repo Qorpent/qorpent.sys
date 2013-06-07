@@ -85,6 +85,9 @@
     <Compile Include="Wiki\IWikiSaveFilter.cs" />
     <Compile Include="Wiki\IWikiPersister.cs" />
     <Compile Include="Wiki\IWikiSource.cs" />
+    <Compile Include="Wiki\WikiBinary.cs" />
+    <Compile Include="Wiki\WikiObjectDescriptor.cs" />
+    <Compile Include="Wiki\WikiObjectType.cs" />
     <Compile Include="Wiki\WikiPage.cs" />
     <None Include="*.import" />
     <None Include="*.export" />

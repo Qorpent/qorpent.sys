@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Qorpent.Serialization;
 
 namespace Qorpent.Wiki {
@@ -7,33 +6,20 @@ namespace Qorpent.Wiki {
 	/// Описывает Wiki-страницу
 	/// </summary>
 	[Serialize]
-	public	class WikiPage {
-		/// <summary>
-		/// Создает пустую страницу
-		/// </summary>
-		public WikiPage() {
-			Propeties = new Dictionary<string, string>();
-		}
+	public class WikiBinary
+	{
 		/// <summary>
 		/// Код страницы
 		/// </summary>
 		[SerializeNotNullOnly]
 		public string Code { get; set; }
+
+
 		/// <summary>
-		/// Признак того, что страница существует
+		/// Mime - тип
 		/// </summary>
 		[SerializeNotNullOnly]
-		public bool Existed { get; set; }
-		/// <summary>
-		/// Метаданные Wiki
-		/// </summary>
-		[SerializeNotNullOnly]
-		public IDictionary<string,string> Propeties { get; private set; }
-		/// <summary>
-		/// Собственно текст страницы
-		/// </summary>
-		[SerializeNotNullOnly]
-		public string Text { get; set; }
+		public string MimeType { get; set; }
 		/// <summary>
 		/// Время последней редакции
 		/// </summary>
@@ -56,5 +42,14 @@ namespace Qorpent.Wiki {
 		/// </summary>
 		[SerializeNotNullOnly]
 		public string Title { get; set; }
+		/// <summary>
+		/// Бинарные данные
+		/// </summary>
+		[SerializeNotNullOnly]
+		public byte[] Data { get; set; }
+		/// <summary>
+		/// Размер файла
+		/// </summary>
+		public long Size { get; set; }
 	}
 }

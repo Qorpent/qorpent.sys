@@ -3,6 +3,8 @@
 namespace Qorpent.Wiki
 {
 
+	
+
 
 	/// <summary>
 	/// Интерфейс, описывающий простеший репозиторий Wiki
@@ -40,5 +42,16 @@ namespace Qorpent.Wiki
 		/// <param name="withData">Флаг, что требуется подгрузка бинарных данных</param>
 		/// <returns></returns>
 		WikiBinary LoadBinary(string code, bool withData = true);
+
+		/// <summary>
+		/// Поиск объектов Wiki
+		/// </summary>
+		/// <param name="search"></param>
+		/// <param name="count"></param>
+		/// <param name="types"></param>
+		/// <param name="start"></param>
+		/// <returns></returns>
+		IEnumerable<WikiObjectDescriptor> Find(string search, int start=-1, int count=-1, WikiObjectType types = WikiObjectType.All);
+
 	}
 }

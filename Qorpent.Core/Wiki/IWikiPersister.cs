@@ -36,5 +36,19 @@ namespace Qorpent.Wiki {
 		/// <param name="withData">Флаг, что требуется подгрузка бинарных данных</param>
 		/// <returns></returns>
 		WikiBinary LoadBinary(string code, bool withData = true);
+
+		/// <summary>
+		/// Поиск страниц по маске 
+		/// </summary>
+		/// <param name="search"></param>
+		/// <returns></returns>
+		IEnumerable<WikiPage> FindPages(string search);
+
+		/// <summary>
+		/// Поиск файлов по маске
+		/// </summary>
+		/// <param name="search"></param>
+		/// <returns></returns>
+		IEnumerable<WikiBinary> FindBinaries(string search);
 	}
 }

@@ -27,144 +27,173 @@ Features
 */
 (function(){
 var qwiki = window.qwiki = window.qwiki || {};
+
+qwiki.beforePreprocess = null;
+qwiki.afterPreprocess = null;
+qwiki.preprocess = function(processor){
+	var preprocessedText  = processor.text;
+	if(this.beforePreprocess){
+		preprocessedText = this.beforePreprocess(processor,preprocessedText);
+	}
+	var preprocessedText = '\n'+processor.text.trim()+'\n';
+	preprocessedText = preprocessedText.replace(/\r/g,'');
+	// firstly we must meet 1-st feature - we unify and process line delimiters
+	preprocessedText = preprocessedText.replace(/\n\n+/g,"\n\n[BR]\n\n");
+	preprocessedText = preprocessedText.replace(/\n([\=\%\!\-\|])([^\n]+)/g,'\n\n$1$2\n\n');
+	// then we must split lines for block elements
+	preprocessedText = preprocessedText.replace(/(\[\[\/?\w+\]\])/g,"\n\n\n\n$1\n\n\n\n");
+	// and finally remove ambigous lines
+	preprocessedText = preprocessedText.replace(/\n\n+/g,"__LINER__");
+	preprocessedText = preprocessedText.replace(/\n/g,"&nbsp;");
+	preprocessedText = preprocessedText.replace(/__LINER__/g,"\n");
+	if(this.afterPreprocess){
+		preprocessedText = this.afterPreprocess(processor,preprocessedText);
+	}
+	return preprocessedText;
+};
+qwiki.beforeInline = null;
+qwiki.afterInline = null;
+qwiki.processInline = function(processor, curline){
+	if(this.beforeInline){
+		curline = this.beforeInline(processor,curline);
+	}
+	//LETER STYLE SUPPORT
+	//bold
+	curline = curline.replace(/\*\*\*([\s\S]+?)\*\*\*/g,'<strong>$1</strong>');
+	//italic
+	curline = curline.replace(/\*\*([\s\S]+?)\*\*/g,'<em>$1</em>');
+	//underline
+	curline = curline.replace(/__([\s\S]+?)__/g,'<ins>$1</ins>');
+	//strikeout
+	curline = curline.replace(/--([\s\S]+?)--/g,'<del>$1</del>');
+	//subtext new version
+	curline = curline.replace(/,,([\s\S]+?),,/g,'<sub>$1</sub>');
+	//supertext
+	curline = curline.replace(/::([\s\S]+?)::/g,'<sup>$1</sup>');
+	//custom style
+	curline = curline.replace(/\{style:([\s\S]+?)\}([\s\S]+?)\{style\}/g,'<span style="$1">$2</span>');
+	if(this.afterInline){
+		curline = this.afterInline(processor,curline);
+	}
+	return curline;
+};
+qwiki.beforeLine = null;
+qwiki.afterLine = null;
+qwiki.processLine =  function(processor,curline){
+	if(this.beforeLine){
+		curline = this.beforeLine(processor,curline);
+	}
+	//HEADERS SUPPORT
+	if (curline.match(/^======/)){
+		curline = "<h6>" + curline.substring(6) + "</h6>";
+	}else if (curline.match(/^=====/)){
+		curline = "<h5>" + curline.substring(5) + "</h5>";
+	}else if (curline.match(/^====/)){
+		curline = "<h4>" + curline.substring(4) + "</h4>";
+	}else if (curline.match(/^===/)){
+		curline = "<h3>" + curline.substring(3) + "</h3>";
+	}else if (curline.match(/^==/)){
+		curline = "<h2>" + curline.substring(2) + "</h2>";
+	}else if (curline.match(/^=/)){
+		curline = "<h1>" + curline.substring(1) + "</h1>";
+	}
+
+	//LIST SUPPORT
+	else if (curline.match(/^%%%%%%/)){
+		curline = "<div class='wiki-list-6'>" + curline.substring(6) + "</div>";
+	}else if (curline.match(/^%%%%%/)){
+		curline = "<div class='wiki-list-5'>" + curline.substring(5) + "</div>";
+	}else if (curline.match(/^%%%%/)){
+		curline = "<div class='wiki-list-4'>" + curline.substring(4) + "</div>";
+	}else if (curline.match(/^%%%/)){
+		curline = "<div class='wiki-list-3'>" + curline.substring(3) + "</div>";
+	}else if (curline.match(/^%%/)){
+		curline = "<div class='wiki-list-2'>" + curline.substring(2) + "</div>";
+	}else if (curline.match(/^%/)){
+		curline = "<div class='wiki-list-1'>" + curline.substring(1) + "</div>";
+	}else{
+		curline = "<p>"+curline+"</p>";
+	}
+	if(this.afterLine){
+		curline = this.afterLine(processor,curline);
+	}
+	return curline;
+};
+qwiki.beforeCode = null;
+qwiki.afterCode = null;
+qwiki.processCode =function(processor,curline ) {
+	if(this.beforeCode){
+		curline = this.beforeCode(processor,curline);
+	}
+	curline = curline.replace(/\&nbsp;/g,' __BR__ ');
+	curline = curline.replace(/\[BR\]/g,'');
+	curline = curline.replace(/\s{4}/g,' __TAB__ ');
+	curline = curline.replace(/\t/g,' __TAB__ ');
+	//CODE BLOCKS
+	curline = curline.replace(
+		/([!=+\-*\.\\\/;<>%\&\^\:\|]+)/g,
+		"<span _CLASS_ATTR_'operator'>$1</span>");
+	curline = curline.replace(/\/\*/g,"<span _CLASS_ATTR_'comment'>");
+	curline = curline.replace(/\*\//g,"</span>");
+	curline = curline.replace (/(\#[^"']+)$/g,"<span _CLASS_ATTR_'comment'>$1</span>");
+	curline = curline.replace(
+		/\b((var)|(for)|(return)|(foreach)|(while)|(case)|(switch)|(in)|(out)|(private)|(public)|(protected)|(void)|(function)|(class)|(namespace)|(using)|(select)|(where)|(group by)|(order by)|(null)|(true)|(false))\b/g,
+		"<span _CLASS_ATTR_'keyword'>$1</span>");
+	curline = curline.replace(
+		/\b((int)|(string)|(DateTime)|(decimal)|(bool)|(nvarchar)|(datetime)|(bit)|(byte)|(float)|(long)|(bigint))\b/g,
+		"<span _CLASS_ATTR_'type'>$1</span>");
+	
+	curline = curline.replace(
+		/([\{\}\[\]\(\),]+)/g,
+		"<span _CLASS_ATTR_'delimiter'>$1</span>");
+	
+	curline = curline.replace(/\\"/g,'_EQ_');
+	curline = curline.replace(/""/g,'_DQ_');
+	curline = curline.replace(/"([\s\S]+?)"/g,"<span _CLASS_ATTR_'string'>$1</span>");
+	curline = curline.replace(/_EQ_/g,'\\"');
+	curline = curline.replace(/_DQ_/g,'""');
+	
+	curline = curline.replace(/(\b-?\d+(\.\d+)?)/g,"<span _CLASS_ATTR_'number'>$1</span>");
+	
+	
+	curline+="<br/>";
+	curline = curline.replace(/_CLASS_ATTR_/g,'class=');
+	curline = curline.replace(/__TAB__/g,'&nbsp;&nbsp;&nbsp;&nbsp;');
+	curline = curline.replace(/__BR__/g,'<br/>');
+	if(this.afterCode){
+		curline = this.afterCode(processor,curline);
+	}
+	return curline;
+};
+qwiki.referenceRegex = /\[([^\s\]]+?)(\s+([^|~\]]+?))?([\|~]([\s\S]+?))?\]/g;
+qwiki.processReferences = function(processor,curline, callback, context){
+	curline = curline.replace(qwiki.referenceRegex, function(match, addr, p2, name, p3, tail){
+		return callback(processor,match, addr, p2, name, p3, tail,context);
+	});
+	return curline;
+};
+qwiki.defaultProcessReference = function(processor,match, addr, p2, name, p3, tail,context) {
+			return qwiki.getReference(processor,(addr||"").trim(),(name||addr||"").trim(),(tail||"").trim());
+};
+qwiki.getCustomReference = null;
+qwiki.getReference = function(processor,addr,name,tail){
+
+	if(this.getCustomReference){
+		var result = null;
+		result = this.getCustomReference(processor,addr,name,tail);
+		if(null!=result){
+			return result;
+		}
+	}	
+	
+	if(addr.match(/\.((png)|(gif)|(jpg)|(jpeg))$/)){
+		return "<img src='"+addr+"' title='"+name+"' "+tail+" />";
+	}else{
+		return "<a href='" + addr + "' "+tail+" >" + name + "</a>";
+	}
+	
+};
 qwiki.setup  = function(wikiprocessor){};
-qwiki.createTOC = function(text, logwriter){
-	var result = {
-		text : text,
-		lines /* as string[] */: null,
-		processed : [],
-		html /* as string */: null,
-		log : logwriter||function(sender,text){},
-
-		processReference : function(match, addr, p2, name, p3, tail,newitem) {
-			var addr = (addr || "").trim();
-			var title = (name || addr|| "").trim();
-			var tail = (tail||"").trim();
-			newitem.addr = addr;
-			newitem.title = title;
-			newitem.extension = tail;
-		},
-		
-		processDefault : function( curline ) {
-				var level = 0;
-				//HEADERS SUPPORT
-				if (curline.match(/^======/)){
-					level = 6;
-					curline = curline.substring(6).trim();
-				}else if (curline.match(/^=====/)){
-					level = 5;
-					curline = curline.substring(5).trim();
-				}else if (curline.match(/^====/)){
-					level = 4;
-					curline = curline.substring(4).trim();
-				}else if (curline.match(/^===/)){
-					level = 3;
-					curline = curline.substring(3).trim();
-				}else if (curline.match(/^==/)){
-					level = 2;
-					curline = curline.substring(2).trim();
-				}else if (curline.match(/^=/)){
-					level = 1;
-					curline = curline.substring(1).trim();
-				}
-				if(level == 0 ) return null;
-				//LETER STYLE SUPPORT
-				//bold
-				curline = curline.replace(/\*\*\*([\s\S]+?)\*\*\*/,'<strong>$1</strong>');
-				//italic
-				curline = curline.replace(/\*\*([\s\S]+?)\*\*/,'<em>$1</em>');
-				//underline
-				curline = curline.replace(/__([\s\S]+?)__/,'<ins>$1</ins>');
-				//strikeout
-				curline = curline.replace(/--([\s\S]+?)--/,'<del>$1</del>');
-				//subtext
-				curline = curline.replace(/,,([\s\S]+?),,/,'<sub>$1</sub>');
-				//supertext
-				curline = curline.replace(/::([\s\S]+?)::/,'<sup>$1</sup>');
-				//custom style
-				curline = curline.replace(/\{style:([\s\S]+?)\}([\s\S]+?)\{style\}/,'<span style="$1">$2</span>');
-				
-				var newitem = { level : level, raw : curline, items : []  };
-				// references
-				
-				var self = this;
-				curline = curline.replace(/\[([^\s\]]+?)(\s+([^|~\]]+?))?([\|~]([\s\S]+?))?\]/, function(match, addr, p2, name, p3, tail){
-					return self.processReference(match, addr, p2, name, p3, tail,newitem);
-				});
-				
-				
-				if (1==level) {
-					this.json.items.push(newitem);
-					newitem.parent = this.json;
-				}else{
-					if (null!=this.last) {
-						if ( level == this.last.level ) {
-							this.last.parent.items.push(newitem);
-							newitem.parent = this.last.parent;
-						}else if( level == this.last.level + 1) {
-							this.last.items.push(newitem);
-							newitem.parent = this.last;
-						}else if (level < this.last.level) {
-							var target = this.last;
-							while (level <= target.level) {
-								target = target.parent;
-							}
-							target.items.push(newitem);
-							newitem.parent = target;
-						}
-					}
-				}
-				
-				this.currentLevel = level;
-				this.last = newitem;
-				this.json.all = this.json.all || [];
-				this.json.all.push(newitem);
-		},
-		
-		//state control
-		idx : 0,
-		curline : "",
-		currentLevel : 0,
-		last : null,
-		process : function(){
-			this.processed = [];
-			this.json = {items:[]};
-			this.log(this,"start");
-			var preprocessedText = '\n'+this.text.trim()+'\n';
-			preprocessedText = preprocessedText.replace(/\r/g,'');
-			// firstly we must meet 1-st feature - we unify and process line delimiters
-			preprocessedText = preprocessedText.replace(/\n\n+/g,"\n\n[BR]\n\n");
-			preprocessedText = preprocessedText.replace(/\n([\=\%\!\-\|])([^\n]+)/g,'\n\n$1$2\n\n');
-			// then we must split lines for block elements
-			preprocessedText = preprocessedText.replace(/(\[\[\/?\w+\]\])/g,"\n\n\n\n$1\n\n\n\n");
-			
-			// and finally remove ambigous lines
-			preprocessedText = preprocessedText.replace(/\n\n+/g,"__LINER__");
-			preprocessedText = preprocessedText.replace(/\n/g,"&nbsp;");
-			preprocessedText = preprocessedText.replace(/__LINER__/g,"\n");
-			
-			this.log(this,"lines merged");
-			// then we setup array of 
-			this.lines = preprocessedText.split(/\n/);
-			this.log(this,"text splited");
-			for (this.idx = 0; this.idx < this.lines.length; this.idx++){
-				this. processDefault( this.lines[this.idx] );
-				
-			}
-
-			if(this.json.all){
-				for(var i = 0;i<this.json.all.length;i++){
-					delete(this.json.all[i].parent);
-				}
-			
-			}
-			delete (this.json.all);
-			
-		},
-	};
-	this.setup(result);
-	return result;
-}
 qwiki.create = function(text, logwriter){
 	var result = {
 		text : text,
@@ -172,85 +201,9 @@ qwiki.create = function(text, logwriter){
 		processed : [],
 		html /* as string */: null,
 		log : logwriter||function(sender,text){},
-		defaultReference: function(addr,name,tail){
-			if ( window.zefs.api.wiki ) {
-				//move this to extension
-				
-				// reference to another wiki page
-				if(addr.match(/^\//)){
-					return "<span class='wiki-link' onclick='window.zefs.api.wiki.getsync.execute({code:\""+addr+"\"})' >"+name+"</a>";
-				}
-				//reference to wiki-image
-				else if(addr.match(/^img\:/)){
-					var imgcode = addr.match(/^img\:([\s\S]+)$/)[1];
-					var imgaddr = "./wiki/getfile.filedesc.qweb?code="+imgcode;
-					return "<img src='"+imgaddr+"' title='"+name+"' "+tail+" />";
-				}
-				//reference to wiki-filedesc
-				else if (addr.match(/^file\:/)){
-					var filecode = addr.match(/^file\:([\s\S]+)$/)[1];
-					var fileaddr = "./wiki/getfile.filedesc.qweb?asfile=true&code="+filecode;
-					return "<a href='"+fileaddr+"' "+tail+" target='_blank' >"+name+"</a>";				
-				}// native urls 
-				else{
-					if(addr.match(/\.((png)|(gif)|(jpg)|(jpeg))$/)){
-						//case of usual image
-						return "<img src='"+addr+"' title='"+name+"' "+tail+" />";
-					}else{
-						//case of usual ref
-						return "<a href='" + addr + "' "+tail+" >" + name + "</a>";
-					}
-				}
-				
-			}else{
-				if(addr.match(/\.((png)|(gif)|(jpg)|(jpeg))$/)){
-					return "<img src='"+addr+"' title='"+name+"' "+tail+" />";
-				}else{
-					return "<a href='" + addr + "' "+tail+" >" + name + "</a>";
-				}
-			}
-		},
-		processReference : function(match, addr, p2, name, p3, tail) {
-			return this.defaultReference((addr||"").trim(),(name||addr||"").trim(),(tail||"").trim());
-		},
-		processCode : function(curline ) {
-			curline = curline.replace(/\&nbsp;/g,' __BR__ ');
-			curline = curline.replace(/\[BR\]/g,'');
-			curline = curline.replace(/\s{4}/g,' __TAB__ ');
-			curline = curline.replace(/\t/g,' __TAB__ ');
-			//CODE BLOCKS
-			curline = curline.replace(
-				/([!=+\-*\.\\\/;<>%\&\^\:\|]+)/g,
-				"<span _CLASS_ATTR_'operator'>$1</span>");
-			curline = curline.replace(/\/\*/g,"<span _CLASS_ATTR_'comment'>");
-			curline = curline.replace(/\*\//g,"</span>");
-			curline = curline.replace (/(\#[^"']+)$/g,"<span _CLASS_ATTR_'comment'>$1</span>");
-			curline = curline.replace(
-				/\b((var)|(for)|(return)|(foreach)|(while)|(case)|(switch)|(in)|(out)|(private)|(public)|(protected)|(void)|(function)|(class)|(namespace)|(using)|(select)|(where)|(group by)|(order by)|(null)|(true)|(false))\b/g,
-				"<span _CLASS_ATTR_'keyword'>$1</span>");
-			curline = curline.replace(
-				/\b((int)|(string)|(DateTime)|(decimal)|(bool)|(nvarchar)|(datetime)|(bit)|(byte)|(float)|(long)|(bigint))\b/g,
-				"<span _CLASS_ATTR_'type'>$1</span>");
-			
-			curline = curline.replace(
-				/([\{\}\[\]\(\),]+)/g,
-				"<span _CLASS_ATTR_'delimiter'>$1</span>");
-			
-			curline = curline.replace(/\\"/g,'_EQ_');
-			curline = curline.replace(/""/g,'_DQ_');
-			curline = curline.replace(/"([\s\S]+?)"/g,"<span _CLASS_ATTR_'string'>$1</span>");
-			curline = curline.replace(/_EQ_/g,'\\"');
-			curline = curline.replace(/_DQ_/g,'""');
-			
-			curline = curline.replace(/(\b-?\d+(\.\d+)?)/g,"<span _CLASS_ATTR_'number'>$1</span>");
-			
-			
-			curline+="<br/>";
-			curline = curline.replace(/_CLASS_ATTR_/g,'class=');
-			curline = curline.replace(/__TAB__/g,'&nbsp;&nbsp;&nbsp;&nbsp;');
-			curline = curline.replace(/__BR__/g,'<br/>');
-			return curline;
-		},
+		
+		
+		
 		processDefault : function( curline ) {
 			
 				// BY LINE IGNORE
@@ -259,64 +212,18 @@ qwiki.create = function(text, logwriter){
 					this.processed.push(curline);
 					return;
 				}
-				/////////////////////////////////////////////////////
-			
+				/////////////////////////////////////////////////////	
 				// LINE BREAK SUPPORT
 				if (curline == "[BR]") {
 					this.processed.push("<br/>");
 					return;
 				}
 				
-				//LETER STYLE SUPPORT
-				//bold
-				curline = curline.replace(/\*\*\*([\s\S]+?)\*\*\*/,'<strong>$1</strong>');
-				//italic
-				curline = curline.replace(/\*\*([\s\S]+?)\*\*/,'<em>$1</em>');
-				//underline
-				curline = curline.replace(/__([\s\S]+?)__/,'<ins>$1</ins>');
-				//strikeout
-				curline = curline.replace(/--([\s\S]+?)--/,'<del>$1</del>');
-				//subtext new version
-				curline = curline.replace(/,,([\s\S]+?),,/,'<sub>$1</sub>');
-				//supertext
-				curline = curline.replace(/::([\s\S]+?)::/,'<sup>$1</sup>');
-				//custom style
-				curline = curline.replace(/\{style:([\s\S]+?)\}([\s\S]+?)\{style\}/,'<span style="$1">$2</span>');
+				curline = qwiki.processInline(this,curline);
 				// references
-				var self = this;
-				curline = curline.replace(/\[([^\s\]]+?)(\s+([^|~\]]+?))?([\|~]([\s\S]+?))?\]/g, function(match, addr, p2, name, p3, tail){
-					return self.processReference(match, addr, p2, name, p3, tail);
-				});
+				curline = qwiki.processReferences(this,curline, qwiki.defaultProcessReference, null);
 				
-				//HEADERS SUPPORT
-				if (curline.match(/^======/)){
-					curline = "<h6>" + curline.substring(6) + "</h6>";
-				}else if (curline.match(/^=====/)){
-					curline = "<h5>" + curline.substring(5) + "</h5>";
-				}else if (curline.match(/^====/)){
-					curline = "<h4>" + curline.substring(4) + "</h4>";
-				}else if (curline.match(/^===/)){
-					curline = "<h3>" + curline.substring(3) + "</h3>";
-				}else if (curline.match(/^==/)){
-					curline = "<h2>" + curline.substring(2) + "</h2>";
-				}else if (curline.match(/^=/)){
-					curline = "<h1>" + curline.substring(1) + "</h1>";
-				}
-
-				//LIST SUPPORT
-				if (curline.match(/^%%%%%%/)){
-					curline = "<div class='wiki-list-6'>" + curline.substring(6) + "</div>";
-				}else if (curline.match(/^%%%%%/)){
-					curline = "<div class='wiki-list-5'>" + curline.substring(5) + "</div>";
-				}else if (curline.match(/^%%%%/)){
-					curline = "<div class='wiki-list-4'>" + curline.substring(4) + "</div>";
-				}else if (curline.match(/^%%%/)){
-					curline = "<div class='wiki-list-3'>" + curline.substring(3) + "</div>";
-				}else if (curline.match(/^%%/)){
-					curline = "<div class='wiki-list-2'>" + curline.substring(2) + "</div>";
-				}else if (curline.match(/^%/)){
-					curline = "<div class='wiki-list-1'>" + curline.substring(1) + "</div>";
-				}
+				curline = qwiki.processLine(this,curline);
 				
 				return curline;
 		},
@@ -334,21 +241,7 @@ qwiki.create = function(text, logwriter){
 			this.html = "";
 			this.processed.push("<div class='wiki'>");
 			this.log(this,"start");
-			var preprocessedText = '\n'+this.text.trim()+'\n';
-			preprocessedText = preprocessedText.replace(/\r/g,'');
-			// firstly we must meet 1-st feature - we unify and process line delimiters
-			preprocessedText = preprocessedText.replace(/\n\n+/g,"\n\n[BR]\n\n");
-			preprocessedText = preprocessedText.replace(/\n([\=\%\!\-\|])([^\n]+)/g,'\n\n$1$2\n\n');
-			// then we must split lines for block elements
-			preprocessedText = preprocessedText.replace(/(\[\[\/?\w+\]\])/g,"\n\n\n\n$1\n\n\n\n");
-			
-			
-			
-			// and finally remove ambigous lines
-			preprocessedText = preprocessedText.replace(/\n\n+/g,"__LINER__");
-			preprocessedText = preprocessedText.replace(/\n/g,"&nbsp;");
-			preprocessedText = preprocessedText.replace(/__LINER__/g,"\n");
-			
+			var preprocessedText = qwiki.preprocess(this);
 			this.log(this,"lines merged");
 			// then we setup array of 
 			this.lines = preprocessedText.split(/\n/);
@@ -369,10 +262,9 @@ qwiki.create = function(text, logwriter){
 				
 				if (this.codeblock) {
 					
-					this.processed.push( this.processCode( curline)) ;
+					this.processed.push( qwiki.processCode(this, curline)) ;
 					continue;
 				}
-				
 				
 				//WIKI IGNORANCE SUPPORT WITH BLOCK AND INLINE
 				if (curline=="[[/nowiki]]") {
@@ -387,9 +279,7 @@ qwiki.create = function(text, logwriter){
 					this.processed.push(curline);
 					continue;
 				}
-				
-				
-				
+			
 				if (curline.match(/^\|/)) {
 					if (!this.table) {
 						this.processed.push("<table>");
@@ -486,6 +376,131 @@ qwiki.create = function(text, logwriter){
 	this.setup(result);
 	return result;
 }
+
+
+qwiki.createTOC = function(text, logwriter){
+	var result = {
+		text : text,
+		lines /* as string[] */: null,
+		processed : [],
+		html /* as string */: null,
+		log : logwriter||function(sender,text){},
+
+		processReference : function(processor,match, addr, p2, name, p3, tail,newitem) {
+			var addr = (addr || "").trim();
+			var title = (name || addr|| "").trim();
+			var tail = (tail||"").trim();
+			newitem.addr = addr;
+			newitem.title = title;
+			newitem.extension = tail;
+		},
+		
+		processDefault : function( curline ) {
+				if(this.nowiki)return;
+				if(curline=="[[nowiki]]"){
+					this.nowiki = true;
+					return;
+				}
+				if(curline=="[[/nowiki]]"){
+					this.nowiki = false;
+					return;
+				}
+				if(curline.match(/^\!/))return;
+				if(!curline.match(/^\=/))return;
+				
+				var level = 0;
+				//HEADERS SUPPORT
+				if (curline.match(/^======/)){
+					level = 6;
+					curline = curline.substring(6).trim();
+				}else if (curline.match(/^=====/)){
+					level = 5;
+					curline = curline.substring(5).trim();
+				}else if (curline.match(/^====/)){
+					level = 4;
+					curline = curline.substring(4).trim();
+				}else if (curline.match(/^===/)){
+					level = 3;
+					curline = curline.substring(3).trim();
+				}else if (curline.match(/^==/)){
+					level = 2;
+					curline = curline.substring(2).trim();
+				}else if (curline.match(/^=/)){
+					level = 1;
+					curline = curline.substring(1).trim();
+				}
+				if(level == 0 ) return null;
+				
+				curline = qwiki.processInline(this,curline);
+				
+				var newitem = { level : level, raw : curline, items : []  };
+				// references
+				
+				curline = qwiki.processReferences(this,curline, this.processReference, newitem);
+				
+				if (1==level) {
+					this.json.items.push(newitem);
+					newitem.parent = this.json;
+				}else{
+					if (null!=this.last) {
+						if ( level == this.last.level ) {
+							this.last.parent.items.push(newitem);
+							newitem.parent = this.last.parent;
+						}else if( level == this.last.level + 1) {
+							this.last.items.push(newitem);
+							newitem.parent = this.last;
+						}else if (level < this.last.level) {
+							var target = this.last;
+							while (level <= target.level) {
+								target = target.parent;
+							}
+							target.items.push(newitem);
+							newitem.parent = target;
+						}
+					}
+				}
+				
+				this.currentLevel = level;
+				this.last = newitem;
+				this.json.all = this.json.all || [];
+				this.json.all.push(newitem);
+		},
+		
+		//state control
+		idx : 0,
+		curline : "",
+		currentLevel : 0,
+		last : null,
+		nowiki : false,
+		process : function(){
+			this.processed = [];
+			this.json = {items:[]};
+			this.log(this,"start");
+			var preprocessedText = qwiki.preprocess(this);
+			
+			this.log(this,"lines merged");
+			// then we setup array of 
+			this.lines = preprocessedText.split(/\n/);
+			this.log(this,"text splited");
+			for (this.idx = 0; this.idx < this.lines.length; this.idx++){
+				this. processDefault( this.lines[this.idx] );
+				
+			}
+
+			if(this.json.all){
+				for(var i = 0;i<this.json.all.length;i++){
+					delete(this.json.all[i].parent);
+				}
+			
+			}
+			delete (this.json.all);
+			
+		},
+	};
+	this.setup(result);
+	return result;
+}
+
 qwiki.toHTML = function(text){
 	var processor = this.create(text);
 	processor.process();

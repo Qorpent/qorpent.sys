@@ -1,4 +1,9 @@
-﻿.wiki .sample {
+﻿.wiki p {
+	text-align : justify;
+	text-indent : 30px;
+}
+
+.wiki .sample {
 	background-color: #fafacc;
 	border : solid 1px gray;
 	padding : 5px;
@@ -28,18 +33,21 @@
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 18pt;
+	
 }
 .wiki h2 {
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 16pt;
 	padding-left : 10px;
+	
 }
 .wiki h3 {
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 14pt;
 	padding-left : 20px;
+	
 }
 .wiki h4 {
 	margin-top : 6px;
@@ -47,6 +55,7 @@
 	font-size : 14pt;
 	font-style :italic;
 	padding-left : 30px;
+	
 }
 .wiki h5 {
 	margin-top : 6px;
@@ -54,6 +63,7 @@
 	font-size : 12pt;
 	font-style :italic;
 	padding-left : 40px;
+	
 }
 .wiki h6 {
 	margin-top : 6px;
@@ -61,40 +71,52 @@
 	font-size : 10pt;
 	font-style :italic;
 	padding-left : 50px;
+	
 }
 
 .wiki .wiki-list-1:before {
 	content : "●    ";
+	
 }
 .wiki .wiki-list-2:before {
 	content : "○    ";
+	
 }
 .wiki .wiki-list-2 {
 	padding-left : 20px;
+	
 }
 .wiki .wiki-list-3:before {
 	content : "¤    ";
+	
 }
 .wiki .wiki-list-3 {
 	padding-left : 40px;
+	
 }
 .wiki .wiki-list-4:before {
 	content : "●    ";
+	
 }
 .wiki .wiki-list-4 {
 	padding-left : 60px;
+	
 }
 .wiki .wiki-list-5:before {
 	content : "○    ";
+	
 }
 .wiki .wiki-list-5 {
 	padding-left : 80px;
+	
 }
 .wiki .wiki-list-6:before {
 	content : "¤    ";
+	
 }
 .wiki .wiki-list-6 {
 	padding-left : 100px;
+	
 }
 
 .wiki .wiki-code {
@@ -102,6 +124,7 @@
 	background-color : #ffffAA;
 	font-family : consolas;
 	font-size:8pt;
+	
 }
 
 .wiki .wiki-code .comment {

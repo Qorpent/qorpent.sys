@@ -111,5 +111,64 @@ namespace Qorpent.Wiki {
 			CheckPersister();
 			return Persister.LoadBinary(code, withData);
 		}
+
+
+		/// <summary>
+		/// Поиск объектов Wiki
+		/// </summary>
+		/// <param name="search"></param>
+		/// <param name="count"></param>
+		/// <param name="types"></param>
+		/// <param name="start"></param>
+		/// <returns></returns>
+		public IEnumerable<WikiObjectDescriptor> Find(string search, int start=-1, int count =-1, WikiObjectType types = WikiObjectType.All) {
+			CheckPersister();
+			int currentIdx = 0;
+
+			IEnumerable<WikiPage> pageselector =types.HasFlag(WikiObjectType.Page)?Persister.FindPages(search):  null;
+			IEnumerable<WikiBinary> binselector = types.HasFlag(WikiObjectType.File) ? Persister.FindBinaries(search) : null;
+			IEnumerator<WikiPage> pageenum = pageselector != null ? pageselector.GetEnumerator() : null;
+			IEnumerator<WikiBinary> fileenum = pageselector != null ? binselector.GetEnumerator() : null;
+			bool haspages = pageenum == null ? false : true;
+			bool hasbins = fileenum == null ? false : true;
+			while (haspages||hasbins) {
+				if (start != -1 && count != -1)
+				{
+					if (currentIdx >= (start + count))
+					{
+						break;
+					}
+				}
+				if (haspages) {
+					haspages = pageenum.MoveNext();
+					if (haspages) {
+
+						if (-1 == start || currentIdx >= start) {
+							yield return new WikiObjectDescriptor(pageenum.Current);
+						}
+						currentIdx++;
+						continue;
+					}
+				}
+				
+
+				if (hasbins)
+				{
+					hasbins = fileenum.MoveNext();
+					if (hasbins)
+					{
+
+						if (-1 == start || currentIdx >= start)
+						{
+							yield return new WikiObjectDescriptor(fileenum.Current);
+						}
+						currentIdx++;
+						continue;
+					}
+				}
+
+			}
+			
+		}
 	}
 }
