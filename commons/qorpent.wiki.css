@@ -1,4 +1,12 @@
-﻿.wiki p {
+﻿@media print{
+	.wiki hr {
+		display :none;
+		page-break-before : always;
+	}
+}
+
+
+.wiki p {
 	text-align : justify;
 	text-indent : 30px;
 }

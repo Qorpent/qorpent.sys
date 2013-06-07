@@ -23,6 +23,11 @@ namespace Qorpent.IO {
 	public static class MimeHelper
 	{
 		/// <summary>
+		/// Стандартный MIME для HTML
+		/// </summary>
+		public const string HTML = "text/html";
+
+		/// <summary>
 		/// Converts extension to mime type
 		/// </summary>
 		/// <param name="extension"></param>
@@ -58,7 +63,7 @@ namespace Qorpent.IO {
 				case "pdf":
 					return "application/pdf";
 				case "html":
-					return "text/html";
+					return HTML;
 				case "htm":
 					return "text/html";
 				case "zip":

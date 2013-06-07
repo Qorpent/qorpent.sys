@@ -82,6 +82,7 @@
     <Compile Include="Wiki\DefaultWikiSource.cs" />
     <Compile Include="Wiki\IWikiEmptyFilter.cs" />
     <Compile Include="Wiki\IWikiGetFilter.cs" />
+    <Compile Include="Wiki\IWikiSerializer.cs" />
     <Compile Include="Wiki\IWikiSaveFilter.cs" />
     <Compile Include="Wiki\IWikiPersister.cs" />
     <Compile Include="Wiki\IWikiSource.cs" />

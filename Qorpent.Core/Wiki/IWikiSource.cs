@@ -2,10 +2,6 @@
 
 namespace Qorpent.Wiki
 {
-
-	
-
-
 	/// <summary>
 	/// Интерфейс, описывающий простеший репозиторий Wiki
 	/// </summary>
