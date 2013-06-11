@@ -39,7 +39,7 @@ qwiki.preprocess = function(processor){
 	preprocessedText = preprocessedText.replace(/\r/g,'');
 	// firstly we must meet 1-st feature - we unify and process line delimiters
 	preprocessedText = preprocessedText.replace(/\n\n+/g,"\n\n[BR]\n\n");
-	preprocessedText = preprocessedText.replace(/\n([\=\%\!\-\|])([^\n]+)/g,'\n\n$1$2\n\n');
+	preprocessedText = preprocessedText.replace(/\n([\=\%\!\-\|№])([^\n]+)/g,'\n\n$1$2\n\n');
 	// then we must split lines for block elements
 	preprocessedText = preprocessedText.replace(/(\[\[\/?\w+\]\])/g,"\n\n\n\n$1\n\n\n\n");
 	// and finally remove ambigous lines
@@ -100,18 +100,35 @@ qwiki.processLine =  function(processor,curline){
 
 	//LIST SUPPORT
 	else if (curline.match(/^%%%%%%/)){
-		curline = "<div class='wiki-list-6'>" + curline.substring(6) + "</div>";
+		curline = "<div class='wiki-list wiki-list-6'>" + curline.substring(6) + "</div>";
 	}else if (curline.match(/^%%%%%/)){
-		curline = "<div class='wiki-list-5'>" + curline.substring(5) + "</div>";
+		curline = "<div class='wiki-list wiki-list-5'>" + curline.substring(5) + "</div>";
 	}else if (curline.match(/^%%%%/)){
-		curline = "<div class='wiki-list-4'>" + curline.substring(4) + "</div>";
+		curline = "<div class='wiki-list wiki-list-4'>" + curline.substring(4) + "</div>";
 	}else if (curline.match(/^%%%/)){
-		curline = "<div class='wiki-list-3'>" + curline.substring(3) + "</div>";
+		curline = "<div class='wiki-list wiki-list-3'>" + curline.substring(3) + "</div>";
 	}else if (curline.match(/^%%/)){
-		curline = "<div class='wiki-list-2'>" + curline.substring(2) + "</div>";
+		curline = "<div class='wiki-list wiki-list-2'>" + curline.substring(2) + "</div>";
 	}else if (curline.match(/^%/)){
-		curline = "<div class='wiki-list-1'>" + curline.substring(1) + "</div>";
-	}else{
+		curline = "<div class='wiki-list wiki-list-1'>" + curline.substring(1) + "</div>";
+	}
+	
+	else if (curline.match(/^№№№№№№/)){
+		curline = "<div class='wiki-list wiki-list-6 number'>" + curline.substring(6) + "</div>";
+	}else if (curline.match(/^№№№№№/)){
+		curline = "<div class='wiki-list wiki-list-5 number'>" + curline.substring(5) + "</div>";
+	}else if (curline.match(/^№№№№/)){
+		curline = "<div class='wiki-list wiki-list-4 number'>" + curline.substring(4) + "</div>";
+	}else if (curline.match(/^№№№/)){
+		curline = "<div class='wiki-list wiki-list-3 number'>" + curline.substring(3) + "</div>";
+	}else if (curline.match(/^№№/)){
+		curline = "<div class='wiki-list wiki-list-2 number'>" + curline.substring(2) + "</div>";
+	}else if (curline.match(/^№/)){
+		curline = "<div class='wiki-list wiki-list-1 number'>" + curline.substring(1) + "</div>";
+	}
+	
+	
+	else{
 		curline = "<p>"+curline+"</p>";
 	}
 	if(this.afterLine){
@@ -156,10 +173,10 @@ qwiki.processCode =function(processor,curline ) {
 	curline = curline.replace(/(\b-?\d+(\.\d+)?)/g,"<span _CLASS_ATTR_'number'>$1</span>");
 	
 	
-	curline+="<br/>";
+	//curline+="<br/>";
 	curline = curline.replace(/_CLASS_ATTR_/g,'class=');
 	curline = curline.replace(/__TAB__/g,'&nbsp;&nbsp;&nbsp;&nbsp;');
-	curline = curline.replace(/__BR__/g,'<br/>');
+	curline = curline.replace(/__BR__/g,'');
 	if(this.afterCode){
 		curline = this.afterCode(processor,curline);
 	}
@@ -215,7 +232,7 @@ qwiki.create = function(text, logwriter){
 				/////////////////////////////////////////////////////	
 				// LINE BREAK SUPPORT
 				if (curline == "[BR]") {
-					this.processed.push("<br/>");
+					//this.processed.push("<br/>");
 					return;
 				}
 				
@@ -248,6 +265,8 @@ qwiki.create = function(text, logwriter){
 			this.log(this,"text splited");
 			for (this.idx = 0; this.idx < this.lines.length; this.idx++){
 				var curline = this.lines[this.idx];
+				if (curline.match(/^\s*$/))continue;
+				
 				// CODE BLOCK SUPPORT
 				if (curline=="[[/code]]") {
 					this.codeblock = false;
@@ -285,8 +304,7 @@ qwiki.create = function(text, logwriter){
 						this.processed.push("<table>");
 						this.processed.push("<thead>");
 						this.table = true;
-						this.firstrow = true;
-						this.headclosed = false;
+						this.ishead = true;
 					}
 				}else{
 					if(this.table){
@@ -297,27 +315,28 @@ qwiki.create = function(text, logwriter){
 				}
 								
 				if ( this.table ) {
-					var tde = this.firstrow ? "th" : "td" ;
-					var keephead  = false;
-					if(!this.firstrow){
+					var tde = this.ishead ? "th" : "td" ;
+					if(!this.ishead){
 						if(curline.match(/^\|\{\+\}/)){
 							curline = curline.replace(/^\|\{\+\}/,'|');
-							this.firstrow = true;
+							this.ishead = true;
 							suffix = "";
 							tde = "th";
 						}
 					}
 					var items = curline.split(/\|/);
 					var row = "";
-					if(!this.firstrow && this.headclosed){
+					if(!this.ishead){
 						row+="</thead></tbody>";
-						this.headclosed = true;
 					}
+					this.ishead = false;
+					
 					row += "<tr>";
 					for(var i = 0;i<items.length;i++){
 						if(i==0||i==items.length-1)continue; //ignore left-right starters
 						var cell = items[i].trim();
-						cell = this.processDefault(cell).trim();
+						cell = qwiki.processInline(this,cell);
+						cell = qwiki.processReferences(this,cell, qwiki.defaultProcessReference, null);
 						var spanmatch = cell.match(/^\{(\d+)?(,(\d+))?\}/);
 						if(spanmatch){
 							cell = cell.replace(/^\{(\d+)?(,(\d+))?\}/,'');
@@ -339,7 +358,7 @@ qwiki.create = function(text, logwriter){
 					
 					row+="</tr>";
 					this.processed.push(row);
-					this.firstrow = false;
+					
 					continue;
 				}
 				if (curline=="[[sample]]") {

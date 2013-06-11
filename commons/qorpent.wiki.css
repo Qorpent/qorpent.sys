@@ -1,27 +1,64 @@
 ﻿@media print{
 	.wiki hr {
-		display :none;
-		page-break-before : always;
+		page-break-before : always ;
+		visibility : hidden;
+	}
+	.wiki .sample hr {
+		page-break-before : avoid !important ;
+		visibility : visible !important;
 	}
 }
+.wiki {
+	counter-reset : wiki-head-1 0 wiki-list-1 0 wiki-ref 0 wiki-img 0 wiki-file 0 wiki-sample 0 wiki-code 0 wiki-table 0;
+}
 
+.wiki-code, .wiki-sample {
+	counter-reset :  wiki-list-1 0;
+}
+
+.wiki-img {
+	counter-increment : wiki-img;
+	padding : 10px;
+}
+.wiki-img img {
+	padding : 3px;
+	margin : 3px;
+	border: solid 2px gray;
+}
+.wiki-img-title{
+	page-break-after :avoid;
+	font-size:10pt;
+	
+}
+.wiki-img-title:before {
+	content : "Рис. " counter(wiki-img) ". " ;
+}
 
 .wiki p {
+	counter-reset : wiki-list-1 0;
 	text-align : justify;
 	text-indent : 30px;
 }
 
+.wiki p, .wiki-list {
+	margin-top : 6pt;
+}
+
+
 .wiki .sample {
+	counter-increment : wiki-sample;
 	background-color: #fafacc;
 	border : solid 1px gray;
 	padding : 5px;
 }
 
 .wiki table {
+	counter-increment : wiki-table;
 	border-collapse : collapse;
 }
 
 .wiki .wiki-link { 	
+	counter-increment : wiki-ref;
 	color : #0088CC;
 	cursor : pointer;
 }
@@ -40,92 +77,172 @@
 .wiki h1 {
 	margin-top : 6px;
 	margin-bottom : 3px;
-	font-size : 18pt;
-	
+	font-size : 18pt;	
+	counter-increment : wiki-head-1;
+	counter-reset : wiki-head-2;
 }
+
+.wiki .sample h1, .wiki .sample h2, .wiki .sample h3,.wiki .sample h4,.wiki .sample h5,.wiki .sample h6 {
+	counter-increment : none;
+	counter-reset : none;
+}
+
+.wiki h1:before {
+	content : counter(wiki-head-1) "." ;
+}
+
 .wiki h2 {
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 16pt;
 	padding-left : 10px;
-	
+	counter-increment : wiki-head-2;
+	counter-reset : wiki-head-3;
 }
+
+.wiki h2:before {
+	content : counter(wiki-head-1) "." counter(wiki-head-2) "." ;
+}
+
 .wiki h3 {
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 14pt;
 	padding-left : 20px;
-	
+	counter-increment : wiki-head-3;
+	counter-reset : wiki-head-4;
 }
+
+.wiki h3:before {
+	content : counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." ;
+}
+
+
 .wiki h4 {
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 14pt;
 	font-style :italic;
 	padding-left : 30px;
-	
+	counter-increment : wiki-head-4;
+	counter-reset : wiki-head-5;
 }
+.wiki h4:before {
+	content : counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." counter(wiki-head-4) "." ;
+}
+
+
+
 .wiki h5 {
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 12pt;
 	font-style :italic;
 	padding-left : 40px;
+	counter-increment : wiki-head-5;
+	counter-reset : wiki-head-6;
 	
 }
+
+
+.wiki h5:before {
+	
+	content : counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." counter(wiki-head-4) "." counter(wiki-head-5) "." ;
+}
+
+
+
 .wiki h6 {
 	margin-top : 6px;
 	margin-bottom : 3px;
 	font-size : 10pt;
 	font-style :italic;
 	padding-left : 50px;
+	counter-increment : wiki-head-6;
 	
+}
+.wiki h6:before {
+	
+	content : counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." counter(wiki-head-4) "." counter(wiki-head-5) "." counter(wiki-head-6) "." ;
 }
 
+
+.wiki .wiki-list {
+	text-align : justify;
+}
+.wiki .wiki-list-1 {
+	counter-increment : wiki-list-1;
+	counter-reset : wiki-list-2;
+}
 .wiki .wiki-list-1:before {
 	content : "●    ";
-	
 }
-.wiki .wiki-list-2:before {
-	content : "○    ";
-	
+.wiki .wiki-list-1.number:before {
+	content : counter(wiki-list-1) ".";
 }
 .wiki .wiki-list-2 {
 	padding-left : 20px;
-	
+	counter-increment : wiki-list-2;	
+	counter-reset : wiki-list-3;
+}
+.wiki .wiki-list-2:before {
+	content : "○    ";
+}
+.wiki .wiki-list-2.number:before {
+	content : counter(wiki-list-1) "." counter(wiki-list-2) "." ;
+}
+
+
+.wiki .wiki-list-3{
+	padding-left : 40px;
+	counter-increment : wiki-list-3;
+	counter-reset : wiki-list-4;
 }
 .wiki .wiki-list-3:before {
 	content : "¤    ";
-	
 }
-.wiki .wiki-list-3 {
-	padding-left : 40px;
-	
+.wiki .wiki-list-3.number:before {
+	content : counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) "." ;
+}
+
+.wiki .wiki-list-4 {
+	padding-left : 60px;
+	counter-increment : wiki-list-4;
+	counter-reset : wiki-list-5;	
 }
 .wiki .wiki-list-4:before {
 	content : "●    ";
-	
 }
-.wiki .wiki-list-4 {
-	padding-left : 60px;
-	
+.wiki .wiki-list-4.number:before {
+	content : counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) "." counter(wiki-list-4) "." ;
+}
+
+.wiki .wiki-list-5 {
+	counter-increment : wiki-list-5;
+	counter-reset : wiki-list-6;
+	padding-left : 80px;
 }
 .wiki .wiki-list-5:before {
 	content : "○    ";
-	
 }
-.wiki .wiki-list-5 {
-	padding-left : 80px;
-	
+.wiki .wiki-list-5.number:before {
+	content : counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) "." counter(wiki-list-4) "." counter(wiki-list-5) "." ;
 }
-.wiki .wiki-list-6:before {
-	content : "¤    ";
-	
-}
-.wiki .wiki-list-6 {
+
+.wiki .wiki-list-6 {	
+	counter-increment : wiki-list-6;
 	padding-left : 100px;
 	
 }
+
+.wiki .wiki-list-6:before {
+	content : "¤    ";
+}
+.wiki .wiki-list-6.number:before {
+	content : counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) "." counter(wiki-list-4) "." counter(wiki-list-5) "." counter(wiki-list-6) "." ;
+}
+
+
 
 .wiki .wiki-code {
 	padding : 5pt;
