@@ -1,6 +1,11 @@
+using System;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Qorpent.Mvc.Binding;
+using Qorpent.Mvc.Renders;
 using Qorpent.Utils.Extensions;
+using Qorpent.Wiki;
 
 namespace Qorpent.Mvc.Actions {
 	/// <summary>
@@ -15,13 +20,38 @@ namespace Qorpent.Mvc.Actions {
 		/// <summary>
 		/// Вариант использования
 		/// </summary>
-		[Bind] public string Usage;
+		[Bind(Default = "default")] public string Usage;
 		/// <summary>
 		/// Возвращает страницы Wiki по запросу
 		/// </summary>
 		/// <returns></returns>
 		protected override object MainProcess() {
 			return WikiSource.Get(Usage,Code.SmartSplit(false,true,',').ToArray()).ToArray();
+		}
+		/// <summary>
+		/// Поддерживает возврат статуса неизменности
+		/// </summary>
+		/// <returns></returns>
+		protected override bool GetSupportNotModified() {
+			return true;
+		}
+
+		/// <summary>
+		/// Возвращает последнюю версию страницы
+		/// </summary>
+		/// <returns></returns>
+		protected override System.DateTime EvalLastModified() {
+			return WikiSource.GetVersion(Code, WikiObjectType.Page);
+		}
+
+		/// <summary>
+		/// 	override if Yr action provides 304 state and return ETag header
+		/// </summary>
+		/// <returns> </returns>
+		protected override string EvalEtag()
+		{
+			return Convert.ToBase64String( MD5.Create().ComputeHash(Encoding.UTF8.GetBytes( Code+"_"+ Usage+"_" + WikiRender.WikiRenderVersion)));
+			
 		}
 	}
 }

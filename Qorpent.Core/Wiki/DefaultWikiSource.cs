@@ -9,7 +9,21 @@ namespace Qorpent.Wiki {
 	/// </summary>
 	[ContainerComponent(Lifestyle.Transient,Name = "wiki.source.default",ServiceType = typeof(IWikiSource))]
 	public class DefaultWikiSource :ServiceBase, IWikiSource {
-		
+		/// <summary>
+		/// Версия для 304
+		/// </summary>
+		public const int Version = 1;
+
+		/// <summary>
+		/// Играет роль хэш-функции для определенного типа.
+		/// </summary>
+		/// <returns>
+		/// Хэш-код для текущего объекта <see cref="T:System.Object"/>.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode() {
+			return Version;
+		}
 		/// <summary>
 		/// Компонент, реализующий физическое хранение вики
 		/// </summary>
@@ -169,6 +183,20 @@ namespace Qorpent.Wiki {
 
 			}
 			
+		}
+
+		/// <summary>
+		/// Возвращает версию объекта
+		/// </summary>
+		/// <param name="code"></param>
+		/// <param name="objectType"></param>
+		/// <returns></returns>
+		public DateTime GetVersion(string code, WikiObjectType objectType) {
+			CheckPersister();
+			if (objectType == WikiObjectType.File) {
+				return Persister.GetBinaryVersion(code);
+			}
+			return Persister.GetPageVersion(code);
 		}
 	}
 }

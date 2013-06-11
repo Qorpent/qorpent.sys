@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Qorpent.Wiki
 {
@@ -48,6 +49,14 @@ namespace Qorpent.Wiki
 		/// <param name="start"></param>
 		/// <returns></returns>
 		IEnumerable<WikiObjectDescriptor> Find(string search, int start=-1, int count=-1, WikiObjectType types = WikiObjectType.All);
+
+		/// <summary>
+		/// Возвращает версию объекта
+		/// </summary>
+		/// <param name="code"></param>
+		/// <param name="objectType"></param>
+		/// <returns></returns>
+		DateTime GetVersion(string code, WikiObjectType objectType);
 
 	}
 }

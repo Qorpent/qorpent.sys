@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Wiki {
+﻿using Qorpent.Mvc;
+
+namespace Qorpent.Wiki {
 	/// <summary>
 	/// Интерфейс рендера Wiki
 	/// </summary>
@@ -10,6 +12,6 @@
 		/// <param name="page"></param>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		string ToHTML(string usage, WikiPage page, object context);
+		string ToHTML(string usage, WikiPage page, IMvcContext context);
 	}
 }

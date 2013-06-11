@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Qorpent.Wiki {
 	/// <summary>
@@ -50,5 +51,18 @@ namespace Qorpent.Wiki {
 		/// <param name="search"></param>
 		/// <returns></returns>
 		IEnumerable<WikiBinary> FindBinaries(string search);
+
+		/// <summary>
+		/// Возвращает версию файла
+		/// </summary>
+		/// <param name="code"></param>
+		/// <returns></returns>
+		DateTime GetBinaryVersion(string code);
+		/// <summary>
+		/// Возвращает версию страницы
+		/// </summary>
+		/// <param name="code"></param>
+		/// <returns></returns>
+		DateTime GetPageVersion(string code);
 	}
 }

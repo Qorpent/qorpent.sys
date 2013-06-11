@@ -1,5 +1,6 @@
 using System;
 using Qorpent.Mvc.Binding;
+using Qorpent.Wiki;
 
 namespace Qorpent.Mvc.Actions {
 	/// <summary>
@@ -19,6 +20,12 @@ namespace Qorpent.Mvc.Actions {
 		public bool AsFile { get; set; }
 
 		/// <summary>
+		/// Параметр указывающий необходимость подгрузки данных
+		/// </summary>
+		[Bind(Default = true)]
+		public bool WithData { get; set; }
+
+		/// <summary>
 		/// 	override if Yr action provides 304 state and return TRUE
 		/// </summary>
 		/// <returns> </returns>
@@ -30,10 +37,8 @@ namespace Qorpent.Mvc.Actions {
 		/// 	override if Yr action provides 304 state  and return Last-Modified-State header
 		/// </summary>
 		/// <returns> </returns>
-		protected override System.DateTime EvalLastModified() {
-			var file = WikiSource.LoadBinary(Code, false);
-			if (null == file) return DateTime.MinValue;
-			return file.LastWriteTime;
+		protected override DateTime EvalLastModified() {
+			return WikiSource.GetVersion(Code, WikiObjectType.File);
 		}
 		
 
@@ -42,13 +47,13 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
-			var file = WikiSource.LoadBinary(Code, true);
+			var file = WikiSource.LoadBinary(Code, WithData);
 			if (null == file) {
 				throw new Exception("file not found");
 			}
 			var filedesc = new FileDescriptor();
 			filedesc.NeedDisposition = AsFile;
-			
+			filedesc.LastWriteTime = file.LastWriteTime;
 			filedesc.MimeType = file.MimeType;
 			filedesc.Data = file.Data;
 			filedesc.Length = (int)file.Size;

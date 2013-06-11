@@ -11,6 +11,22 @@ namespace Qorpent.Mvc.Renders {
 	[Render("wiki")]
 	public class WikiRender : RenderBase {
 		/// <summary>
+		/// Версия для расчета 304
+		/// </summary>
+		public const int WikiRenderVersion = 1;
+
+		/// <summary>
+		/// Играет роль хэш-функции для определенного типа.
+		/// </summary>
+		/// <returns>
+		/// Хэш-код для текущего объекта <see cref="T:System.Object"/>.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode() {
+
+			return WikiRenderVersion*10000 + WikiSerializer.GetHashCode()*100 + WikiSource.GetHashCode() *10;
+		}
+		/// <summary>
 		/// Объект трансформации WIKI в HTML
 		/// </summary>
 		[Inject]
@@ -29,7 +45,7 @@ namespace Qorpent.Mvc.Renders {
 		public override void Render(IMvcContext context) {
 			var standalone = context.Get("standalone", true);
 			var usage = context.Get("usage", "default");
-			var onserver = context.Get("onserver", false);
+			var onserver = context.Get("onserver", true);
 			var page = GetWikiPage(context);
 			Render(page,usage,standalone,onserver,context);
 		}
@@ -38,6 +54,9 @@ namespace Qorpent.Mvc.Renders {
 			WikiPage page = null;
 			if (context.ActionResult is WikiPage) {
 				page = context.ActionResult as WikiPage;
+			}
+			else if (context.ActionResult is WikiPage[]) {
+				page = (context.ActionResult as WikiPage[])[0];
 			}
 			else if (context.ActionResult is string) {
 				page = new WikiPage {Text = context.ActionResult as string};
@@ -75,27 +94,27 @@ namespace Qorpent.Mvc.Renders {
 		/// <summary>
 		/// Адрес CSS WIKI для разрисовки по умолчанию
 		/// </summary>
-		public  string DefaultWikiCssReference = "./styles/qorpent.wiki.css";
+		public  string DefaultWikiCssReference = "/styles/qorpent.wiki.css";
 		/// <summary>
 		/// Адрес JS для разрисовки WIKI по умолчанию
 		/// </summary>
-		public  string DefaultWikiJsReference = "./styles/qorpent.wiki.css";
+		public  string DefaultWikiJsReference = "/scripts/qorpent.wiki.js";
 
 		/// <summary>
 		/// Шаблон отдельной Wiki страницы с серверной отрисовкой
 		/// </summary>
 		public  string StandaloneServerBasedTemplate = @"
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
 	<head>
-		<link rel='stylesheet' src='{0}' />
+		<link rel='stylesheet' href='{0}' type='text/css' >
 	</head>
 	<body>
 		<h1 class='wiki-title'>{1}</h1>
 		<div class='wiki-info'>
 			Последняя редакция: {2} , {3}
 		</div>
-		<div class='wiki-content'>
+		<div class='wiki'>
 		{4}
 		</div>
 	</body>
@@ -106,15 +125,15 @@ namespace Qorpent.Mvc.Renders {
 		/// </summary>
 
 		public  string StandaloneClientBasedTemplate = @"
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
 	<head>
-		<link rel='stylesheet' type='text/css' src='{0}' />
-		<script href='{1}' type='text/javascript' ></script>
+		<link rel='stylesheet' href='{0}' type='text/css'  >
+		<script src='{1}' type='text/javascript' ></script>
 		<script type='text/javascript'>
-			function render(){
+			function render(){{
 				document.getElementById('trg').innerHTML = qwiki.toHTML(document.getElementById('src').value);
-			}
+			}}
 		</script>
 	</head>
 	<body onload='render()'>
@@ -125,7 +144,7 @@ namespace Qorpent.Mvc.Renders {
 		<textarea id='src' style='display:none'>
 			{5}
 		</textarea>
-		<div id='trg' class='wiki-content'>
+		<div id='trg' class='wiki'>
 
 		</div>
 	</body>
@@ -135,8 +154,8 @@ namespace Qorpent.Mvc.Renders {
 		private void RenderStandaloneClientProcessedPage(WikiPage page, string usage, IMvcContext context) {
 			context.Output.Write(
 					string.Format(StandaloneClientBasedTemplate,
-						DefaultWikiCssReference,
-						DefaultWikiJsReference,
+						("/"+Application.ApplicationName+"/"+DefaultWikiCssReference).Replace("//","/"), 
+						("/"+Application.ApplicationName+"/"+DefaultWikiJsReference).Replace("//","/"), 
 						page.Title,
 						page.Editor,
 						page.LastWriteTime.ToString("dd.MM.yyyy hh:mm:ss"),
@@ -146,7 +165,7 @@ namespace Qorpent.Mvc.Renders {
 		private void RenderStandaloneServerProcessedPage(WikiPage page, string usage, IMvcContext context) {
 				context.Output.Write(
 					string.Format(StandaloneServerBasedTemplate, 
-						DefaultWikiCssReference, 
+						("/"+Application.ApplicationName+"/"+DefaultWikiCssReference).Replace("//","/"), 
 						page.Title, 
 						page.Editor,
 				        page.LastWriteTime.ToString("dd.MM.yyyy hh:mm:ss"),
