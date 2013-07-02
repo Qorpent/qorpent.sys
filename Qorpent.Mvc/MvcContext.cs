@@ -312,7 +312,65 @@ namespace Qorpent.Mvc {
 			}
 			set { _language = value; }
 		}
+        /// <summary>
+        /// 	UserHostAddress property
+        /// </summary>
+        [SerializeNotNullOnly]
+        public override string UserHostAddress
+        {
+            get
+            {
+                if (null == _userhostaddress)
+                {
+                    if (null != NativeAspContext)
+                    {
+                        _userhostaddress = NativeAspContext.Request.UserHostAddress;
+                    }
+                }
+                return _userhostaddress;
+            }
+            set { _userhostaddress = value; }
+        }
 
+        /// <summary>
+        /// 	UserHostName property
+        /// </summary>
+        [SerializeNotNullOnly]
+        public override string UserHostName
+        {
+            get
+            {
+                if (null == _userhostname)
+                {
+                    if (null != NativeAspContext)
+                    {
+                        _userhostname = NativeAspContext.Request.UserHostName;
+                    }
+                }
+                return _userhostname;
+            }
+            set { _userhostname = value; }
+        }
+
+        /// <summary>
+        /// 	UserAgent property
+        /// </summary>
+        [SerializeNotNullOnly]
+        public override string UserAgent
+        {
+            get
+            {
+                if (null == _useragent)
+                {
+                    if (null != NativeAspContext)
+                    {
+                        _useragent = NativeAspContext.Request.UserAgent;
+                    }
+                }
+                return _useragent;
+            }
+            set { _useragent = value; }
+        }
 
 		/// <summary>
 		/// </summary>
@@ -603,5 +661,8 @@ namespace Qorpent.Mvc {
 		private XElement _xdata;
 		private bool _xdatachecked;
 		private string _fileDisposition;
+	    private string _userhostaddress;
+	    private string _userhostname;
+	    private string _useragent;
 	}
 }

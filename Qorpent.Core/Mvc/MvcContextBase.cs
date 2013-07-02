@@ -414,8 +414,26 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		public bool IsRedirected { get; set; }
 
+	    /// <summary>
+	    /// 	UserHostAddress property
+	    /// </summary>
+	    [SerializeNotNullOnly]
+	    public virtual string UserHostAddress { get; set; }
 
-		/// <summary>
+	    /// <summary>
+	    /// 	UserHostName property
+	    /// </summary>
+	    [SerializeNotNullOnly]
+	    public virtual string UserHostName { get; set; }
+
+	    /// <summary>
+	    /// 	UserAgent property
+	    /// </summary>
+	    [SerializeNotNullOnly]
+	    public virtual string UserAgent { get; set; }
+
+
+	    /// <summary>
 		/// 	Generates parameters from underlined context
 		/// </summary>
 		/// <returns> </returns>

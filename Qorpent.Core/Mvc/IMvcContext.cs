@@ -36,6 +36,8 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		TextWriter Output { get; set; }
 
+	   
+
 		/// <summary>
 		/// 	Name of called action
 		/// </summary>
@@ -182,7 +184,25 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		string FileDisposition { get; set; }
 
-		/// <summary>
+	    /// <summary>
+	    /// 	UserHostAddress property
+	    /// </summary>
+	    [SerializeNotNullOnly]
+	    string UserHostAddress { get;  }
+
+	    /// <summary>
+	    /// 	UserHostName property
+	    /// </summary>
+	    [SerializeNotNullOnly]
+	    string UserHostName { get;  }
+
+	    /// <summary>
+	    /// 	UserAgent property
+	    /// </summary>
+	    [SerializeNotNullOnly]
+	    string UserAgent { get;  }
+
+	    /// <summary>
 		/// 	Extract call only information from context (for serialization propose)
 		/// </summary>
 		MvcCallInfo GetCallInfo();

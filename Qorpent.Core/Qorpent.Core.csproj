@@ -34,6 +34,7 @@
     <Compile Include="Model\Hierarchy.cs" />
     <Compile Include="Model\IWithGetParameter.cs" />
     <Compile Include="Model\IWithProperties.cs" />
+    <Compile Include="Mvc\IClientStatStorage.cs" />
     <Compile Include="Mvc\ValidationException.cs" />
     <Compile Include="Mvc\ValidationResult.cs" />
     <Compile Include="Qlaood\ApplicationQlaoodMode.cs" />
