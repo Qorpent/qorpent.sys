@@ -673,7 +673,7 @@ namespace Qorpent.IoC {
 		private void ProcessAttributedInjections(object result) {
 			var injections = from p in result.GetType().FindAllValueMembers(typeof (InjectAttribute))
 			                 let inja = p.Member.GetFirstAttribute<InjectAttribute>()
-			                 select new {prop = p, type = p.Type, name = inja.Name};
+			                 select new {prop = p, type = p.Type, name = inja.Name, factoryType = inja.FactoryType, required =inja.Required};
 
 			foreach (var i in injections) {
 				var current = i.prop.Get(result);
@@ -710,7 +710,15 @@ namespace Qorpent.IoC {
 				else {
 					throw new ContainerException("cannot inject property " + i.prop.Member.Name + " of type " + i.type);
 				}
-
+                if (!i.type.IsValueType && null == val) {
+                    if (null != i.factoryType) {
+                        var factory = (IFactory) Activator.CreateInstance(i.factoryType);
+                        val = factory.Get(i.type);
+                    }
+                    if (null == val && i.required) {
+                        throw new ContainerException("cannot inject required member "+i.name+" of type "+i.type);
+                    }
+                }
 				i.prop.Set(result, val);
 			}
 		}
