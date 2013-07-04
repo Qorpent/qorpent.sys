@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +6,7 @@ using NUnit.Framework;
 
 namespace Qorpent.Utils.Tests
 {
-	[TestFixture]
+    [TestFixture]
 	public class ComplexStringHelperTest
 	{
 		[TestCase("/`a:1~~`z/ ", "/a", "1::/z")]

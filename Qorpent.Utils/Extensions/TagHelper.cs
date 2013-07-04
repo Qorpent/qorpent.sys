@@ -33,9 +33,26 @@ namespace Qorpent.Utils.Extensions{
         public static string ToString(IDictionary<string,string> tags){
             var result = new StringBuilder();
             foreach (var tag in tags){
-                result.Append(" /" + tag.Key + ":" + tag.Value + "/");
+                result.Append(" /" + tag.Key + ":" + Escape(tag.Value) + "/");
             }
             return result.ToString().Trim();
+        }
+        /// <summary>
+        /// Производит экранизаци
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public static string Escape(string val) {
+            return val.Replace(":", "~").Replace("/", "`");
+        }
+
+        /// <summary>
+        /// Производит де-экранизацию значения
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public static string UnEscape(string val) {
+            return val.Replace("~", ":").Replace("`", "/");
         }
 
 		/// <summary>
@@ -121,7 +138,7 @@ namespace Qorpent.Utils.Extensions{
         /// <returns></returns>
         public static string Value (string tags, string tagname){
             var dict = Parse(tags);
-			if(dict.ContainsKey(tagname)) return dict[tagname].Replace("~", "/");
+			if(dict.ContainsKey(tagname)) return UnEscape(dict[tagname]);
 	        return "";
         }
 		/// <summary>
@@ -142,7 +159,7 @@ namespace Qorpent.Utils.Extensions{
                 {
                     if (s.Contains(":"))
                     {
-                        result[s.Split(':')[0]] = s.Split(':')[1];
+                        result[s.Split(':')[0]] = UnEscape(s.Split(':')[1]);
                     }
                     else
                     {

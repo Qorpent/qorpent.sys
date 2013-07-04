@@ -30,6 +30,7 @@
     <Compile Include="ReflectionHelperTest.cs" />
     <Compile Include="StaticInstanceTest.cs" />
     <Compile Include="StringExtensionsTest.cs" />
+    <Compile Include="TagHelperTest.cs" />
     <Compile Include="UniSqlTest.cs" />
     <Compile Include="XmlExtensionsTest.cs" />
   </ItemGroup>

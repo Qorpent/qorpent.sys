@@ -269,5 +269,20 @@ ns::test");
 			                                      new BxlParser().ParseTokens("x (a)=2"));
 			StringAssert.Contains("assign", exc.Message);
 		}
+
+        
+        [TestCase("e x=\"\"\"a:a\"\"\"")]
+        [TestCase("e\r\n\tx=\"\"\"a:a\"\"\"")]
+        [TestCase("e x='a:a'")]
+        [TestCase("e\r\n\tx='a:a'")]
+        [TestCase("e x=\"a:a\"")]
+        public void QPT78_Not_Supported_DoubleDot_In_Attribute(string code) {
+
+            var parsed = new BxlParser().Parse(code);
+            var e = parsed.Element("e");
+            var a = e.Attribute("x");
+            Assert.NotNull(a);
+            Assert.AreEqual("a:a",a.Value);
+        }
 	}
 }
