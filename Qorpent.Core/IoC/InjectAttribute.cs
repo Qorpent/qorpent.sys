@@ -24,9 +24,28 @@ namespace Qorpent.IoC {
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 	public class InjectAttribute : ContainerAttribute {
-		/// <summary>
+	    private Type _factoryType;
+
+	    /// <summary>
 		/// 	Name of component (for named injections)
 		/// </summary>
 		public string Name { get; set; }
+        /// <summary>
+        /// Тип фабрики для формирования объекта по умолчанию, должна наследовать IFactory
+        /// </summary>
+        public Type FactoryType {
+            get { return _factoryType; }
+            set {
+                if (null != value) {
+                    if(!typeof(IFactory).IsAssignableFrom(value))throw new Exception("must be IFactory");
+                    if (value.IsAbstract) throw new Exception("must be non-abstract");
+                }
+                _factoryType = value;
+            }
+        }
+        /// <summary>
+        /// Sygnals that this Injection MUST be resolved anyway , exception must be thrown otherwise
+        /// </summary>
+        public bool Required { get; set; }
 	}
 }

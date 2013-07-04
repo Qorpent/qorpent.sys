@@ -16,10 +16,11 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/IContainer.cs
 #endregion
+
 using System.Collections.Generic;
 
 namespace Qorpent.IoC {
-	///<summary>
+    ///<summary>
 	///	Описывает контейнер активации типов приложения (IoC+DI)
 	///</summary>
 	///<qorpentimplemented ref="Qorpent.IoC~Qorpent.IoC.Container">Container</qorpentimplemented>

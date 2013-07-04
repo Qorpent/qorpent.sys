@@ -23,6 +23,7 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
@@ -31,18 +32,28 @@ namespace Qorpent.IoC.Tests {
 	public class InjectionsTest {
 		[SetUp]
 		public void Setup() {
-			var c = new Container();
-			c.Register(new ComponentDefinition<IExt1, Ext1>(Lifestyle.Extension, "e1"));
-			c.Register(new ComponentDefinition<IExt1, Ext1>(Lifestyle.Extension, "e2"));
-			c.Register(new ComponentDefinition<IService1, Service1>(Lifestyle.Transient));
-			c.Register(new ComponentDefinition<IAgg, Agg>(Lifestyle.Transient).Set("prop1", "value1"));
-			testobj = c.Get<IAgg>();
+			container = new Container();
+			container.Register(new ComponentDefinition<IExt1, Ext1>(Lifestyle.Extension, "e1"));
+			container.Register(new ComponentDefinition<IExt1, Ext1>(Lifestyle.Extension, "e2"));
+			container.Register(new ComponentDefinition<IService1, Service1>(Lifestyle.Transient));
+			container.Register(new ComponentDefinition<IAgg, Agg>(Lifestyle.Transient,"1").Set("prop1", "value1"));
+		    container.Register(new ComponentDefinition<IAgg, Agg2>(Lifestyle.Transient,"2"));
+            container.Register(new ComponentDefinition<IAgg, Agg3>(Lifestyle.Transient,"3"));
+			testobj = container.Get<IAgg>("1");
 		}
 
 
 		private IAgg testobj;
+	    private Container container;
 
-		public interface IExt1 {}
+	    public interface IExt1 {}
+        public interface IExt2ByFact {}
+        public class Ext2ByFact:IExt2ByFact{}
+        public class Ext2Factory:IFactory {
+            public object Get(Type serviceType) {
+                return new Ext2ByFact();
+            }
+        }
 
 		public class Ext1 : IExt1 {}
 
@@ -50,13 +61,16 @@ namespace Qorpent.IoC.Tests {
 
 		public class Service1 : IService1 {}
 
+ 
+
 		public interface IAgg {
 			string Prop1 { get; set; }
-			[Inject] IService1 Service1 { get; set; }
-			[Inject] IExt1[] ExtsArray { get; set; }
-			[Inject] IList<IExt1> ExtsNullList { get; set; }
-			[Inject] List<IExt1> ExtsNullList2 { get; set; }
-			[Inject] IList<IExt1> ExtsNotNullList { get; set; }
+			IService1 Service1 { get; set; }
+			IExt1[] ExtsArray { get; set; }
+			IList<IExt1> ExtsNullList { get; set; }
+			List<IExt1> ExtsNullList2 { get; set; }
+			IList<IExt1> ExtsNotNullList { get; set; }
+            IExt2ByFact Ext2 { get; set; }
 		}
 
 		public class Agg : IAgg {
@@ -72,7 +86,73 @@ namespace Qorpent.IoC.Tests {
 			[Inject] public IList<IExt1> ExtsNullList { get; set; }
 			[Inject] public List<IExt1> ExtsNullList2 { get; set; }
 			[Inject] public IList<IExt1> ExtsNotNullList { get; set; }
+            [Inject(FactoryType = typeof(Ext2Factory))]public IExt2ByFact Ext2 { get; set; }
 		}
+        public class Agg2 : IAgg
+        {
+            public Agg2()
+            {
+                ExtsNotNullList = new List<IExt1>();
+                ExtsNotNullList.Add(new Ext1());
+            }
+
+
+            public string Prop1 { get; set; }
+            [Inject]
+            public IService1 Service1 { get; set; }
+            [Inject]
+            public IExt1[] ExtsArray { get; set; }
+            [Inject]
+            public IList<IExt1> ExtsNullList { get; set; }
+            [Inject]
+            public List<IExt1> ExtsNullList2 { get; set; }
+            [Inject]
+            public IList<IExt1> ExtsNotNullList { get; set; }
+            [Inject(Required = true)]
+            public IExt2ByFact Ext2 { get; set; }
+        }
+        public class Agg3 : IAgg
+        {
+            public Agg3()
+            {
+                ExtsNotNullList = new List<IExt1>();
+                ExtsNotNullList.Add(new Ext1());
+            }
+
+
+            public string Prop1 { get; set; }
+            [Inject]
+            public IService1 Service1 { get; set; }
+            [Inject]
+            public IExt1[] ExtsArray { get; set; }
+            [Inject]
+            public IList<IExt1> ExtsNullList { get; set; }
+            [Inject]
+            public List<IExt1> ExtsNullList2 { get; set; }
+            [Inject]
+            public IList<IExt1> ExtsNotNullList { get; set; }
+            [Inject(Required = false)]
+            public IExt2ByFact Ext2 { get; set; }
+        }
+
+       
+
+        [Test]
+        public void CanSetupWithFactory()
+        {
+            Assert.NotNull(testobj.Ext2);
+            Assert.IsInstanceOf<Ext2ByFact>(testobj.Ext2);
+        }
+
+        [Test]
+        public void ThrowErrorOnRequiredTrue() {
+            Assert.Throws<ContainerException>(() => container.Get<IAgg>("2"));
+        }
+        [Test]
+        public void NullOnRequiredFalse() {
+            var val = container.Get<IAgg>("3");
+            Assert.Null(val.Ext2);
+        }
 
 		[Test]
 		public void ArrayIsSettedWithInjections() {

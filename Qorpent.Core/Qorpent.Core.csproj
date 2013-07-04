@@ -28,6 +28,7 @@
     <Compile Include="Data\ParamAttribute.cs" />
     <Compile Include="Dsl\SmartXslt\IXsltHelper.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
+    <Compile Include="IoC\IFactory.cs" />
     <Compile Include="IO\IXmlReadable.cs" />
     <Compile Include="IO\IXmlWriteable.cs" />
     <Compile Include="IO\MimeHelper.cs" />
