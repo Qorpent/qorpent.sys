@@ -30,7 +30,7 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns></returns>
 		protected override object MainProcess() {
-			var page = new WikiPage {Code = Code, Title = Title,Text = Text};
+			var page = new WikiPage {Code = Code, Title = Title ?? "",Text = Text ?? ""};
 			foreach (var parameter in Context.Parameters) {
 				if (
 					parameter.Key.ToUpper() != "CODE" 
