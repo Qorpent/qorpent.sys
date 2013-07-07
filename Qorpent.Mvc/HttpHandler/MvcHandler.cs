@@ -110,7 +110,7 @@ namespace Qorpent.Mvc.HttpHandler {
 				AfterAuthorize(context);
 
 				if (context.AuthrizeResult.Authorized) {
-					BindContext(context);
+                    BindContext(context);
 					if (!context.IgnoreActionResult) {
 						EvaluateActionResult(context);
 					}
@@ -141,6 +141,7 @@ namespace Qorpent.Mvc.HttpHandler {
 		}
 
 		private void BindContext(IMvcContext context) {
+            if(context.RenderName=="form")return;
 			context.Bind();
 		}
 

@@ -98,7 +98,7 @@ namespace Qorpent.Mvc.Binding {
 					}
 				}
 				else if (TargetType.IsValueType) {
-					if (!context.Parameters.ContainsKey(Name)) {
+					if (!context.Parameters.ContainsKey(Name.ToLower())) {
 						isValid = false;
 					}
 				}
