@@ -4,10 +4,10 @@ using Qorpent.Serialization;
 
 namespace Qorpent.Wiki {
 	/// <summary>
-	/// Описывает Wiki-страницу
+	///     Описывает Wiki-страницу
 	/// </summary>
 	[Serialize]
-	public	class WikiPage {
+	public class WikiPage {
 		/// <summary>
 		/// Создает пустую страницу
 		/// </summary>
@@ -56,5 +56,15 @@ namespace Qorpent.Wiki {
 		/// </summary>
 		[SerializeNotNullOnly]
 		public string Title { get; set; }
+
+        /// <summary>
+        ///     Версия страницы
+        /// </summary>
+        public string Version { get; set; }
+
+        /// <summary>
+        ///     Дата публикации страницы
+        /// </summary>
+        public DateTime Published { get; set; }
 	}
 }

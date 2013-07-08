@@ -18,6 +18,21 @@ namespace Qorpent.Wiki {
 		/// <param name="codes"></param>
 		/// <returns></returns>
 		IEnumerable<WikiPage> Exists(params string[] codes);
+
+        /// <summary>
+        /// Возвращает полностью загруженные страницы Wiki
+        /// </summary>
+        /// <param name="codeVersion"></param>
+        /// <returns></returns>
+        IEnumerable<WikiPage> Get(IEnumerable<KeyValuePair<string, string>> codeVersion);
+
+        /// <summary>
+        /// Возвращает страницы, только с загруженным признаком хранения в БД
+        /// </summary>
+        /// <param name="codeVersion"></param>
+        /// <returns></returns>
+        IEnumerable<WikiPage> Exists(IEnumerable<KeyValuePair<string, string>> codeVersion);
+
 		/// <summary>
 		/// Метод сохранения изменений в страницу
 		/// </summary>
