@@ -51,9 +51,18 @@ namespace Qorpent.Mvc.Loader {
                     case LoadItemType.Style:
                     GenerateStyle(item, sb);
                     break;
+                    case LoadItemType.Template:
+                    GenerateTemplate(item, sb);
+                    break;
                 default:
                     throw new Exception("unknown type");
             }
+        }
+
+        private void GenerateTemplate(LoadItem item, StringBuilder sb) {
+            sb.Append("$.ajax({ url: 'tpl/" + item.Value + "', async: false })");
+            sb.Append(".success(function(data){templates[href] = data;});");
+            sb.AppendLine();
         }
 
         private void GenerateStyle(LoadItem item, StringBuilder sb) {
@@ -88,6 +97,8 @@ namespace Qorpent.Mvc.Loader {
 
         private void GeneratePreContent(LoadPackage[] set, StringBuilder sb) {
             sb.AppendLine("/* auto generated load set started */ ");
+            sb.AppendLine("window.templates = window.templates || {};");
+
         }
     }
 }

@@ -51,6 +51,8 @@ namespace Qorpent.Mvc.Loader {
                 result.Type = LoadItemType.Style;
             }else if (result.Value.Contains("rel=")) {
                 result.Type = LoadItemType.Link;
+            }else if (result.Value.EndsWith(".html")) {
+                result.Type = LoadItemType.Template;
             }
             else {
                 result.Type = LoadItemType.Meta;

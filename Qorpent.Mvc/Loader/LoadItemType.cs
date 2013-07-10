@@ -18,6 +18,10 @@
         /// <summary>
         /// CSS- file
         /// </summary>
-        Style
+        Style,
+        /// <summary>
+        /// Шаблон отрисовки
+        /// </summary>
+        Template,
     }
 }

@@ -74,10 +74,16 @@ namespace Qorpent.Mvc.Loader {
                 throw new Exception("unknown level");
             }
         }
-
+        /// <summary>
+        /// Сравнивает порядок пакетов
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public int Compare(LoadPackage x, LoadPackage y) {
             if (y.Dependency.ContainsKey(x.Code)) return -1;
             if (x.Dependency.ContainsKey(y.Code)) return 1;
+            if (x.Level != y.Level) return x.Level.CompareTo(y.Level);
             return System.String.Compare(x.Code, y.Code, StringComparison.Ordinal);
         }
     }

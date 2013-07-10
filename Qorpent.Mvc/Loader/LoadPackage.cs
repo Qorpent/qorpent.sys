@@ -43,6 +43,7 @@ namespace Qorpent.Mvc.Loader {
             foreach (var item in Items) {
                 result.Items.Add(item);
             }
+            return result;
         }
     }
 }

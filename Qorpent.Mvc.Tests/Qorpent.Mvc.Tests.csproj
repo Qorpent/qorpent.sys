@@ -17,6 +17,7 @@
   <ItemGroup>
     <Compile Include="BasicQViewCompilerTest.cs" />
     <Compile Include="DefaultLayoutTest.cs" />
+    <Compile Include="Loader\NormalizerTest.cs" />
     <Compile Include="MvcContextTest.cs" />
     <Compile Include="SimpleMvcProcessing.cs" />
     <Compile Include="SystemBasicConfiguration.cs" />
