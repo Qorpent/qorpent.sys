@@ -58,5 +58,20 @@ namespace Qorpent.Wiki
 		/// <returns></returns>
 		DateTime GetVersion(string code, WikiObjectType objectType);
 
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="code"></param>
+	    /// <param name="version"></param>
+	    /// <returns></returns>
+	    WikiPage GetWikiPageByVersion(string code, string version);
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="code"></param>
+	    /// <param name="comment"></param>
+	    /// <returns></returns>
+	    object CreateVersion(string code, string comment);
 	}
 }

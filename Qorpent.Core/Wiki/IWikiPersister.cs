@@ -12,6 +12,7 @@ namespace Qorpent.Wiki {
 		/// <param name="codes"></param>
 		/// <returns></returns>
 		IEnumerable<WikiPage> Get(params string[] codes);
+
 		/// <summary>
 		/// Возвращает страницы, только с загруженным признаком хранения в БД
 		/// </summary>
@@ -20,24 +21,18 @@ namespace Qorpent.Wiki {
 		IEnumerable<WikiPage> Exists(params string[] codes);
 
         /// <summary>
-        /// Возвращает полностью загруженные страницы Wiki
+        ///     Возвращает страницу Wiki. Если версия не указана — последнюю актуальную
         /// </summary>
-        /// <param name="codeVersion"></param>
+        /// <param name="code"></param>
+        /// <param name="version"></param>
         /// <returns></returns>
-        IEnumerable<WikiPage> Get(IEnumerable<KeyValuePair<string, string>> codeVersion);
+        WikiPage GetWikiPageByVersion(string code, string version);
 
         /// <summary>
-        /// Возвращает страницы, только с загруженным признаком хранения в БД
+        /// Метод сохранения изменений в страницу
         /// </summary>
-        /// <param name="codeVersion"></param>
-        /// <returns></returns>
-        IEnumerable<WikiPage> Exists(IEnumerable<KeyValuePair<string, string>> codeVersion);
-
-		/// <summary>
-		/// Метод сохранения изменений в страницу
-		/// </summary>
-		/// <param name="pages"></param>
-		void Save(params WikiPage[] pages);
+        /// <param name="pages"></param>
+        void Save(params WikiPage[] pages);
 
 		/// <summary>
 		/// Сохраняет в Wiki файл с указанным кодом
@@ -79,5 +74,13 @@ namespace Qorpent.Wiki {
 		/// <param name="code"></param>
 		/// <returns></returns>
 		DateTime GetPageVersion(string code);
+
+	    /// <summary>
+	    ///     Создание версии страницы (копии последней с комментарием)
+	    /// </summary>
+	    /// <param name="code">Код страницы</param>
+	    /// <param name="comment">Комментарий</param>
+	    /// <returns></returns>
+	    object CreateVersion(string code, string comment);
 	}
 }

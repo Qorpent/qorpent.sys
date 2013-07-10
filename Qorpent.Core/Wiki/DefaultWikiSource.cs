@@ -75,6 +75,26 @@ namespace Qorpent.Wiki {
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="comment"></param>
+        /// <returns></returns>
+        public object CreateVersion(string code, string comment) {
+            return Persister.CreateVersion(code, comment);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="version"></param>
+        /// <returns></returns>
+        public WikiPage GetWikiPageByVersion(string code, string version) {
+            return Persister.GetWikiPageByVersion(code, version);
+        }
+
 		private void CheckPersister() {
 			if (null == Persister) {
 				throw new Exception("no persister given");

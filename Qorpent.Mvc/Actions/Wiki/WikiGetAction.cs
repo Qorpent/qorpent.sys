@@ -13,6 +13,10 @@ namespace Qorpent.Mvc.Actions {
 	/// </summary>
 	[Action("wiki.get",Help = "ѕолучить Wiki по заданным кодам")]
 	public class WikiGetAction:WikiActionBase {
+        /// <summary>
+        /// 
+        /// </summary>
+        [Bind(Required = false)] protected string PageVersion;
 		/// <summary>
 		///  од или коды страниц, которые требуетс€ получить
 		/// </summary>
@@ -26,6 +30,10 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns></returns>
 		protected override object MainProcess() {
+            if (PageVersion != null) {
+                return WikiSource.GetWikiPageByVersion(Code, PageVersion);
+            }
+
 			return WikiSource.Get(Usage,Code.SmartSplit(false,true,',').ToArray()).ToArray();
 		}
 		/// <summary>
@@ -48,8 +56,7 @@ namespace Qorpent.Mvc.Actions {
 		/// 	override if Yr action provides 304 state and return ETag header
 		/// </summary>
 		/// <returns> </returns>
-		protected override string EvalEtag()
-		{
+		protected override string EvalEtag() {
 			return Convert.ToBase64String( MD5.Create().ComputeHash(Encoding.UTF8.GetBytes( Code+"_"+ Usage+"_" + WikiRender.WikiRenderVersion)));
 			
 		}

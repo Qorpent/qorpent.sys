@@ -16,6 +16,7 @@
     <Compile Include="Actions\IsInRoleAction.cs" />
     <Compile Include="Actions\SysInfoAction.cs" />
     <Compile Include="Actions\Wiki\WikiActionBase.cs" />
+    <Compile Include="Actions\Wiki\WikiCreateVersionAction.cs" />
     <Compile Include="Actions\Wiki\WikiExistsAction.cs" />
     <Compile Include="Actions\Wiki\WikiGetAction.cs" />
     <Compile Include="Actions\Wiki\WikiGetFileAction.cs" />
