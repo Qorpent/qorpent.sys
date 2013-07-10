@@ -23,6 +23,7 @@
     <Compile Include="Actions\Wiki\WikiSaveFileAction.cs" />
     <Compile Include="ClusterNodeLoadPoints.cs" />
     <Compile Include="HttpContextWrapper.cs" />
+    <Compile Include="Loader\CompileLoadScriptAction.cs" />
     <Compile Include="Loader\ILoadConfigReader.cs" />
     <Compile Include="Loader\ILoadFileGenerator.cs" />
     <Compile Include="Loader\ILoadPackageReader.cs" />
@@ -35,6 +36,7 @@
     <Compile Include="Loader\LoadLevel.cs" />
     <Compile Include="Loader\LoadPackage.cs" />
     <Compile Include="Loader\LoadPackageReader.cs" />
+    <Compile Include="Loader\LoadScriptAction.cs" />
     <Compile Include="Loader\LoadScriptGenerator.cs" />
     <Compile Include="Loader\LoadPackageSet.cs" />
     <Compile Include="Loader\LoadService.cs" />

@@ -343,7 +343,7 @@ namespace Qorpent.IO {
 		private string ResolveBestPosiblePath(FileSearchResultType type, string dir, string file,
 		                                      IUserLog userLog) {
 			if (file.StartsWith("~/")) {
-				return Path.Combine(Root, file.Substring(2)).NormalizePath();
+				return AdaptFilePath(type,Path.Combine(Root, file.Substring(2)).NormalizePath());
 			}
 			var path = "/" + dir + "/" + file;
 			var resolved = (Root + path).NormalizePath();

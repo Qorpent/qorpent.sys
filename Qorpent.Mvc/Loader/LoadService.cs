@@ -43,7 +43,7 @@ namespace Qorpent.Mvc.Loader {
         /// <summary>
         /// Корневая директория для скриптов
         /// </summary>
-        public string RootDir = "~/tmp/";
+        public string RootDir = "~/.tmp/";
         /// <summary>
         /// Шаблон имени файлов
         /// </summary>
@@ -53,7 +53,7 @@ namespace Qorpent.Mvc.Loader {
         /// Метод синхронизации на чтение/доступ к файлам скрипта
         /// </summary>
         public void Synchronize() {
-            if (null != CompileTask) {
+            if (null != CompileTask && !CompileTask.IsFaulted && !CompileTask.IsCanceled) {
                 CompileTask.Wait();
                 return;
             }
