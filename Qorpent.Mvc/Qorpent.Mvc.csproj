@@ -27,6 +27,7 @@
     <Compile Include="Loader\ILoadFileGenerator.cs" />
     <Compile Include="Loader\ILoadPackageReader.cs" />
     <Compile Include="Loader\ILoadScriptGenerator.cs" />
+    <Compile Include="Loader\ILoadService.cs" />
     <Compile Include="Loader\LoadConfigReader.cs" />
     <Compile Include="Loader\LoadFileGenerator.cs" />
     <Compile Include="Loader\LoadItem.cs" />
@@ -36,6 +37,7 @@
     <Compile Include="Loader\LoadPackageReader.cs" />
     <Compile Include="Loader\LoadScriptGenerator.cs" />
     <Compile Include="Loader\LoadPackageSet.cs" />
+    <Compile Include="Loader\LoadService.cs" />
     <Compile Include="MimeMapper.cs" />
     <Compile Include="Actions\MyActions.cs" />
     <Compile Include="Actions\MyRenders.cs" />

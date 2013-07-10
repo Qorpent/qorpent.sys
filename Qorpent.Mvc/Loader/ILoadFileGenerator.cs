@@ -6,7 +6,7 @@
         /// <summary>
         /// Формирует на диске готовые к загрузке JS файлы
         /// </summary>
-        void Generate();
+        void Generate(string rootdir = "~/.tmp/", string template = "load.{0}.js");
     }
 
 

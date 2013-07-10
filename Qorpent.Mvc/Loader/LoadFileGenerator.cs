@@ -27,17 +27,17 @@ namespace Qorpent.Mvc.Loader {
         /// <summary>
         /// Формирует на диске готовые к загрузке JS файлы
         /// </summary>
-        public void Generate() {
+        public void Generate(string rootdir = "~/.tmp/",string template= "load.{0}.js") {
             ConfigReader = ConfigReader ?? new LoadConfigReader();
             PackageReader = PackageReader ?? new LoadPackageReader();
             ScriptGenerator = ScriptGenerator ?? new LoadScriptGenerator();
             Resolver = Resolver ?? Application.Current.Files;
 
-            var targetdir = Resolver.Resolve("~/.tmp/");
+            var targetdir = Resolver.Resolve(rootdir);
             Directory.CreateDirectory(targetdir);
-            var guestfile = Path.Combine(targetdir, "__quest.load.js");
-            var authfile = Path.Combine(targetdir, "__auth.load.js");
-            var adminfile = Path.Combine(targetdir, "__admin.load.js");
+            var guestfile = Path.Combine(targetdir, string.Format(template,LoadLevel.Guest.ToString().ToLower()));
+            var authfile = Path.Combine(targetdir, string.Format(template, LoadLevel.Auth.ToString().ToLower()));
+            var adminfile = Path.Combine(targetdir, string.Format(template, LoadLevel.Admin.ToString().ToLower()));
 
             var config = ConfigReader.LoadConfig();
             var packages = PackageReader.Read(config);
