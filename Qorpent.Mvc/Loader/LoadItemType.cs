@@ -4,6 +4,10 @@
     /// </summary>
     public enum LoadItemType {
         /// <summary>
+        /// Неизвестный тип
+        /// </summary>
+         Unknown,
+        /// <summary>
         /// META tag
         /// </summary>
         Meta,
@@ -23,5 +27,6 @@
         /// Шаблон отрисовки
         /// </summary>
         Template,
+       
     }
 }

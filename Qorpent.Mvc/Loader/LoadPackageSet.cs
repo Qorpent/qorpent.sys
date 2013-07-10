@@ -40,10 +40,7 @@ namespace Qorpent.Mvc.Loader {
                 bool remove = false;
                 foreach (var dep in rp.Value.Dependency.ToArray())
                 {
-                    if (resultpkg.ContainsKey(dep.Key)) {
-                        rp.Value.Dependency[dep.Key] = resultpkg[dep.Key];
-                    }
-                    else {
+                    if (!resultpkg.ContainsKey(dep)) {
                         remove = true;
                         break;
                     }
@@ -81,8 +78,8 @@ namespace Qorpent.Mvc.Loader {
         /// <param name="y"></param>
         /// <returns></returns>
         public int Compare(LoadPackage x, LoadPackage y) {
-            if (y.Dependency.ContainsKey(x.Code)) return -1;
-            if (x.Dependency.ContainsKey(y.Code)) return 1;
+            if (y.Dependency.Contains(x.Code)) return -1;
+            if (x.Dependency.Contains(y.Code)) return 1;
             if (x.Level != y.Level) return x.Level.CompareTo(y.Level);
             return System.String.Compare(x.Code, y.Code, StringComparison.Ordinal);
         }

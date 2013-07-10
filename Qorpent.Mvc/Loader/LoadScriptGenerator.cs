@@ -38,7 +38,11 @@ namespace Qorpent.Mvc.Loader {
         }
 
         private void GenerateItem(LoadItem item, StringBuilder sb) {
-            switch (item.Type) {
+            var type = item.Type;
+            if (type == LoadItemType.Unknown) {
+                type = DetermineType(item);
+            }
+            switch (type) {
                     case LoadItemType.Link:
                     GenerateLink(item, sb);
                     break;
@@ -59,9 +63,17 @@ namespace Qorpent.Mvc.Loader {
             }
         }
 
+        private LoadItemType DetermineType(LoadItem item) {
+            if (item.Value.EndsWith(".js")) return LoadItemType.Script;
+            if (item.Value.EndsWith(".css"))return LoadItemType.Style;
+            if (item.Value.EndsWith(".html"))return LoadItemType.Template;
+            if (item.Value.Contains("rel=")) return LoadItemType.Link;
+            return LoadItemType.Meta;
+          }
+
         private void GenerateTemplate(LoadItem item, StringBuilder sb) {
             sb.Append("$.ajax({ url: 'tpl/" + item.Value + "', async: false })");
-            sb.Append(".success(function(data){templates[href] = data;});");
+            sb.Append(".success(function(data){templates['"+item.Value.Replace(".html","").Replace(".tpl","") +"'] = data;});");
             sb.AppendLine();
         }
 
@@ -69,7 +81,7 @@ namespace Qorpent.Mvc.Loader {
             sb.Append("document.write(\"");
             sb.Append("<link rel='stylesheet' href='styles/");
             sb.Append(item.Value);
-            sb.Append("' type='text/css' ></link>");
+            sb.Append("' type='text/css' />");
             sb.Append("\");");
             sb.AppendLine();
         }
@@ -84,15 +96,25 @@ namespace Qorpent.Mvc.Loader {
         }
 
         private void GenerateMeta(LoadItem item, StringBuilder sb) {
-            
+            sb.Append("document.write(\"");
+            sb.Append("<meta ");
+            sb.Append(item.Value);
+            sb.Append(" />");
+            sb.Append("\");");
+            sb.AppendLine();
         }
 
         private void GenerateLink(LoadItem item, StringBuilder sb) {
-            
+            sb.Append("document.write(\"");
+            sb.Append("<link ");
+            sb.Append(item.Value);
+            sb.Append(" />");
+            sb.Append("\");");
+            sb.AppendLine();
         }
 
         private void GeneratePrePackage(LoadPackage pkg, StringBuilder sb) {
-            sb.AppendLine("/* auto generated pkg "+pkg.Code+" started */ ");
+            sb.AppendLine("/* auto generated pkg "+pkg.Code+" ("+string.Join(",",pkg.Dependency)+") started */ ");
         }
 
         private void GeneratePreContent(LoadPackage[] set, StringBuilder sb) {

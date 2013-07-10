@@ -25,11 +25,9 @@ namespace Qorpent.Mvc.Loader {
             if (!string.IsNullOrWhiteSpace(level)) {
                 result.Level = (LoadLevel) Enum.Parse(typeof (LoadLevel), level, true);
             }
-            var deps = pkge.ChooseAttr("depend", "dependency");
-            if (!string.IsNullOrWhiteSpace(deps)) {
-                foreach (var d in deps.SmartSplit()) {
-                    result.Dependency[d] = null;
-                }
+            var deps = pkge.Elements("uses");
+            foreach (var dep in deps) {
+                result.Dependency.Add(dep.Attr("code"));
             }
             foreach (var item in pkge.Elements("load")) {
                 result.Items.Add(ReadItem(item));

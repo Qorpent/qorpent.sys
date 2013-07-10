@@ -10,7 +10,7 @@ namespace Qorpent.Mvc.Loader {
         /// </summary>
         public LoadPackage() {
             Items = new List<LoadItem>();
-            Dependency = new Dictionary<string, LoadPackage>();
+            Dependency = new List<string>();
         }
         /// <summary>
         /// Код пакета
@@ -27,7 +27,7 @@ namespace Qorpent.Mvc.Loader {
         /// <summary>
         /// Зависимость от других пакетов
         /// </summary>
-        public IDictionary<string,LoadPackage> Dependency { get; private set; }
+        public IList<string> Dependency { get; private set; }
 
         /// <summary>
         /// Создает копию пакета
@@ -36,9 +36,9 @@ namespace Qorpent.Mvc.Loader {
         public LoadPackage Clone() {
             var result = (LoadPackage)MemberwiseClone();
             result.Items = new List<LoadItem>();
-            result.Dependency = new Dictionary<string, LoadPackage>();
+            result.Dependency = new List<string>();
             foreach (var ld in this.Dependency) {
-                result.Dependency[ld.Key] = null;
+                result.Dependency.Add(ld);
             }
             foreach (var item in Items) {
                 result.Items.Add(item);
