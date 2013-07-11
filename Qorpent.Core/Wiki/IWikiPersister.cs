@@ -109,6 +109,6 @@ namespace Qorpent.Wiki {
 	    ///     Снять блокировку
 	    /// </summary>
 	    /// <param name="code">код страницы</param>
-	    bool Releaselock(string code);
+	    bool ReleaseLock(string code);
 	}
 }

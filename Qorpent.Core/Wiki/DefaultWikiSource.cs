@@ -179,7 +179,7 @@ namespace Qorpent.Wiki {
         /// </summary>
         /// <param name="code">код страницы</param>
         public bool Releaselock(string code) {
-            return Persister.Releaselock(code);
+            return Persister.ReleaseLock(code);
         }
 
 

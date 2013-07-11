@@ -66,5 +66,10 @@ namespace Qorpent.Wiki {
         ///     Дата публикации страницы
         /// </summary>
         public DateTime Published { get; set; }
+
+        /// <summary>
+        ///     Юзер, залочивший страницу
+        /// </summary>
+        public string Locker { get; set; }
 	}
 }
