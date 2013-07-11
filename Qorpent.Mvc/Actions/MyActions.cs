@@ -17,7 +17,10 @@
 // PROJECT ORIGIN: Qorpent.Mvc/MyActions.cs
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Mvc.Binding;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Actions {
 	/// <summary>
@@ -35,7 +38,37 @@ namespace Qorpent.Mvc.Actions {
 					.Select(x => new ActionDescriptor((IAction) Activator.CreateInstance(x.ImplementationType)))
 					//не напр€гаем контейнер
 					.Where(x => IsAccessible(x))
+                    .Select(_ =>
+                        new{
+                            _.Name,
+                            _.Help,
+                            _.ActionTypeName,
+                            _.DirectRole,
+                            _.Role,
+                            Parameters = GetParameters(_),
+ 
+                        })
 					.ToArray();
 		}
+
+	    private IDictionary<string,object> GetParameters(ActionDescriptor actionDescriptor)
+	    {
+	        return
+	            (from vm in ReflectionExtensions.FindAllValueMembers(actionDescriptor.ActionType, typeof (BindAttribute))
+	             let attr = vm.Member.GetCustomAttributes(typeof (BindAttribute), true).First() as BindAttribute
+	             let name = string.IsNullOrWhiteSpace(attr.Name) ? vm.Member.Name : attr.Name
+	             let type = vm.Type.Name
+	             select new
+	                 {
+	                     name,
+	                     type,
+	                     help = attr.Help,
+                         required = attr.Required,
+                         pattern = attr.ValidatePattern,
+                         fixedset = attr.Constraint,
+                         defval = attr.Default,
+	                 }
+	            ).ToDictionary(_=>_.name,_=>(object)_);
+	    }
 	}
 }

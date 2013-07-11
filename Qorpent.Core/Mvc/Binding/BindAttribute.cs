@@ -116,7 +116,8 @@ namespace Qorpent.Mvc.Binding {
 		public string Name {
 			get {
 				if (string.IsNullOrEmpty(_parameterName)) {
-					return Member.Name;
+                    
+					return null==Member ? "" : Member.Name;
 				}
 				return _parameterName;
 			}
