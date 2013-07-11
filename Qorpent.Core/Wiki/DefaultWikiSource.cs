@@ -91,8 +91,27 @@ namespace Qorpent.Wiki {
         /// <param name="code"></param>
         /// <param name="version"></param>
         /// <returns></returns>
+        public object RestoreVersion(string code, string version) {
+            return Persister.RestoreVersion(code, version);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="version"></param>
+        /// <returns></returns>
         public WikiPage GetWikiPageByVersion(string code, string version) {
             return Persister.GetWikiPageByVersion(code, version);
+        }
+
+        /// <summary>
+        ///     Возвращает список версий и первичную информацию о документе по коду
+        /// </summary>
+        /// <param name="code">Wiki page code</param>
+        /// <returns></returns>
+        public IEnumerable<object> GetVersionsList(string code) {
+            return Persister.GetVersionsList(code);
         }
 
 		private void CheckPersister() {

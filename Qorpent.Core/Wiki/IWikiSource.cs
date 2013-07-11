@@ -73,5 +73,20 @@ namespace Qorpent.Wiki
 	    /// <param name="comment"></param>
 	    /// <returns></returns>
 	    object CreateVersion(string code, string comment);
+
+        /// <summary>
+        ///     Восстановление состояние страницы на момент определённой версии
+        /// </summary>
+        /// <param name="code">Код страницы</param>
+        /// <param name="version">Идентификатор версии</param>
+        /// <returns></returns>
+        object RestoreVersion(string code, string version);
+
+	    /// <summary>
+	    ///     Возвращает список версий и первичную информацию о документе по коду
+	    /// </summary>
+	    /// <param name="code">Wiki page code</param>
+	    /// <returns></returns>
+	    IEnumerable<object> GetVersionsList(string code);
 	}
 }

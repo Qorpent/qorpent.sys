@@ -15,6 +15,8 @@
     <Compile Include="Actions\ImpersonateAction.cs" />
     <Compile Include="Actions\IsInRoleAction.cs" />
     <Compile Include="Actions\SysInfoAction.cs" />
+    <Compile Include="Actions\Wiki\WikiGetVersionsListAction.cs" />
+    <Compile Include="Actions\Wiki\WikiRestoreVersionAction.cs" />
     <Compile Include="Actions\Wiki\WikiActionBase.cs" />
     <Compile Include="Actions\Wiki\WikiCreateVersionAction.cs" />
     <Compile Include="Actions\Wiki\WikiExistsAction.cs" />
