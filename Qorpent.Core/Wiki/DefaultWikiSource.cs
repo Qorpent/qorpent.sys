@@ -165,6 +165,23 @@ namespace Qorpent.Wiki {
 			return Persister.LoadBinary(code, withData);
 		}
 
+        /// <summary>
+        ///     Установить блокировку
+        /// </summary>
+        /// <param name="code">Код страницы</param>
+        /// <returns>Результат операции</returns>
+        public bool GetLock(string code) {
+            return Persister.GetLock(code);
+        }
+
+        /// <summary>
+        ///     Снять блокировку
+        /// </summary>
+        /// <param name="code">код страницы</param>
+        public bool Releaselock(string code) {
+            return Persister.Releaselock(code);
+        }
+
 
 		/// <summary>
 		/// Поиск объектов Wiki
