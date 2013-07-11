@@ -32,8 +32,24 @@ namespace Qorpent.Mvc.Loader {
             foreach (var item in pkge.Elements("load")) {
                 result.Items.Add(ReadItem(item));
             }
+            foreach (var item in pkge.Elements("widget")) {
+                ReadWidget(result, item);
+            }
 
             return result;
+        }
+
+        private void ReadWidget(LoadPackage result, XElement item) {
+            var level = LoadLevel.Guest;
+            var levele = item.Attr("level");
+            if (!string.IsNullOrWhiteSpace(levele))
+            {
+                level = (LoadLevel)Enum.Parse(typeof(LoadLevel), levele, true);
+            }
+            var code = item.Attr("code");
+            result.Items.Add(new LoadItem {Level = level, Type = LoadItemType.Script, Value = code + ".js"});
+            result.Items.Add(new LoadItem { Level = level, Type = LoadItemType.Style, Value = code + ".css" });
+            result.Items.Add(new LoadItem { Level = level, Type = LoadItemType.Template, Value = code + ".tpl.html" });
         }
 
         private LoadItem ReadItem(XElement ie) {
