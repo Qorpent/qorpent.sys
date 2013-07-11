@@ -90,7 +90,7 @@ namespace Qorpent.Mvc.Loader {
             sb.Append("document.write(\"");
             sb.Append("<script src='scripts/");
             sb.Append(item.Value);
-            sb.Append("' type='text/javascript' ></script>");
+            sb.Append("' type='text/javascript' defer='defer' ></script>");
             sb.Append("\");");
             sb.AppendLine();
         }
