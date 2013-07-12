@@ -18,8 +18,7 @@ namespace Qorpent.Mvc.Actions {
 	/// Базовый класс действий при работе с Wiki
 	/// </summary>
 	[Action("wiki.find", Help = "Осуществляет поиск объектов")]
-	public class WikiFind : WikiActionBase
-	{
+	public class WikiFind : WikiActionBase {
 		/// <summary>
 		/// Регекс поиска
 		/// </summary>

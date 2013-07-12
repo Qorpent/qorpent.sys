@@ -58,5 +58,48 @@ namespace Qorpent.Wiki
 		/// <returns></returns>
 		DateTime GetVersion(string code, WikiObjectType objectType);
 
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="code"></param>
+	    /// <param name="version"></param>
+	    /// <returns></returns>
+	    WikiPage GetWikiPageByVersion(string code, string version);
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="code"></param>
+	    /// <param name="comment"></param>
+	    /// <returns></returns>
+	    object CreateVersion(string code, string comment);
+
+        /// <summary>
+        ///     Восстановление состояние страницы на момент определённой версии
+        /// </summary>
+        /// <param name="code">Код страницы</param>
+        /// <param name="version">Идентификатор версии</param>
+        /// <returns></returns>
+        object RestoreVersion(string code, string version);
+
+	    /// <summary>
+	    ///     Возвращает список версий и первичную информацию о документе по коду
+	    /// </summary>
+	    /// <param name="code">Wiki page code</param>
+	    /// <returns></returns>
+	    IEnumerable<object> GetVersionsList(string code);
+
+        /// <summary>
+        ///     Установить блокировку
+        /// </summary>
+        /// <param name="code">Код страницы</param>
+        /// <returns>Результат операции</returns>
+        bool GetLock(string code);
+
+        /// <summary>
+        ///     Снять блокировку
+        /// </summary>
+        /// <param name="code">код страницы</param>
+        bool Releaselock(string code);
 	}
 }
