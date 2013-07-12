@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Qorpent.Mvc.Binding;
 using Qorpent.Wiki;
@@ -7,8 +8,7 @@ namespace Qorpent.Mvc.Actions {
 	/// Действие получения страницы Wiki
 	/// </summary>
 	[Action("wiki.save", Help = "Сохранить правки в страницу", Role = "DOCWRITER")]
-	public class WikiSaveAction : WikiActionBase
-	{
+	public class WikiSaveAction : WikiActionBase {
 		/// <summary>
 		/// Код или коды страниц, которые требуется проверить
 		/// </summary>
@@ -40,7 +40,12 @@ namespace Qorpent.Mvc.Actions {
 					page.Propeties[parameter.Key] = parameter.Value;
 				}
 			}
-			WikiSource.Save(page);
+			var success = WikiSource.Save(page);
+
+            if (!success) {
+                throw new Exception("Вы не имеет прав на редактирование страницы. Страница заблокирована.");
+            }
+
 			return WikiSource.Get(null,Code).First();
 		}
 	}

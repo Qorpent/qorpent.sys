@@ -24,7 +24,7 @@ namespace Qorpent.Wiki
 		/// Метод сохранения изменений в страницу
 		/// </summary>
 		/// <param name="pages"></param>
-		void Save(params WikiPage[] pages);
+		bool Save(params WikiPage[] pages);
 
 		/// <summary>
 		/// Сохраняет в Wiki файл с указанным кодом

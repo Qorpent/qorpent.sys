@@ -132,7 +132,7 @@ namespace Qorpent.Wiki {
 		/// Производит сохранение страницы в хранилище с предварительной фильтрацией
 		/// </summary>
 		/// <param name="pages"></param>
-		public void Save(params WikiPage[] pages) {
+		public bool Save(params WikiPage[] pages) {
 			CheckPersister();
 			foreach (var wikiPage in pages) {
 				if (null != WikiSaveFilters && 0 != WikiSaveFilters.Length)
@@ -143,7 +143,7 @@ namespace Qorpent.Wiki {
 					}
 				}	
 			}
-			Persister.Save(pages);
+			return Persister.Save(pages);
 		}
 
 		/// <summary>
