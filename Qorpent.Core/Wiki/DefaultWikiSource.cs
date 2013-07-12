@@ -75,6 +75,45 @@ namespace Qorpent.Wiki {
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="comment"></param>
+        /// <returns></returns>
+        public object CreateVersion(string code, string comment) {
+            return Persister.CreateVersion(code, comment);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="version"></param>
+        /// <returns></returns>
+        public object RestoreVersion(string code, string version) {
+            return Persister.RestoreVersion(code, version);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="version"></param>
+        /// <returns></returns>
+        public WikiPage GetWikiPageByVersion(string code, string version) {
+            return Persister.GetWikiPageByVersion(code, version);
+        }
+
+        /// <summary>
+        ///     Возвращает список версий и первичную информацию о документе по коду
+        /// </summary>
+        /// <param name="code">Wiki page code</param>
+        /// <returns></returns>
+        public IEnumerable<object> GetVersionsList(string code) {
+            return Persister.GetVersionsList(code);
+        }
+
 		private void CheckPersister() {
 			if (null == Persister) {
 				throw new Exception("no persister given");
@@ -125,6 +164,23 @@ namespace Qorpent.Wiki {
 			CheckPersister();
 			return Persister.LoadBinary(code, withData);
 		}
+
+        /// <summary>
+        ///     Установить блокировку
+        /// </summary>
+        /// <param name="code">Код страницы</param>
+        /// <returns>Результат операции</returns>
+        public bool GetLock(string code) {
+            return Persister.GetLock(code);
+        }
+
+        /// <summary>
+        ///     Снять блокировку
+        /// </summary>
+        /// <param name="code">код страницы</param>
+        public bool Releaselock(string code) {
+            return Persister.ReleaseLock(code);
+        }
 
 
 		/// <summary>
