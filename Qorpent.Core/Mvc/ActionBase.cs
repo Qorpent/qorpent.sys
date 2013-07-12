@@ -371,7 +371,7 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <returns> </returns>
 		protected virtual DateTime EvalLastModified() {
-			return new DateTime(1900, 1, 1);
+			return new DateTime(1901, 1, 1);
 		}
 
 		/// <summary>
