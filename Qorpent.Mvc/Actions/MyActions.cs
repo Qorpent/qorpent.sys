@@ -51,7 +51,7 @@ namespace Qorpent.Mvc.Actions {
         private object RealCommands() {
             var logon = Context.LogonUser;
             var actions = GetAllActions();
-            var dict = new Dictionary<string, IDictionary<string, IDictionary<string, string>>>();
+            var dict = new Dictionary<string, IDictionary<string, IDictionary<string, object>>>();
 
             foreach (var action in actions) {
                 if (!Application.Roles.IsInRole(logon, action.DirectRole)) {
@@ -62,12 +62,12 @@ namespace Qorpent.Mvc.Actions {
 
                 // if domain not exists
                 if (!dict.ContainsKey(exploded[0])) {
-                    dict.Add(exploded[0], new Dictionary<string, IDictionary<string, string>>());
+                    dict.Add(exploded[0], new Dictionary<string, IDictionary<string, object>>());
                 }
 
-                dict[exploded[0]][exploded[1]] = new Dictionary<string, string> {
+                dict[exploded[0]][exploded[1]] = new Dictionary<string, object> {
                     {"help", action.Help},
-                    {"parameters", null}
+                    {"parameters", action.GetBindings()}
                 };
             }
 
