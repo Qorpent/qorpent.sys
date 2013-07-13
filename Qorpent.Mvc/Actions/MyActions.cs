@@ -65,9 +65,21 @@ namespace Qorpent.Mvc.Actions {
                     dict.Add(exploded[0], new Dictionary<string, IDictionary<string, object>>());
                 }
 
+                var parameters = new Dictionary<string, IDictionary<string, object>>();
+
+                foreach (var binding in action.GetBindings()) {
+                    parameters.Add(
+                        binding.Name,
+                        new Dictionary<string, object> {
+                            {"Required", binding.Required},
+                            {"Help", binding.Help}
+                        }
+                    );
+                }
+
                 dict[exploded[0]][exploded[1]] = new Dictionary<string, object> {
                     {"help", action.Help},
-                    {"parameters", action.GetBindings()}
+                    {"parameters", parameters}
                 };
             }
 
