@@ -17,7 +17,9 @@
 // PROJECT ORIGIN: Qorpent.Mvc/MyActions.cs
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Mvc.Binding;
 
 namespace Qorpent.Mvc.Actions {
 	/// <summary>
@@ -25,17 +27,67 @@ namespace Qorpent.Mvc.Actions {
 	/// </summary>
 	[Action("_sys.myactions", Role = "DEVELOPER,MASTERUSER", Help = "Позволяет получить список доступных операций")]
 	public class MyActions : ActionBase {
+
+        /// <summary>
+        /// 
+        /// </summary>
+	    [Bind] protected string Usage;
 		/// <summary>
 		/// 	В защищенном режиме ищет доступные пользователю действия
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
-			return
-				Container.GetComponents().Where(x => x.ServiceType == typeof (IAction))
-					.Select(x => new ActionDescriptor((IAction) Activator.CreateInstance(x.ImplementationType)))
-					//не напрягаем контейнер
-					.Where(x => IsAccessible(x))
-					.ToArray();
+            if (Usage == "ui") {
+                return RealCommands();
+            }
+
+            return GetAllActions();
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private object RealCommands() {
+            var logon = Context.LogonUser;
+            var actions = GetAllActions();
+            var dict = new Dictionary<string, IDictionary<string, IDictionary<string, string>>>();
+
+            foreach (var action in actions) {
+                if (!Application.Roles.IsInRole(logon, action.DirectRole)) {
+                    continue;
+                }
+
+                var exploded = action.Name.Split(new[] { "." }, StringSplitOptions.None);
+
+                // if domain not exists
+                if (!dict.ContainsKey(exploded[0])) {
+                    dict.Add(exploded[0], new Dictionary<string, IDictionary<string, string>>());
+                }
+
+                dict[exploded[0]][exploded[1]] = new Dictionary<string, string> {
+                    {"help", action.Help},
+                    {"parameters", null}
+                };
+            }
+
+            return dict;
+        }
+
+        /// <summary>
+        ///     Get all actions
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<ActionDescriptor> GetAllActions() {
+            return Container.GetComponents().Where(
+                x => x.ServiceType == typeof(IAction)
+            ).Select(
+                x => new ActionDescriptor(
+                    (IAction)Activator.CreateInstance(x.ImplementationType)
+                )
+            ).Where(
+                x => IsAccessible(x)
+            ).ToArray();
+        }
 	}
 }
