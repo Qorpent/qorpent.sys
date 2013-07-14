@@ -2,18 +2,17 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration>Debug</Configuration>
-    <ProjectGuid>1516A281-7749-4D16-B888-039BC08C9D1E</ProjectGuid>
+    <ProjectGuid>{1B7FE240-27D1-4270-AC0F-5E4C77903C37}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Qorpent.Json</RootNamespace>
     <AssemblyName>Qorpent.Json</AssemblyName>
   </PropertyGroup>
-   <ItemGroup>
-	<None Include="*.import" />
-	<None Include="*.export" />
-	<EmbeddedResource Include=".\**\*.*resource"/>
- </ItemGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
-  <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Core.import"/>
-   <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Utils.import"/>
-
+  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
+  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Utils.import" />
 </Project>

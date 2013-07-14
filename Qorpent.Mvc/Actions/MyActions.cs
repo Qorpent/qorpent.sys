@@ -20,55 +20,102 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Mvc.Binding;
-using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// 	Действие для получения списка доступных операций
 	/// </summary>
-	[Action("_sys.myactions", Role = "DEVELOPER,MASTERUSER", Help = "Позволяет получить список доступных операций")]
+	[Action("_sys.myactions", Role = "DEFAULT", Help = "Позволяет получить список доступных операций")]
 	public class MyActions : ActionBase {
+
+        /// <summary>
+        /// 
+        /// </summary>
+	    [Bind] protected string Usage;
 		/// <summary>
 		/// 	В защищенном режиме ищет доступные пользователю действия
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
-			return
-				Container.GetComponents().Where(x => x.ServiceType == typeof (IAction))
-					.Select(x => new ActionDescriptor((IAction) Activator.CreateInstance(x.ImplementationType)))
-					//не напрягаем контейнер
-					.Where(x => IsAccessible(x))
-                    .Select(_ =>
-                        new{
-                            _.Name,
-                            _.Help,
-                            _.ActionTypeName,
-                            _.DirectRole,
-                            _.Role,
-                            Parameters = GetParameters(_),
- 
-                        })
-					.ToArray();
+            if (Usage == "ui") {
+                return RealCommands();
+            }
+
+            if (
+                Application.Roles.IsInRole(Context.User, "DEVELOPER")
+                    ||
+                Application.Roles.IsInRole(Context.User, "MASTERUSER")
+            ) {
+                return GetAllActions();
+            }
+
+		    throw new Exception("You don't have needed roles");
 		}
 
-	    private IDictionary<string,object> GetParameters(ActionDescriptor actionDescriptor)
-	    {
-	        return
-	            (from vm in ReflectionExtensions.FindAllValueMembers(actionDescriptor.ActionType, typeof (BindAttribute))
-	             let attr = vm.Member.GetCustomAttributes(typeof (BindAttribute), true).First() as BindAttribute
-	             let name = string.IsNullOrWhiteSpace(attr.Name) ? vm.Member.Name : attr.Name
-	             let type = vm.Type.Name
-	             select new
-	                 {
-	                     name,
-	                     type,
-	                     help = attr.Help,
-                         required = attr.Required,
-                         pattern = attr.ValidatePattern,
-                         fixedset = attr.Constraint,
-                         defval = attr.Default,
-	                 }
-	            ).ToDictionary(_=>_.name,_=>(object)_);
-	    }
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <returns></returns>
+        private object RealCommands() {
+            var actions = GetAllActions();
+            var dict = new Dictionary<string, IDictionary<string, IDictionary<string, object>>>();
+
+            foreach (var action in actions) {
+                if (!Application.Roles.IsInRole(Context.User, action.DirectRole)) {
+                        continue;
+                }
+
+                var exploded = action.Name.Split(new[] { "." }, StringSplitOptions.None);
+
+                // if domain not exists
+                if (!dict.ContainsKey(exploded[0])) {
+                    dict.Add(exploded[0], new Dictionary<string, IDictionary<string, object>>());
+                }
+
+                var parameters = new Dictionary<string, IDictionary<string, object>>();
+
+                foreach (var binding in action.GetBindings()) {
+                    parameters.Add(
+                        binding.Name,
+                        new Dictionary<string, object> {
+                            {"Required", binding.Required},
+                            {"Help", binding.Help},
+                            {"IsBool", binding.IsBool},
+                            {"IsColor", binding.IsColor},
+                            {"IsComplexString", binding.IsComplexString},
+                            {"IsEnum", binding.IsEnum},
+                            {"IsLargeText", binding.IsLargeText},
+                            {"IsDate", binding.IsDate},
+                            {"Default", binding.Default},
+                            {"UpperCase", binding.UpperCase},
+                            {"LowerCase", binding.LowerCase}
+                        }
+                    );
+                }
+
+                dict[exploded[0]][exploded[1]] = new Dictionary<string, object> {
+                    {"help", action.Help},
+                    {"parameters", parameters}
+                };
+            }
+
+            return dict;
+        }
+
+        /// <summary>
+        ///     Get all actions
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<ActionDescriptor> GetAllActions() {
+            return Container.GetComponents().Where(
+                x => x.ServiceType == typeof(IAction)
+            ).Select(
+                x => new ActionDescriptor(
+                    (IAction)Activator.CreateInstance(x.ImplementationType)
+                )
+            ).Where(
+                x => IsAccessible(x)
+            ).ToArray();
+        }
 	}
 }
