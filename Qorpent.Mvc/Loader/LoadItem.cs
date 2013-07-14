@@ -13,6 +13,12 @@
         public LoadLevel Level { get; set; }
 
         /// <summary>
+        /// Команда, которая ДОЛЖНА присутствовать среди доступных по API для запуска пакета (Q-28)
+        /// </summary>
+        public string Command { get; set; }
+
+
+        /// <summary>
         /// file name for styles,scripts, attribute content for others
         /// </summary>
         public string Value { get; set; }

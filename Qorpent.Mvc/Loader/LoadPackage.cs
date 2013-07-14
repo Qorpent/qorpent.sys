@@ -20,6 +20,17 @@ namespace Qorpent.Mvc.Loader {
         /// Level of package
         /// </summary>
         public LoadLevel Level { get; set; }
+
+        /// <summary>
+        /// Целевой АРМ пакета (Q-31)
+        /// </summary>
+        public string Arm { get; set; }
+
+        /// <summary>
+        /// Команда, которая ДОЛЖНА присутствовать среди доступных по API для запуска пакета (Q-28)
+        /// </summary>
+        public string Command { get; set; }
+
         /// <summary>
         /// Элементы пакета
         /// </summary>

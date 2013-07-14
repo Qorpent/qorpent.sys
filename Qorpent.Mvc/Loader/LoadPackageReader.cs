@@ -25,6 +25,11 @@ namespace Qorpent.Mvc.Loader {
             if (!string.IsNullOrWhiteSpace(level)) {
                 result.Level = (LoadLevel) Enum.Parse(typeof (LoadLevel), level, true);
             }
+
+            result.Arm = pkge.Attr("arm","default");
+            result.Command = pkge.Attr("command", "");
+               
+
             var deps = pkge.Elements("uses");
             foreach (var dep in deps) {
                 result.Dependency.Add(dep.Attr("code"));
@@ -35,6 +40,7 @@ namespace Qorpent.Mvc.Loader {
             foreach (var item in pkge.Elements("widget")) {
                 ReadWidget(result, item);
             }
+
 
             return result;
         }
@@ -47,9 +53,10 @@ namespace Qorpent.Mvc.Loader {
                 level = (LoadLevel)Enum.Parse(typeof(LoadLevel), levele, true);
             }
             var code = item.Attr("code");
-            result.Items.Add(new LoadItem {Level = level, Type = LoadItemType.Script, Value = code + ".js"});
-            result.Items.Add(new LoadItem { Level = level, Type = LoadItemType.Style, Value = code + ".css" });
-            result.Items.Add(new LoadItem { Level = level, Type = LoadItemType.Template, Value = code + ".tpl.html" });
+            var command = item.Attr("command");
+            result.Items.Add(new LoadItem {Level = level, Command=command, Type = LoadItemType.Script, Value = code + ".js"});
+            result.Items.Add(new LoadItem { Level = level, Command=command, Type = LoadItemType.Style, Value = code + ".css" });
+            result.Items.Add(new LoadItem { Level = level, Command = command, Type = LoadItemType.Template, Value = code + ".tpl.html" });
         }
 
         private LoadItem ReadItem(XElement ie) {
@@ -59,6 +66,7 @@ namespace Qorpent.Mvc.Loader {
             {
                 result.Level = (LoadLevel)Enum.Parse(typeof(LoadLevel), level, true);
             }
+            result.Command = ie.Attr("command");
             if (result.Value.EndsWith(".js")) {
                 result.Type = LoadItemType.Script;
             }else if (result.Value.EndsWith(".css")) {
