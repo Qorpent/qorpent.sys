@@ -60,6 +60,7 @@
     <Compile Include="HttpHandler\WaitApplicationStartupHandler.cs" />
     <Compile Include="MvcContext.cs" />
     <Compile Include="HttpApplicationReloader.cs" />
+    <Compile Include="Renders\HtmlRender.cs" />
     <Compile Include="Renders\LoginViews\LoginView.cs" />
     <Compile Include="Renders\WikiRender.cs" />
     <Compile Include="ServiceStateBuilder.cs" />

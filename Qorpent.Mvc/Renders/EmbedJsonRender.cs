@@ -41,7 +41,7 @@ namespace Qorpent.Mvc.Renders {
 				context.Output.Write("null");
 			}
 			else {
-				GetSerializer().Serialize("result", context.ActionResult, context.Output);
+				GetMainSerializer().Serialize("result", context.ActionResult, context.Output);
 			}
 			context.Output.Write(";");
 		}
