@@ -184,5 +184,7 @@ namespace Qorpent.Serialization.Tests {
 		public void string_serialized() {
 			test("test", @"""test""");
 		}
+
+
 	}
 }

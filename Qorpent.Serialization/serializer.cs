@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization {
 	/// <summary>
@@ -70,20 +71,26 @@ namespace Qorpent.Serialization {
 		}
 
 
-		/// <summary>
-		/// 	Serializes the element.
-		/// </summary>
-		/// <param name="value"> The value. </param>
-		/// <remarks>
-		/// </remarks>
-		private void SerializeElement(XElement value) {
-			_s.BeginObject(value.Name.LocalName);
-			var c = value.Attributes().OfType<XObject>().Union(
+	    /// <summary>
+	    /// 	Serializes the element.
+	    /// </summary>
+	    /// <param name="value"> The value. </param>
+	    /// <param name="renderstart"></param>
+	    /// <remarks>
+	    /// </remarks>
+	    private void SerializeElement(XElement value, bool renderstart = true) {
+		    if (renderstart) {
+		        _s.BeginObject(value.Name.LocalName);
+		    }
+		    var c = value.Attributes().OfType<XObject>().Union(
 				value.Nodes().Where(z => z is XText)
 				).Union(
 					value.Elements()).Count();
 			foreach (var a in value.Attributes()) {
 				c--;
+                if (a.Name.LocalName == "key" && value.Name.LocalName == "item") {
+                    continue;
+                }
 				_s.BeginObjectItem(a.Name.LocalName, true);
 				_s.WriteFinal(a.Value);
 				_s.EndObjectItem(c == 0);
@@ -101,33 +108,69 @@ namespace Qorpent.Serialization {
 			IList<string> checkedx = new List<string>();
 			IEnumerable<XElement> elements;
 			foreach (var e in value.Elements()) {
+			    if (0 >= c) break;  
 				c--;
-				if (checkedx.Contains(e.Name.LocalName)) {
+			    bool pseudodict = false;
+			    var name = e.Name.LocalName;
+                if (name == "item" && !string.IsNullOrWhiteSpace(e.Attr("key"))) {
+                    name = e.Attr("key");
+                    pseudodict = true;
+                }
+				if (checkedx.Contains(name)) {
 					continue;
 				}
-				checkedx.Add(e.Name.LocalName);
-				elements = value.Elements(e.Name).ToArray();
-				_s.BeginObjectItem(e.Name.LocalName, false);
-				if (elements.Count() == 1 && value.Attribute("isarray") == null) {
-					SerializeElement(e);
-				}
-				else {
-					_s.BeginArray(e.Name.LocalName);
-					var i = 0;
-					foreach (var x in elements) {
-						_s.BeginArrayEntry(i++);
-						SerializeElement(x);
-						_s.EndArrayEntry(i == c);
-					}
-					_s.EndArray();
-				}
-				_s.EndObjectItem(c == 0);
+                checkedx.Add(name);
+                elements = value.Elements(e.Name).ToArray();
+
+                if (e.Name.LocalName == "value" && e.Parent != null && e.Parent.Name.LocalName == "item") {
+                    SerializeElement(e,false);
+                    break;
+                }
+
+			    if ( value.Name.LocalName == "result" && e.Name.LocalName == "item") {
+			        var idx = 0;
+			        while (idx<elements.Count()) {
+			            _s.BeginObjectItem(idx.ToString(),false);
+                        SerializeElement(elements.ElementAt(idx));
+                        _s.EndObjectItem(idx==elements.Count()-1);
+			            idx++;
+			            c = 0;
+			        }
+			    }
+			    else {
+
+			        c = WriteOutNamedObjectItem(value, name, pseudodict, elements, e, c);
+			    }
 			}
+	        if (renderstart) {
+	            _s.EndObject();
+	        }
+	    }
 
-			_s.EndObject();
-		}
+	    private int WriteOutNamedObjectItem(XElement value, string name, bool pseudodict, IEnumerable<XElement> elements, XElement e,
+	                                        int c) {
+	        _s.BeginObjectItem(name, false);
 
-		/// <summary>
+	        if (pseudodict || elements.Count() == 1 && value.Attribute("isarray") == null) {
+	            SerializeElement(e);
+	        }
+	        else {
+	            c++;
+	            _s.BeginArray(e.Name.LocalName);
+	            var i = 0;
+	            foreach (var x in elements) {
+	                _s.BeginArrayEntry(i++);
+	                SerializeElement(x);
+	                _s.EndArrayEntry(i == c);
+	            }
+	            _s.EndArray();
+	            c -= elements.Count();
+	        }
+	        _s.EndObjectItem(c == 0);
+	        return c;
+	    }
+
+	    /// <summary>
 		/// 	Creates the impl.
 		/// </summary>
 		/// <param name="name"> The name. </param>
