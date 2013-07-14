@@ -30,7 +30,7 @@ namespace Qorpent.Data.REST
 	/// <summary>
 	/// Возвращает список зарегистрированных соединений
 	/// </summary>
-	[Action("_db.connections",Role="DEVELOPER")]
+	[Action("_db.connections",Role="DEVELOPER",Arm="admin")]
 	public class ConnectionsAction :ActionBase {
 		[Bind] private bool testConnection = false;
 

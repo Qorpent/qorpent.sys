@@ -26,7 +26,7 @@ namespace Qorpent.Mvc.Actions {
 	/// 	call server OnReset event of QWebEventManager
 	/// 	converts request data to OnResetData
 	/// </summary>
-	[Action("_sys.fileresolve", Role = "ADMIN")]
+	[Action("_sys.fileresolve", Role = "ADMIN", Arm="admin")]
 	public class FileResolveAction : ActionBase {
 		/// <summary>
 		/// 	processing of execution - main method of action

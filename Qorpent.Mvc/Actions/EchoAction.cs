@@ -24,7 +24,7 @@ namespace Qorpent.Mvc.Actions {
 	/// 	echo intended to be used as 'ping' or
 	/// 	as remote server based serializer of data
 	/// </summary>
-	[Action("_sys.echo")]
+	[Action("_sys.echo",Arm="admin")]
 	public class EchoAction : ActionBase {
 		/// <summary>
 		/// 	processing of execution - main method of action

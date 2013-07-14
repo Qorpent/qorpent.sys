@@ -2,7 +2,7 @@
     /// <summary>
     /// Действие для возврата скрипта загрузки
     /// </summary>
-    [Action("_sys.compileloadscript", Role = "ADMIN")]
+    [Action("_sys.compileloadscript", Role = "ADMIN", Arm="admin")]
     public class CompileLoadScriptAction : ActionBase
     {
         /// <summary>

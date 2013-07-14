@@ -20,7 +20,7 @@ namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// 	Возвращает текущий откомпилированный манифест (полный XML)
 	/// </summary>
-	[Action("_sys.manifest", Role = "DEVELOPER", Help = "Считывает и возвращает сведенный файл манифеста")]
+	[Action("_sys.manifest", Role = "DEVELOPER", Help = "Считывает и возвращает сведенный файл манифеста", Arm="admin")]
 	public class ReadManifestAction : ActionBase {
 		/// <summary>
 		/// 	processing of execution - main method of action

@@ -4,7 +4,7 @@ namespace Qorpent.Mvc.Actions.Wiki {
     /// <summary>
     /// 
     /// </summary>
-    [Action("wiki.getlock", Help = "установить блокировку на страницу, если это возможно")]
+    [Action("wiki.getlock", Help = "установить блокировку на страницу, если это возможно", Role="DOCWRITER", Arm="sys")]
     class WikiGetLockAction : WikiActionBase {
         /// <summary>
         /// 

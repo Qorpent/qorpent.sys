@@ -4,7 +4,7 @@ namespace Qorpent.Mvc.Actions {
     /// <summary>
     ///     Действие создания версии страницы Wiki
     /// </summary>
-    [Action("wiki.createversion", Help = "Создать версию Wiki")]
+    [Action("wiki.createversion", Help = "Создать версию Wiki", Role="DOCWRITER", Arm="sys")]
     public class WikiCreateVersionAction : WikiActionBase {
         /// <summary>
         ///     Код

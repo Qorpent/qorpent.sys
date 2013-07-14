@@ -5,7 +5,7 @@ namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// 
 	/// </summary>
-	[Action("_sys.info",Role ="ADMIN")]
+	[Action("_sys.info",Role ="ADMIN", Arm="admin")]
 	public class SysInfoAction :ActionBase {
 		/// <summary>
 		/// 	processing of execution - main method of action

@@ -50,7 +50,6 @@
     <Compile Include="Actions\MyActions.cs" />
     <Compile Include="Actions\MyRenders.cs" />
     <Compile Include="FileDescriptor.cs" />
-    <Compile Include="Actions\QviewCompileAction.cs" />
     <Compile Include="Actions\ReadManifestAction.cs" />
     <Compile Include="Actions\WhoAmIAction.cs" />
     <Compile Include="Binding\BindExecutor.cs" />

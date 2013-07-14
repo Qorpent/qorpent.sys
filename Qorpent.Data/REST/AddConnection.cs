@@ -23,7 +23,7 @@ namespace Qorpent.Data.REST {
 	/// <summary>
 	/// Добавляет соединение к списку соединений (или обновляет его)
 	/// </summary>
-	[Action("_db.addconnection", Role = "DEVELOPER")]
+	[Action("_db.addconnection", Role = "DEVELOPER", Arm="admin")]
 	public class AddConnection : ActionBase {
 		[Bind] private bool temporal = false;
 		[Bind(Required = true)] private string name = "";

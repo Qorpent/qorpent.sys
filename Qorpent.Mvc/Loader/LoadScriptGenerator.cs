@@ -23,6 +23,7 @@ namespace Qorpent.Mvc.Loader {
 
         private void GeneratePostContent(LoadPackage[] set, StringBuilder sb) {
             sb.AppendLine("/* auto generated load set finished */ ");
+            sb.AppendLine("})(window, window.qweb.embedStorage._sys__myactions)");
         }
 
         private void GeneratePkg(LoadPackage pkg, StringBuilder sb) {
@@ -34,10 +35,12 @@ namespace Qorpent.Mvc.Loader {
         }
 
         private void GeneratePostPackage(LoadPackage pkg, StringBuilder sb) {
-            sb.AppendLine("/* auto generated pkg " + pkg.Code + " finished */ ");
+            sb.AppendLine("}");
+            sb.AppendLine("/* auto generated pkg " + pkg.Code+ " finished */ ");
         }
 
         private void GenerateItem(LoadItem item, StringBuilder sb) {
+            sb.AppendFormat("if(allowed('','{0}')){{", item.Command);
             var type = item.Type;
             if (type == LoadItemType.Unknown) {
                 type = DetermineType(item);
@@ -61,6 +64,7 @@ namespace Qorpent.Mvc.Loader {
                 default:
                     throw new Exception("unknown type");
             }
+            sb.AppendLine("}");
         }
 
         private LoadItemType DetermineType(LoadItem item) {
@@ -114,12 +118,29 @@ namespace Qorpent.Mvc.Loader {
         }
 
         private void GeneratePrePackage(LoadPackage pkg, StringBuilder sb) {
-            sb.AppendLine("/* auto generated pkg "+pkg.Code+" ("+string.Join(",",pkg.Dependency)+") started */ ");
+            sb.AppendLine("/* auto generated pkg "+pkg.Code+" ("+string.Join(",",pkg.Dependency)+"):"+pkg.Arm+":"+pkg.Command+" started */ ");
+            sb.AppendFormat("if(allowed('{0}','{1}')){{\r\n", pkg.Arm, pkg.Command);
         }
 
         private void GeneratePreContent(LoadPackage[] set, StringBuilder sb) {
             sb.AppendLine("/* auto generated load set started */ ");
-            sb.AppendLine("window.templates = window.templates || {};");
+            sb.AppendLine("(function(root,actions){");
+            sb.AppendLine("root.templates = root.templates || {};");
+            sb.AppendLine("root.arms = ((document.head.getElementsByClassName('qorpent-loader')[0].getAttribute('arm'))||'').split(',');");
+            sb.AppendLine(@"function allowed(arm,command){
+    if(!(arm||command))return true; //empty condition
+    if(arm=='default'&&!command)return true; // default arm always exists
+    if(arm!='default'&& $.inArray(arm, root.arms)==-1)return false; //arm not match
+    if(!command) return true; //arm match, command empty
+    var cmd = command.split(',');
+    if(!!actions[cmd[0]]){
+        if(!!actions[cmd[0]][cmd[1]]){
+            return true; //command match
+        }
+    }
+    return false; //arm or command not match
+}
+");
 
         }
     }

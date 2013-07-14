@@ -1,7 +1,7 @@
 ﻿using Qorpent.Mvc.Binding;
 
 namespace Qorpent.Mvc.Actions.Wiki {
-    [Action("wiki.restoreversion")]
+    [Action("wiki.restoreversion", Role="DOCWRITER" , Arm="sys")]
     class WikiRestoreVersionAction : WikiActionBase {
         /// <summary>
         ///     Код

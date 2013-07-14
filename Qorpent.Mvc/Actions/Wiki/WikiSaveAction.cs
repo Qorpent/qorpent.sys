@@ -7,7 +7,7 @@ namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// Действие получения страницы Wiki
 	/// </summary>
-	[Action("wiki.save", Help = "Сохранить правки в страницу", Role = "DOCWRITER")]
+	[Action("wiki.save", Help = "Сохранить правки в страницу", Role = "DOCWRITER", Arm="sys")]
 	public class WikiSaveAction : WikiActionBase {
 		/// <summary>
 		/// Код или коды страниц, которые требуется проверить

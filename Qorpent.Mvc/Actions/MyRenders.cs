@@ -23,7 +23,7 @@ namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// 	ƒействие дл€ получени€ списка доступных операций
 	/// </summary>
-	[Action("_sys.myrenders", Role = "DEVELOPER,MASTERUSER", Help = "ѕозвол€ет получить список доступных рендеров")]
+	[Action("_sys.myrenders", Role = "DEVELOPER,MASTERUSER", Help = "ѕозвол€ет получить список доступных рендеров", Arm="admin")]
 	public class MyRenders : ActionBase {
 		/// <summary>
 		/// 	¬ защищенном режиме ищет доступные пользователю рендеры

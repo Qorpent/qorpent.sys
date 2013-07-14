@@ -23,7 +23,7 @@ namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// 	Parses source text as BXL and return XElemnt
 	/// </summary>
-	[Action("_sys.bxlparse", Help = "Converts BXL to XML")]
+	[Action("_sys.bxlparse", Help = "Converts BXL to XML", Arm="dev")]
 	public class BxlParseAction : ActionBase {
 		/// <summary>
 		/// 	processing of execution - main method of action

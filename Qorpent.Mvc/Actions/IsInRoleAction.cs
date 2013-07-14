@@ -22,7 +22,7 @@ namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// Проверяет наличие роли у указанного пользователя
 	/// </summary>
-	[Action("_sys.isinrole",Role="SECURITYMANAGER",Help = "Проверка роли у пользователя")]
+	[Action("_sys.isinrole",Role="SECURITYMANAGER",Help = "Проверка роли у пользователя", Arm="admin")]
 	public class IsInRoleAction: ActionBase {
 		[Bind(Required = true)] private string usr= "";
 		[Bind(Required = true)]private string role= "";

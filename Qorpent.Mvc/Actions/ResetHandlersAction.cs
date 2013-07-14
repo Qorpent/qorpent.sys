@@ -72,7 +72,7 @@ namespace Qorpent.Mvc.Actions {
 	///		}
 	///		}</code>
 	///</example>
-	[Action("_sys.resethandlers", Help = "Список возможных объектов для сброса состояния")]
+	[Action("_sys.resethandlers", Help = "Список возможных объектов для сброса состояния", Arm="admin", Role="admin")]
 	public class ResetHandlersAction : ActionBase {
 		/// <summary>
 		/// 	processing of execution - main method of action

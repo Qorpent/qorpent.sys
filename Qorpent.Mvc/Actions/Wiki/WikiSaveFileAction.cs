@@ -9,7 +9,7 @@ namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// Сохраняет контент в Wiki
 	/// </summary>
-	[Action("wiki.savefile", Help = "Загрузить бинарный контент в Wiki", Role = "DOCWRITER")]
+	[Action("wiki.savefile", Help = "Загрузить бинарный контент в Wiki", Role = "DOCWRITER", Arm="sys")]
 	public class WikiSaveFileAction : WikiActionBase {
 		private HttpPostedFileBase _file;
 

@@ -61,7 +61,7 @@ namespace Qorpent.Mvc.Actions {
 	///		}
 	///		}</code>
 	///</example>
-	[Action("_sys.reset")]
+	[Action("_sys.reset", Arm="admin")]
 	public class ResetAction : ActionBase {
 		/// <summary>
 		/// 	processing of execution - main method of action
