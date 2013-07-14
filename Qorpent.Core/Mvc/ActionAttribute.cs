@@ -34,9 +34,14 @@ namespace Qorpent.Mvc {
 				name += ".action";
 			}
 			Name = name;
+            Arm = "default";
 			ServiceType = typeof (IAction);
 			Lifestyle = Lifestyle.Transient;
 		}
+        /// <summary>
+        /// Целевой АРМ действия (Q-24)
+        /// </summary>
+        public string Arm { get; set; }
 
 		/// <summary>
 		/// 	get name of action (attributebased)
@@ -47,6 +52,32 @@ namespace Qorpent.Mvc {
 			var type = action.GetType();
 			return GetName(type);
 		}
+
+        /// <summary>
+        /// 	get name of action (attributebased)
+        /// </summary>
+        /// <param name="action"> </param>
+        /// <returns> </returns>
+        public static string GetArm(IAction action)
+        {
+            var type = action.GetType();
+            return GetArm(type);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="type"> </param>
+        /// <returns> </returns>
+        public static string GetArm(Type type)
+        {
+            var attr =
+                type.GetCustomAttributes(typeof(ActionAttribute), true).OfType<ActionAttribute>().FirstOrDefault();
+            if (null == attr)
+            {
+                return "default";
+            }
+            return string.IsNullOrWhiteSpace(attr.Arm) ? "default" : attr.Arm;
+        }
 
 		/// <summary>
 		/// </summary>

@@ -39,11 +39,17 @@ namespace Qorpent.Mvc {
 			DirectRole = ActionAttribute.GetRole(action);
 			Help = ActionAttribute.GetHelp(action);
 			RoleContext = ActionAttribute.GetRoleContext(action);
+            Arm = ActionAttribute.GetArm(action);
 			var contextualAction = action as IContextualAction;
 			if (contextualAction != null) {
 				contextualAction.SetDescriptor(this);
 			}
 		}
+
+        /// <summary>
+        /// Целевой АРМ действия (Q-29)
+        /// </summary>
+        public string Arm { get; set; }
 
 		/// <summary>
 		/// 	Reference to action itself
