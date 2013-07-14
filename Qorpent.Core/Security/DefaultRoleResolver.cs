@@ -16,6 +16,8 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/DefaultRoleResolver.cs
 #endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
@@ -166,7 +168,7 @@ namespace Qorpent.Security {
 			if (null != callcontext) {
 				if (callcontext.IsLocalHost()) {
 					var windowsIdentity = WindowsIdentity.GetCurrent();
-					if (windowsIdentity != null && principal.Identity.Name.ToLower() == windowsIdentity.Name.ToLower()) {
+					if (windowsIdentity != null && principal.Identity.Name.Replace("local\\",Environment.MachineName+"\\").ToLower() == windowsIdentity.Name.ToLower()) {
 						{
 							return !exact;
 						}
