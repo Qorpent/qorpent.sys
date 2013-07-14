@@ -74,7 +74,7 @@ namespace Qorpent.Security {
 				}
 					
 #endif
-
+                
 				if(!exact && role!="ADMIN") {
 					if(IsInRole(principal,"ADMIN",true,callcontext,customcontext)) {
 						return true;
@@ -126,7 +126,15 @@ namespace Qorpent.Security {
 
 		private bool EvaluateIsInRole(IPrincipal principal, string role, bool exact, IMvcContext callcontext,
 		                              object customcontext) {
-			callcontext = callcontext ?? MvcContextBase.Current;
+			//Q-32 fix
+            if (string.IsNullOrWhiteSpace(role))
+            {
+                return principal.Identity.IsAuthenticated;
+            }
+            
+            callcontext = callcontext ?? MvcContextBase.Current;
+            
+
 			//ALL ARE DEFAULTS AND GUESTS
 			if (InternalIsInRole(principal, role, callcontext, exact)) {
 				return true;
@@ -142,6 +150,8 @@ namespace Qorpent.Security {
 		}
 
 		private static bool InternalIsInRole(IPrincipal principal, string role, IMvcContext callcontext, bool exact) {
+           
+
 			if (role == "DEFAULT" || role == "GUEST" || string.IsNullOrWhiteSpace(role)) {
 				return true;
 			}
