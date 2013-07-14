@@ -25,7 +25,7 @@ namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// 	ƒействие дл€ получени€ списка доступных операций
 	/// </summary>
-	[Action("_sys.myactions", Role = "REFAULT", Help = "ѕозвол€ет получить список доступных операций")]
+	[Action("_sys.myactions", Role = "DEFAULT", Help = "ѕозвол€ет получить список доступных операций")]
 	public class MyActions : ActionBase {
 
         /// <summary>
@@ -42,28 +42,27 @@ namespace Qorpent.Mvc.Actions {
             }
 
             if (
-                Application.Roles.IsInRole(Context.LogonUser, "DEVELOPER")
+                Application.Roles.IsInRole(Context.User, "DEVELOPER")
                     ||
-                Application.Roles.IsInRole(Context.LogonUser, "MASTERUSER")
+                Application.Roles.IsInRole(Context.User, "MASTERUSER")
             ) {
                 return GetAllActions();
             }
 
-		    return null;
+		    throw new Exception("You don't have needed roles");
 		}
 
         /// <summary>
-        /// 
+        ///     
         /// </summary>
         /// <returns></returns>
         private object RealCommands() {
-            var logon = Context.LogonUser;
             var actions = GetAllActions();
             var dict = new Dictionary<string, IDictionary<string, IDictionary<string, object>>>();
 
             foreach (var action in actions) {
-                if (!Application.Roles.IsInRole(logon, action.DirectRole)) {
-                    continue;
+                if (!Application.Roles.IsInRole(Context.User, action.DirectRole)) {
+                        continue;
                 }
 
                 var exploded = action.Name.Split(new[] { "." }, StringSplitOptions.None);

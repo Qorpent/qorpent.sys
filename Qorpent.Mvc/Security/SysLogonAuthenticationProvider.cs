@@ -16,6 +16,8 @@
 // 
 // PROJECT ORIGIN: Qorpent.Mvc/SysLogonAuthenticationProvider.cs
 #endregion
+
+using System;
 using Qorpent.Applications;
 
 namespace Qorpent.Mvc.Security {
@@ -33,7 +35,7 @@ namespace Qorpent.Mvc.Security {
 		public bool IsAuthenticated(string name, string password, IMvcContext context) {
 #if !Unix
 			if (Application.Current.SysLogon != null) {
-				return Application.Current.SysLogon.Logon(name, password);
+                return Application.Current.SysLogon.Logon(name, password);
 			}
 			return false;
 #else
