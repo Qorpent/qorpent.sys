@@ -25,7 +25,7 @@ namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// 	ƒействие дл€ получени€ списка доступных операций
 	/// </summary>
-	[Action("_sys.myactions", Role = "DEVELOPER,MASTERUSER", Help = "ѕозвол€ет получить список доступных операций")]
+	[Action("_sys.myactions", Role = "REFAULT", Help = "ѕозвол€ет получить список доступных операций")]
 	public class MyActions : ActionBase {
 
         /// <summary>
@@ -41,7 +41,15 @@ namespace Qorpent.Mvc.Actions {
                 return RealCommands();
             }
 
-            return GetAllActions();
+            if (
+                Application.Roles.IsInRole(Context.LogonUser, "DEVELOPER")
+                    ||
+                Application.Roles.IsInRole(Context.LogonUser, "MASTERUSER")
+            ) {
+                return GetAllActions();
+            }
+
+		    return null;
 		}
 
         /// <summary>
@@ -72,7 +80,16 @@ namespace Qorpent.Mvc.Actions {
                         binding.Name,
                         new Dictionary<string, object> {
                             {"Required", binding.Required},
-                            {"Help", binding.Help}
+                            {"Help", binding.Help},
+                            {"IsBool", binding.IsBool},
+                            {"IsColor", binding.IsColor},
+                            {"IsComplexString", binding.IsComplexString},
+                            {"IsEnum", binding.IsEnum},
+                            {"IsLargeText", binding.IsLargeText},
+                            {"IsDate", binding.IsDate},
+                            {"Default", binding.Default},
+                            {"UpperCase", binding.UpperCase},
+                            {"LowerCase", binding.LowerCase}
                         }
                     );
                 }
