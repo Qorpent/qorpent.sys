@@ -80,6 +80,7 @@
     <Compile Condition="'$(QISD_DEVEL)'!=''" Include="$(QISD_DEVEL)" />
     <Compile Condition="'$(QISD_USER)'!=''" Include="$(QISD_USER)" />
     <Compile Include="Security\WinLogonType.cs" />
+    <Compile Include="Serialization\ISerializerXsltExtension.cs" />
     <Compile Include="ServiceState.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
     <Compile Include="Wiki\IWikiEmptyFilter.cs" />

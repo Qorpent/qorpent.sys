@@ -1,0 +1,16 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<DirectImport>True</DirectImport>
+		<IsWeb>True</IsWeb>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<Package Include="qorpent.kernel"/>
+		<Package Include="qorpent.sys"/>
+		<Package Include="qorpent.ui"/>
+	</ItemGroup>
+	
+	<Import Project="..\qorpent.kernel\package-install.targets" />	
+	
+</Project>
