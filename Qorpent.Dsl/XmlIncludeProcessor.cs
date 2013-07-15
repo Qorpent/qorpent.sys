@@ -180,7 +180,11 @@ namespace Qorpent.Dsl {
 							i.Parent.SetAttributeValue(xAttribute.Name, xAttribute.Value);
 						}
 					}
+					var parent = i.Parent;
 					i.ReplaceWith(importElement.Elements());
+					if (!string.IsNullOrWhiteSpace(i.Attr("replace"))) {
+						parent.ReplaceWith(ApplyReplacesToImportedData(i, new[] {parent}));
+					}
 				}
 			}
 		}
@@ -210,7 +214,12 @@ namespace Qorpent.Dsl {
 							i.Parent.SetAttributeValue(xAttribute.Name, xAttribute.Value);
 						}
 					}
+					var parent = i.Parent;
 					i.ReplaceWith(importElement.Elements());
+					if (!string.IsNullOrWhiteSpace(i.Attr("replace")))
+					{
+						parent.ReplaceWith(ApplyReplacesToImportedData(i, new[] { parent }));
+					}
 				}
 			}
 		}
@@ -226,12 +235,36 @@ namespace Qorpent.Dsl {
 		                                     IEnumerable<XElement> processable) {
 			foreach (var i in processable.Where(x => x.Name == QorpentConst.Xml.XmlIncludeIncludeElementName)) {
 				var includeElements = GetIncludeSource(document, i, codebase, options);
-				i.ReplaceWith(includeElements);
+                includeElements = ApplyReplacesToImportedData(i, includeElements);
+			    i.ReplaceWith(includeElements);
 			}
 		}
 
+	    private static IEnumerable<XElement> ApplyReplacesToImportedData(XElement i, IEnumerable<XElement> includeElements) {
+	        var replacer = i.Attr("replace");
+	        if (!string.IsNullOrWhiteSpace(replacer)) {
+	            includeElements = includeElements.Select(_ => new XElement(_)).ToArray();
+	            var replaces = replacer.SmartSplit().Select(_ => new {from = _.Split('=')[0], to = _.Split('=')[1]}).ToArray();
+	            foreach (var ie in includeElements) {
+	                var texts = ie.DescendantNodes().OfType<XText>().ToArray();
+		            var attributes = ie.DescendantsAndSelf().SelectMany(_ => _.Attributes()).ToArray();
+	                foreach (var a in attributes) {
+	                    foreach (var r in replaces) {
+	                        a.Value = a.Value.Replace(r.@from, r.to);
+	                    }
+	                }
+	                foreach (var a in texts) {
+	                    foreach (var r in replaces) {
+	                        a.Value = a.Value.Replace(r.@from, r.to);
+	                    }
+	                }
+	            }
+	        }
+	        return includeElements;
+	    }
 
-		/// <summary>
+
+	    /// <summary>
 		/// 	Применяет элементы TEMPLATE
 		/// </summary>
 		/// <param name="document"> </param>

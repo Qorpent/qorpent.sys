@@ -148,6 +148,45 @@ e y
 		}
 
 
+        [Test]
+        public void Self_Include_With_Replace_Test()
+        {
+            var result = includer.Include(Bxl.Parse(@"
+e x my='CODE'
+e y
+	qxi::include self replace='CODE=TEST' : ""//*[@id='x']""
+", "", BxlParserOptions.NoLexData),"test");
+            var bxlresult = Bxl.Generate(result, genopt);
+            Console.WriteLine(bxlresult);
+            Assert.AreEqual(@"
+e x
+	my=CODE
+e y
+	e x
+		my=TEST
+".Trim().LfOnly(), bxlresult.Trim().LfOnly());
+        }
+
+
+		[Test]
+		public void Self_Import_With_Replace_Test()
+		{
+			var result = includer.Include(Bxl.Parse(@"
+e x my='CODE'
+e y
+	qxi::import self replace='CODE=TEST' : ""//*[@id='x']""
+", "", BxlParserOptions.NoLexData), "test");
+			var bxlresult = Bxl.Generate(result, genopt);
+			Console.WriteLine(bxlresult);
+			Assert.AreEqual(@"
+e x
+	my=CODE
+e y
+	my=TEST
+".Trim().LfOnly(), bxlresult.Trim().LfOnly());
+		}
+
+
 		[Test]
 		public void SafeImportAndCommonImport() {
 			var result = includer.Include(Safe_Import_And_Import, "~/test.bxl");
