@@ -58,7 +58,7 @@ namespace Qorpent.Mvc.Actions {
         /// <returns></returns>
         private object RealCommands() {
             var actions = GetAllActions();
-            var dict = new Dictionary<string, IDictionary<string, IDictionary<string, object>>>();
+            var dict = new Dictionary<string, IDictionary<string, object>>();
 
             foreach (var action in actions) {
                 if (!Application.Roles.IsInRole(Context.User, action.DirectRole)) {
@@ -69,34 +69,18 @@ namespace Qorpent.Mvc.Actions {
 
                 // if domain not exists
                 if (!dict.ContainsKey(exploded[0])) {
-                    dict.Add(exploded[0], new Dictionary<string, IDictionary<string, object>>());
+                    dict.Add(exploded[0], new Dictionary<string, object>());
                 }
 
-                var parameters = new Dictionary<string, IDictionary<string, object>>();
+                var parameters = new List<object>();
 
                 foreach (var binding in action.GetBindings()) {
                     parameters.Add(
-                        binding.Name,
-                        new Dictionary<string, object> {
-                            {"Required", binding.Required},
-                            {"Help", binding.Help},
-                            {"IsBool", binding.IsBool},
-                            {"IsColor", binding.IsColor},
-                            {"IsComplexString", binding.IsComplexString},
-                            {"IsEnum", binding.IsEnum},
-                            {"IsLargeText", binding.IsLargeText},
-                            {"IsDate", binding.IsDate},
-                            {"Default", binding.Default},
-                            {"UpperCase", binding.UpperCase},
-                            {"LowerCase", binding.LowerCase}
-                        }
+						binding
                     );
                 }
-
-                dict[exploded[0]][exploded[1]] = new Dictionary<string, object> {
-                    {"help", action.Help},
-                    {"parameters", parameters}
-                };
+				
+                dict[exploded[0]][exploded[1]] = new {action.Help, action.Arm, parameters= parameters.ToArray()};
             }
 
             return dict;

@@ -14,7 +14,7 @@ namespace Qorpent.Mvc.Loader {
             var level = LoadLevel.Guest;
             if (User.Identity.IsAuthenticated) {
                 level = LoadLevel.Auth;
-                if (IsInRole("ADMIN")) {
+                if (Roles.IsInRole(Context.LogonUser,"ADMIN")) {
                     level = LoadLevel.Admin;
                 }
             }
