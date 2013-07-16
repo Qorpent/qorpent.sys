@@ -23,6 +23,9 @@
 
 #endregion
 
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.Applications;
@@ -37,7 +40,10 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.IoC.Tests {
 	namespace InnerNs {
-		public class ManifestTestService : ITestService2 {}
+		public class ManifestTestService : ITestService2 {
+			public string[] str_array_param { get; set; }
+			public IDictionary<string,string> str_dict_param { get; set; }
+		}
 	}
 
 	[TestFixture]
@@ -118,6 +124,49 @@ transient 'name2', ManifestTestService  : ITestService2
 			c.Register(c.NewComponent<IBxlParser, BxlParser>(Lifestyle.Singleton));
 			c.GetLoader().LoadDefaultManifest(false);
 			Assert.AreEqual(5, c.GetComponents().Count());
+		}
+
+
+		[Test]
+		public void Q34CanReadStringArrayParameter()
+		{
+			var manifest = @"
+ref	Qorpent.IoC.Tests
+using Qorpent.IoC.Tests
+using Qorpent.IoC.Tests.InnerNs
+transient 'name1', ManifestTestService  : ITestService2
+	str_array_param 
+		add x
+		add y
+		add z
+";
+			
+			var c = new Container();
+			var cpt = c.GetLoader().LoadManifest(new BxlParser().Parse(manifest),true).First();
+			CollectionAssert.AreEqual(new[]{"x","y","z"},(IEnumerable)cpt.Parameters["str_array_param"]);
+			var res = c.Get<ITestService2>()as ManifestTestService;
+			CollectionAssert.AreEqual(new[]{"x","y","z"},res.str_array_param);
+		}
+
+		[Test]
+		public void Q35CanReadStringDictionaryParameter()
+		{
+			var manifest = @"
+ref	Qorpent.IoC.Tests
+using Qorpent.IoC.Tests
+using Qorpent.IoC.Tests.InnerNs
+transient 'name1', ManifestTestService  : ITestService2
+	str_dict_param 
+		add x a
+		add y b
+		add z c
+";
+
+			var c = new Container();
+			var cpt = c.GetLoader().LoadManifest(new BxlParser().Parse(manifest), true).First();
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "x", "a" }, { "y", "b" }, { "z", "c" } }, (IEnumerable)cpt.Parameters["str_dict_param"]);
+			var res = c.Get<ITestService2>() as ManifestTestService;
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "x", "a" }, { "y", "b" }, { "z", "c" } },  res.str_dict_param);
 		}
 
 		[Test]

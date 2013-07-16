@@ -32,9 +32,10 @@ namespace Qorpent.Bxl {
 		/// <param name="message"> some user message </param>
 		/// <param name="inner"> inner wrapped exception </param>
 		/// <param name="lexinfo"> lexinfo of item caused exception </param>
-		public BxlException(string message = "", LexInfo lexinfo = new LexInfo(), Exception inner = null)
+		public BxlException(string message = "", LexInfo lexinfo = null, Exception inner = null)
+			
 			: base(message, inner) {
-			LexInfo = lexinfo;
+			LexInfo = lexinfo ?? new LexInfo();
 		}
 
 		/// <summary>

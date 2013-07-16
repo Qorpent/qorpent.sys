@@ -16,11 +16,21 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/LexInfo.cs
 #endregion
+
+using Qorpent.Serialization;
+
 namespace Qorpent.Dsl {
 	/// <summary>
 	/// 	Describe information of source file position in Bxl file
 	/// </summary>
-	public struct LexInfo {
+	[Serialize]
+	public class LexInfo {
+		/// <summary>
+		/// 
+		/// </summary>
+		public LexInfo() {
+			
+		}
 		/// <summary>
 		/// 	Creates new instance of BxlLexInfo
 		/// </summary>
@@ -29,12 +39,14 @@ namespace Qorpent.Dsl {
 		/// <param name="col"> column number </param>
 		/// <param name="charindex"> global char index </param>
 		/// <param name="length"> length of item </param>
-		public LexInfo(string filename = "", int line = 0, int col = 0, int charindex = 0, int length = 0) {
+		/// <param name="context"></param>
+		public LexInfo(string filename = "", int line = 0, int col = 0, int charindex = 0, int length = 0, string context =null) {
 			File = filename;
 			Line = line;
 			Column = col;
 			Length = length;
 			CharIndex = charindex;
+			Context = context;
 		}
 
 		/// <summary>
@@ -42,7 +54,7 @@ namespace Qorpent.Dsl {
 		/// </summary>
 		/// <returns> </returns>
 		public override string ToString() {
-			return " at " + (File ?? "") + " : " + Line + ":" + Column;
+			return " at " + (File ?? "") + " : " + Line + ":" + Column + (string.IsNullOrWhiteSpace(Context)?"":" : "+Context);
 		}
 
 		/// <summary>
@@ -56,26 +68,37 @@ namespace Qorpent.Dsl {
 		/// <summary>
 		/// 	Not-lined char index in whole file
 		/// </summary>
+		[SerializeNotNullOnly]
 		public int CharIndex;
 
 		/// <summary>
 		/// 	Column number of char in row
 		/// </summary>
+		[SerializeNotNullOnly]
 		public int Column;
 
 		/// <summary>
 		/// 	Source file name
 		/// </summary>
+		[SerializeNotNullOnly]
 		public string File;
 
 		/// <summary>
 		/// 	Length of described code element
 		/// </summary>
+		[SerializeNotNullOnly]
 		public int Length;
 
 		/// <summary>
 		/// 	Line number of described code element
 		/// </summary>
+		[SerializeNotNullOnly]
 		public int Line;
+
+		/// <summary>
+		/// Дополнительный контекст
+		/// </summary>
+		[SerializeNotNullOnly]
+		public string Context;
 	}
 }

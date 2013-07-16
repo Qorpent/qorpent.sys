@@ -129,8 +129,32 @@ namespace Qorpent.IoC {
 						Parameters[attribute.Name.LocalName] = attribute.Value;
 					}
 				}
+				//collection parameters support (Q-34,Q-35)
+				foreach (var element in Source.Elements())
+				{
+					var itemelements = element.Elements("add");
+					if (itemelements.Count()!=0)
+					{
+						if(string.IsNullOrWhiteSpace(itemelements.First().ChooseAttr("__name","name"))){
+							PrepareArrayParameter(element,itemelements);
+						}else{
+							PrepareDictionaryParameter(element,itemelements);
+						}
+					}
+				}
 			}
 			Priority = Source.Attr("priority", "1000").ToInt();
+		}
+
+		private void PrepareDictionaryParameter(XElement element, IEnumerable<XElement> itemelements)
+		{
+			Parameters[element.Name.LocalName] = itemelements.Select(_ => _.Describe()).ToDictionary(_ => _.Code, _ => _.Name);
+			
+		}
+
+		private void PrepareArrayParameter(XElement element, IEnumerable<XElement> itemelements)
+		{
+			Parameters[element.Name.LocalName] = itemelements.Select(_ => _.ChooseAttr("__code", "code")).ToArray();
 		}
 	}
 }
