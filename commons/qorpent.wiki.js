@@ -306,15 +306,67 @@ qwiki.create = function(text, logwriter){
 						this.table = true;
 						this.ishead = true;
 					}
-				}else{
+				}
+				else if (curline=="[[row]]"){
+					if (this.cellstart) {
+						this.cellstart = false;
+						this.processed.push("</td>");
+					}
+					if (this.rowstart) {
+						this.processed.push("</tr>");
+					}
+					if(!this.table){
+						this.processed.push("<table><tbody>");
+						this.table = true;
+					}
+					this.rowstart = true;
+					this.processed.push("<tr>");
+					continue;
+				}
+				else if (curline=="[[cell]]"){
+					if (this.cellstart) {
+						this.processed.push("</td>");
+					}
+					if(!this.table){
+						this.processed.push("<table><tbody><tr>");
+						this.table = true;
+						this.rowstart = true;
+					}
+					this.cellstart = true;
+					this.processed.push("<td>");
+					continue;
+				}else if(curline=="[[/cell]]"){
+					this.cellstart =  false;
+					this.processed.push("</td>");
+					continue;
+				}
+				else if(curline=="[[/row]]"){
+					if(this.cellstart){
+						this.processed.push("</td>");
+					}
+					this.cellstart =  false;
+					this.rowstart =  false;
+					this.processed.push("</tr>");
+					continue;
+				}
+				else{
+				
 					if(this.table){
-						this.processed.push("</tbody>");
-						this.processed.push("</table>");
-						this.table = false;
+						if(!this.cellstart) {
+							if (this.rowstart){
+								this.processed.push("</tr>");
+							}
+							this.processed.push("</tbody>");
+							this.processed.push("</table>");
+							this.table = false;
+							this.cellstart= false;
+							this.rowstart =false;
+						
+						}
 					}
 				}
 								
-				if ( this.table ) {
+				if ( this.table &&  !this.cellstart ) {
 					var tde = this.ishead ? "th" : "td" ;
 					if(!this.ishead){
 						if(curline.match(/^\|\{\+\}/)){
