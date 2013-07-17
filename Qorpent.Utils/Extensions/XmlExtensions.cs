@@ -56,9 +56,10 @@ namespace Qorpent.Utils.Extensions {
 		/// 	returns qorpent/bxl bound descriptor of XElement
 		/// </summary>
 		/// <param name="x"> </param>
+		/// <param name="explicitname"></param>
 		/// <returns> </returns>
-		public static XmlElementDescriptor Describe(this XElement x) {
-			return new XmlElementDescriptor(x);
+		public static XmlElementDescriptor Describe(this XElement x,bool explicitname = false) {
+			return new XmlElementDescriptor(x,explicitname);
 		}
 		/// <summary>
 		/// Получает значение атрибута id, code или само значение элемента
@@ -403,15 +404,18 @@ namespace Qorpent.Utils.Extensions {
 			/// 	creates descriptor for element
 			/// </summary>
 			/// <param name="element"> </param>
-			public XmlElementDescriptor(XElement element) {
+			/// <param name="explicitname"></param>
+			public XmlElementDescriptor(XElement element,bool explicitname = false) {
 				Id = element.ChooseAttr("__id", "id", "__code", "code");
 				Code = element.ChooseAttr("__code", "code", "__id", "id");
 				Name = element.ChooseAttr("__name", "name");
-				if (Name.IsEmpty()) {
-					Name = element.Value;
-				}
-				if (Name.IsEmpty()) {
-					Name = Code;
+				if (!explicitname) {
+					if (Name.IsEmpty()) {
+						Name = element.Value;
+					}
+					if (Name.IsEmpty()) {
+						Name = Code;
+					}
 				}
 				File = element.ChooseAttr("_file", "__file");
 				Line = element.ChooseAttr("_line", "__line").ToInt();
@@ -464,5 +468,7 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		#endregion
+
+		
 	}
 }

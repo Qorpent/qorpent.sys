@@ -82,39 +82,21 @@ namespace Qorpent.Mvc.Loader {
         }
 
         private void GenerateStyle(LoadItem item, StringBuilder sb) {
-            sb.Append("document.write(\"");
-            sb.Append("<link rel='stylesheet' href='styles/");
-            sb.Append(item.Value);
-            sb.Append("' type='text/css' />");
-            sb.Append("\");");
-            sb.AppendLine();
+			sb.AppendFormat("$(document.head).append($('<link/>').attr({{rel:'stylesheet', href:'styles/{0}'}}));\r\n", item.Value);
+
         }
 
         private void GenerateScript(LoadItem item, StringBuilder sb) {
-            sb.Append("document.write(\"");
-            sb.Append("<script src='scripts/");
-            sb.Append(item.Value);
-            sb.Append("' type='text/javascript' defer='defer' ></script>");
-            sb.Append("\");");
-            sb.AppendLine();
+			sb.AppendFormat("$(document.head).append($('<script src=\"scripts/{0}\" async=\"false\" />'));\r\n", item.Value);
         }
 
         private void GenerateMeta(LoadItem item, StringBuilder sb) {
-            sb.Append("document.write(\"");
-            sb.Append("<meta ");
-            sb.Append(item.Value);
-            sb.Append(" />");
-            sb.Append("\");");
-            sb.AppendLine();
+			sb.AppendFormat("$(document.head).append($('<meta {0} />'));\r\n", item.Value);
         }
 
         private void GenerateLink(LoadItem item, StringBuilder sb) {
-            sb.Append("document.write(\"");
-            sb.Append("<link ");
-            sb.Append(item.Value);
-            sb.Append(" />");
-            sb.Append("\");");
-            sb.AppendLine();
+			sb.AppendFormat("$(document.head).append($('<link {0} />'));\r\n", item.Value);
+     
         }
 
         private void GeneratePrePackage(LoadPackage pkg, StringBuilder sb) {

@@ -19,6 +19,9 @@
 using System.IO;
 
 namespace Qorpent.Serialization {
+
+
+
 	/// <summary>
 	/// 	Describes entity to Serialize an object to text stream
 	/// </summary>

@@ -112,7 +112,7 @@ namespace Qorpent.Serialization {
 			EndObjectItem(last);
 		}
 
-		public void BeginArray(string name) {
+		public void BeginArray(string name, int length) {
 			_statestack.Push(ObjectSerializerState.Array);
 			Output.Write("[");
 		}

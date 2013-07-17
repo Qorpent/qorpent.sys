@@ -122,9 +122,10 @@ namespace Qorpent.Serialization {
 		/// 	Begins the array.
 		/// </summary>
 		/// <param name="name"> The name. </param>
+		/// <param name="length"></param>
 		/// <remarks>
 		/// </remarks>
-		void BeginArray(string name);
+		void BeginArray(string name,int length);
 
 		/// <summary>
 		/// 	Ends the array.

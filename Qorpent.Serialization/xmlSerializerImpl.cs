@@ -99,6 +99,14 @@ namespace Qorpent.Serialization {
 			    current.Name.LocalName == current.Elements().First().Name.LocalName) {
 				current.ReplaceWith(current.Elements().First());
 			}
+			if (current.Name.LocalName == "Children")
+			{
+				if (current.Elements().Count() == 0) current.Remove();
+				else
+				{
+					current.ReplaceWith(current.Elements());
+				}
+			}
 		}
 
 		/// <summary>
@@ -194,16 +202,18 @@ namespace Qorpent.Serialization {
 		public void EndDictionaryEntry(bool last) {
 			_stack.Pop();
 		}
-
 		/// <summary>
 		/// 	Begins the array.
 		/// </summary>
 		/// <param name="name"> The name. </param>
+		/// <param name="lenght"></param>
 		/// <remarks>
 		/// </remarks>
-		public void BeginArray(string name) {
+		public void BeginArray(string name,int lenght) {
 			name = name.Replace("[", "_").Replace("]", "_");
-			BeginObject(name);
+		
+				BeginObject(name);
+		
 		}
 
 		/// <summary>
@@ -212,7 +222,9 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public void EndArray() {
+			
 			EndObject();
+			
 		}
 
 		/// <summary>
@@ -222,6 +234,7 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public void BeginArrayEntry(int idx) {
+
 			var e = new XElement("item", new XAttribute("__idx", idx));
 			Current.Add(e);
 			_stack.Push(e);

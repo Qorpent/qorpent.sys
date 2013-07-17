@@ -124,7 +124,7 @@ namespace Qorpent.Log {
 				sb.AppendFormat("\thost='''" + HostObject + "'''\r\n");
 			}
 
-			if (!string.IsNullOrEmpty(LexInfo.File)) {
+			if (null!=LexInfo && !string.IsNullOrEmpty(LexInfo.File)) {
 				sb.AppendFormat("\tlexinfo='{0}'\r\n", LexInfo);
 			}
 			if (null != MvcCallInfo) {

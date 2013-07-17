@@ -156,7 +156,7 @@ namespace Qorpent.Serialization {
 	        }
 	        else {
 	            c++;
-	            _s.BeginArray(e.Name.LocalName);
+	            _s.BeginArray(e.Name.LocalName,elements.Count());
 	            var i = 0;
 	            foreach (var x in elements) {
 	                _s.BeginArrayEntry(i++);
@@ -269,7 +269,7 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		private void SerializeArray(string name, Array value) {
-			_s.BeginArray(name);
+			_s.BeginArray(name,value.Length);
 			var i = 0;
 			foreach (var val in value) {
 				_s.BeginArrayEntry(i);
