@@ -110,6 +110,7 @@ namespace Qorpent.Mvc.Renders {
 	                ProbeFiles = new[] {xslt + ".xslt", xslt},
 	                ExistedOnly = true,
 	                PathType = FileSearchResultType.FullPath,
+					UseCache =false,
 	            });
 	        if (null == resolvedxslt) {
 	            throw new Exception("cannot find xslt with code " + xslt);
@@ -147,7 +148,7 @@ namespace Qorpent.Mvc.Renders {
 	        if (obj is XElement) return (obj as XElement).CreateNavigator();
 	        if (obj is string) return new XPathDocument(new StringReader(obj as string));
 	        var stringwriter = new StringWriter();
-	        GetXmlSerializer().Serialize("xmltransform", obj, stringwriter);
+	        GetXmlSerializer().Serialize("result", obj, stringwriter);
             return new XPathDocument(new StringReader(stringwriter.ToString()));
 	    }
 
