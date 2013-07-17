@@ -25,6 +25,13 @@ namespace Qorpent.IO {
 	/// </summary>
 	public class FileSearchQuery {
 		/// <summary>
+		/// 
+		/// </summary>
+		public FileSearchQuery()
+		{
+			UseCache = true;
+		}
+		/// <summary>
 		/// 	indicatest that all matched files must be returned
 		/// </summary>
 		public bool All { get; set; }
@@ -54,6 +61,10 @@ namespace Qorpent.IO {
 		/// </summary>
 		public IUserLog UserLog { get; set; }
 
+		/// <summary>
+		/// Признак использования кэша
+		/// </summary>
+		public bool UseCache { get; set; }
 
 		/// <summary>
 		/// 	Запрос на поиск одного конкретного файла с разрешением относительно типовых уровней

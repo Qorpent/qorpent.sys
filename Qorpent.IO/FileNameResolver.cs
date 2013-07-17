@@ -229,7 +229,7 @@ namespace Qorpent.IO {
 				var key = query.ToString();
 				query.UserLog.Trace("start resolving files with key " + key, this);
 				string[] result;
-				if (!_cache.ContainsKey(key)) {
+				if (!_cache.ContainsKey(key) || !query.UseCache) {
 					query.UserLog.Debug("no cached Context found", this);
 					result = InternalResolve(query);
 					Version++;
@@ -319,6 +319,10 @@ namespace Qorpent.IO {
 				foreach (var dir in query.ProbePaths) {
 					query.UserLog.Debug("enter dir " + dir, this);
 					var path = (Root + "/" + dir).NormalizePath();
+					if (dir.StartsWith("~/"))
+					{
+						path = (Root + dir.Substring(1)).NormalizePath();
+					}
 					var probe = (path + "/" + probefile).NormalizePath();
 					query.UserLog.Debug("try " + probe, Root);
 					if (File.Exists(probe) || Directory.Exists(probe)) {
