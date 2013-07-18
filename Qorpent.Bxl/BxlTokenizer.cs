@@ -984,6 +984,8 @@ namespace Qorpent.Bxl {
 					goto case ' ';
 				case ' ':
 					return BxlTokenType.WhiteSpace;
+				case '\u00A0':
+					return BxlTokenType.WhiteSpace;
 				case '#':
 					return BxlTokenType.Comment;
 				case '"':
