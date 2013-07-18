@@ -152,7 +152,7 @@ namespace Qorpent.IoC {
 		private void ResolveDefines(XElement manifest) {
 			
 			IDictionary<string,string> defines  = new Dictionary<string, string>();
-			foreach (var e in manifest.Elements("define").ToArray()) {
+			foreach (var e in manifest.Elements("define").OrderBy(_=>_.Attr("idx").ToInt()).ToArray()) {
 				var desc = e.Describe();
 				var code = desc.Code;
 				var value = desc.Name;

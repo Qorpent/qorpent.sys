@@ -43,6 +43,7 @@ namespace Qorpent.IoC.Tests {
 		public class ManifestTestService : ITestService2 {
 			public string[] str_array_param { get; set; }
 			public IDictionary<string,string> str_dict_param { get; set; }
+			public string Val { get; set; }
 		}
 	}
 
@@ -190,5 +191,33 @@ pooled 'name1', @MTS  : @TS
 			Assert.AreEqual(Lifestyle.Pooled, component.Lifestyle);
 			Assert.AreEqual("name1", component.Name);
 		}
+
+
+		[Test]
+		public void DefineOrder()
+		{
+			var c = new Container();
+			var manifest = new BxlParser().Parse(@"
+define X idx=20 : 2
+define X idx=30 : 3
+define X idx=10 : 1
+ref	Qorpent.IoC.Tests
+using Qorpent.IoC.Tests
+using Qorpent.IoC.Tests.InnerNs
+transient 'name1', ManifestTestService  : ITestService2
+	Val  = @X
+", "test");
+			var loader = c.GetLoader();
+			loader.LoadManifest(manifest, false);
+
+			var component = c.Components.First();
+			Assert.AreEqual(typeof(ITestService2), component.ServiceType);
+			Assert.AreEqual(typeof(ManifestTestService), component.ImplementationType);
+			Assert.AreEqual("3", component.Parameters["Val"]);
+
+		}
 	}
+
+
+
 }
