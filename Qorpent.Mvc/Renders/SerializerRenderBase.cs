@@ -73,9 +73,17 @@ namespace Qorpent.Mvc.Renders {
 			    //Q-11 добавлена поддержка пред-подготовки и фильтрации объекта при рендеринге
 			    var objectToRender = PrepareRenderObject(context);
 			    /////////////////////////////////////////////////////////////////
-				GetMainSerializer().Serialize("result", objectToRender, context.Output);
+			    SendOutput(context, objectToRender);
 			}
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="objectToRender"></param>
+	    protected virtual void SendOutput(IMvcContext context, object objectToRender) {
+	        GetMainSerializer().Serialize("result", objectToRender, context.Output);
+	    }
 
 	    private object PrepareRenderObject(IMvcContext context) {
             //Q-14 common xpath/xslt support
