@@ -19,7 +19,11 @@
   <Choose>
     <When Condition="'$(Configuration)'!='SQL2008'" />
   </Choose>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="..\..\minerva\libtidy.dll">
+      <Link>libtidy.dll</Link>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Applications\IHttpContextWrapper.cs" />
     <Compile Include="Applications\StubHttpContextWrapper.cs" />

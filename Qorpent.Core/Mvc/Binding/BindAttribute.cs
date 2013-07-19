@@ -154,6 +154,14 @@ namespace Qorpent.Mvc.Binding {
 		}
 
 		/// <summary>
+		/// Имя типа параметра
+		/// </summary>
+		[Serialize]
+		public string DataType {
+			get { return TargetType.Name; }
+		}
+
+		/// <summary>
 		/// 	Client/server validation - mark required parameters
 		/// </summary>
 		public bool Required { get; set; }
