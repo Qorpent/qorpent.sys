@@ -64,6 +64,7 @@ namespace Qorpent.Mvc.Renders {
 		/// </summary>
 		/// <param name="context"> </param>
 		public override void Render(IMvcContext context) {
+            context.ContentType = GetContentType();
             if (null != context.ActionResult) {
                 if (context.ActionResult is string) {
                     if (IsNativeString(context.ActionResult as string)) {
@@ -73,7 +74,7 @@ namespace Qorpent.Mvc.Renders {
                 }
             }
 
-			context.ContentType = GetContentType();
+			
 			if (null == context.ActionResult) {
 				context.Output.Write("null");
 			}
