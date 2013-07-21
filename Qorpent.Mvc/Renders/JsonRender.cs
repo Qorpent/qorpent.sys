@@ -40,5 +40,18 @@ namespace Qorpent.Mvc.Renders {
 		protected override string GetContentType() {
 			return "application/json";
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="actionResult"></param>
+        /// <returns></returns>
+        protected override bool IsNativeString(string actionResult) {
+            if (actionResult[0] == '{') {
+                return true;
+            }
+
+            return false;
+        }
 	}
 }

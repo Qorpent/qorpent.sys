@@ -1,4 +1,4 @@
-#region LICENSE
+п»ї#region LICENSE
 // Copyright 2007-2013 Qorpent Team - http://github.com/Qorpent
 // Supported by Media Technology LTD 
 //  
@@ -35,13 +35,13 @@ namespace Qorpent.Mvc.Renders {
 	    private ISerializer _xmlserializer;
 
         /// <summary>
-        /// Расширения XSLT для серверных XSLT преобразований
+        /// ГђГ Г±ГёГЁГ°ГҐГ­ГЁГї XSLT Г¤Г«Гї Г±ГҐГ°ГўГҐГ°Г­Г»Гµ XSLT ГЇГ°ГҐГ®ГЎГ°Г Г§Г®ГўГ Г­ГЁГ©
         /// </summary>
         [Inject]
         public ISerializerXsltExtension[] XsltExtensions { get; set; }
 
         /// <summary>
-        /// Компонент поиска файлов для резолюции XSLT
+        /// ГЉГ®Г¬ГЇГ®Г­ГҐГ­ГІ ГЇГ®ГЁГ±ГЄГ  ГґГ Г©Г«Г®Гў Г¤Г«Гї Г°ГҐГ§Г®Г«ГѕГ¶ГЁГЁ XSLT
         /// </summary>
         [Inject]
         public IFileNameResolver FileNameResolver { get; set; }
@@ -64,19 +64,37 @@ namespace Qorpent.Mvc.Renders {
 		/// </summary>
 		/// <param name="context"> </param>
 		public override void Render(IMvcContext context) {
-         
+            if (null != context.ActionResult) {
+                if (context.ActionResult is string) {
+                    if (IsNativeString(context.ActionResult as string)) {
+                        context.Output.Write(context.ActionResult);
+                        return;
+                    }
+                }
+            }
+
 			context.ContentType = GetContentType();
 			if (null == context.ActionResult) {
 				context.Output.Write("null");
 			}
 			else {
-			    //Q-11 добавлена поддержка пред-подготовки и фильтрации объекта при рендеринге
+			    //Q-11 Г¤Г®ГЎГ ГўГ«ГҐГ­Г  ГЇГ®Г¤Г¤ГҐГ°Г¦ГЄГ  ГЇГ°ГҐГ¤-ГЇГ®Г¤ГЈГ®ГІГ®ГўГЄГЁ ГЁ ГґГЁГ«ГјГІГ°Г Г¶ГЁГЁ Г®ГЎГєГҐГЄГІГ  ГЇГ°ГЁ Г°ГҐГ­Г¤ГҐГ°ГЁГ­ГЈГҐ
 			    var objectToRender = PrepareRenderObject(context);
 			    /////////////////////////////////////////////////////////////////
 			    SendOutput(context, objectToRender);
 			}
 		}
+
         /// <summary>
+        ///     РџСЂРѕРІРµСЂРёРј, С‡С‚Рѕ СЃС‚СЂРѕРєРµ РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ СЃРµСЂРёР»РёР·Р°С†РёСЏ
+        /// </summary>
+        /// <param name="actionResult"></param>
+        /// <returns></returns>
+	    protected virtual bool IsNativeString(string actionResult) {
+	        return false;
+	    }
+
+	    /// <summary>
         /// 
         /// </summary>
         /// <param name="context"></param>
@@ -97,10 +115,10 @@ namespace Qorpent.Mvc.Renders {
 	    }
 
 	    private object TransformResult(IMvcContext context, object objectToRender, string xpath, string xslt) {
-            //сначала приводим исходный объект к IXPathNavigable (что нужно как для xpath, так и для xslt)
+            //Г±Г­Г Г·Г Г«Г  ГЇГ°ГЁГўГ®Г¤ГЁГ¬ ГЁГ±ГµГ®Г¤Г­Г»Г© Г®ГЎГєГҐГЄГІ ГЄ IXPathNavigable (Г·ГІГ® Г­ГіГ¦Г­Г® ГЄГ ГЄ Г¤Г«Гї xpath, ГІГ ГЄ ГЁ Г¤Г«Гї xslt)
 	        var xnav = ConvertToXmlReader(objectToRender);
-            // если у нас есть фильтрующее условие (запрос), то сначала выполняем его и получаем новый
-            // документ
+            // ГҐГ±Г«ГЁ Гі Г­Г Г± ГҐГ±ГІГј ГґГЁГ«ГјГІГ°ГіГѕГ№ГҐГҐ ГіГ±Г«Г®ГўГЁГҐ (Г§Г ГЇГ°Г®Г±), ГІГ® Г±Г­Г Г·Г Г«Г  ГўГ»ГЇГ®Г«Г­ГїГҐГ¬ ГҐГЈГ® ГЁ ГЇГ®Г«ГіГ·Г ГҐГ¬ Г­Г®ГўГ»Г©
+            // Г¤Г®ГЄГіГ¬ГҐГ­ГІ
             if (!string.IsNullOrWhiteSpace(xpath)) {
                 xnav = FilterByXPath(xnav, xpath);
             }
@@ -170,7 +188,7 @@ namespace Qorpent.Mvc.Renders {
 		}
 
         /// <summary>
-        ///  Инспользуется для предварительной трансформации в XML для выполнения требований Q-10
+        ///  Г€Г­Г±ГЇГ®Г«ГјГ§ГіГҐГІГ±Гї Г¤Г«Гї ГЇГ°ГҐГ¤ГўГ Г°ГЁГІГҐГ«ГјГ­Г®Г© ГІГ°Г Г­Г±ГґГ®Г°Г¬Г Г¶ГЁГЁ Гў XML Г¤Г«Гї ГўГ»ГЇГ®Г«Г­ГҐГ­ГЁГї ГІГ°ГҐГЎГ®ГўГ Г­ГЁГ© Q-10
         /// </summary>
         /// <returns></returns>
         protected ISerializer GetXmlSerializer() {
