@@ -47,7 +47,8 @@ namespace Qorpent.Mvc.Renders {
         /// <param name="actionResult"></param>
         /// <returns></returns>
         protected override bool IsNativeString(string actionResult) {
-            if (actionResult[0] == '{') {
+			if (actionResult[0] == '{' || actionResult[0] == '[')
+			{
                 return true;
             }
 
