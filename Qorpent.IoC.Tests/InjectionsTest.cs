@@ -50,7 +50,7 @@ namespace Qorpent.IoC.Tests {
         public interface IExt2ByFact {}
         public class Ext2ByFact:IExt2ByFact{}
         public class Ext2Factory:IFactory {
-            public object Get(Type serviceType) {
+            public object Get(Type serviceType,string name = "") {
                 return new Ext2ByFact();
             }
         }
