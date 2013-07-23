@@ -231,6 +231,21 @@ namespace Qorpent.Serialization {
 				return !Equals(Value, Activator.CreateInstance(Type));
 			}
 			return null != Value;
+			/*if (null == Value) {
+				return false;
+			}
+			if (Value is Array) {
+				return 0 != ((Array) Value).Length;
+			}
+			if (Value.GetType().IsGenericType) {
+				if (Value.GetType().GetGenericTypeDefinition() == typeof (IList<>)) {
+					return ((IEnumerable) Value).OfType<object>().Count() != 0;
+				}
+				if (Value.GetType().GetGenericTypeDefinition() == typeof (IDictionary<,>)) {
+					return ((IEnumerable) Value).OfType<object>().Count() != 0;
+				}
+			}
+			return false;*/
 		}
 
 		private bool IsNotNullSetted() {
