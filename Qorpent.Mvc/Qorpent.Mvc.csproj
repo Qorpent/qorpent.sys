@@ -66,15 +66,9 @@
     <Compile Include="ServiceStateBuilder.cs" />
     <Compile Include="UI\ButtonSize.cs" />
     <Compile Include="UI\DefaultLayout.cs" />
-    <Compile Include="QView\QViewCompilerHelper.cs" />
-    <Compile Include="QView\QViewResourceProvider.cs" />
-    <Compile Include="QView\QViewXmlPreprocessor.cs" />
-    <Compile Include="QView\QViewXsltExtension.cs" />
     <Compile Include="QView\QViewBase.cs" />
     <Compile Include="QView\QViewBinder.cs" />
-    <Compile Include="QView\QViewCompiler.cs" />
     <Compile Include="QView\QViewContext.cs" />
-    <Compile Include="QView\QViewMonitor.cs" />
     <Compile Include="ContainerInfo.cs" />
     <Compile Include="UI\Widget.cs" />
     <Compile Include="UI\WidgetType.cs" />
@@ -113,9 +107,6 @@
     <Compile Include="Renders\ViewRender.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="QView\vbxlcompiler.xslt">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Renders\ActionFormViews\qvexr_actionform.css" />
     <EmbeddedResource Include="Renders\ActionFormViews\qvexr_actionform.js" />
   </ItemGroup>

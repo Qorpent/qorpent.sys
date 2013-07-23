@@ -15,7 +15,6 @@
     <None Include="Qorpent.Serialization.import" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicQViewCompilerTest.cs" />
     <Compile Include="DefaultLayoutTest.cs" />
     <Compile Include="Loader\BxlLoadingTest.cs" />
     <Compile Include="Loader\NormalizerTest.cs" />

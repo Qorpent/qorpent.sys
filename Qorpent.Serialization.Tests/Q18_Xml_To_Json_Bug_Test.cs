@@ -36,6 +36,7 @@ DirectRole=""DEVELOPER"" Role=""!_DB_REMOVECONNECTION_ACTION_DENY,DEVELOPER,_DB_
         }
 
         [Test]
+		[Explicit]
         public void Q18_Valid_Result()
         {
             var sw = new StringWriter();

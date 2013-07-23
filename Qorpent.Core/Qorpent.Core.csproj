@@ -227,13 +227,10 @@
     <Compile Include=".\Mvc\MvcStepDescriptor.cs" />
     <Compile Include=".\Mvc\QView\IQView.cs" />
     <Compile Include=".\Mvc\QView\IQViewBinder.cs" />
-    <Compile Include=".\Mvc\QView\IQViewCompiler.cs" />
     <Compile Include=".\Mvc\QView\IQViewContext.cs" />
     <Compile Include=".\Mvc\QView\IQViewExtended.cs" />
-    <Compile Include=".\Mvc\QView\IQViewMonitor.cs" />
     <Compile Include=".\Mvc\QView\QViewAttribute.cs" />
     <Compile Include=".\Mvc\QView\QViewBindAttribute.cs" />
-    <Compile Include=".\Mvc\QView\QViewCompileType.cs" />
     <Compile Include=".\Mvc\QView\QViewInvariantBase.cs" />
     <Compile Include=".\Mvc\QView\QViewLevel.cs" />
     <Compile Include=".\Mvc\QView\ViewDataAttribute.cs" />

@@ -41,11 +41,6 @@ namespace Qorpent.Mvc {
 		}
 #endif
 
-		/// <summary>
-		/// 	Reference to QView monitor instance
-		/// </summary>
-		[Inject] public IQViewMonitor QViewMonitor { get; set; }
-
 
 		/// <summary>
 		/// 	Registers all mvcfactory-managed items from given assembly
@@ -308,26 +303,6 @@ namespace Qorpent.Mvc {
 			return new {actions = _actionPool.Count, renders = _renderPool.Count, views = _viewPool.Count};
 		}
 
-
-		/// <summary>
-		/// 	called on object after creation in IoC with current component context
-		/// 	object can perform container bound logic here
-		/// </summary>
-		/// <param name="container"> The container. </param>
-		/// <param name="component"> The component. </param>
-		/// <remarks>
-		/// </remarks>
-		public override void SetContainerContext(IContainer container, IComponentDefinition component) {
-			base.SetContainerContext(container, component);
-
-			//Register(Assembly.GetExecutingAssembly());
-
-			if (null != QViewMonitor) {
-				QViewMonitor.SetFactory(this);
-				QViewMonitor.Startup();
-				QViewMonitor.StartMonitoring();
-			}
-		}
 
 		private ActionDescriptor GenerateNewActionDescriptor(string actionName) {
 			var name = NormalizeActionName(actionName);
