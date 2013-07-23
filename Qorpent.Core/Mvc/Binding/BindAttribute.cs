@@ -43,16 +43,19 @@ namespace Qorpent.Mvc.Binding {
 		/// <summary>
 		/// 	Flags that it will be lrge text, - can force textarea to be shown
 		/// </summary>
+		[SerializeNotNullOnly]
 		public bool IsLargeText { get; set; }
 
 		/// <summary>
 		/// 	Flags that parameter can be parsed as dictionary string in form A:B|C:D|X|Y
 		/// </summary>
+		[SerializeNotNullOnly]
 		public bool IsComplexString { get; set; }
 
 		/// <summary>
 		/// 	Flags that it's RGB color definition
 		/// </summary>
+		[SerializeNotNullOnly]
 		public bool IsColor { get; set; }
 
 		/// <summary>
@@ -96,6 +99,7 @@ namespace Qorpent.Mvc.Binding {
 		/// <summary>
 		/// 	Flag that bind reqires client validation
 		/// </summary>
+		[SerializeNotNullOnly]
 		public bool RequireValidation {
 			get { return Required || (null != Constraint && 0 != Constraint.Length); }
 		}
@@ -103,16 +107,19 @@ namespace Qorpent.Mvc.Binding {
 		/// <summary>
 		/// 	Convert to Lower on bind
 		/// </summary>
+		[SerializeNotNullOnly]
 		public bool LowerCase { get; set; }
 
 		/// <summary>
 		/// 	Convert to Upper on bind
 		/// </summary>
+		[SerializeNotNullOnly]
 		public bool UpperCase { get; set; }
 
 		/// <summary>
 		/// 	Name or parameter in context
 		/// </summary>
+		[SerializeNotNullOnly]
 		public string Name {
 			get {
 				if (string.IsNullOrEmpty(_parameterName)) {
@@ -127,6 +134,7 @@ namespace Qorpent.Mvc.Binding {
 		/// <summary>
 		/// 	Name of target type to be bound to
 		/// </summary>
+		[SerializeNotNullOnly]
 		public string TypeName {
 			get { return TargetType.FullName; }
 		}
@@ -164,16 +172,19 @@ namespace Qorpent.Mvc.Binding {
 		/// <summary>
 		/// 	Client/server validation - mark required parameters
 		/// </summary>
+		[SerializeNotNullOnly]
 		public bool Required { get; set; }
 
 		/// <summary>
 		/// 	Client/server validation - regex to be checked
 		/// </summary>
+		[SerializeNotNullOnly]
 		public string ValidatePattern { get; set; }
 
 		/// <summary>
 		/// 	Error message to be shown on invalid bind
 		/// </summary>
+		[SerializeNotNullOnly]
 		public string ErrorMessage {
 			get {
 #if !SQL2008
@@ -200,12 +211,14 @@ namespace Qorpent.Mvc.Binding {
 		/// <summary>
 		/// 	Набор допустимых значений
 		/// </summary>
+		[SerializeNotNullOnly]
 		public object[] Constraint { get; set; }
 
 
 		/// <summary>
 		/// 	Справочаня информация для отрисовки на клиете
 		/// </summary>
+		[SerializeNotNullOnly]
 		public string Help { get; set; }
 
 		private string _errorMessage;
