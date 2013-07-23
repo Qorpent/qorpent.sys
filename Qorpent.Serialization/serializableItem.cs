@@ -230,22 +230,22 @@ namespace Qorpent.Serialization {
 				}
 				return !Equals(Value, Activator.CreateInstance(Type));
 			}
-			return null != Value;
-			/*if (null == Value) {
+			//return null != Value;
+			if (null == Value) {
 				return false;
 			}
 			if (Value is Array) {
 				return 0 != ((Array) Value).Length;
 			}
 			if (Value.GetType().IsGenericType) {
-				if (Value.GetType().GetGenericTypeDefinition() == typeof (IList<>)) {
+				if ( typeof (List<>)==Value.GetType().GetGenericTypeDefinition()) {
 					return ((IEnumerable) Value).OfType<object>().Count() != 0;
 				}
-				if (Value.GetType().GetGenericTypeDefinition() == typeof (IDictionary<,>)) {
+				if (Value.GetType().GetGenericTypeDefinition() == typeof (Dictionary<,>)) {
 					return ((IEnumerable) Value).OfType<object>().Count() != 0;
 				}
 			}
-			return false;*/
+			return true;
 		}
 
 		private bool IsNotNullSetted() {
@@ -312,6 +312,10 @@ namespace Qorpent.Serialization {
 				if (IsAttrSetted<SerializeAttribute>(Member)) {
 					return true;
 				}
+				if (IsAttrSetted<SerializeNotNullOnlyAttribute>(Member))
+				{
+					return true;
+				}
 				if (typeof (IDictionary).IsAssignableFrom(Type) && Value is IDictionary) {
 					return true;
 				}
@@ -322,7 +326,7 @@ namespace Qorpent.Serialization {
 				if (Value != null && Value.GetType().Name.StartsWith("<")) {
 					return true;
 				}
-				return IsAttrSetted<SerializeAttribute>(Type);
+				return IsAttrSetted<SerializeAttribute>(Type) ;
 			}
 			catch (Exception) {
 				return false;
