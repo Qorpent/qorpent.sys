@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Qorpent.Mvc.HttpHandler;
 
 namespace Qorpent.Core.Tests {
@@ -15,6 +16,6 @@ namespace Qorpent.Core.Tests {
         public void TestsSetUp() {
             _service = new ServiceEmulation();
         }
-
+		
     }
 }
