@@ -11,5 +11,10 @@
 		/// Значение свойства
 		/// </summary>
 		public JsonItem Value;
+
+		/// <summary>
+		/// Признак установления двоеточия
+		/// </summary>
+		public bool HasColon;
 	}
 }

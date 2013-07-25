@@ -1,4 +1,7 @@
-﻿namespace Qorpent.Dsl.Json {
+﻿using System;
+using Qorpent.Utils.Extensions;
+
+namespace Qorpent.Dsl.Json {
 	/// <summary>
 	/// Минимальное значение JSON
 	/// </summary>
@@ -55,8 +58,18 @@
 		/// </summary>
 		public TType Type;
 		/// <summary>
-		/// Само значение
+		/// 
 		/// </summary>
-		public string Value;
+		/// <param name="format"></param>
+		/// <returns></returns>
+		public override string ToString(bool format) {
+			if (TType.Null == Type) return "null";
+			if (TType.Bool == Type) return Value=="false"?"false":"true";
+			if (TType.Lit == Type) return Value;
+			if (TType.Num == Type) return Value;
+			if (TType.Str == Type)
+				return "\"" + Value.Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n").Replace("\t", "\\t")+"\"";
+			throw new Exception("cannot to string " + Type);
+		}
 	}
 }

@@ -12,6 +12,7 @@ namespace Qorpent.Dsl.Json {
 	
 		private JsonItem rootitem = null;
 		private JsonItem currentitem = null;
+		private JsonTuple currenttuple = null;
 		
 
 
@@ -29,52 +30,224 @@ namespace Qorpent.Dsl.Json {
 
 		private void Collect(JsonToken t) {
 			switch (t.Type) {
+				// обработка открытия,закрытия класса
+				case TType.Open:
+					ProcessOpenClass(t);
+					break;
+				case TType.Close:
+					ProcessCloseClass(t);
+					break;
 
+				// обработка открытия,закрытия массивов
+				case TType.OpenArray:
+					ProcessOpenArray(t);
+					break;
+				case TType.CloseArray:
+					ProcessCloseArray(t);
+					break;
+
+				//обработка двоеточий
+				case TType.Colon:
+					ProcessColon();
+					break;
+
+				case TType.Comma:
+					ProcessComma();
+					break;
+
+				//  обработка значений,которые могут встречаться и в именах и значениях
 				case TType.Num:
-					goto case TType.Str;
 				case TType.Lit:
-					goto case TType.Str;				
-				case TType.Bool:
-					if (CanSetValue()) {
-						CollectValue(t);
-						break;
-					}
-					throw new Exception("illegal for bool");
 				case TType.Str:
-					if (CanSetValue()) {
-						CollectValue(t);
-						break;
-					}
-					if (CanSetName()) {
-						CollectName(t);
-						break;
-					}
-					throw new Exception("illegal for val");
+					ProcessValue(t);
+					break;
+
+				// обработка значений которые могут быть только значениями
+				case TType.Bool:
+				case TType.Null:
+					ProcessSystemLiteral(t);
+					break;
+				
 				default:
 					throw new NotSupportedException(t.Type.ToString());
 			}
 		}
 
+		private void ProcessCloseArray(JsonToken jsonToken) {
+			var obj = currentitem as JsonArray;
+			if (null == obj) throw new Exception("cannot close array here");
+			currentitem = obj.Parent;
+			if (null != currentitem)
+			{
+				//пока не было запятой
+				currentitem.CanAddItems = false;
+			}
+		}
+
+		private void ProcessOpenArray(JsonToken jsonToken) {
+			if (!CanSetValue()) throw new Exception("cannot open array here");
+			var newobj = new JsonArray();
+
+			// вариант с корневым объектом
+			if (null == rootitem)
+			{
+				rootitem = newobj;
+				currentitem = newobj;
+				return;
+			}
+
+			// вариант с значением свойства
+			if (null != currenttuple && currenttuple.HasColon)
+			{
+				newobj.Parent = currentitem;
+				currenttuple.Value = newobj;
+				(currentitem as JsonObject).Properties.Add(currenttuple);
+				currenttuple = null;
+				currentitem = newobj;
+				return;
+			}
+
+			if (currentitem is JsonArray && currentitem.CanAddItems)
+			{
+				newobj.Parent = currentitem;
+				(currentitem as JsonArray).Values.Add(newobj);
+				currentitem = newobj;
+				return;
+			}
+			throw new Exception("cannot open object here");
+		}
+
+		private void ProcessComma() {
+			if (null == currentitem) throw new Exception("cannot add comma - not object");
+			if (null != currenttuple) throw new Exception("cannot add comma - in property");
+			if (currentitem is JsonValue)throw new Exception("cannot add comma - require non-literal object");
+			if (currentitem.CanAddItems) throw new Exception("cannot add comma - already added");
+			currentitem.CanAddItems = true;
+		}
+
+		private void ProcessColon() {
+			if (null == currenttuple) throw new Exception("cannot process colon here");
+			currenttuple.HasColon = true;
+		}
+
+		private void ProcessCloseClass(JsonToken jsonToken) {
+			var obj = currentitem as JsonObject;
+			if (null == obj) throw new Exception("cannot close object here");
+			if (null != currenttuple) throw new Exception("cannot object class here - not closed property");
+			currentitem = obj.Parent;
+			if (null != currentitem) {
+				//пока не было запятой
+				currentitem.CanAddItems = false;
+			}
+		}
+
+		private void ProcessOpenClass(JsonToken jsonToken) {
+			if (!CanSetValue()) throw new Exception("cannot open object here");
+			var newobj = new JsonObject();
+
+			// вариант с корневым объектом
+			if (null == rootitem) {
+				rootitem = newobj;
+				currentitem = newobj;
+				return;
+			}
+
+			// вариант с значением свойства
+			if (null != currenttuple && currenttuple.HasColon) {
+				newobj.Parent = currentitem;
+				currenttuple.Value = newobj;
+				(currentitem as JsonObject).Properties.Add(currenttuple);
+				currenttuple = null;
+				currentitem = newobj;
+				return;
+			}
+			
+			if (currentitem is JsonArray && currentitem.CanAddItems) {
+				newobj.Parent = currentitem;
+				(currentitem as JsonArray).Values.Add(newobj);
+				currentitem = newobj;
+				return;
+			}
+			throw new Exception("cannot open object here");
+		}
+
+		private void ProcessSystemLiteral(JsonToken t) {
+			if (CanSetValue()) {
+				CollectValue(t);
+				return;
+			}
+			throw new Exception("illegal for " + t);
+		}
+
+		private void ProcessValue(JsonToken t) {
+			if (CanSetValue()) {
+				CollectValue(t);
+				return;
+			}
+			if (CanSetName()) {
+				CollectName(t);
+				return;
+			}
+			throw new Exception("illegal for val");
+		}
+
 		private void CollectName(JsonToken jsonToken) {
-			throw new NotImplementedException();
+			if ( currentitem is JsonObject && null == currenttuple) {
+				currenttuple = new JsonTuple();
+				currenttuple.Name = new JsonValue(jsonToken.Type, jsonToken.Value);
+				return;
+			}
+			throw new Exception("insuficient place of name");
 		}
 
 		private bool CanSetName() {
-			throw new NotImplementedException();
+			if (null == currentitem) return false;
+			if (!(currentitem is JsonObject)) return false;
+			if (!currentitem.CanAddItems) return false;
+			//если свойство уже в агенде, значит имя установлено
+			if (null != currenttuple) return false;
+			return true;
 		}
 
 		private bool CanSetValue() {
+			//Вариант автономного значения
 			if (null == currentitem) return true;
-
+			//Вариант значения свойства
+			if (null != currenttuple && null == currenttuple.Value && null != currenttuple.Name) return true;
+			//Вариант массива
+			if (currentitem is JsonArray) return currentitem.CanAddItems;
 			return false;
 		}
 
 		private void CollectValue(JsonToken jtoken) {
 			var item = new JsonValue(jtoken.Type, jtoken.Value);
+			//вариант с автономным значением
 			if (null == rootitem) {
 				rootitem = item;
+				currentitem = item;
+				return;
 			}
-			currentitem = item;
+
+			//вариант выставления свойства значению
+			if (null != currenttuple) {
+				currenttuple.Value = item;
+				(currentitem as JsonObject).Properties.Add(currenttuple);
+				currenttuple = null;
+				//пока еще не было запятой - нельзя новые значения
+				currentitem.CanAddItems = false;
+				return;
+			}
+
+			//вариант с массивом
+			if (currentitem is JsonArray) {
+				(currentitem as JsonArray).Values.Add(item);
+				//пока нет запятых - нельзя новые значения
+				currentitem.CanAddItems = false;
+				return;
+			}
+
+			throw new Exception("insuficient place of value");
+
 		}
 
 		

@@ -46,5 +46,10 @@ namespace Qorpent.Dsl.Json {
 		/// Булевское значение
 		/// </summary>
 		Bool,
+
+		/// <summary>
+		/// Null
+		/// </summary>
+		Null,
 	}
 }
