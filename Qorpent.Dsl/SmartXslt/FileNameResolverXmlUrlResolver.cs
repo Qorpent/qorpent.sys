@@ -79,7 +79,7 @@ namespace Qorpent.Dsl.SmartXslt {
 		/// </summary>
 		/// <returns> A System.IO.Stream object or null if a type other than stream is specified. </returns>
 		/// <param name="absoluteUri"> The URI returned from <see
-		/// 	 cref="M:System.Xml.XmlResolver.ResolveUri(System.Uri,System.String)" /> </param>
+		/// 	 cref="M:System.Xml.XmlResolver.ResolveUri(System.Uri,System.Str)" /> </param>
 		/// <param name="role"> The current implementation does not use this parameter when resolving URIs. This is provided for future extensibility purposes. For example, this can be mapped to the xlink:role and used as an implementation specific argument in other scenarios. </param>
 		/// <param name="ofObjectToReturn"> The type of object to return. The current implementation only returns System.IO.Stream objects. </param>
 		/// <exception cref="T:System.Xml.XmlException">

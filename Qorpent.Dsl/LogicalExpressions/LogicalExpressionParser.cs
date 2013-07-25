@@ -77,7 +77,7 @@ namespace Qorpent.Dsl.LogicalExpressions {
 			Or,
 
 			/// <summary>
-			/// 	String const "..."
+			/// 	Str const "..."
 			/// </summary>
 			String,
 
@@ -524,16 +524,16 @@ namespace Qorpent.Dsl.LogicalExpressions {
 			}
 
 			/// <summary>
-			/// 	Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
+			/// 	Returns a <see cref="T:System.Str" /> that represents the current <see cref="T:System.Object" />.
 			/// </summary>
-			/// <returns> A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" /> . </returns>
+			/// <returns> A <see cref="T:System.Str" /> that represents the current <see cref="T:System.Object" /> . </returns>
 			/// <filterpriority>2</filterpriority>
 			public override string ToString() {
 				if (TokenType.Literal == Type) {
-					return "Literal:" + Value;
+					return "Lit:" + Value;
 				}
 				if (TokenType.String == Type) {
-					return "String:" + Value;
+					return "Str:" + Value;
 				}
 				return string.Format("{0}[{1}]", Type, Children.Select(x => x.ToString()).ConcatString());
 			}
