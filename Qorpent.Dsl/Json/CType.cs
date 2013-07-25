@@ -1,8 +1,15 @@
-﻿namespace Qorpent.Dsl.Json {
+﻿using System;
+
+namespace Qorpent.Dsl.Json {
 	/// <summary>
 	/// Классы символов Json
 	/// </summary>
+	[Flags]
 	public enum CType {
+		/// <summary>
+		/// Zero type
+		/// </summary>
+		None,
 		/// <summary>
 		/// Апостроф
 		/// </summary>
@@ -15,10 +22,7 @@
 		/// Escape
 		/// </summary>
 		Esc,
-		/// <summary>
-		/// Запятая
-		/// </summary>
-		Сom,
+		
 		/// <summary>
 		/// Двоеточие
 		/// </summary>
@@ -63,5 +67,13 @@
 		/// Пробельные символы
 		/// </summary>
 		WS,
+		/// <summary>
+		/// Знак минуса
+		/// </summary>
+		Min,
+		/// <summary>
+		/// Запятая
+		/// </summary>
+		Com,
 	}
 }

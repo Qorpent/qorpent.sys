@@ -2,7 +2,7 @@
 	/// <summary>
 	/// 
 	/// </summary>
-	public struct JsonToken {
+	public class JsonToken {
 		/// <summary>
 		/// 
 		/// </summary>

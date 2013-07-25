@@ -26,7 +26,6 @@
     <Compile Include="Json\JsonValue.cs" />
     <Compile Include="Json\JsonValueType.cs" />
     <Compile Include="Json\Lexer.cs" />
-    <Compile Include="Json\SType.cs" />
     <Compile Include="Json\Tokenizer.cs" />
     <Compile Include="LogicalExpressions\ConjunctionNode.cs" />
     <Compile Include="LogicalExpressions\ContainerInfo.cs" />
