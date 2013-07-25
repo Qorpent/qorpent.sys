@@ -138,7 +138,7 @@ namespace Qorpent.Dsl {
 				return;
 			}
 
-			if (ParseStage.AfterOpenArray == stage || ParseStage.AfterArrayComma == stage) {
+			if (ParseStage.AfterOpenArray == stage || ParseStage.AfterArrayComma == stage  ||ParseStage.AfterArrayValue==stage) {
 				pushe(new XElement("value", lastproduction));
 				pope();
 				pushs(ParseStage.AfterArrayValue);
@@ -207,6 +207,13 @@ namespace Qorpent.Dsl {
 					break;
 				case '"':
 					if (stage == ParseStage.End) {
+						throw new JsonParserException("symbols after end");
+					}
+					processQuot(c);
+					break;
+				case '\'':
+					if (stage == ParseStage.End)
+					{
 						throw new JsonParserException("symbols after end");
 					}
 					processQuot(c);
@@ -407,6 +414,13 @@ namespace Qorpent.Dsl {
 		private void closeArray() {
 			pops();
 			var x = pope();
+			if (ParseStage.AfterArrayComma == stage) {
+				pops();
+			}
+			if (ParseStage.AfterOpenArray == stage)
+			{
+				pops();
+			}
 			if (ParseStage.AfterColumn == stage || ParseStage.AfterOpenArray == stage) {
 				pushs(ParseStage.AfterValue);
 			}
@@ -496,6 +510,9 @@ namespace Qorpent.Dsl {
 		private void closeBlock() {
 			pops();
 			var x = pope();
+			if (ParseStage.AfterOpenBlock == stage) {
+				pops();
+			}
 			if (ParseStage.AfterColumn == stage || ParseStage.AfterOpenBlock == stage) {
 				var pr = prev();
 				if (ParseStage.AfterArrayComma == pr || ParseStage.AfterOpenArray == pr) {
@@ -507,9 +524,7 @@ namespace Qorpent.Dsl {
 			}
 			if (x.Name.LocalName == "object") {
 				x = pope();
-				pops();
-				var pr = prev();
-				if (ParseStage.AfterArrayComma == pr || ParseStage.AfterOpenArray == pr) {
+				if (ParseStage.AfterArrayComma == stage || ParseStage.AfterOpenArray == stage) {
 					pushs(ParseStage.AfterArrayValue);
 				}
 				else {
@@ -544,6 +559,7 @@ namespace Qorpent.Dsl {
 			pushs(ParseStage.AfterOpenBlock);
 		}
 
+		private char stringopenchar = '\0';
 		/// <summary>
 		/// 	Processes the quot.
 		/// </summary>
@@ -553,22 +569,29 @@ namespace Qorpent.Dsl {
 		private void processQuot(char c) {
 			if (ParseStage.Escaped == stage) {
 				pops();
-				appendString("\"");
+				appendString(c);
 				return;
 			}
 			if (ParseStage.InString == stage) {
-				endString();
+				if (c == stringopenchar) {
+					endString();
+				}
+				else {
+					appendString(c);
+				}
 				return;
 			}
-			beginString();
+			beginString(c);
 		}
 
 		/// <summary>
 		/// 	Begins the string.
 		/// </summary>
+		/// <param name="c"></param>
 		/// <remarks>
 		/// </remarks>
-		private void beginString() {
+		private void beginString(char c) {
+			stringopenchar = c;
 			pushs(ParseStage.InString);
 			currentString = "";
 		}

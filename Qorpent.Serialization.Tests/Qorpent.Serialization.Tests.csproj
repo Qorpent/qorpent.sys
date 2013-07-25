@@ -18,6 +18,7 @@
     <Compile Include="js_serializer_test.cs" />
     <Compile Include="Q18_Xml_To_Json_Bug_Test.cs" />
     <Compile Include="Q48SerializeNotNullCollectionsTest.cs" />
+    <Compile Include="Q51JsonXmlParserFail.cs" />
     <Compile Include="serialization_set_test.cs" />
     <Compile Include="xml_serializer_test.cs" />
   </ItemGroup>
@@ -29,5 +30,11 @@
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Dsl\Qorpent.Dsl.csproj">
+      <Project>{B758E220-22F5-47DF-A73B-BC9B1A3DBDC3}</Project>
+      <Name>Qorpent.Dsl</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
