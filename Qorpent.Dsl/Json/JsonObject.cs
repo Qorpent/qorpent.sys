@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Qorpent.Dsl.Json {
 	/// <summary>
@@ -80,6 +81,46 @@ namespace Qorpent.Dsl.Json {
 			}
 			sb.Append("}");
 			return sb.ToString();
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="current"></param>
+		public override XElement WriteToXml(XElement current) {
+			current = current ?? new XElement("obj");
+			// простые значения записываем атрибуты
+			foreach (var p in Properties.Where(_ => _.Name.Type==TType.Lit &&  _.Value is JsonValue)) {
+				current.SetAttributeValue(p.Name.Value,p.Value.Value);
+			}
+			// простые но строковые имена пишем с контролем разрешенных имен
+			foreach (var p in Properties.Where(_ => _.Name.Type == TType.Str && _.Value is JsonValue)) {
+				if (IsLiteral(p.Name.Value)) {
+					current.SetAttributeValue(p.Name.Value, p.Value.Value);	
+				}else if (IsNumber(p.Name.Value)) {
+					var e = new XElement("item", new XAttribute("idx", p.Name.Value), new XText(p.Value.Value));
+					current.Add(e);
+				}
+				else {
+					var e = new XElement("item", new XAttribute("name", p.Name.Value), new XText(p.Value.Value));
+					current.Add(e);
+				}
+				
+			}
+			//массив пишем как вложенный элемент и передаем ему управление
+			foreach (var p in Properties.Where(_ => _.Value is JsonArray)) {
+				var arelement = new XElement(p.Name.Value, new XAttribute("__isarray", true));
+				current.Add(arelement);
+				p.Value.WriteToXml(arelement);
+			}
+			//а теперь пишем вложенные объекты
+			foreach (var p in Properties.Where(_ => _.Value is JsonObject))
+			{
+				var arelement = new XElement(p.Name.Value);
+				current.Add(arelement);
+				p.Value.WriteToXml(arelement);
+			}
+
+			return current;
 		}
 	}
 }

@@ -29,6 +29,7 @@ using NUnit.Framework;
 
 namespace Qorpent.Dsl.Tests {
 	[TestFixture]
+	[Ignore("использует устаревшую нотацию")]
 	public class JsonToXmlParserTest {
 		private void test(string json, string xml) {
 			var res = new JsonToXmlParser().Parse(json);

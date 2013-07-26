@@ -27,8 +27,15 @@ namespace Qorpent.Dsl.Tests.Json {
                 },
         ]
 }";
+
 		[Test]
-	
+		public void XmlTest() {
+			var item = new JsonParser().Parse(json);
+			var xml = item.WriteToXml();
+			Console.WriteLine(xml.ToString());
+		}
+
+		[Test]
 		public void MainParserTest() {
 			var item = new JsonParser().Parse(json);
 			Console.WriteLine(item.ToString(true));

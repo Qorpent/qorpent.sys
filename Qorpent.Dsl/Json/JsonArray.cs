@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Qorpent.Dsl.Json {
 	/// <summary>
@@ -49,6 +50,20 @@ namespace Qorpent.Dsl.Json {
 			}
 			sb.Append("]");
 			return sb.ToString();
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="current"></param>
+		public override XElement WriteToXml(XElement current) {
+			current = current ?? new XElement("array");
+			for(var i=0;i<Values.Count;i++) {
+				var v = Values[i];
+				var e = new XElement("item", new XAttribute("idx", i));
+				current.Add(e);
+				v.WriteToXml(e);
+			}
+			return current;
 		}
 	}
 }

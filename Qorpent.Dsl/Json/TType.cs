@@ -6,50 +6,55 @@ namespace Qorpent.Dsl.Json {
 	/// </summary>
 	[Flags]
 	public enum TType {
+
+		/// <summary>
+		/// Неопределенный
+		/// </summary>
+		None = 0,
 		/// <summary>
 		/// Открытие блока
 		/// </summary>
-		Open,
+		Open = 1,
 		/// <summary>
 		/// Закрытие блока
 		/// </summary>
-		Close,
+		Close = 2,
 		/// <summary>
 		/// Открытие массива
 		/// </summary>
-		OpenArray,
+		OpenArray = 4,
 		/// <summary>
 		/// Закрытие массива
 		/// </summary>
-		CloseArray,
+		CloseArray = 8,
 		/// <summary>
 		/// Литерал
 		/// </summary>
-		Lit,
+		Lit =16,
 		/// <summary>
 		/// Строка
 		/// </summary>
-		Str,
+		Str =32,
 		/// <summary>
 		/// Число
 		/// </summary>
-		Num,
+		Num = 64,
 		/// <summary>
 		/// Запятая
 		/// </summary>
-		Comma,
+		Comma = 128,
 		/// <summary>
 		/// Двоеточие
 		/// </summary>
-		Colon,
+		Colon = 256,
 		/// <summary>
 		/// Булевское значение
 		/// </summary>
-		Bool,
+		Bool =512,
 
 		/// <summary>
 		/// Null
 		/// </summary>
-		Null,
+		Null = 1024,
 	}
 }

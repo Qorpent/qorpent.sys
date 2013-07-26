@@ -1,5 +1,5 @@
 ﻿using System;
-using Qorpent.Utils.Extensions;
+using System.Xml.Linq;
 
 namespace Qorpent.Dsl.Json {
 	/// <summary>
@@ -54,10 +54,6 @@ namespace Qorpent.Dsl.Json {
 		}
 
 		/// <summary>
-		/// Тип значения
-		/// </summary>
-		public TType Type;
-		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="format"></param>
@@ -70,6 +66,15 @@ namespace Qorpent.Dsl.Json {
 			if (TType.Str == Type)
 				return "\"" + Value.Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n").Replace("\t", "\\t")+"\"";
 			throw new Exception("cannot to string " + Type);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="current"></param>
+		public override XElement WriteToXml(XElement current) {
+			current = current ?? new XElement("value");
+			current.Add(new XText(Value));
+			return current;
 		}
 	}
 }
