@@ -1,0 +1,14 @@
+﻿ref Qorpent.Core
+ref Qorpent.MongoDBIntegration
+
+using Qorpent.Wiki
+using Qorpent.MongoDBIntegration
+using Qorpent.MongoDBIntegration.Wiki
+
+define MONGODB_CONNECTION_STRING : "mongodb://ugmk-as2:28017,ugmk-econ:28017/?connect=replicaset;readpreference=primaryPreferred"
+define MONGODB_WIKI_DB : wiki
+
+transient "wiki.mongo.persister"  MongoWikiPersister : IWikiPersister
+	ConnectionString = @MONGODB_CONNECTION_STRING
+	DatabaseName = @MONGODB_WIKI_DB
+	CollectionName = "main"

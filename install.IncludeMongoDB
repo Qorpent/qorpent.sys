@@ -1,0 +1,24 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="..\qorpent.kernel\package-install.targets" />	
+	<PropertyGroup>
+		<PackageCondition Condition="'$(qorpent_sys)'=='True'">True</PackageCondition>
+	</PropertyGroup>
+	<ItemGroup>
+		<Library Include="Qorpent.Core"/>
+		<Library Include="Qorpent.Utils"/>
+		<Library Include="Qorpent.IO"/>
+		<Library Include="Qorpent.Data"/>
+		<Library Include="Qorpent.IoC"/>
+		<Library Include="Qorpent.Dsl"/>
+		<Library Include="Qorpent.Bxl"/>
+		<Library Include="Qorpent.Serialization"/>
+		<Library Include="Qorpent.Security"/>
+		<Library Include="Qorpent.Mvc"/>
+		<Library Include="Qorpent.Log"/>
+		<Library Include="Qorpent.MongoDBIntegration"/>
+		<Config Include="commons\mongodbintegration.ioc-manifest.bxl" />
+		<Config Include="commons\default-log.ioc-manifest.bxl" />
+		<Config Include="commons\log.ioc-template"  />
+		<Handler Include="qweb" />
+	</ItemGroup>
+</Project>
