@@ -67,8 +67,8 @@ namespace Qorpent.Log.Tests {
 
 			Console.WriteLine(size1);
 			Console.WriteLine(size2);
-			Assert.AreEqual(519, size1);
-			Assert.AreEqual(345, size2);
+			Assert.LessOrEqual(519, size1);
+			Assert.LessOrEqual(345, size2);
 		}
 
 		[Test]
@@ -103,10 +103,10 @@ namespace Qorpent.Log.Tests {
 			Console.WriteLine(fstlog);
 			Console.WriteLine(seclog);
 
-			Assert.AreEqual(@"02.05.2010 0:00:00 : message1
-02.05.2010 0:00:00 : message1_2".LfOnly(), fstlog.Trim().LfOnly());
-			Assert.AreEqual(@"03.05.2010 0:00:00 : message2
-03.05.2010 0:00:00 : message2_1".LfOnly(), seclog.Trim().LfOnly());
+			Assert.AreEqual(@"2010-05-02 00:00:00 : message1
+2010-05-02 00:00:00 : message1_2".LfOnly(), fstlog.Trim().LfOnly());
+			Assert.AreEqual(@"2010-05-03 00:00:00 : message2
+2010-05-03 00:00:00 : message2_1".LfOnly(), seclog.Trim().LfOnly());
 		}
 	}
 }

@@ -112,7 +112,7 @@ namespace Qorpent.Log {
 		/// <returns> </returns>
 		public override string ToString() {
 			var sb = new StringBuilder();
-			sb.AppendFormat("logitem level={0}, time='{1}', user='{2}', server={3} ", Level, Time, User, Server);
+			sb.AppendFormat("logitem level={0}, time='{1}', user='{2}', server={3} ", Level, Time.ToString("yyyy-MM-dd HH:mm:ss"), User, Server);
 			if (!string.IsNullOrEmpty(Name)) {
 				sb.AppendFormat(",logger='{0}' ", Name);
 			}

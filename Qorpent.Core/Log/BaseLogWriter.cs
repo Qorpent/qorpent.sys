@@ -16,6 +16,8 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/BaseLogWriter.cs
 #endregion
+
+using System;
 using System.Text.RegularExpressions;
 
 namespace Qorpent.Log {
@@ -74,6 +76,9 @@ namespace Qorpent.Log {
 							var val = prop.GetValue(message, null);
 							if (null == val) {
 								return "";
+							}
+							if (val is DateTime) {
+								return ((DateTime) val).ToString("yyyy-MM-dd HH:mm:ss");
 							}
 							return val.ToString();
 						}

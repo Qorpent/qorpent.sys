@@ -87,7 +87,7 @@ logger main
 			logger.Warn("x", new LogMessage {User = "test/test", Time = DateTime.MinValue, Server = "test"});
 			c.Get<ILogManager>().Join();
 			Console.WriteLine(File.ReadAllText(tmpfile).Trim());
-			Assert.AreEqual(@"logitem level=Warning, time='01.01.0001 0:00:00', user='test/test', server=test ,logger='any' 
+			Assert.AreEqual(@"logitem level=Warning, time='0001-01-01 00:00:00', user='test/test', server=test ,logger='any' 
 	host='''Qorpent.Log.Tests.LoadLoggerFromComponentDefinitionSource'''
 	message='''
 x
