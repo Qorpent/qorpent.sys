@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>7B68AA79-43AF-4949-95BF-36D7CD6C4CEC</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Sys.MongoDBIntegration</RootNamespace>
+    <AssemblyName>Qorpent.Sys.MongoDBIntegration</AssemblyName>
+  </PropertyGroup>
+   <ItemGroup>
+	<None Include="*.import" />
+	<None Include="*.export" />
+	<EmbeddedResource Include=".\**\*.*resource"/>
+ </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+
+</Project>
