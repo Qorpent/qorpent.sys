@@ -87,7 +87,7 @@ namespace Qorpent.Dsl.Json {
 		/// </summary>
 		/// <param name="current"></param>
 		public override XElement WriteToXml(XElement current) {
-			current = current ?? new XElement("obj");
+			current = current ?? new XElement("object");
 			// простые значения записываем атрибуты
 			foreach (var p in Properties.Where(_ => _.Name.Type==TType.Lit &&  _.Value is JsonValue)) {
 				current.SetAttributeValue(p.Name.Value,p.Value.Value);

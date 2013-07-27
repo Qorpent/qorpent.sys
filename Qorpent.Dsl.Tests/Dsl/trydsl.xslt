@@ -17,7 +17,7 @@ using Qorpent.Dsl.Tests.Dsl;
 using System.Collections.Generic;
 namespace Tests {
     public class Test:TryDslFramework.ITryDsl{
-    public IEnumerable&lt;string&gt; GetStrs(){
+    public IEnumerable&lt;string&gt; GetStrings(){
           <xsl:apply-templates select="//str"/>
 #if YIELDD
           yield return "D";

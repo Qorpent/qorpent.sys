@@ -154,6 +154,11 @@ namespace Qorpent.Dsl.Json {
 				}
 			}
 			if (inescape) {
+				if (c == '\\')
+				{
+					currentbuffer += "\\";
+					inescape = false;
+				}
 				if (c == 'r') {
 					currentbuffer += "\r";
 					inescape = false;
@@ -166,8 +171,18 @@ namespace Qorpent.Dsl.Json {
 					currentbuffer += "\t";
 					inescape = false;
 				}
+				else if (c == '"')
+				{
+					currentbuffer += "\"";
+					inescape = false;
+				}
+				else if (c == '\'')
+				{
+					currentbuffer += "'";
+					inescape = false;
+				}
 				else {
-					throw new Exception("unknown esc");
+					throw new Exception("unknown esc "+c);
 				}
 			}
 			else {
