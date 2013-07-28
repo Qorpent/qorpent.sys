@@ -36,6 +36,7 @@
     <Compile Include="ServiceStateTests.cs" />
     <Compile Include="TestSupport\QorpentFixture.cs" />
     <Compile Include="TestSupport\QorpentFixtureAttribute.cs" />
+    <Compile Include="Wiki\FileWikiPersisterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />
@@ -46,12 +47,20 @@
     <Folder Include="Application\" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
-    <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Core.import"/>
+  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Qorpent.IoC\Qorpent.IoC.csproj">
+      <Project>{62F22FFA-A1CF-4A74-838C-9AB33A9442EA}</Project>
+      <Name>Qorpent.IoC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IO\Qorpent.IO.csproj">
+      <Project>{426C92DF-3C40-426C-B0BE-40A1DF9044C2}</Project>
+      <Name>Qorpent.IO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Qorpent.Mvc\Qorpent.Mvc.csproj">
       <Project>{96885c8f-ad20-41b4-86ee-bc9b3d47d9f9}</Project>
       <Name>Qorpent.Mvc</Name>

@@ -44,6 +44,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Core.Tests", "Qorpent.Core.Tests\Qorpent.Core.Tests.csproj", "{880F65EA-1A22-4672-A137-FFC912902046}"
 	ProjectSection(ProjectDependencies) = postProject
 		{96885C8F-AD20-41B4-86EE-BC9B3D47D9F9} = {96885C8F-AD20-41B4-86EE-BC9B3D47D9F9}
+		{426C92DF-3C40-426C-B0BE-40A1DF9044C2} = {426C92DF-3C40-426C-B0BE-40A1DF9044C2}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Dsl.Tests", "Qorpent.Dsl.Tests\Qorpent.Dsl.Tests.csproj", "{7A163EB3-715F-4D13-B720-1E6645380E20}"

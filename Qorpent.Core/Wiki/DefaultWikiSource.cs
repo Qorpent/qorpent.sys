@@ -116,7 +116,7 @@ namespace Qorpent.Wiki {
 
 		private void CheckPersister() {
 			if (null == Persister) {
-				throw new Exception("no persister given");
+			    Persister = new FileWikiPersister();
 			}
 		}
 		/// <summary>
