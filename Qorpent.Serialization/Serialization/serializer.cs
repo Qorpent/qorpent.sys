@@ -202,6 +202,11 @@ namespace Qorpent.Serialization {
 				SerializeClass(name,
 				               new {type = value.GetType().Name, message = ((Exception) value).Message, text = value.ToString()});
 			}
+			else if (value is XElement) {
+				_s.BeginObject(name);
+				SerializeElement((XElement)value,true);
+				_s.EndObject();
+			}
 			else if (typeof (Array).IsAssignableFrom(value.GetType())) {
 				SerializeArray(name, (Array) value);
 			}
