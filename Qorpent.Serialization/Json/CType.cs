@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Qorpent.Dsl.Json {
+namespace Qorpent.Json {
 	/// <summary>
 	/// Классы символов Json
 	/// </summary>

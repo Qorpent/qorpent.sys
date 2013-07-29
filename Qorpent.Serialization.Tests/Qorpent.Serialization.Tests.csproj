@@ -10,10 +10,21 @@
     <AssemblyNameBase>Qorpent.Serialization</AssemblyNameBase>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Bxl\ApplicationAccessToBxl.cs" />
+    <Compile Include="Bxl\BxlGeneratorTest.cs" />
+    <Compile Include="Bxl\BxlParserTest.cs" />
+    <Compile Include="Bxl\BxlTokenizerTestComplex.cs" />
+    <Compile Include="Bxl\BxlTokenizerTest_L0.cs" />
+    <Compile Include="Bxl\BxlTokenTest.cs" />
+    <Compile Include="Bxl\BxlXmlGeneratorTest.cs" />
+    <Compile Include="Bxl\ByLineParsingTest.cs" />
+    <Compile Include="Bxl\TokenizerTestHelper.cs" />
     <Compile Include="bxl_serializer_test.cs" />
     <Compile Include="coverage_only_tests.cs" />
     <Compile Include="exceptions_need_to_be_fixed.cs" />
     <Compile Include="iocconfiguationtest.cs" />
+    <Compile Include="Json\LexerTests.cs" />
+    <Compile Include="Json\ParserTest.cs" />
     <Compile Include="json_serializer_test.cs" />
     <Compile Include="js_serializer_test.cs" />
     <Compile Include="Q18_Xml_To_Json_Bug_Test.cs" />
@@ -23,6 +34,9 @@
     <Compile Include="xml_serializer_test.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Comdiv.UXmlDiff">
+      <HintPath>..\dependency\Comdiv.UXmlDiff.dll</HintPath>
+    </Reference>
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -30,11 +44,5 @@
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Qorpent.Dsl\Qorpent.Dsl.csproj">
-      <Project>{B758E220-22F5-47DF-A73B-BC9B1A3DBDC3}</Project>
-      <Name>Qorpent.Dsl</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>

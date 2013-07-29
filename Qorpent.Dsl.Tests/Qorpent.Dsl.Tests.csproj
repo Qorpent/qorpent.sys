@@ -13,8 +13,6 @@
     <Compile Include="Bug_XmlInterpolationInContainer.cs" />
     <Compile Include="Dsl\TryDslFramework.cs" />
     <Compile Include="JsonToXmlParserTest.cs" />
-    <Compile Include="Json\LexerTests.cs" />
-    <Compile Include="Json\ParserTest.cs" />
     <Compile Include="MainTest.cs" />
     <Compile Include="SmartXslt\XsltHelperTest.cs" />
     <Compile Include="XmlInclude\XmlIncludeMainTest.cs" />

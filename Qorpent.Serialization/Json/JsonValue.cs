@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
-using Qorpent.Json;
 
-namespace Qorpent.Dsl.Json {
+namespace Qorpent.Json {
 	/// <summary>
 	/// Минимальное значение JSON
 	/// </summary>

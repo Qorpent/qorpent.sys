@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Qorpent.Json;
 
-namespace Qorpent.Dsl.Json {
+namespace Qorpent.Json {
 	/// <summary>
 	/// Объекты JSON
 	/// </summary>

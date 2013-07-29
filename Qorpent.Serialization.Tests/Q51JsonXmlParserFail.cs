@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Qorpent.Dsl;
+using Qorpent.Json;
 
 namespace Qorpent.Serialization.Tests {
 	[TestFixture]
@@ -69,7 +70,7 @@ namespace Qorpent.Serialization.Tests {
 		[TestCase("{x:['1','2\"']}")]
 		[TestCase("{x:[{y:1},2]}")]
 		public void TestArrayParsing(string code) {
-			Console.WriteLine(new JsonToXmlParser().Parse(code));
+			Console.WriteLine(((ISpecialXmlParser)new JsonParser()).Parse(code));
 		}
 	}
 }

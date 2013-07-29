@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
-using Qorpent.Json;
 
-namespace Qorpent.Dsl.Json {
+namespace Qorpent.Json {
 	/// <summary>
 	/// Массив JSON
 	/// </summary>

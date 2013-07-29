@@ -29,7 +29,6 @@
     <Compile Include="Log\LoggerTest.cs" />
     <Compile Include="Model\HierarchyExtensionTest.cs" />
     <Compile Include="Mvc\MvcCallInfoTest.cs" />
-    <Compile Include="Qlaood\SimpleQlaoodHostingTest.cs" />
     <Compile Include="Security\StubIWithRole.cs" />
     <Compile Include="Security\StubPrincipalSource.cs" />
     <Compile Include="Security\StubRoleResolver.cs" />
@@ -46,7 +45,7 @@
     <Folder Include="Application\" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
-    <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Core.import"/>
+  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />

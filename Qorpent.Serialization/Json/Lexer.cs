@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Qorpent.Json;
 
-namespace Qorpent.Dsl.Json {
+namespace Qorpent.Json {
 
 
 	/// <summary>

@@ -19,10 +19,6 @@
       <Project>{880f65ea-1a22-4672-a137-ffc91290a209}</Project>
       <Name>Qorpent.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Qorpent.Dsl\Qorpent.Dsl.csproj">
-      <Project>{b758e220-22f5-47df-a73b-bc9b1a3dbdc3}</Project>
-      <Name>Qorpent.Dsl</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Qorpent.IoC\Qorpent.IoC.csproj">
       <Project>{62f22ffa-a1cf-4a74-838c-9ab33a9442ea}</Project>
       <Name>Qorpent.IoC</Name>

@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Qorpent.Json;
 
 namespace Qorpent.Dsl.Tests.Json {
 	[TestFixture]
@@ -55,7 +56,7 @@ namespace Qorpent.Dsl.Tests.Json {
 			var tokens = new Tokenizer().Tokenize(json);
 			var ts = string.Join(";", tokens);
 			Console.WriteLine(ts);
-			Assert.AreEqual(@"BeginObject:{;Str:in;Colon::;Str:content;Comma:,;Str:type;Colon::;Str:text;Comma:,;Str:actions;Colon::;OpenArray:[;BeginObject:{;Str:actiontype;Colon::;Str:select;Comma:,;Str:code;Colon::;Str:title;Comma:,;Str:selector;Colon::;Str:#title;Comma:,;CloseObject:};Comma:,;BeginObject:{;Str:actiontype;Colon::;Str:select;Comma:,;Str:code;Colon::;Str:date;Comma:,;Str:selector;Colon::;Str:.data;Comma:,;CloseObject:};Comma:,;BeginObject:{;Str:actiontype;Colon::;Str:select;Comma:,;Str:code;Colon::;Str:text;Comma:,;Str:selector;Colon::;Str:#content;Comma:,;Str:type;Colon::;Str:xml;CloseObject:};Comma:,;CloseArray:];CloseObject:}", ts);
+			Assert.AreEqual(@"BeginObject:{;String:in;Colon::;String:content;Comma:,;String:type;Colon::;String:text;Comma:,;String:actions;Colon::;OpenArray:[;BeginObject:{;String:actiontype;Colon::;String:select;Comma:,;String:code;Colon::;String:title;Comma:,;String:selector;Colon::;String:#title;Comma:,;CloseObject:};Comma:,;BeginObject:{;String:actiontype;Colon::;String:select;Comma:,;String:code;Colon::;String:date;Comma:,;String:selector;Colon::;String:.data;Comma:,;CloseObject:};Comma:,;BeginObject:{;String:actiontype;Colon::;String:select;Comma:,;String:code;Colon::;String:text;Comma:,;String:selector;Colon::;String:#content;Comma:,;String:type;Colon::;String:xml;CloseObject:};Comma:,;CloseArray:];CloseObject:}", ts);
 		}
 	}
 }
