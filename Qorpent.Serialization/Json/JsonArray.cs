@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
+using Qorpent.Json;
 
 namespace Qorpent.Dsl.Json {
 	/// <summary>

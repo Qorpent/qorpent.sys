@@ -1,8 +1,7 @@
 ﻿using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 
-namespace Qorpent.Dsl.Json {
+namespace Qorpent.Json {
 	/// <summary>
 	/// Вообще единица JSON
 	/// </summary>
@@ -24,7 +23,7 @@ namespace Qorpent.Dsl.Json {
 		/// <summary>
 		/// Тип значения
 		/// </summary>
-		public TType Type;
+		public JsonTokenType Type;
 
 		/// <summary>
 		/// 

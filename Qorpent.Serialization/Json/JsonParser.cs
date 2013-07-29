@@ -1,8 +1,9 @@
 ﻿using System.Xml.Linq;
+using Qorpent.Dsl;
+using Qorpent.Dsl.Json;
 using Qorpent.IoC;
-using Qorpent.Serialization.Json;
 
-namespace Qorpent.Dsl.Json
+namespace Qorpent.Json
 {
 	/// <summary>
 	/// Парсер JSON

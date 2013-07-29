@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Dsl.Json {
+﻿using Qorpent.Json;
+
+namespace Qorpent.Dsl.Json {
 	/// <summary>
 	/// Пара свойство-значене
 	/// </summary>

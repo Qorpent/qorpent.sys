@@ -47,7 +47,7 @@ namespace Qorpent.Data.Tests
 			File.WriteAllText(file, "con1 pgsql 'Server=127.0.0.1;Port=5432;Integrated Security=True;Database=zetatest;'");
 			var conp = container.Get<IDatabaseConnectionProvider>();
 			var c1 = conp.GetConnection("con1");
-			//c1.Open();
+			//c1.BeginObject();
 			Console.WriteLine(c1.ConnectionString);
 			Assert.AreEqual("NpgsqlConnection",c1.GetType().Name);
 			//Assert.IsInstanceOf<Npgsql.NpgsqlConnection>(c1);

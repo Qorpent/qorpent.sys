@@ -1,6 +1,4 @@
-﻿using Qorpent.Dsl.Json;
-
-namespace Qorpent.Serialization.Json
+﻿namespace Qorpent.Json
 {
 	/// <summary>
 	/// Интерфейс парсера JSON

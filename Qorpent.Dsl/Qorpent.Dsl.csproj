@@ -14,7 +14,6 @@
     <Compile Include="DslCSharpXsltExtensions.cs" />
     <Compile Include="DslSqlXsltExtensions.cs" />
     <Compile Include="FileSplitWriter.cs" />
-    <Compile Include="JsonToXmlParser.cs" />
     <Compile Include="LogicalExpressions\ConjunctionNode.cs" />
     <Compile Include="LogicalExpressions\ContainerInfo.cs" />
     <Compile Include="LogicalExpressions\DisjunctionNode.cs" />

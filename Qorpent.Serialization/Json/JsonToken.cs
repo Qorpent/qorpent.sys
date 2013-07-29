@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Dsl.Json {
+﻿using Qorpent.Json;
+
+namespace Qorpent.Dsl.Json {
 	/// <summary>
 	/// 
 	/// </summary>
@@ -6,7 +8,7 @@
 		/// <summary>
 		/// 
 		/// </summary>
-		public JsonToken(TType type, string value = null) {
+		public JsonToken(JsonTokenType type, string value = null) {
 			Type = type;
 			Value = value;
 		}
@@ -21,21 +23,21 @@
 		/// <summary>
 		/// Тип
 		/// </summary>
-		public TType Type;
+		public JsonTokenType Type;
 		/// <summary>
 		/// Значение
 		/// </summary>
 		public string Value;
 
-		private static readonly JsonToken _comma = new JsonToken(TType.Comma,",");
-		private static readonly JsonToken _colon = new JsonToken(TType.Colon,":");
-		private static readonly JsonToken _open = new JsonToken(TType.Open,"{");
-		private static readonly JsonToken _close = new JsonToken(TType.Close,"}");
-		private static readonly JsonToken _opena = new JsonToken(TType.OpenArray,"[");
-		private static readonly JsonToken _closea = new JsonToken(TType.CloseArray,"]");
-		private static readonly JsonToken _true = new JsonToken(TType.Bool,"true");
-		private static readonly JsonToken _false = new JsonToken(TType.Bool,"false");
-		private static readonly JsonToken _null = new JsonToken(TType.Null,"null");
+		private static readonly JsonToken _comma = new JsonToken(JsonTokenType.Comma,",");
+		private static readonly JsonToken _colon = new JsonToken(JsonTokenType.Colon,":");
+		private static readonly JsonToken _open = new JsonToken(JsonTokenType.BeginObject,"{");
+		private static readonly JsonToken _close = new JsonToken(JsonTokenType.CloseObject,"}");
+		private static readonly JsonToken _opena = new JsonToken(JsonTokenType.OpenArray,"[");
+		private static readonly JsonToken _closea = new JsonToken(JsonTokenType.CloseArray,"]");
+		private static readonly JsonToken _true = new JsonToken(JsonTokenType.Bool,"true");
+		private static readonly JsonToken _false = new JsonToken(JsonTokenType.Bool,"false");
+		private static readonly JsonToken _null = new JsonToken(JsonTokenType.Null,"null");
 		/// <summary>
 		/// Запятая
 		/// </summary>
@@ -113,7 +115,7 @@
 		/// <param name="s"></param>
 		/// <returns></returns>
 		public static JsonToken String(string s) {
-			return new JsonToken(TType.Str, s);
+			return new JsonToken(JsonTokenType.String, s);
 		}
 
 		/// <summary>
@@ -123,7 +125,7 @@
 		/// <returns></returns>
 		public static JsonToken Num(decimal s)
 		{
-			return new JsonToken(TType.Num, s.ToString());
+			return new JsonToken(JsonTokenType.Number, s.ToString());
 		}
 
 		/// <summary>
@@ -133,7 +135,7 @@
 		/// <returns></returns>
 		public static JsonToken Lit(string s)
 		{
-			return new JsonToken(TType.Lit, s);
+			return new JsonToken(JsonTokenType.Literal, s);
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Qorpent.Json;
 
 namespace Qorpent.Dsl.Json {
 	/// <summary>
@@ -34,7 +35,7 @@ namespace Qorpent.Dsl.Json {
 			set {
 				var property = Properties.FirstOrDefault (_ => _.Name.Value == name);
 				if (null == property) {
-					property = new JsonTuple{Name = new JsonValue(TType.Str,name)};
+					property = new JsonTuple{Name = new JsonValue(JsonTokenType.String,name)};
 					Properties.Add(property);
 				}
 				property.Value = value;
@@ -89,11 +90,11 @@ namespace Qorpent.Dsl.Json {
 		public override XElement WriteToXml(XElement current) {
 			current = current ?? new XElement("object");
 			// простые значения записываем атрибуты
-			foreach (var p in Properties.Where(_ => _.Name.Type==TType.Lit &&  _.Value is JsonValue)) {
+			foreach (var p in Properties.Where(_ => _.Name.Type==JsonTokenType.Literal &&  _.Value is JsonValue)) {
 				current.SetAttributeValue(p.Name.Value,p.Value.Value);
 			}
 			// простые но строковые имена пишем с контролем разрешенных имен
-			foreach (var p in Properties.Where(_ => _.Name.Type == TType.Str && _.Value is JsonValue)) {
+			foreach (var p in Properties.Where(_ => _.Name.Type == JsonTokenType.String && _.Value is JsonValue)) {
 				if (IsLiteral(p.Name.Value)) {
 					current.SetAttributeValue(p.Name.Value, p.Value.Value);	
 				}else if (IsNumber(p.Name.Value)) {

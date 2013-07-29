@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Linq;
+using Qorpent.Json;
 
 namespace Qorpent.Dsl.Json {
 	/// <summary>
@@ -12,7 +13,7 @@ namespace Qorpent.Dsl.Json {
 		/// <param name="value"></param>
 		public JsonValue(string value)
 		{
-			Type = TType.Str;
+			Type = JsonTokenType.String;
 			Value = value;
 		}
 		/// <summary>
@@ -20,7 +21,7 @@ namespace Qorpent.Dsl.Json {
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="value"></param>
-		public JsonValue(TType type, string value) {
+		public JsonValue(JsonTokenType type, string value) {
 			Type = type;
 			Value = value;
 		}
@@ -30,7 +31,7 @@ namespace Qorpent.Dsl.Json {
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public static JsonValue Literal(string value) {
-			return new JsonValue(TType.Lit, value);
+			return new JsonValue(JsonTokenType.Literal, value);
 		}
 
 		/// <summary>
@@ -40,7 +41,7 @@ namespace Qorpent.Dsl.Json {
 		/// <returns></returns>
 		public static JsonValue String(string value)
 		{
-			return new JsonValue(TType.Str, value);
+			return new JsonValue(JsonTokenType.String, value);
 		}
 
 		/// <summary>
@@ -50,7 +51,7 @@ namespace Qorpent.Dsl.Json {
 		/// <returns></returns>
 		public static JsonValue Number(string value)
 		{
-			return new JsonValue(TType.Num, value);
+			return new JsonValue(JsonTokenType.Number, value);
 		}
 
 		/// <summary>
@@ -59,11 +60,11 @@ namespace Qorpent.Dsl.Json {
 		/// <param name="format"></param>
 		/// <returns></returns>
 		public override string ToString(bool format) {
-			if (TType.Null == Type) return "null";
-			if (TType.Bool == Type) return Value=="false"?"false":"true";
-			if (TType.Lit == Type) return Value;
-			if (TType.Num == Type) return Value;
-			if (TType.Str == Type)
+			if (JsonTokenType.Null == Type) return "null";
+			if (JsonTokenType.Bool == Type) return Value=="false"?"false":"true";
+			if (JsonTokenType.Literal == Type) return Value;
+			if (JsonTokenType.Number == Type) return Value;
+			if (JsonTokenType.String == Type)
 				return "\"" + Value.Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n").Replace("\t", "\\t")+"\"";
 			throw new Exception("cannot to string " + Type);
 		}

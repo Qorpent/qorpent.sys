@@ -10,7 +10,6 @@
   <ItemGroup>
     <Compile Include="Json\CType.cs" />
     <Compile Include="Json\JsonArray.cs" />
-    <Compile Include="Json\JsonItem.cs" />
     <Compile Include="Json\JsonObject.cs" />
     <Compile Include="Json\JsonParser.cs" />
     <Compile Include="Json\JsonToken.cs" />
@@ -19,7 +18,6 @@
     <Compile Include="Json\JsonValueType.cs" />
     <Compile Include="Json\Lexer.cs" />
     <Compile Include="Json\Tokenizer.cs" />
-    <Compile Include="Json\TType.cs" />
     <Compile Include="Qxi\ReplaceDescriptor.cs" />
     <Compile Include="Qxi\XmlIncludeProcessor.cs" />
     <Compile Include="Qxi\XmlInterpolationPreprocessor.cs" />

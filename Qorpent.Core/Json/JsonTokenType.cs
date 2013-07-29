@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Qorpent.Dsl.Json {
+namespace Qorpent.Json {
 	/// <summary>
 	/// Типы токенов
 	/// </summary>
 	[Flags]
-	public enum TType {
+	public enum JsonTokenType {
 
 		/// <summary>
 		/// Неопределенный
@@ -14,11 +14,11 @@ namespace Qorpent.Dsl.Json {
 		/// <summary>
 		/// Открытие блока
 		/// </summary>
-		Open = 1,
+		BeginObject = 1,
 		/// <summary>
 		/// Закрытие блока
 		/// </summary>
-		Close = 2,
+		CloseObject = 2,
 		/// <summary>
 		/// Открытие массива
 		/// </summary>
@@ -30,15 +30,15 @@ namespace Qorpent.Dsl.Json {
 		/// <summary>
 		/// Литерал
 		/// </summary>
-		Lit =16,
+		Literal =16,
 		/// <summary>
 		/// Строка
 		/// </summary>
-		Str =32,
+		String =32,
 		/// <summary>
 		/// Число
 		/// </summary>
-		Num = 64,
+		Number = 64,
 		/// <summary>
 		/// Запятая
 		/// </summary>

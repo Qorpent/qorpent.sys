@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Qorpent.Json;
 
 namespace Qorpent.Dsl.Json {
 
@@ -31,40 +32,40 @@ namespace Qorpent.Dsl.Json {
 		private void Collect(JsonToken t) {
 			switch (t.Type) {
 				// обработка открытия,закрытия класса
-				case TType.Open:
+				case JsonTokenType.BeginObject:
 					ProcessOpenClass(t);
 					break;
-				case TType.Close:
+				case JsonTokenType.CloseObject:
 					ProcessCloseClass(t);
 					break;
 
 				// обработка открытия,закрытия массивов
-				case TType.OpenArray:
+				case JsonTokenType.OpenArray:
 					ProcessOpenArray(t);
 					break;
-				case TType.CloseArray:
+				case JsonTokenType.CloseArray:
 					ProcessCloseArray(t);
 					break;
 
 				//обработка двоеточий
-				case TType.Colon:
+				case JsonTokenType.Colon:
 					ProcessColon();
 					break;
 
-				case TType.Comma:
+				case JsonTokenType.Comma:
 					ProcessComma();
 					break;
 
 				//  обработка значений,которые могут встречаться и в именах и значениях
-				case TType.Num:
-				case TType.Lit:
-				case TType.Str:
+				case JsonTokenType.Number:
+				case JsonTokenType.Literal:
+				case JsonTokenType.String:
 					ProcessValue(t);
 					break;
 
 				// обработка значений которые могут быть только значениями
-				case TType.Bool:
-				case TType.Null:
+				case JsonTokenType.Bool:
+				case JsonTokenType.Null:
 					ProcessSystemLiteral(t);
 					break;
 				

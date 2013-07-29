@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Qorpent.Dsl.Json;
+using Qorpent.Json;
 
 namespace Qorpent.Dsl.Tests.Json
 {
 	[TestFixture]
 	public class LexerTests
 	{
-		[TestCase("123",TType.Num)]
-		[TestCase("123",TType.Str)]
-		[TestCase("l123",TType.Lit)]
-		[TestCase("true", TType.Bool)]
-		public void CanReturnSingleValues(string val,TType type) {
+		[TestCase("123",JsonTokenType.Number)]
+		[TestCase("123",JsonTokenType.String)]
+		[TestCase("l123",JsonTokenType.Literal)]
+		[TestCase("true", JsonTokenType.Bool)]
+		public void CanReturnSingleValues(string val,JsonTokenType type) {
 			var token = new JsonToken(type, val);
 			var item = new Lexer().Collect(new[] {token});
 			Console.WriteLine(item.ToString());
@@ -25,14 +25,14 @@ namespace Qorpent.Dsl.Tests.Json
 		}
 
 
-		[TestCase( TType.Null, "a",  1, false)]
-		[TestCase( TType.Bool, "a",  1, false)]
-		[TestCase(TType.Num, "a",  2, false)]
-		[TestCase( TType.Lit, "a",  3, true)]
-		[TestCase( TType.Str, "a",  1, false)]
-		[TestCase(TType.Str, "a",  2, false)]
-		[TestCase( TType.Str, "a", 2, true)]
-		public void CanCollectSimpleArray( TType valt, string value, int itemcount, bool trailcomma)
+		[TestCase( JsonTokenType.Null, "a",  1, false)]
+		[TestCase( JsonTokenType.Bool, "a",  1, false)]
+		[TestCase(JsonTokenType.Number, "a",  2, false)]
+		[TestCase( JsonTokenType.Literal, "a",  3, true)]
+		[TestCase( JsonTokenType.String, "a",  1, false)]
+		[TestCase(JsonTokenType.String, "a",  2, false)]
+		[TestCase( JsonTokenType.String, "a", 2, true)]
+		public void CanCollectSimpleArray( JsonTokenType valt, string value, int itemcount, bool trailcomma)
 		{
 			var tokens = new List<JsonToken> { JsonToken.OpenArray };
 			for (var i = 0; i < itemcount; i++)
@@ -60,14 +60,14 @@ namespace Qorpent.Dsl.Tests.Json
 		}
 
 
-		[TestCase(TType.Str,TType.Null,"a","b",1,false)]
-		[TestCase(TType.Lit,TType.Bool,"a","b",1,false)]
-		[TestCase(TType.Lit,TType.Num,"a","b",2,false)]
-		[TestCase(TType.Str,TType.Lit,"a","b",3,true)]
-		[TestCase(TType.Lit,TType.Str,"a","b",1,false)]
-		[TestCase(TType.Lit,TType.Str,"a","b",2,false)]
-		[TestCase(TType.Lit,TType.Str,"a","b",2,true)]
-		public void CanCollectSimpleObject(TType leftt,TType rightt, string left, string right, int itemcount, bool trailcomma) {
+		[TestCase(JsonTokenType.String,JsonTokenType.Null,"a","b",1,false)]
+		[TestCase(JsonTokenType.Literal,JsonTokenType.Bool,"a","b",1,false)]
+		[TestCase(JsonTokenType.Literal,JsonTokenType.Number,"a","b",2,false)]
+		[TestCase(JsonTokenType.String,JsonTokenType.Literal,"a","b",3,true)]
+		[TestCase(JsonTokenType.Literal,JsonTokenType.String,"a","b",1,false)]
+		[TestCase(JsonTokenType.Literal,JsonTokenType.String,"a","b",2,false)]
+		[TestCase(JsonTokenType.Literal,JsonTokenType.String,"a","b",2,true)]
+		public void CanCollectSimpleObject(JsonTokenType leftt,JsonTokenType rightt, string left, string right, int itemcount, bool trailcomma) {
 			var tokens = new List<JsonToken> {JsonToken.Open};
 			for (var i = 0; i < itemcount; i++) {
 				if (0 != i) tokens.Add(JsonToken.Comma);
