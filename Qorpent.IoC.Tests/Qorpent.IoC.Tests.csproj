@@ -55,4 +55,10 @@
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
+      <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
+      <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

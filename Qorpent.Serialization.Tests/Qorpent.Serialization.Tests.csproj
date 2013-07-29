@@ -31,6 +31,7 @@
     <Compile Include="Q48SerializeNotNullCollectionsTest.cs" />
     <Compile Include="Q51JsonXmlParserFail.cs" />
     <Compile Include="serialization_set_test.cs" />
+    <Compile Include="XmlInclude\Bug_XmlInterpolationInContainer.cs" />
     <Compile Include="XmlInclude\XmlIncludeMainTest.cs" />
     <Compile Include="xml_serializer_test.cs" />
   </ItemGroup>

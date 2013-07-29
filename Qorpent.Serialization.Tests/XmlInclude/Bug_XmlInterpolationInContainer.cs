@@ -24,9 +24,10 @@
 #endregion
 
 using NUnit.Framework;
+using Qorpent.Dsl;
 using Qorpent.IoC;
 
-namespace Qorpent.Dsl.Tests {
+namespace Qorpent.Serialization.Tests.XmlInclude {
 	[TestFixture]
 	public class Bug_XmlInterpolationInContainer {
 		[Test]

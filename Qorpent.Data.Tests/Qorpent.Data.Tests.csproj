@@ -18,6 +18,12 @@
   <ItemGroup>
     <Reference Include="System.Data" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
+      <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
+      <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <PropertyGroup>
     <PostBuildEvent>if exist "..\..\..\Npgsql2\src\bin\Debug4\npgsql.dl" xcopy ..\..\..\Npgsql2\src\bin\Debug4\npgsql.dll $(OutDir) /s/d/y</PostBuildEvent>

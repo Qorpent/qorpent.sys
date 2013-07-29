@@ -23,6 +23,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ComplexStringHelperTest.cs" />
+    <Compile Include="ComplexStringTest.cs" />
     <Compile Include="ConsoleArgumentHelperTest.cs" />
     <Compile Include="ConvertExtensionsTest.cs" />
     <Compile Include="DatabaseExtensionsTest.cs" />
