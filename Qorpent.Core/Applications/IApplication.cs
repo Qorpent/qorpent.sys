@@ -121,12 +121,7 @@ namespace Qorpent.Applications {
 		/// </remarks>
 		string ApplicationName { get; set; }
 
-		/// <summary>
-		/// 	Access to DSL subsystem
-		/// </summary>
-		/// <remarks>
-		/// </remarks>
-		IDslProviderService Dsl { get; }
+		
 
 		/// <summary>
 		/// 	Access to principal source

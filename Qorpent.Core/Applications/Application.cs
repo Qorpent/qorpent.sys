@@ -269,21 +269,7 @@ namespace Qorpent.Applications {
 		}
 
 
-		/// <summary>
-		/// 	Access to DSL subsystem
-		/// </summary>
-		/// <remarks>
-		/// </remarks>
-		public IDslProviderService Dsl {
-			get {
-				if (null == _dsl) {
-					lock (this) {
-						return _dsl = ResolveService<IDslProviderService>();
-					}
-				}
-				return _dsl;
-			}
-		}
+		
 
 		/// <summary>
 		/// 	Access to Application logger
@@ -574,7 +560,6 @@ namespace Qorpent.Applications {
 		/// </summary>
 		private IContainer _container;
 
-		private IDslProviderService _dsl;
 
 		/// <summary>
 		/// </summary>

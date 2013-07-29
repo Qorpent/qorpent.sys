@@ -30,7 +30,6 @@
     <Compile Include="Applications\TaskWrapper.cs" />
     <Compile Include="Data\IParametersProvider.cs" />
     <Compile Include="Data\ParamAttribute.cs" />
-    <Compile Include="Dsl\SmartXslt\IXsltHelper.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
     <Compile Include="IoC\IFactory.cs" />
     <Compile Include="IO\IXmlReadable.cs" />
@@ -75,10 +74,10 @@
     <Compile Condition="'$(QISD_DEVEL)'!=''" Include="$(QISD_DEVEL)" />
     <Compile Condition="'$(QISD_USER)'!=''" Include="$(QISD_USER)" />
     <Compile Include="Security\WinLogonType.cs" />
-    <Compile Include="Json\IJsonParser.cs" />
+    <Compile Include="Dsl\Json\IJsonParser.cs" />
     <Compile Include="Serialization\ISerializerXsltExtension.cs" />
-    <Compile Include="Json\JsonItem.cs" />
-    <Compile Include="Json\JsonTokenType.cs" />
+    <Compile Include="Dsl\Json\JsonItem.cs" />
+    <Compile Include="Dsl\Json\JsonTokenType.cs" />
     <Compile Include="ServiceState.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
     <Compile Include="Wiki\IWikiEmptyFilter.cs" />
@@ -99,25 +98,15 @@
     <Compile Include=".\Applications\IApplication.cs" />
     <Compile Include=".\Applications\IApplicationBound.cs" />
     <Compile Include=".\Applications\IApplicationStartup.cs" />
-    <Compile Include=".\Bxl\BxlException.cs" />
-    <Compile Include=".\Bxl\BxlGeneratorOptions.cs" />
-    <Compile Include=".\Bxl\BxlParserOptions.cs" />
-    <Compile Include=".\Bxl\IBxlParser.cs" />
-    <Compile Include=".\Bxl\IBxlService.cs" />
+    <Compile Include="Dsl\Bxl\BxlException.cs" />
+    <Compile Include="Dsl\Bxl\BxlGeneratorOptions.cs" />
+    <Compile Include="Dsl\Bxl\BxlParserOptions.cs" />
+    <Compile Include="Dsl\Bxl\IBxlParser.cs" />
+    <Compile Include="Dsl\Bxl\IBxlService.cs" />
     <Compile Include="Data\ConnectionDescriptor.cs" />
     <Compile Include=".\Data\IDatabaseConnectionProvider.cs" />
     <Compile Include=".\Data\IDatabaseConnectionProviderExtension.cs" />
     <Compile Include=".\Data\IDatabaseConnectionRegistryExtension.cs" />
-    <Compile Include=".\Dsl\DslContext.cs" />
-    <Compile Include=".\Dsl\DslException.cs" />
-    <Compile Include=".\Dsl\DslMessage.cs" />
-    <Compile Include=".\Dsl\DslProject.cs" />
-    <Compile Include=".\Dsl\DslProjectType.cs" />
-    <Compile Include=".\Dsl\DslProviderBase.cs" />
-    <Compile Include=".\Dsl\IDslProvider.cs" />
-    <Compile Include=".\Dsl\IDslProviderService.cs" />
-    <Compile Include=".\Dsl\IDslResourceProvider.cs" />
-    <Compile Include=".\Dsl\IDslXmlPreprocessor.cs" />
     <Compile Include=".\Dsl\ISpecialXmlParser.cs" />
     <Compile Include=".\Dsl\IXmlInterpolationPreprocessor.cs" />
     <Compile Include=".\Dsl\LexInfo.cs" />
@@ -126,9 +115,6 @@
     <Compile Include=".\Dsl\LogicalExpressions\ILogicTermSource.cs" />
     <Compile Include=".\Dsl\LogicalExpressions\LogicalExpressionNode.cs" />
     <Compile Include=".\Dsl\LogicalExpressions\LogicTermSource.cs" />
-    <Compile Include=".\Dsl\SmartXslt\ISmartXsltTransform.cs" />
-    <Compile Include=".\Dsl\SmartXslt\XsltExtensionDefinition.cs" />
-    <Compile Include=".\Dsl\SmartXslt\XsltExtenstionType.cs" />
     <Compile Include=".\Dsl\XmlInclude\IXmlIncludeProcessor.cs" />
     <Compile Include=".\EnvironmentInfo.cs" />
     <Compile Include=".\EnvironmentInfoTestObject.cs" />

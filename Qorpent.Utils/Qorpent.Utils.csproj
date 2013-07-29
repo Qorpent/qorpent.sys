@@ -45,6 +45,14 @@
     <Compile Include="Extensions\SqlCommandType.cs" />
     <Compile Include="Extensions\UniSqlConst.cs" />
     <Compile Include="Extensions\UniSqlQuery.cs" />
+    <Compile Include="LogicalExpressions\ConjunctionNode.cs" />
+    <Compile Include="LogicalExpressions\ContainerInfo.cs" />
+    <Compile Include="LogicalExpressions\DisjunctionNode.cs" />
+    <Compile Include="LogicalExpressions\EqualNode.cs" />
+    <Compile Include="LogicalExpressions\EqualValueNode.cs" />
+    <Compile Include="LogicalExpressions\LiteralNode.cs" />
+    <Compile Include="LogicalExpressions\LogicalExpressionEvaluator.cs" />
+    <Compile Include="LogicalExpressions\LogicalExpressionParser.cs" />
     <Compile Include="ParamMappingHelper.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="Extensions\TagHelper.cs" />
