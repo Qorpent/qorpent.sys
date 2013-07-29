@@ -14,19 +14,7 @@
     <Compile Include="DslCSharpXsltExtensions.cs" />
     <Compile Include="DslSqlXsltExtensions.cs" />
     <Compile Include="FileSplitWriter.cs" />
-    <Compile Include="Json\CType.cs" />
-    <Compile Include="Json\JsonArray.cs" />
-    <Compile Include="Json\JsonItem.cs" />
-    <Compile Include="Json\JsonObject.cs" />
-    <Compile Include="Json\JsonParser.cs" />
     <Compile Include="JsonToXmlParser.cs" />
-    <Compile Include="Json\JsonToken.cs" />
-    <Compile Include="Json\TType.cs" />
-    <Compile Include="Json\JsonTuple.cs" />
-    <Compile Include="Json\JsonValue.cs" />
-    <Compile Include="Json\JsonValueType.cs" />
-    <Compile Include="Json\Lexer.cs" />
-    <Compile Include="Json\Tokenizer.cs" />
     <Compile Include="LogicalExpressions\ConjunctionNode.cs" />
     <Compile Include="LogicalExpressions\ContainerInfo.cs" />
     <Compile Include="LogicalExpressions\DisjunctionNode.cs" />
@@ -35,13 +23,10 @@
     <Compile Include="LogicalExpressions\LiteralNode.cs" />
     <Compile Include="LogicalExpressions\LogicalExpressionEvaluator.cs" />
     <Compile Include="LogicalExpressions\LogicalExpressionParser.cs" />
-    <Compile Include="ReplaceDescriptor.cs" />
     <Compile Include="SmartXslt\FileNameResolverXmlUrlResolver.cs" />
     <Compile Include="SmartXslt\SmartXsltTransform.cs" />
     <Compile Include="SmartXslt\XsltHelper.cs" />
     <Compile Include="SqlScriptDslCompiler.cs" />
-    <Compile Include="XmlIncludeProcessor.cs" />
-    <Compile Include="XmlInterpolationPreprocessor.cs" />
     <Compile Include="XsltDslDefinition.cs" />
     <Compile Include="XsltBasedDslProvider.cs" />
   </ItemGroup>
@@ -55,5 +40,8 @@
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Json\" />
   </ItemGroup>
 </Project>

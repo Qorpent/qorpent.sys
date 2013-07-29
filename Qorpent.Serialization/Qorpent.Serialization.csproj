@@ -4,26 +4,52 @@
     <Configuration>Debug</Configuration>
     <ProjectGuid>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Qorpent.Serialization</RootNamespace>
+    <RootNamespace>Qorpent</RootNamespace>
     <AssemblyName>Qorpent.Serialization</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="bxlSerializer.cs" />
-    <Compile Include="bxlSerializerImpl.cs" />
-    <Compile Include="ContainerInfo.cs" />
-    <Compile Include="ISerializerImpl.cs" />
-    <Compile Include="jsonSerializer.cs" />
-    <Compile Include="jsonSerializerImpl.cs" />
-    <Compile Include="JsRaw.cs" />
-    <Compile Include="JsSerializer.cs" />
-    <Compile Include="jsSerializerImpl.cs" />
-    <Compile Include="md5serializer.cs" />
-    <Compile Include="objectSerializerState.cs" />
-    <Compile Include="serializableItem.cs" />
-    <Compile Include="serializer.cs" />
-    <Compile Include="WikiSerializer.cs" />
-    <Compile Include="xmlSerializer.cs" />
-    <Compile Include="xmlSerializerImpl.cs" />
+    <Compile Include="Json\CType.cs" />
+    <Compile Include="Json\JsonArray.cs" />
+    <Compile Include="Json\JsonItem.cs" />
+    <Compile Include="Json\JsonObject.cs" />
+    <Compile Include="Json\JsonParser.cs" />
+    <Compile Include="Json\JsonToken.cs" />
+    <Compile Include="Json\JsonTuple.cs" />
+    <Compile Include="Json\JsonValue.cs" />
+    <Compile Include="Json\JsonValueType.cs" />
+    <Compile Include="Json\Lexer.cs" />
+    <Compile Include="Json\Tokenizer.cs" />
+    <Compile Include="Json\TType.cs" />
+    <Compile Include="Qxi\ReplaceDescriptor.cs" />
+    <Compile Include="Qxi\XmlIncludeProcessor.cs" />
+    <Compile Include="Qxi\XmlInterpolationPreprocessor.cs" />
+    <Compile Include="Serialization\bxlSerializer.cs" />
+    <Compile Include="Serialization\bxlSerializerImpl.cs" />
+    <Compile Include="Bxl\BxlGenerator.cs" />
+    <Compile Include="Bxl\BxlParser.cs" />
+    <Compile Include="Bxl\BxlService.cs" />
+    <Compile Include="Bxl\BxlToken.cs" />
+    <Compile Include="Bxl\BxlTokenizer.cs" />
+    <Compile Include="Bxl\BxlTokenType.cs" />
+    <Compile Include="Bxl\BxlTokenTypeHelper.cs" />
+    <Compile Include="Bxl\BxlTree.cs" />
+    <Compile Include="Bxl\BxlXmlGenerator.cs" />
+    <Compile Include="Bxl\BxlXpathNavigator.cs" />
+    <Compile Include="Bxl\MyBxl.cs" />
+    <Compile Include="Serialization\ContainerInfo.cs" />
+    <Compile Include="Serialization\ISerializerImpl.cs" />
+    <Compile Include="Serialization\jsonSerializer.cs" />
+    <Compile Include="Serialization\jsonSerializerImpl.cs" />
+    <Compile Include="Serialization\JsRaw.cs" />
+    <Compile Include="Serialization\JsSerializer.cs" />
+    <Compile Include="Serialization\jsSerializerImpl.cs" />
+    <Compile Include="Serialization\md5serializer.cs" />
+    <Compile Include="Serialization\objectSerializerState.cs" />
+    <Compile Include="Serialization\serializableItem.cs" />
+    <Compile Include="Serialization\serializer.cs" />
+    <Compile Include="Serialization\WikiSerializer.cs" />
+    <Compile Include="Serialization\xmlSerializer.cs" />
+    <Compile Include="Serialization\xmlSerializerImpl.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.XML" />
@@ -36,4 +62,5 @@
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
+  <ItemGroup />
 </Project>

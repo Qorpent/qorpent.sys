@@ -76,8 +76,6 @@ namespace Qorpent.IoC {
 									new WellKnownService<Assembly>("Qorpent.Log"),
 									new WellKnownService<Assembly>("Qorpent.IO"),
 									new WellKnownService<Assembly>("Qorpent.Serialization"),
-									new WellKnownService<Assembly>("Qorpent.Bxl"),
-									new WellKnownService<Assembly>("Qorpent.Dsl"),
 									new WellKnownService<Assembly>("Qorpent.Mvc"),
 									new WellKnownService<Assembly>("Qorpent.Security")
 								};

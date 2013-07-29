@@ -26,10 +26,6 @@
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Qorpent.Bxl\Qorpent.Bxl.csproj">
-      <Project>{381dec86-5709-4a64-bd9f-462e792884ce}</Project>
-      <Name>Qorpent.Bxl</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
       <Project>{880f65ea-1a22-4672-a137-ffc91290a209}</Project>
       <Name>Qorpent.Core</Name>
@@ -68,8 +64,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
-  <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Core.import"/>
-  <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Bxl.import"/>
+  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
+  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Bxl.import" />
   <PropertyGroup>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
