@@ -192,10 +192,10 @@ namespace Qorpent.Mvc {
 
 			//if it's {} code - try to parse as json
 			if (datax.StartsWith("{")) {
-				return ResolveService<ISpecialXmlParser>("json.xml.parser").Parse(datax);
+				return ResolveService<ISpecialXmlParser>("json.xml.parser").ParseXml(datax);
 			}
 			//otherwise try parse as bxl
-			return ResolveService<ISpecialXmlParser>("bxl.xml.parser").Parse(datax);
+			return ResolveService<ISpecialXmlParser>("bxl.xml.parser").ParseXml(datax);
 		}
 
 		/// <summary>

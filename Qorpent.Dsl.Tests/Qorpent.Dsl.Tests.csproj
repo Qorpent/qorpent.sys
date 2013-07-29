@@ -12,10 +12,8 @@
   <ItemGroup>
     <Compile Include="Bug_XmlInterpolationInContainer.cs" />
     <Compile Include="Dsl\TryDslFramework.cs" />
-    <Compile Include="JsonToXmlParserTest.cs" />
     <Compile Include="MainTest.cs" />
     <Compile Include="SmartXslt\XsltHelperTest.cs" />
-    <Compile Include="XmlInclude\XmlIncludeMainTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Data" />
@@ -25,32 +23,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="XmlInclude\main.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="XmlInclude\near.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="XmlInclude\ext.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="XmlInclude\ext2.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="XmlInclude\near2.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Dsl\trydsl.xslt" />
@@ -65,9 +38,6 @@
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
-    <EmbeddedResource Include="XmlInclude\import.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.Core.Tests\Qorpent.Core.Tests.csproj">

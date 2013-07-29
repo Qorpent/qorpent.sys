@@ -79,7 +79,7 @@ namespace Qorpent.Bxl {
 		}
 
 
-		XElement ISpecialXmlParser.Parse(string srccode) {
+		XElement ISpecialXmlParser.ParseXml(string srccode) {
 			return Parse(srccode, "isxp");
 		}
 

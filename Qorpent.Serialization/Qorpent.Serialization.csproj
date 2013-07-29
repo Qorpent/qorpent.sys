@@ -12,6 +12,7 @@
     <Compile Include="Json\JsonArray.cs" />
     <Compile Include="Json\JsonObject.cs" />
     <Compile Include="Json\JsonParser.cs" />
+    <Compile Include="Json\JsonParserException.cs" />
     <Compile Include="Json\JsonToken.cs" />
     <Compile Include="Json\JsonTuple.cs" />
     <Compile Include="Json\JsonValue.cs" />

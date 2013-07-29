@@ -30,6 +30,6 @@ namespace Qorpent.Dsl {
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		XElement Parse(string srccode);
+		XElement ParseXml(string srccode);
 	}
 }

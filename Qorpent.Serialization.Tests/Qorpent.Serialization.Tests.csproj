@@ -31,6 +31,7 @@
     <Compile Include="Q48SerializeNotNullCollectionsTest.cs" />
     <Compile Include="Q51JsonXmlParserFail.cs" />
     <Compile Include="serialization_set_test.cs" />
+    <Compile Include="XmlInclude\XmlIncludeMainTest.cs" />
     <Compile Include="xml_serializer_test.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -44,5 +45,29 @@
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
+    <EmbeddedResource Include="XmlInclude\ext.bxl">
+      <LastGenOutput>main1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XmlInclude\ext2.bxl">
+      <LastGenOutput>main1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XmlInclude\import.bxl">
+      <LastGenOutput>main1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XmlInclude\main.bxl">
+      <LastGenOutput>main1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XmlInclude\near.bxl">
+      <LastGenOutput>main1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XmlInclude\near2.bxl">
+      <LastGenOutput>main1.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Core.Tests\Qorpent.Core.Tests.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC912902046}</Project>
+      <Name>Qorpent.Core.Tests</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

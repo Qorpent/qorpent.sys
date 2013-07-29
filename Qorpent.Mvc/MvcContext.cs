@@ -156,7 +156,7 @@ namespace Qorpent.Mvc {
 					else if (Parameters.ContainsKey("_jdata")) {
 						var j = Get("_jdata");
 						if (!string.IsNullOrEmpty(j)) {
-							_xdata = ResolveService<ISpecialXmlParser>("json.xml.parser").Parse(j);
+							_xdata = ResolveService<ISpecialXmlParser>("json.xml.parser").ParseXml(j);
 						}
 					}
 					else if (Parameters.ContainsKey("_bxldata")) {

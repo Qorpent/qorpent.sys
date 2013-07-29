@@ -25,7 +25,7 @@ namespace Qorpent.Json
 		/// </summary>
 		/// <param name="srccode"></param>
 		/// <returns></returns>
-		XElement ISpecialXmlParser.Parse(string srccode) {
+		public XElement ParseXml(string srccode) {
 			return ((IJsonParser) this).Parse(srccode).WriteToXml();
 		}
 	}

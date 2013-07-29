@@ -70,7 +70,7 @@ namespace Qorpent.Serialization.Tests {
 		[TestCase("{x:['1','2\"']}")]
 		[TestCase("{x:[{y:1},2]}")]
 		public void TestArrayParsing(string code) {
-			Console.WriteLine(((ISpecialXmlParser)new JsonParser()).Parse(code));
+			Console.WriteLine(((ISpecialXmlParser)new JsonParser()).ParseXml(code));
 		}
 	}
 }
