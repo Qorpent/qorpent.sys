@@ -45,6 +45,10 @@ namespace Qorpent.IoC.Tests {
 			ContainerBoundRelease = true;
 		}
 
+		public void OnContainerCreateInstanceFinished() {
+			
+		}
+
 
 		public bool ContainerBoundCalled { get; set; }
 

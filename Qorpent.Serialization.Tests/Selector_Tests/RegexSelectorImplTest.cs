@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Xml.Linq;
-using Minerva.Core.Processing.Selector.Implementations;
 using NUnit.Framework;
+using Qorpent.Selector.Implementations;
 
-namespace Minerva.Core.Tests.Selector_Tests
+namespace Qorpent.Serialization.Tests.Selector_Tests
 {
 	/// <summary>
 	/// Проверка селектора на основе регекса

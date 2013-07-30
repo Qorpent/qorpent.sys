@@ -34,6 +34,10 @@ namespace Qorpent.IoC.Tests {
 			Released = true;
 		}
 
+		public void OnContainerCreateInstanceFinished() {
+			
+		}
+
 		public IComponentDefinition Component;
 		public IContainer Container;
 		public bool Released;

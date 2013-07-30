@@ -651,6 +651,10 @@ namespace Qorpent.IoC {
 						Object = result,
 					};
 				ProcessExtensions(context);
+				var o = context.Object as IContainerBound;
+				if (o != null) {
+					o.OnContainerCreateInstanceFinished();
+				}
 				return context.Object;
 			}
 			catch (ContainerException ex) {

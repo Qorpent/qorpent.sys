@@ -29,5 +29,8 @@ namespace Qorpent.IoC.Tests {
 		public void SetContainerContext(IContainer container, IComponentDefinition component) {}
 
 		public void OnContainerRelease() {}
+		public void OnContainerCreateInstanceFinished() {
+			
+		}
 	}
 }

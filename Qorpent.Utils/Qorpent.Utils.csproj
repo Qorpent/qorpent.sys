@@ -30,6 +30,7 @@
     <Compile Include="Collections\StringMap.cs" />
     <Compile Include="ComplexStringExtension.cs" />
     <Compile Include="ComplexStringHelper.cs" />
+    <Compile Include="Config\ConfigBase.cs" />
     <Compile Include="ConsoleArgumentHelper.cs" />
     <Compile Include="ConsoleRenderHelper.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />

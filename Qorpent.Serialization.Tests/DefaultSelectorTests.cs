@@ -1,25 +1,23 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
-using Minerva.Core.Processing.Selector;
-using Minerva.Core.Processing.Selector.Implementations;
 using NUnit.Framework;
 using Qorpent.IoC;
 using Qorpent.Selector;
-using Qorpent.Serialization;
+using Qorpent.Selector.Implementations;
 
-namespace Minerva.Core.Tests {
+namespace Qorpent.Serialization.Tests {
     class DefaultSelectorTests {
 	    private Container _container;
 
         [SetUp]
         public void FixTureSetUp() {
             _container = new Container();
-            _container.Register(new ComponentDefinition<ISelectorImpl, CssSelectorImpl>(Lifestyle.Default, "zeus.robot.selector.unified"));
+            _container.Register(new ComponentDefinition<ISelectorImpl, CssSelectorImpl>(Lifestyle.Default, "selector.css"));
         }
 
         [Test]
         public void CanLoadUnifiedSelectorImplFromContainer() {
-            var t = _container.Get<ISelectorImpl>("zeus.robot.selector.unified");
+            var t = _container.Get<ISelectorImpl>("selector.css");
             Assert.NotNull(t);
         }
 

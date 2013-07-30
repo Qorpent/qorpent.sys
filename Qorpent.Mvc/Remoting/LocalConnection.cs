@@ -46,6 +46,13 @@ namespace Qorpent.Mvc.Remoting {
 		/// </summary>
 		public void OnContainerRelease() {}
 
+		/// <summary>
+		/// Событие, вызываемое после выполнения инициализации при помощи контейнера
+		/// </summary>
+		public void OnContainerCreateInstanceFinished() {
+			
+		}
+
 
 		/// <summary>
 		/// 	implement for real calling to mvc

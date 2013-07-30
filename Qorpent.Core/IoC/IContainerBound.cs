@@ -33,5 +33,9 @@ namespace Qorpent.IoC {
 		/// 	/called then Release is called and container process it
 		/// </summary>
 		void OnContainerRelease();
+		/// <summary>
+		/// Событие, вызываемое после выполнения инициализации при помощи контейнера
+		/// </summary>
+		void OnContainerCreateInstanceFinished();
 	}
 }

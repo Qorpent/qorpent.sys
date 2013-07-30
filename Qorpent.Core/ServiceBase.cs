@@ -119,6 +119,13 @@ namespace Qorpent {
 		/// </remarks>
 		public virtual void OnContainerRelease() {}
 
+		/// <summary>
+		/// Событие, вызываемое после выполнения инициализации при помощи контейнера
+		/// </summary>
+		public virtual void OnContainerCreateInstanceFinished() {
+			
+		}
+
 
 		/// <summary>
 		/// 	Реализует интерфейс <see cref="IDisposable" />, по умолчанию вызывает <see cref="ITypeResolver.Release" />, относительно
