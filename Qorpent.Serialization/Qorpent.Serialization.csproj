@@ -22,6 +22,12 @@
     <Compile Include="Qxi\ReplaceDescriptor.cs" />
     <Compile Include="Qxi\XmlIncludeProcessor.cs" />
     <Compile Include="Qxi\XmlInterpolationPreprocessor.cs" />
+    <Compile Include="Selector\DefaultSelector.cs" />
+    <Compile Include="Selector\Implementations\CssSelectorImpl.cs" />
+    <Compile Include="Selector\Implementations\RegexSelectorImpl.cs" />
+    <Compile Include="Selector\Implementations\XPathSelectorImpl.cs" />
+    <Compile Include="Selector\ProcessingSelectorException.cs" />
+    <Compile Include="Selector\SelectorFactory.cs" />
     <Compile Include="Serialization\bxlSerializer.cs" />
     <Compile Include="Serialization\bxlSerializerImpl.cs" />
     <Compile Include="Bxl\BxlGenerator.cs" />

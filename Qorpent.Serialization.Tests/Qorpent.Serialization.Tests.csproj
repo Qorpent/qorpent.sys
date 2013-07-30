@@ -21,6 +21,7 @@
     <Compile Include="Bxl\TokenizerTestHelper.cs" />
     <Compile Include="bxl_serializer_test.cs" />
     <Compile Include="coverage_only_tests.cs" />
+    <Compile Include="DefaultSelectorTests.cs" />
     <Compile Include="exceptions_need_to_be_fixed.cs" />
     <Compile Include="iocconfiguationtest.cs" />
     <Compile Include="Json\LexerTests.cs" />
@@ -31,6 +32,7 @@
     <Compile Include="Q48SerializeNotNullCollectionsTest.cs" />
     <Compile Include="Q51JsonXmlParserFail.cs" />
     <Compile Include="Q66EmbededXmlSerialization.cs" />
+    <Compile Include="Selector_Tests\RegexSelectorImplTest.cs" />
     <Compile Include="serialization_set_test.cs" />
     <Compile Include="XmlInclude\Bug_XmlInterpolationInContainer.cs" />
     <Compile Include="XmlInclude\XmlIncludeMainTest.cs" />

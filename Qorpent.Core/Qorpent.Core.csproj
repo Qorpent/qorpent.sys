@@ -75,9 +75,13 @@
     <Compile Condition="'$(QISD_USER)'!=''" Include="$(QISD_USER)" />
     <Compile Include="Security\WinLogonType.cs" />
     <Compile Include="Dsl\Json\IJsonParser.cs" />
+    <Compile Include="Serialization\ICustomSelectorImpl.cs" />
+    <Compile Include="Serialization\ISelector.cs" />
+    <Compile Include="Serialization\ISelectorImpl.cs" />
     <Compile Include="Serialization\ISerializerXsltExtension.cs" />
     <Compile Include="Dsl\Json\JsonItem.cs" />
     <Compile Include="Dsl\Json\JsonTokenType.cs" />
+    <Compile Include="Serialization\SelectorLanguage.cs" />
     <Compile Include="ServiceState.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
     <Compile Include="Wiki\IWikiEmptyFilter.cs" />
