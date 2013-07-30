@@ -94,7 +94,7 @@ namespace Qorpent.Mvc.Tests {
 		public void action1_rendered() {
 			var ctx = app.CreateContext("http://localhost/action1.xml.qweb");
 			handler.ProcessRequest(ctx);
-			Assert.AreEqual("<value>1</value>", ctx.Output.ToString());
+			Assert.AreEqual("<root><value>1</value></root>", ctx.Output.ToString());
 		}
 
 		[Test]
@@ -127,7 +127,7 @@ namespace Qorpent.Mvc.Tests {
 			var ctx = app.CreateContext("http://localhost/test/act2.xml.qweb");
 			handler.ProcessRequest(ctx);
 			Console.WriteLine(ctx.Output.ToString());
-			Assert.AreEqual("<value>2</value>", ctx.Output.ToString());
+			Assert.AreEqual("<root><value>2</value></root>", ctx.Output.ToString());
 		}
 	}
 }
