@@ -33,6 +33,10 @@ namespace Qorpent.Mvc.Actions {
         /// </summary>
 	    [Bind] protected string Usage;
 		/// <summary>
+		/// 
+		/// </summary>
+	    [Bind] protected string Command;
+		/// <summary>
 		/// 	В защищенном режиме ищет доступные пользователю действия
 		/// </summary>
 		/// <returns> </returns>
@@ -58,6 +62,9 @@ namespace Qorpent.Mvc.Actions {
         /// <returns></returns>
         private object RealCommands() {
             var actions = GetAllActions();
+			if (!string.IsNullOrWhiteSpace(Command)) {
+				actions = actions.Where(_ => _.Name.Replace(".action","") == Command);
+			}
             var dict = new Dictionary<string, IDictionary<string, object>>();
 
             foreach (var action in actions) {
