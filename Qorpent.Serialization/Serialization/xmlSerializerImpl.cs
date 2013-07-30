@@ -64,9 +64,9 @@ namespace Qorpent.Serialization {
 		/// </remarks>
 		public virtual void End() {
 			var e = Root;
-			if (e.Elements().Count() == 1) {
+			/*if (e.Elements().Count() == 1) {
 				e = e.Elements().First();
-			}
+			}*/
 			Output.Write(e.ToString(SaveOptions.DisableFormatting));
 		}
 
@@ -96,7 +96,9 @@ namespace Qorpent.Serialization {
 		public void EndObject() {
 			var current = _stack.Pop();
 			if (!current.Attributes().Any() && current.Elements().Count() == 1 &&
-			    current.Name.LocalName == current.Elements().First().Name.LocalName) {
+			    current.Name.LocalName == current.Elements().First().Name.LocalName 
+	
+				) {
 				current.ReplaceWith(current.Elements().First());
 			}
 			if (current.Name.LocalName == "Children")

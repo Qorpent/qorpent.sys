@@ -66,7 +66,7 @@ namespace Qorpent.Serialization.Tests {
 		public void array_serialized() {
 			var a = new object[] {1, true, "test!"};
 
-			test(a, @"<Object__><item __idx=""0"">1</item><item __idx=""1"">true</item><item __idx=""2"">test!</item></Object__>");
+			test(a, @"<root><Object__><item __idx=""0"">1</item><item __idx=""1"">true</item><item __idx=""2"">test!</item></Object__></root>");
 		}
 
 		[Test]
@@ -74,13 +74,13 @@ namespace Qorpent.Serialization.Tests {
 		{
 			var a = new object[] { new{x=1},new{y=2} };
 
-			test(a, @"<Object__><item x=""1"" __idx=""0"" /><item y=""2"" __idx=""1"" /></Object__>");
+			test(a, @"<root><Object__><item x=""1"" __idx=""0"" /><item y=""2"" __idx=""1"" /></Object__></root>");
 		}
 
 		[Test]
 		public void bool_serialized() {
-			test(true, "<value>true</value>");
-			test(false, "<value>false</value>");
+			test(true, "<root><value>true</value></root>");
+			test(false, "<root><value>false</value></root>");
 		}
 
 		[Test]
@@ -88,25 +88,25 @@ namespace Qorpent.Serialization.Tests {
 			var x = new parent();
 			x.Y = 1;
 			x.child2 = new child();
-			test(x, @"<parent Y=""1"" X=""0""><child1 /><child2 id=""0"" /><child3 /></parent>");
+			test(x, @"<root><parent Y=""1"" X=""0""><child1 /><child2 id=""0"" /><child3 /></parent></root>");
 		}
 
 		[Test]
 		public void bug_insuficient_nesting_in_xml_serialization() {
 			test(new {z = new {a = 2, b = 3}},
-			     @"<anonymous><z a=""2"" b=""3"" /></anonymous>");
+			     @"<root><anonymous><z a=""2"" b=""3"" /></anonymous></root>");
 		}
 
 		[Test]
 		public void complex_class_with_attributes_processed() {
 			var x = new parent();
-			test(x, @"<parent X=""0""><child1 /><child3 /></parent>");
+			test(x, @"<root><parent X=""0""><child1 /><child3 /></parent></root>");
 			x.Y = 1;
-			test(x, @"<parent Y=""1"" X=""0""><child1 /><child3 /></parent>");
+			test(x, @"<root><parent Y=""1"" X=""0""><child1 /><child3 /></parent></root>");
 			x.child2 = new child();
-			test(x, @"<parent Y=""1"" X=""0""><child1 /><child2 id=""0"" /><child3 /></parent>");
+			test(x, @"<root><parent Y=""1"" X=""0""><child1 /><child2 id=""0"" /><child3 /></parent></root>");
 			x.child2.id2 = 3;
-			test(x, @"<parent Y=""1"" X=""0""><child1 /><child2 id=""0"" id2=""3"" /><child3 /></parent>");
+			test(x, @"<root><parent Y=""1"" X=""0""><child1 /><child2 id=""0"" id2=""3"" /><child3 /></parent></root>");
 		}
 
 		[Test]
@@ -118,12 +118,12 @@ namespace Qorpent.Serialization.Tests {
 			var a = new object[] {1, true, "test!"};
 			var obj = new {name = "x", dict, a};
 			test(obj,
-			     @"<anonymous name=""x""><dict><item key=""x"">1</item><item key=""y'x"">true</item><item key=""z"">test!</item></dict><a><item __idx=""0"">1</item><item __idx=""1"">true</item><item __idx=""2"">test!</item></a></anonymous>");
+			     @"<root><anonymous name=""x""><dict><item key=""x"">1</item><item key=""y'x"">true</item><item key=""z"">test!</item></dict><a><item __idx=""0"">1</item><item __idx=""1"">true</item><item __idx=""2"">test!</item></a></anonymous></root>");
 		}
 
 		[Test]
 		public void datetime_serialized() {
-			test(new DateTime(2010, 1, 12, 13, 15, 36), "<value>2010-01-12T13:15:36</value>");
+			test(new DateTime(2010, 1, 12, 13, 15, 36), "<root><value>2010-01-12T13:15:36</value></root>");
 		}
 
 		[Test]
@@ -137,50 +137,50 @@ namespace Qorpent.Serialization.Tests {
 
 		[Test]
 		public void double_float_decimal_serialized() {
-			test(111111.1111d, "<value>111111.1111</value>");
-			test(111111.1111m, "<value>111111.1111</value>");
-			test(111111.5f, "<value>111111.5</value>"
+			test(111111.1111d, "<root><value>111111.1111</value></root>");
+			test(111111.1111m, "<root><value>111111.1111</value></root>");
+			test(111111.5f, "<root><value>111111.5</value></root>"
 				);
 		}
 
 		[Test]
 		public void enum_serialized() {
-			test(testEnum.X, "<value>X</value>");
-			test(testEnum.Y, "<value>Y</value>");
+			test(testEnum.X, "<root><value>X</value></root>");
+			test(testEnum.Y, "<root><value>Y</value></root>");
 		}
 
 		[Test]
 		public void int_and_long_serialized() {
-			test((long) 1111111111, "<value>1111111111</value>");
-			test(1111111111, "<value>1111111111</value>");
+			test((long) 1111111111, "<root><value>1111111111</value></root>");
+			test(1111111111, "<root><value>1111111111</value></root>");
 		}
 
 		[Test]
 		public void null_serialized() {
-			test(null, "<value />"
+			test(null, "<root><value /></root>"
 				);
 		}
 
 		[Test]
 		public void string_escaped_CRLFT_and_serialized() {
-			test("\ttest'n\r\n", "<value>\ttest'n\r\n</value>"
+			test("\ttest'n\r\n", "<root><value>\ttest'n\r\n</value></root>"
 				);
 		}
 
 		[Test]
 		public void string_escaped_and_serialized() {
-			test(@"\test'n", "<value>\\test'n</value>"
+			test(@"\test'n", "<root><value>\\test'n</value></root>"
 				);
 		}
 
 		[Test]
 		public void string_serialized() {
-			test("test", "<value>test</value>");
+			test("test", "<root><value>test</value></root>");
 		}
 
 		[Test]
 		public void try_to_catch_bug_with_nulls() {
-			test(new {x = (xml_serializer_test) null, y = (string) null}, "<anonymous y=\"\"><x /></anonymous>");
+			test(new {x = (xml_serializer_test) null, y = (string) null}, "<root><anonymous y=\"\"><x /></anonymous></root>");
 		}
 
 		[Test]
