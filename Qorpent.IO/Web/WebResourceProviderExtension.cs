@@ -20,6 +20,10 @@ namespace Qorpent.IO.Web
 		{
 			IsCreateRequestSupported = true;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="config"></param>
 		protected override void InternalProcessConfig(IResourceProviderConfig config)
 		{
 			base.InternalProcessConfig(config);
@@ -33,7 +37,12 @@ namespace Qorpent.IO.Web
 			var scheme = uri.Scheme.ToLowerInvariant();
 			return scheme == "http" || scheme == "https";
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="uri"></param>
+		/// <param name="config"></param>
+		/// <returns></returns>
 		public override IResourceRequest InternalCreateRequest(Uri uri, IResourceRequestConfig config) {
 			return new WebResourceRequest(uri, config);
 		} 

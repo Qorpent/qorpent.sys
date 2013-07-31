@@ -55,6 +55,7 @@
     <Compile Include="Serialization\WikiSerializer.cs" />
     <Compile Include="Serialization\xmlSerializer.cs" />
     <Compile Include="Serialization\xmlSerializerImpl.cs" />
+    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.XML" />
