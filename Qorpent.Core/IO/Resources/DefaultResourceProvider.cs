@@ -53,7 +53,8 @@ namespace Qorpent.IO.Resources {
 		/// <param name="uri"></param>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		public IResourceRequest CreateRequest(Uri uri, IResourceRequestConfig config = null) {
+		public IResourceRequest CreateRequest(Uri uri, IResourceConfig config = null)
+		{
 			if (null == Extensions || 0==Extensions.Length) throw new ResourceException("нет расширений для реализации запросов");
 			var realuri = RewriteUrl(uri);
 			var resourcegetter = Extensions.FirstOrDefault(_ => _.IsCreateRequestSupported && _.IsMatchUri(realuri));

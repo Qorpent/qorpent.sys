@@ -19,6 +19,6 @@ namespace Qorpent.IO.Resources
 		/// <param name="uri"></param>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		IResourceRequest CreateRequest(Uri uri, IResourceRequestConfig config = null);
+		IResourceRequest CreateRequest(Uri uri, IResourceConfig config = null);
 	}
 }

@@ -10,7 +10,7 @@
 		/// <summary>
 		/// В процессе работы
 		/// </summary>
-		Busy = 4,
+		Get = 4,
 		/// <summary>
 		/// Завершен
 		/// </summary>
@@ -19,5 +19,9 @@
 		/// Ошибка
 		/// </summary>
 		Error = 16,
+		/// <summary>
+		/// Начальное состояние
+		/// </summary>
+		Init = 32,
 	}
 }

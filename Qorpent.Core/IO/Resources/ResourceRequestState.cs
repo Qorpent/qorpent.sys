@@ -13,18 +13,30 @@ namespace Qorpent.IO.Resources {
 		/// <summary>
 		/// Создан
 		/// </summary>
-		Created =2,
+		Init =2,
+		/// <summary>
+		/// Создан
+		/// </summary>
+		Creating = 4,
+		/// <summary>
+		/// Создан
+		/// </summary>
+		Created = 8,
 		/// <summary>
 		/// В процессе работы
 		/// </summary>
-		Busy =4,
+		Get =16,
 		/// <summary>
 		/// Завершен
 		/// </summary>
-		Finished = 8,
+		Finished = 32,
 		/// <summary>
 		/// Ошибка
 		/// </summary>
-		Error =16,
+		Error =64,
+		/// <summary>
+		/// Отправка сообщения на источник, для вебоподобных соединений (POST,PUT)
+		/// </summary>
+		Post = 128,
 	}
 }

@@ -1,24 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Qorpent.IO.Resources {
 	/// <summary>
 	/// Интерфейс запроса
 	/// </summary>
-	public interface IResourceRequest {
+	public interface IResourceRequest:IDisposable {
 		/// <summary>
 		/// Текущее состояние запроса
 		/// </summary>
 		ResourceRequestState State { get; }
 		/// <summary>
-		/// Выполняет синхронный запрос ресурса
+		/// Выполняет асинхронный запрос ресурса
 		/// </summary>
 		/// <returns></returns>
-		IResourceResponse GetResponse(IResourceResponseCallConfig config = null);
-		/// <summary>
-		/// Асинхронный интерфейс вызова запроса
-		/// </summary>
-		/// <param name="config"></param>
-		/// <returns></returns>
-		Task<IResourceResponse> BeginGetResponse(IResourceResponseCallConfig config = null);
+		Task<IResourceResponse> GetResponse(IResourceConfig config = null);
+		
 	}
 }

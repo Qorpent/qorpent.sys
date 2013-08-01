@@ -1,29 +1,26 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Qorpent.IO.Resources {
 	/// <summary>
 	/// Интерфейс самого ресурса
 	/// </summary>
-	public interface IResource {
+	public interface IResource:IDisposable {
 		/// <summary>
 		/// Метаданные ресурса
 		/// </summary>
 		IResourceConfig Config { get; }
-		/// <summary>
-		/// Метод синхронного получения данных
-		/// </summary>
-		/// <returns></returns>
-		byte[] GetData();
+		
 		/// <summary>
 		/// Асинхронный метод получения данных
 		/// </summary>
 		/// <returns></returns>
-		Task<byte[]> BeginGetData();
+		Task<byte[]> GetData();
 		/// <summary>
 		/// Метод открытия потока к данным
 		/// </summary>
 		/// <returns></returns>
-		Stream Open();
+		Task<Stream> Open();
 	}
 }

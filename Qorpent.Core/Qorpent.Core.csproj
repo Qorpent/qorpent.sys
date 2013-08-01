@@ -44,9 +44,7 @@
     <Compile Include="IO\Resources\IResourceProviderConfig.cs" />
     <Compile Include="IO\Resources\IResourceProviderExtension.cs" />
     <Compile Include="IO\Resources\IResourceRequest.cs" />
-    <Compile Include="IO\Resources\IResourceRequestConfig.cs" />
     <Compile Include="IO\Resources\IResourceResponse.cs" />
-    <Compile Include="IO\Resources\IResourceResponseCallConfig.cs" />
     <Compile Include="IO\Resources\ResourceBase.cs" />
     <Compile Include="IO\Resources\ResourceException.cs" />
     <Compile Include="IO\Resources\ResourceProviderExtensionBase.cs" />

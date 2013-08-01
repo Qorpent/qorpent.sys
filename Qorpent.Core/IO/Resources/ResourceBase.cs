@@ -19,7 +19,7 @@ namespace Qorpent.IO.Resources {
 		/// Метод синхронного получения данных
 		/// </summary>
 		/// <returns></returns>
-		public virtual byte[] GetData() {
+		public virtual byte[] SyncGetData() {
 			if (null == FixedContent) return new byte[] {};
 			return FixedContent;
 		}
@@ -28,16 +28,25 @@ namespace Qorpent.IO.Resources {
 		/// Асинхронный метод получения данных
 		/// </summary>
 		/// <returns></returns>
-		public virtual Task<byte[]> BeginGetData() {
-			return Task.Run(() => GetData());
+		public virtual Task<byte[]> GetData() {
+			return Task.Run(() => SyncGetData());
 		}
+
+		
 
 		/// <summary>
 		/// Метод открытия потока к данным
 		/// </summary>
 		/// <returns></returns>
-		public virtual Stream Open() {
-			return new MemoryStream(GetData());
+		public async virtual Task<Stream> Open() {
+			return new MemoryStream(await GetData());
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Dispose() {
+			FixedContent = null;
+			Config = null;
 		}
 	}
 }

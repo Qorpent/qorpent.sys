@@ -38,7 +38,7 @@ namespace Qorpent.IO.Resources {
 		/// <param name="uri"></param>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		public IResourceRequest CreateRequest(Uri uri, IResourceRequestConfig config = null) {
+		public IResourceRequest CreateRequest(Uri uri, IResourceConfig config = null) {
 			if (!IsCreateRequestSupported) {
 				throw new ResourceException("cannot retrieve request by settings");
 			}
@@ -53,7 +53,8 @@ namespace Qorpent.IO.Resources {
 		/// <param name="uri"></param>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		public virtual IResourceRequest InternalCreateRequest(Uri uri, IResourceRequestConfig config) {
+		public virtual IResourceRequest InternalCreateRequest(Uri uri, IResourceConfig config)
+		{
 			throw new NotImplementedException();
 		}
 
