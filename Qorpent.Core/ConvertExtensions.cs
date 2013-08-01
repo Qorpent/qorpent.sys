@@ -83,7 +83,7 @@ namespace Qorpent.Utils.Extensions {
 			}
 			var s = x as string;
 			if (s != null) {
-				if (s.IsEmpty()) {
+				if (string.IsNullOrWhiteSpace(s)) {
 					return false;
 				}
 				if ("0" == s) {
@@ -184,11 +184,11 @@ namespace Qorpent.Utils.Extensions {
 				converted = true;
 				return x;
 			}
-			var xElement = x as XElement;
+			/*var xElement = x as XElement;
 			if (xElement != null) {
 				converted = true;
 				return xElement.Deserialize(type, null);
-			}
+			}*/
 			if (type.IsEnum) {
 				if (x is int) {
 					converted = true;
@@ -220,7 +220,7 @@ namespace Qorpent.Utils.Extensions {
 				}
 				if (type == typeof (DateTime)) {
 					var ds = x.ToStr();
-					if (ds.IsEmpty()) {
+					if (string.IsNullOrWhiteSpace(ds)) {
 						converted = false;
 						return new DateTime(1900, 1, 1);
 					}
@@ -267,7 +267,7 @@ namespace Qorpent.Utils.Extensions {
 				return (DateTime) obj;
 			}
 			var s = obj.ToStr();
-			if (s.IsEmpty()) {
+			if (string.IsNullOrWhiteSpace(s)) {
 				return new DateTime(1900, 1, 1);
 			}
 			return DateTime.ParseExact(s, QorpentConst.Date.StandardDateFormats, CultureInfo.InvariantCulture,

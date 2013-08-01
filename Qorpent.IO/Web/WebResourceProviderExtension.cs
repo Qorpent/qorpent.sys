@@ -43,7 +43,7 @@ namespace Qorpent.IO.Web
 		/// <param name="uri"></param>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		public override IResourceRequest InternalCreateRequest(Uri uri, IResourceRequestConfig config) {
+		public override IResourceRequest InternalCreateRequest(Uri uri, IResourceConfig config) {
 			return new WebResourceRequest(uri, config);
 		} 
 	}

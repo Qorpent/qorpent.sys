@@ -15,7 +15,7 @@ namespace Qorpent.IO.Web {
 		/// <param name="nativeResponse"></param>
 		/// <param name="nativeRequest"></param>
 		/// <param name="config"></param>
-		public WebResourceResponse(WebResponse nativeResponse, WebRequest nativeRequest, IResourceResponseCallConfig config) {
+		public WebResourceResponse(WebResponse nativeResponse, WebRequest nativeRequest, IResourceConfig config) {
 			State = ResourceResponseState.Init;
 			this.NativeResponse = nativeResponse;
 			this.NativeRequest = nativeRequest;
@@ -25,7 +25,7 @@ namespace Qorpent.IO.Web {
 		/// <summary>
 		/// Конфигурация
 		/// </summary>
-		public IResourceResponseCallConfig Config { get; protected set; }
+		public IResourceConfig Config { get; protected set; }
 		/// <summary>
 		/// Доступ к системному запросу
 		/// </summary>
@@ -108,6 +108,10 @@ namespace Qorpent.IO.Web {
 		public Exception LastError { get; protected set; }
 
 
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		/// <filterpriority>2</filterpriority>
 		public void Dispose() {
 			NativeRequest = null;
 			NativeResponse = null;

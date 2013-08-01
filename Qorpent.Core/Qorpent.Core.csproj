@@ -29,7 +29,9 @@
     <Compile Include="Applications\IHttpContextWrapper.cs" />
     <Compile Include="Applications\StubHttpContextWrapper.cs" />
     <Compile Include="Applications\TaskWrapper.cs" />
+    <Compile Include="Config\ConfigBase.cs" />
     <Compile Include="Config\IConfig.cs" />
+    <Compile Include="ConvertExtensions.cs" />
     <Compile Include="Data\IParametersProvider.cs" />
     <Compile Include="Data\ParamAttribute.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
@@ -46,6 +48,7 @@
     <Compile Include="IO\Resources\IResourceRequest.cs" />
     <Compile Include="IO\Resources\IResourceResponse.cs" />
     <Compile Include="IO\Resources\ResourceBase.cs" />
+    <Compile Include="IO\Resources\ResourceConfig.cs" />
     <Compile Include="IO\Resources\ResourceException.cs" />
     <Compile Include="IO\Resources\ResourceProviderExtensionBase.cs" />
     <Compile Include="IO\Resources\ResourceRequestState.cs" />

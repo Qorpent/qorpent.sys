@@ -29,6 +29,10 @@ namespace Qorpent.IO.Web {
 		public IResourceConfig Config { get; protected set; }
 
 
+		/// <summary>
+		/// Асинхронный метод получения данных
+		/// </summary>
+		/// <returns></returns>
 		public async Task<byte[]> GetData() {
 			var buffer = new byte[NativeResponse.ContentLength];
 			using (var s = await Open()) {
@@ -37,14 +41,23 @@ namespace Qorpent.IO.Web {
 			return buffer;
 		}
 
+		/// <summary>
+		/// Метод открытия потока к данным
+		/// </summary>
+		/// <returns></returns>
 		public Task<Stream> Open() {
 			return Task.Run(() => NativeResponse.GetResponseStream());
 		}
 
 
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		/// <filterpriority>2</filterpriority>
 		public void Dispose() {
 			NativeResponse = null;
 			Config = null;
 		}
 	}
+
 }

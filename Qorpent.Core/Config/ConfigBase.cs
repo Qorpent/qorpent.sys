@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Utils.Config;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Utils.Config {
+namespace Qorpent.Config {
 	/// <summary>
 	/// Базовый класс для конфигураций
 	/// </summary>

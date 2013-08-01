@@ -12,7 +12,7 @@ namespace Qorpent.IO.Web {
 		/// <summary>
 		///     Конфигурация
 		/// </summary>
-		protected IResourceRequestConfig Config;
+		protected IResourceConfig Config;
 
 		/// <summary>
 		///     Сохраненный результат запроса
@@ -29,7 +29,7 @@ namespace Qorpent.IO.Web {
 		/// </summary>
 		/// <param name="uri"></param>
 		/// <param name="config"></param>
-		public WebResourceRequest(Uri uri, IResourceRequestConfig config) {
+		public WebResourceRequest(Uri uri, IResourceConfig config) {
 			State = ResourceRequestState.Init;
 			Config = config;
 			Uri = uri;
@@ -49,7 +49,7 @@ namespace Qorpent.IO.Web {
 		///     Выполняет синхронный запрос ресурса
 		/// </summary>
 		/// <returns></returns>
-		public async Task<IResourceResponse> GetResponse(IResourceResponseCallConfig config = null) {
+		public async Task<IResourceResponse> GetResponse(IResourceConfig config = null) {
 			if (CheckCurrentCanBeReturned()) return Response;
 
 			if (ResourceRequestState.Init == State) {
@@ -86,35 +86,31 @@ namespace Qorpent.IO.Web {
 				if (ResourceRequestState.Init == State) {
 					return false;
 				}
-				else if (ResourceRequestState.Error == State) {
+				if (ResourceRequestState.Error == State) {
 					if (null == LastError) {
 						LastError = new ResourceException("some error in request");
 					}
 					throw LastError;
 				}
-				else if (ResourceRequestState.Finished == State) {
+				if (ResourceRequestState.Finished == State) {
 					{
 						return true;
 					}
 				}
-				else {
-					throw new ResourceException("insuficient state for GetResponse call " + State);
-				}
-
-				return false;
+				throw new ResourceException("insuficient state for GetResponse call " + State);
 			}
 		}
 
-		private async Task<IResourceResponse> InternalGetResponse(IResourceResponseCallConfig config) {
+		private async Task<IResourceResponse> InternalGetResponse(IResourceConfig config) {
 			try {
 				State = ResourceRequestState.Creating;
 				var nativeRequest = WebRequest.Create(Uri);
 				SetupNativeRequest(nativeRequest, config);
 				State = ResourceRequestState.Created;
-				if (null != config.PostData) {
+				if (null != config.RequestPostData) {
 					State = ResourceRequestState.Post;
 					using (var stream = new BinaryWriter(await nativeRequest.GetRequestStreamAsync())) {
-						stream.Write(config.PostData, 0, config.PostData.Length);
+						stream.Write(config.RequestPostData, 0, config.RequestPostData.Length);
 					}
 				}
 				State = ResourceRequestState.Get;
@@ -134,11 +130,11 @@ namespace Qorpent.IO.Web {
 		/// </summary>
 		/// <param name="nativeRequest"></param>
 		/// <param name="config"></param>
-		protected virtual void SetupNativeRequest(WebRequest nativeRequest, IResourceResponseCallConfig config) {
+		protected virtual void SetupNativeRequest(WebRequest nativeRequest, IResourceConfig config) {
 			if (null == config) return;
 			string method = config.Method;
 			if (string.IsNullOrWhiteSpace(method)) {
-				if (null != config.PostData) {
+				if (null != config.RequestPostData) {
 					method = "POST";
 				}
 				else {
@@ -148,6 +144,10 @@ namespace Qorpent.IO.Web {
 			nativeRequest.Method = method;
 		}
 
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		/// <filterpriority>2</filterpriority>
 		public void Dispose() {
 			Config = null;
 			Response = null;

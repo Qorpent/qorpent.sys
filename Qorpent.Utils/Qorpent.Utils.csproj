@@ -30,7 +30,6 @@
     <Compile Include="Collections\StringMap.cs" />
     <Compile Include="ComplexStringExtension.cs" />
     <Compile Include="ComplexStringHelper.cs" />
-    <Compile Include="Config\ConfigBase.cs" />
     <Compile Include="ConsoleArgumentHelper.cs" />
     <Compile Include="ConsoleRenderHelper.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />
@@ -39,6 +38,7 @@
     <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="Extensions\DateExtensions.cs" />
     <Compile Include="Extensions\FileNameResolverExtensions.cs" />
+    <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Extensions\SecurityExtensions.cs" />
     <Compile Include="Extensions\SlashListHelper.cs" />
     <Compile Include="Extensions\HierarchyExtensions.cs" />
@@ -58,9 +58,7 @@
     <Compile Include="StringHelper.cs" />
     <Compile Include="Extensions\TagHelper.cs" />
     <Compile Include="ValueMember.cs" />
-    <Compile Include="Extensions\ConvertExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="ReflectionExtensionsException.cs" />
     <Compile Include="ReflectionHelper.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -79,5 +77,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Config\" />
+  </ItemGroup>
 </Project>
