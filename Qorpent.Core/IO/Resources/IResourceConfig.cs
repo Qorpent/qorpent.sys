@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using Qorpent.Utils.Config;
+using Qorpent.Config;
 
 namespace Qorpent.IO.Resources {
 	/// <summary>
@@ -18,5 +18,23 @@ namespace Qorpent.IO.Resources {
 		/// Кодировка закаченных данных
 		/// </summary>
 		Encoding ResponseEncoding { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		ProxyUsage ProxyUsage { get; set; }
+
+		/// <summary>
+		/// Адреса прокси в формате 
+		/// TYPE=scheme://[USER:PASSWORD@]url, разделенные пробелами, вместо TYPE может использоваться 
+		/// звездочка, а имя/пароль могут опускаться (будут использоваться DefaultCredentials)
+		/// например 
+		/// *=http://myproxy.com
+		/// </summary>
+		string ProxyAddress { get; set; }
+
+		/// <summary>
+		/// Space-delimited list of proxy excludes
+		/// </summary>
+		string ProxyExcludes { get; set; }
 	}
 }

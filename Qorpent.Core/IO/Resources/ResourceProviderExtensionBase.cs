@@ -12,14 +12,14 @@ namespace Qorpent.IO.Resources {
 		/// <summary>
 		/// Акцессор к конфигу
 		/// </summary>
-		public IResourceProviderConfig _config;
+		protected IResourceConfig _config;
 
 		/// <summary>
 		/// Выполняет конфигурацию провайдера ресурсов
 		/// </summary>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		public void Configure(IResourceProviderConfig config = null) {
+		public void Configure(IResourceConfig config = null) {
 			_config = config;
 
 			if (null != config) {
@@ -30,7 +30,7 @@ namespace Qorpent.IO.Resources {
 		/// Точка перекрытия - обработка конфига
 		/// </summary>
 		/// <param name="config"></param>
-		protected virtual void InternalProcessConfig(IResourceProviderConfig config) {}
+		protected virtual void InternalProcessConfig(IResourceConfig config) {}
 
 		/// <summary>
 		/// Формирует объект запроса ресурса, который может использоваться для получения контента

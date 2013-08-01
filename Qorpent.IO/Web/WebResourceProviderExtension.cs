@@ -21,7 +21,7 @@ namespace Qorpent.IO.Web
 		/// 
 		/// </summary>
 		/// <param name="config"></param>
-		protected override void InternalProcessConfig(IResourceProviderConfig config)
+		protected override void InternalProcessConfig(IResourceConfig config)
 		{
 			base.InternalProcessConfig(config);
 		}
@@ -41,6 +41,10 @@ namespace Qorpent.IO.Web
 		/// <param name="config"></param>
 		/// <returns></returns>
 		public override IResourceRequest InternalCreateRequest(Uri uri, IResourceConfig config) {
+			if (null == _config) _config = ResourceConfig.Default;
+			if (null == config.GetParent()) {
+				config.SetParent(_config);
+			}
 			return new WebResourceRequest(uri, config);
 		} 
 	}

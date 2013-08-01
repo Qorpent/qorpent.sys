@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Qorpent.Config;
 using Qorpent.IoC;
-using Qorpent.Utils.Config;
 
 namespace Qorpent.IO.Resources {
 	/// <summary>
@@ -21,7 +21,7 @@ namespace Qorpent.IO.Resources {
 				}
 			}
 		}
-		private IResourceProviderConfig _config;
+		private IResourceConfig _config;
 
 		/// <summary>
 		/// Расширения провайдера ресурсов - собственно компоненты, делающие дело
@@ -34,7 +34,7 @@ namespace Qorpent.IO.Resources {
 		/// </summary>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		public void Configure(IResourceProviderConfig config = null) {
+		public void Configure(IResourceConfig config = null) {
 			_config = config;
 			ConfigureExtensions();
 		}

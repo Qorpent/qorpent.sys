@@ -11,6 +11,7 @@
     <Compile Include="ContainerInfo.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
+    <Compile Include="Web\ProxySelectorHelper.cs" />
     <Compile Include="Web\WebResource.cs" />
     <Compile Include="Web\WebResourceProviderExtension.cs" />
     <Compile Include="Web\WebResourceRequest.cs" />

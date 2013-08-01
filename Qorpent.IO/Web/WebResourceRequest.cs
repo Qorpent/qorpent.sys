@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Qorpent.IO.Resources;
 
@@ -51,14 +53,12 @@ namespace Qorpent.IO.Web {
 		/// <returns></returns>
 		public async Task<IResourceResponse> GetResponse(IResourceConfig config = null) {
 			if (CheckCurrentCanBeReturned()) return Response;
-
+			config = config ?? Config ?? ResourceConfig.Default;
 			if (ResourceRequestState.Init == State) {
 				if (null == Response) {
-					Response = await InternalGetResponse(config);
-					
+					Response = await InternalGetResponse(config);					
 				}
 			}
-
 			if (ResourceRequestState.Error == State) {
 				if (null == LastError) {
 					LastError = new ResourceException("some error in request");
@@ -103,17 +103,12 @@ namespace Qorpent.IO.Web {
 
 		private async Task<IResourceResponse> InternalGetResponse(IResourceConfig config) {
 			try {
-				config = config ?? new ResourceConfig();
+				config = config ?? ResourceConfig.Default;
 				State = ResourceRequestState.Creating;
 				var nativeRequest = WebRequest.Create(Uri);
 				SetupNativeRequest(nativeRequest, config);
 				State = ResourceRequestState.Created;
-				if (null != config.RequestPostData) {
-					State = ResourceRequestState.Post;
-					using (var stream = new BinaryWriter(await nativeRequest.GetRequestStreamAsync())) {
-						stream.Write(config.RequestPostData, 0, config.RequestPostData.Length);
-					}
-				}
+				await PostDataToServer(config, nativeRequest);
 				State = ResourceRequestState.Get;
 				var nativeResponse = await nativeRequest.GetResponseAsync();
 				State = ResourceRequestState.Finished;
@@ -126,21 +121,30 @@ namespace Qorpent.IO.Web {
 			return null;
 		}
 
+		private async Task PostDataToServer(IResourceConfig config, WebRequest nativeRequest) {
+			if (null != config.RequestPostData) {
+				State = ResourceRequestState.Post;
+				using (var stream = new BinaryWriter(await nativeRequest.GetRequestStreamAsync())) {
+					stream.Write(config.RequestPostData, 0, config.RequestPostData.Length);
+				}
+			}
+		}
+
 		/// <summary>
 		///     Донастройка веб-запроса
 		/// </summary>
 		/// <param name="nativeRequest"></param>
 		/// <param name="config"></param>
-		protected virtual void SetupNativeRequest(WebRequest nativeRequest, IResourceConfig config) {
-			if (null == config) return;
-			string method = config.Method;
+		private  void SetupNativeRequest(WebRequest nativeRequest, IResourceConfig config) {
+			SetupHttpMethod(nativeRequest, config);
+			nativeRequest.UseDefaultCredentials = true;
+			nativeRequest.Proxy = ProxySelectorHelper.Select(Uri, config);
+		}
+
+		private static void SetupHttpMethod(WebRequest nativeRequest, IResourceConfig config) {
+			var method = config.Method;
 			if (string.IsNullOrWhiteSpace(method)) {
-				if (null != config.RequestPostData) {
-					method = "POST";
-				}
-				else {
-					method = "GET";
-				}
+				method = null != config.RequestPostData ? "POST" : "GET";
 			}
 			nativeRequest.Method = method;
 		}

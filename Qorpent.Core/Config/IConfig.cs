@@ -1,4 +1,4 @@
-namespace Qorpent.Utils.Config {
+namespace Qorpent.Config {
 	/// <summary>
 	/// Описатель абстрактного конфига
 	/// </summary>
@@ -32,5 +32,11 @@ namespace Qorpent.Utils.Config {
 		/// <param name="def"></param>
 		/// <returns></returns>
 		T Get<T>(string name, T def = default(T));
+
+		/// <summary>
+		/// Получение родителя
+		/// </summary>
+		/// <returns></returns>
+		IConfig GetParent();
 	}
 }

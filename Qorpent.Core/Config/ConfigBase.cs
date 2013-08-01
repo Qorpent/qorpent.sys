@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Qorpent.Utils.Config;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Config {
@@ -102,6 +101,14 @@ namespace Qorpent.Config {
 				return def;
 			}
 			return options[name].To<T>();
+		}
+
+		/// <summary>
+		/// Получение родителя
+		/// </summary>
+		/// <returns></returns>
+		public IConfig GetParent() {
+			return _parent;
 		}
 	}
 }

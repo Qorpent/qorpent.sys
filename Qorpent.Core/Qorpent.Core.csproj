@@ -43,10 +43,10 @@
     <Compile Include="IO\IXmlReadable.cs" />
     <Compile Include="IO\IXmlWriteable.cs" />
     <Compile Include="IO\MimeHelper.cs" />
-    <Compile Include="IO\Resources\IResourceProviderConfig.cs" />
     <Compile Include="IO\Resources\IResourceProviderExtension.cs" />
     <Compile Include="IO\Resources\IResourceRequest.cs" />
     <Compile Include="IO\Resources\IResourceResponse.cs" />
+    <Compile Include="IO\Resources\ProxyUsage.cs" />
     <Compile Include="IO\Resources\ResourceBase.cs" />
     <Compile Include="IO\Resources\ResourceConfig.cs" />
     <Compile Include="IO\Resources\ResourceException.cs" />

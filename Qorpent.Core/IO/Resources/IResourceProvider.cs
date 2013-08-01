@@ -12,7 +12,7 @@ namespace Qorpent.IO.Resources
 		/// </summary>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		void Configure(IResourceProviderConfig config = null);
+		void Configure(IResourceConfig config = null);
 		/// <summary>
 		/// Формирует объект запроса ресурса, который может использоваться для получения контента
 		/// </summary>
