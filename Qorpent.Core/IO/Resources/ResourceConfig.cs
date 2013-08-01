@@ -43,6 +43,11 @@ namespace Qorpent.IO.Resources {
 		/// </summary>
 		public const string PROXY_EXCLUDES = "proxy_excludes";
 
+		/// <summary>
+		/// Адрес (адреса прокси)
+		/// </summary>
+		public const string ACCEPT_ALL_CERTIFICATES = "accept_all_certificates";
+
 
 		/// <summary>
 		/// Данные для отсылки конечной точке(для вебоподобных ресурсов)
@@ -95,6 +100,13 @@ namespace Qorpent.IO.Resources {
 		{
 			get { return Get(PROXY_EXCLUDES, ""); }
 			set { Set(PROXY_EXCLUDES, value); }
+		}
+		/// <summary>
+		/// True, чтобы принимать самоподписные или недоверенные сертификаты
+		/// </summary>
+		public bool AcceptAllCeritficates {
+			get { return Get(ACCEPT_ALL_CERTIFICATES,false); }
+			set { Set(ACCEPT_ALL_CERTIFICATES, value); }
 		}
 	}
 }

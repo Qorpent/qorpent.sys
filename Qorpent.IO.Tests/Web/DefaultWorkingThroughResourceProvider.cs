@@ -45,6 +45,19 @@ namespace Qorpent.IO.Tests.Web
 		public void GetGetDataExtensionApi() {
 			StringAssert.Contains("<html", res.GetString("http://localhost"));
 		}
+
+		[Test]
+		[ExpectedException]
+		public void GetGetDataExtensionApiHttpsNonTrustedFail()
+		{
+			StringAssert.Contains("<html", res.GetString("https://localhost"));
+		}
+		[Test]
+		[ExpectedException]
+		public void GetGetDataExtensionApiHttpsIgnoreNonTrust()
+		{
+			StringAssert.Contains("<html", res.GetString("https://localhost", new ResourceConfig{AcceptAllCeritficates=true}));
+		}
 		[Test]
 		public void GetGetDataExtensionApiAsync() {
 			var t = res.GetStringAsync("http://localhost");

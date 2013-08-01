@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Qorpent.IO.Resources;
@@ -110,6 +112,7 @@ namespace Qorpent.IO.Web {
 				State = ResourceRequestState.Created;
 				await PostDataToServer(config, nativeRequest);
 				State = ResourceRequestState.Get;
+				_acceptAllcertificates = config.AcceptAllCeritficates;
 				var nativeResponse = await nativeRequest.GetResponseAsync();
 				State = ResourceRequestState.Finished;
 				return new WebResourceResponse(nativeResponse, nativeRequest, config);
@@ -156,6 +159,18 @@ namespace Qorpent.IO.Web {
 		public void Dispose() {
 			Config = null;
 			Response = null;
+		}
+		[ThreadStatic]
+		private static bool _acceptAllcertificates = false;
+		static WebResourceRequest() {
+			ServicePointManager.ServerCertificateValidationCallback = ValidateServerCertficate;
+
+		}
+
+		private static bool ValidateServerCertficate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors) {
+			if (sslpolicyerrors == SslPolicyErrors.None) return true;
+			if (_acceptAllcertificates) return true;
+			return false;
 		}
 	}
 }

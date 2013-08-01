@@ -36,5 +36,10 @@ namespace Qorpent.IO.Resources {
 		/// Space-delimited list of proxy excludes
 		/// </summary>
 		string ProxyExcludes { get; set; }
+
+		/// <summary>
+		/// True, чтобы принимать самоподписные или недоверенные сертификаты
+		/// </summary>
+		bool AcceptAllCeritficates { get; set; }
 	}
 }

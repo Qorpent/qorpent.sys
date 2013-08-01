@@ -10,6 +10,7 @@ namespace Qorpent.IO.Web
 	[ContainerComponent(Lifestyle=Lifestyle.Transient,Name="resource.provider.web",ServiceType = typeof(IResourceProviderExtension))]
 	public class WebResourceProviderExtension : ResourceProviderExtensionBase
 	{
+
 		/// <summary>
 		///ctor 
 		/// </summary>
