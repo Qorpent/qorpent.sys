@@ -17,14 +17,7 @@ namespace Qorpent.IO.Web
 		{
 			IsCreateRequestSupported = true;
 		}
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="config"></param>
-		protected override void InternalProcessConfig(IResourceConfig config)
-		{
-			base.InternalProcessConfig(config);
-		}
+
 		/// <summary>
 		/// Обрабатывает только http и https схемы
 		/// </summary>
@@ -41,10 +34,6 @@ namespace Qorpent.IO.Web
 		/// <param name="config"></param>
 		/// <returns></returns>
 		public override IResourceRequest InternalCreateRequest(Uri uri, IResourceConfig config) {
-			if (null == _config) _config = ResourceConfig.Default;
-			if (null == config.GetParent()) {
-				config.SetParent(_config);
-			}
 			return new WebResourceRequest(uri, config);
 		} 
 	}

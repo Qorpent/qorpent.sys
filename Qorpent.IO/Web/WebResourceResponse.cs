@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Qorpent.IO.Resources;
 
@@ -17,9 +18,14 @@ namespace Qorpent.IO.Web {
 		/// <param name="config"></param>
 		public WebResourceResponse(WebResponse nativeResponse, WebRequest nativeRequest, IResourceConfig config) {
 			State = ResourceResponseState.Init;
-			this.NativeResponse = nativeResponse;
-			this.NativeRequest = nativeRequest;
-			this.Config = config;
+			NativeResponse = nativeResponse;
+			NativeRequest = nativeRequest;
+			Config = config;
+			var enc = nativeResponse.Headers[HttpResponseHeader.ContentEncoding];
+			if (!string.IsNullOrWhiteSpace(enc)) {
+				config.ResponseEncoding = Encoding.GetEncoding(enc);
+			}
+			
 		}
 
 		/// <summary>

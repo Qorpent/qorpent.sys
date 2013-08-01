@@ -45,6 +45,10 @@ namespace Qorpent.IO.Resources {
 			if (!IsSupported(uri)) {
 				throw new ResourceException("cannot process such uris "+uri);
 			}
+			config = config ?? new ResourceConfig();
+			if (null == config.GetParent()) {
+				config.SetParent(_config);
+			}
 			return InternalCreateRequest(uri, config);
 		}
 		/// <summary>
