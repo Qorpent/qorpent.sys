@@ -42,7 +42,7 @@ namespace Qorpent.IO.Resources {
 			if (!IsCreateRequestSupported) {
 				throw new ResourceException("cannot retrieve request by settings");
 			}
-			if (!IsMatchUri(uri)) {
+			if (!IsSupported(uri)) {
 				throw new ResourceException("cannot process such uris "+uri);
 			}
 			return InternalCreateRequest(uri, config);
@@ -91,7 +91,7 @@ namespace Qorpent.IO.Resources {
 		/// </summary>
 		/// <param name="uri"></param>
 		/// <returns></returns>
-		public virtual bool IsMatchUri(Uri uri) {
+		public virtual bool IsSupported(Uri uri) {
 			return false;
 		}
 	}

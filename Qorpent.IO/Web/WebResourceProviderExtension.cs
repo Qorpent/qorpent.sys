@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Qorpent.IO.Resources;
 using Qorpent.IoC;
 
@@ -33,7 +30,7 @@ namespace Qorpent.IO.Web
 		/// </summary>
 		/// <param name="uri"></param>
 		/// <returns></returns>
-		public override bool IsMatchUri(Uri uri) {
+		public override bool IsSupported(Uri uri) {
 			var scheme = uri.Scheme.ToLowerInvariant();
 			return scheme == "http" || scheme == "https";
 		}

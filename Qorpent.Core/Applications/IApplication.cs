@@ -22,6 +22,7 @@ using Qorpent.Data;
 using Qorpent.Dsl;
 using Qorpent.Events;
 using Qorpent.IO;
+using Qorpent.IO.Resources;
 using Qorpent.IoC;
 using Qorpent.Log;
 using Qorpent.Mvc;
@@ -191,6 +192,10 @@ namespace Qorpent.Applications {
 		/// <remarks>
 		/// </remarks>
 		ISysLogon SysLogon { get; set; }
+		/// <summary>
+		/// Служба доступа к ресурсам
+		/// </summary>
+		IResourceProvider Resources { get; set; }
 
 		/// <summary>
 		/// 	simple synchronization method, waits wile Application lock released

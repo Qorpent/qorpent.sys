@@ -55,7 +55,7 @@ namespace Qorpent.IO.Web {
 			if (ResourceRequestState.Init == State) {
 				if (null == Response) {
 					Response = await InternalGetResponse(config);
-					State = ResourceRequestState.Finished;
+					
 				}
 			}
 
@@ -103,6 +103,7 @@ namespace Qorpent.IO.Web {
 
 		private async Task<IResourceResponse> InternalGetResponse(IResourceConfig config) {
 			try {
+				config = config ?? new ResourceConfig();
 				State = ResourceRequestState.Creating;
 				var nativeRequest = WebRequest.Create(Uri);
 				SetupNativeRequest(nativeRequest, config);
@@ -115,7 +116,7 @@ namespace Qorpent.IO.Web {
 				}
 				State = ResourceRequestState.Get;
 				var nativeResponse = await nativeRequest.GetResponseAsync();
-
+				State = ResourceRequestState.Finished;
 				return new WebResourceResponse(nativeResponse, nativeRequest, config);
 			}
 			catch (Exception ex) {

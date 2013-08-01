@@ -20,5 +20,11 @@ namespace Qorpent.IO.Resources
 		/// <param name="config"></param>
 		/// <returns></returns>
 		IResourceRequest CreateRequest(Uri uri, IResourceConfig config = null);
+		/// <summary>
+		/// Проверка, что Uri может быть обработан
+		/// </summary>
+		/// <param name="uri"></param>
+		/// <returns></returns>
+		bool IsSupported(Uri uri);
 	}
 }

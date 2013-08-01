@@ -24,11 +24,6 @@ namespace Qorpent.IO.Resources {
 		/// Флаговое свойство - признак поддержки создания реальных запросов
 		/// </summary>
 		bool IsCreateRequestSupported { get; }
-		/// <summary>
-		/// Проверяет возможность создания ресурса для указанного URI
-		/// </summary>
-		/// <param name="uri"></param>
-		/// <returns></returns>
-		bool IsMatchUri(Uri uri);
+		
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Qorpent.Config;
+﻿using System.Text;
+using Qorpent.Config;
 
 namespace Qorpent.IO.Resources {
 	/// <summary>
@@ -15,6 +16,11 @@ namespace Qorpent.IO.Resources {
 		public const string REQUEST_METHOD = "request_method";
 
 		/// <summary>
+		/// Кодировка результатов загрузки
+		/// </summary>
+		public const string RESPONSE_ENCODING = "response_encoding";
+
+		/// <summary>
 		/// Данные для отсылки конечной точке(для вебоподобных ресурсов)
 		/// </summary>
 		public byte[] RequestPostData {
@@ -28,6 +34,15 @@ namespace Qorpent.IO.Resources {
 		public string Method {
 			get { return Get<string>(REQUEST_METHOD); }
 			set { Set(REQUEST_METHOD, value); }
+		}
+
+		/// <summary>
+		/// Метод запроса (для вебоподобных ресурсов)
+		/// </summary>
+		public Encoding ResponseEncoding
+		{
+			get { return Get<Encoding>(RESPONSE_ENCODING); }
+			set { Set(RESPONSE_ENCODING, value); }
 		}
 	}
 }

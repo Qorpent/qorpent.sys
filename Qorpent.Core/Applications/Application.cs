@@ -25,6 +25,7 @@ using Qorpent.Data;
 using Qorpent.Dsl;
 using Qorpent.Events;
 using Qorpent.IO;
+using Qorpent.IO.Resources;
 using Qorpent.IoC;
 using Qorpent.Log;
 using Qorpent.Mvc;
@@ -154,6 +155,21 @@ namespace Qorpent.Applications {
 				return _syslogon;
 			}
 			set { _syslogon = value; }
+		}
+
+		/// <summary>
+		/// Служба доступа к ресурсам
+		/// </summary>
+		public IResourceProvider Resources {
+			get {
+				if (null == _resources) {
+					lock (this) {
+						return _resources = ResolveService<IResourceProvider>();
+					}
+				}
+				return _resources;
+			}
+			set { _resources = value; }
 		}
 
 		/// <summary>
@@ -594,5 +610,6 @@ namespace Qorpent.Applications {
 		private ISerializerFactory _serializerfactory;
 		private IDatabaseConnectionProvider _dbconnecitons;
 		private ISysLogon _syslogon;
+		private IResourceProvider _resources;
 	}
 }

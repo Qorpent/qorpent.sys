@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-	<IsTest>True</IsTest>
+    <IsTest>True</IsTest>
     <Configuration>Debug</Configuration>
     <ProjectGuid>{4F6F2194-F11D-4CC6-8BB1-7D20F97EC082}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Qorpent.IO.Tests</RootNamespace>
-    <AssemblyName>Qorpent.IO.Tests</AssemblyName><AssemblyNameBase>Qorpent.IO</AssemblyNameBase>
+    <AssemblyName>Qorpent.IO.Tests</AssemblyName>
+    <AssemblyNameBase>Qorpent.IO</AssemblyNameBase>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SQL2008|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -26,7 +27,11 @@
   <ItemGroup>
     <Compile Include="FileResolverTest.cs" />
     <Compile Include="FileServiceTest.cs" />
+    <Compile Include="Web\DefaultWorkingThroughResourceProvider.cs" />
   </ItemGroup>
-   <Import Project="..\..\qorpent.kernel\build.targets" />
-  
-<ItemGroup><None Include="*.import" /><None Include="*.export" /></ItemGroup></Project>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+  </ItemGroup>
+</Project>

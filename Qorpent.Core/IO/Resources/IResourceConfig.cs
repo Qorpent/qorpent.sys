@@ -1,4 +1,5 @@
-﻿using Qorpent.Utils.Config;
+﻿using System.Text;
+using Qorpent.Utils.Config;
 
 namespace Qorpent.IO.Resources {
 	/// <summary>
@@ -13,5 +14,9 @@ namespace Qorpent.IO.Resources {
 		/// Метод запроса (для вебоподобных ресурсов)
 		/// </summary>
 		string Method { get; set; }
+		/// <summary>
+		/// Кодировка закаченных данных
+		/// </summary>
+		Encoding ResponseEncoding { get; set; }
 	}
 }

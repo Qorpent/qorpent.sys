@@ -50,6 +50,7 @@
     <Compile Include="IO\Resources\ResourceBase.cs" />
     <Compile Include="IO\Resources\ResourceConfig.cs" />
     <Compile Include="IO\Resources\ResourceException.cs" />
+    <Compile Include="IO\Resources\ResourceExtensions.cs" />
     <Compile Include="IO\Resources\ResourceProviderExtensionBase.cs" />
     <Compile Include="IO\Resources\ResourceRequestState.cs" />
     <Compile Include="IO\Resources\ResourceResponseState.cs" />

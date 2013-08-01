@@ -56,17 +56,29 @@ namespace Qorpent.IO.Resources {
 		public IResourceRequest CreateRequest(Uri uri, IResourceConfig config = null)
 		{
 			if (null == Extensions || 0==Extensions.Length) throw new ResourceException("нет расширений для реализации запросов");
-			var realuri = RewriteUrl(uri);
-			var resourcegetter = Extensions.FirstOrDefault(_ => _.IsCreateRequestSupported && _.IsMatchUri(realuri));
+			var realuri = RewriteUri(uri);
+			var resourcegetter = Extensions.FirstOrDefault(_ => _.IsCreateRequestSupported && _.IsSupported(realuri));
 			if (null == resourcegetter) throw new ResourceException("нет расширений для реализации запроса "+uri+" => "+realuri);
 			return resourcegetter.CreateRequest(uri, config);
 		}
+
+		/// <summary>
+		/// Проверка, что Uri может быть обработан
+		/// </summary>
+		/// <param name="uri"></param>
+		/// <returns></returns>
+		public bool IsSupported(Uri uri) {
+			if (null == Extensions) return false;
+			var realuri = RewriteUri(uri);
+			return Extensions.Any(_ => _.IsCreateRequestSupported && _.IsSupported(realuri));
+		}
+
 		/// <summary>
 		/// Акцессор к движку перезаписи адресов
 		/// </summary>
 		/// <param name="uri"></param>
 		/// <returns></returns>
-		public Uri RewriteUrl(Uri uri) {
+		public Uri RewriteUri(Uri uri) {
 			var realuri = uri;
 			if (null != Extensions) {
 				foreach (var e in Extensions.Where(_ => _.IsRewriteUriSupported)) {
