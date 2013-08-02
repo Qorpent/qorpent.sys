@@ -142,6 +142,9 @@ namespace Qorpent.IO.Web {
 			SetupHttpMethod(nativeRequest, config);
 			nativeRequest.UseDefaultCredentials = true;
 			nativeRequest.Proxy = ProxySelectorHelper.Select(Uri, config);
+			((HttpWebRequest)nativeRequest).UserAgent =
+				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36";
+			((HttpWebRequest) nativeRequest).CookieContainer = new CookieContainer();
 		}
 
 		private static void SetupHttpMethod(WebRequest nativeRequest, IResourceConfig config) {

@@ -78,5 +78,10 @@ namespace Qorpent.IO.Tests.Web
 			t.Wait();
 			StringAssert.Contains("<html", t.Result);
 		}
+
+		[Test]
+		public void CannotAccessRootOfE1() {
+			res.GetString("http://www.e1.ru");
+		}
 	}
 }
