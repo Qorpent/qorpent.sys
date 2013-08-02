@@ -5,6 +5,8 @@ using NUnit.Framework;
 using Qorpent.IO.Resources;
 namespace Qorpent.IO.Tests.Web
 {
+	
+
 	[TestFixture]
 	public class DefaultWorkingThroughResourceProvider
 	{
@@ -51,6 +53,12 @@ namespace Qorpent.IO.Tests.Web
 		public void GetGetDataExtensionApiHttpsNonTrustedFail()
 		{
 			StringAssert.Contains("<html", res.GetString("https://localhost"));
+		}
+
+		[Test]
+		public void Q81DoesNotMatchEncoding() {
+			var result = res.GetString("http://www.e1.ru/news/spool/news_id-391750-section_id-115.html");
+			StringAssert.Contains("Екатеринбург",result);
 		}
 
 		[Test]

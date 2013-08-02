@@ -22,7 +22,7 @@ namespace Qorpent.IoC {
 	/// <summary>
 	/// 	Marks service-bound properties to be processed with container based injection
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+	[AttributeUsage(AttributeTargets.Property|AttributeTargets.Field, AllowMultiple = false)]
 	public class InjectAttribute : ContainerAttribute {
 	    private Type _factoryType;
 

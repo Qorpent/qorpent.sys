@@ -21,11 +21,21 @@ namespace Qorpent.IO.Web {
 			NativeResponse = nativeResponse;
 			NativeRequest = nativeRequest;
 			Config = config;
+			SetupResponseEncoding(nativeResponse, config);
+		}
+
+		private void SetupResponseEncoding(WebResponse nativeResponse, IResourceConfig config) {
 			var enc = nativeResponse.Headers[HttpResponseHeader.ContentEncoding];
 			if (!string.IsNullOrWhiteSpace(enc)) {
 				config.ResponseEncoding = Encoding.GetEncoding(enc);
 			}
-			
+			else {
+				var ctype = NativeResponse.Headers[HttpResponseHeader.ContentType];
+				if (ctype.Contains("charset=")) {
+					enc = ctype.Substring(ctype.IndexOf("charset=") + 8);
+					config.ResponseEncoding = Encoding.GetEncoding(enc);
+				}
+			}
 		}
 
 		/// <summary>
