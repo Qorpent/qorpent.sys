@@ -56,12 +56,14 @@ namespace Qorpent.IO.Tests.Web
 		}
 
 		[Test]
+		[Explicit]
 		public void Q81DoesNotMatchEncoding() {
 			var result = res.GetString("http://www.e1.ru/news/spool/news_id-391750-section_id-115.html");
 			StringAssert.Contains("Екатеринбург",result);
 		}
 
 		[Test]
+		[Explicit]
 		public void GetGetDataExtensionApiHttpsTrust() {
 			var s = res.GetString("https://github.com");
 			StringAssert.Contains("<html", s);
@@ -80,6 +82,7 @@ namespace Qorpent.IO.Tests.Web
 		}
 
 		[Test]
+		[Explicit]
 		public void CannotAccessRootOfE1() {
 			res.GetString("http://www.e1.ru");
 		}
