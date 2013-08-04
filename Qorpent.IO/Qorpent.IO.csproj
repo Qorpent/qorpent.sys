@@ -16,10 +16,12 @@
     <Compile Include="Web\WebResourceProviderExtension.cs" />
     <Compile Include="Web\WebResourceRequest.cs" />
     <Compile Include="Web\WebResourceResponse.cs" />
+    <Compile Include="Zip\ZipFileSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
