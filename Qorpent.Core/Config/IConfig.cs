@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Qorpent.Config {
 	/// <summary>
 	/// Описатель абстрактного конфига
@@ -38,5 +40,11 @@ namespace Qorpent.Config {
 		/// </summary>
 		/// <returns></returns>
 		IConfig GetParent();
+		/// <summary>
+		/// Возвращает имена всех опций
+		/// </summary>
+		/// <param name="withParent"></param>
+		/// <returns></returns>
+		IEnumerable<string> GetNames(bool withParent = false);
 	}
 }
