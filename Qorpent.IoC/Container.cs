@@ -23,6 +23,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Qorpent.Applications;
 using Qorpent.Events;
@@ -797,14 +798,29 @@ namespace Qorpent.IoC {
 						x =>
 						((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0).Reverse().ToArray();
 			}
-			if (!ByNameCache.ContainsKey(name)) {
-				return new IComponentDefinition[] {};
+			//поддержка поиска по тегам
+			if (name.StartsWith("tag:")) {
+				var regex = new Regex(name.Substring(4));
+				return Components.Where(
+						x =>
+						((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0
+						&&
+						(null!=x.Tag && regex.IsMatch(x.Tag))
+						).Reverse().ToArray();
 			}
-			return ByNameCache[name].Where(
-				x =>
-				type.IsAssignableFrom(x.ServiceType) &&
-				((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0
-				).Reverse().ToArray();
+			else {
+				if (!ByNameCache.ContainsKey(name))
+				{
+					return new IComponentDefinition[] { };
+				}
+				return ByNameCache[name].Where(
+					x =>
+					type.IsAssignableFrom(x.ServiceType) &&
+					((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0
+					).Reverse().ToArray();	
+			}
+
+			
 		}
 
 		/// <summary>

@@ -101,5 +101,9 @@ namespace Qorpent.IoC {
 		/// 	 cref="IComponentDefinition.Implementation" />
 		/// </summary>
 		public bool CacheInstanceOfExtension { get; set; }
+		/// <summary>
+		/// Теги
+		/// </summary>
+		public string Tag { get; set; }
 	}
 }

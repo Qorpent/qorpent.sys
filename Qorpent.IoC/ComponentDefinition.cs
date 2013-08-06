@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Linq;
+using Qorpent.Serialization;
 
 namespace Qorpent.IoC {
 	/// <summary>
@@ -132,6 +133,11 @@ namespace Qorpent.IoC {
 		/// 	Опицональный элемент XML из которого произведена загрузка компонента (при манифестах)
 		/// </summary>
 		public XElement Source { get; set; }
+
+		/// <summary>
+		/// Теги компонента
+		/// </summary>
+		public string Tag { get; set; }
 
 
 		/// <summary>

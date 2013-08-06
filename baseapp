@@ -8,7 +8,7 @@
 	<ItemGroup>
 		<Package Include="qorpent.kernel"/>
 		<Package Include="qorpent.sys"/>
-		<Package Include="qorpent.ui"/>
+		<Package Include="qorpent_ui"/>
 	</ItemGroup>
 	
 	<Import Project="..\qorpent.kernel\package-install.targets" />	

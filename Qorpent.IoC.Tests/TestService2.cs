@@ -24,5 +24,7 @@
 #endregion
 
 namespace Qorpent.IoC.Tests {
-	public class TestService2 : ITestService2 {}
+	public class TestService2 : ITestService2 {
+		public string Val { get; set; }
+	}
 }

@@ -50,7 +50,8 @@ namespace Qorpent.IoC {
 						Help = predesc.GetValue<string>("Help"),
 						Role = predesc.GetValue<string>("Role"),
 						ServiceType = predesc.GetValue<Type>("ServiceType"),
-						Priority = predesc.GetValue<int>("Priority")
+						Priority = predesc.GetValue<int>("Priority"),
+						Tag = predesc.GetValue<string>("Tag")
 					};
 			}
 
@@ -84,7 +85,8 @@ namespace Qorpent.IoC {
 						Help = predesc.GetValue<string>("Help"),
 						Role = predesc.GetValue<string>("Role"),
 						ServiceType = predesc.GetValue<Type>("ServiceType"),
-						Priority = predesc.GetValue<int>("Priority")
+						Priority = predesc.GetValue<int>("Priority"),
+						Tag = predesc.GetValue<string>("Tag"),
 					};
 			}
 
@@ -150,7 +152,7 @@ namespace Qorpent.IoC {
 				               ? AssemblyManifest.Descriptor.Priority
 				               : Descriptor.Priority;
 			var result = new ComponentDefinition(stype, impltype, lifestyle, Descriptor.Name, priority)
-				{Role = Descriptor.Role, Help = Descriptor.Help};
+				{Role = Descriptor.Role, Help = Descriptor.Help, Tag=Descriptor.Tag};
 			return result;
 		}
 	}

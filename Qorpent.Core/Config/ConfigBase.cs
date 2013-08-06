@@ -110,5 +110,15 @@ namespace Qorpent.Config {
 		public IConfig GetParent() {
 			return _parent;
 		}
+
+		/// <summary>
+		/// Возвращает имена всех опций
+		/// </summary>
+		/// <param name="withParent"></param>
+		/// <returns></returns>
+		public IEnumerable<string> GetNames(bool withParent = false) {
+			if (!withParent || null==_parent) return options.Keys;
+			return options.Keys.Union(_parent.GetNames(true)).Distinct();
+		}
 	}
 }

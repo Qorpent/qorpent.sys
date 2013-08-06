@@ -67,6 +67,10 @@ namespace Qorpent.IoC {
 		/// 	Name of component
 		/// </summary>
 		public string Name { get; set; }
+		/// <summary>
+		/// Теги
+		/// </summary>
+		public string Tag { get; set; }
 
 		/// <summary>
 		/// </summary>

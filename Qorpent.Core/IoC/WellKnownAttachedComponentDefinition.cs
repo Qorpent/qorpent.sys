@@ -35,6 +35,7 @@ namespace Qorpent.IoC {
 			}
 			Parameters = new Dictionary<string, object>();
 			Name = service.Name;
+			Tag = service.Tag;
 		}
 
 
@@ -52,5 +53,7 @@ namespace Qorpent.IoC {
 		public string Help { get; set; }
 		public XElement Source { get; set; }
 		public bool CacheInstanceOfExtension { get; set; }
+
+		public string Tag { get; set; }
 	}
 }
