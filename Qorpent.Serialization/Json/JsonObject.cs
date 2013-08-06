@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Json {
 	/// <summary>
@@ -113,9 +114,17 @@ namespace Qorpent.Json {
 				p.Value.WriteToXml(arelement);
 			}
 			//а теперь пишем вложенные объекты
-			foreach (var p in Properties.Where(_ => _.Value is JsonObject))
-			{
-				var arelement = new XElement(p.Name.Value);
+			foreach (var p in Properties.Where(_ => _.Value is JsonObject)) {
+				var name = p.Name.Value;
+				int idx = -1;
+				if (name.All(_ => char.IsDigit(_))) {
+					name = "item";
+					idx = name.ToInt();
+				}
+				var arelement = new XElement(name);
+				if (-1 != idx) {
+					arelement.SetAttributeValue("idx",idx);
+				}
 				current.Add(arelement);
 				p.Value.WriteToXml(arelement);
 			}
