@@ -16,6 +16,7 @@
 // 
 // PROJECT ORIGIN: Qorpent.Mvc/ReadManifestAction.cs
 #endregion
+
 namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// 	Возвращает текущий откомпилированный манифест (полный XML)

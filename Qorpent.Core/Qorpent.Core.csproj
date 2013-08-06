@@ -35,6 +35,7 @@
     <Compile Include="Data\IParametersProvider.cs" />
     <Compile Include="Data\ParamAttribute.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
+    <Compile Include="IoC\ComponentDefinitionWrapper.cs" />
     <Compile Include="IoC\IFactory.cs" />
     <Compile Include="IO\IFileSource.cs" />
     <Compile Include="IO\Resources\DefaultResourceProvider.cs" />
