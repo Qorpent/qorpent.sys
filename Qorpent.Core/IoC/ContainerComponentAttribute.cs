@@ -72,5 +72,11 @@ namespace Qorpent.IoC {
 		/// 	Role checking context
 		/// </summary>
 		public string RoleContext { get; set; }
+
+
+		/// <summary>
+		/// Тег компонента
+		/// </summary>
+		public string Tag { get; set; }
 	}
 }

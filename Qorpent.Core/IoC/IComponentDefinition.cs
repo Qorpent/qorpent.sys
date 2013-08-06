@@ -92,5 +92,10 @@ namespace Qorpent.IoC {
 		/// 	При первом создании и при наличии стиля жизни Extension - объекты будут сохраняться в <see cref="Implementation" />
 		/// </summary>
 		bool CacheInstanceOfExtension { get; set; }
+
+		/// <summary>
+		/// Теги
+		/// </summary>
+		string Tag { get; set; }
 	}
 }

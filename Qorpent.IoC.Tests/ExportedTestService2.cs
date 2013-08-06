@@ -25,5 +25,7 @@
 
 namespace Qorpent.IoC.Tests {
 	[ContainerComponent(Lifestyle.Extension, "name1", 600)]
-	public class ExportedTestService2 : ITestService2 {}
+	public class ExportedTestService2 : ITestService2 {
+		public string Val { get; set; }
+	}
 }

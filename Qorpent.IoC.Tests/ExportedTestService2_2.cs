@@ -32,5 +32,7 @@ namespace Qorpent.IoC.Tests {
 		public void OnContainerCreateInstanceFinished() {
 			
 		}
+
+		public string Val { get; set; }
 	}
 }

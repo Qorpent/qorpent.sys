@@ -26,7 +26,7 @@ using Qorpent.Utils.Extensions;
 namespace Qorpent.IoC {
 	internal class ManifestComponentDefinition : ComponentDefinition {
 		private static readonly string[] Skipbxlattributes = new[]
-			{"code", "name", "id", "__code", "__name", "__id", "_file", "_line"};
+			{"code", "name", "id", "__code", "__name", "__id", "_file", "_line","tag"};
 
 		private static readonly Regex FullyQualifiedTypeName = new Regex(@"^[^\.]+\.[^,]+\s*,\s*\S+$");
 
@@ -122,6 +122,7 @@ namespace Qorpent.IoC {
 					Name = Source.Attr("code");
 					ImplementationTypeName = Source.Attr("name").Trim();
 				}
+				Tag = Source.Attr("tag");
 				SericeTypeName = Source.SelfValue();
 				Lifestyle = Source.Name.LocalName.To<Lifestyle>();
 				foreach (var attribute in Source.Attributes()) {

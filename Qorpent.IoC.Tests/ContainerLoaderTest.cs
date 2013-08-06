@@ -150,6 +150,33 @@ transient 'name1', ManifestTestService  : ITestService2
 		}
 
 		[Test]
+		public void CanFindWithTags()
+		{
+			var manifest = @"
+ref	Qorpent.IoC.Tests
+using Qorpent.IoC.Tests
+using Qorpent.IoC.Tests.InnerNs
+transient 'name1', ManifestTestService, tag='aaa'  : ITestService2
+	Val = 1 
+transient 'name2', ManifestTestService, tag='aba'  : ITestService2
+	Val = 2
+transient 'name3', ManifestTestService, tag='ccc'  : ITestService2
+	Val = 3
+transient 'name4', ManifestTestService, tag='aac'  : ITestService2
+	Val = 4
+transient 'name5', ManifestTestService, tag='baa'  : ITestService2
+	Val = 5
+";
+
+			var c = new Container();
+			c.GetLoader().LoadManifest(new BxlParser().Parse(manifest), true);
+			var test1 = c.All<object>("tag:^aa");
+			CollectionAssert.AreEquivalent(new[]{"1","4"},test1.Cast<ITestService2>().Select(_=>_.Val));
+			var test2 = c.All<object>("tag:c");
+			CollectionAssert.AreEquivalent(new[] { "3", "4" }, test2.Cast<ITestService2>().Select(_ => _.Val).ToArray());
+		}
+
+		[Test]
 		public void Q35CanReadStringDictionaryParameter()
 		{
 			var manifest = @"
