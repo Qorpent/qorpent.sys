@@ -8,7 +8,7 @@
     <AssemblyName>Qorpent.Mvc</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Actions\Container.cs" />
+    <Compile Include="Actions\ContainerAction.cs" />
     <Compile Include="Actions\DoNothingAction.cs" />
     <Compile Include="Actions\GetClusterNodeLoad.cs" />
     <Compile Include="Actions\GetCssAction.cs" />

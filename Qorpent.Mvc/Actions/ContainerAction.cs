@@ -6,7 +6,7 @@ namespace Qorpent.Mvc.Actions {
 	/// 	Возвращает текущий откомпилированный манифест (полный XML)
 	/// </summary>
 	[Action("_sys.container", Role = "DEVELOPER", Help = "Возвращает полные настройки компонентов в контейнере", Arm = "admin")]
-	public class Container : ActionBase
+	public class ContainerAction : ActionBase
 	{
 		/// <summary>
 		/// 	processing of execution - main method of action

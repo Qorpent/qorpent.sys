@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using Qorpent.Serialization;
 
 namespace Qorpent.IoC {
@@ -32,7 +33,22 @@ namespace Qorpent.IoC {
 			Parametes = c.Parameters;
 			Help = c.Help;
 			Id = c.ContainerId;
+			if (null != c.Source) {
+				FileName =Path.GetFileName( c.Source.Attribute("_file").Value);
+				Line = c.Source.Attribute("_line").Value;
+			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		[SerializeNotNullOnly]
+		public string Line { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		[SerializeNotNullOnly]
+		public string FileName { get; set; }
+
 		/// <summary>
 		/// Номер в контейнере
 		/// </summary>
