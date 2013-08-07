@@ -34,6 +34,7 @@
     <Compile Include="ConvertExtensions.cs" />
     <Compile Include="Data\IParametersProvider.cs" />
     <Compile Include="Data\ParamAttribute.cs" />
+    <Compile Include="Dsl\ReplaceDescriptor.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
     <Compile Include="IoC\ComponentDefinitionWrapper.cs" />
     <Compile Include="IoC\IFactory.cs" />

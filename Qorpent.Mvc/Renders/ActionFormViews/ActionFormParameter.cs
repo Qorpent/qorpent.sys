@@ -49,7 +49,7 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 				if (Parameter.IsLargeText) {
 					inner.Name = "textarea";
 					inner.Add(new XText("   "));
-				}else {
+				}else if(Parameter.Constraint==null || Parameter.Constraint.Length==0) {
 					inner.Add(new XAttribute("size","50"));
 				}
 				if (Parameter.IsBool) {

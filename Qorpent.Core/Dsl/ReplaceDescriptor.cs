@@ -16,9 +16,10 @@
 // 
 // PROJECT ORIGIN: Qorpent.Dsl/ReplaceDescriptor.cs
 #endregion
+
 using System.Text.RegularExpressions;
 
-namespace Qorpent.Dsl {
+namespace Qorpent {
 	/// <summary>
 	/// 	Описатель операции замены в тексте
 	/// </summary>

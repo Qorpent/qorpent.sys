@@ -19,7 +19,6 @@
     <Compile Include="Json\JsonValueType.cs" />
     <Compile Include="Json\Lexer.cs" />
     <Compile Include="Json\Tokenizer.cs" />
-    <Compile Include="Qxi\ReplaceDescriptor.cs" />
     <Compile Include="Qxi\XmlIncludeProcessor.cs" />
     <Compile Include="Qxi\XmlInterpolationPreprocessor.cs" />
     <Compile Include="Selector\DefaultSelector.cs" />

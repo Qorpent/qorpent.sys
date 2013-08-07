@@ -16,6 +16,7 @@
 // 
 // PROJECT ORIGIN: Qorpent.Dsl/XmlIncludeProcessor.cs
 #endregion
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -28,7 +29,7 @@ using Qorpent.IO;
 using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Dsl {
+namespace Qorpent.Qxi {
 	/// <summary>
 	/// 	Uses file resolver from container or application or directly setted to perform XML include logic
 	/// </summary>
