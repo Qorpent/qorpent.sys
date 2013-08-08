@@ -62,8 +62,12 @@ namespace Qorpent.Utils.Extensions{
         public static string RemoveMark(string src, string  mark){
             if(string.IsNullOrWhiteSpace(src)) return "";
         	var delimiter = getDelimiter(src);
-            return src.Replace(delimiter + mark + delimiter, delimiter).Replace(delimiter+delimiter, delimiter);
-        }
+            var result= src.Replace(delimiter + mark + delimiter, delimiter).Replace(delimiter+delimiter, delimiter);
+			if (result == "/") {
+				result = "";
+			}
+			return result;
+		}
 		/// <summary>
 		/// Проверяет наличие элемента в строек
 		/// </summary>
