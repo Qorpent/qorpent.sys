@@ -31,6 +31,7 @@ using System.Text.RegularExpressions;
 using Qorpent.Bxl;
 using Qorpent.Dsl;
 using Qorpent.IO;
+using Qorpent.Qxi;
 using Qorpent.Serialization;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
