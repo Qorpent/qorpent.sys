@@ -68,6 +68,7 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 				                                       _binders.SelectMany(p => XhtmlSubview("actionformparameter", new {p})))
 					             ),
 				             new XElement("select", new XAttribute("id", "formrender"),
+											
 				                          from item in Container.All<IRender>().OrderBy(RenderAttribute.GetName)
 				                          select
 					                          new XElement("option",
@@ -81,10 +82,21 @@ namespace Qorpent.Mvc.Renders.ActionFormViews {
 					             ),
 				             new XElement("section",
 				                          new XElement("iframe", new XAttribute("id", "formresult"),
-				                                       new XAttribute("name", "formresult"))
-					             )
+				                                       new XAttribute("name", "formresult"),
+													   new XComment("<!-- fill -->"))
+					             ),
+							new XElement("script",new XAttribute("type","text/javascript"),
+								new XComment("\r\ndocument.getElementById('formrender').value='"+GetDefaultRender()+"';\r\n"))
 					).ToString()
 				);
+		}
+
+		private object GetDefaultRender() {
+			var render = ViewContext.Context.Get("render");
+			if (string.IsNullOrWhiteSpace(render)) {
+				return "xml";
+			}
+			return render;
 		}
 
 		/// <summary>
