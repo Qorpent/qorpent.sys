@@ -28,9 +28,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml.Linq;
 using NUnit.Framework;
+using Qorpent.Bxl;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Bxl.Tests {
+namespace Qorpent.Serialization.Tests.Bxl {
 	[TestFixture]
 	public class BxlParserTest {
 		[Test]
@@ -60,9 +61,9 @@ root code, name y=33 : 'value'
 		[Test]
 		public void CanInterpolateDuringParse() {
 			var res = new BxlParser().Parse(@"
-test x='1' y=3
-	test2 x='${.x}${y}2'
-		test3 y='${x}${.y}'
+test x='1' y=3 
+	test2 x='${.x}${y}2' 
+		test3  y='${x}${.y}'
 	", "", BxlParserOptions.PerformInterpolation);
 			Console.WriteLine(res.ToString());
 			Assert.AreEqual(@"<root>
