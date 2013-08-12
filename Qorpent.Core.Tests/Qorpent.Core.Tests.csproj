@@ -22,6 +22,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ConfigBaseTest.cs" />
     <Compile Include="Dsl\LexInfoTest.cs" />
     <Compile Include="EnvironmentInfoTest.cs" />
     <Compile Include="Events\ResetEventDataTest.cs" />

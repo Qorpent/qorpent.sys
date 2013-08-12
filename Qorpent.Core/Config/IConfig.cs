@@ -18,13 +18,7 @@ namespace Qorpent.Config {
 		/// <param name="value"></param>
 		void Set(string name, object value);
 
-		/// <summary>
-		/// Получить строковую опцию
-		/// </summary>
-		/// <param name="name">имя опции</param>
-		/// <param name="def">значение по умолчанию</param>
-		/// <returns></returns>
-		string Get(string name, string def = "");
+		
 
 		/// <summary>
 		/// Получить приведенную типизированную опцию

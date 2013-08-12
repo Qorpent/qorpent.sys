@@ -75,4 +75,7 @@
       <Name>Qorpent.Core.Tests</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="StringInterpolationTests\" />
+  </ItemGroup>
 </Project>

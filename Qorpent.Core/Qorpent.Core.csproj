@@ -30,6 +30,7 @@
     <Compile Include="Applications\StubHttpContextWrapper.cs" />
     <Compile Include="Applications\TaskWrapper.cs" />
     <Compile Include="Config\ConfigBase.cs" />
+    <Compile Include="Config\DictionaryCompatibleConfig.cs" />
     <Compile Include="Config\IConfig.cs" />
     <Compile Include="ConvertExtensions.cs" />
     <Compile Include="Data\IParametersProvider.cs" />

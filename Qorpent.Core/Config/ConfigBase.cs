@@ -8,16 +8,17 @@ namespace Qorpent.Config {
 	/// <summary>
 	/// Базовый класс для конфигураций
 	/// </summary>
-	public  class ConfigBase : IConfig {
-
+	public partial class ConfigBase : IConfig {
 
 
 		/// <summary>
 		/// Внутреннее хранилище опций
 		/// </summary>
 		protected IDictionary<string, object> options = new Dictionary<string, object>();
-
-		private bool _freezed;
+		/// <summary>
+		/// Признак заморозки
+		/// </summary>
+		protected bool _freezed;
 		private IConfig _parent;
 
 		/// <summary>
@@ -69,22 +70,24 @@ namespace Qorpent.Config {
 			if (_freezed) throw new Exception("config freezed");
 			options[name] = value;
 		}
+		
 
-		/// <summary>
-		/// Получить строковую опцию
-		/// </summary>
-		/// <param name="name">имя опции</param>
-		/// <param name="def">значение по умолчанию</param>
-		/// <returns></returns>
-		public string Get(string name, string def = "") {
-			if (!options.ContainsKey(name)) {
-				if (null != _parent) {
-					return _parent.Get(name, def);
+		private T ReturnIerachical<T>(string name, T def) {
+			IConfig parent = this;
+			while (name.StartsWith(".")) {
+				if (null != parent) {
+					parent = parent.GetParent();
 				}
+				name = name.Substring(1);
+			}
+			if (null != parent) {
+				return parent.Get(name,def);
+			}
+			else {
 				return def;
 			}
-			return options[name].ToStr();
 		}
+
 		/// <summary>
 		/// Получить приведенную типизированную опцию
 		/// </summary>
@@ -93,13 +96,28 @@ namespace Qorpent.Config {
 		/// <param name="def"></param>
 		/// <returns></returns>
 		public T Get<T>(string name, T def = default(T)) {
+			
+			if (name.StartsWith("."))
+			{
+				return ReturnIerachical(name, def);
+			}
 			if (!options.ContainsKey(name)) {
 				if (null != _parent)
 				{
 					return _parent.Get(name, def);
 				}
+				if (typeof(string) == typeof(T))
+				{
+					if (Equals(def, null)) {
+						return (T)(object)string.Empty;
+					}
+				}
 				return def;
 			}
+			if (typeof (T) == typeof (object)) {
+				return (T)options[name];
+			}
+
 			return options[name].To<T>();
 		}
 
