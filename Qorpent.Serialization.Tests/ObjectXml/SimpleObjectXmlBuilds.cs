@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Qorpent.Bxl;
 using Qorpent.ObjectXml;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.ObjectXml
 {
@@ -10,6 +11,8 @@ namespace Qorpent.Serialization.Tests.ObjectXml
 	{
 		ObjectXmlCompilerIndex Compile(string code) {
 			var xml = new BxlParser().Parse(code, "c.bxl");
+			var cfg = new ObjectXmlCompilerConfig();
+			cfg.UseInterpolation = true;
 			return new ObjectXmlCompiler().Compile(new[] {xml});
 		}
 
@@ -18,6 +21,7 @@ namespace Qorpent.Serialization.Tests.ObjectXml
 			var idx = 0;
 			var xmls = code.Select(_ => parser.Parse(_, (idx++) + ".bxl")).ToArray();
 			var cfg = new ObjectXmlCompilerConfig();
+			cfg.UseInterpolation = true;
 			if (single) {
 				cfg.SingleSource = true;
 			}
@@ -93,6 +97,23 @@ namespace X
 			Assert.AreEqual("custom", result.Working[0].DefaultImportCode);
 			Assert.NotNull(result.Working[0].DefaultImport);
 			Assert.AreEqual("custom", result.Working[0].DefaultImport.Name);
+		}
+
+		[Test]
+		public void CanInterpolate()
+		{
+			var result = Compile(@"
+class custom abstract
+	x=1
+	y='${x}${x}'
+	z='${y}!'
+namespace X
+	custom A x=2");
+			Assert.AreEqual(1, result.Working.Count);
+			var xml = result.Working[0].Compiled;
+			Assert.AreEqual("2",xml.Attr("x"));
+			Assert.AreEqual("22", xml.Attr("y"));
+			Assert.AreEqual("22!", xml.Attr("z"));
 		}
 
 		[Test]
