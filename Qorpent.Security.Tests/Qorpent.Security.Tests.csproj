@@ -15,6 +15,18 @@
     <None Include="*.export" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cryptography\CryptoProviderAction.cs" />
+    <Compile Include="Cryptography\CryptoProvider.cs" />
+    <Compile Include="Cryptography\CryptoProviderActionType.cs" />
+    <Compile Include="Cryptography\CryptoProviderEntity.cs" />
+    <Compile Include="Cryptography\CryptoProviderEntityPrivacy.cs" />
+    <Compile Include="Cryptography\CryptoProviderFileType.cs" />
+    <Compile Include="Cryptography\CryptoSourceSupportActions.cs" />
+    <Compile Include="Cryptography\CryptoSourceSupportTypes.cs" />
+    <Compile Include="Cryptography\ICryptoProviderAction.cs" />
+    <Compile Include="Cryptography\ICryptoProviderResult.cs" />
+    <Compile Include="Cryptography\ICryptoSource.cs" />
+    <Compile Include="Cryptography\Sources\CryptoSourceExternalOpenSsl.cs" />
     <Compile Include="LogonTest.cs" />
     <Compile Include="RoleResolverRoleExtensionTest.cs" />
     <Compile Include="XmlRoleResolverTest.cs" />
