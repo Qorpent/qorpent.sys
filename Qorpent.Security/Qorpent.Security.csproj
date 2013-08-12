@@ -8,13 +8,25 @@
     <AssemblyName>Qorpent.Security</AssemblyName>
   </PropertyGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
-  <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Core.import"/>
-   <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Utils.import"/>
+  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
+  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Utils.import" />
   <ItemGroup>
     <None Include="*.import" />
     <None Include="Qorpent.Security.export" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cryptography\CryptoProvider.cs" />
+    <Compile Include="Cryptography\CryptoProviderAction.cs" />
+    <Compile Include="Cryptography\CryptoProviderActionType.cs" />
+    <Compile Include="Cryptography\CryptoProviderEntity.cs" />
+    <Compile Include="Cryptography\CryptoProviderEntityPrivacy.cs" />
+    <Compile Include="Cryptography\CryptoProviderFileType.cs" />
+    <Compile Include="Cryptography\CryptoSourceSupportActions.cs" />
+    <Compile Include="Cryptography\CryptoSourceSupportTypes.cs" />
+    <Compile Include="Cryptography\ICryptoProviderAction.cs" />
+    <Compile Include="Cryptography\ICryptoProviderResult.cs" />
+    <Compile Include="Cryptography\ICryptoSource.cs" />
+    <Compile Include="Cryptography\Sources\CryptoSourceExternalOpenSsl.cs" />
     <Compile Include="FileBasedRoleProvider.cs" />
     <Compile Include="NativeWindowsFunctions.cs" />
     <Compile Include="Watchdog\ParanoidProvider.cs" />
