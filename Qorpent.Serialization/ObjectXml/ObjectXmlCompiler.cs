@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.ObjectXml {
@@ -100,43 +101,63 @@ namespace Qorpent.ObjectXml {
 			foreach (var cls in _classes) {
 				BuildClass(cls, index);
 			}
-			
 		}
-
+		XmlInterpolation xi = new XmlInterpolation();
 		private void BuildClass(XmlObjectClassDefinition cls, ObjectXmlCompilerIndex index) {
 			cls.Compiled = cls.Source;
+			cls.ParamIndex = cls.BuildParameterOverrideXml();
+			cls.SrcParamIndex = new XElement(cls.ParamIndex);
+			if (GetConfig().UseInterpolation) {
+				cls.ParamIndex = xi.Interpolate(cls.ParamIndex);
+				var lastelement = cls.ParamIndex.Descendants().Last();
+				//force cross-attribute resulution
+				for (var i = 0; i < 3; i++) {
+					if (lastelement.Attributes().Any(_ => _.Value.Contains("${"))) {
+						xi.Interpolate(cls.ParamIndex);
+					}
+					else {
+						break;
+					}
+				}
+			}
+			foreach (var a in cls.Compiled.Attributes().ToArray()) {
+				a.Remove();
+			}
+			foreach (var e in cls.ParamIndex.DescendantsAndSelf()) {
+				foreach (var a in e.Attributes()) {
+					cls.Compiled.SetAttributeValue(a.Name, a.Value);
+				}
+			}
 		}
 
 		private IEnumerable<XmlObjectClassDefinition> CollectFinalClasses(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
 			BindOrphansAndSetupFullImportName(index);
+			ResolveImports(index);
 			return index.Working;
+		}
+
+		private void ResolveImports(ObjectXmlCompilerIndex index) {
+			foreach (var w in index.Working) {
+				foreach (var i in w.Imports) {
+					i.Orphaned = true;
+					var import = ResolveClass(index, i.TargetCode, w.Namespace);
+					if (null != import) {
+						i.Orphaned = false;
+						i.Target = import;
+					}
+				}
+			}
 		}
 
 		private static void BindOrphansAndSetupFullImportName(ObjectXmlCompilerIndex index) {
 			var _initiallyorphaned = index.RawClasses.Values.Where(_ => _.Orphaned);
 			foreach (var o in _initiallyorphaned) {
-				if (!string.IsNullOrWhiteSpace(o.DefaultImportCode)) {
-					if (o.DefaultImportCode.Contains('.')) {
-						if (index.RawClasses.ContainsKey(o.DefaultImportCode)) {
-							o.DefaultImport = index.RawClasses[o.DefaultImportCode];
-							o.Orphaned = false;
-						}
-					}
-					else {
-						var probe = o.Namespace + "." + o.DefaultImportCode;
-						if (index.RawClasses.ContainsKey(probe)) {
-							o.DefaultImport = index.RawClasses[probe];
-							o.Orphaned = false;
-						}
-						else {
-							probe = o.DefaultImportCode;
-							if (index.RawClasses.ContainsKey(probe))
-							{
-								o.DefaultImport = index.RawClasses[probe];
-								o.Orphaned = false;
-							}
-						}
-					}
+				var code = o.DefaultImportCode;
+				var ns = o.Namespace;
+				var import = ResolveClass(index, code, ns);
+				if (import != null) {
+					o.Orphaned = false;
+					o.DefaultImport = import;
 				}
 			}
 
@@ -145,6 +166,30 @@ namespace Qorpent.ObjectXml {
 			index.Abstracts = index.RawClasses.Values.Where(_ => _.Abstract && !_.DetectIfIsOrphaned()).ToList();
 
 			index.Working = index.RawClasses.Values.Where(_ => !_.Abstract && !_.DetectIfIsOrphaned()).ToList();
+		}
+
+		private static XmlObjectClassDefinition ResolveClass(ObjectXmlCompilerIndex index, string code, string ns) {
+			XmlObjectClassDefinition import = null;
+			if (!string.IsNullOrWhiteSpace(code)) {
+				if (code.Contains('.')) {
+					if (index.RawClasses.ContainsKey(code)) {
+						import = index.RawClasses[code];
+					}
+				}
+				else {
+					var probe = ns + "." + code;
+					if (index.RawClasses.ContainsKey(probe)) {
+						import = index.RawClasses[probe];
+					}
+					else {
+						probe = code;
+						if (index.RawClasses.ContainsKey(probe)) {
+							import = index.RawClasses[probe];
+						}
+					}
+				}
+			}
+			return import;
 		}
 	}
 }

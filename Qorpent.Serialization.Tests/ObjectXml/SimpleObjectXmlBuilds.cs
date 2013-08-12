@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Qorpent.Bxl;
 using Qorpent.ObjectXml;
@@ -13,7 +14,10 @@ namespace Qorpent.Serialization.Tests.ObjectXml
 			var xml = new BxlParser().Parse(code, "c.bxl");
 			var cfg = new ObjectXmlCompilerConfig();
 			cfg.UseInterpolation = true;
-			return new ObjectXmlCompiler().Compile(new[] {xml});
+
+			var compiler = new ObjectXmlCompiler();
+			compiler.Initialize(cfg);
+			return  compiler.Compile(new[] {xml});
 		}
 
 		ObjectXmlCompilerIndex CompileAll(bool single,params string[] code) {
@@ -108,12 +112,14 @@ class custom abstract
 	y='${x}${x}'
 	z='${y}!'
 namespace X
-	custom A x=2");
+	custom A c=3 x='${c}${.x}2'");
 			Assert.AreEqual(1, result.Working.Count);
 			var xml = result.Working[0].Compiled;
-			Assert.AreEqual("2",xml.Attr("x"));
-			Assert.AreEqual("22", xml.Attr("y"));
-			Assert.AreEqual("22!", xml.Attr("z"));
+			Console.WriteLine(xml);
+			Console.WriteLine(result.Working[0].ParamIndex);
+			Assert.AreEqual("312",xml.Attr("x"));
+			Assert.AreEqual("312312", xml.Attr("y"));
+			Assert.AreEqual("312312!", xml.Attr("z"));
 		}
 
 		[Test]
@@ -191,7 +197,34 @@ custom D");
 			Assert.AreEqual(4, result.Working.Count);
 			Assert.AreEqual("A", result.Working[0].Name);
 			Assert.AreEqual("B", result.Working[1].Name);
-			Assert.AreEqual(3, result.Working[1].Imports.Count);
+			Assert.AreEqual(4, result.Working[1].CollectImports().Count());
+			CollectionAssert.AreEqual(new[]{"custom","C","D","A"},
+				result.Working[1].CollectImports().Select(_=>_.Name).ToArray()
+				);
+		}
+
+
+		[Test]
+		public void BreakCycles()
+		{
+			var result = Compile(@"
+class custom abstract
+custom A
+	import C
+	import D
+	import B
+custom B
+	import A
+	import D
+custom C
+custom D");
+			Assert.AreEqual(4, result.Working.Count);
+			Assert.AreEqual("A", result.Working[0].Name);
+			Assert.AreEqual("B", result.Working[1].Name);
+			Assert.AreEqual(4, result.Working[1].CollectImports().Count());
+			CollectionAssert.AreEqual(new[] { "custom", "C", "D", "A" },
+				result.Working[1].CollectImports().Select(_ => _.Name).ToArray()
+				);
 		}
 
 		[Test]

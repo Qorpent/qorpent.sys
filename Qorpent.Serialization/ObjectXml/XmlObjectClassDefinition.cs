@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Config;
 
 namespace Qorpent.ObjectXml {
 	/// <summary>
@@ -76,6 +78,78 @@ namespace Qorpent.ObjectXml {
 		/// Признак явного создания класса через ключевое слово
 		/// </summary>
 		public bool ExplicitClass { get; set; }
+		/// <summary>
+		/// Элемент хранящий данные об индексе параметров
+		/// </summary>
+		public XElement ParamIndex { get; set; }
+		/// <summary>
+		/// Исходный индекс параметров для отладки
+		/// </summary>
+		public XElement SrcParamIndex { get; set; }
+
+
+		/// <summary>
+		/// Возвращает XML для резолюции атрибутов
+		/// </summary>
+		/// <returns></returns>
+		public XElement BuildParameterOverrideXml() {
+			var result = new XElement("root");
+			var current = result;
+			foreach (var i in CollectImports().Union(new[]{this})) {
+				var import = new XElement(i.FullName);
+				foreach (var ca in current.Attributes()) {
+					if (null == i.Source.Attribute(ca.Name)) {
+						import.Add(ca);
+					}
+				}
+				foreach (var a in i.Source.Attributes()) {
+					import.Add(a);
+				}
+				current.Add(import);
+				current = import;
+			}
+
+			return result;
+		}
+
+	
+
+		 
+
+		/// <summary>
+		/// Возвращает полное перечисление импортируемых классов в порядке их накатывания
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<XmlObjectClassDefinition> CollectImports(string root = null) {
+			if (null == root) {
+				root = this.Name;
+			}
+			return RawCollectImports(root).ToArray().Distinct();
+		}
+
+		private IEnumerable<XmlObjectClassDefinition> RawCollectImports(string root)
+		{
+			if (null != DefaultImport) {
+				if (root != DefaultImport.Name) {
+					foreach (var i in DefaultImport.CollectImports(root)) {
+						yield return i;
+					}
+					yield return DefaultImport;
+				}
+			}
+			foreach (var i in Imports) {
+				if (!(i.Orphaned || i.Target.DetectIfIsOrphaned())
+					&& root!=i.TargetCode
+					) {
+					foreach (var ic in i.Target.CollectImports(root))
+					{
+						yield return ic;
+					}
+					yield return i.Target;
+				}
+			}
+
+		}
 
 		/// <summary>
 		/// Полная проверка статуса Orphan
