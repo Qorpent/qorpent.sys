@@ -58,6 +58,23 @@ root code, name y=33 : 'value'
 		}
 
 		[Test]
+		public void CanInterpolateDuringParse() {
+			var res = new BxlParser().Parse(@"
+test x='1' y=3
+	test2 x='${.x}${y}2'
+		test3 y='${x}${.y}'
+	", "", BxlParserOptions.PerformInterpolation);
+			Console.WriteLine(res.ToString());
+			Assert.AreEqual(@"<root>
+  <test _file=""code.bxl"" _line=""2"" x=""1"" y=""3"">
+    <test2 _file=""code.bxl"" _line=""3"" x=""132"">
+      <test3 _file=""code.bxl"" _line=""5"" y=""1323"" />
+    </test2>
+  </test>
+</root>",res.ToString());
+		}
+
+		[Test]
 		public void CanParseAttribuesAfterElements() {
 			var res = new BxlParser().Parse(@"
 test 

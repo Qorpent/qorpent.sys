@@ -57,6 +57,10 @@ namespace Qorpent.Bxl {
 		/// <summary>
 		/// 	Forces remove ROOT element if only one child element
 		/// </summary>
-		ExtractSingle = 32
+		ExtractSingle = 32,
+		/// <summary>
+		/// ‘лаг применени€ интерпол€ции
+		/// </summary>
+		PerformInterpolation = 64,
 	}
 }

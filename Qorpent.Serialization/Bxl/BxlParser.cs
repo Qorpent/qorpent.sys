@@ -22,6 +22,7 @@ using System.IO;
 using System.Xml.Linq;
 using Qorpent.Dsl;
 using Qorpent.IoC;
+using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Bxl {
@@ -65,6 +66,10 @@ namespace Qorpent.Bxl {
 											0!=(options&BxlParserOptions.OnlyCodeAttribute)
 				);
 #endif
+
+			if (options.HasFlag(BxlParserOptions.PerformInterpolation)) {
+				result = new XmlInterpolation().Interpolate(result);
+			}
 			return result;
 		}
 
