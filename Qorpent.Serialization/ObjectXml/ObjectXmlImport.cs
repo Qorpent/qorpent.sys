@@ -1,22 +1,23 @@
 ﻿namespace Qorpent.ObjectXml {
 	/// <summary>
-	/// 
 	/// </summary>
-	public class XmlObjectImportDescription {
+	public class ObjectXmlImport {
 		/// <summary>
-		/// 
 		/// </summary>
-		public XmlObjectClassDefinition Target { get; set; } 
+		public ObjectXmlClass Target { get; set; }
+
 		/// <summary>
-		/// Тип импорта 
+		///     Тип импорта
 		/// </summary>
 		public string Condition { get; set; }
+
 		/// <summary>
-		/// Код цели
+		///     Код цели
 		/// </summary>
 		public string TargetCode { get; set; }
+
 		/// <summary>
-		/// Признак неразрешенного импорта
+		///     Признак неразрешенного импорта
 		/// </summary>
 		public bool Orphaned { get; set; }
 	}

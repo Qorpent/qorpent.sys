@@ -25,10 +25,10 @@
     <Compile Include="ObjectXml\ObjectXmlCompilerConfig.cs" />
     <Compile Include="ObjectXml\IObjectXmlCompilerConfig.cs" />
     <Compile Include="ObjectXml\ObjectXmlCompilerIndex.cs" />
-    <Compile Include="ObjectXml\XmlObjectClassDefinition.cs" />
-    <Compile Include="ObjectXml\XmlObjectImportDescription.cs" />
-    <Compile Include="ObjectXml\XmlObjectMergeDefinition.cs" />
-    <Compile Include="ObjectXml\XmlObjectMergeType.cs" />
+    <Compile Include="ObjectXml\ObjectXmlClass.cs" />
+    <Compile Include="ObjectXml\ObjectXmlImport.cs" />
+    <Compile Include="ObjectXml\ObjectXmlMerge.cs" />
+    <Compile Include="ObjectXml\ObjectXmlMergeType.cs" />
     <Compile Include="Qxi\XmlIncludeProcessor.cs" />
     <Compile Include="Qxi\XmlInterpolationPreprocessor.cs" />
     <Compile Include="Selector\DefaultSelector.cs" />

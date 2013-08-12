@@ -4,12 +4,13 @@ using System.Xml.Linq;
 
 namespace Qorpent.ObjectXml {
 	/// <summary>
-	/// Абстракция компилятора, опирается на некий набор первичных компиляторов
+	///     Абстракция компилятора, опирается на некий набор первичных компиляторов
 	/// </summary>
 	public abstract class ObjectXmlCompilerBase : IObjectXmlCompiler {
 		private IObjectXmlCompilerConfig _config;
+
 		/// <summary>
-		/// Возвращает конфигурацию компилятора
+		///     Возвращает конфигурацию компилятора
 		/// </summary>
 		/// <returns></returns>
 		public IObjectXmlCompilerConfig GetConfig() {
@@ -20,7 +21,6 @@ namespace Qorpent.ObjectXml {
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="compilerConfig"></param>
 		public void Initialize(IObjectXmlCompilerConfig compilerConfig) {
@@ -29,18 +29,18 @@ namespace Qorpent.ObjectXml {
 
 
 		/// <summary>
-		/// Компилирует источники в перечисление итоговых классов 
+		///     Компилирует источники в перечисление итоговых классов
 		/// </summary>
 		/// <param name="sources"></param>
 		/// <returns></returns>
 		public ObjectXmlCompilerIndex Compile(IEnumerable<XElement> sources) {
-			var cfg = GetConfig();
+			IObjectXmlCompilerConfig cfg = GetConfig();
 			if (cfg.SingleSource) {
 				return BuildBatch(sources);
 			}
 			var result = new ObjectXmlCompilerIndex();
-			foreach (var src in sources) {
-				var subresult = BuildSingle(src);
+			foreach (XElement src in sources) {
+				ObjectXmlCompilerIndex subresult = BuildSingle(src);
 				result.Merge(subresult);
 			}
 			return result;
@@ -48,25 +48,27 @@ namespace Qorpent.ObjectXml {
 
 		private ObjectXmlCompilerIndex BuildSingle(XElement source) {
 			var batch = new[] {source};
-			var index = BuildIndex(batch);
+			ObjectXmlCompilerIndex index = BuildIndex(batch);
 			Link(batch, index);
 			return index;
 		}
+
 		/// <summary>
-		/// Перекрыть для создания индексатора
+		///     Перекрыть для создания индексатора
 		/// </summary>
 		/// <param name="sources"></param>
 		/// <returns></returns>
 		protected abstract ObjectXmlCompilerIndex BuildIndex(IEnumerable<XElement> sources);
-			
+
 		private ObjectXmlCompilerIndex BuildBatch(IEnumerable<XElement> sources) {
-			var batch = sources.ToArray();
-			var index = BuildIndex(batch);
+			XElement[] batch = sources.ToArray();
+			ObjectXmlCompilerIndex index = BuildIndex(batch);
 			Link(batch, index);
 			return index;
 		}
+
 		/// <summary>
-		/// Перекрыть для создания линковщика
+		///     Перекрыть для создания линковщика
 		/// </summary>
 		/// <param name="sources"></param>
 		/// <param name="index"></param>

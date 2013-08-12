@@ -1,19 +1,20 @@
 ﻿namespace Qorpent.ObjectXml {
 	/// <summary>
-	/// Тип 
+	///     Тип
 	/// </summary>
-	public enum XmlObjectMergeType
-	{
+	public enum ObjectXmlMergeType {
 		/// <summary>
-		/// Перезапись с ноля
+		///     Перезапись с ноля
 		/// </summary>
 		Define,
+
 		/// <summary>
-		/// Перезапись внутренних элементов
+		///     Перезапись внутренних элементов
 		/// </summary>
 		Override,
+
 		/// <summary>
-		/// Расширение
+		///     Расширение
 		/// </summary>
 		Extension,
 	}
