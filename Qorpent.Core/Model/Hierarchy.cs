@@ -7,7 +7,10 @@ namespace Qorpent.Model {
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public  class Hierarchy<T> : Entity, IWithHierarchy<T> where T:class,IWithId,IWithCode,IWithHierarchy<T> {
-		private ICollection<T> _children;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected ICollection<T> _children;
 		private int? _parentId;
 		private T _parent;
 		private string _path;

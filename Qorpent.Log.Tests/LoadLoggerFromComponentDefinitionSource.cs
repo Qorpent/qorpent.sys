@@ -31,6 +31,7 @@ using Qorpent.Bxl;
 using Qorpent.Dsl;
 using Qorpent.Dsl.XmlInclude;
 using Qorpent.IoC;
+using Qorpent.Qxi;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Log.Tests {

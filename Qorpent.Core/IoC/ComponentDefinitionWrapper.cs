@@ -30,7 +30,7 @@ namespace Qorpent.IoC {
 			Priority = c.Priority;
 			ActivationCount = c.ActivationCount;
 			CreationCount = c.CreationCount;
-			Parametes = c.Parameters;
+			Parameters = c.Parameters;
 			Help = c.Help;
 			Id = c.ContainerId;
 			if (null != c.Source) {
@@ -76,7 +76,7 @@ namespace Qorpent.IoC {
 		/// 
 		/// </summary>
 		[SerializeNotNullOnly]
-		public IDictionary<string, object> Parametes { get; set; }
+		public IDictionary<string, object> Parameters { get; set; }
 
 		/// <summary>
 		/// Имя компонента

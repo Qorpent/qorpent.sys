@@ -28,6 +28,7 @@ using System.IO;
 using System.Xml.Linq;
 using NUnit.Framework;
 using Qorpent.Bxl;
+using Qorpent.Qxi;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.TestSupport;
 
