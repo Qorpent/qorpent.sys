@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace Qorpent.Security.Cryptography.Sources {
@@ -51,25 +52,67 @@ namespace Qorpent.Security.Cryptography.Sources {
         private ICryptoProviderResult Verify(ICryptoProviderAction action) {
             var tempfileSource = Path.GetTempFileName();
             var tempfileTarget = Path.GetTempFileName();
+            var tempfileSigner = Path.GetTempFileName();
             File.WriteAllText(tempfileSource, action.Entity.EntityBody);
             Environment.SetEnvironmentVariable("OPENSSL_CONF", "c:\\OpenSSL-Win32\\bin\\openssl.cfg");
             Directory.SetCurrentDirectory("C:\\OpenSSL-Win32\\bin");
             var process = System.Diagnostics.Process.Start(
                 "openssl.exe",
-                "smime -verify -in " + tempfileSource + " -CAfile C:\\OpenSSL-Win32\\bin\\demoCA\\cacert.pem -out " + tempfileTarget
+                "smime -verify -in " + tempfileSource + " -CAfile C:\\OpenSSL-Win32\\bin\\demoCA\\cacert.pem -out " + tempfileTarget + " -signer " + tempfileSigner
             );
 
             if (process == null) {
                 throw new Exception("Can not start the OpenSSL");
             }
 
+            /*
+             * openssl smime -verify -in dec.msg -noverify -signer ./demoCA/cacert.pem5 -out textd
+             * 
+             * openssl x509 -text -in ./demoCA/cacert.pem4
+             * */
+
             process.WaitForExit();
             process.Dispose();
+
+            /*process = System.Diagnostics.Process.Start(
+                "openssl.exe",
+                "x509 -text -in " + tempfileCert
+            );*/
+
+            process = new Process();
+            process.StartInfo = new ProcessStartInfo();
+            process.StartInfo.FileName = "openssl.exe";
+            process.StartInfo.Arguments = "x509 -text -in " + tempfileSigner;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.Start();
+
+            if (process == null) {
+                throw new Exception("Can not start the OpenSSL");
+            }
+
+            var sr = process.StandardOutput;
+            var cert = sr.ReadToEnd().ToString();
+
+            process.WaitForExit();
+            process.Dispose();
+
+
+
             var result = File.ReadAllText(tempfileTarget);
+            var entity = new CryptoProviderEntity("", action.Entity.FileType);
+
+
+            var sz = cert.Substring(cert.IndexOf("Subject: C=RU, ST=moscow, O=Aktiv, OU=IT, CN=", System.StringComparison.Ordinal), cert.Length - cert.IndexOf("Subject: C=RU, ST=moscow, O=Aktiv, OU=IT, CN=", System.StringComparison.Ordinal));
+            var t = sz.Substring(sz.IndexOf("CN=", System.StringComparison.Ordinal) + 3,
+                                 sz.IndexOf('/') - sz.IndexOf("CN=", System.StringComparison.Ordinal) -3);
+
+
+            entity.EntityMetadata["Login"] = t;
             File.Delete(tempfileSource);
             File.Delete(tempfileTarget);
-
-            var entity = new CryptoProviderEntity("", action.Entity.FileType);
+            File.Delete(tempfileSigner);
+            
             var first = result.IndexOf(':') - 2;
             entity.EntityMetadata["Hash"] = result.Substring(first, result.Length - first);
 
