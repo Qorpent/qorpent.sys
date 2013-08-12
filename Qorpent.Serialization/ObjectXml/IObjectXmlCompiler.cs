@@ -17,7 +17,7 @@ namespace Qorpent.ObjectXml {
 		/// </summary>
 		/// <param name="sources"></param>
 		/// <returns></returns>
-		IEnumerable<XElement> Compile(IEnumerable<XElement> sources);
+		ObjectXmlCompilerIndex Compile(IEnumerable<XElement> sources);
 
 		/// <summary>
 		/// Возвращает конфигурацию компилятора

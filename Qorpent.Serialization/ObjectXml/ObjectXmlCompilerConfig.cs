@@ -12,8 +12,10 @@ namespace Qorpent.ObjectXml {
 		/// <summary>
 		/// Флаг режима объединения источников
 		/// </summary>
-		public const string SINGLESOURCE = "useinterpolation";
-
+		public const string SINGLESOURCE = "singlesource";
+		/// <summary>
+		/// Признак использования интерполяции при компиляции
+		/// </summary>
 		public bool UseInterpolation {
 			get { return Get(USEINTERPOLATION, false); }
 			set { Set(USEINTERPOLATION, value); }

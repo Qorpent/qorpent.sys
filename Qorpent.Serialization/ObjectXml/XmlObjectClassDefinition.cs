@@ -30,7 +30,10 @@ namespace Qorpent.ObjectXml {
 		/// <summary>
 		/// Полное имя
 		/// </summary>
-		public string FullName { get; set; }
+		public string FullName { get {
+			if (string.IsNullOrWhiteSpace(Namespace)) return Name;
+			return Namespace + "." + Name;
+		}}
 
 		/// <summary>
 		/// Признак абстракции
@@ -69,14 +72,18 @@ namespace Qorpent.ObjectXml {
 		/// Компилированная версия класса
 		/// </summary>
 		public XElement Compiled { get; set; }
+		/// <summary>
+		/// Признак явного создания класса через ключевое слово
+		/// </summary>
+		public bool ExplicitClass { get; set; }
 
 		/// <summary>
 		/// Полная проверка статуса Orphan
 		/// </summary>
 		/// <returns></returns>
 		public bool DetectIfIsOrphaned() {
+			if (ExplicitClass) return false;
 			if (Orphaned) return true;
-			if (Name == "class") return false;
 			if (null == DefaultImport) return true;
 			return DefaultImport.DetectIfIsOrphaned();
 		}

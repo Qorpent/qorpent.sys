@@ -13,9 +13,15 @@ namespace Qorpent.ObjectXml {
 		/// </summary>
 		protected ObjectXmlCompilerIndex _currentBuildIndex;
 
+		/// <summary>
+		/// Перекрыть для создания индексатора
+		/// </summary>
+		/// <param name="sources"></param>
+		/// <returns></returns>
 		protected override ObjectXmlCompilerIndex BuildIndex(IEnumerable<XElement> sources) {
 			_currentBuildIndex = new ObjectXmlCompilerIndex();
-			_currentBuildIndex.RawClasses = IndexizeRawClasses(sources).ToDictionary(_=>_.FullName,_=>_);
+			var baseindex = IndexizeRawClasses(sources).ToArray();
+			_currentBuildIndex.RawClasses =baseindex.ToDictionary(_=>_.FullName,_=>_);
 			return _currentBuildIndex;
 		}
 
@@ -31,7 +37,12 @@ namespace Qorpent.ObjectXml {
 		private IEnumerable<XmlObjectClassDefinition> IndexizeRawClasses(XElement src, string ns) {
 			foreach (var e in src.Elements()) {
 				if (e.Name.LocalName == "namespace") {
-					ns = ns + "." + e.Attr("code");
+					if (string.IsNullOrWhiteSpace(ns)) {
+						ns = e.Attr("code");
+					}
+					else {
+						ns = ns + "." + e.Attr("code");
+					}
 					foreach (var e_ in IndexizeRawClasses(e, ns)) {
 						yield return e_;
 					}
@@ -41,12 +52,17 @@ namespace Qorpent.ObjectXml {
 					def.Source = e;
 					def.Name = e.Attr("code");
 					def.Namespace = ns;
-					if (null != e.Attribute("abstract")) {
+					
+					if (null != e.Attribute("abstract") || e.Attr("name")=="abstract") {
 						def.Abstract = true;
 					}
 					if (e.Name.LocalName != "class") {
 						def.Orphaned = true;
 						def.DefaultImportCode = e.Name.LocalName;
+					}
+					else {
+						def.Orphaned = false;
+						def.ExplicitClass = true;
 					}
 					foreach (var i in e.Elements("import")) {
 						var import = new XmlObjectImportDescription {Condition = i.Value, TargetCode = i.Attr("code")};
@@ -72,13 +88,19 @@ namespace Qorpent.ObjectXml {
 			}
 		}
 
-		protected override IEnumerable<XElement> Link(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
+		/// <summary>
+		/// Перекрыть для создания линковщика
+		/// </summary>
+		/// <param name="sources"></param>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		protected override void Link(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
 			_currentBuildIndex = index;
 			var _classes = CollectFinalClasses(sources, index);
 			foreach (var cls in _classes) {
 				BuildClass(cls, index);
 			}
-			return _classes.Select(_ => _.Compiled);
+			
 		}
 
 		private void BuildClass(XmlObjectClassDefinition cls, ObjectXmlCompilerIndex index) {
@@ -118,7 +140,7 @@ namespace Qorpent.ObjectXml {
 				}
 			}
 
-			index.Orphaned = index.RawClasses.Values.Where(_ => _.DetectIfIsOrphaned()).ToList();
+			index.Orphans = index.RawClasses.Values.Where(_ => _.DetectIfIsOrphaned()).ToList();
 
 			index.Abstracts = index.RawClasses.Values.Where(_ => _.Abstract && !_.DetectIfIsOrphaned()).ToList();
 

@@ -18,6 +18,11 @@ namespace Qorpent.ObjectXml {
 			}
 			return _config;
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="compilerConfig"></param>
 		public void Initialize(IObjectXmlCompilerConfig compilerConfig) {
 			_config = compilerConfig;
 		}
@@ -28,18 +33,24 @@ namespace Qorpent.ObjectXml {
 		/// </summary>
 		/// <param name="sources"></param>
 		/// <returns></returns>
-		public IEnumerable<XElement> Compile(IEnumerable<XElement> sources) {
+		public ObjectXmlCompilerIndex Compile(IEnumerable<XElement> sources) {
 			var cfg = GetConfig();
 			if (cfg.SingleSource) {
 				return BuildBatch(sources);
 			}
-			return sources.SelectMany(BuildSingle);
+			var result = new ObjectXmlCompilerIndex();
+			foreach (var src in sources) {
+				var subresult = BuildSingle(src);
+				result.Merge(subresult);
+			}
+			return result;
 		}
 
-		private IEnumerable<XElement> BuildSingle(XElement source) {
+		private ObjectXmlCompilerIndex BuildSingle(XElement source) {
 			var batch = new[] {source};
 			var index = BuildIndex(batch);
-			return Link(batch, index);
+			Link(batch, index);
+			return index;
 		}
 		/// <summary>
 		/// Перекрыть для создания индексатора
@@ -48,10 +59,11 @@ namespace Qorpent.ObjectXml {
 		/// <returns></returns>
 		protected abstract ObjectXmlCompilerIndex BuildIndex(IEnumerable<XElement> sources);
 			
-		private IEnumerable<XElement> BuildBatch(IEnumerable<XElement> sources) {
+		private ObjectXmlCompilerIndex BuildBatch(IEnumerable<XElement> sources) {
 			var batch = sources.ToArray();
 			var index = BuildIndex(batch);
-			return Link(batch, index);
+			Link(batch, index);
+			return index;
 		}
 		/// <summary>
 		/// Перекрыть для создания линковщика
@@ -59,6 +71,6 @@ namespace Qorpent.ObjectXml {
 		/// <param name="sources"></param>
 		/// <param name="index"></param>
 		/// <returns></returns>
-		protected abstract IEnumerable<XElement> Link(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index);
+		protected abstract void Link(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index);
 	}
 }
