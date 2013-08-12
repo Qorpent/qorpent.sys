@@ -121,6 +121,22 @@ namespace Qorpent.ObjectXml {
 			}
 			return RawCollectImports(root).ToArray().Distinct();
 		}
+		/// <summary>
+		/// Собирает все определения мержей из класса
+		/// </summary>
+		/// <param name="root"></param>
+		/// <returns></returns>
+		public IEnumerable<ObjectXmlMerge> CollectMerges(string root = null) {
+			if (null == root)
+			{
+				root = Name;
+			}
+			return RawCollectMerges(root).ToArray();
+		}
+
+		private IEnumerable<ObjectXmlMerge> RawCollectMerges(string root) {
+			throw new System.NotImplementedException();
+		}
 
 		private IEnumerable<ObjectXmlClass> RawCollectImports(string root) {
 			if (null != DefaultImport) {
