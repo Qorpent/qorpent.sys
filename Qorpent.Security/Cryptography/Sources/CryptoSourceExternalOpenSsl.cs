@@ -69,11 +69,12 @@ namespace Qorpent.Security.Cryptography.Sources {
             File.Delete(tempfileSource);
             File.Delete(tempfileTarget);
 
+            var entity = new CryptoProviderEntity("", action.Entity.FileType);
+            var first = result.IndexOf(':') - 2;
+            entity.EntityMetadata["Hash"] = result.Substring(first, result.Length - first);
+
             return new CryptoProviderResult(
-                new CryptoProviderEntity(
-                    "",
-                    action.Entity.FileType
-                ),
+                entity,
                 action,
                 result.Contains(action.Config["Salt"])
             );

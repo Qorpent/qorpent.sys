@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Qorpent.Security.Cryptography {
     /// <summary>
     ///     An entity
@@ -17,6 +19,11 @@ namespace Qorpent.Security.Cryptography {
         ///     Entity body
         /// </summary>
         public string EntityBody { get; private set; }
+
+        /// <summary>
+        ///     Metadata
+        /// </summary>
+        public IDictionary<string, string> EntityMetadata { get; set; }
 
         /// <summary>
         ///     
@@ -41,6 +48,7 @@ namespace Qorpent.Security.Cryptography {
             Privacy = privacy;
             FileType = fileType;
             EntityBody = entityBody;
+            EntityMetadata = new Dictionary<string, string>();
         }
     }
 }
