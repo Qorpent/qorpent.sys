@@ -28,10 +28,46 @@ namespace Qorpent.ObjectXml {
 		}
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public class XmlObjectClassDefinition {
 		/// <summary>
 		/// 
 		/// </summary>
-		public string Code { get; set; }
+		public string Name { get; set; }
+
+		/// <summary>
+		/// Признак абстракции
+		/// </summary>
+		public bool Abstract { get; set; }
+
+		/// <summary>
+		/// Явные импорты
+		/// </summary>
+		public XmlObjectImportDescription[] Imports { get; set; }
+
+		public 
+	}
+	/// <summary>
+	/// 
+	/// </summary>
+	public class XmlObjectImportDescription {
+		/// <summary>
+		/// 
+		/// </summary>
+		public XmlObjectClassDefinition Target { get; set; } 
+		/// <summary>
+		/// Тип импорта 
+		/// </summary>
+		public XmlObjectImportType ImportType { get; set; }
+
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum XmlObjectImportType {
+		
 	}
 }
