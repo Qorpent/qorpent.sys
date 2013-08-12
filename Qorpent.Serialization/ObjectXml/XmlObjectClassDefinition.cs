@@ -82,52 +82,30 @@ namespace Qorpent.ObjectXml {
 		/// <summary>
 		/// Элемент хранящий данные об индексе параметров
 		/// </summary>
-		public XElement ParamIndex { get; set; }
+		public IConfig ParamSourceIndex { get; set; }
 		/// <summary>
-		/// Исходный индекс параметров для отладки
+		/// Сведенный словарь параметров
 		/// </summary>
-		public XElement SrcParamIndex { get; set; }
+		public IConfig ParamIndex { get; set; }
 
 
 		/// <summary>
 		/// Возвращает XML для резолюции атрибутов
 		/// </summary>
 		/// <returns></returns>
-		public XElement BuildParameterOverrideXml() {
-			var result = new XElement("root");
+		public IConfig BuildParametersConfig() {
+			var result = new ConfigBase();
 			var current = result;
 			foreach (var i in CollectImports().Union(new[]{this})) {
-
-				var allattributes = i.Source.Attributes();
-				var nonfixedattributes = allattributes.Where(_ => _.Value.Contains("${")).ToArray();
-				if (nonfixedattributes.Length != 0) {
-
-					var import = new XElement(i.FullName);
-					foreach (var ca in current.Attributes()) {
-						if (null == i.Source.Attribute(ca.Name)) {
-							import.Add(ca);
-						}
-					}
-
-					foreach (var a in i.Source.Attributes()) {
-						import.Add(a);
-					}
-
-					current.Add(import);
-					current = import;
+				var selfconfig = new ConfigBase();
+				selfconfig.Set("_class_", FullName);
+				selfconfig.SetParent(current);
+				current = selfconfig;
+				foreach (var a in i.Source.Attributes()) {
+					current.Set(a.Name.LocalName, a.Value);
 				}
-				else {
-					var curmerge = current.Attr("__merged");
-					curmerge += i.FullName+";";
-					current.SetAttributeValue("__merged",curmerge);
-					foreach (var a in allattributes) {
-						current.SetAttributeValue(a.Name,a.Value);
-					}
-				}
-				
 			}
-
-			return result;
+			return current;
 		}
 
 	

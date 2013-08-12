@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using System.Xml.XPath;
+using Qorpent.Config;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
@@ -102,30 +105,60 @@ namespace Qorpent.ObjectXml {
 				BuildClass(cls, index);
 			}
 		}
-		XmlInterpolation xi = new XmlInterpolation();
+
 		private void BuildClass(XmlObjectClassDefinition cls, ObjectXmlCompilerIndex index) {
-			cls.Compiled = cls.Source;
-			cls.ParamIndex = cls.BuildParameterOverrideXml();
-			cls.SrcParamIndex = new XElement(cls.ParamIndex);
-			if (GetConfig().UseInterpolation) {
-				cls.ParamIndex = xi.Interpolate(cls.ParamIndex);
-				var lastelement = cls.ParamIndex.Descendants().Last();
-				//force cross-attribute resulution
-				for (var i = 0; i < 3; i++) {
-					if (lastelement.Attributes().Any(_ => _.Value.Contains("${"))) {
-						xi.Interpolate(cls.ParamIndex);
-					}
-					else {
-						break;
-					}
+			InitializeBuildIndexes(cls);
+			InterpolateFields(cls);
+			BindParametersToCompiledClass(cls);
+			InterpolateElements(cls);
+			CleanupPrivateMembers(cls);
+
+		}
+
+		private void CleanupPrivateMembers(XmlObjectClassDefinition cls) {
+			foreach (
+				var a in ((IEnumerable) cls.Compiled.XPathEvaluate(".//@*[starts-with(local-name(),'_')]")).OfType<XAttribute>().ToArray()) {
+				if (a.Name.LocalName != "_file" && a.Name.LocalName != "_line") {
+
+					a.Remove();
 				}
 			}
-			foreach (var a in cls.Compiled.Attributes().ToArray()) {
-				a.Remove();
+		}
+
+		private static void InitializeBuildIndexes(XmlObjectClassDefinition cls) {
+			cls.Compiled = cls.Source;
+			cls.ParamSourceIndex = cls.BuildParametersConfig();
+			cls.ParamIndex = new ConfigBase();
+			foreach (var p in ((IDictionary<string, object>) cls.ParamSourceIndex)) {
+				cls.ParamIndex.Set(p.Key, p.Value);
 			}
-			foreach (var e in cls.ParamIndex.DescendantsAndSelf()) {
-				foreach (var a in e.Attributes()) {
-					cls.Compiled.SetAttributeValue(a.Name, a.Value);
+		}
+
+		private static void BindParametersToCompiledClass(XmlObjectClassDefinition cls) {
+			foreach (var e in ((IDictionary<string,object>)cls.ParamIndex)) {
+					cls.Compiled.SetAttributeValue(e.Key, e.Value.ToStr());
+			}
+		}
+
+		private void InterpolateElements(XmlObjectClassDefinition cls) {
+			if (GetConfig().UseInterpolation) {
+				var xi = new XmlInterpolation();
+				xi.Interpolate(cls.Compiled);
+			}
+		}
+
+		private void InterpolateFields(XmlObjectClassDefinition cls) {
+			if (GetConfig().UseInterpolation) {
+				var si = new StringInterpolation();
+
+				for (var i = 0; i <= 3; i++) {
+					var _substs = ((IDictionary<string,object>)cls.ParamIndex).Where(_ => (_.Value is string) && ((string) _.Value).Contains("${")).ToArray();
+					if (0 == _substs.Length) {
+						break;
+					}
+					foreach (var s in _substs) {
+						cls.ParamIndex.Set(s.Key, si.Interpolate((string) s.Value, cls.ParamSourceIndex));
+					}
 				}
 			}
 		}

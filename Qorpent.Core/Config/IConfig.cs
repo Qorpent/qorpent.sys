@@ -40,5 +40,12 @@ namespace Qorpent.Config {
 		/// <param name="withParent"></param>
 		/// <returns></returns>
 		IEnumerable<string> GetNames(bool withParent = false);
+
+		/// <summary>
+		/// Сериализация конфига в заданном формате
+		/// </summary>
+		/// <param name="rendertype"></param>
+		/// <returns></returns>
+		string ToString(ConfigRenderType rendertype );
 	}
 }

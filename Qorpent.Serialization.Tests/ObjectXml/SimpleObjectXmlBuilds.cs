@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.Bxl;
+using Qorpent.Config;
 using Qorpent.ObjectXml;
 using Qorpent.Utils.Extensions;
 
@@ -108,22 +109,28 @@ namespace X
 		{
 			var result = Compile(@"
 class custom abstract
+	_priv=ZZZ
 	x=1
 	y='${x}${x}'
 	z='${y}!'
 namespace X
-	custom A c='${u:3}' x='${c}${.x}2'
+	custom A c='${u:3}' x='${c}${.x}${_priv}2'
 		import B
+		any '${c}${x}!!!'
 	custom B
 		x=4");
 			Assert.AreEqual(2, result.Working.Count);
 			var xml = result.Working[0].Compiled;
 			Console.WriteLine(xml);
-			Console.WriteLine(result.Working[0].ParamIndex);
-			Console.WriteLine(result.Working[0].SrcParamIndex);
-			Assert.AreEqual("342",xml.Attr("x"));
-			Assert.AreEqual("342342", xml.Attr("y"));
-			Assert.AreEqual("342342!", xml.Attr("z"));
+			Console.WriteLine("=================================");
+			Console.WriteLine(result.Working[0].ParamSourceIndex.ToString(ConfigRenderType.SimpleBxl));
+			Console.WriteLine("=====================================");
+			Console.WriteLine(result.Working[0].ParamIndex.ToString(ConfigRenderType.SimpleBxl));
+			Assert.AreEqual("34ZZZ2", xml.Attr("x"));
+			Assert.AreEqual("34ZZZ234ZZZ2", xml.Attr("y"));
+			Assert.AreEqual("34ZZZ234ZZZ2!", xml.Attr("z"));
+			Console.WriteLine("=================================");
+
 		}
 
 		[Test]
