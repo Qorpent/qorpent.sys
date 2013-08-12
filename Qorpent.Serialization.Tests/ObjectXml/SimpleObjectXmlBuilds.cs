@@ -112,14 +112,18 @@ class custom abstract
 	y='${x}${x}'
 	z='${y}!'
 namespace X
-	custom A c=3 x='${c}${.x}2'");
-			Assert.AreEqual(1, result.Working.Count);
+	custom A c='${u:3}' x='${c}${.x}2'
+		import B
+	custom B
+		x=4");
+			Assert.AreEqual(2, result.Working.Count);
 			var xml = result.Working[0].Compiled;
 			Console.WriteLine(xml);
 			Console.WriteLine(result.Working[0].ParamIndex);
-			Assert.AreEqual("312",xml.Attr("x"));
-			Assert.AreEqual("312312", xml.Attr("y"));
-			Assert.AreEqual("312312!", xml.Attr("z"));
+			Console.WriteLine(result.Working[0].SrcParamIndex);
+			Assert.AreEqual("342",xml.Attr("x"));
+			Assert.AreEqual("342342", xml.Attr("y"));
+			Assert.AreEqual("342342!", xml.Attr("z"));
 		}
 
 		[Test]

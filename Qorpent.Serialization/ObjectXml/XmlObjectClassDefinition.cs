@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Config;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.ObjectXml {
 	/// <summary>
@@ -96,17 +97,34 @@ namespace Qorpent.ObjectXml {
 			var result = new XElement("root");
 			var current = result;
 			foreach (var i in CollectImports().Union(new[]{this})) {
-				var import = new XElement(i.FullName);
-				foreach (var ca in current.Attributes()) {
-					if (null == i.Source.Attribute(ca.Name)) {
-						import.Add(ca);
+
+				var allattributes = i.Source.Attributes();
+				var nonfixedattributes = allattributes.Where(_ => _.Value.Contains("${")).ToArray();
+				if (nonfixedattributes.Length != 0) {
+
+					var import = new XElement(i.FullName);
+					foreach (var ca in current.Attributes()) {
+						if (null == i.Source.Attribute(ca.Name)) {
+							import.Add(ca);
+						}
+					}
+
+					foreach (var a in i.Source.Attributes()) {
+						import.Add(a);
+					}
+
+					current.Add(import);
+					current = import;
+				}
+				else {
+					var curmerge = current.Attr("__merged");
+					curmerge += i.FullName+";";
+					current.SetAttributeValue("__merged",curmerge);
+					foreach (var a in allattributes) {
+						current.SetAttributeValue(a.Name,a.Value);
 					}
 				}
-				foreach (var a in i.Source.Attributes()) {
-					import.Add(a);
-				}
-				current.Add(import);
-				current = import;
+				
 			}
 
 			return result;
