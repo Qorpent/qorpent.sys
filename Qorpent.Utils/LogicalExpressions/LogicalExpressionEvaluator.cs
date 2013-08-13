@@ -16,9 +16,12 @@
 // 
 // PROJECT ORIGIN: Qorpent.Dsl/LogicalExpressionEvaluator.cs
 #endregion
-using Qorpent.IoC;
 
-namespace Qorpent.Dsl.LogicalExpressions {
+using Qorpent.Dsl.LogicalExpressions;
+using Qorpent.IoC;
+using Qorpent.LogicalExpressions;
+
+namespace Qorpent.Utils.LogicalExpressions {
 	/// <summary>
 	/// 	simple realization of logical expression evaluator
 	/// </summary>
@@ -39,8 +42,10 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// <param name="source"> </param>
 		/// <returns> </returns>
 		public bool Eval(string expression, ILogicTermSource source) {
-			var parsedexpression = parser.Parse(expression);
-			return parsedexpression.Eval(source);
+			lock (this) {
+				var parsedexpression = parser.Parse(expression);
+				return parsedexpression.Eval(source);
+			}
 		}
 
 		private readonly LogicalExpressionParser parser;

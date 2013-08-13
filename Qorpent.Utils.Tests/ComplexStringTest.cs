@@ -26,6 +26,7 @@
 using NUnit.Framework;
 using Qorpent.Dsl.LogicalExpressions;
 using Qorpent.Utils;
+using Qorpent.Utils.LogicalExpressions;
 
 namespace Qorpent.Dsl.Tests {
 	[TestFixture]

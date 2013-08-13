@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
@@ -137,6 +138,47 @@ namespace Qorpent.Config {
 		public IEnumerable<string> GetNames(bool withParent = false) {
 			if (!withParent || null==_parent) return options.Keys;
 			return options.Keys.Union(_parent.GetNames(true)).Distinct();
+		}
+
+		/// <summary>
+		/// Сериализация конфига в заданном формате
+		/// </summary>
+		/// <param name="rendertype"></param>
+		/// <returns></returns>
+		public string ToString(ConfigRenderType rendertype ) {
+			if (rendertype == ConfigRenderType.SimpleBxl) {
+				return GenerateSimpleBxl();
+			}
+			else {
+				throw new Exception("unknown format " + rendertype);
+			}
+		}
+
+		private string GenerateSimpleBxl() {
+			var asdict = this as IDictionary<string,object>;
+			var sb = new StringBuilder();
+			sb.AppendLine("config");
+			foreach (var d in asdict) {
+				sb.Append("\t");
+				sb.Append(d.Key);
+				var strval = d.Value.ToStr();
+				if (string.IsNullOrEmpty(strval)) {
+					sb.AppendLine(" = \"\"");
+				}else if (strval.All(c => char.IsLetterOrDigit(c) ||c=='.')) {
+					sb.AppendLine(" = "+strval);
+				}else if (strval.Any(c => c == '"' || c == '\r' || c == '\n')) {
+					sb.AppendLine(" = \"\"\"");
+					sb.AppendLine(strval);
+					sb.AppendLine("\t\"\"\"");
+				}
+				else {
+					sb.Append(" = \"");
+					sb.Append(strval);
+					sb.AppendLine("\"");
+				}
+				
+			}
+			return sb.ToString();
 		}
 	}
 }

@@ -16,13 +16,15 @@
 // 
 // PROJECT ORIGIN: Qorpent.Dsl/LogicalExpressionParser.cs
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Qorpent.Dsl.LogicalExpressions;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Dsl.LogicalExpressions {
+namespace Qorpent.Utils.LogicalExpressions {
 	/// <summary>
 	/// 	simple expression to node tree parser for logical expressions
 	/// </summary>

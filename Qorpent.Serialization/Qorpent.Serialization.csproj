@@ -19,6 +19,17 @@
     <Compile Include="Json\JsonValueType.cs" />
     <Compile Include="Json\Lexer.cs" />
     <Compile Include="Json\Tokenizer.cs" />
+    <Compile Include="ObjectXml\IObjectXmlCompiler.cs" />
+    <Compile Include="ObjectXml\ObjectXmlClassBuilder.cs" />
+    <Compile Include="ObjectXml\ObjectXmlCompiler.cs" />
+    <Compile Include="ObjectXml\ObjectXmlCompilerBase.cs" />
+    <Compile Include="ObjectXml\ObjectXmlCompilerConfig.cs" />
+    <Compile Include="ObjectXml\IObjectXmlCompilerConfig.cs" />
+    <Compile Include="ObjectXml\ObjectXmlCompilerIndex.cs" />
+    <Compile Include="ObjectXml\ObjectXmlClass.cs" />
+    <Compile Include="ObjectXml\ObjectXmlImport.cs" />
+    <Compile Include="ObjectXml\ObjectXmlMerge.cs" />
+    <Compile Include="ObjectXml\ObjectXmlMergeType.cs" />
     <Compile Include="Qxi\XmlIncludeProcessor.cs" />
     <Compile Include="Qxi\XmlInterpolationPreprocessor.cs" />
     <Compile Include="Selector\DefaultSelector.cs" />

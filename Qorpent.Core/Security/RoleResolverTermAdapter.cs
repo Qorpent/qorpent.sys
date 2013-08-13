@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Principal;
 using Qorpent.Dsl.LogicalExpressions;
+using Qorpent.LogicalExpressions;
 
 namespace Qorpent.Security {
 	/// <summary>
