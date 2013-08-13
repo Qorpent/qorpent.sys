@@ -306,7 +306,8 @@ class thema
 	");
 			Assert.AreEqual(1, result.Working.Count);
 			Assert.AreEqual("thema", result.Working[0].Name);
-			Assert.AreEqual(3, result.Working[0].AllMergeDefs.Count);
+			//включая дефолты
+			Assert.AreEqual(5, result.Working[0].AllMergeDefs.Count);
 
 		}
 
@@ -321,11 +322,11 @@ class thema abstract
 	element reportex extend=report
 thema mythema
 	element report
-	element myreportset orverride=report
+	element myreportset override=report
 	");
 			Assert.AreEqual(1, result.Working.Count);
 			Assert.AreEqual("mythema", result.Working[0].Name);
-			Assert.AreEqual(4, result.Working[0].AllMergeDefs.Count);
+			Assert.AreEqual(6, result.Working[0].AllMergeDefs.Count);
 
 		}
 

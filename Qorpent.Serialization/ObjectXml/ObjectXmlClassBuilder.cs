@@ -61,12 +61,12 @@ namespace Qorpent.ObjectXml {
 		{
 			lock (_cls) {
 				if (CheckExistedBuild()) return;
-				Console.WriteLine("start build " + _cls.FullName);
+				//Console.WriteLine("start build " + _cls.FullName);
 				_cls.InBuiltMode = true;	
 				InternalBuild();
 				_cls.InBuiltMode = false;
 				_cls.IsBuilt = true;
-				Console.WriteLine("fininsh build " + _cls.FullName);
+				//Console.WriteLine("fininsh build " + _cls.FullName);
 			}
 			
 		}
@@ -90,7 +90,46 @@ namespace Qorpent.ObjectXml {
 				foreach(var doublers in groupedroots.Where(_=>_.Count()>1)) {
 					doublers.Skip(1).Remove();
 				}
+				var alloverrides =
+					_cls.AllMergeDefs.Where(_ => _.Type != ObjectXmlMergeType.Define && _.TargetName == root.Name).ToArray();
+//				foreach (var over in alloverrides) {
+					foreach (var g in groupedroots) {
+						var e = g.First();
+						//реверсировать надо для правильного порядка обхода
+						var candidates = e.ElementsBeforeSelf().Reverse().Where(_=>_.Attr("code")==g.Key).ToArray();
+
+						foreach (var o in candidates) {
+							var over = alloverrides.FirstOrDefault(_ => _.Name == o.Name.LocalName);
+							if (null != over) {
+								if (over.Type == ObjectXmlMergeType.Override) {
+									foreach (var a in o.Attributes()) {
+										e.SetAttributeValue(a.Name, a.Value);
+									}
+									if (o.HasElements) {
+										e.Elements().Remove();
+										e.Add(o.Elements());
+									}
+								}else if (over.Type == ObjectXmlMergeType.Extension) {
+									foreach (var a in o.Attributes())
+									{
+										if (null == e.Attribute(a.Name)) {
+											e.SetAttributeValue(a.Name, a.Value);
+										}
+									}
+									if (o.HasElements)
+									{
+										e.Add(o.Elements());
+									}
+								}
+
+								o.Remove();	
+							}
+						}
+						
+					}
+	//			}
 			}
+			
 		}
 
 		private bool CheckExistedBuild() {
@@ -117,19 +156,38 @@ namespace Qorpent.ObjectXml {
 		private void IntializeMergeIndexes()
 		{
 			_cls.AllMergeDefs = _cls.CollectMerges().ToList();
+			foreach (var m in _cls.AllMergeDefs) {
+				m.Name = m.Name.ConvertToXNameCompatibleString();
+				if (!string.IsNullOrWhiteSpace(m.TargetName)) {
+					m.TargetName = m.TargetName.ConvertToXNameCompatibleString();
+				}
+			}
+			var allroots = _cls.AllMergeDefs.Where(_ => _.Type == ObjectXmlMergeType.Define).Select(_ => _.Name).ToArray();
+			foreach (var root in allroots) {
+				var defoverride = new ObjectXmlMerge {Name = "__TILD__" + root, TargetName = root, Type = ObjectXmlMergeType.Override};
+				if (!_cls.AllMergeDefs.Contains(defoverride)) {
+					_cls.AllMergeDefs.Add(defoverride);
+				}
+				var defext = new ObjectXmlMerge { Name = "__PLUS__" + root, TargetName = root, Type = ObjectXmlMergeType.Extension };
+				if (!_cls.AllMergeDefs.Contains(defext))
+				{
+					_cls.AllMergeDefs.Add(defext);
+				}
+			}
 		}
 
 		private void MergeSimpleInternalsStatic()
 		{
-			foreach (var e in _cls.CollectImports().Where(_ => _.Static))
+			//реверс нужен для правильного порядка наката элементов
+			foreach (var e in _cls.CollectImports().Where(_ => _.Static).Reverse())
 			{
 				_cls.Compiled.Add(e.Compiled.Elements());
 			}
 		}
 
 		private void MergeSimpleInternalsNonStatic()
-		{
-			foreach (var e in _cls.CollectImports().Where(_ => !_.Static))
+		{//реверс нужен для правильного порядка наката элементов
+			foreach (var e in _cls.CollectImports().Where(_ => !_.Static).Reverse())
 			{
 				_cls.Compiled.Add(e.Source.Elements());
 			}
@@ -151,11 +209,17 @@ namespace Qorpent.ObjectXml {
 
 			foreach (var e in _cls.Compiled.DescendantsAndSelf())
 			{
-				if (e.Attr("code") == e.Attr("id"))
-				{
-					e.Attribute("id").Remove();
+				if (null != e.Attribute("id")) {
+					if (e.Attr("code") == e.Attr("id")) {
+						e.Attribute("id").Remove();
+					}
+
 				}
 				e.Attributes().Where(_ => _.Name.LocalName.StartsWith("_") || string.IsNullOrEmpty(_.Value)).Remove();
+			}
+
+			foreach (var m in _cls.AllMergeDefs.Where(_ => _.Type != ObjectXmlMergeType.Define).Select(_ => _.Name).Distinct()) {
+				_cls.Compiled.Elements(m).Remove();
 			}
 
 		}
@@ -163,6 +227,8 @@ namespace Qorpent.ObjectXml {
 		private void InitializeBuildIndexes()
 		{
 			_cls.Compiled = new XElement(_cls.Source);
+			_cls.Compiled.Elements("import").Remove();
+			_cls.Compiled.Elements("element").Remove();
 			_cls.ParamSourceIndex = BuildParametersConfig();
 			_cls.ParamIndex = new ConfigBase();
 			foreach (var p in _cls.ParamSourceIndex)

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -112,7 +113,16 @@ namespace Qorpent.ObjectXml {
 		protected override void Link(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
 			_currentBuildIndex = index;
 			CollectClassGroups(sources, index);
-			index.Working.AsParallel().ForAll(_=>ObjectXmlClassBuilder.Build(this, _, index));
+			index.Working.AsParallel().ForAll(
+				_ => {
+					try {
+						ObjectXmlClassBuilder.Build(this, _, index);
+					}
+					catch (Exception ex) {
+						_.Error = ex;
+					}
+				})
+			;
 		}
 
 		
