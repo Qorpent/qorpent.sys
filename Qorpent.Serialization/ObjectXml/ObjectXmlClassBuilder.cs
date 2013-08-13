@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,11 +59,16 @@ namespace Qorpent.ObjectXml {
 		/// </summary>
 		public void Build()
 		{
-			if (CheckExistedBuild()) return;
-			_cls.InBuiltMode = true;
-			InternalBuild();
-			_cls.InBuiltMode = false;
-			_cls.IsBuilt = true;
+			lock (_cls) {
+				if (CheckExistedBuild()) return;
+				Console.WriteLine("start build " + _cls.FullName);
+				_cls.InBuiltMode = true;	
+				InternalBuild();
+				_cls.InBuiltMode = false;
+				_cls.IsBuilt = true;
+				Console.WriteLine("fininsh build " + _cls.FullName);
+			}
+			
 		}
 
 		private void InternalBuild() {
