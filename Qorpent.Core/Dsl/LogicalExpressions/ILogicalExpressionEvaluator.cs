@@ -16,6 +16,9 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/ILogicalExpressionEvaluator.cs
 #endregion
+
+using Qorpent.LogicalExpressions;
+
 namespace Qorpent.Dsl.LogicalExpressions {
 	/// <summary>
 	/// 	Describes abstract logical expression evaluator

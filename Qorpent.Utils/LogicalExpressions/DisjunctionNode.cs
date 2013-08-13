@@ -16,9 +16,12 @@
 // 
 // PROJECT ORIGIN: Qorpent.Dsl/DisjunctionNode.cs
 #endregion
-using System.Linq;
 
-namespace Qorpent.Dsl.LogicalExpressions {
+using System.Linq;
+using Qorpent.Dsl.LogicalExpressions;
+using Qorpent.LogicalExpressions;
+
+namespace Qorpent.Utils.LogicalExpressions {
 	/// <summary>
 	/// 	operator that describes evaluation of disjuntion
 	/// </summary>

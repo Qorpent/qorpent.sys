@@ -10,6 +10,7 @@ namespace Qorpent.ObjectXml {
 		private const string ORPHANED = "orphaned";
 		private const string ABSTRACTS = "abstracts";
 		private const string WORKING = "working";
+		private const string STATIC = "static";
 
 		/// <summary>
 		///     Исходные сырые определения классов
@@ -41,6 +42,14 @@ namespace Qorpent.ObjectXml {
 		public List<ObjectXmlClass> Working {
 			get { return Get<List<ObjectXmlClass>>(WORKING); }
 			set { Set(WORKING, value); }
+		}
+
+		/// <summary>
+		/// Классы со статической компиляцией
+		/// </summary>
+		public List<ObjectXmlClass> Static {
+			get { return Get<List<ObjectXmlClass>>(STATIC); }
+			set { Set(STATIC, value); }
 		}
 
 		/// <summary>

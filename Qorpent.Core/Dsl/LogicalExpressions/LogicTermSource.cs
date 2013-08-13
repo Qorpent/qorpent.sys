@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Core/LogicTermSource.cs
 #endregion
 using System.Collections.Generic;
+using Qorpent.LogicalExpressions;
 
 namespace Qorpent.Dsl.LogicalExpressions {
 	/// <summary>

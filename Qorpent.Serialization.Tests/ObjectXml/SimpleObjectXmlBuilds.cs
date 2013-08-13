@@ -1,40 +1,13 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Qorpent.Bxl;
 using Qorpent.Config;
-using Qorpent.ObjectXml;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.ObjectXml
 {
 	[TestFixture]
-	public class SimpleObjectXmlBuilds
-	{
-		ObjectXmlCompilerIndex Compile(string code) {
-			var xml = new BxlParser().Parse(code, "c.bxl");
-			var cfg = new ObjectXmlCompilerConfig();
-			cfg.UseInterpolation = true;
-
-			var compiler = new ObjectXmlCompiler();
-			compiler.Initialize(cfg);
-			return  compiler.Compile(new[] {xml});
-		}
-
-		ObjectXmlCompilerIndex CompileAll(bool single,params string[] code) {
-			var parser = new BxlParser();
-			var idx = 0;
-			var xmls = code.Select(_ => parser.Parse(_, (idx++) + ".bxl")).ToArray();
-			var cfg = new ObjectXmlCompilerConfig();
-			cfg.UseInterpolation = true;
-			if (single) {
-				cfg.SingleSource = true;
-			}
-			var compiler = new ObjectXmlCompiler();
-			compiler.Initialize(cfg);
-			return compiler.Compile(xmls);
-		}
-
+	public class SimpleObjectXmlBuilds : CompileTestBase {
 		[Test]
 		public void SingleSourceMode() {
 			var result = CompileAll(false, @"class custom abstract", @"custom a");
@@ -76,6 +49,8 @@ custom A");
 			Assert.AreEqual("custom", result.Working[0].DefaultImport.Name);
 		}
 
+		
+
 		[Test]
 		public void DefaultImportInNamespace()
 		{
@@ -104,34 +79,7 @@ namespace X
 			Assert.AreEqual("custom", result.Working[0].DefaultImport.Name);
 		}
 
-		[Test]
-		public void CanInterpolate()
-		{
-			var result = Compile(@"
-class custom abstract
-	_priv=ZZZ
-	x=1
-	y='${x}${x}'
-	z='${y}!'
-namespace X
-	custom A c='${u:3}' x='${c}${.x}${_priv}2'
-		import B
-		any '${c}${x}!!!'
-	custom B
-		x=4");
-			Assert.AreEqual(2, result.Working.Count);
-			var xml = result.Working[0].Compiled;
-			Console.WriteLine(xml);
-			Console.WriteLine("=================================");
-			Console.WriteLine(result.Working[0].ParamSourceIndex.ToString(ConfigRenderType.SimpleBxl));
-			Console.WriteLine("=====================================");
-			Console.WriteLine(result.Working[0].ParamIndex.ToString(ConfigRenderType.SimpleBxl));
-			Assert.AreEqual("34ZZZ2", xml.Attr("x"));
-			Assert.AreEqual("34ZZZ234ZZZ2", xml.Attr("y"));
-			Assert.AreEqual("34ZZZ234ZZZ2!", xml.Attr("z"));
-			Console.WriteLine("=================================");
-
-		}
+		
 
 		[Test]
 		public void DefaultImportCrossNamespace()
@@ -159,7 +107,117 @@ namespace X
 			Assert.AreEqual(1, result.Orphans.Count);
 			
 		}
+		[Test]
+		public void MergesInner() {
+			var result = Compile(@"
+class A
+	test 1
+class B
+	import A
+	test 2");
+			Assert.AreEqual(2, result.Working[1].Compiled.Elements("test").Count());
+		}
 
+		[Test]
+		public void MergesInnerNonStatic()
+		{
+			var result = Compile(@"
+class A
+	_x = 1
+	_y = '${_x}'
+	test '${_y}${_y}'
+class B _y = 2
+	import A
+	");
+			Console.WriteLine(result.Working[1].Compiled);
+			Assert.AreEqual("22", result.Working[1].Compiled.Element("test").Attr("code"));
+		}
+
+
+		[Test]
+		public void MergesInnerStatic()
+		{
+			var result = Compile(@"
+class A static
+	_x = 1
+	_y = '${_x}'
+	test '${_y}${_y}'
+class B _y = 2
+	import A
+	");
+			Console.WriteLine(result.Working[1].Compiled);
+			Assert.AreEqual("11", result.Working[1].Compiled.Element("test").Attr("code"));
+		}
+
+		[Test]
+		public void MergesInnerStaticInHierarchy()
+		{
+			var result = Compile(@"
+class A abstract
+	test 1
+	test 2
+A B static abstract
+A C static abstract
+class D 
+	import B
+	import C
+	");
+			Console.WriteLine(result.Working[0].Compiled);
+			Assert.AreEqual(4, result.Working[0].Compiled.Elements("test").Count());
+		}
+
+		[Test]
+		public void MergesInnerNonStaticInHierarchy()
+		{
+			var result = Compile(@"
+class A abstract
+	test 1
+	test 2
+A B abstract
+A C abstract
+class D 
+	import B
+	import C
+	");
+			Console.WriteLine(result.Working[0].Compiled);
+			Assert.AreEqual(2, result.Working[0].Compiled.Elements("test").Count());
+		}
+
+		[Test]
+		public void MergesInnerStaticWithParametersOverride()
+		{
+			var result = Compile(@"
+class A static
+	x = 1
+	y = '${x}'
+	z = '${y}'
+class B y = 2
+	import A
+	");
+			var c = result.Working[1].Compiled;
+			Console.WriteLine(c);
+			Assert.AreEqual("1",c.Attr("x"));
+			Assert.AreEqual("2",c.Attr("y"));
+			Assert.AreEqual("1",c.Attr("z"));
+		}
+
+		[Test]
+		public void MergesInnerNonStaticWithParametersOverride()
+		{
+			var result = Compile(@"
+class A 
+	x = 1
+	y = '${x}'
+	z = '${y}'
+class B y = 2 
+	import A
+	");
+			var c = result.Working[1].Compiled;
+			Console.WriteLine(c);
+			Assert.AreEqual("1", c.Attr("x"));
+			Assert.AreEqual("2", c.Attr("y"));
+			Assert.AreEqual("2", c.Attr("z"));
+		}
 
 		[Test]
 		public void UnresolvedNamespaceMissed()
@@ -248,7 +306,7 @@ class thema
 	");
 			Assert.AreEqual(1, result.Working.Count);
 			Assert.AreEqual("thema", result.Working[0].Name);
-			Assert.AreEqual(3, result.Working[0].MergeDefs.Count);
+			Assert.AreEqual(3, result.Working[0].AllMergeDefs.Count);
 
 		}
 
@@ -267,7 +325,7 @@ thema mythema
 	");
 			Assert.AreEqual(1, result.Working.Count);
 			Assert.AreEqual("mythema", result.Working[0].Name);
-			Assert.AreEqual(4, result.Working[0].MergeDefs.Count);
+			Assert.AreEqual(4, result.Working[0].AllMergeDefs.Count);
 
 		}
 
@@ -307,6 +365,61 @@ namespace X
 			Assert.AreEqual(1, result.Abstracts.Count);
 			Assert.AreEqual("A", result.Abstracts[0].Name);
 			Assert.AreEqual("X.A", result.Abstracts[0].FullName);
+		}
+		[Test]
+		public void CanInterpolate()
+		{
+
+
+			var result = Compile(@"
+class custom abstract
+	_priv=ZZZ
+	x=1
+	y='${x}${x}'
+	z='${y}!'
+namespace X
+	custom A c='${u:3}' x='${c}${.x}${_priv}2'
+		import B
+		any '${c}${x}!!!'
+	custom B
+		x=4");
+			Assert.AreEqual(2, result.Working.Count);
+			var xml = result.Working[0].Compiled;
+			Console.WriteLine(xml);
+			Console.WriteLine("=================================");
+			Console.WriteLine(result.Working[0].ParamSourceIndex.ToString(ConfigRenderType.SimpleBxl));
+			Console.WriteLine("=====================================");
+			Console.WriteLine(result.Working[0].ParamIndex.ToString(ConfigRenderType.SimpleBxl));
+			Assert.AreEqual("34ZZZ2", xml.Attr("x"));
+			Assert.AreEqual("34ZZZ234ZZZ2", xml.Attr("y"));
+			Assert.AreEqual("34ZZZ234ZZZ2!", xml.Attr("z"));
+			Console.WriteLine("=================================");
+
+		}
+
+		[Test]
+		public void ConditionalImport()
+		{
+			var result = Compile(@"
+class custom abstract
+	test='${_a}${_b}${_c}'
+	import A if='_x'
+	import B if='_y'
+	import C if='_x & _y'
+
+class A abstract _a = 1
+class B abstract _b = 2
+class C abstract _c = 3
+
+custom X 'xed' _x
+custom Y 'yed' _y
+custom Z 'zed' _x _y
+");
+			Assert.AreEqual(3, result.Working.Count);
+			Assert.AreEqual("1", result.Working[0].Compiled.Attribute("test").Value);
+			Assert.AreEqual("2", result.Working[1].Compiled.Attribute("test").Value);
+			Assert.AreEqual("123", result.Working[2].Compiled.Attribute("test").Value);
+			Console.WriteLine(result.Working[2].Compiled);
 		}
 	}
 }

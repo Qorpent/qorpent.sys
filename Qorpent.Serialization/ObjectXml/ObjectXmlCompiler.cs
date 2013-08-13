@@ -51,43 +51,56 @@ namespace Qorpent.ObjectXml {
 					}
 				}
 				else {
-					var def = new ObjectXmlClass();
-					def.Source = e;
-					def.Name = e.Attr("code");
-					def.Namespace = ns;
+					var def = new ObjectXmlClass {Source = e, Name = e.Attr("code"), Namespace = ns};
 
-					if (null != e.Attribute("abstract") || e.Attr("name") == "abstract") {
-						def.Abstract = true;
-					}
-					if (e.Name.LocalName != "class") {
-						def.Orphaned = true;
-						def.DefaultImportCode = e.Name.LocalName;
-					}
-					else {
-						def.Orphaned = false;
-						def.ExplicitClass = true;
-					}
-					foreach (XElement i in e.Elements("import")) {
-						var import = new ObjectXmlImport {Condition = i.Value, TargetCode = i.Attr("code")};
-						def.Imports.Add(import);
-					}
-					foreach (XElement i in e.Elements("element")) {
-						var merge = new ObjectXmlMerge();
-						merge.Name = i.Attr("code");
-						merge.Type = ObjectXmlMergeType.Define;
-						if (i.Attribute("override") != null) {
-							merge.Type = ObjectXmlMergeType.Override;
-							merge.TargetName = i.Attr("override");
-						}
-						else if (null != i.Attribute("extend")) {
-							merge.Type = ObjectXmlMergeType.Extension;
-							merge.TargetName = i.Attr("extend");
-						}
-						def.MergeDefs.Add(merge);
-					}
+					SetupInitialOrphanState(e, def);
+					ParseImports(e, def);
+					ParseCompoundElements(e, def);
 
 					yield return def;
 				}
+			}
+		}
+
+		private static void SetupInitialOrphanState(XElement e, ObjectXmlClass def) {
+			if (null != e.Attribute("abstract") || e.Attr("name") == "abstract") {
+				def.Abstract = true;
+			}
+			if (null != e.Attribute("static") || e.Attr("name") == "static")
+			{
+				def.Static = true;
+			}
+			if (e.Name.LocalName != "class") {
+				def.Orphaned = true;
+				def.DefaultImportCode = e.Name.LocalName;
+			}
+			else {
+				def.Orphaned = false;
+				def.ExplicitClass = true;
+			}
+		}
+
+		private static void ParseImports(XElement e, ObjectXmlClass def) {
+			foreach (XElement i in e.Elements("import")) {
+				var import = new ObjectXmlImport {Condition = i.Attr("if"), TargetCode = i.Attr("code")};
+				def.Imports.Add(import);
+			}
+		}
+
+		private static void ParseCompoundElements(XElement e, ObjectXmlClass def) {
+			foreach (XElement i in e.Elements("element")) {
+				var merge = new ObjectXmlMerge();
+				merge.Name = i.Attr("code");
+				merge.Type = ObjectXmlMergeType.Define;
+				if (i.Attribute("override") != null) {
+					merge.Type = ObjectXmlMergeType.Override;
+					merge.TargetName = i.Attr("override");
+				}
+				else if (null != i.Attribute("extend")) {
+					merge.Type = ObjectXmlMergeType.Extension;
+					merge.TargetName = i.Attr("extend");
+				}
+				def.MergeDefs.Add(merge);
 			}
 		}
 
@@ -99,41 +112,102 @@ namespace Qorpent.ObjectXml {
 		/// <returns></returns>
 		protected override void Link(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
 			_currentBuildIndex = index;
-			IEnumerable<ObjectXmlClass> _classes = CollectFinalClasses(sources, index);
-			foreach (ObjectXmlClass cls in _classes) {
+			CollectClassGroups(sources, index);
+			foreach (ObjectXmlClass cls in index.Static) {
+				BuildClass(cls, index);
+			}
+			foreach (ObjectXmlClass cls in index.Working.Where(_=>!_.Static))
+			{
 				BuildClass(cls, index);
 			}
 		}
 
 		private void BuildClass(ObjectXmlClass cls, ObjectXmlCompilerIndex index) {
-			InitializeBuildIndexes(cls);
+			if (cls.IsBuilt) return;
+			InitializeBuildIndexes(cls,index);
+			IntializeMergeIndexes(cls,index);
+			MergeSimpleInternalsNonStatic(cls);
 			InterpolateFields(cls);
 			BindParametersToCompiledClass(cls);
 			InterpolateElements(cls);
+			MergeSimpleInternalsStatic(cls);
 			CleanupPrivateMembers(cls);
+			cls.IsBuilt = true;
+		}
+
+		private void IntializeMergeIndexes(ObjectXmlClass cls, ObjectXmlCompilerIndex index) {
+			cls.AllMergeDefs = cls.CollectMerges().ToList();
+		}
+
+		private void MergeSimpleInternalsStatic(ObjectXmlClass cls) {
+			foreach (var e in cls.CollectImports().Where(_=>_.Static)) {
+				cls.Compiled.Add(e.Compiled.Elements());
+			}
+		}
+
+		private void MergeSimpleInternalsNonStatic(ObjectXmlClass cls) {
+			foreach (var e in cls.CollectImports().Where(_ => !_.Static))
+			{
+				cls.Compiled.Add(e.Source.Elements());
+			}
 		}
 
 		private void CleanupPrivateMembers(ObjectXmlClass cls) {
-			foreach (
-				XAttribute a in
-					((IEnumerable) cls.Compiled.XPathEvaluate(".//@*[starts-with(local-name(),'_')]")).OfType<XAttribute>().ToArray()) {
-				if (a.Name.LocalName != "_file" && a.Name.LocalName != "_line") {
-					a.Remove();
-				}
+			((IEnumerable) cls.Compiled.XPathEvaluate(".//@*[starts-with(local-name(),'_')]")).OfType<XAttribute>().Remove();
+			if (cls.Compiled.Attr("name") == "abstract") {
+				cls.Compiled.Attribute("name").Remove();
 			}
+			cls.Compiled.Elements("import").Remove();
+			cls.Compiled.Elements("element").Remove();
 		}
 
-		private static void InitializeBuildIndexes(ObjectXmlClass cls) {
-			cls.Compiled = cls.Source;
-			cls.ParamSourceIndex = cls.BuildParametersConfig();
+		private  void InitializeBuildIndexes(ObjectXmlClass cls,ObjectXmlCompilerIndex index) {
+			cls.Compiled = new XElement( cls.Source);
+			cls.ParamSourceIndex = BuildParametersConfig(cls,index);
 			cls.ParamIndex = new ConfigBase();
-			foreach (var p in ((IDictionary<string, object>) cls.ParamSourceIndex)) {
+			foreach (var p in cls.ParamSourceIndex) {
 				cls.ParamIndex.Set(p.Key, p.Value);
 			}
+
+		}
+
+		/// <summary>
+		///     Возвращает XML для резолюции атрибутов
+		/// </summary>
+		/// <returns></returns>
+		public  IConfig BuildParametersConfig(ObjectXmlClass cls,ObjectXmlCompilerIndex index)
+		{
+
+			var result = new ConfigBase();
+			ConfigBase current = result;
+			foreach (var i in cls.CollectImports().Union(new[] { cls }))
+			{
+				var selfconfig = new ConfigBase();
+				selfconfig.Set("_class_", cls.FullName);
+				selfconfig.SetParent(current);
+				current = selfconfig;
+				if (i.Static && cls!=i)
+				{
+					if (!i.IsBuilt) {
+						BuildClass(i,index);
+					}
+					foreach (var p in  i.ParamIndex) {
+						current.Set(p.Key,p.Value);
+					}
+				}
+				else
+				{
+					foreach (XAttribute a in i.Source.Attributes())
+					{
+						current.Set(a.Name.LocalName, a.Value);
+					}
+				}
+			}
+			return current;
 		}
 
 		private static void BindParametersToCompiledClass(ObjectXmlClass cls) {
-			foreach (var e in ((IDictionary<string, object>) cls.ParamIndex)) {
+			foreach (var e in cls.ParamIndex) {
 				cls.Compiled.SetAttributeValue(e.Key, e.Value.ToStr());
 			}
 		}
@@ -151,7 +225,7 @@ namespace Qorpent.ObjectXml {
 
 				for (int i = 0; i <= 3; i++) {
 					KeyValuePair<string, object>[] _substs =
-						((IDictionary<string, object>) cls.ParamIndex).Where(_ => (_.Value is string) && ((string) _.Value).Contains("${"))
+						cls.ParamIndex.Where(_ => (_.Value is string) && ((string) _.Value).Contains("${"))
 						                                              .ToArray();
 					if (0 == _substs.Length) {
 						break;
@@ -163,17 +237,16 @@ namespace Qorpent.ObjectXml {
 			}
 		}
 
-		private IEnumerable<ObjectXmlClass> CollectFinalClasses(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
+		private void CollectClassGroups(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
 			BindOrphansAndSetupFullImportName(index);
 			ResolveImports(index);
-			return index.Working;
 		}
 
 		private void ResolveImports(ObjectXmlCompilerIndex index) {
-			foreach (ObjectXmlClass w in index.Working) {
+			foreach (var w in index.Working.Union(index.Abstracts)) {
 				foreach (ObjectXmlImport i in w.Imports) {
 					i.Orphaned = true;
-					ObjectXmlClass import = ResolveClass(index, i.TargetCode, w.Namespace);
+					var import = ResolveClass(index, i.TargetCode, w.Namespace);
 					if (null != import) {
 						i.Orphaned = false;
 						i.Target = import;
@@ -184,10 +257,10 @@ namespace Qorpent.ObjectXml {
 
 		private static void BindOrphansAndSetupFullImportName(ObjectXmlCompilerIndex index) {
 			IEnumerable<ObjectXmlClass> _initiallyorphaned = index.RawClasses.Values.Where(_ => _.Orphaned);
-			foreach (ObjectXmlClass o in _initiallyorphaned) {
+			foreach (var o in _initiallyorphaned) {
 				string code = o.DefaultImportCode;
 				string ns = o.Namespace;
-				ObjectXmlClass import = ResolveClass(index, code, ns);
+				var import = ResolveClass(index, code, ns);
 				if (import != null) {
 					o.Orphaned = false;
 					o.DefaultImport = import;
@@ -199,6 +272,7 @@ namespace Qorpent.ObjectXml {
 			index.Abstracts = index.RawClasses.Values.Where(_ => _.Abstract && !_.DetectIfIsOrphaned()).ToList();
 
 			index.Working = index.RawClasses.Values.Where(_ => !_.Abstract && !_.DetectIfIsOrphaned()).ToList();
+			index.Static = index.RawClasses.Values.Where(_ => _.Static && !_.DetectIfIsOrphaned()).ToList();
 		}
 
 		private static ObjectXmlClass ResolveClass(ObjectXmlCompilerIndex index, string code, string ns) {

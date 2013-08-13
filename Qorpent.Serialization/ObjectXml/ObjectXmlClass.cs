@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Config;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.ObjectXml {
 	/// <summary>
@@ -40,6 +41,12 @@ namespace Qorpent.ObjectXml {
 		///     Признак абстракции
 		/// </summary>
 		public bool Abstract { get; set; }
+
+
+		/// <summary>
+		///     Признак статического класса
+		/// </summary>
+		public bool Static { get; set; }
 
 		/// <summary>
 		///     Класс, для которого еще не сопоставлен реальный тип
@@ -89,25 +96,26 @@ namespace Qorpent.ObjectXml {
 		///     Сведенный словарь параметров
 		/// </summary>
 		public IConfig ParamIndex { get; set; }
+		/// <summary>
+		/// Признак класса с закоченным билдом
+		/// </summary>
+		public bool IsBuilt { get; set; }
+		/// <summary>
+		/// Список всех определений мержа
+		/// </summary>
+		public List<ObjectXmlMerge> AllMergeDefs { get; set; }
 
 
 		/// <summary>
-		///     Возвращает XML для резолюции атрибутов
+		/// Метод построения собственного индекса параметров
 		/// </summary>
 		/// <returns></returns>
-		public IConfig BuildParametersConfig() {
+		public IConfig BuildSelfParametesSource() {
 			var result = new ConfigBase();
-			ConfigBase current = result;
-			foreach (ObjectXmlClass i in CollectImports().Union(new[] {this})) {
-				var selfconfig = new ConfigBase();
-				selfconfig.Set("_class_", FullName);
-				selfconfig.SetParent(current);
-				current = selfconfig;
-				foreach (XAttribute a in i.Source.Attributes()) {
-					current.Set(a.Name.LocalName, a.Value);
-				}
+			foreach (var a in Source.Attributes()) {
+				result.Set(a.Name.LocalName, a.Value);
 			}
-			return current;
+			return result;
 		}
 
 
@@ -115,44 +123,56 @@ namespace Qorpent.ObjectXml {
 		///     Возвращает полное перечисление импортируемых классов в порядке их накатывания
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<ObjectXmlClass> CollectImports(string root = null) {
+		public IEnumerable<ObjectXmlClass> CollectImports(string root = null, IConfig config = null)
+		{
 			if (null == root) {
 				root = Name;
 			}
-			return RawCollectImports(root).ToArray().Distinct();
+			config = config ?? new ConfigBase();
+			return RawCollectImports(root,config).ToArray().Distinct();
 		}
 		/// <summary>
 		/// Собирает все определения мержей из класса
 		/// </summary>
-		/// <param name="root"></param>
 		/// <returns></returns>
-		public IEnumerable<ObjectXmlMerge> CollectMerges(string root = null) {
-			if (null == root)
-			{
-				root = Name;
+		public IEnumerable<ObjectXmlMerge> CollectMerges() {
+			return CollectImports().SelectMany(_ => _.MergeDefs).Union(MergeDefs).Distinct();
+		}
+
+		
+
+		private IEnumerable<ObjectXmlClass> RawCollectImports(string root,IConfig config) {
+
+			var dict = ((IDictionary<string, object>) config);
+			var self = ((IDictionary<string, object>)BuildSelfParametesSource());
+			foreach (var p in self.Where(_=>_.Value!=null)) {
+				if (!dict.ContainsKey(p.Key) && !p.Value.ToStr().Contains("${")) {
+					dict[p.Key] = p.Value;
+				}
 			}
-			return RawCollectMerges(root).ToArray();
-		}
 
-		private IEnumerable<ObjectXmlMerge> RawCollectMerges(string root) {
-			throw new System.NotImplementedException();
-		}
-
-		private IEnumerable<ObjectXmlClass> RawCollectImports(string root) {
 			if (null != DefaultImport) {
 				if (root != DefaultImport.Name) {
-					foreach (ObjectXmlClass i in DefaultImport.CollectImports(root)) {
+					foreach (ObjectXmlClass i in DefaultImport.CollectImports(root,config)) {
 						yield return i;
 					}
 					yield return DefaultImport;
 				}
 			}
+
+
+
 			foreach (ObjectXmlImport i in Imports) {
-				if (!(i.Orphaned || i.Target.DetectIfIsOrphaned())
-				    && root != i.TargetCode
+				if (null!=i.Target
+					&&
+					!i.Target.DetectIfIsOrphaned()
+				    && root != i.Target.FullName
+					&& i.Match(config)
 					) {
-					foreach (ObjectXmlClass ic in i.Target.CollectImports(root)) {
-						yield return ic;
+					if (!i.Target.Static) {
+						foreach (ObjectXmlClass ic in i.Target.CollectImports(root)) {
+							yield return ic;
+						}
 					}
 					yield return i.Target;
 				}

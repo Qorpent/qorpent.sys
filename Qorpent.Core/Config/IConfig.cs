@@ -4,7 +4,7 @@ namespace Qorpent.Config {
 	/// <summary>
 	/// Описатель абстрактного конфига
 	/// </summary>
-	public interface IConfig {
+	public interface IConfig:IDictionary<string,object> {
 		/// <summary>
 		/// Устанавливает родительский конфиг
 		/// </summary>

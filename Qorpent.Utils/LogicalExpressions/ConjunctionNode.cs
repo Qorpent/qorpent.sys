@@ -16,9 +16,12 @@
 // 
 // PROJECT ORIGIN: Qorpent.Dsl/ConjunctionNode.cs
 #endregion
-using System.Linq;
 
-namespace Qorpent.Dsl.LogicalExpressions {
+using System.Linq;
+using Qorpent.Dsl.LogicalExpressions;
+using Qorpent.LogicalExpressions;
+
+namespace Qorpent.Utils.LogicalExpressions {
 	/// <summary>
 	/// 	node that describes &amp; operator
 	/// </summary>
