@@ -20,6 +20,7 @@
     <Compile Include="Json\Lexer.cs" />
     <Compile Include="Json\Tokenizer.cs" />
     <Compile Include="ObjectXml\IObjectXmlCompiler.cs" />
+    <Compile Include="ObjectXml\ObjectXmlClassBuilder.cs" />
     <Compile Include="ObjectXml\ObjectXmlCompiler.cs" />
     <Compile Include="ObjectXml\ObjectXmlCompilerBase.cs" />
     <Compile Include="ObjectXml\ObjectXmlCompilerConfig.cs" />

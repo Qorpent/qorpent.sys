@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
@@ -104,6 +105,14 @@ namespace Qorpent.ObjectXml {
 		/// Список всех определений мержа
 		/// </summary>
 		public List<ObjectXmlMerge> AllMergeDefs { get; set; }
+		/// <summary>
+		/// Текущая задача на построение
+		/// </summary>
+		public Task BuildTask { get; set; }
+		/// <summary>
+		/// Флаг того, что класс находится в режиме построения
+		/// </summary>
+		public bool InBuiltMode { get; set; }
 
 
 		/// <summary>

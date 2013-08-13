@@ -42,8 +42,10 @@ namespace Qorpent.Utils.LogicalExpressions {
 		/// <param name="source"> </param>
 		/// <returns> </returns>
 		public bool Eval(string expression, ILogicTermSource source) {
-			var parsedexpression = parser.Parse(expression);
-			return parsedexpression.Eval(source);
+			lock (this) {
+				var parsedexpression = parser.Parse(expression);
+				return parsedexpression.Eval(source);
+			}
 		}
 
 		private readonly LogicalExpressionParser parser;

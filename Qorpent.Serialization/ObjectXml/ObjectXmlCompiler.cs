@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Qorpent.Config;
-using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.ObjectXml {
@@ -113,129 +112,13 @@ namespace Qorpent.ObjectXml {
 		protected override void Link(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
 			_currentBuildIndex = index;
 			CollectClassGroups(sources, index);
-			foreach (ObjectXmlClass cls in index.Static) {
-				BuildClass(cls, index);
-			}
-			foreach (ObjectXmlClass cls in index.Working.Where(_=>!_.Static))
-			{
-				BuildClass(cls, index);
-			}
+			index.Working.AsParallel().ForAll(_=>ObjectXmlClassBuilder.Build(this, _, index));
 		}
 
-		private void BuildClass(ObjectXmlClass cls, ObjectXmlCompilerIndex index) {
-			if (cls.IsBuilt) return;
-			InitializeBuildIndexes(cls,index);
-			IntializeMergeIndexes(cls,index);
-			MergeSimpleInternalsNonStatic(cls);
-			InterpolateFields(cls);
-			BindParametersToCompiledClass(cls);
-			InterpolateElements(cls);
-			MergeSimpleInternalsStatic(cls);
-			CleanupPrivateMembers(cls);
-			cls.IsBuilt = true;
-		}
+		
+		
 
-		private void IntializeMergeIndexes(ObjectXmlClass cls, ObjectXmlCompilerIndex index) {
-			cls.AllMergeDefs = cls.CollectMerges().ToList();
-		}
-
-		private void MergeSimpleInternalsStatic(ObjectXmlClass cls) {
-			foreach (var e in cls.CollectImports().Where(_=>_.Static)) {
-				cls.Compiled.Add(e.Compiled.Elements());
-			}
-		}
-
-		private void MergeSimpleInternalsNonStatic(ObjectXmlClass cls) {
-			foreach (var e in cls.CollectImports().Where(_ => !_.Static))
-			{
-				cls.Compiled.Add(e.Source.Elements());
-			}
-		}
-
-		private void CleanupPrivateMembers(ObjectXmlClass cls) {
-			((IEnumerable) cls.Compiled.XPathEvaluate(".//@*[starts-with(local-name(),'_')]")).OfType<XAttribute>().Remove();
-			if (cls.Compiled.Attr("name") == "abstract") {
-				cls.Compiled.Attribute("name").Remove();
-			}
-			cls.Compiled.Elements("import").Remove();
-			cls.Compiled.Elements("element").Remove();
-		}
-
-		private  void InitializeBuildIndexes(ObjectXmlClass cls,ObjectXmlCompilerIndex index) {
-			cls.Compiled = new XElement( cls.Source);
-			cls.ParamSourceIndex = BuildParametersConfig(cls,index);
-			cls.ParamIndex = new ConfigBase();
-			foreach (var p in cls.ParamSourceIndex) {
-				cls.ParamIndex.Set(p.Key, p.Value);
-			}
-
-		}
-
-		/// <summary>
-		///     Возвращает XML для резолюции атрибутов
-		/// </summary>
-		/// <returns></returns>
-		public  IConfig BuildParametersConfig(ObjectXmlClass cls,ObjectXmlCompilerIndex index)
-		{
-
-			var result = new ConfigBase();
-			ConfigBase current = result;
-			foreach (var i in cls.CollectImports().Union(new[] { cls }))
-			{
-				var selfconfig = new ConfigBase();
-				selfconfig.Set("_class_", cls.FullName);
-				selfconfig.SetParent(current);
-				current = selfconfig;
-				if (i.Static && cls!=i)
-				{
-					if (!i.IsBuilt) {
-						BuildClass(i,index);
-					}
-					foreach (var p in  i.ParamIndex) {
-						current.Set(p.Key,p.Value);
-					}
-				}
-				else
-				{
-					foreach (XAttribute a in i.Source.Attributes())
-					{
-						current.Set(a.Name.LocalName, a.Value);
-					}
-				}
-			}
-			return current;
-		}
-
-		private static void BindParametersToCompiledClass(ObjectXmlClass cls) {
-			foreach (var e in cls.ParamIndex) {
-				cls.Compiled.SetAttributeValue(e.Key, e.Value.ToStr());
-			}
-		}
-
-		private void InterpolateElements(ObjectXmlClass cls) {
-			if (GetConfig().UseInterpolation) {
-				var xi = new XmlInterpolation();
-				xi.Interpolate(cls.Compiled);
-			}
-		}
-
-		private void InterpolateFields(ObjectXmlClass cls) {
-			if (GetConfig().UseInterpolation) {
-				var si = new StringInterpolation();
-
-				for (int i = 0; i <= 3; i++) {
-					KeyValuePair<string, object>[] _substs =
-						cls.ParamIndex.Where(_ => (_.Value is string) && ((string) _.Value).Contains("${"))
-						                                              .ToArray();
-					if (0 == _substs.Length) {
-						break;
-					}
-					foreach (var s in _substs) {
-						cls.ParamIndex.Set(s.Key, si.Interpolate((string) s.Value, cls.ParamSourceIndex));
-					}
-				}
-			}
-		}
+		
 
 		private void CollectClassGroups(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
 			BindOrphansAndSetupFullImportName(index);

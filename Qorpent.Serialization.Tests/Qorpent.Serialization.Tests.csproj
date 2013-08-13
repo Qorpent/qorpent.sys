@@ -31,6 +31,7 @@
     <Compile Include="js_serializer_test.cs" />
     <Compile Include="ObjectXml\CompileTestBase.cs" />
     <Compile Include="ObjectXml\SimpleObjectXmlBuilds.cs" />
+    <Compile Include="ObjectXml\TbxlSamples.cs" />
     <Compile Include="Q18_Xml_To_Json_Bug_Test.cs" />
     <Compile Include="Q48SerializeNotNullCollectionsTest.cs" />
     <Compile Include="Q51JsonXmlParserFail.cs" />
