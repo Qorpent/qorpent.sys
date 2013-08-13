@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Config;
+using Qorpent.LogicalExpressions;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
+using Qorpent.Utils.LogicalExpressions;
 
 namespace Qorpent.ObjectXml {
 	/// <summary>
@@ -74,13 +74,23 @@ namespace Qorpent.ObjectXml {
 		private void InternalBuild() {
 			InitializeBuildIndexes();
 			IntializeMergeIndexes();
-			MergeSimpleInternalsNonStatic();
 			InterpolateFields();
 			BindParametersToCompiledClass();
+
+			CleanupElementsWithConditions();
+			
+			MergeInternals();
 			InterpolateElements();
-			MergeSimpleInternalsStatic();
 			PerformMergingWithElements();
+			
+			CleanupElementsWithConditions();
+
 			CleanupPrivateMembers();
+		}
+
+		private void CleanupElementsWithConditions() {
+				_cls.Compiled.Descendants().Where(_ => !IsMatch(_)).Remove();
+
 		}
 
 		private void PerformMergingWithElements() {
@@ -176,21 +186,36 @@ namespace Qorpent.ObjectXml {
 			}
 		}
 
-		private void MergeSimpleInternalsStatic()
-		{
-			//реверс нужен для правильного порядка наката элементов
-			foreach (var e in _cls.CollectImports().Where(_ => _.Static).Reverse())
-			{
-				_cls.Compiled.Add(e.Compiled.Elements());
-			}
-		}
+		
 
-		private void MergeSimpleInternalsNonStatic()
+		private void MergeInternals()
 		{//реверс нужен для правильного порядка наката элементов
-			foreach (var e in _cls.CollectImports().Where(_ => !_.Static).Reverse())
+			
+			foreach (var e in _cls.CollectImports().Reverse())
 			{
-				_cls.Compiled.Add(e.Source.Elements());
+				if (e.Static) {
+					if (!e.IsBuilt) {
+						Build(_compiler,e,_index);
+					}
+					_cls.Compiled.Add(e.Compiled.Elements().Where(IsMatch));
+				}
+				else {
+					_cls.Compiled.Add(e.Source.Elements().Where(IsMatch));
+				}
 			}
+
+			
+		}
+		
+		private bool IsMatch(XElement arg) {
+			var cond = arg.Attr("if");
+			if (string.IsNullOrWhiteSpace(cond)) {
+				return true;
+			}
+			//мы должны пропускать интерполяции, так как сверить их все равно нельзя пока
+			if (cond.Contains("${")) return true;
+			var src = new DictionaryTermSource(_cls.ParamIndex);
+			return new LogicalExpressionEvaluator().Eval(cond, src);
 		}
 
 		private void CleanupPrivateMembers()
@@ -214,6 +239,9 @@ namespace Qorpent.ObjectXml {
 						e.Attribute("id").Remove();
 					}
 
+				}
+				if (null != e.Attribute("if")) {
+					e.Attribute("if").Remove();
 				}
 				e.Attributes().Where(_ => _.Name.LocalName.StartsWith("_") || string.IsNullOrEmpty(_.Value)).Remove();
 			}
