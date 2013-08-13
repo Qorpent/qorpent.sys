@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Qorpent.Config;
 
 namespace Qorpent.ObjectXml {
@@ -11,6 +12,16 @@ namespace Qorpent.ObjectXml {
 		private const string ABSTRACTS = "abstracts";
 		private const string WORKING = "working";
 		private const string STATIC = "static";
+		/// <summary>
+		/// Возвращает рабочий класс по коду
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public ObjectXmlClass Get(string name) {
+			var full = Working.FirstOrDefault(_ => _.FullName == name);
+			if (null != full) return full;
+			return Working.FirstOrDefault(_ => _.Name == name);
+		}
 
 		/// <summary>
 		///     Исходные сырые определения классов

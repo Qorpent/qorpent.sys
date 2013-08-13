@@ -68,7 +68,7 @@ test x='1' y=3
 			Assert.AreEqual(@"<root>
   <test _file=""code.bxl"" _line=""2"" x=""1"" y=""3"">
     <test2 _file=""code.bxl"" _line=""3"" x=""132"">
-      <test3 _file=""code.bxl"" _line=""5"" y=""1323"" />
+      <test3 _file=""code.bxl"" _line=""4"" y=""1323"" />
     </test2>
   </test>
 </root>",res.ToString());

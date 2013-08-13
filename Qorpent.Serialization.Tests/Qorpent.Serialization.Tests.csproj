@@ -30,6 +30,7 @@
     <Compile Include="json_serializer_test.cs" />
     <Compile Include="js_serializer_test.cs" />
     <Compile Include="ObjectXml\CompileTestBase.cs" />
+    <Compile Include="ObjectXml\MergeContentTests.cs" />
     <Compile Include="ObjectXml\SimpleObjectXmlBuilds.cs" />
     <Compile Include="ObjectXml\TbxlSamples.cs" />
     <Compile Include="Q18_Xml_To_Json_Bug_Test.cs" />

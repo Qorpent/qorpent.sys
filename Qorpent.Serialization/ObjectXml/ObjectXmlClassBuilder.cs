@@ -79,7 +79,18 @@ namespace Qorpent.ObjectXml {
 			BindParametersToCompiledClass();
 			InterpolateElements();
 			MergeSimpleInternalsStatic();
+			PerformMergingWithElements();
 			CleanupPrivateMembers();
+		}
+
+		private void PerformMergingWithElements() {
+			foreach (var root in _cls.AllMergeDefs.Where(_ => _.Type == ObjectXmlMergeType.Define).ToArray()) {
+				var allroots = _cls.Compiled.Elements(root.Name).ToArray();
+				var groupedroots = allroots.GroupBy(_ => _.Attr("code"));
+				foreach(var doublers in groupedroots.Where(_=>_.Count()>1)) {
+					doublers.Skip(1).Remove();
+				}
+			}
 		}
 
 		private bool CheckExistedBuild() {
