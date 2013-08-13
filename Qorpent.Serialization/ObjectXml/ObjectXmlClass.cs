@@ -127,19 +127,25 @@ namespace Qorpent.ObjectXml {
 			return result;
 		}
 
-
+		private ObjectXmlClass[] _cachedImports;
 		/// <summary>
 		///     Возвращает полное перечисление импортируемых классов в порядке их накатывания
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<ObjectXmlClass> CollectImports(string root = null, IConfig config = null)
-		{
-			if (null == root) {
-				root = Name;
+		public IEnumerable<ObjectXmlClass> CollectImports(string root = null, IConfig config = null) {
+			if (null != _cachedImports) return _cachedImports;
+			lock (this) {
+
+				if (null == root) {
+					root = Name;
+				}
+				config = config ?? new ConfigBase();
+				_cachedImports = RawCollectImports(root, config).Distinct().ToArray();
+				return _cachedImports;
 			}
-			config = config ?? new ConfigBase();
-			return RawCollectImports(root,config).ToArray().Distinct();
 		}
+
+
 		/// <summary>
 		/// Собирает все определения мержей из класса
 		/// </summary>
@@ -162,7 +168,7 @@ namespace Qorpent.ObjectXml {
 
 			if (null != DefaultImport) {
 				if (root != DefaultImport.Name) {
-					foreach (ObjectXmlClass i in DefaultImport.CollectImports(root,config)) {
+					foreach (ObjectXmlClass i in DefaultImport.RawCollectImports(root,config)) {
 						yield return i;
 					}
 					yield return DefaultImport;
@@ -179,7 +185,7 @@ namespace Qorpent.ObjectXml {
 					&& i.Match(config)
 					) {
 					if (!i.Target.Static) {
-						foreach (ObjectXmlClass ic in i.Target.CollectImports(root)) {
+						foreach (ObjectXmlClass ic in i.Target.RawCollectImports(root,config)) {
 							yield return ic;
 						}
 					}
