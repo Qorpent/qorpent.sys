@@ -16,6 +16,7 @@
     <Compile Include="Actions\GetResourceAction.cs" />
     <Compile Include="Actions\ImpersonateAction.cs" />
     <Compile Include="Actions\IsInRoleAction.cs" />
+    <Compile Include="Actions\ListFilesAction.cs" />
     <Compile Include="Actions\SysInfoAction.cs" />
     <Compile Include="Actions\Wiki\WikiGetLockAction.cs" />
     <Compile Include="Actions\Wiki\WikiGetVersionsListAction.cs" />
