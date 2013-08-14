@@ -259,6 +259,7 @@ namespace Qorpent.ObjectXml {
 			_cls.Compiled.Elements("element").Remove();
 			_cls.ParamSourceIndex = BuildParametersConfig();
 			_cls.ParamIndex = new ConfigBase();
+			_cls.Compiled.SetAttributeValue("fullcode",_cls.FullName);
 			foreach (var p in _cls.ParamSourceIndex)
 			{
 				_cls.ParamIndex.Set(p.Key, p.Value);

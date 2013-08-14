@@ -76,6 +76,39 @@ test x='1' y=3
 		}
 
 		[Test]
+		public void CanUseObjectXmlDuringParse()
+		{
+			var res = new BxlParser().Parse(@"
+class A abstract
+	x=1
+class B
+	import A
+	y='${x}'
+	", "", BxlParserOptions.ObjectXml);
+			Console.WriteLine(res.ToString());
+			Assert.AreEqual(@"<objectxml>
+  <class code=""B"" y=""${x}"" fullcode=""B"" x=""1"" />
+</objectxml>", res.ToString());
+		}
+
+		[Test]
+		public void CanUseObjectXmlWithInterpolationsDuringParse()
+		{
+			var res = new BxlParser().Parse(@"
+class A abstract
+	x=1
+class B
+	import A
+	y='${x}'
+	", "", BxlParserOptions.ObjectXml|BxlParserOptions.PerformInterpolation);
+			Console.WriteLine(res.ToString());
+			Assert.AreEqual(@"<objectxml>
+  <class code=""B"" y=""1"" fullcode=""B"" x=""1"" />
+</objectxml>", res.ToString());
+		}
+
+
+		[Test]
 		public void CanParseAttribuesAfterElements() {
 			var res = new BxlParser().Parse(@"
 test 

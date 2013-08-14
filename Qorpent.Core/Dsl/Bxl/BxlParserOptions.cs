@@ -62,5 +62,9 @@ namespace Qorpent.Bxl {
 		/// ‘лаг применени€ интерпол€ции
 		/// </summary>
 		PerformInterpolation = 64,
+		/// <summary>
+		/// –ассматривать результат как файл ObjectXml и применить к нему компил€цию
+		/// </summary>
+		ObjectXml = 128,
 	}
 }

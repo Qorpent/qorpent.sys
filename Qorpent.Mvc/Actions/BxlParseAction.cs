@@ -37,6 +37,14 @@ namespace Qorpent.Mvc.Actions {
 			if (SafeAttributes) {
 				opts = opts | BxlParserOptions.SafeAttributeNames;
 			}
+			if (Interpolate)
+			{
+				opts = opts | BxlParserOptions.PerformInterpolation;
+			}
+			if (ObjectXml)
+			{
+				opts = opts | BxlParserOptions.ObjectXml;
+			}
 			return Context.Application.Bxl.Parse(Text, "bxlparse.action", opts);
 		}
 
@@ -47,6 +55,14 @@ namespace Qorpent.Mvc.Actions {
 		/// <summary>
 		/// </summary>
 		[Bind] protected bool SafeAttributes;
+		/// <summary>
+		/// Использовать интерполяцию
+		/// </summary>
+		[Bind] protected bool Interpolate;
+		/// <summary>
+		/// Использовать ObjectXml
+		/// </summary>
+		[Bind] protected bool ObjectXml;
 
 		/// <summary>
 		/// </summary>
