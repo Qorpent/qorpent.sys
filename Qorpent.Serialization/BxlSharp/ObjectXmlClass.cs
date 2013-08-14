@@ -6,7 +6,7 @@ using System.Xml.Linq;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.ObjectXml {
+namespace Qorpent.BxlSharp {
 	/// <summary>
 	/// </summary>
 	public class ObjectXmlClass {

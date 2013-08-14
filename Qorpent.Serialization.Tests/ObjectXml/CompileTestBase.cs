@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Qorpent.Bxl;
-using Qorpent.ObjectXml;
+using Qorpent.BxlSharp;
 
 namespace Qorpent.Serialization.Tests.ObjectXml {
 	public class CompileTestBase {

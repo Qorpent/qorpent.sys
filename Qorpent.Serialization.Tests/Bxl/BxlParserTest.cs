@@ -84,7 +84,7 @@ class A abstract
 class B
 	import A
 	y='${x}'
-	", "", BxlParserOptions.ObjectXml);
+	", "", BxlParserOptions.BxlSharp);
 			Console.WriteLine(res.ToString());
 			Assert.AreEqual(@"<objectxml>
   <class code=""B"" y=""${x}"" fullcode=""B"" x=""1"" />
@@ -100,7 +100,7 @@ class A abstract
 class B
 	import A
 	y='${x}'
-	", "", BxlParserOptions.ObjectXml|BxlParserOptions.PerformInterpolation);
+	", "", BxlParserOptions.BxlSharp|BxlParserOptions.PerformInterpolation);
 			Console.WriteLine(res.ToString());
 			Assert.AreEqual(@"<objectxml>
   <class code=""B"" y=""1"" fullcode=""B"" x=""1"" />

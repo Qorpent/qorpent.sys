@@ -20,9 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
+using Qorpent.BxlSharp;
 using Qorpent.Dsl;
 using Qorpent.IoC;
-using Qorpent.ObjectXml;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
@@ -67,7 +67,7 @@ namespace Qorpent.Bxl {
 											0!=(options&BxlParserOptions.OnlyCodeAttribute)
 				);
 #endif
-			if (options.HasFlag(BxlParserOptions.ObjectXml)) {
+			if (options.HasFlag(BxlParserOptions.BxlSharp)) {
 				var compileroptions = new ObjectXmlCompilerConfig {
 					UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation)
 				};

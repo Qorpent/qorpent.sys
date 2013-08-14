@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml.XPath;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.ObjectXml {
+namespace Qorpent.BxlSharp {
 	/// <summary>
-	///     Компилятор ObjectXml по умолчанию
+	///     Компилятор BxlSharp по умолчанию
 	/// </summary>
 	public class ObjectXmlCompiler : ObjectXmlCompilerBase {
 		/// <summary>

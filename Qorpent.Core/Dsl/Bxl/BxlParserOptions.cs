@@ -63,8 +63,8 @@ namespace Qorpent.Bxl {
 		/// </summary>
 		PerformInterpolation = 64,
 		/// <summary>
-		/// Рассматривать результат как файл ObjectXml и применить к нему компиляцию
+		/// Рассматривать результат как файл BxlSharp и применить к нему компиляцию
 		/// </summary>
-		ObjectXml = 128,
+		BxlSharp = 128,
 	}
 }

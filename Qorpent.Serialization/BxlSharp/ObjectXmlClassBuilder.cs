@@ -9,7 +9,7 @@ using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.LogicalExpressions;
 
-namespace Qorpent.ObjectXml {
+namespace Qorpent.BxlSharp {
 	/// <summary>
 	/// 
 	/// </summary>

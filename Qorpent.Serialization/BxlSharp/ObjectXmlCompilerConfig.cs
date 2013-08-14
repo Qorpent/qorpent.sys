@@ -1,8 +1,8 @@
 ﻿using Qorpent.Config;
 
-namespace Qorpent.ObjectXml {
+namespace Qorpent.BxlSharp {
 	/// <summary>
-	///     Конфигурация для компилятора ObjectXml
+	///     Конфигурация для компилятора BxlSharp
 	/// </summary>
 	public class ObjectXmlCompilerConfig : ConfigBase, IObjectXmlCompilerConfig {
 		/// <summary>

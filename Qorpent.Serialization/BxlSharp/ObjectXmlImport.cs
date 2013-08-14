@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Qorpent.Config;
+﻿using Qorpent.Config;
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils.LogicalExpressions;
 
-namespace Qorpent.ObjectXml {
+namespace Qorpent.BxlSharp {
 	/// <summary>
 	/// </summary>
 	public class ObjectXmlImport {
