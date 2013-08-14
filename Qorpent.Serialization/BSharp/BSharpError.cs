@@ -32,7 +32,7 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Класс, которого касается ошибка
 		/// </summary>
-		public BSharpClass Class { get; set; }
+		public IBSharpClass Class { get; set; }
 		/// <summary>
 		/// Системное исключение
 		/// </summary>

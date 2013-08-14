@@ -9,12 +9,12 @@ using Qorpent.Utils.Extensions;
 namespace Qorpent.BSharp {
 	/// <summary>
 	/// </summary>
-	public class BSharpClass {
+	public class BSharpClass : IBSharpClass {
 		/// <summary>
 		/// </summary>
 		public BSharpClass() {
-			MergeDefs = new List<BSharpElement>();
-			Imports = new List<BSharpImport>();
+			SelfElements = new List<BSharpElement>();
+			SelfImports = new List<BSharpImport>();
 		}
 
 		/// <summary>
@@ -85,7 +85,7 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		///     Код первичного класса импорта
 		/// </summary>
-		public BSharpClass DefaultImport { get; set; }
+		public IBSharpClass DefaultImport { get; set; }
 
 		/// <summary>
 		///     Код первичного класса импорта
@@ -95,12 +95,12 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		///     Явные импорты
 		/// </summary>
-		public IList<BSharpImport> Imports { get; private set; }
+		public IList<BSharpImport> SelfImports { get; private set; }
 
 		/// <summary>
 		///     Определение сводимых элементов
 		/// </summary>
-		public IList<BSharpElement> MergeDefs { get; private set; }
+		public IList<BSharpElement> SelfElements { get; private set; }
 
 		/// <summary>
 		/// </summary>
@@ -120,11 +120,19 @@ namespace Qorpent.BSharp {
 		///     Сведенный словарь параметров
 		/// </summary>
 		public IConfig ParamIndex { get; set; }
-		
+
+		private List<BSharpElement> _allelements = null;
 		/// <summary>
 		/// Список всех определений мержа
 		/// </summary>
-		public List<BSharpElement> AllMergeDefs { get; set; }
+		public List<BSharpElement> AllElements {
+			get {
+				if (null == _allelements) {
+					_allelements = GetAllElements().ToList();
+				}
+				return _allelements;
+			}
+		}
 		/// <summary>
 		/// Текущая задача на построение
 		/// </summary>
@@ -154,21 +162,19 @@ namespace Qorpent.BSharp {
 			return result;
 		}
 
-		private BSharpClass[] _cachedImports;
+		private IBSharpClass[] _cachedImports;
+
 		/// <summary>
 		///     Возвращает полное перечисление импортируемых классов в порядке их накатывания
 		/// </summary>
-		/// <returns></returns>
-		public IEnumerable<BSharpClass> CollectImports(string root = null, IConfig config = null) {
-			if (null != _cachedImports) return _cachedImports;
-			lock (this) {
-
-				if (null == root) {
-					root = Name;
+		/// <value></value>
+		public IEnumerable<IBSharpClass> AllImports {
+			get {
+				if (null != _cachedImports) return _cachedImports;
+				lock (this) {
+					_cachedImports = GetAllImports(FullName, new ConfigBase()).Distinct().ToArray();
+					return _cachedImports;
 				}
-				config = config ?? new ConfigBase();
-				_cachedImports = RawCollectImports(root, config).Distinct().ToArray();
-				return _cachedImports;
 			}
 		}
 
@@ -177,13 +183,13 @@ namespace Qorpent.BSharp {
 		/// Собирает все определения мержей из класса
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<BSharpElement> CollectMerges() {
-			return CollectImports().SelectMany(_ => _.MergeDefs).Union(MergeDefs).Distinct();
+		private IEnumerable<BSharpElement> GetAllElements() {
+			return AllImports.SelectMany(_ => _.SelfElements).Union(SelfElements).Distinct();
 		}
 
 		
 
-		private IEnumerable<BSharpClass> RawCollectImports(string root,IConfig config) {
+		private IEnumerable<IBSharpClass> GetAllImports(string root,IConfig config) {
 
 			var dict = ((IDictionary<string, object>) config);
 			var self = ((IDictionary<string, object>)BuildSelfParametesSource());
@@ -194,8 +200,8 @@ namespace Qorpent.BSharp {
 			}
 
 			if (null != DefaultImport) {
-				if (root != DefaultImport.Name) {
-					foreach (var i in DefaultImport.RawCollectImports(root,config)) {
+				if (root != DefaultImport.FullName) {
+					foreach (var i in ((BSharpClass)DefaultImport).GetAllImports(root,config)) {
 						yield return i;
 					}
 					yield return DefaultImport;
@@ -204,15 +210,15 @@ namespace Qorpent.BSharp {
 
 
 
-			foreach (BSharpImport i in Imports) {
+			foreach (BSharpImport i in SelfImports) {
 				if (null!=i.Target
 					&&
-					!i.Target.IsOrphaned()
+					!i.Target.IsOrphaned
 				    && root != i.Target.FullName
 					&& i.Match(config)
 					) {
 					if (!i.Target.Is(BSharpClassAttributes.Static)) {
-						foreach (BSharpClass ic in i.Target.RawCollectImports(root,config)) {
+						foreach (BSharpClass ic in ((BSharpClass)i.Target).GetAllImports(root,config)) {
 							yield return ic;
 						}
 					}
@@ -224,12 +230,14 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		///     Полная проверка статуса Orphan
 		/// </summary>
-		/// <returns></returns>
-		public bool IsOrphaned() {
-			if (Is(BSharpClassAttributes.Explicit)) return false;
-			if (Is(BSharpClassAttributes.Orphan)) return true;
-			if (null == DefaultImport) return true;
-			return DefaultImport.IsOrphaned();
+		/// <value></value>
+		public bool IsOrphaned {
+			get {
+				if (Is(BSharpClassAttributes.Explicit)) return false;
+				if (Is(BSharpClassAttributes.Orphan)) return true;
+				if (null == DefaultImport) return true;
+				return DefaultImport.IsOrphaned;
+			}
 		}
 	}
 }

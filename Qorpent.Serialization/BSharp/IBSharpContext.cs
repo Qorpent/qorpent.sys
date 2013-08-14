@@ -34,7 +34,7 @@ namespace Qorpent.BSharp {
 		/// Загружает исходные определения классов
 		/// </summary>
 		/// <param name="rawclasses"></param>
-		void Setup(IEnumerable<BSharpClass> rawclasses);
+		void Setup(IEnumerable<IBSharpClass> rawclasses);
 
 		/// <summary>
 		///     Присоединяет и склеивается с другим результатом
@@ -48,14 +48,14 @@ namespace Qorpent.BSharp {
 		/// <param name="code"></param>
 		/// <param name="ns"></param>
 		/// <returns></returns>
-		BSharpClass Get( string code, string ns = null);
+		IBSharpClass Get( string code, string ns = null);
 
 		/// <summary>
 		/// Возвращает коллекцию классов по типу классов
 		/// </summary>
 		/// <param name="datatype"></param>
 		/// <returns></returns>
-		IEnumerable<BSharpClass> Get(BSharpContextDataType datatype);
+		IEnumerable<IBSharpClass> Get(BSharpContextDataType datatype);
 
 		/// <summary>
 		/// Возвращает ошибки указанного уровня

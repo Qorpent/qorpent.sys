@@ -11,7 +11,7 @@ namespace Qorpent.BSharp {
 
 		/// <summary>
 		/// </summary>
-		public BSharpClass Target { get; set; }
+		public IBSharpClass Target { get; set; }
 
 		/// <summary>
 		///     Тип импорта

@@ -15,7 +15,7 @@ namespace Qorpent.BSharp {
 	/// </summary>
 	public class BSharpClassBuilder {
 		private readonly IBSharpCompiler _compiler;
-		private readonly BSharpClass _cls;
+		private readonly IBSharpClass _cls;
 		private readonly IBSharpContext _context;
 
 		private IBSharpConfig GetConfig() {
@@ -27,7 +27,7 @@ namespace Qorpent.BSharp {
 		/// <param name="compiler"></param>
 		/// <param name="cls"></param>
 		/// <param name="context"></param>
-		public static void Build(IBSharpCompiler compiler, BSharpClass cls, IBSharpContext context) {
+		public static void Build(IBSharpCompiler compiler, IBSharpClass cls, IBSharpContext context) {
 			new BSharpClassBuilder(compiler, cls, context).Build();
 		}
 		/// <summary>
@@ -36,7 +36,7 @@ namespace Qorpent.BSharp {
 		/// <param name="compiler"></param>
 		/// <param name="cls"></param>
 		/// <param name="context"></param>
-		public static Task BuildAsync(BSharpCompiler compiler, BSharpClass cls, BSharpContext context) {
+		public static Task BuildAsync(BSharpCompiler compiler, IBSharpClass cls, BSharpContext context) {
 			var task = new Task(() => new BSharpClassBuilder(compiler, cls, context).Build());
 			cls.BuildTask = task;
 			task.Start();
@@ -48,7 +48,7 @@ namespace Qorpent.BSharp {
 		/// <param name="bSharpCompiler"></param>
 		/// <param name="cls"></param>
 		/// <param name="context"></param>
-		protected BSharpClassBuilder(IBSharpCompiler bSharpCompiler, BSharpClass cls, IBSharpContext context) {
+		protected BSharpClassBuilder(IBSharpCompiler bSharpCompiler, IBSharpClass cls, IBSharpContext context) {
 			_compiler = bSharpCompiler;
 			_cls = cls;
 			_context = context;
@@ -129,14 +129,14 @@ namespace Qorpent.BSharp {
 		}
 
 		private void PerformMergingWithElements() {
-			foreach (var root in _cls.AllMergeDefs.Where(_ => _.Type == BSharpElementType.Define).ToArray()) {
+			foreach (var root in _cls.AllElements.Where(_ => _.Type == BSharpElementType.Define).ToArray()) {
 				var allroots = _cls.Compiled.Elements(root.Name).ToArray();
 				var groupedroots = allroots.GroupBy(_ => _.Attr("code"));
 				foreach(var doublers in groupedroots.Where(_=>_.Count()>1)) {
 					doublers.Skip(1).Remove();
 				}
 				var alloverrides =
-					_cls.AllMergeDefs.Where(_ => _.Type != BSharpElementType.Define && _.TargetName == root.Name).ToArray();
+					_cls.AllElements.Where(_ => _.Type != BSharpElementType.Define && _.TargetName == root.Name).ToArray();
 //				foreach (var over in alloverrides) {
 					foreach (var g in groupedroots) {
 						var e = g.First();
@@ -202,23 +202,22 @@ namespace Qorpent.BSharp {
 
 		private void IntializeMergeIndexes()
 		{
-			_cls.AllMergeDefs = _cls.CollectMerges().ToList();
-			foreach (var m in _cls.AllMergeDefs) {
+			foreach (var m in _cls.AllElements) {
 				m.Name = m.Name.ConvertToXNameCompatibleString();
 				if (!string.IsNullOrWhiteSpace(m.TargetName)) {
 					m.TargetName = m.TargetName.ConvertToXNameCompatibleString();
 				}
 			}
-			var allroots = _cls.AllMergeDefs.Where(_ => _.Type == BSharpElementType.Define).Select(_ => _.Name).ToArray();
+			var allroots = _cls.AllElements.Where(_ => _.Type == BSharpElementType.Define).Select(_ => _.Name).ToArray();
 			foreach (var root in allroots) {
 				var defoverride = new BSharpElement {Name = "__TILD__" + root, TargetName = root, Type = BSharpElementType.Override};
-				if (!_cls.AllMergeDefs.Contains(defoverride)) {
-					_cls.AllMergeDefs.Add(defoverride);
+				if (!_cls.AllElements.Contains(defoverride)) {
+					_cls.AllElements.Add(defoverride);
 				}
 				var defext = new BSharpElement { Name = "__PLUS__" + root, TargetName = root, Type = BSharpElementType.Extension };
-				if (!_cls.AllMergeDefs.Contains(defext))
+				if (!_cls.AllElements.Contains(defext))
 				{
-					_cls.AllMergeDefs.Add(defext);
+					_cls.AllElements.Add(defext);
 				}
 			}
 		}
@@ -228,7 +227,7 @@ namespace Qorpent.BSharp {
 		private void MergeInternals()
 		{//реверс нужен для правильного порядка наката элементов
 			
-			foreach (var e in _cls.CollectImports().Reverse())
+			foreach (var e in _cls.AllImports.Reverse())
 			{
 				if (e.Is(BSharpClassAttributes.Static)) {
 					if (!e.Is(BSharpClassAttributes.Built)) {
@@ -283,7 +282,7 @@ namespace Qorpent.BSharp {
 				e.Attributes().Where(_ => _.Name.LocalName.StartsWith("_") || string.IsNullOrEmpty(_.Value)).Remove();
 			}
 
-			foreach (var m in _cls.AllMergeDefs.Where(_ => _.Type != BSharpElementType.Define).Select(_ => _.Name).Distinct()) {
+			foreach (var m in _cls.AllElements.Where(_ => _.Type != BSharpElementType.Define).Select(_ => _.Name).Distinct()) {
 				_cls.Compiled.Elements(m).Remove();
 			}
 
@@ -313,7 +312,7 @@ namespace Qorpent.BSharp {
 
 			var result = new ConfigBase();
 			ConfigBase current = result;
-			foreach (var i in _cls.CollectImports().Union(new[] { _cls }))
+			foreach (var i in _cls.AllImports.Union(new[] { _cls }))
 			{
 				var selfconfig = new ConfigBase();
 				selfconfig.Set("_class_", _cls.FullName);

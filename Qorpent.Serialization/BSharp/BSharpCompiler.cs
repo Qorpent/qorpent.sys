@@ -89,7 +89,7 @@ namespace Qorpent.BSharp {
 		private static void ParseImports(XElement e, BSharpClass def) {
 			foreach (XElement i in e.Elements("import")) {
 				var import = new BSharpImport {Condition = i.Attr("if"), TargetCode = i.Attr("code")};
-				def.Imports.Add(import);
+				def.SelfImports.Add(import);
 			}
 		}
 
@@ -106,7 +106,7 @@ namespace Qorpent.BSharp {
 					merge.Type = BSharpElementType.Extension;
 					merge.TargetName = i.Attr("extend");
 				}
-				def.MergeDefs.Add(merge);
+				def.SelfElements.Add(merge);
 			}
 		}
 

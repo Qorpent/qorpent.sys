@@ -21,56 +21,56 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		///     Исходные сырые определения классов
 		/// </summary>
-		public IDictionary<string, BSharpClass> RawClasses {
-			get { return Get<IDictionary<string, BSharpClass>>(RAWCLASSES); }
+		public IDictionary<string, IBSharpClass> RawClasses {
+			get { return Get<IDictionary<string, IBSharpClass>>(RAWCLASSES); }
 			set { Set(RAWCLASSES, value); }
 		}
 
 		/// <summary>
 		///     Классы с непроинициализированным наследованием
 		/// </summary>
-		public List<BSharpClass> Orphans {
-			get { return Get<List<BSharpClass>>(ORPHANED); }
+		public List<IBSharpClass> Orphans {
+			get { return Get<List<IBSharpClass>>(ORPHANED); }
 			set { Set(ORPHANED, value); }
 		}
 
 		/// <summary>
 		///     Классы с непроинициализированным наследованием
 		/// </summary>
-		public List<BSharpClass> Abstracts {
-			get { return Get<List<BSharpClass>>(ABSTRACTS); }
+		public List<IBSharpClass> Abstracts {
+			get { return Get<List<IBSharpClass>>(ABSTRACTS); }
 			set { Set(ABSTRACTS, value); }
 		}
 
 		/// <summary>
 		///     Классы с непроинициализированным наследованием
 		/// </summary>
-		public List<BSharpClass> Working {
-			get { return Get<List<BSharpClass>>(WORKING); }
+		public List<IBSharpClass> Working {
+			get { return Get<List<IBSharpClass>>(WORKING); }
 			set { Set(WORKING, value); }
 		}
 
 		/// <summary>
 		/// Классы со статической компиляцией
 		/// </summary>
-		public List<BSharpClass> Static {
-			get { return Get<List<BSharpClass>>(STATIC); }
+		public List<IBSharpClass> Static {
+			get { return Get<List<IBSharpClass>>(STATIC); }
 			set { Set(STATIC, value); }
 		}
 		/// <summary>
 		/// Реестр перезагрузок классов
 		/// </summary>
-		public List<BSharpClass> Overrides
+		public List<IBSharpClass> Overrides
 		{
-			get { return Get<List<BSharpClass>>(OVERRIDES); }
+			get { return Get<List<IBSharpClass>>(OVERRIDES); }
 			set { Set(OVERRIDES, value); }
 		}
 		/// <summary>
 		/// Реестр перезагрузок классов
 		/// </summary>
-		public List<BSharpClass> Extensions
+		public List<IBSharpClass> Extensions
 		{
-			get { return Get<List<BSharpClass>>(EXTENSIONS); }
+			get { return Get<List<IBSharpClass>>(EXTENSIONS); }
 			set { Set(EXTENSIONS, value); }
 		}
 
@@ -87,9 +87,9 @@ namespace Qorpent.BSharp {
 		/// Загружает исходные определения классов
 		/// </summary>
 		/// <param name="rawclasses"></param>
-		public void Setup(IEnumerable<BSharpClass> rawclasses) {
+		public void Setup(IEnumerable<IBSharpClass> rawclasses) {
 			if (null == RawClasses) {
-				RawClasses = new Dictionary<string, BSharpClass>();
+				RawClasses = new Dictionary<string, IBSharpClass>();
 			}
 			if (null == Errors) {
 				Errors = new List<BSharpError>();
@@ -117,25 +117,25 @@ namespace Qorpent.BSharp {
 
 			if (null != subresult.Abstracts) {
 				if (null == Abstracts) {
-					Abstracts = new List<BSharpClass>();
+					Abstracts = new List<IBSharpClass>();
 				}
-				foreach (BSharpClass a in subresult.Abstracts) {
+				foreach (IBSharpClass a in subresult.Abstracts) {
 					Abstracts.Add(a);
 				}
 			}
 			if (null != subresult.Orphans) {
 				if (null == Orphans) {
-					Orphans = new List<BSharpClass>();
+					Orphans = new List<IBSharpClass>();
 				}
-				foreach (BSharpClass a in subresult.Orphans) {
+				foreach (IBSharpClass a in subresult.Orphans) {
 					Orphans.Add(a);
 				}
 			}
 			if (null != subresult.Working) {
 				if (null == Working) {
-					Working = new List<BSharpClass>();
+					Working = new List<IBSharpClass>();
 				}
-				foreach (BSharpClass a in subresult.Working) {
+				foreach (IBSharpClass a in subresult.Working) {
 					Working.Add(a);
 				}
 			}
@@ -144,9 +144,9 @@ namespace Qorpent.BSharp {
 			{
 				if (null == Overrides)
 				{
-					Overrides = new List<BSharpClass>();
+					Overrides = new List<IBSharpClass>();
 				}
-				foreach (BSharpClass a in subresult.Overrides)
+				foreach (IBSharpClass a in subresult.Overrides)
 				{
 					Overrides.Add(a);
 				}
@@ -156,9 +156,9 @@ namespace Qorpent.BSharp {
 			{
 				if (null == Extensions)
 				{
-					Extensions = new List<BSharpClass>();
+					Extensions = new List<IBSharpClass>();
 				}
-				foreach (BSharpClass a in subresult.Extensions)
+				foreach (IBSharpClass a in subresult.Extensions)
 				{
 					Extensions.Add(a);
 				}
@@ -177,14 +177,14 @@ namespace Qorpent.BSharp {
 			}
 		}
 
-		private IDictionary<string, BSharpClass> _resolveclassCache = new Dictionary<string, BSharpClass>();
+		private IDictionary<string, IBSharpClass> _resolveclassCache = new Dictionary<string, IBSharpClass>();
 		/// <summary>
 		/// Разрешает класс по коду и заявленному пространству имен
 		/// </summary>
 		/// <param name="code"></param>
 		/// <param name="ns"></param>
 		/// <returns></returns>
-		public  BSharpClass Get( string code, string ns = null) {
+		public  IBSharpClass Get( string code, string ns = null) {
 
 			if (null == ns) {
 				var full = Working.FirstOrDefault(_ => _.FullName == code);
@@ -195,7 +195,7 @@ namespace Qorpent.BSharp {
 			if (_resolveclassCache.ContainsKey(key)) {
 				return _resolveclassCache[key];
 			}
-			BSharpClass import = null;
+			IBSharpClass import = null;
 			if (!String.IsNullOrWhiteSpace(code)) {
 				if (code.Contains('.')) {
 					if (RawClasses.ContainsKey(code)) {
@@ -252,7 +252,7 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <param name="datatype"></param>
 		/// <returns></returns>
-		public IEnumerable<BSharpClass> Get(BSharpContextDataType datatype) {
+		public IEnumerable<IBSharpClass> Get(BSharpContextDataType datatype) {
 			if (!_built) throw new Exception("not still built");
 			switch (datatype) {
 				case BSharpContextDataType.Working:
@@ -270,7 +270,7 @@ namespace Qorpent.BSharp {
 				case BSharpContextDataType.Errors:
 					
 				default :
-					return new BSharpClass[] {};
+					return new IBSharpClass[] {};
 			}
 		}
 
@@ -299,10 +299,10 @@ namespace Qorpent.BSharp {
 			ApplyOverrides();
 			ApplyExtensions();
 			ResolveOrphans();
-			Orphans = RawClasses.Values.Where(_ => _.IsOrphaned()).ToList();
-			Abstracts = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned()).ToList();
-			Working = RawClasses.Values.Where(_ => !_.Is(BSharpClassAttributes.Extension) && !_.Is(BSharpClassAttributes.Override) && !_.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned()).ToList();
-			Static = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Static) && !_.IsOrphaned()).ToList();
+			Orphans = RawClasses.Values.Where(_ => _.IsOrphaned).ToList();
+			Abstracts = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned).ToList();
+			Working = RawClasses.Values.Where(_ => !_.Is(BSharpClassAttributes.Extension) && !_.Is(BSharpClassAttributes.Override) && !_.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned).ToList();
+			Static = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Static) && !_.IsOrphaned).ToList();
 			ResolveImports();
 			_built = true;
 		}
@@ -321,7 +321,7 @@ namespace Qorpent.BSharp {
 			}
 		}
 
-		private void ApplyExtension(BSharpClass src, BSharpClass trg) {
+		private void ApplyExtension(IBSharpClass src, IBSharpClass trg) {
 			foreach (var e in src.Source.Attributes()) {
 				if (null == trg.Source.Attribute(e.Name)) {
 					trg.Source.Add(e);
@@ -344,7 +344,7 @@ namespace Qorpent.BSharp {
 			}
 		}
 
-		private void ApplyOverride(BSharpClass src, BSharpClass trg) {
+		private void ApplyOverride(IBSharpClass src, IBSharpClass trg) {
 			foreach (var e in src.Source.Attributes())
 			{
 				trg.Source.SetAttributeValue(e.Name,e.Value);
@@ -357,7 +357,7 @@ namespace Qorpent.BSharp {
 		{
 			foreach (var w in Working.Union(Abstracts))
 			{
-				foreach (BSharpImport i in w.Imports)
+				foreach (BSharpImport i in w.SelfImports)
 				{
 					i.Orphaned = true;
 					var import = Get(i.TargetCode, w.Namespace);
@@ -372,7 +372,7 @@ namespace Qorpent.BSharp {
 
 
 		private void ResolveOrphans() {
-			IEnumerable<BSharpClass> _initiallyorphaned = RawClasses.Values.Where(_ => !_.Is(BSharpClassAttributes.Explicit));
+			IEnumerable<IBSharpClass> _initiallyorphaned = RawClasses.Values.Where(_ => !_.Is(BSharpClassAttributes.Explicit));
 			foreach (var o in _initiallyorphaned) {
 				string code = o.DefaultImportCode;
 				string ns = o.Namespace;

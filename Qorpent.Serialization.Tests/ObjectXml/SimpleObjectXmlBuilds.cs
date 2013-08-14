@@ -289,10 +289,10 @@ custom B
 			Assert.AreEqual(2, result.Working.Count);
 			Assert.AreEqual("A", result.Working[0].Name);
 			Assert.AreEqual("B", result.Working[1].Name);
-			Assert.AreEqual(1, result.Working[1].Imports.Count);
-			Assert.AreEqual("A", result.Working[1].Imports[0].TargetCode);
-			Assert.NotNull( result.Working[1].Imports[0].Target);
-			Assert.AreEqual("A",result.Working[1].Imports[0].Target.Name);
+			Assert.AreEqual(1, result.Working[1].SelfImports.Count);
+			Assert.AreEqual("A", result.Working[1].SelfImports[0].TargetCode);
+			Assert.NotNull( result.Working[1].SelfImports[0].Target);
+			Assert.AreEqual("A",result.Working[1].SelfImports[0].Target.Name);
 			
 		}
 
@@ -312,9 +312,9 @@ custom D");
 			Assert.AreEqual(4, result.Working.Count);
 			Assert.AreEqual("A", result.Working[0].Name);
 			Assert.AreEqual("B", result.Working[1].Name);
-			Assert.AreEqual(4, result.Working[1].CollectImports().Count());
+			Assert.AreEqual(4, result.Working[1].AllImports.Count());
 			CollectionAssert.AreEqual(new[]{"custom","C","D","A"},
-				result.Working[1].CollectImports().Select(_=>_.Name).ToArray()
+				result.Working[1].AllImports.Select(_=>_.Name).ToArray()
 				);
 		}
 
@@ -336,9 +336,9 @@ custom D");
 			Assert.AreEqual(4, result.Working.Count);
 			Assert.AreEqual("A", result.Working[0].Name);
 			Assert.AreEqual("B", result.Working[1].Name);
-			Assert.AreEqual(4, result.Working[1].CollectImports().Count());
+			Assert.AreEqual(4, result.Working[1].AllImports.Count());
 			CollectionAssert.AreEqual(new[] { "custom", "C", "D", "A" },
-				result.Working[1].CollectImports().Select(_ => _.Name).ToArray()
+				result.Working[1].AllImports.Select(_ => _.Name).ToArray()
 				);
 		}
 
@@ -353,7 +353,7 @@ class thema
 			Assert.AreEqual(1, result.Working.Count);
 			Assert.AreEqual("thema", result.Working[0].Name);
 			//включая дефолты
-			Assert.AreEqual(5, result.Working[0].AllMergeDefs.Count);
+			Assert.AreEqual(5, result.Working[0].AllElements.Count);
 
 		}
 
@@ -372,7 +372,7 @@ thema mythema
 	");
 			Assert.AreEqual(1, result.Working.Count);
 			Assert.AreEqual("mythema", result.Working[0].Name);
-			Assert.AreEqual(6, result.Working[0].AllMergeDefs.Count);
+			Assert.AreEqual(6, result.Working[0].AllElements.Count);
 
 		}
 
