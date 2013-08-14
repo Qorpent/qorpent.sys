@@ -9,7 +9,12 @@
 		/// <param name="doubleClass"></param>
 		/// <returns></returns>
 		public static BSharpError DuplicateClassNames(IBSharpClass doubleClass) {
-			return new BSharpError {Level = ErrorLevel.Error, Class = doubleClass, Phase = BSharpCompilePhase.SourceIndexing};
+			return new BSharpError {
+				Level = ErrorLevel.Error, 
+				Class = doubleClass, 
+				Phase = BSharpCompilePhase.SourceIndexing,
+				Type = BSharpErrorType.DuplicateClassNames,
+			};
 		}
 	}
 }

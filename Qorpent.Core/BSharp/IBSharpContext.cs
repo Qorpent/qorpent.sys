@@ -1,31 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Qorpent.BSharp {
-
-	/// <summary>
-	/// Перечисление типов ошибки
-	/// </summary>
-	[Flags]
-	public enum BSharpErrorTypes {
-		/// <summary>
-		/// Дублирующиеся имена классов
-		/// </summary>
-		DuplicateClassNames =1 ,
-	}
-
-	/// <summary>
-	/// Фазы компиляции BSharp
-	/// </summary>
-	[Flags]
-	public enum BSharpCompilePhase {
-		/// <summary>
-		/// Индексация источников
-		/// </summary>
-		SourceIndexing,
-
-	}
-
 	/// <summary>
 	/// Интерфейс результирующего контекста BSharp
 	/// </summary>

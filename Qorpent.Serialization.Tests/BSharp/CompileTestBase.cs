@@ -2,7 +2,7 @@
 using Qorpent.BSharp;
 using Qorpent.Bxl;
 
-namespace Qorpent.Serialization.Tests.ObjectXml {
+namespace Qorpent.Serialization.Tests.BSharp {
 	public class CompileTestBase {
 		protected BSharpContext Compile(string code) {
 			var xml = new BxlParser().Parse(code, "c.bxl");

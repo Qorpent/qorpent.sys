@@ -4,10 +4,10 @@ using NUnit.Framework;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Serialization.Tests.ObjectXml
+namespace Qorpent.Serialization.Tests.BSharp
 {
 	[TestFixture]
-	public class SimpleObjectXmlBuilds : CompileTestBase {
+	public class BSharpBasics : CompileTestBase {
 		[Test]
 		public void SingleSourceMode() {
 			var result = CompileAll(false, @"class custom abstract", @"custom a");

@@ -2,24 +2,80 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp {
 	/// <summary>
-	///     Компилятор BxlSharp по умолчанию
+	///     Абстракция компилятора, опирается на некий набор первичных компиляторов
 	/// </summary>
-	public class BSharpCompiler : BSharpCompilerBase {
+	[ContainerComponent(ServiceType = typeof(IBSharpCompiler))]
+	public  class BSharpCompiler :  ServiceBase,IBSharpCompiler {
+		private IBSharpConfig _config;
+
 		/// <summary>
 		///     Текущий контекстный индекс
 		/// </summary>
 		protected IBSharpContext CurrentBuildContext;
 
 		/// <summary>
+		///     Возвращает конфигурацию компилятора
+		/// </summary>
+		/// <returns></returns>
+		public IBSharpConfig GetConfig() {
+			if (null == _config) {
+				_config = new BSharpConfig();
+			}
+			return _config;
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="compilerConfig"></param>
+		public void Initialize(IBSharpConfig compilerConfig) {
+			_config = compilerConfig;
+		}
+
+
+		/// <summary>
+		///     Компилирует источники в перечисление итоговых классов
+		/// </summary>
+		/// <param name="sources"></param>
+		/// <param name="preparedContext"></param>
+		/// <returns></returns>
+		public IBSharpContext Compile(IEnumerable<XElement> sources , IBSharpContext preparedContext = null) {
+			var cfg = GetConfig();
+			if (cfg.SingleSource) {
+				return BuildBatch(sources);
+			}
+			IBSharpContext result = new BSharpContext();
+			foreach (XElement src in sources) {
+				IBSharpContext subresult = BuildSingle(src);
+				result.Merge(subresult);
+			}
+			return result;
+		}
+
+		private IBSharpContext BuildSingle(XElement source) {
+			var batch = new[] {source};
+			IBSharpContext context = BuildIndex(batch);
+			Link(batch, context);
+			return context;
+		}
+
+		private IBSharpContext BuildBatch(IEnumerable<XElement> sources) {
+			XElement[] batch = sources.ToArray();
+			var context = BuildIndex(batch);
+			Link(batch, context);
+			return context;
+		}
+
+		/// <summary>
 		///     Перекрыть для создания индексатора
 		/// </summary>
 		/// <param name="sources"></param>
 		/// <returns></returns>
-		protected override IBSharpContext BuildIndex(IEnumerable<XElement> sources) {
+		protected virtual IBSharpContext BuildIndex(IEnumerable<XElement> sources) {
 			
 			var baseindex = IndexizeRawClasses(sources);
 			CurrentBuildContext = new BSharpContext();
@@ -116,7 +172,7 @@ namespace Qorpent.BSharp {
 		/// <param name="sources"></param>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		protected override void Link(IEnumerable<XElement> sources, IBSharpContext context) {
+		protected virtual void Link(IEnumerable<XElement> sources, IBSharpContext context) {
 			
 			context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
 				_ => {
@@ -127,7 +183,7 @@ namespace Qorpent.BSharp {
 						_.Error = ex;
 					}
 				})
-			;
+				;
 		}
 	}
 }

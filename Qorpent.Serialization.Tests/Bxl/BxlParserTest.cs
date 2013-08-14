@@ -76,7 +76,7 @@ test x='1' y=3
 		}
 
 		[Test]
-		public void CanUseObjectXmlDuringParse()
+		public void CanUseBSharpDuringParse()
 		{
 			var res = new BxlParser().Parse(@"
 class A abstract
@@ -84,7 +84,7 @@ class A abstract
 class B
 	import A
 	y='${x}'
-	", "", BxlParserOptions.BxlSharp);
+	", "", BxlParserOptions.BSharp);
 			Console.WriteLine(res.ToString());
 			Assert.AreEqual(@"<objectxml>
   <class code=""B"" y=""${x}"" fullcode=""B"" x=""1"" />
@@ -92,7 +92,7 @@ class B
 		}
 
 		[Test]
-		public void CanUseObjectXmlWithInterpolationsDuringParse()
+		public void CanUseBSharpWithInterpolationsDuringParse()
 		{
 			var res = new BxlParser().Parse(@"
 class A abstract
@@ -100,7 +100,7 @@ class A abstract
 class B
 	import A
 	y='${x}'
-	", "", BxlParserOptions.BxlSharp|BxlParserOptions.PerformInterpolation);
+	", "", BxlParserOptions.BSharp|BxlParserOptions.PerformInterpolation);
 			Console.WriteLine(res.ToString());
 			Assert.AreEqual(@"<objectxml>
   <class code=""B"" y=""1"" fullcode=""B"" x=""1"" />

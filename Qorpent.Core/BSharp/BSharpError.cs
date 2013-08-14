@@ -13,7 +13,7 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Тип ошибки
 		/// </summary>
-		public BSharpErrorTypes Type { get; set; }
+		public BSharpErrorType Type { get; set; }
 
 		/// <summary>
 		/// Фаза, на которой произошла ошибка

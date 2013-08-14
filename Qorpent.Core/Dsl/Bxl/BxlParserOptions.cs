@@ -65,6 +65,6 @@ namespace Qorpent.Bxl {
 		/// <summary>
 		/// Рассматривать результат как файл BxlSharp и применить к нему компиляцию
 		/// </summary>
-		BxlSharp = 128,
+		BSharp = 128,
 	}
 }

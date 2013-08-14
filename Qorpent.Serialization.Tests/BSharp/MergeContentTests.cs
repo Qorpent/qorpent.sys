@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Serialization.Tests.ObjectXml {
+namespace Qorpent.Serialization.Tests.BSharp {
 	[TestFixture]
 	public class MergeContentTests : CompileTestBase {
 		[Test]

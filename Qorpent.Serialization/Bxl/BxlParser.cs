@@ -67,7 +67,7 @@ namespace Qorpent.Bxl {
 											0!=(options&BxlParserOptions.OnlyCodeAttribute)
 				);
 #endif
-			if (options.HasFlag(BxlParserOptions.BxlSharp)) {
+			if (options.HasFlag(BxlParserOptions.BSharp)) {
 				var compileroptions = new BSharpConfig {
 					UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation)
 				};

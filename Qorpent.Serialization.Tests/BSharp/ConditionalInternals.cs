@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 
-namespace Qorpent.Serialization.Tests.ObjectXml {
+namespace Qorpent.Serialization.Tests.BSharp {
 	[TestFixture]
 	public class ConditionalInternals:CompileTestBase {
 		[Test]

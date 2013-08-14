@@ -41,9 +41,9 @@ namespace Qorpent.Mvc.Actions {
 			{
 				opts = opts | BxlParserOptions.PerformInterpolation;
 			}
-			if (BxlSharp)
+			if (BSharp)
 			{
-				opts = opts | BxlParserOptions.BxlSharp;
+				opts = opts | BxlParserOptions.BSharp;
 			}
 			return Context.Application.Bxl.Parse(Text, "bxlparse.action", opts);
 		}
@@ -60,9 +60,9 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		[Bind] protected bool Interpolate;
 		/// <summary>
-		/// Использовать BxlSharp
+		/// Использовать BSharp
 		/// </summary>
-		[Bind] protected bool BxlSharp;
+		[Bind] protected bool BSharp;
 
 		/// <summary>
 		/// </summary>

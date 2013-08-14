@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using NUnit.Framework;
 
-namespace Qorpent.Serialization.Tests.ObjectXml {
+namespace Qorpent.Serialization.Tests.BSharp {
 	/// <summary>
 	/// 
 	/// </summary>
