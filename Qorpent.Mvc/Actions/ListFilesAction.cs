@@ -1,37 +1,11 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Qorpent.IoC;
 using System;
 
 namespace Qorpent.Mvc.Actions
 {
-    internal abstract class CodeBase
-    {
-        public static string[] ListFilesString()
-        {
-            var listFilesStr = Directory.GetFiles(Environment.CurrentDirectory);
-            return listFilesStr;
-        }
-
-        public static string ListDIrectrory()
-        {
-            var di = new DirectoryInfo(Environment.CurrentDirectory);
-            var subDirs = di.GetDirectories();
-            Console.WriteLine(Environment.CurrentDirectory);
-            if (subDirs.Length > 0)
-            {
-                return subDirs.ToString();
-            }
-            else
-            {
-                Console.WriteLine("Пусто");
-                return null;
-            }
-        }
-
-    }
-
-
     /// <summary>
     /// 	Возвращает текущий откомпилированный манифест (полный XML)
     /// </summary>
@@ -44,17 +18,32 @@ namespace Qorpent.Mvc.Actions
         /// </summary>
         protected override object MainProcess()
         {
+            var dirs = ListDirectrory();
+            var files = ListFiles();
 
-            //String dir1 = Environment.CurrentDirectory;//получаем текущую рабочую папку приложения
-            //String dir2 = Application.StartupPath;//получаем папку из которой произошел запуск приложения
+            var result = new List<string>();
 
-            return CodeBase.ListFilesString();
+            result.AddRange(dirs);
+            result.AddRange(files);
 
-           // return CodeBase.ListDIrectrory();
-           // return ;
-            //CodeBase.ListDIrectrory();
+            return result;
+        }
+
+        private IEnumerable<string> ListDirectrory()
+        {
+            var di = new DirectoryInfo(Environment.CurrentDirectory);
+            if (null == di)
+            {
+                throw new Exception("Cannot get directory info");
+            }
+
+            return di.GetDirectories().Select(directoryInfo => directoryInfo.Name).ToList();
+        }
 
 
+        private IEnumerable<string> ListFiles()
+        {
+            
         }
     }
 }
