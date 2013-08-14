@@ -288,5 +288,8 @@
     <EmbeddedResource Include=".\**\*.*resource" />
     <QorpentReference Include="*.import" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BSharp\" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

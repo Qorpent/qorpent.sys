@@ -24,6 +24,7 @@ namespace Qorpent.BSharp {
 			var baseindex = IndexizeRawClasses(sources);
 			CurrentBuildContext = new BSharpContext();
 			CurrentBuildContext.Setup(baseindex);
+			CurrentBuildContext.Build();
 			return CurrentBuildContext;
 		}
 
@@ -63,33 +64,24 @@ namespace Qorpent.BSharp {
 
 		private static void SetupInitialOrphanState(XElement e, BSharpClass def) {
 			if (null != e.Attribute("abstract") || e.Attr("name") == "abstract") {
-				def.Abstract = true;
+				def.Set(BSharpClassAttributes.Abstract);
 			}
 			if (null != e.Attribute("static") || e.Attr("name") == "static")
 			{
-				def.Static = true;
+				def.Set(BSharpClassAttributes.Static);
 			}
 			if (e.Name.LocalName == "class") {
-				def.ExplicitlyOrphaned = false;
-				def.ExplicitClass = true;
+				def.Set(BSharpClassAttributes.Explicit);
 			}
 			else if (e.Name.LocalName == "__TILD__class") {
-				def.IsClassOverride = true;
-				def.TargetClassName = def.Name;
-				def.Name = Guid.NewGuid().ToString();
-				def.ExplicitlyOrphaned = false;
-				def.ExplicitClass = true;
+				def.Set(BSharpClassAttributes.Override);				
 			}
 			else if (e.Name.LocalName == "__PLUS__class")
 			{
-				def.IsClassExtension = true;
-				def.TargetClassName = def.Name;
-				def.Name = Guid.NewGuid().ToString();
-				def.ExplicitlyOrphaned = false;
-				def.ExplicitClass = true;
+				def.Set(BSharpClassAttributes.Extension);			
 			}
 			else {
-				def.ExplicitlyOrphaned = true;
+				def.Set(BSharpClassAttributes.Orphan);
 				def.DefaultImportCode = e.Name.LocalName;
 			}
 		}
@@ -125,7 +117,7 @@ namespace Qorpent.BSharp {
 		/// <param name="context"></param>
 		/// <returns></returns>
 		protected override void Link(IEnumerable<XElement> sources, IBSharpContext context) {
-			CurrentBuildContext = context;
+			
 			context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
 				_ => {
 					try {

@@ -10,8 +10,10 @@
   <ItemGroup>
     <Compile Include="BSharp\BSharpClassAttributes.cs" />
     <Compile Include="BSharp\BSharpContextDataType.cs" />
+    <Compile Include="BSharp\BSharpElementType.cs" />
     <Compile Include="BSharp\BSharpError.cs" />
     <Compile Include="BSharp\BSharpErrors.cs" />
+    <Compile Include="BSharp\IBSharpCompiler.cs" />
     <Compile Include="BSharp\IBSharpConfig.cs" />
     <Compile Include="BSharp\IBSharpContext.cs" />
     <Compile Include="Json\CType.cs" />
@@ -25,7 +27,6 @@
     <Compile Include="Json\JsonValueType.cs" />
     <Compile Include="Json\Lexer.cs" />
     <Compile Include="Json\Tokenizer.cs" />
-    <Compile Include="BSharp\IBSharpCompiler.cs" />
     <Compile Include="BSharp\BSharpClassBuilder.cs" />
     <Compile Include="BSharp\BSharpCompiler.cs" />
     <Compile Include="BSharp\BSharpCompilerBase.cs" />
@@ -34,7 +35,6 @@
     <Compile Include="BSharp\BSharpClass.cs" />
     <Compile Include="BSharp\BSharpImport.cs" />
     <Compile Include="BSharp\BSharpElement.cs" />
-    <Compile Include="BSharp\BSharpElementType.cs" />
     <Compile Include="Qxi\XmlIncludeProcessor.cs" />
     <Compile Include="Qxi\XmlInterpolationPreprocessor.cs" />
     <Compile Include="Selector\DefaultSelector.cs" />

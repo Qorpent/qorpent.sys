@@ -61,14 +61,11 @@ namespace Qorpent.BSharp {
 		{
 			lock (_cls) {
 				if (CheckExistedBuild()) return;
-				//Console.WriteLine("start build " + _cls.FullName);
-				_cls.InBuiltMode = true;	
+				_cls.Set(BSharpClassAttributes.InBuild);
 				InternalBuild();
-				_cls.InBuiltMode = false;
-				_cls.IsBuilt = true;
-				//Console.WriteLine("fininsh build " + _cls.FullName);
+				_cls.Remove(BSharpClassAttributes.InBuild);
+				_cls.Set(BSharpClassAttributes.Built);
 			}
-			
 		}
 
 		private void InternalBuild() {
@@ -181,21 +178,23 @@ namespace Qorpent.BSharp {
 		}
 
 		private bool CheckExistedBuild() {
-			if (_cls.IsBuilt) return true;
+			if (_cls.Is(BSharpClassAttributes.Built)) return true;
 			lock (_cls) {
-				if (_cls.InBuiltMode) {
+				if (_cls.Is(BSharpClassAttributes.InBuild))
+				{
 					if (null != _cls.BuildTask) {
 						_cls.BuildTask.Wait();
 					}
 					else {
 						for (var i = 0; i <= 10; i++) {
 							Thread.Sleep(10);
-							if (_cls.IsBuilt) {
+							if (_cls.Is(BSharpClassAttributes.Built))
+							{
 								break;
 							}
 						}
 					}
-					if (_cls.IsBuilt) return true;
+					if (_cls.Is(BSharpClassAttributes.Built)) return true;
 				}
 			}
 			return false;
@@ -231,8 +230,8 @@ namespace Qorpent.BSharp {
 			
 			foreach (var e in _cls.CollectImports().Reverse())
 			{
-				if (e.Static) {
-					if (!e.IsBuilt) {
+				if (e.Is(BSharpClassAttributes.Static)) {
+					if (!e.Is(BSharpClassAttributes.Built)) {
 						Build(_compiler,e,_context);
 					}
 					_cls.Compiled.Add(e.Compiled.Elements().Where(IsMatch));
@@ -320,9 +319,9 @@ namespace Qorpent.BSharp {
 				selfconfig.Set("_class_", _cls.FullName);
 				selfconfig.SetParent(current);
 				current = selfconfig;
-				if (i.Static && _cls != i)
+				if (i.Is(BSharpClassAttributes.Static) && _cls != i)
 				{
-					if (!i.IsBuilt) {
+					if (!i.Is(BSharpClassAttributes.Built)) {
 						Build(_compiler, i, _context);
 					}
 					foreach (var p in i.ParamIndex)

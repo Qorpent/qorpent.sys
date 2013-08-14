@@ -11,7 +11,7 @@ namespace Qorpent.Serialization.Tests.ObjectXml {
 
 			var compiler = new BSharpCompiler();
 			compiler.Initialize(cfg);
-			return  compiler.Compile(new[] {xml});
+			return  (BSharpContext)compiler.Compile(new[] {xml});
 		}
 
 		protected BSharpContext CompileAll(bool single,params string[] code) {
@@ -26,7 +26,7 @@ namespace Qorpent.Serialization.Tests.ObjectXml {
 			var compiler = new BSharpCompiler();
 			compiler.Initialize(cfg);
 			var result = compiler.Compile(xmls);
-			return result;
+			return (BSharpContext)result;
 
 		}
 	}

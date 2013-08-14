@@ -113,7 +113,6 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <param name="othercontext"></param>
 		public void Merge(IBSharpContext othercontext) {
-			Build();
 			var subresult = othercontext as BSharpContext;
 
 			if (null != subresult.Abstracts) {
@@ -185,8 +184,8 @@ namespace Qorpent.BSharp {
 		/// <param name="code"></param>
 		/// <param name="ns"></param>
 		/// <returns></returns>
-		public  BSharpClass Get( string code, string ns) {
-			Build();
+		public  BSharpClass Get( string code, string ns = null) {
+
 			if (null == ns) {
 				var full = Working.FirstOrDefault(_ => _.FullName == code);
 				if (null != full) return full;
@@ -254,7 +253,7 @@ namespace Qorpent.BSharp {
 		/// <param name="datatype"></param>
 		/// <returns></returns>
 		public IEnumerable<BSharpClass> Get(BSharpContextDataType datatype) {
-			Build();
+			if (!_built) throw new Exception("not still built");
 			switch (datatype) {
 				case BSharpContextDataType.Working:
 					return Working;
@@ -295,15 +294,15 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public void Build() {
 			if (_built) return;
-			Overrides = RawClasses.Values.Where(_ => _.IsClassOverride).OrderBy(_=>_.Source.Attr("priority").ToInt()).ToList();
-			Extensions = RawClasses.Values.Where(_ => _.IsClassExtension).OrderBy(_ => _.Source.Attr("priority").ToInt()).ToList();
+			Overrides = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Override)).OrderBy(_=>_.Source.Attr("priority").ToInt()).ToList();
+			Extensions = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Extension)).OrderBy(_ => _.Source.Attr("priority").ToInt()).ToList();
 			ApplyOverrides();
 			ApplyExtensions();
 			ResolveOrphans();
 			Orphans = RawClasses.Values.Where(_ => _.IsOrphaned()).ToList();
-			Abstracts = RawClasses.Values.Where(_ => _.Abstract && !_.IsOrphaned()).ToList();
-			Working = RawClasses.Values.Where(_ => !_.IsClassExtension && !_.IsClassOverride && !_.Abstract && !_.IsOrphaned()).ToList();
-			Static = RawClasses.Values.Where(_ => _.Static && !_.IsOrphaned()).ToList();
+			Abstracts = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned()).ToList();
+			Working = RawClasses.Values.Where(_ => !_.Is(BSharpClassAttributes.Extension) && !_.Is(BSharpClassAttributes.Override) && !_.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned()).ToList();
+			Static = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Static) && !_.IsOrphaned()).ToList();
 			ResolveImports();
 			_built = true;
 		}
@@ -312,7 +311,7 @@ namespace Qorpent.BSharp {
 			foreach (var o in Extensions) {
 				var cls = Get(o.TargetClassName, o.Namespace);
 				if (null == cls) {
-					o.IsClassExtension = false;
+					o.Remove(BSharpClassAttributes.Extension);
 					o.Name = o.TargetClassName;
 				}
 				else
@@ -336,7 +335,7 @@ namespace Qorpent.BSharp {
 			foreach (var o in Overrides) {
 				var cls = Get(o.TargetClassName, o.Namespace);
 				if (null == cls) {
-					o.IsClassOverride = false;
+					o.Remove(BSharpClassAttributes.Override);
 					o.Name = o.TargetClassName;
 				}
 				else {
@@ -373,13 +372,13 @@ namespace Qorpent.BSharp {
 
 
 		private void ResolveOrphans() {
-			IEnumerable<BSharpClass> _initiallyorphaned = RawClasses.Values.Where(_ => _.ExplicitlyOrphaned);
+			IEnumerable<BSharpClass> _initiallyorphaned = RawClasses.Values.Where(_ => !_.Is(BSharpClassAttributes.Explicit));
 			foreach (var o in _initiallyorphaned) {
 				string code = o.DefaultImportCode;
 				string ns = o.Namespace;
 				var import = Get(code, ns);
 				if (import != null) {
-					o.ExplicitlyOrphaned = false;
+					o.Remove(BSharpClassAttributes.Orphan);
 					o.DefaultImport = import;
 				}
 			}

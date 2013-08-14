@@ -63,5 +63,10 @@ namespace Qorpent.BSharp {
 		/// <param name="level"></param>
 		/// <returns></returns>
 		IEnumerable<BSharpError> GetErrors(ErrorLevel level = ErrorLevel.None);
+
+		/// <summary>
+		/// Строит рабочий индекс классов
+		/// </summary>
+		void Build();
 	}
 }

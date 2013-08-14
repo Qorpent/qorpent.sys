@@ -39,6 +39,20 @@ namespace Qorpent.BSharp {
 		/// <param name="flags"></param>
 		public void Set(BSharpClassAttributes flags) {
 			_attributes = _attributes | flags;
+			if (
+				flags.HasFlag(BSharpClassAttributes.Override)
+				||
+				flags.HasFlag(BSharpClassAttributes.Extension)
+				) {
+				if (null == TargetClassName) {
+					TargetClassName = Name;
+					Name = Guid.NewGuid().ToString();
+				}
+				Set(BSharpClassAttributes.Explicit);
+			}
+			if (flags.HasFlag(BSharpClassAttributes.Explicit)) {
+				Remove(BSharpClassAttributes.Orphan);
+			}
 		}
 		/// <summary>
 		/// Снимает определенные флаги
