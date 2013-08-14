@@ -31,6 +31,7 @@
     <Compile Include="js_serializer_test.cs" />
     <Compile Include="ObjectXml\CompileTestBase.cs" />
     <Compile Include="ObjectXml\ConditionalInternals.cs" />
+    <Compile Include="ObjectXml\IncludeTest.cs" />
     <Compile Include="ObjectXml\MergeContentTests.cs" />
     <Compile Include="ObjectXml\SimpleObjectXmlBuilds.cs" />
     <Compile Include="ObjectXml\TbxlSamples.cs" />
