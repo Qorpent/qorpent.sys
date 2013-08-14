@@ -24,10 +24,13 @@
 # во-первых определяем, что у нас вообще в системе есть темы
 # используем атрибут prototype просто как метку для этого класса и всех наследников
 class thema abstract prototype=thema
-	element form
-	element report
+	element form 	# указали, что темы содержат некие формы с возможностью перекрытия
+	element report  # указали, что темы содержат некие отчеты с возможностью перекрытия
 
 thema eco abstract
+	# вот тут мы определяем внутренние параметры, облегчающие конфигурацию и перекрытие
+	# и хорошо видна мотивация скрытия атрибутов с "_" в начале имени
+	# без их использования выдача содержала бы кучу ненужных для Zeta атрибутов
 	_form = true
 	_report = true
 	_obj = true
@@ -36,12 +39,22 @@ thema eco abstract
 	_plan = true
 	_korr = false
 	
-	_readrole = '${roleprefix}_READ'
-	_svodrole = '${roleprefix}_ANALYTIC'
-	_writerole = '${roleprefix}_WRITE'
+	# это такие константы, которые возможно потребуют смены в будущем
+	# и мы их тут в одном месте описываем, чтобы проще было потом изменять
+	_writerolesuffix = '_OPERATOR'
+	_readrolesuffix = '_ANALYTIC'
+	_svodrolesuffix = '_ANALYTIC'
 	
+	_readrole = '${roleprefix}${_readrolesuffix}'
+	_svodrole = '${roleprefix}${_svodrolesuffix}'
+	_writerole = '${roleprefix}${_writerolesuffix}'
+	
+	# а вот роль на доступ вполне видимый атрибут
 	role = '${_readrole}'
 	
+	# для форм и отчетов очень правильно применить условную компиляцию
+	# в итоге мы с одной стороны все описали, с другой стороны темы
+	# могут определить под себя только нужный набор
 	form A role='${_writerole}' if='_form & _fact'
 	form B role='${_writerole}' if='_form & _plan'
 	form C role='${_writerole}' if='_form & _korr'
@@ -49,29 +62,31 @@ thema eco abstract
 	report Ab role='${_readrole}' if='_report & _fact & _obj'
 	report Ba role='${_svodrole}' if='_report & _plan & _svod'
 	report Bb role='${_readrole}' if='_report & _plan & _obj'
-	
 	report Ca role='${_svodrole}' if='_report & _korr & _svod'
 	report Cb role='${_readrole}' if='_report & _korr & _obj'
-	
+	# типа предложение как привязывать парамсеты - не прямо в отчет, а в тему
 	paramset ps_main if='_svod & !_remove_ps_main'
+		for report.Aa
+		for report.Ba
+		for report.Ca
 
+# пример промежуточной абстракции привязывющей некие колсеты по умолчанию
 eco month 'Типовая месячная тема' abstract
-	colset cs_month_base for=all if='!_remove_cs_month_base'
-	colset cs_month_plan for='form B,report Ba, report Bb'  if='_plan & !_remove_cs_month_plan'
+	# типа предложение как привязывать колсеты с назначением им целевых элементов
+	colset cs_month_base if='!_remove_cs_month_base' # этот колсет всем
+	colset cs_month_plan if='!_remove_cs_month_plan' # а этот колсет только для плановых форм/отчетов
+		for form.B
+		for report.Ba
+		for report.Bb
 	
-	
-month balans rootrow=m111 roleprefix=FIN
+month balans 'Баланс (форма 1)' rootrow=m111 roleprefix=FIN
 
-balans balans_rsn _korr=true
+balans balans_rsn 'Баланс приложение с коррективами' _korr=true
 	+report Bb
 		col mycol2
 		
-balans balans_rsn2 _korr=true
-	~report Bb
-		col mycol2
-		
-balans balans_olap _form=false _plan=false _obj=false
-	_remove_cs_month_base = true
+balans balans_olap 'Балансовый анализ' _form=false _plan=false _obj=false
+	_remove_cs_month_base = true #отключили колсет по умолчанию
 	colset cs_month_olap
 
 	
