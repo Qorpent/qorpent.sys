@@ -137,6 +137,8 @@ namespace Qorpent.BxlSharp {
 				}
 			}
 		}
+
+		private IDictionary<string, ObjectXmlClass> _resolveclassCache = new Dictionary<string, ObjectXmlClass>();
 		/// <summary>
 		/// Разрешает класс по коду и заявленному пространству имен
 		/// </summary>
@@ -144,6 +146,10 @@ namespace Qorpent.BxlSharp {
 		/// <param name="ns"></param>
 		/// <returns></returns>
 		public  ObjectXmlClass ResolveClass( string code, string ns) {
+			var key = ns + "." + code;
+			if (_resolveclassCache.ContainsKey(key)) {
+				return _resolveclassCache[key];
+			}
 			ObjectXmlClass import = null;
 			if (!String.IsNullOrWhiteSpace(code)) {
 				if (code.Contains('.')) {
@@ -191,6 +197,9 @@ namespace Qorpent.BxlSharp {
 					import = RawClasses[code];
 				}
 			}
+			if (null != import) {
+				_resolveclassCache[key] = import;
+			}
 			return import;
 		}
 
@@ -198,8 +207,10 @@ namespace Qorpent.BxlSharp {
 		/// Строит рабочий индекс классов
 		/// </summary>
 		public void Build() {
-			Overrides = RawClasses.Values.Where(_ => _.IsClassOverride).ToList();
-			Extensions = RawClasses.Values.Where(_ => _.IsClassExtension).ToList();
+			Overrides = RawClasses.Values.Where(_ => _.IsClassOverride).OrderBy(_=>_.Source.Attr("priority").ToInt()).ToList();
+			Extensions = RawClasses.Values.Where(_ => _.IsClassExtension).OrderBy(_ => _.Source.Attr("priority").ToInt()).ToList();
+			ApplyOverrides();
+			ApplyExtensions();
 			ResolveOrphans();
 			Orphans = RawClasses.Values.Where(_ => _.DetectIfIsOrphaned()).ToList();
 			Abstracts = RawClasses.Values.Where(_ => _.Abstract && !_.DetectIfIsOrphaned()).ToList();
@@ -207,6 +218,52 @@ namespace Qorpent.BxlSharp {
 			Static = RawClasses.Values.Where(_ => _.Static && !_.DetectIfIsOrphaned()).ToList();
 			ResolveImports();
 		}
+
+		private void ApplyExtensions() {
+			foreach (var o in Extensions) {
+				var cls = ResolveClass(o.TargetClassName, o.Namespace);
+				if (null == cls) {
+					o.IsClassExtension = false;
+					o.Name = o.TargetClassName;
+				}
+				else
+				{
+					ApplyExtension(o, cls);
+				}
+			}
+		}
+
+		private void ApplyExtension(ObjectXmlClass src, ObjectXmlClass trg) {
+			foreach (var e in src.Source.Attributes()) {
+				if (null == trg.Source.Attribute(e.Name)) {
+					trg.Source.Add(e);
+				}
+			}
+			trg.Source.Add(src.Source.Elements());
+		}
+
+		private void ApplyOverrides()
+		{
+			foreach (var o in Overrides) {
+				var cls = ResolveClass(o.TargetClassName, o.Namespace);
+				if (null == cls) {
+					o.IsClassOverride = false;
+					o.Name = o.TargetClassName;
+				}
+				else {
+					ApplyOverride(o, cls);
+				}
+			}
+		}
+
+		private void ApplyOverride(ObjectXmlClass src, ObjectXmlClass trg) {
+			foreach (var e in src.Source.Attributes())
+			{
+				trg.Source.SetAttributeValue(e.Name,e.Value);
+			}
+			trg.Source.Add(src.Source.Elements());
+		}
+
 
 		private void ResolveImports()
 		{
