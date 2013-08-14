@@ -253,7 +253,6 @@ namespace Qorpent.BSharp {
 		/// <param name="datatype"></param>
 		/// <returns></returns>
 		public IEnumerable<IBSharpClass> Get(BSharpContextDataType datatype) {
-			if (!_built) throw new Exception("not still built");
 			switch (datatype) {
 				case BSharpContextDataType.Working:
 					return Working;

@@ -108,19 +108,37 @@ namespace Qorpent.BSharp {
 			}
 			else {
 				Build(_compiler,includecls,_context);
-				var includeelement = includecls.Compiled;
+				var includeelement = new XElement(includecls.Compiled);
 				var usebody = null!=i.Attribute("body")||i.Attr("name")=="body";
 
 				needReInterpolate = needReInterpolate || includeelement.HasAttributes(contains: "%{", skipself: usebody);
 
 				if (usebody) {
+					var elements = includeelement.Elements().ToArray();
+					foreach (var e in elements) {
+						StoreIncludeParameters(i, e);
+					}
 					i.ReplaceWith(includeelement.Elements());
 				}
 				else {
+					StoreIncludeParameters(i, includeelement);
+					includeelement.Name = includeelement.Attr("fullcode");
+					includeelement.Attribute("fullcode").Remove();
+					includeelement.Attribute("code").Remove();
+					includeelement.Attribute("id").Remove();
 					i.ReplaceWith(includeelement);
 				}
 			}
 			return needReInterpolate;
+		}
+
+		private void StoreIncludeParameters(XElement src, XElement trg) {
+			foreach (var a in src.Attributes()) {
+				if(a.Name.LocalName=="code") continue;
+				if (a.Name.LocalName == "name") continue;
+				if (a.Name.LocalName == "body") continue;
+				trg.SetAttributeValue(a.Name,a.Value);
+			}
 		}
 
 		private void CleanupElementsWithConditions() {

@@ -74,7 +74,7 @@ namespace Qorpent.Bxl {
 				var compiler = new BSharpCompiler();
 				compiler.Initialize(compileroptions);
 				var compileresult = compiler.Compile(new[] {result});
-				var newresult = new XElement("objectxml");
+				var newresult = new XElement("bsharp");
 				foreach (var o in compileresult.Get(BSharpContextDataType.Orphans)) {
 					newresult.Add(new XElement("orphan", new XAttribute("code", o.FullName)));
 				}

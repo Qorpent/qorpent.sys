@@ -49,8 +49,9 @@ namespace Qorpent.BSharp {
 				return BuildBatch(sources);
 			}
 			IBSharpContext result = new BSharpContext();
+			
 			foreach (XElement src in sources) {
-				IBSharpContext subresult = BuildSingle(src);
+				var subresult = BuildSingle(src);
 				result.Merge(subresult);
 			}
 			return result;

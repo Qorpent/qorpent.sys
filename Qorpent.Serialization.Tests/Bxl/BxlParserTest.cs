@@ -86,9 +86,9 @@ class B
 	y='${x}'
 	", "", BxlParserOptions.BSharp);
 			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<objectxml>
+			Assert.AreEqual(@"<bsharp>
   <class code=""B"" y=""${x}"" fullcode=""B"" x=""1"" />
-</objectxml>", res.ToString());
+</bsharp>", res.ToString());
 		}
 
 		[Test]
@@ -102,9 +102,9 @@ class B
 	y='${x}'
 	", "", BxlParserOptions.BSharp|BxlParserOptions.PerformInterpolation);
 			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<objectxml>
+			Assert.AreEqual(@"<bsharp>
   <class code=""B"" y=""1"" fullcode=""B"" x=""1"" />
-</objectxml>", res.ToString());
+</bsharp>", res.ToString());
 		}
 
 

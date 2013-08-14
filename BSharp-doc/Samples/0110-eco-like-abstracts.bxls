@@ -1,5 +1,5 @@
 # Copyright Comdiv 2007-2013
-# qorpent.sys bxl#
+# qorpent.sys B#
 
 ###############################################
 # ДАННЫЙ ПРИМЕР ПОКАЗЫАЕТ                     #
@@ -77,7 +77,7 @@ eco month 'Типовая месячная тема' abstract
 	colset cs_month_plan if='!_remove_cs_month_plan' # а этот колсет только для плановых форм/отчетов
 		for form.B
 		for report.Ba
-		for report.Bb
+		for report.Bb 
 	
 month balans 'Баланс (форма 1)' rootrow=m111 roleprefix=FIN
 
