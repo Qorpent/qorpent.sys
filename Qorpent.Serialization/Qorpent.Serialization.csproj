@@ -17,6 +17,8 @@
     <Compile Include="BSharp\IBSharpCompiler.cs" />
     <Compile Include="BSharp\IBSharpConfig.cs" />
     <Compile Include="BSharp\IBSharpContext.cs" />
+    <Compile Include="BSharp\IBSharpElement.cs" />
+    <Compile Include="BSharp\IBSharpImport.cs" />
     <Compile Include="Json\CType.cs" />
     <Compile Include="Json\JsonArray.cs" />
     <Compile Include="Json\JsonObject.cs" />

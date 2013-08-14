@@ -1,13 +1,13 @@
 ﻿namespace Qorpent.BSharp {
 	/// <summary>
 	/// </summary>
-	public class BSharpElement {
+	public class BSharpElement : IBSharpElement {
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="other"></param>
 		/// <returns></returns>
-		protected bool Equals(BSharpElement other) {
+		protected bool Equals(IBSharpElement other) {
 			return string.Equals(Name, other.Name) && string.Equals(TargetName, other.TargetName) && Type == other.Type;
 		}
 
@@ -50,7 +50,7 @@
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
 			if (obj.GetType() != this.GetType()) return false;
-			return Equals((BSharpElement) obj);
+			return Equals((IBSharpElement) obj);
 		}
 	}
 }

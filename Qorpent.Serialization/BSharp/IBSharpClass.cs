@@ -38,12 +38,12 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		///     Явные импорты
 		/// </summary>
-		IList<BSharpImport> SelfImports { get; }
+		IList<IBSharpImport> SelfImports { get; }
 
 		/// <summary>
 		///     Определение сводимых элементов
 		/// </summary>
-		IList<BSharpElement> SelfElements { get; }
+		IList<IBSharpElement> SelfElements { get; }
 
 		/// <summary>
 		/// </summary>
@@ -67,7 +67,7 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Список всех определений мержа
 		/// </summary>
-		List<BSharpElement> AllElements { get; }
+		List<IBSharpElement> AllElements { get; }
 
 		/// <summary>
 		/// Текущая задача на построение

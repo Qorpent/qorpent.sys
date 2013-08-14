@@ -28,15 +28,15 @@ namespace Qorpent.BSharp {
 			return CurrentBuildContext;
 		}
 
-		private IEnumerable<BSharpClass> IndexizeRawClasses(IEnumerable<XElement> sources) {
+		private IEnumerable<IBSharpClass> IndexizeRawClasses(IEnumerable<XElement> sources) {
 			foreach (XElement src in sources) {
-				foreach (BSharpClass e in IndexizeRawClasses(src, "")) {
+				foreach (IBSharpClass e in IndexizeRawClasses(src, "")) {
 					yield return e;
 				}
 			}
 		}
 
-		private IEnumerable<BSharpClass> IndexizeRawClasses(XElement src, string ns) {
+		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns) {
 			foreach (XElement e in src.Elements()) {
 				var _ns = "";
 				if (e.Name.LocalName == "namespace") {
@@ -46,7 +46,7 @@ namespace Qorpent.BSharp {
 					else {
 						_ns = ns + "." + e.Attr("code");
 					}
-					foreach (BSharpClass e_ in IndexizeRawClasses(e, _ns)) {
+					foreach (IBSharpClass e_ in IndexizeRawClasses(e, _ns)) {
 						yield return e_;
 					}
 				}
@@ -62,7 +62,7 @@ namespace Qorpent.BSharp {
 			}
 		}
 
-		private static void SetupInitialOrphanState(XElement e, BSharpClass def) {
+		private static void SetupInitialOrphanState(XElement e, IBSharpClass def) {
 			if (null != e.Attribute("abstract") || e.Attr("name") == "abstract") {
 				def.Set(BSharpClassAttributes.Abstract);
 			}
@@ -86,14 +86,14 @@ namespace Qorpent.BSharp {
 			}
 		}
 
-		private static void ParseImports(XElement e, BSharpClass def) {
+		private static void ParseImports(XElement e, IBSharpClass def) {
 			foreach (XElement i in e.Elements("import")) {
 				var import = new BSharpImport {Condition = i.Attr("if"), TargetCode = i.Attr("code")};
 				def.SelfImports.Add(import);
 			}
 		}
 
-		private static void ParseCompoundElements(XElement e, BSharpClass def) {
+		private static void ParseCompoundElements(XElement e, IBSharpClass def) {
 			foreach (XElement i in e.Elements("element")) {
 				var merge = new BSharpElement();
 				merge.Name = i.Attr("code");

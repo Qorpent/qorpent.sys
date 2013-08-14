@@ -13,8 +13,8 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// </summary>
 		public BSharpClass() {
-			SelfElements = new List<BSharpElement>();
-			SelfImports = new List<BSharpImport>();
+			SelfElements = new List<IBSharpElement>();
+			SelfImports = new List<IBSharpImport>();
 		}
 
 		/// <summary>
@@ -95,12 +95,12 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		///     Явные импорты
 		/// </summary>
-		public IList<BSharpImport> SelfImports { get; private set; }
+		public IList<IBSharpImport> SelfImports { get; private set; }
 
 		/// <summary>
 		///     Определение сводимых элементов
 		/// </summary>
-		public IList<BSharpElement> SelfElements { get; private set; }
+		public IList<IBSharpElement> SelfElements { get; private set; }
 
 		/// <summary>
 		/// </summary>
@@ -121,11 +121,11 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public IConfig ParamIndex { get; set; }
 
-		private List<BSharpElement> _allelements = null;
+		private List<IBSharpElement> _allelements = null;
 		/// <summary>
 		/// Список всех определений мержа
 		/// </summary>
-		public List<BSharpElement> AllElements {
+		public List<IBSharpElement> AllElements {
 			get {
 				if (null == _allelements) {
 					_allelements = GetAllElements().ToList();
@@ -183,7 +183,7 @@ namespace Qorpent.BSharp {
 		/// Собирает все определения мержей из класса
 		/// </summary>
 		/// <returns></returns>
-		private IEnumerable<BSharpElement> GetAllElements() {
+		private IEnumerable<IBSharpElement> GetAllElements() {
 			return AllImports.SelectMany(_ => _.SelfElements).Union(SelfElements).Distinct();
 		}
 
@@ -210,7 +210,7 @@ namespace Qorpent.BSharp {
 
 
 
-			foreach (BSharpImport i in SelfImports) {
+			foreach (IBSharpImport i in SelfImports) {
 				if (null!=i.Target
 					&&
 					!i.Target.IsOrphaned

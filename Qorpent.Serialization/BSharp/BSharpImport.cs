@@ -5,7 +5,7 @@ using Qorpent.Utils.LogicalExpressions;
 namespace Qorpent.BSharp {
 	/// <summary>
 	/// </summary>
-	public class BSharpImport {
+	public class BSharpImport : IBSharpImport {
 		static readonly LogicalExpressionEvaluator logical = new LogicalExpressionEvaluator();
 		private string _condition;
 

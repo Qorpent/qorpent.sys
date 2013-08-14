@@ -357,7 +357,7 @@ namespace Qorpent.BSharp {
 		{
 			foreach (var w in Working.Union(Abstracts))
 			{
-				foreach (BSharpImport i in w.SelfImports)
+				foreach (IBSharpImport i in w.SelfImports)
 				{
 					i.Orphaned = true;
 					var import = Get(i.TargetCode, w.Namespace);
