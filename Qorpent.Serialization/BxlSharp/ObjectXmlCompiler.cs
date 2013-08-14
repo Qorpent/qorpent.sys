@@ -1,14 +1,12 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml.XPath;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.ObjectXml {
+namespace Qorpent.BxlSharp {
 	/// <summary>
-	///     Компилятор ObjectXml по умолчанию
+	///     Компилятор BxlSharp по умолчанию
 	/// </summary>
 	public class ObjectXmlCompiler : ObjectXmlCompilerBase {
 		/// <summary>
@@ -38,14 +36,15 @@ namespace Qorpent.ObjectXml {
 
 		private IEnumerable<ObjectXmlClass> IndexizeRawClasses(XElement src, string ns) {
 			foreach (XElement e in src.Elements()) {
+				var _ns = "";
 				if (e.Name.LocalName == "namespace") {
 					if (string.IsNullOrWhiteSpace(ns)) {
-						ns = e.Attr("code");
+						_ns = e.Attr("code");
 					}
 					else {
-						ns = ns + "." + e.Attr("code");
+						_ns = ns + "." + e.Attr("code");
 					}
-					foreach (ObjectXmlClass e_ in IndexizeRawClasses(e, ns)) {
+					foreach (ObjectXmlClass e_ in IndexizeRawClasses(e, _ns)) {
 						yield return e_;
 					}
 				}
@@ -112,7 +111,16 @@ namespace Qorpent.ObjectXml {
 		protected override void Link(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
 			_currentBuildIndex = index;
 			CollectClassGroups(sources, index);
-			index.Working.AsParallel().ForAll(_=>ObjectXmlClassBuilder.Build(this, _, index));
+			index.Working.AsParallel().ForAll(
+				_ => {
+					try {
+						ObjectXmlClassBuilder.Build(this, _, index);
+					}
+					catch (Exception ex) {
+						_.Error = ex;
+					}
+				})
+			;
 		}
 
 		
@@ -129,7 +137,7 @@ namespace Qorpent.ObjectXml {
 			foreach (var w in index.Working.Union(index.Abstracts)) {
 				foreach (ObjectXmlImport i in w.Imports) {
 					i.Orphaned = true;
-					var import = ResolveClass(index, i.TargetCode, w.Namespace);
+					var import = index.ResolveClass( i.TargetCode, w.Namespace);
 					if (null != import) {
 						i.Orphaned = false;
 						i.Target = import;
@@ -143,7 +151,7 @@ namespace Qorpent.ObjectXml {
 			foreach (var o in _initiallyorphaned) {
 				string code = o.DefaultImportCode;
 				string ns = o.Namespace;
-				var import = ResolveClass(index, code, ns);
+				var import = index.ResolveClass( code, ns);
 				if (import != null) {
 					o.Orphaned = false;
 					o.DefaultImport = import;
@@ -156,30 +164,6 @@ namespace Qorpent.ObjectXml {
 
 			index.Working = index.RawClasses.Values.Where(_ => !_.Abstract && !_.DetectIfIsOrphaned()).ToList();
 			index.Static = index.RawClasses.Values.Where(_ => _.Static && !_.DetectIfIsOrphaned()).ToList();
-		}
-
-		private static ObjectXmlClass ResolveClass(ObjectXmlCompilerIndex index, string code, string ns) {
-			ObjectXmlClass import = null;
-			if (!string.IsNullOrWhiteSpace(code)) {
-				if (code.Contains('.')) {
-					if (index.RawClasses.ContainsKey(code)) {
-						import = index.RawClasses[code];
-					}
-				}
-				else {
-					string probe = ns + "." + code;
-					if (index.RawClasses.ContainsKey(probe)) {
-						import = index.RawClasses[probe];
-					}
-					else {
-						probe = code;
-						if (index.RawClasses.ContainsKey(probe)) {
-							import = index.RawClasses[probe];
-						}
-					}
-				}
-			}
-			return import;
 		}
 	}
 }

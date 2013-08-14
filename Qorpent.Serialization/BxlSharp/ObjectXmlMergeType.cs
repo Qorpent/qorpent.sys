@@ -1,4 +1,4 @@
-﻿namespace Qorpent.ObjectXml {
+﻿namespace Qorpent.BxlSharp {
 	/// <summary>
 	///     Тип
 	/// </summary>

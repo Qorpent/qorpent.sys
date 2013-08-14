@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
+using Qorpent.Bxl;
 
 namespace Qorpent.Utils.Tests {
 	[TestFixture]
@@ -75,6 +77,26 @@ namespace Qorpent.Utils.Tests {
 			x = _xi.Interpolate(x);
 			Console.WriteLine(x);
 			Assert.AreEqual("2z2", x.Element("b").Attribute("z").Value);
+
+		}
+
+		/// <summary>
+		/// Простой проброс интрполяции вниз с явной ссылкой на родительский атрибут
+		/// </summary>
+		[Test]
+		public void BugNotResolveWithLevel()
+		{
+			var x = new BxlParser().Parse(
+@"
+test11 x=A
+	test12 
+		test14 x=B
+			test15
+				test16 x='${..x}${.x}C' y='${x}+'"
+				);
+			x = _xi.Interpolate(x);
+			Console.WriteLine(x);
+			Assert.AreEqual("ABC", x.Descendants("test16").First().Attribute("x").Value);
 
 		}
 	}

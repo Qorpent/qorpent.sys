@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace Qorpent.ObjectXml {
+namespace Qorpent.BxlSharp {
 	/// <summary>
-	///     Интерфейс компилятора ObjectXml - на входе у нас набор неких входных документов,
+	///     Интерфейс компилятора BxlSharp - на входе у нас набор неких входных документов,
 	///     на выходе набор итоговых классов с исключенными абстракциями
 	/// </summary>
 	public interface IObjectXmlCompiler {

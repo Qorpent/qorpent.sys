@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Qorpent.ObjectXml {
+namespace Qorpent.BxlSharp {
 	/// <summary>
 	///     Абстракция компилятора, опирается на некий набор первичных компиляторов
 	/// </summary>

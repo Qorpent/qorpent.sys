@@ -1,4 +1,4 @@
-﻿namespace Qorpent.ObjectXml {
+﻿namespace Qorpent.BxlSharp {
 	/// <summary>
 	/// </summary>
 	public class ObjectXmlMerge {

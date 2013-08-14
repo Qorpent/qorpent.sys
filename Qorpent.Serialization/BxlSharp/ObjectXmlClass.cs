@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.ObjectXml {
+namespace Qorpent.BxlSharp {
 	/// <summary>
 	/// </summary>
 	public class ObjectXmlClass {
@@ -113,6 +114,10 @@ namespace Qorpent.ObjectXml {
 		/// Флаг того, что класс находится в режиме построения
 		/// </summary>
 		public bool InBuiltMode { get; set; }
+		/// <summary>
+		/// Ошибка компиляции
+		/// </summary>
+		public Exception Error { get; set; }
 
 
 		/// <summary>

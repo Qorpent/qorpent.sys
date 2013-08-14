@@ -74,18 +74,28 @@ namespace Qorpent.Config {
 		
 
 		private T ReturnIerachical<T>(string name, T def) {
-			IConfig parent = this;
-			while (name.StartsWith(".")) {
-				if (null != parent) {
-					parent = parent.GetParent();
+			var basis = name.Replace(".", "");
+			var skips = name.Count(_ => _ == '.');
+			var result= AllByName(basis).Skip(skips).FirstOrDefault();
+			if (null == result) {
+				result = AllByName(basis).Last();
+			}
+			if (null == result) return def;
+			return (T) result;
+		}
+		/// <summary>
+		/// Возвращает все по имени 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public IEnumerable<object> AllByName(string name) {
+			if (this.options.ContainsKey(name)) {
+				yield return options[name];
+			}
+			if (null != _parent) {
+				foreach (var p in ((ConfigBase) _parent).AllByName(name)) {
+					yield return p;
 				}
-				name = name.Substring(1);
-			}
-			if (null != parent) {
-				return parent.Get(name,def);
-			}
-			else {
-				return def;
 			}
 		}
 

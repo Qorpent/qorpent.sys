@@ -1,6 +1,6 @@
 ﻿using Qorpent.Config;
 
-namespace Qorpent.ObjectXml {
+namespace Qorpent.BxlSharp {
 	/// <summary>
 	///     Интерфейс конфигурации компилятора
 	/// </summary>

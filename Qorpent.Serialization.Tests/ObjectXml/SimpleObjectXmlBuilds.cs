@@ -66,6 +66,18 @@ namespace X
 		}
 
 		[Test]
+		public void NestedNamespaces()
+		{
+			var result = Compile(@"
+namespace X
+	namespace Y
+		class Z");
+			Assert.AreEqual(1, result.Working.Count);
+			Assert.AreEqual("Z", result.Working[0].Name);
+			Assert.AreEqual("X.Y.Z", result.Working[0].FullName);
+		}
+
+		[Test]
 		public void DefaultImportFromRootNamespace()
 		{
 			var result = Compile(@"
@@ -95,6 +107,40 @@ namespace X
 			Assert.NotNull(result.Working[0].DefaultImport);
 			Assert.AreEqual("custom", result.Working[0].DefaultImport.Name);
 		}
+
+
+		[Test]
+		public void ResolveNamespaceUp()
+		{
+			var result = Compile(@"
+namespace X
+	class A
+	namespace Y
+		A B
+		namespace Z
+			B C");
+			var th = result.Get("X.A");
+			Assert.NotNull(th);
+			th = result.Get("X.Y.Z.C");
+			Assert.NotNull(th);
+			
+		}
+		[Test]
+		public void ResolveNamespaceUp2()
+		{
+			var result = Compile(@"
+namespace X
+	class A
+namespace X.Y
+	A B
+namespace X.Y.Z
+	B C");
+			var th = result.Get("X.A");
+			Assert.NotNull(th);
+			th = result.Get("X.Y.Z.C");
+			Assert.NotNull(th);
+		}
+
 
 		[Test]
 		public void UnresolvedNamespaceNoRoot()
@@ -306,7 +352,8 @@ class thema
 	");
 			Assert.AreEqual(1, result.Working.Count);
 			Assert.AreEqual("thema", result.Working[0].Name);
-			Assert.AreEqual(3, result.Working[0].AllMergeDefs.Count);
+			//включая дефолты
+			Assert.AreEqual(5, result.Working[0].AllMergeDefs.Count);
 
 		}
 
@@ -321,11 +368,11 @@ class thema abstract
 	element reportex extend=report
 thema mythema
 	element report
-	element myreportset orverride=report
+	element myreportset override=report
 	");
 			Assert.AreEqual(1, result.Working.Count);
 			Assert.AreEqual("mythema", result.Working[0].Name);
-			Assert.AreEqual(4, result.Working[0].AllMergeDefs.Count);
+			Assert.AreEqual(6, result.Working[0].AllMergeDefs.Count);
 
 		}
 

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Config;
+using Qorpent.Utils.Extensions;
 
-namespace Qorpent.ObjectXml {
+namespace Qorpent.BxlSharp {
 	/// <summary>
 	///     Внутренний индекс компилятора
 	/// </summary>
@@ -92,6 +94,62 @@ namespace Qorpent.ObjectXml {
 					Working.Add(a);
 				}
 			}
+		}
+		/// <summary>
+		/// Разрешает класс по коду и заявленному пространству имен
+		/// </summary>
+		/// <param name="code"></param>
+		/// <param name="ns"></param>
+		/// <returns></returns>
+		public  ObjectXmlClass ResolveClass( string code, string ns) {
+			ObjectXmlClass import = null;
+			if (!String.IsNullOrWhiteSpace(code)) {
+				if (code.Contains('.')) {
+					if (RawClasses.ContainsKey(code)) {
+						import = RawClasses[code];
+					}
+				}
+				else if (ns.Contains(".")) {
+					var nsparts = ns.SmartSplit(false, true, '.');
+					for (var i = nsparts.Count - 1; i >= -1; i--) {
+						if (i == -1) {
+							var probe = code;
+							if (RawClasses.ContainsKey(probe)) {
+								import = RawClasses[probe];
+								break;
+							}
+						}
+						else {
+							var probe = "";
+							for (var j = 0; j <= i; j++) {
+								probe += nsparts[j] + ".";
+							}
+							probe += code;
+							if (RawClasses.ContainsKey(probe)) {
+								import = RawClasses[probe];
+								break;
+							}
+						}
+					}
+
+
+				}
+				else if(!String.IsNullOrWhiteSpace(ns)) {
+					var probe = ns+"." + code;
+					if (RawClasses.ContainsKey(probe))
+					{
+						import = RawClasses[probe];
+					}
+					
+				}
+			}
+			if (null == import) {
+				if (RawClasses.ContainsKey(code))
+				{
+					import = RawClasses[code];
+				}
+			}
+			return import;
 		}
 	}
 }
