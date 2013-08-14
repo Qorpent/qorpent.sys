@@ -49,6 +49,8 @@ namespace Qorpent.Mvc.Actions
             //String dir2 = Application.StartupPath;//получаем папку из которой произошел запуск приложения
 
             return CodeBase.ListFilesString();
+
+           // return CodeBase.ListDIrectrory();
            // return ;
             //CodeBase.ListDIrectrory();
 
