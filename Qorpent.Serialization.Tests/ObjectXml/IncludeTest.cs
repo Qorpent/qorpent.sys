@@ -40,10 +40,10 @@ class B x=2
 class A x=1
 	test '${x}%{x}'
 class B x=2
-	include A
+	include A body
 ";
 			var result = Compile(code).Get("B");
-			Assert.AreEqual(1, result.Compiled.Descendants("class").Count());
+			Assert.AreEqual(1, result.Compiled.Descendants("test").Count());
 			Assert.AreEqual("12", result.Compiled.Descendants("test").First().Attr("code"));
 		}
 

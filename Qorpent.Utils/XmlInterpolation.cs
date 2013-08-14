@@ -27,6 +27,13 @@ namespace Qorpent.Utils {
 			}
 			return source;
 		}
+		/// <summary>
+		/// Установка символа начала интерполяции
+		/// </summary>
+		public char AncorSymbol {
+			get { return _stringInterpolation.AncorSymbol; }
+			set { _stringInterpolation.AncorSymbol = value; }
+		}
 
 		private void InterpolateDataToElement(XElement source, IConfig datasource)
 		{

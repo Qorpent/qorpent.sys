@@ -85,7 +85,44 @@ namespace Qorpent.BxlSharp {
 			
 			CleanupElementsWithConditions();
 
+			ProcessIncludes();
+
 			CleanupPrivateMembers();
+		}
+
+		private void ProcessIncludes() {
+			XElement[] includes;
+			var needReInterpolate = false;
+			while ((includes = _cls.Compiled.Descendants("include").ToArray()).Length != 0) {
+				foreach (var i in includes) {
+					needReInterpolate = ProcessInclude(i, needReInterpolate);
+				}				
+			}
+			if (needReInterpolate) {
+				InterpolateElements('%');
+			}
+		}
+
+		private bool ProcessInclude(XElement i, bool needReInterpolate) {
+			var code = i.Attr("code");
+			var includecls = _index.ResolveClass(code, _cls.Namespace);
+			if (null == includecls) {
+				i.Remove();
+			}
+			else {
+				var includeelement = includecls.Compiled;
+				var usebody = null!=i.Attribute("body")||i.Attr("name")=="body";
+
+				needReInterpolate = needReInterpolate || includeelement.HasAttributes(contains: "%{", skipself: usebody);
+
+				if (usebody) {
+					i.ReplaceWith(includeelement.Elements());
+				}
+				else {
+					i.ReplaceWith(includeelement);
+				}
+			}
+			return needReInterpolate;
 		}
 
 		private void CleanupElementsWithConditions() {
@@ -311,11 +348,11 @@ namespace Qorpent.BxlSharp {
 			}
 		}
 
-		private void InterpolateElements()
+		private void InterpolateElements(char ancor='$')
 		{
 			if (GetConfig().UseInterpolation)
 			{
-				var xi = new XmlInterpolation();
+				var xi = new XmlInterpolation{AncorSymbol = ancor};
 				xi.Interpolate(_cls.Compiled);
 			}
 		}
