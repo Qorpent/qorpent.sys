@@ -125,7 +125,7 @@ namespace Qorpent.BxlSharp {
 		/// <returns></returns>
 		protected override void Link(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
 			_currentBuildIndex = index;
-			CollectClassGroups(sources, index);
+			index.Build();
 			index.Working.AsParallel().ForAll(
 				_ => {
 					try {
@@ -136,53 +136,6 @@ namespace Qorpent.BxlSharp {
 					}
 				})
 			;
-		}
-
-		
-		
-
-		
-
-		private void CollectClassGroups(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index) {
-			BindOrphansAndSetupFullImportName(index);
-			ResolveImports(index);
-		}
-
-		private void ResolveImports(ObjectXmlCompilerIndex index) {
-			foreach (var w in index.Working.Union(index.Abstracts)) {
-				foreach (ObjectXmlImport i in w.Imports) {
-					i.Orphaned = true;
-					var import = index.ResolveClass( i.TargetCode, w.Namespace);
-					if (null != import) {
-						i.Orphaned = false;
-						i.Target = import;
-					}
-				}
-			}
-		}
-
-		private static void BindOrphansAndSetupFullImportName(ObjectXmlCompilerIndex index) {
-
-			index.Overrides = index.RawClasses.Values.Where(_ => _.IsClassOverride).ToList();
-			index.Extensions = index.RawClasses.Values.Where(_ => _.IsClassExtension).ToList();
-
-			IEnumerable<ObjectXmlClass> _initiallyorphaned = index.RawClasses.Values.Where(_ => _.Orphaned);
-			foreach (var o in _initiallyorphaned) {
-				string code = o.DefaultImportCode;
-				string ns = o.Namespace;
-				var import = index.ResolveClass( code, ns);
-				if (import != null) {
-					o.Orphaned = false;
-					o.DefaultImport = import;
-				}
-			}
-
-			index.Orphans = index.RawClasses.Values.Where(_ => _.DetectIfIsOrphaned()).ToList();
-
-			index.Abstracts = index.RawClasses.Values.Where(_ => _.Abstract && !_.DetectIfIsOrphaned()).ToList();
-
-			index.Working = index.RawClasses.Values.Where(_ => !_.IsClassExtension && !_.IsClassOverride && !_.Abstract && !_.DetectIfIsOrphaned()).ToList();
-			index.Static = index.RawClasses.Values.Where(_ => _.Static && !_.DetectIfIsOrphaned()).ToList();
 		}
 	}
 }

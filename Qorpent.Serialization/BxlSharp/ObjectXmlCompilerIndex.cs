@@ -193,5 +193,50 @@ namespace Qorpent.BxlSharp {
 			}
 			return import;
 		}
+
+		/// <summary>
+		/// Строит рабочий индекс классов
+		/// </summary>
+		public void Build() {
+			Overrides = RawClasses.Values.Where(_ => _.IsClassOverride).ToList();
+			Extensions = RawClasses.Values.Where(_ => _.IsClassExtension).ToList();
+			ResolveOrphans();
+			Orphans = RawClasses.Values.Where(_ => _.DetectIfIsOrphaned()).ToList();
+			Abstracts = RawClasses.Values.Where(_ => _.Abstract && !_.DetectIfIsOrphaned()).ToList();
+			Working = RawClasses.Values.Where(_ => !_.IsClassExtension && !_.IsClassOverride && !_.Abstract && !_.DetectIfIsOrphaned()).ToList();
+			Static = RawClasses.Values.Where(_ => _.Static && !_.DetectIfIsOrphaned()).ToList();
+			ResolveImports();
+		}
+
+		private void ResolveImports()
+		{
+			foreach (var w in Working.Union(Abstracts))
+			{
+				foreach (ObjectXmlImport i in w.Imports)
+				{
+					i.Orphaned = true;
+					var import = ResolveClass(i.TargetCode, w.Namespace);
+					if (null != import)
+					{
+						i.Orphaned = false;
+						i.Target = import;
+					}
+				}
+			}
+		}
+
+
+		private void ResolveOrphans() {
+			IEnumerable<ObjectXmlClass> _initiallyorphaned = RawClasses.Values.Where(_ => _.Orphaned);
+			foreach (var o in _initiallyorphaned) {
+				string code = o.DefaultImportCode;
+				string ns = o.Namespace;
+				var import = ResolveClass(code, ns);
+				if (import != null) {
+					o.Orphaned = false;
+					o.DefaultImport = import;
+				}
+			}
+		}
 	}
 }
