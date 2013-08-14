@@ -1,8 +1,8 @@
-﻿namespace Qorpent.BxlSharp {
+﻿namespace Qorpent.BSharp {
 	/// <summary>
 	///     Тип
 	/// </summary>
-	public enum ObjectXmlMergeType {
+	public enum BSharpElementType {
 		/// <summary>
 		///     Перезапись с ноля
 		/// </summary>

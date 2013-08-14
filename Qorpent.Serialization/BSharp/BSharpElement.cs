@@ -1,13 +1,13 @@
-﻿namespace Qorpent.BxlSharp {
+﻿namespace Qorpent.BSharp {
 	/// <summary>
 	/// </summary>
-	public class ObjectXmlMerge {
+	public class BSharpElement {
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="other"></param>
 		/// <returns></returns>
-		protected bool Equals(ObjectXmlMerge other) {
+		protected bool Equals(BSharpElement other) {
 			return string.Equals(Name, other.Name) && string.Equals(TargetName, other.TargetName) && Type == other.Type;
 		}
 
@@ -39,7 +39,7 @@
 		/// <summary>
 		///     Тип импорта
 		/// </summary>
-		public ObjectXmlMergeType Type { get; set; }
+		public BSharpElementType Type { get; set; }
 
 		/// <summary>
 		/// 
@@ -50,7 +50,7 @@
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
 			if (obj.GetType() != this.GetType()) return false;
-			return Equals((ObjectXmlMerge) obj);
+			return Equals((BSharpElement) obj);
 		}
 	}
 }

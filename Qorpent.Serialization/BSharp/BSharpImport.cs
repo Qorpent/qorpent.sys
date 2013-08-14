@@ -2,16 +2,16 @@
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils.LogicalExpressions;
 
-namespace Qorpent.BxlSharp {
+namespace Qorpent.BSharp {
 	/// <summary>
 	/// </summary>
-	public class ObjectXmlImport {
+	public class BSharpImport {
 		static readonly LogicalExpressionEvaluator logical = new LogicalExpressionEvaluator();
 		private string _condition;
 
 		/// <summary>
 		/// </summary>
-		public ObjectXmlClass Target { get; set; }
+		public BSharpClass Target { get; set; }
 
 		/// <summary>
 		///     Тип импорта

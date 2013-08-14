@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
-using Qorpent.BxlSharp;
+using Qorpent.BSharp;
 using Qorpent.Dsl;
 using Qorpent.IoC;
 using Qorpent.Utils;
@@ -68,17 +68,17 @@ namespace Qorpent.Bxl {
 				);
 #endif
 			if (options.HasFlag(BxlParserOptions.BxlSharp)) {
-				var compileroptions = new ObjectXmlCompilerConfig {
+				var compileroptions = new BSharpConfig {
 					UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation)
 				};
-				var compiler = new ObjectXmlCompiler();
+				var compiler = new BSharpCompiler();
 				compiler.Initialize(compileroptions);
 				var compileresult = compiler.Compile(new[] {result});
 				var newresult = new XElement("objectxml");
-				foreach (var o in compileresult.Orphans) {
+				foreach (var o in compileresult.Get(BSharpContextDataType.Orphans)) {
 					newresult.Add(new XElement("orphan", new XAttribute("code", o.FullName)));
 				}
-				foreach (var w in compileresult.Working) {
+				foreach (var w in compileresult.Get(BSharpContextDataType.Working)) {
 					var copy = new XElement(w.Compiled);
 					if (null != w.Error) {
 						copy.AddFirst(new XElement("error",new XText(w.Error.ToString())));

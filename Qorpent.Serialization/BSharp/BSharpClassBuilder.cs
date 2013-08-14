@@ -9,16 +9,16 @@ using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.LogicalExpressions;
 
-namespace Qorpent.BxlSharp {
+namespace Qorpent.BSharp {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ObjectXmlClassBuilder {
-		private readonly ObjectXmlCompiler _compiler;
-		private readonly ObjectXmlClass _cls;
-		private readonly ObjectXmlCompilerIndex _index;
+	public class BSharpClassBuilder {
+		private readonly IBSharpCompiler _compiler;
+		private readonly BSharpClass _cls;
+		private readonly IBSharpContext _context;
 
-		private IObjectXmlCompilerConfig GetConfig() {
+		private IBSharpConfig GetConfig() {
 			return _compiler.GetConfig();
 		}
 		/// <summary>
@@ -26,18 +26,18 @@ namespace Qorpent.BxlSharp {
 		/// </summary>
 		/// <param name="compiler"></param>
 		/// <param name="cls"></param>
-		/// <param name="index"></param>
-		public static void Build(ObjectXmlCompiler compiler, ObjectXmlClass cls, ObjectXmlCompilerIndex index) {
-			new ObjectXmlClassBuilder(compiler, cls, index).Build();
+		/// <param name="context"></param>
+		public static void Build(IBSharpCompiler compiler, BSharpClass cls, IBSharpContext context) {
+			new BSharpClassBuilder(compiler, cls, context).Build();
 		}
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="compiler"></param>
 		/// <param name="cls"></param>
-		/// <param name="index"></param>
-		public static Task BuildAsync(ObjectXmlCompiler compiler, ObjectXmlClass cls, ObjectXmlCompilerIndex index) {
-			var task = new Task(() => new ObjectXmlClassBuilder(compiler, cls, index).Build());
+		/// <param name="context"></param>
+		public static Task BuildAsync(BSharpCompiler compiler, BSharpClass cls, BSharpContext context) {
+			var task = new Task(() => new BSharpClassBuilder(compiler, cls, context).Build());
 			cls.BuildTask = task;
 			task.Start();
 			return task;
@@ -45,13 +45,13 @@ namespace Qorpent.BxlSharp {
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="objectXmlCompiler"></param>
+		/// <param name="bSharpCompiler"></param>
 		/// <param name="cls"></param>
-		/// <param name="index"></param>
-		protected ObjectXmlClassBuilder(ObjectXmlCompiler objectXmlCompiler, ObjectXmlClass cls, ObjectXmlCompilerIndex index) {
-			_compiler = objectXmlCompiler;
+		/// <param name="context"></param>
+		protected BSharpClassBuilder(IBSharpCompiler bSharpCompiler, BSharpClass cls, IBSharpContext context) {
+			_compiler = bSharpCompiler;
 			_cls = cls;
-			_index = index;
+			_context = context;
 		}
 
 		/// <summary>
@@ -105,12 +105,12 @@ namespace Qorpent.BxlSharp {
 
 		private bool ProcessInclude(XElement i, bool needReInterpolate) {
 			var code = i.Attr("code");
-			var includecls = _index.ResolveClass(code, _cls.Namespace);
+			var includecls = _context.Get(code, _cls.Namespace);
 			if (null == includecls) {
 				i.Remove();
 			}
 			else {
-				Build(_compiler,includecls,_index);
+				Build(_compiler,includecls,_context);
 				var includeelement = includecls.Compiled;
 				var usebody = null!=i.Attribute("body")||i.Attr("name")=="body";
 
@@ -132,14 +132,14 @@ namespace Qorpent.BxlSharp {
 		}
 
 		private void PerformMergingWithElements() {
-			foreach (var root in _cls.AllMergeDefs.Where(_ => _.Type == ObjectXmlMergeType.Define).ToArray()) {
+			foreach (var root in _cls.AllMergeDefs.Where(_ => _.Type == BSharpElementType.Define).ToArray()) {
 				var allroots = _cls.Compiled.Elements(root.Name).ToArray();
 				var groupedroots = allroots.GroupBy(_ => _.Attr("code"));
 				foreach(var doublers in groupedroots.Where(_=>_.Count()>1)) {
 					doublers.Skip(1).Remove();
 				}
 				var alloverrides =
-					_cls.AllMergeDefs.Where(_ => _.Type != ObjectXmlMergeType.Define && _.TargetName == root.Name).ToArray();
+					_cls.AllMergeDefs.Where(_ => _.Type != BSharpElementType.Define && _.TargetName == root.Name).ToArray();
 //				foreach (var over in alloverrides) {
 					foreach (var g in groupedroots) {
 						var e = g.First();
@@ -149,7 +149,7 @@ namespace Qorpent.BxlSharp {
 						foreach (var o in candidates) {
 							var over = alloverrides.FirstOrDefault(_ => _.Name == o.Name.LocalName);
 							if (null != over) {
-								if (over.Type == ObjectXmlMergeType.Override) {
+								if (over.Type == BSharpElementType.Override) {
 									foreach (var a in o.Attributes()) {
 										e.SetAttributeValue(a.Name, a.Value);
 									}
@@ -157,7 +157,7 @@ namespace Qorpent.BxlSharp {
 										e.Elements().Remove();
 										e.Add(o.Elements());
 									}
-								}else if (over.Type == ObjectXmlMergeType.Extension) {
+								}else if (over.Type == BSharpElementType.Extension) {
 									foreach (var a in o.Attributes())
 									{
 										if (null == e.Attribute(a.Name)) {
@@ -210,13 +210,13 @@ namespace Qorpent.BxlSharp {
 					m.TargetName = m.TargetName.ConvertToXNameCompatibleString();
 				}
 			}
-			var allroots = _cls.AllMergeDefs.Where(_ => _.Type == ObjectXmlMergeType.Define).Select(_ => _.Name).ToArray();
+			var allroots = _cls.AllMergeDefs.Where(_ => _.Type == BSharpElementType.Define).Select(_ => _.Name).ToArray();
 			foreach (var root in allroots) {
-				var defoverride = new ObjectXmlMerge {Name = "__TILD__" + root, TargetName = root, Type = ObjectXmlMergeType.Override};
+				var defoverride = new BSharpElement {Name = "__TILD__" + root, TargetName = root, Type = BSharpElementType.Override};
 				if (!_cls.AllMergeDefs.Contains(defoverride)) {
 					_cls.AllMergeDefs.Add(defoverride);
 				}
-				var defext = new ObjectXmlMerge { Name = "__PLUS__" + root, TargetName = root, Type = ObjectXmlMergeType.Extension };
+				var defext = new BSharpElement { Name = "__PLUS__" + root, TargetName = root, Type = BSharpElementType.Extension };
 				if (!_cls.AllMergeDefs.Contains(defext))
 				{
 					_cls.AllMergeDefs.Add(defext);
@@ -233,7 +233,7 @@ namespace Qorpent.BxlSharp {
 			{
 				if (e.Static) {
 					if (!e.IsBuilt) {
-						Build(_compiler,e,_index);
+						Build(_compiler,e,_context);
 					}
 					_cls.Compiled.Add(e.Compiled.Elements().Where(IsMatch));
 				}
@@ -284,7 +284,7 @@ namespace Qorpent.BxlSharp {
 				e.Attributes().Where(_ => _.Name.LocalName.StartsWith("_") || string.IsNullOrEmpty(_.Value)).Remove();
 			}
 
-			foreach (var m in _cls.AllMergeDefs.Where(_ => _.Type != ObjectXmlMergeType.Define).Select(_ => _.Name).Distinct()) {
+			foreach (var m in _cls.AllMergeDefs.Where(_ => _.Type != BSharpElementType.Define).Select(_ => _.Name).Distinct()) {
 				_cls.Compiled.Elements(m).Remove();
 			}
 
@@ -323,7 +323,7 @@ namespace Qorpent.BxlSharp {
 				if (i.Static && _cls != i)
 				{
 					if (!i.IsBuilt) {
-						Build(_compiler, i, _index);
+						Build(_compiler, i, _context);
 					}
 					foreach (var p in i.ParamIndex)
 					{

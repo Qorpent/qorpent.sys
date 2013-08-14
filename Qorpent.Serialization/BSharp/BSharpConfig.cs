@@ -1,10 +1,10 @@
 ﻿using Qorpent.Config;
 
-namespace Qorpent.BxlSharp {
+namespace Qorpent.BSharp {
 	/// <summary>
 	///     Конфигурация для компилятора BxlSharp
 	/// </summary>
-	public class ObjectXmlCompilerConfig : ConfigBase, IObjectXmlCompilerConfig {
+	public class BSharpConfig : ConfigBase, IBSharpConfig {
 		/// <summary>
 		///     Флаг использования интерполяций
 		/// </summary>

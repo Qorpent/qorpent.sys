@@ -2,20 +2,20 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Qorpent.BxlSharp {
+namespace Qorpent.BSharp {
 	/// <summary>
 	///     Абстракция компилятора, опирается на некий набор первичных компиляторов
 	/// </summary>
-	public abstract class ObjectXmlCompilerBase : IObjectXmlCompiler {
-		private IObjectXmlCompilerConfig _config;
+	public abstract class BSharpCompilerBase : IBSharpCompiler {
+		private IBSharpConfig _config;
 
 		/// <summary>
 		///     Возвращает конфигурацию компилятора
 		/// </summary>
 		/// <returns></returns>
-		public IObjectXmlCompilerConfig GetConfig() {
+		public IBSharpConfig GetConfig() {
 			if (null == _config) {
-				_config = new ObjectXmlCompilerConfig();
+				_config = new BSharpConfig();
 			}
 			return _config;
 		}
@@ -23,7 +23,7 @@ namespace Qorpent.BxlSharp {
 		/// <summary>
 		/// </summary>
 		/// <param name="compilerConfig"></param>
-		public void Initialize(IObjectXmlCompilerConfig compilerConfig) {
+		public void Initialize(IBSharpConfig compilerConfig) {
 			_config = compilerConfig;
 		}
 
@@ -32,25 +32,26 @@ namespace Qorpent.BxlSharp {
 		///     Компилирует источники в перечисление итоговых классов
 		/// </summary>
 		/// <param name="sources"></param>
+		/// <param name="preparedContext"></param>
 		/// <returns></returns>
-		public ObjectXmlCompilerIndex Compile(IEnumerable<XElement> sources) {
-			IObjectXmlCompilerConfig cfg = GetConfig();
+		public IBSharpContext Compile(IEnumerable<XElement> sources , IBSharpContext preparedContext = null) {
+			var cfg = GetConfig();
 			if (cfg.SingleSource) {
 				return BuildBatch(sources);
 			}
-			var result = new ObjectXmlCompilerIndex();
+			IBSharpContext result = new BSharpContext();
 			foreach (XElement src in sources) {
-				ObjectXmlCompilerIndex subresult = BuildSingle(src);
+				IBSharpContext subresult = BuildSingle(src);
 				result.Merge(subresult);
 			}
 			return result;
 		}
 
-		private ObjectXmlCompilerIndex BuildSingle(XElement source) {
+		private IBSharpContext BuildSingle(XElement source) {
 			var batch = new[] {source};
-			ObjectXmlCompilerIndex index = BuildIndex(batch);
-			Link(batch, index);
-			return index;
+			IBSharpContext context = BuildIndex(batch);
+			Link(batch, context);
+			return context;
 		}
 
 		/// <summary>
@@ -58,21 +59,21 @@ namespace Qorpent.BxlSharp {
 		/// </summary>
 		/// <param name="sources"></param>
 		/// <returns></returns>
-		protected abstract ObjectXmlCompilerIndex BuildIndex(IEnumerable<XElement> sources);
+		protected abstract IBSharpContext BuildIndex(IEnumerable<XElement> sources);
 
-		private ObjectXmlCompilerIndex BuildBatch(IEnumerable<XElement> sources) {
+		private IBSharpContext BuildBatch(IEnumerable<XElement> sources) {
 			XElement[] batch = sources.ToArray();
-			ObjectXmlCompilerIndex index = BuildIndex(batch);
-			Link(batch, index);
-			return index;
+			var context = BuildIndex(batch);
+			Link(batch, context);
+			return context;
 		}
 
 		/// <summary>
 		///     Перекрыть для создания линковщика
 		/// </summary>
 		/// <param name="sources"></param>
-		/// <param name="index"></param>
+		/// <param name="context"></param>
 		/// <returns></returns>
-		protected abstract void Link(IEnumerable<XElement> sources, ObjectXmlCompilerIndex index);
+		protected abstract void Link(IEnumerable<XElement> sources, IBSharpContext context);
 	}
 }

@@ -1,12 +1,12 @@
 ﻿using Qorpent.Config;
 
-namespace Qorpent.BxlSharp {
+namespace Qorpent.BSharp {
 	/// <summary>
-	///     Интерфейс конфигурации компилятора
+	/// Интерфейс конфигурации BSharp
 	/// </summary>
-	public interface IObjectXmlCompilerConfig : IConfig {
+	public interface IBSharpConfig:IConfig {
 		/// <summary>
-		///     Флаг использования интерполяции
+		///     Признак использования интерполяции при компиляции
 		/// </summary>
 		bool UseInterpolation { get; set; }
 

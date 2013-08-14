@@ -6,20 +6,47 @@ using System.Xml.Linq;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.BxlSharp {
+namespace Qorpent.BSharp {
 	/// <summary>
 	/// </summary>
-	public class ObjectXmlClass {
+	public class BSharpClass {
 		/// <summary>
 		/// </summary>
-		public ObjectXmlClass() {
-			MergeDefs = new List<ObjectXmlMerge>();
-			Imports = new List<ObjectXmlImport>();
+		public BSharpClass() {
+			MergeDefs = new List<BSharpElement>();
+			Imports = new List<BSharpImport>();
 		}
 
 		/// <summary>
 		/// </summary>
 		public string Name { get; set; }
+
+		/// <summary>
+		/// Атрибуты класса
+		/// </summary>
+		private BSharpClassAttributes _attributes;
+		/// <summary>
+		/// Возвращает true при наличии флага
+		/// </summary>
+		/// <param name="attribute"></param>
+		/// <returns></returns>
+		public bool Is(BSharpClassAttributes attribute) {
+			return _attributes.HasFlag(attribute);
+		}
+		/// <summary>
+		/// Устанавливает определенные флаги
+		/// </summary>
+		/// <param name="flags"></param>
+		public void Set(BSharpClassAttributes flags) {
+			_attributes = _attributes | flags;
+		}
+		/// <summary>
+		/// Снимает определенные флаги
+		/// </summary>
+		/// <param name="flags"></param>
+		public void Remove(BSharpClassAttributes flags) {
+			_attributes = _attributes & ~flags;
+		}
 
 
 		/// <summary>
@@ -39,26 +66,12 @@ namespace Qorpent.BxlSharp {
 			}
 		}
 
-		/// <summary>
-		///     Признак абстракции
-		/// </summary>
-		public bool Abstract { get; set; }
-
-
-		/// <summary>
-		///     Признак статического класса
-		/// </summary>
-		public bool Static { get; set; }
-
-		/// <summary>
-		///     Класс, для которого еще не сопоставлен реальный тип
-		/// </summary>
-		public bool Orphaned { get; set; }
+		
 
 		/// <summary>
 		///     Код первичного класса импорта
 		/// </summary>
-		public ObjectXmlClass DefaultImport { get; set; }
+		public BSharpClass DefaultImport { get; set; }
 
 		/// <summary>
 		///     Код первичного класса импорта
@@ -68,12 +81,12 @@ namespace Qorpent.BxlSharp {
 		/// <summary>
 		///     Явные импорты
 		/// </summary>
-		public IList<ObjectXmlImport> Imports { get; private set; }
+		public IList<BSharpImport> Imports { get; private set; }
 
 		/// <summary>
 		///     Определение сводимых элементов
 		/// </summary>
-		public IList<ObjectXmlMerge> MergeDefs { get; private set; }
+		public IList<BSharpElement> MergeDefs { get; private set; }
 
 		/// <summary>
 		/// </summary>
@@ -85,11 +98,6 @@ namespace Qorpent.BxlSharp {
 		public XElement Compiled { get; set; }
 
 		/// <summary>
-		///     Признак явного создания класса через ключевое слово
-		/// </summary>
-		public bool ExplicitClass { get; set; }
-
-		/// <summary>
 		///     Элемент хранящий данные об индексе параметров
 		/// </summary>
 		public IConfig ParamSourceIndex { get; set; }
@@ -98,35 +106,22 @@ namespace Qorpent.BxlSharp {
 		///     Сведенный словарь параметров
 		/// </summary>
 		public IConfig ParamIndex { get; set; }
-		/// <summary>
-		/// Признак класса с закоченным билдом
-		/// </summary>
-		public bool IsBuilt { get; set; }
+		
 		/// <summary>
 		/// Список всех определений мержа
 		/// </summary>
-		public List<ObjectXmlMerge> AllMergeDefs { get; set; }
+		public List<BSharpElement> AllMergeDefs { get; set; }
 		/// <summary>
 		/// Текущая задача на построение
 		/// </summary>
 		public Task BuildTask { get; set; }
-		/// <summary>
-		/// Флаг того, что класс находится в режиме построения
-		/// </summary>
-		public bool InBuiltMode { get; set; }
+
 		/// <summary>
 		/// Ошибка компиляции
 		/// </summary>
 		public Exception Error { get; set; }
 
-		/// <summary>
-		/// Признак перегрузки парциального класса
-		/// </summary>
-		public bool IsClassOverride { get; set; }
-		/// <summary>
-		/// Признак расширения парциального класса
-		/// </summary>
-		public bool IsClassExtension { get; set; }
+	
 		/// <summary>
 		/// Для расширений - имя целевого класса
 		/// </summary>
@@ -137,7 +132,7 @@ namespace Qorpent.BxlSharp {
 		/// Метод построения собственного индекса параметров
 		/// </summary>
 		/// <returns></returns>
-		public IConfig BuildSelfParametesSource() {
+		private IConfig BuildSelfParametesSource() {
 			var result = new ConfigBase();
 			foreach (var a in Source.Attributes()) {
 				result.Set(a.Name.LocalName, a.Value);
@@ -145,12 +140,12 @@ namespace Qorpent.BxlSharp {
 			return result;
 		}
 
-		private ObjectXmlClass[] _cachedImports;
+		private BSharpClass[] _cachedImports;
 		/// <summary>
 		///     Возвращает полное перечисление импортируемых классов в порядке их накатывания
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<ObjectXmlClass> CollectImports(string root = null, IConfig config = null) {
+		public IEnumerable<BSharpClass> CollectImports(string root = null, IConfig config = null) {
 			if (null != _cachedImports) return _cachedImports;
 			lock (this) {
 
@@ -168,13 +163,13 @@ namespace Qorpent.BxlSharp {
 		/// Собирает все определения мержей из класса
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<ObjectXmlMerge> CollectMerges() {
+		public IEnumerable<BSharpElement> CollectMerges() {
 			return CollectImports().SelectMany(_ => _.MergeDefs).Union(MergeDefs).Distinct();
 		}
 
 		
 
-		private IEnumerable<ObjectXmlClass> RawCollectImports(string root,IConfig config) {
+		private IEnumerable<BSharpClass> RawCollectImports(string root,IConfig config) {
 
 			var dict = ((IDictionary<string, object>) config);
 			var self = ((IDictionary<string, object>)BuildSelfParametesSource());
@@ -186,7 +181,7 @@ namespace Qorpent.BxlSharp {
 
 			if (null != DefaultImport) {
 				if (root != DefaultImport.Name) {
-					foreach (ObjectXmlClass i in DefaultImport.RawCollectImports(root,config)) {
+					foreach (var i in DefaultImport.RawCollectImports(root,config)) {
 						yield return i;
 					}
 					yield return DefaultImport;
@@ -195,15 +190,15 @@ namespace Qorpent.BxlSharp {
 
 
 
-			foreach (ObjectXmlImport i in Imports) {
+			foreach (BSharpImport i in Imports) {
 				if (null!=i.Target
 					&&
-					!i.Target.DetectIfIsOrphaned()
+					!i.Target.IsOrphaned()
 				    && root != i.Target.FullName
 					&& i.Match(config)
 					) {
-					if (!i.Target.Static) {
-						foreach (ObjectXmlClass ic in i.Target.RawCollectImports(root,config)) {
+					if (!i.Target.Is(BSharpClassAttributes.Static)) {
+						foreach (BSharpClass ic in i.Target.RawCollectImports(root,config)) {
 							yield return ic;
 						}
 					}
@@ -216,11 +211,11 @@ namespace Qorpent.BxlSharp {
 		///     Полная проверка статуса Orphan
 		/// </summary>
 		/// <returns></returns>
-		public bool DetectIfIsOrphaned() {
-			if (ExplicitClass) return false;
-			if (Orphaned) return true;
+		public bool IsOrphaned() {
+			if (Is(BSharpClassAttributes.Explicit)) return false;
+			if (Is(BSharpClassAttributes.Orphan)) return true;
 			if (null == DefaultImport) return true;
-			return DefaultImport.DetectIfIsOrphaned();
+			return DefaultImport.IsOrphaned();
 		}
 	}
 }
