@@ -194,6 +194,9 @@ namespace Qorpent.Utils.Extensions {
 			if (0 != adaptedname.Length && -1 != Array.IndexOf(Digits, adaptedname[0])) {
 				adaptedname = "_" + adaptedname;
 			}
+			if (adaptedname.StartsWith(".")) {
+				adaptedname = "__DOT__" + adaptedname.Substring(1);
+			}
 			return adaptedname;
 		}
 
