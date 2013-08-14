@@ -110,6 +110,7 @@ namespace Qorpent.BxlSharp {
 				i.Remove();
 			}
 			else {
+				Build(_compiler,includecls,_index);
 				var includeelement = includecls.Compiled;
 				var usebody = null!=i.Attribute("body")||i.Attr("name")=="body";
 
