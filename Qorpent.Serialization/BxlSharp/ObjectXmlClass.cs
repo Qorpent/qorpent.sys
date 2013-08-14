@@ -119,6 +119,19 @@ namespace Qorpent.BxlSharp {
 		/// </summary>
 		public Exception Error { get; set; }
 
+		/// <summary>
+		/// Признак перегрузки парциального класса
+		/// </summary>
+		public bool IsClassOverride { get; set; }
+		/// <summary>
+		/// Признак расширения парциального класса
+		/// </summary>
+		public bool IsClassExtension { get; set; }
+		/// <summary>
+		/// Для расширений - имя целевого класса
+		/// </summary>
+		public string TargetClassName { get; set; }
+
 
 		/// <summary>
 		/// Метод построения собственного индекса параметров

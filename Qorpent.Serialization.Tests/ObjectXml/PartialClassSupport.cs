@@ -30,8 +30,11 @@ namespace Qorpent.Serialization.Tests.ObjectXml {
 class A x=1 y=1
 ~class A x=2
 ";
-			var result = Compile(code).Get("A");
-			Assert.AreEqual("2",result.Compiled.Attr("x"));
+			
+			var result = Compile(code);
+			Assert.AreEqual(1, result.Overrides.Count);
+			var th = result.Get("A");
+			Assert.AreEqual("2",th.Compiled.Attr("x"));
 		}
 
 		[Test]
@@ -81,11 +84,14 @@ class A x=1 y=1
 ~class A z=2 priority=20
 ~class A z=1 u=3 priority=10
 ";
-			var result = Compile(code).Get("A");
-			Assert.AreEqual("3", result.Compiled.Attr("u"));
-			Assert.AreEqual("2", result.Compiled.Attr("r"));
-			Assert.AreEqual("2", result.Compiled.Attr("w"));
-			Assert.AreEqual("2", result.Compiled.Attr("z"));
+			var result = Compile(code);
+			var th = result.Get("A");
+			Assert.AreEqual(2,result.Overrides.Count);
+			Assert.AreEqual(2,result.Extensions.Count);
+			Assert.AreEqual("3", th.Compiled.Attr("u"));
+			Assert.AreEqual("2", th.Compiled.Attr("r"));
+			Assert.AreEqual("2", th.Compiled.Attr("w"));
+			Assert.AreEqual("2", th.Compiled.Attr("z"));
 		}
 	}
 }

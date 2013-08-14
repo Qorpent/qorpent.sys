@@ -21,7 +21,7 @@ namespace Qorpent.BxlSharp {
 		/// <returns></returns>
 		protected override ObjectXmlCompilerIndex BuildIndex(IEnumerable<XElement> sources) {
 			_currentBuildIndex = new ObjectXmlCompilerIndex();
-			ObjectXmlClass[] baseindex = IndexizeRawClasses(sources).ToArray();
+			var baseindex = IndexizeRawClasses(sources).ToArray();
 			_currentBuildIndex.RawClasses = baseindex.ToDictionary(_ => _.FullName, _ => _);
 			return _currentBuildIndex;
 		}
@@ -68,13 +68,28 @@ namespace Qorpent.BxlSharp {
 			{
 				def.Static = true;
 			}
-			if (e.Name.LocalName != "class") {
-				def.Orphaned = true;
-				def.DefaultImportCode = e.Name.LocalName;
-			}
-			else {
+			if (e.Name.LocalName == "class") {
 				def.Orphaned = false;
 				def.ExplicitClass = true;
+			}
+			else if (e.Name.LocalName == "__TILD__class") {
+				def.IsClassOverride = true;
+				def.TargetClassName = def.Name;
+				def.Name = Guid.NewGuid().ToString();
+				def.Orphaned = false;
+				def.ExplicitClass = true;
+			}
+			else if (e.Name.LocalName == "__PLUS__class")
+			{
+				def.IsClassExtension = true;
+				def.TargetClassName = def.Name;
+				def.Name = Guid.NewGuid().ToString();
+				def.Orphaned = false;
+				def.ExplicitClass = true;
+			}
+			else {
+				def.Orphaned = true;
+				def.DefaultImportCode = e.Name.LocalName;
 			}
 		}
 
@@ -147,6 +162,10 @@ namespace Qorpent.BxlSharp {
 		}
 
 		private static void BindOrphansAndSetupFullImportName(ObjectXmlCompilerIndex index) {
+
+			index.Overrides = index.RawClasses.Values.Where(_ => _.IsClassOverride).ToList();
+			index.Extensions = index.RawClasses.Values.Where(_ => _.IsClassExtension).ToList();
+
 			IEnumerable<ObjectXmlClass> _initiallyorphaned = index.RawClasses.Values.Where(_ => _.Orphaned);
 			foreach (var o in _initiallyorphaned) {
 				string code = o.DefaultImportCode;
@@ -162,7 +181,7 @@ namespace Qorpent.BxlSharp {
 
 			index.Abstracts = index.RawClasses.Values.Where(_ => _.Abstract && !_.DetectIfIsOrphaned()).ToList();
 
-			index.Working = index.RawClasses.Values.Where(_ => !_.Abstract && !_.DetectIfIsOrphaned()).ToList();
+			index.Working = index.RawClasses.Values.Where(_ => !_.IsClassExtension && !_.IsClassOverride && !_.Abstract && !_.DetectIfIsOrphaned()).ToList();
 			index.Static = index.RawClasses.Values.Where(_ => _.Static && !_.DetectIfIsOrphaned()).ToList();
 		}
 	}

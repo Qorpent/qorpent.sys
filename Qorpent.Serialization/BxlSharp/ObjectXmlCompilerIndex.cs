@@ -14,6 +14,8 @@ namespace Qorpent.BxlSharp {
 		private const string ABSTRACTS = "abstracts";
 		private const string WORKING = "working";
 		private const string STATIC = "static";
+		private const string OVERRIDES = "overrides";
+		private const string EXTENSIONS = "extensions";
 		/// <summary>
 		/// Возвращает рабочий класс по коду
 		/// </summary>
@@ -64,6 +66,22 @@ namespace Qorpent.BxlSharp {
 			get { return Get<List<ObjectXmlClass>>(STATIC); }
 			set { Set(STATIC, value); }
 		}
+		/// <summary>
+		/// Реестр перезагрузок классов
+		/// </summary>
+		public List<ObjectXmlClass> Overrides
+		{
+			get { return Get<List<ObjectXmlClass>>(OVERRIDES); }
+			set { Set(OVERRIDES, value); }
+		}
+		/// <summary>
+		/// Реестр перезагрузок классов
+		/// </summary>
+		public List<ObjectXmlClass> Extensions
+		{
+			get { return Get<List<ObjectXmlClass>>(EXTENSIONS); }
+			set { Set(EXTENSIONS, value); }
+		}
 
 		/// <summary>
 		///     Присоединяет и склеивается с другим результатом
@@ -92,6 +110,30 @@ namespace Qorpent.BxlSharp {
 				}
 				foreach (ObjectXmlClass a in subresult.Working) {
 					Working.Add(a);
+				}
+			}
+
+			if (null != subresult.Overrides)
+			{
+				if (null == Overrides)
+				{
+					Overrides = new List<ObjectXmlClass>();
+				}
+				foreach (ObjectXmlClass a in subresult.Overrides)
+				{
+					Overrides.Add(a);
+				}
+			}
+
+			if (null != subresult.Extensions)
+			{
+				if (null == Extensions)
+				{
+					Extensions = new List<ObjectXmlClass>();
+				}
+				foreach (ObjectXmlClass a in subresult.Extensions)
+				{
+					Extensions.Add(a);
 				}
 			}
 		}
