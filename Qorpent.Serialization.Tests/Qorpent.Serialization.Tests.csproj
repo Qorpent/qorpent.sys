@@ -29,6 +29,7 @@
     <Compile Include="Json\ParserTest.cs" />
     <Compile Include="json_serializer_test.cs" />
     <Compile Include="js_serializer_test.cs" />
+    <Compile Include="ObjectXml\PartialClassSupport.cs" />
     <Compile Include="ObjectXml\CompileTestBase.cs" />
     <Compile Include="ObjectXml\MergeContentTests.cs" />
     <Compile Include="ObjectXml\SimpleObjectXmlBuilds.cs" />
