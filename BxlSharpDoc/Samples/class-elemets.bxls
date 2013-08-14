@@ -76,7 +76,7 @@ class el5 abstract
 		body1
 class el5_child
 	import el5
-	~item z=4
+	~item X1 z=4
 	+item X1 w=5
 		body2
 		
