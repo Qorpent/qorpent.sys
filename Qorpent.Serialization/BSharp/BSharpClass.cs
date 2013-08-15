@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Config;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp {
 	/// <summary>
 	/// </summary>
+	[Serialize]
 	public class BSharpClass : IBSharpClass {
 		/// <summary>
 		/// </summary>
@@ -19,7 +21,15 @@ namespace Qorpent.BSharp {
 
 		/// <summary>
 		/// </summary>
+		[SerializeNotNullOnly]
 		public string Name { get; set; }
+		/// <summary>
+		/// Сериализуемая версия атрибутов
+		/// </summary>
+		[SerializeNotNullOnly]
+		public BSharpClassAttributes Attributes {
+			get { return _attributes; }
+		}
 
 		/// <summary>
 		/// Атрибуты класса
@@ -68,11 +78,13 @@ namespace Qorpent.BSharp {
 		///     по умолчанию если классы указаны в Namespace резолюция ведется только в рамках
 		///     этого namespace, если без namespace, то глобально (RootNs)
 		/// </summary>
+		[SerializeNotNullOnly]
 		public string Namespace { get; set; }
 
 		/// <summary>
 		///     Полное имя
 		/// </summary>
+		[IgnoreSerialize]
 		public string FullName {
 			get {
 				if (string.IsNullOrWhiteSpace(Namespace)) return Name;
@@ -85,46 +97,55 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		///     Код первичного класса импорта
 		/// </summary>
+		[IgnoreSerialize]
 		public IBSharpClass DefaultImport { get; set; }
 
 		/// <summary>
 		///     Код первичного класса импорта
 		/// </summary>
+		[SerializeNotNullOnly]
 		public string DefaultImportCode { get; set; }
 
 		/// <summary>
 		///     Явные импорты
 		/// </summary>
+		[IgnoreSerialize]
 		public IList<IBSharpImport> SelfImports { get; private set; }
 
 		/// <summary>
 		///     Определение сводимых элементов
 		/// </summary>
+		[IgnoreSerialize]
 		public IList<IBSharpElement> SelfElements { get; private set; }
 
 		/// <summary>
 		/// </summary>
+		[SerializeNotNullOnly]
 		public XElement Source { get; set; }
 
 		/// <summary>
 		///     Компилированная версия класса
 		/// </summary>
+		[SerializeNotNullOnly]
 		public XElement Compiled { get; set; }
 
 		/// <summary>
 		///     Элемент хранящий данные об индексе параметров
 		/// </summary>
+		[IgnoreSerialize]
 		public IConfig ParamSourceIndex { get; set; }
 
 		/// <summary>
 		///     Сведенный словарь параметров
 		/// </summary>
+		[IgnoreSerialize]
 		public IConfig ParamIndex { get; set; }
 
 		private List<IBSharpElement> _allelements = null;
 		/// <summary>
 		/// Список всех определений мержа
 		/// </summary>
+		[IgnoreSerialize]
 		public List<IBSharpElement> AllElements {
 			get {
 				if (null == _allelements) {
@@ -136,17 +157,20 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Текущая задача на построение
 		/// </summary>
+		[IgnoreSerialize]
 		public Task BuildTask { get; set; }
 
 		/// <summary>
 		/// Ошибка компиляции
 		/// </summary>
+		[SerializeNotNullOnly]
 		public Exception Error { get; set; }
 
 	
 		/// <summary>
 		/// Для расширений - имя целевого класса
 		/// </summary>
+		[SerializeNotNullOnly]
 		public string TargetClassName { get; set; }
 
 
@@ -231,6 +255,7 @@ namespace Qorpent.BSharp {
 		///     Полная проверка статуса Orphan
 		/// </summary>
 		/// <value></value>
+		[SerializeNotNullOnly]
 		public bool IsOrphaned {
 			get {
 				if (Is(BSharpClassAttributes.Explicit)) return false;
