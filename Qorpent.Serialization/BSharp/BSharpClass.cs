@@ -194,6 +194,7 @@ namespace Qorpent.BSharp {
 		///     Возвращает полное перечисление импортируемых классов в порядке их накатывания
 		/// </summary>
 		/// <value></value>
+		[IgnoreSerialize]
 		public IEnumerable<IBSharpClass> AllImports {
 			get {
 				if (null != _cachedImports) return _cachedImports;

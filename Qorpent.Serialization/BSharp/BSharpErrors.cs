@@ -8,12 +8,12 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Создает типовую ошибку о дублировании имени класса
 		/// </summary>
-		/// <param name="doubleClass"></param>
 		/// <returns></returns>
-		public static BSharpError DuplicateClassNames(IBSharpClass doubleClass) {
+		public static BSharpError DuplicateClassNames(IBSharpClass cls1,IBSharpClass cls2) {
 			return new BSharpError {
 				Level = ErrorLevel.Error, 
-				Class = doubleClass, 
+				Class = cls1, 
+				AltClass = cls2, 
 				Phase = BSharpCompilePhase.SourceIndexing,
 				Type = BSharpErrorType.DuplicateClassNames,
 				Message = "В коде обнаружено два класса с одинаковыми (полными) именами."
@@ -122,7 +122,7 @@ namespace Qorpent.BSharp {
 			};
 		}
 		/// <summary>
-		/// Ошибка включения несуществующей темы
+		/// Ошибка включения несуществующего класса
 		/// </summary>
 		/// <param name="cls"></param>
 		/// <param name="e"></param>
@@ -136,6 +136,25 @@ namespace Qorpent.BSharp {
 				ClassName = cls.FullName,
 				Xml = e,
 				Message = "Попытка включить несуществующий класс"
+			};
+		}
+
+		/// <summary>
+		/// Ошибка включения несуществующего класса
+		/// </summary>
+		/// <param name="cls"></param>
+		/// <param name="e"></param>
+		/// <returns></returns>
+		public static BSharpError OrphanInclude(IBSharpClass cls, XElement e)
+		{
+			return new BSharpError
+			{
+				Level = ErrorLevel.Error,
+				Phase = BSharpCompilePhase.IncludeProcessing,
+				Type = BSharpErrorType.OrphanInclude,
+				ClassName = cls.FullName,
+				Xml = e,
+				Message = "Попытка включить класс-сироту"
 			};
 		}
 		/// <summary>

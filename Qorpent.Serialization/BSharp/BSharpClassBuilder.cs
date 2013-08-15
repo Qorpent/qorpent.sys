@@ -112,6 +112,9 @@ namespace Qorpent.BSharp {
 			if (null == includecls) {
 				_context.RegisterError(BSharpErrors.NotResolvedInclude(_cls, i));
 				i.Remove();
+			}else if (includecls.IsOrphaned) {
+				_context.RegisterError(BSharpErrors.OrphanInclude(_cls, i));
+				i.Remove();
 			}
 			else {
 				Build(_compiler,includecls,_context);

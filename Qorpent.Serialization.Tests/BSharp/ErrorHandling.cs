@@ -110,6 +110,25 @@ class A
 		}
 
 		[Test]
+		public void OrphanInclude()
+		{
+			var code = @"
+test B
+class A
+	include B
+";
+			var result = Compile(code);
+			var errors = result.GetErrors();
+			Assert.AreEqual(2, errors.Count());
+			var error = errors.LastOrDefault();
+			Assert.NotNull(error);
+			Assert.AreEqual(BSharpErrorType.OrphanInclude, error.Type);
+			var i = error.Xml;
+			Assert.NotNull(i);
+		}
+
+
+		[Test]
 		public void ClassCreatedFormOverride()
 		{
 			var code = @"

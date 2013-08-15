@@ -21,16 +21,18 @@ namespace Qorpent.BSharp {
 		/// Класс был создан из конструкции расширения
 		/// </summary>
 		ClassCreatedFormExtension =1020,
-		/// <summary>
-		/// Целевая тема при импорте оказалась "сиротской"
-		/// </summary>
-		OrphanImport =210,
-
 
 		/// <summary>
 		/// Ошибка неразрешенного импорта
 		/// </summary>
-		NotResolvedImport = 220,
+		NotResolvedImport = 210,
+		/// <summary>
+		/// Целевая тема при импорте оказалась "сиротской"
+		/// </summary>
+		OrphanImport =220,
+
+
+		
 		/// <summary>
 		/// Циклический импорт
 		/// </summary>
@@ -40,11 +42,16 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		FakeInclude = 3010,
 		/// <summary>
-		/// Не найдена тема, которая могла бы быть применена в инклуд
+		/// Не найдена класс для инклуда
 		/// </summary>
 		NotResolvedInclude = 320,
+
 		/// <summary>
-		/// При инклуде темы в режиме body ее контент оказался пустым
+		/// Попытка включить класс-сироту
+		/// </summary>
+		OrphanInclude = 330,
+		/// <summary>
+		/// При инклуде класса в режиме body ее контент оказался пустым
 		/// </summary>
 		EmptyInclude = 3030,
 

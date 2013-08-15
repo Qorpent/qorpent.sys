@@ -56,5 +56,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		[SerializeNotNullOnly]
 		public string ClassName { get; set; }
+		/// <summary>
+		/// Дополнительный класс для некоторых сообщений
+		/// </summary>
+		[SerializeNotNullOnly]
+		public IBSharpClass AltClass { get; set; }
 	}
 }

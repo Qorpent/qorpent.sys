@@ -97,7 +97,7 @@ namespace Qorpent.BSharp {
 			foreach (var cls in rawclasses) {
 				if (RawClasses.ContainsKey(cls.FullName)) {
 					if (RawClasses[cls.FullName] != cls) {
-						Errors.Add(BSharpErrors.DuplicateClassNames(cls));
+						Errors.Add(BSharpErrors.DuplicateClassNames(cls, RawClasses[cls.FullName]));
 					}
 				}
 				else {
