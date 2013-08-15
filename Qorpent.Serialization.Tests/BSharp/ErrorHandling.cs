@@ -43,6 +43,20 @@ class A
 		}
 
 		[Test]
+		public void OrphanClass()
+		{
+			var code = @"
+no-class A
+";
+			var result = Compile(code);
+			var errors = result.GetErrors();
+			Assert.AreEqual(1, errors.Count());
+			var error = errors.FirstOrDefault();
+			Assert.NotNull(error);
+			Assert.AreEqual(BSharpErrorType.OrphanClass, error.Type);
+		}
+
+		[Test]
 		public void OrphanImport()
 		{
 			var code = @"

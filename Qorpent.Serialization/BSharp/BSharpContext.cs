@@ -299,6 +299,9 @@ namespace Qorpent.BSharp {
 			ApplyExtensions();
 			ResolveOrphans();
 			Orphans = RawClasses.Values.Where(_ => _.IsOrphaned).ToList();
+			foreach (var o in Orphans) {
+				RegisterError(BSharpErrors.OrphanClass(o));
+			}
 			Abstracts = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned).ToList();
 			Working = RawClasses.Values.Where(_ => !_.Is(BSharpClassAttributes.Extension) && !_.Is(BSharpClassAttributes.Override) && !_.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned).ToList();
 			Static = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Static) && !_.IsOrphaned).ToList();

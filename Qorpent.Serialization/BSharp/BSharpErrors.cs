@@ -155,5 +155,20 @@ namespace Qorpent.BSharp {
 				Message = "Инклуд, включаемый в режиме body не имеет контента, возможно ошибка в коде"
 			};
 		}
+		/// <summary>
+		/// Ошибка - класс "сирота"
+		/// </summary>
+		/// <param name="cls"></param>
+		/// <returns></returns>
+		public static BSharpError OrphanClass(IBSharpClass cls) {
+			return new BSharpError
+			{
+				Level = ErrorLevel.Error,
+				Class = cls,
+				Phase = BSharpCompilePhase.SourceIndexing,
+				Type = BSharpErrorType.OrphanClass,
+				Message = "В коде обнаружен участок, похожий на класс, но который нельзя связать ни с одной из имеющихся базовых классов или ключевым словом class"
+			};
+		}
 	}
 }

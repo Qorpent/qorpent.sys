@@ -10,6 +10,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		DuplicateClassNames =100 ,
 		/// <summary>
+		/// Класс-сирота
+		/// </summary>
+		OrphanClass = 110,
+		/// <summary>
 		/// Класс был создан из override-конструкции
 		/// </summary>
 		ClassCreatedFormOverride = 1010,
@@ -43,6 +47,7 @@ namespace Qorpent.BSharp {
 		/// При инклуде темы в режиме body ее контент оказался пустым
 		/// </summary>
 		EmptyInclude = 3030,
+
 
 		
 	}
