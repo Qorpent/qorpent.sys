@@ -43,6 +43,13 @@ namespace Qorpent.Mvc.Actions
 
         private IEnumerable<string> ListFiles()
         {
+            string[] di =  Directory.GetFiles(Environment.CurrentDirectory); 
+            
+            if (null == di)
+            {
+                throw new Exception("Cannot get directory info");
+            }
+            return di;
             
         }
     }
