@@ -318,6 +318,7 @@ namespace Qorpent.BSharp {
 			foreach (var o in Extensions) {
 				var cls = Get(o.TargetClassName, o.Namespace);
 				if (null == cls) {
+					RegisterError(BSharpErrors.ClassCreatedFormExtension(o.Source, o.TargetClassName));
 					o.Remove(BSharpClassAttributes.Extension);
 					o.Name = o.TargetClassName;
 				}
@@ -342,6 +343,7 @@ namespace Qorpent.BSharp {
 			foreach (var o in Overrides) {
 				var cls = Get(o.TargetClassName, o.Namespace);
 				if (null == cls) {
+					RegisterError(BSharpErrors.ClassCreatedFormOverride(o.Source, o.TargetClassName));
 					o.Remove(BSharpClassAttributes.Override);
 					o.Name = o.TargetClassName;
 				}

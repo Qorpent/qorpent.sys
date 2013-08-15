@@ -18,42 +18,37 @@
 # во-первых не обязан знать что его включают, а во-вторых
 # импорт статика производится только в корень класса
 
+# улучшение примера из 0020 - показывает как это в целом работает и что позволяет решить
+# было
+class colset abstract
+	
+colset onecol 
+	col '${colcode}'
+
+onecol colsetPd colcode='Pd' static
+
+onecol colsetB1 colcode='B1' static
+
+class main
+	import colsetB1 
+	import colsetPd 
+	
+#стало
+class colset abstract
+	
+colset onecol 
+	col '%{_colcode}'
+
+class main
+	include onecol body _colcode='Б1'
+	include onecol body _colcode='Pd'
+
+
+
+
+
+# ПРИМЕР СО СЛОЖНЫМ ОБЪЕКТОМ
 # итак, сооружаем на B# автомобиль
-
-# есть некое колесо
-class coleso price=10000 abstract
-# есть 4 купленных колеса
-coleso col_fl place='front_left'
-coleso col_fr place='front_right'
-coleso col_rl place='rear_left'
-coleso col_rr place='rear_right'
-# есть вообще фара
-class fara price=5000 abstract
-# и две купленные фары
-fara f_left place='left'
-fara f_right place='right'
-# ну и есть машина
-class car
-	kuzov
-		fornt
-			include f_left
-			include f_right
-	podveska
-		front
-			include col_fl
-			include col_fr
-		rear
-			include col_rl
-			include col_rr
-# все вроде бы понятно - собрали одни классы, вставили в другие
-# однако и тут не все так просто. Можно задаться вопросом
-# а зачем нам собственно отдельно держать в коде каждое колесо?
-# а зачем нам стряпать им коды и все такое?
-# на это в B# тоже есть ответ "поздняя интерполяция"
-# это специальный режим интерполяции, выполняемый после include,
-# чтобы подставлять им параметры надо использовать не ${...}, а %{...}
-# смотрим, и даже усложним пример:
-
 # есть некое колесо
 class coleso abstract
 	# но с заготовочкой на "установку куда-то"  и с радиусом
@@ -85,6 +80,8 @@ class car abstract
 	
 # и конкретная машина с 13 радиусом колес, без багажника, но с магнитолой
 car our_matrix _number='a666aa96'  _radius=13 _magnitola=true
+car raz_landcuiser _number='a002aa96'  _radius=20 _magnitola=true _bagazh=true
+
 
 			
 # и опять мы добились читаемости и чистоты кода:
@@ -129,6 +126,8 @@ colset B
 	include A body # теперь все будет как надо !!!
 	col D
 	col E	
+	
+
 	
 # таким образом резюмируем уже несколько примеров:
 # 1) наследование, пространства имен, статики и интерполяция - предназначены для увязывания 

@@ -102,8 +102,14 @@ namespace Qorpent.BSharp {
 
 		private bool ProcessInclude(XElement i, bool needReInterpolate) {
 			var code = i.Attr("code");
+			if (string.IsNullOrWhiteSpace(code)) {
+				_context.RegisterError(BSharpErrors.FakeInclude(_cls,i));
+				return needReInterpolate;
+			}
+
 			var includecls = _context.Get(code, _cls.Namespace);
 			if (null == includecls) {
+				_context.RegisterError(BSharpErrors.NotResolvedInclude(_cls, i));
 				i.Remove();
 			}
 			else {
@@ -115,6 +121,9 @@ namespace Qorpent.BSharp {
 
 				if (usebody) {
 					var elements = includeelement.Elements().ToArray();
+					if (0 == elements.Length) {
+						_context.RegisterError(BSharpErrors.EmptyInclude(_cls, i));
+					}
 					foreach (var e in elements) {
 						StoreIncludeParameters(i, e);
 					}

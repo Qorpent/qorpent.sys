@@ -241,19 +241,25 @@ namespace Qorpent.BSharp {
 				if (null!=i.Target
 					&&
 					!i.Target.IsOrphaned
-				    && root != i.Target.FullName
+				   
 					&& i.Match(config)
 					) {
-					if (!i.Target.Is(BSharpClassAttributes.Static)) {
-						foreach (BSharpClass ic in ((BSharpClass)i.Target).GetAllImports(root,config)) {
-							yield return ic;
+
+					if (root != i.Target.FullName) {
+						if (!i.Target.Is(BSharpClassAttributes.Static)) {
+							foreach (BSharpClass ic in ((BSharpClass) i.Target).GetAllImports(root, config)) {
+								yield return ic;
+							}
 						}
+						yield return i.Target;
 					}
-					yield return i.Target;
+					else {
+						_context.RegisterError(BSharpErrors.RecycleImport(this,root,i));
+					}
 				}
 			}
 
-			foreach (var i in SelfImports.Where(_ => _.Target.IsOrphaned)) {
+			foreach (var i in SelfImports.Where(_ =>null!=_.Target && _.Target.IsOrphaned)) {
 				_context.RegisterError(BSharpErrors.OrphanImport(this, i));
 			}
 		}
