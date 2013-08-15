@@ -85,19 +85,21 @@ namespace Qorpent.Bxl {
 			compiler.Initialize(compileroptions);
 			var compileresult = compiler.Compile(new[] {result});
 			var newresult = new XElement("bsharp");
-			foreach (var e in compileresult.GetErrors()) {
-				newresult.Add(XElement.Parse(new XmlSerializer().Serialize("error", e)).Element("error"));
-			}
-
-			foreach (var o in compileresult.Get(BSharpContextDataType.Orphans)) {
-				newresult.Add(new XElement("orphan", new XAttribute("code", o.FullName)));
-			}
+			
 			foreach (var w in compileresult.Get(BSharpContextDataType.Working)) {
 				var copy = new XElement(w.Compiled);
 				if (null != w.Error) {
 					copy.AddFirst(new XElement("error", new XText(w.Error.ToString())));
 				}
 				newresult.Add(copy);
+			}
+			var e = new XElement("errors");
+			foreach (var er in compileresult.GetErrors())
+			{
+				e.Add(XElement.Parse(new XmlSerializer().Serialize("error", er)).Element("error"));
+			}
+			if (e.HasElements) {
+				newresult.Add(e);
 			}
 			result = newresult;
 			return result;
