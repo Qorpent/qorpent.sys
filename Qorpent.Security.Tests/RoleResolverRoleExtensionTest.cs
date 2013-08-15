@@ -29,6 +29,7 @@ using System.Security.Principal;
 using NUnit.Framework;
 using Qorpent.Dsl.LogicalExpressions;
 using Qorpent.Security;
+using Qorpent.Utils.LogicalExpressions;
 
 namespace Qorpent.Core.Tests.Security {
 	[TestFixture]

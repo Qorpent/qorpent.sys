@@ -4,7 +4,7 @@ namespace Qorpent.Config {
 	/// <summary>
 	/// Описатель абстрактного конфига
 	/// </summary>
-	public interface IConfig {
+	public interface IConfig:IDictionary<string,object> {
 		/// <summary>
 		/// Устанавливает родительский конфиг
 		/// </summary>
@@ -18,13 +18,7 @@ namespace Qorpent.Config {
 		/// <param name="value"></param>
 		void Set(string name, object value);
 
-		/// <summary>
-		/// Получить строковую опцию
-		/// </summary>
-		/// <param name="name">имя опции</param>
-		/// <param name="def">значение по умолчанию</param>
-		/// <returns></returns>
-		string Get(string name, string def = "");
+		
 
 		/// <summary>
 		/// Получить приведенную типизированную опцию
@@ -46,5 +40,12 @@ namespace Qorpent.Config {
 		/// <param name="withParent"></param>
 		/// <returns></returns>
 		IEnumerable<string> GetNames(bool withParent = false);
+
+		/// <summary>
+		/// Сериализация конфига в заданном формате
+		/// </summary>
+		/// <param name="rendertype"></param>
+		/// <returns></returns>
+		string ToString(ConfigRenderType rendertype );
 	}
 }

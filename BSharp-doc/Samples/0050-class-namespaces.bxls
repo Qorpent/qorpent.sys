@@ -1,0 +1,148 @@
+# Copyright Comdiv 2007-2013
+# qorpent.sys B#
+
+###############################################
+# ДАННЫЙ ПРИМЕР ПОКАЗЫАЕТ                     #
+# ЛОГИКУ РАБОТЫ ПРОСТРАНСТВ ИМЕН			  #
+# режим работы с тестом                       #
+# Interpolation = true                        #
+# BxlSharp = true                             #
+###############################################
+
+# Пространства имен используются чтобы лучше разграничить имена 
+# классов и при этом обеспечить совместимость различных решений
+
+# итак, допустим у нас есть
+
+class admin_form
+
+class thema abstract
+
+thema eco
+
+class sys_report
+
+eco balans
+
+eco prib
+
+# во-первых в таком списке крайне сложно определиться какие из 
+# классов относятся к системному, уровню, какие к прикладному и какие функции затрагивают
+# и более того, вполне может статься так что кто-то еще назовет свой 
+# отчет sys_report
+# вот чтобы такой мешанины не было и создают пространства имен
+# например
+
+namespace sys
+	class admin_form
+	class sys_report
+	
+namespace assoi
+	
+	class thema abstract
+	thema eco
+	
+	namespace fin
+		eco balans
+		eco prib
+
+#это примерно соответствует:
+class sys.admin_form
+
+class assoi.thema abstract
+
+thema assoi.eco
+
+class sys.sys_report
+
+eco assoi.fin.balans
+
+eco assoi.fin.prib
+
+# пространства имен не обязательно вкладывать друг в друга
+# так
+
+namespace A
+	namespace B
+		namespace C
+			class D
+
+#то же самое что и
+namespace A.B.C
+	class D
+		
+# пространства имен не зависят от файлов так например
+# первый файл
+namespace X
+	class A
+#второй файл
+namespace X
+	class B
+#оба класса A и B "живут" в одном пространстве
+
+# пространства позволяют адеватно например управлять двумя сходными иерархиями
+# допустим было
+
+class A x=1
+class B x=2
+	import A
+class C x=3
+	import B
+
+#а мы хотим сделать новую версию этого набора классов, но при этом сохранить старую
+
+namespace old
+	class A x=1
+	class B x=2
+		import A
+	class C x=3
+		import B 
+		
+namespace new
+	class A x=10
+	class B x=20
+		import A
+	class C x=30
+		import B 
+
+# система корректно обработает все импорты
+
+# но ничего не мешает импортировать что-либо из другого пространства
+
+namespace assoi
+	class thema
+	thema eco
+	eco balans
+	
+namespace no-assoi
+	class no-thema
+		import assoi.thema
+# система находит assoi.thema в данном случае 
+
+# и вот так не (!) сработает:
+
+namespace assoi
+	class thema
+	thema eco
+	eco balans
+	
+namespace no-assoi
+	class no-thema
+		import balans
+		
+# потому как в зоне видимости класса no-thema нет темы balans
+# а вот так сработает (!)
+namespace assoi
+	class thema
+	thema eco
+	eco balans
+	
+namespace no-assoi
+	class no-thema
+		import assoi.balans
+		
+# таким образом пространства имен - это основное средство описания
+# пакетов, подпакетов, разделения по службам и проч на уровне исходного кода!
+
+
+

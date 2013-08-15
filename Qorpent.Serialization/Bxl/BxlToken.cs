@@ -229,7 +229,7 @@ namespace Qorpent.Bxl {
 		public bool Ignore;
 
 		/// <summary>
-		/// 	Internal low-level token for high-level token
+		/// 	Override low-level token for high-level token
 		/// </summary>
 		public BxlToken Impl;
 

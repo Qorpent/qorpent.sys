@@ -29,6 +29,14 @@
     <Compile Include="Json\ParserTest.cs" />
     <Compile Include="json_serializer_test.cs" />
     <Compile Include="js_serializer_test.cs" />
+    <Compile Include="BSharp\ErrorHandling.cs" />
+    <Compile Include="BSharp\PartialClassSupport.cs" />
+    <Compile Include="BSharp\CompileTestBase.cs" />
+    <Compile Include="BSharp\ConditionalInternals.cs" />
+    <Compile Include="BSharp\IncludeTest.cs" />
+    <Compile Include="BSharp\MergeContentTests.cs" />
+    <Compile Include="BSharp\BSharpBasics.cs" />
+    <Compile Include="BSharp\TbxlSamples.cs" />
     <Compile Include="Q18_Xml_To_Json_Bug_Test.cs" />
     <Compile Include="Q48SerializeNotNullCollectionsTest.cs" />
     <Compile Include="Q51JsonXmlParserFail.cs" />
@@ -75,4 +83,5 @@
       <Name>Qorpent.Core.Tests</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
 </Project>

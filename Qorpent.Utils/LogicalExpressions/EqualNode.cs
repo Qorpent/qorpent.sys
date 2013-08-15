@@ -16,7 +16,11 @@
 // 
 // PROJECT ORIGIN: Qorpent.Dsl/EqualNode.cs
 #endregion
-namespace Qorpent.Dsl.LogicalExpressions {
+
+using Qorpent.Dsl.LogicalExpressions;
+using Qorpent.LogicalExpressions;
+
+namespace Qorpent.Utils.LogicalExpressions {
 	/// <summary>
 	/// 	node that describes logical == operator
 	/// </summary>

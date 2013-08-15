@@ -57,12 +57,14 @@
     <Compile Include="ParamMappingHelper.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="Extensions\TagHelper.cs" />
+    <Compile Include="StringInterpolation.cs" />
     <Compile Include="ValueMember.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="ReflectionExtensionsException.cs" />
     <Compile Include="ReflectionHelper.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
+    <Compile Include="XmlInterpolation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Data" />

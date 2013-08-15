@@ -28,9 +28,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml.Linq;
 using NUnit.Framework;
+using Qorpent.Bxl;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Bxl.Tests {
+namespace Qorpent.Serialization.Tests.Bxl {
 	[TestFixture]
 	public class BxlParserTest {
 		[Test]
@@ -56,6 +57,56 @@ root code, name y=33 : 'value'
 			Assert.AreEqual(4, tree[0].Elements[0].Elements.Count);
 			Assert.AreEqual(tree[0], tree[0].Elements[0].Parent);
 		}
+
+		[Test]
+		public void CanInterpolateDuringParse() {
+			var res = new BxlParser().Parse(@"
+test x='1' y=3 
+	test2 x='${.x}${y}2' 
+		test3  y='${x}${.y}'
+	", "", BxlParserOptions.PerformInterpolation);
+			Console.WriteLine(res.ToString());
+			Assert.AreEqual(@"<root>
+  <test _file=""code.bxl"" _line=""2"" x=""1"" y=""3"">
+    <test2 _file=""code.bxl"" _line=""3"" x=""132"">
+      <test3 _file=""code.bxl"" _line=""4"" y=""1323"" />
+    </test2>
+  </test>
+</root>",res.ToString());
+		}
+
+		[Test]
+		public void CanUseBSharpDuringParse()
+		{
+			var res = new BxlParser().Parse(@"
+class A abstract
+	x=1
+class B
+	import A
+	y='${x}'
+	", "", BxlParserOptions.BSharp);
+			Console.WriteLine(res.ToString());
+			Assert.AreEqual(@"<bsharp>
+  <class code=""B"" y=""${x}"" fullcode=""B"" x=""1"" />
+</bsharp>", res.ToString());
+		}
+
+		[Test]
+		public void CanUseBSharpWithInterpolationsDuringParse()
+		{
+			var res = new BxlParser().Parse(@"
+class A abstract
+	x=1
+class B
+	import A
+	y='${x}'
+	", "", BxlParserOptions.BSharp|BxlParserOptions.PerformInterpolation);
+			Console.WriteLine(res.ToString());
+			Assert.AreEqual(@"<bsharp>
+  <class code=""B"" y=""1"" fullcode=""B"" x=""1"" />
+</bsharp>", res.ToString());
+		}
+
 
 		[Test]
 		public void CanParseAttribuesAfterElements() {

@@ -8,6 +8,7 @@
     <AssemblyName>Qorpent.Serialization</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BSharp\BSharpErrors.cs" />
     <Compile Include="Json\CType.cs" />
     <Compile Include="Json\JsonArray.cs" />
     <Compile Include="Json\JsonObject.cs" />
@@ -19,6 +20,13 @@
     <Compile Include="Json\JsonValueType.cs" />
     <Compile Include="Json\Lexer.cs" />
     <Compile Include="Json\Tokenizer.cs" />
+    <Compile Include="BSharp\BSharpClassBuilder.cs" />
+    <Compile Include="BSharp\BSharpCompiler.cs" />
+    <Compile Include="BSharp\BSharpConfig.cs" />
+    <Compile Include="BSharp\BSharpContext.cs" />
+    <Compile Include="BSharp\BSharpClass.cs" />
+    <Compile Include="BSharp\BSharpImport.cs" />
+    <Compile Include="BSharp\BSharpElement.cs" />
     <Compile Include="Qxi\XmlIncludeProcessor.cs" />
     <Compile Include="Qxi\XmlInterpolationPreprocessor.cs" />
     <Compile Include="Selector\DefaultSelector.cs" />

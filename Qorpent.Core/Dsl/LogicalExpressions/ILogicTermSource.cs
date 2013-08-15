@@ -16,9 +16,10 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/ILogicTermSource.cs
 #endregion
+
 using System.Collections.Generic;
 
-namespace Qorpent.Dsl.LogicalExpressions {
+namespace Qorpent.LogicalExpressions {
 	/// <summary>
 	/// 	describes abstract source of logical/valued terms - used to describe source data for logical expression parser
 	/// </summary>

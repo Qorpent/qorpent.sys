@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
@@ -8,16 +9,17 @@ namespace Qorpent.Config {
 	/// <summary>
 	/// Базовый класс для конфигураций
 	/// </summary>
-	public  class ConfigBase : IConfig {
-
+	public partial class ConfigBase : IConfig {
 
 
 		/// <summary>
 		/// Внутреннее хранилище опций
 		/// </summary>
 		protected IDictionary<string, object> options = new Dictionary<string, object>();
-
-		private bool _freezed;
+		/// <summary>
+		/// Признак заморозки
+		/// </summary>
+		protected bool _freezed;
 		private IConfig _parent;
 
 		/// <summary>
@@ -69,22 +71,34 @@ namespace Qorpent.Config {
 			if (_freezed) throw new Exception("config freezed");
 			options[name] = value;
 		}
+		
 
-		/// <summary>
-		/// Получить строковую опцию
-		/// </summary>
-		/// <param name="name">имя опции</param>
-		/// <param name="def">значение по умолчанию</param>
-		/// <returns></returns>
-		public string Get(string name, string def = "") {
-			if (!options.ContainsKey(name)) {
-				if (null != _parent) {
-					return _parent.Get(name, def);
-				}
-				return def;
+		private T ReturnIerachical<T>(string name, T def) {
+			var basis = name.Replace(".", "");
+			var skips = name.Count(_ => _ == '.');
+			var result= AllByName(basis).Skip(skips).FirstOrDefault();
+			if (null == result) {
+				result = AllByName(basis).Last();
 			}
-			return options[name].ToStr();
+			if (null == result) return def;
+			return (T) result;
 		}
+		/// <summary>
+		/// Возвращает все по имени 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public IEnumerable<object> AllByName(string name) {
+			if (this.options.ContainsKey(name)) {
+				yield return options[name];
+			}
+			if (null != _parent) {
+				foreach (var p in ((ConfigBase) _parent).AllByName(name)) {
+					yield return p;
+				}
+			}
+		}
+
 		/// <summary>
 		/// Получить приведенную типизированную опцию
 		/// </summary>
@@ -93,13 +107,28 @@ namespace Qorpent.Config {
 		/// <param name="def"></param>
 		/// <returns></returns>
 		public T Get<T>(string name, T def = default(T)) {
+			
+			if (name.StartsWith("."))
+			{
+				return ReturnIerachical(name, def);
+			}
 			if (!options.ContainsKey(name)) {
 				if (null != _parent)
 				{
 					return _parent.Get(name, def);
 				}
+				if (typeof(string) == typeof(T))
+				{
+					if (Equals(def, null)) {
+						return (T)(object)string.Empty;
+					}
+				}
 				return def;
 			}
+			if (typeof (T) == typeof (object)) {
+				return (T)options[name];
+			}
+
 			return options[name].To<T>();
 		}
 
@@ -119,6 +148,47 @@ namespace Qorpent.Config {
 		public IEnumerable<string> GetNames(bool withParent = false) {
 			if (!withParent || null==_parent) return options.Keys;
 			return options.Keys.Union(_parent.GetNames(true)).Distinct();
+		}
+
+		/// <summary>
+		/// Сериализация конфига в заданном формате
+		/// </summary>
+		/// <param name="rendertype"></param>
+		/// <returns></returns>
+		public string ToString(ConfigRenderType rendertype ) {
+			if (rendertype == ConfigRenderType.SimpleBxl) {
+				return GenerateSimpleBxl();
+			}
+			else {
+				throw new Exception("unknown format " + rendertype);
+			}
+		}
+
+		private string GenerateSimpleBxl() {
+			var asdict = this as IDictionary<string,object>;
+			var sb = new StringBuilder();
+			sb.AppendLine("config");
+			foreach (var d in asdict) {
+				sb.Append("\t");
+				sb.Append(d.Key);
+				var strval = d.Value.ToStr();
+				if (string.IsNullOrEmpty(strval)) {
+					sb.AppendLine(" = \"\"");
+				}else if (strval.All(c => char.IsLetterOrDigit(c) ||c=='.')) {
+					sb.AppendLine(" = "+strval);
+				}else if (strval.Any(c => c == '"' || c == '\r' || c == '\n')) {
+					sb.AppendLine(" = \"\"\"");
+					sb.AppendLine(strval);
+					sb.AppendLine("\t\"\"\"");
+				}
+				else {
+					sb.Append(" = \"");
+					sb.Append(strval);
+					sb.AppendLine("\"");
+				}
+				
+			}
+			return sb.ToString();
 		}
 	}
 }

@@ -16,9 +16,13 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/DictionaryTermSource.cs
 #endregion
-using System.Collections.Generic;
 
-namespace Qorpent.Dsl.LogicalExpressions {
+using System.Collections.Generic;
+using System.Linq;
+using Qorpent.Dsl.LogicalExpressions;
+using Qorpent.Utils.Extensions;
+
+namespace Qorpent.LogicalExpressions {
 	/// <summary>
 	/// 	system provided simple dictionary based term source - all existed, non empty pairs treated as bool, other false
 	/// 	(changed from Qweb where just ContainsKey was checked)
@@ -30,6 +34,14 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// <param name="dict"> </param>
 		public DictionaryTermSource(IDictionary<string, string> dict) {
 			_all = dict;
+		}
+		/// <summary>
+		/// 	creates new instance
+		/// </summary>
+		/// <param name="dict"> </param>
+		public DictionaryTermSource(IDictionary<string, object> dict)
+		{
+			_all = dict.ToDictionary(_=>_.Key,_=>_.Value.ToStr());
 		}
 
 		/// <summary>

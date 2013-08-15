@@ -16,7 +16,11 @@
 // 
 // PROJECT ORIGIN: Qorpent.Dsl/LiteralNode.cs
 #endregion
-namespace Qorpent.Dsl.LogicalExpressions {
+
+using Qorpent.Dsl.LogicalExpressions;
+using Qorpent.LogicalExpressions;
+
+namespace Qorpent.Utils.LogicalExpressions {
 	/// <summary>
 	/// 	evaluates atomic literal value
 	/// </summary>

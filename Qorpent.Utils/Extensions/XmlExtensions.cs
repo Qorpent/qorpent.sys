@@ -51,6 +51,28 @@ namespace Qorpent.Utils.Extensions {
 			}
 			return xElement.Nodes().OfType<XText>().Select(x => x.Value).ConcatString(" ");
 		}
+		/// <summary>
+		/// Производит поиск атрибутов по имени и/или вхождению строки
+		/// </summary>
+		/// <param name="e"></param>
+		/// <param name="attributename"></param>
+		/// <param name="contains"></param>
+		/// <param name="skipself"></param>
+		/// <param name="selfonly"></param>
+		/// <returns></returns>
+		public static bool HasAttributes(this XElement e, string attributename = null, string contains = null,
+		                                 bool skipself = false, bool selfonly = false) {
+			if (!skipself) {
+				foreach (var a in e.Attributes()) {
+					if (null == attributename || a.Name.LocalName == attributename) {
+						if (null == contains || a.Value.Contains(contains)) {
+							return true;
+						}
+					}
+				}
+			}
+			return !selfonly && e.Elements().Any(c => HasAttributes(c, attributename, contains));
+		}
 
 		/// <summary>
 		/// 	returns qorpent/bxl bound descriptor of XElement
@@ -193,6 +215,9 @@ namespace Qorpent.Utils.Extensions {
 			}
 			if (0 != adaptedname.Length && -1 != Array.IndexOf(Digits, adaptedname[0])) {
 				adaptedname = "_" + adaptedname;
+			}
+			if (adaptedname.StartsWith(".")) {
+				adaptedname = "__DOT__" + adaptedname.Substring(1);
 			}
 			return adaptedname;
 		}
