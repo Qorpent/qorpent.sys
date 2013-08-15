@@ -50,7 +50,10 @@ namespace Qorpent.Core.Tests
 			Assert.AreEqual(3, cfgchild.Get<object>("a"));
 			Assert.AreEqual(2, cfgchild.Get<object>(".a"));
 			Assert.AreEqual(1, cfgchild.Get<object>("..a"));
-			Assert.Null(cfgchild.Get<object>("...a"));
+			//пересмотрено поведение по переходу границы - берется самый последний вариант
+			//мотивация - иначе очень сложно описать ... для неизвестного уровня вложенности
+			//и теперь . обозначает "желательный пропуск значения"
+			Assert.AreEqual(1,cfgchild.Get<object>("...a"));
 		}
 
 		[Test]
