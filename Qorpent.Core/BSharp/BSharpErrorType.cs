@@ -31,16 +31,13 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		OrphanImport =220,
 
-
-		
 		/// <summary>
 		/// Циклический импорт
 		/// </summary>
 		RecycleImport = 230,
-		/// <summary>
-		/// У инклуда вообще не указан код
-		/// </summary>
-		FakeInclude = 3010,
+
+
+		
 		/// <summary>
 		/// Не найдена класс для инклуда
 		/// </summary>
@@ -50,6 +47,12 @@ namespace Qorpent.BSharp {
 		/// Попытка включить класс-сироту
 		/// </summary>
 		OrphanInclude = 330,
+
+		/// <summary>
+		/// У инклуда вообще не указан код
+		/// </summary>
+		FakeInclude = 3010,
+		
 		/// <summary>
 		/// При инклуде класса в режиме body ее контент оказался пустым
 		/// </summary>
