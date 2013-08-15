@@ -104,6 +104,7 @@ namespace Qorpent.BSharp {
 			var code = i.Attr("code");
 			if (string.IsNullOrWhiteSpace(code)) {
 				_context.RegisterError(BSharpErrors.FakeInclude(_cls,i));
+				i.Remove();
 				return needReInterpolate;
 			}
 

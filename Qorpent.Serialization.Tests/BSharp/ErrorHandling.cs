@@ -137,7 +137,7 @@ class A
 			var error = errors.FirstOrDefault();
 			Assert.NotNull(error);
 			Assert.AreEqual(BSharpErrorType.EmptyInclude, error.Type);
-			var i = error.Data as BSharpImport;
+			var i = error.Xml;
 			Assert.NotNull(i);
 		}
 

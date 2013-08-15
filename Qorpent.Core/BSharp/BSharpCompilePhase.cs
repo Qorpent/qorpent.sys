@@ -14,5 +14,9 @@ namespace Qorpent.BSharp {
 		/// Разрешение импортов
 		/// </summary>
 		ImportResolution = 1<<1,
+		/// <summary>
+		/// Обработка инклудов
+		/// </summary>
+		IncludeProcessing = 1<<2,
 	}
 }

@@ -114,20 +114,46 @@ namespace Qorpent.BSharp {
 			return new BSharpError
 			{
 				Level = ErrorLevel.Warning,
-				Phase = BSharpCompilePhase.SourceIndexing,
-				Type = BSharpErrorType.ClassCreatedFormOverride,
+				Phase = BSharpCompilePhase.IncludeProcessing,
+				Type = BSharpErrorType.FakeInclude,
 				ClassName = cls.FullName,
 				Xml = e,
 				Message = "В инклуде не указан код - это может быть как результат сознательного условного пустого инклуда или ошибка в коде"
 			};
 		}
-
+		/// <summary>
+		/// Ошибка включения несуществующей темы
+		/// </summary>
+		/// <param name="cls"></param>
+		/// <param name="e"></param>
+		/// <returns></returns>
 		public static BSharpError NotResolvedInclude(IBSharpClass cls, XElement e) {
-			throw new System.NotImplementedException();
+			return new BSharpError
+			{
+				Level = ErrorLevel.Error,
+				Phase = BSharpCompilePhase.IncludeProcessing,
+				Type = BSharpErrorType.NotResolvedInclude,
+				ClassName = cls.FullName,
+				Xml = e,
+				Message = "Попытка включить несуществующий класс"
+			};
 		}
-
+		/// <summary>
+		/// Пустой инклуд
+		/// </summary>
+		/// <param name="cls"></param>
+		/// <param name="e"></param>
+		/// <returns></returns>
 		public static BSharpError EmptyInclude(IBSharpClass cls, XElement e) {
-			throw new System.NotImplementedException();
+			return new BSharpError
+			{
+				Level = ErrorLevel.Warning,
+				Phase = BSharpCompilePhase.IncludeProcessing,
+				Type = BSharpErrorType.EmptyInclude,
+				ClassName = cls.FullName,
+				Xml = e,
+				Message = "Инклуд, включаемый в режиме body не имеет контента, возможно ошибка в коде"
+			};
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// У инклуда вообще не указан код
 		/// </summary>
-		FakeInclude = 310,
+		FakeInclude = 3010,
 		/// <summary>
 		/// Не найдена тема, которая могла бы быть применена в инклуд
 		/// </summary>
@@ -42,7 +42,7 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// При инклуде темы в режиме body ее контент оказался пустым
 		/// </summary>
-		EmptyInclude = 330,
+		EmptyInclude = 3030,
 
 		
 	}
