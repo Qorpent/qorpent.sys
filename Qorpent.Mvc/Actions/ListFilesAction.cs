@@ -31,7 +31,7 @@ namespace Qorpent.Mvc.Actions
 
         private IEnumerable<string> ListDirectrory()
         {
-            var di = new DirectoryInfo(Environment.CurrentDirectory);
+            var di = new DirectoryInfo(EnvironmentInfo.RootDirectory);
             if (null == di)
             {
                 throw new Exception("Cannot get directory info");
@@ -43,7 +43,7 @@ namespace Qorpent.Mvc.Actions
 
         private IEnumerable<string> ListFiles()
         {
-            string[] di =  Directory.GetFiles(Environment.CurrentDirectory); 
+            string[] di = Directory.GetFiles(EnvironmentInfo.RootDirectory); 
             
             if (null == di)
             {
