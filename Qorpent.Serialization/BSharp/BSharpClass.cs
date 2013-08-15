@@ -14,9 +14,10 @@ namespace Qorpent.BSharp {
 	public class BSharpClass : IBSharpClass {
 		/// <summary>
 		/// </summary>
-		public BSharpClass() {
+		public BSharpClass(IBSharpContext context) {
 			SelfElements = new List<IBSharpElement>();
 			SelfImports = new List<IBSharpImport>();
+			_context = context;
 		}
 
 		/// <summary>
@@ -187,6 +188,7 @@ namespace Qorpent.BSharp {
 		}
 
 		private IBSharpClass[] _cachedImports;
+		private IBSharpContext _context;
 
 		/// <summary>
 		///     Возвращает полное перечисление импортируемых классов в порядке их накатывания
@@ -232,6 +234,7 @@ namespace Qorpent.BSharp {
 				}
 			}
 
+			
 
 
 			foreach (IBSharpImport i in SelfImports) {
@@ -248,6 +251,10 @@ namespace Qorpent.BSharp {
 					}
 					yield return i.Target;
 				}
+			}
+
+			foreach (var i in SelfImports.Where(_ => _.Target.IsOrphaned)) {
+				_context.RegisterError(BSharpErrors.OrphanImport(this, i));
 			}
 		}
 

@@ -43,5 +43,10 @@ namespace Qorpent.BSharp {
 		/// Строит рабочий индекс классов
 		/// </summary>
 		void Build();
+		/// <summary>
+		/// Регистрирует ошибку в контексте
+		/// </summary>
+		/// <param name="error"></param>
+		void RegisterError(BSharpError error);
 	}
 }

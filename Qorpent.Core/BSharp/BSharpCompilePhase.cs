@@ -9,7 +9,10 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Индексация источников
 		/// </summary>
-		SourceIndexing,
-
+		SourceIndexing  =1,
+		/// <summary>
+		/// Разрешение импортов
+		/// </summary>
+		ImportResolution = 1<<1,
 	}
 }

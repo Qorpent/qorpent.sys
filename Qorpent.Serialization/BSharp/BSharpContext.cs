@@ -306,6 +306,14 @@ namespace Qorpent.BSharp {
 			_built = true;
 		}
 
+		/// <summary>
+		/// Регистрирует ошибку в контексте
+		/// </summary>
+		/// <param name="error"></param>
+		public void RegisterError(BSharpError error) {
+			Errors.Add(error);
+		}
+
 		private void ApplyExtensions() {
 			foreach (var o in Extensions) {
 				var cls = Get(o.TargetClassName, o.Namespace);
@@ -360,10 +368,12 @@ namespace Qorpent.BSharp {
 				{
 					i.Orphaned = true;
 					var import = Get(i.TargetCode, w.Namespace);
-					if (null != import)
-					{
+					if (null != import) {
 						i.Orphaned = false;
 						i.Target = import;
+					}
+					else {
+						Errors.Add(BSharpErrors.NotResolvedImport(w, i));	
 					}
 				}
 			}

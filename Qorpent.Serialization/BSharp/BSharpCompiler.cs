@@ -77,9 +77,9 @@ namespace Qorpent.BSharp {
 		/// <param name="sources"></param>
 		/// <returns></returns>
 		protected virtual IBSharpContext BuildIndex(IEnumerable<XElement> sources) {
-			
-			var baseindex = IndexizeRawClasses(sources);
 			CurrentBuildContext = new BSharpContext();
+			var baseindex = IndexizeRawClasses(sources);
+			
 			CurrentBuildContext.Setup(baseindex);
 			CurrentBuildContext.Build();
 			return CurrentBuildContext;
@@ -108,7 +108,7 @@ namespace Qorpent.BSharp {
 					}
 				}
 				else {
-					var def = new BSharpClass {Source = e, Name = e.Attr("code"), Namespace = ns};
+					var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = e.Attr("code"), Namespace = ns};
 
 					SetupInitialOrphanState(e, def);
 					ParseImports(e, def);
@@ -145,7 +145,7 @@ namespace Qorpent.BSharp {
 
 		private static void ParseImports(XElement e, IBSharpClass def) {
 			foreach (XElement i in e.Elements("import")) {
-				var import = new BSharpImport {Condition = i.Attr("if"), TargetCode = i.Attr("code")};
+				var import = new BSharpImport {Condition = i.Attr("if"), TargetCode = i.Attr("code"), Source = i};
 				def.SelfImports.Add(import);
 			}
 		}

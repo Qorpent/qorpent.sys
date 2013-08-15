@@ -46,5 +46,15 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		[SerializeNotNullOnly]
 		public Exception Error { get; set; }
+		/// <summary>
+		///Дополнительные данные
+		/// </summary>
+		[SerializeNotNullOnly]
+		public object Data { get; set; }
+		/// <summary>
+		/// Имя класса
+		/// </summary>
+		[SerializeNotNullOnly]
+		public string ClassName { get; set; }
 	}
 }
