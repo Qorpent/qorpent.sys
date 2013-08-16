@@ -179,7 +179,6 @@ namespace Qorpent.BSharp.Builder {
 		/// <param name="result"></param>
 		protected virtual void PostBuild(IBSharpContext result) {
 			ExecutePhase(result, BSharpBuilderPhase.PostBuild);
-
 		}
 
 		/// <summary>

@@ -40,7 +40,7 @@ namespace Qorpent.BSharp.Builder {
 		/// Исходящая папка для отладочной информации
 		/// </summary>
 		public string DebugOutputDirectory {
-			get { return Get(DEBUG_OUTPUT_DIRECTORY, "./.debug"); }
+			get { return Get(DEBUG_OUTPUT_DIRECTORY, ".debug"); }
 			set { Set(DEBUG_OUTPUT_DIRECTORY, value); }
 		}
 
@@ -48,7 +48,7 @@ namespace Qorpent.BSharp.Builder {
 		/// Исходящая папка для результатов
 		/// </summary>
 		public string MainOutputDirectory {
-			get { return Get(MAIN_OUTPUT_DIRECTORY, "./"); }
+			get { return Get(MAIN_OUTPUT_DIRECTORY, ".output"); }
 			set { Set(MAIN_OUTPUT_DIRECTORY, value); }
 		}
 
@@ -56,7 +56,7 @@ namespace Qorpent.BSharp.Builder {
 		/// Исходящая папка для журнала
 		/// </summary>
 		public string LogOutputDirectory {
-			get { return Get(LOG_OUTPUT_DIRECTORY, "./.log"); }
+			get { return Get(LOG_OUTPUT_DIRECTORY, ".log"); }
 			set { Set(LOG_OUTPUT_DIRECTORY, value); }
 		}
 	}
