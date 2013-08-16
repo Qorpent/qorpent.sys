@@ -5,6 +5,11 @@ namespace Qorpent.BSharp {
 	/// Перечисление типов ошибки
 	/// </summary>
 	public enum BSharpErrorType {
+
+		/// <summary>
+		/// Общая ошибка
+		/// </summary>
+		GenericError =10,
 		/// <summary>
 		/// Дублирующиеся имена классов
 		/// </summary>

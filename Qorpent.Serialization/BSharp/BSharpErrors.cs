@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -187,6 +188,25 @@ namespace Qorpent.BSharp {
 				Phase = BSharpCompilePhase.SourceIndexing,
 				Type = BSharpErrorType.OrphanClass,
 				Message = "В коде обнаружен участок, похожий на класс, но который нельзя связать ни с одной из имеющихся базовых классов или ключевым словом class"
+			};
+		}
+
+		/// <summary>
+		/// Создает общую ошибку
+		/// </summary>
+		/// <param name="exception"></param>
+		/// <param name="level"></param>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public static BSharpError Generic(Exception exception, ErrorLevel level =ErrorLevel.Fatal , object data = null) {
+			return new BSharpError
+			{
+				Level = level,
+				Data = data,
+				Phase = BSharpCompilePhase.Common,
+				Type = BSharpErrorType.GenericError,
+				Error = exception,
+				Message = "Общая ошибка выполнения"
 			};
 		}
 	}

@@ -9,6 +9,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BSharp\BSharpErrors.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderBase.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderPhase.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderTaskBase.cs" />
+    <Compile Include="BSharp\Builder\IBSharpBuilder.cs" />
+    <Compile Include="BSharp\Builder\IBSharpBuilderTask.cs" />
+    <Compile Include="BSharp\Builder\IBSharpProject.cs" />
     <Compile Include="Json\CType.cs" />
     <Compile Include="Json\JsonArray.cs" />
     <Compile Include="Json\JsonObject.cs" />

@@ -18,5 +18,9 @@ namespace Qorpent.BSharp {
 		/// Обработка инклудов
 		/// </summary>
 		IncludeProcessing = 1<<2,
+		/// <summary>
+		/// Компиляция в целом
+		/// </summary>
+		Common = 1<<3,
 	}
 }
