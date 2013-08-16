@@ -10,8 +10,10 @@
   <ItemGroup>
     <Compile Include="BSharp\BSharpErrors.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderBase.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderOutputAttributes.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderPhase.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderTaskBase.cs" />
+    <Compile Include="BSharp\Builder\BSharpProject.cs" />
     <Compile Include="BSharp\Builder\IBSharpBuilder.cs" />
     <Compile Include="BSharp\Builder\IBSharpBuilderTask.cs" />
     <Compile Include="BSharp\Builder\IBSharpProject.cs" />
