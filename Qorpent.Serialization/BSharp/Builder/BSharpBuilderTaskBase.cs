@@ -1,7 +1,4 @@
-﻿using Qorpent.BSharp;
-using Qorpent.BSharp.Builder;
-
-namespace Qorpent.Integration.BSharp.Builder {
+﻿namespace Qorpent.BSharp.Builder {
 	/// <summary>
 	/// 
 	/// </summary>

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Qorpent.BSharp;
-using Qorpent.BSharp.Builder;
 using Qorpent.Bxl;
 using Qorpent.IO.Resources;
 using Qorpent.IoC;
 
-namespace Qorpent.Integration.BSharp.Builder {
+namespace Qorpent.BSharp.Builder {
 	/// <summary>
 	/// Базовый билдер BSharp
 	/// </summary>
@@ -89,7 +87,41 @@ namespace Qorpent.Integration.BSharp.Builder {
 		/// <summary>
 		/// 
 		/// </summary>
-		protected abstract void PrepareTasks();
+		protected virtual void PrepareTasks() {
+			if (_project.IsFullyQualifiedProject) {
+				PrepareTasksFromProject(_project);
+			}
+			else {
+				var _realproject = CompileRealProject();
+				PrepareTasksFromProject(_realproject);
+			}
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="project"></param>
+		protected abstract void PrepareTasksFromProject(IBSharpProject project);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		protected virtual IBSharpProject CompileRealProject() {
+			var compiledProject = CompileInternalProject();
+			return ConvertToBSharpBuilderProject(compiledProject);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="compiledProject"></param>
+		/// <returns></returns>
+		protected abstract IBSharpProject ConvertToBSharpBuilderProject(IBSharpContext compiledProject);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		protected abstract IBSharpContext CompileInternalProject();
 
 		/// <summary>
 		/// 
