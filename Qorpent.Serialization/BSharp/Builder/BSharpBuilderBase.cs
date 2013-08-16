@@ -233,6 +233,10 @@ namespace Qorpent.BSharp.Builder {
 			return new BSharpContext();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		public IBSharpProject GetProject() {
 			return _project;
 		}
