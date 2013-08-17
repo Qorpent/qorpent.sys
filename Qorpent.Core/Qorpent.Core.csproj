@@ -41,6 +41,10 @@
     <Compile Include="BSharp\IBSharpContext.cs" />
     <Compile Include="BSharp\IBSharpElement.cs" />
     <Compile Include="BSharp\IBSharpImport.cs" />
+    <Compile Include="BSharp\Runtime\BSharpRuntimeProviderService.cs" />
+    <Compile Include="BSharp\Runtime\IBSharpRuntimeBuilder.cs" />
+    <Compile Include="BSharp\Runtime\IBSharpRuntimeProvider.cs" />
+    <Compile Include="BSharp\Runtime\IBSharpRuntimeProviderService.cs" />
     <Compile Include="Config\ConfigBase.cs" />
     <Compile Include="Config\ConfigRenderType.cs" />
     <Compile Include="Config\DictionaryCompatibleConfig.cs" />
