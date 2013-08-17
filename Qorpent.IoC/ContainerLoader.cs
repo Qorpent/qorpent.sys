@@ -29,6 +29,7 @@ using Qorpent.Dsl.XmlInclude;
 using Qorpent.IO;
 using Qorpent.Mvc;
 using Qorpent.Utils.Extensions;
+using Qorpent.BSharp.Runtime;
 
 namespace Qorpent.IoC {
 	/// <summary>
@@ -143,6 +144,11 @@ namespace Qorpent.IoC {
 
 			RegisterMvcLibraries();
 			RegisterSubResolvers();
+
+			if (null != _container.FindComponent(typeof (IBSharpRuntimeService),null)) {
+				_container.RegisterSubResolver(new BSharpTypeResolver(_container));
+			}
+
 			return result.ToArray();
 
 		}

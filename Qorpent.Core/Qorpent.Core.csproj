@@ -48,7 +48,7 @@
     <Compile Include="BSharp\Runtime\IBSharpRuntimeActivatorService.cs" />
     <Compile Include="BSharp\Runtime\IBSharpRuntimeClass.cs" />
     <Compile Include="BSharp\Runtime\IBSharpRuntimeProvider.cs" />
-    <Compile Include="BSharp\Runtime\IBSharpRuntimeProviderService.cs" />
+    <Compile Include="BSharp\Runtime\IBSharpRuntimeService.cs" />
     <Compile Include="Config\ConfigBase.cs" />
     <Compile Include="Config\ConfigRenderType.cs" />
     <Compile Include="Config\DictionaryCompatibleConfig.cs" />

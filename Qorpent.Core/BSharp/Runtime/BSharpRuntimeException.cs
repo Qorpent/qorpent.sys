@@ -29,7 +29,11 @@ namespace Qorpent.BSharp.Runtime {
 		/// <param name="message"></param>
 		/// <param name="inner"></param>
 		public BSharpRuntimeException(string message, Exception inner) : base(message, inner) {}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="info"></param>
+		/// <param name="context"></param>
 		protected BSharpRuntimeException(
 			SerializationInfo info,
 			StreamingContext context) : base(info, context) {}

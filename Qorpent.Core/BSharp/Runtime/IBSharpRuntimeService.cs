@@ -5,7 +5,7 @@
 	/// <summary>
 	/// Интерфейс сервера Runtime инфраструктуры BSharp
 	/// </summary>
-	public interface IBSharpRuntimeProviderService : IBSharpRuntimeProvider, IBSharpRuntimeActivator {
+	public interface IBSharpRuntimeService : IBSharpRuntimeProvider, IBSharpRuntimeActivator {
 		/// <summary>
 		/// Активирует сервис по имени класса
 		/// </summary>
