@@ -66,8 +66,8 @@ class A
 ";
 			var result = Compile(code);
 			var errors = result.GetErrors();
-			Assert.AreEqual(1, errors.Count());
-			var error = errors.FirstOrDefault();
+			Assert.AreEqual(2, errors.Count());
+			var error = errors.ElementAt(1);
 			Assert.NotNull(error);
 			Assert.AreEqual(BSharpErrorType.OrphanImport, error.Type);
 			var i = error.Data as BSharpImport;
