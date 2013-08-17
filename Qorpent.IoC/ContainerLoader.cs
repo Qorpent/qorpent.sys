@@ -142,9 +142,20 @@ namespace Qorpent.IoC {
 			}
 
 			RegisterMvcLibraries();
+			RegisterSubResolvers();
 			return result.ToArray();
 
 		}
+
+		private void RegisterSubResolvers() {
+			var subcontainers =_container.All<ITypeResolver>();
+			foreach (var c in subcontainers) {
+				//force valid order
+				c.Idx = _container.Idx + c.Idx;
+				_container.RegisterSubResolver(c);
+			}
+		}
+
 		/// <summary>
 		/// Регекс глобальных констант
 		/// </summary>
