@@ -1,17 +1,18 @@
 ﻿namespace Qorpent.BSharp.Runtime {
+
+	
+
 	/// <summary>
 	/// Интерфейс сервера Runtime инфраструктуры BSharp
 	/// </summary>
-	public interface IBSharpRuntimeProviderService : IBSharpRuntimeProvider
-	{
+	public interface IBSharpRuntimeProviderService : IBSharpRuntimeProvider, IBSharpRuntimeActivator {
 		/// <summary>
-		/// Возвращает типизированный сериализованный объект IBSharp
+		/// Активирует сервис по имени класса
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="name"></param>
+		/// <param name="acivationType"></param>
 		/// <returns></returns>
-		T Get<T>(string name) where T:class;
-
-
+		T Activate<T>(string name, BSharpActivationType acivationType = BSharpActivationType.Default);
 	}
 }

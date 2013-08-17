@@ -20,6 +20,6 @@ namespace Qorpent.BSharp.Runtime
 		/// </summary>
 		/// <param name="fullname"></param>
 		/// <returns></returns>
-		XElement GetRaw(string fullname);
+		IBSharpRuntimeClass GetRuntimeClass(string fullname);
 	}
 }

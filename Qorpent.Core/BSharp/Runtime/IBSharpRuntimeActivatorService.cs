@@ -4,7 +4,7 @@ namespace Qorpent.BSharp.Runtime {
 	/// <summary>
 	/// Интерфейс построителя объектов для BSharp
 	/// </summary>
-	public interface IBSharpRuntimeBuilder {
+	public interface IBSharpRuntimeActivatorService : IBSharpRuntimeActivator {
 		/// <summary>
 		/// Порядковый номер при обходе
 		/// </summary>
@@ -14,12 +14,6 @@ namespace Qorpent.BSharp.Runtime {
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		bool IsSupported<T>();
-		/// <summary>
-		/// Создать типизированный объект из динамического объекта BSharp
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
-		T Create<T>(XElement src);
+		bool CanActivate<T>(IBSharpRuntimeClass rtcls, BSharpActivationType acivationType = BSharpActivationType.Default);
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent;
 using Qorpent.IO;
 using Qorpent.IoC;
 
@@ -20,7 +21,7 @@ namespace Qorpent.BSharp.Runtime {
 		/// Массив сериализаторов объектов
 		/// </summary>
 		[Inject]
-		public IBSharpRuntimeBuilder[] Builders { get; set; }
+		public IBSharpRuntimeActivatorService[] Activators { get; set; }
 
 		/// <summary>
 		/// Разрешает имена классов с использованием корневого неймспейса
@@ -45,11 +46,11 @@ namespace Qorpent.BSharp.Runtime {
 		/// </summary>
 		/// <param name="fullname"></param>
 		/// <returns></returns>
-		public XElement GetRaw(string fullname) {
-			XElement result = null;
+		public IBSharpRuntimeClass GetRuntimeClass(string fullname) {
+			IBSharpRuntimeClass result = null;
 			foreach (var p in Providers)
 			{
-				result = p.GetRaw(fullname);
+				result = p.GetRuntimeClass(fullname);
 				if (null != result)
 				{
 					break;
@@ -58,38 +59,38 @@ namespace Qorpent.BSharp.Runtime {
 			return result;
 		}
 
-	
 
 		/// <summary>
-		/// Возвращает типизированный сериализованный объект IBSharp
+		/// Активирует сервис по имени класса
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="name"></param>
+		/// <param name="acivationType"></param>
 		/// <returns></returns>
-		public T Get<T>(string name) where T : class {
-			var raw = GetRaw(name);
-			var builder = Builders.FirstOrDefault(_ => _.IsSupported<T>());
-			if (null != builder) {
-				return builder.Create<T>(raw);
+		public T Activate<T>(string name, BSharpActivationType acivationType = BSharpActivationType.Auto) {
+			var runtimeclass = GetRuntimeClass(name);
+			if (null == runtimeclass)
+			{
+				throw new BSharpRuntimeException("cannot create runtime class with name " + name);
 			}
-			T result = null;
-			if (typeof (T).IsInterface) {
-				result = ResolveService<T>();
-			}
-			else {
-				result = Activator.CreateInstance<T>();
-			}
-			if (null == result) {
-				throw new Exception("no implementation class was found");
-			}
-			if (result is IXmlReadable) {
-				((IXmlReadable)result).ReadFromXml(raw);
-			}
-			else {
-				throw new Exception("result object does not support initialization from XML");
-			}
-			return result;
+			return Activate<T>(runtimeclass, acivationType);
 		}
 
+		/// <summary>
+		/// Создать типизированный объект из динамического объекта BSharp
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public T Activate<T>(IBSharpRuntimeClass runtimeclass, BSharpActivationType acivationType) {
+			var activator = Activators
+				.OrderBy(_ => _.Index)
+				.FirstOrDefault(_ => _.CanActivate<T>(runtimeclass, acivationType));
+			if (null == activator) {
+				throw new BSharpRuntimeException("cannot find activator for " + runtimeclass.Fullname +
+				                                 " to create requested service " + typeof (T).Name);
+			}
+
+			return activator.Activate<T>(runtimeclass, acivationType);
+		}
 	}
 }
