@@ -10,6 +10,7 @@
     <AssemblyNameBase>Qorpent.Serialization</AssemblyNameBase>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BSharp\SchemeSupport.cs" />
     <Compile Include="Bxl\ApplicationAccessToBxl.cs" />
     <Compile Include="Bxl\BxlGeneratorTest.cs" />
     <Compile Include="Bxl\BxlParserTest.cs" />
