@@ -128,6 +128,7 @@ namespace Qorpent.BSharp {
 					if (0 == elements.Length) {
 						_context.RegisterError(BSharpErrors.EmptyInclude(_cls, i));
 					}
+					StoreParentParameters(includeelement,i);
 					foreach (var e in elements) {
 						StoreIncludeParameters(i, e);
 					}
@@ -151,6 +152,15 @@ namespace Qorpent.BSharp {
 				if (a.Name.LocalName == "name") continue;
 				if (a.Name.LocalName == "body") continue;
 				trg.SetAttributeValue(a.Name,a.Value);
+			}
+		}
+		private void StoreParentParameters(XElement src, XElement trg)
+		{
+			foreach (var a in src.Attributes())
+			{
+				if (trg.AncestorsAndSelf().All(_=>null==_.Attribute(a.Name))) {
+					trg.SetAttributeValue(a.Name,a.Value);
+				}
 			}
 		}
 

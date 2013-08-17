@@ -37,7 +37,7 @@ class B x=2
 		public void CanEmbed()
 		{
 			var code = @"
-class A x=1
+class A x=1 z=3
 	test '${x}%{x}'
 class B x=2
 	include A body
@@ -45,6 +45,7 @@ class B x=2
 			var result = Compile(code).Get("B");
 			Assert.AreEqual(1, result.Compiled.Descendants("test").Count());
 			Assert.AreEqual("12", result.Compiled.Descendants("test").First().Attr("code"));
+			Assert.AreEqual("3", result.Compiled.Descendants("test").First().Attr("z"));
 		}
 
 		[Test]
@@ -54,7 +55,7 @@ class B x=2
 class A 
 	test '%{x}'
 class B x=2
-	include A body x=1 
+	include A body x=1 y=2
 	include A body x=2 
 	include A body x=3 
 	include A body x=4 
@@ -62,7 +63,10 @@ class B x=2
 			var result = Compile(code).Get("B");
 			Assert.AreEqual(4, result.Compiled.Descendants("test").Count());
 			CollectionAssert.AreEquivalent(new[]{"1","2","3","4"}, result.Compiled.Descendants("test").Select(_=>_.Attr("code")).ToArray());
+			Assert.AreEqual("2", result.Compiled.Descendants("test").First().Attr("y"));
 		}
+
+
 
 
 		[Test]
