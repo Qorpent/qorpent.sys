@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Qorpent.BSharp.Runtime;
 
-namespace Qorpent.IoC
+namespace Qorpent.IoC.BSharp
 {
 	/// <summary>
 	///  Специальный резольвер BSharp классов для общей IoC инфраструктуры

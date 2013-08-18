@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Qorpent.BSharp.Runtime
@@ -21,5 +22,16 @@ namespace Qorpent.BSharp.Runtime
 		/// <param name="fullname"></param>
 		/// <returns></returns>
 		IBSharpRuntimeClass GetRuntimeClass(string fullname);
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		IEnumerable<string> GetClassNames(string mask);
+
+		/// <summary>
+		/// Метод обновления кэшей при их наличии
+		/// </summary>
+		void Refresh();
 	}
 }

@@ -20,7 +20,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyManifestDefinition.cs" />
-    <Compile Include="BSharpTypeResolver.cs" />
+    <Compile Include="BSharp\BSharpTypeResolver.cs" />
     <Compile Include="ComponentDefinition.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="ManifestClassDefinition.cs" />

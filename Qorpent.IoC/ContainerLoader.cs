@@ -27,6 +27,7 @@ using System.Xml.Linq;
 using Qorpent.Bxl;
 using Qorpent.Dsl.XmlInclude;
 using Qorpent.IO;
+using Qorpent.IoC.BSharp;
 using Qorpent.Mvc;
 using Qorpent.Utils.Extensions;
 using Qorpent.BSharp.Runtime;

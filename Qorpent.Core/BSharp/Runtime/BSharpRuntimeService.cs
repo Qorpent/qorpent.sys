@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent;
@@ -31,14 +32,16 @@ namespace Qorpent.BSharp.Runtime {
 		/// <param name="rootnamespace"></param>
 		/// <returns></returns>
 		public string Resolve(string name, string rootnamespace) {
-			string result = null;
-			foreach (var p in Providers) {
-				result = p.Resolve(name, rootnamespace);
-				if (null != result) {
-					break;
+			lock (this) {
+				string result = null;
+				foreach (var p in Providers) {
+					result = p.Resolve(name, rootnamespace);
+					if (null != result) {
+						break;
+					}
 				}
+				return result;
 			}
-			return result;
 		}
 
 		/// <summary>
@@ -47,16 +50,36 @@ namespace Qorpent.BSharp.Runtime {
 		/// <param name="fullname"></param>
 		/// <returns></returns>
 		public IBSharpRuntimeClass GetRuntimeClass(string fullname) {
-			IBSharpRuntimeClass result = null;
-			foreach (var p in Providers)
-			{
-				result = p.GetRuntimeClass(fullname);
-				if (null != result)
-				{
-					break;
+			lock (this) {
+				IBSharpRuntimeClass result = null;
+				foreach (var p in Providers) {
+					result = p.GetRuntimeClass(fullname);
+					if (null != result) {
+						break;
+					}
+				}
+				return result;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<string> GetClassNames(string mask) {
+			lock (this) {
+				return Providers.SelectMany(_ => _.GetClassNames(mask)).Distinct().ToArray();
+			}
+		}
+		/// <summary>
+		/// Очищает кэш классов
+		/// </summary>
+		public void Refresh() {
+			lock (this) {
+				foreach (var p in Providers) {
+					p.Refresh();
 				}
 			}
-			return result;
 		}
 
 
