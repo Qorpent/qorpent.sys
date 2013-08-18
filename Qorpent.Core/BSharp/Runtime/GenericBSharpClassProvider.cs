@@ -1,10 +1,10 @@
 ﻿namespace Qorpent.BSharp.Runtime {
 	/// <summary>
-	/// Обобщенный истоник классов BSharp
+	///     Обобщенный истоник классов BSharp
 	/// </summary>
 	public class GenericBSharpClassProvider : BSharpClassProviderBase {
 		/// <summary>
-		/// Вносит класс напрямую в кэш
+		///     Вносит класс напрямую в кэш
 		/// </summary>
 		/// <param name="cls"></param>
 		public void Set(BSharpRuntimeClass cls) {
@@ -17,7 +17,6 @@
 			else {
 				Cache[cls.Fullname].CachedClass = cls;
 			}
-			
 		}
 	}
 }

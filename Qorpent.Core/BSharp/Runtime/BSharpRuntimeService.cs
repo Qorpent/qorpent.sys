@@ -1,32 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
-using Qorpent;
-using Qorpent.IO;
 using Qorpent.IoC;
 
 namespace Qorpent.BSharp.Runtime {
 	/// <summary>
-	/// Базовый сервис провайдера BSharpRuntime
+	///     Базовый сервис провайдера BSharpRuntime
 	/// </summary>
 	public class BSharpRuntimeService : ServiceBase, IBSharpRuntimeService {
-
 		/// <summary>
-		/// Массив локаторов ресурсов BSharp
+		///     Массив локаторов ресурсов BSharp
 		/// </summary>
 		[Inject]
 		public IBSharpRuntimeProvider[] Providers { get; set; }
 
 		/// <summary>
-		/// Массив сериализаторов объектов
+		///     Массив сериализаторов объектов
 		/// </summary>
 		[Inject]
 		public IBSharpRuntimeActivatorService[] Activators { get; set; }
 
 		/// <summary>
-		/// Разрешает имена классов с использованием корневого неймспейса
-		/// используется при поздних референсах
+		///     Разрешает имена классов с использованием корневого неймспейса
+		///     используется при поздних референсах
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="rootnamespace"></param>
@@ -34,7 +29,7 @@ namespace Qorpent.BSharp.Runtime {
 		public string Resolve(string name, string rootnamespace) {
 			lock (this) {
 				string result = null;
-				foreach (var p in Providers) {
+				foreach (IBSharpRuntimeProvider p in Providers) {
 					result = p.Resolve(name, rootnamespace);
 					if (null != result) {
 						break;
@@ -45,14 +40,14 @@ namespace Qorpent.BSharp.Runtime {
 		}
 
 		/// <summary>
-		/// Возвращает исходное определение класса BSharp
+		///     Возвращает исходное определение класса BSharp
 		/// </summary>
 		/// <param name="fullname"></param>
 		/// <returns></returns>
 		public IBSharpRuntimeClass GetRuntimeClass(string fullname) {
 			lock (this) {
 				IBSharpRuntimeClass result = null;
-				foreach (var p in Providers) {
+				foreach (IBSharpRuntimeProvider p in Providers) {
 					result = p.GetRuntimeClass(fullname);
 					if (null != result) {
 						break;
@@ -63,7 +58,6 @@ namespace Qorpent.BSharp.Runtime {
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
 		public IEnumerable<string> GetClassNames(string mask) {
@@ -71,12 +65,13 @@ namespace Qorpent.BSharp.Runtime {
 				return Providers.SelectMany(_ => _.GetClassNames(mask)).Distinct().ToArray();
 			}
 		}
+
 		/// <summary>
-		/// Очищает кэш классов
+		///     Очищает кэш классов
 		/// </summary>
 		public void Refresh() {
 			lock (this) {
-				foreach (var p in Providers) {
+				foreach (IBSharpRuntimeProvider p in Providers) {
 					p.Refresh();
 				}
 			}
@@ -84,28 +79,27 @@ namespace Qorpent.BSharp.Runtime {
 
 
 		/// <summary>
-		/// Активирует сервис по имени класса
+		///     Активирует сервис по имени класса
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="name"></param>
 		/// <param name="acivationType"></param>
 		/// <returns></returns>
 		public T Activate<T>(string name, BSharpActivationType acivationType = BSharpActivationType.Auto) {
-			var runtimeclass = GetRuntimeClass(name);
-			if (null == runtimeclass)
-			{
+			IBSharpRuntimeClass runtimeclass = GetRuntimeClass(name);
+			if (null == runtimeclass) {
 				throw new BSharpRuntimeException("cannot create runtime class with name " + name);
 			}
 			return Activate<T>(runtimeclass, acivationType);
 		}
 
 		/// <summary>
-		/// Создать типизированный объект из динамического объекта BSharp
+		///     Создать типизированный объект из динамического объекта BSharp
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public T Activate<T>(IBSharpRuntimeClass runtimeclass, BSharpActivationType acivationType) {
-			var activator = Activators
+			IBSharpRuntimeActivatorService activator = Activators
 				.OrderBy(_ => _.Index)
 				.FirstOrDefault(_ => _.CanActivate<T>(runtimeclass, acivationType));
 			if (null == activator) {

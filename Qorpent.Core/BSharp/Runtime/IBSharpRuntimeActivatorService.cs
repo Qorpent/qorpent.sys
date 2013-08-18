@@ -1,16 +1,15 @@
-﻿using System.Xml.Linq;
-
-namespace Qorpent.BSharp.Runtime {
+﻿namespace Qorpent.BSharp.Runtime {
 	/// <summary>
-	/// Интерфейс построителя объектов для BSharp
+	///     Интерфейс построителя объектов для BSharp
 	/// </summary>
 	public interface IBSharpRuntimeActivatorService : IBSharpRuntimeActivator {
 		/// <summary>
-		/// Порядковый номер при обходе
+		///     Порядковый номер при обходе
 		/// </summary>
 		int Index { get; set; }
+
 		/// <summary>
-		/// Проверяет поддержку сериализации
+		///     Проверяет поддержку сериализации
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>

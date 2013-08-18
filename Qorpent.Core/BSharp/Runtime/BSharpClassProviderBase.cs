@@ -1,29 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Qorpent.BSharp.Runtime {
 	/// <summary>
-	/// 
 	/// </summary>
 	public abstract class BSharpClassProviderBase : IBSharpRuntimeProvider {
-
 		/// <summary>
-		/// Маркер первичной загрузки
-		/// </summary>
-		protected bool IndexWasBuilt = false;
-
-		/// <summary>
-		/// Кэш загруженных дескрипторов
+		///     Кэш загруженных дескрипторов
 		/// </summary>
 		protected IDictionary<string, BSharpRuntimeClassDescriptor> Cache =
 			new Dictionary<string, BSharpRuntimeClassDescriptor>();
 
+		/// <summary>
+		///     Маркер первичной загрузки
+		/// </summary>
+		protected bool IndexWasBuilt = false;
+
 
 		/// <summary>
-		/// Разрешает имена классов с использованием корневого неймспейса
-		/// используется при поздних референсах
+		///     Разрешает имена классов с использованием корневого неймспейса
+		///     используется при поздних референсах
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="rootnamespace"></param>
@@ -37,8 +34,8 @@ namespace Qorpent.BSharp.Runtime {
 					}
 				}
 
-				var nssplit = rootnamespace.Split('.');
-				for (var i = nssplit.Length; i >= 0; i--) {
+				string[] nssplit = rootnamespace.Split('.');
+				for (int i = nssplit.Length; i >= 0; i--) {
 					string query = name;
 					if (i != 0) {
 						query = string.Join(".", nssplit.Take(i)) + "." + name;
@@ -53,7 +50,7 @@ namespace Qorpent.BSharp.Runtime {
 		}
 
 		/// <summary>
-		/// Возвращает исходное определение класса BSharp
+		///     Возвращает исходное определение класса BSharp
 		/// </summary>
 		/// <param name="fullname"></param>
 		/// <returns></returns>
@@ -61,7 +58,7 @@ namespace Qorpent.BSharp.Runtime {
 			lock (this) {
 				if (!IndexWasBuilt) Refresh();
 				if (!Cache.ContainsKey(fullname)) return null;
-				var descriptor = Cache[fullname];
+				BSharpRuntimeClassDescriptor descriptor = Cache[fullname];
 				if (null == descriptor.CachedClass || !IsActual(descriptor)) {
 					ReloadClass(descriptor);
 				}
@@ -70,30 +67,19 @@ namespace Qorpent.BSharp.Runtime {
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
 		public IEnumerable<string> GetClassNames(string mask) {
 			lock (this) {
 				if (!IndexWasBuilt) Refresh();
 				if (string.IsNullOrWhiteSpace(mask)) return Cache.Keys;
-				return Cache.Keys.Where(_=>IsMatchMask(_,mask));
+				return Cache.Keys.Where(_ => IsMatchMask(_, mask));
 			}
 		}
-		/// <summary>
-		/// Проверяет соответствие имени файла метке
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="mask"></param>
-		/// <returns></returns>
-		protected virtual bool IsMatchMask(string s, string mask) {
-			var regex = ("^" + mask + "$").Replace("*", @"([^\.]+\.?)+").Replace("?",@"[^\.]+");
-			return Regex.IsMatch(s, regex);
-		}
 
 
 		/// <summary>
-		/// Метод обновления кэшей при их наличии
+		///     Метод обновления кэшей при их наличии
 		/// </summary>
 		public virtual void Refresh() {
 			lock (this) {
@@ -103,15 +89,24 @@ namespace Qorpent.BSharp.Runtime {
 		}
 
 		/// <summary>
-		/// Перегружает класс с диска
+		///     Проверяет соответствие имени файла метке
 		/// </summary>
-		/// <param name="descriptor"></param>
-		protected virtual void ReloadClass(BSharpRuntimeClassDescriptor descriptor) {
-			
+		/// <param name="s"></param>
+		/// <param name="mask"></param>
+		/// <returns></returns>
+		protected virtual bool IsMatchMask(string s, string mask) {
+			string regex = ("^" + mask + "$").Replace("*", @"([^\.]+\.?)+").Replace("?", @"[^\.]+");
+			return Regex.IsMatch(s, regex);
 		}
 
 		/// <summary>
-		/// Проверяет актуальность класса
+		///     Перегружает класс с диска
+		/// </summary>
+		/// <param name="descriptor"></param>
+		protected virtual void ReloadClass(BSharpRuntimeClassDescriptor descriptor) {}
+
+		/// <summary>
+		///     Проверяет актуальность класса
 		/// </summary>
 		/// <param name="descriptor"></param>
 		/// <returns></returns>
@@ -120,10 +115,8 @@ namespace Qorpent.BSharp.Runtime {
 		}
 
 		/// <summary>
-		/// Обновляет индекс дескрипторов
+		///     Обновляет индекс дескрипторов
 		/// </summary>
-		protected virtual void RebuildIndex() {
-			
-		}
+		protected virtual void RebuildIndex() {}
 	}
 }

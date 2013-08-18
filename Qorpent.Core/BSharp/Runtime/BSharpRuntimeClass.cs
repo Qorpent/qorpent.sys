@@ -2,27 +2,27 @@
 
 namespace Qorpent.BSharp.Runtime {
 	/// <summary>
-	/// Базовая реализация BSharp класса времени выполнения
+	///     Базовая реализация BSharp класса времени выполнения
 	/// </summary>
 	public class BSharpRuntimeClass : IBSharpRuntimeClass {
 		/// <summary>
-		/// Имя класса
+		///     Имя класса
 		/// </summary>
-		public string Name { get;  set; }
+		public string Name { get; set; }
 
 		/// <summary>
-		/// Пространство имен
+		///     Пространство имен
 		/// </summary>
-		public string Namespace { get;  set; }
+		public string Namespace { get; set; }
 
 		/// <summary>
-		/// Полное имя
+		///     Полное имя
 		/// </summary>
-		public string Fullname { get;  set; }
+		public string Fullname { get; set; }
 
 		/// <summary>
-		/// Определение
+		///     Определение
 		/// </summary>
-		public XElement Definition { get;  set; }
+		public XElement Definition { get; set; }
 	}
 }

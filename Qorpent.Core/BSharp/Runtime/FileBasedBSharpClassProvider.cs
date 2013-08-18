@@ -1,30 +1,24 @@
 ﻿using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Qorpent.BSharp.Runtime
-{
+namespace Qorpent.BSharp.Runtime {
 	/// <summary>
-	/// Источник классов BSharp на основе директории
-	/// имя ресурса для дескриптора - имя файла, работает с плоскими директориями
+	///     Источник классов BSharp на основе директории
+	///     имя ресурса для дескриптора - имя файла, работает с плоскими директориями
 	/// </summary>
-	public class FileBasedBSharpClassProvider : BSharpClassProviderBase
-	{
+	public class FileBasedBSharpClassProvider : BSharpClassProviderBase {
 		/// <summary>
-		/// Корневая директория,содержащая классы
+		///     Корневая директория,содержащая классы
 		/// </summary>
 		public string RootDirectory { get; set; }
 
 		/// <summary>
-		/// Строит список из всех кдассов с расширением ".bsclass"
+		///     Строит список из всех кдассов с расширением ".bsclass"
 		/// </summary>
-		protected override void RebuildIndex()
-		{
+		protected override void RebuildIndex() {
 			Cache.Clear();
-			foreach (var fn in Directory.GetFiles(RootDirectory, "*.bsclass", SearchOption.AllDirectories)) {
-				var fullname = Path.GetFileNameWithoutExtension(fn);
+			foreach (string fn in Directory.GetFiles(RootDirectory, "*.bsclass", SearchOption.AllDirectories)) {
+				string fullname = Path.GetFileNameWithoutExtension(fn);
 				var desc = new BSharpRuntimeClassDescriptor {
 					ResourceName = fn,
 					Fullname = fullname,
@@ -35,17 +29,17 @@ namespace Qorpent.BSharp.Runtime
 		}
 
 		/// <summary>
-		/// Перегружает класс из файла на диске
+		///     Перегружает класс из файла на диске
 		/// </summary>
 		/// <param name="descriptor"></param>
 		protected override void ReloadClass(BSharpRuntimeClassDescriptor descriptor) {
-			var xml = XElement.Load(descriptor.ResourceName);
+			XElement xml = XElement.Load(descriptor.ResourceName);
 			var cls = new BSharpRuntimeClass {Definition = xml};
 			descriptor.CachedClass = cls;
 		}
 
 		/// <summary>
-		/// Проверяет наличие файла на диске и его время записи
+		///     Проверяет наличие файла на диске и его время записи
 		/// </summary>
 		/// <param name="descriptor"></param>
 		/// <returns></returns>
