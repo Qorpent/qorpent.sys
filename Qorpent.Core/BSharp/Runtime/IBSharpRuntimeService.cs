@@ -8,8 +8,8 @@
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="name"></param>
-		/// <param name="acivationType"></param>
+		/// <param name="activationType"></param>
 		/// <returns></returns>
-		T Activate<T>(string name, BSharpActivationType acivationType = BSharpActivationType.Default);
+		T Activate<T>(string name, BSharpActivationType activationType = BSharpActivationType.Default);
 	}
 }

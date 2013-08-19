@@ -34,7 +34,7 @@ namespace Qorpent.BSharp.Runtime {
 		/// <param name="descriptor"></param>
 		protected override void ReloadClass(BSharpRuntimeClassDescriptor descriptor) {
 			XElement xml = XElement.Load(descriptor.ResourceName);
-			var cls = new BSharpRuntimeClass {Definition = xml};
+			var cls = new BSharpRuntimeClass(Container) {Definition = xml};
 			descriptor.CachedClass = cls;
 		}
 

@@ -8,6 +8,6 @@
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		T Activate<T>(IBSharpRuntimeClass rtcls, BSharpActivationType acivationType = BSharpActivationType.Default);
+		T Activate<T>(IBSharpRuntimeClass rtcls, BSharpActivationType activationType = BSharpActivationType.Default);
 	}
 }

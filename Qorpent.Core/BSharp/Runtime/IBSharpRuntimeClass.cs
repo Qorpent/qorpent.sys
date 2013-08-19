@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace Qorpent.BSharp.Runtime {
 	/// <summary>
@@ -24,5 +25,10 @@ namespace Qorpent.BSharp.Runtime {
 		///     Определение
 		/// </summary>
 		XElement Definition { get; }
+
+		/// <summary>
+		/// Дескриптор рантайм-класса
+		/// </summary>
+		RuntimeClassDescriptor RuntimeDescriptor { get; }
 	}
 }

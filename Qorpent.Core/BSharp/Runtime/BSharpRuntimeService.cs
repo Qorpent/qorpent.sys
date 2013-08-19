@@ -83,14 +83,14 @@ namespace Qorpent.BSharp.Runtime {
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="name"></param>
-		/// <param name="acivationType"></param>
+		/// <param name="activationType"></param>
 		/// <returns></returns>
-		public T Activate<T>(string name, BSharpActivationType acivationType = BSharpActivationType.Auto) {
+		public T Activate<T>(string name, BSharpActivationType activationType = BSharpActivationType.Auto) {
 			IBSharpRuntimeClass runtimeclass = GetRuntimeClass(name);
 			if (null == runtimeclass) {
 				throw new BSharpRuntimeException("cannot create runtime class with name " + name);
 			}
-			return Activate<T>(runtimeclass, acivationType);
+			return Activate<T>(runtimeclass, activationType);
 		}
 
 		/// <summary>
@@ -98,16 +98,16 @@ namespace Qorpent.BSharp.Runtime {
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public T Activate<T>(IBSharpRuntimeClass runtimeclass, BSharpActivationType acivationType) {
+		public T Activate<T>(IBSharpRuntimeClass runtimeclass, BSharpActivationType activationType) {
 			IBSharpRuntimeActivatorService activator = Activators
 				.OrderBy(_ => _.Index)
-				.FirstOrDefault(_ => _.CanActivate<T>(runtimeclass, acivationType));
+				.FirstOrDefault(_ => _.CanActivate<T>(runtimeclass, activationType));
 			if (null == activator) {
 				throw new BSharpRuntimeException("cannot find activator for " + runtimeclass.Fullname +
 				                                 " to create requested service " + typeof (T).Name);
 			}
 
-			return activator.Activate<T>(runtimeclass, acivationType);
+			return activator.Activate<T>(runtimeclass, activationType);
 		}
 	}
 }

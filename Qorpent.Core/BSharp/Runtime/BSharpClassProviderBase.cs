@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace Qorpent.BSharp.Runtime {
 	/// <summary>
 	/// </summary>
-	public abstract class BSharpClassProviderBase : IBSharpRuntimeProvider {
+	public abstract class BSharpClassProviderBase :ServiceBase, IBSharpRuntimeProvider {
 		/// <summary>
 		///     Кэш загруженных дескрипторов
 		/// </summary>
