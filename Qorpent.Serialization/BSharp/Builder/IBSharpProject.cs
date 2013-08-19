@@ -29,5 +29,31 @@ namespace Qorpent.BSharp.Builder {
 		/// Исходящая папка для журнала
 		/// </summary>
 		string LogOutputDirectory { get; set; }
+		/// <summary>
+		/// Расширение для результирующих файлов
+		/// </summary>
+		string OutputExtension { get; set; }
+
+		/// <summary>
+		/// Корневая директория
+		/// </summary>
+		string RootDirectory { get; set; }
+
+		/// <summary>
+		/// Возвращает путь к целевой директории
+		/// </summary>
+		/// <returns></returns>
+		string GetOutputDirectory();
+
+		/// <summary>
+		/// Возвращает нормализованный полный путь корневой папки репозитория или решения
+		/// </summary>
+		/// <returns></returns>
+		string GetRootDirectory();
+		/// <summary>
+		/// Возвращает исходящее расширение
+		/// </summary>
+		/// <returns></returns>
+		string GetOutputExtension();
 	}
 }

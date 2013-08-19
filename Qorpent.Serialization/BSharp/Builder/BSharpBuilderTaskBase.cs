@@ -11,7 +11,7 @@
 		/// Установить целевой проект
 		/// </summary>
 		/// <param name="project"></param>
-		public void SetProject(IBSharpProject project) {
+		public virtual void SetProject(IBSharpProject project) {
 			Project = project;
 		}
 
