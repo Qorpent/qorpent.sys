@@ -4,6 +4,18 @@
 	/// </summary>
 	public abstract class BSharpBuilderTaskBase : IBSharpBuilderTask {
 		/// <summary>
+		/// Связанный целевой проект
+		/// </summary>
+		protected IBSharpProject Project;
+		/// <summary>
+		/// Установить целевой проект
+		/// </summary>
+		/// <param name="project"></param>
+		public void SetProject(IBSharpProject project) {
+			Project = project;
+		}
+
+		/// <summary>
 		/// Выполнение цели
 		/// </summary>
 		/// <param name="context"></param>

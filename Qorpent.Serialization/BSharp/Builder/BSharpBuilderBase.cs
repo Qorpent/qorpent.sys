@@ -88,13 +88,18 @@ namespace Qorpent.BSharp.Builder {
 		/// 
 		/// </summary>
 		protected virtual void PrepareTasks() {
+			var _realproject = _project;
 			if (_project.IsFullyQualifiedProject) {
 				PrepareTasksFromProject(_project);
 			}
 			else {
-				var _realproject = CompileRealProject();
+				_realproject = CompileRealProject();
 				PrepareTasksFromProject(_realproject);
 			}
+			foreach (var t in Tasks) {
+				t.SetProject(_realproject);
+			}
+			
 		}
 		/// <summary>
 		/// 

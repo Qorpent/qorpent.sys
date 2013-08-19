@@ -16,5 +16,11 @@
 		/// Номер внутри фазы
 		/// </summary>
 		int Index { get; }
+
+		/// <summary>
+		/// Установить целевой проект
+		/// </summary>
+		/// <param name="project"></param>
+		void SetProject(IBSharpProject project);
 	}
 }
