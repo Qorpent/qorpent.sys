@@ -5,11 +5,8 @@ using Qorpent.IoC;
 namespace Qorpent.Core.Tests.BSharp.Runtime
 {
 	[TestFixture]
-	public class RuntimeClassDescriptorTests
+	public class RuntimeClassDescriptorTests : BSharpRuntimeTestBase
 	{
-		public class A:I {}
-		public class B:I {}
-		public interface I {}
 		[Test]
 		public void CanSetupWithUsualClass() {
 			var desc = new RuntimeClassDescriptor(typeof (A).AssemblyQualifiedName, null);
