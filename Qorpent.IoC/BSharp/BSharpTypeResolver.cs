@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Qorpent.BSharp.Runtime;
 
 namespace Qorpent.IoC.BSharp
@@ -8,8 +9,11 @@ namespace Qorpent.IoC.BSharp
 	/// <summary>
 	///  Специальный резольвер BSharp классов для общей IoC инфраструктуры
 	/// </summary>
-	public class BSharpTypeResolver:ITypeResolver
-	{
+	public class BSharpTypeResolver:ITypeResolver {
+		/// <summary>
+		/// Префикс имен BSharp-классов
+		/// </summary>
+		public const string COMPONENT_NAME_PREFIX = "bsharp://";
 		private IContainer _container;
 		private IBSharpRuntimeService _bsharpRuntimeService;
 		/// <summary>
@@ -17,10 +21,10 @@ namespace Qorpent.IoC.BSharp
 		/// </summary>
 		/// <param name="parentContainer"></param>
 		public BSharpTypeResolver(IContainer parentContainer) {
-			this._container = parentContainer;
-			this._bsharpRuntimeService = _container.Get<IBSharpRuntimeService>();
-			//это резольвер-перехватчик
-			this.Idx = _container.Idx - 10;
+			_container = parentContainer;
+			_bsharpRuntimeService = _container.Get<IBSharpRuntimeService>();
+			//это резольвер-дополнение
+			Idx = _container.Idx + 100;
 		}
 
 		/// <summary>
@@ -34,9 +38,9 @@ namespace Qorpent.IoC.BSharp
 		/// <param name="ctorArguments"></param>
 		/// <returns></returns>
 		public T Get<T>(string name = null, params object[] ctorArguments) where T : class {
-			if (null != name && name.StartsWith("bsrt:"))
-			{
-				throw new NotImplementedException();
+			if (null != name && name.StartsWith(COMPONENT_NAME_PREFIX)) {
+				var classname = name.Replace(COMPONENT_NAME_PREFIX, "");
+				return _bsharpRuntimeService.Activate<T>(classname);
 			}
 			return default(T);
 		}
@@ -48,9 +52,10 @@ namespace Qorpent.IoC.BSharp
 		/// <param name="ctorArguments"></param>
 		/// <returns></returns>
 		public object Get(Type type, string name = null, params object[] ctorArguments) {
-			if (null != name && name.StartsWith("bsrt:"))
+			if (null != name && name.StartsWith(COMPONENT_NAME_PREFIX))
 			{
-				throw new NotImplementedException();
+				var classname = name.Replace(COMPONENT_NAME_PREFIX, "");
+				return _bsharpRuntimeService.Activate<object>(classname);
 			}
 			return null;
 		}
@@ -61,11 +66,15 @@ namespace Qorpent.IoC.BSharp
 		/// <param name="ctorArguments"></param>
 		/// <returns></returns>
 		public IEnumerable<T> All<T>(string name = null, params object[] ctorArguments) where T : class {
-			if (null!=name && name.StartsWith("bsrt:")) {
-				throw new NotImplementedException();
-			}
-			else {
-				yield break;
+			if (null != name && name.StartsWith(COMPONENT_NAME_PREFIX))
+			{
+				var classmask = name.Replace(COMPONENT_NAME_PREFIX, "");
+				var result = _bsharpRuntimeService.GetClassNames(classmask)
+				                            .Select(_ => _bsharpRuntimeService.Activate<T>(_))
+				                            .Where(_ => null != _);
+				foreach (var r in result) {
+					yield return r;
+				}
 			}
 		}
 		/// <summary>
@@ -76,13 +85,16 @@ namespace Qorpent.IoC.BSharp
 		/// <param name="ctorArguments"></param>
 		/// <returns></returns>
 		public IEnumerable All(Type type, string name = null, params object[] ctorArguments) {
-			if (null != name && name.StartsWith("bsrt:"))
+			if (null != name && name.StartsWith(COMPONENT_NAME_PREFIX))
 			{
-				throw new NotImplementedException();
-			}
-			else
-			{
-				yield break;
+				var classmask = name.Replace(COMPONENT_NAME_PREFIX, "");
+				var result = _bsharpRuntimeService.GetClassNames(classmask)
+											.Select(_ => _bsharpRuntimeService.Activate<object>(_))
+											.Where(_ => null != _);
+				foreach (var r in result)
+				{
+					yield return r;
+				}
 			}
 		}
 
