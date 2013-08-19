@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Qorpent.Config;
+using Qorpent.Log;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -21,6 +22,10 @@ namespace Qorpent.BSharp {
 		/// Условия компиляции
 		/// </summary>
 		public const string CONDITIONS = "conditions";
+		/// <summary>
+		/// Журнал
+		/// </summary>
+		public const string LOG = "log";
 
 		/// <summary>
 		///     Признак использования интерполяции при компиляции
@@ -39,6 +44,15 @@ namespace Qorpent.BSharp {
 			set { Set(SINGLESOURCE, value); }
 		}
 
+		private IUserLog _log = new StubUserLog();
+		/// <summary>
+		/// Журнал проекта
+		/// </summary>
+		public IUserLog Log
+		{
+			get { return Get(LOG, _log); }
+			set { Set(LOG, value); }
+		}
 		/// <summary>
 		/// Условия компиляции 
 		/// </summary>

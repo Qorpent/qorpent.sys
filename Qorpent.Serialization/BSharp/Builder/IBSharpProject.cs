@@ -53,6 +53,11 @@ namespace Qorpent.BSharp.Builder {
 		IUserLog Log { get; set; }
 
 		/// <summary>
+		/// Условия компиляции 
+		/// </summary>
+		IDictionary<string, string> Conditions { get; set; }
+
+		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>

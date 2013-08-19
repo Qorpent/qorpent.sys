@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Config;
+using Qorpent.Log;
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
@@ -17,6 +18,10 @@ namespace Qorpent.BSharp {
 		private readonly IBSharpCompiler _compiler;
 		private readonly IBSharpClass _cls;
 		private readonly IBSharpContext _context;
+
+		IUserLog Log {
+			get { return _compiler.GetConfig().Log; }
+		}
 
 		private IBSharpConfig GetConfig() {
 			return _compiler.GetConfig();

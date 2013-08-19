@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Qorpent.Config;
+using Qorpent.Log;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -20,5 +21,10 @@ namespace Qorpent.BSharp {
 		/// Условия компиляции 
 		/// </summary>
 		IDictionary<string, string> Conditions { get; set; }
+
+		/// <summary>
+		/// Журнал проекта
+		/// </summary>
+		IUserLog Log { get; set; }
 	}
 }

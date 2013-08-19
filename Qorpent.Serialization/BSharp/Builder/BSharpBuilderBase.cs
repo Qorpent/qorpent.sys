@@ -171,12 +171,13 @@ namespace Qorpent.BSharp.Builder {
 		}
 
 		private void ExecutePhase(IBSharpContext result, BSharpBuilderPhase phase) {
-			Log.Trace("start phase "+phase);
+			Log.Trace("\tstart phase "+phase);
 			foreach (var t in Tasks.Where(_ => _.Phase == phase).OrderBy(_ => _.Index)) {
+				Log.Trace("\t\t"+t.GetType().Name + " started");
 				t.Execute(result);
-				Log.Trace(t.GetType().Name+" executed");
+				Log.Trace("\t\t"+t.GetType().Name+" executed");
 			}
-			Log.Trace("end phase " + phase);
+			Log.Trace("\tend phase " + phase);
 		}
 
 		/// <summary>

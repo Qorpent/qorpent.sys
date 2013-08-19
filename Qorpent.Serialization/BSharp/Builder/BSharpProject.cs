@@ -20,7 +20,13 @@ namespace Qorpent.BSharp.Builder {
 		private const string OUTPUT_EXTENSION = "output_extension";
 		private const string ROOT_DIRECTORY = "root_directory";
 		private const string LOG = "log";
-
+		private const string CONDITIONS = "conditions";
+		/// <summary>
+		/// 
+		/// </summary>
+		public BSharpProject() {
+			Conditions = new Dictionary<string, string>();
+		}
 		/// <summary>
 		/// Целевые проекты при билде
 		/// </summary>
@@ -97,6 +103,15 @@ namespace Qorpent.BSharp.Builder {
 		public IUserLog Log {
 			get { return Get(LOG, _log); }
 			set { Set(LOG, value); }
+		}
+
+		/// <summary>
+		/// Условия компиляции 
+		/// </summary>
+		public IDictionary<string, string> Conditions
+		{
+			get { return Get<IDictionary<string, string>>(CONDITIONS); }
+			set { Set(CONDITIONS, value); }
 		}
 
 		/// <summary>

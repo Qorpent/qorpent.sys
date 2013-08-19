@@ -68,7 +68,9 @@ namespace Qorpent.Log {
 			return new LoggerBasedUserLog(
 				new[]
 					{
-						new BaseLogger {Writers = new ILogWriter[] {new ConsoleLogWriter {CustomFormat = customFormat}}}
+						new BaseLogger {Writers = new ILogWriter[] {
+							new ConsoleLogWriter {CustomFormat = customFormat},
+						},Level = level}
 					}, null, logname) {Level = level};
 		}
 

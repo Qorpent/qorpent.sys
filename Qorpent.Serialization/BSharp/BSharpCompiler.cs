@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Config;
 using Qorpent.IoC;
+using Qorpent.Log;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp {
@@ -14,7 +15,9 @@ namespace Qorpent.BSharp {
 	[ContainerComponent(ServiceType = typeof(IBSharpCompiler))]
 	public  class BSharpCompiler :  ServiceBase,IBSharpCompiler {
 		private IBSharpConfig _config;
-
+		IUserLog log {
+			get { return GetConfig().Log; }
+		}
 		/// <summary>
 		///     Текущий контекстный индекс
 		/// </summary>
@@ -192,34 +195,46 @@ namespace Qorpent.BSharp {
 		/// <param name="context"></param>
 		/// <returns></returns>
 		protected virtual void Link(IEnumerable<XElement> sources, IBSharpContext context) {
+			log.Trace("enter link");
+			Console.WriteLine();
 			if (Debugger.IsAttached) {
+				log.Warn("in debug mode - singlethread mode choosed");
+				
 				foreach (var c in context.Get(BSharpContextDataType.Working)) {
 					try
 					{
+						Console.Write("-");
 						BSharpClassBuilder.Build(this, c, context);
+						Console.Write("+");
 					}
 					catch (Exception ex)
 					{
 						c.Error = ex;
+						Console.Write("!");
 					}
 				}
 			}
 			else {
+				log.Warn("in normal mode - parallel mode choosed");
 				context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
 					_ =>
 					{
 						try
 						{
+							Console.Write("-");
 							BSharpClassBuilder.Build(this, _, context);
+							Console.Write("+");
 						}
 						catch (Exception ex)
 						{
 							_.Error = ex;
+							Console.Write("!");
 						}
 					})
 					;	
 			}
-			
+			Console.WriteLine();
+			log.Trace("finish link");
 		}
 	}
 }
