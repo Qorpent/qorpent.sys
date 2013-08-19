@@ -5,14 +5,9 @@ namespace Qorpent.BSharp.Runtime {
 	/// Базовый класс инициализации классов BSharp
 	/// </summary>
 	public class BSharpRuntimeActivatorService :ServiceBase, IBSharpRuntimeActivatorService {
-		/// <summary>
-		/// Индекс активатора BSharp по умолчанию
-		/// </summary>
-		public const int DEFAULT_ACTIVATOR_INDEX = 100;
-
 		/// <summary></summary>
 		public BSharpRuntimeActivatorService() {
-			Index = DEFAULT_ACTIVATOR_INDEX;
+			Index = BSharpRuntimeDefaults.DEFAULT_ACTIVATOR_INDEX;
 		}
 
 		/// <summary>

@@ -17,7 +17,7 @@ namespace Qorpent.BSharp.Runtime {
 		/// </summary>
 		protected override void RebuildIndex() {
 			Cache.Clear();
-			foreach (string fn in Directory.GetFiles(RootDirectory, "*.bsclass", SearchOption.AllDirectories)) {
+			foreach (string fn in Directory.GetFiles(RootDirectory, "*."+BSharpRuntimeDefaults.BSHARP_CLASS_FILE_EXTENSION, SearchOption.AllDirectories)) {
 				string fullname = Path.GetFileNameWithoutExtension(fn);
 				var desc = new BSharpRuntimeClassDescriptor {
 					ResourceName = fn,

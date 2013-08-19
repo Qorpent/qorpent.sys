@@ -46,6 +46,7 @@
     <Compile Include="BSharp\Runtime\BSharpRuntimeActivatorService.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeClassDescriptor.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeClass.cs" />
+    <Compile Include="BSharp\Runtime\BSharpRuntimeDefaults.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeException.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeService.cs" />
     <Compile Include="BSharp\Runtime\BSharpFileBasedClassProvider.cs" />
