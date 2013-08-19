@@ -42,5 +42,9 @@ namespace Qorpent.BSharp {
 		/// Флаг ошибки в классе
 		/// </summary>
 		Error = 1<<8,
+		/// <summary>
+		/// Проигнорированный
+		/// </summary>
+		Ignored =1<<9,
 	}
 }

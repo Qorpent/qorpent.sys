@@ -1,4 +1,5 @@
-﻿using Qorpent.Config;
+﻿using System.Collections.Generic;
+using Qorpent.Config;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -15,5 +16,9 @@ namespace Qorpent.BSharp {
 		///     с общим индексом
 		/// </summary>
 		bool SingleSource { get; set; }
+		/// <summary>
+		/// Условия компиляции 
+		/// </summary>
+		IDictionary<string, string> Conditions { get; set; }
 	}
 }

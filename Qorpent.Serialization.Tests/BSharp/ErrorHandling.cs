@@ -75,6 +75,24 @@ class A
 		}
 
 		[Test]
+		public void IgnoredImport()
+		{
+			var code = @"
+class B if='ALWAYS_NO'
+class A
+	import B
+";
+			var result = Compile(code);
+			var errors = result.GetErrors();
+			Assert.AreEqual(1, errors.Count());
+			var error = errors.First();
+			Assert.NotNull(error);
+			Assert.AreEqual(BSharpErrorType.IgnoredImport, error.Type);
+			var i = error.Data as BSharpImport;
+			Assert.NotNull(i);
+		}
+
+		[Test]
 		public void FakeInclude()
 		{
 			var code = @"

@@ -1,10 +1,13 @@
-﻿using Qorpent.Config;
+﻿using System.Collections.Generic;
+using Qorpent.Config;
 
 namespace Qorpent.BSharp {
 	/// <summary>
 	///     Конфигурация для компилятора BxlSharp
 	/// </summary>
 	public class BSharpConfig : ConfigBase, IBSharpConfig {
+
+
 		/// <summary>
 		///     Флаг использования интерполяций
 		/// </summary>
@@ -14,6 +17,10 @@ namespace Qorpent.BSharp {
 		///     Флаг режима объединения источников
 		/// </summary>
 		public const string SINGLESOURCE = "singlesource";
+		/// <summary>
+		/// Условия компиляции
+		/// </summary>
+		public const string CONDITIONS = "conditions";
 
 		/// <summary>
 		///     Признак использования интерполяции при компиляции
@@ -30,6 +37,14 @@ namespace Qorpent.BSharp {
 		public bool SingleSource {
 			get { return Get(SINGLESOURCE, false); }
 			set { Set(SINGLESOURCE, value); }
+		}
+
+		/// <summary>
+		/// Условия компиляции 
+		/// </summary>
+		public IDictionary<string, string> Conditions {
+			get { return Get<IDictionary<string,string>>(CONDITIONS); }
+			set { Set(CONDITIONS, value); }
 		}
 	}
 }

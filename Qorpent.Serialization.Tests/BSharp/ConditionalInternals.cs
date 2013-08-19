@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Qorpent.Serialization.Tests.BSharp {
@@ -40,6 +41,46 @@ A B x=y z=1
 ";
 			result = Compile(code).Get("B");
 			Assert.AreEqual(1, result.Compiled.Elements().Count());
+		}
+
+
+		[Test]
+		public void ClassCanBeConditional() {
+			var code = @"
+class A x=1 z=true if='z'
+	test 1 if='x'
+	test 2 if='x | y'
+	test 3 if='! x'
+";
+			Assert.NotNull( Compile(code).Get("A"));
+
+			code = @"
+class A x=1 z=false if='z'
+	test 1 if='x'
+	test 2 if='x | y'
+	test 3 if='! x'
+";
+			Assert.Null(Compile(code).Get("A"));
+		}
+
+		[Test]
+		public void CanSupplyConditionsWithCompiler()
+		{
+			var code = @"
+class A x=1 z=false if='z'
+	test 1 if='x'
+	test 2 if='x | y'
+	test 3 if='! x'
+";
+			Assert.NotNull(Compile(code, new Dictionary<string,string>{{"z","true"}}).Get("A"));
+
+			code = @"
+class A x=1 z=true if='z'
+	test 1 if='x'
+	test 2 if='x | y'
+	test 3 if='! x'
+";
+			Assert.Null(Compile(code, new Dictionary<string, string> { { "z", "false" } }).Get("A"));
 		}
 
 		[Test]

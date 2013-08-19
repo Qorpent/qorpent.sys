@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
@@ -30,6 +31,14 @@ namespace Qorpent.BSharp {
 		}
 
 		/// <summary>
+		/// Возвращает условия компиляции
+		/// </summary>
+		/// <returns></returns>
+		public IConfig GetConditions() {
+			return new ConfigBase(GetConfig().Conditions);
+		}
+
+		/// <summary>
 		/// </summary>
 		/// <param name="compilerConfig"></param>
 		public void Initialize(IBSharpConfig compilerConfig) {
@@ -48,7 +57,10 @@ namespace Qorpent.BSharp {
 			if (cfg.SingleSource) {
 				return BuildBatch(sources);
 			}
-			IBSharpContext result = new BSharpContext();
+			IBSharpContext result = preparedContext ?? new BSharpContext(this);
+			if (null == result.Compiler) {
+				result.Compiler = this;
+			}
 			
 			foreach (XElement src in sources) {
 				var subresult = BuildSingle(src);
@@ -77,7 +89,7 @@ namespace Qorpent.BSharp {
 		/// <param name="sources"></param>
 		/// <returns></returns>
 		protected virtual IBSharpContext BuildIndex(IEnumerable<XElement> sources) {
-			CurrentBuildContext = new BSharpContext();
+			CurrentBuildContext = new BSharpContext(this);
 			var baseindex = IndexizeRawClasses(sources);
 			
 			CurrentBuildContext.Setup(baseindex);

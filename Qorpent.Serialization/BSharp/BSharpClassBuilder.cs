@@ -291,7 +291,13 @@ namespace Qorpent.BSharp {
 			}
 			//мы должны пропускать интерполяции, так как сверить их все равно нельзя пока
 			if (cond.Contains("${")) return true;
-			var src = new DictionaryTermSource(_cls.ParamIndex);
+			var compilerOptions = _compiler.GetConditions();
+			var srcp = _cls.ParamIndex;
+			if (null != compilerOptions) {
+				compilerOptions.SetParent(srcp);
+				srcp = compilerOptions;
+			}
+			var src = new DictionaryTermSource(srcp);
 			return new LogicalExpressionEvaluator().Eval(cond, src);
 		}
 

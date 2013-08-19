@@ -242,7 +242,7 @@ namespace Qorpent.BSharp {
 				if (null!=i.Target
 					&&
 					!i.Target.IsOrphaned
-				   
+					&& !i.Target.Is(BSharpClassAttributes.Ignored)
 					&& i.Match(config)
 					) {
 
@@ -262,6 +262,10 @@ namespace Qorpent.BSharp {
 
 			foreach (var i in SelfImports.Where(_ =>null!=_.Target && _.Target.IsOrphaned)) {
 				_context.RegisterError(BSharpErrors.OrphanImport(this, i));
+			}
+			foreach (var i in SelfImports.Where(_ => null != _.Target && _.Target.Is(BSharpClassAttributes.Ignored) && _.Match(config)))
+			{
+				_context.RegisterError(BSharpErrors.IgnoredImport(this, i));
 			}
 		}
 

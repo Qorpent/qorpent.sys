@@ -209,5 +209,20 @@ namespace Qorpent.BSharp {
 				Message = "Общая ошибка выполнения"
 			};
 		}
+		/// <summary>
+		/// Ошибка импорта игнорируемого класса
+		/// </summary>
+		/// <returns></returns>
+		public static BSharpError IgnoredImport(BSharpClass cls, IBSharpImport i) {
+			return new BSharpError
+			{
+				Level = ErrorLevel.Error,
+				Phase = BSharpCompilePhase.ImportResolution,
+				Type = BSharpErrorType.IgnoredImport,
+				Data = i,
+				ClassName = cls.FullName,
+				Message = "Импортируемый класс является гнорируемым по признаку if"
+			};
+		}
 	}
 }

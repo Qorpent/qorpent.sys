@@ -41,6 +41,11 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		RecycleImport = 230,
 
+		/// <summary>
+		/// Импорт игнорируемого объекта
+		/// </summary>
+		IgnoredImport = 240,
+
 
 		
 		/// <summary>
