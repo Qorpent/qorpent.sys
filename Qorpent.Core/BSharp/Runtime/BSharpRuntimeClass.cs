@@ -118,7 +118,6 @@ namespace Qorpent.BSharp.Runtime {
 		}
 
 		private RuntimeClassDescriptor GetRuntimeClassDescriptor() {
-			if (null == RuntimeCode) return null;
 			return new RuntimeClassDescriptor(RuntimeCode,_container);
 		
 		}

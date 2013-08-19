@@ -98,17 +98,20 @@ namespace Qorpent.Security {
 		private void initialize() {
 			Reset(null);
 			if (null == DirectXml) {
-				var rolefiles = FileNameResolver.ResolveAll(
-					new FileSearchQuery
-						{
+				if (null != FileNameResolver) {
+
+
+					var rolefiles = FileNameResolver.ResolveAll(
+						new FileSearchQuery {
 							ExistedOnly = true,
 							PathType = FileSearchResultType.FullPath,
 							ProbeFiles = new[] {"*.rolemap.xml", "*.rolemap.bxl"},
 							ProbePaths = new[] {"~/", "~/.config", "~/bin", "~/sys", "~/usr"}
 						});
-				foreach (var rolefile in rolefiles) {
-					var xml = XmlExtensions.GetXmlFromAny(rolefile);
-					ReadXml(xml);
+					foreach (var rolefile in rolefiles) {
+						var xml = XmlExtensions.GetXmlFromAny(rolefile);
+						ReadXml(xml);
+					}
 				}
 			}
 			else {
