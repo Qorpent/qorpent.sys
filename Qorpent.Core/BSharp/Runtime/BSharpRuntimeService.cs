@@ -6,7 +6,7 @@ namespace Qorpent.BSharp.Runtime {
 	/// <summary>
 	///     Базовый сервис провайдера BSharpRuntime
 	/// </summary>
-	[ContainerComponent]
+	[ContainerComponent(Lifestyle.Singleton,"default.bsrt.service",ServiceType=typeof(IBSharpRuntimeService))]
 	public class BSharpRuntimeService : ServiceBase, IBSharpRuntimeService {
 		/// <summary>
 		///     Массив локаторов ресурсов BSharp

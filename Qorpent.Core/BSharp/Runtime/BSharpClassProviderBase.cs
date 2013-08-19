@@ -69,7 +69,7 @@ namespace Qorpent.BSharp.Runtime {
 		/// <summary>
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<string> GetClassNames(string mask) {
+		public IEnumerable<string> GetClassNames(string mask = null) {
 			lock (this) {
 				if (!IndexWasBuilt) Refresh();
 				if (string.IsNullOrWhiteSpace(mask)) return Cache.Keys;
@@ -95,7 +95,8 @@ namespace Qorpent.BSharp.Runtime {
 		/// <param name="mask"></param>
 		/// <returns></returns>
 		protected virtual bool IsMatchMask(string s, string mask) {
-			string regex = ("^" + mask + "$").Replace("*", @"([^\.]+\.?)+").Replace("?", @"[^\.]+");
+			mask = mask.Replace(".", @"\.");
+			string regex = ("^" + mask + "$").Replace("*", @"([^\.]+\.~)*").Replace("?", @"[^\.]+").Replace("~","?");
 			return Regex.IsMatch(s, regex);
 		}
 

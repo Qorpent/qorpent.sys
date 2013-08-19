@@ -13,6 +13,7 @@ namespace Qorpent.BSharp.Runtime {
 		private string _fullname;
 		private RuntimeClassDescriptor _runtimeDescriptor;
 		private IContainer _container;
+		private string _runtimeCode;
 
 		/// <summary>
 		/// Создает класс в увязке с контейнером
@@ -81,7 +82,7 @@ namespace Qorpent.BSharp.Runtime {
 		///     Полное имя
 		/// </summary>
 		public string Fullname {
-			get { return _fullname ??(_fullname = Namespace+"."+Name) ; }
+			get { return _fullname ??(_fullname = string.IsNullOrWhiteSpace(Namespace)?Name:( Namespace+"."+Name) ); }
 			set { _fullname = value; }
 		}
 
@@ -100,17 +101,25 @@ namespace Qorpent.BSharp.Runtime {
 			private set { _runtimeDescriptor = value; }
 		}
 
-		private RuntimeClassDescriptor GetRuntimeClassDescriptor() {
+		/// <summary>
+		/// Код рантайма
+		/// </summary>
+		public string RuntimeCode {
+			get { return _runtimeCode ??(_runtimeCode = GetRuntimeCode()); }
+			set { _runtimeCode = value; }
+		}
+
+		private string GetRuntimeCode() {
 			var e = GetClassElement();
-			if (null == e) {
-				return null;
-			}
-			var runtimecode = "";
-			if (null != e.Attribute(BSharpRuntimeDefaults.BSHARP_RUNTIME_ATTRIBUTE))
-			{
-				runtimecode = e.Attribute(BSharpRuntimeDefaults.BSHARP_RUNTIME_ATTRIBUTE).Value;
-			}
-			return new RuntimeClassDescriptor(runtimecode,_container);
+			if (null == e) return null;
+			var ra = e.Attribute(BSharpRuntimeDefaults.BSHARP_RUNTIME_ATTRIBUTE);
+			if (null == ra) return null;
+			return ra.Value;
+		}
+
+		private RuntimeClassDescriptor GetRuntimeClassDescriptor() {
+			if (null == RuntimeCode) return null;
+			return new RuntimeClassDescriptor(RuntimeCode,_container);
 		
 		}
 	}

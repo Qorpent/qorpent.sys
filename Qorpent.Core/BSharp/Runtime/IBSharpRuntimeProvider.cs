@@ -24,7 +24,7 @@ namespace Qorpent.BSharp.Runtime {
 		/// <summary>
 		/// </summary>
 		/// <returns></returns>
-		IEnumerable<string> GetClassNames(string mask);
+		IEnumerable<string> GetClassNames(string mask = null);
 
 		/// <summary>
 		///     Метод обновления кэшей при их наличии

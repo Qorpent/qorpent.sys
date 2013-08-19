@@ -1,9 +1,11 @@
 ﻿using System;
+using Qorpent.IoC;
 
 namespace Qorpent.BSharp.Runtime {
 	/// <summary>
 	/// Базовый класс инициализации классов BSharp
 	/// </summary>
+	[ContainerComponent(Lifestyle.Transient, "default.bsrt.activator.default", ServiceType = typeof(IBSharpRuntimeActivatorService))]
 	public class BSharpRuntimeActivatorService :ServiceBase, IBSharpRuntimeActivatorService {
 		/// <summary></summary>
 		public BSharpRuntimeActivatorService() {
