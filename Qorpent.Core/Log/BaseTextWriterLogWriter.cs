@@ -16,6 +16,8 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/BaseTextWriterLogWriter.cs
 #endregion
+
+using System;
 using System.IO;
 
 namespace Qorpent.Log {

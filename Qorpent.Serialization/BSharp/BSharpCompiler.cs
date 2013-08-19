@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Config;
@@ -55,7 +56,8 @@ namespace Qorpent.BSharp {
 		public IBSharpContext Compile(IEnumerable<XElement> sources , IBSharpContext preparedContext = null) {
 			var cfg = GetConfig();
 			if (cfg.SingleSource) {
-				return BuildBatch(sources);
+				return BuildBatch(sources,preparedContext);
+				
 			}
 			IBSharpContext result = preparedContext ?? new BSharpContext(this);
 			if (null == result.Compiler) {
@@ -76,10 +78,14 @@ namespace Qorpent.BSharp {
 			return context;
 		}
 
-		private IBSharpContext BuildBatch(IEnumerable<XElement> sources) {
+		private IBSharpContext BuildBatch(IEnumerable<XElement> sources, IBSharpContext preparedContext) {
 			XElement[] batch = sources.ToArray();
 			var context = BuildIndex(batch);
 			Link(batch, context);
+			if (null != preparedContext) {
+				preparedContext.Merge(context);
+				return preparedContext;
+			}
 			return context;
 		}
 
@@ -186,17 +192,34 @@ namespace Qorpent.BSharp {
 		/// <param name="context"></param>
 		/// <returns></returns>
 		protected virtual void Link(IEnumerable<XElement> sources, IBSharpContext context) {
+			if (Debugger.IsAttached) {
+				foreach (var c in context.Get(BSharpContextDataType.Working)) {
+					try
+					{
+						BSharpClassBuilder.Build(this, c, context);
+					}
+					catch (Exception ex)
+					{
+						c.Error = ex;
+					}
+				}
+			}
+			else {
+				context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
+					_ =>
+					{
+						try
+						{
+							BSharpClassBuilder.Build(this, _, context);
+						}
+						catch (Exception ex)
+						{
+							_.Error = ex;
+						}
+					})
+					;	
+			}
 			
-			context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
-				_ => {
-					try {
-						BSharpClassBuilder.Build(this, _, context);
-					}
-					catch (Exception ex) {
-						_.Error = ex;
-					}
-				})
-				;
 		}
 	}
 }

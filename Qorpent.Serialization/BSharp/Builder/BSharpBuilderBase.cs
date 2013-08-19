@@ -90,11 +90,14 @@ namespace Qorpent.BSharp.Builder {
 		protected virtual void PrepareTasks() {
 			var _realproject = _project;
 			if (_project.IsFullyQualifiedProject) {
+				Log.Trace("load prepared project");
 				PrepareTasksFromProject(_project);
 			}
 			else {
+				Log.Trace("start compile projects");
 				_realproject = CompileRealProject();
 				PrepareTasksFromProject(_realproject);
+				Log.Trace("internal project loaded");
 			}
 			foreach (var t in Tasks) {
 				t.SetProject(_realproject);
@@ -140,7 +143,9 @@ namespace Qorpent.BSharp.Builder {
 		/// </summary>
 		/// <returns></returns>
 		public IBSharpContext Build() {
+			Log.Trace("build start");
 			var result = GetInitialContext();
+			Log.Trace("initial context ready");
 			PreProcess(result);
 			PreVerify(result);
 			try {
@@ -153,6 +158,7 @@ namespace Qorpent.BSharp.Builder {
 			}
 			PostVerify(result);
 			PostProcess(result);
+			Log.Trace("build finished");
 			return result;
 		}
 
@@ -165,9 +171,12 @@ namespace Qorpent.BSharp.Builder {
 		}
 
 		private void ExecutePhase(IBSharpContext result, BSharpBuilderPhase phase) {
+			Log.Trace("start phase "+phase);
 			foreach (var t in Tasks.Where(_ => _.Phase == phase).OrderBy(_ => _.Index)) {
 				t.Execute(result);
+				Log.Trace(t.GetType().Name+" executed");
 			}
+			Log.Trace("end phase " + phase);
 		}
 
 		/// <summary>

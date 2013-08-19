@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Xml.Linq;
 using Qorpent.Config;
+using Qorpent.Log;
 
 namespace Qorpent.BSharp.Builder {
 	/// <summary>
 	/// 
 	/// </summary>
 	public class BSharpProject :ConfigBase, IBSharpProject {
+		private IList<XElement> _sources;
 		private const string TARGET_NAMES = "target_names";
 		private const string FULLY_QUALIFIED = "fully_qualified";
 		private const string OUTPUT_ATTRIBUTES = "output_attrbutes";
@@ -15,6 +19,7 @@ namespace Qorpent.BSharp.Builder {
 		private const string LOG_OUTPUT_DIRECTORY = "log_output_directory";
 		private const string OUTPUT_EXTENSION = "output_extension";
 		private const string ROOT_DIRECTORY = "root_directory";
+		private const string LOG = "log";
 
 		/// <summary>
 		/// Целевые проекты при билде
@@ -64,14 +69,34 @@ namespace Qorpent.BSharp.Builder {
 			set { Set(LOG_OUTPUT_DIRECTORY, value); }
 		}
 
+		/// <summary>
+		/// Расширение для результирующих файлов
+		/// </summary>
 		public string OutputExtension {
 			get { return Get(OUTPUT_EXTENSION, BSharpBuilderDefaults.DefaultOutputExtension ); }
 			set { Set(OUTPUT_EXTENSION, value); }
 		}
 
+		/// <summary>
+		/// Корневая директория
+		/// </summary>
 		public string RootDirectory {
 			get { return Get(ROOT_DIRECTORY, EnvironmentInfo.RootDirectory); }
 			set { Set(ROOT_DIRECTORY, value); }
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public IList<XElement> Sources {
+			get { return _sources ?? (_sources = new List<XElement>()); }
+		}
+		IUserLog _log =  new StubUserLog();
+		/// <summary>
+		/// Журнал проекта
+		/// </summary>
+		public IUserLog Log {
+			get { return Get(LOG, _log); }
+			set { Set(LOG, value); }
 		}
 
 		/// <summary>
@@ -83,6 +108,7 @@ namespace Qorpent.BSharp.Builder {
 				if (Path.IsPathRooted(MainOutputDirectory)) {
 					return MainOutputDirectory;
 				}
+				return Path.Combine(GetRootDirectory(), MainOutputDirectory);
 			}
 			return Path.Combine(GetRootDirectory(), BSharpBuilderDefaults.DefaultOutputDirectory);
 		}
@@ -103,6 +129,21 @@ namespace Qorpent.BSharp.Builder {
 		public string GetOutputExtension() {
 			if (string.IsNullOrWhiteSpace(OutputExtension)) return BSharpBuilderDefaults.DefaultOutputExtension;
 			return OutputExtension;
+		}
+
+		/// <summary>
+		/// Возвращает исходящее расширение
+		/// </summary>
+		/// <returns></returns>
+		public string GetLogDirectory()
+		{
+			if (!string.IsNullOrWhiteSpace(LogOutputDirectory)) {
+				if (Path.IsPathRooted(LogOutputDirectory)) {
+					return LogOutputDirectory;
+				}
+				return Path.Combine(GetRootDirectory(), LogOutputDirectory);
+			}
+			return Path.Combine(GetRootDirectory(), BSharpBuilderDefaults.DefaultOutputDirectory);
 		}
 	}
 }

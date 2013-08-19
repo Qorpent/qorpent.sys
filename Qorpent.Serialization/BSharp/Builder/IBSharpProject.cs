@@ -1,4 +1,7 @@
-﻿using Qorpent.Config;
+﻿using System.Collections.Generic;
+using System.Xml.Linq;
+using Qorpent.Config;
+using Qorpent.Log;
 
 namespace Qorpent.BSharp.Builder {
 	/// <summary>
@@ -40,6 +43,16 @@ namespace Qorpent.BSharp.Builder {
 		string RootDirectory { get; set; }
 
 		/// <summary>
+		/// Исходный код
+		/// </summary>
+		IList<XElement> Sources { get; }
+
+		/// <summary>
+		/// Журнал проекта
+		/// </summary>
+		IUserLog Log { get; set; }
+
+		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>
@@ -55,5 +68,11 @@ namespace Qorpent.BSharp.Builder {
 		/// </summary>
 		/// <returns></returns>
 		string GetOutputExtension();
+
+		/// <summary>
+		/// Возвращает исходящее расширение
+		/// </summary>
+		/// <returns></returns>
+		string GetLogDirectory();
 	}
 }

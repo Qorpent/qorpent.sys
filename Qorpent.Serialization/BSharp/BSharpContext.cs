@@ -330,9 +330,12 @@ namespace Qorpent.BSharp {
 				RegisterError(BSharpErrors.OrphanClass(o));
 			}
 			Abstracts = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned && !_.Is(BSharpClassAttributes.Ignored)).ToList();
-			Working = RawClasses.Values.Where(_ => !_.Is(BSharpClassAttributes.Extension) && !_.Is(BSharpClassAttributes.Override)
-
-				&& !_.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned && !_.Is(BSharpClassAttributes.Ignored)).ToList();
+			Working = RawClasses.Values.Where(_ => 
+				!_.Is(BSharpClassAttributes.Extension) && 
+				!_.Is(BSharpClassAttributes.Override) && 
+				!_.Is(BSharpClassAttributes.Abstract) && 
+				!_.IsOrphaned && 
+				!_.Is(BSharpClassAttributes.Ignored)).ToList();
 			Static = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Static) && !_.IsOrphaned && !_.Is(BSharpClassAttributes.Ignored)).ToList();
 			ResolveImports();
 			_built = true;
@@ -358,6 +361,7 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <param name="error"></param>
 		public void RegisterError(BSharpError error) {
+			if (null == Errors) Errors = new List<BSharpError>();
 			Errors.Add(error);
 		}
 

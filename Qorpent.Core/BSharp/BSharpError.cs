@@ -61,5 +61,13 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		[SerializeNotNullOnly]
 		public IBSharpClass AltClass { get; set; }
+		/// <summary>
+		/// Конвертирует строку для лога
+		/// </summary>
+		/// <returns></returns>
+		public string ToLogString() {
+			return String.Format(@"{0}:{1}:{3} {2} ({4},{5})", Type, Phase, Message, Xml, 
+				null==Class?ClassName:Class.FullName,null==AltClass?"":AltClass.FullName);
+		}
 	}
 }
