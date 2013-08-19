@@ -71,9 +71,11 @@ namespace Qorpent.BSharp.Runtime {
 				case RuntimeClassResolutionType.Resolved:
 					return ResolvedType;
 				case RuntimeClassResolutionType.ContainerService:
+					if (null == _container) return null;
 					var stc = _container.FindComponent(ResolvedType, null);
 					return stc==null?null:stc.ImplementationType;
 				case RuntimeClassResolutionType.ContainerName:
+					if (null == _container) return null;
 					var ntc = _container.FindComponent(null,SourceClassName);
 					return ntc==null?null:ntc.ImplementationType;
 				default :
