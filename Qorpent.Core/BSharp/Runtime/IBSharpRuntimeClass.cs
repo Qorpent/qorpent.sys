@@ -30,5 +30,10 @@ namespace Qorpent.BSharp.Runtime {
 		/// Дескриптор рантайм-класса
 		/// </summary>
 		RuntimeClassDescriptor RuntimeDescriptor { get; }
+
+		/// <summary>
+		/// Создает 
+		/// </summary>
+		object Create();
 	}
 }

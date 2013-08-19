@@ -32,21 +32,19 @@ namespace Qorpent.BSharp.Runtime {
 		}
 
 		private T ActivateConfiguredType<T>(IBSharpRuntimeClass rtcls) where T:class {
-			var instance = (T)rtcls.RuntimeDescriptor.Create();
-			BindRuntimeClass(rtcls, instance);
-			return instance;
-		}
-
-		private static void BindRuntimeClass<T>(IBSharpRuntimeClass rtcls, T instance) where T : class {
-			var bound = instance as IBSharpRuntimeBound;
-			if (null != bound) {
-				bound.Initialize(rtcls);
+			var result = rtcls.Create();
+			if (!(result is T)) {
+				throw new BSharpRuntimeException("cannot convert actual type " + result.GetType() + " to expected " + typeof (T));
 			}
+			return (T) result;
 		}
 
 		private T ActivateClientType<T>(IBSharpRuntimeClass rtcls)  where T:class {
 			var instance = typeof (T).IsInterface ? ResolveService<T>() : Activator.CreateInstance<T>();
-			BindRuntimeClass(rtcls, instance);
+			var bound = instance as IBSharpRuntimeBound;
+			if (null != bound) {
+				bound.Initialize(rtcls);
+			}
 			return instance;
 		}
 
@@ -112,12 +110,7 @@ namespace Qorpent.BSharp.Runtime {
 		private static bool GetCanActivateConfigured<T>(IBSharpRuntimeClass rtcls) {
 			if (null == rtcls.RuntimeDescriptor) return false;
 			var resolvedType = rtcls.RuntimeDescriptor.GetActualType();
-			if (null == resolvedType) return false;
-			return
-				typeof (T).IsAssignableFrom(resolvedType)
-				&&
-				typeof (IBSharpRuntimeBound).IsAssignableFrom(resolvedType)
-				;
+			return null != resolvedType && typeof (T).IsAssignableFrom(resolvedType);
 		}
 	}
 }

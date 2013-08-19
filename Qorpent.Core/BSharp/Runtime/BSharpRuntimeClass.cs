@@ -29,6 +29,21 @@ namespace Qorpent.BSharp.Runtime {
 			set { _name = value; }
 		}
 
+
+		/// <summary>
+		/// Создает 
+		/// </summary>
+		public object Create() {
+			if (null == RuntimeDescriptor) throw new BSharpRuntimeException("cannot create - no descriptor configured");
+			if (null == RuntimeDescriptor.GetActualType()) throw new BSharpRuntimeException("cannot create - no type resolved");
+			var result = RuntimeDescriptor.Create();
+			var bound = result as IBSharpRuntimeBound;
+			if (null != bound) {
+				bound.Initialize(this);
+			}
+			return result;
+		}
+
 		private string GetName() {
 			var e = GetClassElement();
 			if (null == e) return null;
