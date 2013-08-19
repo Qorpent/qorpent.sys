@@ -13,6 +13,6 @@
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		bool CanActivate<T>(IBSharpRuntimeClass rtcls, BSharpActivationType acivationType = BSharpActivationType.Default);
+		bool CanActivate<T>(IBSharpRuntimeClass rtcls, BSharpActivationType activationType = BSharpActivationType.Default)where T :class;
 	}
 }

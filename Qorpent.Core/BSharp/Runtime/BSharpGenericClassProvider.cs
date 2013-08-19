@@ -2,7 +2,7 @@
 	/// <summary>
 	///     Обобщенный истоник классов BSharp
 	/// </summary>
-	public class GenericBSharpClassProvider : BSharpClassProviderBase {
+	public class BSharpGenericClassProvider : BSharpClassProviderBase {
 		/// <summary>
 		///     Вносит класс напрямую в кэш
 		/// </summary>

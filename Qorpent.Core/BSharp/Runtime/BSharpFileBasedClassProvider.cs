@@ -6,7 +6,7 @@ namespace Qorpent.BSharp.Runtime {
 	///     Источник классов BSharp на основе директории
 	///     имя ресурса для дескриптора - имя файла, работает с плоскими директориями
 	/// </summary>
-	public class FileBasedBSharpClassProvider : BSharpClassProviderBase {
+	public class BSharpFileBasedClassProvider : BSharpClassProviderBase {
 		/// <summary>
 		///     Корневая директория,содержащая классы
 		/// </summary>

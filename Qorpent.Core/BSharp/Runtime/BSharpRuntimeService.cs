@@ -85,8 +85,8 @@ namespace Qorpent.BSharp.Runtime {
 		/// <param name="name"></param>
 		/// <param name="activationType"></param>
 		/// <returns></returns>
-		public T Activate<T>(string name, BSharpActivationType activationType = BSharpActivationType.Auto) {
-			IBSharpRuntimeClass runtimeclass = GetRuntimeClass(name);
+		public T Activate<T>(string name, BSharpActivationType activationType = BSharpActivationType.Auto) where T : class {
+			var runtimeclass = GetRuntimeClass(name);
 			if (null == runtimeclass) {
 				throw new BSharpRuntimeException("cannot create runtime class with name " + name);
 			}
@@ -98,7 +98,7 @@ namespace Qorpent.BSharp.Runtime {
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public T Activate<T>(IBSharpRuntimeClass runtimeclass, BSharpActivationType activationType) {
+		public T Activate<T>(IBSharpRuntimeClass runtimeclass, BSharpActivationType activationType) where T : class {
 			IBSharpRuntimeActivatorService activator = Activators
 				.OrderBy(_ => _.Index)
 				.FirstOrDefault(_ => _.CanActivate<T>(runtimeclass, activationType));

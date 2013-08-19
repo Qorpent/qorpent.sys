@@ -48,10 +48,11 @@
     <Compile Include="BSharp\Runtime\BSharpRuntimeClass.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeException.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeService.cs" />
-    <Compile Include="BSharp\Runtime\FileBasedBSharpClassProvider.cs" />
-    <Compile Include="BSharp\Runtime\GenericBSharpClassProvider.cs" />
+    <Compile Include="BSharp\Runtime\BSharpFileBasedClassProvider.cs" />
+    <Compile Include="BSharp\Runtime\BSharpGenericClassProvider.cs" />
     <Compile Include="BSharp\Runtime\IBSharpRuntimeActivator.cs" />
     <Compile Include="BSharp\Runtime\IBSharpRuntimeActivatorService.cs" />
+    <Compile Include="BSharp\Runtime\IBSharpRuntimeBound.cs" />
     <Compile Include="BSharp\Runtime\IBSharpRuntimeClass.cs" />
     <Compile Include="BSharp\Runtime\IBSharpRuntimeProvider.cs" />
     <Compile Include="BSharp\Runtime\IBSharpRuntimeService.cs" />
