@@ -3,6 +3,10 @@
 	/// Фазы построения
 	/// </summary>
 	public enum BSharpBuilderPhase {
+        /// <summary>
+        ///     No phase. We can use 
+        /// </summary>
+        NoPhase = 0,
 		/// <summary>
 		/// 
 		/// </summary>
