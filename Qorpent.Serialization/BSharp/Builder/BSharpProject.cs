@@ -114,6 +114,11 @@ namespace Qorpent.BSharp.Builder {
 			set { Set(CONDITIONS, value); }
 		}
 
+        /// <summary>
+        ///     Компилировать ли JSON
+        /// </summary>
+        public bool CompileJson { get; set; }
+
 		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>

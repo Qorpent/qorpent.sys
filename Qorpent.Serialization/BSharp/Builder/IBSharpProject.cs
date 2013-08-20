@@ -57,6 +57,11 @@ namespace Qorpent.BSharp.Builder {
 		/// </summary>
 		IDictionary<string, string> Conditions { get; set; }
 
+        /// <summary>
+        ///     
+        /// </summary>
+        bool CompileJson { get; set; }
+
 		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
