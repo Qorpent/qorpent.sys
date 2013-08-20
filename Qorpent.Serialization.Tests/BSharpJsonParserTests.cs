@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.BSharp;
+using System;
 
 namespace Qorpent.Serialization.Tests {
     public class BSharpJsonParserTests {
@@ -15,8 +16,8 @@ namespace Qorpent.Serialization.Tests {
             bSharpJsonParser.CompileContext();
             var compiled = (BSharpContext)bSharpJsonParser.GetBSharpContext();
 
-            Debug.Print("0: " + compiled.Working[0].Compiled);
-            Debug.Print("1: " + compiled.Working[1].Compiled);
+            Console.Write("0: " + compiled.Working[0].Compiled);
+            Console.Write("1: " + compiled.Working[1].Compiled);
 
             Assert.AreEqual(2, compiled.Working.Count);
             Assert.AreEqual("f", compiled.Working[0].Compiled.Attribute("h").Value);
