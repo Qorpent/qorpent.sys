@@ -72,7 +72,7 @@ namespace Qorpent.Serialization {
                 var root = new XElement("root");
                 classItem.SetAttributeValue("__idx", classItem.Attribute("idx").Value);
                 classItem.Attribute("idx").Remove();
-                classItem.Name = "class";
+                classItem.Name = classItem.Parent.Name;
                 root.Add(classItem);
                 xmlList.Add(root);
             }
