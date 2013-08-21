@@ -45,9 +45,8 @@ namespace Qorpent.BSharp.Builder {
 		/// <summary>
 		/// Исходный код
 		/// </summary>
-		IList<XElement> Sources { get; }
-
-		/// <summary>
+		IDictionary<string, XElement> Sources { get; }
+        /// <summary>
 		/// Журнал проекта
 		/// </summary>
 		IUserLog Log { get; set; }

@@ -10,7 +10,7 @@ namespace Qorpent.BSharp.Builder {
 	/// 
 	/// </summary>
 	public class BSharpProject :ConfigBase, IBSharpProject {
-		private IList<XElement> _sources;
+		private IDictionary<string, XElement> _sources;
 		private const string TARGET_NAMES = "target_names";
 		private const string FULLY_QUALIFIED = "fully_qualified";
 		private const string OUTPUT_ATTRIBUTES = "output_attrbutes";
@@ -93,10 +93,11 @@ namespace Qorpent.BSharp.Builder {
 		/// <summary>
 		/// 
 		/// </summary>
-		public IList<XElement> Sources {
-			get { return _sources ?? (_sources = new List<XElement>()); }
+        public IDictionary<string, XElement> Sources {
+			get { return _sources ?? (_sources = new Dictionary<string, XElement>()); }
 		}
-		IUserLog _log =  new StubUserLog();
+
+	    IUserLog _log =  new StubUserLog();
 		/// <summary>
 		/// Журнал проекта
 		/// </summary>

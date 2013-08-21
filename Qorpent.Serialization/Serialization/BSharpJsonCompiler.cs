@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -68,16 +69,21 @@ namespace Qorpent.Serialization {
                 return xmlList;
             }
 
-            foreach (var classItem in classElements.Elements()) {
+            foreach (var item in classElements.Elements()) {
                 var root = new XElement("root");
-                classItem.SetAttributeValue("__idx", classItem.Attribute("idx").Value);
-                classItem.Attribute("idx").Remove();
-                classItem.Name = classItem.Parent.Name;
-                root.Add(classItem);
+                RebuildXElementToBSharpStyle(item);
+                root.Add(item);
                 xmlList.Add(root);
             }
 
             return xmlList;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="xElement"></param>
+        private void RebuildXElementToBSharpStyle(XElement xElement) {
+           
         }
         /// <summary>
         ///     Очистить текущий B# контекст
