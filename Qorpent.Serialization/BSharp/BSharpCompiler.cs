@@ -7,6 +7,8 @@ using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Log;
 using Qorpent.Utils.Extensions;
+using Qorpent.LogicalExpressions;
+using Qorpent.Utils.LogicalExpressions;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -114,10 +116,22 @@ namespace Qorpent.BSharp {
 			}
 		}
 
+        LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
+
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns) {
 			foreach (XElement e in src.Elements()) {
 				var _ns = "";
 				if (e.Name.LocalName == "namespace") {
+                    var ifa = e.Attr("if");
+                    if (!string.IsNullOrWhiteSpace(ifa))
+                    {
+                        var terms = new DictionaryTermSource(this.GetConditions());
+                        if (!eval.Eval(ifa, terms))
+                        {
+                            continue;
+                        }
+                    }
+
 					if (string.IsNullOrWhiteSpace(ns)) {
 						_ns = e.Attr("code");
 					}
