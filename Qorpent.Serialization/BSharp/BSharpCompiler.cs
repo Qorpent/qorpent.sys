@@ -144,7 +144,7 @@ namespace Qorpent.BSharp {
 				}
 				else {
 					var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = e.Attr("code"), Namespace = ns};
-
+                    if (!IsOverrideMatch(def)) continue;
 					SetupInitialOrphanState(e, def);
 					ParseImports(e, def);
 					ParseCompoundElements(e, def);
@@ -153,6 +153,21 @@ namespace Qorpent.BSharp {
 				}
 			}
 		}
+
+        private bool IsOverrideMatch(BSharpClass def)
+        {
+            if (def.Source.Name.LocalName == "__TILD__class" || def.Source.Name.LocalName == "__PLUS__class")
+            {
+                var ifa = def.Source.Attr("if");
+                if (!string.IsNullOrWhiteSpace(ifa))
+                {
+                    def.Source.Attribute("if").Remove();
+                    var terms = new DictionaryTermSource(GetConditions());
+                    return eval.Eval(ifa, terms);
+                }
+            }
+            return true;
+        }
 
 		private static void SetupInitialOrphanState(XElement e, IBSharpClass def) {
 			if (null != e.Attribute("abstract") || e.Attr("name") == "abstract") {
