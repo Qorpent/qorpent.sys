@@ -27,8 +27,10 @@ using System.Xml.Linq;
 using Qorpent.Bxl;
 using Qorpent.Dsl.XmlInclude;
 using Qorpent.IO;
+using Qorpent.IoC.BSharp;
 using Qorpent.Mvc;
 using Qorpent.Utils.Extensions;
+using Qorpent.BSharp.Runtime;
 
 namespace Qorpent.IoC {
 	/// <summary>
@@ -142,9 +144,25 @@ namespace Qorpent.IoC {
 			}
 
 			RegisterMvcLibraries();
+			RegisterSubResolvers();
+
+			if (null != _container.FindComponent(typeof (IBSharpRuntimeService),null)) {
+				_container.RegisterSubResolver(new BSharpTypeResolver(_container));
+			}
+
 			return result.ToArray();
 
 		}
+
+		private void RegisterSubResolvers() {
+			var subcontainers =_container.All<ITypeResolver>();
+			foreach (var c in subcontainers) {
+				//force valid order
+				c.Idx = _container.Idx + c.Idx;
+				_container.RegisterSubResolver(c);
+			}
+		}
+
 		/// <summary>
 		/// Регекс глобальных констант
 		/// </summary>

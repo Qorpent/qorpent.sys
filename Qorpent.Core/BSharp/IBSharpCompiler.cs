@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
+using Qorpent.Config;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -25,5 +26,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <returns></returns>
 		IBSharpConfig GetConfig();
+		/// <summary>
+		/// Возвращает условия компиляции
+		/// </summary>
+		/// <returns></returns>
+		IConfig GetConditions();
 	}
 }

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Config;
+using Qorpent.LogicalExpressions;
 using Qorpent.Utils.Extensions;
+using Qorpent.Utils.LogicalExpressions;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -16,6 +18,7 @@ namespace Qorpent.BSharp {
 		private const string STATIC = "static";
 		private const string OVERRIDES = "overrides";
 		private const string EXTENSIONS = "extensions";
+		private const string IGNORED = "ignored";
 		private const string ERRORS = "errors";
 
 		/// <summary>
@@ -77,11 +80,31 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Реестр перезагрузок классов
 		/// </summary>
+		public List<IBSharpClass> Ignored
+		{
+			get { return Get<List<IBSharpClass>>(IGNORED); }
+			set { Set(IGNORED, value); }
+		}
+
+		/// <summary>
+		/// Реестр перезагрузок классов
+		/// </summary>
 		public List<BSharpError> Errors
 		{
 			get { return Get<List<BSharpError>>(ERRORS); }
 			set { Set(ERRORS, value); }
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public BSharpContext(IBSharpCompiler compiler = null) {
+			this.Compiler = compiler;
+		}
+		/// <summary>
+		/// Компилятор
+		/// </summary>
+		public IBSharpCompiler Compiler { get; set; }
 
 		/// <summary>
 		/// Загружает исходные определения классов
@@ -97,7 +120,7 @@ namespace Qorpent.BSharp {
 			foreach (var cls in rawclasses) {
 				if (RawClasses.ContainsKey(cls.FullName)) {
 					if (RawClasses[cls.FullName] != cls) {
-						Errors.Add(BSharpErrors.DuplicateClassNames(cls));
+						Errors.Add(BSharpErrors.DuplicateClassNames(cls, RawClasses[cls.FullName]));
 					}
 				}
 				else {
@@ -266,6 +289,8 @@ namespace Qorpent.BSharp {
 					return Overrides;
 				case BSharpContextDataType.Extensions:
 					return Extensions;
+				case BSharpContextDataType.Ignored:
+					return Ignored;
 				case BSharpContextDataType.Errors:
 					
 				default :
@@ -298,18 +323,53 @@ namespace Qorpent.BSharp {
 			ApplyOverrides();
 			ApplyExtensions();
 			ResolveOrphans();
+			ResolveIgnored();
 			Orphans = RawClasses.Values.Where(_ => _.IsOrphaned).ToList();
-			Abstracts = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned).ToList();
-			Working = RawClasses.Values.Where(_ => !_.Is(BSharpClassAttributes.Extension) && !_.Is(BSharpClassAttributes.Override) && !_.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned).ToList();
-			Static = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Static) && !_.IsOrphaned).ToList();
+			Ignored = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Ignored)).ToList();
+			foreach (var o in Orphans) {
+				RegisterError(BSharpErrors.OrphanClass(o));
+			}
+			Abstracts = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Abstract) && !_.IsOrphaned && !_.Is(BSharpClassAttributes.Ignored)).ToList();
+			Working = RawClasses.Values.Where(_ => 
+				!_.Is(BSharpClassAttributes.Extension) && 
+				!_.Is(BSharpClassAttributes.Override) && 
+				!_.Is(BSharpClassAttributes.Abstract) && 
+				!_.IsOrphaned && 
+				!_.Is(BSharpClassAttributes.Ignored)).ToList();
+			Static = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Static) && !_.IsOrphaned && !_.Is(BSharpClassAttributes.Ignored)).ToList();
 			ResolveImports();
 			_built = true;
+		}
+
+		private void ResolveIgnored() {
+			foreach (var c in RawClasses.Values.Where(_ => null != _.Source.Attribute("if")).ToArray()) {
+				var options = null==Compiler? new ConfigBase() : Compiler.GetConditions();
+				foreach (var a in c.Source.Attributes()) {
+					if (!options.ContainsKey(a.Name.LocalName)) {
+						options.Set(a.Name.LocalName, a.Value);
+					}
+				}
+				var src = new DictionaryTermSource(options);
+				if (!new LogicalExpressionEvaluator().Eval(c.Source.Attr("if"), src)) {
+					c.Set(BSharpClassAttributes.Ignored);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Регистрирует ошибку в контексте
+		/// </summary>
+		/// <param name="error"></param>
+		public void RegisterError(BSharpError error) {
+			if (null == Errors) Errors = new List<BSharpError>();
+			Errors.Add(error);
 		}
 
 		private void ApplyExtensions() {
 			foreach (var o in Extensions) {
 				var cls = Get(o.TargetClassName, o.Namespace);
 				if (null == cls) {
+					RegisterError(BSharpErrors.ClassCreatedFormExtension(o.Source, o.TargetClassName));
 					o.Remove(BSharpClassAttributes.Extension);
 					o.Name = o.TargetClassName;
 				}
@@ -334,6 +394,7 @@ namespace Qorpent.BSharp {
 			foreach (var o in Overrides) {
 				var cls = Get(o.TargetClassName, o.Namespace);
 				if (null == cls) {
+					RegisterError(BSharpErrors.ClassCreatedFormOverride(o.Source, o.TargetClassName));
 					o.Remove(BSharpClassAttributes.Override);
 					o.Name = o.TargetClassName;
 				}
@@ -360,10 +421,12 @@ namespace Qorpent.BSharp {
 				{
 					i.Orphaned = true;
 					var import = Get(i.TargetCode, w.Namespace);
-					if (null != import)
-					{
+					if (null != import) {
 						i.Orphaned = false;
 						i.Target = import;
+					}
+					else {
+						Errors.Add(BSharpErrors.NotResolvedImport(w, i));	
 					}
 				}
 			}

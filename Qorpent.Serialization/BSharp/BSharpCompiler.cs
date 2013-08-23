@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Config;
 using Qorpent.IoC;
+using Qorpent.Log;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp {
@@ -12,7 +15,9 @@ namespace Qorpent.BSharp {
 	[ContainerComponent(ServiceType = typeof(IBSharpCompiler))]
 	public  class BSharpCompiler :  ServiceBase,IBSharpCompiler {
 		private IBSharpConfig _config;
-
+		IUserLog log {
+			get { return GetConfig().Log; }
+		}
 		/// <summary>
 		///     Текущий контекстный индекс
 		/// </summary>
@@ -27,6 +32,14 @@ namespace Qorpent.BSharp {
 				_config = new BSharpConfig();
 			}
 			return _config;
+		}
+
+		/// <summary>
+		/// Возвращает условия компиляции
+		/// </summary>
+		/// <returns></returns>
+		public IConfig GetConditions() {
+			return new ConfigBase(GetConfig().Conditions);
 		}
 
 		/// <summary>
@@ -46,9 +59,13 @@ namespace Qorpent.BSharp {
 		public IBSharpContext Compile(IEnumerable<XElement> sources , IBSharpContext preparedContext = null) {
 			var cfg = GetConfig();
 			if (cfg.SingleSource) {
-				return BuildBatch(sources);
+				return BuildBatch(sources,preparedContext);
+				
 			}
-			IBSharpContext result = new BSharpContext();
+			IBSharpContext result = preparedContext ?? new BSharpContext(this);
+			if (null == result.Compiler) {
+				result.Compiler = this;
+			}
 			
 			foreach (XElement src in sources) {
 				var subresult = BuildSingle(src);
@@ -64,10 +81,14 @@ namespace Qorpent.BSharp {
 			return context;
 		}
 
-		private IBSharpContext BuildBatch(IEnumerable<XElement> sources) {
+		private IBSharpContext BuildBatch(IEnumerable<XElement> sources, IBSharpContext preparedContext) {
 			XElement[] batch = sources.ToArray();
 			var context = BuildIndex(batch);
 			Link(batch, context);
+			if (null != preparedContext) {
+				preparedContext.Merge(context);
+				return preparedContext;
+			}
 			return context;
 		}
 
@@ -77,9 +98,9 @@ namespace Qorpent.BSharp {
 		/// <param name="sources"></param>
 		/// <returns></returns>
 		protected virtual IBSharpContext BuildIndex(IEnumerable<XElement> sources) {
-			
+			CurrentBuildContext = new BSharpContext(this);
 			var baseindex = IndexizeRawClasses(sources);
-			CurrentBuildContext = new BSharpContext();
+			
 			CurrentBuildContext.Setup(baseindex);
 			CurrentBuildContext.Build();
 			return CurrentBuildContext;
@@ -108,7 +129,7 @@ namespace Qorpent.BSharp {
 					}
 				}
 				else {
-					var def = new BSharpClass {Source = e, Name = e.Attr("code"), Namespace = ns};
+					var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = e.Attr("code"), Namespace = ns};
 
 					SetupInitialOrphanState(e, def);
 					ParseImports(e, def);
@@ -145,7 +166,7 @@ namespace Qorpent.BSharp {
 
 		private static void ParseImports(XElement e, IBSharpClass def) {
 			foreach (XElement i in e.Elements("import")) {
-				var import = new BSharpImport {Condition = i.Attr("if"), TargetCode = i.Attr("code")};
+				var import = new BSharpImport {Condition = i.Attr("if"), TargetCode = i.Attr("code"), Source = i};
 				def.SelfImports.Add(import);
 			}
 		}
@@ -174,17 +195,46 @@ namespace Qorpent.BSharp {
 		/// <param name="context"></param>
 		/// <returns></returns>
 		protected virtual void Link(IEnumerable<XElement> sources, IBSharpContext context) {
-			
-			context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
-				_ => {
-					try {
-						BSharpClassBuilder.Build(this, _, context);
+			log.Trace("enter link");
+			Console.WriteLine();
+			if (Debugger.IsAttached) {
+				log.Warn("in debug mode - singlethread mode choosed");
+				
+				foreach (var c in context.Get(BSharpContextDataType.Working)) {
+					try
+					{
+						Console.Write("-");
+						BSharpClassBuilder.Build(this, c, context);
+						Console.Write("+");
 					}
-					catch (Exception ex) {
-						_.Error = ex;
+					catch (Exception ex)
+					{
+						c.Error = ex;
+						Console.Write("!");
 					}
-				})
-				;
+				}
+			}
+			else {
+				log.Warn("in normal mode - parallel mode choosed");
+				context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
+					_ =>
+					{
+						try
+						{
+							Console.Write("-");
+							BSharpClassBuilder.Build(this, _, context);
+							Console.Write("+");
+						}
+						catch (Exception ex)
+						{
+							_.Error = ex;
+							Console.Write("!");
+						}
+					})
+					;	
+			}
+			Console.WriteLine();
+			log.Trace("finish link");
 		}
 	}
 }

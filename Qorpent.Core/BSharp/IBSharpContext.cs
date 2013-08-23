@@ -43,5 +43,20 @@ namespace Qorpent.BSharp {
 		/// Строит рабочий индекс классов
 		/// </summary>
 		void Build();
+		/// <summary>
+		/// Регистрирует ошибку в контексте
+		/// </summary>
+		/// <param name="error"></param>
+		void RegisterError(BSharpError error);
+
+		/// <summary>
+		/// Реестр перезагрузок классов
+		/// </summary>
+		List<IBSharpClass> Ignored { get; set; }
+
+		/// <summary>
+		/// Компилятор
+		/// </summary>
+		IBSharpCompiler Compiler { get; set; }
 	}
 }

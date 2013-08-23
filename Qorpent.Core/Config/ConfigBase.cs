@@ -10,8 +10,33 @@ namespace Qorpent.Config {
 	/// Базовый класс для конфигураций
 	/// </summary>
 	public partial class ConfigBase : IConfig {
-
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public ConfigBase(){}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dict"></param>
+		public ConfigBase(IDictionary<string, object> dict) {
+			if (null != dict) {
+				foreach (var d in dict) {
+					Set(d.Key, d.Value);
+				}
+			}
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dict"></param>
+		public ConfigBase(IDictionary<string, string> dict)
+		{
+			if (null != dict) {
+				foreach (var d in dict) {
+					Set(d.Key, d.Value);
+				}
+			}
+		}
 		/// <summary>
 		/// Внутреннее хранилище опций
 		/// </summary>

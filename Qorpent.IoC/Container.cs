@@ -109,9 +109,7 @@ namespace Qorpent.IoC {
 		/// <exception cref="ContainerException">При ошибках в конструировании объектов</exception>
 		public object Get(Type type, string name = null, params object[] ctorArguments) {
 			lock (this) {
-				if (null == type) {
-					throw new ArgumentNullException("type");
-				}
+				type = type ?? typeof (object);
 				if (type.IsValueType) {
 					throw new ArgumentException("type must be interface or reference type");
 				}
@@ -748,6 +746,7 @@ namespace Qorpent.IoC {
 		/// <remarks>
 		/// </remarks>
 		public IComponentDefinition FindComponent(Type type, string name) {
+			type = type ?? typeof (object);
 			var preresult = PreFindComponentWithSubResolvers(type, name);
 			if(null!=preresult) {
 				return preresult;

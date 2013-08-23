@@ -1,4 +1,5 @@
-﻿using Qorpent.Config;
+﻿using System.Xml.Linq;
+using Qorpent.Config;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -23,6 +24,11 @@ namespace Qorpent.BSharp {
 		///     Признак неразрешенного импорта
 		/// </summary>
 		bool Orphaned { get; set; }
+
+		/// <summary>
+		/// Исходное определение
+		/// </summary>
+		XElement Source { get; set; }
 
 		/// <summary>
 		/// Проверяет условные импорты

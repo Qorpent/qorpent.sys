@@ -1,14 +1,15 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Qorpent.BSharp;
 using Qorpent.Bxl;
 
 namespace Qorpent.Serialization.Tests.BSharp {
 	public class CompileTestBase {
-		protected BSharpContext Compile(string code) {
+		protected BSharpContext Compile(string code, IDictionary<string,string> conditions=null) {
 			var xml = new BxlParser().Parse(code, "c.bxl");
 			var cfg = new BSharpConfig();
 			cfg.UseInterpolation = true;
-
+			cfg.Conditions = conditions;
 			var compiler = new BSharpCompiler();
 			compiler.Initialize(cfg);
 			return  (BSharpContext)compiler.Compile(new[] {xml});

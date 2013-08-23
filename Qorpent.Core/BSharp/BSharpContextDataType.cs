@@ -35,8 +35,13 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		Errors = 1<<6,
 		/// <summary>
+		/// Проигнорированные классы
+		/// </summary>
+		Ignored=1<<7,
+		/// <summary>
 		/// По умолчанию - рабочие классы
 		/// </summary>
 		Default = Working,
+		
 	}
 }

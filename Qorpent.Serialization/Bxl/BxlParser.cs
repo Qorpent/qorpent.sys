@@ -23,6 +23,7 @@ using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Dsl;
 using Qorpent.IoC;
+using Qorpent.Serialization;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
@@ -68,29 +69,39 @@ namespace Qorpent.Bxl {
 				);
 #endif
 			if (options.HasFlag(BxlParserOptions.BSharp)) {
-				var compileroptions = new BSharpConfig {
-					UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation)
-				};
-				var compiler = new BSharpCompiler();
-				compiler.Initialize(compileroptions);
-				var compileresult = compiler.Compile(new[] {result});
-				var newresult = new XElement("bsharp");
-				foreach (var o in compileresult.Get(BSharpContextDataType.Orphans)) {
-					newresult.Add(new XElement("orphan", new XAttribute("code", o.FullName)));
-				}
-				foreach (var w in compileresult.Get(BSharpContextDataType.Working)) {
-					var copy = new XElement(w.Compiled);
-					if (null != w.Error) {
-						copy.AddFirst(new XElement("error",new XText(w.Error.ToString())));
-					}
-					newresult.Add(copy);
-				}
-				result = newresult;
-
+				result = CompileWithBSharp(options, result);
 			}else
 			if (options.HasFlag(BxlParserOptions.PerformInterpolation)) {
 				result = new XmlInterpolation().Interpolate(result);
 			}
+			return result;
+		}
+
+		private static XElement CompileWithBSharp(BxlParserOptions options, XElement result) {
+			var compileroptions = new BSharpConfig {
+				UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation)
+			};
+			var compiler = new BSharpCompiler();
+			compiler.Initialize(compileroptions);
+			var compileresult = compiler.Compile(new[] {result});
+			var newresult = new XElement("bsharp");
+			
+			foreach (var w in compileresult.Get(BSharpContextDataType.Working)) {
+				var copy = new XElement(w.Compiled);
+				if (null != w.Error) {
+					copy.AddFirst(new XElement("error", new XText(w.Error.ToString())));
+				}
+				newresult.Add(copy);
+			}
+			var e = new XElement("errors");
+			foreach (var er in compileresult.GetErrors())
+			{
+				e.Add(XElement.Parse(new XmlSerializer().Serialize("error", er)).Element("error"));
+			}
+			if (e.HasElements) {
+				newresult.Add(e);
+			}
+			result = newresult;
 			return result;
 		}
 

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Config;
+using Qorpent.Log;
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
@@ -17,6 +18,10 @@ namespace Qorpent.BSharp {
 		private readonly IBSharpCompiler _compiler;
 		private readonly IBSharpClass _cls;
 		private readonly IBSharpContext _context;
+
+		IUserLog Log {
+			get { return _compiler.GetConfig().Log; }
+		}
 
 		private IBSharpConfig GetConfig() {
 			return _compiler.GetConfig();
@@ -102,8 +107,18 @@ namespace Qorpent.BSharp {
 
 		private bool ProcessInclude(XElement i, bool needReInterpolate) {
 			var code = i.Attr("code");
+			if (string.IsNullOrWhiteSpace(code)) {
+				_context.RegisterError(BSharpErrors.FakeInclude(_cls,i));
+				i.Remove();
+				return needReInterpolate;
+			}
+
 			var includecls = _context.Get(code, _cls.Namespace);
 			if (null == includecls) {
+				_context.RegisterError(BSharpErrors.NotResolvedInclude(_cls, i));
+				i.Remove();
+			}else if (includecls.IsOrphaned) {
+				_context.RegisterError(BSharpErrors.OrphanInclude(_cls, i));
 				i.Remove();
 			}
 			else {
@@ -115,6 +130,10 @@ namespace Qorpent.BSharp {
 
 				if (usebody) {
 					var elements = includeelement.Elements().ToArray();
+					if (0 == elements.Length) {
+						_context.RegisterError(BSharpErrors.EmptyInclude(_cls, i));
+					}
+					StoreParentParameters(includeelement,i);
 					foreach (var e in elements) {
 						StoreIncludeParameters(i, e);
 					}
@@ -138,6 +157,15 @@ namespace Qorpent.BSharp {
 				if (a.Name.LocalName == "name") continue;
 				if (a.Name.LocalName == "body") continue;
 				trg.SetAttributeValue(a.Name,a.Value);
+			}
+		}
+		private void StoreParentParameters(XElement src, XElement trg)
+		{
+			foreach (var a in src.Attributes())
+			{
+				if (trg.AncestorsAndSelf().All(_=>null==_.Attribute(a.Name))) {
+					trg.SetAttributeValue(a.Name,a.Value);
+				}
 			}
 		}
 
@@ -268,7 +296,13 @@ namespace Qorpent.BSharp {
 			}
 			//мы должны пропускать интерполяции, так как сверить их все равно нельзя пока
 			if (cond.Contains("${")) return true;
-			var src = new DictionaryTermSource(_cls.ParamIndex);
+			var compilerOptions = _compiler.GetConditions();
+			var srcp = _cls.ParamIndex;
+			if (null != compilerOptions) {
+				compilerOptions.SetParent(srcp);
+				srcp = compilerOptions;
+			}
+			var src = new DictionaryTermSource(srcp);
 			return new LogicalExpressionEvaluator().Eval(cond, src);
 		}
 
