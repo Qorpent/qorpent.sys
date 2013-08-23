@@ -6,26 +6,26 @@ using System;
 
 namespace Qorpent.Mvc.Actions
 {
-    /// <summary>
-    /// 	Возвращает текущий откомпилированный манифест (полный XML)
-    /// </summary>
-    [Action("_sys.listfiles", Role = "DEVELOPER", Help = "Возвращает список всех файлов и папок, где находися приложение", Arm = "admin")]
+   
+   /// <summary>
+   /// f
+   /// </summary>
    public class DirectoryObjEntry
     {
-        ///// <summary>
-        ///// ID
-        ///// </summary>
-        //public int ID { get; set; }
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
 
-        ///// <summary>
-        ///// Имя папки или файла
-        ///// </summary>
+        /// <summary>
+        /// Имя папки или файла
+        /// </summary>
 
-        //public string ObjName { get; set; }
-        ///// <summary>
-        ///// Тайп (папка или файл)
-        ///// </summary>
-        //public string ObjType { get; set; }
+        public string ObjName { get; set; }
+        /// <summary>
+        /// Тайп (папка или файл)
+        /// </summary>
+        public string ObjType { get; set; }
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ namespace Qorpent.Mvc.Actions
         /// <returns></returns>
         public static DirectoryInfo[] ListDir()
         {
-            var di = new DirectoryInfo(Environment.CurrentDirectory);
+            var di = new DirectoryInfo(EnvironmentInfo.RootDirectory);
             return di.GetDirectories();
         }
 
@@ -49,7 +49,7 @@ namespace Qorpent.Mvc.Actions
         /// <returns></returns>
         public static string[] ListFile()
         {
-            return Directory.GetFiles(Environment.CurrentDirectory);
+            return Directory.GetFiles(EnvironmentInfo.RootDirectory);
         }
 
         /// <summary>
@@ -73,8 +73,9 @@ namespace Qorpent.Mvc.Actions
 
 
     /// <summary>
-    /// r
+    /// 	Возвращает текущий откомпилированный манифест (полный XML)
     /// </summary>
+    [Action("_sys.listfiles", Role = "DEVELOPER", Help = "Возвращает список всех файлов и папок, где находися приложение", Arm = "admin")]
     public class ListFilesAction : ActionBase
     {
         /// <summary>
