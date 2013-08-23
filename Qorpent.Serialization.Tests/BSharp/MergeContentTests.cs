@@ -4,8 +4,43 @@ using NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
+
+  
 	[TestFixture]
 	public class MergeContentTests : CompileTestBase {
+
+        [Test]
+        public void CanExtendNotCodedElements()
+        {
+            var code = @"
+class A
+    element item
+    item
+~class A
+    +item x=1
+";
+            var result = Compile(code).Get("A").Compiled;
+            Assert.AreEqual(1, result.Elements("item").Count());
+            Assert.AreEqual("1", result.Element("item").Attr("x"));
+
+        }
+
+         [Test]
+        public void CanExtendNotCodedElementsInExtension()
+        {
+            var code = @"
+class A
+    element item
+    item
++class A
+    +item x=1
+";
+            var result = Compile(code).Get("A").Compiled;
+            Assert.AreEqual(1, result.Elements("item").Count());
+            Assert.AreEqual("1", result.Element("item").Attr("x"));
+
+        }
+
 		[Test]
 		public void CanRedefineElement() {
 			const string noelementcode = @"

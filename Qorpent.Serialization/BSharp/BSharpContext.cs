@@ -386,7 +386,17 @@ namespace Qorpent.BSharp {
 					trg.Source.Add(e);
 				}
 			}
-			trg.Source.Add(src.Source.Elements());
+            foreach (var e in src.Source.Elements())
+            {
+                if (e.Name.LocalName.StartsWith("__TILD__") || (e.Name.LocalName.StartsWith("__PLUS__")))
+                {
+                    trg.Source.AddFirst(e);
+                }
+                else
+                {
+                    trg.Source.Add(e);
+                }
+            }
 		}
 
 		private void ApplyOverrides()
