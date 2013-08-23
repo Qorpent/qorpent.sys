@@ -26,7 +26,7 @@ namespace Qorpent.Mvc.Actions
         /// <summary>
         /// Тайп (папка или файл)
         /// </summary>
-        public string FullPath { get; set; }
+        public string ObjType { get; set; }
     }
 
     /// <summary>
@@ -52,11 +52,7 @@ namespace Qorpent.Mvc.Actions
         //public static string[] ListFile(string fMask)
             public static string[] ListFile(string filMask)
         {
-            if (filMask != null)
-            {
-                return Directory.GetFiles(EnvironmentInfo.RootDirectory, filMask);
-            }
-            return Directory.GetFiles(EnvironmentInfo.RootDirectory);
+            return filMask != null ? Directory.GetFiles(EnvironmentInfo.RootDirectory, filMask) : Directory.GetFiles(EnvironmentInfo.RootDirectory);
         }
 
         /// <summary>
@@ -69,11 +65,11 @@ namespace Qorpent.Mvc.Actions
             var listFilesCollection = new List<DirectoryObjEntry>();
             for (int index = 0; index < ListDir().Count(); index++)
             {
-                listFilesCollection.Add(new DirectoryObjEntry() { ID = index + 1, LocaPath = ListDir()[index].ToString(), FullPath = "Dir" });
+                listFilesCollection.Add(new DirectoryObjEntry() { ID = index + 1, LocaPath = ListDir()[index].ToString(), ObjType = "Dir" });
             }
             for (var index = 0; index < ListFile(fMask).Count(); index++)
             {
-                listFilesCollection.Add(new DirectoryObjEntry() { ID = index + 1 + ListDir().Count(), LocaPath = ListFile(fMask)[index], FullPath = "File" });
+                listFilesCollection.Add(new DirectoryObjEntry() { ID = index + 1 + ListDir().Count(), LocaPath = ListFile(fMask)[index], ObjType = "File" });
             }
             return listFilesCollection;
         }
