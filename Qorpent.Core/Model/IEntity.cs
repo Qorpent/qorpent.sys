@@ -20,5 +20,7 @@ namespace Qorpent.Model {
 	/// <summary>
 	/// 	Базовый интерфейс для классов данных
 	/// </summary>
-	public interface IEntity : IWithId, IWithCode, IWithName, IWithIndex, IWithTag, IWithComment, IWithVersion {}
+	public interface IEntity : IWithId, IWithCode, IWithName, IWithIndex, IWithTag, IWithComment, IWithVersion {
+		
+	}
 }
