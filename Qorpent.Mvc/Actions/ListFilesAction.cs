@@ -13,16 +13,24 @@ namespace Qorpent.Mvc.Actions
     /// </summary>
     public class DirectoryObjEntry
     {
-        /// <summary>
-        /// ID
-        /// </summary>
-        public int ID { get; set; }
+        ///// <summary>
+        ///// ID
+        ///// </summary>
+        //public int ID { get; set; }
 
         /// <summary>
-        /// Имя папки или файла
+        /// Имя папки или файла 
         /// </summary>
+        public string LocalPath { get; set; }
 
-        public string LocaPath { get; set; }
+        /// <summary>
+        /// полное имя папки
+        /// </summary>
+        public string FullPath { get; set; }
+
+        
+
+        
         /// <summary>
         /// Тайп (папка или файл)
         /// </summary>
@@ -55,6 +63,22 @@ namespace Qorpent.Mvc.Actions
             return filMask != null ? Directory.GetFiles(EnvironmentInfo.RootDirectory, filMask) : Directory.GetFiles(EnvironmentInfo.RootDirectory);
         }
 
+            /// <summary>
+            /// Локальное имя файла
+            /// </summary>
+            /// <returns></returns>
+            public static string[] ListFileLocalName(string fileMask)
+            {
+                var localNameFile = new string[ListFile(fileMask).Count()];
+                for (int index = 0; index < ListFile(fileMask).Count(); index++)
+                {
+                    localNameFile[index] = Path.GetFileName(ListFile(fileMask)[index]);
+                }
+                return localNameFile;
+
+
+            }
+
         /// <summary>
         /// Добавляетв в коллекцию
         /// </summary>
@@ -65,11 +89,12 @@ namespace Qorpent.Mvc.Actions
             var listFilesCollection = new List<DirectoryObjEntry>();
             for (int index = 0; index < ListDir().Count(); index++)
             {
-                listFilesCollection.Add(new DirectoryObjEntry() { ID = index + 1, LocaPath = ListDir()[index].ToString(), ObjType = "Dir" });
+                listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1,*/ LocalPath = ListDir()[index].ToString(), FullPath = Path.GetFullPath(EnvironmentInfo.RootDirectory)  + ListDir()[index].ToString(), ObjType = "Dir" });
             }
+            
             for (var index = 0; index < ListFile(fMask).Count(); index++)
             {
-                listFilesCollection.Add(new DirectoryObjEntry() { ID = index + 1 + ListDir().Count(), LocaPath = ListFile(fMask)[index], ObjType = "File" });
+                listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1 + ListDir().Count(), */LocalPath = ListFileLocalName(fMask)[index], FullPath = ListFile(fMask)[index], ObjType = "File" });
             }
             return listFilesCollection;
         }
