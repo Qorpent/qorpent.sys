@@ -8,7 +8,7 @@ namespace Qorpent.Serialization.Tests {
     public class BSharpJsonParserTests {
         private const string a1 = @"{""class"": {""0"": {""code"": ""riA"", ""h"" : ""f"", ""fullcode"": ""riA""}, ""1"": {""code"": ""riB"", ""z"" : ""tezt"", ""fullcode"": ""riB""}}}";
         private const string a2 = @"{""class"": {""0"": {""code"": ""month"", ""fact"": ""true"", ""period"": {""0"": {""code"": ""11"", ""name"": ""янв."", ""fullname"": ""Январь"", ""start"": ""1899-01-01"", ""finish"": ""1899-01-31""}, ""1"": {""code"": ""12"", ""name"": ""фев."", ""fullname"": ""Февраль"", ""start"": ""1899-02-01"", ""finish"": ""1899-02-28""}, ""2"": {""code"": ""13"", ""name"": ""март"", ""fullname"": ""Март"", ""start"": ""1899-03-01"", ""finish"": ""1899-03-31""}}}}}";
-        [Test]
+        //[Test]
         public void CanWorkWithSimpleClasses() {
             Debug.Print(a1);
             var bSharpJsonParser = new BSharpJsonCompiler();
@@ -24,7 +24,7 @@ namespace Qorpent.Serialization.Tests {
             Assert.AreEqual("tezt", compiled.Working[1].Compiled.Attribute("z").Value);
         }
 
-        [Test]
+        //[Test]
         public void CanWorkWithNestedNamespaces() {
             Debug.Print(a2);
             var bSharpJsonParser = new BSharpJsonCompiler();
