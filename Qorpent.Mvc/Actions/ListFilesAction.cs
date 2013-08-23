@@ -85,8 +85,9 @@ namespace Qorpent.Mvc.Actions
         /// <summary>
         /// Имя скрипта
         /// </summary>
-        [Bind(true)]
-        protected string FileMask { get; set; }
+        [Bind]
+        protected string FileMask;
+        //protected string FileMask { get; set; }
         /// <summary>
         /// 	fh
         /// </summary>
