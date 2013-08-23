@@ -45,7 +45,7 @@ namespace Qorpent.BSharp.Builder {
 		/// <summary>
 		/// Исходный код
 		/// </summary>
-		IDictionary<string, XElement> Sources { get; }
+		IList<XElement> Sources { get; }
         /// <summary>
 		/// Журнал проекта
 		/// </summary>
@@ -56,10 +56,6 @@ namespace Qorpent.BSharp.Builder {
 		/// </summary>
 		IDictionary<string, string> Conditions { get; set; }
 
-        /// <summary>
-        ///     
-        /// </summary>
-        bool CompileJson { get; set; }
 
 		/// <summary>
 		/// Возвращает путь к целевой директории

@@ -10,7 +10,15 @@ namespace Qorpent.BSharp.Builder {
 	/// 
 	/// </summary>
 	public class BSharpProject :ConfigBase, IBSharpProject {
-		private IDictionary<string, XElement> _sources;
+        /// <summary>
+        /// 
+        /// </summary>
+        public BSharpProject()
+        {
+            Sources = new List<XElement>();
+            Conditions = new Dictionary<string, string>();
+        }
+
 		private const string TARGET_NAMES = "target_names";
 		private const string FULLY_QUALIFIED = "fully_qualified";
 		private const string OUTPUT_ATTRIBUTES = "output_attrbutes";
@@ -21,12 +29,8 @@ namespace Qorpent.BSharp.Builder {
 		private const string ROOT_DIRECTORY = "root_directory";
 		private const string LOG = "log";
 		private const string CONDITIONS = "conditions";
-		/// <summary>
-		/// 
-		/// </summary>
-		public BSharpProject() {
-			Conditions = new Dictionary<string, string>();
-		}
+        private const string SOURCES = "sources";
+		
 		/// <summary>
 		/// Целевые проекты при билде
 		/// </summary>
@@ -93,8 +97,9 @@ namespace Qorpent.BSharp.Builder {
 		/// <summary>
 		/// 
 		/// </summary>
-        public IDictionary<string, XElement> Sources {
-			get { return _sources ?? (_sources = new Dictionary<string, XElement>()); }
+        public IList<XElement> Sources {
+            get { return Get<IList<XElement>>(SOURCES); }
+            set { Set(SOURCES, value); }
 		}
 
 	    IUserLog _log =  new StubUserLog();
@@ -115,10 +120,6 @@ namespace Qorpent.BSharp.Builder {
 			set { Set(CONDITIONS, value); }
 		}
 
-        /// <summary>
-        ///     Компилировать ли JSON
-        /// </summary>
-        public bool CompileJson { get; set; }
 
 		/// <summary>
 		/// Возвращает путь к целевой директории
