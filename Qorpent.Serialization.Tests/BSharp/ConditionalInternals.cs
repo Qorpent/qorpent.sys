@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-
+using Qorpent.Utils.Extensions;
 namespace Qorpent.Serialization.Tests.BSharp {
 	[TestFixture]
 	public class ConditionalInternals:CompileTestBase {
@@ -43,6 +43,31 @@ A B x=y z=1
 			Assert.AreEqual(1, result.Compiled.Elements().Count());
 		}
 
+        [Test]
+        public void NamespaceCanBeConditional()
+        {
+            var code = @"
+namespace A if='USE_A'
+    class B
+";
+            var r = Compile(code);
+            Assert.AreEqual(0, r.Working.Count);
+            r = Compile(code, new Dictionary<string, string> { { "USE_A", "1" } });
+            Assert.AreEqual(1, r.Working.Count);
+        }
+
+        [Test]
+        public void OverridesCanBeConditional()
+        {
+            var code = @"
+~class A x=2 if='USE_A'
+class A x=1
+";
+            var r = Compile(code);
+            Assert.AreEqual("1", r.Working[0].Compiled.Attr("x"));
+            r = Compile(code, new Dictionary<string, string> { { "USE_A", "1" } });
+            Assert.AreEqual("2", r.Working[0].Compiled.Attr("x"));
+        }
 
 		[Test]
 		public void ClassCanBeConditional() {
