@@ -74,6 +74,36 @@ class A x=1 y=1
 			Assert.AreEqual("4", result.Compiled.Attr("z"));
 		}
 
+        [Test]
+        public void CanOverrideElement()
+        {
+            var code = @"
+class A
+    element item
+    item X
+~class A
+    ~item X y=1
+";
+            var result = Compile(code).Get("A");
+            Assert.AreEqual("1", result.Compiled.Element("item").Attr("y"));
+        }
+
+        [Test]
+        public void CanExtendElement()
+        {
+            var code = @"
+class A
+    element item
+    item X x=2
+~class A
+    +item X x=1 y=1
+";
+            var result = Compile(code).Get("A");
+            Assert.AreEqual("1", result.Compiled.Element("item").Attr("y"));
+            Assert.AreEqual("2", result.Compiled.Element("item").Attr("x"));
+        }
+
+
 		[Test]
 		public void CanExtendAndOverrideValidOrder()
 		{

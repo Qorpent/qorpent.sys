@@ -201,7 +201,7 @@ namespace Qorpent.Utils.Extensions {
 					if (string.IsNullOrWhiteSpace(x as string)) {
 						return Activator.CreateInstance(type);
 					}
-					return Enum.Parse(type, x as string, true);
+                    return ConvertEnum(type, x as string);
 				}
 			}
 			try {
@@ -232,7 +232,7 @@ namespace Qorpent.Utils.Extensions {
 						var val = x.ToInt();
 						return Enum.ToObject(type, val);
 					}
-					return Enum.Parse(type, x.ToStr());
+                    return ConvertEnum(type, x.ToStr());
 				}
 
 
@@ -253,6 +253,24 @@ namespace Qorpent.Utils.Extensions {
 					ex);
 			}
 		}
+
+        private static object ConvertEnum(Type type, string x)
+        {
+            if (!x.Contains("+"))
+            {
+                return Enum.Parse(type, x as string, true);
+            }
+            else
+            {
+                var result = Activator.CreateInstance(type);
+                var subitems = x.Split('+');
+                foreach (var s in subitems)
+                {
+                    result = (int)result | (int)ConvertEnum(type, s);
+                }
+                return result;
+            }
+        }
 
 		/// <summary>
 		/// 	converts given object to DateTime with different formats
