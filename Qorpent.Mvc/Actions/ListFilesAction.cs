@@ -83,19 +83,28 @@ namespace Qorpent.Mvc.Actions
         /// Добавляетв в коллекцию
         /// </summary>
         /// <returns></returns>
-        public static List<DirectoryObjEntry> AddListFilesAndDirs(string fMask)
+        public static List<DirectoryObjEntry> AddListFilesAndDirs(string fMask, bool sDir, bool sFile)
         {
 
             var listFilesCollection = new List<DirectoryObjEntry>();
-            for (int index = 0; index < ListDir().Count(); index++)
+           
+            
+            if (sDir)
             {
-                listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1,*/ LocalPath = ListDir()[index].ToString(), FullPath = Path.GetFullPath(EnvironmentInfo.RootDirectory)  + ListDir()[index].ToString(), ObjType = "Dir" });
+                for (int index = 0; index < ListDir().Count(); index++)
+                {
+                    listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1,*/ LocalPath = ListDir()[index].ToString(), FullPath = Path.GetFullPath(EnvironmentInfo.RootDirectory) + ListDir()[index].ToString(), ObjType = "Dir" });
+                }
+            }
+
+            if (sFile)
+            {
+                for (var index = 0; index < ListFile(fMask).Count(); index++)
+                {
+                    listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1 + ListDir().Count(), */LocalPath = ListFileLocalName(fMask)[index], FullPath = ListFile(fMask)[index], ObjType = "File" });
+                }
             }
             
-            for (var index = 0; index < ListFile(fMask).Count(); index++)
-            {
-                listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1 + ListDir().Count(), */LocalPath = ListFileLocalName(fMask)[index], FullPath = ListFile(fMask)[index], ObjType = "File" });
-            }
             return listFilesCollection;
         }
     }
@@ -112,14 +121,30 @@ namespace Qorpent.Mvc.Actions
         /// </summary>
         [Bind]
         protected string FileMask;
-        //protected string FileMask { get; set; }
+
+        /// <summary>
+        /// Показывать папки
+        /// </summary>
+        [Bind]
+        protected bool ShowDirs;
+        
+        /// <summary>
+        /// Показывать файлы
+        /// </summary>
+        [Bind]
+        protected bool ShowFiles;
+
         /// <summary>
         /// 	fh
         /// </summary>
-        
         protected override object MainProcess()
         {
-            return MetodsCollect.AddListFilesAndDirs(FileMask);
+            //if (ShowDirs)
+            //{
+                //return MetodsCollect.AddListFilesAndDirs(FileMask, ShowDirs, ShowFiles);
+            //}
+
+            return MetodsCollect.AddListFilesAndDirs(FileMask, ShowDirs, ShowFiles);
         }
 
       
