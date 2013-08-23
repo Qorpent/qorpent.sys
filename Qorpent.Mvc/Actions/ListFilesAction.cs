@@ -3,14 +3,15 @@ using System.IO;
 using System.Linq;
 using Qorpent.IoC;
 using System;
+using Qorpent.Mvc.Binding;
 
 namespace Qorpent.Mvc.Actions
 {
-   
-   /// <summary>
-   /// f
-   /// </summary>
-   public class DirectoryObjEntry
+
+    /// <summary>
+    /// f
+    /// </summary>
+    public class DirectoryObjEntry
     {
         /// <summary>
         /// ID
@@ -21,11 +22,11 @@ namespace Qorpent.Mvc.Actions
         /// Имя папки или файла
         /// </summary>
 
-        public string ObjName { get; set; }
+        public string LocaPath { get; set; }
         /// <summary>
         /// Тайп (папка или файл)
         /// </summary>
-        public string ObjType { get; set; }
+        public string FullPath { get; set; }
     }
 
     /// <summary>
@@ -33,6 +34,7 @@ namespace Qorpent.Mvc.Actions
     /// </summary>
     public class MetodsCollect
     {
+       
         /// <summary>
         /// Метод вовращает список дирректориев
         /// </summary>
@@ -47,25 +49,27 @@ namespace Qorpent.Mvc.Actions
         /// Список Файлов
         /// </summary>
         /// <returns></returns>
-        public static string[] ListFile()
+        //public static string[] ListFile(string fMask)
+            public static string[] ListFile(string filMask)
         {
-            return Directory.GetFiles(EnvironmentInfo.RootDirectory);
+            return Directory.GetFiles(EnvironmentInfo.RootDirectory, filMask);
         }
 
         /// <summary>
         /// Добавляетв в коллекцию
         /// </summary>
         /// <returns></returns>
-        public static List<DirectoryObjEntry> AddListFilesAndDirs()
+        public static List<DirectoryObjEntry> AddListFilesAndDirs(string fMask)
         {
+
             var listFilesCollection = new List<DirectoryObjEntry>();
             for (int index = 0; index < ListDir().Count(); index++)
             {
-                listFilesCollection.Add(new DirectoryObjEntry() { ID = index + 1, ObjName = ListDir()[index].ToString(), ObjType = "Dir" });
+                listFilesCollection.Add(new DirectoryObjEntry() { ID = index + 1, LocaPath = ListDir()[index].ToString(), FullPath = "Dir" });
             }
-            for (var index = 0; index < ListFile().Count(); index++)
+            for (var index = 0; index < ListFile(fMask).Count(); index++)
             {
-                listFilesCollection.Add(new DirectoryObjEntry() { ID = index + 1 + ListDir().Count(), ObjName = ListFile()[index], ObjType = "File" });
+                listFilesCollection.Add(new DirectoryObjEntry() { ID = index + 1 + ListDir().Count(), LocaPath = ListFile(fMask)[index], FullPath = "File" });
             }
             return listFilesCollection;
         }
@@ -79,11 +83,20 @@ namespace Qorpent.Mvc.Actions
     public class ListFilesAction : ActionBase
     {
         /// <summary>
+        /// Имя скрипта
+        /// </summary>
+        [Bind(true)]
+        protected string FileMask { get; set; }
+        /// <summary>
         /// 	fh
         /// </summary>
+        
         protected override object MainProcess()
         {
-            return MetodsCollect.AddListFilesAndDirs();
+            return MetodsCollect.AddListFilesAndDirs(FileMask);
         }
+
+      
+
     }
 }
