@@ -52,7 +52,11 @@ namespace Qorpent.Mvc.Actions
         //public static string[] ListFile(string fMask)
             public static string[] ListFile(string filMask)
         {
-            return Directory.GetFiles(EnvironmentInfo.RootDirectory, filMask);
+            if (filMask != null)
+            {
+                return Directory.GetFiles(EnvironmentInfo.RootDirectory, filMask);
+            }
+            return Directory.GetFiles(EnvironmentInfo.RootDirectory);
         }
 
         /// <summary>
