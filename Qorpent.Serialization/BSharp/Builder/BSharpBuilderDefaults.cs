@@ -1,4 +1,5 @@
-﻿namespace Qorpent.BSharp.Builder {
+﻿using System.IO;
+namespace Qorpent.BSharp.Builder {
     /// <summary>
     /// 
     /// </summary>
@@ -38,5 +39,13 @@
         ///     Имя файла-лога с ошибками
         /// </summary>
         public const string ErrorsFilename = ".errors.xml";
+        /// <summary>
+        ///     Имя файла с выдачей по умолчанию
+        /// </summary>
+        public const string SingleModeFilename = "output";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string OrphansOutputDirectory = BSharpBuilderDefaults.DefaultOutputDirectory + "\\.orphans";
     }
 }
