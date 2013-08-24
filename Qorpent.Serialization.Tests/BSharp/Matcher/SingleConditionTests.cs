@@ -23,6 +23,17 @@ namespace Qorpent.Serialization.Tests.BSharp.Matcher
 			MainTest(src, trg, result);
 		}
 
+		[TestCase("x a=TRUE", "x", false)]
+		[TestCase("x a!=TRUE", "x", true)]
+		[TestCase("x a=TRUE", "x a=1", true)]
+		[TestCase("x a=TRUE", "x a=true", true)]
+		[TestCase("x a=TRUE", "x a=0", false)]
+		[TestCase("x a!=TRUE", "x a=0", true)]	
+		public void IsTrue(string src, string trg, bool result)
+		{
+			MainTest(src, trg, result);
+		}
+
 		[TestCase("x a=NULL","x",true)]
 		[TestCase("x a=NULL","x a=1",false)]
 		[TestCase("x a!=NULL","x a=1",true)]

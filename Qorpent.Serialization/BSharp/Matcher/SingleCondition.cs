@@ -22,6 +22,9 @@ namespace Qorpent.BSharp.Matcher {
 			if ("NULL" == Value) {
 				ConditionType = ConditionType.IsNull;
 			}
+			else if("TRUE" == Value) {
+				ConditionType = ConditionType.IsTrue;
+			}
 			AttributeName = a.Name.LocalName;
 			if (a.Name.LocalName.Contains("__")) {
 				SetupFromSpecialName(a);
