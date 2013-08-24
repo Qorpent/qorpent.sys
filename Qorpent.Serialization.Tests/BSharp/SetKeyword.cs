@@ -49,7 +49,7 @@ class A y=1
 		{
 			var code = @"
 class B
-	set x='~{y}'
+	set x='%{y}'
 		item a
 		item b
 		item c x=2
