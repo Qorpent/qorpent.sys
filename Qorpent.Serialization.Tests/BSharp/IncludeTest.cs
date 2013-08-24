@@ -67,6 +67,29 @@ class B x=2
 		}
 
 
+		[Test]
+		public void CanUseWhere()
+		{
+			var code = @"
+class A
+	item x=1
+	item x=1 y=2
+	item x=2
+	item x=3
+	item x=4
+	
+class B
+	include A body
+		where x>>=2
+		where y!=NULL
+";
+			var result = Compile(code).Get("B");
+			Assert.AreEqual(3, result.Compiled.Descendants("item").Count());
+			CollectionAssert.AreEquivalent(new[] { "1", "3", "4"}, result.Compiled.Descendants("item").Select(_ => _.Attr("x")).ToArray());
+			Assert.AreEqual("2", result.Compiled.Descendants("item").First().Attr("y"));
+		}
+
+
 
 
 		[Test]

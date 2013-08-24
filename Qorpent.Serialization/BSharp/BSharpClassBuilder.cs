@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Qorpent.BSharp.Matcher;
 using Qorpent.Config;
 using Qorpent.Log;
 using Qorpent.LogicalExpressions;
@@ -158,6 +159,11 @@ namespace Qorpent.BSharp {
 
 				if (usebody) {
 					var elements = includeelement.Elements().ToArray();
+					var wheres = i.Elements("where").ToArray();
+					if (0 != wheres.Length) {
+						var matcher = new XmlTemplateMatcher(wheres);
+						elements = elements.Where(matcher.IsMatch).ToArray();
+					}
 					if (0 == elements.Length) {
 						_context.RegisterError(BSharpErrors.EmptyInclude(_cls, i));
 					}
@@ -165,7 +171,7 @@ namespace Qorpent.BSharp {
 					foreach (var e in elements) {
 						StoreIncludeParameters(i, e);
 					}
-					i.ReplaceWith(includeelement.Elements());
+					i.ReplaceWith(elements);
 				}
 				else {
 					StoreIncludeParameters(i, includeelement);
