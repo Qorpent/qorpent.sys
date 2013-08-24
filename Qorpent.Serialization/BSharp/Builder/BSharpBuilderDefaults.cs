@@ -6,7 +6,7 @@
 		/// <summary>
 		/// Директория для логов по умолчанию
 		/// </summary>
-	    public const string DefaultLogDirectory = ".log";
+	    public const string DefaultLogDirectory = BSharpBuilderDefaults.DefaultOutputDirectory;
 		
 		/// <summary>
 		/// Директория для логов по умолчанию
@@ -34,5 +34,9 @@
 		/// 
 		/// </summary>
 		public const string DefaultOutputExtension = ".bs.xml";
+        /// <summary>
+        ///     Имя файла-лога с ошибками
+        /// </summary>
+        public const string ErrorsFilename = ".errors.xml";
     }
 }
