@@ -14,6 +14,8 @@ class B x=^A
 			Assert.AreEqual("A",result.Attr("x"));
 		}
 
+
+
 		[Test]
 		public void NamespaceTest()
 		{
