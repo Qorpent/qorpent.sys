@@ -224,5 +224,60 @@ namespace Qorpent.BSharp {
 				Message = "Импортируемый класс является гнорируемым по признаку if"
 			};
 		}
+		
+		/// <summary>
+		/// Подсказка косвенной ссылки на класс
+		/// </summary>
+		/// <returns></returns>
+		public static BSharpError NotDirectClassReference(IBSharpClass cls, XElement parent, string clsname)
+		{
+			return new BSharpError
+			{
+				Level = ErrorLevel.Warning,
+				Phase = BSharpCompilePhase.ReferenceResolution,
+				Type = BSharpErrorType.NotDirectClassReference,
+				ClassName = cls.FullName,
+				Xml = parent,
+				Data = clsname,
+				Message = "Ссылка на класс разрешена косвенно по имени, а не по стеку пространств имен"
+			};
+		}
+		/// <summary>
+		/// Неоднозначная косвенная ссылка на класс
+		/// </summary>
+		/// <returns></returns>
+		public static BSharpError AmbigousClassReference(IBSharpClass cls, XElement parent, string clsname)
+		{
+			return new BSharpError
+			{
+				Level = ErrorLevel.Error,
+				Phase = BSharpCompilePhase.ReferenceResolution,
+				Type = BSharpErrorType.AmbigousClassReference,
+				ClassName = cls.FullName,
+				Xml = parent,
+				Data = clsname,
+				Message = "Двойственная ссылка на класс - было найдено несколько кандидатов"
+			};
+		}
+		/// <summary>
+		/// Ошибка неразрешенной ссылки на класс
+		/// </summary>
+		/// <param name="cls"></param>
+		/// <param name="parent"></param>
+		/// <param name="clsname"></param>
+		/// <returns></returns>
+		public static BSharpError NotResolvedClassReference(IBSharpClass cls, XElement parent, string clsname)
+		{
+			return new BSharpError
+			{
+				Level = ErrorLevel.Error,
+				Phase = BSharpCompilePhase.ReferenceResolution,
+				Type = BSharpErrorType.NotResolvedClassReference,
+				ClassName = cls.FullName,
+				Xml = parent,
+				Data = clsname,
+				Message = "Не найден класс, на который указывает ссылка"
+			};
+		}
 	}
 }

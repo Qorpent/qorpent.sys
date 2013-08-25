@@ -232,14 +232,11 @@ namespace Qorpent.BSharp {
 				foreach (var c in context.Get(BSharpContextDataType.Working)) {
 					try
 					{
-						Console.Write("-");
 						BSharpClassBuilder.Build(this, c, context);
-						Console.Write("+");
 					}
 					catch (Exception ex)
 					{
 						c.Error = ex;
-						Console.Write("!");
 					}
 				}
 			}
@@ -250,14 +247,11 @@ namespace Qorpent.BSharp {
 					{
 						try
 						{
-							Console.Write("-");
 							BSharpClassBuilder.Build(this, _, context);
-							Console.Write("+");
 						}
 						catch (Exception ex)
 						{
 							_.Error = ex;
-							Console.Write("!");
 						}
 					})
 					;	

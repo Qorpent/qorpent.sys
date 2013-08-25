@@ -25,5 +25,18 @@ namespace Qorpent.Model {
 		///The TAG string
 		/// </summary>
 		string Tag { get; set; }
+		/// <summary>
+		/// ѕровер€ет наличие установленного тега, свер€ет его значение
+		/// </summary>
+		/// <param name="tagname"></param>
+		/// <param name="testvalue"></param>
+		/// <returns></returns>
+		bool IsTagSet(string tagname, string testvalue = null);
+		/// <summary>
+		/// ¬озвращает наличие установленного тега
+		/// </summary>
+		/// <param name="tagname"></param>
+		/// <returns></returns>
+		string TagGet(string tagname);
 	}
 }
