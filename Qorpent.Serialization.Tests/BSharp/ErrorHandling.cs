@@ -57,6 +57,36 @@ no-class A
 			Assert.AreEqual(BSharpErrorType.OrphanClass, error.Type);
 		}
 
+        [Test]
+        public void NotResolvedDictionary()
+        {
+            var code = @"
+class A x=?x.a y=??x.b z=?~a.b w=??~a.b
+";
+            var result = Compile(code);
+            var errors = result.GetErrors();
+            Assert.AreEqual(2, errors.Count());
+            var error = errors.FirstOrDefault();
+            Assert.NotNull(error);
+            Assert.AreEqual(BSharpErrorType.NotResolvedDictionary, error.Type);
+        }
+
+        [Test]
+        public void NotResolvedDictionaryElement()
+        {
+            var code = @"
+class B
+    export x
+class A x=?x.a y=??x.b z=?~a.b w=??~a.b
+";
+            var result = Compile(code);
+            var errors = result.GetErrors();
+            Assert.AreEqual(2, errors.Count());
+            var error = errors.FirstOrDefault();
+            Assert.NotNull(error);
+            Assert.AreEqual(BSharpErrorType.NotResolvedDictionaryElement, error.Type);
+        }
+
 		[Test]
 		public void OrphanImport()
 		{
