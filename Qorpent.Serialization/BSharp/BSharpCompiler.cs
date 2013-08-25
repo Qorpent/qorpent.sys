@@ -239,6 +239,8 @@ namespace Qorpent.BSharp {
 						c.Error = ex;
 					}
 				}
+
+                context.ResolveDictionaries();
 			}
 			else {
 				log.Warn("in normal mode - parallel mode choosed");
@@ -255,6 +257,7 @@ namespace Qorpent.BSharp {
 						}
 					})
 					;	
+                context.ResolveDictionaries();
 			}
 			Console.WriteLine();
 			log.Trace("finish link");

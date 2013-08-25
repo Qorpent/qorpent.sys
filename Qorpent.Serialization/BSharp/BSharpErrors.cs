@@ -279,5 +279,43 @@ namespace Qorpent.BSharp {
 				Message = "Не найден класс, на который указывает ссылка"
 			};
 		}
+        /// <summary>
+        /// Ошибка - не обнаружен словарь
+        /// </summary>
+        /// <param name="fullName"></param>
+        /// <param name="parent"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
+	    public static BSharpError NotResolvedDictionary(string fullName, XElement parent, string code) {
+            return new BSharpError
+            {
+                Level = ErrorLevel.Warning,
+                Phase = BSharpCompilePhase.ReferenceResolution,
+                Type = BSharpErrorType.NotResolvedDictionary,
+                ClassName = fullName,
+                Xml = parent,
+                Data = code,
+                Message = "Не найден словарь, на который указывает ссылка"
+            };
+	    }
+        /// <summary>
+        /// Ошибка - не обнаружено значение словаря
+        /// </summary>
+        /// <param name="fullName"></param>
+        /// <param name="parent"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+	    public static BSharpError NotResolvedDictionaryElement(string fullName, XElement parent, string val) {
+            return new BSharpError
+            {
+                Level = ErrorLevel.Error,
+                Phase = BSharpCompilePhase.ReferenceResolution,
+                Type = BSharpErrorType.NotResolvedDictionaryElement,
+                ClassName = fullName,
+                Xml = parent,
+                Data = val,
+                Message = "Не найдено указанное значение словаря"
+            };
+	    }
 	}
 }

@@ -58,5 +58,11 @@ namespace Qorpent.BSharp {
 		/// Компилятор
 		/// </summary>
 		IBSharpCompiler Compiler { get; set; }
+
+
+	    /// <summary>
+	    /// Разрешает словари
+	    /// </summary>
+	    void ResolveDictionaries();
 	}
 }

@@ -79,6 +79,15 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Ссылка на класс разрешена просто по имени
 		/// </summary>
-		NotDirectClassReference = 4010
+		NotDirectClassReference = 4010,
+        /// <summary>
+        /// Не найден словарь
+        /// </summary>
+	    NotResolvedDictionary = 430,
+
+        /// <summary>
+        /// Не найден словарь
+        /// </summary>
+        NotResolvedDictionaryElement = 440,
 	}
 }
