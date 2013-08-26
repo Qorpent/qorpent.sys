@@ -17,6 +17,7 @@ namespace Qorpent.BSharp.Builder {
         {
             Sources = new List<XElement>();
             Conditions = new Dictionary<string, string>();
+            Targets = new BSharpBuilderTargets();
         }
 
 		private const string TARGET_NAMES = "target_names";
@@ -30,6 +31,7 @@ namespace Qorpent.BSharp.Builder {
 		private const string LOG = "log";
 		private const string CONDITIONS = "conditions";
         private const string SOURCES = "sources";
+        private const string TARGETS = "targets";
 		
 		/// <summary>
 		/// Целевые проекты при билде
@@ -101,7 +103,13 @@ namespace Qorpent.BSharp.Builder {
             get { return Get<IList<XElement>>(SOURCES); }
             set { Set(SOURCES, value); }
 		}
-
+        /// <summary>
+        ///     Цели проекта
+        /// </summary>
+        public BSharpBuilderTargets Targets {
+            get { return Get<BSharpBuilderTargets>(TARGETS); }
+            set { Set(TARGETS, value); }
+        }
 	    IUserLog _log =  new StubUserLog();
 		/// <summary>
 		/// Журнал проекта
