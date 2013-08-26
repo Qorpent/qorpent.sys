@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using Qorpent.Config;
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils.Extensions;
@@ -20,6 +21,7 @@ namespace Qorpent.BSharp {
 		private const string EXTENSIONS = "extensions";
 		private const string IGNORED = "ignored";
 		private const string ERRORS = "errors";
+		private const string EXPORTS = "exports";
 
 		/// <summary>
 		///     Исходные сырые определения классов
@@ -94,8 +96,151 @@ namespace Qorpent.BSharp {
 			get { return Get<List<BSharpError>>(ERRORS); }
 			set { Set(ERRORS, value); }
 		}
+        
+	    private IDictionary<string, string> _resolveDictCache = new Dictionary<string, string>();
+        /// <summary>
+        /// Запись об экспортной 
+        /// </summary>
+        private class ExportRecord
+        {
+            public ExportRecord(IBSharpClass cls, XElement e)
+            {
+                this.cls = cls;
+                names = new List<string>();
+                var uses = e.Elements("use");
+                foreach (var u in uses)
+                {
+                    names.Add(u.Attr("code"));
+                }
+                if (names.Count == 0)
+                {
+                    names.Add("item");
+                }
 
-		/// <summary>
+            }
+            public IBSharpClass cls;
+            public IList<string> names;
+            /// <summary>
+            /// Разрешает элемент словаря
+            /// </summary>
+            /// <param name="element"></param>
+            /// <returns></returns>
+            public string Resolve(string element) {
+                foreach (var n in names) {
+                    var el = cls.Compiled.Descendants(n).FirstOrDefault(_ => element == _.Attr("code"));
+                    if (null != el) {
+                        var val = el.Value;
+                        return val + "|" + cls.FullName + ":" + n + ":" + element;
+                    }
+                }
+                return null;
+            }
+        }
+        private IDictionary<string,IList<ExportRecord>> Exports
+        {
+            get { return Get<IDictionary<string, IList<ExportRecord>>>(EXPORTS); }
+            set { Set(EXPORTS, value); }
+        }
+
+	    /// <summary>
+	    /// Строит индекс словарей
+	    /// </summary>
+        private void BuildDictionaryIndex() {
+
+	            Exports = Exports ?? new Dictionary<string, IList<ExportRecord>>();
+	            foreach (var cls in Working) {
+	                var exports = cls.Compiled.Elements("export").ToArray();
+                    exports.Remove();
+	                foreach (var e in exports) {
+	                   var code = e.Attr("code");
+	                    if (!Exports.ContainsKey(code)) {
+	                        Exports[code] = new List<ExportRecord>();
+	                    }
+	                    Exports[code].Add(new ExportRecord(cls, e));
+	                }
+	            }
+
+	 
+	    }
+       
+        /// <summary>
+        /// Разрешает элементы в словаре
+        /// </summary>
+        /// <returns></returns>
+	    public string ResolveDictionary(string code, string element) {
+            var key = code + "." + element;
+            if (_resolveDictCache.ContainsKey(key)) {
+                return _resolveDictCache[key];
+            }
+            lock (this) {
+                string result = null;
+                if (Exports.ContainsKey(code)) {
+                    foreach (var e in Exports[code]) {
+                        result = e.Resolve(element);
+                        if (null != result) break;
+                    }   
+                }
+                _resolveDictCache[key] = result;
+                return result;
+            }
+	    }
+        /// <summary>
+        /// Разрешает словари
+        /// </summary>
+        public void ResolveDictionaries() {
+            BuildDictionaryIndex();
+            foreach (var _cls in Working) {
+                //найдем все атрибуты, начинающиеся на ^
+                foreach (var a in _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes())) {
+                    if (a.Value.StartsWith("?")) {
+                        var val = a.Value;
+                        bool valueonly = false;
+                        bool canbeignored = false;
+                        val = val.Substring(1);
+                        if (val.StartsWith("?")) {
+                            valueonly = true;
+                            val = val.Substring(1);
+                        }
+                        if (val.StartsWith("~")) {
+                            canbeignored = true;
+                            val = val.Substring(1);
+                        }
+                        var fstdot = val.IndexOf('.');
+                        var code = val.Substring(0, fstdot);
+                        var element = val.Substring(fstdot + 1);
+
+                        var result = ResolveDictionary(code, element);
+                        if (null == result) {
+                            if (canbeignored) {
+                                a.Value = "";
+                            }
+                            else {
+                                a.Value = "notresolved:" + val;
+                                if (!Exports.ContainsKey(code)) {
+                                    RegisterError(BSharpErrors.NotResolvedDictionary(_cls.FullName, a.Parent,
+                                        code));
+                                }
+                                else {
+                                    RegisterError(BSharpErrors.NotResolvedDictionaryElement(_cls.FullName,
+                                        a.Parent, val));
+                                }
+                            }
+                        }
+                        else {
+                            if (valueonly) {
+                                a.Value = result.Split('|')[0];
+                            }
+                            else {
+                                a.Value = result;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+	   
+
+	    /// <summary>
 		/// 
 		/// </summary>
 		public BSharpContext(IBSharpCompiler compiler = null) {

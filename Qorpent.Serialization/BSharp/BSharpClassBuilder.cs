@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -92,9 +93,12 @@ namespace Qorpent.BSharp {
 
 			CleanupPrivateMembers();
 			ResolveClassReferences();
+		    
 		}
 
-		private void ResolveClassReferences() {
+	    
+
+	    private void ResolveClassReferences() {
 			//найдем все атрибуты, начинающиеся на ^
 			foreach (var a in _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes())) {
 				if (a.Value.StartsWith("^")) {
