@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,26 +14,22 @@ namespace Qorpent.BSharp.Schema
 		/// Общая политика поведения по элементам
 		/// </summary>
 		public ElementPolicy ElementPolicy { get; set; }
-
-	}
-	/// <summary>
-	/// Правило элемента
-	/// </summary>
-	public class ElementRule {
-		
-	}
-
-	/// <summary>
-	/// Политика поведения внутренних элементов
-	/// </summary>
-	public enum ElementPolicy {
 		/// <summary>
-		/// Все что не запрещено - разрешено
+		/// Общее правило для всех элементов
 		/// </summary>
-		Free,
+		public ElementRule AllElementsRule { get; set; }
 		/// <summary>
-		/// Все что не разрешено - запрещено
+		/// Правило для корневого элемента
 		/// </summary>
-		Strict,
+		public ElementRule RootElementRule { get; set; }
+		/// <summary>
+		/// Правило для всех элементов кроме корня
+		/// </summary>
+		public ElementRule BodyElementRule { get; set; }
+		/// <summary>
+		/// Правило для отдельног элмента
+		/// </summary>
+		public ElementRule[] NamedElementRules { get; set; }
+
 	}
 }

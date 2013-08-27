@@ -28,6 +28,15 @@
     <Compile Include="BSharp\Matcher\ConditionGroup.cs" />
     <Compile Include="BSharp\Matcher\ConditionType.cs" />
     <Compile Include="BSharp\Matcher\SingleCondition.cs" />
+    <Compile Include="BSharp\Schema\AttributeRule.cs" />
+    <Compile Include="BSharp\Schema\ElementPolicy.cs" />
+    <Compile Include="BSharp\Schema\ElementRule.cs" />
+    <Compile Include="BSharp\Schema\IRule.cs" />
+    <Compile Include="BSharp\Schema\RuleActionType.cs" />
+    <Compile Include="BSharp\Schema\RuleBase.cs" />
+    <Compile Include="BSharp\Schema\RuleType.cs" />
+    <Compile Include="BSharp\Schema\Schema.cs" />
+    <Compile Include="BSharp\Schema\SchemaNote.cs" />
     <Compile Include="Json\CType.cs" />
     <Compile Include="Json\JsonArray.cs" />
     <Compile Include="Json\JsonObject.cs" />
