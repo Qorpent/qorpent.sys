@@ -46,5 +46,13 @@ namespace Qorpent.BSharp {
 		/// Проигнорированный
 		/// </summary>
 		Ignored =1<<9,
+		/// <summary>
+		/// В стадии ликовки
+		/// </summary>
+		InLink = 1<<10,
+		/// <summary>
+		/// Стадия линковки завершена
+		/// </summary>
+		Linked = 1<<11
 	}
 }

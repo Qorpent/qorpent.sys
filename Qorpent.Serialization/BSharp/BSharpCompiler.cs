@@ -79,14 +79,14 @@ namespace Qorpent.BSharp {
 		private IBSharpContext BuildSingle(XElement source) {
 			var batch = new[] {source};
 			IBSharpContext context = BuildIndex(batch);
-			Link(batch, context);
+			CompileClasses(batch, context);
 			return context;
 		}
 
 		private IBSharpContext BuildBatch(IEnumerable<XElement> sources, IBSharpContext preparedContext) {
 			XElement[] batch = sources.ToArray();
 			var context = BuildIndex(batch);
-			Link(batch, context);
+			CompileClasses(batch, context);
 			if (null != preparedContext) {
 				preparedContext.Merge(context);
 				return preparedContext;
@@ -223,12 +223,12 @@ namespace Qorpent.BSharp {
 		/// <param name="sources"></param>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		protected virtual void Link(IEnumerable<XElement> sources, IBSharpContext context) {
+		protected virtual void CompileClasses(IEnumerable<XElement> sources, IBSharpContext context) {
 			if (Debugger.IsAttached) {
 				foreach (var c in context.Get(BSharpContextDataType.Working)) {
 					try
 					{
-						BSharpClassBuilder.Build(this, c, context);
+						BSharpClassBuilder.Build(BuildPhase.Compile,  this, c, context);
 					}
 					catch (Exception ex)
 					{
@@ -244,7 +244,7 @@ namespace Qorpent.BSharp {
 					{
 						try
 						{
-							BSharpClassBuilder.Build(this, _, context);
+							BSharpClassBuilder.Build(BuildPhase.Compile,  this, _, context);
 						}
 						catch (Exception ex)
 						{
