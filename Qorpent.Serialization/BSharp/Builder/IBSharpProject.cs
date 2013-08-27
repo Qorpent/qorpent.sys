@@ -13,13 +13,13 @@ namespace Qorpent.BSharp.Builder {
         /// </summary>
         BSharpBuilderTargets Targets { get; set; }
 		/// <summary>
-		/// Целевые проекты при билде
-		/// </summary>
-		string[] TargetNames { get; set; }
-		/// <summary>
 		/// Признак полностью загруженного проекта
 		/// </summary>
-		bool IsFullyQualifiedProject { get; set; }	
+		bool IsFullyQualifiedProject { get; set; }
+        /// <summary>
+        ///     Признак того, что результаты будут писаться на диск
+        /// </summary>
+        bool WriteCompiled { get; set; }
 		/// <summary>
 		/// Флаги по управлению выводом
 		/// </summary>
