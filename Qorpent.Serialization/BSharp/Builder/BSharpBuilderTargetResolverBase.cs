@@ -6,7 +6,7 @@ namespace Qorpent.BSharp.Builder {
     /// <summary>
     ///     Класс ля резольвинга инклудов и эксклудов
     /// </summary>
-    public abstract class BSharpBuilderTargetResolverBase {
+    public abstract class BSharpBuilderTargetResolverBase : IBSharpBuilderTargetResolver {
         /// <summary>
         ///     Проект
         /// </summary>
