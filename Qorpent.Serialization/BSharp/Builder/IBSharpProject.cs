@@ -8,6 +8,10 @@ namespace Qorpent.BSharp.Builder {
 	/// 
 	/// </summary>
 	public interface IBSharpProject:IConfig {
+        /// <summary>
+        ///     Цели проекта
+        /// </summary>
+        BSharpBuilderTargets Targets { get; set; }
 		/// <summary>
 		/// Целевые проекты при билде
 		/// </summary>
@@ -36,12 +40,10 @@ namespace Qorpent.BSharp.Builder {
 		/// Расширение для результирующих файлов
 		/// </summary>
 		string OutputExtension { get; set; }
-
 		/// <summary>
 		/// Корневая директория
 		/// </summary>
 		string RootDirectory { get; set; }
-
 		/// <summary>
 		/// Исходный код
 		/// </summary>
@@ -50,19 +52,15 @@ namespace Qorpent.BSharp.Builder {
 		/// Журнал проекта
 		/// </summary>
 		IUserLog Log { get; set; }
-
 		/// <summary>
 		/// Условия компиляции 
 		/// </summary>
 		IDictionary<string, string> Conditions { get; set; }
-
-
 		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>
 		string GetOutputDirectory();
-
 		/// <summary>
 		/// Возвращает нормализованный полный путь корневой папки репозитория или решения
 		/// </summary>
@@ -72,8 +70,7 @@ namespace Qorpent.BSharp.Builder {
 		/// Возвращает исходящее расширение
 		/// </summary>
 		/// <returns></returns>
-		string GetOutputExtension();
-
+        string GetOutputExtension();
 		/// <summary>
 		/// Возвращает исходящее расширение
 		/// </summary>
