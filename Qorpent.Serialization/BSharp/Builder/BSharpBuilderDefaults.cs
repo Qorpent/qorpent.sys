@@ -55,5 +55,14 @@ namespace Qorpent.BSharp.Builder {
         ///     Имя контейнера для классетов внутри документа
         /// </summary>
         public const string BSharpClassetName = "bsharpclassset";
+        /// <summary>
+        ///     Рсширение для файлов по умолчанию
+        /// </summary>
+        public const string DefaultInputExtension = "bxls";
+        /// <summary>
+        ///     BSharp project
+        /// </summary>
+        public const string DefaultBSharpProjectExtension = "bsproj";
+
     }
 }

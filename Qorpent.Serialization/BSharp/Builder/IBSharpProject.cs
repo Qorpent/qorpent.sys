@@ -40,6 +40,10 @@ namespace Qorpent.BSharp.Builder {
 		/// Расширение для результирующих файлов
 		/// </summary>
 		string OutputExtension { get; set; }
+        /// <summary>
+        ///     Расширение для входных файлов
+        /// </summary>
+        string InputExtension { get; set; }
 		/// <summary>
 		/// Корневая директория
 		/// </summary>
