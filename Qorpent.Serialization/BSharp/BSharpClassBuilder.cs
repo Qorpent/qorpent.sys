@@ -454,16 +454,11 @@ namespace Qorpent.BSharp {
 
 				for (int i = 0; i <= 3; i++)
 				{
-					KeyValuePair<string, object>[] _substs =
-						_cls.ParamIndex.Where(_ => (_.Value is string) && ((string)_.Value).Contains("${"))
-						   .ToArray();
-					if (0 == _substs.Length)
-					{
-						break;
-					}
-					foreach (var s in _substs)
-					{
-						_cls.ParamIndex.Set(s.Key, si.Interpolate((string)s.Value, _cls.ParamSourceIndex));
+					foreach (var v in _cls.ParamIndex.ToArray()) {
+						var s = v.Value as string;
+						if (null == s) continue;
+						if (-1 == s.IndexOf('{')) continue;
+						_cls.ParamIndex.Set(v.Key, si.Interpolate(s, _cls.ParamSourceIndex));
 					}
 				}
 			}
