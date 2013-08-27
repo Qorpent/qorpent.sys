@@ -92,8 +92,14 @@ namespace Qorpent.BSharp {
 		}
 
 		private void InternalLink() {
+			ResolveAdvancedIncludes();
 			ResolveClassReferences();
 			ResolveDictionaries();
+		}
+
+		private void ResolveAdvancedIncludes() {
+			if (!_cls.Is(BSharpClassAttributes.RequireAdvancedIncludes)) return;
+
 		}
 
 		private void ResolveDictionaries() {

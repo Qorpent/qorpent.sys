@@ -11,6 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BSharpJsonParserTests.cs" />
+    <Compile Include="BSharp\AdvancedIncludeTest.cs" />
     <Compile Include="BSharp\ClassReference.cs" />
     <Compile Include="BSharp\DictionarySupport.cs" />
     <Compile Include="BSharp\Matcher\SingleConditionTests.cs" />

@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
-    [TestFixture]
+	[TestFixture]
 	public class IncludeTest : CompileTestBase {
 		[Test]
 		public void CanInclude()
@@ -17,6 +17,20 @@ class B x=2
 			var result = Compile(code).Get("B");
 			Assert.AreEqual(1, result.Compiled.Descendants("A").Count());
 			Assert.AreEqual("1", result.Compiled.Descendants("test").First().Attr("code"));
+		}
+
+		[Test]
+		public void CanIncludeNoBody()
+		{
+			var code = @"
+class A x=1
+	test
+class B x=2
+	include A nobody
+";
+			var result = Compile(code).Get("B");
+			Assert.AreEqual(1, result.Compiled.Descendants("A").Count());
+			Assert.AreEqual(0, result.Compiled.Descendants("test").Count());
 		}
 
 		[Test]
