@@ -9,12 +9,11 @@ namespace Qorpent.BSharp.Builder {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BSharpProject :ConfigBase, IBSharpProject {
+	public class BSharpProject : ConfigBase, IBSharpProject {
         /// <summary>
         /// 
         /// </summary>
-        public BSharpProject()
-        {
+        public BSharpProject() {
             Sources = new List<XElement>();
             Conditions = new Dictionary<string, string>();
             Targets = new BSharpBuilderTargets();
@@ -32,6 +31,7 @@ namespace Qorpent.BSharp.Builder {
 		private const string CONDITIONS = "conditions";
         private const string SOURCES = "sources";
         private const string TARGETS = "targets";
+	    private const string INPUT_EXTENSION = "input_extension";
 		
 		/// <summary>
 		/// Целевые проекты при билде
@@ -40,7 +40,6 @@ namespace Qorpent.BSharp.Builder {
 			get { return Get(TARGET_NAMES, new string[] {}); }
 			set { Set(TARGET_NAMES, value); }
 		}
-
 		/// <summary>
 		/// Признак полностью загруженного проекта
 		/// </summary>
@@ -88,8 +87,15 @@ namespace Qorpent.BSharp.Builder {
 			get { return Get(OUTPUT_EXTENSION, BSharpBuilderDefaults.DefaultOutputExtension ); }
 			set { Set(OUTPUT_EXTENSION, value); }
 		}
+	    /// <summary>
+	    ///     Расширение для входных файлов
+	    /// </summary>
+	    public string InputExtension {
+            get { return Get(INPUT_EXTENSION, BSharpBuilderDefaults.DefaultInputExtension); }
+            set { Set(INPUT_EXTENSION, value); }
+	    }
 
-		/// <summary>
+	    /// <summary>
 		/// Корневая директория
 		/// </summary>
 		public string RootDirectory {
