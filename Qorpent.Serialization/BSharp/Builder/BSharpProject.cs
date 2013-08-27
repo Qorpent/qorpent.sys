@@ -9,8 +9,16 @@ namespace Qorpent.BSharp.Builder {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BSharpProject :ConfigBase, IBSharpProject {
-		private IDictionary<string, XElement> _sources;
+	public class BSharpProject : ConfigBase, IBSharpProject {
+        /// <summary>
+        /// 
+        /// </summary>
+        public BSharpProject() {
+            Sources = new List<XElement>();
+            Conditions = new Dictionary<string, string>();
+            Targets = new BSharpBuilderTargets();
+        }
+
 		private const string TARGET_NAMES = "target_names";
 		private const string FULLY_QUALIFIED = "fully_qualified";
 		private const string OUTPUT_ATTRIBUTES = "output_attrbutes";
@@ -21,12 +29,10 @@ namespace Qorpent.BSharp.Builder {
 		private const string ROOT_DIRECTORY = "root_directory";
 		private const string LOG = "log";
 		private const string CONDITIONS = "conditions";
-		/// <summary>
-		/// 
-		/// </summary>
-		public BSharpProject() {
-			Conditions = new Dictionary<string, string>();
-		}
+        private const string SOURCES = "sources";
+        private const string TARGETS = "targets";
+	    private const string INPUT_EXTENSION = "input_extension";
+		
 		/// <summary>
 		/// Целевые проекты при билде
 		/// </summary>
@@ -34,7 +40,6 @@ namespace Qorpent.BSharp.Builder {
 			get { return Get(TARGET_NAMES, new string[] {}); }
 			set { Set(TARGET_NAMES, value); }
 		}
-
 		/// <summary>
 		/// Признак полностью загруженного проекта
 		/// </summary>
@@ -82,8 +87,15 @@ namespace Qorpent.BSharp.Builder {
 			get { return Get(OUTPUT_EXTENSION, BSharpBuilderDefaults.DefaultOutputExtension ); }
 			set { Set(OUTPUT_EXTENSION, value); }
 		}
+	    /// <summary>
+	    ///     Расширение для входных файлов
+	    /// </summary>
+	    public string InputExtension {
+            get { return Get(INPUT_EXTENSION, BSharpBuilderDefaults.DefaultInputExtension); }
+            set { Set(INPUT_EXTENSION, value); }
+	    }
 
-		/// <summary>
+	    /// <summary>
 		/// Корневая директория
 		/// </summary>
 		public string RootDirectory {
@@ -93,10 +105,17 @@ namespace Qorpent.BSharp.Builder {
 		/// <summary>
 		/// 
 		/// </summary>
-        public IDictionary<string, XElement> Sources {
-			get { return _sources ?? (_sources = new Dictionary<string, XElement>()); }
+        public IList<XElement> Sources {
+            get { return Get<IList<XElement>>(SOURCES); }
+            set { Set(SOURCES, value); }
 		}
-
+        /// <summary>
+        ///     Цели проекта
+        /// </summary>
+        public BSharpBuilderTargets Targets {
+            get { return Get<BSharpBuilderTargets>(TARGETS); }
+            set { Set(TARGETS, value); }
+        }
 	    IUserLog _log =  new StubUserLog();
 		/// <summary>
 		/// Журнал проекта
@@ -115,10 +134,6 @@ namespace Qorpent.BSharp.Builder {
 			set { Set(CONDITIONS, value); }
 		}
 
-        /// <summary>
-        ///     Компилировать ли JSON
-        /// </summary>
-        public bool CompileJson { get; set; }
 
 		/// <summary>
 		/// Возвращает путь к целевой директории

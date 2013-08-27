@@ -36,4 +36,6 @@ namespace Qorpent.Model {
 		/// </summary>
 		bool IsFormula { get; set; }
 	}
+
+	
 }

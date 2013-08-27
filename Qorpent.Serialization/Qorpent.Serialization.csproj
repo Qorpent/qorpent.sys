@@ -13,11 +13,19 @@
     <Compile Include="BSharp\Builder\BSharpBuilderDefaults.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderOutputAttributes.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderPhase.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderTargetExtensions.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderTargetResolverBase.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderTargets.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderTargetType.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderTaskBase.cs" />
     <Compile Include="BSharp\Builder\BSharpProject.cs" />
+    <Compile Include="BSharp\Builder\BSharpProjectSerializer.cs" />
     <Compile Include="BSharp\Builder\IBSharpBuilder.cs" />
     <Compile Include="BSharp\Builder\IBSharpBuilderTask.cs" />
     <Compile Include="BSharp\Builder\IBSharpProject.cs" />
+    <Compile Include="BSharp\Matcher\ConditionGroup.cs" />
+    <Compile Include="BSharp\Matcher\ConditionType.cs" />
+    <Compile Include="BSharp\Matcher\SingleCondition.cs" />
     <Compile Include="Json\CType.cs" />
     <Compile Include="Json\JsonArray.cs" />
     <Compile Include="Json\JsonObject.cs" />
@@ -44,6 +52,7 @@
     <Compile Include="Selector\Implementations\XPathSelectorImpl.cs" />
     <Compile Include="Selector\ProcessingSelectorException.cs" />
     <Compile Include="Selector\SelectorFactory.cs" />
+    <Compile Include="BSharp\Matcher\XmlTemplateMatcher.cs" />
     <Compile Include="Serialization\BSharpJsonCompiler.cs" />
     <Compile Include="Serialization\bxlSerializer.cs" />
     <Compile Include="Serialization\bxlSerializerImpl.cs" />

@@ -7,6 +7,8 @@ using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Log;
 using Qorpent.Utils.Extensions;
+using Qorpent.LogicalExpressions;
+using Qorpent.Utils.LogicalExpressions;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -114,10 +116,22 @@ namespace Qorpent.BSharp {
 			}
 		}
 
+        LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
+
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns) {
 			foreach (XElement e in src.Elements()) {
 				var _ns = "";
 				if (e.Name.LocalName == "namespace") {
+                    var ifa = e.Attr("if");
+                    if (!string.IsNullOrWhiteSpace(ifa))
+                    {
+                        var terms = new DictionaryTermSource(this.GetConditions());
+                        if (!eval.Eval(ifa, terms))
+                        {
+                            continue;
+                        }
+                    }
+
 					if (string.IsNullOrWhiteSpace(ns)) {
 						_ns = e.Attr("code");
 					}
@@ -130,7 +144,7 @@ namespace Qorpent.BSharp {
 				}
 				else {
 					var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = e.Attr("code"), Namespace = ns};
-
+                    if (!IsOverrideMatch(def)) continue;
 					SetupInitialOrphanState(e, def);
 					ParseImports(e, def);
 					ParseCompoundElements(e, def);
@@ -139,6 +153,21 @@ namespace Qorpent.BSharp {
 				}
 			}
 		}
+
+        private bool IsOverrideMatch(BSharpClass def)
+        {
+            if (def.Source.Name.LocalName == "__TILD__class" || def.Source.Name.LocalName == "__PLUS__class")
+            {
+                var ifa = def.Source.Attr("if");
+                if (!string.IsNullOrWhiteSpace(ifa))
+                {
+                    def.Source.Attribute("if").Remove();
+                    var terms = new DictionaryTermSource(GetConditions());
+                    return eval.Eval(ifa, terms);
+                }
+            }
+            return true;
+        }
 
 		private static void SetupInitialOrphanState(XElement e, IBSharpClass def) {
 			if (null != e.Attribute("abstract") || e.Attr("name") == "abstract") {
@@ -203,16 +232,15 @@ namespace Qorpent.BSharp {
 				foreach (var c in context.Get(BSharpContextDataType.Working)) {
 					try
 					{
-						Console.Write("-");
 						BSharpClassBuilder.Build(this, c, context);
-						Console.Write("+");
 					}
 					catch (Exception ex)
 					{
 						c.Error = ex;
-						Console.Write("!");
 					}
 				}
+
+                context.ResolveDictionaries();
 			}
 			else {
 				log.Warn("in normal mode - parallel mode choosed");
@@ -221,17 +249,15 @@ namespace Qorpent.BSharp {
 					{
 						try
 						{
-							Console.Write("-");
 							BSharpClassBuilder.Build(this, _, context);
-							Console.Write("+");
 						}
 						catch (Exception ex)
 						{
 							_.Error = ex;
-							Console.Write("!");
 						}
 					})
 					;	
+                context.ResolveDictionaries();
 			}
 			Console.WriteLine();
 			log.Trace("finish link");

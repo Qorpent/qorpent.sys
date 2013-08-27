@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Qorpent.BSharp.Matcher;
 using Qorpent.Config;
 using Qorpent.Log;
 using Qorpent.LogicalExpressions;
@@ -90,6 +92,37 @@ namespace Qorpent.BSharp {
 			ProcessIncludes();
 
 			CleanupPrivateMembers();
+			ResolveClassReferences();
+		    
+		}
+
+	    
+
+	    private void ResolveClassReferences() {
+			//найдем все атрибуты, начинающиеся на ^
+			foreach (var a in _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes())) {
+				if (a.Value.StartsWith("^")) {
+					var clsname = a.Value.Substring(1);
+					var normallyresolvedClass = _context.Get(clsname, _cls.Namespace);
+					if (null != normallyresolvedClass) {
+						a.Value = normallyresolvedClass.FullName;
+					}
+					else {
+						var candidates = _context.Get(BSharpContextDataType.Working).Where(_ => _.FullName.EndsWith(clsname)).ToArray();
+						if (!candidates.Any()) {
+							a.Value = "NOTRESOLVED::" + clsname;
+							_context.RegisterError(BSharpErrors.NotResolvedClassReference(_cls, a.Parent,clsname));
+						}else if (1 == candidates.Count()) {
+							a.Value = candidates[0].FullName;
+							_context.RegisterError(BSharpErrors.NotDirectClassReference(_cls, a.Parent, clsname));
+						}
+						else {
+							a.Value = "AMBIGOUS::" + clsname;
+							_context.RegisterError(BSharpErrors.AmbigousClassReference(_cls, a.Parent, clsname));
+						}
+					}
+				}
+			}
 		}
 
 		private void ProcessIncludes() {
@@ -130,6 +163,11 @@ namespace Qorpent.BSharp {
 
 				if (usebody) {
 					var elements = includeelement.Elements().ToArray();
+					var wheres = i.Elements("where").ToArray();
+					if (0 != wheres.Length) {
+						var matcher = new XmlTemplateMatcher(wheres);
+						elements = elements.Where(matcher.IsMatch).ToArray();
+					}
 					if (0 == elements.Length) {
 						_context.RegisterError(BSharpErrors.EmptyInclude(_cls, i));
 					}
@@ -137,7 +175,7 @@ namespace Qorpent.BSharp {
 					foreach (var e in elements) {
 						StoreIncludeParameters(i, e);
 					}
-					i.ReplaceWith(includeelement.Elements());
+					i.ReplaceWith(elements);
 				}
 				else {
 					StoreIncludeParameters(i, includeelement);
