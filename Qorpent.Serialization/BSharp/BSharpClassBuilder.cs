@@ -93,6 +93,68 @@ namespace Qorpent.BSharp {
 
 		private void InternalLink() {
 			ResolveClassReferences();
+			ResolveDictionaries();
+		}
+
+		private void ResolveDictionaries() {
+			if (!_cls.Is(BSharpClassAttributes.RequireDictionaryResolution)) return;
+			foreach (var a in _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes()))
+			{
+				if (a.Value.StartsWith("?"))
+				{
+					var val = a.Value;
+					bool valueonly = false;
+					bool canbeignored = false;
+					val = val.Substring(1);
+					if (val.StartsWith("?"))
+					{
+						valueonly = true;
+						val = val.Substring(1);
+					}
+					if (val.StartsWith("~"))
+					{
+						canbeignored = true;
+						val = val.Substring(1);
+					}
+					var fstdot = val.IndexOf('.');
+					var code = val.Substring(0, fstdot);
+					var element = val.Substring(fstdot + 1);
+
+					var result = _context.ResolveDictionary(code, element);
+					if (null == result)
+					{
+						if (canbeignored)
+						{
+							a.Value = "";
+						}
+						else
+						{
+							a.Value = "notresolved:" + val;
+							if (!_context.HasDictionary(code))
+							{
+								_context.RegisterError(BSharpErrors.NotResolvedDictionary(_cls.FullName, a.Parent,
+									code));
+							}
+							else
+							{
+								_context.RegisterError(BSharpErrors.NotResolvedDictionaryElement(_cls.FullName,
+									a.Parent, val));
+							}
+						}
+					}
+					else
+					{
+						if (valueonly)
+						{
+							a.Value = result.Split('|')[0];
+						}
+						else
+						{
+							a.Value = result;
+						}
+					}
+				}
+			}
 		}
 
 		private void PerformCompilation() {
@@ -121,13 +183,31 @@ namespace Qorpent.BSharp {
 			ProcessSimpleIncludes();
 
 			CleanupPrivateMembers();
-			
-		    
+
+			CheckoutRequireLinkingRequirements();
+
 		}
 
-	    
+		private void CheckoutRequireLinkingRequirements() {
+			var attrs = _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes());
+			foreach (var a in attrs) {
+				if (a.Value.StartsWith("^")) {
+					_cls.Set(BSharpClassAttributes.RequireClassResolution);
+				}else if (a.Value.StartsWith("?")) {
+					_cls.Set(BSharpClassAttributes.RequireDictionaryResolution);
+				}
+			}
+			if (_cls.Compiled.Elements("export").Any()) {
+				_cls.Set(BSharpClassAttributes.RequireDictionaryRegistration);
+			}
+			if (_cls.Compiled.Descendants("include").Any()) {
+				_cls.Set(BSharpClassAttributes.RequireAdvancedIncludes);
+			}
+		}
 
-	    private void ResolveClassReferences() {
+
+		private void ResolveClassReferences() {
+			if (!_cls.Is(BSharpClassAttributes.RequireClassResolution)) return;
 			//найдем все атрибуты, начинающиеся на ^
 			foreach (var a in _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes())) {
 				if (a.Value.StartsWith("^")) {
@@ -184,7 +264,7 @@ namespace Qorpent.BSharp {
 				i.Remove();
 			}
 			else {
-				Build(BuildPhase.Link,_compiler, includecls, _context);
+				Build(BuildPhase.Compile,_compiler, includecls, _context);
 				var includeelement = new XElement(includecls.Compiled);
 				var usebody = null!=i.Attribute("body")||i.Attr("name")=="body";
 

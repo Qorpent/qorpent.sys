@@ -51,17 +51,28 @@ namespace Qorpent.BSharp {
 		public void Set(BSharpClassAttributes flags) {
 			_attributes = _attributes | flags;
 			if (
-				flags.HasFlag(BSharpClassAttributes.Override)
+				flags==BSharpClassAttributes.RequireClassResolution
 				||
-				flags.HasFlag(BSharpClassAttributes.Extension)
+				flags==BSharpClassAttributes.RequireDictionaryResolution
+				||
+				flags==BSharpClassAttributes.RequireAdvancedIncludes
+				) {
+
+				_attributes = _attributes | BSharpClassAttributes.RequireLinking;
+			}
+			else if (
+				flags==BSharpClassAttributes.Override
+				||
+				flags==BSharpClassAttributes.Extension
 				) {
 				if (null == TargetClassName) {
 					TargetClassName = Name;
 					Name = Guid.NewGuid().ToString();
 				}
-				Set(BSharpClassAttributes.Explicit);
+				_attributes = _attributes | BSharpClassAttributes.Explicit;
+				Remove(BSharpClassAttributes.Orphan);
 			}
-			if (flags.HasFlag(BSharpClassAttributes.Explicit)) {
+			else if (flags==BSharpClassAttributes.Explicit) {
 				Remove(BSharpClassAttributes.Orphan);
 			}
 		}

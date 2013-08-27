@@ -80,6 +80,7 @@ namespace Qorpent.BSharp {
 			var batch = new[] {source};
 			IBSharpContext context = BuildIndex(batch);
 			CompileClasses(batch, context);
+			LinkClasses(batch,context);
 			return context;
 		}
 
@@ -87,6 +88,7 @@ namespace Qorpent.BSharp {
 			XElement[] batch = sources.ToArray();
 			var context = BuildIndex(batch);
 			CompileClasses(batch, context);
+			LinkClasses(batch, context);
 			if (null != preparedContext) {
 				preparedContext.Merge(context);
 				return preparedContext;
@@ -235,8 +237,8 @@ namespace Qorpent.BSharp {
 						c.Error = ex;
 					}
 				}
-
-                context.ResolveDictionaries();
+				context.ClearBuildTasks();
+                
 			}
 			else {
 				context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
@@ -252,7 +254,49 @@ namespace Qorpent.BSharp {
 						}
 					})
 					;	
-                context.ResolveDictionaries();
+  
+			}
+		}
+
+		/// <summary>
+		///     Перекрыть для создания линковщика
+		/// </summary>
+		/// <param name="sources"></param>
+		/// <param name="context"></param>
+		/// <returns></returns>
+		protected virtual void LinkClasses(IEnumerable<XElement> sources, IBSharpContext context) {
+			context.BuildDictionaryIndex();
+			if (!context.RequireLinking()) return;
+			if (Debugger.IsAttached)
+			{
+				foreach (var c in context.Get(BSharpContextDataType.Working).Where(_=>_.Is(BSharpClassAttributes.RequireLinking)))
+				{
+					try
+					{
+						BSharpClassBuilder.Build(BuildPhase.Link, this, c, context);
+					}
+					catch (Exception ex)
+					{
+						c.Error = ex;
+					}
+				}
+				context.ClearBuildTasks();
+			}
+			else
+			{
+				context.Get(BSharpContextDataType.Working).Where(_=>_.Is(BSharpClassAttributes.RequireLinking)).AsParallel().ForAll(
+					_ =>
+					{
+						try
+						{
+							BSharpClassBuilder.Build(BuildPhase.Link, this, _, context);
+						}
+						catch (Exception ex)
+						{
+							_.Error = ex;
+						}
+					})
+					;
 			}
 		}
 	}

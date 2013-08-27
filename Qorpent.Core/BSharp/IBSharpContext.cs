@@ -60,9 +60,34 @@ namespace Qorpent.BSharp {
 		IBSharpCompiler Compiler { get; set; }
 
 
-	    /// <summary>
-	    /// Разрешает словари
-	    /// </summary>
-	    void ResolveDictionaries();
+
+		/// <summary>
+		/// Очищает данные по задачам
+		/// </summary>
+		void ClearBuildTasks();
+
+		/// <summary>
+		/// Строит индекс словарей
+		/// </summary>
+		void BuildDictionaryIndex();
+
+		/// <summary>
+		/// Разрешает элементы в словаре
+		/// </summary>
+		/// <returns></returns>
+		string ResolveDictionary(string code, string element);
+
+		/// <summary>
+		/// Определяет наличие словаря
+		/// </summary>
+		/// <param name="code"></param>
+		/// <returns></returns>
+		bool HasDictionary(string code);
+
+		/// <summary>
+		/// Проверяет необходимость линковки контекста в целом
+		/// </summary>
+		/// <returns></returns>
+		bool RequireLinking();
 	}
 }

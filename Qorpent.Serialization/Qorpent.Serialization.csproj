@@ -24,6 +24,7 @@
     <Compile Include="BSharp\Builder\IBSharpBuilderTask.cs" />
     <Compile Include="BSharp\Builder\IBSharpProject.cs" />
     <Compile Include="BSharp\BuildPhase.cs" />
+    <Compile Include="BSharp\ExportRecord.cs" />
     <Compile Include="BSharp\Matcher\ConditionGroup.cs" />
     <Compile Include="BSharp\Matcher\ConditionType.cs" />
     <Compile Include="BSharp\Matcher\SingleCondition.cs" />
