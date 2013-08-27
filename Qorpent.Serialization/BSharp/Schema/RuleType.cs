@@ -4,6 +4,10 @@
 	/// </summary>
 	public enum RuleType {
 		/// <summary>
+		/// Не указано
+		/// </summary>
+		None,
+		/// <summary>
 		/// Разрешен
 		/// </summary>
 		Allow,
