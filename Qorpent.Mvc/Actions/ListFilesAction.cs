@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Qorpent.IoC;
 using System;
+using Qorpent.Mvc;
+using Qorpent.Mvc.Actions;
 using Qorpent.Mvc.Binding;
 
 namespace Qorpent.Mvc.Actions
@@ -58,21 +61,21 @@ namespace Qorpent.Mvc.Actions
         /// </summary>
         /// <returns></returns>
         //public static string[] ListFile(string fMask)
-            public static string[] ListFile(string filMask)
+            public static string[] ListFile()
         {
-            return filMask != null ? Directory.GetFiles(EnvironmentInfo.RootDirectory, filMask) : Directory.GetFiles(EnvironmentInfo.RootDirectory);
+          return  Directory.GetFiles(EnvironmentInfo.RootDirectory);
         }
 
             /// <summary>
             /// Локальное имя файла
             /// </summary>
             /// <returns></returns>
-            public static string[] ListFileLocalName(string fileMask)
+            public static string[] ListFileLocalName()
             {
-                var localNameFile = new string[ListFile(fileMask).Count()];
-                for (int index = 0; index < ListFile(fileMask).Count(); index++)
+                var localNameFile = new string[ListFile().Count()];
+                for (int index = 0; index < ListFile().Count(); index++)
                 {
-                    localNameFile[index] = Path.GetFileName(ListFile(fileMask)[index]);
+                    localNameFile[index] = Path.GetFileName(ListFile()[index]);
                 }
                 return localNameFile;
 
@@ -83,7 +86,7 @@ namespace Qorpent.Mvc.Actions
         /// Добавляетв в коллекцию
         /// </summary>
         /// <returns></returns>
-        public static List<DirectoryObjEntry> AddListFilesAndDirs(string fMask, bool sDir, bool sFile)
+        public static List<DirectoryObjEntry> AddListFilesAndDirs( bool sDir, bool sFile)
         {
 
             var listFilesCollection = new List<DirectoryObjEntry>();
@@ -99,13 +102,220 @@ namespace Qorpent.Mvc.Actions
 
             if (sFile)
             {
-                for (var index = 0; index < ListFile(fMask).Count(); index++)
+                for (var index = 0; index < ListFile().Count(); index++)
                 {
-                    listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1 + ListDir().Count(), */LocalPath = ListFileLocalName(fMask)[index], FullPath = ListFile(fMask)[index], ObjType = "File" });
+                    listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1 + ListDir().Count(), */LocalPath = ListFileLocalName()[index], FullPath = ListFile()[index], ObjType = "File" });
                 }
             }
             
             return listFilesCollection;
+        }
+
+
+        //  /// <summary>
+        ///// Проверка соответствия имени файла маске
+        ///// </summary>
+        ///// <param name="fileName">Имя проверяемого файла</param>
+        ///// <param name="inputMasksMassS">Маска файла</param>
+        ///// <param name="i"></param>
+        ///// <returns>true - файл удовлетворяет маске, иначе false</returns>
+        //static public bool CheckMask(string[] fileName, string inputMasksMassS, int i)
+        //{
+            
+        //    //Console.WriteLine(counter);
+        //    string pattern = string.Empty;
+        //    foreach (string ext in OuputMasksMassive(inputMasksMassS))
+        //        {
+        //            if ((ext.IndexOf(".") > -1) || (ext.IndexOf("?") > -1) || ((ext.IndexOf("*") > -1)))
+        //            {
+        //                pattern += @"^"; //признак начала строки
+        //                foreach (char symbol in ext)
+        //                    switch (symbol)
+        //                    {
+        //                        case '.':
+        //                            pattern += @"\.";
+        //                            break;
+        //                        case '?':
+        //                            pattern += @".";
+        //                            break;
+        //                        case '*':
+        //                            pattern += @".*";
+        //                            break;
+        //                        default:
+        //                            pattern += symbol;
+        //                            break;
+
+        //                            // default: pattern += @".*(" + symbol + @").*"; break;
+        //                            //^.*(sdg).*$
+        //                    }
+        //                pattern += @"$|"; //признак окончания строки
+        //            }
+        //            else
+        //            {
+        //                pattern += @"^.*(" + ext + @").*$|";
+        //               // ^.*(sdg).*$
+        //            }
+        //            //Console.WriteLine(pattern);
+        //       }
+        //    if (pattern.Length == 0)
+        //        {
+        //            return false;
+        //        }
+        //        {
+        //            pattern = pattern.Remove(pattern.Length - 1);
+        //            var mask = new Regex(pattern, RegexOptions.IgnoreCase);
+        //            return mask.IsMatch(Path.GetFileName(fileName[i]));
+        //        }
+
+        //    }
+
+        //static public void CollectionAfterMask(string inputMasksMassS)
+
+         /// <summary>
+         /// Массив масок
+         /// </summary>
+         /// <param name="inputstring"></param>
+         /// <returns></returns>
+         public static string[] OuputMasksMassive(string inputstring)
+        {
+            if (inputstring != "")
+            {
+                string[] exts = inputstring.Split('|', ',', ';', ' ');
+                int counter = 0;
+                for (int index = 0; index < exts.Length; index++)
+                {
+                    string ext = exts[index];
+                    if (VyvodPatterna().IsMatch(ext))
+                    {
+                        counter++;
+                    }
+
+                }
+                var resultmassive = new string[exts.Length - counter];
+                counter = 0;
+                for (int index = 0; index < exts.Length; index++)
+                {
+                    //string ext = exts[index];
+                    if (exts[index] != "")
+                    {
+                        resultmassive[counter] = exts[index];
+                        counter++;
+                    }
+
+                }
+                //Console.WriteLine(counter);
+                return resultmassive;
+            }
+            else
+            {
+                return null;
+            }
+           
+        }
+
+         /// <summary>
+         /// Паттерн, убирающий пробелы
+         /// </summary>
+         /// <returns></returns>
+         public static Regex VyvodPatterna()
+            {
+                string pattern = @"^\s*$";
+                var newReg = new Regex(pattern);
+                return newReg;
+            }
+       
+
+        
+        /// <summary>
+        /// Вывод коллекции после применения маски
+        /// </summary>
+        /// <param name="inputMasksMassS"></param>
+        /// <param name="inputCollection"></param>
+        /// <returns></returns>
+        static public List<DirectoryObjEntry> CollectionAfterMask(string inputMasksMassS, List<DirectoryObjEntry> inputCollection )
+         {
+             if (inputMasksMassS != null)
+             {
+            string pattern = string.Empty;
+            foreach (string ext in OuputMasksMassive(inputMasksMassS))
+                {
+                    if ((ext.IndexOf(".") > -1) || (ext.IndexOf("?") > -1) || ((ext.IndexOf("*") > -1)))
+                    {
+                        pattern += @"^"; //признак начала строки
+                        foreach (char symbol in ext)
+                            switch (symbol)
+                            {
+                                case '.':
+                                    pattern += @"\.";
+                                    break;
+                                case '?':
+                                    pattern += @".";
+                                    break;
+                                case '*':
+                                    pattern += @".*";
+                                    break;
+                                default:
+                                    pattern += symbol;
+                                    break;
+
+                                    // default: pattern += @".*(" + symbol + @").*"; break;
+                                    //^.*(sdg).*$
+                            }
+                        pattern += @"$|"; //признак окончания строки
+                    }
+                    else
+                    {
+                        pattern += @"^.*(" + ext + @").*$|";
+                        // ^.*(sdg).*$
+                    }
+                    Console.WriteLine(pattern);
+                }
+                if (pattern.Length == 0)
+                {
+                    Console.WriteLine("Размер паттерна 0 ");
+                    return inputCollection;
+
+                }
+
+                pattern = pattern.Remove(pattern.Length - 1);
+                var mask = new Regex(pattern, RegexOptions.IgnoreCase);
+
+                for (int index = 0; index < inputCollection.Count; index++)
+                {
+                    var myClass = inputCollection[index];
+                    Console.WriteLine(" " + " " + myClass.FullPath + " " + myClass.ObjType);
+                }
+                int limit = inputCollection.Count;
+                var massivObjName = new string[limit];
+                for (int index = 0; index < limit; index++)
+                {
+                    var myClass = inputCollection[index];
+                    massivObjName[index] = myClass.FullPath;
+                    Console.WriteLine(massivObjName[index]);
+                }
+
+
+                for (int index = limit - 1; index >= 0; index--)
+                {
+                    //var myClass = inputCollection[index];
+                    if (mask.IsMatch(massivObjName[index]))
+                    {
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Удаляем едемент с индексом " + (index + 1));
+                        inputCollection.RemoveAt(index);
+                    }
+                    //Console.WriteLine(myClass.ID + " " + " " + myClass.ObjName + " " + myClass.ObjType);
+                }
+                //foreach (var myClass in inputCollection)
+                //Console.WriteLine(myClass.ID + " " + " " + myClass.ObjName + " " + myClass.ObjType);
+                return inputCollection;
+            }
+             else return inputCollection;
+        }
+
         }
     }
 
@@ -139,15 +349,11 @@ namespace Qorpent.Mvc.Actions
         /// </summary>
         protected override object MainProcess()
         {
-            //if (ShowDirs)
-            //{
-                //return MetodsCollect.AddListFilesAndDirs(FileMask, ShowDirs, ShowFiles);
-            //}
+            
 
-            return MetodsCollect.AddListFilesAndDirs(FileMask, ShowDirs, ShowFiles);
+            return MetodsCollect.CollectionAfterMask(FileMask, MetodsCollect.AddListFilesAndDirs(ShowDirs,ShowFiles));
         }
 
       
 
     }
-}
