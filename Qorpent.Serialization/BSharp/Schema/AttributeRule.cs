@@ -7,6 +7,18 @@ namespace Qorpent.BSharp.Schema {
 	/// </summary>
 	public class AttributeRule:RuleBase {
 		/// <summary>
+		/// Правило атрибута
+		/// </summary>
+		public  AttributeRule(){}
+		/// <summary>
+		/// Создать из атрибута
+		/// </summary>
+		/// <param name="attr"></param>
+		public AttributeRule(XAttribute attr) {
+			
+		}
+
+		/// <summary>
 		/// Получить клон правила для атрибута
 		/// </summary>
 		/// <returns></returns>
@@ -22,15 +34,19 @@ namespace Qorpent.BSharp.Schema {
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Перекрывает настройки целевого правила для атрибута
+		/// </summary>
+		/// <param name="target"></param>
 		public void Override(AttributeRule target) {
-			if (RuleType.None != this.Type) {
-				target.Type = this.Type;
+			if (RuleType.None != Type) {
+				target.Type = Type;
 			}
-			if (RuleActionType.None != this.Action) {
-				target.Action = this.Action;
+			if (RuleActionType.None != Action) {
+				target.Action = Action;
 			}
 			if (!string.IsNullOrWhiteSpace(Value)) {
-				target.Value = this.Value;
+				target.Value = Value;
 			}
 		}
 	}

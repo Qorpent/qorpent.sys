@@ -48,7 +48,7 @@ namespace Qorpent.BSharp.Schema {
 		/// </summary>
 		/// <param name="targetRule"></param>
 		/// <returns></returns>
-		public ElementRule Override(ElementRule targetRule) {
+		public void Override(ElementRule targetRule) {
 			if (RuleType.None != Type) {
 				targetRule.Type = Type;
 			}
@@ -82,6 +82,8 @@ namespace Qorpent.BSharp.Schema {
 					a.Override(target);
 				}
 			}
+
+
 		}
 
 
