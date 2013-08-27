@@ -19,6 +19,7 @@
     <Compile Include="BSharp\Builder\BSharpBuilderTargetType.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderTaskBase.cs" />
     <Compile Include="BSharp\Builder\BSharpProject.cs" />
+    <Compile Include="BSharp\Builder\BSharpProjectSerializer.cs" />
     <Compile Include="BSharp\Builder\IBSharpBuilder.cs" />
     <Compile Include="BSharp\Builder\IBSharpBuilderTask.cs" />
     <Compile Include="BSharp\Builder\IBSharpProject.cs" />
