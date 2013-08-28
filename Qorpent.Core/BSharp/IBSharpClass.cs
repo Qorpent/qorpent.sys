@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Config;
+using Qorpent.Serialization;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -95,6 +96,12 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <value></value>
 		bool IsOrphaned { get; }
+
+		/// <summary>
+		/// Прототип класса
+		/// </summary>
+		[Serialize]
+		string Prototype { get; }
 
 		/// <summary>
 		/// Возвращает true при наличии флага

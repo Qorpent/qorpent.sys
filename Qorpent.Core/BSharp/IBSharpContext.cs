@@ -69,7 +69,7 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Строит индекс словарей
 		/// </summary>
-		void BuildDictionaryIndex();
+		void BuildLinkingIndex();
 
 		/// <summary>
 		/// Разрешает элементы в словаре
@@ -89,5 +89,13 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <returns></returns>
 		bool RequireLinking();
+
+		/// <summary>
+		/// Специальная индексация для модификатора all
+		/// </summary>
+		/// <param name="query"></param>
+		/// <param name="basens"></param>
+		/// <returns></returns>
+		IEnumerable<IBSharpClass> ResolveAll(string query, string basens);
 	}
 }

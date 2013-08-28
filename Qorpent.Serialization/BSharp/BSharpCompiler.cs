@@ -265,7 +265,7 @@ namespace Qorpent.BSharp {
 		/// <param name="context"></param>
 		/// <returns></returns>
 		protected virtual void LinkClasses(IEnumerable<XElement> sources, IBSharpContext context) {
-			context.BuildDictionaryIndex();
+			context.BuildLinkingIndex();
 			if (!context.RequireLinking()) return;
 			if (Debugger.IsAttached)
 			{

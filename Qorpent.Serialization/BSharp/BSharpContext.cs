@@ -22,6 +22,7 @@ namespace Qorpent.BSharp {
 		private const string IGNORED = "ignored";
 		private const string ERRORS = "errors";
 		private const string EXPORTS = "exports";
+		private const string PROTOTYPE_MAP = "prototypemap";
 
 		/// <summary>
 		///     Исходные сырые определения классов
@@ -96,6 +97,15 @@ namespace Qorpent.BSharp {
 			get { return Get<List<BSharpError>>(ERRORS); }
 			set { Set(ERRORS, value); }
 		}
+
+		/// <summary>
+		/// Реестр перезагрузок классов
+		/// </summary>
+		public IDictionary<string,IBSharpClass[]> PrototypeMap
+		{
+			get { return Get<IDictionary<string, IBSharpClass[]>>(PROTOTYPE_MAP); }
+			set { Set(PROTOTYPE_MAP, value); }
+		}
         
 	    private IDictionary<string, string> _resolveDictCache = new Dictionary<string, string>();
 
@@ -111,32 +121,58 @@ namespace Qorpent.BSharp {
 	    /// <summary>
 	    /// Строит индекс словарей
 	    /// </summary>
-	    public void BuildDictionaryIndex() {
-			if (Working.Any(_ => _.Is(BSharpClassAttributes.RequireDictionaryRegistration)))
-			{
-				Dictionaries = Dictionaries ?? new Dictionary<string, IList<ExportRecord>>();
-				foreach (var cls in Working.Where(_ => _.Is(BSharpClassAttributes.RequireDictionaryRegistration)))
-				{
-					var exports = cls.Compiled.Elements(BSharpSyntax.ClassExportDefinition).ToArray();
-					exports.Remove();
-					foreach (var e in exports)
-					{
-						var code = e.GetCode();
-						if (!Dictionaries.ContainsKey(code))
-						{
-							Dictionaries[code] = new List<ExportRecord>();
-						}
-						Dictionaries[code].Add(new ExportRecord(cls, e));
+	    public void BuildLinkingIndex() {
+		    PrototypeMap = Working.Where(_ => !string.IsNullOrWhiteSpace(_.Prototype))
+		                          .GroupBy(_ => _.Prototype).ToDictionary(_ => _.Key, _ => _.ToArray());
+			if (Working.Any(_ => _.Is(BSharpClassAttributes.RequireDictionaryRegistration))) {
+				BuildDictionaryIndex();
+			}
+	    }
+
+		/// <summary>
+		/// Специальная индексация для модификатора all
+		/// </summary>
+		/// <param name="query"></param>
+		/// <param name="ns"></param>
+		/// <returns></returns>
+		public IEnumerable<IBSharpClass> ResolveAll(string query, string ns) {
+			if (string.IsNullOrWhiteSpace(query)) {
+				return Working;
+			}
+			if (query.EndsWith(".*")) {
+				return Working.Where(_ => _.Namespace.StartsWith(query.Substring(0, query.Length - 2)));
+			}
+			if (PrototypeMap.ContainsKey(query)) {
+				return PrototypeMap[query];
+			}
+			if (Dictionaries.ContainsKey(query)) {
+				return Dictionaries[query].Select(_ => _.cls);
+			}
+			
+
+			var basetype = Get(query, ns);
+			if (null != basetype) {
+				return Working.Where(_ => _.AllImports.Contains( basetype));
+			}
+			return new IBSharpClass[] {};
+		}
+
+		private void BuildDictionaryIndex() {
+			Dictionaries = Dictionaries ?? new Dictionary<string, IList<ExportRecord>>();
+			foreach (var cls in Working.Where(_ => _.Is(BSharpClassAttributes.RequireDictionaryRegistration))) {
+				var exports = cls.Compiled.Elements(BSharpSyntax.ClassExportDefinition).ToArray();
+				exports.Remove();
+				foreach (var e in exports) {
+					var code = e.GetCode();
+					if (!Dictionaries.ContainsKey(code)) {
+						Dictionaries[code] = new List<ExportRecord>();
 					}
+					Dictionaries[code].Add(new ExportRecord(cls, e));
 				}
 			}
+		}
 
-	            
-
-	 
-	    }
-       
-        /// <summary>
+		/// <summary>
         /// Разрешает элементы в словаре
         /// </summary>
         /// <returns></returns>
@@ -162,7 +198,7 @@ namespace Qorpent.BSharp {
         /// Разрешает словари
         /// </summary>
         public void ResolveDictionaries() {
-            BuildDictionaryIndex();
+            BuildLinkingIndex();
         }
 		/// <summary>
 		/// 

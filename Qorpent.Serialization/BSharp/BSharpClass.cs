@@ -103,7 +103,15 @@ namespace Qorpent.BSharp {
 				return Namespace + "." + Name;
 			}
 		}
-
+		/// <summary>
+		/// Прототип класса
+		/// </summary>
+		[Serialize]
+		public string Prototype {
+			get {
+				return Compiled.Attr(BSharpSyntax.ClassPrototypeAttribute);
+			}
+		}
 		
 
 		/// <summary>

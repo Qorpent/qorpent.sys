@@ -97,7 +97,27 @@ namespace Qorpent.BSharp {
 
 		private void ResolveAdvancedIncludes() {
 			if (!_cls.Is(BSharpClassAttributes.RequireAdvancedIncludes)) return;
+			var includes =
+				_cls.Compiled.Descendants(BSharpSyntax.IncludeBlock)
+				    .Where(_ => null != _.Attribute(BSharpSyntax.IncludeAllModifier))
+					.ToArray();
+			foreach (var i in includes) {
+				var query = i.GetName();
+				if (query == BSharpSyntax.IncludeBodyModifier || query == BSharpSyntax.IncludeNoChildModifier) {
+					query = "";
+				}
+				var sources = _context.ResolveAll(query, _cls.Namespace).ToArray();
+				if (0 == sources.Length) {
+					i.Remove();
+					continue;
+				}
+				ProcessAdvancedInclude(_cls, i, sources);
+			}
 
+		}
+
+		private void ProcessAdvancedInclude(IBSharpClass cls, XElement e, IBSharpClass[] sources) {
+			throw new System.NotImplementedException();
 		}
 
 		private void ResolveDictionaries() {
@@ -250,7 +270,7 @@ namespace Qorpent.BSharp {
 			var needReInterpolate = false;
 			while ((includes = _cls.Compiled.Descendants(BSharpSyntax.IncludeBlock).Where(_=>_.GetCode()!=BSharpSyntax.IncludeAllModifier).ToArray()).Length != 0) {
 				foreach (var i in includes) {
-					needReInterpolate = ProcessInclude(i, needReInterpolate);
+					needReInterpolate = ProcessSimpleInclude(i, needReInterpolate);
 				}				
 			}
 			if (needReInterpolate) {
@@ -258,7 +278,7 @@ namespace Qorpent.BSharp {
 			}
 		}
 
-		private bool ProcessInclude(XElement i, bool needReInterpolate) {
+		private bool ProcessSimpleInclude(XElement i, bool needReInterpolate) {
 			var code = i.GetCode();
 			if (string.IsNullOrWhiteSpace(code)) {
 				_context.RegisterError(BSharpErrors.FakeInclude(_cls,i));
@@ -278,7 +298,7 @@ namespace Qorpent.BSharp {
 				Build(BuildPhase.Compile,_compiler, includecls, _context);
 				var includeelement = new XElement(includecls.Compiled);
 				var usebody = null != i.Attribute(BSharpSyntax.IncludeBodyModifier) || i.GetName() == BSharpSyntax.IncludeBodyModifier;
-
+				var nochild = null != i.Attribute(BSharpSyntax.IncludeNoChildModifier) || i.GetName() == BSharpSyntax.IncludeNoChildModifier;
 				needReInterpolate = needReInterpolate || includeelement.HasAttributes(contains: BSharpSyntax.IncludeInterpolationAncor+"{", skipself: usebody);
 
 				if (usebody) {
@@ -293,12 +313,18 @@ namespace Qorpent.BSharp {
 					}
 					StoreParentParameters(includeelement,i);
 					foreach (var e in elements) {
+						if (nochild) {
+							e.Elements().Remove();
+						}
 						StoreIncludeParameters(i, e);
 					}
 					i.ReplaceWith(elements);
 				}
 				else {
-					StoreIncludeParameters(i, includeelement);
+					if (nochild) {
+						includeelement.Elements().Remove();
+					}
+					StoreIncludeParameters(i,includeelement);
 					includeelement.Name = includeelement.Attr(BSharpSyntax.ClassFullNameAttribute);
 					includeelement.Attribute(BSharpSyntax.ClassFullNameAttribute).Remove();
 					includeelement.Attribute(BSharpSyntax.ClassNameAttribute).Remove();
