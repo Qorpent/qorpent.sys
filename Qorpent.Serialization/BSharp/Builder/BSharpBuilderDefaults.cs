@@ -50,7 +50,7 @@ namespace Qorpent.BSharp.Builder {
         /// <summary>
         ///     Имя классета внутри документа
         /// </summary>
-        public const string BSharpClassName = "bsharpclass";
+        public const string BSharpClassContainerName = "bsharpclass";
         /// <summary>
         ///     Имя контейнера для классетов внутри документа
         /// </summary>
