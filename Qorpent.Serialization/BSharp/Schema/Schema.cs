@@ -11,6 +11,10 @@ namespace Qorpent.BSharp.Schema
 	public class Schema
 	{
 		/// <summary>
+		/// Запросы схемы на выполнение
+		/// </summary>
+		public ClassQuery[] Queries { get; set; }
+		/// <summary>
 		/// Общая политика поведения по элементам
 		/// </summary>
 		public ElementPolicy ElementPolicy { get; set; }

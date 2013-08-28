@@ -30,6 +30,7 @@
     <Compile Include="BSharp\Matcher\ConditionType.cs" />
     <Compile Include="BSharp\Matcher\SingleCondition.cs" />
     <Compile Include="BSharp\Schema\AttributeRule.cs" />
+    <Compile Include="BSharp\Schema\ClassQuery.cs" />
     <Compile Include="BSharp\Schema\ElementPolicy.cs" />
     <Compile Include="BSharp\Schema\ElementRule.cs" />
     <Compile Include="BSharp\Schema\IRule.cs" />

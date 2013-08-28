@@ -75,5 +75,15 @@ namespace Qorpent.BSharp {
 		/// Необходимость регистрации словаря
 		/// </summary>
 		RequireDictionaryRegistration = 1<<17,
+
+		/// <summary>
+		/// Библиотечный, не изменяемый класс
+		/// </summary>
+		Library  =1 << 18,
+
+		/// <summary>
+		/// Признак класса - схемы
+		/// </summary>
+		Shema = 1<<19
 	}
 }

@@ -123,7 +123,7 @@ namespace Qorpent.BSharp {
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns) {
 			foreach (XElement e in src.Elements()) {
 				var _ns = "";
-				if (e.Name.LocalName == "namespace") {
+				if (e.Name.LocalName == BSharpSyntax.Namespace) {
                     var ifa = e.Attr("if");
                     if (!string.IsNullOrWhiteSpace(ifa))
                     {

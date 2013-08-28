@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -104,25 +102,29 @@ namespace Qorpent.BSharp {
 
 		private void ResolveDictionaries() {
 			if (!_cls.Is(BSharpClassAttributes.RequireDictionaryResolution)) return;
-			foreach (var a in _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes()))
-			{
-				if (a.Value.StartsWith("?"))
+			foreach (var a in _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes())) {
+				var val = a.Value;
+				if (string.IsNullOrWhiteSpace(val)||val.Length<2) continue;
+				if (val[0]==BSharpSyntax.DictionaryReferencePrefix)
 				{
-					var val = a.Value;
 					bool valueonly = false;
 					bool canbeignored = false;
 					val = val.Substring(1);
-					if (val.StartsWith("?"))
+					if (val[0] == BSharpSyntax.DictionaryReferenceValueOnlyModifier)
 					{
 						valueonly = true;
 						val = val.Substring(1);
 					}
-					if (val.StartsWith("~"))
+					if (val.Length == 0) {
+						continue;
+					}
+					if (val[0]==BSharpSyntax.DictionaryReferenceOptionalModifier)
 					{
 						canbeignored = true;
 						val = val.Substring(1);
 					}
-					var fstdot = val.IndexOf('.');
+					if (val.Length == 0) continue;
+					var fstdot = val.IndexOf(BSharpSyntax.DictionaryCodeElementDelimiter);
 					var code = val.Substring(0, fstdot);
 					var element = val.Substring(fstdot + 1);
 
@@ -197,16 +199,19 @@ namespace Qorpent.BSharp {
 		private void CheckoutRequireLinkingRequirements() {
 			var attrs = _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes());
 			foreach (var a in attrs) {
-				if (a.Value.StartsWith("^")) {
+				var val = a.Value;
+				if (string.IsNullOrWhiteSpace(val) || val.Length < 2) continue;
+				if (val[0]==BSharpSyntax.ClassReferencePrefix) {
 					_cls.Set(BSharpClassAttributes.RequireClassResolution);
-				}else if (a.Value.StartsWith("?")) {
+				}else if (val[0]==BSharpSyntax.DictionaryReferencePrefix) {
 					_cls.Set(BSharpClassAttributes.RequireDictionaryResolution);
 				}
 			}
-			if (_cls.Compiled.Elements("export").Any()) {
+			if (_cls.Compiled.Elements(BSharpSyntax.ClassExportDefinition).Any()) {
 				_cls.Set(BSharpClassAttributes.RequireDictionaryRegistration);
 			}
-			if (_cls.Compiled.Descendants("include").Any()) {
+			if (_cls.Compiled.Descendants(BSharpSyntax.IncludeBlock).Any())
+			{
 				_cls.Set(BSharpClassAttributes.RequireAdvancedIncludes);
 			}
 		}
@@ -243,18 +248,18 @@ namespace Qorpent.BSharp {
 		private void ProcessSimpleIncludes() {
 			XElement[] includes;
 			var needReInterpolate = false;
-			while ((includes = _cls.Compiled.Descendants("include").Where(_=>_.Attr("code")!="all").ToArray()).Length != 0) {
+			while ((includes = _cls.Compiled.Descendants(BSharpSyntax.IncludeBlock).Where(_=>_.GetCode()!=BSharpSyntax.IncludeAllModifier).ToArray()).Length != 0) {
 				foreach (var i in includes) {
 					needReInterpolate = ProcessInclude(i, needReInterpolate);
 				}				
 			}
 			if (needReInterpolate) {
-				InterpolateElements('%');
+				InterpolateElements(BSharpSyntax.IncludeInterpolationAncor);
 			}
 		}
 
 		private bool ProcessInclude(XElement i, bool needReInterpolate) {
-			var code = i.Attr("code");
+			var code = i.GetCode();
 			if (string.IsNullOrWhiteSpace(code)) {
 				_context.RegisterError(BSharpErrors.FakeInclude(_cls,i));
 				i.Remove();
@@ -272,13 +277,13 @@ namespace Qorpent.BSharp {
 			else {
 				Build(BuildPhase.Compile,_compiler, includecls, _context);
 				var includeelement = new XElement(includecls.Compiled);
-				var usebody = null!=i.Attribute("body")||i.Attr("name")=="body";
+				var usebody = null != i.Attribute(BSharpSyntax.IncludeBodyModifier) || i.GetName() == BSharpSyntax.IncludeBodyModifier;
 
-				needReInterpolate = needReInterpolate || includeelement.HasAttributes(contains: "%{", skipself: usebody);
+				needReInterpolate = needReInterpolate || includeelement.HasAttributes(contains: BSharpSyntax.IncludeInterpolationAncor+"{", skipself: usebody);
 
 				if (usebody) {
 					var elements = includeelement.Elements().ToArray();
-					var wheres = i.Elements("where").ToArray();
+					var wheres = i.Elements(BSharpSyntax.IncludeWhereClause).ToArray();
 					if (0 != wheres.Length) {
 						var matcher = new XmlTemplateMatcher(wheres);
 						elements = elements.Where(matcher.IsMatch).ToArray();
@@ -294,9 +299,9 @@ namespace Qorpent.BSharp {
 				}
 				else {
 					StoreIncludeParameters(i, includeelement);
-					includeelement.Name = includeelement.Attr("fullcode");
-					includeelement.Attribute("fullcode").Remove();
-					includeelement.Attribute("code").Remove();
+					includeelement.Name = includeelement.Attr(BSharpSyntax.ClassFullNameAttribute);
+					includeelement.Attribute(BSharpSyntax.ClassFullNameAttribute).Remove();
+					includeelement.Attribute(BSharpSyntax.ClassNameAttribute).Remove();
 					includeelement.Attribute("id").Remove();
 					i.ReplaceWith(includeelement);
 				}
@@ -308,7 +313,7 @@ namespace Qorpent.BSharp {
 			foreach (var a in src.Attributes()) {
 				if(a.Name.LocalName=="code") continue;
 				if (a.Name.LocalName == "name") continue;
-				if (a.Name.LocalName == "body") continue;
+				if (a.Name.LocalName == BSharpSyntax.IncludeBodyModifier) continue;
 				trg.SetAttributeValue(a.Name,a.Value);
 			}
 		}
@@ -330,7 +335,7 @@ namespace Qorpent.BSharp {
 		private void PerformMergingWithElements() {
 			foreach (var root in _cls.AllElements.Where(_ => _.Type == BSharpElementType.Define).ToArray()) {
 				var allroots = _cls.Compiled.Elements(root.Name).ToArray();
-				var groupedroots = allroots.GroupBy(_ => _.Attr("code"));
+				var groupedroots = allroots.GroupBy(_ => _.GetCode());
 				foreach(var doublers in groupedroots.Where(_=>_.Count()>1)) {
 					doublers.Skip(1).Remove();
 				}
@@ -340,7 +345,7 @@ namespace Qorpent.BSharp {
 					foreach (var g in groupedroots) {
 						var e = g.First();
 						//реверсировать надо для правильного порядка обхода
-						var candidates = e.ElementsBeforeSelf().Reverse().Where(_=>_.Attr("code")==g.Key).ToArray();
+						var candidates = e.ElementsBeforeSelf().Reverse().Where(_=>_.GetCode()==g.Key).ToArray();
 
 						foreach (var o in candidates) {
 							var over = alloverrides.FirstOrDefault(_ => _.Name == o.Name.LocalName);
@@ -435,11 +440,11 @@ namespace Qorpent.BSharp {
 			}
 			var allroots = _cls.AllElements.Where(_ => _.Type == BSharpElementType.Define).Select(_ => _.Name).ToArray();
 			foreach (var root in allroots) {
-				var defoverride = new BSharpElement {Name = "__TILD__" + root, TargetName = root, Type = BSharpElementType.Override};
+				var defoverride = new BSharpElement { Name = BSharpSyntax.ElementOverridePrefix + root, TargetName = root, Type = BSharpElementType.Override };
 				if (!_cls.AllElements.Contains(defoverride)) {
 					_cls.AllElements.Add(defoverride);
 				}
-				var defext = new BSharpElement { Name = "__PLUS__" + root, TargetName = root, Type = BSharpElementType.Extension };
+				var defext = new BSharpElement { Name = BSharpSyntax.ElementExtensionPrefix + root, TargetName = root, Type = BSharpElementType.Extension };
 				if (!_cls.AllElements.Contains(defext))
 				{
 					_cls.AllElements.Add(defext);
@@ -469,7 +474,7 @@ namespace Qorpent.BSharp {
 		}
 		
 		private bool IsMatch(XElement arg) {
-			var cond = arg.Attr("if");
+			var cond = arg.Attr(BSharpSyntax.ConditionalAttribute);
 			if (string.IsNullOrWhiteSpace(cond)) {
 				return true;
 			}
@@ -485,19 +490,17 @@ namespace Qorpent.BSharp {
 			return new LogicalExpressionEvaluator().Eval(cond, src);
 		}
 
-		private void CleanupPrivateMembers()
-		{
-			var name = _cls.Compiled.Attr("name");
-			if (name == "abstract" || name == "static")
+		private void CleanupPrivateMembers() {
+			var name = _cls.Compiled.GetName();
+			if (name == BSharpSyntax.ClassAbstractModifier || name == BSharpSyntax.ClassStaticModifier)
 			{
 				_cls.Compiled.Attribute("name").Remove();
 			}
-			_cls.Compiled.Attributes("abstract").Remove();
-			_cls.Compiled.Attributes("static").Remove();
-			_cls.Compiled.Elements("import").Remove();
-			_cls.Compiled.Elements("element").Remove();
-			_cls.Compiled.Descendants("embed").Remove();
-			_cls.Compiled.Descendants("include").Remove();
+			_cls.Compiled.Attributes(BSharpSyntax.ClassAbstractModifier).Remove();
+			_cls.Compiled.Attributes(BSharpSyntax.ClassStaticModifier).Remove();
+			_cls.Compiled.Elements(BSharpSyntax.ClassImportDefinition).Remove();
+			_cls.Compiled.Elements(BSharpSyntax.ClassElementDefinition).Remove();
+			_cls.Compiled.Descendants(BSharpSyntax.IncludeBlock).Remove();
 
 			foreach (var e in _cls.Compiled.DescendantsAndSelf())
 			{
@@ -507,10 +510,11 @@ namespace Qorpent.BSharp {
 					}
 
 				}
-				if (null != e.Attribute("if")) {
-					e.Attribute("if").Remove();
+				if (null != e.Attribute(BSharpSyntax.ConditionalAttribute))
+				{
+					e.Attribute(BSharpSyntax.ConditionalAttribute).Remove();
 				}
-				e.Attributes().Where(_ => _.Name.LocalName.StartsWith("_") || string.IsNullOrEmpty(_.Value)).Remove();
+				e.Attributes().Where(_ => _.Name.LocalName[0]==BSharpSyntax.PrivateAttributePrefix || string.IsNullOrEmpty(_.Value)).Remove();
 			}
 
 			foreach (var m in _cls.AllElements.Where(_ => _.Type != BSharpElementType.Define).Select(_ => _.Name).Distinct()) {
@@ -522,11 +526,11 @@ namespace Qorpent.BSharp {
 		private void InitializeBuildIndexes()
 		{
 			_cls.Compiled = new XElement(_cls.Source);
-			_cls.Compiled.Elements("import").Remove();
-			_cls.Compiled.Elements("element").Remove();
+			_cls.Compiled.Elements(BSharpSyntax.ClassImportDefinition).Remove();
+			_cls.Compiled.Elements(BSharpSyntax.ClassElementDefinition).Remove();
 			_cls.ParamSourceIndex = BuildParametersConfig();
 			_cls.ParamIndex = new ConfigBase();
-			_cls.Compiled.SetAttributeValue("fullcode",_cls.FullName);
+			_cls.Compiled.SetAttributeValue(BSharpSyntax.ClassFullNameAttribute, _cls.FullName);
 			foreach (var p in _cls.ParamSourceIndex)
 			{
 				_cls.ParamIndex.Set(p.Key, p.Value);
