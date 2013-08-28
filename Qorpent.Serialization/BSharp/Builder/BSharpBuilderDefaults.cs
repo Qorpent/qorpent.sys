@@ -34,7 +34,7 @@ namespace Qorpent.BSharp.Builder {
 		/// <summary>
 		/// 
 		/// </summary>
-		public const string DefaultOutputExtension = ".bs.xml";
+		public const string DefaultOutputExtension = "bs.xml";
         /// <summary>
         ///     Имя файла-лога с ошибками
         /// </summary>
@@ -50,7 +50,7 @@ namespace Qorpent.BSharp.Builder {
         /// <summary>
         ///     Имя классета внутри документа
         /// </summary>
-        public const string BSharpClassName = "bsharpclass";
+        public const string BSharpClassContainerName = "bsharpclass";
         /// <summary>
         ///     Имя контейнера для классетов внутри документа
         /// </summary>
@@ -63,6 +63,17 @@ namespace Qorpent.BSharp.Builder {
         ///     BSharp project
         /// </summary>
         public const string DefaultBSharpProjectExtension = "bsproj";
-
+        /// <summary>
+        ///     Имя контейнера для индекса классов
+        /// </summary>
+        public const string DefaultClassIndexContainerName = "bsharpclassindex";
+        /// <summary>
+        ///     Расширение для файлов индекса по молчанию
+        /// </summary>
+        public const string IndexFileExtension = "ibsclass";
+        /// <summary>
+        ///     Имя файла с индексом по умолчанию
+        /// </summary>
+        public const string IndexFileName = "index";
     }
 }
