@@ -29,7 +29,7 @@ class A a=1 b=2 c=3
 	test '${x}' a=3 b=4 c=5
 class B x=2
 	include A
-		for all a=0 c=0
+		for all -a -c
 ";
 			var result = Compile(code).Get("B");
 			var a = result.Compiled.Element("A");
