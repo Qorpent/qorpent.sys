@@ -26,10 +26,7 @@ namespace Qorpent.Mvc.Actions
         /// </summary>
         public string LocalPath { get; set; }
 
-        /// <summary>
-        /// полное имя папки
-        /// </summary>
-        public string FullPath { get; set; }
+       //// public string FullPath { get; set; }
 
         
 
@@ -53,7 +50,7 @@ namespace Qorpent.Mvc.Actions
         public static DirectoryInfo[] ListDir()
         {
             var di = new DirectoryInfo(EnvironmentInfo.RootDirectory);
-            return di.GetDirectories();
+            return di.GetDirectories("*.*",SearchOption.AllDirectories);
         }
 
         /// <summary>
@@ -63,7 +60,7 @@ namespace Qorpent.Mvc.Actions
         //public static string[] ListFile(string fMask)
             public static string[] ListFile()
         {
-          return  Directory.GetFiles(EnvironmentInfo.RootDirectory);
+            return Directory.GetFiles(EnvironmentInfo.RootDirectory,"*.*", SearchOption.AllDirectories);
         }
 
             /// <summary>
@@ -96,18 +93,18 @@ namespace Qorpent.Mvc.Actions
             {
                 for (int index = 0; index < ListDir().Count(); index++)
                 {
-                    listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1,*/ LocalPath = ListDir()[index].ToString(), FullPath = Path.GetFullPath(EnvironmentInfo.RootDirectory) + ListDir()[index].ToString(), ObjType = "Dir" });
+                    //listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1,*/ LocalPath = ListDir()[index].ToString(), FullPath = Path.GetFullPath(EnvironmentInfo.RootDirectory) + ListDir()[index].ToString(), ObjType = "Dir" });
+                    listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1,*/ LocalPath = ListDir()[index].ToString(),  ObjType = "Dir" });
                 }
             }
-
             if (sFile)
             {
                 for (var index = 0; index < ListFile().Count(); index++)
                 {
-                    listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1 + ListDir().Count(), */LocalPath = ListFileLocalName()[index], FullPath = ListFile()[index], ObjType = "File" });
+                    //listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1 + ListDir().Count(), */LocalPath = ListFileLocalName()[index], FullPath = ListFile()[index], ObjType = "File" });
+                    listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1 + ListDir().Count(), */LocalPath = ListFileLocalName()[index], ObjType = "File" });
                 }
             }
-            
             return listFilesCollection;
         }
 
@@ -189,7 +186,6 @@ namespace Qorpent.Mvc.Actions
                     {
                         counter++;
                     }
-
                 }
                 var resultmassive = new string[exts.Length - counter];
                 counter = 0;
@@ -233,89 +229,81 @@ namespace Qorpent.Mvc.Actions
         /// <param name="inputCollection"></param>
         /// <returns></returns>
         static public List<DirectoryObjEntry> CollectionAfterMask(string inputMasksMassS, List<DirectoryObjEntry> inputCollection )
-         {
-             if (inputMasksMassS != null)
-             {
-            string pattern = string.Empty;
-            foreach (string ext in OuputMasksMassive(inputMasksMassS))
-                {
-                    if ((ext.IndexOf(".") > -1) || (ext.IndexOf("?") > -1) || ((ext.IndexOf("*") > -1)))
                     {
-                        pattern += @"^"; //признак начала строки
-                        foreach (char symbol in ext)
-                            switch (symbol)
+                        if (inputMasksMassS != null)
+                         {
+                        var pattern = new string[OuputMasksMassive(inputMasksMassS).Count()];
+                             for (int index = 0; index < OuputMasksMassive(inputMasksMassS).Length; index++)
+                             {
+                                 string ext = OuputMasksMassive(inputMasksMassS)[index];
+                                 if ((ext.IndexOf(".") > -1) || (ext.IndexOf("?") > -1) || ((ext.IndexOf("*") > -1)))
+                                 {
+                                     pattern[index] += @"^"; //признак начала строки
+                                     foreach (char symbol in ext)
+                                         switch (symbol)
+                                         {
+                                             case '.':
+                                                 pattern[index] += @"\.";
+                                                 break;
+                                             case '?':
+                                                 pattern[index] += @".";
+                                                 break;
+                                             case '*':
+                                                 pattern[index] += @".*";
+                                                 break;
+                                             default:
+                                                 pattern[index] += symbol;
+                                                 break;
+
+                                                 // default: pattern += @".*(" + symbol + @").*"; break;
+                                                 //^.*(sdg).*$
+                                         }
+                                     pattern[index] += @"$"; //признак окончания строки
+                                 }
+                                 else
+                                 {
+                                     pattern[index] += @"^.*(" + ext + @").*$";
+                                     // ^.*(sdg).*$
+                                 }
+                             }
+                             if (pattern.Length == 0)
                             {
-                                case '.':
-                                    pattern += @"\.";
-                                    break;
-                                case '?':
-                                    pattern += @".";
-                                    break;
-                                case '*':
-                                    pattern += @".*";
-                                    break;
-                                default:
-                                    pattern += symbol;
-                                    break;
-
-                                    // default: pattern += @".*(" + symbol + @").*"; break;
-                                    //^.*(sdg).*$
+                              return inputCollection;
                             }
-                        pattern += @"$|"; //признак окончания строки
+                           // pattern = pattern.Remove(pattern.Length - 1);
+                             var mask = new Regex[pattern.Length];
+                            int limit = inputCollection.Count;
+                            for (int index = 0; index < pattern.Length; index++)
+                            {
+                                //var s = pattern[index];
+                                mask[index] = new Regex(pattern[index], RegexOptions.IgnoreCase);
+                            }
+                            var massivObjName = new string[limit];
+                            for (int index = 0; index < limit; index++)
+                            {
+                                var myClass = inputCollection[index];
+                                massivObjName[index] = myClass.LocalPath;
+                            }
+                            for (int index = limit - 1; index >= 0; index--)
+                            {
+                                for (int internalindex = 0; internalindex < pattern.Length; internalindex++)
+                                {
+                                    if (mask[internalindex].IsMatch(massivObjName[index]))
+                                    {
+                                        //Console.WriteLine("Совпадение в элеменете " + (index + 1));
+                                    }
+                                    else
+                                    {
+                                        //Console.WriteLine("Удаляем едемент с индексом " + (index + 1));
+                                        inputCollection.RemoveAt(index);
+                                        break;
+                                    }
+                                }
+                             }
+                             return inputCollection;
+                        }
+                        return inputCollection;
                     }
-                    else
-                    {
-                        pattern += @"^.*(" + ext + @").*$|";
-                        // ^.*(sdg).*$
-                    }
-                    Console.WriteLine(pattern);
-                }
-                if (pattern.Length == 0)
-                {
-                    Console.WriteLine("Размер паттерна 0 ");
-                    return inputCollection;
-
-                }
-
-                pattern = pattern.Remove(pattern.Length - 1);
-                var mask = new Regex(pattern, RegexOptions.IgnoreCase);
-
-                for (int index = 0; index < inputCollection.Count; index++)
-                {
-                    var myClass = inputCollection[index];
-                    Console.WriteLine(" " + " " + myClass.FullPath + " " + myClass.ObjType);
-                }
-                int limit = inputCollection.Count;
-                var massivObjName = new string[limit];
-                for (int index = 0; index < limit; index++)
-                {
-                    var myClass = inputCollection[index];
-                    massivObjName[index] = myClass.FullPath;
-                    Console.WriteLine(massivObjName[index]);
-                }
-
-
-                for (int index = limit - 1; index >= 0; index--)
-                {
-                    //var myClass = inputCollection[index];
-                    if (mask.IsMatch(massivObjName[index]))
-                    {
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("Удаляем едемент с индексом " + (index + 1));
-                        inputCollection.RemoveAt(index);
-                    }
-                    //Console.WriteLine(myClass.ID + " " + " " + myClass.ObjName + " " + myClass.ObjType);
-                }
-                //foreach (var myClass in inputCollection)
-                //Console.WriteLine(myClass.ID + " " + " " + myClass.ObjName + " " + myClass.ObjType);
-                return inputCollection;
-            }
-             else return inputCollection;
-        }
-
         }
     }
 
