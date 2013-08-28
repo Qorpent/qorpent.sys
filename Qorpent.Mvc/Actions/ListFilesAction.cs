@@ -67,12 +67,12 @@ namespace Qorpent.Mvc.Actions
             /// Локальное имя файла
             /// </summary>
             /// <returns></returns>
-            public static string[] ListFileLocalName()
-            {
-                var localNameFile = new string[ListFile().Count()];
-                for (int index = 0; index < ListFile().Count(); index++)
+            public static string[] ListFileLocalName() {
+	            var files = ListFile();
+                var localNameFile = new string[files.Length];
+                for (int index = 0; index < files.Length; index++)
                 {
-                    localNameFile[index] = Path.GetFileName(ListFile()[index]);
+                    localNameFile[index] = Path.GetFileName(files[index]);
                 }
                 return localNameFile;
 
@@ -97,12 +97,12 @@ namespace Qorpent.Mvc.Actions
                     listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1,*/ LocalPath = ListDir()[index].ToString(),  ObjType = "Dir" });
                 }
             }
-            if (sFile)
-            {
+            if (sFile) {
+	            var localfiles = ListFileLocalName();
                 for (var index = 0; index < ListFile().Count(); index++)
                 {
                     //listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1 + ListDir().Count(), */LocalPath = ListFileLocalName()[index], FullPath = ListFile()[index], ObjType = "File" });
-                    listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1 + ListDir().Count(), */LocalPath = ListFileLocalName()[index], ObjType = "File" });
+                    listFilesCollection.Add(new DirectoryObjEntry() { /*ID = index + 1 + ListDir().Count(), */LocalPath = localfiles[index], ObjType = "File" });
                 }
             }
             return listFilesCollection;
