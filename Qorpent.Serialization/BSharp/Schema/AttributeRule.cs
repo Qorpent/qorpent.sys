@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace Qorpent.BSharp.Schema {
+
+
+
 	/// <summary>
 	/// Правило для атрибута
 	/// </summary>
@@ -18,21 +23,25 @@ namespace Qorpent.BSharp.Schema {
 			var type = RuleType.Allow;
 			var action = RuleActionType.None;
 			var value = val;
-			if (code.StartsWith("__PLUS__")) {
-				code = code.Replace("__PLUS__", "");
+			if (code.StartsWith("+")) {
+				code = code.Replace("+", "");
 				if (!string.IsNullOrWhiteSpace(value) && value != "1") {
 					action = RuleActionType.Rename;
 				}
-			}else if (code.StartsWith("__MINUS__")) {
-				code = code.Replace("__PLUS__", "");
+			}else if (code.StartsWith("-")) {
+				code = code.Replace("-", "");
+				action =RuleActionType.Remove;
+			}else if (code.StartsWith("!")) {
+				code = code.Replace("!", "");
 				type = RuleType.Deny;
-			}else if (code.StartsWith("__EXC__")) {
-				code = code.Replace("__EXC__", "");
+			}
+			else if (code.StartsWith("@")) {
+				code = code.Replace("@", "");
 				type = RuleType.Require;
 			}
-			else if (code.StartsWith("__TILDA__"))
+			else if (code.StartsWith("~"))
 			{
-				code = code.Replace("__TILDA__", "");
+				code = code.Replace("~", "");
 				type = RuleType.Obsolete;
 			}
 			Code = code;
@@ -53,7 +62,13 @@ namespace Qorpent.BSharp.Schema {
 		/// Применить правило к элементу
 		/// </summary>
 		/// <param name="e"></param>
-		public override SchemaNote Apply(XElement e) {
+		public override IEnumerable<SchemaNote> Apply(XElement e) {
+			var r = InternalApply(e);
+			if (null == r) return new SchemaNote[] {};
+			return r.ToArray();
+		}
+
+		private IEnumerable<SchemaNote> InternalApply(XElement e) {
 			if (Type == RuleType.Allow) {
 				return ProcessAllow(e);
 			}
@@ -69,32 +84,32 @@ namespace Qorpent.BSharp.Schema {
 			return null;
 		}
 
-		private SchemaNote ProcessObsolete(XElement e) {
+		private IEnumerable<SchemaNote> ProcessObsolete(XElement e) {
 			if (null != e.Attribute(Code)) {
-				return new SchemaNote {ErrorElement = e, Level = ErrorLevel.Warning, Rule = this};
+				return new[]{new SchemaNote {ErrorElement = e, Level = ErrorLevel.Warning, Rule = this}};
 			}
 			return null;
 		}
 
-		private SchemaNote ProcessRequire(XElement e) {
+		private IEnumerable<SchemaNote> ProcessRequire(XElement e) {
 			ProcessAllow(e);
 			if (null == e.Attribute(Code)) {
 				e.SetAttributeValue(Code, Value);
-				return new SchemaNote {ErrorElement = e, Level = ErrorLevel.Hint, Rule = this};
+				return new[]{new SchemaNote {ErrorElement = e, Level = ErrorLevel.Hint, Rule = this}};
 			}
 			return null;
 		}
 
-		private SchemaNote ProcessDeny(XElement e) {
+		private IEnumerable<SchemaNote> ProcessDeny(XElement e) {
 			var a = e.Attribute(Code);
 			if (null != a) {
 				a.Remove();
-				return new SchemaNote {ErrorElement = e, Level = ErrorLevel.Error, Rule = this};
+				return new[]{new SchemaNote {ErrorElement = e, Level = ErrorLevel.Error, Rule = this}};
 			}
 			return null;
 		}
 
-		private SchemaNote ProcessAllow(XElement e) {
+		private IEnumerable<SchemaNote> ProcessAllow(XElement e) {
 			if (Action == RuleActionType.Remove) {
 				var a = e.Attribute(Code);
 				if (null != a) {

@@ -2,12 +2,58 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Schema {
 	/// <summary>
 	/// Правило элемента
 	/// </summary>
 	public class ElementRule:RuleBase {
+		/// <summary>
+		/// 
+		/// </summary>
+		public ElementRule() {
+			
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="s"></param>
+		public ElementRule(XElement s) {
+			var code = s.GetCode();
+			var type = RuleType.Allow;
+			if (code.StartsWith("+")) {
+				this.ForseStrict = true;
+				code = code.Replace("+", "");
+			}else if (code.StartsWith("-")) {
+				type = RuleType.Deny;
+				code = code.Replace("-", "");
+			}
+			foreach (var a in s.Attributes()) {
+				if (a.Name.LocalName == "code") continue;
+				if (a.Name.LocalName == "name") {
+					AttributeRules.Add(new AttributeRule(a.Value, "1"));
+				}
+				else {
+					var acode = a.Name.LocalName;
+					acode =
+						acode.Replace("__PLUS__", "+")
+						     .Replace("__MINUS__", "-")
+						     .Replace("__AT__", "@")
+						     .Replace("__EXC__", "!")
+						     .Replace("__TILD__", "~");
+					AttributeRules.Add(new AttributeRule(acode, a.Value));
+				}
+			}
+
+			Code = code;
+			Type = type;
+
+		}
+		/// <summary>
+		/// Признак того, что данное правило форсирует ограниченный режим
+		/// </summary>
+		public bool ForseStrict { get; set; }
 
 		private List<AttributeRule> _attributeRules = new List<AttributeRule>();
 		/// <summary>
@@ -26,6 +72,8 @@ namespace Qorpent.BSharp.Schema {
 			get { return _elementRules; }
 		}
 		
+
+
 
 		/// <summary>
 		/// Клонирует элемент
@@ -91,8 +139,25 @@ namespace Qorpent.BSharp.Schema {
 		/// Применить правило к элементу
 		/// </summary>
 		/// <param name="e"></param>
-		public override SchemaNote Apply(XElement e) {
-			throw new NotImplementedException();
+		public override IEnumerable<SchemaNote> Apply(XElement e) {
+			return InternalApply(e).ToArray();
+		}
+
+		private IEnumerable<SchemaNote> InternalApply(XElement e) {
+			if (Type == RuleType.Deny) {
+				e.Remove();
+				yield break;
+			}
+			bool strict = AttributeRules.Any(_ => _.Type == RuleType.Allow);
+			if (strict) {
+				e.Attributes().Where(_ => !AttributeRules.Any(__ => __.Code == _.Name.LocalName)).Remove();
+			}
+			foreach (var a in AttributeRules) {
+				var asn = a.Apply(e);
+				if (null != asn) {
+					foreach (var asn_ in asn) yield return asn_;
+				}
+			}
 		}
 	}
 }

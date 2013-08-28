@@ -17,7 +17,7 @@ namespace Qorpent.Serialization.Tests.BSharp.Schema
 		public void CanRemoveAttributeWithAction() {
 			var rule = new AttributeRule {Action = RuleActionType.Remove, Code="a", Type = RuleType.Allow};
 			var e = XElement.Parse("<a a='1' b='2'/>");
-			var n = rule.Apply(e);
+			var n = rule.Apply(e).FirstOrDefault();
 			Assert.Null(n);
 			Assert.Null(e.Attribute("a"));
 			Assert.NotNull(e.Attribute("b"));
@@ -28,7 +28,7 @@ namespace Qorpent.Serialization.Tests.BSharp.Schema
 		{
 			var rule = new AttributeRule { Action = RuleActionType.None, Code = "a", Type = RuleType.Require };
 			var e = XElement.Parse("<a a='1' b='2'/>");
-			var n = rule.Apply(e);
+			var n = rule.Apply(e).FirstOrDefault();
 			Assert.Null(n);
 			Assert.NotNull(e.Attribute("a"));
 			Assert.AreEqual("1",e.Attr("a"));
@@ -41,7 +41,7 @@ namespace Qorpent.Serialization.Tests.BSharp.Schema
 		{
 			var rule = new AttributeRule { Action = RuleActionType.None, Code = "a", Type = RuleType.Obsolete };
 			var e = XElement.Parse("<a a='1' b='2'/>");
-			var n = rule.Apply(e);
+			var n = rule.Apply(e).FirstOrDefault();
 			Assert.NotNull(n);
 			Assert.AreEqual(ErrorLevel.Warning,n.Level);
 			Assert.NotNull(e.Attribute("a"));
@@ -53,7 +53,7 @@ namespace Qorpent.Serialization.Tests.BSharp.Schema
 		{
 			var rule = new AttributeRule { Action = RuleActionType.None, Code = "a", Type = RuleType.Require ,Value = "def"};
 			var e = XElement.Parse("<a  b='2'/>");
-			var n = rule.Apply(e);
+			var n = rule.Apply(e).FirstOrDefault();
 			Assert.NotNull(n);
 			Assert.AreEqual(ErrorLevel.Hint,n.Level);
 			Assert.NotNull(e.Attribute("a"));
@@ -66,7 +66,7 @@ namespace Qorpent.Serialization.Tests.BSharp.Schema
 		{
 			var rule = new AttributeRule { Action = RuleActionType.None, Code = "a", Type = RuleType.Deny };
 			var e = XElement.Parse("<a a='1' b='2'/>");
-			var n = rule.Apply(e);
+			var n = rule.Apply(e).FirstOrDefault();
 			Assert.NotNull(n);
 			Assert.AreEqual(ErrorLevel.Error,n.Level);
 			Assert.Null(e.Attribute("a"));

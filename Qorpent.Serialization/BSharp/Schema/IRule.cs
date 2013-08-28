@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace Qorpent.BSharp.Schema {
 	/// <summary>
@@ -25,6 +26,6 @@ namespace Qorpent.BSharp.Schema {
 		/// Применить правило к элементу
 		/// </summary>
 		/// <param name="e"></param>
-		SchemaNote Apply(XElement e);
+		IEnumerable<SchemaNote> Apply(XElement e);
 	}
 }
