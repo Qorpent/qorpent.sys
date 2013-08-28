@@ -109,65 +109,6 @@ namespace Qorpent.Mvc.Actions
         }
 
 
-        //  /// <summary>
-        ///// Проверка соответствия имени файла маске
-        ///// </summary>
-        ///// <param name="fileName">Имя проверяемого файла</param>
-        ///// <param name="inputMasksMassS">Маска файла</param>
-        ///// <param name="i"></param>
-        ///// <returns>true - файл удовлетворяет маске, иначе false</returns>
-        //static public bool CheckMask(string[] fileName, string inputMasksMassS, int i)
-        //{
-            
-        //    //Console.WriteLine(counter);
-        //    string pattern = string.Empty;
-        //    foreach (string ext in OuputMasksMassive(inputMasksMassS))
-        //        {
-        //            if ((ext.IndexOf(".") > -1) || (ext.IndexOf("?") > -1) || ((ext.IndexOf("*") > -1)))
-        //            {
-        //                pattern += @"^"; //признак начала строки
-        //                foreach (char symbol in ext)
-        //                    switch (symbol)
-        //                    {
-        //                        case '.':
-        //                            pattern += @"\.";
-        //                            break;
-        //                        case '?':
-        //                            pattern += @".";
-        //                            break;
-        //                        case '*':
-        //                            pattern += @".*";
-        //                            break;
-        //                        default:
-        //                            pattern += symbol;
-        //                            break;
-
-        //                            // default: pattern += @".*(" + symbol + @").*"; break;
-        //                            //^.*(sdg).*$
-        //                    }
-        //                pattern += @"$|"; //признак окончания строки
-        //            }
-        //            else
-        //            {
-        //                pattern += @"^.*(" + ext + @").*$|";
-        //               // ^.*(sdg).*$
-        //            }
-        //            //Console.WriteLine(pattern);
-        //       }
-        //    if (pattern.Length == 0)
-        //        {
-        //            return false;
-        //        }
-        //        {
-        //            pattern = pattern.Remove(pattern.Length - 1);
-        //            var mask = new Regex(pattern, RegexOptions.IgnoreCase);
-        //            return mask.IsMatch(Path.GetFileName(fileName[i]));
-        //        }
-
-        //    }
-
-        //static public void CollectionAfterMask(string inputMasksMassS)
-
          /// <summary>
          /// Массив масок
          /// </summary>
