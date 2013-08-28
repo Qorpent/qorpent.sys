@@ -124,9 +124,8 @@ namespace Qorpent.BSharp {
 	    public void BuildLinkingIndex() {
 		    PrototypeMap = Working.Where(_ => !string.IsNullOrWhiteSpace(_.Prototype))
 		                          .GroupBy(_ => _.Prototype).ToDictionary(_ => _.Key, _ => _.ToArray());
-			if (Working.Any(_ => _.Is(BSharpClassAttributes.RequireDictionaryRegistration))) {
-				BuildDictionaryIndex();
-			}
+			BuildDictionaryIndex();
+			
 	    }
 
 		/// <summary>

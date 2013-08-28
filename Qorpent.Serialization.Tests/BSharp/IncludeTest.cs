@@ -29,7 +29,7 @@ class A a=1 b=2 c=3
 	test '${x}' a=3 b=4 c=5
 class B x=2
 	include A
-		attributes all a=0 c=0
+		for all a=0 c=0
 ";
 			var result = Compile(code).Get("B");
 			var a = result.Compiled.Element("A");
@@ -51,7 +51,7 @@ class A a=1 b=2 c=3
 	test '${x}' a=3 b=4 c=5
 class B x=2
 	include A
-		attributes root a=0 c=0
+		for root a=0 c=0
 ";
 			var result = Compile(code).Get("B");
 			var a = result.Compiled.Element("A");
@@ -73,7 +73,7 @@ class A a=1 b=2 c=3
 		test2 2 a=3 b=4 c=5
 class B x=2
 	include A body
-		attributes all a=0 c=0
+		for all a=0 c=0
 ";
 			var result = Compile(code).Get("B");
 			var a = result.Compiled.Element("test");
@@ -96,7 +96,7 @@ class A a=1 b=2 c=3
 		test2 2 a=3 b=4 c=5
 class B x=2
 	include A body
-		attributes root a=0 c=0
+		for root a=0 c=0
 ";
 			var result = Compile(code).Get("B");
 			var a = result.Compiled.Element("test");

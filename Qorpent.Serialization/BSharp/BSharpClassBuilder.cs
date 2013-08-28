@@ -97,27 +97,44 @@ namespace Qorpent.BSharp {
 
 		private void ResolveAdvancedIncludes() {
 			if (!_cls.Is(BSharpClassAttributes.RequireAdvancedIncludes)) return;
-			var includes =
-				_cls.Compiled.Descendants(BSharpSyntax.IncludeBlock)
-				    .Where(_ => null != _.Attribute(BSharpSyntax.IncludeAllModifier))
-					.ToArray();
-			foreach (var i in includes) {
-				var query = i.GetName();
-				if (query == BSharpSyntax.IncludeBodyModifier || query == BSharpSyntax.IncludeNoChildModifier) {
-					query = "";
+			XElement[] includes = null;
+			while (0!=(includes =
+			       _cls.Compiled.Descendants(BSharpSyntax.IncludeBlock)
+			           .Where(_ => _.GetCode()==BSharpSyntax.IncludeAllModifier)
+			           .ToArray()).Length) {
+				foreach (var i in includes) {
+					var query = i.GetName();
+					if (query == BSharpSyntax.IncludeBodyModifier || query == BSharpSyntax.IncludeNoChildModifier) {
+						query = "";
+					}
+					var sources = _context.ResolveAll(query, _cls.Namespace).ToArray();
+					if (0 == sources.Length) {
+						i.Remove();
+						continue;
+					}
+					ProcessAdvancedInclude(_cls, i, sources);
 				}
-				var sources = _context.ResolveAll(query, _cls.Namespace).ToArray();
-				if (0 == sources.Length) {
-					i.Remove();
-					continue;
-				}
-				ProcessAdvancedInclude(_cls, i, sources);
 			}
-
 		}
 
-		private void ProcessAdvancedInclude(IBSharpClass cls, XElement e, IBSharpClass[] sources) {
-			throw new System.NotImplementedException();
+		private void ProcessAdvancedInclude(IBSharpClass cls, XElement i, IBSharpClass[] sources) {
+			var stub = new XElement("_");
+			foreach (var s in sources) {
+				var includeelement = new XElement(s.Compiled);
+				var usebody = null != i.Attribute(BSharpSyntax.IncludeBodyModifier) || i.GetName() == BSharpSyntax.IncludeBodyModifier;
+				var nochild = null != i.Attribute(BSharpSyntax.IncludeNoChildModifier) || i.GetName() == BSharpSyntax.IncludeNoChildModifier;
+				if (usebody)
+				{
+					var elements = ExtractIncludeBody(i, includeelement, nochild);
+					stub.Add(elements);
+				}
+				else
+				{
+					ExctractIncludeClass(i, nochild, includeelement);
+					stub.Add(includeelement);
+				}
+			}
+			i.ReplaceWith(stub.Elements());
 		}
 
 		private void ResolveDictionaries() {
@@ -302,37 +319,48 @@ namespace Qorpent.BSharp {
 				needReInterpolate = needReInterpolate || includeelement.HasAttributes(contains: BSharpSyntax.IncludeInterpolationAncor+"{", skipself: usebody);
 
 				if (usebody) {
-					var elements = includeelement.Elements().ToArray();
-					var wheres = i.Elements(BSharpSyntax.IncludeWhereClause).ToArray();
-					if (0 != wheres.Length) {
-						var matcher = new XmlTemplateMatcher(wheres);
-						elements = elements.Where(matcher.IsMatch).ToArray();
-					}
-					if (0 == elements.Length) {
-						_context.RegisterError(BSharpErrors.EmptyInclude(_cls, i));
-					}
-					StoreParentParameters(includeelement,i);
-					foreach (var e in elements) {
-						if (nochild) {
-							e.Elements().Remove();
-						}
-						StoreIncludeParameters(i, e);
-					}
+					var elements = ExtractIncludeBody(i, includeelement, nochild);
 					i.ReplaceWith(elements);
 				}
 				else {
-					if (nochild) {
-						includeelement.Elements().Remove();
-					}
-					StoreIncludeParameters(i,includeelement);
-					includeelement.Name = includeelement.Attr(BSharpSyntax.ClassFullNameAttribute);
-					includeelement.Attribute(BSharpSyntax.ClassFullNameAttribute).Remove();
-					includeelement.Attribute(BSharpSyntax.ClassNameAttribute).Remove();
-					includeelement.Attribute("id").Remove();
+					ExctractIncludeClass(i, nochild, includeelement);
 					i.ReplaceWith(includeelement);
 				}
 			}
 			return needReInterpolate;
+		}
+
+		private void ExctractIncludeClass(XElement i, bool nochild, XElement includeelement) {
+			if (nochild) {
+				includeelement.Elements().Remove();
+			}
+			StoreIncludeParameters(i, includeelement);
+			includeelement.Name = includeelement.Attr(BSharpSyntax.ClassFullNameAttribute);
+			includeelement.Attribute(BSharpSyntax.ClassFullNameAttribute).Remove();
+			includeelement.Attribute(BSharpSyntax.ClassNameAttribute).Remove();
+			var a = includeelement.Attribute("id");
+			if (null != a) a.Remove();
+			
+		}
+
+		private XElement[] ExtractIncludeBody(XElement i, XElement includeelement, bool nochild) {
+			var elements = includeelement.Elements().ToArray();
+			var wheres = i.Elements(BSharpSyntax.IncludeWhereClause).ToArray();
+			if (0 != wheres.Length) {
+				var matcher = new XmlTemplateMatcher(wheres);
+				elements = elements.Where(matcher.IsMatch).ToArray();
+			}
+			if (0 == elements.Length) {
+				_context.RegisterError(BSharpErrors.EmptyInclude(_cls, i));
+			}
+			StoreParentParameters(includeelement, i);
+			foreach (var e in elements) {
+				if (nochild) {
+					e.Elements().Remove();
+				}
+				StoreIncludeParameters(i, e);
+			}
+			return elements;
 		}
 
 		private void StoreIncludeParameters(XElement src, XElement trg) {
@@ -526,8 +554,6 @@ namespace Qorpent.BSharp {
 			_cls.Compiled.Attributes(BSharpSyntax.ClassStaticModifier).Remove();
 			_cls.Compiled.Elements(BSharpSyntax.ClassImportDefinition).Remove();
 			_cls.Compiled.Elements(BSharpSyntax.ClassElementDefinition).Remove();
-			_cls.Compiled.Descendants(BSharpSyntax.IncludeBlock).Remove();
-
 			foreach (var e in _cls.Compiled.DescendantsAndSelf())
 			{
 				if (null != e.Attribute("id")) {
