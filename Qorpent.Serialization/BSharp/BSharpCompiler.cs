@@ -224,11 +224,7 @@ namespace Qorpent.BSharp {
 		/// <param name="context"></param>
 		/// <returns></returns>
 		protected virtual void Link(IEnumerable<XElement> sources, IBSharpContext context) {
-			log.Trace("enter link");
-			Console.WriteLine();
 			if (Debugger.IsAttached) {
-				log.Warn("in debug mode - singlethread mode choosed");
-				
 				foreach (var c in context.Get(BSharpContextDataType.Working)) {
 					try
 					{
@@ -243,7 +239,6 @@ namespace Qorpent.BSharp {
                 context.ResolveDictionaries();
 			}
 			else {
-				log.Warn("in normal mode - parallel mode choosed");
 				context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
 					_ =>
 					{
@@ -259,8 +254,6 @@ namespace Qorpent.BSharp {
 					;	
                 context.ResolveDictionaries();
 			}
-			Console.WriteLine();
-			log.Trace("finish link");
 		}
 	}
 }

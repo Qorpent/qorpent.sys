@@ -32,6 +32,7 @@ namespace Qorpent.BSharp.Builder {
         private const string SOURCES = "sources";
         private const string TARGETS = "targets";
 	    private const string INPUT_EXTENSION = "input_extension";
+	    private const string WRITE_COMPILED = "write_compiled";
 		
 		/// <summary>
 		/// Целевые проекты при билде
@@ -47,8 +48,15 @@ namespace Qorpent.BSharp.Builder {
 			get { return Get(FULLY_QUALIFIED, false); }
 			set { Set(FULLY_QUALIFIED, value); }
 		}
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    public bool WriteCompiled {
+            get { return Get(WRITE_COMPILED, true); }
+            set { Set(WRITE_COMPILED, value); }
+	    }
 
-		/// <summary>
+	    /// <summary>
 		/// Флаги по управлению выводом
 		/// </summary>
 		public BSharpBuilderOutputAttributes OutputAttributes {
@@ -128,8 +136,7 @@ namespace Qorpent.BSharp.Builder {
 		/// <summary>
 		/// Условия компиляции 
 		/// </summary>
-		public IDictionary<string, string> Conditions
-		{
+		public IDictionary<string, string> Conditions {
 			get { return Get<IDictionary<string, string>>(CONDITIONS); }
 			set { Set(CONDITIONS, value); }
 		}
@@ -171,15 +178,8 @@ namespace Qorpent.BSharp.Builder {
 		/// Возвращает исходящее расширение
 		/// </summary>
 		/// <returns></returns>
-		public string GetLogDirectory()
-		{
-			if (!string.IsNullOrWhiteSpace(LogOutputDirectory)) {
-				if (Path.IsPathRooted(LogOutputDirectory)) {
-					return LogOutputDirectory;
-				}
-				return Path.Combine(GetRootDirectory(), LogOutputDirectory);
-			}
-			return Path.Combine(GetRootDirectory(), BSharpBuilderDefaults.DefaultOutputDirectory);
+		public string GetLogDirectory() {
+			return Path.Combine(GetRootDirectory(), GetOutputDirectory());  // drop logs to the output directory 
 		}
 	}
 }
