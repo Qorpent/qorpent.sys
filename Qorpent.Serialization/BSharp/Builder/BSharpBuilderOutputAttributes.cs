@@ -1,7 +1,10 @@
-﻿namespace Qorpent.BSharp.Builder {
+﻿using System;
+
+namespace Qorpent.BSharp.Builder {
 	/// <summary>
 	/// Флаги расположения выходного потока
 	/// </summary>
+	[Flags]
 	public enum BSharpBuilderOutputAttributes {
 		//ФЛАГИ ОПРЕДЕЛЕНИЯ ТОГО, ЧТО ВООБЩЕ ВКЛЮЧАЕТСЯ В НАБОР
 
@@ -54,8 +57,8 @@
 		TreeNamespace = 1 << 7,
 
 		/// <summary>
-		/// По умолчанию просто выводится плоская директория с классами с полным именем и без отладочной информации
+		/// По умолчанию просто выводится директория с плоскими нэймспэйсами
 		/// </summary>
-		Default = IncludeWork  | UseFullName ,
+        Default = IncludeWork | PlainNamespace,
 	}
 }

@@ -42,6 +42,37 @@ namespace Qorpent.Utils.Tests {
 			Assert.AreEqual("11213", x.Attribute("z").Value);
 		}
 
+
+
+		/// <summary>
+		/// Тест в котором один атрибут просто прошивается в другой в одном элементе,
+		/// но при этом производится 2 преобразования
+		/// </summary>
+		[Test]
+		public void CanStopInterpolationDown()
+		{
+			var x = XElement.Parse("<a x='1'><b a='${x}' stopinterpolate='1'><c a='${x}'/></b></a>");
+			x = _xi.Interpolate(x);
+			Console.WriteLine(x);
+			Assert.AreEqual("1", x.Descendants("b").First().Attribute("a").Value);
+			Assert.AreEqual("${x}", x.Descendants("c").First().Attribute("a").Value);
+		}
+
+		/// <summary>
+		/// Тест в котором один атрибут просто прошивается в другой в одном элементе,
+		/// но при этом производится 2 преобразования
+		/// </summary>
+		[Test]
+		public void CanStopInterpolationTotally()
+		{
+			var x = XElement.Parse("<a x='1'><b a='${x}' stopinterpolate='all'><c a='${x}'/></b></a>");
+			x = _xi.Interpolate(x);
+			Console.WriteLine(x);
+			Assert.AreEqual("${x}", x.Descendants("b").First().Attribute("a").Value);
+			Assert.AreEqual("${x}", x.Descendants("c").First().Attribute("a").Value);
+		}
+
+
 		/// <summary>
 		/// Простой проброс интрполяции вниз
 		/// </summary>

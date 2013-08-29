@@ -187,13 +187,28 @@ namespace Qorpent.Bxl {
 				if (ProcessNewLine()) {
 					continue;
 				}
-				if (ProcessWhiteSpace()) {
-					continue;
+				if (BxlTokenType.WhiteSpace == _currentType) {
+					if (_instring || _inexpression) {
+						//in strings all is very simple
+						_buffer[_bufferidx++] = _c;
+						continue;
+					}
+					if (ProcessWhiteSpace())
+					{
+						continue;
+					}
 				}
+				
 				if (ProcessEscape()) {
 					continue;
 				}
 				if (ProcessExpression()) {
+					continue;
+				}
+				if (_instring && !(BxlTokenType.Quot == _currentType || BxlTokenType.Apos == _currentType))
+				{
+					//при нахождении в строке и с простыми символами все просто
+					_buffer[_bufferidx++] = _c;
 					continue;
 				}
 				if (ProcessString()) {
@@ -519,67 +534,68 @@ namespace Qorpent.Bxl {
 			// STRING SUPPORT (we must process string delimiters)
 			// suppose that escapes (including quots will be already processed
 			// /////////////////////////////////////////////////////////////////
-
-
-			//process symbols in string which are collected in buffer
-			if (_instring && !(BxlTokenType.Quot == _currentType || BxlTokenType.Apos == _currentType)) {
-				//при нахождении в строке и с простыми символами все просто
-				_buffer[_bufferidx++] = _c;
-				return true;
+			if (_instring) {
+				//if quot is another than current string quot all is simple too
+				if ((BxlTokenType.Quot == _currentType || BxlTokenType.Apos == _currentType) &&
+				    _c.ToString(CultureInfo.InvariantCulture) != _stringstart) {
+					//при нахождении в строке и с простыми символами все просто
+					_buffer[_bufferidx++] = _c;
+					return true;
+				}
+				//if string is not tripple and it's closer we collapse string
+				if ((BxlTokenType.Quot == _currentType || BxlTokenType.Apos == _currentType) &&
+				    _c.ToString(CultureInfo.InvariantCulture) == _stringstart &&
+				    !_tripplestring) {
+					Appendstring();
+					return true;
+				}
+				//close tripple string
+				if ((BxlTokenType.Quot == _currentType) && _tripplestring && Read(2) == "\"\"") {
+					_skips++;
+					_skips++;
+					Appendstring();
+					return true;
+				}
+				// not processed are usual chars
+				if ((BxlTokenType.Quot == _currentType || BxlTokenType.Apos == _currentType)) {
+					_buffer[_bufferidx++] = _c;
+					return true;
+				}
 			}
-			//if quot is another than current string quot all is simple too
-			if (_instring && (BxlTokenType.Quot == _currentType || BxlTokenType.Apos == _currentType) &&
-			    _c.ToString(CultureInfo.InvariantCulture) != _stringstart) {
-				//при нахождении в строке и с простыми символами все просто
-				_buffer[_bufferidx++] = _c;
-				return true;
-			}
-			//if string is not tripple and it's closer we collapse string
-			if (_instring && (BxlTokenType.Quot == _currentType || BxlTokenType.Apos == _currentType) &&
-			    _c.ToString(CultureInfo.InvariantCulture) == _stringstart &&
-			    !_tripplestring) {
-				Appendstring();
-				return true;
-			}
-			//close tripple string
-			if (_instring && (BxlTokenType.Quot == _currentType) && _tripplestring && Read(2) == "\"\"") {
-				_skips++;
-				_skips++;
-				Appendstring();
-				return true;
-			}
-			// not processed are usual chars
-			if (_instring && (BxlTokenType.Quot == _currentType || BxlTokenType.Apos == _currentType)) {
-				_buffer[_bufferidx++] = _c;
-				return true;
+			else {
+				if ((BxlTokenType.Quot == _currentType || BxlTokenType.Apos == _currentType))
+				{
+					if (_inliteral)
+					{
+						throw new BxlException("illegal character in literal " + _filename + ":" + _line + ":" + _col,
+											   new LexInfo(_filename, _line, _col));
+					}
+					if (!_wasdelimiter && !_wascolon && _last.Type != BxlTokenType.Start && _last.Type != BxlTokenType.Level &&
+						_last.Type != BxlTokenType.NewLine)
+					{
+						throw new BxlException("string must be precedet with delimeter " + _filename + ":" + _line + ":" + _col,
+											   new LexInfo(_filename, _line, _col));
+					}
+					_instring = true;
+					_startcol = _col;
+					_startline = _line;
+					_startidx = _idx - 1;
+					_stringstart = _c.ToString(CultureInfo.InvariantCulture);
+					_bufferidx = 0;
+					//try to check tripple)
+					if (BxlTokenType.Quot == _currentType && Read(2) == "\"\"")
+					{
+						_tripplestring = true;
+						_skips++;
+						_skips++;
+					}
+					_wasdelimiter = false;
+					return true;
+				}
 			}
 
 			//not in strings quots treats as open string constructs
-			if (!_instring && (BxlTokenType.Quot == _currentType || BxlTokenType.Apos == _currentType)) {
-				if (_inliteral) {
-					throw new BxlException("illegal character in literal " + _filename + ":" + _line + ":" + _col,
-					                       new LexInfo(_filename, _line, _col));
-				}
-				if (!_wasdelimiter && !_wascolon && _last.Type != BxlTokenType.Start && _last.Type != BxlTokenType.Level &&
-				    _last.Type != BxlTokenType.NewLine) {
-					throw new BxlException("string must be precedet with delimeter " + _filename + ":" + _line + ":" + _col,
-					                       new LexInfo(_filename, _line, _col));
-				}
-				_instring = true;
-				_startcol = _col;
-				_startline = _line;
-				_startidx = _idx - 1;
-				_stringstart = _c.ToString(CultureInfo.InvariantCulture);
-				_bufferidx = 0;
-				//try to check tripple)
-				if (BxlTokenType.Quot == _currentType && Read(2) == "\"\"") {
-					_tripplestring = true;
-					_skips++;
-					_skips++;
-				}
-				_wasdelimiter = false;
-				return true;
-			}
+			
 			return false;
 		}
 
@@ -667,11 +683,6 @@ namespace Qorpent.Bxl {
 			// в начале триммируем
 			// //////////////////////////////////////////////////////////////////
 			if (BxlTokenType.WhiteSpace == _currentType) {
-				if (_instring || _inexpression) {
-//in strings all is very simple
-					_buffer[_bufferidx++] = _c;
-					return true;
-				}
 				if (_inliteral) {
 					Appendliteral();
 				}

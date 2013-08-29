@@ -18,15 +18,24 @@ namespace Qorpent.BSharp.Runtime {
 		protected override void RebuildIndex() {
 			Cache.Clear();
 			foreach (string fn in Directory.GetFiles(RootDirectory, "*."+BSharpRuntimeDefaults.BSHARP_CLASS_FILE_EXTENSION, SearchOption.AllDirectories)) {
-				string fullname = Path.GetFileNameWithoutExtension(fn);
-				var desc = new BSharpRuntimeClassDescriptor {
-					ResourceName = fn,
-					Fullname = fullname,
-					LastWrite = File.GetLastWriteTime(fn)
-				};
-				Cache[fullname] = desc;
+                if (IsStandaloneFile(RootDirectory,fn))
+                {
+                    string fullname = Path.GetFileNameWithoutExtension(fn);
+                    var desc = new BSharpRuntimeClassDescriptor
+                    {
+                        ResourceName = fn,
+                        Fullname = fullname,
+                        LastWrite = File.GetLastWriteTime(fn)
+                    };
+                    Cache[fullname] = desc;
+                }
 			}
 		}
+
+        private bool IsStandaloneFile(string RootDirectory, string fn)
+        {
+            throw new System.NotImplementedException();
+        }
 
 		/// <summary>
 		///     Перегружает класс из файла на диске

@@ -7,6 +7,8 @@ using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Log;
 using Qorpent.Utils.Extensions;
+using Qorpent.LogicalExpressions;
+using Qorpent.Utils.LogicalExpressions;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -77,14 +79,16 @@ namespace Qorpent.BSharp {
 		private IBSharpContext BuildSingle(XElement source) {
 			var batch = new[] {source};
 			IBSharpContext context = BuildIndex(batch);
-			Link(batch, context);
+			CompileClasses(batch, context);
+			LinkClasses(batch,context);
 			return context;
 		}
 
 		private IBSharpContext BuildBatch(IEnumerable<XElement> sources, IBSharpContext preparedContext) {
 			XElement[] batch = sources.ToArray();
 			var context = BuildIndex(batch);
-			Link(batch, context);
+			CompileClasses(batch, context);
+			LinkClasses(batch, context);
 			if (null != preparedContext) {
 				preparedContext.Merge(context);
 				return preparedContext;
@@ -114,10 +118,22 @@ namespace Qorpent.BSharp {
 			}
 		}
 
+        LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
+
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns) {
 			foreach (XElement e in src.Elements()) {
 				var _ns = "";
-				if (e.Name.LocalName == "namespace") {
+				if (e.Name.LocalName == BSharpSyntax.Namespace) {
+                    var ifa = e.Attr("if");
+                    if (!string.IsNullOrWhiteSpace(ifa))
+                    {
+                        var terms = new DictionaryTermSource(this.GetConditions());
+                        if (!eval.Eval(ifa, terms))
+                        {
+                            continue;
+                        }
+                    }
+
 					if (string.IsNullOrWhiteSpace(ns)) {
 						_ns = e.Attr("code");
 					}
@@ -130,7 +146,7 @@ namespace Qorpent.BSharp {
 				}
 				else {
 					var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = e.Attr("code"), Namespace = ns};
-
+                    if (!IsOverrideMatch(def)) continue;
 					SetupInitialOrphanState(e, def);
 					ParseImports(e, def);
 					ParseCompoundElements(e, def);
@@ -139,6 +155,21 @@ namespace Qorpent.BSharp {
 				}
 			}
 		}
+
+        private bool IsOverrideMatch(BSharpClass def)
+        {
+            if (def.Source.Name.LocalName == "__TILD__class" || def.Source.Name.LocalName == "__PLUS__class")
+            {
+                var ifa = def.Source.Attr("if");
+                if (!string.IsNullOrWhiteSpace(ifa))
+                {
+                    def.Source.Attribute("if").Remove();
+                    var terms = new DictionaryTermSource(GetConditions());
+                    return eval.Eval(ifa, terms);
+                }
+            }
+            return true;
+        }
 
 		private static void SetupInitialOrphanState(XElement e, IBSharpClass def) {
 			if (null != e.Attribute("abstract") || e.Attr("name") == "abstract") {
@@ -194,47 +225,79 @@ namespace Qorpent.BSharp {
 		/// <param name="sources"></param>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		protected virtual void Link(IEnumerable<XElement> sources, IBSharpContext context) {
-			log.Trace("enter link");
-			Console.WriteLine();
+		protected virtual void CompileClasses(IEnumerable<XElement> sources, IBSharpContext context) {
 			if (Debugger.IsAttached) {
-				log.Warn("in debug mode - singlethread mode choosed");
-				
 				foreach (var c in context.Get(BSharpContextDataType.Working)) {
 					try
 					{
-						Console.Write("-");
-						BSharpClassBuilder.Build(this, c, context);
-						Console.Write("+");
+						BSharpClassBuilder.Build(BuildPhase.Compile,  this, c, context);
 					}
 					catch (Exception ex)
 					{
 						c.Error = ex;
-						Console.Write("!");
 					}
 				}
+				context.ClearBuildTasks();
+                
 			}
 			else {
-				log.Warn("in normal mode - parallel mode choosed");
 				context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
 					_ =>
 					{
 						try
 						{
-							Console.Write("-");
-							BSharpClassBuilder.Build(this, _, context);
-							Console.Write("+");
+							BSharpClassBuilder.Build(BuildPhase.Compile,  this, _, context);
 						}
 						catch (Exception ex)
 						{
 							_.Error = ex;
-							Console.Write("!");
 						}
 					})
 					;	
+  
 			}
-			Console.WriteLine();
-			log.Trace("finish link");
+		}
+
+		/// <summary>
+		///     Перекрыть для создания линковщика
+		/// </summary>
+		/// <param name="sources"></param>
+		/// <param name="context"></param>
+		/// <returns></returns>
+		protected virtual void LinkClasses(IEnumerable<XElement> sources, IBSharpContext context) {
+			context.BuildLinkingIndex();
+			if (!context.RequireLinking()) return;
+			if (Debugger.IsAttached)
+			{
+				foreach (var c in context.Get(BSharpContextDataType.Working).Where(_=>_.Is(BSharpClassAttributes.RequireLinking)))
+				{
+					try
+					{
+						BSharpClassBuilder.Build(BuildPhase.Link, this, c, context);
+					}
+					catch (Exception ex)
+					{
+						c.Error = ex;
+					}
+				}
+				context.ClearBuildTasks();
+			}
+			else
+			{
+				context.Get(BSharpContextDataType.Working).Where(_=>_.Is(BSharpClassAttributes.RequireLinking)).AsParallel().ForAll(
+					_ =>
+					{
+						try
+						{
+							BSharpClassBuilder.Build(BuildPhase.Link, this, _, context);
+						}
+						catch (Exception ex)
+						{
+							_.Error = ex;
+						}
+					})
+					;
+			}
 		}
 	}
 }

@@ -12,7 +12,6 @@
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
-    <Compile Include="Entity.cs" />
     <Compile Include="MetaStorage\IMetaFacade.cs" />
     <Compile Include="MetaStorage\IMetaStorage.cs" />
     <Compile Include="MetaStorage\IMetaSynchronizer.cs" />
@@ -37,6 +36,6 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
-  <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Core.import"/>
-   <Import Condition="$(OS)=='UNIX'"  Project="Qorpent.Utils.import"/>
+  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
+  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Utils.import" />
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using Qorpent.BSharp;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
 	[TestFixture]
@@ -55,6 +56,36 @@ no-class A
 			Assert.NotNull(error);
 			Assert.AreEqual(BSharpErrorType.OrphanClass, error.Type);
 		}
+
+        [Test]
+        public void NotResolvedDictionary()
+        {
+            var code = @"
+class A x=?x.a y=??x.b z=?~a.b w=??~a.b
+";
+            var result = Compile(code);
+            var errors = result.GetErrors();
+            Assert.AreEqual(2, errors.Count());
+            var error = errors.FirstOrDefault();
+            Assert.NotNull(error);
+            Assert.AreEqual(BSharpErrorType.NotResolvedDictionary, error.Type);
+        }
+
+        [Test]
+        public void NotResolvedDictionaryElement()
+        {
+            var code = @"
+class B
+    export x
+class A x=?x.a y=??x.b z=?~a.b w=??~a.b
+";
+            var result = Compile(code);
+            var errors = result.GetErrors();
+            Assert.AreEqual(2, errors.Count());
+            var error = errors.FirstOrDefault();
+            Assert.NotNull(error);
+            Assert.AreEqual(BSharpErrorType.NotResolvedDictionaryElement, error.Type);
+        }
 
 		[Test]
 		public void OrphanImport()
@@ -190,6 +221,60 @@ class A
 			Assert.AreEqual(BSharpErrorType.EmptyInclude, error.Type);
 			var i = error.Xml;
 			Assert.NotNull(i);
+		}
+
+
+		[Test]
+		public void NotDirectClassReference()
+		{
+			var code = @"
+namespace Y
+	class B
+class A x=^B
+";
+			var result = Compile(code);
+			var errors = result.GetErrors();
+			Assert.AreEqual(1, errors.Count());
+			var error = errors.FirstOrDefault();
+			Assert.NotNull(error);
+			Assert.AreEqual(BSharpErrorType.NotDirectClassReference, error.Type);
+			Assert.AreEqual("Y.B", result.Get("A").Compiled.Attr("x"));
+		}
+
+		[Test]
+		public void AmbigousClassReference()
+		{
+			var code = @"
+namespace X
+	class B
+namespace Y
+	class B
+class A x=^B
+";
+			var result = Compile(code);
+			var errors = result.GetErrors();
+			Assert.AreEqual(1, errors.Count());
+			var error = errors.FirstOrDefault();
+			Assert.NotNull(error);
+			Assert.AreEqual(BSharpErrorType.AmbigousClassReference, error.Type);
+			Assert.AreEqual("AMBIGOUS::B", result.Get("A").Compiled.Attr("x"));
+		}
+
+
+		[Test]
+		public void NotResolvedClassReference()
+		{
+			var code = @"
+class A x=^B
+";
+			var result = Compile(code);
+			var errors = result.GetErrors();
+			Assert.AreEqual(1, errors.Count());
+			var error = errors.FirstOrDefault();
+			Assert.NotNull(error);
+			Assert.AreEqual(BSharpErrorType.NotResolvedClassReference, error.Type);
+			Assert.AreEqual("NOTRESOLVED::B",result.Get("A").Compiled.Attr("x"));
+
 		}
 
 		[Test]

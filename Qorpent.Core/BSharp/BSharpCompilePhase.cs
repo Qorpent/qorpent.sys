@@ -22,5 +22,9 @@ namespace Qorpent.BSharp {
 		/// Компиляция в целом
 		/// </summary>
 		Common = 1<<3,
+		/// <summary>
+		/// Стадия разрешения ссылок
+		/// </summary>
+		ReferenceResolution = 1<<4,
 	}
 }

@@ -7,15 +7,19 @@ namespace Qorpent.BSharp.Builder {
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface IBSharpProject:IConfig {
-		/// <summary>
-		/// Целевые проекты при билде
-		/// </summary>
-		string[] TargetNames { get; set; }
+	public interface IBSharpProject : IConfig {
+        /// <summary>
+        ///     Цели проекта
+        /// </summary>
+        BSharpBuilderTargets Targets { get; set; }
 		/// <summary>
 		/// Признак полностью загруженного проекта
 		/// </summary>
-		bool IsFullyQualifiedProject { get; set; }	
+		bool IsFullyQualifiedProject { get; set; }
+        /// <summary>
+        ///     Признак того, что результаты будут писаться на диск
+        /// </summary>
+        bool WriteCompiled { get; set; }
 		/// <summary>
 		/// Флаги по управлению выводом
 		/// </summary>
@@ -36,37 +40,31 @@ namespace Qorpent.BSharp.Builder {
 		/// Расширение для результирующих файлов
 		/// </summary>
 		string OutputExtension { get; set; }
-
+        /// <summary>
+        ///     Расширение для входных файлов
+        /// </summary>
+        string InputExtension { get; set; }
 		/// <summary>
 		/// Корневая директория
 		/// </summary>
 		string RootDirectory { get; set; }
-
 		/// <summary>
 		/// Исходный код
 		/// </summary>
-		IDictionary<string, XElement> Sources { get; }
+		IList<XElement> Sources { get; }
         /// <summary>
 		/// Журнал проекта
 		/// </summary>
 		IUserLog Log { get; set; }
-
 		/// <summary>
 		/// Условия компиляции 
 		/// </summary>
 		IDictionary<string, string> Conditions { get; set; }
-
-        /// <summary>
-        ///     
-        /// </summary>
-        bool CompileJson { get; set; }
-
 		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>
 		string GetOutputDirectory();
-
 		/// <summary>
 		/// Возвращает нормализованный полный путь корневой папки репозитория или решения
 		/// </summary>
@@ -76,8 +74,7 @@ namespace Qorpent.BSharp.Builder {
 		/// Возвращает исходящее расширение
 		/// </summary>
 		/// <returns></returns>
-		string GetOutputExtension();
-
+        string GetOutputExtension();
 		/// <summary>
 		/// Возвращает исходящее расширение
 		/// </summary>

@@ -25,6 +25,8 @@ namespace Qorpent.IO.Tests.Web
 		public void SupportHtmlScheme() {
 			Assert.True(res.IsSupported(new Uri("http://test")));
 		}
+
+        [Explicit]
 		[Test]
 		public void CanGetDataFullApi() {
 			var request = res.CreateRequest(new Uri("http://localhost"));
@@ -42,7 +44,7 @@ namespace Qorpent.IO.Tests.Web
 			var result = getresult.Result;
 			StringAssert.Contains("<html",result);
 		}
-
+        [Explicit]
 		[Test]
 		public void GetGetDataExtensionApi() {
 			StringAssert.Contains("<html", res.GetString("http://localhost"));
@@ -74,6 +76,7 @@ namespace Qorpent.IO.Tests.Web
 		{
 			StringAssert.Contains("<html", res.GetString("https://localhost", new ResourceConfig{AcceptAllCeritficates=true}));
 		}
+        [Explicit]
 		[Test]
 		public void GetGetDataExtensionApiAsync() {
 			var t = res.GetStringAsync("http://localhost");

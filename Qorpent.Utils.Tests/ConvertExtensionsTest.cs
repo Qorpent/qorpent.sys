@@ -15,6 +15,13 @@ namespace Qorpent.Utils.Tests
 			A = 1,
 			B = 2 
 		}
+
+        public enum Y
+        {
+            A = 1,
+            B = 1<<1,
+            C = 1<<2,
+        }
 		
 		[Test]
 		public void EnumFromNullWorks() {
@@ -30,6 +37,12 @@ namespace Qorpent.Utils.Tests
 			Assert.AreEqual(X.Default, x);
 		}
 
+        [Test]
+        public void EnumFromMultipleStringWorks()
+        {
+            var res = "A+C".To<Y>();
+            Assert.AreEqual(Y.A | Y.C, res);
+        }
 
 		
 			

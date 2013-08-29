@@ -14,6 +14,9 @@
     <Compile Include="Actions\GetCssAction.cs" />
     <Compile Include="Actions\GetJsAction.cs" />
     <Compile Include="Actions\GetResourceAction.cs" />
+    <Compile Include="Actions\Helpers\FileIndexer.cs" />
+    <Compile Include="Actions\Helpers\FileListEntry.cs" />
+    <Compile Include="Actions\Helpers\FileListEntryType.cs" />
     <Compile Include="Actions\ImpersonateAction.cs" />
     <Compile Include="Actions\IsInRoleAction.cs" />
     <Compile Include="Actions\ListFilesAction.cs" />

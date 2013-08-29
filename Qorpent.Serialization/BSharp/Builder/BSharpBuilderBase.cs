@@ -242,8 +242,7 @@ namespace Qorpent.BSharp.Builder {
 		/// Внутренний метод подготовки результата
 		/// </summary>
 		/// <returns></returns>
-		protected virtual IBSharpContext GetInitialContext()
-		{
+		protected virtual IBSharpContext GetInitialContext() {
 			return new BSharpContext();
 		}
 
