@@ -7,7 +7,7 @@ namespace Qorpent.BSharp.Builder {
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface IBSharpProject:IConfig {
+	public interface IBSharpProject : IConfig {
         /// <summary>
         ///     Цели проекта
         /// </summary>

@@ -1,7 +1,10 @@
-﻿namespace Qorpent.BSharp.Builder {
+﻿using System;
+
+namespace Qorpent.BSharp.Builder {
 	/// <summary>
 	/// Флаги расположения выходного потока
 	/// </summary>
+	[Flags]
 	public enum BSharpBuilderOutputAttributes {
 		//ФЛАГИ ОПРЕДЕЛЕНИЯ ТОГО, ЧТО ВООБЩЕ ВКЛЮЧАЕТСЯ В НАБОР
 

@@ -7,7 +7,7 @@ namespace Qorpent.BSharp.Builder {
 		/// <summary>
 		/// Директория для логов по умолчанию
 		/// </summary>
-	    public const string DefaultLogDirectory = BSharpBuilderDefaults.DefaultOutputDirectory;
+	    public const string DefaultLogDirectory = DefaultOutputDirectory;
 		
 		/// <summary>
 		/// Директория для логов по умолчанию
