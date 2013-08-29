@@ -11,6 +11,12 @@ namespace Qorpent.Utils {
 	public class XmlInterpolation {
 		private readonly StringInterpolation _stringInterpolation = new StringInterpolation();
 		/// <summary>
+		/// 
+		/// </summary>
+		public XmlInterpolation() {
+			StopAttribute = "stopinterpolate";
+		}
+		/// <summary>
 		/// Выполняет интерполяцию атрибутов в строки по Xml элементу
 		/// рекурсивно по всей подветке
 		/// </summary>
@@ -21,9 +27,11 @@ namespace Qorpent.Utils {
 
 		private XElement InternalInterpolate(XElement source, IConfig parentconfig) {
 			var datasource = PrepareDataSource(source, parentconfig);
-			InterpolateDataToElement(source, datasource);
-			foreach (var e in source.Elements()) {
-				InternalInterpolate(e, datasource);
+			var processchild = InterpolateDataToElement(source, datasource);
+			if (processchild) {
+				foreach (var e in source.Elements()) {
+					InternalInterpolate(e, datasource);
+				}
 			}
 			return source;
 		}
@@ -34,9 +42,24 @@ namespace Qorpent.Utils {
 			get { return _stringInterpolation.AncorSymbol; }
 			set { _stringInterpolation.AncorSymbol = value; }
 		}
+		/// <summary>
+		/// Стопер при обходе элементов - блокирует интерполяцию
+		/// значения - 1,true - ниже, all - что либо другое - этот и ниже
+		/// </summary>
+		public string StopAttribute { get; set; }
 
-		private void InterpolateDataToElement(XElement source, IConfig datasource)
-		{
+		private bool InterpolateDataToElement(XElement source, IConfig datasource) {
+			bool processchild = true;
+			if (!string.IsNullOrWhiteSpace(StopAttribute)) {
+				var stopper = source.Attribute(StopAttribute);
+				if (null != stopper) {
+					if (stopper.Value != "0") {
+						if(stopper.Value=="all")	return false;
+
+						processchild = false;
+					}
+				}
+			}
 			foreach (var a in source.Attributes()) {
 				var val = a.Value;
 				if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol)) {
@@ -45,14 +68,17 @@ namespace Qorpent.Utils {
 					datasource.Set(a.Name.LocalName, val);
 				}
 			}
-			foreach (var t in source.Nodes().OfType<XText>()) {
-				var val = t.Value;
-				if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol))
-				{
-					val = _stringInterpolation.Interpolate(val, datasource);
-					t.Value = val;
+	
+				foreach (var t in source.Nodes().OfType<XText>()) {
+
+					var val = t.Value;
+					if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol)) {
+						val = _stringInterpolation.Interpolate(val, datasource);
+						t.Value = val;
+					}
 				}
-			}
+				
+			return processchild;
 		}
 
 		private IConfig PrepareDataSource(XElement source, IConfig parent) {

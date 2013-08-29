@@ -79,14 +79,16 @@ namespace Qorpent.BSharp {
 		private IBSharpContext BuildSingle(XElement source) {
 			var batch = new[] {source};
 			IBSharpContext context = BuildIndex(batch);
-			Link(batch, context);
+			CompileClasses(batch, context);
+			LinkClasses(batch,context);
 			return context;
 		}
 
 		private IBSharpContext BuildBatch(IEnumerable<XElement> sources, IBSharpContext preparedContext) {
 			XElement[] batch = sources.ToArray();
 			var context = BuildIndex(batch);
-			Link(batch, context);
+			CompileClasses(batch, context);
+			LinkClasses(batch, context);
 			if (null != preparedContext) {
 				preparedContext.Merge(context);
 				return preparedContext;
@@ -121,7 +123,7 @@ namespace Qorpent.BSharp {
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns) {
 			foreach (XElement e in src.Elements()) {
 				var _ns = "";
-				if (e.Name.LocalName == "namespace") {
+				if (e.Name.LocalName == BSharpSyntax.Namespace) {
                     var ifa = e.Attr("if");
                     if (!string.IsNullOrWhiteSpace(ifa))
                     {
@@ -223,33 +225,28 @@ namespace Qorpent.BSharp {
 		/// <param name="sources"></param>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		protected virtual void Link(IEnumerable<XElement> sources, IBSharpContext context) {
-			log.Trace("enter link");
-			Console.WriteLine();
+		protected virtual void CompileClasses(IEnumerable<XElement> sources, IBSharpContext context) {
 			if (Debugger.IsAttached) {
-				log.Warn("in debug mode - singlethread mode choosed");
-				
 				foreach (var c in context.Get(BSharpContextDataType.Working)) {
 					try
 					{
-						BSharpClassBuilder.Build(this, c, context);
+						BSharpClassBuilder.Build(BuildPhase.Compile,  this, c, context);
 					}
 					catch (Exception ex)
 					{
 						c.Error = ex;
 					}
 				}
-
-                context.ResolveDictionaries();
+				context.ClearBuildTasks();
+                
 			}
 			else {
-				log.Warn("in normal mode - parallel mode choosed");
 				context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
 					_ =>
 					{
 						try
 						{
-							BSharpClassBuilder.Build(this, _, context);
+							BSharpClassBuilder.Build(BuildPhase.Compile,  this, _, context);
 						}
 						catch (Exception ex)
 						{
@@ -257,10 +254,50 @@ namespace Qorpent.BSharp {
 						}
 					})
 					;	
-                context.ResolveDictionaries();
+  
 			}
-			Console.WriteLine();
-			log.Trace("finish link");
+		}
+
+		/// <summary>
+		///     Перекрыть для создания линковщика
+		/// </summary>
+		/// <param name="sources"></param>
+		/// <param name="context"></param>
+		/// <returns></returns>
+		protected virtual void LinkClasses(IEnumerable<XElement> sources, IBSharpContext context) {
+			context.BuildLinkingIndex();
+			if (!context.RequireLinking()) return;
+			if (Debugger.IsAttached)
+			{
+				foreach (var c in context.Get(BSharpContextDataType.Working).Where(_=>_.Is(BSharpClassAttributes.RequireLinking)))
+				{
+					try
+					{
+						BSharpClassBuilder.Build(BuildPhase.Link, this, c, context);
+					}
+					catch (Exception ex)
+					{
+						c.Error = ex;
+					}
+				}
+				context.ClearBuildTasks();
+			}
+			else
+			{
+				context.Get(BSharpContextDataType.Working).Where(_=>_.Is(BSharpClassAttributes.RequireLinking)).AsParallel().ForAll(
+					_ =>
+					{
+						try
+						{
+							BSharpClassBuilder.Build(BuildPhase.Link, this, _, context);
+						}
+						catch (Exception ex)
+						{
+							_.Error = ex;
+						}
+					})
+					;
+			}
 		}
 	}
 }

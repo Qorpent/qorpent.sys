@@ -46,5 +46,44 @@ namespace Qorpent.BSharp {
 		/// Проигнорированный
 		/// </summary>
 		Ignored =1<<9,
+		/// <summary>
+		/// В стадии ликовки
+		/// </summary>
+		InLink = 1<<10,
+		/// <summary>
+		/// Стадия линковки завершена
+		/// </summary>
+		Linked = 1<<11,
+		/// <summary>
+		/// Признак необходимости линковки
+		/// </summary>
+		RequireLinking = 1<<13,
+		/// <summary>
+		/// Признак необходимости разрешения классов
+		/// </summary>
+		RequireClassResolution = 1<<14,
+		/// <summary>
+		/// Потребность в резолюции словарей
+		/// </summary>
+		RequireDictionaryResolution = 1<<15,
+
+		/// <summary>
+		/// Потребность в резолюции дополнительных инклудов
+		/// </summary>
+		RequireAdvancedIncludes = 1 << 16,
+		/// <summary>
+		/// Необходимость регистрации словаря
+		/// </summary>
+		RequireDictionaryRegistration = 1<<17,
+
+		/// <summary>
+		/// Библиотечный, не изменяемый класс
+		/// </summary>
+		Library  =1 << 18,
+
+		/// <summary>
+		/// Признак класса - схемы
+		/// </summary>
+		Shema = 1<<19
 	}
 }

@@ -147,6 +147,23 @@ namespace Qorpent.Utils.Extensions {
 			var attr = sourceElement.Attribute(name);
 			return null == attr ? defaultvalue : attr.Value;
 		}
+		/// <summary>
+		/// Резолюция атрибута Code
+		/// </summary>
+		/// <param name="e"></param>
+		/// <returns></returns>
+		public static string GetCode(this XElement e) {
+			return Attr(e, "code");
+		}
+		/// <summary>
+		/// Резолюция атрибута name
+		/// </summary>
+		/// <param name="e"></param>
+		/// <returns></returns>
+		public static string GetName(this XElement e)
+		{
+			return Attr(e, "name");
+		}
 
 		/// <summary>
 		/// 	Resolves default Qorpent ID attribute for element in following priority - id, code, __id, __code, ID
