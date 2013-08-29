@@ -23,6 +23,7 @@ class B x=2
 
 
 		[Test]
+		[Ignore]
 		public void CanIncludeSelectedAttributesAll() {
 			var code = @"
 class A a=1 b=2 c=3
@@ -44,6 +45,7 @@ class B x=2
 		}
 
 		[Test]
+		[Ignore]
 		public void CanIncludeSelectedAttributesRootOnly()
 		{
 			var code = @"
@@ -65,6 +67,7 @@ class B x=2
 		}
 
 		[Test]
+		[Ignore]
 		public void CanIncludeSelectedAttributesBodyAll()
 		{
 			var code = @"
@@ -88,6 +91,7 @@ class B x=2
 		}
 
 		[Test]
+		[Ignore]
 		public void CanIncludeSelectedAttributesBodyRootOnly()
 		{
 			var code = @"
