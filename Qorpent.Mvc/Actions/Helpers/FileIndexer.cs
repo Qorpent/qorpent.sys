@@ -17,45 +17,26 @@ namespace Qorpent.Mvc.Actions.Helpers {
 	    /// <returns></returns>
 	    /// <exception cref="NotImplementedException"></exception>
 	    public IEnumerable<FileListEntry> Collect(string fileMask = null, bool showDirs = true, bool showFiles = true) 
-        {
-            var listFilesCollection = new List<FileListEntry>();
-            var filesNameMass = ListFile();
-            var dirNameMass = ListDir();
-	       if (showDirs)
+        { 
+           var listFilesCollection = new List<FileListEntry>(); 
+           if (showFiles)
 		    {
-                for (int index = 0; index < filesNameMass.Count(); index++)
+                var fileName = Directory.GetFiles(EnvironmentInfo.RootDirectory, "", SearchOption.AllDirectories);
+                for (int index = 0; index < fileName.Count(); index++)
                 {
-                    listFilesCollection.Add(new FileListEntry() { LocalPath = filesNameMass[index], Type = FileListEntryType.Directory });
+                    listFilesCollection.Add(new FileListEntry() { LocalPath = fileName[index], Type = FileListEntryType.File });
                 }
 		    }
-            
-          // var dirsNameMass = ListDir();
-            if (showFiles)
-            {
-                for (int index = 0; index < dirNameMass.Count(); index++)
+           if (showDirs)
+           {
+	        string[] dirNames = Directory.GetDirectories(EnvironmentInfo.RootDirectory, "", SearchOption.AllDirectories);
+	        
+                for (int index = 0; index < dirNames.Count(); index++)
                 {
-                    listFilesCollection.Add(new FileListEntry() { LocalPath = dirNameMass[index].ToString(), Type = FileListEntryType.File });
+                    listFilesCollection.Add(new FileListEntry() { LocalPath = dirNames[index], Type = FileListEntryType.Directory });
                 }
             }
 	        return listFilesCollection;
         }
-        /// <summary>
-        /// Список папок
-        /// </summary>
-        /// <returns></returns>
-        public DirectoryInfo[] ListDir()
-        {
-            var di = new DirectoryInfo(EnvironmentInfo.RootDirectory);
-            return di.GetDirectories("*.*", SearchOption.AllDirectories);
-        }
-        /// <summary>
-        /// Список файлов
-        /// </summary>
-        /// <returns></returns>
-        public string[] ListFile()
-        {
-            return Directory.GetFiles(EnvironmentInfo.RootDirectory, "*.*", SearchOption.AllDirectories);
-        }
-
-	}
+      }
 }
