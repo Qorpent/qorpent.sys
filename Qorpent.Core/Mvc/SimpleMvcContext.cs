@@ -186,5 +186,12 @@ namespace Qorpent.Mvc {
 		public override void WriteOutStream(Stream sourceStream) {
 			throw new NotImplementedException();
 		}
+
+		/// <summary>
+		/// Выводит в исходящий поток данные
+		/// </summary>
+		public override void WriteOutBytes(byte[] data) {
+			throw new NotImplementedException();
+		}
 	}
 }
