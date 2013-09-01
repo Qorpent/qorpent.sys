@@ -58,7 +58,7 @@ namespace Qorpent.BSharp.Builder {
         /// <summary>
         ///     Рсширение для файлов по умолчанию
         /// </summary>
-        public const string DefaultInputExtension = "bxls";
+        public const string DefaultInputExtension = "bxls;bxjs";
         /// <summary>
         ///     BSharp project
         /// </summary>

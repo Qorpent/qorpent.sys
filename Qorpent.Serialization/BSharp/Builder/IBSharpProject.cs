@@ -43,7 +43,7 @@ namespace Qorpent.BSharp.Builder {
         /// <summary>
         ///     Расширение для входных файлов
         /// </summary>
-        string InputExtension { get; set; }
+        string InputExtensions { get; set; }
 		/// <summary>
 		/// Корневая директория
 		/// </summary>
@@ -60,6 +60,11 @@ namespace Qorpent.BSharp.Builder {
 		/// Условия компиляции 
 		/// </summary>
 		IDictionary<string, string> Conditions { get; set; }
+		/// <summary>
+		/// Имя проекта
+		/// </summary>
+		string ProjectName { get; set; }
+
 		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>

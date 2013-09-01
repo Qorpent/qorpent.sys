@@ -33,6 +33,7 @@ namespace Qorpent.BSharp.Builder {
         private const string TARGETS = "targets";
 	    private const string INPUT_EXTENSION = "input_extension";
 	    private const string WRITE_COMPILED = "write_compiled";
+	    private const string PROJECT_NAME = "project_name";
 		
 		/// <summary>
 		/// Целевые проекты при билде
@@ -98,7 +99,7 @@ namespace Qorpent.BSharp.Builder {
 	    /// <summary>
 	    ///     Расширение для входных файлов
 	    /// </summary>
-	    public string InputExtension {
+	    public string InputExtensions {
             get { return Get(INPUT_EXTENSION, BSharpBuilderDefaults.DefaultInputExtension); }
             set { Set(INPUT_EXTENSION, value); }
 	    }
@@ -139,6 +140,15 @@ namespace Qorpent.BSharp.Builder {
 		public IDictionary<string, string> Conditions {
 			get { return Get<IDictionary<string, string>>(CONDITIONS); }
 			set { Set(CONDITIONS, value); }
+		}
+
+		/// <summary>
+		/// Корневая директория
+		/// </summary>
+		public string ProjectName
+		{
+			get { return Get(PROJECT_NAME,""); }
+			set { Set(PROJECT_NAME, value); }
 		}
 
 
