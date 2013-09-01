@@ -22,7 +22,7 @@ namespace Qorpent.Mvc.Actions {
 		/// <summary>
 		/// Регекс поиска
 		/// </summary>
-		[Bind(Required = true)] public string Search { get; set; }
+		[Bind] public string Search { get; set; }
 		/// <summary>
 		/// Начальный индекс поисковой страницы
 		/// </summary>
@@ -49,6 +49,7 @@ namespace Qorpent.Mvc.Actions {
 			var type = WikiObjectType.None;
 			if (Files) type = type | WikiObjectType.File;
 			if (Pages) type = type | WikiObjectType.Page;
+            if (string.IsNullOrEmpty(Search)) Search = "*";
 			return WikiSource.Find(Search, Start, Count, type).ToArray()
 			;
 		}
