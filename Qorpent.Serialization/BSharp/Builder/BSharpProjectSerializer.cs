@@ -19,6 +19,9 @@ namespace Qorpent.BSharp.Builder {
             ParseIncludes(bSharpClass, project);
             ParseExcludes(bSharpClass, project);
 
+	        project.GenerateSrcPkg = bSharpClass["GenerateSrcPkg"].ToBool();
+			project.SrcPkgName = bSharpClass["SrcPkgName"];
+
             var outLayout = bSharpClass.Compiled.Element("Layout");
             if (outLayout != null) {
                 project.OutputAttributes = outLayout.Attribute("code").Value.To<BSharpBuilderOutputAttributes>();

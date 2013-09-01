@@ -44,6 +44,15 @@ namespace Qorpent.BSharp {
 		public bool Is(BSharpClassAttributes attribute) {
 			return _attributes.HasFlag(attribute);
 		}
+
+		/// <summary>
+		/// Возвращает полный комплект атрибутов
+		/// </summary>
+		/// <returns></returns>
+		public BSharpClassAttributes GetAttributes() {
+			return _attributes;
+		}
+
 		/// <summary>
 		/// Устанавливает определенные флаги
 		/// </summary>
@@ -67,7 +76,11 @@ namespace Qorpent.BSharp {
 				) {
 				if (null == TargetClassName) {
 					TargetClassName = Name;
-					Name = Guid.NewGuid().ToString();
+					var name = flags.ToString() + "_" + Name +"_" +Source.Attr("name");
+					if (null != _context.Get(name, Namespace)) {
+						name += "_" + EXTCOUNTER++;
+					}
+					Name = name;
 				}
 				_attributes = _attributes | BSharpClassAttributes.Explicit;
 				Remove(BSharpClassAttributes.Orphan);
@@ -82,6 +95,21 @@ namespace Qorpent.BSharp {
 		/// <param name="flags"></param>
 		public void Remove(BSharpClassAttributes flags) {
 			_attributes = _attributes & ~flags;
+		}
+
+		private static int EXTCOUNTER = 1;
+		/// <summary>
+		/// Упрощенный доступ компилированному контенту
+		/// </summary>
+		/// <param name="code"></param>
+		/// <returns></returns>
+		public string this[string code] {
+			get
+			{
+				var a = Compiled.Attribute(code);
+				if (null == a) return string.Empty;
+				return a.Value;
+			}
 		}
 
 

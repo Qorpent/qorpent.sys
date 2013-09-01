@@ -4,6 +4,10 @@
 	/// </summary>
 	public abstract class BSharpBuilderTaskBase : IBSharpBuilderTask {
 		/// <summary>
+		/// Шаг прироста индекса задач
+		/// </summary>
+		public const int INDEX_STEP = 100;
+		/// <summary>
 		/// Связанный целевой проект
 		/// </summary>
 		protected IBSharpProject Project;

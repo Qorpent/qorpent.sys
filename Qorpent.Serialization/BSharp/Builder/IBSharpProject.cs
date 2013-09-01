@@ -66,6 +66,16 @@ namespace Qorpent.BSharp.Builder {
 		string ProjectName { get; set; }
 
 		/// <summary>
+		/// Требование создать пакет исходников в виде перносимого архива
+		/// </summary>
+		string SrcPkgName { get; set; }
+
+		/// <summary>
+		/// Требование создать пакет исходников в виде перносимого архива
+		/// </summary>
+		bool GenerateSrcPkg { get; set; }
+
+		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>

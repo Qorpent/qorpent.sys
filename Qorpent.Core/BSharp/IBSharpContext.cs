@@ -59,6 +59,7 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		IBSharpCompiler Compiler { get; set; }
 
+		
 
 
 		/// <summary>

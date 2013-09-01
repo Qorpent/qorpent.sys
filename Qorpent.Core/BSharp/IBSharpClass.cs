@@ -109,6 +109,11 @@ namespace Qorpent.BSharp {
 		/// <param name="attribute"></param>
 		/// <returns></returns>
 		bool Is(BSharpClassAttributes attribute);
+		/// <summary>
+		/// Возвращает полный комплект атрибутов
+		/// </summary>
+		/// <returns></returns>
+		BSharpClassAttributes GetAttributes();
 
 		/// <summary>
 		/// Устанавливает определенные флаги
@@ -121,5 +126,12 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <param name="flags"></param>
 		void Remove(BSharpClassAttributes flags);
+
+		/// <summary>
+		/// Упрощенный доступ компилированному контенту
+		/// </summary>
+		/// <param name="code"></param>
+		/// <returns></returns>
+		string this[string code] { get; }
 	}
 }

@@ -84,6 +84,12 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Признак класса - схемы
 		/// </summary>
-		Shema = 1<<19
+		Shema = 1<<19,
+		/// <summary>
+		/// Набор флагов для пакета исходников
+		/// </summary>
+		SrcPkgSet = Abstract | Static | Override | Extension 
+			| RequireLinking | RequireClassResolution | RequireDictionaryResolution
+			| RequireAdvancedIncludes | RequireDictionaryRegistration | Shema,
 	}
 }

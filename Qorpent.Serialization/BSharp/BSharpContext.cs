@@ -407,6 +407,8 @@ namespace Qorpent.BSharp {
 					return Extensions;
 				case BSharpContextDataType.Ignored:
 					return Ignored;
+				case BSharpContextDataType.SrcPkg:
+					return Working.Union(Abstracts).Union(Overrides).Union(Extensions).Distinct();
 				case BSharpContextDataType.Errors:
 					
 				default :
