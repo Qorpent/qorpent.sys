@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
@@ -42,7 +43,25 @@ namespace Qorpent.Mvc
 		/// <param name="parameters"></param>
 		/// <returns></returns>
 		public async Task<XElement> GetXml(string command, object parameters = null) {
-			var url = ApplicationRoot + "/" + command + ".xml.qweb";
+			const string format = "xml";
+			var stream = GetStream(command, parameters, format);
+			return XElement.Load(XmlReader.Create(await stream));
+		}
+		/// <summary>
+		/// Получить XML с сервера
+		/// </summary>
+		/// <param name="command"></param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
+		public async Task<string> GetString(string command, object parameters = null)
+		{
+			const string format = "string";
+			var stream = GetStream(command, parameters, format);
+			return new StreamReader(await stream).ReadToEnd();
+		}
+
+		private  Task<Stream> GetStream(string command, object parameters, string format) {
+			var url = ApplicationRoot + "/" + command + "." + format + ".qweb";
 			var resourceConfig = new ResourceConfig {
 				Credentials = Credentials,
 				AcceptAllCeritficates = true,
@@ -56,8 +75,8 @@ namespace Qorpent.Mvc
 				}
 			}
 
-			var stream =  Resources.GetStreamAsync(url, resourceConfig);
-			return XElement.Load(XmlReader.Create(await stream));
+			var stream = Resources.GetStreamAsync(url, resourceConfig);
+			return stream;
 		}
 
 		private string GeneratePostData(object parameters) {

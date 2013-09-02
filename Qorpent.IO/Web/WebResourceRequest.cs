@@ -175,6 +175,7 @@ namespace Qorpent.IO.Web {
 						stream.Write(config.RequestPostData, 0, config.RequestPostData.Length);
 					}
 				}else if (!string.IsNullOrWhiteSpace(config.RequestFormString)) {
+					nativeRequest.ContentType = "application/x-www-form-urlencoded";
 					State = ResourceRequestState.Post;
 					using (var stream = new StreamWriter(await nativeRequest.GetRequestStreamAsync()))
 					{
