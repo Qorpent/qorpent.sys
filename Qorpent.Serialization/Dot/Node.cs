@@ -10,7 +10,22 @@ namespace Qorpent.Dot {
 		/// </summary>
 		public NodeShapeType Shape {
 			get { return Get(DotConstants.ShapeAttribute).To<NodeShapeType>(); }
-			set { Set(DotConstants.ShapeAttribute,value.ToStr()); }
+			set {
+                var str = value.ToStr().ToLower();
+                if (str == "mcircle")
+                {
+                    str = "Mcircle";
+                }
+                else if (str == "mdiamond")
+                {
+                    str = "Mdiamond";
+                }
+                else if (str == "msquare")
+                {
+                    str = "Msquare";
+                }
+                Set(DotConstants.ShapeAttribute,str); 
+            }
 		}
 	}
 }
