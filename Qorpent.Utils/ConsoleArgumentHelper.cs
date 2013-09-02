@@ -16,6 +16,8 @@
 // 
 // PROJECT ORIGIN: Qorpent.Utils/ConsoleArgumentHelper.cs
 #endregion
+
+using System;
 using System.Collections.Generic;
 
 namespace Qorpent.Utils {
@@ -94,5 +96,23 @@ namespace Qorpent.Utils {
 		}
 
 		private readonly ReflectionHelper _reflectionhelper;
+		/// <summary>
+		/// Считывает текст с коммандной строки, заменяя символы звездочками
+		/// </summary>
+		/// <param name="message"></param>
+		/// <returns></returns>
+		public string ReadLineSafety(string message) {
+			Console.WriteLine();
+			Console.Write(message);
+			string buffer = "";
+			while (true) {
+				var key = Console.ReadKey(true);
+				if (key.Key == ConsoleKey.Enter) {
+					Console.WriteLine();
+					return buffer;
+				}
+				buffer += key.KeyChar;
+			}
+		}
 	}
 }

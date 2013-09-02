@@ -168,10 +168,18 @@ namespace Qorpent.IO.Web {
 
 	
 		private async Task PostDataToServer(IResourceConfig config, WebRequest nativeRequest) {
-			if (null != config.RequestPostData) {
-				State = ResourceRequestState.Post;
-				using (var stream = new BinaryWriter(await nativeRequest.GetRequestStreamAsync())) {
-					stream.Write(config.RequestPostData, 0, config.RequestPostData.Length);
+			if (config.Method == "POST") {
+				if (null != config.RequestPostData) {
+					State = ResourceRequestState.Post;
+					using (var stream = new BinaryWriter(await nativeRequest.GetRequestStreamAsync())) {
+						stream.Write(config.RequestPostData, 0, config.RequestPostData.Length);
+					}
+				}else if (!string.IsNullOrWhiteSpace(config.RequestFormString)) {
+					State = ResourceRequestState.Post;
+					using (var stream = new StreamWriter(await nativeRequest.GetRequestStreamAsync()))
+					{
+						stream.Write(config.RequestFormString);
+					}
 				}
 			}
 		}

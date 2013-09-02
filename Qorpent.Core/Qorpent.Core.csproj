@@ -72,6 +72,7 @@
     <Compile Include="IoC\ComponentDefinitionWrapper.cs" />
     <Compile Include="IoC\IFactory.cs" />
     <Compile Include="IO\IFileSource.cs" />
+    <Compile Include="Mvc\MvcClient.cs" />
     <Compile Include="IO\Resources\DefaultResourceProvider.cs" />
     <Compile Include="IO\Resources\IResource.cs" />
     <Compile Include="IO\Resources\IResourceConfig.cs" />

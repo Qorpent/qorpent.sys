@@ -55,5 +55,10 @@ namespace Qorpent.IO.Resources {
 		/// Контейнер кук
 		/// </summary>
 		bool UseQwebAuthentication { get; set; }
+
+		/// <summary>
+		/// Данные формы для POST
+		/// </summary>
+		string RequestFormString { get; set; }
 	}
 }

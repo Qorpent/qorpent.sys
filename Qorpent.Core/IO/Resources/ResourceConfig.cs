@@ -62,6 +62,10 @@ namespace Qorpent.IO.Resources {
 		/// Использование аутентификации QWEB
 		/// </summary>
 		public const string QWEBAUTH = "qweb_auth";
+		/// <summary>
+		/// Данные для формы
+		/// </summary>
+		public const string REQUEST_FORM_STRING = "post_data";
 
 		/// <summary>
 		/// Данные для отсылки конечной точке(для вебоподобных ресурсов)
@@ -145,6 +149,13 @@ namespace Qorpent.IO.Resources {
 		{
 			get { return Get(QWEBAUTH, false); }
 			set { Set(QWEBAUTH, value); }
+		}
+		/// <summary>
+		/// Данные формы для POST
+		/// </summary>
+		public string RequestFormString {
+			get { return Get(REQUEST_FORM_STRING, ""); }
+			set { Set(REQUEST_FORM_STRING, value); }
 		}
 	}
 }
