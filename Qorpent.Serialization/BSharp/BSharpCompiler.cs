@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Config;
@@ -146,6 +147,9 @@ namespace Qorpent.BSharp {
 				}
 				else {
 					var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = e.Attr("code"), Namespace = ns};
+					if (null != def.Source.Attribute("_file")) {
+						def.Source.SetAttributeValue("_dir",Path.GetDirectoryName(def.Source.Attr("_file")).Replace("\\","/"));
+					}
                     if (!IsOverrideMatch(def)) continue;
 					SetupInitialOrphanState(e, def);
 					ParseImports(e, def);

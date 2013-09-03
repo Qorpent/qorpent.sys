@@ -42,6 +42,9 @@ namespace Qorpent.BSharp {
 		/// По умолчанию - рабочие классы
 		/// </summary>
 		Default = Working,
-		
+		/// <summary>
+		/// Обобщенный тип индексируемого в качестве исходного текста класса
+		/// </summary>
+		SrcPkg = 1<<8,
 	}
 }

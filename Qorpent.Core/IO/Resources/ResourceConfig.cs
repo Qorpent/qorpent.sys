@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using Qorpent.Config;
 
 namespace Qorpent.IO.Resources {
@@ -48,6 +49,23 @@ namespace Qorpent.IO.Resources {
 		/// </summary>
 		public const string ACCEPT_ALL_CERTIFICATES = "accept_all_certificates";
 
+		/// <summary>
+		/// Сведения о пользователе (адреса прокси)
+		/// </summary>
+		public const string CREDENTIALS = "credentials";
+		/// <summary>
+		/// Куки (адреса прокси)
+		/// </summary>
+		public const string COOKIES = "cookies";
+
+		/// <summary>
+		/// Использование аутентификации QWEB
+		/// </summary>
+		public const string QWEBAUTH = "qweb_auth";
+		/// <summary>
+		/// Данные для формы
+		/// </summary>
+		public const string REQUEST_FORM_STRING = "post_data";
 
 		/// <summary>
 		/// Данные для отсылки конечной точке(для вебоподобных ресурсов)
@@ -107,6 +125,37 @@ namespace Qorpent.IO.Resources {
 		public bool AcceptAllCeritficates {
 			get { return Get(ACCEPT_ALL_CERTIFICATES,false); }
 			set { Set(ACCEPT_ALL_CERTIFICATES, value); }
+		}
+
+		/// <summary>
+		/// Сведения о пользователе
+		/// </summary>
+		public ICredentials Credentials {
+			get { return Get<ICredentials>(CREDENTIALS, null); }
+			set { Set(CREDENTIALS, value); }
+		}
+		/// <summary>
+		/// Контейнер кук
+		/// </summary>
+		public CookieContainer Cookies {
+			get { return Get<CookieContainer>(COOKIES, null); }
+			set { Set(COOKIES, value); }
+		}
+
+		/// <summary>
+		/// Контейнер кук
+		/// </summary>
+		public bool UseQwebAuthentication
+		{
+			get { return Get(QWEBAUTH, false); }
+			set { Set(QWEBAUTH, value); }
+		}
+		/// <summary>
+		/// Данные формы для POST
+		/// </summary>
+		public string RequestFormString {
+			get { return Get(REQUEST_FORM_STRING, ""); }
+			set { Set(REQUEST_FORM_STRING, value); }
 		}
 	}
 }

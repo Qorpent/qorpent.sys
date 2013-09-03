@@ -19,6 +19,9 @@ namespace Qorpent.BSharp.Builder {
             ParseIncludes(bSharpClass, project);
             ParseExcludes(bSharpClass, project);
 
+	        project.GenerateSrcPkg = bSharpClass["GenerateSrcPkg"].ToBool();
+			project.SrcPkgName = bSharpClass["SrcPkgName"];
+
             var outLayout = bSharpClass.Compiled.Element("Layout");
             if (outLayout != null) {
                 project.OutputAttributes = outLayout.Attribute("code").Value.To<BSharpBuilderOutputAttributes>();
@@ -34,9 +37,9 @@ namespace Qorpent.BSharp.Builder {
                 project.OutputExtension = outputExtension.Attribute("code").Value;
             }
 
-            var inputExtension = bSharpClass.Compiled.Element("InputExtension");
+            var inputExtension = bSharpClass.Compiled.Element("InputExtensions");
             if (inputExtension != null) {
-                project.InputExtension = inputExtension.Attribute("code").Value;
+                project.InputExtensions = inputExtension.Attribute("code").Value;
             }
 
             return project;
@@ -49,7 +52,6 @@ namespace Qorpent.BSharp.Builder {
         private static void ParseIncludes(IBSharpClass bSharpClass, IBSharpProject project) {
             var include = bSharpClass.Compiled.Element("Include");
             if (include != null) {
-                FlushIncludeDefaultsIfNeeded(include, project);
 
                 foreach (var el in include.Elements("Path")) {
                     AppendInclude(project.Targets.Paths, el.Attribute("code").Value);
@@ -90,24 +92,6 @@ namespace Qorpent.BSharp.Builder {
         private static void AppendInclude(IDictionary<string, BSharpBuilderTargetType> collection, string value) {
             collection.AppendTarget(value, BSharpBuilderTargetType.Include);
         }
-        /// <summary>
-        ///     сбрасывает настройки по умолчанию для инклудов, если это имеются
-        ///     инклуды на Path, Namespace
-        /// </summary>
-        /// <param name="include"></param>
-        /// <param name="project"></param>
-        private static void FlushIncludeDefaultsIfNeeded(XElement include, IBSharpProject project) {
-            if (!include.Elements("Path").IsEmptyCollection()) {
-                project.Targets.Paths.RemoveTarget("*");
-            }
 
-            if (!include.Elements("Namespace").IsEmptyCollection()) {
-                project.Targets.Namespaces.RemoveTarget("*");
-            }
-
-            if (!include.Elements("Class").IsEmptyCollection()) {
-                project.Targets.Classes.RemoveTarget("*");
-            }
-        }
     }
 }

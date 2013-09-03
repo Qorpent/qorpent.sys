@@ -467,6 +467,11 @@ namespace Qorpent.Mvc {
 		/// <param name="sourceStream"></param>
 		public abstract void WriteOutStream(Stream sourceStream);
 
+		/// <summary>
+		/// Выводит в исходящий поток данные
+		/// </summary>
+		public abstract void WriteOutBytes(byte[] data);
+
 		private bool _isbinded = false;
 		/// <summary>
 		/// Выполнить настройку действия на контекст

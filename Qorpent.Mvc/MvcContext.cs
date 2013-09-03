@@ -137,6 +137,17 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
+		/// Выводит в исходящий поток данные
+		/// </summary>
+		public override void WriteOutBytes(byte[] data) {
+			if (null == NativeAspContext)
+			{
+				throw new Exception("cannot write out stream without native context");
+			}
+			NativeAspContext.Response.OutputStream.Write(data,0,data.Length);
+		}
+
+		/// <summary>
 		/// 	IIS-based HTTP context (mostly used)
 		/// </summary>
 		[IgnoreSerialize] public HttpContextBase NativeAspContext { get; protected set; }

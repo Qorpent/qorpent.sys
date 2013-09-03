@@ -67,8 +67,10 @@ namespace Qorpent.BSharp.Builder {
 		protected virtual IResourceProvider GetDefaultResources() {
 			return new DefaultResourceProvider();
 		}
-
-		private IBSharpProject _project;
+		/// <summary>
+		/// Ссылка на целевой исходный проект
+		/// </summary>
+		protected IBSharpProject Project;
 		private IResourceProvider _resources;
 		private IBSharpCompiler _compiler ;
 		private IBxlParser _bxl;
@@ -79,7 +81,7 @@ namespace Qorpent.BSharp.Builder {
 		/// </summary>
 		/// <param name="project"></param>
 		public void Initialize(IBSharpProject project) {
-			_project = project;
+			Project = project;
 			PrepareTasks();
 			PostInitialize();
 		}
@@ -88,14 +90,16 @@ namespace Qorpent.BSharp.Builder {
 		/// 
 		/// </summary>
 		protected virtual void PrepareTasks() {
-			var _realproject = _project;
-			if (_project.IsFullyQualifiedProject) {
+			var _realproject = Project;
+			if (Project.IsFullyQualifiedProject || string.IsNullOrWhiteSpace(Project.ProjectName)) {
 				Log.Trace("load prepared project");
-				PrepareTasksFromProject(_project);
+				PrepareTasksFromProject(Project);
 			}
 			else {
 				Log.Trace("start compile projects");
 				_realproject = CompileRealProject();
+				_realproject.SetParent(Project);
+				Project = _realproject;
 				PrepareTasksFromProject(_realproject);
 				Log.Trace("internal project loaded");
 			}
@@ -251,7 +255,7 @@ namespace Qorpent.BSharp.Builder {
 		/// </summary>
 		/// <returns></returns>
 		public IBSharpProject GetProject() {
-			return _project;
+			return Project;
 		}
 	}
 }

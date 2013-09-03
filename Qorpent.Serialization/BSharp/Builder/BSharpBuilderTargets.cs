@@ -26,15 +26,7 @@ namespace Qorpent.BSharp.Builder {
             Namespaces = new Dictionary<string, BSharpBuilderTargetType>();
             Classes = new Dictionary<string, BSharpBuilderTargetType>();
             Paths = new Dictionary<string, BSharpBuilderTargetType>();
-            SetDefaults();
         }
-        /// <summary>
-        ///     Установка настроек настроек по умолчанию
-        /// </summary>
-        public void SetDefaults() {
-            Namespaces.AppendTarget("*", BSharpBuilderTargetType.Include);
-            Classes.AppendTarget("*", BSharpBuilderTargetType.Include);
-            Paths.AppendTarget("*", BSharpBuilderTargetType.Include);
-        }
+       
     }
 }

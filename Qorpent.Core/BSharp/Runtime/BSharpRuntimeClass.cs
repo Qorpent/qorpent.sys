@@ -50,8 +50,11 @@ namespace Qorpent.BSharp.Runtime {
 			if (null == e) return null;
 			return e.Attribute(BSharpRuntimeDefaults.BSHARP_CLASS_NAME_ATTRIBUTE).Value;
 		}
-
-		private XElement GetClassElement() {
+		/// <summary>
+		/// Возвращает нативное определение класса
+		/// </summary>
+		/// <returns></returns>
+		public XElement GetClassElement() {
 			if (null == Definition) return null;
 			var e = Definition;
 			//хидер пропускаем

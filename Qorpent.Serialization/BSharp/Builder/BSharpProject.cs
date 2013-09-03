@@ -33,6 +33,9 @@ namespace Qorpent.BSharp.Builder {
         private const string TARGETS = "targets";
 	    private const string INPUT_EXTENSION = "input_extension";
 	    private const string WRITE_COMPILED = "write_compiled";
+	    private const string PROJECT_NAME = "project_name";
+	    private const string GENERATE_SRC_PKG = "generate_src_pkg";
+	    private const string SRC_PKG_NAME = "src_pkg_name";
 		
 		/// <summary>
 		/// Целевые проекты при билде
@@ -98,7 +101,7 @@ namespace Qorpent.BSharp.Builder {
 	    /// <summary>
 	    ///     Расширение для входных файлов
 	    /// </summary>
-	    public string InputExtension {
+	    public string InputExtensions {
             get { return Get(INPUT_EXTENSION, BSharpBuilderDefaults.DefaultInputExtension); }
             set { Set(INPUT_EXTENSION, value); }
 	    }
@@ -139,6 +142,30 @@ namespace Qorpent.BSharp.Builder {
 		public IDictionary<string, string> Conditions {
 			get { return Get<IDictionary<string, string>>(CONDITIONS); }
 			set { Set(CONDITIONS, value); }
+		}
+
+		/// <summary>
+		/// Корневая директория
+		/// </summary>
+		public string ProjectName
+		{
+			get { return Get(PROJECT_NAME,""); }
+			set { Set(PROJECT_NAME, value); }
+		}
+		/// <summary>
+		/// Требование создать пакет исходников в виде перносимого архива
+		/// </summary>
+		public bool GenerateSrcPkg {
+			get { return Get(GENERATE_SRC_PKG, false); }
+			set { Set(GENERATE_SRC_PKG, value); }
+		}
+		/// <summary>
+		/// Требование создать пакет исходников в виде перносимого архива
+		/// </summary>
+		public string SrcPkgName
+		{
+			get { return Get(SRC_PKG_NAME, "src.bssrc"); }
+			set { Set(SRC_PKG_NAME, value); }
 		}
 
 

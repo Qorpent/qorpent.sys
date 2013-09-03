@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using Qorpent.Config;
 
 namespace Qorpent.IO.Resources {
@@ -41,5 +42,23 @@ namespace Qorpent.IO.Resources {
 		/// True, чтобы принимать самоподписные или недоверенные сертификаты
 		/// </summary>
 		bool AcceptAllCeritficates { get; set; }
+		/// <summary>
+		/// Сведения о пользователе
+		/// </summary>
+		ICredentials Credentials { get; set; }
+		/// <summary>
+		/// Контейнер кук
+		/// </summary>
+		CookieContainer Cookies { get; set; }
+
+		/// <summary>
+		/// Контейнер кук
+		/// </summary>
+		bool UseQwebAuthentication { get; set; }
+
+		/// <summary>
+		/// Данные формы для POST
+		/// </summary>
+		string RequestFormString { get; set; }
 	}
 }

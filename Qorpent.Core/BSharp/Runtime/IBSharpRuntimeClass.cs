@@ -35,5 +35,11 @@ namespace Qorpent.BSharp.Runtime {
 		/// Создает 
 		/// </summary>
 		object Create();
+
+		/// <summary>
+		/// Возвращает нативное определение класса
+		/// </summary>
+		/// <returns></returns>
+		XElement GetClassElement();
 	}
 }

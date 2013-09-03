@@ -17,6 +17,8 @@
 // PROJECT ORIGIN: Qorpent.Mvc/EchoAction.cs
 #endregion
 
+using System.Text;
+
 namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// 	QWebEchoAction (qweb/echo) return Request data wrapped
@@ -31,6 +33,16 @@ namespace Qorpent.Mvc.Actions {
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
+			if (Context.RenderName == "dot") {
+				var result = new StringBuilder();
+				result.AppendLine("digraph Echo { ");
+				result.AppendLine("echo");
+				foreach (var c in Context.Parameters) {
+					result.AppendLine("echo->" + c.Key + "[label=\"" + c.Key + ":" + c.Value + "\"]");
+				}
+				result.AppendLine("}");
+				return result.ToString();
+			}
 			return Context.Parameters;
 		}
 	}
