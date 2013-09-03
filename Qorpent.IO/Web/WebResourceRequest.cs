@@ -16,6 +16,8 @@ namespace Qorpent.IO.Web {
 	///     Обертка над Web-запросом
 	/// </summary>
 	public class WebResourceRequest : IResourceRequest {
+		public const string ALLOW_ALL_CERTIFICATES_HEADER = "ALLOW_ALL_CERTIFICATES";
+
 		/// <summary>
 		///     Конфигурация
 		/// </summary>
@@ -118,7 +120,9 @@ namespace Qorpent.IO.Web {
 				State = ResourceRequestState.Created;
 				await PostDataToServer(config, nativeRequest);
 				State = ResourceRequestState.Get;
-				nativeRequest.Headers["ALLOW_ALL_CERTIFICATES"] = "1";
+				if (config.AcceptAllCeritficates) {
+					nativeRequest.Headers[ALLOW_ALL_CERTIFICATES_HEADER] = "1";
+				}
 				var nativeResponse = await nativeRequest.GetResponseAsync();
 				State = ResourceRequestState.Finished;
 				return new WebResourceResponse(nativeResponse, nativeRequest, config);
@@ -136,7 +140,7 @@ namespace Qorpent.IO.Web {
 			var nr = (HttpWebRequest)WebRequest.Create(whoami);
 			nr.CookieContainer = config.Cookies ?? MainContainer;
 			if (config.AcceptAllCeritficates) {
-				nr.Headers["ALLOW_ALL_CERTIFICATES"] = "1";
+				nr.Headers[ALLOW_ALL_CERTIFICATES_HEADER] = "1";
 			}
 			var r = nr.GetResponse();
 			var x = XElement.Load(XmlReader.Create(r.GetResponseStream()));
@@ -230,7 +234,7 @@ namespace Qorpent.IO.Web {
 		private static bool ValidateServerCertficate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors) {
 			if (sslpolicyerrors == SslPolicyErrors.None) return true;
 			var req = (HttpWebRequest) sender;
-			if (req.Headers.AllKeys.Contains("ALLOW_ALL_CERTIFICATES")) {
+			if (req.Headers.AllKeys.Contains(ALLOW_ALL_CERTIFICATES_HEADER)) {
 				return true;
 			}
 			return false;
