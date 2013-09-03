@@ -24,9 +24,9 @@ namespace Qorpent.Dot {
                 {
                     str = "Msquare";
                 }
-                else if (str == "Mrecord")
+                else if (str == "mrecord")
                 {
-                    str = "mrecord";
+                    str = "Mrecord";
                 }                
                 Set(DotConstants.ShapeAttribute,str); 
             }

@@ -15,5 +15,14 @@
 		/// Атрибут формы узла
 		/// </summary>
 		public const string ShapeAttribute = "shape";
+        /// <summary>
+        /// Форма конца стрелки
+        /// </summary>
+        public const string ArrowHeadAttribute = "arrowhead";
+        /// <summary>
+        /// Форма начала стрелки
+        /// </summary>
+        public const string ArrowTailAttribute = "arrowtail";
+
 	}
 }
