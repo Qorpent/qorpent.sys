@@ -36,6 +36,9 @@ namespace Qorpent.Dot {
 			get { return Get(DotConstants.LabelAttribute); }
 			set { Set(DotConstants.LabelAttribute,value); }
 		}
+        
+        
+            
 
 		/// <summary>
 		/// Автонастройка
@@ -51,5 +54,25 @@ namespace Qorpent.Dot {
 		public bool HasAttribute(string name) {
 			return Attributes.ContainsKey(name);
 		}
+
+        /// <summary>
+        /// Заголовок
+        /// </summary>
+        public string FontName
+        {
+            get {
+                return Get(DotConstants.FontNameAttribute); 
+            }
+            set {
+                if (value == DotConstants.DefaultFontNameAttribute)
+                {
+                    Attributes.Remove(DotConstants.FontNameAttribute);
+                }
+                else {
+                    Set(DotConstants.FontNameAttribute, value); 
+                }
+                
+            }
+        }
 	}
 }

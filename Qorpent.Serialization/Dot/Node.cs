@@ -31,5 +31,18 @@ namespace Qorpent.Dot {
                 Set(DotConstants.ShapeAttribute,str); 
             }
 		}
+        /// <summary>
+        /// Задает угол в градусах для вращения многоугольника формы узла (shape=poligon). Н-р, node [shape=poligon; orientation=30]
+        /// </summary>
+        public double Orientation
+        {
+            get { return Get(DotConstants.OrientationAttribute).To<double>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.OrientationAttribute, str);
+
+            }
+        }
 	}
 }

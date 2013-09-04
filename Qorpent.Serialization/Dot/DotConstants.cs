@@ -2,19 +2,20 @@
 	/// <summary>
 	/// Набор констант дота
 	/// </summary>
-	public static class DotConstants {
-		/// <summary>
-		/// Атрибут заголовка
-		/// </summary>
-		public const string LabelAttribute = "label";
-		/// <summary>
-		/// Атрибут направления разрисовки графа
-		/// </summary>
-		public const string RankDirAttribute = "rankdir";
-		/// <summary>
-		/// Атрибут формы узла
-		/// </summary>
-		public const string ShapeAttribute = "shape";
+    public static class DotConstants
+    {
+        /// <summary>
+        /// Атрибут заголовка
+        /// </summary>
+        public const string LabelAttribute = "label";
+        /// <summary>
+        /// Атрибут направления разрисовки графа
+        /// </summary>
+        public const string RankDirAttribute = "rankdir";
+        /// <summary>
+        /// Атрибут формы узла
+        /// </summary>
+        public const string ShapeAttribute = "shape";
         /// <summary>
         /// Форма конца стрелки
         /// </summary>
@@ -59,6 +60,48 @@
         /// Определеяет на каких концах ребра должны быть стрелки (или не быть). Фактически же стиль стрелки можно задать с помощью ArrowTail и ArrowHead.
         /// </summary>        
         public const string DirAttribute = "dir";
-	}
+        /// <summary>
+        /// Сконцентрированное расположение узлов и подграфов графа
+        /// </summary>        
+        public const string ConcentrateAttribute = "сoncentrate";
+        /// <summary>
+        /// Имя у шрифта
+        /// </summary>        
+        public const string FontNameAttribute = "fontname";
+        /// <summary>
+        /// Имя у шрифта
+        /// </summary>        
+        public const string DefaultFontNameAttribute = "Times-Roman";
+        /// <summary>
+        /// Не нужный атрибут
+        /// </summary>        
+        public const string FontNamesAttribute = "fontnames";
+        /// <summary>
+        /// Если "Да", то график отображается в ландшафтном режиме, т.е. переварачивается на 90 градусов
+        /// </summary>        
+        public const string LandscapeAttribute = "landscape";
+        /// <summary>
+        /// Если "Да", то график отображается в ландшафтном режиме, т.е. переварачивается на 90 градусов
+        /// </summary>        
+        public const string LandscapeAttribute = "landscape";
+        /// <summary>
+        /// Для graph и node
+        /// </summary>        
+        public const string OrientationAttribute = "orientation";
+        /// <summary>
+        /// Квантум увеличивает размеры узла графа на указанное значение. Н-р, quantum=0.5
+        /// </summary>        
+        public const string QuantumAttribute = "quantum";
+        /// <summary>
+        /// Если "Да" и есть несколько графов, то ?????
+        /// </summary>        
+        public const string RemincrossAttribute = "remincross";
+        /// <summary>
+        /// Если установить значение 90, то произойдет переориентации графа в альбомную страницу
+        /// </summary>        
+        public const string RotateAttribute = "rotate";
+        
+        
+    }
 
 }
