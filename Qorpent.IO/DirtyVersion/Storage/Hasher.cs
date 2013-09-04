@@ -9,6 +9,16 @@ namespace Qorpent.IO.DirtyVersion.Storage
 	/// Хелпер формирования хэшей
 	/// </summary>
 	public class Hasher {
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="length"></param>
+		public Hasher(int length=Const.HashSize) {
+			_length = Math.Min(length, Const.HashSize);
+		}
+
+		private int _length;
+		
 		private HashAlgorithm _internalhasher;
 
 		private HashAlgorithm Internalhasher {
@@ -47,12 +57,22 @@ namespace Qorpent.IO.DirtyVersion.Storage
 			return ConvertHashToString(hash);
 		}
 
-		private static string ConvertHashToString(byte[] hash) {
+		private  string ConvertHashToString(byte[] hash) {
 			var sb = new StringBuilder();
 			for (var i = 0; i < hash.Length; i++) {
-				sb.Append(hash[i].ToString("x2"));
+				if (0 == i) {
+					var val = hash[i].ToString("x2");
+					if (char.IsDigit(val[0])) {
+
+						val = ((char) (((int) val[0]) + 55)).ToString() + val[1].ToString();
+					}
+					sb.Append(val);
+				}
+				else {
+					sb.Append(hash[i].ToString("x2"));
+				}
 			}
-			return sb.ToString();
+			return sb.ToString().Substring(0,_length);
 		}
 	}
 }

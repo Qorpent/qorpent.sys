@@ -10,24 +10,12 @@ namespace Qorpent.IO.DirtyVersion.Storage
 	/// <summary>
 	/// Специальная диреткория, выполняющая сохранение объекта в виде хэшированной записи
 	/// </summary>
-	public class HashedDirectory
-	{
+	public class HashedDirectory : HashedDirectoryBase {
 		/// <summary>
 		/// Создает хэшированную директорию для записи файлов
 		/// </summary>
 	
-		public HashedDirectory(string targetDirectoryName, bool compress = true) {
-			_rootDirectory = targetDirectoryName;
-			_compress = compress;
-		}
-
-		/// <summary>
-		/// Корневая директория
-		/// </summary>
-		private readonly string _rootDirectory;
-
-		private readonly Hasher _hasher = new Hasher();
-		private bool _compress;
+		public HashedDirectory(string targetDirectoryName, bool compress = true, int hashsize = Const.HashSize) : base(targetDirectoryName, compress: compress, hashsize: hashsize) {}
 
 		/// <summary>
 		/// Выполняет сохранение файла с формированием хэш -записи
@@ -168,10 +156,6 @@ namespace Qorpent.IO.DirtyVersion.Storage
 			};
 		}
 
-		private string ConvertToHash(string filename) {
-			return Path.GetFileName( Path.GetDirectoryName(filename)) + Path.GetFileName(filename);
-		}
-
 		/// <summary>
 		/// Возвращает последний файл, записанный до указанного времени
 		/// </summary>
@@ -216,16 +200,6 @@ namespace Qorpent.IO.DirtyVersion.Storage
 			foreach (var filename in Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories)) {
 				yield return ConvertToResultFileRecord(file, filename);
 			}
-		}
-
-		/// <summary>
-		/// Конвертирует хэш в путь
-		/// </summary>
-		/// <param name="root"></param>
-		/// <param name="hash"></param>
-		/// <returns></returns>
-		private string ConvertToFileName(string root, string hash) {
-			return Path.GetFullPath( Path.Combine(root, hash.Substring(0, 2) + "/" + hash.Substring(2)));
 		}
 	}
 }

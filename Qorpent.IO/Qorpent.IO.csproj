@@ -10,6 +10,9 @@
   <ItemGroup>
     <Compile Include="ContainerInfo.cs" />
     <Compile Include="DirtyVersion\Const.cs" />
+    <Compile Include="DirtyVersion\Mapper\MapperOperator.cs" />
+    <Compile Include="DirtyVersion\Mapper\MapRecord.cs" />
+    <Compile Include="DirtyVersion\HashedDirectoryBase.cs" />
     <Compile Include="DirtyVersion\Storage\HashedDirectoryRecord.cs" />
     <Compile Include="DirtyVersion\Storage\Hasher.cs" />
     <Compile Include="DirtyVersion\Storage\HashedDirectory.cs" />
