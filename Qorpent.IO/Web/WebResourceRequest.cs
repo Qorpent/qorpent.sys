@@ -15,7 +15,7 @@ namespace Qorpent.IO.Web {
 	///     Обертка над Web-запросом
 	/// </summary>
 	public class WebResourceRequest : IResourceRequest {
-		public const string ALLOW_ALL_CERTIFICATES_HEADER = "ALLOW_ALL_CERTIFICATES";
+
 
 		/// <summary>
 		/// Заголовок запроса на игнор сертификата

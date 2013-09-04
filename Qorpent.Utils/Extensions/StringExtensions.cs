@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Qorpent.Utils.Extensions {
@@ -35,6 +36,57 @@ namespace Qorpent.Utils.Extensions {
 		public static StringHelper DefaultHelper {
 			get { return _helper; }
 			set { _helper = value; }
+		}
+
+		/// <summary>
+		/// Конвертирует исходный текст в сущности XML
+		/// </summary>
+		/// <param name="src"></param>
+		/// <param name="escapeQuots"></param>
+		/// <param name="altprefix"></param>
+		/// <returns></returns>
+		public static string GetUnicodeSafeXmlString(this string src, bool escapeQuots = false, string altprefix = null) {
+			var builder = new StringBuilder();
+			foreach (char c in src)
+			{
+				
+				if (c > 127)
+				{
+					builder.Append(altprefix ?? "&#");
+					builder.Append((int)c);
+					builder.Append(";");
+				}
+				else
+				{
+					if (escapeQuots)
+					{
+						if (c == '"') {
+							builder.Append("&quot;");
+						}else if (c == '\'') {
+							builder.Append("&apos;");
+						}
+						else if (c == '&')
+						{
+							builder.Append("&amp;");
+						}
+						else if (c == '<')
+						{
+							builder.Append("&lt;");
+						}
+						else if (c == '>') {
+							builder.Append("&gt;");
+						}
+						else {
+							builder.Append(c);
+						}
+					}
+					else {
+
+						builder.Append(c);
+					}
+				}
+			}
+			return builder.ToString();
 		}
 
 		/// <summary>
