@@ -25,6 +25,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirtyVersion\HahserTest.cs" />
     <Compile Include="FileResolverTest.cs" />
     <Compile Include="FileServiceTest.cs" />
     <Compile Include="Web\DefaultWorkingThroughResourceProvider.cs" />
