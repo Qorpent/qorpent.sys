@@ -25,12 +25,14 @@ namespace Qorpent.Mvc.Actions {
 		/// <summary>
 		/// Показывать папки
 		/// </summary>
-		[Bind] protected bool ShowDirs;
+        [Bind(Default = true)]
+        protected bool ShowDirs;
 
 		/// <summary>
 		/// Показывать файлы
 		/// </summary>
-		[Bind] protected bool ShowFiles;
+        [Bind(Default = true)]
+        protected bool ShowFiles;
 
 		/// <summary>
 		/// 	fh
