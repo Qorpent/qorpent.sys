@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dot
@@ -58,6 +59,21 @@ namespace Qorpent.Dot
 
             }
         }
-    
+
+
+		/// <summary>
+		/// Автонастройка
+		/// </summary>
+		public override void AutoTune()
+		{
+			base.AutoTune();
+			if (Edges.Any(e => 
+				e.HasAttribute(DotConstants.LheadAttribute)
+				||e.HasAttribute(DotConstants.LtailAttribute))) {
+				if (!HasAttribute(DotConstants.CompoundAttribute)) {
+					Compound = true;
+				}
+			}
+		}
 	}
 }

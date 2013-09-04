@@ -121,10 +121,22 @@ namespace Qorpent.Dot {
 
             }
         }
-    
-    
-    
-    
+
+
+		/// <summary>
+		/// Автонастройка
+		/// </summary>
+		public override void AutoTune()
+		{
+			base.AutoTune();
+			// автоматическое выставление Dir в случае ArrowTail
+			if (HasAttribute(DotConstants.ArrowTailAttribute)) {
+				if (!HasAttribute(DotConstants.DirAttribute))
+				{
+					Dir = DirType.Both;
+				}
+			}
+		}
     
     
     

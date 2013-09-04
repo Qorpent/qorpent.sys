@@ -36,5 +36,20 @@ namespace Qorpent.Dot {
 			get { return Get(DotConstants.LabelAttribute); }
 			set { Set(DotConstants.LabelAttribute,value); }
 		}
+
+		/// <summary>
+		/// Автонастройка
+		/// </summary>
+		public virtual void AutoTune() {
+			
+		}
+		/// <summary>
+		/// Проверяет наличие атрибута
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public bool HasAttribute(string name) {
+			return Attributes.ContainsKey(name);
+		}
 	}
 }
