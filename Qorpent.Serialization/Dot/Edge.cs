@@ -108,6 +108,19 @@ namespace Qorpent.Dot {
 
             }
         }
+        /// <summary>
+        /// Определеяет на каких концах ребра должны быть стрелки (или не быть). Фактически же стиль стрелки можно задать с помощью ArrowTail и ArrowHead.
+        /// </summary>
+        public DirType Dir
+        {
+            get { return Get(DotConstants.DirAttribute).To<DirType>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.DirAttribute, str);
+
+            }
+        }
     
     
     

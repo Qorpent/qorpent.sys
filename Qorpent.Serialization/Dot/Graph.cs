@@ -31,5 +31,33 @@ namespace Qorpent.Dot
 			get { return Get(DotConstants.RankDirAttribute).To<RankDirType>(); }
 			set { Set(DotConstants.RankDirAttribute, value.ToStr()); }
 		}
+
+        /// <summary>
+        /// Если "Да", то расположение графа центировано, а если "Нет", то не центировано
+        /// </summary>
+        public bool Center
+        {
+            get { return Get(DotConstants.CenterAttribute).To<bool>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.CenterAttribute, str);
+
+            }
+        }
+        /// <summary>
+        /// Если "Да", то позволяет стрелкам идти между подграфами (См. Lhead Ltail )
+        /// </summary>
+        public bool Compound
+        {
+            get { return Get(DotConstants.CompoundAttribute).To<bool>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.CompoundAttribute, str);
+
+            }
+        }
+    
 	}
 }
