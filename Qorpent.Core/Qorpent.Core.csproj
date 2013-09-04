@@ -132,6 +132,7 @@
     <Compile Include="Security\WinLogonType.cs" />
     <Compile Include="Dsl\Json\IJsonParser.cs" />
     <Compile Include="Serialization\ContentCleanerOptions.cs" />
+    <Compile Include="Serialization\IBSharpDotConverter.cs" />
     <Compile Include="Serialization\IContentCleaner.cs" />
     <Compile Include="Serialization\ICustomSelectorImpl.cs" />
     <Compile Include="Serialization\ISelector.cs" />
