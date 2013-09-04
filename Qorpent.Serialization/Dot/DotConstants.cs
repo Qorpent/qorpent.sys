@@ -80,10 +80,7 @@
         /// Если "Да", то график отображается в ландшафтном режиме, т.е. переварачивается на 90 градусов
         /// </summary>        
         public const string LandscapeAttribute = "landscape";
-        /// <summary>
-        /// Если "Да", то график отображается в ландшафтном режиме, т.е. переварачивается на 90 градусов
-        /// </summary>        
-        public const string LandscapeAttribute = "landscape";
+        
         /// <summary>
         /// Для graph и node
         /// </summary>        
