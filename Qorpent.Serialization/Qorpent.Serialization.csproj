@@ -38,6 +38,7 @@
     <Compile Include="BSharp\Schema\Schema.cs" />
     <Compile Include="BSharp\Schema\SchemaNote.cs" />
     <Compile Include="Dot\ArrowType.cs" />
+    <Compile Include="Dot\StyleGraphType.cs" />
     <Compile Include="Dot\StyleEdgeType.cs" />
     <Compile Include="Dot\StyleNodeType.cs" />
     <Compile Include="Dot\DirType.cs" />
