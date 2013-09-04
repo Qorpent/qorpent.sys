@@ -10,10 +10,10 @@
   <ItemGroup>
     <Compile Include="ContainerInfo.cs" />
     <Compile Include="DirtyVersion\Const.cs" />
-    <Compile Include="DirtyVersion\Helpers\HashedDirectoryRecord.cs" />
-    <Compile Include="DirtyVersion\Helpers\Hasher.cs" />
-    <Compile Include="DirtyVersion\Helpers\HashedDirectory.cs" />
-    <Compile Include="DirtyVersion\Helpers\ProxyReadStream.cs" />
+    <Compile Include="DirtyVersion\Storage\HashedDirectoryRecord.cs" />
+    <Compile Include="DirtyVersion\Storage\Hasher.cs" />
+    <Compile Include="DirtyVersion\Storage\HashedDirectory.cs" />
+    <Compile Include="DirtyVersion\Storage\CopyOnReadStream.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
     <Compile Include="Web\ProxySelectorHelper.cs" />

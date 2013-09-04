@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
 
-namespace Qorpent.IO.DirtyVersion.Helpers
+namespace Qorpent.IO.DirtyVersion.Storage
 {
 	/// <summary>
 	/// Специальная диреткория, выполняющая сохранение объекта в виде хэшированной записи
@@ -13,9 +15,10 @@ namespace Qorpent.IO.DirtyVersion.Helpers
 		/// <summary>
 		/// Создает хэшированную директорию для записи файлов
 		/// </summary>
-		/// <param name="targetDirectoryName"></param>
-		public HashedDirectory(string targetDirectoryName) {
+	
+		public HashedDirectory(string targetDirectoryName, bool compress = true) {
 			_rootDirectory = targetDirectoryName;
+			_compress = compress;
 		}
 
 		/// <summary>
@@ -24,6 +27,17 @@ namespace Qorpent.IO.DirtyVersion.Helpers
 		private readonly string _rootDirectory;
 
 		private readonly Hasher _hasher = new Hasher();
+		private bool _compress;
+
+		/// <summary>
+		/// Выполняет сохранение файла с формированием хэш -записи
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <param name="data"></param>
+		public HashedDirectoryRecord Write(string filename,string data) {
+			return Write(filename, new MemoryStream(Encoding.UTF8.GetBytes(data)));
+		}
+
 		/// <summary>
 		/// Выполняет сохранение файла с формированием хэш -записи
 		/// </summary>
@@ -32,7 +46,7 @@ namespace Qorpent.IO.DirtyVersion.Helpers
 		public HashedDirectoryRecord Write(string filename, Stream data) {
 			var stubFile = Path.Combine(_rootDirectory, Guid.NewGuid().ToString());
 			var fileNameHash = _hasher.GetHash(filename);
-			var proxyStream = new ProxyReadStream(data, stubFile);
+			var proxyStream = new CopyOnReadStream(data, stubFile,_compress);
 			var dataHash = _hasher.GetHash(proxyStream);
 			proxyStream.Close();
 			var fileDir = ConvertToFileName(_rootDirectory, fileNameHash);
@@ -42,10 +56,11 @@ namespace Qorpent.IO.DirtyVersion.Helpers
 				File.SetLastWriteTime(fileName,DateTime.Now);
 			}
 			else {
-				Directory.CreateDirectory(fileDir);
+				Directory.CreateDirectory(Path.GetDirectoryName(fileName));
 				File.Move(stubFile,fileName);
 			}
-			return new HashedDirectoryRecord {DataHash = dataHash, NameHash = fileNameHash};
+
+			return new HashedDirectoryRecord {DataHash = dataHash, NameHash = fileNameHash,LastWriteTime = File.GetLastWriteTime(fileName)};
 		}
 		/// <summary>
 		/// Проверка на существовании в директории хэшированного файла
@@ -83,7 +98,11 @@ namespace Qorpent.IO.DirtyVersion.Helpers
 		/// <returns></returns>
 		public Stream Open(HashedDirectoryRecord record) {
 			var fname = ResolveNativeFileName(record);
-			return File.Open(fname, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			var result = (Stream)File.Open(fname, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			if (_compress) {
+				result = new GZipStream(result,CompressionMode.Decompress);
+			}
+			return result;
 		}
 		/// <summary>
 		/// Возвращает реальный полный путь к файлу
@@ -134,7 +153,7 @@ namespace Qorpent.IO.DirtyVersion.Helpers
 		{
 			return
 				EnumerateFiles(file)
-				.Where(_ => _.LastWriteTime <= file.LastWriteTime)
+				.Where(_ => _.LastWriteTime < file.LastWriteTime)
 				.OrderByDescending(_ => _.LastWriteTime)
 				.FirstOrDefault();
 		}
@@ -150,7 +169,7 @@ namespace Qorpent.IO.DirtyVersion.Helpers
 		}
 
 		private string ConvertToHash(string filename) {
-			return Path.GetDirectoryName(filename) + Path.GetFileName(filename);
+			return Path.GetFileName( Path.GetDirectoryName(filename)) + Path.GetFileName(filename);
 		}
 
 		/// <summary>
@@ -206,7 +225,7 @@ namespace Qorpent.IO.DirtyVersion.Helpers
 		/// <param name="hash"></param>
 		/// <returns></returns>
 		private string ConvertToFileName(string root, string hash) {
-			return Path.Combine(root, "./" + hash.Substring(0, 2) + "/" + hash.Substring(2));
+			return Path.GetFullPath( Path.Combine(root, hash.Substring(0, 2) + "/" + hash.Substring(2)));
 		}
 	}
 }

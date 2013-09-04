@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Qorpent.IO.DirtyVersion.Helpers
+namespace Qorpent.IO.DirtyVersion.Storage
 {
 	/// <summary>
 	/// Хелпер формирования хэшей
@@ -22,7 +22,7 @@ namespace Qorpent.IO.DirtyVersion.Helpers
 		/// <returns></returns>
 		public string GetHash(Stream stream) {
 			if (null == stream) throw new ArgumentNullException("stream");
-			if (stream.CanRead) throw new ArgumentException("stream is not readable","stream");
+			if (!stream.CanRead) throw new ArgumentException("stream is not readable","stream");
 			var hash = Internalhasher.ComputeHash(stream);
 			return ConvertHashToString(hash);
 		}

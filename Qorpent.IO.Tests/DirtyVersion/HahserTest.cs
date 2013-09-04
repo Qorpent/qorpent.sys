@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Qorpent.IO.DirtyVersion;
-using Qorpent.IO.DirtyVersion.Helpers;
+using Qorpent.IO.DirtyVersion.Storage;
 
 namespace Qorpent.IO.Tests.DirtyVersion
 {
