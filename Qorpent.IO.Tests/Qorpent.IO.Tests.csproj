@@ -27,6 +27,8 @@
   <ItemGroup>
     <Compile Include="FileResolverTest.cs" />
     <Compile Include="FileServiceTest.cs" />
+    <Compile Include="VcsStorageTests.cs" />
+    <Compile Include="VcsStorageTestsBase.cs" />
     <Compile Include="Web\DefaultWorkingThroughResourceProvider.cs" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
