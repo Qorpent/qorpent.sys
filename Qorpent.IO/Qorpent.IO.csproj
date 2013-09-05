@@ -10,8 +10,13 @@
   <ItemGroup>
     <Compile Include="ContainerInfo.cs" />
     <Compile Include="DirtyVersion\Const.cs" />
-    <Compile Include="DirtyVersion\Mapper\MapperOperator.cs" />
-    <Compile Include="DirtyVersion\Mapper\MapRecord.cs" />
+    <Compile Include="DirtyVersion\Mapper\Commit.cs" />
+    <Compile Include="DirtyVersion\Mapper\CommitAuthorInfo.cs" />
+    <Compile Include="DirtyVersion\Mapper\CommitSourceType.cs" />
+    <Compile Include="DirtyVersion\Mapper\HeadState.cs" />
+    <Compile Include="DirtyVersion\Mapper\MappingInfo.cs" />
+    <Compile Include="DirtyVersion\Mapper\MappingInfoSerializer.cs" />
+    <Compile Include="DirtyVersion\Mapper\MappingOperator.cs" />
     <Compile Include="DirtyVersion\HashedDirectoryBase.cs" />
     <Compile Include="DirtyVersion\Storage\HashedDirectoryRecord.cs" />
     <Compile Include="DirtyVersion\Storage\Hasher.cs" />
