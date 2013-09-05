@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
+using Qorpent.IO.Storages;
 using Qorpent.IO.VcsStorage;
-using Qorpent.IO.VcsStorage.Engines;
 
 namespace Qorpent.IO.Tests {
     public class VcsStorageTestsBase {

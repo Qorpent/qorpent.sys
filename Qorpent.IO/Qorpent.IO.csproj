@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ContainerInfo.cs" />
+    <Compile Include="FileDescriptors\DirtyVersionBasedFileDescriptor.cs" />
     <Compile Include="DirtyVersion\Const.cs" />
     <Compile Include="DirtyVersion\DirtyVersionStorage.cs" />
     <Compile Include="DirtyVersion\DirtyVersionStorageExtensions.cs" />
@@ -34,13 +35,14 @@
     <Compile Include="DirtyVersion\Storage\HashedDirectory.cs" />
     <Compile Include="DirtyVersion\Storage\CopyOnReadStream.cs" />
     <Compile Include="DirtyVersion\IHashedDirectory.cs" />
-    <Compile Include="FsBasedFileDescriptor.cs" />
+    <Compile Include="FileDescriptors\FsBasedFileDescriptor.cs" />
     <Compile Include="FileEntity.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
     <Compile Include="FileStorageAbilities.cs" />
     <Compile Include="IGeneralFileDescriptor.cs" />
     <Compile Include="IFileEntity.cs" />
+    <Compile Include="Storages\FileStorageDirtyVersion.cs" />
     <Compile Include="VcsStorage\VcsCommit.cs" />
     <Compile Include="Web\ProxySelectorHelper.cs" />
     <Compile Include="Web\WebResource.cs" />
@@ -48,7 +50,7 @@
     <Compile Include="Web\WebResourceRequest.cs" />
     <Compile Include="Web\WebResourceResponse.cs" />
     <Compile Include="Zip\ZipFileSource.cs" />
-    <Compile Include="Storages\FileStorageFsEngine.cs" />
+    <Compile Include="Storages\FileStorageFs.cs" />
     <Compile Include="VcsStorage\VcsStorageLogger.cs" />
     <Compile Include="VcsStorage\VcsStorageDefaults.cs" />
     <Compile Include="VcsStorage\VcsStorageTransaction.cs" />

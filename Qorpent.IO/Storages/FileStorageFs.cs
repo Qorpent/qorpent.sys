@@ -1,6 +1,7 @@
 ﻿using System.IO;
+using Qorpent.IO.VcsStorage;
 
-namespace Qorpent.IO.VcsStorage.Engines {
+namespace Qorpent.IO.Storages {
     /// <summary>
     ///     Движок на файловой системе
     /// </summary>
@@ -38,7 +39,13 @@ namespace Qorpent.IO.VcsStorage.Engines {
         public IGeneralFileDescriptor Get(IFileEntity file) {
             return RollRealReading(file);
         }
-
+        /// <summary>
+        ///     Возвращает клас текущего хранилища текущее хранилища
+        /// </summary>
+        /// <returns></returns>
+        public object GetStorage() {
+            return this;
+        }
         /// <summary>
         ///     Прокатака цикла реальной записи на диск
         /// </summary>
