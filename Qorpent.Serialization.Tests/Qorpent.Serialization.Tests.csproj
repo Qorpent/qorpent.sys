@@ -30,6 +30,7 @@
     <Compile Include="bxl_serializer_test.cs" />
     <Compile Include="coverage_only_tests.cs" />
     <Compile Include="DefaultSelectorTests.cs" />
+    <Compile Include="Dot\TuningTest.cs" />
     <Compile Include="exceptions_need_to_be_fixed.cs" />
     <Compile Include="iocconfiguationtest.cs" />
     <Compile Include="Json\AF768Tests.cs" />

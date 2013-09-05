@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Renders {
 	/// <summary>
@@ -11,7 +12,6 @@ namespace Qorpent.Mvc.Renders {
 	[Render("dot")]
 	public class DotRender : RenderBase {
 		private string _dotpath;
-
 		/// <summary>
 		/// 	Renders given context
 		/// </summary>
@@ -24,7 +24,8 @@ namespace Qorpent.Mvc.Renders {
 			var p = GetProcess(format);
 			p.Start();
 			try {
-				p.StandardInput.WriteLine(dotscript);
+				var script = dotscript.GetUnicodeSafeXmlString();
+				p.StandardInput.WriteLine(script);
 				if (format == "svg") {
 					WriteOutSvg(context, p);
 				}
@@ -94,7 +95,8 @@ namespace Qorpent.Mvc.Renders {
 				UseShellExecute = false,
 				CreateNoWindow = true,
 				RedirectStandardOutput = true,
-				RedirectStandardInput = true
+				RedirectStandardInput = true,
+				StandardOutputEncoding = Encoding.UTF8
 			};
 			var p = new Process {StartInfo = process_start};
 			return p;

@@ -9,14 +9,55 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ContainerInfo.cs" />
+    <Compile Include="DirtyVersion\Const.cs" />
+    <Compile Include="DirtyVersion\DirtyVersionStorage.cs" />
+    <Compile Include="DirtyVersion\DirtyVersionStorageExtensions.cs" />
+    <Compile Include="DirtyVersion\IDirtyVersionStorage.cs" />
+    <Compile Include="DirtyVersion\Mapping\Commit.cs" />
+    <Compile Include="DirtyVersion\Mapping\CommitAuthorInfo.cs" />
+    <Compile Include="DirtyVersion\Mapping\CommitHeadBehavior.cs" />
+    <Compile Include="DirtyVersion\Mapping\CommitSourceType.cs" />
+    <Compile Include="DirtyVersion\Mapping\DeleteHeadBehavior.cs" />
+    <Compile Include="DirtyVersion\Mapping\HeadState.cs" />
+    <Compile Include="DirtyVersion\IMapper.cs" />
+    <Compile Include="DirtyVersion\IMapperSession.cs" />
+    <Compile Include="DirtyVersion\IMappingOperator.cs" />
+    <Compile Include="DirtyVersion\Mapping\Mapper.cs" />
+    <Compile Include="DirtyVersion\Mapping\MapperSession.cs" />
+    <Compile Include="DirtyVersion\Mapping\MappingInfo.cs" />
+    <Compile Include="DirtyVersion\Mapping\MappingInfoSerializer.cs" />
+    <Compile Include="DirtyVersion\Mapping\MappingOperator.cs" />
+    <Compile Include="DirtyVersion\HashedDirectoryBase.cs" />
+    <Compile Include="DirtyVersion\MappingOperatorExtensions.cs" />
+    <Compile Include="DirtyVersion\Storage\HashedDirectoryRecord.cs" />
+    <Compile Include="DirtyVersion\Storage\Hasher.cs" />
+    <Compile Include="DirtyVersion\Storage\HashedDirectory.cs" />
+    <Compile Include="DirtyVersion\Storage\CopyOnReadStream.cs" />
+    <Compile Include="DirtyVersion\IHashedDirectory.cs" />
+    <Compile Include="FsBasedFileDescriptor.cs" />
+    <Compile Include="FileEntity.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
+    <Compile Include="FileStorageAbilities.cs" />
+    <Compile Include="IGeneralFileDescriptor.cs" />
+    <Compile Include="IFileEntity.cs" />
+    <Compile Include="VcsStorage\VcsCommit.cs" />
     <Compile Include="Web\ProxySelectorHelper.cs" />
     <Compile Include="Web\WebResource.cs" />
     <Compile Include="Web\WebResourceProviderExtension.cs" />
     <Compile Include="Web\WebResourceRequest.cs" />
     <Compile Include="Web\WebResourceResponse.cs" />
     <Compile Include="Zip\ZipFileSource.cs" />
+    <Compile Include="Storages\FileStorageFsEngine.cs" />
+    <Compile Include="VcsStorage\VcsStorageLogger.cs" />
+    <Compile Include="VcsStorage\VcsStorageDefaults.cs" />
+    <Compile Include="VcsStorage\VcsStorageTransaction.cs" />
+    <Compile Include="VcsStorage\VcsStorageTransactionType.cs" />
+    <Compile Include="VcsStorage\VcsStorageMapper.cs" />
+    <Compile Include="VcsStorage\VcsStoragePersister.cs" />
+    <Compile Include="VcsStorage\VcsStorageUtils.cs" />
+    <Compile Include="IFileStorage.cs" />
+    <Compile Include="VcsStorage\IVcsStoragePersister.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.XML" />

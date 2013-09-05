@@ -25,13 +25,24 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirtyVersion\HahserTest.cs" />
+    <Compile Include="DirtyVersion\HashedDirectoryTest.cs" />
+    <Compile Include="DirtyVersion\MapperTest.cs" />
+    <Compile Include="DirtyVersion\ReadProxyStreamTest.cs" />
+    <Compile Include="DirtyVersion\VersionedStorageTest.cs" />
     <Compile Include="FileResolverTest.cs" />
     <Compile Include="FileServiceTest.cs" />
+    <Compile Include="VcsStorageTests.cs" />
+    <Compile Include="VcsStorageTestsBase.cs" />
     <Compile Include="Web\DefaultWorkingThroughResourceProvider.cs" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
 </Project>

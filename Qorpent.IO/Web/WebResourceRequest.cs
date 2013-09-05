@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -16,8 +15,10 @@ namespace Qorpent.IO.Web {
 	///     Обертка над Web-запросом
 	/// </summary>
 	public class WebResourceRequest : IResourceRequest {
+
+
 		/// <summary>
-		/// 
+		/// Заголовок запроса на игнор сертификата
 		/// </summary>
 		public const string ALLOW_ALL_CERTIFICATES_HEADER = "ALLOW_ALL_CERTIFICATES";
 

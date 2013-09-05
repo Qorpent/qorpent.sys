@@ -66,5 +66,9 @@ namespace Qorpent.Bxl {
 		/// Рассматривать результат как файл BxlSharp и применить к нему компиляцию
 		/// </summary>
 		BSharp = 128,
+		/// <summary>
+		/// Специальное расширение BSharp для преобразование в DOT
+		/// </summary>
+		DotFilter = 256,
 	}
 }

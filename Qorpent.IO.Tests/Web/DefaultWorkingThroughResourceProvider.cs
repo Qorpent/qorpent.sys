@@ -52,6 +52,7 @@ namespace Qorpent.IO.Tests.Web
 
 		[Test]
 		[ExpectedException]
+		[Explicit]
 		public void GetGetDataExtensionApiHttpsNonTrustedFail()
 		{
 			StringAssert.Contains("<html", res.GetString("https://localhost"));
