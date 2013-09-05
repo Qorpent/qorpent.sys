@@ -60,10 +60,19 @@ namespace Qorpent.IO.Tests.DirtyVersion {
 			Assert.AreEqual(CONTENT1, s.ReadString(FILENAME));
 			Assert.AreEqual(CONTENT2, s.ReadString(FILENAME,c2.Hash));
 
+			
+
+			var c3  = s.Save(FILENAME, "new", c2.Hash);
+			var c4 = s.Save(FILENAME, "new1", c2.Hash);
+			var c5 = s.Save(FILENAME, "new2", c2.Hash);
+			//взяли и нативным апи пофиксили историю
+			using (var o = s.GetMapper().Open(FILENAME)) {
+				o.Commit(c5.Hash, CommitHeadBehavior.Override, c1.Hash, c3.Hash);
+				o.Commit();
+			}
 			//и это все еще можно получить и сконвертить в XML
 			var xmlinfo = s.ExplainAsXml(FILENAME);
 			Console.WriteLine(xmlinfo);
-			
 		}
 	}
 }

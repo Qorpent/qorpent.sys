@@ -5,7 +5,37 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 	/// <summary>
 	/// Информация о коммитере и дате коммита
 	/// </summary>
-	public struct CommitAuthorInfo {
+	public class CommitAuthorInfo {
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		protected bool Equals(CommitAuthorInfo other) {
+			return string.Equals(Commiter, other.Commiter) && Time.Equals(other.Time);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public override int GetHashCode() {
+			unchecked {
+				return ((Commiter != null ? Commiter.GetHashCode() : 0)*397) ^ Time.GetHashCode();
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((CommitAuthorInfo) obj);
+		}
 		/// <summary>
 		/// Автор
 		/// </summary>

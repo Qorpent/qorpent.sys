@@ -108,8 +108,8 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		/// <summary>
 		/// 
 		/// </summary>
-		public void Revert() {
-			_session.Revert();
+		public void Cancel() {
+			_session.Cancel();
 		}
 		/// <summary>
 		/// 

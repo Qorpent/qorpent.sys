@@ -37,7 +37,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		/// <summary>
 		/// Отменяет изменения и сбрасывает MappingInfo
 		/// </summary>
-		public void Revert() {
+		public void Cancel() {
 			_info = null;
 			_commited = false;
 		}
@@ -73,6 +73,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		/// </summary>
 		public void Dispose() {
 			if (null!=_info && _info.Changed && _commited) {
+				_info.Normalize();
 				Save();
 			}
 			_mapper.ReleaseLock(_file);

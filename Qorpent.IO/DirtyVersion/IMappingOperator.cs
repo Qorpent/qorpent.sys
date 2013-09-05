@@ -47,7 +47,7 @@ namespace Qorpent.IO.DirtyVersion {
 		/// <summary>
 		/// Отменяет изменения в сессии
 		/// </summary>
-		void Revert();
+		void Cancel();
 
 		/// <summary>
 		/// 

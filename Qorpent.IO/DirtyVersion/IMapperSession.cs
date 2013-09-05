@@ -20,7 +20,7 @@ namespace Qorpent.IO.DirtyVersion {
 		/// <summary>
 		/// Отменяет изменения и сбрасывает MappingInfo
 		/// </summary>
-		void Revert();
+		void Cancel();
 		/// <summary>
 		/// Помечает сессию к сохранению
 		/// </summary>
