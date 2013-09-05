@@ -25,5 +25,58 @@ namespace Qorpent.IO.DirtyVersion
 		/// Специальное имя для отщепленного имени
 		/// </summary>
 		public const string DETACHEDHEAD = "DETACHED";
+		/// <summary>
+		/// Атрибут имени коммитера
+		/// </summary>
+		public const string COMMITERATTRIBUTE = "a";
+		/// <summary>
+		/// Элемент имени мапинга
+		/// </summary>
+		public const string MAPPINGNAMEATTRIBUTE = "n";
+	/// <summary>
+	/// Атрибут хэша имени мапинга
+	/// </summary>
+		public const string MAPPINGHASHATTRIBUTE = "nh";
+		/// <summary>
+		/// Атрибут текщего хида
+		/// </summary>
+		public const string HEADATTRIBUTE = "h";
+
+		/// <summary>
+		/// Атрибут времени коммита
+		/// </summary>
+		public const string TIMEATTRIBUTE = "t";
+		/// <summary>
+		/// Атрибут типа источника
+		/// </summary>
+		public const string SRCTYPEATTRIBUTE = "st";
+		/// <summary>
+		/// Атрибут единичного источника
+		/// </summary>
+		public const string SRCATTRIBUTE = "s";
+		/// <summary>
+		/// Элемент соавторства
+		/// </summary>
+		public const string COELEMENT = "co";
+		/// <summary>
+		/// Элемент источников для мержа
+		/// </summary>
+		public const string SOURCESELEMENT = "ss";
+		/// <summary>
+		/// Элемент коммитов
+		/// </summary>
+		public const string COMMITSELEMENT = "cs";
+		/// <summary>
+		/// Элемент альясов
+		/// </summary>
+		public const string ALIASESELEMENT = "as";
+		/// <summary>
+		/// Элемент мапинга
+		/// </summary>
+		public const string MAPPINGELEMENT = "map";
+		/// <summary>
+		/// Расширение файла блокировки
+		/// </summary>
+		public const string LOCKEXTENSION = ".l";
 	}
 }

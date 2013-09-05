@@ -7,8 +7,6 @@ namespace Qorpent.IO.DirtyVersion.Mapping
 /// Оператор журнала
 /// </summary>
 	public class Mapper:HashedDirectoryBase, IMapper {
-		private const string LOCKEXTENSION = ".l";
-
 		/// <summary>
 		/// Основной конструктор
 		/// </summary>
@@ -35,7 +33,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping
 		/// <param name="filename"></param>
 		/// <returns></returns>
 		public bool GetLock(string filename) {
-			var lockFileName = ConvertToHasedFileName(_rootDirectory, _hasher.GetHash(filename)) + LOCKEXTENSION;
+			var lockFileName = ConvertToHasedFileName(_rootDirectory, _hasher.GetHash(filename)) + Const.LOCKEXTENSION;
 			if (File.Exists(lockFileName)) return false;
 			Directory.CreateDirectory(Path.GetDirectoryName(lockFileName));
 			using (var fs = new FileStream(lockFileName, FileMode.CreateNew, FileAccess.Write, FileShare.None)) {
@@ -50,7 +48,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping
 		/// </summary>
 		/// <param name="filename"></param>
 		public void ReleaseLock(string filename) {
-			var lockFileName = ConvertToHasedFileName(_rootDirectory, _hasher.GetHash(filename)) + LOCKEXTENSION;
+			var lockFileName = ConvertToHasedFileName(_rootDirectory, _hasher.GetHash(filename)) + Const.LOCKEXTENSION;
 			if (!File.Exists(lockFileName)) return;
 			File.Delete(lockFileName);
 		}

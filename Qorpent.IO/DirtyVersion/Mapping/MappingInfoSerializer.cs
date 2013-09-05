@@ -7,23 +7,8 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 	/// Сериализатор информации о версии
 	/// </summary>
 	public class MappingInfoSerializer {
-		private const string COMMITERATTRIBUTE = "a";
-		private const string MAPPINGNAMEATTRIBUTE = "n";
-		private const string MAPPINGHASHATTRIBUTE = "nh";
-		private const string HEADATTRIBUTE = "h";
-		private const string TIMEATTRIBUTE = "t";
-		private const string SRCTYPEATTRIBUTE = "st";
-		private const string SRCATTRIBUTE = "s";
-		private const string COELEMENT = "co";
-		private const string SOURCESELEMENT = "ss";
-		private const string COMMITSELEMENT = "cs";
-		private const string ALIASESELEMENT = "as";
-		private const string MAPPINGELEMENT = "map";
-
-		
-
 		private static void ReadCommits(XElement xml, MappingInfo result) {
-			var commits = xml.Element(COMMITSELEMENT);
+			var commits = xml.Element(Const.COMMITSELEMENT);
 			if (null != commits) {
 				foreach (var e in commits.Elements()) {
 					var commit = new Commit();
@@ -36,12 +21,12 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		}
 
 		private static void ReadCommitSourceInfo(Commit commit, XElement e) {
-			commit.SourceType = e.Attr(SRCTYPEATTRIBUTE).To<CommitSourceType>();
+			commit.SourceType = e.Attr(Const.SRCTYPEATTRIBUTE).To<CommitSourceType>();
 			if (commit.SourceType == CommitSourceType.Single) {
-				commit.Sources.Add(e.Attr(SRCATTRIBUTE));
+				commit.Sources.Add(e.Attr(Const.SRCATTRIBUTE));
 			}
 			else if (commit.SourceType == CommitSourceType.Merged) {
-				var sources = e.Element(SOURCESELEMENT);
+				var sources = e.Element(Const.SOURCESELEMENT);
 				if (null != sources) {
 					foreach (var c in sources.Elements()) {
 						commit.Sources.Add(c.Name.LocalName);
@@ -52,13 +37,13 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 
 		private static void ReadCommitAuthorInfo(Commit commit, XElement e) {
 			commit.Author = new CommitAuthorInfo {
-				Commiter = e.Attr(COMMITERATTRIBUTE),
-				Time = Convert.ToDateTime(e.Attr(TIMEATTRIBUTE))
+				Commiter = e.Attr(Const.COMMITERATTRIBUTE),
+				Time = Convert.ToDateTime(e.Attr(Const.TIMEATTRIBUTE))
 			};
-			foreach (var co in e.Elements(COELEMENT)) {
+			foreach (var co in e.Elements(Const.COELEMENT)) {
 				commit.CoAuthors.Add(new CommitAuthorInfo {
-					Commiter = co.Attr(COMMITERATTRIBUTE),
-					Time = Convert.ToDateTime(co.Attr(TIMEATTRIBUTE))
+					Commiter = co.Attr(Const.COMMITERATTRIBUTE),
+					Time = Convert.ToDateTime(co.Attr(Const.TIMEATTRIBUTE))
 				});
 			}
 		}
@@ -66,7 +51,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 
 
 		private static void ReadAliases(XElement xml, MappingInfo result) {
-			var aliases = xml.Element(ALIASESELEMENT);
+			var aliases = xml.Element(Const.ALIASESELEMENT);
 			if (null != aliases) {
 				foreach (var e in aliases.Elements()) {
 					result.Aliases[e.Value] = e.Name.LocalName;
@@ -83,9 +68,9 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		{
 			var result = new MappingInfo
 			{
-				Name = xml.Attr(MAPPINGNAMEATTRIBUTE),
-				NameHash = xml.Attr(MAPPINGHASHATTRIBUTE),
-				Head = xml.Attr(HEADATTRIBUTE)
+				Name = xml.Attr(Const.MAPPINGNAMEATTRIBUTE),
+				NameHash = xml.Attr(Const.MAPPINGHASHATTRIBUTE),
+				Head = xml.Attr(Const.HEADATTRIBUTE)
 			};
 			ReadAliases(xml, result);
 			ReadCommits(xml, result);
@@ -98,10 +83,10 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		/// <param name="info"></param>
 		/// <returns></returns>
 		public XElement Serialize(MappingInfo info) {
-			var result = new XElement(MAPPINGELEMENT);
-			result.SetAttributeValue(MAPPINGNAMEATTRIBUTE,info.Name);
-			result.SetAttributeValue(MAPPINGHASHATTRIBUTE, info.NameHash);
-			result.SetAttributeValue(HEADATTRIBUTE, info.Head);
+			var result = new XElement(Const.MAPPINGELEMENT);
+			result.SetAttributeValue(Const.MAPPINGNAMEATTRIBUTE,info.Name);
+			result.SetAttributeValue(Const.MAPPINGHASHATTRIBUTE, info.NameHash);
+			result.SetAttributeValue(Const.HEADATTRIBUTE, info.Head);
 			WriteAliases(info, result);
 			WriteCommits(info, result);
 			return result;
@@ -109,7 +94,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 
 		private static void WriteCommits(MappingInfo info, XElement result) {
 			if (0 != info.Commits.Count) {
-				var commits = new XElement(COMMITSELEMENT);
+				var commits = new XElement(Const.COMMITSELEMENT);
 				foreach (var c in info.Commits.Values) {
 					WriteCommit(c, commits);
 				}
@@ -119,9 +104,9 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 
 		private static void WriteCommit(Commit c, XElement commits) {
 			var commit = new XElement(c.Hash);
-			commit.SetAttributeValue(COMMITERATTRIBUTE, c.Author.Commiter);
-			commit.SetAttributeValue(TIMEATTRIBUTE, c.Author.Time);
-			commit.SetAttributeValue(SRCTYPEATTRIBUTE, c.SourceType);
+			commit.SetAttributeValue(Const.COMMITERATTRIBUTE, c.Author.Commiter);
+			commit.SetAttributeValue(Const.TIMEATTRIBUTE, c.Author.Time);
+			commit.SetAttributeValue(Const.SRCTYPEATTRIBUTE, c.SourceType);
 			WriteCoAuthors(c, commit);
 			WriteSources(c, commit);
 			commits.Add(commit);
@@ -130,10 +115,10 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		private static void WriteSources(Commit c, XElement commit) {
 			if (c.HasSources()) {
 				if (c.SourceType == CommitSourceType.Single) {
-					commit.SetAttributeValue(SRCATTRIBUTE, c.Sources[0]);
+					commit.SetAttributeValue(Const.SRCATTRIBUTE, c.Sources[0]);
 				}
 				else if (c.SourceType == CommitSourceType.Merged) {
-					var sources = new XElement(SOURCESELEMENT);
+					var sources = new XElement(Const.SOURCESELEMENT);
 					foreach (var s in c.Sources) {
 						sources.Add(new XElement(s));
 					}
@@ -145,9 +130,9 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		private static void WriteCoAuthors(Commit c, XElement commit) {
 			if (c.HasCoAuthors()) {
 				foreach (var co in c.CoAuthors) {
-					var coel = new XElement(COELEMENT);
-					coel.SetAttributeValue(COMMITERATTRIBUTE, co.Commiter);
-					coel.SetAttributeValue(TIMEATTRIBUTE, co.Time);
+					var coel = new XElement(Const.COELEMENT);
+					coel.SetAttributeValue(Const.COMMITERATTRIBUTE, co.Commiter);
+					coel.SetAttributeValue(Const.TIMEATTRIBUTE, co.Time);
 					commit.Add(coel);
 				}
 			}
@@ -155,7 +140,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 
 		private static void WriteAliases(MappingInfo info, XElement result) {
 			if (0 != info.Aliases.Count) {
-				var aliases = new XElement(ALIASESELEMENT);
+				var aliases = new XElement(Const.ALIASESELEMENT);
 				foreach (var a in info.Aliases) {
 					aliases.Add(new XElement(a.Value, a.Key));
 				}
