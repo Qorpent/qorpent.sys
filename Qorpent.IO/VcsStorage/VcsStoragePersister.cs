@@ -11,7 +11,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Бинарный журнал
         /// </summary>
-        private readonly VcsStorageBinLog _binLog;
+        private readonly VcsStorageLogger _logger;
         /// <summary>
         ///     Маппер
         /// </summary>
@@ -32,7 +32,7 @@ namespace Qorpent.IO.VcsStorage {
             Engine = engine;
             Abilities = FileStorageAbilities.Vcs;
             
-            _binLog = new VcsStorageBinLog(Engine);
+            _logger = new VcsStorageLogger(Engine);
             _mapper = new VcsStorageMapper(Engine);
         }
         /// <summary>
@@ -40,7 +40,7 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         public void Dispose() {
             _mapper.Dispose();
-            _binLog.Dispose();
+            _logger.Dispose();
         }
         /// <summary>
         ///     Коммит файла в хранилище
@@ -92,11 +92,11 @@ namespace Qorpent.IO.VcsStorage {
         /// <param name="commit">Представление элемента</param>
         public VcsCommit Revert(VcsCommit commit) {
             if (!VcsStorageUtils.CorrectCommitCode(commit)) {
-                throw new VcsStorageException("Incorrect commit code!");
+                throw new Exception("Incorrect commit code!");
             }
 
             if (!CommitExists(commit)) {
-                throw new VcsStorageException("Transaction not exists!");
+                throw new Exception("Transaction not exists!");
             }
 
             var sourceStream = Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }).GetStream(FileAccess.Read);
@@ -152,8 +152,8 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         /// <param name="engine">Движок</param>
         public void SetBinLogEngine(IFileStorage engine) {
-            if (_binLog != null) {
-                _binLog.SetEngine(engine);
+            if (_logger != null) {
+                _logger.SetEngine(engine);
             }
         }
         /// <summary>
@@ -212,7 +212,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <param name="commit">Представление коммита</param>
         /// <param name="type">Тип транзакции</param>
         private void Transaction(VcsCommit commit, VcsStorageTransactionType type) {
-            _binLog.Transaction(new VcsStorageTransaction {
+            _logger.Transaction(new VcsStorageTransaction {
                 Commit = commit,
                 DateTime = DateTime.Now,
                 Filename = commit.File.Path,

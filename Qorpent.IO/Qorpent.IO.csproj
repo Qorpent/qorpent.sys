@@ -31,12 +31,11 @@
     <Compile Include="Web\WebResourceRequest.cs" />
     <Compile Include="Web\WebResourceResponse.cs" />
     <Compile Include="Zip\ZipFileSource.cs" />
-    <Compile Include="VcsStorage\Engines\FileStorageFsEngine.cs" />
-    <Compile Include="VcsStorage\VcsStorageBinLog.cs" />
+    <Compile Include="Storages\FileStorageFsEngine.cs" />
+    <Compile Include="VcsStorage\VcsStorageLogger.cs" />
     <Compile Include="VcsStorage\VcsStorageDefaults.cs" />
     <Compile Include="VcsStorage\VcsStorageTransaction.cs" />
     <Compile Include="VcsStorage\VcsStorageTransactionType.cs" />
-    <Compile Include="VcsStorage\VcsStorageException.cs" />
     <Compile Include="VcsStorage\VcsStorageMapper.cs" />
     <Compile Include="VcsStorage\VcsStoragePersister.cs" />
     <Compile Include="VcsStorage\VcsStorageUtils.cs" />

@@ -6,20 +6,16 @@ namespace Qorpent.IO {
     /// </summary>
     public interface IFileEntity {
         /// <summary>
-        ///     Имя файла с расширением
-        /// </summary>
-        string Filename { get; set; }
-        /// <summary>
         ///     полный путь до файла
         /// </summary>
-        string Path { get; set; }
+        string Path { get; }
         /// <summary>
         ///     Дата публикации файла в хранилище
         /// </summary>
-        DateTime DateTime { get; set; }
+        DateTime DateTime { get;}
         /// <summary>
         ///     Версия файла
         /// </summary>
-        string Version { get; set; }
+        string Version { get; }
     }
 }

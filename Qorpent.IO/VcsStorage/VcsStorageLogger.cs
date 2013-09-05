@@ -7,7 +7,7 @@ namespace Qorpent.IO.VcsStorage {
     /// <summary>
     ///     Внутренний журнал транзакций
     /// </summary>
-    class VcsStorageBinLog : IDisposable {
+    class VcsStorageLogger : IDisposable {
         /// <summary>
         ///     Указатель на то, что клас уже разрушен
         /// </summary>
@@ -35,14 +35,14 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Внутренний журнал транзакций
         /// </summary>
-        public VcsStorageBinLog(IFileStorage engine) {
+        public VcsStorageLogger(IFileStorage engine) {
             SetEngine(engine);
             InitializeNewBinLog();
         }
         /// <summary>
         ///     Деструктор
         /// </summary>
-        ~VcsStorageBinLog() {
+        ~VcsStorageLogger() {
             Dispose(false);
         }
         /// <summary>
