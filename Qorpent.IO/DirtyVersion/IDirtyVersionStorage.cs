@@ -52,20 +52,5 @@ namespace Qorpent.IO.DirtyVersion {
 		/// <param name="versionHash"></param>
 		/// <returns></returns>
 		Stream Open(string name, string versionHash = null);
-
-		/// <summary>
-		/// Возвращает полную историю
-		/// </summary>
-		/// <param name="name"></param>
-		/// <returns></returns>
-		MappingInfo Explain(string name);
-
-		/// <summary>
-		/// Возвращает информацию о последнем или указанном коммите
-		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="hash"></param>
-		/// <returns></returns>
-		Commit ExplainVersion(string name, string hash = null);
 	}
 }

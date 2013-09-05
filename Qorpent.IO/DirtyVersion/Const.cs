@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Qorpent.IO.DirtyVersion
 {
@@ -12,6 +13,8 @@ namespace Qorpent.IO.DirtyVersion
 	/// </summary>
 	public static class Const
 	{
+		
+
 		/// <summary>
 		/// Размерность хэша Md5 в байтах
 		/// </summary>
@@ -74,6 +77,11 @@ namespace Qorpent.IO.DirtyVersion
 		/// Элемент альясов
 		/// </summary>
 		public const string ALIASESELEMENT = "as";
+
+		/// <summary>
+		/// Атрибут состояния относительно HEAD
+		/// </summary>
+		public const string HEADSTATEATTRIBUTE = "hs";
 		/// <summary>
 		/// Элемент мапинга
 		/// </summary>

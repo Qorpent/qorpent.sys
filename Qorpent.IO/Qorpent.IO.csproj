@@ -11,6 +11,7 @@
     <Compile Include="ContainerInfo.cs" />
     <Compile Include="DirtyVersion\Const.cs" />
     <Compile Include="DirtyVersion\DirtyVersionStorage.cs" />
+    <Compile Include="DirtyVersion\DirtyVersionStorageExtensions.cs" />
     <Compile Include="DirtyVersion\IDirtyVersionStorage.cs" />
     <Compile Include="DirtyVersion\Mapping\Commit.cs" />
     <Compile Include="DirtyVersion\Mapping\CommitAuthorInfo.cs" />

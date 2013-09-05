@@ -121,29 +121,8 @@ namespace Qorpent.IO.DirtyVersion
 			var binrecord = new HashedDirectoryRecord {DataHash = datahash, NameHash = namehash};
 			return _hashed.Open(binrecord);
 		}
-		/// <summary>
-		/// Возвращает полную историю
-		/// </summary>
-		/// <param name="name"></param>
-		/// <returns></returns>
-		public MappingInfo Explain(string name) {
-			using (var o = _mapper.Open(name)) {
-				return o.MappingInfo;
-			}
-		}
-		/// <summary>
-		/// Возвращает информацию о последнем или указанном коммите
-		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="hash"></param>
-		/// <returns></returns>
-		public Commit ExplainVersion(string name, string hash = null) {
-			using (var o = _mapper.Open(name)) {
-				if (string.IsNullOrWhiteSpace(hash)) {
-					return o.MappingInfo.GetHead();
-				}
-				return o.Resolve(hash);
-			}
-		}
+
+
+		
 	}
 }

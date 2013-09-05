@@ -107,6 +107,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 			commit.SetAttributeValue(Const.COMMITERATTRIBUTE, c.Author.Commiter);
 			commit.SetAttributeValue(Const.TIMEATTRIBUTE, c.Author.Time);
 			commit.SetAttributeValue(Const.SRCTYPEATTRIBUTE, c.SourceType);
+			commit.SetAttributeValue(Const.HEADSTATEATTRIBUTE, c.HeadState);
 			WriteCoAuthors(c, commit);
 			WriteSources(c, commit);
 			commits.Add(commit);

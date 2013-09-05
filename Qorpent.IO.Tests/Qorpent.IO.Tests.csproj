@@ -29,6 +29,7 @@
     <Compile Include="DirtyVersion\HashedDirectoryTest.cs" />
     <Compile Include="DirtyVersion\MapperTest.cs" />
     <Compile Include="DirtyVersion\ReadProxyStreamTest.cs" />
+    <Compile Include="DirtyVersion\VersionedStorageTest.cs" />
     <Compile Include="FileResolverTest.cs" />
     <Compile Include="FileServiceTest.cs" />
     <Compile Include="VcsStorageTests.cs" />
