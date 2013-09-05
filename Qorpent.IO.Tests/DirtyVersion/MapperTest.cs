@@ -37,6 +37,7 @@ namespace Qorpent.IO.Tests.DirtyVersion {
 			using (var o = mapper.Open("CanWriteInitial"))
 			{
 				o.Commit("a");
+				o.Commit();
 			}
 			using (var o2 = mapper.Open("CanWriteInitial"))
 			{
@@ -109,7 +110,7 @@ namespace Qorpent.IO.Tests.DirtyVersion {
 				var c3 = o.Commit("c", "a");
 				var c4 = o.Commit("d", CommitHeadBehavior.Override, "c");
 				Assert.AreEqual(HeadState.Merged, c1.HeadState);
-				Assert.AreEqual(HeadState.NonMergedHead, c2.HeadState);
+				Assert.AreEqual(HeadState.Merged, c2.HeadState);
 				Assert.AreEqual(HeadState.Merged, c3.HeadState);
 				Assert.AreEqual(HeadState.IsHead, c4.HeadState);
 				Assert.True(c4.Sources.Contains("b"));
@@ -128,9 +129,13 @@ namespace Qorpent.IO.Tests.DirtyVersion {
 				var c4 = o.Commit("d", "c");
 				var c5 = o.Commit("d", "b");
 				var c6 = o.Commit("e", "d");
-				Assert.AreEqual(CommitSourceType.Merged, c5.SourceType);
+				Assert.AreEqual(2, c5.Sources.Count);
+				Assert.False(c5.Sources.Contains("a"));
+				Assert.True(c5.Sources.Contains("b"));
 				o.Delete("b");
-				Assert.AreEqual(CommitSourceType.Single,c5.SourceType);
+				Assert.AreEqual(2, c5.Sources.Count);
+				Assert.True(c5.Sources.Contains("a"));
+				Assert.False(c5.Sources.Contains("b"));
 				Assert.Null(o.MappingInfo.Resolve("b"));
 				o.Commit();
 			}

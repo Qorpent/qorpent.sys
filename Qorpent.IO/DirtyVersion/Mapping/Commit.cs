@@ -79,7 +79,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 				}
 			}
 			if (HasSources()) {
-				for (var i = 0; i <= Sources.Count; i++) {
+				for (var i = 0; i < Sources.Count; i++) {
 					var s = Sources[i];
 					if (MappingInfo.Aliases.ContainsKey(s)) {
 						Sources[i] = MappingInfo.Aliases[s];
