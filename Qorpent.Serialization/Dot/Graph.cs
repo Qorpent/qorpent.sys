@@ -137,6 +137,32 @@ namespace Qorpent.Dot
 
             }
         }
+        /// <summary>
+        /// Задает тип разрисовки линий графа (дуги, ломанные и т.п.)
+        /// </summary>
+        public string Splines
+        {
+            get { return Get(DotConstants.SplinesAttribute).To<string>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.SplinesAttribute, str);
+
+            }
+        }
+        /// <summary>
+        /// Задает цвет границы подграфов. По умолчанию черный 
+        /// </summary>
+        public color PenColor
+        {
+            get { return Get(DotConstants.PenColorAttribute).To<color>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.PenColorAttribute, str);
+
+            }
+        }
         
 
 

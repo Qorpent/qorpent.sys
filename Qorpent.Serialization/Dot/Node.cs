@@ -148,6 +148,19 @@ namespace Qorpent.Dot {
 
             }
         }
+        /// <summary>
+        /// Внешняя метка для узла или края. Для узлов, названия будут помещаться вне узла, но рядом с ним и для ребра - вблизи центра ребра. 
+        /// </summary>
+        public lblString XLabe
+        {
+            get { return Get(DotConstants.XLabeAttribute).To<lblString>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.XLabeAttribute, str);
+
+            }
+        }
         
          
 	}

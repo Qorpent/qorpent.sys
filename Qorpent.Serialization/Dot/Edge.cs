@@ -134,6 +134,47 @@ namespace Qorpent.Dot {
 
             }
         }
+        /// <summary>
+        /// Задает размер наконечника (головы) стрелки. По умолчанию 1
+        /// </summary>
+        public double ArrowSize
+        {
+            get { return Get(DotConstants.ArrowSizeAttribute).To<double>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.ArrowSizeAttribute, str);
+
+            }
+        }
+        /// <summary>
+        /// Внешняя метка для узла или края. Для узлов, названия будут помещаться вне узла, но рядом с ним и для ребра - вблизи центра ребра. 
+        /// </summary>
+        public lblString XLabe
+        {
+            get { return Get(DotConstants.XLabeAttribute).To<lblString>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.XLabeAttribute, str);
+
+            }
+        }
+        /// <summary>
+        /// Минимальная длина ребра в рангах (разница между головой и хвостом). По умолчанию 1, минимальная 0
+        /// </summary>
+        public int Minlen
+        {
+            get { return Get(DotConstants.MinlenAttribute).To<int>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.MinlenAttribute, str);
+
+            }
+        }
+        
+         
 
 
 		/// <summary>
@@ -150,7 +191,8 @@ namespace Qorpent.Dot {
 				}
 			}
 		}
-    
+
+   
     
     
     

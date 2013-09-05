@@ -137,7 +137,26 @@
         ///  Задает количество сторон для полигона
         /// </summary>        
         public const string SidesAttribute = "sides";
-        
+        /// <summary>
+        ///  Задает тип разрисовки линий графа (дуги, ломанные и т.п.)
+        /// </summary>        
+        public const string SplinesAttribute = "splines";
+        /// <summary>
+        ///  Задает цвет границы подграфов. По умолчанию черный 
+        /// </summary>        
+        public const string PenColorAttribute = "pencolor";
+        /// <summary>
+        ///  Задает размер наконечника (головы) стрелки. По умолчанию 1 
+        /// </summary>        
+        public const string ArrowSizeAttribute = "arrowsize";
+        /// <summary>
+        ///  Внешняя метка для узла или края. Для узлов, названия будут помещаться вне узла, но рядом с ним и для ребра - вблизи центра ребра.
+        /// </summary>        
+        public const string XLabeAttribute = "xlabe";
+        /// <summary>
+        ///  Минимальная длина ребра в рангах (разница между головой и хвостом). По умолчанию 1, минимальная 0
+        /// </summary>        
+        public const string MinlenAttribute = "minlen";
     }
 
 }
