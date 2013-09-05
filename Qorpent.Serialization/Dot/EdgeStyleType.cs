@@ -2,7 +2,7 @@
 	/// <summary>
 	/// Стили стрелок (ребер)
 	/// </summary>
-	public enum StyleEdgeType {
+	public enum EdgeStyleType {
 		/// <summary>
 		/// Сплошная линия стрелки
 		/// </summary>

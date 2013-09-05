@@ -2,7 +2,7 @@
 	/// <summary>
 	/// Стили узлов
 	/// </summary>
-	public enum StyleGraphType {
+	public enum GraphStyleType {
 		/// <summary>
 		/// Сплошная граница графа
 		/// </summary>

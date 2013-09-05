@@ -2,7 +2,7 @@
 	/// <summary>
 	/// Стили узлов
 	/// </summary>
-	public enum StyleNodeType {
+	public enum NodeStyleType {
 		/// <summary>
 		/// Сплошная граница узла
 		/// </summary>
