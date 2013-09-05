@@ -109,7 +109,12 @@ namespace Qorpent.IO.VcsStorage {
             };
 
             Transaction(commit, VcsStorageTransactionType.Revert);
-            Engine.Set(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }, sourceStream);
+            Engine.Set(
+                new FileEntity {
+                    Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code)
+                },
+                sourceStream
+            );
             
             return reverted;
         }

@@ -31,8 +31,6 @@
     <Compile Include="Web\WebResourceRequest.cs" />
     <Compile Include="Web\WebResourceResponse.cs" />
     <Compile Include="Zip\ZipFileSource.cs" />
-    <Compile Include="VcsStorage\VcsStorageElementDescriptor.cs" />
-    <Compile Include="VcsStorage\VcsStorageEngineElement.cs" />
     <Compile Include="VcsStorage\Engines\FileStorageFsEngine.cs" />
     <Compile Include="VcsStorage\VcsStorageBinLog.cs" />
     <Compile Include="VcsStorage\VcsStorageDefaults.cs" />
@@ -43,9 +41,7 @@
     <Compile Include="VcsStorage\VcsStorageMapper.cs" />
     <Compile Include="VcsStorage\VcsStoragePersister.cs" />
     <Compile Include="VcsStorage\VcsStorageUtils.cs" />
-    <Compile Include="VcsStorage\IVcsStorageElementDescriptor.cs" />
     <Compile Include="IFileStorage.cs" />
-    <Compile Include="VcsStorage\IVcsStorageEngineElement.cs" />
     <Compile Include="VcsStorage\IVcsStoragePersister.cs" />
   </ItemGroup>
   <ItemGroup>
