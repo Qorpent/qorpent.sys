@@ -13,7 +13,11 @@ namespace Qorpent.IO.DirtyVersion
 	/// </summary>
 	public static class Const
 	{
-		
+		/// <summary>
+		/// количество исходящих ссылок
+		/// </summary>
+		public const string REFCOUNTATTRIBUTE = "r";
+
 
 		/// <summary>
 		/// Размерность хэша Md5 в байтах
