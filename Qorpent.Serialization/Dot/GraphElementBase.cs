@@ -36,6 +36,32 @@ namespace Qorpent.Dot {
 			get { return Get(DotConstants.LabelAttribute); }
 			set { Set(DotConstants.LabelAttribute,value); }
 		}
+        /// <summary>
+        /// Размер шрифта, по умолчанию 14 
+        /// </summary>
+        public double FontSize
+        {
+            get { return Get(DotConstants.FontSizeAttribute).To<double>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.FontSizeAttribute, str);
+
+            }
+        }
+        /// <summary>
+        /// Цвет используемый для текста. По умолчанию черный 
+        /// </summary>
+        public color FontColor
+        {
+            get { return Get(DotConstants.FontColorAttribute).To<color>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.FontColorAttribute, str);
+
+            }
+        }
         
         
             

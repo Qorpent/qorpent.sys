@@ -121,6 +121,19 @@ namespace Qorpent.Dot {
 
             }
         }
+        /// <summary>
+        /// Задает ширину линии (стрелки, узла, кластера...) в точках 
+        /// </summary>
+        public double Penwidth
+        {
+            get { return Get(DotConstants.OrientationAttribute).To<double>(); }
+            set
+            {
+                var str = value.ToStr().ToLower();
+                Set(DotConstants.PenwidthAttribute, str);
+
+            }
+        }
 
 
 		/// <summary>

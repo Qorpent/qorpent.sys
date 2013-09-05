@@ -97,7 +97,46 @@
         /// Если установить значение 90, то произойдет переориентации графа в альбомную страницу
         /// </summary>        
         public const string RotateAttribute = "rotate";
-        
+        /// <summary>
+        /// Задает ширину линии (стрелки, узла, кластера...) в точках 
+        /// </summary>        
+        public const string PenwidthAttribute = "penwidth";
+        /// <summary>
+        /// Коэффициент для shape=polygon задающий при положительном значении верхнюю часть больше, чем нижнюю и при отрицательном - наоборот
+        /// </summary>        
+        public const string DistortionAttribute = "distortion";
+        /// <summary>
+        /// Если "Да", то размер узла определяется значениями ширины и высоты - Width and Height
+        /// </summary>        
+        public const string FixedSizeAttribute = "fixedsize";
+        /// <summary>
+        /// Задает высоту узла. По умолчанию 0.5,  min значение 0.02
+        /// </summary>        
+        public const string HeightAttribute = "height";
+        /// <summary>
+        /// Задает ширину узла. По умолчанию 0.75,  min значение 0.01 
+        /// </summary>        
+        public const string WidthAttribute = "width";
+        /// <summary>
+        /// Для Shape=polygon задает косые. Положительные значения - верхняя части полигона направо, отрицательные  - налево. По умолчанию 0.0
+        /// </summary>        
+        public const string SkewAttribute = "skew";
+        /// <summary>
+        /// Задает колличество рамочек вокруг узла той же формы что и форма узла
+        /// </summary>        
+        public const string PeripheriesAttribute = "peripheries";
+        /// <summary>
+        ///  Размер шрифта, по умолчанию 14
+        /// </summary>        
+        public const string FontSizeAttribute = "fontsize";
+        /// <summary>
+        ///  Цвет используемый для текста. По умолчанию черный 
+        /// </summary>        
+        public const string FontColorAttribute = "fontcolor";
+        /// <summary>
+        ///  Задает количество сторон для полигона
+        /// </summary>        
+        public const string SidesAttribute = "sides";
         
     }
 
