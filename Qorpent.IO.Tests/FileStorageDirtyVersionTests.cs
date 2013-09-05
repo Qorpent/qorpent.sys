@@ -59,6 +59,13 @@ namespace Qorpent.IO.Tests {
             using (var sr = new StreamReader(getDescr.GetStream(FileAccess.Read))) {
                 Assert.AreEqual("testString", sr.ReadToEnd());
             }
+
+            var nativeStorage = (IDirtyVersionStorage)_dirtyVersionStorage.GetStorage();
+            Assert.NotNull(nativeStorage);
+
+            using (var sr = new StreamReader(nativeStorage.Open("test", getDescr.FileEntity.Version))) {
+                Assert.AreEqual("testString", sr.ReadToEnd());
+            }
         }
     }
 }
