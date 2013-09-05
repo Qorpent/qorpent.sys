@@ -11,7 +11,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Бинарный журнал
         /// </summary>
-        private readonly VcsStorageBinLog _binLog;
+        private readonly VcsStorageLogger _logger;
         /// <summary>
         ///     Маппер
         /// </summary>
@@ -19,15 +19,20 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         /// 
         /// </summary>
-        public IVcsStorageEngine Engine { get; private set; }
+        public IFileStorage Engine { get; private set; }
+        /// <summary>
+        ///     Поддерживаемый функционал
+        /// </summary>
+        public FileStorageAbilities Abilities { get; private set; }
         /// <summary>
         ///     Конструктор по умолчанию
         /// </summary>
         /// <param name="engine"></param>
-        public VcsStoragePersister(IVcsStorageEngine engine) {
+        public VcsStoragePersister(IFileStorage engine) {
             Engine = engine;
-
-            _binLog = new VcsStorageBinLog(Engine);
+            Abilities = FileStorageAbilities.Vcs;
+            
+            _logger = new VcsStorageLogger(Engine);
             _mapper = new VcsStorageMapper(Engine);
         }
         /// <summary>
@@ -35,46 +40,49 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         public void Dispose() {
             _mapper.Dispose();
-            _binLog.Dispose();
+            _logger.Dispose();
         }
         /// <summary>
         ///     Коммит файла в хранилище
         /// </summary>
-        /// <param name="element">Путь файла от корня хранилища</param>
+        /// <param name="commit">Путь файла от корня хранилища</param>
         /// <param name="stream">Данные для записи</param>
         /// <returns>Внутренний идентификатор коммита</returns>
-        public void Commit(IVcsStorageElement element, Stream stream) {
-            element.Commit = ComputeCommitCode(stream);
-            Transaction(element, VcsStorageTransactionType.Commit);
-            RollRealWriting(element, stream);
+        public VcsCommit Commit(VcsCommit commit, Stream stream) {
+            var realCommit = new VcsCommit {File = commit.File, Code = ComputeCommitCode(stream), Branch = commit.Branch};
+
+            Transaction(realCommit, VcsStorageTransactionType.Commit);
+            RollRealWriting(realCommit, stream);
+
+            return realCommit;
         }
         /// <summary>
         ///     Возвращает поток на чтение файла из хранилища
         /// </summary>
-        /// <param name="element"></param>
+        /// <param name="commit"></param>
         /// <returns></returns>
-        public Stream Pick(IVcsStorageElement element) {
-            return VcsStorageUtils.CorrectCommitCode(element) ? PickCommit(element) : PickLatestCommit(element);
+        public Stream Pick(VcsCommit commit) {
+            return VcsStorageUtils.CorrectCommitCode(commit) ? PickCommit(commit) : PickLatestCommit(commit);
         }
         /// <summary>
         ///     Удалить элемент из хранилища
         /// </summary>
-        /// <param name="element">Целевой элемент</param>
-        public void Remove(IVcsStorageElement element) {
-            Remove(element, EnumerateCommits(element));
+        /// <param name="file">Целевой элемент</param>
+        public void Remove(IFileEntity file) {
+            Remove(new VcsCommit {File = file}, EnumerateCommits(file));
         }
         /// <summary>
         ///     Удалить определённые версии файла из хранилища
         /// </summary>
-        /// <param name="element">Целевой элемент</param>
+        /// <param name="commit">Целевой элемент</param>
         /// <param name="commits">Перечисление коммитов</param>
-        public void Remove(IVcsStorageElement element, IEnumerable<string> commits) {
-            foreach (var commit in commits) {
+        public void Remove(VcsCommit commit, IEnumerable<string> commits) {
+            foreach (var c in commits) {
                 Transaction(
-                    new VcsStorageElement {
-                        Filename = element.Filename,
-                        Commit = commit
-                    },
+                    new VcsCommit {
+                        Code = c,
+                        File = commit.File
+                    }, 
                     VcsStorageTransactionType.Remove
                 );
             }
@@ -82,67 +90,59 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Производит реверт элемента на коммит, указанный в поле IVcsStorageElement::commit
         /// </summary>
-        /// <param name="element">Представление элемента</param>
-        public IVcsStorageElement Revert(IVcsStorageElement element) {
-            if (!VcsStorageUtils.CorrectCommitCode(element)) {
-                throw new VcsStorageException("Incorrect commit code!");
+        /// <param name="commit">Представление элемента</param>
+        public VcsCommit Revert(VcsCommit commit) {
+            if (!VcsStorageUtils.CorrectCommitCode(commit)) {
+                throw new Exception("Incorrect commit code!");
             }
 
-            if (!CommitExists(element)) {
-                throw new VcsStorageException("Transaction not exists!");
+            if (!CommitExists(commit)) {
+                throw new Exception("Transaction not exists!");
             }
 
-            var sourceStream = Engine.Get(new VcsStorageElementDescriptor {
-                Filename = element.Commit,
-                RelativeDirectory = VcsStorageDefaults.ObjFilesDirectory
-            }).Stream;
-
-            var reverted = new VcsStorageElement {
-                Filename = element.Filename,
-                Commit = ComputeCommitCode(sourceStream)
+            var sourceStream = Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }).GetStream(FileAccess.Read);
+            var revertedCode = ComputeCommitCode(sourceStream);
+            var reverted = new VcsCommit {
+                File = new FileEntity {
+                    Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, revertedCode)
+                },
+                Code = revertedCode
             };
 
-            Transaction(element, VcsStorageTransactionType.Revert);
-            Engine.Set(new VcsStorageEngineElement {
-                Descriptor = new VcsStorageElementDescriptor {
-                    Filename = reverted.Commit,
-                    RelativeDirectory = VcsStorageDefaults.ObjFilesDirectory
-                },
-                StreamAccess = FileAccess.Read,
-                Stream = sourceStream
-            });
+            Transaction(commit, VcsStorageTransactionType.Revert);
+            Engine.Set(reverted.File, sourceStream);
             
             return reverted;
         }
         /// <summary>
         ///     Подсчитывает количество версий элемента в хранилище
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        public int Count(IVcsStorageElement element) {
-            return _mapper.Count(element);
+        public int Count(IFileEntity file) {
+            return _mapper.Count(file);
         }
         /// <summary>
         ///     проверяет существование файла в хранилище
         /// </summary>
         /// <returns></returns>
-        public bool Exists(IVcsStorageElement element) {
-            return _mapper.Exists(element);
+        public bool Exists(IFileEntity file) {
+            return _mapper.Exists(new VcsCommit {File = file});
         }
         /// <summary>
         ///     Перечисляет идентификаторы коммитов файла
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="file">Представление элемента</param>
         /// <returns>Перечисление идентификаторов коммитов</returns>
-        public IEnumerable<string> EnumerateCommits(IVcsStorageElement element) {
-            return _mapper.Find(element).Select(el => el.Commit);
+        public IEnumerable<string> EnumerateCommits(IFileEntity file) {
+            return _mapper.Find(new VcsCommit {File = file}).Select(el => el.Code);
         }
         /// <summary>
         ///     Устанавливает движок низкоуровневого хранилища для
         ///     маппера
         /// </summary>
         /// <param name="engine">Движок</param>
-        public void SetMapperEngine(IVcsStorageEngine engine) {
+        public void SetMapperEngine(IFileStorage engine) {
             if (_mapper != null) {
                 _mapper.SetEngine(engine);
             }
@@ -152,38 +152,35 @@ namespace Qorpent.IO.VcsStorage {
         ///     бинарного журнала
         /// </summary>
         /// <param name="engine">Движок</param>
-        public void SetBinLogEngine(IVcsStorageEngine engine) {
-            if (_binLog != null) {
-                _binLog.SetEngine(engine);
+        public void SetBinLogEngine(IFileStorage engine) {
+            if (_logger != null) {
+                _logger.SetEngine(engine);
             }
         }
         /// <summary>
         ///     Проверяет наличие коммита в системе
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="commit">Представление элемента</param>
         /// <returns>True, если коммит присутствует</returns>
-        private bool CommitExists(IVcsStorageElement element) {
-            return _mapper.Find(element).Any(el => el.Commit == element.Commit);
+        private bool CommitExists(VcsCommit commit) {
+            return _mapper.Find(commit).Any(c => c.Code == commit.Code);
         }
         /// <summary>
         ///     Возвращает актуальную версию элемента
         /// </summary>
-        /// <param name="element"></param>
+        /// <param name="commit"></param>
         /// <returns></returns>
-        private IVcsStorageElement GetLatestVersion(IVcsStorageElement element) {
-            return _mapper.Find(element).ToList().FirstOrDefault();
+        private VcsCommit GetLatestVersion(VcsCommit commit) {
+            return _mapper.Find(new VcsCommit {File = commit.File, Branch = commit.Branch}).ToList().FirstOrDefault();
         }
         /// <summary>
         ///     Возвращает поток до версии файла, если он существует
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="commit"></param>
         /// <returns></returns>
-        private Stream PickCommit(IVcsStorageElement element) {
-            if (_mapper.Exists(element)) {
-                return Engine.Get(new VcsStorageElementDescriptor {
-                    Filename = element.Commit,
-                    RelativeDirectory = VcsStorageDefaults.ObjFilesDirectory
-                }).Stream;
+        private Stream PickCommit(VcsCommit commit) {
+            if (_mapper.Exists(commit)) {
+                return Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }).GetStream(FileAccess.Read);
             }
             
             return null;
@@ -191,49 +188,39 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Возвращает наиболее позднюю версию элемента из хранилища
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="commit"></param>
         /// <returns></returns>
-        private Stream PickLatestCommit(IVcsStorageElement element) {
-            var latestVersion = GetLatestVersion(element);
+        private Stream PickLatestCommit(VcsCommit commit) {
+            var latestVersion = GetLatestVersion(commit);
 
             if (latestVersion == null) {
                 return null;
             }
 
-            return Engine.Get(new VcsStorageElementDescriptor {
-                Filename = latestVersion.Commit,
-                RelativeDirectory = VcsStorageDefaults.ObjFilesDirectory
-            }).Stream;
+            return Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, latestVersion.Code) }).GetStream(FileAccess.Read);
         }
         /// <summary>
         ///     Производит реальной прокат записи на диск
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="commit">Представление элемента</param>
         /// <param name="stream">Исходный поток</param>
-        private void RollRealWriting(IVcsStorageElement element, Stream stream) {
-            Engine.Set(new VcsStorageEngineElement {
-                Descriptor = new VcsStorageElementDescriptor {
-                    Filename = element.Commit,
-                    RelativeDirectory = VcsStorageDefaults.ObjFilesDirectory
-                },
-                Stream = stream,
-                StreamAccess = FileAccess.Read
-            });
+        private void RollRealWriting(VcsCommit commit, Stream stream) {
+            Engine.Set(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }, stream);
         }
         /// <summary>
         ///     Регистрирует транзакцию
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="commit">Представление коммита</param>
         /// <param name="type">Тип транзакции</param>
-        private void Transaction(IVcsStorageElement element, VcsStorageTransactionType type) {
-            _binLog.Transaction(new VcsStorageTransaction {
-                Commit = element.Commit,
+        private void Transaction(VcsCommit commit, VcsStorageTransactionType type) {
+            _logger.Transaction(new VcsStorageTransaction {
+                Commit = commit,
                 DateTime = DateTime.Now,
-                Filename = element.Filename,
+                Filename = commit.File.Path,
                 Type = type
             });
 
-            _mapper.Transaction(element, type);
+            _mapper.Transaction(commit, type);
         }
         /// <summary>
         ///     Вычисляет код коммита по содержимому, добавляю компонент случайности

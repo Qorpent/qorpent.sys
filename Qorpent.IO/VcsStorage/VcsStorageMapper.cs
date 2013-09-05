@@ -13,13 +13,17 @@ namespace Qorpent.IO.VcsStorage {
     /// </summary>
     class VcsStorageMapper : IDisposable {
         /// <summary>
+        ///     
+        /// </summary>
+        private readonly Object _lock = new Object();
+        /// <summary>
         ///     Текущая карта хранилища
         /// </summary>
         private XElement Map { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public IVcsStorageEngine Engine { get; private set; }
+        public IFileStorage Engine { get; private set; }
         /// <summary>
         ///     Указатель на то, что класс уже разрушен
         /// </summary>
@@ -28,7 +32,7 @@ namespace Qorpent.IO.VcsStorage {
         /// 
         /// </summary>
         /// <param name="engine"></param>
-        public VcsStorageMapper(IVcsStorageEngine engine) {
+        public VcsStorageMapper(IFileStorage engine) {
             SetEngine(engine);
             Initialize();
         }
@@ -48,86 +52,96 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Транзакция: операции вставки или удаления
         /// </summary>
-        /// <param name="element"></param>
+        /// <param name="commit"></param>
         /// <param name="transactionType"></param>
-        public void Transaction(IVcsStorageElement element, VcsStorageTransactionType transactionType) {
-            switch (transactionType) {
-                case VcsStorageTransactionType.Commit: Insert(element); break;
-                case VcsStorageTransactionType.Remove: Remove(element); break;
+        public void Transaction(VcsCommit commit, VcsStorageTransactionType transactionType) {
+            lock (_lock) {
+                switch (transactionType) {
+                    case VcsStorageTransactionType.Commit: Insert(commit); break;
+                    case VcsStorageTransactionType.Remove: Remove(commit); break;
+                }
             }
         }
         /// <summary>
         ///     Поиск представления элемента в хранилище
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IVcsStorageElement> Find(IVcsStorageElement element) {
-            return Find(element, true);
+        public IEnumerable<VcsCommit> Find(VcsCommit commit) {
+            return Find(commit, true);
         }
         /// <summary>
         ///     Установить движок
         /// </summary>
         /// <param name="engine"></param>
-        public void SetEngine(IVcsStorageEngine engine) {
+        public void SetEngine(IFileStorage engine) {
             Engine = engine;
         }
         /// <summary>
         ///     Поиск представления элемента в хранилище
         /// </summary>
-        /// <param name="element"></param>
+        /// <param name="commit"></param>
         /// <param name="excludeRemoved"></param>
         /// <returns></returns>
-        private IEnumerable<IVcsStorageElement> Find(IVcsStorageElement element, bool excludeRemoved) {
-            var container = GetElement(element);
+        private IEnumerable<VcsCommit> Find(VcsCommit commit, bool excludeRemoved) {
+            var container = GetElement(commit);
 
             if (container == null) {
-                return new List<IVcsStorageElement>();
+                return new List<VcsCommit>();
             }
 
-            return new List<IVcsStorageElement>(container.Descendants("Commit").Where(
+            return new List<VcsCommit>(container.Descendants("Commit").Where(
                 el => el.IsRemovedElement() == !excludeRemoved
             ).Select(
-                el => new VcsStorageElement {
-                    Commit = el.Attribute("Code").Value,
-                    Filename = container.Attribute("Filename").Value
+                el => new VcsCommit {
+                    Code = el.Attribute("Code").Value,
+                    File = new FileEntity {
+                        Version = el.Attribute("Code").Value,
+                        Path = container.Attribute("Filename").Value,
+                        Filename = Path.GetFileName(container.Attribute("Filename").Value),
+                        DateTime = DateTime.Parse(el.Attribute("DateTime").Value),
+                        Owner = el.Attribute("Commiter").Value
+                    }
                 }
             ));
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="element"></param>
-        public void Insert(IVcsStorageElement element) {
-            var container = GetElement(element);
+        /// <param name="commit"></param>
+        public void Insert(VcsCommit commit) {
+            var container = GetElement(commit);
 
             if (container == null) {
                 container = new XElement("Element");
-                container.SetAttributeValue("Filename", element.Filename);
+                container.SetAttributeValue("Filename", commit.File.Path);
+                container.SetAttributeValue("Branch", commit.Branch);
                 container.SetAttributeValue("TotalCommits", 0);
                 Map.Add(container);
             }
 
-            var commit = new XElement("Commit");
-            commit.SetAttributeValue("Code", element.Commit);
-            commit.SetAttributeValue("DateTime", DateTime.Now);
+            var xmlCommit = new XElement("Commit");
+            xmlCommit.SetAttributeValue("Code", commit.Code);
+            xmlCommit.SetAttributeValue("DateTime", DateTime.Now);
+            xmlCommit.SetAttributeValue("Commiter", commit.Commiter);
 
             IncrementElementCommits(container);
-            container.SetAttributeValue("LastCommit", element.Commit);
-            container.AddFirst(commit);
+            container.SetAttributeValue("LastCommit", commit.Code);
+            container.AddFirst(xmlCommit);
         }
         /// <summary>
         ///     Удаляет элемент из маппинга. Если указан коммит, то только 
         ///     данный коммит, в противном случае - весь элемент
         /// </summary>
-        /// <param name="element">Представление элемента</param>
-        public void Remove(IVcsStorageElement element) {
-            var container = GetElement(element);
+        /// <param name="commit">Представление коммита</param>
+        public void Remove(VcsCommit commit) {
+            var container = GetElement(commit);
 
-            if (!VcsStorageUtils.CorrectCommitCode(element)) {
+            if (!VcsStorageUtils.CorrectCommitCode(commit)) {
                 container.SetAttributeValue("Removed", true);
             } else {
-                var commit = container.XPathSelectElement("/Element/Commit[@Code='" + element.Commit + "']");
-                if (commit != null) {
-                    commit.SetAttributeValue("Removed", true);
+                var xmlCommit = container.XPathSelectElement("/Element/Commit[@Code='" + commit.Code + "']");
+                if (xmlCommit != null) {
+                    xmlCommit.SetAttributeValue("Removed", true);
                 }
 
                 if (!container.Elements().All(el => el.IsRemovedElement())) {
@@ -139,29 +153,29 @@ namespace Qorpent.IO.VcsStorage {
         ///     Проверяет существование элемента в маппинге. Если указан коммит, 
         ///     то проверяет жёстко по коммиту
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="commit">Представление элемента</param>
         /// <returns></returns>
-        public bool Exists(IVcsStorageElement element) {
-            var found = Find(element);
+        public bool Exists(VcsCommit commit) {
+            var found = Find(commit);
 
             if (!found.Any()) {
                 return false;
             }
             // если код коммита имеет некорректную форму или не указан, а элемент
             // найден - просто вернём true
-            if (!VcsStorageUtils.CorrectCommitCode(element)) {
+            if (!VcsStorageUtils.CorrectCommitCode(commit)) {
                 return true;
             }
 
-            return found.Any(el => el.Commit == element.Commit);
+            return found.Any(c => c.Code == commit.Code);
         }
         /// <summary>
         ///     Подсчитывает количество версий файла
         /// </summary>
-        /// <param name="element"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        public int Count(IVcsStorageElement element) {
-            return Find(element).Count();
+        public int Count(IFileEntity file) {
+            return Find(new VcsCommit {File = file}).Count();
         }
         /// <summary>
         ///     Внутренний деструктор
@@ -178,12 +192,15 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Возвращает описание элемента из карты, если таковой существует
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="commit">Представление элемента</param>
         /// <returns>XML-контейнер элемента</returns>
-        private XElement GetElement(IVcsStorageElement element) {
-            return Map.XPathSelectElement("/Element[@Filename='" + element.Filename + "']");
+        private XElement GetElement(VcsCommit commit) {
+            return Map.XPathSelectElement("/Element[@Filename='" + commit.File.Path + "' and @Branch='" + commit.Branch + "']");
         }
-
+        /// <summary>
+        ///     Увеличивает счётчик коммитов в контейнере
+        /// </summary>
+        /// <param name="container"></param>
         private void IncrementElementCommits(XElement container) {
             container.SetAttributeValue("TotalCommits", container.Attribute("TotalCommits").Value.ToInt() + 1);
         }
@@ -201,14 +218,13 @@ namespace Qorpent.IO.VcsStorage {
         ///     Мержит текущую карту, если таковая существует
         /// </summary>
         private void MergeCurrentMap() {
-            var currentMapStream = Engine.Get(new VcsStorageElementDescriptor {
-                Filename = "master." + VcsStorageDefaults.MapFileExtension,
-                RelativeDirectory = VcsStorageDefaults.MapFilesDirectory
-            });
+            var currentMapStream = Engine.Get(new FileEntity {
+                Path = Path.Combine(VcsStorageDefaults.MapFilesDirectory, "master." + VcsStorageDefaults.MapFileExtension)
+            }).GetStream(FileAccess.Read);
 
-            if (currentMapStream.Stream != null) {
+            if (currentMapStream != null) {
                 Map.Add(XElement.Parse(
-                    VcsStorageUtils.StreamToString(currentMapStream.Stream)    
+                    VcsStorageUtils.StreamToString(currentMapStream)    
                 ).Elements());
             }
         }
@@ -223,14 +239,12 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         private void Dump() {
             Map.SetAttributeValue("EndWriting", DateTime.Now);
-            Engine.Set(new VcsStorageEngineElement {
-                Descriptor = new VcsStorageElementDescriptor {
-                    Filename = "master." + VcsStorageDefaults.MapFileExtension,
-                    RelativeDirectory = VcsStorageDefaults.MapFilesDirectory
+            Engine.Set(
+                new FileEntity {
+                    Path = Path.Combine(VcsStorageDefaults.MapFilesDirectory, "master." + VcsStorageDefaults.MapFileExtension)
                 },
-                StreamAccess = FileAccess.Read,
-                Stream = VcsStorageUtils.StringToStream(Map.ToString())
-            });
+                VcsStorageUtils.StringToStream(Map.ToString())
+            );
         }
     }
 }
