@@ -1,4 +1,6 @@
-﻿namespace Qorpent.IO.VcsStorage {
+﻿using System.IO;
+
+namespace Qorpent.IO {
     /// <summary>
     ///     Интерфейс движка хранилища
     /// </summary>
@@ -10,13 +12,14 @@
         /// <summary>
         ///     Запись элемента в низкоуровневое хранилище
         /// </summary>
-        /// <param name="engineElement">Представление элемента</param>
-        void Set(IVcsStorageEngineElement engineElement);
+        /// <param name="file"></param>
+        /// <param name="stream">поток-источник</param>
+        IGeneralFileDescriptor Set(IFileEntity file, Stream stream);
         /// <summary>
         ///     Чтение элемента из низкоуровневого хранилища
         /// </summary>
-        /// <param name="descriptor">Дескриптор элемента</param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        IVcsStorageEngineElement Get(IVcsStorageElementDescriptor descriptor);
+        IGeneralFileDescriptor Get(IFileEntity file);
     }
 }

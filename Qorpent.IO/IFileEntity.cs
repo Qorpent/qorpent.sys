@@ -6,6 +6,10 @@ namespace Qorpent.IO {
     /// </summary>
     public interface IFileEntity {
         /// <summary>
+        ///     Имя файла с расширением
+        /// </summary>
+        string Filename { get; set; }
+        /// <summary>
         ///     полный путь до файла
         /// </summary>
         string Path { get; set; }

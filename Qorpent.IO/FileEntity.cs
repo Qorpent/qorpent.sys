@@ -9,9 +9,7 @@ namespace Qorpent.IO {
         /// <summary>
         ///     Имя файла
         /// </summary>
-        public string Filename {
-            get { return System.IO.Path.GetFileName(Path); }
-        }
+        public string Filename { get; set; }
         /// <summary>
         ///     полный путь до файла
         /// </summary>

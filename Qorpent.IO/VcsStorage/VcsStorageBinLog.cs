@@ -106,14 +106,7 @@ namespace Qorpent.IO.VcsStorage {
         ///     Производит прокатку записи журнала на диск
         /// </summary>
         private void Dump() {
-            Engine.Set(new VcsStorageEngineElement {
-                Descriptor = new VcsStorageElementDescriptor {
-                    Filename = BinLogGuid + "." + VcsStorageDefaults.BinLogExtension,
-                    RelativeDirectory = VcsStorageDefaults.BinLogDirectory
-                },
-                Stream = VcsStorageUtils.StringToStream(BinLog.ToString()),
-                StreamAccess = FileAccess.Read
-            });
+            Engine.Set(new FileEntity {Path = Path.Combine(VcsStorageDefaults.BinLogDirectory, BinLogGuid + "." + VcsStorageDefaults.BinLogExtension)}, VcsStorageUtils.StringToStream(BinLog.ToString()));
         }
         /// <summary>
         ///     Генерирует запись для бинарного журнала о транзакции

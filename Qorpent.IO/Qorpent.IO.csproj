@@ -17,10 +17,12 @@
     <Compile Include="DirtyVersion\Storage\Hasher.cs" />
     <Compile Include="DirtyVersion\Storage\HashedDirectory.cs" />
     <Compile Include="DirtyVersion\Storage\CopyOnReadStream.cs" />
+    <Compile Include="FsBasedFileDescriptor.cs" />
     <Compile Include="FileEntity.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
     <Compile Include="FileStorageAbilities.cs" />
+    <Compile Include="IGeneralFileDescriptor.cs" />
     <Compile Include="IFileEntity.cs" />
     <Compile Include="VcsStorage\VcsCommit.cs" />
     <Compile Include="Web\ProxySelectorHelper.cs" />
@@ -42,7 +44,7 @@
     <Compile Include="VcsStorage\VcsStoragePersister.cs" />
     <Compile Include="VcsStorage\VcsStorageUtils.cs" />
     <Compile Include="VcsStorage\IVcsStorageElementDescriptor.cs" />
-    <Compile Include="VcsStorage\IFileStorage.cs" />
+    <Compile Include="IFileStorage.cs" />
     <Compile Include="VcsStorage\IVcsStorageEngineElement.cs" />
     <Compile Include="VcsStorage\IVcsStoragePersister.cs" />
   </ItemGroup>

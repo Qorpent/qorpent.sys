@@ -7,7 +7,7 @@ namespace Qorpent.IO.VcsStorage {
     /// <summary>
     /// 
     /// </summary>
-    public class VcsStoragePersister : IVcsStoragePersister, IDisposable, IFileStorage {
+    public class VcsStoragePersister : IVcsStoragePersister, IDisposable {
         /// <summary>
         ///     Бинарный журнал
         /// </summary>
@@ -99,10 +99,7 @@ namespace Qorpent.IO.VcsStorage {
                 throw new VcsStorageException("Transaction not exists!");
             }
 
-            var sourceStream = Engine.Get(new VcsStorageElementDescriptor {
-                Filename = commit.Code,
-                RelativeDirectory = VcsStorageDefaults.ObjFilesDirectory
-            }).Stream;
+            var sourceStream = Engine.Get(commit.File).GetStream(FileAccess.Read);
 
             var reverted = new VcsCommit {
                 File = new FileEntity {
@@ -112,14 +109,7 @@ namespace Qorpent.IO.VcsStorage {
             };
 
             Transaction(commit, VcsStorageTransactionType.Revert);
-            Engine.Set(new VcsStorageEngineElement {
-                Descriptor = new VcsStorageElementDescriptor {
-                    Filename = reverted.Code,
-                    RelativeDirectory = VcsStorageDefaults.ObjFilesDirectory
-                },
-                StreamAccess = FileAccess.Read,
-                Stream = sourceStream
-            });
+            Engine.Set(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }, sourceStream);
             
             return reverted;
         }
@@ -189,10 +179,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <returns></returns>
         private Stream PickCommit(VcsCommit commit) {
             if (_mapper.Exists(commit)) {
-                return Engine.Get(new VcsStorageElementDescriptor {
-                    Filename = commit.Code,
-                    RelativeDirectory = VcsStorageDefaults.ObjFilesDirectory
-                }).Stream;
+                return Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }).GetStream(FileAccess.Read);
             }
             
             return null;
@@ -209,10 +196,7 @@ namespace Qorpent.IO.VcsStorage {
                 return null;
             }
 
-            return Engine.Get(new VcsStorageElementDescriptor {
-                Filename = latestVersion.Code,
-                RelativeDirectory = VcsStorageDefaults.ObjFilesDirectory
-            }).Stream;
+            return Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }).GetStream(FileAccess.Read);
         }
         /// <summary>
         ///     Производит реальной прокат записи на диск
@@ -220,14 +204,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <param name="commit">Представление элемента</param>
         /// <param name="stream">Исходный поток</param>
         private void RollRealWriting(VcsCommit commit, Stream stream) {
-            Engine.Set(new VcsStorageEngineElement {
-                Descriptor = new VcsStorageElementDescriptor {
-                    Filename = commit.Code,
-                    RelativeDirectory = VcsStorageDefaults.ObjFilesDirectory
-                },
-                Stream = stream,
-                StreamAccess = FileAccess.Read
-            });
+            Engine.Set(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }, stream);
         }
         /// <summary>
         ///     Регистрирует транзакцию
@@ -257,21 +234,6 @@ namespace Qorpent.IO.VcsStorage {
                     VcsStorageUtils.StreamToString(internalStream) + Guid.NewGuid().ToString()
                 );
             }
-        }
-        /// <summary>
-        ///     Сохранение в хранилище
-        /// </summary>
-        /// <param name="engineElement"></param>
-        public void Set(IVcsStorageEngineElement engineElement) {
-            throw new NotImplementedException();
-        }
-        /// <summary>
-        ///     Получение из хранилища
-        /// </summary>
-        /// <param name="descriptor"></param>
-        /// <returns></returns>
-        public IVcsStorageEngineElement Get(IVcsStorageElementDescriptor descriptor) {
-            throw new NotImplementedException();
         }
     }
 }

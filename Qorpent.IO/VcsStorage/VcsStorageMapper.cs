@@ -205,14 +205,13 @@ namespace Qorpent.IO.VcsStorage {
         ///     Мержит текущую карту, если таковая существует
         /// </summary>
         private void MergeCurrentMap() {
-            var currentMapStream = Engine.Get(new VcsStorageElementDescriptor {
-                Filename = "master." + VcsStorageDefaults.MapFileExtension,
-                RelativeDirectory = VcsStorageDefaults.MapFilesDirectory
-            });
+            var currentMapStream = Engine.Get(new FileEntity {
+                Path = Path.Combine(VcsStorageDefaults.MapFilesDirectory, "master." + VcsStorageDefaults.MapFileExtension)
+            }).GetStream(FileAccess.Read);
 
-            if (currentMapStream.Stream != null) {
+            if (currentMapStream != null) {
                 Map.Add(XElement.Parse(
-                    VcsStorageUtils.StreamToString(currentMapStream.Stream)    
+                    VcsStorageUtils.StreamToString(currentMapStream)    
                 ).Elements());
             }
         }
@@ -227,14 +226,12 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         private void Dump() {
             Map.SetAttributeValue("EndWriting", DateTime.Now);
-            Engine.Set(new VcsStorageEngineElement {
-                Descriptor = new VcsStorageElementDescriptor {
-                    Filename = "master." + VcsStorageDefaults.MapFileExtension,
-                    RelativeDirectory = VcsStorageDefaults.MapFilesDirectory
+            Engine.Set(
+                new FileEntity {
+                    Path = Path.Combine(VcsStorageDefaults.MapFilesDirectory, "master." + VcsStorageDefaults.MapFileExtension)
                 },
-                StreamAccess = FileAccess.Read,
-                Stream = VcsStorageUtils.StringToStream(Map.ToString())
-            });
+                VcsStorageUtils.StringToStream(Map.ToString())
+            );
         }
     }
 }
