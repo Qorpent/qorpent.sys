@@ -31,7 +31,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Низкойровневый файловый движок
         /// </summary>
-        public IVcsStorageEngine Engine { get; private set; }
+        public IFileStorage Engine { get; private set; }
         /// <summary>
         ///     Директория для хранения журналов транзакций
         /// </summary>
@@ -39,7 +39,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Внутренний журнал транзакций
         /// </summary>
-        public VcsStorageBinLog(IVcsStorageEngine engine) {
+        public VcsStorageBinLog(IFileStorage engine) {
             SetEngine(engine);
             InitializeNewBinLog();
         }
@@ -78,7 +78,7 @@ namespace Qorpent.IO.VcsStorage {
         ///     Установить движок
         /// </summary>
         /// <param name="engine"></param>
-        public void SetEngine(IVcsStorageEngine engine) {
+        public void SetEngine(IFileStorage engine) {
             Engine = engine;
         }
         /// <summary>

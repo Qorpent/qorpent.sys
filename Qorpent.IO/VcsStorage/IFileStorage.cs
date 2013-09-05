@@ -2,7 +2,11 @@
     /// <summary>
     ///     Интерфейс движка хранилища
     /// </summary>
-    public interface IVcsStorageEngine {
+    public interface IFileStorage {
+        /// <summary>
+        ///     Поддерживаемый функционал
+        /// </summary>
+        FileStorageAbilities Abilities { get; }
         /// <summary>
         ///     Запись элемента в низкоуровневое хранилище
         /// </summary>

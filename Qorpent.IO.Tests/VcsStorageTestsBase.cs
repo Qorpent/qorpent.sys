@@ -20,7 +20,7 @@ namespace Qorpent.IO.Tests {
         /// </summary>
         [SetUp]
         public void SetUp() {
-            Persister = new VcsStoragePersister(new VcsStorageFsEngine(new DirectoryInfo(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()))));
+            Persister = new VcsStoragePersister(new FileStorageFs(new DirectoryInfo(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()))));
         }
         /// <summary>
         /// 
@@ -28,11 +28,9 @@ namespace Qorpent.IO.Tests {
         /// <param name="names"></param>
         protected void WriteStubElements(IEnumerable<string> names) {
             foreach (var name in names) {
-                var element = GetVcsStorageElement();
-                element.Filename = name;
 
                 Persister.Commit(
-                    element,
+                    new FileEntity {Path = name}, 
                     GenerateStreamFromString(
                         Guid.NewGuid().ToString()
                         )
@@ -47,22 +45,16 @@ namespace Qorpent.IO.Tests {
         protected void WriteStubElements(int count) {
             for (var i = 0; i < count; i++) {
                 Persister.Commit(
-                    GetVcsStorageElement(),
+                    new FileEntity {
+                        Path = Guid.NewGuid().ToString()
+                    },
                     GenerateStreamFromString(
                         Guid.NewGuid().ToString()
                     )
                 );
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected IVcsStorageElement GetVcsStorageElement() {
-            return new VcsStorageElement {
-                Filename = Guid.NewGuid().ToString()
-            };
-        }
+
         /// <summary>
         /// 
         /// </summary>

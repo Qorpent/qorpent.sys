@@ -5,17 +5,22 @@ namespace Qorpent.IO.VcsStorage.Engines {
     /// <summary>
     ///     Движок на файловой системе
     /// </summary>
-    public class VcsStorageFsEngine : IVcsStorageEngine {
+    public class FileStorageFs : IFileStorage {
         /// <summary>
         ///     Текущая рабочая директория
         /// </summary>
         public DirectoryInfo WorkingDirectory { get; private set; }
         /// <summary>
+        ///     Поддерживаемый функционал
+        /// </summary>
+        public FileStorageAbilities Abilities { get; private set; }
+        /// <summary>
         ///     Движок на файловой системе
         /// </summary>
         /// <param name="workingDirectory">рабочая директория</param>
-        public VcsStorageFsEngine(DirectoryInfo workingDirectory) {
+        public FileStorageFs(DirectoryInfo workingDirectory) {
             WorkingDirectory = workingDirectory;
+            Abilities = FileStorageAbilities.Persist;
         }
         /// <summary>
         ///     Запись элемента в низкоуровневое хранилище

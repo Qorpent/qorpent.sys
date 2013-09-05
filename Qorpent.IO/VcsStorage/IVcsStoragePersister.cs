@@ -9,37 +9,37 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Коммит файла в хранилище
         /// </summary>
-        /// <param name="element">Путь файла от корня хранилища</param>
+        /// <param name="file">Путь файла от корня хранилища</param>
         /// <param name="stream">Данные для записи</param>
         /// <returns>Внутренний идентификатор коммита</returns>
-        void Commit(IVcsStorageElement element, Stream stream);
+        VcsCommit Commit(IFileEntity file, Stream stream);
         /// <summary>
         ///     Возвращает поток на чтение файла из хранилища
         /// </summary>
-        /// <param name="element"></param>
+        /// <param name="commit"></param>
         /// <returns></returns>
-        Stream Pick(IVcsStorageElement element);
+        Stream Pick(VcsCommit commit);
         /// <summary>
         ///     Удалить элемент из хранилища
         /// </summary>
-        /// <param name="element">Целевой элемент</param>
-        void Remove(IVcsStorageElement element);
+        /// <param name="file">Целевой элемент</param>
+        void Remove(IFileEntity file);
         /// <summary>
         ///     Удалить определённые версии файла из хранилища
         /// </summary>
-        /// <param name="element">Целевой элемент</param>
+        /// <param name="commit">Целевой элемент</param>
         /// <param name="commits">Перечисление коммитов</param>
-        void Remove(IVcsStorageElement element, IEnumerable<string> commits);
+        void Remove(VcsCommit commit, IEnumerable<string> commits);
         /// <summary>
         ///     Подсчитывает количество версий элемента в хранилище
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="file">Представление файла</param>
         /// <returns></returns>
-        int Count(IVcsStorageElement element);
+        int Count(IFileEntity file);
         /// <summary>
         ///     проверяет существование файла в хранилище
         /// </summary>
         /// <returns></returns>
-        bool Exists(IVcsStorageElement element);
+        bool Exists(IFileEntity file);
     }
 }

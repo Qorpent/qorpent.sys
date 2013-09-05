@@ -11,10 +11,10 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Проверяет код коммита на валидность
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="commit"></param>
         /// <returns>True, если код верен</returns>
-        public static bool CorrectCommitCode(IVcsStorageElement element) {
-            return !string.IsNullOrWhiteSpace(element.Commit);
+        public static bool CorrectCommitCode(VcsCommit commit) {
+            return !string.IsNullOrWhiteSpace(commit.Code);
         }
         /// <summary>
         ///     

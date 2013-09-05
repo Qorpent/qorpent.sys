@@ -17,8 +17,12 @@
     <Compile Include="DirtyVersion\Storage\Hasher.cs" />
     <Compile Include="DirtyVersion\Storage\HashedDirectory.cs" />
     <Compile Include="DirtyVersion\Storage\CopyOnReadStream.cs" />
+    <Compile Include="FileEntity.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
+    <Compile Include="FileStorageAbilities.cs" />
+    <Compile Include="IFileEntity.cs" />
+    <Compile Include="VcsStorage\VcsCommit.cs" />
     <Compile Include="Web\ProxySelectorHelper.cs" />
     <Compile Include="Web\WebResource.cs" />
     <Compile Include="Web\WebResourceProviderExtension.cs" />
@@ -36,13 +40,11 @@
     <Compile Include="VcsStorage\VcsStorageException.cs" />
     <Compile Include="VcsStorage\VcsStorageMapper.cs" />
     <Compile Include="VcsStorage\VcsStoragePersister.cs" />
-    <Compile Include="VcsStorage\VcsStorageElement.cs" />
     <Compile Include="VcsStorage\VcsStorageUtils.cs" />
     <Compile Include="VcsStorage\IVcsStorageElementDescriptor.cs" />
-    <Compile Include="VcsStorage\IVcsStorageEngine.cs" />
+    <Compile Include="VcsStorage\IFileStorage.cs" />
     <Compile Include="VcsStorage\IVcsStorageEngineElement.cs" />
     <Compile Include="VcsStorage\IVcsStoragePersister.cs" />
-    <Compile Include="VcsStorage\IVcsStorageElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.XML" />
