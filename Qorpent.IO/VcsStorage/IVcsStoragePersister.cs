@@ -7,12 +7,12 @@ namespace Qorpent.IO.VcsStorage {
     /// </summary>
     public interface IVcsStoragePersister {
         /// <summary>
-        ///     Коммит файла в хранилище
+        /// 
         /// </summary>
-        /// <param name="file">Путь файла от корня хранилища</param>
-        /// <param name="stream">Данные для записи</param>
-        /// <returns>Внутренний идентификатор коммита</returns>
-        VcsCommit Commit(IFileEntity file, Stream stream);
+        /// <param name="commit"></param>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        VcsCommit Commit(VcsCommit commit, Stream stream);
         /// <summary>
         ///     Возвращает поток на чтение файла из хранилища
         /// </summary>

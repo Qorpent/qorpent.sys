@@ -45,15 +45,15 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Коммит файла в хранилище
         /// </summary>
-        /// <param name="file">Путь файла от корня хранилища</param>
+        /// <param name="commit">Путь файла от корня хранилища</param>
         /// <param name="stream">Данные для записи</param>
         /// <returns>Внутренний идентификатор коммита</returns>
-        public VcsCommit Commit(IFileEntity file, Stream stream) {
-            var commit = new VcsCommit {File = file, Code = ComputeCommitCode(stream)};
+        public VcsCommit Commit(VcsCommit commit, Stream stream) {
+            var realCommit = new VcsCommit {File = commit.File, Code = ComputeCommitCode(stream), Branch = commit.Branch};
 
-            Transaction(commit, VcsStorageTransactionType.Commit);
-            RollRealWriting(commit, stream);
-            return commit;
+            Transaction(realCommit, VcsStorageTransactionType.Commit);
+            RollRealWriting(realCommit, stream);
+            return realCommit;
         }
         /// <summary>
         ///     Возвращает поток на чтение файла из хранилища
@@ -177,10 +177,10 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Возвращает актуальную версию элемента
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="commit"></param>
         /// <returns></returns>
-        private VcsCommit GetLatestVersion(IFileEntity file) {
-            return _mapper.Find(new VcsCommit {File = file}).ToList().FirstOrDefault();
+        private VcsCommit GetLatestVersion(VcsCommit commit) {
+            return _mapper.Find(new VcsCommit {File = commit.File, Branch = commit.Branch}).ToList().FirstOrDefault();
         }
         /// <summary>
         ///     Возвращает поток до версии файла, если он существует
@@ -203,7 +203,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <param name="commit"></param>
         /// <returns></returns>
         private Stream PickLatestCommit(VcsCommit commit) {
-            var latestVersion = GetLatestVersion(commit.File);
+            var latestVersion = GetLatestVersion(commit);
 
             if (latestVersion == null) {
                 return null;
@@ -236,7 +236,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <param name="type">Тип транзакции</param>
         private void Transaction(VcsCommit commit, VcsStorageTransactionType type) {
             _binLog.Transaction(new VcsStorageTransaction {
-                Commit = commit.Code,
+                Commit = commit,
                 DateTime = DateTime.Now,
                 Filename = commit.File.Path,
                 Type = type

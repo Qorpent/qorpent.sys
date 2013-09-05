@@ -24,5 +24,9 @@ namespace Qorpent.IO.VcsStorage {
         ///     Расширение файла с журналом по умолчанию
         /// </summary>
         public const string BinLogExtension = "BinLog.xml";
+        /// <summary>
+        ///     Имя бранча по умолчанию
+        /// </summary>
+        public const string DefaultBranch = "Master";
     }
 }

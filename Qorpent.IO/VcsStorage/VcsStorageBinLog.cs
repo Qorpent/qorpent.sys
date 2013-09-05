@@ -33,10 +33,6 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         public IFileStorage Engine { get; private set; }
         /// <summary>
-        ///     Директория для хранения журналов транзакций
-        /// </summary>
-        public DirectoryInfo BinLogStorage { get; private set; }
-        /// <summary>
         ///     Внутренний журнал транзакций
         /// </summary>
         public VcsStorageBinLog(IFileStorage engine) {
@@ -128,9 +124,10 @@ namespace Qorpent.IO.VcsStorage {
             var node = new XElement("transaction");
 
             node.SetAttributeValue("Filename", transaction.Filename);
-            node.SetAttributeValue("Guid", transaction.Commit);
+            node.SetAttributeValue("Commit", transaction.Commit.Code);
             node.SetAttributeValue("DateTime", transaction.DateTime);
             node.SetAttributeValue("Type", transaction.Type);
+            node.SetAttributeValue("Branch", transaction.Commit.Branch);
 
             return node;
         }

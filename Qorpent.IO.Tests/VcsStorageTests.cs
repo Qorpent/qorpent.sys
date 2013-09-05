@@ -17,8 +17,8 @@ namespace Qorpent.IO.Tests {
         /// </summary>
         [Test]
         public void CanCommitFile() {
-            var elementFirst = Persister.Commit(new FileEntity {Path = Guid.NewGuid().ToString()}, GenerateStreamFromString("test data"));
-            var elementSecond = Persister.Commit(new FileEntity { Path = Guid.NewGuid().ToString() }, GenerateStreamFromString("SOMETESTDATA"));
+            var elementFirst = Persister.Commit(new VcsCommit {File = new FileEntity {Path = Guid.NewGuid().ToString()}}, GenerateStreamFromString("test data"));
+            var elementSecond = Persister.Commit(new VcsCommit {File = new FileEntity { Path = Guid.NewGuid().ToString() }}, GenerateStreamFromString("SOMETESTDATA"));
 
             var pickedFirst = Persister.Pick(elementFirst);
             var pickedSecond = Persister.Pick(elementSecond);
@@ -70,9 +70,9 @@ namespace Qorpent.IO.Tests {
         public void CanRevert() {
 
 
-            var elementFirst = Persister.Commit(new FileEntity { Path = "test" }, GenerateStreamFromString("test data"));
-            var elementSecond = Persister.Commit(new FileEntity { Path = "test" }, GenerateStreamFromString("SOMETESTDATA"));
-            var elementThird = Persister.Commit(new FileEntity { Path = "test" }, GenerateStreamFromString("ANOTHERDTA"));
+            var elementFirst = Persister.Commit(new VcsCommit { File = new FileEntity { Path = "test" } }, GenerateStreamFromString("test data"));
+            var elementSecond = Persister.Commit(new VcsCommit { File = new FileEntity { Path = "test" } }, GenerateStreamFromString("SOMETESTDATA"));
+            var elementThird = Persister.Commit(new VcsCommit { File = new FileEntity { Path = "test" } }, GenerateStreamFromString("ANOTHERDTA"));
 
             var picked = Persister.Pick(new VcsCommit { File = new FileEntity { Path = "test" } });
 
@@ -99,6 +99,24 @@ namespace Qorpent.IO.Tests {
             RunCanBootstrap(storage);
             RunCanBootstrap(storage);
             Debug.Print(storage.WorkingDirectory.FullName);
+        }
+        [Test]
+        public void Branching() {
+            var br1Commit = Persister.Commit(new VcsCommit { File = new FileEntity { Path = "test" }, Branch = "br1"}, GenerateStreamFromString("test data"));
+            var br2Commit = Persister.Commit(new VcsCommit { File = new FileEntity { Path = "test" }, Branch = "br2"}, GenerateStreamFromString("SOMETESTDATA"));
+
+
+            var pickedFirst = Persister.Pick(new VcsCommit {Branch = "br1", File = new FileEntity {Path = "test"}});
+            var pickedSecond = Persister.Pick(new VcsCommit { Branch = "br2", File = new FileEntity { Path = "test" } });
+
+            Assert.IsNotNull(pickedFirst);
+            Assert.IsNotNull(pickedSecond);
+
+            var contentFirst = new StreamReader(pickedFirst).ReadToEnd();
+            var contentSecond = new StreamReader(pickedSecond).ReadToEnd();
+
+            Assert.AreEqual("test data", contentFirst);
+            Assert.AreEqual("SOMETESTDATA", contentSecond);
         }
         private void RunCanBootstrap(IFileStorage engine) {
             Persister = new VcsStoragePersister(engine);

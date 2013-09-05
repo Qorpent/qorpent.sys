@@ -105,6 +105,7 @@ namespace Qorpent.IO.VcsStorage {
             if (container == null) {
                 container = new XElement("Element");
                 container.SetAttributeValue("Filename", commit.File.Path);
+                container.SetAttributeValue("Branch", commit.Branch);
                 container.SetAttributeValue("TotalCommits", 0);
                 Map.Add(container);
             }
@@ -184,7 +185,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <param name="commit">Представление элемента</param>
         /// <returns>XML-контейнер элемента</returns>
         private XElement GetElement(VcsCommit commit) {
-            return Map.XPathSelectElement("/Element[@Filename='" + commit.File.Path + "']");
+            return Map.XPathSelectElement("/Element[@Filename='" + commit.File.Path + "' and @Branch='" + commit.Branch + "']");
         }
 
         private void IncrementElementCommits(XElement container) {
