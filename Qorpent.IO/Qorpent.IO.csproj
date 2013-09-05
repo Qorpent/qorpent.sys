@@ -34,7 +34,6 @@
     <Compile Include="VcsStorage\Engines\FileStorageFsEngine.cs" />
     <Compile Include="VcsStorage\VcsStorageBinLog.cs" />
     <Compile Include="VcsStorage\VcsStorageDefaults.cs" />
-    <Compile Include="VcsStorage\VcsStorageMapperExtensions.cs" />
     <Compile Include="VcsStorage\VcsStorageTransaction.cs" />
     <Compile Include="VcsStorage\VcsStorageTransactionType.cs" />
     <Compile Include="VcsStorage\VcsStorageException.cs" />
