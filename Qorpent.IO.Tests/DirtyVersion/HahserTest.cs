@@ -23,7 +23,7 @@ namespace Qorpent.IO.Tests.DirtyVersion
 			// первое требование - хэш должен быть
 			Assert.False(string.IsNullOrWhiteSpace(result));
 			// второе требование - хэш должен иметь фиксированный размер
-			Assert.AreEqual(Const.HashSize,result.Length);
+			Assert.AreEqual(Const.MaxHashSize,result.Length);
 			// третье требование - хэш должен быть совместим с файловой системой
 			Assert.True(result.All(char.IsLetterOrDigit));
 			// четвертое требование - хэш должен быть воспроизводимым

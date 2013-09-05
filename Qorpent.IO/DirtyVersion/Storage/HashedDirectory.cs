@@ -10,12 +10,12 @@ namespace Qorpent.IO.DirtyVersion.Storage
 	/// <summary>
 	/// Специальная диреткория, выполняющая сохранение объекта в виде хэшированной записи
 	/// </summary>
-	public class HashedDirectory : HashedDirectoryBase {
+	public class HashedDirectory : HashedDirectoryBase, IHashedDirectory {
 		/// <summary>
 		/// Создает хэшированную директорию для записи файлов
 		/// </summary>
 	
-		public HashedDirectory(string targetDirectoryName, bool compress = true, int hashsize = Const.HashSize) : base(targetDirectoryName, compress: compress, hashsize: hashsize) {}
+		public HashedDirectory(string targetDirectoryName, bool compress = true, int hashsize = Const.MaxHashSize) : base(targetDirectoryName, compress: compress, hashsize: hashsize) {}
 
 		/// <summary>
 		/// Выполняет сохранение файла с формированием хэш -записи

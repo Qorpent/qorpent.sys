@@ -10,6 +10,8 @@
   <ItemGroup>
     <Compile Include="ContainerInfo.cs" />
     <Compile Include="DirtyVersion\Const.cs" />
+    <Compile Include="DirtyVersion\DirtyVersionStorage.cs" />
+    <Compile Include="DirtyVersion\IDirtyVersionStorage.cs" />
     <Compile Include="DirtyVersion\Mapping\Commit.cs" />
     <Compile Include="DirtyVersion\Mapping\CommitAuthorInfo.cs" />
     <Compile Include="DirtyVersion\Mapping\CommitHeadBehavior.cs" />
@@ -30,6 +32,7 @@
     <Compile Include="DirtyVersion\Storage\Hasher.cs" />
     <Compile Include="DirtyVersion\Storage\HashedDirectory.cs" />
     <Compile Include="DirtyVersion\Storage\CopyOnReadStream.cs" />
+    <Compile Include="DirtyVersion\IHashedDirectory.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
     <Compile Include="Web\ProxySelectorHelper.cs" />

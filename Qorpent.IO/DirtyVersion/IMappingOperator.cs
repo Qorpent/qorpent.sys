@@ -53,5 +53,18 @@ namespace Qorpent.IO.DirtyVersion {
 		/// 
 		/// </summary>
 		void Commit();
+
+		/// <summary>
+		/// Возвращает хэш хида
+		/// </summary>
+		/// <returns></returns>
+		string GetHeadHash();
+
+		/// <summary>
+		/// Осуществляет разрешение коммитов
+		/// </summary>
+		/// <param name="hash"></param>
+		/// <returns></returns>
+		Commit Resolve(string hash);
 	}
 }

@@ -177,5 +177,20 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		public void Dispose() {
 			_session.Dispose();
 		}
+		/// <summary>
+		/// Возвращает хэш хида
+		/// </summary>
+		/// <returns></returns>
+		public string GetHeadHash() {
+			return MappingInfo.Head;
+		}
+		/// <summary>
+		/// Осуществляет разрешение коммитов
+		/// </summary>
+		/// <param name="hash"></param>
+		/// <returns></returns>
+		public Commit Resolve(string hash) {
+			return MappingInfo.Resolve(hash);
+		}
 	}
 }

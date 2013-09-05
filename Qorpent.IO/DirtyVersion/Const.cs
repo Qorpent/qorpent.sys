@@ -20,7 +20,11 @@ namespace Qorpent.IO.DirtyVersion
 		/// <summary>
 		/// Размерность хэша
 		/// </summary>
-		public const int HashSize = Md5HashSizeInBytes * 2;
+		public const int MaxHashSize = Md5HashSizeInBytes * 2;
+		/// <summary>
+		/// Размерность хэша
+		/// </summary>
+		public const int MinHashSize = 7;
 		/// <summary>
 		/// Специальное имя для отщепленного имени
 		/// </summary>

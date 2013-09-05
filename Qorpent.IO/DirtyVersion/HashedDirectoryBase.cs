@@ -23,7 +23,7 @@ namespace Qorpent.IO.DirtyVersion {
 		/// <summary>
 		/// Создает хэшированную директорию для записи файлов
 		/// </summary>
-		protected HashedDirectoryBase(string targetDirectoryName, bool compress = true, int hashsize = Const.HashSize) {
+		protected HashedDirectoryBase(string targetDirectoryName, bool compress = true, int hashsize = Const.MaxHashSize) {
 			_rootDirectory = targetDirectoryName;
 			_compress = compress;
 			_hasher = new Hasher(hashsize);

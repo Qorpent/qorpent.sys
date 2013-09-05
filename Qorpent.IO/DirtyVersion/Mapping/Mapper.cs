@@ -11,7 +11,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping
 		/// Основной конструктор
 		/// </summary>
 
-		public Mapper(string targetDirectoryName, bool compress = true, int hashsize = Const.HashSize) :
+		public Mapper(string targetDirectoryName, bool compress = true, int hashsize = Const.MaxHashSize) :
 			base(targetDirectoryName, compress, hashsize) {
 			
 		}
