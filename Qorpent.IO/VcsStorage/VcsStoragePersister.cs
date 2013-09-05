@@ -99,22 +99,17 @@ namespace Qorpent.IO.VcsStorage {
                 throw new VcsStorageException("Transaction not exists!");
             }
 
-            var sourceStream = Engine.Get(commit.File).GetStream(FileAccess.Read);
-
+            var sourceStream = Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }).GetStream(FileAccess.Read);
+            var revertedCode = ComputeCommitCode(sourceStream);
             var reverted = new VcsCommit {
                 File = new FileEntity {
-                    Path = commit.File.Path
+                    Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, revertedCode)
                 },
-                Code = ComputeCommitCode(sourceStream)
+                Code = revertedCode
             };
 
             Transaction(commit, VcsStorageTransactionType.Revert);
-            Engine.Set(
-                new FileEntity {
-                    Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code)
-                },
-                sourceStream
-            );
+            Engine.Set(reverted.File, sourceStream);
             
             return reverted;
         }
@@ -201,7 +196,7 @@ namespace Qorpent.IO.VcsStorage {
                 return null;
             }
 
-            return Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }).GetStream(FileAccess.Read);
+            return Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, latestVersion.Code) }).GetStream(FileAccess.Read);
         }
         /// <summary>
         ///     Производит реальной прокат записи на диск

@@ -71,7 +71,7 @@ namespace Qorpent.IO.VcsStorage.Engines {
         /// <param name="file">Дескриптор</param>
         /// <returns></returns>
         private string GenerateElementDirectory(IFileEntity file) {
-            return Path.Combine(WorkingDirectory.FullName, file.Path);
+            return Path.Combine(WorkingDirectory.FullName, Path.GetDirectoryName(file.Path));
         }
         /// <summary>
         ///     Генерирует путь до файла
@@ -79,7 +79,7 @@ namespace Qorpent.IO.VcsStorage.Engines {
         /// <param name="file">Представление элемента</param>
         /// <returns>Полный путь</returns>
         private string GeneratePath(IFileEntity file) {
-            return Path.Combine(GenerateElementDirectory(file), file.Filename);
+            return Path.Combine(GenerateElementDirectory(file), Path.GetFileName(file.Path));
         }
     }
 }

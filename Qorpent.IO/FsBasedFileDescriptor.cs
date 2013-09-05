@@ -24,7 +24,7 @@ namespace Qorpent.IO {
                 throw new Exception("You haven't access to this file");
             }
 
-            return File.Open(FileEntity.Path, FileMode.Open, access);
+            return File.Exists(FileEntity.Path) ? File.Open(FileEntity.Path, FileMode.Open, access) : null;
         }
         /// <summary>
         /// 
