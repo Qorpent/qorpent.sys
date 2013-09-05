@@ -38,9 +38,9 @@
     <Compile Include="BSharp\Schema\Schema.cs" />
     <Compile Include="BSharp\Schema\SchemaNote.cs" />
     <Compile Include="Dot\ArrowType.cs" />
-    <Compile Include="Dot\StyleGraphType.cs" />
-    <Compile Include="Dot\StyleEdgeType.cs" />
-    <Compile Include="Dot\StyleNodeType.cs" />
+    <Compile Include="Dot\GraphStyleType.cs" />
+    <Compile Include="Dot\EdgeStyleType.cs" />
+    <Compile Include="Dot\NodeStyleType.cs" />
     <Compile Include="Dot\DirType.cs" />
     <Compile Include="Dot\DotConstants.cs" />
     <Compile Include="Dot\Graph.cs" />
