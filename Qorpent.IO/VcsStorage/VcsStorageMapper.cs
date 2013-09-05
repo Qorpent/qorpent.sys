@@ -90,7 +90,9 @@ namespace Qorpent.IO.VcsStorage {
                     Code = el.Attribute("Code").Value,
                     File = new FileEntity {
                         Version = el.Attribute("Code").Value,
-                        Path = container.Attribute("Filename").Value
+                        Path = container.Attribute("Filename").Value,
+                        Filename = Path.GetFileName(container.Attribute("Filename").Value),
+                        DateTime = DateTime.Parse(el.Attribute("DateTime").Value)
                     }
                 }
             ));
