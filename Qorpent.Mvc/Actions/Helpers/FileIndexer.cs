@@ -46,7 +46,9 @@ namespace Qorpent.Mvc.Actions.Helpers {
 	    {
 	        var localname = name.Replace("\\", "/");
 	        var basedir = EnvironmentInfo.RootDirectory.Replace("\\", "/");
-	        localname = localname.Replace(basedir, "./");
+            var basedirStr=basedir.Split('/');
+            localname = localname.Replace(basedir, basedirStr[basedirStr.Length-2]+"/");
+           
 	        return new FileListEntry
 	            {
                     LocalPath = localname,
