@@ -16,7 +16,7 @@ namespace Qorpent.IO.Storages {
         /// </summary>
         private IDirtyVersionStorage DirtyVersionStorage { get; set; }
         /// <summary>
-        ///     Хранилище файлов, основанное на 
+        ///     Хранилище файлов, основанное на DirtyVersion
         /// </summary>
         public FileStorageDirtyVersion(string workingDirectory) {
             Abilities = FileStorageAbilities.Vcs;
@@ -48,7 +48,7 @@ namespace Qorpent.IO.Storages {
             );
         }
         /// <summary>
-        ///     Возвращает класс текущего хранилища текущее хранилища
+        ///     Возвращает класс текущего хранилища
         /// </summary>
         /// <returns></returns>
         public object GetStorage() {
