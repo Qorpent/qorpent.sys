@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
+using Qorpent.IO.DirtyVersion;
 using Qorpent.IO.DirtyVersion.Mapping;
 using Qorpent.IO.DirtyVersion.Storage;
 using Qorpent.Utils.Extensions;
@@ -33,150 +34,175 @@ namespace Qorpent.IO.Tests.DirtyVersion {
 
 		[Test]
 		public void CanWriteInitial() {
-			var result = mapper.Write(new MapRecord {Name = "test1", NewDataHash = new Hasher(7).GetHash("hello!")});
-			var xml = mapper.GetFullInfo(result.Name);
-			Assert.AreEqual(result.NewDataHash, xml.Attr("head"));
-			Assert.AreEqual("init", xml.Element(result.NewDataHash).Attr("src"));
+			using (var o = mapper.Open("CanWriteInitial"))
+			{
+				o.Commit("a");
+			}
+			using (var o2 = mapper.Open("CanWriteInitial"))
+			{
+				var mi = o2.MappingInfo;
+				var c = mi.Resolve("a");
+				Assert.NotNull(c);
+				Assert.AreEqual(mi.Head,c.Hash);
+				Assert.AreEqual(CommitSourceType.Initial,c.SourceType);
+			}
+
 		}
 
 		[Test]
 		public void CanUpdate()
 		{
-			var result = mapper.Write(new MapRecord { Name = "test", NewDataHash = new Hasher(7).GetHash("hello!") });
-			var result2 = mapper.Write(new MapRecord { Name = "test", NewDataHash = new Hasher(7).GetHash("hello2!")
-				,SourceDataHashes = new[]{result.NewDataHash}});
+			using (var o = mapper.Open("CanUpdate"))
+			{
+				var c1 = o.Commit("a");
+				var c2 = o.Commit("b", "a");
+				var c3 = o.Commit("c", "a");
+				var c4 = o.Commit("d", "c");
+				Assert.AreEqual(HeadState.Merged, c1.HeadState);
+				Assert.AreEqual(HeadState.IsHead, c2.HeadState);
+				Assert.AreEqual(HeadState.NonMerged, c3.HeadState);
+				Assert.AreEqual(HeadState.NonMergedHead, c4.HeadState);
+				var c5 = o.Commit("d", "b");
+				Assert.AreEqual(HeadState.Merged, c1.HeadState);
+				Assert.AreEqual(HeadState.Merged, c2.HeadState);
+				Assert.AreEqual(HeadState.Merged, c3.HeadState);
+				Assert.AreEqual(HeadState.IsHead, c4.HeadState);
+				Assert.AreEqual(c5,c4);
+				o.Commit();
+			}
+			using (var o = mapper.Open("CanUpdate")) {
+				var c1 = o.MappingInfo.Resolve("a");
+				var c2 = o.MappingInfo.Resolve("b");
+				var c3 = o.MappingInfo.Resolve("c");
+				var c4 = o.MappingInfo.Resolve("d");
+				Assert.AreEqual(HeadState.Merged, c1.HeadState);
+				Assert.AreEqual(HeadState.Merged, c2.HeadState);
+				Assert.AreEqual(HeadState.Merged, c3.HeadState);
+				Assert.AreEqual(HeadState.IsHead, c4.HeadState);
+			}
+		}
+
+		[Test]
+		public void CanUpdateDirectHead()
+		{
+			using (var o = mapper.Open("CanUpdateDirectHead"))
+			{
+				var c1 = o.Commit("a");
+				var c2 = o.Commit("b", "a");
+				var c3 = o.Commit("c",CommitHeadBehavior.Direct, "a");
+				var c4 = o.Commit("d", "c");
+				Assert.AreEqual(HeadState.Merged, c1.HeadState);
+				Assert.AreEqual(HeadState.NonMergedHead, c2.HeadState);
+				Assert.AreEqual(HeadState.Merged, c3.HeadState);
+				Assert.AreEqual(HeadState.IsHead, c4.HeadState);
+			}
+		
+		}
+
+		[Test]
+		public void CanUpdateOverrideHead()
+		{
+			using (var o = mapper.Open("CanUpdateOverrideHead"))
+			{
+				var c1 = o.Commit("a");
+				var c2 = o.Commit("b", "a");
+				var c3 = o.Commit("c", "a");
+				var c4 = o.Commit("d", CommitHeadBehavior.Override, "c");
+				Assert.AreEqual(HeadState.Merged, c1.HeadState);
+				Assert.AreEqual(HeadState.NonMergedHead, c2.HeadState);
+				Assert.AreEqual(HeadState.Merged, c3.HeadState);
+				Assert.AreEqual(HeadState.IsHead, c4.HeadState);
+				Assert.True(c4.Sources.Contains("b"));
+			}
+		}
+
+
+		[Test]
+		public void CanDeleteNoHead()
+		{
+			using (var o = mapper.Open("CanDeleteNoHead"))
+			{
+				var c1 = o.Commit("a");
+				var c2 = o.Commit("b", "a");
+				var c3 = o.Commit("c", "a");
+				var c4 = o.Commit("d", "c");
+				var c5 = o.Commit("d", "b");
+				var c6 = o.Commit("e", "d");
+				Assert.AreEqual(CommitSourceType.Merged, c5.SourceType);
+				o.Delete("b");
+				Assert.AreEqual(CommitSourceType.Single,c5.SourceType);
+				Assert.Null(o.MappingInfo.Resolve("b"));
+				o.Commit();
+			}
+			using (var o = mapper.Open("CanDeleteNoHead"))
+			{
+				Assert.Null(o.MappingInfo.Resolve("b"));
+				Assert.NotNull(o.MappingInfo.Resolve("e"));
+			}
+		}
+
+		[Test]
+		[ExpectedException]
+		public void CanDenyHeadDeletion()
+		{
+			using (var o = mapper.Open("CanDenyHeadDeletion"))
+			{
+				var c1 = o.Commit("a");
+				var c2 = o.Commit("b", "a");
+				var c3 = o.Commit("c", "b");
+				o.Delete(c3.Hash);
+			}
 			
-			Assert.AreEqual(result2.NewDataHash, mapper.GetFullInfo(result.Name).Attr("head"));
-			var result3 = mapper.Write(new MapRecord
-			{
-				Name = "test",
-				NewDataHash = new Hasher(7).GetHash("hello3!")
-				,
-				SourceDataHashes = new[] { result.NewDataHash }
-			});
-			Assert.AreEqual(result2.NewDataHash, mapper.GetFullInfo(result.Name).Attr("head"));
-			var result4 = mapper.Write(new MapRecord
-			{
-				Name = "test",
-				NewDataHash = new Hasher(7).GetHash("hello4!")
-				,
-				Commiter="fst",
-				SourceDataHashes = new[] { result3.NewDataHash }
-			});
-			Assert.AreEqual(result2.NewDataHash, mapper.GetFullInfo(result.Name).Attr("head"));
-			var result5 = mapper.Write(new MapRecord
-			{
-				Name = "test",
-				NewDataHash = new Hasher(7).GetHash("hello4!")
-				,
-				Commiter = "sec",
-				SourceDataHashes = new[] { result2.NewDataHash }
-			});
-			var xml = mapper.GetFullInfo(result.Name);
-			Assert.AreEqual(result5.NewDataHash, xml.Attr("head"));
-			Assert.AreEqual(result.NewDataHash, xml.Element(result2.NewDataHash).Attr("src"));
-			Assert.True(result2.IsHead);
-			Assert.False(result3.IsHead);
-			Assert.False(result4.IsHead);
-			Assert.True(result5.IsHead);
 		}
 
 		[Test]
-		public void CanDelete()
+		public void CanDeleteHeadWithDetach()
 		{
-			var result = mapper.Write(new MapRecord { Name = "CanDelete", NewDataHash = new Hasher(7).GetHash("hello!") });
-			var result2 = mapper.Write(new MapRecord
+			using (var o = mapper.Open("CanUpdate"))
 			{
-				Name = "CanDelete",
-				NewDataHash = new Hasher(7).GetHash("hello2!")
-				,
-				SourceDataHashes = new[] { result.NewDataHash }
-			});
-			var result3 = mapper.Write(new MapRecord
-			{
-				Name = "CanDelete",
-				NewDataHash = new Hasher(7).GetHash("hello3!")
-				,
-				SourceDataHashes = new[] { result.NewDataHash }
-			});
-			mapper.Write(new MapRecord
-			{
-				Name = "CanDelete",
-				NewDataHash = new Hasher(7).GetHash("hello4!")
-				,
-				Commiter = "fst",
-				SourceDataHashes = new[] { result3.NewDataHash }
-			});
-			var result5 =mapper.Write(new MapRecord
-			{
-				Name = "CanDelete",
-				NewDataHash = new Hasher(7).GetHash("hello4!")
-				,
-				Commiter = "sec",
-				SourceDataHashes = new[] { result2.NewDataHash }
-			});
-			var xml = mapper.GetFullInfo(result.Name);
-			var last = xml.Element(result5.NewDataHash);
-			Assert.AreEqual("merged",last.Attr("src"));
-			Assert.AreEqual(3,last.Elements().Count());
-			Console.WriteLine(xml);
-			mapper.Delete(result3);
-			xml = mapper.GetFullInfo(result.Name);
-			last = xml.Element(result5.NewDataHash);
-			Assert.AreEqual(result2.NewDataHash, last.Attr("src"));
-			Assert.AreEqual(1, last.Elements().Count());
-			Console.WriteLine(xml);
-		}
+				var c1 = o.Commit("a");
+				var c2 = o.Commit("b", "a");
+				var c3 = o.Commit("c", "b");
+				o.Delete(c3.Hash,DeleteHeadBehavior.Detach);
+				Assert.AreEqual(Const.DETACHEDHEAD,o.MappingInfo.Head);
+			}
 
+		}
 
 		[Test]
-		public void CanFindNonMergedAndWorkWithHead()
+		[ExpectedException]
+		public void CanDenyHeadDeletionWithMerge()
 		{
-			var result = mapper.Write(new MapRecord { Name = "CanFindNonMerged", NewDataHash = new Hasher(7).GetHash("hello!") });
-			var result2 = mapper.Write(new MapRecord
+			using (var o = mapper.Open("CanDenyHeadDeletionWithMerge"))
 			{
-				Name = "CanFindNonMerged",
-				NewDataHash = new Hasher(7).GetHash("hello2!")
-			});
-			var result3 = mapper.Write(new MapRecord
-			{
-				Name = "CanFindNonMerged",
-				NewDataHash = new Hasher(7).GetHash("hello3!")
-				,
-				SourceDataHashes = new[] { result2.NewDataHash }
-			});
-			var result4 = mapper.Write(new MapRecord
-			{
-				Name = "CanFindNonMerged",
-				NewDataHash = new Hasher(7).GetHash("hello4!")
-				,
-				Commiter = "sec",
-				SourceDataHashes = new[] { result3.NewDataHash }
-			});
-			var head = mapper.GetHead("CanFindNonMerged");
-			Assert.AreEqual(result.NewDataHash, head);
-			var nonmerged = mapper.GetNotMerged("CanFindNonMerged").ToArray();
-			Assert.AreEqual(3,nonmerged.Length);
-			nonmerged = mapper.GetNotMerged("CanFindNonMerged",true).ToArray();
-			Assert.AreEqual(1, nonmerged.Length);
-			Assert.AreEqual(result4.NewDataHash, nonmerged[0]);
+				var c1 = o.Commit("a");
+				var c2 = o.Commit("b", "a");
+				var c3 = o.Commit("c", "b");
+				var c4 = o.Commit("d", "c", "a", "b");
+				o.Delete(c4.Hash, DeleteHeadBehavior.AllowSingleDenyMerge);
+				Assert.AreEqual(Const.DETACHEDHEAD, o.MappingInfo.Head);
+			}
 
-			mapper.MoveHead(result3);
-			head = mapper.GetHead("CanFindNonMerged");
-			Assert.AreEqual(result3.NewDataHash, head);
-			nonmerged = mapper.GetNotMerged("CanFindNonMerged", true).ToArray();
-			Assert.AreEqual(2, nonmerged.Length);
-			Assert.AreEqual(result.NewDataHash, nonmerged[0]);
-			Assert.AreEqual(result4.NewDataHash, nonmerged[1]);
-
-			mapper.MoveHead(result4);
-			head = mapper.GetHead("CanFindNonMerged");
-			Assert.AreEqual(result4.NewDataHash, head);
-			nonmerged = mapper.GetNotMerged("CanFindNonMerged", true).ToArray();
-			Assert.AreEqual(1, nonmerged.Length);
-			Assert.AreEqual(result.NewDataHash, nonmerged[0]);
 		}
 
+		[Test]
+		public void CanDeleteSingleWithPropogationAndDetachMerges()
+		{
+			using (var o = mapper.Open("CanDeleteSingleWithPropogationAndDetachMerges"))
+			{
+				var c1 = o.Commit("a");
+				var c2 = o.Commit("b", "a");
+				var c3 = o.Commit("c", "b");
+				var c4 = o.Commit("d", "c", "a", "b");
+				var c5 = o.Commit("e", "d");
+				Assert.AreEqual(c5.Hash, o.MappingInfo.Head);
+				o.Delete(c5.Hash, DeleteHeadBehavior.AllowSingleDetachMerge);
+				Assert.AreEqual(c4.Hash, o.MappingInfo.Head);
+				o.Delete(c4.Hash, DeleteHeadBehavior.AllowSingleDetachMerge);
+				Assert.AreEqual(Const.DETACHEDHEAD, o.MappingInfo.Head);
+			}
+
+		}
 
 	}
 }

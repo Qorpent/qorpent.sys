@@ -16,11 +16,21 @@ namespace Qorpent.IO.DirtyVersion.Mapping
 			
 		}
 		/// <summary>
+		/// Открывет оператора версий для указанного файла
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <returns></returns>
+		public IMappingOperator Open(string filename) {
+			var session = OpenSession(filename);
+			return session.GetOperator();
+		}
+
+		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="filename"></param>
 		/// <returns></returns>
-		public MapperSession Open(string filename) {
+		public IMapperSession OpenSession(string filename) {
 			if (GetLock(filename)) {
 				return new MapperSession(this, filename,MakeHash(filename),ConvertToHasedFileName(filename));
 			}

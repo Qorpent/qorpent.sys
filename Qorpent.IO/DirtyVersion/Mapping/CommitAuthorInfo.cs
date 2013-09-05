@@ -9,11 +9,12 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		/// <summary>
 		/// Автор
 		/// </summary>
-		public string Commiter { get; set; }
+		public string Commiter;
+
 		/// <summary>
 		/// Время записи
 		/// </summary>
-		public DateTime Time { get; set; }
+		public DateTime Time;
 		/// <summary>
 		/// 
 		/// </summary>

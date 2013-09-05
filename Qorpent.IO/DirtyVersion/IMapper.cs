@@ -1,4 +1,6 @@
-﻿namespace Qorpent.IO.DirtyVersion.Mapping {
+﻿using Qorpent.IO.DirtyVersion.Mapping;
+
+namespace Qorpent.IO.DirtyVersion {
 	/// <summary>
 	/// Общий интерфейс мэппера
 	/// </summary>
@@ -8,7 +10,7 @@
 		/// </summary>
 		/// <param name="filename"></param>
 		/// <returns></returns>
-		MapperSession Open(string filename);
+		IMappingOperator Open(string filename);
 
 		/// <summary>
 		/// Получает эксклюзивную блокировку на файл

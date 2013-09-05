@@ -6,18 +6,22 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 	/// 
 	/// </summary>
 	public class MappingOperator : IMappingOperator {
+		private readonly IMapperSession _session;
+
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="info"></param>
-		public MappingOperator(MappingInfo info)
+		/// <param name="session"></param>
+		public MappingOperator(IMapperSession session)
 		{
-			this.MappingInfo = info;
+			_session = session;
 		}
 		/// <summary>
 		/// Целевая информация по мапингу
 		/// </summary>
-		public MappingInfo MappingInfo { get; private set; }
+		public MappingInfo MappingInfo {
+			get { return _session.GetMappingInfo(); }
+		}
 
 		/// <summary>
 		/// Мержит новый коммит в структуру
@@ -101,6 +105,18 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 			MappingInfo.Normalize();
 
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Revert() {
+			_session.Revert();
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Commit() {
+			_session.Commit();
+		}
 
 		private void PreprocessHeadDeletion(Commit existed, DeleteHeadBehavior deleteHeadBehavior) {
 			if (deleteHeadBehavior == DeleteHeadBehavior.Deny) {
@@ -151,6 +167,11 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 					target.MappingInfo.Head = target.Hash;
 				}
 			}
+		}
+
+
+		public void Dispose() {
+			_session.Dispose();
 		}
 	}
 }

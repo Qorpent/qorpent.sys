@@ -25,6 +25,7 @@
     <Compile Include="DirtyVersion\Mapping\MappingInfoSerializer.cs" />
     <Compile Include="DirtyVersion\Mapping\MappingOperator.cs" />
     <Compile Include="DirtyVersion\HashedDirectoryBase.cs" />
+    <Compile Include="DirtyVersion\MappingOperatorExtensions.cs" />
     <Compile Include="DirtyVersion\Storage\HashedDirectoryRecord.cs" />
     <Compile Include="DirtyVersion\Storage\Hasher.cs" />
     <Compile Include="DirtyVersion\Storage\HashedDirectory.cs" />

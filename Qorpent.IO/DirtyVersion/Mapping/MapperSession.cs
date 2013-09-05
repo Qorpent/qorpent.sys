@@ -13,12 +13,13 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		private readonly string _fileName;
 		private IMappingOperator _operator;
 		private readonly string _hash;
+		private bool _commited;
 
 		/// <summary>
 		/// Акцессор до исходного мапинга
 		/// </summary>
-		public MappingInfo MappingInfo {
-			get {
+		public MappingInfo GetMappingInfo() {
+			
 				if (null == _info) {
 					if (!File.Exists(_fileName)) {
 						_info = CreateNewInfo(_hash);
@@ -30,7 +31,22 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 					
 				}
 				return _info;
-			}
+			
+		}
+
+		/// <summary>
+		/// Отменяет изменения и сбрасывает MappingInfo
+		/// </summary>
+		public void Revert() {
+			_info = null;
+			_commited = false;
+		}
+
+		/// <summary>
+		/// Помечает сессию к сохранению
+		/// </summary>
+		public void Commit() {
+			_commited = true;
 		}
 
 		private MappingInfo LoadInfo(string fileName) {
@@ -56,7 +72,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		/// 
 		/// </summary>
 		public void Dispose() {
-			if (null!=_info && _info.Changed) {
+			if (null!=_info && _info.Changed && _commited) {
 				Save();
 			}
 			_mapper.ReleaseLock(_file);
@@ -72,7 +88,7 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 		/// </summary>
 		/// <returns></returns>
 		public IMappingOperator GetOperator() {
-			return _operator ?? (_operator = new MappingOperator(_info));
+			return _operator ?? (_operator = new MappingOperator(this));
 		}
 	}
 }
