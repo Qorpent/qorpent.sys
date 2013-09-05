@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Qorpent.IO.DirtyVersion.Mapper {
+namespace Qorpent.IO.DirtyVersion.Mapping {
 	/// <summary>
 	/// Состояние слияние с HEAD
 	/// </summary>

@@ -21,6 +21,9 @@ namespace Qorpent.IO.DirtyVersion
 		/// Размерность хэша
 		/// </summary>
 		public const int HashSize = Md5HashSizeInBytes * 2;
-		
+		/// <summary>
+		/// Специальное имя для отщепленного имени
+		/// </summary>
+		public const string DETACHEDHEAD = "DETACHED";
 	}
 }

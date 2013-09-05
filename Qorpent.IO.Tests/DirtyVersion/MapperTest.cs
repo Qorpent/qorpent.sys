@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
-using Qorpent.IO.DirtyVersion.Mapper;
+using Qorpent.IO.DirtyVersion.Mapping;
 using Qorpent.IO.DirtyVersion.Storage;
 using Qorpent.Utils.Extensions;
 
@@ -11,7 +11,7 @@ namespace Qorpent.IO.Tests.DirtyVersion {
 	[TestFixture]
 	public class MapperTest {
 		private string dir;
-		private MapperOperator mapper;
+		private Mapper mapper;
 
 		[TestFixtureSetUp]
 		public void FixtureSetup()
@@ -28,7 +28,7 @@ namespace Qorpent.IO.Tests.DirtyVersion {
 				}
 			}
 			Directory.CreateDirectory(dir);
-			mapper = new MapperOperator(dir,hashsize:7);
+			mapper = new Mapper(dir,hashsize:7);
 		}
 
 		[Test]

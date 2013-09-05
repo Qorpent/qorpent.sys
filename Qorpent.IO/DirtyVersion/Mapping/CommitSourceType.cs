@@ -1,4 +1,4 @@
-﻿namespace Qorpent.IO.DirtyVersion.Mapper {
+﻿namespace Qorpent.IO.DirtyVersion.Mapping {
 	/// <summary>
 	/// Тип источников коммита
 	/// </summary>

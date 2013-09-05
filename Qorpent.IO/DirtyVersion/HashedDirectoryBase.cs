@@ -40,10 +40,26 @@ namespace Qorpent.IO.DirtyVersion {
 		/// <summary>
 		/// Конвертирует хэш в путь
 		/// </summary>
+		/// <returns></returns>
+		public string ConvertToHasedFileName(string filename) {
+			return ConvertToHasedFileName(_rootDirectory, MakeHash(filename));
+		}
+		/// <summary>
+		/// Формирует хэш строки
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <returns></returns>
+		public string MakeHash(string filename) {
+			return _hasher.GetHash(filename);
+		}
+
+		/// <summary>
+		/// Конвертирует хэш в путь
+		/// </summary>
 		/// <param name="root"></param>
 		/// <param name="hash"></param>
 		/// <returns></returns>
-		protected string ConvertToFileName(string root, string hash) {
+		protected string ConvertToHasedFileName(string root, string hash) {
 			return Path.GetFullPath( Path.Combine(root, hash.Substring(0, 2) + "/" + hash.Substring(2)));
 		}
 	}

@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.IO.DirtyVersion.Mapper {
+namespace Qorpent.IO.DirtyVersion.Mapping {
 	/// <summary>
 	/// Сериализатор информации о версии
 	/// </summary>
@@ -51,7 +51,7 @@ namespace Qorpent.IO.DirtyVersion.Mapper {
 		}
 
 		private static void ReadCommitAuthorInfo(Commit commit, XElement e) {
-			commit.CommitAuthorInfo = new CommitAuthorInfo {
+			commit.Author = new CommitAuthorInfo {
 				Commiter = e.Attr(COMMITERATTRIBUTE),
 				Time = Convert.ToDateTime(e.Attr(TIMEATTRIBUTE))
 			};
@@ -119,8 +119,8 @@ namespace Qorpent.IO.DirtyVersion.Mapper {
 
 		private static void WriteCommit(Commit c, XElement commits) {
 			var commit = new XElement(c.Hash);
-			commit.SetAttributeValue(COMMITERATTRIBUTE, c.CommitAuthorInfo.Commiter);
-			commit.SetAttributeValue(TIMEATTRIBUTE, c.CommitAuthorInfo.Time);
+			commit.SetAttributeValue(COMMITERATTRIBUTE, c.Author.Commiter);
+			commit.SetAttributeValue(TIMEATTRIBUTE, c.Author.Time);
 			commit.SetAttributeValue(SRCTYPEATTRIBUTE, c.SourceType);
 			WriteCoAuthors(c, commit);
 			WriteSources(c, commit);

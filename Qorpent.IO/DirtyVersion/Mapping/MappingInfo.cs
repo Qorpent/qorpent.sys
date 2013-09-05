@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
-namespace Qorpent.IO.DirtyVersion.Mapper {
+namespace Qorpent.IO.DirtyVersion.Mapping {
 
 	
 
@@ -51,13 +52,17 @@ namespace Qorpent.IO.DirtyVersion.Mapper {
 		/// Прсевдонимы коммитов
 		/// </summary>
 		public IDictionary<string,string> Aliases { get; private set; }
+		/// <summary>
+		/// Признак изменения
+		/// </summary>
+		public bool Changed { get; set; }
 
 		/// <summary>
 		/// Нормализует мэпинг
 		/// </summary>
 		public void Normalize() {
 			var headcommit = Resolve(Head);
-			DropState();
+			Init();
 			CalculateReferences();
 			if (null != headcommit) {
 				headcommit.HeadState = HeadState.IsHead;
@@ -66,10 +71,11 @@ namespace Qorpent.IO.DirtyVersion.Mapper {
 			SetupNonMergedState();
 		}
 
-		private void DropState() {
+		private void Init() {
 			foreach (var c in Commits.Values) {
 				c.Refs = 0;
 				c.HeadState = HeadState.None;
+				c.MappingInfo = this;
 			}
 		}
 
@@ -108,5 +114,21 @@ namespace Qorpent.IO.DirtyVersion.Mapper {
 				}
 			}
 		}
+
+		/// <summary>
+		/// Возвращает хид коммит
+		/// </summary>
+		/// <returns></returns>
+		public Commit GetHead() {
+			return Resolve(Head);
+		}
+		/// <summary>
+		/// Получает список несмерженных версий
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<Commit> GetNonMergedHeads() {
+			return Commits.Values.Where(_ => _.HeadState == HeadState.NonMergedHead);
+		}
+
 	}
 }
