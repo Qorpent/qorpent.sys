@@ -21,5 +21,10 @@ namespace Qorpent.IO {
         /// <param name="file"></param>
         /// <returns></returns>
         IGeneralFileDescriptor Get(IFileEntity file);
+        /// <summary>
+        ///     Возвращает класс текущего хранилища текущее хранилища
+        /// </summary>
+        /// <returns></returns>
+        object GetStorage();
     }
 }

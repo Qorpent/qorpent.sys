@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Qorpent.IO.Storages;
 using Qorpent.IO.VcsStorage;
-using Qorpent.IO.VcsStorage.Engines;
 
 namespace Qorpent.IO.Tests {
     /// <summary>
