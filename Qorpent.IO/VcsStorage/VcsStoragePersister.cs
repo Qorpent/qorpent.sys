@@ -53,6 +53,7 @@ namespace Qorpent.IO.VcsStorage {
 
             Transaction(realCommit, VcsStorageTransactionType.Commit);
             RollRealWriting(realCommit, stream);
+
             return realCommit;
         }
         /// <summary>

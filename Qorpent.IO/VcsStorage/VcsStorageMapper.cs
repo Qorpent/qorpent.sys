@@ -13,6 +13,10 @@ namespace Qorpent.IO.VcsStorage {
     /// </summary>
     class VcsStorageMapper : IDisposable {
         /// <summary>
+        ///     
+        /// </summary>
+        private readonly Object _lock = new Object();
+        /// <summary>
         ///     Текущая карта хранилища
         /// </summary>
         private XElement Map { get; set; }
@@ -51,9 +55,11 @@ namespace Qorpent.IO.VcsStorage {
         /// <param name="commit"></param>
         /// <param name="transactionType"></param>
         public void Transaction(VcsCommit commit, VcsStorageTransactionType transactionType) {
-            switch (transactionType) {
-                case VcsStorageTransactionType.Commit: Insert(commit); break;
-                case VcsStorageTransactionType.Remove: Remove(commit); break;
+            lock (_lock) {
+                switch (transactionType) {
+                    case VcsStorageTransactionType.Commit: Insert(commit); break;
+                    case VcsStorageTransactionType.Remove: Remove(commit); break;
+                }
             }
         }
         /// <summary>
@@ -92,7 +98,8 @@ namespace Qorpent.IO.VcsStorage {
                         Version = el.Attribute("Code").Value,
                         Path = container.Attribute("Filename").Value,
                         Filename = Path.GetFileName(container.Attribute("Filename").Value),
-                        DateTime = DateTime.Parse(el.Attribute("DateTime").Value)
+                        DateTime = DateTime.Parse(el.Attribute("DateTime").Value),
+                        Owner = el.Attribute("Commiter").Value
                     }
                 }
             ));
@@ -115,6 +122,7 @@ namespace Qorpent.IO.VcsStorage {
             var xmlCommit = new XElement("Commit");
             xmlCommit.SetAttributeValue("Code", commit.Code);
             xmlCommit.SetAttributeValue("DateTime", DateTime.Now);
+            xmlCommit.SetAttributeValue("Commiter", commit.Commiter);
 
             IncrementElementCommits(container);
             container.SetAttributeValue("LastCommit", commit.Code);
@@ -189,7 +197,10 @@ namespace Qorpent.IO.VcsStorage {
         private XElement GetElement(VcsCommit commit) {
             return Map.XPathSelectElement("/Element[@Filename='" + commit.File.Path + "' and @Branch='" + commit.Branch + "']");
         }
-
+        /// <summary>
+        ///     Увеличивает счётчик коммитов в контейнере
+        /// </summary>
+        /// <param name="container"></param>
         private void IncrementElementCommits(XElement container) {
             container.SetAttributeValue("TotalCommits", container.Attribute("TotalCommits").Value.ToInt() + 1);
         }

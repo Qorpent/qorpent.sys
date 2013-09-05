@@ -21,10 +21,6 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         private Guid BinLogGuid { get; set; }
         /// <summary>
-        ///     Дата начала записи в лог
-        /// </summary>
-        private DateTime BinLogStartWriting { get; set; }
-        /// <summary>
         /// 
         /// </summary>
         private readonly Object _lock = new Object();
@@ -96,9 +92,8 @@ namespace Qorpent.IO.VcsStorage {
         private void InitializeNewBinLog() {
             BinLog = new XElement("BinLog");
             BinLogGuid = Guid.NewGuid();
-            BinLogStartWriting = DateTime.Now;
 
-            BinLog.SetAttributeValue("StartWriting", BinLogStartWriting);
+            BinLog.SetAttributeValue("StartWriting", DateTime.Now);
             BinLog.SetAttributeValue("BinLogGuid", BinLogGuid);
             BinLog.SetAttributeValue("LogElements", 0);
         }
@@ -106,7 +101,12 @@ namespace Qorpent.IO.VcsStorage {
         ///     Производит прокатку записи журнала на диск
         /// </summary>
         private void Dump() {
-            Engine.Set(new FileEntity {Path = Path.Combine(VcsStorageDefaults.BinLogDirectory, BinLogGuid + "." + VcsStorageDefaults.BinLogExtension)}, VcsStorageUtils.StringToStream(BinLog.ToString()));
+            Engine.Set(
+                new FileEntity {
+                    Path = Path.Combine(VcsStorageDefaults.BinLogDirectory, BinLogGuid + "." + VcsStorageDefaults.BinLogExtension)
+                },
+                VcsStorageUtils.StringToStream(BinLog.ToString())
+            );
         }
         /// <summary>
         ///     Генерирует запись для бинарного журнала о транзакции
@@ -121,6 +121,7 @@ namespace Qorpent.IO.VcsStorage {
             node.SetAttributeValue("DateTime", transaction.DateTime);
             node.SetAttributeValue("Type", transaction.Type);
             node.SetAttributeValue("Branch", transaction.Commit.Branch);
+            node.SetAttributeValue("Commiter", transaction.Commit.Commiter);
 
             return node;
         }

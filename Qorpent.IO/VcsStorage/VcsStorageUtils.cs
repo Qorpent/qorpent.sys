@@ -68,7 +68,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <returns></returns>
         public static string ComputeShaFromString(string source) {
             using (var stream = StringToStream(source)) {
-                var sha = new SHA256Managed();
+                var sha = new SHA1Managed();
                 var hash = sha.ComputeHash(stream);
                 return BitConverter.ToString(hash).Replace("-", String.Empty);
             }

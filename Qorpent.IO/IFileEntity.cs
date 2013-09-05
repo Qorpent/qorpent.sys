@@ -17,5 +17,9 @@ namespace Qorpent.IO {
         ///     Версия файла
         /// </summary>
         string Version { get; }
+        /// <summary>
+        ///     владелец файла
+        /// </summary>
+        string Owner { get; set; }
     }
 }

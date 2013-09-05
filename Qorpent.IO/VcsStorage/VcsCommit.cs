@@ -4,6 +4,7 @@
     /// </summary>
     public class VcsCommit {
         private string _branch;
+        private string _commiter;
         /// <summary>
         ///     Представление файла
         /// </summary>
@@ -12,6 +13,12 @@
         ///     Код коммита
         /// </summary>
         public string Code { get; set; }
+        /// <summary>
+        ///     Автор коммита
+        /// </summary>
+        public string Commiter {
+            get { return _commiter ?? (_commiter = System.Security.Principal.WindowsIdentity.GetCurrent().Name); }
+        }
         /// <summary>
         ///     Имя бранча
         /// </summary>

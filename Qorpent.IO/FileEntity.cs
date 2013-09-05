@@ -23,6 +23,10 @@ namespace Qorpent.IO {
         /// </summary>
         public string Version { get; set; }
         /// <summary>
+        /// 
+        /// </summary>
+        public string Owner { get; set; }
+        /// <summary>
         ///     Возвращает путь до директории, в которой 
         ///     находится файл
         /// </summary>
