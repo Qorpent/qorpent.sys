@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Qorpent.IO.DirtyVersion;
 using Qorpent.IO.DirtyVersion.Mapping;
+using Qorpent.IO.FileDescriptors;
 
 namespace Qorpent.IO.Storages {
     /// <summary>

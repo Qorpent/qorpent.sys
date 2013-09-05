@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Qorpent.IO.FileDescriptors;
 using Qorpent.IO.VcsStorage;
 
 namespace Qorpent.IO.Storages {

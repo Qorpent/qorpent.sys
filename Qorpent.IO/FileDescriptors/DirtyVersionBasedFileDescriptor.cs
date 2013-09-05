@@ -2,7 +2,7 @@
 using Qorpent.IO.DirtyVersion;
 using Qorpent.IO.DirtyVersion.Mapping;
 
-namespace Qorpent.IO {
+namespace Qorpent.IO.FileDescriptors {
     class DirtyVersionBasedFileDescriptor : IGeneralFileDescriptor {
         /// <summary>
         ///     Хранилище
