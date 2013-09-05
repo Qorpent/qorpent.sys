@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Dot.Colors;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dot
@@ -153,9 +154,9 @@ namespace Qorpent.Dot
         /// <summary>
         /// Задает цвет границы подграфов. По умолчанию черный 
         /// </summary>
-        public color PenColor
+        public ColorAttribute PenColor
         {
-            get { return Get(DotConstants.PenColorAttribute).To<color>(); }
+            get { return Get(DotConstants.PenColorAttribute).To<ColorAttribute>(); }
             set
             {
                 var str = value.ToStr().ToLower();

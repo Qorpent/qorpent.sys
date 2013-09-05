@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Qorpent.Dot.Colors;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dot {
 	/// <summary>
@@ -52,13 +54,12 @@ namespace Qorpent.Dot {
         /// <summary>
         /// Цвет используемый для текста. По умолчанию черный 
         /// </summary>
-        public color FontColor
+        public ColorAttribute FontColor
         {
-            get { return Get(DotConstants.FontColorAttribute).To<color>(); }
+            get { return ColorAttribute.Native(Get(DotConstants.FontColorAttribute)); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.FontColorAttribute, str);
+               Set(DotConstants.FontColorAttribute, value.ToString());
 
             }
         }
