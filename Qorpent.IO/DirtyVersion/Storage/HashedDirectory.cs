@@ -10,12 +10,12 @@ namespace Qorpent.IO.DirtyVersion.Storage
 	/// <summary>
 	/// Специальная диреткория, выполняющая сохранение объекта в виде хэшированной записи
 	/// </summary>
-	public class HashedDirectory : HashedDirectoryBase {
+	public class HashedDirectory : HashedDirectoryBase, IHashedDirectory {
 		/// <summary>
 		/// Создает хэшированную директорию для записи файлов
 		/// </summary>
 	
-		public HashedDirectory(string targetDirectoryName, bool compress = true, int hashsize = Const.HashSize) : base(targetDirectoryName, compress: compress, hashsize: hashsize) {}
+		public HashedDirectory(string targetDirectoryName, bool compress = true, int hashsize = Const.MaxHashSize) : base(targetDirectoryName, compress: compress, hashsize: hashsize) {}
 
 		/// <summary>
 		/// Выполняет сохранение файла с формированием хэш -записи
@@ -37,8 +37,8 @@ namespace Qorpent.IO.DirtyVersion.Storage
 			var proxyStream = new CopyOnReadStream(data, stubFile,_compress);
 			var dataHash = _hasher.GetHash(proxyStream);
 			proxyStream.Close();
-			var fileDir = ConvertToFileName(_rootDirectory, fileNameHash);
-			var fileName = ConvertToFileName(fileDir, dataHash);
+			var fileDir = ConvertToHasedFileName(_rootDirectory, fileNameHash);
+			var fileName = ConvertToHasedFileName(fileDir, dataHash);
 			if (File.Exists(fileName)) {
 				File.Delete(stubFile);
 				File.SetLastWriteTime(fileName,DateTime.Now);
@@ -64,11 +64,11 @@ namespace Qorpent.IO.DirtyVersion.Storage
 		/// <param name="record"></param>
 		/// <returns></returns>
 		public bool Exists(HashedDirectoryRecord record) {
-			var dir = ConvertToFileName(_rootDirectory, record.NameHash);
+			var dir = ConvertToHasedFileName(_rootDirectory, record.NameHash);
 			if (string.IsNullOrWhiteSpace(record.DataHash)) {
 				return Directory.Exists(dir) && Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories).Any();
 			}
-			var fname = ConvertToFileName(dir, record.DataHash);
+			var fname = ConvertToHasedFileName(dir, record.DataHash);
 			return File.Exists(fname);
 		}
 		/// <summary>
@@ -99,15 +99,15 @@ namespace Qorpent.IO.DirtyVersion.Storage
 		/// <returns></returns>
 		public string ResolveNativeFileName(HashedDirectoryRecord record) {
 			string fname;
-			var dir = ConvertToFileName(_rootDirectory, record.NameHash);
+			var dir = ConvertToHasedFileName(_rootDirectory, record.NameHash);
 			if (!Exists(record)) throw new Exception("Запись не существует");
 			if (string.IsNullOrWhiteSpace(record.DataHash)) {
 				var last = FindLast(record);
 				if (null == last) throw new Exception("last record not found");
-				fname = ConvertToFileName(dir, last.DataHash);
+				fname = ConvertToHasedFileName(dir, last.DataHash);
 			}
 			else {
-				fname = ConvertToFileName(dir, record.DataHash);
+				fname = ConvertToHasedFileName(dir, record.DataHash);
 			}
 			return fname;
 		}
@@ -196,7 +196,7 @@ namespace Qorpent.IO.DirtyVersion.Storage
 		/// <returns></returns>
 		public IEnumerable<HashedDirectoryRecord> EnumerateFiles(HashedDirectoryRecord file) {
 			if (!Exists(file)) yield break;
-			var dir = ConvertToFileName(_rootDirectory, file.NameHash);
+			var dir = ConvertToHasedFileName(_rootDirectory, file.NameHash);
 			foreach (var filename in Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories)) {
 				yield return ConvertToResultFileRecord(file, filename);
 			}
