@@ -44,8 +44,10 @@
     <Compile Include="IFileStorageExtended.cs" />
     <Compile Include="IGeneralFileDescriptor.cs" />
     <Compile Include="IFileEntity.cs" />
+    <Compile Include="IStreamProxy.cs" />
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />
     <Compile Include="Storages\FileStorageVcsStorage.cs" />
+    <Compile Include="StreamProxy.cs" />
     <Compile Include="VcsStorage\VcsCommit.cs" />
     <Compile Include="Web\ProxySelectorHelper.cs" />
     <Compile Include="Web\WebResource.cs" />

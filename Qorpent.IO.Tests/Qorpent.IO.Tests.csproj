@@ -25,6 +25,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirtyVersion\WorkingWithStreamsTests.cs" />
     <Compile Include="FileStorageVcsStorageTests.cs" />
     <Compile Include="FileStorageDirtyVersionTests.cs" />
     <Compile Include="DirtyVersion\HahserTest.cs" />
@@ -34,9 +35,11 @@
     <Compile Include="DirtyVersion\VersionedStorageTest.cs" />
     <Compile Include="FileResolverTest.cs" />
     <Compile Include="FileServiceTest.cs" />
+    <Compile Include="StreamProxyTests.cs" />
     <Compile Include="VcsStorageTests.cs" />
     <Compile Include="VcsStorageTestsBase.cs" />
     <Compile Include="Web\DefaultWorkingThroughResourceProvider.cs" />
+    <Compile Include="VcsStorageWorkingWithStreamsTests.cs" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <ItemGroup>
