@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Qorpent.IO.VcsStorage {
     /// <summary>
@@ -11,10 +12,10 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Проверяет код коммита на валидность
         /// </summary>
-        /// <param name="element">Представление элемента</param>
+        /// <param name="commit"></param>
         /// <returns>True, если код верен</returns>
-        public static bool CorrectCommitCode(IVcsStorageElement element) {
-            return !string.IsNullOrWhiteSpace(element.Commit);
+        public static bool CorrectCommitCode(VcsCommit commit) {
+            return !string.IsNullOrWhiteSpace(commit.Code);
         }
         /// <summary>
         ///     
@@ -67,10 +68,25 @@ namespace Qorpent.IO.VcsStorage {
         /// <returns></returns>
         public static string ComputeShaFromString(string source) {
             using (var stream = StringToStream(source)) {
-                var sha = new SHA256Managed();
+                var sha = new SHA1Managed();
                 var hash = sha.ComputeHash(stream);
                 return BitConverter.ToString(hash).Replace("-", String.Empty);
             }
+        }
+        /// <summary>
+        ///     Проверяет, не является ли элемент уже удалённым
+        /// </summary>
+        /// <param name="element">XML представление элемента</param>
+        public static bool IsRemovedElement(this XElement element) {
+            var removed = element.Attribute("Removed");
+
+            if (removed != null) {
+                if (removed.Value == "true") {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

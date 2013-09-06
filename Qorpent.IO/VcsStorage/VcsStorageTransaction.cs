@@ -16,7 +16,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <summary>
         ///     Идентификатор коммита
         /// </summary>
-        public string Commit { get; set; }
+        public VcsCommit Commit { get; set; }
         /// <summary>
         ///     Тип транзакции
         /// </summary>

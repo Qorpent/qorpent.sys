@@ -22,9 +22,14 @@ namespace Qorpent.Mvc.Actions.Helpers {
 	        return from filename in GetAllFileNames()
                 where IsMatchTypeFilter(showDirs, showFiles, filename)
                 let entry = GetFileEntry(filename)
+                
+                
                 where IsMatchSearchMask(entry,fileMask)
-                select entry;
+                
+                select entry ;
 	    }
+
+	    
 
 	    private bool IsMatchSearchMask(FileListEntry entry, string fileMask)
 	    {
@@ -47,6 +52,7 @@ namespace Qorpent.Mvc.Actions.Helpers {
 	        var localname = name.Replace("\\", "/");
 	        var basedir = EnvironmentInfo.RootDirectory.Replace("\\", "/");
 	        localname = localname.Replace(basedir, "./");
+           // localname = localname.Replace(basedir, Path.GetDirectoryName(basedir));
 	        return new FileListEntry
 	            {
                     LocalPath = localname,
@@ -66,8 +72,12 @@ namespace Qorpent.Mvc.Actions.Helpers {
 	    }
 
 	    private static IEnumerable<string> GetAllFileNames()
+
 	    {
-	        return Directory.GetFileSystemEntries(EnvironmentInfo.RootDirectory,"*",SearchOption.AllDirectories);
-	    }
+
+            var outString = Directory.GetFileSystemEntries(EnvironmentInfo.RootDirectory, "*", SearchOption.AllDirectories).ToList();
+            outString.Add(EnvironmentInfo.RootDirectory);
+           return outString;
+	       }
 	}
 }

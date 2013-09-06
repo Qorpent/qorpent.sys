@@ -13,8 +13,9 @@ namespace Qorpent.IO.DirtyVersion.Storage
 		/// 
 		/// </summary>
 		/// <param name="length"></param>
-		public Hasher(int length=Const.HashSize) {
-			_length = Math.Min(length, Const.HashSize);
+		public Hasher(int length=Const.MaxHashSize) {
+			_length = Math.Min(length, Const.MaxHashSize);
+			_length = Math.Max(_length, Const.MinHashSize);
 		}
 
 		private int _length;
@@ -26,7 +27,7 @@ namespace Qorpent.IO.DirtyVersion.Storage
 		}
 
 		/// <summary>
-		/// Конвертирует вхдоящий поток в хэш размерностью HashSize символов
+		/// Конвертирует вхдоящий поток в хэш размерностью MaxHashSize символов
 		/// </summary>
 		/// <param name="stream"></param>
 		/// <returns></returns>

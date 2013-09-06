@@ -7,7 +7,7 @@ namespace Qorpent.IO.VcsStorage {
     /// <summary>
     ///     Внутренний журнал транзакций
     /// </summary>
-    class VcsStorageBinLog : IDisposable {
+    class VcsStorageLogger : IDisposable {
         /// <summary>
         ///     Указатель на то, что клас уже разрушен
         /// </summary>
@@ -21,32 +21,24 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         private Guid BinLogGuid { get; set; }
         /// <summary>
-        ///     Дата начала записи в лог
-        /// </summary>
-        private DateTime BinLogStartWriting { get; set; }
-        /// <summary>
         /// 
         /// </summary>
         private readonly Object _lock = new Object();
         /// <summary>
         ///     Низкойровневый файловый движок
         /// </summary>
-        public IVcsStorageEngine Engine { get; private set; }
-        /// <summary>
-        ///     Директория для хранения журналов транзакций
-        /// </summary>
-        public DirectoryInfo BinLogStorage { get; private set; }
+        public IFileStorage Engine { get; private set; }
         /// <summary>
         ///     Внутренний журнал транзакций
         /// </summary>
-        public VcsStorageBinLog(IVcsStorageEngine engine) {
+        public VcsStorageLogger(IFileStorage engine) {
             SetEngine(engine);
             InitializeNewBinLog();
         }
         /// <summary>
         ///     Деструктор
         /// </summary>
-        ~VcsStorageBinLog() {
+        ~VcsStorageLogger() {
             Dispose(false);
         }
         /// <summary>
@@ -78,7 +70,7 @@ namespace Qorpent.IO.VcsStorage {
         ///     Установить движок
         /// </summary>
         /// <param name="engine"></param>
-        public void SetEngine(IVcsStorageEngine engine) {
+        public void SetEngine(IFileStorage engine) {
             Engine = engine;
         }
         /// <summary>
@@ -100,9 +92,8 @@ namespace Qorpent.IO.VcsStorage {
         private void InitializeNewBinLog() {
             BinLog = new XElement("BinLog");
             BinLogGuid = Guid.NewGuid();
-            BinLogStartWriting = DateTime.Now;
 
-            BinLog.SetAttributeValue("StartWriting", BinLogStartWriting);
+            BinLog.SetAttributeValue("StartWriting", DateTime.Now);
             BinLog.SetAttributeValue("BinLogGuid", BinLogGuid);
             BinLog.SetAttributeValue("LogElements", 0);
         }
@@ -110,14 +101,12 @@ namespace Qorpent.IO.VcsStorage {
         ///     Производит прокатку записи журнала на диск
         /// </summary>
         private void Dump() {
-            Engine.Set(new VcsStorageEngineElement {
-                Descriptor = new VcsStorageElementDescriptor {
-                    Filename = BinLogGuid + "." + VcsStorageDefaults.BinLogExtension,
-                    RelativeDirectory = VcsStorageDefaults.BinLogDirectory
+            Engine.Set(
+                new FileEntity {
+                    Path = Path.Combine(VcsStorageDefaults.BinLogDirectory, BinLogGuid + "." + VcsStorageDefaults.BinLogExtension)
                 },
-                Stream = VcsStorageUtils.StringToStream(BinLog.ToString()),
-                StreamAccess = FileAccess.Read
-            });
+                VcsStorageUtils.StringToStream(BinLog.ToString())
+            );
         }
         /// <summary>
         ///     Генерирует запись для бинарного журнала о транзакции
@@ -128,9 +117,11 @@ namespace Qorpent.IO.VcsStorage {
             var node = new XElement("transaction");
 
             node.SetAttributeValue("Filename", transaction.Filename);
-            node.SetAttributeValue("Guid", transaction.Commit);
+            node.SetAttributeValue("Commit", transaction.Commit.Code);
             node.SetAttributeValue("DateTime", transaction.DateTime);
             node.SetAttributeValue("Type", transaction.Type);
+            node.SetAttributeValue("Branch", transaction.Commit.Branch);
+            node.SetAttributeValue("Commiter", transaction.Commit.Commiter);
 
             return node;
         }
