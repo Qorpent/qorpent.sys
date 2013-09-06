@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Qorpent.Dot.Colors;
+using Qorpent.Dot;
 
 namespace Qorpent.Serialization.Tests.Dot {
     [TestFixture]

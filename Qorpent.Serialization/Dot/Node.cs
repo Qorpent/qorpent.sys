@@ -9,8 +9,9 @@ namespace Qorpent.Dot {
 		/// Форма
 		/// </summary>
 		public NodeShapeType Shape {
-			get { return Get(DotConstants.ShapeAttribute).To<NodeShapeType>(); }
+			get { return Get<NodeShapeType>(DotConstants.ShapeAttribute); }
 			set {
+                /* //TODO move case
                 var str = value.ToStr().ToLower();
                 if (str == "mcircle")
                 {
@@ -27,21 +28,24 @@ namespace Qorpent.Dot {
                 else if (str == "mrecord")
                 {
                     str = "Mrecord";
-                }                
-                Set(DotConstants.ShapeAttribute,str); 
+                } 
+                 */
+                Set(DotConstants.ShapeAttribute,value); 
             }
 		}
+        /// <summary>
+        /// Целевой подграф
+        /// </summary>
+        public string SubgraphCode { get; set; }
         /// <summary>
         /// Задает угол в градусах для вращения многоугольника формы узла (shape=poligon). Н-р, node [shape=poligon; orientation=30]
         /// </summary>
         public double Orientation
         {
-            get { return Get(DotConstants.OrientationAttribute).To<double>(); }
+            get { return Get<double>(DotConstants.OrientationAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.OrientationAttribute, str);
-
+                Set(DotConstants.OrientationAttribute, value);
             }
         }
         /// <summary>
@@ -49,12 +53,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public double Penwidth
         {
-            get { return Get(DotConstants.OrientationAttribute).To<double>(); }
+            get { return Get<double>(DotConstants.OrientationAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.PenwidthAttribute, str);
-
+                Set(DotConstants.PenwidthAttribute, value);
             }
         }
         /// <summary>
@@ -62,12 +64,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public double Distortion
         {
-            get { return Get(DotConstants.DistortionAttribute).To<double>(); }
+            get { return Get<double>(DotConstants.DistortionAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.DistortionAttribute, str);
-
+                Set(DotConstants.DistortionAttribute, value);
             }
         }
         /// <summary>
@@ -75,12 +75,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public bool FixedSize
         {
-            get { return Get(DotConstants.FixedSizeAttribute).To<bool>(); }
+            get { return Get<bool>(DotConstants.FixedSizeAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.FixedSizeAttribute, str);
-
+                Set(DotConstants.FixedSizeAttribute, value);
             }
         }
         /// <summary>
@@ -88,12 +86,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public double Height
         {
-            get { return Get(DotConstants.HeightAttribute).To<double>(); }
+            get { return Get<double>(DotConstants.HeightAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.HeightAttribute, str);
-
+                Set(DotConstants.HeightAttribute, value);
             }
         }
         /// <summary>
@@ -101,12 +97,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public double Width
         {
-            get { return Get(DotConstants.WidthAttribute).To<double>(); }
+            get { return Get<double>(DotConstants.WidthAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.WidthAttribute, str);
-
+                Set(DotConstants.WidthAttribute, value);
             }
         }
         /// <summary>
@@ -114,12 +108,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public double Skew
         {
-            get { return Get(DotConstants.SkewAttribute).To<double>(); }
+            get { return Get<double>(DotConstants.SkewAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.SkewAttribute, str);
-
+                Set(DotConstants.SkewAttribute, value);
             }
         }
         /// <summary>
@@ -127,12 +119,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public int Peripheries
         {
-            get { return Get(DotConstants.PeripheriesAttribute).To<int>(); }
+            get { return Get<int>(DotConstants.PeripheriesAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.PeripheriesAttribute, str);
-
+                Set(DotConstants.PeripheriesAttribute, value);
             }
         }
         /// <summary>
@@ -140,12 +130,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public double Sides
         {
-            get { return Get(DotConstants.SidesAttribute).To<double>(); }
+            get { return Get<double>(DotConstants.SidesAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.SidesAttribute, str);
-
+                Set(DotConstants.SidesAttribute, value);
             }
         }
         /// <summary>
@@ -153,15 +141,15 @@ namespace Qorpent.Dot {
         /// </summary>
         public string XLabe
         {
-            get { return Get(DotConstants.XLabeAttribute).To<string>(); }
+            get { return Get<string>(DotConstants.XLabeAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.XLabeAttribute, str);
-
+                Set(DotConstants.XLabeAttribute, value);
             }
         }
-        
-         
+        /// <summary>
+        /// Содерджаший узел граф
+        /// </summary>
+	    public SubGraph Subgraph { get; set; }
 	}
 }

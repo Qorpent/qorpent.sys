@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Qorpent.Dot.Colors {
+namespace Qorpent.Dot {
     /// <summary>
     /// Набор цветов для градиентов
     /// </summary>

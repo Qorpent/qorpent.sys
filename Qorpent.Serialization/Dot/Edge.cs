@@ -9,11 +9,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public ArrowType ArrowHead
         {
-            get { return Get(DotConstants.ArrowHeadAttribute).To<ArrowType>(); }
+            get { return Get<ArrowType>(DotConstants.ArrowHeadAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.ArrowHeadAttribute, str);
+                Set(DotConstants.ArrowHeadAttribute, value);
             }
         }
         /// <summary>
@@ -21,26 +20,26 @@ namespace Qorpent.Dot {
         /// </summary>
         public ArrowType ArrowTail
         {
-            get { return Get(DotConstants.ArrowTailAttribute).To<ArrowType>(); }
+            get { return Get<ArrowType>(DotConstants.ArrowTailAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.ArrowTailAttribute, str);
-
+                Set(DotConstants.ArrowTailAttribute, value);
             }
         }
+        /// <summary>
+        /// Тип ребра
+        /// </summary>
+        public string Type { get; set; }
 
         /// <summary>
         /// Если "Да", то присоединение заголовка к стрелке происходит через подчеркивание
         /// </summary>
         public bool DecorateLabel
         {
-            get { return Get(DotConstants.DecorateLabelAttribute).To<bool>(); }
+            get { return Get<bool>(DotConstants.DecorateLabelAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.DecorateLabelAttribute, str);
-
+                Set(DotConstants.DecorateLabelAttribute, value);
             }
         }
         /// <summary>
@@ -48,12 +47,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public bool LabelFloat
         {
-            get { return Get(DotConstants.LabelFloatAttribute).To<bool>(); }
+            get { return Get<bool>(DotConstants.LabelFloatAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.LabelFloatAttribute, str);
-
+                Set(DotConstants.LabelFloatAttribute, value);
             }
         }
         /// <summary>
@@ -61,12 +58,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public string Lhead
         {
-            get { return Get(DotConstants.LheadAttribute).To<string>(); }
+            get { return Get<string>(DotConstants.LheadAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.LheadAttribute, str);
-
+                Set(DotConstants.LheadAttribute, value);
             }
         }
         /// <summary>
@@ -74,12 +69,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public string Ltail
         {
-            get { return Get(DotConstants.LtailAttribute).To<string>(); }
+            get { return Get<string>(DotConstants.LtailAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.LtailAttribute, str);
-
+                Set(DotConstants.LtailAttribute, value);
             }
         }
         /// <summary>
@@ -87,12 +80,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public string SameHead
         {
-            get { return Get(DotConstants.SameHeadAttribute).To<string>(); }
+            get { return Get<string>(DotConstants.SameHeadAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.SameHeadAttribute, str);
-
+                Set(DotConstants.SameHeadAttribute, value);
             }
         }
         /// <summary>
@@ -100,12 +91,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public string SameTail
         {
-            get { return Get(DotConstants.SameTailAttribute).To<string>(); }
+            get { return Get<string>(DotConstants.SameTailAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.SameTailAttribute, str);
-
+                Set(DotConstants.SameTailAttribute, value);
             }
         }
         /// <summary>
@@ -113,12 +102,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public DirType Dir
         {
-            get { return Get(DotConstants.DirAttribute).To<DirType>(); }
+            get { return Get<DirType>(DotConstants.DirAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.DirAttribute, str);
-
+                Set(DotConstants.DirAttribute, value);
             }
         }
         /// <summary>
@@ -126,12 +113,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public double Penwidth
         {
-            get { return Get(DotConstants.OrientationAttribute).To<double>(); }
+            get { return Get<double>(DotConstants.OrientationAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.PenwidthAttribute, str);
-
+                Set(DotConstants.PenwidthAttribute, value);
             }
         }
         /// <summary>
@@ -139,12 +124,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public double ArrowSize
         {
-            get { return Get(DotConstants.ArrowSizeAttribute).To<double>(); }
+            get { return Get<double>(DotConstants.ArrowSizeAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.ArrowSizeAttribute, str);
-
+                Set(DotConstants.ArrowSizeAttribute, value);
             }
         }
         /// <summary>
@@ -152,12 +135,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public string XLabe
         {
-            get { return Get(DotConstants.XLabeAttribute).To<string>(); }
+            get { return Get<string>(DotConstants.XLabeAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.XLabeAttribute, str);
-
+                Set(DotConstants.XLabeAttribute, value);
             }
         }
         /// <summary>
@@ -165,19 +146,23 @@ namespace Qorpent.Dot {
         /// </summary>
         public int Minlen
         {
-            get { return Get(DotConstants.MinlenAttribute).To<int>(); }
+            get { return Get<int>(DotConstants.MinlenAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.MinlenAttribute, str);
-
+                Set(DotConstants.MinlenAttribute, value);
             }
         }
-        
-         
+        /// <summary>
+        /// Код входящего узла
+        /// </summary>
+	    public string From { get; set; }
+        /// <summary>
+        /// Код исходящего узла
+        /// </summary>
+        public string To { get; set; }  
 
 
-		/// <summary>
+	    /// <summary>
 		/// Автонастройка
 		/// </summary>
 		public override void AutoTune()

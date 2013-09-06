@@ -28,7 +28,7 @@ namespace Qorpent.Serialization.Tests.Dot
 		[TestCase(true)]
 		[TestCase(false)]
 		public void LTailOrHeadEdgeCauseCompundGraph(bool head) {
-			var g = new Graph();
+			var g = new SubGraph();
 			Assert.False(g.Attributes.ContainsKey(DotConstants.CompoundAttribute));
 			var e = new Edge();
 			if (head) {

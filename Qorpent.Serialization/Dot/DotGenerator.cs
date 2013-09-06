@@ -8,9 +8,9 @@ namespace Qorpent.Dot {
 		/// <summary>
 		/// Формирует программу на языке DOT
 		/// </summary>
-		/// <param name="graph"></param>
+		/// <param name="subGraph"></param>
 		/// <returns></returns>
-		public string Generate(Graph graph) {
+		public string Generate(SubGraph subGraph) {
 			throw new NotImplementedException();
 		}
 	}

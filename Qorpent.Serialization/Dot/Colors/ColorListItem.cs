@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace Qorpent.Dot.Colors {
+namespace Qorpent.Dot {
     /// <summary>
     /// Описывает элемент списка цветов
     /// </summary>

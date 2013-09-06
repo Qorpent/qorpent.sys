@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Qorpent.Dot.Colors;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dot {
@@ -10,24 +9,24 @@ namespace Qorpent.Dot {
 		/// <summary>
 		/// 
 		/// </summary>
-		public IDictionary<string, string> Attributes = new Dictionary<string, string>();
+		public IDictionary<string, object> Attributes = new Dictionary<string, object>();
 		/// <summary>
 		/// Защищенный метод доступа к атрибутам на чтение
 		/// </summary>
 		/// <param name="code"></param>
 		/// <returns></returns>
-		public string Get(string code) {
+		public T Get<T>(string code) {
 			if (Attributes.ContainsKey(code)) {
-				return Attributes[code];
+				return (T)Attributes[code];
 			}
-			return string.Empty;
+		    return default(T);
 		}
 		/// <summary>
 		/// Установить атрибут
 		/// </summary>
 		/// <param name="code"></param>
 		/// <param name="value"></param>
-		public void Set(string code, string value) {
+		public void Set(string code, object value) {
 			Attributes[code] = value;
 		}
 
@@ -35,7 +34,7 @@ namespace Qorpent.Dot {
 		/// Заголовок
 		/// </summary>
 		public string Label {
-			get { return Get(DotConstants.LabelAttribute); }
+			get { return Get<string>(DotConstants.LabelAttribute); }
 			set { Set(DotConstants.LabelAttribute,value); }
 		}
         /// <summary>
@@ -43,11 +42,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public double FontSize
         {
-            get { return Get(DotConstants.FontSizeAttribute).To<double>(); }
+            get { return Get<double>(DotConstants.FontSizeAttribute); }
             set
             {
-                var str = value.ToStr().ToLower();
-                Set(DotConstants.FontSizeAttribute, str);
+                Set(DotConstants.FontSizeAttribute, value);
 
             }
         }
@@ -56,10 +54,10 @@ namespace Qorpent.Dot {
         /// </summary>
         public ColorAttribute FontColor
         {
-            get { return ColorAttribute.Native(Get(DotConstants.FontColorAttribute)); }
+            get { return Get<ColorAttribute>(DotConstants.FontColorAttribute); }
             set
             {
-               Set(DotConstants.FontColorAttribute, value.ToString());
+               Set(DotConstants.FontColorAttribute, value);
 
             }
         }
@@ -90,18 +88,16 @@ namespace Qorpent.Dot {
         public string FontName
         {
             get {
-                return Get(DotConstants.FontNameAttribute); 
+                return Get<string>(DotConstants.FontNameAttribute); 
             }
             set {
-                if (value == DotConstants.DefaultFontNameAttribute)
-                {
-                    Attributes.Remove(DotConstants.FontNameAttribute);
-                }
-                else {
-                    Set(DotConstants.FontNameAttribute, value); 
-                }
-                
+                Set(DotConstants.FontNameAttribute, value); 
             }
         }
+
+	    /// <summary>
+	    /// Код субграфа
+	    /// </summary>
+	    public string Code { get; set; }
 	}
 }
