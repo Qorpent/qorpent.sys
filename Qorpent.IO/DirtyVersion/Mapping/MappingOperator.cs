@@ -41,8 +41,10 @@ namespace Qorpent.IO.DirtyVersion.Mapping {
 			else {
 				target.Merge(commit);
 			}
-			ProcessHead(target, commitHeadBehavior);
-			MappingInfo.Normalize();
+		    if (target.Hash != MappingInfo.Head) {
+		        ProcessHead(target, commitHeadBehavior);
+		    }
+		    MappingInfo.Normalize();
 			return target;
 		}
 		/// <summary>
