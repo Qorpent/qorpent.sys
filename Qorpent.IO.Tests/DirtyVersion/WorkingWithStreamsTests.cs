@@ -45,6 +45,8 @@ namespace Qorpent.IO.Tests.DirtyVersion {
 
             _dirtyVersionStorage.Save("testfile", msFirst);
             _dirtyVersionStorage.Save("testfile", msSecond);
+
+            Assert.AreEqual("tezt", new StreamReader(_dirtyVersionStorage.Open("testfile")).ReadToEnd());
         }
     }
 }
