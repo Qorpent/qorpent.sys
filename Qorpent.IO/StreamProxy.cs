@@ -25,7 +25,7 @@ namespace Qorpent.IO {
         ///     Класс, проксирующий один поток на чтение в несколько потоков на запись
         /// </summary>
         public StreamProxy() {
-            BufferSize = 256;
+            BufferSize = 1024;
         }
         /// <summary>
         ///     Проксирование
@@ -43,6 +43,21 @@ namespace Qorpent.IO {
             }
 
             return RollProxySync(source, targets);
+        }
+        /// <summary>
+        ///     Проксирование потока в файлы
+        /// </summary>
+        /// <param name="source">Поток-источник</param>
+        /// <param name="paths">Полные пути до целевых файлов</param>
+        /// <returns>Количество проксированных байт</returns>
+        public int Proxy(Stream source, params string[] paths) {
+            var streams = paths.Select(File.OpenWrite).ToList();
+            var proxied = Proxy(source, streams.ToArray());
+            foreach (var fileStream in streams) {
+                fileStream.Close();
+            }
+
+            return proxied;
         }
         /// <summary>
         ///     Проверяет поток-источник на валидность
