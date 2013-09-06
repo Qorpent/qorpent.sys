@@ -29,7 +29,7 @@ namespace Qorpent.IO.Storages {
         /// <param name="file"></param>
         /// <param name="stream">поток-источник</param>
         public IGeneralFileDescriptor Set(IFileEntity file, Stream stream) {
-            return new DirtyVersionBasedFileDescriptor(
+            return new FileDescriptorDirtyVersionBased(
                 DirtyVersionStorage,
                 DirtyVersionStorage.Save(file.Path, stream, file.Version)
             );
@@ -40,7 +40,7 @@ namespace Qorpent.IO.Storages {
         /// <param name="file"></param>
         /// <returns></returns>
         public IGeneralFileDescriptor Get(IFileEntity file) {
-            return new DirtyVersionBasedFileDescriptor(
+            return new FileDescriptorDirtyVersionBased(
                 DirtyVersionStorage,
                 new Commit {
                     MappingInfo = new MappingInfo {Name = file.Path},

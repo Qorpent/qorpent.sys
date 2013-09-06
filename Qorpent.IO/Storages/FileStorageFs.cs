@@ -62,7 +62,7 @@ namespace Qorpent.IO.Storages {
                 stream
             );
 
-            return new FsBasedFileDescriptor(FileAccess.Read, new FileEntity { Path = GeneratePath(file) });
+            return new FileDescriptorFsBased(FileAccess.Read, new FileEntity { Path = GeneratePath(file) });
         }
         /// <summary>
         ///     Реальное чтение элемента из низкоуровневого хранилища
@@ -70,7 +70,7 @@ namespace Qorpent.IO.Storages {
         /// <param name="file">Дескриптор элемента</param>
         /// <returns></returns>
         private IGeneralFileDescriptor RollRealReading(IFileEntity file) {
-            return new FsBasedFileDescriptor(FileAccess.Read, new FileEntity { Path = GeneratePath(file) });
+            return new FileDescriptorFsBased(FileAccess.Read, new FileEntity { Path = GeneratePath(file) });
         }
         /// <summary>
         ///     Генерирует полный путь к директории, в которой располагается

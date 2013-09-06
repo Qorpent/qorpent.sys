@@ -9,7 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ContainerInfo.cs" />
-    <Compile Include="FileDescriptors\DirtyVersionBasedFileDescriptor.cs" />
+    <Compile Include="FileDescriptors\FileDescriptorDirtyVersionBased.cs" />
     <Compile Include="DirtyVersion\Const.cs" />
     <Compile Include="DirtyVersion\DirtyVersionStorage.cs" />
     <Compile Include="DirtyVersion\DirtyVersionStorageExtensions.cs" />
@@ -36,7 +36,7 @@
     <Compile Include="DirtyVersion\Storage\CopyOnReadStream.cs" />
     <Compile Include="DirtyVersion\IHashedDirectory.cs" />
     <Compile Include="FileDescriptors\FileDescriptorVcsStorageBased.cs" />
-    <Compile Include="FileDescriptors\FsBasedFileDescriptor.cs" />
+    <Compile Include="FileDescriptors\FileDescriptorFsBased.cs" />
     <Compile Include="FileEntity.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />

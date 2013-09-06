@@ -6,7 +6,7 @@ namespace Qorpent.IO.FileDescriptors {
     /// <summary>
     ///     Дескриптор файла, основанный на хранилище DirtyVersion
     /// </summary>
-    public class DirtyVersionBasedFileDescriptor : IGeneralFileDescriptor {
+    public class FileDescriptorDirtyVersionBased : IGeneralFileDescriptor {
         /// <summary>
         ///     Дескриптор файла, основанный на хранилище DirtyVersion
         /// </summary>
@@ -26,7 +26,7 @@ namespace Qorpent.IO.FileDescriptors {
         /// <summary>
         ///     Дескриптор файла, основанный на хранилище DirtyVersion
         /// </summary>
-        public DirtyVersionBasedFileDescriptor(IDirtyVersionStorage storage, Commit commit) {
+        public FileDescriptorDirtyVersionBased(IDirtyVersionStorage storage, Commit commit) {
             _dirtyVersionStorage = storage;
 
             FileEntity = new FileEntity {
