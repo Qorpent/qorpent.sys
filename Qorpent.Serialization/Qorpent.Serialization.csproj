@@ -38,7 +38,11 @@
     <Compile Include="BSharp\Schema\Schema.cs" />
     <Compile Include="BSharp\Schema\SchemaNote.cs" />
     <Compile Include="Dot\ArrowType.cs" />
-    <Compile Include="Dot\Colors\DotColor.cs" />
+    <Compile Include="Dot\Colors\Color.cs" />
+    <Compile Include="Dot\Colors\ColorAttributeType.cs" />
+    <Compile Include="Dot\Colors\ColorList.cs" />
+    <Compile Include="Dot\Colors\ColorListItem.cs" />
+    <Compile Include="Dot\Colors\ColorAttribute.cs" />
     <Compile Include="Dot\GraphSplinesType.cs" />
     <Compile Include="Dot\GraphStyleType.cs" />
     <Compile Include="Dot\EdgeStyleType.cs" />
