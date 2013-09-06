@@ -1,7 +1,6 @@
 ﻿using System;
-using Qorpent.Log;
 
-namespace Qorpent.Dot.Colors {
+namespace Qorpent.Dot {
     /// <summary>
     /// Описывает цвета для построения в Dot, поддерживает как режим SINGLECOLOR
     /// Так и ColorList

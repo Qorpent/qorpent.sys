@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Qorpent.Dot.Colors {
+namespace Qorpent.Dot {
     /// <summary>
     /// Описывает цвет
     /// </summary>

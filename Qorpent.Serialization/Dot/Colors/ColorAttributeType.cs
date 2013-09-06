@@ -1,4 +1,4 @@
-namespace Qorpent.Dot.Colors {
+namespace Qorpent.Dot {
     /// <summary>
     /// Тип определения цвета
     /// </summary>
