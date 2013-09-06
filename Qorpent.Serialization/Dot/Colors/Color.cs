@@ -7,6 +7,15 @@ namespace Qorpent.Dot.Colors {
     /// </summary>
     public class Color {
         private static Color _red;
+        /// <summary>
+        /// Красный
+        /// </summary>
+        public static Color Red
+        {
+            get { return _red ?? (_red = new Color("red")); }
+        }
+
+
         private static Color _green;
         private static Color _blue;
 
@@ -74,12 +83,7 @@ namespace Qorpent.Dot.Colors {
             return new Color(def);
         }
 
-        /// <summary>
-        /// Красный
-        /// </summary>
-        public static Color Red {
-            get { return _red ?? (_red = new Color("red")); }
-        }
+        
         /// <summary>
         /// Зеленый
         /// </summary>
