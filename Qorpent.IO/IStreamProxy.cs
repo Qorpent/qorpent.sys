@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace Qorpent.IO {
     /// <summary>
@@ -20,5 +21,19 @@ namespace Qorpent.IO {
         /// <param name="paths">Полные пути до целевых файлов</param>
         /// <returns>Количество проксированных байт</returns>
         int Proxy(Stream source, params string[] paths);
+        /// <summary>
+        ///     Асинхронное проксирование
+        /// </summary>
+        /// <param name="source">Поток-источник</param>
+        /// <param name="targets">Целевые потоки</param>
+        /// <returns>Количество проксированных байт</returns>
+        Task<int> ProxyAsync(Stream source, params Stream[] targets);
+        /// <summary>
+        ///     Асинхронное проксирование потока в файлы
+        /// </summary>
+        /// <param name="source">Поток-источник</param>
+        /// <param name="paths">Полные пути до целевых файлов</param>
+        /// <returns>Количество проксированных байт</returns>
+        Task<int> ProxyAsync(Stream source, params string[] paths);
     }
 }

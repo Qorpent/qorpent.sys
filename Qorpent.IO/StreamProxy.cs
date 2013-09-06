@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Qorpent.IO {
     /// <summary>
@@ -34,14 +35,6 @@ namespace Qorpent.IO {
         /// <param name="targets">Целевые потоки</param>
         /// <returns>Количество проксированных байт</returns>
         public int Proxy(Stream source, params Stream[] targets) {
-            if (!IsCorrectSourceStream(source)) {
-                throw new Exception("Incorrect source stream!");
-            }
-
-            if (!IsCorrectTargetStreams(targets)) {
-                throw new Exception("Incorrect target streams!");
-            }
-
             return RollProxySync(source, targets);
         }
         /// <summary>
@@ -60,26 +53,23 @@ namespace Qorpent.IO {
             return proxied;
         }
         /// <summary>
-        ///     Проверяет поток-источник на валидность
+        ///     Асинхронное проксирование
         /// </summary>
-        /// <param name="stream">Поток-источник</param>
-        /// <returns>True, если валидный</returns>
-        private bool IsCorrectSourceStream(Stream stream) {
-            if (!stream.CanRead) {
-                return false;
-            }
-
-            return true;
+        /// <param name="source">Поток-источник</param>
+        /// <param name="targets">Целевые потоки</param>
+        /// <returns>Количество проксированных байт</returns>
+        public Task<int> ProxyAsync(Stream source, params Stream[] targets) {
+            return Task.Factory.StartNew(() => RollProxySync(source, targets));
         }
         /// <summary>
-        ///     Проверяет потоки-цели на валидность
+        ///     Асинхронное проксирование потока в файлы
         /// </summary>
-        /// <param name="targets">Целевые потоки</param>
-        /// <returns></returns>
-        private bool IsCorrectTargetStreams(IEnumerable<Stream> targets) {
-            return targets.All(target => target.CanWrite);
+        /// <param name="source">Поток-источник</param>
+        /// <param name="paths">Полные пути до целевых файлов</param>
+        /// <returns>Количество проксированных байт</returns>
+        public Task<int> ProxyAsync(Stream source, params string[] paths) {
+            return Task.Factory.StartNew(() => Proxy(source, paths));
         }
-
         /// <summary>
         ///     Прокатывает синхронную операцию проксирования потоков
         /// </summary>
