@@ -26,8 +26,8 @@ namespace Qorpent.IO.Storages {
         /// <summary>
         ///     Запись элемента в низкоуровневое хранилище
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="stream">поток-источник</param>
+        /// <param name="file">Представление файла</param>
+        /// <param name="stream">Поток-источник</param>
         public IGeneralFileDescriptor Set(IFileEntity file, Stream stream) {
             return new FileDescriptorDirtyVersionBased(
                 DirtyVersionStorage,
@@ -37,8 +37,8 @@ namespace Qorpent.IO.Storages {
         /// <summary>
         ///     Чтение элемента из низкоуровневого хранилища
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
+        /// <param name="file">Представление файла</param>
+        /// <returns>Дескриптор файла</returns>
         public IGeneralFileDescriptor Get(IFileEntity file) {
             return new FileDescriptorDirtyVersionBased(
                 DirtyVersionStorage,

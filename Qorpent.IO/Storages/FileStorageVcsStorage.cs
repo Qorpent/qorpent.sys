@@ -6,7 +6,7 @@ namespace Qorpent.IO.Storages {
     /// <summary>
     ///     Хранилище файлов, основанное на VcsStorage
     /// </summary>
-    public class FileStorageVcsStorage : IFileStorage {
+    public class FileStorageVcsStorage : IFileStorageExtended {
         /// <summary>
         ///     Внутренний экземпляр класса хранилища
         /// </summary>
@@ -40,6 +40,13 @@ namespace Qorpent.IO.Storages {
         /// <returns>Дескриптор файла</returns>
         public IGeneralFileDescriptor Get(IFileEntity file) {
             return new FileDescriptorVcsStorageBased(file, VcsStoragePersister);
+        }
+        /// <summary>
+        ///     Производит удаление файла из хранилища
+        /// </summary>
+        /// <param name="file">Представление файла</param>
+        public void Del(IFileEntity file) {
+            VcsStoragePersister.Remove(file);
         }
         /// <summary>
         ///     Получение нативного движка хранилища

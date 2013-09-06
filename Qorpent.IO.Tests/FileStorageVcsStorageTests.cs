@@ -2,9 +2,7 @@
 using System.IO;
 using System.Text;
 using NUnit.Framework;
-using Qorpent.IO.DirtyVersion;
 using Qorpent.IO.Storages;
-using Qorpent.IO.VcsStorage;
 
 namespace Qorpent.IO.Tests {
     class FileStorageVcsStorageTests {
@@ -57,6 +55,9 @@ namespace Qorpent.IO.Tests {
             using (var sr = new StreamReader(getDescr.GetStream(FileAccess.Read))) {
                 Assert.AreEqual("testString", sr.ReadToEnd());
             }
+
+            ((IFileStorageExtended)_vcsStorageStorage).Del(new FileEntity { Path = "test" });
+            Assert.IsNull(_vcsStorageStorage.Get(new FileEntity { Path = "test" }).GetStream(FileAccess.Read));
         }
     }
 }

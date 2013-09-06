@@ -41,6 +41,7 @@
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
     <Compile Include="FileStorageAbilities.cs" />
+    <Compile Include="IFileStorageExtended.cs" />
     <Compile Include="IGeneralFileDescriptor.cs" />
     <Compile Include="IFileEntity.cs" />
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />
