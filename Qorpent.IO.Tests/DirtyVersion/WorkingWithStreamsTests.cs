@@ -42,6 +42,10 @@ namespace Qorpent.IO.Tests.DirtyVersion {
             var msSecond = new MemoryStream();
             msFirst.Write(Encoding.UTF8.GetBytes("test"), 0, 4);
             msSecond.Write(Encoding.UTF8.GetBytes("tezt"), 0, 4);
+            //это первое - так с потоками не работают - после Write "голова" стрима в конце и соответственно
+            //всегда выдавался пустой поток, так что первый "фикс" такой:
+            msFirst.Position = 0;
+            msSecond.Position = 0;
 
             _dirtyVersionStorage.Save("testfile", msFirst);
             _dirtyVersionStorage.Save("testfile", msSecond);
