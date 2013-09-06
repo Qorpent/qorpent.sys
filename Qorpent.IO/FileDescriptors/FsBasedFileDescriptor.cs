@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Qorpent.IO {
+namespace Qorpent.IO.FileDescriptors {
     /// <summary>
     /// 
     /// </summary>
