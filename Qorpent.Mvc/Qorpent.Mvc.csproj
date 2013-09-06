@@ -65,6 +65,7 @@
     <Compile Include="HttpHandler\WaitApplicationStartupHandler.cs" />
     <Compile Include="MvcContext.cs" />
     <Compile Include="HttpApplicationReloader.cs" />
+    <Compile Include="Renders\FusionChartRender.cs" />
     <Compile Include="Renders\DotRender.cs" />
     <Compile Include="Renders\HtmlRender.cs" />
     <Compile Include="Renders\LoginViews\LoginView.cs" />
