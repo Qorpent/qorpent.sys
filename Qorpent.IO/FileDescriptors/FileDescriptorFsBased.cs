@@ -5,7 +5,7 @@ namespace Qorpent.IO.FileDescriptors {
     /// <summary>
     /// 
     /// </summary>
-    class FsBasedFileDescriptor : IGeneralFileDescriptor {
+    class FileDescriptorFsBased : IGeneralFileDescriptor {
         /// <summary>
         ///     Разрешённый уровень доступа
         /// </summary>
@@ -31,7 +31,7 @@ namespace Qorpent.IO.FileDescriptors {
         /// </summary>
         /// <param name="allowedAccess"></param>
         /// <param name="fileEntity"></param>
-        public FsBasedFileDescriptor(FileAccess allowedAccess, FileEntity fileEntity) {
+        public FileDescriptorFsBased(FileAccess allowedAccess, FileEntity fileEntity) {
             AllowedAccess = allowedAccess;
             FileEntity = fileEntity;
         }

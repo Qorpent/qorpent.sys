@@ -5,7 +5,7 @@ using Qorpent.IO.FileDescriptors;
 
 namespace Qorpent.IO.Storages {
     /// <summary>
-    ///     Хранилище файлов, основанное на 
+    ///     Хранилище файлов, основанное на DirtyVersion
     /// </summary>
     public class FileStorageDirtyVersion : IFileStorage {
         /// <summary>
@@ -26,10 +26,10 @@ namespace Qorpent.IO.Storages {
         /// <summary>
         ///     Запись элемента в низкоуровневое хранилище
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="stream">поток-источник</param>
+        /// <param name="file">Представление файла</param>
+        /// <param name="stream">Поток-источник</param>
         public IGeneralFileDescriptor Set(IFileEntity file, Stream stream) {
-            return new DirtyVersionBasedFileDescriptor(
+            return new FileDescriptorDirtyVersionBased(
                 DirtyVersionStorage,
                 DirtyVersionStorage.Save(file.Path, stream, file.Version)
             );
@@ -37,10 +37,10 @@ namespace Qorpent.IO.Storages {
         /// <summary>
         ///     Чтение элемента из низкоуровневого хранилища
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
+        /// <param name="file">Представление файла</param>
+        /// <returns>Дескриптор файла</returns>
         public IGeneralFileDescriptor Get(IFileEntity file) {
-            return new DirtyVersionBasedFileDescriptor(
+            return new FileDescriptorDirtyVersionBased(
                 DirtyVersionStorage,
                 new Commit {
                     MappingInfo = new MappingInfo {Name = file.Path},

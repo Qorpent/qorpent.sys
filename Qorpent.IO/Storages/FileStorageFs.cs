@@ -6,7 +6,7 @@ namespace Qorpent.IO.Storages {
     /// <summary>
     ///     Движок на файловой системе
     /// </summary>
-    public class FileStorageFs : IFileStorage {
+    public class FileStorageFs : IFileStorageExtended {
         /// <summary>
         ///     Текущая рабочая директория
         /// </summary>
@@ -18,7 +18,7 @@ namespace Qorpent.IO.Storages {
         /// <summary>
         ///     Движок на файловой системе
         /// </summary>
-        /// <param name="workingDirectory">рабочая директория</param>
+        /// <param name="workingDirectory">Рабочая директория</param>
         public FileStorageFs(DirectoryInfo workingDirectory) {
             WorkingDirectory = workingDirectory;
             Abilities = FileStorageAbilities.Persist;
@@ -27,31 +27,38 @@ namespace Qorpent.IO.Storages {
         /// <summary>
         ///     Запись элемента в низкоуровневое хранилище
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="stream"></param>
+        /// <param name="file">Представление файла</param>
+        /// <param name="stream">Поток до файла</param>
         public IGeneralFileDescriptor Set(IFileEntity file, Stream stream) {
             return RollRealWriting(file, stream);
         }
         /// <summary>
         ///     Чтение элемента из низкоуровневого хранилища
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
+        /// <param name="file">Представление файла</param>
+        /// <returns>Дескриптор файла</returns>
         public IGeneralFileDescriptor Get(IFileEntity file) {
             return RollRealReading(file);
         }
         /// <summary>
+        ///     Производит удаление файла из хранилища
+        /// </summary>
+        /// <param name="file">Представление файла</param>
+        public void Del(IFileEntity file) {
+            RollRealDeleting(file);
+        }
+        /// <summary>
         ///     Возвращает клас текущего хранилища текущее хранилища
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Класс-хранилище</returns>
         public object GetStorage() {
             return this;
         }
         /// <summary>
         ///     Прокатака цикла реальной записи на диск
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="stream"></param>
+        /// <param name="file">Представление файла</param>
+        /// <param name="stream">Поток до файла</param>
         private IGeneralFileDescriptor RollRealWriting(IFileEntity file, Stream stream) {
             VcsStorageUtils.CreateDirectoryIfNotExists(
                 GenerateElementDirectory(file)
@@ -62,15 +69,22 @@ namespace Qorpent.IO.Storages {
                 stream
             );
 
-            return new FsBasedFileDescriptor(FileAccess.Read, new FileEntity { Path = GeneratePath(file) });
+            return new FileDescriptorFsBased(FileAccess.Read, new FileEntity { Path = GeneratePath(file) });
         }
         /// <summary>
         ///     Реальное чтение элемента из низкоуровневого хранилища
         /// </summary>
         /// <param name="file">Дескриптор элемента</param>
-        /// <returns></returns>
+        /// <returns>Дескриптор файла</returns>
         private IGeneralFileDescriptor RollRealReading(IFileEntity file) {
-            return new FsBasedFileDescriptor(FileAccess.Read, new FileEntity { Path = GeneratePath(file) });
+            return new FileDescriptorFsBased(FileAccess.Read, new FileEntity { Path = GeneratePath(file) });
+        }
+        /// <summary>
+        ///     Производит прокат реального удаления файла из хранилища
+        /// </summary>
+        /// <param name="file">Представление файла</param>
+        private void RollRealDeleting(IFileEntity file) {
+            File.Delete(GeneratePath(file));
         }
         /// <summary>
         ///     Генерирует полный путь к директории, в которой располагается

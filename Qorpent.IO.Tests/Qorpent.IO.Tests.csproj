@@ -25,6 +25,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileStorageVcsStorageTests.cs" />
     <Compile Include="FileStorageDirtyVersionTests.cs" />
     <Compile Include="DirtyVersion\HahserTest.cs" />
     <Compile Include="DirtyVersion\HashedDirectoryTest.cs" />
