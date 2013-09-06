@@ -38,15 +38,15 @@ namespace Qorpent.IO.Tests.DirtyVersion {
         /// </summary>
         [Test]
         public void CanReadFromStreamWriteAndGive() {
-            var msFirst = new MemoryStream();
-            var msSecond = new MemoryStream();
-            msFirst.Write(Encoding.UTF8.GetBytes("test"), 0, 4);
-            msSecond.Write(Encoding.UTF8.GetBytes("tezt"), 0, 4);
-            //это первое - так с потоками не работают - после Write "голова" стрима в конце и соответственно
-            //всегда выдавался пустой поток, так что первый "фикс" такой:
-            msFirst.Position = 0;
-            msSecond.Position = 0;
-
+            //var msFirst = new MemoryStream();
+            //var msSecond = new MemoryStream();
+            //msFirst.Write(Encoding.UTF8.GetBytes("test"), 0, 4);
+            //msSecond.Write(Encoding.UTF8.GetBytes("tezt"), 0, 4);
+            
+            //второе зачем "писать" в MemoryStream
+            var msFirst = new MemoryStream(Encoding.UTF8.GetBytes("test"));
+            var msSecond = new MemoryStream(Encoding.UTF8.GetBytes("tezt"));
+            
             _dirtyVersionStorage.Save("testfile", msFirst);
             _dirtyVersionStorage.Save("testfile", msSecond);
 
