@@ -28,7 +28,6 @@ namespace Qorpent.Dot {
         /// <param name="color"></param>
         /// <returns></returns>
         public static ColorAttribute Single(Color color) {
-            if(null==color)throw new ArgumentNullException("color");
             var result = new ColorAttribute {Mode = ColorAttributeType.Single, Color = color};
             return result;
         }
