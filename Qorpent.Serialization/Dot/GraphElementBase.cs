@@ -99,5 +99,19 @@ namespace Qorpent.Dot {
 	    /// Код субграфа
 	    /// </summary>
 	    public string Code { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public object Data { get; set; }
+
+	    /// <summary>
+	    /// Сводит узлы
+	    /// </summary>
+	    /// <param name="otherNode"></param>
+	    public void Merge(GraphElementBase otherNode) {
+	        foreach (var a in otherNode.Attributes) {
+	            this.Attributes[a.Key] = a.Value;
+	        }
+	    }
 	}
 }

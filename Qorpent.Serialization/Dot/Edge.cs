@@ -159,7 +159,11 @@ namespace Qorpent.Dot {
         /// <summary>
         /// Код исходящего узла
         /// </summary>
-        public string To { get; set; }  
+        public string To { get; set; }
+        /// <summary>
+        /// Родительский подграф
+        /// </summary>
+	    public SubGraph Parent { get; set; }
 
 
 	    /// <summary>

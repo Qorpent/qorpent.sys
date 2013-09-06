@@ -1,4 +1,5 @@
-﻿using Qorpent.Utils.Extensions;
+﻿using System;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dot {
 	/// <summary>
@@ -150,6 +151,30 @@ namespace Qorpent.Dot {
         /// <summary>
         /// Содерджаший узел граф
         /// </summary>
-	    public SubGraph Subgraph { get; set; }
+	    public SubGraph Parent { get; set; }
+
+	    /// <summary>
+	    /// Создает типовой узел
+	    /// </summary>
+	    /// <param name="code"></param>
+	    /// <param name="label"></param>
+	    /// <param name="data"></param>
+	    /// <returns></returns>
+	    public static Node Create(string code,string label=null, object data=null) {
+	        return new Node {Code = code, Label = label,Data = data};
+	    }
+
+        /// <summary>
+        /// Создает типовой узел
+        /// </summary>
+        /// <returns></returns>
+        public static Node Create(string code,Action<Node> setup)
+        {
+            var result = new Node{Code=code};
+            if (null != setup) {
+                setup(result);
+            }
+            return result;
+        }
 	}
 }

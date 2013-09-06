@@ -15,6 +15,7 @@ namespace Qorpent.Dot
             CheckIfCompound();
             SetParentsForSubgraphs();
             MoveNodesToSubgraphs();
+            SetParentsForNodesAndEdges();
             base.AutoTune();
         }
 
@@ -27,8 +28,10 @@ namespace Qorpent.Dot
                 }
             }
         }
-
-        private void MoveNodesToSubgraphs()
+        /// <summary>
+        /// Перемещает узлы по подграфам
+        /// </summary>
+        public void MoveNodesToSubgraphs()
         {
             foreach (var n in Nodes.ToArray())
             {
@@ -36,7 +39,7 @@ namespace Qorpent.Dot
                 {
                     var sg = ResolveSubgraph(n.SubgraphCode);
                     sg.Nodes.Add(n);
-                    n.Subgraph = sg;
+                    n.Parent = sg;
                     Nodes.Remove(n);
                 }
             }

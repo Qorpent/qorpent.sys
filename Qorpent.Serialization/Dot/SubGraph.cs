@@ -19,6 +19,87 @@ namespace Qorpent.Dot {
         }
 
         /// <summary>
+        /// Добавляет или мержит нод
+        /// </summary>
+        /// <param name="newNode"></param>
+        /// <returns></returns>
+        public Node AddNode(Node newNode) {
+            var existed = ResolveNode(newNode.Code);
+            if (null != existed) {
+                existed.Merge(newNode);
+                return existed;
+            }
+            Nodes.Add(newNode);
+            newNode.Parent = this;
+            return newNode;
+        }
+
+
+        /// <summary>
+        /// Добавляет или мержит нод
+        /// </summary>
+        /// <returns></returns>
+        public Edge AddEdge(Edge newEdge, bool merge = true)
+        {
+            if (merge) {
+                var existed = ResolveEdge(newEdge.From, newEdge.To, newEdge.Type, false);
+                if (null != existed) {
+                    existed.Merge(newEdge);
+                    return existed;
+                }
+            }
+            Edges.Add(newEdge);
+            newEdge.Parent = this;
+            return newEdge;
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subgraph"></param>
+        public void AddSubGraph(SubGraph subgraph)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
+        /// <summary>
+        /// Добавляет узел к графу
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public static SubGraph operator +(SubGraph graph, Node node) {
+            graph.AddNode(node);
+            return graph;
+        }
+
+        /// <summary>
+        /// Добавляет узел к графу
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="edge"></param>
+        /// <returns></returns>
+        public static SubGraph operator +(SubGraph graph, Edge edge)
+        {
+            graph.AddEdge(edge);
+            return graph;
+        }
+
+        /// <summary>
+        /// Добавляет узел к графу
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="subgraph"></param>
+        /// <returns></returns>
+        public static SubGraph operator +(SubGraph graph, SubGraph subgraph) {
+            graph.AddSubGraph(subgraph);
+            return graph;
+        }
+
+       
+
+        /// <summary>
         ///     Подграфы
         /// </summary>
         public IList<SubGraph> SubGraphs { get; private set; }
@@ -272,6 +353,21 @@ namespace Qorpent.Dot {
             foreach (SubGraph sg in SubGraphs) {
                 sg.Parent = this;
                 sg.SetParentsForSubgraphs();
+            }
+        }
+
+        /// <summary>
+        /// Нормализует родителей для узлов и ребер
+        /// </summary>
+        public void SetParentsForNodesAndEdges() {
+            foreach (var n in Nodes) {
+                n.Parent = this;
+            }
+            foreach (var e in Edges) {
+                e.Parent = this;
+            }
+            foreach (var subGraph in SubGraphs) {
+                subGraph.SetParentsForNodesAndEdges();
             }
         }
     }
