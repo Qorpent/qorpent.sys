@@ -74,5 +74,13 @@ namespace Qorpent.IO.Tests.DirtyVersion {
 			var xmlinfo = s.ExplainAsXml(FILENAME);
 			Console.WriteLine(xmlinfo);
 		}
+
+        [Test]
+        public void Q146CanWriteSameContentTwiceIfItsHead()
+        {
+            var s = new DirtyVersionStorage(dir);
+            s.Save("testfile", "same");
+            s.Save("testfile", "same");
+        }
 	}
 }
