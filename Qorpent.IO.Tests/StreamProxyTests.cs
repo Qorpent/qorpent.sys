@@ -16,7 +16,9 @@ namespace Qorpent.IO.Tests {
             source.Write(Encoding.UTF8.GetBytes("test"), 0, 4);
             source.Position = 0;
 
-            proxy.Proxy(source, target1, target2);
+            var bytes = proxy.Proxy(source, target1, target2);
+            target1.Position -= bytes;
+            target2.Position -= bytes;
             var target1Got = new StreamReader(target1).ReadToEnd();
             var target2Got = new StreamReader(target2).ReadToEnd();
 

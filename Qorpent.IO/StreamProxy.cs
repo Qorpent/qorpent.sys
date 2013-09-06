@@ -32,7 +32,8 @@ namespace Qorpent.IO {
         /// </summary>
         /// <param name="source">Поток-источник</param>
         /// <param name="targets">Целевые потоки</param>
-        public void Proxy(Stream source, params Stream[] targets) {
+        /// <returns>Количество проксированных байт</returns>
+        public int Proxy(Stream source, params Stream[] targets) {
             if (!IsCorrectSourceStream(source)) {
                 throw new Exception("Incorrect source stream!");
             }
@@ -41,7 +42,7 @@ namespace Qorpent.IO {
                 throw new Exception("Incorrect target streams!");
             }
 
-            RollProxySync(source, targets);
+            return RollProxySync(source, targets);
         }
         /// <summary>
         ///     Проверяет поток-источник на валидность
@@ -69,7 +70,7 @@ namespace Qorpent.IO {
         /// </summary>
         /// <param name="source">Поток-источник</param>
         /// <param name="targets">Целевые потоки</param>
-        private void RollProxySync(Stream source, params Stream[] targets) {
+        private int RollProxySync(Stream source, params Stream[] targets) {
             var buffer = new byte[BufferSize];
             var offset = 0;
 
@@ -86,17 +87,7 @@ namespace Qorpent.IO {
                 }
             }
 
-            RewindStreamsPosition(targets, offset);
-        }
-        /// <summary>
-        ///     Переустанавливает позиции потоков на исходные, чтобы клиент могу их прочитать
-        /// </summary>
-        /// <param name="streams">Коллекция потоков</param>
-        /// <param name="offset">Смещение</param>
-        private void RewindStreamsPosition(IEnumerable<Stream> streams, int offset) {
-            foreach (var stream in streams) {
-                stream.Position -= offset;
-            }
+            return offset;
         }
     }
 }

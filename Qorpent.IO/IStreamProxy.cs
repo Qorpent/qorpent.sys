@@ -11,6 +11,7 @@ namespace Qorpent.IO {
         /// </summary>
         /// <param name="source">Поток-источник</param>
         /// <param name="targets">Целевые потоки</param>
-        void Proxy(Stream source, params Stream[] targets);
+        /// <returns>Количество проксированных байт</returns>
+        int Proxy(Stream source, params Stream[] targets);
     }
 }
