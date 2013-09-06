@@ -5,7 +5,7 @@ using Qorpent.IO.FileDescriptors;
 
 namespace Qorpent.IO.Storages {
     /// <summary>
-    ///     Хранилище файлов, основанное на 
+    ///     Хранилище файлов, основанное на DirtyVersion
     /// </summary>
     public class FileStorageDirtyVersion : IFileStorage {
         /// <summary>
