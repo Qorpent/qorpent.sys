@@ -38,14 +38,16 @@ namespace Qorpent.Utils.Extensions {
 			set { _helper = value; }
 		}
 
-		/// <summary>
-		/// Конвертирует исходный текст в сущности XML
-		/// </summary>
-		/// <param name="src"></param>
-		/// <param name="escapeQuots"></param>
-		/// <param name="altprefix"></param>
-		/// <returns></returns>
-		public static string GetUnicodeSafeXmlString(this string src, bool escapeQuots = false, string altprefix = null) {
+	    /// <summary>
+	    /// Конвертирует исходный текст в сущности XML
+	    /// </summary>
+	    /// <param name="src"></param>
+	    /// <param name="escapeQuots"></param>
+	    /// <param name="xws"></param>
+	    /// <param name="altprefix"></param>
+	    /// <param name="cws"></param>
+	    /// <returns></returns>
+	    public static string GetUnicodeSafeXmlString(this string src, bool escapeQuots = false, bool cws = false, bool xws=false, string altprefix = null) {
 			var builder = new StringBuilder();
 			foreach (char c in src)
 			{
@@ -76,6 +78,16 @@ namespace Qorpent.Utils.Extensions {
 						else if (c == '>') {
 							builder.Append("&gt;");
 						}
+                        else if ((cws||xws) &&(c == '\r' || c=='\n')) {
+                            if (cws) {
+                                if (c == '\r') builder.Append("\\\r");
+                                else builder.Append("\\\n");
+                            }
+                            else {
+                                if (c == '\r') builder.Append("&#0D;");
+                                else builder.Append("&#0A;");
+                            }
+                        }
 						else {
 							builder.Append(c);
 						}

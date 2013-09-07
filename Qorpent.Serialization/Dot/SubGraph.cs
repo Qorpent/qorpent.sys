@@ -9,6 +9,8 @@ namespace Qorpent.Dot {
     public class SubGraph : GraphElementBase {
         private readonly IDictionary<string, Edge[]> _edgeResolutionCache = new Dictionary<string, Edge[]>();
         private readonly IDictionary<string, Node> _nodeResolutionCache = new Dictionary<string, Node>();
+        private Node _defaultNode;
+        private Node _defaultEdge;
 
         /// <summary>
         /// </summary>
@@ -107,12 +109,28 @@ namespace Qorpent.Dot {
         /// <summary>
         ///     Узел по умолчанию
         /// </summary>
-        public Node DefaultNode { get; set; }
+        public Node DefaultNode {
+            get { return _defaultNode; }
+            set { 
+                _defaultNode = value; 
+                if (null != _defaultNode) {
+                    _defaultNode.Code = "node";
+                }
+            }
+        }
 
         /// <summary>
         ///     Ребро по умолванию
         /// </summary>
-        public Edge DefaultEdge { get; set; }
+        public Node DefaultEdge {
+            get { return _defaultEdge; }
+            set {
+                _defaultEdge = value;
+                if (null != _defaultEdge) {
+                    _defaultEdge.Code = "edge";
+                }
+            }
+        }
 
         /// <summary>
         ///     Узлы
@@ -223,8 +241,12 @@ namespace Qorpent.Dot {
         /// </summary>
         public override void AutoTune() {
             base.AutoTune();
-            DefaultNode.AutoTune();
-            DefaultEdge.AutoTune();
+            if (null != DefaultNode) {
+                DefaultNode.AutoTune();
+            }
+            if (null != DefaultEdge) {
+                DefaultEdge.AutoTune();
+            }
             foreach (var sg in SubGraphs) {
                 sg.AutoTune();
             }
@@ -241,7 +263,7 @@ namespace Qorpent.Dot {
         /// <param name="code"></param>
         /// <returns></returns>
         public SubGraph ResolveSubgraph(string code) {
-            var __code = DotLanguageUtils.EscapeCode(code);
+            var __code = DotLanguageUtils.GetClusterCode(code);
             if (Code == __code) return this;
             return SubGraphs.Select(sg => sg.ResolveSubgraph(__code))
                             .FirstOrDefault(sgres => null != sgres);

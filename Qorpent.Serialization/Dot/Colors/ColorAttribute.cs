@@ -37,7 +37,7 @@ namespace Qorpent.Dot {
         public static ColorAttribute Multiple(ColorList colorList)
         {
             if (null == colorList || 0 == colorList.Count) throw new ArgumentException("items must be given", "colorList");
-            var result = new ColorAttribute { Mode = ColorAttributeType.Single, ColorList = colorList };
+            var result = new ColorAttribute { Mode = ColorAttributeType.Multiple, ColorList = colorList };
             return result;
         }
         /// <summary>

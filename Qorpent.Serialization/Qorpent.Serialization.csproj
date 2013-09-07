@@ -38,6 +38,7 @@
     <Compile Include="BSharp\Schema\Schema.cs" />
     <Compile Include="BSharp\Schema\SchemaNote.cs" />
     <Compile Include="Dot\DotLanguageUtils.cs" />
+    <Compile Include="Dot\DotTypes\Arrow.cs" />
     <Compile Include="Dot\DotTypes\ArrowType.cs" />
     <Compile Include="Dot\Cluster.cs" />
     <Compile Include="Dot\Colors\Color.cs" />
@@ -45,6 +46,7 @@
     <Compile Include="Dot\Colors\ColorList.cs" />
     <Compile Include="Dot\Colors\ColorListItem.cs" />
     <Compile Include="Dot\Colors\ColorAttribute.cs" />
+    <Compile Include="Dot\DotTypes\AttributeHelper.cs" />
     <Compile Include="Dot\Graph.cs" />
     <Compile Include="Dot\DotTypes\GraphSplinesType.cs" />
     <Compile Include="Dot\DotTypes\GraphStyleType.cs" />

@@ -1,168 +1,205 @@
-﻿namespace Qorpent.Dot {
+﻿using System;
+
+namespace Qorpent.Dot {
 	/// <summary>
 	/// Типы форм узлов
 	/// </summary>
-	public enum ArrowType {
-		/// <summary>
-		/// Черный квадратик
-		/// </summary>
-        Box,
-        /// <summary>
-		/// Префикс L  оставляет только часть слева от края от основной формы (здесь левая половинка квадрата). 
-		/// </summary>
-        LBox,
-        /// <summary>
-        /// Префикс R  оставляет только часть справа от края от основной формы (здесь правая половинка квадрата). 
-        /// </summary>
-        RBox,
-        /// <summary>
-        /// Префикс O  оставляет форму открытой (без заливки) (здесь пустой квадрат)
-        /// </summary>
-        OBox,
-        /// <summary>
-        /// Сочетание префиксов O  и L оставляет только пустую часть слева от края от основной формы (здесь пустая левая половинка квадрата)
-        /// </summary>
-        OLBox,
-        /// <summary>
-        /// Сочетание префиксов O  и R оставляет только пустую часть справа от края от основной формы (здесь пустая правая половинка квадрата)
-        /// </summary>
-        ORBox, 
-        /// <summary>
-        /// Стрелка наоборот
-        /// </summary>
-        Crow,
-        /// <summary>
-        /// Левая часть стрелки наоборот
-        /// </summary>
-        LCrow,
-        /// <summary>
-        /// Правая часть стрелки наоборот
-        /// </summary>
-        RCrow,
-        /// <summary>
-        /// Якорь
-        /// </summary>
-        Сurve,
-        /// <summary>
-        /// Левая часть якоря
-        /// </summary>
-        LСurve,
-        /// <summary>
-        /// Правая часть якоря 
-        /// </summary>
-        RСurve,
-        /// <summary>
-        /// Ромб
-        /// </summary>
-        Diamond,
-        /// <summary>
-        /// Левая часть ромба
-        /// </summary>
-        LDiamond,
-        /// <summary>
-        /// Правая часть ромба 
-        /// </summary>
-        RDiamond,
-        /// <summary>
-        /// Пустой ромб
-        /// </summary>
-        ODiamond,
-        /// <summary>
-        /// Пустая левая часть ромба
-        /// </summary>
-        OLDiamond,
-        /// <summary>
-        /// Пустая правая часть ромба
-        /// </summary>
-        ORDiamond, 
-        /// <summary>
-        /// Точка (кружек)
-        /// </summary>
-        Dot,
-        /// <summary>
-        /// Пустая точка (кружек)
-        /// </summary>
-        ODot,
-        /// <summary>
-        /// Треугольник наоборот 
-        /// </summary>
-        Inv,
-        /// <summary>
-        /// Левая часть треугольника наоборот
-        /// </summary>
-        LInv,
-        /// <summary>
-        /// Правая часть треугольника наоборот 
-        /// </summary>
-        RInv,
-        /// <summary>
-        /// Пустой треугольник наоборот
-        /// </summary>
-        OInv,
-        /// <summary>
-        /// Пустая левая часть треугольника наоборот
-        /// </summary>
-        OLInv,
-        /// <summary>
-        /// Пустая правая часть треугольника наоборот
-        /// </summary>
-        ORInv, 
+    [Flags]
+    public enum ArrowType {
+
         /// <summary>
         /// Ничего 
         /// </summary>
-        None,
+        None=1,
         /// <summary>
-        /// Стрелка-треугольник
+        /// Обычная стрелка
         /// </summary>
-        Normal,
+        Normal = 1 << 1,
+       
+		/// <summary>
+		/// Черный квадратик
+		/// </summary>
+        Box=1<<2,
         /// <summary>
-        /// Левая часть стрелки-треугольника
+        /// Якорь
         /// </summary>
-        LNormal,
+        Curve = 1 << 3,
         /// <summary>
-        /// Правая часть стрелки-треугольника 
+        /// Ромб
         /// </summary>
-        RNormal,
+        Diamond = 1 << 4,
         /// <summary>
-        /// Пустая стрелка-треугольник
+        /// Развернутая стрелка
         /// </summary>
-        ONormal,
+        Crow = 1<<5,
         /// <summary>
-        /// Пустая левая часть стрелки-треугольника
+        /// Точка (кружек)
         /// </summary>
-        OLNormal,
+        Dot = 1<<6,
         /// <summary>
-        /// Пустая правая часть стрелки-треугольника
+        /// Треугольник наоборот 
         /// </summary>
-        ORNormal, 
+        Inv = 1<<7,
         /// <summary>
         /// Прямоугольник
         /// </summary>
-        Tee,
+        Tee = 1<<8,
         /// <summary>
-        /// Левая часть прямоугольника
+        /// Стрелка вогнутая
         /// </summary>
-        LTee,
+        Vee =1<<9,
         /// <summary>
-        /// Правая часть прямоугольника 
+        /// Все формы
         /// </summary>
-        RTee,
+        Forms = Inv | Box | Curve | Diamond | Crow | Inv | Tee | Vee |None|Dot,
+        /// <summary>Inv | Box | Curve | Diamond | Crow | Inv | Tee | Vee,
+        /// Стрелки с поддержкой право-лево
+        /// </summary>
+        SideAble = Inv | Box | Curve | Diamond | Crow | Inv | Tee | Vee,
         /// <summary>
-        /// Стрелка обычная
+        /// Стрелки с поддержкой пустоты
         /// </summary>
-        Vee,
+        EmptyAble = Inv|Box|Diamond|Dot|Inv,
+       
         /// <summary>
-        /// Левая часть стрелки обычной
+        /// Оставить левую половину шейпа
         /// </summary>
-        LVee,
+        Left =1<<10,
         /// <summary>
-        /// Правая часть стрелки обычной
+        /// Оставить правую половину шейпа
         /// </summary>
-        RVee,
+        Right = 1<<11,
+        /// <summary>
+        /// Пустой
+        /// </summary>
+        Empty = 1<<12,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        LNormal = Normal | Left,
+        /// <summary>
+        /// 
+        /// </summary>
+        RNormal = Normal | Right,
+        /// <summary>
+        /// 
+        /// </summary>
+        ONormal = Normal | Empty,
+        /// <summary>
+        /// 
+        /// </summary>
+        RONormal = Normal|Right|Empty,
+        /// <summary>
+        /// 
+        /// </summary>
+        LONormal = Normal|Left|Empty,
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        LBox = Box | Left,
+        /// <summary>
+        /// 
+        /// </summary>
+        RBox = Box | Right,
+        /// <summary>
+        /// 
+        /// </summary>
+        OBox = Box | Empty,
+        /// <summary>
+        /// 
+        /// </summary>
+        ROBox = Box | Right | Empty,
+        /// <summary>
+        /// 
+        /// </summary>
+        LOBox = Box | Left | Empty,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        LDiamond = Diamond | Left,
+        /// <summary>
+        /// 
+        /// </summary>
+        RDiamond = Diamond | Right,
+        /// <summary>
+        /// 
+        /// </summary>
+        ODiamond = Diamond | Empty,
+        /// <summary>
+        /// 
+        /// </summary>
+        RODiamond = Diamond | Right | Empty,
+        /// <summary>
+        /// 
+        /// </summary>
+        LODiamond = Diamond | Left | Empty,
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        LInv = Inv | Left,
+        /// <summary>
+        /// 
+        /// </summary>
+        RInv = Inv | Right,
+        /// <summary>
+        /// 
+        /// </summary>
+        OInv = Inv | Empty,
+        /// <summary>
+        /// 
+        /// </summary>
+        ROInv = Inv | Right | Empty,
+        /// <summary>
+        /// 
+        /// </summary>
+        LOInv = Inv | Left | Empty,
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        LTee = Tee | Left,
+        /// <summary>
+        /// 
+        /// </summary>
+        RTes = Tee | Right,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        LVee = Vee | Left,
+        /// <summary>
+        /// 
+        /// </summary>
+        RVee = Vee | Right,
+        /// <summary>
+        /// 
+        /// </summary>
+        LCurve = Curve | Left,
+        /// <summary>
+        /// 
+        /// </summary>
+        RCurve = Curve | Right,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        LCrow = Crow | Left,
+        /// <summary>
+        /// 
+        /// </summary>
+        RCrow = Crow | Right,
+        /// <summary>
+        /// 
+        /// </summary>
+        ODot  =Dot|Empty,
         
-
-
-
-
 	}
 }

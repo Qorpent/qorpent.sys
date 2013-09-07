@@ -9,6 +9,6 @@
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        string GenerateGraphScript(GraphOptions parameters);
+        string GenerateGraphScript(GraphOptions parameters = null);
     }
 }

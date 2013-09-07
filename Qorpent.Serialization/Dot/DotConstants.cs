@@ -157,6 +157,19 @@
         ///  Минимальная длина ребра в рангах (разница между головой и хвостом). По умолчанию 1, минимальная 0
         /// </summary>        
         public const string MinlenAttribute = "minlen";
-    }
+
+        /// <summary>
+        /// Атрибут стиля
+        /// </summary>        
+        public const string StyleAttribute = "style";
+        /// <summary>
+        /// Цвет заливки
+        /// </summary>        
+        public const string FillColorAttribute = "fillcolor";
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public const string IdAttribute = "id";
+	}
 
 }

@@ -35,6 +35,8 @@ namespace Qorpent.Dot {
 			Attributes[code] = value;
 		}
 
+        
+
 		/// <summary>
 		/// Заголовок
 		/// </summary>
@@ -96,6 +98,21 @@ namespace Qorpent.Dot {
             }
         }
 
+        /// <summary>
+        /// Заголовок
+        /// </summary>
+        public string Id
+        {
+            get
+            {
+                return Get<string>(DotConstants.IdAttribute);
+            }
+            set
+            {
+                Set(DotConstants.IdAttribute, value);
+            }
+        }
+
 	    /// <summary>
 	    /// Код субграфа
 	    /// </summary>
@@ -103,6 +120,8 @@ namespace Qorpent.Dot {
             get { return string.IsNullOrWhiteSpace(_code) ? (_code = DotLanguageUtils.NULLCODE) : _code; }
 	        set { _code = DotLanguageUtils.EscapeCode(value);}
 	    }
+
+        
 
 	    /// <summary>
         /// 

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dot
 {
@@ -42,6 +43,18 @@ namespace Qorpent.Dot
        /// ФОрмат представления чисел
        /// </summary>
         public const string NUMBERFORMAT = "0.####";
+        /// <summary>
+        /// Кавычка
+        /// </summary>
+        public const string QUOT = "\"";
+        /// <summary>
+        /// Признак атрибута с URL
+        /// </summary>
+        public const string ATTRWITHURL = "URL";
+        /// <summary>
+        /// Признак атрибута с HREF
+        /// </summary>
+        public const string ATTRWITHHREF = "href";
 
         /// <summary>
         /// Приводит код узла к нормальной форме
@@ -80,26 +93,24 @@ namespace Qorpent.Dot
         /// <param name="code"></param>
         /// <returns></returns>
         public static string UnEscapeCode(string code) {
-            if (-1 == code.IndexOf(NONLITERALSUBSTPREFIX)) {
+            if (-1 == code.IndexOf(NONLITERALSUBSTPREFIX, StringComparison.Ordinal)) {
                 return code;
             }
             var sb = new StringBuilder();
-            int curidx = 0;
+            var curidx = 0;
             while (true) {
-                var idx = code.IndexOf(NONLITERALSUBSTPREFIX, curidx);
+                var idx = code.IndexOf(NONLITERALSUBSTPREFIX, curidx, StringComparison.Ordinal);
                 if (-1 == idx) {
                     sb.Append(code.Substring(curidx));
                     break;
                 }
-                else {
-                    if (idx > curidx) {
-                        sb.Append(code.Substring(curidx, idx - curidx));
-                    }
-                    idx += NONLITERALSUBSTPREFIX.Length;
-                    var hex = code.Substring(idx, HEXSIZE);
-                    curidx = idx+HEXSIZE;
-                    sb.Append((char)short.Parse(hex, NumberStyles.HexNumber));
+                if (idx > curidx) {
+                    sb.Append(code.Substring(curidx, idx - curidx));
                 }
+                idx += NONLITERALSUBSTPREFIX.Length;
+                var hex = code.Substring(idx, HEXSIZE);
+                curidx = idx+HEXSIZE;
+                sb.Append((char)short.Parse(hex, NumberStyles.HexNumber));
             }
             return sb.ToString();
         }
@@ -118,9 +129,24 @@ namespace Qorpent.Dot
         /// <returns></returns>
         public static bool IsLiteral(string s) {
             if (string.IsNullOrWhiteSpace(s)) return false;
-            if (!char.IsLetter(s[0])) return false;
+            var fst = s[0];
+            if (!(fst=='_'||char.IsLetter(s[0]))) return false;
             return s.All(IsLiteral);
         }
+        /// <summary>
+        /// Конвертирует переданную строку в код кластера
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public static string GetClusterCode(string code) {
+            if (!code.StartsWith("cluster"))
+            {
+                code = "cluster_" + code;
+            }
+            return EscapeCode(code);
+
+        }
+       
         /// <summary>
         /// Готовит атрибут к рендерингу
         /// </summary>
@@ -133,12 +159,42 @@ namespace Qorpent.Dot
             if (attrvalue is decimal) return ((decimal) attrvalue).ToString(NUMBERFORMAT, CultureInfo.InvariantCulture);
             if (attrvalue is double) return ((double)attrvalue).ToString(NUMBERFORMAT, CultureInfo.InvariantCulture);
             if (attrvalue is bool) return ((bool) attrvalue).ToString().ToLower();
+            if (attrvalue is string) {
+                return GetStringAttributeValue(attrname,(string) attrvalue);
+            }
             if (attrvalue is NodeStyleType) {
                 return ((NodeStyleType) attrvalue).GetAttributeString();
             }
             if (attrvalue is NodeShapeType) {
                 return ((NodeShapeType) attrvalue).GetAttributeString();
             }
+            
+            if (attrvalue.GetType().IsEnum) {
+                return attrvalue.ToString().ToLower();
+            }
+            if (attrvalue is ColorAttribute) {
+                var ca = attrvalue as ColorAttribute;
+                if (ca.Mode == ColorAttributeType.Multiple) {
+                    return QUOT + ca + QUOT;
+                }
+                return ca.ToString();
+            }
+            return attrvalue.ToString();
         }
+        
+        private static string GetStringAttributeValue(string attrname, string attrvalue) {
+            if (string.IsNullOrEmpty(attrvalue)) return EMPTYSTRING;
+            var safe = attrvalue.GetUnicodeSafeXmlString(escapeQuots:true,cws:true);
+            //в случае литерала и отсутствия признаков изменений без кавычек
+            if (IsLiteral(safe) && safe==attrvalue) {
+                return safe;
+            }
+            if (attrname.Contains(ATTRWITHURL) || attrname.Contains(ATTRWITHHREF)) {
+                safe = Uri.EscapeUriString(safe).Replace("+", Uri.HexEscape('+'));
+            }
+            return QUOT + safe + QUOT;
+        }
+       
+        
     }
 }

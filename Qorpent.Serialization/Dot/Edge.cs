@@ -1,4 +1,5 @@
-﻿using Qorpent.Utils.Extensions;
+﻿using System;
+using Qorpent.Utils.Extensions;
 namespace Qorpent.Dot {
 	/// <summary>
 	/// Ребро графа
@@ -10,9 +11,9 @@ namespace Qorpent.Dot {
 	    /// <summary>
         /// Форма конца стрелки
         /// </summary>
-        public ArrowType ArrowHead
+        public Arrow ArrowHead
         {
-            get { return Get<ArrowType>(DotConstants.ArrowHeadAttribute); }
+            get { return Get<Arrow>(DotConstants.ArrowHeadAttribute); }
             set
             {
                 Set(DotConstants.ArrowHeadAttribute, value);
@@ -21,9 +22,9 @@ namespace Qorpent.Dot {
         /// <summary>
         /// Форма начала стрелки
         /// </summary>
-        public ArrowType ArrowTail
+        public Arrow ArrowTail
         {
-            get { return Get<ArrowType>(DotConstants.ArrowTailAttribute); }
+            get { return Get<Arrow>(DotConstants.ArrowTailAttribute); }
             set
             {
                 Set(DotConstants.ArrowTailAttribute, value);
@@ -192,12 +193,20 @@ namespace Qorpent.Dot {
 			}
 		}
 
-   
-    
-    
-    
-    
-    
-    
-    }
+	    /// <summary>
+	    /// Создает ребро
+	    /// </summary>
+	    /// <param name="from"></param>
+	    /// <param name="to"></param>
+	    /// <param name="data"></param>
+	    /// <param name="setup"></param>
+	    /// <returns></returns>
+	    public static Edge Create(string from, string to, object data=null, Action<Edge> setup=null) {
+	        var result = new Edge {From = from, To = to, Data = data};
+            if (null != setup) {
+                setup(result);
+            }
+	        return result;
+	    }
+	}
 }

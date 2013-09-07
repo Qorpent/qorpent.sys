@@ -12,28 +12,18 @@ namespace Qorpent.Dot {
 		public NodeShapeType Shape {
 			get { return Get<NodeShapeType>(DotConstants.ShapeAttribute); }
 			set {
-                /* //TODO move case
-                var str = value.ToStr().ToLower();
-                if (str == "mcircle")
-                {
-                    str = "Mcircle";
-                }
-                else if (str == "mdiamond")
-                {
-                    str = "Mdiamond";
-                }
-                else if (str == "msquare")
-                {
-                    str = "Msquare";
-                }
-                else if (str == "mrecord")
-                {
-                    str = "Mrecord";
-                } 
-                 */
+                
                 Set(DotConstants.ShapeAttribute,value); 
             }
 		}
+
+        /// <summary>
+        /// Стиль
+        /// </summary>
+	    public NodeStyleType Style {
+	        get { return Get<NodeStyleType>(DotConstants.StyleAttribute); }
+            set { Set(DotConstants.StyleAttribute,value);}
+	    }
         /// <summary>
         /// Целевой подграф
         /// </summary>
@@ -152,6 +142,14 @@ namespace Qorpent.Dot {
         /// Содерджаший узел граф
         /// </summary>
 	    public SubGraph Parent { get; set; }
+        /// <summary>
+        /// Цвет заливки
+        /// </summary>
+        public ColorAttribute FillColor
+        {
+            get { return Get<ColorAttribute>(DotConstants.FillColorAttribute); }
+	        set { Set(DotConstants.FillColorAttribute,value);}
+	    }
 
 	    /// <summary>
 	    /// Создает типовой узел
@@ -161,7 +159,7 @@ namespace Qorpent.Dot {
 	    /// <param name="data"></param>
 	    /// <returns></returns>
 	    public static Node Create(string code,string label=null, object data=null) {
-	        return new Node {Code = code, Label = label,Data = data};
+	        return new Node {Code = code, Label = label ?? code,Data = data};
 	    }
 
         /// <summary>
