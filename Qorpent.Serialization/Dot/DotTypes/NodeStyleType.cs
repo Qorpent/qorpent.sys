@@ -1,49 +1,50 @@
-﻿namespace Qorpent.Dot {
+﻿using System;
+
+namespace Qorpent.Dot {
 	/// <summary>
 	/// Стили узлов
 	/// </summary>
+	[Flags]
 	public enum NodeStyleType {
+        /// <summary>
+        /// Отсутствие стиля
+        /// </summary>
+        None =0,
 		/// <summary>
 		/// Сплошная граница узла
 		/// </summary>
-        Solid,
+        Solid =1,
         /// <summary>
         /// Пунктирная граница узла 
 		/// </summary>
-        Dashed,
+        Dashed=1<<1,
         /// <summary>
         /// Точечная граница узла 
         /// </summary>
-        Dotted,
+        Dotted=1<<2,
         /// <summary>
         /// Сплошная жирная граница узла
         /// </summary>
-        Bold,
+        Bold =1<<3,
         /// <summary>
         /// Округляет углы фигуры узла
         /// </summary>
-        Rounded,
+        Rounded=1<<4,
         /// <summary>
         /// Диагональные черты внутри узла
         /// </summary>
-        Diagonals, 
+        Diagonals=1<<5, 
         /// <summary>
         /// Заполнение тела  узла цветом (серым по умолчанию)
         /// </summary>
-        Filled,
+        Filled =1<<6,
         /// <summary>
         /// На три сектора разбит круг с разными цветами, но у меня не воспроизводится....????
         /// </summary>
-        Wedged,
+        Wedged =1<<7,
         /// <summary>
         /// На три сектора разбит прямоугольник с разными цветами, но у меня не воспроизводится....????
         /// </summary>
-        Striped,
-        
-        
-
-
-
-
+        Striped =1<<8
 	}
 }

@@ -1,11 +1,12 @@
 ﻿using System.Linq;
+using Qorpent.Serialization;
 
 namespace Qorpent.Dot
 {
     /// <summary>
     /// Полный граф
     /// </summary>
-    public class Graph : SubGraph
+    public class Graph : SubGraph, IGraphConvertible
     {
         /// <summary>
         /// Тут автоматическое наведение порядка по графу
@@ -43,6 +44,16 @@ namespace Qorpent.Dot
                     Nodes.Remove(n);
                 }
             }
+        }
+
+        /// <summary>
+        /// Возвращает скрипт графа на целевом языке
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public string GenerateGraphScript(GraphOptions parameters) {
+            var render = GraphRender.Create(this,parameters);
+            return render.GenerateGraphScript(parameters);
         }
     }
 }

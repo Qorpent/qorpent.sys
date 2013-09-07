@@ -241,8 +241,9 @@ namespace Qorpent.Dot {
         /// <param name="code"></param>
         /// <returns></returns>
         public SubGraph ResolveSubgraph(string code) {
-            if (Code == code) return this;
-            return SubGraphs.Select(sg => sg.ResolveSubgraph(code))
+            var __code = DotLanguageUtils.EscapeCode(code);
+            if (Code == __code) return this;
+            return SubGraphs.Select(sg => sg.ResolveSubgraph(__code))
                             .FirstOrDefault(sgres => null != sgres);
         }
 
@@ -261,16 +262,17 @@ namespace Qorpent.Dot {
         /// <param name="code"></param>
         /// <param name="cached"></param>
         /// <returns></returns>
-        public Node ResolveNode(string code, bool cached = true)
-        {
+        public Node ResolveNode(string code, bool cached = true) {
+            
             if (null != Parent) return Parent.ResolveNode(code);
-            if (cached && _nodeResolutionCache.ContainsKey(code)) {
-                return _nodeResolutionCache[code];
+            var __code = DotLanguageUtils.EscapeCode(code);
+            if (cached && _nodeResolutionCache.ContainsKey(__code)) {
+                return _nodeResolutionCache[__code];
             }
             
-            var resolved = EnumerateNodes().FirstOrDefault(_ => _.Code == code);
+            var resolved = EnumerateNodes().FirstOrDefault(_ => _.Code == __code);
             if (cached && null != resolved) {
-                _nodeResolutionCache[code] = resolved;
+                _nodeResolutionCache[__code] = resolved;
             }
             return resolved;
         }
@@ -279,9 +281,8 @@ namespace Qorpent.Dot {
         ///     Метод резолюции узлов
         /// </summary>
         /// <returns></returns>
-        public Edge ResolveEdge(string from, string to, string type = null, bool cached = true)
-        {
-            Edge[] edges = ResolveEdges(from, to,cached);
+        public Edge ResolveEdge(string from, string to, string type = null, bool cached = true) {
+            Edge[] edges = ResolveEdges(from,to,cached);
             if (null == edges) return null;
             if (0 == edges.Length) return null;
             if (string.IsNullOrWhiteSpace(type)) {
@@ -296,11 +297,13 @@ namespace Qorpent.Dot {
         /// <returns></returns>
         public Edge[] ResolveEdges(string from, string to,bool cached = true) {
             if (null != Parent) return Parent.ResolveEdges(from, to);
+            var __from = DotLanguageUtils.EscapeCode(from);
+            var __to = DotLanguageUtils.EscapeCode(to);
             var key = from + "->" + to;
             if (cached && _edgeResolutionCache.ContainsKey(key)) {
                 return _edgeResolutionCache[key];
             }
-            var resolved = EnumerateEdges().Where(_ => _.From == from && _.To == to).ToArray();
+            var resolved = EnumerateEdges().Where(_ => _.From == __from && _.To == __to).ToArray();
             if (cached) {
                 _edgeResolutionCache[key] = resolved;
             }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dot {
@@ -6,11 +8,14 @@ namespace Qorpent.Dot {
 	/// Базовые свойства элементов графа
 	/// </summary>
 	public abstract class GraphElementBase {
-		/// <summary>
+	    /// <summary>
 		/// 
 		/// </summary>
 		public IDictionary<string, object> Attributes = new Dictionary<string, object>();
-		/// <summary>
+
+	    private string _code;
+
+	    /// <summary>
 		/// Защищенный метод доступа к атрибутам на чтение
 		/// </summary>
 		/// <param name="code"></param>
@@ -61,13 +66,9 @@ namespace Qorpent.Dot {
 
             }
         }
-        
-        
-        
-        
-            
 
-		/// <summary>
+
+	    /// <summary>
 		/// Автонастройка
 		/// </summary>
 		public virtual void AutoTune() {
@@ -98,8 +99,12 @@ namespace Qorpent.Dot {
 	    /// <summary>
 	    /// Код субграфа
 	    /// </summary>
-	    public string Code { get; set; }
-        /// <summary>
+	    public string Code {
+            get { return string.IsNullOrWhiteSpace(_code) ? (_code = DotLanguageUtils.NULLCODE) : _code; }
+	        set { _code = DotLanguageUtils.EscapeCode(value);}
+	    }
+
+	    /// <summary>
         /// 
         /// </summary>
         public object Data { get; set; }
@@ -110,7 +115,7 @@ namespace Qorpent.Dot {
 	    /// <param name="otherNode"></param>
 	    public void Merge(GraphElementBase otherNode) {
 	        foreach (var a in otherNode.Attributes) {
-	            this.Attributes[a.Key] = a.Value;
+	            Attributes[a.Key] = a.Value;
 	        }
 	    }
 	}

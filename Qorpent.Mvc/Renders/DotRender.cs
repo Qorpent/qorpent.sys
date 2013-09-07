@@ -3,6 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
+using Qorpent.IO;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Renders {
@@ -11,26 +14,50 @@ namespace Qorpent.Mvc.Renders {
 	/// </summary>
 	[Render("dot")]
 	public class DotRender : RenderBase {
-		private string _dotpath;
+        /// <summary>
+        /// Параметр указания целевого формата, по умолчанию SVG
+        /// </summary>
+	    public const string FORMATPARAM = "__format";
+        /// <summary>
+        /// Параметр указания алгоритма по умолчанию DOT
+        /// </summary>
+	    public const string ALGORITHMPARAM = "__algorithm";
+        /// <summary>
+        /// Параметр включения тюнинга графа
+        /// </summary>
+	    public const string TUNEPARAM = "__tune";
+        /// <summary>
+        /// Префикс парамтеров перекрытия настрок графа
+        /// </summary>
+	    public const string OVERRIDEPARAMPREFIX = "g.";
+
+	    const string ENDOFSVGMARKER = "</svg>";
+	    const string PNGENDMARKER = "IEND";
+        const int INITIAL_PNG_BUFFER_SIZE = 8; //size of initial title and start of chank length;
+        const int CHUNK_LENGTH_BLOCK_SIZE = 4;
+        const int CHUNK_TYPE_BLOCK_SIZE = 4;
+        const int CHUNK_SRC_BLOCK_SIZE = 4;
+
+	    private string _dotpath;
 		/// <summary>
 		/// 	Renders given context
 		/// </summary>
 		/// <param name="context"> </param>
 		public override void Render(IMvcContext context)
 		{
-			var dotscript = ExtractDotScript(context);
-			var format = context.Get("__format", "svg");
-			context.ContentType = ReolveContentType(format);
-			var p = GetProcess(format);
+            var options = ExtractOptions(context);
+		    var dotscript = ExtractDotScript(options);
+		    context.ContentType = MimeHelper.GetMimeByExtension(options.Format);
+			var p = GetProcess(options);
 			p.Start();
 			try {
 				var script = dotscript.GetUnicodeSafeXmlString();
 				p.StandardInput.WriteLine(script);
-				if (format == "svg") {
-					WriteOutSvg(context, p);
+				if (options.Format == GraphOptions.PNGFORMAT) {
+					WriteOutSvg(context, p,options);
 				}
 				else {
-					WriteOutPng(context, p);
+					WriteOutPng(context, p,options);
 				}
 			}
 			finally {
@@ -38,11 +65,26 @@ namespace Qorpent.Mvc.Renders {
 			}
 		}
 
-		private static void WriteOutPng(IMvcContext context, Process p) {
-			const int INITIAL_PNG_BUFFER_SIZE = 8; //size of initial title and start of chank length;
-			const int CHUNK_LENGTH_BLOCK_SIZE = 4;
-			const int CHUNK_TYPE_BLOCK_SIZE = 4;
-			const int CHUNK_SRC_BLOCK_SIZE = 4;
+	    private static GraphOptions ExtractOptions(IMvcContext context) {
+	        var format = context.Get(FORMATPARAM, GraphOptions.SVGFORMAT);
+	        var algorithm = context.Get(ALGORITHMPARAM, GraphOptions.DOTAGORITHM);
+	        var tune = context.Get(TUNEPARAM, true);
+	        var overrides = context.GetAll(OVERRIDEPARAMPREFIX);
+	        var options = new GraphOptions {
+	            Tune = tune,
+	            Algorithm = algorithm,
+	            Format = format,
+	            Dialect = GraphOptions.DOTDIALECT
+	        };
+	        foreach (var o in overrides) {
+	            options.OverrideGraphAttributes[o.Key] = o.Value;
+	        }
+	        options.Context = context;
+	        return options;
+	    }
+
+	    private static void WriteOutPng(IMvcContext context, Process p, GraphOptions options) {
+			
 			var buffer = new byte[INITIAL_PNG_BUFFER_SIZE];
 			var s = p.StandardOutput.BaseStream;
 			var idx = 0;
@@ -59,7 +101,7 @@ namespace Qorpent.Mvc.Renders {
 				idx += subbuf.Length;
 				s.Read(subbuf, 0, CHUNK_TYPE_BLOCK_SIZE);
 				var str = Encoding.ASCII.GetString(subbuf);
-				if (str == "IEND")
+				if (str == PNGENDMARKER)
 				{
 					endchunk = true;
 				}
@@ -78,20 +120,27 @@ namespace Qorpent.Mvc.Renders {
 			context.WriteOutBytes(buffer);
 		}
 
-		private static void WriteOutSvg(IMvcContext context, Process p) {
+		private static void WriteOutSvg(IMvcContext context, Process p, GraphOptions options) {
 			var result = "";
 			var line = "";
 			while (true) {
 				line = p.StandardOutput.ReadLine();
 				result += line;
-				if (line.Contains("</svg>")) break;
+				if (line.Contains(ENDOFSVGMARKER)) break;
 			}
-			context.Output.Write(result);
+		    if (options.Context.ActionResult is IGraphSource) {
+		        var xml = XElement.Parse(result);
+		        xml = ((IGraphSource) options.Context.ActionResult).PostprocessGraphSvg(xml, options);
+                context.Output.Write(xml.ToString());
+		    }
+		    else {
+		        context.Output.Write(result);
+		    }
 		}
 
-		private Process GetProcess(string format) {
-			var callargs = "-T" + format;
-			var process_start = new ProcessStartInfo(ResolveDotPath(), callargs) {
+		private Process GetProcess(GraphOptions options) {
+			var callargs = "-T" + options.Format;
+			var process_start = new ProcessStartInfo(ResolveDotPath(options), callargs) {
 				UseShellExecute = false,
 				CreateNoWindow = true,
 				RedirectStandardOutput = true,
@@ -102,11 +151,7 @@ namespace Qorpent.Mvc.Renders {
 			return p;
 		}
 
-		private string ReolveContentType(string format) {
-			if ("svg" == format) return "image/svg+xml";
-			if ("png" == format) return "image/png";
-			throw new Exception("unknown format " + format);
-		}
+		
 
 		/// <summary>
 		/// 	Renders error, occured in given context
@@ -120,29 +165,33 @@ namespace Qorpent.Mvc.Renders {
 
 		}
 
-		private string ResolveDotPath() {
+		private string ResolveDotPath(GraphOptions options) {
 			if (null != _dotpath) {
-				return _dotpath;
+				return Path.Combine(_dotpath,options.Algorithm+".exe");
 			}
 			var paths = Environment.GetEnvironmentVariable("PATH").Split(';');
 			foreach (var p in paths) {
 				var realp = Environment.ExpandEnvironmentVariables(p.Trim());
-				var checkpath = Path.Combine(realp, "dot.exe");
+				var checkpath = Path.Combine(realp, options.Algorithm+".exe");
 				if (File.Exists(checkpath)) {
-					return _dotpath = checkpath;
+					return _dotpath = realp;
 				}
 			}
-			throw new Exception("cannot find dot.exe");
+			throw new Exception("cannot find "+options.Algorithm+".exe");
 		}
 
-		private string ExtractDotScript(IMvcContext context) {
-			var result = context.ActionResult;
+		private string ExtractDotScript(GraphOptions options) {
+			var result = options.Context.ActionResult;
 			var dotscript = "";
 			if (null == result) {
 				dotscript = "digraph N{ null }";
 			}
 			else if (result is string) {
 				dotscript = (string) result;
+			}else if (result is IGraphConvertible) {
+			    dotscript = ((IGraphConvertible) result).GenerateGraphScript(options);
+			}else if (result is IGraphSource) {
+			    dotscript = ((IGraphSource) result).BuildGraph(options).GenerateGraphScript(options);
 			}
 			else {
 				dotscript = ConvertToDotScript(result);

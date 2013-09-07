@@ -4,7 +4,10 @@ namespace Qorpent.Dot {
 	/// Ребро графа
 	/// </summary>
 	public class Edge : GraphElementBase {
-        /// <summary>
+	    private string _from;
+	    private string _to;
+
+	    /// <summary>
         /// Форма конца стрелки
         /// </summary>
         public ArrowType ArrowHead
@@ -155,12 +158,20 @@ namespace Qorpent.Dot {
         /// <summary>
         /// Код входящего узла
         /// </summary>
-	    public string From { get; set; }
-        /// <summary>
+	    public string From {
+            get { return string.IsNullOrWhiteSpace(_from)?(_from=DotLanguageUtils.NULLCODE):_from; }
+            set { _from = DotLanguageUtils.EscapeCode(value); }
+        }
+
+	    /// <summary>
         /// Код исходящего узла
         /// </summary>
-        public string To { get; set; }
-        /// <summary>
+        public string To {
+            get { return string.IsNullOrWhiteSpace(_to) ? (_to = DotLanguageUtils.NULLCODE) : _to; }
+            set { _to = DotLanguageUtils.EscapeCode(value); }
+	    }
+
+	    /// <summary>
         /// Родительский подграф
         /// </summary>
 	    public SubGraph Parent { get; set; }

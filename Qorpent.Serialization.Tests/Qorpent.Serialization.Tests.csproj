@@ -31,6 +31,7 @@
     <Compile Include="coverage_only_tests.cs" />
     <Compile Include="DefaultSelectorTests.cs" />
     <Compile Include="Dot\ColorTest.cs" />
+    <Compile Include="Dot\DotLanguageUtilsTest.cs" />
     <Compile Include="Dot\TuningTest.cs" />
     <Compile Include="exceptions_need_to_be_fixed.cs" />
     <Compile Include="iocconfiguationtest.cs" />
