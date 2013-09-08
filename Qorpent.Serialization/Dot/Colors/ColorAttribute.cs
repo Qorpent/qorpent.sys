@@ -89,13 +89,5 @@ namespace Qorpent.Dot {
         }
 
 
-        /// <summary>
-        /// Строки автоматически конвертируются в цвет нативного типа
-        /// </summary>
-        /// <returns></returns>
-        public static implicit operator ColorAttribute(Color color)
-        {
-            return Single(color);
-        }
     }
 }

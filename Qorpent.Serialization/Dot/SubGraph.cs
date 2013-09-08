@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dot {
@@ -59,9 +61,58 @@ namespace Qorpent.Dot {
         /// 
         /// </summary>
         /// <param name="subgraph"></param>
-        public void AddSubGraph(SubGraph subgraph)
+        public SubGraph AddSubGraph(SubGraph subgraph)
         {
-            throw new System.NotImplementedException();
+            var existed = ResolveSubgraph(subgraph.Code);
+
+            if (null != existed) {
+                existed.Merge(subgraph);
+            }
+            else {
+                existed = new SubGraph {Code = subgraph.Code};
+                existed.Merge(subgraph);
+            }
+            foreach (var n in subgraph.Nodes) {
+                AddNode(n);
+            }
+            foreach (var e in subgraph.Edges) {
+                AddEdge(e);
+            }
+            foreach (var s in subgraph.SubGraphs) {
+                existed.AddSubGraph(s);
+            }
+            return existed;
+        }
+        /// <summary>
+        /// Универсальный метод добавления элементов
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public GraphElementBase AddElement(GraphElementBase element) {
+            if (element is Node) {
+                return AddNode((Node) element);
+            }
+            if (element is Edge)
+            {
+                return AddEdge((Edge)element);
+            }
+            if (element is SubGraph)
+            {
+                return AddSubGraph((SubGraph)element);
+            }
+           throw new Exception("unknown element");
+        }
+
+        /// <summary>
+        /// Универсальный метод добавления элементов
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <returns></returns>
+        public void AddElements(IEnumerable<GraphElementBase> elements)
+        {
+            foreach (GraphElementBase graphElementBase in elements) {
+                AddElement(graphElementBase);
+            }
         }
 
 
@@ -104,11 +155,13 @@ namespace Qorpent.Dot {
         /// <summary>
         ///     Подграфы
         /// </summary>
+        [SerializeNotNullOnly]
         public IList<SubGraph> SubGraphs { get; private set; }
 
         /// <summary>
         ///     Узел по умолчанию
         /// </summary>
+        [SerializeNotNullOnly]
         public Node DefaultNode {
             get { return _defaultNode; }
             set { 
@@ -122,6 +175,7 @@ namespace Qorpent.Dot {
         /// <summary>
         ///     Ребро по умолванию
         /// </summary>
+        [SerializeNotNullOnly]
         public Node DefaultEdge {
             get { return _defaultEdge; }
             set {
@@ -135,24 +189,28 @@ namespace Qorpent.Dot {
         /// <summary>
         ///     Узлы
         /// </summary>
+        [SerializeNotNullOnly]
         public IList<Node> Nodes { get; private set; }
 
         /// <summary>
         ///     Ребра
         /// </summary>
+        [SerializeNotNullOnly]
         public IList<Edge> Edges { get; private set; }
 
         /// <summary>
         ///     Направление графа
         /// </summary>
+       [IgnoreSerialize]
         public RankDirType RankDir {
             get { return Get<RankDirType>(DotConstants.RankDirAttribute); }
-            set { Set(DotConstants.RankDirAttribute, value.ToStr()); }
+            set { Set(DotConstants.RankDirAttribute, value); }
         }
 
         /// <summary>
         ///     Если "Да", то расположение графа центировано, а если "Нет", то не центировано
         /// </summary>
+        [IgnoreSerialize]
         public bool Center {
             get { return Get<bool>(DotConstants.CenterAttribute); }
             set { Set(DotConstants.CenterAttribute, value); }
@@ -161,6 +219,7 @@ namespace Qorpent.Dot {
         /// <summary>
         ///     Задает цвет границы подграфов. По умолчанию черный
         /// </summary>
+        [IgnoreSerialize]
         public ColorAttribute PenColor {
             get { return Get<ColorAttribute>(DotConstants.PenColorAttribute); }
             set { Set(DotConstants.PenColorAttribute, value); }
@@ -169,6 +228,7 @@ namespace Qorpent.Dot {
         /// <summary>
         ///     Родительский граф
         /// </summary>
+        [IgnoreSerialize]
         public SubGraph Parent { get; set; }
 
 

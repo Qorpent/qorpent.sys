@@ -1,17 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dot {
 	/// <summary>
 	/// Базовые свойства элементов графа
 	/// </summary>
-	public abstract class GraphElementBase {
+	[Serialize]
+    public abstract class GraphElementBase {
 	    /// <summary>
 		/// 
 		/// </summary>
-		public IDictionary<string, object> Attributes = new Dictionary<string, object>();
+    [SerializeNotNullOnly]
+        public IDictionary<string, object> Attributes = new Dictionary<string, object>();
 
 	    private string _code;
 
@@ -55,34 +58,29 @@ namespace Qorpent.Dot {
 		/// <summary>
 		/// Заголовок
 		/// </summary>
-		public string Label {
-			get { return Get<string>(DotConstants.LabelAttribute); }
-			set { Set(DotConstants.LabelAttribute,value); }
-		}
-        /// <summary>
+	    [IgnoreSerialize]
+	    public string Label {
+	        get { return Get<string>(DotConstants.LabelAttribute); }
+	        set { Set(DotConstants.LabelAttribute, value); }
+	    }
+
+	    /// <summary>
         /// Размер шрифта, по умолчанию 14 
         /// </summary>
-        public double FontSize
-        {
-            get { return Get<double>(DotConstants.FontSizeAttribute); }
-            set
-            {
-                Set(DotConstants.FontSizeAttribute, value);
+	    [IgnoreSerialize]
+	    public double FontSize {
+	        get { return Get<double>(DotConstants.FontSizeAttribute); }
+	        set { Set(DotConstants.FontSizeAttribute, value); }
+	    }
 
-            }
-        }
-        /// <summary>
+	    /// <summary>
         /// Цвет используемый для текста. По умолчанию черный 
         /// </summary>
-        public ColorAttribute FontColor
-        {
-            get { return Get<ColorAttribute>(DotConstants.FontColorAttribute); }
-            set
-            {
-               Set(DotConstants.FontColorAttribute, value);
-
-            }
-        }
+	    [IgnoreSerialize]
+	    public ColorAttribute FontColor {
+	        get { return Get<ColorAttribute>(DotConstants.FontColorAttribute); }
+	        set { Set(DotConstants.FontColorAttribute, value); }
+	    }
 
 
 	    /// <summary>
@@ -103,35 +101,26 @@ namespace Qorpent.Dot {
         /// <summary>
         /// Заголовок
         /// </summary>
-        public string FontName
-        {
-            get {
-                return Get<string>(DotConstants.FontNameAttribute); 
-            }
-            set {
-                Set(DotConstants.FontNameAttribute, value); 
-            }
-        }
+	    [IgnoreSerialize]
+	    public string FontName {
+	        get { return Get<string>(DotConstants.FontNameAttribute); }
+	        set { Set(DotConstants.FontNameAttribute, value); }
+	    }
 
-        /// <summary>
+	    /// <summary>
         /// Заголовок
         /// </summary>
-        public string Id
-        {
-            get
-            {
-                return Get<string>(DotConstants.IdAttribute);
-            }
-            set
-            {
-                Set(DotConstants.IdAttribute, value);
-            }
-        }
+	    [IgnoreSerialize]
+	    public string Id {
+	        get { return Get<string>(DotConstants.IdAttribute); }
+	        set { Set(DotConstants.IdAttribute, value); }
+	    }
 
 	    /// <summary>
 	    /// Код субграфа
 	    /// </summary>
-	    public string Code {
+	    [Serialize]
+        public string Code {
             get { return string.IsNullOrWhiteSpace(_code) ? (_code = DotLanguageUtils.NULLCODE) : _code; }
 	        set { _code = DotLanguageUtils.EscapeCode(value);}
 	    }
@@ -141,11 +130,13 @@ namespace Qorpent.Dot {
 	    /// <summary>
         /// 
         /// </summary>
+        [IgnoreSerialize]
         public object Data { get; set; }
 
 	    /// <summary>
 	    /// Цветовая схема
 	    /// </summary>
+	    [IgnoreSerialize]
 	    public string ColorScheme {
 	        get { return Get<string>(DotConstants.ColorSchemeAttribute); }
 	        set { Set(DotConstants.ColorSchemeAttribute, value); }

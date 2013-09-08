@@ -55,6 +55,14 @@ namespace Qorpent.Dot
         /// Признак атрибута с HREF
         /// </summary>
         public const string ATTRWITHHREF = "href";
+        /// <summary>
+        /// Открывашка элемента с таблицей
+        /// </summary>
+        public const string OPENTABLE = "<";
+        /// <summary>
+        /// Закрывашка элемента с таблицей
+        /// </summary>
+        public const string CLOSETABLE = ">";
 
         /// <summary>
         /// Приводит код узла к нормальной форме
@@ -168,6 +176,9 @@ namespace Qorpent.Dot
             if (attrvalue is NodeShapeType) {
                 return ((NodeShapeType) attrvalue).GetAttributeString();
             }
+            if (attrvalue is RankDirType) {
+                return ((RankDirType) attrvalue).ToString();
+            }
             
             if (attrvalue.GetType().IsEnum) {
                 return attrvalue.ToString().ToLower();
@@ -183,6 +194,9 @@ namespace Qorpent.Dot
         }
         
         private static string GetStringAttributeValue(string attrname, string attrvalue) {
+            if (attrname == "label" && attrvalue.StartsWith("<TABLE")) {
+                return OPENTABLE + attrvalue.GetUnicodeSafeXmlString()+CLOSETABLE;
+            }
             if (string.IsNullOrEmpty(attrvalue)) return EMPTYSTRING;
             var safe = attrvalue.GetUnicodeSafeXmlString(escapeQuots:true,cws:true);
             //в случае литерала и отсутствия признаков изменений без кавычек

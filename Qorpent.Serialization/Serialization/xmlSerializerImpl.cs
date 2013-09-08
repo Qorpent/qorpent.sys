@@ -16,6 +16,8 @@
 // 
 // PROJECT ORIGIN: Qorpent.Serialization/xmlSerializerImpl.cs
 #endregion
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -152,7 +154,13 @@ namespace Qorpent.Serialization {
 		/// </remarks>
 		public void WriteFinal(object value) {
 			if (_currentAttr != null) {
-				_currentAttr.SetValue(value ?? "");
+			    try {
+			        _currentAttr.SetValue(value ?? "");
+			    }
+			    catch (ArgumentException) {
+			        var val = value.ToString();
+			        _currentAttr.SetValue(val??"");
+			    }
 			}
 			else if (_stack.Count == 1) {
 				Current.Add(new XElement("value", value));

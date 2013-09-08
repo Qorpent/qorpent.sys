@@ -115,31 +115,35 @@ namespace Qorpent.Dot
         /// <summary>
         /// Разделитель по развитию рангов в долях от ранга
         /// </summary>
+        [IgnoreSerialize]
         public double RankSep {
             get { return Get<double>(DotConstants.RankSepAttribute); }
             set { Set(DotConstants.RankSepAttribute, value); }
         }
+
         /// <summary>
         /// Разделитель по развитию рангов в долях от ранга
         /// </summary>
-        public double NodeSep
-        {
+        [IgnoreSerialize]
+        public double NodeSep {
             get { return Get<double>(DotConstants.NodeSepAttribute); }
             set { Set(DotConstants.NodeSepAttribute, value); }
         }
+
         /// <summary>
         /// зазор при оверлапе
         /// </summary>
-        public double Sep
-        {
+        [IgnoreSerialize]
+        public double Sep {
             get { return Get<double>(DotConstants.SepAttribute); }
             set { Set(DotConstants.SepAttribute, value); }
         }
+
         /// <summary>
         /// Расстояния между  ребрами
         /// </summary>
-        public double ESep
-        {
+        [IgnoreSerialize]
+        public double ESep {
             get { return Get<double>(DotConstants.ESepAttribute); }
             set { Set(DotConstants.ESepAttribute, value); }
         }
@@ -147,6 +151,7 @@ namespace Qorpent.Dot
         /// <summary>
         ///     Если "Да", то позволяет стрелкам идти между подграфами (См. Lhead Ltail )
         /// </summary>
+        [IgnoreSerialize]
         public bool Compound {
             get { return Get<bool>(DotConstants.CompoundAttribute); }
             set { Set(DotConstants.CompoundAttribute, value); }
@@ -155,6 +160,7 @@ namespace Qorpent.Dot
         /// <summary>
         ///     Сконцентрированное расположение узлов и подграфов графа
         /// </summary>
+        [IgnoreSerialize]
         public bool Concentrate {
             get { return Get<bool>(DotConstants.ConcentrateAttribute); }
             set { Set(DotConstants.ConcentrateAttribute, value); }
@@ -163,6 +169,7 @@ namespace Qorpent.Dot
         /// <summary>
         ///     Если "Да", то график отображается в ландшафтном режиме, т.е. переварачивается на 90 градусов
         /// </summary>
+        [IgnoreSerialize]
         public bool Landscape {
             get { return Get<bool>(DotConstants.LandscapeAttribute); }
             set { Set(DotConstants.LandscapeAttribute, value); }
@@ -171,6 +178,7 @@ namespace Qorpent.Dot
         /// <summary>
         ///     Разварачивает граф на альбомный лист. В значении д.б. указана любая английская Л - l*, L* или полностью Landscape Н-р, orientation="Landscape"
         /// </summary>
+        [IgnoreSerialize]
         public string Orientation {
             get { return Get<string>(DotConstants.OrientationAttribute); }
             set { Set(DotConstants.OrientationAttribute, value); }
@@ -179,6 +187,7 @@ namespace Qorpent.Dot
         /// <summary>
         ///     Квантум увеличивает размеры узла графа на указанное значение. Н-р, quantum=0.5
         /// </summary>
+        [IgnoreSerialize]
         public double Quantum {
             get { return Get<double>(DotConstants.QuantumAttribute); }
             set { Set(DotConstants.QuantumAttribute, value); }
@@ -187,6 +196,7 @@ namespace Qorpent.Dot
         /// <summary>
         ///     Если "Да" и есть несколько графов, то ?????
         /// </summary>
+        [IgnoreSerialize]
         public bool Remincross {
             get { return Get<bool>(DotConstants.RemincrossAttribute); }
             set { Set(DotConstants.RemincrossAttribute, value); }
@@ -195,6 +205,7 @@ namespace Qorpent.Dot
         /// <summary>
         ///     Если установить значение 90, то произойдет переориентации графа в альбомную страницу
         /// </summary>
+        [IgnoreSerialize]
         public int Rotate {
             get { return Get<int>(DotConstants.RotateAttribute); }
             set { Set(DotConstants.RotateAttribute, value); }
@@ -203,10 +214,12 @@ namespace Qorpent.Dot
         /// <summary>
         ///     Задает тип разрисовки линий графа (дуги, ломанные и т.п.)
         /// </summary>
+        [IgnoreSerialize]
         public string Splines {
             get { return Get<string>(DotConstants.SplinesAttribute); }
             set { Set(DotConstants.SplinesAttribute, value); }
         }
+
         /// <summary>
         /// Устанавливает настройки для компактного отображения
         /// </summary>

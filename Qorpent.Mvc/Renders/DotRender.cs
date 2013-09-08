@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using Qorpent.IO;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
@@ -59,6 +60,9 @@ namespace Qorpent.Mvc.Renders {
                 context.ContentType = "text/plain";
                 context.Output.Write(script);
             }
+            else if (options.Format == "rawxml") {
+                WriteOutRawXml(context,options);
+            }
             else {
                 p = GetProcess(options);
                 p.Start();
@@ -75,6 +79,17 @@ namespace Qorpent.Mvc.Renders {
                     p.StandardInput.Close();
                 }
             }
+        }
+
+        private void WriteOutRawXml(IMvcContext context, GraphOptions options) {
+            var val = context.ActionResult;
+            context.ContentType = MimeHelper.GetMimeByExtension("xml");
+            if (val is IGraphSource) {
+                val = ((IGraphSource) val).BuildGraph(options);
+            }
+            var xmls = Application.Container.Get<ISerializer>("xml.serializer");
+            xmls.Serialize("dot.xml", val, context.Output);
+
         }
 
         private static GraphOptions ExtractOptions(IMvcContext context) {
