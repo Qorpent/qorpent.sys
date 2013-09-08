@@ -510,7 +510,13 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		#endregion
-
-		
+        /// <summary>
+        ///     Пытается получить значение текущего элемента, если он не null
+        /// </summary>
+        /// <param name="xElement">Элемент</param>
+        /// <returns>XElement.value OR null</returns>
+	    public static string TryGetValue(this XElement xElement) {
+	        return xElement != null ? xElement.Value : null;
+	    }
 	}
 }
