@@ -176,6 +176,16 @@ namespace Qorpent.Dot {
         /// Родительский подграф
         /// </summary>
 	    public SubGraph Parent { get; set; }
+        /// <summary>
+        /// Цвет линии
+        /// </summary>
+	    public ColorAttribute Color {
+            get { return Get<ColorAttribute>(DotConstants.ColorAttribute); }
+            set{
+     
+                Set(DotConstants.ColorAttribute, value);
+            }
+	    }
 
 
 	    /// <summary>

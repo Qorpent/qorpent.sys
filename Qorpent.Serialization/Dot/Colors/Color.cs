@@ -69,7 +69,8 @@ namespace Qorpent.Dot {
         /// <param name="def"></param>
         /// <returns></returns>
         public static Color Create(string def) {
-            if (def.All(_ => (_ >= '0' && _ <= '9') || (_ >= 'A' && _ <= 'F') || (_ >= 'a' && _ <= 'f'))) {
+            
+            if (def.Length==6 &&def.All(_ => (_ >= '0' && _ <= '9') || (_ >= 'A' && _ <= 'F') || (_ >= 'a' && _ <= 'f'))) {
                 return new Color("#"+def);
             }
 

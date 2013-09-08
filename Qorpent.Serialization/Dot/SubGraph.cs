@@ -159,70 +159,6 @@ namespace Qorpent.Dot {
         }
 
         /// <summary>
-        ///     Если "Да", то позволяет стрелкам идти между подграфами (См. Lhead Ltail )
-        /// </summary>
-        public bool Compound {
-            get { return Get<bool>(DotConstants.CompoundAttribute); }
-            set { Set(DotConstants.CompoundAttribute, value); }
-        }
-
-        /// <summary>
-        ///     Сконцентрированное расположение узлов и подграфов графа
-        /// </summary>
-        public bool Concentrate {
-            get { return Get<bool>(DotConstants.ConcentrateAttribute); }
-            set { Set(DotConstants.ConcentrateAttribute, value); }
-        }
-
-        /// <summary>
-        ///     Если "Да", то график отображается в ландшафтном режиме, т.е. переварачивается на 90 градусов
-        /// </summary>
-        public bool Landscape {
-            get { return Get<bool>(DotConstants.LandscapeAttribute); }
-            set { Set(DotConstants.LandscapeAttribute, value); }
-        }
-
-        /// <summary>
-        ///     Разварачивает граф на альбомный лист. В значении д.б. указана любая английская Л - l*, L* или полностью Landscape Н-р, orientation="Landscape"
-        /// </summary>
-        public string Orientation {
-            get { return Get<string>(DotConstants.OrientationAttribute); }
-            set { Set(DotConstants.OrientationAttribute, value); }
-        }
-
-        /// <summary>
-        ///     Квантум увеличивает размеры узла графа на указанное значение. Н-р, quantum=0.5
-        /// </summary>
-        public double Quantum {
-            get { return Get<double>(DotConstants.QuantumAttribute); }
-            set { Set(DotConstants.QuantumAttribute, value); }
-        }
-
-        /// <summary>
-        ///     Если "Да" и есть несколько графов, то ?????
-        /// </summary>
-        public bool Remincross {
-            get { return Get<bool>(DotConstants.RemincrossAttribute); }
-            set { Set(DotConstants.RemincrossAttribute, value); }
-        }
-
-        /// <summary>
-        ///     Если установить значение 90, то произойдет переориентации графа в альбомную страницу
-        /// </summary>
-        public int Rotate {
-            get { return Get<int>(DotConstants.RotateAttribute); }
-            set { Set(DotConstants.RotateAttribute, value); }
-        }
-
-        /// <summary>
-        ///     Задает тип разрисовки линий графа (дуги, ломанные и т.п.)
-        /// </summary>
-        public string Splines {
-            get { return Get<string>(DotConstants.SplinesAttribute); }
-            set { Set(DotConstants.SplinesAttribute, value); }
-        }
-
-        /// <summary>
         ///     Задает цвет границы подграфов. По умолчанию черный
         /// </summary>
         public ColorAttribute PenColor {
@@ -265,8 +201,8 @@ namespace Qorpent.Dot {
         public SubGraph ResolveSubgraph(string code) {
             var __code = DotLanguageUtils.GetClusterCode(code);
             if (Code == __code) return this;
-            return SubGraphs.Select(sg => sg.ResolveSubgraph(__code))
-                            .FirstOrDefault(sgres => null != sgres);
+            var result = SubGraphs.Select(sg => sg.ResolveSubgraph(__code)).FirstOrDefault(_=>null!=_);
+            return result;
         }
 
         /// <summary>

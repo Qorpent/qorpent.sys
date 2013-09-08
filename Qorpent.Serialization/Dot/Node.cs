@@ -150,6 +150,28 @@ namespace Qorpent.Dot {
             get { return Get<ColorAttribute>(DotConstants.FillColorAttribute); }
 	        set { Set(DotConstants.FillColorAttribute,value);}
 	    }
+        /// <summary>
+        /// Всплывающа подсказка
+        /// </summary>
+	    public string Tooltip {
+            get { return Get<string>(DotConstants.TooltipAttribute); }
+            set { Set(DotConstants.TooltipAttribute, value); }
+	    }
+        /// <summary>
+        /// Целевой фрейм
+        /// </summary>
+	    public string Target {
+            get { return Get<string>(DotConstants.TargetAttribute); }
+            set { Set(DotConstants.TargetAttribute, value); }
+	    }
+        /// <summary>
+        /// Целевой фрейм
+        /// </summary>
+        public string Href
+        {
+            get { return Get<string>(DotConstants.HrefAttribute); }
+            set { Set(DotConstants.HrefAttribute, value); }
+        }
 
 	    /// <summary>
 	    /// Создает типовой узел

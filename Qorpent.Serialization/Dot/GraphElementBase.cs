@@ -26,6 +26,21 @@ namespace Qorpent.Dot {
 			}
 		    return default(T);
 		}
+        /// <summary>
+        /// Позволяет перекрывать  атрибуты
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="value"></param>
+        public void OverrideAttribute(string code, object value) {
+            object newval = value;
+            if (Attributes.ContainsKey(code)) {
+                var val = Attributes[code];
+                var type = null == val ? typeof (string) : val.GetType();
+                newval = value.ToTargetType(type);
+            }
+            Attributes[code] = newval;
+        }
+
 		/// <summary>
 		/// Установить атрибут
 		/// </summary>
@@ -127,6 +142,14 @@ namespace Qorpent.Dot {
         /// 
         /// </summary>
         public object Data { get; set; }
+
+	    /// <summary>
+	    /// Цветовая схема
+	    /// </summary>
+	    public string ColorScheme {
+	        get { return Get<string>(DotConstants.ColorSchemeAttribute); }
+	        set { Set(DotConstants.ColorSchemeAttribute, value); }
+	    }
 
 	    /// <summary>
 	    /// Сводит узлы

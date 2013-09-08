@@ -216,16 +216,52 @@ namespace Qorpent.Dot {
         private void PrepareGraphForRendering() {
             
             foreach (var p in _parameters.OverrideGraphAttributes) {
-                var newval = p.Value;
-                if (_graph.Attributes.ContainsKey(p.Key)) {
-                    var val = _graph.Attributes[p.Key];
-                    var type = null == val ? typeof (string) : val.GetType();
-                    newval = val.ToTargetType(type);
+                
+                if (p.Key.StartsWith("node.")) {
+                    ApplyNodeOverride(p);
                 }
-                _graph.Attributes[p.Key] = newval;
+                else if (p.Key.StartsWith("edge.")) {
+                    ApplyEdgeOverride(p);
+                }
+                else {
+                    _graph.OverrideAttribute(p.Key,p.Value);
+                }
+                
             }
             if (_parameters.Tune) {
                 _graph.AutoTune();
+            }
+        }
+
+        private void ApplyEdgeOverride(KeyValuePair<string, object> p) {
+            var edgeattr = p.Key.Split('.');
+            if (edgeattr.Length == 2) {
+                if (null == _graph.DefaultEdge) {
+                    _graph.DefaultEdge = new Node();
+                }
+                _graph.DefaultEdge.OverrideAttribute(edgeattr[1], p.Value);
+            }
+            else {
+                var targetEdge = _graph.ResolveEdge(edgeattr[1], edgeattr[2]);
+                if (null != targetEdge) {
+                    targetEdge.OverrideAttribute(edgeattr[3], p.Value);
+                }
+            }
+        }
+
+        private void ApplyNodeOverride(KeyValuePair<string, object> p) {
+            var nodeattr = p.Key.Split('.');
+            if (nodeattr.Length == 2) {
+                if (null == _graph.DefaultNode) {
+                    _graph.DefaultNode = new Node();
+                }
+                _graph.DefaultNode.OverrideAttribute(nodeattr[1], p.Value);
+            }
+            else {
+                var targetNode = _graph.ResolveNode(nodeattr[1]);
+                if (null != targetNode) {
+                    targetNode.OverrideAttribute(nodeattr[2], p.Value);
+                }
             }
         }
     }
