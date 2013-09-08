@@ -35,6 +35,7 @@
     <Compile Include="DirtyVersion\Storage\HashedDirectory.cs" />
     <Compile Include="DirtyVersion\Storage\CopyOnReadStream.cs" />
     <Compile Include="DirtyVersion\IHashedDirectory.cs" />
+    <Compile Include="FileDescriptors\FileDescriptorHashedDirectoryBased.cs" />
     <Compile Include="FileDescriptors\FileDescriptorVcsStorageBased.cs" />
     <Compile Include="FileDescriptors\FileDescriptorFsBased.cs" />
     <Compile Include="FileEntity.cs" />
@@ -46,6 +47,7 @@
     <Compile Include="IFileEntity.cs" />
     <Compile Include="IStreamProxy.cs" />
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />
+    <Compile Include="Storages\FileStorageHashedDirectory.cs" />
     <Compile Include="Storages\FileStorageVcsStorage.cs" />
     <Compile Include="StreamProxy.cs" />
     <Compile Include="VcsStorage\VcsCommit.cs" />

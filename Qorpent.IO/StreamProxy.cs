@@ -92,6 +92,10 @@ namespace Qorpent.IO {
                 }
             }
 
+			foreach (var target in targets) {
+				target.Position = 0;
+			}
+
             return offset;
         }
     }
