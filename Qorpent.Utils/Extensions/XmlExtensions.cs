@@ -518,5 +518,21 @@ namespace Qorpent.Utils.Extensions {
 	    public static string TryGetValue(this XElement xElement) {
 	        return xElement != null ? xElement.Value : null;
 	    }
+        /// <summary>
+        ///     Проверяет элемент на NULL
+        /// </summary>
+        /// <param name="xElement">Элемент</param>
+        /// <returns>True, если не NULL, иначе - False</returns>
+        public static bool IsNotNull(this XElement xElement) {
+            return xElement != null;
+        }
+        /// <summary>
+        ///     Проверяет элемент на НЕ NULL
+        /// </summary>
+        /// <param name="xElement">Элемент</param>
+        /// <returns>True, если NULL, иначе - False</returns>
+        public static bool IsNull(this XElement xElement) {
+            return !xElement.IsNotNull();
+        }
 	}
 }
