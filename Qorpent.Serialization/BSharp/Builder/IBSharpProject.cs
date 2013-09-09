@@ -75,7 +75,12 @@ namespace Qorpent.BSharp.Builder {
 		/// </summary>
 		bool GenerateSrcPkg { get; set; }
 
-		/// <summary>
+	    /// <summary>
+	    /// Флаг необходимости генерации графической карты классов
+	    /// </summary>
+	    bool GenerateGraph { get; set; }
+
+	    /// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>

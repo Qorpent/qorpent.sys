@@ -312,6 +312,22 @@ namespace Qorpent.BSharp {
 					Errors.Add(a);
 				}
 			}
+
+            if (null != subresult.Dictionaries) {
+                Dictionaries = Dictionaries ?? new Dictionary<string, IList<ExportRecord>>();
+                foreach (var p in subresult.Dictionaries) {
+                    if (!Dictionaries.ContainsKey(p.Key)) {
+                        Dictionaries[p.Key]= new List<ExportRecord>();
+                    }
+
+                    var t = Dictionaries[p.Key];
+                    foreach (var  d in p.Value) {
+                        if (!t.Contains(d)) {
+                            t.Add(d);
+                        }
+                    }
+                }
+            }
 		}
 
 		private IDictionary<string, IBSharpClass> _resolveclassCache = new Dictionary<string, IBSharpClass>();

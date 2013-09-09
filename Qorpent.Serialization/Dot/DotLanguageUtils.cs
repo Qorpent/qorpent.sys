@@ -70,6 +70,7 @@ namespace Qorpent.Dot
         /// <param name="code"></param>
         /// <returns></returns>
         public static string EscapeCode(string code) {
+        //    if (code == "node") return "__esc_node";
             if (IsLiteral(code)) return code;
             if (String.IsNullOrWhiteSpace(code)) return NULLCODE;
             var fst = code[0];
@@ -101,6 +102,7 @@ namespace Qorpent.Dot
         /// <param name="code"></param>
         /// <returns></returns>
         public static string UnEscapeCode(string code) {
+           // if (code == "__esc_node") return "node";
             if (-1 == code.IndexOf(NONLITERALSUBSTPREFIX, StringComparison.Ordinal)) {
                 return code;
             }
@@ -198,6 +200,7 @@ namespace Qorpent.Dot
                 return OPENTABLE + attrvalue.GetUnicodeSafeXmlString()+CLOSETABLE;
             }
             if (string.IsNullOrEmpty(attrvalue)) return EMPTYSTRING;
+            if (attrvalue == "node") return QUOT + attrvalue + QUOT;
             var safe = attrvalue.GetUnicodeSafeXmlString(escapeQuots:true);
             //в случае литерала и отсутствия признаков изменений без кавычек
             if (IsLiteral(safe) && safe==attrvalue) {
