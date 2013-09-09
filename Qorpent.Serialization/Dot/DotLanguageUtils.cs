@@ -198,7 +198,7 @@ namespace Qorpent.Dot
                 return OPENTABLE + attrvalue.GetUnicodeSafeXmlString()+CLOSETABLE;
             }
             if (string.IsNullOrEmpty(attrvalue)) return EMPTYSTRING;
-            var safe = attrvalue.GetUnicodeSafeXmlString(escapeQuots:true,cws:true);
+            var safe = attrvalue.GetUnicodeSafeXmlString(escapeQuots:true);
             //в случае литерала и отсутствия признаков изменений без кавычек
             if (IsLiteral(safe) && safe==attrvalue) {
                 return safe;
