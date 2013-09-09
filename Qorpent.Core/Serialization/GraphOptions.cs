@@ -31,6 +31,11 @@ namespace Qorpent.Serialization {
         public const string PNGTARGET = "png";
 
         /// <summary>
+        /// Признак указания легенды
+        /// </summary>
+        public bool ShowLegend { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         public GraphOptions() {

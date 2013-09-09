@@ -185,7 +185,7 @@ namespace Qorpent.Dot
             }
             if (attrvalue is ColorAttribute) {
                 var ca = attrvalue as ColorAttribute;
-                if (ca.Mode == ColorAttributeType.Multiple) {
+                if (ca.Mode == ColorAttributeType.Multiple || !IsLiteral(ca.ToString())) {
                     return QUOT + ca + QUOT;
                 }
                 return ca.ToString();
