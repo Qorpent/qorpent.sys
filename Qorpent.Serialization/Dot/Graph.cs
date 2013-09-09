@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Qorpent.Serialization;
+using Qorpent.Serialization.Graphs;
 
 namespace Qorpent.Dot
 {

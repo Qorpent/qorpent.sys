@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Qorpent.Dot;
+using Qorpent.Serialization.Graphs;
 
 namespace Qorpent.Serialization.Tests.Dot {
     [TestFixture]

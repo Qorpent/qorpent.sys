@@ -12,6 +12,10 @@ namespace Qorpent.IO.FileDescriptors {
         /// </summary>
         private readonly IDirtyVersionStorage _dirtyVersionStorage;
         /// <summary>
+        ///     Коммит, соответутсвующий данному файлу
+        /// </summary>
+        public Commit Commit { get; private set; }
+        /// <summary>
         ///     Представление файла
         /// </summary>
         public IFileEntity FileEntity { get; private set; }
@@ -28,7 +32,7 @@ namespace Qorpent.IO.FileDescriptors {
         /// </summary>
         public FileDescriptorDirtyVersionBased(IDirtyVersionStorage storage, Commit commit) {
             _dirtyVersionStorage = storage;
-
+            Commit = commit;
             FileEntity = new FileEntity {
                 Path = commit.MappingInfo.Name,
                 Owner = (commit.Author != null) ? (commit.Author.Commiter) : (null),

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Qorpent.Mvc;
 
-namespace Qorpent.Serialization {
+namespace Qorpent.Serialization.Graphs {
 
     
 
