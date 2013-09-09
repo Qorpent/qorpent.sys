@@ -132,12 +132,12 @@
     <Compile Include="Security\WinLogonType.cs" />
     <Compile Include="Dsl\Json\IJsonParser.cs" />
     <Compile Include="Serialization\ContentCleanerOptions.cs" />
-    <Compile Include="Serialization\GraphOptions.cs" />
-    <Compile Include="Serialization\IBSharpDotConverter.cs" />
+    <Compile Include="Serialization\Graphs\GraphOptions.cs" />
+    <Compile Include="Serialization\Graphs\IGraphProvider.cs" />
     <Compile Include="Serialization\IContentCleaner.cs" />
     <Compile Include="Serialization\ICustomSelectorImpl.cs" />
-    <Compile Include="Serialization\IGraphConvertible.cs" />
-    <Compile Include="Serialization\IGraphSource.cs" />
+    <Compile Include="Serialization\Graphs\IGraphConvertible.cs" />
+    <Compile Include="Serialization\Graphs\IGraphSource.cs" />
     <Compile Include="Serialization\ISelector.cs" />
     <Compile Include="Serialization\ISelectorImpl.cs" />
     <Compile Include="Serialization\ISerializerXsltExtension.cs" />

@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Serialization
+﻿using Qorpent.Serialization.Graphs;
+
+namespace Qorpent.Serialization
 {
     /// <summary>
     /// Интерфейс класса, пригодного для конвертации в графического представление графа

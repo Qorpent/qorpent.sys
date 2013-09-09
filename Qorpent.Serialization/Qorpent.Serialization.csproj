@@ -37,6 +37,7 @@
     <Compile Include="BSharp\Schema\RuleType.cs" />
     <Compile Include="BSharp\Schema\Schema.cs" />
     <Compile Include="BSharp\Schema\SchemaNote.cs" />
+    <Compile Include="Dot\DotGraphProvider.cs" />
     <Compile Include="Dot\DotLanguageUtils.cs" />
     <Compile Include="Dot\DotTypes\Arrow.cs" />
     <Compile Include="Dot\DotTypes\ArrowType.cs" />

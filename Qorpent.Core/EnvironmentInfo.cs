@@ -17,8 +17,10 @@
 // PROJECT ORIGIN: Qorpent.Core/EnvironmentInfo.cs
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Web;
 using Qorpent.Applications;
 
@@ -173,6 +175,66 @@ namespace Qorpent {
 				wrapper = new StubHttpContextWrapper();
 			}
 			return wrapper;
+		}
+
+
+		private static readonly IDictionary<string, string> ResolvedExeCache = new Dictionary<string, string>();
+		/// <summary>
+		///Разрешает имя исполнимого файла с учетом параметров среды
+		/// </summary>
+		/// <param name="executableName"></param>
+		/// <returns></returns>
+		public static string GetExecutablePath(string executableName) {
+			if (!executableName.EndsWith(".exe")) {
+				executableName += ".exe";
+			}
+			executableName = executableName.ToLower();
+			if (!ResolvedExeCache.ContainsKey(executableName)) {
+				string result = null;
+				if (!File.Exists(result = Path.Combine(BinDirectory, executableName)))
+				{
+					if (!File.Exists(result = Path.Combine(RootDirectory, executableName))) {
+						result = null;
+						var paths = (Environment.GetEnvironmentVariable("PATH")??"").Split(';');
+						foreach (string p in paths)
+						{
+							string realp = Environment.ExpandEnvironmentVariables(p.Trim());
+							string checkpath = Path.Combine(realp, executableName);
+							if (File.Exists(checkpath)) {
+								result = checkpath;
+								break;
+							}
+						}
+					}
+				}
+				ResolvedExeCache[executableName] = result;
+			}
+			return ResolvedExeCache[executableName];
+		}
+
+		/// <summary>
+		/// Формирует дочерний консольный процесс с редиректом входного и выходного потока
+		/// и с переназначением кодировки стандартного потока вывода
+		/// </summary>
+		/// <param name="executableName"></param>
+		/// <param name="argumentstring"></param>
+		/// <param name="encoding"></param>
+		/// <returns></returns>
+		public static Process GetConsoleProcess(string executableName, string argumentstring=null, Encoding encoding = null) {
+			var exePath = GetExecutablePath(executableName);
+			if (null == exePath) {
+				throw new Exception("cannot find executable " + executableName);
+			}
+			var processStart = new ProcessStartInfo(exePath, argumentstring??"")
+			{
+				UseShellExecute = false,
+				CreateNoWindow = true,
+				RedirectStandardOutput = true,
+				RedirectStandardInput = true,
+
+			};
+			var p = new Process { StartInfo = processStart };
+			return p;
 		}
 	}
 }

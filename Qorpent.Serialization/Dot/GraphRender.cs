@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using Qorpent.Serialization;
+using Qorpent.Serialization.Graphs;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dot {
