@@ -225,11 +225,11 @@ namespace Qorpent.Dot
         /// </summary>
         public void Compactize() {
             FontSize = 9;
-            RankSep = 0.01;
-            NodeSep = 0.1;
-            Sep = 0.01;
-            Quantum = 0.01;
-            ESep = 0.01;
+            RankSep = 0.3;
+            NodeSep = 0.2;
+            Sep = 0.2;
+            Quantum = 0.2;
+            ESep = 0.2;
         }
     }
 }
