@@ -519,6 +519,14 @@ namespace Qorpent.Utils.Extensions {
 	        return xElement != null ? xElement.Value : null;
 	    }
         /// <summary>
+        ///     Пытается получить значение текущего атрибута, если он не null
+        /// </summary>
+        /// <param name="xAttribute">Аттрибут</param>
+        /// <returns>XElement.value OR null</returns>
+        public static string TryGetValue(this XAttribute xAttribute) {
+            return xAttribute != null ? xAttribute.Value : null;
+        }
+        /// <summary>
         ///     Проверяет элемент на NULL
         /// </summary>
         /// <param name="xElement">Элемент</param>
