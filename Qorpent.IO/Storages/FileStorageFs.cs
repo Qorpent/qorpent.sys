@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using Qorpent.IO.FileDescriptors;
 using Qorpent.IO.VcsStorage;
 
@@ -53,6 +54,14 @@ namespace Qorpent.IO.Storages {
         /// <returns>Класс-хранилище</returns>
         public object GetStorage() {
             return this;
+        }
+        /// <summary>
+        ///     Вывод файлов в директории
+        /// </summary>
+        /// <param name="pattern">Шаблон для поиска</param>
+        /// <returns>Массив имён</returns>
+        public string[] List(string pattern) {
+            return new DirectoryInfo(WorkingDirectory.FullName).GetFiles(pattern).Select(el => el.Name).ToArray();
         }
         /// <summary>
         ///     Прокатака цикла реальной записи на диск

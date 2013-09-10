@@ -82,5 +82,13 @@ namespace Qorpent.IO.Tests.DirtyVersion {
             s.Save("testfile", "same");
             s.Save("testfile", "same");
         }
+        [Test]
+        public void CanListAllFiles() {
+            var s = new DirtyVersionStorage(dir);
+            s.Save("first", "testdata");
+            s.Save("second", "testdata");
+            s.Save("third", "testdata");
+            s.Save("third", "testdata2");
+        }
 	}
 }
