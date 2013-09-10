@@ -11,12 +11,9 @@ namespace Qorpent.IO.Tests {
         public void CanUseProxy() {
             var proxy = new StreamProxy();
 
-            var source = new MemoryStream();
+            var source = new MemoryStream(Encoding.UTF8.GetBytes("test"));
             var target1 = new MemoryStream();
             var target2 = new MemoryStream();
-
-            source.Write(Encoding.UTF8.GetBytes("test"), 0, 4);
-            source.Position = 0;
 
             var bytes = proxy.Proxy(source, target1, target2);
             target1.Position -= bytes;
@@ -35,12 +32,9 @@ namespace Qorpent.IO.Tests {
         public void CanUseProxyToFile() {
             var proxy = new StreamProxy();
 
-            var source = new MemoryStream();
+            var source = new MemoryStream(Encoding.UTF8.GetBytes("test"));
             var target1 = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             var target2 = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-
-            source.Write(Encoding.UTF8.GetBytes("test"), 0, 4);
-            source.Position = 0;
 
             var bytes = proxy.Proxy(source, target1, target2);
 
@@ -58,12 +52,9 @@ namespace Qorpent.IO.Tests {
         public void CanUseProxyAsync() {
             var proxy = new StreamProxy();
 
-            var source = new MemoryStream();
+            var source = new MemoryStream(Encoding.UTF8.GetBytes("test"));
             var target1 = new MemoryStream();
             var target2 = new MemoryStream();
-
-            source.Write(Encoding.UTF8.GetBytes("test"), 0, 4);
-            source.Position = 0;
 
             var task = proxy.ProxyAsync(source, target1, target2);
             task.Wait();
@@ -84,12 +75,9 @@ namespace Qorpent.IO.Tests {
         public void CanUseProxyToFileAsync() {
             var proxy = new StreamProxy();
 
-            var source = new MemoryStream();
+            var source = new MemoryStream(Encoding.UTF8.GetBytes("test"));
             var target1 = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             var target2 = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-
-            source.Write(Encoding.UTF8.GetBytes("test"), 0, 4);
-            source.Position = 0;
 
             var task = proxy.ProxyAsync(source, target1, target2);
             task.Wait();
