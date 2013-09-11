@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Qorpent.Utils.Extensions
+namespace Qorpent.Serialization
 {
     /// <summary>
     /// преобразовывает спецсимволы из xml в bxl и обратно
@@ -14,6 +14,7 @@ namespace Qorpent.Utils.Extensions
         private static readonly Dictionary<String, String> _xml = new Dictionary<string, string>()
             {
                 {"+", "__PLUS__"},
+                {"-", "__MINUS__"},
                 {"?", "__ASK__"},
                 {"!", "__EXC__"},
                 {"~", "__TILD__"},
@@ -34,12 +35,13 @@ namespace Qorpent.Utils.Extensions
                 {"|", "__VLINE__"},
                 {";", "__PERIOD__"},
                 {"<", "__LT__"},
-                {">", "__GT__"}
+                {">", "__GT__"},
             };
 
         private static readonly Dictionary<String, String> _bxl = new Dictionary<string, string>()
             {
                 {"__PLUS__", "+"},
+                {"__MINUS__", "-"},
                 {"__ASK__", "?"},
                 {"__EXC__", "!"},
                 {"__TILD__", "~"},
@@ -87,6 +89,34 @@ namespace Qorpent.Utils.Extensions
             if (_bxl.TryGetValue(c, out r))
                 return r;
             return c;
+        }
+
+        /// <summary>
+        /// Escape all symbols
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
+        public static String EscapeAll(String txt)
+        {
+            foreach (String c in _xml.Keys)
+            {
+                txt = txt.Replace(c, _xml[c]);
+            }
+            return txt;
+        }
+
+        /// <summary>
+        /// Unescape all symbols
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
+        public static String UnescapeAll(String txt)
+        {
+            foreach (String c in _bxl.Keys)
+            {
+                txt = txt.Replace(c, _bxl[c]);
+            }
+            return txt;
         }
     }
 }

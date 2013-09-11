@@ -28,6 +28,7 @@ using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
 using Qorpent.Utils.Extensions;
+using Qorpent.Serialization;
 
 namespace Qorpent.Bxl.Tests {
 	[TestFixture]
@@ -41,7 +42,7 @@ test +a = 1
 ");
 			var xml = new BxlXmlGenerator().Generate(tokens);
 			Console.WriteLine(xml.ToString());
-			Assert.AreEqual(@"<root><test _line=""2"" __PLUS__a=""1"" __MINUS__b=""2"" _1x=""3"" /></root>".LfOnly(),
+			Assert.AreEqual(@"<root><test _line=""2"" " + XmlEscaper.Escape("+") + @"a=""1"" " + XmlEscaper.Escape("-") + @"b=""2"" _1x=""3"" /></root>".LfOnly(),
 			                xml.ToString(SaveOptions.DisableFormatting).LfOnly());
 		}
 

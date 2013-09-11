@@ -34,7 +34,6 @@
     <Compile Include="StringInterpolationMainTests.cs" />
     <Compile Include="TagHelperTest.cs" />
     <Compile Include="UniSqlTest.cs" />
-    <Compile Include="XmlEscaperTests.cs" />
     <Compile Include="XmlExtensionsTest.cs" />
     <Compile Include="XmlInterpolationTests.cs" />
   </ItemGroup>

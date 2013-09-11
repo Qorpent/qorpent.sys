@@ -147,6 +147,7 @@
     <Compile Include="Dsl\Json\JsonTokenType.cs" />
     <Compile Include="Serialization\SelectorLanguage.cs" />
     <Compile Include="Serialization\ContentCleanerOperations.cs" />
+    <Compile Include="Serialization\XmlEscaper.cs" />
     <Compile Include="ServiceState.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
     <Compile Include="Wiki\IWikiEmptyFilter.cs" />

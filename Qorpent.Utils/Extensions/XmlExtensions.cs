@@ -24,6 +24,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Applications;
 using Qorpent.Bxl;
+using Qorpent.Serialization;
 
 namespace Qorpent.Utils.Extensions {
 	/// <summary>
@@ -203,38 +204,38 @@ namespace Qorpent.Utils.Extensions {
 			var adaptedname = nameCandidate;
 			if (-1 != adaptedname.IndexOfAny(Nonnames)) {
 				adaptedname = adaptedname
-					.Replace("+", "__PLUS__")
-					.Replace("?", "__ASK__")
-					.Replace("!", "__EXC__")
-					.Replace("~", "__TILD__")
-					.Replace("@", "__AT__")
-					.Replace("*", "__STAR__")
-					.Replace("$", "__USD__")
-					.Replace("^", "__UP__")
-					.Replace("&", "__AMP__")
-					.Replace("/", "__DIV__")
-					.Replace(":", "__DBL__")
-					.Replace("%", "__PERC__")
-					.Replace("(", "__LBRACE__")
-					.Replace(")", "__RBRACE__")
-					.Replace("[", "__LINDEX__")
-					.Replace("]", "__RINDEX__")
-					.Replace("{", "__LBLOCK__")
-					.Replace("}", "__RBLOCK__")
-					.Replace("|", "__VLINE__")
-					.Replace(";", "__PERIOD__")
-					.Replace("<", "__LT__")
-					.Replace(">", "__GT__")
+					.Replace("+", XmlEscaper.Escape("+"))
+                    .Replace("?", XmlEscaper.Escape("?"))
+                    .Replace("!", XmlEscaper.Escape("!"))
+                    .Replace("~", XmlEscaper.Escape("~"))
+                    .Replace("@", XmlEscaper.Escape("@"))
+                    .Replace("*", XmlEscaper.Escape("*"))
+                    .Replace("$", XmlEscaper.Escape("$"))
+                    .Replace("^", XmlEscaper.Escape("^"))
+                    .Replace("&", XmlEscaper.Escape("&"))
+                    .Replace("/", XmlEscaper.Escape("/"))
+                    .Replace(":", XmlEscaper.Escape(":"))
+                    .Replace("%", XmlEscaper.Escape("%"))
+                    .Replace("(", XmlEscaper.Escape("("))
+                    .Replace(")", XmlEscaper.Escape(")"))
+                    .Replace("[", XmlEscaper.Escape("["))
+                    .Replace("]", XmlEscaper.Escape("]"))
+                    .Replace("{", XmlEscaper.Escape("{"))
+                    .Replace("}", XmlEscaper.Escape("}"))
+                    .Replace("|", XmlEscaper.Escape("|"))
+                    .Replace(";", XmlEscaper.Escape(";"))
+                    .Replace("<", XmlEscaper.Escape("<"))
+                    .Replace(">", XmlEscaper.Escape(">"))
 					;
 				if(adaptedname.StartsWith("-")) {
-					adaptedname = "__MINUS__" + adaptedname.Substring(1);
+                    adaptedname = XmlEscaper.Escape("-") + adaptedname.Substring(1);
 				}
 			}
 			if (0 != adaptedname.Length && -1 != Array.IndexOf(Digits, adaptedname[0])) {
 				adaptedname = "_" + adaptedname;
 			}
 			if (adaptedname.StartsWith(".")) {
-				adaptedname = "__DOT__" + adaptedname.Substring(1);
+                adaptedname = XmlEscaper.Escape(".") + adaptedname.Substring(1);
 			}
 			return adaptedname;
 		}
