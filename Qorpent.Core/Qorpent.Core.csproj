@@ -72,6 +72,7 @@
     <Compile Include="IoC\ComponentDefinitionWrapper.cs" />
     <Compile Include="IoC\IFactory.cs" />
     <Compile Include="IO\IFileSource.cs" />
+    <Compile Include="Model\AttributedEntity.cs" />
     <Compile Include="Mvc\MvcClient.cs" />
     <Compile Include="IO\Resources\DefaultResourceProvider.cs" />
     <Compile Include="IO\Resources\IResource.cs" />
@@ -131,6 +132,7 @@
     <Compile Condition="'$(QISD_USER)'!=''" Include="$(QISD_USER)" />
     <Compile Include="Security\WinLogonType.cs" />
     <Compile Include="Dsl\Json\IJsonParser.cs" />
+    <Compile Include="Serialization\FcOptions.cs" />
     <Compile Include="Serialization\ContentCleanerOptions.cs" />
     <Compile Include="Serialization\GraphOptions.cs" />
     <Compile Include="Serialization\IBSharpDotConverter.cs" />

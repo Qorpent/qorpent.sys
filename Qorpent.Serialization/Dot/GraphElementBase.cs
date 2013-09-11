@@ -1,61 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
+using Qorpent.Model;
 using Qorpent.Serialization;
-using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Dot {
-	/// <summary>
+    /// <summary>
 	/// Базовые свойства элементов графа
 	/// </summary>
-	[Serialize]
-    public abstract class GraphElementBase {
-	    /// <summary>
-		/// 
-		/// </summary>
-    [SerializeNotNullOnly]
-        public IDictionary<string, object> Attributes = new Dictionary<string, object>();
 
-	    private string _code;
-
-	    /// <summary>
-		/// Защищенный метод доступа к атрибутам на чтение
-		/// </summary>
-		/// <param name="code"></param>
-		/// <returns></returns>
-		public T Get<T>(string code) {
-			if (Attributes.ContainsKey(code)) {
-				return (T)Attributes[code];
-			}
-		    return default(T);
-		}
+    public abstract class GraphElementBase : AttributedEntity {
         /// <summary>
-        /// Позволяет перекрывать  атрибуты
-        /// </summary>
-        /// <param name="code"></param>
-        /// <param name="value"></param>
-        public void OverrideAttribute(string code, object value) {
-            object newval = value;
-            if (Attributes.ContainsKey(code)) {
-                var val = Attributes[code];
-                var type = null == val ? typeof (string) : val.GetType();
-                newval = value.ToTargetType(type);
-            }
-            Attributes[code] = newval;
-        }
-
-		/// <summary>
-		/// Установить атрибут
-		/// </summary>
-		/// <param name="code"></param>
-		/// <param name="value"></param>
-		public void Set(string code, object value) {
-			Attributes[code] = value;
-		}
-
-        
-
-		/// <summary>
 		/// Заголовок
 		/// </summary>
 	    [IgnoreSerialize]
@@ -64,7 +18,16 @@ namespace Qorpent.Dot {
 	        set { Set(DotConstants.LabelAttribute, value); }
 	    }
 
-	    /// <summary>
+        private string _code;
+        /// <summary>
+        /// 
+        /// </summary>
+        public override string Code  {
+            get { return string.IsNullOrWhiteSpace(_code) ? (_code = "NULL") : _code; }
+            set { _code = DotLanguageUtils.EscapeCode(value); }
+        }
+
+        /// <summary>
         /// Размер шрифта, по умолчанию 14 
         /// </summary>
 	    [IgnoreSerialize]
@@ -107,33 +70,8 @@ namespace Qorpent.Dot {
 	        set { Set(DotConstants.FontNameAttribute, value); }
 	    }
 
-	    /// <summary>
-        /// Заголовок
-        /// </summary>
-	    [IgnoreSerialize]
-	    public string Id {
-	        get { return Get<string>(DotConstants.IdAttribute); }
-	        set { Set(DotConstants.IdAttribute, value); }
-	    }
 
-	    /// <summary>
-	    /// Код субграфа
-	    /// </summary>
-	    [Serialize]
-        public string Code {
-            get { return string.IsNullOrWhiteSpace(_code) ? (_code = DotLanguageUtils.NULLCODE) : _code; }
-	        set { _code = DotLanguageUtils.EscapeCode(value);}
-	    }
-
-        
-
-	    /// <summary>
-        /// 
-        /// </summary>
-        [IgnoreSerialize]
-        public object Data { get; set; }
-
-	    /// <summary>
+        /// <summary>
 	    /// Цветовая схема
 	    /// </summary>
 	    [IgnoreSerialize]
@@ -141,15 +79,5 @@ namespace Qorpent.Dot {
 	        get { return Get<string>(DotConstants.ColorSchemeAttribute); }
 	        set { Set(DotConstants.ColorSchemeAttribute, value); }
 	    }
-
-	    /// <summary>
-	    /// Сводит узлы
-	    /// </summary>
-	    /// <param name="otherNode"></param>
-	    public void Merge(GraphElementBase otherNode) {
-	        foreach (var a in otherNode.Attributes) {
-	            Attributes[a.Key] = a.Value;
-	        }
-	    }
-	}
+    }
 }

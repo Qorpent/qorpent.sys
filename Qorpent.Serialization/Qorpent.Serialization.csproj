@@ -62,6 +62,8 @@
     <Compile Include="Dot\Node.cs" />
     <Compile Include="Dot\DotTypes\NodeShapeType.cs" />
     <Compile Include="Dot\DotTypes\RankDirType.cs" />
+    <Compile Include="Fc\Chart.cs" />
+    <Compile Include="Fc\ChartTypes\LabelDisplayType.cs" />
     <Compile Include="Json\CType.cs" />
     <Compile Include="Json\JsonArray.cs" />
     <Compile Include="Json\JsonObject.cs" />
