@@ -28,7 +28,7 @@ using Qorpent.Serialization;
 
 namespace Qorpent.Mvc {
 	/// <summary>
-	/// 	Base for custom actions - wraps most of subsystems and context to simplify acess from user code + templated lifecycle to implement
+	/// Базовый класс для Действий - обертывает большинство подсистем и контекстов для упрощения доступа из пользовательского кода + шаблон "жизненного цикла" для имплементирования 
 	/// </summary>
 	public abstract class ActionBase : ServiceBase, IContextualAction, IWithRole, INotModifiedStateProvider {
 #if PARANOID
@@ -39,26 +39,26 @@ namespace Qorpent.Mvc {
 
 
 		/// <summary>
-		/// 	Back reference to Descriptor
+		/// 	Обратная ссылка на дескриптор
 		/// </summary>
 		public ActionDescriptor Descriptor { get; set; }
 
 		/// <summary>
-		/// 	Wrapper fo Descritor.Name
+		/// 	Обертка над именем дескриптора
 		/// </summary>
 		public string Name {
 			get { return Descriptor.Name; }
 		}
 
 		/// <summary>
-		/// 	Wrapper fo Descritor.Help
+		/// 	Обертка над справкой дескриптора
 		/// </summary>
 		public string Help {
 			get { return Descriptor.Help; }
 		}
 
 		/// <summary>
-		/// 	Access to file system
+		/// 	Доступ к файловой системе
 		/// </summary>
 		[Inject] public IFileNameResolver FileNameResolver {
 			get {
@@ -74,7 +74,7 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	Access to role system
+		/// 	Доступ к системе ролей
 		/// </summary>
 		[Inject] public IRoleResolver Roles {
 			get {
@@ -90,7 +90,7 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	Access to event system
+		/// 	Доступ к системе событий
 		/// </summary>
 		[Inject] public IEventManager Events {
 			get {
@@ -107,7 +107,7 @@ namespace Qorpent.Mvc {
 
 
 		/// <summary>
-		/// 	Access to current user
+		/// 	Доступ к текущему пользователю
 		/// </summary>
 		public IPrincipal User {
 			get {
@@ -119,6 +119,7 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
+		/// Обертка над фабрикой дескриптора
 		/// </summary>
 		protected IMvcFactory Factory {
 			get { return Descriptor.Factory; }
@@ -126,6 +127,13 @@ namespace Qorpent.Mvc {
 
 
 		///<summary>
+		/// Выполнение действия в заданном контексте и возвращение результата
+		/// 0. Вызывается SetContext - устанавливается текущий контекст
+        /// 1. Вызывается Initialize - происходит работа с внешним контекстом
+        /// 2. Вызывается Validate - фаза на которой происходит проверка параметров запроса
+        /// 3. Вызывается Prepare - фаза подготовки
+        /// 4. Вызывается Authorize - происходит дополнительная (кастомная) проверка безопасности
+		/// 
 		///	Executes itself in given context and return some action result
 		///	0. SetContext called
 		///	1. Initialize called - setup context-bound features here - start action state must be completed here
@@ -133,8 +141,8 @@ namespace Qorpent.Mvc {
 		///	3. Prepare called - Prepare is second-level preparation - some db and sys properties can be prepared here
 		///	4. Authorize called - here U can authorize action on very specific logic kind
 		///</summary>
-		///<param name="context"> </param>
-		///<returns> </returns>
+		///<param name="context">Контекст Действия</param>
+		///<returns>Результат выполнения Действия</returns>
 		public object Process(IMvcContext context) {
 			Log.Trace("start", this);
 			try {

@@ -22,13 +22,13 @@ using Qorpent.IoC;
 
 namespace Qorpent.Mvc {
 	/// <summary>
-	/// 	Defines classes that would treated as actions
+	/// Описывает классы которые будут рассматриваться как Действия
 	/// </summary>
 	public class ActionAttribute : ContainerComponentAttribute {
 		/// <summary>
-		/// 	Creates new action definition
+		/// Создает новое определение Действия
 		/// </summary>
-		/// <param name="name"> </param>
+		/// <param name="name">Имя Действия</param>
 		public ActionAttribute(string name) {
 			if (!name.EndsWith(".action")) {
 				name += ".action";
@@ -44,20 +44,20 @@ namespace Qorpent.Mvc {
         public string Arm { get; set; }
 
 		/// <summary>
-		/// 	get name of action (attributebased)
+		/// 	Возвращает имя Действия (attribute-based)
 		/// </summary>
-		/// <param name="action"> </param>
-		/// <returns> </returns>
+		/// <param name="action">Действие</param>
+        /// <returns>Возвращает имя Действия</returns>
 		public static string GetName(IAction action) {
 			var type = action.GetType();
 			return GetName(type);
 		}
 
         /// <summary>
-        /// 	get name of action (attributebased)
+        /// 	Возвращает АРМ Действия (attribute-based)
         /// </summary>
-        /// <param name="action"> </param>
-        /// <returns> </returns>
+        /// <param name="action">Действие</param>
+        /// <returns>Возвращает АРМ</returns>
         public static string GetArm(IAction action)
         {
             var type = action.GetType();
@@ -65,9 +65,10 @@ namespace Qorpent.Mvc {
         }
 
         /// <summary>
+        /// Возвращает АРМ от типа
         /// </summary>
-        /// <param name="type"> </param>
-        /// <returns> </returns>
+        /// <param name="type">тип</param>
+        /// <returns>Возвращает АРМ от типа</returns>
         public static string GetArm(Type type)
         {
             var attr =
@@ -80,9 +81,10 @@ namespace Qorpent.Mvc {
         }
 
 		/// <summary>
+        /// Возвращает имя от типа
 		/// </summary>
-		/// <param name="type"> </param>
-		/// <returns> </returns>
+		/// <param name="type">тип</param>
+		/// <returns>Возвращает имяот типа</returns>
 		public static string GetName(Type type) {
 			var attr =
 				type.GetCustomAttributes(typeof (ActionAttribute), true).OfType<ActionAttribute>().FirstOrDefault();
@@ -97,10 +99,10 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	Get role of given action (attribute-based)
+		/// Возвращает роль от Действия (attribute-based)
 		/// </summary>
-		/// <param name="action"> </param>
-		/// <returns> </returns>
+		/// <param name="action">Действие</param>
+        /// <returns>Возвращает роль от Действия</returns>
 		public static string GetRole(IAction action) {
 			var type = action.GetType();
 			var attr =
@@ -114,8 +116,8 @@ namespace Qorpent.Mvc {
 		/// <summary>
 		/// 	Возвращает контекст применения роли
 		/// </summary>
-		/// <param name="action"> </param>
-		/// <returns> </returns>
+		/// <param name="action">Действие</param>
+        /// <returns>Возвращает контекст применения роли</returns>
 		public static string GetRoleContext(IAction action) {
 			var type = action.GetType();
 			var attr =
@@ -127,10 +129,10 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	Get help string - attribute based
+		/// Возвращает справку по Действию (attribute-based)
 		/// </summary>
-		/// <param name="action"> </param>
-		/// <returns> </returns>
+		/// <param name="action">Действие</param>
+        /// <returns>Возвращает справку по Действию</returns>
 		public static string GetHelp(IAction action) {
 			var type = action.GetType();
 			var attr =
