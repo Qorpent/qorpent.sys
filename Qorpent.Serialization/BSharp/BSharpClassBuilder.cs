@@ -120,26 +120,47 @@ namespace Qorpent.BSharp {
 		}
 
 		private void ProcessAdvancedInclude( XElement i, IBSharpClass[] sources) {
+		    var _i = i;//на случай группировки дублируем
+            var usebody = null != _i.Attribute(BSharpSyntax.IncludeBodyModifier) || _i.GetName() == BSharpSyntax.IncludeBodyModifier;
 			var stub = new XElement("_");
+		    XElement stubi = null;
+            if (usebody && null != _i.Element(BSharpSyntax.IncludeGroupByClause) ||
+                null != _i.Element(BSharpSyntax.IncludeOrderByClause)) {
+                stubi= new XElement(_i);
+                _i = new XElement(_i);
+                foreach (var e in _i.Elements().ToArray()) {
+                    if (e.Name.LocalName != BSharpSyntax.IncludeWhereClause) {
+                        e.Remove();
+                    }
+                    else {
+                        stubi.Element(BSharpSyntax.IncludeWhereClause).Remove();
+                    }
+                }
+                
+            }
 			foreach (var s in sources) {
 			    var __cls = _cls as BSharpClass;
                 if (null != __cls && !__cls.LateIncludedClasses.Contains(s)) {
                     __cls.LateIncludedClasses.Add(s);
                 }
 				var includeelement = new XElement(s.Compiled);
-				var usebody = null != i.Attribute(BSharpSyntax.IncludeBodyModifier) || i.GetName() == BSharpSyntax.IncludeBodyModifier;
-				var nochild = null != i.Attribute(BSharpSyntax.IncludeNoChildModifier) || i.GetName() == BSharpSyntax.IncludeNoChildModifier;
+				
+				var nochild = null != _i.Attribute(BSharpSyntax.IncludeNoChildModifier) || _i.GetName() == BSharpSyntax.IncludeNoChildModifier;
 				if (usebody)
 				{
-					var elements = ExtractIncludeBody(i, includeelement, nochild);
+					var elements = ExtractIncludeBody(_i, includeelement, nochild);
 					stub.Add(elements);
 				}
 				else
 				{
-					ExctractIncludeClass(i, nochild, includeelement);
+					ExctractIncludeClass(_i, nochild, includeelement);
 					stub.Add(includeelement);
 				}
 			}
+            if (usebody && null != stubi) {
+                var elements = ExtractIncludeBody(stubi, stub, false);
+                stub = new XElement("_",elements);
+            }
 			i.ReplaceWith(stub.Elements());
 		}
 
@@ -365,31 +386,93 @@ namespace Qorpent.BSharp {
 		}
 
 		private XElement[] ExtractIncludeBody(XElement i, XElement includeelement, bool nochild) {
-			var elements = includeelement.Elements().ToArray();
-			var wheres = i.Elements(BSharpSyntax.IncludeWhereClause).ToArray();
-			if (0 != wheres.Length) {
+		    var elements = includeelement.Elements();
+		    var wheres = i.Elements(BSharpSyntax.IncludeWhereClause);
+			if (wheres.Any()) {
 				var matcher = new XmlTemplateMatcher(wheres);
 				elements = elements.Where(matcher.IsMatch).ToArray();
 			}
-			if (0 == elements.Length) {
+			if (!elements.Any()) {
 				_context.RegisterError(BSharpErrors.EmptyInclude(_cls, i));
 			}
-			StoreParentParameters(includeelement, i);
+            
+            StoreParentParameters(includeelement, i);
 			foreach (var e in elements) {
 				if (nochild) {
 					e.Elements().Remove();
 				}
 				StoreIncludeParameters(i, e);
 			}
-			return elements;
+            var orderby = i.Element(BSharpSyntax.IncludeOrderByClause);
+            if (null != orderby) {
+                elements = elements.OrderBy(_ => _.Attr(orderby.Attr("code"))).ToArray();
+            }
+		    var select = i.Element(BSharpSyntax.IncludeSelectClause);
+            var grp = i.Element(BSharpSyntax.IncludeGroupByClause);
+            if (null != select && null!=grp) {
+                if (null == select.Attribute(grp.Attr("code"))) {
+                    select.SetAttributeValue(grp.Attr("code"), "false");
+                }
+            }
+            if (null != grp) {
+                var ename = grp.Attr("as", "group");
+                var gattr = grp.Attr("with", "code");
+                var gelements = elements.GroupBy(_ => _.Attr(grp.Attr("code"))).ToArray();
+                var groups = new List<XElement>();
+                foreach (var e in gelements) {
+                    
+                    var grpe = new XElement(ename, new XAttribute(gattr,e.Key));
+                    var els = e.ToArray();
+                    if (null != select)
+                    {
+                        foreach (var el in els) {
+                            FilterWithSelect(el,select);
+                        }
+                    }
+                    grpe.Add(els);
+                    groups.Add(grpe);
+                }
+                return groups.ToArray();
+
+            }
+            else {
+                if (null != select)
+                {
+                    foreach (var el in elements)
+                    {
+                        FilterWithSelect(el, select);
+                    }
+                }
+                return elements.ToArray();    
+            }
 		}
 
-		private void StoreIncludeParameters(XElement src, XElement trg) {
+	    private void FilterWithSelect(XElement e, XElement select) {
+	        foreach (var a in e.Attributes().ToArray()) {
+	            if (a.Name.LocalName == "_file") continue;
+                if (a.Name.LocalName == "_line") continue;
+	            var sa = select.Attribute(a.Name.LocalName);
+                if (null == sa || "false"==sa.Value || "0"==sa.Value) {
+                    a.Remove();
+                    continue;
+                }
+                if (sa.Value == "true" || sa.Value == "1") {
+                    continue;
+                }
+	            e.SetAttributeValue(sa.Value,a.Value);
+	            a.Remove();
+	        }
+	    }
+
+	    private void StoreIncludeParameters(XElement src, XElement trg) {
 			foreach (var a in src.Attributes()) {
 				if(a.Name.LocalName=="code") continue;
 				if (a.Name.LocalName == "name") continue;
 				if (a.Name.LocalName == BSharpSyntax.IncludeBodyModifier) continue;
-				trg.SetAttributeValue(a.Name,a.Value);
+                if (null == trg.Attribute(a.Name.LocalName)) {
+                    trg.SetAttributeValue(a.Name, a.Value);    
+                }
+				
 			}
 		}
 		private void StoreParentParameters(XElement src, XElement trg)

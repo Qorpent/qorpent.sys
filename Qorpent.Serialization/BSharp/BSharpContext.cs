@@ -464,6 +464,7 @@ namespace Qorpent.BSharp {
 			ApplyExtensions();
 			ResolveOrphans();
 			ResolveIgnored();
+		    
 			Orphans = RawClasses.Values.Where(_ => _.IsOrphaned).ToList();
 			Ignored = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Ignored)).ToList();
 			foreach (var o in Orphans) {
@@ -577,6 +578,14 @@ namespace Qorpent.BSharp {
 			foreach (var e in src.Source.Attributes())
 			{
 				trg.Source.SetAttributeValue(e.Name,e.Value);
+                if (e.Name.LocalName == "abstract") {
+                    if (e.Value.ToBool()) {
+                        trg.Set(BSharpClassAttributes.Abstract);
+                    }
+                    else {
+                        trg.Remove(BSharpClassAttributes.Abstract);
+                    }
+                }
 			}
             foreach (var e in src.Source.Elements())
             {

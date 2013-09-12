@@ -128,20 +128,23 @@ namespace Qorpent.Mvc {
 
 		///<summary>
 		/// Выполнение действия в заданном контексте и возвращение результата
-		/// 0. Вызывается SetContext - устанавливается текущий контекст
+		///</summary>
+		///<param name="context">Контекст Действия</param>
+		/// <remarks>
+        /// 0. Вызывается SetContext - устанавливается текущий контекст
         /// 1. Вызывается Initialize - происходит работа с внешним контекстом
         /// 2. Вызывается Validate - фаза на которой происходит проверка параметров запроса
         /// 3. Вызывается Prepare - фаза подготовки
         /// 4. Вызывается Authorize - происходит дополнительная (кастомная) проверка безопасности
-		/// 
-		///	Executes itself in given context and return some action result
-		///	0. SetContext called
-		///	1. Initialize called - setup context-bound features here - start action state must be completed here
-		///	2. Validate called - this phase have to validate request by internal logic (parameters complexity checking)
-		///	3. Prepare called - Prepare is second-level preparation - some db and sys properties can be prepared here
-		///	4. Authorize called - here U can authorize action on very specific logic kind
-		///</summary>
-		///<param name="context">Контекст Действия</param>
+        /// 5. Вызывается MainProcess - собственно собственная логика Action
+        /// 
+        ///	Executes itself in given context and return some action result
+        ///	0. SetContext called
+        ///	1. Initialize called - setup context-bound features here - start action state must be completed here
+        ///	2. Validate called - this phase have to validate request by internal logic (parameters complexity checking)
+        ///	3. Prepare called - Prepare is second-level preparation - some db and sys properties can be prepared here
+        ///	4. Authorize called - here U can authorize action on very specific logic kind
+		/// </remarks>
 		///<returns>Результат выполнения Действия</returns>
 		public object Process(IMvcContext context) {
 			Log.Trace("start", this);
