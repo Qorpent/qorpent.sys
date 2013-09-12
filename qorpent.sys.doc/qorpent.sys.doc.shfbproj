@@ -16,11 +16,17 @@
     <Name>qorpent.sys.doc</Name>
     <!-- SHFB properties -->
     <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
-    <OutputPath>..\..\.build\qorpent.core.help\</OutputPath>
+    <OutputPath>..\..\.build\doc\qorpent.core</OutputPath>
     <HtmlHelpName>qorpent.sys.doc</HtmlHelpName>
     <Language>ru-RU</Language>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Qorpent.Core\Qorpent.Core.csproj" xmlns="" />
+      <DocumentationSource sourceFile="..\Qorpent.IO\Qorpent.IO.csproj" />
+      <DocumentationSource sourceFile="..\Qorpent.IoC\Qorpent.IoC.csproj" />
+      <DocumentationSource sourceFile="..\Qorpent.Log\Qorpent.Log.csproj" />
+      <DocumentationSource sourceFile="..\Qorpent.Mvc\Qorpent.Mvc.csproj" />
+      <DocumentationSource sourceFile="..\Qorpent.Serialization\Qorpent.Serialization.csproj" />
+      <DocumentationSource sourceFile="..\Qorpent.Utils\Qorpent.Utils.csproj" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
