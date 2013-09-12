@@ -43,7 +43,7 @@
     <NamingMethod>MemberName</NamingMethod>
     <HelpTitle>A Sandcastle Documented Class Library</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
-    <VisibleItems>Internals, Privates, Protected, SealedProtected, PrivateFields</VisibleItems>
+    <VisibleItems>Attributes, InheritedMembers, Internals, Privates, Protected, SealedProtected, PrivateFields</VisibleItems>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional
