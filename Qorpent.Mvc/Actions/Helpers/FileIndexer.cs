@@ -12,8 +12,8 @@ namespace Qorpent.Mvc.Actions.Helpers {
 	    /// <summary>
 	    /// Выводит перечень файолов и папок приложения по маске
 	    /// </summary>
-	    /// <param name="fileMask">Маска запроса</param>
-	    /// <param name="showDirs">Показывать папки</param>
+	    /// <param name="fileMask">Маска запроса </param>
+	    /// <param name="showDirs">Показывать  папки</param>
 	    /// <param name="showFiles">Показывать файлы</param>
 	    /// <returns>Список папок и файлов текущей дирректории с учетом маски</returns>
 	    /// <exception cref="NotImplementedException"></exception>
