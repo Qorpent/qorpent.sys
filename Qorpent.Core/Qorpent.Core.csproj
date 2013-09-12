@@ -65,6 +65,8 @@
     <Compile Include="Config\DictionaryCompatibleConfig.cs" />
     <Compile Include="Config\IConfig.cs" />
     <Compile Include="ConvertExtensions.cs" />
+    <Compile Include="Data\DocumentStorageOptions.cs" />
+    <Compile Include="Data\IDocumentStorage.cs" />
     <Compile Include="Data\IParametersProvider.cs" />
     <Compile Include="Data\ParamAttribute.cs" />
     <Compile Include="Dsl\ReplaceDescriptor.cs" />
@@ -134,12 +136,12 @@
     <Compile Include="Dsl\Json\IJsonParser.cs" />
     <Compile Include="Serialization\FcOptions.cs" />
     <Compile Include="Serialization\ContentCleanerOptions.cs" />
-    <Compile Include="Serialization\GraphOptions.cs" />
-    <Compile Include="Serialization\IBSharpDotConverter.cs" />
+    <Compile Include="Serialization\Graphs\GraphOptions.cs" />
+    <Compile Include="Serialization\Graphs\IGraphProvider.cs" />
     <Compile Include="Serialization\IContentCleaner.cs" />
     <Compile Include="Serialization\ICustomSelectorImpl.cs" />
-    <Compile Include="Serialization\IGraphConvertible.cs" />
-    <Compile Include="Serialization\IGraphSource.cs" />
+    <Compile Include="Serialization\Graphs\IGraphConvertible.cs" />
+    <Compile Include="Serialization\Graphs\IGraphSource.cs" />
     <Compile Include="Serialization\ISelector.cs" />
     <Compile Include="Serialization\ISelectorImpl.cs" />
     <Compile Include="Serialization\ISerializerXsltExtension.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="Dsl\Json\JsonTokenType.cs" />
     <Compile Include="Serialization\SelectorLanguage.cs" />
     <Compile Include="Serialization\ContentCleanerOperations.cs" />
+    <Compile Include="Serialization\XmlEscaper.cs" />
     <Compile Include="ServiceState.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
     <Compile Include="Wiki\IWikiEmptyFilter.cs" />

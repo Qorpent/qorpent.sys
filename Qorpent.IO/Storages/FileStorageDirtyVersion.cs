@@ -31,7 +31,7 @@ namespace Qorpent.IO.Storages {
         public IGeneralFileDescriptor Set(IFileEntity file, Stream stream) {
             return new FileDescriptorDirtyVersionBased(
                 DirtyVersionStorage,
-                DirtyVersionStorage.Save(file.Path, stream, file.Version)
+                DirtyVersionStorage.Save(file.Path, stream)
             );
         }
         /// <summary>

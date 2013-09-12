@@ -93,7 +93,7 @@ namespace Qorpent.IO {
             }
 
 			foreach (var target in targets) {
-				target.Position = 0;
+				target.Flush();
 			}
 
             return offset;

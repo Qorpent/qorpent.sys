@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -18,8 +19,9 @@ namespace Qorpent.BSharp {
 		private readonly IBSharpCompiler _compiler;
 		private readonly IBSharpClass _cls;
 		private readonly IBSharpContext _context;
+	   
 
-		IUserLog Log {
+	    IUserLog Log {
 			get { return _compiler.GetConfig().Log; }
 		}
 
@@ -112,14 +114,18 @@ namespace Qorpent.BSharp {
 						i.Remove();
 						continue;
 					}
-					ProcessAdvancedInclude(_cls, i, sources);
+					ProcessAdvancedInclude(i, sources);
 				}
 			}
 		}
 
-		private void ProcessAdvancedInclude(IBSharpClass cls, XElement i, IBSharpClass[] sources) {
+		private void ProcessAdvancedInclude( XElement i, IBSharpClass[] sources) {
 			var stub = new XElement("_");
 			foreach (var s in sources) {
+			    var __cls = _cls as BSharpClass;
+                if (null != __cls && !__cls.LateIncludedClasses.Contains(s)) {
+                    __cls.LateIncludedClasses.Add(s);
+                }
 				var includeelement = new XElement(s.Compiled);
 				var usebody = null != i.Attribute(BSharpSyntax.IncludeBodyModifier) || i.GetName() == BSharpSyntax.IncludeBodyModifier;
 				var nochild = null != i.Attribute(BSharpSyntax.IncludeNoChildModifier) || i.GetName() == BSharpSyntax.IncludeNoChildModifier;
@@ -164,7 +170,11 @@ namespace Qorpent.BSharp {
 					var fstdot = val.IndexOf(BSharpSyntax.DictionaryCodeElementDelimiter);
 					var code = val.Substring(0, fstdot);
 					var element = val.Substring(fstdot + 1);
-
+                    var __cls = _cls as BSharpClass;
+                    if (null != __cls && !__cls.ReferencedDictionaries.Contains(code))
+                    {
+                        __cls.ReferencedDictionaries.Add(code);
+                    }
 					var result = _context.ResolveDictionary(code, element);
 					if (null == result)
 					{
@@ -263,6 +273,11 @@ namespace Qorpent.BSharp {
 					var normallyresolvedClass = _context.Get(clsname, _cls.Namespace);
 					if (null != normallyresolvedClass) {
 						a.Value = normallyresolvedClass.FullName;
+                        var __cls = _cls as BSharpClass;
+                        if (null != __cls && !__cls.ReferencedClasses.Contains(normallyresolvedClass))
+                        {
+                            __cls.ReferencedClasses.Add(normallyresolvedClass);
+                        }
 					}
 					else {
 						var candidates = _context.Get(BSharpContextDataType.Working).Where(_ => _.FullName.EndsWith(clsname)).ToArray();
@@ -313,6 +328,12 @@ namespace Qorpent.BSharp {
 			}
 			else {
 				Build(BuildPhase.Compile,_compiler, includecls, _context);
+                var __cls = _cls as BSharpClass;
+                if (null != __cls && !__cls.IncludedClasses.Contains(includecls))
+                {
+                    __cls.IncludedClasses.Add(includecls);
+                }
+			
 				var includeelement = new XElement(includecls.Compiled);
 				var usebody = null != i.Attribute(BSharpSyntax.IncludeBodyModifier) || i.GetName() == BSharpSyntax.IncludeBodyModifier;
 				var nochild = null != i.Attribute(BSharpSyntax.IncludeNoChildModifier) || i.GetName() == BSharpSyntax.IncludeNoChildModifier;

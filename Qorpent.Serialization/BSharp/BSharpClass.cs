@@ -32,6 +32,45 @@ namespace Qorpent.BSharp {
 			get { return _attributes; }
 		}
 
+        private IList<IBSharpClass> _includedClasses;
+        private IList<IBSharpClass> _referencedClasses;
+        private IList<string> _referencedDictionaries;
+        private IList<IBSharpClass> _lateIncludedClasses;
+
+        /// <summary>
+        /// 
+        /// </summary>
+       [IgnoreSerialize]
+        public IList<IBSharpClass> IncludedClasses
+        {
+            get { return _includedClasses ?? (_includedClasses = new List<IBSharpClass>()); }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        [IgnoreSerialize]
+        public IList<IBSharpClass> LateIncludedClasses
+        {
+            get { return _lateIncludedClasses ?? (_lateIncludedClasses = new List<IBSharpClass>()); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [IgnoreSerialize]
+        public IList<IBSharpClass> ReferencedClasses
+        {
+            get { return _referencedClasses ?? (_referencedClasses = new List<IBSharpClass>()); }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        [IgnoreSerialize]
+        public IList<string> ReferencedDictionaries
+        {
+            get { return _referencedDictionaries ?? (_referencedDictionaries = new List<string>()); }
+        }
+
 		/// <summary>
 		/// Атрибуты класса
 		/// </summary>

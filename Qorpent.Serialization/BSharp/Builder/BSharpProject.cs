@@ -36,6 +36,7 @@ namespace Qorpent.BSharp.Builder {
 	    private const string PROJECT_NAME = "project_name";
 	    private const string GENERATE_SRC_PKG = "generate_src_pkg";
 	    private const string SRC_PKG_NAME = "src_pkg_name";
+	    private const string GENERATE_GRAPH = "generate_graph";
 		
 		/// <summary>
 		/// Целевые проекты при билде
@@ -168,8 +169,16 @@ namespace Qorpent.BSharp.Builder {
 			set { Set(SRC_PKG_NAME, value); }
 		}
 
+	    /// <summary>
+	    /// Флаг необходимости генерации графической карты классов
+	    /// </summary>
+	    public bool GenerateGraph {
+            get { return Get(GENERATE_GRAPH,false); }
+            set { Set(GENERATE_GRAPH, value); }
+	    }
 
-		/// <summary>
+
+	    /// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>

@@ -68,7 +68,6 @@ namespace Qorpent.IO.DirtyVersion
 			}
 			return result;
 		}
-
 		/// <summary>
 		/// Сохраняет массив байтов
 		/// </summary>
@@ -76,11 +75,9 @@ namespace Qorpent.IO.DirtyVersion
 		/// <param name="data"></param>
 		/// <param name="basecommit"></param>
 		/// <returns></returns>
-		public Commit Save(string name, byte[] data, string basecommit = null)
-		{
+		public Commit Save(string name, byte[] data, string basecommit = null) {
 			return Save(name, new MemoryStream(data));
 		}
-
 		/// <summary>
 		/// Сохраняет данные из потока
 		/// </summary>
@@ -88,8 +85,7 @@ namespace Qorpent.IO.DirtyVersion
 		/// <param name="stream"></param>
 		/// <param name="basecommit"></param>
 		/// <returns></returns>
-		public Commit Save(string name, Stream stream, string basecommit = null)
-		{
+		public Commit Save(string name, Stream stream, string basecommit = null) {
 			var binobj = _hashed.Write(name, stream);
 			var commit = MakeCommit(name, basecommit, binobj);
 			return commit;

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace Qorpent.Serialization {
+namespace Qorpent.Serialization.Graphs {
     /// <summary>
     /// Источник графа
     /// </summary>

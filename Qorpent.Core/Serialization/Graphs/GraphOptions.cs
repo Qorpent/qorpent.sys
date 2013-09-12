@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Qorpent.Mvc;
 
-namespace Qorpent.Serialization {
+namespace Qorpent.Serialization.Graphs {
 
     
 
@@ -29,6 +29,11 @@ namespace Qorpent.Serialization {
         /// Цель - SVG
         /// </summary>
         public const string PNGTARGET = "png";
+
+        /// <summary>
+        /// Признак указания легенды
+        /// </summary>
+        public bool ShowLegend { get; set; }
 
         /// <summary>
         /// 

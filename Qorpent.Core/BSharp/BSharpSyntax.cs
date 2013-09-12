@@ -1,8 +1,12 @@
-﻿namespace Qorpent.BSharp {
+﻿using System;
+using Qorpent.Serialization;
+
+namespace Qorpent.BSharp {
 	/// <summary>
 	/// Класс с определением и описанием ключевых и зарезервированных слов BSharp
 	/// </summary>
-	public static class BSharpSyntax {
+	public static class BSharpSyntax
+	{
 		/// <summary>
 		/// Ключевое слово, открывающее пространство имен
 		/// </summary>
@@ -15,19 +19,18 @@
 		/// Разделитель полного имени класса (путь) 
 		/// </summary>
 		public const char ClassPathDelimiter = '.';
-		/// <summary>
-		/// Определение перекрывающего аспекта класса
-		/// </summary>
-		public const string ClassOverrideKeyword = "__TILD__class";
-		/// <summary>
-		/// Определение дополняющего аспекта класса
-		/// </summary>
-		public const string ClassExtensionKeyword = "__PLUS__class";
+	    /// <summary>
+	    /// Определение перекрывающего аспекта класса
+	    /// </summary>
+	    public static readonly string ClassOverrideKeyword = XmlEscaper.Escape("~") + "class";
+	    /// <summary>
+	    /// Определение дополняющего аспекта класса
+	    /// </summary>
+	    public static readonly string ClassExtensionKeyword = XmlEscaper.Escape("+") + "class";
 		/// <summary>
 		/// Атрибут приоритета перекрытия класса
 		/// </summary>
 		public const string ClassOverridePriorityAttribute = "priority";
-
 		/// <summary>
 		/// Атрибут приоритета перекрытия класса
 		/// </summary>
@@ -140,11 +143,11 @@
 		/// <summary>
 		/// Префикс перекрытия элемента
 		/// </summary>
-		public const string ElementOverridePrefix = "__TILD__";
+        public static readonly string ElementOverridePrefix = XmlEscaper.Escape("~");
 		/// <summary>
 		/// Префикс расширения элемента
 		/// </summary>
-		public const string ElementExtensionPrefix = "__PLUS__";
+        public static readonly string ElementExtensionPrefix = XmlEscaper.Escape("+");
 		/// <summary>
 		/// Префикс приватного атрибута
 		/// </summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
+using Qorpent.Serialization;
 
 namespace Qorpent.BSharp.Schema {
 	/// <summary>
@@ -37,11 +38,11 @@ namespace Qorpent.BSharp.Schema {
 				else {
 					var acode = a.Name.LocalName;
 					acode =
-						acode.Replace("__PLUS__", "+")
-						     .Replace("__MINUS__", "-")
-						     .Replace("__AT__", "@")
-						     .Replace("__EXC__", "!")
-						     .Replace("__TILD__", "~");
+                        acode.Replace(XmlEscaper.Escape("+"), "+")
+                             .Replace(XmlEscaper.Escape("-"), "-")
+                             .Replace(XmlEscaper.Escape("@"), "@")
+                             .Replace(XmlEscaper.Escape("!"), "!")
+                             .Replace(XmlEscaper.Escape("~"), "~");
 					AttributeRules.Add(new AttributeRule(acode, a.Value));
 				}
 			}
