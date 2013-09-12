@@ -15,10 +15,10 @@
     <RootNamespace>qorpent.sys.doc</RootNamespace>
     <Name>qorpent.sys.doc</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
-    <OutputPath>.\Help\</OutputPath>
+    <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
+    <OutputPath>..\..\.build\qorpent.core.help\</OutputPath>
     <HtmlHelpName>qorpent.sys.doc</HtmlHelpName>
-    <Language>en-US</Language>
+    <Language>ru-RU</Language>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Qorpent.Core\Qorpent.Core.csproj" xmlns="" />
     </DocumentationSources>
@@ -29,14 +29,15 @@
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
     <CleanIntermediates>True</CleanIntermediates>
-    <SyntaxFilters>CSharp, JavaScript</SyntaxFilters>
+    <SyntaxFilters>CSharp</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <PresentationStyle>VS2010</PresentationStyle>
     <Preliminary>False</Preliminary>
-    <NamingMethod>Guid</NamingMethod>
+    <NamingMethod>MemberName</NamingMethod>
     <HelpTitle>A Sandcastle Documented Class Library</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <VisibleItems>Internals, Privates, Protected, SealedProtected, PrivateFields</VisibleItems>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional
