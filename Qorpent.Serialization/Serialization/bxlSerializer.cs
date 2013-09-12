@@ -21,16 +21,27 @@ using Qorpent.IoC;
 
 namespace Qorpent.Serialization {
 	/// <summary>
+	/// Конвертирует входной объект в BXL-представление.
 	/// </summary>
 	/// <remarks>
+    /// В своей работе использует <see cref="BxlSerializerImpl"/>.
+    /// Соответственно сначала объект приводится к XML представлению, которое приводится к BXL-эквиваленту.
+    /// Напрямую использовать не рекомендуется, стандартное использование через IOC
 	/// </remarks>
+	/// <example>
+	/// var mydata = new {x=1,y=2,z=3};
+	/// var output = new StringWriter();
+	/// var serializer = Application.Current.Container.Get&lt;ISerializer&gt;("bxl.serializer");
+	/// serializer.Serialize("mytest",mydata,output);
+	/// Console.WriteLine(output.ToString());
+	/// </example>
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISerializer), Name = "bxl.serializer")]
 	public class BxlSerializer : Serializer {
 		/// <summary>
-		/// 	Creates the impl.
+        /// Создает экземпляр <see cref="ISerializerImpl"/> ( <see cref="BxlSerializerImpl"/> )
 		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
+		/// <param name="name">Имя объекта сериализации</param>
+		/// <param name="value">Объект сериализации</param>
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>

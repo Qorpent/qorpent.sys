@@ -21,7 +21,15 @@ using Qorpent.Applications;
 using Qorpent.Bxl;
 
 namespace Qorpent.Serialization {
+    /// <summary>
+    /// Реализует конвертацию XML в BXL, является оберткой над <see cref="XmlSerializerImpl"/>
+    /// </summary>
 	internal class BxlSerializerImpl : XmlSerializerImpl {
+        /// <summary>
+        /// В самом конце генерации при закрытии объекта производится собственно запись в поток
+        /// результата преобразования Xml в Bxl 
+        /// </summary>
+        /// <remarks>Используется стандартный <see cref="IBxlParser"/> в режими NoRootElement, так как рутом является сам сериализуемый объект</remarks>
 		public override void End() {
 			var e = Root;
 			Output.Write(Application.Current.Bxl.GetParser().Generate(e,new BxlGeneratorOptions{NoRootElement = true}));
