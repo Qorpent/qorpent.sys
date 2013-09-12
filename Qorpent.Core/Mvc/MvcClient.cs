@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -81,7 +82,7 @@ namespace Qorpent.Mvc
 
 		private string GeneratePostData(object parameters) {
 			var dict = parameters.ToDict();
-			return string.Join("&", dict.Select(_ => _.Key + "=" + _.Value));
+            return string.Join("&", dict.Select(_ => _.Key + "=" + Uri.EscapeDataString(_.Value.ToStr())));
 		}
 	}
 }

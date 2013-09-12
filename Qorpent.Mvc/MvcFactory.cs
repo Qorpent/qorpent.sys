@@ -57,7 +57,9 @@ namespace Qorpent.Mvc {
 					            !t.IsAbstract
 				            select t;
 				foreach (var type in types) {
-					Register(type);
+				    if (null != type.GetCustomAttribute<ContainerComponentAttribute>(true)) {
+				        Register(type);
+				    }
 				}
 				return this;
 			}catch(ReflectionTypeLoadException e) {
