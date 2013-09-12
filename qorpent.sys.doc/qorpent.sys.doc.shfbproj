@@ -44,6 +44,64 @@
     <HelpTitle>A Sandcastle Documented Class Library</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <VisibleItems>Internals, Privates, Protected, SealedProtected, PrivateFields</VisibleItems>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="Qorpent" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Applications" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.BSharp" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.BSharp.Builder" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.BSharp.Matcher" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.BSharp.Runtime" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.BSharp.Schema" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Bxl" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Config" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Data" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Dot" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Dsl" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Dsl.LogicalExpressions" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Dsl.XmlInclude" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Events" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IO" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IO.DirtyVersion" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IO.DirtyVersion.Mapping" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IO.DirtyVersion.Storage" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IO.FileDescriptors" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IO.Resources" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IO.Storages" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IO.VcsStorage" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IO.Web" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IO.Zip" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IoC" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.IoC.BSharp" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Json" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Log" isDocumented="True" xmlns="">Пространство имён, хранящее классы, предоставляющие функционал для регистрации состояний и/или событий системы</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Qorpent.LogicalExpressions" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Model" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.Actions" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.Actions.Helpers" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.Actions.Wiki" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.Binding" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.HttpHandler" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.Loader" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.QView" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.Remoting" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.Renders" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.Renders.ActionFormViews" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.Renders.LoginViews" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.Security" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Mvc.UI" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Qxi" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Security" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Security.Watchdog" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Selector" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Selector.Implementations" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Serialization" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Serialization.Graphs" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Utils" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Utils.Collections" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Utils.Extensions" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Utils.LogicalExpressions" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="Qorpent.Wiki" isDocumented="False" xmlns="" /></NamespaceSummaries>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional
