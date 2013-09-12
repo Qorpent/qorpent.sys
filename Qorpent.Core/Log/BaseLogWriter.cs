@@ -16,55 +16,49 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/BaseLogWriter.cs
 #endregion
-
 using System;
 using System.Text.RegularExpressions;
 
 namespace Qorpent.Log {
 	/// <summary>
-	/// 	abdstract log writer with thread safe write method wrapper
+    ///     Абстрактный менеджер записи в лог с Thread-safe обёрткой к райтеру
 	/// </summary>
 	public abstract class BaseLogWriter : ServiceBase, ILogWriter {
+        /// <summary>
+        /// 	Минимальный уровень логгирования
+        /// </summary>
+        public LogLevel Level { get; set; }
 		/// <summary>
-		/// 	Format or output message
+		/// 	Формат выходящих сообщений
 		/// </summary>
 		public string CustomFormat { get; set; }
-
-
 		/// <summary>
-		/// 	writes message synchronously on down level
+		/// 	Записывает сообщение <see cref="LogMessage"/> в лог на нижний уровень
 		/// </summary>
-		/// <param name="message"> </param>
+        /// <param name="message">Представление сообщения <see cref="LogMessage"/></param>
 		public void Write(LogMessage message) {
 			lock (Sync) {
 				InternalWrite(message);
 			}
 		}
-
-		/// <summary>
-		/// 	Minimal log level of writer
-		/// </summary>
-		public LogLevel Level { get; set; }
-
-
-		/// <summary>
-		/// </summary>
-		/// <param name="message"> </param>
+        /// <summary>
+        ///     Внутренняя операция записи в лог
+        /// </summary>
+        /// <param name="message">Текст сообщения в формате <see cref="LogMessage"/></param>
 		protected abstract void InternalWrite(LogMessage message);
-
-
 		/// <summary>
+		///     Возвращет форматированный текст из представления сообщения <see cref="LogMessage"/>. Фасад над <see cref="GetFormatted"/>
 		/// </summary>
-		/// <param name="message"> </param>
-		/// <returns> </returns>
+        /// <param name="message">Представление сообщения <see cref="LogMessage"/></param>
+		/// <returns>Форматированная строка сообщения</returns>
 		protected virtual string GetText(LogMessage message) {
 			return GetFormatted(message);
 		}
-
 		/// <summary>
+        ///     Возвращет форматированный текст из представления сообщения <see cref="LogMessage"/>
 		/// </summary>
-		/// <param name="message"> </param>
-		/// <returns> </returns>
+        /// <param name="message">Представление сообщения <see cref="LogMessage"/></param>
+        /// <returns>Форматированная строка сообщения</returns>
 		protected virtual string GetFormatted(LogMessage message) {
 			string text;
 			if (!string.IsNullOrEmpty(CustomFormat)) {
