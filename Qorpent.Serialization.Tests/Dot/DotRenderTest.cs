@@ -1,7 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
-using Qorpent.Dot;
-using Qorpent.Serialization.Graphs;
+using Qorpent.Graphs;
+using Qorpent.Graphs.Dot;
+using Qorpent.Graphs.Dot.Types;
 
 namespace Qorpent.Serialization.Tests.Dot {
     [TestFixture]
@@ -80,8 +81,8 @@ namespace Qorpent.Serialization.Tests.Dot {
             
             var r = render(g);
             Assert.AreEqual(@"digraph test {
-	a [label=a;shape=box;style=""bold,dashed,striped"";fillcolor=""red;0.3:blue;0.2:green"";];
-	b [label=b;shape=Mcircle;style=filled;fillcolor=""red:blue"";];
+	a [label=a;shape=box;color=""bold,dashed,striped"";fillcolor=""red;0.3:blue;0.2:green"";];
+	b [label=b;shape=Mcircle;color=filled;fillcolor=""red:blue"";];
 	a -> b [arrowhead=lcurverobox;arrowtail=obox;dir=both;];
 }
 ", r);
