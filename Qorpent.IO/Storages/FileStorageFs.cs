@@ -61,7 +61,12 @@ namespace Qorpent.IO.Storages {
         /// <param name="pattern">Шаблон для поиска</param>
         /// <returns>Массив имён</returns>
         public string[] List(string pattern) {
-            return new DirectoryInfo(WorkingDirectory.FullName).GetFiles(pattern).Select(el => el.Name).ToArray();
+            var di = new DirectoryInfo(WorkingDirectory.FullName);
+            if (!di.Exists) {
+                return new string[] {};
+            }
+
+            return di.GetFiles(pattern).Select(el => el.Name).ToArray();
         }
         /// <summary>
         ///     Прокатака цикла реальной записи на диск
