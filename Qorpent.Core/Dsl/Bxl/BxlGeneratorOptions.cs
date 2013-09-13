@@ -18,41 +18,41 @@
 #endregion
 namespace Qorpent.Bxl {
 	/// <summary>
-	/// 	Options for generating BXL from XML
+	/// 	ќпци€ дл€ создани€ BXL из XML
 	/// </summary>
 	public class BxlGeneratorOptions {
 		/// <summary>
-		/// 	Set of highly prioritized attributes, whose order will be applyed before apphabetical
+		/// 	Ќабор высокоприоритетных атрибутов, пор€док которых будет примен€тьс€ перед алфавитым.
 		/// </summary>
 		public string[] FirstPlaceAttributes = new[] {"id", "code", "name"};
 
 		/// <summary>
-		/// 	Set of attributes which always must be rendered at same line as element start
+		/// 	Ќабор атрибутов которые всегда должны быть представлены в той-же строке, что и элемент начала
 		/// </summary>
 		public string[] InlineAlwaysAttributes = new[] {"id", "code", "name", "_file", "_line", "idx"};
 
 		/// <summary>
-		/// 	If it's possible - renders attributes at same line as element starts
+        /// 	≈сли возможно - представл€ет атрибуты в той-же строке, что и элемент начала
 		/// </summary>
 		public bool InlineAttributesByDefault;
 
 		/// <summary>
-		/// 	Set of attributes which must always be rendered at own line
+		/// 	Ќабор атрибутов которые всегда вынос€тс€ в отдельную строку
 		/// </summary>
 		public string[] NewlineAlwaysAttributes = new string[] {};
 
 		/// <summary>
-		/// 	Prevents generation of root element (just 1-st level descendants will be rendered)
+		/// 	ѕредотвращает создание корневых элементов (“олько первоуровневые дочерние элементы будут представлены)
 		/// </summary>
 		public bool NoRootElement;
 
 		/// <summary>
-		/// 	Set of attributes, which must be skipped during generation
+		/// 	Ќабор атрибутов, которые должны быть пропущены во врем€ создани€
 		/// </summary>
 		public string[] SkipAttributes = new string[] {};
 
 		/// <summary>
-		/// 	Forces usage of safe tripple quotes strings on values rendering
+		/// 	ѕринудительно безопасное использование тройных кавычек в строке при представлении значени€
 		/// </summary>
 		public bool UseTrippleQuotOnValues;
 	}
