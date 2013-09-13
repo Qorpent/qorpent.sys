@@ -73,14 +73,14 @@ namespace Qorpent.Serialization.Tests {
 		public void array_serialized() {
 			var a = new object[] {1, true, "test!"};
 
-			test(a, @"{""0"": 1, ""1"": true, ""2"": ""test!""}");
+			test(a, @"[1, true, ""test!""]");
 		}
 
 		[Test]
 		public void array_serialized_string_with_quots() {
 			var a = new object[] {1, true, "\"test\"!"};
 
-			test(a, @"{""0"": 1, ""1"": true, ""2"": ""\""test\""!""}");
+			test(a, @"[1, true, ""\""test\""!""]");
 		}
 
 		[Test]
@@ -124,7 +124,7 @@ namespace Qorpent.Serialization.Tests {
 			var a = new object[] {1, true, "test!"};
 			var obj = new {name = "x", dict, a};
 			test(obj,
-			     @"{""name"": ""x"", ""dict"": {""x"": 1, ""y'x"": true, ""z"": ""test!""}, ""a"": {""0"": 1, ""1"": true, ""2"": ""test!""}}");
+			     @"{""name"": ""x"", ""dict"": {""x"": 1, ""y'x"": true, ""z"": ""test!""}, ""a"": [1, true, ""test!""]}");
 		}
 
 		[Test]

@@ -71,7 +71,7 @@ namespace Qorpent.Serialization.Tests {
 		public void BUG_cannot_process_xelement_with_multiple_items() {
 			test(
 				new XElement("root", new XElement("x", "v1"), new XElement("x", "v2")),
-				"{x: [{_text: 'v1', }, {_text: 'v2', }, ], }");
+                "{x: ['v1', 'v2', ], }");
 		}
 
 		[Test]
@@ -107,8 +107,8 @@ namespace Qorpent.Serialization.Tests {
 		[Test]
 		public void can_force_array_on_specially_marked_elements() {
 			test(
-				new XElement("root", new XAttribute("isarray", 1), new XElement("x", "v1")),
-				"{isarray: '1', x: [{_text: 'v1', }, ], }");
+				new XElement("root", new XElement("x", new XAttribute("__isarray", 1), new XElement("x", "v1"))),
+                "{x: ['v1', ], }");
 		}
 
 		[Test]
