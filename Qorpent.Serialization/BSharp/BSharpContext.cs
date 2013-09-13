@@ -440,6 +440,7 @@ namespace Qorpent.BSharp {
 		public IEnumerable<BSharpError> GetErrors(ErrorLevel level = ErrorLevel.None) {
 			if (null == Errors) yield break;
 			foreach (var e in Errors.ToArray()) {
+                if (null == e) continue;
 				if (e.Level >= level) {
 					yield return e;
 				}
