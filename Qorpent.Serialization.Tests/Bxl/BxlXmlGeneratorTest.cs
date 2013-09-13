@@ -42,7 +42,7 @@ test +a = 1
 ");
 			var xml = new BxlXmlGenerator().Generate(tokens);
 			Console.WriteLine(xml.ToString());
-			Assert.AreEqual(@"<root><test _line=""2"" " + XmlEscaper.Escape("+") + @"a=""1"" " + XmlEscaper.Escape("-") + @"b=""2"" _1x=""3"" /></root>".LfOnly(),
+			Assert.AreEqual(@"<root><test _line=""2"" " + XmlNameEscaper.EscapeXmlName("+") + @"a=""1"" " + XmlNameEscaper.EscapeXmlName("-") + @"b=""2"" _1x=""3"" /></root>".LfOnly(),
 			                xml.ToString(SaveOptions.DisableFormatting).LfOnly());
 		}
 

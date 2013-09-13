@@ -57,6 +57,7 @@
     <Compile Include="serialization_set_test.cs" />
     <Compile Include="XmlInclude\Bug_XmlInterpolationInContainer.cs" />
     <Compile Include="XmlInclude\XmlIncludeMainTest.cs" />
+    <Compile Include="XmlNameEscaperTest.cs" />
     <Compile Include="xml_serializer_test.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,7 @@ namespace Qorpent.Serialization
     /// <summary>
     /// преобразовывает спецсимволы из xml в bxl и обратно
     /// </summary>
-    public class XmlEscaper
+    public static class XmlNameEscaper
     {
         private static readonly Dictionary<String, String> _xml = new Dictionary<string, string>()
             {
@@ -70,7 +70,7 @@ namespace Qorpent.Serialization
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        public static String Escape(String c)
+        public static String EscapeEntity(this String c)
         {
             String r = c;
             if (_xml.TryGetValue(c, out r))
@@ -83,7 +83,7 @@ namespace Qorpent.Serialization
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        public static String Unescape(String c)
+        public static String UnescapeEntity(String c)
         {
             String r = c;
             if (_bxl.TryGetValue(c, out r))
@@ -92,11 +92,11 @@ namespace Qorpent.Serialization
         }
 
         /// <summary>
-        /// Escape all symbols
+        /// EscapeEntity all symbols
         /// </summary>
         /// <param name="txt"></param>
         /// <returns></returns>
-        public static String EscapeAll(String txt)
+        public static String EscapeXmlName(this String txt)
         {
             foreach (String c in _xml.Keys)
             {
@@ -106,11 +106,11 @@ namespace Qorpent.Serialization
         }
 
         /// <summary>
-        /// Unescape all symbols
+        /// UnescapeEntity all symbols
         /// </summary>
         /// <param name="txt"></param>
         /// <returns></returns>
-        public static String UnescapeAll(String txt)
+        public static String UnescapeXmlName(this String txt)
         {
             foreach (String c in _bxl.Keys)
             {

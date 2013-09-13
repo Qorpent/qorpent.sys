@@ -57,7 +57,7 @@ namespace Qorpent.Bxl {
 		Apos,
 
 		/// <summary>
-		/// 	Escape symbol '\'
+		/// 	EscapeXmlName symbol '\'
 		/// </summary>
 		Escape,
 

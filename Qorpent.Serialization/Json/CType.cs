@@ -19,7 +19,7 @@ namespace Qorpent.Json {
 		/// </summary>
 		Quot,
 		/// <summary>
-		/// Escape
+		/// EscapeXmlName
 		/// </summary>
 		Esc,
 		
