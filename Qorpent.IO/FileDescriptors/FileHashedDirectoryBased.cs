@@ -5,7 +5,7 @@ namespace Qorpent.IO.FileDescriptors {
     /// <summary>
     ///     Дескриптор файла, основанный на HashedDirectory
     /// </summary>
-    public class FileDescriptorHashedDirectoryBased : IGeneralFileDescriptor {
+    public class FileHashedDirectoryBased : IFile {
         /// <summary>
         ///     Экземпляр класса нативного хранилища
         /// </summary>
@@ -13,15 +13,15 @@ namespace Qorpent.IO.FileDescriptors {
         /// <summary>
         ///     Представление файла
         /// </summary>
-        public IFileEntity FileEntity { get; private set; }
+        public IFileDescriptor Descriptor { get; private set; }
         /// <summary>
         ///     Дескриптор файла, основанный на HashedDirectory
         /// </summary>
         /// <param name="hashedDirectory">Экземпляр настроенного движка хранилища</param>
-        /// <param name="fileEntity">Представление файла</param>
-        public FileDescriptorHashedDirectoryBased(HashedDirectory hashedDirectory, IFileEntity fileEntity) {
+        /// <param name="fileDescriptor">Представление файла</param>
+        public FileHashedDirectoryBased(HashedDirectory hashedDirectory, IFileDescriptor fileDescriptor) {
             _hashedDirectoryStorage = hashedDirectory;
-            FileEntity = fileEntity;
+            Descriptor = fileDescriptor;
         }
         /// <summary>
         ///     Получение потока до файла
@@ -29,7 +29,7 @@ namespace Qorpent.IO.FileDescriptors {
         /// <param name="access">Уровень доступа до потока</param>
         /// <returns>Поток до файла</returns>
         public Stream GetStream(FileAccess access) {
-            return _hashedDirectoryStorage.Open(FileEntity.Path);
+            return _hashedDirectoryStorage.Open(Descriptor.Path);
         }
     }
 }

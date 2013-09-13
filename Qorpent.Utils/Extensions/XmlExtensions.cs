@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Utils/XmlExtensions.cs
 #endregion
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -52,6 +53,16 @@ namespace Qorpent.Utils.Extensions {
 			}
 			return xElement.Nodes().OfType<XText>().Select(x => x.Value).ConcatString(" ");
 		}
+
+        /// <summary>
+        /// Формирует сериализуемый в  JSON XML-массив в соответствии с внутренними соглашениями по коду
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="itemname"></param>
+        /// <returns></returns>
+        public static XElement ToMvcXmlArray(this IEnumerable<XElement> items, string itemname ) {
+            return new XElement("result", new XElement(itemname, new XAttribute("__isarray", "true"), items));
+        }
 		/// <summary>
 		/// Производит поиск атрибутов по имени и/или вхождению строки
 		/// </summary>

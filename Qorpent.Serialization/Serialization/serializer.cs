@@ -164,16 +164,23 @@ namespace Qorpent.Serialization {
 	                                        int c) {
 	        _s.BeginObjectItem(name, false);
 
-	        if (pseudodict || elements.Count() == 1 && value.Attribute("isarray") == null) {
+	        if (pseudodict || elements.Count() == 1 && e.Attribute("__isarray") == null) {
 	            SerializeElement(e);
 	        }
 	        else {
 	            c++;
+	            elements = e.Elements();
 	            _s.BeginArray(e.Name.LocalName,elements.Count());
 	            var i = 0;
 	            foreach (var x in elements) {
 	                _s.BeginArrayEntry(i++);
-	                SerializeElement(x);
+	                if (x.Attributes().Count() == 1 && null != x.Attribute("idx") && !x.Elements().Any()) {
+                        _s.WriteFinal(x.Value);
+                        
+	                }
+	                else {
+	                    SerializeElement(x);
+	                }
 	                _s.EndArrayEntry(i == c);
 	            }
 	            _s.EndArray();

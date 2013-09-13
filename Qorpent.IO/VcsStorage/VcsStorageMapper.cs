@@ -94,7 +94,7 @@ namespace Qorpent.IO.VcsStorage {
             ).Select(
                 el => new VcsCommit {
                     Code = el.Attribute("Code").Value,
-                    File = new FileEntity {
+                    File = new FileDescriptor {
                         Version = el.Attribute("Code").Value,
                         Path = container.Attribute("Filename").Value,
                         Filename = Path.GetFileName(container.Attribute("Filename").Value),
@@ -174,7 +174,7 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public int Count(IFileEntity file) {
+        public int Count(IFileDescriptor file) {
             return Find(new VcsCommit {File = file}).Count();
         }
         /// <summary>
@@ -218,7 +218,7 @@ namespace Qorpent.IO.VcsStorage {
         ///     Мержит текущую карту, если таковая существует
         /// </summary>
         private void MergeCurrentMap() {
-            var currentMapStream = Engine.Get(new FileEntity {
+            var currentMapStream = Engine.Get(new FileDescriptor {
                 Path = Path.Combine(VcsStorageDefaults.MapFilesDirectory, "master." + VcsStorageDefaults.MapFileExtension)
             }).GetStream(FileAccess.Read);
 
@@ -240,7 +240,7 @@ namespace Qorpent.IO.VcsStorage {
         private void Dump() {
             Map.SetAttributeValue("EndWriting", DateTime.Now);
             Engine.Set(
-                new FileEntity {
+                new FileDescriptor {
                     Path = Path.Combine(VcsStorageDefaults.MapFilesDirectory, "master." + VcsStorageDefaults.MapFileExtension)
                 },
                 VcsStorageUtils.StringToStream(Map.ToString())

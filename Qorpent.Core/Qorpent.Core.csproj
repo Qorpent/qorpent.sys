@@ -74,7 +74,16 @@
     <Compile Include="IoC\BasicComponentDefinition.cs" />
     <Compile Include="IoC\ComponentDefinitionWrapper.cs" />
     <Compile Include="IoC\IFactory.cs" />
+    <Compile Include="IO\FileDescriptor.cs" />
+    <Compile Include="IO\FileSearchOptions.cs" />
+    <Compile Include="IO\FileStorageAbilities.cs" />
+    <Compile Include="IO\FileStorageExtensions.cs" />
     <Compile Include="IO\IFileSource.cs" />
+    <Compile Include="IO\IFileDescriptor.cs" />
+    <Compile Include="IO\IFileStorage.cs" />
+    <Compile Include="IO\IFileStorageExtended.cs" />
+    <Compile Include="IO\IFile.cs" />
+    <Compile Include="IO\IStreamProxy.cs" />
     <Compile Include="Model\AttributedEntity.cs" />
     <Compile Include="Mvc\MvcClient.cs" />
     <Compile Include="IO\Resources\DefaultResourceProvider.cs" />

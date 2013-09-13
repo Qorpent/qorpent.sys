@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // 
-// PROJECT ORIGIN: Qorpent.Mvc/FileDescriptor.cs
+// PROJECT ORIGIN: Qorpent.Mvc/Descriptor.cs
 #endregion
 using System;
 using System.IO;

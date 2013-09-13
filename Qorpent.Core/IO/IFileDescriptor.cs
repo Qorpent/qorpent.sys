@@ -4,7 +4,7 @@ namespace Qorpent.IO {
     /// <summary>
     ///     Внутреннее представление файла
     /// </summary>
-    public interface IFileEntity {
+    public interface IFileDescriptor {
         /// <summary>
         ///     полный путь до файла
         /// </summary>

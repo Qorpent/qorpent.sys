@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace Qorpent.IO {
     /// <summary>
@@ -14,17 +15,24 @@ namespace Qorpent.IO {
         /// </summary>
         /// <param name="file"></param>
         /// <param name="stream">поток-источник</param>
-        IGeneralFileDescriptor Set(IFileEntity file, Stream stream);
+        IFile Set(IFileDescriptor file, Stream stream);
         /// <summary>
         ///     Чтение элемента из низкоуровневого хранилища
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        IGeneralFileDescriptor Get(IFileEntity file);
+        IFile Get(IFileDescriptor file);
+        /// <summary>
+        /// Возвращает перечисление файлов в хранилище
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        IEnumerable<IFile> EnumerateFiles(FileSearchOptions options = null);
+
         /// <summary>
         ///     Возвращает класс текущего хранилища текущее хранилища
         /// </summary>
         /// <returns></returns>
-        object GetStorage();
+        object GetUnderlinedStorage();
     }
 }

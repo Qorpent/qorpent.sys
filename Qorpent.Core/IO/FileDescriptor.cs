@@ -5,7 +5,7 @@ namespace Qorpent.IO {
     /// <summary>
     ///     Представление файла
     /// </summary>
-    public class FileEntity : IFileEntity {
+    public class FileDescriptor : IFileDescriptor {
         /// <summary>
         ///     Имя файла
         /// </summary>
