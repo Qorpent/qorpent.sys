@@ -33,7 +33,7 @@ namespace Qorpent.Serialization.Tests
 			}
 			if (2 == usear)
 			{
-				obj.Ar = new string[] {"test" };
+				obj.Ar = new[] {"test" };
 			}
 			if (1 == uselst) {
 				obj.Lst = new List<string>();
