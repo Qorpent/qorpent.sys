@@ -169,12 +169,14 @@ namespace Qorpent.Serialization {
 	        }
 	        else {
 	            c++;
-	            elements = e.Elements();
+                if (e.Attribute("__isarray") != null) {
+                    elements = e.Elements();
+                }
 	            _s.BeginArray(e.Name.LocalName,elements.Count());
 	            var i = 0;
 	            foreach (var x in elements) {
 	                _s.BeginArrayEntry(i++);
-	                if (x.Attributes().Count() == 1 && null != x.Attribute("idx") && !x.Elements().Any()) {
+	                if (!x.Attributes().Any() || (x.Attributes().Count() == 1 && null != x.Attribute("idx")) && !x.Elements().Any()) {
                         _s.WriteFinal(x.Value);
                         
 	                }

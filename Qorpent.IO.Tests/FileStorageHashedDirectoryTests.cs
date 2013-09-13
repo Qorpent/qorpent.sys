@@ -37,17 +37,17 @@ namespace Qorpent.IO.Tests {
         [Test]
         public void CanUse() {
             var setDescr = _hashedDirectoryStorage.Set(
-                new FileEntity {Path = "test"},
+                new FileDescriptor {Path = "test"},
                 new MemoryStream(Encoding.UTF8.GetBytes("testString"))
             );
 
             Assert.NotNull(setDescr);
-            Assert.AreEqual("test", setDescr.FileEntity.Path);
+            Assert.AreEqual("test", setDescr.Descriptor.Path);
 
-            var getDescr = _hashedDirectoryStorage.Get(new FileEntity {Path = "test"});
+            var getDescr = _hashedDirectoryStorage.Get(new FileDescriptor {Path = "test"});
             
             Assert.NotNull(getDescr);
-            Assert.AreEqual("test", getDescr.FileEntity.Path);
+            Assert.AreEqual("test", getDescr.Descriptor.Path);
 
         }
         /// <summary>
@@ -56,17 +56,17 @@ namespace Qorpent.IO.Tests {
         [Test]
         public void CanUseWithUrlNames() {
             var setDescr = _hashedDirectoryStorage.Set(
-                new FileEntity { Path = ComplexUrlName },
+                new FileDescriptor { Path = ComplexUrlName },
                 new MemoryStream(Encoding.UTF8.GetBytes("testString"))
             );
 
             Assert.NotNull(setDescr);
-            Assert.AreEqual(ComplexUrlName, setDescr.FileEntity.Path);
+            Assert.AreEqual(ComplexUrlName, setDescr.Descriptor.Path);
 
-            var getDescr = _hashedDirectoryStorage.Get(new FileEntity { Path = ComplexUrlName });
+            var getDescr = _hashedDirectoryStorage.Get(new FileDescriptor { Path = ComplexUrlName });
 
             Assert.NotNull(getDescr);
-            Assert.AreEqual(ComplexUrlName, getDescr.FileEntity.Path);
+            Assert.AreEqual(ComplexUrlName, getDescr.Descriptor.Path);
 
         }
     }
