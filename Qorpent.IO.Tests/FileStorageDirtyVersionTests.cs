@@ -36,17 +36,17 @@ namespace Qorpent.IO.Tests {
         [Test]
         public void CanUse() {
             var setDescr = _dirtyVersionStorage.Set(
-                new FileEntity {Path = "test"},
+                new FileDescriptor {Path = "test"},
                 new MemoryStream(Encoding.UTF8.GetBytes("testString"))
             );
 
             Assert.NotNull(setDescr);
-            Assert.AreEqual("test", setDescr.FileEntity.Path);
+            Assert.AreEqual("test", setDescr.Descriptor.Path);
 
-            var getDescr = _dirtyVersionStorage.Get(new FileEntity {Path = "test"});
+            var getDescr = _dirtyVersionStorage.Get(new FileDescriptor {Path = "test"});
             
             Assert.NotNull(getDescr);
-            Assert.AreEqual("test", getDescr.FileEntity.Path);
+            Assert.AreEqual("test", getDescr.Descriptor.Path);
 
             // Попробует прочитать файл из get дескриптора
             using (var sr = new StreamReader(setDescr.GetStream(FileAccess.Read))) {
@@ -57,10 +57,10 @@ namespace Qorpent.IO.Tests {
                 Assert.AreEqual("testString", sr.ReadToEnd());
             }
 
-            var nativeStorage = (IDirtyVersionStorage)_dirtyVersionStorage.GetStorage();
+            var nativeStorage = (IDirtyVersionStorage)_dirtyVersionStorage.GetUnderlinedStorage();
             Assert.NotNull(nativeStorage);
 
-            using (var sr = new StreamReader(nativeStorage.Open("test", getDescr.FileEntity.Version))) {
+            using (var sr = new StreamReader(nativeStorage.Open("test", getDescr.Descriptor.Version))) {
                 Assert.AreEqual("testString", sr.ReadToEnd());
             }
         }

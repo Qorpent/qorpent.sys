@@ -35,17 +35,17 @@ namespace Qorpent.IO.Tests {
         [Test]
         public void CanUse() {
             var setDescr = _vcsStorageStorage.Set(
-                new FileEntity {Path = "test"},
+                new FileDescriptor {Path = "test"},
                 new MemoryStream(Encoding.UTF8.GetBytes("testString"))
             );
 
             Assert.NotNull(setDescr);
-            Assert.AreEqual("test", setDescr.FileEntity.Path);
+            Assert.AreEqual("test", setDescr.Descriptor.Path);
 
-            var getDescr = _vcsStorageStorage.Get(new FileEntity {Path = "test"});
+            var getDescr = _vcsStorageStorage.Get(new FileDescriptor {Path = "test"});
             
             Assert.NotNull(getDescr);
-            Assert.AreEqual("test", getDescr.FileEntity.Path);
+            Assert.AreEqual("test", getDescr.Descriptor.Path);
 
             // Попробует прочитать файл из get дескриптора
             using (var sr = new StreamReader(setDescr.GetStream(FileAccess.Read))) {
@@ -56,8 +56,8 @@ namespace Qorpent.IO.Tests {
                 Assert.AreEqual("testString", sr.ReadToEnd());
             }
 
-            ((IFileStorageExtended)_vcsStorageStorage).Del(new FileEntity { Path = "test" });
-            Assert.IsNull(_vcsStorageStorage.Get(new FileEntity { Path = "test" }).GetStream(FileAccess.Read));
+            ((IFileStorageExtended)_vcsStorageStorage).Del(new FileDescriptor { Path = "test" });
+            Assert.IsNull(_vcsStorageStorage.Get(new FileDescriptor { Path = "test" }).GetStream(FileAccess.Read));
         }
     }
 }

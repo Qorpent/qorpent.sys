@@ -44,8 +44,8 @@ namespace Qorpent.IO.Tests {
             msFirst.Write(Encoding.UTF8.GetBytes("test"), 0, 4);
             msSecond.Write(Encoding.UTF8.GetBytes("tezt"), 0, 4);
 
-            _vcsStorage.Commit(new VcsCommit {File = new FileEntity {Path = "test"}}, msFirst);
-            var got = _vcsStorage.Commit(new VcsCommit {File = new FileEntity {Path = "test"}}, msSecond);
+            _vcsStorage.Commit(new VcsCommit {File = new FileDescriptor {Path = "test"}}, msFirst);
+            var got = _vcsStorage.Commit(new VcsCommit {File = new FileDescriptor {Path = "test"}}, msSecond);
 
             Assert.AreEqual("tezt", new StreamReader(_vcsStorage.Pick(got)).ReadToEnd());
         }
