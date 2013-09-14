@@ -136,7 +136,7 @@ namespace Qorpent.Mvc {
         /// 2. Вызывается Validate - фаза на которой происходит проверка параметров запроса
         /// 3. Вызывается Prepare - фаза подготовки
         /// 4. Вызывается Authorize - происходит дополнительная (кастомная) проверка безопасности
-        /// 5. Вызывается MainProcess - собственно собственная логика Action
+        /// 5. Вызывается MainProcess - собственная логика Action
         /// 
         ///	Executes itself in given context and return some action result
         ///	0. SetContext called
@@ -171,9 +171,9 @@ namespace Qorpent.Mvc {
 
 
 		/// <summary>
-		/// 	Executes before all other calls to Action
+		/// Устанавливается текущий контекст 
 		/// </summary>
-		/// <param name="context"> </param>
+		/// <param name="context">контекст</param>
 		public virtual void SetContext(IMvcContext context) {
 			Context = context;
 			_lastmodified = new DateTime();
@@ -182,7 +182,7 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	Executes on creation with setting action descriptor
+		/// Устанавливает текущий дескриптор
 		/// </summary>
 		/// <param name="descriptor"> </param>
 		public void SetDescriptor(ActionDescriptor descriptor) {
@@ -191,7 +191,7 @@ namespace Qorpent.Mvc {
 
 
 		/// <summary>
-		/// 	Last modified header wrapper
+        /// Формирует заголовок ответа LastModified
 		/// </summary>
 		[IgnoreSerialize] public DateTime LastModified {
 			get {
@@ -209,7 +209,7 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	Etag header wrapper
+		/// Обертка над функцией получения Eтага
 		/// </summary>
 		[IgnoreSerialize] public string ETag {
 			get {
@@ -225,7 +225,7 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	True if object supports 304 state
+		/// Обертка над функцией отпределяющей поддержку 304 статуса
 		/// </summary>
 		public bool SupportNotModifiedState {
 			get {
@@ -239,7 +239,7 @@ namespace Qorpent.Mvc {
 
 
 		/// <summary>
-		/// 	Wrapper fo Descritor.Role
+		/// Обертка над функцией возращающей роль текущего пользователя
 		/// </summary>
 		public string Role {
 			get { return Descriptor.Role; }
@@ -277,12 +277,12 @@ namespace Qorpent.Mvc {
 
 
 		/// <summary>
-		/// 	Check role against current user
+		/// Проверяет наличие указанной роли у текущего пользователя
 		/// </summary>
-		/// <param name="role"> </param>
-		/// <param name="exact"> </param>
-		/// <param name="customContext"> </param>
-		/// <returns> </returns>
+		/// <param name="role">Роль</param>
+		/// <param name="exact">Точное указание роли</param>
+		/// <param name="customContext">контекст</param>
+		/// <returns>true или false в зависимости от наличие роли у пользователя</returns>
 		public bool IsInRole(string role, bool exact = false, object customContext = null) {
 			return Roles.IsInRole(User, role, exact, Context, customContext);
 		}
@@ -291,10 +291,10 @@ namespace Qorpent.Mvc {
 		/// <summary>
 		/// 	Обертка над вызовом событий приложення
 		/// </summary>
-		/// <param name="eventData"> </param>
-		/// <param name="user"> </param>
-		/// <param name="syslock"> </param>
-		/// <typeparam name="TResult"> </typeparam>
+		/// <param name="eventData">время события</param>
+		/// <param name="user">пользователь</param>
+		/// <param name="syslock">блокировка</param>
+		/// <typeparam name="TResult">Тип возвращаемого содержимого</typeparam>
 		/// <returns> </returns>
 		public TResult Call<TResult>(IEventData eventData = null, IPrincipal user = null, bool syslock = true)
 			where TResult : IEventResult, new() {
@@ -306,11 +306,11 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	Resolved file name against current file system of context
+		/// Определяет имя файла в текущей файловой системе, текущем контексте
 		/// </summary>
-		/// <param name="name"> </param>
+		/// <param name="name">Имя файла</param>
 		/// <param name="existed"> </param>
-		/// <param name="resolvetype"> </param>
+		/// <param name="resolvetype">тип файла</param>
 		/// <returns> </returns>
 		public string ResolveFileName(string name, bool existed = true,
 		                              FileSearchResultType resolvetype = FileSearchResultType.FullPath) {
@@ -318,59 +318,59 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	Quick access to Context.Get[T]
+		/// Доступ к функции возвращающей значение параметра заданного в текущем контексте
 		/// </summary>
-		/// <typeparam name="T"> </typeparam>
-		/// <param name="name"> </param>
-		/// <param name="def"> </param>
+		/// <typeparam name="T">тип параметра</typeparam>
+		/// <param name="name">имя</param>
+		/// <param name="def">значение по-умолчанию</param>
 		/// <returns> </returns>
 		public T Get<T>(string name, T def = default(T)) {
 			return Context.Get(name, def);
 		}
 
 		/// <summary>
-		/// 	Quick access to  Context.Get[string]
+        /// Доступ к функции возвращающей текстовое значение параметра заданного в текущем контексте
 		/// </summary>
-		/// <param name="name"> </param>
-		/// <param name="def"> </param>
+		/// <param name="name">Имя параметра</param>
+		/// <param name="def">значение по умолчанию</param>
 		/// <returns> </returns>
 		public string Get(string name, string def = "") {
 			return Context.Get(name, def);
 		}
 
 		/// <summary>
-		/// 	Quick acess to Context.GetXml
+        /// Доступ к функции возвращающей значение параметра, заданного в текущем контексте, в виде XML
 		/// </summary>
-		/// <param name="name"> </param>
+		/// <param name="name">имя параметра</param>
 		/// <returns> </returns>
 		public XElement Getx(string name) {
 			return Context.GetXml(name);
 		}
 
 		/// <summary>
-		/// 	First phase of execution - override if need special input parameter's processing
+		/// Инициализация - первая фаза запуска Действия. Перекрывается при необходимости дополнительной обработки входных параметров. 
 		/// </summary>
 		protected virtual void Initialize() {}
 
 		/// <summary>
-		/// 	Second phase - validate INPUT/REQUEST parameters here - it called before PREPARE so do not try validate
-		/// 	second-level internal state and authorization - only INPUT PARAMETERS must be validated
+		/// Вторая фаза - проверка входных параметров, параметров запроса (вызывается до стадии подготовки, так что не
+		/// пытайтесь проверить авторизацию или что либо кроме входных параметров)
 		/// </summary>
 		protected virtual void Validate() {}
 
 		/// <summary>
-		/// 	Third part of execution - setup system-bound internal state here (called after validate, but before authorize)
+		/// Третья фаза выполнения Действия - Подготовка, настройка системных параметров (вызывается после стадии проверки и до стадии авторизации)
 		/// </summary>
 		protected virtual void Prepare() {}
 
 		/// <summary>
-		/// 	4 part of execution - all internal context is ready - authorize it with custom logic
+        /// Четвертая фаза - контекст сформирован, проверяем возможность выполнения Действия в соответсвии с правами доступа
 		/// </summary>
 		protected virtual void Authorize() {}
 
 
 		/// <summary>
-		/// 	processing of execution - main method of action
+		/// Основная фаза - тело действия
 		/// </summary>
 		/// <returns> </returns>
 		protected virtual object MainProcess() {
@@ -378,7 +378,7 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	override if Yr action provides 304 state  and return Last-Modified-State header
+		/// Перекрываем, если Yr action возвращает 304 статус и заголовок Last-Modified-Stateer
 		/// </summary>
 		/// <returns> </returns>
 		protected virtual DateTime EvalLastModified() {
@@ -386,7 +386,7 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	override if Yr action provides 304 state and return ETag header
+        /// Перекрываем, если Yr action возвращает 304 статус и заголовок ETag
 		/// </summary>
 		/// <returns> </returns>
 		protected virtual string EvalEtag() {
@@ -394,7 +394,7 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	override if Yr action provides 304 state and return TRUE
+        /// Перекрываем, если Yr action возвращает 304 статус и True
 		/// </summary>
 		/// <returns> </returns>
 		protected virtual bool GetSupportNotModified() {
@@ -403,7 +403,7 @@ namespace Qorpent.Mvc {
 
 
 		/// <summary>
-		/// 	Execute MainProcess on prepared context
+		/// Выполняем запуск Действия
 		/// </summary>
 		/// <returns> </returns>
 		public object Process() {
