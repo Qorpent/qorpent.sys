@@ -180,6 +180,8 @@
     <Compile Include="Dsl\Json\JsonTokenType.cs" />
     <Compile Include="Serialization\SelectorLanguage.cs" />
     <Compile Include="Serialization\ContentCleanerOperations.cs" />
+    <Compile Include="Serialization\SerializerExtensions.cs" />
+    <Compile Include="Serialization\XHtml5XmlWriter.cs" />
     <Compile Include="Serialization\XmlNameEscaper.cs" />
     <Compile Include="ServiceState.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
