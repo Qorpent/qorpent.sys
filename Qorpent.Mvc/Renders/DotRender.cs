@@ -15,7 +15,8 @@ namespace Qorpent.Mvc.Renders {
     public class DotRender : RenderBase {
 
 	    [Inject(Name = "dot.graph.provider")] private IGraphProvider Provider { get; set; }
-
+        [Inject(Name = "dot.serializer")]private ISerializer DotSerializer { get; set; }
+        
         /// <summary>
         ///     Параметр указания целевого формата, по умолчанию SVG
         /// </summary>
@@ -44,7 +45,7 @@ namespace Qorpent.Mvc.Renders {
         /// <param name="context"> </param>
         public override void Render(IMvcContext context) {
             GraphOptions options = ExtractOptions(context);
-            string dotscript = ExtractDotScript(options);
+            string dotscript = DotSerializer.Serialize(options.Context.ActionResult, options: options);
 	        context.ContentType = MimeHelper.GetMimeByExtension(options.Format);
             string script = dotscript.GetUnicodeSafeXmlString();
 
@@ -115,31 +116,6 @@ namespace Qorpent.Mvc.Renders {
         public override void RenderError(Exception error, IMvcContext context) {
             context.ContentType = "text/plain";
             context.Output.Write(error.ToString());
-        }
-
-	    private string ExtractDotScript(GraphOptions options) {
-            object result = options.Context.ActionResult;
-            string dotscript = "";
-            if (null == result) {
-                dotscript = "digraph N{ null }";
-            }
-            else if (result is string) {
-                dotscript = (string) result;
-            }
-            else if (result is IGraphConvertible) {
-                dotscript = ((IGraphConvertible) result).GenerateGraphScript(options);
-            }
-            else if (result is IGraphSource) {
-                dotscript = ((IGraphSource) result).BuildGraph(options).GenerateGraphScript(options);
-            }
-            else {
-                dotscript = ConvertToDotScript(result);
-            }
-            return dotscript;
-        }
-
-        private string ConvertToDotScript(object result) {
-            throw new NotImplementedException("for now any-to-dot mode is not realized");
         }
     }
 }
