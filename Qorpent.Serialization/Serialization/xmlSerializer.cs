@@ -27,6 +27,7 @@ namespace Qorpent.Serialization {
 	/// </remarks>
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISerializer), Name = "xml.serializer")]
 	public class XmlSerializer : Serializer {
+        
 		/// <summary>
 		/// 	Creates the impl.
 		/// </summary>
@@ -55,5 +56,7 @@ namespace Qorpent.Serialization {
 				base.Serialize(name, value, output);
 			}
 		}
+
+
 	}
 }

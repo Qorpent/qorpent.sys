@@ -42,6 +42,11 @@ namespace Qorpent.BSharp.Builder {
                 project.InputExtensions = inputExtension.Attribute("code").Value;
             }
 
+            var generateGraph = bSharpClass.Compiled.Element("GenerateGraph");
+            if (null != generateGraph) {
+                project.GenerateGraph = true;
+            }
+
             return project;
         }
         /// <summary>

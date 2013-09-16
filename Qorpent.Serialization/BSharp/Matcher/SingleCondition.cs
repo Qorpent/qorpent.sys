@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Utils.Extensions;
+using Qorpent.Serialization;
 
 namespace Qorpent.BSharp.Matcher {
 	/// <summary>
@@ -36,28 +37,42 @@ namespace Qorpent.BSharp.Matcher {
 
 		private void SetupFromSpecialName(XAttribute a) {
 			var n = a.Name.LocalName;
-			if (n.Contains("__EXC__")) {
+            if (n.Contains(XmlNameEscaper.EscapeXmlName("!")))
+            {
 				Negate = true;
-				n = n.Replace("__EXC__", "");
+                n = n.Replace(XmlNameEscaper.EscapeXmlName("!"), "");
 			}
 			if (Value == "NULL") {
 				ConditionType= ConditionType.IsNull;
 			}else if (Value == "TRUE") {
 				ConditionType =ConditionType.IsTrue;
 			}
-			if (n.EndsWith("__GT____GT__")) {
+            if (n.EndsWith(XmlNameEscaper.EscapeXmlName(">>")))
+            {
 				ConditionType = ConditionType.Gr;
-			}else if (n.EndsWith("__GT__")) {
+            }
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName(">")))
+            {
 				ConditionType = ConditionType.GrE;
-			}else if (n.EndsWith("__LT____LT__")) {
+            }
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("<<")))
+            {
 				ConditionType= ConditionType.Le;
-			}else if (n.EndsWith("__LT__")) {
+            }
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("<")))
+            {
 				ConditionType = ConditionType.LeE;
-			}else if (n.EndsWith("__TILD__")) {
+            }
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("~")))
+            {
 				ConditionType = ConditionType.Match;
-			}else if (n.EndsWith("__AMP__")){
+            }
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("&")))
+            {
 				ConditionType = ConditionType.InList;
-			}else if (n.EndsWith("__PERC__")) {
+            }
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("%")))
+            {
 				ConditionType = ConditionType.Contains;
 			}
 			var idx = n.IndexOf("__");

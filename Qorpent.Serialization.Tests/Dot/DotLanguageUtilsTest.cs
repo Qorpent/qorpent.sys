@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Qorpent.Dot;
+using Qorpent.Graphs.Dot;
 
 namespace Qorpent.Serialization.Tests.Dot
 {

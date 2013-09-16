@@ -74,6 +74,10 @@ namespace Qorpent.Mvc.Actions {
 
                 var exploded = action.Name.Split(new[] { "." }, StringSplitOptions.None);
 
+                if (1 == exploded.Length) {
+                    throw new Exception("Invalid action name "+action.Name);
+                }
+
                 // if domain not exists
                 if (!dict.ContainsKey(exploded[0])) {
                     dict.Add(exploded[0], new Dictionary<string, object>());

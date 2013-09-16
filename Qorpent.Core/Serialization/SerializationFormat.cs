@@ -16,54 +16,66 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/SerializationFormat.cs
 #endregion
+
+using System;
+
 namespace Qorpent.Serialization {
 	/// <summary>
-	/// 	standard serialization formats
+	/// Стандартные форматы сериализации объектов
 	/// </summary>
-	public enum SerializationFormat {
-		/// <summary>
-		/// 	Factory-depended default format, XML inspired
-		/// </summary>
-		Default,
-
+    public enum SerializationFormat {
 		/// <summary>
 		/// 	Custom format name will be used
 		/// </summary>
-		Custom,
+		Custom =1 ,
 
 		/// <summary>
 		/// 	Html
 		/// </summary>
-		Html,
+		Html =1<<1,
 
 		/// <summary>
 		/// 	Plain text
 		/// </summary>
-		Text,
+		Text =1<<2,
 
 		/// <summary>
 		/// 	XML
 		/// </summary>
-		Xml,
+		Xml =1<<3,
 
 		/// <summary>
 		/// 	BXL
 		/// </summary>
-		Bxl,
+		Bxl =1<<4,
 
 		/// <summary>
 		/// 	JSON
 		/// </summary>
-		Json,
+		Json =1<<5,
 
 		/// <summary>
 		/// 	JavaScript
 		/// </summary>
-		Js,
+		Js =1<<6,
 
 		/// <summary>
 		/// 	Md5 hash
 		/// </summary>
-		Md5
+		Md5 =1<<7,
+        /// <summary>
+        /// Скрипт на языке Dot
+        /// </summary>
+        Dot = 1<<8,
+
+        /// <summary>
+        /// SVG
+        /// </summary>
+        Svg= 1<<9,
+
+        /// <summary>
+        /// 	По умолчанию XML
+        /// </summary>
+        Default = Json,
 	}
 }

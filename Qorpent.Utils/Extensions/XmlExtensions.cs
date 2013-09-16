@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Utils/XmlExtensions.cs
 #endregion
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -24,6 +25,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Applications;
 using Qorpent.Bxl;
+using Qorpent.Serialization;
 
 namespace Qorpent.Utils.Extensions {
 	/// <summary>
@@ -51,6 +53,16 @@ namespace Qorpent.Utils.Extensions {
 			}
 			return xElement.Nodes().OfType<XText>().Select(x => x.Value).ConcatString(" ");
 		}
+
+        /// <summary>
+        /// Формирует сериализуемый в  JSON XML-массив в соответствии с внутренними соглашениями по коду
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="itemname"></param>
+        /// <returns></returns>
+        public static XElement ToMvcXmlArray(this IEnumerable<XElement> items, string itemname ) {
+            return new XElement("result", new XElement(itemname, new XAttribute("__isarray", "true"), items));
+        }
 		/// <summary>
 		/// Производит поиск атрибутов по имени и/или вхождению строки
 		/// </summary>
@@ -203,38 +215,38 @@ namespace Qorpent.Utils.Extensions {
 			var adaptedname = nameCandidate;
 			if (-1 != adaptedname.IndexOfAny(Nonnames)) {
 				adaptedname = adaptedname
-					.Replace("+", "__PLUS__")
-					.Replace("?", "__ASK__")
-					.Replace("!", "__EXC__")
-					.Replace("~", "__TILD__")
-					.Replace("@", "__AT__")
-					.Replace("*", "__STAR__")
-					.Replace("$", "__USD__")
-					.Replace("^", "__UP__")
-					.Replace("&", "__AMP__")
-					.Replace("/", "__DIV__")
-					.Replace(":", "__DBL__")
-					.Replace("%", "__PERC__")
-					.Replace("(", "__LBRACE__")
-					.Replace(")", "__RBRACE__")
-					.Replace("[", "__LINDEX__")
-					.Replace("]", "__RINDEX__")
-					.Replace("{", "__LBLOCK__")
-					.Replace("}", "__RBLOCK__")
-					.Replace("|", "__VLINE__")
-					.Replace(";", "__PERIOD__")
-					.Replace("<", "__LT__")
-					.Replace(">", "__GT__")
+					.Replace("+", XmlNameEscaper.EscapeXmlName("+"))
+                    .Replace("?", XmlNameEscaper.EscapeXmlName("?"))
+                    .Replace("!", XmlNameEscaper.EscapeXmlName("!"))
+                    .Replace("~", XmlNameEscaper.EscapeXmlName("~"))
+                    .Replace("@", XmlNameEscaper.EscapeXmlName("@"))
+                    .Replace("*", XmlNameEscaper.EscapeXmlName("*"))
+                    .Replace("$", XmlNameEscaper.EscapeXmlName("$"))
+                    .Replace("^", XmlNameEscaper.EscapeXmlName("^"))
+                    .Replace("&", XmlNameEscaper.EscapeXmlName("&"))
+                    .Replace("/", XmlNameEscaper.EscapeXmlName("/"))
+                    .Replace(":", XmlNameEscaper.EscapeXmlName(":"))
+                    .Replace("%", XmlNameEscaper.EscapeXmlName("%"))
+                    .Replace("(", XmlNameEscaper.EscapeXmlName("("))
+                    .Replace(")", XmlNameEscaper.EscapeXmlName(")"))
+                    .Replace("[", XmlNameEscaper.EscapeXmlName("["))
+                    .Replace("]", XmlNameEscaper.EscapeXmlName("]"))
+                    .Replace("{", XmlNameEscaper.EscapeXmlName("{"))
+                    .Replace("}", XmlNameEscaper.EscapeXmlName("}"))
+                    .Replace("|", XmlNameEscaper.EscapeXmlName("|"))
+                    .Replace(";", XmlNameEscaper.EscapeXmlName(";"))
+                    .Replace("<", XmlNameEscaper.EscapeXmlName("<"))
+                    .Replace(">", XmlNameEscaper.EscapeXmlName(">"))
 					;
 				if(adaptedname.StartsWith("-")) {
-					adaptedname = "__MINUS__" + adaptedname.Substring(1);
+                    adaptedname = XmlNameEscaper.EscapeXmlName("-") + adaptedname.Substring(1);
 				}
 			}
 			if (0 != adaptedname.Length && -1 != Array.IndexOf(Digits, adaptedname[0])) {
 				adaptedname = "_" + adaptedname;
 			}
 			if (adaptedname.StartsWith(".")) {
-				adaptedname = "__DOT__" + adaptedname.Substring(1);
+                adaptedname = XmlNameEscaper.EscapeXmlName(".") + adaptedname.Substring(1);
 			}
 			return adaptedname;
 		}
@@ -518,5 +530,29 @@ namespace Qorpent.Utils.Extensions {
 	    public static string TryGetValue(this XElement xElement) {
 	        return xElement != null ? xElement.Value : null;
 	    }
+        /// <summary>
+        ///     Пытается получить значение текущего атрибута, если он не null
+        /// </summary>
+        /// <param name="xAttribute">Аттрибут</param>
+        /// <returns>XElement.value OR null</returns>
+        public static string TryGetValue(this XAttribute xAttribute) {
+            return xAttribute != null ? xAttribute.Value : null;
+        }
+        /// <summary>
+        ///     Проверяет элемент на NULL
+        /// </summary>
+        /// <param name="xElement">Элемент</param>
+        /// <returns>True, если не NULL, иначе - False</returns>
+        public static bool IsNotNull(this XElement xElement) {
+            return xElement != null;
+        }
+        /// <summary>
+        ///     Проверяет элемент на НЕ NULL
+        /// </summary>
+        /// <param name="xElement">Элемент</param>
+        /// <returns>True, если NULL, иначе - False</returns>
+        public static bool IsNull(this XElement xElement) {
+            return !xElement.IsNotNull();
+        }
 	}
 }

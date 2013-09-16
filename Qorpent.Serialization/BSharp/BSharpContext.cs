@@ -312,6 +312,22 @@ namespace Qorpent.BSharp {
 					Errors.Add(a);
 				}
 			}
+
+            if (null != subresult.Dictionaries) {
+                Dictionaries = Dictionaries ?? new Dictionary<string, IList<ExportRecord>>();
+                foreach (var p in subresult.Dictionaries) {
+                    if (!Dictionaries.ContainsKey(p.Key)) {
+                        Dictionaries[p.Key]= new List<ExportRecord>();
+                    }
+
+                    var t = Dictionaries[p.Key];
+                    foreach (var  d in p.Value) {
+                        if (!t.Contains(d)) {
+                            t.Add(d);
+                        }
+                    }
+                }
+            }
 		}
 
 		private IDictionary<string, IBSharpClass> _resolveclassCache = new Dictionary<string, IBSharpClass>();
@@ -424,6 +440,7 @@ namespace Qorpent.BSharp {
 		public IEnumerable<BSharpError> GetErrors(ErrorLevel level = ErrorLevel.None) {
 			if (null == Errors) yield break;
 			foreach (var e in Errors.ToArray()) {
+                if (null == e) continue;
 				if (e.Level >= level) {
 					yield return e;
 				}
@@ -448,6 +465,7 @@ namespace Qorpent.BSharp {
 			ApplyExtensions();
 			ResolveOrphans();
 			ResolveIgnored();
+		    
 			Orphans = RawClasses.Values.Where(_ => _.IsOrphaned).ToList();
 			Ignored = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Ignored)).ToList();
 			foreach (var o in Orphans) {
@@ -561,6 +579,14 @@ namespace Qorpent.BSharp {
 			foreach (var e in src.Source.Attributes())
 			{
 				trg.Source.SetAttributeValue(e.Name,e.Value);
+                if (e.Name.LocalName == "abstract") {
+                    if (e.Value.ToBool()) {
+                        trg.Set(BSharpClassAttributes.Abstract);
+                    }
+                    else {
+                        trg.Remove(BSharpClassAttributes.Abstract);
+                    }
+                }
 			}
             foreach (var e in src.Source.Elements())
             {

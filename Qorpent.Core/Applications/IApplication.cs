@@ -27,6 +27,7 @@ using Qorpent.IoC;
 using Qorpent.Log;
 using Qorpent.Mvc;
 using Qorpent.Security;
+using Qorpent.Serialization;
 
 namespace Qorpent.Applications {
 	/// <summary>
@@ -197,7 +198,14 @@ namespace Qorpent.Applications {
 		/// </summary>
 		IResourceProvider Resources { get; set; }
 
-		/// <summary>
+	    /// <summary>
+	    /// 	Access to file system services
+	    /// </summary>
+	    /// <remarks>
+	    /// </remarks>
+	    ISerializerFactory Serialization { get; }
+
+	    /// <summary>
 		/// 	simple synchronization method, waits wile Application lock released
 		/// </summary>
 		/// <remarks>

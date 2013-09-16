@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Log;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils.LogicalExpressions;
@@ -162,7 +163,7 @@ namespace Qorpent.BSharp {
 
         private bool IsOverrideMatch(BSharpClass def)
         {
-            if (def.Source.Name.LocalName == "__TILD__class" || def.Source.Name.LocalName == "__PLUS__class")
+            if (def.Source.Name.LocalName == XmlNameEscaper.EscapeXmlName("~") + "class" || def.Source.Name.LocalName == XmlNameEscaper.EscapeXmlName("+") + "class")
             {
                 var ifa = def.Source.Attr("if");
                 if (!string.IsNullOrWhiteSpace(ifa))
@@ -186,10 +187,11 @@ namespace Qorpent.BSharp {
 			if (e.Name.LocalName == "class") {
 				def.Set(BSharpClassAttributes.Explicit);
 			}
-			else if (e.Name.LocalName == "__TILD__class") {
+            else if (e.Name.LocalName == XmlNameEscaper.EscapeXmlName("~") + "class")
+            {
 				def.Set(BSharpClassAttributes.Override);				
 			}
-			else if (e.Name.LocalName == "__PLUS__class")
+            else if (e.Name.LocalName == XmlNameEscaper.EscapeXmlName("+") + "class")
 			{
 				def.Set(BSharpClassAttributes.Extension);			
 			}

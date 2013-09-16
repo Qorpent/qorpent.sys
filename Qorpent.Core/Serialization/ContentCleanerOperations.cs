@@ -4,6 +4,7 @@ namespace Qorpent.Serialization {
 	/// <summary>
 	/// Допустимые операции XML - очистки HTML
 	/// </summary>
+	/// <remarks>Используется в <see cref="IContentCleaner"/></remarks>
 	[Flags]
 	public enum ContentCleanerOperations {
 		/// <summary>
@@ -34,8 +35,6 @@ namespace Qorpent.Serialization {
 		/// Установить дополнительные классы 
 		/// </summary>
 		SetupPositionClasses = 1<<6,
-
-
 		/// <summary>
 		/// Все операции
 		/// </summary>

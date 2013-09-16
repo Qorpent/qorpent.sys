@@ -1,8 +1,13 @@
-﻿namespace Qorpent.BSharp {
+﻿using System;
+using System.Xml.Linq;
+using Qorpent.Serialization;
+
+namespace Qorpent.BSharp {
 	/// <summary>
 	/// Класс с определением и описанием ключевых и зарезервированных слов BSharp
 	/// </summary>
-	public static class BSharpSyntax {
+	public static class BSharpSyntax
+	{
 		/// <summary>
 		/// Ключевое слово, открывающее пространство имен
 		/// </summary>
@@ -15,19 +20,18 @@
 		/// Разделитель полного имени класса (путь) 
 		/// </summary>
 		public const char ClassPathDelimiter = '.';
-		/// <summary>
-		/// Определение перекрывающего аспекта класса
-		/// </summary>
-		public const string ClassOverrideKeyword = "__TILD__class";
-		/// <summary>
-		/// Определение дополняющего аспекта класса
-		/// </summary>
-		public const string ClassExtensionKeyword = "__PLUS__class";
+	    /// <summary>
+	    /// Определение перекрывающего аспекта класса
+	    /// </summary>
+	    public static readonly string ClassOverrideKeyword = XmlNameEscaper.EscapeXmlName("~") + "class";
+	    /// <summary>
+	    /// Определение дополняющего аспекта класса
+	    /// </summary>
+	    public static readonly string ClassExtensionKeyword = XmlNameEscaper.EscapeXmlName("+") + "class";
 		/// <summary>
 		/// Атрибут приоритета перекрытия класса
 		/// </summary>
 		public const string ClassOverridePriorityAttribute = "priority";
-
 		/// <summary>
 		/// Атрибут приоритета перекрытия класса
 		/// </summary>
@@ -113,6 +117,27 @@
 		/// Описание условия для включения элементов в режиме body для Include
 		/// </summary>
 		public const string IncludeWhereClause = "where";
+
+        /// <summary>
+        /// Описание условия на включение атрибутов в операции include [all] ... body
+        /// </summary>
+        public const string IncludeSelectClause = "select";
+
+        /// <summary>
+        /// Описание условия на группировку элементов в операции include
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        public const string IncludeGroupByClause = "groupby";
+
+        /// <summary>
+        /// Описание условия на операцию упорядочени я элементов в операции include [all] ... body
+        /// </summary>
+        /// <remarks>
+        /// В отличие от SQL order применяется до группировки и селекта и соответственно может и должен быть выражен в исходных именах
+        /// атрибутов
+        /// </remarks>
+        public const string IncludeOrderByClause = "orderby";
 		/// <summary>
 		/// Атрибут блокирования интерполяции
 		/// </summary>
@@ -140,11 +165,11 @@
 		/// <summary>
 		/// Префикс перекрытия элемента
 		/// </summary>
-		public const string ElementOverridePrefix = "__TILD__";
+        public static readonly string ElementOverridePrefix = XmlNameEscaper.EscapeXmlName("~");
 		/// <summary>
 		/// Префикс расширения элемента
 		/// </summary>
-		public const string ElementExtensionPrefix = "__PLUS__";
+        public static readonly string ElementExtensionPrefix = XmlNameEscaper.EscapeXmlName("+");
 		/// <summary>
 		/// Префикс приватного атрибута
 		/// </summary>

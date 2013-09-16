@@ -15,7 +15,7 @@ namespace Qorpent.Mvc.Renders {
             var render = context.Get("render", "javascript");
             var type = context.Get("graph", "Column2D");
             var id = context.Get("id", "fc-graph-" + DateTime.Now.Ticks);
-            var container = context.Get("container", "");
+            var container = context.Get("container");
             var width = context.Get("width", "400");
             var height = context.Get("height", "300");
             var debug = context.Get("debug", "0");

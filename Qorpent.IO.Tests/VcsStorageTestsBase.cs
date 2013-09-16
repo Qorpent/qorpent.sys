@@ -30,7 +30,7 @@ namespace Qorpent.IO.Tests {
             foreach (var name in names) {
 
                 Persister.Commit(
-                    new VcsCommit{File = new FileEntity {Path = name}} ,
+                    new VcsCommit{File = new FileDescriptor {Path = name}} ,
                     GenerateStreamFromString(
                         Guid.NewGuid().ToString()
                         )
@@ -45,7 +45,7 @@ namespace Qorpent.IO.Tests {
         protected void WriteStubElements(int count) {
             for (var i = 0; i < count; i++) {
                 Persister.Commit(
-                    new VcsCommit {File = new FileEntity {
+                    new VcsCommit {File = new FileDescriptor {
                         Path = Guid.NewGuid().ToString()
                     }},
                     GenerateStreamFromString(
