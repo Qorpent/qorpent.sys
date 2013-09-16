@@ -48,7 +48,9 @@ namespace Qorpent.IO.Storages {
         /// <param name="options"></param>
         /// <returns></returns>
         public IEnumerable<IFile> EnumerateFiles(FileSearchOptions options = null) {
-            foreach (var enumerateFile in WorkingDirectory.EnumerateFiles("*",SearchOption.AllDirectories)) {
+            var files = WorkingDirectory.Exists ? WorkingDirectory.EnumerateFiles("*", SearchOption.AllDirectories) : new List<FileInfo>();
+
+            foreach (var enumerateFile in files) {
                 var name = enumerateFile.FullName.Replace(WorkingDirectory.FullName+"\\", "");
                 var f = new FileFsBased(FileAccess.ReadWrite,new FileDescriptor{DateTime = enumerateFile.LastWriteTime,Filename = name,Path = enumerateFile.FullName});
                 yield return f;
