@@ -18,28 +18,25 @@
 #endregion
 namespace Qorpent.Log {
 	/// <summary>
-	/// 	Application LOG gate
+	/// 	Менеджер (шлюз) лога
 	/// </summary>
 	public interface ILogManager {
 		/// <summary>
-		/// 	Default error behavior
+		/// 	Поведение по умолчанию при ошибке
 		/// </summary>
 		InternalLoggerErrorBehavior ErrorBehavior { get; set; }
-
 		/// <summary>
-		/// 	returns UserLog listener, applyable for given context
+		///     Возвращает экземпляр <see cref="IUserLog"/>, применимый к текущему контексту
 		/// </summary>
-		/// <param name="contextDescriptor"> описатель, который позволяет отобрать по маске логгеры, используемые в данном журнале </param>
-		/// <param name="hostObject"> хост-объект по умолчанию для <see cref="IUserLog.HostObject" /> </param>
+		/// <param name="contextDescriptor">описатель, который позволяет отобрать по маске логгеры, используемые в данном журнале</param>
+		/// <param name="hostObject">хост-объект по умолчанию для <see cref="IUserLog.HostObject" /></param>
 		/// <returns> </returns>
 		IUserLog GetLog(string contextDescriptor, object hostObject);
-
 		/// <summary>
 		/// 	Fail safe UserLog gate to write internal exception without main logging context, but with max guarantee of regestering
 		/// 	synchronous
 		/// </summary>
 		void LogFailSafe(LogMessage message);
-
 		/// <summary>
 		/// 	Synchronizes all internal loggers - calling code assumed here that all files/streams are now free
 		/// 	use it for direct access for logging files and so on

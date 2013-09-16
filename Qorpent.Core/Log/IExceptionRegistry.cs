@@ -24,12 +24,13 @@ namespace Qorpent.Log {
 	/// </summary>
 	public interface IExceptionRegistry {
 		/// <summary>
+		///     Отправка сообщения об ошибке
 		/// </summary>
-		/// <param name="error"> Ошибка </param>
-		/// <param name="severity"> Уровень ошибки </param>
-		/// <param name="title"> Заголовок ошибки </param>
-		/// <param name="advancedParameters"> Дополнительные параметры </param>
-		/// <returns> Уникальный ключ сообщения </returns>
+		/// <param name="error">Ошибка</param>
+		/// <param name="severity">Уровень ошибки</param>
+		/// <param name="title">Заголовок ошибки</param>
+		/// <param name="advancedParameters">Дополнительные параметры</param>
+		/// <returns>Уникальный ключ сообщения</returns>
 		string Send(Exception error, ErrorLevel severity, object advancedParameters, string title = "");
 	}
 }

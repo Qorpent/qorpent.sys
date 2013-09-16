@@ -17,48 +17,41 @@
 // PROJECT ORIGIN: Qorpent.Core/ILogger.cs
 #endregion
 namespace Qorpent.Log {
-	/// <summary>
-	/// 	low level logger - executes UserLog writings itself
-	/// 	internal structure for Qorpent log manager
-	/// </summary>
+    /// <summary>
+    /// 	Базовая реализация логгера
+    /// </summary>
 	public interface ILogger {
 		/// <summary>
-		/// 	Level of logger
+		/// 	Уровень логгирования
 		/// </summary>
 		LogLevel Level { get; set; }
-
 		/// <summary>
-		/// 	Marks logger to be used - false - disable logger
+		///     Указывает, что логгер может использоваться (если <see cref="bool"/> True), инче — false
 		/// </summary>
 		bool Available { get; set; }
-
-
 		/// <summary>
-		/// 	user friendly name of logger
+		/// 	Человеко-понятное имя логгера
 		/// </summary>
 		string Name { get; set; }
-
-		/// <summary>
-		/// 	Behavior on error occured in logger - if None - Manager behavior will be used
-		/// </summary>
+        /// <summary>
+        ///     Методика поведения в ситуации сбоя логгера. Если значение не установлено, то будет
+        ///     использовано значение менеджера по умолчанию
+        /// </summary>
 		InternalLoggerErrorBehavior ErrorBehavior { get; set; }
-
 		/// <summary>
-		/// 	check's if this logger is applyable to given context
+		///     Проверяет, что данный логгер применим к переданному контексту
 		/// </summary>
-		/// <param name="context"> </param>
-		/// <returns> </returns>
+		/// <param name="context">Контекст</param>
+		/// <returns>True, если применим</returns>
 		bool IsApplyable(object context);
-
 		/// <summary>
-		/// 	Starts write UserLog message to it's target persistence  - asserted to be async
+		///     Начинает асинхронную запись <see cref="LogMessage"/> в целевой лог
 		/// </summary>
 		/// <param name="message"> </param>
 		void StartWrite(LogMessage message);
-
-		/// <summary>
-		/// 	Synchronizes calling context to logger
-		/// </summary>
+        /// <summary>
+        ///     Синхронизирует вызов контекста к логгеру
+        /// </summary>
 		void Join();
 	}
 }
