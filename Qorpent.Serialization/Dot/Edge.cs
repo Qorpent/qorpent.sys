@@ -10,7 +10,7 @@ namespace Qorpent.Dot {
 	    private string _to;
 
 	    /// <summary>
-	    ///
+        /// Форма конца стрелки
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public Arrow ArrowHead {
@@ -19,7 +19,7 @@ namespace Qorpent.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Форма начала стрелки
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public Arrow ArrowTail {
@@ -33,7 +33,7 @@ namespace Qorpent.Dot {
         public string Type { get; set; }
 
 	    /// <summary>
-	    ///
+        ///  Если "Да", то присоединение заголовка к стрелке происходит через подчеркивание
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public bool DecorateLabel {
@@ -42,7 +42,7 @@ namespace Qorpent.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Если "Да", то заголовок (если длинный) будет пересекать другие стрелки, если "Нет", то заголовок не пересекает их - стрелки выгнуться
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public bool LabelFloat {
@@ -51,7 +51,7 @@ namespace Qorpent.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Стрелка (голова) направляется от узла одного подграфа к другому подграфу (а не к другому узлу другого подграфа). Для этого также у подграфов д.б. compound=true и в значение Lhead нужно подставить название подграфа
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string Lhead {
@@ -60,7 +60,7 @@ namespace Qorpent.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        ///  Стрелка (хвост) направляется от подграфа к узлу другого подграфа. Для этого также у подграфов д.б. compound=true и в значение Ltail нужно подставить название подграфа
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string Ltail {
@@ -69,7 +69,7 @@ namespace Qorpent.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Стрелки (голова) направляется к одной точке подграфа (или узла), а не разным. Н-р, если A -> B  и C -> B   и в значение SameHead к ним нужно подставить название подграфа где узел B
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string SameHead {
@@ -78,7 +78,7 @@ namespace Qorpent.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Стрелки (хвост) отходят от одной точки подграфа (или узла), а не от разных. Н-р, если A -> B  и A -> C   и в значение SameTail к ним нужно подставить название подграфа где узел A
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string SameTail {
@@ -87,7 +87,7 @@ namespace Qorpent.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Определеяет на каких концах ребра должны быть стрелки (или не быть). Фактически же стиль стрелки можно задать с помощью ArrowTail и ArrowHead.
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public DirType Dir {
@@ -101,7 +101,7 @@ namespace Qorpent.Dot {
          [IgnoreSerialize]
         public double Penwidth
         {
-            get { return Get<double>(DotConstants.OrientationAttribute); }
+            get { return Get<double>(DotConstants.PenwidthAttribute); }
             set
             {
                 Set(DotConstants.PenwidthAttribute, value);
@@ -109,7 +109,7 @@ namespace Qorpent.Dot {
         }
 
 	    /// <summary>
-	    ///
+         /// Задает размер наконечника (головы) стрелки. По умолчанию 1
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public double ArrowSize {
@@ -118,7 +118,7 @@ namespace Qorpent.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Внешняя метка для узла или края. Для узлов, названия будут помещаться вне узла, но рядом с ним и для ребра - вблизи центра ребра.
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string XLabe {
@@ -127,7 +127,7 @@ namespace Qorpent.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Минимальная длина ребра в рангах (разница между головой и хвостом). По умолчанию 1, минимальная 0
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public int Minlen {
@@ -158,7 +158,7 @@ namespace Qorpent.Dot {
         public SubGraph Parent { get; set; }
 
 	    /// <summary>
-	    ///
+        /// Цвет линии
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public ColorAttribute Color {
