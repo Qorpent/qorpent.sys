@@ -22,16 +22,16 @@ using Qorpent.Dsl;
 
 namespace Qorpent.Bxl {
 	/// <summary>
-	/// 	Throws on any problems occured during Bxl processing
+	/// 	Срабатывает на любые проблемы, случившиеся в процессе обработки BXL
 	/// </summary>
 	[Serializable]
 	public class BxlException : Exception {
 		/// <summary>
-		/// 	Creates new instance of exception
+		/// 	Создает новый экземпляр ошибки
 		/// </summary>
-		/// <param name="message"> some user message </param>
+		/// <param name="message"> Пользовательское сообщение </param>
 		/// <param name="inner"> inner wrapped exception </param>
-		/// <param name="lexinfo"> lexinfo of item caused exception </param>
+		/// <param name="lexinfo"> Позиция исходного файла вызвавшего ошибку </param>
 		public BxlException(string message = "", LexInfo lexinfo = null, Exception inner = null)
 			
 			: base(message, inner) {
@@ -62,7 +62,7 @@ namespace Qorpent.Bxl {
 		}
 
 		/// <summary>
-		/// 	Erorr source lex info
+        /// 	Ошибка источника позиции исходного файла
 		/// </summary>
 		public readonly LexInfo LexInfo;
 	}
