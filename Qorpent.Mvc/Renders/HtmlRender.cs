@@ -1,7 +1,6 @@
 using System.IO;
-using System.Text;
-using System.Xml;
 using System.Xml.Linq;
+using Qorpent.Serialization;
 
 namespace Qorpent.Mvc.Renders {
     /// <summary>
@@ -17,53 +16,17 @@ namespace Qorpent.Mvc.Renders {
         {
             return "text/html";
         }
+
         /// <summary>
-        /// 
+        /// Преобразует объект в XML и затем отрисовывает его, пропуская через <see cref="XHtml5XmlWriter"/>
         /// </summary>
         /// <param name="context"></param>
         /// <param name="objectToRender"></param>
         protected override void SendOutput(IMvcContext context, object objectToRender) {
-            var sw = new StringWriter();
-            GetMainSerializer().Serialize("result", objectToRender, sw);
-            
-            var xwriter = new FullEndingXmlTextWriter(context.Output);
-            var x = XElement.Parse(sw.ToString());
+            var xml = GetMainSerializer().Serialize( objectToRender, "result");
+            var x = XElement.Parse(xml);
+            var xwriter = new XHtml5XmlWriter(context.Output);   
             x.WriteTo(xwriter);
-            
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        public class FullEndingXmlTextWriter : XmlTextWriter {
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="w"></param>
-            public FullEndingXmlTextWriter(TextWriter w)
-                : base(w) {
-            }
-            /// <summary>
-            /// /
-            /// </summary>
-            /// <param name="w"></param>
-            /// <param name="encoding"></param>
-            public FullEndingXmlTextWriter(Stream w, Encoding encoding)
-                : base(w, encoding) {
-            }
-            /// <summary>
-            /// /
-            /// </summary>
-            /// <param name="fileName"></param>
-            /// <param name="encoding"></param>
-            public FullEndingXmlTextWriter(string fileName, Encoding encoding)
-                : base(fileName, encoding) {
-            }
-            /// <summary>
-            /// 
-            /// </summary>
-            public override void WriteEndElement() {
-                this.WriteFullEndElement();
-            }
         }
     }
 }

@@ -36,58 +36,47 @@ namespace Qorpent.Log {
 			//TODO chacnge user to new current user
 			User = Environment.UserDomainName + "/" + Environment.UserName;
 		}
-
 		/// <summary>
-		/// 	Name of logger (caller supplyed)
+		/// 	Имя логгера
 		/// </summary>
 		public string Name { get; set; }
-
 		/// <summary>
-		/// 	Level of message
+		/// 	Минимальный уровень логгирования
 		/// </summary>
 		public LogLevel Level { get; set; }
-
 		/// <summary>
-		/// 	Code of standard message
+		/// 	Код стандартного сообщения
 		/// </summary>
 		public string Code { get; set; }
-
 		/// <summary>
 		/// 	StartWrite message itself
 		/// </summary>
 		public string Message { get; set; }
-
 		/// <summary>
 		/// 	Объект - "держатель" хост журнала, может пониматься как SourceObject, но
 		/// 	это зависит от характера использования журнала
 		/// </summary>
 		public object HostObject { get; set; }
-
 		/// <summary>
-		/// 	User name
+		/// 	Имя пользователя
 		/// </summary>
 		public string User { get; set; }
-
 		/// <summary>
-		/// 	Error, attached for this UserLog message
+		///     Ошибка, прикреплённая к данному сообщению
 		/// </summary>
 		public Exception Error { get; set; }
-
 		/// <summary>
-		/// 	Machine name of server where UserLog message occured
+		/// 	Имя машины, где было собрано сообщение
 		/// </summary>
 		public string Server { get; set; }
-
 		/// <summary>
-		/// 	Application name where message occured
+		/// 	Имя приложения, где было собрано сообщение
 		/// </summary>
 		public string ApplicationName { get; set; }
-
 		/// <summary>
 		/// 	Time of message
 		/// </summary>
 		public DateTime Time { get; set; }
-
 		/// <summary>
 		/// 	Lexical info for language - awared messages
 		/// </summary>
@@ -100,12 +89,10 @@ namespace Qorpent.Log {
 			get { return _callinfo ?? (_callinfo = (MvcContext == null ? null : MvcContext.GetCallInfo())); }
 			set { _callinfo = value; }
 		}
-
 		/// <summary>
 		/// 	Context of mvc calling
 		/// </summary>
 		[IgnoreSerialize] public IMvcContext MvcContext { get; set; }
-
 		/// <summary>
 		/// 	Generates BXL-like representation of LogMessage
 		/// </summary>

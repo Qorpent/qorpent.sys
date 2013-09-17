@@ -55,8 +55,11 @@
     <Compile Include="Q66EmbededXmlSerialization.cs" />
     <Compile Include="Selector_Tests\RegexSelectorImplTest.cs" />
     <Compile Include="serialization_set_test.cs" />
+    <Compile Include="XHtml5XmlWriterTests.cs" />
     <Compile Include="XmlInclude\Bug_XmlInterpolationInContainer.cs" />
     <Compile Include="XmlInclude\XmlIncludeMainTest.cs" />
+    <Compile Include="XmlJson2WayConversionTest.cs" />
+    <Compile Include="XmlNameEscaperTest.cs" />
     <Compile Include="xml_serializer_test.cs" />
   </ItemGroup>
   <ItemGroup>

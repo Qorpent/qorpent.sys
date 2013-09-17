@@ -29,27 +29,29 @@ namespace Qorpent.Serialization {
 	/// </remarks>
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISerializer), Name = "md5.serializer")]
 	public class Md5Serializer : Serializer {
-		/// <summary>
-		/// 	Creates the impl.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-		/// <returns> </returns>
-		/// <remarks>
-		/// </remarks>
-		protected override ISerializerImpl CreateImpl(string name, object value) {
+	    /// <summary>
+	    /// 	Creates the impl.
+	    /// </summary>
+	    /// <param name="name"> The name. </param>
+	    /// <param name="value"> The value. </param>
+	    /// <param name="options">Игнорируется</param>
+	    /// <returns> </returns>
+	    /// <remarks>
+	    /// </remarks>
+	    protected override ISerializerImpl CreateImpl(string name, object value, object options) {
 			return new JsonSerializerImpl();
 		}
 
-		/// <summary>
-		/// 	Serializes the specified name.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-		/// <param name="output"> The output. </param>
-		/// <remarks>
-		/// </remarks>
-		public override void Serialize(string name, object value, TextWriter output) {
+	    /// <summary>
+	    /// 	Serializes the specified name.
+	    /// </summary>
+	    /// <param name="name"> The name. </param>
+	    /// <param name="value"> The value. </param>
+	    /// <param name="output"> The output. </param>
+	    /// <param name="options">Игнорируется</param>
+	    /// <remarks>
+	    /// </remarks>
+	    public override void Serialize(string name, object value, TextWriter output,object options = null) {
 			var sw = new StringWriter();
 			base.Serialize(name, value, sw);
 			var data = sw.ToString();

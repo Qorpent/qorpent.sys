@@ -23,11 +23,11 @@ namespace Qorpent.BSharp {
 	    /// <summary>
 	    /// Определение перекрывающего аспекта класса
 	    /// </summary>
-	    public static readonly string ClassOverrideKeyword = XmlEscaper.Escape("~") + "class";
+	    public static readonly string ClassOverrideKeyword = XmlNameEscaper.EscapeXmlName("~") + "class";
 	    /// <summary>
 	    /// Определение дополняющего аспекта класса
 	    /// </summary>
-	    public static readonly string ClassExtensionKeyword = XmlEscaper.Escape("+") + "class";
+	    public static readonly string ClassExtensionKeyword = XmlNameEscaper.EscapeXmlName("+") + "class";
 		/// <summary>
 		/// Атрибут приоритета перекрытия класса
 		/// </summary>
@@ -165,11 +165,11 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Префикс перекрытия элемента
 		/// </summary>
-        public static readonly string ElementOverridePrefix = XmlEscaper.Escape("~");
+        public static readonly string ElementOverridePrefix = XmlNameEscaper.EscapeXmlName("~");
 		/// <summary>
 		/// Префикс расширения элемента
 		/// </summary>
-        public static readonly string ElementExtensionPrefix = XmlEscaper.Escape("+");
+        public static readonly string ElementExtensionPrefix = XmlNameEscaper.EscapeXmlName("+");
 		/// <summary>
 		/// Префикс приватного атрибута
 		/// </summary>

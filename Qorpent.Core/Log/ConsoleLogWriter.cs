@@ -20,10 +20,11 @@ using System;
 
 namespace Qorpent.Log {
 	/// <summary>
-	/// 	Default console writer
+	/// 	ћенеджер записи в консоль, используемый по умолчанию
 	/// </summary>
 	public class ConsoleLogWriter : BaseLogWriter {
 		/// <summary>
+		///     ¬нутренн€€ операци€ записи в лог
 		/// </summary>
 		/// <param name="message"> </param>
 		protected override void InternalWrite(LogMessage message) {
@@ -55,15 +56,13 @@ namespace Qorpent.Log {
 				Console.ResetColor();
 			}
 		}
-
-
 		/// <summary>
-		/// 	Creates new userlog with consoler writer
+        ///     —оздаЄт новый экземпл€р <see cref="IUserLog"/> c экземпл€ром <see cref="ConsoleLogWriter"/>
 		/// </summary>
-		/// <param name="logname"> </param>
-		/// <param name="level"> </param>
-		/// <param name="customFormat"> </param>
-		/// <returns> </returns>
+		/// <param name="logname">„еловеко-пон€тное им€ лога</param>
+		/// <param name="level">”ровень логгировани€</param>
+		/// <param name="customFormat">ѕереопределЄнный формат сообщени€</param>
+        /// <returns>Ёкземпл€р <see cref="IUserLog"/> c экземпл€ром <see cref="ConsoleLogWriter"/></returns>
 		public static IUserLog CreateLog(string logname, LogLevel level = LogLevel.Trace, string customFormat = "") {
 			return new LoggerBasedUserLog(
 				new[]
@@ -73,14 +72,13 @@ namespace Qorpent.Log {
 						},Level = level}
 					}, null, logname) {Level = level};
 		}
-
 		/// <summary>
-		/// 	Creates logger with console writer
+        /// 	—оздаЄт новый экземпл€р <see cref="ILogger"/> c экземпл€ром <see cref="ConsoleLogWriter"/>
 		/// </summary>
-		/// <param name="regex"> </param>
-		/// <param name="level"> </param>
-		/// <param name="customFormat"> </param>
-		/// <returns> </returns>
+		/// <param name="regex">ћаска в виде регул€рного выражени€</param>
+		/// <param name="level">”ровень логгировани€</param>
+        /// <param name="customFormat">ѕереопределЄнный формат сообщени€</param>
+        /// <returns>Ёкземпл€р <see cref="ILogger"/> c экземпл€ром <see cref="ConsoleLogWriter"/></returns>
 		public static ILogger CreateLogger(string regex = "", LogLevel level = LogLevel.Trace, string customFormat = "") {
 			return new BaseLogger
 				{Mask = regex, Level = level, Writers = new ILogWriter[] {new ConsoleLogWriter {CustomFormat = customFormat}}};

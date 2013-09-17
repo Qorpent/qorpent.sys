@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Qorpent.Json {
@@ -19,11 +20,18 @@ namespace Qorpent.Json {
 		/// <param name="jsonstring"></param>
 		/// <returns></returns>
 		public IEnumerable<JsonToken> Tokenize(string jsonstring) {
-			return 
-				from c in jsonstring 
-				let type = GetCType(c) 
-				from t in ProcessChar(type, c) 
-				select t;
+			foreach (var token in 
+			    from c in jsonstring
+			    let type = GetCType(c)
+			    from t in ProcessChar(type, c)
+			    select t) {
+			    yield return token;
+			}
+            if (inliteral) {
+                yield return JsonToken.Lit(currentbuffer);
+            }else if (innumber) {
+                yield return JsonToken.Num(Convert.ToDecimal(currentbuffer,CultureInfo.InvariantCulture));
+            }
 		}
 
 		private IEnumerable<JsonToken> ProcessChar(CType type, char c)
@@ -168,7 +176,7 @@ namespace Qorpent.Json {
 					inescape = false;
 				}
 				else if (c == 'n') {
-					currentbuffer += "\t";
+					currentbuffer += "\n";
 					inescape = false;
 				}
 				else if (c == '"')

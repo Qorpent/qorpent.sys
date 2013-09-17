@@ -51,8 +51,9 @@ namespace Qorpent.Json {
 			var sb = new StringBuilder();
 			if (format) sb.Append(" ");
 			sb.Append("{");
-			
+		    var pi = 0;
 			foreach (var p in Properties) {
+			    pi++;
 				if (format)
 				{
 					sb.Append(Environment.NewLine);
@@ -63,12 +64,20 @@ namespace Qorpent.Json {
 				}
 
 				
-				sb.Append(p.Name.ToString(format));
+				sb.Append(p.Name.ToString(true));
 				if (format) sb.Append(" ");
 				sb.Append(":");
 				if (format) sb.Append(" ");
-				sb.Append(p.Value.ToString(format));
-				sb.Append(",");
+                if (p.Value is JsonValue) {
+                    sb.Append(p.Value.ToString(true));    
+                }
+                else {
+                    sb.Append(p.Value.ToString(format));    
+                }
+				
+			    if (pi != Properties.Count) {
+			        sb.Append(",");
+			    }
 			}
 			if (format)
 			{
@@ -89,6 +98,7 @@ namespace Qorpent.Json {
 		/// <param name="current"></param>
 		public override XElement WriteToXml(XElement current) {
 			current = current ?? new XElement("object");
+            current.SetAttributeValue(JsonTypeAttributeName, "object");
 			// простые значения записываем атрибуты
 			foreach (var p in Properties.Where(_ => _.Name.Type==JsonTokenType.Literal &&  _.Value is JsonValue)) {
 				current.SetAttributeValue(p.Name.Value,p.Value.Value);
@@ -96,15 +106,11 @@ namespace Qorpent.Json {
 			// простые но строковые имена пишем с контролем разрешенных имен
 			foreach (var p in Properties.Where(_ => _.Name.Type == JsonTokenType.String && _.Value is JsonValue)) {
 				if (IsLiteral(p.Name.Value)) {
-					current.SetAttributeValue(p.Name.Value, p.Value.Value);	
-				}else if (IsNumber(p.Name.Value)) {
-					var e = new XElement("item", new XAttribute("idx", p.Name.Value), new XText(p.Value.Value));
-					current.Add(e);
+					current.SetAttributeValue(p.Name.Value, p.Value.Value ?? "");	
+				}else {
+                    current.SetAttributeValue(XmlExtensions.ConvertToXNameCompatibleString(p.Name.Value),p.Value.Value ?? "");
 				}
-				else {
-					var e = new XElement("item", new XAttribute("name", p.Name.Value), new XText(p.Value.Value));
-					current.Add(e);
-				}
+				
 				
 			}
 			//массив пишем как вложенный элемент и передаем ему управление

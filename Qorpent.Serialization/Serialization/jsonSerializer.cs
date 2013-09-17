@@ -16,7 +16,10 @@
 // 
 // PROJECT ORIGIN: Qorpent.Serialization/jsonSerializer.cs
 #endregion
+
+using System.Xml.Linq;
 using Qorpent.IoC;
+using Qorpent.Json;
 
 namespace Qorpent.Serialization {
 	/// <summary>
@@ -30,11 +33,33 @@ namespace Qorpent.Serialization {
 		/// </summary>
 		/// <param name="name"> The name. </param>
 		/// <param name="value"> The value. </param>
+        /// <param name="options">Дополнительные опции при создании</param>
 		/// <returns> </returns>
 		/// <remarks>
 		/// </remarks>
-		protected override ISerializerImpl CreateImpl(string name, object value) {
+		protected override ISerializerImpl CreateImpl(string name, object value, object options) {
 			return new JsonSerializerImpl();
 		}
+
+        private XmlToJsonConverter converter = new XmlToJsonConverter();
+
+	    /// <summary>
+        /// Сериализует переданный объект в текстовой поток, перекрыта отрисовка XML через <see cref="XmlToJsonConverter"/>
+	    /// </summary>
+	    /// <param name="name"> Имя сериализуемого объекта</param>
+	    /// <param name="value">Сериализуемый объект </param>
+	    /// <param name="output">Целевой текстововй поток</param>
+	    /// <param name="options">Опции сериализации, используются при создании имепдлементации</param>
+	    /// <remarks>
+	    /// </remarks>
+	    public override void Serialize(string name, object value, System.IO.TextWriter output, object options = null)
+        {
+            if (value is XElement && null!=((XElement)value).Attribute(JsonItem.JsonTypeAttributeName)) {
+                output.Write(converter.ConvertToJson((XElement)value));
+                return;
+                
+            }
+            base.Serialize(name, value, output, options);
+        }
 	}
 }

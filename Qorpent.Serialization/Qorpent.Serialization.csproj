@@ -46,6 +46,8 @@
     <Compile Include="Graphs.Dot\DotGraphProvider.cs" />
     <Compile Include="Graphs.Dot\DotLanguageUtils.cs" />
     <Compile Include="Graphs.Dot\Cluster.cs" />
+    <Compile Include="Serialization\DotScriptSerializer.cs" />
+    <Compile Include="Serialization\DotSvgSerializer.cs" />
     <Compile Include="Graphs.Dot\Graph.cs" />
     <Compile Include="Graphs.Dot\GraphRender.cs" />
     <Compile Include="Graphs.Dot\SubGraph.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="Serialization\WikiSerializer.cs" />
     <Compile Include="Serialization\xmlSerializer.cs" />
     <Compile Include="Serialization\xmlSerializerImpl.cs" />
+    <Compile Include="Serialization\XmlToJsonConverter.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -104,11 +104,11 @@ namespace Qorpent.Log {
 			ErrorBehavior = InternalLoggerErrorBehavior.Log | InternalLoggerErrorBehavior.Ignore;
 			Available = true;
 		}
-		/// <summary>
-		/// 	Проверяет, что данный логгер применим к текущему контексту
-		/// </summary>
-		/// <param name="context"> </param>
-		/// <returns> </returns>
+        /// <summary>
+        ///     Проверяет, что данный логгер применим к переданному контексту
+        /// </summary>
+        /// <param name="context">Контекст</param>
+        /// <returns>True, если применим</returns>
 		public virtual bool IsApplyable(object context) {
 			lock (Sync) {
 				if (string.IsNullOrEmpty(Mask) || "*" == Mask) {

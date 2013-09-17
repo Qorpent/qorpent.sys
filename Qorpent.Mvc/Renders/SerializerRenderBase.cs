@@ -112,6 +112,9 @@ namespace Qorpent.Mvc.Renders {
 	        if (!string.IsNullOrWhiteSpace(xpath) || !string.IsNullOrWhiteSpace(xslt)) {
 	            objectToRender = TransformResult(context,objectToRender, xpath, xslt);
 	        }
+            if (objectToRender is XElement) {
+                ((XElement)objectToRender).SetAttributeValue("__jsontype","object");
+            }
 	        return objectToRender;
 	    }
 

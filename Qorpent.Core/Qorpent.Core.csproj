@@ -180,7 +180,9 @@
     <Compile Include="Dsl\Json\JsonTokenType.cs" />
     <Compile Include="Serialization\SelectorLanguage.cs" />
     <Compile Include="Serialization\ContentCleanerOperations.cs" />
-    <Compile Include="Serialization\XmlEscaper.cs" />
+    <Compile Include="Serialization\SerializerExtensions.cs" />
+    <Compile Include="Serialization\XHtml5XmlWriter.cs" />
+    <Compile Include="Serialization\XmlNameEscaper.cs" />
     <Compile Include="ServiceState.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
     <Compile Include="Wiki\IWikiEmptyFilter.cs" />
@@ -360,8 +362,6 @@
     <EmbeddedResource Include=".\**\*.*resource" />
     <QorpentReference Include="*.import" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Serialization\CleanXml\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>
