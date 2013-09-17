@@ -709,7 +709,7 @@ namespace Qorpent.IoC {
 				else if (!i.type.IsValueType) {
 					val = Get(i.type, i.name);
                     //try resolve by co-interface
-                    if (null == val) {
+                    if ((null == val) && !(string.IsNullOrWhiteSpace(i.name))) {
                         val = Get(null,i.name);
                     }
 				}
