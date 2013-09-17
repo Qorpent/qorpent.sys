@@ -1,15 +1,7 @@
 ﻿using System;
+using Qorpent.Graphs.Dot.Types;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
-namespace Qorpent.Dot
-{
-    /// <summary>
-    /// Ребро графа
-    /// </summary>
-    public class Edge : GraphElementBase
-    {
-        private string _from;
-        private string _to;
 
 namespace Qorpent.Graphs.Dot {
 	/// <summary>
