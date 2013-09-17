@@ -22,9 +22,9 @@ namespace Qorpent.Json {
 			var sb = new StringBuilder();
 			if (format) sb.Append(" ");
 			sb.Append("[");
-
-			foreach (var p in Values)
-			{
+		    var pi = 0;
+			foreach (var p in Values) {
+			    pi++;
 				if (format)
 				{
 					sb.Append(Environment.NewLine);
@@ -35,8 +35,10 @@ namespace Qorpent.Json {
 				}
 
 
-				sb.Append(p.ToString(format));		
-				sb.Append(",");
+				sb.Append(p.ToString(format));
+			    if (pi != Values.Count) {
+			        sb.Append(",");
+			    }
 			}
 			if (format)
 			{
@@ -57,9 +59,10 @@ namespace Qorpent.Json {
 		/// <param name="current"></param>
 		public override XElement WriteToXml(XElement current) {
 			current = current ?? new XElement("array");
+            current.SetAttributeValue(JsonTypeAttributeName,"array");
 			for(var i=0;i<Values.Count;i++) {
 				var v = Values[i];
-				var e = new XElement("item", new XAttribute("idx", i));
+				var e = new XElement("item", new XAttribute("idx", i), new XAttribute(JsonTypeAttributeName,v.Type));
 				current.Add(e);
 				v.WriteToXml(e);
 			}

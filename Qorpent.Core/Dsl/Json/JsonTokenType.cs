@@ -56,5 +56,9 @@ namespace Qorpent.Json {
 		/// Null
 		/// </summary>
 		Null = 1024,
+        /// <summary>
+        /// Автоматическое опредление типа токена
+        /// </summary>
+	    Auto = 2048
 	}
 }

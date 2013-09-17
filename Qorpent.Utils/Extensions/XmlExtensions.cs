@@ -25,6 +25,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Applications;
 using Qorpent.Bxl;
+using Qorpent.Json;
 using Qorpent.Serialization;
 
 namespace Qorpent.Utils.Extensions {
@@ -61,7 +62,7 @@ namespace Qorpent.Utils.Extensions {
         /// <param name="itemname"></param>
         /// <returns></returns>
         public static XElement ToMvcXmlArray(this IEnumerable<XElement> items, string itemname ) {
-            return new XElement("result", new XElement(itemname, new XAttribute("__isarray", "true"), items));
+            return new XElement("result", new XElement(itemname, new XAttribute(JsonItem.JsonTypeAttributeName, "array"), items));
         }
 		/// <summary>
 		/// Производит поиск атрибутов по имени и/или вхождению строки
@@ -215,38 +216,38 @@ namespace Qorpent.Utils.Extensions {
 			var adaptedname = nameCandidate;
 			if (-1 != adaptedname.IndexOfAny(Nonnames)) {
 				adaptedname = adaptedname
-					.Replace("+", XmlNameEscaper.EscapeXmlName("+"))
-                    .Replace("?", XmlNameEscaper.EscapeXmlName("?"))
-                    .Replace("!", XmlNameEscaper.EscapeXmlName("!"))
-                    .Replace("~", XmlNameEscaper.EscapeXmlName("~"))
-                    .Replace("@", XmlNameEscaper.EscapeXmlName("@"))
-                    .Replace("*", XmlNameEscaper.EscapeXmlName("*"))
-                    .Replace("$", XmlNameEscaper.EscapeXmlName("$"))
-                    .Replace("^", XmlNameEscaper.EscapeXmlName("^"))
-                    .Replace("&", XmlNameEscaper.EscapeXmlName("&"))
-                    .Replace("/", XmlNameEscaper.EscapeXmlName("/"))
-                    .Replace(":", XmlNameEscaper.EscapeXmlName(":"))
-                    .Replace("%", XmlNameEscaper.EscapeXmlName("%"))
-                    .Replace("(", XmlNameEscaper.EscapeXmlName("("))
-                    .Replace(")", XmlNameEscaper.EscapeXmlName(")"))
-                    .Replace("[", XmlNameEscaper.EscapeXmlName("["))
-                    .Replace("]", XmlNameEscaper.EscapeXmlName("]"))
-                    .Replace("{", XmlNameEscaper.EscapeXmlName("{"))
-                    .Replace("}", XmlNameEscaper.EscapeXmlName("}"))
-                    .Replace("|", XmlNameEscaper.EscapeXmlName("|"))
-                    .Replace(";", XmlNameEscaper.EscapeXmlName(";"))
-                    .Replace("<", XmlNameEscaper.EscapeXmlName("<"))
-                    .Replace(">", XmlNameEscaper.EscapeXmlName(">"))
+					.Replace("+", "+".EscapeXmlName())
+                    .Replace("?", "?".EscapeXmlName())
+                    .Replace("!", "!".EscapeXmlName())
+                    .Replace("~", "~".EscapeXmlName())
+                    .Replace("@", "@".EscapeXmlName())
+                    .Replace("*", "*".EscapeXmlName())
+                    .Replace("$", "$".EscapeXmlName())
+                    .Replace("^", "^".EscapeXmlName())
+                    .Replace("&", "&".EscapeXmlName())
+                    .Replace("/", "/".EscapeXmlName())
+                    .Replace(":", ":".EscapeXmlName())
+                    .Replace("%", "%".EscapeXmlName())
+                    .Replace("(", "(".EscapeXmlName())
+                    .Replace(")", ")".EscapeXmlName())
+                    .Replace("[", "[".EscapeXmlName())
+                    .Replace("]", "]".EscapeXmlName())
+                    .Replace("{", "{".EscapeXmlName())
+                    .Replace("}", "}".EscapeXmlName())
+                    .Replace("|", "|".EscapeXmlName())
+                    .Replace(";", ";".EscapeXmlName())
+                    .Replace("<", "<".EscapeXmlName())
+                    .Replace(">", ">".EscapeXmlName())
 					;
 				if(adaptedname.StartsWith("-")) {
-                    adaptedname = XmlNameEscaper.EscapeXmlName("-") + adaptedname.Substring(1);
+                    adaptedname = "__MINUS__" + adaptedname.Substring(1);
 				}
 			}
 			if (0 != adaptedname.Length && -1 != Array.IndexOf(Digits, adaptedname[0])) {
 				adaptedname = "_" + adaptedname;
 			}
 			if (adaptedname.StartsWith(".")) {
-                adaptedname = XmlNameEscaper.EscapeXmlName(".") + adaptedname.Substring(1);
+                adaptedname = "__DOT__" + adaptedname.Substring(1);
 			}
 			return adaptedname;
 		}
