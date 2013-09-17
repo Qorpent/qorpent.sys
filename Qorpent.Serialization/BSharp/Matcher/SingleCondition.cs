@@ -37,41 +37,41 @@ namespace Qorpent.BSharp.Matcher {
 
 		private void SetupFromSpecialName(XAttribute a) {
 			var n = a.Name.LocalName;
-            if (n.Contains(XmlEscaper.Escape("!")))
+            if (n.Contains(XmlNameEscaper.EscapeXmlName("!")))
             {
 				Negate = true;
-                n = n.Replace(XmlEscaper.Escape("!"), "");
+                n = n.Replace(XmlNameEscaper.EscapeXmlName("!"), "");
 			}
 			if (Value == "NULL") {
 				ConditionType= ConditionType.IsNull;
 			}else if (Value == "TRUE") {
 				ConditionType =ConditionType.IsTrue;
 			}
-            if (n.EndsWith(XmlEscaper.EscapeAll(">>")))
+            if (n.EndsWith(XmlNameEscaper.EscapeXmlName(">>")))
             {
 				ConditionType = ConditionType.Gr;
             }
-            else if (n.EndsWith(XmlEscaper.Escape(">")))
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName(">")))
             {
 				ConditionType = ConditionType.GrE;
             }
-            else if (n.EndsWith(XmlEscaper.EscapeAll("<<")))
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("<<")))
             {
 				ConditionType= ConditionType.Le;
             }
-            else if (n.EndsWith(XmlEscaper.Escape("<")))
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("<")))
             {
 				ConditionType = ConditionType.LeE;
             }
-            else if (n.EndsWith(XmlEscaper.Escape("~")))
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("~")))
             {
 				ConditionType = ConditionType.Match;
             }
-            else if (n.EndsWith(XmlEscaper.Escape("&")))
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("&")))
             {
 				ConditionType = ConditionType.InList;
             }
-            else if (n.EndsWith(XmlEscaper.Escape("%")))
+            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("%")))
             {
 				ConditionType = ConditionType.Contains;
 			}

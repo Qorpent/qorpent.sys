@@ -18,15 +18,15 @@
 #endregion
 namespace Qorpent.Serialization {
 	/// <summary>
-	/// 	Factory of serializers (qorpent serializers into text output)
+	/// 	Фабрика для создания сериализаторов указанного формата
 	/// </summary>
 	public interface ISerializerFactory {
 		/// <summary>
-		/// 	Returns serializer to use for given format
+		/// Создает сериализатор заданного формата
 		/// </summary>
-		/// <param name="format"> </param>
-		/// <param name="customFormatName"> </param>
-		/// <returns> </returns>
+		/// <param name="format">Стандартный формат </param>
+		/// <param name="customFormatName">Имя специального пользовательского формата </param>
+		/// <returns>объект сериализатора </returns>
 		ISerializer GetSerializer(SerializationFormat format, string customFormatName = null);
 	}
 }

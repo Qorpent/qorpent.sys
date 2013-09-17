@@ -1,6 +1,7 @@
 ﻿using System;
 using Qorpent.Graphs.Dot.Types;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Graphs.Dot {
 	/// <summary>
@@ -11,7 +12,7 @@ namespace Qorpent.Graphs.Dot {
 	    private string _to;
 
 	    /// <summary>
-	    ///
+        /// Форма начала стрелки
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public Arrow ArrowHead {
@@ -34,7 +35,7 @@ namespace Qorpent.Graphs.Dot {
         public string Type { get; set; }
 
 	    /// <summary>
-	    ///
+        ///  Если "Да", то присоединение заголовка к стрелке происходит через подчеркивание
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public bool DecorateLabel {
@@ -43,7 +44,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Если "Да", то заголовок (если длинный) будет пересекать другие стрелки, если "Нет", то заголовок не пересекает их - стрелки выгнуться
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public bool LabelFloat {
@@ -52,7 +53,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Стрелка (голова) направляется от узла одного подграфа к другому подграфу (а не к другому узлу другого подграфа). Для этого также у подграфов д.б. compound=true и в значение Lhead нужно подставить название подграфа
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string Lhead {
@@ -61,7 +62,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        ///  Стрелка (хвост) направляется от подграфа к узлу другого подграфа. Для этого также у подграфов д.б. compound=true и в значение Ltail нужно подставить название подграфа
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string Ltail {
@@ -70,7 +71,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Стрелки (голова) направляется к одной точке подграфа (или узла), а не разным. Н-р, если A -> B  и C -> B   и в значение SameHead к ним нужно подставить название подграфа где узел B
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string SameHead {
@@ -79,7 +80,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Стрелки (хвост) отходят от одной точки подграфа (или узла), а не от разных. Н-р, если A -> B  и A -> C   и в значение SameTail к ним нужно подставить название подграфа где узел A
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string SameTail {
@@ -87,8 +88,8 @@ namespace Qorpent.Graphs.Dot {
 	        set { Set(DotConstants.SameTailAttribute, value); }
 	    }
 
-	    /// <summary>
-	    ///
+        /// <summary>
+        /// Определеяет на каких концах ребра должны быть стрелки (или не быть). Фактически же стиль стрелки можно задать с помощью ArrowTail и ArrowHead.
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public DirType Dir {
@@ -99,10 +100,10 @@ namespace Qorpent.Graphs.Dot {
 	    /// <summary>
         /// Задает ширину линии (стрелки, узла, кластера...) в точках 
         /// </summary>
-         [IgnoreSerialize]
+        [IgnoreSerialize]
         public double Penwidth
         {
-            get { return Get<double>(DotConstants.OrientationAttribute); }
+            get { return Get<double>(DotConstants.PenwidthAttribute); }
             set
             {
                 Set(DotConstants.PenwidthAttribute, value);
@@ -110,7 +111,7 @@ namespace Qorpent.Graphs.Dot {
         }
 
 	    /// <summary>
-	    ///
+        /// Задает размер наконечника (головы) стрелки. По умолчанию 1
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public double ArrowSize {
@@ -119,7 +120,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Внешняя метка для узла или края. Для узлов, названия будут помещаться вне узла, но рядом с ним и для ребра - вблизи центра ребра.
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string XLabe {
@@ -128,7 +129,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Минимальная длина ребра в рангах (разница между головой и хвостом). По умолчанию 1, минимальная 0
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public int Minlen {
@@ -139,72 +140,79 @@ namespace Qorpent.Graphs.Dot {
 	    /// <summary>
         /// Код входящего узла
         /// </summary>
-	    public string From {
-            get { return string.IsNullOrWhiteSpace(_from)?(_from=DotLanguageUtils.NULLCODE):_from; }
+        public string From
+        {
+            get { return string.IsNullOrWhiteSpace(_from) ? (_from = DotLanguageUtils.NULLCODE) : _from; }
             set { _from = DotLanguageUtils.EscapeCode(value); }
         }
 
-	    /// <summary>
+        /// <summary>
         /// Код исходящего узла
         /// </summary>
-        public string To {
+        public string To
+        {
             get { return string.IsNullOrWhiteSpace(_to) ? (_to = DotLanguageUtils.NULLCODE) : _to; }
             set { _to = DotLanguageUtils.EscapeCode(value); }
-	    }
+        }
 
-	    /// <summary>
+        /// <summary>
         /// Родительский подграф
         /// </summary>
-	    [IgnoreSerialize]
+        [IgnoreSerialize]
         public SubGraph Parent { get; set; }
 
-	    /// <summary>
-	    ///
-	    /// </summary>
-	    [IgnoreSerialize]
-	    public ColorAttribute Color {
-	        get { return Get<ColorAttribute>(DotConstants.ColorAttribute); }
-	        set { Set(DotConstants.ColorAttribute, value); }
-	    }
+        /// <summary>
+        /// Цвет линии
+        /// </summary>
+        [IgnoreSerialize]
+        public ColorAttribute Color
+        {
+            get { return Get<ColorAttribute>(DotConstants.ColorAttribute); }
+            set { Set(DotConstants.ColorAttribute, value); }
+        }
         /// <summary>
         /// Стиль ребра
         /// </summary>
         [IgnoreSerialize]
-        public EdgeStyleType Style {
+	    public EdgeStyleType Style {
             get { return Get<EdgeStyleType>(DotConstants.StyleAttribute); }
             set { Set(DotConstants.StyleAttribute, value); }
 	    }
 
 
 	    /// <summary>
-		/// Автонастройка
-		/// </summary>
-		public override void AutoTune()
-		{
-			base.AutoTune();
-			// автоматическое выставление Dir в случае ArrowTail
-			if (HasAttribute(DotConstants.ArrowTailAttribute)) {
-				if (!HasAttribute(DotConstants.DirAttribute))
-				{
-					Dir = DirType.Both;
-				}
-			}
-		}
+        /// Автонастройка
+        /// </summary>
+        public override void AutoTune()
+        {
+            base.AutoTune();
+            // автоматическое выставление Dir в случае ArrowTail
+            if (HasAttribute(DotConstants.ArrowTailAttribute))
+            {
+                if (!HasAttribute(DotConstants.DirAttribute))
+                {
+                    Dir = DirType.Both;
+                }
+            }
+        }
+        
 
-	    /// <summary>
-	    /// Создает ребро
-	    /// </summary>
-	    /// <param name="from"></param>
-	    /// <param name="to"></param>
-	    /// <param name="data"></param>
-	    /// <param name="setup"></param>
-	    /// <returns></returns>
-	    public static Edge Create(string from, string to, object data=null, Action<Edge> setup=null) {
-	        var result = new Edge {From = from, To = to, Data = data};
-            if (null != setup) {
+        /// <summary>
+        /// Создает ребро
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="data"></param>
+        /// <param name="setup"></param>
+        /// <returns></returns>
+        public static Edge Create(string from, string to, object data = null, Action<Edge> setup = null)
+        {
+            var result = new Edge { From = from, To = to, Data = data };
+            if (null != setup)
+            {
                 setup(result);
             }
-	        return result;
-	    }
-	}
+            return result;
+        }
+    }
 }

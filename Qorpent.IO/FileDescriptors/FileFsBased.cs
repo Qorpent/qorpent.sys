@@ -5,7 +5,7 @@ namespace Qorpent.IO.FileDescriptors {
     /// <summary>
     /// 
     /// </summary>
-    class FileDescriptorFsBased : IGeneralFileDescriptor {
+    class FileFsBased : IFile {
         /// <summary>
         ///     Разрешённый уровень доступа
         /// </summary>
@@ -13,7 +13,7 @@ namespace Qorpent.IO.FileDescriptors {
         /// <summary>
         ///     Представление файла
         /// </summary>
-        public IFileEntity FileEntity { get; private set; }
+        public IFileDescriptor Descriptor { get; private set; }
         /// <summary>
         ///     Получить поток до файла
         /// </summary>
@@ -24,16 +24,16 @@ namespace Qorpent.IO.FileDescriptors {
                 throw new Exception("You haven't access to this file");
             }
 
-            return File.Exists(FileEntity.Path) ? File.Open(FileEntity.Path, FileMode.Open, access) : null;
+            return File.Exists(Descriptor.Path) ? File.Open(Descriptor.Path, FileMode.Open, access) : null;
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="allowedAccess"></param>
-        /// <param name="fileEntity"></param>
-        public FileDescriptorFsBased(FileAccess allowedAccess, FileEntity fileEntity) {
+        /// <param name="fileDescriptor"></param>
+        public FileFsBased(FileAccess allowedAccess, FileDescriptor fileDescriptor) {
             AllowedAccess = allowedAccess;
-            FileEntity = fileEntity;
+            Descriptor = fileDescriptor;
         }
     }
 }

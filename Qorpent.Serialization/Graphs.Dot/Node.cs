@@ -8,7 +8,7 @@ namespace Qorpent.Graphs.Dot {
 	/// </summary>
 	public class Node : GraphElementBase {
 	    /// <summary>
-	    ///
+        /// Атрибут формы узла
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public NodeShapeType Shape {
@@ -32,7 +32,7 @@ namespace Qorpent.Graphs.Dot {
         public string SubgraphCode { get; set; }
 
 	    /// <summary>
-	    ///
+       /// Для graph и node
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public double Orientation {
@@ -42,7 +42,7 @@ namespace Qorpent.Graphs.Dot {
 
 
 	    /// <summary>
-	    ///
+        /// Коэффициент для shape=polygon задающий при положительном значении верхнюю часть больше, чем нижнюю и при отрицательном - наоборот
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public double Distortion {
@@ -51,7 +51,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Если "Да", то размер узла определяется значениями ширины и высоты - Width and Height
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public bool FixedSize {
@@ -60,7 +60,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Задает высоту узла. По умолчанию 0.5,  min значение 0.02
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public double Height {
@@ -69,7 +69,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Задает ширину узла. По умолчанию 0.75,  min значение 0.01
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public double Width {
@@ -78,7 +78,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Для Shape=polygon задает косые. Положительные значения - верхняя части полигона направо, отрицательные  - налево. По умолчанию 0.0
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public double Skew {
@@ -87,7 +87,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Задает колличество рамочек вокруг узла той же формы что и форма узла
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public int Peripheries {
@@ -96,7 +96,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Задает количество сторон для полигона
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public double Sides {
@@ -105,7 +105,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Внешняя метка для узла или края. Для узлов, названия будут помещаться вне узла, но рядом с ним и для ребра - вблизи центра ребра.
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string XLabe {
@@ -120,7 +120,7 @@ namespace Qorpent.Graphs.Dot {
         public SubGraph Parent { get; set; }
 
 	    /// <summary>
-	    ///
+       /// Цвет заливки
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public ColorAttribute FillColor {
@@ -129,7 +129,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Подсказка
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string Tooltip {
@@ -138,7 +138,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Целевой фрейм
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string Target {
@@ -147,7 +147,7 @@ namespace Qorpent.Graphs.Dot {
 	    }
 
 	    /// <summary>
-	    ///
+        /// Ссылка
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public string Href {

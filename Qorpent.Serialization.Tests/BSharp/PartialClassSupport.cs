@@ -23,6 +23,20 @@ namespace Qorpent.Serialization.Tests.BSharp {
 			Assert.NotNull(result);
 		}
 
+
+        [Test]
+        public void CanMakeClassAbstract()
+        {
+            var code = @"
+class A
+class B
+~class A abstract=true
+";
+            Assert.NotNull(Compile(code).Get("B"));
+            var a = Compile(code).Get("A");
+            Assert.Null( a);
+        }
+
 		[Test]
 		public void CanOverrideAttribute()
 		{

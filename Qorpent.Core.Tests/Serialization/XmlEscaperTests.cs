@@ -17,7 +17,7 @@ namespace Qorpent.Core.Tests.Serialization
         {
             String bxl = "~";
             String xml = "__TILD__";
-            Assert.AreEqual(XmlEscaper.Escape(bxl), xml);
+            Assert.AreEqual(XmlNameEscaper.EscapeXmlName(bxl), xml);
             
         }
 
@@ -26,7 +26,7 @@ namespace Qorpent.Core.Tests.Serialization
         {
             String xml = "__PERC__";
             String bxl = "%";
-            Assert.AreEqual(XmlEscaper.Unescape(xml), bxl);
+            Assert.AreEqual(XmlNameEscaper.UnescapeXmlName(xml), bxl);
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace Qorpent.Core.Tests.Serialization
         {
             String bxl = "test~qwerty!<>#+-";
             String xml = "test__TILD__qwerty__EXC____LT____GT__#__PLUS____MINUS__";
-            Assert.AreEqual(XmlEscaper.EscapeAll(bxl), xml);
+            Assert.AreEqual(XmlNameEscaper.EscapeXmlName(bxl), xml);
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace Qorpent.Core.Tests.Serialization
         {
             String xml = "test__TILD__qwerty__EXC____LT____GT__#__PLUS____MINUS__";
             String bxl = "test~qwerty!<>#+-";
-            Assert.AreEqual(XmlEscaper.UnescapeAll(xml), bxl);
+            Assert.AreEqual(XmlNameEscaper.UnescapeXmlName(xml), bxl);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 using Qorpent.Serialization;
 
 namespace Qorpent.BSharp {
@@ -22,11 +23,11 @@ namespace Qorpent.BSharp {
 	    /// <summary>
 	    /// Определение перекрывающего аспекта класса
 	    /// </summary>
-	    public static readonly string ClassOverrideKeyword = XmlEscaper.Escape("~") + "class";
+	    public static readonly string ClassOverrideKeyword = XmlNameEscaper.EscapeXmlName("~") + "class";
 	    /// <summary>
 	    /// Определение дополняющего аспекта класса
 	    /// </summary>
-	    public static readonly string ClassExtensionKeyword = XmlEscaper.Escape("+") + "class";
+	    public static readonly string ClassExtensionKeyword = XmlNameEscaper.EscapeXmlName("+") + "class";
 		/// <summary>
 		/// Атрибут приоритета перекрытия класса
 		/// </summary>
@@ -116,6 +117,27 @@ namespace Qorpent.BSharp {
 		/// Описание условия для включения элементов в режиме body для Include
 		/// </summary>
 		public const string IncludeWhereClause = "where";
+
+        /// <summary>
+        /// Описание условия на включение атрибутов в операции include [all] ... body
+        /// </summary>
+        public const string IncludeSelectClause = "select";
+
+        /// <summary>
+        /// Описание условия на группировку элементов в операции include
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        public const string IncludeGroupByClause = "groupby";
+
+        /// <summary>
+        /// Описание условия на операцию упорядочени я элементов в операции include [all] ... body
+        /// </summary>
+        /// <remarks>
+        /// В отличие от SQL order применяется до группировки и селекта и соответственно может и должен быть выражен в исходных именах
+        /// атрибутов
+        /// </remarks>
+        public const string IncludeOrderByClause = "orderby";
 		/// <summary>
 		/// Атрибут блокирования интерполяции
 		/// </summary>
@@ -143,11 +165,11 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Префикс перекрытия элемента
 		/// </summary>
-        public static readonly string ElementOverridePrefix = XmlEscaper.Escape("~");
+        public static readonly string ElementOverridePrefix = XmlNameEscaper.EscapeXmlName("~");
 		/// <summary>
 		/// Префикс расширения элемента
 		/// </summary>
-        public static readonly string ElementExtensionPrefix = XmlEscaper.Escape("+");
+        public static readonly string ElementExtensionPrefix = XmlNameEscaper.EscapeXmlName("+");
 		/// <summary>
 		/// Префикс приватного атрибута
 		/// </summary>

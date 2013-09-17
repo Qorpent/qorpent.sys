@@ -1,3 +1,4 @@
+
 ﻿namespace Qorpent.IO {
     /// <summary>
     ///     Расширенное хранилище с поддержкой удаления
@@ -7,6 +8,6 @@
         ///     Производит удаление файла из хранилища
         /// </summary>
         /// <param name="file">Представление файла</param>
-        void Del(IFileEntity file);
+        void Del(IFileDescriptor file);
     }
 }

@@ -38,11 +38,11 @@ namespace Qorpent.BSharp.Schema {
 				else {
 					var acode = a.Name.LocalName;
 					acode =
-                        acode.Replace(XmlEscaper.Escape("+"), "+")
-                             .Replace(XmlEscaper.Escape("-"), "-")
-                             .Replace(XmlEscaper.Escape("@"), "@")
-                             .Replace(XmlEscaper.Escape("!"), "!")
-                             .Replace(XmlEscaper.Escape("~"), "~");
+                        acode.Replace(XmlNameEscaper.EscapeXmlName("+"), "+")
+                             .Replace(XmlNameEscaper.EscapeXmlName("-"), "-")
+                             .Replace(XmlNameEscaper.EscapeXmlName("@"), "@")
+                             .Replace(XmlNameEscaper.EscapeXmlName("!"), "!")
+                             .Replace(XmlNameEscaper.EscapeXmlName("~"), "~");
 					AttributeRules.Add(new AttributeRule(acode, a.Value));
 				}
 			}

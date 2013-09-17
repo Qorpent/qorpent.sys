@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace Qorpent.Json {
@@ -63,7 +64,7 @@ namespace Qorpent.Json {
 		/// <param name="value"></param>
 		/// <returns></returns>
 		protected static bool IsNumber(string value) {
-			return value.All(char.IsDigit);
+			return value.All(Char.IsDigit);
 		}
 
 		/// <summary>
@@ -73,8 +74,13 @@ namespace Qorpent.Json {
 		/// <returns></returns>
 		protected static bool IsLiteral(string value) {
 			var fst = value[0];
-			if (!(char.IsLetter(fst) || fst == '_')) return false;
-			return value.All(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '.');
+			if (!(Char.IsLetter(fst) || fst == '_')) return false;
+			return value.All(_ => Char.IsLetterOrDigit(_) || _ == '_' || _ == '.');
 		}
+
+	    /// <summary>
+	    /// Имя атрибута для описания JSon типа
+	    /// </summary>
+	    public const string JsonTypeAttributeName = "__jsontype";
 	}
 }

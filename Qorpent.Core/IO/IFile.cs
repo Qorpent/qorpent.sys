@@ -4,11 +4,11 @@ namespace Qorpent.IO {
     /// <summary>
     ///     Дескриптор файла
     /// </summary>
-    public interface IGeneralFileDescriptor {
+    public interface IFile {
         /// <summary>
         ///     Представление файла
         /// </summary>
-        IFileEntity FileEntity { get; }
+        IFileDescriptor Descriptor { get; }
         /// <summary>
         ///     получить поток до файла
         /// </summary>

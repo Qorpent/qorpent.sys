@@ -26,71 +26,62 @@ namespace Qorpent.Log {
 		/// 	транслироваться в журнал как <see cref="LogMessage.HostObject" />
 		/// </summary>
 		object HostObject { get; set; }
-
 		/// <summary>
+		///     Уровень логгирования
 		/// </summary>
 		LogLevel Level { get; set; }
-
 		/// <summary>
-		/// 	Generates debug UserLog message
+        /// 	Сгенерировать сообщение в лог уровня «Debug»
 		/// </summary>
-		/// <param name="message"> </param>
-		/// <param name="context"> </param>
-		/// <param name="host"> </param>
+        /// <param name="message">Сообщение в лог</param>
+        /// <param name="context">Контекст сообщения</param>
+        /// <param name="host">Хост-объект</param>
 		void Debug(string message, object context = null, object host = null);
-
 		/// <summary>
-		/// 	Generate error UserLog message
+        /// 	Сгенерировать сообщение в лог уровня «Error»
 		/// </summary>
-		/// <param name="message"> </param>
-		/// <param name="context"> </param>
-		/// <param name="host"> пользовательский Host </param>
+        /// <param name="message">Сообщение в лог</param>
+        /// <param name="context">Контекст сообщения</param>
+        /// <param name="host">Хост-объект</param>
 		void Error(string message, object context = null, object host = null);
-
 		/// <summary>
-		/// 	Generate trace UserLog message
+        /// 	Сгенерировать сообщение в лог уровня «Trace»
 		/// </summary>
-		/// <param name="message"> </param>
-		/// <param name="context"> </param>
-		/// <param name="host"> </param>
+        /// <param name="message">Сообщение в лог</param>
+        /// <param name="context">Контекст сообщения</param>
+        /// <param name="host">Хост-объект</param>
 		void Trace(string message, object context = null, object host = null);
-
 		/// <summary>
-		/// 	Generate user info UserLog message
+        /// 	Сгенерировать сообщение в лог уровня «Info»
 		/// </summary>
-		/// <param name="message"> </param>
-		/// <param name="context"> </param>
-		/// <param name="host"> </param>
+        /// <param name="message">Сообщение в лог</param>
+        /// <param name="context">Контекст сообщения</param>
+        /// <param name="host">Хост-объект</param>
 		void Info(string message, object context = null, object host = null);
-
 		/// <summary>
-		/// 	Generate warn UserLog message
+        /// 	Сгенерировать сообщение в лог уровня «Warn»
 		/// </summary>
-		/// <param name="message"> </param>
-		/// <param name="context"> </param>
-		/// <param name="host"> </param>
+        /// <param name="message">Сообщение в лог</param>
+        /// <param name="context">Контекст сообщения</param>
+        /// <param name="host">Хост-объект</param>
 		void Warn(string message, object context = null, object host = null);
-
 		/// <summary>
-		/// 	Generate fatal UserLog message
+		/// 	Сгенерировать сообщение в лог уровня «Fatal»
 		/// </summary>
-		/// <param name="message"> </param>
-		/// <param name="context"> </param>
-		/// <param name="host"> </param>
+		/// <param name="message">Сообщение в лог</param>
+		/// <param name="context">Контекст сообщения</param>
+		/// <param name="host">Хост-объект</param>
 		void Fatal(string message, object context = null, object host = null);
-
-
 		/// <summary>
-		/// 	Writes out UserLog info
+        /// 	Записть в лог сообщение произвольного уровня
 		/// </summary>
-		/// <param name="level"> </param>
-		/// <param name="message"> </param>
-		/// <param name="context"> </param>
-		/// <param name="host"> </param>
+		/// <param name="level">Уровень логгирования</param>
+        /// <param name="message">Сообщение в лог</param>
+        /// <param name="context">Контекст сообщения</param>
+        /// <param name="host">Хост-объект</param>
 		void Write(LogLevel level, string message, object context, object host);
-
 		/// <summary>
-		/// 	Writes out fully complicated message
+		/// 	Записывает в лог полностью скомплектованное сообщение в виде <see cref="LogMessage"/>
 		/// </summary>
 		/// <param name="logmessage"> </param>
 		void Write(LogMessage logmessage);

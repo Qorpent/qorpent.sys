@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Qorpent.IO.DirtyVersion;
 using Qorpent.IO.DirtyVersion.Mapping;
 using Qorpent.IO.FileDescriptors;
@@ -28,8 +29,8 @@ namespace Qorpent.IO.Storages {
         /// </summary>
         /// <param name="file">Представление файла</param>
         /// <param name="stream">Поток-источник</param>
-        public IGeneralFileDescriptor Set(IFileEntity file, Stream stream) {
-            return new FileDescriptorDirtyVersionBased(
+        public IFile Set(IFileDescriptor file, Stream stream) {
+            return new FileDirtyVersionBased(
                 DirtyVersionStorage,
                 DirtyVersionStorage.Save(file.Path, stream)
             );
@@ -39,8 +40,8 @@ namespace Qorpent.IO.Storages {
         /// </summary>
         /// <param name="file">Представление файла</param>
         /// <returns>Дескриптор файла</returns>
-        public IGeneralFileDescriptor Get(IFileEntity file) {
-            return new FileDescriptorDirtyVersionBased(
+        public IFile Get(IFileDescriptor file) {
+            return new FileDirtyVersionBased(
                 DirtyVersionStorage,
                 new Commit {
                     MappingInfo = new MappingInfo {Name = file.Path},
@@ -49,10 +50,19 @@ namespace Qorpent.IO.Storages {
             );
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public IEnumerable<IFile> EnumerateFiles(FileSearchOptions options = null) {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
         ///     Возвращает класс текущего хранилища
         /// </summary>
         /// <returns></returns>
-        public object GetStorage() {
+        public object GetUnderlinedStorage() {
             return DirtyVersionStorage;
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Json {
+﻿using System.Globalization;
+
+namespace Qorpent.Json {
 	/// <summary>
 	/// 
 	/// </summary>
@@ -123,7 +125,7 @@
 		/// <returns></returns>
 		public static JsonToken Num(decimal s)
 		{
-			return new JsonToken(JsonTokenType.Number, s.ToString());
+			return new JsonToken(JsonTokenType.Number, s.ToString(CultureInfo.InvariantCulture));
 		}
 
 		/// <summary>

@@ -102,7 +102,7 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         private void Dump() {
             Engine.Set(
-                new FileEntity {
+                new FileDescriptor {
                     Path = Path.Combine(VcsStorageDefaults.BinLogDirectory, BinLogGuid + "." + VcsStorageDefaults.BinLogExtension)
                 },
                 VcsStorageUtils.StringToStream(BinLog.ToString())

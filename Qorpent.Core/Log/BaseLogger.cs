@@ -25,83 +25,105 @@ using System.Xml.Linq;
 
 namespace Qorpent.Log {
 	/// <summary>
-	/// 	Basic logger implementation
+	/// 	Базовая реализация логгера
 	/// </summary>
 	public class BaseLogger : ServiceBase, ILogger {
-		/// <summary>
-		/// </summary>
+        /// <summary>
+        ///     Объект для локинга
+        /// </summary>
+        private readonly object _busylock = new object();
+        /// <summary>
+        ///     Признак «занятости» логгера — производится запись
+        /// </summary>
+        internal bool Busy = false;
+        /// <summary>
+        ///     Время окончания записи логгером
+        /// </summary>
+        internal DateTime Finish;
+        /// <summary>
+        ///     Время начала записи логгером
+        /// </summary>
+        internal DateTime Start;
+        /// <summary>
+        ///     Экземпляр исключения, произошедшего внутри потока
+        /// </summary>
+        private Exception _internalThreadError;
+        /// <summary>
+        ///     Внутреннее хранилище массива райтеров
+        /// </summary>
+        private ILogWriter[] _writers;
+        /// <summary>
+        /// 	Регулярное выражение, которое будет применено к тексту сообщения
+        /// </summary>
+        public string Filter { get; set; }
+        /// <summary>
+        /// 	Регулярное выражение, которое будет применимо к выданному контексту («*» — любой контекст)
+        /// </summary>
+        public string Mask { get; set; }
+        /// <summary>
+        /// 	Массив низкоуровневых менеджеров записи лога
+        /// </summary>
+        public ILogWriter[] Writers {
+            get { return _writers ?? (_writers = LoadFromXmlSource()); }
+            set { _writers = value; }
+        }
+        /// <summary>
+        /// 	Фильтр на пользователя
+        /// </summary>
+        public string UserFilter { get; set; }
+        /// <summary>
+        ///     Таймаут потока записи (используется в методе <see cref="Qorpent.Log.BaseLogger.Join"/>)
+        /// </summary>
+        public int WriteTimeOut { get; set; }
+        /// <summary>
+        /// 	Использует синхронные вызовы к райтерам вместо асинхронных процессов по умолчанию
+        /// </summary>
+        public bool Synchronized { get; set; }
+        /// <summary>
+        /// 	Человеко-понятное название логгера
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        ///     Методика поведения в ситуации сбоя логгера. Если значение не установлено, то будет
+        ///     использовано значение менеджера по умолчанию
+        /// </summary>
+        public InternalLoggerErrorBehavior ErrorBehavior { get; set; }
+        /// <summary>
+        /// 	Уровень логгирования
+        /// </summary>
+        public LogLevel Level { get; set; }
+        /// <summary>
+        /// 	Указывает, что логгер может использоваться. В противном случае — false
+        /// </summary>
+        public bool Available { get; set; }
+        /// <summary>
+        /// 	Базовая реализация логгера
+        /// </summary>
 		public BaseLogger() {
 			WriteTimeOut = 5000;
 			ErrorBehavior = InternalLoggerErrorBehavior.Log | InternalLoggerErrorBehavior.Ignore;
 			Available = true;
 		}
-
-		/// <summary>
-		/// 	Regex to be applyed to text of message
-		/// </summary>
-		public string Filter { get; set; }
-
-		/// <summary>
-		/// 	Regex to be apply to given context - * for all context
-		/// </summary>
-		public string Mask { get; set; }
-
-		/// <summary>
-		/// 	Low level writer of UserLog
-		/// </summary>
-		public ILogWriter[] Writers {
-			get { return _writers ?? (_writers = LoadFromXmlSource()); }
-			set { _writers = value; }
-		}
-
-		/// <summary>
-		/// 	Фильтр на пользователя
-		/// </summary>
-		public string UserFilter { get; set; }
-
-		/// <summary>
-		/// 	Time out of write thread - will be used by Join
-		/// </summary>
-		public int WriteTimeOut { get; set; }
-
-		/// <summary>
-		/// 	Uses synchronous calls to writer instead of async default process
-		/// </summary>
-		public bool Synchronized { get; set; }
-
-
-		/// <summary>
-		/// 	user friendly name of logger
-		/// </summary>
-		public string Name { get; set; }
-
-
-		/// <summary>
-		/// 	Behavior on error occured in logger - if None - Manager behavior will be used
-		/// </summary>
-		public InternalLoggerErrorBehavior ErrorBehavior { get; set; }
-
-		/// <summary>
-		/// 	check's if this logger is applyable to given context
-		/// </summary>
-		/// <param name="context"> </param>
-		/// <returns> </returns>
+        /// <summary>
+        ///     Проверяет, что данный логгер применим к переданному контексту
+        /// </summary>
+        /// <param name="context">Контекст</param>
+        /// <returns>True, если применим</returns>
 		public virtual bool IsApplyable(object context) {
 			lock (Sync) {
 				if (string.IsNullOrEmpty(Mask) || "*" == Mask) {
-					return true; //logger supports all contexts
+					return true; // логгер поддерживает весь контекст
 				}
 				if (null == context || "".Equals(context)) {
-					return false; //logger need context, but it's not supplyed
+					return false; // логгер требует контекст, который не был передан
 				}
 				var contextstr = context.ToString();
 				return Regex.IsMatch(contextstr, Mask, RegexOptions.Compiled);
 				//in all other cases we checkout our regex on string representation of context
 			}
 		}
-
 		/// <summary>
-		/// 	Starts write UserLog message to it's target persistence  - asserted to be async
+		///     Начинает запись сообщения UserLog в его цели, асинхронно
 		/// </summary>
 		/// <param name="message"> </param>
 		public void StartWrite(LogMessage message) {
@@ -109,25 +131,26 @@ namespace Qorpent.Log {
 				if (InvalidMessageText(message)) {
 					return;
 				}
+
 				if (InvalidUser(message)) {
 					return;
 				}
+
 				while (Busy) {
 					Thread.Sleep(10);
 				}
+
 				Busy = true;
 				Start = DateTime.Now;
 				if (Synchronized) {
 					InternalWrite(message);
-				}
-				else {
+				} else {
 					ThreadPool.QueueUserWorkItem(InternalWrite, message);
 				}
 			}
 		}
-
 		/// <summary>
-		/// 	Synchronizes calling context to logger
+		///     Синхронизирует вызов контекста к логгеру
 		/// </summary>
 		public void Join() {
 			lock (Sync) {
@@ -150,18 +173,10 @@ namespace Qorpent.Log {
 				WriteTimeOut = 1000;
 			}
 		}
-
-		/// <summary>
-		/// 	Level of logger
-		/// </summary>
-		public LogLevel Level { get; set; }
-
-		/// <summary>
-		/// 	Marks logger to be used - false - disable logger
-		/// </summary>
-		public bool Available { get; set; }
-
-
+        /// <summary>
+        ///     Загрузка из XML-представления
+        /// </summary>
+        /// <returns></returns>
 		private ILogWriter[] LoadFromXmlSource() {
 			if (null == Container) {
 				return null;
@@ -174,13 +189,16 @@ namespace Qorpent.Log {
 			}
 			return GetAppendersFromXml(Component.Source).ToArray();
 		}
-
+        /// <summary>
+        ///     Загружает перечисление описаний райтеров из XML
+        /// </summary>
+        /// <param name="src">Исходный XML-элемент</param>
+        /// <returns>Перечисление менеджеров записи <see cref="ILogWriter"/></returns>
 		private IEnumerable<ILogWriter> GetAppendersFromXml(XElement src) {
 			var elements = src.DescendantsAndSelf("writer");
 			return elements.Select(GetWriter).Where(result => null != result);
 		}
-
-		/// <summary>
+        /// <summary>
 		/// 	Извлекает объект аппендера из элемента
 		/// </summary>
 		/// <param name="element"> </param>
@@ -188,7 +206,10 @@ namespace Qorpent.Log {
 		protected virtual ILogWriter GetWriter(XElement element) {
 			return null;
 		}
-
+        /// <summary>
+        ///     Прокатывание внутренней операции записи в лог
+        /// </summary>
+        /// <param name="message"></param>
 		private void InternalWrite(object message) {
 			lock (_busylock) {
 				try {
@@ -212,17 +233,20 @@ namespace Qorpent.Log {
 				}
 			}
 		}
-
+        /// <summary>
+        ///     Указывает на то, что имя пользователя, переданное в <see cref="LogMessage"/> некорректное
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
 		private bool InvalidUser(LogMessage message) {
 			if (!string.IsNullOrEmpty(UserFilter)) {
 				if (UserFilter.Contains("/")) {
-//полное имя
+                    // полное имя
 					if (message.User.Replace("\\", "/").ToLowerInvariant() != UserFilter.ToLowerInvariant()) {
 						return true;
 					}
-				}
-				else {
-					//домен
+				} else {
+					// домен
 					if (message.User.Split('/', '\\')[0] != UserFilter.ToLowerInvariant()) {
 						return true;
 					}
@@ -230,7 +254,11 @@ namespace Qorpent.Log {
 			}
 			return false;
 		}
-
+        /// <summary>
+        ///     Указывает на то, что текст, переданный в <see cref="LogMessage"/> некорректный
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
 		private bool InvalidMessageText(LogMessage message) {
 			if (!string.IsNullOrEmpty(Filter)) {
 				if (string.IsNullOrEmpty(message.Message)) {
@@ -242,13 +270,5 @@ namespace Qorpent.Log {
 			}
 			return false;
 		}
-
-		private readonly object _busylock = new object();
-		internal bool Busy = false;
-		internal DateTime Finish;
-
-		internal DateTime Start;
-		private Exception _internalThreadError;
-		private ILogWriter[] _writers;
 	}
 }

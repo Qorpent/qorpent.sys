@@ -23,7 +23,7 @@ namespace Qorpent.Serialization.Tests
 			public IDictionary<string,string> Dct { get; set; }
 
 		}
-		[TestCase(2, 2, 2, "{'Ar': {'0': 'test'}, 'Lst': {'0': 'test'}, 'Dct': {'test': 'test'}}")]
+		[TestCase(2, 2, 2, "{'Ar': ['test'], 'Lst': ['test'], 'Dct': {'test': 'test'}}")]
 		[TestCase(1,1,1,"{}")]
 		[TestCase(0, 0, 0, "{}")]
 		public void TestSerialization(int usear, int uselst, int usedct,string expected) {
@@ -33,7 +33,7 @@ namespace Qorpent.Serialization.Tests
 			}
 			if (2 == usear)
 			{
-				obj.Ar = new string[] {"test" };
+				obj.Ar = new[] {"test" };
 			}
 			if (1 == uselst) {
 				obj.Lst = new List<string>();

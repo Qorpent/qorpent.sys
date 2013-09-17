@@ -68,7 +68,7 @@ namespace Qorpent.IO.VcsStorage {
         ///     Удалить элемент из хранилища
         /// </summary>
         /// <param name="file">Целевой элемент</param>
-        public void Remove(IFileEntity file) {
+        public void Remove(IFileDescriptor file) {
             Remove(new VcsCommit {File = file}, EnumerateCommits(file));
         }
         /// <summary>
@@ -100,10 +100,10 @@ namespace Qorpent.IO.VcsStorage {
                 throw new Exception("Transaction not exists!");
             }
 
-            var sourceStream = Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }).GetStream(FileAccess.Read);
+            var sourceStream = Engine.Get(new FileDescriptor { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }).GetStream(FileAccess.Read);
             var revertedCode = ComputeCommitCode(sourceStream);
             var reverted = new VcsCommit {
-                File = new FileEntity {
+                File = new FileDescriptor {
                     Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, revertedCode)
                 },
                 Code = revertedCode
@@ -119,14 +119,14 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public int Count(IFileEntity file) {
+        public int Count(IFileDescriptor file) {
             return _mapper.Count(file);
         }
         /// <summary>
         ///     проверяет существование файла в хранилище
         /// </summary>
         /// <returns></returns>
-        public bool Exists(IFileEntity file) {
+        public bool Exists(IFileDescriptor file) {
             return _mapper.Exists(new VcsCommit {File = file});
         }
         /// <summary>
@@ -134,7 +134,7 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         /// <param name="file">Представление элемента</param>
         /// <returns>Перечисление идентификаторов коммитов</returns>
-        public IEnumerable<string> EnumerateCommits(IFileEntity file) {
+        public IEnumerable<string> EnumerateCommits(IFileDescriptor file) {
             return _mapper.Find(new VcsCommit {File = file}).Select(el => el.Code);
         }
         /// <summary>
@@ -180,7 +180,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <returns></returns>
         private Stream PickCommit(VcsCommit commit) {
             if (_mapper.Exists(commit)) {
-                return Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }).GetStream(FileAccess.Read);
+                return Engine.Get(new FileDescriptor { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }).GetStream(FileAccess.Read);
             }
             
             return null;
@@ -197,7 +197,7 @@ namespace Qorpent.IO.VcsStorage {
                 return null;
             }
 
-            return Engine.Get(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, latestVersion.Code) }).GetStream(FileAccess.Read);
+            return Engine.Get(new FileDescriptor { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, latestVersion.Code) }).GetStream(FileAccess.Read);
         }
         /// <summary>
         ///     Производит реальной прокат записи на диск
@@ -205,7 +205,7 @@ namespace Qorpent.IO.VcsStorage {
         /// <param name="commit">Представление элемента</param>
         /// <param name="stream">Исходный поток</param>
         private void RollRealWriting(VcsCommit commit, Stream stream) {
-            Engine.Set(new FileEntity { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }, stream);
+            Engine.Set(new FileDescriptor { Path = Path.Combine(VcsStorageDefaults.ObjFilesDirectory, commit.Code) }, stream);
         }
         /// <summary>
         ///     Регистрирует транзакцию

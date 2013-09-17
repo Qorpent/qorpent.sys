@@ -1,4 +1,5 @@
-﻿using Qorpent.IO.DirtyVersion.Storage;
+﻿using System.Collections.Generic;
+using Qorpent.IO.DirtyVersion.Storage;
 using Qorpent.IO.FileDescriptors;
 using System.IO;
 
@@ -34,11 +35,11 @@ namespace Qorpent.IO.Storages {
         /// <param name="file">Представление файла</param>
         /// <param name="stream">Поток-источник</param>
         /// <returns>Дескриптор файла</returns>
-        public IGeneralFileDescriptor Set(IFileEntity file, Stream stream) {
+        public IFile Set(IFileDescriptor file, Stream stream) {
             var record = _hashedDirectoryStorage.Write(file.Path, stream);
-            return new FileDescriptorHashedDirectoryBased(
+            return new FileHashedDirectoryBased(
                 _hashedDirectoryStorage,
-                new FileEntity {
+                new FileDescriptor {
                     Path = file.Path,
                     Filename = record.NameHash,
                     DateTime = record.LastWriteTime,
@@ -51,14 +52,24 @@ namespace Qorpent.IO.Storages {
         /// </summary>
         /// <param name="file">Представление файла</param>
         /// <returns>Дескриптор файла</returns>
-        public IGeneralFileDescriptor Get(IFileEntity file) {
-            return new FileDescriptorHashedDirectoryBased(_hashedDirectoryStorage, file);
+        public IFile Get(IFileDescriptor file) {
+            return new FileHashedDirectoryBased(_hashedDirectoryStorage, file);
         }
+
+        /// <summary>
+        /// Возвращает перечисление файлов в хранилище
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public IEnumerable<IFile> EnumerateFiles(FileSearchOptions options = null) {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         ///     Получение экземпляра класса нативного движка хранилища
         /// </summary>
         /// <returns>Настроенный на данное хранилище экземпляр HashedDirectory</returns>
-        public object GetStorage() {
+        public object GetUnderlinedStorage() {
             return _hashedDirectoryStorage;
         }
     }

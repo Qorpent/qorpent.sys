@@ -707,8 +707,11 @@ namespace Qorpent.IoC {
 					}
 				}
 				else if (!i.type.IsValueType) {
-					//  if(null!=current)continue;
 					val = Get(i.type, i.name);
+                    //try resolve by co-interface
+                    if ((null == val) && !(string.IsNullOrWhiteSpace(i.name))) {
+                        val = Get(null,i.name);
+                    }
 				}
 				else {
 					throw new ContainerException("cannot inject property " + i.prop.Member.Name + " of type " + i.type);

@@ -30,7 +30,7 @@ namespace Qorpent.Graphs.Dot.Types {
         }
 
         /// <summary>
-        /// 
+        /// Тип стрелок
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>

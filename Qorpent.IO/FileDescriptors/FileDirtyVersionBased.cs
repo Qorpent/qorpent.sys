@@ -6,7 +6,7 @@ namespace Qorpent.IO.FileDescriptors {
     /// <summary>
     ///     Дескриптор файла, основанный на хранилище DirtyVersion
     /// </summary>
-    public class FileDescriptorDirtyVersionBased : IGeneralFileDescriptor {
+    public class FileDirtyVersionBased : IFile {
         /// <summary>
         ///     Дескриптор файла, основанный на хранилище DirtyVersion
         /// </summary>
@@ -18,22 +18,22 @@ namespace Qorpent.IO.FileDescriptors {
         /// <summary>
         ///     Представление файла
         /// </summary>
-        public IFileEntity FileEntity { get; private set; }
+        public IFileDescriptor Descriptor { get; private set; }
         /// <summary>
         ///     Возвращает поток на чтение файла из хранилища
         /// </summary>
         /// <param name="access">Уровень доступа</param>
         /// <returns>поток до файла</returns>
         public Stream GetStream(FileAccess access) {
-            return _dirtyVersionStorage.Open(FileEntity.Path, FileEntity.Version);
+            return _dirtyVersionStorage.Open(Descriptor.Path, Descriptor.Version);
         }
         /// <summary>
         ///     Дескриптор файла, основанный на хранилище DirtyVersion
         /// </summary>
-        public FileDescriptorDirtyVersionBased(IDirtyVersionStorage storage, Commit commit) {
+        public FileDirtyVersionBased(IDirtyVersionStorage storage, Commit commit) {
             _dirtyVersionStorage = storage;
             Commit = commit;
-            FileEntity = new FileEntity {
+            Descriptor = new FileDescriptor {
                 Path = commit.MappingInfo.Name,
                 Owner = (commit.Author != null) ? (commit.Author.Commiter) : (null),
                 Version = commit.Hash

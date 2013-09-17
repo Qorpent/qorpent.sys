@@ -8,7 +8,7 @@
         /// <summary>
         ///     Представление файла
         /// </summary>
-        public IFileEntity File { get; set; }
+        public IFileDescriptor File { get; set; }
         /// <summary>
         ///     Код коммита
         /// </summary>

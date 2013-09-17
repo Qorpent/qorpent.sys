@@ -122,7 +122,7 @@ namespace Qorpent.Dsl.Tests.Json
 
 			var item = new Lexer().Collect(tokens);
 			Console.WriteLine(item.ToString(false));
-			Assert.AreEqual(@"{""a"":{b:[{c:false,},3,],d:true,},}",item.ToString(false));
+			Assert.AreEqual(@"{""a"":{b:[{c:false},3],d:true}}",item.ToString(false));
 		}
 	}
 }

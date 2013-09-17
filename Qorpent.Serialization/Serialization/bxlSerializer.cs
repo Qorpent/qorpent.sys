@@ -21,32 +21,45 @@ using Qorpent.IoC;
 
 namespace Qorpent.Serialization {
 	/// <summary>
+	/// Конвертирует входной объект в BXL-представление.
 	/// </summary>
 	/// <remarks>
+    /// В своей работе использует <see cref="BxlSerializerImpl"/>.
+    /// Соответственно сначала объект приводится к XML представлению, которое приводится к BXL-эквиваленту.
+    /// Напрямую использовать не рекомендуется, стандартное использование через IOC
 	/// </remarks>
+	/// <example>
+	/// var mydata = new {x=1,y=2,z=3};
+	/// var output = new StringWriter();
+	/// var serializer = Application.Current.Container.Get&lt;ISerializer&gt;("bxl.serializer");
+	/// serializer.Serialize("mytest",mydata,output);
+	/// Console.WriteLine(output.ToString());
+	/// </example>
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISerializer), Name = "bxl.serializer")]
 	public class BxlSerializer : Serializer {
-		/// <summary>
-		/// 	Creates the impl.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-		/// <returns> </returns>
-		/// <remarks>
-		/// </remarks>
-		protected override ISerializerImpl CreateImpl(string name, object value) {
+	    /// <summary>
+	    /// Создает экземпляр <see cref="ISerializerImpl"/> ( <see cref="BxlSerializerImpl"/> )
+	    /// </summary>
+	    /// <param name="name">Имя объекта сериализации</param>
+	    /// <param name="value">Объект сериализации</param>
+	    /// <param name="options">Игнорируется</param>
+	    /// <returns> </returns>
+	    /// <remarks>
+	    /// </remarks>
+	    protected override ISerializerImpl CreateImpl(string name, object value, object options) {
 			return new BxlSerializerImpl();
 		}
 
-		/// <summary>
-		/// 	Serializes the specified name.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-		/// <param name="output"> The output. </param>
-		/// <remarks>
-		/// </remarks>
-		public override void Serialize(string name, object value, TextWriter output) {
+	    /// <summary>
+	    /// 	Serializes the specified name.
+	    /// </summary>
+	    /// <param name="name"> The name. </param>
+	    /// <param name="value"> The value. </param>
+	    /// <param name="output"> The output. </param>
+	    /// <param name="options">Игнорируется</param>
+	    /// <remarks>
+	    /// </remarks>
+	    public override void Serialize(string name, object value, TextWriter output,object options = null) {
 			if (null == value) {
 				output.Write(name + " : null");
 			}

@@ -27,27 +27,33 @@ namespace Qorpent.Serialization {
 	/// </remarks>
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISerializer), Name = "xml.serializer")]
 	public class XmlSerializer : Serializer {
-		/// <summary>
-		/// 	Creates the impl.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-		/// <returns> </returns>
-		/// <remarks>
-		/// </remarks>
-		protected override ISerializerImpl CreateImpl(string name, object value) {
+	    /// <summary>
+	    /// 	Creates the impl.
+	    /// </summary>
+	    /// <param name="name"> The name. </param>
+	    /// <param name="value"> The value. </param>
+	    /// <param name="options">Игнорируется</param>
+	    /// <returns> </returns>
+	    /// <remarks>
+	    /// </remarks>
+	    protected override ISerializerImpl CreateImpl(string name, object value, object options) {
 			return new XmlSerializerImpl();
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool JsonCompatibleMode { get; set; }
 
-		/// <summary>
-		/// 	Serializes the specified name.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-		/// <param name="output"> The output. </param>
-		/// <remarks>
-		/// </remarks>
-		public override void Serialize(string name, object value, TextWriter output) {
+	    /// <summary>
+	    /// 	Serializes the specified name.
+	    /// </summary>
+	    /// <param name="name"> The name. </param>
+	    /// <param name="value"> The value. </param>
+	    /// <param name="output"> The output. </param>
+	    /// <param name="options">Игнорируются </param>
+	    /// <remarks>
+	    /// </remarks>
+	    public override void Serialize(string name, object value, TextWriter output, object options = null) {
 			if (value is XElement) {
 				output.Write(((XElement) value).ToString(SaveOptions.DisableFormatting));
 			}
@@ -55,5 +61,7 @@ namespace Qorpent.Serialization {
 				base.Serialize(name, value, output);
 			}
 		}
+
+
 	}
 }

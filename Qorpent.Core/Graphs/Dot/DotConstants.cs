@@ -196,7 +196,7 @@
         /// <summary>
         ///     Атрибут стиля
         /// </summary>
-        public const string StyleAttribute = "color";
+        public const string StyleAttribute = "style";
 
         /// <summary>
         ///     Цвет заливки

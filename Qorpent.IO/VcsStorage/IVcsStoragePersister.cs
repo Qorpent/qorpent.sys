@@ -23,7 +23,7 @@ namespace Qorpent.IO.VcsStorage {
         ///     Удалить элемент из хранилища
         /// </summary>
         /// <param name="file">Целевой элемент</param>
-        void Remove(IFileEntity file);
+        void Remove(IFileDescriptor file);
         /// <summary>
         ///     Удалить определённые версии файла из хранилища
         /// </summary>
@@ -35,11 +35,11 @@ namespace Qorpent.IO.VcsStorage {
         /// </summary>
         /// <param name="file">Представление файла</param>
         /// <returns></returns>
-        int Count(IFileEntity file);
+        int Count(IFileDescriptor file);
         /// <summary>
         ///     проверяет существование файла в хранилище
         /// </summary>
         /// <returns></returns>
-        bool Exists(IFileEntity file);
+        bool Exists(IFileDescriptor file);
     }
 }
