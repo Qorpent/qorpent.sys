@@ -157,7 +157,7 @@ namespace Qorpent.Mvc.Tests {
 
 		[Test]
 		public void xdata_by_json() {
-			Assert.AreEqual(@"<object x=""1"" />",
+			Assert.AreEqual(@"<object __jsontype=""object"" x=""1"" />",
 			                new MvcContext().Set("_jdata", "{ x : 1}").XData.ToString(SaveOptions.DisableFormatting));
 		}
 
