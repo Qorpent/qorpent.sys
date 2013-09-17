@@ -1,6 +1,15 @@
 ﻿using System;
-using Qorpent.Graphs.Dot.Types;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
+namespace Qorpent.Dot
+{
+    /// <summary>
+    /// Ребро графа
+    /// </summary>
+    public class Edge : GraphElementBase
+    {
+        private string _from;
+        private string _to;
 
 namespace Qorpent.Graphs.Dot {
 	/// <summary>
@@ -99,10 +108,10 @@ namespace Qorpent.Graphs.Dot {
 	    /// <summary>
         /// Задает ширину линии (стрелки, узла, кластера...) в точках 
         /// </summary>
-         [IgnoreSerialize]
+        [IgnoreSerialize]
         public double Penwidth
         {
-            get { return Get<double>(DotConstants.OrientationAttribute); }
+            get { return Get<double>(DotConstants.PenwidthAttribute); }
             set
             {
                 Set(DotConstants.PenwidthAttribute, value);
@@ -139,72 +148,71 @@ namespace Qorpent.Graphs.Dot {
 	    /// <summary>
         /// Код входящего узла
         /// </summary>
-	    public string From {
-            get { return string.IsNullOrWhiteSpace(_from)?(_from=DotLanguageUtils.NULLCODE):_from; }
+        public string From
+        {
+            get { return string.IsNullOrWhiteSpace(_from) ? (_from = DotLanguageUtils.NULLCODE) : _from; }
             set { _from = DotLanguageUtils.EscapeCode(value); }
         }
 
-	    /// <summary>
+        /// <summary>
         /// Код исходящего узла
         /// </summary>
-        public string To {
+        public string To
+        {
             get { return string.IsNullOrWhiteSpace(_to) ? (_to = DotLanguageUtils.NULLCODE) : _to; }
             set { _to = DotLanguageUtils.EscapeCode(value); }
-	    }
+        }
 
-	    /// <summary>
+        /// <summary>
         /// Родительский подграф
         /// </summary>
-	    [IgnoreSerialize]
+        [IgnoreSerialize]
         public SubGraph Parent { get; set; }
 
-	    /// <summary>
-	    ///
-	    /// </summary>
-	    [IgnoreSerialize]
-	    public ColorAttribute Color {
-	        get { return Get<ColorAttribute>(DotConstants.ColorAttribute); }
-	        set { Set(DotConstants.ColorAttribute, value); }
-	    }
         /// <summary>
-        /// Стиль ребра
+        /// Цвет линии
         /// </summary>
         [IgnoreSerialize]
-        public EdgeStyleType Style {
-            get { return Get<EdgeStyleType>(DotConstants.StyleAttribute); }
-            set { Set(DotConstants.StyleAttribute, value); }
-	    }
+        public ColorAttribute Color
+        {
+            get { return Get<ColorAttribute>(DotConstants.ColorAttribute); }
+            set { Set(DotConstants.ColorAttribute, value); }
+        }
 
 
-	    /// <summary>
-		/// Автонастройка
-		/// </summary>
-		public override void AutoTune()
-		{
-			base.AutoTune();
-			// автоматическое выставление Dir в случае ArrowTail
-			if (HasAttribute(DotConstants.ArrowTailAttribute)) {
-				if (!HasAttribute(DotConstants.DirAttribute))
-				{
-					Dir = DirType.Both;
-				}
-			}
-		}
+        /// <summary>
+        /// Автонастройка
+        /// </summary>
+        public override void AutoTune()
+        {
+            base.AutoTune();
+            // автоматическое выставление Dir в случае ArrowTail
+            if (HasAttribute(DotConstants.ArrowTailAttribute))
+            {
+                if (!HasAttribute(DotConstants.DirAttribute))
+                {
+                    Dir = DirType.Both;
+                }
+            }
+        }
+        
 
-	    /// <summary>
-	    /// Создает ребро
-	    /// </summary>
-	    /// <param name="from"></param>
-	    /// <param name="to"></param>
-	    /// <param name="data"></param>
-	    /// <param name="setup"></param>
-	    /// <returns></returns>
-	    public static Edge Create(string from, string to, object data=null, Action<Edge> setup=null) {
-	        var result = new Edge {From = from, To = to, Data = data};
-            if (null != setup) {
+        /// <summary>
+        /// Создает ребро
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="data"></param>
+        /// <param name="setup"></param>
+        /// <returns></returns>
+        public static Edge Create(string from, string to, object data = null, Action<Edge> setup = null)
+        {
+            var result = new Edge { From = from, To = to, Data = data };
+            if (null != setup)
+            {
                 setup(result);
             }
-	        return result;
-	    }
-	}
+            return result;
+        }
+    }
 }

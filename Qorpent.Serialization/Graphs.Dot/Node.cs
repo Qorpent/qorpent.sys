@@ -8,7 +8,7 @@ namespace Qorpent.Graphs.Dot {
 	/// </summary>
 	public class Node : GraphElementBase {
 	    /// <summary>
-	    ///
+        /// Атрибут формы узла
 	    /// </summary>
 	    [IgnoreSerialize]
 	    public NodeShapeType Shape {

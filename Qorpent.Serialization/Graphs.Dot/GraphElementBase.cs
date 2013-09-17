@@ -127,7 +127,7 @@ namespace Qorpent.Graphs.Dot {
         
 
 	    /// <summary>
-        /// 
+        /// Дата
         /// </summary>
         [IgnoreSerialize]
         public object Data { get; set; }
