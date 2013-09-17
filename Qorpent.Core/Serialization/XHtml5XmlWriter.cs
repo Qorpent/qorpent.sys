@@ -43,6 +43,7 @@ namespace Qorpent.Serialization {
         /// Массив всех элементов HTML
         /// </summary>
         public static readonly string[] Html5Elements = new string[] {
+            "a",
             "abbr",
             "address",
             "area",
