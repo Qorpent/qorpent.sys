@@ -39,6 +39,10 @@ namespace Qorpent.Serialization {
 	    protected override ISerializerImpl CreateImpl(string name, object value, object options) {
 			return new XmlSerializerImpl();
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool JsonCompatibleMode { get; set; }
 
 	    /// <summary>
 	    /// 	Serializes the specified name.
