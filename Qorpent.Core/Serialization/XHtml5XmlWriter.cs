@@ -42,7 +42,7 @@ namespace Qorpent.Serialization {
         /// <summary>
         /// Массив всех элементов HTML
         /// </summary>
-        public static readonly string[] Html5Elements = new string[] {
+        public static readonly string[] Html5Elements = new[] {
             "a",
             "abbr",
             "address",
@@ -161,14 +161,14 @@ namespace Qorpent.Serialization {
         /// </summary>
         public static readonly string[] CloseableXhtmlElements = new[] {"img","br","hr","meta"};
 
-        private bool _preventFullClosing = false;
-        private bool _autoStylesWrote = false;
-        private bool _htmlElmentWasWrote = false;
-        private bool _doctypeWasWrote = false;
+        private bool _preventFullClosing;
+        private bool _autoStylesWrote;
+        private bool _htmlElmentWasWrote;
+        private bool _doctypeWasWrote;
         private bool _generateHtmlWrapper = true;
         private bool _generateStylesForNonHtmlElements = true;
         private bool _requireCloser;
-        private int _level = 0;
+        private int _level;
 
         /// <summary>
         /// Перекрытая верся - выставляет флаг, что DocType прописан (работает в увязке с опицей автоматического враппинга)
@@ -196,7 +196,8 @@ namespace Qorpent.Serialization {
             get { return _generateStylesForNonHtmlElements; }
             set { _generateStylesForNonHtmlElements = value; }
         }
-        IList<string> _autoStyleElements = new List<string>();
+
+        readonly IList<string> _autoStyleElements = new List<string>();
         private bool _noCheckStyles;
 
         /// <summary>
