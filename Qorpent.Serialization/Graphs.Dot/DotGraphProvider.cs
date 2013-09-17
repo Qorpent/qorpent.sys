@@ -90,7 +90,12 @@ namespace Qorpent.Graphs.Dot
 				var sr = new StreamReader(s, Encoding.UTF8);
 				while (true)
 				{
-					line = sr.ReadLine();
+					var linereader = sr.ReadLineAsync();
+				    var read = linereader.Wait(200);
+                    if (!read) {
+                        throw new Exception("some errors in dot");
+                    }
+				    line = linereader.Result;
 					result += line;
 					if (line.Contains(ENDOFSVGMARKER)) break;
 				}

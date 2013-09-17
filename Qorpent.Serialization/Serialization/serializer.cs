@@ -55,16 +55,18 @@ namespace Qorpent.Serialization {
 			Serialize(name,value,sw);
 			return sw.ToString();
 		}
-		/// <summary>
-		/// Сериализует переданный объект в текстовой поток
-		/// </summary>
-		/// <param name="name"> Имя сериализуемого объекта</param>
-		/// <param name="value">Сериализуемый объект </param>
-		/// <param name="output">Целевой текстововй поток</param>
-		/// <remarks>
-		/// </remarks>
-		public virtual void Serialize(string name, object value, TextWriter output) {
-			_s = CreateImpl(name, value);
+
+	    /// <summary>
+	    /// Сериализует переданный объект в текстовой поток
+	    /// </summary>
+	    /// <param name="name"> Имя сериализуемого объекта</param>
+	    /// <param name="value">Сериализуемый объект </param>
+	    /// <param name="output">Целевой текстововй поток</param>
+	    /// <param name="options">Опции сериализации, используются при создании имепдлементации</param>
+	    /// <remarks>
+	    /// </remarks>
+	    public virtual void Serialize(string name, object value, TextWriter output, object options = null) {
+			_s = CreateImpl(name, value, options);
 			if (null == output) {
 				throw new ArgumentNullException("output");
 			}
@@ -192,17 +194,18 @@ namespace Qorpent.Serialization {
 	        return c;
 	    }
 
-        /// <summary>
-        /// Создает экземпляр <see cref="ISerializerImpl"/>
-        /// </summary>
-        /// <param name="name">Имя объекта сериализации</param>
-        /// <param name="value">Объект сериализации</param>
-		/// <returns> </returns>
-		/// <remarks>
-		/// В реализации можно предусмотреть донастройкуна конкретный объект
-		/// в стандартных реализациях <paramref name="name"/> и <paramref name="value"/> игнорируется
-		/// </remarks>
-		protected abstract ISerializerImpl CreateImpl(string name, object value);
+	    /// <summary>
+	    /// Создает экземпляр <see cref="ISerializerImpl"/>
+	    /// </summary>
+	    /// <param name="name">Имя объекта сериализации</param>
+	    /// <param name="value">Объект сериализации</param>
+	    /// <param name="options">Опции создания имплементации</param>
+	    /// <returns> </returns>
+	    /// <remarks>
+	    /// В реализации можно предусмотреть донастройкуна конкретный объект
+	    /// в стандартных реализациях <paramref name="name"/> и <paramref name="value"/> игнорируется
+	    /// </remarks>
+	    protected abstract ISerializerImpl CreateImpl(string name, object value,object options);
 
 		/// <summary>
 		/// 	_serializes the specified name.

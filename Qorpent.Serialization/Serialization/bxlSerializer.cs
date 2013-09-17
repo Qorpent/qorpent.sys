@@ -37,27 +37,29 @@ namespace Qorpent.Serialization {
 	/// </example>
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISerializer), Name = "bxl.serializer")]
 	public class BxlSerializer : Serializer {
-		/// <summary>
-        /// Создает экземпляр <see cref="ISerializerImpl"/> ( <see cref="BxlSerializerImpl"/> )
-		/// </summary>
-		/// <param name="name">Имя объекта сериализации</param>
-		/// <param name="value">Объект сериализации</param>
-		/// <returns> </returns>
-		/// <remarks>
-		/// </remarks>
-		protected override ISerializerImpl CreateImpl(string name, object value) {
+	    /// <summary>
+	    /// Создает экземпляр <see cref="ISerializerImpl"/> ( <see cref="BxlSerializerImpl"/> )
+	    /// </summary>
+	    /// <param name="name">Имя объекта сериализации</param>
+	    /// <param name="value">Объект сериализации</param>
+	    /// <param name="options">Игнорируется</param>
+	    /// <returns> </returns>
+	    /// <remarks>
+	    /// </remarks>
+	    protected override ISerializerImpl CreateImpl(string name, object value, object options) {
 			return new BxlSerializerImpl();
 		}
 
-		/// <summary>
-		/// 	Serializes the specified name.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-		/// <param name="output"> The output. </param>
-		/// <remarks>
-		/// </remarks>
-		public override void Serialize(string name, object value, TextWriter output) {
+	    /// <summary>
+	    /// 	Serializes the specified name.
+	    /// </summary>
+	    /// <param name="name"> The name. </param>
+	    /// <param name="value"> The value. </param>
+	    /// <param name="output"> The output. </param>
+	    /// <param name="options">Игнорируется</param>
+	    /// <remarks>
+	    /// </remarks>
+	    public override void Serialize(string name, object value, TextWriter output,object options = null) {
 			if (null == value) {
 				output.Write(name + " : null");
 			}
