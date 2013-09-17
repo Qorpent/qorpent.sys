@@ -170,9 +170,17 @@ namespace Qorpent.Graphs.Dot {
             get { return Get<ColorAttribute>(DotConstants.ColorAttribute); }
             set { Set(DotConstants.ColorAttribute, value); }
         }
-
-
         /// <summary>
+        /// Стиль ребра
+        /// </summary>
+        [IgnoreSerialize]
+	    public EdgeStyleType Style {
+            get { return Get<EdgeStyleType>(DotConstants.StyleAttribute); }
+            set { Set(DotConstants.StyleAttribute, value); }
+	    }
+
+
+	    /// <summary>
         /// Автонастройка
         /// </summary>
         public override void AutoTune()
