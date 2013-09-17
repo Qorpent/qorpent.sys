@@ -54,7 +54,7 @@ namespace Qorpent.Mvc.Actions {
 		[Bind] protected bool NoLexData;
 
 		/// <summary>
-		/// Сохранить атрибуты
+        /// Использовать префиксы "__" стандартных атрибутов (code,name,id) вместо оригинального имени
         /// </summary>
 		[Bind] protected bool SafeAttributes;
 		/// <summary>
