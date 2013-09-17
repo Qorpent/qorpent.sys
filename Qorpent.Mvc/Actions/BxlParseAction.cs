@@ -21,12 +21,12 @@ using Qorpent.Mvc.Binding;
 
 namespace Qorpent.Mvc.Actions {
 	/// <summary>
-	/// 	Parses source text as BXL and return XElemnt
+    /// 	Конвертирует BXL в XML
 	/// </summary>
-	[Action("_sys.bxlparse", Help = "Converts BXL to XML", Arm="dev")]
+	[Action("_sys.bxlparse", Help = "Конвертирует BXL в XML", Arm="dev")]
 	public class BxlParseAction : ActionBase {
 		/// <summary>
-		/// 	processing of execution - main method of action
+        /// 	Основная фаза - тело действия
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
@@ -49,11 +49,13 @@ namespace Qorpent.Mvc.Actions {
 		}
 
 		/// <summary>
-		/// </summary>
+        /// Не генерировать информацию о позиции исходных файлов в BXL файле в XML
+        /// </summary>
 		[Bind] protected bool NoLexData;
 
 		/// <summary>
-		/// </summary>
+		/// Сохранить атрибуты
+        /// </summary>
 		[Bind] protected bool SafeAttributes;
 		/// <summary>
 		/// Использовать интерполяцию
@@ -65,7 +67,8 @@ namespace Qorpent.Mvc.Actions {
 		[Bind] protected bool BSharp;
 
 		/// <summary>
-		/// </summary>
+		/// BXL текст
+        /// </summary>
 		[Bind(IsLargeText = true)] protected string Text;
 	}
 }
