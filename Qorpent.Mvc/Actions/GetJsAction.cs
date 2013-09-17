@@ -7,13 +7,13 @@ namespace Qorpent.Mvc.Actions {
 	/// <summary>
 	/// Возвращает javascript с контролем ETag
 	/// </summary>
-	[Action("_sys.getjs",Role = "DEFAULT")]
+    [Action("_sys.getjs", Role = "DEFAULT", Help = "Возвращает javascript с контролем ETag")]
 	public class GetJsAction : ActionBase {
 		private string _filename;
 
 
 		/// <summary>
-		/// 	First phase of execution - override if need special input parameter's processing
+        /// 	Инициализация - первая фаза запуска Действия. Перекрывается при необходимости дополнительной обработки входных параметров. 
 		/// </summary>
 		protected override void Initialize() {
 			base.Initialize();
@@ -25,9 +25,9 @@ namespace Qorpent.Mvc.Actions {
 		}
 
 		/// <summary>
-		/// 	Second phase - validate INPUT/REQUEST parameters here - it called before PREPARE so do not try validate
-		/// 	second-level internal state and authorization - only INPUT PARAMETERS must be validated
-		/// </summary>
+        /// Вторая фаза - проверка входных параметров, параметров запроса (вызывается до стадии подготовки, так что не
+        /// пытайтесь проверить авторизацию или что либо кроме входных параметров)
+        /// </summary>
 		protected override void Validate()
 		{
 			if (string.IsNullOrWhiteSpace(_filename)) {
@@ -36,7 +36,7 @@ namespace Qorpent.Mvc.Actions {
 		}
 
 		/// <summary>
-		/// 	override if Yr action provides 304 state and return TRUE
+        /// Перекрываем, если Yr action возвращает 304 статус и True
 		/// </summary>
 		/// <returns> </returns>
 		protected override bool GetSupportNotModified() {
@@ -44,7 +44,7 @@ namespace Qorpent.Mvc.Actions {
 		}
 
 		/// <summary>
-		/// 	override if Yr action provides 304 state  and return Last-Modified-State header
+        /// Перекрываем, если Yr action возвращает 304 статус и заголовок Last-Modified-Stateer
 		/// </summary>
 		/// <returns> </returns>
 		protected override DateTime EvalLastModified() {
@@ -55,7 +55,7 @@ namespace Qorpent.Mvc.Actions {
 
 		
 		/// <summary>
-		/// 	processing of execution - main method of action
+        /// Основная фаза - тело действия
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
