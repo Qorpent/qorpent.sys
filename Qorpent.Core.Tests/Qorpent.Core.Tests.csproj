@@ -40,7 +40,6 @@
     <Compile Include="Security\StubIWithRole.cs" />
     <Compile Include="Security\StubPrincipalSource.cs" />
     <Compile Include="Security\StubRoleResolver.cs" />
-    <Compile Include="Serialization\XmlEscaperTests.cs" />
     <Compile Include="ServiceStateTests.cs" />
     <Compile Include="TestSupport\QorpentFixture.cs" />
     <Compile Include="TestSupport\QorpentFixtureAttribute.cs" />
