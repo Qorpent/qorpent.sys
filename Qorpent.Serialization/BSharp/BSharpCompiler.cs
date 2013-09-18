@@ -80,17 +80,20 @@ namespace Qorpent.BSharp {
 
 		private IBSharpContext BuildSingle(XElement source) {
 			var batch = new[] {source};
-			IBSharpContext context = BuildIndex(batch);
-			CompileClasses(batch, context);
-			LinkClasses(batch,context);
-			return context;
+			var context = Build(batch);
+		    return context;
 		}
 
-		private IBSharpContext BuildBatch(IEnumerable<XElement> sources, IBSharpContext preparedContext) {
+	    private IBSharpContext Build(XElement[] batch) {
+	        IBSharpContext context = BuildIndex(batch);
+	        CompileClasses(batch, context);
+	        LinkClasses(batch, context);
+	        return context;
+	    }
+
+	    private IBSharpContext BuildBatch(IEnumerable<XElement> sources, IBSharpContext preparedContext) {
 			XElement[] batch = sources.ToArray();
-			var context = BuildIndex(batch);
-			CompileClasses(batch, context);
-			LinkClasses(batch, context);
+            var context = Build(batch);
 			if (null != preparedContext) {
 				preparedContext.Merge(context);
 				return preparedContext;

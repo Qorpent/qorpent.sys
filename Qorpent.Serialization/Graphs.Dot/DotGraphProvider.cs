@@ -91,7 +91,7 @@ namespace Qorpent.Graphs.Dot
 				while (true)
 				{
 					var linereader = sr.ReadLineAsync();
-				    var read = linereader.Wait(200);
+				    var read = linereader.Wait(1000);
                     if (!read) {
                         throw new Exception("some errors in dot");
                     }

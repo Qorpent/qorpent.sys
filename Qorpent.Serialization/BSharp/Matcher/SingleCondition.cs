@@ -108,6 +108,9 @@ namespace Qorpent.BSharp.Matcher {
 		public bool IsMatch(XElement e) {
 			_e = e;
 			var a = e.Attribute(AttributeName);
+            if (null == a && AttributeName == "localname") {
+                a= new XAttribute("localname",e.Name.LocalName);
+            }
 			var mainismatch = InternalIsMatch(a);
 			return Negate? !mainismatch : mainismatch;
 		}
