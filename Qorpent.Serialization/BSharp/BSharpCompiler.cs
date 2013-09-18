@@ -163,7 +163,7 @@ namespace Qorpent.BSharp {
 
         private bool IsOverrideMatch(BSharpClass def)
         {
-            if (def.Source.Name.LocalName == XmlNameEscaper.EscapeXmlName("~") + "class" || def.Source.Name.LocalName == XmlNameEscaper.EscapeXmlName("+") + "class")
+            if (def.Source.Name.LocalName == BSharpSyntax.ClassOverrideKeyword || def.Source.Name.LocalName == BSharpSyntax.ClassExtensionKeyword)
             {
                 var ifa = def.Source.Attr("if");
                 if (!string.IsNullOrWhiteSpace(ifa))
@@ -187,11 +187,11 @@ namespace Qorpent.BSharp {
 			if (e.Name.LocalName == "class") {
 				def.Set(BSharpClassAttributes.Explicit);
 			}
-            else if (e.Name.LocalName == XmlNameEscaper.EscapeXmlName("~") + "class")
+            else if (e.Name.LocalName == BSharpSyntax.ClassOverrideKeyword)
             {
 				def.Set(BSharpClassAttributes.Override);				
 			}
-            else if (e.Name.LocalName == XmlNameEscaper.EscapeXmlName("+") + "class")
+            else if (e.Name.LocalName == BSharpSyntax.ClassExtensionKeyword)
 			{
 				def.Set(BSharpClassAttributes.Extension);			
 			}
