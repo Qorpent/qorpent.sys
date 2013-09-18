@@ -17,6 +17,7 @@ namespace Qorpent.BSharp.Builder {
             Sources = new List<XElement>();
             Conditions = new Dictionary<string, string>();
             Targets = new BSharpBuilderTargets();
+            Extensions = new List<string>();
         }
 
 		private const string TARGET_NAMES = "target_names";
@@ -37,6 +38,7 @@ namespace Qorpent.BSharp.Builder {
 	    private const string GENERATE_SRC_PKG = "generate_src_pkg";
 	    private const string SRC_PKG_NAME = "src_pkg_name";
 	    private const string GENERATE_GRAPH = "generate_graph";
+	    private const string EXTENSIONS = "extensions";
 		
 		/// <summary>
 		/// Целевые проекты при билде
@@ -176,6 +178,13 @@ namespace Qorpent.BSharp.Builder {
             get { return Get(GENERATE_GRAPH,false); }
             set { Set(GENERATE_GRAPH, value); }
 	    }
+        /// <summary>
+        /// Расширения проекта (имена классов или библиотек)
+        /// </summary>
+	    public IList<string> Extensions {
+            get { return Get<IList<string>>(EXTENSIONS); }
+            set { Set(EXTENSIONS, value); }
+	    }
 
 
 	    /// <summary>
@@ -210,6 +219,7 @@ namespace Qorpent.BSharp.Builder {
 			return OutputExtension;
 		}
 
+       
 		/// <summary>
 		/// Возвращает исходящее расширение
 		/// </summary>
@@ -217,5 +227,7 @@ namespace Qorpent.BSharp.Builder {
 		public string GetLogDirectory() {
 			return Path.Combine(GetRootDirectory(), GetOutputDirectory());  // drop logs to the output directory 
 		}
+
+        
 	}
 }

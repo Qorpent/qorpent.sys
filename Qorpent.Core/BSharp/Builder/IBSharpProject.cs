@@ -4,7 +4,7 @@ using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.BSharp.Builder {
-	/// <summary>
+    /// <summary>
 	/// 
 	/// </summary>
 	public interface IBSharpProject : IConfig {
@@ -79,6 +79,11 @@ namespace Qorpent.BSharp.Builder {
 	    /// Флаг необходимости генерации графической карты классов
 	    /// </summary>
 	    bool GenerateGraph { get; set; }
+
+	    /// <summary>
+	    /// Расширения проекта (имена классов или библиотек)
+	    /// </summary>
+	    IList<string> Extensions { get; set; }
 
 	    /// <summary>
 		/// Возвращает путь к целевой директории

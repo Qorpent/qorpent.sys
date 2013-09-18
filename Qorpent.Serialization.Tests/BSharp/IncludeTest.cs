@@ -210,6 +210,31 @@ class B x=2
 
 
         [Test]
+        public void CanFindByElementLocalName()
+        {
+            var code = @"
+class A x=1
+	x a x=1 y=5
+	x a1 x=3 y=4
+	y a4 x=3 y=3
+	y a2 x=1 y=2
+    x b x=1 y=1 z=3
+class B x=2
+	include A body
+        where localname=x
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled.ToString().Replace("\"", "\"\""));
+            Assert.AreEqual(@"<class code=""B"" x=""2"" fullcode=""B"">
+  <x code=""a"" x=""1"" y=""5"" id=""A"" />
+  <x code=""a1"" x=""3"" y=""4"" id=""A"" />
+  <x code=""b"" x=""1"" y=""1"" z=""3"" id=""A"" />
+</class>", result.Compiled.ToString());
+
+        }
+
+
+        [Test]
         public void CrossClassGroupBy()
         {
             var code = @"

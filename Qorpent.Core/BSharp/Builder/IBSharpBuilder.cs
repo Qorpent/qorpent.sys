@@ -13,10 +13,5 @@
 		/// </summary>
 		/// <returns></returns>
 		IBSharpContext Build();
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		IBSharpProject GetProject();
 	}
 }

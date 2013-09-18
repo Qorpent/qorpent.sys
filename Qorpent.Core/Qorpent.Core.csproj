@@ -36,6 +36,14 @@
     <Compile Include="BSharp\BSharpError.cs" />
     <Compile Include="BSharp\BSharpErrorType.cs" />
     <Compile Include="BSharp\BSharpSyntax.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderOutputAttributes.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderPhase.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderTargets.cs" />
+    <Compile Include="BSharp\Builder\BSharpBuilderTargetType.cs" />
+    <Compile Include="BSharp\Builder\IBSharpBuilder.cs" />
+    <Compile Include="BSharp\Builder\IBSharpBuilderExtension.cs" />
+    <Compile Include="BSharp\Builder\IBSharpBuilderTask.cs" />
+    <Compile Include="BSharp\Builder\IBSharpProject.cs" />
     <Compile Include="BSharp\IBSharpClass.cs" />
     <Compile Include="BSharp\IBSharpCompiler.cs" />
     <Compile Include="BSharp\IBSharpConfig.cs" />
