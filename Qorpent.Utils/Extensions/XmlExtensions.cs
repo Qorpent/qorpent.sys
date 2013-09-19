@@ -555,5 +555,34 @@ namespace Qorpent.Utils.Extensions {
         public static bool IsNull(this XElement xElement) {
             return !xElement.IsNotNull();
         }
+        /// <summary>
+        ///     Проверяет, присутствует ли элемент с данным именем
+        /// </summary>
+        /// <param name="xElement">Исходный элемент</param>
+        /// <param name="xName">Имя проверяемого элемента</param>
+        /// <returns></returns>
+        public static bool ContainsElement(this XElement xElement, string xName) {
+            return xElement.Element(xName).IsNotNull();
+        }
+        /// <summary>
+        ///     Попробовать проверить тип JSON-элемента в XML-представлении, если таковой присутствует
+        /// </summary>
+        /// <param name="xElement">Исходный элемент</param>
+        /// <returns></returns>
+        public static string TryCheckJsonType(this XElement xElement) {
+            return xElement.Attribute(JsonItem.JsonTypeAttributeName).TryGetValue();
+        }
+
+	    /// <summary>
+	    ///     Вытаскивает значение атрибута элемента с переданным именем
+	    /// </summary>
+	    /// <param name="xElement">Базовый элемент</param>
+	    /// <param name="elName">Имя элемента</param>
+	    /// <param name="attrName">Имя атрибута</param>
+	    /// <returns>Значение</returns>
+	    public static string TryGetElAttrValue(this XElement xElement, XName elName, XName attrName) {
+            var el = xElement.Element(elName);
+            return el == null ? null : el.Attribute(attrName).TryGetValue();
+        }
 	}
 }

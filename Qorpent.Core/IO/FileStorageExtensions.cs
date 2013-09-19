@@ -21,7 +21,13 @@ namespace Qorpent.IO {
         /// <param name="file"></param>
         /// <returns></returns>
         public static string Read(this IFile file) {
-            using (var sr = new StreamReader(file.GetStream(FileAccess.Read))) {
+            var stream = file.GetStream(FileAccess.Read);
+            
+            if (stream == null) {
+                return null;
+            }
+
+            using (var sr = new StreamReader(stream)) {
                 return sr.ReadToEnd();
             }
         }
