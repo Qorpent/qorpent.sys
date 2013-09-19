@@ -3,12 +3,12 @@ using System.Net.NetworkInformation;
 
 namespace Qorpent.Mvc.Actions {
 	/// <summary>
-	/// 
+	/// Возвращает информацию основную информацию о приложении 
 	/// </summary>
-	[Action("_sys.info",Role ="ADMIN", Arm="admin")]
+    [Action("_sys.info", Role = "ADMIN", Arm = "admin", Help = "Возвращает информацию основную информацию о приложении")]
 	public class SysInfoAction :ActionBase {
 		/// <summary>
-		/// 	processing of execution - main method of action
+        /// 	Основная фаза - тело действия
 		/// </summary>
 		/// <returns> </returns>
 		protected override object MainProcess() {
