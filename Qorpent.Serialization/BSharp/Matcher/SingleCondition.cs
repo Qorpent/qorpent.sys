@@ -42,9 +42,9 @@ namespace Qorpent.BSharp.Matcher {
 				Negate = true;
                 n = n.Replace(XmlNameEscaper.EscapeXmlName("!"), "");
 			}
-			if (Value == "NULL") {
+			if (Value.ToUpper() == "NULL") {
 				ConditionType= ConditionType.IsNull;
-			}else if (Value == "TRUE") {
+			}else if (Value.ToUpper() == "TRUE") {
 				ConditionType =ConditionType.IsTrue;
 			}
             if (n.EndsWith(XmlNameEscaper.EscapeXmlName(">>")))
