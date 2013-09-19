@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Qorpent.IO.DirtyVersion.Storage {
+namespace Qorpent.IO {
 	/// <summary>
 	/// Запись о хэшированном файле
 	/// </summary>
