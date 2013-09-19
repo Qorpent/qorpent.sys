@@ -15,6 +15,7 @@
     <None Include="Qorpent.Security.export" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CredentialStorage.cs" />
     <Compile Include="Cryptography\CryptoProvider.cs" />
     <Compile Include="Cryptography\CryptoProviderAction.cs" />
     <Compile Include="Cryptography\CryptoProviderActionType.cs" />

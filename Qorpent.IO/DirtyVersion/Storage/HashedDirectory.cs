@@ -3,15 +3,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
+using Qorpent.IoC;
 
 namespace Qorpent.IO.DirtyVersion.Storage
 {
 	/// <summary>
 	/// Специальная диреткория, выполняющая сохранение объекта в виде хэшированной записи
 	/// </summary>
-	public class HashedDirectory : HashedDirectoryBase, IHashedDirectory {
-		/// <summary>
+	[ContainerComponent(ServiceType = typeof(IHashedDirectory),Name = "default.hasheddirectory")]
+    public class HashedDirectory : HashedDirectoryBase, IHashedDirectory {
+	
+        /// <summary>
+        /// Создает директорию с нацеливаением на целевую папку
+        /// </summary>
+        /// <param name="targetDirectoryName"></param>
+        public HashedDirectory(string targetDirectoryName):this(targetDirectoryName,true,Const.MaxHashSize) {
+            
+        }
+        /// <summary>
 		/// Создает хэшированную директорию для записи файлов
 		/// </summary>
 	
