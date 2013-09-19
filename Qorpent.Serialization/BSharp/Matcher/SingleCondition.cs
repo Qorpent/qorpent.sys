@@ -42,9 +42,9 @@ namespace Qorpent.BSharp.Matcher {
 				Negate = true;
                 n = n.Replace(XmlNameEscaper.EscapeXmlName("!"), "");
 			}
-			if (Value == "NULL") {
+			if (Value.ToUpper() == "NULL") {
 				ConditionType= ConditionType.IsNull;
-			}else if (Value == "TRUE") {
+			}else if (Value.ToUpper() == "TRUE") {
 				ConditionType =ConditionType.IsTrue;
 			}
             if (n.EndsWith(XmlNameEscaper.EscapeXmlName(">>")))
@@ -108,6 +108,9 @@ namespace Qorpent.BSharp.Matcher {
 		public bool IsMatch(XElement e) {
 			_e = e;
 			var a = e.Attribute(AttributeName);
+            if (null == a && AttributeName == "localname") {
+                a= new XAttribute("localname",e.Name.LocalName);
+            }
 			var mainismatch = InternalIsMatch(a);
 			return Negate? !mainismatch : mainismatch;
 		}

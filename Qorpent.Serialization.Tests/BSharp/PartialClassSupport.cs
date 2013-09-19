@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
@@ -35,6 +36,19 @@ class B
             Assert.NotNull(Compile(code).Get("B"));
             var a = Compile(code).Get("A");
             Assert.Null( a);
+        }
+
+        [Test]
+        public void CanInterpolateWithExtensions()
+        {
+            var code = @"
+class A x=2
++class A
+    test y=${x}
+";
+            var a = Compile(code).Get("A");
+            Assert.NotNull(a);
+            Assert.AreEqual("2",a.Compiled.Descendants("test").First().Attr("y"));
         }
 
 		[Test]

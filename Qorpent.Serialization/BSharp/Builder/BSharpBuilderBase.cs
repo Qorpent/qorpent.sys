@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Qorpent.Bxl;
 using Qorpent.IO.Resources;
 using Qorpent.IoC;
 
 namespace Qorpent.BSharp.Builder {
-	/// <summary>
+    /// <summary>
 	/// Базовый билдер BSharp
 	/// </summary>
 	public abstract class BSharpBuilderBase : ServiceBase, IBSharpBuilder {
@@ -84,6 +86,10 @@ namespace Qorpent.BSharp.Builder {
 			Project = project;
 			PrepareTasks();
 			PostInitialize();
+            foreach (var t in Tasks)
+            {
+                t.SetProject(Project);
+            }
 		}
 
 		/// <summary>
@@ -103,9 +109,7 @@ namespace Qorpent.BSharp.Builder {
 				PrepareTasksFromProject(_realproject);
 				Log.Trace("internal project loaded");
 			}
-			foreach (var t in Tasks) {
-				t.SetProject(_realproject);
-			}
+			
 			
 		}
 		/// <summary>
@@ -139,10 +143,37 @@ namespace Qorpent.BSharp.Builder {
 		/// 
 		/// </summary>
 		protected virtual void PostInitialize() {
-			
+		    PrepareExtensions();
 		}
+        /// <summary>
+        /// Загрузка расширений
+        /// </summary>
+	    protected virtual void PrepareExtensions() {
+            foreach (var ext in Project.Extensions) {
+                foreach (var type in GetExtensionTypes(ext)) {
+                    var extension = (IBSharpBuilderExtension)Activator.CreateInstance(type);
+                    extension.SetUp(this);
+                }    
+            }
+	    }
+        /// <summary>
+        /// Конвертирует строку с описанием сборки или типа в перечисление типов расширений
+        /// </summary>
+        /// <param name="extensionDescriptor"></param>
+        /// <returns></returns>
+	    private IEnumerable<Type> GetExtensionTypes(string extensionDescriptor) {
+            if (extensionDescriptor.Contains(",")) yield return Type.GetType(extensionDescriptor);
+            var assembly = Assembly.Load(extensionDescriptor);
+            foreach (var t in assembly.GetTypes()) {
+                if (typeof (IBSharpBuilderExtension).IsAssignableFrom(t)) {
+                    if (!t.IsAbstract) {
+                        yield return t;
+                    }
+                }
+            }
+        }
 
-		/// <summary>
+	    /// <summary>
 		/// Построить проект
 		/// </summary>
 		/// <returns></returns>

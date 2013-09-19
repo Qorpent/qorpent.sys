@@ -47,6 +47,13 @@ namespace Qorpent.BSharp.Builder {
                 project.GenerateGraph = true;
             }
 
+            var extensions = bSharpClass.Compiled.Elements("Extension");
+            foreach (var e in extensions) {
+                project.Extensions.Add(e.GetCode());
+            }
+
+            project.SrcClass = bSharpClass;
+
             return project;
         }
         /// <summary>

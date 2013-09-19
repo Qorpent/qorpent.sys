@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Qorpent.IO.DirtyVersion.Storage;
 
-namespace Qorpent.IO.DirtyVersion {
+namespace Qorpent.IO {
 	/// <summary>
 	/// Интерфейс полноценной HashedDirectory
 	/// </summary>

@@ -35,14 +35,6 @@ namespace Qorpent.Utils.Extensions {
 	public static class XmlExtensions {
 		private static readonly string[] Idatributes = new[] {"id", "code", "__id", "__code", "ID"};
 
-		private static readonly char[] Digits = new[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-
-		private static readonly char[] Nonnames = new[]
-			{
-				'+', '-', '?', '!', '~', '@', '*', '$', '^', '&'
-				, '/', ':', '%', '(', ')', '{', '}', '[', ']', '<', '>'
-			};
-
 		/// <summary>
 		/// 	Возвращает только собственное значение элемента (конкатенация текстовых элементов через пробел)
 		/// </summary>
@@ -212,44 +204,9 @@ namespace Qorpent.Utils.Extensions {
 		/// </summary>
 		/// <param name="nameCandidate"> </param>
 		/// <returns> </returns>
-		public static string ConvertToXNameCompatibleString(this string nameCandidate) {
-			var adaptedname = nameCandidate;
-			if (-1 != adaptedname.IndexOfAny(Nonnames)) {
-				adaptedname = adaptedname
-					.Replace("+", "+".EscapeXmlName())
-                    .Replace("?", "?".EscapeXmlName())
-                    .Replace("!", "!".EscapeXmlName())
-                    .Replace("~", "~".EscapeXmlName())
-                    .Replace("@", "@".EscapeXmlName())
-                    .Replace("*", "*".EscapeXmlName())
-                    .Replace("$", "$".EscapeXmlName())
-                    .Replace("^", "^".EscapeXmlName())
-                    .Replace("&", "&".EscapeXmlName())
-                    .Replace("/", "/".EscapeXmlName())
-                    .Replace(":", ":".EscapeXmlName())
-                    .Replace("%", "%".EscapeXmlName())
-                    .Replace("(", "(".EscapeXmlName())
-                    .Replace(")", ")".EscapeXmlName())
-                    .Replace("[", "[".EscapeXmlName())
-                    .Replace("]", "]".EscapeXmlName())
-                    .Replace("{", "{".EscapeXmlName())
-                    .Replace("}", "}".EscapeXmlName())
-                    .Replace("|", "|".EscapeXmlName())
-                    .Replace(";", ";".EscapeXmlName())
-                    .Replace("<", "<".EscapeXmlName())
-                    .Replace(">", ">".EscapeXmlName())
-					;
-				if(adaptedname.StartsWith("-")) {
-                    adaptedname = "__MINUS__" + adaptedname.Substring(1);
-				}
-			}
-			if (0 != adaptedname.Length && -1 != Array.IndexOf(Digits, adaptedname[0])) {
-				adaptedname = "_" + adaptedname;
-			}
-			if (adaptedname.StartsWith(".")) {
-                adaptedname = "__DOT__" + adaptedname.Substring(1);
-			}
-			return adaptedname;
+		public static string ConvertToXNameCompatibleString(this string nameCandidate)
+		{
+		    return nameCandidate.EscapeXmlName();
 		}
 
 		/// <summary>

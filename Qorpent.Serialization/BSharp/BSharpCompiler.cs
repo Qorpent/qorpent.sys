@@ -80,17 +80,20 @@ namespace Qorpent.BSharp {
 
 		private IBSharpContext BuildSingle(XElement source) {
 			var batch = new[] {source};
-			IBSharpContext context = BuildIndex(batch);
-			CompileClasses(batch, context);
-			LinkClasses(batch,context);
-			return context;
+			var context = Build(batch);
+		    return context;
 		}
 
-		private IBSharpContext BuildBatch(IEnumerable<XElement> sources, IBSharpContext preparedContext) {
+	    private IBSharpContext Build(XElement[] batch) {
+	        IBSharpContext context = BuildIndex(batch);
+	        CompileClasses(batch, context);
+	        LinkClasses(batch, context);
+	        return context;
+	    }
+
+	    private IBSharpContext BuildBatch(IEnumerable<XElement> sources, IBSharpContext preparedContext) {
 			XElement[] batch = sources.ToArray();
-			var context = BuildIndex(batch);
-			CompileClasses(batch, context);
-			LinkClasses(batch, context);
+            var context = Build(batch);
 			if (null != preparedContext) {
 				preparedContext.Merge(context);
 				return preparedContext;
@@ -114,11 +117,35 @@ namespace Qorpent.BSharp {
 
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(IEnumerable<XElement> sources) {
 			foreach (XElement src in sources) {
+			    Preprocess(src);
 				foreach (IBSharpClass e in IndexizeRawClasses(src, "")) {
 					yield return e;
 				}
 			}
 		}
+
+        private void Preprocess(XElement src)
+        {
+           var sets = src.Descendants("set").Reverse().ToArray();
+
+            foreach (var s in sets)
+            {
+                var subelements = s.Elements().ToArray();
+                foreach (var a in s.Attributes())
+                {
+                    foreach (var sb in subelements)
+                    {
+                        if (null == sb.Attribute(a.Name))
+                        {
+                            sb.SetAttributeValue(a.Name, a.Value);
+                        }
+                    }
+                }
+                s.ReplaceWith(subelements);
+            }
+            
+        }
+
 
         LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
 
@@ -163,7 +190,7 @@ namespace Qorpent.BSharp {
 
         private bool IsOverrideMatch(BSharpClass def)
         {
-            if (def.Source.Name.LocalName == XmlNameEscaper.EscapeXmlName("~") + "class" || def.Source.Name.LocalName == XmlNameEscaper.EscapeXmlName("+") + "class")
+            if (def.Source.Name.LocalName == BSharpSyntax.ClassOverrideKeyword || def.Source.Name.LocalName == BSharpSyntax.ClassExtensionKeyword)
             {
                 var ifa = def.Source.Attr("if");
                 if (!string.IsNullOrWhiteSpace(ifa))
@@ -187,11 +214,11 @@ namespace Qorpent.BSharp {
 			if (e.Name.LocalName == "class") {
 				def.Set(BSharpClassAttributes.Explicit);
 			}
-            else if (e.Name.LocalName == XmlNameEscaper.EscapeXmlName("~") + "class")
+            else if (e.Name.LocalName == BSharpSyntax.ClassOverrideKeyword)
             {
 				def.Set(BSharpClassAttributes.Override);				
 			}
-            else if (e.Name.LocalName == XmlNameEscaper.EscapeXmlName("+") + "class")
+            else if (e.Name.LocalName == BSharpSyntax.ClassExtensionKeyword)
 			{
 				def.Set(BSharpClassAttributes.Extension);			
 			}
