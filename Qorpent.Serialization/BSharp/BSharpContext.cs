@@ -328,6 +328,18 @@ namespace Qorpent.BSharp {
                     }
                 }
             }
+
+		    foreach (var p in subresult.PrototypeMap) {
+                if (null == PrototypeMap) {
+                    PrototypeMap = new Dictionary<string, IBSharpClass[]>();
+                }
+		        if (!PrototypeMap.ContainsKey(p.Key)) {
+		            PrototypeMap[p.Key] = p.Value;
+		        }
+		        else {
+		            PrototypeMap[p.Key] = PrototypeMap[p.Key].Union(p.Value).Distinct().ToArray();
+		        }
+		    }
 		}
 
 		private IDictionary<string, IBSharpClass> _resolveclassCache = new Dictionary<string, IBSharpClass>();
@@ -479,26 +491,9 @@ namespace Qorpent.BSharp {
 				!_.IsOrphaned && 
 				!_.Is(BSharpClassAttributes.Ignored)).ToList();
 			Static = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Static) && !_.IsOrphaned && !_.Is(BSharpClassAttributes.Ignored)).ToList();
-			ResolveSets();
+			
 			ResolveImports();
 			_built = true;
-		}
-
-		private void ResolveSets() {
-			foreach (var v in Working.Union(Abstracts).Union(Static).Distinct()) {
-				var sets = v.Source.Descendants("set").Reverse().ToArray();
-				foreach (var s in sets) {
-					var subelements = s.Elements().ToArray();
-					foreach (var a in s.Attributes()) {
-						foreach (var sb in subelements) {
-							if (null == sb.Attribute(a.Name)) {
-								sb.SetAttributeValue(a.Name,a.Value);
-							}
-						}
-					}
-					s.ReplaceWith(subelements);
-				}
-			}
 		}
 
 		private void ResolveIgnored() {

@@ -86,6 +86,10 @@ namespace Qorpent.BSharp.Builder {
 			Project = project;
 			PrepareTasks();
 			PostInitialize();
+            foreach (var t in Tasks)
+            {
+                t.SetProject(Project);
+            }
 		}
 
 		/// <summary>
@@ -105,9 +109,7 @@ namespace Qorpent.BSharp.Builder {
 				PrepareTasksFromProject(_realproject);
 				Log.Trace("internal project loaded");
 			}
-			foreach (var t in Tasks) {
-				t.SetProject(_realproject);
-			}
+			
 			
 		}
 		/// <summary>

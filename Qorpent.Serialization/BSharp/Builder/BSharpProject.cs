@@ -39,6 +39,7 @@ namespace Qorpent.BSharp.Builder {
 	    private const string SRC_PKG_NAME = "src_pkg_name";
 	    private const string GENERATE_GRAPH = "generate_graph";
 	    private const string EXTENSIONS = "extensions";
+        private const string SRCCLASS = "srcclass";
 		
 		/// <summary>
 		/// Целевые проекты при билде
@@ -184,6 +185,13 @@ namespace Qorpent.BSharp.Builder {
 	    public IList<string> Extensions {
             get { return Get<IList<string>>(EXTENSIONS); }
             set { Set(EXTENSIONS, value); }
+	    }
+        /// <summary>
+        /// Исходный класс, на основе которого сделан проект
+        /// </summary>
+	    public IBSharpClass SrcClass {
+            get { return Get<IBSharpClass>(SRCCLASS); }
+            set { Set(SRCCLASS, value); }
 	    }
 
 

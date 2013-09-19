@@ -52,6 +52,8 @@ namespace Qorpent.BSharp.Builder {
                 project.Extensions.Add(e.GetCode());
             }
 
+            project.SrcClass = bSharpClass;
+
             return project;
         }
         /// <summary>

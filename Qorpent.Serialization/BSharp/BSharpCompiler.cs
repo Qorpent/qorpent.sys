@@ -117,11 +117,35 @@ namespace Qorpent.BSharp {
 
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(IEnumerable<XElement> sources) {
 			foreach (XElement src in sources) {
+			    Preprocess(src);
 				foreach (IBSharpClass e in IndexizeRawClasses(src, "")) {
 					yield return e;
 				}
 			}
 		}
+
+        private void Preprocess(XElement src)
+        {
+           var sets = src.Descendants("set").Reverse().ToArray();
+
+            foreach (var s in sets)
+            {
+                var subelements = s.Elements().ToArray();
+                foreach (var a in s.Attributes())
+                {
+                    foreach (var sb in subelements)
+                    {
+                        if (null == sb.Attribute(a.Name))
+                        {
+                            sb.SetAttributeValue(a.Name, a.Value);
+                        }
+                    }
+                }
+                s.ReplaceWith(subelements);
+            }
+            
+        }
+
 
         LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
 

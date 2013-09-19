@@ -7,9 +7,7 @@ namespace Qorpent.BSharp {
 	///     Конфигурация для компилятора BxlSharp
 	/// </summary>
 	public class BSharpConfig : ConfigBase, IBSharpConfig {
-
-
-		/// <summary>
+	    /// <summary>
 		///     Флаг использования интерполяций
 		/// </summary>
 		public const string USEINTERPOLATION = "useinterpolation";
