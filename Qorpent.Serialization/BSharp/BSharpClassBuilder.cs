@@ -307,7 +307,10 @@ namespace Qorpent.BSharp {
 							_context.RegisterError(BSharpErrors.NotResolvedClassReference(_cls, a.Parent,clsname));
 						}else if (1 == candidates.Count()) {
 							a.Value = candidates[0].FullName;
-							_context.RegisterError(BSharpErrors.NotDirectClassReference(_cls, a.Parent, clsname));
+						    var start = candidates[0].FullName.Replace( clsname,"");
+						    if (!_cls.FullName.StartsWith(start)) {
+						        _context.RegisterError(BSharpErrors.NotDirectClassReference(_cls, a.Parent, clsname));
+						    }
 						}
 						else {
 							a.Value = "AMBIGOUS::" + clsname;
@@ -318,7 +321,8 @@ namespace Qorpent.BSharp {
 			}
 		}
 
-		private void ProcessSimpleIncludes() {
+		private void 
+            ProcessSimpleIncludes() {
 			XElement[] includes;
 			var needReInterpolate = false;
 			while ((includes = _cls.Compiled.Descendants(BSharpSyntax.IncludeBlock).Where(_=>_.GetCode()!=BSharpSyntax.IncludeAllModifier).ToArray()).Length != 0) {
@@ -382,6 +386,7 @@ namespace Qorpent.BSharp {
 			includeelement.Attribute(BSharpSyntax.ClassNameAttribute).Remove();
 			var a = includeelement.Attribute("id");
 			if (null != a) a.Remove();
+          
 			
 		}
 
