@@ -66,7 +66,7 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <returns></returns>
 		public string ToLogString() {
-			return String.Format(@"{0}:{1}:{3} {2} ({4},{5})", Type, Phase, Message, Xml, 
+			return String.Format(@"{0}:{1} {2} ({4},{5})", Type, Phase, Message, Xml, 
 				null==Class?ClassName:Class.FullName,null==AltClass?"":AltClass.FullName);
 		}
 	}
