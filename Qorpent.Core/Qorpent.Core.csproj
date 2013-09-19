@@ -156,6 +156,15 @@
     <Compile Condition="'$(QISD_USER)'!=''" Include="$(QISD_USER)" />
     <Compile Include="Security\WinLogonType.cs" />
     <Compile Include="Dsl\Json\IJsonParser.cs" />
+    <Compile Include="Serialization\Escaping\BxlLiteral.cs" />
+    <Compile Include="Serialization\Escaping\MyDictionary.cs" />
+    <Compile Include="Serialization\Escaping\Escaper.cs" />
+    <Compile Include="Serialization\Escaping\EscapingDataFactory.cs" />
+    <Compile Include="Serialization\Escaping\EscapingType.cs" />
+    <Compile Include="Serialization\Escaping\IData.cs" />
+    <Compile Include="Serialization\Escaping\XmlAttribute.cs" />
+    <Compile Include="Serialization\Escaping\XmlName.cs" />
+    <Compile Include="Serialization\Escaping\XmlNameEscaper.cs" />
     <Compile Include="Serialization\FcOptions.cs" />
     <Compile Include="Serialization\ContentCleanerOptions.cs" />
     <Compile Include="Graphs\Dot\DotConstants.cs" />
