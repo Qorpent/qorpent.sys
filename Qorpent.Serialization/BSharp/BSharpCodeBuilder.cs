@@ -224,7 +224,8 @@ namespace Qorpent.BSharp
             if(null==value)return;
             if(Equals(0, value))return;
             if (value is DateTime) {
-                if (((DateTime) value).Year <= 1900) {
+                if (((DateTime)value) == QorpentConst.Date.Begin )
+                {
                     return;
                 }
             }

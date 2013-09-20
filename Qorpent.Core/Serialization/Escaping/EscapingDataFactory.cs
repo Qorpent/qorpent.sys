@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Qorpent.Serialization.Escaping;
 
 namespace Qorpent.Serialization
 {

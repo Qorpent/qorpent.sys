@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Qorpent.Serialization.Escaping
 {
     /// <summary>
-    /// <see cref="EscapingType.JsonLiteral" />
+    /// <see cref="JsonLiteral" />
     /// </summary>
     class JsonLiteral : IData
     {
@@ -19,7 +19,7 @@ namespace Qorpent.Serialization.Escaping
 
         private static readonly Dictionary<char, string> _first = new Dictionary<char, string>();
 
-        private static readonly MyDictionary _unescape = new MyDictionary()
+        private static readonly OptimizedEscapeDictionary _unescape = new OptimizedEscapeDictionary()
             {
                 {"__BSLASH__", '\\'},
                 {"__QUOT__", '"'},
@@ -35,7 +35,7 @@ namespace Qorpent.Serialization.Escaping
             return _common;
         }
 
-        public MyDictionary GetUnescape()
+        public OptimizedEscapeDictionary GetUnescape()
         {
             return _unescape;
         }

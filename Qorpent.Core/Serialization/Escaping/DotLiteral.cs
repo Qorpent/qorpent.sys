@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Qorpent.Serialization.Escaping
+namespace Qorpent.Serialization
 {
     /// <summary>
-    /// <see cref="EscapingType.DotLiteral"/>
+    /// <see cref="DotLiteral"/>
     /// </summary>
     class DotLiteral : IData
     {
@@ -27,7 +24,7 @@ namespace Qorpent.Serialization.Escaping
                 {'8', _uni.Replace(" ", ((int) '8').ToString("X4"))},
                 {'9', _uni.Replace(" ", ((int) '9').ToString("X4"))},
             };
-        protected static readonly MyDictionary _unescape = new MyDictionary();
+        protected static readonly OptimizedEscapeDictionary _unescape = new OptimizedEscapeDictionary();
 
         public Dictionary<char, string> GetFirst()
         {
@@ -39,7 +36,7 @@ namespace Qorpent.Serialization.Escaping
             return _common;
         }
 
-        public MyDictionary GetUnescape()
+        public OptimizedEscapeDictionary GetUnescape()
         {
             return _unescape;
         }
