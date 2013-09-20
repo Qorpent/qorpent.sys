@@ -98,11 +98,7 @@ namespace Qorpent.Serialization.Escaping
             if (d.GetUnicodePattern() == null)
                 return c.ToString();
 
-            // standard ASCII exclude control characters
-            if (c >= 32 && c <= 127)
-                return c.ToString();
-            // Russian
-            if (!d.NeedEscapeRussian() && (c >= 0x0410 && c <= 0x044f || c == 0x0401 || c == 0x0451))
+            if (!d.NeedEscapeUnicode(c))
                 return c.ToString();
 
             return d.GetUnicodePattern().Replace(" ", ((int)c).ToString("X4"));

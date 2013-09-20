@@ -14,6 +14,7 @@ namespace Qorpent.Serialization.Escaping
             {EscapingType.XmlAttribute, new XmlAttribute()},
             {EscapingType.BxlLiteral, new BxlLiteral()},
             {EscapingType.JsonLiteral, new JsonLiteral()},
+            {EscapingType.DotLiteral, new DotLiteral()},
         };
 
         /// <summary>

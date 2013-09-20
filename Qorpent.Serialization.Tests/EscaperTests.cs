@@ -6,7 +6,7 @@ namespace Qorpent.Serialization.Tests
     [TestFixture]
     public class EscaperTests
     {
-
+        // XML
         [TestCase("in-minus", "in-minus")]
         [TestCase("in1dec", "in1dec")]
         [TestCase("1leaddec", "_1leaddec")]
@@ -52,6 +52,7 @@ namespace Qorpent.Serialization.Tests
             Assert.AreEqual(output, input.Unescape(EscapingType.XmlAttribute));
         }
 
+        // BXL
         [TestCase("quo\"te", "quo__QUOT__te")]
         [TestCase("=equals=", "__EQ__equals__EQ__")]
         [TestCase("√unicodesymbols;∞", "√unicodesymbols;∞")]
@@ -67,6 +68,45 @@ namespace Qorpent.Serialization.Tests
         {
             Assert.AreEqual(output, input.Unescape(EscapingType.BxlLiteral));
         }
+
+        // DOT
+        [TestCase("num1ber", "num1ber")]
+        [TestCase("p!u\"n#c$t%u&a't(i)o*n", "p_0x0021u_0x0022n_0x0023c_0x0024t_0x0025u_0x0026a_0x0027t_0x0028i_0x0029o_0x002An")]
+        [TestCase("2firstnumber", "_0x0032firstnumber")]
+        [TestCase("_under_score_", "_under_score_")]
+        public void TestDotLiteralEscaping(string input, string output)
+        {
+            Assert.AreEqual(output, input.Escape(EscapingType.DotLiteral));
+        }
+
+        [TestCase("num1ber", "num1ber")]
+        [TestCase("p!u\"n#c$t%u&a't(i)o*n", "p_0x0021u_0x0022n_0x0023c_0x0024t_0x0025u_0x0026a_0x0027t_0x0028i_0x0029o_0x002An")]
+        [TestCase("2firstnumber", "_0x0032firstnumber")]
+        [TestCase("_under_score_", "_under_score_")]
+        public void TestDotLiteralUnscaping(string output, string input)
+        {
+            Assert.AreEqual(output, input.Unescape(EscapingType.DotLiteral));
+        }
+
+        //json
+        [TestCase("back\\slash", "back__BSLASH__slash")]
+        [TestCase("p!u\"n#c$t%u&a't(i)o*n", "p!u__QUOT__n#c$t%u&a't(i)o*n")]
+        [TestCase("2firstnumber", "2firstnumber")]
+        [TestCase("√unicodesymbols;∞", "\\u221Aunicodesymbols;\\u221E")]
+        public void TestJsonLiteralEscaping(string input, string output)
+        {
+            Assert.AreEqual(output, input.Escape(EscapingType.JsonLiteral));
+        }
+
+        [TestCase("back\\slash", "back__BSLASH__slash")]
+        [TestCase("p!u\"n#c$t%u&a't(i)o*n", "p!u__QUOT__n#c$t%u&a't(i)o*n")]
+        [TestCase("2firstnumber", "2firstnumber")]
+        [TestCase("√unicodesymbols;∞", "\\u221Aunicodesymbols;\\u221E")]
+        public void TestJsonLiteralUnscaping(string output, string input)
+        {
+            Assert.AreEqual(output, input.Unescape(EscapingType.JsonLiteral));
+        }
+
 
         [TestCase('q', EscapingType.XmlName, true, true)]
         [TestCase('.', EscapingType.XmlName, false, true)]

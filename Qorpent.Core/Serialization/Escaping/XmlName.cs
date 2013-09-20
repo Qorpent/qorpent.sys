@@ -117,9 +117,16 @@ namespace Qorpent.Serialization.Escaping
             return "__0x __";
         }
 
-        public bool NeedEscapeRussian()
+        public bool NeedEscapeUnicode(char c)
         {
-            return false;
+            // standard ASCII exclude control characters
+            if (c >= 32 && c <= 127)
+                return false;
+            // Russian
+            if (c >= 0x0410 && c <= 0x044f || c == 0x0401 || c == 0x0451)
+                return false;
+
+            return true;
         }
     }
 }
