@@ -35,6 +35,7 @@
     <Compile Include="Dot\DotLanguageUtilsTest.cs" />
     <Compile Include="Dot\DotRenderTest.cs" />
     <Compile Include="Dot\TuningTest.cs" />
+    <Compile Include="EscaperTests.cs" />
     <Compile Include="exceptions_need_to_be_fixed.cs" />
     <Compile Include="iocconfiguationtest.cs" />
     <Compile Include="Json\AF768Tests.cs" />

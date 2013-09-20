@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -540,6 +541,19 @@ namespace Qorpent.Utils.Extensions {
 	    public static string TryGetElAttrValue(this XElement xElement, XName elName, XName attrName) {
             var el = xElement.Element(elName);
             return el == null ? null : el.Attribute(attrName).TryGetValue();
+        }
+	    /// <summary>
+        ///     Превращает любые имена элементов в нотацию типа «Word» («wORd» -> «Word»)
+	    /// </summary>
+	    /// <param name="xElement">Исходный элемент</param>
+	    /// <param name="includeRoot">Включать корневой элемент</param>
+	    /// <returns>Исходный элемент</returns>
+	    public static XElement Capitalize(this XElement xElement, bool includeRoot = true) {
+            foreach (var el in xElement.XPathSelectElements(includeRoot ? "//*" : "/" + xElement.Name + "/*")) {
+                el.Name = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(el.Name.ToString());
+            }
+
+            return xElement;
         }
 	}
 }
