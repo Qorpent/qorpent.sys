@@ -27,6 +27,7 @@ using System;
 using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 using Qorpent.Serialization.Escaping;
 
