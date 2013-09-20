@@ -555,5 +555,31 @@ namespace Qorpent.Utils.Extensions {
 
             return xElement;
         }
+        /// <summary>
+        ///     Превращает любые имена элементов в нотацию типа «WORD» («wORd» -> «WORD»)
+        /// </summary>
+        /// <param name="xElement">Исходный элемент</param>
+        /// <param name="includeRoot">Включать корневой элемент</param>
+        /// <returns>Исходный элемент</returns>
+        public static XElement ElementsToUpperCase(this XElement xElement, bool includeRoot = true) {
+            foreach (var el in xElement.XPathSelectElements(includeRoot ? "//*" : "/" + xElement.Name + "/*")) {
+                el.Name = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(el.Name.ToString().ToUpper());
+            }
+
+            return xElement;
+        }
+        /// <summary>
+        ///     Превращает любые имена элементов в нотацию типа «word» («wORd» -> «word»)
+        /// </summary>
+        /// <param name="xElement">Исходный элемент</param>
+        /// <param name="includeRoot">Включать корневой элемент</param>
+        /// <returns>Исходный элемент</returns>
+        public static XElement ElementsToLowerCase(this XElement xElement, bool includeRoot = true) {
+            foreach (var el in xElement.XPathSelectElements(includeRoot ? "//*" : "/" + xElement.Name + "/*")) {
+                el.Name = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(el.Name.ToString().ToLower());
+            }
+
+            return xElement;
+        }
 	}
 }
