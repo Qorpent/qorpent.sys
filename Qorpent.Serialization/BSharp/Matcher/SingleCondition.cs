@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Utils.Extensions;
 using Qorpent.Serialization;
+using Qorpent.Serialization.Escaping;
 
 namespace Qorpent.BSharp.Matcher {
 	/// <summary>
@@ -37,41 +38,41 @@ namespace Qorpent.BSharp.Matcher {
 
 		private void SetupFromSpecialName(XAttribute a) {
 			var n = a.Name.LocalName;
-            if (n.Contains(XmlNameEscaper.EscapeXmlName("!")))
+            if (n.Contains("!".Escape(EscapingType.XmlName)))
             {
 				Negate = true;
-                n = n.Replace(XmlNameEscaper.EscapeXmlName("!"), "");
+                n = n.Replace("!".Escape(EscapingType.XmlName), "");
 			}
 			if (Value.ToUpper() == "NULL") {
-				ConditionType= ConditionType.IsNull;
+				ConditionType = ConditionType.IsNull;
 			}else if (Value.ToUpper() == "TRUE") {
-				ConditionType =ConditionType.IsTrue;
+				ConditionType = ConditionType.IsTrue;
 			}
-            if (n.EndsWith(XmlNameEscaper.EscapeXmlName(">>")))
+            if (n.EndsWith(">>".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.Gr;
             }
-            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName(">")))
+            else if (n.EndsWith(">".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.GrE;
             }
-            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("<<")))
+            else if (n.EndsWith("<<".Escape(EscapingType.XmlName)))
             {
 				ConditionType= ConditionType.Le;
             }
-            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("<")))
+            else if (n.EndsWith("<".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.LeE;
             }
-            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("~")))
+            else if (n.EndsWith("~".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.Match;
             }
-            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("&")))
+            else if (n.EndsWith("&".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.InList;
             }
-            else if (n.EndsWith(XmlNameEscaper.EscapeXmlName("%")))
+            else if (n.EndsWith("%".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.Contains;
 			}

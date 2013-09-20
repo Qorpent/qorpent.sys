@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Xml.Linq;
-using Qorpent.Serialization;
+using Qorpent.Serialization.Escaping;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -23,11 +23,11 @@ namespace Qorpent.BSharp {
 	    /// <summary>
 	    /// Определение перекрывающего аспекта класса
 	    /// </summary>
-	    public static readonly string ClassOverrideKeyword = XmlNameEscaper.EscapeXmlName("~") + "class";
+        public static readonly string ClassOverrideKeyword = "~".Escape(EscapingType.XmlName) + "class";
 	    /// <summary>
 	    /// Определение дополняющего аспекта класса
 	    /// </summary>
-	    public static readonly string ClassExtensionKeyword = XmlNameEscaper.EscapeXmlName("+") + "class";
+        public static readonly string ClassExtensionKeyword = "+".Escape(EscapingType.XmlName) + "class";
 		/// <summary>
 		/// Атрибут приоритета перекрытия класса
 		/// </summary>
@@ -165,11 +165,11 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Префикс перекрытия элемента
 		/// </summary>
-        public static readonly string ElementOverridePrefix = XmlNameEscaper.EscapeXmlName("~");
+        public static readonly string ElementOverridePrefix = "~".Escape(EscapingType.XmlName);
 		/// <summary>
 		/// Префикс расширения элемента
 		/// </summary>
-        public static readonly string ElementExtensionPrefix = XmlNameEscaper.EscapeXmlName("+");
+        public static readonly string ElementExtensionPrefix = "+".Escape(EscapingType.XmlName);
 		/// <summary>
 		/// Префикс приватного атрибута
 		/// </summary>

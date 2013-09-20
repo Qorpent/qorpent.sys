@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 using Qorpent.Serialization;
+using Qorpent.Serialization.Escaping;
 
 namespace Qorpent.BSharp.Schema {
 	/// <summary>
@@ -38,11 +39,11 @@ namespace Qorpent.BSharp.Schema {
 				else {
 					var acode = a.Name.LocalName;
 					acode =
-                        acode.Replace(XmlNameEscaper.EscapeXmlName("+"), "+")
-                             .Replace(XmlNameEscaper.EscapeXmlName("-"), "-")
-                             .Replace(XmlNameEscaper.EscapeXmlName("@"), "@")
-                             .Replace(XmlNameEscaper.EscapeXmlName("!"), "!")
-                             .Replace(XmlNameEscaper.EscapeXmlName("~"), "~");
+                        acode.Replace("+".Escape(EscapingType.XmlName), "+")
+                             .Replace("-".Escape(EscapingType.XmlName), "-")
+                             .Replace("@".Escape(EscapingType.XmlName), "@")
+                             .Replace("!".Escape(EscapingType.XmlName), "!")
+                             .Replace("~".Escape(EscapingType.XmlName), "~");
 					AttributeRules.Add(new AttributeRule(acode, a.Value));
 				}
 			}

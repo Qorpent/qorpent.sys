@@ -36,7 +36,7 @@ namespace Qorpent.Serialization.Escaping
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static String Unescape(this String str)
+        private static String Unescape(this String str)
         {
 
 
@@ -98,8 +98,8 @@ namespace Qorpent.Serialization.Escaping
             if (d.GetUnicodePattern() == null)
                 return c.ToString();
 
-            // standard ASCII
-            if (c < 128)
+            // standard ASCII exclude control characters
+            if (c >= 32 && c <= 127)
                 return c.ToString();
             // Russian
             if (c >= 0x0410 && c <= 0x044f || c == 0x0401 || c == 0x0451)

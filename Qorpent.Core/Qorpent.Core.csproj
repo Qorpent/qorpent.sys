@@ -157,6 +157,7 @@
     <Compile Include="Security\WinLogonType.cs" />
     <Compile Include="Dsl\Json\IJsonParser.cs" />
     <Compile Include="Serialization\Escaping\BxlLiteral.cs" />
+    <Compile Include="Serialization\Escaping\JsonLiteral.cs" />
     <Compile Include="Serialization\Escaping\MyDictionary.cs" />
     <Compile Include="Serialization\Escaping\Escaper.cs" />
     <Compile Include="Serialization\Escaping\EscapingDataFactory.cs" />
@@ -164,7 +165,6 @@
     <Compile Include="Serialization\Escaping\IData.cs" />
     <Compile Include="Serialization\Escaping\XmlAttribute.cs" />
     <Compile Include="Serialization\Escaping\XmlName.cs" />
-    <Compile Include="Serialization\Escaping\XmlNameEscaper.cs" />
     <Compile Include="Serialization\FcOptions.cs" />
     <Compile Include="Serialization\ContentCleanerOptions.cs" />
     <Compile Include="Graphs\Dot\DotConstants.cs" />
@@ -203,7 +203,6 @@
     <Compile Include="Serialization\ContentCleanerOperations.cs" />
     <Compile Include="Serialization\SerializerExtensions.cs" />
     <Compile Include="Serialization\XHtml5XmlWriter.cs" />
-    <Compile Include="Serialization\XmlNameEscaper.cs" />
     <Compile Include="ServiceState.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
     <Compile Include="Wiki\IWikiEmptyFilter.cs" />

@@ -28,6 +28,7 @@ using Qorpent.Applications;
 using Qorpent.Bxl;
 using Qorpent.Json;
 using Qorpent.Serialization;
+using Qorpent.Serialization.Escaping;
 
 namespace Qorpent.Utils.Extensions {
 	/// <summary>
@@ -207,7 +208,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <returns> </returns>
 		public static string ConvertToXNameCompatibleString(this string nameCandidate)
 		{
-		    return nameCandidate.EscapeXmlName();
+		    return nameCandidate.Escape(EscapingType.XmlName);
 		}
 
 		/// <summary>

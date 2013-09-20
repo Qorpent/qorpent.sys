@@ -13,6 +13,7 @@ namespace Qorpent.Serialization.Escaping
             {EscapingType.XmlName, new XmlName()},
             {EscapingType.XmlAttribute, new XmlAttribute()},
             {EscapingType.BxlLiteral, new BxlLiteral()},
+            {EscapingType.JsonLiteral, new JsonLiteral()},
         };
 
         /// <summary>

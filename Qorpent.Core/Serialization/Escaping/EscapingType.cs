@@ -23,15 +23,13 @@ namespace Qorpent.Serialization.Escaping
         /// 
         /// </summary>
         BxlLiteral = 4,
-        /*
         /// <summary>
         /// 
         /// </summary>
-        Json = 8,
+        JsonLiteral = 8,
         /// <summary>
         /// 
         /// </summary>
-        Dot = 16
-        */
+        DotLiteral = 16
     }
 }
