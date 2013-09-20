@@ -37,12 +37,7 @@ namespace Qorpent.BSharp.Schema {
 				}
 				else {
 					var acode = a.Name.LocalName;
-					acode =
-                        acode.Replace(XmlNameEscaper.EscapeXmlName("+"), "+")
-                             .Replace(XmlNameEscaper.EscapeXmlName("-"), "-")
-                             .Replace(XmlNameEscaper.EscapeXmlName("@"), "@")
-                             .Replace(XmlNameEscaper.EscapeXmlName("!"), "!")
-                             .Replace(XmlNameEscaper.EscapeXmlName("~"), "~");
+				    acode = acode.UnescapeLiteral(EscapingType.XmlName);
 					AttributeRules.Add(new AttributeRule(acode, a.Value));
 				}
 			}

@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 
 namespace Qorpent.Serialization
 {
     /// <summary>
     /// преобразовывает спецсимволы из xml в bxl и обратно
     /// </summary>
-    public static class XmlNameEscaper
+    public static class NewXmlNameEscaper
     {
         private static readonly String _digits = "0123456789";
 
@@ -111,7 +109,7 @@ namespace Qorpent.Serialization
             if (c < 128)
                 return c.ToString();
             // Russian
-            if (c >= 0x0410 && c <= 0x044f || c == 0x0401 || c == 0x451)
+            if (c >= 0x0410 && c <= 0x044f || c == 0x0401 || c == 0x0451)
                 return c.ToString();
 
             return "__0x" + ((int)c).ToString("X4") + "__";

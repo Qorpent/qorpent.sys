@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Qorpent.Serialization.Escaping
+namespace Qorpent.Serialization
 {
     /// <summary>
     /// <see cref="EscapingType.XmlName" />
@@ -61,7 +57,7 @@ namespace Qorpent.Serialization.Escaping
                 {'9', "_9"},
             };
 
-        private static readonly MyDictionary _unescape = new MyDictionary()
+        private static readonly OptimizedEscapeDictionary _unescape = new OptimizedEscapeDictionary()
             {
                 {"__PLUS__", '+'},
                 {"__MINUS__", '-'},
@@ -107,7 +103,7 @@ namespace Qorpent.Serialization.Escaping
             return _common;
         }
 
-        public MyDictionary GetUnescape()
+        public OptimizedEscapeDictionary GetUnescape()
         {
             return _unescape;
         }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using Qorpent.IoC;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp
@@ -113,14 +109,62 @@ namespace Qorpent.BSharp
         /// <param name="ns"></param>
         /// <param name="attributes"></param>
         public void StartNamespace(string ns, object attributes =null) {
-            WriteLevel();
-            _buffer.Append(BSharpSyntax.Namespace);
-            _buffer.Append(' ');
-            _buffer.Append(ns);
-            _buffer.AppendLine();
-            WriteAttributesInline(attributes);
+            StartElement(BSharpSyntax.Namespace, ns, null, null, attributes);
+        }
+        /// <summary>
+        /// Начать элемент
+        /// </summary>
+        /// <param name="elementname"></param>
+        /// <param name="code"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="inlineattributes"></param>
+        /// <param name="linedattributes"></param>
+        public void StartElement(string elementname, string code=null, string name = null, string value = null, object inlineattributes = null, object linedattributes = null)
+        {
+            WriteElement(elementname,code,name,value,inlineattributes,linedattributes);
             Indent();
         }
+        
+
+        /// <summary>
+        /// Записывает  элемента
+        /// </summary>
+        /// <param name="elementname"></param>
+        /// <param name="code"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="inlineattributes"></param>
+        /// <param name="linedattributes"></param>
+        public void WriteElement(string elementname, string code=null, string name=null, string value=null, object inlineattributes=null,object linedattributes = null) {
+            WriteLevel();
+            _buffer.Append(elementname);
+            _buffer.Append(' ');
+            _buffer.Append(code);
+            if (!string.IsNullOrWhiteSpace(name)) {
+                _buffer.Append(' ');
+                _buffer.Append(name.ToStringConstant(EscapingType.BxlSinglelineString));
+            }
+            WriteAttributesInline(inlineattributes);
+            if (!string.IsNullOrWhiteSpace(value)) {
+                _buffer.Append(" : ");
+                _buffer.Append(value.ToStringConstant(EscapingType.BxlMultilineString));
+            }
+            Indent();
+            WriteAttributesLined(linedattributes);
+            Dedent();
+            _buffer.AppendLine();
+        }
+
+        /// <summary>
+        /// Начинает блок класса
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="attributes"></param>
+        public void StartClass(string name, object attributes = null) {
+            StartElement(BSharpSyntax.Class, name, null, null,attributes );
+        }
+
         /// <summary>
         /// Формирует строку атрибутов в той же строке с элементом
         /// </summary>
@@ -130,11 +174,41 @@ namespace Qorpent.BSharp
             var dict = attributes.ToDict();
             foreach (var o in dict) {
                 _buffer.Append(' ');
-                _buffer.Append(o.Key);
-                _buffer.Append('=');
-
+                WriteAttribute(o.Key,o.Value);
             }
         }
+        /// <summary>
+        /// Формирует строку атрибутов в той же строке с элементом
+        /// </summary>
+        /// <param name="attributes"></param>
+        public void WriteAttributesLined(object attributes)
+        {
+            if (null == attributes) return;
+            var dict = attributes.ToDict();
+            foreach (var o in dict)
+            {
+                WriteLevel();
+                WriteAttribute(o.Key,o.Value);
+                _buffer.AppendLine();
+            }
+        }
+        /// <summary>
+        /// Записать атрибут
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void WriteAttribute(string key,object value) {
+            var val = value.ToStr();
+            _buffer.Append(key.EscapeLiteral(EscapingType.BxlLiteral));
+            _buffer.Append('=');
+            if (val.IsLiteral(EscapingType.BxlLiteral)) {
+                _buffer.Append(val);
+            }
+            else {
+                _buffer.Append(val.ToStringConstant(EscapingType.BxlMultilineString));
+            }
+        }
+
         /// <summary>
         /// Закончить пространство
         /// </summary>
@@ -145,6 +219,14 @@ namespace Qorpent.BSharp
         /// Закончить блок класса
         /// </summary>
         public void EndClass()
+        {
+            Dedent();
+        }
+
+        /// <summary>
+        /// Закончить блок класса
+        /// </summary>
+        public void EndElement()
         {
             Dedent();
         }

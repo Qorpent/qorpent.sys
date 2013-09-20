@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Qorpent.Serialization.Escaping
+namespace Qorpent.Serialization
 {
     /// <summary>
     /// <see cref="EscapingType.BxlLiteral" />
@@ -25,7 +21,7 @@ namespace Qorpent.Serialization.Escaping
 
         protected static readonly Dictionary<char, string> _first = new Dictionary<char, string>();
 
-        protected static readonly MyDictionary _unescape = new MyDictionary()
+        protected static readonly OptimizedEscapeDictionary _unescape = new OptimizedEscapeDictionary()
             {
                 {"__EQ__", '='},
                 {"__COMMA__", ','},
@@ -47,7 +43,7 @@ namespace Qorpent.Serialization.Escaping
             return _common;
         }
 
-        public MyDictionary GetUnescape()
+        public OptimizedEscapeDictionary GetUnescape()
         {
             return _unescape;
         }

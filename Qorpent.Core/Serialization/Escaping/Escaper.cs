@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Serialization.Escaping
+namespace Qorpent.Serialization
 {
     /// <summary>
     /// Univarsal character escaper
@@ -14,12 +10,12 @@ namespace Qorpent.Serialization.Escaping
     public static class Escaper
     {
         /// <summary>
-        /// Escape all symbols for given type
+        /// EscapeLiteral all symbols for given type
         /// </summary>
         /// <param name="str"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static String Escape(this String str, EscapingType type)
+        public static String EscapeLiteral(this String str, EscapingType type)
         {
             IData d = EscapingDataFactory.Get(type);
             StringBuilder sb = new StringBuilder(str.Length);
@@ -30,13 +26,61 @@ namespace Qorpent.Serialization.Escaping
 
             return sb.ToString();
         }
+        /// <summary>
+        /// Конвертирует указанную стро
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static String ToStringConstant(this string str, EscapingType type) {
+            if (type == EscapingType.BxlSinglelineString || type == EscapingType.BxlMultilineString) {
+                if (string.IsNullOrEmpty(str)) {
+                    return "\"\"";
+                }
+                if (type == EscapingType.BxlSinglelineString) {
+                    return ToBxlSingleLineString(str);
+                }
+                if (type == EscapingType.BxlMultilineString) {
+                    return ToBxlMultiLineString(str);
+                }
+            }
+            throw new Exception("unknown string type");
+        }
+
+        private static string ToBxlMultiLineString(string str) {
+            if (-1 == str.IndexOf('\r') && -1 == str.IndexOf('\n')) {
+                return ToBxlSingleLineString(str);
+            }
+            return "\"\"\"" + str + "\"\"\"";
+        }
+
+        private static string ToBxlSingleLineString(string str) {
+            if (-1 != str.IndexOf('\\')) {
+                str = str.Replace("\\", "\\\\");
+            }
+            if (-1 != str.IndexOf('\r')) {
+                str = str.Replace("\r", "\\r");
+            }
+            if (-1 != str.IndexOf('\n'))
+            {
+                str = str.Replace("\n", "\\n");
+            }
+            if (-1 != str.IndexOf('\t'))
+            {
+                str = str.Replace("\t", "\\t");
+            }
+            if (-1 != str.IndexOf('\'')) {
+                str = str.Replace("'", "\'");
+            }
+            return "'" + str + "'";
+        }
 
         /// <summary>
-        /// Unescape all symbols (auto type)
+        /// UnescapeLiteral all symbols (auto type)
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static String Unescape(this String str)
+        public static String UnescapeLiteral(this String str)
         {
 
 
@@ -51,7 +95,7 @@ namespace Qorpent.Serialization.Escaping
         /// <param name="type"></param>
         /// <param name="first"></param>
         /// <returns></returns>
-        public static bool IsLiteral(char c, EscapingType type, bool first = false)
+        public static bool IsLiteral(this char c, EscapingType type, bool first = false)
         {
             IData d = EscapingDataFactory.Get(type);
             return !(first && d.GetFirst().ContainsKey(c)
@@ -64,7 +108,7 @@ namespace Qorpent.Serialization.Escaping
         /// <param name="str"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static bool IsLiteral(String str, EscapingType type)
+        public static bool IsLiteral(this String str, EscapingType type)
         {
             IData d = EscapingDataFactory.Get(type);
 
@@ -115,7 +159,7 @@ namespace Qorpent.Serialization.Escaping
         /// <param name="str"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static String Unescape(this String str, EscapingType type)
+        public static String UnescapeLiteral(this String str, EscapingType type)
         {
             IData d = EscapingDataFactory.Get(type);
             StringBuilder res = new StringBuilder(str.Length);

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Qorpent.Serialization.Escaping
+namespace Qorpent.Serialization
 {
     interface IData
     {
@@ -22,7 +19,7 @@ namespace Qorpent.Serialization.Escaping
         /// unescape dictionry for all characters
         /// </summary>
         /// <returns></returns>
-        MyDictionary GetUnescape();
+        OptimizedEscapeDictionary GetUnescape();
         /// <summary>
         /// pattern for escaping other symbols with their codes (hex)
         /// " " (space) - for value

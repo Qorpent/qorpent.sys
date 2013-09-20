@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Qorpent.Serialization.Escaping
+namespace Qorpent.Serialization
 {
     /// <summary>
     /// strores information about length of keys
     /// </summary>
-    class MyDictionary : Dictionary<string, char>
+    class OptimizedEscapeDictionary : Dictionary<string, char>
     {
         private HashSet<int> _len = new HashSet<int>();
 

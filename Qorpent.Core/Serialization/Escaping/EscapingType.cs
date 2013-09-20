@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Qorpent.Serialization.Escaping
+namespace Qorpent.Serialization
 {
     /// <summary>
     /// 
     /// </summary>
+    [Flags]
     public enum EscapingType
     {
         /// <summary>
@@ -33,5 +30,14 @@ namespace Qorpent.Serialization.Escaping
         /// </summary>
         Dot = 16
         */
+        /// <summary>
+        /// Строка BXL с escape для спец-символов
+        /// </summary>
+        BxlSinglelineString = 32,
+        /// <summary>
+        /// Строка BXL c поддержкой многострочности
+        /// </summary>
+        BxlMultilineString = 64,
+
     }
 }
