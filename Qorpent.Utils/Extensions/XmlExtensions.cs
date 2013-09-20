@@ -207,7 +207,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <returns> </returns>
 		public static string ConvertToXNameCompatibleString(this string nameCandidate)
 		{
-		    return nameCandidate.EscapeXmlName();
+		    return nameCandidate.Escape(EscapingType.XmlName);
 		}
 
 		/// <summary>

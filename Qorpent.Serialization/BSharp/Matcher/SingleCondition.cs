@@ -37,41 +37,41 @@ namespace Qorpent.BSharp.Matcher {
 
 		private void SetupFromSpecialName(XAttribute a) {
 			var n = a.Name.LocalName;
-            if (n.Contains("!".EscapeLiteral(EscapingType.XmlName)))
+            if (n.Contains("!".Escape(EscapingType.XmlName)))
             {
 				Negate = true;
-                n = n.Replace("!".EscapeLiteral(EscapingType.XmlName), "");
+                n = n.Replace("!".Escape(EscapingType.XmlName), "");
 			}
 			if (Value.ToUpper() == "NULL") {
 				ConditionType= ConditionType.IsNull;
 			}else if (Value.ToUpper() == "TRUE") {
 				ConditionType =ConditionType.IsTrue;
 			}
-            if (n.EndsWith(">>".EscapeLiteral(EscapingType.XmlName)))
+            if (n.EndsWith(">>".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.Gr;
             }
-            else if (n.EndsWith(">".EscapeLiteral(EscapingType.XmlName)))
+            else if (n.EndsWith(">".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.GrE;
             }
-            else if (n.EndsWith("<<".EscapeLiteral(EscapingType.XmlName)))
+            else if (n.EndsWith("<<".Escape(EscapingType.XmlName)))
             {
 				ConditionType= ConditionType.Le;
             }
-            else if (n.EndsWith("<".EscapeLiteral(EscapingType.XmlName)))
+            else if (n.EndsWith("<".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.LeE;
             }
-            else if (n.EndsWith("~".EscapeLiteral(EscapingType.XmlName)))
+            else if (n.EndsWith("~".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.Match;
             }
-            else if (n.EndsWith("&".EscapeLiteral(EscapingType.XmlName)))
+            else if (n.EndsWith("&".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.InList;
             }
-            else if (n.EndsWith("%".EscapeLiteral(EscapingType.XmlName)))
+            else if (n.EndsWith("%".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.Contains;
 			}

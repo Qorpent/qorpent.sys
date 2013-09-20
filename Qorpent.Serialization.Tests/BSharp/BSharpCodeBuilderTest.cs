@@ -60,13 +60,18 @@ namespace Qorpent.Serialization.Tests.BSharp {
         }
 
         [Test]
+        public void EqualReParse() {
+            Assert.AreEqual("%test+,:", "__PERC__test__PLUS____COMMA____DBL__".Unescape(EscapingType.XmlName));
+        }
+
+        [Test]
         public void NamespaceClassElementWithEscapes()
         {
             var builder = new BSharpCodeBuilder();
             builder.StartNamespace("test");
             builder.StartClass("mya", new { a = 1, b = "23", c = "dsdsd gfgfg !!!" });
             builder.WriteAttributesLined(new { x = 2, y = true });
-            builder.WriteElement("%test+", "a",value:"trtr\r\ndsds", inlineattributes: new { a = 5, b = 6 });
+            builder.WriteElement("%test+,:", "a",value:"trtr\r\ndsds", inlineattributes: new { a = 5, b = 6 });
             builder.EndClass();
             builder.StartClass("mya2", new { a = 3, b = "23", c = "dsdsd\r\ngfgfg !!!" });
             builder.WriteAttributesLined(new { x = 3, y = false });
@@ -77,7 +82,7 @@ namespace Qorpent.Serialization.Tests.BSharp {
 	class mya a=1 b=23 c='dsdsd gfgfg !!!'
 		x=2
 		y=True
-		%test+ a a=5 b=6 : """"""trtr
+		%test+__COMMA____DBL__ a a=5 b=6 : """"""trtr
 dsds""""""
 	class mya2 a=3 b=23 c=""""""dsdsd
 gfgfg !!!""""""

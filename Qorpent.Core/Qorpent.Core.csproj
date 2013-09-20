@@ -165,7 +165,6 @@
     <Compile Include="Serialization\Escaping\IData.cs" />
     <Compile Include="Serialization\Escaping\XmlAttribute.cs" />
     <Compile Include="Serialization\Escaping\XmlName.cs" />
-    <Compile Include="Serialization\Escaping\NewXmlNameEscaper.cs" />
     <Compile Include="Serialization\FcOptions.cs" />
     <Compile Include="Serialization\ContentCleanerOptions.cs" />
     <Compile Include="Graphs\Dot\DotConstants.cs" />

@@ -19,7 +19,7 @@ namespace Qorpent.Serialization.Tests
         [TestCase("!a*", "__EXC__a__STAR__")]
         [TestCase("√unicode__symbols∞", "__0x221A__unicode__symbols__0x221E__")]
         public void TestEscaping(string input, string output) {
-            Assert.AreEqual(output,input.EscapeXmlName());
+            Assert.AreEqual(output,input.Escape(EscapingType.XmlName));
         }
 
         [TestCase("in-defis", "in-defis")]
@@ -34,7 +34,7 @@ namespace Qorpent.Serialization.Tests
         [TestCase("√unicode__symbol∞", "__0x221A__unicode__symbol__0x221E__")]
         public void TestUnEscaping(string output, string input)
         {
-            Assert.AreEqual(output, input.UnescapeXmlName());
+            Assert.AreEqual(output, input.Unescape(EscapingType.XmlName));
         }
     }
 }

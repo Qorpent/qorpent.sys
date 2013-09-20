@@ -10,13 +10,30 @@ namespace Qorpent.Serialization
     public static class Escaper
     {
         /// <summary>
-        /// EscapeLiteral all symbols for given type
+        /// Escape all symbols for given type
         /// </summary>
         /// <param name="str"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static String EscapeLiteral(this String str, EscapingType type)
+        public static String Escape(this String str, EscapingType type)
         {
+            if (type == EscapingType.BxlSinglelineString || type == EscapingType.BxlMultilineString)
+            {
+                if (string.IsNullOrEmpty(str))
+                {
+                    return "\"\"";
+                }
+                if (type == EscapingType.BxlSinglelineString)
+                {
+                    return ToBxlSingleLineString(str);
+                }
+                if (type == EscapingType.BxlMultilineString)
+                {
+                    return ToBxlMultiLineString(str);
+                }
+            }
+
+
             IData d = EscapingDataFactory.Get(type);
             StringBuilder sb = new StringBuilder(str.Length);
 
@@ -25,26 +42,6 @@ namespace Qorpent.Serialization
                 sb.Append(EscapeCommon(str[i], d));
 
             return sb.ToString();
-        }
-        /// <summary>
-        /// Конвертирует указанную стро
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static String ToStringConstant(this string str, EscapingType type) {
-            if (type == EscapingType.BxlSinglelineString || type == EscapingType.BxlMultilineString) {
-                if (string.IsNullOrEmpty(str)) {
-                    return "\"\"";
-                }
-                if (type == EscapingType.BxlSinglelineString) {
-                    return ToBxlSingleLineString(str);
-                }
-                if (type == EscapingType.BxlMultilineString) {
-                    return ToBxlMultiLineString(str);
-                }
-            }
-            throw new Exception("unknown string type");
         }
 
         private static string ToBxlMultiLineString(string str) {
@@ -76,11 +73,11 @@ namespace Qorpent.Serialization
         }
 
         /// <summary>
-        /// UnescapeLiteral all symbols (auto type)
+        /// Unescape all symbols (auto type)
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static String UnescapeLiteral(this String str)
+        public static String Unescape(this String str)
         {
 
 
@@ -159,7 +156,7 @@ namespace Qorpent.Serialization
         /// <param name="str"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static String UnescapeLiteral(this String str, EscapingType type)
+        public static String Unescape(this String str, EscapingType type)
         {
             IData d = EscapingDataFactory.Get(type);
             StringBuilder res = new StringBuilder(str.Length);

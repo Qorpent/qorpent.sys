@@ -138,17 +138,17 @@ namespace Qorpent.BSharp
         /// <param name="linedattributes"></param>
         public void WriteElement(string elementname, string code=null, string name=null, string value=null, object inlineattributes=null,object linedattributes = null) {
             WriteLevel();
-            _buffer.Append(elementname);
+            _buffer.Append(elementname.Escape(EscapingType.BxlLiteral));
             _buffer.Append(' ');
             _buffer.Append(code);
             if (!string.IsNullOrWhiteSpace(name)) {
                 _buffer.Append(' ');
-                _buffer.Append(name.ToStringConstant(EscapingType.BxlSinglelineString));
+                _buffer.Append(name.Escape(EscapingType.BxlSinglelineString));
             }
             WriteAttributesInline(inlineattributes);
             if (!string.IsNullOrWhiteSpace(value)) {
                 _buffer.Append(" : ");
-                _buffer.Append(value.ToStringConstant(EscapingType.BxlMultilineString));
+                _buffer.Append(value.Escape(EscapingType.BxlMultilineString));
             }
             Indent();
             WriteAttributesLined(linedattributes);
@@ -199,13 +199,13 @@ namespace Qorpent.BSharp
         /// <param name="value"></param>
         public void WriteAttribute(string key,object value) {
             var val = value.ToStr();
-            _buffer.Append(key.EscapeLiteral(EscapingType.BxlLiteral));
+            _buffer.Append(key.Escape(EscapingType.BxlLiteral));
             _buffer.Append('=');
             if (val.IsLiteral(EscapingType.BxlLiteral)) {
                 _buffer.Append(val);
             }
             else {
-                _buffer.Append(val.ToStringConstant(EscapingType.BxlMultilineString));
+                _buffer.Append(val.Escape(EscapingType.BxlMultilineString));
             }
         }
 

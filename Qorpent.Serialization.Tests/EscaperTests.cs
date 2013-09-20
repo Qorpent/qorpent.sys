@@ -17,7 +17,7 @@ namespace Qorpent.Serialization.Tests
         [TestCase("√unicode__symbols∞", "__0x221A__unicode__symbols__0x221E__")]
         public void TestXmlNameEscaping(string input, string output)
         {
-            Assert.AreEqual(output, input.EscapeLiteral(EscapingType.XmlName));
+            Assert.AreEqual(output, input.Escape(EscapingType.XmlName));
         }
 
         [TestCase("in-defis", "in-defis")]
@@ -32,7 +32,7 @@ namespace Qorpent.Serialization.Tests
         [TestCase("√unicode__symbol∞", "__0x221A__unicode__symbol__0x221E__")]
         public void TestXmlNameUnEscaping(string output, string input)
         {
-            Assert.AreEqual(output, input.UnescapeLiteral(EscapingType.XmlName));
+            Assert.AreEqual(output, input.Unescape(EscapingType.XmlName));
         }
 
         [TestCase("quo\"te", "quo&quot;te")]
@@ -40,7 +40,7 @@ namespace Qorpent.Serialization.Tests
         [TestCase("√unicodesymbols;∞", "&#x221A;unicodesymbols;&#x221E;")]
         public void TestXmlAttributeEscaping(string input, string output)
         {
-            Assert.AreEqual(output, input.EscapeLiteral(EscapingType.XmlAttribute));
+            Assert.AreEqual(output, input.Escape(EscapingType.XmlAttribute));
         }
 
         [TestCase("quo\"te", "quo&quot;te")]
@@ -48,7 +48,7 @@ namespace Qorpent.Serialization.Tests
         [TestCase("√unicodesymbols;∞", "&#x221A;unicodesymbols;&#x221E;")]
         public void TestXmlAttributeUnescaping(string output, string input)
         {
-            Assert.AreEqual(output, input.UnescapeLiteral(EscapingType.XmlAttribute));
+            Assert.AreEqual(output, input.Unescape(EscapingType.XmlAttribute));
         }
 
         [TestCase("quo\"te", "quo__QUOT__te")]
@@ -56,7 +56,7 @@ namespace Qorpent.Serialization.Tests
         [TestCase("√unicodesymbols;∞", "√unicodesymbols;∞")]
         public void TestBxlLiteralEscaping(string input, string output)
         {
-            Assert.AreEqual(output, input.EscapeLiteral(EscapingType.BxlLiteral));
+            Assert.AreEqual(output, input.Escape(EscapingType.BxlLiteral));
         }
 
         [TestCase("quo\"te", "quo__QUOT__te")]
@@ -64,7 +64,7 @@ namespace Qorpent.Serialization.Tests
         [TestCase("√unicodesymbols;∞", "√unicodesymbols;∞")]
         public void TestBxlLiteralUnescaping(string output, string input)
         {
-            Assert.AreEqual(output, input.UnescapeLiteral(EscapingType.BxlLiteral));
+            Assert.AreEqual(output, input.Unescape(EscapingType.BxlLiteral));
         }
 
         [TestCase('q', EscapingType.XmlName, true, true)]
