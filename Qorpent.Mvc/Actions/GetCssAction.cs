@@ -14,7 +14,7 @@ namespace Qorpent.Mvc.Actions {
 
 
 		/// <summary>
-		/// 	First phase of execution - override if need special input parameter's processing
+        /// Инициализация - первая фаза запуска Действия. Перекрывается при необходимости дополнительной обработки входных параметров. 
 		/// </summary>
 		protected override void Initialize()
 		{
@@ -28,9 +28,9 @@ namespace Qorpent.Mvc.Actions {
 		}
 
 		/// <summary>
-		/// 	Second phase - validate INPUT/REQUEST parameters here - it called before PREPARE so do not try validate
-		/// 	second-level internal state and authorization - only INPUT PARAMETERS must be validated
-		/// </summary>
+        /// Вторая фаза - проверка входных параметров, параметров запроса (вызывается до стадии подготовки, так что не
+        /// пытайтесь проверить авторизацию или что либо кроме входных параметров)
+        /// </summary>
 		protected override void Validate()
 		{
 			if (string.IsNullOrWhiteSpace(_filename))
@@ -39,19 +39,19 @@ namespace Qorpent.Mvc.Actions {
 			}
 		}
 
-		/// <summary>
-		/// 	override if Yr action provides 304 state and return TRUE
-		/// </summary>
-		/// <returns> </returns>
+        /// <summary>
+        /// Перекрываем, если Yr action возвращает 304 статус и True
+        /// </summary>
+        /// <returns> </returns>
 		protected override bool GetSupportNotModified()
 		{
 			return true;
 		}
 
-		/// <summary>
-		/// 	override if Yr action provides 304 state  and return Last-Modified-State header
-		/// </summary>
-		/// <returns> </returns>
+        /// <summary>
+        /// Перекрываем, если Yr action возвращает 304 статус и заголовок Last-Modified-Stateer
+        /// </summary>
+        /// <returns> </returns>
 		protected override DateTime EvalLastModified()
 		{
 			EvalScriptPath();
@@ -60,10 +60,10 @@ namespace Qorpent.Mvc.Actions {
 		}
 
 
-		/// <summary>
-		/// 	processing of execution - main method of action
-		/// </summary>
-		/// <returns> </returns>
+        /// <summary>
+        /// Основная фаза - тело действия
+        /// </summary>
+        /// <returns> </returns>
 		protected override object MainProcess()
 		{
 			return _filename;
