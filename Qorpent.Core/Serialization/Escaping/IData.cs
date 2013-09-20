@@ -29,5 +29,10 @@ namespace Qorpent.Serialization.Escaping
         /// </summary>
         /// <returns>pattern or null if unicode escaping not defined</returns>
         String GetUnicodePattern();
+        /// <summary>
+        /// escape or not russian characters as other unicode symbols
+        /// </summary>
+        /// <returns></returns>
+        bool NeedEscapeRussian();
     }
 }

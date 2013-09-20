@@ -102,7 +102,7 @@ namespace Qorpent.Serialization.Escaping
             if (c >= 32 && c <= 127)
                 return c.ToString();
             // Russian
-            if (c >= 0x0410 && c <= 0x044f || c == 0x0401 || c == 0x0451)
+            if (!d.NeedEscapeRussian() && (c >= 0x0410 && c <= 0x044f || c == 0x0401 || c == 0x0451))
                 return c.ToString();
 
             return d.GetUnicodePattern().Replace(" ", ((int)c).ToString("X4"));

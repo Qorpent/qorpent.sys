@@ -44,5 +44,10 @@ namespace Qorpent.Serialization.Escaping
         {
             return "\\u ";
         }
+
+        public bool NeedEscapeRussian()
+        {
+            return false;
+        }
     }
 }
