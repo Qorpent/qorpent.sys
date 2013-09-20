@@ -34,8 +34,9 @@ namespace Qorpent.BSharp
         /// <summary>
         /// Прописывает блок комментариев
         /// </summary>
+        /// <param name="title"></param>
         /// <param name="commentSource"></param>
-        void WriteCommentBlock(object commentSource = null);
+        void WriteCommentBlock(string title,object commentSource = null);
 
         /// <summary>
         /// Формирует строку комментариев

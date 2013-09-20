@@ -28,6 +28,7 @@ using Qorpent.Applications;
 using Qorpent.Bxl;
 using Qorpent.Json;
 using Qorpent.Serialization;
+using Qorpent.Serialization.Escaping;
 
 namespace Qorpent.Utils.Extensions {
 	/// <summary>

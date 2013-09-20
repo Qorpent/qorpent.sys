@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Utils.Extensions;
 using Qorpent.Serialization;
+using Qorpent.Serialization.Escaping;
 
 namespace Qorpent.BSharp.Matcher {
 	/// <summary>
@@ -43,9 +44,9 @@ namespace Qorpent.BSharp.Matcher {
                 n = n.Replace("!".Escape(EscapingType.XmlName), "");
 			}
 			if (Value.ToUpper() == "NULL") {
-				ConditionType= ConditionType.IsNull;
+				ConditionType = ConditionType.IsNull;
 			}else if (Value.ToUpper() == "TRUE") {
-				ConditionType =ConditionType.IsTrue;
+				ConditionType = ConditionType.IsTrue;
 			}
             if (n.EndsWith(">>".Escape(EscapingType.XmlName)))
             {

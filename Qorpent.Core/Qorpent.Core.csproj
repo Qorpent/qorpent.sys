@@ -159,6 +159,9 @@
     <Compile Include="Dsl\Json\IJsonParser.cs" />
     <Compile Include="Serialization\Escaping\BxlLiteral.cs" />
     <Compile Include="Serialization\Escaping\OptimizedEscapeDictionary.cs" />
+    <Compile Include="Serialization\Escaping\DotLiteral.cs" />
+    <Compile Include="Serialization\Escaping\JsonLiteral.cs" />
+    <Compile Include="Serialization\Escaping\MyDictionary.cs" />
     <Compile Include="Serialization\Escaping\Escaper.cs" />
     <Compile Include="Serialization\Escaping\EscapingDataFactory.cs" />
     <Compile Include="Serialization\Escaping\EscapingType.cs" />

@@ -26,5 +26,10 @@ namespace Qorpent.Serialization
         /// </summary>
         /// <returns>pattern or null if unicode escaping not defined</returns>
         String GetUnicodePattern();
+        /// <summary>
+        /// escape or not special unicode symbol
+        /// </summary>
+        /// <returns></returns>
+        bool NeedEscapeUnicode(char c);
     }
 }

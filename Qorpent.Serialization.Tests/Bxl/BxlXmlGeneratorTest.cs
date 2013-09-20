@@ -28,7 +28,7 @@ using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
 using Qorpent.Utils.Extensions;
-using Qorpent.Serialization;
+using Qorpent.Serialization.Escaping;
 
 namespace Qorpent.Bxl.Tests {
 	[TestFixture]

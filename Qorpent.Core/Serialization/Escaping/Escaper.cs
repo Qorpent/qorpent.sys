@@ -77,7 +77,7 @@ namespace Qorpent.Serialization
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static String Unescape(this String str)
+        private static String Unescape(this String str)
         {
 
 
@@ -139,11 +139,7 @@ namespace Qorpent.Serialization
             if (d.GetUnicodePattern() == null)
                 return c.ToString();
 
-            // standard ASCII
-            if (c < 128)
-                return c.ToString();
-            // Russian
-            if (c >= 0x0410 && c <= 0x044f || c == 0x0401 || c == 0x0451)
+            if (!d.NeedEscapeUnicode(c))
                 return c.ToString();
 
             return d.GetUnicodePattern().Replace(" ", ((int)c).ToString("X4"));

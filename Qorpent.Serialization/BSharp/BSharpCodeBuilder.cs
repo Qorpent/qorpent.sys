@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Qorpent.IoC;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
@@ -53,12 +54,34 @@ namespace Qorpent.BSharp
         /// <summary>
         /// Прописывает блок комментариев
         /// </summary>
+        /// <param name="title"></param>
         /// <param name="commentSource"></param>
-        public void WriteCommentBlock(object commentSource = null) {
+        public void WriteCommentBlock(string title, object commentSource = null) {
             if (null == commentSource) {
                 return;
             }
             WriteCommentLine();
+            for (var i = 0; i < 4; i++)
+            {
+                _buffer.Append('#');
+            }
+            var delt = 120 - 8 - title.Length;
+            var start = (int) Math.Floor(delt/2.0);
+            var end = (int)Math.Ceiling(delt / 2.0);
+            for (var i = 0; i < start; i++)
+            {
+                _buffer.Append(' ');
+            }
+            _buffer.Append(title);
+            for (var i = 0; i < end; i++)
+            {
+                _buffer.Append(' ');
+            }
+            for (var i = 0; i < 4; i++)
+            {
+                _buffer.Append('#');
+            }
+            _buffer.AppendLine();
             var dict = commentSource.ToDict();
             foreach (var p in dict) {
                 for (var i = 0; i < 4; i++) {
@@ -198,7 +221,20 @@ namespace Qorpent.BSharp
         /// <param name="key"></param>
         /// <param name="value"></param>
         public void WriteAttribute(string key,object value) {
+            if(null==value)return;
+            if(Equals(0, value))return;
+            if (value is DateTime) {
+                if (((DateTime) value).Year <= 1900) {
+                    return;
+                }
+            }
             var val = value.ToStr();
+            if (string.IsNullOrEmpty(val))
+            {
+                return;
+            }
+            
+           
             _buffer.Append(key.Escape(EscapingType.BxlLiteral));
             _buffer.Append('=');
             if (val.IsLiteral(EscapingType.BxlLiteral)) {

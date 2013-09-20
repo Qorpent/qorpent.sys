@@ -9,6 +9,8 @@ namespace Qorpent.Serialization
             {EscapingType.XmlName, new XmlName()},
             {EscapingType.XmlAttribute, new XmlAttribute()},
             {EscapingType.BxlLiteral, new BxlLiteral()},
+            {EscapingType.JsonLiteral, new JsonLiteral()},
+            {EscapingType.DotLiteral, new DotLiteral()},
         };
 
         /// <summary>
