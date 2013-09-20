@@ -6,7 +6,7 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp
 {
-	[TestFixture]
+    [TestFixture]
 	public class BSharpBasics : CompileTestBase {
 		[Test]
 		public void SingleSourceMode() {

@@ -45,6 +45,7 @@
     <Compile Include="BSharp\Builder\IBSharpBuilderTask.cs" />
     <Compile Include="BSharp\Builder\IBSharpProject.cs" />
     <Compile Include="BSharp\Builder\TaskConstants.cs" />
+    <Compile Include="BSharp\IBSharpCodeBuilder.cs" />
     <Compile Include="BSharp\IBSharpClass.cs" />
     <Compile Include="BSharp\IBSharpCompiler.cs" />
     <Compile Include="BSharp\IBSharpConfig.cs" />

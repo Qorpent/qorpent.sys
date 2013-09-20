@@ -8,6 +8,7 @@
     <AssemblyName>Qorpent.Serialization</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BSharp\BSharpCodeBuilder.cs" />
     <Compile Include="BSharp\BSharpErrors.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderBase.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderDefaults.cs" />
