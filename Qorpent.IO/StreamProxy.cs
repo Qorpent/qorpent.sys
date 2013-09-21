@@ -80,15 +80,15 @@ namespace Qorpent.IO {
             var offset = 0;
 
             while (true) {
-                var read = source.Read(buffer, offset, BufferSize);
+                var read = source.Read(buffer, 0, BufferSize);
                 offset += read;
 
-                foreach (var target in targets) {
-                    target.Write(buffer, offset - read, read);
+                if (read == 0) {
+                    break;
                 }
 
-                if ((read == 0) || (offset == source.Length)) {
-                    break;
+                foreach (var target in targets) {
+                    target.Write(buffer, 0, read);
                 }
             }
 
