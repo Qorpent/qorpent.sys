@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -80,7 +81,12 @@ namespace Qorpent.Selector.Implementations {
 				subconditions.Add("@id='" + id + "'");
 			}
 			if (!string.IsNullOrWhiteSpace(cls)) {
-				subconditions.Add("contains(concat(' ',@class,' '), ' " + cls + " ')");
+			    var clause = "";
+                foreach (var className in cls.Split('.')) {
+                    clause += "contains(concat(' ',@class,' '), ' " + className + " ') and ";
+			    }
+                clause = clause.Substring(0, clause.Length - 5);
+                subconditions.Add(clause);
 			}
 
 			if (!string.IsNullOrWhiteSpace(attr)) {
