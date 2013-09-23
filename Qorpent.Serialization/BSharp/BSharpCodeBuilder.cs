@@ -81,7 +81,7 @@ namespace Qorpent.BSharp
             {
                 _buffer.Append('#');
             }
-            _buffer.AppendLine();
+            EnsureAppendLine();
             var dict = commentSource.ToDict();
             foreach (var p in dict) {
                 for (var i = 0; i < 4; i++) {
@@ -111,7 +111,7 @@ namespace Qorpent.BSharp
                 {
                     _buffer.Append('#');
                 }
-                _buffer.AppendLine();
+                EnsureAppendLine();
             }
 
             WriteCommentLine();
@@ -123,7 +123,7 @@ namespace Qorpent.BSharp
             for (var i = 0; i < 120; i++) {
                 _buffer.Append('#');
             }
-            _buffer.AppendLine();
+            EnsureAppendLine();
         }
 
         /// <summary>
@@ -173,10 +173,24 @@ namespace Qorpent.BSharp
                 _buffer.Append(" : ");
                 _buffer.Append(value.Escape(EscapingType.BxlMultilineString));
             }
+            
             Indent();
-            WriteAttributesLined(linedattributes);
+            if (null != linedattributes) {
+                EnsureAppendLine();
+                WriteAttributesLined(linedattributes);
+            }
             Dedent();
+            EnsureAppendLine();
+        }
+
+        private int lastAppendLine = -1;
+        /// <summary>
+        /// Позволяет добавить перенос строки, но не позволяет это сделать 2жды подряд
+        /// </summary>
+        private void EnsureAppendLine() {
+            if(_buffer.Length==lastAppendLine)return;
             _buffer.AppendLine();
+            lastAppendLine = _buffer.Length;
         }
 
         /// <summary>
@@ -196,8 +210,11 @@ namespace Qorpent.BSharp
             if (null == attributes) return;
             var dict = attributes.ToDict();
             foreach (var o in dict) {
-                _buffer.Append(' ');
-                WriteAttribute(o.Key,o.Value);
+                var val = GetValue(o.Value);
+                if (null != val) {
+                    _buffer.Append(' ');
+                    WriteAttribute(o.Key, o.Value);
+                }
             }
         }
         /// <summary>
@@ -210,9 +227,11 @@ namespace Qorpent.BSharp
             var dict = attributes.ToDict();
             foreach (var o in dict)
             {
+                var val = GetValue(o.Value);
+                if (null == val) continue;
                 WriteLevel();
                 WriteAttribute(o.Key,o.Value);
-                _buffer.AppendLine();
+                EnsureAppendLine();
             }
         }
         /// <summary>
@@ -221,21 +240,9 @@ namespace Qorpent.BSharp
         /// <param name="key"></param>
         /// <param name="value"></param>
         public void WriteAttribute(string key,object value) {
-            if(null==value)return;
-            if(Equals(0, value))return;
-            if (value is DateTime) {
-                if (((DateTime)value) == QorpentConst.Date.Begin )
-                {
-                    return;
-                }
-            }
-            var val = value.ToStr();
-            if (string.IsNullOrEmpty(val))
-            {
-                return;
-            }
-            
-           
+            var val = GetValue(value);
+            if(null==val)return;
+
             _buffer.Append(key.Escape(EscapingType.BxlLiteral));
             _buffer.Append('=');
             if (val.IsLiteral(EscapingType.BxlLiteral)) {
@@ -244,6 +251,22 @@ namespace Qorpent.BSharp
             else {
                 _buffer.Append(val.Escape(EscapingType.BxlMultilineString));
             }
+        }
+
+        private static string GetValue(object value) {
+            if (null == value) return null;
+            if (Equals(false, value)) return null;
+            if (Equals(0, value)) return null;
+            if (value is DateTime) {
+                if (((DateTime) value) == QorpentConst.Date.Begin) {
+                    return null;
+                }
+            }
+            var val = value.ToStr().Trim();
+            if (string.IsNullOrEmpty(val)) {
+                return null;
+            }
+            return val;
         }
 
         /// <summary>

@@ -364,6 +364,9 @@ namespace Qorpent.Utils.Extensions {
 			if(obj is IDictionary<string,object>) {
 				return (IDictionary<string, object>) obj;
 			}
+            if (obj is IDictionary<string, string>) {
+                return ((IDictionary<string, string>) obj).ToDictionary(_=>_.Key,_=>(object)_.Value);
+            }
 			
 			var result = new Dictionary<string, object>();
 			foreach (var p in obj.GetType().GetProperties()) {

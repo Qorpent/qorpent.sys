@@ -54,7 +54,6 @@ namespace Qorpent.Serialization.Tests.BSharp {
 		test a a=5 b=6
 	class mya2 a=3 b=23 c='dsdsd gfgfg !!!'
 		x=3
-		y=False
 ", result);
             var xml = new BxlParser().Parse(result);
             Console.WriteLine(xml);
@@ -63,6 +62,18 @@ namespace Qorpent.Serialization.Tests.BSharp {
         [Test]
         public void EqualReParse() {
             Assert.AreEqual("%test+,:", "__PERC__test__PLUS____COMMA____DBL__".Unescape(EscapingType.XmlName));
+        }
+        [Test]
+        public void BugToManyEmptyLines() {
+            var b = new BSharpCodeBuilder();
+            b.WriteElement("x","y","z",linedattributes:new{x=(string)null,y=(string)null});
+            b.WriteElement("x","y","z");
+            var result = b.ToString();
+            Console.WriteLine(result);
+            Assert.AreEqual(@"x y 'z'
+x y 'z'
+",result);
+
         }
 
         [Test]
@@ -88,7 +99,6 @@ dsds""""""
 	class mya2 a=3 b=23 c=""""""dsdsd
 gfgfg !!!""""""
 		x=3
-		y=False
 ", result);
             var xml = new BxlParser().Parse(result);
             Console.WriteLine(xml);
