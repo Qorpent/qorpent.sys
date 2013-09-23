@@ -36,6 +36,19 @@ namespace Qorpent.Utils.Extensions {
 	public static class XmlExtensions {
 		private static readonly string[] Idatributes = new[] {"id", "code", "__id", "__code", "ID"};
 
+	    /// <summary>
+	    /// Возвращает true если код, имя, значение равны name или есть атрибут с именем name, приводимый к true
+	    /// </summary>
+	    /// <param name="x"></param>
+	    /// <param name="name"></param>
+	    /// <returns></returns>
+	    public static bool HasSignificantAttribute(this XElement x,string name) {
+            if (null != x.Attribute(name)) return true;
+            if (x.GetCode() == name) return true;
+            if (x.GetName() == name) return true;
+            if (x.Value == name) return true;
+            return false;
+        }
 		/// <summary>
 		/// 	Возвращает только собственное значение элемента (конкатенация текстовых элементов через пробел)
 		/// </summary>
