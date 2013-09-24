@@ -35,6 +35,12 @@ namespace Qorpent.Serialization
         /// <param name="xml"></param>
         /// <returns></returns>
         public JsonItem ConvertToJsonItem(XElement xml) {
+            if (xml.Attribute("__isarray") != null) {
+                if (xml.Attribute("__isarray").Value == "true") {
+                    xml.SetAttributeValue(JsonItem.JsonTypeAttributeName, "array");
+                }
+            }
+
             if (null == xml.Attribute(JsonItem.JsonTypeAttributeName)) {
                 var json = BaseSerializer.Serialize("root", xml);
                 return Parser.Parse(json);
