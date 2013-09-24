@@ -306,7 +306,7 @@ namespace Qorpent.BSharp {
 				{
 					try
 					{
-						BSharpClassBuilder.Build(BuildPhase.Link, this, c, context);
+						BSharpClassBuilder.Build(BuildPhase.AutonomeLink, this, c, context);
 					}
 					catch (Exception ex)
 					{
@@ -314,6 +314,18 @@ namespace Qorpent.BSharp {
 					}
 				}
 				context.ClearBuildTasks();
+                foreach (var c in context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.RequireLinking)))
+                {
+                    try
+                    {
+                        BSharpClassBuilder.Build(BuildPhase.CrossClassLink, this, c, context);
+                    }
+                    catch (Exception ex)
+                    {
+                        c.Error = ex;
+                    }
+                }
+                context.ClearBuildTasks();
 			}
 			else
 			{
@@ -322,7 +334,7 @@ namespace Qorpent.BSharp {
 					{
 						try
 						{
-							BSharpClassBuilder.Build(BuildPhase.Link, this, _, context);
+							BSharpClassBuilder.Build(BuildPhase.AutonomeLink, this, _, context);
 						}
 						catch (Exception ex)
 						{
@@ -330,6 +342,19 @@ namespace Qorpent.BSharp {
 						}
 					})
 					;
+                context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.RequireLinking)).AsParallel().ForAll(
+                    _ =>
+                    {
+                        try
+                        {
+                            BSharpClassBuilder.Build(BuildPhase.CrossClassLink, this, _, context);
+                        }
+                        catch (Exception ex)
+                        {
+                            _.Error = ex;
+                        }
+                    })
+                    ;
 			}
 		}
 	}
