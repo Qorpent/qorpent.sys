@@ -32,6 +32,8 @@
     <Compile Include="BSharp\Schema\RuleType.cs" />
     <Compile Include="BSharp\Schema\Schema.cs" />
     <Compile Include="BSharp\Schema\SchemaNote.cs" />
+    <Compile Include="Bxl2\BxlParser2.cs" />
+    <Compile Include="Bxl2\ReadMode.cs" />
     <Compile Include="Graphs.Dot\Builder\DotEdgeBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphElementBuilderBase.cs" />
