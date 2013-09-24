@@ -77,25 +77,43 @@ namespace Qorpent.BSharp {
 				if (BuildPhase.Compile == phase) {
 					PerformCompilation();
 				}
-				else if (BuildPhase.Link == phase) {
-					PerformLinking();
+				else if (BuildPhase.AutonomeLink == phase) {
+					PerformAutonomeLinking();
 				}
+
+                else if (BuildPhase.CrossClassLink == phase)
+                {
+                    PerformCrossClassLinking();
+                }
 			}
 		}
 
-		private void PerformLinking() {
+        private void PerformAutonomeLinking()
+        {
 			if (CheckExistedLink()) return;
 			_cls.Set(BSharpClassAttributes.InLink);
-			InternalLink();
+			InternalAutonomeLink();
 			_cls.Remove(BSharpClassAttributes.InLink);
-			_cls.Set(BSharpClassAttributes.Linked);
+			//_cls.Set(BSharpClassAttributes.Linked);
 		}
+        private void PerformCrossClassLinking()
+        {
+            if (CheckExistedLink()) return;
+            _cls.Set(BSharpClassAttributes.InLink);
+            InternalCrossClassLink();
+            _cls.Remove(BSharpClassAttributes.InLink);
+            _cls.Set(BSharpClassAttributes.Linked);
+        }
 
-		private void InternalLink() {
+        private void InternalAutonomeLink()
+        {
             ResolveClassReferences();
-            ResolveAdvancedIncludes();
-			ResolveDictionaries();
 		}
+        private void InternalCrossClassLink()
+        {
+            ResolveAdvancedIncludes();
+            ResolveDictionaries();
+        }
 
 		private void ResolveAdvancedIncludes() {
 			if (!_cls.Is(BSharpClassAttributes.RequireAdvancedIncludes)) return;
@@ -105,6 +123,7 @@ namespace Qorpent.BSharp {
 			           .Where(_ => _.GetCode()==BSharpSyntax.IncludeAllModifier)
 			           .ToArray()).Length) {
 				foreach (var i in includes) {
+   
 					var query = i.GetName();
 					if (query == BSharpSyntax.IncludeBodyModifier || query == BSharpSyntax.IncludeNoChildModifier) {
 						query = "";

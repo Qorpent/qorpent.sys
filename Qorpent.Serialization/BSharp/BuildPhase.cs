@@ -8,8 +8,12 @@
 		/// </summary>
 		Compile,
 		/// <summary>
-		/// Линковка
+		/// Линковка на уровне отдельного класа
 		/// </summary>
-		Link,
+	    AutonomeLink,
+        /// <summary>
+        /// Линковка между классами
+        /// </summary>
+        CrossClassLink
 	}
 }
