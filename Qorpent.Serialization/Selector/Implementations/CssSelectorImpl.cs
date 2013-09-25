@@ -60,7 +60,8 @@ namespace Qorpent.Selector.Implementations {
 		}
 
 		private static string BuildSubpath(string condition) {
-			var match = Regex.Match(condition.Trim(), 
+		    var sc = condition.Split(':');
+			var match = Regex.Match(sc[0].Trim(), 
 					@"(?ix)^
 						(?<tag>[^\.\#].*?)?
 						(\#(?<id>.+?))?
@@ -106,6 +107,14 @@ namespace Qorpent.Selector.Implementations {
 			if (0 != subconditions.Count) {
 				result += "[" + string.Join(" and ", subconditions) + "]";
 			}
+
+            if (sc.Count() == 2) {
+                if (sc[1].Contains("first-child")) {
+                    result += "[1]";
+                }
+            }
+
+            Debug.Print(result);
 			return result;
 		}
 	}
