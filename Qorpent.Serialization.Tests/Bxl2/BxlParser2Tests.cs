@@ -97,7 +97,7 @@ test1 x   =   2
 
 		[Test]
 		public void CanUseSingleLineStringAsAnonAttribute() {
-			String bxl = @"test1 a 'w w' 'q q'
+			String bxl = @"test1 a 'w w' ""q q""
 ";
 			IBxlParser p = new BxlParser2();
 			XElement res = p.Parse(bxl);
@@ -121,7 +121,7 @@ test1 x   =   2
 
 		[Test]
 		public void CanUseSingleLineStringAsAttributeName() {
-			String bxl = @"test1 'w w' = 'q q'
+			String bxl = @"test1 'w w' = ""q q""
 ";
 			IBxlParser p = new BxlParser2();
 			XElement res = p.Parse(bxl);
@@ -149,19 +149,50 @@ test1 x   =   2
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
-			Assert.AreEqual(res.Elements().First().Attribute(XName.Get("q".Escape(EscapingType.XmlName))).Value, "");
+			Assert.AreEqual(res.Elements().First().Attribute(XName.Get("q")).Value, "");
 		}
 
 		[Test]
-		public void CanUseMultiLineString() {
-			String bxl = @"test s=""""""qwerty
+		public void CanUseMultiLineStringAsAttributeValue() {
+			String bxl = @"test q=""""""qwerty
 asdf""""""
 ";
 			IBxlParser p = new BxlParser2();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
-			//Assert.AreEqual(res.Elements().First().Attribute(XName.Get("q".Escape(EscapingType.XmlName))).Value, "");
+			Assert.AreEqual(res.Elements().First().Attribute(XName.Get("q")).Value, "qwerty\r\nasdf");
+		}
+
+		[Test]
+		public void CanUseMultiLineStringAsAnonAttribute() {
+			String bxl = @"test1 a """"""1
+2 ' ''' """"
+3""""""
+";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			XElement test1 = res.Elements().First();
+			Assert.AreEqual(test1.Attribute(XName.Get("name")).Value, "1\r\n2 ' ''' \"\"\r\n3");
+		}
+
+		[Test]
+		public void CanUseMultiLineStringAsAttributeName() {
+			String bxl = @"test1 a
+	""""""q
+w
+e"""""" = """"""r
+t
+y""""""
+";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			XElement test1 = res.Elements().First();
+			Assert.AreEqual(test1.Attribute(XName.Get("q\r\nw\r\ne".Escape(EscapingType.XmlName))).Value, "r\r\nt\r\ny");
 		}
 	}
 }

@@ -38,7 +38,7 @@ namespace Qorpent.Serialization
                 {'\'', "__APOS__"},
                 {' ', "__SPACE__"},
                 {'\t', "__TAB__"},
-                {'\n', "__NLINE"},
+                {'\n', "__NLINE__"},
             };
 
         private static readonly Dictionary<char, string> _first = new Dictionary<char, string>()
@@ -90,7 +90,7 @@ namespace Qorpent.Serialization
                 {"__APOS__", '\''},
                 {"__SPACE__", ' '},
                 {"__TAB__", '\t'},
-                {"__NLINE", '\n'},
+                {"__NLINE__", '\n'},
             };
 
         public Dictionary<char, string> GetFirst()

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Bxl;
 using Qorpent.Serialization;
@@ -68,6 +67,9 @@ namespace Qorpent.Bxl2 {
             foreach (char c in code) {
                 map[_mode](c);
             }
+
+	        if (code.Last() != '\r' || code.Last() != '\n')
+		        map[_mode]('\n');
 
             return _root;
         }
@@ -329,6 +331,7 @@ namespace Qorpent.Bxl2 {
 		}
 
 		private void processQuoting1(char c) {
+			_isString = true;
 			switch (c) {
 				case '"':
 					_mode = ReadMode.Quoting2;
@@ -342,6 +345,7 @@ namespace Qorpent.Bxl2 {
 					_mode = ReadMode.EscapingBackSlash;
 					return;
 				default:
+					_buf.Append(c);
 					_stack.Push('"');
 					_mode = ReadMode.SingleLineString;
 					return;
@@ -442,7 +446,7 @@ namespace Qorpent.Bxl2 {
 			// checking for empty values must be implemented in invoker !
 		    String s = _buf.ToString();
 			_buf.Clear();
-			_current.SetAttributeValue(XName.Get(_value.Escape(EscapingType.XmlName)), s); // s escaped automatically
+			_current.SetAttributeValue(XName.Get(_value.Escape(EscapingType.XmlName)), s);
 		    _value = "";
 	    }
 
