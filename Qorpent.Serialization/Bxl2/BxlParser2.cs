@@ -20,10 +20,13 @@ namespace Qorpent.Bxl2 {
         private XElement root, current;
         private ReadMode mode;
         private StringBuilder buf = new StringBuilder(256);
-        private Stack<char> stack = new Stack<char>();
+        private CharStack stack = new CharStack();
 	    private int symbol_count = 0;
 	    private int anon_count = 0;
-	    private String att_name = "";
+	    private String value = "";
+	    private bool isString = false;
+	    //private bool multiLineString = false;
+		//private bool escapeCharacter = false;
 
         private delegate void stateOperation(char c);
         private Dictionary<ReadMode, stateOperation> map;
@@ -33,11 +36,13 @@ namespace Qorpent.Bxl2 {
         /// </summary>
         public BxlParser2() {
             map = new Dictionary<ReadMode, stateOperation>() {
-                {ReadMode.ElementName,		processElementName},
-				{ReadMode.AttributeName,	processAttributeName},
-				{ReadMode.AttributeValue,	processAttributeValue},
-                {ReadMode.Indent,			processIndent},
-                {ReadMode.NewLine,			processNewLine},
+                {ReadMode.ElementName,			processElementName},
+				{ReadMode.AttributeName,		processAttributeName},
+				{ReadMode.AttributeValue,		processAttributeValue},
+                {ReadMode.Indent,				processIndent},
+                {ReadMode.NewLine,				processNewLine},
+				{ReadMode.SingleLineString,		processSingleLineString},
+				{ReadMode.EscapingBackSlash,	processEscapingBackSlash},
             };
         }
 
@@ -59,8 +64,6 @@ namespace Qorpent.Bxl2 {
 	        current = root;
             mode = ReadMode.NewLine;
             foreach (char c in code) {
-                if (c == '\r')
-                    continue;
                 map[mode](c);
             }
 
@@ -82,10 +85,14 @@ namespace Qorpent.Bxl2 {
         private void processIndent(char c) {
             switch (c) {
                 case ':':
-                case '"':
-                case '\'':
 					throw new BxlException("not implemented: " + c.ToString());
 
+				case '"':
+				case '\'':
+					stack.Push((char)ReadMode.AttributeName);
+					stack.Push(c);
+					mode = ReadMode.SingleLineString;
+		            return;
 				case ',':
 		            return;
 				case '=':
@@ -96,11 +103,14 @@ namespace Qorpent.Bxl2 {
 						processIndent('\t');
 		            }
 					return;
+				case '\r':
                 case '\n':
-                    throw new BxlException("unexpected '\\n' symbol");
+                    throw new BxlException("unexpected '\\r' or '\\n' symbol");
                 case '\t':
                     current = current.Elements().Last();
                     return;
+				case '\\':
+					throw new BxlException("escape not in string");
                 default:
                     buf.Append(c);
                     mode = ReadMode.ElementName;
@@ -108,15 +118,23 @@ namespace Qorpent.Bxl2 {
             }
         }
 
-        private void processNewLine(char c) {
-	        anon_count = 0;
+	    private void processNewLine(char c) {
+			char s = stack.Peek();
+			if (isQuote(s))
+				throw new BxlException("new line in regular string");
+
+		    anon_count = 0;
 	        current = root;
             switch (c) {
                 case ':':
-                case '"':
-                case '\'':
 					throw new BxlException("not implemented: " + c.ToString());
 
+				case '"':
+				case '\'':
+					stack.Push((char)ReadMode.AttributeName);
+					stack.Push(c);
+					mode = ReadMode.SingleLineString;
+					return;
 				case ',':
 		            return;
 				case '=':
@@ -125,12 +143,15 @@ namespace Qorpent.Bxl2 {
 		            symbol_count++;
 					mode = ReadMode.Indent;
 		            return;
+				case '\r':
                 case '\n':
                     return;
                 case '\t':
                     current = current.Elements().Last();
                     mode = ReadMode.Indent;
                     return;
+				case '\\':
+					throw new BxlException("escape not in string");
                 default:
                     buf.Append(c);
 					mode = ReadMode.ElementName;
@@ -141,10 +162,14 @@ namespace Qorpent.Bxl2 {
 		private void processElementName(char c) {
 			switch (c) {
 				case ':':
-				case '"':
-				case '\'':
 					throw new BxlException("not implemented: " + c.ToString());
 
+				case '"':
+				case '\'':
+					stack.Push((char)ReadMode.AttributeName);
+					stack.Push(c);
+					mode = ReadMode.SingleLineString;
+					return;
 				case ',':
 					processElementName(' ');
 					return;
@@ -156,6 +181,7 @@ namespace Qorpent.Bxl2 {
 					addNode();
 					mode = ReadMode.AttributeName;
 					return;
+				case '\r':
 				case '\n':
 					addNode();
 					mode = ReadMode.NewLine;
@@ -163,6 +189,8 @@ namespace Qorpent.Bxl2 {
 				case '\t':
 					processElementName(' ');
 					return;
+				case '\\':
+					throw new BxlException("escape not in string");
 				default:
 					buf.Append(c);
 					return;
@@ -172,10 +200,15 @@ namespace Qorpent.Bxl2 {
 		private void processAttributeName(char c) {
 			switch (c) {
 				case ':':
-				case '"':
-				case '\'':
 					throw new BxlException("not implemented: " + c.ToString());
 
+				case '"':
+				case '\'':
+					addAnonAttribute();
+					stack.Push((char)mode);
+					stack.Push(c);
+					mode = ReadMode.SingleLineString;
+					return;
 				case ',':
 					processAttributeName(' ');
 					return;
@@ -186,6 +219,7 @@ namespace Qorpent.Bxl2 {
 				case ' ':
 					saveAttributeName();
 					return;
+				case '\r':
 				case '\n':
 					saveAttributeName();
 					addAnonAttribute();
@@ -194,6 +228,8 @@ namespace Qorpent.Bxl2 {
 				case '\t':
 					processAttributeName(' ');
 					return;
+				case '\\':
+					throw new BxlException("escape not in string");
 				default:
 					buf.Append(c);
 					addAnonAttribute();
@@ -204,10 +240,14 @@ namespace Qorpent.Bxl2 {
 	    private void processAttributeValue(char c) {
 			switch (c) {
 				case ':':
-				case '"':
-				case '\'':
 					throw new BxlException("not implemented: " + c.ToString());
 
+				case '"':
+				case '\'':
+					stack.Push((char)mode);
+					stack.Push(c);
+					mode = ReadMode.SingleLineString;
+					return;
 				case ',':
 					processAttributeValue(' ');
 					return;
@@ -219,6 +259,7 @@ namespace Qorpent.Bxl2 {
 					addAttributeValue();
 					mode = ReadMode.AttributeName;
 					return;
+				case '\r':
 				case '\n':
 					if (buf.Length == 0)
 						throw new BxlException("empty attribute value");
@@ -228,11 +269,46 @@ namespace Qorpent.Bxl2 {
 				case '\t':
 					processAttributeValue(' ');
 					return;
+				case '\\':
+					throw new BxlException("escape not in string");
 				default:
 					buf.Append(c);
 					return;
 			}
 	    }
+
+		private void processSingleLineString(char c) {
+			isString = true;
+			switch (c) {
+				case ':':
+					throw new BxlException("not implemented: " + c.ToString());
+
+				case '"':
+				case '\'':
+					if (stack.Peek() == c) {
+						stack.Pop();
+						mode = (ReadMode) stack.Pop();
+					}
+					else
+						buf.Append(c);
+					return;
+				case '\r':
+				case '\n':
+					throw new BxlException("new line in regular string");
+				case '\\':
+					stack.Push((char)mode);
+					mode = ReadMode.EscapingBackSlash;
+					return;
+				default:
+					buf.Append(c);
+					return;
+			}
+		}
+
+		private void processEscapingBackSlash(char c) {
+			buf.Append(c);
+			mode = (ReadMode) stack.Pop();
+		}
 
 		//		modifying tree
 
@@ -245,40 +321,67 @@ namespace Qorpent.Bxl2 {
 	    }
 
 	    private void addAnonAttribute() {
-		    if (att_name.Length == 0)
+		    if (value.Length == 0)
 			    return;
-		    String s = att_name;
-		    att_name = "";
 		    switch (anon_count) {
 			    case 0:
-					current.SetAttributeValue(XName.Get("code"), s);
-					current.SetAttributeValue(XName.Get("id"), s);
+					current.SetAttributeValue(XName.Get("code"), value);
+					current.SetAttributeValue(XName.Get("id"), value);
 				    break;
 				case 1:
-					current.SetAttributeValue(XName.Get("name"), s);
+					current.SetAttributeValue(XName.Get("name"), value);
 				    break;
 				default:
-					current.SetAttributeValue(XName.Get(s), "1");
+				    if (isString) {
+					    String name = "_aa" + (current.Attributes().Count() + 1);
+						current.SetAttributeValue(XName.Get(name), value);
+						isString = false;
+				    } else
+						current.SetAttributeValue(XName.Get(value.Escape(EscapingType.XmlName)), "1");
 				    break;
 		    }
+			value = "";
 		    anon_count++;
 	    }
 
 	    private void saveAttributeName() {
 			if (buf.Length == 0)
 				return;
-			String s = buf.ToString().Escape(EscapingType.XmlName);
+			value = buf.ToString();
 			buf.Clear();
-		    att_name = s;
 	    }
 
 	    private void addAttributeValue() {
 			// checking for empty values must be implemented in invoker !
-			String s = buf.ToString().Escape(EscapingType.XmlAttribute);
+		    String s = buf.ToString();
 			buf.Clear();
-			current.SetAttributeValue(XName.Get(att_name), s);
-		    att_name = "";
+			current.SetAttributeValue(XName.Get(value.Escape(EscapingType.XmlName)), s); // s escaped automatically
+		    value = "";
 	    }
-       
+
+
+		//		utils
+
+		private static bool isQuote(char c) {
+			return c == '\'' || c == '"';
+		}
+
+		/// <summary>
+		/// modified method Pop and Peak - if stack is empty they return 0, not excption
+		/// </summary>
+		private class CharStack : Stack<char> {
+			
+			public new char Pop() {
+				if (this.IsNotEmpty())
+					return base.Pop();
+				return (char)0;
+			}
+
+			public new char Peek() {
+				if (this.IsNotEmpty())
+					return base.Peek();
+				return (char) 0;
+			}
+		}
     }
 }

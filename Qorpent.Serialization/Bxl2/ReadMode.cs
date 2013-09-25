@@ -13,7 +13,7 @@ namespace Qorpent.Bxl2
         AttributeName = 2,
         AttributeValue = 4,
         Literal = ElementName | AttributeName,
-        //SingleLineString = 8,
+        SingleLineString = 8,
         //MultiLineString = 16,
         //String = SingleLineString | MultiLineString,
         //Text = Literal | String,
@@ -21,5 +21,7 @@ namespace Qorpent.Bxl2
         //Quoting = 64,
         //Colon = 128,
         NewLine = 256,
+		//Commentary = 512,
+		EscapingBackSlash = 1024,
     }
 }
