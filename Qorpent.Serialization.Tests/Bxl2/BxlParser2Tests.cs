@@ -14,7 +14,8 @@ namespace Qorpent.Serialization.Tests.Bxl2
 		[Test]
 		[Explicit]
 		public void BxlParserTest() {
-			String bxl = "test qq ='r\\\rr'";
+			String bxl = @"test s=""""""\\""""""
+";
 
 			BxlParser parser = new BxlParser();
 			XElement res = parser.Parse(bxl, "ololo.txt", BxlParserOptions.NoLexData);
@@ -138,6 +139,29 @@ test1 x   =   2
 			Console.WriteLine(res);
 
 			Assert.AreEqual(res.Elements().First().Attribute(XName.Get("q\"q".Escape(EscapingType.XmlName))).Value, "r\"r");
+		}
+
+		[Test]
+		public void CanUseUseEmptyStringInAttributeValue() {
+			String bxl = @"test q=""""
+";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			Assert.AreEqual(res.Elements().First().Attribute(XName.Get("q".Escape(EscapingType.XmlName))).Value, "");
+		}
+
+		[Test]
+		public void CanUseMultiLineString() {
+			String bxl = @"test s=""""""qwerty
+asdf""""""
+";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			//Assert.AreEqual(res.Elements().First().Attribute(XName.Get("q".Escape(EscapingType.XmlName))).Value, "");
 		}
 	}
 }

@@ -17,16 +17,14 @@ namespace Qorpent.Bxl2 {
 	    private const int TAB_SPACE_COUNT = 4;
 
         //private int line_number = 1;
-        private XElement root, current;
-        private ReadMode mode;
-        private StringBuilder buf = new StringBuilder(256);
-        private CharStack stack = new CharStack();
-	    private int symbol_count = 0;
-	    private int anon_count = 0;
-	    private String value = "";
-	    private bool isString = false;
-	    //private bool multiLineString = false;
-		//private bool escapeCharacter = false;
+        private XElement _root, _current;
+        private ReadMode _mode;
+        private readonly StringBuilder _buf = new StringBuilder(256);
+        private readonly CharStack _stack = new CharStack();
+	    private int _symbolCount = 0;
+	    private int _anonCount = 0;
+	    private String _value = "";
+	    private bool _isString = false;
 
         private delegate void stateOperation(char c);
         private Dictionary<ReadMode, stateOperation> map;
@@ -43,6 +41,10 @@ namespace Qorpent.Bxl2 {
                 {ReadMode.NewLine,				processNewLine},
 				{ReadMode.SingleLineString,		processSingleLineString},
 				{ReadMode.EscapingBackSlash,	processEscapingBackSlash},
+				{ReadMode.Quoting1,				processQuoting1},
+				{ReadMode.Quoting2,				processQuoting2},
+				{ReadMode.Unquoting,			processUnquoting},
+				{ReadMode.MultiLineString,		processMultiLineString},
             };
         }
 
@@ -60,14 +62,14 @@ namespace Qorpent.Bxl2 {
                 code = File.ReadAllText(filename);
             }
 
-            root = new XElement("root");
-	        current = root;
-            mode = ReadMode.NewLine;
+            _root = new XElement("root");
+	        _current = _root;
+            _mode = ReadMode.NewLine;
             foreach (char c in code) {
-                map[mode](c);
+                map[_mode](c);
             }
 
-            return root;
+            return _root;
         }
 
         /// <summary>
@@ -88,18 +90,21 @@ namespace Qorpent.Bxl2 {
 					throw new BxlException("not implemented: " + c.ToString());
 
 				case '"':
+					_stack.Push((char)ReadMode.AttributeName);
+					_mode = ReadMode.Quoting1;
+		            return;
 				case '\'':
-					stack.Push((char)ReadMode.AttributeName);
-					stack.Push(c);
-					mode = ReadMode.SingleLineString;
+					_stack.Push((char)ReadMode.AttributeName);
+					_stack.Push(c);
+					_mode = ReadMode.SingleLineString;
 		            return;
 				case ',':
 		            return;
 				case '=':
 					throw new BxlException("unexpected '=' symbol");
                 case ' ':
-					if (++symbol_count == TAB_SPACE_COUNT) {
-			            symbol_count = 0;
+					if (++_symbolCount == TAB_SPACE_COUNT) {
+			            _symbolCount = 0;
 						processIndent('\t');
 		            }
 					return;
@@ -107,54 +112,57 @@ namespace Qorpent.Bxl2 {
                 case '\n':
                     throw new BxlException("unexpected '\\r' or '\\n' symbol");
                 case '\t':
-                    current = current.Elements().Last();
+                    _current = _current.Elements().Last();
                     return;
 				case '\\':
 					throw new BxlException("escape not in string");
                 default:
-                    buf.Append(c);
-                    mode = ReadMode.ElementName;
+                    _buf.Append(c);
+                    _mode = ReadMode.ElementName;
                     return;
             }
         }
 
 	    private void processNewLine(char c) {
-			char s = stack.Peek();
+			char s = _stack.Peek();
 			if (isQuote(s))
 				throw new BxlException("new line in regular string");
 
-		    anon_count = 0;
-	        current = root;
+		    _anonCount = 0;
+	        _current = _root;
             switch (c) {
                 case ':':
 					throw new BxlException("not implemented: " + c.ToString());
 
 				case '"':
+					_stack.Push((char)ReadMode.AttributeName);
+					_mode = ReadMode.Quoting1;
+					return;
 				case '\'':
-					stack.Push((char)ReadMode.AttributeName);
-					stack.Push(c);
-					mode = ReadMode.SingleLineString;
+					_stack.Push((char)ReadMode.AttributeName);
+					_stack.Push(c);
+					_mode = ReadMode.SingleLineString;
 					return;
 				case ',':
 		            return;
 				case '=':
 					throw new BxlException("unexpected '=' symbol");
                 case ' ':
-		            symbol_count++;
-					mode = ReadMode.Indent;
+		            _symbolCount++;
+					_mode = ReadMode.Indent;
 		            return;
 				case '\r':
                 case '\n':
                     return;
                 case '\t':
-                    current = current.Elements().Last();
-                    mode = ReadMode.Indent;
+                    _current = _current.Elements().Last();
+                    _mode = ReadMode.Indent;
                     return;
 				case '\\':
 					throw new BxlException("escape not in string");
                 default:
-                    buf.Append(c);
-					mode = ReadMode.ElementName;
+                    _buf.Append(c);
+					_mode = ReadMode.ElementName;
                     return;
             }
         }
@@ -165,26 +173,29 @@ namespace Qorpent.Bxl2 {
 					throw new BxlException("not implemented: " + c.ToString());
 
 				case '"':
+					_stack.Push((char)ReadMode.AttributeName);
+					_mode = ReadMode.Quoting1;
+					return;
 				case '\'':
-					stack.Push((char)ReadMode.AttributeName);
-					stack.Push(c);
-					mode = ReadMode.SingleLineString;
+					_stack.Push((char)ReadMode.AttributeName);
+					_stack.Push(c);
+					_mode = ReadMode.SingleLineString;
 					return;
 				case ',':
 					processElementName(' ');
 					return;
 				case '=':
 					saveAttributeName();
-					mode = ReadMode.AttributeValue;
+					_mode = ReadMode.AttributeValue;
 					return;
 				case ' ':
 					addNode();
-					mode = ReadMode.AttributeName;
+					_mode = ReadMode.AttributeName;
 					return;
 				case '\r':
 				case '\n':
 					addNode();
-					mode = ReadMode.NewLine;
+					_mode = ReadMode.NewLine;
 					return;
 				case '\t':
 					processElementName(' ');
@@ -192,7 +203,7 @@ namespace Qorpent.Bxl2 {
 				case '\\':
 					throw new BxlException("escape not in string");
 				default:
-					buf.Append(c);
+					_buf.Append(c);
 					return;
 			}
 		}
@@ -203,18 +214,22 @@ namespace Qorpent.Bxl2 {
 					throw new BxlException("not implemented: " + c.ToString());
 
 				case '"':
+					addAnonAttribute();
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Quoting1;
+					return;
 				case '\'':
 					addAnonAttribute();
-					stack.Push((char)mode);
-					stack.Push(c);
-					mode = ReadMode.SingleLineString;
+					_stack.Push((char)_mode);
+					_stack.Push(c);
+					_mode = ReadMode.SingleLineString;
 					return;
 				case ',':
 					processAttributeName(' ');
 					return;
 				case '=':
 					saveAttributeName();
-					mode = ReadMode.AttributeValue;
+					_mode = ReadMode.AttributeValue;
 					return;
 				case ' ':
 					saveAttributeName();
@@ -223,7 +238,7 @@ namespace Qorpent.Bxl2 {
 				case '\n':
 					saveAttributeName();
 					addAnonAttribute();
-					mode = ReadMode.NewLine;
+					_mode = ReadMode.NewLine;
 					return;
 				case '\t':
 					processAttributeName(' ');
@@ -231,7 +246,7 @@ namespace Qorpent.Bxl2 {
 				case '\\':
 					throw new BxlException("escape not in string");
 				default:
-					buf.Append(c);
+					_buf.Append(c);
 					addAnonAttribute();
 					return;
 			}
@@ -243,10 +258,13 @@ namespace Qorpent.Bxl2 {
 					throw new BxlException("not implemented: " + c.ToString());
 
 				case '"':
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Quoting1;
+					return;
 				case '\'':
-					stack.Push((char)mode);
-					stack.Push(c);
-					mode = ReadMode.SingleLineString;
+					_stack.Push((char)_mode);
+					_stack.Push(c);
+					_mode = ReadMode.SingleLineString;
 					return;
 				case ',':
 					processAttributeValue(' ');
@@ -254,17 +272,17 @@ namespace Qorpent.Bxl2 {
 				case '=':
 					throw new BxlException("unexpected '=' symbol");
 				case ' ':
-					if (buf.Length == 0)
+					if (_buf.Length == 0)
 						return;
 					addAttributeValue();
-					mode = ReadMode.AttributeName;
+					_mode = ReadMode.AttributeName;
 					return;
 				case '\r':
 				case '\n':
-					if (buf.Length == 0)
+					if (_buf.Length == 0 && !_isString)
 						throw new BxlException("empty attribute value");
 					addAttributeValue();
-					mode = ReadMode.NewLine;
+					_mode = ReadMode.NewLine;
 					return;
 				case '\t':
 					processAttributeValue(' ');
@@ -272,91 +290,160 @@ namespace Qorpent.Bxl2 {
 				case '\\':
 					throw new BxlException("escape not in string");
 				default:
-					buf.Append(c);
+					_buf.Append(c);
 					return;
 			}
 	    }
 
 		private void processSingleLineString(char c) {
-			isString = true;
+			_isString = true;
 			switch (c) {
 				case ':':
 					throw new BxlException("not implemented: " + c.ToString());
 
 				case '"':
 				case '\'':
-					if (stack.Peek() == c) {
-						stack.Pop();
-						mode = (ReadMode) stack.Pop();
+					if (_stack.Peek() == c) {
+						_stack.Pop();
+						_mode = (ReadMode) _stack.Pop();
 					}
 					else
-						buf.Append(c);
+						_buf.Append(c);
 					return;
 				case '\r':
 				case '\n':
 					throw new BxlException("new line in regular string");
 				case '\\':
-					stack.Push((char)mode);
-					mode = ReadMode.EscapingBackSlash;
+					_stack.Push((char)_mode);
+					_mode = ReadMode.EscapingBackSlash;
 					return;
 				default:
-					buf.Append(c);
+					_buf.Append(c);
 					return;
 			}
 		}
 
 		private void processEscapingBackSlash(char c) {
-			buf.Append(c);
-			mode = (ReadMode) stack.Pop();
+			_buf.Append(c);
+			_mode = (ReadMode) _stack.Pop();
+		}
+
+		private void processQuoting1(char c) {
+			switch (c) {
+				case '"':
+					_mode = ReadMode.Quoting2;
+					return;
+				case '\n':
+				case '\r':
+					throw new BxlException("new line in regular string");
+				case '\\':
+					_stack.Push('"');
+					_stack.Push((char)ReadMode.SingleLineString);
+					_mode = ReadMode.EscapingBackSlash;
+					return;
+				default:
+					_stack.Push('"');
+					_mode = ReadMode.SingleLineString;
+					return;
+			}
+		}
+
+		private void processQuoting2(char c) {
+			switch (c) {
+				case '"':
+					_mode = ReadMode.MultiLineString;
+					return;
+				default:
+					map[(ReadMode)_stack.Pop()](c);
+					return;
+			}
+		}
+
+		private void processUnquoting(char c) {
+			switch (c) {
+				case '"':
+					_symbolCount++;
+					if (_symbolCount == 3) {
+						_mode = (ReadMode) _stack.Pop();
+						_symbolCount = 0;
+					}
+					return;
+				case '\\':
+					_buf.Append('"', _symbolCount);
+					_stack.Push((char)ReadMode.MultiLineString);
+					_mode = ReadMode.EscapingBackSlash;
+					return;
+				default:
+					_buf.Append('"', _symbolCount);
+					_buf.Append(c);
+					_mode = ReadMode.MultiLineString;
+					return;
+			}
+		}
+
+		private void processMultiLineString(char c) {
+			switch (c) {
+				case '"':
+					_symbolCount = 1;
+					_mode = ReadMode.Unquoting;
+					return;
+				case '\\':
+					_stack.Push((char)_mode);
+					_mode = ReadMode.EscapingBackSlash;
+					return;
+				default:
+					_buf.Append(c);
+					return;
+			}
 		}
 
 		//		modifying tree
 
 	    private void addNode() {
-			String s = buf.ToString().Escape(EscapingType.XmlName);
-		    buf.Clear();
+			String s = _buf.ToString().Escape(EscapingType.XmlName);
+		    _buf.Clear();
 			XElement node = new XElement(s);
-			current.Add(node);
-			current = node;
+			_current.Add(node);
+			_current = node;
 	    }
 
 	    private void addAnonAttribute() {
-		    if (value.Length == 0)
+		    if (_value.Length == 0)
 			    return;
-		    switch (anon_count) {
+		    switch (_anonCount) {
 			    case 0:
-					current.SetAttributeValue(XName.Get("code"), value);
-					current.SetAttributeValue(XName.Get("id"), value);
+					_current.SetAttributeValue(XName.Get("code"), _value);
+					_current.SetAttributeValue(XName.Get("id"), _value);
 				    break;
 				case 1:
-					current.SetAttributeValue(XName.Get("name"), value);
+					_current.SetAttributeValue(XName.Get("name"), _value);
 				    break;
 				default:
-				    if (isString) {
-					    String name = "_aa" + (current.Attributes().Count() + 1);
-						current.SetAttributeValue(XName.Get(name), value);
-						isString = false;
+				    if (_isString) {
+					    String name = "_aa" + (_current.Attributes().Count() + 1);
+						_current.SetAttributeValue(XName.Get(name), _value);
+						_isString = false;
 				    } else
-						current.SetAttributeValue(XName.Get(value.Escape(EscapingType.XmlName)), "1");
+						_current.SetAttributeValue(XName.Get(_value.Escape(EscapingType.XmlName)), "1");
 				    break;
 		    }
-			value = "";
-		    anon_count++;
+			_value = "";
+		    _anonCount++;
 	    }
 
 	    private void saveAttributeName() {
-			if (buf.Length == 0)
+			if (_buf.Length == 0)
 				return;
-			value = buf.ToString();
-			buf.Clear();
+			_value = _buf.ToString();
+			_buf.Clear();
 	    }
 
 	    private void addAttributeValue() {
 			// checking for empty values must be implemented in invoker !
-		    String s = buf.ToString();
-			buf.Clear();
-			current.SetAttributeValue(XName.Get(value.Escape(EscapingType.XmlName)), s); // s escaped automatically
-		    value = "";
+		    String s = _buf.ToString();
+			_buf.Clear();
+			_current.SetAttributeValue(XName.Get(_value.Escape(EscapingType.XmlName)), s); // s escaped automatically
+		    _value = "";
 	    }
 
 
