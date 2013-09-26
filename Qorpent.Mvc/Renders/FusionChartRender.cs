@@ -19,7 +19,18 @@ namespace Qorpent.Mvc.Renders {
             var width = context.Get("width", "400");
             var height = context.Get("height", "300");
             var debug = context.Get("debug", "0");
-            var script = string.Format(@"<script type=""text/javascript""><!--
+            var script = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(context.Get("__standalone"))) {
+                script += @"
+<script type=""text/javascript"" src=""/scripts/jquery.min.js""></script>
+<script type=""text/javascript"" src=""/scripts/fusioncharts/FusionCharts.js""></script>
+<link rel=""stylesheet"" type=""text/css"" href=""/styles/fusioncharts/presentation.css""></link>
+";   
+            }
+
+            script += string.Format(@"
+<script type=""text/javascript""><!--
     FusionCharts.setCurrentRenderer('{0}');
     var myChart = new FusionCharts('{1}', '{2}', '{3}', '{4}', '{5}');
     {7};
