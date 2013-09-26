@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Linq;
+using Qorpent.Dsl;
 
 namespace Qorpent.Mvc.Renders {
     /// <summary>
@@ -8,37 +9,65 @@ namespace Qorpent.Mvc.Renders {
     [Render("fc")]
     public class FusionChartRender: RenderBase {
         /// <summary>
-        /// 	Renders given context
+        /// Renders given context
         /// </summary>
         /// <param name="context"></param>
         public override void Render(IMvcContext context) {
-            var render = context.Get("render", "javascript");
-            var type = context.Get("graph", "Column2D");
+            var render = context.Get("render");
+            var type = ResolveChartType(context);
             var id = context.Get("id", "fc-graph-" + DateTime.Now.Ticks);
-            var container = context.Get("container");
+            var container = context.Get("__targetdiv");
             var width = context.Get("width", "400");
             var height = context.Get("height", "300");
             var debug = context.Get("debug", "0");
             var script = string.Empty;
 
+            if (!string.IsNullOrWhiteSpace(container)) {
+                script += string.Format(@"
+<div class=""fusinchart-cintainer"" id=""{0}""></div>", id);
+                container = id;
+            }
+            script += string.Format(@"
+<script type=""text/javascript""><!--
+    {0}
+    var myChart = new FusionCharts('{1}', '{2}', '{3}', '{4}', '{5}');
+    {7}
+    myChart.render('{6}');
+// -->
+</script>", render == "javascript" ? "FusionCharts.setCurrentRenderer('"+ render + "');" : "", type, id, width, height, debug, container, RenderDataScript(context));
+            context.ContentType = "text/html";
+
             if (!string.IsNullOrWhiteSpace(context.Get("__standalone"))) {
-                script += @"
+                script = @"
+<html>
+<header>
+</header>
+<body>
 <script type=""text/javascript"" src=""/scripts/jquery.min.js""></script>
 <script type=""text/javascript"" src=""/scripts/fusioncharts/FusionCharts.js""></script>
 <link rel=""stylesheet"" type=""text/css"" href=""/styles/fusioncharts/presentation.css""></link>
-";   
+" + script + @"
+</body>
+</html>";
             }
 
-            script += string.Format(@"
-<script type=""text/javascript""><!--
-    FusionCharts.setCurrentRenderer('{0}');
-    var myChart = new FusionCharts('{1}', '{2}', '{3}', '{4}', '{5}');
-    {7};
-    myChart.render('{6}');
-// -->
-</script>", render, type, id, width, height, debug, container, RenderDataScript(context));
-            context.ContentType = "text/html";
             context.Output.Write(script);
+        }
+
+        private string ResolveChartType(IMvcContext context) {
+            var type = context.Get("__charttype");
+            if (string.IsNullOrWhiteSpace(type)) {
+                if (context.ActionResult is XElement) {
+                    type = ((XElement)context.ActionResult).Attribute("charttype").Value;
+                }
+                if (context.ActionResult is String && context.ActionResult.ToString().IndexOf("{", StringComparison.InvariantCulture) != 0) {
+                    type = ResolveService<ISpecialXmlParser>("json.xml.parser").ParseXml((string)context.ActionResult).Attribute("charttype").Value;
+                }
+            }
+            if (string.IsNullOrWhiteSpace(type)) {
+                type = "Column2D";
+            }
+            return type;
         }
 
         /// <summary>
@@ -72,7 +101,8 @@ namespace Qorpent.Mvc.Renders {
         /// <param name="error"></param>
         /// <param name="context"></param>
         public override void RenderError(Exception error, IMvcContext context) {
-            throw new NotImplementedException();
+            context.ContentType = "text/plain";
+            context.Output.Write(error.ToString());
         }
     }
 }
