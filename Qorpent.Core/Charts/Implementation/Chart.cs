@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Qorpent.Charts.Implementation {
@@ -36,7 +35,7 @@ namespace Qorpent.Charts.Implementation {
         /// </summary>
         public Chart() {
             Root = new ChartElement {
-                Name = "chart"
+                Name = ChartDefaults.ChartElementName
             };
         }
         /// <summary>

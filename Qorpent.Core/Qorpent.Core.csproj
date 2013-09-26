@@ -78,6 +78,7 @@
     <Compile Include="Charts\IChartRenderConfig.cs" />
     <Compile Include="Charts\Implementation\Chart.cs" />
     <Compile Include="Charts\Implementation\ChartAttribute.cs" />
+    <Compile Include="Charts\Implementation\ChartCategory.cs" />
     <Compile Include="Charts\Implementation\ChartDataset.cs" />
     <Compile Include="Charts\Implementation\ChartElement.cs" />
     <Compile Include="Config\ConfigBase.cs" />

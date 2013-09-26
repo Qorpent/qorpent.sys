@@ -24,15 +24,12 @@ namespace Qorpent.Charts.Implementation {
             };
 
             element.AddAttribute(new ChartAttribute {
-                Name = "value",
+                Name = ChartDefaults.DatasetSetValueAttributeName,
                 ParentElement = element,
                 Value = value.ToString(CultureInfo.InvariantCulture)
             });
-
-
-            AddChild(element);
-
-            return element;
+            
+            return AddChild(element);
         }
         /// <summary>
         /// 
@@ -44,7 +41,13 @@ namespace Qorpent.Charts.Implementation {
                     continue;
                 }
 
-                yield return Convert.ToInt32(child.Attributes.Where(_ => _.Name == "value").Select(_ => _.Value).First());
+                yield return Convert.ToInt32(
+                    child.Attributes.Where(
+                        _ => _.Name == ChartDefaults.DatasetSetValueAttributeName
+                    ).Select(
+                        _ => _.Value
+                    ).First()
+                );
             }
         }
     }
