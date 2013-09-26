@@ -12,7 +12,7 @@ namespace Qorpent.Bxl2
         ElementName = 1,
         AttributeName = 2,
         AttributeValue = 4,
-        Literal = ElementName | AttributeName,
+        //Literal = ElementName | AttributeName,
         SingleLineString = 8,
         MultiLineString = 16,
         Indent = 32,
@@ -20,7 +20,10 @@ namespace Qorpent.Bxl2
         Quoting1 = 128,
 		Quoting2 = 256,
 		Unquoting = 512,
-		//Commentary = 512,
+		//Commentary,
 		EscapingBackSlash = 1024,
+		Expression = 2048,
+		TextContent = 4096,
+		WaitingForNL = 8192,
     }
 }

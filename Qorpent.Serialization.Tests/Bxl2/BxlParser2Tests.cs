@@ -13,12 +13,41 @@ namespace Qorpent.Serialization.Tests.Bxl2
 	internal class BxlParser2Tests {
 		[Test]
 		[Explicit]
-		public void BxlParserTest() {
-			String bxl = @"test s=""""""\\""""""
+		public void BxlParserLevelTextContent() {
+			// текстовый контент для узлов определяется почему-то без учета отступов
+			String bxl = @"test1
+	test3
+:qwerty
+		test2
 ";
 
 			BxlParser parser = new BxlParser();
 			XElement res = parser.Parse(bxl, "ololo.txt", BxlParserOptions.NoLexData);
+			Console.WriteLine(res);
+		}
+
+		[Test]
+		[Explicit]
+		public void BxlParsertest() {
+			// текстовый контент для узлов определяется почему-то без учета отступов
+			String bxl = @"ss='qwerty'
+ss::test
+qq::test
+ww::test";
+
+			BxlParser parser = new BxlParser();
+			XElement res = parser.Parse(bxl, "ololo.txt", BxlParserOptions.NoLexData);
+			Console.WriteLine(res);
+		}
+
+		[Test]
+		[Explicit]
+		public void AnyTest() {
+			String bxl = @"	test
+	k=ololo";
+
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 		}
 
@@ -193,6 +222,79 @@ y""""""
 
 			XElement test1 = res.Elements().First();
 			Assert.AreEqual(test1.Attribute(XName.Get("q\r\nw\r\ne".Escape(EscapingType.XmlName))).Value, "r\r\nt\r\ny");
+		}
+
+		[Test]
+		public void CanUseExpression() {
+			String bxl = @"test1 qwerty=(
+nested (expression)
+)
+";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			XElement test1 = res.Elements().First();
+			Assert.AreEqual(test1.Attribute(XName.Get("qwerty")).Value, "(\r\nnested (expression)\r\n)");
+		}
+
+		[Test]
+		public void CanUseTextContentSimpleLiteral() {
+			String bxl = @"test1 : qwerty
+";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			Assert.AreEqual(res.Elements().First().Value, "qwerty");
+		}
+
+		[Test]
+		public void CanUseTextContentMultilineString() {
+			String bxl = @"test1 
+	: """"""qwerty'
+	: 'ololo""""""
+";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			Assert.AreEqual(res.Elements().First().Value, "qwerty'\r\n\t: 'ololo");
+		}
+
+		[Test]
+		public void CanUseTextContentWithAttributes() {
+			String bxl = @"test1 a b c=3:qwerty
+";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			Assert.AreEqual(res.Elements().First().Attribute(XName.Get("name")).Value, "b");
+			Assert.AreEqual(res.Elements().First().Attribute(XName.Get("c")).Value, "3");
+			Assert.AreEqual(res.Elements().First().Value, "qwerty");
+		}
+
+		[Test]
+		public void CanUseTextContentWithChildElements() {
+			String[] bxl = {
+@"test1 
+	:qwerty
+	test2",
+@"test1 
+	test2
+	:qwerty"
+			};
+
+			IBxlParser p = new BxlParser2();
+			foreach (string code in bxl) {
+				XElement res = p.Parse(code);
+				Console.WriteLine(res);
+
+				Assert.AreEqual(res.Elements().First().Name.LocalName, "test1");
+				Assert.AreEqual(res.Elements().First().Value, "qwerty");
+				Assert.AreEqual(res.Elements().First().Elements().First().Name.LocalName, "test2");
+			}
 		}
 	}
 }
