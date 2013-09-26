@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using NUnit.Framework;
 using Qorpent.Charts.Implementation;
 
@@ -28,6 +29,40 @@ namespace Qorpent.Core.Tests.Charts {
             Assert.AreEqual("value", element.GetAttributeValue("test"));
             Assert.AreEqual("OK", element.GetAttributeValue("test2"));
             Assert.AreEqual(null, element.GetAttributeValue("NOT_EXISTS"));
+        }
+        [Test]
+        public void CanDrawElementStructure() {
+            var element = new ChartElement();
+            element.AddAttribute("test", "value");
+            element.AddAttribute("test2", "OK");
+
+            element.AddChild("test");
+
+            var xml = element.DrawStructure();
+            Debug.Print(xml.ToString());
+
+            Assert.AreEqual("value", xml.Attribute("test").Value);
+            Assert.AreEqual("OK", xml.Attribute("test2").Value);
+            Assert.NotNull(xml.Element("test"));
+        }
+        [Test]
+        public void CanDrawChartStructure() {
+            var chart = new Chart();
+
+            var dataset1 = new ChartDataset();
+            dataset1.AddValue(1000);
+            dataset1.AddValue(5003);
+            dataset1.AddValue(2031);
+
+            var dataset2 = new ChartDataset();
+            dataset2.AddValue(1000);
+            dataset2.AddValue(5003);
+            dataset2.AddValue(2031);
+
+            chart.AddDataset(dataset1);
+            chart.AddDataset(dataset2);
+
+            Debug.Print(chart.DrawStructure().ToString());
         }
     }
 }

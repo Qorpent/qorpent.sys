@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace Qorpent.Charts.Implementation {
     /// <summary>
@@ -14,6 +15,10 @@ namespace Qorpent.Charts.Implementation {
         ///     Внутренний список дочерних элементов
         /// </summary>
         private readonly IList<IChartElement> _childs;
+        /// <summary>
+        ///     Родительский элемент
+        /// </summary>
+        public IChartElement Parent { get; set; }
         /// <summary>
         ///     Имя элемента
         /// </summary>
@@ -38,32 +43,61 @@ namespace Qorpent.Charts.Implementation {
             _childs = new List<IChartElement>();
         }
         /// <summary>
+        ///     Устанавливает родительский элемент
+        /// </summary>
+        /// <param name="parent">Родительский элемент</param>
+        public void SetParent(IChartElement parent) {
+            Parent = parent;
+        }
+        /// <summary>
         ///     Добавляет атрибут во внутреннюю коллекцию
         /// </summary>
         /// <param name="chartAttribute">Представление атрибута</param>
-        public void AddAttribute(IChartAttribute chartAttribute) {
+        public IChartAttribute AddAttribute(IChartAttribute chartAttribute) {
             if (!HasAttribute(chartAttribute.Name)) {
                 _attributes.Add(chartAttribute);
             }
+
+            return chartAttribute;
         }
         /// <summary>
         ///     Добавляет атрибут во внутреннюю коллекцию
         /// </summary>
         /// <param name="name">Имя атрибута</param>
         /// <param name="value">Значение атрибута</param>
-        public void AddAttribute(string name, string value) {
-            AddAttribute(new ChartAttribute {
+        public IChartAttribute AddAttribute(string name, string value) {
+            var attribute = new ChartAttribute {
                 Name = name,
                 ParentElement = this,
                 Value = value
-            });
+            };
+
+            AddAttribute(attribute);
+
+            return attribute;
         }
         /// <summary>
         ///     Добавляет дочерний элемент во внутреннюю коллекцию
         /// </summary>
         /// <param name="chartElement">Представление элемента</param>
-        public void AddChild(IChartElement chartElement) {
+        public IChartElement AddChild(IChartElement chartElement) {
+            chartElement.SetParent(this);
             _childs.Add(chartElement);
+            return chartElement;
+        }
+        /// <summary>
+        ///     Добавляет дочерний элемент во внутреннюю коллекцию
+        /// </summary>
+        /// <param name="name">Имя элемента</param>
+        public IChartElement AddChild(string name) {
+            var chartElement = new ChartElement {
+                Name = name
+            };
+
+            chartElement.SetParent(this);
+            _childs.Add(chartElement);
+
+            return chartElement;
         }
         /// <summary>
         ///     Проверяет наличие атрибута
@@ -98,6 +132,23 @@ namespace Qorpent.Charts.Implementation {
             }
 
             return attrs.FirstOrDefault();
+        }
+        /// <summary>
+        ///     Разрисовка структуры
+        /// </summary>
+        /// <returns>XML-представление элемента</returns>
+        public XElement DrawStructure() {
+            var xml = new XElement(Name ?? "Element");
+
+            foreach (var chartAttribute in Attributes) {
+                xml.SetAttributeValue(chartAttribute.Name, chartAttribute.Value);
+            }
+
+            foreach (var chartElement in Childs) {
+                xml.Add(((ChartElement)chartElement).DrawStructure());
+            }
+
+            return xml;
         }
     }
 }

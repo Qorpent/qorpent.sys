@@ -10,11 +10,11 @@ namespace Qorpent.Charts.Implementation {
         /// <summary>
         ///     Внутренний список категорий
         /// </summary>
-        private readonly IList<IChartElement> _categories;
+        private readonly IList<IChartElement> _categories = new List<IChartElement>();
         /// <summary>
         ///     Внутренний список датасетов
         /// </summary>
-        private readonly IList<IChartElement> _datasets;
+        private readonly IList<IChartElement> _datasets = new List<IChartElement>();
         /// <summary>
         ///     Корневой элемент
         /// </summary>
@@ -34,18 +34,24 @@ namespace Qorpent.Charts.Implementation {
         /// <summary>
         ///     Представление графика
         /// </summary>
+        public Chart() {
+            Root = new ChartElement {
+                Name = "chart"
+            };
+        }
+        /// <summary>
+        ///     Представление графика
+        /// </summary>
         /// <param name="root">Представление корневого элемента</param>
         public Chart(IChartElement root) {
             Root = root;
-
-            _categories = new List<IChartElement>();
-            _datasets = new List<IChartElement>();
         }
         /// <summary>
         ///     Добавление категории
         /// </summary>
         /// <param name="category">Представление категории</param>
         public void AddCategory(IChartElement category) {
+            category.SetParent(Root);
             _categories.Add(category);
         }
         /// <summary>
@@ -53,6 +59,7 @@ namespace Qorpent.Charts.Implementation {
         /// </summary>
         /// <param name="dataset">Представление датасета</param>
         public void AddDataset(IChartElement dataset) {
+            dataset.SetParent(Root);
             _datasets.Add(dataset);
         }
         /// <summary>
@@ -60,7 +67,17 @@ namespace Qorpent.Charts.Implementation {
         /// </summary>
         /// <returns></returns>
         public XElement DrawStructure() {
-            throw new NotImplementedException();
+            var root = Root.DrawStructure();
+
+            foreach (var chartElement in Categories) {
+                root.Add(chartElement.DrawStructure());
+            }
+
+            foreach (var chartElement in Datasets) {
+                root.Add(chartElement.DrawStructure());
+            }
+
+            return root;
         }
     }
 }

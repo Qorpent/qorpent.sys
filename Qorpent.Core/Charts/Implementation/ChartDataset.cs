@@ -9,6 +9,12 @@ namespace Qorpent.Charts.Implementation {
     /// </summary>
     public class ChartDataset : ChartElement {
         /// <summary>
+        ///     Представление датасета
+        /// </summary>
+        public ChartDataset() {
+            Name = ChartDefaults.DatasetElementName;
+        }
+        /// <summary>
         ///     Добавление значения в датасет
         /// </summary>
         /// <returns>Элемент, при помощи которого было представлено значение</returns>
