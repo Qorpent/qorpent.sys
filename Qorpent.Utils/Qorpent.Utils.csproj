@@ -38,6 +38,7 @@
     <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="Extensions\DateExtensions.cs" />
     <Compile Include="Extensions\FileNameResolverExtensions.cs" />
+    <Compile Include="Extensions\Html\XmlHtmlExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Extensions\SecurityExtensions.cs" />
     <Compile Include="Extensions\SlashListHelper.cs" />

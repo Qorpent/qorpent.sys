@@ -516,7 +516,7 @@ namespace Qorpent.BSharp {
 
 		private void PerformMergingWithElements() {
 			foreach (var root in _cls.AllElements.Where(_ => _.Type == BSharpElementType.Define).ToArray()) {
-				var allroots = _cls.Compiled.Elements(root.Name).ToArray();
+				var allroots = _cls.Compiled.Descendants(root.Name).ToArray();
 				var groupedroots = allroots.GroupBy(_ => _.GetCode());
 				foreach(var doublers in groupedroots.Where(_=>_.Count()>1)) {
 					doublers.Skip(1).Remove();
@@ -527,9 +527,14 @@ namespace Qorpent.BSharp {
 					foreach (var g in groupedroots) {
 						var e = g.First();
 						//реверсировать надо для правильного порядка обхода
-						var candidates = e.ElementsBeforeSelf().Reverse().Where(_=>_.GetCode()==g.Key).ToArray();
-
-						foreach (var o in candidates) {
+					    XElement[] candidates;
+					    if (e.Parent == _cls.Compiled) {
+					        candidates = e.ElementsBeforeSelf().Reverse().Where(_ => _.GetCode() == g.Key).ToArray();
+					    }
+					    else {
+                            candidates = _cls.Compiled.Elements().Reverse().Where(_ => _.GetCode() == g.Key).ToArray();
+					    }
+					    foreach (var o in candidates) {
 							var over = alloverrides.FirstOrDefault(_ => _.Name == o.Name.LocalName);
 							if (null != over) {
 								if (over.Type == BSharpElementType.Override) {

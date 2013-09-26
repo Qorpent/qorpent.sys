@@ -35,7 +35,25 @@ namespace Qorpent.Utils.Extensions {
 	/// </summary>
 	public static class XmlExtensions {
 		private static readonly string[] Idatributes = new[] {"id", "code", "__id", "__code", "ID"};
-
+        /// <summary>
+        /// Создает или возвращает дочерний элемент
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static XElement EnsureSingleElement(this XElement element, string name) {
+            var existed = element.Elements(name).ToArray();
+            if (existed.Length == 1) {
+                return existed[0];
+            }
+            if (existed.Length == 0) {
+                var result = new XElement(name);
+                element.Add(result);
+                return result;
+            }
+            throw new Exception("multiple instance");
+        }
 	    /// <summary>
 	    /// Возвращает true если код, имя, значение равны name или есть атрибут с именем name, приводимый к true
 	    /// </summary>
@@ -594,5 +612,39 @@ namespace Qorpent.Utils.Extensions {
 
             return xElement;
         }
+        /// <summary>
+        /// Создает элемент с телом и атрибутами
+        /// </summary>
+        /// <param name="tagname"></param>
+        /// <param name="text"></param>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
+	    public static XElement CreateElement(string tagname, string text = "", object attributes = null) {
+            var element = new XElement(tagname);
+            if (!String.IsNullOrWhiteSpace(text)) {
+                element.Value = text;
+            }
+            if (null != attributes) {
+                var dict = attributes.ToDict();
+                foreach (var p in dict) {
+                    element.SetAttributeValue(p.Key.Escape(EscapingType.XmlName), p.Value);
+                }
+            }
+            return element;
+        }
+
+	    /// <summary>
+	    /// Добавляет дочерний элемент и возвращает его
+	    /// </summary>
+	    /// <param name="parent"></param>
+	    /// <param name="tagname"></param>
+	    /// <param name="text"></param>
+	    /// <param name="attributes"></param>
+	    /// <returns></returns>
+	    public static XElement AddElement(this XElement parent, string tagname, string text = null, object attributes= null ) {
+	        var element = CreateElement(tagname, text, attributes);
+	        parent.Add(element);
+	        return element;
+	    }
 	}
 }
