@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Qorpent.Charts {
+﻿namespace Qorpent.Charts {
     /// <summary>
-    /// 
+    ///     Конфиг чарт рендера
     /// </summary>
     public interface IChartRenderConfig {
         /// <summary>
-        ///     «Нечто» — представление графика
+        ///     Выходной формат рендера
         /// </summary>
-        IChart ChartObject { get; set; }
+        ChartRenderFormat RenderFormat { get; set; }
     }
 }
