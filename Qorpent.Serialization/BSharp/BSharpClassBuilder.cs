@@ -7,6 +7,7 @@ using Qorpent.BSharp.Matcher;
 using Qorpent.Config;
 using Qorpent.Log;
 using Qorpent.LogicalExpressions;
+using Qorpent.Serialization;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.LogicalExpressions;
@@ -515,6 +516,7 @@ namespace Qorpent.BSharp {
 		}
 
 		private void PerformMergingWithElements() {
+
 			foreach (var root in _cls.AllElements.Where(_ => _.Type == BSharpElementType.Define).ToArray()) {
 				var allroots = _cls.Compiled.Descendants(root.Name).ToArray();
 				var groupedroots = allroots.GroupBy(_ => _.GetCode());
@@ -523,6 +525,10 @@ namespace Qorpent.BSharp {
 				}
 				var alloverrides =
 					_cls.AllElements.Where(_ => _.Type != BSharpElementType.Define && _.TargetName == root.Name).ToArray();
+                //если нет целевых элементов, то не обрабатываем мержи
+                if (!_cls.Compiled.Elements().Any(_ => alloverrides.Any(__ => __.Name == _.Name.LocalName))) {
+                    continue;
+                }
 //				foreach (var over in alloverrides) {
 					foreach (var g in groupedroots) {
 						var e = g.First();
