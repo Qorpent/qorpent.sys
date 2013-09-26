@@ -70,6 +70,16 @@
     <Compile Include="BSharp\Runtime\IBSharpRuntimeService.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptor.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassResolutionType.cs" />
+    <Compile Include="Charts\ChartDefaults.cs" />
+    <Compile Include="Charts\IChart.cs" />
+    <Compile Include="Charts\IChartAttribute.cs" />
+    <Compile Include="Charts\IChartElement.cs" />
+    <Compile Include="Charts\IChartRender.cs" />
+    <Compile Include="Charts\IChartRenderConfig.cs" />
+    <Compile Include="Charts\Implementation\Chart.cs" />
+    <Compile Include="Charts\Implementation\ChartAttribute.cs" />
+    <Compile Include="Charts\Implementation\ChartDataset.cs" />
+    <Compile Include="Charts\Implementation\ChartElement.cs" />
     <Compile Include="Config\ConfigBase.cs" />
     <Compile Include="Config\ConfigRenderType.cs" />
     <Compile Include="Config\DictionaryCompatibleConfig.cs" />
