@@ -18,6 +18,15 @@ namespace Qorpent.BSharp
         public int Level {
             get { return _level; }
         }
+        /// <summary>
+        /// Записывает информацию об элементах
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public IBSharpCodeBuilder WriteClassElement(string element) {
+            WriteElement(BSharpSyntax.ClassElementDefinition, element);
+            return this;
+        }
 
         /// <summary>
         /// Возвращает текущее строчное преобразование буфера

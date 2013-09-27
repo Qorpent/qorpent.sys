@@ -92,7 +92,7 @@ namespace Qorpent.Mvc
 		}
 
 		private  Task<Stream> GetStream(string command, object parameters, string format) {
-			var url = ApplicationRoot + "/" + command + "." + format + ".qweb";
+			var url = ApplicationRoot + "/" + command.Replace(".","/") + "." + format + ".qweb";
 			var resourceConfig = new ResourceConfig {
 				Credentials = GetCredentials(),
 				AcceptAllCeritficates = true,
