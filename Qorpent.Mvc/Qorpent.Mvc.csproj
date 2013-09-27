@@ -8,6 +8,7 @@
     <AssemblyName>Qorpent.Mvc</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Actions\RenderChartAction.cs" />
     <Compile Include="Actions\ContainerAction.cs" />
     <Compile Include="Actions\DoNothingAction.cs" />
     <Compile Include="Actions\GetClusterNodeLoad.cs" />
