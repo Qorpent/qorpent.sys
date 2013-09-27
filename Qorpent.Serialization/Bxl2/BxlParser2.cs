@@ -28,8 +28,12 @@ namespace Qorpent.Bxl2 {
         private readonly StringBuilder _buf = new StringBuilder(256);
         private readonly CharStack _stack = new CharStack();
 	    private int _symbolCount;
+	    private int _tabIgnore;
+	    private int _tabs;
 	    private int _anonCount;
+	    private int _def_ns_count;
 	    private String _value;
+	    private String _prefix;
 	    private bool _isString;
 	    private bool _isExpression;
 
@@ -41,6 +45,7 @@ namespace Qorpent.Bxl2 {
         /// </summary>
         public BxlParser2() {
             map = new Dictionary<ReadMode, stateOperation>() {
+				{ReadMode.Start,				processStart},
                 {ReadMode.ElementName,			processElementName},
 				{ReadMode.AttributeName,		processAttributeName},
 				{ReadMode.AttributeValue,		processAttributeValue},
@@ -55,6 +60,10 @@ namespace Qorpent.Bxl2 {
 				{ReadMode.Expression,			processExpression},
 				{ReadMode.TextContent,			processTextContent},
 				{ReadMode.WaitingForNL,			processWaitingForNL},
+				{ReadMode.NamespaceName,		processNamespaceName},
+				{ReadMode.NamespaceValue,		processNamespaceValue},
+				{ReadMode.Colon,				processColon},
+				{ReadMode.Commentary,			processCommentary},
             };
         }
 
@@ -74,8 +83,12 @@ namespace Qorpent.Bxl2 {
 
 	        _default_namespace_prefix += filename + "_";
 			_symbolCount = 0;
+	        _tabIgnore = 0;
+	        _tabs = 0;
 			_anonCount = 0;
+	        _def_ns_count = 0;
 			_value = "";
+	        _prefix = "";
 			_isString = false;
 			_isExpression = false;
 	        _buf.Clear();
@@ -83,7 +96,7 @@ namespace Qorpent.Bxl2 {
 
             _root = new XElement(ROOT_NAME);
 	        _current = _root;
-            _mode = ReadMode.NewLine;
+            _mode = ReadMode.Start;
             foreach (char c in code) {
                 map[_mode](c);
             }
@@ -134,15 +147,24 @@ namespace Qorpent.Bxl2 {
 					return;
 				case '\r':
                 case '\n':
-                    throw new BxlException("unexpected '\\r' or '\\n' symbol");
+					_mode = ReadMode.NewLine;
+		            return; //throw new BxlException("unexpected '\\r' or '\\n' symbol");
                 case '\t':
-                    _current = _current.Elements().Last();
+					if (_tabs == 0)
+						_current = _current.Elements().Last();
+					else
+						_tabs--;
                     return;
 				case '\\':
 					throw new BxlException("escape not in string");
 				case '(':
 				case ')':
 					throw new BxlException("unexpected symbol " + c);
+				case '#':
+		            map[_mode]('\n');
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Commentary;
+		            return;
                 default:
                     _buf.Append(c);
                     _mode = ReadMode.ElementName;
@@ -156,6 +178,7 @@ namespace Qorpent.Bxl2 {
 				throw new BxlException("new line in regular string");
 
 		    _anonCount = 0;
+		    _tabs = _tabIgnore;
 	        _current = _root;
             switch (c) {
                 case ':':
@@ -182,7 +205,10 @@ namespace Qorpent.Bxl2 {
                 case '\n':
                     return;
                 case '\t':
-                    _current = _current.Elements().Last();
+					if (_tabs == 0)
+						_current = _current.Elements().Last();
+					else
+						_tabs--;
                     _mode = ReadMode.Indent;
                     return;
 				case '\\':
@@ -190,6 +216,11 @@ namespace Qorpent.Bxl2 {
 				case '(':
 				case ')':
 					throw new BxlException("unexpected symbol " + c);
+				case '#':
+					map[_mode]('\n');
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Commentary;
+					return;
                 default:
                     _buf.Append(c);
 					_mode = ReadMode.ElementName;
@@ -200,35 +231,47 @@ namespace Qorpent.Bxl2 {
 		private void processElementName(char c) {
 			switch (c) {
 				case ':':
-					addNode();
-					_mode = ReadMode.TextContent;
+					saveValue();
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Colon;
 					return;
 				case '"':
+					if (_prefix.Length != 0)
+						throw new BxlException("unexpected symbol " + c);
 					_stack.Push((char)ReadMode.AttributeName);
 					_mode = ReadMode.Quoting1;
 					return;
 				case '\'':
+					if (_prefix.Length != 0)
+						throw new BxlException("unexpected symbol " + c);
 					_stack.Push((char)ReadMode.AttributeName);
 					_stack.Push(c);
 					_mode = ReadMode.SingleLineString;
 					return;
 				case '=':
-					saveAttributeName();
+					saveValue();
 					_mode = ReadMode.AttributeValue;
 					return;
 				case ',':
 				case '\t':
 				case ' ':
+					saveValue();
 					addNode();
 					_mode = ReadMode.AttributeName;
 					return;
 				case '\r':
 				case '\n':
+					saveValue();
 					addNode();
 					_mode = ReadMode.NewLine;
 					return;
 				case '\\':
 					throw new BxlException("escape not in string");
+				case '#':
+					map[_mode]('\n');
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Commentary;
+					return;
 				default:
 					_buf.Append(c);
 					return;
@@ -238,16 +281,20 @@ namespace Qorpent.Bxl2 {
 		private void processAttributeName(char c) {
 			switch (c) {
 				case ':':
-					saveAttributeName();
-					addAnonAttribute();
-					_mode = ReadMode.TextContent;
+					saveValue();
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Colon;
 					return;
 				case '"':
+					if (_prefix.Length != 0)
+						throw new BxlException("unexpected symbol " + c);
 					addAnonAttribute();
 					_stack.Push((char)_mode);
 					_mode = ReadMode.Quoting1;
 					return;
 				case '\'':
+					if (_prefix.Length != 0)
+						throw new BxlException("unexpected symbol " + c);
 					addAnonAttribute();
 					_stack.Push((char)_mode);
 					_stack.Push(c);
@@ -256,17 +303,17 @@ namespace Qorpent.Bxl2 {
 				case '=':
 					if (_isExpression)
 						throw new BxlException("can not assign to expression");
-					saveAttributeName();
+					saveValue();
 					_mode = ReadMode.AttributeValue;
 					return;
 				case '\t':
 				case ',':
 				case ' ':
-					saveAttributeName();
+					saveValue();
 					return;
 				case '\r':
 				case '\n':
-					saveAttributeName();
+					saveValue();
 					addAnonAttribute();
 					_mode = ReadMode.NewLine;
 					return;
@@ -283,6 +330,11 @@ namespace Qorpent.Bxl2 {
 				case ')':
 					if (_buf.Length != 0)
 						_buf.Append(c);
+					return;
+				case '#':
+					map[_mode]('\n');
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Commentary;
 					return;
 				default:
 					_buf.Append(c);
@@ -338,6 +390,11 @@ namespace Qorpent.Bxl2 {
 				case ')':
 					if (_buf.Length != 0)
 						_buf.Append(c);
+					return;
+				case '#':
+					map[_mode]('\n');
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Commentary;
 					return;
 				default:
 					_buf.Append(c);
@@ -509,6 +566,11 @@ namespace Qorpent.Bxl2 {
 					if (_buf.Length != 0)
 						_buf.Append(c);
 				    return;
+				case '#':
+					map[_mode]('\n');
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Commentary;
+					return;
 				default:
 					_buf.Append(c);
 				    return;
@@ -525,47 +587,269 @@ namespace Qorpent.Bxl2 {
 				case '\r':
 					_mode = ReadMode.NewLine;
 				    return;
+				case '#':
+					map[_mode]('\n');
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Commentary;
+					return;
 				default:
 					throw new BxlException("unexpected symbol " + c);
 		    }
 	    }
 
+		private void processStart(char c) {
+			switch (c) {
+				case ':':
+					_mode = ReadMode.TextContent;
+					return;
+				case ',':
+				case ')':
+					return;
+				case '=':
+				case '(':
+					throw new BxlException("unexpected symbol "+ c);
+				case '\\':
+					throw new BxlException("escape not in string");
+				case '"':
+					_stack.Push((char)ReadMode.NamespaceName);
+					_mode = ReadMode.Quoting1;
+					return;
+				case '\'':
+					_stack.Push((char)ReadMode.NamespaceName);
+					_stack.Push(c);
+					_mode = ReadMode.SingleLineString;
+					return;
+				case ' ':
+					_symbolCount++;
+					if (_symbolCount == TAB_SPACE_COUNT) {
+						_symbolCount = 0;
+						processStart('\t');
+					}
+					return;
+				case '\n':
+				case '\r':
+					_symbolCount = 0;
+					_tabIgnore = 0;
+					return;
+				case '\t':
+					_tabIgnore++;
+					return;
+				case '#':
+					map[_mode]('\n');
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Commentary;
+					return;
+				default:
+					_buf.Append(c);
+					_mode = ReadMode.NamespaceName;
+					return;
+			}
+		}
+
+		private void processNamespaceName(char c) {
+			switch (c) {
+				case ':':
+					saveValue();
+					_stack.Push((char)ReadMode.ElementName);
+					_mode = ReadMode.Colon;
+					return;
+				case '\t':
+				case ' ':
+				case ',':
+					saveValue();
+					return;
+				case '=':
+					saveValue();
+					_mode = ReadMode.NamespaceValue;
+					return;
+				case '(':
+				case ')':
+				case '"':
+					if (_value.Length != 0) {
+						addNode();
+						_stack.Push((char)ReadMode.AttributeName);
+						_mode = ReadMode.Quoting1;
+					} else
+						throw new BxlException("unexpected symbol " + c);
+					return;
+				case '\'':
+					if (_value.Length != 0) {
+						addNode();
+						_stack.Push((char)ReadMode.AttributeName);
+						_stack.Push(c);
+						_mode = ReadMode.SingleLineString;
+					} else
+						throw new BxlException("unexpected symbol " + c);
+					return;
+				case '\n':
+				case '\r':
+					saveValue();
+					addNode();
+					_mode = ReadMode.NewLine;
+					return;
+				case '\\':
+					throw new BxlException("escaping not in string");
+				case '#':
+					map[_mode]('\n');
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Commentary;
+					return;
+				default:
+					_buf.Append(c);
+					if (_value.Length != 0) {
+						addNode();
+						_mode = ReadMode.AttributeName;
+					}
+					return;
+			}
+		}
+
+		private void processNamespaceValue(char c) {
+			switch (c) {
+				case ':':
+				case ',':
+				case '=':
+					throw new BxlException("unexpected symbol " + c);
+				case '"':
+					if (_buf.Length == 0) {
+						_stack.Push((char)_mode);
+						_mode = ReadMode.Quoting1;
+					} else
+						throw new BxlException("unexpected symbol " + c);
+					return;
+				case '\'':
+					if (_buf.Length == 0) {
+						_stack.Push((char)_mode);
+						_stack.Push(c);
+						_mode = ReadMode.SingleLineString;
+					} else
+						throw new BxlException("unexpected symbol " + c);
+					return;
+				case '\t':
+				case ' ':
+					if (_buf.Length != 0) {
+						addNamespace();
+						_mode = ReadMode.WaitingForNL;
+					}
+					return;
+				case '\n':
+				case '\r':
+					if (_buf.Length != 0) {
+						addNamespace();
+						_mode = ReadMode.Start;
+					} else 
+						throw new BxlException("unexpected symbol " + c);
+					return;
+				case '\\':
+					throw new BxlException("escaping not in string");
+				case '(':
+					if (_buf.Length == 0) {
+						_stack.Push((char)_mode);
+						_stack.Push(c);
+						_mode = ReadMode.Expression;
+					}
+					_buf.Append(c);
+					return;
+				case ')':
+					if (_buf.Length != 0)
+						_buf.Append(c);
+					return;
+				case '#':
+					map[_mode]('\n');
+					_stack.Push((char)_mode);
+					_mode = ReadMode.Commentary;
+					return;
+				default:
+					_buf.Append(c);
+					return;
+			}
+		}
+
+		private void processColon(char c) {
+			switch (c) {
+				case ':':
+					if (_value.Length == 0)
+						throw new BxlException("wrong namespace");
+					_prefix = _value;
+					_value = "";
+					_mode = (ReadMode)_stack.Pop();
+					return;
+				default:
+					_mode = (ReadMode)_stack.Pop();
+					if (_mode == ReadMode.ElementName)
+						addNode();
+					else if (_mode == ReadMode.AttributeName)
+						addAnonAttribute();
+					_mode = ReadMode.TextContent;
+					map[_mode](c);
+					return;
+			}
+		}
+
+		private void processCommentary(char c) {
+			if (c == '\n' || c == '\r')
+				_mode = (ReadMode) _stack.Pop();
+		}
+
 		//		modifying tree
 
 	    private void addNode() {
-			String s = _buf.ToString().Escape(EscapingType.XmlName);
-		    _buf.Clear();
-			XElement node = new XElement(s);
-			_current.Add(node);
+			String s = _value.Escape(EscapingType.XmlName);
+		    _value = "";
+
+			String ns = "";
+			if (_prefix.Length != 0) {
+				XNamespace xns = _root.GetNamespaceOfPrefix(_prefix);
+				if (xns == null) {
+					ns = addDefaultNamespace(_prefix);
+				} else
+					ns = xns.NamespaceName;
+			}
+			XElement node = new XElement(XName.Get(s, ns));
+		    _current.Add(node);
 			_current = node;
+		    _prefix = "";
 	    }
 
 	    private void addAnonAttribute() {
 		    if (_value.Length == 0)
 			    return;
+
+			String ns = "";
+			if (_prefix.Length != 0) {
+				XNamespace xns = _root.GetNamespaceOfPrefix(_prefix);
+				if (xns == null) {
+					ns = addDefaultNamespace(_prefix);
+				} else
+					ns = xns.NamespaceName;
+				_prefix += "::"; // for default attributes
+			}
+
 		    switch (_anonCount) {
 			    case 0:
-					_current.SetAttributeValue(XName.Get(ANON_CODE), _value);
-					_current.SetAttributeValue(XName.Get(ANON_ID), _value);
+					_current.SetAttributeValue(XName.Get(ANON_CODE), _prefix + _value);
+					_current.SetAttributeValue(XName.Get(ANON_ID), _prefix + _value);
 				    break;
 				case 1:
-					_current.SetAttributeValue(XName.Get(ANON_NAME), _value);
+					_current.SetAttributeValue(XName.Get(ANON_NAME), _prefix + _value);
 				    break;
 				default:
 				    if (_isString) {
 					    String name = ANON_PREFIX + (_current.Attributes().Count() + 1);
-						_current.SetAttributeValue(XName.Get(name), _value);
+						_current.SetAttributeValue(XName.Get(name), _value); 
+						// namespace not needed because this anonymous string attribute can not be declared with namespace prefix
 				    } else
-						_current.SetAttributeValue(XName.Get(_value.Escape(EscapingType.XmlName)), ANON_VALUE);
+						_current.SetAttributeValue(XName.Get(_value.Escape(EscapingType.XmlName), ns), ANON_VALUE);
 				    break;
 		    }
 		    _isExpression = false;
 			_isString = false;
 			_value = "";
+			_prefix = "";
 		    _anonCount++;
 	    }
 
-	    private void saveAttributeName() {
+	    private void saveValue() {
 			if (_buf.Length == 0)
 				return;
 			_value = _buf.ToString();
@@ -573,12 +857,25 @@ namespace Qorpent.Bxl2 {
 	    }
 
 	    private void addAttributeValue() {
-			// checking for empty values must be implemented in invoker !
+			// checking for empty _buf must be implemented in invoker !
+			if (_value.Length == 0)
+				throw new BxlException("empty attribute name");
+
+			String ns = "";
+			if (_prefix.Length != 0) {
+				XNamespace xns = _root.GetNamespaceOfPrefix(_prefix);
+				if (xns == null) {
+					ns = addDefaultNamespace(_prefix);
+				} else
+					ns = xns.NamespaceName;
+			}
+
 		    String s = _buf.ToString();
 			_buf.Clear();
-			_current.SetAttributeValue(XName.Get(_value.Escape(EscapingType.XmlName)), s);
+			_current.SetAttributeValue(XName.Get(_value.Escape(EscapingType.XmlName), ns), s);
 			_isExpression = false;
 			_isString = false;
+		    _prefix = "";
 		    _value = "";
 	    }
 
@@ -593,6 +890,23 @@ namespace Qorpent.Bxl2 {
 		    _current.Add(new XText(s));
 			_mode = ReadMode.WaitingForNL;
 	    }
+
+		private void addNamespace() {
+			// checking for empty _buf must be implemented in invoker !
+			if (_value.Length == 0)
+				throw new BxlException("empty namespace name");
+			String s = _value.Escape(EscapingType.XmlName);
+			_root.SetAttributeValue(XNamespace.Xmlns + s, _buf.ToString());
+			_value = "";
+			_buf.Clear();
+		}
+
+		private String addDefaultNamespace(String prefix) {
+			String s = prefix.Escape(EscapingType.XmlName);
+			String ns = _default_namespace_prefix + new string('X', ++_def_ns_count);
+			_root.SetAttributeValue(XNamespace.Xmlns + s, ns);
+			return ns;
+		}
 
 		//		utils
 

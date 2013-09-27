@@ -13,38 +13,9 @@ namespace Qorpent.Serialization.Tests.Bxl2
 	internal class BxlParser2Tests {
 		[Test]
 		[Explicit]
-		public void BxlParserLevelTextContent() {
-			// текстовый контент для узлов определяется почему-то без учета отступов
-			String bxl = @"test1
-	test3
-:qwerty
-		test2
-";
-
-			BxlParser parser = new BxlParser();
-			XElement res = parser.Parse(bxl, "ololo.txt", BxlParserOptions.NoLexData);
-			Console.WriteLine(res);
-		}
-
-		[Test]
-		[Explicit]
-		public void BxlParsertest() {
-			// текстовый контент для узлов определяется почему-то без учета отступов
-			String bxl = @"ss='qwerty'
-ss::test
-qq::test
-ww::test";
-
-			BxlParser parser = new BxlParser();
-			XElement res = parser.Parse(bxl, "ololo.txt", BxlParserOptions.NoLexData);
-			Console.WriteLine(res);
-		}
-
-		[Test]
-		[Explicit]
 		public void AnyTest() {
-			String bxl = @"	test
-	k=ololo";
+			String bxl = @"ns1=qwerty
+test ns::a";
 
 			IBxlParser p = new BxlParser2();
 			XElement res = p.Parse(bxl);
@@ -295,6 +266,116 @@ nested (expression)
 				Assert.AreEqual(res.Elements().First().Value, "qwerty");
 				Assert.AreEqual(res.Elements().First().Elements().First().Name.LocalName, "test2");
 			}
+		}
+
+		[Test]
+		public void CanDeclareNamespace() {
+			String bxl = @"ns1=qwerty
+""""""ns
+2""""""=""""""ololo""""""
+test";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			Assert.AreEqual(res.GetNamespaceOfPrefix("ns1").NamespaceName, "qwerty");
+			Assert.AreEqual(res.GetNamespaceOfPrefix("ns\r\n2".Escape(EscapingType.XmlName)).NamespaceName, "ololo");
+		}
+
+		[Test]
+		public void CanProcessExtraTabs() {
+			String bxl = @"	test1
+	test2";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			Assert.AreEqual(res.Elements().First().Name.LocalName, "test1");
+			Assert.AreEqual(res.Elements().Last().Name.LocalName, "test2");
+		}
+
+		[Test]
+		public void CanUseElementNamespace() {
+			String bxl = @"ns1=qwerty
+ns2=qwerty2
+ns1::test1
+	ns2::test2";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			XElement test1 = res.Elements().First();
+			XElement test2 = test1.Elements().First();
+
+			Assert.AreEqual(test1.Name.LocalName, "test1");
+			Assert.AreEqual(test1.Name.NamespaceName, "qwerty");
+			Assert.AreEqual(test2.Name.LocalName, "test2");
+			Assert.AreEqual(test2.Name.NamespaceName, "qwerty2");
+		}
+
+		[Test]
+		public void CanUseAttributeNamespace() {
+			String bxl = @"ns1=qwerty
+ns2=qwerty2
+test1 ns1::x=2 ns2::y=3";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			XElement test1 = res.Elements().First();
+			XAttribute att1 = test1.Attributes().First();
+			XAttribute att2 = test1.Attributes().Last();
+
+			Assert.AreEqual(att1.Name.LocalName, "x");
+			Assert.AreEqual(att1.Name.NamespaceName, "qwerty");
+			Assert.AreEqual(att2.Name.LocalName, "y");
+			Assert.AreEqual(att2.Name.NamespaceName, "qwerty2");
+		}
+
+		[Test]
+		public void CanUseAnonAttributeNamespace() {
+			String bxl = @"ns1=qwerty
+test a b ns1::x";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			XElement test = res.Elements().First();
+			XAttribute att = test.Attributes().Last();
+
+			Assert.AreEqual(att.Name.LocalName, "x");
+			Assert.AreEqual(att.Name.NamespaceName, "qwerty");
+		}
+
+		[Test]
+		public void CanDeclareDefaultNamespace() {
+			String bxl = @"ns1=qwerty
+ns2::test a b ns3::x";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			XElement test = res.Elements().First();
+			XAttribute att = test.Attributes().Last();
+
+			Assert.AreEqual(test.Name.NamespaceName, "namespace::code.bxl_X");
+			Assert.AreEqual(att.Name.NamespaceName, "namespace::code.bxl_XX");
+		}
+
+		[Test]
+		public void CanSkipCommentary() {
+			String bxl = @"#qwerty
+ns1=qwerty #qwerty
+ns2::test a b ns3::x
+#qwerty
+test
+#qwerty";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			XElement test = res.Elements().First();
+			XAttribute att = test.Attributes().Last();
 		}
 	}
 }
