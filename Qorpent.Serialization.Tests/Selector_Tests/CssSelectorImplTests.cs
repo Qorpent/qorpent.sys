@@ -12,9 +12,17 @@ namespace Qorpent.Serialization.Tests.Selector_Tests {
     <div class=""first"">NOT</div>
     <div class=""second"">NOT</div>
 </root>";
+        private const string _case2 = @"<root>
+    <div class=""first"">TRUE</div>
+    <div class=""first"">BUZZ</div>
+    <div class=""first"">NOT</div>
+</root>";
         [TestCase(_case1, "div.first", new[] { @"<div class="" first second"">TRUE</div>", @"<div class=""first"">NOT</div>" }, 2)]
         [TestCase(_case1, "div.first.second", new[] {@"<div class="" first second"">TRUE</div>"}, 1)]
-        public void CanSelectWithTwoClasses(string source, string clause, IEnumerable<string> result, int count) {
+        [TestCase(_case2, "div.first:first-child", new[] { @"<div class=""first"">TRUE</div>" }, 1)]
+        [TestCase(_case2, "div.first:last-child", new[] { @"<div class=""first"">NOT</div>" }, 1)]
+        [TestCase(_case2, "div.first:nth-child(2)", new[] { @"<div class=""first"">BUZZ</div>" }, 1)]
+        public void CanSelect(string source, string clause, IEnumerable<string> result, int count) {
             var cssSelector = new CssSelectorImpl();
             var selected = cssSelector.Select(XElement.Parse(source), clause);
             Assert.AreEqual(count, selected.Count());
