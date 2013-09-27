@@ -112,9 +112,23 @@ namespace Qorpent.Selector.Implementations {
                 if (sc[1].Contains("first-child")) {
                     result += "[1]";
                 }
+
+                if (sc[1].Contains("last-child")) {
+                    result += "[last()]";
+                }
+
+                if (sc[1].Contains("nth-child")) {
+                    var openBracketIndex = sc[1].IndexOf("(", System.StringComparison.Ordinal);
+                    var closeBracketIndex = sc[1].IndexOf(")", System.StringComparison.Ordinal);
+                    var nth = sc[1].Substring(
+                        openBracketIndex + 1,
+                        closeBracketIndex - openBracketIndex - 1
+                    );
+
+                    result += "[" + nth + "]";
+                }
             }
 
-            Debug.Print(result);
 			return result;
 		}
 	}
