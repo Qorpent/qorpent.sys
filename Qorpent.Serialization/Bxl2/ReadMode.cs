@@ -8,7 +8,7 @@ namespace Qorpent.Bxl2
 {
     enum ReadMode
     {
-        Start,
+        Start = 0,
         ElementName,
         AttributeName,
         AttributeValue,

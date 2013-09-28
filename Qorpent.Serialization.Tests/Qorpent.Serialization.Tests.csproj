@@ -19,6 +19,7 @@
     <Compile Include="BSharp\Schema\AttributeRuleTest.cs" />
     <Compile Include="BSharp\Schema\ElementRuleTest.cs" />
     <Compile Include="BSharp\SetKeyword.cs" />
+    <Compile Include="Bxl2\BxlParser2CompatibilityTests.cs" />
     <Compile Include="Bxl2\BxlParser2Tests.cs" />
     <Compile Include="Bxl\ApplicationAccessToBxl.cs" />
     <Compile Include="Bxl\BxlGeneratorTest.cs" />

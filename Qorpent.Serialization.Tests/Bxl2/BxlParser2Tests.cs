@@ -10,18 +10,7 @@ using Qorpent.Bxl;
 
 namespace Qorpent.Serialization.Tests.Bxl2
 {
-	internal class BxlParser2Tests {
-		[Test]
-		[Explicit]
-		public void AnyTest() {
-			String bxl = @"ns1=qwerty
-test ns::a";
-
-			IBxlParser p = new BxlParser2();
-			XElement res = p.Parse(bxl);
-			Console.WriteLine(res);
-		}
-
+	class BxlParser2Tests {
 		[Test]
 		public void CanParse() {
 			String bxl = @"tes+t1 f f
@@ -39,6 +28,8 @@ test2
 			IBxlParser p = new BxlParser2();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
+
+			Assert.AreEqual(res.Elements().Last().Attribute("_line").Value, "7");
 		}
 
 		[Test]
@@ -97,8 +88,7 @@ test1 x   =   2
 
 		[Test]
 		public void CanUseSingleLineStringAsAnonAttribute() {
-			String bxl = @"test1 a 'w w' ""q q""
-";
+			String bxl = @"test1 a 'w w' ""q q"" (qwerty)";
 			IBxlParser p = new BxlParser2();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
@@ -207,6 +197,18 @@ nested (expression)
 
 			XElement test1 = res.Elements().First();
 			Assert.AreEqual(test1.Attribute(XName.Get("qwerty")).Value, "(\r\nnested (expression)\r\n)");
+		}
+
+		[Test]
+		public void CanUseExprecssionAsAnonAttribute() {
+			String bxl = @"test1 a 'w w' (q q)";
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			XElement test1 = res.Elements().First();
+			Assert.AreEqual(test1.Attribute(XName.Get("name")).Value, "w w");
+			Assert.AreEqual(test1.Attribute(XName.Get("_aa4")).Value, "(q q)");
 		}
 
 		[Test]
@@ -319,7 +321,7 @@ ns1::test1
 ns2=qwerty2
 test1 ns1::x=2 ns2::y=3";
 			IBxlParser p = new BxlParser2();
-			XElement res = p.Parse(bxl);
+			XElement res = p.Parse(bxl, "file", BxlParserOptions.NoLexData);
 			Console.WriteLine(res);
 
 			XElement test1 = res.Elements().First();
@@ -373,9 +375,16 @@ test
 			IBxlParser p = new BxlParser2();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
+		}
 
-			XElement test = res.Elements().First();
-			XAttribute att = test.Attributes().Last();
+		[Test]
+		public void CanUseOptions() {
+			String bxl = @"test1 a b c";
+
+			IBxlParser p = new BxlParser2();
+			XElement res = p.Parse(bxl, "qqqq", BxlParserOptions.NoLexData | BxlParserOptions.OnlyIdAttibute | BxlParserOptions.SafeAttributeNames | BxlParserOptions.ExtractSingle);
+			Console.WriteLine(res);
+			Assert.AreEqual(res.Attributes().First().Name.LocalName, "__id");
 		}
 	}
 }
