@@ -73,6 +73,7 @@
     <Compile Include="Charts\ChartDefaults.cs" />
     <Compile Include="Charts\IChart.cs" />
     <Compile Include="Charts\IChartAttribute.cs" />
+    <Compile Include="Charts\IChartBuilder.cs" />
     <Compile Include="Charts\IChartConfig.cs" />
     <Compile Include="Charts\IChartElement.cs" />
     <Compile Include="Charts\IChartRender.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Charts\IChartXmlSource.cs" />
     <Compile Include="Charts\Implementation\Chart.cs" />
     <Compile Include="Charts\Implementation\ChartAttribute.cs" />
+    <Compile Include="Charts\Implementation\ChartBuilder.cs" />
     <Compile Include="Charts\Implementation\ChartCategory.cs" />
     <Compile Include="Charts\Implementation\ChartConfig.cs" />
     <Compile Include="Charts\Implementation\ChartDataset.cs" />
