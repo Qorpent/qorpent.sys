@@ -2,18 +2,13 @@
     /// <summary>
     ///     Интерфейс рендера графиков
     /// </summary>
-    public interface IChartRender {
-        /// <summary>
-        ///     Прокатывает операцию рендеринга
-        /// </summary>
-        /// <param name="chart">Представление графика</param>
-        /// <returns>Результат работы рендера</returns>
-        IChartRenderResult Render(IChart chart);
+    public interface IChartRender : IChartXmlSource, IChartSource {
         /// <summary>
         ///     Инициализация чарт-рендера
         /// </summary>
-        /// <param name="chartRenderConfig">Конфиг рендера чарта</param>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="chartConfig">Конфиг чарта</param>
         /// <returns>Экземпляр данного класса</returns>
-        IChartRender Initialize(IChartRenderConfig chartRenderConfig);
+        IChartRender Initialize(IChart chart, IChartConfig chartConfig);
     }
 }

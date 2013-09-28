@@ -4,7 +4,7 @@ namespace Qorpent.Charts {
     /// <summary>
     ///     Представление графика
     /// </summary>
-    public interface IChart {
+    public interface IChart : IChartXmlSource {
         /// <summary>
         ///     Корневой элемент
         /// </summary>
