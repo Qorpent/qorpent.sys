@@ -34,6 +34,7 @@ namespace Qorpent.Utils.Extensions {
 	/// 	Xml related extensions of common XNodes
 	/// </summary>
 	public static class XmlExtensions {
+<<<<<<< HEAD
 		private static readonly string[] Idatributes = new[] {"id", "code", "__id", "__code", "ID"};
         /// <summary>
         /// Создает или возвращает дочерний элемент
@@ -54,6 +55,15 @@ namespace Qorpent.Utils.Extensions {
             }
             throw new Exception("multiple instance");
         }
+=======
+
+        /// <summary>
+        /// имя атрибута с уникаьным номером элемента по умолчанию
+        /// </summary>
+	    public const string ElementUidAttribute = "__UID";
+	    private static readonly string[] Idatributes = new[] {"id", "code", "__id", "__code", "ID"};
+
+>>>>>>> a304ff90073eb9e38049d5a4e592080da19cc124
 	    /// <summary>
 	    /// Возвращает true если код, имя, значение равны name или есть атрибут с именем name, приводимый к true
 	    /// </summary>
@@ -216,6 +226,23 @@ namespace Qorpent.Utils.Extensions {
 				.FirstOrDefault(id => id.IsNotEmpty());
 			return result ?? String.Empty;
 		}
+
+	    /// <summary>
+	    /// Присваивает уникальные целочисленные ID каждому элементу в DocOrder
+	    /// </summary>
+	    /// <param name="xml"></param>
+	    /// <param name="attrname"></param>
+	    /// <param name="copy"></param>
+	    /// <returns></returns>
+	    public static XElement GenerateUniqueIdsForElements(this XElement xml, string attrname = ElementUidAttribute, bool copy = false) {
+            var result = xml;
+            if(copy)result = new XElement(xml);
+	        var id = 0;
+            foreach (var e in result.DescendantsAndSelf()) {
+                e.SetAttributeValue(attrname,id++);
+            }
+            return result;
+        }
 
 		/// <summary>
 		/// 	Returns not-null string Value of attribute, searching it up to first occurance start from given element
@@ -607,7 +634,7 @@ namespace Qorpent.Utils.Extensions {
         /// <returns>Исходный элемент</returns>
         public static XElement ElementsToLowerCase(this XElement xElement, bool includeRoot = true) {
             foreach (var el in xElement.XPathSelectElements(includeRoot ? "//*" : "/" + xElement.Name + "/*")) {
-                el.Name = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(el.Name.ToString().ToLower());
+                el.Name = el.Name.ToString().ToLower();
             }
 
             return xElement;

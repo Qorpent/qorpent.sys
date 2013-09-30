@@ -18,6 +18,17 @@ namespace Qorpent.BSharp
         public int Level {
             get { return _level; }
         }
+
+        /// <summary>
+        /// Записывает информацию об элементах
+        /// </summary>
+        /// <param name="dictcode"></param>
+        /// <returns></returns>
+        public IBSharpCodeBuilder WriteClassExport(string dictcode)
+        {
+            WriteElement(BSharpSyntax.ClassExportDefinition, dictcode);
+            return this;
+        }
         /// <summary>
         /// Записывает информацию об элементах
         /// </summary>

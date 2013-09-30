@@ -36,9 +36,13 @@ namespace Qorpent.Serialization {
 		/// </summary>
 		SetupPositionClasses = 1<<6,
 		/// <summary>
+		/// Устанавливает уникальные номера элементов в DocOrder
+		/// </summary>
+        SetupUniqueIds= 1<<7,
+        /// <summary>
 		/// Все операции
 		/// </summary>
-		All = RemoveBadTags | RemoveBadAttributes | RewriteTables |FixImageUrls |FixHrefUrls |SetupPositionClasses,
+		All = RemoveBadTags | RemoveBadAttributes | RewriteTables |FixImageUrls |FixHrefUrls |SetupPositionClasses|SetupUniqueIds, 
 		/// <summary>
 		/// Опции по умолчанию
 		/// </summary>
@@ -47,5 +51,8 @@ namespace Qorpent.Serialization {
 		/// Неопределенные опции
 		/// </summary>
 		Undefined = 1<<32,
+
+
+
 	}
 }

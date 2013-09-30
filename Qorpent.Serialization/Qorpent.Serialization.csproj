@@ -121,5 +121,7 @@
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="FusionCharts\" />
+  </ItemGroup>
 </Project>
