@@ -92,6 +92,10 @@
   
   </xsl:template>
 
- 
+ <xsl:template match="@charttype">
+   <xsl:attribute name="charttype">
+     <xsl:value-of select="fun:match(.,'^([^\.]+)',1)"/>
+   </xsl:attribute>
+  </xsl:template>
   
 </xsl:stylesheet>
