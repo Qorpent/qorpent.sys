@@ -5,19 +5,56 @@ namespace Qorpent.Charts.Implementation {
     ///     Имплементация конфига чарта
     /// </summary>
     public class ChartConfig : ConfigBase, IChartConfig {
+        private string _javaScriptRender;
+
         /// <summary>
-        ///     Датасеты
+        /// Тип чарта
         /// </summary>
-        public IEnumerable<IChartElement> Datasets {
-            get { return Get <List<IChartElement>>(ChartDefaults.DatasetElementName); }
-            set { Set(ChartDefaults.DatasetElementName, value); }
+        public string Type {
+            get { return Get<string>(ChartDefaults.ChartTypeAttributeName); }
+            set { Set(ChartDefaults.ChartTypeAttributeName, value); }
         }
         /// <summary>
-        ///     Категории
+        /// Ширина чарта
         /// </summary>
-        public IEnumerable<IChartElement> Categories {
-            get { return Get<List<IChartElement>>(ChartDefaults.CategoryElementName); }
-            set { Set(ChartDefaults.CategoryElementName, value); }
+        public string Width {
+            get { return Get<string>(ChartDefaults.ChartWidthAttributeName); }
+            set { Set(ChartDefaults.ChartWidthAttributeName, value); }
+        }
+        /// <summary>
+        /// Высота чарта
+        /// </summary>
+        public string Height {
+            get { return Get<string>(ChartDefaults.ChartHeightAttributeName); }
+            set { Set(ChartDefaults.ChartHeightAttributeName, value); }
+        }
+        /// <summary>
+        /// Режим отладки чарта
+        /// </summary>
+        public string Debug {
+            get { return Get<string>(ChartDefaults.ChartDebugAttributeName); }
+            set { Set(ChartDefaults.ChartDebugAttributeName, value); }
+        }
+        /// <summary>
+        /// Id чарта
+        /// </summary>
+        public string Id {
+            get { return Get<string>(ChartDefaults.ChartIdAttributeName); }
+            set { Set(ChartDefaults.ChartIdAttributeName, value); }
+        }
+        /// <summary>
+        /// Контейнер чарта
+        /// </summary>
+        public string Container {
+            get { return Get<string>(ChartDefaults.ChartContainerAttributeName); }
+            set { Set(ChartDefaults.ChartContainerAttributeName, value); }
+        }
+        /// <summary>
+        /// Рендер чарта средствами svg
+        /// </summary>
+        public bool JavaScriptRender {
+            get { return Get<bool>(ChartDefaults.ChartRenderAttributeName); }
+            set { Set(ChartDefaults.ChartRenderAttributeName, value); }
         }
     }
 }

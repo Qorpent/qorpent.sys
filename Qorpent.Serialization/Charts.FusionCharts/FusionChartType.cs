@@ -131,8 +131,7 @@ using System;
     MSBar2D = 1<<41,    
   
     ///<summary>Line2D</summary>
-    Line2D = 1<<42,    
-  
+    Line2D = 1<<42,
     }
 }
   

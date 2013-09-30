@@ -1,17 +1,45 @@
 ﻿using System.Collections.Generic;
+using Qorpent.Config;
 
 namespace Qorpent.Charts {
     /// <summary>
     ///     Описание конфига чарта
     /// </summary>
-    public interface IChartConfig {
+    public interface IChartConfig:IConfig {
         /// <summary>
-        ///     Датасеты
+        /// Тип чарта
         /// </summary>
-        IEnumerable<IChartElement> Datasets { get; }
+        string Type { get; set; }
+
         /// <summary>
-        ///     Категории
+        /// Ширина чарта
         /// </summary>
-        IEnumerable<IChartElement> Categories { get; }
+        string Width { get; set; }
+
+        /// <summary>
+        /// Высота чарта
+        /// </summary>
+        string Height { get; set; }
+
+        /// <summary>
+        /// Режим отладки чарта
+        /// </summary>
+        string Debug { get; set; }
+
+        /// <summary>
+        /// Id чарта
+        /// </summary>
+        string Id { get; set; }
+
+        /// <summary>
+        /// Контейнер чарта
+        /// </summary>
+        string Container { get; set; }
+
+        /// <summary>
+        /// Рендер чарта средствами svg
+        /// </summary>
+        bool JavaScriptRender { get; set; }
     }
+
 }
