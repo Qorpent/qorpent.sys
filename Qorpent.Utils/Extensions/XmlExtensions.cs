@@ -34,8 +34,7 @@ namespace Qorpent.Utils.Extensions {
 	/// 	Xml related extensions of common XNodes
 	/// </summary>
 	public static class XmlExtensions {
-<<<<<<< HEAD
-		private static readonly string[] Idatributes = new[] {"id", "code", "__id", "__code", "ID"};
+
         /// <summary>
         /// Создает или возвращает дочерний элемент
         /// </summary>
@@ -55,7 +54,7 @@ namespace Qorpent.Utils.Extensions {
             }
             throw new Exception("multiple instance");
         }
-=======
+
 
         /// <summary>
         /// имя атрибута с уникаьным номером элемента по умолчанию
@@ -63,7 +62,6 @@ namespace Qorpent.Utils.Extensions {
 	    public const string ElementUidAttribute = "__UID";
 	    private static readonly string[] Idatributes = new[] {"id", "code", "__id", "__code", "ID"};
 
->>>>>>> a304ff90073eb9e38049d5a4e592080da19cc124
 	    /// <summary>
 	    /// Возвращает true если код, имя, значение равны name или есть атрибут с именем name, приводимый к true
 	    /// </summary>
