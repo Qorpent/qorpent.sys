@@ -32,6 +32,8 @@
     <Compile Include="BSharp\Schema\RuleType.cs" />
     <Compile Include="BSharp\Schema\Schema.cs" />
     <Compile Include="BSharp\Schema\SchemaNote.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartElementType.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartType.cs" />
     <Compile Include="Graphs.Dot\Builder\DotEdgeBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphElementBuilderBase.cs" />
@@ -121,7 +123,5 @@
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FusionCharts\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
