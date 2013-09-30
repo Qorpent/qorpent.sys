@@ -12,7 +12,7 @@ using System;
  ///Типы графиков FusionChart
  ///&lt;/summary>
     [Flags]
-    public enum FusionChartType {
+    public enum FusionChartType :long {
       <xsl:apply-templates select="(.//part/@charttype)"/>
     }
 }

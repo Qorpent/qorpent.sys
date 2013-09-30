@@ -236,16 +236,25 @@ namespace Qorpent.Serialization
 
             return null;
         }
+
         /// <summary>
         /// Возвращает строку в PascalCase
         /// </summary>
         /// <param name="s"></param>
+        /// <param name="escapeWhiteSpaces"></param>
         /// <returns></returns>
-        public static string PascalCase(string s) {
-            if (string.IsNullOrWhiteSpace(s)) {
-                return string.Empty;
+        public static string PascalCase(string s, bool escapeWhiteSpaces = true) {
+            if (string.IsNullOrEmpty(s)) return "";
+            if (escapeWhiteSpaces) {
+                if (s.Contains(" ")) {
+                    var res = new StringBuilder();
+                    foreach (var n in s.Split(' ')) {
+                        res.Append(PascalCase(n));
+                    }
+                    return res.ToString();
+                }
             }
-            return s[0].ToString().ToUpperInvariant() + s.Substring(1);
+            return (s[0].ToString().ToUpper() + s.Substring(1)).Replace(" ", "_");
         }
     }
 }

@@ -5,7 +5,7 @@ using System;
  ///Типы графиков FusionChart
  ///</summary>
     [Flags]
-    public enum FusionChartType {
+    public enum FusionChartType :long {
       
     ///<summary>Column2D</summary>
     Column2D = 1<<1,    

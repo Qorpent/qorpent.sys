@@ -9,12 +9,16 @@ namespace fcapimerge {
     public class FusionChartAttribute {
         public FusionChartAttribute(XElement xElement) {
             Name = xElement.Attr("name");
-            Type = xElement.Attr("name");
-            Range = xElement.Attr("name");
+            Type = FusionChartDataType.String;
+            var t = Escaper.PascalCase(xElement.Attr("type"));
+            if (!string.IsNullOrWhiteSpace(t)) {
+                Type =t.To<FusionChartDataType>();
+            }
+            Range = xElement.Attr("range");
             var desc = new XElement("desc");
             desc.Add(xElement.Nodes());
             Description = desc.ToString();
-            Category = xElement.Parent.Attr("category");
+            Category = Escaper.PascalCase( xElement.Parent.Attr("category") );
             var elementHandler = xElement.Ancestors().First(_ => null != _.Attribute("element"));
             var chartType = xElement.Ancestors("part").First().Attr("charttype");
             var elementFullName = Escaper.PascalCase( elementHandler.Attr("subelement") )+ Escaper.PascalCase( elementHandler.Attr("element"));
@@ -24,10 +28,30 @@ namespace fcapimerge {
 
         public string Key { get { return Name + "_" + Element ; } }
         public string Name { get; set; }
-        public string Type { get; set; }
+        public FusionChartDataType Type { get; set; }
         public string Range { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
+        public bool IsDefault { get {
+            foreach (var v in Enum.GetValues(typeof (FusionChartType))) {
+                if (0 == (long) v) continue;
+                if (0 == ((FusionChartType)v & Chart)) return false;
+            }
+            return true;
+        } }
+
+        public bool IsCommon
+        {
+            get {
+                int matches = 0;
+                foreach (var v in Enum.GetValues(typeof(FusionChartType)))
+                {
+                    if (0 == (long)v) continue;
+                    if (0 != ((FusionChartType) v & Chart)) matches++;
+                }
+                return matches >= 30;
+            }
+        }
         public FusionChartElementType Element { get; set; }
         public FusionChartType Chart { get; set; }
         /// <summary>
@@ -35,7 +59,7 @@ namespace fcapimerge {
         /// </summary>
         /// <returns></returns>
         public XElement ToXmlElement() {
-            return new XElement("attribute",
+            var result =  new XElement("attribute",
                                 new XAttribute("name",Name),
                                 new XAttribute("element",Element),
                                 new XAttribute("chart",Chart.ToString().Replace(", "," + ")),
@@ -45,7 +69,12 @@ namespace fcapimerge {
                                 new XText(Description)
                 
                 );
-
+            if (IsDefault) {
+                result.SetAttributeValue("default",true);
+            }else if (IsCommon) {
+                result.SetAttributeValue("common", true);
+            }
+            return result;
         }
     }
 }

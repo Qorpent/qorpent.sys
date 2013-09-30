@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace fcapimerge {
     public class FusionChartAttributeMerger {
@@ -13,6 +14,15 @@ namespace fcapimerge {
             SerializeIndex(index, result);
             Console.WriteLine(attributes.Count());
             Console.WriteLine(index.Count());
+            Console.WriteLine(attributes.Count(_ => _.IsDefault));
+            Console.WriteLine(attributes.Count(_ => _.IsCommon));
+
+            var uniqueChartSets = attributes.Where(_ => !(_.IsCommon || _.IsDefault)).Select(_ => _.Chart).Distinct();
+            Console.WriteLine(uniqueChartSets.Count());
+            /*foreach (var fusionChartType in uniqueChartSets) {
+                Console.WriteLine(fusionChartType.ToStr());
+            }*/
+
             return result;
         }
 
