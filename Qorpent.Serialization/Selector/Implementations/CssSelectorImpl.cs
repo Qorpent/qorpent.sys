@@ -32,7 +32,9 @@ namespace Qorpent.Selector.Implementations {
         /// <returns></returns>
 		public IEnumerable<XElement> Select(XElement root, string query) {
 	        var xpath = BuildXpath(query);
-	        return root.XPathSelectElements(xpath);
+            Debug.Print(xpath);
+	        var result = root.XPathSelectElements(xpath);
+            return result;
         }
 		/// <summary>
 		/// Конвертирует строку селектора в XPATH
@@ -55,7 +57,7 @@ namespace Qorpent.Selector.Implementations {
 		private string BuildConditionXpath(string condition) {
 			var subpaths = condition.SmartSplit(false, true, ' ');
 			var xsubpaths = subpaths.Select(BuildSubpath);
-			var result = "." + string.Join("",xsubpaths);
+			var result = "./" + string.Join("",xsubpaths);
 			return result;
 		}
 
@@ -103,7 +105,7 @@ namespace Qorpent.Selector.Implementations {
 				}
 			}
 
-			var result = "//" + tag;
+			var result = "/" + tag;
 			if (0 != subconditions.Count) {
 				result += "[" + string.Join(" and ", subconditions) + "]";
 			}
