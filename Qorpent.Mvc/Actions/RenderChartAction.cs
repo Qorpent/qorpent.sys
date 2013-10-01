@@ -6,8 +6,6 @@ namespace Qorpent.Mvc.Actions {
     /// </summary>
     [Action("fc.renderchart")]
     public class RenderChartAction : ActionBase {
-        [Bind] private string Config { get; set; }
-
         /// <summary>
         /// Возвращает fusionchart конфиг
         /// </summary>

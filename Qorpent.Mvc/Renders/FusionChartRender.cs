@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Qorpent.Charts;
+using Qorpent.Charts.Implementation;
 using Qorpent.Dsl;
+using Qorpent.IoC;
 
 namespace Qorpent.Mvc.Renders {
     /// <summary>
@@ -9,28 +12,31 @@ namespace Qorpent.Mvc.Renders {
     /// </summary>
     [Render("chart")]
     public class FusionChartRender: RenderBase {
+
+        [Inject]
+        private IChartRender InternalRender { get; set; }
+
         /// <summary>
         /// Renders given context
         /// </summary>
         /// <param name="context"></param>
         public override void Render(IMvcContext context) {
-            var render = ResolveDataType(context);
-            var charttype = ResolveChartType(context, render);
-            var id = context.Get("__id", DateTime.Now.Ticks);
-            var container = context.Get("__targetdiv");
-            var width = context.Get("__width", "400");
-            var height = context.Get("__height", "300");
-            var debug = context.Get("__debug", "0");
+            
+            var config = PrepareChartConfig(context);
             var script = string.Empty;
-            var datascript = RenderDataScript(context, render);
+
+            var datascript = RenderDataScript(context, config);
             var error = string.Empty;
 
             if (string.IsNullOrWhiteSpace(datascript)) {
                 error = "Нет данных для отображения";
             }
 
+            var id = config.Get<string>("Id");
+            var container = config.Get<string>("Container");
+
             if (string.IsNullOrWhiteSpace(container)) {
-                container = "fc-graph-" + id;
+                container = "fc-container-" + id;
                 script += string.Format(@"
 <div class=""fusinchart-container{0}"" id=""{1}"">{2}</div>", string.IsNullOrEmpty(error) ? " fusionchart-error" : "", container, error);
             }
@@ -43,7 +49,7 @@ namespace Qorpent.Mvc.Renders {
     {5}
     myChart.render('{6}');
 // -->
-</script>", charttype, "fc-chart-" + id, width, height, debug, datascript, container);
+</script>", config.Get<string>("Type"), id, config.Get<string>("Width"), config.Get<string>("Height"), config.Get<string>("Debug"), datascript, container);
                 context.ContentType = "text/html";   
             }
 
@@ -65,23 +71,53 @@ namespace Qorpent.Mvc.Renders {
             context.Output.Write(script);
         }
 
+        private IChartConfig PrepareChartConfig(IMvcContext context) {
+            var result = new ChartConfig();
+            result.Set("Id", context.Get("__id", "fc-chart-" + DateTime.Now.Ticks));
+            result.Set("Container", context.Get("__container", string.Empty));
+            result.Set("Width", context.Get("__width", "400"));
+            result.Set("Height", context.Get("__height", "300"));
+            result.Set("Debug", context.Get("__debug", "0"));
+            result.Set("Type", context.Get("__type", "Column2D"));
+
+            var specAttrs = context.GetAll("fc");
+            foreach (var attr in specAttrs) {
+                result.Set(attr.Key, attr.Value);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Определяет тип графика (по-умолчанию Column2D)
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="datatype"></param>
+        /// <returns></returns>
         private string ResolveChartType(IMvcContext context, string datatype = null) {
             var type = context.Get("__charttype");
+
             if (string.IsNullOrWhiteSpace(type)) {
-                if (null == datatype) datatype = ResolveDataType(context);
+                if (null == datatype) datatype = ResolveRenderType(context);
                 XAttribute typeattr = null;
                 if (datatype == "xml") {
                     typeattr = ((XElement)context.ActionResult).Attribute("charttype");
                 }
-                if (datatype == "xmlstring") {
+                else if (datatype == "xmlstring") {
                     typeattr = (XElement.Parse((string) context.ActionResult)).Attribute("charttype");
                 }
-                if (datatype == "json") {
+                else if (datatype == "json") {
                     typeattr = ResolveService<ISpecialXmlParser>("json.xml.parser").ParseXml((string)context.ActionResult).Attribute("charttype");
                 }
-                if (null != typeattr) {
+                else if (datatype == "") {
+                    
+                }
+                else if (null != typeattr) {
                     type = typeattr.Value;
                 }
+                else {
+                    
+                }
+
             }
             if (string.IsNullOrWhiteSpace(type)) {
                 type = "Column2D";
@@ -89,38 +125,40 @@ namespace Qorpent.Mvc.Renders {
             return type;
         }
 
-        private string ResolveDataType(IMvcContext context) {
-            string type;
-            if (context.ActionResult is XElement) {
-                type = "xml";
-            } else if (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("<")) {
-                type = "xmlstring";
-            } else if (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("{")) {
-                type = "json";
-            } /*else if (context.ActionResult is IChartXmlSource) {
-                type = "xmlsource";
-            } else if (context.ActionResult is IChartSource) {
-                type = "source";
-            }*/ else {
-                type = "unknown";
-            }
-            return type;
+        /// <summary>
+        /// Определяет тип рендера графика
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private string ResolveRenderType(IMvcContext context) {
+            return
+                (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("{")) ? "javascript" : "xml";
         }
 
         /// <summary>
         /// Render "set data" part of script 
         /// </summary>
         /// <param name="context"></param>
-        /// <param name="datatype"></param>
+        /// <param name="config"></param>
         /// <returns></returns>
-        private string RenderDataScript(IMvcContext context, string datatype = null) {
-            if (null == datatype) datatype = ResolveDataType(context);
-            if (null != context.ActionResult && (datatype == "xml" || datatype == "json" || datatype == "xmlstring")) {
-                var result = context.ActionResult.ToString();
-                result = Regex.Replace(result, @"\s{2,}", "");
-                return string.Format(@"myChart.set{0}Data(""{1}"");", datatype == "xmlstring" ? "XML" : datatype.ToUpper(), result);
+        private string RenderDataScript(IMvcContext context, IChartConfig config) {
+            var data = string.Empty;
+            if (context.ActionResult is XElement) {
+                
+            } else if (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("<")) {
+                
+            } else if (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("{")) {
+                
+            } else if (context.ActionResult is IChartXmlSource) {
+                
+            } else if (context.ActionResult is IChartSource) {
+                
+            } else if (context.ActionResult is IChart) {
+
+            } else {
+                
             }
-            return "";
+            return data;
         }
 
         /// <summary>

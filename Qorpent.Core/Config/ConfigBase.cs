@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Qorpent.Charts;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Config {
@@ -47,7 +48,7 @@ namespace Qorpent.Config {
 		protected bool _freezed;
 		private IConfig _parent;
 
-		/// <summary>
+	    /// <summary>
 		/// Конвертирует XML в словарь
 		/// </summary>
 		/// <param name="xml"></param>

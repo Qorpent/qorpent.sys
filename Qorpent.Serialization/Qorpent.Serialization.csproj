@@ -35,6 +35,7 @@
     <Compile Include="Charts.FusionCharts\API_auto.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartDataType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartElementType.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartGroupedType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartType.cs" />
     <Compile Include="Graphs.Dot\Builder\DotEdgeBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphBuilder.cs" />
