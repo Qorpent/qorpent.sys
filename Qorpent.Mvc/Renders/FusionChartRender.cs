@@ -153,6 +153,8 @@ namespace Qorpent.Mvc.Renders {
                 
             } else if (context.ActionResult is IChartSource) {
                 
+            } else if (context.ActionResult is IChart) {
+
             } else {
                 
             }

@@ -5,8 +5,6 @@ namespace Qorpent.Charts.Implementation {
     ///     Имплементация конфига чарта
     /// </summary>
     public class ChartConfig : ConfigBase, IChartConfig {
-        private string _javaScriptRender;
-
         /// <summary>
         /// Тип чарта
         /// </summary>
