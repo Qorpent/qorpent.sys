@@ -37,6 +37,16 @@
     <Compile Include="Charts.FusionCharts\FusionChartElementType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartGroupedType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartType.cs" />
+    <Compile Include="Charts\Chart.cs" />
+    <Compile Include="Charts\ChartAttribute.cs" />
+    <Compile Include="Charts\ChartBuilder.cs" />
+    <Compile Include="Charts\ChartCategory.cs" />
+    <Compile Include="Charts\ChartConfig.cs" />
+    <Compile Include="Charts\ChartDataset.cs" />
+    <Compile Include="Charts\ChartElement.cs" />
+    <Compile Include="Charts\ChartRender.cs" />
+    <Compile Include="Charts\ChartRenderConfig.cs" />
+    <Compile Include="Charts\ChartXmlSource.cs" />
     <Compile Include="Graphs.Dot\Builder\DotEdgeBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphElementBuilderBase.cs" />
