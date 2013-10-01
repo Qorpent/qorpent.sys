@@ -16,9 +16,11 @@ using System;
     ///&lt;summary>
  ///Типы элементов графиков FusionChart
  ///&lt;/summary>
-   [Flags]
-   public enum FusionChartElementType {
-      <xsl:apply-templates select="(.//category[@element and generate-id()=generate-id(key('categories',concat(@subelement,@element)))])"/>
+    [Flags]
+    public enum FusionChartElementType {
+    ///&lt;summary>Не указан&lt;/summary>
+    None = 0,
+    <xsl:apply-templates select="(.//category[@element and generate-id()=generate-id(key('categories',concat(@subelement,@element)))])"/>
     }
 }
   </xsl:template>

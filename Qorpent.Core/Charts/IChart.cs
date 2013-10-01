@@ -1,32 +1,26 @@
-﻿using System.Collections.Generic;
-using Qorpent.Config;
+﻿using Qorpent.Config;
 
 namespace Qorpent.Charts {
     /// <summary>
     ///     Представление графика
     /// </summary>
-    public interface IChart : IChartXmlSource, IConfig {
-        /// <summary>
-        ///     Корневой элемент
-        /// </summary>
-        IChartElement Root { get; }
+    public interface IChart : IChartXmlSource, IChartElement {
         /// <summary>
         ///     Перечисление элементов
         /// </summary>
-        IEnumerable<IChartElement> Categories { get; }
+        IChartCategories Categories { get; }
         /// <summary>
         ///     Датасеты
         /// </summary>
-        IEnumerable<IChartElement> Datasets { get; }
+        IChartDatasets Datasets { get; }
         /// <summary>
-        ///     Добавление категории
+        /// Набор дополнительных линий
         /// </summary>
-        /// <param name="category">Представление категории</param>
-        void AddCategory(IChartElement category);
+        IChartLineSet LineSet { get; }
         /// <summary>
-        ///     Добавление датасета
+        /// Набор линий тренда
         /// </summary>
-        /// <param name="dataset">Представление датасета</param>
-        void AddDataset(IChartElement dataset);
+        IChartTrendLines TrendLines { get; }
+
     }
 }

@@ -13,7 +13,7 @@ namespace Qorpent.Config {
         /// <summary>
         ///     Внутренний экземпляр переменной, определяющий поддержку наследования
         /// </summary>
-	    private bool _inheritance = true;
+	    private bool _useInheritance = true;
         /// <summary>
         ///     Базовый класс для конфигураций
         /// </summary>
@@ -21,9 +21,9 @@ namespace Qorpent.Config {
 	    /// <summary>
 	    ///     Поддержка наследования от родителя
 	    /// </summary>
-	    public bool Inheritance {
-            get { return _inheritance; }
-            set { _inheritance = value; }
+	    public bool UseInheritance {
+            get { return _useInheritance; }
+            set { _useInheritance = value; }
 	    }
         /// <summary>
         ///     Базовый класс для конфигураций
@@ -137,13 +137,16 @@ namespace Qorpent.Config {
 			if (options.ContainsKey(name)) {
 				yield return options[name];
 			}
+
+            if (!UseInheritance)
+            {
+                yield return null;
+            }
 			
             if (
                 (null != GetParent())
             ) {
-                if (!Inheritance) {
-                    yield return null;
-                }
+                
 
 				foreach (var p in ((ConfigBase) GetParent()).AllByName(name)) {
 					yield return p;
@@ -165,7 +168,7 @@ namespace Qorpent.Config {
 
 			if (!options.ContainsKey(name)) {
 				if (null != GetParent()) {
-				    if (Inheritance) {
+				    if (UseInheritance) {
 				        return GetParent().Get(name, def);
 				    }
 				}
@@ -202,7 +205,7 @@ namespace Qorpent.Config {
 			    return options.Keys;
 			}
 
-		    if (Inheritance) {
+		    if (UseInheritance) {
 		        return options.Keys.Union(GetParent().GetNames(true)).Distinct();
 		    }
 

@@ -6,7 +6,9 @@ using System;
  ///</summary>
     [Flags]
     public enum FusionChartType :long {
-      
+      ///<summary>Не указан</summary>
+  None = 0,
+  
     ///<summary>Pie2D</summary>
     Pie2D = 1<<1,    
   

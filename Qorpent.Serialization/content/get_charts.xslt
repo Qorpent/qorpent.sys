@@ -13,7 +13,9 @@ using System;
  ///&lt;/summary>
     [Flags]
     public enum FusionChartType :long {
-      <xsl:apply-templates select="(.//part/@charttype)"/>
+      ///&lt;summary>Не указан&lt;/summary>
+  None = 0,
+  <xsl:apply-templates select="(.//part/@charttype)"/>
     }
 }
   </xsl:template>
