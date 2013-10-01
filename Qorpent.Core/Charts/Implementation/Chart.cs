@@ -121,13 +121,13 @@ namespace Qorpent.Charts.Implementation {
         public static IChart Initialize(IChartConfig chartConfig) {
             var chart = new Chart(chartConfig);
 
-            foreach (var dataset in chartConfig.Datasets) {
+            /*foreach (var dataset in chartConfig.Datasets) {
                 chart.AddDataset(dataset);
             }
 
             foreach (var category in chartConfig.Categories) {
                 chart.AddCategory(category);
-            }
+            }*/
 
             return chart;
         }
