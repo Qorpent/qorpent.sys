@@ -22,5 +22,7 @@ namespace Qorpent.Charts {
         /// </summary>
         IChartTrendLines TrendLines { get; }
 
+       
+
     }
 }

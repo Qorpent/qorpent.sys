@@ -50,7 +50,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="config"></param>
         /// <returns></returns>
         private static bool IsMatch(string name, FusionChartType chartType, FusionChartElementType elementType = FusionChartElementType.Chart, IChartConfig config = null) {
-            var key = elementType.ToString() + "_" + Escaper.PascalCase(name);
+            var key = (elementType.ToString() + "_" + name).ToLower();
             if (Attributes.ContainsKey(key)) {
                 return 0 != (Attributes[key].Charts & chartType);
             }
@@ -84,5 +84,18 @@ namespace Qorpent.Charts.FusionCharts {
                 }
                 );
         }
+
+        /// <summary>
+        /// Возвращает адаптер для работы с графиком в API FusionChart
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static FusionChartWrapper AsFusion(this IChartElement chart, IChartConfig config=null) {
+            config = config ?? new ChartConfig(){Type = FusionChartType.Column2D.ToString()};
+            return new FusionChartWrapper(chart,config); 
+
+        }
+        
     }
 }

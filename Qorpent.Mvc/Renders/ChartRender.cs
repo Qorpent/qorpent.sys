@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.Charts;
 using Qorpent.Dsl;
@@ -10,7 +9,7 @@ namespace Qorpent.Mvc.Renders {
     /// Render для отрисовки графиков Fusionchart
     /// </summary>
     [Render("chart")]
-    public class FusionChartRender: RenderBase {
+    public class ChartRender: RenderBase {
 
         [Inject]
         private IChartRender InternalRender { get; set; }

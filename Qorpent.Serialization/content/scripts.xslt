@@ -20,9 +20,13 @@
     // throw new Exception(s);
     return "\n///"+ s.Replace("\n","\n///").Replace("&amp;","&amp;amp;").Replace("&lt;","&amp;lt;");
     }
-    
+
     public string Replace (string s, string f, string r) {
-      return s.Replace(f,r);
+    return s.Replace(f,r);
+    }
+
+    public string ToLower (string s) {
+    return s.ToLower();
     }
   </msxsl:script>
    

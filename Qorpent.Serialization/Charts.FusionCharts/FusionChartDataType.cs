@@ -1,6 +1,7 @@
 ﻿
 using System;
-    namespace Qorpent.Charts.FusionCharts{
+
+namespace Qorpent.Charts.FusionCharts{
     ///<summary>
  ///Типы данных графиков FusionChart
  ///</summary>

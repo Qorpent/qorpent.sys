@@ -11,3253 +11,3253 @@ namespace Qorpent.Charts.FusionCharts {
      ///<summary>Полный реестр атрибутов</summary>
     public static readonly IDictionary<string,FusionChartAttributeDescriptor> Attributes = new Dictionary<string,FusionChartAttributeDescriptor>{
          
-    { Chart_Animation, new FusionChartAttributeDescriptor { 
+    { "chart_animation", new FusionChartAttributeDescriptor { 
       Name = Chart_Animation,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Palette, new FusionChartAttributeDescriptor { 
+    { "chart_palette", new FusionChartAttributeDescriptor { 
       Name = Chart_Palette,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PaletteColors, new FusionChartAttributeDescriptor { 
+    { "chart_palettecolors", new FusionChartAttributeDescriptor { 
       Name = Chart_PaletteColors,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowAboutMenuItem, new FusionChartAttributeDescriptor { 
+    { "chart_showaboutmenuitem", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowAboutMenuItem,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AboutMenuItemLabel, new FusionChartAttributeDescriptor { 
+    { "chart_aboutmenuitemlabel", new FusionChartAttributeDescriptor { 
       Name = Chart_AboutMenuItemLabel,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AboutMenuItemLink, new FusionChartAttributeDescriptor { 
+    { "chart_aboutmenuitemlink", new FusionChartAttributeDescriptor { 
       Name = Chart_AboutMenuItemLink,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowZeroPies, new FusionChartAttributeDescriptor { 
+    { "chart_showzeropies", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowZeroPies,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowPercentValues, new FusionChartAttributeDescriptor { 
+    { "chart_showpercentvalues", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowPercentValues,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D | FusionChartType.StackedColumn3D | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowPercentInToolTip, new FusionChartAttributeDescriptor { 
+    { "chart_showpercentintooltip", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowPercentInToolTip,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D | FusionChartType.StackedColumn3D | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowLabels, new FusionChartAttributeDescriptor { 
+    { "chart_showlabels", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowLabels,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowValues, new FusionChartAttributeDescriptor { 
+    { "chart_showvalues", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowValues,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LabelSepChar, new FusionChartAttributeDescriptor { 
+    { "chart_labelsepchar", new FusionChartAttributeDescriptor { 
       Name = Chart_LabelSepChar,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DefaultAnimation, new FusionChartAttributeDescriptor { 
+    { "chart_defaultanimation", new FusionChartAttributeDescriptor { 
       Name = Chart_DefaultAnimation,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ClickURL, new FusionChartAttributeDescriptor { 
+    { "chart_clickurl", new FusionChartAttributeDescriptor { 
       Name = Chart_ClickURL,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Caption, new FusionChartAttributeDescriptor { 
+    { "chart_caption", new FusionChartAttributeDescriptor { 
       Name = Chart_Caption,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SubCaption, new FusionChartAttributeDescriptor { 
+    { "chart_subcaption", new FusionChartAttributeDescriptor { 
       Name = Chart_SubCaption,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowBorder, new FusionChartAttributeDescriptor { 
+    { "chart_showborder", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowBorder,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BorderColor, new FusionChartAttributeDescriptor { 
+    { "chart_bordercolor", new FusionChartAttributeDescriptor { 
       Name = Chart_BorderColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BorderThickness, new FusionChartAttributeDescriptor { 
+    { "chart_borderthickness", new FusionChartAttributeDescriptor { 
       Name = Chart_BorderThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BorderAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_borderalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_BorderAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BgColor, new FusionChartAttributeDescriptor { 
+    { "chart_bgcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_BgColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BgAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_bgalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_BgAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BgRatio, new FusionChartAttributeDescriptor { 
+    { "chart_bgratio", new FusionChartAttributeDescriptor { 
       Name = Chart_BgRatio,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BgAngle, new FusionChartAttributeDescriptor { 
+    { "chart_bgangle", new FusionChartAttributeDescriptor { 
       Name = Chart_BgAngle,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BgImage, new FusionChartAttributeDescriptor { 
+    { "chart_bgimage", new FusionChartAttributeDescriptor { 
       Name = Chart_BgImage,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BgImageAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_bgimagealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_BgImageAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BgImageDisplayMode, new FusionChartAttributeDescriptor { 
+    { "chart_bgimagedisplaymode", new FusionChartAttributeDescriptor { 
       Name = Chart_BgImageDisplayMode,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BgImageVAlign, new FusionChartAttributeDescriptor { 
+    { "chart_bgimagevalign", new FusionChartAttributeDescriptor { 
       Name = Chart_BgImageVAlign,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BgImageHAlign, new FusionChartAttributeDescriptor { 
+    { "chart_bgimagehalign", new FusionChartAttributeDescriptor { 
       Name = Chart_BgImageHAlign,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BgImageScale, new FusionChartAttributeDescriptor { 
+    { "chart_bgimagescale", new FusionChartAttributeDescriptor { 
       Name = Chart_BgImageScale,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LogoURL, new FusionChartAttributeDescriptor { 
+    { "chart_logourl", new FusionChartAttributeDescriptor { 
       Name = Chart_LogoURL,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LogoPosition, new FusionChartAttributeDescriptor { 
+    { "chart_logoposition", new FusionChartAttributeDescriptor { 
       Name = Chart_LogoPosition,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LogoAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_logoalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_LogoAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LogoScale, new FusionChartAttributeDescriptor { 
+    { "chart_logoscale", new FusionChartAttributeDescriptor { 
       Name = Chart_LogoScale,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LogoLink, new FusionChartAttributeDescriptor { 
+    { "chart_logolink", new FusionChartAttributeDescriptor { 
       Name = Chart_LogoLink,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowPlotBorder, new FusionChartAttributeDescriptor { 
+    { "chart_showplotborder", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowPlotBorder,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotBorderColor, new FusionChartAttributeDescriptor { 
+    { "chart_plotbordercolor", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotBorderColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotBorderThickness, new FusionChartAttributeDescriptor { 
+    { "chart_plotborderthickness", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotBorderThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotBorderAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_plotborderalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotBorderAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotFillAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_plotfillalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotFillAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowShadow, new FusionChartAttributeDescriptor { 
+    { "chart_showshadow", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowShadow,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Use3DLighting, new FusionChartAttributeDescriptor { 
+    { "chart_use3dlighting", new FusionChartAttributeDescriptor { 
       Name = Chart_Use3DLighting,
       Charts = FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Doughnut2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn3D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedBar3D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Radius3D, new FusionChartAttributeDescriptor { 
+    { "chart_radius3d", new FusionChartAttributeDescriptor { 
       Name = Chart_Radius3D,
       Charts = FusionChartType.Pie2D | FusionChartType.Doughnut2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SlicingDistance, new FusionChartAttributeDescriptor { 
+    { "chart_slicingdistance", new FusionChartAttributeDescriptor { 
       Name = Chart_SlicingDistance,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PieRadius, new FusionChartAttributeDescriptor { 
+    { "chart_pieradius", new FusionChartAttributeDescriptor { 
       Name = Chart_PieRadius,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_StartingAngle, new FusionChartAttributeDescriptor { 
+    { "chart_startingangle", new FusionChartAttributeDescriptor { 
       Name = Chart_StartingAngle,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_EnableRotation, new FusionChartAttributeDescriptor { 
+    { "chart_enablerotation", new FusionChartAttributeDescriptor { 
       Name = Chart_EnableRotation,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_EnableSmartLabels, new FusionChartAttributeDescriptor { 
+    { "chart_enablesmartlabels", new FusionChartAttributeDescriptor { 
       Name = Chart_EnableSmartLabels,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SkipOverlapLabels, new FusionChartAttributeDescriptor { 
+    { "chart_skipoverlaplabels", new FusionChartAttributeDescriptor { 
       Name = Chart_SkipOverlapLabels,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_IsSmartLineSlanted, new FusionChartAttributeDescriptor { 
+    { "chart_issmartlineslanted", new FusionChartAttributeDescriptor { 
       Name = Chart_IsSmartLineSlanted,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SmartLineColor, new FusionChartAttributeDescriptor { 
+    { "chart_smartlinecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_SmartLineColor,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SmartLineThickness, new FusionChartAttributeDescriptor { 
+    { "chart_smartlinethickness", new FusionChartAttributeDescriptor { 
       Name = Chart_SmartLineThickness,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SmartLineAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_smartlinealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_SmartLineAlpha,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LabelDistance, new FusionChartAttributeDescriptor { 
+    { "chart_labeldistance", new FusionChartAttributeDescriptor { 
       Name = Chart_LabelDistance,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SmartLabelClearance, new FusionChartAttributeDescriptor { 
+    { "chart_smartlabelclearance", new FusionChartAttributeDescriptor { 
       Name = Chart_SmartLabelClearance,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ManageLabelOverflow, new FusionChartAttributeDescriptor { 
+    { "chart_managelabeloverflow", new FusionChartAttributeDescriptor { 
       Name = Chart_ManageLabelOverflow,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_UseEllipsesWhenOverflow, new FusionChartAttributeDescriptor { 
+    { "chart_useellipseswhenoverflow", new FusionChartAttributeDescriptor { 
       Name = Chart_UseEllipsesWhenOverflow,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_FormatNumber, new FusionChartAttributeDescriptor { 
+    { "chart_formatnumber", new FusionChartAttributeDescriptor { 
       Name = Chart_FormatNumber,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_FormatNumberScale, new FusionChartAttributeDescriptor { 
+    { "chart_formatnumberscale", new FusionChartAttributeDescriptor { 
       Name = Chart_FormatNumberScale,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DefaultNumberScale, new FusionChartAttributeDescriptor { 
+    { "chart_defaultnumberscale", new FusionChartAttributeDescriptor { 
       Name = Chart_DefaultNumberScale,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_NumberScaleUnit, new FusionChartAttributeDescriptor { 
+    { "chart_numberscaleunit", new FusionChartAttributeDescriptor { 
       Name = Chart_NumberScaleUnit,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_NumberScaleValue, new FusionChartAttributeDescriptor { 
+    { "chart_numberscalevalue", new FusionChartAttributeDescriptor { 
       Name = Chart_NumberScaleValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ScaleRecursively, new FusionChartAttributeDescriptor { 
+    { "chart_scalerecursively", new FusionChartAttributeDescriptor { 
       Name = Chart_ScaleRecursively,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_MaxScaleRecursion, new FusionChartAttributeDescriptor { 
+    { "chart_maxscalerecursion", new FusionChartAttributeDescriptor { 
       Name = Chart_MaxScaleRecursion,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ScaleSeparator, new FusionChartAttributeDescriptor { 
+    { "chart_scaleseparator", new FusionChartAttributeDescriptor { 
       Name = Chart_ScaleSeparator,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_NumberPrefix, new FusionChartAttributeDescriptor { 
+    { "chart_numberprefix", new FusionChartAttributeDescriptor { 
       Name = Chart_NumberPrefix,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_NumberSuffix, new FusionChartAttributeDescriptor { 
+    { "chart_numbersuffix", new FusionChartAttributeDescriptor { 
       Name = Chart_NumberSuffix,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DecimalSeparator, new FusionChartAttributeDescriptor { 
+    { "chart_decimalseparator", new FusionChartAttributeDescriptor { 
       Name = Chart_DecimalSeparator,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ThousandSeparator, new FusionChartAttributeDescriptor { 
+    { "chart_thousandseparator", new FusionChartAttributeDescriptor { 
       Name = Chart_ThousandSeparator,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ThousandSeparatorPosition, new FusionChartAttributeDescriptor { 
+    { "chart_thousandseparatorposition", new FusionChartAttributeDescriptor { 
       Name = Chart_ThousandSeparatorPosition,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_InDecimalSeparator, new FusionChartAttributeDescriptor { 
+    { "chart_indecimalseparator", new FusionChartAttributeDescriptor { 
       Name = Chart_InDecimalSeparator,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_InThousandSeparator, new FusionChartAttributeDescriptor { 
+    { "chart_inthousandseparator", new FusionChartAttributeDescriptor { 
       Name = Chart_InThousandSeparator,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Decimals, new FusionChartAttributeDescriptor { 
+    { "chart_decimals", new FusionChartAttributeDescriptor { 
       Name = Chart_Decimals,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ForceDecimals, new FusionChartAttributeDescriptor { 
+    { "chart_forcedecimals", new FusionChartAttributeDescriptor { 
       Name = Chart_ForceDecimals,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BaseFont, new FusionChartAttributeDescriptor { 
+    { "chart_basefont", new FusionChartAttributeDescriptor { 
       Name = Chart_BaseFont,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BaseFontSize, new FusionChartAttributeDescriptor { 
+    { "chart_basefontsize", new FusionChartAttributeDescriptor { 
       Name = Chart_BaseFontSize,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BaseFontColor, new FusionChartAttributeDescriptor { 
+    { "chart_basefontcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_BaseFontColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowLegend, new FusionChartAttributeDescriptor { 
+    { "chart_showlegend", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowLegend,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendPosition, new FusionChartAttributeDescriptor { 
+    { "chart_legendposition", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendPosition,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendCaption, new FusionChartAttributeDescriptor { 
+    { "chart_legendcaption", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendCaption,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendIconScale, new FusionChartAttributeDescriptor { 
+    { "chart_legendiconscale", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendIconScale,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendBgColor, new FusionChartAttributeDescriptor { 
+    { "chart_legendbgcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendBgColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendBgAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_legendbgalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendBgAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendBorderColor, new FusionChartAttributeDescriptor { 
+    { "chart_legendbordercolor", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendBorderColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendBorderThickness, new FusionChartAttributeDescriptor { 
+    { "chart_legendborderthickness", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendBorderThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendBorderAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_legendborderalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendBorderAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendShadow, new FusionChartAttributeDescriptor { 
+    { "chart_legendshadow", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendShadow,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendAllowDrag, new FusionChartAttributeDescriptor { 
+    { "chart_legendallowdrag", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendAllowDrag,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendScrollBgColor, new FusionChartAttributeDescriptor { 
+    { "chart_legendscrollbgcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendScrollBgColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendScrollBarColor, new FusionChartAttributeDescriptor { 
+    { "chart_legendscrollbarcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendScrollBarColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendScrollBtnColor, new FusionChartAttributeDescriptor { 
+    { "chart_legendscrollbtncolor", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendScrollBtnColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ReverseLegend, new FusionChartAttributeDescriptor { 
+    { "chart_reverselegend", new FusionChartAttributeDescriptor { 
       Name = Chart_ReverseLegend,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_InteractiveLegend, new FusionChartAttributeDescriptor { 
+    { "chart_interactivelegend", new FusionChartAttributeDescriptor { 
       Name = Chart_InteractiveLegend,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendNumColumns, new FusionChartAttributeDescriptor { 
+    { "chart_legendnumcolumns", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendNumColumns,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_MinimiseWrappingInLegend, new FusionChartAttributeDescriptor { 
+    { "chart_minimisewrappinginlegend", new FusionChartAttributeDescriptor { 
       Name = Chart_MinimiseWrappingInLegend,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowToolTip, new FusionChartAttributeDescriptor { 
+    { "chart_showtooltip", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowToolTip,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ToolTipBgColor, new FusionChartAttributeDescriptor { 
+    { "chart_tooltipbgcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ToolTipBgColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ToolTipBorderColor, new FusionChartAttributeDescriptor { 
+    { "chart_tooltipbordercolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ToolTipBorderColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ToolTipSepChar, new FusionChartAttributeDescriptor { 
+    { "chart_tooltipsepchar", new FusionChartAttributeDescriptor { 
       Name = Chart_ToolTipSepChar,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowToolTipShadow, new FusionChartAttributeDescriptor { 
+    { "chart_showtooltipshadow", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowToolTipShadow,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CaptionPadding, new FusionChartAttributeDescriptor { 
+    { "chart_captionpadding", new FusionChartAttributeDescriptor { 
       Name = Chart_CaptionPadding,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ChartLeftMargin, new FusionChartAttributeDescriptor { 
+    { "chart_chartleftmargin", new FusionChartAttributeDescriptor { 
       Name = Chart_ChartLeftMargin,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ChartRightMargin, new FusionChartAttributeDescriptor { 
+    { "chart_chartrightmargin", new FusionChartAttributeDescriptor { 
       Name = Chart_ChartRightMargin,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ChartTopMargin, new FusionChartAttributeDescriptor { 
+    { "chart_charttopmargin", new FusionChartAttributeDescriptor { 
       Name = Chart_ChartTopMargin,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ChartBottomMargin, new FusionChartAttributeDescriptor { 
+    { "chart_chartbottommargin", new FusionChartAttributeDescriptor { 
       Name = Chart_ChartBottomMargin,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Set_BorderColor, new FusionChartAttributeDescriptor { 
+    { "set_bordercolor", new FusionChartAttributeDescriptor { 
       Name = Set_BorderColor,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_BorderAlpha, new FusionChartAttributeDescriptor { 
+    { "set_borderalpha", new FusionChartAttributeDescriptor { 
       Name = Set_BorderAlpha,
       Charts = FusionChartType.Pie2D | FusionChartType.Doughnut2D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_IsSliced, new FusionChartAttributeDescriptor { 
+    { "set_issliced", new FusionChartAttributeDescriptor { 
       Name = Set_IsSliced,
       Charts = FusionChartType.Pie2D | FusionChartType.Pie3D | FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_Label, new FusionChartAttributeDescriptor { 
+    { "set_label", new FusionChartAttributeDescriptor { 
       Name = Set_Label,
       Charts = FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_Value, new FusionChartAttributeDescriptor { 
+    { "set_value", new FusionChartAttributeDescriptor { 
       Name = Set_Value,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_DisplayValue, new FusionChartAttributeDescriptor { 
+    { "set_displayvalue", new FusionChartAttributeDescriptor { 
       Name = Set_DisplayValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_Color, new FusionChartAttributeDescriptor { 
+    { "set_color", new FusionChartAttributeDescriptor { 
       Name = Set_Color,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_Link, new FusionChartAttributeDescriptor { 
+    { "set_link", new FusionChartAttributeDescriptor { 
       Name = Set_Link,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_ToolText, new FusionChartAttributeDescriptor { 
+    { "set_tooltext", new FusionChartAttributeDescriptor { 
       Name = Set_ToolText,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_Dashed, new FusionChartAttributeDescriptor { 
+    { "set_dashed", new FusionChartAttributeDescriptor { 
       Name = Set_Dashed,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_Alpha, new FusionChartAttributeDescriptor { 
+    { "set_alpha", new FusionChartAttributeDescriptor { 
       Name = Set_Alpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_ShowLabel, new FusionChartAttributeDescriptor { 
+    { "set_showlabel", new FusionChartAttributeDescriptor { 
       Name = Set_ShowLabel,
       Charts = FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_ShowValue, new FusionChartAttributeDescriptor { 
+    { "set_showvalue", new FusionChartAttributeDescriptor { 
       Name = Set_ShowValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Chart_LabelDisplay, new FusionChartAttributeDescriptor { 
+    { "chart_labeldisplay", new FusionChartAttributeDescriptor { 
       Name = Chart_LabelDisplay,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_RotateLabels, new FusionChartAttributeDescriptor { 
+    { "chart_rotatelabels", new FusionChartAttributeDescriptor { 
       Name = Chart_RotateLabels,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SlantLabels, new FusionChartAttributeDescriptor { 
+    { "chart_slantlabels", new FusionChartAttributeDescriptor { 
       Name = Chart_SlantLabels,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LabelStep, new FusionChartAttributeDescriptor { 
+    { "chart_labelstep", new FusionChartAttributeDescriptor { 
       Name = Chart_LabelStep,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_StaggerLines, new FusionChartAttributeDescriptor { 
+    { "chart_staggerlines", new FusionChartAttributeDescriptor { 
       Name = Chart_StaggerLines,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_RotateValues, new FusionChartAttributeDescriptor { 
+    { "chart_rotatevalues", new FusionChartAttributeDescriptor { 
       Name = Chart_RotateValues,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlaceValuesInside, new FusionChartAttributeDescriptor { 
+    { "chart_placevaluesinside", new FusionChartAttributeDescriptor { 
       Name = Chart_PlaceValuesInside,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSColumn3D | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedBar3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowYAxisValues, new FusionChartAttributeDescriptor { 
+    { "chart_showyaxisvalues", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowYAxisValues,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowLimits, new FusionChartAttributeDescriptor { 
+    { "chart_showlimits", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowLimits,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowDivLineValues, new FusionChartAttributeDescriptor { 
+    { "chart_showdivlinevalues", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowDivLineValues,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YAxisValuesStep, new FusionChartAttributeDescriptor { 
+    { "chart_yaxisvaluesstep", new FusionChartAttributeDescriptor { 
       Name = Chart_YAxisValuesStep,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AdjustDiv, new FusionChartAttributeDescriptor { 
+    { "chart_adjustdiv", new FusionChartAttributeDescriptor { 
       Name = Chart_AdjustDiv,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_RotateYAxisName, new FusionChartAttributeDescriptor { 
+    { "chart_rotateyaxisname", new FusionChartAttributeDescriptor { 
       Name = Chart_RotateYAxisName,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YAxisNameWidth, new FusionChartAttributeDescriptor { 
+    { "chart_yaxisnamewidth", new FusionChartAttributeDescriptor { 
       Name = Chart_YAxisNameWidth,
       Charts = FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YAxisMinValue, new FusionChartAttributeDescriptor { 
+    { "chart_yaxisminvalue", new FusionChartAttributeDescriptor { 
       Name = Chart_YAxisMinValue,
       Charts = FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YAxisMaxValue, new FusionChartAttributeDescriptor { 
+    { "chart_yaxismaxvalue", new FusionChartAttributeDescriptor { 
       Name = Chart_YAxisMaxValue,
       Charts = FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SetAdaptiveYMin, new FusionChartAttributeDescriptor { 
+    { "chart_setadaptiveymin", new FusionChartAttributeDescriptor { 
       Name = Chart_SetAdaptiveYMin,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CenterYaxisName, new FusionChartAttributeDescriptor { 
+    { "chart_centeryaxisname", new FusionChartAttributeDescriptor { 
       Name = Chart_CenterYaxisName,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XAxisName, new FusionChartAttributeDescriptor { 
+    { "chart_xaxisname", new FusionChartAttributeDescriptor { 
       Name = Chart_XAxisName,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YAxisName, new FusionChartAttributeDescriptor { 
+    { "chart_yaxisname", new FusionChartAttributeDescriptor { 
       Name = Chart_YAxisName,
       Charts = FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasBgColor, new FusionChartAttributeDescriptor { 
+    { "chart_canvasbgcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasBgColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasBgAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_canvasbgalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasBgAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasBgRatio, new FusionChartAttributeDescriptor { 
+    { "chart_canvasbgratio", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasBgRatio,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasBgAngle, new FusionChartAttributeDescriptor { 
+    { "chart_canvasbgangle", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasBgAngle,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasBorderColor, new FusionChartAttributeDescriptor { 
+    { "chart_canvasbordercolor", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasBorderColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasBorderThickness, new FusionChartAttributeDescriptor { 
+    { "chart_canvasborderthickness", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasBorderThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasBorderAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_canvasborderalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasBorderAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowVLineLabelBorder, new FusionChartAttributeDescriptor { 
+    { "chart_showvlinelabelborder", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowVLineLabelBorder,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_UseRoundEdges, new FusionChartAttributeDescriptor { 
+    { "chart_useroundedges", new FusionChartAttributeDescriptor { 
       Name = Chart_UseRoundEdges,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSBar2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotBorderDashed, new FusionChartAttributeDescriptor { 
+    { "chart_plotborderdashed", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotBorderDashed,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotBorderDashLen, new FusionChartAttributeDescriptor { 
+    { "chart_plotborderdashlen", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotBorderDashLen,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotBorderDashGap, new FusionChartAttributeDescriptor { 
+    { "chart_plotborderdashgap", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotBorderDashGap,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotFillAngle, new FusionChartAttributeDescriptor { 
+    { "chart_plotfillangle", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotFillAngle,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotFillRatio, new FusionChartAttributeDescriptor { 
+    { "chart_plotfillratio", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotFillRatio,
       Charts = FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotGradientColor, new FusionChartAttributeDescriptor { 
+    { "chart_plotgradientcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotGradientColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_NumDivLines, new FusionChartAttributeDescriptor { 
+    { "chart_numdivlines", new FusionChartAttributeDescriptor { 
       Name = Chart_NumDivLines,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DivLineColor, new FusionChartAttributeDescriptor { 
+    { "chart_divlinecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_DivLineColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DivLineThickness, new FusionChartAttributeDescriptor { 
+    { "chart_divlinethickness", new FusionChartAttributeDescriptor { 
       Name = Chart_DivLineThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DivLineAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_divlinealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_DivLineAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DivLineIsDashed, new FusionChartAttributeDescriptor { 
+    { "chart_divlineisdashed", new FusionChartAttributeDescriptor { 
       Name = Chart_DivLineIsDashed,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DivLineDashLen, new FusionChartAttributeDescriptor { 
+    { "chart_divlinedashlen", new FusionChartAttributeDescriptor { 
       Name = Chart_DivLineDashLen,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DivLineDashGap, new FusionChartAttributeDescriptor { 
+    { "chart_divlinedashgap", new FusionChartAttributeDescriptor { 
       Name = Chart_DivLineDashGap,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZeroPlaneColor, new FusionChartAttributeDescriptor { 
+    { "chart_zeroplanecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ZeroPlaneColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZeroPlaneThickness, new FusionChartAttributeDescriptor { 
+    { "chart_zeroplanethickness", new FusionChartAttributeDescriptor { 
       Name = Chart_ZeroPlaneThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZeroPlaneAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_zeroplanealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_ZeroPlaneAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowZeroPlaneValue, new FusionChartAttributeDescriptor { 
+    { "chart_showzeroplanevalue", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowZeroPlaneValue,
       Charts = FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowAlternateHGridColor, new FusionChartAttributeDescriptor { 
+    { "chart_showalternatehgridcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowAlternateHGridColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AlternateHGridColor, new FusionChartAttributeDescriptor { 
+    { "chart_alternatehgridcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_AlternateHGridColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AlternateHGridAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_alternatehgridalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_AlternateHGridAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ForceYAxisValueDecimals, new FusionChartAttributeDescriptor { 
+    { "chart_forceyaxisvaluedecimals", new FusionChartAttributeDescriptor { 
       Name = Chart_ForceYAxisValueDecimals,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YAxisValueDecimals, new FusionChartAttributeDescriptor { 
+    { "chart_yaxisvaluedecimals", new FusionChartAttributeDescriptor { 
       Name = Chart_YAxisValueDecimals,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_OutCnvBaseFont, new FusionChartAttributeDescriptor { 
+    { "chart_outcnvbasefont", new FusionChartAttributeDescriptor { 
       Name = Chart_OutCnvBaseFont,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_OutCnvBaseFontSize, new FusionChartAttributeDescriptor { 
+    { "chart_outcnvbasefontsize", new FusionChartAttributeDescriptor { 
       Name = Chart_OutCnvBaseFontSize,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_OutCnvBaseFontColor, new FusionChartAttributeDescriptor { 
+    { "chart_outcnvbasefontcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_OutCnvBaseFontColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XAxisNamePadding, new FusionChartAttributeDescriptor { 
+    { "chart_xaxisnamepadding", new FusionChartAttributeDescriptor { 
       Name = Chart_XAxisNamePadding,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YAxisNamePadding, new FusionChartAttributeDescriptor { 
+    { "chart_yaxisnamepadding", new FusionChartAttributeDescriptor { 
       Name = Chart_YAxisNamePadding,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YAxisValuesPadding, new FusionChartAttributeDescriptor { 
+    { "chart_yaxisvaluespadding", new FusionChartAttributeDescriptor { 
       Name = Chart_YAxisValuesPadding,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LabelPadding, new FusionChartAttributeDescriptor { 
+    { "chart_labelpadding", new FusionChartAttributeDescriptor { 
       Name = Chart_LabelPadding,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ValuePadding, new FusionChartAttributeDescriptor { 
+    { "chart_valuepadding", new FusionChartAttributeDescriptor { 
       Name = Chart_ValuePadding,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.Marimekko | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotSpacePercent, new FusionChartAttributeDescriptor { 
+    { "chart_plotspacepercent", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotSpacePercent,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSColumn3D | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasLeftMargin, new FusionChartAttributeDescriptor { 
+    { "chart_canvasleftmargin", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasLeftMargin,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasRightMargin, new FusionChartAttributeDescriptor { 
+    { "chart_canvasrightmargin", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasRightMargin,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasTopMargin, new FusionChartAttributeDescriptor { 
+    { "chart_canvastopmargin", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasTopMargin,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasBottomMargin, new FusionChartAttributeDescriptor { 
+    { "chart_canvasbottommargin", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasBottomMargin,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { VLine_Color, new FusionChartAttributeDescriptor { 
+    { "vline_color", new FusionChartAttributeDescriptor { 
       Name = VLine_Color,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { VLine_Thickness, new FusionChartAttributeDescriptor { 
+    { "vline_thickness", new FusionChartAttributeDescriptor { 
       Name = VLine_Thickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { VLine_Alpha, new FusionChartAttributeDescriptor { 
+    { "vline_alpha", new FusionChartAttributeDescriptor { 
       Name = VLine_Alpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { VLine_Dashed, new FusionChartAttributeDescriptor { 
+    { "vline_dashed", new FusionChartAttributeDescriptor { 
       Name = VLine_Dashed,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { VLine_DashLen, new FusionChartAttributeDescriptor { 
+    { "vline_dashlen", new FusionChartAttributeDescriptor { 
       Name = VLine_DashLen,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { VLine_DashGap, new FusionChartAttributeDescriptor { 
+    { "vline_dashgap", new FusionChartAttributeDescriptor { 
       Name = VLine_DashGap,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { VLine_Label, new FusionChartAttributeDescriptor { 
+    { "vline_label", new FusionChartAttributeDescriptor { 
       Name = VLine_Label,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { VLine_ShowLabelBorder, new FusionChartAttributeDescriptor { 
+    { "vline_showlabelborder", new FusionChartAttributeDescriptor { 
       Name = VLine_ShowLabelBorder,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { VLine_LinePosition, new FusionChartAttributeDescriptor { 
+    { "vline_lineposition", new FusionChartAttributeDescriptor { 
       Name = VLine_LinePosition,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { VLine_LabelPosition, new FusionChartAttributeDescriptor { 
+    { "vline_labelposition", new FusionChartAttributeDescriptor { 
       Name = VLine_LabelPosition,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { VLine_LabelHAlign, new FusionChartAttributeDescriptor { 
+    { "vline_labelhalign", new FusionChartAttributeDescriptor { 
       Name = VLine_LabelHAlign,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { VLine_LabelVAlign, new FusionChartAttributeDescriptor { 
+    { "vline_labelvalign", new FusionChartAttributeDescriptor { 
       Name = VLine_LabelVAlign,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.VLine,
     } },
   
-    { Line_StartValue, new FusionChartAttributeDescriptor { 
+    { "line_startvalue", new FusionChartAttributeDescriptor { 
       Name = Line_StartValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_EndValue, new FusionChartAttributeDescriptor { 
+    { "line_endvalue", new FusionChartAttributeDescriptor { 
       Name = Line_EndValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_DisplayValue, new FusionChartAttributeDescriptor { 
+    { "line_displayvalue", new FusionChartAttributeDescriptor { 
       Name = Line_DisplayValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_Color, new FusionChartAttributeDescriptor { 
+    { "line_color", new FusionChartAttributeDescriptor { 
       Name = Line_Color,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_IsTrendZone, new FusionChartAttributeDescriptor { 
+    { "line_istrendzone", new FusionChartAttributeDescriptor { 
       Name = Line_IsTrendZone,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_ShowOnTop, new FusionChartAttributeDescriptor { 
+    { "line_showontop", new FusionChartAttributeDescriptor { 
       Name = Line_ShowOnTop,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_Thickness, new FusionChartAttributeDescriptor { 
+    { "line_thickness", new FusionChartAttributeDescriptor { 
       Name = Line_Thickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_Alpha, new FusionChartAttributeDescriptor { 
+    { "line_alpha", new FusionChartAttributeDescriptor { 
       Name = Line_Alpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_Dashed, new FusionChartAttributeDescriptor { 
+    { "line_dashed", new FusionChartAttributeDescriptor { 
       Name = Line_Dashed,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_DashLen, new FusionChartAttributeDescriptor { 
+    { "line_dashlen", new FusionChartAttributeDescriptor { 
       Name = Line_DashLen,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_DashGap, new FusionChartAttributeDescriptor { 
+    { "line_dashgap", new FusionChartAttributeDescriptor { 
       Name = Line_DashGap,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_ValueOnRight, new FusionChartAttributeDescriptor { 
+    { "line_valueonright", new FusionChartAttributeDescriptor { 
       Name = Line_ValueOnRight,
       Charts = FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine,
       Element = FusionChartElementType.Line,
     } },
   
-    { Line_ToolText, new FusionChartAttributeDescriptor { 
+    { "line_tooltext", new FusionChartAttributeDescriptor { 
       Name = Line_ToolText,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Chart_PieInnerFaceAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_pieinnerfacealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_PieInnerFaceAlpha,
       Charts = FusionChartType.Pie3D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PieOuterFaceAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_pieouterfacealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_PieOuterFaceAlpha,
       Charts = FusionChartType.Pie3D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PieYScale, new FusionChartAttributeDescriptor { 
+    { "chart_pieyscale", new FusionChartAttributeDescriptor { 
       Name = Chart_PieYScale,
       Charts = FusionChartType.Pie3D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PieSliceDepth, new FusionChartAttributeDescriptor { 
+    { "chart_pieslicedepth", new FusionChartAttributeDescriptor { 
       Name = Chart_PieSliceDepth,
       Charts = FusionChartType.Pie3D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_MaxColWidth, new FusionChartAttributeDescriptor { 
+    { "chart_maxcolwidth", new FusionChartAttributeDescriptor { 
       Name = Chart_MaxColWidth,
       Charts = FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Pareto3D | FusionChartType.MSColumn3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasBaseColor, new FusionChartAttributeDescriptor { 
+    { "chart_canvasbasecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasBaseColor,
       Charts = FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Pareto3D | FusionChartType.MSColumn3D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedBar3D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowCanvasBg, new FusionChartAttributeDescriptor { 
+    { "chart_showcanvasbg", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowCanvasBg,
       Charts = FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Pareto3D | FusionChartType.MSColumn3D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedBar3D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowCanvasBase, new FusionChartAttributeDescriptor { 
+    { "chart_showcanvasbase", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowCanvasBase,
       Charts = FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Pareto3D | FusionChartType.MSColumn3D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedBar3D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasBaseDepth, new FusionChartAttributeDescriptor { 
+    { "chart_canvasbasedepth", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasBaseDepth,
       Charts = FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Pareto3D | FusionChartType.MSColumn3D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedBar3D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasBgDepth, new FusionChartAttributeDescriptor { 
+    { "chart_canvasbgdepth", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasBgDepth,
       Charts = FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Pareto3D | FusionChartType.MSColumn3D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedBar3D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_OverlapColumns, new FusionChartAttributeDescriptor { 
+    { "chart_overlapcolumns", new FusionChartAttributeDescriptor { 
       Name = Chart_OverlapColumns,
       Charts = FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Pareto3D | FusionChartType.MSColumn3D | FusionChartType.StackedColumn3D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZeroPlaneShowBorder, new FusionChartAttributeDescriptor { 
+    { "chart_zeroplaneshowborder", new FusionChartAttributeDescriptor { 
       Name = Chart_ZeroPlaneShowBorder,
       Charts = FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Pareto3D | FusionChartType.MSColumn3D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedBar3D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZeroPlaneBorderColor, new FusionChartAttributeDescriptor { 
+    { "chart_zeroplanebordercolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ZeroPlaneBorderColor,
       Charts = FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Pareto3D | FusionChartType.MSColumn3D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.StackedBar3D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_MaxLabelWidthPercent, new FusionChartAttributeDescriptor { 
+    { "chart_maxlabelwidthpercent", new FusionChartAttributeDescriptor { 
       Name = Chart_MaxLabelWidthPercent,
       Charts = FusionChartType.Bar2D | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_RotateXAxisName, new FusionChartAttributeDescriptor { 
+    { "chart_rotatexaxisname", new FusionChartAttributeDescriptor { 
       Name = Chart_RotateXAxisName,
       Charts = FusionChartType.Bar2D | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XAxisNameWidth, new FusionChartAttributeDescriptor { 
+    { "chart_xaxisnamewidth", new FusionChartAttributeDescriptor { 
       Name = Chart_XAxisNameWidth,
       Charts = FusionChartType.Bar2D | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CenterXaxisName, new FusionChartAttributeDescriptor { 
+    { "chart_centerxaxisname", new FusionChartAttributeDescriptor { 
       Name = Chart_CenterXaxisName,
       Charts = FusionChartType.Bar2D | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowAlternateVGridColor, new FusionChartAttributeDescriptor { 
+    { "chart_showalternatevgridcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowAlternateVGridColor,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.StackedArea2D | FusionChartType.StackedBar2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AlternateVGridColor, new FusionChartAttributeDescriptor { 
+    { "chart_alternatevgridcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_AlternateVGridColor,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.StackedArea2D | FusionChartType.StackedBar2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AlternateVGridAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_alternatevgridalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_AlternateVGridAlpha,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.StackedArea2D | FusionChartType.StackedBar2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ConnectNullData, new FusionChartAttributeDescriptor { 
+    { "chart_connectnulldata", new FusionChartAttributeDescriptor { 
       Name = Chart_ConnectNullData,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ValuePosition, new FusionChartAttributeDescriptor { 
+    { "chart_valueposition", new FusionChartAttributeDescriptor { 
       Name = Chart_ValuePosition,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.ZoomLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LineColor, new FusionChartAttributeDescriptor { 
+    { "chart_linecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_LineColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.ZoomLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LineThickness, new FusionChartAttributeDescriptor { 
+    { "chart_linethickness", new FusionChartAttributeDescriptor { 
       Name = Chart_LineThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.ZoomLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LineAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_linealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_LineAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.ZoomLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LineDashed, new FusionChartAttributeDescriptor { 
+    { "chart_linedashed", new FusionChartAttributeDescriptor { 
       Name = Chart_LineDashed,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LineDashLen, new FusionChartAttributeDescriptor { 
+    { "chart_linedashlen", new FusionChartAttributeDescriptor { 
       Name = Chart_LineDashLen,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LineDashGap, new FusionChartAttributeDescriptor { 
+    { "chart_linedashgap", new FusionChartAttributeDescriptor { 
       Name = Chart_LineDashGap,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DrawAnchors, new FusionChartAttributeDescriptor { 
+    { "chart_drawanchors", new FusionChartAttributeDescriptor { 
       Name = Chart_DrawAnchors,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AnchorSides, new FusionChartAttributeDescriptor { 
+    { "chart_anchorsides", new FusionChartAttributeDescriptor { 
       Name = Chart_AnchorSides,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AnchorRadius, new FusionChartAttributeDescriptor { 
+    { "chart_anchorradius", new FusionChartAttributeDescriptor { 
       Name = Chart_AnchorRadius,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AnchorBorderColor, new FusionChartAttributeDescriptor { 
+    { "chart_anchorbordercolor", new FusionChartAttributeDescriptor { 
       Name = Chart_AnchorBorderColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AnchorBorderThickness, new FusionChartAttributeDescriptor { 
+    { "chart_anchorborderthickness", new FusionChartAttributeDescriptor { 
       Name = Chart_AnchorBorderThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AnchorBgColor, new FusionChartAttributeDescriptor { 
+    { "chart_anchorbgcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_AnchorBgColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AnchorAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_anchoralpha", new FusionChartAttributeDescriptor { 
       Name = Chart_AnchorAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AnchorBgAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_anchorbgalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_AnchorBgAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.Pareto2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_NumVDivLines, new FusionChartAttributeDescriptor { 
+    { "chart_numvdivlines", new FusionChartAttributeDescriptor { 
       Name = Chart_NumVDivLines,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivLineColor, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlinecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivLineColor,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivLineThickness, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlinethickness", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivLineThickness,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivLineAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlinealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivLineAlpha,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivLineIsDashed, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlineisdashed", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivLineIsDashed,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivLineDashLen, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlinedashlen", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivLineDashLen,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivLineDashGap, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlinedashgap", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivLineDashGap,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowZeroPlane, new FusionChartAttributeDescriptor { 
+    { "chart_showzeroplane", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowZeroPlane,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.MSLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CanvasPadding, new FusionChartAttributeDescriptor { 
+    { "chart_canvaspadding", new FusionChartAttributeDescriptor { 
       Name = Chart_CanvasPadding,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.MSBar3D | FusionChartType.StackedArea2D | FusionChartType.StackedBar3D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Set_ValuePosition, new FusionChartAttributeDescriptor { 
+    { "set_valueposition", new FusionChartAttributeDescriptor { 
       Name = Set_ValuePosition,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_AnchorSides, new FusionChartAttributeDescriptor { 
+    { "set_anchorsides", new FusionChartAttributeDescriptor { 
       Name = Set_AnchorSides,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_AnchorRadius, new FusionChartAttributeDescriptor { 
+    { "set_anchorradius", new FusionChartAttributeDescriptor { 
       Name = Set_AnchorRadius,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_AnchorBorderColor, new FusionChartAttributeDescriptor { 
+    { "set_anchorbordercolor", new FusionChartAttributeDescriptor { 
       Name = Set_AnchorBorderColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_AnchorBorderThickness, new FusionChartAttributeDescriptor { 
+    { "set_anchorborderthickness", new FusionChartAttributeDescriptor { 
       Name = Set_AnchorBorderThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_AnchorBgColor, new FusionChartAttributeDescriptor { 
+    { "set_anchorbgcolor", new FusionChartAttributeDescriptor { 
       Name = Set_AnchorBgColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_AnchorAlpha, new FusionChartAttributeDescriptor { 
+    { "set_anchoralpha", new FusionChartAttributeDescriptor { 
       Name = Set_AnchorAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_AnchorBgAlpha, new FusionChartAttributeDescriptor { 
+    { "set_anchorbgalpha", new FusionChartAttributeDescriptor { 
       Name = Set_AnchorBgAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Set,
     } },
   
-    { Chart_DoughnutRadius, new FusionChartAttributeDescriptor { 
+    { "chart_doughnutradius", new FusionChartAttributeDescriptor { 
       Name = Chart_DoughnutRadius,
       Charts = FusionChartType.Doughnut2D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PlotFillColor, new FusionChartAttributeDescriptor { 
+    { "chart_plotfillcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_PlotFillColor,
       Charts = FusionChartType.ScrollArea2D | FusionChartType.MSArea | FusionChartType.StackedArea2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowSecondaryLimits, new FusionChartAttributeDescriptor { 
+    { "chart_showsecondarylimits", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowSecondaryLimits,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.Pareto2D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowDivLineSecondaryValue, new FusionChartAttributeDescriptor { 
+    { "chart_showdivlinesecondaryvalue", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowDivLineSecondaryValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.Pareto2D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PYAxisMaxValue, new FusionChartAttributeDescriptor { 
+    { "chart_pyaxismaxvalue", new FusionChartAttributeDescriptor { 
       Name = Chart_PYAxisMaxValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.Pareto2D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PYAxisMinValue, new FusionChartAttributeDescriptor { 
+    { "chart_pyaxisminvalue", new FusionChartAttributeDescriptor { 
       Name = Chart_PYAxisMinValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.Pareto2D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PYAxisNameWidth, new FusionChartAttributeDescriptor { 
+    { "chart_pyaxisnamewidth", new FusionChartAttributeDescriptor { 
       Name = Chart_PYAxisNameWidth,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.Pareto2D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SYAxisNameWidth, new FusionChartAttributeDescriptor { 
+    { "chart_syaxisnamewidth", new FusionChartAttributeDescriptor { 
       Name = Chart_SYAxisNameWidth,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.Pareto2D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowCumulativeLine, new FusionChartAttributeDescriptor { 
+    { "chart_showcumulativeline", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowCumulativeLine,
       Charts = FusionChartType.Pareto3D | FusionChartType.Pareto2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowLineValues, new FusionChartAttributeDescriptor { 
+    { "chart_showlinevalues", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowLineValues,
       Charts = FusionChartType.Pareto3D | FusionChartType.Pareto2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PrimaryAxisOnLeft, new FusionChartAttributeDescriptor { 
+    { "chart_primaryaxisonleft", new FusionChartAttributeDescriptor { 
       Name = Chart_PrimaryAxisOnLeft,
       Charts = FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Use3DLineShift, new FusionChartAttributeDescriptor { 
+    { "chart_use3dlineshift", new FusionChartAttributeDescriptor { 
       Name = Chart_Use3DLineShift,
       Charts = FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SYAXisName, new FusionChartAttributeDescriptor { 
+    { "chart_syaxisname", new FusionChartAttributeDescriptor { 
       Name = Chart_SYAXisName,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.Pareto2D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PYAxisName, new FusionChartAttributeDescriptor { 
+    { "chart_pyaxisname", new FusionChartAttributeDescriptor { 
       Name = Chart_PYAxisName,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.Pareto2D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Sdecimals, new FusionChartAttributeDescriptor { 
+    { "chart_sdecimals", new FusionChartAttributeDescriptor { 
       Name = Chart_Sdecimals,
       Charts = FusionChartType.Pareto3D | FusionChartType.Pareto2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SforceDecimals, new FusionChartAttributeDescriptor { 
+    { "chart_sforcedecimals", new FusionChartAttributeDescriptor { 
       Name = Chart_SforceDecimals,
       Charts = FusionChartType.Pareto3D | FusionChartType.Pareto2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SyAxisValueDecimals, new FusionChartAttributeDescriptor { 
+    { "chart_syaxisvaluedecimals", new FusionChartAttributeDescriptor { 
       Name = Chart_SyAxisValueDecimals,
       Charts = FusionChartType.Pareto3D | FusionChartType.Pareto2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Line_ParentYAxis, new FusionChartAttributeDescriptor { 
+    { "line_parentyaxis", new FusionChartAttributeDescriptor { 
       Name = Line_ParentYAxis,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.Pareto2D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Line,
     } },
   
-    { Chart_LegendMarkerCircle, new FusionChartAttributeDescriptor { 
+    { "chart_legendmarkercircle", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendMarkerCircle,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SeriesNameInToolTip, new FusionChartAttributeDescriptor { 
+    { "chart_seriesnameintooltip", new FusionChartAttributeDescriptor { 
       Name = Chart_SeriesNameInToolTip,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LegendPadding, new FusionChartAttributeDescriptor { 
+    { "chart_legendpadding", new FusionChartAttributeDescriptor { 
       Name = Chart_LegendPadding,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Categories_Font, new FusionChartAttributeDescriptor { 
+    { "categories_font", new FusionChartAttributeDescriptor { 
       Name = Categories_Font,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Categories,
     } },
   
-    { Categories_FontSize, new FusionChartAttributeDescriptor { 
+    { "categories_fontsize", new FusionChartAttributeDescriptor { 
       Name = Categories_FontSize,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Categories,
     } },
   
-    { Categories_FontColor, new FusionChartAttributeDescriptor { 
+    { "categories_fontcolor", new FusionChartAttributeDescriptor { 
       Name = Categories_FontColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Categories,
     } },
   
-    { Category_Label, new FusionChartAttributeDescriptor { 
+    { "category_label", new FusionChartAttributeDescriptor { 
       Name = Category_Label,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Category,
     } },
   
-    { Category_ShowLabel, new FusionChartAttributeDescriptor { 
+    { "category_showlabel", new FusionChartAttributeDescriptor { 
       Name = Category_ShowLabel,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Category,
     } },
   
-    { Category_ToolText, new FusionChartAttributeDescriptor { 
+    { "category_tooltext", new FusionChartAttributeDescriptor { 
       Name = Category_ToolText,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Category,
     } },
   
-    { Dataset_SeriesName, new FusionChartAttributeDescriptor { 
+    { "dataset_seriesname", new FusionChartAttributeDescriptor { 
       Name = Dataset_SeriesName,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_Color, new FusionChartAttributeDescriptor { 
+    { "dataset_color", new FusionChartAttributeDescriptor { 
       Name = Dataset_Color,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_Alpha, new FusionChartAttributeDescriptor { 
+    { "dataset_alpha", new FusionChartAttributeDescriptor { 
       Name = Dataset_Alpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_Ratio, new FusionChartAttributeDescriptor { 
+    { "dataset_ratio", new FusionChartAttributeDescriptor { 
       Name = Dataset_Ratio,
       Charts = FusionChartType.Pie2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.MSColumn2D | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.StackedColumn2DLine,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_ShowValues, new FusionChartAttributeDescriptor { 
+    { "dataset_showvalues", new FusionChartAttributeDescriptor { 
       Name = Dataset_ShowValues,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_Dashed, new FusionChartAttributeDescriptor { 
+    { "dataset_dashed", new FusionChartAttributeDescriptor { 
       Name = Dataset_Dashed,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_IncludeInLegend, new FusionChartAttributeDescriptor { 
+    { "dataset_includeinlegend", new FusionChartAttributeDescriptor { 
       Name = Dataset_IncludeInLegend,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSColumn2D | FusionChartType.MSLine | FusionChartType.MSColumn3D | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.MSBar2D | FusionChartType.MSBar3D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_ValuePosition, new FusionChartAttributeDescriptor { 
+    { "dataset_valueposition", new FusionChartAttributeDescriptor { 
       Name = Dataset_ValuePosition,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Bar2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.ZoomLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_DrawAnchors, new FusionChartAttributeDescriptor { 
+    { "dataset_drawanchors", new FusionChartAttributeDescriptor { 
       Name = Dataset_DrawAnchors,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_AnchorSides, new FusionChartAttributeDescriptor { 
+    { "dataset_anchorsides", new FusionChartAttributeDescriptor { 
       Name = Dataset_AnchorSides,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_AnchorRadius, new FusionChartAttributeDescriptor { 
+    { "dataset_anchorradius", new FusionChartAttributeDescriptor { 
       Name = Dataset_AnchorRadius,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_AnchorBorderColor, new FusionChartAttributeDescriptor { 
+    { "dataset_anchorbordercolor", new FusionChartAttributeDescriptor { 
       Name = Dataset_AnchorBorderColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_AnchorBorderThickness, new FusionChartAttributeDescriptor { 
+    { "dataset_anchorborderthickness", new FusionChartAttributeDescriptor { 
       Name = Dataset_AnchorBorderThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_AnchorBgColor, new FusionChartAttributeDescriptor { 
+    { "dataset_anchorbgcolor", new FusionChartAttributeDescriptor { 
       Name = Dataset_AnchorBgColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_AnchorAlpha, new FusionChartAttributeDescriptor { 
+    { "dataset_anchoralpha", new FusionChartAttributeDescriptor { 
       Name = Dataset_AnchorAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_AnchorBgAlpha, new FusionChartAttributeDescriptor { 
+    { "dataset_anchorbgalpha", new FusionChartAttributeDescriptor { 
       Name = Dataset_AnchorBgAlpha,
       Charts = FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.ScrollArea2D | FusionChartType.MSLine | FusionChartType.MSArea | FusionChartType.ZoomLine | FusionChartType.StackedArea2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_LineThickness, new FusionChartAttributeDescriptor { 
+    { "dataset_linethickness", new FusionChartAttributeDescriptor { 
       Name = Dataset_LineThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.ZoomLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_LineDashLen, new FusionChartAttributeDescriptor { 
+    { "dataset_linedashlen", new FusionChartAttributeDescriptor { 
       Name = Dataset_LineDashLen,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_LineDashGap, new FusionChartAttributeDescriptor { 
+    { "dataset_linedashgap", new FusionChartAttributeDescriptor { 
       Name = Dataset_LineDashGap,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Column3D | FusionChartType.Bar2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSLine | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_ShowPlotBorder, new FusionChartAttributeDescriptor { 
+    { "dataset_showplotborder", new FusionChartAttributeDescriptor { 
       Name = Dataset_ShowPlotBorder,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie3D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_PlotBorderColor, new FusionChartAttributeDescriptor { 
+    { "dataset_plotbordercolor", new FusionChartAttributeDescriptor { 
       Name = Dataset_PlotBorderColor,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie3D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_PlotBorderThickness, new FusionChartAttributeDescriptor { 
+    { "dataset_plotborderthickness", new FusionChartAttributeDescriptor { 
       Name = Dataset_PlotBorderThickness,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie3D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_PlotBorderAlpha, new FusionChartAttributeDescriptor { 
+    { "dataset_plotborderalpha", new FusionChartAttributeDescriptor { 
       Name = Dataset_PlotBorderAlpha,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie3D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSArea | FusionChartType.StackedArea2D | FusionChartType.MSCombi2D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Chart_CompactDataMode, new FusionChartAttributeDescriptor { 
+    { "chart_compactdatamode", new FusionChartAttributeDescriptor { 
       Name = Chart_CompactDataMode,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DataSeparator, new FusionChartAttributeDescriptor { 
+    { "chart_dataseparator", new FusionChartAttributeDescriptor { 
       Name = Chart_DataSeparator,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Axis, new FusionChartAttributeDescriptor { 
+    { "chart_axis", new FusionChartAttributeDescriptor { 
       Name = Chart_Axis,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LogBase, new FusionChartAttributeDescriptor { 
+    { "chart_logbase", new FusionChartAttributeDescriptor { 
       Name = Chart_LogBase,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_NumMinorLogDivLines, new FusionChartAttributeDescriptor { 
+    { "chart_numminorlogdivlines", new FusionChartAttributeDescriptor { 
       Name = Chart_NumMinorLogDivLines,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DynamicAxis, new FusionChartAttributeDescriptor { 
+    { "chart_dynamicaxis", new FusionChartAttributeDescriptor { 
       Name = Chart_DynamicAxis,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DivIntervalHints, new FusionChartAttributeDescriptor { 
+    { "chart_divintervalhints", new FusionChartAttributeDescriptor { 
       Name = Chart_DivIntervalHints,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AllowPinMode, new FusionChartAttributeDescriptor { 
+    { "chart_allowpinmode", new FusionChartAttributeDescriptor { 
       Name = Chart_AllowPinMode,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_NumVisibleLabels, new FusionChartAttributeDescriptor { 
+    { "chart_numvisiblelabels", new FusionChartAttributeDescriptor { 
       Name = Chart_NumVisibleLabels,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AnchorMinRenderDistance, new FusionChartAttributeDescriptor { 
+    { "chart_anchorminrenderdistance", new FusionChartAttributeDescriptor { 
       Name = Chart_AnchorMinRenderDistance,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowVDivLines, new FusionChartAttributeDescriptor { 
+    { "chart_showvdivlines", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowVDivLines,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DisplayStartIndex, new FusionChartAttributeDescriptor { 
+    { "chart_displaystartindex", new FusionChartAttributeDescriptor { 
       Name = Chart_DisplayStartIndex,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DisplayEndIndex, new FusionChartAttributeDescriptor { 
+    { "chart_displayendindex", new FusionChartAttributeDescriptor { 
       Name = Chart_DisplayEndIndex,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DrawToolbarButtons, new FusionChartAttributeDescriptor { 
+    { "chart_drawtoolbarbuttons", new FusionChartAttributeDescriptor { 
       Name = Chart_DrawToolbarButtons,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PixelsPerPoint, new FusionChartAttributeDescriptor { 
+    { "chart_pixelsperpoint", new FusionChartAttributeDescriptor { 
       Name = Chart_PixelsPerPoint,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PaletteThemeColor, new FusionChartAttributeDescriptor { 
+    { "chart_palettethemecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_PaletteThemeColor,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ToolbarButtonColor, new FusionChartAttributeDescriptor { 
+    { "chart_toolbarbuttoncolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ToolbarButtonColor,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ToolbarButtonFontColor, new FusionChartAttributeDescriptor { 
+    { "chart_toolbarbuttonfontcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ToolbarButtonFontColor,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZoomPaneBorderColor, new FusionChartAttributeDescriptor { 
+    { "chart_zoompanebordercolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ZoomPaneBorderColor,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZoomPaneBgColor, new FusionChartAttributeDescriptor { 
+    { "chart_zoompanebgcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ZoomPaneBgColor,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZoomPaneBgAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_zoompanebgalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_ZoomPaneBgAlpha,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PinLineThicknessDelta, new FusionChartAttributeDescriptor { 
+    { "chart_pinlinethicknessdelta", new FusionChartAttributeDescriptor { 
       Name = Chart_PinLineThicknessDelta,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PinPaneBorderColor, new FusionChartAttributeDescriptor { 
+    { "chart_pinpanebordercolor", new FusionChartAttributeDescriptor { 
       Name = Chart_PinPaneBorderColor,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PinPaneBgColor, new FusionChartAttributeDescriptor { 
+    { "chart_pinpanebgcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_PinPaneBgColor,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PinPaneBgAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_pinpanebgalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_PinPaneBgAlpha,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ToolTipBarColor, new FusionChartAttributeDescriptor { 
+    { "chart_tooltipbarcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ToolTipBarColor,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_MouseCursorColor, new FusionChartAttributeDescriptor { 
+    { "chart_mousecursorcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_MouseCursorColor,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BtnResetChartTitle, new FusionChartAttributeDescriptor { 
+    { "chart_btnresetcharttitle", new FusionChartAttributeDescriptor { 
       Name = Chart_BtnResetChartTitle,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BtnZoomOutTitle, new FusionChartAttributeDescriptor { 
+    { "chart_btnzoomouttitle", new FusionChartAttributeDescriptor { 
       Name = Chart_BtnZoomOutTitle,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BtnSwitchtoZoomModeTitle, new FusionChartAttributeDescriptor { 
+    { "chart_btnswitchtozoommodetitle", new FusionChartAttributeDescriptor { 
       Name = Chart_BtnSwitchtoZoomModeTitle,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BtnSwitchToPinModeTitle, new FusionChartAttributeDescriptor { 
+    { "chart_btnswitchtopinmodetitle", new FusionChartAttributeDescriptor { 
       Name = Chart_BtnSwitchToPinModeTitle,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowToolBarButtonTooltext, new FusionChartAttributeDescriptor { 
+    { "chart_showtoolbarbuttontooltext", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowToolBarButtonTooltext,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BtnResetChartTooltext, new FusionChartAttributeDescriptor { 
+    { "chart_btnresetcharttooltext", new FusionChartAttributeDescriptor { 
       Name = Chart_BtnResetChartTooltext,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BtnSwitchToPinModeTooltext, new FusionChartAttributeDescriptor { 
+    { "chart_btnswitchtopinmodetooltext", new FusionChartAttributeDescriptor { 
       Name = Chart_BtnSwitchToPinModeTooltext,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZoomOutMenuItemLabel, new FusionChartAttributeDescriptor { 
+    { "chart_zoomoutmenuitemlabel", new FusionChartAttributeDescriptor { 
       Name = Chart_ZoomOutMenuItemLabel,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ResetChartMenuItemLabel, new FusionChartAttributeDescriptor { 
+    { "chart_resetchartmenuitemlabel", new FusionChartAttributeDescriptor { 
       Name = Chart_ResetChartMenuItemLabel,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZoomModeMenuItemLabel, new FusionChartAttributeDescriptor { 
+    { "chart_zoommodemenuitemlabel", new FusionChartAttributeDescriptor { 
       Name = Chart_ZoomModeMenuItemLabel,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_PinModeMenuItemLabel, new FusionChartAttributeDescriptor { 
+    { "chart_pinmodemenuitemlabel", new FusionChartAttributeDescriptor { 
       Name = Chart_PinModeMenuItemLabel,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ToolBarBtnTextVMargin, new FusionChartAttributeDescriptor { 
+    { "chart_toolbarbtntextvmargin", new FusionChartAttributeDescriptor { 
       Name = Chart_ToolBarBtnTextVMargin,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ToolBarBtnTextHMargin, new FusionChartAttributeDescriptor { 
+    { "chart_toolbarbtntexthmargin", new FusionChartAttributeDescriptor { 
       Name = Chart_ToolBarBtnTextHMargin,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ToolBarBtnHPadding, new FusionChartAttributeDescriptor { 
+    { "chart_toolbarbtnhpadding", new FusionChartAttributeDescriptor { 
       Name = Chart_ToolBarBtnHPadding,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ToolBarBtnVPadding, new FusionChartAttributeDescriptor { 
+    { "chart_toolbarbtnvpadding", new FusionChartAttributeDescriptor { 
       Name = Chart_ToolBarBtnVPadding,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ScrollColor, new FusionChartAttributeDescriptor { 
+    { "chart_scrollcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_ScrollColor,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ScrollHeight, new FusionChartAttributeDescriptor { 
+    { "chart_scrollheight", new FusionChartAttributeDescriptor { 
       Name = Chart_ScrollHeight,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ScrollPadding, new FusionChartAttributeDescriptor { 
+    { "chart_scrollpadding", new FusionChartAttributeDescriptor { 
       Name = Chart_ScrollPadding,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ScrollBtnWidth, new FusionChartAttributeDescriptor { 
+    { "chart_scrollbtnwidth", new FusionChartAttributeDescriptor { 
       Name = Chart_ScrollBtnWidth,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ScrollBtnPadding, new FusionChartAttributeDescriptor { 
+    { "chart_scrollbtnpadding", new FusionChartAttributeDescriptor { 
       Name = Chart_ScrollBtnPadding,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.ZoomLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Set_StartIndex, new FusionChartAttributeDescriptor { 
+    { "set_startindex", new FusionChartAttributeDescriptor { 
       Name = Set_StartIndex,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_EndIndex, new FusionChartAttributeDescriptor { 
+    { "set_endindex", new FusionChartAttributeDescriptor { 
       Name = Set_EndIndex,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_DisplayAlways, new FusionChartAttributeDescriptor { 
+    { "set_displayalways", new FusionChartAttributeDescriptor { 
       Name = Set_DisplayAlways,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_DisplayWhenCount, new FusionChartAttributeDescriptor { 
+    { "set_displaywhencount", new FusionChartAttributeDescriptor { 
       Name = Set_DisplayWhenCount,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_ShowOnTop, new FusionChartAttributeDescriptor { 
+    { "set_showontop", new FusionChartAttributeDescriptor { 
       Name = Set_ShowOnTop,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_Thickness, new FusionChartAttributeDescriptor { 
+    { "set_thickness", new FusionChartAttributeDescriptor { 
       Name = Set_Thickness,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D | FusionChartType.ZoomLine,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_ValueOnTop, new FusionChartAttributeDescriptor { 
+    { "set_valueontop", new FusionChartAttributeDescriptor { 
       Name = Set_ValueOnTop,
       Charts = FusionChartType.ZoomLine,
       Element = FusionChartElementType.Set,
     } },
   
-    { Chart_MaxBarHeight, new FusionChartAttributeDescriptor { 
+    { "chart_maxbarheight", new FusionChartAttributeDescriptor { 
       Name = Chart_MaxBarHeight,
       Charts = FusionChartType.MSBar3D | FusionChartType.StackedBar3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BarDepth, new FusionChartAttributeDescriptor { 
+    { "chart_bardepth", new FusionChartAttributeDescriptor { 
       Name = Chart_BarDepth,
       Charts = FusionChartType.MSBar3D | FusionChartType.StackedBar3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_OverlapBars, new FusionChartAttributeDescriptor { 
+    { "chart_overlapbars", new FusionChartAttributeDescriptor { 
       Name = Chart_OverlapBars,
       Charts = FusionChartType.MSBar3D | FusionChartType.StackedBar3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowSum, new FusionChartAttributeDescriptor { 
+    { "chart_showsum", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowSum,
       Charts = FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Doughnut2D | FusionChartType.StackedColumn3D | FusionChartType.Marimekko | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Stack100Percent, new FusionChartAttributeDescriptor { 
+    { "chart_stack100percent", new FusionChartAttributeDescriptor { 
       Name = Chart_Stack100Percent,
       Charts = FusionChartType.Doughnut2D | FusionChartType.StackedColumn3D | FusionChartType.StackedArea2D | FusionChartType.StackedColumn2D | FusionChartType.StackedBar2D | FusionChartType.StackedBar3D | FusionChartType.MSStackedColumn2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_UsePercentDistribution, new FusionChartAttributeDescriptor { 
+    { "chart_usepercentdistribution", new FusionChartAttributeDescriptor { 
       Name = Chart_UsePercentDistribution,
       Charts = FusionChartType.Marimekko,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowXAxisPercentValues, new FusionChartAttributeDescriptor { 
+    { "chart_showxaxispercentvalues", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowXAxisPercentValues,
       Charts = FusionChartType.Marimekko,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Category_WidthPercent, new FusionChartAttributeDescriptor { 
+    { "category_widthpercent", new FusionChartAttributeDescriptor { 
       Name = Category_WidthPercent,
       Charts = FusionChartType.Marimekko,
       Element = FusionChartElementType.Category,
     } },
   
-    { Chart_Animate3D, new FusionChartAttributeDescriptor { 
+    { "chart_animate3d", new FusionChartAttributeDescriptor { 
       Name = Chart_Animate3D,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ExeTime, new FusionChartAttributeDescriptor { 
+    { "chart_exetime", new FusionChartAttributeDescriptor { 
       Name = Chart_ExeTime,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XAxisTickColor, new FusionChartAttributeDescriptor { 
+    { "chart_xaxistickcolor", new FusionChartAttributeDescriptor { 
       Name = Chart_XAxisTickColor,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XAxisTickAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_xaxistickalpha", new FusionChartAttributeDescriptor { 
       Name = Chart_XAxisTickAlpha,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XAxisTickThickness, new FusionChartAttributeDescriptor { 
+    { "chart_xaxistickthickness", new FusionChartAttributeDescriptor { 
       Name = Chart_XAxisTickThickness,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Is2D, new FusionChartAttributeDescriptor { 
+    { "chart_is2d", new FusionChartAttributeDescriptor { 
       Name = Chart_Is2D,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Clustered, new FusionChartAttributeDescriptor { 
+    { "chart_clustered", new FusionChartAttributeDescriptor { 
       Name = Chart_Clustered,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ChartOrder, new FusionChartAttributeDescriptor { 
+    { "chart_chartorder", new FusionChartAttributeDescriptor { 
       Name = Chart_ChartOrder,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ChartOnTop, new FusionChartAttributeDescriptor { 
+    { "chart_chartontop", new FusionChartAttributeDescriptor { 
       Name = Chart_ChartOnTop,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AutoScaling, new FusionChartAttributeDescriptor { 
+    { "chart_autoscaling", new FusionChartAttributeDescriptor { 
       Name = Chart_AutoScaling,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AllowScaling, new FusionChartAttributeDescriptor { 
+    { "chart_allowscaling", new FusionChartAttributeDescriptor { 
       Name = Chart_AllowScaling,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_StartAngX, new FusionChartAttributeDescriptor { 
+    { "chart_startangx", new FusionChartAttributeDescriptor { 
       Name = Chart_StartAngX,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_StartAngY, new FusionChartAttributeDescriptor { 
+    { "chart_startangy", new FusionChartAttributeDescriptor { 
       Name = Chart_StartAngY,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_EndAngX, new FusionChartAttributeDescriptor { 
+    { "chart_endangx", new FusionChartAttributeDescriptor { 
       Name = Chart_EndAngX,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_EndAngY, new FusionChartAttributeDescriptor { 
+    { "chart_endangy", new FusionChartAttributeDescriptor { 
       Name = Chart_EndAngY,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CameraAngX, new FusionChartAttributeDescriptor { 
+    { "chart_cameraangx", new FusionChartAttributeDescriptor { 
       Name = Chart_CameraAngX,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_CameraAngY, new FusionChartAttributeDescriptor { 
+    { "chart_cameraangy", new FusionChartAttributeDescriptor { 
       Name = Chart_CameraAngY,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LightAngX, new FusionChartAttributeDescriptor { 
+    { "chart_lightangx", new FusionChartAttributeDescriptor { 
       Name = Chart_LightAngX,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_LightAngY, new FusionChartAttributeDescriptor { 
+    { "chart_lightangy", new FusionChartAttributeDescriptor { 
       Name = Chart_LightAngY,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Intensity, new FusionChartAttributeDescriptor { 
+    { "chart_intensity", new FusionChartAttributeDescriptor { 
       Name = Chart_Intensity,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DynamicShading, new FusionChartAttributeDescriptor { 
+    { "chart_dynamicshading", new FusionChartAttributeDescriptor { 
       Name = Chart_DynamicShading,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_Bright2D, new FusionChartAttributeDescriptor { 
+    { "chart_bright2d", new FusionChartAttributeDescriptor { 
       Name = Chart_Bright2D,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AllowRotation, new FusionChartAttributeDescriptor { 
+    { "chart_allowrotation", new FusionChartAttributeDescriptor { 
       Name = Chart_AllowRotation,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ConstrainVerticalRotation, new FusionChartAttributeDescriptor { 
+    { "chart_constrainverticalrotation", new FusionChartAttributeDescriptor { 
       Name = Chart_ConstrainVerticalRotation,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_MinVerticalRotAngle, new FusionChartAttributeDescriptor { 
+    { "chart_minverticalrotangle", new FusionChartAttributeDescriptor { 
       Name = Chart_MinVerticalRotAngle,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_MaxVerticalRotAngle, new FusionChartAttributeDescriptor { 
+    { "chart_maxverticalrotangle", new FusionChartAttributeDescriptor { 
       Name = Chart_MaxVerticalRotAngle,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ConstrainHorizontalRotation, new FusionChartAttributeDescriptor { 
+    { "chart_constrainhorizontalrotation", new FusionChartAttributeDescriptor { 
       Name = Chart_ConstrainHorizontalRotation,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_MinHorizontalRotAngle, new FusionChartAttributeDescriptor { 
+    { "chart_minhorizontalrotangle", new FusionChartAttributeDescriptor { 
       Name = Chart_MinHorizontalRotAngle,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_MaxHorizontalRotAngle, new FusionChartAttributeDescriptor { 
+    { "chart_maxhorizontalrotangle", new FusionChartAttributeDescriptor { 
       Name = Chart_MaxHorizontalRotAngle,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZDepth, new FusionChartAttributeDescriptor { 
+    { "chart_zdepth", new FusionChartAttributeDescriptor { 
       Name = Chart_ZDepth,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZGapPlot, new FusionChartAttributeDescriptor { 
+    { "chart_zgapplot", new FusionChartAttributeDescriptor { 
       Name = Chart_ZGapPlot,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YzWallDepth, new FusionChartAttributeDescriptor { 
+    { "chart_yzwalldepth", new FusionChartAttributeDescriptor { 
       Name = Chart_YzWallDepth,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZxWallDepth, new FusionChartAttributeDescriptor { 
+    { "chart_zxwalldepth", new FusionChartAttributeDescriptor { 
       Name = Chart_ZxWallDepth,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XyWallDepth, new FusionChartAttributeDescriptor { 
+    { "chart_xywalldepth", new FusionChartAttributeDescriptor { 
       Name = Chart_XyWallDepth,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DivLineEffect, new FusionChartAttributeDescriptor { 
+    { "chart_divlineeffect", new FusionChartAttributeDescriptor { 
       Name = Chart_DivLineEffect,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ZeroPlaneMesh, new FusionChartAttributeDescriptor { 
+    { "chart_zeroplanemesh", new FusionChartAttributeDescriptor { 
       Name = Chart_ZeroPlaneMesh,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YLabelGap, new FusionChartAttributeDescriptor { 
+    { "chart_ylabelgap", new FusionChartAttributeDescriptor { 
       Name = Chart_YLabelGap,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XLabelGap, new FusionChartAttributeDescriptor { 
+    { "chart_xlabelgap", new FusionChartAttributeDescriptor { 
       Name = Chart_XLabelGap,
       Charts = FusionChartType.MSCombi3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Dataset_RenderAs, new FusionChartAttributeDescriptor { 
+    { "dataset_renderas", new FusionChartAttributeDescriptor { 
       Name = Dataset_RenderAs,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSCombi3D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.StackedColumn2DLine | FusionChartType.StackedColumn3DLine,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Chart_AreaOverColumns, new FusionChartAttributeDescriptor { 
+    { "chart_areaovercolumns", new FusionChartAttributeDescriptor { 
       Name = Chart_AreaOverColumns,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Dataset_ParentYAxis, new FusionChartAttributeDescriptor { 
+    { "dataset_parentyaxis", new FusionChartAttributeDescriptor { 
       Name = Dataset_ParentYAxis,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D | FusionChartType.MSCombi2D | FusionChartType.MSColumnLine3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Chart_, new FusionChartAttributeDescriptor { 
+    { "chart_", new FusionChartAttributeDescriptor { 
       Name = Chart_,
       Charts = FusionChartType.Pie3D | FusionChartType.MSColumnLine3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SYAxisMinValue, new FusionChartAttributeDescriptor { 
+    { "chart_syaxisminvalue", new FusionChartAttributeDescriptor { 
       Name = Chart_SYAxisMinValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SYAxisMaxValue, new FusionChartAttributeDescriptor { 
+    { "chart_syaxismaxvalue", new FusionChartAttributeDescriptor { 
       Name = Chart_SYAxisMaxValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SetAdaptiveSYMin, new FusionChartAttributeDescriptor { 
+    { "chart_setadaptivesymin", new FusionChartAttributeDescriptor { 
       Name = Chart_SetAdaptiveSYMin,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SyncAxisLimits, new FusionChartAttributeDescriptor { 
+    { "chart_syncaxislimits", new FusionChartAttributeDescriptor { 
       Name = Chart_SyncAxisLimits,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowPZeroPlaneValue, new FusionChartAttributeDescriptor { 
+    { "chart_showpzeroplanevalue", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowPZeroPlaneValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowSZeroPlaneValue, new FusionChartAttributeDescriptor { 
+    { "chart_showszeroplanevalue", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowSZeroPlaneValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SScaleRecursively, new FusionChartAttributeDescriptor { 
+    { "chart_sscalerecursively", new FusionChartAttributeDescriptor { 
       Name = Chart_SScaleRecursively,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SMaxScaleRecursion, new FusionChartAttributeDescriptor { 
+    { "chart_smaxscalerecursion", new FusionChartAttributeDescriptor { 
       Name = Chart_SMaxScaleRecursion,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SScaleSeparator, new FusionChartAttributeDescriptor { 
+    { "chart_sscaleseparator", new FusionChartAttributeDescriptor { 
       Name = Chart_SScaleSeparator,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ForceSYAxisValueDecimals, new FusionChartAttributeDescriptor { 
+    { "chart_forcesyaxisvaluedecimals", new FusionChartAttributeDescriptor { 
       Name = Chart_ForceSYAxisValueDecimals,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SFormatNumber, new FusionChartAttributeDescriptor { 
+    { "chart_sformatnumber", new FusionChartAttributeDescriptor { 
       Name = Chart_SFormatNumber,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SFormatNumberScale, new FusionChartAttributeDescriptor { 
+    { "chart_sformatnumberscale", new FusionChartAttributeDescriptor { 
       Name = Chart_SFormatNumberScale,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SDefaultNumberScale, new FusionChartAttributeDescriptor { 
+    { "chart_sdefaultnumberscale", new FusionChartAttributeDescriptor { 
       Name = Chart_SDefaultNumberScale,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SNumberScaleUnit, new FusionChartAttributeDescriptor { 
+    { "chart_snumberscaleunit", new FusionChartAttributeDescriptor { 
       Name = Chart_SNumberScaleUnit,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SNumberScaleValue, new FusionChartAttributeDescriptor { 
+    { "chart_snumberscalevalue", new FusionChartAttributeDescriptor { 
       Name = Chart_SNumberScaleValue,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SNumberPrefix, new FusionChartAttributeDescriptor { 
+    { "chart_snumberprefix", new FusionChartAttributeDescriptor { 
       Name = Chart_SNumberPrefix,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SNumberSuffix, new FusionChartAttributeDescriptor { 
+    { "chart_snumbersuffix", new FusionChartAttributeDescriptor { 
       Name = Chart_SNumberSuffix,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SDecimals, new FusionChartAttributeDescriptor { 
+    { "chart_sdecimals", new FusionChartAttributeDescriptor { 
       Name = Chart_SDecimals,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SYAxisValueDecimals, new FusionChartAttributeDescriptor { 
+    { "chart_syaxisvaluedecimals", new FusionChartAttributeDescriptor { 
       Name = Chart_SYAxisValueDecimals,
       Charts = FusionChartType.MSCombiDY2D | FusionChartType.Pie2D | FusionChartType.Column2D | FusionChartType.Pareto3D | FusionChartType.MSColumn3DLineDY,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Lineset_IncludeInLegend, new FusionChartAttributeDescriptor { 
+    { "lineset_includeinlegend", new FusionChartAttributeDescriptor { 
       Name = Lineset_IncludeInLegend,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_SeriesName, new FusionChartAttributeDescriptor { 
+    { "lineset_seriesname", new FusionChartAttributeDescriptor { 
       Name = Lineset_SeriesName,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_Color, new FusionChartAttributeDescriptor { 
+    { "lineset_color", new FusionChartAttributeDescriptor { 
       Name = Lineset_Color,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_Alpha, new FusionChartAttributeDescriptor { 
+    { "lineset_alpha", new FusionChartAttributeDescriptor { 
       Name = Lineset_Alpha,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_ShowValues, new FusionChartAttributeDescriptor { 
+    { "lineset_showvalues", new FusionChartAttributeDescriptor { 
       Name = Lineset_ShowValues,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_ValuePosition, new FusionChartAttributeDescriptor { 
+    { "lineset_valueposition", new FusionChartAttributeDescriptor { 
       Name = Lineset_ValuePosition,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_Dashed, new FusionChartAttributeDescriptor { 
+    { "lineset_dashed", new FusionChartAttributeDescriptor { 
       Name = Lineset_Dashed,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_LineDashLen, new FusionChartAttributeDescriptor { 
+    { "lineset_linedashlen", new FusionChartAttributeDescriptor { 
       Name = Lineset_LineDashLen,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_LineDashGap, new FusionChartAttributeDescriptor { 
+    { "lineset_linedashgap", new FusionChartAttributeDescriptor { 
       Name = Lineset_LineDashGap,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_LineThickness, new FusionChartAttributeDescriptor { 
+    { "lineset_linethickness", new FusionChartAttributeDescriptor { 
       Name = Lineset_LineThickness,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_DrawAnchors, new FusionChartAttributeDescriptor { 
+    { "lineset_drawanchors", new FusionChartAttributeDescriptor { 
       Name = Lineset_DrawAnchors,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_AnchorSides, new FusionChartAttributeDescriptor { 
+    { "lineset_anchorsides", new FusionChartAttributeDescriptor { 
       Name = Lineset_AnchorSides,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_AnchorRadius, new FusionChartAttributeDescriptor { 
+    { "lineset_anchorradius", new FusionChartAttributeDescriptor { 
       Name = Lineset_AnchorRadius,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_AnchorBorderColor, new FusionChartAttributeDescriptor { 
+    { "lineset_anchorbordercolor", new FusionChartAttributeDescriptor { 
       Name = Lineset_AnchorBorderColor,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_AnchorBorderThickness, new FusionChartAttributeDescriptor { 
+    { "lineset_anchorborderthickness", new FusionChartAttributeDescriptor { 
       Name = Lineset_AnchorBorderThickness,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_AnchorBgColor, new FusionChartAttributeDescriptor { 
+    { "lineset_anchorbgcolor", new FusionChartAttributeDescriptor { 
       Name = Lineset_AnchorBgColor,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_AnchorBgAlpha, new FusionChartAttributeDescriptor { 
+    { "lineset_anchorbgalpha", new FusionChartAttributeDescriptor { 
       Name = Lineset_AnchorBgAlpha,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Lineset_AnchorAlpha, new FusionChartAttributeDescriptor { 
+    { "lineset_anchoralpha", new FusionChartAttributeDescriptor { 
       Name = Lineset_AnchorAlpha,
       Charts = FusionChartType.Pie2D,
       Element = FusionChartElementType.Lineset,
     } },
   
-    { Chart_ClipBubbles, new FusionChartAttributeDescriptor { 
+    { "chart_clipbubbles", new FusionChartAttributeDescriptor { 
       Name = Chart_ClipBubbles,
       Charts = FusionChartType.Pie3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_NegativeColor, new FusionChartAttributeDescriptor { 
+    { "chart_negativecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_NegativeColor,
       Charts = FusionChartType.Pie3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XAxisLabelMode, new FusionChartAttributeDescriptor { 
+    { "chart_xaxislabelmode", new FusionChartAttributeDescriptor { 
       Name = Chart_XAxisLabelMode,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowXAxisValues, new FusionChartAttributeDescriptor { 
+    { "chart_showxaxisvalues", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowXAxisValues,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowVLimits, new FusionChartAttributeDescriptor { 
+    { "chart_showvlimits", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowVLimits,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowVDivLineValues, new FusionChartAttributeDescriptor { 
+    { "chart_showvdivlinevalues", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowVDivLineValues,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XAxisMinValue, new FusionChartAttributeDescriptor { 
+    { "chart_xaxisminvalue", new FusionChartAttributeDescriptor { 
       Name = Chart_XAxisMinValue,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XAxisMaxValue, new FusionChartAttributeDescriptor { 
+    { "chart_xaxismaxvalue", new FusionChartAttributeDescriptor { 
       Name = Chart_XAxisMaxValue,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_BubbleScale, new FusionChartAttributeDescriptor { 
+    { "chart_bubblescale", new FusionChartAttributeDescriptor { 
       Name = Chart_BubbleScale,
       Charts = FusionChartType.Pie3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XAxisValuesStep, new FusionChartAttributeDescriptor { 
+    { "chart_xaxisvaluesstep", new FusionChartAttributeDescriptor { 
       Name = Chart_XAxisValuesStep,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_AdjustVDiv, new FusionChartAttributeDescriptor { 
+    { "chart_adjustvdiv", new FusionChartAttributeDescriptor { 
       Name = Chart_AdjustVDiv,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_SetAdaptiveXMin, new FusionChartAttributeDescriptor { 
+    { "chart_setadaptivexmin", new FusionChartAttributeDescriptor { 
       Name = Chart_SetAdaptiveXMin,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowRegressionLine, new FusionChartAttributeDescriptor { 
+    { "chart_showregressionline", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowRegressionLine,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowYOnX, new FusionChartAttributeDescriptor { 
+    { "chart_showyonx", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowYOnX,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_RegressionLineColor, new FusionChartAttributeDescriptor { 
+    { "chart_regressionlinecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_RegressionLineColor,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_RegressionLineThickness, new FusionChartAttributeDescriptor { 
+    { "chart_regressionlinethickness", new FusionChartAttributeDescriptor { 
       Name = Chart_RegressionLineThickness,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_RegressionLineAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_regressionlinealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_RegressionLineAlpha,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_DrawQuadrant, new FusionChartAttributeDescriptor { 
+    { "chart_drawquadrant", new FusionChartAttributeDescriptor { 
       Name = Chart_DrawQuadrant,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantXVal, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantxval", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantXVal,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantYVal, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantyval", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantYVal,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantLineColor, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantlinecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantLineColor,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantLineThickness, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantlinethickness", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantLineThickness,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantLineAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantlinealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantLineAlpha,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantLineIsDashed, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantlineisdashed", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantLineIsDashed,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantLineDashLen, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantlinedashlen", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantLineDashLen,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantLineDashGap, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantlinedashgap", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantLineDashGap,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantLabelTL, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantlabeltl", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantLabelTL,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantLabelTR, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantlabeltr", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantLabelTR,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantLabelBL, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantlabelbl", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantLabelBL,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantLabelBR, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantlabelbr", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantLabelBR,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_QuadrantLabelPadding, new FusionChartAttributeDescriptor { 
+    { "chart_quadrantlabelpadding", new FusionChartAttributeDescriptor { 
       Name = Chart_QuadrantLabelPadding,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_NumVDivlines, new FusionChartAttributeDescriptor { 
+    { "chart_numvdivlines", new FusionChartAttributeDescriptor { 
       Name = Chart_NumVDivlines,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivlineColor, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlinecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivlineColor,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivlineThickness, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlinethickness", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivlineThickness,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivlineAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlinealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivlineAlpha,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivlineIsDashed, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlineisdashed", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivlineIsDashed,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivlineDashLen, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlinedashlen", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivlineDashLen,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VDivlineDashGap, new FusionChartAttributeDescriptor { 
+    { "chart_vdivlinedashgap", new FusionChartAttributeDescriptor { 
       Name = Chart_VDivlineDashGap,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ShowVZeroPlane, new FusionChartAttributeDescriptor { 
+    { "chart_showvzeroplane", new FusionChartAttributeDescriptor { 
       Name = Chart_ShowVZeroPlane,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VZeroPlaneColor, new FusionChartAttributeDescriptor { 
+    { "chart_vzeroplanecolor", new FusionChartAttributeDescriptor { 
       Name = Chart_VZeroPlaneColor,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VZeroPlaneThickness, new FusionChartAttributeDescriptor { 
+    { "chart_vzeroplanethickness", new FusionChartAttributeDescriptor { 
       Name = Chart_VZeroPlaneThickness,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_VZeroPlaneAlpha, new FusionChartAttributeDescriptor { 
+    { "chart_vzeroplanealpha", new FusionChartAttributeDescriptor { 
       Name = Chart_VZeroPlaneAlpha,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YFormatNumber, new FusionChartAttributeDescriptor { 
+    { "chart_yformatnumber", new FusionChartAttributeDescriptor { 
       Name = Chart_YFormatNumber,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XFormatNumber, new FusionChartAttributeDescriptor { 
+    { "chart_xformatnumber", new FusionChartAttributeDescriptor { 
       Name = Chart_XFormatNumber,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YFormatNumberScale, new FusionChartAttributeDescriptor { 
+    { "chart_yformatnumberscale", new FusionChartAttributeDescriptor { 
       Name = Chart_YFormatNumberScale,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XFormatNumberScale, new FusionChartAttributeDescriptor { 
+    { "chart_xformatnumberscale", new FusionChartAttributeDescriptor { 
       Name = Chart_XFormatNumberScale,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YDefaultNumberScale, new FusionChartAttributeDescriptor { 
+    { "chart_ydefaultnumberscale", new FusionChartAttributeDescriptor { 
       Name = Chart_YDefaultNumberScale,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XDefaultNumberScale, new FusionChartAttributeDescriptor { 
+    { "chart_xdefaultnumberscale", new FusionChartAttributeDescriptor { 
       Name = Chart_XDefaultNumberScale,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YNumberScaleUnit, new FusionChartAttributeDescriptor { 
+    { "chart_ynumberscaleunit", new FusionChartAttributeDescriptor { 
       Name = Chart_YNumberScaleUnit,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XNumberScaleUnit, new FusionChartAttributeDescriptor { 
+    { "chart_xnumberscaleunit", new FusionChartAttributeDescriptor { 
       Name = Chart_XNumberScaleUnit,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XScaleRecursively, new FusionChartAttributeDescriptor { 
+    { "chart_xscalerecursively", new FusionChartAttributeDescriptor { 
       Name = Chart_XScaleRecursively,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XMaxScaleRecursion, new FusionChartAttributeDescriptor { 
+    { "chart_xmaxscalerecursion", new FusionChartAttributeDescriptor { 
       Name = Chart_XMaxScaleRecursion,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XScaleSeparator, new FusionChartAttributeDescriptor { 
+    { "chart_xscaleseparator", new FusionChartAttributeDescriptor { 
       Name = Chart_XScaleSeparator,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YNumberScaleValue, new FusionChartAttributeDescriptor { 
+    { "chart_ynumberscalevalue", new FusionChartAttributeDescriptor { 
       Name = Chart_YNumberScaleValue,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XNumberScaleValue, new FusionChartAttributeDescriptor { 
+    { "chart_xnumberscalevalue", new FusionChartAttributeDescriptor { 
       Name = Chart_XNumberScaleValue,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YNumberPrefix, new FusionChartAttributeDescriptor { 
+    { "chart_ynumberprefix", new FusionChartAttributeDescriptor { 
       Name = Chart_YNumberPrefix,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XNumberPrefix, new FusionChartAttributeDescriptor { 
+    { "chart_xnumberprefix", new FusionChartAttributeDescriptor { 
       Name = Chart_XNumberPrefix,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_YNumberSuffix, new FusionChartAttributeDescriptor { 
+    { "chart_ynumbersuffix", new FusionChartAttributeDescriptor { 
       Name = Chart_YNumberSuffix,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XNumberSuffix, new FusionChartAttributeDescriptor { 
+    { "chart_xnumbersuffix", new FusionChartAttributeDescriptor { 
       Name = Chart_XNumberSuffix,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ForceXAxisValueDecimals, new FusionChartAttributeDescriptor { 
+    { "chart_forcexaxisvaluedecimals", new FusionChartAttributeDescriptor { 
       Name = Chart_ForceXAxisValueDecimals,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_XAxisValueDecimals, new FusionChartAttributeDescriptor { 
+    { "chart_xaxisvaluedecimals", new FusionChartAttributeDescriptor { 
       Name = Chart_XAxisValueDecimals,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Categories_VerticalLineColor, new FusionChartAttributeDescriptor { 
+    { "categories_verticallinecolor", new FusionChartAttributeDescriptor { 
       Name = Categories_VerticalLineColor,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Categories,
     } },
   
-    { Categories_VerticalLineThickness, new FusionChartAttributeDescriptor { 
+    { "categories_verticallinethickness", new FusionChartAttributeDescriptor { 
       Name = Categories_VerticalLineThickness,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Categories,
     } },
   
-    { Categories_VerticalLineAlpha, new FusionChartAttributeDescriptor { 
+    { "categories_verticallinealpha", new FusionChartAttributeDescriptor { 
       Name = Categories_VerticalLineAlpha,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Categories,
     } },
   
-    { Categories_VerticalLineDashed, new FusionChartAttributeDescriptor { 
+    { "categories_verticallinedashed", new FusionChartAttributeDescriptor { 
       Name = Categories_VerticalLineDashed,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Categories,
     } },
   
-    { Categories_VerticalLineDashLen, new FusionChartAttributeDescriptor { 
+    { "categories_verticallinedashlen", new FusionChartAttributeDescriptor { 
       Name = Categories_VerticalLineDashLen,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Categories,
     } },
   
-    { Categories_VerticalLineDashGap, new FusionChartAttributeDescriptor { 
+    { "categories_verticallinedashgap", new FusionChartAttributeDescriptor { 
       Name = Categories_VerticalLineDashGap,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Categories,
     } },
   
-    { Category_X, new FusionChartAttributeDescriptor { 
+    { "category_x", new FusionChartAttributeDescriptor { 
       Name = Category_X,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Category,
     } },
   
-    { Category_ShowVerticalLine, new FusionChartAttributeDescriptor { 
+    { "category_showverticalline", new FusionChartAttributeDescriptor { 
       Name = Category_ShowVerticalLine,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Category,
     } },
   
-    { Category_LineDashed, new FusionChartAttributeDescriptor { 
+    { "category_linedashed", new FusionChartAttributeDescriptor { 
       Name = Category_LineDashed,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Category,
     } },
   
-    { Dataset_PlotFillAlpha, new FusionChartAttributeDescriptor { 
+    { "dataset_plotfillalpha", new FusionChartAttributeDescriptor { 
       Name = Dataset_PlotFillAlpha,
       Charts = FusionChartType.Pie3D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_ShowRegressionLine, new FusionChartAttributeDescriptor { 
+    { "dataset_showregressionline", new FusionChartAttributeDescriptor { 
       Name = Dataset_ShowRegressionLine,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_ShowYOnX, new FusionChartAttributeDescriptor { 
+    { "dataset_showyonx", new FusionChartAttributeDescriptor { 
       Name = Dataset_ShowYOnX,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_RegressionLineColor, new FusionChartAttributeDescriptor { 
+    { "dataset_regressionlinecolor", new FusionChartAttributeDescriptor { 
       Name = Dataset_RegressionLineColor,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_RegressionLineThickness, new FusionChartAttributeDescriptor { 
+    { "dataset_regressionlinethickness", new FusionChartAttributeDescriptor { 
       Name = Dataset_RegressionLineThickness,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_RegressionLineAlpha, new FusionChartAttributeDescriptor { 
+    { "dataset_regressionlinealpha", new FusionChartAttributeDescriptor { 
       Name = Dataset_RegressionLineAlpha,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Set_X, new FusionChartAttributeDescriptor { 
+    { "set_x", new FusionChartAttributeDescriptor { 
       Name = Set_X,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_Y, new FusionChartAttributeDescriptor { 
+    { "set_y", new FusionChartAttributeDescriptor { 
       Name = Set_Y,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_Z, new FusionChartAttributeDescriptor { 
+    { "set_z", new FusionChartAttributeDescriptor { 
       Name = Set_Z,
       Charts = FusionChartType.Pie3D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_Name, new FusionChartAttributeDescriptor { 
+    { "set_name", new FusionChartAttributeDescriptor { 
       Name = Set_Name,
       Charts = FusionChartType.Pie3D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_StartValue, new FusionChartAttributeDescriptor { 
+    { "set_startvalue", new FusionChartAttributeDescriptor { 
       Name = Set_StartValue,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_EndValue, new FusionChartAttributeDescriptor { 
+    { "set_endvalue", new FusionChartAttributeDescriptor { 
       Name = Set_EndValue,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_IsTrendZone, new FusionChartAttributeDescriptor { 
+    { "set_istrendzone", new FusionChartAttributeDescriptor { 
       Name = Set_IsTrendZone,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_DashLen, new FusionChartAttributeDescriptor { 
+    { "set_dashlen", new FusionChartAttributeDescriptor { 
       Name = Set_DashLen,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Set_DashGap, new FusionChartAttributeDescriptor { 
+    { "set_dashgap", new FusionChartAttributeDescriptor { 
       Name = Set_DashGap,
       Charts = FusionChartType.Pie3D | FusionChartType.Column3D,
       Element = FusionChartElementType.Set,
     } },
   
-    { Dataset_DrawLine, new FusionChartAttributeDescriptor { 
+    { "dataset_drawline", new FusionChartAttributeDescriptor { 
       Name = Dataset_DrawLine,
       Charts = FusionChartType.Column3D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_LineColor, new FusionChartAttributeDescriptor { 
+    { "dataset_linecolor", new FusionChartAttributeDescriptor { 
       Name = Dataset_LineColor,
       Charts = FusionChartType.Column3D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_LineAlpha, new FusionChartAttributeDescriptor { 
+    { "dataset_linealpha", new FusionChartAttributeDescriptor { 
       Name = Dataset_LineAlpha,
       Charts = FusionChartType.Column3D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Dataset_LineDashed, new FusionChartAttributeDescriptor { 
+    { "dataset_linedashed", new FusionChartAttributeDescriptor { 
       Name = Dataset_LineDashed,
       Charts = FusionChartType.Column3D,
       Element = FusionChartElementType.Dataset,
     } },
   
-    { Chart_NumVisiblePlot, new FusionChartAttributeDescriptor { 
+    { "chart_numvisibleplot", new FusionChartAttributeDescriptor { 
       Name = Chart_NumVisiblePlot,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
     } },
   
-    { Chart_ScrollToEnd, new FusionChartAttributeDescriptor { 
+    { "chart_scrolltoend", new FusionChartAttributeDescriptor { 
       Name = Chart_ScrollToEnd,
       Charts = FusionChartType.Bar2D | FusionChartType.Line | FusionChartType.Doughnut2D | FusionChartType.ScrollArea2D | FusionChartType.Pareto3D | FusionChartType.ScrollCombi2D,
       Element = FusionChartElementType.Chart,
