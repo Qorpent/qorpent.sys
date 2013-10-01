@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using Qorpent.Config;
 
 namespace Qorpent.Charts {
     /// <summary>
     ///     Представление графика
     /// </summary>
-    public interface IChart : IChartXmlSource {
+    public interface IChart : IChartXmlSource, IConfig {
         /// <summary>
         ///     Корневой элемент
         /// </summary>

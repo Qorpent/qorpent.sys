@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
+using Qorpent.Config;
 
 namespace Qorpent.Charts {
     /// <summary>
     ///     Представление графика
     /// </summary>
-    public class Chart : IChart, IChartXmlSource {
+    public class Chart : ConfigBase, IChart, IChartXmlSource {
         /// <summary>
         ///     Конфиг чарта
         /// </summary>
@@ -38,9 +39,8 @@ namespace Qorpent.Charts {
         ///     Представление графика
         /// </summary>
         public Chart() {
-            Root = new ChartElement {
-                Name = ChartDefaults.ChartElementName
-            };
+            Root = new ChartElement();
+            Root.SetName(ChartDefaults.ChartElementName);
         }
         /// <summary>
         ///     Представление графика
@@ -86,14 +86,14 @@ namespace Qorpent.Charts {
         /// </summary>
         /// <returns></returns>
         public XElement DrawStructure() {
-            var root = Root.DrawStructure();
+            var root = Root.ToXml();
 
             foreach (var chartElement in Categories) {
-                root.Add(chartElement.DrawStructure());
+                root.Add(chartElement.ToXml());
             }
 
             foreach (var chartElement in Datasets) {
-                root.Add(chartElement.DrawStructure());
+                root.Add(chartElement.ToXml());
             }
 
             return root;

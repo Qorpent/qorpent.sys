@@ -12,17 +12,16 @@ namespace Qorpent.Charts {
         ///     Представление датасета
         /// </summary>
         public ChartDataset() {
-            Name = ChartDefaults.DatasetElementName;
+            SetName(ChartDefaults.DatasetElementName);
         }
         /// <summary>
         ///     Добавление значения в датасет
         /// </summary>
         /// <returns>Элемент, при помощи которого было представлено значение</returns>
         public IChartElement AddValue(int value) {
-            var element = new ChartElement {
-                Name = ChartDefaults.DatasetValueName
-            };
+            var element = new ChartElement();
 
+            element.SetName(ChartDefaults.CategoryValueName);
             element.AddAttribute(new ChartAttribute {
                 Name = ChartDefaults.DatasetSetValueAttributeName,
                 ParentElement = element,

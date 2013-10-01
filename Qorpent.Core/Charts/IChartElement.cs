@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
+using Qorpent.Config;
 
 namespace Qorpent.Charts {
     /// <summary>
     ///     Элемент чарта
     /// </summary>
-    public interface IChartElement {
+    public interface IChartElement : IConfig {
         /// <summary>
         ///     Родительский элемент
         /// </summary>
@@ -28,9 +29,14 @@ namespace Qorpent.Charts {
         /// <param name="parent">Родительский элемент</param>
         void SetParent(IChartElement parent);
         /// <summary>
+        ///     Устанавливает имя элемента
+        /// </summary>
+        /// <param name="name">Имя элемента</param>
+        void SetName(string name);
+        /// <summary>
         ///     Разрисовка структуры
         /// </summary>
         /// <returns></returns>
-        XElement DrawStructure();
+        XElement ToXml();
     }
 }

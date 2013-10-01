@@ -6,28 +6,28 @@ namespace Qorpent.Charts {
     /// </summary>
     public class ChartConfig : ConfigBase, IChartConfig {
         /// <summary>
-        /// Тип чарта
+        ///     Тип чарта
         /// </summary>
         public string Type {
             get { return Get<string>(ChartDefaults.ChartTypeAttributeName); }
             set { Set(ChartDefaults.ChartTypeAttributeName, value); }
         }
         /// <summary>
-        /// Ширина чарта
+        ///     Ширина чарта
         /// </summary>
         public string Width {
             get { return Get<string>(ChartDefaults.ChartWidthAttributeName); }
             set { Set(ChartDefaults.ChartWidthAttributeName, value); }
         }
         /// <summary>
-        /// Высота чарта
+        ///     Высота чарта
         /// </summary>
         public string Height {
             get { return Get<string>(ChartDefaults.ChartHeightAttributeName); }
             set { Set(ChartDefaults.ChartHeightAttributeName, value); }
         }
         /// <summary>
-        /// Режим отладки чарта
+        ///     Режим отладки чарта
         /// </summary>
         public string Debug {
             get { return Get<string>(ChartDefaults.ChartDebugAttributeName); }
@@ -41,14 +41,14 @@ namespace Qorpent.Charts {
             set { Set(ChartDefaults.ChartIdAttributeName, value); }
         }
         /// <summary>
-        /// Контейнер чарта
+        ///     Контейнер чарта
         /// </summary>
         public string Container {
             get { return Get<string>(ChartDefaults.ChartContainerAttributeName); }
             set { Set(ChartDefaults.ChartContainerAttributeName, value); }
         }
         /// <summary>
-        /// Рендер чарта средствами svg
+        ///     Рендер чарта средствами svg
         /// </summary>
         public bool JavaScriptRender {
             get { return Get<bool>(ChartDefaults.ChartRenderAttributeName); }

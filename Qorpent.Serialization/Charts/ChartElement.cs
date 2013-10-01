@@ -1,46 +1,38 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Config;
 
 namespace Qorpent.Charts {
     /// <summary>
     ///     Элемент чарта
     /// </summary>
-    public class ChartElement : IChartElement {
-        /// <summary>
-        ///     Внутренний список атрибутов
-        /// </summary>
-        private readonly IList<IChartAttribute> _attributes;
-        /// <summary>
-        ///     Внутренний список дочерних элементов
-        /// </summary>
-        private readonly IList<IChartElement> _childs;
+    public class ChartElement : ConfigBase, IChartElement {
         /// <summary>
         ///     Родительский элемент
         /// </summary>
-        public IChartElement Parent { get; set; }
+        public IChartElement Parent {
+            get { return Get<IChartElement>(ChartDefaults.ChartElementParentProperty, this); }
+            private set { Set(ChartDefaults.ChartElementParentProperty, value); }
+        }
         /// <summary>
         ///     Имя элемента
         /// </summary>
-        public string Name { get; set; }
+        public string Name {
+            get { return Get(ChartDefaults.ChartElementNameProperty, "ChartElement"); }
+            private set { Set(ChartDefaults.ChartElementNameProperty, value); }
+        }
         /// <summary>
         ///     Атрибуты
         /// </summary>
         public IEnumerable<IChartAttribute> Attributes {
-            get { return _attributes; }
+            get { return Get<IEnumerable<IChartAttribute>>(ChartDefaults.ChartElementChilds, new List<IChartAttribute>()); }
         }
         /// <summary>
         ///     Дочерние элементы
         /// </summary>
         public IEnumerable<IChartElement> Childs {
-            get { return _childs; }
-        }
-        /// <summary>
-        ///     Элемент чарта
-        /// </summary>
-        public ChartElement() {
-            _attributes = new List<IChartAttribute>();
-            _childs = new List<IChartElement>();
+            get { return Get<IEnumerable<IChartElement>>(ChartDefaults.ChartElementChilds, new List<IChartElement>()); }
         }
         /// <summary>
         ///     Устанавливает родительский элемент
@@ -50,12 +42,19 @@ namespace Qorpent.Charts {
             Parent = parent;
         }
         /// <summary>
+        ///     Устанавливает имя элемента
+        /// </summary>
+        /// <param name="name">Имя элемента</param>
+        public void SetName(string name) {
+            Name = name;
+        }
+        /// <summary>
         ///     Добавляет атрибут во внутреннюю коллекцию
         /// </summary>
         /// <param name="chartAttribute">Представление атрибута</param>
         public IChartAttribute AddAttribute(IChartAttribute chartAttribute) {
             if (!HasAttribute(chartAttribute.Name)) {
-                _attributes.Add(chartAttribute);
+                ((List<IChartAttribute>)Attributes).Add(chartAttribute);
             }
 
             return chartAttribute;
@@ -82,7 +81,7 @@ namespace Qorpent.Charts {
         /// <param name="chartElement">Представление элемента</param>
         public IChartElement AddChild(IChartElement chartElement) {
             chartElement.SetParent(this);
-            _childs.Add(chartElement);
+            ((List<IChartElement>)Childs).Add(chartElement);
             return chartElement;
         }
         /// <summary>
@@ -95,7 +94,7 @@ namespace Qorpent.Charts {
             };
 
             chartElement.SetParent(this);
-            _childs.Add(chartElement);
+            ((List<IChartElement>)Childs).Add(chartElement);
 
             return chartElement;
         }
@@ -137,15 +136,15 @@ namespace Qorpent.Charts {
         ///     Разрисовка структуры
         /// </summary>
         /// <returns>XML-представление элемента</returns>
-        public XElement DrawStructure() {
-            var xml = new XElement(Name ?? "Element");
+        public XElement ToXml() {
+            var xml = new XElement(Name);
 
             foreach (var chartAttribute in Attributes) {
                 xml.SetAttributeValue(chartAttribute.Name, chartAttribute.Value);
             }
 
             foreach (var chartElement in Childs) {
-                xml.Add(((ChartElement)chartElement).DrawStructure());
+                xml.Add(((ChartElement)chartElement).ToXml());
             }
 
             return xml;

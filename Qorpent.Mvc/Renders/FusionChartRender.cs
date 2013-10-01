@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.Charts;
-using Qorpent.Serialization.Charts.Implementation;
 using Qorpent.Dsl;
 using Qorpent.IoC;
 

@@ -10,7 +10,7 @@ namespace Qorpent.Charts {
         ///     Представление категории
         /// </summary>
         public ChartCategory() {
-            Name = ChartDefaults.CategoryElementName;
+            SetName(ChartDefaults.CategoryElementName);
         }
         /// <summary>
         ///     Добавление метки
@@ -18,10 +18,9 @@ namespace Qorpent.Charts {
         /// <param name="value">Значение метки</param>
         /// <returns>Представление элемента</returns>
         public IChartElement AddLabel(string value) {
-            var element = new ChartElement {
-                Name = ChartDefaults.CategoryValueName
-            };
+            var element = new ChartElement();
 
+            element.SetName(ChartDefaults.CategoryValueName);
             element.AddAttribute(new ChartAttribute {
                 Name = ChartDefaults.CategoryLabelAttributeName,
                 ParentElement = element,

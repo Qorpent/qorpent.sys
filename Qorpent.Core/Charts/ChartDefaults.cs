@@ -4,6 +4,18 @@
     /// </summary>
     public static class ChartDefaults {
         /// <summary>
+        /// 
+        /// </summary>
+        public const string ChartElementParentProperty = "ChartElementParentProperty";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string ChartElementNameProperty = "ElementName";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string ChartElementChilds = "ElementChilds";
+        /// <summary>
         ///     Имя элемента Chart
         /// </summary>
         public const string ChartElementName = "chart";

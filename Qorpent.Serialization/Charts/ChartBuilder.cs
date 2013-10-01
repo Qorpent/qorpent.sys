@@ -19,9 +19,18 @@ namespace Qorpent.Charts {
         ///     Возвращает собарнный чарт
         /// </summary>
         /// <returns>Настроенный экземпляр класса, реализующего <see cref="IChart"/></returns>
-        public IChart GetChartObject() {
+        public IChart GenerateChart() {
             return Chart.Initialize(InternalChartConfig);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataset"></param>
+        /// <returns></returns>
+        public IChartBuilder AddDataset(IChartElement dataset) {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         ///     Выставляет атрибуты на уровне чарта
         /// </summary>

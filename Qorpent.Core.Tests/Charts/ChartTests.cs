@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
-using Qorpent.Charts.Implementation;
+using Qorpent.Charts;
 
 namespace Qorpent.Core.Tests.Charts {
     [TestFixture]
@@ -19,7 +19,7 @@ namespace Qorpent.Core.Tests.Charts {
             Assert.Contains(1000, values);
             Assert.Contains(5003, values);
             Assert.Contains(2031, values);
-            Debug.Print(dataset.DrawStructure().ToString());
+            Debug.Print(dataset.ToXml().ToString());
         }
         [Test]
         public void CanUseCategories() {
@@ -36,7 +36,7 @@ namespace Qorpent.Core.Tests.Charts {
             Assert.Contains("Sept", labels);
             Assert.Contains("May", labels);
 
-            Debug.Print(category.DrawStructure().ToString());
+            Debug.Print(category.ToXml().ToString());
         }
         [Test]
         public void CanUseAttributesFromElement() {
@@ -47,7 +47,7 @@ namespace Qorpent.Core.Tests.Charts {
             Assert.AreEqual("value", element.GetAttributeValue("test"));
             Assert.AreEqual("OK", element.GetAttributeValue("test2"));
             Assert.AreEqual(null, element.GetAttributeValue("NOT_EXISTS"));
-            Debug.Print(element.DrawStructure().ToString());
+            Debug.Print(element.ToXml().ToString());
         }
         [Test]
         public void CanDrawElementStructure() {
@@ -57,7 +57,7 @@ namespace Qorpent.Core.Tests.Charts {
 
             element.AddChild("test");
 
-            var xml = element.DrawStructure();
+            var xml = element.ToXml();
             Debug.Print(xml.ToString());
 
             Assert.AreEqual("value", xml.Attribute("test").Value);
