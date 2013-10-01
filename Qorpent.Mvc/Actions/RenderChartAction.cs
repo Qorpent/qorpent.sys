@@ -1,4 +1,6 @@
-﻿using Qorpent.Mvc.Binding;
+﻿using Qorpent.Charts;
+using Qorpent.Charts.FusionCharts;
+using Qorpent.Mvc.Binding;
 
 namespace Qorpent.Mvc.Actions {
     /// <summary>
@@ -11,6 +13,13 @@ namespace Qorpent.Mvc.Actions {
         /// </summary>
         /// <returns></returns>
         protected override object MainProcess() {
+            var result = new Chart();
+            var fus = result.AsFusion();
+            fus.Caption = "Monthly Revenue";
+            fus.AddSet("Jan", 420000);
+
+            return result;
+            /*
             return @"<chart caption='Monthly Revenue' xAxisName='Month' yAxisName='Revenue' numberPrefix='$' showValues='0'>
 
    <set label='Jan' value='420000' />
@@ -42,7 +51,7 @@ namespace Qorpent.Mvc.Actions {
 
    </styles>
 
-</chart>";
+</chart>";*/
         }
     }
 }

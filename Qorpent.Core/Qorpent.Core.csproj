@@ -81,6 +81,7 @@
     <Compile Include="Charts\IChartDataset.cs" />
     <Compile Include="Charts\IChartDatasets.cs" />
     <Compile Include="Charts\IChartElement.cs" />
+    <Compile Include="Charts\IChartElementList.cs" />
     <Compile Include="Charts\IChartLineset.cs" />
     <Compile Include="Charts\IChartRender.cs" />
     <Compile Include="Charts\IChartRenderConfig.cs" />

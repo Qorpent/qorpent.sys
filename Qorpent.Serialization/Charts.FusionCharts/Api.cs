@@ -84,5 +84,18 @@ namespace Qorpent.Charts.FusionCharts {
                 }
                 );
         }
+
+        /// <summary>
+        /// Возвращает адаптер для работы с графиком в API FusionChart
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static FusionChartWrapper AsFusion(this IChartElement chart, IChartConfig config=null) {
+            config = config ?? new ChartConfig(){Type = FusionChartType.Column2D.ToString()};
+            return new FusionChartWrapper(chart,config); 
+
+        }
+        
     }
 }

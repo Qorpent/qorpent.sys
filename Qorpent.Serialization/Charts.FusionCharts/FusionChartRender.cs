@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Collections.Generic;
+using System.Xml.Linq;
 using Qorpent.IoC;
 
 namespace Qorpent.Charts.FusionCharts {
@@ -17,18 +18,13 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>XML-представление чарата</returns>
         public XElement GenerateChartXml(IChartConfig chartConfig) {
             var realConfig = chartConfig ?? _config;
-            var result = new XElement("chart");
-            result.SetAttributeValue("caption", _chart.Caption);
-            result.SetAttributeValue("subCaption", _chart.SubCaption);
-            result.SetAttributeValue("xAxisName", _chart.XAxisName);
-            result.SetAttributeValue("yAxisName", _chart.YAxisName);
-
-            foreach (var cat in _chart.Categories) {
-
-            }
-
-            foreach (var set in _chart.Datasets) {
-                
+            var fusion = _chart.AsFusion(realConfig);
+            var result = fusion.GetXmlElement();
+            foreach (var ds in _chart.Datasets.AsList) {
+                foreach (var s in ds.AsList) {
+                    var fusset = s.AsFusion(realConfig);
+                    result.Add(fusset.GetXmlElement());
+                }
             }
 
             return result;
@@ -61,7 +57,6 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="chartConfig">Конфиг чарта</param>
         /// <returns>Экземпляр данного класса</returns>
         public IChartRender Initialize(IChart chart, IChartConfig chartConfig) {
-            //if(!(chart is C
             _chart = chart;
             _config = chartConfig;
             return this;
