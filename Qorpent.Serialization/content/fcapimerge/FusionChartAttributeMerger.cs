@@ -9,7 +9,7 @@ namespace fcapimerge {
 
         public XElement Merge(XElement source) {
             var result = new XElement("fcindex");
-            IEnumerable<FusionChartAttribute> attributes = source.Descendants("attribute").Select(GenerateAttribute).ToArray();
+            IEnumerable<FusionChartAttribute> attributes = source.Descendants("attribute").Select(GenerateAttribute).Where(_=>_!=null).ToArray();
             IDictionary<string, FusionChartAttribute> index = BuildIndex(attributes);
             SerializeIndex(index, result);
             Console.WriteLine(attributes.Count());
@@ -50,7 +50,11 @@ namespace fcapimerge {
         }
 
         private FusionChartAttribute GenerateAttribute(XElement xElement) {
-            return new FusionChartAttribute(xElement);
+            var result= new FusionChartAttribute(xElement);
+            if (result.Name.ToLower().Contains("deprecated") || result.Name.ToLower().Contains("since v")) {
+                result.Name = result.Name.Split('\r', '\n')[0];
+            }
+            return result;
         }
 
     }

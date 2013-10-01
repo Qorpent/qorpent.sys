@@ -43,11 +43,11 @@ JavaScript links.&lt;/desc&gt;</attribute>
 (and their values). Otherwise, they won't show up in the
 chart.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showPercentValues" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="showPercentValues" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D + StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;Whether to show percentage values in labels of
 the chart.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showPercentInToolTip" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="showPercentInToolTip" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D + StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;Whether to show percentage values in tool
 tip.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
@@ -102,8 +102,8 @@ of a gradient. See
 &lt;strong&gt;Advanced charting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/Gradients.html" target="_blank"&gt;Using Gradients&lt;/a&gt; page for
 more details.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="bgImage&#xA;                or&#xA;                bgSWF &#xA;- deprecated" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="To place any image (JPG/PNG/GIF) or Flash movie&#xA;(SWF) as background of the chart, enter the (path and) name of the&#xA;background image or SWF file. It should be in the same domain as&#xA;the chart.&#xA;                &#xA;                  Loading of Flash movie is deprecated and is not&#xA;supported by JavaScript charts." category="ChartCosmetics" default="true">&lt;desc /&gt;</attribute>
-  <attribute name="bgImageAlpha&#xA;                or&#xA;                bgSWFAlpha &#xA;- deprecated" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="0-100" category="ChartCosmetics" default="true">&lt;desc&gt;
+  <attribute name="bgImage" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="To place any image (JPG/PNG/GIF) or Flash movie&#xA;(SWF) as background of the chart, enter the (path and) name of the&#xA;background image or SWF file. It should be in the same domain as&#xA;the chart.&#xA;                &#xA;                  Loading of Flash movie is deprecated and is not&#xA;supported by JavaScript charts." category="ChartCosmetics" default="true">&lt;desc /&gt;</attribute>
+  <attribute name="bgImageAlpha" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="0-100" category="ChartCosmetics" default="true">&lt;desc&gt;
   &lt;span&gt;Helps you specify alpha for the loaded
 background image or Flash movie.&lt;/span&gt;
   &lt;p&gt;
@@ -111,7 +111,7 @@ background image or Flash movie.&lt;/span&gt;
 supported by JavaScript charts.&lt;/span&gt;
   &lt;/p&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="bgImageDisplayMode&#xA;                Since v3.2.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="stretch, tile, fit, fill, center, none" category="ChartCosmetics" default="true">&lt;desc&gt;
+  <attribute name="bgImageDisplayMode" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="stretch, tile, fit, fill, center, none" category="ChartCosmetics" default="true">&lt;desc&gt;
   &lt;span&gt;Helps you specify the mode in which the
 background image is to be displayed.&lt;/span&gt;
   &lt;ul&gt;
@@ -142,15 +142,15 @@ applied&lt;/span&gt;
     &lt;/li&gt;
   &lt;/ul&gt;For more details 
 &lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/BgSWF.html#displaymode" target="_blank"&gt;click here&lt;/a&gt;.&lt;/desc&gt;</attribute>
-  <attribute name="bgImageVAlign&#xA;                Since v3.2.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="top, middle, bottom" category="ChartCosmetics" default="true">&lt;desc&gt;
+  <attribute name="bgImageVAlign" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="top, middle, bottom" category="ChartCosmetics" default="true">&lt;desc&gt;
   &lt;span&gt;Helps you to vertically align the background
 image.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="bgImageHAlign&#xA;                Since v3.2.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="left, middle, right" category="ChartCosmetics" default="true">&lt;desc&gt;
+  <attribute name="bgImageHAlign" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="left, middle, right" category="ChartCosmetics" default="true">&lt;desc&gt;
   &lt;span&gt;Helps you to horizontally align the background
 image.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="bgImageScale&#xA;                Since v3.2.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="0-300" category="ChartCosmetics" default="true">&lt;desc&gt;
+  <attribute name="bgImageScale" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="0-300" category="ChartCosmetics" default="true">&lt;desc&gt;
   &lt;span&gt;Helps you magnify the background image.This
 attribute will only work when the attribute&lt;/span&gt;
   &lt;span&gt;bgImageDisplayMode&lt;/span&gt;
@@ -286,7 +286,7 @@ of the overflowing labels fit in the "quadrant specific smart
 labeling algorithm". Data labels try to wrap first. In case, there
 is constrain of space in the quadrant, the labels get truncated
 with ellipses.&lt;/desc&gt;</attribute>
-  <attribute name="useEllipsesWhenOverflow&#xA;Since v 3.2.1" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="SmartLabels&amp;Lines" common="true">&lt;desc&gt;When enabled, long data labels are
+  <attribute name="useEllipsesWhenOverflow" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="SmartLabels&amp;Lines" common="true">&lt;desc&gt;When enabled, long data labels are
 truncated by adding ellipses to prevent them from overflowing the
 chart background. The default value is 1. This setting works only
 when 
@@ -315,12 +315,12 @@ Scaling&lt;/a&gt; page.&lt;/span&gt;
   <attribute name="defaultNumberScale" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="The default unit of the numbers that you're&#xA;providing to the chart. For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting" default="true">&lt;desc /&gt;</attribute>
   <attribute name="numberScaleUnit" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="Unit of each block of the scale. For more&#xA;details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting" default="true">&lt;desc /&gt;</attribute>
   <attribute name="numberScaleValue" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="Range of the various blocks that constitute the&#xA;scale. For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting" default="true">&lt;desc /&gt;</attribute>
-  <attribute name="scaleRecursively&#xA;Since v 3.2.2 - SR3" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="NumberFormatting" default="true">&lt;desc&gt;Whether to scale the number
+  <attribute name="scaleRecursively" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="NumberFormatting" default="true">&lt;desc&gt;Whether to scale the number
 recursively? For more details, please see 
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Rec_Num_Scaling.html" target="_blank"&gt;Recursive
 Number Scaling&lt;/a&gt; page.&lt;/desc&gt;</attribute>
-  <attribute name="maxScaleRecursion&#xA;Since v 3.2.2 - SR3" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="How many recursions to complete&#xA;during recursive scaling? -1 completes the entire set of recursion.&#xA;For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;&#xA;Recursive Number Scaling page." category="NumberFormatting" default="true">&lt;desc /&gt;</attribute>
-  <attribute name="scaleSeparator&#xA;Since v 3.2.2 - SR3" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="What character to use to separate the&#xA;scales that generated after recursion? For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;Recursive&#xA;Number Scaling page." category="NumberFormatting" default="true">&lt;desc /&gt;</attribute>
+  <attribute name="maxScaleRecursion" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="How many recursions to complete&#xA;during recursive scaling? -1 completes the entire set of recursion.&#xA;For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;&#xA;Recursive Number Scaling page." category="NumberFormatting" default="true">&lt;desc /&gt;</attribute>
+  <attribute name="scaleSeparator" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="What character to use to separate the&#xA;scales that generated after recursion? For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;Recursive&#xA;Number Scaling page." category="NumberFormatting" default="true">&lt;desc /&gt;</attribute>
   <attribute name="numberPrefix" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="Character" category="NumberFormatting" default="true">&lt;desc&gt;
   &lt;span&gt;Using this attribute, you could add prefix to
 all the numbers visible on the graph. For example, to represent all
@@ -352,7 +352,7 @@ please see
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#separator" target="_blank"&gt;Basics&lt;/a&gt;
 page.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="thousandSeparatorPosition&#xA;                Since v 3.2.2 - SR3" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="This option helps you specify the position of&#xA;the thousand separator. For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;&#xA;Basics page." category="NumberFormatting" common="true">&lt;desc /&gt;</attribute>
+  <attribute name="thousandSeparatorPosition" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="This option helps you specify the position of&#xA;the thousand separator. For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;&#xA;Basics page." category="NumberFormatting" default="true">&lt;desc /&gt;</attribute>
   <attribute name="inDecimalSeparator" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="Character" category="NumberFormatting" common="true">&lt;desc&gt;
   &lt;span&gt;In some countries, commas are used as decimal
 separators and dots as thousand separators. In XML, if you specify
@@ -402,45 +402,45 @@ the canvas will be displayed using the font size provided
 here.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
   <attribute name="baseFontColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="This attribute sets the base font color of the&#xA;chart i.e., all the values and the names in the chart which lie on&#xA;the canvas will be displayed using the font color provided&#xA;here." category="FontProperties" default="true">&lt;desc /&gt;</attribute>
-  <attribute name="showLegend&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Boolean" range="0/1" category="LegendProperties">&lt;desc&gt;Whether to show legend on
+  <attribute name="showLegend" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;Whether to show legend on
 the chart.&lt;/desc&gt;</attribute>
-  <attribute name="legendPosition&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="String" range="BOTTOM or&#xA;RIGHT" category="LegendProperties">&lt;desc&gt;The legend can be plotted at two
+  <attribute name="legendPosition" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="BOTTOM or&#xA;RIGHT" category="LegendProperties" common="true">&lt;desc&gt;The legend can be plotted at two
 positions on the chart - below the chart (BOTTOM) and on the RIGHT
 side of the chart.&lt;/desc&gt;</attribute>
-  <attribute name="legendCaption&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="String" range="You can add a caption for the entire&#xA;legend by setting the same here." category="LegendProperties">&lt;desc /&gt;</attribute>
-  <attribute name="legendIconScale&#xA;Since v 3.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="Greater than 0 and less than equal to&#xA;5" category="LegendProperties" common="true">&lt;desc&gt;Scaling of legend icon is possible in
+  <attribute name="legendCaption" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="You can add a caption for the entire&#xA;legend by setting the same here." category="LegendProperties" common="true">&lt;desc /&gt;</attribute>
+  <attribute name="legendIconScale" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="Greater than 0 and less than equal to&#xA;5" category="LegendProperties" common="true">&lt;desc&gt;Scaling of legend icon is possible in
 FusionCharts XT. This attribute lets you control the size of the
 legend icon.
 The default scale value is 1. Anything less than 1 reduces
 the size of the legend-icons on the chart. Any value bigger than 1
 enlarges the icons. e.g., 0.5 means half the size, where as, 2
 means twice the size.&lt;/desc&gt;</attribute>
-  <attribute name="legendBgColor&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Color" range="Hex Code" category="LegendProperties">&lt;desc&gt;Background color for the legend.&lt;/desc&gt;</attribute>
-  <attribute name="legendBgAlpha&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Number" range="0-100" category="LegendProperties">&lt;desc&gt;Background alpha for the legend.&lt;/desc&gt;</attribute>
-  <attribute name="legendBorderColor&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Color" range="Hex Code" category="LegendProperties">&lt;desc&gt;Border Color for the legend.&lt;/desc&gt;</attribute>
-  <attribute name="legendBorderThickness&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Number" range="In Pixels" category="LegendProperties">&lt;desc&gt;Border thickness for the legend.&lt;/desc&gt;</attribute>
-  <attribute name="legendBorderAlpha&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Number" range="0-100" category="LegendProperties">&lt;desc&gt;Border alpha for the legend.&lt;/desc&gt;</attribute>
-  <attribute name="legendShadow&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Boolean" range="0/1" category="LegendProperties">&lt;desc&gt;Whether to show a shadow for
+  <attribute name="legendBgColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Hex Code" category="LegendProperties" common="true">&lt;desc&gt;Background color for the legend.&lt;/desc&gt;</attribute>
+  <attribute name="legendBgAlpha" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="0-100" category="LegendProperties" common="true">&lt;desc&gt;Background alpha for the legend.&lt;/desc&gt;</attribute>
+  <attribute name="legendBorderColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Hex Code" category="LegendProperties" common="true">&lt;desc&gt;Border Color for the legend.&lt;/desc&gt;</attribute>
+  <attribute name="legendBorderThickness" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="In Pixels" category="LegendProperties" common="true">&lt;desc&gt;Border thickness for the legend.&lt;/desc&gt;</attribute>
+  <attribute name="legendBorderAlpha" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="0-100" category="LegendProperties" common="true">&lt;desc&gt;Border alpha for the legend.&lt;/desc&gt;</attribute>
+  <attribute name="legendShadow" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;Whether to show a shadow for
 legend.&lt;/desc&gt;</attribute>
-  <attribute name="legendAllowDrag&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Boolean" range="0/1" category="LegendProperties">&lt;desc&gt;The legend can be made drag-able by
+  <attribute name="legendAllowDrag" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;The legend can be made drag-able by
 setting this attribute to 1. End viewers of the chart can drag the
 legend around on the chart.&lt;/desc&gt;</attribute>
-  <attribute name="legendScrollBgColor&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Color" range="Hex Code" category="LegendProperties">&lt;desc&gt;If you've too many items on the
+  <attribute name="legendScrollBgColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Hex Code" category="LegendProperties" common="true">&lt;desc&gt;If you've too many items on the
 legend, a scroll bar shows up on the same. This attribute lets you
 configure the background color of the scroll bar.&lt;/desc&gt;</attribute>
-  <attribute name="legendScrollBarColor&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Color" range="Hex Code" category="LegendProperties">&lt;desc&gt;If you've too many items on the
+  <attribute name="legendScrollBarColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Hex Code" category="LegendProperties" common="true">&lt;desc&gt;If you've too many items on the
 legend, a scroll bar shows up on the same. This attribute lets you
 configure the bar color of the scroll bar.&lt;/desc&gt;</attribute>
-  <attribute name="legendScrollBtnColor&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Color" range="Hex Code" category="LegendProperties">&lt;desc&gt;If you've too many items on the
+  <attribute name="legendScrollBtnColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Hex Code" category="LegendProperties" common="true">&lt;desc&gt;If you've too many items on the
 legend, a scroll bar shows up on the same. This attribute lets you
 configure the color of buttons of the scroll bar.&lt;/desc&gt;</attribute>
-  <attribute name="reverseLegend&#xA;Since v 3.2" element="Chart" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Boolean" range="0/1" category="LegendProperties">&lt;desc&gt;You can reverse the ordering of
+  <attribute name="reverseLegend" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;You can reverse the ordering of
 datasets in the legend by setting this attribute to 1.&lt;/desc&gt;</attribute>
-  <attribute name="interactiveLegend&#xA;Since v 3.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + MSBar2D + MSBar3D + StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;This attribute lets you interact with
+  <attribute name="interactiveLegend" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;This attribute lets you interact with
 the legend in your chart. When you click a particular legend key,
 the associated slice slides out from the chart. Re-clicking the key
 causes the slice to slide in.&lt;/desc&gt;</attribute>
-  <attribute name="legendNumColumns&#xA;Since v 3.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="Zero and Positive Integers" category="LegendProperties" common="true">&lt;desc&gt;The legend items are arranged in
+  <attribute name="legendNumColumns" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="Zero and Positive Integers" category="LegendProperties" common="true">&lt;desc&gt;The legend items are arranged in
 columns. Using this attribute, you can propose the number of
 columns. This value undergoes internal checking on judicious use of
 white-space. In case, the value is found improper, the chart
@@ -451,7 +451,7 @@ The above is applicable when
 &lt;span&gt;.&lt;/span&gt; If you have set RIGHT 
 &lt;span&gt;legendPosition&lt;/span&gt;, the number of
 columns is always set to 1.&lt;/desc&gt;</attribute>
-  <attribute name="minimiseWrappingInLegend&#xA;Since v 3.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;Whether to minimize legend item text
+  <attribute name="minimiseWrappingInLegend" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;Whether to minimize legend item text
 wrapping.&lt;/desc&gt;</attribute>
   <attribute name="showToolTip" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="Tool-tip" default="true">&lt;desc&gt;
   &lt;span&gt;Whether to show tool tip on chart.&lt;/span&gt;
@@ -522,11 +522,11 @@ data item. The range for this attribute is 0 to 100. 0 means
 complete transparency (the data item wont be shown on the graph)
 and 100 means opaque.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showLabel&#xA;              Since v 3.2.2 - SR5" element="Set" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Boolean" range="0/1" category="&lt;set&gt;Element">&lt;desc&gt;
+  <attribute name="showLabel" element="Set" chart="Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + Pareto2D" type="Boolean" range="0/1" category="&lt;set&gt;Element">&lt;desc&gt;
   &lt;span&gt;You can individually opt to show/hide labels of
 individual data items using this attribute.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showValue&#xA;              Since v 3.3.1" element="Set" chart="Pie2D + Pie3D + Doughnut2D + ScrollCombi2D" type="Boolean" range="0/1" category="&lt;set&gt;Element">&lt;desc&gt;
+  <attribute name="showValue" element="Set" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="&lt;set&gt;Element" common="true">&lt;desc&gt;
   &lt;span&gt;You can individually opt to show/hide values of
 individual data items using this attribute.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
@@ -624,7 +624,7 @@ rotated mode.&lt;/span&gt;
   &lt;span&gt;If you opt to not rotate y-axis name, you can
 choose a maximum width that will be applied to y-axis name.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="yAxisMinValue" element="Chart" chart="Column2D + Pie3D + Column3D + Bar2D + Line + ScrollArea2D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + Marimekko + MSCombi3D + MSCombi2D + MSColumnLine3D" type="Number" range="This attribute helps you explicitly set the&#xA;lower limit of the chart. If you don't specify this value, it is&#xA;automatically calculated by FusionCharts XT based on the data&#xA;provided by you." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
+  <attribute name="yAxisMinValue" element="Chart" chart="Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine" type="Number" range="This attribute helps you explicitly set the&#xA;lower limit of the chart. If you don't specify this value, it is&#xA;automatically calculated by FusionCharts XT based on the data&#xA;provided by you." category="FunctionalAttributes" common="true">&lt;desc /&gt;</attribute>
   <attribute name="yAxisMaxValue" element="Chart" chart="Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine" type="Number" range="This attribute helps you explicitly set the&#xA;upper limit of the chart. If you don't specify this value, it is&#xA;automatically calculated by FusionCharts XT based on the data&#xA;provided by you." category="FunctionalAttributes" common="true">&lt;desc /&gt;</attribute>
   <attribute name="setAdaptiveYMin" element="Chart" chart="MSCombiDY2D + Column2D + Pie3D + Column3D + Bar2D + Line + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + MSCombi3D + MSCombi2D + MSColumnLine3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;This attribute lets you set whether the y-axis
@@ -632,7 +632,7 @@ lower limit will be 0 (in case of all positive values on chart) or
 should the y-axis lower limit adapt itself to a different figure
 based on values provided to the chart.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="centerYaxisName&#xA;                Since v 3.2.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="FunctionalAttributes" common="true">&lt;desc&gt;
+  <attribute name="centerYaxisName" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="FunctionalAttributes" common="true">&lt;desc&gt;
   &lt;span&gt;This attribute when set to '1', allows you to
 align the y-axis name with respect to the height of the chart. When
 set to '0', the y-axis name is aligned with respect to the height
@@ -752,7 +752,7 @@ between dash.&lt;/span&gt;
   <attribute name="zeroPlaneAlpha" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="0-100" category="DivisionalLines&amp;Grids" common="true">&lt;desc&gt;
   &lt;span&gt;Alpha of zero plane.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showZeroPlaneValue&#xA;                Since v 3.2.2 - SR3" element="Chart" chart="Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids" common="true">&lt;desc&gt;
+  <attribute name="showZeroPlaneValue" element="Chart" chart="Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids" common="true">&lt;desc&gt;
   &lt;span&gt;Allows you to show or hide the value on which
 the zero plane exists on the y-axis. By default, the value is
 displayed. This attribute is not supported in JavaScript
@@ -764,8 +764,7 @@ grid bands.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
   <attribute name="alternateHGridColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSArea + ZoomLine + Marimekko + StackedArea2D + StackedColumn2D + MSStackedColumn2D + MSCombi3D + MSCombi2D + StackedColumn2DLine" type="Color" range="Color of the alternate horizontal grid&#xA;bands." category="DivisionalLines&amp;Grids" common="true">&lt;desc /&gt;</attribute>
   <attribute name="alternateHGridAlpha" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSArea + ZoomLine + Marimekko + StackedArea2D + StackedColumn2D + MSStackedColumn2D + MSCombi2D + StackedColumn2DLine" type="Number" range="Alpha (transparency) of the alternate horizontal&#xA;grid bands." category="DivisionalLines&amp;Grids" common="true">&lt;desc /&gt;</attribute>
-  <attribute name="thousandSeparatorPosition&#xA;                &#xA;                  Since v 3.2.2 - SR3" element="Chart" chart="Column2D + Pie3D + MSCombi2D" type="Number" range="This option helps you specify the position of&#xA;the thousand separator. For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;&#xA;Basics page." category="NumberFormatting">&lt;desc /&gt;</attribute>
-  <attribute name="forceYAxisValueDecimals&#xA;                Since version 3.2" element="Chart" chart="Column2D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;Whether to forcefully
+  <attribute name="forceYAxisValueDecimals" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="NumberFormatting" default="true">&lt;desc&gt;Whether to forcefully
 attach decimal places to all y-axis values. For example, If you
 limit the maximum number of decimal digits to 2, a number like
 55.345 will be rounded to 55.34. This does not mean that all y-axis
@@ -873,14 +872,6 @@ chart.&lt;/span&gt;
 &lt;span&gt;canvasLeftMargin&lt;/span&gt;, this attribute
 lets you set the space between bottom of canvas and bottom of
 chart.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="showLabel" element="Set" chart="Column2D + Column3D + Bar2D + Line + ScrollArea2D + Pareto3D + Pareto2D" type="Boolean" range="0/1" category="&lt;set&gt;Element">&lt;desc&gt;
-  &lt;span&gt;You can individually opt to show/hide labels of
-individual data items using this attribute.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="showValue" element="Set" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="&lt;set&gt;Element" common="true">&lt;desc&gt;
-  &lt;span&gt;You can individually opt to show/hide values of
-individual data items using this attribute.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
   <attribute name="color" element="VLine" chart="MSCombiDY2D + Pie2D + Column2D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Hex Color" category="VerticalDataSeparatorLines" common="true">&lt;desc&gt;
   &lt;span&gt;This attribute defines the color of vertical
@@ -1011,17 +1002,6 @@ visible and 0 percent means only the side face is visible.&lt;/span&gt;
   <attribute name="overlapColumns" element="Chart" chart="Column2D + Column3D + Pareto3D + MSColumn3D + StackedColumn3D + MSColumnLine3D + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="Whether to overlap columns over each other to&#xA;give a richer 3D look. If there are too many columns on the chart,&#xA;it will automatically overlap." category="DataPlotCosmetics">&lt;desc /&gt;</attribute>
   <attribute name="zeroPlaneShowBorder" element="Chart" chart="Column2D + Column3D + Pareto3D + MSColumn3D + MSBar3D + StackedColumn3D + StackedBar3D + MSColumnLine3D + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="Whether to show border of zero plane." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
   <attribute name="zeroPlaneBorderColor" element="Chart" chart="Column2D + Column3D + Pareto3D + MSColumn3D + MSBar3D + StackedColumn3D + StackedBar3D + MSColumnLine3D + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Sets the border color of zero plane." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
-  <attribute name="forceYAxisValueDecimals&#xA;Since v 3.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + Pareto2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="NumberFormatting" default="true">&lt;desc&gt;Whether to forcefully
-attach decimal places to all y-axis values. For example, If you
-limit the maximum number of decimal digits to 2, a number like
-55.345 will be rounded to 55.34. This does not mean that all y-axis
-numbers will be displayed with a fixed number of decimal places.
-For instance 55 will not be displayed as 55.00 and 55.1 will not
-become 55.10. In order to have fixed number of decimal places
-attached to all y-axis numbers, set this attribute to 1. For more
-details, please see 
-&lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#rounding" target="_blank"&gt;Basics&lt;/a&gt;
-page.&lt;/desc&gt;</attribute>
   <attribute name="maxLabelWidthPercent" element="Chart" chart="Bar2D + MSBar2D + MSBar3D + StackedBar2D + StackedBar3D" type="Number" range="1-100" category="FunctionalAttributes">&lt;desc&gt;Restricts the maximum
 length of data labels in terms of percentage of the charts width
 that the data labels can occupy. If a data label is longer than the
@@ -1039,18 +1019,18 @@ rotated mode.&lt;/span&gt;
   &lt;span&gt;If you opt to not rotate x-axis name, you can
 choose a maximum width that will be applied to x-axis name.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="centerXaxisName&#xA;                Since v 3.2.2" element="Chart" chart="Bar2D + MSBar2D + MSBar3D + StackedBar2D + StackedBar3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="centerXaxisName" element="Chart" chart="Bar2D + MSBar2D + MSBar3D + StackedBar2D + StackedBar3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;This attribute when set to '1', allows you to
 align the x-axis name with respect to the height of the chart. When
 set to '0', the x-axis name is aligned with respect to the height
 of the canvas.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showAlternateVGridColor" element="Chart" chart="Bar2D + Line + ScrollArea2D + MSLine + MSArea + MSBar2D + StackedArea2D + StackedBar2D" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="showAlternateVGridColor" element="Chart" chart="Pie3D + Column3D + Bar2D + Line + ScrollArea2D + MSLine + MSArea + MSBar2D + StackedArea2D + StackedBar2D" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Whether to show alternate colored vertical grid
 bands.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="alternateVGridColor" element="Chart" chart="Bar2D + Line + ScrollArea2D + MSLine + MSArea + MSBar2D + StackedArea2D + StackedBar2D" type="Color" range="Color of the alternate vertical grid&#xA;bands." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
-  <attribute name="alternateVGridAlpha" element="Chart" chart="Bar2D + Line + ScrollArea2D + MSLine + MSArea + MSBar2D + StackedArea2D + StackedBar2D" type="Number" range="Alpha (transparency) of the alternate vertical&#xA;grid bands." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
+  <attribute name="alternateVGridColor" element="Chart" chart="Pie3D + Column3D + Bar2D + Line + ScrollArea2D + MSLine + MSArea + MSBar2D + StackedArea2D + StackedBar2D" type="Color" range="Color of the alternate vertical grid&#xA;bands." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
+  <attribute name="alternateVGridAlpha" element="Chart" chart="Pie3D + Column3D + Bar2D + Line + ScrollArea2D + MSLine + MSArea + MSBar2D + StackedArea2D + StackedBar2D" type="Number" range="Alpha (transparency) of the alternate vertical&#xA;grid bands." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
   <attribute name="connectNullData" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Bar2D + Line + ScrollArea2D + Pareto3D + ScrollCombi2D + Pareto2D + MSLine + MSArea + ZoomLine + StackedArea2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;This attribute lets you control whether empty
 data sets in your data will be connected to each other OR do they
@@ -1058,7 +1038,7 @@ appear as broken data sets. Please see
 &lt;strong&gt;Advanced charting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/DiscData.html" target="_blank"&gt;Plotting Discontinuous data&lt;/a&gt;
 section for more details on this.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="valuePosition&#xA;Since v 3.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Bar2D + Line + Pareto3D + ScrollCombi2D + Pareto2D + MSLine + ZoomLine + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="ABOVE&#xA;BELOW&#xA;AUTO" category="FunctionalAttributes">&lt;desc&gt;If you've opted to show
+  <attribute name="valuePosition" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Bar2D + Line + Pareto3D + ScrollCombi2D + Pareto2D + MSLine + ZoomLine + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="ABOVE&#xA;BELOW&#xA;AUTO" category="FunctionalAttributes">&lt;desc&gt;If you've opted to show
 data values on the chart, this attribute lets you adjust the
 vertical alignment of data values with respect to dataplots. By
 default, this attribute is set to AUTO mode in which the alignment
@@ -1154,7 +1134,7 @@ negative values are present).&lt;/span&gt;
   &lt;span&gt;Lets you set the space between the canvas border
 and first &amp;amp; last data points&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="valuePosition&#xA;Since v 3.2" element="Set" chart="MSCombiDY2D + Pie2D + Column2D + Bar2D + Line + Pareto3D + ScrollCombi2D + MSLine + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="ABOVE&#xA;BELOW&#xA;AUTO" category="&lt;set&gt;Element">&lt;desc&gt;If you've opted to show a
+  <attribute name="valuePosition" element="Set" chart="MSCombiDY2D + Pie2D + Column2D + Bar2D + Line + Pareto3D + ScrollCombi2D + MSLine + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="ABOVE&#xA;BELOW&#xA;AUTO" category="&lt;set&gt;Element">&lt;desc&gt;If you've opted to show a
 particular data value on the chart, this attribute lets you adjust
 the vertical alignment of individual data values with respect to
 dataplots. By default, this attribute is set to AUTO mode in which
@@ -1215,7 +1195,7 @@ values.&lt;/span&gt;
 secondary y-axis.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
   <attribute name="PYAxisMaxValue" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + Pareto2D + MSColumn3DLineDY" type="Number" range="This attribute helps you explicitly set the&#xA;upper limit of the primary y-axis. If you don't specify this value,&#xA;it is automatically calculated by FusionCharts XT based on the data&#xA;provided by you." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
-  <attribute name="PYAxisMinValue" element="Chart" chart="MSCombiDY2D + Pareto3D + Pareto2D + MSColumn3DLineDY" type="Number" range="This attribute helps you explicitly set the&#xA;lower limit of the primary y-axis. If you don't specify this value,&#xA;it is automatically calculated by FusionCharts XT based on the data&#xA;provided by you." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
+  <attribute name="PYAxisMinValue" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + Pareto2D + MSColumn3DLineDY" type="Number" range="This attribute helps you explicitly set the&#xA;lower limit of the primary y-axis. If you don't specify this value,&#xA;it is automatically calculated by FusionCharts XT based on the data&#xA;provided by you." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
   <attribute name="PYAxisNameWidth" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + Pareto2D + MSColumn3DLineDY" type="Number" range="(In Pixels)" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;If you opt to not rotate y-axis name, you can
 choose a maximum width that will be applied to primary y-axis
@@ -1236,7 +1216,7 @@ secondary y-axis.&lt;/span&gt;
   &lt;span&gt;Whether to show values for the line
 series.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="primaryAxisOnLeft&#xA;Since v 3.2" element="Chart" chart="Column2D + Pareto3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;Setting this attribute to 0 helps in
+  <attribute name="primaryAxisOnLeft" element="Chart" chart="Column2D + Pareto3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;Setting this attribute to 0 helps in
 reversing the position of primary axis.&lt;/desc&gt;</attribute>
   <attribute name="use3DLineShift" element="Chart" chart="Column2D + Pareto3D + MSColumnLine3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;By default, when a line dataset is
 rendered over a column 3D dataset, the line dataset shifts in the
@@ -1275,58 +1255,7 @@ page.&lt;/span&gt;
 secondary axis. In case of Pareto chart, since secondary axis is
 0-100%, you'll have to specify a value within this range.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showLegend" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;Whether to show legend on the chart.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendCaption" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="You can add a caption for the entire&#xA;legend by setting the same here." category="LegendProperties" common="true">&lt;desc /&gt;</attribute>
-  <attribute name="legendPosition" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="BOTTOM or RIGHT" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;The legend can be plotted at two positions on
-the chart - below the chart (BOTTOM) and on the RIGHT side of the
-chart.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendBgColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Hex Code" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;Background color for the legend.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendBgAlpha" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="0-100" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;Background alpha for the legend.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendBorderColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Hex Code" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;Border Color for the legend.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendBorderThickness" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="In Pixels" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;Border thickness for the legend.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendBorderAlpha" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Number" range="0-100" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;Border alpha for the legend.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendShadow" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;Whether to show a shadow for legend.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendAllowDrag" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;The legend can be made drag-able by setting this
-attribute to 1. End viewers of the chart can drag the legend around
-on the chart.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendScrollBgColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Hex Code" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;If you've too many items on the legend, a scroll
-bar shows up on the same. This attribute lets you configure the
-background color of the scroll bar.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendScrollBarColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Hex Code" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;If you've too many items on the legend, a scroll
-bar shows up on the same. This attribute lets you configure the bar
-color of the scroll bar.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendScrollBtnColor" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Color" range="Hex Code" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;If you've too many items on the legend, a scroll
-bar shows up on the same. This attribute lets you configure the
-color of buttons of the scroll bar.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="reverseLegend" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + ZoomLine + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;
-  &lt;span&gt;You can reverse the ordering of datasets in the
-legend by setting this attribute to 1.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="legendMarkerCircle&#xA;                deprecated. Not applicable." element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;Whether to use
+  <attribute name="legendMarkerCircle" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="LegendProperties" common="true">&lt;desc&gt;Whether to use
 square legend keys or circular ones.&lt;/desc&gt;</attribute>
   <attribute name="seriesNameInToolTip" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pie3D + Column3D + Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D + MSColumn2D + MSLine + MSColumn3D + MSArea + MSBar2D + MSBar3D + StackedColumn3D + Marimekko + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + MSCombi3D + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="Boolean" range="0/1" category="Tool-tip" common="true">&lt;desc&gt;
   &lt;span&gt;For multi-series charts, FusionCharts XT shows
@@ -1383,7 +1312,7 @@ dashed.&lt;/span&gt;
   &lt;span&gt;Whether to include the seriesName of this
 dataset in legend.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="valuePosition&#xA;Since v 3.2" element="Dataset" chart="MSCombiDY2D + Pie2D + Column2D + Bar2D + Pareto3D + ScrollCombi2D + MSLine + ZoomLine + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="ABOVE&#xA;BELOW&#xA;AUTO" category="&lt;dataset&gt;Element">&lt;desc&gt;This attribute lets you
+  <attribute name="valuePosition" element="Dataset" chart="MSCombiDY2D + Pie2D + Column2D + Bar2D + Pareto3D + ScrollCombi2D + MSLine + ZoomLine + MSCombi2D + MSColumnLine3D + StackedColumn2DLine + StackedColumn3DLine + MSColumn3DLineDY" type="String" range="ABOVE&#xA;BELOW&#xA;AUTO" category="&lt;dataset&gt;Element">&lt;desc&gt;This attribute lets you
 adjust the vertical alignment of data values for all dataplots in
 the dataset. The alignment is set with respect to the position of
 the dataplots on the chart. By default, the attribute is set to
@@ -1655,19 +1584,6 @@ scroll track (background).&lt;/span&gt;
   &lt;p&gt;This feature is not available in
 JavaScript charts.&lt;/p&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="legendIconScale" element="Chart" chart="ZoomLine" type="Number" range="0-5" category="LegendProperties">&lt;desc&gt;Scaling of legend icon is possible in
-FusionCharts XT. This attribute lets you control the size of legend
-icon.&lt;/desc&gt;</attribute>
-  <attribute name="interactiveLegend" element="Chart" chart="ZoomLine + MSCombi3D" type="Boolean" range="0/1" category="LegendProperties">&lt;desc&gt;This attribute lets you interact with
-the legend in your chart. When you click a legend key, the
-dataplots associated with that series are eliminated from the
-chart. Re-clicking the key causes the dataplots to reappear.&lt;/desc&gt;</attribute>
-  <attribute name="legendNumColumns" element="Chart" chart="ZoomLine" type="Number" range="Positive Integer" category="LegendProperties">&lt;desc&gt;If your chart contains multiple
-series, the legend is displayed as a grid comprising of multiple
-legend keys. With the help of this attribute you can specify the
-number of columns that are to be displayed in the legend.&lt;/desc&gt;</attribute>
-  <attribute name="minimiseWrappingInLegend" element="Chart" chart="ZoomLine" type="Boolean" range="0/1" category="LegendProperties">&lt;desc&gt;Whether to minimize legend item text
-wrapping.&lt;/desc&gt;</attribute>
   <attribute name="startIndex" element="Set" chart="ZoomLine" type="Number" range="Numeric Value" category="VerticalTrend-linesAndVertical&#xA;Trend-zones">&lt;desc&gt;
   &lt;span&gt;The starting index for the vertical trendline.
 Index represents the relative position of a data-point from the
@@ -1734,13 +1650,8 @@ use this attribute.&lt;/span&gt;
   &lt;span&gt;If you want to show sum of all the columns in a
 given stacked column, set this attribute to 1.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="yAxisMinValue&#xA;Since v 3.2" element="Chart" chart="Doughnut2D + StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D + StackedColumn2DLine + StackedColumn3DLine" type="Number" range="This attribute helps you&#xA;explicitly set the lower limit of the chart. If you don't specify&#xA;this value, it is automatically calculated by FusionCharts XT based&#xA;on the data provided by you." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
-  <attribute name="stack100Percent&#xA;Since v 3.2" element="Chart" chart="StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;Setting this attribute to
+  <attribute name="stack100Percent" element="Chart" chart="Doughnut2D + StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;Setting this attribute to
 1 helps in depicting the values in percentage figures.&lt;/desc&gt;</attribute>
-  <attribute name="showPercentValues&#xA;Since v 3.2" element="Chart" chart="StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;Whether to show
-percentage figures in data values of the chart.&lt;/desc&gt;</attribute>
-  <attribute name="showPercentInToolTip&#xA;Since v 3.2" element="Chart" chart="StackedColumn3D + StackedArea2D + StackedColumn2D + StackedBar2D + StackedBar3D + MSStackedColumn2D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;Whether to show
-percentage figures in tool tip.&lt;/desc&gt;</attribute>
   <attribute name="usePercentDistribution" element="Chart" chart="Marimekko" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;If you do not wish to
 show data values as percentage figures, set this attribute to
 0.&lt;/desc&gt;</attribute>
@@ -1770,21 +1681,12 @@ menu (right click menu). This is also applicable while using
 JavaScript API functions - 
 &lt;span&gt;view2D(), view3D, resetView() or
 rotateView()&lt;/span&gt;. Default value is 0.5.&lt;/desc&gt;</attribute>
-  <attribute name="xAxisTickColor&#xA;                Since v 3.2.2" element="Chart" chart="MSCombi3D" type="Color" range="In multi-series combination chart the x-axis&#xA;contains tiny tick lines. This attribute allows you to set the&#xA;color of the tick lines on the x-axis." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
-  <attribute name="xAxisTickAlpha&#xA;                Since v 3.2.2" element="Chart" chart="MSCombi3D" type="Number" range="0-100" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="xAxisTickColor" element="Chart" chart="MSCombi3D" type="Color" range="In multi-series combination chart the x-axis&#xA;contains tiny tick lines. This attribute allows you to set the&#xA;color of the tick lines on the x-axis." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
+  <attribute name="xAxisTickAlpha" element="Chart" chart="MSCombi3D" type="Number" range="0-100" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;This attribute allows you to set the
 transparency of the x-axis tick lines.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="xAxisTickThickness&#xA;                Since v 3.2.2" element="Chart" chart="MSCombi3D" type="Number" range="This attribute allows you to set the thickness&#xA;of the tick lines." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
-  <attribute name="xAxisTickColor&#xA;                Since v3.2.2" element="Chart" chart="MSCombi3D" type="Color" range="Hex Code" category="ChartCosmetics">&lt;desc&gt;
-  &lt;span&gt;Allows you to change the color of the tick marks
-present on the x-axis.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="xAxisTickAlpha&#xA;                Since v3.2.2" element="Chart" chart="MSCombi3D" type="Number" range="0-100" category="ChartCosmetics">&lt;desc&gt;
-  &lt;span&gt;Allows you to control the transparency of the
-tick marks present on the x-axis.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="xAxisTickThickness&#xA;                Since v3.2.2" element="Chart" chart="MSCombi3D" type="Number" range="Allows you to change the thickness of the tick&#xA;marks present on the x-axis." category="ChartCosmetics">&lt;desc /&gt;</attribute>
+  <attribute name="xAxisTickThickness" element="Chart" chart="MSCombi3D" type="Number" range="This attribute allows you to set the thickness&#xA;of the tick lines." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
   <attribute name="is2D" element="Chart" chart="MSCombi3D" type="Boolean" range="0/1" category="3DFunctionalAttributes">&lt;desc&gt;Using this you can decide whether
 initially to draw a 2D view of the chart or not.&lt;/desc&gt;</attribute>
   <attribute name="clustered" element="Chart" chart="MSCombi3D" type="Boolean" range="0/1" category="3DFunctionalAttributes">&lt;desc&gt;It lets you to set if multi column
@@ -1993,12 +1895,6 @@ LINE.&lt;/span&gt;
 combination chart, this attribute lets you configure whether area
 chart will appear over column chart.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showZeroPlaneValue&#xA;                &#xA;                  Since v 3.2.2 - SR3" element="Chart" chart="MSCombi2D" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
-  &lt;span&gt;Allows you to show or hide the value on which
-the zero plane exists on the y-axis. By default, the value is
-displayed. This attribute is not supported in JavaScript
-charts.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
   <attribute name="parentYAxis" element="Dataset" chart="MSCombiDY2D + Column2D + Pareto3D + ScrollCombi2D + MSCombi2D + MSColumnLine3D + MSColumn3DLineDY" type="String" range="P or S" category="&lt;dataset&gt;Element">&lt;desc&gt;
   &lt;span&gt;renderAs attribute over-rides this attribute in
 FusionCharts XT for Single Y Combination Charts. This attribute
@@ -2017,26 +1913,26 @@ different figure based on values provided to the chart.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
   <attribute name="syncAxisLimits" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;Setting this attribute to 1 lets you
 synchronize the limits of both the primary and secondary axes.&lt;/desc&gt;</attribute>
-  <attribute name="showPZeroPlaneValue&#xA;                Since v 3.2.2 - SR3" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="showPZeroPlaneValue" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Allows you to show or hide the value on which
 the zero plane exists on the primary y-axis. By default, the value
 is displayed. This attribute is not supported in JavaScript
 charts.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showSZeroPlaneValue&#xA;                Since v 3.2.2 - SR3" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="showSZeroPlaneValue" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Allows you to show or hide the value on which
 the zero plane exists on the secondary y-axis. By default, the
 value is displayed. This attribute is not supported in JavaScript
 charts.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="sScaleRecursively&#xA;Since v 3.2.2 - SR3" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;To scale the numbers recursively only
+  <attribute name="sScaleRecursively" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;To scale the numbers recursively only
 for the secondary y-axis you need to set this attribute to '1'. For
 more details, please see 
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Rec_Num_Scaling.html" target="_blank"&gt;Recursive
 number scaling&lt;/a&gt; page.&lt;/desc&gt;</attribute>
-  <attribute name="sMaxScaleRecursion&#xA;Since v 3.2.2 - SR3" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="Number" range="How many recursions to complete&#xA;during recursive scaling for the numbers of the secondary y-axis?&#xA;-1 completes the entire set of recursion. For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;&#xA;Recursive Number Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
-  <attribute name="sScaleSeparator&#xA;Since v 3.2.2 - SR3" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="String" range="What character to use to separate the&#xA;scales that generated after recursion for the numbers of the&#xA;secondary y-axis? For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;Recursive&#xA;Number Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
-  <attribute name="forceSYAxisValueDecimals&#xA;Since v 3.2" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;Whether to forcefully
+  <attribute name="sMaxScaleRecursion" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="Number" range="How many recursions to complete&#xA;during recursive scaling for the numbers of the secondary y-axis?&#xA;-1 completes the entire set of recursion. For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;&#xA;Recursive Number Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
+  <attribute name="sScaleSeparator" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="String" range="What character to use to separate the&#xA;scales that generated after recursion for the numbers of the&#xA;secondary y-axis? For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;Recursive&#xA;Number Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
+  <attribute name="forceSYAxisValueDecimals" element="Chart" chart="MSCombiDY2D + Pie2D + Column2D + Pareto3D + MSColumn3DLineDY" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;Whether to forcefully
 attach decimal places to all secondary y-axis values. For example,
 If you limit the maximum number of decimal digits to 2, a number
 like 55.345 will be rounded to 55.34. This does not mean that all
@@ -2099,8 +1995,6 @@ attribute. For more details, please see
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#yaxis" target="_blank"&gt;Basics&lt;/a&gt;
 page.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="PYAxisMinValue&#xA;Since v 3.2" element="Chart" chart="Pie2D + Column2D" type="Number" range="This attribute helps you&#xA;explicitly set the lower limit of the primary y-axis. If you don't&#xA;specify this value, it is automatically calculated by FusionCharts&#xA;XT based on the data provided by you." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
-  <attribute name="thousandSeparatorPosition" element="Chart" chart="Pie2D" type="Number" range="This option helps you specify the position of&#xA;the thousand separator. For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;&#xA;Basics page." category="NumberFormatting">&lt;desc /&gt;</attribute>
   <attribute name="includeInLegend" element="Lineset" chart="Pie2D" type="Boolean" range="0/1" category="&lt;lineset&gt;Element">&lt;desc&gt;
   &lt;span&gt;Whether to include the seriesName of this
 line-set in legend.&lt;/span&gt;
@@ -2118,7 +2012,7 @@ the entire line-set.&lt;/span&gt;
   &lt;span&gt;Whether to show the values for this
 line-set.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="valuePosition&#xA;Since v 3.2" element="Lineset" chart="Pie2D" type="String" range="ABOVE&#xA;BELOW&#xA;AUTO" category="&lt;lineset&gt;Element">&lt;desc&gt;This attribute lets you
+  <attribute name="valuePosition" element="Lineset" chart="Pie2D" type="String" range="ABOVE&#xA;BELOW&#xA;AUTO" category="&lt;lineset&gt;Element">&lt;desc&gt;This attribute lets you
 adjust the vertical alignment of data values for all lines in the
 line-set.&lt;/desc&gt;</attribute>
   <attribute name="dashed" element="Lineset" chart="Pie2D" type="Boolean" range="0/1" category="&lt;lineset&gt;Element">&lt;desc&gt;
@@ -2176,7 +2070,7 @@ canvas by setting this attribute to 1.&lt;/span&gt;
 Z value on the chart with a single color, which can be specified
 for this attribute.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="xAxisLabelMode&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="String" range="AUTO&#xA;CATEGORIES&#xA;MIXED" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="xAxisLabelMode" element="Chart" chart="Pie3D + Column3D" type="String" range="AUTO&#xA;CATEGORIES&#xA;MIXED" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;This attribute is used to render the x-axis
 labels in three different modes. The modes are as following:&lt;/span&gt;
   &lt;ul&gt;
@@ -2196,7 +2090,7 @@ x-axis simultaneously.&lt;/li&gt;
   &lt;/ul&gt;For more details on these modes click 
 &lt;a href="http://docs.fusioncharts.com/charts/contents/AttDesc/BubbleScatter.html" target="_blank"&gt;here&lt;/a&gt;.
 &lt;/desc&gt;</attribute>
-  <attribute name="showXAxisValues&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="showXAxisValues" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;FusionCharts XT x-axis is divided into
 horizontal sections using div (divisional) lines. Each div line
 assumes a value based on its position. Using this attribute you can
@@ -2209,13 +2103,13 @@ When specified the values of&lt;/span&gt;
   &lt;span&gt;overrides the value of this
 attribute.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showVLimits&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="showVLimits" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;Whether to show chart limit values of the
 x-axis. If not specified&lt;/span&gt;
   &lt;span&gt;showXAxisValues&lt;/span&gt;
   &lt;span&gt;attribute overrides this value.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showVDivLineValues&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="showVDivLineValues" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;Whether to show vertical div line values. If not
 specified&lt;/span&gt;
   &lt;span&gt;showXAxisValues&lt;/span&gt;
@@ -2239,12 +2133,12 @@ size of all the bubbles on the chart, you can use this attribute. A
 value of less than 1 (but greater than 0) will decrease all the
 bubble sizes and vice versa.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="xAxisValuesStep&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="1 or above" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="xAxisValuesStep" element="Chart" chart="Pie3D + Column3D" type="Number" range="1 or above" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;By default, all div lines show their values.
 However, you can opt to display every x(th) div line value using
 this attribute.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="adjustVDiv&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="adjustVDiv" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;FusionCharts XT automatically tries to adjust
 divisional lines and limit values of the x-axis based on the data
 provided. However, if you want to set your explicit lower and upper
@@ -2252,18 +2146,18 @@ limit values and number of divisional lines for the x-axis, first
 set this attribute to false. That will disable automatic adjustment
 of divisional lines.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="setAdaptiveXMin&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="setAdaptiveXMin" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;This attribute lets you set whether the x-axis
 lower limit will be 0 (in case of all positive values on chart) or
 should the x-axis lower limit adapt itself to a different figure
 based on values provided to the chart.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showRegressionLine&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="showRegressionLine" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;This attribute when set to '1' draws 
 &lt;a href="http://docs.fusioncharts.com/charts/contents/AttDesc/BubbleScatter.html#regression" target="_blank"&gt;regression
 lines&lt;/a&gt; for all the datasets in the chart.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showYOnX&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="showYOnX" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;When it is set to '1' the 
 &lt;a href="http://docs.fusioncharts.com/charts/contents/AttDesc/BubbleScatter.html#regression" target="_blank"&gt;regression
 lines&lt;/a&gt; are drawn using 
@@ -2272,88 +2166,79 @@ and when the attribute is set to '0' the regression lines are drawn
 using 
 &lt;strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/AttDesc/BubbleScatter.html#regressionmodes" target="_blank"&gt;X On Y&lt;/a&gt;&lt;/strong&gt; mode. By default, this attribute is set to '1'.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="RegressionLineColor&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Color" range="This attribute allows you&#xA;to set the color of all the regression lines in a chart." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
-  <attribute name="RegressionLineThickness&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="This attribute allows you to set the thickness&#xA;of all the regression lines in a chart." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
-  <attribute name="RegressionLineAlpha&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="0-100" category="FunctionalAttributes">&lt;desc&gt;
+  <attribute name="RegressionLineColor" element="Chart" chart="Pie3D + Column3D" type="Color" range="This attribute allows you&#xA;to set the color of all the regression lines in a chart." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
+  <attribute name="RegressionLineThickness" element="Chart" chart="Pie3D + Column3D" type="Number" range="This attribute allows you to set the thickness&#xA;of all the regression lines in a chart." category="FunctionalAttributes">&lt;desc /&gt;</attribute>
+  <attribute name="RegressionLineAlpha" element="Chart" chart="Pie3D + Column3D" type="Number" range="0-100" category="FunctionalAttributes">&lt;desc&gt;
   &lt;span&gt;This attribute allows you to set the
 transparency of all the regression lines in a chart.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="drawQuadrant&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="1/0" category="Quadrants">&lt;desc&gt;Whether to draw quadrants
+  <attribute name="drawQuadrant" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="1/0" category="Quadrants">&lt;desc&gt;Whether to draw quadrants
 on the chart.&lt;/desc&gt;</attribute>
-  <attribute name="quadrantXVal&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="Number" range="Numeric Value" category="Quadrants">&lt;desc&gt;This attribute lets you
+  <attribute name="quadrantXVal" element="Chart" chart="Pie3D + Column3D" type="Number" range="Numeric Value" category="Quadrants">&lt;desc&gt;This attribute lets you
 set the position of the vertical quadrant line.&lt;/desc&gt;</attribute>
-  <attribute name="quadrantYVal&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="Number" range="Numeric Value" category="Quadrants">&lt;desc&gt;This attribute lets you
+  <attribute name="quadrantYVal" element="Chart" chart="Pie3D + Column3D" type="Number" range="Numeric Value" category="Quadrants">&lt;desc&gt;This attribute lets you
 set the position of the horizontal quadrant line.&lt;/desc&gt;</attribute>
-  <attribute name="quadrantLineColor&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="Color" range="Hex Code" category="Quadrants">&lt;desc&gt;Lets you set the color of
+  <attribute name="quadrantLineColor" element="Chart" chart="Pie3D + Column3D" type="Color" range="Hex Code" category="Quadrants">&lt;desc&gt;Lets you set the color of
 the quadrant lines.&lt;/desc&gt;</attribute>
-  <attribute name="quadrantLineThickness&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="Quadrants">&lt;desc&gt;Lets you set the
+  <attribute name="quadrantLineThickness" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="Quadrants">&lt;desc&gt;Lets you set the
 thickness of the quadrant lines.&lt;/desc&gt;</attribute>
-  <attribute name="quadrantLineAlpha&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="Number" range="0-100" category="Quadrants">&lt;desc&gt;Lets you control the
+  <attribute name="quadrantLineAlpha" element="Chart" chart="Pie3D + Column3D" type="Number" range="0-100" category="Quadrants">&lt;desc&gt;Lets you control the
 transparency of the quadrant lines.&lt;/desc&gt;</attribute>
-  <attribute name="quadrantLineIsDashed&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="1/0" category="Quadrants">&lt;desc&gt;Whether the quadrant
+  <attribute name="quadrantLineIsDashed" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="1/0" category="Quadrants">&lt;desc&gt;Whether the quadrant
 lines should appear as dashed.&lt;/desc&gt;</attribute>
-  <attribute name="quadrantLineDashLen&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="Quadrants">&lt;desc&gt;If you've opted to show
+  <attribute name="quadrantLineDashLen" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="Quadrants">&lt;desc&gt;If you've opted to show
 quadrant lines as dashed, this attribute lets you specify the
 length of the dash.&lt;/desc&gt;</attribute>
-  <attribute name="quadrantLineDashGap&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="Quadrants">&lt;desc&gt;If you've opted to show
+  <attribute name="quadrantLineDashGap" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="Quadrants">&lt;desc&gt;If you've opted to show
 quadrant lines as dashed, this attribute lets you specify the
 length of the dash gap.&lt;/desc&gt;</attribute>
-  <attribute name="quadrantLabelTL&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="String" range="This attribute lets you&#xA;specify the label text of the Top-Left quadrant." category="Quadrants">&lt;desc /&gt;</attribute>
-  <attribute name="quadrantLabelTR&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="String" range="This attribute lets you&#xA;specify the label text of the Top-Right quadrant." category="Quadrants">&lt;desc /&gt;</attribute>
-  <attribute name="quadrantLabelBL&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="String" range="This attribute lets you&#xA;specify the label text of the Bottom-Left quadrant." category="Quadrants">&lt;desc /&gt;</attribute>
-  <attribute name="quadrantLabelBR&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="String" range="This attribute lets you&#xA;specify the label text of the Bottom-Right quadrant." category="Quadrants">&lt;desc /&gt;</attribute>
-  <attribute name="quadrantLabelPadding&#xA;Since v 3.2.1" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="Quadrants">&lt;desc&gt;This attribute lets you
+  <attribute name="quadrantLabelTL" element="Chart" chart="Pie3D + Column3D" type="String" range="This attribute lets you&#xA;specify the label text of the Top-Left quadrant." category="Quadrants">&lt;desc /&gt;</attribute>
+  <attribute name="quadrantLabelTR" element="Chart" chart="Pie3D + Column3D" type="String" range="This attribute lets you&#xA;specify the label text of the Top-Right quadrant." category="Quadrants">&lt;desc /&gt;</attribute>
+  <attribute name="quadrantLabelBL" element="Chart" chart="Pie3D + Column3D" type="String" range="This attribute lets you&#xA;specify the label text of the Bottom-Left quadrant." category="Quadrants">&lt;desc /&gt;</attribute>
+  <attribute name="quadrantLabelBR" element="Chart" chart="Pie3D + Column3D" type="String" range="This attribute lets you&#xA;specify the label text of the Bottom-Right quadrant." category="Quadrants">&lt;desc /&gt;</attribute>
+  <attribute name="quadrantLabelPadding" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="Quadrants">&lt;desc&gt;This attribute lets you
 control the space between quadrant labels and the associated
 quadrant lines.&lt;/desc&gt;</attribute>
-  <attribute name="numVDivlines&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="Numeric Value &gt; 0" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="numVDivlines" element="Chart" chart="Pie3D + Column3D" type="Number" range="Numeric Value &gt; 0" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Number of vertical axis division lines that you
 want to display on the chart.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="vDivlineColor&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Color" range="Color for vertical divisional lines." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
-  <attribute name="vDivlineThickness&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="1-5" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="vDivlineColor" element="Chart" chart="Pie3D + Column3D" type="Color" range="Color for vertical divisional lines." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
+  <attribute name="vDivlineThickness" element="Chart" chart="Pie3D + Column3D" type="Number" range="1-5" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Thickness of vertical divisional lines.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="vDivlineAlpha&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="0-100" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="vDivlineAlpha" element="Chart" chart="Pie3D + Column3D" type="Number" range="0-100" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Transparency of the vertical divisional
 lines.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="vDivlineIsDashed&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="vDivlineIsDashed" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Whether the vertical divisional lines should
 display as dash.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="vDivlineDashLen&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="vDivlineDashLen" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;If the vertical divisional lines are to be
 displayed as dash, this attribute lets you control the length of
 each dash.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="vDivlineDashGap&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="vDivlineDashGap" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;If the vertical divisional lines are to
 displayed as dash, this attribute lets you control the length of
 each gap between dash.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showAlternateVGridColor&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
-  &lt;span&gt;Whether to show alternate colored vertical grid
-bands.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="alternateVGridColor&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Color" range="Color of the alternate vertical grid&#xA;bands." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
-  <attribute name="alternateVGridAlpha&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="0-100" category="DivisionalLines&amp;Grids">&lt;desc&gt;
-  &lt;span&gt;Transparency of the alternate vertical grid
-bands.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="showVZeroPlane&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="showVZeroPlane" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Whether to show vertical zero plane.&lt;/span&gt;
   &lt;span&gt;Zero Plane is the line/plane that appears at 0
 x-position on canvas, when negative data is being shown on the
 chart.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="vZeroPlaneColor&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Color" range="Color of the vertical zero plane." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
-  <attribute name="vZeroPlaneThickness&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="vZeroPlaneColor" element="Chart" chart="Pie3D + Column3D" type="Color" range="Color of the vertical zero plane." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
+  <attribute name="vZeroPlaneThickness" element="Chart" chart="Pie3D + Column3D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Thickness of the vertical zero plane.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="vZeroPlaneAlpha&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="0-100" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="vZeroPlaneAlpha" element="Chart" chart="Pie3D + Column3D" type="Number" range="0-100" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Transparency of the vertical zero plane.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="yFormatNumber&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;
+  <attribute name="yFormatNumber" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;
   &lt;span&gt;This configuration determines whether the
 numbers displayed on the y-axis of the chart will be formatted
 using commas, e.g., 40,000 if 
@@ -2366,7 +2251,7 @@ default value from&lt;/span&gt;
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html" target="_blank"&gt;Basics&lt;/a&gt;
 page.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="xFormatNumber&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;
+  <attribute name="xFormatNumber" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;
   &lt;span&gt;This configuration determines whether the
 numbers displayed on the x-axis of the chart will be formatted
 using commas, e.g., 40,000 if 
@@ -2379,7 +2264,7 @@ default value from&lt;/span&gt;
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html" target="_blank"&gt;Basics&lt;/a&gt;
 page.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="yFormatNumberScale&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;
+  <attribute name="yFormatNumberScale" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;
   &lt;span&gt;Configuration whether to add K (thousands) and M
 (millions) to a number after truncating and rounding it on the
 y-axis - e.g., if&lt;/span&gt;
@@ -2394,7 +2279,7 @@ the chart inherits the default value from&lt;/span&gt;
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Scaling.html" target="_blank"&gt;Number
 Scaling&lt;/a&gt; page.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="xFormatNumberScale&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;
+  <attribute name="xFormatNumberScale" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;
   &lt;span&gt;Configuration whether to add K (thousands) and M
 (millions) to a number after truncating and rounding it on the
 x-axis - e.g., if&lt;/span&gt;
@@ -2409,11 +2294,11 @@ the chart inherits the default value from&lt;/span&gt;
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Scaling.html" target="_blank"&gt;Number
 Scaling&lt;/a&gt; page.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="yDefaultNumberScale&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="String" range="The default unit of the numbers of the y-axis&#xA;that you're providing to the chart. If this attribute is not&#xA;specifically mentioned, the chart inherits the default value from &#xA;DefaultNumberScale&#xA;attribute.&#xA;                For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
-  <attribute name="xDefaultNumberScale&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="String" range="The default unit of the numbers of the x-axis&#xA;that you're providing to the chart. If this attribute is not&#xA;specifically mentioned, the chart inherits the default value from &#xA;DefaultNumberScale&#xA;attribute.&#xA;                For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
-  <attribute name="yNumberScaleUnit&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="String" range="Unit of each block of the scale of the y-axis.&#xA;If this attribute is not specifically mentioned, the chart inherits&#xA;the default value from &#xA;NumberScaleUnit attribute.&#xA;                For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
-  <attribute name="xNumberScaleUnit&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="String" range="Unit of each block of the scale of the x-axis.&#xA;If this attribute is not specifically mentioned, the chart inherits&#xA;the default value from &#xA;NumberScaleUnit attribute. For more&#xA;details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
-  <attribute name="xScaleRecursively&#xA;Since v 3.2.2 - SR3" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;Whether to scale the number
+  <attribute name="yDefaultNumberScale" element="Chart" chart="Pie3D + Column3D" type="String" range="The default unit of the numbers of the y-axis&#xA;that you're providing to the chart. If this attribute is not&#xA;specifically mentioned, the chart inherits the default value from &#xA;DefaultNumberScale&#xA;attribute.&#xA;                For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
+  <attribute name="xDefaultNumberScale" element="Chart" chart="Pie3D + Column3D" type="String" range="The default unit of the numbers of the x-axis&#xA;that you're providing to the chart. If this attribute is not&#xA;specifically mentioned, the chart inherits the default value from &#xA;DefaultNumberScale&#xA;attribute.&#xA;                For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
+  <attribute name="yNumberScaleUnit" element="Chart" chart="Pie3D + Column3D" type="String" range="Unit of each block of the scale of the y-axis.&#xA;If this attribute is not specifically mentioned, the chart inherits&#xA;the default value from &#xA;NumberScaleUnit attribute.&#xA;                For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
+  <attribute name="xNumberScaleUnit" element="Chart" chart="Pie3D + Column3D" type="String" range="Unit of each block of the scale of the x-axis.&#xA;If this attribute is not specifically mentioned, the chart inherits&#xA;the default value from &#xA;NumberScaleUnit attribute. For more&#xA;details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
+  <attribute name="xScaleRecursively" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;Whether to scale the number
 recursively for the x-axis? This attribute will work only if the
 attribute 
 &lt;span&gt;xAxisLabelMode&lt;/span&gt; is set to '
@@ -2422,11 +2307,11 @@ attribute
 see 
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Rec_Num_Scaling.html" target="_blank"&gt;Recursive
 Number Scaling&lt;/a&gt; page.&lt;/desc&gt;</attribute>
-  <attribute name="xMaxScaleRecursion&#xA;Since v 3.2.2 - SR3" element="Chart" chart="Pie3D + Column3D" type="Number" range="How many recursions to complete&#xA;during recursive scaling for the numbers on the x-axis? -1&#xA;completes the entire set of recursion. For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;&#xA;Recursive Number Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
-  <attribute name="xScaleSeparator&#xA;Since v 3.2.2 - SR3" element="Chart" chart="Pie3D + Column3D" type="String" range="What character to use to separate the&#xA;scales that generated after recursion for the numbers on the&#xA;x-axis? For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;Recursive&#xA;Number Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
-  <attribute name="yNumberScaleValue&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="String" range="Range of the various blocks that constitute the&#xA;y-axis scale. If this attribute is not specifically mentioned, the&#xA;chart inherits the default value from &#xA;NumberScaleValue attribute.&#xA;                For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
-  <attribute name="xNumberScaleValue&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="String" range="Range of the various blocks that constitute the&#xA;x-axis scale. If this attribute is not specifically mentioned, the&#xA;chart inherits the default value from &#xA;NumberScaleValue attribute.&#xA;                For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
-  <attribute name="yNumberPrefix&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="String" range="Character" category="NumberFormatting">&lt;desc&gt;
+  <attribute name="xMaxScaleRecursion" element="Chart" chart="Pie3D + Column3D" type="Number" range="How many recursions to complete&#xA;during recursive scaling for the numbers on the x-axis? -1&#xA;completes the entire set of recursion. For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;&#xA;Recursive Number Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
+  <attribute name="xScaleSeparator" element="Chart" chart="Pie3D + Column3D" type="String" range="What character to use to separate the&#xA;scales that generated after recursion for the numbers on the&#xA;x-axis? For more details see &#xA;Advanced Charting &gt; Number Formatting &gt;Recursive&#xA;Number Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
+  <attribute name="yNumberScaleValue" element="Chart" chart="Pie3D + Column3D" type="String" range="Range of the various blocks that constitute the&#xA;y-axis scale. If this attribute is not specifically mentioned, the&#xA;chart inherits the default value from &#xA;NumberScaleValue attribute.&#xA;                For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
+  <attribute name="xNumberScaleValue" element="Chart" chart="Pie3D + Column3D" type="String" range="Range of the various blocks that constitute the&#xA;x-axis scale. If this attribute is not specifically mentioned, the&#xA;chart inherits the default value from &#xA;NumberScaleValue attribute.&#xA;                For more details, please see &#xA;Advanced Charting &gt; Number Formatting &gt;Number&#xA;Scaling page." category="NumberFormatting">&lt;desc /&gt;</attribute>
+  <attribute name="yNumberPrefix" element="Chart" chart="Pie3D + Column3D" type="String" range="Character" category="NumberFormatting">&lt;desc&gt;
   &lt;span&gt;Using this attribute, you could add prefix to
 all the numbers visible on the y-axis. For example, to represent
 all dollars figure on the y-axis, you could specify this attribute
@@ -2437,7 +2322,7 @@ details, please see
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#prefix" target="_blank"&gt;Basics&lt;/a&gt;
 page.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="xNumberPrefix&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="String" range="Character" category="NumberFormatting">&lt;desc&gt;
+  <attribute name="xNumberPrefix" element="Chart" chart="Pie3D + Column3D" type="String" range="Character" category="NumberFormatting">&lt;desc&gt;
   &lt;span&gt;Using this attribute, you could add prefix to
 all the numbers visible on the x-axis. For example, to represent
 all dollars figure on the x-axis, you could specify this attribute
@@ -2448,7 +2333,7 @@ details, please see
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#prefix" target="_blank"&gt;Basics&lt;/a&gt;
 page.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="yNumberSuffix&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="String" range="Character" category="NumberFormatting">&lt;desc&gt;
+  <attribute name="yNumberSuffix" element="Chart" chart="Pie3D + Column3D" type="String" range="Character" category="NumberFormatting">&lt;desc&gt;
   &lt;span&gt;Using this attribute, you could add a suffix to
 all the numbers visible on the y-axis. For example, to represent
 all figure quantified as per annum on the y-axis, you could specify
@@ -2460,7 +2345,7 @@ details, please see
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#prefix" target="_blank"&gt;Basics&lt;/a&gt;
 page.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="xNumberSuffix&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="String" range="Character" category="NumberFormatting">&lt;desc&gt;
+  <attribute name="xNumberSuffix" element="Chart" chart="Pie3D + Column3D" type="String" range="Character" category="NumberFormatting">&lt;desc&gt;
   &lt;span&gt;Using this attribute, you could add a suffix to
 all the numbers visible on the x-axis. For example, to represent
 all figure quantified as per annum on the x-axis, you could specify
@@ -2472,7 +2357,7 @@ details, please see
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#prefix" target="_blank"&gt;Basics&lt;/a&gt;
 page.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="forceXAxisValueDecimals&#xA;Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;Whether to forcefully
+  <attribute name="forceXAxisValueDecimals" element="Chart" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="NumberFormatting">&lt;desc&gt;Whether to forcefully
 attach decimal places to all x-axis values. For example, If you
 limit the maximum number of decimal digits to 2, a number like
 55.345 will be rounded to 55.34. This does not mean that all x-axis
@@ -2483,7 +2368,7 @@ attached to all x-axis numbers, set this attribute to 1. For more
 details, please see 
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#yaxis" target="_blank"&gt;Basics&lt;/a&gt;
 page.&lt;/desc&gt;</attribute>
-  <attribute name="xAxisValueDecimals&#xA;                Since v3.2.2" element="Chart" chart="Pie3D + Column3D" type="Number" range="0-10" category="NumberFormatting">&lt;desc&gt;
+  <attribute name="xAxisValueDecimals" element="Chart" chart="Pie3D + Column3D" type="Number" range="0-10" category="NumberFormatting">&lt;desc&gt;
   &lt;span&gt;If you've opted not to adjust vertical div
 lines, you can specify the decimal precision of the div line values
 using this attribute. For more details, please see 
@@ -2534,14 +2419,14 @@ dashed.&lt;/span&gt;
   &lt;span&gt;This attribute sets the alpha (transparency) of
 the entire dataset.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showRegressionLine&#xA;              Since v3.2.2" element="Dataset" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="&lt;dataset&gt;Element">&lt;desc&gt;
+  <attribute name="showRegressionLine" element="Dataset" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="&lt;dataset&gt;Element">&lt;desc&gt;
   &lt;span&gt;This attribute when set to '1'  draws a 
 &lt;a href="http://docs.fusioncharts.com/charts/contents/AttDesc/BubbleScatter.html#regression" target="_blank"&gt;regression
 line&lt;/a&gt; for the corresponding 
 &lt;span&gt;&amp;lt;dataset&amp;gt;&lt;/span&gt; element in the
 chart.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="showYOnX&#xA;              Since v3.2.2" element="Dataset" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="&lt;dataset&gt;Element">&lt;desc&gt;
+  <attribute name="showYOnX" element="Dataset" chart="Pie3D + Column3D" type="Boolean" range="0/1" category="&lt;dataset&gt;Element">&lt;desc&gt;
   &lt;span&gt;When it is set to '1' the 
 &lt;a href="http://docs.fusioncharts.com/charts/contents/AttDesc/BubbleScatter.html#regression" target="_blank"&gt;regression
 line&lt;/a&gt; is drawn using 
@@ -2549,9 +2434,9 @@ line&lt;/a&gt; is drawn using
 is drawn using 
 &lt;a href="http://docs.fusioncharts.com/charts/contents/AttDesc/BubbleScatter.html#regressionmodes" target="_blank"&gt;&lt;strong&gt;X On Y&lt;/strong&gt;&lt;/a&gt; mode. By default, this attribute is set to '1'.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="RegressionLineColor&#xA;              Since v3.2.2" element="Dataset" chart="Pie3D + Column3D" type="Color" range="This attribute allows you to set the color of&#xA;the regression line." category="&lt;dataset&gt;Element">&lt;desc /&gt;</attribute>
-  <attribute name="RegressionLineThickness&#xA;              Since v3.2.2" element="Dataset" chart="Pie3D + Column3D" type="Number" range="This attribute allows you to set the thickness&#xA;of the regression line." category="&lt;dataset&gt;Element">&lt;desc /&gt;</attribute>
-  <attribute name="RegressionLineAlpha&#xA;              Since v3.2.2" element="Dataset" chart="Pie3D + Column3D" type="Number" range="0-100" category="&lt;dataset&gt;Element">&lt;desc&gt;
+  <attribute name="RegressionLineColor" element="Dataset" chart="Pie3D + Column3D" type="Color" range="This attribute allows you to set the color of&#xA;the regression line." category="&lt;dataset&gt;Element">&lt;desc /&gt;</attribute>
+  <attribute name="RegressionLineThickness" element="Dataset" chart="Pie3D + Column3D" type="Number" range="This attribute allows you to set the thickness&#xA;of the regression line." category="&lt;dataset&gt;Element">&lt;desc /&gt;</attribute>
+  <attribute name="RegressionLineAlpha" element="Dataset" chart="Pie3D + Column3D" type="Number" range="0-100" category="&lt;dataset&gt;Element">&lt;desc&gt;
   &lt;span&gt;This attribute allows you to set the
 transparency of the regression line.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
@@ -2629,6 +2514,4 @@ document, set this attribute as 0.&lt;/p&gt;&lt;/desc&gt;</attribute>
   <attribute name="scrollToEnd" element="Chart" chart="Bar2D + Line + Doughnut2D + ScrollArea2D + Pareto3D + ScrollCombi2D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;When the chart renders, you can opt
 to scroll to the end of the chart (to show data at extreme right)
 by setting this attribute as 1.&lt;/desc&gt;</attribute>
-  <attribute name="stack100Percent" element="Chart" chart="Doughnut2D" type="Boolean" range="0/1" category="FunctionalAttributes">&lt;desc&gt;Setting this attribute to
-1 helps in depicting the values in percentage figures.&lt;/desc&gt;</attribute>
 </fcindex>

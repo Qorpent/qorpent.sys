@@ -82,16 +82,6 @@
     <Compile Include="Charts\IChartRenderResult.cs" />
     <Compile Include="Charts\IChartSource.cs" />
     <Compile Include="Charts\IChartXmlSource.cs" />
-    <Compile Include="Charts\Implementation\Chart.cs" />
-    <Compile Include="Charts\Implementation\ChartAttribute.cs" />
-    <Compile Include="Charts\Implementation\ChartBuilder.cs" />
-    <Compile Include="Charts\Implementation\ChartCategory.cs" />
-    <Compile Include="Charts\Implementation\ChartConfig.cs" />
-    <Compile Include="Charts\Implementation\ChartDataset.cs" />
-    <Compile Include="Charts\Implementation\ChartElement.cs" />
-    <Compile Include="Charts\Implementation\ChartRender.cs" />
-    <Compile Include="Charts\Implementation\ChartRenderConfig.cs" />
-    <Compile Include="Charts\Implementation\ChartXmlSource.cs" />
     <Compile Include="Config\ConfigBase.cs" />
     <Compile Include="Config\ConfigRenderType.cs" />
     <Compile Include="Config\DictionaryCompatibleConfig.cs" />
@@ -406,6 +396,8 @@
     <EmbeddedResource Include=".\**\*.*resource" />
     <QorpentReference Include="*.import" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Charts\Implementation\" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>
