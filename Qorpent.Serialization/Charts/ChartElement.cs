@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Qorpent.Charts.Implementation {
+namespace Qorpent.Charts {
     /// <summary>
     ///     Элемент чарта
     /// </summary>

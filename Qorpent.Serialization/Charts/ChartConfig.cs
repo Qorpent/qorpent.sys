@@ -1,6 +1,6 @@
 ﻿using Qorpent.Config;
-using System.Collections.Generic;
-namespace Qorpent.Charts.Implementation {
+
+namespace Qorpent.Charts {
     /// <summary>
     ///     Имплементация конфига чарта
     /// </summary>

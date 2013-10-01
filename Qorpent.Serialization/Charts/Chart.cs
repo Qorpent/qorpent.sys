@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace Qorpent.Charts.Implementation {
+namespace Qorpent.Charts {
     /// <summary>
     ///     Представление графика
     /// </summary>

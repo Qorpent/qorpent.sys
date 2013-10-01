@@ -1,4 +1,4 @@
-﻿namespace Qorpent.Charts.Implementation {
+﻿namespace Qorpent.Charts {
     /// <summary>
     ///     Конфиг рендера чарта
     /// </summary>
