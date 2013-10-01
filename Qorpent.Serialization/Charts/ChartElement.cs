@@ -14,7 +14,7 @@ namespace Qorpent.Charts {
         /// <summary>
         /// Элементы чарта не наследуют атрибутов друг друга
         /// </summary>
-        public ChartElement() : base() {
+        public ChartElement() {
             UseInheritance = false;
             Set(ChartDefaults.ChartElementChilds,new List<IChartElement>());
         }
@@ -29,8 +29,7 @@ namespace Qorpent.Charts {
         /// <summary>
         ///     Родительский элемент
         /// </summary>
-        public string ElementName
-        {
+        public string ElementName {
             get { return Get<string>(ChartDefaults.ChartElementName); }
             protected set { Set(ChartDefaults.ChartElementName, value); }
         }

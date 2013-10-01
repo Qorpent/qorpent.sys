@@ -6,7 +6,6 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts.FusionCharts {
     public static partial  class Api {
-
         /// <summary>
         /// Проверяет доступность атрибута для данного элемента в конфигурации
         /// </summary>

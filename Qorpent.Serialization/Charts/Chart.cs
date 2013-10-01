@@ -4,7 +4,7 @@ namespace Qorpent.Charts {
     /// <summary>
     /// Основной объект - сам график
     /// </summary>
-    public class Chart : ChartElement,IChart {
+    public partial class Chart : ChartElement,IChart {
         private IChartCategories _categories;
         private IChartDatasets _datasets;
         private IChartLineSet _lineSet;

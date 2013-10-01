@@ -3264,5 +3264,5 @@ namespace Qorpent.Charts.FusionCharts {
     } },
   
     };
-   }
+}
 }
