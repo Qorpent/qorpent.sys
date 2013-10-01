@@ -3,13 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{142D4B49-1AB0-4D8D-A348-716887CAFAAC}"
 	ProjectSection(SolutionItems) = preProject
+		api_attribute_dictionary.xslt = api_attribute_dictionary.xslt
+		ChartClassGenerator.xslt = ChartClassGenerator.xslt
 		clean_fusion_chart_api.xml = clean_fusion_chart_api.xml
 		get_charts.xslt = get_charts.xslt
+		get_elements.xslt = get_elements.xslt
 		get_types.xslt = get_types.xslt
-		GetChartAttributes.xslt = GetChartAttributes.xslt
 		merged_fusion_chart_api.xml = merged_fusion_chart_api.xml
 		raw_fusion_chart_api.xml = raw_fusion_chart_api.xml
 		raw_fusion_chart_api_distiller.xslt = raw_fusion_chart_api_distiller.xslt
+		scripts.xslt = scripts.xslt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fcapimerge", "fcapimerge\fcapimerge.csproj", "{ECB9A893-6468-470E-A3F9-6291954363F9}"

@@ -1,135 +1,128 @@
-п»їusing System.Collections.Generic;
 using System.Xml.Linq;
-using Qorpent.Config;
 
 namespace Qorpent.Charts {
     /// <summary>
-    ///     РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РіСЂР°С„РёРєР°
+    /// Основной объект - сам график
     /// </summary>
-    public class Chart : ConfigBase, IChart, IChartXmlSource {
+    public class Chart : ChartElement,IChart {
+        private IChartCategories _categories;
+        private IChartDatasets _datasets;
+        private IChartLineSet _lineSet;
+        private IChartTrendLines _trendLines;
+
         /// <summary>
-        ///     РљРѕРЅС„РёРі С‡Р°СЂС‚Р°
+        ///     Собирается XML-представление чарата по его конфигу
         /// </summary>
-        private IChartConfig _config;
+        /// <param name="chartConfig">Конфиг чарта</param>
+        /// <returns>XML-представление чарата</returns>
+        public XElement GenerateChartXml(IChartConfig chartConfig) {
+            var render = CreateChartRender(chartConfig);
+            var xml = render.GenerateChartXmlSource(chartConfig).GenerateChartXml(chartConfig);
+            xml = render.RefactorChartXml(xml,chartConfig);
+            return xml;
+        }
+
         /// <summary>
-        ///     Р’РЅСѓС‚СЂРµРЅРЅРёР№ СЃРїРёСЃРѕРє РєР°С‚РµРіРѕСЂРёР№
+        /// Перекрыть, чтобы создать класс рендера для данного класса
         /// </summary>
-        private readonly IList<IChartElement> _categories = new List<IChartElement>();
+        /// <param name="chartConfig"></param>
+        /// <returns></returns>
+        protected virtual IChartRender CreateChartRender(IChartConfig chartConfig) {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
-        ///     Р’РЅСѓС‚СЂРµРЅРЅРёР№ СЃРїРёСЃРѕРє РґР°С‚Р°СЃРµС‚РѕРІ
+        ///     Перечисление элементов
         /// </summary>
-        private readonly IList<IChartElement> _datasets = new List<IChartElement>();
-        /// <summary>
-        ///     РљРѕСЂРЅРµРІРѕР№ СЌР»РµРјРµРЅС‚
-        /// </summary>
-        public IChartElement Root { get; private set; }
-        /// <summary>
-        ///     РџРµСЂРµС‡РёСЃР»РµРЅРёРµ СЌР»РµРјРµРЅС‚РѕРІ
-        /// </summary>
-        public IEnumerable<IChartElement> Categories {
-            get { return _categories; }
+        public IChartCategories Categories {
+            get {
+                if (null == _categories) {
+                    _categories = CreateCategoriesElement();
+                    _categories.SetParent(this);
+                    Children.Add(_categories);
+                    Set(ChartDefaults.Categories,_categories);
+                }
+                return _categories;
+            }
         }
         /// <summary>
-        ///     Р”Р°С‚Р°СЃРµС‚С‹
-        /// </summary>
-        public IEnumerable<IChartElement> Datasets {
-            get { return _datasets; }
-        }
-        /// <summary>
-        ///     РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РіСЂР°С„РёРєР°
-        /// </summary>
-        public Chart() {
-            Root = new ChartElement();
-            Root.SetName(ChartDefaults.ChartElementName);
-        }
-        /// <summary>
-        ///     РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РіСЂР°С„РёРєР°
-        /// </summary>
-        /// <param name="root">РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РєРѕСЂРЅРµРІРѕРіРѕ СЌР»РµРјРµРЅС‚Р°</param>
-        public Chart(IChartElement root) {
-            Root = root;
-        }
-        /// <summary>
-        ///     РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РіСЂР°С„РёРєР°
-        /// </summary>
-        /// <param name="config">РљРѕРЅС„РёРі С‡Р°СЂС‚Р°</param>
-        public Chart(IChartConfig config) {
-            _config = config;
-        }
-        /// <summary>
-        ///     РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РіСЂР°С„РёРєР°
-        /// </summary>
-        /// <param name="config">РљРѕРЅС„РёРі С‡Р°СЂС‚Р°</param>
-        /// <param name="root">РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РєРѕСЂРЅРµРІРѕРіРѕ СЌР»РµРјРµРЅС‚Р°</param>
-        public Chart(IChartConfig config, IChartElement root) {
-            _config = config;
-            Root = root;
-        }
-        /// <summary>
-        ///     Р”РѕР±Р°РІР»РµРЅРёРµ РєР°С‚РµРіРѕСЂРёРё
-        /// </summary>
-        /// <param name="category">РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РєР°С‚РµРіРѕСЂРёРё</param>
-        public void AddCategory(IChartElement category) {
-            category.SetParent(Root);
-            _categories.Add(category);
-        }
-        /// <summary>
-        ///     Р”РѕР±Р°РІР»РµРЅРёРµ РґР°С‚Р°СЃРµС‚Р°
-        /// </summary>
-        /// <param name="dataset">РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РґР°С‚Р°СЃРµС‚Р°</param>
-        public void AddDataset(IChartElement dataset) {
-            dataset.SetParent(Root);
-            _datasets.Add(dataset);
-        }
-        /// <summary>
-        ///     Р Р°Р·СЂРёСЃРѕРІС‹РІР°РµС‚ СЃС‚СЂСѓРєС‚СѓСЂСѓ РІ XML-РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ
+        /// Перекрыть для создания элемента для категорий
         /// </summary>
         /// <returns></returns>
-        public XElement DrawStructure() {
-            var root = Root.ToXml();
+        protected virtual IChartCategories CreateCategoriesElement() {
+            return new ChartCategories();
+        }
 
-            foreach (var chartElement in Categories) {
-                root.Add(chartElement.ToXml());
+        /// <summary>
+        ///     Датасеты
+        /// </summary>
+        public IChartDatasets Datasets {
+            get
+            {
+                if (null == _datasets)
+                {
+                    _datasets = CreateDatasetsElement();
+                    _datasets.SetParent(this);
+                    Children.Add(_datasets);
+                    Set(ChartDefaults.Datasets, _datasets);
+                }
+                return _datasets;
             }
-
-            foreach (var chartElement in Datasets) {
-                root.Add(chartElement.ToXml());
-            }
-
-            return root;
         }
         /// <summary>
-        ///     Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСѓС‰РёР№ РєРѕРЅС„РёРі
+        /// Создает набор элемента данных
         /// </summary>
-        /// <returns>РљРѕРЅС„РёРі С‡Р°СЂС‚Р°</returns>
-        public IChartConfig GetConfig() {
-            return _config;
+        /// <returns></returns>
+        protected virtual IChartDatasets CreateDatasetsElement() {
+            return new ChartDatasets();
         }
-        /// <summary>
-        ///     РЎРѕР±РёСЂР°РµС‚СЃСЏ XML-РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ С‡Р°СЂР°С‚Р° РїРѕ РµРіРѕ РєРѕРЅС„РёРіСѓ
-        /// </summary>
-        /// <param name="chartConfig">РљРѕРЅС„РёРі С‡Р°СЂС‚Р°</param>
-        /// <returns>XML-РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ С‡Р°СЂР°С‚Р°</returns>
-        public XElement GenerateChartXml(IChartConfig chartConfig) {
-            return DrawStructure();
-        }
-        /// <summary>
-        ///     РџРѕРґРЅРёРјР°РµС‚ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ <see cref="IChart"/> РёР· РїРµСЂРµРґР°РЅРЅРѕРі РѕРєРѕРЅС„РёРіР°
-        /// </summary>
-        /// <param name="chartConfig">РљРѕРЅС„РёРі С‡Р°СЂС‚Р°</param>
-        /// <returns>РќР°СЃС‚СЂРѕРµРЅРЅС‹Р№ РїРѕ РєРѕРЅС„РёРіСѓ СЌРєР·РµРјРїР»СЏСЂ <see cref="IChart"/></returns>
-        public static IChart Initialize(IChartConfig chartConfig) {
-            var chart = new Chart(chartConfig);
 
-            /*foreach (var dataset in chartConfig.Datasets) {
-                chart.AddDataset(dataset);
+        /// <summary>
+        /// Набор дополнительных линий
+        /// </summary>
+        public IChartLineSet LineSet {
+            get
+            {
+                if (null == _lineSet)
+                {
+                    _lineSet = CreateLinesetElement();
+                    _lineSet.SetParent(this);
+                    Children.Add(_lineSet);
+                    Set(ChartDefaults.Datasets, _lineSet);
+                }
+                return _lineSet;
             }
+        }
+        /// <summary>
+        /// Создает новый элемент лайнсетов
+        /// </summary>
+        /// <returns></returns>
+        protected virtual IChartLineSet CreateLinesetElement() {
+            return new ChartLineSet();
+        }
 
-            foreach (var category in chartConfig.Categories) {
-                chart.AddCategory(category);
-            }*/
-
-            return chart;
+        /// <summary>
+        /// Набор линий тренда
+        /// </summary>
+        public IChartTrendLines TrendLines {
+            get
+            {
+                if (null == _trendLines)
+                {
+                    _trendLines = CreateTrendlinesElement();
+                    _trendLines.SetParent(this);
+                    Children.Add(_trendLines);
+                    Set(ChartDefaults.Datasets, _trendLines);
+                }
+                return _trendLines;
+            }
+        }
+        /// <summary>
+        /// Согздает реальный элемент Trendline
+        /// </summary>
+        /// <returns></returns>
+        public virtual IChartTrendLines CreateTrendlinesElement() {
+            return new ChartTrendLines();
         }
     }
 }

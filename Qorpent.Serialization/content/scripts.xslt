@@ -15,9 +15,14 @@
     }
     return (s[0].ToString().ToUpper()+s.Substring(1)).Replace(" ","_");
     }
+    
     public string AsComment(string s){
     // throw new Exception(s);
     return "\n///"+ s.Replace("\n","\n///").Replace("&amp;","&amp;amp;").Replace("&lt;","&amp;lt;");
+    }
+    
+    public string Replace (string s, string f, string r) {
+      return s.Replace(f,r);
     }
   </msxsl:script>
    

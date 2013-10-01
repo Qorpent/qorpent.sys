@@ -72,5 +72,22 @@
         /// Имя аттрибута рендера чарта
         /// </summary>
         public const string ChartRenderAttributeName = "chartrender";
+
+        /// <summary>
+        /// Набор категорий
+        /// </summary>
+        public const string Categories = "categories_collection";
+        /// <summary>
+        /// Наборы данных
+        /// </summary>
+        public const string Datasets = "datasets_collection";
+        /// <summary>
+        /// Наборы данных
+        /// </summary>
+        public const string TrendLines = "trendlines_collection";
+        /// <summary>
+        /// Наборы дополнительных линий
+        /// </summary>
+        public const string Lineset = "lines_collection";
     }
 }

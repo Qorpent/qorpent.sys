@@ -1,6 +1,6 @@
 ﻿
 namespace Qorpent.Charts.FusionCharts {
-///<summary>
+    ///<summary>
 ///Описывает атрибуты и прочие соглашения по атрибутам FusionChart
 ///</summary>
   public static partial class Api {

@@ -4,9 +4,11 @@ using System;
     ///<summary>
  ///Типы элементов графиков FusionChart
  ///</summary>
-   [Flags]
-   public enum FusionChartElementType {
-      
+    [Flags]
+    public enum FusionChartElementType {
+    ///<summary>Не указан</summary>
+    None = 0,
+    
     ///<summary>Chart</summary>
     Chart = 1<<1,    
   
@@ -28,7 +30,7 @@ using System;
     ///<summary>Dataset</summary>
     Dataset = 1<<7,    
   
-    ///<summary>Lineset</summary>
+    ///<summary>LineSet</summary>
     Lineset = 1<<8,    
   
     }
