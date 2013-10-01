@@ -86,7 +86,6 @@
     <Compile Include="Charts\IChartLineset.cs" />
     <Compile Include="Charts\IChartRender.cs" />
     <Compile Include="Charts\IChartRenderConfig.cs" />
-    <Compile Include="Charts\ChartRenderFormat.cs" />
     <Compile Include="Charts\IChartRenderResult.cs" />
     <Compile Include="Charts\IChartSet.cs" />
     <Compile Include="Charts\IChartSource.cs" />

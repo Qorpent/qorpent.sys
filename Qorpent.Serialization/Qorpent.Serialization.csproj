@@ -37,12 +37,15 @@
     <Compile Include="Charts.FusionCharts\API_auto.cs" />
     <Compile Include="Charts.FusionCharts\Api_dict_auto.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartAttributeDescriptor.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartChart.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartDataType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartElementType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartGroupedType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartRender.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartsChartBuilder.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartWrapper.cs" />
+    <Compile Include="Charts\ChartBuilder.cs" />
     <Compile Include="Charts\ChartCategory.cs" />
     <Compile Include="Charts\ChartConfig.cs" />
     <Compile Include="Charts\ChartDataset.cs" />
@@ -54,6 +57,7 @@
     <Compile Include="Charts\ChartExtended.cs" />
     <Compile Include="Charts\ChartLine.cs" />
     <Compile Include="Charts\ChartLineSet.cs" />
+    <Compile Include="Charts\ChartRenderResult.cs" />
     <Compile Include="Charts\ChartSet.cs" />
     <Compile Include="Charts\ChartTrendLines.cs" />
     <Compile Include="Charts\ChartVLine.cs" />

@@ -9,7 +9,10 @@ namespace Qorpent.Charts.FusionCharts {
     [ContainerComponent(ServiceType = typeof(IChartRender),Name = "fusion.chart.render")]    
     public class FusionChartRender:ServiceBase,IChartRender {
         private IChart _chart;
-        private IChartConfig _config;
+        /// <summary>
+        ///     Внутренний экземпляр конфига рендера чартов
+        /// </summary>
+        private IChartRenderConfig _chartRenderConfig;
 
         /// <summary>
         ///     Собирается XML-представление чарата по его конфигу
@@ -17,7 +20,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="chartConfig">Конфиг чарта</param>
         /// <returns>XML-представление чарата</returns>
         public XElement GenerateChartXml(IChartConfig chartConfig) {
-            var realConfig = chartConfig ?? _config;
+            var realConfig = chartConfig;
             var fusion = _chart.AsFusion(realConfig);
             var result = fusion.GetXmlElement();
             foreach (var ds in _chart.Datasets.AsList) {
@@ -38,7 +41,6 @@ namespace Qorpent.Charts.FusionCharts {
         public IChartXmlSource GenerateChartXmlSource(IChartConfig chartConfig) {
             return this;
         }
-
         /// <summary>
         ///     Дошлифовывает полученное представление чарта в XML-формате
         ///     до максимально идеального
@@ -53,13 +55,23 @@ namespace Qorpent.Charts.FusionCharts {
         /// <summary>
         ///     Инициализация чарт-рендера
         /// </summary>
-        /// <param name="chart">Представление графика</param>
-        /// <param name="chartConfig">Конфиг чарта</param>
+        /// <param name="chart">Представление чарта</param>
+        /// <param name="chartRenderConfig">Конфиг рендера чарта</param>
         /// <returns>Экземпляр данного класса</returns>
-        public IChartRender Initialize(IChart chart, IChartConfig chartConfig) {
+        public IChartRender Initialize(IChart chart, IChartRenderConfig chartRenderConfig) {
             _chart = chart;
-            _config = chartConfig;
+            _chartRenderConfig = chartRenderConfig;
             return this;
+        }
+        /// <summary>
+        ///     Отрендерить чарт по переданному представлению и конфигу
+        /// </summary>
+        /// <param name="chartConfig">Представления конфига чарта</param>
+        /// <returns>XML-представление отрендеренного чарта</returns>
+        public IChartRenderResult RenderChart(IChartConfig chartConfig) {
+            var renderResult = new ChartRenderResult(_chart, chartConfig);
+
+            return renderResult;
         }
     }
 }

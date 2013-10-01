@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Qorpent.Charts {
+﻿namespace Qorpent.Charts {
     /// <summary>
     ///     Представление чарт-билдера
     /// </summary>
@@ -17,7 +11,25 @@ namespace Qorpent.Charts {
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        IChartBuilder AddCategory(IChartElement category);
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         IChartBuilder AddDataset(IChartElement dataset);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lineset"></param>
+        /// <returns></returns>
+        IChartBuilder AddLineset(IChartElement lineset);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="trendline"></param>
+        /// <returns></returns>
+        IChartBuilder AddTrendLine(IChartElement trendline);
     }
 }

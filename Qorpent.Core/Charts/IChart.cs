@@ -1,6 +1,4 @@
-﻿using Qorpent.Config;
-
-namespace Qorpent.Charts {
+﻿namespace Qorpent.Charts {
     /// <summary>
     ///     Представление графика
     /// </summary>
@@ -14,15 +12,12 @@ namespace Qorpent.Charts {
         /// </summary>
         IChartDatasets Datasets { get; }
         /// <summary>
-        /// Набор дополнительных линий
+        ///     Набор дополнительных линий
         /// </summary>
         IChartLineSet LineSet { get; }
         /// <summary>
-        /// Набор линий тренда
+        ///     Набор линий тренда
         /// </summary>
         IChartTrendLines TrendLines { get; }
-
-       
-
     }
 }
