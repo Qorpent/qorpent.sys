@@ -50,7 +50,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="config"></param>
         /// <returns></returns>
         private static bool IsMatch(string name, FusionChartType chartType, FusionChartElementType elementType = FusionChartElementType.Chart, IChartConfig config = null) {
-            var key = elementType.ToString() + "_" + Escaper.PascalCase(name);
+            var key = (elementType.ToString() + "_" + name).ToLower();
             if (Attributes.ContainsKey(key)) {
                 return 0 != (Attributes[key].Charts & chartType);
             }

@@ -86,5 +86,14 @@ namespace Qorpent.Charts.FusionCharts {
             dataset.Add(el);
             return el;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sets"></param>
+        public void AddSets(object sets) {
+            foreach (var s in sets.ToDict()) {
+                AddSet(s.Key, s.Value.ToDecimal());
+            }
+        }
     }
 }

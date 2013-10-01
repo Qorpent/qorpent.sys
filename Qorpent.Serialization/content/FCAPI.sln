@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Utils", "..\..\Qorp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Serialization", "..\Qorpent.Serialization.csproj", "{21971F28-8ED8-4F50-B623-E9DB2658AF54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChartsApiAnalizer", "ChartsApiAnalizer\ChartsApiAnalizer.csproj", "{04F485A1-E3A1-42FB-AB9A-29D1E6FC0933}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,12 @@ Global
 		{21971F28-8ED8-4F50-B623-E9DB2658AF54}.Release|Any CPU.Build.0 = Release|Any CPU
 		{21971F28-8ED8-4F50-B623-E9DB2658AF54}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{21971F28-8ED8-4F50-B623-E9DB2658AF54}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{04F485A1-E3A1-42FB-AB9A-29D1E6FC0933}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04F485A1-E3A1-42FB-AB9A-29D1E6FC0933}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04F485A1-E3A1-42FB-AB9A-29D1E6FC0933}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04F485A1-E3A1-42FB-AB9A-29D1E6FC0933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04F485A1-E3A1-42FB-AB9A-29D1E6FC0933}.SQL2008|Any CPU.ActiveCfg = Release|Any CPU
+		{04F485A1-E3A1-42FB-AB9A-29D1E6FC0933}.SQL2008|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

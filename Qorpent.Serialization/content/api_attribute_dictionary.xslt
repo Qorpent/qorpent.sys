@@ -25,7 +25,7 @@ namespace Qorpent.Charts.FusionCharts {
 </xsl:text>
   </xsl:template>
   <xsl:template match="attribute" mode="dict">
-    { <xsl:value-of select="@element"/>_<xsl:value-of select="f:PascalCase(@name)"/>, new FusionChartAttributeDescriptor { 
+    { "<xsl:value-of select="f:ToLower(@element)"/>_<xsl:value-of select="f:ToLower(@name)"/>", new FusionChartAttributeDescriptor { 
       Name = <xsl:value-of select="@element"/>_<xsl:value-of select="f:PascalCase(@name)"/>,
       Charts = <xsl:value-of select="concat( 'FusionChartType.' , f:Replace(@chart, '+ ', '| FusionChartType.'))"/>,
       Element = <xsl:value-of select="concat( 'FusionChartElementType.' , f:PascalCase(@element))"/>,
