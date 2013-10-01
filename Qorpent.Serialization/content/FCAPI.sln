@@ -4,7 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{142D4B49-1AB0-4D8D-A348-716887CAFAAC}"
 	ProjectSection(SolutionItems) = preProject
 		clean_fusion_chart_api.xml = clean_fusion_chart_api.xml
+		get_charts.xslt = get_charts.xslt
 		get_types.xslt = get_types.xslt
+		GetChartAttributes.xslt = GetChartAttributes.xslt
 		merged_fusion_chart_api.xml = merged_fusion_chart_api.xml
 		raw_fusion_chart_api.xml = raw_fusion_chart_api.xml
 		raw_fusion_chart_api_distiller.xslt = raw_fusion_chart_api_distiller.xslt
