@@ -173,23 +173,61 @@ ns::test");
 			Console.WriteLine("bxl length: {0}", bxlcode.Length);
 
 			var sw = Stopwatch.StartNew();
-			XElement.Parse(xmlcode);
-			sw.Stop();
+		    for (var i = 0; i < 20; i++) {
+		        XElement.Parse(xmlcode);
+		    }
+		    sw.Stop();
 			var xmltime = sw.ElapsedMilliseconds;
 
 			sw = Stopwatch.StartNew();
-			new BxlParser().Parse(bxlcode);
-			sw.Stop();
+		    for (var i = 0; i < 20; i++) {
+		        new BxlParser().Parse(bxlcode);
+		    }
+		    sw.Stop();
 			var bxl1time = sw.ElapsedMilliseconds;
 
 			sw = Stopwatch.StartNew();
-			new BxlParser2().Parse(bxlcode);
-			sw.Stop();
+		    for (var i = 0; i < 20; i++) {
+		        new BxlParser2().Parse(bxlcode);
+		    }
+		    sw.Stop();
 			var bxl2time = sw.ElapsedMilliseconds;
 
 			Console.WriteLine("xml: {0}\nbxl1: {1}\nbxl2: {2}", xmltime, bxl1time, bxl2time);
 			Assert.True(bxl2time < bxl1time);
 		}
+
+
+        [Test]
+        [Explicit]
+        public void Parser2ProfileBenchmark()
+        {
+            var xml = new XElement("root");
+            for (int i = 0; i < NamespaceCount; i++)
+            {
+                String k = randomString();
+                String v = randomString();
+                ns[i] = v;
+                xml.Add(new XAttribute(XNamespace.Xmlns + k, v));
+            }
+            for (var i = 0; i < NodePerLevelCount; i++)
+            {
+                xml.Add(createElement(Depth));
+            }
+            String xmlcode = xml.ToString();
+            //Console.WriteLine(xmlcode);
+            Console.WriteLine("xml length: {0}", xmlcode.Length);
+            String bxlcode = new BxlGenerator().Convert(xml);
+            //Console.WriteLine(bxlcode);
+            Console.WriteLine("bxl length: {0}", bxlcode.Length);
+           
+            for (var i = 0; i < 100; i++)
+            {
+                new BxlParser2().Parse(bxlcode);
+            }
+
+           
+        }
 
 		private XElement createElement(int depth) {
 			XElement e = new XElement(randomName());

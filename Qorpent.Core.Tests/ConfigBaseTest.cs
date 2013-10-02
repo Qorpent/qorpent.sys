@@ -64,7 +64,7 @@ namespace Qorpent.Core.Tests
             cfgchild.SetParent(cfgbase);
             cfgbase.Set("a", 1);
             Assert.AreEqual(1, cfgchild.Get<object>("a"));
-            cfgchild.Inheritance = false;
+            cfgchild.UseInheritance = false;
             Assert.IsNull(cfgchild.Get<object>("a"));
         }
         /// <summary>
