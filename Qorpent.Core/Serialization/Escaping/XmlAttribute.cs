@@ -5,7 +5,7 @@ namespace Qorpent.Serialization
     /// <summary>
     /// <see cref="EscapingType.XmlAttribute"/>
     /// </summary>
-    class XmlAttribute : IData
+    class XmlAttribute : IEscapeProvider
     {
         protected static readonly Dictionary<char, string> _common = new Dictionary<char, string>()
             {

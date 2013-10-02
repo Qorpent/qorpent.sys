@@ -6,7 +6,7 @@ namespace Qorpent.Serialization
     /// <summary>
     /// <see cref="DotLiteral"/>
     /// </summary>
-    class DotLiteral : IData
+    class DotLiteral : IEscapeProvider
     {
         protected static readonly String _uni = "_0x ";
         protected static readonly Dictionary<char, string> _common = new Dictionary<char, string>();

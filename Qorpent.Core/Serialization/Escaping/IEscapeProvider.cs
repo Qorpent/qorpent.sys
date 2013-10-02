@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Qorpent.Serialization
 {
-    interface IData
+    interface IEscapeProvider
     {
         /// <summary>
         /// special escape dictionary for first character
@@ -31,5 +31,6 @@ namespace Qorpent.Serialization
         /// </summary>
         /// <returns></returns>
         bool NeedEscapeUnicode(char c);
+
     }
 }

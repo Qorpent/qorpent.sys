@@ -9,7 +9,7 @@ namespace Qorpent.Serialization.Escaping
     /// <summary>
     /// <see cref="JsonLiteral" />
     /// </summary>
-    class JsonLiteral : IData
+    class JsonLiteral : IEscapeProvider
     {
         private static readonly Dictionary<char, string> _common = new Dictionary<char, string>()
             {

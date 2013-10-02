@@ -5,7 +5,7 @@ namespace Qorpent.Serialization
     /// <summary>
     /// <see cref="EscapingType.BxlLiteral" />
     /// </summary>
-    class BxlLiteral : IData
+    class BxlLiteral : IEscapeProvider
     {
         protected static readonly Dictionary<char, string> _common = new Dictionary<char, string>()
             {

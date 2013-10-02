@@ -34,14 +34,25 @@ namespace Qorpent.Serialization
             }
 
 
-            IData d = EscapingDataFactory.Get(type);
-            StringBuilder sb = new StringBuilder(str.Length);
+            IEscapeProvider d = EscapingDataFactory.Get(type);
+            var sb = new StringBuilder(str.Length);
 
-            sb.Append(EscapeFirst(str[0], d));
+			if (!IsLiteral(str[0],type,true)) {
+				sb.Append(EscapeFirst(str[0], d));
+			}
+			else {
+				sb.Append(str[0]);
+			}
+            
             for (int i = 1; i < str.Length; i++)
-                sb.Append(EscapeCommon(str[i], d));
+	            if (!IsLiteral(str[i],type)) {
+		            sb.Append(EscapeCommon(str[i], d));
+	            }
+	            else {
+		            sb.Append(str[i]);
+	            }
 
-            return sb.ToString();
+	        return sb.ToString();
         }
 
         private static string ToBxlMultiLineString(string str) {
@@ -94,7 +105,7 @@ namespace Qorpent.Serialization
         /// <returns></returns>
         public static bool IsLiteral(this char c, EscapingType type, bool first = false)
         {
-            IData d = EscapingDataFactory.Get(type);
+            IEscapeProvider d = EscapingDataFactory.Get(type);
             return !(first && d.GetFirst().ContainsKey(c)
                     || d.GetCommon().ContainsKey(c)
                     || d.NeedEscapeUnicode(c));
@@ -108,7 +119,7 @@ namespace Qorpent.Serialization
         /// <returns></returns>
         public static bool IsLiteral(this String str, EscapingType type)
         {
-            IData d = EscapingDataFactory.Get(type);
+            IEscapeProvider d = EscapingDataFactory.Get(type);
 
             if (d.GetFirst().ContainsKey(str[0]))
                 return false;
@@ -118,7 +129,7 @@ namespace Qorpent.Serialization
             return true;
         }
 
-        private static String EscapeFirst(char c, IData d)
+        private static String EscapeFirst(char c, IEscapeProvider d)
         {
             String r;
             if (d.GetFirst().TryGetValue(c, out r))
@@ -126,7 +137,7 @@ namespace Qorpent.Serialization
             return EscapeCommon(c, d);
         }
 
-        private static String EscapeCommon(char c, IData d)
+        private static String EscapeCommon(char c, IEscapeProvider d)
         {
             String r;
             if (d.GetCommon().TryGetValue(c, out r))
@@ -134,7 +145,7 @@ namespace Qorpent.Serialization
             return EscapeUnicode(c, d);
         }
 
-        private static String EscapeUnicode(char c, IData d)
+        private static String EscapeUnicode(char c, IEscapeProvider d)
         {
             // escaping not defined
             if (d.GetUnicodePattern() == null)
@@ -155,7 +166,7 @@ namespace Qorpent.Serialization
         /// <returns></returns>
         public static String Unescape(this String str, EscapingType type)
         {
-            IData d = EscapingDataFactory.Get(type);
+            IEscapeProvider d = EscapingDataFactory.Get(type);
             StringBuilder res = new StringBuilder(str.Length);
 
             int offset = 0;
@@ -182,7 +193,7 @@ namespace Qorpent.Serialization
             return res + str.Substring(offset);
         }
 
-        private static String CheckSuffix(String str, int start, int end, IData d)
+        private static String CheckSuffix(String str, int start, int end, IEscapeProvider d)
         {
             String s;
             // the length of escaping code not constant so check all variants
@@ -213,7 +224,7 @@ namespace Qorpent.Serialization
             return null;
         }
 
-        private static String UnescapeEntity(this String s, IData d)
+        private static String UnescapeEntity(this String s, IEscapeProvider d)
         {
             char r;
             if (d.GetUnescape().TryGetValue(s, out r))
@@ -222,7 +233,7 @@ namespace Qorpent.Serialization
             return null;
         }
 
-        private static String UnescapeUnicode(this String s, IData d)
+        private static String UnescapeUnicode(this String s, IEscapeProvider d)
         {
             String p = d.GetUnicodePattern();
             if (p == null)

@@ -191,8 +191,8 @@ namespace Qorpent.Bxl2 {
 					_mode = ReadMode.NewLine;
 		            return;
                 case '\t':
-					if (_tabs == 0)
-						_current = _current.Elements().Last();
+		            if (_tabs == 0)
+			            _current = _current.LastNode as XElement ?? _current;
 					else
 						_tabs--;
                     return;

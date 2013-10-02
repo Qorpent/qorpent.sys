@@ -187,7 +187,7 @@
     <Compile Include="Serialization\Escaping\Escaper.cs" />
     <Compile Include="Serialization\Escaping\EscapingDataFactory.cs" />
     <Compile Include="Serialization\Escaping\EscapingType.cs" />
-    <Compile Include="Serialization\Escaping\IData.cs" />
+    <Compile Include="Serialization\Escaping\IEscapeProvider.cs" />
     <Compile Include="Serialization\Escaping\XmlAttribute.cs" />
     <Compile Include="Serialization\Escaping\XmlName.cs" />
     <Compile Include="Serialization\FcOptions.cs" />
