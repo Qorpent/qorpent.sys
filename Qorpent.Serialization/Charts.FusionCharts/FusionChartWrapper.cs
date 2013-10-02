@@ -43,8 +43,8 @@ namespace Qorpent.Charts.FusionCharts {
         /// Заголовок чарта
         /// </summary>
         public string Caption {
-            get { return _element.Get<string>(Api.Chart_Caption); }
-            set { _element.Set(Api.Chart_Caption,value); }
+            get { return _element.Get<string>(FusionChartApi.Chart_Caption); }
+            set { _element.Set(FusionChartApi.Chart_Caption,value); }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns></returns>
         public XElement GetXmlElement() {
             var result = new XElement(_elementName);
-            foreach (var attr in Api.FindAttributes(_charttype, _eltype)) {
+            foreach (var attr in FusionChartApi.FindAttributes(_charttype, _eltype)) {
                 if (_element.ContainsKey(attr.Name)) {
                     result.SetAttributeValue(attr.Name,_element.Get<string>(attr.Name));
                 }
@@ -80,8 +80,8 @@ namespace Qorpent.Charts.FusionCharts {
             var dataset = ((IChart) _element).Datasets.EnsureDataset();
             var el = new ChartSet();
             if (!string.IsNullOrWhiteSpace(label)) {
-                el.Set(Api.Set_Label, label);
-                el.Set(Api.Set_Value, value);
+                el.Set(FusionChartApi.Set_Label, label);
+                el.Set(FusionChartApi.Set_Value, value);
             }
             dataset.Add(el);
             return el;

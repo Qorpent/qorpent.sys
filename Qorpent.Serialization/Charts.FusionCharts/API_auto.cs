@@ -1,9 +1,9 @@
 ﻿
 namespace Qorpent.Charts.FusionCharts {
-    ///<summary>
+///<summary>
 ///Описывает атрибуты и прочие соглашения по атрибутам FusionChart
 ///</summary>
-  public static partial class Api {
+  public static partial class FusionChartApi {
 
     ///<summary>Animation</summary>
     ///<remarks>
@@ -4142,30 +4142,6 @@ namespace Qorpent.Charts.FusionCharts {
     ///</remarks>
     public const string Chart_SNumberSuffix = "sNumberSuffix";
   
-    ///<summary>SDecimals</summary>
-    ///<remarks>
-///&lt;desc>
-///  &lt;span>Number of decimal places to which all numbers
-///belonging to secondary axis will be rounded to. For more details,
-///please see 
-///&lt;strong>Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong>&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#rounding" target="_blank">Basics&lt;/a>
-///page.&lt;/span>
-///&lt;/desc>
-    ///</remarks>
-    public const string Chart_SDecimals = "sDecimals";
-  
-    ///<summary>SYAxisValueDecimals</summary>
-    ///<remarks>
-///&lt;desc>
-///  &lt;span>If you've opted to not adjust div lines, you can
-///specify the secondary div line values decimal precision using this
-///attribute. For more details, please see 
-///&lt;strong>Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong>&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#yaxis" target="_blank">Basics&lt;/a>
-///page.&lt;/span>
-///&lt;/desc>
-    ///</remarks>
-    public const string Chart_SYAxisValueDecimals = "sYAxisValueDecimals";
-  
     ///<summary>IncludeInLegend</summary>
     ///<remarks>
 ///&lt;desc>
@@ -4614,67 +4590,6 @@ namespace Qorpent.Charts.FusionCharts {
 ///quadrant lines.&lt;/desc>
     ///</remarks>
     public const string Chart_QuadrantLabelPadding = "quadrantLabelPadding";
-  
-    ///<summary>NumVDivlines</summary>
-    ///<remarks>
-///&lt;desc>
-///  &lt;span>Number of vertical axis division lines that you
-///want to display on the chart.&lt;/span>
-///&lt;/desc>
-    ///</remarks>
-    public const string Chart_NumVDivlines = "numVDivlines";
-  
-    ///<summary>VDivlineColor</summary>
-    ///<remarks>
-///&lt;desc />
-    ///</remarks>
-    public const string Chart_VDivlineColor = "vDivlineColor";
-  
-    ///<summary>VDivlineThickness</summary>
-    ///<remarks>
-///&lt;desc>
-///  &lt;span>Thickness of vertical divisional lines.&lt;/span>
-///&lt;/desc>
-    ///</remarks>
-    public const string Chart_VDivlineThickness = "vDivlineThickness";
-  
-    ///<summary>VDivlineAlpha</summary>
-    ///<remarks>
-///&lt;desc>
-///  &lt;span>Transparency of the vertical divisional
-///lines.&lt;/span>
-///&lt;/desc>
-    ///</remarks>
-    public const string Chart_VDivlineAlpha = "vDivlineAlpha";
-  
-    ///<summary>VDivlineIsDashed</summary>
-    ///<remarks>
-///&lt;desc>
-///  &lt;span>Whether the vertical divisional lines should
-///display as dash.&lt;/span>
-///&lt;/desc>
-    ///</remarks>
-    public const string Chart_VDivlineIsDashed = "vDivlineIsDashed";
-  
-    ///<summary>VDivlineDashLen</summary>
-    ///<remarks>
-///&lt;desc>
-///  &lt;span>If the vertical divisional lines are to be
-///displayed as dash, this attribute lets you control the length of
-///each dash.&lt;/span>
-///&lt;/desc>
-    ///</remarks>
-    public const string Chart_VDivlineDashLen = "vDivlineDashLen";
-  
-    ///<summary>VDivlineDashGap</summary>
-    ///<remarks>
-///&lt;desc>
-///  &lt;span>If the vertical divisional lines are to
-///displayed as dash, this attribute lets you control the length of
-///each gap between dash.&lt;/span>
-///&lt;/desc>
-    ///</remarks>
-    public const string Chart_VDivlineDashGap = "vDivlineDashGap";
   
     ///<summary>ShowVZeroPlane</summary>
     ///<remarks>

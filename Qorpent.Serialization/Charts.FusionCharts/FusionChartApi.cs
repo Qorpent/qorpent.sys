@@ -5,7 +5,7 @@ using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts.FusionCharts {
-    public static partial  class Api {
+    public static partial  class FusionChartApi {
         /// <summary>
         /// Проверяет доступность атрибута для данного элемента в конфигурации
         /// </summary>

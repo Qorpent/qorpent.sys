@@ -34,6 +34,7 @@ namespace fcapimerge {
 
         private IDictionary<string, FusionChartAttribute> BuildIndex(IEnumerable<FusionChartAttribute> attributes) {
             var result = new Dictionary<string, FusionChartAttribute>();
+            IList<string> finalKeys = new List<string>();
             foreach (var a in attributes) {
                 if (result.ContainsKey(a.Key)) {
                     var existed = result[a.Key];
@@ -44,6 +45,20 @@ namespace fcapimerge {
                 }
                 else {
                     result[a.Key] = a;
+                }
+                
+                
+                
+            }
+            foreach (var r in result) {
+                var lowerkey = r.Key.ToLower();
+                if (finalKeys.Contains(lowerkey))
+                {
+                    Console.WriteLine(r.Key + "=" + r.Key.ToLower());
+                }
+                else
+                {
+                    finalKeys.Add(lowerkey);
                 }
             }
             return result;

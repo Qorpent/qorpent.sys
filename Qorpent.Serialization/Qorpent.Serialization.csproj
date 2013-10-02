@@ -32,7 +32,7 @@
     <Compile Include="BSharp\Schema\RuleType.cs" />
     <Compile Include="BSharp\Schema\Schema.cs" />
     <Compile Include="BSharp\Schema\SchemaNote.cs" />
-    <Compile Include="Charts.FusionCharts\Api.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartApi.cs" />
     <Compile Include="Charts.FusionCharts\ApiExtended.cs" />
     <Compile Include="Charts.FusionCharts\API_auto.cs" />
     <Compile Include="Charts.FusionCharts\Api_dict_auto.cs" />

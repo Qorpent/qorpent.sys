@@ -10,7 +10,7 @@ namespace Qorpent.Charts.FusionCharts {
 ///&lt;summary>
 ///Описывает атрибуты и прочие соглашения по атрибутам FusionChart
 ///&lt;/summary>
-  public static partial class Api {
+  public static partial class FusionChartApi {
 </xsl:text>
     <xsl:apply-templates select="//attribute" mode="constant"/>
     <xsl:text>

@@ -1105,24 +1105,24 @@ set this as 0.&lt;/span&gt;
   &lt;span&gt;Helps you set the alpha of anchor
 background.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="numVDivLines" element="Chart" chart="ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Number" range="Number of vertical axis division lines" category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
-  <attribute name="vDivLineColor" element="Chart" chart="ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Color" range="Color of vertical axis division lines." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
-  <attribute name="vDivLineThickness" element="Chart" chart="ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="numVDivLines" element="Chart" chart="Bubble + Scatter + ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Number" range="Number of vertical axis division lines" category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
+  <attribute name="vDivLineColor" element="Chart" chart="Bubble + Scatter + ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Color" range="Color of vertical axis division lines." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
+  <attribute name="vDivLineThickness" element="Chart" chart="Bubble + Scatter + ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Thickness of vertical axis division
 lines.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="vDivLineAlpha" element="Chart" chart="ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Number" range="0-100" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="vDivLineAlpha" element="Chart" chart="Bubble + Scatter + ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Number" range="0-100" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Alpha of vertical axis division lines.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="vDivLineIsDashed" element="Chart" chart="ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="vDivLineIsDashed" element="Chart" chart="Bubble + Scatter + ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Whether vertical divisional lines appear as
 dashed.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="vDivLineDashLen" element="Chart" chart="ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="vDivLineDashLen" element="Chart" chart="Bubble + Scatter + ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;If vertical div lines are dashed, this attribute
 lets you control the width of dash.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="vDivLineDashGap" element="Chart" chart="ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
+  <attribute name="vDivLineDashGap" element="Chart" chart="Bubble + Scatter + ScrollLine2D + ScrollColumn2D + ScrollArea2D + MSLine + MSArea + StackedArea2D" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;If vertical div lines are dashed, this attribute
 lets you control the width of dash gap.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
@@ -1225,7 +1225,7 @@ add the perspective to the line dataset, you may set this attribute
 as 0.&lt;/desc&gt;</attribute>
   <attribute name="SYAXisName" element="Chart" chart="MSCombiDY2D + MSStackedColumn2DLineDY + StackedColumn3DLineDY + ScrollCombiDY2D + Pareto2D + MSColumn3DLineDY" type="String" range="Secondary y-axis title" category="ChartTitlesAndAxisNames">&lt;desc /&gt;</attribute>
   <attribute name="PYAxisName" element="Chart" chart="MSCombiDY2D + MSStackedColumn2DLineDY + StackedColumn3DLineDY + ScrollCombiDY2D + Pareto2D + MSColumn3DLineDY" type="String" range="Primary Y-Axis title." category="ChartTitlesAndAxisNames">&lt;desc /&gt;</attribute>
-  <attribute name="sdecimals" element="Chart" chart="ScrollCombiDY2D + Pareto2D" type="Number" range="0-10" category="NumberFormatting">&lt;desc&gt;
+  <attribute name="sdecimals" element="Chart" chart="MSCombiDY2D + MSStackedColumn2DLineDY + StackedColumn3DLineDY + ScrollCombiDY2D + Pareto2D + MSColumn3DLineDY" type="Number" range="0-10" category="NumberFormatting">&lt;desc&gt;
   &lt;span&gt;Number of decimal places for the secondary axis
 to which all numbers on the cumulative line will be rounded to. For
 more details, please see 
@@ -1243,7 +1243,7 @@ attached to all the numbers, set this attribute to 1. For more
 details, please see 
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#rounding" target="_blank"&gt;Basics&lt;/a&gt;
 page.&lt;/desc&gt;</attribute>
-  <attribute name="syAxisValueDecimals" element="Chart" chart="ScrollCombiDY2D + Pareto2D" type="Number" range="0-10" category="NumberFormatting">&lt;desc&gt;
+  <attribute name="syAxisValueDecimals" element="Chart" chart="MSCombiDY2D + MSStackedColumn2DLineDY + StackedColumn3DLineDY + ScrollCombiDY2D + Pareto2D + MSColumn3DLineDY" type="Number" range="0-10" category="NumberFormatting">&lt;desc&gt;
   &lt;span&gt;If you've opted to not adjust div lines, you can
 specify the div line values decimal precision using this attribute
 for the secondary axis. For more details, please see 
@@ -1981,20 +1981,6 @@ please see
 &lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#prefix" target="_blank"&gt;Basics&lt;/a&gt;
 page.&lt;/span&gt;
 &lt;/desc&gt;</attribute>
-  <attribute name="sDecimals" element="Chart" chart="MSCombiDY2D + MSStackedColumn2DLineDY + StackedColumn3DLineDY + ScrollCombiDY2D + MSColumn3DLineDY" type="Number" range="0-10" category="NumberFormatting">&lt;desc&gt;
-  &lt;span&gt;Number of decimal places to which all numbers
-belonging to secondary axis will be rounded to. For more details,
-please see 
-&lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#rounding" target="_blank"&gt;Basics&lt;/a&gt;
-page.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="sYAxisValueDecimals" element="Chart" chart="MSCombiDY2D + MSStackedColumn2DLineDY + StackedColumn3DLineDY + ScrollCombiDY2D + MSColumn3DLineDY" type="Number" range="0-10" category="NumberFormatting">&lt;desc&gt;
-  &lt;span&gt;If you've opted to not adjust div lines, you can
-specify the secondary div line values decimal precision using this
-attribute. For more details, please see 
-&lt;strong&gt;Advanced Charting &amp;gt; Number Formatting &amp;gt;&lt;/strong&gt;&lt;a href="http://docs.fusioncharts.com/charts/contents/advanced/number-format/Number_Basics.html#yaxis" target="_blank"&gt;Basics&lt;/a&gt;
-page.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
   <attribute name="includeInLegend" element="Lineset" chart="MSStackedColumn2DLineDY" type="Boolean" range="0/1" category="&lt;lineset&gt;Element">&lt;desc&gt;
   &lt;span&gt;Whether to include the seriesName of this
 line-set in legend.&lt;/span&gt;
@@ -2199,32 +2185,6 @@ length of the dash gap.&lt;/desc&gt;</attribute>
   <attribute name="quadrantLabelPadding" element="Chart" chart="Bubble + Scatter" type="Number" range="In Pixels" category="Quadrants">&lt;desc&gt;This attribute lets you
 control the space between quadrant labels and the associated
 quadrant lines.&lt;/desc&gt;</attribute>
-  <attribute name="numVDivlines" element="Chart" chart="Bubble + Scatter" type="Number" range="Numeric Value &gt; 0" category="DivisionalLines&amp;Grids">&lt;desc&gt;
-  &lt;span&gt;Number of vertical axis division lines that you
-want to display on the chart.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="vDivlineColor" element="Chart" chart="Bubble + Scatter" type="Color" range="Color for vertical divisional lines." category="DivisionalLines&amp;Grids">&lt;desc /&gt;</attribute>
-  <attribute name="vDivlineThickness" element="Chart" chart="Bubble + Scatter" type="Number" range="1-5" category="DivisionalLines&amp;Grids">&lt;desc&gt;
-  &lt;span&gt;Thickness of vertical divisional lines.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="vDivlineAlpha" element="Chart" chart="Bubble + Scatter" type="Number" range="0-100" category="DivisionalLines&amp;Grids">&lt;desc&gt;
-  &lt;span&gt;Transparency of the vertical divisional
-lines.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="vDivlineIsDashed" element="Chart" chart="Bubble + Scatter" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
-  &lt;span&gt;Whether the vertical divisional lines should
-display as dash.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="vDivlineDashLen" element="Chart" chart="Bubble + Scatter" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
-  &lt;span&gt;If the vertical divisional lines are to be
-displayed as dash, this attribute lets you control the length of
-each dash.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
-  <attribute name="vDivlineDashGap" element="Chart" chart="Bubble + Scatter" type="Number" range="In Pixels" category="DivisionalLines&amp;Grids">&lt;desc&gt;
-  &lt;span&gt;If the vertical divisional lines are to
-displayed as dash, this attribute lets you control the length of
-each gap between dash.&lt;/span&gt;
-&lt;/desc&gt;</attribute>
   <attribute name="showVZeroPlane" element="Chart" chart="Bubble + Scatter" type="Boolean" range="0/1" category="DivisionalLines&amp;Grids">&lt;desc&gt;
   &lt;span&gt;Whether to show vertical zero plane.&lt;/span&gt;
   &lt;span&gt;Zero Plane is the line/plane that appears at 0

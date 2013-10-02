@@ -26,7 +26,7 @@ namespace fcapimerge {
             Chart = (FusionChartType)Enum.Parse(typeof(FusionChartType), chartType, true);
         }
 
-        public string Key { get { return Name + "_" + Element ; } }
+        public string Key { get { return (Name + "_" + Element).ToLower() ; } }
         public string Name { get; set; }
         public FusionChartDataType Type { get; set; }
         public string Range { get; set; }

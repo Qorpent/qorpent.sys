@@ -2,7 +2,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public partial class Api {
+    public partial class FusionChartApi {
         /// <summary>
         /// 
         /// </summary>
