@@ -19,18 +19,10 @@
     <Compile Include="BSharp\Schema\AttributeRuleTest.cs" />
     <Compile Include="BSharp\Schema\ElementRuleTest.cs" />
     <Compile Include="BSharp\SetKeyword.cs" />
-    <Compile Include="Bxl2\BxlParser2CompatibilityTests.cs" />
-    <Compile Include="Bxl2\BxlParser2Tests.cs" />
-    <Compile Include="Bxl2\RealWorldBxl2Test.cs" />
+    <Compile Include="Bxl\BxlParserCompatibilityTests.cs" />
+    <Compile Include="Bxl\BxlParserTests.cs" />
     <Compile Include="Bxl\ApplicationAccessToBxl.cs" />
     <Compile Include="Bxl\BxlGeneratorTest.cs" />
-    <Compile Include="Bxl\BxlParserTest.cs" />
-    <Compile Include="Bxl\BxlTokenizerTestComplex.cs" />
-    <Compile Include="Bxl\BxlTokenizerTest_L0.cs" />
-    <Compile Include="Bxl\BxlTokenTest.cs" />
-    <Compile Include="Bxl\BxlXmlGeneratorTest.cs" />
-    <Compile Include="Bxl\ByLineParsingTest.cs" />
-    <Compile Include="Bxl\TokenizerTestHelper.cs" />
     <Compile Include="bxl_serializer_test.cs" />
     <Compile Include="coverage_only_tests.cs" />
     <Compile Include="DefaultSelectorTests.cs" />
@@ -96,8 +88,8 @@
     <EmbeddedResource Include="XmlInclude\near2.bxl">
       <LastGenOutput>main1.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Bxl2\demo.import.forms.m600.bxls" />
-    <EmbeddedResource Include="Bxl2\presentation_ocm_structure.hql" />
+    <EmbeddedResource Include="Bxl\demo.import.forms.m600.bxls" />
+    <EmbeddedResource Include="Bxl\presentation_ocm_structure.hql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.Core.Tests\Qorpent.Core.Tests.csproj">

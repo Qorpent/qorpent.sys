@@ -10,11 +10,10 @@ using System.Xml.Linq;
 using Comdiv.UXmlDiff;
 using NUnit.Framework;
 using Qorpent.Bxl;
-using Qorpent.Bxl2;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Serialization.Tests.Bxl2 {
-	class BxlParser2CompatibilityTests {
+namespace Qorpent.Serialization.Tests.Bxl {
+	class BxlParserCompatibilityTests {
 		[Test]
 		public void CanInterpolateDuringParse() {
 			var res = new BxlParser().Parse(@"
@@ -64,7 +63,7 @@ class B
 
 		[Test]
 		public void CanParseAttribuesAfterElements() {
-			var res = new BxlParser2().Parse(@"
+			var res = new BxlParser().Parse(@"
 test 
 	test2
 	y=3
@@ -75,7 +74,7 @@ test
 
 		[Test]
 		public void GeneratesNamespaceDeclarations() {
-			var res = new BxlParser2().Parse(@"
+			var res = new BxlParser().Parse(@"
 ns = 'http://myns'
 test");
 			Console.WriteLine(res.ToString());
@@ -86,7 +85,7 @@ test");
 
 		[Test]
 		public void GeneratesNamespaceDeclarations_ImplicitWellknownNameSpace() {
-			var res = new BxlParser2().Parse(@"
+			var res = new BxlParser().Parse(@"
 e1 :
 	qxi::include direct//inclA
 	qxi::include direct//inclD delay
@@ -105,7 +104,7 @@ e1 :
 
 		[Test]
 		public void GeneratesNamespaceDeclarations_NotWorkingExample() {
-			var res = new BxlParser2().Parse(@"
+			var res = new BxlParser().Parse(@"
 qxi='http://qorpent/xml/include'
 e1 :
 	qxi::include direct//inclA
@@ -126,7 +125,7 @@ e1 :
 
 		[Test]
 		public void Implicit_Namespace_Generation() {
-			var res = new BxlParser2().Parse(@"
+			var res = new BxlParser().Parse(@"
 a::e1
 b::e1", "myfile", BxlParserOptions.NoLexData);
 			Console.WriteLine(res.ToString());
@@ -138,20 +137,20 @@ b::e1", "myfile", BxlParserOptions.NoLexData);
 
 		[Test]
 		public void NotAllowAttributesAtRoot() {
-			Assert.Throws<BxlException>(() => new BxlParser2().Parse(@"
+			Assert.Throws<BxlException>(() => new BxlParser().Parse(@"
 test 
 x=2"));
 		}
 
 		[Test]
 		public void SupportBracesInLiteral() {
-			var res = new BxlParser2().Parse("test val(1)");
+			var res = new BxlParser().Parse("test val(1)");
 			Console.WriteLine(res.ToString());
 		}
 
 		[Test]
 		public void UsesNamespacesInAttributeNames() {
-			var res = new BxlParser2().Parse(@"
+			var res = new BxlParser().Parse(@"
 ns = 'http://myns'
 ns::test ns::attr=2");
 			Console.WriteLine(res.ToString());
@@ -162,7 +161,7 @@ ns::test ns::attr=2");
 
 		[Test]
 		public void UsesNamespacesInElementNames() {
-			var res = new BxlParser2().Parse(@"
+			var res = new BxlParser().Parse(@"
 ns = 'http://myns'
 ns::test");
 			Console.WriteLine(res.ToString());
@@ -174,7 +173,7 @@ ns::test");
 		[Test]
 		public void WrongAssignError() {
 			var exc = Assert.Throws<BxlException>(() =>
-												  new BxlParser2().Parse("x (a)=2"));
+												  new BxlParser().Parse("x (a)=2"));
 			StringAssert.Contains("assign", exc.Message);
 		}
 
@@ -185,7 +184,7 @@ ns::test");
 		[TestCase("e x=\"a:a\"")]
 		public void QPT78_Not_Supported_DoubleDot_In_Attribute(string code) {
 
-			var parsed = new BxlParser2().Parse(code);
+			var parsed = new BxlParser().Parse(code);
 			var e = parsed.Element("e");
 			var a = e.Attribute("x");
 			Assert.NotNull(a);
@@ -235,7 +234,7 @@ ns::test");
 
 			sw = Stopwatch.StartNew();
 		    for (var i = 0; i < 20; i++) {
-		        new BxlParser2().Parse(bxlcode);
+		        new BxlParser().Parse(bxlcode);
 		    }
 		    sw.Stop();
 			var bxl2time = sw.ElapsedMilliseconds;
@@ -270,7 +269,7 @@ ns::test");
            
             for (var i = 0; i < 100; i++)
             {
-                new BxlParser2().Parse(bxlcode);
+                new BxlParser().Parse(bxlcode);
             }
 
            

@@ -62,8 +62,8 @@
     <Compile Include="Charts\ChartTrendLines.cs" />
     <Compile Include="Charts\ChartVLine.cs" />
     <Compile Include="Charts\Chart_default_attributes.cs" />
-    <Compile Include="Bxl2\BxlParser2.cs" />
-    <Compile Include="Bxl2\ReadMode.cs" />
+    <Compile Include="Bxl\BxlParser.cs" />
+    <Compile Include="Bxl\ReadMode.cs" />
     <Compile Include="Graphs.Dot\Builder\DotEdgeBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphElementBuilderBase.cs" />
@@ -115,15 +115,7 @@
     <Compile Include="Serialization\bxlSerializer.cs" />
     <Compile Include="Serialization\bxlSerializerImpl.cs" />
     <Compile Include="Bxl\BxlGenerator.cs" />
-    <Compile Include="Bxl\BxlParser.cs" />
     <Compile Include="Bxl\BxlService.cs" />
-    <Compile Include="Bxl\BxlToken.cs" />
-    <Compile Include="Bxl\BxlTokenizer.cs" />
-    <Compile Include="Bxl\BxlTokenType.cs" />
-    <Compile Include="Bxl\BxlTokenTypeHelper.cs" />
-    <Compile Include="Bxl\BxlTree.cs" />
-    <Compile Include="Bxl\BxlXmlGenerator.cs" />
-    <Compile Include="Bxl\BxlXpathNavigator.cs" />
     <Compile Include="Bxl\MyBxl.cs" />
     <Compile Include="Serialization\ContainerInfo.cs" />
     <Compile Include="Serialization\ISerializerImpl.cs" />
@@ -153,5 +145,7 @@
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Bxl2\" />
+  </ItemGroup>
 </Project>

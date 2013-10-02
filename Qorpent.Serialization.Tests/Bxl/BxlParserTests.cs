@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using NUnit.Framework;
-using Qorpent.Bxl2;
 using Qorpent.Bxl;
+using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Serialization.Tests.Bxl2
+namespace Qorpent.Serialization.Tests.Bxl
 {
-	class BxlParser2Tests {
+	class BxlParserTests {
 		[Test]
 		public void CanParse() {
 			String bxl = @"tes+t1 f f
@@ -25,7 +25,7 @@ test2
 	h	d,g,
 ";
 
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -37,7 +37,7 @@ test2
 			String bxl = @"
 test1 a b c
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -53,7 +53,7 @@ test1 a b c
 			String bxl = @"
 test1 x=1 y=2 x=3
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -67,7 +67,7 @@ test1 x=1 y=2 x=3
 			String bxl = @"
 test1 x   =   2
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -79,7 +79,7 @@ test1 x   =   2
 			String bxl = @"test1 x
 	y = 5
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -89,7 +89,7 @@ test1 x   =   2
 		[Test]
 		public void CanUseSingleLineStringAsAnonAttribute() {
 			String bxl = @"test1 a 'w w' ""q q"" (qwerty)";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -102,7 +102,7 @@ test1 x   =   2
 		public void CanUseSingleLineStringAsAttributeValue() {
 			String bxl = @"test1 x='q q'
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -113,7 +113,7 @@ test1 x   =   2
 		public void CanUseSingleLineStringAsAttributeName() {
 			String bxl = @"test1 'w w' = ""q q""
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -124,7 +124,7 @@ test1 x   =   2
 		public void CanUseEscapedCharacters() {
 			String bxl = @"test ""q\""q""=""r\""r""
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -135,7 +135,7 @@ test1 x   =   2
 		public void CanUseUseEmptyStringInAttributeValue() {
 			String bxl = @"test q=""""
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -147,7 +147,7 @@ test1 x   =   2
 			String bxl = @"test q=""""""qwerty
 asdf""""""
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -160,7 +160,7 @@ asdf""""""
 2 ' ''' """"
 3""""""
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -177,7 +177,7 @@ e"""""" = """"""r
 t
 y""""""
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -191,7 +191,7 @@ y""""""
 nested (expression)
 )
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -202,7 +202,7 @@ nested (expression)
 		[Test]
 		public void CanUseExprecssionAsAnonAttribute() {
 			String bxl = @"test1 a 'w w' (q q)";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -215,7 +215,7 @@ nested (expression)
 		public void CanUseTextContentSimpleLiteral() {
 			String bxl = @"test1 : qwerty
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -228,7 +228,7 @@ nested (expression)
 	: """"""qwerty'
 	: 'ololo""""""
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -239,7 +239,7 @@ nested (expression)
 		public void CanUseTextContentWithAttributes() {
 			String bxl = @"test1 a b c=3:qwerty
 ";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -259,7 +259,7 @@ nested (expression)
 	:qwerty"
 			};
 
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			foreach (string code in bxl) {
 				XElement res = p.Parse(code);
 				Console.WriteLine(res);
@@ -276,7 +276,7 @@ nested (expression)
 """"""ns
 2""""""=""""""ololo""""""
 test";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -288,7 +288,7 @@ test";
 		public void CanProcessExtraTabs() {
 			String bxl = @"	test1
 	test2";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -302,7 +302,7 @@ test";
 ns2=qwerty2
 ns1::test1
 	ns2::test2";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -320,7 +320,7 @@ ns1::test1
 			String bxl = @"ns1=qwerty
 ns2=qwerty2
 test1 ns1::x=2 ns2::y=3";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl, "file", BxlParserOptions.NoLexData);
 			Console.WriteLine(res);
 
@@ -338,7 +338,7 @@ test1 ns1::x=2 ns2::y=3";
 		public void CanUseAnonAttributeNamespace() {
 			String bxl = @"ns1=qwerty
 test a b ns1::x";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -353,7 +353,7 @@ test a b ns1::x";
 		public void CanDeclareDefaultNamespace() {
 			String bxl = @"ns1=qwerty
 ns2::test a b ns3::x";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 
@@ -372,7 +372,7 @@ ns2::test a b ns3::x
 #qwerty
 test
 #qwerty";
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl);
 			Console.WriteLine(res);
 		}
@@ -381,10 +381,18 @@ test
 		public void CanUseOptions() {
 			String bxl = @"test1 a b c";
 
-			IBxlParser p = new BxlParser2();
+			IBxlParser p = new BxlParser();
 			XElement res = p.Parse(bxl, "qqqq", BxlParserOptions.NoLexData | BxlParserOptions.OnlyIdAttibute | BxlParserOptions.SafeAttributeNames | BxlParserOptions.ExtractSingle);
 			Console.WriteLine(res);
 			Assert.AreEqual(res.Attributes().First().Name.LocalName, "__id");
+		}
+
+		[TestCase("demo.import.forms.m600.bxls")]
+		[TestCase("presentation_ocm_structure.hql")]
+		public void HardTest(String filename) {
+
+			String bxl = GetType().Assembly.ReadManifestResource(filename);
+			var xml1 = new BxlParser().Parse(bxl);
 		}
 	}
 }
