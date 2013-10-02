@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Qorpent.BSharp;
 using Qorpent.Bxl;
 using Qorpent.Dsl;
 using Qorpent.Serialization;
+using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Bxl2 {
@@ -78,7 +80,7 @@ namespace Qorpent.Bxl2 {
         }
 
         /// <summary>
-        /// 
+		/// 	Parses source code into Xml
         /// </summary>
         /// <param name="code"></param>
         /// <param name="filename"></param>
@@ -117,17 +119,25 @@ namespace Qorpent.Bxl2 {
 
 	        if (_stack.IsNotEmpty())
 				throw new BxlException("invalid quotes or braces");
+
+			if (options.HasFlag(BxlParserOptions.BSharp)) {
+				_root = CompileWithBSharp(options, _root);
+			} 
+
+			if (options.HasFlag(BxlParserOptions.PerformInterpolation)) {
+				_root = new XmlInterpolation().Interpolate(_root);
+			}
             return _root;
         }
 
         /// <summary>
-        /// 
+		///		Generates BXL code from XML with given settings
         /// </summary>
         /// <param name="sourcexml"></param>
         /// <param name="options"></param>
         /// <returns></returns>
         public string Generate(XElement sourcexml, BxlGeneratorOptions options = null) {
-            return "";
+			return new BxlGenerator().Convert(sourcexml, options);
         }
 
 	    private void init(String filename, BxlParserOptions options) {
@@ -159,6 +169,35 @@ namespace Qorpent.Bxl2 {
 			_current = _root;
 			_mode = ReadMode.Start;
 	    }
+
+		private static XElement CompileWithBSharp(BxlParserOptions options, XElement result) {
+			var compileroptions = new BSharpConfig {
+				UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation)
+			};
+			var compiler = new BSharpCompiler();
+			compiler.Initialize(compileroptions);
+			var compileresult = compiler.Compile(new[] { result });
+			var newresult = new XElement("bsharp");
+
+			foreach (var w in compileresult.Get(BSharpContextDataType.Working)) {
+				var copy = new XElement(w.Compiled);
+				if (null != w.Error) {
+					copy.AddFirst(new XElement("error", new XText(w.Error.ToString())));
+				}
+				newresult.Add(copy);
+			}
+			var e = new XElement("errors");
+			foreach (var er in compileresult.GetErrors()) {
+				e.Add(XElement.Parse(new XmlSerializer().Serialize("error", er)).Element("error"));
+			}
+			if (e.HasElements) {
+				newresult.Add(e);
+			}
+			result = newresult;
+			return result;
+		}
+
+
 
 		//		processing current state
 
@@ -192,7 +231,7 @@ namespace Qorpent.Bxl2 {
 		            return;
                 case '\t':
 		            if (_tabs == 0)
-			            _current = _current.LastNode as XElement ?? _current;
+			            _current = _current.Elements().Last();//_current.LastNode as XElement ?? _current;
 					else
 						_tabs--;
                     return;
@@ -219,6 +258,7 @@ namespace Qorpent.Bxl2 {
 				throw new BxlException("new line in regular string", _info);
 
 		    _anonCount = 0;
+		    _symbolCount = 0;
 		    _tabs = _tabIgnore;
 	        _current = _root;
             switch (c) {
@@ -277,12 +317,16 @@ namespace Qorpent.Bxl2 {
 					_mode = ReadMode.Colon;
 					return;
 				case '"':
+					if (_value.Length != 0)
+						addNode();
 					if (_prefix.Length != 0)
 						throw new BxlException("unexpected symbol " + c, _info);
 					_stack.Push((char)ReadMode.AttributeName);
 					_mode = ReadMode.Quoting1;
 					return;
 				case '\'':
+					if (_value.Length != 0)
+						addNode();
 					if (_prefix.Length != 0)
 						throw new BxlException("unexpected symbol " + c, _info);
 					_stack.Push((char)ReadMode.AttributeName);
@@ -297,8 +341,6 @@ namespace Qorpent.Bxl2 {
 				case '\t':
 				case ' ':
 					saveValue();
-					addNode();
-					_mode = ReadMode.AttributeName;
 					return;
 				case '\r':
 				case '\n':
@@ -314,6 +356,10 @@ namespace Qorpent.Bxl2 {
 					_mode = ReadMode.Commentary;
 					return;
 				default:
+					if (_value.Length != 0) {
+						addNode();
+						_mode = ReadMode.AttributeName;
+					}
 					_buf.Append(c);
 					return;
 			}

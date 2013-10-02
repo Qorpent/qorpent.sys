@@ -18,8 +18,8 @@ namespace Qorpent.Serialization.Tests.Bxl2
         public void HardTest(String filename) {
 
             String bxl = GetType().Assembly.ReadManifestResource(filename);
-            var xml1 = new BxlParser().Parse(bxl);
-            var xml2 = new BxlParser2().Parse(bxl);
+	        var xml1 = new BxlParser().Parse(bxl);
+			var xml2 = new BxlParser2().Parse(bxl);
             Assert.AreEqual(xml1.ToString(), xml2.ToString());
         }
     }
