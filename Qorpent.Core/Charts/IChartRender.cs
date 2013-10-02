@@ -7,9 +7,9 @@
         ///     Инициализация чарт-рендера
         /// </summary>
         /// <param name="chart">Представление чарта</param>
-        /// <param name="renderConfig">Конфиг рендера чарта</param>
+        /// <param name="config">Конфиг рендера чарта</param>
         /// <returns>Экземпляр данного класса</returns>
-        IChartRender Initialize(IChart chart, IChartRenderConfig renderConfig);
+        IChartRender Initialize(IChart chart, IChartConfig config);
         /// <summary>
         ///     Отрендерить чарт по переданному представлению и конфигу
         /// </summary>
