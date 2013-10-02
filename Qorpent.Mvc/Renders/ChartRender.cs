@@ -147,12 +147,16 @@ namespace Qorpent.Mvc.Renders {
                 
             } else if (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("{")) {
                 
-            } else if (context.ActionResult is IChartXmlSource) {
-                
+            } else if (context.ActionResult is IChart) {
+                InternalRender.Initialize((IChart)context.ActionResult, config);
+                var xmlsrc = InternalRender.GenerateChartXmlSource(config);
+                var xml = xmlsrc.GenerateChartXml(config);
+                xml = InternalRender.RefactorChartXml(xml, config);
+                return xml.ToString();
             } else if (context.ActionResult is IChartSource) {
                 
-            } else if (context.ActionResult is IChart) {
-
+            } else if (context.ActionResult is IChartXmlSource) {
+                
             } else {
                 
             }
