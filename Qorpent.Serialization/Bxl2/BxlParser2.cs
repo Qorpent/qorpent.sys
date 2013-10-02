@@ -231,7 +231,7 @@ namespace Qorpent.Bxl2 {
 		            return;
                 case '\t':
 		            if (_tabs == 0)
-			            _current = _current.Elements().Last();//_current.LastNode as XElement ?? _current;
+			            _current = _current.LastNode as XElement ?? _current;
 					else
 						_tabs--;
                     return;
