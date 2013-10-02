@@ -54,5 +54,13 @@ namespace Qorpent.Charts {
             get { return Get<bool>(ChartDefaults.ChartRenderAttributeName); }
             set { Set(ChartDefaults.ChartRenderAttributeName, value); }
         }
+
+        /// <summary>
+        /// Тип данных графика
+        /// </summary>
+        public string DataType {
+            get { return Get<string>(ChartDefaults.ChartDataTypeAttributeName); }
+            set { Set(ChartDefaults.ChartDataTypeAttributeName, value); }
+        }
     }
 }

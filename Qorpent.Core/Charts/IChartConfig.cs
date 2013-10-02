@@ -33,5 +33,9 @@ namespace Qorpent.Charts {
         /// Рендер чарта средствами svg
         /// </summary>
         bool JavaScriptRender { get; set; }
+        /// <summary>
+        /// Тип данных графика
+        /// </summary>
+        string DataType { get; set; }
     }
 }

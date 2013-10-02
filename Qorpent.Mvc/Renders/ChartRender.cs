@@ -41,13 +41,14 @@ namespace Qorpent.Mvc.Renders {
 
             if (string.IsNullOrWhiteSpace(error)) {
                 script += string.Format(@"
+<div style=""display:none"" id=""fc-data-{1}"">{5}</div>
 <script type=""text/javascript""><!--
     FusionCharts.setCurrentRenderer('javascript');
-    var myChart = new FusionCharts('../charts/{0}.swf', '{1}', '{2}', '{3}', '{4}');
-    {5}
+    var myChart = new FusionCharts('../charts/{0}.swf', 'fc-chart-{1}', '{2}', '{3}', '{4}');
+    myChart.set{7}Data($('#fc-data-{1}').text());
     myChart.render('{6}');
 // -->
-</script>", config.Get<string>("Type"), id, config.Get<string>("Width"), config.Get<string>("Height"), config.Get<string>("Debug"), datascript, container);
+</script>", config.Get<string>("Type"), id, config.Get<string>("Width"), config.Get<string>("Height"), config.Get<string>("Debug"), datascript, container, config.Get("DataType", "XML"));
                 context.ContentType = "text/html";   
             }
 
@@ -71,7 +72,7 @@ namespace Qorpent.Mvc.Renders {
 
         private IChartConfig PrepareChartConfig(IMvcContext context) {
             var result = new ChartConfig();
-            result.Set("Id", context.Get("__id", "fc-chart-" + DateTime.Now.Ticks));
+            result.Set("Id", context.Get("__id", DateTime.Now.Ticks));
             result.Set("Container", context.Get("__container", string.Empty));
             result.Set("Width", context.Get("__width", "400"));
             result.Set("Height", context.Get("__height", "300"));
@@ -140,7 +141,6 @@ namespace Qorpent.Mvc.Renders {
         /// <param name="config"></param>
         /// <returns></returns>
         private string RenderDataScript(IMvcContext context, IChartConfig config) {
-            var data = string.Empty;
             if (context.ActionResult is XElement) {
                 
             } else if (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("<")) {
@@ -148,11 +148,12 @@ namespace Qorpent.Mvc.Renders {
             } else if (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("{")) {
                 
             } else if (context.ActionResult is IChart) {
+                config.Set("DataType", "XML");
                 InternalRender.Initialize((IChart)context.ActionResult, config);
                 var xmlsrc = InternalRender.GenerateChartXmlSource(config);
                 var xml = xmlsrc.GenerateChartXml(config);
                 xml = InternalRender.RefactorChartXml(xml, config);
-                return xml.ToString();
+                return xml.ToString().Replace("<", "&lt;");
             } else if (context.ActionResult is IChartSource) {
                 
             } else if (context.ActionResult is IChartXmlSource) {
@@ -160,7 +161,8 @@ namespace Qorpent.Mvc.Renders {
             } else {
                 
             }
-            return data;
+
+            return string.Empty;
         }
 
         /// <summary>
