@@ -5,7 +5,7 @@ namespace Qorpent.Charts {
     /// <summary>
     ///     Представление категории
     /// </summary>
-    public class ChartCategory : ChartElement {
+    public partial class ChartCategory : ChartElement {
         
         
     }

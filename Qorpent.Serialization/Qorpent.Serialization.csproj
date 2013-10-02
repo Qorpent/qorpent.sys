@@ -61,6 +61,7 @@
     <Compile Include="Charts\ChartSet.cs" />
     <Compile Include="Charts\ChartTrendLines.cs" />
     <Compile Include="Charts\ChartVLine.cs" />
+    <Compile Include="Charts\Chart_default_attributes.cs" />
     <Compile Include="Graphs.Dot\Builder\DotEdgeBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphElementBuilderBase.cs" />

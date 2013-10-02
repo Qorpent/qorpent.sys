@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using Qorpent.Charts.FusionCharts;
 
 namespace Qorpent.Charts {
     /// <summary>
@@ -28,7 +29,7 @@ namespace Qorpent.Charts {
         /// <param name="chartConfig"></param>
         /// <returns></returns>
         protected virtual IChartRender CreateChartRender(IChartConfig chartConfig) {
-            throw new System.NotImplementedException();
+            return new FusionChartRender();
         }
         /// <summary>
         ///     Перечисление элементов

@@ -28,6 +28,14 @@
     public string ToLower (string s) {
     return s.ToLower();
     }
+
+    public string ToSystemType (string s) {
+      if(s=="Boolean") return "bool";
+      if(s=="Number") return "decimal";
+      if(s=="String") return "string";
+      if(s=="Color") return "FusionChartColor";
+      return s;
+    }
   </msxsl:script>
    
 </xsl:stylesheet>
