@@ -14,8 +14,8 @@ namespace Qorpent.Charts {
 ///theme. Valid values are 1-5.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal Palette {
-    get { return Get<decimal>( FusionChartApi.Chart_Palette ); }
+    public int Palette {
+    get { return Get<int>( FusionChartApi.Chart_Palette ); }
         set { Set( FusionChartApi.Chart_Palette, value); }
     }
   
@@ -157,8 +157,8 @@ namespace Qorpent.Charts {
 ///  &lt;span>Border thickness of the chart.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal BorderThickness {
-    get { return Get<decimal>( FusionChartApi.Chart_BorderThickness ); }
+    public int BorderThickness {
+    get { return Get<int>( FusionChartApi.Chart_BorderThickness ); }
         set { Set( FusionChartApi.Chart_BorderThickness, value); }
     }
   
@@ -169,8 +169,8 @@ namespace Qorpent.Charts {
 ///  &lt;span>Border alpha of the chart.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal BorderAlpha {
-    get { return Get<decimal>( FusionChartApi.Chart_BorderAlpha ); }
+    public int BorderAlpha {
+    get { return Get<int>( FusionChartApi.Chart_BorderAlpha ); }
         set { Set( FusionChartApi.Chart_BorderAlpha, value); }
     }
   
@@ -195,8 +195,8 @@ namespace Qorpent.Charts {
 ///more details.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal BgAlpha {
-    get { return Get<decimal>( FusionChartApi.Chart_BgAlpha ); }
+    public int BgAlpha {
+    get { return Get<int>( FusionChartApi.Chart_BgAlpha ); }
         set { Set( FusionChartApi.Chart_BgAlpha, value); }
     }
   
@@ -210,8 +210,8 @@ namespace Qorpent.Charts {
 ///more details.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal BgRatio {
-    get { return Get<decimal>( FusionChartApi.Chart_BgRatio ); }
+    public int BgRatio {
+    get { return Get<int>( FusionChartApi.Chart_BgRatio ); }
         set { Set( FusionChartApi.Chart_BgRatio, value); }
     }
   
@@ -225,8 +225,8 @@ namespace Qorpent.Charts {
 ///more details.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal BgAngle {
-    get { return Get<decimal>( FusionChartApi.Chart_BgAngle ); }
+    public int BgAngle {
+    get { return Get<int>( FusionChartApi.Chart_BgAngle ); }
         set { Set( FusionChartApi.Chart_BgAngle, value); }
     }
   
@@ -252,8 +252,8 @@ namespace Qorpent.Charts {
 ///  &lt;/p>
 ///&lt;/desc>
     ///</remarks>
-    public decimal BgImageAlpha {
-    get { return Get<decimal>( FusionChartApi.Chart_BgImageAlpha ); }
+    public int BgImageAlpha {
+    get { return Get<int>( FusionChartApi.Chart_BgImageAlpha ); }
         set { Set( FusionChartApi.Chart_BgImageAlpha, value); }
     }
   
@@ -333,8 +333,8 @@ namespace Qorpent.Charts {
 ///  &lt;span>is set to none, center or tile.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal BgImageScale {
-    get { return Get<decimal>( FusionChartApi.Chart_BgImageScale ); }
+    public int BgImageScale {
+    get { return Get<int>( FusionChartApi.Chart_BgImageScale ); }
         set { Set( FusionChartApi.Chart_BgImageScale, value); }
     }
   
@@ -374,8 +374,8 @@ namespace Qorpent.Charts {
 ///configure its opacity using this attribute.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal LogoAlpha {
-    get { return Get<decimal>( FusionChartApi.Chart_LogoAlpha ); }
+    public int LogoAlpha {
+    get { return Get<int>( FusionChartApi.Chart_LogoAlpha ); }
         set { Set( FusionChartApi.Chart_LogoAlpha, value); }
     }
   
@@ -388,8 +388,8 @@ namespace Qorpent.Charts {
 ///parameter.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal LogoScale {
-    get { return Get<decimal>( FusionChartApi.Chart_LogoScale ); }
+    public int LogoScale {
+    get { return Get<int>( FusionChartApi.Chart_LogoScale ); }
         set { Set( FusionChartApi.Chart_LogoScale, value); }
     }
   
@@ -495,8 +495,8 @@ namespace Qorpent.Charts {
     ///<remarks>
 ///&lt;desc />
     ///</remarks>
-    public decimal MaxScaleRecursion {
-    get { return Get<decimal>( FusionChartApi.Chart_MaxScaleRecursion ); }
+    public int MaxScaleRecursion {
+    get { return Get<int>( FusionChartApi.Chart_MaxScaleRecursion ); }
         set { Set( FusionChartApi.Chart_MaxScaleRecursion, value); }
     }
   
@@ -582,8 +582,8 @@ namespace Qorpent.Charts {
     ///<remarks>
 ///&lt;desc />
     ///</remarks>
-    public decimal ThousandSeparatorPosition {
-    get { return Get<decimal>( FusionChartApi.Chart_ThousandSeparatorPosition ); }
+    public int ThousandSeparatorPosition {
+    get { return Get<int>( FusionChartApi.Chart_ThousandSeparatorPosition ); }
         set { Set( FusionChartApi.Chart_ThousandSeparatorPosition, value); }
     }
   
@@ -597,8 +597,8 @@ namespace Qorpent.Charts {
 ///page.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal Decimals {
-    get { return Get<decimal>( FusionChartApi.Chart_Decimals ); }
+    public int Decimals {
+    get { return Get<int>( FusionChartApi.Chart_Decimals ); }
         set { Set( FusionChartApi.Chart_Decimals, value); }
     }
   
@@ -644,8 +644,8 @@ namespace Qorpent.Charts {
 ///here.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal BaseFontSize {
-    get { return Get<decimal>( FusionChartApi.Chart_BaseFontSize ); }
+    public int BaseFontSize {
+    get { return Get<int>( FusionChartApi.Chart_BaseFontSize ); }
         set { Set( FusionChartApi.Chart_BaseFontSize, value); }
     }
   
@@ -713,8 +713,8 @@ namespace Qorpent.Charts {
 ///this padding does not come into play.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal CaptionPadding {
-    get { return Get<decimal>( FusionChartApi.Chart_CaptionPadding ); }
+    public int CaptionPadding {
+    get { return Get<int>( FusionChartApi.Chart_CaptionPadding ); }
         set { Set( FusionChartApi.Chart_CaptionPadding, value); }
     }
   
@@ -727,8 +727,8 @@ namespace Qorpent.Charts {
 ///space.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal ChartLeftMargin {
-    get { return Get<decimal>( FusionChartApi.Chart_ChartLeftMargin ); }
+    public int ChartLeftMargin {
+    get { return Get<int>( FusionChartApi.Chart_ChartLeftMargin ); }
         set { Set( FusionChartApi.Chart_ChartLeftMargin, value); }
     }
   
@@ -741,8 +741,8 @@ namespace Qorpent.Charts {
 ///space.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal ChartRightMargin {
-    get { return Get<decimal>( FusionChartApi.Chart_ChartRightMargin ); }
+    public int ChartRightMargin {
+    get { return Get<int>( FusionChartApi.Chart_ChartRightMargin ); }
         set { Set( FusionChartApi.Chart_ChartRightMargin, value); }
     }
   
@@ -754,8 +754,8 @@ namespace Qorpent.Charts {
 ///the top of your chart. Nothing is rendered in this space.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal ChartTopMargin {
-    get { return Get<decimal>( FusionChartApi.Chart_ChartTopMargin ); }
+    public int ChartTopMargin {
+    get { return Get<int>( FusionChartApi.Chart_ChartTopMargin ); }
         set { Set( FusionChartApi.Chart_ChartTopMargin, value); }
     }
   
@@ -767,8 +767,8 @@ namespace Qorpent.Charts {
 ///the bottom of your chart. Nothing is rendered in this space.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal ChartBottomMargin {
-    get { return Get<decimal>( FusionChartApi.Chart_ChartBottomMargin ); }
+    public int ChartBottomMargin {
+    get { return Get<int>( FusionChartApi.Chart_ChartBottomMargin ); }
         set { Set( FusionChartApi.Chart_ChartBottomMargin, value); }
     }
   
@@ -826,8 +826,8 @@ namespace Qorpent.Charts {
 ///  &lt;span>Thickness of divisional lines.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal DivLineThickness {
-    get { return Get<decimal>( FusionChartApi.Chart_DivLineThickness ); }
+    public int DivLineThickness {
+    get { return Get<int>( FusionChartApi.Chart_DivLineThickness ); }
         set { Set( FusionChartApi.Chart_DivLineThickness, value); }
     }
   
@@ -838,8 +838,8 @@ namespace Qorpent.Charts {
 ///  &lt;span>Alpha of divisional lines.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal DivLineAlpha {
-    get { return Get<decimal>( FusionChartApi.Chart_DivLineAlpha ); }
+    public int DivLineAlpha {
+    get { return Get<int>( FusionChartApi.Chart_DivLineAlpha ); }
         set { Set( FusionChartApi.Chart_DivLineAlpha, value); }
     }
   
@@ -874,8 +874,8 @@ namespace Qorpent.Charts {
 ///page.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal YAxisValueDecimals {
-    get { return Get<decimal>( FusionChartApi.Chart_YAxisValueDecimals ); }
+    public int YAxisValueDecimals {
+    get { return Get<int>( FusionChartApi.Chart_YAxisValueDecimals ); }
         set { Set( FusionChartApi.Chart_YAxisValueDecimals, value); }
     }
   
@@ -904,8 +904,8 @@ namespace Qorpent.Charts {
 ///here.&lt;/span>
 ///&lt;/desc>
     ///</remarks>
-    public decimal OutCnvBaseFontSize {
-    get { return Get<decimal>( FusionChartApi.Chart_OutCnvBaseFontSize ); }
+    public int OutCnvBaseFontSize {
+    get { return Get<int>( FusionChartApi.Chart_OutCnvBaseFontSize ); }
         set { Set( FusionChartApi.Chart_OutCnvBaseFontSize, value); }
     }
   

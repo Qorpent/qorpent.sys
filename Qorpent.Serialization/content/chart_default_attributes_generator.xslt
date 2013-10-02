@@ -24,8 +24,8 @@ namespace Qorpent.Charts {
     ///&lt;summary><xsl:value-of select="f:PascalCase(@name)"/> (<xsl:value-of select="f:Replace(@category,'&amp;','&amp;amp;')"/>)&lt;/summary>
     ///&lt;remarks><xsl:value-of select="f:AsComment(.)" />
     ///&lt;/remarks>
-    public <xsl:value-of select="f:ToSystemType(@type)"/> <xsl:value-of select="f:PascalCase(@name)"/> {
-    get { return Get&lt;<xsl:value-of select="f:ToSystemType(@type)"/>&gt;(<xsl:value-of select="$const"/> ); }
+    public <xsl:value-of select="f:ToSystemType(@type,@range)"/> <xsl:value-of select="f:PascalCase(@name)"/> {
+    get { return Get&lt;<xsl:value-of select="f:ToSystemType(@type,@range)"/>&gt;(<xsl:value-of select="$const"/> ); }
         set { Set(<xsl:value-of select="$const"/>, value); }
     }
   </xsl:template>

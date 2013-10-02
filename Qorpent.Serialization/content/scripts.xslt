@@ -29,9 +29,13 @@
     return s.ToLower();
     }
 
-    public string ToSystemType (string s) {
+    public string ToSystemType (string s, string range) {
       if(s=="Boolean") return "bool";
-      if(s=="Number") return "decimal";
+      if(s=="Number") {
+        if(string.IsNullOrWhiteSpace(range)){
+         return "decimal";
+       }return "int";
+      }
       if(s=="String") return "string";
       if(s=="Color") return "FusionChartColor";
       return s;
