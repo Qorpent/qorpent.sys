@@ -59,10 +59,10 @@ namespace Qorpent.Mvc.Renders {
 </header>
 <body>
 <script type=""text/javascript"" src=""../scripts/jquery.min.js""></script>
-<script type=""text/javascript"" src=""../charts/FusionCharts.js""></script>
-<script type=""text/javascript"" src=""../charts/FusionCharts.HC.js""></script>
-<script type=""text/javascript"" src=""../charts/FusionCharts.HC.Charts.js""></script>
-<link rel=""stylesheet"" type=""text/css"" href=""../charts/presentation.css""></link>" + script + @"
+<script type=""text/javascript"" src=""../scripts/FusionCharts.js""></script>
+<script type=""text/javascript"" src=""../scripts/FusionCharts.HC.js""></script>
+<script type=""text/javascript"" src=""../scripts/FusionCharts.HC.Charts.js""></script>
+" + script + @"
 </body>
 </html>";
             }

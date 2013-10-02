@@ -14,7 +14,14 @@ namespace Qorpent.Charts {
         /// </summary>
         public IList<C> Children {
             get {
-                return _children ?? (_children = Get<IList<C>>(ChartDefaults.ChartElementChilds));
+                if (_children == null) {
+                    _children = Get<IList<C>>(ChartDefaults.ChartElementChilds);
+                    if (_children == null) {
+                        _children = new List<C>();
+                        Set(ChartDefaults.ChartElementChilds,_children);
+                    }
+                }
+                return _children;
             }
 
         }

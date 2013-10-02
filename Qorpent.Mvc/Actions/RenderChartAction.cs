@@ -15,11 +15,11 @@ namespace Qorpent.Mvc.Actions {
             var result = new Chart {Caption = "Monthly Revenue"};
             result.AddSets(new {
                 Jan = 420000,
-                Feb = 910000,
+                Feb = 990000,
                 Mar = 720000,
                 Apr = 550000,
                 May = 810000,
-                Jun = 510000,
+                Jun = 23,
                 Jul = 680000,
                 Aug = 620000,
                 Sep = 610000,
