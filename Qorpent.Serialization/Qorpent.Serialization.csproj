@@ -62,6 +62,8 @@
     <Compile Include="Charts\ChartTrendLines.cs" />
     <Compile Include="Charts\ChartVLine.cs" />
     <Compile Include="Charts\Chart_default_attributes.cs" />
+    <Compile Include="Bxl2\BxlParser2.cs" />
+    <Compile Include="Bxl2\ReadMode.cs" />
     <Compile Include="Graphs.Dot\Builder\DotEdgeBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphBuilder.cs" />
     <Compile Include="Graphs.Dot\Builder\DotGraphElementBuilderBase.cs" />

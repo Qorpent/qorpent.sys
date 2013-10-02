@@ -96,7 +96,8 @@ namespace Qorpent.Serialization
         {
             IData d = EscapingDataFactory.Get(type);
             return !(first && d.GetFirst().ContainsKey(c)
-                    || d.GetCommon().ContainsKey(c));
+                    || d.GetCommon().ContainsKey(c)
+                    || d.NeedEscapeUnicode(c));
         }
 
         /// <summary>
