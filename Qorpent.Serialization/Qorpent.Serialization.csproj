@@ -57,6 +57,7 @@
     <Compile Include="Charts\ChartElementList.cs" />
     <Compile Include="Charts\ChartLine.cs" />
     <Compile Include="Charts\ChartLineSet.cs" />
+    <Compile Include="Charts\ChartLineSetItem.cs" />
     <Compile Include="Charts\ChartRenderResult.cs" />
     <Compile Include="Charts\ChartSet.cs" />
     <Compile Include="Charts\ChartTrendLines.cs" />

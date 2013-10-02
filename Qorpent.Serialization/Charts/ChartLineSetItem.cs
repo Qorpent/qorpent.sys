@@ -2,7 +2,7 @@ namespace Qorpent.Charts {
     /// <summary>
     /// Единица данных
     /// </summary>
-    public class ChartVLine : ChartElement<IChartDataset>, IChartVerticalLine
+    public class ChartLineSetItem : ChartElement<IChartLineSet>, IChartLineSetItem
     {
 
     }

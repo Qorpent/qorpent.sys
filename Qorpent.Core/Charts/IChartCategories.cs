@@ -4,6 +4,6 @@ namespace Qorpent.Charts {
     /// <summary>
     /// Коллекция категорий
     /// </summary>
-    public interface IChartCategories : IChartElementList<IChartCategory> {
+    public interface IChartCategories : IChartRootElement<IChartCategory> {
     }
 }

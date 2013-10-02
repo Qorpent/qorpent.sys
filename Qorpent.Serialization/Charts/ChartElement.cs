@@ -8,21 +8,19 @@ namespace Qorpent.Charts {
     /// <summary>
     ///     Элемент чарта
     /// </summary>
-    public abstract class ChartElement : ConfigBase, IChartElement {
-        private IList<IChartElement> _children;
-
+    public abstract class ChartElement<P> : ConfigBase, IChartElement<P> where P : IChartElement {
         /// <summary>
         /// Элементы чарта не наследуют атрибутов друг друга
         /// </summary>
         public ChartElement() {
             UseInheritance = false;
-            Set(ChartDefaults.ChartElementChilds,new List<IChartElement>());
+            Set(ChartDefaults.ChartElementChilds,new List<P>());
         }
         /// <summary>
         ///     Родительский элемент
         /// </summary>
-        public IChartElement Parent {
-            get { return Get<IChartElement>(ChartDefaults.ChartElementParentProperty, this); }
+        public P Parent {
+            get { return Get<P>(ChartDefaults.ChartElementParentProperty); }
             private set { Set(ChartDefaults.ChartElementParentProperty, value); }
         }
 
@@ -35,20 +33,11 @@ namespace Qorpent.Charts {
         }
 
         /// <summary>
-        ///     Дочерние элементы
-        /// </summary>
-        public IList<IChartElement> Children {
-            get {
-                return _children ?? (_children = Get<IList<IChartElement>>(ChartDefaults.ChartElementChilds));
-            }
-
-        }
-        /// <summary>
         ///     Устанавливает родительский элемент
         /// </summary>
         /// <param name="parent">Родительский элемент</param>
-        public void SetParent(IChartElement parent) {
-            Parent = parent;
+        public void SetParentElement(IChartElement parent) {
+            Parent =(P) parent;
         }
        
       

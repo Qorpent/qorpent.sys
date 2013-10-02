@@ -2,7 +2,7 @@
     /// <summary>
     /// Коллекция наборов данных
     /// </summary>
-    public interface IChartDatasets:IChartElementList<IChartDataset> {
+    public interface IChartDatasets:IChartRootElement<IChartDataset> {
         /// <summary>
         /// ИНициирует или возвращает датасет по умолчанию
         /// </summary>

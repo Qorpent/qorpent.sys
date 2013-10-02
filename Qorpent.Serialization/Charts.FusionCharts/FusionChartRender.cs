@@ -23,8 +23,8 @@ namespace Qorpent.Charts.FusionCharts {
             var realConfig = config ?? _config;
             var fusion = _chart.AsFusion(realConfig);
             var result = fusion.GetXmlElement();
-            foreach (var ds in _chart.Datasets.AsList) {
-                foreach (var s in ds.AsList) {
+            foreach (var ds in _chart.Datasets.Children) {
+                foreach (var s in ds.Children) {
                     var fusset = s.AsFusion(realConfig);
                     result.Add(fusset.GetXmlElement());
                 }

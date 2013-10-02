@@ -2,7 +2,7 @@
     /// <summary>
     ///     Представление графика
     /// </summary>
-    public interface IChart : IChartXmlSource, IChartElement {
+    public interface IChart : IChartXmlSource, IChartElementList<IChart,IChartRootElement> {
         /// <summary>
         ///     Перечисление элементов
         /// </summary>
@@ -19,5 +19,18 @@
         ///     Набор линий тренда
         /// </summary>
         IChartTrendLines TrendLines { get; }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IChartRootElement:IChartElement<IChart> {
+        
+    }
+    /// <summary>
+    /// Абстракция корневого элемента чарта
+    /// </summary>
+    public interface IChartRootElement<C> : IChartRootElement,IChartElementList<IChart, C> where C : IChartElement
+    {
+        
     }
 }
