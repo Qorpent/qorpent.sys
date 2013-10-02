@@ -89,5 +89,10 @@
         /// Наборы дополнительных линий
         /// </summary>
         public const string Lineset = "lines_collection";
+
+        /// <summary>
+        /// Аттрибут типа данных графика
+        /// </summary>
+        public const string ChartDataTypeAttributeName = "chartdatatype";
     }
 }
