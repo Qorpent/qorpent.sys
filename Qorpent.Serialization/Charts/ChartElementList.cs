@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Qorpent.Charts {
@@ -32,7 +31,7 @@ namespace Qorpent.Charts {
         public void Add(C item) {
             if (!Children.Contains(item)) {
                 item.SetParentElement(this);
-                this.Children.Add(item);
+                Children.Add(item);
             }
         }
     }

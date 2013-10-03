@@ -26,5 +26,10 @@ namespace Qorpent.BSharp {
 		/// Стадия разрешения ссылок
 		/// </summary>
 		ReferenceResolution = 1<<4,
+
+        /// <summary>
+        /// Фаза для расширений компилятора после выполнения сведений и интерполяций, но до 
+        /// </summary>
+	    PreSimpleInclude =1<<5,
 	}
 }

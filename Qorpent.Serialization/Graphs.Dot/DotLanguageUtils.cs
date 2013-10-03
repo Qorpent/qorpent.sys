@@ -94,6 +94,28 @@ namespace Qorpent.Graphs.Dot
             }
             return sb.ToString();
         }
+        /// <summary>
+        /// Приводит код узла к нормальной форме
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public static string EscapeScript(string code)
+        {
+   
+            var sb = new StringBuilder();
+            foreach (var c in code)
+            {
+                if (c<=127)
+                {
+                    sb.Append(c);
+                }
+                else
+                {
+                   sb.Append("&#x"+((int)c).ToString(HEXUNICODE)+";");
+                }
+            }
+            return sb.ToString();
+        }
 
         /// <summary>
         /// 
@@ -129,7 +151,7 @@ namespace Qorpent.Graphs.Dot
         /// <param name="c"></param>
         /// <returns></returns>
         public static bool IsLiteral(char c) {
-            return Char.IsLetterOrDigit(c) || (c == '_');
+            return (Char.IsLetterOrDigit(c) || (c == '_')) && c<=127;
         }
         /// <summary>
         /// Проверка строки на то что она литерал

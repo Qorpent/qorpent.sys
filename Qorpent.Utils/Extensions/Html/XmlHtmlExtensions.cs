@@ -54,7 +54,7 @@ th {
         /// <param name="html"></param>
         /// <returns></returns>
         public static XElement HtmlGetHead(XElement html) {
-            return FindHtmlElement(html).EnsureSingleElement("head");
+            return HtmlFindRoot(html).EnsureSingleElement("head");
         }
         /// <summary>
         /// Получить тело HTML
@@ -63,7 +63,7 @@ th {
         /// <returns></returns>
         public static XElement HtmlGetBody(XElement html)
         {
-            return FindHtmlElement(html).EnsureSingleElement("body");
+            return HtmlFindRoot(html).EnsureSingleElement("body");
         }
 
         /// <summary>
@@ -249,9 +249,11 @@ th {
         /// </summary>
         /// <param name="html"></param>
         /// <returns></returns>
-        public static XElement FindHtmlElement(XElement html) {
+        public static XElement HtmlFindRoot(this XElement html) {
             return FindElement(html, HtmlFindTags);
         }
+
+
         /// <summary>
         /// Ищет ближайший соответствующий схеме элемент вверх и вниз в случае нахождение рутов
         /// </summary>

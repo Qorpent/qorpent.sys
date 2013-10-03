@@ -91,6 +91,11 @@ namespace Qorpent.BSharp.Builder {
         IBSharpClass SrcClass { get; set; }
 
         /// <summary>
+        /// Расширения компилятора
+        /// </summary>
+        IList<IBSharpCompilerExtension> CompilerExtensions { get; }
+
+        /// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>

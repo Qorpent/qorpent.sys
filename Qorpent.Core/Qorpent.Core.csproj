@@ -48,6 +48,7 @@
     <Compile Include="BSharp\IBSharpCodeBuilder.cs" />
     <Compile Include="BSharp\IBSharpClass.cs" />
     <Compile Include="BSharp\IBSharpCompiler.cs" />
+    <Compile Include="BSharp\IBSharpCompilerExtension.cs" />
     <Compile Include="BSharp\IBSharpConfig.cs" />
     <Compile Include="BSharp\IBSharpContext.cs" />
     <Compile Include="BSharp\IBSharpElement.cs" />

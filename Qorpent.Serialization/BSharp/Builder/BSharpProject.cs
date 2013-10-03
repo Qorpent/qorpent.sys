@@ -40,7 +40,14 @@ namespace Qorpent.BSharp.Builder {
 	    private const string GENERATE_GRAPH = "generate_graph";
 	    private const string EXTENSIONS = "extensions";
         private const string SRCCLASS = "srcclass";
-		
+        private IList<IBSharpCompilerExtension> _compilerExtensions = new List<IBSharpCompilerExtension>();
+        /// <summary>
+        /// Расширения компилятора
+        /// </summary>
+        public IList<IBSharpCompilerExtension> CompilerExtensions
+        {
+            get { return _compilerExtensions; }
+        }
 		/// <summary>
 		/// Целевые проекты при билде
 		/// </summary>

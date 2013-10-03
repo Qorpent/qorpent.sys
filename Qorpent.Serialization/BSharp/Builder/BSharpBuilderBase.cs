@@ -36,6 +36,7 @@ namespace Qorpent.BSharp.Builder {
 			get { return _tasks ?? (_tasks = new List<IBSharpBuilderTask>()); }
 			private set { _tasks = value; }
 		}
+        
 
 		/// <summary>
 		/// Компилятор
@@ -46,7 +47,9 @@ namespace Qorpent.BSharp.Builder {
 			get { return _bxl ?? (_bxl = GetDefaultBxl()); }
 			set { _bxl = value; }
 		}
-		/// <summary>
+       
+
+        /// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>

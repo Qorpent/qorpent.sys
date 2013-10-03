@@ -1,7 +1,10 @@
-﻿using System.Xml.Linq;
+﻿using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using Qorpent.Graphs;
+using Qorpent.Graphs.Dot;
 using Qorpent.IoC;
 using Qorpent.Mvc.Binding;
+using Qorpent.Serialization;
 
 namespace Qorpent.Mvc.Actions
 {
@@ -21,7 +24,12 @@ namespace Qorpent.Mvc.Actions
             if (!Script.Contains("digraph")) {
                 Script = "digraph G{\r\n" + Script + "\r\n}";
             }
+            Script = Escape(Script);
             return XElement.Parse((string)Provider.Generate(Script, new GraphOptions()));
+        }
+
+        private string Escape(string script) {
+            return DotLanguageUtils.EscapeScript(script);
         }
     }
 }

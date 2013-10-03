@@ -31,5 +31,13 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <returns></returns>
 		IConfig GetConditions();
+
+	    /// <summary>
+	    /// Выполняет расширения для указанного
+	    /// </summary>
+	    /// <param name="cls"></param>
+	    /// <param name="context"></param>
+	    /// <param name="phase"></param>
+	    void CallExtensions(IBSharpClass cls, IBSharpContext context, BSharpCompilePhase phase);
 	}
 }

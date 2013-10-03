@@ -276,6 +276,8 @@ namespace Qorpent.BSharp {
 			
 			CleanupElementsWithConditions();
 
+            ExecutePreSimpleIncludeExtensions();
+
 			ProcessSimpleIncludes();
 
 			CleanupPrivateMembers();
@@ -284,7 +286,11 @@ namespace Qorpent.BSharp {
 
 		}
 
-		private void CheckoutRequireLinkingRequirements() {
+	    private void ExecutePreSimpleIncludeExtensions() {
+	        _compiler.CallExtensions(_cls, _context, BSharpCompilePhase.PreSimpleInclude);
+	    }
+
+	    private void CheckoutRequireLinkingRequirements() {
 			var attrs = _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes());
 			foreach (var a in attrs) {
 				var val = a.Value;

@@ -15,6 +15,7 @@
 			Project = project;
 		}
 
+
 		/// <summary>
 		/// Выполнение цели
 		/// </summary>

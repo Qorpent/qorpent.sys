@@ -54,7 +54,7 @@ namespace Qorpent.Utils.Extensions {
 				
 				if (c > 127)
 				{
-					builder.Append(altprefix ?? "&#");
+					builder.Append(altprefix ?? "&#x");
 					builder.Append((int)c);
 					builder.Append(";");
 				}

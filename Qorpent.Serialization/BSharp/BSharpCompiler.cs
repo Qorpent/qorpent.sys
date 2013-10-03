@@ -7,7 +7,6 @@ using System.Xml.Linq;
 using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Log;
-using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils.LogicalExpressions;
@@ -22,7 +21,14 @@ namespace Qorpent.BSharp {
 		IUserLog log {
 			get { return GetConfig().Log; }
 		}
-		/// <summary>
+        /// <summary>
+        /// Коллекция расширений
+        /// </summary>
+	    public IList<IBSharpCompilerExtension> Extensions {
+	        get { return _extensions; }
+	    }
+
+	    /// <summary>
 		///     Текущий контекстный индекс
 		/// </summary>
 		protected IBSharpContext CurrentBuildContext;
@@ -46,7 +52,22 @@ namespace Qorpent.BSharp {
 			return new ConfigBase(GetConfig().Conditions);
 		}
 
-		/// <summary>
+	    private IList<IBSharpCompilerExtension> _extensions = new List<IBSharpCompilerExtension>();
+
+	    /// <summary>
+	    /// Выполняет расширения
+	    /// </summary>
+	    /// <param name="cls"></param>
+	    /// <param name="context"></param>
+	    /// <param name="phase"></param>
+	    public void CallExtensions(IBSharpClass cls, IBSharpContext context, BSharpCompilePhase phase) {
+	        if(0==Extensions.Count)return;
+            foreach (var extension in Extensions) {
+                extension.Execute(this,context,cls,phase);
+            }
+	    }
+
+	    /// <summary>
 		/// </summary>
 		/// <param name="compilerConfig"></param>
 		public void Initialize(IBSharpConfig compilerConfig) {
