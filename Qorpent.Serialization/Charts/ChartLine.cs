@@ -2,7 +2,7 @@ namespace Qorpent.Charts {
     /// <summary>
     /// Единица данных
     /// </summary>
-    public class ChartLine : ChartElement, IChartTrendLine
+    public class ChartLine : ChartElement<IChartTrendLines>, IChartTrendLine
     {
 
     }

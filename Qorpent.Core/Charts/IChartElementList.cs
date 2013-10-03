@@ -2,13 +2,19 @@
 
 namespace Qorpent.Charts {
     /// <summary>
-    ///     Оболочка нал списком элементов
+    /// Контейнерный элемент чарта
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IChartElementList<T> :IChartElement{
+    /// <typeparam name="P"></typeparam>
+    /// <typeparam name="C"></typeparam>
+    public interface IChartElementList<P,C> :IChartElement<P> where C :IChartElement where P : IChartElement {
         /// <summary>
-        ///     Акцессор как к списку
+        /// Дочерние элементы
         /// </summary>
-        IList<T> AsList { get; } 
+        IList<C> Children { get;  }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        void Add(C item);
     }
 }

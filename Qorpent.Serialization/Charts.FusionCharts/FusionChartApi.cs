@@ -95,6 +95,17 @@ namespace Qorpent.Charts.FusionCharts {
             return new FusionChartWrapper(chart,config); 
 
         }
+
+        /// <summary>
+        /// Добавить элементы значений
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <param name="sets"></param>
+        /// <returns></returns>
+        public static IChart AddSets(this IChart chart, object sets) {
+            chart.AsFusion().AddSets(sets);
+            return chart;
+        }
         
     }
 }

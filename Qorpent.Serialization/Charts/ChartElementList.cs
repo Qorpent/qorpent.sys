@@ -5,31 +5,28 @@ namespace Qorpent.Charts {
     /// <summary>
     /// Заготовка под перечислимый элемент чарта
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public abstract class ChartElementList<T> : ChartElement, IChartElementList<T> where T  :IChartElement
+   
+    public abstract class ChartElementList<P,C> : ChartElement<P>, IChartElementList<P,C> where P : IChartElement where C : IChartElement {
+        private IList<C> _children;
 
-    {
         /// <summary>
-        /// Реальный хранимый список
+        ///     Дочерние элементы
         /// </summary>
-        protected IList<T> RealList = new List<T>();
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
-        /// </returns>
-        /// <filterpriority>1</filterpriority>
-        public IEnumerator<T> GetEnumerator() {
-            return RealList.GetEnumerator();
+        public IList<C> Children {
+            get {
+                return _children ?? (_children = Get<IList<C>>(ChartDefaults.ChartElementChilds));
+            }
+
         }
         /// <summary>
         /// 
         /// </summary>
-        public IList<T> AsList {
-            get { return RealList; }
-        } 
-
-       
+        /// <param name="item"></param>
+        public void Add(C item) {
+            if (!Children.Contains(item)) {
+                item.SetParentElement(this);
+                this.Children.Add(item);
+            }
+        }
     }
 }

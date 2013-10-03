@@ -1,25 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using Qorpent.Config;
 
 namespace Qorpent.Charts {
+
     /// <summary>
-    ///     Элемент чарта
+    /// 
     /// </summary>
-    public interface IChartElement : IConfig {
-        /// <summary>
-        ///     Родительский элемент
-        /// </summary>
-        IChartElement Parent { get; }
-        /// <summary>
-        ///     Дочерние элементы
-        /// </summary>
-        IList<IChartElement> Children { get; }
+    public interface IChartElement:IConfig {
         /// <summary>
         ///     Устанавливает родительский элемент
         /// </summary>
         /// <param name="parent">Родительский элемент</param>
-        void SetParent(IChartElement parent);
-
+        void SetParentElement(IChartElement parent);
+    }
+    /// <summary>
+    ///     Элемент чарта
+    /// </summary>
+    public interface IChartElement<T> :IChartElement  where T:IChartElement  
+    {
+        /// <summary>
+        ///     Родительский элемент
+        /// </summary>
+         T Parent { get; }
     }
 }

@@ -4,6 +4,6 @@ namespace Qorpent.Charts {
     /// <summary>
     /// Коллекция дополнительных линий
     /// </summary>
-    public interface IChartLineSet:IChartElementList<IChartSet> {
+    public interface IChartLineSet:IChartRootElement<IChartLineSetItem> {
     }
 }

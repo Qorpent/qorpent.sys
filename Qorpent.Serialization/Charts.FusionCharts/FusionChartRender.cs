@@ -12,19 +12,19 @@ namespace Qorpent.Charts.FusionCharts {
         /// <summary>
         ///     Внутренний экземпляр конфига рендера чартов
         /// </summary>
-        private IChartRenderConfig _chartRenderConfig;
+        private IChartConfig _config;
 
         /// <summary>
         ///     Собирается XML-представление чарата по его конфигу
         /// </summary>
-        /// <param name="chartConfig">Конфиг чарта</param>
+        /// <param name="config">Конфиг чарта</param>
         /// <returns>XML-представление чарата</returns>
-        public XElement GenerateChartXml(IChartConfig chartConfig) {
-            var realConfig = chartConfig;
+        public XElement GenerateChartXml(IChartConfig config) {
+            var realConfig = config ?? _config;
             var fusion = _chart.AsFusion(realConfig);
             var result = fusion.GetXmlElement();
-            foreach (var ds in _chart.Datasets.AsList) {
-                foreach (var s in ds.AsList) {
+            foreach (var ds in _chart.Datasets.Children) {
+                foreach (var s in ds.Children) {
                     var fusset = s.AsFusion(realConfig);
                     result.Add(fusset.GetXmlElement());
                 }
@@ -56,11 +56,11 @@ namespace Qorpent.Charts.FusionCharts {
         ///     Инициализация чарт-рендера
         /// </summary>
         /// <param name="chart">Представление чарта</param>
-        /// <param name="chartRenderConfig">Конфиг рендера чарта</param>
+        /// <param name="config">Конфиг рендера чарта</param>
         /// <returns>Экземпляр данного класса</returns>
-        public IChartRender Initialize(IChart chart, IChartRenderConfig chartRenderConfig) {
+        public IChartRender Initialize(IChart chart, IChartConfig config) {
             _chart = chart;
-            _chartRenderConfig = chartRenderConfig;
+            _config = config;
             return this;
         }
         /// <summary>

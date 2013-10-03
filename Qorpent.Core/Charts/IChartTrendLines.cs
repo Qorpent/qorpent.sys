@@ -4,6 +4,6 @@ namespace Qorpent.Charts {
     /// <summary>
     /// Коллекция линий тренда
     /// </summary>
-    public interface IChartTrendLines:IChartElementList<IChartTrendLine> { 
+    public interface IChartTrendLines:IChartRootElement<IChartTrendLine> { 
     }
 }
