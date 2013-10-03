@@ -70,10 +70,20 @@ namespace Qorpent.BSharp.Builder {
 		/// </summary>
 		string SrcPkgName { get; set; }
 
+        /// <summary>
+        /// Требование создать пакет компилированного кода в виде перносимого архива
+        /// </summary>
+        string LibPkgName { get; set; }
+
 		/// <summary>
 		/// Требование создать пакет исходников в виде перносимого архива
 		/// </summary>
 		bool GenerateSrcPkg { get; set; }
+
+        /// <summary>
+        /// Требование создать пакет исходников в виде перносимого архива
+        /// </summary>
+        bool GenerateLibPkg { get; set; }
 
 	    /// <summary>
 	    /// Флаг необходимости генерации графической карты классов
