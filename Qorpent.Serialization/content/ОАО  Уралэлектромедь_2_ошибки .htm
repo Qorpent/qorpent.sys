@@ -1,0 +1,5172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title></title>
+		 <script type="text/javascript" src="/ecot/scripts/qweb/start.js"></script>
+		 <script type='text/javascript'>
+		var overlays = {
+			items : [],
+			start : function(){
+				this.items.each(function(x){x.start();});
+			}
+		};
+		Event.observe(window,'load',function(){
+			$$('.hide_by_default').each(function(e){e.hide();});
+			window.overlays.start();
+		});
+	</script><script type='text/javascript' src='/ecot/sys/views/report/wikilinks.js' ></script><script type='text/javascript' src='/ecot/sys/views/report/enableeditors.js' ></script><script type='text/javascript' src='/ecot/sys/views/report/redirectreports.js' ></script><script type='text/javascript' src='/ecot/sys/views/report/themasvg.js' ></script><link rel='stylesheet' type='text/css' href='/ecot/sys/views/report/base_thema.css' ></link><link rel='stylesheet' type='text/css' href='/ecot/sys/views/report/base_color_thema.css' ></link><link rel='stylesheet' type='text/css' href='/ecot/sys/views/report/doc/presentation.css' ></link><link rel='stylesheet' type='text/css' href='/ecot/sys/views/report/doc/debug-presentation.css' ></link><script type='text/javascript' src='/ecot/scripts/chart/FusionCharts.js' ></script><script type='text/javascript' src='/ecot/scripts/mia/js/mia-charts.js' ></script>
+	</head>
+<body>
+	<reportpart id='part_blockheader'></reportpart><reportpart id='part_blockcontent'><style type='text/css'>
+		.error {
+			border : solid 5px red;
+			font-size:6pt;
+		}
+	</style><div class='navigation'><dl><dt><a href='#b-contents'>Содержание</a></dt><dt><a href='#b1'>Основные параметры бюджета</a></dt><dd><a href='#s1'>Котировки металлов в текущем году</a></dd><dt><a href='#b2'>Сырье</a></dt><dd><a href='#s2'>Поставка драгсодержащего сырья</a></dd><dt><a href='#b3'>Производство. ЦИНК. СВИНЕЦ</a></dt><dt><a href='#b4'>Производство</a></dt><dd><a href='#s3'>Объемы производства меди и драгметаллов</a></dd><dt><a href='#b5'>Показатели ФХД предприятия</a></dt><dd><a href='#s4'>Прибыль от продаж, чистая прибыль, EBITDA</a></dd><dt><a href='#b6'>ПРОДАЖИ</a></dt><dt><a href='#b7'>ПРОДАЖИ</a></dt><dd><a href='#s5'>Динамика цен и себестоимость </a></dd><dd><a href='#s6'>Динамика цен и себестоимость  </a></dd><dt><a href='#b8'>Энергетика</a></dt><dd><a href='#s7'>Цены и потребление энергоресурсов</a></dd><dt><a href='#b9'>Ремонтный фонд</a></dt><dd><a href='#s8'>Ремонтный фонд</a></dd><dt><a href='#b10'>Инвестиции</a></dt><dd><a href='#s9'>Инвестиции</a></dd></dl></div><section id='b-titul True'><article class='titul' id='s-titul'><div class='slide-box horisontal default'><div class='slot' style='width:1265px; height: 850px; margin-left: 0; margin-right: 0;'><div class='frontpage'><div class='obj-bg obj352' style='background-image: url(&#39;/ecot/usr/content/image/fpages/352.jpg&#39;)'></div><div class='ugmk-logo' style='background-image: url(&#39;/ecot/usr/content/image/ugmk-logo.png&#39;)'></div><div class='obj-logo' style='background-image: url(&#39;/ecot/usr/content/image/logos/352.png&#39;)'></div><div class='ugmk-title'>за I полугодие 2013 года</br><h1 class="p3">ОАО "Уралэлектромедь"</h1></div></div><table style='display:none;'></table></div></div><footer class='print-only'><div class='slides'>Лист: %лист% | Листов: %листов%</div><div class='object'>ОАО "Уралэлектромедь"</div></footer></article></section><section id='b-contents'><article class='contents'><div class='print-only'><h1>Содержание</h1><div class='copyrights'>Сделано в АССОИ</div></div><div class='two-columns'><h1 href='#b1'>Основные параметры бюджета</h1><h3 href='#s1'>Макроэкономические показатели</h3><h3 href='#s2'>Котировки металлов в текущем году</h3><h1 href='#b2'>Сырье</h1><h3 href='#s3'>Поставка меди в сырье</h3><h3 href='#s4'>Поставка золота в сырья</h3><h3 href='#s5'>Поставка серебра в сырья</h3><h3 href='#s6'>Поставка меди в сырье </h3><h3 href='#s7'>Поставка драгсодержащего сырья</h3><h1 href='#b3'>Производство. ЦИНК. СВИНЕЦ</h1><h1 href='#b4'>Производство</h1><h3 href='#s8'>Выполнение объемов производства</h3><h3 href='#s9'>Извлечение металлов в продукцию </h3><h3 href='#s10'>Объемы производства меди и драгметаллов</h3><h1 href='#b5'>Показатели ФХД предприятия</h1><h3 href='#s11'>Основные показатели (форма 2)</h3><h3 href='#s12'>Прибыль от продаж, чистая прибыль, EBITDA</h3><h1 href='#b6'>ПРОДАЖИ</h1><h1 href='#b7'>ПРОДАЖИ</h1><h3 href='#s13'>Динамика цен и себестоимость </h3><h3 href='#s14'>Динамика цен и себестоимость  </h3><h1 href='#b8'>Энергетика</h1><h3 href='#s15'>Цены и потребление энергоресурсов</h3><h1 href='#b9'>Ремонтный фонд</h1><h3 href='#s16'>Ремонтный фонд</h3><h1 href='#b10'>Инвестиции</h1><h3 href='#s17'>Основные показатели (источники, инвестиции, фин.результат)</h3><h3 href='#s18'>Инвестиции</h3></div><footer class='print-only'><div class='slides'>Лист: %лист% | Листов: %листов%</div><div class='object'>ОАО "Уралэлектромедь"</div></footer><table></table></article></section><section id='b1'><header><h1>Основные параметры бюджета</h1></header><article class='' id='s1'><div class='print-only'><h1>Основные параметры бюджета</h1><div class='copyrights'>Сделано в АССОИ</div></div><header><h3>Котировки металлов в текущем году</h3></header><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 325px;'><div class='slot-context' style='font-size:9px;top:211px;padding:4px;left:15px;border:none;background-color:#e9e9e9;font-weight:bold;font-family:Arial;color:red;'>ТПФП</div><div id='PRD_DIV_MET_SLOT_4_2_1_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_4_2_1_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_4_2_1_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 7  2  
+ 0 --> 7000.00000 
+ 1 --> 8170.00000 
+ 2 --> 7828.00000 
+ 3 --> 7582.50000 
+ 4 --> 7073.50000 
+ 5 --> 7241.00000 
+ 6 --> 6750.50000 
+ 0 --> 7000.00000 
+ 1 --> 8049.27270 
+ 2 --> 8070.47500 
+ 3 --> 7662.90000 
+ 4 --> 7203.35710 
+ 5 --> 7229.16670 
+ 6 --> 7018.65790*//*   7000.00000  8170.00000  7828.00000  7582.50000  7073.50000  7241.00000  6750.50000  7000.00000  8049.27270  8070.47500  7662.90000  7203.35710  7229.16670  7018.65790   */
+
+
+/*MIN --> 6750.50000 MAX --> 8170.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_4_2_1_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Котировки МЕДИ на LMЕ',
+'subcaption':'$ \за тонну CU',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'yAxisMinValue':'6700',
+'yAxisMaxValue':'8200',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : 'На конец периода','color' : 'AA3322', 'anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '8170',},
+ 			{ 'value' : '7828',},
+ 			{ 'value' : '7583',},
+ 			{ 'value' : '7074',},
+ 			{ 'value' : '7241',},
+ 			{ 'value' : '6751',},
+ ]}, 
+{ 'seriesname' : 'Среднее за период','color' : 'F2A5AA', 'anchorradius' : '4','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD','dashed' : '1', 'data' : [ 			{ 'value' : '8049',},
+ 			{ 'value' : '8070',},
+ 			{ 'value' : '7663',},
+ 			{ 'value' : '7203',},
+ 			{ 'value' : '7229',},
+ 			{ 'value' : '7019',},
+ ]}, 
+], 
+ 'trendlines' : [  { 'line' : [ {  'startvalue' : '7000',  'color' : 'D50000',  'displayvalue':'7000', thickness: '2', dashed: '1', dashLen:'4', dashGap:'3' }, ]},  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, 'auto',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_4_2_1_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 325px;'><div class='slot-context' style='font-size:9px;top:211px;padding:4px;left:15px;border:none;background-color:#e9e9e9;font-weight:bold;font-family:Arial;color:red;'>ТПФП</div><div id='PRD_DIV_MET_SLOT_4_2_2_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_4_2_2_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_4_2_2_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 7  2  
+ 0 --> 1800.00000 
+ 1 --> 2139.00000 
+ 2 --> 2065.50000 
+ 3 --> 1870.50000 
+ 4 --> 1854.00000 
+ 5 --> 1882.00000 
+ 6 --> 1823.00000 
+ 0 --> 1800.00000 
+ 1 --> 2033.15910 
+ 2 --> 2129.25000 
+ 3 --> 1935.90000 
+ 4 --> 1852.90480 
+ 5 --> 1829.00000 
+ 6 --> 1841.00000*//*   1800.00000  2139.00000  2065.50000  1870.50000  1854.00000  1882.00000  1823.00000  1800.00000  2033.15910  2129.25000  1935.90000  1852.90480  1829.00000  1841.00000   */
+
+
+/*MIN --> 1800.00000 MAX --> 2139.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_4_2_2_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Котировки ЦИНКА на LMЕ',
+'subcaption':'$ \за тонну ZN',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'yAxisMinValue':'1700',
+'yAxisMaxValue':'2200',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : 'На конец периода','color' : 'BFBFBB', 'anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : '6CB87A','anchorbordercolor' : '6CB87A', 'data' : [ 			{ 'value' : '2139',},
+ 			{ 'value' : '2066',},
+ 			{ 'value' : '1871',},
+ 			{ 'value' : '1854',},
+ 			{ 'value' : '1882',},
+ 			{ 'value' : '1823',},
+ ]}, 
+{ 'seriesname' : 'Среднее за период','color' : 'BFBFBB', 'anchorradius' : '4','anchorbgcolor' : '6CB87A','anchorbordercolor' : '6CB87A','dashed' : '1', 'data' : [ 			{ 'value' : '2033',},
+ 			{ 'value' : '2129',},
+ 			{ 'value' : '1936',},
+ 			{ 'value' : '1853',},
+ 			{ 'value' : '1829',},
+ 			{ 'value' : '1841',},
+ ]}, 
+], 
+ 'trendlines' : [  { 'line' : [ {  'startvalue' : '1800',  'color' : 'D50000',  'displayvalue':'1800', thickness: '2', dashed: '1', dashLen:'4', dashGap:'3' }, ]},  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, 'auto',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_4_2_2_graph_div');
+	</script></div></div><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 325px;'><div class='slot-context' style='font-size:9px;top:77px;padding:4px;left:15px;border:none;background-color:#eeeeee;font-weight:bold;font-family:Arial;color:red;'>ТПФП</div><div id='PRD_DIV_MET_SLOT_4_2_3_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_4_2_3_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_4_2_3_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 7  2  
+ 0 --> 1600.00000 
+ 1 --> 1608.62000 
+ 2 --> 1583.51000 
+ 3 --> 1597.22000 
+ 4 --> 1479.71000 
+ 5 --> 1428.21000 
+ 6 --> 1265.36000 
+ 0 --> 1600.00000 
+ 1 --> 1627.88880 
+ 2 --> 1585.30550 
+ 3 --> 1576.53710 
+ 4 --> 1503.45760 
+ 5 --> 1416.83280 
+ 6 --> 1396.35240*//*   1600.00000  1608.62000  1583.51000  1597.22000  1479.71000  1428.21000  1265.36000  1600.00000  1627.88880  1585.30550  1576.53710  1503.45760  1416.83280  1396.35240   */
+
+
+/*MIN --> 1265.36000 MAX --> 1627.88880  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_4_2_3_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Котировки золота ЦБ РФ',
+'subcaption':'рубль \за грамм AU',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'yAxisMinValue':'1250',
+'yAxisMaxValue':'1650',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : 'На конец периода','color' : 'FFD440', 'anchorsides' : '3','anchorradius' : '9','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '1609',},
+ 			{ 'value' : '1584',},
+ 			{ 'value' : '1597',},
+ 			{ 'value' : '1480',},
+ 			{ 'value' : '1428',},
+ 			{ 'value' : '1265',},
+ ]}, 
+{ 'seriesname' : 'Среднее за период','color' : 'FEDF72', 'anchorradius' : '4','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD','dashed' : '1', 'data' : [ 			{ 'value' : '1628',},
+ 			{ 'value' : '1585',},
+ 			{ 'value' : '1577',},
+ 			{ 'value' : '1503',},
+ 			{ 'value' : '1417',},
+ 			{ 'value' : '1396',},
+ ]}, 
+], 
+ 'trendlines' : [  { 'line' : [ {  'startvalue' : '1600',  'color' : 'D50000',  'displayvalue':'1600', thickness: '2', dashed: '1', dashLen:'4', dashGap:'3' }, ]},  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, 'auto',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_4_2_3_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 325px;'><div class='slot-context' style='font-size:9px;top:80px;padding:4px 2px;left:2px;border:none;background-color:#eeeeee;font-weight:bold;font-family:Arial;color:red;'>ТПФП</div><div id='PRD_DIV_MET_SLOT_4_2_4_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_4_2_4_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_4_2_4_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 7  2  
+ 0 --> 30.00000 
+ 1 --> 29.99000 
+ 2 --> 28.30000 
+ 3 --> 28.62000 
+ 4 --> 24.14000 
+ 5 --> 22.71000 
+ 6 --> 19.57000 
+ 0 --> 30.00000 
+ 1 --> 30.35940 
+ 2 --> 29.66000 
+ 3 --> 28.52710 
+ 4 --> 25.80380 
+ 5 --> 23.10780 
+ 6 --> 22.17000*//*   30.00000  29.99000  28.30000  28.62000  24.14000  22.71000  19.57000  30.00000  30.35940  29.66000  28.52710  25.80380  23.10780  22.17000   */
+
+
+/*MIN --> 19.57000 MAX --> 30.35940  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_4_2_4_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'1',
+'sDecimals':'1',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Котировки серебра ЦБ РФ',
+'subcaption':'рубль \за грамм AG',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'yAxisMinValue':'18',
+'yAxisMaxValue':'32',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : 'На конец периода','color' : 'CCCCCC', 'anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : '6CB87A','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '29.99',},
+ 			{ 'value' : '28.3',},
+ 			{ 'value' : '28.62',},
+ 			{ 'value' : '24.14',},
+ 			{ 'value' : '22.71',},
+ 			{ 'value' : '19.57',},
+ ]}, 
+{ 'seriesname' : 'Среднее за период','color' : 'BFBDAE', 'anchorradius' : '4','anchorbgcolor' : '6CB87A','anchorbordercolor' : '669ACD','dashed' : '1', 'data' : [ 			{ 'value' : '30.36',},
+ 			{ 'value' : '29.66',},
+ 			{ 'value' : '28.53',},
+ 			{ 'value' : '25.8',},
+ 			{ 'value' : '23.11',},
+ 			{ 'value' : '22.17',},
+ ]}, 
+], 
+ 'trendlines' : [  { 'line' : [ {  'startvalue' : '30',  'color' : 'D50000',  'displayvalue':'30', thickness: '2', dashed: '1', dashLen:'4', dashGap:'3' }, ]},  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, 'auto',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_4_2_4_graph_div');
+	</script></div></div><footer class='print-only'><div class='slides'>Лист: %лист% | Листов: %листов%</div><div class='object'>ОАО "Уралэлектромедь"</div></footer></article></section><section id='b2'><header><h1>Сырье</h1></header><article class='' id='s2'><div class='print-only'><h1>Сырье</h1><div class='copyrights'>Сделано в АССОИ</div></div><header><h3>Поставка драгсодержащего сырья</h3></header><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 670px;'><div id='PRD_DIV_MET_SLOT_6_6_1_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_6_6_1_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_6_6_1_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -2- 5  7  
+ 0 --> 0 
+ 1 --> 0 
+ 2 --> 0 
+ 3 --> 0 
+ 4 --> 0 
+ 0 --> 2245.00000 
+ 1 --> 1732.00000 
+ 2 --> 647.00000 
+ 3 --> 315.00000 
+ 4 --> 315.00000 
+ 0 --> 444.00000 
+ 1 --> 766.00000 
+ 2 --> 204.00000 
+ 3 --> 192.00000 
+ 4 --> 192.00000 
+ 0 --> 4829.00000 
+ 1 --> 4326.00000 
+ 2 --> 1958.00000 
+ 3 --> 1265.00000 
+ 4 --> 1265.00000 
+ 0 --> 1692.00000 
+ 1 --> 1404.00000 
+ 2 --> 678.00000 
+ 3 --> 354.00000 
+ 4 --> 354.00000 
+ 0 --> 1515.00000 
+ 1 --> 1344.00000 
+ 2 --> 706.00000 
+ 3 --> 393.00000 
+ 4 --> 393.00000 
+ 0 --> 1363.00000 
+ 1 --> 1065.00000 
+ 2 --> 322.00000 
+ 3 --> 58.00000 
+ 4 --> 58.00000*//*   0  0  0  0  0  2245.00000  1732.00000  647.00000  315.00000  315.00000  444.00000  766.00000  204.00000  192.00000  192.00000  4829.00000  4326.00000  1958.00000  1265.00000  1265.00000  1692.00000  1404.00000  678.00000  354.00000  354.00000  1515.00000  1344.00000  706.00000  393.00000  393.00000  1363.00000  1065.00000  322.00000  58.00000  58.00000   */
+
+
+/*MIN --> 0 MAX --> 4829.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSStackedColumn2D.swf',   'PRD_DIV_MET_SLOT_6_6_1_chart', chartwidth,  chartheight, '0', '1' );
+		myChart.setJSONData({
+		 'chart':{
+  'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Поставка золота в сырье',
+'subcaption':'',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+	}, 'categories' : [{'category': [{ 'label' : 'Факт 2012'},{ 'label' : 'ТПФП 2013'},{ 'label' : 'План I пг.'},{ 'label' : 'Факт I пг'},{ 'label' : 'Факт I кв'},]}],/* --2-- */'dataset' : [
+{'dataset' : [
+		{ 'seriesname' : 'Золото в перв. сырье','data' : [
+			{ 'value' : '2245' /* 46.489956512735556015738248084 */},
+			{ 'value' : '1732' /* 35.866639055705114930627459101 */},
+			{ 'value' : '647' /* 13.398219092979913025471112031 */},
+			{ 'value' : '315' /* 6.5230896665976392627873265686 */},
+			{ 'value' : '315' /* 6.5230896665976392627873265686 */},
+]},		{ 'seriesname' : 'Золото во втор. сырье','data' : [
+			{ 'value' : '444' /* 9.194450196728101056119279354 */},
+			{ 'value' : '766' /* 15.862497411472354524746324291 */},
+			{ 'value' : '204' /* 4.2244771174156139987575067302 */},
+			{ 'value' : '192' /* 3.975978463449989645889418099 */},
+			{ 'value' : '192' /* 3.975978463449989645889418099 */},
+]},		{ 'seriesname' : 'МЧ ОАО "СУМЗ"','data' : [
+			{ 'value' : '4829' /* 100 */},
+			{ 'value' : '4326' /* 89.58376475460757920894595154 */},
+			{ 'value' : '1958' /* 40.546697038724373576309794989 */},
+			{ 'value' : '1265' /* 26.195899772209567198177676538 */},
+			{ 'value' : '1265' /* 26.195899772209567198177676538 */},
+]},		{ 'seriesname' : 'МЧ ОАО "Святогор"','data' : [
+			{ 'value' : '1692' /* 35.038310209153033754400496997 */},
+			{ 'value' : '1404' /* 29.074342513978049285566369849 */},
+			{ 'value' : '678' /* 14.040173949057775937047007662 */},
+			{ 'value' : '354' /* 7.33071029198591840960861462 */},
+			{ 'value' : '354' /* 7.33071029198591840960861462 */},
+]},		{ 'seriesname' : 'МЧ ООО "ММСК"','data' : [
+			{ 'value' : '1515' /* 31.372955063160074549596189687 */},
+			{ 'value' : '1344' /* 27.831849244149927521225926693 */},
+			{ 'value' : '706' /* 14.620004141644232760405881135 */},
+			{ 'value' : '393' /* 8.138330917374197556429902671 */},
+			{ 'value' : '393' /* 8.138330917374197556429902671 */},
+]},		{ 'seriesname' : 'Прочее сырье:','data' : [
+			{ 'value' : '1363' /* 28.225305446262166079933733692 */},
+			{ 'value' : '1065' /* 22.054255539449161317042866018 */},
+			{ 'value' : '322' /* 6.6680472147442534686270449368 */},
+			{ 'value' : '58','showValue': '0' },
+			{ 'value' : '58','showValue': '0' },
+]},]}], 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	});
+		myChart.render('PRD_DIV_MET_SLOT_6_6_1_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 670px;'><div id='PRD_DIV_MET_SLOT_6_6_2_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_6_6_2_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_6_6_2_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -2- 5  6  
+ 0 --> 88320.00000 
+ 1 --> 48981.00000 
+ 2 --> 23099.00000 
+ 3 --> 14710.00000 
+ 4 --> 14710.00000 
+ 0 --> 20247.00000 
+ 1 --> 27365.00000 
+ 2 --> 12989.00000 
+ 3 --> 9265.00000 
+ 4 --> 9265.00000 
+ 0 --> 83474.00000 
+ 1 --> 59778.00000 
+ 2 --> 27148.00000 
+ 3 --> 19335.00000 
+ 4 --> 19335.00000 
+ 0 --> 43750.00000 
+ 1 --> 30926.00000 
+ 2 --> 15396.00000 
+ 3 --> 10378.00000 
+ 4 --> 10378.00000 
+ 0 --> 39725.00000 
+ 1 --> 24414.00000 
+ 2 --> 13395.00000 
+ 3 --> 10091.00000 
+ 4 --> 10091.00000 
+ 0 --> 13930.00000 
+ 1 --> 4455.00000 
+ 2 --> 2975.00000 
+ 3 --> 1569.00000 
+ 4 --> 1569.00000*//*   88320.00000  48981.00000  23099.00000  14710.00000  14710.00000  20247.00000  27365.00000  12989.00000  9265.00000  9265.00000  83474.00000  59778.00000  27148.00000  19335.00000  19335.00000  43750.00000  30926.00000  15396.00000  10378.00000  10378.00000  39725.00000  24414.00000  13395.00000  10091.00000  10091.00000  13930.00000  4455.00000  2975.00000  1569.00000  1569.00000   */
+
+
+/*MIN --> 1569.00000 MAX --> 88320.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSStackedColumn2D.swf',   'PRD_DIV_MET_SLOT_6_6_2_chart', chartwidth,  chartheight, '0', '1' );
+		myChart.setJSONData({
+		 'chart':{
+  'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Поставка серебра в сырье',
+'subcaption':'',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+	}, 'categories' : [{'category': [{ 'label' : 'Факт 2012'},{ 'label' : 'ТПФП 2013'},{ 'label' : 'План I пг.'},{ 'label' : 'Факт I пг'},{ 'label' : 'Факт I кв'},]}],/* --2-- */'dataset' : [
+{'dataset' : [
+		{ 'seriesname' : 'Серебро в перв. сырье','data' : [
+			{ 'value' : '88320' /* 100 */},
+			{ 'value' : '48981' /* 55.458559782608695652173913043 */},
+			{ 'value' : '23099' /* 26.153759057971014492753623188 */},
+			{ 'value' : '14710' /* 16.655344202898550724637681159 */},
+			{ 'value' : '14710' /* 16.655344202898550724637681159 */},
+]},		{ 'seriesname' : 'Серебро во втор. сырье','data' : [
+			{ 'value' : '20247' /* 22.924592391304347826086956522 */},
+			{ 'value' : '27365' /* 30.98392210144927536231884058 */},
+			{ 'value' : '12989' /* 14.706748188405797101449275362 */},
+			{ 'value' : '9265' /* 10.490262681159420289855072464 */},
+			{ 'value' : '9265' /* 10.490262681159420289855072464 */},
+]},		{ 'seriesname' : 'МЧ ОАО "СУМЗ"','data' : [
+			{ 'value' : '83474' /* 94.51313405797101449275362319 */},
+			{ 'value' : '59778' /* 67.683423913043478260869565217 */},
+			{ 'value' : '27148' /* 30.738224637681159420289855072 */},
+			{ 'value' : '19335' /* 21.891983695652173913043478261 */},
+			{ 'value' : '19335' /* 21.891983695652173913043478261 */},
+]},		{ 'seriesname' : 'МЧ ОАО "Святогор"','data' : [
+			{ 'value' : '43750' /* 49.535778985507246376811594203 */},
+			{ 'value' : '30926' /* 35.01585144927536231884057971 */},
+			{ 'value' : '15396' /* 17.432065217391304347826086957 */},
+			{ 'value' : '10378' /* 11.75045289855072463768115942 */},
+			{ 'value' : '10378' /* 11.75045289855072463768115942 */},
+]},		{ 'seriesname' : 'МЧ ООО "ММСК"','data' : [
+			{ 'value' : '39725' /* 44.978487318840579710144927536 */},
+			{ 'value' : '24414' /* 27.642663043478260869565217391 */},
+			{ 'value' : '13395' /* 15.166440217391304347826086957 */},
+			{ 'value' : '10091' /* 11.425498188405797101449275362 */},
+			{ 'value' : '10091' /* 11.425498188405797101449275362 */},
+]},		{ 'seriesname' : 'Прочее сырье:','data' : [
+			{ 'value' : '13930' /* 15.772192028985507246376811594 */},
+			{ 'value' : '4455' /* 5.0441576086956521739130434783 */},
+			{ 'value' : '2975' /* 3.3684329710144927536231884058 */},
+			{ 'value' : '1569','showValue': '0' },
+			{ 'value' : '1569','showValue': '0' },
+]},]}], 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	});
+		myChart.render('PRD_DIV_MET_SLOT_6_6_2_graph_div');
+	</script></div></div><footer class='print-only'><div class='slides'>Лист: %лист% | Листов: %листов%</div><div class='object'>ОАО "Уралэлектромедь"</div></footer></article></section><section id='b3'><header><h1>Производство. ЦИНК. СВИНЕЦ</h1></header></section><section id='b4'><header><h1>Производство</h1></header><article class='' id='s3'><div class='print-only'><h1>Производство</h1><div class='copyrights'>Сделано в АССОИ</div></div><header><h3>Объемы производства меди и драгметаллов</h3></header><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_9_4_1_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_9_4_1_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_9_4_1_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -2- 7  1  
+ 0 --> 31666.666666666666666666666667 
+ 1 --> 33804.00000 
+ 2 --> 29396.00000 
+ 3 --> 30933.00000 
+ 4 --> 28631.00000 
+ 5 --> 30135.00000 
+ 6 --> 31152.00000*//*   31666.666666666666666666666667  33804.00000  29396.00000  30933.00000  28631.00000  30135.00000  31152.00000   */
+
+
+/*MIN --> 28631.00000 MAX --> 33804.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSStackedColumn2D.swf',   'PRD_DIV_MET_SLOT_9_4_1_chart', chartwidth,  chartheight, '0', '1' );
+		myChart.setJSONData({
+		 'chart':{
+  'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Катоды медные',
+'subcaption':'т',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '0',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+	}, 'categories' : [{'category': [{ 'label' : 'ТПФП мес.2013'},{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],/* --2-- */'dataset' : [
+{'dataset' : [
+		{ 'seriesname' : 'Катоды медные','color' : 'F2A5AA','data' : [
+			{ 'value' : '31667' /* 93.6772768508657752534216858 */},
+			{ 'value' : '33804' /* 100 */},
+			{ 'value' : '29396' /* 86.96012306235948408472370134 */},
+			{ 'value' : '30933' /* 91.50692225772097976570820021 */},
+			{ 'value' : '28631' /* 84.69707726896225298781209324 */},
+			{ 'value' : '30135' /* 89.14625488107916222932197373 */},
+			{ 'value' : '31152' /* 92.15477458288959886403975861 */},
+]},]}], 'trendlines' : [  { 'line' : [ {  'startvalue' : '31667',  'color' : 'D50000',  'displayvalue':'31667', thickness: '2', dashed: '1', dashLen:'4', dashGap:'3' }, ]},  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	});
+		myChart.render('PRD_DIV_MET_SLOT_9_4_1_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_9_4_2_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_9_4_2_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_9_4_2_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -2- 7  1  
+ 0 --> 541.66666666666666666666666667 
+ 1 --> 388.00000 
+ 2 --> 549.00000 
+ 3 --> 623.00000 
+ 4 --> 607.00000 
+ 5 --> 668.00000 
+ 6 --> 603.00000*//*   541.66666666666666666666666667  388.00000  549.00000  623.00000  607.00000  668.00000  603.00000   */
+
+
+/*MIN --> 388.00000 MAX --> 668.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSStackedColumn2D.swf',   'PRD_DIV_MET_SLOT_9_4_2_chart', chartwidth,  chartheight, '0', '1' );
+		myChart.setJSONData({
+		 'chart':{
+  'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Порошки медные',
+'subcaption':'т',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '0',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'F2A5AA',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+	}, 'categories' : [{'category': [{ 'label' : 'ТПФП мес.2013'},{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],/* --2-- */'dataset' : [
+{'dataset' : [
+		{ 'seriesname' : '','data' : [
+			{ 'value' : '542' /* 81.08782435129740518962075848 */},
+			{ 'value' : '388' /* 58.083832335329341317365269461 */},
+			{ 'value' : '549' /* 82.18562874251497005988023952 */},
+			{ 'value' : '623' /* 93.26347305389221556886227545 */},
+			{ 'value' : '607' /* 90.86826347305389221556886228 */},
+			{ 'value' : '668' /* 100 */},
+			{ 'value' : '603' /* 90.26946107784431137724550898 */},
+]},]}], 'trendlines' : [  { 'line' : [ {  'startvalue' : '542',  'color' : 'D50000',  'displayvalue':'542', thickness: '2', dashed: '1', dashLen:'4', dashGap:'3' }, ]},  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	});
+		myChart.render('PRD_DIV_MET_SLOT_9_4_2_graph_div');
+	</script></div></div><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_9_4_6_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_9_4_6_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_9_4_6_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -2- 7  1  
+ 0 --> 858.3333333333333333333333333 
+ 1 --> 1078.00000 
+ 2 --> 764.00000 
+ 3 --> 906.00000 
+ 4 --> 922.00000 
+ 5 --> 1055.00000 
+ 6 --> 895.00000*//*   858.3333333333333333333333333  1078.00000  764.00000  906.00000  922.00000  1055.00000  895.00000   */
+
+
+/*MIN --> 764.00000 MAX --> 1078.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSStackedColumn2D.swf',   'PRD_DIV_MET_SLOT_9_4_6_chart', chartwidth,  chartheight, '0', '1' );
+		myChart.setJSONData({
+		 'chart':{
+  'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Золото в слитках. Производство',
+'subcaption':'кг',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '0',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'E6E602',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+	}, 'categories' : [{'category': [{ 'label' : 'ТПФП мес.2013'},{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],/* --2-- */'dataset' : [
+{'dataset' : [
+		{ 'seriesname' : '','data' : [
+			{ 'value' : '858' /* 79.62275819418676561533704391 */},
+			{ 'value' : '1078' /* 100 */},
+			{ 'value' : '764' /* 70.871985157699443413729128015 */},
+			{ 'value' : '906' /* 84.04452690166975881261595547 */},
+			{ 'value' : '922' /* 85.52875695732838589981447124 */},
+			{ 'value' : '1055' /* 97.86641929499072356215213358 */},
+			{ 'value' : '895' /* 83.02411873840445269016697588 */},
+]},]}], 'trendlines' : [  { 'line' : [ {  'startvalue' : '858',  'color' : 'D50000',  'displayvalue':'858', thickness: '2', dashed: '1', dashLen:'4', dashGap:'3' }, ]},  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	});
+		myChart.render('PRD_DIV_MET_SLOT_9_4_6_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_9_4_7_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_9_4_7_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_9_4_7_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -2- 7  1  
+ 0 --> 19166.666666666666666666666667 
+ 1 --> 22205.00000 
+ 2 --> 19244.00000 
+ 3 --> 24326.00000 
+ 4 --> 25616.00000 
+ 5 --> 25151.00000 
+ 6 --> 26173.00000*//*   19166.666666666666666666666667  22205.00000  19244.00000  24326.00000  25616.00000  25151.00000  26173.00000   */
+
+
+/*MIN --> 19166.666666666666666666666667 MAX --> 26173.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSStackedColumn2D.swf',   'PRD_DIV_MET_SLOT_9_4_7_chart', chartwidth,  chartheight, '0', '1' );
+		myChart.setJSONData({
+		 'chart':{
+  'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Серебро в слитках. Производство',
+'subcaption':'кг',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '0',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'E3DEE0',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+	}, 'categories' : [{'category': [{ 'label' : 'ТПФП мес.2013'},{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],/* --2-- */'dataset' : [
+{'dataset' : [
+		{ 'seriesname' : '','data' : [
+			{ 'value' : '19167' /* 73.230683019396579171920172189 */},
+			{ 'value' : '22205' /* 84.83933824934092385282543079 */},
+			{ 'value' : '19244' /* 73.526152905666144500057310969 */},
+			{ 'value' : '24326' /* 92.94310931112214877927635349 */},
+			{ 'value' : '25616' /* 97.87185267260153593397776334 */},
+			{ 'value' : '25151' /* 96.09521262369617544798074351 */},
+			{ 'value' : '26173' /* 100 */},
+]},]}], 'trendlines' : [  { 'line' : [ {  'startvalue' : '19167',  'color' : 'D50000',  'displayvalue':'19167', thickness: '2', dashed: '1', dashLen:'4', dashGap:'3' }, ]},  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	});
+		myChart.render('PRD_DIV_MET_SLOT_9_4_7_graph_div');
+	</script></div></div><footer class='print-only'><div class='slides'>Лист: %лист% | Листов: %листов%</div><div class='object'>ОАО "Уралэлектромедь"</div></footer></article></section><section id='b5'><header><h1>Показатели ФХД предприятия</h1></header><article class='' id='s4'><div class='print-only'><h1>Показатели ФХД предприятия</h1><div class='copyrights'>Сделано в АССОИ</div></div><header><h3>Прибыль от продаж, чистая прибыль, EBITDA</h3></header><div class='slide-box horisontal default'><div class='slide-box vertical default'><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_11_2_1_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_11_2_1_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_11_2_1_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 5  2  
+ 0 --> 22565941.00000 
+ 1 --> 21869554.00000 
+ 2 --> 10458192.00000 
+ 3 --> 10846866.00000 
+ 4 --> 5442496.00000 
+ 0 --> 5227208.00000 
+ 1 --> 1941190.00000 
+ 2 --> 1244350.00000 
+ 3 --> 1379780.00000 
+ 4 --> 706232.00000*//*   22565941.00000  21869554.00000  10458192.00000  10846866.00000  5442496.00000  5227208.00000  1941190.00000  1244350.00000  1379780.00000  706232.00000   */
+
+
+/*MIN --> 0 MAX --> 22565941.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSArea.swf', 'PRD_DIV_MET_SLOT_11_2_1_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'1',
+'sDecimals':'1',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Динамика выручки от продаж продукции(товаров, работ, услуг) и прибыли от продаж',
+'subcaption':'млн.руб.',
+'xaxisname':'',
+'yaxisname':'Выручка',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'10,10,10',
+'sNumberScaleValue':'10,10,10',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '1',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+'canvasPadding':'30',
+'plotBorderThickness': '1',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'Факт 2012'},{ 'label' : 'ТПФП 2013'},{ 'label' : 'План I пг.'},{ 'label' : 'Факт I пг'},{ 'label' : 'Факт I кв'},]}],'dataset' : [ 
+{ 'seriesname' : 'Выручка от продаж продукции(товаров, работ, услуг)','color' : '3EE5E0', 'anchorbgcolor' : '3EE5E0','anchorbordercolor' : '3EE5E0','data' : [ 			{ 'value' : '22565941',},
+ 			{ 'value' : '21869554',},
+ 			{ 'value' : '10458192',},
+ 			{ 'value' : '10846866',},
+ 			{ 'value' : '5442496',},
+ ]}, 
+{ 'seriesname' : 'Прибыль от продаж','color' : 'FFFE68', 'anchorbgcolor' : 'FFFE68','anchorbordercolor' : 'FFFE68','data' : [ 			{ 'value' : '5227208',},
+ 			{ 'value' : '1941190',},
+ 			{ 'value' : '1244350',},
+ 			{ 'value' : '1379780',},
+ 			{ 'value' : '706232',},
+ ]}, 
+], 
+ 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, '3000,18000',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_11_2_1_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 325px;'><!-- -200-  -40-  -40-  -40-  -40-  -40- --><div class='tablediv' id='PRD_DIV_MET_SLOT_11_2_2_table_div'><h2 class='graphlike'>Прибыль от продаж, чистая прибыль, EBITDA</h2><h3 class='subcaption'>тыс.руб.</h3><table class='data  obj_352' style='font-size:110%;'><thead><tr><th class='col_object' style='width: 200px;'>Наименование</th><th class='Б1 col_data' style='width: 40px;'>Факт 2012</th><th class='PLANGOD col_data' style='width: 40px;'>ТПФП 2013</th><th class='PLANOPER col_data' style='width: 40px;'>План I пг.</th><th class='Б1 col_data' style='width: 40px;'>Факт I пг</th><th class='Б1 col_data' style='width: 40px;'>Факт I кв</th></tr></thead><tbody><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m1122200'>Прибыль от продаж</td><td class='value Б1'>5 227 208</td><td class='value PLANGOD'>1 941 190</td><td class='value PLANOPER'>1 244 350</td><td class='value Б1'>1 379 780</td><td class='value Б1'>706 232</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m1122300'>Прибыль до налоообложения</td><td class='value Б1'>4 868 770</td><td class='value PLANGOD'>1 228 353</td><td class='value PLANOPER'>769 027</td><td class='value Б1'>763 222</td><td class='value Б1'>539 931</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m1122330'>Проценты к уплате(+)</td><td class='value Б1'>232 975</td><td class='value PLANGOD'>211 250</td><td class='value PLANOPER'>111 178</td><td class='value Б1'>118 066</td><td class='value Б1'>57 602</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m1122320'>Проценты к получению(-)</td><td class='value Б1'>98 384</td><td class='value PLANGOD'>74 336</td><td class='value PLANOPER'>37 168</td><td class='value Б1'>48 537</td><td class='value Б1'>25 415</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m260400_11_2_2'>Амортизация (+)</td><td class='value Б1'>969 009</td><td class='value PLANGOD'>1 148 743</td><td class='value PLANOPER'>602 882</td><td class='value Б1'>622 981</td><td class='value Б1'>306 779</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m212240_11_2_2'>Результат по курс.разнице(-)</td><td class='value Б1'>122 385</td><td class='value PLANGOD'>0</td><td class='value PLANOPER'>0</td><td class='value Б1'>-165 125</td><td class='value Б1'>-76 804</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m200420_11_2_2'>EBITDA</td><td class='value Б1'>5 849 960</td><td class='value PLANGOD'>2 514 010</td><td class='value PLANOPER'>1 445 919</td><td class='value Б1'>1 620 857</td><td class='value Б1'>955 733</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m200200_11_2_2'>Чистая прибыль</td><td class='value Б1'>3 790 569</td><td class='value PLANGOD'>973 482</td><td class='value PLANOPER'>549 856</td><td class='value Б1'>421 398</td><td class='value Б1'>304 955</td></tr></tbody></table></div></div></div><div class='slot' style='width:623px; height: 672px;'><div id='PRD_DIV_MET_SLOT_11_2_3_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_11_2_3_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_11_2_3_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 5  3  
+ 0 --> 5227208.00000 
+ 1 --> 1941190.00000 
+ 2 --> 1244350.00000 
+ 3 --> 1379780.00000 
+ 4 --> 706232.00000 
+ 0 --> 3790569.00000 
+ 1 --> 973482.00000 
+ 2 --> 549856.00000 
+ 3 --> 421398.00000 
+ 4 --> 304955.00000 
+ 0 --> 5849960.00000 
+ 1 --> 2514010.00000 
+ 2 --> 1445919.00000 
+ 3 --> 1620857.00000 
+ 4 --> 955733.00000*//*   5227208.00000  1941190.00000  1244350.00000  1379780.00000  706232.00000  3790569.00000  973482.00000  549856.00000  421398.00000  304955.00000  5849960.00000  2514010.00000  1445919.00000  1620857.00000  955733.00000   */
+
+
+/*MIN --> 304955.00000 MAX --> 5849960.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_11_2_3_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'1',
+'sDecimals':'1',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Прибыль от продаж, чистая прибыль, EBITDA',
+'subcaption':'млн.руб.',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'10,10,10',
+'sNumberScaleValue':'10,10,10',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '5',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '8',
+'linedashgap' : '6',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'Факт 2012'},{ 'label' : 'ТПФП 2013'},{ 'label' : 'План I пг.'},{ 'label' : 'Факт I пг'},{ 'label' : 'Факт I кв'},]}],'dataset' : [ 
+{ 'seriesname' : 'Прибыль от продаж','color' : 'FFFE68', 'anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : 'FFFE68','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '5227208',},
+ 			{ 'value' : '1941190',},
+ 			{ 'value' : '1244350',},
+ 			{ 'value' : '1379780',},
+ 			{ 'value' : '706232',},
+ ]}, 
+{ 'seriesname' : 'Чистая прибыль','color' : '477F6A', 'anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '3790569',},
+ 			{ 'value' : '973482',},
+ 			{ 'value' : '549856',},
+ 			{ 'value' : '421398',},
+ 			{ 'value' : '304955',},
+ ]}, 
+{ 'seriesname' : 'EBITDA','color' : 'FF99AA', 'anchorsides' : '4','anchorradius' : '6','anchorbgcolor' : 'FF99AA','anchorbordercolor' : '669ACD','dashed' : '1', 'data' : [ 			{ 'value' : '5849960',},
+ 			{ 'value' : '2514010',},
+ 			{ 'value' : '1445919',},
+ 			{ 'value' : '1620857',},
+ 			{ 'value' : '955733',},
+ ]}, 
+], 
+ 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, 'auto',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_11_2_3_graph_div');
+	</script></div></div><footer class='print-only'><div class='slides'>Лист: %лист% | Листов: %листов%</div><div class='object'>ОАО "Уралэлектромедь"</div></footer></article></section><section id='b6'><header><h1>ПРОДАЖИ</h1></header></section><section id='b7'><header><h1>ПРОДАЖИ</h1></header><article class='' id='s5'><div class='print-only'><h1>ПРОДАЖИ</h1><div class='copyrights'>Сделано в АССОИ</div></div><header><h3>Динамика цен и себестоимость </h3></header><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 672px;'><div id='PRD_DIV_MET_SLOT_13_1_2_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_13_1_2_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_13_1_2_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 6  3  
+ 0 --> 10304.694271722455638326167760 
+ 1 --> 11190.975704840653222120919930 
+ 2 --> 9477.043878602660587479055792 
+ 3 --> 11887.810671317978692564662505 
+ 4 --> 9557.050377937141024922508653 
+ 5 --> 9860.558021845062552239841729 
+ 0 --> 11604.580000158846497959155958 
+ 1 --> 11590.380000410918456462569780 
+ 2 --> 10665.000000172903294253846035 
+ 3 --> 13371.609999973551446803984883 
+ 4 --> 8569.360000038421949927997635 
+ 5 --> 10054.890000527515858026019552 
+ 0 --> 10510.380000231600619161822808 
+ 1 --> 10529.230000037185491032718837 
+ 2 --> 9216.889999857873492123338559 
+ 3 --> 12225.240000182735458445195352 
+ 4 --> 7576.7000000480274374099970441 
+ 5 --> 8595.820000246979434800986253*//*   10304.694271722455638326167760  11190.975704840653222120919930  9477.043878602660587479055792  11887.810671317978692564662505  9557.050377937141024922508653  9860.558021845062552239841729  11604.580000158846497959155958  11590.380000410918456462569780  10665.000000172903294253846035  13371.609999973551446803984883  8569.360000038421949927997635  10054.890000527515858026019552  10510.380000231600619161822808  10529.230000037185491032718837  9216.889999857873492123338559  12225.240000182735458445195352  7576.7000000480274374099970441  8595.820000246979434800986253   */
+
+
+/*MIN --> 7576.7000000480274374099970441 MAX --> 13371.609999973551446803984883  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_13_1_2_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'1',
+'sDecimals':'1',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Цена и себестоимость реализации катоды медные (услуга)',
+'subcaption':'',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '5',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '8',
+'linedashgap' : '6',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'0D9E0F,3BA3D0,3BA3D0',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : 'цена','anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '10305',},
+ 			{ 'value' : '11191',},
+ 			{ 'value' : '9477',},
+ 			{ 'value' : '11888',},
+ 			{ 'value' : '9557',},
+ 			{ 'value' : '9861',},
+ ]}, 
+{ 'seriesname' : 'полная СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '11605',},
+ 			{ 'value' : '11590',},
+ 			{ 'value' : '10665',},
+ 			{ 'value' : '13372',},
+ 			{ 'value' : '8569',},
+ 			{ 'value' : '10055',},
+ ]}, 
+{ 'seriesname' : 'цеховая СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD','dashed' : '1', 'data' : [ 			{ 'value' : '10510',},
+ 			{ 'value' : '10529',},
+ 			{ 'value' : '9217',},
+ 			{ 'value' : '12225',},
+ 			{ 'value' : '7577',},
+ 			{ 'value' : '8596',},
+ ]}, 
+], 
+ 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, 'auto',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_13_1_2_graph_div');
+	</script></div><div class='slide-box vertical default'><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_13_1_3_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_13_1_3_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_13_1_3_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 6  3  
+ 0 --> 235932.70881250799082093575314 
+ 1 --> 234404.00822805545534861981722 
+ 2 --> 232114.87964776216065803268616 
+ 3 --> 225038.20095842627799008242426 
+ 4 --> 216265.98283413398525799209152 
+ 5 --> 222306.45352816529980251780873 
+ 0 --> 154290.57997872629279949596867 
+ 1 --> 153845.04000310248752440482130 
+ 2 --> 170687.85000464799302123855778 
+ 3 --> 160207.90000207058053522991777 
+ 4 --> 168784.52000169656161195603124 
+ 5 --> 185624.37000897127265745939553 
+ 0 --> 127750.28998936314639974798434 
+ 1 --> 129658.44000221375411897635686 
+ 2 --> 132850.10000264720132335441039 
+ 3 --> 137165.38000455527717750581909 
+ 4 --> 144784.08000122374935944369467 
+ 5 --> 149767.90000135603962205034618*//*   235932.70881250799082093575314  234404.00822805545534861981722  232114.87964776216065803268616  225038.20095842627799008242426  216265.98283413398525799209152  222306.45352816529980251780873  154290.57997872629279949596867  153845.04000310248752440482130  170687.85000464799302123855778  160207.90000207058053522991777  168784.52000169656161195603124  185624.37000897127265745939553  127750.28998936314639974798434  129658.44000221375411897635686  132850.10000264720132335441039  137165.38000455527717750581909  144784.08000122374935944369467  149767.90000135603962205034618   */
+
+
+/*MIN --> 127750.28998936314639974798434 MAX --> 235932.70881250799082093575314  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_13_1_3_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'1',
+'sDecimals':'1',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Цена и себестоимость реализации катанка медная',
+'subcaption':'',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '5',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '8',
+'linedashgap' : '6',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'0D9E0F,3BA3D0,3BA3D0',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : 'цена','anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '235933',},
+ 			{ 'value' : '234404',},
+ 			{ 'value' : '232115',},
+ 			{ 'value' : '225038',},
+ 			{ 'value' : '216266',},
+ 			{ 'value' : '222306',},
+ ]}, 
+{ 'seriesname' : 'полная СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '154291',},
+ 			{ 'value' : '153845',},
+ 			{ 'value' : '170688',},
+ 			{ 'value' : '160208',},
+ 			{ 'value' : '168785',},
+ 			{ 'value' : '185624',},
+ ]}, 
+{ 'seriesname' : 'цеховая СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD','dashed' : '1', 'data' : [ 			{ 'value' : '127750',},
+ 			{ 'value' : '129658',},
+ 			{ 'value' : '132850',},
+ 			{ 'value' : '137165',},
+ 			{ 'value' : '144784',},
+ 			{ 'value' : '149768',},
+ ]}, 
+], 
+ 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, '125000,250000',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_13_1_3_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_13_1_4_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_13_1_4_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_13_1_4_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 6  3  
+ 0 --> 271410.47281429483088704530951 
+ 1 --> 272996.37422476729812253695232 
+ 2 --> 269076.85774932682344498730773 
+ 3 --> 262454.72470103213356334610099 
+ 4 --> 255637.80718518858822988928194 
+ 5 --> 259696.02505616492665521342672 
+ 0 --> 209562.99002339927674962773878 
+ 1 --> 194785.14000147914927785819185 
+ 2 --> 209687.32000281677861126107849 
+ 3 --> 195872.21002309873980292973890 
+ 4 --> 200732.02999954058896494693803 
+ 5 --> 224282.76000176203691467336241 
+ 0 --> 177644.4000 
+ 1 --> 167353.03998985726209468668449 
+ 2 --> 164921.45999671375828686207509 
+ 3 --> 165856.03001374228823718604719 
+ 4 --> 172464.46999280256045083536240 
+ 5 --> 180034.74999339236156997489097*//*   271410.47281429483088704530951  272996.37422476729812253695232  269076.85774932682344498730773  262454.72470103213356334610099  255637.80718518858822988928194  259696.02505616492665521342672  209562.99002339927674962773878  194785.14000147914927785819185  209687.32000281677861126107849  195872.21002309873980292973890  200732.02999954058896494693803  224282.76000176203691467336241  177644.4000  167353.03998985726209468668449  164921.45999671375828686207509  165856.03001374228823718604719  172464.46999280256045083536240  180034.74999339236156997489097   */
+
+
+/*MIN --> 164921.45999671375828686207509 MAX --> 272996.37422476729812253695232  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_13_1_4_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'1',
+'sDecimals':'1',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Цена и себестоимость реализации порошок медный',
+'subcaption':'',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '5',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '8',
+'linedashgap' : '6',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'0D9E0F,3BA3D0,3BA3D0',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : 'цена','anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '271410',},
+ 			{ 'value' : '272996',},
+ 			{ 'value' : '269077',},
+ 			{ 'value' : '262455',},
+ 			{ 'value' : '255638',},
+ 			{ 'value' : '259696',},
+ ]}, 
+{ 'seriesname' : 'полная СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '209563',},
+ 			{ 'value' : '194785',},
+ 			{ 'value' : '209687',},
+ 			{ 'value' : '195872',},
+ 			{ 'value' : '200732',},
+ 			{ 'value' : '224283',},
+ ]}, 
+{ 'seriesname' : 'цеховая СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD','dashed' : '1', 'data' : [ 			{ 'value' : '177644',},
+ 			{ 'value' : '167353',},
+ 			{ 'value' : '164921',},
+ 			{ 'value' : '165856',},
+ 			{ 'value' : '172464',},
+ 			{ 'value' : '180035',},
+ ]}, 
+], 
+ 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, '160000,280000',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_13_1_4_graph_div');
+	</script></div></div></div><footer class='print-only'><div class='slides'>Лист: %лист% | Листов: %листов%</div><div class='object'>ОАО "Уралэлектромедь"</div></footer></article><article class='' id='s6'><div class='print-only'><h1>ПРОДАЖИ</h1><div class='copyrights'>Сделано в АССОИ</div></div><header><h3>Динамика цен и себестоимость  </h3></header><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_13_2_1_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_13_2_1_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_13_2_1_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 6  3  
+ 0 --> 1644195.9513870300869634548468 
+ 1 --> 1562409.9997871593218895995403 
+ 2 --> 1584614.7771245251388185234994 
+ 3 --> 1441818.2024625739943037319813 
+ 4 --> 1468901.8393132105718323525069 
+ 5 --> 1379525.4835191091073413461039 
+ 0 --> 1609524.0899305773074929808475 
+ 1 --> 1653703.4203496972341353879553 
+ 2 --> 1791715.0900237493709193918411 
+ 3 --> 1615703.3099347053025393592515 
+ 4 --> 1626725.4500200383893353582653 
+ 5 --> 1771415.6201240351952463563363 
+ 0 --> 1454483.3099361584591465394012 
+ 1 --> 1527077.3702470016069471197335 
+ 2 --> 1561465.1500283612260802092503 
+ 3 --> 1487497.0699072586574016086784 
+ 4 --> 1487497.0701765487565652091375 
+ 5 --> 1577497.1300499672771469827452*//*   1644195.9513870300869634548468  1562409.9997871593218895995403  1584614.7771245251388185234994  1441818.2024625739943037319813  1468901.8393132105718323525069  1379525.4835191091073413461039  1609524.0899305773074929808475  1653703.4203496972341353879553  1791715.0900237493709193918411  1615703.3099347053025393592515  1626725.4500200383893353582653  1771415.6201240351952463563363  1454483.3099361584591465394012  1527077.3702470016069471197335  1561465.1500283612260802092503  1487497.0699072586574016086784  1487497.0701765487565652091375  1577497.1300499672771469827452   */
+
+
+/*MIN --> 1379525.4835191091073413461039 MAX --> 1791715.0900237493709193918411  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_13_2_1_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'1',
+'sDecimals':'1',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Цена и себестоимость реализации золото в слитках',
+'subcaption':'',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '5',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '8',
+'linedashgap' : '6',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'0D9E0F,3BA3D0,3BA3D0',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : 'цена','anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '1644196',},
+ 			{ 'value' : '1562410',},
+ 			{ 'value' : '1584615',},
+ 			{ 'value' : '1441818',},
+ 			{ 'value' : '1468902',},
+ 			{ 'value' : '1379525',},
+ ]}, 
+{ 'seriesname' : 'полная СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '1609524',},
+ 			{ 'value' : '1653703',},
+ 			{ 'value' : '1791715',},
+ 			{ 'value' : '1615703',},
+ 			{ 'value' : '1626725',},
+ 			{ 'value' : '1771416',},
+ ]}, 
+{ 'seriesname' : 'цеховая СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD','dashed' : '1', 'data' : [ 			{ 'value' : '1454483',},
+ 			{ 'value' : '1527077',},
+ 			{ 'value' : '1561465',},
+ 			{ 'value' : '1487497',},
+ 			{ 'value' : '1487497',},
+ 			{ 'value' : '1577497',},
+ ]}, 
+], 
+ 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, '1350000,1800000',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_13_2_1_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_13_2_2_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_13_2_2_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_13_2_2_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 6  3  
+ 0 --> 30999.128720786288098139843181 
+ 1 --> 30055.044592823979337324197713 
+ 2 --> 28452.436965513154168509175936 
+ 3 --> 27307.189026599815429441652272 
+ 4 --> 23467.199392374224836404871095 
+ 5 --> 22775.391342660428042704118424 
+ 0 --> 32190.819999401779030154005216 
+ 1 --> 32039.039999896511984963191415 
+ 2 --> 34366.809999584288238462584800 
+ 3 --> 33043.400000201130285159166127 
+ 4 --> 31679.790001255820115583240828 
+ 5 --> 32387.589999910183107115749491 
+ 0 --> 29092.739999480789346926117735 
+ 1 --> 29430.799999547239934213962441 
+ 2 --> 30101.769999481104412209861219 
+ 3 --> 30356.639997908245034344672277 
+ 4 --> 29484.020000992974044879771818 
+ 5 --> 29094.790000107042050423695813*//*   30999.128720786288098139843181  30055.044592823979337324197713  28452.436965513154168509175936  27307.189026599815429441652272  23467.199392374224836404871095  22775.391342660428042704118424  32190.819999401779030154005216  32039.039999896511984963191415  34366.809999584288238462584800  33043.400000201130285159166127  31679.790001255820115583240828  32387.589999910183107115749491  29092.739999480789346926117735  29430.799999547239934213962441  30101.769999481104412209861219  30356.639997908245034344672277  29484.020000992974044879771818  29094.790000107042050423695813   */
+
+
+/*MIN --> 22775.391342660428042704118424 MAX --> 34366.809999584288238462584800  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_13_2_2_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'1',
+'sDecimals':'1',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Цена и себестоимость реализации серебро в слитках',
+'subcaption':'',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '5',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '8',
+'linedashgap' : '6',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'0D9E0F,3BA3D0,3BA3D0',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : 'цена','anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '30999',},
+ 			{ 'value' : '30055',},
+ 			{ 'value' : '28452',},
+ 			{ 'value' : '27307',},
+ 			{ 'value' : '23467',},
+ 			{ 'value' : '22775',},
+ ]}, 
+{ 'seriesname' : 'полная СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '32191',},
+ 			{ 'value' : '32039',},
+ 			{ 'value' : '34367',},
+ 			{ 'value' : '33043',},
+ 			{ 'value' : '31680',},
+ 			{ 'value' : '32388',},
+ ]}, 
+{ 'seriesname' : 'цеховая СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD','dashed' : '1', 'data' : [ 			{ 'value' : '29093',},
+ 			{ 'value' : '29431',},
+ 			{ 'value' : '30102',},
+ 			{ 'value' : '30357',},
+ 			{ 'value' : '29484',},
+ 			{ 'value' : '29095',},
+ ]}, 
+], 
+ 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, '22000,35000',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_13_2_2_graph_div');
+	</script></div></div><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_13_2_3_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_13_2_3_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_13_2_3_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 6  3  
+ 0 --> 195934.84506322017741431519051 
+ 1 --> 202614.11315328704655756647035 
+ 2 --> 196810.22322205526852271007179 
+ 3 --> 176221.04853126116113646738239 
+ 4 --> 183701.52635718304585684881820 
+ 5 --> 160751.48085049688855565343166 
+ 0 --> 109687.64001561099868704036984 
+ 1 --> 110017.15999166687696347869228 
+ 2 --> 116153.52000740547102786568232 
+ 3 --> 95975.01001964011912638485119 
+ 4 --> 102519.20004110440620920718350 
+ 5 --> 93381.51001489874311491213710 
+ 0 --> 91211.80999643869129647120759 
+ 1 --> 93596.23000010201632583370158 
+ 2 --> 87624.08001309181485283397411 
+ 3 --> 80406.97001441389340588163898 
+ 4 --> 86007.05001612635738653301630 
+ 5 --> 71029.600013512099352671226292*//*   195934.84506322017741431519051  202614.11315328704655756647035  196810.22322205526852271007179  176221.04853126116113646738239  183701.52635718304585684881820  160751.48085049688855565343166  109687.64001561099868704036984  110017.15999166687696347869228  116153.52000740547102786568232  95975.01001964011912638485119  102519.20004110440620920718350  93381.51001489874311491213710  91211.80999643869129647120759  93596.23000010201632583370158  87624.08001309181485283397411  80406.97001441389340588163898  86007.05001612635738653301630  71029.600013512099352671226292   */
+
+
+/*MIN --> 71029.600013512099352671226292 MAX --> 202614.11315328704655756647035  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_13_2_3_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'1',
+'sDecimals':'1',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Цена и себестоимость реализации золото в слитках (услуга)',
+'subcaption':'',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '5',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '8',
+'linedashgap' : '6',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'0D9E0F,3BA3D0,3BA3D0',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : 'цена','anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '195935',},
+ 			{ 'value' : '202614',},
+ 			{ 'value' : '196810',},
+ 			{ 'value' : '176221',},
+ 			{ 'value' : '183702',},
+ 			{ 'value' : '160751',},
+ ]}, 
+{ 'seriesname' : 'полная СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '109688',},
+ 			{ 'value' : '110017',},
+ 			{ 'value' : '116154',},
+ 			{ 'value' : '95975',},
+ 			{ 'value' : '102519',},
+ 			{ 'value' : '93382',},
+ ]}, 
+{ 'seriesname' : 'цеховая СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD','dashed' : '1', 'data' : [ 			{ 'value' : '91212',},
+ 			{ 'value' : '93596',},
+ 			{ 'value' : '87624',},
+ 			{ 'value' : '80407',},
+ 			{ 'value' : '86007',},
+ 			{ 'value' : '71030',},
+ ]}, 
+], 
+ 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, '75000,200000',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_13_2_3_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_13_2_4_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_13_2_4_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_13_2_4_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 6  3  
+ 0 --> 5385.1648872684012814102624157 
+ 1 --> 5696.0323981944637535128647655 
+ 2 --> 5303.2625517545557770958223438 
+ 3 --> 4539.6784175674366227698434973 
+ 4 --> 4598.4507249593827322509023446 
+ 5 --> 4218.6800057167002674847282125 
+ 0 --> 2766.4600004729295156777809454 
+ 1 --> 3313.7700005097791626262502736 
+ 2 --> 2998.2900005082149631491600407 
+ 3 --> 2303.0200008340207787619242571 
+ 4 --> 2474.3600007145914880602105117 
+ 5 --> 2509.0500015379818529725341678 
+ 0 --> 2258.6600001933766510123608458 
+ 1 --> 2852.1300007065522071847357170 
+ 2 --> 2229.5300001307213843171256115 
+ 3 --> 1901.9700000113000699852401342 
+ 4 --> 2061.0200009451273384967891465 
+ 5 --> 1922.4600014566870489082159528*//*   5385.1648872684012814102624157  5696.0323981944637535128647655  5303.2625517545557770958223438  4539.6784175674366227698434973  4598.4507249593827322509023446  4218.6800057167002674847282125  2766.4600004729295156777809454  3313.7700005097791626262502736  2998.2900005082149631491600407  2303.0200008340207787619242571  2474.3600007145914880602105117  2509.0500015379818529725341678  2258.6600001933766510123608458  2852.1300007065522071847357170  2229.5300001307213843171256115  1901.9700000113000699852401342  2061.0200009451273384967891465  1922.4600014566870489082159528   */
+
+
+/*MIN --> 1901.9700000113000699852401342 MAX --> 5696.0323981944637535128647655  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSLine.swf', 'PRD_DIV_MET_SLOT_13_2_4_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'1',
+'sDecimals':'1',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Цена и себестоимость реализации серебро в слитках (услуга)',
+'subcaption':'',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '5',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '8',
+'linedashgap' : '6',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'0D9E0F,3BA3D0,3BA3D0',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30',
+'numVDivLines': '0',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : 'цена','anchorsides' : '3','anchorradius' : '8','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '5385',},
+ 			{ 'value' : '5696',},
+ 			{ 'value' : '5303',},
+ 			{ 'value' : '4540',},
+ 			{ 'value' : '4598',},
+ 			{ 'value' : '4219',},
+ ]}, 
+{ 'seriesname' : 'полная СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD', 'data' : [ 			{ 'value' : '2766',},
+ 			{ 'value' : '3314',},
+ 			{ 'value' : '2998',},
+ 			{ 'value' : '2303',},
+ 			{ 'value' : '2474',},
+ 			{ 'value' : '2509',},
+ ]}, 
+{ 'seriesname' : 'цеховая СС','anchorsides' : '5','anchorradius' : '5','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD','dashed' : '1', 'data' : [ 			{ 'value' : '2259',},
+ 			{ 'value' : '2852',},
+ 			{ 'value' : '2230',},
+ 			{ 'value' : '1902',},
+ 			{ 'value' : '2061',},
+ 			{ 'value' : '1922',},
+ ]}, 
+], 
+ 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, '1800,5800',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_13_2_4_graph_div');
+	</script></div></div><footer class='print-only'><div class='slides'>Лист: %лист% | Листов: %листов%</div><div class='object'>ОАО "Уралэлектромедь"</div></footer></article></section><section id='b8'><header><h1>Энергетика</h1></header><article class='' id='s7'><div class='print-only'><h1>Энергетика</h1><div class='copyrights'>Сделано в АССОИ</div></div><header><h3>Цены и потребление энергоресурсов</h3></header><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_16_2_1_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_16_2_1_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_16_2_1_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');
+		var myChart = new FusionCharts( 'FusionCharts/MSCombiDY2D.swf', 'PRD_DIV_MET_SLOT_16_2_1_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','pyaxisname':'Объем потребления, тыс.м3',
+'syaxisname':'Цена, руб.',
+'plotSpacePercent':'12',
+'showZeroPlane':'0',
+
+'caption':'Динамика объемов потребления и цен газа природного',
+'subcaption':'',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '3',
+'anchorradius' : '6',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '0',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'BFBFBB,5CD390',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30','numVDivLines': '0','setAdaptiveYMin': '1',
+},
+/* --3-- */'categories' : [{'category': [{ 'label' : 'ТПФП мес.2013'},{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : '','color' : '', 'anchorsides' : '3','anchorradius' : '6','anchorbgcolor' : '053666','anchorbordercolor' : '053666',renderAs: 'COLUMN','data' : [ 			{ 'value' : '12762',},
+ 			{ 'value' : '16695',},
+ 			{ 'value' : '13330',},
+ 			{ 'value' : '14714',},
+ 			{ 'value' : '10642',},
+ 			{ 'value' : '8255',},
+ 			{ 'value' : '6866',},
+ ]}, 
+{ 'seriesname' : '','color' : '', 'anchorsides' : '3','anchorradius' : '6','anchorbgcolor' : '053666','anchorbordercolor' : '053666',renderAs: 'LINE',
+'parentyaxis':'S','data' : [ 			{ 'value' : '3432',},
+ 			{ 'value' : '3128',},
+ 			{ 'value' : '3188',},
+ 			{ 'value' : '3255',},
+ 			{ 'value' : '3096',},
+ 			{ 'value' : '3092',},
+ 			{ 'value' : '2749',},
+ ]}, 
+], 
+
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+		 };
+	myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_16_2_1_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_16_2_2_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_16_2_2_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_16_2_2_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');
+		var myChart = new FusionCharts( 'FusionCharts/MSCombiDY2D.swf', 'PRD_DIV_MET_SLOT_16_2_2_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'0',
+'sDecimals':'0',
+'sDecimals':'2',
+'connectNullData': '1','pyaxisname':'Объем потребления, тыс.квт',
+'syaxisname':'Цена, руб.',
+'plotSpacePercent':'12',
+'showZeroPlane':'0',
+
+'caption':'Динамика объемов потребления и цен электроэнергии',
+'subcaption':'',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'10,10,10',
+'sNumberScaleValue':'10,10,10',
+'showPercentageValues':'1',
+'anchorsides' : '3',
+'anchorradius' : '6',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '0',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'BFBFBB,5CD390',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30','numVDivLines': '0','setAdaptiveYMin': '1',
+},
+/* --3-- */'categories' : [{'category': [{ 'label' : 'ТПФП мес.2013'},{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : '','color' : '', 'anchorsides' : '3','anchorradius' : '6','anchorbgcolor' : '053666','anchorbordercolor' : '053666',renderAs: 'COLUMN','data' : [ 			{ 'value' : '34131510.08',},
+ 			{ 'value' : '38034651.00',},
+ 			{ 'value' : '34136162.00',},
+ 			{ 'value' : '36934817.00',},
+ 			{ 'value' : '34464809.00',},
+ 			{ 'value' : '34284122.00',},
+ 			{ 'value' : '33342782.00',},
+ ]}, 
+{ 'seriesname' : '','color' : '', 'anchorsides' : '3','anchorradius' : '6','anchorbgcolor' : '053666','anchorbordercolor' : '053666',renderAs: 'LINE',
+'parentyaxis':'S','data' : [ 			{ 'value' : '2.30',},
+ 			{ 'value' : '1.99',},
+ 			{ 'value' : '2.19',},
+ 			{ 'value' : '2.13',},
+ 			{ 'value' : '2.05',},
+ 			{ 'value' : '2.11',},
+ 			{ 'value' : '2.19',},
+ ]}, 
+], 
+
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+		 };
+	myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_16_2_2_graph_div');
+	</script></div></div><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 325px;'><!-- -200-  -65-  -65-  -65-  -65-  -65-  -65- --><div class='tablediv' id='PRD_DIV_MET_SLOT_16_2_4_table_div'><h2 class='graphlike'>Влияние цен и потребеления энергоресуросов на себестоимость</h2><h3 class='subcaption'>тыс.руб.</h3><table class='data  obj_352' style='font-size:110%;'><thead><tr><th class='col_object' style='width: 200px;'>Наименование</th><th class='ENSUMMA col_data' style='width: 65px;'>План I пг. 2013</th><th class='ENSUMMA col_data' style='width: 65px;'>Факт I пг 2013</th><th class='ENOTKLP col_data' style='width: 65px;'>Откл-е всего</th><th class='ENOTKLP_KOL col_data' style='width: 65px;'>за счет кол-ва</th><th class='ENOTKLP_CENA col_data' style='width: 65px;'>за счет цен </th><th class='UDVESPERED col_data' style='width: 65px;'>Доля затратах (без сырья) I пг 2013, %</th></tr></thead><tbody><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m260171_16_2_4'>Газ природный</td><td class='value ENSUMMA'>249 553</td><td class='value ENSUMMA'>219 960</td><td class='value ENOTKLP'>-29 593</td><td class='value ENOTKLP_KOL'>-22 742</td><td class='value ENOTKLP_CENA'>-6 851</td><td class='value UDVESPERED'>3</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m260181_16_2_4'>Электроэнергия</td><td class='value ENSUMMA'>446 303</td><td class='value ENSUMMA'>445 328</td><td class='value ENOTKLP'>-975</td><td class='value ENOTKLP_KOL'>17 458</td><td class='value ENOTKLP_CENA'>-18 433</td><td class='value UDVESPERED'>6</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m260172_16_2_4'>Мазут</td><td class='value ENSUMMA'>12 814</td><td class='value ENSUMMA'>11 767</td><td class='value ENOTKLP'>-1 047</td><td class='value ENOTKLP_KOL'>0</td><td class='value ENOTKLP_CENA'>0</td><td class='value UDVESPERED'>0</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m260173_16_2_4'>Кокс</td><td class='value ENSUMMA'>218 247</td><td class='value ENSUMMA'>207 411</td><td class='value ENOTKLP'>-10 836</td><td class='value ENOTKLP_KOL'>-3 287</td><td class='value ENOTKLP_CENA'>-7 549</td><td class='value UDVESPERED'>3</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m260174_16_2_4'>Коксовая мелочь</td><td class='value ENSUMMA'>0</td><td class='value ENSUMMA'>0</td><td class='value ENOTKLP'>0</td><td class='value ENOTKLP_KOL'>0</td><td class='value ENOTKLP_CENA'>0</td><td class='value UDVESPERED'>0</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_m260175_16_2_4'>Каменный уголь</td><td class='value ENSUMMA'>4 064</td><td class='value ENSUMMA'>3 745</td><td class='value ENOTKLP'>-319</td><td class='value ENOTKLP_KOL'>0</td><td class='value ENOTKLP_CENA'>0</td><td class='value UDVESPERED'>0</td></tr><tr class='level1 title_False' style='height: 23px;'><td class='name col_object' title='PRD_DIV_MET_REF_r175180_16_2_4'>Топливо дизельное</td><td class='value ENSUMMA'>0</td><td class='value ENSUMMA'>0</td><td class='value ENOTKLP'>0</td><td class='value ENOTKLP_KOL'>0</td><td class='value ENOTKLP_CENA'>0</td><td class='value UDVESPERED'>0</td></tr></tbody></table></div></div><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_16_2_6_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_16_2_6_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_16_2_6_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');
+		var myChart = new FusionCharts( 'FusionCharts/MSCombiDY2D.swf', 'PRD_DIV_MET_SLOT_16_2_6_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'12',
+'showZeroPlane':'0',
+
+'caption':'Динамика объемов потребления и цен кокс',
+'subcaption':'тн',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'1,1,1',
+'sNumberScaleValue':'1,1,1',
+'showPercentageValues':'1',
+'anchorsides' : '3',
+'anchorradius' : '6',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '0',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'BFBFBB,5CD390',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','canvasPadding':'30','numVDivLines': '0','setAdaptiveYMin': '1',
+},
+/* --3-- */'categories' : [{'category': [{ 'label' : 'ТПФП мес.2013'},{ 'label' : 'янв.'},{ 'label' : 'фев.'},{ 'label' : 'март'},{ 'label' : 'апр.'},{ 'label' : 'май'},{ 'label' : 'июнь'},]}],'dataset' : [ 
+{ 'seriesname' : '','color' : '', 'anchorsides' : '3','anchorradius' : '6','anchorbgcolor' : '053666','anchorbordercolor' : '053666',renderAs: 'COLUMN','data' : [ 			{ 'value' : '4135',},
+ 			{ 'value' : '3975',},
+ 			{ 'value' : '3616',},
+ 			{ 'value' : '4008',},
+ 			{ 'value' : '3895',},
+ 			{ 'value' : '4020',},
+ 			{ 'value' : '3897',},
+ ]}, 
+{ 'seriesname' : '','color' : '', 'anchorsides' : '3','anchorradius' : '6','anchorbgcolor' : '053666','anchorbordercolor' : '053666',renderAs: 'LINE',
+'parentyaxis':'S','data' : [ 			{ 'value' : '10584',},
+ 			{ 'value' : '10303',},
+ 			{ 'value' : '10291',},
+ 			{ 'value' : '9002',},
+ 			{ 'value' : '8380',},
+ 			{ 'value' : '7833',},
+ 			{ 'value' : '7452',},
+ ]}, 
+], 
+
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+		 };
+	myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_16_2_6_graph_div');
+	</script></div></div><footer class='print-only'><div class='slides'>Лист: %лист% | Листов: %листов%</div><div class='object'>ОАО "Уралэлектромедь"</div></footer></article></section><section id='b9'><header><h1>Ремонтный фонд</h1></header><article class='' id='s8'><div class='print-only'><h1>Ремонтный фонд</h1><div class='copyrights'>Сделано в АССОИ</div></div><header><h3>Ремонтный фонд</h3></header><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 672px;'><div id='PRD_DIV_MET_SLOT_19_1_2_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_19_1_2_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_19_1_2_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');
+		var myChart = new FusionCharts( 'FusionCharts/StackedBar2D.swf',   'PRD_DIV_MET_SLOT_19_1_2_chart', chartwidth,  chartheight, '0', '1' );
+		var config = {
+		 'chart':{
+  	'showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+'showVZeroPlane': '0',
+'zeroPlaneThickness': '0',
+'showZeroPlane': '0',
+'showZeroPlaneValue': '0',
+'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Изменение структуры основных средств',
+'subcaption':'млн.руб.',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'10,10,10',
+'sNumberScaleValue':'10,10,10',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4',
+	}, 
+	'categories' : [{
+		'category': [
+		{ 'label' : '2012'},
+		{ 'label' : 'I кв 2013'},
+		{ 'label' : 'I пг 2013'},
+		]
+	}],
+	'dataset' : [/* -2- 3 7  
+ 0 --> 326082.00000 
+ 1 --> 334625.00000 
+ 2 --> 336106.00000 
+ 0 --> 4834073.00000 
+ 1 --> 5251686.00000 
+ 2 --> 5372873.00000 
+ 0 --> 1610713.00000 
+ 1 --> 1752756.00000 
+ 2 --> 1718681.00000 
+ 0 --> 780437.00000 
+ 1 --> 720972.00000 
+ 2 --> 717774.00000 
+ 0 --> 3968235.00000 
+ 1 --> 3887752.00000 
+ 2 --> 3845518.00000 
+ 0 --> 1075717.00000 
+ 1 --> 954826.00000 
+ 2 --> 953962.00000 
+ 0 --> 506129.00000 
+ 1 --> 516676.00000 
+ 2 --> 576475.00000*//*   13101386.00000  13419293.00000  13521389.00000   */
+
+{ 
+				'seriesname' : 'Земля и объекты природоп.',
+				'color' : '90E7E8',
+				'data' : [
+				{ 'value' : '326082','showValue': '0' /* 100 * |326082.00000| / 13521389.00000 < 3 */},
+{ 'value' : '334625','showValue': '0' /* 100 * |334625.00000| / 13521389.00000 < 3 */},
+{ 'value' : '336106','showValue': '0' /* 100 * |336106.00000| / 13521389.00000 < 3 */},
+]
+			},
+			{ 
+				'seriesname' : 'Здания',
+				'color' : '6CB87A',
+				'data' : [
+				{ 'value' : '4834073'},
+{ 'value' : '5251686'},
+{ 'value' : '5372873'},
+]
+			},
+			{ 
+				'seriesname' : 'Сооружения',
+				'color' : 'DDF88E',
+				'data' : [
+				{ 'value' : '1610713'},
+{ 'value' : '1752756'},
+{ 'value' : '1718681'},
+]
+			},
+			{ 
+				'seriesname' : 'Передаточные устройства',
+				'color' : 'E3483B',
+				'data' : [
+				{ 'value' : '780437'},
+{ 'value' : '720972'},
+{ 'value' : '717774'},
+]
+			},
+			{ 
+				'seriesname' : 'Машины и оборудование',
+				'color' : '86ECE8',
+				'data' : [
+				{ 'value' : '3968235'},
+{ 'value' : '3887752'},
+{ 'value' : '3845518'},
+]
+			},
+			{ 
+				'seriesname' : 'Транспортные средства',
+				'color' : 'A096EF',
+				'data' : [
+				{ 'value' : '1075717'},
+{ 'value' : '954826'},
+{ 'value' : '953962'},
+]
+			},
+			{ 
+				'seriesname' : 'Прочие осн.средства',
+				'color' : 'FA978F',
+				'data' : [
+				{ 'value' : '506129'},
+{ 'value' : '516676'},
+{ 'value' : '576475'},
+]
+			},
+			],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	};
+	/* Суперкод для удаления нулевых серий */
+	config.dataset.each(function(dataset, i) { 
+		var sum = 0;
+		dataset.data.each(function(data,j) {
+			sum+= parseFloat(data.value || '0,0');
+		});
+		if (sum == 0) delete config.dataset[i]; 
+	});
+	myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_19_1_2_graph_div');
+	</script></div><div class='slide-box vertical default'><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_19_1_3_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_19_1_3_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_19_1_3_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 5  2  
+ 0 --> 359567.00000 
+ 1 --> 459386.00000 
+ 2 --> 192571.00000 
+ 3 --> 105145.00000 
+ 4 --> 38828.00000 
+ 0 --> 560585.00000 
+ 1 --> 432751.00000 
+ 2 --> 216790.00000 
+ 3 --> 238688.00000 
+ 4 --> 103771.00000*//*   359567.00000  459386.00000  192571.00000  105145.00000  38828.00000  560585.00000  432751.00000  216790.00000  238688.00000  103771.00000   */
+
+
+/*MIN --> 0 MAX --> 560585.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/StackedArea2D.swf', 'PRD_DIV_MET_SLOT_19_1_3_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Ремонтный фонд по структуре выполнения',
+'subcaption':'млн.руб.',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'10,10,10',
+'sNumberScaleValue':'10,10,10',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+'canvasPadding':'30',
+'plotBorderThickness': '1',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'Факт 2012'},{ 'label' : 'ТПФП 2013'},{ 'label' : 'План I пг.'},{ 'label' : 'Факт I пг'},{ 'label' : 'Факт I кв'},]}],'dataset' : [ 
+{ 'seriesname' : 'Услуги стронних организаций','color' : '66CCCC', 'anchorbgcolor' : '66CCCC','anchorbordercolor' : '66CCCC','data' : [ 			{ 'value' : '359567',},
+ 			{ 'value' : '459386',},
+ 			{ 'value' : '192571',},
+ 			{ 'value' : '105145',},
+ 			{ 'value' : '38828',},
+ ]}, 
+{ 'seriesname' : 'Хоз.способ','color' : 'F3F084', 'anchorbgcolor' : 'F3F084','anchorbordercolor' : 'F3F084','data' : [ 			{ 'value' : '560585',},
+ 			{ 'value' : '432751',},
+ 			{ 'value' : '216790',},
+ 			{ 'value' : '238688',},
+ 			{ 'value' : '103771',},
+ ]}, 
+], 
+
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, 'auto',false);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_19_1_3_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_19_1_4_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_19_1_4_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_19_1_4_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 5  2  
+ 0 --> 920152.00000 
+ 1 --> 892137.00000 
+ 2 --> 409361.00000 
+ 3 --> 343833.00000 
+ 4 --> 142599.00000 
+ 0 --> 930593.00000 
+ 1 --> 1111380.00000 
+ 2 --> 583588.00000 
+ 3 --> 603936.00000 
+ 4 --> 297257.00000*//*   920152.00000  892137.00000  409361.00000  343833.00000  142599.00000  930593.00000  1111380.00000  583588.00000  603936.00000  297257.00000   */
+
+
+/*MIN --> 0 MAX --> 920152.00000  SMIN --> 0 SMAX --> 1111380.00000 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSCombiDY2D.swf', 'PRD_DIV_MET_SLOT_19_1_4_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','pyaxisname':'Ремонтный фонд',
+'syaxisname':'Амортизация ОС',
+'plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Ремонтный фонд и амортизация',
+'subcaption':'млн.руб.',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'10,10,10',
+'sNumberScaleValue':'10,10,10',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '0',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'Факт 2012'},{ 'label' : 'ТПФП 2013'},{ 'label' : 'План I пг.'},{ 'label' : 'Факт I пг'},{ 'label' : 'Факт I кв'},]}],'dataset' : [ 
+{ 'seriesname' : 'Ремонтный фонд','color' : '66CCCC', 'anchorbgcolor' : '66CCCC','anchorbordercolor' : '66CCCC','data' : [ 			{ 'value' : '920152',},
+ 			{ 'value' : '892137',},
+ 			{ 'value' : '409361',},
+ 			{ 'value' : '343833',},
+ 			{ 'value' : '142599',},
+ ]}, 
+{ 'seriesname' : 'Амортизация ОС','color' : 'E3483B', 'anchorsides' : '5','anchorradius' : '6','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD','parentyaxis':'S','data' : [ 			{ 'value' : '930593',},
+ 			{ 'value' : '1111380',},
+ 			{ 'value' : '583588',},
+ 			{ 'value' : '603936',},
+ 			{ 'value' : '297257',},
+ ]}, 
+], 
+ 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, 'auto',true);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_19_1_4_graph_div');
+	</script></div></div></div><footer class='print-only'><div class='slides'>Лист: %лист% | Листов: %листов%</div><div class='object'>ОАО "Уралэлектромедь"</div></footer></article></section><section id='b10'><header><h1>Инвестиции</h1></header><article class='' id='s9'><div class='print-only'><h1>Инвестиции</h1><div class='copyrights'>Сделано в АССОИ</div></div><header><h3>Инвестиции</h3></header><div class='slide-box horisontal default'><div class='slot' style='width:623px; height: 672px;'><div id='PRD_DIV_MET_SLOT_20_2_1_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_20_2_1_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_20_2_1_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -2- 5  4  
+ 0 --> 1478003.00000 
+ 1 --> 942411.00000 
+ 2 --> 98661.00000 
+ 3 --> 245022.00000 
+ 4 --> 76531.00000 
+ 0 --> 376178.00000 
+ 1 --> 450002.00000 
+ 2 --> 180000.00000 
+ 3 --> 70470.00000 
+ 4 --> 14585.00000 
+ 0 --> 968297.00000 
+ 1 --> 862632.00000 
+ 2 --> 422456.00000 
+ 3 --> 1360467.00000 
+ 4 --> 987609.00000 
+ 0 --> 998957.00000 
+ 1 --> 15340.00000 
+ 2 --> 381330.00000 
+ 3 --> 542104.00000 
+ 4 --> 177901.00000*//*   1478003.00000  942411.00000  98661.00000  245022.00000  76531.00000  376178.00000  450002.00000  180000.00000  70470.00000  14585.00000  968297.00000  862632.00000  422456.00000  1360467.00000  987609.00000  998957.00000  15340.00000  381330.00000  542104.00000  177901.00000   */
+
+
+/*MIN --> 14585.00000 MAX --> 1478003.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSStackedColumn2D.swf',   'PRD_DIV_MET_SLOT_20_2_1_chart', chartwidth,  chartheight, '0', '1' );
+		myChart.setJSONData({
+		 'chart':{
+  'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Cтруктура инвестиций ',
+'subcaption':'млн.руб',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'10,10,10',
+'sNumberScaleValue':'10,10,10',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '1',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+	}, 'categories' : [{'category': [{ 'label' : 'Факт 2012'},{ 'label' : 'ТПФП 2013'},{ 'label' : 'План I пг.'},{ 'label' : 'Факт I пг'},{ 'label' : 'Факт I кв'},]}],/* --2-- */'dataset' : [
+{'dataset' : [
+		{ 'seriesname' : 'КС пром.характера','color' : '90E7E8','data' : [
+			{ 'value' : '1478003' /* 100 */},
+			{ 'value' : '942411' /* 63.762455150632305888418359097 */},
+			{ 'value' : '98661' /* 6.6752909161889387233990729383 */},
+			{ 'value' : '245022' /* 16.577909517098409137193902854 */},
+			{ 'value' : '76531' /* 5.1780003152902937274146263573 */},
+]},		{ 'seriesname' : 'Приобретение оборудования','color' : 'BFBFBB','data' : [
+			{ 'value' : '376178' /* 25.451775131714888264773481515 */},
+			{ 'value' : '450002' /* 30.446622909425758946362084515 */},
+			{ 'value' : '180000' /* 12.178595036681251661870781047 */},
+			{ 'value' : '70470' /* 4.76791995686071002562241078 */},
+			{ 'value' : '14585','showValue': '0' },
+]},		{ 'seriesname' : 'Прочие инвестиции','color' : 'D9987E','data' : [
+			{ 'value' : '968297' /* 65.513872434629699669080509309 */},
+			{ 'value' : '862632' /* 58.36469885379123046434953109 */},
+			{ 'value' : '422456' /* 28.582891915645638067040459322 */},
+			{ 'value' : '1360467' /* 92.04764807649240224816864377 */},
+			{ 'value' : '987609' /* 66.820500364342968180714112218 */},
+]},		{ 'seriesname' : 'Авансы','color' : '6CB87A','data' : [
+			{ 'value' : '998957' /* 67.588293122544406202152499014 */},
+			{ 'value' : '15340','showValue': '0' },
+			{ 'value' : '381330' /* 25.800353585209231645673249648 */},
+			{ 'value' : '542104' /* 36.678139354250295838371099382 */},
+			{ 'value' : '177901' /* 12.03657908678128528832485455 */},
+]},]}], 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	});
+		myChart.render('PRD_DIV_MET_SLOT_20_2_1_graph_div');
+	</script></div><div class='slide-box vertical default'><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_20_2_2_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_20_2_2_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_20_2_2_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 5  2  
+ 0 --> 3821435.00000 
+ 1 --> 2270385.00000 
+ 2 --> 1082447.00000 
+ 3 --> 2218063.00000 
+ 4 --> 1256626.00000 
+ 0 --> 5849960.00000 
+ 1 --> 2514010.00000 
+ 2 --> 1445919.00000 
+ 3 --> 1620857.00000 
+ 4 --> 955733.00000*//*   3821435.00000  2270385.00000  1082447.00000  2218063.00000  1256626.00000  5849960.00000  2514010.00000  1445919.00000  1620857.00000  955733.00000   */
+
+
+/*MIN --> 0 MAX --> 3821435.00000  SMIN --> 0 SMAX --> 5849960.00000 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSCombiDY2D.swf', 'PRD_DIV_MET_SLOT_20_2_2_chart', chartwidth, chartheight, '0', '1');
+		var config = { 'chart':{
+	'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','pyaxisname':'Инвестиции',
+'syaxisname':'EBITDA',
+'plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Инвестиции и EBITDA ',
+'subcaption':'млн.руб',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'10,10,10',
+'sNumberScaleValue':'10,10,10',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '0',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+
+},
+/* --3-!!- */'categories' : [{'category': [{ 'label' : 'Факт 2012'},{ 'label' : 'ТПФП 2013'},{ 'label' : 'План I пг.'},{ 'label' : 'Факт I пг'},{ 'label' : 'Факт I кв'},]}],'dataset' : [ 
+{ 'seriesname' : 'Инвестиции','color' : '3EE5E0', 'anchorbgcolor' : '3EE5E0','anchorbordercolor' : '3EE5E0','data' : [ 			{ 'value' : '3821435',},
+ 			{ 'value' : '2270385',},
+ 			{ 'value' : '1082447',},
+ 			{ 'value' : '2218063',},
+ 			{ 'value' : '1256626',},
+ ]}, 
+{ 'seriesname' : 'EBITDA','color' : 'FF99AA', 'anchorsides' : '4','anchorradius' : '6','anchorbgcolor' : '053666','anchorbordercolor' : '669ACD','parentyaxis':'S','data' : [ 			{ 'value' : '5849960',},
+ 			{ 'value' : '2514010',},
+ 			{ 'value' : '1445919',},
+ 			{ 'value' : '1620857',},
+ 			{ 'value' : '955733',},
+ ]}, 
+], 
+ 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	
+			 };
+		mia.charts.setupMinMaxAxis(config, 'auto',true);
+		myChart.setJSONData(config);
+	
+		myChart.render('PRD_DIV_MET_SLOT_20_2_2_graph_div');
+	</script></div><div class='slot' style='width:623px; height: 325px;'><div id='PRD_DIV_MET_SLOT_20_2_3_graph_div'></div><script type='text/javascript'><!--
+		chartwidth=$('PRD_DIV_MET_SLOT_20_2_3_graph_div').up('div.slot').getStyle('width');
+		chartheight=$('PRD_DIV_MET_SLOT_20_2_3_graph_div').up('div.slot').getStyle('height');
+		graphdir='/ecot/scripts/graph/Charts/';
+	FusionCharts.setCurrentRenderer('javascript');/* -3- 3  2  
+ 0 0 PRD_DIV_MET_REF_m1111131_20_2_3 --> 13101386.00000 
+ 0 1 PRD_DIV_MET_REF_m1111131_20_2_3 --> 13419293.00000 
+ 0 2 PRD_DIV_MET_REF_m1111131_20_2_3 --> 13521389.00000 
+ 1 0 PRD_DIV_MET_REF_m1111154_20_2_3 --> 3025345.00000 
+ 1 1 PRD_DIV_MET_REF_m1111154_20_2_3 --> 2466081.00000 
+ 1 2 PRD_DIV_MET_REF_m1111154_20_2_3 --> 2590872.000006  *//*   13101386.00000  13419293.00000  13521389.00000  3025345.00000  2466081.00000  2590872.00000   */
+
+
+/*MIN --> 2466081.00000 MAX --> 13521389.00000  SMIN --> 0 SMAX --> 0 */
+
+
+		var myChart = new FusionCharts( 'FusionCharts/MSStackedColumn2D.swf',   'PRD_DIV_MET_SLOT_20_2_3_chart', chartwidth,  chartheight, '0', '1' );
+		myChart.setJSONData({
+		 'chart':{
+  'decimals':'0',
+'sDecimals':'0',
+'connectNullData': '1','plotSpacePercent':'40',
+'showZeroPlane':'0',
+
+'caption':'Динамика основных средств и незавершенного строительства',
+'subcaption':'млн.руб',
+'xaxisname':'',
+'yaxisname':'',
+'rotateValues' : '',
+'dynamicAxis':'1',
+'thousandSeparator' : ' ',
+'formatNumberScale':'1' ,
+'sFormatNumberScale':'1' ,
+'numberScaleUnit':',,',
+'canvasBgColor':'ffffff',
+'useroundedges':'0',
+'numberScaleValue':'10,10,10',
+'sNumberScaleValue':'10,10,10',
+'showPercentageValues':'1',
+'anchorsides' : '',
+'anchorradius' : '',
+'anchorbgcolor' : '',
+'anchorborderthickness':'1',
+'anchorbordercolor':'CCCCCC',
+'linedashed' : '',
+'linedashlen' : '',
+'linedashgap' : '',
+'showsum' : '0',
+
+'canvasPadding': 20,
+
+'plotGradientColor': "",
+
+
+'divLineColor': "999999",
+'showAlternateGridColor': 0,
+
+'showBorder': '0',
+'bgColor': "FFFFFF",
+'showAlternateHGridColor': '0',
+'canvasBorderColor': "999999",
+'canvasBorderThickness': '1',
+
+'legendBgColor': "FFFFFF",
+'legendShadow': '0',
+'legendBorderColor': "cccccc",
+'legendPadding': '10',
+'labelPadding': '10',
+
+'placeValuesInside': '1',
+'baseFont': "",
+'showPlotBorder': '0',
+'showvalues': '1',
+'chartTopMargin': '5',
+'chartRightMargin': '5',
+'chartBottomMargin':'5',
+'chartLeftMargin':'5',
+'paletteColors':'',
+'setAdaptiveYMin':'1',
+'adjustDiv':'1',
+'legendPosition':'BOTTOM',
+'showlegend' : '1','lineThickness': '4','showAlternateHGridColor':'0',
+'showAlternateVGridColor':'0',
+'divLineColor': 'FFFFFF',
+	}, 'categories' : [{'category': [{ 'label' : '2012'},{ 'label' : 'I кв 2013'},{ 'label' : 'I пг 2013'},]}],/* --3-- */'dataset' : [
+		{'dataset' : [
+		{  'seriesname' : 'Основные средства', 'color' : 'BFBFBB','data' : [
+			{ 'value' : '13101386'},
+			{ 'value' : '13419293'},
+			{ 'value' : '13521389'},
+]},]},		{'dataset' : [
+		{  'seriesname' : 'Незавершенное строительство с авансами', 'color' : '3EE5E0','data' : [
+			{ 'value' : '3025345'},
+			{ 'value' : '2466081'},
+			{ 'value' : '2590872'},
+]},]},], 'trendlines' : [  ],
+	'styles': {
+		'definition': [{
+		        "name": "captionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "18",
+		        "color": "333333"
+		    },{
+		        "name": "legendStyle",
+		        "type": "font",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "size": "12",
+		        "color": "666666"
+		    },{
+		        "name": "subCaptionStyle",
+		        "type": "font",
+		        "font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'HelveticaNeue', 'Helvetica Neue', 'SegoeUI-Light', 'Segoe UI Light', 'SegoeUI', 'Segoe UI', Verdana",
+		        "size": "16",
+		        "color": "999999"
+		    },
+	
+			{
+		        "name": "valuesStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "46757F",
+		        "bgcolor": "B6E7FF",
+		        "bordercolor": "B6E7FF",
+		        "leftMargin": "10",
+		        "bold": "1"
+      		},
+		
+			{
+		        "name": "labelsStyle",
+		        "type": "font",
+		        "size": "13",
+		        "font": "SegoeUI, 'Segoe UI', HelveticaNeue, 'Helvetica Neue', 'Trebuchet MS', Verdana",
+		        "color": "666666",
+		        "bold": "0"
+      		}],
+		'application': [{
+		        "toobject": "Caption",
+		        "styles": "captionStyle"
+      		},{
+		        "toobject": "Subcaption",
+		        "styles": "subCaptionStyle"
+      		},{
+		        "toobject": "Legend",
+		        "styles": "legendStyle"
+      		},{
+		        "toobject": "DataValues",
+		        "styles": "valuesStyle"
+      		},{
+		        "toobject": "DataLabels",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "YAXISVALUES",
+		        "styles": "labelsStyle"
+      		},{
+		        "toobject": "XAxisName",
+		        "styles": "labelsStyle"
+      	}]
+	}
+	});
+		myChart.render('PRD_DIV_MET_SLOT_20_2_3_graph_div');
+	</script></div></div></div><footer class='print-only'><div class='slides'>Лист: %лист% | Листов: %листов%</div><div class='object'>ОАО "Уралэлектромедь"</div></footer></article></section><script type='text/javascript'>
+			Event.observe(window,'load',function() {
+				$$('tr.title_False').each(function(tr) {
+					isnullrow = true
+					tr.childElements().each(function(td) {
+						if (td.hasClassName('value') && isnullrow) {
+							if (td.innerHTML != '0' && td.innerHTML != '') isnullrow = false;
+						}
+					});
+					if (isnullrow) {
+						tr.hide();
+					}
+				});
+				$$('section','.slide-box','.slot','article').each(function(s){
+					if(!(s.down('div.error' ) || s.down('svg') || s.down('table') || s.down('object') || s.down('.slot-context'))){
+						var items = $$('*[href=#'+s.getAttribute('id')+']');
+						items.each(function(_s){
+							_s.remove();
+						});
+						s.remove();
+					}
+				});
+				sections = $$('section > article > footer > .slides');
+				sections.each(function(e,i) {
+					var p = i + 1; 
+					e.innerHTML = e.innerHTML.replace('%лист%', p).replace('%листов%', sections.length);
+					/*var slide = $('s' + p + '-contents');
+					if (slide != null) {
+						slide.innerHTML = 'стр. ' + p;
+					} */
+				});
+				$$('h3[href^="#s"]').each(function(e,i) { e.innerHTML = e.innerHTML + "<span>стр. " + (i + 3) + "</span>" })
+			//	$$('div.slide-box')[0].setAttribute('style', '');
+			}); 
+		</script><script type='text/javascript'>
+		Event.observe(window,'load',function(){ document.title = 'ОАО "Уралэлектромедь"'; });
+	</script></reportpart><reportpart id='part_footer'><div class='underwrite' id='report-footer' style='margin-top:30px;'></div><div class='systemdata'>Отчет сформирован в АССОИ-УГМК при поддержке ООО "Медиа Технологии"<br />Дата формирования документа : 03.10.2013 10:59 <br />исп. Л.С. Садыкова тел. (34368) 96-942</div></reportpart>
+ </body>
+ </html>
