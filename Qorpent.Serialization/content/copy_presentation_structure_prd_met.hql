@@ -31,8 +31,8 @@ report PRD_TEST, "Презентация тест"
 	
 	block 'Основные параметры бюджета', role="FIN_, DR_, MTR_, COST_" , targetgroup=top_management
 		slide 'Котировки металлов в текущем году', key='kotir_ME', pr_measure=руб.,	pr_linethikness=4,  pr_numberscalevalue="1,1,1"
-		pr_typecol=month_b1, uselines=1, colcategory=1, 
-		pr_anchorbordercolor=669ACD,  pr_anchorbgcolor=053666 
+			pr_typecol=month_b1, uselines=1, colcategory=1, 
+			pr_anchorbordercolor=669ACD,  pr_anchorbgcolor=053666 
 			slot 'Котировки МЕДИ на LMЕ',  pr_measure="$ \\за тонну CU", 
 				pr_contextstyle="font-size~9px;top~211px;padding~4px;left~15px;border~none;background-color~#e9e9e9;font-weight~bold;font-family~Arial;color~red;"
 				pr_contexttext="ТПФП"
@@ -65,7 +65,6 @@ report PRD_TEST, "Презентация тест"
 				
 				
 	block 'Показатели ФХД предприятия' role="FIN_", targetgroup=top_management
-		qxi::include template_budget.bxl : " //*[@key='Показатели ФХД предприятия'] "
 		slide 'Прибыль от продаж, чистая прибыль, EBITDA', key='Показатели ФХД предприятия',slideformat=rbigtwogorslots #noheader=1 
 			slot 'Динамика выручки от продаж продукции(товаров, работ, услуг) и прибыли от продаж', 
 				pr_measure=млн.руб., pr_numberscalevalue="10,10,10", pr_decimals = 1
