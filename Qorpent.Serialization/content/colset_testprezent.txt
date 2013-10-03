@@ -1,0 +1,108 @@
+#______________________ AHD _____________________________________________________________________________________________________________________
+		col Б1, "Факт {0}", group="AHD", year=-2, period = 4, condition="FACT and Y1" , forperiods="251,301"
+		col Б1, "Факт {0}", group="AHD", year=-1, period = 4, condition="FACT and Y1", forperiods="1,2,3,4,406,409,401"
+		col PLANGOD, "ТПФП {0}", group="AHD", period = 251, condition="USETPFP", forperiods="1,2,3,4,406,409"
+		col PLANOPER, "План {2}", group="AHD", period = 303, forperiods=1, condition="PLAN"
+		col PLANOPER, "План {2}", group="AHD", period = 306, forperiods="2,406", condition="PLAN"
+		col PLANOPER, "План {2}", group="AHD", period = 309, forperiods=3, condition="PLAN"
+
+		col Б1, "Ожид. 1 кв.", group="AHD", condition="FACT", forperiods="403"
+		col Б1, "Ожид. I пг", group="AHD", condition="FACT", forperiods="406"
+		col Б1, "Ожид. 9 мес.", group="AHD", condition="FACT", forperiods="409"
+		col Б1, "Ожид. {0} год", group="AHD", condition="FACT", forperiods="401"
+
+		col Б1, "Факт {2}", group="AHD", period = 4, condition="FACT", forperiods="4"
+		col Б1, "Факт {2}", group="AHD", period = 3, condition="FACT", forperiods="3,4,401"
+		col Б1, "Факт {2}", group="AHD", period = 2, condition="FACT", forperiods="2,3,4,409,401"
+		col Б1, "Факт {2}", group="AHD", period = 1, condition="FACT", forperiods="1,2,3,4,406,409,401"
+
+		col PLANKORR, "ТПФП {0}", group="AHD", period = 301, condition="PLAN", forperiods="401,4"
+		col OZHIDPREDGOD, "{2} {0}", group="AHD", condition="FACT", forperiods="401"
+		col Б1, "{2} {0}", group="AHD", condition="FACT", forperiods="4"
+		
+		col PLANKORR, "ТПФП {0}", group="AHD", period = 301, year=-1, condition="PLAN", forperiods="251,301"
+		col OZHIDPREDGOD, "{2} {0}", group="AHD", period = 401, year=-1, condition="FACT", forperiods="251,301"
+#		col FACT9M, "Факт {2} {0}", group="AHD", period = 3, year=-1, condition="FACT", forperiods="251,301"
+#		col OZHID4KV, "{2} {0}", group="AHD", period = 444, year=-1, condition="FACT", forperiods="251,301"
+		col Б1, "ТПФП {0}", group="AHD", condition="PLAN", forperiods="251,301"
+
+#		col Б1, "Факт {2} {0}", group="AHD", period = 42, year=-1, condition="FACT and KVART", forperiods="251,301"
+#		col Б1, "Факт {2} {0}", group="AHD", period = 43, year=-1, condition="FACT and KVART", forperiods="251,301"
+#		col Б1, "Факт {2} {0}", group="AHD", period = 44, year=-1, condition="FACT and KVART", forperiods="251,301"
+#		col Б1, "Факт {2} {0}", group="AHD", period = 444, year=-1, condition="FACT and KVART", forperiods="251,301"
+
+
+		
+		
+#__________________ month_b1 _____________________________________________________________________________________________________________________
+		col PLANGOD, "ТПФП {0}", group="month_b1", period=251,  tag="/trend:1/", condition="USETPFP and СНГ", forperiods="11,12,13,14,15,16,17,18,19,110,111,112,1,2,3,4,403,406,409,401"
+		col PLANDIV12, "ТПФП мес.{0}", group="month_b1", period=251, forgroup="!PR_KVART", tag="/trend:1/", condition="USETPFP and BYMONTH", forperiods="11,12,13,14,15,16,17,18,19,110,111,112,1,2,3,4,403,406,409,401"
+		col PLANDIV4, "ТПФП кв.{0}", group="month_b1", period=251, forgroup="PR_KVART", tag="/trend:1/", condition="USETPFP and BYMONTH", forperiods="1,2,3,4,403,406,409,401"
+		
+		col Б1, "{2}", group="month_b1", period = 11, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="11,12,13,14,15,16,17,18,19,110,111,112,1,2,3,4,403,406,409,401"
+		col Б1, "{2}", group="month_b1", period = 12, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="12,13,14,15,16,17,18,19,110,111,112,1,2,3,4,403,406,409,401"
+		col Б1, "{2}", group="month_b1", period = 13, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="13,14,15,16,17,18,19,110,111,112,1,2,3,4,403,406,409,401"
+		col Б1, "{2}", group="month_b1", period = 14, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="14,15,16,17,18,19,110,111,112,2,3,4,406,409,401"
+		col Б1, "{2}", group="month_b1", period = 15, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="15,16,17,18,19,110,111,112,2,3,4,406,409,401"
+
+		col Б1, "{2}", group="month_b1", period = 16, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="16,17,18,19,110,111,112,2,3,4,409,401"
+		col Б1, "{2}", group="month_b1", period = 416, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="406"
+
+		col Б1, "{2}", group="month_b1", period = 17, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="17,18,19,110,111,112,3,4,409,401"
+		col Б1, "{2}", group="month_b1", period = 18, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="18,19,110,111,112,3,4,409,401"
+		col Б1, "{2}", group="month_b1", period = 19, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="19,110,111,112,3,4,409,401"
+		col Б1, "{2}", group="month_b1", period = 110, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="110,111,112,4,401"
+		col Б1, "{2}", group="month_b1", period = 111, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="111,112,4,401"
+		col Б1, "{2}", group="month_b1", period = 112, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="112,4,401"
+
+		col Б1, "{2}", group="month_b1", period = 1, forgroup="PR_KVART", condition="FACT and BYMONTH", forperiods="1,2,3,4,406,409,401"
+		col Б1, "{2}", group="month_b1", period = 42, forgroup="PR_KVART", condition="FACT and BYMONTH", forperiods="2,3,4,409,401"
+		col Б1, "{2}", group="month_b1", period = 442, forgroup="PR_KVART", condition="FACT and BYMONTH", forperiods="406"
+		col Б1, "{2}", group="month_b1", period = 43, forgroup="PR_KVART", condition="FACT and BYMONTH", forperiods="3,4,401"
+		col Б1, "{2}", group="month_b1", period = 44, forgroup="PR_KVART", condition="FACT and BYMONTH", forperiods="4"
+
+		col Б1, "{2}", group="month_b1", period = 1, condition="FACT and СНГ", forperiods="1,2,3,4,406,409,401"
+		col Б1, "{2}", group="month_b1", period = 2, condition="FACT and СНГ", forperiods="2,3,4,409,401"
+		col Б1, "{2}", group="month_b1", period = 3, condition="FACT and СНГ", forperiods="3,4,401"
+		col Б1, "{2}", group="month_b1", period = 4, condition="FACT and СНГ", forperiods="4"
+		
+		col Б1, "{2}", group="month_b1", period = 403, condition="FACT and СНГ", forperiods="403"
+		col Б1, "{2}", group="month_b1", period = 406, condition="FACT and СНГ", forperiods="406"
+		col Б1, "{2}", group="month_b1", period = 409, condition="FACT and СНГ", forperiods="409"
+#		col Б1, "{2}", group="month_b1", period = 401, condition="FACT and СНГ", forperiods="401"
+
+		col PLANGOD, "ТПФП {0}", group="month_b1", period = 301, year=-1, condition="PLAN and СНГ", forperiods="251,301"
+		col PLANDIV12, "ТПФП {0} ср.м.", group="month_b1", period = 301, year=-1, condition="PLAN and BYMONTH", forperiods="251,301"
+		col PLANDIV4, "ТПФП {0} ср.кв.", group="month_b1", period = 301, year=-1, condition="PLAN and KVART", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 11, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 12, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 13, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 14, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 15, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 16, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 17, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 18, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 19, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 110, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 111, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 112, year=-1, forgroup="!PR_KVART", condition="FACT and BYMONTH", forperiods="251,301"
+
+		col Б1, "{2} {0}", group="month_b1", period = 1, year=-1, condition="FACT and ( СНГ or KVART) ", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 2, year=-1, condition="FACT and СНГ", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 3, year=-1, condition="FACT and СНГ", forperiods="251,301"
+
+		col Б1, "{2} {0}", group="month_b1", period = 42, year=-1, condition="FACT and KVART", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 43, year=-1, condition="FACT and KVART", forperiods="251,301"
+#		col Б1, "{2} {0}", group="month_b1", period = 44, year=-1, condition="FACT and KVART", forperiods="251,301"
+		col Б1, "{2} {0}", group="month_b1", period = 444, year=-1, condition="FACT and KVART", forperiods="251,301"
+
+		col OZHIDPREDGOD, "Ожид. {0}", group="month_b1", period = 401, year=-1, condition="( FACT or OZHID ) and СНГ", forperiods="251,301"
+		col OZHIDPREDGODDIV12, "Ожид. {0} ср.м.", group="month_b1", period = 401, year=-1, condition="( FACT or OZHID ) and BYMONTH", forperiods="251,301"
+		col OZHIDPREDGODDIV4, "Ожид. {0} ср.кв.", group="month_b1", period = 401, year=-1, condition="( FACT or OZHID ) and KVART", forperiods="251,301"
+		col Б1, "ТПФП {0}", group="month_b1", condition="PLAN and СНГ", forperiods="251,301"
+		col PLANDIV12, "ТПФП {0} ср.м.", group="month_b1", condition="PLAN and BYMONTH", forperiods="251,301"
+		col PLANDIV4, "ТПФП {0} ср.кв.", group="month_b1", condition="PLAN and KVART", forperiods="251,301"
+
+		col Б1, "{2} {0}", group="month_b1", period = 4, year=-1, condition="FACT and Y1", forperiods="401"
+		col PLANKORR, "ТПФП {0}", group="month_b1", condition="PLAN and Y1", period=301, forperiods="401"
+		col OZHIDPREDGOD, "Ожид. {0}", group="month_b1", period = 401, condition="FACT or OZHID", forperiods="401"
