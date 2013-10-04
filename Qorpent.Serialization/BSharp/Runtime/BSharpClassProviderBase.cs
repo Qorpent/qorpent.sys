@@ -59,7 +59,7 @@ namespace Qorpent.BSharp.Runtime {
 				if (!IndexWasBuilt) Refresh();
 				if (!Cache.ContainsKey(fullname)) return null;
 				BSharpRuntimeClassDescriptor descriptor = Cache[fullname];
-				if (null == descriptor.CachedClass || !IsActual(descriptor)) {
+				if (null == descriptor.CachedClass || !descriptor.CachedClass.Loaded || !IsActual(descriptor) ) {
 					ReloadClass(descriptor);
 				}
 				return descriptor.CachedClass;
@@ -119,5 +119,29 @@ namespace Qorpent.BSharp.Runtime {
 		///     Обновляет индекс дескрипторов
 		/// </summary>
 		protected virtual void RebuildIndex() {}
+
+	    /// <summary>
+	    /// Осуществляет поиск класса по пространству имен и/или прототипу
+	    /// </summary>
+	    /// <param name="ns"></param>
+	    /// <param name="prototype"></param>
+	    /// <returns></returns>
+	    public IEnumerable<IBSharpRuntimeClass> FindClasses(string ns = null,string prototype = null) {
+	        foreach (var descriptor in Cache.Values) {
+	            if (null == descriptor.CachedClass || null==descriptor.CachedClass.PrototypeCode || null==descriptor.CachedClass.Namespace) {
+	                ReloadClass(descriptor);
+	            }
+	            if (null != ns) {
+	                if (descriptor.CachedClass.Namespace != ns) continue;
+	            }
+	            if (null != prototype) {
+	                if (descriptor.CachedClass.PrototypeCode != prototype) continue;
+	            }
+	            if (!descriptor.CachedClass.Loaded) {
+	                ReloadClass(descriptor);
+	            }
+	            yield return descriptor.CachedClass;
+	        }
+	    }
 	}
 }

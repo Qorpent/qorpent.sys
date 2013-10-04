@@ -30,5 +30,13 @@ namespace Qorpent.BSharp.Runtime {
 		///     Метод обновления кэшей при их наличии
 		/// </summary>
 		void Refresh();
+
+	    /// <summary>
+	    /// Осуществляет поиск класса по пространству имен и/или прототипу
+	    /// </summary>
+	    /// <param name="ns"></param>
+	    /// <param name="prototype"></param>
+	    /// <returns></returns>
+	    IEnumerable<IBSharpRuntimeClass> FindClasses(string ns = null,string prototype = null);
 	}
 }

@@ -54,15 +54,12 @@
     <Compile Include="BSharp\IBSharpElement.cs" />
     <Compile Include="BSharp\IBSharpImport.cs" />
     <Compile Include="BSharp\Runtime\BSharpActivationType.cs" />
-    <Compile Include="BSharp\Runtime\BSharpClassProviderBase.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeActivatorService.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeClassDescriptor.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeClass.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeDefaults.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeException.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeService.cs" />
-    <Compile Include="BSharp\Runtime\BSharpFileBasedClassProvider.cs" />
-    <Compile Include="BSharp\Runtime\BSharpGenericClassProvider.cs" />
     <Compile Include="BSharp\Runtime\IBSharpRuntimeActivator.cs" />
     <Compile Include="BSharp\Runtime\IBSharpRuntimeActivatorService.cs" />
     <Compile Include="BSharp\Runtime\IBSharpRuntimeBound.cs" />

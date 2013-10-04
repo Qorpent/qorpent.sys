@@ -2,6 +2,10 @@
 using System.Xml.Linq;
 
 namespace Qorpent.BSharp.Runtime {
+
+   
+
+
 	/// <summary>
 	///     Источник классов BSharp на основе директории
 	///     имя ресурса для дескриптора - имя файла, работает с плоскими директориями
