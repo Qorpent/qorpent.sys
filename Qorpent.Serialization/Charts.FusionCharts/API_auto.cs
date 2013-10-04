@@ -4296,6 +4296,145 @@ namespace Qorpent.Charts.FusionCharts {
     ///</remarks>
     public const string Lineset_AnchorAlpha = "anchorAlpha";
   
+    ///<summary>Value</summary>
+    ///<remarks>
+///&lt;desc />
+    ///</remarks>
+    public const string LinesetSet_Value = "value";
+  
+    ///<summary>DisplayValue</summary>
+    ///<remarks>
+///&lt;desc />
+    ///</remarks>
+    public const string LinesetSet_DisplayValue = "displayValue";
+  
+    ///<summary>Color</summary>
+    ///<remarks>
+///&lt;desc>
+///  &lt;span>For combination charts, you can define the color
+///of line-sets at set level.&lt;/span>
+///&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_Color = "color";
+  
+    ///<summary>Link</summary>
+    ///<remarks>
+///&lt;desc />
+    ///</remarks>
+    public const string LinesetSet_Link = "link";
+  
+    ///<summary>ToolText</summary>
+    ///<remarks>
+///&lt;desc />
+    ///</remarks>
+    public const string LinesetSet_ToolText = "toolText";
+  
+    ///<summary>ShowValue</summary>
+    ///<remarks>
+///&lt;desc>
+///  &lt;span>You can individually opt to show/hide values of
+///individual data items using this attribute. This value over-rides
+///the line-set level value.&lt;/span>
+///&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_ShowValue = "showValue";
+  
+    ///<summary>ValuePosition</summary>
+    ///<remarks>
+///&lt;desc>If you've opted to show a
+///particular data value on the line, this attribute lets you adjust
+///the vertical alignment of individual data values with respect to a
+///line. By default, this attribute is set to AUTO mode in which the
+///alignment of a data value is determined automatically based on the
+///position of its plot point. In ABOVE mode, a data value is
+///displayed above the plot point unless a plot point is too close to
+///the upper edge of the canvas while in BELOW mode, a data value is
+///displayed below the plot point unless a plot point is too close to
+///the lower edge of the canvas.&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_ValuePosition = "valuePosition";
+  
+    ///<summary>Alpha</summary>
+    ///<remarks>
+///&lt;desc>
+///  &lt;span>For combination charts, you can define the alpha
+///of line-sets at lineset level.&lt;/span>
+///&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_Alpha = "alpha";
+  
+    ///<summary>AnchorSides</summary>
+    ///<remarks>
+///&lt;desc>
+///  &lt;span>Lets you specify "set" specific sides of the
+///anchor.&lt;/span>
+///&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_AnchorSides = "anchorSides";
+  
+    ///<summary>AnchorRadius</summary>
+    ///<remarks>
+///&lt;desc>
+///  &lt;span>Lets you specify "set" specific radius (in
+///pixels) of the anchor.&lt;/span>
+///&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_AnchorRadius = "anchorRadius";
+  
+    ///<summary>AnchorBorderColor</summary>
+    ///<remarks>
+///&lt;desc>
+///  &lt;span>Lets you specify "set" specific border color of
+///the anchor.&lt;/span>
+///&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_AnchorBorderColor = "anchorBorderColor";
+  
+    ///<summary>AnchorBorderThickness</summary>
+    ///<remarks>
+///&lt;desc>
+///  &lt;span>Lets you specify "set" specific border thickness
+///of the anchor.&lt;/span>
+///&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_AnchorBorderThickness = "anchorBorderThickness";
+  
+    ///<summary>AnchorBgColor</summary>
+    ///<remarks>
+///&lt;desc>
+///  &lt;span>Lets you specify "set" specific background color
+///of the anchor.&lt;/span>
+///&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_AnchorBgColor = "anchorBgColor";
+  
+    ///<summary>AnchorAlpha</summary>
+    ///<remarks>
+///&lt;desc>
+///  &lt;span>Lets you specify "set" specific alpha of the
+///anchor.&lt;/span>
+///&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_AnchorAlpha = "anchorAlpha";
+  
+    ///<summary>AnchorBgAlpha</summary>
+    ///<remarks>
+///&lt;desc>
+///  &lt;span>Lets you specify "set" specific alpha of the
+///anchor background.&lt;/span>
+///&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_AnchorBgAlpha = "anchorBgAlpha";
+  
+    ///<summary>Dashed</summary>
+    ///<remarks>
+///&lt;desc>
+///  &lt;span>Whether the border of this line item should
+///appear as dashed.&lt;/span>
+///&lt;/desc>
+    ///</remarks>
+    public const string LinesetSet_Dashed = "dashed";
+  
     ///<summary>ClipBubbles</summary>
     ///<remarks>
 ///&lt;desc>

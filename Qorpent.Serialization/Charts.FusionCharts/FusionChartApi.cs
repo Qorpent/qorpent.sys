@@ -106,6 +106,24 @@ namespace Qorpent.Charts.FusionCharts {
             chart.AsFusion().AddSets(sets);
             return chart;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <param name="label"></param>
+        /// <param name="value"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static IChart AddSet(this IChart chart, string label, decimal value, Action<IChartSet> action = null) {
+            var set = chart.AsFusion().AddSet(label, value);
+            
+            if (null != action) {
+                action(set);
+            }
+
+            return chart;
+        }
         
     }
 }

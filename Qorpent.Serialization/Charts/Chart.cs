@@ -117,6 +117,11 @@ namespace Qorpent.Charts {
                 return _trendLines;
             }
         }
+
+        /// <summary>
+        ///     Конфиг чарта
+        /// </summary>
+        public IChartConfig Config { get; set; }
         /// <summary>
         /// Согздает реальный элемент Trendline
         /// </summary>

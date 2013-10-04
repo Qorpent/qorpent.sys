@@ -1,0 +1,41 @@
+﻿.block {
+
+}
+
+.slide {
+
+}
+
+.section{
+	margin-bottom: 20px;
+	border: 1px dashed #ccc;
+}
+
+.article{
+
+}
+
+.section.block {
+
+}
+
+.article.slide {
+
+
+}
+
+.invisible {
+	display: none;
+}
+
+.default_slot,
+.market1_slot {
+	margin:3px;
+	border: 1px dashed Black;
+	padding: 3px;
+}
+
+
+.slot {
+	
+}

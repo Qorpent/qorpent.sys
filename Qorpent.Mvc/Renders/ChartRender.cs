@@ -30,8 +30,8 @@ namespace Qorpent.Mvc.Renders {
                 error = "Нет данных для отображения";
             }
 
-            var id = config.Get<string>("Id");
-            var container = config.Get<string>("Container");
+            var id = config.Id;
+            var container = config.Container;
 
             if (string.IsNullOrWhiteSpace(container)) {
                 container = "fc-container-" + id;
@@ -48,7 +48,7 @@ namespace Qorpent.Mvc.Renders {
     myChart.set{7}Data($('#fc-data-{1}').text());
     myChart.render('{6}');
 // -->
-</script>", config.Get<string>("Type"), id, config.Get<string>("Width"), config.Get<string>("Height"), config.Get<string>("Debug"), datascript, container, config.Get("DataType", "XML"));
+</script>", config.Type, id, config.Width, config.Height, config.Debug, datascript, container, config.DataType);
                 context.ContentType = "text/html";   
             }
 
@@ -72,12 +72,12 @@ namespace Qorpent.Mvc.Renders {
 
         private IChartConfig PrepareChartConfig(IMvcContext context) {
             var result = new ChartConfig();
-            result.Set("Id", context.Get("__id", DateTime.Now.Ticks));
-            result.Set("Container", context.Get("__container", string.Empty));
-            result.Set("Width", context.Get("__width", "400"));
-            result.Set("Height", context.Get("__height", "300"));
-            result.Set("Debug", context.Get("__debug", "0"));
-            result.Set("Type", context.Get("__type", "Column2D"));
+            result.Id =  context.Get("__id", DateTime.Now.Ticks).ToString();
+            result.Container =  context.Get("__container", string.Empty);
+            result.Width =  context.Get("__width", "400");
+            result.Height =  context.Get("__height", "300");
+            result.Debug =  context.Get("__debug", "0");
+            result.Type =  context.Get("__type", "Column2D");
 
             var specAttrs = context.GetAll("fc");
             foreach (var attr in specAttrs) {
@@ -148,7 +148,14 @@ namespace Qorpent.Mvc.Renders {
             } else if (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("{")) {
                 
             } else if (context.ActionResult is IChart) {
-                config.Set("DataType", "XML");
+                config.DataType ="XML";
+                var chart = context.ActionResult as IChart;
+                if (null != chart.Config) {
+                    foreach (var p in chart.Config) {
+                        config[p.Key] = p.Value;
+                    }
+                }
+
                 InternalRender.Initialize((IChart)context.ActionResult, config);
                 var xmlsrc = InternalRender.GenerateChartXmlSource(config);
                 var xml = xmlsrc.GenerateChartXml(config);

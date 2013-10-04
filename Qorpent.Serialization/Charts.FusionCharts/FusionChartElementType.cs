@@ -31,8 +31,11 @@ using System;
     Dataset = 1<<7,    
   
     ///<summary>LineSet</summary>
-    Lineset = 1<<8,    
-  
+    Lineset = 1<<8,
+    /// <summary>
+    /// Set in lineset
+    /// </summary>
+    LinesetSet =1<<9,
     }
 }
   

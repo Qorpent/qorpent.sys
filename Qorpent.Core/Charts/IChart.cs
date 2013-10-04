@@ -19,6 +19,10 @@
         ///     Набор линий тренда
         /// </summary>
         IChartTrendLines TrendLines { get; }
+        /// <summary>
+        ///     Конфиг чарта
+        /// </summary>
+        IChartConfig Config { get; }
     }
     /// <summary>
     /// 
