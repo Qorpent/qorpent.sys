@@ -20,7 +20,9 @@ namespace Qorpent.BSharp.Builder {
             ParseExcludes(bSharpClass, project);
 
 	        project.GenerateSrcPkg = bSharpClass["GenerateSrcPkg"].ToBool();
+	        project.GenerateLibPkg = bSharpClass["GenerateLibPkg"].ToBool();
 			project.SrcPkgName = bSharpClass["SrcPkgName"];
+			project.LibPkgName = bSharpClass["LibPkgName"];
 
             var outLayout = bSharpClass.Compiled.Element("Layout");
             if (outLayout != null) {
