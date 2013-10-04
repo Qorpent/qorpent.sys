@@ -42,6 +42,7 @@
     <Compile Include="Charts.FusionCharts\FusionChartDataType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartElementType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartGroupedType.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartNormalizer.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartRender.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartsChartBuilder.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartType.cs" />

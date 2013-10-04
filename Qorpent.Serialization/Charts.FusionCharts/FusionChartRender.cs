@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using Qorpent.IoC;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts.FusionCharts {
     /// <summary>
@@ -23,16 +25,41 @@ namespace Qorpent.Charts.FusionCharts {
             var realConfig = config ?? _config;
             var fusion = _chart.AsFusion(realConfig);
             var result = fusion.GetXmlElement();
+            var rootElement = result;
+
+            var normalizer = FusionChartNormalizer.Create(realConfig);
+            normalizer.Normalize(_chart);
+
+            result.SetAttributeValue("yAxisMinValue", _chart.Get<double>("yAxisMinValue").ToInt());
+
             foreach (var ds in _chart.Datasets.Children) {
+                if (IsMultiserial(_chart)) {
+                    var dataset = new XElement("dataset");
+                    result.Add(dataset);
+                    rootElement = dataset;
+                }
+
                 foreach (var s in ds.Children) {
                     var fusset = s.AsFusion(realConfig);
-                    result.Add(fusset.GetXmlElement());
+                    rootElement.Add(fusset.GetXmlElement());
+                }
+            }
+
+            if (IsMultiserial(_chart)) {
+                if (_chart.Categories.Children.Count != 0) {
+                    var categories = new XElement("categories");
+                    foreach (var cat in _chart.Categories.Children) {
+                        var category = new XElement("category");
+                        category.SetAttributeValue(FusionChartApi.Set_Label, cat.Get<string>(FusionChartApi.Set_Label));
+                        categories.Add(category);
+                    }
+
+                    result.Add(categories);
                 }
             }
 
             return result;
         }
-
         /// <summary>
         ///     Собирает из переданного конфига чарта его XML-представление
         /// </summary>
@@ -72,6 +99,21 @@ namespace Qorpent.Charts.FusionCharts {
             var renderResult = new ChartRenderResult(_chart, chartConfig);
 
             return renderResult;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private bool IsMultiserial(IChart chart) {
+            var f = chart.Config.Type.To<FusionChartType>();
+            if (
+                (f & (FusionChartType)FusionChartGroupedType.MultiSeries) == f
+            ) {
+                return true;
+            }
+
+            return false;
         }
     }
 }

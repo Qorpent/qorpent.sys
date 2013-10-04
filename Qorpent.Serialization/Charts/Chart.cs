@@ -10,7 +10,6 @@ namespace Qorpent.Charts {
         private IChartDatasets _datasets;
         private IChartLineSet _lineSet;
         private IChartTrendLines _trendLines;
-
         /// <summary>
         ///     Собирается XML-представление чарата по его конфигу
         /// </summary>
