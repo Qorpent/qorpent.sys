@@ -22,5 +22,6 @@ namespace Qorpent.IO
 		/// <param name="name"></param>
 		/// <returns></returns>
 		Stream Open(string name);
+
 	}
 }

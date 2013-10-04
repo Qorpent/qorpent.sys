@@ -22,6 +22,10 @@
     <Compile Include="BSharp\Matcher\ConditionGroup.cs" />
     <Compile Include="BSharp\Matcher\ConditionType.cs" />
     <Compile Include="BSharp\Matcher\SingleCondition.cs" />
+    <Compile Include="BSharp\Runtime\BSharpClassProviderBase.cs" />
+    <Compile Include="BSharp\Runtime\BSharpFileBasedClassProvider.cs" />
+    <Compile Include="BSharp\Runtime\BSharpGenericClassProvider.cs" />
+    <Compile Include="BSharp\Runtime\BSharpLibraryClassProvider.cs" />
     <Compile Include="BSharp\Schema\AttributeRule.cs" />
     <Compile Include="BSharp\Schema\ClassQuery.cs" />
     <Compile Include="BSharp\Schema\ElementPolicy.cs" />

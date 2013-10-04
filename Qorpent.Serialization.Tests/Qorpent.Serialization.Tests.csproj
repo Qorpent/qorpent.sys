@@ -16,6 +16,7 @@
     <Compile Include="BSharp\ClassReference.cs" />
     <Compile Include="BSharp\DictionarySupport.cs" />
     <Compile Include="BSharp\Matcher\SingleConditionTests.cs" />
+    <Compile Include="BSharp\Runtime\BSharpLibraryClassProviderTest.cs" />
     <Compile Include="BSharp\Schema\AttributeRuleTest.cs" />
     <Compile Include="BSharp\Schema\ElementRuleTest.cs" />
     <Compile Include="BSharp\SetKeyword.cs" />
@@ -90,11 +91,16 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Bxl\demo.import.forms.m600.bxls" />
     <EmbeddedResource Include="Bxl\presentation_ocm_structure.hql" />
+    <EmbeddedResource Include="BSharp\Runtime\demo.bslib" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.Core.Tests\Qorpent.Core.Tests.csproj">
       <Project>{880F65EA-1A22-4672-A137-FFC912902046}</Project>
       <Name>Qorpent.Core.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IO\Qorpent.IO.csproj">
+      <Project>{426c92df-3c40-426c-b0be-40a1df9044c2}</Project>
+      <Name>Qorpent.IO</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

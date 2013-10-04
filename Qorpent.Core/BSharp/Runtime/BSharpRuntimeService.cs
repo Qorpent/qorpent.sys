@@ -78,8 +78,18 @@ namespace Qorpent.BSharp.Runtime {
 			}
 		}
 
+	    /// <summary>
+	    /// Осуществляет поиск класса по пространству имен и/или прототипу
+	    /// </summary>
+	    /// <param name="ns"></param>
+	    /// <param name="prototype"></param>
+	    /// <returns></returns>
+	    public IEnumerable<IBSharpRuntimeClass> FindClasses(string ns = null, string prototype = null) {
+	        return Providers.SelectMany(provider => provider.FindClasses(ns,prototype));
+	    }
 
-		/// <summary>
+
+	    /// <summary>
 		///     Активирует сервис по имени класса
 		/// </summary>
 		/// <typeparam name="T"></typeparam>

@@ -14,8 +14,9 @@ namespace Qorpent.BSharp.Runtime {
 		private RuntimeClassDescriptor _runtimeDescriptor;
 		private IContainer _container;
 		private string _runtimeCode;
+	    private string _prototypeCode;
 
-		/// <summary>
+	    /// <summary>
 		/// Создает класс в увязке с контейнером
 		/// </summary>
 		/// <param name="container"></param>
@@ -103,8 +104,12 @@ namespace Qorpent.BSharp.Runtime {
 			get { return _runtimeDescriptor ?? (_runtimeDescriptor = GetRuntimeClassDescriptor() ); }
 			private set { _runtimeDescriptor = value; }
 		}
+        /// <summary>
+        /// Признак загрузки
+        /// </summary>
+	    public bool Loaded   { get; set; }
 
-		/// <summary>
+	    /// <summary>
 		/// Код рантайма
 		/// </summary>
 		public string RuntimeCode {
@@ -112,7 +117,24 @@ namespace Qorpent.BSharp.Runtime {
 			set { _runtimeCode = value; }
 		}
 
-		private string GetRuntimeCode() {
+        /// <summary>
+        /// Код прототипа
+        /// </summary>
+        public string PrototypeCode
+        {
+            get { return _prototypeCode ?? (_prototypeCode = GetPrototypeCode()); }
+            set { _prototypeCode = value; }
+        }
+
+	    private string GetPrototypeCode() {
+            var e = GetClassElement();
+            if (null == e) return null;
+            var ra = e.Attribute(BSharpRuntimeDefaults.BSHARP_PROTOTYPE_ATTRIBUTE);
+            if (null == ra) return null;
+            return ra.Value;
+	    }
+
+	    private string GetRuntimeCode() {
 			var e = GetClassElement();
 			if (null == e) return null;
 			var ra = e.Attribute(BSharpRuntimeDefaults.BSHARP_RUNTIME_ATTRIBUTE);
