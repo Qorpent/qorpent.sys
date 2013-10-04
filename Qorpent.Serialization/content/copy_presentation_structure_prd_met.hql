@@ -1,36 +1,36 @@
 ﻿transform blocklang
 report PRD_TEST, "Презентация тест"
 	pr_dtype=MSColumn 
-	view=verstka_1	
+	#view=verstka_1	
 	pr_typecol=AHD 
 	slotview=graph_slot
-	pr_measure=тыс.руб.
-	pr_numberscalevalue="1,1,1"
-	pr_decimals = 0
-	pr_clearempty=1
+	#pr_measure=тыс.руб.
+	#pr_numberscalevalue="1,1,1"
+	#pr_decimals = 0
+	pr_clearempty=1 # очистка пустых колонок
 	numberformat="#,0"
-	prg_showvalues="1"
-	prg_showsum="1"
+	#prg_showvalues="1"
+	#prg_showsum="1"
 	pr_linethikness=4
 	pr_legendposition="BOTTOM"
-	pr_measure="DYNAMIC"
-	pr_clearempty = 1	
-	pr_pieradius=180
-	pr_ylimitsplus=5  
-	pr_ylimits='auto'
-	singlecontents=true
-	pr_connectnull=true
+	#pr_measure="DYNAMIC"
+	
+	#pr_pieradius=180
+	#pr_ylimitsplus=5  
+	#pr_ylimits='auto'
+	#singlecontents=true
+	#pr_connectnull=true
 	newstylerender=true
-	pr_ylimitsplus = 3 
+	#pr_ylimitsplus = 3 
 	pr_hidevalueslover = 3 
-	singlecontents=true
-	pr_plotspace=40
+
+	#pr_plotspace=40
 	process="top_management"
 
 
 	
 	block 'Основные параметры бюджета', role="FIN_, DR_, MTR_, COST_" , targetgroup=top_management
-		slide 'Котировки металлов в текущем году', key='kotir_ME', pr_measure=руб.,	pr_linethikness=4,  pr_numberscalevalue="1,1,1"
+		slide 'Котировки металлов в текущем году', key='kotir_ME', pr_measure=руб. #,	pr_linethikness=4,  pr_numberscalevalue="1,1,1"
 			pr_typecol=month_b1, uselines=1, colcategory=1, 
 			pr_anchorbordercolor=669ACD,  pr_anchorbgcolor=053666 
 			slot 'Котировки МЕДИ на LMЕ',  pr_measure="$ \\за тонну CU", 
