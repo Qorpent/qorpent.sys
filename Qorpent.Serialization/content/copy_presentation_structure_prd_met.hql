@@ -1,32 +1,30 @@
 ﻿transform blocklang
 report PRD_TEST, "Презентация тест"
-	pr_dtype=MSColumn 
+	
 	#view=verstka_1	
-	pr_typecol=AHD 
-	slotview=graph_slot
 	#pr_measure=тыс.руб.
 	#pr_numberscalevalue="1,1,1"
 	#pr_decimals = 0
-	pr_clearempty=1 # очистка пустых колонок
-	numberformat="#,0"
 	#prg_showvalues="1"
 	#prg_showsum="1"
-	pr_linethikness=4
-	pr_legendposition="BOTTOM"
 	#pr_measure="DYNAMIC"
-	
 	#pr_pieradius=180
 	#pr_ylimitsplus=5  
 	#pr_ylimits='auto'
 	#singlecontents=true
 	#pr_connectnull=true
-	newstylerender=true
 	#pr_ylimitsplus = 3 
-	pr_hidevalueslover = 3 
-
 	#pr_plotspace=40
 	process="top_management"
-
+	pr_clearempty=1 # очистка пустых колонок
+	pr_dtype=MSColumn
+	numberformat="#,0"
+	pr_typecol=AHD 
+	slotview=graph_slot
+	pr_hidevalueslover = 3 
+	newstylerender=true
+	pr_linethikness=4
+	pr_legendposition="BOTTOM"
 
 	
 	block 'Основные параметры бюджета', role="FIN_, DR_, MTR_, COST_" , targetgroup=top_management
