@@ -21,7 +21,7 @@ namespace fcapimerge {
             Category = Escaper.PascalCase( xElement.Parent.Attr("category") );
             var elementHandler = xElement.Ancestors().First(_ => null != _.Attribute("element"));
             var chartType = xElement.Ancestors("part").First().Attr("charttype");
-            var elementFullName = Escaper.PascalCase( elementHandler.Attr("subelement") )+ Escaper.PascalCase( elementHandler.Attr("element"));
+            var elementFullName = Escaper.PascalCase( elementHandler.Attr("parent") )+ Escaper.PascalCase( elementHandler.Attr("element"));
             Element = (FusionChartElementType) Enum.Parse(typeof (FusionChartElementType), elementFullName, true);
             Chart = (FusionChartType)Enum.Parse(typeof(FusionChartType), chartType, true);
         }
