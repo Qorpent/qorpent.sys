@@ -30,6 +30,7 @@ namespace Qorpent.Charts.FusionCharts {
         private string determineName(IChartElement element) {
             if (element is IChart) return "chart";
             if (element is IChartSet) return "set";
+            if (element is IChartTrendLine) return "line";
             throw new Exception("unknown type " + element.GetType().Name);
         }
 
@@ -94,6 +95,30 @@ namespace Qorpent.Charts.FusionCharts {
             foreach (var s in sets.ToDict()) {
                 AddSet(s.Key, s.Value.ToDecimal());
             }
+        }
+        /// <summary>
+        ///     Добавление сформированного датасета
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <param name="dataset"></param>
+        public void AddDataset(IChart chart, IChartDataset dataset) {
+            chart.Datasets.Add(dataset);
+        }
+        /// <summary>
+        ///     Добавление линии тренда
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="value">Значение, по которому проходит линия тренда</param>
+        public void AddTrendLine(IChart chart, double value) {
+            chart.TrendLines.Add(new ChartLine {StartValue = value});
+        }
+        /// <summary>
+        ///     Добавление линии тренда
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="trendLine">Представление линии тренда</param>
+        public void AddTrendLine(IChart chart, IChartTrendLine trendLine) {
+            chart.TrendLines.Add(trendLine);
         }
     }
 }

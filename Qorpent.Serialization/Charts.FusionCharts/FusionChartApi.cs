@@ -106,7 +106,16 @@ namespace Qorpent.Charts.FusionCharts {
             chart.AsFusion().AddSets(sets);
             return chart;
         }
-
+        /// <summary>
+        ///     Добавление линии тренда
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="value">Значение, по которому проходит линия тренда</param>
+        /// <returns>Представление графика</returns>
+        public static IChart AddTrendLine(this IChart chart, double value) {
+            chart.AsFusion().AddTrendLine(chart, value);
+            return chart;
+        }
         /// <summary>
         /// 
         /// </summary>

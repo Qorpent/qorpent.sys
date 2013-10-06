@@ -94,5 +94,25 @@
         /// Аттрибут типа данных графика
         /// </summary>
         public const string ChartDataTypeAttributeName = "chartdatatype";
+        /// <summary>
+        ///     Атрибут подгонки осей графиков по высоте
+        /// </summary>
+        public const string FitAxis = "FitAxis";
+        /// <summary>
+        ///     Опция начального значения линии тренда
+        /// </summary>
+        public const string ChartLineStartValue = "ChartLineStartValue";
+        /// <summary>
+        ///     Опция цвета линии
+        /// </summary>
+        public const string ChartLineColor = "ChartLineColor";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string ChartLineDashed = "ChartLineDashed";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string TrendLineDisplayValue = "TrendLineDisplayValue";
     }
 }

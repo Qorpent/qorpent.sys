@@ -58,6 +58,21 @@ namespace Qorpent.Charts.FusionCharts {
                 }
             }
 
+            var trendLines = new XElement("trendLines");
+            result.Add(trendLines);
+
+            foreach (var tl in _chart.TrendLines.Children) {
+                var trendLine = new XElement("line");
+                trendLine.SetAttributeValue("startValue", tl.Get<double>(ChartDefaults.ChartLineStartValue));
+                trendLine.SetAttributeValue("color", tl.Get<string>(ChartDefaults.ChartLineColor));
+                trendLine.SetAttributeValue("displayValue", tl.Get<string>(ChartDefaults.TrendLineDisplayValue));
+                if (tl.Get<bool>(ChartDefaults.ChartLineDashed)) {
+                    trendLine.SetAttributeValue("dashed", 1);
+                }
+
+                trendLines.Add(trendLine);
+            }
+
             return result;
         }
         /// <summary>

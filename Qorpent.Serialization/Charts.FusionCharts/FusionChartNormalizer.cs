@@ -18,7 +18,7 @@ namespace Qorpent.Charts.FusionCharts {
         ///     значений графика относительно верхней и нижней границы
         /// </summary>
         public double XAxisMargin {
-            get { Get<double>("XAxisMargin", 100); }
+            get { return Get<double>("XAxisMargin", 100); }
             set { Set("XAxisMargin", value); }
         }
         /// <summary>
@@ -52,8 +52,9 @@ namespace Qorpent.Charts.FusionCharts {
         /// </summary>
         /// <param name="chart">Конфиг графика</param>
         private void FitYAxisHeight(IChart chart) {
-            chart.Set("yAxisMinValue", Math.Round(GetMinDataset(chart).ToInt() / 100.0) * 100 - XAxisMargin);
-            chart.Set("yAxisMaxValue", Math.Round(GetMaxDataset(chart).ToInt() / 100.0) * 100 + XAxisMargin);
+
+            chart.Set(FusionChartApi.YAxisMinValue, GetMinDataset(chart).RoundToNearestHundred() - XAxisMargin);
+            chart.Set(FusionChartApi.YAxisMaxValue, GetMaxDataset(chart).RoundToNearestHundred() + XAxisMargin);
         }
         /// <summary>
         ///     Возвращает минимальное значение из всех датасетов

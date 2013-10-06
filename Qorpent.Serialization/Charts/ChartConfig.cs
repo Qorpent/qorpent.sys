@@ -62,5 +62,18 @@ namespace Qorpent.Charts {
             get { return Get<string>(ChartDefaults.ChartDataTypeAttributeName); }
             set { Set(ChartDefaults.ChartDataTypeAttributeName, value); }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool FitAxis {
+            get { return Get<bool>(ChartDefaults.FitAxis); }
+            set { Set(ChartDefaults.FitAxis, value); }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public ChartConfig() {
+            FitAxis = true;
+        }
     }
 }

@@ -37,5 +37,9 @@ namespace Qorpent.Charts {
         /// Тип данных графика
         /// </summary>
         string DataType { get; set; }
+        /// <summary>
+        ///     Требуется ли подгонка максимальных и минимальных значений осей
+        /// </summary>
+        bool FitAxis { get; set; }
     }
 }
