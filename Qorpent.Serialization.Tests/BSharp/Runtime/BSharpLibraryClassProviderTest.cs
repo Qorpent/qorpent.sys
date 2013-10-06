@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Qorpent.BSharp.Runtime;
 
@@ -19,8 +16,8 @@ namespace Qorpent.Serialization.Tests.BSharp.Runtime
             var m111 = provider.GetRuntimeClass("demo.import.forms.m111");
             Assert.NotNull(m111);
             var forms = provider.FindClasses(prototype: "formdef").ToArray();
-            Console.WriteLine(forms.Length
-                );
+            Assert.Less(20,forms.Length);
+            Console.WriteLine(forms.Length);
         }
     }
 }
