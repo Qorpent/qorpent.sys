@@ -21,6 +21,16 @@ namespace Qorpent.Model {
 	/// 	Базовый интерфейс для классов данных
 	/// </summary>
 	public interface IEntity : IWithId, IWithCode, IWithName, IWithIndex, IWithTag, IWithComment, IWithVersion {
-		
+        /// <summary>
+        /// Общий метод установления некоего контекстного объекта, использование зависит от реализации
+        /// </summary>
+        /// <param name="context"></param>
+	    void SetContext(object context);
+        /// <summary>
+        /// Возвращает контекстный объект
+        /// </summary>
+        /// <returns></returns>
+	    object GetContext();
 	}
+
 }
