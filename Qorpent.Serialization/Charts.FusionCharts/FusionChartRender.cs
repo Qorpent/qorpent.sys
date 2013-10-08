@@ -30,8 +30,8 @@ namespace Qorpent.Charts.FusionCharts {
             var normalizer = FusionChartNormalizer.Create(realConfig);
             normalizer.Normalize(_chart);
 
-            result.SetAttributeValue(FusionChartApi.YAxisMinValue, _chart.Get<string>(FusionChartApi.YAxisMinValue));
-            result.SetAttributeValue(FusionChartApi.YAxisMaxValue, _chart.Get<string>(FusionChartApi.YAxisMaxValue));
+            result.SetAttributeValue(FusionChartApi.YAxisMinValue, _chart.Get<double>(FusionChartApi.YAxisMinValue));
+            result.SetAttributeValue(FusionChartApi.YAxisMaxValue, _chart.Get<double>(FusionChartApi.YAxisMaxValue));
             result.SetAttributeValue(FusionChartApi.Chart_LegendPosition, _chart.Get<string>(FusionChartApi.Chart_LegendPosition));
 
             foreach (var ds in _chart.Datasets.Children) {

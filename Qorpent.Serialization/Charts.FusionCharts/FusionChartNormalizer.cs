@@ -52,9 +52,8 @@ namespace Qorpent.Charts.FusionCharts {
         /// </summary>
         /// <param name="chart">Конфиг графика</param>
         private void FitYAxisHeight(IChart chart) {
-
-            chart.Set(FusionChartApi.YAxisMinValue, GetMinDataset(chart).RoundToNearestHundred() - XAxisMargin);
-            chart.Set(FusionChartApi.YAxisMaxValue, GetMaxDataset(chart).RoundToNearestHundred() + XAxisMargin);
+            chart.Set(FusionChartApi.YAxisMinValue, Math.Round(GetMinDataset(chart) - 1).RoundToNearestOrder(1));
+            chart.Set(FusionChartApi.YAxisMaxValue, Math.Round(GetMaxDataset(chart) + 1).RoundToNearestOrder(1));
         }
         /// <summary>
         ///     Возвращает минимальное значение из всех датасетов
