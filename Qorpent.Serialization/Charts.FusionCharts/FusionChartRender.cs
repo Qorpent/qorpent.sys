@@ -38,6 +38,7 @@ namespace Qorpent.Charts.FusionCharts {
                 if (IsMultiserial(_chart)) {
                     var dataset = new XElement("dataset");
                     dataset.SetAttributeValue(FusionChartApi.Dataset_SeriesName, ds.Get<string>(FusionChartApi.Dataset_SeriesName));
+                    dataset.SetAttributeValue(FusionChartApi.Dataset_Color, ds.Get<string>(FusionChartApi.Dataset_Color));
                     result.Add(dataset);
                     rootElement = dataset;
                 }
