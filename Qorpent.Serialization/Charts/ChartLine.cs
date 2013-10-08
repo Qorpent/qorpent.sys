@@ -1,3 +1,5 @@
+using System.Xml.Linq;
+
 namespace Qorpent.Charts {
     /// <summary>
     ///     Единица данных

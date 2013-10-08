@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Charts {
+﻿using System;
+
+namespace Qorpent.Charts {
     /// <summary>
     ///     Представление графика
     /// </summary>
