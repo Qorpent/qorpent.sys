@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
@@ -61,7 +62,6 @@ namespace Qorpent.Charts.FusionCharts {
             }
             return result;
         }
-
         /// <summary>
         /// Добавляет элемент в первый датасет
         /// </summary>
@@ -99,10 +99,20 @@ namespace Qorpent.Charts.FusionCharts {
         /// <summary>
         ///     Добавление сформированного датасета
         /// </summary>
-        /// <param name="chart"></param>
-        /// <param name="dataset"></param>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="dataset">Перечисление датасетов</param>
         public void AddDataset(IChart chart, IChartDataset dataset) {
             chart.Datasets.Add(dataset);
+        }
+        /// <summary>
+        ///     Добавление перечисления датасета
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="datasets">Перечисление датасетов</param>
+        public void AddDatasets(IChart chart, IEnumerable<IChartDataset> datasets) {
+            foreach (var dataset in datasets) {
+                AddDataset(chart, dataset);
+            }
         }
         /// <summary>
         ///     Добавление линии тренда

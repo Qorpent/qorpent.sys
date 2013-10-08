@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
@@ -23,18 +24,21 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>XML-представление чарата</returns>
         public XElement GenerateChartXml(IChartConfig config) {
             var realConfig = config ?? _config;
-            var fusion = _chart.AsFusion(realConfig);
-            var result = fusion.GetXmlElement();
+            var result = _chart.AsFusion(realConfig).GetXmlElement();
             var rootElement = result;
 
             var normalizer = FusionChartNormalizer.Create(realConfig);
             normalizer.Normalize(_chart);
 
-            result.SetAttributeValue("yAxisMinValue", _chart.Get<double>("yAxisMinValue").ToInt());
+            result.SetAttributeValue(FusionChartApi.YAxisMinValue, _chart.Get<double>(FusionChartApi.YAxisMinValue));
+            result.SetAttributeValue(FusionChartApi.YAxisMaxValue, _chart.Get<double>(FusionChartApi.YAxisMaxValue));
+            result.SetAttributeValue(FusionChartApi.Chart_LegendPosition, _chart.Get<string>(FusionChartApi.Chart_LegendPosition));
 
             foreach (var ds in _chart.Datasets.Children) {
                 if (IsMultiserial(_chart)) {
                     var dataset = new XElement("dataset");
+                    dataset.SetAttributeValue(FusionChartApi.Dataset_SeriesName, ds.Get<string>(FusionChartApi.Dataset_SeriesName));
+                    dataset.SetAttributeValue(FusionChartApi.Dataset_Color, ds.Get<string>(FusionChartApi.Dataset_Color));
                     result.Add(dataset);
                     rootElement = dataset;
                 }
@@ -45,35 +49,63 @@ namespace Qorpent.Charts.FusionCharts {
                 }
             }
 
-            if (IsMultiserial(_chart)) {
-                if (_chart.Categories.Children.Count != 0) {
-                    var categories = new XElement("categories");
-                    foreach (var cat in _chart.Categories.Children) {
-                        var category = new XElement("category");
-                        category.SetAttributeValue(FusionChartApi.Set_Label, cat.Get<string>(FusionChartApi.Set_Label));
-                        categories.Add(category);
-                    }
-
-                    result.Add(categories);
-                }
+            if (
+                (IsMultiserial(_chart))
+                    &&
+                (_chart.Categories.Children.Any())
+            ) {
+                result.Add(RenderCategories(_chart));
             }
 
-            var trendLines = new XElement("trendLines");
-            result.Add(trendLines);
-
-            foreach (var tl in _chart.TrendLines.Children) {
-                var trendLine = new XElement("line");
-                trendLine.SetAttributeValue("startValue", tl.Get<double>(ChartDefaults.ChartLineStartValue));
-                trendLine.SetAttributeValue("color", tl.Get<string>(ChartDefaults.ChartLineColor));
-                trendLine.SetAttributeValue("displayValue", tl.Get<string>(ChartDefaults.TrendLineDisplayValue));
-                if (tl.Get<bool>(ChartDefaults.ChartLineDashed)) {
-                    trendLine.SetAttributeValue("dashed", 1);
-                }
-
-                trendLines.Add(trendLine);
+            if (_chart.TrendLines.Children.Any()) {
+                result.Add(RenderTrendLines(_chart));
             }
 
             return result;
+        }
+        /// <summary>
+        ///     Разрисовка категорий графика
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private XElement RenderCategories(IChart chart) {
+            return new XElement("categories", chart.Categories.Children.Select(RenderCategory));
+        }
+        /// <summary>
+        ///     Разрисовка единичной категории по конфигу
+        /// </summary>
+        /// <param name="categoryConfig">Конфиг категории</param>
+        /// <returns></returns>
+        private XElement RenderCategory(IConfig categoryConfig) {
+            var category = new XElement("category");
+            category.SetAttributeValue(FusionChartApi.Set_Label, categoryConfig.Get<string>(FusionChartApi.Set_Label));
+            return category;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private XElement RenderTrendLines(IChart chart) {
+            return new XElement("trendLines", chart.TrendLines.Children.Select(RenderLine));
+        }
+        /// <summary>
+        ///     Разрисовка линии по её конфигу
+        /// </summary>
+        /// <param name="lineConfig"></param>
+        /// <returns></returns>
+        private XElement RenderLine(IConfig lineConfig) {
+            var line = new XElement("line");
+
+            line.SetAttributeValue(FusionChartApi.Line_StartValue, lineConfig.Get<double>(ChartDefaults.ChartLineStartValue));
+            line.SetAttributeValue("color", lineConfig.Get<string>(ChartDefaults.ChartLineColor));
+            line.SetAttributeValue(FusionChartApi.Line_DisplayValue, lineConfig.Get<string>(ChartDefaults.TrendLineDisplayValue));
+
+            if (lineConfig.Get<bool>(ChartDefaults.ChartLineDashed)) {
+                line.SetAttributeValue(FusionChartApi.Line_Dashed, 1);
+            }
+
+            return line;
         }
         /// <summary>
         ///     Собирает из переданного конфига чарта его XML-представление
@@ -93,7 +125,6 @@ namespace Qorpent.Charts.FusionCharts {
         public XElement RefactorChartXml(XElement chartXml, IChartConfig chartConfig) {
             return chartXml;
         }
-
         /// <summary>
         ///     Инициализация чарт-рендера
         /// </summary>
