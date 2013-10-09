@@ -137,7 +137,7 @@ namespace Qorpent.Applications {
 		/// </summary>
 		/// <remarks>
 		/// </remarks>
-		IRoleResolver Roles { get; }
+        IRoleResolver Roles { get; set; }
 
 		/// <summary>
 		/// 	Indicates that application is in startup mode
