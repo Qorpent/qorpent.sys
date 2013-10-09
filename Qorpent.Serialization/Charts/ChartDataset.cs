@@ -26,5 +26,19 @@ namespace Qorpent.Charts {
             get { return Get<string>(FusionChartApi.Dataset_Color); }
             set { Set(FusionChartApi.Dataset_Color, value);}
         }
+        /// <summary>
+        ///     Радиус вершин
+        /// </summary>
+        public int AnchorRadius {
+            get { return Get<int>(FusionChartApi.Chart_AnchorRadius); }
+            set { Set(FusionChartApi.Chart_AnchorRadius, value); }
+        }
+        /// <summary>
+        ///     Количество сторое вершины
+        /// </summary>
+        public int AnchorSides {
+            get { return Get<int>(FusionChartApi.Chart_AnchorSides); }
+            set { Set(FusionChartApi.Chart_AnchorSides, value); }
+        }
     }
 }

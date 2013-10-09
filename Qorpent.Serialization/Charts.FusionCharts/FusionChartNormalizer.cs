@@ -28,6 +28,11 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Нормализованный чарт</returns>
         public IChart Normalize(IChart chart) {
             FitYAxisHeight(chart);
+            
+            if (IsMultiserial(chart)) {
+                FixZeroAnchors(chart);
+            }
+
             return chart;
         }
         /// <summary>
@@ -52,8 +57,32 @@ namespace Qorpent.Charts.FusionCharts {
         /// </summary>
         /// <param name="chart">Конфиг графика</param>
         private void FitYAxisHeight(IChart chart) {
-            chart.Set(FusionChartApi.YAxisMinValue, Math.Round(GetMinDataset(chart) - 1).RoundToNearestOrder(1));
-            chart.Set(FusionChartApi.YAxisMaxValue, Math.Round(GetMaxDataset(chart) + 1).RoundToNearestOrder(1));
+
+            var max = GetMaxDataset(chart);
+            var min = GetMinDataset(chart);
+            chart.Set(FusionChartApi.YAxisMinValue, min.RoundToNearestOrder(min.GetNumberOfDigits()));
+            chart.Set(FusionChartApi.YAxisMaxValue, max.RoundToNearestOrder(max.GetNumberOfDigits()));
+        }
+        /// <summary>
+        ///     Фиксит нулевые значения радиусов и сторон якорей вершин
+        /// </summary>
+        /// <param name="chart">Представление чарта</param>
+        private void FixZeroAnchors(IChart chart) {
+            chart.Datasets.Children.Where(
+                _ => (
+                    (_.Get<int>(FusionChartApi.Chart_AnchorRadius) == 0)
+                        ||
+                    (_.Get<int>(FusionChartApi.Chart_AnchorSides) == 0)
+                )
+            ).DoForEach(_ => {
+                if (_.Get<int>(FusionChartApi.Chart_AnchorRadius) == 0) {
+                    _.Set(FusionChartApi.Chart_AnchorRadius, 5);
+                }
+
+                if (_.Get<int>(FusionChartApi.Chart_AnchorSides) == 0) {
+                    _.Set(FusionChartApi.Chart_AnchorSides, 3);
+                }
+            });
         }
         /// <summary>
         ///     Возвращает минимальное значение из всех датасетов
@@ -82,6 +111,21 @@ namespace Qorpent.Charts.FusionCharts {
             ).Select(
                 _ => _.Get<double>(FusionChartApi.Set_Value)
             );
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private bool IsMultiserial(IChart chart) {
+            var f = chart.Config.Type.To<FusionChartType>();
+            if (
+                (f & (FusionChartType)FusionChartGroupedType.MultiSeries) == f
+            ) {
+                return true;
+            }
+
+            return false;
         }
     }
 }
