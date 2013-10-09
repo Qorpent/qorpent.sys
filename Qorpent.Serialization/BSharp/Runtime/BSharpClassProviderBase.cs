@@ -26,30 +26,41 @@ namespace Qorpent.BSharp.Runtime {
 		/// <param name="rootnamespace"></param>
 		/// <returns></returns>
 		public string Resolve(string name, string rootnamespace) {
-			lock (this) {
-				if (!IndexWasBuilt) Refresh();
-				if (string.IsNullOrWhiteSpace(rootnamespace)) {
-					if (Cache.ContainsKey(name)) {
-						return name;
-					}
-				}
+		    lock (this) {
+		        CheckIndex();
 
-				string[] nssplit = rootnamespace.Split('.');
-				for (int i = nssplit.Length; i >= 0; i--) {
-					string query = name;
-					if (i != 0) {
-						query = string.Join(".", nssplit.Take(i)) + "." + name;
-					}
-					if (Cache.ContainsKey(query)) {
-						return query;
-					}
-				}
+		        if (string.IsNullOrWhiteSpace(rootnamespace)) {
+		            if (Cache.ContainsKey(name)) {
+		                return name;
+		            }
+		        }
 
-				return null;
-			}
+		        string[] nssplit = rootnamespace.Split('.');
+		        for (int i = nssplit.Length; i >= 0; i--) {
+		            string query = name;
+		            if (i != 0) {
+		                query = string.Join(".", nssplit.Take(i)) + "." + name;
+		            }
+		            if (Cache.ContainsKey(query)) {
+		                return query;
+		            }
+		        }
+
+		        return null;
+		    }
 		}
 
-		/// <summary>
+	    private void CheckIndex() {
+	        if (!IndexWasBuilt) {
+	            lock (this) {
+	                if (!IndexWasBuilt) {
+	                    Refresh();
+	                }
+	            }
+	        }
+	    }
+
+	    /// <summary>
 		///     Возвращает исходное определение класса BSharp
 		/// </summary>
 		/// <param name="fullname"></param>
@@ -127,20 +138,24 @@ namespace Qorpent.BSharp.Runtime {
 	    /// <param name="prototype"></param>
 	    /// <returns></returns>
 	    public IEnumerable<IBSharpRuntimeClass> FindClasses(string ns = null,string prototype = null) {
-	        foreach (var descriptor in Cache.Values) {
-	            if (null == descriptor.CachedClass || null==descriptor.CachedClass.PrototypeCode || null==descriptor.CachedClass.Namespace) {
-	                ReloadClass(descriptor);
+	        lock (this) {
+	            CheckIndex();
+	            foreach (var descriptor in Cache.Values) {
+	                if (null == descriptor.CachedClass || null == descriptor.CachedClass.PrototypeCode ||
+	                    null == descriptor.CachedClass.Namespace) {
+	                    ReloadClass(descriptor);
+	                }
+	                if (!string.IsNullOrWhiteSpace(ns)) {
+	                    if (descriptor.CachedClass.Namespace != ns) continue;
+	                }
+	                if (!string.IsNullOrWhiteSpace(prototype)) {
+	                    if (descriptor.CachedClass.PrototypeCode != prototype) continue;
+	                }
+	                if (!descriptor.CachedClass.Loaded) {
+	                    ReloadClass(descriptor);
+	                }
+	                yield return descriptor.CachedClass;
 	            }
-	            if (null != ns) {
-	                if (descriptor.CachedClass.Namespace != ns) continue;
-	            }
-	            if (null != prototype) {
-	                if (descriptor.CachedClass.PrototypeCode != prototype) continue;
-	            }
-	            if (!descriptor.CachedClass.Loaded) {
-	                ReloadClass(descriptor);
-	            }
-	            yield return descriptor.CachedClass;
 	        }
 	    }
 	}

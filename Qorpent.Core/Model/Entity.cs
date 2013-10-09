@@ -23,7 +23,9 @@ namespace Qorpent.Model {
 	/// Simple <see cref="IEntity"/> implementation
 	/// </summary>
 	public class Entity : IEntity {
-		/// <summary>
+	    private object _context;
+
+	    /// <summary>
 		/// PK ID in database terms
 		/// </summary>
 		public virtual int Id { get; set; }
@@ -91,5 +93,21 @@ namespace Qorpent.Model {
 		/// User's or system's time stamp
 		/// </summary>
 		public virtual DateTime Version { get; set; }
+
+	    /// <summary>
+	    /// Общий метод установления некоего контекстного объекта, использование зависит от реализации
+	    /// </summary>
+	    /// <param name="context"></param>
+	    public virtual  void SetContext(object context) {
+	        _context = context;
+	    }
+
+	    /// <summary>
+	    /// Возвращает контекстный объект
+	    /// </summary>
+	    /// <returns></returns>
+	    public object GetContext() {
+	        return _context;
+	    }
 	}
 }
