@@ -333,6 +333,7 @@ namespace Qorpent.Applications {
 				}
 				return _roles;
 			}
+            set { _roles = value; }
 		}
 
 
