@@ -671,5 +671,22 @@ namespace Qorpent.Utils.Extensions {
 	        parent.Add(element);
 	        return element;
 	    }
+        /// <summary>
+        ///     Устанавливает атрибут, если значение не null
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public static void SetAttr(this XElement parent, string name, object value) {
+            if (value != null) {
+                if (value is string) {
+                    if (string.IsNullOrWhiteSpace(value as string)) {
+                        return;
+                    }
+                }
+
+                parent.SetAttributeValue(name, value);
+            }
+        }
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Qorpent.Utils.Extensions {
     /// <summary>
@@ -18,16 +19,34 @@ namespace Qorpent.Utils.Extensions {
         /// <param name="number"></param>
         /// <param name="order"></param>
         /// <returns></returns>
-        public static double RoundToNearestOrder(this double number, int order) {
-            return Math.Round(number/(order*10))*(order*10);
+        public static int RoundToNearestOrder(this double number, int order) {
+            var floor = Math.Floor(number / Math.Pow(10, order)).ToInt();
+            var fract = Math.Round(number%(Math.Pow(10, order)));
+
+            if (order == 1) {
+                var f = ((fract < 5) ? (0) : (10));
+                return floor*10 + f;
+            }
+
+            var t = floor*Math.Pow(10, order).ToInt();
+            var g = ((order > 1) ? fract.RoundToNearestOrder(order - 1) : (fract.ToInt()));
+            return t + g;
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public static double GetNumberOfDigits(this double number) {
-            return Math.Floor(Math.Log10(number) + 1);
+        public static int GetNumberOfDigits(this double number) {
+            return Math.Floor(Math.Log10(number) + 1).ToInt();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static double ToDouble(this int n) {
+            return n*1.0;
         }
     }
 }
