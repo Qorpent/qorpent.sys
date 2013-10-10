@@ -41,5 +41,9 @@ namespace Qorpent.Charts {
         ///     Требуется ли подгонка максимальных и минимальных значений осей
         /// </summary>
         bool FitAxis { get; set; }
+        /// <summary>
+        ///     Признак того, что нужно использовать скалинг значений по умолчанию.
+        /// </summary>
+        bool UseDefaultScaling { get; set; }
     }
 }

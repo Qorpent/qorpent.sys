@@ -16,7 +16,6 @@ namespace Qorpent.Charts.FusionCharts {
         ///     Внутренний экземпляр конфига рендера чартов
         /// </summary>
         private IChartConfig _config;
-
         /// <summary>
         ///     Собирается XML-представление чарата по его конфигу
         /// </summary>
@@ -31,7 +30,9 @@ namespace Qorpent.Charts.FusionCharts {
             SetAttrs(_chart, result, new[] {
                 FusionChartApi.YAxisMinValue,
                 FusionChartApi.YAxisMaxValue,
-                FusionChartApi.Chart_LegendPosition
+                FusionChartApi.Chart_LegendPosition,
+                FusionChartApi.Chart_FormatNumber,
+                FusionChartApi.Chart_FormatNumberScale
             });
 
             RenderDatasets(_chart, realConfig, result);
@@ -132,9 +133,9 @@ namespace Qorpent.Charts.FusionCharts {
         private XElement RenderLine(IConfig lineConfig) {
             var line = new XElement("line");
 
-            line.Attr(FusionChartApi.Line_StartValue, lineConfig.Get<double>(ChartDefaults.ChartLineStartValue).ToString());
-            line.Attr("color", lineConfig.Get<string>(ChartDefaults.ChartLineColor));
-            line.Attr(FusionChartApi.Line_DisplayValue, lineConfig.Get<string>(ChartDefaults.TrendLineDisplayValue));
+            line.SetAttr(FusionChartApi.Line_StartValue, lineConfig.Get<object>(ChartDefaults.ChartLineStartValue));
+            line.SetAttr("color", lineConfig.Get<string>(ChartDefaults.ChartLineColor));
+            line.SetAttr(FusionChartApi.Line_DisplayValue, lineConfig.Get<object>(ChartDefaults.TrendLineDisplayValue));
 
             if (lineConfig.Get<bool>(ChartDefaults.ChartLineDashed)) {
                 line.SetAttributeValue(FusionChartApi.Line_Dashed, 1);

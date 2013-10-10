@@ -71,5 +71,41 @@ namespace Qorpent.Utils.Extensions {
         public static double ToDouble(this int n) {
             return n*1.0;
         }
+        /// <summary>
+        ///     Возвращает наибольшее из двух
+        /// </summary>
+        /// <param name="f">Исходное число</param>
+        /// <param name="s">Второе число</param>
+        /// <returns>Наибольшее из двух чисел</returns>
+        public static double Maximal(this double f, double s) {
+            return (f > s) ? (f) : (s);
+        }
+        /// <summary>
+        ///     Возвращает наименьшее из двух
+        /// </summary>
+        /// <param name="f">Исходное число</param>
+        /// <param name="s">Второе число</param>
+        /// <returns>Наибольшее из двух чисел</returns>
+        public static double Minimal(this double f, double s) {
+            return (f < s) ? (f) : (s);
+        }
+        /// <summary>
+        ///     Возвращает наибольшее из двух
+        /// </summary>
+        /// <param name="f">Исходное число</param>
+        /// <param name="s">Второе число</param>
+        /// <returns>Наибольшее из двух чисел</returns>
+        public static int Maximal(this int f, int s) {
+            return (f*1.0).Maximal(s*1.0).ToInt();
+        }
+        /// <summary>
+        ///     Возвращает наименьшее из двух
+        /// </summary>
+        /// <param name="f">Исходное число</param>
+        /// <param name="s">Второе число</param>
+        /// <returns>Наибольшее из двух чисел</returns>
+        public static int Minimal(this int f, int s) {
+            return (f * 1.0).Minimal(s * 1.0).ToInt();
+        }
     }
 }
