@@ -21,7 +21,7 @@ namespace Qorpent.Serialization.Tests {
             tl2.SetParentElement(tls);
             tt.SetParentElement(ds);
 
-            chart.AddElement(ds).AddElement(tt).AddElement(tl).AddElement(tl2);
+            chart.Add(ds).Add(tt).Add(tl).Add(tl2);
             Assert.AreEqual(1, chart.Datasets.Children.Count);
             Assert.AreEqual(1, chart.Datasets.Children.First().Children.Count);
             Assert.AreEqual(1, chart.TrendLines.Children.Count);

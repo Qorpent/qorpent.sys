@@ -84,7 +84,7 @@ namespace Qorpent.Charts.FusionCharts {
             SetAttrs(dataset, xml, new[] {
                 FusionChartApi.Dataset_SeriesName,
                 FusionChartApi.Dataset_Color,
-                FusionChartApi.Chart_AnchorRadius,
+                FusionChartApi.Dataset_AnchorRadius,
                 FusionChartApi.Dataset_AnchorSides
             });
 

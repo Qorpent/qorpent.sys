@@ -13,7 +13,7 @@ namespace Qorpent.Charts {
         /// <param name="chart">Исходное представление чарта</param>
         /// <param name="element">Элемент для добавления</param>
         /// <returns>Замыкание на чарт</returns>
-        public static IChart AddElement(this IChart chart, IChartElement element) {
+        public static IChart Add(this IChart chart, IChartElement element) {
             if (element is IChartDataset) {
                 chart.Datasets.Add(element as IChartDataset);
                 SetParent(element, chart.Datasets);
@@ -48,8 +48,8 @@ namespace Qorpent.Charts {
         /// <param name="element">Элемент для добавления</param>
         /// <param name="postInit">Действие пост-инициализации</param>
         /// <returns>Замыкание на чарт</returns>
-        public static IChart AddElement(this IChart chart, IChartElement element, Action<IChartElement> postInit) {
-            postInit(chart.AddElement(element));
+        public static IChart Add(this IChart chart, IChartElement element, Action<IChartElement> postInit) {
+            postInit(chart.Add(element));
             return chart;
         }
         /// <summary>
@@ -60,7 +60,7 @@ namespace Qorpent.Charts {
         /// <returns>Замыкание на чарт</returns>
         public static IChart AddElements(this IChart chart, IEnumerable<IChartElement> elements) {
             foreach (var element in elements) {
-                chart.AddElement(element);
+                chart.Add(element);
             }
 
             return chart;
@@ -101,7 +101,7 @@ namespace Qorpent.Charts {
         /// <param name="name">Имя атрибута</param>
         /// <param name="value">Значение атрибута</param>
         /// <returns>Замыкание на элемент</returns>
-        public static IChartElement SetAttribute(this IChartElement element, string name, object value) {
+        public static IChartElement Set(this IChartElement element, string name, object value) {
             element.Set(name, value);
             return element;
         }
@@ -113,8 +113,8 @@ namespace Qorpent.Charts {
         /// <param name="name">Имя атрибута</param>
         /// <param name="value">Значение атрибута</param>
         /// <returns>Замыкание на типизированный элемент</returns>
-        public static T SetAttribute<T>(this IChartElement element, string name, object value) {
-            return (T)element.SetAttribute(name, value);
+        public static T Set<T>(this IChartElement element, string name, object value) {
+            return (T)Set(element, name, value);
         }
     }
 }
