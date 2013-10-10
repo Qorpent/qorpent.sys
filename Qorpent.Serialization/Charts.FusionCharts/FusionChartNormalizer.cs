@@ -60,8 +60,8 @@ namespace Qorpent.Charts.FusionCharts {
 
             var max = GetMaxDataset(chart);
             var min = GetMinDataset(chart);
-            chart.Set(FusionChartApi.YAxisMinValue, min.RoundToNearestOrder(min.GetNumberOfDigits()));
-            chart.Set(FusionChartApi.YAxisMaxValue, max.RoundToNearestOrder(max.GetNumberOfDigits()));
+            chart.Set(FusionChartApi.YAxisMinValue, min.Round(min.GetNumberOfDigits()));
+            chart.Set(FusionChartApi.YAxisMaxValue, max.Round(max.GetNumberOfDigits()));
         }
         /// <summary>
         ///     Фиксит нулевые значения радиусов и сторон якорей вершин

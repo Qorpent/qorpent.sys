@@ -13,13 +13,14 @@ namespace Qorpent.Utils.Extensions {
         public static double RoundToNearestHundred(this double number) {
             return Math.Round(number.ToInt()/100.0)*100;
         }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="number"></param>
         /// <param name="order"></param>
         /// <returns></returns>
-        public static int RoundToNearestOrder(this double number, int order) {
+        public static int Round(this double number, int order) {
             var floor = Math.Floor(number / Math.Pow(10, order)).ToInt();
             var fract = Math.Round(number%(Math.Pow(10, order)));
 
@@ -29,8 +30,30 @@ namespace Qorpent.Utils.Extensions {
             }
 
             var t = floor*Math.Pow(10, order).ToInt();
-            var g = ((order > 1) ? fract.RoundToNearestOrder(order - 1) : (fract.ToInt()));
+            var g = ((order > 1) ? fract.Round(order - 1) : (fract.ToInt()));
             return t + g;
+        }
+        /// <summary>
+        ///     Округляет в меньшую сторону относительно указанного порядка
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <param name="order">Порядок, по которому округлять</param>
+        /// <returns>Округлённое число</returns>
+        public static int RoundDown(this double number, int order) {
+            var t = Math.Pow(10, order);
+            var f = Math.Floor(number.ToInt()/t);
+            var y = Math.Round(number%t);
+            var b = (order > 1) ? Math.Floor(y / Math.Pow(10, order - 1)) : (0);
+            return (f*Math.Pow(10, order) + b * (Math.Pow(10, order - 1))).ToInt();
+        }
+        /// <summary>
+        ///     Округляет в большую сторону относительно указанного порядка
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <param name="order">Порядок, по которому округлять</param>
+        /// <returns>Округлённое число</returns>
+        public static int RoundUp(this double number, int order) {
+            return number.RoundDown(order) + ((order == 1) ? (10) : (Math.Pow(10, order - 1).ToInt()));
         }
         /// <summary>
         /// 
