@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace Qorpent.Charts {
     /// <summary>
@@ -65,7 +66,7 @@ namespace Qorpent.Charts {
             return chart;
         }
         /// <summary>
-        ///     Установка нонфига для <see cref="Chart"/>
+        ///     Установка конфига для <see cref="Chart"/>
         /// </summary>
         /// <param name="chart">Исходное представление чарта</param>
         /// <param name="chartConfig">Конфиг чарта</param>
@@ -78,31 +79,42 @@ namespace Qorpent.Charts {
             return chart;
         }
         /// <summary>
-        /// 
+        ///     Установка родительского элемента элементу. Фасад над <see cref="IChartElement.SetParentElement"/>
         /// </summary>
-        /// <param name="element"></param>
-        /// <param name="parent"></param>
+        /// <param name="element">Исходный элемент</param>
+        /// <param name="parent">Родительский элемент</param>
         private static void SetParent(IChartElement element, IChartElement parent) {
             element.SetParentElement(parent);
         }
         /// <summary>
-        /// 
+        ///     Возвращает типизированный класс-родитель
         /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
+        /// <param name="element">Исходный элемент</param>
+        /// <returns>Типизированный класс-родитель</returns>
         private static T ParentOf<T>(IChartElement element) {
             return element.Get<T>(ChartDefaults.ChartElementParentProperty);
         }
         /// <summary>
         ///     Установка атрибута
         /// </summary>
-        /// <param name="element"></param>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="element">Исходный элемент</param>
+        /// <param name="name">Имя атрибута</param>
+        /// <param name="value">Значение атрибута</param>
+        /// <returns>Замыкание на элемент</returns>
         public static IChartElement SetAttribute(this IChartElement element, string name, object value) {
             element.Set(name, value);
             return element;
+        }
+        /// <summary>
+        ///     Установка атрибута
+        /// </summary>
+        /// <typeparam name="T">Типизация элемента</typeparam>
+        /// <param name="element">Исходный элемент</param>
+        /// <param name="name">Имя атрибута</param>
+        /// <param name="value">Значение атрибута</param>
+        /// <returns>Замыкание на типизированный элемент</returns>
+        public static T SetAttribute<T>(this IChartElement element, string name, object value) {
+            return (T)element.SetAttribute(name, value);
         }
     }
 }
