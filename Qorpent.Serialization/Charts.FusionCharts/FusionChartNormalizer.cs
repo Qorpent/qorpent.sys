@@ -57,11 +57,27 @@ namespace Qorpent.Charts.FusionCharts {
         /// </summary>
         /// <param name="chart">Конфиг графика</param>
         private void FitYAxisHeight(IChart chart) {
-
             var max = GetMaxDataset(chart);
             var min = GetMinDataset(chart);
-            chart.Set(FusionChartApi.YAxisMinValue, min.Round(min.GetNumberOfDigits()));
-            chart.Set(FusionChartApi.YAxisMaxValue, max.Round(max.GetNumberOfDigits()));
+
+            if (!_chartConfig.UseDefaultScaling) {
+                chart.Set(FusionChartApi.Chart_FormatNumber, 0);
+                chart.Set(FusionChartApi.Chart_FormatNumberScale, 0);
+            }
+
+            chart.Set(
+                FusionChartApi.YAxisMinValue,
+                min.RoundDown(min.GetNumberOfDigits() - 1).Minimal(
+                    GetMinTrendline(chart).ToInt()
+                )
+            );
+
+            chart.Set(
+                FusionChartApi.YAxisMaxValue,
+                max.RoundUp(max.GetNumberOfDigits() - 1).Maximal(
+                    GetMaxTrendline(chart).ToInt()
+                )
+            );
         }
         /// <summary>
         ///     Фиксит нулевые значения радиусов и сторон якорей вершин
@@ -83,6 +99,32 @@ namespace Qorpent.Charts.FusionCharts {
                     _.Set(FusionChartApi.Chart_AnchorSides, 3);
                 }
             });
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private IEnumerable<double> GetTrendlines(IChart chart) {
+            return chart.TrendLines.Children.Select(
+                _ => _.Get<double>(ChartDefaults.ChartLineStartValue)
+            );
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private double GetMaxTrendline(IChart chart) {
+            return GetTrendlines(chart).Max();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private double GetMinTrendline(IChart chart) {
+            return GetTrendlines(chart).Min();
         }
         /// <summary>
         ///     Возвращает минимальное значение из всех датасетов

@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using Qorpent.Config;
+﻿using Qorpent.Config;
 
 namespace Qorpent.Charts {
 
@@ -16,8 +15,7 @@ namespace Qorpent.Charts {
     /// <summary>
     ///     Элемент чарта
     /// </summary>
-    public interface IChartElement<T> :IChartElement  where T:IChartElement  
-    {
+    public interface IChartElement<T> :IChartElement  where T:IChartElement {
         /// <summary>
         ///     Родительский элемент
         /// </summary>

@@ -70,6 +70,10 @@ namespace Qorpent.Charts {
             set { Set(ChartDefaults.FitAxis, value); }
         }
         /// <summary>
+        ///     Признак того, что нужно использовать скалинг значений по умолчанию.
+        /// </summary>
+        public bool UseDefaultScaling { get; set; }
+        /// <summary>
         /// 
         /// </summary>
         public ChartConfig() {

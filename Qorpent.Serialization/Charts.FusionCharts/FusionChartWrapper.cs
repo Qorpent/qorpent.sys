@@ -7,7 +7,7 @@ namespace Qorpent.Charts.FusionCharts {
     /// <summary>
     /// Обертка графика для соответствия FusionChart
     /// </summary>
-    public partial class FusionChartWrapper  {
+    public class FusionChartWrapper  {
         private IChartElement _element;
         private IChartConfig _config;
         private string _elementName;
