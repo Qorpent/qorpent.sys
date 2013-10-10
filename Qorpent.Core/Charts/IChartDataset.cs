@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Qorpent.Charts {
+﻿namespace Qorpent.Charts {
     /// <summary>
-    /// Набор данных чарта
+    ///     Набор данных чарта
     /// </summary>
-    public interface IChartDataset:IChartElementList<IChartDatasets,IChartDataItem> {
-
-    }
+    public interface IChartDataset : IChartElementList<IChartDatasets, IChartDataItem> { }
 }
