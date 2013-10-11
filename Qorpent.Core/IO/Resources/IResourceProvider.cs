@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Qorpent.IO.Resources
-{
+namespace Qorpent.IO.Resources {
 	/// <summary>
 	/// Общее описание службы получения контента
 	/// </summary>
@@ -26,5 +24,11 @@ namespace Qorpent.IO.Resources
 		/// <param name="uri"></param>
 		/// <returns></returns>
 		bool IsSupported(Uri uri);
+        /// <summary>
+        ///     Получение размера документа по его Uri
+        /// </summary>
+        /// <param name="uri">Uri документа</param>
+        /// <returns>Размер документа</returns>
+	    int GetSize(Uri uri);
 	}
 }
