@@ -1,54 +1,165 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Qorpent.Config;
+using Qorpent.IoC;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts.FusionCharts {
     /// <summary>
-    ///     Нормалайзер
+    ///     
     /// </summary>
-    public static class FusionChartsNormalizer {
+    [ContainerComponent(ServiceType = typeof(IСhartNormalizer), Name = "fusion.chart.normalizer")]  
+    public class FusionChartNormalizer : ConfigBase, IСhartNormalizer {
         /// <summary>
-        /// 
+        ///     Внутренний экземпляр конфига чарта
         /// </summary>
-        public const int MinValuePadding = 10;
+        private IChartConfig _chartConfig;
         /// <summary>
-        /// 
+        ///     Произвести нормализацию чарта
         /// </summary>
-        /// <param name="chart"></param>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        public static IChart Normalize(this IChart chart, FusionChartsNormalizerConfig config) {
-            if (chart is Chart) {
-                return NormalizeChart(chart as Chart, config);
-            }
-
-            throw new NotSupportedException();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chart"></param>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        private static Chart NormalizeChart(Chart chart, FusionChartsNormalizerConfig config) {
-            foreach (var dataset in chart.Datasets.AsList) {
-                foreach (var ds in dataset.AsList) {
-                    foreach (var c in ds.Children) {
-                        Console.WriteLine(c.Count);
-                    }
-                }
-
+        /// <param name="chart">Чарт</param>
+        /// <returns>Нормализованный чарт</returns>
+        public IChart Normalize(IChart chart) {
+            FitYAxisHeight(chart);
+            
+            if (IsMultiserial(chart)) {
+                FixZeroAnchors(chart);
             }
 
             return chart;
         }
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    public struct FusionChartsNormalizerConfig {
         /// <summary>
-        ///    Установленный параметер указывает на то, что нормалайзер должен сделать «разрыв» графика 
+        ///     Создание инстанции нормалайзера
         /// </summary>
-        public bool ReduceY;
+        /// <param name="chartConfig">Конфиг графика</param>
+        /// <returns>Настроенный экземпляр <see cref="IСhartNormalizer"/></returns>
+        public static IСhartNormalizer Create(IChartConfig chartConfig) {
+            return new FusionChartNormalizer().Initialize(chartConfig);
+        }
+        /// <summary>
+        ///     Инициализация нормалайзера
+        /// </summary>
+        /// <param name="chartConfig">Конфиг графика</param>
+        /// <returns>Настроенный экземпляр <see cref="IСhartNormalizer"/></returns>
+        public IСhartNormalizer Initialize(IChartConfig chartConfig) {
+            _chartConfig = chartConfig;
+            return this;
+        }
+        /// <summary>
+        ///     Подгонка начальных значений y-оси
+        /// </summary>
+        /// <param name="chart">Конфиг графика</param>
+        private void FitYAxisHeight(IChart chart) {
+            var max = GetMaxDataset(chart);
+            var min = GetMinDataset(chart);
+
+            if (!_chartConfig.UseDefaultScaling) {
+                chart.Set(FusionChartApi.Chart_FormatNumber, 0);
+                chart.Set(FusionChartApi.Chart_FormatNumberScale, 0);
+            }
+
+            chart.SetYAxisMinValue(
+                min.RoundDown(min.GetNumberOfDigits() - 1).Minimal(
+                    GetMinTrendline(chart).ToInt()
+                ) - Math.Pow(10, min.GetNumberOfDigits() - 2)
+            );
+
+            chart.SetYAxisMaxValue(
+                max.RoundUp(max.GetNumberOfDigits() - 1).Maximal(
+                    GetMaxTrendline(chart).ToInt()
+                ) + Math.Pow(10, min.GetNumberOfDigits() - 2)
+            );
+        }
+        /// <summary>
+        ///     Фиксит нулевые значения радиусов и сторон якорей вершин
+        /// </summary>
+        /// <param name="chart">Представление чарта</param>
+        private void FixZeroAnchors(IChart chart) {
+            chart.Datasets.Children.Where(
+                _ => (
+                    (_.Get<int>(FusionChartApi.Chart_AnchorRadius) == 0)
+                        ||
+                    (_.Get<int>(FusionChartApi.Chart_AnchorSides) == 0)
+                )
+            ).DoForEach(_ => {
+                if (_.Get<int>(FusionChartApi.Chart_AnchorRadius) == 0) {
+                    _.Set(FusionChartApi.Chart_AnchorRadius, 5);
+                }
+
+                if (_.Get<int>(FusionChartApi.Chart_AnchorSides) == 0) {
+                    _.Set(FusionChartApi.Chart_AnchorSides, 3);
+                }
+            });
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private IEnumerable<double> GetTrendlines(IChart chart) {
+            return chart.TrendLines.Children.Select(
+                _ => _.Get<double>(ChartDefaults.ChartLineStartValue)
+            );
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private double GetMaxTrendline(IChart chart) {
+            return GetTrendlines(chart).Max();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private double GetMinTrendline(IChart chart) {
+            return GetTrendlines(chart).Min();
+        }
+        /// <summary>
+        ///     Возвращает минимальное значение из всех датасетов
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Минимальное значение из всех датасетов</returns>
+        private double GetMinDataset(IChart chart) {
+            return GetDatasetValues(chart).Min();
+        }
+        /// <summary>
+        ///     Возвращает максимальное значение из всех датасетов
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Максимальное значение датасета</returns>
+        private double GetMaxDataset(IChart chart) {
+            return GetDatasetValues(chart).Max();
+        }
+        /// <summary>
+        ///     Возвращает плоский список всех значений датасетов
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Перечисление значений датасетов</returns>
+        private IEnumerable<double> GetDatasetValues(IChart chart) {
+            return chart.Datasets.Children.SelectMany(
+                _ => _.Children
+            ).Select(
+                _ => _.Get<double>(FusionChartApi.Set_Value)
+            );
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private bool IsMultiserial(IChart chart) {
+            var f = chart.Config.Type.To<FusionChartType>();
+            if (
+                (f & (FusionChartType)FusionChartGroupedType.MultiSeries) == f
+            ) {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

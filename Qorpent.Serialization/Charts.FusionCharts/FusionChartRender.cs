@@ -9,7 +9,12 @@ namespace Qorpent.Charts.FusionCharts {
     /// 
     /// </summary>
     [ContainerComponent(ServiceType = typeof(IChartRender),Name = "fusion.chart.render")]    
-    public class FusionChartRender:ServiceBase,IChartRender {
+    public class FusionChartRender : ServiceBase,IChartRender {
+        /// <summary>
+        ///     Нормалайзер чартов
+        /// </summary>
+        [Inject]
+        public IСhartNormalizer ChartNormalizer { get; set; }
         private IChart _chart;
         /// <summary>
         ///     Внутренний экземпляр конфига рендера чартов
@@ -24,7 +29,12 @@ namespace Qorpent.Charts.FusionCharts {
             var realConfig = config ?? _config;
             var result = _chart.AsFusion(realConfig).GetXmlElement();
 
-            FusionChartNormalizer.Create(realConfig).Normalize(_chart);
+            if (ChartNormalizer == null) {
+                ChartNormalizer = new FusionChartNormalizer();
+            }
+
+            ChartNormalizer.Initialize(realConfig);
+            ChartNormalizer.Normalize(_chart);
 
             result.SetAttr(FusionChartApi.Chart_XAxisName, _chart.GetXAxisName());
             result.SetAttr(FusionChartApi.Chart_YAxisName, _chart.GetYAxisName());
