@@ -26,9 +26,17 @@ namespace Qorpent.Charts.FusionCharts {
 
             FusionChartNormalizer.Create(realConfig).Normalize(_chart);
 
+            result.SetAttr(FusionChartApi.Chart_XAxisName, _chart.GetXAxisName());
+            result.SetAttr(FusionChartApi.Chart_YAxisName, _chart.GetYAxisName());
+            result.SetAttr(FusionChartApi.Chart_YAxisMinValue, _chart.GetYAxisMinValue());
+            result.SetAttr(FusionChartApi.Chart_YAxisMaxValue, _chart.GetYAxisMaxValue());
+            result.SetAttr(FusionChartApi.Chart_BgColor, _chart.GetBgColor());
+            result.SetAttr(FusionChartApi.Chart_Alpha, _chart.GetAlpha());
+            result.SetAttr(FusionChartApi.Chart_DivIntervalHints, _chart.GetDivIntervalHints());
+            result.SetAttr(FusionChartApi.Chart_DivLineAlpha, _chart.GetDivLineAlpha());
+            result.SetAttr(FusionChartApi.Chart_ShowAlternateHGridColor, _chart.GetShowAlternateHGridColor() ? 1 : 0);
+
             SetAttrs(_chart, result, new[] {
-                FusionChartApi.YAxisMinValue,
-                FusionChartApi.YAxisMaxValue,
                 FusionChartApi.Chart_LegendPosition,
                 FusionChartApi.Chart_FormatNumber,
                 FusionChartApi.Chart_FormatNumberScale

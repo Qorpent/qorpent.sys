@@ -66,7 +66,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static string Chart_Alpha = "Chart_Alpha";
+        public static string Chart_Alpha = "alpha";
         /// <summary>
         /// 
         /// </summary>

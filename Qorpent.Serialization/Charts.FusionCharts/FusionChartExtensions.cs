@@ -7,20 +7,6 @@ namespace Qorpent.Charts.FusionCharts {
     /// </summary>
     public static class FusionChartExtensions {
         /// <summary>
-        ///     Добавление сета к датасету
-        /// </summary>
-        /// <param name="dataset">Исходный датасет</param>
-        /// <param name="label">Метка</param>
-        /// <param name="value">Значение</param>
-        /// <returns>Установленный сет</returns>
-        public static IChartSet AddSet(this IChartDataset dataset, string label, decimal value) {
-            var set = new ChartSet();
-            set.Set(FusionChartApi.Set_Label, label);
-            set.Set(FusionChartApi.Set_Value, value);
-            dataset.Add(set);
-            return set;
-        }
-        /// <summary>
         ///     Признак того, что график мультисерийный
         /// </summary>
         /// <param name="chart">Представление графика</param>
@@ -60,6 +46,91 @@ namespace Qorpent.Charts.FusionCharts {
             return chart.TrendLines.Children;
         }
         /// <summary>
+        ///     Установка фона графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="bgColor">Фон графика</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetBgColor(this IChart chart, string bgColor) {
+            return chart.Set<IChart>(FusionChartApi.Chart_BgColor, bgColor);
+        }
+        /// <summary>
+        ///     Получение фона графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Фон графика</returns>
+        public static string GetBgColor(this IChart chart) {
+            return chart.Get<string>(FusionChartApi.Chart_BgColor);
+        }
+        /// <summary>
+        ///     Установка прозрачности фона графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="alpha">Прозрачность фона графика</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetAlpha(this IChart chart, int alpha) {
+            return chart.Set<IChart>(FusionChartApi.Chart_Alpha, alpha);
+        }
+        /// <summary>
+        ///     Получение прозрачности фона графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Прозрачность фона графика</returns>
+        public static int GetAlpha(this IChart chart) {
+            return chart.Get<int>(FusionChartApi.Chart_Alpha);
+        }
+        /// <summary>
+        ///     Установка интервала разрисовки
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="divIntervalHints">Интервал разрисовки</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetDivIntervalHints(this IChart chart, string divIntervalHints) {
+            return chart.Set<IChart>(FusionChartApi.Chart_DivIntervalHints, divIntervalHints);
+        }
+        /// <summary>
+        ///     Получение интервала разрисовки
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Интервал разрисовки</returns>
+        public static string GetDivIntervalHints(this IChart chart) {
+            return chart.Get<string>(FusionChartApi.Chart_DivIntervalHints);
+        }
+        /// <summary>
+        ///     Установка прозрачности фона линий тренда
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="divLineAlpha">Прозрачность фона линий тренда</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetDivLineAlpha(this IChart chart, int divLineAlpha) {
+            return chart.Set<IChart>(FusionChartApi.Chart_DivLineAlpha, divLineAlpha);
+        }
+        /// <summary>
+        ///     Получение прозрачности фона линий тренда
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Прозрачность фона линий тренда</returns>
+        public static int GetDivLineAlpha(this IChart chart) {
+            return chart.Get<int>(FusionChartApi.Chart_DivLineAlpha);
+        }
+        /// <summary>
+        ///     Установка отображения горизонтальных чередующихся блоков линий тренда другим цветом
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="showAlternateHGridColor">Признак отрисовки</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetShowAlternateHGridColor(this IChart chart, bool showAlternateHGridColor) {
+            return chart.Set<IChart>(FusionChartApi.Chart_ShowAlternateHGridColor, showAlternateHGridColor);
+        }
+        /// <summary>
+        ///     Получение отображения горизонтальных чередующихся блоков линий тренда другим цветом
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Признак отрисовки</returns>
+        public static bool GetShowAlternateHGridColor(this IChart chart) {
+            return chart.Get<bool>(FusionChartApi.Chart_ShowAlternateHGridColor);
+        }
+        /// <summary>
         ///     Установка заголовка графика
         /// </summary>
         /// <param name="chart">Представление графика</param>
@@ -75,6 +146,74 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Заголовок графика</returns>
         public static string GetCaption(this IChart chart) {
             return chart.Get<string>(FusionChartApi.Chart_Caption);
+        }
+        /// <summary>
+        ///     Установка имени X оси
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="name">Имя X оси</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetXAxisName(this IChart chart, string name) {
+            return chart.Set<IChart>(FusionChartApi.Chart_XAxisName, name);
+        }
+        /// <summary>
+        ///     Получение имени X оси
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Имя X оси</returns>
+        public static string GetXAxisName(this IChart chart) {
+            return chart.Get<string>(FusionChartApi.Chart_XAxisName);
+        }
+        /// <summary>
+        ///     Установка минимального значения оси Y
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="minValue">Минимальное значение</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetYAxisMinValue(this IChart chart, double minValue) {
+            return chart.Set<IChart>(FusionChartApi.Chart_XAxisMinValue, minValue);
+        }
+        /// <summary>
+        ///     Получение минимального значения оси Y
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static double GetYAxisMinValue(this IChart chart) {
+            return chart.Get<double>(FusionChartApi.Chart_XAxisMinValue);
+        }
+        /// <summary>
+        ///     Установка максимального значения оси Y
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="minValue">Минимальное значение</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetYAxisMaxValue(this IChart chart, double minValue) {
+            return chart.Set<IChart>(FusionChartApi.Chart_XAxisMaxValue, minValue);
+        }
+        /// <summary>
+        ///     Получение максимального значения оси Y
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Максимальное значение оси Y</returns>
+        public static double GetYAxisMaxValue(this IChart chart) {
+            return chart.Get<double>(FusionChartApi.Chart_XAxisMaxValue);
+        }
+        /// <summary>
+        ///     Установка имени Y оси
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="name">Имя Y оси</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetYAxisName(this IChart chart, string name) {
+            return chart.Set<IChart>(FusionChartApi.Chart_YAxisName, name);
+        }
+        /// <summary>
+        ///     Получение имени Y оси
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Имя Y оси</returns>
+        public static string GetYAxisName(this IChart chart) {
+            return chart.Get<string>(FusionChartApi.Chart_YAxisName);
         }
         /// <summary>
         ///     Установка подзаголовка графика
@@ -219,6 +358,40 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Подпись тренда</returns>
         public static string GetDisplayValue(this IChartTrendLine trendLine) {
             return trendLine.Get<string>(ChartDefaults.TrendLineDisplayValue);
+        }
+        /// <summary>
+        ///     Установка метки к сету
+        /// </summary>
+        /// <param name="chartSet">Представление сета</param>
+        /// <param name="label">Метка</param>
+        /// <returns>Замыкание на сет</returns>
+        public static IChartSet SetLabel(this IChartSet chartSet, string label) {
+            return chartSet.Set<IChartSet>(FusionChartApi.Set_Label, label);
+        }
+        /// <summary>
+        ///     Получение метки к сету
+        /// </summary>
+        /// <param name="chartSet">Представление сета</param>
+        /// <returns>Метка</returns>
+        public static string GetLabel(this IChartSet chartSet) {
+            return chartSet.Get<string>(FusionChartApi.Set_Label);
+        }
+        /// <summary>
+        ///     Установка значения сету
+        /// </summary>
+        /// <param name="chartSet">Представление сета</param>
+        /// <param name="value">Значение</param>
+        /// <returns>Замыкание на сет</returns>
+        public static IChartSet SetValue(this IChartSet chartSet, decimal value) {
+            return chartSet.Set<IChartSet>(FusionChartApi.Set_Value, value);
+        }
+        /// <summary>
+        ///     Получение значения сета
+        /// </summary>
+        /// <param name="chartSet">Представление сета</param>
+        /// <returns>Замыкание на сет</returns>
+        public static decimal GetValue(this IChartSet chartSet) {
+            return chartSet.Get<decimal>(FusionChartApi.Set_Value);
         }
     }
 }

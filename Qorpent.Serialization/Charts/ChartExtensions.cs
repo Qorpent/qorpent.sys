@@ -41,6 +41,23 @@ namespace Qorpent.Charts {
             return chart;
         }
         /// <summary>
+        ///     Добавление элемента к элементу
+        /// </summary>
+        /// <param name="baseElement">Исходное представление элемента</param>
+        /// <param name="element">Элемент для добавления</param>
+        /// <returns>Замыкание на исходный элемент</returns>
+        public static IChartElement Add(this IChartElement baseElement, IChartElement element) {
+            if (baseElement is IChart) {
+                (baseElement as IChart).Add(element);
+            } else if (baseElement is IChartDataset) {
+                if (element is IChartDataItem) {
+                    (baseElement as IChartDataset).Add(element as IChartDataItem);
+                }
+            }
+
+            return baseElement;
+        }
+        /// <summary>
         ///     Добавление элемента к чарту
         /// </summary>
         /// <param name="chart">Исходное представление чарта</param>

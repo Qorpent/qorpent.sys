@@ -65,18 +65,16 @@ namespace Qorpent.Charts.FusionCharts {
                 chart.Set(FusionChartApi.Chart_FormatNumberScale, 0);
             }
 
-            chart.Set(
-                FusionChartApi.YAxisMinValue,
+            chart.SetYAxisMinValue(
                 min.RoundDown(min.GetNumberOfDigits() - 1).Minimal(
                     GetMinTrendline(chart).ToInt()
-                )
+                ) - Math.Pow(10, min.GetNumberOfDigits() - 2)
             );
 
-            chart.Set(
-                FusionChartApi.YAxisMaxValue,
+            chart.SetYAxisMaxValue(
                 max.RoundUp(max.GetNumberOfDigits() - 1).Maximal(
                     GetMaxTrendline(chart).ToInt()
-                )
+                ) + Math.Pow(10, min.GetNumberOfDigits() - 2)
             );
         }
         /// <summary>
