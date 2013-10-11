@@ -15,8 +15,8 @@ namespace Qorpent.Serialization.Tests {
             var chart = new Chart();
             var ds = new ChartDataset();
             var tt = new ChartSet();
-            var tl = new ChartLine();
-            var tl2 = new ChartLine();
+            var tl = new ChartTrendLine();
+            var tl2 = new ChartTrendLine();
             var tls = new ChartTrendLines();
             tl2.SetParentElement(tls);
             tt.SetParentElement(ds);

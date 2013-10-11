@@ -63,7 +63,7 @@
     <Compile Include="Charts\ChartElement.cs" />
     <Compile Include="Charts\ChartElementList.cs" />
     <Compile Include="Charts\ChartExtensions.cs" />
-    <Compile Include="Charts\ChartLine.cs" />
+    <Compile Include="Charts\ChartTrendLine.cs" />
     <Compile Include="Charts\ChartLineSet.cs" />
     <Compile Include="Charts\ChartLineSetItem.cs" />
     <Compile Include="Charts\ChartRenderResult.cs" />

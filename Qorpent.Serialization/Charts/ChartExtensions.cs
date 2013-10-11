@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace Qorpent.Charts {
     /// <summary>
@@ -91,7 +90,7 @@ namespace Qorpent.Charts {
         /// </summary>
         /// <param name="element">Исходный элемент</param>
         /// <returns>Типизированный класс-родитель</returns>
-        private static T ParentOf<T>(IChartElement element) {
+        public static T ParentOf<T>(IChartElement element) {
             return element.Get<T>(ChartDefaults.ChartElementParentProperty);
         }
         /// <summary>
@@ -104,6 +103,25 @@ namespace Qorpent.Charts {
         public static IChartElement Set(this IChartElement element, string name, object value) {
             element.Set(name, value);
             return element;
+        }
+        /// <summary>
+        ///     Получение значения атрибута
+        /// </summary>
+        /// <param name="element">Исходный элемент</param>
+        /// <param name="name">Имя атрибута</param>
+        /// <returns>Значение атрибута</returns>
+        public static object Get(this IChartElement element, string name) {
+            return element.Get(name, typeof (object));
+        }
+        /// <summary>
+        ///     Получение значения атрибута
+        /// </summary>
+        /// <typeparam name="T">Типизация</typeparam>
+        /// <param name="element">Исходный элемент</param>
+        /// <param name="name">Имя атрибута</param>
+        /// <returns>Значение атрибута</returns>
+        public static T Get<T>(this IChartElement element, string name) {
+            return (T)element.Get(name);
         }
         /// <summary>
         ///     Установка атрибута

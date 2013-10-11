@@ -1,4 +1,7 @@
-﻿namespace Qorpent.Charts.FusionCharts {
+﻿using System.Collections.Generic;
+using Qorpent.Utils.Extensions;
+
+namespace Qorpent.Charts.FusionCharts {
     /// <summary>
     /// 
     /// </summary>
@@ -18,6 +21,45 @@
             return set;
         }
         /// <summary>
+        ///     Признак того, что график мультисерийный
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Признак того, что график мультисерийный</returns>
+        public static bool IsMultiserial(this IChart chart) {
+            var f = chart.Config.Type.To<FusionChartType>();
+            if (
+                (f & (FusionChartType)FusionChartGroupedType.MultiSeries) == f
+            ) {
+                return true;
+            }
+
+            return false;
+        }
+        /// <summary>
+        ///     Возвращает перечисление категорий, относящихся к графику
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Перечисление категорий</returns>
+        public static IEnumerable<IChartCategory> GetCategories(this IChart chart) {
+            return chart.Categories.Children;
+        }
+        /// <summary>
+        ///     Возвращает перечисление датасетов, относящихся к графику
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Перечисление датасетов</returns>
+        public static IEnumerable<IChartDataset> GetDatasets(this IChart chart) {
+            return chart.Datasets.Children;
+        }
+        /// <summary>
+        ///     Возвращает перечисление линий тренда, относящихся к графику
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Перечисление линий тренда</returns>
+        public static IEnumerable<IChartTrendLine> GetTrendlines(this IChart chart) {
+            return chart.TrendLines.Children;
+        }
+        /// <summary>
         ///     Установка заголовка графика
         /// </summary>
         /// <param name="chart">Представление графика</param>
@@ -27,6 +69,14 @@
             return chart.Set<IChart>(FusionChartApi.Chart_Caption, caption);
         }
         /// <summary>
+        ///     Получение заголовка графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Заголовок графика</returns>
+        public static string GetCaption(this IChart chart) {
+            return chart.Get<string>(FusionChartApi.Chart_Caption);
+        }
+        /// <summary>
         ///     Установка подзаголовка графика
         /// </summary>
         /// <param name="chart">Представление графика</param>
@@ -34,6 +84,14 @@
         /// <returns>Замыкание на представление графика</returns>
         public static IChart SetSubCaption(this IChart chart, string subCaption) {
             return chart.Set<IChart>(FusionChartApi.Chart_SubCaption, subCaption);
+        }
+        /// <summary>
+        ///     Получение подзаголовка графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Подзаголовок графика</returns>
+        public static string GetSubCaption(this IChart chart) {
+            return chart.Get<string>(FusionChartApi.Chart_SubCaption);
         }
         /// <summary>
         ///     Установка отступа заголовка
@@ -101,6 +159,14 @@
             return trendLine;
         }
         /// <summary>
+        ///     Получение начального значения линии тренда
+        /// </summary>
+        /// <param name="trendLine">Представление линии тренда</param>
+        /// <returns>Начальное значение линии тренда</returns>
+        public static double GetStartValue(this IChartTrendLine trendLine) {
+            return trendLine.Get<double>(ChartDefaults.ChartLineStartValue);
+        }
+        /// <summary>
         ///     Установка цвета линии тренда
         /// </summary>
         /// <param name="trendLine">Представление линии тренда</param>
@@ -109,6 +175,14 @@
         public static IChartTrendLine SetColor(this IChartTrendLine trendLine, string color) {
             trendLine.Set(ChartDefaults.ChartLineColor, color);
             return trendLine;
+        }
+        /// <summary>
+        ///     Получение цвета линии тренда
+        /// </summary>
+        /// <param name="trendLine">Представление линии тренда</param>
+        /// <returns>Цвет линии тренда</returns>
+        public static string GetColor(this IChartTrendLine trendLine) {
+            return trendLine.Get<string>(ChartDefaults.ChartLineColor);
         }
         /// <summary>
         ///     Установка пунктирной линии тренда
@@ -121,6 +195,14 @@
             return trendLine;
         }
         /// <summary>
+        ///     Установка пунктирной линии тренда
+        /// </summary>
+        /// <param name="trendLine">Представление линии тренда</param>
+        /// <returns>Признак того, что линия пунктирная</returns>
+        public static bool GetDashed(this IChartTrendLine trendLine) {
+            return trendLine.Get<bool>(ChartDefaults.ChartLineDashed);
+        }
+        /// <summary>
         ///     Установка подписи тренда
         /// </summary>
         /// <param name="trendLine">Представление линии тренда</param>
@@ -129,6 +211,14 @@
         public static IChartTrendLine SetDisplayValue(this IChartTrendLine trendLine, string displayValue) {
             trendLine.Set(ChartDefaults.TrendLineDisplayValue, displayValue);
             return trendLine;
+        }
+        /// <summary>
+        ///     Получение подписи тренда
+        /// </summary>
+        /// <param name="trendLine">Представление линии тренда</param>
+        /// <returns>Подпись тренда</returns>
+        public static string GetDisplayValue(this IChartTrendLine trendLine) {
+            return trendLine.Get<string>(ChartDefaults.TrendLineDisplayValue);
         }
     }
 }
