@@ -80,6 +80,11 @@ namespace Qorpent.Utils {
                 classvalue.Set(target, ((string) value).SmartSplit().ToArray());
                 return target;
             }
+            if (targettype == typeof(int[]) && value is string)
+            {
+                classvalue.Set(target, ((string)value).SmartSplit().Select(_=>_.ToInt()).ToArray());
+                return target;
+            }
 
 			// get converted Value
 			var assignvalue = value.ToTargetType(targettype, ignoreTypeConversionError);
