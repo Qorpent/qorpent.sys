@@ -35,6 +35,7 @@ namespace Qorpent.Charts.FusionCharts {
             result.SetAttr(FusionChartApi.Chart_DivIntervalHints, _chart.GetDivIntervalHints());
             result.SetAttr(FusionChartApi.Chart_DivLineAlpha, _chart.GetDivLineAlpha());
             result.SetAttr(FusionChartApi.Chart_ShowAlternateHGridColor, _chart.GetShowAlternateHGridColor() ? 1 : 0);
+            result.SetAttr(FusionChartApi.Chart_ChartOrder, _chart.GetChartOrder());
 
             SetAttrs(_chart, result, new[] {
                 FusionChartApi.Chart_LegendPosition,
@@ -45,7 +46,7 @@ namespace Qorpent.Charts.FusionCharts {
             RenderDatasets(_chart, realConfig, result);
 
             if (
-                (_chart.IsMultiserial())
+                (_chart.IsMultiserial() || _chart.IsCombined())
                     &&
                 (_chart.GetCategories().Any())
             ) {
@@ -75,7 +76,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="result"></param>
         private void RenderDatasets(IChart chart, IChartConfig chartConfig, XElement result) {
             foreach (var xml in chart.GetDatasets().Select(ds => RenderDataset(ds, chartConfig))) {
-                result.Add(chart.IsMultiserial() ? new[] { xml } : xml.Elements());
+                result.Add(chart.IsMultiserial() || chart.IsCombined() ? new[] { xml } : xml.Elements());
             }
         }
         /// <summary>

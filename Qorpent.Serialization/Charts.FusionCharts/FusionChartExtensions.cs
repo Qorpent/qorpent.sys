@@ -3,7 +3,7 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts.FusionCharts {
     /// <summary>
-    /// 
+    ///     Набор расширений для работы с FusionCharts на базе абстракций чартов
     /// </summary>
     public static class FusionChartExtensions {
         /// <summary>
@@ -12,9 +12,34 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="chart">Представление графика</param>
         /// <returns>Признак того, что график мультисерийный</returns>
         public static bool IsMultiserial(this IChart chart) {
+            return chart.Is(FusionChartGroupedType.MultiSeries);
+        }
+        /// <summary>
+        ///     Признак того, что график односерийный
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Признак того, что график односерийный</returns>
+        public static bool IsSingleSeries(this IChart chart) {
+            return chart.Is(FusionChartGroupedType.SingleSeries);
+        }
+        /// <summary>
+        ///     Признак того, что график относится к комбинированным
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Признак того, что график комбинированный</returns>
+        public static bool IsCombined(this IChart chart) {
+            return chart.Is(FusionChartGroupedType.Compination);
+        }
+        /// <summary>
+        ///     Проверить, что представление графика попадает в указанную группу
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="groupedType">Тип группы</param>
+        /// <returns>Признак того, что представление графика попадает в указанную группу</returns>
+        public static bool Is(this IChart chart, FusionChartGroupedType groupedType) {
             var f = chart.Config.Type.To<FusionChartType>();
             if (
-                (f & (FusionChartType)FusionChartGroupedType.MultiSeries) == f
+                (f & (FusionChartType)groupedType) == f
             ) {
                 return true;
             }
@@ -240,6 +265,23 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Замыкание на представление графика</returns>
         public static IChart SetCaptionPadding(this IChart chart, decimal captionPadding) {
             return chart.Set<IChart>(FusionChartApi.Chart_CaptionPadding, captionPadding);
+        }
+        /// <summary>
+        ///     Установка порядка отрисовки графиков
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="chartOrder">Порядок отрисовки графика</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetChartOrder(this IChart chart, string chartOrder) {
+            return chart.Set<IChart>(FusionChartApi.Chart_ChartOrder, chartOrder);
+        }
+        /// <summary>
+        ///     Получение порядка отрисовки графиков
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Порядок отрисовки графика</returns>
+        public static string GetChartOrder(this IChart chart) {
+            return chart.Get<string>(FusionChartApi.Chart_ChartOrder);
         }
         /// <summary>
         ///     Установка имени серии для датасета
