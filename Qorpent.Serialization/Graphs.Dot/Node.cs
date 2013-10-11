@@ -15,7 +15,14 @@ namespace Qorpent.Graphs.Dot {
 	        get { return Get<NodeShapeType>(DotConstants.ShapeAttribute); }
 	        set { Set(DotConstants.ShapeAttribute, value); }
 	    }
-
+        /// <summary>
+        ///     Уже посчитан
+        /// </summary>
+        public bool Counted { get; set; }
+        /// <summary>
+        ///     Вес узла
+        /// </summary>
+        public int Weight { get; set; }
 	    /// <summary>
 	    ///
 	    /// </summary>

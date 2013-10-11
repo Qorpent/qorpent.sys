@@ -1,14 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Qorpent.Graphs.Dot.Builder;
 using Qorpent.Serialization;
 
-namespace Qorpent.Graphs.Dot
-{
+namespace Qorpent.Graphs.Dot {
     /// <summary>
     /// Полный граф
     /// </summary>
-    public class Graph : SubGraph, IGraphConvertible
-    {
+    public class Graph : SubGraph, IGraphConvertible {
+        private bool _wasCalculated = false;
         /// <summary>
         /// Тут автоматическое наведение порядка по графу
         /// </summary>
@@ -18,9 +19,83 @@ namespace Qorpent.Graphs.Dot
             SetParentsForSubgraphs();
             MoveNodesToSubgraphs();
             SetParentsForNodesAndEdges();
+
+            if (CalculateEdgeInWeight && !_wasCalculated) {
+                try {
+                    foreach (var kv in CalculateWeight()) {
+                        ResolveNode(kv.Key).Label += " (" + kv.Value + ")";
+                    }
+                } catch (Exception) {
+                   throw new Exception("Can not calculate weight");
+                }
+
+                _wasCalculated = true;
+            }
+
             base.AutoTune();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<KeyValuePair<string, int>> CalculateWeight() {
+            foreach (var node in EnumerateNodes()) {
+                node.Weight = Edges.Count(_ => _.To == node.Code);
+                node.Counted = true;
 
+                if (node.Weight != 0) {
+                    node.Counted = false;
+                }
+            }
+
+            var somethingDone = true;
+
+            while (true) {
+                if (somethingDone == false) {
+                    break;
+                }
+
+                somethingDone = false;
+                var nodes = EnumerateNodes().Where(_ => !_.Counted);
+
+                if (!nodes.Any()) {
+                    break;
+                }
+
+                foreach (var node in nodes) {
+                    var f = GetInNodes(node).ToList();
+
+                    if (!f.Any()) {
+                        continue;
+                    }
+
+                    if (f.All(_ => _.Counted)) {
+                        node.Weight += GetInNodes(node).Sum(_ => _.Weight);
+                        node.Counted = true;
+                        somethingDone = true;
+                    }
+                }
+            }
+
+
+            return EnumerateNodes().Select(_ => new KeyValuePair<string, int>(_.Code, _.Weight));
+        }
+        /// <summary>
+        ///     Возвращает все ноды, в которые входит данный нод
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerable<Node> GetOutNodes(Node node) {
+            return EnumerateEdges().Where(_ => _.From == node.Code).Select(_ => ResolveNode(_.To));
+        }
+        /// <summary>
+        ///     Возвращает все ноды, которые входят в данный нод
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerable<Node> GetInNodes(Node node) {
+            return EnumerateEdges().Where(_ => _.To == node.Code).Select(_ => ResolveNode(_.From));
+        }
         private void CorrectClusterCodes() {
            foreach (var c in EnumerateSubGraphs()) {
                c.Code = DotLanguageUtils.GetClusterCode(c.Code);
@@ -228,7 +303,13 @@ namespace Qorpent.Graphs.Dot
             get { return Get<string>(DotConstants.SplinesAttribute); }
             set { Set(DotConstants.SplinesAttribute, value); }
         }
-
+        /// <summary>
+        ///     Флаг, указывающий на то, что требуется просчёт сложности графа
+        /// </summary>
+        public bool CalculateEdgeInWeight {
+            get { return Get<bool>(DotConstants.CalculateEdgeInWeight); }
+            set { Set(DotConstants.CalculateEdgeInWeight, value); }
+        }
         /// <summary>
         /// Устанавливает настройки для компактного отображения
         /// </summary>
