@@ -400,6 +400,8 @@ namespace Qorpent.Bxl {
 					if (_isExpression)
 						throw new BxlException("can not assign to expression", _info);
 					saveValue();
+					_isString = false;
+					_isExpression = false;
 					_mode = ReadMode.AttributeValue;
 					return;
 				case '\t':
