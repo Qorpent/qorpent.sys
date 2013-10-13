@@ -462,7 +462,7 @@ namespace Qorpent.Bxl {
 				case '\t':
 				case ',':
 				case ' ':
-					if (_buf.Length == 0)
+					if (_buf.Length == 0 && !_isString)
 						return;
 					addAttributeValue();
 					_mode = ReadMode.AttributeName;

@@ -154,7 +154,5 @@
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Bxl2\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
