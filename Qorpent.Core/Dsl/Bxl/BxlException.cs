@@ -34,7 +34,7 @@ namespace Qorpent.Bxl {
 		/// <param name="lexinfo"> Позиция исходного файла вызвавшего ошибку </param>
 		public BxlException(string message = "", LexInfo lexinfo = null, Exception inner = null)
 			
-			: base(message, inner) {
+			: base(message + (lexinfo??new LexInfo()), inner) {
 			LexInfo = lexinfo ?? new LexInfo();
 		}
 
