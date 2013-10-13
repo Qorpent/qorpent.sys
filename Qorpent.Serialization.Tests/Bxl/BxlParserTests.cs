@@ -7,7 +7,8 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.Bxl
 {
-	class BxlParserTests {
+    [TestFixture]
+	public class BxlParserTests {
 		[Test]
 		public void CanParse() {
 			String bxl = @"tes+t1 f f
