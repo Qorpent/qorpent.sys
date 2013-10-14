@@ -59,17 +59,19 @@ namespace Qorpent.Charts.FusionCharts {
                 chart.Set(FusionChartApi.Chart_FormatNumberScale, 0);
             }
 
-            chart.SetYAxisMinValue(
-                min.RoundDown(min.GetNumberOfDigits() - 1).Minimal(
-                    GetMinTrendline(chart).ToInt()
-                ) - Math.Pow(10, min.GetNumberOfDigits() - 2)
-            );
+            min = min.RoundDown(min.GetNumberOfDigits() - 1).Minimal(
+                GetMinTrendline(chart).ToInt()
+            ) - Math.Pow(10, min.GetNumberOfDigits() - 2);
+            max = max.RoundUp(max.GetNumberOfDigits() - 1).Maximal(
+                GetMaxTrendline(chart).ToInt()
+            ) + Math.Pow(10, min.GetNumberOfDigits() - 2);
 
-            chart.SetYAxisMaxValue(
-                max.RoundUp(max.GetNumberOfDigits() - 1).Maximal(
-                    GetMaxTrendline(chart).ToInt()
-                ) + Math.Pow(10, min.GetNumberOfDigits() - 2)
-            );
+            chart.SetYAxisMinValue(min.RoundDown(min.GetNumberOfDigits() - 1));
+            chart.SetYAxisMaxValue(max.RoundUp(max.GetNumberOfDigits() - 1));
+
+            var delta = max - min;
+
+            chart.SetNumDivLines((delta/Math.Pow(10, delta.GetNumberOfDigits() - 1)).ToInt());
         }
         /// <summary>
         ///     Фиксит нулевые значения радиусов и сторон якорей вершин

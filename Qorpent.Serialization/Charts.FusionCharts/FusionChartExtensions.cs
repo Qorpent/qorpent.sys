@@ -224,6 +224,23 @@ namespace Qorpent.Charts.FusionCharts {
             return chart.Get<double>(FusionChartApi.Chart_XAxisMaxValue);
         }
         /// <summary>
+        ///     Установка количества дивлайнов
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="numDivLines">Количество дивлайнов</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetNumDivLines(this IChart chart, int numDivLines) {
+            return chart.Set<IChart>(FusionChartApi.Chart_NumDivLines, numDivLines);
+        }
+        /// <summary>
+        ///     Получение количества дивлайнов
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Количество дивлайнов</returns>
+        public static int GetNumDivLines(this IChart chart) {
+            return chart.Get<int>(FusionChartApi.Chart_NumDivLines);
+        }
+        /// <summary>
         ///     Установка имени Y оси
         /// </summary>
         /// <param name="chart">Представление графика</param>

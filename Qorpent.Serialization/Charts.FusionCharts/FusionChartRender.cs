@@ -46,6 +46,8 @@ namespace Qorpent.Charts.FusionCharts {
             result.SetAttr(FusionChartApi.Chart_DivLineAlpha, _chart.GetDivLineAlpha());
             result.SetAttr(FusionChartApi.Chart_ShowAlternateHGridColor, _chart.GetShowAlternateHGridColor() ? 1 : 0);
             result.SetAttr(FusionChartApi.Chart_ChartOrder, _chart.GetChartOrder());
+            result.SetAttr(FusionChartApi.Chart_NumDivLines, _chart.GetNumDivLines() != 0 ? _chart.GetNumDivLines().ToString() : null);
+
 
             SetAttrs(_chart, result, new[] {
                 FusionChartApi.Chart_LegendPosition,
