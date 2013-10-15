@@ -105,6 +105,23 @@ namespace Qorpent.Charts.FusionCharts {
             return chart.Get<int>(FusionChartApi.Chart_Alpha);
         }
         /// <summary>
+        ///     Установка отступа значения чарта
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="valuePadding">Отступ</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetValuePadding(this IChart chart, int valuePadding) {
+            return chart.Set<IChart>(FusionChartApi.Chart_ValuePadding, valuePadding);
+        }
+        /// <summary>
+        ///     Получение отступа значения чарта
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Отступ</returns>
+        public static int GetValuePadding(this IChart chart) {
+            return chart.Get<int>(FusionChartApi.Chart_ValuePadding);
+        }
+        /// <summary>
         ///     Установка интервала разрисовки
         /// </summary>
         /// <param name="chart">Представление графика</param>
