@@ -220,6 +220,9 @@ namespace Qorpent.Graphs.Dot
             if (attrname == "label" && attrvalue.StartsWith("<TABLE")) {
                 return OPENTABLE + attrvalue.GetUnicodeSafeXmlString()+CLOSETABLE;
             }
+			if (attrname == "label" && attrvalue.StartsWith("<") && attrvalue.EndsWith(">")) {
+				return attrvalue.GetUnicodeSafeXmlString();
+			}
             if (string.IsNullOrEmpty(attrvalue)) return EMPTYSTRING;
             if (attrvalue == "node") return QUOT + attrvalue + QUOT;
             var safe = attrvalue.GetUnicodeSafeXmlString(escapeQuots:true);
