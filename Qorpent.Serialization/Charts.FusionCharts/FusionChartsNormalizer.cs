@@ -26,9 +26,17 @@ namespace Qorpent.Charts.FusionCharts {
 
             if (IsMultiserial(chart)) {
                 FixZeroAnchors(chart);
+                FitLabels(chart);
             }
 
             return chart;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        private void FitLabels(IChart chart) {
+            
         }
         /// <summary>
         /// 
@@ -62,16 +70,8 @@ namespace Qorpent.Charts.FusionCharts {
         /// </summary>
         /// <param name="chart">Конфиг графика</param>
         private void FitYAxisHeight(IChart chart) {
-            var max = GetMaxDataset(chart);
-            var min = GetMinDataset(chart);
-
-            min = min.RoundDown(min.GetNumberOfDigits() - 1);
-            max = max.RoundUp(max.GetNumberOfDigits() - 1);
-
-            if (chart.TrendLines.Children.Any()) {
-                min = min.Minimal(GetMinTrendline(chart).ToInt(true));
-                max = max.Maximal(GetMaxTrendline(chart).ToInt(true));
-            }
+            var max = GetMaxValue(chart);
+            var min = GetMinValue(chart);
 
             min = min.RoundDown(min.GetNumberOfDigits() - 1);
             max = max.RoundUp(max.GetNumberOfDigits() - 1);
@@ -80,6 +80,34 @@ namespace Qorpent.Charts.FusionCharts {
             chart.SetYAxisMaxValue(max);
 
             FitYAxisNumDivLines(chart, min, max);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private double GetMinValue(IChart chart) {
+            var min = GetMinDataset(chart);
+
+            if (chart.TrendLines.Children.Any()) {
+                min = min.Minimal(GetMinTrendline(chart).ToInt(true));
+            }
+
+            return min;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private double GetMaxValue(IChart chart) {
+            var max = GetMaxDataset(chart);
+
+            if (chart.TrendLines.Children.Any()) {
+                max = max.Maximal(GetMaxTrendline(chart).ToInt(true));
+            }
+
+            return max;
         }
         /// <summary>
         /// 
