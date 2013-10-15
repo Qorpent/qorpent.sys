@@ -61,7 +61,7 @@ namespace Qorpent.Utils.Extensions {
         /// <param name="number"></param>
         /// <returns></returns>
         public static int GetNumberOfDigits(this double number) {
-            return Math.Floor(Math.Log10(number) + 1).ToInt();
+            return Math.Floor(Math.Log10(number) + 1).ToInt(true);
         }
         /// <summary>
         /// 

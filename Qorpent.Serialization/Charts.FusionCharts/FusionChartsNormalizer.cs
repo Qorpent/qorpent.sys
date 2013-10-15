@@ -59,8 +59,13 @@ namespace Qorpent.Charts.FusionCharts {
                 chart.Set(FusionChartApi.Chart_FormatNumberScale, 0);
             }
 
-            min = min.RoundDown(min.GetNumberOfDigits() - 1).Minimal(GetMinTrendline(chart).ToInt());
-            max = max.RoundUp(max.GetNumberOfDigits() - 1).Maximal(GetMaxTrendline(chart).ToInt());
+            min = min.RoundDown(min.GetNumberOfDigits() - 1);
+            max = max.RoundUp(max.GetNumberOfDigits() - 1);
+
+            if (chart.TrendLines.Children.Any()) {
+                min = min.Minimal(GetMinTrendline(chart).ToInt());
+                max = max.Maximal(GetMaxTrendline(chart).ToInt());
+            }
 
             chart.SetYAxisMinValue(min.RoundDown(min.GetNumberOfDigits() - 1));
             chart.SetYAxisMaxValue(max.RoundUp(max.GetNumberOfDigits() - 1));
