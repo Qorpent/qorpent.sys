@@ -76,6 +76,9 @@ namespace Qorpent.Charts.FusionCharts {
             min = min.RoundDown(min.GetNumberOfDigits() - 1);
             max = max.RoundUp(max.GetNumberOfDigits() - 1);
 
+            chart.SetYAxisMinValue(min);
+            chart.SetYAxisMaxValue(max);
+
             FitYAxisNumDivLines(chart, min, max);
         }
         /// <summary>
@@ -88,11 +91,17 @@ namespace Qorpent.Charts.FusionCharts {
             var delta = max - min;
             var deltaDigits = delta.GetNumberOfDigits();
             var numDivLines = 0;
+            var height = Convert.ToDouble(_chartConfig.Height);
 
             if (deltaDigits >= 4) {
                 numDivLines = (delta / Math.Pow(10, deltaDigits - 2)).ToInt() - 1;
             } else if (deltaDigits >= 3) {
                 numDivLines = (delta / Math.Pow(10, deltaDigits - 1)).ToInt() - 1;
+            }
+
+            if (delta >= height*2) {
+                var dh = delta/height;
+                numDivLines = numDivLines/(dh).RoundUp(dh.GetNumberOfDigits() - 2);
             }
 
             chart.SetNumDivLines(numDivLines);

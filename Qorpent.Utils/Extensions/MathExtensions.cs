@@ -56,6 +56,22 @@ namespace Qorpent.Utils.Extensions {
             return number.RoundDown(order) + ((order == 1) ? (10) : (Math.Pow(10, order - 1).ToInt()));
         }
         /// <summary>
+        ///     Чётное
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public static bool IsEven(this int number) {
+            return number%2 == 0;
+        }
+        /// <summary>
+        ///     Нечётное
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public static bool IsOdd(this int number) {
+            return !number.IsEven();
+        }
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="number"></param>
