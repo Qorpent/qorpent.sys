@@ -63,16 +63,27 @@ namespace Qorpent.Charts.FusionCharts {
             max = max.RoundUp(max.GetNumberOfDigits() - 1);
 
             if (chart.TrendLines.Children.Any()) {
-                min = min.Minimal(GetMinTrendline(chart).ToInt());
-                max = max.Maximal(GetMaxTrendline(chart).ToInt());
+                min = min.Minimal(GetMinTrendline(chart).ToInt(true));
+                max = max.Maximal(GetMaxTrendline(chart).ToInt(true));
             }
 
-            chart.SetYAxisMinValue(min.RoundDown(min.GetNumberOfDigits() - 1));
-            chart.SetYAxisMaxValue(max.RoundUp(max.GetNumberOfDigits() - 1));
+            min = min.RoundDown(min.GetNumberOfDigits() - 1);
+            max = max.RoundUp(max.GetNumberOfDigits() - 1);
+
+            chart.SetYAxisMinValue(min);
+            chart.SetYAxisMaxValue(max);
 
             var delta = max - min;
+            var deltaDigits = delta.GetNumberOfDigits();
+            var numDivLines = 0;
 
-            chart.SetNumDivLines((delta/Math.Pow(10, delta.GetNumberOfDigits() - 1)).ToInt());
+            if (deltaDigits >= 4) {
+                numDivLines = (delta / Math.Pow(10, deltaDigits - 2)).ToInt() - 1;
+            } else if (deltaDigits >= 3) {
+                numDivLines = (delta / Math.Pow(10, deltaDigits - 1)).ToInt() - 1;
+            }
+
+            chart.SetNumDivLines(numDivLines);
         }
         /// <summary>
         ///     Фиксит нулевые значения радиусов и сторон якорей вершин
