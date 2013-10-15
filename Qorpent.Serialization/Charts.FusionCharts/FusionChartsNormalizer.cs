@@ -22,12 +22,23 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Нормализованный чарт</returns>
         public IChart Normalize(IChart chart) {
             FitYAxisHeight(chart);
-            
+            FixNumberScaling(chart);
+
             if (IsMultiserial(chart)) {
                 FixZeroAnchors(chart);
             }
 
             return chart;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        private void FixNumberScaling(IChart chart) {
+            if (!_chartConfig.UseDefaultScaling) {
+                chart.Set(FusionChartApi.Chart_FormatNumber, 0);
+                chart.Set(FusionChartApi.Chart_FormatNumberScale, 0);
+            }
         }
         /// <summary>
         ///     Создание инстанции нормалайзера
@@ -54,11 +65,6 @@ namespace Qorpent.Charts.FusionCharts {
             var max = GetMaxDataset(chart);
             var min = GetMinDataset(chart);
 
-            if (!_chartConfig.UseDefaultScaling) {
-                chart.Set(FusionChartApi.Chart_FormatNumber, 0);
-                chart.Set(FusionChartApi.Chart_FormatNumberScale, 0);
-            }
-
             min = min.RoundDown(min.GetNumberOfDigits() - 1);
             max = max.RoundUp(max.GetNumberOfDigits() - 1);
 
@@ -70,9 +76,15 @@ namespace Qorpent.Charts.FusionCharts {
             min = min.RoundDown(min.GetNumberOfDigits() - 1);
             max = max.RoundUp(max.GetNumberOfDigits() - 1);
 
-            chart.SetYAxisMinValue(min);
-            chart.SetYAxisMaxValue(max);
-
+            FitYAxisNumDivLines(chart, min, max);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        private void FitYAxisNumDivLines(IChart chart, double min, double max) {
             var delta = max - min;
             var deltaDigits = delta.GetNumberOfDigits();
             var numDivLines = 0;
