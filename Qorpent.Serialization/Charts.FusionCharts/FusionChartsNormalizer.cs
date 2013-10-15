@@ -36,7 +36,31 @@ namespace Qorpent.Charts.FusionCharts {
         /// </summary>
         /// <param name="chart"></param>
         private void FitLabels(IChart chart) {
-            
+            var max = GetMaxValue(chart);
+            var min = GetMinValue(chart);
+            var rel = (max - min)/20;
+
+            var src = new Dictionary<int, IEnumerable<IChartDataItem>>();
+
+            if (!chart.Datasets.Children.Any()) {
+                return;
+            }
+
+            for (int k = 0; k < chart.Datasets.Children.FirstOrDefault().Children.Count; k++ ) {
+                src.Add(k, chart.Datasets.Children.Select(c => c.Children.Skip(k).FirstOrDefault()));
+            }
+
+            foreach (var el in src) {
+                var ordered = el.Value.Select(_ => _.Get<double>(FusionChartApi.Set_Value)).OrderBy(_ => _).ToList();
+                var soClose = ordered.Skip(1).Where(_ => Math.Abs(_ - ordered.Previous(_)) < rel).ToList();
+                var t = 1;
+
+                foreach (var e in soClose) {
+                    var i = el.Value.FirstOrDefault(_ => _.Get<double>(FusionChartApi.Set_Value) == e);
+                    if (i == null) continue;
+                    i.Set(FusionChartApi.Set_ValuePosition, t++.IsEven() ? "bottom" : "above");
+                }
+            }
         }
         /// <summary>
         /// 
