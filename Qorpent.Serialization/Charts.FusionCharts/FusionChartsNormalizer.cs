@@ -22,9 +22,10 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Нормализованный чарт</returns>
         public IChart Normalize(IChart chart) {
             FitYAxisHeight(chart);
+            FixFontColors(chart);
             FixNumberScaling(chart);
 
-            if (IsMultiserial(chart)) {
+            if (chart.IsMultiserial()) {
                 FixZeroAnchors(chart);
                 FitLabels(chart);
             }
@@ -35,39 +36,97 @@ namespace Qorpent.Charts.FusionCharts {
         /// 
         /// </summary>
         /// <param name="chart"></param>
+        private void FixFontColors(IChart chart) {
+            foreach (var dataset in chart.Datasets.Children) {
+                if (Convert.ToInt32(dataset.GetColor(), 16)/20 > 1) {
+                    dataset.SetColor("FF0000");
+                }
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
         private void FitLabels(IChart chart) {
-            var rel = Convert.ToDouble(_chartConfig.Height)/2;
+            var rel = 5*Convert.ToDouble(_chartConfig.Height)/100;
 
-            var src = new Dictionary<int, IEnumerable<IChartDataItem>>();
+            var src = new List<IEnumerable<IChartDataItem>>();
 
             if (!chart.Datasets.Children.Any()) {
                 return;
             }
 
-            for (int k = 0; k < chart.Datasets.Children.FirstOrDefault().Children.Count; k++ ) {
-                var l = new List<IChartDataItem>();
-
-                foreach (var c in chart.Datasets.Children) {
-                    l.Add(c.Children.Skip(k).FirstOrDefault());
-                }
-
-                src.Add(k, l);
+            for (var k = 0; k < chart.GetLabelCount(); k++) {
+                src.Add(chart.Datasets.Children.Select(_ => _.Children.Skip(k).FirstOrDefault()).ToList());
             }
 
             foreach (var el in chart.Datasets.Children.SelectMany(_ => _.Children)) {
                 el.Set(FusionChartApi.Set_ValuePosition, "bottom");
+                el.SetShowValue(true);
+            }
+
+            foreach (var el in src.FirstOrDefault()) {
+                if (
+                    (SomewhereNearby(chart, el, el.GetValue<double>().RoundDown(GetRoundOrder(el.GetValue<double>()))))
+                        ||
+                    (SomewhereNearby(chart, el, el.GetValue<double>().RoundUp(GetRoundOrder(el.GetValue<double>()))))
+                ) {
+                    el.SetShowValue(false);
+                }
             }
 
             foreach (var el in src) {
-                var ordered = el.Value.Select(_ => _.Get<double>(FusionChartApi.Set_Value)).OrderBy(_ => _).ToList();
+                var ordered = el.Select(_ => _.GetValue<double>()).OrderBy(_ => _).ToList();
                 var soClose = ordered.Skip(1).Where(_ => Math.Abs(_ - ordered.Previous(_)) < rel).ToList();
 
                 foreach (var e in soClose) {
-                    var i = el.Value.FirstOrDefault(_ => _.Get<double>(FusionChartApi.Set_Value) == e);
+                    var i = el.FirstOrDefault(_ => _.GetValue<double>() == e);
                     if (i == null) continue;
+                    
                     i.Set(FusionChartApi.Set_ValuePosition, "above");
                 }
             }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private IEnumerable<double> EnumerateDivlineValues(IChart chart) {
+            var step = (chart.GetYAxisMaxValue() - chart.GetYAxisMinValue())/(chart.GetNumDivLines() + 1);
+            for (var i = chart.GetYAxisMinValue(); i < chart.GetYAxisMaxValue(); i += step) {
+                yield return i;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <param name="element"></param>
+        /// <param name="something"></param>
+        /// <returns></returns>
+        private bool SomewhereNearby(IChart chart, IChartElement element, object something) {
+            var relative = 25*(chart.GetDelta() / Convert.ToDouble(_chartConfig.Height));
+
+            if ((something is int) && (element is IChartDataItem)) {
+                var el = element as IChartDataItem;
+                return (
+                    el.GetValue<double>() - relative < something.ToInt()
+                        &&
+                    el.GetValue<double>() + relative > something.ToInt()
+                );
+            }
+
+            throw new NotSupportedException();
+        }
+        /// <summary>
+        ///     Возвращает порядок, на который можно округлить число, сохранив его значимость 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private int GetRoundOrder(double value) {
+            return value.GetNumberOfDigits() - 1;
         }
         /// <summary>
         /// 
@@ -116,50 +175,21 @@ namespace Qorpent.Charts.FusionCharts {
         /// 
         /// </summary>
         /// <param name="chart"></param>
-        /// <returns></returns>
-        private double GetMinValue(IChart chart) {
-            var min = GetMinDataset(chart);
-
-            if (chart.TrendLines.Children.Any()) {
-                min = min.Minimal(GetMinTrendline(chart).ToInt(true));
-            }
-
-            return min;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chart"></param>
-        /// <returns></returns>
-        private double GetMaxValue(IChart chart) {
-            var max = GetMaxDataset(chart);
-
-            if (chart.TrendLines.Children.Any()) {
-                max = max.Maximal(GetMaxTrendline(chart).ToInt(true));
-            }
-
-            return max;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chart"></param>
         /// <param name="min"></param>
         /// <param name="max"></param>
         private void FitYAxisNumDivLines(IChart chart, double min, double max) {
-            var delta = max - min;
-            var deltaDigits = delta.GetNumberOfDigits();
+            var deltaDigits = chart.GetDelta().GetNumberOfDigits();
             var numDivLines = 0;
             var height = Convert.ToDouble(_chartConfig.Height);
 
             if (deltaDigits >= 4) {
-                numDivLines = (delta / Math.Pow(10, deltaDigits - 2)).ToInt() - 1;
+                numDivLines = (chart.GetDelta() / Math.Pow(10, deltaDigits - 2)).ToInt() - 1;
             } else if (deltaDigits >= 3) {
-                numDivLines = (delta / Math.Pow(10, deltaDigits - 1)).ToInt() - 1;
+                numDivLines = (chart.GetDelta() / Math.Pow(10, deltaDigits - 1)).ToInt() - 1;
             }
 
-            if (delta >= height*2) {
-                var dh = delta/height;
+            if (chart.GetDelta() >= height * 2) {
+                var dh = chart.GetDelta() / height;
                 numDivLines = numDivLines/(dh).RoundUp(dh.GetNumberOfDigits() - 2);
             }
 
@@ -245,15 +275,28 @@ namespace Qorpent.Charts.FusionCharts {
         /// </summary>
         /// <param name="chart"></param>
         /// <returns></returns>
-        private bool IsMultiserial(IChart chart) {
-            var f = chart.Config.Type.To<FusionChartType>();
-            if (
-                (f & (FusionChartType)FusionChartGroupedType.MultiSeries) == f
-            ) {
-                return true;
+        private double GetMinValue(IChart chart) {
+            var min = GetMinDataset(chart);
+
+            if (chart.TrendLines.Children.Any()) {
+                min = min.Minimal(GetMinTrendline(chart).ToInt(true));
             }
 
-            return false;
+            return min;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <returns></returns>
+        private double GetMaxValue(IChart chart) {
+            var max = GetMaxDataset(chart);
+
+            if (chart.TrendLines.Children.Any()) {
+                max = max.Maximal(GetMaxTrendline(chart).ToInt(true));
+            }
+
+            return max;
         }
     }
 }

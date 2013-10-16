@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts.FusionCharts {
@@ -318,6 +320,82 @@ namespace Qorpent.Charts.FusionCharts {
             return chart.Get<string>(FusionChartApi.Chart_ChartOrder);
         }
         /// <summary>
+        ///     Возвращает количество категорий графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Количество категорий графика</returns>
+        public static int GetLabelCount(this IChart chart) {
+            return (chart.Categories.Children != null) ? chart.Categories.Children.Count : chart.Datasets.Children.SelectMany(_ => _.Children).Count();
+        }
+        /// <summary>
+        ///     Установка цвета рамки графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="borderColor">Цвет рамки графика</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetBorderColor(this IChart chart, string borderColor ) {
+            return chart.Set<IChart>(FusionChartApi.Chart_BorderColor, borderColor);
+        }
+        /// <summary>
+        ///     Получение цвета рамки графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Цвет рамки графика</returns>
+        public static string GetBorderColor(this IChart chart) {
+            return chart.Get<string>(FusionChartApi.Chart_BorderColor);
+        }
+        /// <summary>
+        ///     Установка ширины рамки графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="borderThickness">Ширина рамки графика</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetBorderThickness(this IChart chart, int borderThickness) {
+            return chart.Set<IChart>(FusionChartApi.Chart_BorderThickness, borderThickness);
+        }
+        /// <summary>
+        ///     Получение ширины рамки графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Ширина рамки графика</returns>
+        public static int GetBorderThickness(this IChart chart) {
+            return chart.Get<int>(FusionChartApi.Chart_BorderThickness);
+        }
+        /// <summary>
+        ///     Установка цвета рамки канвы
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="borderColor">Цвет рамки графика</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetCanvasBorderColor(this IChart chart, string borderColor) {
+            return chart.Set<IChart>(FusionChartApi.Chart_CanvasBorderColor, borderColor);
+        }
+        /// <summary>
+        ///     Получение цвета рамки канвы
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Цвет рамки графика</returns>
+        public static string GetCanvasBorderColor(this IChart chart) {
+            return chart.Get<string>(FusionChartApi.Chart_CanvasBorderColor);
+        }
+        /// <summary>
+        ///     Установка ширины рамки канвы
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="canvasBorderThickness">Ширина рамки канвы</param>
+        /// <returns>Замыкание на представление графика</returns>
+        public static IChart SetCanvasBorderThickness(this IChart chart, int canvasBorderThickness) {
+            return chart.Set<IChart>(FusionChartApi.Chart_CanvasBorderThickness, canvasBorderThickness);
+        }
+        /// <summary>
+        ///     Получение ширины рамки канвы
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Ширина рамки канвы</returns>
+        public static int GetCanvasBorderThickness(this IChart chart) {
+            return chart.Get<int>(FusionChartApi.Chart_CanvasBorderThickness);
+        }
+        /// <summary>
         ///     Установка имени серии для датасета
         /// </summary>
         /// <param name="chartDataset">Представление датасета</param>
@@ -325,6 +403,14 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Замыкание на датасет</returns>
         public static IChartDataset SetSeriesName(this IChartDataset chartDataset, string seriesName) {
             return chartDataset.Set<IChartDataset>(FusionChartApi.Dataset_SeriesName, seriesName);
+        }
+        /// <summary>
+        ///     Получение имени серии для датасета
+        /// </summary>
+        /// <param name="chartDataset">Представление датасета</param>
+        /// <returns>Имя серии</returns>
+        public static string GetSeriesName(this IChartDataset chartDataset) {
+            return chartDataset.Get<string>(FusionChartApi.Dataset_SeriesName);
         }
         /// <summary>
         ///     Установка количества сторон якоря вершины дасатета
@@ -336,6 +422,14 @@ namespace Qorpent.Charts.FusionCharts {
             return chartDataset.Set<IChartDataset>(FusionChartApi.Dataset_AnchorSides, anchorSides);
         }
         /// <summary>
+        ///     Получение количества сторон якоря вершины дасатета
+        /// </summary>
+        /// <param name="chartDataset">Представление датасета</param>
+        /// <returns>Количество сторон якоря</returns>
+        public static int GetAnchorSides(this IChartDataset chartDataset) {
+            return chartDataset.Get<int>(FusionChartApi.Dataset_AnchorSides);
+        }
+        /// <summary>
         ///     Установка радиус якоря вершины дасатета
         /// </summary>
         /// <param name="chartDataset">Представление датасета</param>
@@ -345,13 +439,37 @@ namespace Qorpent.Charts.FusionCharts {
             return chartDataset.Set<IChartDataset>(FusionChartApi.Dataset_AnchorRadius, anchorRadius);
         }
         /// <summary>
+        ///     Получение радиуса якоря вершины дасатета
+        /// </summary>
+        /// <param name="chartDataset">Представление датасета</param>
+        /// <returns>Радиус якоря</returns>
+        public static string GetAnchorRadius(this IChartDataset chartDataset) {
+            return chartDataset.Get<string>(FusionChartApi.Dataset_AnchorRadius);
+        }
+        /// <summary>
         ///     Установка цвета линии датасета
         /// </summary>
         /// <param name="chartDataset">Представление датасета</param>
         /// <param name="color">Цвет</param>
         /// <returns>Замыкание на датасет</returns>
         public static IChartDataset SetColor(this IChartDataset chartDataset, string color) {
-            return chartDataset.Set<IChartDataset>(FusionChartApi.Dataset_Color, color);
+            return chartDataset.Set<IChartDataset>(FusionChartApi.Dataset_Color, new Hex(color));
+        }
+        /// <summary>
+        ///     Установка цвета линии датасета
+        /// </summary>
+        /// <param name="chartDataset">Представление датасета</param>
+        /// <returns>Цвет</returns>
+        public static string GetColor(this IChartDataset chartDataset) {
+            return chartDataset.GetColorAsHex().ToHex();
+        }
+        /// <summary>
+        ///     Установка цвета линии датасета
+        /// </summary>
+        /// <param name="chartDataset">Представление датасета</param>
+        /// <returns>Цвет</returns>
+        public static Hex GetColorAsHex(this IChartDataset chartDataset) {
+            return chartDataset.Get<Hex>(FusionChartApi.Dataset_Color);
         }
         /// <summary>
         ///     Установка типа графика в конфиг
@@ -468,6 +586,56 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Замыкание на сет</returns>
         public static decimal GetValue(this IChartSet chartSet) {
             return chartSet.Get<decimal>(FusionChartApi.Set_Value);
+        }
+        /// <summary>
+        ///     Установка значения сету
+        /// </summary>
+        /// <param name="chartSet">Представление сета</param>
+        /// <param name="value">Значение</param>
+        /// <returns>Замыкание на сет</returns>
+        public static IChartSet SetValue(this IChartDataItem chartSet, decimal value) {
+            return chartSet.Set<IChartSet>(FusionChartApi.Set_Value, value);
+        }
+        /// <summary>
+        ///     Получение значения сета
+        /// </summary>
+        /// <param name="chartSet">Представление сета</param>
+        /// <returns>Замыкание на сет</returns>
+        public static decimal GetValue(this IChartDataItem chartSet) {
+            return chartSet.Get<decimal>(FusionChartApi.Set_Value);
+        }
+        /// <summary>
+        ///     Получение значения сета
+        /// </summary>
+        /// <param name="chartSet">Представление сета</param>
+        /// <returns>Замыкание на сет</returns>
+        public static T GetValue<T>(this IChartDataItem chartSet) {
+            return chartSet.Get<T>(FusionChartApi.Set_Value).To<T>();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataItem"></param>
+        /// <param name="showLabel"></param>
+        /// <returns></returns>
+        public static IChartDataItem SetShowValue(this IChartDataItem dataItem, bool showLabel) {
+            return dataItem.Set<IChartDataItem>(FusionChartApi.Set_ShowValue, showLabel);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataItem"></param>
+        /// <returns></returns>
+        public static bool GetShowValue(this IChartDataItem dataItem) {
+            return dataItem.Get<bool>(FusionChartApi.Set_ShowValue);
+        }
+        /// <summary>
+        ///     Возвращает дельту: разницу между максимальным и минимальным значением
+        /// </summary>
+        /// <param name="chart">Представление чарта</param>
+        /// <returns>Дельта</returns>
+        public static double GetDelta(this IChart chart) {
+            return chart.GetYAxisMaxValue() - chart.GetYAxisMinValue();
         }
     }
 }

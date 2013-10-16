@@ -48,6 +48,8 @@ namespace Qorpent.Charts.FusionCharts {
             result.SetAttr(FusionChartApi.Chart_ChartOrder, _chart.GetChartOrder());
             result.SetAttr(FusionChartApi.Chart_NumDivLines, _chart.GetNumDivLines() != 0 ? _chart.GetNumDivLines().ToString() : null);
             result.SetAttr(FusionChartApi.Chart_ValuePadding, _chart.GetValuePadding() != 0 ? _chart.GetValuePadding().ToString() : null);
+            result.SetAttr(FusionChartApi.Chart_BorderColor, _chart.GetBorderColor());
+            result.SetAttr(FusionChartApi.Chart_BorderThickness, _chart.GetBorderThickness() != 0 ? _chart.GetBorderThickness().ToString() : null);
 
             SetAttrs(_chart, result, new[] {
                 FusionChartApi.Chart_LegendPosition,
@@ -98,16 +100,11 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="config"></param>
         /// <returns></returns>
         private XElement RenderDataset(IChartDataset dataset, IChartConfig config) {
-            var xml = new XElement(FusionChartApi.Dataset, RenderDatasetSets(dataset, config));
-
-            SetAttrs(dataset, xml, new[] {
-                FusionChartApi.Dataset_SeriesName,
-                FusionChartApi.Dataset_Color,
-                FusionChartApi.Dataset_AnchorRadius,
-                FusionChartApi.Dataset_AnchorSides
-            });
-
-            return xml;
+            return new XElement(FusionChartApi.Dataset, RenderDatasetSets(dataset, config))
+                .SetAttr(FusionChartApi.Set_Color, dataset.GetColor())
+                .SetAttr(FusionChartApi.Dataset_SeriesName, dataset.GetSeriesName())
+                .SetAttr(FusionChartApi.Chart_AnchorRadius, dataset.GetAnchorRadius())
+                .SetAttr(FusionChartApi.Chart_AnchorSides, dataset.GetAnchorSides());
         }
         /// <summary>
         /// 
@@ -116,7 +113,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="config"></param>
         /// <returns></returns>
         private IEnumerable<XElement> RenderDatasetSets(IChartDataset dataset, IChartConfig config) {
-            return dataset.Children.Select(_ => _.AsFusion(config).GetXmlElement());
+            return dataset.Children.Select(_ => _.AsFusion(config).GetXmlElement().SetAttr(FusionChartApi.Set_ShowValue, _.GetShowValue() ? "1" : "0"));
         }
         /// <summary>
         ///     Разрисовка категорий графика
