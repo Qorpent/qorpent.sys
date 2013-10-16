@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace Qorpent.Charts {
     /// <summary>
@@ -40,6 +39,23 @@ namespace Qorpent.Charts {
             }
 
             return chart;
+        }
+        /// <summary>
+        ///     Добавление элемента к элементу
+        /// </summary>
+        /// <param name="baseElement">Исходное представление элемента</param>
+        /// <param name="element">Элемент для добавления</param>
+        /// <returns>Замыкание на исходный элемент</returns>
+        public static IChartElement Add(this IChartElement baseElement, IChartElement element) {
+            if (baseElement is IChart) {
+                (baseElement as IChart).Add(element);
+            } else if (baseElement is IChartDataset) {
+                if (element is IChartDataItem) {
+                    (baseElement as IChartDataset).Add(element as IChartDataItem);
+                }
+            }
+
+            return baseElement;
         }
         /// <summary>
         ///     Добавление элемента к чарту
@@ -91,7 +107,7 @@ namespace Qorpent.Charts {
         /// </summary>
         /// <param name="element">Исходный элемент</param>
         /// <returns>Типизированный класс-родитель</returns>
-        private static T ParentOf<T>(IChartElement element) {
+        public static T ParentOf<T>(IChartElement element) {
             return element.Get<T>(ChartDefaults.ChartElementParentProperty);
         }
         /// <summary>
@@ -104,6 +120,25 @@ namespace Qorpent.Charts {
         public static IChartElement Set(this IChartElement element, string name, object value) {
             element.Set(name, value);
             return element;
+        }
+        /// <summary>
+        ///     Получение значения атрибута
+        /// </summary>
+        /// <param name="element">Исходный элемент</param>
+        /// <param name="name">Имя атрибута</param>
+        /// <returns>Значение атрибута</returns>
+        public static object Get(this IChartElement element, string name) {
+            return element.Get(name, typeof (object));
+        }
+        /// <summary>
+        ///     Получение значения атрибута
+        /// </summary>
+        /// <typeparam name="T">Типизация</typeparam>
+        /// <param name="element">Исходный элемент</param>
+        /// <param name="name">Имя атрибута</param>
+        /// <returns>Значение атрибута</returns>
+        public static T Get<T>(this IChartElement element, string name) {
+            return (T)element.Get(name);
         }
         /// <summary>
         ///     Установка атрибута

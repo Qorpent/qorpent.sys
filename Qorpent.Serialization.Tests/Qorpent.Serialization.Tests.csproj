@@ -20,6 +20,7 @@
     <Compile Include="BSharp\Schema\AttributeRuleTest.cs" />
     <Compile Include="BSharp\Schema\ElementRuleTest.cs" />
     <Compile Include="BSharp\SetKeyword.cs" />
+    <Compile Include="Bxl\Ap286ParserTests.cs" />
     <Compile Include="Bxl\BxlParserCompatibilityTests.cs" />
     <Compile Include="Bxl\BxlParserTests.cs" />
     <Compile Include="Bxl\ApplicationAccessToBxl.cs" />
@@ -34,6 +35,8 @@
     <Compile Include="Dot\TuningTest.cs" />
     <Compile Include="EscaperTests.cs" />
     <Compile Include="exceptions_need_to_be_fixed.cs" />
+    <Compile Include="FusionChartsNormalizerTests.cs" />
+    <Compile Include="GraphTests.cs" />
     <Compile Include="iocconfiguationtest.cs" />
     <Compile Include="Json\AF768Tests.cs" />
     <Compile Include="Json\LexerTests.cs" />

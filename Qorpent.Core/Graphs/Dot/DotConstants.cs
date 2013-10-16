@@ -244,5 +244,9 @@
         /// Ссылка
         /// </summary>
         public const string HrefAttribute = "href";
+        /// <summary>
+        /// Флаг, указывающий на то, что требуется просчёт сложности графа
+        /// </summary>
+        public const string CalculateEdgeInWeight = "CalculateEdgeInWeight";
     }
 }

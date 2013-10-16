@@ -192,7 +192,7 @@ namespace Qorpent.Mvc.Binding {
                     var clsdict = obj.ToDict();
                     foreach (var p in clsdict) {
                         var v = context.Get(p.Key,null);
-                        if (null != v) {
+                        if (!string.IsNullOrWhiteSpace(v)) {
                             obj.SetValue(p.Key,v, true, true, false, true, true);
                         }
                     }

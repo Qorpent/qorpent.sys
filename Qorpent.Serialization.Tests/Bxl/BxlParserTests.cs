@@ -7,7 +7,8 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.Bxl
 {
-	class BxlParserTests {
+    [TestFixture]
+	public class BxlParserTests {
 		[Test]
 		public void CanParse() {
 			String bxl = @"tes+t1 f f
@@ -383,6 +384,26 @@ test
 			Console.WriteLine(res);
 			Assert.AreEqual(res.Attributes().First().Name.LocalName, "__id");
 		}
+
+		[Test]
+		public void CanCountAnonAttributes() {
+			String bxl = @"
+test1 a b
+	test2 c
+	'anon1'
+		'anon2'";
+
+			IBxlParser p = new BxlParser();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			XElement t1 = res.Element("test1");
+			XElement t2 = t1.Element("test2");
+
+			Assert.AreEqual(t1.Attribute("_aa4").Value, "anon1");
+			Assert.AreEqual(t2.Attribute("name").Value, "anon2");
+		}
+
 
 		[TestCase("demo.import.forms.m600.bxls")]
 		[TestCase("presentation_ocm_structure.hql")]

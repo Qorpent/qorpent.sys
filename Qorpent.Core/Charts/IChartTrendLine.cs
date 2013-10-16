@@ -1,7 +1,6 @@
 ﻿namespace Qorpent.Charts {
     /// <summary>
-    /// Линия тренда
+    ///     Линия тренда
     /// </summary>
-    public interface IChartTrendLine :IChartElement{
-    }
+    public interface IChartTrendLine : IChartElement {}
 }

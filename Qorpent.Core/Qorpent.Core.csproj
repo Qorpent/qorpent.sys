@@ -83,6 +83,7 @@
     <Compile Include="Charts\IChartElementList.cs" />
     <Compile Include="Charts\IChartLineset.cs" />
     <Compile Include="Charts\IChartLineSetItem.cs" />
+    <Compile Include="Charts\IChartNormalizer.cs" />
     <Compile Include="Charts\IChartRender.cs" />
     <Compile Include="Charts\IChartRenderConfig.cs" />
     <Compile Include="Charts\IChartRenderResult.cs" />

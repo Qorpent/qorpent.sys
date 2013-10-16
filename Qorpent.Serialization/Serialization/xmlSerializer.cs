@@ -55,7 +55,7 @@ namespace Qorpent.Serialization {
 	    /// </remarks>
 	    public override void Serialize(string name, object value, TextWriter output, object options = null) {
 			if (value is XElement) {
-				output.Write(((XElement) value).ToString(SaveOptions.DisableFormatting));
+				output.Write(value.ToString());
 			}
 			else {
 				base.Serialize(name, value, output);

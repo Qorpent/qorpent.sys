@@ -48,9 +48,9 @@
     <Compile Include="Charts.FusionCharts\FusionChartElementType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartExtensions.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartGroupedType.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartNormalizer.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartRender.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartsChartBuilder.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartsNormalizer.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartWrapper.cs" />
     <Compile Include="Charts\ChartBuilder.cs" />
@@ -63,7 +63,7 @@
     <Compile Include="Charts\ChartElement.cs" />
     <Compile Include="Charts\ChartElementList.cs" />
     <Compile Include="Charts\ChartExtensions.cs" />
-    <Compile Include="Charts\ChartLine.cs" />
+    <Compile Include="Charts\ChartTrendLine.cs" />
     <Compile Include="Charts\ChartLineSet.cs" />
     <Compile Include="Charts\ChartLineSetItem.cs" />
     <Compile Include="Charts\ChartRenderResult.cs" />
@@ -154,7 +154,5 @@
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Bxl2\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
