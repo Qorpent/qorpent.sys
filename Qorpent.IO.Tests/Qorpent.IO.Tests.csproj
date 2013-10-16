@@ -51,10 +51,4 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Remalloc.Tools\Remalloc.Phoenix.CSWrapper\Remalloc.Phoenix.CSWrapper.csproj">
-      <Project>{e6f08ae7-c7d2-4560-b0a1-7360a278634d}</Project>
-      <Name>Remalloc.Phoenix.CSWrapper</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

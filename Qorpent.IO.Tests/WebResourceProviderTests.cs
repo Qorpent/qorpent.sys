@@ -1,12 +1,16 @@
 ﻿using NUnit.Framework;
 using Qorpent.IO.Resources;
 using Qorpent.IO.Web;
-using Remalloc.Phoenix.CSWrapper;
 using System;
 
 namespace Qorpent.IO.Tests {
     [TestFixture]
-    public class WebResourceProviderTests : PhoenixFixtureBase {
+    public class WebResourceProviderTests {
+        /*
+        /// <summary>
+        /// 
+        /// </summary>
+        public IWebFixtureBase WebFixtureBase { get; set; }
         [Test]
         public void GetSize() {
             var content = "test";
@@ -17,5 +21,6 @@ namespace Qorpent.IO.Tests {
             };
             Assert.AreEqual(content.Length, drp.GetSize(new Uri(LongSrv.GetUrl("/test.html"))));
         }
+         * */
     }
 }

@@ -10,6 +10,7 @@ namespace Qorpent.Serialization.Tests.Dot
     [TestFixture]
     public class DotLanguageUtilsTest
     {
+        [Explicit]
         [TestCase("aРус", "aРус")] // так и должно быть? вроде же в Dot не допускаются русские буквы
         [TestCase("a1", "a1")]
         [TestCase("_a1", "_a1")]
