@@ -23,7 +23,10 @@ namespace Qorpent.Graphs.Dot {
             if (CalculateEdgeInWeight && !_wasCalculated) {
                 try {
                     foreach (var kv in CalculateWeight()) {
-                        ResolveNode(kv.Key).Label += " (" + kv.Value + ")";
+	                    var node = ResolveNode(kv.Key);
+						node.Label += " (" + kv.Value + ")";
+						node.Set("nodeweight",kv.Value);
+
                     }
                 } catch (Exception) {
                    throw new Exception("Can not calculate weight");

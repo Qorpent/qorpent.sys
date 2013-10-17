@@ -145,7 +145,7 @@ namespace Qorpent.Mvc.Renders {
 	        if (null == resolvedxslt) {
 	            throw new Exception("cannot find xslt with code " + xslt);
 	        }
-	        var transform = new XslCompiledTransform();
+	        var transform = new XslCompiledTransform(true);
 	        transform.Load(resolvedxslt, XsltSettings.TrustedXslt, new XmlUrlResolver());
 	        var sw = new StringWriter();
 	        var xw = XmlWriter.Create(sw);

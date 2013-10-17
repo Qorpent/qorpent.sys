@@ -31,6 +31,18 @@ namespace Qorpent.Graphs.Dot {
 	        get { return Get<NodeStyleType>(DotConstants.StyleAttribute); }
 	        set { Set(DotConstants.StyleAttribute, value); }
 	    }
+		/// <summary>
+		/// Задает ширину линии (стрелки, узла, кластера...) в точках 
+		/// </summary>
+		[IgnoreSerialize]
+		public double Penwidth
+		{
+			get { return Get<double>(DotConstants.PenwidthAttribute); }
+			set
+			{
+				Set(DotConstants.PenwidthAttribute, value);
+			}
+		}
 
 	    /// <summary>
         /// Целевой подграф

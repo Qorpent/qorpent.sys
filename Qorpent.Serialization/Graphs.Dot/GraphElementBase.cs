@@ -150,5 +150,9 @@ namespace Qorpent.Graphs.Dot {
 	            Attributes[a.Key] = a.Value;
 	        }
 	    }
+		/// <summary>
+		/// Просто общий 
+		/// </summary>
+		public object Tag { get; set; }
 	}
 }
