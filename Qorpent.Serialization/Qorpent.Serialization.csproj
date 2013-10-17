@@ -8,6 +8,14 @@
     <AssemblyName>Qorpent.Serialization</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AbstractCanvas\Canvas.cs" />
+    <Compile Include="AbstractCanvas\CanvasAxis.cs" />
+    <Compile Include="AbstractCanvas\CanvasPoint.cs" />
+    <Compile Include="AbstractCanvas\ICanvas.cs" />
+    <Compile Include="AbstractCanvas\ICanvasAxis.cs" />
+    <Compile Include="AbstractCanvas\ICanvasElement.cs" />
+    <Compile Include="AbstractCanvas\ICanvasPoint.cs" />
+    <Compile Include="AbstractCanvas\ICanvasPrimitive.cs" />
     <Compile Include="BSharp\BSharpCodeBuilder.cs" />
     <Compile Include="BSharp\BSharpErrors.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderBase.cs" />
