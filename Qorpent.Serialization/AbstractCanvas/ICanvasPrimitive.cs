@@ -11,5 +11,15 @@
         ///     Позиция по оси Y
         /// </summary>
         double Y { get; }
+        /// <summary>
+        ///     Объект, к которому относится данное значение
+        /// </summary>
+        object Owner { get; }
+        /// <summary>
+        ///     Устанавливает объект-родитель
+        /// </summary>
+        /// <param name="owner">Объект-родитель</param>
+        /// <returns>Замыкание</returns>
+        ICanvasPrimitive SetOwner(object owner);
     }
 }
