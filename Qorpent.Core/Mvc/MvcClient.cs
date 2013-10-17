@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -113,6 +114,17 @@ namespace Qorpent.Mvc
 		private string GeneratePostData(object parameters) {
 			var dict = parameters.ToDict();
             return string.Join("&", dict.Select(_ => _.Key + "=" + Uri.EscapeDataString(_.Value.ToStr())));
+		}
+		/// <summary>
+		/// Возвращает строку, полученную в указанном формате
+		/// </summary>
+		/// <param name="command"></param>
+		/// <param name="parameters"></param>
+		/// <param name="format"></param>
+		/// <returns></returns>
+		public async Task<string> GetString(string command, IDictionary<string, object> parameters, string format) {
+			var stream = GetStream(command, parameters, format);
+			return new StreamReader(await stream).ReadToEnd();
 		}
 	}
 }

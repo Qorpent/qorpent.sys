@@ -9,6 +9,7 @@ namespace Qorpent.Serialization.Tests {
     /// 
     /// </summary>
     public class FusionChartsNormalizerTests {
+        [Explicit]
         [Test]
         public void CanNormalizeChartWithValuesLessThanOne() {
             var chart = new Chart {Config = new ChartConfig {Type = "MSBar2D", Height = "300"}};
@@ -29,6 +30,7 @@ namespace Qorpent.Serialization.Tests {
             Assert.LessOrEqual(chart.GetYAxisMinValue(), -1);
             Assert.GreaterOrEqual(chart.GetYAxisMinValue(), -2);
         }
+        [Explicit]
         [Test]
         public void CanNormalizeChartWithValuesLessThanOneAndOther() {
             var chart = new Chart { Config = new ChartConfig { Type = "MSBar2D", Height = "300"} };

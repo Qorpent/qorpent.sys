@@ -44,7 +44,28 @@ namespace Qorpent.Security
             return null;
         }
 
-        /// <summary>
+	    /// <summary>
+	    /// Возвращает имя-пароль в незащищенном виде
+	    /// </summary>
+	    /// <param name="node"></param>
+	    /// <param name="app"></param>
+	    /// <returns></returns>
+	    public Tuple<string,string> GetUnsafeCredentials(string node = "127.0.0.1", string app = "default") {
+			if (string.IsNullOrWhiteSpace(node)) node = "127.0.0.1";
+			if (string.IsNullOrWhiteSpace(app)) app = "default";
+			var key = node + ":" + app;
+			if (FileStorage.Exists(key))
+			{
+				var record = new StreamReader(FileStorage.Open(key)).ReadToEnd();
+				var delindex = record.IndexOf(':');
+				var username = record.Substring(0, delindex);
+				var password = record.Substring(delindex + 1);
+				return new Tuple<string, string>(username,password);
+			}
+			return null;
+	    }
+
+	    /// <summary>
         /// Установить креденции для указанного сервера и приложения
         /// </summary>
         /// <param name="node"></param>

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 namespace Qorpent.Security {
     /// <summary>
@@ -12,6 +13,13 @@ namespace Qorpent.Security {
         /// <param name="app"></param>
         /// <returns></returns>
         ICredentials GetCredentials(string node = "127.0.0.1", string app="default");
+		/// <summary>
+		/// Возвращает имя-пароль в незащищенном виде
+		/// </summary>
+		/// <param name="node"></param>
+		/// <param name="app"></param>
+		/// <returns></returns>
+	    Tuple<string,string> GetUnsafeCredentials(string node = "127.0.0.1", string app = "default");
         /// <summary>
         /// Установить креденции для указанного сервера и приложения
         /// </summary>

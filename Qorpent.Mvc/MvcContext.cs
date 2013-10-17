@@ -49,7 +49,14 @@ namespace Qorpent.Mvc {
 		private void InitializeContext(System.Web.HttpContextWrapper httpContextWrapper) {
 			SetNativeContext(httpContextWrapper);
 		}
-
+		/// <summary>
+		/// Специальный метод для совместимости с XSLT для возврата атрибутов
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public string xsltget(string name) {
+			return Get(name);
+		}
 
 		/// <summary>
 		/// </summary>

@@ -51,7 +51,7 @@ namespace Qorpent.Serialization.Tests {
 	</p>
 	<i>2</i>
 </body>
-";
+";      [Explicit]
 		[TestCase(".main h1", new[] { "<h1>Заголовок</h1>" })]
 		[TestCase(".main h1 , #x, p i ", new[] { "<h1>Заголовок</h1>", "<img id=\"x\" />" ,"<i>1</i>"})]
 		[TestCase("p b[type~=3]", new[] { "<b type=\"2 3\" />", "<b type=\"3 45\" />" })]
