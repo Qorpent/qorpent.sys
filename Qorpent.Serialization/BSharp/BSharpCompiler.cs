@@ -195,7 +195,20 @@ namespace Qorpent.BSharp {
 					}
 				}
 				else {
-					var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = e.Attr("code"), Namespace = ns};
+					var selfcode = e.Attr("code");
+					var __ns = ns ?? string.Empty;
+					if (selfcode.Contains(".")) {
+						var lastdot = selfcode.LastIndexOf('.');
+						var _nsadd = selfcode.Substring(0, lastdot);
+						selfcode = selfcode.Substring(lastdot+1);
+						if (string.IsNullOrWhiteSpace(__ns)) {
+							__ns = _nsadd;
+						}
+						else {
+							__ns = __ns + "." + _nsadd;
+						}
+					}
+					var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = selfcode, Namespace = __ns};
 					if (null != def.Source.Attribute("_file")) {
 						def.Source.SetAttributeValue("_dir",Path.GetDirectoryName(def.Source.Attr("_file")).Replace("\\","/"));
 					}

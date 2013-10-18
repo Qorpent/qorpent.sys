@@ -151,5 +151,16 @@ class A x=1 y=1
 			Assert.AreEqual("2", th.Compiled.Attr("w"));
 			Assert.AreEqual("2", th.Compiled.Attr("z"));
 		}
+
+
+		[Test]
+		public void Q186InvalidClassNameAndNamespaceResolution() {
+			var code = @"class X.Y.A";
+			var result = Compile(code);
+			var cls = result.Get("X.Y.A");
+			Assert.AreEqual("A",cls.Name);
+			Assert.AreEqual("X.Y.A", cls.FullName);
+			Assert.AreEqual("X.Y", cls.Namespace);
+		}
 	}
 }
