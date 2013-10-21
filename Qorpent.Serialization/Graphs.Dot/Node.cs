@@ -23,6 +23,11 @@ namespace Qorpent.Graphs.Dot {
         ///     Вес узла
         /// </summary>
         public int Weight { get; set; }
+
+		/// <summary>
+		/// Прямой входящий вес (только непосредственные связи)
+		/// </summary>
+		public int DirectInputWeight { get; set; }
 	    /// <summary>
 	    ///
 	    /// </summary>
@@ -181,8 +186,12 @@ namespace Qorpent.Graphs.Dot {
             get { return Get<ColorAttribute>(DotConstants.ColorAttribute); }
             set { Set(DotConstants.ColorAttribute, value); }
 	    }
+		/// <summary>
+		/// Прямой исходящий вес
+		/// </summary>
+		public int DirectOutputWeight { get; set; }
 
-	    /// <summary>
+		/// <summary>
 	    /// Создает типовой узел
 	    /// </summary>
 	    /// <param name="code"></param>

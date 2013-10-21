@@ -44,6 +44,8 @@ namespace Qorpent.Graphs.Dot {
         public IEnumerable<KeyValuePair<string, int>> CalculateWeight() {
             foreach (var node in EnumerateNodes()) {
                 node.Weight = Edges.Count(_ => _.To == node.Code);
+				node.DirectOutputWeight = Edges.Count(_ => _.From == node.Code);
+	            node.DirectInputWeight = node.Weight;
                 node.Counted = true;
 
                 if (node.Weight != 0) {
