@@ -39,6 +39,10 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="groupedType">Тип группы</param>
         /// <returns>Признак того, что представление графика попадает в указанную группу</returns>
         public static bool Is(this IChart chart, FusionChartGroupedType groupedType) {
+            if (chart.Config == null) {
+                return false;
+            }
+
             var f = chart.Config.Type.To<FusionChartType>();
             if (
                 (f & (FusionChartType)groupedType) == f
@@ -461,7 +465,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="chartDataset">Представление датасета</param>
         /// <returns>Цвет</returns>
         public static string GetColor(this IChartDataset chartDataset) {
-            return chartDataset.GetColorAsHex().ToHex();
+            return chartDataset.GetColorAsHex() != null ? chartDataset.GetColorAsHex().ToHex() : "";
         }
         /// <summary>
         ///     Установка цвета линии датасета

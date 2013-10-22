@@ -38,6 +38,10 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="chart"></param>
         private void FixFontColors(IChart chart) {
             foreach (var dataset in chart.Datasets.Children) {
+                if (string.IsNullOrWhiteSpace(dataset.GetColor())) {
+                    continue;
+                }
+
                 if (Convert.ToInt32(dataset.GetColor(), 16)/20 > 1) {
                     dataset.SetColor("FF0000");
                 }
@@ -63,6 +67,10 @@ namespace Qorpent.Charts.FusionCharts {
             foreach (var el in chart.Datasets.Children.SelectMany(_ => _.Children)) {
                 el.Set(FusionChartApi.Set_ValuePosition, "bottom");
                 el.SetShowValue(true);
+            }
+
+            if (!src.Any()) {
+                return;
             }
 
             foreach (var el in src.FirstOrDefault()) {
