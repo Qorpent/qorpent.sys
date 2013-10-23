@@ -21,8 +21,16 @@ namespace Qorpent.Mvc.Actions {
         /// </summary>
         /// <returns> </returns>
         protected override object MainProcess() {
+            return GenerateCustomSetChart(ChartData);
+        }
+        /// <summary>
+        ///     Собирает примитивный график по переданному массиву данных
+        /// </summary>
+        /// <param name="chartData">Массив данных согласно #AP-311</param>
+        /// <returns>Представление графика</returns>
+        public static IChart GenerateCustomSetChart(string chartData) {
             var chart = new Chart();
-            var datasets = ChartData.Split(new[] {';'});
+            var datasets = chartData.Split(new[] { ';' });
             chart.Config = chart.Config ?? new ChartConfig();
 
             foreach (var ds in datasets) {
