@@ -122,47 +122,6 @@ namespace Qorpent.Charts.FusionCharts {
         /// 
         /// </summary>
         /// <param name="chart"></param>
-        /// <returns></returns>
-        private IEnumerable<double> EnumerateDivlineValues(IChart chart) {
-            var step = (chart.GetYAxisMaxValue() - chart.GetYAxisMinValue())/(chart.GetNumDivLines() + 1);
-            for (var i = chart.GetYAxisMinValue(); i < chart.GetYAxisMaxValue(); i += step) {
-                yield return i;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chart"></param>
-        /// <param name="element"></param>
-        /// <param name="something"></param>
-        /// <returns></returns>
-        private bool SomewhereNearby(IChart chart, IChartElement element, object something) {
-            var relative = 25*(chart.GetDelta() / Convert.ToDouble(_chartConfig.Height));
-
-            if ((something is int) && (element is IChartDataItem)) {
-                var el = element as IChartDataItem;
-                return (
-                    el.GetValue<double>() - relative < something.ToInt()
-                        &&
-                    el.GetValue<double>() + relative > something.ToInt()
-                );
-            }
-
-            throw new NotSupportedException();
-        }
-        /// <summary>
-        ///     Возвращает порядок, на который можно округлить число, сохранив его значимость 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private int GetRoundOrder(double value) {
-            return value.GetNumberOfDigits() - 1;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chart"></param>
         private void FixNumberScaling(IChart chart) {
             if (!_chartConfig.UseDefaultScaling) {
                 chart.Set(FusionChartApi.Chart_FormatNumber, 0);
@@ -191,8 +150,8 @@ namespace Qorpent.Charts.FusionCharts {
         /// </summary>
         /// <param name="chart">Конфиг графика</param>
         private void FitYAxisHeight(IChart chart) {
-            var max = GetMaxValue(chart);
-            var min = GetMinValue(chart);
+            var max = chart.GetYMaxValueWholeChart();
+            var min = chart.GetYMinValueWholeChart();
 
             if ((max != 0.0) && (min != 0.0)) {
                 min = min.RoundDown(min.GetNumberOfDigits() - 1);
@@ -247,88 +206,6 @@ namespace Qorpent.Charts.FusionCharts {
                     _.Set(FusionChartApi.Chart_AnchorSides, 3);
                 }
             });
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chart"></param>
-        /// <returns></returns>
-        private IEnumerable<double> GetTrendlines(IChart chart) {
-            return chart.TrendLines.Children.Select(
-                _ => _.Get<double>(ChartDefaults.ChartLineStartValue)
-            );
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chart"></param>
-        /// <returns></returns>
-        private double GetMaxTrendline(IChart chart) {
-            return GetTrendlines(chart).Max();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chart"></param>
-        /// <returns></returns>
-        private double GetMinTrendline(IChart chart) {
-            return GetTrendlines(chart).Min();
-        }
-        /// <summary>
-        ///     Возвращает минимальное значение из всех датасетов
-        /// </summary>
-        /// <param name="chart">Представление графика</param>
-        /// <returns>Минимальное значение из всех датасетов</returns>
-        private double GetMinDataset(IChart chart) {
-            return GetDatasetValues(chart).Min();
-        }
-        /// <summary>
-        ///     Возвращает максимальное значение из всех датасетов
-        /// </summary>
-        /// <param name="chart">Представление графика</param>
-        /// <returns>Максимальное значение датасета</returns>
-        private double GetMaxDataset(IChart chart) {
-            return GetDatasetValues(chart).Max();
-        }
-        /// <summary>
-        ///     Возвращает плоский список всех значений датасетов
-        /// </summary>
-        /// <param name="chart">Представление графика</param>
-        /// <returns>Перечисление значений датасетов</returns>
-        private IEnumerable<double> GetDatasetValues(IChart chart) {
-            return chart.Datasets.Children.SelectMany(
-                _ => _.Children
-            ).Select(
-                _ => _.Get<double>(FusionChartApi.Set_Value)
-            );
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chart"></param>
-        /// <returns></returns>
-        private double GetMinValue(IChart chart) {
-            var min = GetMinDataset(chart);
-
-            if (chart.TrendLines.Children.Any()) {
-                min = min.Minimal(GetMinTrendline(chart).ToInt(true));
-            }
-
-            return min;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chart"></param>
-        /// <returns></returns>
-        private double GetMaxValue(IChart chart) {
-            var max = GetMaxDataset(chart);
-
-            if (chart.TrendLines.Children.Any()) {
-                max = max.Maximal(GetMaxTrendline(chart).ToInt(true));
-            }
-
-            return max;
         }
     }
 }

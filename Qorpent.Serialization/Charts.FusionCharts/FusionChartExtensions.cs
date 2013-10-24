@@ -661,5 +661,75 @@ namespace Qorpent.Charts.FusionCharts {
         public static double GetDelta(this IChart chart) {
             return chart.GetYAxisMaxValue() - chart.GetYAxisMinValue();
         }
+        /// <summary>
+        ///     Возвращает перечисление значений датасетов в виде плоского списка
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Перечисление значений датасетов в виде плоского списка</returns>
+        public static IEnumerable<double> GetLinearDatasetValues(this IChart chart) {
+            return chart.Datasets.Children.SelectMany(
+                _ => _.Children
+            ).Select(
+                _ => _.Get<double>(FusionChartApi.Set_Value)
+            );
+        }
+        /// <summary>
+        ///     Возвращает максимальное значение из всех сетов датасетов графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Максимальное значение из всех сетов датасетов графика</returns>
+        public static double GetMaxDatasetSetValue(this IChart chart) {
+            return chart.GetLinearDatasetValues().Max();
+        }
+        /// <summary>
+        ///     Возвращает минимальное значение из всех сетов датасетов графика
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Минимальное значение из всех сетов датасетов графика</returns>
+        public static double GetMinDatasetSetValue(this IChart chart) {
+            return chart.GetLinearDatasetValues().Min();
+        }
+        /// <summary>
+        ///     Возвращает перечисление значений трендлайнов, относящихся к чарту
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Перечисление значений трендлайнов, относящихся к чарту</returns>
+        public static IEnumerable<double> GetTrendlinesValues(this IChart chart) {
+            return chart.GetTrendlines().Select(
+                _ => _.Get<double>(ChartDefaults.ChartLineStartValue)
+            );
+        }
+        /// <summary>
+        ///     Возвращает минимальное значение линии тренда из всех существующих
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Минимальное значение линии тренда из всех существующих</returns>
+        public static double GetMinTrendlineValue(this IChart chart) {
+            return chart.GetTrendlinesValues().Min();
+        }
+        /// <summary>
+        ///     Возвращает максимальное значение линии тренда из всех существующих
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Максимальное значение линии тренда из всех существующих</returns>
+        public static double GetMaxTrendlineValue(this IChart chart) {
+            return chart.GetTrendlinesValues().Max();
+        }
+        /// <summary>
+        ///     Возвращает минимальное значение всего чарта относительно оси Y с учётом трендлайнов
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Минимальное значение всего чарта относительно оси Y с учётом трендлайнов</returns>
+        public static double GetYMinValueWholeChart(this IChart chart) {
+            return chart.TrendLines.Children.Any() ? chart.GetMinDatasetSetValue().Minimal(chart.GetMinTrendlineValue()) : chart.GetMinDatasetSetValue();
+        }
+        /// <summary>
+        ///     Возвращает минимальное значение всего чарта относительно оси Y с учётом трендлайнов
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <returns>Минимальное значение всего чарта относительно оси Y с учётом трендлайнов</returns>
+        public static double GetYMaxValueWholeChart(this IChart chart) {
+            return chart.TrendLines.Children.Any() ? chart.GetMaxDatasetSetValue().Maximal(chart.GetMaxTrendlineValue()) : chart.GetMaxDatasetSetValue();
+        }
     }
 }
