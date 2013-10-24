@@ -56,7 +56,11 @@ namespace Qorpent.Charts.FusionCharts {
             foreach (var primitive in ps) {
                 var min = ps.OrderBy(_ => _.Y).First();
                 foreach (var nbp in canvas.Nearby(primitive, 15).Where(__ => !__.Equals(min) && ps.Contains(__))) {
-                    normalized.AddFixedAttribute((nbp.Owner as IChartDataItem), FusionChartApi.Set_ShowValue, false);
+                    if (!canvas.Nearby(primitive, 10).Where(__ => !__.Equals(min) && ps.Contains(__)).Contains(nbp)) {
+                        normalized.AddFixedAttribute((nbp.Owner as IChartDataItem), FusionChartApi.Set_ValuePosition, "above");
+                    } else {
+                        normalized.AddFixedAttribute((nbp.Owner as IChartDataItem), FusionChartApi.Set_ShowLabel, false);
+                    }
                 }
             }
         }

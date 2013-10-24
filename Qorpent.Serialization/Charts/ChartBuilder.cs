@@ -30,7 +30,7 @@ namespace Qorpent.Charts {
                 chart.Add(dataset);
             }
 
-            if (datasets.Count > 1) {
+            if ((datasets.Count > 1) && (string.IsNullOrWhiteSpace(chart.Config.Type))) {
                 chart.Config.SetChartType(FusionChartType.MSLine);
             }
 
