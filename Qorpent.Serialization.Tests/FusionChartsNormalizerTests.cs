@@ -22,7 +22,7 @@ namespace Qorpent.Serialization.Tests {
             chart.Add(ds3);
             chart.Add(ds4);
 
-            var normalizer = new FusionChartNormalizer().Initialize(chart.Config);
+            var normalizer = new FusionChartNormalizer();
             normalizer.Normalize(chart);
 
             Assert.LessOrEqual(chart.GetYAxisMaxValue(), 2);
@@ -43,7 +43,7 @@ namespace Qorpent.Serialization.Tests {
             chart.Add(ds3);
             chart.Add(ds4);
 
-            var normalizer = new FusionChartNormalizer().Initialize(chart.Config);
+            var normalizer = new FusionChartNormalizer();
             normalizer.Normalize(chart);
             Assert.LessOrEqual(chart.GetYAxisMaxValue(), 10);
             Assert.GreaterOrEqual(chart.GetYAxisMaxValue(), 2);

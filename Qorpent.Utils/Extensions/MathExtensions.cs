@@ -83,6 +83,15 @@ namespace Qorpent.Utils.Extensions {
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="number"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public static bool IsRoundNumber(this double number, int order) {
+            return number%Math.Pow(10, order) == 0.0;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
         public static double ToDouble(this int n) {

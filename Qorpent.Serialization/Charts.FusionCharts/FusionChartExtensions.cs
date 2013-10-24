@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
@@ -730,6 +731,14 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Минимальное значение всего чарта относительно оси Y с учётом трендлайнов</returns>
         public static double GetYMaxValueWholeChart(this IChart chart) {
             return chart.TrendLines.Children.Any() ? chart.GetMaxDatasetSetValue().Maximal(chart.GetMaxTrendlineValue()) : chart.GetMaxDatasetSetValue();
+        }
+        /// <summary>
+        ///     Нормализация чарта
+        /// </summary>
+        /// <param name="chart">Исходное представление чарта</param>
+        /// <returns>Замыкание на нормализованный чарт</returns>
+        public static IChart Normalize(this IChart chart) {
+            return new FusionChartNormalizer().Normalize(chart);
         }
     }
 }

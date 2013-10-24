@@ -37,6 +37,7 @@
     <Compile Include="EscaperTests.cs" />
     <Compile Include="exceptions_need_to_be_fixed.cs" />
     <Compile Include="FusionChartsNormalizerTests.cs" />
+    <Compile Include="FusionChartsScaleNormalizerTests.cs" />
     <Compile Include="GraphTests.cs" />
     <Compile Include="iocconfiguationtest.cs" />
     <Compile Include="Json\AF768Tests.cs" />
