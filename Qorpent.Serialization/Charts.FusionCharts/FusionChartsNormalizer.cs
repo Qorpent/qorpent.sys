@@ -89,10 +89,8 @@ namespace Qorpent.Charts.FusionCharts {
                                 if (!nb15.Any()) {
                                     return;
                                 }
-
-                                var topv = nb15.Select(______ => ______.X).Max();
                                 var highest = nb15.FirstOrDefault(
-                                    _____ => ____.X == topv
+                                    _____ => ____.X == nb15.OrderByDescending(______ => ______.X).First().X
                                 );
 
                                 if (highest.X > ____.X) {
