@@ -78,7 +78,7 @@ namespace Qorpent.Utils.Extensions {
         /// <param name="number"></param>
         /// <returns></returns>
         public static int GetNumberOfDigits(this double number) {
-            return number.ToString().Split(new[] {'.', ','})[0].Length;
+            return number.ToString().Split(new[] {'.', ','})[0].Replace("-", "").Length;
         }
         /// <summary>
         ///     Признак того, что это круглое число
