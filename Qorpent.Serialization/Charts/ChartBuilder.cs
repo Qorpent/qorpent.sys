@@ -30,10 +30,6 @@ namespace Qorpent.Charts {
                 chart.Add(dataset);
             }
 
-            if ((datasets.Count > 1) && (string.IsNullOrWhiteSpace(chart.Config.Type))) {
-                chart.Config.SetChartType(FusionChartType.MSLine);
-            }
-
             for (var i = 0; i < chart.Datasets.Children.Select(_ => _.Children.Count()).Max(); i++) {
                 chart.Add(new ChartCategory().SetLabelValue(""));
             }
