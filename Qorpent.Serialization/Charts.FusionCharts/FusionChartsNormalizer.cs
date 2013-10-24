@@ -194,13 +194,14 @@ namespace Qorpent.Charts.FusionCharts {
             var max = GetMaxValue(chart);
             var min = GetMinValue(chart);
 
-            min = min.RoundDown(min.GetNumberOfDigits() - 1);
-            max = max.RoundUp(max.GetNumberOfDigits() - 1);
+            if ((max != 0.0) && (min != 0.0)) {
+                min = min.RoundDown(min.GetNumberOfDigits() - 1);
+                max = max.RoundUp(max.GetNumberOfDigits() - 1);
+                chart.SetYAxisMinValue(min);
+                chart.SetYAxisMaxValue(max);
 
-            chart.SetYAxisMinValue(min);
-            chart.SetYAxisMaxValue(max);
-
-            FitYAxisNumDivLines(chart, min, max);
+                FitYAxisNumDivLines(chart, min, max);
+            }
         }
         /// <summary>
         /// 
