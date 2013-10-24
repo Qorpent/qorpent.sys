@@ -55,7 +55,7 @@ namespace Qorpent.Charts.FusionCharts {
 
             foreach (var primitive in ps) {
                 var min = ps.OrderBy(_ => _.Y).First();
-                foreach (var nbp in canvas.Nearby(primitive, 100).Where(__ => !__.Equals(min) && Math.Abs(__.X - min.X) < 1)) {
+                foreach (var nbp in canvas.Nearby(primitive, 20).Where(__ => !__.Equals(min) && Math.Abs(__.X - min.X) < 1)) {
                     normalized.AddFixedAttribute((nbp.Owner as IChartDataItem), FusionChartApi.Set_ShowValue, false);
                 }
             }

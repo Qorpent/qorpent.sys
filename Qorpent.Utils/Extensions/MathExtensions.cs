@@ -81,7 +81,7 @@ namespace Qorpent.Utils.Extensions {
             return Math.Floor(Math.Log10(number) + 1).ToInt(true);
         }
         /// <summary>
-        /// 
+        ///     Признак того, что это круглое число
         /// </summary>
         /// <param name="number"></param>
         /// <param name="order"></param>
