@@ -31,7 +31,7 @@ namespace Qorpent.Charts.FusionCharts {
             
             var yAxis = normalized.Scales.FirstOrDefault(
                 _ => _.ScaleType == ChartAbstractScaleType.Y
-                );
+            );
 
             if (yAxis == null) {
                 return;
@@ -42,7 +42,7 @@ namespace Qorpent.Charts.FusionCharts {
 
             GetPointsByColumn(chart, canvas).DoForEach(
                 _ => ResolveColumn(_, canvas, normalized)
-                );
+            );
         }
         /// <summary>
         ///     Резольвит расположение лэйблов относительно друг друга внутри колонки
@@ -55,7 +55,7 @@ namespace Qorpent.Charts.FusionCharts {
 
             foreach (var primitive in ps) {
                 var min = ps.OrderBy(_ => _.Y).First();
-                foreach (var nbp in canvas.Nearby(primitive, 20).Where(__ => !__.Equals(min) && Math.Abs(__.X - min.X) < 1)) {
+                foreach (var nbp in canvas.Nearby(primitive, 15).Where(__ => !__.Equals(min) && ps.Contains(__))) {
                     normalized.AddFixedAttribute((nbp.Owner as IChartDataItem), FusionChartApi.Set_ShowValue, false);
                 }
             }
@@ -72,7 +72,7 @@ namespace Qorpent.Charts.FusionCharts {
             SetBottomPositionForLabels(chart);
 
             src.DoForEach(_ => {
-                var xpos = ((canvas.X.EndValue - canvas.X.BeginValue) / src.Count) * src.IndexOf(_);
+                var xpos = chart.Config.Width.ToInt()*src.IndexOf(_);
                 var nb = new List<ICanvasPrimitive>();
                 _.DoForEach(__ => {
                     var p = canvas.SetPoint(xpos, Convert.ToDouble(__.GetValue())).SetOwner(__);

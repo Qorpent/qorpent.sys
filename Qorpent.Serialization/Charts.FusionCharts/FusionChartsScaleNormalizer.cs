@@ -36,15 +36,21 @@ namespace Qorpent.Charts.FusionCharts {
             var min = chart.GetYMinValueWholeChart();
             var max = chart.GetYMaxValueWholeChart();
 
-            var normalizedMin = NormalizeMinValue(min);
             var normalizedMax = NormalizeMaxValue(max);
+            var normalizedMin = NormalizeMinValue(min);
 
-            while (normalizedMin >= min) {
-                normalizedMin = NormalizeMinValue(normalizedMin - Math.Pow(10, normalizedMin.GetNumberOfDigits() - 1));
-            }
+            if ((min >= 0) && (max >= 0)) {
+                if (min < 100 && max > 100) {
+                    normalizedMin = 0;
+                }
 
-            while (normalizedMax <= max) {
-                normalizedMax = NormalizeMaxValue(normalizedMax + Math.Pow(10, normalizedMax.GetNumberOfDigits() - 1));
+                while (normalizedMax <= max) {
+                    normalizedMax = NormalizeMaxValue(normalizedMax + Math.Pow(10, normalizedMax.GetNumberOfDigits() - 1));
+                }
+
+                while (normalizedMin >= min) {
+                    normalizedMin = NormalizeMinValue(normalizedMin - Math.Pow(10, normalizedMin.GetNumberOfDigits() - 1));
+                }
             }
 
             abstractScale.MinValue = normalizedMin;
