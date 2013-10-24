@@ -13,21 +13,24 @@ namespace Qorpent.Charts {
         /// <param name="chartData">Представление датасетов</param>
         /// <returns>Сформированный график</returns>
         public static IChart ParseDatasets(string chartData) {
-            var chart = new Chart();
-            var datasets = chartData.Split(new[] { ';' });
-            chart.Config = chart.Config ?? new ChartConfig();
+            var chart = new Chart {
+                Config = new ChartConfig()
+            };
+
+            var datasets = chartData.SmartSplit(false, true, new[] {';'});
 
             foreach (var ds in datasets) {
                 var dataset = new ChartDataset();
 
-                foreach (var value in ds.Split(new[] { ',' })) {
-                    dataset.Add(new ChartSet().SetValue(value.ToDecimal()));
-                }
+                ds.SmartSplit(false, true, new[] { ',' }).DoForEach(
+                    _ => dataset.Add(new ChartSet().SetValue(_.ToDecimal()))
+                );
+
 
                 chart.Add(dataset);
             }
 
-            if (datasets.Length > 1) {
+            if (datasets.Count > 1) {
                 chart.Config.SetChartType(FusionChartType.MSLine);
 
                 for (var i = 0; i < chart.Datasets.Children.Select(_ => _.Children.Count()).Max(); i++) {
