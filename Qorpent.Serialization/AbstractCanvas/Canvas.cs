@@ -41,7 +41,10 @@ namespace Qorpent.AbstractCanvas {
         ///     Возвращает величину на пиксель
         /// </summary>
         public double ValuePerPixes {
-            get { return (Width.Minimal(Height))/((_x.Value - _x.Key).Minimal(_y.Value - _y.Key)); }
+            get {
+                var divisor = ((_x.Value - _x.Key).Minimal(_y.Value - _y.Key));
+                return (Width.Minimal(Height))/(divisor == 0.0 ? 1.0 : divisor);
+            }
         }
         /// <summary>
         ///     Представление канвы
@@ -96,12 +99,16 @@ namespace Qorpent.AbstractCanvas {
         /// <returns>Перечисление элементов, находящихся неподалеку</returns>
         public IEnumerable<ICanvasPrimitive> Nearby(ICanvasPrimitive canvasPrimitive, int radius) {
             return _primitives.Where(
-                _ => (
-                    Math.Pow((_.X - canvasPrimitive.X) * ValuePerPixes, 2) + Math.Pow((_.Y - canvasPrimitive.Y) * ValuePerPixes, 2) <= (Math.Pow(radius, 2))
-                ) && (
-                    !_.Equals(canvasPrimitive)
-                )
-            );
+                _ => {
+                    var t = Math.Pow((_.X - canvasPrimitive.X) * ValuePerPixes, 2) + Math.Pow((_.Y - canvasPrimitive.Y) * ValuePerPixes, 2);
+                    var u = Math.Pow(radius, 2);
+
+                    if ((t <= u) && (!_.Equals(canvasPrimitive))) {
+                        return true;
+                    }
+
+                    return false;
+                });
         }
     }
 }

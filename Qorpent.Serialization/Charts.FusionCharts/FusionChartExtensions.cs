@@ -740,5 +740,13 @@ namespace Qorpent.Charts.FusionCharts {
         public static IChart Normalize(this IChart chart) {
             return new FusionChartNormalizer().Normalize(chart);
         }
+        /// <summary>
+        ///     Проверяет наличие датасетов в чарте
+        /// </summary>
+        /// <param name="chart">Представление чарта</param>
+        /// <returns>Признак наличия датасетов в чарте</returns>
+        public static bool DatasetsExists(this IChart chart) {
+            return chart.Datasets.Children.Any();
+        }
     }
 }

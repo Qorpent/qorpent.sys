@@ -1,19 +1,26 @@
-п»їnamespace Qorpent.Charts {
+namespace Qorpent.Charts {
     /// <summary>
-    ///     РРЅС‚РµСЂС„РµР№СЃ РЅРѕСЂРјР°Р»Р°Р№Р·РµСЂР° РіСЂР°С„РёРєРѕРІ
+    ///     Интерфейс нормализатора чартов
     /// </summary>
-    public interface IРЎhartNormalizer {
+    public interface IChartNormalizer {
         /// <summary>
-        ///     РџСЂРѕРёР·РІРµСЃС‚Рё РЅРѕСЂРјР°Р»РёР·Р°С†РёСЋ С‡Р°СЂС‚Р°
+        ///     Нормализация чарта
         /// </summary>
-        /// <param name="chart">Р§Р°СЂС‚</param>
-        /// <returns>РќРѕСЂРјР°Р»РёР·РѕРІР°РЅРЅС‹Р№ С‡Р°СЂС‚</returns>
-        IChart Normalize(IChart chart);
+        /// <param name="chart">Представление исходного чарта</param>
+        /// <param name="normalized">абстрактное представление нормализованного чарта</param>
+        /// <returns>Замыкание на абстрактное представление нормализованного чарта</returns>
+        IChartNormalized Normalize(IChart chart, IChartNormalized normalized);
         /// <summary>
-        ///     РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РЅРѕСЂРјР°Р»Р°Р№Р·РµСЂР°
+        ///     Определяет признак того, что переданное представление нормализованного чарта поддерживается системой
         /// </summary>
-        /// <param name="chartConfig">РљРѕРЅС„РёРі РіСЂР°С„РёРєР°</param>
-        /// <returns>РќР°СЃС‚СЂРѕРµРЅРЅС‹Р№ СЌРєР·РµРјРїР»СЏСЂ <see cref="IРЎhartNormalizer"/></returns>
-        IРЎhartNormalizer Initialize(IChartConfig chartConfig);
+        /// <param name="normalized">Представление нормализованного чарта</param>
+        /// <returns>Признак того, что переданное представление нормализованного чарта поддерживается системой</returns>
+        bool IsSupported(IChartNormalized normalized);
+        /// <summary>
+        ///     Определяет признак того, что переданное представление чарта поддерживается системой
+        /// </summary>
+        /// <param name="chart">Представление чарта</param>
+        /// <returns>Признак того, что переданное представление чарта поддерживается системой</returns>
+        bool IsSupported(IChart chart);
     }
 }

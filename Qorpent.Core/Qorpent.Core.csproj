@@ -68,6 +68,8 @@
     <Compile Include="BSharp\Runtime\IBSharpRuntimeService.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptor.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassResolutionType.cs" />
+    <Compile Include="Charts\ChartAbstractScale.cs" />
+    <Compile Include="Charts\ChartAbstractScaleType.cs" />
     <Compile Include="Charts\ChartDefaults.cs" />
     <Compile Include="Charts\IChart.cs" />
     <Compile Include="Charts\IChartAttribute.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Charts\IChartElementList.cs" />
     <Compile Include="Charts\IChartLineset.cs" />
     <Compile Include="Charts\IChartLineSetItem.cs" />
+    <Compile Include="Charts\IChartNormalized.cs" />
     <Compile Include="Charts\IChartNormalizer.cs" />
     <Compile Include="Charts\IChartRender.cs" />
     <Compile Include="Charts\IChartRenderConfig.cs" />

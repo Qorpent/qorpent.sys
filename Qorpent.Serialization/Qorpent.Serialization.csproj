@@ -44,6 +44,7 @@
     <Compile Include="BSharp\Schema\RuleType.cs" />
     <Compile Include="BSharp\Schema\Schema.cs" />
     <Compile Include="BSharp\Schema\SchemaNote.cs" />
+    <Compile Include="Charts.FusionCharts\ChartNormalized.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartApi.cs" />
     <Compile Include="Charts.FusionCharts\ApiExtended.cs" />
     <Compile Include="Charts.FusionCharts\API_auto.cs" />
@@ -57,7 +58,12 @@
     <Compile Include="Charts.FusionCharts\FusionChartExtensions.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartGroupedType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartRender.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartsAbstractNormalizer.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartsAnchorsNormalizer.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartsColorNormalizer.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartsNormalizer.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartsNumberScalingNormalizer.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartsPositionNormalizer.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartsScaleNormalizer.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartWrapper.cs" />

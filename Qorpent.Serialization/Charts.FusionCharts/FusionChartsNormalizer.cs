@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Config;
-using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts.FusionCharts {
     /// <summary>
     ///     
     /// </summary>
-    [ContainerComponent(ServiceType = typeof(IСhartNormalizer), Name = "fusion.chart.normalizer")]  
     public class FusionChartNormalizer : ConfigBase {
         private readonly IList<IChartNormalizer> _normalizers = new List<IChartNormalizer>();
         /// <summary>

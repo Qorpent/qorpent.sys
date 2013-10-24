@@ -9,7 +9,7 @@ namespace Qorpent.Serialization.Tests {
         public void CanNormalizeAp330() {
             var chart = ChartBuilder.ParseDatasets("200,500,250,233,486");
             var normalizer = new FusionChartsScaleNormalizer();
-            var normalized = normalizer.Normalize(chart, new ChartNormalized()).Scales.FirstOrDefault(_ => _.ScaleType == FusionChartsScaleType.Y);
+            var normalized = normalizer.Normalize(chart, new ChartNormalized()).Scales.FirstOrDefault(_ => _.ScaleType == ChartAbstractScaleType.Y);
             Assert.IsNotNull(normalized);
             Assert.AreEqual(600, normalized.MaxValue);
             Assert.AreEqual(100, normalized.MinValue);
