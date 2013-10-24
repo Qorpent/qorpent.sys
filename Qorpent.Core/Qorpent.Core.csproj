@@ -71,7 +71,6 @@
     <Compile Include="Charts\ChartDefaults.cs" />
     <Compile Include="Charts\IChart.cs" />
     <Compile Include="Charts\IChartAttribute.cs" />
-    <Compile Include="Charts\IChartBuilder.cs" />
     <Compile Include="Charts\IChartCategories.cs" />
     <Compile Include="Charts\IChartCategory.cs" />
     <Compile Include="Charts\IChartColor.cs" />

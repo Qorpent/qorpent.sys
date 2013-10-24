@@ -486,6 +486,26 @@ namespace Qorpent.Charts.FusionCharts {
             return chartConfig;
         }
         /// <summary>
+        ///     Установка длины графика
+        /// </summary>
+        /// <param name="chartConfig">Представление конфига</param>
+        /// <param name="width">Длина</param>
+        /// <returns>Замыкание на конфиг</returns>
+        public static IChartConfig SetWidth(this IChartConfig chartConfig, double width) {
+            chartConfig.Width = width.ToString();
+            return chartConfig;
+        }
+        /// <summary>
+        ///     Установка высоты графика
+        /// </summary>
+        /// <param name="chartConfig">Представление конфига</param>
+        /// <param name="height">Высота</param>
+        /// <returns>Замыкание на конфиг</returns>
+        public static IChartConfig SetHeight(this IChartConfig chartConfig, double height) {
+            chartConfig.Height = height.ToString();
+            return chartConfig;
+        }
+        /// <summary>
         ///     Установка начального значения линии тренда
         /// </summary>
         /// <param name="trendLine">Представление линии тренда</param>
