@@ -10,6 +10,13 @@ namespace Qorpent.Charts.FusionCharts {
     /// </summary>
     public class FusionChartsPositionNormalizer : FusionChartsAbstractNormalizer {
         /// <summary>
+        /// 
+        /// </summary>
+        public FusionChartsPositionNormalizer() {
+            Area = ChartNormalizerArea.Labels;
+            Dependencies = new[] { FusionChartsNormalizerCodes.ScaleNormalizer };
+        }
+        /// <summary>
         ///     Нормализация чарта
         /// </summary>
         /// <param name="chart">Представление исходного чарта</param>

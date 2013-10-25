@@ -71,6 +71,7 @@
     <Compile Include="Charts\ChartAbstractScale.cs" />
     <Compile Include="Charts\ChartAbstractScaleType.cs" />
     <Compile Include="Charts\ChartDefaults.cs" />
+    <Compile Include="Charts\ChartNormalizerArea.cs" />
     <Compile Include="Charts\IChart.cs" />
     <Compile Include="Charts\IChartAttribute.cs" />
     <Compile Include="Charts\IChartCategories.cs" />

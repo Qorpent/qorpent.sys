@@ -1,8 +1,23 @@
-﻿namespace Qorpent.Charts.FusionCharts {
+﻿using System.Collections.Generic;
+using Qorpent.Config;
+
+namespace Qorpent.Charts.FusionCharts {
     /// <summary>
     ///     Абстрактный класс нормализации чартов
     /// </summary>
-    public abstract class FusionChartsAbstractNormalizer : IChartNormalizer {
+    public abstract class FusionChartsAbstractNormalizer : ConfigBase, IChartNormalizer {
+        /// <summary>
+        ///     Область нормализации чарта
+        /// </summary>
+        public ChartNormalizerArea Area { get; protected set; }
+        /// <summary>
+        ///     Код нормалайзера
+        /// </summary>
+        public int Code { get; protected set; }
+        /// <summary>
+        ///     Зависимости нормалайзера от результата работы других нормалайзеров
+        /// </summary>
+        public IEnumerable<int> Dependencies { get; protected set; }
         /// <summary>
         ///     Нормализация чарта
         /// </summary>

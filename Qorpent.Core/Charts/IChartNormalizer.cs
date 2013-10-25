@@ -1,8 +1,23 @@
+using System.Collections.Generic;
+using Qorpent.Config;
+
 namespace Qorpent.Charts {
     /// <summary>
     ///     Интерфейс нормализатора чартов
     /// </summary>
-    public interface IChartNormalizer {
+    public interface IChartNormalizer : IConfig {
+        /// <summary>
+        ///     Код нормалайзера
+        /// </summary>
+        int Code { get; }
+        /// <summary>
+        ///     Зависимости нормалайзера от других нормализаторов
+        /// </summary>
+        IEnumerable<int> Dependencies { get; }
+        /// <summary>
+        ///     Область нормализации чарта
+        /// </summary>
+        ChartNormalizerArea Area { get; }
         /// <summary>
         ///     Нормализация чарта
         /// </summary>

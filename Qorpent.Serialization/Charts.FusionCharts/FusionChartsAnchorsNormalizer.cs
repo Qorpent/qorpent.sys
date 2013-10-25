@@ -7,6 +7,14 @@ namespace Qorpent.Charts.FusionCharts {
     /// </summary>
     public class FusionChartsAnchorsNormalizer : FusionChartsAbstractNormalizer {
         /// <summary>
+        ///     Нормалайзер якорей величин графиков
+        /// </summary>
+        public FusionChartsAnchorsNormalizer() {
+            Code = 1;
+            Area = ChartNormalizerArea.Anchors;
+            Dependencies = new int[] {};
+        }
+        /// <summary>
         ///     Нормализация чарта
         /// </summary>
         /// <param name="chart">Представление исходного чарта</param>

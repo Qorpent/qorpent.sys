@@ -7,6 +7,13 @@ namespace Qorpent.Charts.FusionCharts {
     /// </summary>
     public class FusionChartsColorNormalizer : FusionChartsAbstractNormalizer {
         /// <summary>
+        /// 
+        /// </summary>
+        public FusionChartsColorNormalizer() {
+            Code = FusionChartsNormalizerCodes.ColorNormalizer;
+            Area = ChartNormalizerArea.Colors;
+        }
+        /// <summary>
         ///     Нормализация чарта
         /// </summary>
         /// <param name="chart">Представление исходного чарта</param>

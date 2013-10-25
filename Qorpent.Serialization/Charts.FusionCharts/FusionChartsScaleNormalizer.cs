@@ -8,6 +8,13 @@ namespace Qorpent.Charts.FusionCharts {
     /// </summary>
     public class FusionChartsScaleNormalizer : FusionChartsAbstractNormalizer {
         /// <summary>
+        /// 
+        /// </summary>
+        public FusionChartsScaleNormalizer() {
+            Code = FusionChartsNormalizerCodes.ScaleNormalizer;
+            Area = ChartNormalizerArea.YScale;
+        }
+        /// <summary>
         ///     Нормализация чарта
         /// </summary>
         /// <param name="chart">Представление исходного чарта</param>
