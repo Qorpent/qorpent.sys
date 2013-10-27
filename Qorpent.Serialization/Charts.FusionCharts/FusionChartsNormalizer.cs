@@ -144,31 +144,28 @@ namespace Qorpent.Charts.FusionCharts {
 
             return schedule;
         }
-
         /// <summary>
-        /// 
+        ///     Метод разрешения зависимостей между нормалайзерами
         /// </summary>
-        /// <param name="schedule"></param>
-        /// <param name="normalizer"></param>
-        /// <param name="loopStarter"></param>
+        /// <param name="schedule">План нормализации</param>
+        /// <param name="normalizer">Нормалайзер, для которого требуется разрешить зависимости</param>
+        /// <param name="loopStarter">Код нормалайзера, начавшего рекурсивный вызов <see cref="ResolveDependence"/> для определения бесконечного цикла</param>
         private void ResolveDependence(ChartNormalizeSchedule schedule, IChartNormalizer normalizer, int loopStarter = -1) {
             if (loopStarter == normalizer.Code) {
                 throw new Exception("Infinite loop detected");
             }
 
-            var currentNormalizers = schedule.GetNormalizers().Select(_ => _.Code).ToList();
-
-            if (currentNormalizers.ContainsAll(normalizer.Dependencies)) {
+            if (schedule.NormalizerExists(normalizer.Dependencies.ToArray())) {
                 schedule.AddNormalizer(normalizer);
                 return;
             }
 
-            var t = normalizer.Dependencies.FirstOrDefault(_ => schedule.GetNormalizers().Any(__ => __.Code == _));
-
-            var requestedNormalizer = Normalizers.FirstOrDefault(_ => _.Code == t);
+            var requestedNormalizer = Normalizers.FirstOrDefault(
+                _ => _.Code == schedule.UnexistingNormalizers(normalizer.Dependencies).FirstOrDefault()
+            );
 
             if (requestedNormalizer == null) {
-                throw new Exception("There is no normalizer to resolve dependency. Code: " + t);
+                throw new Exception("There is no normalizer to resolve dependency.");
             }
 
             ResolveDependence(schedule, requestedNormalizer, loopStarter == -1 ? normalizer.Code : loopStarter);
@@ -263,6 +260,37 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Перечисление настроенных нормализаторов</returns>
         public IEnumerable<IChartNormalizer> GetNormalizers() {
             return _normalizers.AsEnumerable();
+        }
+        /// <summary>
+        ///     Возвращает перечисление кодов нормалайзеров, принадлежащих плану выполнения
+        /// </summary>
+        /// <returns>Перечисление кодов нормалайзеров, принадлежащих плану выполнения</returns>
+        public IEnumerable<int> GetNormalizerCodes() {
+            return GetNormalizers().Select(_ => _.Code);
+        }
+        /// <summary>
+        ///     Определяет признак наличия нормалайзера в плане выполнения
+        /// </summary>
+        /// <param name="code">Код нормалайзера</param>
+        /// <returns>Признак наличия нормалайзера в плане выполнения</returns>
+        public bool NormalizerExists(int code) {
+            return GetNormalizerCodes().Any(_ => _ == code);
+        }
+        /// <summary>
+        ///     Определяет признак наличия нормалайзера в плане выполнения
+        /// </summary>
+        /// <param name="codes">Коды нормалайзеров</param>
+        /// <returns>Признак наличия нормалайзеров в плане выполнения</returns>
+        public bool NormalizerExists(IEnumerable<int> codes) {
+            return GetNormalizerCodes().ContainsAll(codes);
+        }
+        /// <summary>
+        ///     Возвращает перечислние нормалайзеров, несуществующих в данном контексте
+        /// </summary>
+        /// <param name="codes">Коды нормалайзеров для проверки</param>
+        /// <returns>Коды нормалайзеров, не существующих в данном контексте</returns>
+        public IEnumerable<int> UnexistingNormalizers(IEnumerable<int> codes) {
+            return codes.Where(_ => GetNormalizerCodes().Contains(_));
         }
     }
 }
