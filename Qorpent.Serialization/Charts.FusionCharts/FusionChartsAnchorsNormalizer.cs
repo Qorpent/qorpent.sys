@@ -12,7 +12,6 @@ namespace Qorpent.Charts.FusionCharts {
         public FusionChartsAnchorsNormalizer() {
             Code = 1;
             Area = ChartNormalizerArea.Anchors;
-            Dependencies = new int[] {};
         }
         /// <summary>
         ///     Нормализация чарта

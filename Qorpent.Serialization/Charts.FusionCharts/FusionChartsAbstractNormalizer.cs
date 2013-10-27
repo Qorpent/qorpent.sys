@@ -7,6 +7,10 @@ namespace Qorpent.Charts.FusionCharts {
     /// </summary>
     public abstract class FusionChartsAbstractNormalizer : ConfigBase, IChartNormalizer {
         /// <summary>
+        /// 
+        /// </summary>
+        private readonly IList<int> _dependencies = new List<int>();
+        /// <summary>
         ///     Область нормализации чарта
         /// </summary>
         public ChartNormalizerArea Area { get; protected set; }
@@ -17,7 +21,9 @@ namespace Qorpent.Charts.FusionCharts {
         /// <summary>
         ///     Зависимости нормалайзера от результата работы других нормалайзеров
         /// </summary>
-        public IEnumerable<int> Dependencies { get; protected set; }
+        public IEnumerable<int> Dependencies {
+            get { return _dependencies; }
+        }
         /// <summary>
         ///     Нормализация чарта
         /// </summary>
@@ -40,6 +46,13 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Признак того, что переданное представление чарта поддерживается системой</returns>
         public virtual bool IsSupported(IChart chart) {
             return true;
+        }
+        /// <summary>
+        ///     Добавление зависимости
+        /// </summary>
+        /// <param name="code">Кот нормалазера</param>
+        protected void AddDependency(int code) {
+            _dependencies.Add(code);
         }
     }
 }

@@ -77,7 +77,12 @@ namespace Qorpent.Charts.FusionCharts {
                 throw new Exception("You attempt to set a normalizer which have the code number from the base space");
             }
 
+            if (Normalizers.Any(_ => _.Code == normalizer.Code)) {
+                throw new Exception("There is a normalizer with same code");
+            }
+
             _normalizers.Add(normalizer);
+            IncludeNormalizer(normalizer.Code);
         }
         /// <summary>
         ///     Исключение нормалайзера из плана выполнения по коду
@@ -86,6 +91,15 @@ namespace Qorpent.Charts.FusionCharts {
         public void ExcludeNormalizer(int code) {
             if (!_excludedNormalizers.Contains(code)) {
                 _excludedNormalizers.Add(code);
+            }
+        }
+        /// <summary>
+        ///     Операция, обратная <see cref="ExcludeNormalizer"/>
+        /// </summary>
+        /// <param name="code">Код нормалайзера</param>
+        public void IncludeNormalizer(int code) {
+            if (_excludedNormalizers.Contains(code)) {
+                _excludedNormalizers.Remove(code);
             }
         }
         /// <summary>
@@ -107,38 +121,66 @@ namespace Qorpent.Charts.FusionCharts {
             return chart;
         }
         /// <summary>
+        ///     Возвращает перечисление нормалайзеров, запрошенных 
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<IChartNormalizer> GetRequestedNormalizers() {
+            return Normalizers.Where(_ => !IsExcludedNormalizer(_.Code));
+        }
+        /// <summary>
         ///     Сборка плана нормализации исходя из переданного контекста
         /// </summary>
         /// <param name="chart">Представление графика, реализующего <see cref="IChart"/>, над которым будет производиться нормализация</param>
-        /// <param name="config">Опционайльный конфиг нормализатора</param>
+        /// <param name="config">Опциональный конфиг нормализатора</param>
         /// <returns>Настроенный план нормализации, готовый к <see cref="ChartNormalizeSchedule.Execute"/></returns>
-        private ChartNormalizeSchedule MakeSchedule(IChart chart, IDictionary<int, IConfig> config = null) {
+        private ChartNormalizeSchedule MakeSchedule(IChart chart, IDictionary<int, IConfig> config) {
             var schedule = new ChartNormalizeSchedule(chart);
 
-            foreach (var normalizer in Normalizers) {
-                
-            }
+            GetRequestedNormalizers().DoForEach(
+                _ => ResolveDependence(schedule, _)
+            ).DoForEach(
+            _ => SetupNormalizer(_, config.ContainsKey(_.Code) ? config[_.Code] : null)
+            );
 
             return schedule;
         }
-        /// <summary>
-        ///     Поиск и настройка нормалайзера по переданному конфигу
-        /// </summary>
-        /// <param name="code">Код нормалайзера для настройки</param>
-        /// <param name="config">Конфиг для нормалайзера</param>
-        /// <returns>Настроенный экземпляр нормалайзера</returns>
-        private IChartNormalizer SetupNormalizer(int code, IConfig config = null) {
-            var normalizer = Normalizers.FirstOrDefault(_ => _.Code == code);
 
-            if (
-                (normalizer != null)
-                    &&
-                (config != null)
-            ) {
-                normalizer.SetParent(config);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="schedule"></param>
+        /// <param name="normalizer"></param>
+        /// <param name="loopStarter"></param>
+        private void ResolveDependence(ChartNormalizeSchedule schedule, IChartNormalizer normalizer, int loopStarter = -1) {
+            if (loopStarter == normalizer.Code) {
+                throw new Exception("Infinite loop detected");
             }
 
-            return normalizer;
+            var currentNormalizers = schedule.GetNormalizers().Select(_ => _.Code).ToList();
+
+            if (currentNormalizers.ContainsAll(normalizer.Dependencies)) {
+                schedule.AddNormalizer(normalizer);
+                return;
+            }
+
+            var t = normalizer.Dependencies.FirstOrDefault(_ => schedule.GetNormalizers().Any(__ => __.Code == _));
+
+            var requestedNormalizer = Normalizers.FirstOrDefault(_ => _.Code == t);
+
+            if (requestedNormalizer == null) {
+                throw new Exception("There is no normalizer to resolve dependency. Code: " + t);
+            }
+
+            ResolveDependence(schedule, requestedNormalizer, loopStarter == -1 ? normalizer.Code : loopStarter);
+        }
+        /// <summary>
+        ///     Настройка нормалайзера по переданному конфигу
+        /// </summary>
+        /// <param name="normalizer">Нормалайзер для настройки</param>
+        /// <param name="config">Конфиг для нормалайзера</param>
+        /// <returns>Настроенный экземпляр нормалайзера</returns>
+        private void SetupNormalizer(IChartNormalizer normalizer, IConfig config = null) {
+            normalizer.SetParent(config);
         }
         /// <summary>
         ///     Выполнение плана нормализации по переданному контексту нормализации
@@ -174,7 +216,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <summary>
         ///     Внутренний список нормализаторов, расположенных в порядке выполнения
         /// </summary>
-        private readonly IList<IChartNormalizer> _normalizers;
+        private readonly Queue<IChartNormalizer> _normalizers;
         /// <summary>
         ///     Чарт, над которым производится нормализация
         /// </summary>
@@ -186,14 +228,14 @@ namespace Qorpent.Charts.FusionCharts {
         public ChartNormalizeSchedule(IChart chart) {
             _chart = chart;
             _normalized = new ChartNormalized();
-            _normalizers = new List<IChartNormalizer>();
+            _normalizers = new Queue<IChartNormalizer>();
         }
         /// <summary>
         ///     Добавление настроенного нормалайзера в план нормализации
         /// </summary>
         /// <param name="normalizer">Настроенный экземпляр класса, реализующего <see cref="IChartNormalizer"/></param>
         public void AddNormalizer(IChartNormalizer normalizer) {
-            _normalizers.Add(normalizer);
+            _normalizers.Enqueue(normalizer);
         }
         /// <summary>
         ///     Применение результата выполнения к исходному чарту
