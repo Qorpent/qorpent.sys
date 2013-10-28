@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Qorpent.Dot;
+using Qorpent.Graphs.Dot;
+using Qorpent.Graphs.Dot.Types;
 
 namespace Qorpent.Serialization.Tests.Dot
 {

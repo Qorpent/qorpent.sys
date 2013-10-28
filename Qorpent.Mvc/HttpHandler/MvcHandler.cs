@@ -159,14 +159,14 @@ namespace Qorpent.Mvc.HttpHandler {
 
 
 		private void ProcessError(IMvcContext context, Exception ex) {
-			context.StatusCode = 403;
+			context.StatusCode = 500;
 			context.Error = ex;
 			context.RenderError(ex);
 			OnError(context, ex);
 		}
 
 		private static void ProcessNotAuthorized(IMvcContext context) {
-			context.StatusCode = 403;
+			context.StatusCode = 500;
 			context.Error = context.AuthrizeResult.AuthorizeError;
 			context.RenderError(context.AuthrizeResult.AuthorizeError);
 		}

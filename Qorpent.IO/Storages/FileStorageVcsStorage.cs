@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Qorpent.IO.FileDescriptors;
 using Qorpent.IO.VcsStorage;
 
@@ -27,8 +28,8 @@ namespace Qorpent.IO.Storages {
         /// <param name="file">Представление файла</param>
         /// <param name="stream">Поток-источник</param>
         /// <returns></returns>
-        public IGeneralFileDescriptor Set(IFileEntity file, Stream stream) {
-            return new FileDescriptorVcsStorageBased(
+        public IFile Set(IFileDescriptor file, Stream stream) {
+            return new FileVcsStorageBased(
                 VcsStoragePersister.Commit(new VcsCommit { File = file }, stream).File,
                 VcsStoragePersister
             );
@@ -38,21 +39,31 @@ namespace Qorpent.IO.Storages {
         /// </summary>
         /// <param name="file">Представление файла</param>
         /// <returns>Дескриптор файла</returns>
-        public IGeneralFileDescriptor Get(IFileEntity file) {
-            return new FileDescriptorVcsStorageBased(file, VcsStoragePersister);
+        public IFile Get(IFileDescriptor file) {
+            return new FileVcsStorageBased(file, VcsStoragePersister);
         }
+
+        /// <summary>
+        /// Возвращает перечисление файлов в хранилище
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public IEnumerable<IFile> EnumerateFiles(FileSearchOptions options = null) {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         ///     Производит удаление файла из хранилища
         /// </summary>
         /// <param name="file">Представление файла</param>
-        public void Del(IFileEntity file) {
+        public void Del(IFileDescriptor file) {
             VcsStoragePersister.Remove(file);
         }
         /// <summary>
         ///     Получение нативного движка хранилища
         /// </summary>
         /// <returns></returns>
-        public object GetStorage() {
+        public object GetUnderlinedStorage() {
             return VcsStoragePersister;
         }
     }

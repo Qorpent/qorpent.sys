@@ -20,7 +20,9 @@ namespace Qorpent.BSharp.Builder {
             ParseExcludes(bSharpClass, project);
 
 	        project.GenerateSrcPkg = bSharpClass["GenerateSrcPkg"].ToBool();
+	        project.GenerateLibPkg = bSharpClass["GenerateLibPkg"].ToBool();
 			project.SrcPkgName = bSharpClass["SrcPkgName"];
+			project.LibPkgName = bSharpClass["LibPkgName"];
 
             var outLayout = bSharpClass.Compiled.Element("Layout");
             if (outLayout != null) {
@@ -46,6 +48,13 @@ namespace Qorpent.BSharp.Builder {
             if (null != generateGraph) {
                 project.GenerateGraph = true;
             }
+
+            var extensions = bSharpClass.Compiled.Elements("Extension");
+            foreach (var e in extensions) {
+                project.Extensions.Add(e.GetCode());
+            }
+
+            project.SrcClass = bSharpClass;
 
             return project;
         }

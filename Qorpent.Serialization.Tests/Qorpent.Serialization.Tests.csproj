@@ -12,29 +12,33 @@
   <ItemGroup>
     <Compile Include="BSharpJsonParserTests.cs" />
     <Compile Include="BSharp\AdvancedIncludeTest.cs" />
+    <Compile Include="BSharp\BSharpCodeBuilderTest.cs" />
     <Compile Include="BSharp\ClassReference.cs" />
     <Compile Include="BSharp\DictionarySupport.cs" />
     <Compile Include="BSharp\Matcher\SingleConditionTests.cs" />
+    <Compile Include="BSharp\Runtime\BSharpLibraryClassProviderTest.cs" />
     <Compile Include="BSharp\Schema\AttributeRuleTest.cs" />
     <Compile Include="BSharp\Schema\ElementRuleTest.cs" />
     <Compile Include="BSharp\SetKeyword.cs" />
+    <Compile Include="Bxl\Ap286ParserTests.cs" />
+    <Compile Include="Bxl\BxlParserCompatibilityTests.cs" />
+    <Compile Include="Bxl\BxlParserTests.cs" />
     <Compile Include="Bxl\ApplicationAccessToBxl.cs" />
     <Compile Include="Bxl\BxlGeneratorTest.cs" />
-    <Compile Include="Bxl\BxlParserTest.cs" />
-    <Compile Include="Bxl\BxlTokenizerTestComplex.cs" />
-    <Compile Include="Bxl\BxlTokenizerTest_L0.cs" />
-    <Compile Include="Bxl\BxlTokenTest.cs" />
-    <Compile Include="Bxl\BxlXmlGeneratorTest.cs" />
-    <Compile Include="Bxl\ByLineParsingTest.cs" />
-    <Compile Include="Bxl\TokenizerTestHelper.cs" />
     <Compile Include="bxl_serializer_test.cs" />
+    <Compile Include="CanvasTests.cs" />
+    <Compile Include="ChartExtensionsTests.cs" />
     <Compile Include="coverage_only_tests.cs" />
     <Compile Include="DefaultSelectorTests.cs" />
     <Compile Include="Dot\ColorTest.cs" />
     <Compile Include="Dot\DotLanguageUtilsTest.cs" />
     <Compile Include="Dot\DotRenderTest.cs" />
     <Compile Include="Dot\TuningTest.cs" />
+    <Compile Include="EscaperTests.cs" />
     <Compile Include="exceptions_need_to_be_fixed.cs" />
+    <Compile Include="FusionChartsNormalizerTests.cs" />
+    <Compile Include="FusionChartsScaleNormalizerTests.cs" />
+    <Compile Include="GraphTests.cs" />
     <Compile Include="iocconfiguationtest.cs" />
     <Compile Include="Json\AF768Tests.cs" />
     <Compile Include="Json\LexerTests.cs" />
@@ -53,10 +57,13 @@
     <Compile Include="Q48SerializeNotNullCollectionsTest.cs" />
     <Compile Include="Q51JsonXmlParserFail.cs" />
     <Compile Include="Q66EmbededXmlSerialization.cs" />
+    <Compile Include="Selector_Tests\CssSelectorImplTests.cs" />
     <Compile Include="Selector_Tests\RegexSelectorImplTest.cs" />
     <Compile Include="serialization_set_test.cs" />
+    <Compile Include="XHtml5XmlWriterTests.cs" />
     <Compile Include="XmlInclude\Bug_XmlInterpolationInContainer.cs" />
     <Compile Include="XmlInclude\XmlIncludeMainTest.cs" />
+    <Compile Include="XmlJson2WayConversionTest.cs" />
     <Compile Include="xml_serializer_test.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -88,11 +95,18 @@
     <EmbeddedResource Include="XmlInclude\near2.bxl">
       <LastGenOutput>main1.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Bxl\demo.import.forms.m600.bxls" />
+    <EmbeddedResource Include="Bxl\presentation_ocm_structure.hql" />
+    <EmbeddedResource Include="BSharp\Runtime\demo.bslib" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.Core.Tests\Qorpent.Core.Tests.csproj">
       <Project>{880F65EA-1A22-4672-A137-FFC912902046}</Project>
       <Name>Qorpent.Core.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IO\Qorpent.IO.csproj">
+      <Project>{426c92df-3c40-426c-b0be-40a1df9044c2}</Project>
+      <Name>Qorpent.IO</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -26,9 +26,22 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization {
 	/// <summary>
+	/// Абстракция сериализатора, используется в качестве базиса для реальных сериализаторов
 	/// </summary>
 	/// <remarks>
+    /// Является оболочкой над <see cref="ISerializerImpl"/>,
+    /// поддерживает 2 основных режима - XElement и object.
+    /// В случае XElement ренедринг ведется по элементам и атрибутам.
+    /// В случае object производится обход свойств и полей с учетом 
+    /// атрибутов <see cref="SerializeAttribute"/>, <see cref="IgnoreSerializeAttribute"/>, <see cref="SerializeNotNullOnlyAttribute"/>.
+    /// 
+    /// При реализации как правило сам сериализатор остается прозрачной оберткой,
+    /// основную задачу выполняет именно реализация <see cref="ISerializerImpl"/>
 	/// </remarks>
+    /// <seealso cref="ISerializerImpl"/>
+    /// <seealso cref="SerializeAttribute"/>
+    /// <seealso cref="IgnoreSerializeAttribute"/>
+    /// <seealso cref="SerializeNotNullOnlyAttribute"/>
 	public abstract class Serializer : ISerializer {
 
 		/// <summary>
@@ -42,16 +55,18 @@ namespace Qorpent.Serialization {
 			Serialize(name,value,sw);
 			return sw.ToString();
 		}
-		/// <summary>
-		/// 	Serializes the specified name.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-		/// <param name="output"> The output. </param>
-		/// <remarks>
-		/// </remarks>
-		public virtual void Serialize(string name, object value, TextWriter output) {
-			_s = CreateImpl(name, value);
+
+	    /// <summary>
+	    /// Сериализует переданный объект в текстовой поток
+	    /// </summary>
+	    /// <param name="name"> Имя сериализуемого объекта</param>
+	    /// <param name="value">Сериализуемый объект </param>
+	    /// <param name="output">Целевой текстововй поток</param>
+	    /// <param name="options">Опции сериализации, используются при создании имепдлементации</param>
+	    /// <remarks>
+	    /// </remarks>
+	    public virtual void Serialize(string name, object value, TextWriter output, object options = null) {
+			_s = CreateImpl(name, value, options);
 			if (null == output) {
 				throw new ArgumentNullException("output");
 			}
@@ -151,16 +166,25 @@ namespace Qorpent.Serialization {
 	                                        int c) {
 	        _s.BeginObjectItem(name, false);
 
-	        if (pseudodict || elements.Count() == 1 && value.Attribute("isarray") == null) {
+	        if (pseudodict || elements.Count() == 1 && e.Attribute("__isarray") == null) {
 	            SerializeElement(e);
 	        }
 	        else {
 	            c++;
+                if (e.Attribute("__isarray") != null) {
+                    elements = e.Elements();
+                }
 	            _s.BeginArray(e.Name.LocalName,elements.Count());
 	            var i = 0;
 	            foreach (var x in elements) {
 	                _s.BeginArrayEntry(i++);
-	                SerializeElement(x);
+	                if (!x.Attributes().Any() || (x.Attributes().Count() == 1 && null != x.Attribute("idx")) && !x.Elements().Any()) {
+                        _s.WriteFinal(x.Value);
+                        
+	                }
+	                else {
+	                    SerializeElement(x);
+	                }
 	                _s.EndArrayEntry(i == c);
 	            }
 	            _s.EndArray();
@@ -171,14 +195,17 @@ namespace Qorpent.Serialization {
 	    }
 
 	    /// <summary>
-		/// 	Creates the impl.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-		/// <returns> </returns>
-		/// <remarks>
-		/// </remarks>
-		protected abstract ISerializerImpl CreateImpl(string name, object value);
+	    /// Создает экземпляр <see cref="ISerializerImpl"/>
+	    /// </summary>
+	    /// <param name="name">Имя объекта сериализации</param>
+	    /// <param name="value">Объект сериализации</param>
+	    /// <param name="options">Опции создания имплементации</param>
+	    /// <returns> </returns>
+	    /// <remarks>
+	    /// В реализации можно предусмотреть донастройкуна конкретный объект
+	    /// в стандартных реализациях <paramref name="name"/> и <paramref name="value"/> игнорируется
+	    /// </remarks>
+	    protected abstract ISerializerImpl CreateImpl(string name, object value,object options);
 
 		/// <summary>
 		/// 	_serializes the specified name.

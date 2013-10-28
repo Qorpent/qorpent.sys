@@ -41,7 +41,7 @@ namespace Qorpent.Dsl.Tests.Json {
 			Console.WriteLine(item.ToString(true));
 			Console.WriteLine("---------------------------------------------");
 			Console.WriteLine(item.ToString(false));
-			Assert.AreEqual(@"{""in"":""content"",""type"":""text"",""actions"":[{""actiontype"":""select"",""code"":""title"",""selector"":""#title"",},{""actiontype"":""select"",""code"":""date"",""selector"":"".data"",},{""actiontype"":""select"",""code"":""text"",""selector"":""#content"",""type"":""xml"",},],}", item.ToString(false));
+			Assert.AreEqual(@"{""in"":""content"",""type"":""text"",""actions"":[{""actiontype"":""select"",""code"":""title"",""selector"":""#title""},{""actiontype"":""select"",""code"":""date"",""selector"":"".data""},{""actiontype"":""select"",""code"":""text"",""selector"":""#content"",""type"":""xml""}]}", item.ToString(false));
 		}
 		[Test]
 		[Explicit]

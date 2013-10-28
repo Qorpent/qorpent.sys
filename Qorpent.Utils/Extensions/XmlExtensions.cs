@@ -17,13 +17,16 @@
 // PROJECT ORIGIN: Qorpent.Utils/XmlExtensions.cs
 #endregion
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Applications;
 using Qorpent.Bxl;
+using Qorpent.Json;
 using Qorpent.Serialization;
 
 namespace Qorpent.Utils.Extensions {
@@ -31,16 +34,47 @@ namespace Qorpent.Utils.Extensions {
 	/// 	Xml related extensions of common XNodes
 	/// </summary>
 	public static class XmlExtensions {
-		private static readonly string[] Idatributes = new[] {"id", "code", "__id", "__code", "ID"};
 
-		private static readonly char[] Digits = new[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        /// <summary>
+        /// Создает или возвращает дочерний элемент
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static XElement EnsureSingleElement(this XElement element, string name) {
+            var existed = element.Elements(name).ToArray();
+            if (existed.Length == 1) {
+                return existed[0];
+            }
+            if (existed.Length == 0) {
+                var result = new XElement(name);
+                element.Add(result);
+                return result;
+            }
+            throw new Exception("multiple instance");
+        }
 
-		private static readonly char[] Nonnames = new[]
-			{
-				'+', '-', '?', '!', '~', '@', '*', '$', '^', '&'
-				, '/', ':', '%', '(', ')', '{', '}', '[', ']', '<', '>'
-			};
 
+        /// <summary>
+        /// имя атрибута с уникаьным номером элемента по умолчанию
+        /// </summary>
+	    public const string ElementUidAttribute = "__UID";
+	    private static readonly string[] Idatributes = new[] {"id", "code", "__id", "__code", "ID"};
+
+	    /// <summary>
+	    /// Возвращает true если код, имя, значение равны name или есть атрибут с именем name, приводимый к true
+	    /// </summary>
+	    /// <param name="x"></param>
+	    /// <param name="name"></param>
+	    /// <returns></returns>
+	    public static bool HasSignificantAttribute(this XElement x,string name) {
+            if (null != x.Attribute(name)) return true;
+            if (x.GetCode() == name) return true;
+            if (x.GetName() == name) return true;
+            if (x.Value == name) return true;
+            return false;
+        }
 		/// <summary>
 		/// 	Возвращает только собственное значение элемента (конкатенация текстовых элементов через пробел)
 		/// </summary>
@@ -52,6 +86,16 @@ namespace Qorpent.Utils.Extensions {
 			}
 			return xElement.Nodes().OfType<XText>().Select(x => x.Value).ConcatString(" ");
 		}
+
+        /// <summary>
+        /// Формирует сериализуемый в  JSON XML-массив в соответствии с внутренними соглашениями по коду
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="itemname"></param>
+        /// <returns></returns>
+        public static XElement ToMvcXmlArray(this IEnumerable<XElement> items, string itemname ) {
+            return new XElement("result", new XElement(itemname, new XAttribute(JsonItem.JsonTypeAttributeName, "array"), items));
+        }
 		/// <summary>
 		/// Производит поиск атрибутов по имени и/или вхождению строки
 		/// </summary>
@@ -181,6 +225,23 @@ namespace Qorpent.Utils.Extensions {
 			return result ?? String.Empty;
 		}
 
+	    /// <summary>
+	    /// Присваивает уникальные целочисленные ID каждому элементу в DocOrder
+	    /// </summary>
+	    /// <param name="xml"></param>
+	    /// <param name="attrname"></param>
+	    /// <param name="copy"></param>
+	    /// <returns></returns>
+	    public static XElement GenerateUniqueIdsForElements(this XElement xml, string attrname = ElementUidAttribute, bool copy = false) {
+            var result = xml;
+            if(copy)result = new XElement(xml);
+	        var id = 0;
+            foreach (var e in result.DescendantsAndSelf()) {
+                e.SetAttributeValue(attrname,id++);
+            }
+            return result;
+        }
+
 		/// <summary>
 		/// 	Returns not-null string Value of attribute, searching it up to first occurance start from given element
 		/// </summary>
@@ -200,44 +261,9 @@ namespace Qorpent.Utils.Extensions {
 		/// </summary>
 		/// <param name="nameCandidate"> </param>
 		/// <returns> </returns>
-		public static string ConvertToXNameCompatibleString(this string nameCandidate) {
-			var adaptedname = nameCandidate;
-			if (-1 != adaptedname.IndexOfAny(Nonnames)) {
-				adaptedname = adaptedname
-					.Replace("+", XmlEscaper.Escape("+"))
-                    .Replace("?", XmlEscaper.Escape("?"))
-                    .Replace("!", XmlEscaper.Escape("!"))
-                    .Replace("~", XmlEscaper.Escape("~"))
-                    .Replace("@", XmlEscaper.Escape("@"))
-                    .Replace("*", XmlEscaper.Escape("*"))
-                    .Replace("$", XmlEscaper.Escape("$"))
-                    .Replace("^", XmlEscaper.Escape("^"))
-                    .Replace("&", XmlEscaper.Escape("&"))
-                    .Replace("/", XmlEscaper.Escape("/"))
-                    .Replace(":", XmlEscaper.Escape(":"))
-                    .Replace("%", XmlEscaper.Escape("%"))
-                    .Replace("(", XmlEscaper.Escape("("))
-                    .Replace(")", XmlEscaper.Escape(")"))
-                    .Replace("[", XmlEscaper.Escape("["))
-                    .Replace("]", XmlEscaper.Escape("]"))
-                    .Replace("{", XmlEscaper.Escape("{"))
-                    .Replace("}", XmlEscaper.Escape("}"))
-                    .Replace("|", XmlEscaper.Escape("|"))
-                    .Replace(";", XmlEscaper.Escape(";"))
-                    .Replace("<", XmlEscaper.Escape("<"))
-                    .Replace(">", XmlEscaper.Escape(">"))
-					;
-				if(adaptedname.StartsWith("-")) {
-                    adaptedname = XmlEscaper.Escape("-") + adaptedname.Substring(1);
-				}
-			}
-			if (0 != adaptedname.Length && -1 != Array.IndexOf(Digits, adaptedname[0])) {
-				adaptedname = "_" + adaptedname;
-			}
-			if (adaptedname.StartsWith(".")) {
-                adaptedname = XmlEscaper.Escape(".") + adaptedname.Substring(1);
-			}
-			return adaptedname;
+		public static string ConvertToXNameCompatibleString(this string nameCandidate)
+		{
+		    return nameCandidate.Escape(EscapingType.XmlName);
 		}
 
 		/// <summary>
@@ -542,6 +568,127 @@ namespace Qorpent.Utils.Extensions {
         /// <returns>True, если NULL, иначе - False</returns>
         public static bool IsNull(this XElement xElement) {
             return !xElement.IsNotNull();
+        }
+        /// <summary>
+        ///     Проверяет, присутствует ли элемент с данным именем
+        /// </summary>
+        /// <param name="xElement">Исходный элемент</param>
+        /// <param name="xName">Имя проверяемого элемента</param>
+        /// <returns></returns>
+        public static bool ContainsElement(this XElement xElement, string xName) {
+            return xElement.Element(xName).IsNotNull();
+        }
+        /// <summary>
+        ///     Попробовать проверить тип JSON-элемента в XML-представлении, если таковой присутствует
+        /// </summary>
+        /// <param name="xElement">Исходный элемент</param>
+        /// <returns></returns>
+        public static string TryCheckJsonType(this XElement xElement) {
+            return xElement.Attribute(JsonItem.JsonTypeAttributeName).TryGetValue();
+        }
+
+	    /// <summary>
+	    ///     Вытаскивает значение атрибута элемента с переданным именем
+	    /// </summary>
+	    /// <param name="xElement">Базовый элемент</param>
+	    /// <param name="elName">Имя элемента</param>
+	    /// <param name="attrName">Имя атрибута</param>
+	    /// <returns>Значение</returns>
+	    public static string TryGetElAttrValue(this XElement xElement, XName elName, XName attrName) {
+            var el = xElement.Element(elName);
+            return el == null ? null : el.Attribute(attrName).TryGetValue();
+        }
+	    /// <summary>
+        ///     Превращает любые имена элементов в нотацию типа «Word» («wORd» -> «Word»)
+	    /// </summary>
+	    /// <param name="xElement">Исходный элемент</param>
+	    /// <param name="includeRoot">Включать корневой элемент</param>
+	    /// <returns>Исходный элемент</returns>
+	    public static XElement Capitalize(this XElement xElement, bool includeRoot = true) {
+            foreach (var el in xElement.XPathSelectElements(includeRoot ? "//*" : "/" + xElement.Name + "/*")) {
+                el.Name = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(el.Name.ToString());
+            }
+
+            return xElement;
+        }
+        /// <summary>
+        ///     Превращает любые имена элементов в нотацию типа «WORD» («wORd» -> «WORD»)
+        /// </summary>
+        /// <param name="xElement">Исходный элемент</param>
+        /// <param name="includeRoot">Включать корневой элемент</param>
+        /// <returns>Исходный элемент</returns>
+        public static XElement ElementsToUpperCase(this XElement xElement, bool includeRoot = true) {
+            foreach (var el in xElement.XPathSelectElements(includeRoot ? "//*" : "/" + xElement.Name + "/*")) {
+                el.Name = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(el.Name.ToString().ToUpper());
+            }
+
+            return xElement;
+        }
+        /// <summary>
+        ///     Превращает любые имена элементов в нотацию типа «word» («wORd» -> «word»)
+        /// </summary>
+        /// <param name="xElement">Исходный элемент</param>
+        /// <param name="includeRoot">Включать корневой элемент</param>
+        /// <returns>Исходный элемент</returns>
+        public static XElement ElementsToLowerCase(this XElement xElement, bool includeRoot = true) {
+            foreach (var el in xElement.XPathSelectElements(includeRoot ? "//*" : "/" + xElement.Name + "/*")) {
+                el.Name = el.Name.ToString().ToLower();
+            }
+
+            return xElement;
+        }
+        /// <summary>
+        /// Создает элемент с телом и атрибутами
+        /// </summary>
+        /// <param name="tagname"></param>
+        /// <param name="text"></param>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
+	    public static XElement CreateElement(string tagname, string text = "", object attributes = null) {
+            var element = new XElement(tagname);
+            if (!String.IsNullOrWhiteSpace(text)) {
+                element.Value = text;
+            }
+            if (null != attributes) {
+                var dict = attributes.ToDict();
+                foreach (var p in dict) {
+                    element.SetAttributeValue(p.Key.Escape(EscapingType.XmlName), p.Value);
+                }
+            }
+            return element;
+        }
+
+	    /// <summary>
+	    /// Добавляет дочерний элемент и возвращает его
+	    /// </summary>
+	    /// <param name="parent"></param>
+	    /// <param name="tagname"></param>
+	    /// <param name="text"></param>
+	    /// <param name="attributes"></param>
+	    /// <returns></returns>
+	    public static XElement AddElement(this XElement parent, string tagname, string text = null, object attributes= null ) {
+	        var element = CreateElement(tagname, text, attributes);
+	        parent.Add(element);
+	        return element;
+	    }
+        /// <summary>
+        ///     Устанавливает атрибут, если значение не null
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public static XElement SetAttr(this XElement parent, string name, object value) {
+            if (value != null) {
+                if (value is string) {
+                    if (string.IsNullOrWhiteSpace(value as string)) {
+                        return parent;
+                    }
+                }
+
+                parent.SetAttributeValue(name, value);
+            }
+
+            return parent;
         }
 	}
 }

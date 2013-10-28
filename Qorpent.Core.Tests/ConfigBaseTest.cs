@@ -37,8 +37,7 @@ namespace Qorpent.Core.Tests
 			Assert.AreEqual(1, cfgchild.Get<object>(".a"));
 		}
 		[Test]
-		public void CanResolveFromParentExplcitly3dLevel()
-		{
+		public void CanResolveFromParentExplcitly3dLevel() {
 			var cfgbase = new ConfigBase();
 			var cfgbase2 = new ConfigBase();
 			var cfgchild = new ConfigBase();
@@ -55,7 +54,22 @@ namespace Qorpent.Core.Tests
 			//и теперь . обозначает "желательный пропуск значения"
 			Assert.AreEqual(1,cfgchild.Get<object>("...a"));
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        [Test]
+        public void CanPreventInheritance() {
+            var cfgbase = new ConfigBase();
+            var cfgchild = new ConfigBase();
+            cfgchild.SetParent(cfgbase);
+            cfgbase.Set("a", 1);
+            Assert.AreEqual(1, cfgchild.Get<object>("a"));
+            cfgchild.UseInheritance = false;
+            Assert.IsNull(cfgchild.Get<object>("a"));
+        }
+        /// <summary>
+        /// 
+        /// </summary>
 		[Test]
 		public void DictionaryCompatibilityWorks() {
 			var basecfg = new ConfigBase();

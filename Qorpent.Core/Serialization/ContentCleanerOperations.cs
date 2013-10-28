@@ -4,6 +4,7 @@ namespace Qorpent.Serialization {
 	/// <summary>
 	/// Допустимые операции XML - очистки HTML
 	/// </summary>
+	/// <remarks>Используется в <see cref="IContentCleaner"/></remarks>
 	[Flags]
 	public enum ContentCleanerOperations {
 		/// <summary>
@@ -34,12 +35,14 @@ namespace Qorpent.Serialization {
 		/// Установить дополнительные классы 
 		/// </summary>
 		SetupPositionClasses = 1<<6,
-
-
 		/// <summary>
+		/// Устанавливает уникальные номера элементов в DocOrder
+		/// </summary>
+        SetupUniqueIds= 1<<7,
+        /// <summary>
 		/// Все операции
 		/// </summary>
-		All = RemoveBadTags | RemoveBadAttributes | RewriteTables |FixImageUrls |FixHrefUrls |SetupPositionClasses,
+		All = RemoveBadTags | RemoveBadAttributes | RewriteTables |FixImageUrls |FixHrefUrls |SetupPositionClasses|SetupUniqueIds, 
 		/// <summary>
 		/// Опции по умолчанию
 		/// </summary>
@@ -48,5 +51,8 @@ namespace Qorpent.Serialization {
 		/// Неопределенные опции
 		/// </summary>
 		Undefined = 1<<32,
+
+
+
 	}
 }

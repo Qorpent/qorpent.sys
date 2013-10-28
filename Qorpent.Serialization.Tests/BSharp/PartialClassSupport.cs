@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
@@ -22,6 +23,33 @@ namespace Qorpent.Serialization.Tests.BSharp {
 			var result = Compile(code).Get("A");
 			Assert.NotNull(result);
 		}
+
+
+        [Test]
+        public void CanMakeClassAbstract()
+        {
+            var code = @"
+class A
+class B
+~class A abstract=true
+";
+            Assert.NotNull(Compile(code).Get("B"));
+            var a = Compile(code).Get("A");
+            Assert.Null( a);
+        }
+
+        [Test]
+        public void CanInterpolateWithExtensions()
+        {
+            var code = @"
+class A x=2
++class A
+    test y=${x}
+";
+            var a = Compile(code).Get("A");
+            Assert.NotNull(a);
+            Assert.AreEqual("2",a.Compiled.Descendants("test").First().Attr("y"));
+        }
 
 		[Test]
 		public void CanOverrideAttribute()
@@ -122,6 +150,17 @@ class A x=1 y=1
 			Assert.AreEqual("2", th.Compiled.Attr("r"));
 			Assert.AreEqual("2", th.Compiled.Attr("w"));
 			Assert.AreEqual("2", th.Compiled.Attr("z"));
+		}
+
+
+		[Test]
+		public void Q186InvalidClassNameAndNamespaceResolution() {
+			var code = @"class X.Y.A";
+			var result = Compile(code);
+			var cls = result.Get("X.Y.A");
+			Assert.AreEqual("A",cls.Name);
+			Assert.AreEqual("X.Y.A", cls.FullName);
+			Assert.AreEqual("X.Y", cls.Namespace);
 		}
 	}
 }

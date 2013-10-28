@@ -66,7 +66,7 @@ namespace Qorpent.Mvc.Binding {
 				if (null == action || null == context) {
 					return;
 				}
-
+                
 				SetupValue(action, context);
 				ValidateBinding(action, context);
 			}
@@ -161,11 +161,11 @@ namespace Qorpent.Mvc.Binding {
 					customBindConverter.SetConverted(action,(string)val,context,SetDirectly);
 					return;
 				}
-				SetConverted(action, val);
+				SetConverted(action, val,context);
 			}
 		}
 
-		private void SetConverted(IAction action, object val) {
+		private void SetConverted(IAction action, object val,IMvcContext context) {
 			var converted = val.ToTargetType(TargetType);
 			if (TargetType == typeof (string)) {
 				var s = (string) converted;
@@ -178,8 +178,29 @@ namespace Qorpent.Mvc.Binding {
 					}
 				}
 				converted = s;
+			}else if (TargetType.IsClass) {
+			    var prefix = this.Name;
+			    var obj = Activator.CreateInstance(TargetType);
+			    
+                if (string.IsNullOrWhiteSpace(prefix)) {
+                    var parameters = context.GetAll(prefix+".");
+                    foreach (var valuePair in parameters) {
+                        obj.SetValue(valuePair.Key, valuePair.Value, true, true, false, true, true);
+                    }
+                }
+                else {
+                    var clsdict = obj.ToDict();
+                    foreach (var p in clsdict) {
+                        var v = context.Get(p.Key,null);
+                        if (!string.IsNullOrWhiteSpace(v)) {
+                            obj.SetValue(p.Key,v, true, true, false, true, true);
+                        }
+                    }
+                }
+			    converted = obj;
 			}
 			SetDirectly(action, converted);
+			
 		}
 
 		private object GetCurrent(object action) {

@@ -1,4 +1,3 @@
-
 ﻿using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -12,13 +11,13 @@ namespace Qorpent.Mvc.Actions {
 
 
 	/// <summary>
-	/// 	Возвращает текущий откомпилированный манифест (полный XML)
+	/// 	Выводит список файлов и папок текущей дирректории
 	/// </summary>
 	[Action("_sys.listfiles", Role = "DEVELOPER", Help = "Возвращает список всех файлов и папок, где находися приложение",
 		Arm = "admin")]
 	public class ListFilesAction : ActionBase {
 		/// <summary>
-		/// Имя скрипта
+		/// Маска
 		/// </summary>
 		[Bind] protected string FileMask;
 
@@ -35,7 +34,7 @@ namespace Qorpent.Mvc.Actions {
         protected bool ShowFiles;
 
 		/// <summary>
-		/// 	fh
+		///  Возвращает список
 		/// </summary>
 		protected override object MainProcess() {
 			return new FileIndexer().Collect(FileMask, ShowDirs, ShowFiles).ToArray();

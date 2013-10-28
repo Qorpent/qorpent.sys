@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.Utils.Extensions;
@@ -155,6 +156,146 @@ class B x=2
 			Assert.AreEqual(0, result.Compiled.Descendants("class").Count());
 			Assert.AreEqual("1", result.Compiled.Descendants("test").First().Attr("code"));
 		}
+
+        [Test]
+        public void SelectClauseForBody()
+        {
+            var code = @"
+class A x=1
+	test a x=1 y=2
+    test b x=3 y=4 z=3
+class B x=2
+	include A body
+        select code=true x=true y=b
+";
+            var result = Compile(code).Get("B");
+            Assert.AreEqual("a", result.Compiled.Descendants("test").ElementAt(0).Attr("code"));
+            Assert.AreEqual("b", result.Compiled.Descendants("test").ElementAt(1).Attr("code"));
+            var sec = result.Compiled.Descendants("test").ElementAt(1);
+            Assert.AreEqual("4",sec.Attr("b"));
+            Assert.Null(sec.Attribute("z"));
+
+        }
+
+
+        [Test]
+        public void GroupByClauseForBody()
+        {
+            var code = @"
+class A x=1
+	test a x=1 y=5
+	test a1 x=3 y=4
+	test a4 x=3 y=3
+	test a2 x=1 y=2
+    test b x=1 y=1 z=3
+class B x=2
+	include A body
+        groupby x
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled.ToString().Replace("\"","\"\""));
+            Assert.AreEqual(@"<class code=""B"" x=""2"" fullcode=""B"">
+  <group code=""1"">
+    <test code=""a"" x=""1"" y=""5"" id=""A"" />
+    <test code=""a2"" x=""1"" y=""2"" id=""A"" />
+    <test code=""b"" x=""1"" y=""1"" z=""3"" id=""A"" />
+  </group>
+  <group code=""3"">
+    <test code=""a1"" x=""3"" y=""4"" id=""A"" />
+    <test code=""a4"" x=""3"" y=""3"" id=""A"" />
+  </group>
+</class>", result.Compiled.ToString());
+
+        }
+
+
+        [Test]
+        public void CanFindByElementLocalName()
+        {
+            var code = @"
+class A x=1
+	x a x=1 y=5
+	x a1 x=3 y=4
+	y a4 x=3 y=3
+	y a2 x=1 y=2
+    x b x=1 y=1 z=3
+class B x=2
+	include A body
+        where localname=x
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled.ToString().Replace("\"", "\"\""));
+            Assert.AreEqual(@"<class code=""B"" x=""2"" fullcode=""B"">
+  <x code=""a"" x=""1"" y=""5"" id=""A"" />
+  <x code=""a1"" x=""3"" y=""4"" id=""A"" />
+  <x code=""b"" x=""1"" y=""1"" z=""3"" id=""A"" />
+</class>", result.Compiled.ToString());
+
+        }
+
+
+        [Test]
+        public void CrossClassGroupBy()
+        {
+            var code = @"
+class A x=1 prototype=p
+	test a x=1 y=5
+	test a1 x=3 y=4
+class C x=1 prototype=p
+	test a4 x=3 y=3
+	test a2 x=1 y=2
+    test b x=1 y=1 z=3
+class B x=2
+	include all p body
+        select code=true y=true
+        groupby x
+        orderby y
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled.ToString().Replace("\"", "\"\""));
+            Assert.AreEqual(@"<class code=""B"" x=""2"" fullcode=""B"">
+  <group code=""1"">
+    <test code=""b"" y=""1"" />
+    <test code=""a2"" y=""2"" />
+    <test code=""a"" y=""5"" />
+  </group>
+  <group code=""3"">
+    <test code=""a4"" y=""3"" />
+    <test code=""a1"" y=""4"" />
+  </group>
+</class>", result.Compiled.ToString());
+
+        }
+        [Test]
+        public void AllIncludeClauses()
+        {
+            var code = @"
+class A x=1
+	test a x=1 y=5
+	test a1 x=3 y=4
+	test a4 x=3 y=3
+	test a2 x=1 y=2
+    test b x=1 y=1 z=3
+class B x=2
+	include A body
+        select code=true y=b
+        groupby x as=mygroup with=name
+        orderby y
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled.ToString().Replace("\"", "\"\""));
+            Assert.AreEqual(@"<class code=""B"" x=""2"" fullcode=""B"">
+  <mygroup name=""1"">
+    <test code=""b"" b=""1"" />
+    <test code=""a2"" b=""2"" />
+    <test code=""a"" b=""5"" />
+  </mygroup>
+  <mygroup name=""3"">
+    <test code=""a4"" b=""3"" />
+    <test code=""a1"" b=""4"" />
+  </mygroup>
+</class>",result.Compiled.ToString());
+        }
 
 		[Test]
 		public void CanEmbed()

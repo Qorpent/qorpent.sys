@@ -328,6 +328,18 @@ namespace Qorpent.BSharp {
                     }
                 }
             }
+
+		    foreach (var p in subresult.PrototypeMap) {
+                if (null == PrototypeMap) {
+                    PrototypeMap = new Dictionary<string, IBSharpClass[]>();
+                }
+		        if (!PrototypeMap.ContainsKey(p.Key)) {
+		            PrototypeMap[p.Key] = p.Value;
+		        }
+		        else {
+		            PrototypeMap[p.Key] = PrototypeMap[p.Key].Union(p.Value).Distinct().ToArray();
+		        }
+		    }
 		}
 
 		private IDictionary<string, IBSharpClass> _resolveclassCache = new Dictionary<string, IBSharpClass>();
@@ -425,6 +437,8 @@ namespace Qorpent.BSharp {
 					return Ignored;
 				case BSharpContextDataType.SrcPkg:
 					return Working.Union(Abstracts).Union(Overrides).Union(Extensions).Distinct();
+                case BSharpContextDataType.LibPkg:
+                    return Working.Distinct();
 				case BSharpContextDataType.Errors:
 					
 				default :
@@ -440,6 +454,7 @@ namespace Qorpent.BSharp {
 		public IEnumerable<BSharpError> GetErrors(ErrorLevel level = ErrorLevel.None) {
 			if (null == Errors) yield break;
 			foreach (var e in Errors.ToArray()) {
+                if (null == e) continue;
 				if (e.Level >= level) {
 					yield return e;
 				}
@@ -464,6 +479,7 @@ namespace Qorpent.BSharp {
 			ApplyExtensions();
 			ResolveOrphans();
 			ResolveIgnored();
+		    
 			Orphans = RawClasses.Values.Where(_ => _.IsOrphaned).ToList();
 			Ignored = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Ignored)).ToList();
 			foreach (var o in Orphans) {
@@ -477,26 +493,9 @@ namespace Qorpent.BSharp {
 				!_.IsOrphaned && 
 				!_.Is(BSharpClassAttributes.Ignored)).ToList();
 			Static = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Static) && !_.IsOrphaned && !_.Is(BSharpClassAttributes.Ignored)).ToList();
-			ResolveSets();
+			
 			ResolveImports();
 			_built = true;
-		}
-
-		private void ResolveSets() {
-			foreach (var v in Working.Union(Abstracts).Union(Static).Distinct()) {
-				var sets = v.Source.Descendants("set").Reverse().ToArray();
-				foreach (var s in sets) {
-					var subelements = s.Elements().ToArray();
-					foreach (var a in s.Attributes()) {
-						foreach (var sb in subelements) {
-							if (null == sb.Attribute(a.Name)) {
-								sb.SetAttributeValue(a.Name,a.Value);
-							}
-						}
-					}
-					s.ReplaceWith(subelements);
-				}
-			}
 		}
 
 		private void ResolveIgnored() {
@@ -577,6 +576,14 @@ namespace Qorpent.BSharp {
 			foreach (var e in src.Source.Attributes())
 			{
 				trg.Source.SetAttributeValue(e.Name,e.Value);
+                if (e.Name.LocalName == "abstract") {
+                    if (e.Value.ToBool()) {
+                        trg.Set(BSharpClassAttributes.Abstract);
+                    }
+                    else {
+                        trg.Remove(BSharpClassAttributes.Abstract);
+                    }
+                }
 			}
             foreach (var e in src.Source.Elements())
             {

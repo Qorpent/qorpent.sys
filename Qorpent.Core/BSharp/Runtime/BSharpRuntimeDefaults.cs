@@ -1,9 +1,16 @@
-﻿namespace Qorpent.BSharp.Runtime {
+﻿using System.Xml.Linq;
+
+namespace Qorpent.BSharp.Runtime {
 	/// <summary>
 	/// Общие константы BSharpRT
 	/// </summary>
 	public static class BSharpRuntimeDefaults {
-		/// <summary>
+	    /// <summary>
+		/// Атрибут назначения runtime-имени в BSharp
+		/// </summary>
+		public const string BSHARP_RUNTIME_ATTRIBUTE = "runtime";
+
+	    /// <summary>
 		/// Расширение для классов BSharp на диске
 		/// </summary>
 		public const string BSHARP_CLASS_FILE_EXTENSION = "bsclass"; 
@@ -23,7 +30,7 @@
 		/// <summary>
 		/// Атрибут назначения runtime-имени в BSharp
 		/// </summary>
-		public const string BSHARP_RUNTIME_ATTRIBUTE = "runtime";
+		public const string BSHARP_PROTOTYPE_ATTRIBUTE = "prototype";
 
 		/// <summary>
 		/// Индекс активатора BSharp по умолчанию

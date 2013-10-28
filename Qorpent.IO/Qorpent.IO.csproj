@@ -9,7 +9,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ContainerInfo.cs" />
-    <Compile Include="FileDescriptors\FileDescriptorDirtyVersionBased.cs" />
+    <Compile Include="DirtyVersion\Storage\NetworkCredentialsHashedDirectory.cs" />
+    <Compile Include="FileDescriptors\FileDirtyVersionBased.cs" />
     <Compile Include="DirtyVersion\Const.cs" />
     <Compile Include="DirtyVersion\DirtyVersionStorage.cs" />
     <Compile Include="DirtyVersion\DirtyVersionStorageExtensions.cs" />
@@ -30,22 +31,14 @@
     <Compile Include="DirtyVersion\Mapping\MappingOperator.cs" />
     <Compile Include="DirtyVersion\HashedDirectoryBase.cs" />
     <Compile Include="DirtyVersion\MappingOperatorExtensions.cs" />
-    <Compile Include="DirtyVersion\Storage\HashedDirectoryRecord.cs" />
     <Compile Include="DirtyVersion\Storage\Hasher.cs" />
     <Compile Include="DirtyVersion\Storage\HashedDirectory.cs" />
     <Compile Include="DirtyVersion\Storage\CopyOnReadStream.cs" />
-    <Compile Include="DirtyVersion\IHashedDirectory.cs" />
-    <Compile Include="FileDescriptors\FileDescriptorHashedDirectoryBased.cs" />
-    <Compile Include="FileDescriptors\FileDescriptorVcsStorageBased.cs" />
-    <Compile Include="FileDescriptors\FileDescriptorFsBased.cs" />
-    <Compile Include="FileEntity.cs" />
+    <Compile Include="FileDescriptors\FileHashedDirectoryBased.cs" />
+    <Compile Include="FileDescriptors\FileVcsStorageBased.cs" />
+    <Compile Include="FileDescriptors\FileFsBased.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
-    <Compile Include="FileStorageAbilities.cs" />
-    <Compile Include="IFileStorageExtended.cs" />
-    <Compile Include="IGeneralFileDescriptor.cs" />
-    <Compile Include="IFileEntity.cs" />
-    <Compile Include="IStreamProxy.cs" />
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />
     <Compile Include="Storages\FileStorageHashedDirectory.cs" />
     <Compile Include="Storages\FileStorageVcsStorage.cs" />
@@ -54,6 +47,7 @@
     <Compile Include="Web\ProxySelectorHelper.cs" />
     <Compile Include="Web\WebResource.cs" />
     <Compile Include="Web\WebResourceProviderExtension.cs" />
+    <Compile Include="Web\WebResourceProviderGetSizeExtension.cs" />
     <Compile Include="Web\WebResourceRequest.cs" />
     <Compile Include="Web\WebResourceResponse.cs" />
     <Compile Include="Zip\ZipFileSource.cs" />
@@ -65,7 +59,6 @@
     <Compile Include="VcsStorage\VcsStorageMapper.cs" />
     <Compile Include="VcsStorage\VcsStoragePersister.cs" />
     <Compile Include="VcsStorage\VcsStorageUtils.cs" />
-    <Compile Include="IFileStorage.cs" />
     <Compile Include="VcsStorage\IVcsStoragePersister.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -28,6 +28,8 @@
     <Compile Include="ConvertExtensionsTest.cs" />
     <Compile Include="DatabaseExtensionsTest.cs" />
     <Compile Include="EnumerableExtensionsTest.cs" />
+    <Compile Include="HexTests.cs" />
+    <Compile Include="MathTests.cs" />
     <Compile Include="ReflectionHelperTest.cs" />
     <Compile Include="StaticInstanceTest.cs" />
     <Compile Include="StringExtensionsTest.cs" />

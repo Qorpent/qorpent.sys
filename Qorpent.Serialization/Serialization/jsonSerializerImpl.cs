@@ -112,7 +112,7 @@ namespace Qorpent.Serialization {
 
 		public void BeginArray(string name, int length) {
 			_statestack.Push(ObjectSerializerState.Array);
-			Output.Write("{");
+			Output.Write("[");
 		}
 
 		public void EndArray() {
@@ -120,11 +120,11 @@ namespace Qorpent.Serialization {
 			if (r != ObjectSerializerState.Array) {
 				throw new Exception("cannot close array here");
 			}
-			Output.Write("}");
+			Output.Write("]");
 		}
 
 		public void BeginArrayEntry(int idx) {
-			Output.Write("\"" + idx + "\": ");
+			//Output.Write("\"" + idx + "\": ");
 		}
 
 		public void EndArrayEntry(bool last) {

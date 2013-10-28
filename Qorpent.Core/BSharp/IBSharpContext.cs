@@ -97,6 +97,6 @@ namespace Qorpent.BSharp {
 		/// <param name="query"></param>
 		/// <param name="basens"></param>
 		/// <returns></returns>
-		IEnumerable<IBSharpClass> ResolveAll(string query, string basens);
+		IEnumerable<IBSharpClass> ResolveAll(string query, string basens =null);
 	}
 }

@@ -1,10 +1,14 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using Qorpent.Applications;
 using Qorpent.IO.Resources;
+using Qorpent.Security;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc
@@ -17,10 +21,10 @@ namespace Qorpent.Mvc
 		/// <summary>
 		/// Создает клиента на приложение и пользователя
 		/// </summary>
-		public MvcClient(string appname, ICredentials credentials, IResourceProvider resources = null) {
+		public MvcClient(string appname, Func<ICredentials> credentials, IResourceProvider resources = null) {
 			ApplicationRoot = appname;
-			Credentials = credentials;
-			Resources = resources ?? Applications.Application.Current.Resources;
+			LogonFunction = credentials;
+			Resources = resources ?? Application.Current.Resources;
 		}
 		/// <summary>
 		/// Используемый сервис ресурсов
@@ -30,7 +34,35 @@ namespace Qorpent.Mvc
 		/// <summary>
 		/// Учетные сведения пользователя
 		/// </summary>
-		public ICredentials Credentials { get;private set; }
+		public Func<ICredentials> LogonFunction { get;private set; }
+
+	    private ICredentials _credentials;
+        private ICredentials GetCredentials() {
+            if (null == _credentials) {
+                var uri = new Uri(ApplicationRoot);
+                var host = uri.Host;
+                var app = ApplicationRoot.Split('/').Last();
+                var cs = Application.Current.Container.Get<ICredentialStorage>();
+                ICredentials credentials = null;
+                if (null != cs) {
+                    credentials = cs.GetCredentials(host, app);
+                    if (null == credentials) {
+                        credentials = cs.GetCredentials(host);
+                    }
+                }
+                if (null == credentials) {
+                    if (null != LogonFunction) {
+                        credentials = LogonFunction();
+                    }
+                    else {
+                        throw new Exception("no credentials or logon function provided");
+                    }
+                }
+                _credentials = credentials;
+            }
+            return _credentials;
+        }
+
 		/// <summary>
 		/// Корневой URL приложения
 		/// </summary>
@@ -61,9 +93,9 @@ namespace Qorpent.Mvc
 		}
 
 		private  Task<Stream> GetStream(string command, object parameters, string format) {
-			var url = ApplicationRoot + "/" + command + "." + format + ".qweb";
+			var url = ApplicationRoot + "/" + command.Replace(".","/") + "." + format + ".qweb";
 			var resourceConfig = new ResourceConfig {
-				Credentials = Credentials,
+				Credentials = GetCredentials(),
 				AcceptAllCeritficates = true,
 				UseQwebAuthentication = true,
 			};
@@ -81,7 +113,18 @@ namespace Qorpent.Mvc
 
 		private string GeneratePostData(object parameters) {
 			var dict = parameters.ToDict();
-			return string.Join("&", dict.Select(_ => _.Key + "=" + _.Value));
+            return string.Join("&", dict.Select(_ => _.Key + "=" + Uri.EscapeDataString(_.Value.ToStr())));
+		}
+		/// <summary>
+		/// Возвращает строку, полученную в указанном формате
+		/// </summary>
+		/// <param name="command"></param>
+		/// <param name="parameters"></param>
+		/// <param name="format"></param>
+		/// <returns></returns>
+		public async Task<string> GetString(string command, IDictionary<string, object> parameters, string format) {
+			var stream = GetStream(command, parameters, format);
+			return new StreamReader(await stream).ReadToEnd();
 		}
 	}
 }

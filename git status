@@ -1,0 +1,285 @@
+[33mcommit bf923d49cea14bc7c4d0ea222da45ed9d184177a[m
+Author: Dmitry Shamrikov <bivis08@gmail.com>
+Date:   Wed Oct 2 11:48:01 2013 +0600
+
+    some fixes
+
+[33mcommit 661c566948ddbe73241860fcf18d2999498e1246[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Wed Oct 2 10:30:37 2013 +0600
+
+    incompatibility found
+
+[33mcommit f6de41dd9122aabac083bd187c4555f2d9228126[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Wed Oct 2 10:11:41 2013 +0600
+
+    proifiled bxl2 parser
+
+[33mcommit 9afef77d586d868766a370bbaeb6498feba08d8a[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Wed Oct 2 09:46:05 2013 +0600
+
+    merge fix for bxl2
+
+[33mcommit d017b67e7dd4a2f03f173d64093498c0e83e67ec[m
+Merge: 24ade98 c54417c
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Wed Oct 2 09:38:01 2013 +0600
+
+    Merge remote-tracking branch 'origin/BxlParser2'
+
+[33mcommit 24ade98927562a12eaac7eaf18481f69455d86a8[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Wed Oct 2 09:36:46 2013 +0600
+
+    fusion chart attributes type fix
+
+[33mcommit 510407dff450d148fcbbbe443534173fec87ef77[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Wed Oct 2 09:17:52 2013 +0600
+
+    fusion chart default attributes
+
+[33mcommit 2ca57a2db008ddcadf9a2b4a769688259b469c54[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Wed Oct 2 08:54:29 2013 +0600
+
+    doubled attributes in fusion chart fixed
+
+[33mcommit cb620043a330243465f6195bb15b2aab282ac094[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Tue Oct 1 19:19:35 2013 +0100
+
+    Abstracts update
+
+[33mcommit 13f53f025fd9f52375a11a3918be21416ef5828e[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Tue Oct 1 18:41:35 2013 +0100
+
+    Chart Extended by many new attributes
+
+[33mcommit 738737fe92a5b902b078ee7af2463e56c1048806[m
+Merge: 1492f77 8153cd7
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Tue Oct 1 16:06:06 2013 +0100
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 1492f77dc37eaaa6cd1910c2052fe2566b144f68[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Tue Oct 1 16:05:07 2013 +0100
+
+    More correct XSLT for Chart's properties
+
+[33mcommit 8153cd7ee472639dcdc9760d7a3ff068c0fe7f0a[m
+Author: Myachin <i.myachin@ugmk.com>
+Date:   Tue Oct 1 20:26:01 2013 +0600
+
+    find not uniq attributes in fc api
+
+[33mcommit 35f3a2c1a347aa70a1a87eb0b7aa11e8ed72be13[m
+Author: Myachin <i.myachin@ugmk.com>
+Date:   Tue Oct 1 19:35:29 2013 +0600
+
+    create render chart action on api
+
+[33mcommit 9b2d4cd0b5ecb0625fa016f5c5e82a881ab6cd37[m
+Merge: eaa37c0 e2f9ac8
+Author: Myachin <i.myachin@ugmk.com>
+Date:   Tue Oct 1 18:45:01 2013 +0600
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit eaa37c014c9ce05e69ec4c913197b34078975d87[m
+Author: Myachin <i.myachin@ugmk.com>
+Date:   Tue Oct 1 18:43:37 2013 +0600
+
+    Начало работы над ренером XML для чартов
+
+[33mcommit e2f9ac828d55411eef8b3b469ed4fb8b89810b7a[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Tue Oct 1 18:38:32 2013 +0600
+
+    initial chart api
+
+[33mcommit b5d4bc7f668a369471243fc563f8448c6be24a30[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Tue Oct 1 17:14:43 2013 +0600
+
+    Daily 2
+
+[33mcommit b17a095c5e496c55ed0d9019470c9b9113980390[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Tue Oct 1 17:06:43 2013 +0600
+
+    Daily commit
+
+[33mcommit 64e17879ac24b596772cb937292b0e9b07bed2dd[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Tue Oct 1 16:18:49 2013 +0600
+
+    Some addings
+
+[33mcommit 2385d4a517bada5c10b5823d7375d96d8807ee4b[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Tue Oct 1 13:36:19 2013 +0600
+
+    Some structure fixes
+
+[33mcommit 98093708cd06a2a2916ede818d4824a0da0bfe06[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Tue Oct 1 13:09:56 2013 +0600
+
+    Projects for MaksUr created
+
+[33mcommit db7b70d099593b363102daefe721e2d9a7ab60c2[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Tue Oct 1 12:44:54 2013 +0600
+
+    Charts implementation moved to Qorpent.Serilization
+
+[33mcommit 38a3692221abd35e1e69b4873f0863be3db67ca9[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Tue Oct 1 12:41:22 2013 +0600
+
+    Control inheritance in ConfigBase support added
+
+[33mcommit 99ac2e90f80ebe285ab042bb6864419a3ed6f114[m
+Merge: 3ac5863 2b7191d
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Tue Oct 1 11:29:11 2013 +0600
+
+    Merge branch 'master' of https://assoi-git.ugmk.com:8601/qorpent.sys
+
+[33mcommit 3ac5863ce827fb254ff9b105d472e6cb98cc6c48[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Tue Oct 1 11:28:57 2013 +0600
+
+    fcapi.sln
+
+[33mcommit 2b7191d085bab79a5e4e342b6d4f5658b913266e[m
+Author: Myachin <i.myachin@ugmk.com>
+Date:   Tue Oct 1 11:28:57 2013 +0600
+
+    Chart.Initialize fixed
+
+[33mcommit 39ea2f9df77103d1812af80709365a8a6a551b8b[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Tue Oct 1 11:13:48 2013 +0600
+
+    fs improved
+
+[33mcommit 36fbbfe664e0cf730617e1046aab580384c6b5ab[m
+Author: Myachin <i.myachin@ugmk.com>
+Date:   Tue Oct 1 09:34:41 2013 +0600
+
+    .
+
+[33mcommit 738d1896b5c13ebee54a7c7e4ad9c3cc7955d49f[m
+Merge: f357360 7f8f475
+Author: Myachin <i.myachin@ugmk.com>
+Date:   Mon Sep 30 17:05:48 2013 +0600
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit f357360d40c2d9c1c05690ab6815dc171bec0648[m
+Author: Myachin <i.myachin@ugmk.com>
+Date:   Mon Sep 30 17:04:31 2013 +0600
+
+    .
+
+[33mcommit 7f8f475d4aaeb433d431d973aa8252ca27427cbc[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Mon Sep 30 17:01:44 2013 +0600
+
+    fixed chart type names
+
+[33mcommit ffd820e7a6e36bf7597fa5690118e7fcaabbea31[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Mon Sep 30 11:57:30 2013 +0100
+
+    Some fixes for Css Selector and new FC api in XML
+
+[33mcommit e17888bf21455186ef17d3c9a98594be7ed36317[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Mon Sep 30 14:28:16 2013 +0600
+
+    fc api improved
+
+[33mcommit c609256cb7b2934a4214f891c9e619e3400cd49d[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Mon Sep 30 13:38:35 2013 +0600
+
+    fusion auto api improved
+
+[33mcommit 30ef407843d130974eb74f6e5ae7f02a4a41f8a6[m
+Author: Larisa Sadykova <larisatyan@gmail.com>
+Date:   Mon Sep 30 09:58:32 2013 +0600
+
+    #AP-156 fixed (distilled fc api)
+
+[33mcommit f252770d3fec951adde0bef5287477ba4e84c0e2[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Mon Sep 30 08:45:35 2013 +0600
+
+    raw_fusion_chart_api added
+
+[33mcommit 6209a91ccaed3f79458f90464ce4675793be23b3[m
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Mon Sep 30 08:38:44 2013 +0600
+
+    conflict ugmk
+
+[33mcommit 16fec616752ea1d7cc1d8da2ba200aafa7212880[m
+Merge: b72d2a5 a304ff9
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Mon Sep 30 08:36:33 2013 +0600
+
+    merge finished
+
+[33mcommit c54417c77443c4526390b34006cf6cee9dc272d6[m
+Author: Dmitry Shamrikov <bivis08@gmail.com>
+Date:   Sun Sep 29 00:04:48 2013 +0600
+
+    parser options supporting, tests and benchmark added
+
+[33mcommit a304ff90073eb9e38049d5a4e592080da19cc124[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Sat Sep 28 10:55:50 2013 +0600
+
+    ChartBuilder added without implementation
+
+[33mcommit ea6620a08edb9d6aad3d04caf3848e85227251a4[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Sat Sep 28 10:24:08 2013 +0600
+
+    #AP-149 update
+
+[33mcommit c7fa33cc6ebdb71d0644959713d087b384db8957[m
+Author: Dmitry Shamrikov <bivis08@gmail.com>
+Date:   Fri Sep 27 19:35:16 2013 +0600
+
+    added namespaces and commentary supporting
+
+[33mcommit 1cdf25b0ba2660ddbefaecdfb374ac5a7a300d1d[m
+Merge: 9e2edfc 3605df0
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Fri Sep 27 19:08:01 2013 +0600
+
+    Merge remote-tracking branch 'origin/master' into fusionchart
+
+[33mcommit 9e2edfcafdb7721e8a3aa7723d5415d49ca1c831[m
+Author: Kirill Shirshov <remalloc@gmail.com>
+Date:   Fri Sep 27 19:07:28 2013 +0600
+
+    comdiv's big commit
+
+[33mcommit b72d2a50cadadd0326a32cff561788d7d553afc1[m
+Merge: be4d64f 3605df0
+Author: comdiv <fagim.sadykov@gmail.com>
+Date:   Fri Sep 27 15:15:05 2013 +0600
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit be4d64fbb364bee23de56b73b07250b8fe57d572

@@ -7,16 +7,27 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Config {
 	/// <summary>
-	/// Базовый класс для конфигураций
+	///     Базовый класс для конфигураций
 	/// </summary>
 	public partial class ConfigBase : IConfig {
-		/// <summary>
-		/// 
-		/// </summary>
-		public ConfigBase(){}
-		/// <summary>
-		/// 
-		/// </summary>
+        /// <summary>
+        ///     Внутренний экземпляр переменной, определяющий поддержку наследования
+        /// </summary>
+	    private bool _useInheritance = true;
+        /// <summary>
+        ///     Базовый класс для конфигураций
+        /// </summary>
+		public ConfigBase() {}
+	    /// <summary>
+	    ///     Поддержка наследования от родителя
+	    /// </summary>
+	    public bool UseInheritance {
+            get { return _useInheritance; }
+            set { _useInheritance = value; }
+	    }
+        /// <summary>
+        ///     Базовый класс для конфигураций
+        /// </summary>
 		/// <param name="dict"></param>
 		public ConfigBase(IDictionary<string, object> dict) {
 			if (null != dict) {
@@ -29,8 +40,7 @@ namespace Qorpent.Config {
 		/// 
 		/// </summary>
 		/// <param name="dict"></param>
-		public ConfigBase(IDictionary<string, string> dict)
-		{
+		public ConfigBase(IDictionary<string, string> dict) {
 			if (null != dict) {
 				foreach (var d in dict) {
 					Set(d.Key, d.Value);
@@ -47,7 +57,7 @@ namespace Qorpent.Config {
 		protected bool _freezed;
 		private IConfig _parent;
 
-		/// <summary>
+	    /// <summary>
 		/// Конвертирует XML в словарь
 		/// </summary>
 		/// <param name="xml"></param>
@@ -74,13 +84,15 @@ namespace Qorpent.Config {
 
 		private void LoadElement(XElement e, string root) {
 			foreach (var a in e.Attributes()) {
-				var optname = string.IsNullOrWhiteSpace(root)?(a.Name.LocalName):(root+"."+a.Name.LocalName);
+				var optname = string.IsNullOrWhiteSpace(root) ? (a.Name.LocalName) : (root+"."+a.Name.LocalName);
 				options[optname] = a.Value;
 			}
+
 			var text = e.Nodes().OfType<XText>().FirstOrDefault();
 			if (null != text) {
 				options[root] = text.Value;
 			}
+
 			root = string.IsNullOrWhiteSpace(root) ? e.Name.LocalName : (root + "." + e.Name.LocalName);
 			foreach (var c in e.Elements()) {
 				LoadElement(c,root);
@@ -93,7 +105,10 @@ namespace Qorpent.Config {
 		/// <param name="name"></param>
 		/// <param name="value"></param>
 		public void Set(string name, object value) {
-			if (_freezed) throw new Exception("config freezed");
+			if (_freezed) {
+			    throw new Exception("config freezed");
+			}
+
 			options[name] = value;
 		}
 		
@@ -101,11 +116,16 @@ namespace Qorpent.Config {
 		private T ReturnIerachical<T>(string name, T def) {
 			var basis = name.Replace(".", "");
 			var skips = name.Count(_ => _ == '.');
-			var result= AllByName(basis).Skip(skips).FirstOrDefault();
-			if (null == result) {
+			var result = AllByName(basis).Skip(skips).FirstOrDefault();
+			
+            if (null == result) {
 				result = AllByName(basis).Last();
 			}
-			if (null == result) return def;
+
+			if (null == result) {
+			    return def;
+			}
+
 			return (T) result;
 		}
 		/// <summary>
@@ -114,11 +134,21 @@ namespace Qorpent.Config {
 		/// <param name="name"></param>
 		/// <returns></returns>
 		public IEnumerable<object> AllByName(string name) {
-			if (this.options.ContainsKey(name)) {
+			if (options.ContainsKey(name)) {
 				yield return options[name];
 			}
-			if (null != _parent) {
-				foreach (var p in ((ConfigBase) _parent).AllByName(name)) {
+
+            if (!UseInheritance)
+            {
+                yield return null;
+            }
+			
+            if (
+                (null != GetParent())
+            ) {
+                
+
+				foreach (var p in ((ConfigBase) GetParent()).AllByName(name)) {
 					yield return p;
 				}
 			}
@@ -132,24 +162,25 @@ namespace Qorpent.Config {
 		/// <param name="def"></param>
 		/// <returns></returns>
 		public T Get<T>(string name, T def = default(T)) {
-			
-			if (name.StartsWith("."))
-			{
+			if (name.StartsWith(".")) {
 				return ReturnIerachical(name, def);
 			}
+
 			if (!options.ContainsKey(name)) {
-				if (null != _parent)
-				{
-					return _parent.Get(name, def);
+				if (null != GetParent()) {
+				    if (UseInheritance) {
+				        return GetParent().Get(name, def);
+				    }
 				}
-				if (typeof(string) == typeof(T))
-				{
+
+				if (typeof(string) == typeof(T)) {
 					if (Equals(def, null)) {
 						return (T)(object)string.Empty;
 					}
 				}
 				return def;
 			}
+
 			if (typeof (T) == typeof (object)) {
 				return (T)options[name];
 			}
@@ -164,32 +195,37 @@ namespace Qorpent.Config {
 		public IConfig GetParent() {
 			return _parent;
 		}
-
 		/// <summary>
 		/// Возвращает имена всех опций
 		/// </summary>
 		/// <param name="withParent"></param>
 		/// <returns></returns>
 		public IEnumerable<string> GetNames(bool withParent = false) {
-			if (!withParent || null==_parent) return options.Keys;
-			return options.Keys.Union(_parent.GetNames(true)).Distinct();
+			if (!withParent || null == GetParent()) {
+			    return options.Keys;
+			}
+
+		    if (UseInheritance) {
+		        return options.Keys.Union(GetParent().GetNames(true)).Distinct();
+		    }
+
+            return new List<string>();
 		}
 
 		/// <summary>
-		/// Сериализация конфига в заданном формате
+		///     Сериализация конфига в заданном формате
 		/// </summary>
 		/// <param name="rendertype"></param>
 		/// <returns></returns>
 		public string ToString(ConfigRenderType rendertype ) {
-			if (rendertype == ConfigRenderType.SimpleBxl) {
+		    if (rendertype == ConfigRenderType.SimpleBxl) {
 				return GenerateSimpleBxl();
 			}
-			else {
-				throw new Exception("unknown format " + rendertype);
-			}
+
+		    throw new Exception("unknown format " + rendertype);
 		}
 
-		private string GenerateSimpleBxl() {
+	    private string GenerateSimpleBxl() {
 			var asdict = this as IDictionary<string,object>;
 			var sb = new StringBuilder();
 			sb.AppendLine("config");

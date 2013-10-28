@@ -23,17 +23,22 @@ namespace Qorpent.Serialization {
 
 
 	/// <summary>
-	/// 	Describes entity to Serialize an object to text stream
+	/// Описывает объект-сериализатор, превращающий входной объект в поток симвлолв нужного формата
 	/// </summary>
 	public interface ISerializer {
-		/// <summary>
-		/// 	Serializes the specified name.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-		/// <param name="output"> The output. </param>
-		/// <remarks>
-		/// </remarks>
-		void Serialize(string name, object value, TextWriter output);
+	    /// <summary>
+	    /// Сериализует переданный объект в текстовой поток
+	    /// </summary>
+	    /// <param name="name"> Имя сериализуемого объекта</param>
+	    /// <param name="value">Сериализуемый объект </param>
+	    /// <param name="output">Целевой текстововй поток</param>
+	    /// <param name="options">Некие опции сериализатора, класс и поддержка зависят от конкретного сериализатора</param>
+	    /// <remarks>
+	    /// Такое определение интерфейса предполагает, что сериализация производится в поток,
+	    /// но при этом мы не предполагаем бинарной сериализации, так как бинарная сериализация
+	    /// не является типовым сценарием для коммутриуемх API
+	    /// </remarks>
+	    void Serialize(string name, object value, TextWriter output, object options = null);
+
 	}
 }

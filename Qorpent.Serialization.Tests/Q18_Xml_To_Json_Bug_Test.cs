@@ -48,9 +48,9 @@ DirectRole=""DEVELOPER"" Role=""!_DB_REMOVECONNECTION_ACTION_DENY,DEVELOPER,_DB_
         [Test]
         public void Small_Test() {
             var sw = new StringWriter();
-            json.Serialize("test", XElement.Parse("<r><a key='a'><i key='1'/><i key='2'/><i key='3'/></a><a key='b'><i key='1'/><i key='2'/><i key='3'/></a></r>"), sw);
+            json.Serialize("test", XElement.Parse("<r><a key='a' ><i key='1'/><i key='2'/><i key='3'/></a><a key='b'><i key='1'/><i key='2'/><i key='3'/></a></r>"), sw);
             Console.WriteLine(sw.ToString());
-            Assert.AreEqual(@"{""a"": {""0"": {""key"": ""a"", ""i"": {""0"": {""key"": ""1""}, ""1"": {""key"": ""2""}, ""2"": {""key"": ""3""}}}, ""1"": {""key"": ""b"", ""i"": {""0"": {""key"": ""1""}, ""1"": {""key"": ""2""}, ""2"": {""key"": ""3""}}}}}", sw.ToString().Replace("  ", " ").Trim());
+            Assert.AreEqual(XmlJson2WayConversionTest.Simplify(@"{""a"": [{""key"": ""a"", ""i"": [{""key"": ""1""}, {""key"": ""2""}, {""key"": ""3""}]}, {""key"": ""b"", ""i"": [{""key"": ""1""}, {""key"": ""2""}, {""key"": ""3""}]}]}"),XmlJson2WayConversionTest.Simplify( sw.ToString()));
         }
 
         [Test]

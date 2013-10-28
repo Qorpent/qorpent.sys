@@ -25,6 +25,24 @@ class A
 
         }
 
+        [Test]
+        public void NestedElementsSupport()
+        {
+            var code = @"
+class A
+    element item
+    element item2
+    item X
+        item2 X
+~class A
+    +item2 X x=1
+";
+            var result = Compile(code).Get("A").Compiled;
+            Console.WriteLine(result);
+            Assert.AreEqual("1", result.Descendants("item2").First().Attr("x"));
+
+        }
+
          [Test]
         public void CanExtendNotCodedElementsInExtension()
         {

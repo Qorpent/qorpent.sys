@@ -62,11 +62,13 @@ namespace Qorpent.Config {
 				return keyparent.ContainsKey(key.Substring(1));
 			}
 			if (options.ContainsKey(key)) return true;
-			var parent = GetParent() as IDictionary<string,object>;
-			if(null!=parent) {
-				return parent.ContainsKey(key);
-			}
-			return false;
+		    if (UseInheritance) {
+		        var parent = GetParent() as IDictionary<string, object>;
+		        if (null != parent) {
+		            return parent.ContainsKey(key);
+		        }
+		    }
+		    return false;
 		}
 
 		void IDictionary<string, object>.Add(string key, object value) {

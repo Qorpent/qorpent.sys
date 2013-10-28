@@ -25,15 +25,16 @@ namespace Qorpent.Serialization {
 	/// </remarks>
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISerializer), Name = "js.serializer")]
 	public class JsSerializer : Serializer {
-		/// <summary>
-		/// 	Creates the impl.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-		/// <returns> </returns>
-		/// <remarks>
-		/// </remarks>
-		protected override ISerializerImpl CreateImpl(string name, object value) {
+	    /// <summary>
+	    /// 	Creates the impl.
+	    /// </summary>
+	    /// <param name="name"> The name. </param>
+	    /// <param name="value"> The value. </param>
+	    /// <param name="options">Дополнительные опции при создании</param>
+	    /// <returns> </returns>
+	    /// <remarks>
+	    /// </remarks>
+	    protected override ISerializerImpl CreateImpl(string name, object value,object options) {
 			return new JsSerializerImpl();
 		}
 	}

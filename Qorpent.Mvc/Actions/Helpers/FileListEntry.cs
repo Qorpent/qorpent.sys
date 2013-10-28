@@ -1,4 +1,4 @@
-namespace Qorpent.Mvc.Actions.Helpers {
+ namespace Qorpent.Mvc.Actions.Helpers {
 	/// <summary>
 	/// Ёлемент списка
 	/// </summary>

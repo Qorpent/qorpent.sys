@@ -41,6 +41,7 @@ namespace Qorpent.Mvc.Renders {
 			return "text/xml";
 		}
 
+
 		/// <summary>
 		/// 	Renders error, occured in given context
 		/// </summary>

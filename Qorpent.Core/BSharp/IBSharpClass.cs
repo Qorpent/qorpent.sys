@@ -133,5 +133,6 @@ namespace Qorpent.BSharp {
 		/// <param name="code"></param>
 		/// <returns></returns>
 		string this[string code] { get; }
+
 	}
 }

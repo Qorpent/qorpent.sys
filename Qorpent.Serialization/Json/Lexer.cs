@@ -23,7 +23,9 @@ namespace Qorpent.Json {
 		/// <returns></returns>
 		public JsonItem Collect(IEnumerable<JsonToken> tokens) {
 			foreach (var t in tokens) {
-				Collect(t);
+			    if (null != t) {
+			        Collect(t);
+			    }
 			}
 			return rootitem;
 		}

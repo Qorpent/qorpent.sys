@@ -292,7 +292,35 @@ namespace Qorpent.Utils.Extensions {
 			                           DateTimeStyles.AllowWhiteSpaces);
 		}
 
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="x"></param>
+	    /// <param name="extended"></param>
+	    /// <returns></returns>
+	    public static int ToInt(this double x, bool extended) {
+            if (!extended) {
+                return x.ToInt();
+            }
 
+            if (
+                (x >= 1) || (x <= -1)
+            ) {
+                return Convert.ToInt32(x);
+            }
+
+            if (
+                (x <= 0.5) && (x >= -0.5)
+            ) {
+                return 0;
+            }
+
+            if (x > 1.0) {
+                return 1;
+            }
+
+	        return -1;
+	    }
 		/// <summary>
 		/// 	converts object to Int32 null safe
 		/// </summary>
@@ -364,6 +392,9 @@ namespace Qorpent.Utils.Extensions {
 			if(obj is IDictionary<string,object>) {
 				return (IDictionary<string, object>) obj;
 			}
+            if (obj is IDictionary<string, string>) {
+                return ((IDictionary<string, string>) obj).ToDictionary(_=>_.Key,_=>(object)_.Value);
+            }
 			
 			var result = new Dictionary<string, object>();
 			foreach (var p in obj.GetType().GetProperties()) {

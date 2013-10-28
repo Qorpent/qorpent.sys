@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.Utils.Extensions;
 using Qorpent.Serialization;
+using Qorpent.Serialization.Escaping;
 
 namespace Qorpent.BSharp.Matcher {
 	/// <summary>
@@ -37,41 +38,41 @@ namespace Qorpent.BSharp.Matcher {
 
 		private void SetupFromSpecialName(XAttribute a) {
 			var n = a.Name.LocalName;
-            if (n.Contains(XmlEscaper.Escape("!")))
+            if (n.Contains("!".Escape(EscapingType.XmlName)))
             {
 				Negate = true;
-                n = n.Replace(XmlEscaper.Escape("!"), "");
+                n = n.Replace("!".Escape(EscapingType.XmlName), "");
 			}
-			if (Value == "NULL") {
-				ConditionType= ConditionType.IsNull;
-			}else if (Value == "TRUE") {
-				ConditionType =ConditionType.IsTrue;
+			if (Value.ToUpper() == "NULL") {
+				ConditionType = ConditionType.IsNull;
+			}else if (Value.ToUpper() == "TRUE") {
+				ConditionType = ConditionType.IsTrue;
 			}
-            if (n.EndsWith(XmlEscaper.EscapeAll(">>")))
+            if (n.EndsWith(">>".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.Gr;
             }
-            else if (n.EndsWith(XmlEscaper.Escape(">")))
+            else if (n.EndsWith(">".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.GrE;
             }
-            else if (n.EndsWith(XmlEscaper.EscapeAll("<<")))
+            else if (n.EndsWith("<<".Escape(EscapingType.XmlName)))
             {
 				ConditionType= ConditionType.Le;
             }
-            else if (n.EndsWith(XmlEscaper.Escape("<")))
+            else if (n.EndsWith("<".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.LeE;
             }
-            else if (n.EndsWith(XmlEscaper.Escape("~")))
+            else if (n.EndsWith("~".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.Match;
             }
-            else if (n.EndsWith(XmlEscaper.Escape("&")))
+            else if (n.EndsWith("&".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.InList;
             }
-            else if (n.EndsWith(XmlEscaper.Escape("%")))
+            else if (n.EndsWith("%".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.Contains;
 			}
@@ -108,6 +109,9 @@ namespace Qorpent.BSharp.Matcher {
 		public bool IsMatch(XElement e) {
 			_e = e;
 			var a = e.Attribute(AttributeName);
+            if (null == a && AttributeName == "localname") {
+                a= new XAttribute("localname",e.Name.LocalName);
+            }
 			var mainismatch = InternalIsMatch(a);
 			return Negate? !mainismatch : mainismatch;
 		}

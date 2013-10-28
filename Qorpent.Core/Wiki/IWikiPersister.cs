@@ -110,5 +110,11 @@ namespace Qorpent.Wiki {
 	    /// </summary>
 	    /// <param name="code">код страницы</param>
 	    bool ReleaseLock(string code);
+		/// <summary>
+		/// Позволяет сменить код у существующей страницы
+		/// </summary>
+		/// <param name="fromcode"></param>
+		/// <param name="tocode"></param>
+		void ChangeCode(string fromcode, string tocode);
 	}
 }

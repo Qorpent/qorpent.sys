@@ -17,6 +17,7 @@ namespace Qorpent.BSharp.Builder {
             Sources = new List<XElement>();
             Conditions = new Dictionary<string, string>();
             Targets = new BSharpBuilderTargets();
+            Extensions = new List<string>();
         }
 
 		private const string TARGET_NAMES = "target_names";
@@ -35,9 +36,20 @@ namespace Qorpent.BSharp.Builder {
 	    private const string WRITE_COMPILED = "write_compiled";
 	    private const string PROJECT_NAME = "project_name";
 	    private const string GENERATE_SRC_PKG = "generate_src_pkg";
+	    private const string GENERATE_LIB_PKG = "generate_lib_pkg";
 	    private const string SRC_PKG_NAME = "src_pkg_name";
+	    private const string LIB_PKG_NAME = "lib_pkg_name";
 	    private const string GENERATE_GRAPH = "generate_graph";
-		
+	    private const string EXTENSIONS = "extensions";
+        private const string SRCCLASS = "srcclass";
+        private IList<IBSharpCompilerExtension> _compilerExtensions = new List<IBSharpCompilerExtension>();
+        /// <summary>
+        /// Расширения компилятора
+        /// </summary>
+        public IList<IBSharpCompilerExtension> CompilerExtensions
+        {
+            get { return _compilerExtensions; }
+        }
 		/// <summary>
 		/// Целевые проекты при билде
 		/// </summary>
@@ -160,6 +172,15 @@ namespace Qorpent.BSharp.Builder {
 			get { return Get(GENERATE_SRC_PKG, false); }
 			set { Set(GENERATE_SRC_PKG, value); }
 		}
+
+        /// <summary>
+        /// Требование создать пакет исходников в виде перносимого архива
+        /// </summary>
+        public bool GenerateLibPkg
+        {
+            get { return Get(GENERATE_LIB_PKG, false); }
+            set { Set(GENERATE_LIB_PKG, value); }
+        }
 		/// <summary>
 		/// Требование создать пакет исходников в виде перносимого архива
 		/// </summary>
@@ -169,12 +190,35 @@ namespace Qorpent.BSharp.Builder {
 			set { Set(SRC_PKG_NAME, value); }
 		}
 
+        /// <summary>
+        /// Имя компилированного пакета
+        /// </summary>
+        public string LibPkgName
+        {
+            get { return Get(LIB_PKG_NAME, "compiled.bslib"); }
+            set { Set(LIB_PKG_NAME, value); }
+        }
+
 	    /// <summary>
 	    /// Флаг необходимости генерации графической карты классов
 	    /// </summary>
 	    public bool GenerateGraph {
             get { return Get(GENERATE_GRAPH,false); }
             set { Set(GENERATE_GRAPH, value); }
+	    }
+        /// <summary>
+        /// Расширения проекта (имена классов или библиотек)
+        /// </summary>
+	    public IList<string> Extensions {
+            get { return Get<IList<string>>(EXTENSIONS); }
+            set { Set(EXTENSIONS, value); }
+	    }
+        /// <summary>
+        /// Исходный класс, на основе которого сделан проект
+        /// </summary>
+	    public IBSharpClass SrcClass {
+            get { return Get<IBSharpClass>(SRCCLASS); }
+            set { Set(SRCCLASS, value); }
 	    }
 
 
@@ -210,6 +254,7 @@ namespace Qorpent.BSharp.Builder {
 			return OutputExtension;
 		}
 
+       
 		/// <summary>
 		/// Возвращает исходящее расширение
 		/// </summary>
@@ -217,5 +262,7 @@ namespace Qorpent.BSharp.Builder {
 		public string GetLogDirectory() {
 			return Path.Combine(GetRootDirectory(), GetOutputDirectory());  // drop logs to the output directory 
 		}
+
+        
 	}
 }

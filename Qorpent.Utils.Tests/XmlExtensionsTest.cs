@@ -23,6 +23,7 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -60,5 +61,37 @@ namespace Qorpent.Utils.Tests {
 			var result = XmlExtensions.GetXmlFromAny(src);
 			Assert.AreEqual("<hello />", result.ToString());
 		}
+
+        [Test]
+        public void IdsAreApplyed() {
+            var src = XElement.Parse(@"
+<a>
+<b>
+    <d/>
+    <f/>
+</b>
+<c>
+    <g/>
+    <h/>
+</c>
+</a>
+");
+            var result = src.GenerateUniqueIdsForElements("id");
+            Console.WriteLine(result.ToString());
+            Console.WriteLine("============================================================");
+            string escaped = result.ToString().Replace("\"", "\"\"");
+            Console.WriteLine(escaped);
+
+            Assert.AreEqual(@"<a id=""0"">
+  <b id=""1"">
+    <d id=""2"" />
+    <f id=""3"" />
+  </b>
+  <c id=""4"">
+    <g id=""5"" />
+    <h id=""6"" />
+  </c>
+</a>", result.ToString());
+        }
 	}
 }

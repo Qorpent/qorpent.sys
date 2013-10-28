@@ -38,6 +38,7 @@
     <Compile Include="StreamProxyTests.cs" />
     <Compile Include="VcsStorageTests.cs" />
     <Compile Include="VcsStorageTestsBase.cs" />
+    <Compile Include="WebResourceProviderTests.cs" />
     <Compile Include="Web\DefaultWorkingThroughResourceProvider.cs" />
     <Compile Include="VcsStorageWorkingWithStreamsTests.cs" />
   </ItemGroup>

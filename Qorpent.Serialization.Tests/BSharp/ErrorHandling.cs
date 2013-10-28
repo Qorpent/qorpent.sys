@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Qorpent.BSharp;
 using Qorpent.Utils.Extensions;
@@ -240,6 +241,25 @@ class A x=^B
 			Assert.AreEqual(BSharpErrorType.NotDirectClassReference, error.Type);
 			Assert.AreEqual("Y.B", result.Get("A").Compiled.Attr("x"));
 		}
+
+
+        [Test]
+        public void BugBadErrorCatchOnClassReference()
+        {
+            var code = @"
+namespace demo
+    namespace colsets
+	    class B
+    namespace blocks
+        class A x=^colsets.B
+";
+            var result = Compile(code);
+            var errors = result.GetErrors().Where(_=>_.Level>=ErrorLevel.Warning);
+           
+            Assert.AreEqual(0, errors.Count());
+           
+            
+        }
 
 		[Test]
 		public void AmbigousClassReference()

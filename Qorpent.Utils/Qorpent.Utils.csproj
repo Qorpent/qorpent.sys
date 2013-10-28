@@ -38,6 +38,9 @@
     <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="Extensions\DateExtensions.cs" />
     <Compile Include="Extensions\FileNameResolverExtensions.cs" />
+    <Compile Include="Extensions\Html\XmlHtmlExtensions.cs" />
+    <Compile Include="Extensions\LinqExtensions.cs" />
+    <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Extensions\SecurityExtensions.cs" />
     <Compile Include="Extensions\SlashListHelper.cs" />
@@ -46,6 +49,8 @@
     <Compile Include="Extensions\SqlCommandType.cs" />
     <Compile Include="Extensions\UniSqlConst.cs" />
     <Compile Include="Extensions\UniSqlQuery.cs" />
+    <Compile Include="Hex.cs" />
+    <Compile Include="ListUtils.cs" />
     <Compile Include="LogicalExpressions\ConjunctionNode.cs" />
     <Compile Include="LogicalExpressions\ContainerInfo.cs" />
     <Compile Include="LogicalExpressions\DisjunctionNode.cs" />

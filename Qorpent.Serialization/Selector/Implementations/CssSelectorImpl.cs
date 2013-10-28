@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -31,7 +32,9 @@ namespace Qorpent.Selector.Implementations {
         /// <returns></returns>
 		public IEnumerable<XElement> Select(XElement root, string query) {
 	        var xpath = BuildXpath(query);
-	        return root.XPathSelectElements(xpath);
+            Debug.Print(xpath);
+	        var result = root.XPathSelectElements(xpath);
+            return result;
         }
 		/// <summary>
 		/// Конвертирует строку селектора в XPATH
@@ -54,12 +57,13 @@ namespace Qorpent.Selector.Implementations {
 		private string BuildConditionXpath(string condition) {
 			var subpaths = condition.SmartSplit(false, true, ' ');
 			var xsubpaths = subpaths.Select(BuildSubpath);
-			var result = "." + string.Join("",xsubpaths);
+			var result = "./" + string.Join("",xsubpaths);
 			return result;
 		}
 
 		private static string BuildSubpath(string condition) {
-			var match = Regex.Match(condition.Trim(), 
+		    var sc = condition.Split(':');
+			var match = Regex.Match(sc[0].Trim(), 
 					@"(?ix)^
 						(?<tag>[^\.\#].*?)?
 						(\#(?<id>.+?))?
@@ -80,7 +84,12 @@ namespace Qorpent.Selector.Implementations {
 				subconditions.Add("@id='" + id + "'");
 			}
 			if (!string.IsNullOrWhiteSpace(cls)) {
-				subconditions.Add("contains(concat(' ',@class,' '), ' " + cls + " ')");
+			    var clause = "";
+                foreach (var className in cls.Split('.')) {
+                    clause += "contains(concat(' ',@class,' '), ' " + className + " ') and ";
+			    }
+                clause = clause.Substring(0, clause.Length - 5);
+                subconditions.Add(clause);
 			}
 
 			if (!string.IsNullOrWhiteSpace(attr)) {
@@ -96,10 +105,32 @@ namespace Qorpent.Selector.Implementations {
 				}
 			}
 
-			var result = "//" + tag;
+			var result = "/" + tag;
 			if (0 != subconditions.Count) {
 				result += "[" + string.Join(" and ", subconditions) + "]";
 			}
+
+            if (sc.Count() == 2) {
+                if (sc[1].Contains("first-child")) {
+                    result += "[1]";
+                }
+
+                if (sc[1].Contains("last-child")) {
+                    result += "[last()]";
+                }
+
+                if (sc[1].Contains("nth-child")) {
+                    var openBracketIndex = sc[1].IndexOf("(", System.StringComparison.Ordinal);
+                    var closeBracketIndex = sc[1].IndexOf(")", System.StringComparison.Ordinal);
+                    var nth = sc[1].Substring(
+                        openBracketIndex + 1,
+                        closeBracketIndex - openBracketIndex - 1
+                    );
+
+                    result += "[" + nth + "]";
+                }
+            }
+
 			return result;
 		}
 	}

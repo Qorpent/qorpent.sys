@@ -24,6 +24,9 @@ namespace Qorpent.IO.Resources {
 		/// Флаговое свойство - признак поддержки создания реальных запросов
 		/// </summary>
 		bool IsCreateRequestSupported { get; }
-		
+        /// <summary>
+        ///     Поддерживает получение размера документа по Uri
+        /// </summary>
+        bool GetSizeSupported { get; }
 	}
 }

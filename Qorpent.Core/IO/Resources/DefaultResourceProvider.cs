@@ -72,8 +72,31 @@ namespace Qorpent.IO.Resources {
 			var realuri = RewriteUri(uri);
 			return Extensions.Any(_ => _.IsCreateRequestSupported && _.IsSupported(realuri));
 		}
+	    /// <summary>
+	    ///     Получение размера документа по его Uri
+	    /// </summary>
+	    /// <param name="uri">Uri документа</param>
+	    /// <returns>Размер документа</returns>
+	    public int GetSize(Uri uri) {
+	        if (
+                (Extensions == null)
+                    ||
+                (!Extensions.Any())
+            ) {
+	            throw new Exception("There are no extensions");
+	        }
 
-		/// <summary>
+            var provider = Extensions.FirstOrDefault(
+                _ => _.GetSizeSupported && _.IsSupported(uri)
+            );
+
+            if (provider == null) {
+                throw new Exception("There are no extensions that supports GetSize");
+            }
+
+	        return provider.GetSize(uri);
+	    }
+	    /// <summary>
 		/// Акцессор к движку перезаписи адресов
 		/// </summary>
 		/// <param name="uri"></param>

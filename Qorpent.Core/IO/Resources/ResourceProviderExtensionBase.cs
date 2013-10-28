@@ -90,7 +90,11 @@ namespace Qorpent.IO.Resources {
 		/// </summary>
 		public bool IsCreateRequestSupported { get; protected set; }
 
-		/// <summary>
+	    /// <summary>
+	    ///     Поддерживает получение размера документа по Uri
+	    /// </summary>
+	    public bool GetSizeSupported { get; protected set; }
+	    /// <summary>
 		/// Проверяет возможность создания ресурса для указанного URI
 		/// </summary>
 		/// <param name="uri"></param>
@@ -98,5 +102,13 @@ namespace Qorpent.IO.Resources {
 		public virtual bool IsSupported(Uri uri) {
 			return false;
 		}
+	    /// <summary>
+	    ///     Получение размера документа по его Uri
+	    /// </summary>
+	    /// <param name="uri">Uri документа</param>
+	    /// <returns>Размер документа</returns>
+	    public virtual int GetSize(Uri uri) {
+	        throw new NotImplementedException();
+	    }
 	}
 }

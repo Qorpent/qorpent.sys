@@ -21,7 +21,7 @@ using Qorpent.Serialization;
 
 namespace Qorpent.Dsl {
 	/// <summary>
-	/// 	Describe information of source file position in Bxl file
+	/// 	Описывает информацию о позиции исходных файлов в BXL файле
 	/// </summary>
 	[Serialize]
 	public class LexInfo {
@@ -32,13 +32,13 @@ namespace Qorpent.Dsl {
 			
 		}
 		/// <summary>
-		/// 	Creates new instance of BxlLexInfo
+        /// 	Создает новый экземпляр BxlLexInfo
 		/// </summary>
-		/// <param name="filename"> source file name </param>
-		/// <param name="line"> line number </param>
-		/// <param name="col"> column number </param>
-		/// <param name="charindex"> global char index </param>
-		/// <param name="length"> length of item </param>
+		/// <param name="filename"> имя исходного файла </param>
+		/// <param name="line"> номер строки </param>
+		/// <param name="col"> номер колонки </param>
+		/// <param name="charindex"> глобальный индекс символа </param>
+		/// <param name="length"> длина элемента </param>
 		/// <param name="context"></param>
 		public LexInfo(string filename = "", int line = 0, int col = 0, int charindex = 0, int length = 0, string context =null) {
 			File = filename;
@@ -50,7 +50,7 @@ namespace Qorpent.Dsl {
 		}
 
 		/// <summary>
-		/// 	Generates readable lexinfo string
+		/// 	Создает читаемую строку lexinfo
 		/// </summary>
 		/// <returns> </returns>
 		public override string ToString() {
@@ -58,7 +58,7 @@ namespace Qorpent.Dsl {
 		}
 
 		/// <summary>
-		/// 	Generates copy of current lexinfo
+		/// 	Создает копию текущего lexinfo
 		/// </summary>
 		/// <returns> </returns>
 		public LexInfo Clone() {
@@ -66,31 +66,31 @@ namespace Qorpent.Dsl {
 		}
 
 		/// <summary>
-		/// 	Not-lined char index in whole file
+		/// 	****************************************Not-lined char index in whole file
 		/// </summary>
 		[SerializeNotNullOnly]
 		public int CharIndex;
 
 		/// <summary>
-		/// 	Column number of char in row
+		/// 	Колонка количества символов в строке
 		/// </summary>
 		[SerializeNotNullOnly]
 		public int Column;
 
 		/// <summary>
-		/// 	Source file name
+		/// 	Имя исходного файла
 		/// </summary>
 		[SerializeNotNullOnly]
 		public string File;
 
 		/// <summary>
-		/// 	Length of described code element
+        /// 	Длина описанного элемента кода
 		/// </summary>
 		[SerializeNotNullOnly]
 		public int Length;
 
 		/// <summary>
-		/// 	Line number of described code element
+		/// 	Номер строки, описываемый элементом код
 		/// </summary>
 		[SerializeNotNullOnly]
 		public int Line;
