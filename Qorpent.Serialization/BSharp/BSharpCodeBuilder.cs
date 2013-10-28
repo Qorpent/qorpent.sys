@@ -183,7 +183,7 @@ namespace Qorpent.BSharp
             WriteLevel();
             _buffer.Append(elementname.Escape(EscapingType.BxlLiteral));
             _buffer.Append(' ');
-            _buffer.Append(code);
+			_buffer.Append(code.Escape(EscapingType.BxlStringOrLiteral));
             if (!string.IsNullOrWhiteSpace(name)) {
                 _buffer.Append(' ');
                 _buffer.Append(name.Escape(EscapingType.BxlSinglelineString));

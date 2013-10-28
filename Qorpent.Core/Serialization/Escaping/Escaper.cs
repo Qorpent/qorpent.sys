@@ -31,6 +31,17 @@ namespace Qorpent.Serialization
                 {
                     return ToBxlMultiLineString(str);
                 }
+            }else if (type == EscapingType.BxlStringOrLiteral) {
+				if (string.IsNullOrEmpty(str))
+				{
+					return "\"\"";
+				}
+				if (str.IsLiteral(EscapingType.BxlLiteral ) && !str.Contains("\\")) {
+					return str;
+				}
+				
+				return ToBxlSingleLineString(str);
+				
             }
 
 

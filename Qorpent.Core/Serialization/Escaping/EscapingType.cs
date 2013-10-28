@@ -38,6 +38,9 @@ namespace Qorpent.Serialization
         /// Строка BXL c поддержкой многострочности
         /// </summary>
         BxlMultilineString = 64,
-
+		/// <summary>
+		/// Однострочка строка BXL с поддержкой режима "литерал"
+		/// </summary>
+	    BxlStringOrLiteral =128,
     }
 }

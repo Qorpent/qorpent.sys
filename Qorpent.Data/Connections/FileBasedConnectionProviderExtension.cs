@@ -49,7 +49,9 @@ namespace Qorpent.Data.Connections {
 		/// <returns></returns>
 		public IEnumerable<ConnectionDescriptor> GetConnections() {
             if(null==Files)yield break;
-			var connectiFiles = Directory.GetFiles(Files.Root, "*.db-connection", SearchOption.AllDirectories);
+			var configdir = Path.Combine(Files.Root, ".config");
+			if(!Directory.Exists(configdir))yield break;
+			var connectiFiles = Directory.GetFiles(configdir, "*.db-connection", SearchOption.AllDirectories);
 			IList<XElement> xcons = new List<XElement>();
 			foreach (var connectiFile in connectiFiles) {
 				var content = File.ReadAllText(connectiFile);
