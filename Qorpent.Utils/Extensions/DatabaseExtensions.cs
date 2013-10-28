@@ -97,7 +97,11 @@ namespace Qorpent.Utils.Extensions
 			catch (Exception ex)
 			{
 				throw new Exception("error in query:" + cmd.CommandText, ex);
-			}
+            }
+            finally
+            {
+                connection.Close();
+            }
 		}
 
 
