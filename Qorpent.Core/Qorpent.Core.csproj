@@ -232,6 +232,9 @@
     <Compile Include="Serialization\SerializerExtensions.cs" />
     <Compile Include="Serialization\XHtml5XmlWriter.cs" />
     <Compile Include="ServiceState.cs" />
+    <Compile Include="TransactionAction.cs" />
+    <Compile Include="Verdict.cs" />
+    <Compile Include="VerdictType.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
     <Compile Include="Wiki\IWikiEmptyFilter.cs" />
     <Compile Include="Wiki\IWikiGetFilter.cs" />
