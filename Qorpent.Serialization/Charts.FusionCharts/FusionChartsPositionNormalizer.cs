@@ -14,7 +14,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// </summary>
         public FusionChartsPositionNormalizer() {
             Area = ChartNormalizerArea.Labels;
-            Dependencies = new[] { FusionChartsNormalizerCodes.ScaleNormalizer };
+            AddDependency(FusionChartsNormalizerCodes.ScaleNormalizer);
         }
         /// <summary>
         ///     Нормализация чарта
