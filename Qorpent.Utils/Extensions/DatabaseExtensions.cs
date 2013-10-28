@@ -100,7 +100,7 @@ namespace Qorpent.Utils.Extensions
             }
             finally
             {
-                reader.Close();
+                connection.Close();
             }
 		}
 
