@@ -748,5 +748,17 @@ namespace Qorpent.Charts.FusionCharts {
         public static bool DatasetsExists(this IChart chart) {
             return chart.Datasets.Children.Any();
         }
+        /// <summary>
+        ///     Проверяет наличие конфига и создат его в случа отсутствия
+        /// </summary>
+        /// <param name="chart">Представление чарта</param>
+        /// <returns>Замякание на представление чарта</returns>
+        public static IChart EnsureConfig(this IChart chart) {
+            if (chart.Config == null) {
+                chart.SetConfig(new ChartConfig());
+            }
+
+            return chart;
+        }
     }
 }

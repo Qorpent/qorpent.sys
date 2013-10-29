@@ -44,6 +44,10 @@ namespace Qorpent.Charts.FusionCharts {
                 return;
             }
 
+            if (chart.Config == null) {
+                return;
+            }
+
             var canvas = new Canvas(0, chart.Config.Width.ToInt(), yAxis.MinValue, yAxis.MaxValue);
             canvas.Scale(chart.Config.Width.ToInt(), chart.Config.Height.ToInt());
 
