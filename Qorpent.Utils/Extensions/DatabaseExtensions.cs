@@ -98,10 +98,6 @@ namespace Qorpent.Utils.Extensions
 			{
 				throw new Exception("error in query:" + cmd.CommandText, ex);
             }
-            finally
-            {
-                connection.Close();
-            }
 		}
 
 
