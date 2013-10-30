@@ -45,5 +45,50 @@ namespace Qorpent.Charts {
         ///     Признак того, что нужно использовать скалинг значений по умолчанию.
         /// </summary>
         bool UseDefaultScaling { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        string MaxValue { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        string MinValue { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        ChartShowValuesAs ShowValuesAs { get; set; }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum ChartShowValuesAs {
+        /// <summary>
+        ///     Как есть
+        /// </summary>
+        AsIs,
+        /// <summary>
+        ///     Десятки
+        /// </summary>
+        Tens,
+        /// <summary>
+        ///     сотни
+        /// </summary>
+        Hundreds,
+        /// <summary>
+        ///     Тысячи
+        /// </summary>
+        Thousands,
+        /// <summary>
+        ///     Десятки тысяч
+        /// </summary>
+        TensOfThousands,
+        /// <summary>
+        ///     Сотни тысяч
+        /// </summary>
+        HundredsOfThousands,
+        /// <summary>
+        ///     Миллионы
+        /// </summary>
+        Millions
     }
 }

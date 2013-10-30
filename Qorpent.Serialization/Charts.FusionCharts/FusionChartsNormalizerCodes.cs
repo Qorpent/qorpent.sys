@@ -23,5 +23,9 @@
         ///     Нормализатор представлени значений шкал
         /// </summary>
         public const int ScalingNormalizer = 4;
+        /// <summary>
+        /// 
+        /// </summary>
+        public const int FusionChartsValuesNormalizer = 5;
     }
 }

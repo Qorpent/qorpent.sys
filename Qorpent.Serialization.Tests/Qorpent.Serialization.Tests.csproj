@@ -28,6 +28,7 @@
     <Compile Include="bxl_serializer_test.cs" />
     <Compile Include="CanvasTests.cs" />
     <Compile Include="ChartExtensionsTests.cs" />
+    <Compile Include="Charts\NormalizerTests.cs" />
     <Compile Include="coverage_only_tests.cs" />
     <Compile Include="DefaultSelectorTests.cs" />
     <Compile Include="Dot\ColorTest.cs" />

@@ -60,7 +60,8 @@ namespace Qorpent.Charts.FusionCharts {
             new FusionChartsAnchorsNormalizer(),
             new FusionChartsColorNormalizer(),
             new FusionChartsNumberScalingNormalizer(),
-            new FusionChartsPositionNormalizer()
+            new FusionChartsPositionNormalizer(),
+            new FusionChartsValuesNormalizer()
         };
         /// <summary>
         ///     Перечисление нормалайзеров
@@ -136,6 +137,11 @@ namespace Qorpent.Charts.FusionCharts {
         private ChartNormalizeSchedule MakeSchedule(IChart chart, IDictionary<int, IConfig> config) {
             var schedule = new ChartNormalizeSchedule(chart);
 
+            GetRequestedNormalizers().Where(_ => !_.Dependencies.Any()).DoForEach(_ => {
+                SetupNormalizer(_);
+                schedule.AddNormalizer(_);
+            });
+
             GetRequestedNormalizers().DoForEach(
                 _ => ResolveDependence(schedule, _)
             ).DoForEach(
@@ -156,12 +162,18 @@ namespace Qorpent.Charts.FusionCharts {
             }
 
             if (schedule.NormalizerExists(normalizer.Dependencies.ToArray())) {
-                schedule.AddNormalizer(normalizer);
+                if (!schedule.GetNormalizerCodes().Contains(normalizer.Code)) {
+                    schedule.AddNormalizer(normalizer);
+                }
+
                 return;
             }
 
+            var nextNormalizers = schedule.UnexistingNormalizers(normalizer.Dependencies).Where(_ => _.Dependencies.IsIn(schedule.GetNormalizerCodes()));
+
+
             var requestedNormalizer = Normalizers.FirstOrDefault(
-                _ => _.Code == schedule.UnexistingNormalizers(normalizer.Dependencies).FirstOrDefault()
+                _ => _.Code == nextNormalizers.FirstOrDefault().Code
             );
 
             if (requestedNormalizer == null) {
@@ -289,8 +301,8 @@ namespace Qorpent.Charts.FusionCharts {
         /// </summary>
         /// <param name="codes">Коды нормалайзеров для проверки</param>
         /// <returns>Коды нормалайзеров, не существующих в данном контексте</returns>
-        public IEnumerable<int> UnexistingNormalizers(IEnumerable<int> codes) {
-            return codes.Where(_ => GetNormalizerCodes().Contains(_));
+        public IEnumerable<IChartNormalizer> UnexistingNormalizers(IEnumerable<int> codes) {
+            return _normalizers.Where(_ => GetNormalizerCodes().Contains(_.Code));
         }
     }
 }

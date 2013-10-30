@@ -40,6 +40,7 @@ namespace Qorpent.Charts.FusionCharts {
             result.SetAttr(FusionChartApi.Chart_ValuePadding, _chart.GetValuePadding() != 0 ? _chart.GetValuePadding().ToString() : null);
             result.SetAttr(FusionChartApi.Chart_BorderColor, _chart.GetBorderColor());
             result.SetAttr(FusionChartApi.Chart_BorderThickness, _chart.GetBorderThickness() != 0 ? _chart.GetBorderThickness().ToString() : null);
+            result.SetAttr(FusionChartApi.Chart_CanvasPadding, _chart.GetCavasPadding());
 
             SetAttrs(_chart, result, new[] {
                 FusionChartApi.Chart_LegendPosition,
@@ -103,7 +104,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="config"></param>
         /// <returns></returns>
         private IEnumerable<XElement> RenderDatasetSets(IChartDataset dataset, IChartConfig config) {
-            return dataset.Children.Select(_ => _.AsFusion(config).GetXmlElement().SetAttr(FusionChartApi.Set_ShowValue, _.GetShowValue() ? "1" : "0"));
+            return dataset.Children.Select(_ => _.AsFusion(config).GetXmlElement());
         }
         /// <summary>
         ///     Разрисовка категорий графика

@@ -16,15 +16,29 @@ namespace Qorpent.Charts {
         ///     Ширина чарта
         /// </summary>
         public string Width {
-            get { return Get<string>(ChartDefaults.ChartWidthAttributeName); }
+            get { return Get(ChartDefaults.ChartWidthAttributeName, "800"); }
             set { Set(ChartDefaults.ChartWidthAttributeName, value); }
         }
         /// <summary>
         ///     Высота чарта
         /// </summary>
         public string Height {
-            get { return Get<string>(ChartDefaults.ChartHeightAttributeName); }
+            get { return Get(ChartDefaults.ChartHeightAttributeName, "300"); }
             set { Set(ChartDefaults.ChartHeightAttributeName, value); }
+        }
+        /// <summary>
+        ///     Максимальное значение чарта
+        /// </summary>
+        public string MaxValue {
+            get { return Get<string>(ChartDefaults.ChartMaxValueAttributeName); }
+            set { Set(ChartDefaults.ChartMaxValueAttributeName, value); }
+        }
+        /// <summary>
+        ///     Минимальное значение чарта
+        /// </summary>
+        public string MinValue {
+            get { return Get<string>(ChartDefaults.ChartMinValueAttributeName); }
+            set { Set(ChartDefaults.ChartMinValueAttributeName, value); }
         }
         /// <summary>
         ///     Режим отладки чарта
@@ -70,6 +84,13 @@ namespace Qorpent.Charts {
             set { Set(ChartDefaults.FitAxis, value); }
         }
         /// <summary>
+        ///     Указывает как показывать число
+        /// </summary>
+        public ChartShowValuesAs ShowValuesAs {
+            get { return Get<ChartShowValuesAs>(ChartDefaults.ShowValuesAs); }
+            set { Set(ChartDefaults.ShowValuesAs, value); }
+        }
+        /// <summary>
         ///     Признак того, что нужно использовать скалинг значений по умолчанию.
         /// </summary>
         public bool UseDefaultScaling { get; set; }
@@ -78,6 +99,7 @@ namespace Qorpent.Charts {
         /// </summary>
         public ChartConfig() {
             FitAxis = true;
+            ShowValuesAs = ChartShowValuesAs.AsIs;
         }
     }
 }

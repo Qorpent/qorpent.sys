@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
@@ -195,6 +194,15 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Заголовок графика</returns>
         public static string GetCaption(this IChart chart) {
             return chart.Get<string>(FusionChartApi.Chart_Caption);
+        }
+        /// <summary>
+        ///     Возвращает тип графика
+        /// </summary>
+        /// <param name="chart">Представлине графика</param>
+        /// <returns>Тип графика</returns>
+        public static FusionChartType GetChartType(this IChart chart) {
+            chart.EnsureConfig();
+            return chart.Config.Type.To<FusionChartType>();
         }
         /// <summary>
         ///     Установка имени X оси
@@ -647,6 +655,23 @@ namespace Qorpent.Charts.FusionCharts {
             return dataItem.Set<IChartDataItem>(FusionChartApi.Set_ShowValue, showLabel);
         }
         /// <summary>
+        ///     Установа паддинга канвы чарта
+        /// </summary>
+        /// <param name="chart">Представление чарта</param>
+        /// <param name="canvasPadding">Паддинг канвы</param>
+        /// <returns>Замыкание на чарт</returns>
+        public static IChart SetCavasPadding(this IChart chart, double canvasPadding) {
+            return chart.Set<IChart>(FusionChartApi.Chart_CanvasPadding, canvasPadding);
+        }
+        /// <summary>
+        ///     Получение паддинга канвы чарта
+        /// </summary>
+        /// <param name="chart">Представление чарта</param>
+        /// <returns>Паддинг канвы</returns>
+        public static double GetCavasPadding(this IChart chart) {
+            return chart.Get<double>(FusionChartApi.Chart_CanvasPadding);
+        }
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="dataItem"></param>
@@ -753,12 +778,12 @@ namespace Qorpent.Charts.FusionCharts {
         /// </summary>
         /// <param name="chart">Представление чарта</param>
         /// <returns>Замякание на представление чарта</returns>
-        public static IChart EnsureConfig(this IChart chart) {
+        public static IChartConfig EnsureConfig(this IChart chart) {
             if (chart.Config == null) {
                 chart.SetConfig(new ChartConfig());
             }
 
-            return chart;
+            return chart.Config;
         }
     }
 }

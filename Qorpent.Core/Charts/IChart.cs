@@ -29,14 +29,9 @@ namespace Qorpent.Charts {
     /// <summary>
     /// 
     /// </summary>
-    public interface IChartRootElement:IChartElement<IChart> {
-        
-    }
+    public interface IChartRootElement:IChartElement<IChart> { }
     /// <summary>
     /// Абстракция корневого элемента чарта
     /// </summary>
-    public interface IChartRootElement<C> : IChartRootElement,IChartElementList<IChart, C> where C : IChartElement
-    {
-        
-    }
+    public interface IChartRootElement<C> : IChartRootElement,IChartElementList<IChart, C> where C : IChartElement {}
 }

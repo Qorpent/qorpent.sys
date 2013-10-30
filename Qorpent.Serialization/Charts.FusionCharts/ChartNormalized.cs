@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts.FusionCharts {
     /// <summary>
-    /// 
+    ///     јбстрактное представление нормалзованного чарта потипу разр€жЄнного массива
     /// </summary>
     public class ChartNormalized : IChartNormalized {
-        private readonly IList<ChartAbstractScale> _scales;
-        private readonly IDictionary<IChartElement, IDictionary<string, object>> _fixedAttributes;
+        private readonly IList<ChartAbstractScale> _scales = new List<ChartAbstractScale>();
+        private readonly IDictionary<IChartElement, IDictionary<string, object>> _fixedAttributes = new Dictionary<IChartElement, IDictionary<string, object>>();
+        private readonly IChart _snappedChart;
         /// <summary>
         ///     ѕредставление списка исправленных атрибутов
         /// </summary>
@@ -23,9 +25,20 @@ namespace Qorpent.Charts.FusionCharts {
         /// <summary>
         ///     ѕредставление нормализованного чарта
         /// </summary>
-        public ChartNormalized() {
-            _scales = new List<ChartAbstractScale>();
-            _fixedAttributes = new Dictionary<IChartElement, IDictionary<string, object>>();
+        public ChartNormalized() { }
+        /// <summary>
+        ///     »нициализирует класс с переносом контекста чарта в его абстрактное представление
+        /// </summary>
+        /// <param name="chart">„арт</param>
+        public ChartNormalized(IChart chart) {
+            _snappedChart = chart;
+
+            // копируем представление сетов датасетов в контекст
+            chart.Datasets.Children.SelectMany(_ => _.Children).DoForEach(_ => _.DoForEach(__ => AddFixedAttribute(_, __.Key, __.Value)));
+            // копируем представление трендлайнов в контекст
+            chart.TrendLines.Children.DoForEach(_ => _.DoForEach(__ => AddFixedAttribute(_, __.Key, __.Value)));
+            chart.Datasets.Children.DoForEach(_ => _.DoForEach(__ => AddFixedAttribute(_, __.Key, __.Value)));
+            chart.DoForEach(_ => AddFixedAttribute(chart, _.Key, _.Value));
         }
         /// <summary>
         ///     ѕрименение нолрмализованных параметров к переданному чурта
@@ -47,6 +60,13 @@ namespace Qorpent.Charts.FusionCharts {
             }
 
             return chart;
+        }
+        /// <summary>
+        ///     ¬озвращает чарт, к которому прив€зано представление
+        /// </summary>
+        /// <returns>„арт, к которому прив€зан чарт</returns>
+        public IChart GetSnappedChart() {
+            return _snappedChart;
         }
         /// <summary>
         ///     ƒобавление шкалы 
@@ -71,6 +91,37 @@ namespace Qorpent.Charts.FusionCharts {
             } else {
                 _fixedAttributes[element].Add(attribute, value);
             }
+        }
+        /// <summary>
+        ///     ¬озвращает перечисление всех атрибутов по родителю
+        /// </summary>
+        /// <param name="parent">–одительский элемент-владалец</param>
+        /// <returns>—ловарь исправленных атрибутов</returns>
+        public IDictionary<string, object> GetFixedAttributes(IChartElement parent) {
+            return FixedAttributes.ContainsKey(parent) ? FixedAttributes[parent] : null;
+        }
+        /// <summary>
+        ///     ¬озвращает перечисление всех исправленных атрибутов по имени
+        /// </summary>
+        /// <typeparam name="T">“ипизаци€</typeparam>
+        /// <param name="attribute">»м€ атрибута</param>
+        /// <returns>ѕеречисление исправленных атрибутов</returns>
+        public IEnumerable<T> GetFixedAttributes<T>(string attribute) {
+            return FixedAttributes.Where(_ => _.Value.ContainsKey(attribute)).Select(_ => (T)_.Value[attribute]);
+        }
+        /// <summary>
+        ///     ¬озвращает перечисление всех исправленных атрибутов по имени и типу родител€
+        /// </summary>
+        /// <typeparam name="TP">“ип родител€</typeparam>
+        /// <typeparam name="T">“ипизаци€ значени€</typeparam>
+        /// <param name="attribute">»м€ атрибута</param>
+        /// <returns>ѕеречисление исправленных атрибутов</returns>
+        public IEnumerable<T> GetFixedAttributes<TP, T>(string attribute) {
+            return FixedAttributes.Where(
+                _ => (_.Key is TP) && (_.Value.ContainsKey(attribute))
+            ).Select(
+                _ => (T)_.Value[attribute]
+            );
         }
     }
 }

@@ -114,5 +114,17 @@
         /// 
         /// </summary>
         public const string TrendLineDisplayValue = "TrendLineDisplayValue";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string ShowValuesAs = "ShowValuesAs";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string ChartMaxValueAttributeName = "ChartMaxValueAttributeName";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string ChartMinValueAttributeName = "ChartMinValueAttributeName";
     }
 }
