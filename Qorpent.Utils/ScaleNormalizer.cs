@@ -435,7 +435,15 @@ namespace Qorpent.Utils {
     /// <summary>
     /// 
     /// </summary>
-    public class ScaleNormalizeClause {
+    public class ScaleNormalizeClause : ConfigBase {
+        /// <summary>
+        ///     Признак того, что минимальное значение было утсановлено
+        /// </summary>
+        private bool _isMinimalValueSet;
+        /// <summary>
+        ///     Признак того, что максимальное значение было установлено
+        /// </summary>
+        private bool _isMaximalValueSet;
         /// <summary>
         ///     Признак того, что нужно использовать установленное минимальное значение
         /// </summary>
@@ -444,29 +452,38 @@ namespace Qorpent.Utils {
         ///     Признак того, что нужно использовать установленное максимальное значение
         /// </summary>
         public bool UseMaximalValue { get; set; }
+
         /// <summary>
         ///     Минимальное значение
         /// </summary>
-        public double MinimalValue { get; private set; }
+        public double MinimalValue {
+            get {
+                if (!_isMinimalValueSet) {
+                    throw new Exception("The minimal value was not set");
+                }
+
+                return Get<double>("MinimalValue");
+            }
+            set {
+                _isMinimalValueSet = true;
+                Set("MinimalValue", value);
+            }
+        }
         /// <summary>
         ///     Максимальное значение
         /// </summary>
-        public double MaximalValue { get; private set; }
-        /// <summary>
-        ///     Установка минимального значения
-        /// </summary>
-        /// <param name="minimal">Минимальное значение</param>
-        public void SetMinimalValue(double minimal) {
-            UseMinimalValue = true;
-            MinimalValue = minimal;
-        }
-        /// <summary>
-        ///     Установка максимального значения
-        /// </summary>
-        /// <param name="maximal">Максимальное значение</param>
-        public void SetMaximalValue(double maximal) {
-            UseMaximalValue = true;
-            MaximalValue = maximal;
+        public double MaximalValue {
+            get {
+                if (!_isMaximalValueSet) {
+                    throw new Exception("The maximal value was not set");
+                }
+
+                return Get<double>("MaximalValue");
+            }
+            set {
+                _isMaximalValueSet = true;
+                Set("MaximalValue", value);
+            }
         }
     }
 }
