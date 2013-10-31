@@ -25,6 +25,7 @@ namespace Qorpent.Charts.FusionCharts {
             normalized.AddScale(NormalizeYAxis(chart, normalized));
             return normalized;
         }
+
         /// <summary>
         ///     Производит прокат операции нормализации Y оси чарта
         /// </summary>
@@ -38,16 +39,24 @@ namespace Qorpent.Charts.FusionCharts {
                 MinValue = 0.0
             };
 
-            if (!string.IsNullOrWhiteSpace(chart.Config.MinValue) && !string.IsNullOrWhiteSpace(chart.Config.MaxValue)) {
-                abstractScale.MinValue = Convert.ToDouble(chart.Config.MinValue);
-                abstractScale.MaxValue = Convert.ToDouble(chart.Config.MaxValue);
+            if (!string.IsNullOrWhiteSpace(chart.Config.MinValue) || !string.IsNullOrWhiteSpace(chart.Config.MaxValue)) {
+                if (!string.IsNullOrWhiteSpace(chart.Config.MinValue)) {
+                    abstractScale.MinValue = Convert.ToDouble(chart.Config.MinValue);
+                }
+
+                if (!string.IsNullOrWhiteSpace(chart.Config.MaxValue)) {
+                    abstractScale.MaxValue = Convert.ToDouble(chart.Config.MaxValue);
+                }
             } else {
                 NormalizeLeftY(normalized, abstractScale);
             }
 
             abstractScale.NumDivLines = NormalizeNumDivlines(abstractScale);
+            if (abstractScale.NumDivLines <= 0) {
+                abstractScale.NumDivLines = 1;
+            }
 
-            return abstractScale;
+    return abstractScale;
         }
         private void NormalizeLeftY(IChartNormalized normalized, ChartAbstractScale abstractScale) {
             var min = Convert.ToDouble(normalized.GetFixedAttributes<IChartDataItem, decimal>(FusionChartApi.Set_Value).Min());

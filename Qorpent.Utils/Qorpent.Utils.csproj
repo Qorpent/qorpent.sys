@@ -60,6 +60,7 @@
     <Compile Include="LogicalExpressions\LogicalExpressionEvaluator.cs" />
     <Compile Include="LogicalExpressions\LogicalExpressionParser.cs" />
     <Compile Include="ParamMappingHelper.cs" />
+    <Compile Include="ScaleNormalizer.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="Extensions\TagHelper.cs" />
     <Compile Include="StringInterpolation.cs" />

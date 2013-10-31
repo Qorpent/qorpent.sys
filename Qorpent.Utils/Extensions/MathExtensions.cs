@@ -133,5 +133,6 @@ namespace Qorpent.Utils.Extensions {
         public static int Minimal(this int f, int s) {
             return (f * 1.0).Minimal(s * 1.0).ToInt();
         }
+        
     }
 }
