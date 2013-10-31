@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
@@ -76,9 +77,12 @@ namespace Qorpent.Utils {
         /// <returns></returns>
         private void GetApproximatedVariants(ApproximatedScaleLimits approximated) {
             var withFractions = approximated.BorderValue > 1 || approximated.BorderValue < -1;
+
             var step = approximated.BorderValue/20;
-            var minimals = SlickNumbers.GenerateLine(approximated.Minimal - approximated.BorderValue, approximated.Minimal, step);
-            var maximals = SlickNumbers.GenerateLine(approximated.Maximal, approximated.Maximal + approximated.BorderValue, step);
+            step = step.RoundDown(step.GetNumberOfDigits() - 1);
+
+            var minimals = SlickNumbers.GenerateLine(approximated.Minimal - step*20, approximated.Minimal, step);
+            var maximals = SlickNumbers.GenerateLine(approximated.Maximal, approximated.Maximal + step*20, step);
 
             if (!withFractions) {
                 minimals = minimals.Select(Math.Floor);
