@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
@@ -10,6 +9,26 @@ namespace Qorpent.Utils {
     ///     Утилита нормализации шкал для FusionCharts
     /// </summary>
     public class ScaleNormalizer {
+        /// <summary>
+        ///     Код шага базовой аппроксимации
+        /// </summary>
+        public const int BaseApproximationCode = 0;
+        /// <summary>
+        ///     Код шага получения вариантов нормализации
+        /// </summary>
+        public const int GetApproximatedVariantsCode = 1;
+        /// <summary>
+        ///     Код шага улучшения полученных вариантов нормализации
+        /// </summary>
+        public const int ImproveApproximatedVariantsCode = 2;
+        /// <summary>
+        ///     Код шага сборки полученных вариантов нормализации
+        /// </summary>
+        public const int BuildFinalVariantsCode = 3;
+        /// <summary>
+        ///     Код шага выборки рекомендованного варианта нормализации
+        /// </summary>
+        public const int SelectFinalVariantCode = 4;
         /// <summary>
         ///     Производит нормалзацию шкалы
         /// </summary>
@@ -82,23 +101,34 @@ namespace Qorpent.Utils {
             return Normalize(values.ToArray());
         }
         /// <summary>
+        ///     Производит добивку коллекции модулей нормализаци системными вариантами для более тонкой нормализации
+        ///     на разных шагах
+        /// </summary>
+        /// <param name="clause">Исходный запрос на нормализацию</param>
+        private void InsertBaseAppendixes(ScaleNormalizeClause clause) {
+            if (!clause.RunSlickNormalization) {
+                return;
+            }
+        }
+        /// <summary>
         ///     Возвращает перечисление шагов нормализации шкалы
         /// </summary>
         /// <returns>Перечисление шагов нормализации шкалы</returns>
         private IEnumerable<KeyValuePair<int, Action<ApproximatedScaleLimits>>> GetApproximationSteps() {
-            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(0, BaseApproximation);
-            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(1, GetApproximatedVariants);
-            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(2, ImproveApproximatedVariants);
-            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(3, BuildFinalVariants);
-            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(4, SelectFinalVariant);
+            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(BaseApproximationCode, BaseApproximation);
+            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(GetApproximatedVariantsCode, GetApproximatedVariants);
+            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(ImproveApproximatedVariantsCode, ImproveApproximatedVariants);
+            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(BuildFinalVariantsCode, BuildFinalVariants);
+            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(SelectFinalVariantCode, SelectFinalVariant);
         }
         /// <summary>
-        ///     
+        ///     Подготавливает базу для нормализации
         /// </summary>
-        /// <param name="clause"></param>
-        /// <param name="baseValues"></param>
-        /// <returns></returns>
+        /// <param name="clause">Исходный запрос на нормализацию</param>
+        /// <param name="baseValues">Перечисление базовых значений</param>
+        /// <returns>Представление аппроксимированной и улучшенной шкалы</returns>
         private ApproximatedScaleLimits GetApproximatedBase(ScaleNormalizeClause clause, IEnumerable<double> baseValues) {
+            InsertBaseAppendixes(clause);
             return new ApproximatedScaleLimits(clause, baseValues, new ScaleNormalized(clause));
         }
         /// <summary>
@@ -585,7 +615,7 @@ namespace Qorpent.Utils {
         public int Divline { get; set; }
     }
     /// <summary>
-    /// 
+    ///     Представление запроса на нормалзацию
     /// </summary>
     public class ScaleNormalizeClause : ConfigBase {
         /// <summary>
@@ -608,6 +638,11 @@ namespace Qorpent.Utils {
         ///     Признак того, что нужно использовать установленное максимальное значение
         /// </summary>
         public bool UseMaximalValue { get; set; }
+        /// <summary>
+        ///     Признак того, что нужно проводить тонкую нормализацию при помощи дополнительных <see cref="Appendixes"/>,
+        ///     вставляемых компилятором плана нормализации
+        /// </summary>
+        public bool RunSlickNormalization { get; set; }
         /// <summary>
         ///     Дополнительные действия, запускаемые каждый раз после выполнения шага с указанным кодом
         /// </summary>
@@ -645,6 +680,12 @@ namespace Qorpent.Utils {
                 _isMaximalValueSet = true;
                 Set("MaximalValue", value);
             }
+        }
+        /// <summary>
+        ///     Представление запроса на нормалзацию
+        /// </summary>
+        public ScaleNormalizeClause() {
+            RunSlickNormalization = true;
         }
         /// <summary>
         ///     Добавление дополнительного действия в коллекцию

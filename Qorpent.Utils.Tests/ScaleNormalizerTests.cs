@@ -25,7 +25,7 @@ namespace Qorpent.Utils.Tests {
         /// <param name="expectedMin">Ожидаемое минимальное значение чарта</param>
         /// <param name="expectedMax">Ожидаемое максимальное значение чарта</param>
         /// <param name="divline">Количество дивлайнов</param>
-        [TestCase("2139,2066,1870,1854,1882,1823,1870,2033,2129,1936,1853,1829,1841,2033", 1800.0, 2200.0, 3.0)]
+        [TestCase("2139,2066,1870,1854,1882,1823,1870,2033,2129,1936,1853,1829,1841,2033", 1700.0, 2300.0, 3.0)]
         [TestCase("200,500,250,233,286", 0, 600, 5)]
         [TestCase("216790,238688,103771,192571,105145,38828", 0, 250000, 5)]
         public void CanUseDefaultNormalizer(string dataRow, double expectedMin, double expectedMax, double divline) {
