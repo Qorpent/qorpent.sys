@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
@@ -64,8 +63,9 @@ namespace Qorpent.Utils {
             var maximals = approximated.Maximals;
             var minimals = approximated.Minimals;
 
-            maximals = maximals.Select(_ => _.RoundUp(_.GetNumberOfDigits() - 1).ToDouble());
-            minimals = minimals.Select(_ => _.RoundDown(_.GetNumberOfDigits() - 1).ToDouble());
+            //  немного улучшим значения округлениями и зачистим от повторов, использую Distinct()
+            maximals = maximals.Select(_ => _.RoundUp(_.GetNumberOfDigits() - 1).ToDouble()).Distinct().ToList();
+            minimals = minimals.Select(_ => _.RoundDown(_.GetNumberOfDigits() - 1).ToDouble()).Distinct().ToList();
 
             approximated.SetMaximals(maximals);
             approximated.SetMinimals(minimals);
@@ -81,8 +81,25 @@ namespace Qorpent.Utils {
             var step = approximated.BorderValue/20;
             step = step.RoundDown(step.GetNumberOfDigits() - 1);
 
-            var minimals = SlickNumbers.GenerateLine(approximated.Minimal - step*20, approximated.Minimal, step);
-            var maximals = SlickNumbers.GenerateLine(approximated.Maximal, approximated.Maximal + step*20, step);
+            var minimals = SlickNumbers.GenerateLine(
+                approximated.Minimal - step*20,
+                (approximated.Minimal < 1000)
+                    ?
+                (approximated.Minimal.RoundDown(approximated.Minimal.GetNumberOfDigits()) - step)
+                    :
+                (approximated.Minimal + step * 20),
+                step
+            );
+
+            var maximals = SlickNumbers.GenerateLine(
+                approximated.Maximal,
+                (approximated.Maximal < 1000)
+                    ?
+                (approximated.Maximal.RoundUp(approximated.Maximal.GetNumberOfDigits()) + step)
+                    :
+                (approximated.Maximal + step * 20),
+                step
+            );
 
             if (!withFractions) {
                 minimals = minimals.Select(Math.Floor);
@@ -125,7 +142,27 @@ namespace Qorpent.Utils {
         /// </summary>
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         private void BuildFinalVariants(ApproximatedScaleLimits approximated) {
-            throw new NotImplementedException();
+            foreach (var maximal in approximated.Maximals) {
+                foreach (var minimal in approximated.Minimals) {
+                    var delta = maximal - minimal;
+                    var divider = Math.Pow(10, delta.GetNumberOfDigits() - 2);
+                    var rez = delta%divider;
+                    if (rez == 0.0) {
+                        var res = delta/divider;
+                        if (res % 3 == 0.0) {
+                            approximated.AddVariant(minimal, maximal, (res / 3).ToInt());
+                        }
+
+                        if (res % 6 == 0.0) {
+                            approximated.AddVariant(minimal, maximal, (res / 6).ToInt());
+                        }
+
+                        if (res % 5 == 0.0) {
+                            approximated.AddVariant(minimal, maximal, (res / 5).ToInt());
+                        }
+                    }
+                }
+            }
         }
         /// <summary>
         ///     Выбирает финальный вариант из всех представленных в качестве рекомендованного
