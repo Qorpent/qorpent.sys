@@ -18,7 +18,7 @@ namespace Qorpent.Utils {
         public ScaleNormalized Normalize(ScaleNormalizeClause clause, IEnumerable<double> values) {
             var approximated = new ApproximatedScaleLimits(clause, values, new ScaleNormalized(clause));
 
-            MatchApproximatedLimits(approximated);
+            BaseApproximation(approximated);
             GetApproximatedVariants(approximated);
             ImproveApproximatedVariants(approximated);
             BuildFinalVariants(approximated);
@@ -64,24 +64,46 @@ namespace Qorpent.Utils {
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         /// <returns></returns>
         private void GetApproximatedVariants(ApproximatedScaleLimits approximated) {
-            throw new NotImplementedException();
+            var withFractions = approximated.BorderValue > 0;
+            var step = approximated.BorderValue/20;
+            var minimals = SlickNumbers.GenerateLine(approximated.Minimal - approximated.BorderValue, approximated.Minimal, step);
+            var maximals = SlickNumbers.GenerateLine(approximated.Maximal, approximated.Maximal + approximated.BorderValue, step);
+
+            if (!withFractions) {
+                minimals = minimals.Select(Math.Floor);
+                maximals = maximals.Select(Math.Floor);
+            }
+
+            approximated.SetMinimals(minimals);
+            approximated.SetMaximals(maximals);
         }
         /// <summary>
         ///     Подсчитывает приблизительные пределы, округляя нижнее и верхнее значение
         /// </summary>
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private void MatchApproximatedLimits(ApproximatedScaleLimits approximated) {
+        private void BaseApproximation(ApproximatedScaleLimits approximated) {
+            var maxDispersion = SlickNumbers.MaxDispersion(approximated.BaseValues);
+            var minimal = approximated.BaseValues.Min();
+            var maximal = approximated.BaseValues.Max();
+            var mborder = (maximal - minimal)/5; // граничное значение — 20% от разрыва между минимальным и максимальным
+
             if (approximated.Clause.UseMinimalValue) {
                 approximated.Minimal = approximated.Clause.MinimalValue;
             } else {
-                
+                if ((mborder >= maxDispersion) && (minimal >= 0)) {
+                    approximated.Minimal = 0; // если разрыв слишком большой и значения больше нуля, то нижняя граница 0
+                } else {
+                    approximated.Minimal = minimal.RoundDown(minimal.GetNumberOfDigits() - 1);
+                }
             }
 
             if (approximated.Clause.UseMaximalValue) {
                 approximated.Maximal = approximated.Clause.MaximalValue;
             } else {
-                
+                approximated.Maximal = maximal.RoundUp(maximal.GetNumberOfDigits() - 1);
             }
+
+            approximated.BorderValue = mborder;
         }
         /// <summary>
         ///     Собирает конечные варианты нормализации
@@ -111,6 +133,10 @@ namespace Qorpent.Utils {
         /// </summary>
         private bool _isMaximalSet;
         /// <summary>
+        ///     Признак того, что граничное значение установлено
+        /// </summary>
+        private bool _isBorderValueSet;
+        /// <summary>
         ///     Указатель на кляузу, к которой относятся лимиты
         /// </summary>
         public ScaleNormalizeClause Clause { get; private set; }
@@ -130,6 +156,10 @@ namespace Qorpent.Utils {
                 return Get<double>("Minimal");
             }
             set {
+                if (_isMinimalSet) {
+                    throw new Exception("The minimal value was already set"); // логика проста: дальше — только варианты
+                }
+
                 _isMinimalSet = true;
                 Set("Minimal", value);
             }
@@ -146,8 +176,32 @@ namespace Qorpent.Utils {
                 return Get<double>("Maximal");
             }
             set {
+                if (_isMaximalSet) {
+                    throw new Exception("The maximal values was already set"); // логика проста: дальше — только варианты
+                }
+
                 _isMaximalSet = true;
                 Set("Maximal", value);
+            }
+        }
+        /// <summary>
+        ///     Граничное значение
+        /// </summary>
+        public double BorderValue {
+            get {
+                if (!_isBorderValueSet) {
+                    throw new Exception("The border value value was not set"); // логика проста: дальше — только варианты
+                }
+
+                return Get<double>("BorderValue");
+            }
+            set {
+                if (_isBorderValueSet) {
+                    throw new Exception("The border value was already set");
+                }
+
+                _isBorderValueSet = true;
+                Set("BorderValue", value);
             }
         }
         /// <summary>
@@ -210,19 +264,26 @@ namespace Qorpent.Utils {
     /// </summary>
     public static class SlickNumbers {
         /// <summary>
-        /// 
+        ///     Генерирует ряд из чисел с шагом
         /// </summary>
-        /// <param name="d"></param>
+        /// <param name="from">Начало ряда (включительно)</param>
+        /// <param name="to">Предел ряда ряда</param>
+        /// <param name="step">Шаг</param>
         /// <returns></returns>
-        public static double GetFraction(double d) {
-            var doubleString = d.ToString();
-            var lastIndex = doubleString.LastIndexOf(".");
-            double result = 0;
-            if (lastIndex > 0) {
-                var s = doubleString.Substring(lastIndex, doubleString.Length - lastIndex);
-                result = Convert.ToDouble(s);
+        public static IEnumerable<double> GenerateLine(double from, double to, double step) {
+            if (Math.Abs(step - (double.MinValue - double.MaxValue)) <= 0) {
+                throw new Exception("Infinity loop detected");
             }
-            return result;
+
+            if (to < from) {
+                throw new Exception("Infinity loop detected");
+            }
+
+            var current = from;
+            while (current <= to) {
+                yield return current;
+                current += step;
+            }
         }
         /// <summary>
         /// 
