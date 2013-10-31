@@ -369,6 +369,10 @@ namespace Qorpent.Utils {
     /// </summary>
     public class ScaleNormalized {
         /// <summary>
+        ///     Рекомендованный вариант
+        /// </summary>
+        private ScaleNormalizedVariant _recommendedVariant;
+        /// <summary>
         ///     Внутренний список вариантов
         /// </summary>
         private readonly IList<ScaleNormalizedVariant> _variants = new List<ScaleNormalizedVariant>();
@@ -377,22 +381,28 @@ namespace Qorpent.Utils {
         /// </summary>
         public ScaleNormalizeClause Clause { get; private set; }
         /// <summary>
+        ///     Рекомендованный вариант
+        /// </summary>
+        public ScaleNormalizedVariant RecommendedVariant {
+            get { return _recommendedVariant; }
+        }
+        /// <summary>
         ///     Максимальное зачение шкалы
         /// </summary>
         public double Maximal {
-            get { return Variants.FirstOrDefault().Maximal; }
+            get { return _recommendedVariant.Maximal; }
         }
         /// <summary>
         ///     Минимальное значение шкалы
         /// </summary>
         public double Minimal {
-            get { return Variants.FirstOrDefault().Minimal; }
+            get { return _recommendedVariant.Minimal; }
         }
         /// <summary>
         ///     Количество дивлайнов
         /// </summary>
         public int Divline {
-            get { return Variants.FirstOrDefault().Divline; }
+            get { return _recommendedVariant.Divline; }
         }
         /// <summary>
         ///     Класс, представляющий нормализованную шкалу
@@ -413,6 +423,13 @@ namespace Qorpent.Utils {
         /// <param name="variant">Вариант</param>
         public void AddVariant(ScaleNormalizedVariant variant) {
             _variants.Add(variant);
+        }
+        /// <summary>
+        ///     Установка рекомендованного варианта
+        /// </summary>
+        /// <param name="recommendedVariant">Рекомендованный вариант</param>
+        public void SetRecommendedVariant(ScaleNormalizedVariant recommendedVariant) {
+            _recommendedVariant = recommendedVariant;
         }
     }
     /// <summary>
