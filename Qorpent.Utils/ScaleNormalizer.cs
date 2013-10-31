@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils {
@@ -15,10 +16,15 @@ namespace Qorpent.Utils {
         /// <param name="values">Перечисление значений шкалы</param>
         /// <returns>Представление нормализованной шкалы</returns>
         public ScaleNormalized Normalize(ScaleNormalizeClause clause, IEnumerable<double> values) {
-            var result = new ScaleNormalized(clause);
-            var alimits = GetApproximatedScaleLimits(clause, values);
-            ImproveApproximatedScaleLimits(clause, values);
-            return result;
+            var approximated = new ApproximatedScaleLimits(clause, values, new ScaleNormalized(clause));
+
+            MatchApproximatedLimits(approximated);
+            GetApproximatedVariants(approximated);
+            ImproveApproximatedVariants(approximated);
+            BuildFinalVariants(approximated);
+            SelectFinalVariant(approximated);
+            
+            return approximated.Normalized;
         }
         /// <summary>
         ///     Производит нормалзацию шкалы
@@ -48,67 +54,155 @@ namespace Qorpent.Utils {
         /// <summary>
         ///     Производит улучшение апроксимированых значений 
         /// </summary>
-        /// <param name="clause"></param>
-        /// <param name="scaleValues"></param>
-        private void ImproveApproximatedScaleLimits(ScaleNormalizeClause clause, IEnumerable<double> scaleValues) {
-            
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private void ImproveApproximatedVariants(ApproximatedScaleLimits approximated) {
+            throw new NotImplementedException();
         }
         /// <summary>
-        ///     
+        ///     Возвращает разброс значений для дальнейшего запуска генетического алгоритма поиска лучшего решения
         /// </summary>
-        /// <param name="clause"></param>
-        /// <param name="scaleValues"></param>
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         /// <returns></returns>
-        private ApproximatedScaleLimits GetApproximatedScaleLimits(ScaleNormalizeClause clause, IEnumerable<double> scaleValues) {
-            var limits = new ApproximatedScaleLimits(clause);
-            var minimal = clause.UseMinimalValue ? clause.MinimalValue : scaleValues.Min();
-            var maximal = clause.UseMaximalValue ? clause.MaximalValue : scaleValues.Max();
-
-
-
-            return limits;
+        private void GetApproximatedVariants(ApproximatedScaleLimits approximated) {
+            throw new NotImplementedException();
         }
         /// <summary>
-        /// 
+        ///     Подсчитывает приблизительные пределы, округляя нижнее и верхнее значение
         /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="withoutFraction"></param>
-        /// <returns></returns>
-        private IEnumerable<double> GetRandomDispersion(double from, double to, bool withoutFraction = true) {
-            var single = Math.Round((to - from)/100);
-            from = withoutFraction ? Math.Floor(from) : from;
-            var last = from;
-            
-            while (last + single <= to) {
-                last += single;
-                if (single == 0.0) break;
-                yield return withoutFraction ? last + single : Math.Floor(last + single);
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private void MatchApproximatedLimits(ApproximatedScaleLimits approximated) {
+            if (approximated.Clause.UseMinimalValue) {
+                approximated.Minimal = approximated.Clause.MinimalValue;
+            } else {
+                
             }
+
+            if (approximated.Clause.UseMaximalValue) {
+                approximated.Maximal = approximated.Clause.MaximalValue;
+            } else {
+                
+            }
+        }
+        /// <summary>
+        ///     Собирает конечные варианты нормализации
+        /// </summary>
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private void BuildFinalVariants(ApproximatedScaleLimits approximated) {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        ///     Выбирает финальный вариант из всех представленных в качестве рекомендованного
+        /// </summary>
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private void SelectFinalVariant(ApproximatedScaleLimits approximated) {
+            throw new NotImplementedException();
         }
     }
     /// <summary>
     ///     Контейнер для приблизительных значений шкалы сверху и снизу
     /// </summary>
-    internal class ApproximatedScaleLimits {
+    internal class ApproximatedScaleLimits : ConfigBase {
+        /// <summary>
+        ///     Признак того, что миниальное значение установлено
+        /// </summary>
+        private bool _isMinimalSet;
+        /// <summary>
+        ///     Признак того, что максимальное значение было установлено
+        /// </summary>
+        private bool _isMaximalSet;
         /// <summary>
         ///     Указатель на кляузу, к которой относятся лимиты
         /// </summary>
         public ScaleNormalizeClause Clause { get; private set; }
         /// <summary>
+        ///     Нормализованное представление шкалы
+        /// </summary>
+        public ScaleNormalized Normalized { get; private set; }
+        /// <summary>
+        ///     Минимальное значение — округлённое или выставленное пользователем
+        /// </summary>
+        public double Minimal {
+            get {
+                if (!_isMinimalSet) {
+                    throw new Exception("The minimal value was not set");
+                }
+
+                return Get<double>("Minimal");
+            }
+            set {
+                _isMinimalSet = true;
+                Set("Minimal", value);
+            }
+        }
+        /// <summary>
+        ///     Максимальное значение — округлённое или выставленное пользователем
+        /// </summary>
+        public double Maximal {
+            get {
+                if (!_isMaximalSet) {
+                    throw new Exception("The maximal value was not set");
+                }
+
+                return Get<double>("Maximal");
+            }
+            set {
+                _isMaximalSet = true;
+                Set("Maximal", value);
+            }
+        }
+        /// <summary>
+        ///     Перечисление исходных значений шкалы
+        /// </summary>
+        public IEnumerable<double> BaseValues { get; private set; }
+        /// <summary>
         ///     Набор минимальных значений шкалы
         /// </summary>
-        public IEnumerable<double> Minimals { get; set; }
+        public IEnumerable<double> Minimals { get; private set; }
         /// <summary>
         ///     Набор максимальных значенй для шкалы
         /// </summary>
-        public IEnumerable<double> Maximals { get; set; }
+        public IEnumerable<double> Maximals { get; private set; }
+
         /// <summary>
         ///     Контейнер для приблизительных значений шкалы сверху и снизу
         /// </summary>
         /// <param name="clause">Кляуза, к которой относятся значения</param>
-        public ApproximatedScaleLimits(ScaleNormalizeClause clause) {
+        /// <param name="baseLimits">Базовые значения шкалы</param>
+        /// <param name="normalized">Нормализованное представление шкалы</param>
+        public ApproximatedScaleLimits(ScaleNormalizeClause clause, IEnumerable<double> baseLimits, ScaleNormalized normalized) {
             Clause = clause;
+            BaseValues = baseLimits;
+            Normalized = normalized;
+        }
+        /// <summary>
+        ///     Установка перечисления максимальных значений
+        /// </summary>
+        /// <param name="maximals">Перечисление максимальных значений</param>
+        public void SetMaximals(IEnumerable<double> maximals) {
+            Maximals = maximals;
+        }
+        /// <summary>
+        ///     Установка перечисления минимальных значений
+        /// </summary>
+        /// <param name="minimals">Перечисление минимальных значений</param>
+        public void SetMinimals(IEnumerable<double> minimals) {
+            Minimals = minimals;
+        }
+        /// <summary>
+        ///     Добавление нормализованного варианта
+        /// </summary>
+        /// <param name="variant">Представление варианта</param>
+        public void AddVariant(ScaleNormalizedVariant variant) {
+            Normalized.AddVariant(variant);
+        }
+        /// <summary>
+        ///     Добавление нормализованного варианта
+        /// </summary>
+        /// <param name="minimal">Минимальное значение</param>
+        /// <param name="maximal">Максимальное значение</param>
+        /// <param name="divlines">Количество дивлайнов</param>
+        public void AddVariant(double minimal, double maximal, int divlines) {
+            Normalized.AddVariant(new ScaleNormalizedVariant { Divline = divlines, Minimal = minimal, Maximal = maximal });
         }
     }
     /// <summary>
