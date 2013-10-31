@@ -56,7 +56,18 @@ namespace Qorpent.Utils {
         /// </summary>
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         private void ImproveApproximatedVariants(ApproximatedScaleLimits approximated) {
-            throw new NotImplementedException();
+            if (!(approximated.BorderValue > 1 || approximated.BorderValue < -1)) {
+                return;
+            }
+
+            var maximals = approximated.Maximals;
+            var minimals = approximated.Minimals;
+
+            maximals = maximals.Select(_ => _.RoundUp(_.GetNumberOfDigits() - 1).ToDouble());
+            minimals = minimals.Select(_ => _.RoundDown(_.GetNumberOfDigits() - 1).ToDouble());
+
+            approximated.SetMaximals(maximals);
+            approximated.SetMinimals(minimals);
         }
         /// <summary>
         ///     Возвращает разброс значений для дальнейшего запуска генетического алгоритма поиска лучшего решения
@@ -64,7 +75,7 @@ namespace Qorpent.Utils {
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         /// <returns></returns>
         private void GetApproximatedVariants(ApproximatedScaleLimits approximated) {
-            var withFractions = approximated.BorderValue > 0;
+            var withFractions = approximated.BorderValue > 1 || approximated.BorderValue < -1;
             var step = approximated.BorderValue/20;
             var minimals = SlickNumbers.GenerateLine(approximated.Minimal - approximated.BorderValue, approximated.Minimal, step);
             var maximals = SlickNumbers.GenerateLine(approximated.Maximal, approximated.Maximal + approximated.BorderValue, step);
