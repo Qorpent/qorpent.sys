@@ -15,26 +15,10 @@ namespace Qorpent.Utils {
         /// <param name="values">Перечисление значений шкалы</param>
         /// <returns>Представление нормализованной шкалы</returns>
         public ScaleNormalized Normalize(ScaleNormalizeClause clause, IEnumerable<double> values) {
-            var minimal = clause.UseMinimalValue ? clause.MinimalValue : values.Min();
-            var maximal = clause.UseMaximalValue ? clause.MaximalValue : values.Max();
-
-            var twentyProcentOf = (maximal - minimal)/5;
-            var toMinimalDisp = clause.UseMinimalValue ? new[] { clause.MinimalValue } : GetRandomDispersion(minimal - twentyProcentOf, minimal, minimal.GetNumberOfDigits() > 2);
-            var fromMaxDisp = clause.UseMaximalValue ? new[] { clause.MaximalValue } : GetRandomDispersion(maximal, maximal + twentyProcentOf, maximal.GetNumberOfDigits() > 2);
-
-            foreach (var d in fromMaxDisp) {
-                Console.Write(d + ",");
-            }
-            Console.WriteLine();
-            Console.WriteLine();
-            foreach (var d in toMinimalDisp) {
-                Console.Write(d + ",");
-            }
-
-            Console.WriteLine();
-            Console.WriteLine();
-
-            return new ScaleNormalized(clause);
+            var result = new ScaleNormalized(clause);
+            var alimits = GetApproximatedScaleLimits(clause, values);
+            ImproveApproximatedScaleLimits(clause, values);
+            return result;
         }
         /// <summary>
         ///     Производит нормалзацию шкалы
@@ -62,6 +46,29 @@ namespace Qorpent.Utils {
             return Normalize(values.ToArray());
         }
         /// <summary>
+        ///     Производит улучшение апроксимированых значений 
+        /// </summary>
+        /// <param name="clause"></param>
+        /// <param name="scaleValues"></param>
+        private void ImproveApproximatedScaleLimits(ScaleNormalizeClause clause, IEnumerable<double> scaleValues) {
+            
+        }
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="clause"></param>
+        /// <param name="scaleValues"></param>
+        /// <returns></returns>
+        private ApproximatedScaleLimits GetApproximatedScaleLimits(ScaleNormalizeClause clause, IEnumerable<double> scaleValues) {
+            var limits = new ApproximatedScaleLimits(clause);
+            var minimal = clause.UseMinimalValue ? clause.MinimalValue : scaleValues.Min();
+            var maximal = clause.UseMaximalValue ? clause.MaximalValue : scaleValues.Max();
+
+
+
+            return limits;
+        }
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="from"></param>
@@ -70,11 +77,121 @@ namespace Qorpent.Utils {
         /// <returns></returns>
         private IEnumerable<double> GetRandomDispersion(double from, double to, bool withoutFraction = true) {
             var single = Math.Round((to - from)/100);
+            from = withoutFraction ? Math.Floor(from) : from;
             var last = from;
+            
             while (last + single <= to) {
                 last += single;
+                if (single == 0.0) break;
                 yield return withoutFraction ? last + single : Math.Floor(last + single);
             }
+        }
+    }
+    /// <summary>
+    ///     Контейнер для приблизительных значений шкалы сверху и снизу
+    /// </summary>
+    internal class ApproximatedScaleLimits {
+        /// <summary>
+        ///     Указатель на кляузу, к которой относятся лимиты
+        /// </summary>
+        public ScaleNormalizeClause Clause { get; private set; }
+        /// <summary>
+        ///     Набор минимальных значений шкалы
+        /// </summary>
+        public IEnumerable<double> Minimals { get; set; }
+        /// <summary>
+        ///     Набор максимальных значенй для шкалы
+        /// </summary>
+        public IEnumerable<double> Maximals { get; set; }
+        /// <summary>
+        ///     Контейнер для приблизительных значений шкалы сверху и снизу
+        /// </summary>
+        /// <param name="clause">Кляуза, к которой относятся значения</param>
+        public ApproximatedScaleLimits(ScaleNormalizeClause clause) {
+            Clause = clause;
+        }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class SlickNumbers {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static double GetFraction(double d) {
+            var doubleString = d.ToString();
+            var lastIndex = doubleString.LastIndexOf(".");
+            double result = 0;
+            if (lastIndex > 0) {
+                var s = doubleString.Substring(lastIndex, doubleString.Length - lastIndex);
+                result = Convert.ToDouble(s);
+            }
+            return result;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="numbers"></param>
+        /// <returns></returns>
+        public static IEnumerable<double> Dispersion(IEnumerable<double> numbers) {
+            var array = numbers.ToArray();
+            for (var i = 1; i < array.Length; i++) {
+                yield return array[i] - array[i - 1];
+            }
+        }
+        /// <summary>
+        ///     Поиск максимального разброса между значениями
+        /// </summary>
+        /// <param name="numbers">Пречисление чисел</param>
+        /// <returns>Максимальный разброс между двумя соседними числами</returns>
+        public static double MaxDispersion(IEnumerable<double> numbers) {
+            return Dispersion(numbers.OrderBy(_ => _)).Max();
+        }
+        /// <summary>
+        ///     Поиск минимального разброса между значениями
+        /// </summary>
+        /// <param name="numbers">Пречисление чисел</param>
+        /// <returns>Минимальный разброс между двумя соседними числами</returns>
+        public static double MinDispersion(IEnumerable<double> numbers) {
+            return Dispersion(numbers.OrderBy(_ => _)).Min();
+        }
+        /// <summary>
+        ///     Сделать охуенно
+        /// </summary>
+        /// <param name="notSlick"></param>
+        /// <returns></returns>
+        public static IEnumerable<double> SlickSort(IEnumerable<double> notSlick) {
+            notSlick = notSlick.OrderByDescending(_ => _);
+            var t = new List<double>();
+            for (var i = notSlick.Max().GetNumberOfDigits() - 1; i > 0; i--) {
+                foreach (var d in notSlick.Where(_ => _%Math.Pow(10, i) == 0 && !t.Contains(_))) {
+                     t.Add(d);
+                }
+            }
+
+            var sublist = notSlick.Where(_ => !t.Contains(_));
+
+            if (!sublist.Any()) return t;
+
+            for (var i = sublist.Max().GetNumberOfDigits() - 1; i >= 0; i--) {
+                foreach (var d in sublist.Where(_ => {
+                    if (t.Contains(_)) {
+                        return false;
+                    }
+                    var divider = Math.Pow(10, i)*2;
+                    var result = _%divider;
+                    var res = result == 0.0;
+                    return res;
+                })) {
+                    t.Add(d);
+                }
+            }
+
+            sublist = notSlick.Where(_ => !t.Contains(_));
+
+            return t.Union(sublist);
         }
     }
     /// <summary>
@@ -84,11 +201,54 @@ namespace Qorpent.Utils {
         /// <summary>
         ///     Внутренний список вариантов
         /// </summary>
-        private readonly IList<ScaleNormalized> _variants = new List<ScaleNormalized>();
+        private readonly IList<ScaleNormalizedVariant> _variants = new List<ScaleNormalizedVariant>();
         /// <summary>
         ///     Исходная кляуза
         /// </summary>
         public ScaleNormalizeClause Clause { get; private set; }
+        /// <summary>
+        ///     Максимальное зачение шкалы
+        /// </summary>
+        public double Maximal {
+            get { return Variants.FirstOrDefault().Maximal; }
+        }
+        /// <summary>
+        ///     Минимальное значение шкалы
+        /// </summary>
+        public double Minimal {
+            get { return Variants.FirstOrDefault().Minimal; }
+        }
+        /// <summary>
+        ///     Количество дивлайнов
+        /// </summary>
+        public int Divline {
+            get { return Variants.FirstOrDefault().Divline; }
+        }
+        /// <summary>
+        ///     Класс, представляющий нормализованную шкалу
+        /// </summary>
+        /// <param name="clause">Исходная кляуза</param>
+        public ScaleNormalized(ScaleNormalizeClause clause) {
+            Clause = clause;
+        }
+        /// <summary>
+        ///     Перечисление вариантов нормализации, сочтённых нормализатором менее подходящими
+        /// </summary>
+        public IEnumerable<ScaleNormalizedVariant> Variants {
+            get { return _variants.AsEnumerable(); }
+        }
+        /// <summary>
+        ///     Добавление варианта в нормализованное представление
+        /// </summary>
+        /// <param name="variant">Вариант</param>
+        public void AddVariant(ScaleNormalizedVariant variant) {
+            _variants.Add(variant);
+        }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ScaleNormalizedVariant {
         /// <summary>
         ///     Максимальное зачение шкалы
         /// </summary>
@@ -100,27 +260,7 @@ namespace Qorpent.Utils {
         /// <summary>
         ///     Количество дивлайнов
         /// </summary>
-        public double Divline { get; set; }
-        /// <summary>
-        ///     Класс, представляющий нормализованную шкалу
-        /// </summary>
-        /// <param name="clause">Исходная кляуза</param>
-        public ScaleNormalized(ScaleNormalizeClause clause) {
-            Clause = clause;
-        }
-        /// <summary>
-        ///     Перечисление вариантов нормализации, сочтённых нормализатором менее подходящими
-        /// </summary>
-        public IEnumerable<ScaleNormalized> Variants {
-            get { return _variants.AsEnumerable(); }
-        }
-        /// <summary>
-        ///     Добавление варианта в нормализованное представление
-        /// </summary>
-        /// <param name="variant">Вариант</param>
-        public void AddVariant(ScaleNormalized variant) {
-            _variants.Add(variant);
-        }
+        public int Divline { get; set; }
     }
     /// <summary>
     /// 
