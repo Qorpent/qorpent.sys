@@ -16,14 +16,39 @@ namespace Qorpent.Utils {
         /// <param name="values">Перечисление значений шкалы</param>
         /// <returns>Представление нормализованной шкалы</returns>
         public ScaleNormalized Normalize(ScaleNormalizeClause clause, IEnumerable<double> values) {
-            var approximated = new ApproximatedScaleLimits(clause, values, new ScaleNormalized(clause));
+            var approximated = GetApproximatedBase(clause, values);
+            approximated.ErrorBahavior = _ => {
+                if (_.Normalized == null) {
+                    return;
+                }
 
-            BaseApproximation(approximated);
-            GetApproximatedVariants(approximated);
-            ImproveApproximatedVariants(approximated);
-            BuildFinalVariants(approximated);
-            SelectFinalVariant(approximated);
-            
+                if (!_.BaseValues.Any()) {
+                    _.Normalized.SetRecommendedVariant(new ScaleNormalizedVariant {
+                        Divline = 0,
+                        Minimal = double.MinValue,
+                        Maximal = double.MaxValue
+                    });
+
+                    return;
+                }
+
+                _.Normalized.SetRecommendedVariant(new ScaleNormalizedVariant {
+                    Divline = 3,
+                    Maximal = _.BaseValues.Max(),
+                    Minimal = _.BaseValues.Min()
+                });
+            };
+
+            try {
+                BaseApproximation(approximated);
+                GetApproximatedVariants(approximated);
+                ImproveApproximatedVariants(approximated);
+                BuildFinalVariants(approximated);
+                SelectFinalVariant(approximated);
+            } catch (Exception e) {
+                approximated.Error(e, true);
+            }
+
             return approximated.Normalized;
         }
         /// <summary>
@@ -50,6 +75,15 @@ namespace Qorpent.Utils {
         /// <returns>Представление нормализованной шкалы</returns>
         public ScaleNormalized Normalize(IEnumerable<double> values) {
             return Normalize(values.ToArray());
+        }
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="clause"></param>
+        /// <param name="baseValues"></param>
+        /// <returns></returns>
+        private ApproximatedScaleLimits GetApproximatedBase(ScaleNormalizeClause clause, IEnumerable<double> baseValues) {
+            return new ApproximatedScaleLimits(clause, baseValues, new ScaleNormalized(clause));
         }
         /// <summary>
         ///     Производит улучшение апроксимированых значений 
@@ -150,15 +184,15 @@ namespace Qorpent.Utils {
                     if (rez == 0.0) {
                         var res = delta/divider;
                         if (res % 3 == 0.0) {
-                            approximated.AddVariant(minimal, maximal, (res / 3).ToInt());
+                            approximated.AddVariant(minimal, maximal, 3.ToInt());
                         }
 
                         if (res % 6 == 0.0) {
-                            approximated.AddVariant(minimal, maximal, (res / 6).ToInt());
+                            approximated.AddVariant(minimal, maximal, 6);
                         }
 
                         if (res % 5 == 0.0) {
-                            approximated.AddVariant(minimal, maximal, (res / 5).ToInt());
+                            approximated.AddVariant(minimal, maximal, 5);
                         }
                     }
                 }
@@ -169,7 +203,7 @@ namespace Qorpent.Utils {
         /// </summary>
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         private void SelectFinalVariant(ApproximatedScaleLimits approximated) {
-            throw new NotImplementedException();
+            approximated.Normalized.SetRecommendedVariant(approximated.Normalized.Variants.FirstOrDefault());
         }
     }
     /// <summary>
@@ -189,6 +223,20 @@ namespace Qorpent.Utils {
         /// </summary>
         private bool _isBorderValueSet;
         /// <summary>
+        ///     Исключение, пойманное в момент возникновения ошибки, на наличие которой указывает
+        ///     <see cref="IsError"/>
+        /// </summary>
+        public Exception Exception { get; private set; }
+        /// <summary>
+        ///     Признак того, что при нормализации была выявлена фатальная ошибка
+        ///     шаттная процедура нормализации не была проведена
+        /// </summary>
+        public bool IsError { get; private set; }
+        /// <summary>
+        ///     Признак того, что при попытке среагировать на фатальную ошибку, произошёл сбой
+        /// </summary>
+        public bool IsErrorBahaviorError { get; private set; }
+        /// <summary>
         ///     Указатель на кляузу, к которой относятся лимиты
         /// </summary>
         public ScaleNormalizeClause Clause { get; private set; }
@@ -196,6 +244,10 @@ namespace Qorpent.Utils {
         ///     Нормализованное представление шкалы
         /// </summary>
         public ScaleNormalized Normalized { get; private set; }
+        /// <summary>
+        ///     Действие, запускаемое при возникновении фатальной ошибки
+        /// </summary>
+        public Action<ApproximatedScaleLimits> ErrorBahavior { get; set; }
         /// <summary>
         ///     Минимальное значение — округлённое или выставленное пользователем
         /// </summary>
@@ -308,13 +360,43 @@ namespace Qorpent.Utils {
         /// <param name="maximal">Максимальное значение</param>
         /// <param name="divlines">Количество дивлайнов</param>
         public void AddVariant(double minimal, double maximal, int divlines) {
-            Normalized.AddVariant(new ScaleNormalizedVariant { Divline = divlines, Minimal = minimal, Maximal = maximal });
+            AddVariant(new ScaleNormalizedVariant { Divline = divlines, Minimal = minimal, Maximal = maximal });
+        }
+        /// <summary>
+        ///     Установка состояния фатальной ошибки
+        /// </summary>
+        /// <param name="exception">Исключение, представляющее ошибку</param>
+        /// <param name="runErrorBehavior">Признак того, что нужно запустить алгоритм реакции на сбой</param>
+        public void Error(Exception exception, bool runErrorBehavior) {
+            IsError = true;
+            Exception = exception;
+
+            if (runErrorBehavior) {
+                if (ErrorBahavior == null) {
+                    return;
+                }
+
+                try {
+                    ErrorBahavior(this);
+                } catch {
+                    IsErrorBahaviorError = true;
+                }
+            }
         }
     }
     /// <summary>
     /// 
     /// </summary>
     public static class SlickNumbers {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static double Gcd(double a, double b) {
+            return b == 0.0 ? a : Gcd(b, a % b);
+        }
         /// <summary>
         ///     Генерирует ряд из чисел с шагом
         /// </summary>
