@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
@@ -39,12 +40,16 @@ namespace Qorpent.Utils {
                 });
             };
 
+            var steps = GetApproximationSteps();
+
             try {
-                BaseApproximation(approximated);
-                GetApproximatedVariants(approximated);
-                ImproveApproximatedVariants(approximated);
-                BuildFinalVariants(approximated);
-                SelectFinalVariant(approximated);
+                foreach (var step in steps) {
+                    step.Value(approximated);
+                    var appendixes = clause.Appendixes.Where(_ => _.Key == step.Key).ToList();
+                    foreach (var appendix in appendixes) {
+                        appendix.Value(approximated);
+                    }
+                }
             } catch (Exception e) {
                 approximated.Error(e, true);
             }
@@ -75,6 +80,17 @@ namespace Qorpent.Utils {
         /// <returns>Представление нормализованной шкалы</returns>
         public ScaleNormalized Normalize(IEnumerable<double> values) {
             return Normalize(values.ToArray());
+        }
+        /// <summary>
+        ///     Возвращает перечисление шагов нормализации шкалы
+        /// </summary>
+        /// <returns>Перечисление шагов нормализации шкалы</returns>
+        private IEnumerable<KeyValuePair<int, Action<ApproximatedScaleLimits>>> GetApproximationSteps() {
+            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(0, BaseApproximation);
+            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(1, GetApproximatedVariants);
+            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(2, ImproveApproximatedVariants);
+            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(3, BuildFinalVariants);
+            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(4, SelectFinalVariant);
         }
         /// <summary>
         ///     
@@ -209,7 +225,7 @@ namespace Qorpent.Utils {
     /// <summary>
     ///     Контейнер для приблизительных значений шкалы сверху и снизу
     /// </summary>
-    internal class ApproximatedScaleLimits : ConfigBase {
+    public class ApproximatedScaleLimits : ConfigBase {
         /// <summary>
         ///     Признак того, что миниальное значение установлено
         /// </summary>
@@ -552,7 +568,7 @@ namespace Qorpent.Utils {
         }
     }
     /// <summary>
-    /// 
+    ///     Класс, представляющий вариант нормализации шкалы
     /// </summary>
     public class ScaleNormalizedVariant {
         /// <summary>
@@ -573,6 +589,10 @@ namespace Qorpent.Utils {
     /// </summary>
     public class ScaleNormalizeClause : ConfigBase {
         /// <summary>
+        ///     Дополнительные действия, запускаемые каждый раз после выполнения шага с указанным кодом
+        /// </summary>
+        private IList<KeyValuePair<int, Action<ApproximatedScaleLimits>>> _appendixes = new List<KeyValuePair<int, Action<ApproximatedScaleLimits>>>();
+        /// <summary>
         ///     Признак того, что минимальное значение было утсановлено
         /// </summary>
         private bool _isMinimalValueSet;
@@ -588,7 +608,12 @@ namespace Qorpent.Utils {
         ///     Признак того, что нужно использовать установленное максимальное значение
         /// </summary>
         public bool UseMaximalValue { get; set; }
-
+        /// <summary>
+        ///     Дополнительные действия, запускаемые каждый раз после выполнения шага с указанным кодом
+        /// </summary>
+        public IEnumerable<KeyValuePair<int, Action<ApproximatedScaleLimits>>> Appendixes {
+            get { return _appendixes.AsEnumerable(); }
+        }
         /// <summary>
         ///     Минимальное значение
         /// </summary>
@@ -620,6 +645,21 @@ namespace Qorpent.Utils {
                 _isMaximalValueSet = true;
                 Set("MaximalValue", value);
             }
+        }
+        /// <summary>
+        ///     Добавление дополнительного действия в коллекцию
+        /// </summary>
+        /// <param name="appendix">Пара, представляющая код шага и действие</param>
+        public void AddAppendix(KeyValuePair<int, Action<ApproximatedScaleLimits>> appendix) {
+            _appendixes.Add(appendix);
+        }
+        /// <summary>
+        ///     Добавление дополнительного действия в коллекцию
+        /// </summary>
+        /// <param name="stepCode">Код шага, с которым ассоциированно действие</param>
+        /// <param name="appendix">Действие</param>
+        public void AddAppendix(int stepCode, Action<ApproximatedScaleLimits> appendix) {
+            AddAppendix(new KeyValuePair<int, Action<ApproximatedScaleLimits>>(stepCode, appendix));
         }
     }
 }
