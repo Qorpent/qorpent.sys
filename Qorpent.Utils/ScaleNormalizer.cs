@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils {
     /// <summary>
@@ -11,19 +12,38 @@ namespace Qorpent.Utils {
         ///     Производит нормалзацию шкалы
         /// </summary>
         /// <param name="clause">Кляуза на нормализацию</param>
-        /// <param name="values">Массив значений шкалы</param>
+        /// <param name="values">Перечисление значений шкалы</param>
         /// <returns>Представление нормализованной шкалы</returns>
-        public ScaleNormalized Normalize(ScaleNormalizeClause clause, params double[] values) {
-            throw new NotImplementedException();
+        public ScaleNormalized Normalize(ScaleNormalizeClause clause, IEnumerable<double> values) {
+            var minimal = clause.UseMinimalValue ? clause.MinimalValue : values.Min();
+            var maximal = clause.UseMaximalValue ? clause.MaximalValue : values.Max();
+
+            var twentyProcentOf = (maximal - minimal)/5;
+            var toMinimalDisp = clause.UseMinimalValue ? new[] { clause.MinimalValue } : GetRandomDispersion(minimal - twentyProcentOf, minimal, minimal.GetNumberOfDigits() > 2);
+            var fromMaxDisp = clause.UseMaximalValue ? new[] { clause.MaximalValue } : GetRandomDispersion(maximal, maximal + twentyProcentOf, maximal.GetNumberOfDigits() > 2);
+
+            foreach (var d in fromMaxDisp) {
+                Console.Write(d + ",");
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            foreach (var d in toMinimalDisp) {
+                Console.Write(d + ",");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            return new ScaleNormalized(clause);
         }
         /// <summary>
         ///     Производит нормалзацию шкалы
         /// </summary>
         /// <param name="clause">Кляуза на нормализацию</param>
-        /// <param name="values">Перечисление значений шкалы</param>
+        /// <param name="values">Массив значений шкалы</param>
         /// <returns>Представление нормализованной шкалы</returns>
-        public ScaleNormalized Normalize(ScaleNormalizeClause clause, IEnumerable<double> values) {
-            return Normalize(clause, values.ToArray());
+        public ScaleNormalized Normalize(ScaleNormalizeClause clause, params double[] values) {
+            return Normalize(clause, values.AsEnumerable());
         }
         /// <summary>
         ///     Производит нормалзацию шкалы
@@ -40,6 +60,21 @@ namespace Qorpent.Utils {
         /// <returns>Представление нормализованной шкалы</returns>
         public ScaleNormalized Normalize(IEnumerable<double> values) {
             return Normalize(values.ToArray());
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="withoutFraction"></param>
+        /// <returns></returns>
+        private IEnumerable<double> GetRandomDispersion(double from, double to, bool withoutFraction = true) {
+            var single = Math.Round((to - from)/100);
+            var last = from;
+            while (last + single <= to) {
+                last += single;
+                yield return withoutFraction ? last + single : Math.Floor(last + single);
+            }
         }
     }
     /// <summary>
