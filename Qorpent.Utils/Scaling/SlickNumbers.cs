@@ -67,7 +67,7 @@ namespace Qorpent.Utils.Scaling {
             return Dispersion(numbers.OrderBy(_ => _)).Min();
         }
         /// <summary>
-        ///     Сделать охуенно
+        ///     Сортирует числа по крутости
         /// </summary>
         /// <param name="notSlick"></param>
         /// <returns></returns>
