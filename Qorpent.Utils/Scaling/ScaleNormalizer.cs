@@ -119,7 +119,8 @@ namespace Qorpent.Utils.Scaling {
             });
         }
         /// <summary>
-        /// 
+        ///     Таблица аппроксимации представляет собой хранилище вида:
+        ///     {[[Точное значение min]:[верхняя граница для Max]]:{[Точное значение Max с учётом max.RoundUp(max.GetNumberOfDigits())]:[Вариант, поставленный в соответствие]}}
         /// </summary>
         private static IDictionary<KeyValuePair<double[], double>, IDictionary<double, ScaleNormalizedVariant>> _approximatedTable = new Dictionary<KeyValuePair<double[], double>, IDictionary<double, ScaleNormalizedVariant>> {
             {new KeyValuePair<double[], double>(new[] {100.0, 200.0}, 1000), new Dictionary<double, ScaleNormalizedVariant> {
@@ -281,10 +282,13 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         private static void SelectFinalVariant(ScaleApproximated approximated) {
             if (ContainsApproximatedPoints(approximated)) {
-                AppleApproximatedPoints(approximated);
-            } else {
-                approximated.Normalized.SetRecommendedVariant(approximated.Normalized.Variants.FirstOrDefault());
+                var isSuccess = AppleApproximatedPoints(approximated);
+                if (isSuccess) {
+                    return;
+                }
             }
+
+            approximated.Normalized.SetRecommendedVariant(approximated.Normalized.Variants.FirstOrDefault());
         }
         /// <summary>
         ///     Определяет признак того, что таблица примерных значений дивлайнов присутствует в системе
@@ -298,9 +302,10 @@ namespace Qorpent.Utils.Scaling {
         ///     Применяет заранее определённые значение аппроксимированной шкалы
         /// </summary>
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private static void AppleApproximatedPoints(ScaleApproximated approximated) {
+        /// <returns>Признак того, что применение таблицы было успешно завершено</returns>
+        private static bool AppleApproximatedPoints(ScaleApproximated approximated) {
             if (!ContainsApproximatedPoints(approximated)) {
-                throw new Exception("There is no approximated values");
+                return false;
             }
 
             var maximal = approximated.Maximal.RoundUp(approximated.Maximal.GetNumberOfDigits());
@@ -309,11 +314,13 @@ namespace Qorpent.Utils.Scaling {
             );
 
             if (!approx.Value.Any(_ => _.Key.Equals(maximal))) {
-                throw new Exception("There is no approximated value for the maximal value");
+                return false;
             }
 
             var specApprox = approx.Value.FirstOrDefault(_ => _.Key.Equals(maximal)).Value;
             approximated.Normalized.SetRecommendedVariant(specApprox);
+
+            return true;
         }
     }
 }
