@@ -133,12 +133,12 @@ namespace Qorpent.Utils {
         ///     Возвращает перечисление шагов нормализации шкалы
         /// </summary>
         /// <returns>Перечисление шагов нормализации шкалы</returns>
-        private IEnumerable<KeyValuePair<int, Action<ApproximatedScaleLimits>>> GetApproximationSteps() {
-            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(BaseApproximationCode, BaseApproximation);
-            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(GetApproximatedVariantsCode, GetApproximatedVariants);
-            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(ImproveApproximatedVariantsCode, ImproveApproximatedVariants);
-            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(BuildFinalVariantsCode, BuildFinalVariants);
-            yield return new KeyValuePair<int, Action<ApproximatedScaleLimits>>(SelectFinalVariantCode, SelectFinalVariant);
+        private IEnumerable<KeyValuePair<int, Action<ScaleApproximated>>> GetApproximationSteps() {
+            yield return new KeyValuePair<int, Action<ScaleApproximated>>(BaseApproximationCode, BaseApproximation);
+            yield return new KeyValuePair<int, Action<ScaleApproximated>>(GetApproximatedVariantsCode, GetApproximatedVariants);
+            yield return new KeyValuePair<int, Action<ScaleApproximated>>(ImproveApproximatedVariantsCode, ImproveApproximatedVariants);
+            yield return new KeyValuePair<int, Action<ScaleApproximated>>(BuildFinalVariantsCode, BuildFinalVariants);
+            yield return new KeyValuePair<int, Action<ScaleApproximated>>(SelectFinalVariantCode, SelectFinalVariant);
         }
         /// <summary>
         ///     Подготавливает базу для нормализации
@@ -146,57 +146,57 @@ namespace Qorpent.Utils {
         /// <param name="clause">Исходный запрос на нормализацию</param>
         /// <param name="baseValues">Перечисление базовых значений</param>
         /// <returns>Представление аппроксимированной и улучшенной шкалы</returns>
-        private ApproximatedScaleLimits GetApproximatedBase(ScaleNormalizeClause clause, IEnumerable<double> baseValues) {
+        private ScaleApproximated GetApproximatedBase(ScaleNormalizeClause clause, IEnumerable<double> baseValues) {
             InsertBaseAppendixes(clause);
-            return new ApproximatedScaleLimits(clause, baseValues, new ScaleNormalized(clause));
+            return new ScaleApproximated(clause, baseValues, new ScaleNormalized(clause));
         }
         /// <summary>
         ///     Производит улучшение апроксимированых значений 
         /// </summary>
-        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private void ImproveApproximatedVariants(ApproximatedScaleLimits approximated) {
-            if (!(approximated.BorderValue > 1 || approximated.BorderValue < -1)) {
+        /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private void ImproveApproximatedVariants(ScaleApproximated scaleApproximated) {
+            if (!(scaleApproximated.BorderValue > 1 || scaleApproximated.BorderValue < -1)) {
                 return;
             }
 
-            var maximals = approximated.Maximals;
-            var minimals = approximated.Minimals;
+            var maximals = scaleApproximated.Maximals;
+            var minimals = scaleApproximated.Minimals;
 
             //  немного улучшим значения округлениями и зачистим от повторов, использую Distinct()
             maximals = maximals.Select(_ => _.RoundUp(_.GetNumberOfDigits() - 1).ToDouble()).Distinct().ToList();
             minimals = minimals.Select(_ => _.RoundDown(_.GetNumberOfDigits() - 1).ToDouble()).Distinct().ToList();
 
-            approximated.SetMaximals(maximals);
-            approximated.SetMinimals(minimals);
+            scaleApproximated.SetMaximals(maximals);
+            scaleApproximated.SetMinimals(minimals);
         }
         /// <summary>
         ///     Возвращает разброс значений для дальнейшего запуска генетического алгоритма поиска лучшего решения
         /// </summary>
-        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
+        /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
         /// <returns></returns>
-        private void GetApproximatedVariants(ApproximatedScaleLimits approximated) {
-            var withFractions = approximated.BorderValue > 1 || approximated.BorderValue < -1;
+        private void GetApproximatedVariants(ScaleApproximated scaleApproximated) {
+            var withFractions = scaleApproximated.BorderValue > 1 || scaleApproximated.BorderValue < -1;
 
-            var step = approximated.BorderValue/20;
+            var step = scaleApproximated.BorderValue/20;
             step = step.RoundDown(step.GetNumberOfDigits() - 1);
 
             var minimals = SlickNumbers.GenerateLine(
-                approximated.Minimal - step*20,
-                (approximated.Minimal < 1000)
+                scaleApproximated.Minimal - step*20,
+                (scaleApproximated.Minimal < 1000)
                     ?
-                (approximated.Minimal.RoundDown(approximated.Minimal.GetNumberOfDigits()) - step)
+                (scaleApproximated.Minimal.RoundDown(scaleApproximated.Minimal.GetNumberOfDigits()) - step)
                     :
-                (approximated.Minimal + step * 20),
+                (scaleApproximated.Minimal + step * 20),
                 step
             );
 
             var maximals = SlickNumbers.GenerateLine(
-                approximated.Maximal,
-                (approximated.Maximal < 1000)
+                scaleApproximated.Maximal,
+                (scaleApproximated.Maximal < 1000)
                     ?
-                (approximated.Maximal.RoundUp(approximated.Maximal.GetNumberOfDigits()) + step)
+                (scaleApproximated.Maximal.RoundUp(scaleApproximated.Maximal.GetNumberOfDigits()) + step)
                     :
-                (approximated.Maximal + step * 20),
+                (scaleApproximated.Maximal + step * 20),
                 step
             );
 
@@ -205,59 +205,59 @@ namespace Qorpent.Utils {
                 maximals = maximals.Select(Math.Floor);
             }
 
-            approximated.SetMinimals(minimals);
-            approximated.SetMaximals(maximals);
+            scaleApproximated.SetMinimals(minimals);
+            scaleApproximated.SetMaximals(maximals);
         }
         /// <summary>
         ///     Подсчитывает приблизительные пределы, округляя нижнее и верхнее значение
         /// </summary>
-        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private void BaseApproximation(ApproximatedScaleLimits approximated) {
-            var maxDispersion = SlickNumbers.MaxDispersion(approximated.BaseValues);
-            var minimal = approximated.BaseValues.Min();
-            var maximal = approximated.BaseValues.Max();
+        /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private void BaseApproximation(ScaleApproximated scaleApproximated) {
+            var maxDispersion = SlickNumbers.MaxDispersion(scaleApproximated.BaseValues);
+            var minimal = scaleApproximated.BaseValues.Min();
+            var maximal = scaleApproximated.BaseValues.Max();
             var mborder = (maximal - minimal)/5; // граничное значение — 20% от разрыва между минимальным и максимальным
 
-            if (approximated.Clause.UseMinimalValue) {
-                approximated.Minimal = approximated.Clause.MinimalValue;
+            if (scaleApproximated.Clause.UseMinimalValue) {
+                scaleApproximated.Minimal = scaleApproximated.Clause.MinimalValue;
             } else {
                 if ((mborder >= maxDispersion) && (minimal >= 0)) {
-                    approximated.Minimal = 0; // если разрыв слишком большой и значения больше нуля, то нижняя граница 0
+                    scaleApproximated.Minimal = 0; // если разрыв слишком большой и значения больше нуля, то нижняя граница 0
                 } else {
-                    approximated.Minimal = minimal.RoundDown(minimal.GetNumberOfDigits() - 1);
+                    scaleApproximated.Minimal = minimal.RoundDown(minimal.GetNumberOfDigits() - 1);
                 }
             }
 
-            if (approximated.Clause.UseMaximalValue) {
-                approximated.Maximal = approximated.Clause.MaximalValue;
+            if (scaleApproximated.Clause.UseMaximalValue) {
+                scaleApproximated.Maximal = scaleApproximated.Clause.MaximalValue;
             } else {
-                approximated.Maximal = maximal.RoundUp(maximal.GetNumberOfDigits() - 1);
+                scaleApproximated.Maximal = maximal.RoundUp(maximal.GetNumberOfDigits() - 1);
             }
 
-            approximated.BorderValue = mborder;
+            scaleApproximated.BorderValue = mborder;
         }
         /// <summary>
         ///     Собирает конечные варианты нормализации
         /// </summary>
-        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private void BuildFinalVariants(ApproximatedScaleLimits approximated) {
-            foreach (var maximal in approximated.Maximals) {
-                foreach (var minimal in approximated.Minimals) {
+        /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private void BuildFinalVariants(ScaleApproximated scaleApproximated) {
+            foreach (var maximal in scaleApproximated.Maximals) {
+                foreach (var minimal in scaleApproximated.Minimals) {
                     var delta = maximal - minimal;
                     var divider = Math.Pow(10, delta.GetNumberOfDigits() - 2);
                     var rez = delta%divider;
                     if (rez == 0.0) {
                         var res = delta/divider;
                         if (res % 3 == 0.0) {
-                            approximated.AddVariant(minimal, maximal, 3.ToInt());
+                            scaleApproximated.AddVariant(minimal, maximal, 3.ToInt());
                         }
 
                         if (res % 6 == 0.0) {
-                            approximated.AddVariant(minimal, maximal, 6);
+                            scaleApproximated.AddVariant(minimal, maximal, 6);
                         }
 
                         if (res % 5 == 0.0) {
-                            approximated.AddVariant(minimal, maximal, 5);
+                            scaleApproximated.AddVariant(minimal, maximal, 5);
                         }
                     }
                 }
@@ -266,15 +266,15 @@ namespace Qorpent.Utils {
         /// <summary>
         ///     Выбирает финальный вариант из всех представленных в качестве рекомендованного
         /// </summary>
-        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private void SelectFinalVariant(ApproximatedScaleLimits approximated) {
-            approximated.Normalized.SetRecommendedVariant(approximated.Normalized.Variants.FirstOrDefault());
+        /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private void SelectFinalVariant(ScaleApproximated scaleApproximated) {
+            scaleApproximated.Normalized.SetRecommendedVariant(scaleApproximated.Normalized.Variants.FirstOrDefault());
         }
     }
     /// <summary>
     ///     Контейнер для приблизительных значений шкалы сверху и снизу
     /// </summary>
-    public class ApproximatedScaleLimits : ConfigBase {
+    public class ScaleApproximated : ConfigBase {
         /// <summary>
         ///     Признак того, что миниальное значение установлено
         /// </summary>
@@ -312,7 +312,7 @@ namespace Qorpent.Utils {
         /// <summary>
         ///     Действие, запускаемое при возникновении фатальной ошибки
         /// </summary>
-        public Action<ApproximatedScaleLimits> ErrorBahavior { get; set; }
+        public Action<ScaleApproximated> ErrorBahavior { get; set; }
         /// <summary>
         ///     Минимальное значение — округлённое или выставленное пользователем
         /// </summary>
@@ -392,7 +392,7 @@ namespace Qorpent.Utils {
         /// <param name="clause">Кляуза, к которой относятся значения</param>
         /// <param name="baseLimits">Базовые значения шкалы</param>
         /// <param name="normalized">Нормализованное представление шкалы</param>
-        public ApproximatedScaleLimits(ScaleNormalizeClause clause, IEnumerable<double> baseLimits, ScaleNormalized normalized) {
+        public ScaleApproximated(ScaleNormalizeClause clause, IEnumerable<double> baseLimits, ScaleNormalized normalized) {
             Clause = clause;
             BaseValues = baseLimits;
             Normalized = normalized;
@@ -640,7 +640,7 @@ namespace Qorpent.Utils {
         /// <summary>
         ///     Дополнительные действия, запускаемые каждый раз после выполнения шага с указанным кодом
         /// </summary>
-        private IList<KeyValuePair<int, Action<ApproximatedScaleLimits>>> _appendixes = new List<KeyValuePair<int, Action<ApproximatedScaleLimits>>>();
+        private IList<KeyValuePair<int, Action<ScaleApproximated>>> _appendixes = new List<KeyValuePair<int, Action<ScaleApproximated>>>();
         /// <summary>
         ///     Признак того, что минимальное значение было утсановлено
         /// </summary>
@@ -665,7 +665,7 @@ namespace Qorpent.Utils {
         /// <summary>
         ///     Дополнительные действия, запускаемые каждый раз после выполнения шага с указанным кодом
         /// </summary>
-        public IEnumerable<KeyValuePair<int, Action<ApproximatedScaleLimits>>> Appendixes {
+        public IEnumerable<KeyValuePair<int, Action<ScaleApproximated>>> Appendixes {
             get { return _appendixes.AsEnumerable(); }
         }
         /// <summary>
@@ -710,7 +710,7 @@ namespace Qorpent.Utils {
         ///     Добавление дополнительного действия в коллекцию
         /// </summary>
         /// <param name="appendix">Пара, представляющая код шага и действие</param>
-        public ScaleNormalizeClause AddAppendix(KeyValuePair<int, Action<ApproximatedScaleLimits>> appendix) {
+        public ScaleNormalizeClause AddAppendix(KeyValuePair<int, Action<ScaleApproximated>> appendix) {
             _appendixes.Add(appendix);
             return this;
         }
@@ -719,8 +719,8 @@ namespace Qorpent.Utils {
         /// </summary>
         /// <param name="stepCode">Код шага, с которым ассоциированно действие</param>
         /// <param name="appendix">Действие</param>
-        public ScaleNormalizeClause AddAppendix(int stepCode, Action<ApproximatedScaleLimits> appendix) {
-            return AddAppendix(new KeyValuePair<int, Action<ApproximatedScaleLimits>>(stepCode, appendix));
+        public ScaleNormalizeClause AddAppendix(int stepCode, Action<ScaleApproximated> appendix) {
+            return AddAppendix(new KeyValuePair<int, Action<ScaleApproximated>>(stepCode, appendix));
         }
     }
 }
