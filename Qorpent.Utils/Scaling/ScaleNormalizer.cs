@@ -116,35 +116,22 @@ namespace Qorpent.Utils.Scaling {
                         __ => __.RoundUp(__.GetNumberOfDigits() - 1).ToDouble())
                     );
                 }
-            }).AddAppendix(SelectFinalVariantCode, _ => {
-                if (_.Maximal < 1000 && _.Minimal >= 0) {
-                    if (_.Maximal + 20 <= _.Maximal.RoundUp(_.Maximal.GetNumberOfDigits())) {
-                        _.Normalized.SetRecommendedVariant(new ScaleNormalizedVariant {
-                            Minimal = _.Normalized.RecommendedVariant.Minimal,
-                            Maximal = _.Maximal.RoundUp(_.Maximal.GetNumberOfDigits()),
-                        });
-
-                        if (_.Normalized.Maximal == 300.0) {
-                            _.Normalized.RecommendedVariant.Divline = 2;
-                        } else if (_.Normalized.Maximal == 400.0) {
-                            _.Normalized.RecommendedVariant.Divline = 2;
-                        } else if (_.Normalized.Maximal == 500.0) {
-                            _.Normalized.RecommendedVariant.Divline = 4;
-                        } else if (_.Normalized.Maximal == 600.0) {
-                            _.Normalized.RecommendedVariant.Divline = 5;
-                        } else if (_.Normalized.Maximal == 700.0) {
-                            _.Normalized.RecommendedVariant.Divline = 5;
-                        } else if (_.Normalized.Maximal == 800.0) {
-                            _.Normalized.RecommendedVariant.Divline = 3;
-                        } else if (_.Normalized.Maximal == 900.0) {
-                            _.Normalized.RecommendedVariant.Divline = 2;
-                        } else {
-                            _.Normalized.RecommendedVariant.Divline = 3;
-                        }
-                    }
-                }
             });
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        private static IDictionary<KeyValuePair<double[], double>, IDictionary<double, ScaleNormalizedVariant>> _approximatedTable = new Dictionary<KeyValuePair<double[], double>, IDictionary<double, ScaleNormalizedVariant>> {
+            {new KeyValuePair<double[], double>(new[] {100.0, 200.0}, 1000), new Dictionary<double, ScaleNormalizedVariant> {
+                {300, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 300.0}},
+                {400, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 400.0}},
+                {500, new ScaleNormalizedVariant { Divline = 4, Minimal = 0.0, Maximal = 500.0}},
+                {600, new ScaleNormalizedVariant { Divline = 5, Minimal = 0.0, Maximal = 600.0}},
+                {700, new ScaleNormalizedVariant { Divline = 5, Minimal = 0.0, Maximal = 700.0}},
+                {800, new ScaleNormalizedVariant { Divline = 3, Minimal = 0.0, Maximal = 800.0}},
+                {900, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 900.0}}
+            }}
+        };
         /// <summary>
         ///     Возвращает перечисление шагов нормализации шкалы
         /// </summary>
@@ -255,36 +242,78 @@ namespace Qorpent.Utils.Scaling {
         /// <summary>
         ///     Собирает конечные варианты нормализации
         /// </summary>
-        /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private static void BuildFinalVariants(ScaleApproximated scaleApproximated) {
-            foreach (var maximal in scaleApproximated.Maximals) {
-                foreach (var minimal in scaleApproximated.Minimals) {
-                    var delta = maximal - minimal;
-                    var divider = Math.Pow(10, delta.GetNumberOfDigits() - 2);
-                    var rez = delta%divider;
-                    if (rez == 0.0) {
-                        var res = delta/divider;
-                        if (res % 3 == 0.0) {
-                            scaleApproximated.AddVariant(minimal, maximal, 3.ToInt());
-                        }
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private static void BuildFinalVariants(ScaleApproximated approximated) {
+            foreach (var maximal in approximated.Maximals) {
+                foreach (var minimal in approximated.Minimals) {
+                    ResolveApproximatedPair(approximated, minimal, maximal);
+                }
+            }
+        }
+        /// <summary>
+        ///     Резольвит переданную пару типа минимальное:максимальное относительно доавбелиня варианта
+        /// </summary>
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
+        /// <param name="minimal">Минимальное значение</param>
+        /// <param name="maximal">Максимальное значение</param>
+        private static void ResolveApproximatedPair(ScaleApproximated approximated, double minimal, double maximal) {
+            var delta = maximal - minimal;
+            var divider = Math.Pow(10, delta.GetNumberOfDigits() - 2);
+            var rez = delta % divider;
+            if (rez == 0.0) {
+                var res = delta / divider;
+                if (res % 3 == 0.0) {
+                    approximated.AddVariant(minimal, maximal, 3);
+                }
 
-                        if (res % 6 == 0.0) {
-                            scaleApproximated.AddVariant(minimal, maximal, 6);
-                        }
+                if (res % 6 == 0.0) {
+                    approximated.AddVariant(minimal, maximal, 6);
+                }
 
-                        if (res % 5 == 0.0) {
-                            scaleApproximated.AddVariant(minimal, maximal, 5);
-                        }
-                    }
+                if (res % 5 == 0.0) {
+                    approximated.AddVariant(minimal, maximal, 5);
                 }
             }
         }
         /// <summary>
         ///     Выбирает финальный вариант из всех представленных в качестве рекомендованного
         /// </summary>
-        /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private static void SelectFinalVariant(ScaleApproximated scaleApproximated) {
-            scaleApproximated.Normalized.SetRecommendedVariant(scaleApproximated.Normalized.Variants.FirstOrDefault());
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private static void SelectFinalVariant(ScaleApproximated approximated) {
+            if (ContainsApproximatedPoints(approximated)) {
+                AppleApproximatedPoints(approximated);
+            } else {
+                approximated.Normalized.SetRecommendedVariant(approximated.Normalized.Variants.FirstOrDefault());
+            }
+        }
+        /// <summary>
+        ///     Определяет признак того, что таблица примерных значений дивлайнов присутствует в системе
+        /// </summary>
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
+        /// <returns>Признак того, что таблица примерных значений дивлайнов присутствует в системе</returns>
+        private static bool ContainsApproximatedPoints(ScaleApproximated approximated) {
+            return _approximatedTable.Any(_ => approximated.Minimal.IsIn<double>(_.Key.Key) && _.Key.Value >= approximated.Maximal);
+        }
+        /// <summary>
+        ///     Применяет заранее определённые значение аппроксимированной шкалы
+        /// </summary>
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private static void AppleApproximatedPoints(ScaleApproximated approximated) {
+            if (!ContainsApproximatedPoints(approximated)) {
+                throw new Exception("There is no approximated values");
+            }
+
+            var maximal = approximated.Maximal.RoundUp(approximated.Maximal.GetNumberOfDigits());
+            var approx = _approximatedTable.FirstOrDefault(
+                _ => approximated.Minimal.IsIn<double>(_.Key.Key) && _.Key.Value >= maximal
+            );
+
+            if (!approx.Value.Any(_ => _.Key.Equals(maximal))) {
+                throw new Exception("There is no approximated value for the maximal value");
+            }
+
+            var specApprox = approx.Value.FirstOrDefault(_ => _.Key.Equals(maximal)).Value;
+            approximated.Normalized.SetRecommendedVariant(specApprox);
         }
     }
 }

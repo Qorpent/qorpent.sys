@@ -56,8 +56,16 @@ namespace Qorpent.Utils.Extensions {
 		public static bool IsIn(this object obj, params object[] objs) {
 			return -1 != Array.IndexOf(objs, obj);
 		}
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="objs"></param>
+        /// <returns></returns>
+        public static bool IsIn<T>(this T obj, IEnumerable<T> objs) {
+            return objs.Any(_ => _.Equals(obj));
+        }
 		/// <summary>
 		/// 	test if enumerable is not null and contains not null elements
 		/// </summary>
