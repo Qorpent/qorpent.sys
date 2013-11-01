@@ -81,7 +81,7 @@ namespace Qorpent.Serialization.Tests.Charts {
         [Test]
         public void CantAddExternalNormalizerWithCodeLessThan1000() {
             var normalizer = new StubNormalizer();
-            var factory = new FusionChartsNormalizeFactory();
+            var factory = new FusionChartsNormalizerFactory();
             Assert.Throws<Exception>(() => factory.AddNormalizer(normalizer.SetCode(999)));
             Assert.DoesNotThrow(() => factory.AddNormalizer(new StubNormalizer().SetCode(1000)));
         }

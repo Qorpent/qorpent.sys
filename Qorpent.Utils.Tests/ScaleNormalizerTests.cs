@@ -11,14 +11,6 @@ namespace Qorpent.Utils.Tests {
     /// </summary>
     [TestFixture]
     public class ScaleNormalizerTests {
-        private ScaleNormalizer _scaleNormalizer;
-        /// <summary>
-        /// 
-        /// </summary>
-        [TestFixtureSetUp]
-        public void TestFixtureSetUp() {
-            _scaleNormalizer = new ScaleNormalizer();
-        }
         /// <summary>
         ///     Тест проверяет правильность работы нормализатора согласно #AP-347
         /// </summary>
@@ -27,11 +19,18 @@ namespace Qorpent.Utils.Tests {
         /// <param name="expectedMax">Ожидаемое максимальное значение чарта</param>
         /// <param name="divline">Количество дивлайнов</param>
         [TestCase("2139,2066,1870,1854,1882,1823,1870,2033,2129,1936,1853,1829,1841,2033", 1700.0, 2300.0, 3.0)]
-        [TestCase("200,500,250,233,286", 0, 600, 5)]
         [TestCase("216790,238688,103771,192571,105145,38828", 0, 250000, 5)]
+        [TestCase("200,500,250,233,286", 0, 600, 5)]
+        [TestCase("100,200,250,150", 0, 300, 2)]
+        [TestCase("100,200,350,150", 0, 400, 2)]
+        [TestCase("100,200,450,150", 0, 500, 4)]
+        [TestCase("100,200,550,150", 0, 600, 5)]
+        [TestCase("100,200,650,150", 0, 700, 5)]
+        [TestCase("100,200,750,150", 0, 800, 3)]
+        [TestCase("100,200,850,150", 0, 900, 2)]
         public void CanUseDefaultNormalizer(string dataRow, double expectedMin, double expectedMax, double divline) {
             var data = dataRow.SmartSplit(false, true, new[] {','}).Select(Convert.ToDouble);
-            var normalized = _scaleNormalizer.Normalize(data);
+            var normalized = ScaleNormalizer.Normalize(data);
             Console.WriteLine("Expected: from {0} to {1} with {2} divlines", expectedMin, expectedMax, divline);
             Console.WriteLine("Gotten: from {0} to {1} with {2} divlines", normalized.Minimal, normalized.Maximal, normalized.Divline);
             Assert.AreEqual(expectedMin, normalized.Minimal);

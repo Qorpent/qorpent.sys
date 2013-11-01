@@ -61,7 +61,7 @@
     <Compile Include="Charts.FusionCharts\FusionChartsAbstractNormalizer.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartsAnchorsNormalizer.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartsColorNormalizer.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartsNormalizer.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartsNormalizerFactory.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartsNormalizerCodes.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartsNumberScalingNormalizer.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartsPositionNormalizer.cs" />

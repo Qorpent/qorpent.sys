@@ -763,7 +763,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="chart">Исходное представление чарта</param>
         /// <returns>Замыкание на нормализованный чарт</returns>
         public static IChart Normalize(this IChart chart) {
-            return new FusionChartsNormalizeFactory().Normalize(chart);
+            return new FusionChartsNormalizerFactory().Normalize(chart);
         }
         /// <summary>
         ///     Проверяет наличие датасетов в чарте

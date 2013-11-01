@@ -7,7 +7,7 @@ namespace Qorpent.Utils.Scaling {
     /// <summary>
     ///     Утилита нормализации шкал для FusionCharts
     /// </summary>
-    public class ScaleNormalizer {
+    public static class ScaleNormalizer {
         /// <summary>
         ///     Код шага базовой аппроксимации
         /// </summary>
@@ -34,7 +34,7 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="clause">Кляуза на нормализацию</param>
         /// <param name="values">Перечисление значений шкалы</param>
         /// <returns>Представление нормализованной шкалы</returns>
-        public ScaleNormalized Normalize(ScaleNormalizeClause clause, IEnumerable<double> values) {
+        public static ScaleNormalized Normalize(ScaleNormalizeClause clause, IEnumerable<double> values) {
             var approximated = GetApproximatedBase(clause, values);
             approximated.ErrorBahavior = _ => {
                 if (_.Normalized == null) {
@@ -80,7 +80,7 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="clause">Кляуза на нормализацию</param>
         /// <param name="values">Массив значений шкалы</param>
         /// <returns>Представление нормализованной шкалы</returns>
-        public ScaleNormalized Normalize(ScaleNormalizeClause clause, params double[] values) {
+        public static ScaleNormalized Normalize(ScaleNormalizeClause clause, params double[] values) {
             return Normalize(clause, values.AsEnumerable());
         }
         /// <summary>
@@ -88,7 +88,7 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         /// <param name="values">Перечисление значений шкалы</param>
         /// <returns>Представление нормализованной шкалы</returns>
-        public ScaleNormalized Normalize(params double[] values) {
+        public static ScaleNormalized Normalize(params double[] values) {
             return Normalize(new ScaleNormalizeClause { UseMaximalValue = false, UseMinimalValue = false }, values);
         }
         /// <summary>
@@ -96,7 +96,7 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         /// <param name="values">Перечисление значений шкалы</param>
         /// <returns>Представление нормализованной шкалы</returns>
-        public ScaleNormalized Normalize(IEnumerable<double> values) {
+        public static ScaleNormalized Normalize(IEnumerable<double> values) {
             return Normalize(values.ToArray());
         }
         /// <summary>
@@ -104,7 +104,7 @@ namespace Qorpent.Utils.Scaling {
         ///     на разных шагах
         /// </summary>
         /// <param name="clause">Исходный запрос на нормализацию</param>
-        private void InsertBaseAppendixes(ScaleNormalizeClause clause) {
+        private static void InsertBaseAppendixes(ScaleNormalizeClause clause) {
             if (!clause.RunSlickNormalization) {
                 return;
             }
@@ -122,8 +122,25 @@ namespace Qorpent.Utils.Scaling {
                         _.Normalized.SetRecommendedVariant(new ScaleNormalizedVariant {
                             Minimal = _.Normalized.RecommendedVariant.Minimal,
                             Maximal = _.Maximal.RoundUp(_.Maximal.GetNumberOfDigits()),
-                            Divline = _.Maximal.RoundUp(_.Maximal.GetNumberOfDigits()) / 100 - 1
                         });
+
+                        if (_.Normalized.Maximal == 300.0) {
+                            _.Normalized.RecommendedVariant.Divline = 2;
+                        } else if (_.Normalized.Maximal == 400.0) {
+                            _.Normalized.RecommendedVariant.Divline = 2;
+                        } else if (_.Normalized.Maximal == 500.0) {
+                            _.Normalized.RecommendedVariant.Divline = 4;
+                        } else if (_.Normalized.Maximal == 600.0) {
+                            _.Normalized.RecommendedVariant.Divline = 5;
+                        } else if (_.Normalized.Maximal == 700.0) {
+                            _.Normalized.RecommendedVariant.Divline = 5;
+                        } else if (_.Normalized.Maximal == 800.0) {
+                            _.Normalized.RecommendedVariant.Divline = 3;
+                        } else if (_.Normalized.Maximal == 900.0) {
+                            _.Normalized.RecommendedVariant.Divline = 2;
+                        } else {
+                            _.Normalized.RecommendedVariant.Divline = 3;
+                        }
                     }
                 }
             });
@@ -132,7 +149,7 @@ namespace Qorpent.Utils.Scaling {
         ///     Возвращает перечисление шагов нормализации шкалы
         /// </summary>
         /// <returns>Перечисление шагов нормализации шкалы</returns>
-        private IEnumerable<KeyValuePair<int, Action<ScaleApproximated>>> GetApproximationSteps() {
+        private static IEnumerable<KeyValuePair<int, Action<ScaleApproximated>>> GetApproximationSteps() {
             yield return new KeyValuePair<int, Action<ScaleApproximated>>(BaseApproximationCode, BaseApproximation);
             yield return new KeyValuePair<int, Action<ScaleApproximated>>(GetApproximatedVariantsCode, GetApproximatedVariants);
             yield return new KeyValuePair<int, Action<ScaleApproximated>>(ImproveApproximatedVariantsCode, ImproveApproximatedVariants);
@@ -145,7 +162,7 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="clause">Исходный запрос на нормализацию</param>
         /// <param name="baseValues">Перечисление базовых значений</param>
         /// <returns>Представление аппроксимированной и улучшенной шкалы</returns>
-        private ScaleApproximated GetApproximatedBase(ScaleNormalizeClause clause, IEnumerable<double> baseValues) {
+        private static ScaleApproximated GetApproximatedBase(ScaleNormalizeClause clause, IEnumerable<double> baseValues) {
             InsertBaseAppendixes(clause);
             return new ScaleApproximated(clause, baseValues, new ScaleNormalized(clause));
         }
@@ -153,7 +170,7 @@ namespace Qorpent.Utils.Scaling {
         ///     Производит улучшение апроксимированых значений 
         /// </summary>
         /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private void ImproveApproximatedVariants(ScaleApproximated scaleApproximated) {
+        private static void ImproveApproximatedVariants(ScaleApproximated scaleApproximated) {
             if (!(scaleApproximated.BorderValue > 1 || scaleApproximated.BorderValue < -1)) {
                 return;
             }
@@ -173,7 +190,7 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
         /// <returns></returns>
-        private void GetApproximatedVariants(ScaleApproximated scaleApproximated) {
+        private static void GetApproximatedVariants(ScaleApproximated scaleApproximated) {
             var withFractions = scaleApproximated.BorderValue > 1 || scaleApproximated.BorderValue < -1;
 
             var step = scaleApproximated.BorderValue/20;
@@ -211,7 +228,7 @@ namespace Qorpent.Utils.Scaling {
         ///     Подсчитывает приблизительные пределы, округляя нижнее и верхнее значение
         /// </summary>
         /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private void BaseApproximation(ScaleApproximated scaleApproximated) {
+        private static void BaseApproximation(ScaleApproximated scaleApproximated) {
             var maxDispersion = SlickNumbers.MaxDispersion(scaleApproximated.BaseValues);
             var minimal = scaleApproximated.BaseValues.Min();
             var maximal = scaleApproximated.BaseValues.Max();
@@ -239,7 +256,7 @@ namespace Qorpent.Utils.Scaling {
         ///     Собирает конечные варианты нормализации
         /// </summary>
         /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private void BuildFinalVariants(ScaleApproximated scaleApproximated) {
+        private static void BuildFinalVariants(ScaleApproximated scaleApproximated) {
             foreach (var maximal in scaleApproximated.Maximals) {
                 foreach (var minimal in scaleApproximated.Minimals) {
                     var delta = maximal - minimal;
@@ -266,7 +283,7 @@ namespace Qorpent.Utils.Scaling {
         ///     Выбирает финальный вариант из всех представленных в качестве рекомендованного
         /// </summary>
         /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private void SelectFinalVariant(ScaleApproximated scaleApproximated) {
+        private static void SelectFinalVariant(ScaleApproximated scaleApproximated) {
             scaleApproximated.Normalized.SetRecommendedVariant(scaleApproximated.Normalized.Variants.FirstOrDefault());
         }
     }
