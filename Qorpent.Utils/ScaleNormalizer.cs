@@ -109,6 +109,25 @@ namespace Qorpent.Utils {
             if (!clause.RunSlickNormalization) {
                 return;
             }
+
+            clause.AddAppendix(ImproveApproximatedVariantsCode, _ => {
+                if (_.Maximal < 1000) {
+                    _.SetMinimals(new ArraySegment<double>(new[] { 0.0 }));
+                    _.SetMaximals(SlickNumbers.GenerateLine(_.Maximal, 1000, 90).Select(
+                        __ => __.RoundUp(__.GetNumberOfDigits() - 1).ToDouble())
+                    );
+                }
+            }).AddAppendix(SelectFinalVariantCode, _ => {
+                if (_.Maximal < 1000 && _.Minimal >= 0) {
+                    if (_.Maximal + 20 <= _.Maximal.RoundUp(_.Maximal.GetNumberOfDigits())) {
+                        _.Normalized.SetRecommendedVariant(new ScaleNormalizedVariant {
+                            Minimal = _.Normalized.RecommendedVariant.Minimal,
+                            Maximal = _.Maximal.RoundUp(_.Maximal.GetNumberOfDigits()),
+                            Divline = _.Maximal.RoundUp(_.Maximal.GetNumberOfDigits()) / 100 - 1
+                        });
+                    }
+                }
+            });
         }
         /// <summary>
         ///     Возвращает перечисление шагов нормализации шкалы
@@ -691,16 +710,17 @@ namespace Qorpent.Utils {
         ///     Добавление дополнительного действия в коллекцию
         /// </summary>
         /// <param name="appendix">Пара, представляющая код шага и действие</param>
-        public void AddAppendix(KeyValuePair<int, Action<ApproximatedScaleLimits>> appendix) {
+        public ScaleNormalizeClause AddAppendix(KeyValuePair<int, Action<ApproximatedScaleLimits>> appendix) {
             _appendixes.Add(appendix);
+            return this;
         }
         /// <summary>
         ///     Добавление дополнительного действия в коллекцию
         /// </summary>
         /// <param name="stepCode">Код шага, с которым ассоциированно действие</param>
         /// <param name="appendix">Действие</param>
-        public void AddAppendix(int stepCode, Action<ApproximatedScaleLimits> appendix) {
-            AddAppendix(new KeyValuePair<int, Action<ApproximatedScaleLimits>>(stepCode, appendix));
+        public ScaleNormalizeClause AddAppendix(int stepCode, Action<ApproximatedScaleLimits> appendix) {
+            return AddAppendix(new KeyValuePair<int, Action<ApproximatedScaleLimits>>(stepCode, appendix));
         }
     }
 }
