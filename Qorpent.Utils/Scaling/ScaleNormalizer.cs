@@ -169,8 +169,8 @@ namespace Qorpent.Utils.Scaling {
                 return;
             }
 
-            approximated.SetMaximals((approximated.Maximal - approximated.BaseValues.Max() > approximated.BorderValue/4 ? new[] {approximated.Maximal} : new double[] {}).Union(approximated.Maximals.Select(_ => _.RoundUp(GetRoundEstimation(_.GetNumberOfDigits())))));
-            approximated.SetMinimals(approximated.Minimals.Select(_ => _.RoundDown(GetRoundEstimation(_.GetNumberOfDigits()))));
+            approximated.SetMaximals((approximated.Maximal - approximated.BaseValues.Max() > approximated.BorderValue / 4 ? new[] { approximated.Maximal } : new double[] { }).Union(approximated.Maximals.Select(_ => _.RoundUp(_.OrderEstimation()))));
+            approximated.SetMinimals(approximated.Minimals.Select(_ => _.RoundDown(_.OrderEstimation())));
 
             if (approximated.Minimal >= 0 && approximated.Maximal >= 0) {
                 approximated.SetMaximals(approximated.Maximals.Where(_ => _ >= 0 ).Distinct());
@@ -220,32 +220,17 @@ namespace Qorpent.Utils.Scaling {
                 if (((mborder >= maxDispersion) || (maximal.GetNumberOfDigits() - minimal.GetNumberOfDigits() > 0)) && (minimal >= 0)) {
                     scaleApproximated.Minimal = 0; // если разрыв слишком большой и значения больше нуля, то нижняя граница 0
                 } else {
-                    scaleApproximated.Minimal = minimal.RoundDown(GetRoundEstimation(minimal.GetNumberOfDigits()));
+                    scaleApproximated.Minimal = minimal.RoundDown(minimal.OrderEstimation());
                 }
             }
 
             if (scaleApproximated.Clause.UseMaximalValue) {
                 scaleApproximated.Maximal = scaleApproximated.Clause.MaximalValue;
             } else {
-                scaleApproximated.Maximal = maximal.RoundUp(GetRoundEstimation(maximal.GetNumberOfDigits()));
+                scaleApproximated.Maximal = maximal.RoundUp(maximal.OrderEstimation());
             }
 
             scaleApproximated.BorderValue = mborder;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="digits"></param>
-        private static int GetRoundEstimation(int digits) {
-            if (digits < 0) {
-                throw new Exception("There are no number with negative count of digits");
-            } else if (digits >= 4) {
-                return digits - 2;
-            } else if (digits >= 2) {
-                return 2;
-            } else {
-                return 1;
-            }
         }
         /// <summary>
         ///     Собирает конечные варианты нормализации

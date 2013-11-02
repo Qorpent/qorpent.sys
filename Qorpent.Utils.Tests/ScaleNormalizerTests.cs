@@ -18,6 +18,7 @@ namespace Qorpent.Utils.Tests {
         /// <param name="expectedMin">Ожидаемое минимальное значение чарта</param>
         /// <param name="expectedMax">Ожидаемое максимальное значение чарта</param>
         /// <param name="divline">Количество дивлайнов</param>
+        /// <param name="checkDivlines">Признак того, что нужно сверить кол-во дивлайнов</param>
         [TestCase("2139,2066,1870,1854,1882,1823,1870,2033,2129,1936,1853,1829,1841,2033", 1800.0, 2200.0, 3.0, false)]
         [TestCase("216790,238688,103771,192571,105145,38828", 0, 250000, 5, false)]
         [TestCase("-150,100,200,250", -200, 300, 5, false)]
@@ -30,7 +31,8 @@ namespace Qorpent.Utils.Tests {
         [TestCase("100,200,750,150", 0, 800, 3, true)]
         [TestCase("100,200,850,150", 0, 900, 2, true)]
         [TestCase("-10,100,200,250", -100, 300, 5, true)]
-        [TestCase("-10,200,850,150", -100, 900, 5, true)] 
+        [TestCase("-10,200,850,150", -100, 900, 5, true)]
+        [TestCase("432751000,216790000,238688000,103771000,459386000,192571000,105145000,38828000", 0, 500000000, 5, true)]
         public void CanUseDefaultNormalizer(string dataRow, double expectedMin, double expectedMax, double divline, bool checkDivlines) {
             var data = dataRow.SmartSplit(false, true, new[] {','}).Select(Convert.ToDouble);
             var normalized = ScaleNormalizer.Normalize(data);

@@ -68,10 +68,10 @@ namespace Qorpent.Utils.Extensions {
             return !number.IsEven();
         }
         /// <summary>
-        /// 
+        ///     Определяет количество знаков целой части числа
         /// </summary>
-        /// <param name="number"></param>
-        /// <returns></returns>
+        /// <param name="number">Исходное число</param>
+        /// <returns>Количество знаков целой части числа</returns>
         public static int GetNumberOfDigits(this double number) {
             var intNum = number.ToInt();
             var digits = 1;
@@ -135,6 +135,24 @@ namespace Qorpent.Utils.Extensions {
         public static int Minimal(this int f, int s) {
             return (f * 1.0).Minimal(s * 1.0).ToInt();
         }
-        
+        /// <summary>
+        ///     Определяет порядок приближения числа, по которому можно округлить число, не потеряв семантики
+        /// </summary>
+        /// <param name="number">Число</param>
+        public static int OrderEstimation(this double number) {
+            var digits = number.GetNumberOfDigits();
+
+            if (digits < 0) {
+                throw new Exception("There are no number with negative count of digits");
+            } else if (digits >= 7) {
+                return digits - 1;
+            } else if (digits >= 4) {
+                return digits - 2;
+            } else if (digits >= 2) {
+                return 2;
+            } else {
+                return 1;
+            }
+        }
     }
 }
