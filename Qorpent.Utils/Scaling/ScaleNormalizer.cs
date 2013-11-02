@@ -176,12 +176,12 @@ namespace Qorpent.Utils.Scaling {
             ));
 
             if (approximated.Minimal > 0) {
-                minimals = minimals.Where(_ => _ >= 0);
+                minimals = minimals.RemoveNegativeValues();
             }
 
             if (approximated.BorderValue.GreaterOrEqualOneByAbs()) {
-                minimals = minimals.Select(Math.Floor);
-                maximals = maximals.Select(Math.Floor);
+                minimals = minimals.Floor();
+                maximals = maximals.Floor();
             }
 
             approximated.SetMinimals(minimals);
@@ -200,17 +200,17 @@ namespace Qorpent.Utils.Scaling {
             if (scaleApproximated.Clause.UseMinimalValue) {
                 scaleApproximated.Minimal = scaleApproximated.Clause.MinimalValue;
             } else {
-                if (((mborder >= maxDispersion) || (maximal.GetNumberOfDigits() - minimal.GetNumberOfDigits() > 0)) && (minimal >= 0)) {
+                if (((mborder >= maxDispersion) || (!maximal.IsOrderEquals(minimal))) && (minimal >= 0)) {
                     scaleApproximated.Minimal = 0; // если разрыв слишком большой и значения больше нуля, то нижняя граница 0
                 } else {
-                    scaleApproximated.Minimal = minimal.RoundDown(minimal.OrderEstimation());
+                    scaleApproximated.Minimal = minimal.ApproximateDown();
                 }
             }
 
             if (scaleApproximated.Clause.UseMaximalValue) {
                 scaleApproximated.Maximal = scaleApproximated.Clause.MaximalValue;
             } else {
-                scaleApproximated.Maximal = maximal.RoundUp(maximal.OrderEstimation());
+                scaleApproximated.Maximal = maximal.ApproximateUp();
             }
 
             scaleApproximated.BorderValue = mborder;
@@ -251,7 +251,7 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         /// <returns>Признак того, что таблица примерных значений дивлайнов присутствует в системе</returns>
         private static bool ContainsApproximatedPoints(ScaleApproximated approximated) {
-            return _approxTable.Any(_ => approximated.Minimal.IsIn<double>(_.Key.Key) && _.Key.Value >= approximated.Maximal);
+            return _approxTable.Any(_ => approximated.Minimal.IsIn(_.Key.Key) && _.Key.Value.IsGreaterOrEqual(approximated.Maximal));
         }
         /// <summary>
         ///     Применяет заранее определённые значение аппроксимированной шкалы
@@ -263,9 +263,8 @@ namespace Qorpent.Utils.Scaling {
                 return false;
             }
 
-            var maximal = approximated.Maximal.RoundUp(approximated.Maximal.GetNumberOfDigits());
             var approx = _approxTable.FirstOrDefault(
-                _ => approximated.Minimal.IsIn<double>(_.Key.Key) && _.Key.Value >= maximal
+                _ => approximated.Minimal.IsIn(_.Key.Key) && _.Key.Value.IsGreaterOrEqual(approximated.Maximal)
             );
 
             if (!approx.Value.Any(_ => _.Key.Equals(approximated.Maximal))) {
@@ -277,8 +276,5 @@ namespace Qorpent.Utils.Scaling {
 
             return true;
         }
-    }
-    internal class ApproximationTable {
-        
     }
 }

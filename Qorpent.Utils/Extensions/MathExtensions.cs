@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Qorpent.Utils.Extensions {
     /// <summary>
@@ -42,6 +43,16 @@ namespace Qorpent.Utils.Extensions {
         public static double RoundDown(this double number, int order) {
             var pow = Math.Pow(10, order);
             return Math.Floor(number.ToInt() / pow) * pow.ToInt();
+        }
+        /// <summary>
+        ///     Суммирование ряда чисел
+        /// </summary>
+        /// <param name="numbers">Перечисление чисел для суммирования</param>
+        /// <returns>Результат суммирования</returns>
+        public static double Sigma(this IEnumerable<double> numbers) {
+            var result = 0.0;
+            numbers.DoForEach(_ => result += _);
+            return result;
         }
         /// <summary>
         ///     Округляет в большую сторону относительно указанного порядка
@@ -116,13 +127,80 @@ namespace Qorpent.Utils.Extensions {
             }
         }
         /// <summary>
+        ///     Удаляет из перечисления отрицательные значения
+        /// </summary>
+        /// <param name="numbers">Исходное перечисление чисел</param>
+        /// <returns>Очищенное перечисление чисел</returns>
+        public static IEnumerable<double> RemoveNegativeValues(this IEnumerable<double> numbers) {
+            return numbers.Where(_ => _ >= 0);
+        }
+        /// <summary>
+        ///     Удаляет из перечисления положительные значения
+        /// </summary>
+        /// <param name="numbers">Исходное перечисление чисел</param>
+        /// <returns>Очищенное перечисление чисел</returns>
+        public static IEnumerable<double> RemovePositiveValues(this IEnumerable<double> numbers) {
+            return numbers.Where(_ => _ <= 0);
+        }
+        /// <summary>
+        ///     Возвращает перечисление без дробной части
+        /// </summary>
+        /// <param name="numbers">Исходное перечисление</param>
+        /// <returns>Перечисление без дробной части</returns>
+        public static IEnumerable<double> Floor(this IEnumerable<double> numbers) {
+            return numbers.Select(Math.Floor);
+        }
+        /// <summary>
+        ///     Определяет признак того, что числа имеют одинаковый порядок
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <param name="another">Число для сравнения</param>
+        /// <returns>Признак того, что числа имеют одинаковый порядок</returns>
+        public static bool IsOrderEquals(this double number, double another) {
+            return number.GetNumberOfDigits() == another.GetNumberOfDigits();
+        }
+        /// <summary>
+        ///     Определяет признак того, что исходное число больше, чем второе
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <param name="another">Число для сравнения</param>
+        /// <returns>Признак того, что исходное число больше, чем второе</returns>
+        public static bool IsGreaterThan(this double number, double another) {
+            return number > another;
+        }
+        /// <summary>
+        ///     Определяет признак того, что исходное число больше или равно, чем второе
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <param name="another">Число для сравнения</param>
+        /// <returns>Признак того, что исходное число больше или равно, чем второе</returns>
+        public static bool IsGreaterOrEqual(this double number, double another) {
+            return number >= another;
+        }
+        /// <summary>
+        ///     Аппроксимация вверх
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <returns>Аппроксимированное число</returns>
+        public static double ApproximateUp(this double number) {
+            return number.RoundUp(number.OrderEstimation());
+        }
+        /// <summary>
+        ///     Аппроксимация вниз
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <returns>Аппроксимированное число</returns>
+        public static double ApproximateDown(this double number) {
+            return number.RoundDown(number.OrderEstimation());
+        }
+        /// <summary>
         ///     Признак того, что это круглое число
         /// </summary>
         /// <param name="number"></param>
         /// <param name="order"></param>
         /// <returns></returns>
         public static bool IsRoundNumber(this double number, int order) {
-            return number%Math.Pow(10, order) == 0.0;
+            return (number%Math.Pow(10, order)).ToInt() == 0;
         }
         /// <summary>
         /// 
@@ -177,15 +255,21 @@ namespace Qorpent.Utils.Extensions {
 
             if (digits < 0) {
                 throw new Exception("There are no number with negative count of digits");
-            } else if (digits >= 7) {
-                return digits - 1;
-            } else if (digits >= 4) {
-                return digits - 2;
-            } else if (digits >= 2) {
-                return 2;
-            } else {
-                return 1;
             }
+            
+            if (digits >= 7) {
+                return digits - 1;
+            }
+            
+            if (digits >= 4) {
+                return digits - 2;
+            }
+            
+            if (digits >= 2) {
+                return 2;
+            }
+
+            return 1;
         }
     }
 }
