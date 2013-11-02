@@ -30,6 +30,10 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         public const int SelectFinalVariantCode = 4;
         /// <summary>
+        ///     Значение количества дивлайнов по умолчанию
+        /// </summary>
+        public const int DefaultDivlineCount = 5;
+        /// <summary>
         ///     Производит нормалзацию шкалы
         /// </summary>
         /// <param name="clause">Кляуза на нормализацию</param>
@@ -44,7 +48,7 @@ namespace Qorpent.Utils.Scaling {
 
                 if (!_.BaseValues.Any()) {
                     _.Normalized.SetRecommendedVariant(new ScaleNormalizedVariant {
-                        Divline = 0,
+                        Divline = DefaultDivlineCount,
                         Minimal = double.MinValue,
                         Maximal = double.MaxValue
                     });
@@ -53,7 +57,7 @@ namespace Qorpent.Utils.Scaling {
                 }
 
                 _.Normalized.SetRecommendedVariant(new ScaleNormalizedVariant {
-                    Divline = 3,
+                    Divline = DefaultDivlineCount,
                     Maximal = _.BaseValues.Max(),
                     Minimal = _.BaseValues.Min()
                 });
@@ -115,7 +119,7 @@ namespace Qorpent.Utils.Scaling {
                     _.Normalized.SetRecommendedVariant(new ScaleNormalizedVariant {
                         Minimal = _.Minimal,
                         Maximal = _.Maximal,
-                        Divline = 0
+                        Divline = DefaultDivlineCount
                     });
                 }
             });
@@ -185,12 +189,12 @@ namespace Qorpent.Utils.Scaling {
 
             var minimals = SlickNumbers.GenerateLine(
                 scaleApproximated.Minimal - step*20,
-                scaleApproximated.Minimal,
+                scaleApproximated.Minimal - step,
                 step
             );
 
             var maximals = SlickNumbers.GenerateLine(
-                scaleApproximated.Maximal,
+                scaleApproximated.Maximal + step,
                 scaleApproximated.Maximal + step * 20,
                 step
             );
@@ -216,7 +220,7 @@ namespace Qorpent.Utils.Scaling {
             if (scaleApproximated.Clause.UseMinimalValue) {
                 scaleApproximated.Minimal = scaleApproximated.Clause.MinimalValue;
             } else {
-                if ((mborder >= maxDispersion) && (minimal >= 0)) {
+                if (((mborder >= maxDispersion) || (maximal.GetNumberOfDigits() - minimal.GetNumberOfDigits() > 0)) && (minimal >= 0)) {
                     scaleApproximated.Minimal = 0; // если разрыв слишком большой и значения больше нуля, то нижняя граница 0
                 } else {
                     scaleApproximated.Minimal = minimal.RoundDown(GetRoundEstimation(minimal.GetNumberOfDigits()));
@@ -284,7 +288,7 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         private static void SelectFinalVariant(ScaleApproximated approximated) {
             if (ContainsApproximatedPoints(approximated)) {
-                var isSuccess = AppleApproximatedPoints(approximated);
+                var isSuccess = ApplyApproximatedPoints(approximated);
                 if (isSuccess) {
                     return;
                 }
@@ -305,7 +309,7 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         /// <returns>Признак того, что применение таблицы было успешно завершено</returns>
-        private static bool AppleApproximatedPoints(ScaleApproximated approximated) {
+        private static bool ApplyApproximatedPoints(ScaleApproximated approximated) {
             if (!ContainsApproximatedPoints(approximated)) {
                 return false;
             }
