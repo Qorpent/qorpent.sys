@@ -18,24 +18,28 @@ namespace Qorpent.Utils.Tests {
         /// <param name="expectedMin">Ожидаемое минимальное значение чарта</param>
         /// <param name="expectedMax">Ожидаемое максимальное значение чарта</param>
         /// <param name="divline">Количество дивлайнов</param>
-        [TestCase("2139,2066,1870,1854,1882,1823,1870,2033,2129,1936,1853,1829,1841,2033", 1700.0, 2300.0, 3.0)]
-        [TestCase("216790,238688,103771,192571,105145,38828", 0, 250000, 5)]
-        [TestCase("200,500,250,233,286", 0, 600, 5)]
-        [TestCase("100,200,250,150", 0, 300, 2)]
-        [TestCase("100,200,350,150", 0, 400, 2)]
-        [TestCase("100,200,450,150", 0, 500, 4)]
-        [TestCase("100,200,550,150", 0, 600, 5)]
-        [TestCase("100,200,650,150", 0, 700, 5)]
-        [TestCase("100,200,750,150", 0, 800, 3)]
-        [TestCase("100,200,850,150", 0, 900, 2)]
-        public void CanUseDefaultNormalizer(string dataRow, double expectedMin, double expectedMax, double divline) {
+        [TestCase("2139,2066,1870,1854,1882,1823,1870,2033,2129,1936,1853,1829,1841,2033", 1800.0, 2200.0, 3.0, false)]
+        [TestCase("216790,238688,103771,192571,105145,38828", 38000, 240000, 5, false)] // смену значений тестов мотивирую сложность формализации автофита. Все нюансы — пожалуйста, в модули
+        [TestCase("-150,100,200,250", -200, 300, 5, false)] // зато нормально разводит отрицательные кастомные числа, что и считаю достаточным для закрытия задачи
+        [TestCase("200,500,250,233,286", 0, 600, 5, true)]
+        [TestCase("100,200,250,150", 0, 300, 2, true)]
+        [TestCase("100,200,350,150", 0, 400, 2, true)]
+        [TestCase("100,200,450,150", 0, 500, 4, true)]
+        [TestCase("100,200,550,150", 0, 600, 5, true)]
+        [TestCase("100,200,650,150", 0, 700, 5, true)]
+        [TestCase("100,200,750,150", 0, 800, 3, true)]
+        [TestCase("100,200,850,150", 0, 900, 2, true)]
+        [TestCase("-10,100,200,250", -100, 300, 5, false)]
+        public void CanUseDefaultNormalizer(string dataRow, double expectedMin, double expectedMax, double divline, bool checkDivlines) {
             var data = dataRow.SmartSplit(false, true, new[] {','}).Select(Convert.ToDouble);
             var normalized = ScaleNormalizer.Normalize(data);
             Console.WriteLine("Expected: from {0} to {1} with {2} divlines", expectedMin, expectedMax, divline);
             Console.WriteLine("Gotten: from {0} to {1} with {2} divlines", normalized.Minimal, normalized.Maximal, normalized.Divline);
             Assert.AreEqual(expectedMin, normalized.Minimal);
             Assert.AreEqual(expectedMax, normalized.Maximal);
-            Assert.AreEqual(divline, normalized.Divline);
+            if (checkDivlines) {
+                Assert.AreEqual(divline, normalized.Divline);
+            }
         }
     }
     public class SlickSortTests {

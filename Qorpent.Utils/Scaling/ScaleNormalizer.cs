@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.Scaling {
@@ -109,12 +110,13 @@ namespace Qorpent.Utils.Scaling {
                 return;
             }
 
-            clause.AddAppendix(ImproveApproximatedVariantsCode, _ => {
-                if (_.Maximal < 1000) {
-                    _.SetMinimals(new ArraySegment<double>(new[] { 0.0 }));
-                    _.SetMaximals(SlickNumbers.GenerateLine(_.Maximal, 1000, 90).Select(
-                        __ => __.RoundUp(__.GetNumberOfDigits() - 1).ToDouble())
-                    );
+            clause.AddAppendix(SelectFinalVariantCode, _ => {
+                if (_.Normalized.RecommendedVariant == null) {
+                    _.Normalized.SetRecommendedVariant(new ScaleNormalizedVariant {
+                        Minimal = _.Minimal,
+                        Maximal = _.Maximal,
+                        Divline = 0
+                    });
                 }
             });
         }
@@ -123,7 +125,7 @@ namespace Qorpent.Utils.Scaling {
         ///     {[[Точное значение min]:[верхняя граница для Max]]:{[Точное значение Max с учётом max.RoundUp(max.GetNumberOfDigits())]:[Вариант, поставленный в соответствие]}}
         /// </summary>
         private static IDictionary<KeyValuePair<double[], double>, IDictionary<double, ScaleNormalizedVariant>> _approximatedTable = new Dictionary<KeyValuePair<double[], double>, IDictionary<double, ScaleNormalizedVariant>> {
-            {new KeyValuePair<double[], double>(new[] {100.0, 200.0}, 1000), new Dictionary<double, ScaleNormalizedVariant> {
+            {new KeyValuePair<double[], double>(new[] {0.0, 100.0, 200.0}, 1000), new Dictionary<double, ScaleNormalizedVariant> {
                 {300, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 300.0}},
                 {400, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 400.0}},
                 {500, new ScaleNormalizedVariant { Divline = 4, Minimal = 0.0, Maximal = 500.0}},
@@ -157,21 +159,19 @@ namespace Qorpent.Utils.Scaling {
         /// <summary>
         ///     Производит улучшение апроксимированых значений 
         /// </summary>
-        /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private static void ImproveApproximatedVariants(ScaleApproximated scaleApproximated) {
-            if (!(scaleApproximated.BorderValue > 1 || scaleApproximated.BorderValue < -1)) {
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
+        private static void ImproveApproximatedVariants(ScaleApproximated approximated) {
+            if (!(approximated.BorderValue > 1 || approximated.BorderValue < -1)) {
                 return;
             }
 
-            var maximals = scaleApproximated.Maximals;
-            var minimals = scaleApproximated.Minimals;
+            approximated.SetMaximals(new [] {approximated.Maximal}.Union(approximated.Maximals.Select(_ => _.RoundUp(GetRoundEstimation(_.GetNumberOfDigits())))));
+            approximated.SetMinimals(new[] { approximated.Minimal }.Union(approximated.Minimals.Select(_ => _.RoundDown(GetRoundEstimation(_.GetNumberOfDigits())))));
 
-            //  немного улучшим значения округлениями и зачистим от повторов, использую Distinct()
-            maximals = maximals.Select(_ => _.RoundUp(_.GetNumberOfDigits() - 1).ToDouble()).Distinct().ToList();
-            minimals = minimals.Select(_ => _.RoundDown(_.GetNumberOfDigits() - 1).ToDouble()).Distinct().ToList();
-
-            scaleApproximated.SetMaximals(maximals);
-            scaleApproximated.SetMinimals(minimals);
+            if (approximated.Minimal >= 0 && approximated.Maximal >= 0) {
+                approximated.SetMaximals(approximated.Maximals.Where(_ => _ >= 0).Distinct());
+                approximated.SetMinimals(approximated.Minimals.Where(_ => _ >= 0).Distinct());
+            }
         }
         /// <summary>
         ///     Возвращает разброс значений для дальнейшего запуска генетического алгоритма поиска лучшего решения
@@ -181,26 +181,17 @@ namespace Qorpent.Utils.Scaling {
         private static void GetApproximatedVariants(ScaleApproximated scaleApproximated) {
             var withFractions = scaleApproximated.BorderValue > 1 || scaleApproximated.BorderValue < -1;
 
-            var step = scaleApproximated.BorderValue/20;
-            step = step.RoundDown(step.GetNumberOfDigits() - 1);
+            var step = scaleApproximated.BaseValues.Average()/20;
 
             var minimals = SlickNumbers.GenerateLine(
                 scaleApproximated.Minimal - step*20,
-                (scaleApproximated.Minimal < 1000)
-                    ?
-                (scaleApproximated.Minimal.RoundDown(scaleApproximated.Minimal.GetNumberOfDigits()) - step)
-                    :
-                (scaleApproximated.Minimal + step * 20),
+                scaleApproximated.Minimal,
                 step
             );
 
             var maximals = SlickNumbers.GenerateLine(
                 scaleApproximated.Maximal,
-                (scaleApproximated.Maximal < 1000)
-                    ?
-                (scaleApproximated.Maximal.RoundUp(scaleApproximated.Maximal.GetNumberOfDigits()) + step)
-                    :
-                (scaleApproximated.Maximal + step * 20),
+                scaleApproximated.Maximal + step * 20,
                 step
             );
 
@@ -228,17 +219,32 @@ namespace Qorpent.Utils.Scaling {
                 if ((mborder >= maxDispersion) && (minimal >= 0)) {
                     scaleApproximated.Minimal = 0; // если разрыв слишком большой и значения больше нуля, то нижняя граница 0
                 } else {
-                    scaleApproximated.Minimal = minimal.RoundDown(minimal.GetNumberOfDigits() - 1);
+                    scaleApproximated.Minimal = minimal.RoundDown(GetRoundEstimation(minimal.GetNumberOfDigits()));
                 }
             }
 
             if (scaleApproximated.Clause.UseMaximalValue) {
                 scaleApproximated.Maximal = scaleApproximated.Clause.MaximalValue;
             } else {
-                scaleApproximated.Maximal = maximal.RoundUp(maximal.GetNumberOfDigits() - 1);
+                scaleApproximated.Maximal = maximal.RoundUp(GetRoundEstimation(maximal.GetNumberOfDigits()));
             }
 
             scaleApproximated.BorderValue = mborder;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="digits"></param>
+        private static int GetRoundEstimation(int digits) {
+            if (digits < 0) {
+                throw new Exception("There are no number with negative count of digits");
+            } else if (digits >= 4) {
+                return digits - 2;
+            } else if (digits >= 2) {
+                return 2;
+            } else {
+                return 1;
+            }
         }
         /// <summary>
         ///     Собирает конечные варианты нормализации
@@ -259,21 +265,17 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="maximal">Максимальное значение</param>
         private static void ResolveApproximatedPair(ScaleApproximated approximated, double minimal, double maximal) {
             var delta = maximal - minimal;
-            var divider = Math.Pow(10, delta.GetNumberOfDigits() - 2);
-            var rez = delta % divider;
-            if (rez == 0.0) {
-                var res = delta / divider;
-                if (res % 3 == 0.0) {
-                    approximated.AddVariant(minimal, maximal, 3);
-                }
 
-                if (res % 6 == 0.0) {
-                    approximated.AddVariant(minimal, maximal, 6);
-                }
+            if (delta % 3 == 0.0) {
+                approximated.AddVariant(minimal, maximal, 3);
+            }
 
-                if (res % 5 == 0.0) {
-                    approximated.AddVariant(minimal, maximal, 5);
-                }
+            if (delta % 6 == 0.0) {
+                approximated.AddVariant(minimal, maximal, 6);
+            }
+
+            if (delta % 5 == 0.0) {
+                approximated.AddVariant(minimal, maximal, 5);
             }
         }
         /// <summary>
@@ -313,11 +315,11 @@ namespace Qorpent.Utils.Scaling {
                 _ => approximated.Minimal.IsIn<double>(_.Key.Key) && _.Key.Value >= maximal
             );
 
-            if (!approx.Value.Any(_ => _.Key.Equals(maximal))) {
-                return false;
+            if (!approx.Value.Any(_ => _.Key.Equals(approximated.Maximal))) {
+                throw new Exception("There is no approximated value for the maximal value");
             }
 
-            var specApprox = approx.Value.FirstOrDefault(_ => _.Key.Equals(maximal)).Value;
+            var specApprox = approx.Value.FirstOrDefault(_ => _.Key.Equals(approximated.Maximal)).Value;
             approximated.Normalized.SetRecommendedVariant(specApprox);
 
             return true;

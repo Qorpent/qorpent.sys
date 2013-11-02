@@ -40,12 +40,9 @@ namespace Qorpent.Utils.Extensions {
         /// <param name="number">Исходное число</param>
         /// <param name="order">Порядок, по которому округлять</param>
         /// <returns>Округлённое число</returns>
-        public static int RoundDown(this double number, int order) {
-            var t = Math.Pow(10, order);
-            var f = Math.Floor(number.ToInt()/t);
-            var y = Math.Round(number%t);
-            var b = (order > 1) ? Math.Floor(y / Math.Pow(10, order - 1)) : (0);
-            return (f*Math.Pow(10, order) + b * (Math.Pow(10, order - 1))).ToInt();
+        public static double RoundDown(this double number, int order) {
+            var pow = Math.Pow(10, order);
+            return Math.Floor(number.ToInt() / pow) * pow.ToInt();
         }
         /// <summary>
         ///     Округляет в большую сторону относительно указанного порядка
@@ -53,8 +50,8 @@ namespace Qorpent.Utils.Extensions {
         /// <param name="number">Исходное число</param>
         /// <param name="order">Порядок, по которому округлять</param>
         /// <returns>Округлённое число</returns>
-        public static int RoundUp(this double number, int order) {
-            return number.RoundDown(order) + ((order == 1) ? (10) : (Math.Pow(10, order - 1).ToInt()));
+        public static double RoundUp(this double number, int order) {
+            return number.RoundDown(order).ToInt() + Math.Pow(10, order).ToInt();
         }
         /// <summary>
         ///     Чётное
@@ -78,7 +75,14 @@ namespace Qorpent.Utils.Extensions {
         /// <param name="number"></param>
         /// <returns></returns>
         public static int GetNumberOfDigits(this double number) {
-            return number.ToString().Split(new[] {'.', ','})[0].Replace("-", "").Length;
+            var intNum = number.ToInt();
+            var digits = 1;
+            while (intNum/10 != 0) {
+                intNum /= 10;
+                digits++;
+            }
+
+            return digits;
         }
         /// <summary>
         ///     Признак того, что это круглое число
