@@ -66,6 +66,7 @@
     <Compile Include="Scaling\ScaleNormalizedVariant.cs" />
     <Compile Include="Scaling\ScaleNormalizer.cs" />
     <Compile Include="Scaling\SlickNumbers.cs" />
+    <Compile Include="Scaling\Table.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="Extensions\TagHelper.cs" />
     <Compile Include="StringInterpolation.cs" />
