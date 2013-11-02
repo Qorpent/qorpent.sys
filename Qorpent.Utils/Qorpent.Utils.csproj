@@ -61,6 +61,7 @@
     <Compile Include="LogicalExpressions\LogicalExpressionParser.cs" />
     <Compile Include="ParamMappingHelper.cs" />
     <Compile Include="Scaling\ScaleApproximated.cs" />
+    <Compile Include="Scaling\ScaleNormalizeCache.cs" />
     <Compile Include="Scaling\ScaleNormalizeClause.cs" />
     <Compile Include="Scaling\ScaleNormalized.cs" />
     <Compile Include="Scaling\ScaleNormalizedVariant.cs" />
