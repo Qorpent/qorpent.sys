@@ -128,8 +128,8 @@ namespace Qorpent.Utils.Scaling {
         ///     Таблица аппроксимации представляет собой хранилище вида:
         ///     {[[Точное значение min]:[верхняя граница для Max]]:{[Точное значение Max с учётом max.RoundUp(max.GetNumberOfDigits())]:[Вариант, поставленный в соответствие]}}
         /// </summary>
-        private static IDictionary<KeyValuePair<double[], double>, IDictionary<double, ScaleNormalizedVariant>> _approximatedTable = new Dictionary<KeyValuePair<double[], double>, IDictionary<double, ScaleNormalizedVariant>> {
-            {new KeyValuePair<double[], double>(new[] {0.0, 100.0, 200.0}, 1000), new Dictionary<double, ScaleNormalizedVariant> {
+        private static Table<KeyValuePair<double[], double>, double, ScaleNormalizedVariant> _approxTable = new Table<KeyValuePair<double[], double>, double, ScaleNormalizedVariant> {
+            {new KeyValuePair<double[], double>(new[] { 0.0, 100.0, 200.0 }, 1000), new Table<double, ScaleNormalizedVariant> {
                 {300, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 300.0}},
                 {400, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 400.0}},
                 {500, new ScaleNormalizedVariant { Divline = 4, Minimal = 0.0, Maximal = 500.0}},
@@ -299,7 +299,7 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         /// <returns>Признак того, что таблица примерных значений дивлайнов присутствует в системе</returns>
         private static bool ContainsApproximatedPoints(ScaleApproximated approximated) {
-            return _approximatedTable.Any(_ => approximated.Minimal.IsIn<double>(_.Key.Key) && _.Key.Value >= approximated.Maximal);
+            return _approxTable.Any(_ => approximated.Minimal.IsIn<double>(_.Key.Key) && _.Key.Value >= approximated.Maximal);
         }
         /// <summary>
         ///     Применяет заранее определённые значение аппроксимированной шкалы
@@ -312,7 +312,7 @@ namespace Qorpent.Utils.Scaling {
             }
 
             var maximal = approximated.Maximal.RoundUp(approximated.Maximal.GetNumberOfDigits());
-            var approx = _approximatedTable.FirstOrDefault(
+            var approx = _approxTable.FirstOrDefault(
                 _ => approximated.Minimal.IsIn<double>(_.Key.Key) && _.Key.Value >= maximal
             );
 
@@ -325,5 +325,8 @@ namespace Qorpent.Utils.Scaling {
 
             return true;
         }
+    }
+    internal class ApproximationTable {
+        
     }
 }
