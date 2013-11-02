@@ -21,7 +21,7 @@ namespace Qorpent.Utils.Tests {
         /// <param name="checkDivlines">Признак того, что нужно сверить кол-во дивлайнов</param>
         [TestCase("2139,2066,1870,1854,1882,1823,1870,2033,2129,1936,1853,1829,1841,2033", 1800.0, 2200.0, 3.0, false)]
         [TestCase("216790,238688,103771,192571,105145,38828", 0, 240000, 5, false)]
-        [TestCase("-150,100,200,250", -200, 300, 5, false)]
+        [TestCase("-150,100,200,250", -200, 300, 5, true)]
         [TestCase("200,500,250,233,286", 0, 600, 5, true)]
         [TestCase("100,200,250,150", 0, 300, 2, true)]
         [TestCase("100,200,350,150", 0, 400, 2, true)]
@@ -43,6 +43,16 @@ namespace Qorpent.Utils.Tests {
             if (checkDivlines) {
                 Assert.AreEqual(divline, normalized.Divline);
             }
+        }
+
+        private readonly double[] _data  = new[] {432751000.0, 216790000.0, 238688000.0, 103771000.0, 459386000.0, 192571000.0, 105145000.0, 38828000.0};
+
+        [Repeat(10)]
+        [Test]
+        public void Can() {
+            var normalized = ScaleNormalizer.Normalize(_data);
+            Assert.AreEqual(0, normalized.Minimal);
+            Assert.AreEqual(500000000, normalized.Maximal);
         }
     }
     public class SlickSortTests {

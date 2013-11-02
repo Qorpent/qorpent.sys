@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.Scaling {
@@ -9,6 +8,10 @@ namespace Qorpent.Utils.Scaling {
     ///     Утилита нормализации шкал для FusionCharts
     /// </summary>
     public static class ScaleNormalizer {
+        /// <summary>
+        ///     Подсистема кэширования
+        /// </summary>
+        private static readonly ScaleNormalizeCache Cache = new ScaleNormalizeCache();
         /// <summary>
         ///     Код шага базовой аппроксимации
         /// </summary>
@@ -37,6 +40,13 @@ namespace Qorpent.Utils.Scaling {
         /// <returns>Представление нормализованной шкалы</returns>
         public static ScaleNormalized Normalize(ScaleNormalizeClause clause, IEnumerable<double> values) {
             var approximated = GetApproximatedBase(clause, values);
+
+            if (Cache.IsInCache(approximated) && clause.UseCache) {
+                approximated.Normalized.SetRecommendedVariant(Cache.Get(approximated));
+                approximated.Done();
+                return approximated.Normalized;
+            }
+
             approximated.ErrorBahavior = _ => {
                 if (_.Normalized == null) {
                     return;
@@ -73,6 +83,12 @@ namespace Qorpent.Utils.Scaling {
                 approximated.Error(e, true);
             }
 
+            approximated.Done();
+            
+            if (clause.UseCache) {
+                Cache.Put(approximated);
+            }
+
             return approximated.Normalized;
         }
         /// <summary>
@@ -101,30 +117,10 @@ namespace Qorpent.Utils.Scaling {
             return Normalize(values.ToArray());
         }
         /// <summary>
-        ///     Производит добивку коллекции модулей нормализаци системными вариантами для более тонкой нормализации
-        ///     на разных шагах
-        /// </summary>
-        /// <param name="clause">Исходный запрос на нормализацию</param>
-        private static void InsertBaseAppendixes(ScaleNormalizeClause clause) {
-            if (!clause.RunSlickNormalization) {
-                return;
-            }
-
-            clause.AddAppendix(SelectFinalVariantCode, _ => {
-                if (_.Normalized.RecommendedVariant == null) {
-                    _.Normalized.SetRecommendedVariant(new ScaleNormalizedVariant {
-                        Minimal = _.Minimal,
-                        Maximal = _.Maximal,
-                        Divline = DefaultDivlineCount
-                    });
-                }
-            });
-        }
-        /// <summary>
         ///     Таблица аппроксимации представляет собой хранилище вида:
         ///     {[[Точное значение min]:[верхняя граница для Max]]:{[Точное значение Max с учётом max.RoundUp(max.GetNumberOfDigits())]:[Вариант, поставленный в соответствие]}}
         /// </summary>
-        private static Table<KeyValuePair<double[], double>, double, ScaleNormalizedVariant> _approxTable = new Table<KeyValuePair<double[], double>, double, ScaleNormalizedVariant> {
+        private static readonly Table<KeyValuePair<double[], double>, double, ScaleNormalizedVariant> ApproxTable = new Table<KeyValuePair<double[], double>, double, ScaleNormalizedVariant> {
             {new KeyValuePair<double[], double>(new[] { 0.0, 100.0, 200.0 }, 1000), new Table<double, ScaleNormalizedVariant> {
                 {300, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 300.0}},
                 {400, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 400.0}},
@@ -152,7 +148,6 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="baseValues">Перечисление базовых значений</param>
         /// <returns>Представление аппроксимированной и улучшенной шкалы</returns>
         private static ScaleApproximated GetApproximatedBase(ScaleNormalizeClause clause, IEnumerable<double> baseValues) {
-            InsertBaseAppendixes(clause);
             return new ScaleApproximated(clause, baseValues, new ScaleNormalized(clause));
         }
         /// <summary>
@@ -193,8 +188,8 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
         private static void BaseApproximation(ScaleApproximated scaleApproximated) {
             var maxDispersion = SlickNumbers.MaxDispersion(scaleApproximated.BaseValues);
-            var minimal = scaleApproximated.BaseValues.Min();
-            var maximal = scaleApproximated.BaseValues.Max();
+            var minimal = scaleApproximated.BaseMinimal;
+            var maximal = scaleApproximated.BaseMaximal;
             var mborder = (maximal - minimal)/5; // граничное значение — 20% от разрыва между минимальным и максимальным
 
             if (scaleApproximated.Clause.UseMinimalValue) {
@@ -251,7 +246,7 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         /// <returns>Признак того, что таблица примерных значений дивлайнов присутствует в системе</returns>
         private static bool ContainsApproximatedPoints(ScaleApproximated approximated) {
-            return _approxTable.Any(_ => approximated.Minimal.IsIn(_.Key.Key) && _.Key.Value.IsGreaterOrEqual(approximated.Maximal));
+            return ApproxTable.Any(_ => approximated.Minimal.IsIn(_.Key.Key) && _.Key.Value.IsGreaterOrEqual(approximated.Maximal));
         }
         /// <summary>
         ///     Применяет заранее определённые значение аппроксимированной шкалы
@@ -263,7 +258,7 @@ namespace Qorpent.Utils.Scaling {
                 return false;
             }
 
-            var approx = _approxTable.FirstOrDefault(
+            var approx = ApproxTable.FirstOrDefault(
                 _ => approximated.Minimal.IsIn(_.Key.Key) && _.Key.Value.IsGreaterOrEqual(approximated.Maximal)
             );
 

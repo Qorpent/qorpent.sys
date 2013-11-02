@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Qorpent.Config;
 
 namespace Qorpent.Utils.Scaling {
@@ -7,6 +10,18 @@ namespace Qorpent.Utils.Scaling {
     ///     Контейнер для приблизительных значений шкалы сверху и снизу
     /// </summary>
     public class ScaleApproximated : ConfigBase {
+        /// <summary>
+        ///     Закэшированное максимальное значение базовой коллекции
+        /// </summary>
+        private readonly double _baseMaximal;
+        /// <summary>
+        ///     Закэшированное минимальное значение базовой коллекции
+        /// </summary>
+        private readonly double _baseMinimal;
+        /// <summary>
+        ///     Признак того, что обработка шкалы завершена
+        /// </summary>
+        private bool _isDone;
         /// <summary>
         ///     Признак того, что миниальное значение установлено
         /// </summary>
@@ -45,6 +60,30 @@ namespace Qorpent.Utils.Scaling {
         ///     Действие, запускаемое при возникновении фатальной ошибки
         /// </summary>
         public Action<ScaleApproximated> ErrorBahavior { get; set; }
+        /// <summary>
+        ///     Возвращает признак завершённости 
+        /// </summary>
+        public bool IsDone {
+            get { return _isDone; }
+        }
+        /// <summary>
+        ///     Минимальное значение из базовых значений
+        /// </summary>
+        public double BaseMinimal {
+            get { return _baseMinimal; }
+        }
+        /// <summary>
+        ///     Максимальное значение из базовых значений
+        /// </summary>
+        public double BaseMaximal {
+            get { return _baseMaximal; }
+        }
+        /// <summary>
+        ///     Хэш текущей аппроксимации
+        /// </summary>
+        public string Hash {
+            get { return MatchHash(); }
+        }
         /// <summary>
         ///     Минимальное значение — округлённое или выставленное пользователем
         /// </summary>
@@ -121,18 +160,25 @@ namespace Qorpent.Utils.Scaling {
         ///     Контейнер для приблизительных значений шкалы сверху и снизу
         /// </summary>
         /// <param name="clause">Кляуза, к которой относятся значения</param>
-        /// <param name="baseLimits">Базовые значения шкалы</param>
+        /// <param name="baseValues">Базовые значения шкалы</param>
         /// <param name="normalized">Нормализованное представление шкалы</param>
-        public ScaleApproximated(ScaleNormalizeClause clause, IEnumerable<double> baseLimits, ScaleNormalized normalized) {
+        public ScaleApproximated(ScaleNormalizeClause clause, IEnumerable<double> baseValues, ScaleNormalized normalized) {
             Clause = clause;
-            BaseValues = baseLimits;
+            BaseValues = baseValues;
             Normalized = normalized;
+
+            _baseMaximal = BaseValues.Max();
+            _baseMinimal = BaseValues.Min();
         }
         /// <summary>
         ///     Установка перечисления максимальных значений
         /// </summary>
         /// <param name="maximals">Перечисление максимальных значений</param>
         public void SetMaximals(IEnumerable<double> maximals) {
+            if (_isDone) {
+                throw new Exception("Holden because handling is done");
+            }
+
             Maximals = maximals;
         }
         /// <summary>
@@ -140,6 +186,10 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         /// <param name="minimals">Перечисление минимальных значений</param>
         public void SetMinimals(IEnumerable<double> minimals) {
+            if (_isDone) {
+                throw new Exception("Holden because handling is done");
+            }
+
             Minimals = minimals;
         }
         /// <summary>
@@ -147,6 +197,10 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         /// <param name="variant">Представление варианта</param>
         public void AddVariant(ScaleNormalizedVariant variant) {
+            if (_isDone) {
+                throw new Exception("Holden because handling is done");
+            }
+
             Normalized.AddVariant(variant);
         }
         /// <summary>
@@ -156,6 +210,10 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="maximal">Максимальное значение</param>
         /// <param name="divlines">Количество дивлайнов</param>
         public void AddVariant(double minimal, double maximal, int divlines) {
+            if (_isDone) {
+                throw new Exception("Holden because handling is done");
+            }
+
             AddVariant(new ScaleNormalizedVariant { Divline = divlines, Minimal = minimal, Maximal = maximal });
         }
         /// <summary>
@@ -165,6 +223,7 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="runErrorBehavior">Признак того, что нужно запустить алгоритм реакции на сбой</param>
         public void Error(Exception exception, bool runErrorBehavior) {
             IsError = true;
+            _isDone = false;
             Exception = exception;
 
             if (runErrorBehavior) {
@@ -178,6 +237,20 @@ namespace Qorpent.Utils.Scaling {
                     IsErrorBahaviorError = true;
                 }
             }
+        }
+        /// <summary>
+        ///     Устанавливает признак того, что обработка завершена
+        /// </summary>
+        public void Done() {
+            Normalized.Done();
+            _isDone = true;
+        }
+        /// <summary>
+        ///     Подсчитывает хэш аппроксимированного представления
+        /// </summary>
+        /// <returns>Хэш аппроксимированного представления</returns>
+        private string MatchHash() {
+            return GetHashCode().ToString();
         }
     }
 }

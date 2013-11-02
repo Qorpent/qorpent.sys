@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +7,10 @@ namespace Qorpent.Utils.Scaling {
     ///     Класс, представляющий нормализованную шкалу
     /// </summary>
     public class ScaleNormalized {
+        /// <summary>
+        ///     Признак того, что нормализация завершена
+        /// </summary>
+        private bool _isDone;
         /// <summary>
         ///     Рекомендованный вариант
         /// </summary>
@@ -23,6 +28,12 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         public ScaleNormalizedVariant RecommendedVariant {
             get { return _recommendedVariant; }
+        }
+        /// <summary>
+        ///     Возвращает признак завершённости обработки шкалы
+        /// </summary>
+        public bool IsDone {
+            get { return _isDone; }
         }
         /// <summary>
         ///     Максимальное зачение шкалы
@@ -60,6 +71,10 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         /// <param name="variant">Вариант</param>
         public void AddVariant(ScaleNormalizedVariant variant) {
+            if (_isDone) {
+                throw new Exception("Holden because handling is done");
+            }
+
             _variants.Add(variant);
         }
         /// <summary>
@@ -67,7 +82,21 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         /// <param name="recommendedVariant">Рекомендованный вариант</param>
         public void SetRecommendedVariant(ScaleNormalizedVariant recommendedVariant) {
+            if (_isDone) {
+                throw new Exception("Holden because handling is done");
+            }
+
             _recommendedVariant = recommendedVariant;
+        }
+        /// <summary>
+        ///     Указывает признак того, что обработка завершена
+        /// </summary>
+        public void Done() {
+            if (_isDone) {
+                throw new Exception("Holden because handling is done");
+            }
+
+            _isDone = true;
         }
     }
 }

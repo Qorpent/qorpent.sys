@@ -11,7 +11,7 @@ namespace Qorpent.Utils.Scaling {
         /// <summary>
         ///     Дополнительные действия, запускаемые каждый раз после выполнения шага с указанным кодом
         /// </summary>
-        private IList<KeyValuePair<int, Action<ScaleApproximated>>> _appendixes = new List<KeyValuePair<int, Action<ScaleApproximated>>>();
+        private readonly IList<KeyValuePair<int, Action<ScaleApproximated>>> _appendixes;
         /// <summary>
         ///     Признак того, что минимальное значение было утсановлено
         /// </summary>
@@ -38,6 +38,16 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         public IEnumerable<KeyValuePair<int, Action<ScaleApproximated>>> Appendixes {
             get { return _appendixes.AsEnumerable(); }
+        }
+        /// <summary>
+        ///     Признак того, что нужно использовать кэш
+        /// </summary>
+        public bool UseCache { get; set; }
+        /// <summary>
+        ///     Хэш
+        /// </summary>
+        public string Hash {
+            get { return MatchHash(); }
         }
         /// <summary>
         ///     Минимальное значение
@@ -75,7 +85,10 @@ namespace Qorpent.Utils.Scaling {
         ///     Представление запроса на нормалзацию
         /// </summary>
         public ScaleNormalizeClause() {
+            _appendixes = new List<KeyValuePair<int, Action<ScaleApproximated>>>();
+
             RunSlickNormalization = true;
+            UseCache = false;
         }
         /// <summary>
         ///     Добавление дополнительного действия в коллекцию
@@ -92,6 +105,13 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="appendix">Действие</param>
         public ScaleNormalizeClause AddAppendix(int stepCode, Action<ScaleApproximated> appendix) {
             return AddAppendix(new KeyValuePair<int, Action<ScaleApproximated>>(stepCode, appendix));
+        }
+        /// <summary>
+        ///     Подсчитывает хэш запроса на нормализацию
+        /// </summary>
+        /// <returns>Хэш запроса на нормализацию</returns>
+        private string MatchHash() {
+            return GetHashCode().ToString();
         }
     }
 }
