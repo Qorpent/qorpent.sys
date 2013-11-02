@@ -169,43 +169,40 @@ namespace Qorpent.Utils.Scaling {
                 return;
             }
 
-            approximated.SetMaximals(new [] {approximated.Maximal}.Union(approximated.Maximals.Select(_ => _.RoundUp(GetRoundEstimation(_.GetNumberOfDigits())))));
-            approximated.SetMinimals(new[] { approximated.Minimal }.Union(approximated.Minimals.Select(_ => _.RoundDown(GetRoundEstimation(_.GetNumberOfDigits())))));
+            approximated.SetMaximals((approximated.Maximal - approximated.BaseValues.Max() > approximated.BorderValue/4 ? new[] {approximated.Maximal} : new double[] {}).Union(approximated.Maximals.Select(_ => _.RoundUp(GetRoundEstimation(_.GetNumberOfDigits())))));
+            approximated.SetMinimals(approximated.Minimals.Select(_ => _.RoundDown(GetRoundEstimation(_.GetNumberOfDigits()))));
 
             if (approximated.Minimal >= 0 && approximated.Maximal >= 0) {
-                approximated.SetMaximals(approximated.Maximals.Where(_ => _ >= 0).Distinct());
+                approximated.SetMaximals(approximated.Maximals.Where(_ => _ >= 0 ).Distinct());
                 approximated.SetMinimals(approximated.Minimals.Where(_ => _ >= 0).Distinct());
             }
         }
         /// <summary>
         ///     Возвращает разброс значений для дальнейшего запуска генетического алгоритма поиска лучшего решения
         /// </summary>
-        /// <param name="scaleApproximated">Представление аппроксимированной и улучшенной шкалы</param>
+        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         /// <returns></returns>
-        private static void GetApproximatedVariants(ScaleApproximated scaleApproximated) {
-            var withFractions = scaleApproximated.BorderValue > 1 || scaleApproximated.BorderValue < -1;
-
-            var step = scaleApproximated.BaseValues.Average()/20;
-
-            var minimals = SlickNumbers.GenerateLine(
-                scaleApproximated.Minimal - step*20,
-                scaleApproximated.Minimal - step,
+        private static void GetApproximatedVariants(ScaleApproximated approximated) {
+            var step = approximated.BaseValues.Average() / 20;
+            var minimals = new[] { approximated.Minimal }.Union(SlickNumbers.GenerateLine(
+                approximated.Minimal - step * 20,
+                approximated.Minimal - step,
                 step
-            );
+            ));
 
-            var maximals = SlickNumbers.GenerateLine(
-                scaleApproximated.Maximal + step,
-                scaleApproximated.Maximal + step * 20,
+            var maximals = new [] {approximated.Maximal}.Union(SlickNumbers.GenerateLine(
+                approximated.Maximal + step,
+                approximated.Maximal + step * 20,
                 step
-            );
+            ));
 
-            if (!withFractions) {
+            if (!(approximated.BorderValue > 1 || approximated.BorderValue < -1)) {
                 minimals = minimals.Select(Math.Floor);
                 maximals = maximals.Select(Math.Floor);
             }
 
-            scaleApproximated.SetMinimals(minimals);
-            scaleApproximated.SetMaximals(maximals);
+            approximated.SetMinimals(minimals);
+            approximated.SetMaximals(maximals);
         }
         /// <summary>
         ///     Подсчитывает приблизительные пределы, округляя нижнее и верхнее значение
