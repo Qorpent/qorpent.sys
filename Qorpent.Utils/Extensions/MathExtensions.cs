@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Qorpent.Utils.Extensions {
     /// <summary>
@@ -81,6 +82,38 @@ namespace Qorpent.Utils.Extensions {
             }
 
             return digits;
+        }
+        /// <summary>
+        ///     Определяет признак того, что число по модулю больше или рано единице
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <returns>Признак того, что число по модулю больше или рано единице</returns>
+        public static bool GreaterOrEqualOneByAbs(this double number) {
+            return Math.Abs(number) > 1;
+        }
+        /// <summary>
+        ///     Выполняет действие каждый раз, когда исходное число делится нацело на элемент из перечисления делителей
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <param name="dividers">Перечисление делителей</param>
+        /// <param name="action">Действие</param>
+        public static void IfDivisible(this double number, IEnumerable<int> dividers, Action<double> action) {
+            dividers.DoForEach(_ => {
+                if ((number%_).ToInt() == 0) {
+                    action(_);
+                }
+            });
+        }
+        /// <summary>
+        ///     Выполняет переданное действие, если исходное число делится нацело на делитель
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <param name="divider">Делитель</param>
+        /// <param name="action">Действие</param>
+        public static void IfDivisible(this double number, int divider, Action<double> action) {
+            if ((number % divider).ToInt() == 0) {
+                action(divider);
+            }
         }
         /// <summary>
         ///     Признак того, что это круглое число

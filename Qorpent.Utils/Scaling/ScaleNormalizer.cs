@@ -18,21 +18,17 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         public const int GetApproximatedVariantsCode = 1;
         /// <summary>
-        ///     Код шага улучшения полученных вариантов нормализации
-        /// </summary>
-        public const int ImproveApproximatedVariantsCode = 2;
-        /// <summary>
         ///     Код шага сборки полученных вариантов нормализации
         /// </summary>
-        public const int BuildFinalVariantsCode = 3;
+        public const int BuildFinalVariantsCode = 2;
         /// <summary>
         ///     Код шага выборки рекомендованного варианта нормализации
         /// </summary>
-        public const int SelectFinalVariantCode = 4;
+        public const int SelectFinalVariantCode = 3;
         /// <summary>
         ///     Значение количества дивлайнов по умолчанию
         /// </summary>
-        public const int DefaultDivlineCount = 5;
+        public const int DefaultDivlineCount = 4;
         /// <summary>
         ///     Производит нормалзацию шкалы
         /// </summary>
@@ -146,7 +142,6 @@ namespace Qorpent.Utils.Scaling {
         private static IEnumerable<KeyValuePair<int, Action<ScaleApproximated>>> GetApproximationSteps() {
             yield return new KeyValuePair<int, Action<ScaleApproximated>>(BaseApproximationCode, BaseApproximation);
             yield return new KeyValuePair<int, Action<ScaleApproximated>>(GetApproximatedVariantsCode, GetApproximatedVariants);
-            yield return new KeyValuePair<int, Action<ScaleApproximated>>(ImproveApproximatedVariantsCode, ImproveApproximatedVariants);
             yield return new KeyValuePair<int, Action<ScaleApproximated>>(BuildFinalVariantsCode, BuildFinalVariants);
             yield return new KeyValuePair<int, Action<ScaleApproximated>>(SelectFinalVariantCode, SelectFinalVariant);
         }
@@ -161,42 +156,30 @@ namespace Qorpent.Utils.Scaling {
             return new ScaleApproximated(clause, baseValues, new ScaleNormalized(clause));
         }
         /// <summary>
-        ///     Производит улучшение апроксимированых значений 
-        /// </summary>
-        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
-        private static void ImproveApproximatedVariants(ScaleApproximated approximated) {
-            if (!(approximated.BorderValue > 1 || approximated.BorderValue < -1)) {
-                return;
-            }
-
-            approximated.SetMaximals((approximated.Maximal - approximated.BaseValues.Max() > approximated.BorderValue / 4 ? new[] { approximated.Maximal } : new double[] { }).Union(approximated.Maximals.Select(_ => _.RoundUp(_.OrderEstimation()))));
-            approximated.SetMinimals(approximated.Minimals.Select(_ => _.RoundDown(_.OrderEstimation())));
-
-            if (approximated.Minimal >= 0 && approximated.Maximal >= 0) {
-                approximated.SetMaximals(approximated.Maximals.Where(_ => _ >= 0 ).Distinct());
-                approximated.SetMinimals(approximated.Minimals.Where(_ => _ >= 0).Distinct());
-            }
-        }
-        /// <summary>
         ///     Возвращает разброс значений для дальнейшего запуска генетического алгоритма поиска лучшего решения
         /// </summary>
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         /// <returns></returns>
         private static void GetApproximatedVariants(ScaleApproximated approximated) {
-            var step = approximated.BaseValues.Average() / 20;
+            var stepMax = Math.Pow(10, approximated.Maximal.OrderEstimation());
+            var stepMin = Math.Pow(10, approximated.Minimal.OrderEstimation());
             var minimals = new[] { approximated.Minimal }.Union(SlickNumbers.GenerateLine(
-                approximated.Minimal - step * 20,
-                approximated.Minimal - step,
-                step
+                approximated.Minimal - stepMin * 20,
+                approximated.Minimal - stepMin,
+                stepMin
             ));
 
             var maximals = new [] {approximated.Maximal}.Union(SlickNumbers.GenerateLine(
-                approximated.Maximal + step,
-                approximated.Maximal + step * 20,
-                step
+                approximated.Maximal + stepMax,
+                approximated.Maximal + stepMax * 20,
+                stepMax
             ));
 
-            if (!(approximated.BorderValue > 1 || approximated.BorderValue < -1)) {
+            if (approximated.Minimal > 0) {
+                minimals = minimals.Where(_ => _ >= 0);
+            }
+
+            if (approximated.BorderValue.GreaterOrEqualOneByAbs()) {
                 minimals = minimals.Select(Math.Floor);
                 maximals = maximals.Select(Math.Floor);
             }
@@ -237,11 +220,7 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         private static void BuildFinalVariants(ScaleApproximated approximated) {
-            foreach (var maximal in approximated.Maximals) {
-                foreach (var minimal in approximated.Minimals) {
-                    ResolveApproximatedPair(approximated, minimal, maximal);
-                }
-            }
+            approximated.Maximals.DoForEach(_ => approximated.Minimals.DoForEach(__ => ResolveApproximatedPair(approximated, __, _)));
         }
         /// <summary>
         ///     Резольвит переданную пару типа минимальное:максимальное относительно доавбелиня варианта
@@ -250,19 +229,7 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="minimal">Минимальное значение</param>
         /// <param name="maximal">Максимальное значение</param>
         private static void ResolveApproximatedPair(ScaleApproximated approximated, double minimal, double maximal) {
-            var delta = maximal - minimal;
-
-            if (delta % 3 == 0.0) {
-                approximated.AddVariant(minimal, maximal, 3);
-            }
-
-            if (delta % 6 == 0.0) {
-                approximated.AddVariant(minimal, maximal, 6);
-            }
-
-            if (delta % 5 == 0.0) {
-                approximated.AddVariant(minimal, maximal, 5);
-            }
+            (maximal - minimal).IfDivisible(new[] {3, 6, 5}, _ => approximated.AddVariant(minimal, maximal, _.ToInt()));
         }
         /// <summary>
         ///     Выбирает финальный вариант из всех представленных в качестве рекомендованного
