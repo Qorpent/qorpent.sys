@@ -29,7 +29,8 @@ namespace Qorpent.Utils.Tests {
         [TestCase("100,200,650,150", 0, 700, 5, true)]
         [TestCase("100,200,750,150", 0, 800, 3, true)]
         [TestCase("100,200,850,150", 0, 900, 2, true)]
-        [TestCase("-10,100,200,250", -100, 300, 5, false)]
+        [TestCase("-10,100,200,250", -100, 300, 5, true)]
+        [TestCase("-10,200,850,150", -100, 900, 5, true)] 
         public void CanUseDefaultNormalizer(string dataRow, double expectedMin, double expectedMax, double divline, bool checkDivlines) {
             var data = dataRow.SmartSplit(false, true, new[] {','}).Select(Convert.ToDouble);
             var normalized = ScaleNormalizer.Normalize(data);

@@ -39,8 +39,8 @@ namespace Qorpent.Charts.FusionCharts {
             return new ChartAbstractScale {
                 ScaleType = ChartAbstractScaleType.Y,
                 NumDivLines = normalizedScale.RecommendedVariant.Divline,
-                MaxValue = normalizedScale.RecommendedVariant.Minimal,
-                MinValue = normalizedScale.RecommendedVariant.Maximal
+                MaxValue = normalizedScale.RecommendedVariant.Maximal,
+                MinValue = normalizedScale.RecommendedVariant.Minimal
             };
         }
     }
