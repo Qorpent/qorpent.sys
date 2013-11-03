@@ -25,6 +25,15 @@ namespace Qorpent.Utils.FuzzyLogic {
         /// <param name="element">Элемент множества</param>
         void Insert(T element);
         /// <summary>
+        ///     Очистка сета от всех элементов
+        /// </summary>
+        void Clear();
+        /// <summary>
+        ///     Вставка перечисления элементов
+        /// </summary>
+        /// <param name="elements">Перечисление элементов</param>
+        void InsertRange(IEnumerable<T> elements);
+        /// <summary>
         ///     Удаление элемента из множества
         /// </summary>
         /// <param name="element">Элемент множества</param>
@@ -42,7 +51,7 @@ namespace Qorpent.Utils.FuzzyLogic {
         /// <summary>
         ///     Внутреннее представление множества
         /// </summary>
-        private readonly IList<T> _fuzzySet;
+        private readonly List<T> _fuzzySet;
         /// <summary>
         ///     Представление нечёткого множества
         /// </summary>
@@ -81,6 +90,19 @@ namespace Qorpent.Utils.FuzzyLogic {
         /// <param name="element">Элемент множества</param>
         public void Insert(T element) {
             _fuzzySet.Add(element);
+        }
+        /// <summary>
+        ///     Очистка сета от всех элементов
+        /// </summary>
+        public void Clear() {
+            _fuzzySet.Clear();
+        }
+        /// <summary>
+        ///     Вставка перечисления элементов
+        /// </summary>
+        /// <param name="elements">Перечисление элементов</param>
+        public void InsertRange(IEnumerable<T> elements) {
+            _fuzzySet.AddRange(elements);
         }
         /// <summary>
         ///     Удаление элемента из множества

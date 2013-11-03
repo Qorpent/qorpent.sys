@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Qorpent.Config;
+using Qorpent.Utils.FuzzyLogic;
 
 namespace Qorpent.Utils.Scaling {
     /// <summary>
@@ -151,11 +152,11 @@ namespace Qorpent.Utils.Scaling {
         /// <summary>
         ///     Набор минимальных значений шкалы
         /// </summary>
-        public IEnumerable<double> Minimals { get; private set; }
+        public IFuzzySet<double> Minimals { get; private set; }
         /// <summary>
         ///     Набор максимальных значенй для шкалы
         /// </summary>
-        public IEnumerable<double> Maximals { get; private set; }
+        public IFuzzySet<double> Maximals { get; private set; }
         /// <summary>
         ///     Контейнер для приблизительных значений шкалы сверху и снизу
         /// </summary>
@@ -166,6 +167,9 @@ namespace Qorpent.Utils.Scaling {
             Clause = clause;
             BaseValues = baseValues;
             Normalized = normalized;
+
+            Maximals = new FuzzySet<double>();
+            Minimals = new FuzzySet<double>();
 
             _baseMaximal = BaseValues.Max();
             _baseMinimal = BaseValues.Min();
@@ -179,7 +183,8 @@ namespace Qorpent.Utils.Scaling {
                 throw new Exception("Holden because handling is done");
             }
 
-            Maximals = maximals;
+            Maximals.Clear();
+            Maximals.InsertRange(maximals);
         }
         /// <summary>
         ///     Установка перечисления минимальных значений
@@ -190,7 +195,8 @@ namespace Qorpent.Utils.Scaling {
                 throw new Exception("Holden because handling is done");
             }
 
-            Minimals = minimals;
+            Minimals.Clear();
+            Minimals.InsertRange(minimals);
         }
         /// <summary>
         ///     Добавление нормализованного варианта
