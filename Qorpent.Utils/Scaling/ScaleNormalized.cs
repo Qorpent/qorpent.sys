@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Utils.FuzzyLogic;
 
 namespace Qorpent.Utils.Scaling {
     /// <summary>
@@ -18,7 +19,7 @@ namespace Qorpent.Utils.Scaling {
         /// <summary>
         ///     Внутренний список вариантов
         /// </summary>
-        private readonly IList<ScaleNormalizedVariant> _variants = new List<ScaleNormalizedVariant>();
+        private readonly IFuzzySet<ScaleNormalizedVariant> _variants = new FuzzySet<ScaleNormalizedVariant>();
         /// <summary>
         ///     Исходная кляуза
         /// </summary>
@@ -63,8 +64,8 @@ namespace Qorpent.Utils.Scaling {
         /// <summary>
         ///     Перечисление вариантов нормализации, сочтённых нормализатором менее подходящими
         /// </summary>
-        public IEnumerable<ScaleNormalizedVariant> Variants {
-            get { return _variants.AsEnumerable(); }
+        public IFuzzySet<ScaleNormalizedVariant> Variants {
+            get { return _variants; }
         }
         /// <summary>
         ///     Добавление варианта в нормализованное представление
@@ -75,7 +76,7 @@ namespace Qorpent.Utils.Scaling {
                 throw new Exception("Holden because handling is done");
             }
 
-            _variants.Add(variant);
+            _variants.Insert(variant);
         }
         /// <summary>
         ///     Установка рекомендованного варианта

@@ -49,6 +49,7 @@
     <Compile Include="Extensions\SqlCommandType.cs" />
     <Compile Include="Extensions\UniSqlConst.cs" />
     <Compile Include="Extensions\UniSqlQuery.cs" />
+    <Compile Include="FuzzyLogic\FuzzySet.cs" />
     <Compile Include="Hex.cs" />
     <Compile Include="ListUtils.cs" />
     <Compile Include="LogicalExpressions\ConjunctionNode.cs" />
