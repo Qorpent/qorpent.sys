@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.FuzzyLogic {
     /// <summary>
@@ -13,6 +14,10 @@ namespace Qorpent.Utils.FuzzyLogic {
         ///     Мю-функция для определения принадлежности элемента к множеству
         /// </summary>
         Func<T, double> MuFunc { get; set; }
+        /// <summary>
+        ///     Возвращает перечисление пар типа {[степень_принадлежности]:[элемент]}
+        /// </summary>
+        IEnumerable<KeyValuePair<double, T>> AsCountedPairs { get; }
         /// <summary>
         ///     Определяет степень принадлежности элемента к множеству
         /// </summary>
@@ -71,6 +76,12 @@ namespace Qorpent.Utils.FuzzyLogic {
 
                 _muFunc = value;
             }
+        }
+        /// <summary>
+        ///     Возвращает перечисление пар типа {[степень_принадлежности]:[элемент]}
+        /// </summary>
+        public IEnumerable<KeyValuePair<double, T>> AsCountedPairs {
+            get { return _fuzzySet.Select(_ => new KeyValuePair<double, T>(Mu(_), _)); }
         }
         /// <summary>
         ///     Определяет степень принадлежности элемента к множеству
@@ -144,6 +155,39 @@ namespace Qorpent.Utils.FuzzyLogic {
         /// <returns>Перечисление элементов, у которых значение Мю эквивалентно указанному</returns>
         public static IEnumerable<T> WhereMuEquals<T>(this IFuzzySet<T> fuzzySet, double muResult) {
             return fuzzySet.Where(_ => fuzzySet.Mu(_).Equals(muResult));
+        }
+        /// <summary>
+        ///     Мерж нескольких нечётких множеств между собой
+        /// </summary>
+        /// <typeparam name="T">Типизация сетов</typeparam>
+        /// <param name="fuzzySet">Исходный сет</param>
+        /// <param name="sets">Массив сетов</param>
+        /// <returns>Замыкание на исходный сет</returns>
+        public static IFuzzySet<T> Merge<T>(this IFuzzySet<T> fuzzySet, params IFuzzySet<T>[] sets) {
+            sets.DoForEach(_ => fuzzySet.Merge(_));
+            return fuzzySet;
+        }
+        /// <summary>
+        ///     Мерж двух нечётких множеств между собой
+        /// </summary>
+        /// <typeparam name="T">Типизация сетов</typeparam>
+        /// <param name="fuzzySet">Исходный сет</param>
+        /// <param name="toMegeFuzzySet">Сет для для мержа</param>
+        /// <returns>Замыкание на исходный сет</returns>
+        public static IFuzzySet<T> Merge<T>(this IFuzzySet<T> fuzzySet, IFuzzySet<T> toMegeFuzzySet) {
+            toMegeFuzzySet.Where(_ => !fuzzySet.Any(__ => __.Equals(_))).DoForEach(fuzzySet.Insert);
+            return fuzzySet;
+        }
+        /// <summary>
+        ///     Вставляет в сет несколько пречислений массивов элементов
+        /// </summary>
+        /// <typeparam name="T">Типизация сетов</typeparam>
+        /// <param name="fuzzySet">Исходный сет</param>
+        /// <param name="values">Перечисление массивов элементов</param>
+        /// <returns>Замыкание на исходный сет</returns>
+        public static IFuzzySet<T> InsertRange<T>(this IFuzzySet<T> fuzzySet, params T[] values) {
+            values.DoForEach(_ => fuzzySet.InsertRange(_));
+            return fuzzySet;
         }
     }
 }

@@ -143,6 +143,14 @@ namespace Qorpent.Utils.Extensions {
             return numbers.Where(_ => _ <= 0);
         }
         /// <summary>
+        ///     Модуль числа
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <returns></returns>
+        public static double Abs(this double number) {
+            return Math.Abs(number);
+        }
+        /// <summary>
         ///     Возвращает перечисление без дробной части
         /// </summary>
         /// <param name="numbers">Исходное перечисление</param>

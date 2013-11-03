@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Utils.Extensions;
+using Qorpent.Utils.FuzzyLogic;
 
 namespace Qorpent.Utils.Scaling {
     /// <summary>
@@ -190,7 +191,7 @@ namespace Qorpent.Utils.Scaling {
             var maxDispersion = SlickNumbers.MaxDispersion(scaleApproximated.BaseValues);
             var minimal = scaleApproximated.BaseMinimal;
             var maximal = scaleApproximated.BaseMaximal;
-            var mborder = (maximal - minimal)/5; // граничное значение — 20% от разрыва между минимальным и максимальным
+            var mborder = (maximal - minimal)/10; // граничное значение — 20% от разрыва между минимальным и максимальным
 
             if (scaleApproximated.Clause.UseMinimalValue) {
                 scaleApproximated.Minimal = scaleApproximated.Clause.MinimalValue;
@@ -215,7 +216,34 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         private static void BuildFinalVariants(ScaleApproximated approximated) {
-            approximated.Maximals.DoForEach(_ => approximated.Minimals.DoForEach(__ => ResolveApproximatedPair(approximated, __, _)));
+            var superSet = new FuzzySet<double>().Merge(approximated.Minimals, approximated.Maximals);
+            superSet.MuFunc = _ => {
+                if (_ <= approximated.Minimal) {
+                    return 1 - (approximated.Minimal - _).Abs() / Math.Pow(10, approximated.Minimal.GetNumberOfDigits());
+                }
+                
+                if (_ >= approximated.Maximal) {
+                    return 1 - (approximated.Maximal + _).Abs() / Math.Pow(10, approximated.Maximal.GetNumberOfDigits());
+                }
+
+                return 0; // How? How fuck?!
+            };
+
+            var minimals = superSet.AsCountedPairs.Where(
+                _ => _.Value <= approximated.Minimal
+            ).OrderByDescending(
+                _ => _.Key
+            ).ToArray();
+
+            var maximals = superSet.AsCountedPairs.Where(
+                _ => _.Value >= approximated.Maximal
+            ).OrderByDescending(
+                _ => _.Key
+            ).ToArray();
+
+            for (var i = 0; i < minimals.Length.Minimal(maximals.Length); i++) {
+                ResolveApproximatedPair(approximated, minimals[i].Value, maximals[i].Value);
+            }
         }
         /// <summary>
         ///     Резольвит переданную пару типа минимальное:максимальное относительно доавбелиня варианта
