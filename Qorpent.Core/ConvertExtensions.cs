@@ -235,6 +235,9 @@ namespace Qorpent.Utils.Extensions {
                     return ConvertEnum(type, x.ToStr());
 				}
 
+				if (x is string[] && type == typeof (int[])) {
+					return ((string[]) x).Select(_ => _.ToInt()).ToArray();
+				}
 
 				try {
 					return Convert.ChangeType(x, type);

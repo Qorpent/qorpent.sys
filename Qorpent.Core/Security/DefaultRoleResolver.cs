@@ -198,6 +198,7 @@ namespace Qorpent.Security {
 		/// <returns> </returns>
 		public override object Reset(ResetEventData data) {
 			var cachesize = _cache.Count;
+			_cache.Clear();
 			IList<string> resetedextensions = new List<string>();
 			base.Reset(data);
 			foreach (var extension in Extensions) {
