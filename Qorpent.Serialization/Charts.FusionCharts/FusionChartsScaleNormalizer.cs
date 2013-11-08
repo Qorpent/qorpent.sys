@@ -37,6 +37,8 @@ namespace Qorpent.Charts.FusionCharts {
             );
 
             ResolveDivlines(chart, normalizedScale);
+            ResolveMinimals(chart, normalizedScale);
+            ResolveMaximals(chart, normalizedScale);
 
             return new ChartAbstractScale {
                 ScaleType = ChartAbstractScaleType.Y,
@@ -44,6 +46,38 @@ namespace Qorpent.Charts.FusionCharts {
                 MaxValue = normalizedScale.RecommendedVariant.Maximal,
                 MinValue = normalizedScale.RecommendedVariant.Minimal
             };
+        }
+
+        /// <summary>
+        ///     Резольвит минимальные значения шкал во избежание неприятных глазу минимальных значений шкал
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <param name="normalized">Представление нормализованного чарта</param>
+        private void ResolveMinimals(IChart chart, ScaleNormalized normalized) {
+            var scale = normalized.RecommendedVariant;
+            var a = (scale.Maximal - normalized.Approximated.BaseMinimal);
+            var b = (scale.Maximal - scale.Minimal);
+            if (1 - a / b <= 0.05) {
+                scale.Minimal -= scale.DivSize;
+                scale.Divline++;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
+        /// <param name="normalized"></param>
+        private void ResolveMaximals(IChart chart, ScaleNormalized normalized) {
+            var scale = normalized.RecommendedVariant;
+            var pixnorm = ((scale.Maximal - scale.Minimal) / chart.Config.Height.ToInt());
+            var a = normalized.Approximated.BaseMaximal;
+            var b = scale.Maximal;
+            var c = (b-a)*(1 - a/b)*pixnorm;
+            if (c < 10) {
+                scale.Maximal += scale.DivSize;
+                scale.Divline++;
+            }
         }
         /// <summary>
         /// 
