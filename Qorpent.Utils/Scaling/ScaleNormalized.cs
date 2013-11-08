@@ -55,6 +55,10 @@ namespace Qorpent.Utils.Scaling {
             get { return _recommendedVariant.Divline; }
         }
         /// <summary>
+        /// 
+        /// </summary>
+        public ScaleApproximated Approximated { get; set; }
+        /// <summary>
         ///      ласс, представл€ющий нормализованную шкалу
         /// </summary>
         /// <param name="clause">»сходна€ кл€уза</param>

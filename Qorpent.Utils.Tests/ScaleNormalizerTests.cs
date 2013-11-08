@@ -20,19 +20,21 @@ namespace Qorpent.Utils.Tests {
         /// <param name="divline">Количество дивлайнов</param>
         /// <param name="checkDivlines">Признак того, что нужно сверить кол-во дивлайнов</param>
         [TestCase("2139,2066,1870,1854,1882,1823,1870,2033,2129,1936,1853,1829,1841,2033", 1800.0, 2200.0, 3.0, false)]
-        [TestCase("216790,238688,103771,192571,105145,38828", 0, 240000, 5, false)]
-        [TestCase("-150,100,200,250", -200, 300, 5, true)]
+        [TestCase("216790,238688,103771,192571,105145,38828", 0, 250000, 5, false)]
+        [TestCase("-150,100,200,250", -200, 300, 4, true)]
         [TestCase("200,500,250,233,286", 0, 600, 5, true)]
         [TestCase("100,200,250,150", 0, 300, 2, true)]
-        [TestCase("100,200,350,150", 0, 400, 2, true)]
+        [TestCase("100,200,350,150", 0, 400, 3, true)]
         [TestCase("100,200,450,150", 0, 500, 4, true)]
         [TestCase("100,200,550,150", 0, 600, 5, true)]
-        [TestCase("100,200,650,150", 0, 700, 5, true)]
-        [TestCase("100,200,750,150", 0, 800, 3, true)]
-        [TestCase("100,200,850,150", 0, 900, 2, true)]
-        [TestCase("-10,100,200,250", -100, 300, 5, true)]
-        [TestCase("-10,200,850,150", -100, 900, 5, true)]
-        [TestCase("432751000,216790000,238688000,103771000,459386000,192571000,105145000,38828000", 0, 500000000, 5, true)]
+        [TestCase("100,200,650,150", 0, 700, 6, true)]
+        [TestCase("100,200,750,150", 0, 800, 7, true)]
+        [TestCase("100,200,850,150", 0, 900, 8, true)]
+        [TestCase("-10,100,200,250", -100, 300, 3, true)]
+        [TestCase("-10,200,850,150", -100, 900, 9, true)]
+        [TestCase("858,1078,764,906,922,1055,895", 0.0, 1100, 5, false)]
+        [TestCase("432751000,216790000,238688000,103771000,459386000,192571000,105145000,38828000", 0, 500000000, 4, true)]
+        [TestCase("8051,7594,7803", 7500, 8100, 5, true)]
         public void CanUseDefaultNormalizer(string dataRow, double expectedMin, double expectedMax, double divline, bool checkDivlines) {
             var data = dataRow.SmartSplit(false, true, new[] {','}).Select(Convert.ToDouble);
             var normalized = ScaleNormalizer.Normalize(data);

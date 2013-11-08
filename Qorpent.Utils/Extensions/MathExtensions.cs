@@ -85,7 +85,7 @@ namespace Qorpent.Utils.Extensions {
         /// <param name="number">Исходное число</param>
         /// <returns>Количество знаков целой части числа</returns>
         public static int GetNumberOfDigits(this double number) {
-            var intNum = number.ToInt();
+            var intNum = Convert.ToInt64(number);
             var digits = 1;
             while (intNum/10 != 0) {
                 intNum /= 10;

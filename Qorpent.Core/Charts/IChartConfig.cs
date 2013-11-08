@@ -57,6 +57,10 @@ namespace Qorpent.Charts {
         /// 
         /// </summary>
         ChartShowValuesAs ShowValuesAs { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        int Divlines { get; set; }
     }
     /// <summary>
     /// 

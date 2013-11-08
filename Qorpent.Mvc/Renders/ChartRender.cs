@@ -78,7 +78,7 @@ namespace Qorpent.Mvc.Renders {
             result.Height =  context.Get("__height", "300");
             result.Debug =  context.Get("__debug", "0");
             result.Type =  context.Get("__type", "Column2D");
-
+            result.Divlines = context.Get("__divlines", -1);
             var specAttrs = context.GetAll("fc");
             foreach (var attr in specAttrs) {
                 result.Set(attr.Key, attr.Value);

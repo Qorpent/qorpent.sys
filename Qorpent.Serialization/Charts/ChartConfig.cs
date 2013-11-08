@@ -84,6 +84,13 @@ namespace Qorpent.Charts {
             set { Set(ChartDefaults.FitAxis, value); }
         }
         /// <summary>
+        /// 
+        /// </summary>
+        public int Divlines {
+            get { return Get<int>(ChartDefaults.Divlines); }
+            set { Set(ChartDefaults.Divlines, value); }
+        }
+        /// <summary>
         ///     Указывает как показывать число
         /// </summary>
         public ChartShowValuesAs ShowValuesAs {

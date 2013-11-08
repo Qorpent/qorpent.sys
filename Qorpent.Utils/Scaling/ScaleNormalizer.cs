@@ -41,6 +41,7 @@ namespace Qorpent.Utils.Scaling {
         /// <returns>Представление нормализованной шкалы</returns>
         public static ScaleNormalized Normalize(ScaleNormalizeClause clause, IEnumerable<double> values) {
             var approximated = GetApproximatedBase(clause, values);
+            approximated.Normalized.Approximated = approximated;
 
             if (Cache.IsInCache(approximated) && clause.UseCache) {
                 approximated.Normalized.SetRecommendedVariant(Cache.Get(approximated));
@@ -124,12 +125,15 @@ namespace Qorpent.Utils.Scaling {
         private static readonly Table<KeyValuePair<double[], double>, double, ScaleNormalizedVariant> ApproxTable = new Table<KeyValuePair<double[], double>, double, ScaleNormalizedVariant> {
             {new KeyValuePair<double[], double>(new[] { 0.0, 100.0, 200.0 }, 1000), new Table<double, ScaleNormalizedVariant> {
                 {300, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 300.0}},
-                {400, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 400.0}},
+                {400, new ScaleNormalizedVariant { Divline = 3, Minimal = 0.0, Maximal = 400.0}},
                 {500, new ScaleNormalizedVariant { Divline = 4, Minimal = 0.0, Maximal = 500.0}},
                 {600, new ScaleNormalizedVariant { Divline = 5, Minimal = 0.0, Maximal = 600.0}},
-                {700, new ScaleNormalizedVariant { Divline = 5, Minimal = 0.0, Maximal = 700.0}},
-                {800, new ScaleNormalizedVariant { Divline = 3, Minimal = 0.0, Maximal = 800.0}},
-                {900, new ScaleNormalizedVariant { Divline = 2, Minimal = 0.0, Maximal = 900.0}}
+                {700, new ScaleNormalizedVariant { Divline = 6, Minimal = 0.0, Maximal = 700.0}},
+                {800, new ScaleNormalizedVariant { Divline = 7, Minimal = 0.0, Maximal = 800.0}},
+                {900, new ScaleNormalizedVariant { Divline = 8, Minimal = 0.0, Maximal = 900.0}}
+            }},
+            {new KeyValuePair<double[], double>(new[] {0.0}, 240000), new Table<double, ScaleNormalizedVariant> {
+                {240000, new ScaleNormalizedVariant { Divline = 5, Minimal = 0.0, Maximal = 250000}}
             }}
         };
         /// <summary>
@@ -226,7 +230,7 @@ namespace Qorpent.Utils.Scaling {
                     return 1 - (approximated.Maximal + _).Abs() / Math.Pow(10, approximated.Maximal.GetNumberOfDigits());
                 }
 
-                return 0; // How? How fuck?!
+                return 0;
             };
 
             var minimals = superSet.AsCountedPairs.Where(
@@ -252,7 +256,19 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="minimal">Минимальное значение</param>
         /// <param name="maximal">Максимальное значение</param>
         private static void ResolveApproximatedPair(ScaleApproximated approximated, double minimal, double maximal) {
-            (maximal - minimal).IfDivisible(new[] {3, 6, 5}, _ => approximated.AddVariant(minimal, maximal, _.ToInt()));
+            (maximal - minimal).IfDivisible(new[] {5}, _ => {
+                var delta = maximal - minimal;
+                var y = Math.Pow(10, maximal.Maximal(minimal).GetNumberOfDigits() - 1);
+                int t;
+                while (true) {
+                    t = (delta/y).ToInt() - 1;
+                    if (t > 0) {
+                        break;
+                    }
+                    y = y/10;
+                }
+                approximated.AddVariant(minimal, maximal, t);
+            });
         }
         /// <summary>
         ///     Выбирает финальный вариант из всех представленных в качестве рекомендованного
@@ -291,7 +307,7 @@ namespace Qorpent.Utils.Scaling {
             );
 
             if (!approx.Value.Any(_ => _.Key.Equals(approximated.Maximal))) {
-                throw new Exception("There is no approximated value for the maximal value");
+                return false;
             }
 
             var specApprox = approx.Value.FirstOrDefault(_ => _.Key.Equals(approximated.Maximal)).Value;

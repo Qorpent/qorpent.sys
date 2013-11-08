@@ -126,5 +126,9 @@
         /// 
         /// </summary>
         public const string ChartMinValueAttributeName = "ChartMinValueAttributeName";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string Divlines = "Divlines";
     }
 }
