@@ -36,6 +36,16 @@ namespace Qorpent.Charts.FusionCharts {
                 normalized.GetFixedAttributes<decimal>(FusionChartApi.Set_Value).Select(Convert.ToDouble)
             );
 
+            var scale = normalizedScale.RecommendedVariant;
+
+            if (scale.Minimal < 0 && scale.Maximal > 0) {
+                if (scale.Maximal.Minimal(scale.Minimal.Abs())/scale.Maximal.Maximal(scale.Minimal.Abs()).Abs() >= 0.8) {
+                    var absMax = scale.Maximal.Maximal(scale.Minimal.Abs()).Abs();
+                    scale.Minimal = absMax*(-1);
+                    scale.Maximal = absMax;
+                }
+            }
+
             ResolveDivlines(chart, normalizedScale);
             ResolveMinimals(chart, normalizedScale);
             ResolveMaximals(chart, normalizedScale);
@@ -49,63 +59,84 @@ namespace Qorpent.Charts.FusionCharts {
         }
 
         /// <summary>
-        ///     Резольвит минимальные значения шкал во избежание неприятных глазу минимальных значений шкал
+        ///     Увеличивает отступ от минимального значения вниз, если это требуется
         /// </summary>
-        /// <param name="chart"></param>
+        /// <param name="chart">Представление исходного чарта</param>
         /// <param name="normalized">Представление нормализованного чарта</param>
         private void ResolveMinimals(IChart chart, ScaleNormalized normalized) {
-            var scale = normalized.RecommendedVariant;
-            var a = (scale.Maximal - normalized.Approximated.BaseMinimal);
-            var b = (scale.Maximal - scale.Minimal);
-            if (1 - a / b <= 0.05) {
-                scale.Minimal -= scale.DivSize;
-                scale.Divline++;
+            while (true) {
+                var currentPadding = GetPixelApproximation(chart, normalized, normalized.RecommendedVariant.Minimal, normalized.Approximated.BaseMinimal).Abs();
+                if (!(currentPadding < 20)) {
+                    break;
+                }
+
+                normalized.RecommendedVariant.Minimal -= normalized.RecommendedVariant.DivSize;
+                normalized.RecommendedVariant.Divline++;
             }
         }
+        /// <summary>
+        ///     Увеличивает отступ от максимального значения вверх, если это требуется
+        /// </summary>
+        /// <param name="chart">Представление исходного чарта</param>
+        /// <param name="normalized">Представление нормализованного чарта</param>
+        private void ResolveMaximals(IChart chart, ScaleNormalized normalized) {
+            while (true) {
+                var currentPadding = GetPixelApproximation(chart, normalized, normalized.RecommendedVariant.Maximal, normalized.Approximated.BaseMaximal);
+                if (!(currentPadding < 20)) {
+                    break;
+                }
 
+                normalized.RecommendedVariant.Maximal += normalized.RecommendedVariant.DivSize;
+                normalized.RecommendedVariant.Divline++;
+            }
+        }
+        /// <summary>
+        ///     Рассчитывает текущий отступ в пикселях реального максимального значения от граничного
+        /// </summary>
+        /// <param name="chart">Представление исходного чарта</param>
+        /// <param name="normalized">Представление нормализованного чарта</param>
+        /// <param name="borderMax">Граничное максимальное значение</param>
+        /// <param name="realMax">Реальное максимальное значение</param>
+        /// <returns>Текущий отступ в пикселях реального максимального значения от граничного</returns>
+        private double GetPixelApproximation(IChart chart, ScaleNormalized normalized, double borderMax, double realMax) {
+            return (borderMax - realMax) / GetPixnorm(chart, normalized);
+        }
+        /// <summary>
+        ///     Вычисляет приблизительную величину на пиксель
+        /// </summary>
+        /// <param name="chart">Представление графика</param>
+        /// <param name="normalized">Представление нормализованного графика</param>
+        /// <returns>Приблизительная величина на пиксель</returns>
+        private double GetPixnorm(IChart chart, ScaleNormalized normalized) {
+            return ((normalized.RecommendedVariant.Maximal - normalized.RecommendedVariant.Minimal) / chart.Config.Height.ToInt()).Abs();
+        }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="chart"></param>
         /// <param name="normalized"></param>
-        private void ResolveMaximals(IChart chart, ScaleNormalized normalized) {
+        private void ResolveDivlines(IChart chart, ScaleNormalized normalized) {
             var scale = normalized.RecommendedVariant;
-            while (true) {
-                var pixnorm = ((scale.Maximal - scale.Minimal)/chart.Config.Height.ToInt());
-                var a = normalized.Approximated.BaseMaximal;
-                var b = scale.Maximal;
-                var c = (b - a)*(a/b)/pixnorm;
-                if (c < 20) {
-                    scale.Maximal += scale.DivSize;
-                    scale.Divline++;
-                } else {
-                    break;
-                }
+            if (scale.Divline <= 3) {
+                scale.DoubleDivlines();
             }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chart"></param>
-        /// <param name="normalizedScale"></param>
-        private void ResolveDivlines(IChart chart, ScaleNormalized normalizedScale) {
-            var scale = normalizedScale.RecommendedVariant;
 
             if (chart.Config.Height.ToInt() > 600) {
-                var pixels = chart.Config.Height.ToDecimal()*0.8m;
-                if (scale.Divline <= 3) {
-                    scale.DoubleDivlines();
-                }
+                while (true) {
+                    var shrinked = (scale.Maximal - scale.DivSize);
+                    var newMaximal = GetPixelApproximation(chart, normalized, shrinked, normalized.Approximated.BaseMaximal);
 
-                var shrinked = (scale.Maximal - scale.DivSize).ToDecimal();
-                var pixnorm = ((scale.Maximal - scale.Minimal).ToDecimal()/pixels);
-
-                if (((shrinked - scale.Minimal.ToDecimal())*pixnorm) >=
-                    ((normalizedScale.Approximated.BaseMaximal - scale.Minimal).ToDecimal()*pixnorm + 40)) {
-                    scale.Maximal = Convert.ToDouble(shrinked);
-                    scale.Divline--;
+                    if (newMaximal > 20) {
+                        scale.Maximal = shrinked;
+                        scale.Divline--;
+                    } else {
+                        break;
+                    }
                 }
             } else {
+                if (normalized.RecommendedVariant.Minimal < 0) {
+                    return;
+                }
                 var oldDivline = scale.Divline;
                 var divided = (scale.Divline/2).ToDouble();
                 var delta = scale.Maximal - scale.Minimal;
