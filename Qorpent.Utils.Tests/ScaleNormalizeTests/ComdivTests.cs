@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,17 @@ using Qorpent.Utils.Scaling;
 
 namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
     public partial class WorkingScalesOnGMKPres {
+
+
+
+		[TestCase("523,450,380,305,197,80", 0, 600, 5, true, 300)]
+
+		[TestCase("98.5,96.5,10.8,101.1", 0, 120, 3, true, 300)]
+
+		[TestCase("3726,3565,3559,3557,3470,3483,3520,3964,4090,1942", 0, 12000, 3, true, 300)]
+		[TestCase("3120.5,1865.6,1399.6,1883.6,1330.9,772.6,237.3", 0, 3500, 6, true, 600)]
+		[TestCase("16322.3,14065.2,10489.5,11295.5,7335.3,4008.1", 0, 18000, 2, true, 300)]
+		[TestCase("1484,1558,1445,1434,1453", 0, 1600, 3, true, 600)]
 		[TestCase("543,520,528,516,494,490,523,555,547,526", 0, 600, 5, true, 600)]
 		public void UchalGokTests(string dataRow, double expectedMin, double expectedMax, double divline, bool checkDivlines, int height) {
 			ExecuteScaleTest(dataRow, expectedMin, expectedMax, divline, checkDivlines, height);
@@ -17,7 +29,7 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
 
 	    private static void ExecuteScaleTest(string dataRow, double expectedMin, double expectedMax, double divline,
 	                                         bool checkDivlines, int height) {
-		    var data = dataRow.SmartSplit(false, true, new[] {','}).Select(Convert.ToDouble);
+		    var data = dataRow.SmartSplit(false, true, new[] {','}).Select(_=>Convert.ToDouble(_,CultureInfo.InvariantCulture));
 		    var normalized = ScaleNormalizerImproved.Normalize(new ChartConfig {Height = height.ToString()}, data);
 		    Console.WriteLine("Expected: from {0} to {1} with {2} divlines", expectedMin, expectedMax, divline);
 		    Console.WriteLine("Gotten: from {0} to {1} with {2} divlines", normalized.Minimal, normalized.Maximal,
