@@ -60,64 +60,98 @@ namespace Qorpent.Utils.Scaling {
         /// <returns>Представление абстрактной нормализованной шкалы</returns>
         private static void NormalizeYAxis(IChartConfig config, ScaleNormalized normalized) {
             var scale = normalized.RecommendedVariant;
+            var variants = normalized.Variants;
 
-            if (scale.Maximal <= 1000 && scale.Minimal >= 0) {
-                scale.Minimal = 0;
-            }
-
-            if (scale.Minimal < 0 && scale.Maximal > 0) {
-                if (scale.Maximal.Minimal(scale.Minimal.Abs()) / scale.Maximal.Maximal(scale.Minimal.Abs()).Abs() >= 0.8) {
-                    var absMax = scale.Maximal.Maximal(scale.Minimal.Abs()).Abs();
-                    scale.Minimal = absMax * (-1);
-                    scale.Maximal = absMax;
+            // минималку в принципе не двигаем, так что её резольвим первой
+            if (GetPixelApproximation(config, normalized, scale.Minimal, normalized.Approximated.BaseMinimal).Abs() < 5) {
+                var sortedByMin = variants.Where(_ => _.Minimal < scale.Minimal).OrderByDescending(_ => _.Minimal);
+                if (sortedByMin.Any()) {
+                    scale.Minimal = sortedByMin.FirstOrDefault().Minimal;
                 }
             }
 
-            //ResolveMinimals(config, normalized);
-            //ResolveMaximals(config, normalized);
-            //ResolveDivlines(config, normalized);
-        }
-        private static bool ShouldNormalizeMinimals(IChartConfig config, ScaleNormalized normalized) {
-            if (normalized.RecommendedVariant.Minimal.Equals(0.0)) {
-                return false;
-            }
 
-            return true;
-        }
-        /// <summary>
-        ///     Увеличивает отступ от минимального значения вниз, если это требуется
-        /// </summary>
-        /// <param name="config">Представление исходного чарта</param>
-        /// <param name="normalized">Представление нормализованного чарта</param>
-        private static void ResolveMinimals(IChartConfig config, ScaleNormalized normalized) {
-            if (!ShouldNormalizeMinimals(config, normalized)) {
-                return;
-            }
+            // разберёмся с максимальными значениями
 
-            while (true) {
-                var currentPadding = GetPixelApproximation(config, normalized, normalized.RecommendedVariant.Minimal, normalized.Approximated.BaseMinimal).Abs();
-                if (!(currentPadding < 20)) {
-                    break;
+                var sortedByMax = variants.Where(
+                    _ => {
+                        var delta = _.Maximal - _.Minimal;
+
+                        if (delta.ToString().StartsWith(new[] { "11", "7", "17", "13" })) {
+                            return false;
+                        }
+
+                        return true;
+                    }
+                ).OrderByDescending(_ => {
+                    var n = _.DivSize.ToString();
+                    if (n.StartsWith("5")) return 100;
+                    if (n.StartsWith("2")) return 80;
+                    if (n.StartsWith("1")) return 50;
+                    return 0;
+                }).OrderBy(_ => _.Maximal);
+                if (sortedByMax.Any()) {
+                    scale.Maximal = sortedByMax.FirstOrDefault().Maximal;
                 }
 
-                normalized.RecommendedVariant.Minimal -= normalized.RecommendedVariant.DivSize;
-                normalized.RecommendedVariant.Divline++;
-            }
-        }
-        /// <summary>
-        ///     Увеличивает отступ от максимального значения вверх, если это требуется
-        /// </summary>
-        /// <param name="config">Представление исходного чарта</param>
-        /// <param name="normalized">Представление нормализованного чарта</param>
-        private static void ResolveMaximals(IChartConfig config, ScaleNormalized normalized) {
-            while (true) {
-                var currentPadding = GetPixelApproximation(config, normalized, normalized.RecommendedVariant.Maximal, normalized.Approximated.BaseMaximal);
-                if (!(currentPadding < 10)) {
-                    break;
-                }
+            // считая, что максималка больше не изменится, разберёмся с минималками
 
-                normalized.RecommendedVariant.Maximal += normalized.RecommendedVariant.DivSize;
-                normalized.RecommendedVariant.Divline++;
+
+            var preSortedDivlines = variants.Where(
+                _ => _.Maximal.Equals(scale.Maximal) && _.Minimal.Equals(scale.Minimal)
+            );
+
+            // теперь изменим дивлайны
+            if (config.Height.ToInt() >= 600) {
+                var sortedByDivlines = preSortedDivlines.OrderByDescending(_ => {
+                    var n = _.DivSize.ToString();
+                    if (n.StartsWith("5")) {
+                        return 100;
+                    }
+
+                    return 0;
+                });
+                if (sortedByDivlines.Any()) {
+                    scale.Divline = sortedByDivlines.FirstOrDefault().Divline;
+                }
+            } else if (config.Height.ToInt() >= 400) {
+                var sortedByDivlines = preSortedDivlines.Where(_ => _.Divline <= 6);
+                if (sortedByDivlines.Any()) {
+                    var better = sortedByDivlines.OrderBy(_ => {
+                        var n = _.DivSize.ToString();
+                        if (n.StartsWith("1")) {
+                            return 100;
+                        } else if (n.StartsWith("2")) {
+                            return 50;
+                        } else if (n.StartsWith("5")) {
+                            return 20;
+                        }
+
+                        return 0;
+                    });
+                    if (better.Any()) {
+                        scale.Divline = better.FirstOrDefault().Divline;
+                    }
+                }
+            } else {
+                var sortedByDivlines = preSortedDivlines.Where(_ => _.Divline <= 6);
+                if (sortedByDivlines.Any()) {
+                    var better = sortedByDivlines.OrderByDescending(_ => {
+                        var n = _.Divline.ToString();
+                        if (n.StartsWith("3")) {
+                            return 100;
+                        } else if (n.StartsWith("4")) {
+                            return 50;
+                        } else if (n.StartsWith("5")) {
+                            return 20;
+                        }
+
+                        return 0;
+                    });
+                    if (better.Any()) {
+                        scale.Divline = better.FirstOrDefault().Divline;
+                    }
+                }
             }
         }
         /// <summary>
@@ -139,73 +173,6 @@ namespace Qorpent.Utils.Scaling {
         /// <returns>Приблизительная величина на пиксель</returns>
         private static double GetPixnorm(IChartConfig config, ScaleNormalized normalized) {
             return ((normalized.RecommendedVariant.Maximal - normalized.RecommendedVariant.Minimal) / config.Height.ToInt()).Abs();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="config"></param>
-        /// <param name="normalized"></param>
-        private static void ResolveDivlines(IChartConfig config, ScaleNormalized normalized) {
-            var scale = normalized.RecommendedVariant;
-
-            if (scale.Minimal.Equals(0.0) && scale.Maximal <= 1000 && scale.Maximal >= 100) {
-                scale.Divline = ((scale.Maximal/100) - 1).ToInt();
-            }
-
-            if (scale.Divline <= 3) {
-                scale.DoubleDivlines();
-            }
-
-            if (config.Height.ToInt() >= 600) {
-                while (true) {
-                    var shrinked = (scale.Maximal - scale.DivSize);
-                    var newMaximal = GetPixelApproximation(config, normalized, shrinked, normalized.Approximated.BaseMaximal);
-
-                    if (newMaximal > 20) {
-                        scale.Maximal = shrinked;
-                        scale.Divline--;
-                    } else {
-                        break;
-                    }
-                }
-            } else {
-                if (normalized.RecommendedVariant.Minimal < 0) {
-                    return;
-                }
-                var oldDivline = scale.Divline;
-
-                if (scale.Divline > 6) {
-                    if (TryDivlines(new[] {2,3,5}, normalized)) {
-                        return;
-                    }
-
-                    scale.Divline = Math.Round(scale.Divline.ToDouble() / 2).ToInt();
-                    while (true) {
-                        if (scale.DivSize.IsRoundNumber(scale.DivSize.OrderEstimation())) {
-                            break;
-                        }
-                        scale.Divline--;
-                        if (scale.Divline == 0) {
-                            break;
-                        }
-                    }
-                }
-                if (scale.Divline == 0) {
-                    scale.Divline = oldDivline;
-                }
-            }
-        }
-        private static bool TryDivlines(IEnumerable<int> divlines, ScaleNormalized normalized) {
-            var scale = normalized.RecommendedVariant;
-            var oldDivline = scale.Divline;
-            foreach (var divline in divlines) {
-                scale.Divline = divline;
-                if (scale.DivSize.IsRoundNumber(scale.DivSize.OrderEstimation())) {
-                    return true;
-                }
-            }
-            scale.Divline = oldDivline;
-            return false;
         }
     }
 }

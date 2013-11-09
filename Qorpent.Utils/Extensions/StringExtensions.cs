@@ -38,6 +38,15 @@ namespace Qorpent.Utils.Extensions {
 			set { _helper = value; }
 		}
 
+        /// <summary>
+        ///     Проверяет, что исходная строка имеет хотя бы одно вхождение StartsWith
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="strings"></param>
+        /// <returns></returns>
+	    public static bool StartsWith(this string source, IEnumerable<string> strings) {
+	        return strings.Any(source.StartsWith);
+	    }
 	    /// <summary>
 	    /// Конвертирует исходный текст в сущности XML
 	    /// </summary>

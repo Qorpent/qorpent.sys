@@ -220,26 +220,13 @@ namespace Qorpent.Utils.Scaling {
         /// </summary>
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         private static void BuildFinalVariants(ScaleApproximated approximated) {
-            var superSet = new FuzzySet<double>().Merge(approximated.Minimals, approximated.Maximals);
-            superSet.MuFunc = _ => {
-                if (_ <= approximated.Minimal) {
-                    return 1 - (approximated.Minimal - _).Abs() / Math.Pow(10, approximated.Minimal.GetNumberOfDigits());
-                }
-                
-                if (_ >= approximated.Maximal) {
-                    return 1 - (approximated.Maximal + _).Abs() / Math.Pow(10, approximated.Maximal.GetNumberOfDigits());
-                }
-
-                return 0;
-            };
-
             var testScale = new ScaleNormalizedVariant();
 
             foreach (var max in approximated.Maximals) {
                 foreach (var min in approximated.Minimals) {
                     testScale.Minimal = min;
                     testScale.Maximal = max;
-                    for (var i = 1; i <= 10; i++) {
+                    foreach (var i in new [] {1, 2, 3, 7, 4, 5, 6, 8, 9}) {
                         testScale.Divline = i;
                         var est = testScale.DivSize.OrderEstimation();
                         if (testScale.DivSize.IsRoundNumber(est)) {
