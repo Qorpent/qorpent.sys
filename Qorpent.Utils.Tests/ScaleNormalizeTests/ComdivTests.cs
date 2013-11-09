@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Qorpent.Charts;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.Scaling;
+using System;
+using System.Linq;
 
 namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
     public partial class WorkingScalesOnGMKPres {

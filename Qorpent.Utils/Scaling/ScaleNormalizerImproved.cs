@@ -56,6 +56,10 @@ namespace Qorpent.Utils.Scaling {
         private static void NormalizeYAxis(IChartConfig config, ScaleNormalized normalized) {
             var scale = normalized.RecommendedVariant;
 
+            if (scale.Maximal <= 1000 && scale.Minimal >= 0) {
+                scale.Minimal = 0;
+            }
+
             if (scale.Minimal < 0 && scale.Maximal > 0) {
                 if (scale.Maximal.Minimal(scale.Minimal.Abs()) / scale.Maximal.Maximal(scale.Minimal.Abs()).Abs() >= 0.8) {
                     var absMax = scale.Maximal.Maximal(scale.Minimal.Abs()).Abs();
@@ -127,11 +131,16 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="normalized"></param>
         private static void ResolveDivlines(IChartConfig config, ScaleNormalized normalized) {
             var scale = normalized.RecommendedVariant;
+
+            if (scale.Minimal.Equals(0.0) && scale.Maximal <= 1000 && scale.Maximal >= 100) {
+                scale.Divline = ((scale.Maximal/100) - 1).ToInt();
+            }
+
             if (scale.Divline <= 3) {
                 scale.DoubleDivlines();
             }
 
-            if (config.Height.ToInt() > 600) {
+            if (config.Height.ToInt() >= 600) {
                 while (true) {
                     var shrinked = (scale.Maximal - scale.DivSize);
                     var newMaximal = GetPixelApproximation(config, normalized, shrinked, normalized.Approximated.BaseMaximal);
