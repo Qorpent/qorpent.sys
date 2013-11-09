@@ -70,13 +70,17 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="normalized"></param>
         private void ResolveMaximals(IChart chart, ScaleNormalized normalized) {
             var scale = normalized.RecommendedVariant;
-            var pixnorm = ((scale.Maximal - scale.Minimal) / chart.Config.Height.ToInt());
-            var a = normalized.Approximated.BaseMaximal;
-            var b = scale.Maximal;
-            var c = (b-a)*(1 - a/b)*pixnorm;
-            if (c < 10) {
-                scale.Maximal += scale.DivSize;
-                scale.Divline++;
+            while (true) {
+                var pixnorm = ((scale.Maximal - scale.Minimal)/chart.Config.Height.ToInt());
+                var a = normalized.Approximated.BaseMaximal;
+                var b = scale.Maximal;
+                var c = (b - a)*(a/b)/pixnorm;
+                if (c < 20) {
+                    scale.Maximal += scale.DivSize;
+                    scale.Divline++;
+                } else {
+                    break;
+                }
             }
         }
         /// <summary>
