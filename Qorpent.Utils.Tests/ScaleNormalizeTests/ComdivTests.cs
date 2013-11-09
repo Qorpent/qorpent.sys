@@ -18,7 +18,7 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
 		[TestCase("1389,1971,1337,1773", 0, 2000, 3, true, 300, 0, true)]
 		[TestCase("1389,1971,1337,1773", 0, 2000, 7, true, 600, 0, true)]
 		[TestCase("893,424,306,606,424,-537,-457,-261,-349,-214", -600, 1200, 5, true, 300, 0, true)]
-		[TestCase("995,1073,795,774,501", 0, 1200, 3, true, 300, 0, true)]
+		[TestCase("995,1073,795,774,501", 0, 1200, 2, true, 300, 0, true)]
 		[TestCase("2323,2093,1556,1712,1110", 0, 2500, 4, true, 600, 0, true)]
 		[TestCase("11694,3119,11394,3963", 0, 12000, 3, true, 300,0,false)]
 		[TestCase("2709,2956,2041,592", 0, 3000, 6, true, 300,0,false)]
@@ -37,7 +37,7 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
 	    private static void ExecuteScaleTest(string dataRow, double expectedMin, double expectedMax, double divline,
 	                                         bool checkDivlines, int height,int minvalue, bool upperlabel) {
 		    var data = dataRow.SmartSplit(false, true, new[] {','}).Select(_=>Convert.ToDouble(_,CultureInfo.InvariantCulture));
-		    var normalized = ScaleNormalizerImproved.Normalize(new ChartConfig {Height = height.ToString()}, data);
+		    var normalized = ScaleNormalizerImproved.Normalize(new ChartConfig {Height = height.ToString(), MinValue = minvalue.ToString()}, data);
 		    Console.WriteLine("Expected: from {0} to {1} with {2} divlines", expectedMin, expectedMax, divline);
 		    Console.WriteLine("Gotten: from {0} to {1} with {2} divlines", normalized.Minimal, normalized.Maximal,
 		                      normalized.Divline);

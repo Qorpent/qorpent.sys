@@ -38,7 +38,12 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="values">Перечисление значений шкалы</param>
         /// <returns>Представление нормализованной шкалы</returns>
         public static ScaleNormalized Normalize(IChartConfig config, params double[] values) {
-            return Normalize(new ScaleNormalizeClause { UseMaximalValue = false, UseMinimalValue = false }, config, values);
+            var clause = new ScaleNormalizeClause {UseMaximalValue = false, UseMinimalValue = false};
+            if (!string.IsNullOrWhiteSpace(config.MinValue)) {
+                clause.UseMinimalValue = true;
+                clause.MinimalValue = Convert.ToDouble(config.MinValue);
+            }
+            return Normalize(clause, config, values);
         }
         /// <summary>
         ///     Производит нормалзацию шкалы
@@ -68,9 +73,16 @@ namespace Qorpent.Utils.Scaling {
                 }
             }
 
-            ResolveDivlines(config, normalized);
             ResolveMinimals(config, normalized);
             ResolveMaximals(config, normalized);
+            ResolveDivlines(config, normalized);
+        }
+        private static bool ShouldNormalizeMinimals(IChartConfig config, ScaleNormalized normalized) {
+            if (normalized.RecommendedVariant.Minimal.Equals(0.0)) {
+                return false;
+            }
+
+            return true;
         }
         /// <summary>
         ///     Увеличивает отступ от минимального значения вниз, если это требуется
@@ -78,6 +90,10 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="config">Представление исходного чарта</param>
         /// <param name="normalized">Представление нормализованного чарта</param>
         private static void ResolveMinimals(IChartConfig config, ScaleNormalized normalized) {
+            if (!ShouldNormalizeMinimals(config, normalized)) {
+                return;
+            }
+
             while (true) {
                 var currentPadding = GetPixelApproximation(config, normalized, normalized.RecommendedVariant.Minimal, normalized.Approximated.BaseMinimal).Abs();
                 if (!(currentPadding < 20)) {
@@ -96,7 +112,7 @@ namespace Qorpent.Utils.Scaling {
         private static void ResolveMaximals(IChartConfig config, ScaleNormalized normalized) {
             while (true) {
                 var currentPadding = GetPixelApproximation(config, normalized, normalized.RecommendedVariant.Maximal, normalized.Approximated.BaseMaximal);
-                if (!(currentPadding < 20)) {
+                if (!(currentPadding < 10)) {
                     break;
                 }
 
@@ -157,16 +173,39 @@ namespace Qorpent.Utils.Scaling {
                     return;
                 }
                 var oldDivline = scale.Divline;
-                var divided = (scale.Divline / 2).ToDouble();
-                var delta = scale.Maximal - scale.Minimal;
-                scale.Divline = Math.Floor(divided).ToInt();
-                if ((delta % scale.DivSize).ToInt() != 0) {
-                    scale.Divline = oldDivline;
+
+                if (scale.Divline > 6) {
+                    if (TryDivlines(new[] {2,3,5}, normalized)) {
+                        return;
+                    }
+
+                    scale.Divline = Math.Round(scale.Divline.ToDouble() / 2).ToInt();
+                    while (true) {
+                        if (scale.DivSize.IsRoundNumber(scale.DivSize.OrderEstimation())) {
+                            break;
+                        }
+                        scale.Divline--;
+                        if (scale.Divline == 0) {
+                            break;
+                        }
+                    }
                 }
                 if (scale.Divline == 0) {
-                    scale.Divline = 1;
+                    scale.Divline = oldDivline;
                 }
             }
+        }
+        private static bool TryDivlines(IEnumerable<int> divlines, ScaleNormalized normalized) {
+            var scale = normalized.RecommendedVariant;
+            var oldDivline = scale.Divline;
+            foreach (var divline in divlines) {
+                scale.Divline = divline;
+                if (scale.DivSize.IsRoundNumber(scale.DivSize.OrderEstimation())) {
+                    return true;
+                }
+            }
+            scale.Divline = oldDivline;
+            return false;
         }
     }
 }
