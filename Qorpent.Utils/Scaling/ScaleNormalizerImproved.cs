@@ -77,7 +77,7 @@ namespace Qorpent.Utils.Scaling {
                     _ => {
                         var delta = _.Maximal - _.Minimal;
 
-                        if (delta.ToString().StartsWith(new[] { "11", "7", "17", "13" })) {
+                        if (delta.ToString().StartsWith(new[] { "11", "7", "17", "13", "24" })) {
                             return false;
                         }
 
@@ -88,14 +88,12 @@ namespace Qorpent.Utils.Scaling {
                     if (n.StartsWith("5")) return 100;
                     if (n.StartsWith("2")) return 80;
                     if (n.StartsWith("1")) return 50;
+
                     return 0;
                 }).OrderBy(_ => _.Maximal);
                 if (sortedByMax.Any()) {
                     scale.Maximal = sortedByMax.FirstOrDefault().Maximal;
                 }
-
-            // считая, что максималка больше не изменится, разберёмся с минималками
-
 
             var preSortedDivlines = variants.Where(
                 _ => _.Maximal.Equals(scale.Maximal) && _.Minimal.Equals(scale.Minimal)
@@ -103,32 +101,53 @@ namespace Qorpent.Utils.Scaling {
 
             // теперь изменим дивлайны
             if (config.Height.ToInt() >= 600) {
+                //  здесь нам вообще насрать на всё и в выборе идеального дивлайна мы оперируем лишь
+                //  красотой биения шкалы. В идеале — по 50 / 500 / 5000 / 5*n
                 var sortedByDivlines = preSortedDivlines.OrderByDescending(_ => {
                     var n = _.DivSize.ToString();
-                    if (n.StartsWith("5")) {
-                        return 100;
-                    }
+                    var zeros = _.DivSize.OrderEstimation() > 1 ? "0" : "";
+                    if (n.StartsWith("5" + zeros)) return 100;
+                    if (n.StartsWith("3" + zeros)) return 90;
+                    if (n.StartsWith("2" + zeros)) return 105;
+                    if (n.StartsWith("4" + zeros)) return 50;
+                    if (n.StartsWith("1" + zeros)) return 40;
 
                     return 0;
-                });
+                }).ThenByDescending(
+                    _ => _.Divline
+                );
+
                 if (sortedByDivlines.Any()) {
                     scale.Divline = sortedByDivlines.FirstOrDefault().Divline;
                 }
             } else if (config.Height.ToInt() >= 400) {
-                var sortedByDivlines = preSortedDivlines.Where(_ => _.Divline <= 6);
+                var sortedByDivlines = preSortedDivlines.Where(
+                    _ => _.Divline <= 6
+                ).OrderByDescending(_ => {
+                    var n = _.DivSize.ToString();
+                    var zeros = _.DivSize.OrderEstimation() > 1 ? "0" : "";
+                    if (n.StartsWith("5" + zeros)) return 100;
+                    if (n.StartsWith("3" + zeros)) return 90;
+                    if (n.StartsWith("2" + zeros)) return 105;
+                    if (n.StartsWith("4" + zeros)) return 50;
+                    if (n.StartsWith("1" + zeros)) return 40;
+
+                    return 0;
+                }).ThenByDescending(
+                    _ => _.Divline
+                );
+
                 if (sortedByDivlines.Any()) {
                     var better = sortedByDivlines.OrderBy(_ => {
                         var n = _.DivSize.ToString();
-                        if (n.StartsWith("1")) {
-                            return 100;
-                        } else if (n.StartsWith("2")) {
-                            return 50;
-                        } else if (n.StartsWith("5")) {
-                            return 20;
-                        }
+                        var zeros = _.DivSize.OrderEstimation() > 1 ? "0" : "";
+                        if (n.StartsWith("1" + zeros)) return 100;
+                        if (n.StartsWith("2" + zeros)) return 50;
+                        if (n.StartsWith("5" + zeros)) return 20;
 
                         return 0;
                     });
+
                     if (better.Any()) {
                         scale.Divline = better.FirstOrDefault().Divline;
                     }
@@ -136,18 +155,25 @@ namespace Qorpent.Utils.Scaling {
             } else {
                 var sortedByDivlines = preSortedDivlines.Where(_ => _.Divline <= 6);
                 if (sortedByDivlines.Any()) {
+                    //  при маленьком размере нам важно нормальное количество дивлайнов, а уж потом
+                    //  максимально ближкое к пятёрам типа 500 биение на шаги шкалы, так что применяем
+                    //  следующий порядок сортировки:
                     var better = sortedByDivlines.OrderByDescending(_ => {
-                        var n = _.Divline.ToString();
-                        if (n.StartsWith("3")) {
-                            return 100;
-                        } else if (n.StartsWith("4")) {
-                            return 50;
-                        } else if (n.StartsWith("5")) {
-                            return 20;
-                        }
+                        if (_.Divline.Equals(3)) return 100;
+                        if (_.Divline.Equals(5)) return 80;
+                        if (_.Divline.Equals(2)) return 50;
+                        if (_.Divline.Equals(1)) return 20;
+
+                        return 0;
+                    }).ThenByDescending(_ => {
+                        var n = _.DivSize.ToString();
+                        if (n.StartsWith("5")) return 100;
+                        if (n.StartsWith("2")) return 50;
+                        if (n.StartsWith("3")) return 20;
 
                         return 0;
                     });
+
                     if (better.Any()) {
                         scale.Divline = better.FirstOrDefault().Divline;
                     }
