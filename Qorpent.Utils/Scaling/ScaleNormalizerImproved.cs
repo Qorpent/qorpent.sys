@@ -73,9 +73,9 @@ namespace Qorpent.Utils.Scaling {
                 }
             }
 
-            ResolveMinimals(config, normalized);
-            ResolveMaximals(config, normalized);
-            ResolveDivlines(config, normalized);
+            //ResolveMinimals(config, normalized);
+            //ResolveMaximals(config, normalized);
+            //ResolveDivlines(config, normalized);
         }
         private static bool ShouldNormalizeMinimals(IChartConfig config, ScaleNormalized normalized) {
             if (normalized.RecommendedVariant.Minimal.Equals(0.0)) {

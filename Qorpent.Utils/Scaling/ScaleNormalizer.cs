@@ -175,7 +175,7 @@ namespace Qorpent.Utils.Scaling {
                 stepMax
             ));
 
-            if (approximated.Minimal > 0) {
+            if (approximated.Minimal >= 0) {
                 minimals = minimals.RemoveNegativeValues();
             }
 
@@ -233,56 +233,29 @@ namespace Qorpent.Utils.Scaling {
                 return 0;
             };
 
-            var minimals = superSet.AsCountedPairs.Where(
-                _ => _.Value <= approximated.Minimal
-            ).OrderByDescending(
-                _ => _.Key
-            ).ToArray();
+            var testScale = new ScaleNormalizedVariant();
 
-            var maximals = superSet.AsCountedPairs.Where(
-                _ => _.Value >= approximated.Maximal
-            ).OrderByDescending(
-                _ => _.Key
-            ).ToArray();
-
-            for (var i = 0; i < minimals.Length.Minimal(maximals.Length); i++) {
-                ResolveApproximatedPair(approximated, minimals[i].Value, maximals[i].Value);
-            }
-        }
-        /// <summary>
-        ///     Резольвит переданную пару типа минимальное:максимальное относительно доавбелиня варианта
-        /// </summary>
-        /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
-        /// <param name="minimal">Минимальное значение</param>
-        /// <param name="maximal">Максимальное значение</param>
-        private static void ResolveApproximatedPair(ScaleApproximated approximated, double minimal, double maximal) {
-            (maximal - minimal).IfDivisible(new[] {5}, _ => {
-                var delta = maximal - minimal;
-                var y = Math.Pow(10, maximal.Maximal(minimal).GetNumberOfDigits() - 1);
-                int t;
-                while (true) {
-                    t = (delta/y).ToInt() - 1;
-                    if (t > 0) {
-                        break;
+            foreach (var max in approximated.Maximals) {
+                foreach (var min in approximated.Minimals) {
+                    testScale.Minimal = min;
+                    testScale.Maximal = max;
+                    for (var i = 1; i <= 10; i++) {
+                        testScale.Divline = i;
+                        var est = testScale.DivSize.OrderEstimation();
+                        if (testScale.DivSize.IsRoundNumber(est)) {
+                            approximated.AddVariant(min, max, i);
+                        }
                     }
-                    y = y/10;
                 }
-                approximated.AddVariant(minimal, maximal, t);
-            });
+            }
         }
         /// <summary>
         ///     Выбирает финальный вариант из всех представленных в качестве рекомендованного
         /// </summary>
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         private static void SelectFinalVariant(ScaleApproximated approximated) {
-            if (ContainsApproximatedPoints(approximated)) {
-                var isSuccess = ApplyApproximatedPoints(approximated);
-                if (isSuccess) {
-                    return;
-                }
-            }
-
-            approximated.Normalized.SetRecommendedVariant(approximated.Normalized.Variants.FirstOrDefault());
+            var sorted = approximated.Normalized.Variants.Where(_ => _.Divline > 2 && _.Divline < 8).OrderBy(_ => _.DivSize.OrderEstimation()).OrderBy(_ => _.DivSize / Math.Pow(10, _.DivSize.OrderEstimation()) % 5 == 0.0).ToList();
+            approximated.Normalized.SetRecommendedVariant(sorted.FirstOrDefault());
         }
         /// <summary>
         ///     Определяет признак того, что таблица примерных значений дивлайнов присутствует в системе
