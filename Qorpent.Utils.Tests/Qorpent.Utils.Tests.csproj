@@ -22,6 +22,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BrickScale\ComdivTests.cs" />
     <Compile Include="ComplexStringHelperTest.cs" />
     <Compile Include="ComplexStringTest.cs" />
     <Compile Include="ConsoleArgumentHelperTest.cs" />
@@ -58,4 +59,5 @@
       <Name>Qorpent.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
 </Project>
