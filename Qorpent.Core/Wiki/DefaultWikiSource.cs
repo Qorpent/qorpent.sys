@@ -61,14 +61,14 @@ namespace Qorpent.Wiki {
 				if (!wikiPage.Existed) {
 					if (null != WikiEmptyFilters && 0 != WikiEmptyFilters.Length) {
 						foreach (var emptyFilter in WikiEmptyFilters) {
-							emptyFilter.Execute(wikiPage);
+							emptyFilter.Execute(this,wikiPage);
 						}
 					}	
 				}
 				if (null != WikiGetFilters && 0 != WikiGetFilters.Length) {
 					foreach (var getFilter in WikiGetFilters)
 					{
-						getFilter.Execute(wikiPage,usage);
+						getFilter.Execute(this,wikiPage,usage);
 					}
 				}
 				yield return wikiPage;
@@ -139,7 +139,7 @@ namespace Qorpent.Wiki {
 				{
 					foreach (var emptyFilter in WikiEmptyFilters)
 					{
-						emptyFilter.Execute(wikiPage);
+						emptyFilter.Execute(this,wikiPage);
 					}
 				}	
 			}

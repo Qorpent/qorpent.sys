@@ -216,10 +216,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		public decimal ResultMinValue {
 			get {
 				var realbricksize = ResultBrickSize;
+				if (Request.KeepSourceMinHard) return Request.SourceMinValue;
 				var currentval = 0m;
 				while (currentval>Request.SourceMinValue) {
 					currentval -= realbricksize;
 				}
+
 				return currentval;
 			}
 		}
@@ -235,15 +237,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		public decimal ResultMaxValue {
 			get {
 				var realbricksize = ResultBrickSize;
-				var curminval = 0m;
-				var realmaxval = ResultBrickSize*BrickCount;
-				while (curminval > Request.SourceMinValue)
-				{
-					curminval -= realbricksize;
-					realmaxval -= realbricksize;
-					if (realmaxval < Request.SourceMaxValue) {
-						realmaxval += realbricksize;
-					}
+				var realmaxval = ResultBrickSize*BrickCount + ResultMinValue;
+				while (realmaxval < Request.SourceMaxValue) {
+					realmaxval += realbricksize;
 				}
 				return realmaxval;
 			}

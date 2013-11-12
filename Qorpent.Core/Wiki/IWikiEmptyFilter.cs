@@ -8,7 +8,8 @@ namespace Qorpent.Wiki {
 		/// <summary>
 		/// Заполняет пустую несохраненную таблицу шаблоном
 		/// </summary>
+		/// <param name="storage"></param>
 		/// <param name="page"></param>
-		void Execute(WikiPage page);
+		void Execute(IWikiSource storage, WikiPage page);
 	}
 }

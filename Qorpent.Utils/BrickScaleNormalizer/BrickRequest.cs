@@ -43,6 +43,9 @@
 		/// <param name="usehat"></param>
 		public BrickRequest(decimal srcmaxvalue, decimal srcminvalue, bool usehat = false):this(srcmaxvalue,usehat) {
 			SourceMinValue = srcminvalue;
+			if (SourceMinValue != 0) {
+				KeepSourceMinHard = true;
+			}
 		}
 
 		private decimal _maxValue;
@@ -59,6 +62,11 @@
 			}
 			private set { _maxValue = value; }
 		}
+
+		/// <summary>
+		/// Признак явного сохранения минимального значения
+		/// </summary>
+		public bool KeepSourceMinHard { get; set; }
 
 		private decimal EvaluateMaxValue() {
 			Offset = SourceMinValue - 0;

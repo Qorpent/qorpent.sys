@@ -8,8 +8,9 @@ namespace Qorpent.Wiki {
 		/// <summary>
 		/// Выполняет фильтрацию страницы перед отправкой пользователю
 		/// </summary>
+		/// <param name="storage"></param>
 		/// <param name="page"></param>
 		/// <param name="usage">Вариант использования</param>
-		void Execute(WikiPage page, string usage);
+		void Execute(IWikiSource storage,  WikiPage page, string usage);
 	}
 }
