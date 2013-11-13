@@ -91,6 +91,13 @@ namespace Qorpent.Charts {
             set { Set(ChartDefaults.Divlines, value); }
         }
         /// <summary>
+        ///     Признак того, нужно ли удерживать шапку
+        /// </summary>
+        public bool KeepHead {
+            get { return Get<bool>(ChartDefaults.KeepHead, true); }
+            set { Set(ChartDefaults.KeepHead, value); }
+        }
+        /// <summary>
         ///     Указывает как показывать число
         /// </summary>
         public ChartShowValuesAs ShowValuesAs {

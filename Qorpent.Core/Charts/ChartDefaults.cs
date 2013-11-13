@@ -130,5 +130,9 @@
         /// 
         /// </summary>
         public const string Divlines = "Divlines";
+        /// <summary>
+        ///     Опция, указывающая на то, нужно ли зарезать шапку
+        /// </summary>
+        public const string KeepHead = "KeepHead";
     }
 }

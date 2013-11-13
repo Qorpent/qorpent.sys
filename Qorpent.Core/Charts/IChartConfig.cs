@@ -61,6 +61,10 @@ namespace Qorpent.Charts {
         /// 
         /// </summary>
         int Divlines { get; set; }
+        /// <summary>
+        ///     Признак того, нужно ли удерживать шапку
+        /// </summary>
+        bool KeepHead { get; set; }
     }
     /// <summary>
     /// 
