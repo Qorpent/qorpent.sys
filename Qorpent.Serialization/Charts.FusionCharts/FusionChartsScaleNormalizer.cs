@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Qorpent.Utils.BrickScaleNormalizer;
+using Qorpent.Utils.Extensions;
 using Qorpent.Utils.Scaling;
 
 namespace Qorpent.Charts.FusionCharts {
@@ -32,16 +34,29 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="normalized"></param>
         /// <returns></returns>
         private ChartAbstractScale NormalizeYAxis(IChart chart, IChartNormalized normalized) {
-            var normalizedScale = ScaleNormalizerImproved.Normalize(
-                new ScaleNormalizeClause(),
-                chart.EnsureConfig(),
-                normalized.GetFixedAttributes<decimal>(FusionChartApi.Set_Value).Select(Convert.ToDouble)
-            );
-
+	        var values = normalized.GetFixedAttributes<decimal>(FusionChartApi.Set_Value).Select(Convert.ToDouble).ToArray();
+	        var brickRequest = new BrickRequest();
+	        brickRequest.SourceMaxValue = Convert.ToDecimal(values.Max());
+	        brickRequest.SourceMinValue = Convert.ToDecimal(values.Min());
+	        var requestedMinValue  = chart.EnsureConfig().MinValue.ToInt();
+			if (requestedMinValue == -1) {
+				brickRequest.MinimalScaleBehavior  = MiniamlScaleBehavior.FitMin;
+			}else if (requestedMinValue != 0) {
+				if (requestedMinValue > brickRequest.SourceMinValue) {
+					brickRequest.MinimalScaleBehavior = MiniamlScaleBehavior.FitMin;
+				}
+				else {
+					brickRequest.SourceMinValue = requestedMinValue;
+					brickRequest.MinimalScaleBehavior = MiniamlScaleBehavior.MatchMin;
+				}
+			}
+	        var bcatalog = new BrickCatalog();
+	        var variant = bcatalog.GetBestVariant(brickRequest);
+            
             return new ChartAbstractScale {
-                NumDivLines = normalizedScale.RecommendedVariant.Divline,
-                MaxValue = normalizedScale.RecommendedVariant.Maximal,
-                MinValue = normalizedScale.RecommendedVariant.Minimal
+                NumDivLines = variant.ResultDivCount,
+                MaxValue = Convert.ToDouble(variant.ResultMaxValue),
+                MinValue = Convert.ToDouble(variant.ResultMinValue)
             };
         }
     }
