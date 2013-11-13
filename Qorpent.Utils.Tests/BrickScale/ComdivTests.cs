@@ -7,7 +7,7 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
     public partial class BrickScalerTest {
-		[TestCase("8170,8070,7663,7203,7249,7019", 6700, 8200, 4, true, 400, 6700, true)]
+		[TestCase("8170,8070,7663,7203,7249,7019", 6700, 8200, 5, true, 400, 6700, true)]
 		[TestCase("8170,8070,7663,7203,7249,7019", 6700, 8300, 7, true, 600, 6700, true)]
       
 
@@ -16,14 +16,14 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
         [TestCase("1679,1962,1427,1532", 0, 2000, 3, true, 300, 0, false)]
         [TestCase("1679,1962,1427,1532", 0, 2100, 6, true, 600, 0, true)] 
         
-		[TestCase("1389,1971,1337,1773", 0, 2400, 5, true, 400, 0, true)]
+		[TestCase("1389,1971,1337,1773", 0, 2100, 6, true, 400, 0, true)]
 		[TestCase("1389,1971,1337,1773", 0, 2000, 3, true, 400, 0, false)]
         [TestCase("1389,1971,1337,1773", 0, 2500, 4, true, 300, 0, true)]
 
         [TestCase("1389,1971,1337,1773", 0, 2100, 6, true, 600, 0, true)]
         [TestCase("1389,1971,1337,1773", 0, 2000, 9, true, 600, 0, false)]
 
-        [TestCase("893,424,306,606,424,-537,-457,-261,-349,-214", -600, 1200, 5, true, 400, -1, true)]
+        [TestCase("893,424,306,606,424,-537,-457,-261,-349,-214", -750, 1250, 7, true, 400, -1, true)]
         [TestCase("893,424,306,606,424,-537,-457,-261,-349,-214", -750, 1000, 6, true, 400, -1, false)]
         [TestCase("893,424,306,606,424,-537,-457,-261,-349,-214", -750, 1000, 6, true, 600, -1, false)]
 
@@ -41,6 +41,10 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
 		[TestCase("11694,3119,11394,3963", 0, 12000, 0, true, 200, 0, false)]
 		[TestCase("11694,3119,11394,3963", 0, 12000, 0, true, 100, 0, false)]
 
+
+		[TestCase("32420", 0, 35000, 6, true, 800, 0, false)]
+		[TestCase("32420,31048", 31000, 32600, 7, true, 800, -1, false)]
+		[TestCase("32420,31048", 20000, 32500, 4, true, 800, 20000, false)]
 
         [TestCase("2709,2956,2041,592", 0, 3000, 2, true, 300, 0, false)]
         [TestCase("2709,2956,2041,592", 0, 3200, 7, true, 600, 0, true)]

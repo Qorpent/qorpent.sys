@@ -38,6 +38,11 @@ namespace Qorpent.Charts.FusionCharts {
 	        var brickRequest = new BrickRequest();
 	        brickRequest.SourceMaxValue = Convert.ToDecimal(values.Max());
 	        brickRequest.SourceMinValue = Convert.ToDecimal(values.Min());
+	        brickRequest.Size = chart.EnsureConfig().Height.ToInt();
+			var keephead = chart.EnsureConfig().KeepHead;
+	        if (keephead) {
+		        brickRequest.MinPixelTop = BrickRequest.DefaultPixelTopHat;
+	        }
 	        var requestedMinValue  = chart.EnsureConfig().MinValue.ToInt();
 			if (requestedMinValue == -1) {
 				brickRequest.MinimalScaleBehavior  = MiniamlScaleBehavior.FitMin;
