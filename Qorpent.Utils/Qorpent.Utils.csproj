@@ -52,6 +52,7 @@
     <Compile Include="Extensions\HierarchyExtensions.cs" />
     <Compile Include="Extensions\HierarchyPropagation.cs" />
     <Compile Include="Extensions\SqlCommandType.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\UniSqlConst.cs" />
     <Compile Include="Extensions\UniSqlQuery.cs" />
     <Compile Include="FuzzyLogic\FuzzySet.cs" />

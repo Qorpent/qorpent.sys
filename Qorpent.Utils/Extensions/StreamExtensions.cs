@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -32,6 +33,21 @@ namespace Qorpent.Utils.Extensions {
             return XElement.Parse(new StreamReader(stream).ReadToEnd());
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static byte[] ReadToAsByte(this Stream stream) {
+            var buffer = new byte[16 * 1024];
+            using (var ms = new MemoryStream()) {
+                int read;
+                while ((read = stream.Read(buffer, 0, buffer.Length)) > 0) {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+        /// <summary>
         ///     Читает поток до конца как XML в асинхронном режиме
         /// </summary>
         /// <param name="stream">Исходный поток</param>
@@ -39,6 +55,15 @@ namespace Qorpent.Utils.Extensions {
         public static async Task<XElement> ReadToEndAsXmlAsync(this Stream stream) {
             var str = await stream.ReadToEndAsStringAsync();
             return XElement.Parse(str);
+        }
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static Stream SeekBegin(this Stream stream) {
+            stream.Seek(0, SeekOrigin.Begin);
+            return stream;
         }
     }
 }
