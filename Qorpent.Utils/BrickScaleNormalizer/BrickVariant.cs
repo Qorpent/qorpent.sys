@@ -216,13 +216,28 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		public decimal ResultMinValue {
 			get {
 				var realbricksize = ResultBrickSize;
-				if (Request.KeepSourceMinHard) return Request.SourceMinValue;
-				var currentval = 0m;
-				while (currentval>Request.SourceMinValue) {
-					currentval -= realbricksize;
+				
+				if (Request.MinimalScaleBehavior== MiniamlScaleBehavior.MatchMin) {
+					return Request.SourceMinValue;
+				}
+				var currentMin = 0m;
+				if (currentMin > Request.SourceMinValue || Request.MinimalScaleBehavior==MiniamlScaleBehavior.FitMin) {
+					while (currentMin > Request.SourceMinValue)
+					{
+						currentMin -= realbricksize;
+					}	
+					if (Request.MinimalScaleBehavior == MiniamlScaleBehavior.FitMin) {
+						while (currentMin < Request.SourceMinValue ) {
+							currentMin += realbricksize;
+						}
+						if (currentMin > Request.SourceMinValue) {
+							currentMin -= realbricksize;
+						}
+					}
 				}
 
-				return currentval;
+
+				return currentMin;
 			}
 		}
 		/// <summary>
@@ -237,9 +252,21 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		public decimal ResultMaxValue {
 			get {
 				var realbricksize = ResultBrickSize;
-				var realmaxval = ResultBrickSize*BrickCount + ResultMinValue;
+				var minvalue = ResultMinValue;
+				var realmaxval = ResultBrickSize*BrickCount + minvalue;
 				while (realmaxval < Request.SourceMaxValue) {
 					realmaxval += realbricksize;
+				}
+				while (realmaxval > (Request.SourceMaxValue+realbricksize)) {
+					realmaxval -= realbricksize;
+				}
+				if (Request.MinPixelTop != 0) {
+					var realpixelsperdata = (realmaxval - minvalue)/Request.Size;
+					var realpixeltop = (realmaxval - Request.MaxValue)/realpixelsperdata;
+					if (realpixeltop < Request.MinPixelTop) {
+						realmaxval += realbricksize;
+					}
+
 				}
 				return realmaxval;
 			}

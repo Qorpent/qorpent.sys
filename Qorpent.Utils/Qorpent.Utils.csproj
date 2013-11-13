@@ -27,6 +27,7 @@
     <Compile Include="BrickScaleNormalizer\BrickRequest.cs" />
     <Compile Include="BrickScaleNormalizer\BrickVariant.cs" />
     <Compile Include="BrickScaleNormalizer\BrickVariantComparer.cs" />
+    <Compile Include="BrickScaleNormalizer\MiniamlScaleBehavior.cs" />
     <Compile Include="Collections\IMap.cs" />
     <Compile Include="Collections\IMapItem.cs" />
     <Compile Include="Collections\Map.cs" />

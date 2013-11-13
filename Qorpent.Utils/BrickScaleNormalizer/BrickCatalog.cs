@@ -109,6 +109,14 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 		/// <param name="request"></param>
 		/// <returns></returns>
 		private IEnumerable<BrickVariant> GetAllVariants(BrickRequest request) {
+
+			if (request.MinimalScaleBehavior == MiniamlScaleBehavior.KeepZero) {
+				if (request.SourceMinValue > 0) {
+					request.SourceMinValue = 0;
+				}
+			}
+			
+
 			if (request.MaxDelimit <= 0) {
 				request.MaxDelimit = DecideBestMaxDelimit(request.Size);
 			}

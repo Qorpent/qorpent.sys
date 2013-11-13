@@ -19,6 +19,12 @@
 		/// Минимальная стандартная шапка в пикселах
 		/// </summary>
 		public const int DefaultPixelTopHat = 20;
+
+		/// <summary>
+		/// Поведение нижней границы шкалы при фитинге
+		/// </summary>
+		public MiniamlScaleBehavior MinimalScaleBehavior { get; set; }
+
 		/// <summary>
 		/// Пустой конструктор
 		/// </summary>
@@ -35,6 +41,7 @@
 			SourceMaxValue = srcmaxvalue;
 			MinPixelTop = usehat ? DefaultPixelTopHat : 0;
 		}
+
 		/// <summary>
 		/// Конструктор запроса со смещенным минимумом и возможной шапкой
 		/// </summary>
@@ -43,9 +50,6 @@
 		/// <param name="usehat"></param>
 		public BrickRequest(decimal srcmaxvalue, decimal srcminvalue, bool usehat = false):this(srcmaxvalue,usehat) {
 			SourceMinValue = srcminvalue;
-			if (SourceMinValue != 0) {
-				KeepSourceMinHard = true;
-			}
 		}
 
 		private decimal _maxValue;
@@ -63,10 +67,7 @@
 			private set { _maxValue = value; }
 		}
 
-		/// <summary>
-		/// Признак явного сохранения минимального значения
-		/// </summary>
-		public bool KeepSourceMinHard { get; set; }
+	
 
 		private decimal EvaluateMaxValue() {
 			Offset = SourceMinValue - 0;
