@@ -262,7 +262,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 				}
 				if (Request.MinPixelTop != 0) {
 					var realpixelsperdata = (realmaxval - minvalue)/Request.Size;
-					var realpixeltop = (realmaxval - Request.MaxValue)/realpixelsperdata;
+					var realpixeltop = (realmaxval - Request.SourceMaxValue)/realpixelsperdata;
 					if (realpixeltop < Request.MinPixelTop) {
 						realmaxval += realbricksize;
 					}
