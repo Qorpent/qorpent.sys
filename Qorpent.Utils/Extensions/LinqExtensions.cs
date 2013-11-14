@@ -26,5 +26,14 @@ namespace Qorpent.Utils.Extensions {
         public static T Previous<T>(this IEnumerable<T> s, T c) {
             return s.TakeWhile(_ => !_.Equals(c)).Last();
         }
+        /// <summary>
+        ///     Выбирает из коллекции все элементы, которые не null
+        /// </summary>
+        /// <typeparam name="T">Типизация коллекции</typeparam>
+        /// <param name="enumerable">Исходное перечисление</param>
+        /// <returns>Результат перечисления</returns>
+        public static IEnumerable<T> NotNulls<T>(this IEnumerable<T> enumerable) {
+            return enumerable.Where(_ => _ != null);
+        }
     }
 }
