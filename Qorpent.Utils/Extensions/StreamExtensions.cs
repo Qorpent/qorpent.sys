@@ -48,6 +48,21 @@ namespace Qorpent.Utils.Extensions {
             }
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static async Task<byte[]> ReadToEndAsByteAsync(this Stream stream) {
+            var buffer = new byte[16 * 1024];
+            using (var ms = new MemoryStream()) {
+                int read;
+                while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0) {
+                    await ms.WriteAsync(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+        /// <summary>
         ///     Читает поток до конца как XML в асинхронном режиме
         /// </summary>
         /// <param name="stream">Исходный поток</param>
