@@ -162,10 +162,16 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			public string Top;
 		}
 		/// <summary>
-		/// Дополнительная настройка запроса при помощи строки
+		/// /
 		/// </summary>
 		/// <param name="setupInfo"></param>
 		public void Setup(string setupInfo) {
+			Setup(setupInfo,"","","");
+		}
+		/// <summary>
+		/// Дополнительная настройка запроса при помощи строки
+		/// </summary>
+		public void Setup(string setupInfo, string _min, string _max , string _top) {
 			var parameters = setupInfo.SmartSplit(false, true, ':', ';', ',', ' ','/');
 			var min = "";
 			var max = "";
@@ -187,6 +193,17 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			}
 			if (string.IsNullOrWhiteSpace(top)) {
 				top = "20";
+			}
+			if (!string.IsNullOrWhiteSpace(_min)) {
+				min = _min;
+			}
+			if (!string.IsNullOrWhiteSpace(_max))
+			{
+				max = _max;
+			}
+			if (!string.IsNullOrWhiteSpace(_top))
+			{
+				top = _top;
 			}
 			var info = new SetupInfo {Min = min, Max = max, Top = top};
 			Setup(info);
