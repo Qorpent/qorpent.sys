@@ -64,6 +64,17 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
         public void UchalGokFixedTests(string dataRow, double expectedMin, double expectedMax, double divline, bool checkDivlines, int height, int minvalue, bool upperlabel) {
             ExecuteScaleTest(dataRow, expectedMin, expectedMax, divline, checkDivlines, height, minvalue, upperlabel);
         }
+		[Test]
+		public void SignedDeltaTest() {
+			var req = new BrickRequest();
+			req.SourceMinValue = 2009;
+			req.SourceMaxValue = 2020;
+			req.Setup("","","","","5");
+			Assert.AreEqual(MiniamlScaleBehavior.FitMin,req.MinimalScaleBehavior);
+			Assert.Greater(req.SourceMinValue,0);
+			Assert.Greater(req.SourceMaxValue,2020);
+			Assert.Less(req.SourceMinValue,2009);
+		}
 
 	    private static void ExecuteScaleTest(string dataRow, double expectedMin, double expectedMax, double divline,
 	                                         bool checkDivlines, int height,int minvalue, bool upperlabel) {

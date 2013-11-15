@@ -237,7 +237,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		private void SetupSignedDeltaScale(SetupInfo setupInfo) {
 			var percSize = SourceMaxValue/100;
 			var stepSize = percSize*setupInfo.SignDelta.ToInt();
-			var avg = (SourceMaxValue - SourceMinValue)/2;
+			var avg = (SourceMaxValue + SourceMinValue)/2;
 			var deltedmax = avg+stepSize;
 			var deltedmin = avg-stepSize;
 			while (deltedmax<SourceMaxValue) {
