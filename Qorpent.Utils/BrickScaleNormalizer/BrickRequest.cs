@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Utils.BrickScaleNormalizer {
+﻿using Qorpent.Utils.Extensions;
+
+namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// <summary>
 	/// Запрос на кирпичи (нормализованный на 0-1000)
 	/// </summary>
@@ -153,7 +155,129 @@
 		/// Число, которое пришлось применить, чтобы получить смещение на 0
 		/// </summary>
 		public decimal Offset { get; private set; }
+		class SetupInfo {
 
+			public string Min;
+			public string Max;
+			public string Top;
 
+			public string SignDelta;
+		}
+		/// <summary>
+		/// /
+		/// </summary>
+		/// <param name="setupInfo"></param>
+		public void Setup(string setupInfo) {
+			Setup(setupInfo,"","","","");
+		}
+		/// <summary>
+		/// Дополнительная настройка запроса при помощи строки
+		/// </summary>
+		public void Setup(string setupInfo, string _min, string _max , string _top,  string _signdelta) {
+			var parameters = setupInfo.SmartSplit(false, true, ':', ';', ',', ' ','/');
+			var min = "";
+			var max = "";
+			var top = "";
+			var signdelta = "";
+			if (parameters.Count > 0) {
+				min = parameters[0];
+			}
+			if (parameters.Count > 1) {
+				max = parameters[1];
+			}
+			if(parameters.Count > 2) {
+				top = parameters[2];
+			}
+			if (parameters.Count > 3)
+			{
+				signdelta = parameters[3];
+			}
+			if (string.IsNullOrWhiteSpace(min)) {
+				min = "0";
+			}
+			if (string.IsNullOrWhiteSpace(max)) {
+				max = "auto";
+			}
+			if (string.IsNullOrWhiteSpace(top)) {
+				top = "20";
+			}
+			if (string.IsNullOrWhiteSpace(signdelta))
+			{
+				signdelta = "0";
+			}
+			if (!string.IsNullOrWhiteSpace(_min)) {
+				min = _min;
+			}
+			if (!string.IsNullOrWhiteSpace(_max))
+			{
+				max = _max;
+			}
+			if (!string.IsNullOrWhiteSpace(_top))
+			{
+				top = _top;
+			}
+			if (!string.IsNullOrWhiteSpace(_signdelta)) {
+				signdelta = _signdelta;
+			}
+			var info = new SetupInfo {Min = min, Max = max, Top = top, SignDelta = signdelta};
+			Setup(info);
+		}
+
+		private void Setup(SetupInfo setupInfo) {
+			
+			MinPixelTop = setupInfo.Top.ToInt();
+			if (setupInfo.SignDelta != "0") {
+				SetupSignedDeltaScale(setupInfo);
+			}
+			else {
+				SetupUsualFitedScale(setupInfo);
+			}
+		}
+
+		private void SetupSignedDeltaScale(SetupInfo setupInfo) {
+			var percSize = SourceMaxValue/100;
+			var stepSize = percSize*setupInfo.SignDelta.ToInt();
+			var avg = (SourceMaxValue + SourceMinValue)/2;
+			var deltedmax = avg+stepSize;
+			var deltedmin = avg-stepSize;
+			while (deltedmax<SourceMaxValue) {
+				deltedmax += stepSize;
+			}
+			while (deltedmin>SourceMinValue) {
+				deltedmin -= stepSize;
+			}
+			SourceMaxValue = deltedmax;
+			SourceMinValue = deltedmin;
+			MinimalScaleBehavior = MiniamlScaleBehavior.FitMin;
+		}
+
+		private void SetupUsualFitedScale(SetupInfo setupInfo) {
+			if (setupInfo.Max != "auto") {
+				var assertedMax = setupInfo.Max.ToDecimal();
+				while (assertedMax < (SourceMaxValue*2/1000)) {
+					assertedMax *= 1000;
+				}
+				if (assertedMax > SourceMaxValue) {
+					SourceMaxValue = assertedMax;
+				}
+			}
+			if (setupInfo.Min == "0") {
+				MinimalScaleBehavior = MiniamlScaleBehavior.KeepZero;
+			}
+			else if (setupInfo.Min == "auto") {
+				MinimalScaleBehavior = MiniamlScaleBehavior.FitMin;
+			}
+			else {
+				MinimalScaleBehavior = MiniamlScaleBehavior.FitMin;
+				var assertedMin = setupInfo.Min.ToDecimal();
+				while (assertedMin < SourceMinValue/1000) {
+					assertedMin *= 1000;
+				}
+				if (assertedMin < SourceMinValue) {
+					SourceMinValue = assertedMin;
+					MinimalScaleBehavior = MiniamlScaleBehavior.MatchMin;
+				}
+			}
+		}
 	}
 }
