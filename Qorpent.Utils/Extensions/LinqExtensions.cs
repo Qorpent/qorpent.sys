@@ -26,5 +26,15 @@ namespace Qorpent.Utils.Extensions {
         public static T Previous<T>(this IEnumerable<T> s, T c) {
             return s.TakeWhile(_ => !_.Equals(c)).Last();
         }
+        /// <summary>
+        ///     Вставляет в типизированный список элемент первым
+        /// </summary>
+        /// <typeparam name="T">Типизация списка</typeparam>
+        /// <param name="list">Исходный список</param>
+        /// <param name="value">Значение для вставки</param>
+        public static void InsertFirst<T>(this IList<T> list, T value) {
+            list.Remove(value);
+            list.Insert(0, value);
+        }
     }
 }
