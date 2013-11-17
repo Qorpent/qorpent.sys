@@ -76,6 +76,21 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
 			Assert.Less(req.SourceMinValue,2009);
 		}
 
+		[TestCase(21,24,20,30,20,30)]
+		[TestCase(210,240,20,30,200,300)]
+		[TestCase(2100,2400,20,30,2000,3000)]
+		[TestCase(21000,24000,20,30,20000,30000)]
+		[TestCase(210000,240000,20,30,200000,300000)]
+		public void MinMaxDirectFitWithRangeMix(int actualmin, int actualmax, int reqmin,int reqmax, int resultmin, int resultmax)
+		{
+			var req = new BrickRequest();
+			req.SourceMinValue = actualmin;
+			req.SourceMaxValue = actualmax;
+			req.Setup("", reqmin.ToString(), reqmax.ToString(), "", "");
+			Assert.AreEqual(resultmin,req.SourceMinValue);
+			Assert.AreEqual(resultmax,req.SourceMaxValue);
+		}
+
 	    private static void ExecuteScaleTest(string dataRow, double expectedMin, double expectedMax, double divline,
 	                                         bool checkDivlines, int height,int minvalue, bool upperlabel) {
 		    var data = dataRow.SmartSplit(false, true, new[] {','}).Select(_=>Convert.ToDecimal(_,CultureInfo.InvariantCulture));

@@ -1,4 +1,5 @@
-﻿using Qorpent.Utils.Extensions;
+﻿using System;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// <summary>
@@ -250,12 +251,15 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			SourceMinValue = deltedmin;
 			MinimalScaleBehavior = MiniamlScaleBehavior.FitMin;
 		}
+		private int l10(decimal v) {
 
+			return (int)Math.Floor(Math.Log10(Convert.ToDouble(v)));
+		}
 		private void SetupUsualFitedScale(SetupInfo setupInfo) {
 			if (setupInfo.Max != "auto") {
 				var assertedMax = setupInfo.Max.ToDecimal();
-				while (assertedMax < (SourceMaxValue*2/1000)) {
-					assertedMax *= 1000;
+				while (l10(assertedMax) < l10(SourceMaxValue)) {
+					assertedMax *= 10;
 				}
 				if (assertedMax > SourceMaxValue) {
 					SourceMaxValue = assertedMax;
@@ -270,8 +274,8 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			else {
 				MinimalScaleBehavior = MiniamlScaleBehavior.FitMin;
 				var assertedMin = setupInfo.Min.ToDecimal();
-				while (assertedMin < SourceMinValue/1000) {
-					assertedMin *= 1000;
+				while (l10(assertedMin) <l10(SourceMinValue)) {
+					assertedMin *= 10;
 				}
 				if (assertedMin < SourceMinValue) {
 					SourceMinValue = assertedMin;
