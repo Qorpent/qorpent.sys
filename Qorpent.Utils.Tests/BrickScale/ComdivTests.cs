@@ -6,7 +6,7 @@ using Qorpent.Utils.BrickScaleNormalizer;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
-    public partial class BrickScalerTest {
+	public partial class BrickScalerTest {
 		[TestCase("8170,8070,7663,7203,7249,7019", 6700, 8450, 6, true, 400, 6700, true)]
 		[TestCase("8170,8070,7663,7203,7249,7019", 6700, 8300, 7, true, 600, 6700, true)]
       

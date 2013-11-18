@@ -27,7 +27,15 @@
     <Compile Include="BrickScaleNormalizer\BrickRequest.cs" />
     <Compile Include="BrickScaleNormalizer\BrickVariant.cs" />
     <Compile Include="BrickScaleNormalizer\BrickVariantComparer.cs" />
+    <Compile Include="BrickScaleNormalizer\DataItem.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickDataSet.cs" />
+    <Compile Include="BrickScaleNormalizer\DataRow.cs" />
+    <Compile Include="BrickScaleNormalizer\LabelPosition.cs" />
     <Compile Include="BrickScaleNormalizer\MiniamlScaleBehavior.cs" />
+    <Compile Include="BrickScaleNormalizer\Scale.cs" />
+    <Compile Include="BrickScaleNormalizer\ScaleType.cs" />
+    <Compile Include="BrickScaleNormalizer\SeriaCalcMode.cs" />
+    <Compile Include="BrickScaleNormalizer\UserPreferences.cs" />
     <Compile Include="Collections\IMap.cs" />
     <Compile Include="Collections\IMapItem.cs" />
     <Compile Include="Collections\Map.cs" />

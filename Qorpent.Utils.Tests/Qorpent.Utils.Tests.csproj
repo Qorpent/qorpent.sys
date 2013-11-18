@@ -22,6 +22,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BrickScale\BrickDataRecordMiniMaxTest.cs" />
     <Compile Include="BrickScale\ComdivTests.cs" />
     <Compile Include="ComplexStringHelperTest.cs" />
     <Compile Include="ComplexStringTest.cs" />
