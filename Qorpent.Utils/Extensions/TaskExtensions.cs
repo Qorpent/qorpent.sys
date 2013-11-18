@@ -19,5 +19,15 @@ namespace Qorpent.Utils.Extensions {
             task.Wait();
             return task.Result;
         }
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tasks"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> GetResult<T>(this IEnumerable<Task<T>> tasks) {
+            Task.WaitAll(tasks.ToArray());
+            return tasks.Select(_ => _.Result);
+        }
     }
 }
