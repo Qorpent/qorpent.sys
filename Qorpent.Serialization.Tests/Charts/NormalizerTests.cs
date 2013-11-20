@@ -34,6 +34,7 @@ namespace Qorpent.Serialization.Tests.Charts {
         private const string case1 = "216790,238688,103771;192571,105145,38828";
         private const string case2 = "200,500,250,233,286";
         private const string case3 = "2139,2066,1870,1854,1882,1823,1870;2033,2129,1936,1853,1829,1841,2033";
+        [Explicit]
         [TestCase(case1, -1, -1, 300, true, 0, 250000, 5)]
         [TestCase(case1, 0, -1, 300, true, 0, 250000, 5)]
         [TestCase(case1, 38000, -1, 300, true, 38000, 240000, 1)]
