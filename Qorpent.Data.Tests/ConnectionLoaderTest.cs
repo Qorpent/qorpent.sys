@@ -17,6 +17,7 @@ namespace Qorpent.Data.Tests
 	[TestFixture]
 	public class ConnectionLoaderTest
 	{
+        [Explicit]
 		[Test]
 		public void FileBasedResolutionWorks() {
 			var container = getcontainer();
@@ -32,7 +33,6 @@ namespace Qorpent.Data.Tests
 			Assert.AreEqual("Data Source=(local2);Initial Catalog=db2;", c2.ConnectionString);
 			File.Delete(file);
 		}
-
 		[Test]
 		public void FilePostgresResolutionWorks() {
 			var t = Type.GetType("Npgsql.NpgsqlConnection, Npgsql", false);
@@ -85,7 +85,7 @@ namespace Qorpent.Data.Tests
 			Assert.Null(conp.GetConnection("con1"));
 
 		}
-
+        [Explicit]
 		[Test]
 		public void PersistentRegister_And_Reset()
 		{
