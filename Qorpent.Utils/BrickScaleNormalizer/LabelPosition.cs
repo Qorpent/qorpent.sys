@@ -18,5 +18,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// Снизу
 		/// </summary>
 		Below,
+		/// <summary>
+		/// Скрытый
+		/// </summary>
+		Hidden ,
 	}
 }

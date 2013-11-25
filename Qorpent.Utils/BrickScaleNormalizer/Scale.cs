@@ -19,5 +19,9 @@
 		/// Признак обсчитанной шкалы
 		/// </summary>
 		public bool Prepared { get; set; }
+		/// <summary>
+		/// Количество единиц на один пиксель
+		/// </summary>
+		public decimal ValueInPixel { get; set; }
 	}
 }

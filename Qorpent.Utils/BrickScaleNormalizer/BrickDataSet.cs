@@ -40,10 +40,32 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 			if (Rows.Any(_ => _.ScaleType == ScaleType.Second)) {
 				CalculateSecondScale();
 			}
-			if(IsRequireLabelPositionCalculate())
-			{
+			if(IsRequireLabelPositionCalculate()) {
+
+				CalculateNormalizedValue();
 				CalculateLabelPosition();
 			}
+		}
+
+		private void CalculateNormalizedValue() {
+			foreach (var scaleType in new[]{ScaleType.First,ScaleType.Second, }) {
+				var data = Rows.Where(_ => _.ScaleType == scaleType).ToArray();
+				if (0 != data.Length) {
+					var scale = scaleType == ScaleType.First ? FirstScale : SecondScale;
+					foreach (var row in data) {
+						foreach (var item in row.Items) {
+							item.NormalizedValue = (item.Value - scale.Min)/scale.ValueInPixel;
+						}
+					}
+				}
+			}
+		}
+		/// <summary>
+		/// Собирает значения по колонке
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<DataItem[]> CollectColons() {
+			throw	new NotImplementedException();
 		}
 
 		private bool IsRequireLabelPositionCalculate() {
@@ -66,7 +88,15 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 						  Preferences.SYSignDelta.ToString());
 				var cat = new BrickCatalog();
 				var result = cat.GetBestVariant(req);
-				this.SecondScale = new Scale { Prepared = true, Min = result.ResultMinValue, Max = result.ResultMaxValue, DivLines = result.ResultDivCount };
+				this.SecondScale = new Scale {
+					Prepared = true, 
+					Min = result.ResultMinValue, 
+					Max = result.ResultMaxValue, 
+					DivLines = result.ResultDivCount,
+					
+				};
+
+				SecondScale.ValueInPixel = (SecondScale.Max - SecondScale.Min)/Preferences.Height;
 			}
 			else
 			{
@@ -86,6 +116,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 				var cat = new BrickCatalog();
 				var result = cat.GetBestVariant(req);
 				this.FirstScale = new Scale{Prepared = true, Min = result.ResultMinValue,Max = result.ResultMaxValue,DivLines = result.ResultDivCount};
+				FirstScale.ValueInPixel = (FirstScale.Max - FirstScale.Min) / Preferences.Height;
 			}
 			else {
 				this.FirstScale = new Scale();
@@ -93,6 +124,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 			
 			
 		}
+
+
+		
 
 		private bool _isNormalizedRecord = false;
 		private BrickDataSet _normalizedSet = null;
@@ -120,47 +154,36 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 				var rows = Rows.Where(_ => _.ScaleType == scaleType).ToArray();
 				if (rows.Length == 0) continue;
 				var maxCount = rows.Select(_ => _.Items.Count).Max();
-				var scaleRow = new DataRow();
-				scaleRow.ScaleType = scaleType;
+				var scaleRow = InitNormalizedScaleRow(scaleType, maxCount);
 				result.Rows.Add(scaleRow);
-				bool sumcs = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum);
-				bool sumser = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum);
-				for (var i = 0; i < maxCount; i++) {
-					scaleRow.Items.Add(new DataItem {
-						NegMin = sumcs?0: decimal.MaxValue,
-						PosMax = sumcs?0:decimal.MinValue,
-						PosMin = decimal.MaxValue,
-						NegMax = decimal.MinValue
-					});
-				}
-				var serias = rows.GroupBy(_ => _.SeriaNumber);
+				var serias = rows.GroupBy(_ => _.SeriaNumber).ToArray();
 				for (var i = 0; i < maxCount; i++)
 				{
 				
-					var currentPosMax = sumser ? 0 : decimal.MinValue;
+					var currentPosMax = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum) ? 0 : decimal.MinValue;
 					var currentPosMin =  decimal.MaxValue;
 					var currentNegMax =  decimal.MinValue;
-					var currentNegMin = sumser ? 0 : decimal.MaxValue;
+					var currentNegMin = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum) ? 0 : decimal.MaxValue;
 
 					foreach (var seria in serias)
 					{
-						var seriaPosMax = sumser ? 0 : decimal.MinValue;
-						var seriaNegMin = sumser ? 0 : decimal.MaxValue;
+						var seriaPosMax = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum) ? 0 : decimal.MinValue;
+						var seriaNegMin = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum) ? 0 : decimal.MaxValue;
 						foreach (var row in seria) {
 							decimal val = 0;
 							if (i < row.Items.Count) {
 								val = row.Items[i].Value;
 							}
-							if (sumser)
+							if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum))
 							{
 								if (val >= 0) {
-									if (sumcs) {
+									if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum)) {
 										currentPosMax += val;
 									}
 									seriaPosMax += val;
 								}
 								else {
-									if (sumcs) {
+									if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum)) {
 										currentNegMin += val;
 									}
 									seriaNegMin += val;
@@ -181,18 +204,18 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 								}
 							}
 						}
-						if (sumser ) {
+						if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum) ) {
 
 							currentNegMax = Math.Max(currentNegMax, seriaNegMin);
 							currentPosMin = Math.Min(currentPosMin, seriaPosMax);
-							if (!sumcs) {
+							if (!(0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum))) {
 								currentPosMax = Math.Max(currentPosMax, seriaPosMax);
 								currentNegMin = Math.Min(currentNegMin, seriaNegMin);
 							}
 						}
 						
 					}
-					if (sumcs)
+					if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum))
 					{
 						scaleRow.Items[i].PosMax += currentPosMax;
 						scaleRow.Items[i].NegMin += currentNegMin;
@@ -208,6 +231,22 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 				
 			}
 			return result;
+		}
+
+		private DataRow InitNormalizedScaleRow(ScaleType scaleType, int maxCount) {
+			var scaleRow = new DataRow();
+			scaleRow.ScaleType = scaleType;
+
+
+			for (var i = 0; i < maxCount; i++) {
+				scaleRow.Items.Add(new DataItem {
+					NegMin = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum) ? 0 : decimal.MaxValue,
+					PosMax = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum) ? 0 : decimal.MinValue,
+					PosMin = decimal.MaxValue,
+					NegMax = decimal.MinValue
+				});
+			}
+			return scaleRow;
 		}
 
 
