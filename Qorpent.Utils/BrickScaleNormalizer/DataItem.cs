@@ -264,7 +264,13 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// 
 		/// </summary>
 		public decimal Max {
-			get { return Math.Max(NegMax < 0 ? NegMax : decimal.MinValue, PosMax > 0 ?PosMax:decimal.MinValue); }
+			get {
+				var result = Math.Max(NegMax < 0 ? NegMax : decimal.MinValue, PosMax > 0 ?PosMax:decimal.MinValue);
+				if (result == decimal.MinValue) {
+					result = 0;
+				}
+				return result;
+			}
 		}
 		/// <summary>
 		/// 
