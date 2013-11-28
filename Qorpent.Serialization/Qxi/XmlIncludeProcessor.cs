@@ -110,6 +110,13 @@ namespace Qorpent.Qxi {
 			}
 			set { _bxl = value; }
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public IDictionary<string, XElement> Importcache {
+			get { return null==_parent?_importcache:_parent._importcache; }
+			set { _importcache = value; }
+		}
 
 
 		/// <summary>
@@ -400,6 +407,9 @@ namespace Qorpent.Qxi {
 			if (href == "self") {
 				return new XElement(document);
 			}
+			if (href == "this") {
+				return new XElement(document);
+			}
 			if (href.StartsWith("direct//")) {
 				var directcode = href.Substring(8);
 				if (!DirectImports.ContainsKey(directcode)) {
@@ -435,12 +445,19 @@ namespace Qorpent.Qxi {
 				}
 				throw new QorpentException("cannot find " + docpath + " resolved from href: " + href + " on codebase: " + codebase);
 			}
-			var result = docpath.EndsWith(".xml") ? XElement.Load(docpath) : Bxl.Parse(File.ReadAllText(docpath), docpath);
+			if (!Importcache.ContainsKey(docpath)) {
+				var result = docpath.EndsWith(".xml") ? XElement.Load(docpath) : Bxl.Parse(File.ReadAllText(docpath), docpath);
 
-			//recursively call to includes (not delayed)
-			result = new XmlIncludeProcessor(this).Include(result, docpath, false, options);
-			return result;
+				//recursively call to includes (not delayed)
+				result = new XmlIncludeProcessor(this).Include(result, docpath, false, options);
+				Importcache[docpath] = result;
+				return result;	
+			}
+			return Importcache[docpath];
+
 		}
+
+		private IDictionary<string,XElement> _importcache = new Dictionary<string, XElement>(); 
 
 		/// <summary>
 		/// 	Gets the include.
@@ -485,6 +502,8 @@ namespace Qorpent.Qxi {
 			normalIi.AddRange(
 				document.DescendantsAndSelf().Where(x => IsProcessAble(x, applyDelayed, false)).Reverse());
 			var selfIi = new List<XElement>(); // список элементов импорта/инклуда типа self
+			//selfIi.AddRange(
+			//	document.DescendantsAndSelf().Where(x => IsProcessAble(x, false, true)).Reverse());
 			if (applyDelayed) {
 				normalIi.AddRange(
 					document.DescendantsAndSelf().Where(x => IsProcessAble(x, true, true)).Reverse());
@@ -520,10 +539,10 @@ namespace Qorpent.Qxi {
 			     xElement.Name == QorpentConst.Xml.XmlIncludeReplaceElementName)) {
 				return false;
 			}
-			if (selfs && xElement.ChooseAttr("__code", "code") != "self") {
+			if (selfs && xElement.ChooseAttr("__code", "code") != "this") {
 				return false;
 			}
-			if (!selfs && xElement.ChooseAttr("__code", "code") == "self") {
+			if (!selfs && xElement.ChooseAttr("__code", "code") == "this") {
 				return false;
 			}
 			if (elementNameFilter.IsNotEmpty() && !elementNameFilter.Contains(xElement.Name.LocalName)) {
@@ -541,7 +560,7 @@ namespace Qorpent.Qxi {
 
 		/// <summary>
 		/// </summary>
-		public string[] NoImportedAttributes = new[] {"__id", "id", "__code", "code", "__name", "name"};
+		public string[] NoImportedAttributes = new[] {"__id", "id", "__code", "code", "__name", "name","key"};
 
 		private IBxlParser _bxl;
 

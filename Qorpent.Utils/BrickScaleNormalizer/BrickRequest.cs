@@ -86,7 +86,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 				}
 			}
 			if (correctedMax < DefaultMinSize) {
-				while (correctedMax <= DefaultMaxSize) {
+				while (Math.Abs(correctedMax) <= DefaultMaxSize) {
 					correctedMax = correctedMax*10;
 					Scale = Scale*10;
 				}

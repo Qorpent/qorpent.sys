@@ -116,7 +116,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		public int TopMarginePixels {
 			get {
-				var valsinPixels = ((decimal)BrickMaxValue) / ((decimal)Request.Size);
+				var valsinPixels = Math.Abs(BrickMaxValue) / ((decimal)Request.Size);
 				return (int)(TopMargin/valsinPixels);
 			}
 		}
