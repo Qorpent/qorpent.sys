@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.BrickScaleNormalizer
 {
@@ -60,21 +62,23 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 				}
 			}
 		}
-		/// <summary>
-		/// Собирает значения по колонке
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerable<DataItem[]> CollectColons() {
-			throw	new NotImplementedException();
-		}
 
 		private bool IsRequireLabelPositionCalculate() {
-			return 0!=(Preferences.SeriaCalcMode & (SeriaCalcMode.SeriaLinear|SeriaCalcMode.CrossSeriaLinear))  && Rows.Select(_=>_.RowNumber).Distinct().Count()>1;
+			return 0!=(Preferences.SeriaCalcMode & (SeriaCalcMode.SeriaLinear|SeriaCalcMode.CrossSeriaLinear))  && Rows.Select(_=>_.SeriaNumber).Distinct().Count()>1;
 		}
-
+        /// <summary>
+        ///     Собирает абстрактные олонки значений
+        /// </summary>
+        /// <returns>Перечисление абстрактных колонок значений</returns>
+        public IEnumerable<DataItemColon> BuildColons() {
+            return this.GetColons();
+        }
+        /// <summary>
+        ///     Производит обсчёт расположения лэйблов значений и пытается максимально раздвинуть их между собой
+        /// </summary>
 		private void CalculateLabelPosition() {
-			//throw new NotImplementedException();
-		}
+            var colons = BuildColons();
+        }
 
 		private void CalculateSecondScale() {
 			if (0 == Preferences.SYFixMin && 0 == Preferences.SYFixMin && 0 == Preferences.SYFixDiv)
@@ -142,13 +146,18 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 					if (null == _seria) return 0;
 					return _seria.Items.Select(_ => _.Max).Max();
 				}
-				if (null == _normalizedSet) {
-					_normalizedSet = GetNormalizedRecord();
-				}
-				return _normalizedSet.GetMax(scaleType);
-		}
 
-		private BrickDataSet GetNormalizedRecord() {
+				return EnsureNormalized().GetMax(scaleType);
+		}
+        /// <summary>
+        ///     Собирает нормализованный экземпляр <see cref="BrickDataSet"/>
+        /// </summary>
+        /// <returns>Нормализованный экземпляр <see cref="BrickDataSet"/></returns>
+        public BrickDataSet EnsureNormalized() {
+            return _normalizedSet ?? (_normalizedSet = GetNormalizedRecord());
+        }
+
+	    private BrickDataSet GetNormalizedRecord() {
 			var result = new BrickDataSet {_isNormalizedRecord = true};
 			foreach (var scaleType in new[]{ScaleType.First,ScaleType.Second}) {
 				var rows = Rows.Where(_ => _.ScaleType == scaleType).ToArray();
@@ -256,15 +265,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 		/// <param name="scaleType"></param>
 		/// <returns></returns>
 		public decimal GetMin(ScaleType scaleType = ScaleType.First) {
-				if (_isNormalizedRecord) {
-					var _seria = Rows.FirstOrDefault(_ => _.ScaleType == scaleType);
-					if (null == _seria) return 0;
-					return _seria.Items.Select(_ => _.Min).Min();
-				}
-				if (null == _normalizedSet) {
-					_normalizedSet = GetNormalizedRecord();
-				}
-			return _normalizedSet.GetMin(scaleType);
+            if (_isNormalizedRecord) {
+                var seria = Rows.FirstOrDefault(_ => _.ScaleType == scaleType);
+                return null == seria ? 0 : seria.Items.Select(_ => _.Min).Min();
+            }
+
+			return EnsureNormalized().GetMin(scaleType);
 		}
 
 		/// <summary>
@@ -285,7 +291,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 		/// <param name="secondscale"></param>
 		public void Add(int serianum, int rownum, decimal value, bool secondscale) {
 			var row = ResolveRow(serianum, rownum, secondscale?ScaleType.Second:ScaleType.First);
-			row.Items.Add(new DataItem{Value = value});
+			row.Items.Add(new DataItem { Value = value, Index = row.Items.Count });
 		}
 		/// <summary>
 		/// Возвращает элемент данных по позиции
@@ -316,4 +322,85 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 			return result;
 		}
 	}
+    internal static class BrickDataSetExtensions {
+        /// <summary>
+        ///     Возвращает перечисление <see cref="DataRow"/> внутри <see cref="BrickDataSet"/> по номеру серии
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        /// <param name="serianum">Номер серии</param>
+        /// <returns>Перечисление <see cref="DataRow"/></returns>
+        public static IEnumerable<DataRow> GetSeriaRows(this BrickDataSet dataSet, int serianum) {
+            return dataSet.Rows.Where(_ => _.SeriaNumber == serianum);
+        }
+        /// <summary>
+        ///     Возвращает упорядоченное перечисление серий из <see cref="BrickDataSet"/>
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        /// <returns>Упорядоченное перечисление серий из <see cref="BrickDataSet"/></returns>
+        public static IEnumerable<BrickDataSetSeria> GetSeries(this BrickDataSet dataSet) {
+            return dataSet.Rows.GroupBy(_ => _.SeriaNumber).Select(_ => new BrickDataSetSeria(_.Key, _.Select(__ => __)));
+        }
+        /// <summary>
+        ///     Собирает упорядоченное перечисление колонок данных графика в виде <see cref="DataItemColon"/>
+        /// </summary>
+        /// <param name="dataSet">Датаест</param>
+        /// <returns>Упорядоченное перечисление колонок данных графика в виде <see cref="DataItemColon"/></returns>
+        public static IEnumerable<DataItemColon> GetColons(this BrickDataSet dataSet) {
+            return dataSet.Rows.SelectMany(_ => _.Items).GroupBy(_ => _.Index).Select(_ => new DataItemColon(_.Select(__ => __)));
+        }
+    }
+    /// <summary>
+    ///     Представление серии из <see cref="DataRow"/>
+    /// </summary>
+    internal class BrickDataSetSeria : IEnumerable<DataRow> {
+        /// <summary>
+        ///     Внутренний список <see cref="DataRow"/>, присущих данной серии
+        /// </summary>
+        private readonly List<DataRow> _rows = new List<DataRow>();
+        /// <summary>
+        ///     Номер серии
+        /// </summary>
+        public int SeriaNumber { get; private set; }
+        /// <summary>
+        ///     Представление серии из <see cref="DataRow"/>
+        /// </summary>
+        /// <param name="seriaNumber">Номер серии</param>
+        public BrickDataSetSeria(int seriaNumber) {
+            SeriaNumber = seriaNumber;
+        }
+        /// <summary>
+        ///     Представление серии из <see cref="DataRow"/>
+        /// </summary>
+        /// <param name="seriaNumber">Номер серии</param>
+        /// <param name="rows">Перечисление <see cref="DataRow"/>, присущих данной серии</param>
+        public BrickDataSetSeria(int seriaNumber, IEnumerable<DataRow> rows) {
+            SeriaNumber = seriaNumber;
+            rows.ForEach(Add);
+        }
+        /// <summary>
+        ///     Добавление <see cref="DataRow"/> в серию
+        /// </summary>
+        /// <param name="dataRow">Экземпляр <see cref="DataRow"/>, связанный с данной серие</param>
+        public void Add(DataRow dataRow) {
+            if (dataRow.SeriaNumber != SeriaNumber) {
+                throw new Exception("Cannot assign a datarow from another seria");
+            }
+
+            _rows.Add(dataRow);
+        }
+        /// <summary>
+        ///     Получение <see cref="IEnumerator{T}"/> по <see cref="DataRow"/>
+        /// </summary>
+        /// <returns><see cref="IEnumerator{T}"/> по <see cref="DataRow"/></returns>
+        public IEnumerator<DataRow> GetEnumerator() {
+            return _rows.GetEnumerator();
+        }
+        /// <summary>
+        ///     Получение <see cref="IEnumerator{T}"/> по <see cref="DataRow"/>
+        /// </summary>
+        /// <returns><see cref="IEnumerator{T}"/> по <see cref="DataRow"/></returns>
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
+        }
+    }
 }

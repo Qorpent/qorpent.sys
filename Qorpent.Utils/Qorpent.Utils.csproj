@@ -29,6 +29,7 @@
     <Compile Include="BrickScaleNormalizer\BrickVariantComparer.cs" />
     <Compile Include="BrickScaleNormalizer\DataItem.cs" />
     <Compile Include="BrickScaleNormalizer\BrickDataSet.cs" />
+    <Compile Include="BrickScaleNormalizer\DataItemColon.cs" />
     <Compile Include="BrickScaleNormalizer\DataRow.cs" />
     <Compile Include="BrickScaleNormalizer\LabelPosition.cs" />
     <Compile Include="BrickScaleNormalizer\MiniamlScaleBehavior.cs" />
