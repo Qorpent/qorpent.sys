@@ -9,12 +9,11 @@ namespace Qorpent.Utils.Tests.BrickScale {
     [TestFixture]
     public class BrickDataSetLabelNormalizationTests {
         [Test]
-        public void SimpleTest() {
-            var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 200);
+        public void SimpleLabelNormalizationTest() {
+            var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 100);
             ds.Add(1, 1, 10);
             ds.Add(1, 1, 50);
             ds.Add(1, 1, 40);
-
             ds.Add(2, 1, 30);
             ds.Add(2, 1, 55);
             ds.Add(2, 1, 41);
@@ -72,7 +71,7 @@ namespace Qorpent.Utils.Tests.BrickScale {
             Assert.AreEqual(300, colons[2].Items[1].Value);
         }
         /// <summary>
-        ///     Тест выражает то, что в мультисерийном графике с 3 рядами соберутся 3 колонки с четырьмя значениями в каждой:
+        ///     Тест выражает то, что в мультисерийном графике с 2 рядами соберутся 3 колонки с четырьмя значениями в каждой:
         ///     1с1р,1с2р,2с1р,2с2р (с — серия, р — ряд)
         /// </summary>
         [Test]
@@ -107,6 +106,95 @@ namespace Qorpent.Utils.Tests.BrickScale {
             Assert.AreEqual(150, colons[0].Items[3].Value);
             Assert.AreEqual(250, colons[1].Items[3].Value);
             Assert.AreEqual(350, colons[2].Items[3].Value);
+        }
+        /// <summary>
+        ///     Тест выражает возможность собрать колонки по графику с двумя Y-ками
+        /// </summary>
+        [Test]
+        public void SingleLineTwoScaleBuildColonsTest() {
+            var ds = GetEmptyDataSet(SeriaCalcMode.Linear, 200);
+            ds.Add(1, 1, 10, false);
+            ds.Add(1, 1, 20, false);
+            ds.Add(1, 1, 15, true);
+            ds.Add(1, 1, 25, true);
+            var colons = ds.BuildColons().ToArray();
+            Assert.AreEqual(2, colons.Length);
+            Assert.AreEqual(2, colons[0].Items.Length);
+            Assert.AreEqual(2, colons[1].Items.Length);
+            Assert.AreEqual(10, colons[0].Items[0].Value);
+            Assert.AreEqual(20, colons[1].Items[0].Value);
+            Assert.AreEqual(15, colons[0].Items[1].Value);
+            Assert.AreEqual(25, colons[1].Items[1].Value);
+        }
+        /// <summary>
+        ///     Тест выражает то, что при работе с двумя осями полностью поддежривается логика работы с Row
+        /// </summary>
+        [Test]
+        public void SingleLineTwoScaleWithRowsBuildColonsTest() {
+            var ds = GetEmptyDataSet(SeriaCalcMode.Linear, 200);
+            ds.Add(1, 1, 10, false);
+            ds.Add(1, 2, 11, false);
+            ds.Add(1, 1, 20, false);
+            ds.Add(1, 2, 21, false);
+            ds.Add(1, 1, 15, true);
+            ds.Add(1, 2, 16, true);
+            ds.Add(1, 1, 25, true);
+            ds.Add(1, 2, 26, true);
+            var colons = ds.BuildColons().ToArray();
+            Assert.AreEqual(2, colons.Length);
+            Assert.AreEqual(4, colons[0].Items.Length);
+            Assert.AreEqual(4, colons[1].Items.Length);
+            Assert.AreEqual(10, colons[0].Items[0].Value);
+            Assert.AreEqual(20, colons[1].Items[0].Value);
+            Assert.AreEqual(11, colons[0].Items[1].Value);
+            Assert.AreEqual(21, colons[1].Items[1].Value);
+            Assert.AreEqual(15, colons[0].Items[2].Value);
+            Assert.AreEqual(25, colons[1].Items[2].Value);
+            Assert.AreEqual(16, colons[0].Items[3].Value);
+            Assert.AreEqual(26, colons[1].Items[3].Value);
+        }
+        /// <summary>
+        ///     Тест показывает то, что поддерживается две оси с множеством серий и рядов
+        /// </summary>
+        [Test]
+        public void MultiLineTwoScaleWithRowsBuildColonsTest() {
+            var ds = GetEmptyDataSet(SeriaCalcMode.Linear, 200);
+            ds.Add(1, 1, 10, false);
+            ds.Add(1, 2, 11, false);
+            ds.Add(1, 1, 20, false);
+            ds.Add(1, 2, 21, false);
+            ds.Add(2, 1, 12, false);
+            ds.Add(2, 2, 13, false);
+            ds.Add(2, 1, 22, false);
+            ds.Add(2, 2, 23, false);
+            ds.Add(1, 1, 15, true);
+            ds.Add(1, 2, 16, true);
+            ds.Add(1, 1, 25, true);
+            ds.Add(1, 2, 26, true);
+            ds.Add(2, 1, 17, true);
+            ds.Add(2, 2, 18, true); 
+            ds.Add(2, 1, 27, true);
+            ds.Add(2, 2, 28, true);
+            var colons = ds.BuildColons().ToArray();
+            Assert.AreEqual(2, colons.Length);
+            Assert.AreEqual(8, colons[0].Items.Length);
+            Assert.AreEqual(8, colons[1].Items.Length);
+            Assert.AreEqual(10, colons[0].Items[0].Value);
+            Assert.AreEqual(20, colons[1].Items[0].Value);
+            Assert.AreEqual(11, colons[0].Items[1].Value);
+            Assert.AreEqual(21, colons[1].Items[1].Value);
+            Assert.AreEqual(12, colons[0].Items[2].Value);
+            Assert.AreEqual(22, colons[1].Items[2].Value);
+            Assert.AreEqual(13, colons[0].Items[3].Value);
+            Assert.AreEqual(23, colons[1].Items[3].Value);
+            Assert.AreEqual(15, colons[0].Items[4].Value);
+            Assert.AreEqual(25, colons[1].Items[4].Value);
+            Assert.AreEqual(16, colons[0].Items[5].Value);
+            Assert.AreEqual(26, colons[1].Items[5].Value);
+            Assert.AreEqual(17, colons[0].Items[6].Value);
+            Assert.AreEqual(27, colons[1].Items[6].Value);
+            Assert.AreEqual(18, colons[0].Items[7].Value);
+            Assert.AreEqual(28, colons[1].Items[7].Value);
         }
         private BrickDataSet GetEmptyDataSet(SeriaCalcMode calcMode, int height) {
             return new BrickDataSet {

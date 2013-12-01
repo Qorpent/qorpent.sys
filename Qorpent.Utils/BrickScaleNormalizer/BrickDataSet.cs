@@ -39,11 +39,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 		/// </summary>
 		public void Calculate() {
 			CalculateFirstScale();
+
 			if (Rows.Any(_ => _.ScaleType == ScaleType.Second)) {
 				CalculateSecondScale();
 			}
-			if(IsRequireLabelPositionCalculate()) {
 
+			if(IsRequireLabelPositionCalculate()) {
 				CalculateNormalizedValue();
 				CalculateLabelPosition();
 			}
@@ -52,14 +53,16 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 		private void CalculateNormalizedValue() {
 			foreach (var scaleType in new[]{ScaleType.First,ScaleType.Second, }) {
 				var data = Rows.Where(_ => _.ScaleType == scaleType).ToArray();
-				if (0 != data.Length) {
-					var scale = scaleType == ScaleType.First ? FirstScale : SecondScale;
-					foreach (var row in data) {
-						foreach (var item in row.Items) {
-							item.NormalizedValue = (item.Value - scale.Min)/scale.ValueInPixel;
-						}
-					}
-				}
+			    if (0 == data.Length) {
+			        continue;
+			    }
+
+			    var scale = scaleType == ScaleType.First ? FirstScale : SecondScale;
+			    foreach (var row in data) {
+			        foreach (var item in row.Items) {
+			            item.NormalizedValue = (item.Value - scale.Min)/scale.ValueInPixel;
+			        }
+			    }
 			}
 		}
 
@@ -77,22 +80,25 @@ namespace Qorpent.Utils.BrickScaleNormalizer
         ///     Производит обсчёт расположения лэйблов значений и пытается максимально раздвинуть их между собой
         /// </summary>
 		private void CalculateLabelPosition() {
-            var colons = BuildColons();
+            BuildColons().ForEach(CalculateLabelPosition);
         }
-
+        /// <summary>
+        ///     Производит обсчёт расположения лэйблов внутри одной колонки
+        /// </summary>
+        /// <param name="colon">Представление колонки данных</param>
+        private void CalculateLabelPosition(DataItemColon colon) {
+            colon.TryMinimizeTemperature();
+        }
 		private void CalculateSecondScale() {
 			if (0 == Preferences.SYFixMin && 0 == Preferences.SYFixMin && 0 == Preferences.SYFixDiv)
 			{
 				var realMin = GetMin(ScaleType.Second);
 				var realMax = GetMax(ScaleType.Second);
-				var req = new BrickRequest();
-				req.SourceMinValue = realMin;
-				req.SourceMaxValue = realMax;
-				req.Setup(Preferences.SY, Preferences.SYMin, Preferences.SYMax, Preferences.SYTop.ToString(),
-						  Preferences.SYSignDelta.ToString());
+				var req = new BrickRequest { SourceMinValue = realMin, SourceMaxValue = realMax };
+			    req.Setup(Preferences.SY, Preferences.SYMin, Preferences.SYMax, Preferences.SYTop.ToString(), Preferences.SYSignDelta.ToString());
 				var cat = new BrickCatalog();
 				var result = cat.GetBestVariant(req);
-				this.SecondScale = new Scale {
+				SecondScale = new Scale {
 					Prepared = true, 
 					Min = result.ResultMinValue, 
 					Max = result.ResultMaxValue, 
@@ -101,17 +107,15 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 				};
 
 				SecondScale.ValueInPixel = (SecondScale.Max - SecondScale.Min)/Preferences.Height;
-			}
-			else
-			{
-				this.SecondScale = new Scale();
+			} else {
+				SecondScale = new Scale();
 			}
 		}
 
 		private void CalculateFirstScale() {
 			if (0 == Preferences.YFixMin && 0 == Preferences.YFixMin && 0 == Preferences.YFixDiv) {
-				var realMin = GetMin(ScaleType.First);
-				var realMax = GetMax(ScaleType.First);
+				var realMin = GetMin();
+				var realMax = GetMax();
 				var req = new BrickRequest();
 				req.SourceMinValue = realMin;
 				req.SourceMaxValue = realMax;
@@ -119,11 +123,11 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 				          Preferences.YSignDelta.ToString());
 				var cat = new BrickCatalog();
 				var result = cat.GetBestVariant(req);
-				this.FirstScale = new Scale{Prepared = true, Min = result.ResultMinValue,Max = result.ResultMaxValue,DivLines = result.ResultDivCount};
+				FirstScale = new Scale{Prepared = true, Min = result.ResultMinValue,Max = result.ResultMaxValue,DivLines = result.ResultDivCount};
 				FirstScale.ValueInPixel = (FirstScale.Max - FirstScale.Min) / Preferences.Height;
 			}
 			else {
-				this.FirstScale = new Scale();
+				FirstScale = new Scale();
 			}
 			
 			
@@ -132,8 +136,8 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 
 		
 
-		private bool _isNormalizedRecord = false;
-		private BrickDataSet _normalizedSet = null;
+		private bool _isNormalizedRecord;
+		private BrickDataSet _normalizedSet;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -343,7 +347,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer
         /// <summary>
         ///     Собирает упорядоченное перечисление колонок данных графика в виде <see cref="DataItemColon"/>
         /// </summary>
-        /// <param name="dataSet">Датаест</param>
+        /// <param name="dataSet">Датасет</param>
         /// <returns>Упорядоченное перечисление колонок данных графика в виде <see cref="DataItemColon"/></returns>
         public static IEnumerable<DataItemColon> GetColons(this BrickDataSet dataSet) {
             return dataSet.Rows.SelectMany(_ => _.Items).GroupBy(_ => _.Index).Select(_ => new DataItemColon(_.Select(__ => __)));
