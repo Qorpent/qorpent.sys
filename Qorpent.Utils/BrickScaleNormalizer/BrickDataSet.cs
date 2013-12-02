@@ -87,7 +87,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer
         /// </summary>
         /// <param name="colon">Представление колонки данных</param>
         private void CalculateLabelPosition(DataItemColon colon) {
-            colon.TryMinimizeTemperature();
+            colon.MinimizeTemperature();
         }
 		private void CalculateSecondScale() {
 			if (0 == Preferences.SYFixMin && 0 == Preferences.SYFixMin && 0 == Preferences.SYFixDiv)

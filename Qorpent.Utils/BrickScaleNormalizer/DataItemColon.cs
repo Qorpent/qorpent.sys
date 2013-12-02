@@ -2,58 +2,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
     /// <summary>
-    /// Колонка значений графика для расчета их позиций
+    ///     Колонка значений графика для расчета их позиций
     /// </summary>
     public class DataItemColon : IEnumerable<DataItem> {
         /// <summary>
-        ///     Внутренний списко <see cref="DataItem"/>
+        ///     Внутренний список <see cref="DataItem"/>
         /// </summary>
         private readonly List<DataItem> _dataItems = new List<DataItem>();
         /// <summary>
-        /// 
+        ///     Внутреннее перечисление коллизий
         /// </summary>
-        public decimal ScaleMax { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public DataItemColon() {}
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataItems"></param>
-        public DataItemColon(IEnumerable<DataItem> dataItems) {
-            _dataItems.AddRange(dataItems);
+        private IEnumerable<DataItemLabelCollision> Collisions {
+            get { return this.Select(_ => new DataItemLabelCollision(this, _, this.Where(_.IsCollision))).Where(_ => !_.IsEmpty); }
         }
         /// <summary>
-        /// 
+        ///     Внутренее значение температуры колонки
         /// </summary>
-        /// <returns></returns>
-        public IEnumerable<DataItemLabelCollision> FindCollisions() {
-            DataItem previous = null;
-            DataItem current = null;
-            for (var i = 0; i < Items.Length; i++) {
-                if(Items[i].LabelPosition==LabelPosition.Hidden)continue;
-                previous = current;
-                current = Items[i];
-                if (0 == i && current.NormalizedLabelMin < 0) {
-                    yield return new DataItemLabelCollision{ScaleMax = ScaleMax,First = current,Second = null};
-                }
-                if (null != previous && (previous.NormalizedLabelMax > current.NormalizedLabelMin) &&
-                    (current.NormalizedValue > previous.NormalizedLabelMax)) {
-                    yield return new DataItemLabelCollision { ScaleMax = ScaleMax, First = previous, Second = current };
-                }
-                if (null != previous && (current.NormalizedLabelMax > previous.NormalizedLabelMin) &&
-                    (previous.NormalizedValue >  current.NormalizedLabelMax))
-                {
-                    yield return new DataItemLabelCollision { ScaleMax = ScaleMax, First = current, Second = previous };
-                }
-            }
+        private decimal Temperature {
+            get { return Collisions.Any() ? Collisions.Select(_ => _.Temperature).Sum()/Collisions.Count() : 0; }
         }
         /// <summary>
-        /// 
+        ///     Массив <see cref="DataItem"/>, формирующих данную колонку в виде <see cref="DataItemColon"/>
         /// </summary>
         public DataItem[] Items {
             get { return _dataItems.ToArray(); }
@@ -62,139 +35,117 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
                 _dataItems.AddRange(value);
             }
         }
-
         /// <summary>
-        /// 
+        ///     Колонка значений графика для расчета их позиций
         /// </summary>
-        /// <returns></returns>
-        public decimal GetTemperature() {
-            return FindCollisions().Select(_ => _.Overlap).Sum();
-        }
-
+        public DataItemColon() {}
         /// <summary>
-        /// 
+        ///     Колонка значений графика для расчета их позиций
         /// </summary>
-        public void TryMinimizeTemperature() {
-            if (GetTemperature() == 0) return;
-            ResetTemperature();
-            int variant = 0;
-            decimal currentMin = GetTemperature();
-            var keepTopAndBottom = KeepTopAndBottom();
-            if (keepTopAndBottom < currentMin)
-            {
-                variant = 1;
-                currentMin = keepTopAndBottom;
-            }
-            ResetTemperature();
-            var fromdownVariant = ColdFromDown();
-            if (fromdownVariant < currentMin) {
-                variant = 2;
-                currentMin = fromdownVariant;
-            }
-            ResetTemperature();
-            var fromUpVariant = ColdFromUp();
-            if (fromUpVariant < currentMin)
-            {
-                variant = 3;
-                currentMin = fromUpVariant;
-            }
-            ResetTemperature();
-            var threeWorst = ColdFromThreeWorst();
-            if (threeWorst < currentMin)
-            {
-                variant = 4;
-            }
-            if (0 == variant) {
-                foreach (var dataItem in Items) {
-                    dataItem.LabelPosition = LabelPosition.Auto;
-                }
-            }
-            else if (1 == variant)
-            {
-                KeepTopAndBottom();
-            }
-            else if(2==variant) {
-                ColdFromDown();
-            }else if (3 == variant) {
-                ColdFromUp();
-            }
-            else {
-                ColdFromThreeWorst();
-            }
-        }
-
-        private void ResetTemperature() {
-            foreach (var dataItem in Items) {
-                dataItem.LabelPosition = LabelPosition.Auto;
-            }
-        }
-
-        private decimal KeepTopAndBottom() {
-            var collisions = FindCollisions().ToArray();
-            var fst = collisions.FirstOrDefault(_ => _.Second == null);
-            var sec = collisions.FirstOrDefault(_ => _.First == null);
-            if (null != fst) {
-                fst.First.LabelPosition = LabelPosition.Above;
-            }
-            if (null != sec) {
-                sec.Second.LabelPosition = LabelPosition.Below;
-            }
-            collisions = FindCollisions().Where(_ => null != _.First && null != _.Second ).ToArray();
-            foreach (var collision in collisions) {
-                if (collision.First == fst.First && collision.Second == sec.Second) {
-                    continue;
-                }
-                if (collision.First == fst.First) {
-                    collision.Second.LabelPosition = LabelPosition.Above;
-                }
-                else if (collision.Second == sec.Second) {
-                    collision.First.LabelPosition = LabelPosition.Below;
-                }
-                else {
-                    collision.Second.LabelPosition= LabelPosition.Above;
-                }
-            }
-
-            return GetTemperature();
-        }
-
-        private decimal ColdFromThreeWorst() {
-            for (var i = 0; i < 3; i++) {
-                var collision = FindCollisions().OrderByDescending(_ => _.Overlap).FirstOrDefault();
-                if (null == collision) break;
-                if (collision.Second == null) {
-                    collision.First.LabelPosition = LabelPosition.Above;
-                }else if (collision.First == null) {
-                    collision.Second.LabelPosition = LabelPosition.Below;
-                }
-                else {
-                    collision.Second.LabelPosition = LabelPosition.Above;
-                    collision.First.LabelPosition = LabelPosition.Below;
-                }
-            }
-            return GetTemperature();
-        }
-
-        private decimal ColdFromUp() {
-            throw new NotImplementedException();
-        }
-
-        private decimal ColdFromDown() {
-            throw new NotImplementedException();
+        /// <param name="dataItems">Перечисление <see cref="DataItem"/>, образующих колонку</param>
+        public DataItemColon(IEnumerable<DataItem> dataItems) {
+            _dataItems.AddRange(dataItems);
         }
         /// <summary>
-        /// 
+        ///     Минимализация температуры колонки
         /// </summary>
-        /// <returns></returns>
+        public void MinimizeTemperature() {
+            EnsureBestLabels();
+            Collisions.SelectMany(_ => _.SelectVeryHot()).ForEach(_ => _.HideLabel()); // дошлейфовка
+        }
+        /// <summary>
+        ///     Получение <see cref="IEnumerator"/> по <see cref="DataItem"/>
+        /// </summary>
+        /// <returns><see cref="IEnumerator"/> по <see cref="DataItem"/></returns>
         public IEnumerator<DataItem> GetEnumerator() {
             return _dataItems.GetEnumerator();
         }
         /// <summary>
-        /// 
+        ///     Получение <see cref="IEnumerator"/> по <see cref="DataItem"/>
         /// </summary>
-        /// <returns></returns>
+        /// <returns><see cref="IEnumerator"/> по <see cref="DataItem"/></returns>
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
+        }
+        /// <summary>
+        ///     Убеждается в наилучшем расположении «лычек»
+        /// </summary>
+        private void EnsureBestLabels() {
+            if (Temperature == 0) {
+                return;
+            }
+
+            var labelPositions = BuildBestLabelPositionsVariant();
+            ApplyLabelPositions(labelPositions);
+        }
+        /// <summary>
+        ///     Собирает наилучший вариант расположения лычек чарта
+        /// </summary>
+        /// <returns></returns>
+        private LabelPosition[] BuildBestLabelPositionsVariant() {
+            var totalizator = new List<KeyValuePair<decimal, LabelPosition[]>>();
+            BuildVariants().DoForEach(_ => {
+                ApplyLabelPositions(_);
+                totalizator.Add(new KeyValuePair<decimal, LabelPosition[]>(Temperature, _));
+            });
+            return totalizator.OrderBy(_ => _.Key).FirstOrDefault().Value;
+        }
+        /// <summary>
+        ///     Собирает разброс вариантов <see cref="LabelPosition"/>
+        /// </summary>
+        /// <returns>Разброс вариантов <see cref="LabelPosition"/></returns>
+        private IEnumerable<LabelPosition[]> BuildVariants() {
+            var v = this.Count();
+            var list = GenerateLetterCombinations(v);
+
+            foreach (var el in list) {
+                var c = new LabelPosition[v];
+                var k = 0;
+                foreach (var ch in el.ToCharArray()) {
+                    switch (ch) {
+                        case 'a': c[k] = LabelPosition.Auto; break;
+                        case 'b': c[k] = LabelPosition.Above; break;
+                        case 'c': c[k] = LabelPosition.Below; break;
+                    }
+                    k++;
+                }
+                yield return c;
+            }
+        }
+
+        private List<string> GenerateLetterCombinations(int numLetters) {
+            var values = new List<string>();
+
+            for (var ch = 'a'; ch <= 'c'; ch++) {
+                values.Add(ch.ToString());
+            }
+
+            for (var i = 1; i < numLetters; i++) {
+                var newValues = new List<string>();
+                foreach (var str in values) {
+                    for (var ch = 'a'; ch <= 'c'; ch++) {
+                        newValues.Add(str + ch);
+                    }
+                }
+
+                values = newValues;
+            }
+
+            return values;
+        }
+
+        /// <summary>
+        ///     Последовательно применяет переданный массив <see cref="LabelPosition"/> к данной колонке
+        /// </summary>
+        /// <param name="labelPositions">Массив <see cref="LabelPosition"/></param>
+        private void ApplyLabelPositions(LabelPosition[] labelPositions) {
+            if (labelPositions.Length != this.Count()) {
+                throw new Exception("LabelPosition array length mismatch");
+            }
+            var items = this.ToArray();
+            for (var i = 0; i < labelPositions.Length; i++) {
+                items[i].LabelPosition = labelPositions[i];
+            }
         }
     }
 }

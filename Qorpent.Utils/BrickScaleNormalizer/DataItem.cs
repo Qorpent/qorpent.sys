@@ -1,56 +1,6 @@
 ﻿using System;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
-
-	/// <summary>
-	/// Обхект пересечения "лычек"
-	/// </summary>
-	public class DataItemLabelCollision {
-		/// <summary>
-		/// 
-		/// </summary>
-		public decimal ScaleMax { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public DataItem First { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public DataItem Second { get; set; }
-		/// <summary>
-		/// Степень наложения
-		/// </summary>
-		public decimal Overlap {
-			get {
-				if (First != null && Second == null) {
-					return 0 - First.NormalizedLabelMin;
-				}
-				if (Second != null && First == null) {
-					return Second.NormalizedLabelMax - ScaleMax;
-				}
-				return First.NormalizedLabelMax - Second.NormalizedLabelMin;
-			}
-		}
-		/// <summary>
-		/// Признак фиксации
-		/// </summary>
-		public bool IsFixed {
-			get {
-				if (null != First) {
-					if (First.LabelPosition == LabelPosition.Auto) return false;
-				}
-
-				if (null != Second) {
-					if (Second.LabelPosition == LabelPosition.Auto) return false;
-				}
-
-				return true;
-			}
-		}
-		
-	}
-
     /// <summary>
 	/// Единица значения
 	/// </summary>
@@ -82,25 +32,19 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// <summary>
 		/// 
 		/// </summary>
-		public decimal NormalizedLabelMin { 
-			get {
-				if (LabelPosition != LabelPosition.Above) return NormalizedValue - DefaultLabelHeight;
-				return NormalizedValue;
-			} 
+		public decimal NormalizedLabelMin {
+            get { return MatchNormalizedLabelMin(LabelPosition); } 
 		}
 		/// <summary>
 		/// Максимальный размер с учетом "лычек"
 		/// </summary>
 		public decimal NormalizedLabelMax {
-			get {
-				if (LabelPosition != LabelPosition.Below) return NormalizedValue + DefaultLabelHeight;
-				return NormalizedValue;
-			}
+            get { return MatchNormalizedLabelMax(LabelPosition); }
 		}
 		/// <summary>
-		/// 
+		///     Размер «лычки» в пикселях
 		/// </summary>
-		protected const int DefaultLabelHeight = 20;
+		public const int LabelHeight = 20;
 
 		/// <summary>
 		/// 
@@ -135,6 +79,23 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// Положение лычки
 		/// </summary>
 		public LabelPosition LabelPosition { get; set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="labelPosition"></param>
+        /// <returns></returns>
+        public decimal MatchNormalizedLabelMin(LabelPosition labelPosition) {
+            if (labelPosition != LabelPosition.Above) return NormalizedValue - LabelHeight;
+            return NormalizedValue;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="labelPosition"></param>
+        /// <returns></returns>
+        public decimal MatchNormalizedLabelMax(LabelPosition labelPosition) {
+            if (labelPosition != LabelPosition.Below) return NormalizedValue + LabelHeight;
+            return NormalizedValue;
+        }
 	}
 }

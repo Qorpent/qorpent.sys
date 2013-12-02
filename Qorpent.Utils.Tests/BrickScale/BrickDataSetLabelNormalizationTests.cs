@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Qorpent.Utils.BrickScaleNormalizer;
 
@@ -10,22 +11,65 @@ namespace Qorpent.Utils.Tests.BrickScale {
     public class BrickDataSetLabelNormalizationTests {
         [Test]
         public void SimpleLabelNormalizationTest() {
-            var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 100);
+            var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 200);
             ds.Add(1, 1, 10);
             ds.Add(1, 1, 50);
             ds.Add(1, 1, 40);
-            ds.Add(2, 1, 30);
+            ds.Add(2, 1, 50);
             ds.Add(2, 1, 55);
             ds.Add(2, 1, 41);
             ds.Calculate();
+            Console.WriteLine(ds.Rows[0].Items[0].LabelPosition + ", " + ds.Rows[1].Items[0].LabelPosition);
+            Console.WriteLine(ds.Rows[0].Items[1].LabelPosition + ", " + ds.Rows[1].Items[1].LabelPosition);
+            Console.WriteLine(ds.Rows[0].Items[2].LabelPosition + ", " + ds.Rows[1].Items[2].LabelPosition);
+            Assert.AreEqual(10, ds.Rows[0].Items[0].Value);
+            Assert.AreEqual(50, ds.Rows[0].Items[1].Value);
+            Assert.AreEqual(40, ds.Rows[0].Items[2].Value);
+            Assert.AreEqual(50, ds.Rows[1].Items[0].Value);
+            Assert.AreEqual(55, ds.Rows[1].Items[1].Value);
+            Assert.AreEqual(41, ds.Rows[1].Items[2].Value);
             // Первая пара слишком далеко друг от друга, так что они Auto
-            Assert.AreEqual(LabelPosition.Auto, ds.GetItem(1, 1, 1).LabelPosition);
-            Assert.AreEqual(LabelPosition.Auto, ds.GetItem(2, 1, 1).LabelPosition);
+            Assert.AreEqual(LabelPosition.Auto, ds.Rows[0].Items[0].LabelPosition);
+            Assert.AreEqual(LabelPosition.Auto, ds.Rows[1].Items[0].LabelPosition);
             // Вторая пара уже близко, так что лэйбел меньшего значения снизу, большего — вверху
-            Assert.AreEqual(LabelPosition.Below, ds.GetItem(1, 1, 2).LabelPosition);
-            Assert.AreEqual(LabelPosition.Above, ds.GetItem(2, 1, 2).LabelPosition);
-            // Третья пара совсем билзко друг к другу, так что у одного отключён
-            Assert.IsTrue(ds.GetItem(1, 1, 3).LabelPosition.HasFlag(LabelPosition.Hidden) || ds.GetItem(2, 1, 3).LabelPosition.HasFlag(LabelPosition.Hidden));
+            Assert.AreEqual(LabelPosition.Below, ds.Rows[0].Items[1].LabelPosition);
+            Assert.AreEqual(LabelPosition.Above, ds.Rows[1].Items[1].LabelPosition);
+            // Вначале я думал, что алгоритм должен отключить один из лэйблов, но он смог развести, так что правлю тест
+            Assert.AreEqual(LabelPosition.Below, ds.Rows[0].Items[2].LabelPosition);
+            Assert.AreEqual(LabelPosition.Above, ds.Rows[1].Items[2].LabelPosition);
+        }
+        /// <summary>
+        ///     Это реально лютый тест. По моим представлениям, отработал даже лучше, чем я предполагал.
+        /// </summary>
+        [Test]
+        public void HardLabelNormalizationTest() {
+            var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 200);
+            ds.Add(1, 1, 10);
+            ds.Add(1, 2, 15);
+            ds.Add(1, 1, 20);
+            ds.Add(1, 2, 25);
+            ds.Add(1, 1, 30);
+            ds.Add(1, 2, 35);
+            ds.Add(2, 1, 20);
+            ds.Add(2, 2, 150);
+            ds.Add(2, 1, 70);
+            ds.Add(2, 2, 250);
+            ds.Add(2, 1, 300);
+            ds.Add(2, 2, 350);
+            ds.Calculate();
+            var colons = ds.BuildColons().ToArray();
+            Assert.AreEqual(LabelPosition.Auto, colons[0].Items[0].LabelPosition);
+            Assert.AreEqual(LabelPosition.Below, colons[0].Items[1].LabelPosition);
+            Assert.AreEqual(LabelPosition.Auto, colons[0].Items[2].LabelPosition);
+            Assert.AreEqual(LabelPosition.Auto, colons[0].Items[3].LabelPosition);
+            Assert.AreEqual(LabelPosition.Below, colons[1].Items[0].LabelPosition);
+            Assert.AreEqual(LabelPosition.Above, colons[1].Items[1].LabelPosition);
+            Assert.AreEqual(LabelPosition.Above, colons[1].Items[2].LabelPosition);
+            Assert.AreEqual(LabelPosition.Auto, colons[1].Items[3].LabelPosition);
+            Assert.AreEqual(LabelPosition.Below, colons[2].Items[0].LabelPosition);
+            Assert.AreEqual(LabelPosition.Above, colons[2].Items[1].LabelPosition);
+            Assert.AreEqual(LabelPosition.Auto, colons[2].Items[2].LabelPosition);
+            Assert.AreEqual(LabelPosition.Above, colons[2].Items[3].LabelPosition);
         }
         /// <summary>
         ///     Тест выражает правильность сбора колонок в односерийном простом графике типа «линия»
