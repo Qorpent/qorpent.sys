@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Qorpent.Utils.BrickScaleNormalizer;
+using Qorpent.Utils.Extensions;
+using Qorpent.Charts.FusionCharts;
 
 namespace Qorpent.Charts {
     /// <summary>
@@ -150,6 +153,20 @@ namespace Qorpent.Charts {
         /// <returns>Замыкание на типизированный элемент</returns>
         public static T Set<T>(this IChartElement element, string name, object value) {
             return (T)Set(element, name, value);
+        }
+        /// <summary>
+        ///     Собирает из указанного представления чарта в виде <see cref="IChart"/> экземпляр <see cref="BrickDataSet"/>
+        /// </summary>
+        /// <param name="chart">Исходное представление чарта</param>
+        /// <returns>Заполненное представление датасета в виде <see cref="BrickDataSet"/></returns>
+        public static BrickDataSet ToBrickDataset(this IChart chart) {
+            var ds = new BrickDataSet();
+            var seria = 0;
+            chart.Datasets.Children.ForEach(_ => {
+                seria++;
+                _.Children.DoForEach(__ => ds.Add(seria, 0, __.GetValue()));
+            });
+            return ds;
         }
     }
 }
