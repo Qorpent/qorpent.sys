@@ -168,5 +168,13 @@ namespace Qorpent.Charts {
             });
             return ds;
         }
+        /// <summary>
+        ///     Преобразует данные из <see cref="BrickDataSet"/> в <see cref="IChart"/>
+        /// </summary>
+        /// <param name="brickDataSet">Исходный датасет в виде <see cref="BrickDataSet"/></param>
+        /// <returns>Эквивалентный экземпляр <see cref="IChart"/></returns>
+        public static IChart ToChart(this BrickDataSet brickDataSet) {
+            return ChartBuilder.ParseBrickDataSet(brickDataSet);
+        }
     }
 }

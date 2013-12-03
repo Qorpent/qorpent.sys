@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Qorpent.Charts.FusionCharts;
+using Qorpent.Utils.BrickScaleNormalizer;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts {
@@ -35,6 +36,14 @@ namespace Qorpent.Charts {
             }
 
             return chart;
+        }
+        /// <summary>
+        ///     Преобразует данные из <see cref="BrickDataSet"/> в <see cref="IChart"/>
+        /// </summary>
+        /// <param name="brickDataSet">Исходный датасет в виде <see cref="BrickDataSet"/></param>
+        /// <returns>Эквивалентный экземпляр <see cref="IChart"/></returns>
+        public static IChart ParseBrickDataSet(BrickDataSet brickDataSet) {
+            return ParseDatasets(string.Join(";", brickDataSet.GetSeries().Select(_ => _.ToString())));
         }
     }
 }
