@@ -59,8 +59,8 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
 
 		[TestCase("-151109.00000,3195556.00000", -500000, 3500000, 7, true, 670, 0, true)]
 		[TestCase("0,1187234.00000", 0, 1500000, 4, true, 325, 0, true)]
-		
 
+		[TestCase("-36187,0", -40000, 10000, 4, true, 325, 0, true)]
         public void UchalGokFixedTests(string dataRow, double expectedMin, double expectedMax, double divline, bool checkDivlines, int height, int minvalue, bool upperlabel) {
             ExecuteScaleTest(dataRow, expectedMin, expectedMax, divline, checkDivlines, height, minvalue, upperlabel);
         }
@@ -74,6 +74,25 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
 			Assert.Greater(req.SourceMinValue,0);
 			Assert.Greater(req.SourceMaxValue,2020);
 			Assert.Less(req.SourceMinValue,2009);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Test]
+		public void BUGZero() {
+			var brickRequest = new BrickRequest();
+			brickRequest.SourceMaxValue = 0;
+			brickRequest.SourceMinValue = -36177;
+			brickRequest.Size = 325;
+			brickRequest.MinPixelTop = 0;
+
+			brickRequest.Setup("", "0", "auto", "0", "0");
+
+			var bcatalog = new BrickCatalog();
+			var variant = bcatalog.GetBestVariant(brickRequest);
+
+
 		}
 
 		[TestCase(21,24,20,30,20,30)]
