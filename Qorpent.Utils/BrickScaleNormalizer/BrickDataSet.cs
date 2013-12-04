@@ -36,7 +36,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 		/// <summary>
 		/// 
 		/// </summary>
-		public void Calculate() {
+		public BrickDataSet Calculate() {
 			CalculateFirstScale();
 
 			if (Rows.Any(_ => _.ScaleType == ScaleType.Second)) {
@@ -47,6 +47,8 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 				CalculateNormalizedValue();
 				CalculateLabelPosition();
 			}
+
+		    return this;
 		}
 
 		private void CalculateNormalizedValue() {
@@ -324,5 +326,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 			}
 			return result;
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() {
+            return string.Join(";", this.GetSeries().Select(_ => _.ToString()));
+        }
 	}
 }

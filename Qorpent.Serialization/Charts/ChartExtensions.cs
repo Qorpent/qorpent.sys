@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Qorpent.Utils.BrickScaleNormalizer;
 using Qorpent.Utils.Extensions;
 using Qorpent.Charts.FusionCharts;
@@ -16,7 +17,11 @@ namespace Qorpent.Charts {
         /// <param name="element">Элемент для добавления</param>
         /// <returns>Замыкание на чарт</returns>
         public static IChart Add(this IChart chart, IChartElement element) {
-            if (element is IChartDataset) {
+            if (element is IChartDatasets) {
+                if (chart is Chart) {
+                    ((Chart) chart).Datasets = (IChartDatasets) element;
+                }
+            } else if (element is IChartDataset) {
                 chart.Datasets.Add(element as IChartDataset);
                 SetParent(element, chart.Datasets);
             } else if (element is IChartCategory) {
@@ -174,7 +179,19 @@ namespace Qorpent.Charts {
         /// <param name="brickDataSet">Исходный датасет в виде <see cref="BrickDataSet"/></param>
         /// <returns>Эквивалентный экземпляр <see cref="IChart"/></returns>
         public static IChart ToChart(this BrickDataSet brickDataSet) {
-            return ChartBuilder.ParseBrickDataSet(brickDataSet);
+            var chart = new Chart();
+
+            foreach (var seria in brickDataSet.GetSeries()) {
+                var ds = new ChartDataset();
+                foreach (var item in seria) {
+                    ds.Add(new ChartSet().SetValue(item.Value).Set<ChartSet>(FusionChartApi.Chart_ValuePosition, item.LabelPosition.ToString()));
+                }
+                chart.Add(ds);
+            }
+            for (var i = 0; i < chart.Datasets.Children.Select(_ => _.Children.Count()).Max(); i++) {
+                chart.Add(new ChartCategory().SetLabelValue(""));
+            }
+            return chart;
         }
     }
 }

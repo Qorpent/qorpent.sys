@@ -34,6 +34,7 @@ namespace Qorpent.Serialization.Tests.Charts {
         public void CanConvertToBrickDatasetAndBack() {
             var chart = ChartBuilder.ParseDatasets("40,50.3,50.1;56.7,20,66.8");
             var brick = chart.ToBrickDataset();
+            brick.Calculate();
             var columns = brick.BuildColons().ToArray();
             Assert.AreEqual(3, columns.Length);
             Assert.AreEqual(2, columns[0].Items.Length);

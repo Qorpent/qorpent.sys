@@ -1,5 +1,7 @@
 ﻿using Qorpent.Charts;
 using Qorpent.Mvc.Binding;
+using Qorpent.Utils.BrickScaleNormalizer;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Actions {
     /// <summary>
@@ -17,7 +19,13 @@ namespace Qorpent.Mvc.Actions {
         /// </summary>
         /// <returns> </returns>
         protected override object MainProcess() {
-            return ChartBuilder.ParseDatasets(ChartData);
+            var chart = ChartBuilder.ParseDatasets(ChartData);
+            var brick = chart.ToBrickDataset();
+            brick.Preferences.SeriaCalcMode = SeriaCalcMode.Linear;
+            brick.Preferences.Height = (Context.Get("__height") ?? "400").ToInt();
+            var calculated = brick.Calculate();
+            var newChart = calculated.ToChart();
+            return newChart;
         }
     }
 }

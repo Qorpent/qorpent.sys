@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Charts.FusionCharts {
+﻿using Qorpent.Utils.BrickScaleNormalizer;
+
+namespace Qorpent.Charts.FusionCharts {
     /// <summary>
     /// 
     /// </summary>
@@ -29,11 +31,11 @@
         /// <param name="chart">Представление графика</param>
         /// <param name="normalized">Нормализованное представление графика</param>
         private void NormalizeMiltiserial(IChart chart, IChartNormalized normalized) {
-            foreach (var e in chart.Datasets.Children) {
-                foreach (var b in e.Children) {
-                    b.SetShowValue(true);
-                }
-            }
+            var ds = chart.ToBrickDataset();
+            ds.Calculate();
+            var chartGenerated = ds.ToChart();
+            chart.AddElements(new [] {chartGenerated.Datasets});
+
         }
     }
 }
