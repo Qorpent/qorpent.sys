@@ -94,7 +94,12 @@ namespace Qorpent.Model {
 		/// </summary>
 		public virtual DateTime Version { get; set; }
 
-	    /// <summary>
+		/// <summary>
+		///     Helper code that maps any foreign coding system
+		/// </summary>
+		public string OuterCode { get; set; }
+
+		/// <summary>
 	    /// Общий метод установления некоего контекстного объекта, использование зависит от реализации
 	    /// </summary>
 	    /// <param name="context"></param>
@@ -109,5 +114,14 @@ namespace Qorpent.Model {
 	    public object GetContext() {
 	        return _context;
 	    }
+
+		/// <summary>
+		/// Ключ сортировки
+		/// </summary>
+		/// <returns></returns>
+		public string GetSortKey()
+		{
+			return string.Format("{0:00000}_{1}_{2}", Index, OuterCode ?? "", Code);
+		}
 	}
 }
