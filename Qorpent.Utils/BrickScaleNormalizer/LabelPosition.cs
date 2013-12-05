@@ -1,26 +1,23 @@
-﻿using System;
-
-namespace Qorpent.Utils.BrickScaleNormalizer {
+﻿namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// <summary>
 	/// тип шкалы значений
 	/// </summary>
-	[Flags]
 	public enum LabelPosition {
 		/// <summary>
-		/// Автоматически
+		///     Автоматически
 		/// </summary>
-		Auto,
+		Auto = 0,
 		/// <summary>
-		///  Сверху
+		///     Сверху
 		/// </summary>
-		Above,
+		Above = 1,
 		/// <summary>
-		/// Снизу
+		///     Снизу
 		/// </summary>
-		Below,
+		Below = 2,
 		/// <summary>
 		/// Скрытый
 		/// </summary>
-		Hidden ,
+		Hidden,
 	}
 }

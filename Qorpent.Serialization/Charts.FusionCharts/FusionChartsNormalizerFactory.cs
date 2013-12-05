@@ -19,7 +19,6 @@ namespace Qorpent.Charts.FusionCharts {
         private readonly IList<IChartNormalizer> _normalizers = new List<IChartNormalizer> {
             new FusionChartsScaleNormalizer(),
             new FusionChartsAnchorsNormalizer(),
-            new FusionChartsColorNormalizer(),
             new FusionChartsNumberScalingNormalizer(),
             new FusionChartsPositionNormalizer(),
             new FusionChartsValuesNormalizer()

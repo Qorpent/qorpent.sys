@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Qorpent.Utils;
+using Qorpent.Utils.BrickScaleNormalizer;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts.FusionCharts {
@@ -501,7 +503,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="width">Длина</param>
         /// <returns>Замыкание на конфиг</returns>
         public static IChartConfig SetWidth(this IChartConfig chartConfig, double width) {
-            chartConfig.Width = width.ToString();
+            chartConfig.Width = width.ToString(CultureInfo.InvariantCulture);
             return chartConfig;
         }
         /// <summary>
@@ -511,7 +513,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="height">Высота</param>
         /// <returns>Замыкание на конфиг</returns>
         public static IChartConfig SetHeight(this IChartConfig chartConfig, double height) {
-            chartConfig.Height = height.ToString();
+            chartConfig.Height = height.ToString(CultureInfo.InvariantCulture);
             return chartConfig;
         }
         /// <summary>
@@ -655,6 +657,21 @@ namespace Qorpent.Charts.FusionCharts {
             return dataItem.Set<IChartDataItem>(FusionChartApi.Set_ShowValue, showLabel);
         }
         /// <summary>
+        ///     Устанавливает позиция «лычки» значения в зависимости от <see cref="LabelPosition"/>
+        /// </summary>
+        /// <param name="dataItem">Исходный <see cref="IChartDataItem"/></param>
+        /// <param name="labelPosition">Указание позиции «лычки»</param>
+        /// <returns>Замыкание на переданный <see cref="IChartDataItem"/></returns>
+        public static IChartDataItem SetLabelPosition(this IChartDataItem dataItem, LabelPosition labelPosition) {
+            if (labelPosition == LabelPosition.Hidden) {
+                dataItem.SetShowValue(false);
+            } else {
+                dataItem.Set<ChartSet>(FusionChartApi.Chart_ValuePosition, labelPosition.ToString());
+            }
+
+            return dataItem;
+        }
+        /// <summary>
         ///     Установа паддинга канвы чарта
         /// </summary>
         /// <param name="chart">Представление чарта</param>
@@ -784,6 +801,26 @@ namespace Qorpent.Charts.FusionCharts {
             }
 
             return chart.Config;
+        }
+        /// <summary>
+        ///     Установка дефолтных настроек якорей для вершин чарта
+        /// </summary>
+        /// <param name="dataset">Датасет</param>
+        /// <returns>Замыкание на переданный датасет</returns>
+        public static IChartDataset SetDefaultAnchors(this IChartDataset dataset) {
+            dataset.Set(FusionChartApi.Chart_AnchorRadius, 5);
+            dataset.Set(FusionChartApi.Chart_AnchorSides, 3);
+            return dataset;
+        }
+        /// <summary>
+        ///     Установка дефолтных параметров скалинга чисел
+        /// </summary>
+        /// <param name="chart">Чарт</param>
+        /// <returns>Замыкание на переданный чарт</returns>
+        public static IChart SetDefaultNumberScaling(this IChart chart) {
+            chart.Set(FusionChartApi.Chart_FormatNumber, 0);
+            chart.Set(FusionChartApi.Chart_FormatNumberScale, 0);
+            return chart;
         }
     }
 }

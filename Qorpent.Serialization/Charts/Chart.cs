@@ -67,6 +67,7 @@ namespace Qorpent.Charts {
                 }
                 return _datasets;
             }
+            set { _datasets = value; }
         }
         /// <summary>
         /// Создает набор элемента данных

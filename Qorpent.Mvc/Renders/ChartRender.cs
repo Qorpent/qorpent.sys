@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using Qorpent.Charts;
 using Qorpent.Dsl;
 using Qorpent.IoC;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Renders {
     /// <summary>
@@ -159,6 +160,11 @@ namespace Qorpent.Mvc.Renders {
                 InternalRender.Initialize((IChart)context.ActionResult, config);
                 var xmlsrc = InternalRender.GenerateChartXmlSource(config);
                 var xml = xmlsrc.GenerateChartXml(config);
+
+                if (!string.IsNullOrWhiteSpace(context.Get("__padding"))) {
+                    xml.SetAttributeValue("canvasPadding", context.Get("__padding").ToInt());
+                }
+
                 xml = InternalRender.RefactorChartXml(xml, config);
                 return xml.ToString().Replace("<", "&lt;");
             } else if (context.ActionResult is IChartSource) {

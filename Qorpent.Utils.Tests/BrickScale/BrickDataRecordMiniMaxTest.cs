@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
 using Qorpent.Utils.BrickScaleNormalizer;
 
-namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
-	/// <summary>
+namespace Qorpent.Utils.Tests.BrickScale {
+    /// <summary>
 	/// Данные тесты проверяют корректность расчета минимакса шкал для промежуточного представления данных графика
 	/// </summary>
 	[TestFixture]
@@ -204,10 +204,12 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
 			dr.Add(1, 1, 2);
 			dr.Add(1, 1, 3);
 			dr.Add(1, 1, 4);
+
 			dr.Add(1, 2, -2);
 			dr.Add(1, 2, 5);
 			dr.Add(1, 2, -6);
 			dr.Add(1, 2, -1);
+
 			dr.Add(1, 3, 2);
 			dr.Add(1, 3, -5);
 			dr.Add(1, 3, 6);
