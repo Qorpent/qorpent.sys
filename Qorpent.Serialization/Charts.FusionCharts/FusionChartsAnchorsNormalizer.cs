@@ -26,15 +26,7 @@ namespace Qorpent.Charts.FusionCharts {
                          ||
                          (_.Get<int>(FusionChartApi.Chart_AnchorSides) == 0)
                      )
-                ).DoForEach(_ => {
-                    if (_.Get<int>(FusionChartApi.Chart_AnchorRadius) == 0) {
-                        normalized.AddFixedAttribute(_, FusionChartApi.Chart_AnchorRadius, 5);
-                    }
-
-                    if (_.Get<int>(FusionChartApi.Chart_AnchorSides) == 0) {
-                        normalized.AddFixedAttribute(_, FusionChartApi.Chart_AnchorSides, 3);
-                    }
-                });
+                ).DoForEach(_ => _.SetDefaultAnchors());
 
             return normalized;
         }

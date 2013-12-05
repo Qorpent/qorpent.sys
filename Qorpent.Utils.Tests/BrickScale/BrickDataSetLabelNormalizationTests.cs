@@ -8,7 +8,7 @@ namespace Qorpent.Utils.Tests.BrickScale {
     ///     Фикстура, тестирующая разнесение лэйблов в графике
     /// </summary>
     [TestFixture]
-    public class BrickDataSetLabelNormalizationTests {
+    public class BrickDataSetLabelNormalizationTests : BrickDataSetTestBase {
         [Test]
         public void SimpleLabelNormalizationTest() {
             var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 200);
@@ -240,7 +240,15 @@ namespace Qorpent.Utils.Tests.BrickScale {
             Assert.AreEqual(18, colons[0].Items[7].Value);
             Assert.AreEqual(28, colons[1].Items[7].Value);
         }
-        private BrickDataSet GetEmptyDataSet(SeriaCalcMode calcMode, int height) {
+    }
+    public class BrickDataSetTestBase {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="calcMode"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        protected BrickDataSet GetEmptyDataSet(SeriaCalcMode calcMode, int height) {
             return new BrickDataSet {
                 Preferences = new UserPreferences {
                     SeriaCalcMode = calcMode,

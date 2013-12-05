@@ -24,7 +24,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="normalized">абстрактное представление нормализованного чарта</param>
         /// <returns>Замыкание на абстрактное представление нормализованного чарта</returns>
         public override IChartNormalized Normalize(IChart chart, IChartNormalized normalized) {
-            normalized.AddScale(NormalizeYAxis(chart, normalized));
+            normalized.AddScale(new ChartAbstractScale {NumDivLines = chart.GetNumDivLines(), MinValue = chart.GetYAxisMinValue(), MaxValue = chart.GetYAxisMaxValue()});
             return normalized;
         }
         /// <summary>

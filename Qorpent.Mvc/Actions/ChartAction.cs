@@ -1,4 +1,6 @@
-﻿using Qorpent.Charts;
+﻿using System;
+using Qorpent.Charts;
+using Qorpent.Charts.FusionCharts;
 using Qorpent.Mvc.Binding;
 using Qorpent.Utils.BrickScaleNormalizer;
 using Qorpent.Utils.Extensions;
@@ -21,10 +23,27 @@ namespace Qorpent.Mvc.Actions {
         protected override object MainProcess() {
             var chart = ChartBuilder.ParseDatasets(ChartData);
             var brick = chart.ToBrickDataset();
+            var height = (Context.Get("__height") ?? "400").ToInt();
+            var brickRequest = new BrickRequest {
+                Size = height,
+                SourceMinValue = brick.GetMin(),
+                SourceMaxValue = brick.GetMax(),
+                MinimalScaleBehavior = MiniamlScaleBehavior.FitMin
+            };
             brick.Preferences.SeriaCalcMode = SeriaCalcMode.Linear;
-            brick.Preferences.Height = (Context.Get("__height") ?? "400").ToInt();
+            brick.Preferences.Height = height;
+            brick.Preferences.YMin = "auto";
             var calculated = brick.Calculate();
             var newChart = calculated.ToChart();
+            var catalog = new BrickCatalog();
+            try {
+                var variant = catalog.GetBestVariant(brickRequest);
+                newChart.SetNumDivLines(variant.ResultDivCount);
+                newChart.SetYAxisMinValue(Convert.ToDouble(variant.ResultMinValue));
+                newChart.SetYAxisMaxValue(Convert.ToDouble(variant.ResultMaxValue));
+            } catch { }
+
+
             return newChart;
         }
     }

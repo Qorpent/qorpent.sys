@@ -19,12 +19,10 @@
         public override IChartNormalized Normalize(IChart chart, IChartNormalized normalized) {
             if (chart.Config != null) {
                 if (!chart.Config.UseDefaultScaling) {
-                    chart.Set(FusionChartApi.Chart_FormatNumber, 0);
-                    chart.Set(FusionChartApi.Chart_FormatNumberScale, 0);
+                    chart.SetDefaultNumberScaling();
                 }
             } else {
-                chart.Set(FusionChartApi.Chart_FormatNumber, 0);
-                chart.Set(FusionChartApi.Chart_FormatNumberScale, 0);
+                chart.SetDefaultNumberScaling();
             }
 
             return normalized;
