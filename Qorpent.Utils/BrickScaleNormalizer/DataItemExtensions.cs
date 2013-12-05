@@ -22,11 +22,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <returns>Температура</returns>
         public static decimal Temperature(this DataItem baseDataItem, DataItem dataItem) {
             if (
-                (baseDataItem.LabelPosition.HasFlag(LabelPosition.Hidden) || dataItem.LabelPosition.HasFlag(LabelPosition.Hidden)) ||
+                baseDataItem.LabelPosition == LabelPosition.Hidden ||
+                dataItem.LabelPosition == LabelPosition.Hidden ||
                 baseDataItem == dataItem ||
                 baseDataItem.NormalizedLabelMax < dataItem.NormalizedLabelMin ||
                 baseDataItem.NormalizedLabelMin > dataItem.NormalizedLabelMax
-                ) {
+            ) {
                 return 0;
             }
 

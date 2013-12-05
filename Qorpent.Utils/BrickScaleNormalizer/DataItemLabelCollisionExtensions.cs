@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
@@ -17,6 +18,14 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <returns>Перечисление «ОЧЕНЬ ГОРЯЧИХ» коллизий</returns>
         public static IEnumerable<DataItem> SelectVeryHot(this DataItemLabelCollision collision) {
             return collision.Where(_ => collision.DataItem.Temperature(_) > VeryHotBorderline);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="collision"></param>
+        /// <returns></returns>
+        public static IEnumerable<DataItem> SelectSimilar(this DataItemLabelCollision collision) {
+            return collision.Conflicts.Where(_ => Math.Abs(collision.DataItem.NormalizedLabelMax - _.NormalizedLabelMax) <= 2);
         }
     }
 }

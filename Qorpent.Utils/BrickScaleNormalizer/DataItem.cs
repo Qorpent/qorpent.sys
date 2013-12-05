@@ -97,5 +97,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             if (labelPosition != LabelPosition.Below) return NormalizedValue + LabelHeight;
             return NormalizedValue;
         }
+        /// <summary>
+        ///     Приведение <see cref="DataItem"/> к строке
+        /// </summary>
+        /// <returns>Строковое представление <see cref="DataItem"/></returns>
+        public override string ToString() {
+            return Value.ToString();
+        }
 	}
 }

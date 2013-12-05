@@ -10,6 +10,20 @@ namespace Qorpent.Utils.Tests.BrickScale {
     [TestFixture]
     public class BrickDataSetLabelNormalizationTests : BrickDataSetTestBase {
         [Test]
+        public void CanHideLabelWhenTwoLabelsDiffersAboutOnePixel() {
+            var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 200);
+            ds.Add(1, 1, 10);
+            ds.Add(2, 1, 10);
+            ds.Calculate();
+            Assert.AreEqual(10, ds.Rows[0].Items[0].Value);
+            Assert.AreEqual(10, ds.Rows[1].Items[0].Value);
+            Assert.IsTrue(
+                ((ds.Rows[0].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden) && !ds.Rows[1].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden)))
+                    ||
+                ((ds.Rows[1].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden) && !ds.Rows[0].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden)))
+            );
+        }
+        [Test]
         public void SimpleLabelNormalizationTest() {
             var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 200);
             ds.Add(1, 1, 10);

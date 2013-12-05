@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Qorpent.Utils;
+using Qorpent.Utils.BrickScaleNormalizer;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts.FusionCharts {
@@ -654,6 +655,21 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns></returns>
         public static IChartDataItem SetShowValue(this IChartDataItem dataItem, bool showLabel) {
             return dataItem.Set<IChartDataItem>(FusionChartApi.Set_ShowValue, showLabel);
+        }
+        /// <summary>
+        ///     Устанавливает позиция «лычки» значения в зависимости от <see cref="LabelPosition"/>
+        /// </summary>
+        /// <param name="dataItem">Исходный <see cref="IChartDataItem"/></param>
+        /// <param name="labelPosition">Указание позиции «лычки»</param>
+        /// <returns>Замыкание на переданный <see cref="IChartDataItem"/></returns>
+        public static IChartDataItem SetLabelPosition(this IChartDataItem dataItem, LabelPosition labelPosition) {
+            if (labelPosition == LabelPosition.Hidden) {
+                dataItem.SetShowValue(false);
+            } else {
+                dataItem.Set<ChartSet>(FusionChartApi.Chart_ValuePosition, labelPosition.ToString());
+            }
+
+            return dataItem;
         }
         /// <summary>
         ///     Установа паддинга канвы чарта

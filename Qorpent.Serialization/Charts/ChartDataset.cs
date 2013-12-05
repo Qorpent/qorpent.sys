@@ -1,4 +1,6 @@
-﻿using Qorpent.Charts.FusionCharts;
+﻿using System.Collections.Generic;
+using Qorpent.Charts.FusionCharts;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts {
     /// <summary>
@@ -39,6 +41,17 @@ namespace Qorpent.Charts {
         public int AnchorSides {
             get { return Get<int>(FusionChartApi.Chart_AnchorSides); }
             set { Set(FusionChartApi.Chart_AnchorSides, value); }
+        }
+        /// <summary>
+        ///     Представление датасета
+        /// </summary>
+        public ChartDataset() {}
+        /// <summary>
+        ///     Представление датасета
+        /// </summary>
+        /// <param name="dataItems">Перечисление значений датасета</param>
+        public ChartDataset(IEnumerable<IChartDataItem> dataItems) {
+            dataItems.ForEach(Add);
         }
     }
 }

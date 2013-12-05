@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.BrickScaleNormalizer
@@ -81,14 +82,24 @@ namespace Qorpent.Utils.BrickScaleNormalizer
         ///     Производит обсчёт расположения лэйблов значений и пытается максимально раздвинуть их между собой
         /// </summary>
 		private void CalculateLabelPosition() {
-            BuildColons().ForEach(CalculateLabelPosition);
+            Task[] tasks = BuildColons().Select(CalculateLabelPositionAsync).ToArray();
+            Task.WaitAll(tasks);
         }
         /// <summary>
         ///     Производит обсчёт расположения лэйблов внутри одной колонки
         /// </summary>
         /// <param name="colon">Представление колонки данных</param>
-        private void CalculateLabelPosition(DataItemColon colon) {
+        private DataItemColon CalculateLabelPosition(DataItemColon colon) {
             colon.MinimizeTemperature();
+            return colon;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="colon"></param>
+        /// <returns></returns>
+        private async Task<DataItemColon> CalculateLabelPositionAsync(DataItemColon colon) {
+            return await Task<DataItemColon>.Factory.StartNew(() => CalculateLabelPosition(colon));
         }
 		private void CalculateSecondScale() {
 			if (0 == Preferences.SYFixMin && 0 == Preferences.SYFixMin && 0 == Preferences.SYFixDiv)

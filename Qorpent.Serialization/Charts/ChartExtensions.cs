@@ -180,14 +180,7 @@ namespace Qorpent.Charts {
         /// <returns>Эквивалентный экземпляр <see cref="IChart"/></returns>
         public static IChart ToChart(this BrickDataSet brickDataSet) {
             var chart = new Chart();
-
-            foreach (var seria in brickDataSet.GetSeries()) {
-                var ds = new ChartDataset();
-                foreach (var item in seria) {
-                    ds.Add(new ChartSet().SetValue(item.Value).Set<ChartSet>(FusionChartApi.Chart_ValuePosition, item.LabelPosition.ToString()));
-                }
-                chart.Add(ds);
-            }
+            brickDataSet.GetSeries().DoForEach(_ => chart.Add(new ChartDataset(_.Select(__ => new ChartSet().SetValue(__.Value).SetLabelPosition(__.LabelPosition)))));
             for (var i = 0; i < chart.Datasets.Children.Select(_ => _.Children.Count()).Max(); i++) {
                 chart.Add(new ChartCategory().SetLabelValue(""));
             }

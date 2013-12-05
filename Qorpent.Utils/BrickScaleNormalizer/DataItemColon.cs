@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Utils.Extensions;
@@ -50,8 +49,10 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Минимализация температуры колонки
         /// </summary>
         public void MinimizeTemperature() {
+            this.SelectSimilar().ForEach(_ => _.Skip(1).ForEach(__ => __.HideLabel()));
             EnsureBestLabels();
-            Collisions.SelectMany(_ => _.SelectVeryHot()).ForEach(_ => _.HideLabel()); // дошлейфовка
+            Collisions.SelectMany(_ => _.SelectSimilar()).ForEach(_ => _.HideLabel());
+            Collisions.SelectMany(_ => _.SelectVeryHot()).ForEach(_ => _.HideLabel());
         }
         /// <summary>
         ///     Получение <see cref="IEnumerator"/> по <see cref="DataItem"/>
@@ -76,76 +77,26 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             }
 
             var labelPositions = BuildBestLabelPositionsVariant();
-            ApplyLabelPositions(labelPositions);
+            Apply(labelPositions);
         }
         /// <summary>
         ///     Собирает наилучший вариант расположения лычек чарта
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Выбранный вариант расположения лэйблов</returns>
         private LabelPosition[] BuildBestLabelPositionsVariant() {
-            var totalizator = new List<KeyValuePair<decimal, LabelPosition[]>>();
-            BuildVariants().DoForEach(_ => {
-                ApplyLabelPositions(_);
-                totalizator.Add(new KeyValuePair<decimal, LabelPosition[]>(Temperature, _));
-            });
-            return totalizator.OrderBy(_ => _.Key).FirstOrDefault().Value;
+            return new LabelPositionVariants(this).Select(_ => new KeyValuePair<decimal, LabelPosition[]>(Apply(_), _)).OrderBy(_ => _.Key).FirstOrDefault().Value;
         }
-        /// <summary>
-        ///     Собирает разброс вариантов <see cref="LabelPosition"/>
-        /// </summary>
-        /// <returns>Разброс вариантов <see cref="LabelPosition"/></returns>
-        private IEnumerable<LabelPosition[]> BuildVariants() {
-            var v = this.Count();
-            var list = GenerateLetterCombinations(v);
-
-            foreach (var el in list) {
-                var c = new LabelPosition[v];
-                var k = 0;
-                foreach (var ch in el.ToCharArray()) {
-                    switch (ch) {
-                        case 'a': c[k] = LabelPosition.Auto; break;
-                        case 'b': c[k] = LabelPosition.Above; break;
-                        case 'c': c[k] = LabelPosition.Below; break;
-                    }
-                    k++;
-                }
-                yield return c;
-            }
-        }
-
-        private List<string> GenerateLetterCombinations(int numLetters) {
-            var values = new List<string>();
-
-            for (var ch = 'a'; ch <= 'c'; ch++) {
-                values.Add(ch.ToString());
-            }
-
-            for (var i = 1; i < numLetters; i++) {
-                var newValues = new List<string>();
-                foreach (var str in values) {
-                    for (var ch = 'a'; ch <= 'c'; ch++) {
-                        newValues.Add(str + ch);
-                    }
-                }
-
-                values = newValues;
-            }
-
-            return values;
-        }
-
         /// <summary>
         ///     Последовательно применяет переданный массив <see cref="LabelPosition"/> к данной колонке
         /// </summary>
         /// <param name="labelPositions">Массив <see cref="LabelPosition"/></param>
-        private void ApplyLabelPositions(LabelPosition[] labelPositions) {
-            if (labelPositions.Length != this.Count()) {
-                throw new Exception("LabelPosition array length mismatch");
-            }
+        /// <returns>Температура колонки после применения переданного массива позиций лэйблов</returns>
+        private decimal Apply(LabelPosition[] labelPositions) {
             var items = this.ToArray();
             for (var i = 0; i < labelPositions.Length; i++) {
                 items[i].LabelPosition = labelPositions[i];
             }
+            return Temperature;
         }
     }
 }
