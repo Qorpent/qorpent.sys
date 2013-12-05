@@ -337,12 +337,24 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 			}
 			return result;
 		}
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <returns></returns>
+	    public override string ToString() {
+	        return string.Join(";", this.GetSeries().Select(_ => _.ToString()));
+	    }
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="dataset"></param>
         /// <returns></returns>
-        public override string ToString() {
-            return string.Join(";", this.GetSeries().Select(_ => _.ToString()));
+        public static BrickDataSet Parse(string dataset) {
+            throw new NotImplementedException();
+        }
+        private IEnumerable<decimal> ParseSeria(string seria) {
+            return seria.Split(new[] {','}).Select(Convert.ToDecimal);
         }
 	}
 }
