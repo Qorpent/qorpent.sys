@@ -654,7 +654,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="showLabel"></param>
         /// <returns></returns>
         public static IChartDataItem SetShowValue(this IChartDataItem dataItem, bool showLabel) {
-            return dataItem.Set<IChartDataItem>(FusionChartApi.Set_ShowValue, showLabel);
+            return dataItem.Set<IChartDataItem>(FusionChartApi.Set_ShowValue, showLabel ? 1 : 0);
         }
         /// <summary>
         ///     Устанавливает позиция «лычки» значения в зависимости от <see cref="LabelPosition"/>

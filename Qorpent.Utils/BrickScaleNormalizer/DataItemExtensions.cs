@@ -31,7 +31,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
                 return 0;
             }
 
-            return Math.Abs(DataItem.LabelHeight - Math.Abs(baseDataItem.NormalizedLabelMax - dataItem.NormalizedLabelMax));
+            return Math.Abs(baseDataItem.LabelHeight - Math.Abs(baseDataItem.NormalizedLabelMax - dataItem.NormalizedLabelMax));
         }
         /// <summary>
         ///     Прячет «лычку» у элемента данных графика

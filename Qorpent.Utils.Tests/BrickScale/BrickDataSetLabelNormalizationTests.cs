@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using Qorpent.Charts;
 using Qorpent.Utils.BrickScaleNormalizer;
 
 namespace Qorpent.Utils.Tests.BrickScale {
@@ -9,6 +10,13 @@ namespace Qorpent.Utils.Tests.BrickScale {
     /// </summary>
     [TestFixture]
     public class BrickDataSetLabelNormalizationTests : BrickDataSetTestBase {
+        [Test]
+        public void RealCase1Test() {
+            var brick = ChartBuilder.ParseDatasets("3918,3602,4009;3568,3509,3771;3531,3492,3898;3198,3840,4122;3365,3345,3863;4100,3840,4122").ToBrickDataset();
+            brick.Preferences = new UserPreferences {Height = 100, SeriaCalcMode = SeriaCalcMode.Linear};
+            brick.Calculate();
+            var colons = brick.GetColons();
+        }
         [Test]
         public void CanHideLabelWhenTwoLabelsDiffersAboutOnePixel() {
             var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 200);
@@ -74,7 +82,7 @@ namespace Qorpent.Utils.Tests.BrickScale {
             var colons = ds.BuildColons().ToArray();
             Assert.AreEqual(LabelPosition.Auto, colons[0].Items[0].LabelPosition);
             Assert.AreEqual(LabelPosition.Below, colons[0].Items[1].LabelPosition);
-            Assert.AreEqual(LabelPosition.Auto, colons[0].Items[2].LabelPosition);
+            Assert.AreEqual(LabelPosition.Hidden, colons[0].Items[2].LabelPosition);
             Assert.AreEqual(LabelPosition.Auto, colons[0].Items[3].LabelPosition);
             Assert.AreEqual(LabelPosition.Below, colons[1].Items[0].LabelPosition);
             Assert.AreEqual(LabelPosition.Above, colons[1].Items[1].LabelPosition);
@@ -266,7 +274,7 @@ namespace Qorpent.Utils.Tests.BrickScale {
             return new BrickDataSet {
                 Preferences = new UserPreferences {
                     SeriaCalcMode = calcMode,
-                    Height = height
+                    Height = height,
                 }
             };
         }

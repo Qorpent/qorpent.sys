@@ -30,20 +30,17 @@ namespace Qorpent.Mvc.Actions {
                 SourceMaxValue = brick.GetMax(),
                 MinimalScaleBehavior = MiniamlScaleBehavior.FitMin
             };
+            var catalog = new BrickCatalog();
+            var variant = catalog.GetBestVariant(brickRequest);
             brick.Preferences.SeriaCalcMode = SeriaCalcMode.Linear;
             brick.Preferences.Height = height;
             brick.Preferences.YMin = "auto";
-            var calculated = brick.Calculate();
-            var newChart = calculated.ToChart();
-            var catalog = new BrickCatalog();
-            try {
-                var variant = catalog.GetBestVariant(brickRequest);
-                newChart.SetNumDivLines(variant.ResultDivCount);
-                newChart.SetYAxisMinValue(Convert.ToDouble(variant.ResultMinValue));
-                newChart.SetYAxisMaxValue(Convert.ToDouble(variant.ResultMaxValue));
-            } catch { }
-
-
+            brick.FirstScale = new Scale {Min = variant.ResultMinValue, Max = variant.ResultMaxValue};
+            var newChart = brick.Calculate().ToChart();
+            newChart.SetNumDivLines(variant.ResultDivCount);
+            newChart.SetYAxisMinValue(Convert.ToDouble(variant.ResultMinValue));
+            newChart.SetYAxisMaxValue(Convert.ToDouble(variant.ResultMaxValue));
+            
             return newChart;
         }
     }

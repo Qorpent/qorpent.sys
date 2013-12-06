@@ -2,22 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Utils.BrickScaleNormalizer
-{
+namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// <summary>
-	/// Описывает набор данных для обсчета
+	///     Описывает набор данных для обсчета
 	/// </summary>
 	public class BrickDataSet {
-		/// <summary>
-		/// 
-		/// </summary>
-		public BrickDataSet() {
-			Rows = new List<DataRow>();
-			Preferences = new UserPreferences();
-		}
-		
 		/// <summary>
 		/// Рассчитанный размер первой шкалы
 		/// </summary>
@@ -34,6 +24,27 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 		/// Требования пользователя
 		/// </summary>
 		public UserPreferences Preferences { get; set; }
+        /// <summary>
+        ///     Размер «лычки» в пикселях
+        /// </summary>
+        public int LabelHeight { get; private set; }
+        /// <summary>
+        ///     Описывает набор данных для обсчета
+        /// </summary>
+        public BrickDataSet() {
+            Rows = new List<DataRow>();
+            Preferences = new UserPreferences();
+            LabelHeight = 20;
+        }
+        /// <summary>
+        ///     Описывает набор данных для обсчета
+        /// </summary>
+        /// <param name="lableHeight">Размер лычки в пикселях</param>
+        public BrickDataSet(int lableHeight) {
+            Rows = new List<DataRow>();
+            Preferences = new UserPreferences();
+            LabelHeight = lableHeight;
+        }
 		/// <summary>
 		/// 
 		/// </summary>
@@ -126,16 +137,20 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 
 		private void CalculateFirstScale() {
 			if (0 == Preferences.YFixMin && 0 == Preferences.YFixMin && 0 == Preferences.YFixDiv) {
-				var realMin = GetMin();
-				var realMax = GetMax();
-				var req = new BrickRequest();
-				req.SourceMinValue = realMin;
-				req.SourceMaxValue = realMax;
-				req.Setup(Preferences.Y, Preferences.YMin, Preferences.YMax, Preferences.YTop.ToString(),
-				          Preferences.YSignDelta.ToString());
-				var cat = new BrickCatalog();
-				var result = cat.GetBestVariant(req);
-				FirstScale = new Scale{Prepared = true, Min = result.ResultMinValue,Max = result.ResultMaxValue,DivLines = result.ResultDivCount};
+                if (FirstScale == null) {
+                    var realMin = GetMin();
+                    var realMax = GetMax();
+                    var req = new BrickRequest {
+                        SourceMinValue = realMin,
+                        SourceMaxValue = realMax
+                    };
+                    req.Setup(Preferences.Y, Preferences.YMin, Preferences.YMax, Preferences.YTop.ToString(),
+                              Preferences.YSignDelta.ToString());
+                    var cat = new BrickCatalog();
+                    var result = cat.GetBestVariant(req);
+                    FirstScale = new Scale { Prepared = true, Min = result.ResultMinValue, Max = result.ResultMaxValue, DivLines = result.ResultDivCount };
+                }
+
 				FirstScale.ValueInPixel = (FirstScale.Max - FirstScale.Min) / Preferences.Height;
 			}
 			else {
@@ -307,7 +322,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 		/// <param name="secondscale"></param>
 		public void Add(int serianum, int rownum, decimal value, bool secondscale) {
 			var row = ResolveRow(serianum, rownum, secondscale?ScaleType.Second:ScaleType.First);
-			row.Items.Add(new DataItem { Value = value, Index = row.Items.Count });
+			row.Items.Add(new DataItem { Value = value, Index = row.Items.Count, LabelHeight = LabelHeight});
 		}
 		/// <summary>
 		/// Возвращает элемент данных по позиции

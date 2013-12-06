@@ -10,7 +10,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <summary>
         ///     Температура коллизии, начиная с которой она считается «ОЧЕНЬ ГОРЯЧЕЙ»
         /// </summary>
-        public static decimal VeryHotBorderline = 15;
+        public static decimal VeryHotBorderline = 13;
         /// <summary>
         ///     Поис «ОЧЕНЬ ГОРЯЧИХ» коллизий в переданном представлении коллизии
         /// </summary>

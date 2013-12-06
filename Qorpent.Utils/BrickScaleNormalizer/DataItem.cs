@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
     /// <summary>
@@ -44,8 +45,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// <summary>
 		///     Размер «лычки» в пикселях
 		/// </summary>
-		public const int LabelHeight = 20;
-
+		public int LabelHeight = 10;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -102,7 +102,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         /// <returns>Строковое представление <see cref="DataItem"/></returns>
         public override string ToString() {
-            return Value.ToString();
+            return Value.ToString(CultureInfo.InvariantCulture);
         }
 	}
 }

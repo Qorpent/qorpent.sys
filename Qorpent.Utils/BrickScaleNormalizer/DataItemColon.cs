@@ -25,6 +25,10 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             get { return Collisions.Any() ? Collisions.Select(_ => _.Temperature).Sum()/Collisions.Count() : 0; }
         }
         /// <summary>
+        ///     Базовый датасет, к которому относится колонка
+        /// </summary>
+        public BrickDataSet DataSet { get; private set; }
+        /// <summary>
         ///     Массив <see cref="DataItem"/>, формирующих данную колонку в виде <see cref="DataItemColon"/>
         /// </summary>
         public DataItem[] Items {
@@ -44,6 +48,22 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <param name="dataItems">Перечисление <see cref="DataItem"/>, образующих колонку</param>
         public DataItemColon(IEnumerable<DataItem> dataItems) {
             _dataItems.AddRange(dataItems);
+        }
+        /// <summary>
+        ///     Колонка значений графика для расчета их позиций
+        /// </summary>
+        /// <param name="brickDataSet"></param>
+        public DataItemColon(BrickDataSet brickDataSet) {
+            DataSet = brickDataSet;
+        }
+        /// <summary>
+        ///     Колонка значений графика для расчета их позиций
+        /// </summary>
+        /// <param name="brickDataSet">Базовый датасет, к которому относится колонка</param>
+        /// <param name="dataItems">Перечисление <see cref="DataItem"/>, образующих колонку</param>
+        public DataItemColon(BrickDataSet brickDataSet, IEnumerable<DataItem> dataItems) {
+            _dataItems.AddRange(dataItems);
+            DataSet = brickDataSet;
         }
         /// <summary>
         ///     Минимализация температуры колонки
