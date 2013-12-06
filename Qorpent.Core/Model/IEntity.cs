@@ -31,6 +31,13 @@ namespace Qorpent.Model {
         /// </summary>
         /// <returns></returns>
 	    object GetContext();
+
+
+		/// <summary>
+		/// Ключ сортировки
+		/// </summary>
+		/// <returns></returns>
+		string GetSortKey();
 	}
 
 }
