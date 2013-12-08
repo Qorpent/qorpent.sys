@@ -11,6 +11,7 @@ tmp
 *.dotCover
 *.suo
 *.sln
+
 *.~*
 *.*~
 *.pidb
@@ -22,3 +23,6 @@ TestResults
 
 qorpent.sys.doc/Help
 qorpent.sys.doc/obj
+
+
+UpgradeLog*
