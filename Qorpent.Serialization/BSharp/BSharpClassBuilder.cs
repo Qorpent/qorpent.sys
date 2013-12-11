@@ -173,8 +173,10 @@ namespace Qorpent.BSharp {
 				}
 				else
 				{
-					ExctractIncludeClass(_i, nochild, includeelement);
-					stub.Add(includeelement);
+					ExctractIncludeClass(_i, nochild, includeelement,s);
+					if (IsIncludeClassMatch(_i, includeelement)) {
+						stub.Add(includeelement);
+					}
 				}
 			}
             if (usebody && null != stubi) {
@@ -308,6 +310,9 @@ namespace Qorpent.BSharp {
 			{
 				_cls.Set(BSharpClassAttributes.RequireAdvancedIncludes);
 			}
+			if (_cls.Compiled.DescendantsAndSelf().Any(_ => _.Attributes().Any(__ => __.Value.Contains("%{")))) {
+				_cls.Set(BSharpClassAttributes.RequireLateInterpolation);
+			}
 		}
 
 
@@ -395,14 +400,31 @@ namespace Qorpent.BSharp {
 					i.ReplaceWith(elements);
 				}
 				else {
-					ExctractIncludeClass(i, nochild, includeelement);
-					i.ReplaceWith(includeelement);
+					ExctractIncludeClass(i, nochild, includeelement, includecls);
+					if (IsIncludeClassMatch(i, includeelement)) {
+						i.ReplaceWith(includeelement);
+					}
+					else {
+						i.Remove();
+					}
 				}
 			}
 			return needReInterpolate;
 		}
 
-		private void ExctractIncludeClass(XElement i, bool nochild, XElement includeelement) {
+		private bool IsIncludeClassMatch(XElement include, XElement includeclass) {
+			var wheres = include.Elements(BSharpSyntax.IncludeWhereClause);
+			if (wheres.Any())
+			{
+				var matcher = new XmlTemplateMatcher(wheres);
+				return matcher.IsMatch(includeclass);
+				
+			}
+			return true;
+		}
+
+		private XmlInterpolation _lateincluder = new XmlInterpolation{AncorSymbol = '%'};
+		private void ExctractIncludeClass(XElement i, bool nochild, XElement includeelement, IBSharpClass cls) {
 			if (nochild) {
 				includeelement.Elements().Remove();
 			}
@@ -412,7 +434,9 @@ namespace Qorpent.BSharp {
 			includeelement.Attribute(BSharpSyntax.ClassNameAttribute).Remove();
 			var a = includeelement.Attribute("id");
 			if (null != a) a.Remove();
-          
+			if (cls.Is(BSharpClassAttributes.RequireLateInterpolation)) {
+				_lateincluder.Interpolate(includeelement, i);
+			}
 			
 		}
 

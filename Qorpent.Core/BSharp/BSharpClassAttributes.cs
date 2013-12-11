@@ -86,10 +86,15 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		Shema = 1<<19,
 		/// <summary>
+		/// Признак необходимости позднего биндинга при интерполяции
+		/// </summary>
+		RequireLateInterpolation = 1 << 20,
+		/// <summary>
 		/// Набор флагов для пакета исходников
 		/// </summary>
 		SrcPkgSet = Abstract | Static | Override | Extension 
 			| RequireLinking | RequireClassResolution | RequireDictionaryResolution
 			| RequireAdvancedIncludes | RequireDictionaryRegistration | Shema,
+		
 	}
 }

@@ -266,6 +266,63 @@ class B x=2
 </class>", result.Compiled.ToString());
 
         }
+
+		[Test]
+		public void IncludeAllWithWhere()
+		{
+			var code = @"
+class A x=1 prototype=p
+class B x=2 prototype=p
+class C x=3 prototype=p
+class D
+	include all p
+        where x>>=1
+";
+			var result = Compile(code).Get("D");
+			Console.WriteLine(result.Compiled.ToString().Replace("\"", "\"\""));
+			Assert.NotNull(result.Compiled.Element("B"));
+			Assert.NotNull(result.Compiled.Element("C"));
+			Assert.Null(result.Compiled.Element("A"));
+
+		}
+
+		[Test]
+		public void MultiConditionInIncludeAll()
+		{
+			var code = @"
+class A x=1 prototype=p
+class B x=2 prototype=p
+class C x=3 prototype=p
+class D x=4 prototype=p
+class E
+	include all p
+		where x=1
+        where x>>=2
+";
+			var result = Compile(code).Get("E");
+			Console.WriteLine(result.Compiled.ToString().Replace("\"", "\"\""));
+			Assert.NotNull(result.Compiled.Element("A"));
+			Assert.NotNull(result.Compiled.Element("C"));
+			Assert.NotNull(result.Compiled.Element("D"));
+			Assert.Null(result.Compiled.Element("B"));
+
+		}
+
+		[Test]
+		public void LateInterpolationInIncludeAll()
+		{
+			var code = @"
+class A prototype=p
+	my = 1
+	x = '%{other,my}'
+class B other=2
+	include all p
+";
+			var result = Compile(code).Get("B").Compiled.Element("A");
+			Assert.AreEqual("2",result.Attr("x"));
+
+		}
+
         [Test]
         public void AllIncludeClauses()
         {

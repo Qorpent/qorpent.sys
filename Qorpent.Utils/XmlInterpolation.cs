@@ -36,6 +36,23 @@ namespace Qorpent.Utils {
 			return source;
 		}
 		/// <summary>
+		/// Интерполирует исходный элемет в целевой
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="baseelement"></param>
+		/// <returns></returns>
+		public XElement Interpolate(XElement source, XElement baseelement) {
+			var datasources = baseelement.AncestorsAndSelf().Reverse().ToArray();
+			ConfigBase cfg = null;
+			foreach (var element in datasources) {
+				cfg = new ConfigBase(cfg);
+				foreach (var attribute in element.Attributes()) {
+					cfg.Set(attribute.Name.LocalName,attribute.Value);
+				}
+			}
+			return Interpolate(source, cfg);
+		}
+		/// <summary>
 		/// Установка символа начала интерполяции
 		/// </summary>
 		public char AncorSymbol {

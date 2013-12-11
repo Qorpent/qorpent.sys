@@ -68,10 +68,20 @@ namespace Qorpent.BSharp.Matcher {
             {
 				ConditionType = ConditionType.Match;
             }
+			else if (n.EndsWith("&+".Escape(EscapingType.XmlName)))
+			{
+				ConditionType = ConditionType.CrossList;
+			}
+			else if (n.EndsWith("&&".Escape(EscapingType.XmlName)))
+			{
+				ConditionType = ConditionType.IverseInList;
+			}
             else if (n.EndsWith("&".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.InList;
             }
+
+			
             else if (n.EndsWith("%".Escape(EscapingType.XmlName)))
             {
 				ConditionType = ConditionType.Contains;
@@ -140,6 +150,14 @@ namespace Qorpent.BSharp.Matcher {
 				case ConditionType.InList:
 					if (null == a) return false;
 					return a.Value.SmartSplit(false, true, ' ', ',', ';').Contains(Value);
+				case ConditionType.IverseInList:
+					if (null == a) return false;
+					return Value.SmartSplit(false, true, ' ', ',', ';').Contains(a.Value);
+				case ConditionType.CrossList:
+					if (null == a) return false;
+					var l1 = a.Value.SmartSplit(false, true, ' ', ',', ';');
+					var l2 = Value.SmartSplit(false, true, ' ', ',', ';');
+					return l1.Intersect(l2).Any();
 				case ConditionType.IsTrue:
 					if (null == a) return false;
 					return a.Value.ToBool();

@@ -47,5 +47,13 @@ namespace Qorpent.BSharp.Matcher {
 		/// 
 		/// </summary>
 		XPath,
+		/// <summary>
+		/// Инверсное вхождение в список
+		/// </summary>
+		IverseInList,
+		/// <summary>
+		/// Пересечение списков
+		/// </summary>
+		CrossList
 	}
 }

@@ -18,6 +18,13 @@ namespace Qorpent.Config {
         ///     Базовый класс для конфигураций
         /// </summary>
 		public ConfigBase() {}
+
+		/// <summary>
+		///     Базовый класс для унаследованной
+		/// </summary>
+		public ConfigBase(IConfig parent) {
+			this.SetParent(parent);
+		}
 	    /// <summary>
 	    ///     Поддержка наследования от родителя
 	    /// </summary>
