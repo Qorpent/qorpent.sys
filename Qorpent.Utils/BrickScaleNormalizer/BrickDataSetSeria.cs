@@ -19,6 +19,14 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         public int SeriaNumber { get; private set; }
         /// <summary>
+        ///     Имя серии
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        ///     Цвет серии
+        /// </summary>
+        public string Color { get; set; }
+        /// <summary>
         ///     Представление серии из <see cref="DataRow"/>
         /// </summary>
         /// <param name="seriaNumber">Номер серии</param>
@@ -33,6 +41,14 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         public BrickDataSetSeria(int seriaNumber, IEnumerable<DataRow> rows) {
             SeriaNumber = seriaNumber;
             rows.ForEach(Add);
+        }
+        /// <summary>
+        ///     Определяет признак наличия <see cref="DataRow"/> в серии
+        /// </summary>
+        /// <param name="row">Исследуемый экземпляр <see cref="DataRow"/></param>
+        /// <returns>Признак наличия <see cref="DataRow"/> в серии</returns>
+        public bool Contains(DataRow row) {
+            return _rows.Contains(row);
         }
         /// <summary>
         ///     Добавление <see cref="DataRow"/> в серию

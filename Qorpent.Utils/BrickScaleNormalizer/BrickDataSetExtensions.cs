@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
     /// <summary>
@@ -21,7 +22,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <param name="dataSet">Датасет</param>
         /// <returns>Упорядоченное перечисление серий из <see cref="BrickDataSet"/></returns>
         public static IEnumerable<BrickDataSetSeria> GetSeries(this BrickDataSet dataSet) {
-            return dataSet.Rows.GroupBy(_ => _.SeriaNumber).Select(_ => new BrickDataSetSeria(_.Key, _.Select(__ => __)));
+            return dataSet.Series;
         }
         /// <summary>
         ///     Собирает упорядоченное перечисление колонок данных графика в виде <see cref="DataItemColon"/>
@@ -30,6 +31,14 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <returns>Упорядоченное перечисление колонок данных графика в виде <see cref="DataItemColon"/></returns>
         public static IEnumerable<DataItemColon> GetColons(this BrickDataSet dataSet) {
             return dataSet.Rows.SelectMany(_ => _.Items).GroupBy(_ => _.Index).Select(_ => new DataItemColon(dataSet, _.Select(__ => __)));
+        }
+        /// <summary>
+        ///     Удаляет серии, где все значения равны указанному
+        /// </summary>
+        /// <param name="dataSet">Исходный датасет</param>
+        /// <param name="value">Искомое значение</param>
+        public static void RemoveSeriesWhereAllValuesIs(this BrickDataSet dataSet, decimal value) {
+            dataSet.Series.Where(_ => _.All(__ => __.Value.Equals(value))).ToList().ForEach(dataSet.Remove);
         }
     }
 }

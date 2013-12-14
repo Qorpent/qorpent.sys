@@ -25,6 +25,7 @@
   <ItemGroup>
     <Compile Include="BrickScaleNormalizer\BrickCatalog.cs" />
     <Compile Include="BrickScaleNormalizer\BrickDataSetExtensions.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickDataSetFusionChartsExtensions.cs" />
     <Compile Include="BrickScaleNormalizer\BrickDataSetSeria.cs" />
     <Compile Include="BrickScaleNormalizer\BrickRequest.cs" />
     <Compile Include="BrickScaleNormalizer\BrickVariant.cs" />
