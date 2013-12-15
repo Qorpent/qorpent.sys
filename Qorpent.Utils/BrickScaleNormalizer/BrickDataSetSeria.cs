@@ -21,25 +21,27 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <summary>
         ///     Имя серии
         /// </summary>
-        public string Name { get; set; }
+        public string Name {
+            get { return Get("seriesname"); }
+        }
         /// <summary>
-        ///     Цвет серии
+        ///     Мета-информация
         /// </summary>
-        public string Color { get; set; }
+        public Dictionary<string, string> Meta { get; private set; }
         /// <summary>
         ///     Представление серии из <see cref="DataRow"/>
         /// </summary>
         /// <param name="seriaNumber">Номер серии</param>
         public BrickDataSetSeria(int seriaNumber) {
             SeriaNumber = seriaNumber;
+            Meta = new Dictionary<string, string>();
         }
         /// <summary>
         ///     Представление серии из <see cref="DataRow"/>
         /// </summary>
         /// <param name="seriaNumber">Номер серии</param>
         /// <param name="rows">Перечисление <see cref="DataRow"/>, присущих данной серии</param>
-        public BrickDataSetSeria(int seriaNumber, IEnumerable<DataRow> rows) {
-            SeriaNumber = seriaNumber;
+        public BrickDataSetSeria(int seriaNumber, IEnumerable<DataRow> rows) : this(seriaNumber) {
             rows.ForEach(Add);
         }
         /// <summary>
@@ -60,6 +62,30 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             }
 
             _rows.Add(dataRow);
+        }
+        /// <summary>
+        ///     Установка мета-информации по колючу
+        /// </summary>
+        /// <param name="key">Ключ</param>
+        /// <param name="value">Значение</param>
+        public void Set(string key, string value) {
+            if (Meta.ContainsKey(key)) {
+                Meta[key] = value;
+            } else {
+                Meta.Add(key, value);
+            }
+        }
+        /// <summary>
+        ///     Получение мета-информации по ключу
+        /// </summary>
+        /// <param name="key">Ключ</param>
+        /// <returns>Значение по ключу или <see cref="string.Empty"/></returns>
+        public string Get(string key) {
+            if (Meta.ContainsKey(key)) {
+                return Meta[key];
+            }
+
+            return string.Empty;
         }
         /// <summary>
         ///     Получение <see cref="IEnumerator{T}"/> по <see cref="DataRow"/>

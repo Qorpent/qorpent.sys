@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
     /// <summary>

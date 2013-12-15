@@ -355,7 +355,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <param name="name">Имя серии</param>
         public void SetSeriaName(int serianum, string name) {
             if (_series.ContainsKey(serianum)) {
-                _series[serianum].Name = name;
+                _series[serianum].Set("seriesname", name);
             }
         }
         /// <summary>
@@ -365,8 +365,32 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <param name="color">Цвет серии</param>
         public void SetSeriaColor(int serianum, string color) {
             if (_series.ContainsKey(serianum)) {
-                _series[serianum].Color = color;
+                _series[serianum].Set("color", color);
             }
+        }
+        /// <summary>
+        ///     Установка мета-информации серии
+        /// </summary>
+        /// <param name="serianum">Номер серии</param>
+        /// <param name="key">Ключ</param>
+        /// <param name="value">Значение</param>
+        public void SetSeriaMeta(int serianum, string key, string value) {
+            if (_series.ContainsKey(serianum)) {
+                _series[serianum].Set(key, value);
+            }
+        }
+        /// <summary>
+        ///     Получение мета-информации по ключу
+        /// </summary>
+        /// <param name="serianum">Номер серии</param>
+        /// <param name="key">Ключ</param>
+        /// <returns>Значение по ключу или <see cref="string.Empty"/></returns>
+        public string GetSeriaMeta(int serianum, string key) {
+            if (_series.ContainsKey(serianum)) {
+                return _series[serianum].Get(key);
+            }
+
+            return string.Empty;
         }
 		/// <summary>
 		/// 
