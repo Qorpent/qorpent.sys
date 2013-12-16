@@ -8,6 +8,14 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	///     Описывает набор данных для обсчета
 	/// </summary>
 	public class BrickDataSet {
+        /// <summary>
+        ///     Внутрениий список категорий
+        /// </summary>
+        private readonly List<string> _categories = new List<string>();
+        /// <summary>
+        ///     Внутренний список серий
+        /// </summary>
+        private readonly Dictionary<int, BrickDataSetSeria> _series = new Dictionary<int, BrickDataSetSeria>();
 		/// <summary>
 		/// Рассчитанный размер первой шкалы
 		/// </summary>
@@ -28,6 +36,18 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Размер «лычки» в пикселях
         /// </summary>
         public int LabelHeight { get; private set; }
+        /// <summary>
+        ///     Серии
+        /// </summary>
+        public IEnumerable<BrickDataSetSeria> Series {
+            get { return _series.Values.AsEnumerable(); }
+        }
+        /// <summary>
+        ///     Перечисление категорий
+        /// </summary>
+	    public IEnumerable<string> Categories {
+            get { return _categories.AsEnumerable(); }
+	    }
         /// <summary>
         ///     Описывает набор данных для обсчета
         /// </summary>
@@ -173,9 +193,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		public decimal GetMax(ScaleType scaleType = ScaleType.First) {
 
 				if (_isNormalizedRecord) {
-					var _seria = Rows.FirstOrDefault(_ => _.ScaleType == scaleType);
-					if (null == _seria) return 0;
-					return _seria.Items.Select(_ => _.Max).Max();
+					var seria = Rows.FirstOrDefault(_ => _.ScaleType == scaleType);
+					if (null == seria) return 0;
+					return seria.Items.Select(_ => _.Max).Max();
 				}
 
 				return EnsureNormalized().GetMax(scaleType);
@@ -303,7 +323,13 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 
 			return EnsureNormalized().GetMin(scaleType);
 		}
-
+        /// <summary>
+        ///     Удаление указанной серии из жатасета
+        /// </summary>
+        /// <param name="seria">Искомая серия</param>
+        public void Remove(BrickDataSetSeria seria) {
+            _series.Remove(_series.FirstOrDefault(_ => _.Value == seria).Key);
+        }
 		/// <summary>
 		/// 
 		/// </summary>
@@ -313,6 +339,59 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		public void Add(int serianum, int rownum, decimal value) {
 			Add(serianum, rownum, value, false);
 		}
+        /// <summary>
+        ///     Добавление категории
+        /// </summary>
+        /// <param name="label">Метка категории</param>
+        public void AddCategory(string label) {
+            if (!_categories.Contains(label)) {
+                _categories.Add(label);
+            }
+        }
+        /// <summary>
+        ///     Установка имени серии
+        /// </summary>
+        /// <param name="serianum">Номер серии</param>
+        /// <param name="name">Имя серии</param>
+        public void SetSeriaName(int serianum, string name) {
+            if (_series.ContainsKey(serianum)) {
+                _series[serianum].Set("seriesname", name);
+            }
+        }
+        /// <summary>
+        ///     Установка цвета серии
+        /// </summary>
+        /// <param name="serianum">Номер серии</param>
+        /// <param name="color">Цвет серии</param>
+        public void SetSeriaColor(int serianum, string color) {
+            if (_series.ContainsKey(serianum)) {
+                _series[serianum].Set("color", color);
+            }
+        }
+        /// <summary>
+        ///     Установка мета-информации серии
+        /// </summary>
+        /// <param name="serianum">Номер серии</param>
+        /// <param name="key">Ключ</param>
+        /// <param name="value">Значение</param>
+        public void SetSeriaMeta(int serianum, string key, string value) {
+            if (_series.ContainsKey(serianum)) {
+                _series[serianum].Set(key, value);
+            }
+        }
+        /// <summary>
+        ///     Получение мета-информации по ключу
+        /// </summary>
+        /// <param name="serianum">Номер серии</param>
+        /// <param name="key">Ключ</param>
+        /// <returns>Значение по ключу или <see cref="string.Empty"/></returns>
+        public string GetSeriaMeta(int serianum, string key) {
+            if (_series.ContainsKey(serianum)) {
+                return _series[serianum].Get(key);
+            }
+
+            return string.Empty;
+        }
 		/// <summary>
 		/// 
 		/// </summary>
@@ -322,7 +401,14 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// <param name="secondscale"></param>
 		public void Add(int serianum, int rownum, decimal value, bool secondscale) {
 			var row = ResolveRow(serianum, rownum, secondscale?ScaleType.Second:ScaleType.First);
-			row.Items.Add(new DataItem { Value = value, Index = row.Items.Count, LabelHeight = LabelHeight});
+		    var item = new DataItem {Value = value, Index = row.Items.Count, LabelHeight = LabelHeight};
+            if (!_series.ContainsKey(serianum)) {
+               _series.Add(serianum, new BrickDataSetSeria(serianum));
+            }
+            if (!_series[serianum].Contains(row)) {
+                _series[serianum].Add(row);
+            }
+			row.Items.Add(item);
 		}
 		/// <summary>
 		/// Возвращает элемент данных по позиции
@@ -352,7 +438,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			}
 			return result;
 		}
-
 	    /// <summary>
 	    /// 
 	    /// </summary>
