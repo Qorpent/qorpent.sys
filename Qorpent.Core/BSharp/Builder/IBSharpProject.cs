@@ -85,6 +85,11 @@ namespace Qorpent.BSharp.Builder {
         /// </summary>
         bool GenerateLibPkg { get; set; }
 
+		/// <summary>
+		///Формирует Json файл с массивом рабочих классов
+		/// </summary>
+		bool GenerateJsonModule { get; set; }
+
 	    /// <summary>
 	    /// Флаг необходимости генерации графической карты классов
 	    /// </summary>
@@ -105,7 +110,12 @@ namespace Qorpent.BSharp.Builder {
         /// </summary>
         IList<IBSharpCompilerExtension> CompilerExtensions { get; }
 
-        /// <summary>
+	    /// <summary>
+	    /// Название модуля JSON
+	    /// </summary>
+	    string JsonModuleName { get; set; }
+
+	    /// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>

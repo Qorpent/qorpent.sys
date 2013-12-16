@@ -37,11 +37,13 @@ namespace Qorpent.BSharp.Builder {
 	    private const string PROJECT_NAME = "project_name";
 	    private const string GENERATE_SRC_PKG = "generate_src_pkg";
 	    private const string GENERATE_LIB_PKG = "generate_lib_pkg";
+	    private const string GENERATE_JSON_MODULE = "generate_json_module";
 	    private const string SRC_PKG_NAME = "src_pkg_name";
 	    private const string LIB_PKG_NAME = "lib_pkg_name";
 	    private const string GENERATE_GRAPH = "generate_graph";
 	    private const string EXTENSIONS = "extensions";
         private const string SRCCLASS = "srcclass";
+		private const string JSON_MODULE_NAME = "json_module_name";
         private IList<IBSharpCompilerExtension> _compilerExtensions = new List<IBSharpCompilerExtension>();
         /// <summary>
         /// Расширения компилятора
@@ -141,6 +143,8 @@ namespace Qorpent.BSharp.Builder {
             set { Set(TARGETS, value); }
         }
 	    IUserLog _log =  new StubUserLog();
+	
+
 		/// <summary>
 		/// Журнал проекта
 		/// </summary>
@@ -181,6 +185,16 @@ namespace Qorpent.BSharp.Builder {
             get { return Get(GENERATE_LIB_PKG, false); }
             set { Set(GENERATE_LIB_PKG, value); }
         }
+
+		/// <summary>
+		/// Требование создать пакет исходников в виде перносимого архива
+		/// </summary>
+		public bool GenerateJsonModule
+		{
+			get { return Get(GENERATE_JSON_MODULE, false); }
+			set { Set(GENERATE_JSON_MODULE, value); }
+		}
+
 		/// <summary>
 		/// Требование создать пакет исходников в виде перносимого архива
 		/// </summary>
@@ -220,9 +234,16 @@ namespace Qorpent.BSharp.Builder {
             get { return Get<IBSharpClass>(SRCCLASS); }
             set { Set(SRCCLASS, value); }
 	    }
+		/// <summary>
+		/// Название модуля JSON
+		/// </summary>
+		public string JsonModuleName {
+			get { return Get<string>(JSON_MODULE_NAME); }
+			set { Set(JSON_MODULE_NAME, value); }
+		}
 
 
-	    /// <summary>
+		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>

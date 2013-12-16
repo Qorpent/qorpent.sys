@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
@@ -110,7 +111,7 @@ namespace Qorpent.Json {
 
 	    private string EscapeStringValue() {
 	        if (string.IsNullOrWhiteSpace(Value)) return string.Empty;
-	        return Value.Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n").Replace("\t", "\\t");
+	        return Value.Replace("\\","\\\\").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n").Replace("\t", "\\t");
 	    }
 
 	    /// <summary>
@@ -121,6 +122,15 @@ namespace Qorpent.Json {
 			current = current ?? new XElement("value", new XAttribute(JsonTypeAttributeName,Type));
 			current.Add(new XText(ToString(false)));
 			return current;
+		}
+
+		/// <summary>
+		/// Перечисляет все значения
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<JsonItem> CollectAllValues() {
+
+			yield return this;
 		}
 	}
 }

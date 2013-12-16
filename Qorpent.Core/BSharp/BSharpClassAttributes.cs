@@ -90,11 +90,15 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		RequireLateInterpolation = 1 << 20,
 		/// <summary>
+		/// Признак внедряемого класса
+		/// </summary>
+		Embed = 1<<21,
+		/// <summary>
 		/// Набор флагов для пакета исходников
 		/// </summary>
 		SrcPkgSet = Abstract | Static | Override | Extension 
 			| RequireLinking | RequireClassResolution | RequireDictionaryResolution
-			| RequireAdvancedIncludes | RequireDictionaryRegistration | Shema,
+			| RequireAdvancedIncludes | RequireDictionaryRegistration | Shema
 		
 	}
 }

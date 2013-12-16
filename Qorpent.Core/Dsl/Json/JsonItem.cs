@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -82,5 +83,11 @@ namespace Qorpent.Json {
 	    /// Имя атрибута для описания JSon типа
 	    /// </summary>
 	    public const string JsonTypeAttributeName = "__jsontype";
+
+		/// <summary>
+		/// Перечисляет все значения
+		/// </summary>
+		/// <returns></returns>
+		public abstract IEnumerable<JsonItem> CollectAllValues();
 	}
 }
