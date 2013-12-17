@@ -359,16 +359,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             }
         }
         /// <summary>
-        ///     Установка цвета серии
-        /// </summary>
-        /// <param name="serianum">Номер серии</param>
-        /// <param name="color">Цвет серии</param>
-        public void SetSeriaColor(int serianum, string color) {
-            if (_series.ContainsKey(serianum)) {
-                _series[serianum].Set("color", color);
-            }
-        }
-        /// <summary>
         ///     Установка мета-информации серии
         /// </summary>
         /// <param name="serianum">Номер серии</param>

@@ -34,7 +34,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 
             var json = "\r\n\t{";
             foreach (var meta in seria.Meta) {
-                json += "\r\n\t\t\"" + meta.Key + "\" : \"" + meta.Value + "\",";
+                json += "\r\n\t\t\"" + meta.Key + "\" : \"" + meta.Value.Replace("\"", "\\\"") + "\",";
             }
             json += "\r\n" + brickDataSet.RenderData(serianumber) + "\r\n\t}";
             return json;
@@ -47,7 +47,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         public static string RenderSeria(this BrickDataSetSeria seria) {
             var json = "\r\n\t{";
             foreach (var meta in seria.Meta) {
-                json += "\r\n\t\t\"" + meta.Key + "\" : \"" + meta.Value + "\",";
+                json += "\r\n\t\t\"" + meta.Key + "\" : \"" + meta.Value.Replace("\"", "\\\"") + "\",";
             }
             json += "\r\n" + seria.RenderData() + "\r\n\t}";
             return json;
@@ -88,7 +88,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         public static string RenderCategories(this BrickDataSet brickDataSet) {
             var json = "\r\n\"categories\" : [\r\n\t{\"category\" : [";
             foreach (var _ in brickDataSet.Categories) {
-                json += "\r\n\t\t{ \"label\" : \"" + _ + "\"},";
+                json += "\r\n\t\t{ \"label\" : \"" + _.Replace("\"", "\\\"") + "\"},";
             }
             json += "]}]";
             return json.Replace("},]}]", "}\r\n\t]}\r\n]\r\n");
