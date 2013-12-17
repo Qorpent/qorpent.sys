@@ -28,6 +28,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Qorpent.Events;
 using Qorpent.IoC;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data.Connections {
 	/// <summary>
@@ -127,12 +128,14 @@ namespace Qorpent.Data.Connections {
 			get { return Applications.Application.Current.DatabaseConnections; }
 		}
 
-		/// <summary>
-		/// Получить соединение по имени
-		/// </summary>
-		/// <param name="name">Имя соединения</param>
-		/// <returns>Содениение</returns>
-		public IDbConnection GetConnection(string name) {
+
+	    /// <summary>
+	    /// Получить соединение по имени
+	    /// </summary>
+	    /// <param name="name">Имя соединения</param>
+	    /// <param name="defaultConnectionString"></param>
+	    /// <returns>Содениение</returns>
+	    public IDbConnection GetConnection(string name, string defaultConnectionString = null) {
 			lock(Sync) {
 				Reload();
 				if(Registry.ContainsKey(name)) {
@@ -165,6 +168,10 @@ namespace Qorpent.Data.Connections {
 						return new SqlConnection(connectionString);
 					}
 				}
+			    if (defaultConnectionString.IsNotEmpty())
+			    {
+			        return new SqlConnection(defaultConnectionString);
+			    }
 				return null;
 			}
 		}
@@ -198,18 +205,19 @@ namespace Qorpent.Data.Connections {
 			return (IDbConnection)Activator.CreateInstance(NpgSQLConnectionType, connstring);
 		}
 
-		/// <summary>
-		/// Получить строку подключения по имени
-		/// </summary>
-		/// <param name="name"></param>
-		/// <returns></returns>
-		public string GetConnectionString(string name) {
+	    /// <summary>
+	    /// Получить строку подключения по имени
+	    /// </summary>
+	    /// <param name="name"></param>
+	    /// <param name="defaultConnectionString"></param>
+	    /// <returns></returns>
+	    public string GetConnectionString(string name, string defaultConnectionString = null) {
 			lock(this) {
 				Reload();
 				if(Registry.ContainsKey(name)) {
 					return Registry[name].ConnectionString;
 				}
-				return null;
+				return defaultConnectionString;
 			}
 		}
 

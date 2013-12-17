@@ -24,19 +24,21 @@ namespace Qorpent.Data {
 	/// 	Фабрика строк подключений и самих подключений, с поддержкой настройки
 	/// </summary>
 	public interface IDatabaseConnectionProvider {
-		/// <summary>
-		/// 	Получить соединение по имени
-		/// </summary>
-		/// <param name="name"> Имя соединения </param>
-		/// <returns> Содениение </returns>
-		IDbConnection GetConnection(string name);
+	    /// <summary>
+	    /// 	Получить соединение по имени
+	    /// </summary>
+	    /// <param name="name"> Имя соединения </param>
+	    /// <param name="defaultConnectionString"></param>
+	    /// <returns> Содениение </returns>
+	    IDbConnection GetConnection(string name, string defaultConnectionString =null);
 
-		/// <summary>
-		/// 	Получить строку подключения по имени
-		/// </summary>
-		/// <param name="name"> </param>
-		/// <returns> </returns>
-		string GetConnectionString(string name);
+	    /// <summary>
+	    /// 	Получить строку подключения по имени
+	    /// </summary>
+	    /// <param name="name"> </param>
+	    /// <param name="defaultConnectionString"></param>
+	    /// <returns> </returns>
+	    string GetConnectionString(string name, string defaultConnectionString = null);
 
 		/// <summary>
 		/// 	Зарегистрировать новое соединение
