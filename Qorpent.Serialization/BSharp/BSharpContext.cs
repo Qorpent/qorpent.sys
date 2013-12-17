@@ -438,7 +438,7 @@ namespace Qorpent.BSharp {
 				case BSharpContextDataType.SrcPkg:
 					return Working.Union(Abstracts).Union(Overrides).Union(Extensions).Distinct();
                 case BSharpContextDataType.LibPkg:
-                    return Working.Distinct();
+                    return Working.Where(_=>!_.Is(BSharpClassAttributes.Embed)).Distinct();
 				case BSharpContextDataType.Errors:
 					
 				default :

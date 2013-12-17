@@ -313,6 +313,11 @@ namespace Qorpent.BSharp {
 			if (_cls.Compiled.DescendantsAndSelf().Any(_ => _.Attributes().Any(__ => __.Value.Contains("%{")))) {
 				_cls.Set(BSharpClassAttributes.RequireLateInterpolation);
 			}
+
+			if (_cls.Compiled.Attr(BSharpSyntax.EmbedAttribute).ToBool())
+			{
+				_cls.Set(BSharpClassAttributes.Embed);
+			}
 		}
 
 

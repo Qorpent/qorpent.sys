@@ -68,5 +68,19 @@ namespace Qorpent.Json {
 			}
 			return current;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<JsonItem> CollectAllValues() {
+			foreach (var jsonItem in Values) {
+				if (jsonItem is JsonValue) yield return  jsonItem;
+				else
+					foreach (var collectAllValue in jsonItem.CollectAllValues()) {
+						yield return collectAllValue;
+					}
+
+			}
+		}
 	}
 }

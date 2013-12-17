@@ -20,13 +20,15 @@ namespace Qorpent.Serialization
             get { return _parser ?? (_parser = new JsonParser()); }
         }
 
-        /// <summary>
-        /// Осуществляет преобразование из XElement в JSON
-        /// </summary>
-        /// <param name="xml"></param>
-        /// <returns></returns>
-        public string ConvertToJson(XElement xml) {
-            return ConvertToJsonItem(xml).ToString(true);
+	    /// <summary>
+	    /// Осуществляет преобразование из XElement в JSON
+	    /// </summary>
+	    /// <param name="xml"></param>
+	    /// <param name="format"></param>
+	    /// <returns></returns>
+	    public string ConvertToJson(XElement xml,bool format =true) {
+	        var result = ConvertToJsonItem(xml);
+            return result.ToString(format);
         }
 
         /// <summary>
@@ -43,7 +45,11 @@ namespace Qorpent.Serialization
 
             if (null == xml.Attribute(JsonItem.JsonTypeAttributeName)) {
                 var json = BaseSerializer.Serialize("root", xml);
-                return Parser.Parse(json);
+                var result = Parser.Parse(json);
+				foreach (var n in result.CollectAllValues()) {
+					n.Type = JsonTokenType.Auto;
+				}
+	            return result;
             }
             if (IsValue(xml)) {
                 return new JsonValue(xml);
@@ -77,7 +83,7 @@ namespace Qorpent.Serialization
                 if(a.Name.LocalName=="__isarray")continue;
                 if(a.Name.LocalName=="_file")continue;
                 if(a.Name.LocalName=="_line")continue;
-                    result[a.Name.LocalName] = new JsonValue {Value = a.Value, Type = JsonTokenType.Auto};
+                    result[a.Name.LocalName] = new JsonValue {Value = a.Value.Escape(EscapingType.JsonValue), Type = JsonTokenType.Auto};
             }
             foreach (var e in xml.Elements()) {
                 result[e.Name.LocalName] = ConvertToJsonItem(e);

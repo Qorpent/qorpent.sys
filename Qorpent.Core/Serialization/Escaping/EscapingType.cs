@@ -42,5 +42,9 @@ namespace Qorpent.Serialization
 		/// Однострочка строка BXL с поддержкой режима "литерал"
 		/// </summary>
 	    BxlStringOrLiteral =128,
+		/// <summary>
+		/// Экранированная JSON-строка
+		/// </summary>
+	    JsonValue = 256,
     }
 }

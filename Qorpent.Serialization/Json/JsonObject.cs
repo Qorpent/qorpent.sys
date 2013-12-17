@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -136,6 +137,18 @@ namespace Qorpent.Json {
 			}
 
 			return current;
+		}
+		/// <summary>
+		/// Перечисляет все значения
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<JsonItem> CollectAllValues() {
+			foreach (var jsonTuple in Properties) {
+				if (jsonTuple.Value is JsonValue) yield return jsonTuple.Value;
+				else foreach (var val in jsonTuple.Value.CollectAllValues()) {
+					yield return val;
+				}
+			}
 		}
 	}
 }

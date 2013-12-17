@@ -42,7 +42,12 @@ namespace Qorpent.Serialization
 				
 				return ToBxlSingleLineString(str);
 				
-            }
+            }else if(type==EscapingType.JsonValue)
+	        {
+				//идентично
+			        return ToBxlSingleLineString(str);
+		        
+	        }
 
 
             IEscapeProvider d = EscapingDataFactory.Get(type);

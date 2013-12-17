@@ -174,6 +174,9 @@ namespace Qorpent.BSharp {
 		/// Префикс приватного атрибута
 		/// </summary>
 		public const char PrivateAttributePrefix = '_';
-
+		/// <summary>
+		/// Признак внедряемого класса (не может использоваться самостоятельно, не включается отдельно в библиотеки)
+		/// </summary>
+		public const string EmbedAttribute = "embed";
 	}
 }
