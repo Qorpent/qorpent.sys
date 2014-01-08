@@ -54,6 +54,21 @@ namespace Qorpent.Serialization.Tests
             BaseTest(json);
         }
 
+		[Test]
+		public void BugInEscapeInLiteral()
+		{
+			var json = new XmlToJsonConverter().ConvertToJson(XElement.Parse("<value __jsontype=\"String\">str\n</value>"));
+			Console.WriteLine(json);
+			Assert.AreEqual("\"str\\n\"", json);
+		}
+		[Test]
+		public void BugInEscapeInLiteral2()
+		{
+			var xml = new JsonParser().ParseXml("\"str\\n\"");
+			Console.WriteLine(xml.ToString());
+			Assert.AreEqual("<value __jsontype=\"String\">str\r\n</value>", xml.ToString());
+		}
+
         
         [TestCase("{}")]
         [TestCase("{\"a\":true}")]

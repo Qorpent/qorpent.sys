@@ -45,10 +45,13 @@ namespace Qorpent.Serialization
             }else if(type==EscapingType.JsonValue)
 	        {
 				//идентично
-			        return ToBxlSingleLineString(str);
+			        return ToBxlSingleLineString(str,false);
 		        
 	        }
-
+			if (string.IsNullOrEmpty(str))
+			{
+				return string.Empty;
+			}
 
             IEscapeProvider d = EscapingDataFactory.Get(type);
             var sb = new StringBuilder(str.Length);
@@ -78,7 +81,7 @@ namespace Qorpent.Serialization
             return "\"\"\"" + str + "\"\"\"";
         }
 
-        private static string ToBxlSingleLineString(string str) {
+        private static string ToBxlSingleLineString(string str, bool enquote = true) {
             if (-1 != str.IndexOf('\\')) {
                 str = str.Replace("\\", "\\\\");
             }
@@ -96,7 +99,8 @@ namespace Qorpent.Serialization
             if (-1 != str.IndexOf('\'')) {
                 str = str.Replace("'", "\'");
             }
-            return "'" + str + "'";
+	        if (enquote) str = "'" + str + "'";
+            return str;
         }
 
         /// <summary>

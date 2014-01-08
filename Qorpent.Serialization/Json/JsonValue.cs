@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Json {
@@ -95,7 +96,7 @@ namespace Qorpent.Json {
 			        return "\"" + EscapeStringValue() + "\"";
 			    }
 			    else {
-			        return EscapeStringValue();
+			        return Value;
 			    }
 			}
 				
@@ -119,9 +120,18 @@ namespace Qorpent.Json {
 		/// </summary>
 		/// <param name="current"></param>
 		public override XElement WriteToXml(XElement current) {
+
+
 			current = current ?? new XElement("value", new XAttribute(JsonTypeAttributeName,Type));
-			current.Add(new XText(ToString(false)));
-			return current;
+		    current.Value = "[REPLACE]";
+		    var value = Escaper.Escape(ToString(false), EscapingType.XmlAttribute);
+		    var result = current.ToString().Replace("[REPLACE]", value);
+		    var resulte = XElement.Parse(result);
+			if (null != current.Parent)
+			{
+				current.ReplaceWith(resulte);
+			}
+		    return resulte;
 		}
 
 		/// <summary>
