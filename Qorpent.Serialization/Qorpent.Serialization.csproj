@@ -157,6 +157,7 @@
     <Compile Include="Serialization\xmlSerializerImpl.cs" />
     <Compile Include="Serialization\XmlToJsonConverter.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Uson\UObj.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.XML" />

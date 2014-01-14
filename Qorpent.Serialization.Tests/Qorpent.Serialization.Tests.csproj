@@ -60,6 +60,7 @@
     <Compile Include="Selector_Tests\CssSelectorImplTests.cs" />
     <Compile Include="Selector_Tests\RegexSelectorImplTest.cs" />
     <Compile Include="serialization_set_test.cs" />
+    <Compile Include="Uson\FirstTest.cs" />
     <Compile Include="XHtml5XmlWriterTests.cs" />
     <Compile Include="XmlInclude\Bug_XmlInterpolationInContainer.cs" />
     <Compile Include="XmlInclude\XmlIncludeMainTest.cs" />
@@ -70,6 +71,7 @@
     <Reference Include="Comdiv.UXmlDiff">
       <HintPath>..\dependency\Comdiv.UXmlDiff.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
