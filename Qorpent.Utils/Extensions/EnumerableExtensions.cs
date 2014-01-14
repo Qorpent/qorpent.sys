@@ -121,7 +121,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="dictionary"></param>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		public static V SafeGet<K,V>(this IDictionary<K,V> dictionary , K key) {
+		public static V SafeGet<K,V>(this IDictionary<K, V> dictionary , K key) {
 			if(null==dictionary) return default (V);
 			if(dictionary.ContainsKey(key)) return dictionary[key];
 			return default(V);
@@ -159,6 +159,31 @@ namespace Qorpent.Utils.Extensions {
 			var result = generator();
 			dictionary[key] = result;
 			return result;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="buffer"></param>
+		/// <param name="startpos"></param>
+		/// <param name="boundaryBytes"></param>
+		/// <returns></returns>
+		public static Int32 IndexOf(this Byte[] buffer, int startpos, Byte[] boundaryBytes)
+		{
+			for (Int32 i = startpos; i <= buffer.Length - boundaryBytes.Length; i++)
+			{
+				Boolean match = true;
+				for (Int32 j = 0; j < boundaryBytes.Length && match; j++)
+				{
+					match = buffer[i + j] == boundaryBytes[j];
+				}
+
+				if (match)
+				{
+					return i;
+				}
+			}
+
+			return -1;
 		}
 	}
 }

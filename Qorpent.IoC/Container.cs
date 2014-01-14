@@ -534,8 +534,11 @@ namespace Qorpent.IoC {
 		/// </remarks>
 		public void Unregister(IComponentDefinition component) {
 			lock (this) {
-				//no need double registration
-				if (Components.Contains(component)) {
+				if (null == component)
+				{
+					return;
+				}
+				if (!Components.Contains(component)) {
 					return;
 				}
 				Components.Remove(component);

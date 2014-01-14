@@ -90,7 +90,7 @@ namespace Qorpent.Mvc {
 		/// <summary>
 		/// 	Name of called action
 		/// </summary>
-		public string ActionName {
+		public virtual string ActionName {
 			get {
 				if (string.IsNullOrEmpty(_actionName)) {
 					_actionName = MvcCallInfo.GetActionName(Uri);
@@ -103,7 +103,7 @@ namespace Qorpent.Mvc {
 		/// <summary>
 		/// 	Name of called render
 		/// </summary>
-		public string RenderName {
+		public virtual string RenderName {
 			get {
 				if (string.IsNullOrEmpty(_renderName)) {
 					_renderName = MvcCallInfo.GetRenderName(Uri);
@@ -440,12 +440,18 @@ namespace Qorpent.Mvc {
 		protected abstract IDictionary<string, string> RetrieveParameters();
 
 		private ActionDescriptor _action;
-		private string _actionName;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected string _actionName;
 		private IMvcFactory _factory;
 		private TextWriter _output;
 		private IDictionary<string, string> _parameters;
 		private RenderDescriptor _renderDescriptor;
-		private string _renderName;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected string _renderName;
 
 		/// <summary>
 		/// 	Response redirect

@@ -209,8 +209,11 @@ namespace Qorpent.Mvc.HttpHandler {
 			context.NotModified = CanReturnNotModifiedStatus(context);
 		}
 
-
-		private static void SetModifiedHeader(IMvcContext context) {
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		public static void SetModifiedHeader(IMvcContext context) {
 			INotModifiedStateProvider cp = null;
 			if (null != context.RenderDescriptor && context.RenderDescriptor.SupportNotModifiedState) {
 				cp = context.RenderDescriptor;
@@ -225,12 +228,19 @@ namespace Qorpent.Mvc.HttpHandler {
 			context.LastModified = cp.LastModified;
 			context.Etag = cp.ETag;
 		}
-
-		private static void ProcessNotModified(IMvcContext context) {
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		public static void ProcessNotModified(IMvcContext context) {
 			context.StatusCode = 304;
 		}
-
-		private static bool CanReturnNotModifiedStatus(IMvcContext context) {
+		/// <summary>
+		/// Public for using in Host
+		/// </summary>
+		/// <param name="context"></param>
+		/// <returns></returns>
+		public static bool CanReturnNotModifiedStatus(IMvcContext context) {
 			if (context.IfModifiedSince.Year <= 1900) {
 				return false;
 			}
