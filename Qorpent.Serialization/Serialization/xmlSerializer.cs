@@ -19,6 +19,7 @@
 using System.IO;
 using System.Xml.Linq;
 using Qorpent.IoC;
+using Qorpent.Uson;
 
 namespace Qorpent.Serialization {
 	/// <summary>
@@ -56,6 +57,9 @@ namespace Qorpent.Serialization {
 	    public override void Serialize(string name, object value, TextWriter output, object options = null) {
 			if (value is XElement) {
 				output.Write(value.ToString());
+			}else if (value is UObj)
+			{
+				output.Write(((UObj)value).ToXmlString());
 			}
 			else {
 				base.Serialize(name, value, output);

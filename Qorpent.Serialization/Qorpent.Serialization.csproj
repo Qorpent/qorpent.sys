@@ -158,6 +158,10 @@
     <Compile Include="Serialization\XmlToJsonConverter.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Uson\UObj.cs" />
+    <Compile Include="Uson\UObjMode.cs" />
+    <Compile Include="Uson\UObjSerializeMode.cs" />
+    <Compile Include="Uson\UObjSerializerSupport.cs" />
+    <Compile Include="Uson\UsonExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.XML" />

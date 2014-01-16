@@ -22,6 +22,7 @@ class A
 class A
     export x
     item a : test
+
 class B y=??x.a
 ";
             var compiled = Compile(code).Get("B").Compiled;

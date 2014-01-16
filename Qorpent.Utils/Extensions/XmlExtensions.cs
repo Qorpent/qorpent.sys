@@ -496,6 +496,16 @@ namespace Qorpent.Utils.Extensions {
 			/// 	Собственное значение элемента
 			/// </summary>
 			public string Value { get; set; }
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <returns></returns>
+			public string GetEfficienValue()
+			{
+				if (!string.IsNullOrWhiteSpace(Value)) return Value;
+				if (!string.IsNullOrWhiteSpace(Name)) return Name;
+				return Code;
+			}
 
 			/// <summary>
 			/// 	returns lexical ing
