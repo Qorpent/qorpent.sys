@@ -20,6 +20,7 @@
 using System.Xml.Linq;
 using Qorpent.IoC;
 using Qorpent.Json;
+using Qorpent.Uson;
 
 namespace Qorpent.Serialization {
 	/// <summary>
@@ -59,6 +60,11 @@ namespace Qorpent.Serialization {
                 return;
                 
             }
+			if (value is UObj)
+			{
+				output.Write(((UObj)value).ToJson());
+				return;
+			}
             base.Serialize(name, value, output, options);
         }
 	}

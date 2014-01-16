@@ -241,7 +241,7 @@ namespace Qorpent.Mvc.HttpHandler {
 		/// <param name="context"></param>
 		/// <returns></returns>
 		public static bool CanReturnNotModifiedStatus(IMvcContext context) {
-			if (context.IfModifiedSince.Year <= 1900) {
+			if (context.IfModifiedSince.Year <= 1900 && string.IsNullOrWhiteSpace(context.IfNoneMatch)) {
 				return false;
 			}
 			if (null != context.RenderDescriptor && context.RenderDescriptor.SupportNotModifiedState) {

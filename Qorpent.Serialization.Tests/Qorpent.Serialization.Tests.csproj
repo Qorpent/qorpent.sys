@@ -60,7 +60,7 @@
     <Compile Include="Selector_Tests\CssSelectorImplTests.cs" />
     <Compile Include="Selector_Tests\RegexSelectorImplTest.cs" />
     <Compile Include="serialization_set_test.cs" />
-    <Compile Include="Uson\FirstTest.cs" />
+    <Compile Include="Uson\UsonMainTest.cs" />
     <Compile Include="XHtml5XmlWriterTests.cs" />
     <Compile Include="XmlInclude\Bug_XmlInterpolationInContainer.cs" />
     <Compile Include="XmlInclude\XmlIncludeMainTest.cs" />

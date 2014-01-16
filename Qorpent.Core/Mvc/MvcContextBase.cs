@@ -39,7 +39,6 @@ namespace Qorpent.Mvc {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
 		}
 #endif
-
 		/// <summary>
 		/// 	Regex to retrieve mvc call info from url
 		/// </summary>
@@ -410,12 +409,12 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	Признак того, что контекст вызвал Redirect
+		///Признак того, что контекст вызвал Redirect
 		/// </summary>
 		public bool IsRedirected { get; set; }
 
 	    /// <summary>
-	    /// 	UserHostAddress property
+	    ///UserHostAddress property
 	    /// </summary>
 	    [SerializeNotNullOnly]
 	    public virtual string UserHostAddress { get; set; }

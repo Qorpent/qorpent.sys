@@ -57,6 +57,7 @@ namespace Qorpent {
 				}
 				return _isWeb.Value;
 			}
+			set { _isWeb = value; }
 		}
 		/// <summary>
 		/// Начало полного имения файла на замену
@@ -97,6 +98,7 @@ namespace Qorpent {
 				}
 				return _isWebUtility.Value;
 			}
+			set { _isWebUtility = value; }
 		}
 
 		/// <summary>
@@ -129,6 +131,7 @@ namespace Qorpent {
 				}
 				return _rootDirectory;
 			}
+			set { _rootDirectory = value; }
 		}
 
 		/// <summary>
@@ -148,6 +151,7 @@ namespace Qorpent {
 				}
 				return _binDirectory;
 			}
+			set { _binDirectory = value; }
 		}
 
 		/// <summary>
