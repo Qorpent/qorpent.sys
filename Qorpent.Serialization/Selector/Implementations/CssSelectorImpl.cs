@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -32,7 +31,6 @@ namespace Qorpent.Selector.Implementations {
         /// <returns></returns>
 		public IEnumerable<XElement> Select(XElement root, string query) {
 	        var xpath = BuildXpath(query);
-            Debug.Print(xpath);
 	        var result = root.XPathSelectElements(xpath);
             return result;
         }
