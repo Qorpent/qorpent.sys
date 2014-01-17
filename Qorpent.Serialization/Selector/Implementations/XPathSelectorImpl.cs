@@ -23,6 +23,11 @@ namespace Qorpent.Selector.Implementations {
 			if (query.StartsWith("/")) {
 				query = "." + query;
 			}
+
+            if (query.Equals("./")) {
+                return new[] {root};
+            }
+
 			// имеем только в виду что такой метод не годится
 			// если вдруг будем работать с контентом, включающим пространства имен
 			// в этом случае потребуется настройка менеджера пространств
