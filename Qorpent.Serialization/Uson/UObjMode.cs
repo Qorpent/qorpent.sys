@@ -20,5 +20,9 @@ namespace Qorpent.Uson
 		/// Информация об исходном типе
 		/// </summary>
 		Fake = 2,
+		/// <summary>
+		/// Value handler
+		/// </summary>
+		Value = 4,
 	}
 }

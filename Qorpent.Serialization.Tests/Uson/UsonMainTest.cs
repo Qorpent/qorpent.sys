@@ -43,6 +43,30 @@ namespace Qorpent.Serialization.Tests.Uson
 		}
 
 		[Test]
+		public void FromDictionary()
+		{
+			var x = new Dictionary<object, object> {{1, 2}, {"x", false}, {"z", "ccc"}}.ToUson();
+			Console.WriteLine(x.ToJson());
+			Assert.AreEqual(@"{""1"":2,""x"":false,""z"":""ccc""}",x.ToJson());
+		}
+
+		[Test]
+		public void FromJson()
+		{
+			var x = "{\"x\":23,\"y\":\"a\"}".ToUson();
+			Console.WriteLine(x.ToJson());
+			Assert.AreEqual("{\"x\":23,\"y\":\"a\"}",x.ToJson());
+		}
+
+		[Test]
+		public void Complex()
+		{
+			var uobj = new {x = "{\"y\":1}"}.ToUson();
+			Console.WriteLine(uobj.ToJson());
+			Assert.AreEqual(@"{""x"":{""y"":1}}",uobj.ToJson());
+		}
+
+		[Test]
 		public void ArrayByIndexTest()
 		{
 			dynamic uobj = new UObj();

@@ -92,7 +92,7 @@ namespace Qorpent.Uson
 		public string ToJson(UObjSerializeMode mode = UObjSerializeMode.None)
 		{
 			var sw = new StringWriter();
-			UObjSerializerSupport.ToJson(this,sw,mode);
+			UsonExtensions.ToJson(this,sw,mode);
 			return sw.ToString();
 		}
 		/// <summary>
@@ -131,7 +131,7 @@ namespace Qorpent.Uson
 		/// <returns></returns>
 		public void WriteXml(XmlWriter writer, UObjSerializeMode mode = UObjSerializeMode.None)
 		{
-			UObjSerializerSupport.WriteXml(this, writer, mode);
+			UsonExtensions.WriteXml(this, writer, mode);
 		}
 
 
