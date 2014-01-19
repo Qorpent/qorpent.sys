@@ -211,7 +211,7 @@ namespace Qorpent.Uson
 			{
 				var s = obj as string;
 				if (s == "0") return 0m;
-				var dec = s.ToDecimal();
+				var dec = s.ToDecimal(true);
 				if (dec != 0)
 				{
 					return dec;
