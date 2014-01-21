@@ -60,6 +60,15 @@ namespace Qorpent.Mvc {
 
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public string ApplicationName
+		{
+			get { return _applicationName ?? Application.ApplicationName; }
+			set { _applicationName = value; }
+		}
+
+		/// <summary>
 		/// Обеспечивает признак выходящего запроса - место расположения файла
 		/// </summary>
 		public abstract string FileDisposition { get; set; }
@@ -478,6 +487,8 @@ namespace Qorpent.Mvc {
 		public abstract void WriteOutBytes(byte[] data);
 
 		private bool _isbinded = false;
+		private string _applicationName;
+
 		/// <summary>
 		/// Выполнить настройку действия на контекст
 		/// </summary>
