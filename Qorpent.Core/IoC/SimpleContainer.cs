@@ -140,6 +140,10 @@ namespace Qorpent.IoC {
 		/// </summary>
 		/// <param name="component"> </param>
 		public void Unregister(IComponentDefinition component) {
+            if (component == null) return; // hack:
+		    
+
+
 			if (!_typemap.ContainsKey(component.ServiceType)) {
 				return;
 			}
@@ -274,9 +278,11 @@ namespace Qorpent.IoC {
 		/// <exception cref="NotImplementedException"></exception>
 		/// <remarks>
 		/// </remarks>
-		public IComponentDefinition FindComponent(Type type, string name) {
-			throw new NotImplementedException();
-		}
+		public IComponentDefinition FindComponent(Type type, string name)
+		{
+		    return null;  // hack
+        
+        }
 
 
 		private bool PrepareResolvedObject(ContainerContext context, out object o1) {
