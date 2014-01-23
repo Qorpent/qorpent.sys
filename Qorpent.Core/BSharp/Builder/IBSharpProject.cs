@@ -135,5 +135,11 @@ namespace Qorpent.BSharp.Builder {
 		/// </summary>
 		/// <returns></returns>
 		string GetLogDirectory();
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="target"></param>
+	    IBSharpProject SafeOverrideProject(IBSharpProject target);
 	}
 }

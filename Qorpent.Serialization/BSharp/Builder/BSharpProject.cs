@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml.Linq;
 using Qorpent.Config;
 using Qorpent.Log;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Builder {
 	/// <summary>
@@ -19,6 +20,36 @@ namespace Qorpent.BSharp.Builder {
             Targets = new BSharpBuilderTargets();
             Extensions = new List<string>();
         }
+
+		private static string[] overrideAttributes = new[]
+			{
+				OUTPUT_ATTRIBUTES,
+				MAIN_OUTPUT_DIRECTORY,
+				ROOT_DIRECTORY,
+				GENERATE_SRC_PKG,
+				GENERATE_LIB_PKG,
+				GENERATE_JSON_MODULE,
+				SRC_PKG_NAME,
+				LIB_PKG_NAME,
+				GENERATE_GRAPH,
+				JSON_MODULE_NAME,
+				CONDITIONS
+			};
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="target"></param>
+		public IBSharpProject SafeOverrideProject(IBSharpProject target)
+		{
+			foreach (var overrideAttribute in overrideAttributes)
+			{
+				if (options.ContainsKey(overrideAttribute) && options[overrideAttribute].ToBool())
+				{
+					target.Set(overrideAttribute,options[overrideAttribute]);
+				}
+			}
+			return target;
+		}
 
 		private const string TARGET_NAMES = "target_names";
 		private const string FULLY_QUALIFIED = "fully_qualified";

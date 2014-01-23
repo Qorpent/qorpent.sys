@@ -200,40 +200,60 @@ namespace Qorpent.BSharp {
 					yield return def;
 				}else if (e.Name.LocalName == BSharpSyntax.Generator)
 				{
-
-					var def = new BSharpClass(CurrentBuildContext) { Source = e, Name = e.Attr("code"), Namespace = ns ?? string.Empty };
+					var code = "gen" + Guid.NewGuid().ToString().Replace("-", "");
+					e.SetAttributeValue("classCode",e.Attr("code"));
+					e.SetAttributeValue("className",e.Attr("name"));
+					e.SetAttributeValue("code",code);
+					var def = new BSharpClass(CurrentBuildContext) { Source = e, Name = code, Namespace = ns ?? string.Empty };
 					def.Set(BSharpClassAttributes.Generator);
 					yield return def;
 				}
-				else {
-					var selfcode = e.Attr("code");
-					var __ns = ns ?? string.Empty;
-					if (selfcode.Contains(".")) {
-						var lastdot = selfcode.LastIndexOf('.');
-						var _nsadd = selfcode.Substring(0, lastdot);
-						selfcode = selfcode.Substring(lastdot+1);
-						if (string.IsNullOrWhiteSpace(__ns)) {
-							__ns = _nsadd;
-						}
-						else {
-							__ns = __ns + "." + _nsadd;
-						}
-					}
-					var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = selfcode, Namespace = __ns};
-					if (null != def.Source.Attribute("_file")) {
-						def.Source.SetAttributeValue("_dir",Path.GetDirectoryName(def.Source.Attr("_file")).Replace("\\","/"));
-					}
-                    if (!IsOverrideMatch(def)) continue;
-					SetupInitialOrphanState(e, def);
-					ParseImports(e, def);
-					ParseCompoundElements(e, def);
+				else
+				{
+					var def = ReadSingleClassSource(e, ns);
 
 					yield return def;
 				}
 			}
 		}
 
-        private bool IsOverrideMatch(BSharpClass def)
+		/// <summary>
+		/// Считать исходный 
+		/// </summary>
+		/// <param name="e"></param>
+		/// <param name="ns"></param>
+		/// <returns></returns>
+		public IBSharpClass ReadSingleClassSource(XElement e, string ns)
+		{
+			var selfcode = e.Attr("code");
+			var __ns = ns ?? string.Empty;
+			if (selfcode.Contains("."))
+			{
+				var lastdot = selfcode.LastIndexOf('.');
+				var _nsadd = selfcode.Substring(0, lastdot);
+				selfcode = selfcode.Substring(lastdot + 1);
+				if (string.IsNullOrWhiteSpace(__ns))
+				{
+					__ns = _nsadd;
+				}
+				else
+				{
+					__ns = __ns + "." + _nsadd;
+				}
+			}
+			var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = selfcode, Namespace = __ns};
+			if (null != def.Source.Attribute("_file"))
+			{
+				def.Source.SetAttributeValue("_dir", Path.GetDirectoryName(def.Source.Attr("_file")).Replace("\\", "/"));
+			}
+			if (!IsOverrideMatch(def)) return def;
+			SetupInitialOrphanState(e, def);
+			ParseImports(e, def);
+			ParseCompoundElements(e, def);
+			return def;
+		}
+
+		private bool IsOverrideMatch(BSharpClass def)
         {
             if (def.Source.Name.LocalName == BSharpSyntax.ClassOverrideKeyword || def.Source.Name.LocalName == BSharpSyntax.ClassExtensionKeyword)
             {

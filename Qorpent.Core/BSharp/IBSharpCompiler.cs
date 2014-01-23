@@ -39,5 +39,13 @@ namespace Qorpent.BSharp {
 	    /// <param name="context"></param>
 	    /// <param name="phase"></param>
 	    void CallExtensions(IBSharpClass cls, IBSharpContext context, BSharpCompilePhase phase);
+
+		/// <summary>
+		/// Считать исходный 
+		/// </summary>
+		/// <param name="e"></param>
+		/// <param name="ns"></param>
+		/// <returns></returns>
+		IBSharpClass ReadSingleClassSource(XElement e, string ns);
 	}
 }

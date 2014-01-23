@@ -106,7 +106,7 @@ namespace Qorpent.BSharp.Builder {
 			}
 			else {
 				Log.Trace("start compile projects");
-				_realproject = CompileRealProject();
+				_realproject = Project.SafeOverrideProject( CompileRealProject());
 				_realproject.SetParent(Project);
 				Project = _realproject;
 				PrepareTasksFromProject(_realproject);
