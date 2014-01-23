@@ -130,8 +130,8 @@ namespace Qorpent.BSharp {
 		protected virtual IBSharpContext BuildIndex(IEnumerable<XElement> sources) {
 			CurrentBuildContext = new BSharpContext(this);
 			var baseindex = IndexizeRawClasses(sources);
-			
 			CurrentBuildContext.Setup(baseindex);
+			CurrentBuildContext.ExecuteGenerators();
 			CurrentBuildContext.Build();
 			return CurrentBuildContext;
 		}
@@ -193,6 +193,17 @@ namespace Qorpent.BSharp {
 					foreach (IBSharpClass e_ in IndexizeRawClasses(e, _ns)) {
 						yield return e_;
 					}
+				}else if (e.Name.LocalName == BSharpSyntax.Dataset)
+				{
+					var def = new BSharpClass(CurrentBuildContext) { Source = e, Name = BSharpSyntax.DatasetClassCodePrefix+e.Attr("code"), Namespace = ns ?? string.Empty };
+					def.Set(BSharpClassAttributes.Dataset);
+					yield return def;
+				}else if (e.Name.LocalName == BSharpSyntax.Generator)
+				{
+
+					var def = new BSharpClass(CurrentBuildContext) { Source = e, Name = e.Attr("code"), Namespace = ns ?? string.Empty };
+					def.Set(BSharpClassAttributes.Generator);
+					yield return def;
 				}
 				else {
 					var selfcode = e.Attr("code");

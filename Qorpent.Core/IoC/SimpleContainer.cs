@@ -160,6 +160,15 @@ namespace Qorpent.IoC {
 		public void CleanUp() {}
 
 		/// <summary>
+		/// ¬рем€ последнего изменени€ 
+		/// </summary>
+		public DateTime TimeStamp
+		{
+			get { return _timeStamp; }
+			private set { _timeStamp = value; }
+		}
+
+		/// <summary>
 		/// 	Get all registered components
 		/// </summary>
 		/// <returns> </returns>
@@ -178,6 +187,14 @@ namespace Qorpent.IoC {
 		/// <returns> </returns>
 		public IContainerLoader GetLoader() {
 			return new EmptyLoader();
+		}
+
+		/// <summary>
+		/// ”станавливает признак обновлени€ версии локального контейнера
+		/// </summary>
+		public void Upgrade()
+		{
+			this.TimeStamp = DateTime.Now;
 		}
 
 		/// <summary>
@@ -354,5 +371,6 @@ namespace Qorpent.IoC {
 
 		private readonly IList<IContainerExtension> _extensions = new List<IContainerExtension>();
 		private readonly IDictionary<Type, Type> _typemap = new Dictionary<Type, Type>();
+		private DateTime _timeStamp = DateTime.Now;
 	}
 }
