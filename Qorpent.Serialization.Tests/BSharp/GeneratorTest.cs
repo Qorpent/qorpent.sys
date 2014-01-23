@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp
 {
@@ -25,10 +26,9 @@ dataset dA
 	item _c=1
 	item _c=2
 	item _c=3
-generator gA
+generator 'cls${_c}' 'cls_n${_c}'
 	dataset dA
-	classCode = 'cls${_c}'
-	className = 'cls_n${_c}'
+	import X
 	x = '${_c}${_c}'
 ";
 			var result = Compile(code);
@@ -36,6 +36,9 @@ generator gA
 			Assert.NotNull(result.Get("cls1"));
 			Assert.NotNull(result.Get("cls2"));
 			Assert.NotNull(result.Get("cls3"));
+
+			Assert.AreEqual("3",result.Get("cls3").Compiled.Attr("y"));
+			Assert.AreEqual("33",result.Get("cls3").Compiled.Attr("x"));
 		}
 	}
 }

@@ -231,11 +231,7 @@ namespace Qorpent.BSharp {
 				}
 				
 				clselement.Add(generator.Elements());
-				var cls = new BSharpClass(this);
-				cls.Source = clselement;
-				cls.Name = clselement.Attr("code");
-				cls.Namespace = ns;
-				cls.Set(BSharpClassAttributes.Explicit);
+				var cls = Compiler.ReadSingleClassSource(clselement, ns);
 				RegisterClassInIndex(cls);
 			}
 		}
