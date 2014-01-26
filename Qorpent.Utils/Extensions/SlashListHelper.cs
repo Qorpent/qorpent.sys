@@ -24,7 +24,6 @@ namespace Qorpent.Utils.Extensions{
     /// <summary>
     /// Устаревший вспомогательный класс для разобра строк из Zeta
     /// </summary>
-    [Obsolete("zeta compatible")]
     public static class SlashListHelper{
 		/// <summary>
 		/// Преобразует строку в перечисление элементов

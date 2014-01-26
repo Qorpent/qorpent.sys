@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Uson
 {
@@ -49,6 +50,26 @@ namespace Qorpent.Uson
 				
 			}
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="uobj"></param>
+		/// <returns></returns>
+		public static implicit operator bool(UObj uobj)
+		{
+			if (null == uobj) return false;
+			if (uobj.UObjMode == UObjMode.Fake) return false;
+			if (uobj.UObjMode == UObjMode.Array) return uobj.Array!=null && uobj.Array.Count!=0;
+			if (uobj.UObjMode == UObjMode.Default) return true;
+			if (uobj.UObjMode == UObjMode.Value)
+			{
+				return uobj.Properties["__value"].ToBool();
+			}
+			return true;
+		}
+		
+
 		/// <summary>
 		/// 
 		/// </summary>
