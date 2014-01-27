@@ -140,6 +140,10 @@ namespace Qorpent.IoC {
 		/// </summary>
 		/// <param name="component"> </param>
 		public void Unregister(IComponentDefinition component) {
+            if (component == null) return; // hack:
+		    
+
+
 			if (!_typemap.ContainsKey(component.ServiceType)) {
 				return;
 			}
@@ -154,6 +158,15 @@ namespace Qorpent.IoC {
 		/// 	Call cleanup logic (pools, caches and so on to free memory) - not clean singletons and components
 		/// </summary>
 		public void CleanUp() {}
+
+		/// <summary>
+		/// ¬рем€ последнего изменени€ 
+		/// </summary>
+		public DateTime TimeStamp
+		{
+			get { return _timeStamp; }
+			private set { _timeStamp = value; }
+		}
 
 		/// <summary>
 		/// 	Get all registered components
@@ -174,6 +187,14 @@ namespace Qorpent.IoC {
 		/// <returns> </returns>
 		public IContainerLoader GetLoader() {
 			return new EmptyLoader();
+		}
+
+		/// <summary>
+		/// ”станавливает признак обновлени€ версии локального контейнера
+		/// </summary>
+		public void Upgrade()
+		{
+			this.TimeStamp = DateTime.Now;
 		}
 
 		/// <summary>
@@ -274,9 +295,11 @@ namespace Qorpent.IoC {
 		/// <exception cref="NotImplementedException"></exception>
 		/// <remarks>
 		/// </remarks>
-		public IComponentDefinition FindComponent(Type type, string name) {
-			throw new NotImplementedException();
-		}
+		public IComponentDefinition FindComponent(Type type, string name)
+		{
+		    return null;  // hack
+        
+        }
 
 
 		private bool PrepareResolvedObject(ContainerContext context, out object o1) {
@@ -348,5 +371,6 @@ namespace Qorpent.IoC {
 
 		private readonly IList<IContainerExtension> _extensions = new List<IContainerExtension>();
 		private readonly IDictionary<Type, Type> _typemap = new Dictionary<Type, Type>();
+		private DateTime _timeStamp = DateTime.Now;
 	}
 }

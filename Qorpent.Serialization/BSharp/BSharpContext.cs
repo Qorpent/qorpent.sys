@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Config;
 using Qorpent.LogicalExpressions;
+using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.LogicalExpressions;
 
@@ -31,6 +32,7 @@ namespace Qorpent.BSharp {
 			get { return Get<IDictionary<string, IBSharpClass>>(RAWCLASSES); }
 			set { Set(RAWCLASSES, value); }
 		}
+
 
 		/// <summary>
 		///     Классы с непроинициализированным наследованием
@@ -156,6 +158,133 @@ namespace Qorpent.BSharp {
 			return new IBSharpClass[] {};
 		}
 
+		/// <summary>
+		/// Выполняет генераторы, формируя дополнительные классы
+		/// </summary>
+		public void ExecuteGenerators()
+		{
+
+			var generators = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Generator)).ToArray();
+			foreach (var cls in generators)
+			{
+				RawClasses.Remove(cls.FullName);
+			}
+			foreach (var generator in generators)
+			{
+				ExecuteGenerator(generator);
+			}
+			foreach (var bSharpClass in RawClasses.Values.Where(_=>_.Is(BSharpClassAttributes.Dataset)).ToArray())
+			{
+				RawClasses.Remove(bSharpClass.FullName);
+			}
+		}
+
+		private void ExecuteGenerator(IBSharpClass generator)
+		{
+			ExecuteGenerator(new XElement(generator.Source),generator.Namespace);
+		}
+
+		XmlInterpolation genInt = new XmlInterpolation();
+
+		private void ExecuteGenerator(XElement generator, string ns)
+		{
+			var datasets = generator.Elements(BSharpSyntax.Dataset).ToArray();
+			var classCode = generator.Attr("classCode");
+			var className = generator.Attr("className");
+			var ca = generator.Attribute("classCode");
+			if (null != ca)
+			{
+				ca.Remove();
+				
+			}
+			var na = generator.Attribute("className");
+			if (null != na)
+			{
+				na.Remove();
+			}
+			
+			var resolvedDatasets = datasets.Select(_ => GetDataSet(_, ns).ToArray()).ToArray();
+			foreach (var dataset in datasets)
+			{
+				dataset.Remove();
+			}
+			var combinations = resolvedDatasets.Combine().ToArray();
+			foreach (var elementSet in combinations)
+			{
+				var clselement = new XElement(BSharpSyntax.Class);
+				clselement.SetAttributeValue("code",classCode);
+				clselement.SetAttributeValue("name",className);
+				foreach (var xElement in elementSet)
+				{
+					foreach (var a in xElement.Attributes())
+					{
+						clselement.SetAttributeValue(a.Name,a.Value);
+					}
+				}
+				genInt.Interpolate(clselement);
+				foreach (var a in generator.Attributes())
+				{
+					if (a.Name!="code" && a.Name!="name" && a.Name!="id")
+					{
+						clselement.SetAttributeValue(a.Name, a.Value);
+					}
+				}
+				
+				clselement.Add(generator.Elements());
+				var cls = Compiler.ReadSingleClassSource(clselement, ns);
+				RegisterClassInIndex(cls);
+			}
+		}
+
+		
+
+
+		private IEnumerable<XElement> GetDataSet(string code, string ns)
+		{
+			var realcode = BSharpSyntax.DatasetClassCodePrefix + code;
+			var targetcls = Get(realcode, ns);
+			return GetDataSet(targetcls.Source, targetcls.Namespace);
+		}
+
+		private IEnumerable<XElement> GetDataSet(XElement source, string ns)
+		{
+
+			
+
+			foreach (var attr in source.Attributes())
+			{
+				if (attr.Name == BSharpSyntax.DatasetImport)
+				{
+					foreach (var e in GetDataSet(attr.Value,ns))
+					{
+						yield return e;
+					}
+				}
+
+				if (attr.Name=="code" && string.IsNullOrWhiteSpace(source.Attr(BSharpSyntax.DatasetImport)) && source.Parent.Name.LocalName==BSharpSyntax.Generator)
+				{
+					foreach (var e in GetDataSet(attr.Value, ns))
+					{
+						yield return e;
+					}
+				}
+			}
+
+			foreach (var element in source.Elements())
+			{
+				if (element.Name == BSharpSyntax.DatasetImport)
+				{
+					foreach (var e in GetDataSet(element.Attr("code"), ns))
+					{
+						yield return e;
+					}
+				}else if (element.Name == BSharpSyntax.DatasetItem)
+				{
+					yield return element;
+				}
+			}
+		}
+
 		private void BuildDictionaryIndex() {
 			Dictionaries = Dictionaries ?? new Dictionary<string, IList<ExportRecord>>();
 			foreach (var cls in Working.Where(_ => _.Is(BSharpClassAttributes.RequireDictionaryRegistration))) {
@@ -232,18 +361,25 @@ namespace Qorpent.BSharp {
 				Errors = new List<BSharpError>();
 			}
 			foreach (var cls in rawclasses) {
-				if (RawClasses.ContainsKey(cls.FullName)) {
-					if (RawClasses[cls.FullName] != cls) {
-						Errors.Add(BSharpErrors.DuplicateClassNames(cls, RawClasses[cls.FullName]));
-					}
-				}
-				else {
-					RawClasses[cls.FullName] = cls;
-				}
+				RegisterClassInIndex(cls);
 			}
 		}
 
-		
+		private void RegisterClassInIndex(IBSharpClass cls)
+		{
+			if (RawClasses.ContainsKey(cls.FullName))
+			{
+				if (RawClasses[cls.FullName] != cls)
+				{
+					Errors.Add(BSharpErrors.DuplicateClassNames(cls, RawClasses[cls.FullName]));
+				}
+			}
+			else
+			{
+				RawClasses[cls.FullName] = cls;
+			}
+		}
+
 
 		/// <summary>
 		///     Присоединяет и склеивается с другим результатом

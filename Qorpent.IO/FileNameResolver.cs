@@ -278,7 +278,7 @@ namespace Qorpent.IO {
 					if (ndir.StartsWith("~/")) {
 						ndir = ndir.Substring(2);
 					}
-					var path = (Root + "/" + ndir).NormalizePath();
+					var path = ResolveStandardPath(ndir);
 					var pf = probefile;
 					if (pf.StartsWith("/")) {
 						pf = pf.Substring(1);
@@ -295,6 +295,32 @@ namespace Qorpent.IO {
 			}
 		}
 
+		private string ResolveStandardPath(string ndir)
+		{
+			var path = "";
+			if (ndir.StartsWith("@TMP@"))
+			{
+				path = (EnvironmentInfo.TmpDirectory + "/" + ndir.Substring(5));
+			}
+			else if (ndir.StartsWith("@LOG@"))
+			{
+				path = (EnvironmentInfo.LogDirectory + "/" + ndir.Substring(5));
+			}
+			else if (ndir.StartsWith("@BIN@"))
+			{
+				path = (EnvironmentInfo.BinDirectory + "/" + ndir.Substring(5));
+			}
+			else if (ndir.StartsWith("@CFG@"))
+			{
+				path = (EnvironmentInfo.ConfigDirectory + "/" + ndir.Substring(5));
+			}
+			else
+			{
+				path = Root + "/" + ndir;
+			}
+			return path.NormalizePath();
+		}
+
 		/// <summary>
 		/// 	Gets the single file.
 		/// </summary>
@@ -307,8 +333,9 @@ namespace Qorpent.IO {
 				if (0 != result.Count) {
 					break;
 				}
-				if (probefile.StartsWith("~/")) {
-					var path = Path.Combine(Root, probefile.Substring(2)).NormalizePath();
+				if (probefile.StartsWith("~/"))
+				{
+					var path = ResolveStandardPath(probefile.Substring(2));
 					query.UserLog.Debug("try " + path, this);
 					if (File.Exists(path) || Directory.Exists(path)) {
 						query.UserLog.Debug("existed", this);
@@ -321,7 +348,7 @@ namespace Qorpent.IO {
 					var path = (Root + "/" + dir).NormalizePath();
 					if (dir.StartsWith("~/"))
 					{
-						path = (Root + dir.Substring(1)).NormalizePath();
+						path = ResolveStandardPath(dir.Substring(2));
 					}
 					var probe = (path + "/" + probefile).NormalizePath();
 					query.UserLog.Debug("try " + probe, Root);
@@ -347,7 +374,7 @@ namespace Qorpent.IO {
 		private string ResolveBestPosiblePath(FileSearchResultType type, string dir, string file,
 		                                      IUserLog userLog) {
 			if (file.StartsWith("~/")) {
-				return AdaptFilePath(type,Path.Combine(Root, file.Substring(2)).NormalizePath());
+				return AdaptFilePath(type,Path.Combine(Root, ResolveStandardPath( file.Substring(2))).NormalizePath());
 			}
 			var path = "/" + dir + "/" + file;
 			var resolved = (Root + path).NormalizePath();

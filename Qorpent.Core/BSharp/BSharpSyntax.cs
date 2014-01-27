@@ -16,6 +16,29 @@ namespace Qorpent.BSharp {
 		/// Ключевое слово,обозначающее заголовок класса
 		/// </summary>
 		public const string Class = "class";
+
+		/// <summary>
+		/// Ключевое слово,обозначающее источник данных для генерации классов
+		/// </summary>
+		public const string Dataset = "dataset";
+		/// <summary>
+		/// Ключевое слово,обозначающее источник данных для генерации классов
+		/// </summary>
+		public const string DatasetImport = "ref";
+		/// <summary>
+		/// Ключевое слово,обозначающее источник данных для генерации классов
+		/// </summary>
+		public const string DatasetItem = "item";
+
+		/// <summary>
+		/// Префикс кода класса набора данных
+		/// </summary>
+		public const string DatasetClassCodePrefix = "__ds_";
+
+		/// <summary>
+		/// Ключевое слово,обозначающее генератор классов
+		/// </summary>
+		public const string Generator = "generator";
 		/// <summary>
 		/// Разделитель полного имени класса (путь) 
 		/// </summary>

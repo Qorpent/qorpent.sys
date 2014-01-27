@@ -4,8 +4,6 @@ using NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
-	
-	
 	[TestFixture]
 	public class IncludeTest : CompileTestBase {
 		[Test]

@@ -98,5 +98,9 @@ namespace Qorpent.BSharp {
 		/// <param name="basens"></param>
 		/// <returns></returns>
 		IEnumerable<IBSharpClass> ResolveAll(string query, string basens =null);
+		/// <summary>
+		/// Выполняет генераторы, формируя дополнительные классы
+		/// </summary>
+		void ExecuteGenerators();
 	}
 }

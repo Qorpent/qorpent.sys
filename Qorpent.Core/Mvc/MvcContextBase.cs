@@ -39,7 +39,6 @@ namespace Qorpent.Mvc {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
 		}
 #endif
-
 		/// <summary>
 		/// 	Regex to retrieve mvc call info from url
 		/// </summary>
@@ -59,6 +58,15 @@ namespace Qorpent.Mvc {
 			set { _factory = value; }
 		}
 
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public string ApplicationName
+		{
+			get { return _applicationName ?? Application.ApplicationName; }
+			set { _applicationName = value; }
+		}
 
 		/// <summary>
 		/// Обеспечивает признак выходящего запроса - место расположения файла
@@ -410,12 +418,12 @@ namespace Qorpent.Mvc {
 		}
 
 		/// <summary>
-		/// 	Признак того, что контекст вызвал Redirect
+		///Признак того, что контекст вызвал Redirect
 		/// </summary>
 		public bool IsRedirected { get; set; }
 
 	    /// <summary>
-	    /// 	UserHostAddress property
+	    ///UserHostAddress property
 	    /// </summary>
 	    [SerializeNotNullOnly]
 	    public virtual string UserHostAddress { get; set; }
@@ -479,6 +487,8 @@ namespace Qorpent.Mvc {
 		public abstract void WriteOutBytes(byte[] data);
 
 		private bool _isbinded = false;
+		private string _applicationName;
+
 		/// <summary>
 		/// Выполнить настройку действия на контекст
 		/// </summary>

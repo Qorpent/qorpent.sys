@@ -57,6 +57,7 @@ namespace Qorpent {
 				}
 				return _isWeb.Value;
 			}
+			set { _isWeb = value; }
 		}
 		/// <summary>
 		/// Начало полного имения файла на замену
@@ -97,6 +98,7 @@ namespace Qorpent {
 				}
 				return _isWebUtility.Value;
 			}
+			set { _isWebUtility = value; }
 		}
 
 		/// <summary>
@@ -129,6 +131,7 @@ namespace Qorpent {
 				}
 				return _rootDirectory;
 			}
+			set { _rootDirectory = Path.GetFullPath(value); }
 		}
 
 		/// <summary>
@@ -148,7 +151,61 @@ namespace Qorpent {
 				}
 				return _binDirectory;
 			}
+			set { _binDirectory = Path.GetFullPath(value); }
 		}
+		/// <summary>
+		/// Директория для конфигов
+		/// </summary>
+		public static string ConfigDirectory
+		{
+			get
+			{
+				if (null == _configDirectory)
+				{
+					lock (Sync)
+					{
+						if (IsWeb || IsWebUtility)
+						{
+							_configDirectory = Path.Combine(RootDirectory, ".config");
+						}
+						else
+						{
+							_configDirectory = AppDomain.CurrentDomain.BaseDirectory;
+						}
+					}
+				}
+				return _configDirectory;
+			}
+			set { _configDirectory = Path.GetFullPath( value); }
+		}
+
+
+		/// <summary>
+		/// Директория для временных файлов
+		/// </summary>
+		public static string TmpDirectory
+		{
+			get
+			{
+				if (null == _tmpDirectory)
+				{
+					lock (Sync)
+					{
+						if (IsWeb || IsWebUtility)
+						{
+							_tmpDirectory = Path.Combine(RootDirectory, ".tmp");
+						}
+						else
+						{
+							_tmpDirectory = AppDomain.CurrentDomain.BaseDirectory;
+						}
+					}
+				}
+				return _tmpDirectory;
+			}
+			set { _tmpDirectory = Path.GetFullPath(value); }
+		}
+
 
 		/// <summary>
 		/// 	Reset environment info due to some changes in environment
@@ -179,6 +236,36 @@ namespace Qorpent {
 
 
 		private static readonly IDictionary<string, string> ResolvedExeCache = new Dictionary<string, string>();
+		private static string _configDirectory;
+		private static string _tmpDirectory;
+		private static string _logDirectory;
+
+		/// <summary>
+		/// Директория для лог
+		/// </summary>
+		public static string LogDirectory
+		{
+			get
+			{
+				if (null == _logDirectory)
+				{
+					lock (Sync)
+					{
+						if (IsWeb || IsWebUtility)
+						{
+							_logDirectory = Path.Combine(RootDirectory, ".log");
+						}
+						else
+						{
+							_logDirectory = AppDomain.CurrentDomain.BaseDirectory;
+						}
+					}
+				}
+				return _logDirectory;
+			}
+			set { _logDirectory = Path.GetFullPath(value); }
+		}
+
 		/// <summary>
 		///Разрешает имя исполнимого файла с учетом параметров среды
 		/// </summary>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml;
 using Qorpent.Json;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Uson
 {
@@ -186,18 +187,41 @@ namespace Qorpent.Uson
 			}
 		}
 
-		
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="parent"></param>
+		/// <param name="noParseJson"></param>
 		/// <returns></returns>
-		public static object ToUson(object obj,UObj parent = null)
+		public static object ToUson(object obj,UObj parent = null, bool noParseJson = false)
 		{
-			if (obj == null || obj is string || obj.GetType().IsValueType)
+			if (obj is string && !noParseJson)
 			{
+				var s = obj.ToString().Trim();
+				if (s.StartsWith("{") && s.EndsWith("}"))
+				{
+					return new JsonParser().Parse(s).ToUson();
+				}
+			
+			}
+
+			if (obj is string)
+			{
+				var s = obj as string;
+				if (s == "0") return 0m;
+				var dec = s.ToDecimal(true);
+				if (dec != 0)
+				{
+					return dec;
+				}
+				return s;
+			}
+
+			if (obj == null || obj.GetType().IsValueType)
+			{
+
 				return obj;
 			}
 			var result = new UObj { Parent = parent, _srctype = obj.GetType()};
@@ -206,7 +230,7 @@ namespace Qorpent.Uson
 				result.UObjMode = (obj as UObj).UObjMode;
 				foreach (var p in ((UObj)obj).Properties)
 				{
-					result.Properties[p.Key] = ToUson(p.Value);
+					result.Properties[p.Key] = ToUson(p.Value,null,noParseJson);
 				}
 				return result;
 			}
@@ -216,23 +240,25 @@ namespace Qorpent.Uson
 				{
 					foreach (var p in ((JsonObject)obj).Properties)
 					{
-						result.Properties[p.Name.ToString()] = ToUson(p.Value);
-					}	
+						result.Properties[p.Name.Value] = ToUson(p.Value, null, noParseJson);
+					}
+					return result;
 				}
 				else if (obj is JsonArray)
 				{
 					foreach (var p in ((JsonObject)obj).Properties)
 					{
-						result.Properties[p.Name.ToString()] = ToUson(p.Value);
+						result.Properties[p.Value.ToString()] = ToUson(p.Value, null, noParseJson);
 					}
+					return result;
 				}else if (obj is JsonValue)
 				{
 					var jv = (JsonValue) obj;
-					if(jv.Type==JsonTokenType.String)return jv.Value;
+					if(jv.Type==JsonTokenType.String)return ToUson(jv.Value,null,noParseJson);
 					if(jv.Type==JsonTokenType.Number)return decimal.Parse( jv.Value);
 					if (jv.Type == JsonTokenType.Null) return null;
 					if (jv.Type == JsonTokenType.Bool) return Boolean.Parse(jv.Value);
-					return jv.Value;
+					return ToUson(jv.Value, null, noParseJson);
 				}
 				
 			}
@@ -241,14 +267,30 @@ namespace Qorpent.Uson
 				result.UObjMode = UObjMode.Array;
 				foreach (var item in ((IEnumerable)obj))
 				{
-					result.Array.Add(ToUson(item));
+					result.Array.Add(ToUson(item, null, noParseJson));
+				}
+			}else if (obj.GetType().Name.StartsWith("Dictionary"))
+			{
+				result.UObjMode = UObjMode.Default;
+				foreach (dynamic item in ((IEnumerable)obj))
+				{
+					result.Properties[item.Key.ToString()] = ToUson(item.Value);
+				}
+	
+			}else if (obj.GetType().Name.StartsWith("List"))
+			{
+				result.UObjMode = UObjMode.Array;
+				foreach (var item in ((IEnumerable)obj))
+				{
+					result.Array.Add(ToUson(item, null, noParseJson));
 				}
 			}
+
 			else
 			{
 				foreach (var p in SerializableItem.GetSerializableItems(obj))
 				{
-					result.Properties[p.Name] = ToUson(p.Value);
+					result.Properties[p.Name] = ToUson(p.Value, null, noParseJson);
 				}	
 			}
 			

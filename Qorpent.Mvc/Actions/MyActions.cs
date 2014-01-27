@@ -36,6 +36,11 @@ namespace Qorpent.Mvc.Actions {
 		/// 
 		/// </summary>
 	    [Bind] protected string Command;
+
+		/// <summary>
+		/// Устанавливается через IoC, если установлено, то использует 304 от времени последнего обновления IoC и имени
+		/// </summary>
+		public bool UseCache { get; set; }
 		/// <summary>
 		/// 	В защищенном режиме ищет доступные пользователю действия
 		/// </summary>
