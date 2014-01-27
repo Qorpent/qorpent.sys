@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Charts {
     /// <summary>
@@ -33,6 +34,14 @@ namespace Qorpent.Charts {
                 item.SetParentElement(this);
                 Children.Add(item);
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="items"></param>
+        public void AddRange(IEnumerable<C> items) {
+            items.ForEach(Add);
         }
     }
 }

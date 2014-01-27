@@ -55,7 +55,8 @@
             FusionChartType.MSCombiDY2D |
             FusionChartType.MSColumn3DLineDY |
             FusionChartType.StackedColumn3DLineDY |
-            FusionChartType.MSStackedColumn2DLineDY
+            FusionChartType.MSStackedColumn2DLineDY |
+            FusionChartType.MSStackedColumn2D
             
     }
 }

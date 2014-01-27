@@ -41,7 +41,7 @@ namespace Qorpent.Charts.FusionCharts {
             result.SetAttr(FusionChartApi.Chart_BorderColor, _chart.GetBorderColor());
             result.SetAttr(FusionChartApi.Chart_BorderThickness, _chart.GetBorderThickness() != 0 ? _chart.GetBorderThickness().ToString() : null);
             result.SetAttr(FusionChartApi.Chart_CanvasPadding, _chart.GetCavasPadding());
-
+            config.ForEach(_ => result.SetAttributeValue(_.Key, _.Value));
             SetAttrs(_chart, result, new[] {
                 FusionChartApi.Chart_LegendPosition,
                 FusionChartApi.Chart_FormatNumber,
@@ -91,11 +91,13 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="config"></param>
         /// <returns></returns>
         private XElement RenderDataset(IChartDataset dataset, IChartConfig config) {
-            return new XElement(FusionChartApi.Dataset, RenderDatasetSets(dataset, config))
+            var xml = new XElement(FusionChartApi.Dataset, RenderDatasetSets(dataset, config))
                 .SetAttr(FusionChartApi.Set_Color, dataset.GetColor())
                 .SetAttr(FusionChartApi.Dataset_SeriesName, dataset.GetSeriesName())
                 .SetAttr(FusionChartApi.Chart_AnchorRadius, dataset.GetAnchorRadius())
                 .SetAttr(FusionChartApi.Chart_AnchorSides, dataset.GetAnchorSides());
+            dataset.Where(_ => !_.Key.Equals("ElementChilds")).ForEach(_ => xml.SetAttributeValue(_.Key, _.Value));
+            return xml;
         }
         /// <summary>
         /// 

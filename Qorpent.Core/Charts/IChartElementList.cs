@@ -16,5 +16,10 @@ namespace Qorpent.Charts {
         /// </summary>
         /// <param name="item"></param>
         void Add(C item);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="items"></param>
+        void AddRange(IEnumerable<C> items);
     }
 }
