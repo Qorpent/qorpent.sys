@@ -1,9 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml.Linq;
 using Qorpent.Charts;
-using Qorpent.Dsl;
-using Qorpent.IoC;
-using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Renders {
     /// <summary>
@@ -11,10 +9,6 @@ namespace Qorpent.Mvc.Renders {
     /// </summary>
     [Render("chart")]
     public class ChartRender: RenderBase {
-
-        [Inject]
-        private IChartRender InternalRender { get; set; }
-
         /// <summary>
         /// Renders given context
         /// </summary>
@@ -49,7 +43,7 @@ namespace Qorpent.Mvc.Renders {
     myChart.set{7}Data($('#fc-data-{1}').text());
     myChart.render('{6}');
 // -->
-</script>", config.Type, id, config.Width, config.Height, config.Debug, datascript, container, config.DataType);
+</script>", config.Type, id, config.Width, config.Height, config.Debug, datascript.Replace("<", "&lt;"), container, config.DataType);
                 context.ContentType = "text/html";   
             }
 
@@ -72,67 +66,20 @@ namespace Qorpent.Mvc.Renders {
         }
 
         private IChartConfig PrepareChartConfig(IMvcContext context) {
-            var result = new ChartConfig();
-            result.Id =  context.Get("__id", DateTime.Now.Ticks).ToString();
-            result.Container =  context.Get("__container", string.Empty);
-            result.Width =  context.Get("__width", "400");
-            result.Height =  context.Get("__height", "300");
-            result.Debug =  context.Get("__debug", "0");
-            result.Type =  context.Get("__type", "Column2D");
-            result.Divlines = context.Get("__divlines", -1);
+            var result = new ChartConfig {
+                Id = context.Get("__id", DateTime.Now.Ticks).ToString(CultureInfo.InvariantCulture),
+                Container = context.Get("__container", string.Empty),
+                Width = context.Get("__width", "400"),
+                Height = context.Get("__height", "300"),
+                Debug = context.Get("__debug", "0"),
+                Type = context.Get("__type", "Column2D"),
+                Divlines = context.Get("__divlines", -1)
+            };
             var specAttrs = context.GetAll("fc");
             foreach (var attr in specAttrs) {
                 result.Set(attr.Key, attr.Value);
             }
             return result;
-        }
-
-        /// <summary>
-        /// Определяет тип графика (по-умолчанию Column2D)
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="datatype"></param>
-        /// <returns></returns>
-        private string ResolveChartType(IMvcContext context, string datatype = null) {
-            var type = context.Get("__charttype");
-
-            if (string.IsNullOrWhiteSpace(type)) {
-                if (null == datatype) datatype = ResolveRenderType(context);
-                XAttribute typeattr = null;
-                if (datatype == "xml") {
-                    typeattr = ((XElement)context.ActionResult).Attribute("charttype");
-                }
-                else if (datatype == "xmlstring") {
-                    typeattr = (XElement.Parse((string) context.ActionResult)).Attribute("charttype");
-                }
-                else if (datatype == "json") {
-                    typeattr = ResolveService<ISpecialXmlParser>("json.xml.parser").ParseXml((string)context.ActionResult).Attribute("charttype");
-                }
-                else if (datatype == "") {
-                    
-                }
-                else if (null != typeattr) {
-                    type = typeattr.Value;
-                }
-                else {
-                    
-                }
-
-            }
-            if (string.IsNullOrWhiteSpace(type)) {
-                type = "Column2D";
-            }
-            return type;
-        }
-
-        /// <summary>
-        /// Определяет тип рендера графика
-        /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        private string ResolveRenderType(IMvcContext context) {
-            return
-                (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("{")) ? "javascript" : "xml";
         }
 
         /// <summary>
@@ -143,36 +90,10 @@ namespace Qorpent.Mvc.Renders {
         /// <returns></returns>
         private string RenderDataScript(IMvcContext context, IChartConfig config) {
             if (context.ActionResult is XElement) {
-                
-            } else if (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("<")) {
-                
-            } else if (context.ActionResult is String && context.ActionResult.ToString().Trim().StartsWith("{")) {
-                
-            } else if (context.ActionResult is IChart) {
-                config.DataType ="XML";
-                var chart = context.ActionResult as IChart;
-                if (null != chart.Config) {
-                    foreach (var p in chart.Config) {
-                        config[p.Key] = p.Value;
-                    }
-                }
-
-                InternalRender.Initialize((IChart)context.ActionResult, config);
-                var xmlsrc = InternalRender.GenerateChartXmlSource(config);
-                var xml = xmlsrc.GenerateChartXml(config);
-
-                if (!string.IsNullOrWhiteSpace(context.Get("__padding"))) {
-                    xml.SetAttributeValue("canvasPadding", context.Get("__padding").ToInt());
-                }
-
-                xml = InternalRender.RefactorChartXml(xml, config);
-                return xml.ToString().Replace("<", "&lt;");
-            } else if (context.ActionResult is IChartSource) {
-                
-            } else if (context.ActionResult is IChartXmlSource) {
-                
-            } else {
-                
+                var xElement = context.ActionResult as XElement;
+                config.DataType = "XML";
+                config.Type = xElement.Attribute("dtype").Value;
+                return (context.ActionResult as XElement).ToString();
             }
 
             return string.Empty;
