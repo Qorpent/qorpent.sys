@@ -130,7 +130,7 @@ namespace Qorpent.Bxl {
 
 			if (options.HasFlag(BxlParserOptions.BSharp)) {
 				_root = CompileWithBSharp(options, _root);
-			}
+			}else
 
 			if (options.HasFlag(BxlParserOptions.PerformInterpolation)) {
 				_root = new XmlInterpolation().Interpolate(_root);
