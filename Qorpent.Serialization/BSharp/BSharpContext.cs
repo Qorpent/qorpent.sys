@@ -496,12 +496,12 @@ namespace Qorpent.BSharp {
 			if (_resolveclassCache.ContainsKey(key)) {
 				return _resolveclassCache[key];
 			}
-			IBSharpClass import = null;
+			IBSharpClass result = null;
 			if (!String.IsNullOrWhiteSpace(code)) {
 				if (code.Contains(BSharpSyntax.ClassPathDelimiter))
 				{
 					if (RawClasses.ContainsKey(code)) {
-						import = RawClasses[code];
+						result = RawClasses[code];
 					}
 				}
 				else if (ns.Contains(BSharpSyntax.ClassPathDelimiter))
@@ -511,7 +511,7 @@ namespace Qorpent.BSharp {
 						if (i == -1) {
 							var probe = code;
 							if (RawClasses.ContainsKey(probe)) {
-								import = RawClasses[probe];
+								result = RawClasses[probe];
 								break;
 							}
 						}
@@ -522,7 +522,7 @@ namespace Qorpent.BSharp {
 							}
 							probe += code;
 							if (RawClasses.ContainsKey(probe)) {
-								import = RawClasses[probe];
+								result = RawClasses[probe];
 								break;
 							}
 						}
@@ -534,21 +534,21 @@ namespace Qorpent.BSharp {
 					var probe = ns+"." + code;
 					if (RawClasses.ContainsKey(probe))
 					{
-						import = RawClasses[probe];
+						result = RawClasses[probe];
 					}
 					
 				}
 			}
-			if (null == import) {
-				if (RawClasses.ContainsKey(code))
+			if (null == result) {
+				if (null!=RawClasses && RawClasses.ContainsKey(code))
 				{
-					import = RawClasses[code];
+					result = RawClasses[code];
 				}
 			}
-			if (null != import) {
-				_resolveclassCache[key] = import;
+			if (null != result) {
+				_resolveclassCache[key] = result;
 			}
-			return import;
+			return result;
 		}
 		/// <summary>
 		/// Возвращает коллекцию классов по типу классов

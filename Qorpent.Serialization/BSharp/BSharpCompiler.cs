@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Bxl;
 using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Log;
@@ -81,7 +82,10 @@ namespace Qorpent.BSharp {
 		/// <param name="sources"></param>
 		/// <param name="preparedContext"></param>
 		/// <returns></returns>
-		public IBSharpContext Compile(IEnumerable<XElement> sources , IBSharpContext preparedContext = null) {
+		public IBSharpContext Compile(IEnumerable<XElement> sources , IBSharpContext preparedContext = null){
+			//if (this.DoProcessRequires){
+				sources = ProcessRequires(sources);
+			//}
 			var cfg = GetConfig();
 			if (cfg.SingleSource) {
 				return BuildBatch(sources,preparedContext);
@@ -97,6 +101,56 @@ namespace Qorpent.BSharp {
 				result.Merge(subresult);
 			}
 			return result;
+		}
+		/// <summary>
+		/// Опция для обработки директивы require  в исходных файлах
+		/// </summary>
+		public bool DoProcessRequires { get; set; }
+
+		private IEnumerable<XElement> ProcessRequires(IEnumerable<XElement> sources){
+			if (DoProcessRequires){
+				var filenames = sources.ToDictionary(_ => Path.GetFullPath(_.Describe().File).NormalizePath(), _ => _);
+				foreach (var src in filenames){
+					ProcessRequires(src.Value, src.Key, filenames);
+				}
+				return filenames.Values.ToArray();
+			}
+			else{
+				foreach (var src in sources){
+					var requires = src.Elements("requre").ToArray();
+					if (requires.Length != 0){
+						requires.Remove();
+						log.Warn("requre options in "+src.Describe().File+" ignored");
+					}
+				}
+				return sources;
+			}
+			
+		}
+		BxlParser requireBxl =new BxlParser();
+
+		private void ProcessRequires(XElement source,string filename, Dictionary<string, XElement> filenames){
+			var requires = source.Elements("requre").ToArray();
+			if (requires.Length != 0){
+				var dir = Path.GetDirectoryName(filename);
+				requires.Remove();
+				foreach (var require in requires){
+					var file = require.Attr("code")+".bxls";
+					
+					if (!Path.IsPathRooted(file)){
+						file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
+					} 
+					if(filenames.ContainsKey(file))continue;
+					if (File.Exists(file)){
+						var src = requireBxl.Parse(File.ReadAllText(file), file);
+						filenames[file] = src;
+						ProcessRequires(src, file, filenames);
+					}
+					else{
+						this.log.Error("cannot  find required module "+require.Attr("code")+" for "+source.Describe().File);
+					}
+				}
+			}
 		}
 
 		private IBSharpContext BuildSingle(XElement source) {
@@ -129,7 +183,7 @@ namespace Qorpent.BSharp {
 		/// <returns></returns>
 		protected virtual IBSharpContext BuildIndex(IEnumerable<XElement> sources) {
 			CurrentBuildContext = new BSharpContext(this);
-			var baseindex = IndexizeRawClasses(sources);
+			var baseindex = IndexizeRawClasses(sources).ToArray();
 			CurrentBuildContext.Setup(baseindex);
 			CurrentBuildContext.ExecuteGenerators();
 			CurrentBuildContext.Build();
@@ -211,8 +265,7 @@ namespace Qorpent.BSharp {
 				else
 				{
 					var def = ReadSingleClassSource(e, ns);
-
-					yield return def;
+					if(null!=def)yield return def;
 				}
 			}
 		}
@@ -246,7 +299,7 @@ namespace Qorpent.BSharp {
 			{
 				def.Source.SetAttributeValue("_dir", Path.GetDirectoryName(def.Source.Attr("_file")).Replace("\\", "/"));
 			}
-			if (!IsOverrideMatch(def)) return def;
+			if (!IsOverrideMatch(def)) return null;
 			SetupInitialOrphanState(e, def);
 			ParseImports(e, def);
 			ParseCompoundElements(e, def);
