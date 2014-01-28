@@ -1,5 +1,5 @@
+using System;
 using System.Xml.Linq;
-using Qorpent.Charts.FusionCharts;
 
 namespace Qorpent.Charts {
     /// <summary>
@@ -16,10 +16,7 @@ namespace Qorpent.Charts {
         /// <param name="chartConfig">Конфиг чарта</param>
         /// <returns>XML-представление чарата</returns>
         public XElement GenerateChartXml(IChartConfig chartConfig) {
-            var render = CreateChartRender(chartConfig);
-            var xml = render.GenerateChartXmlSource(chartConfig).GenerateChartXml(chartConfig);
-            xml = render.RefactorChartXml(xml,chartConfig);
-            return xml;
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -28,7 +25,7 @@ namespace Qorpent.Charts {
         /// <param name="chartConfig"></param>
         /// <returns></returns>
         protected virtual IChartRender CreateChartRender(IChartConfig chartConfig) {
-            return new FusionChartRender();
+            throw new NotSupportedException();
         }
         /// <summary>
         ///     Перечисление элементов
