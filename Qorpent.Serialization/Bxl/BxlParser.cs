@@ -188,6 +188,7 @@ namespace Qorpent.Bxl {
 				UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation)
 			};
 			var compiler = new BSharpCompiler();
+			compiler.DoProcessRequires = true;
 			compiler.Initialize(compileroptions);
 			var compileresult = compiler.Compile(new[] { result });
 			var newresult = new XElement("bsharp");
