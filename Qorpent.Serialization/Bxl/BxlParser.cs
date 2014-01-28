@@ -127,7 +127,9 @@ namespace Qorpent.Bxl {
 
 			if (_stack.IsNotEmpty())
 				throw new BxlException("invalid quotes or braces");
-
+			if (!options.HasFlag(BxlParserOptions.NoLexData)){
+				_root.SetAttr("_file", filename);
+			}
 			if (options.HasFlag(BxlParserOptions.BSharp)) {
 				_root = CompileWithBSharp(options, _root);
 			}else
@@ -185,7 +187,8 @@ namespace Qorpent.Bxl {
 
 		private static XElement CompileWithBSharp(BxlParserOptions options, XElement result) {
 			var compileroptions = new BSharpConfig {
-				UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation)
+				UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation),
+				SingleSource =  true
 			};
 			var compiler = new BSharpCompiler();
 			compiler.DoProcessRequires = true;

@@ -110,7 +110,7 @@ namespace Qorpent.BSharp {
 		private IEnumerable<XElement> ProcessRequires(IEnumerable<XElement> sources){
 			if (DoProcessRequires){
 				var filenames = sources.ToDictionary(_ => Path.GetFullPath(_.Describe().File).NormalizePath(), _ => _);
-				foreach (var src in filenames){
+				foreach (var src in filenames.ToArray()){
 					ProcessRequires(src.Value, src.Key, filenames);
 				}
 				return filenames.Values.ToArray();
@@ -130,7 +130,7 @@ namespace Qorpent.BSharp {
 		BxlParser requireBxl =new BxlParser();
 
 		private void ProcessRequires(XElement source,string filename, Dictionary<string, XElement> filenames){
-			var requires = source.Elements("requre").ToArray();
+			var requires = source.Elements(BSharpSyntax.Require).ToArray();
 			if (requires.Length != 0){
 				var dir = Path.GetDirectoryName(filename);
 				requires.Remove();

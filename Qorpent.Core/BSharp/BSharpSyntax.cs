@@ -201,5 +201,10 @@ namespace Qorpent.BSharp {
 		/// Признак внедряемого класса (не может использоваться самостоятельно, не включается отдельно в библиотеки)
 		/// </summary>
 		public const string EmbedAttribute = "embed";
+		/// <summary>
+		/// Элемент ссылки на другой файл в качестве "требуемого"
+		/// </summary>
+		public const string Require = "require";
+
 	}
 }

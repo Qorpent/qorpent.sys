@@ -185,7 +185,7 @@ namespace Qorpent.BSharp {
 		}
 
 		XmlInterpolation genInt = new XmlInterpolation();
-
+		private  int autogenIndex = 0;
 		private void ExecuteGenerator(XElement generator, string ns)
 		{
 			var datasets = generator.Elements(BSharpSyntax.Dataset).ToArray();
@@ -209,10 +209,23 @@ namespace Qorpent.BSharp {
 				dataset.Remove();
 			}
 			var combinations = resolvedDatasets.Combine().ToArray();
+			
 			foreach (var elementSet in combinations)
 			{
 				var clselement = new XElement(BSharpSyntax.Class);
-				clselement.SetAttributeValue("code",classCode);
+				var realcode = classCode;
+				if (string.IsNullOrWhiteSpace(realcode) || !realcode.Contains("${"))
+				{
+					if (string.IsNullOrWhiteSpace(realcode))
+					{
+						realcode = "auto_class_" + autogenIndex++;
+					}
+					else
+					{
+						realcode += "_" + autogenIndex++;
+					}
+				}
+				clselement.SetAttributeValue("code", realcode);
 				clselement.SetAttributeValue("name",className);
 				foreach (var xElement in elementSet)
 				{
@@ -239,10 +252,21 @@ namespace Qorpent.BSharp {
 		
 
 
-		private IEnumerable<XElement> GetDataSet(string code, string ns)
+		private IEnumerable<XElement> GetDataSet(string code, string ns, bool optional)
 		{
 			var realcode = BSharpSyntax.DatasetClassCodePrefix + code;
 			var targetcls = Get(realcode, ns);
+			// not existed optional dataset support
+			
+			if (null == targetcls ){
+				if (optional){
+					return new XElement[]{};
+				}
+				else{
+					throw new Exception("dataset " + ns + "." + code + " not found");
+
+				}
+			}
 			return GetDataSet(targetcls.Source, targetcls.Namespace);
 		}
 
@@ -255,7 +279,7 @@ namespace Qorpent.BSharp {
 			{
 				if (attr.Name == BSharpSyntax.DatasetImport)
 				{
-					foreach (var e in GetDataSet(attr.Value,ns))
+					foreach (var e in GetDataSet(attr.Value,ns,false))
 					{
 						yield return e;
 					}
@@ -263,7 +287,7 @@ namespace Qorpent.BSharp {
 
 				if (attr.Name=="code" && string.IsNullOrWhiteSpace(source.Attr(BSharpSyntax.DatasetImport)) && source.Parent.Name.LocalName==BSharpSyntax.Generator)
 				{
-					foreach (var e in GetDataSet(attr.Value, ns))
+					foreach (var e in GetDataSet(attr.Value, ns, source.Describe().Name == "optional" || source.Attr("optional").ToBool()))
 					{
 						yield return e;
 					}
@@ -274,7 +298,7 @@ namespace Qorpent.BSharp {
 			{
 				if (element.Name == BSharpSyntax.DatasetImport)
 				{
-					foreach (var e in GetDataSet(element.Attr("code"), ns))
+					foreach (var e in GetDataSet(element.Attr("code"), ns,element.Describe().Name=="optional"||element.Attr("optional").ToBool()))
 					{
 						yield return e;
 					}
