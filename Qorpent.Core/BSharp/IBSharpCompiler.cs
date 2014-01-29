@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
 using Qorpent.Config;
+using Qorpent.IoC;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -47,5 +48,11 @@ namespace Qorpent.BSharp {
 		/// <param name="ns"></param>
 		/// <returns></returns>
 		IBSharpClass ReadSingleClassSource(XElement e, string ns);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Inject]
+		IBSharpSqlAdapter SqlAdapter { get; set; }
 	}
 }

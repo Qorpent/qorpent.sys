@@ -18,6 +18,7 @@
     <Compile Include="AbstractCanvas\ICanvasPrimitive.cs" />
     <Compile Include="BSharp\BSharpCodeBuilder.cs" />
     <Compile Include="BSharp\BSharpErrors.cs" />
+    <Compile Include="BSharp\BSharpSqlAdapter.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderBase.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderDefaults.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderExtensionBase.cs" />
@@ -155,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -165,5 +167,4 @@
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
-  <ItemGroup />
 </Project>

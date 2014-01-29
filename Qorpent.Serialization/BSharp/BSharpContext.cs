@@ -173,7 +173,7 @@ namespace Qorpent.BSharp {
 			{
 				ExecuteGenerator(generator);
 			}
-			foreach (var bSharpClass in RawClasses.Values.Where(_=>_.Is(BSharpClassAttributes.Dataset)).ToArray())
+			foreach (var bSharpClass in RawClasses.Values.Where(_=>_.Is(BSharpClassAttributes.Dataset)||_.Is(BSharpClassAttributes.Connection)||_.Is(BSharpClassAttributes.Template)).ToArray())
 			{
 				RawClasses.Remove(bSharpClass.FullName);
 			}
@@ -183,21 +183,45 @@ namespace Qorpent.BSharp {
 		{
 			ExecuteGenerator(new XElement(generator.Source),generator.Namespace);
 		}
+		/// <summary>
+		/// Возвращает строку соединения
+		/// </summary>
+		/// <param name="code"></param>
+		/// <param name="mode"></param>
+		/// <param name="ns"></param>
+		/// <returns></returns>
+		private string GetConnectionString(string code, string mode, string ns){
+			var cls = GetConnection(mode, code, ns);
+			if (null == cls) return null;
+			return cls.Source.Attr(BSharpSyntax.ConnectionStringAttribute);
+		}
+		/// <summary>
+		/// Возвращает класс соединения
+		/// </summary>
+		/// <param name="mode"></param>
+		/// <param name="code"></param>
+		/// <param name="ns"></param>
+		/// <returns></returns>
+		private IBSharpClass GetConnection(string mode, string code, string ns){
+			return Get(BSharpSyntax.GenerateConnectionClassName(mode, code),ns);
+		}
 
 		XmlInterpolation genInt = new XmlInterpolation();
 		private static int autogenIndex = 0;
 		private void ExecuteGenerator(XElement generator, string ns)
 		{
 			var datasets = generator.Elements(BSharpSyntax.Dataset).ToArray();
-			var classCode = generator.Attr("classCode");
-			var className = generator.Attr("className");
-			var ca = generator.Attribute("classCode");
+			var classCode = generator.Attr(BSharpSyntax.GeneratorClassCodeAttribute);
+			var className = generator.Attr(BSharpSyntax.GeneratorClassNameAttribute);
+			var ca = generator.Attribute(BSharpSyntax.GeneratorClassCodeAttribute);
+
+
 			if (null != ca)
 			{
 				ca.Remove();
 				
 			}
-			var na = generator.Attribute("className");
+			var na = generator.Attribute(BSharpSyntax.GeneratorClassNameAttribute);
 			if (null != na)
 			{
 				na.Remove();
@@ -212,44 +236,39 @@ namespace Qorpent.BSharp {
 			
 			foreach (var elementSet in combinations)
 			{
-				var clselement = new XElement(BSharpSyntax.Class);
-				var realcode = classCode;
-				if (string.IsNullOrWhiteSpace(realcode) || !realcode.Contains("${"))
-				{
-					if (string.IsNullOrWhiteSpace(realcode))
-					{
-						realcode = "auto_class_" + autogenIndex++;
-					}
-					else
-					{
-						realcode += "_" + autogenIndex++;
-					}
-				}
-				clselement.SetAttributeValue("code",realcode);
-				clselement.SetAttributeValue("name",className);
-				foreach (var xElement in elementSet)
-				{
-					foreach (var a in xElement.Attributes())
-					{
-						clselement.SetAttributeValue(a.Name,a.Value);
-					}
-				}
-				genInt.Interpolate(clselement);
-				foreach (var a in generator.Attributes())
-				{
-					if (a.Name!="code" && a.Name!="name" && a.Name!="id")
-					{
-						clselement.SetAttributeValue(a.Name, a.Value);
-					}
-				}
-				
-				clselement.Add(generator.Elements());
-				var cls = Compiler.ReadSingleClassSource(clselement, ns);
-				RegisterClassInIndex(cls);
+				GenerateVariant(generator, ns, classCode, className, elementSet);
 			}
 		}
 
-		
+		private void GenerateVariant(XElement generator, string ns, string classCode, string className, XElement[] elementSet){
+			var clselement = new XElement(BSharpSyntax.Class);
+			var realcode = classCode;
+			if (string.IsNullOrWhiteSpace(realcode) || !realcode.Contains("${")){
+				if (string.IsNullOrWhiteSpace(realcode)){
+					realcode = "auto_class_" + autogenIndex++;
+				}
+				else{
+					realcode += "_" + autogenIndex++;
+				}
+			}
+			clselement.SetAttributeValue("code", realcode);
+			clselement.SetAttributeValue("name", className);
+			foreach (var xElement in elementSet){
+				foreach (var a in xElement.Attributes()){
+					clselement.SetAttributeValue(a.Name, a.Value);
+				}
+			}
+			genInt.Interpolate(clselement);
+			foreach (var a in generator.Attributes()){
+				if (a.Name != "code" && a.Name != "name" && a.Name != "id"){
+					clselement.SetAttributeValue(a.Name, a.Value);
+				}
+			}
+
+			clselement.Add(generator.Elements());
+			var cls = Compiler.ReadSingleClassSource(clselement, ns);
+			RegisterClassInIndex(cls);
+		}
 
 
 		private IEnumerable<XElement> GetDataSet(string code, string ns, bool optional)
@@ -270,9 +289,21 @@ namespace Qorpent.BSharp {
 			return GetDataSet(targetcls.Source, targetcls.Namespace);
 		}
 
-		private IEnumerable<XElement> GetDataSet(XElement source, string ns)
-		{
+		private IEnumerable<XElement> GetDataSet(XElement source, string ns){
 
+			var mode = source.Attr(BSharpSyntax.ConnecitonModeAttribute,"native");
+			if (mode != "native"){
+				if (mode == "sql"){
+
+					foreach (var item in GetSqlDataSet(source,ns)){
+						yield return item;
+
+					}
+				}
+				else{
+					throw new Exception("not defined mode "+mode);
+				}
+			}
 			
 
 			foreach (var attr in source.Attributes())
@@ -307,6 +338,49 @@ namespace Qorpent.BSharp {
 					yield return element;
 				}
 			}
+		}
+		/// <summary>
+		/// Считывает SQL-набор данных
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="ns"></param>
+		/// <returns></returns>
+		private IEnumerable<XElement> GetSqlDataSet(XElement source, string ns){
+			var connectionCode = source.Attr("connection","default");
+			var query = source.Attr("query");
+			if (query.StartsWith("#")){
+				query = GetTemplate(query.Substring(1), source, ns);
+			}
+			else{
+				query = InterpolateSingleString(source, query);
+			}
+			if (string.IsNullOrWhiteSpace(query)){
+				return new XElement[]{};
+			}
+			var connection = GetConnectionString(connectionCode, "sql", ns);
+			if (null == connection){
+				throw new Exception("sql connection with code "+connectionCode+" not found");
+			}
+			return Compiler.SqlAdapter.ExecuteReader(connection, query,BSharpSyntax.DatasetItem);
+		}
+		StringInterpolation templater = new StringInterpolation();
+		private string GetTemplate(string code, XElement source, string ns){
+			var template = Get(BSharpSyntax.GenerateTemplateClassName(code), ns);
+			if (null == template){
+				throw new Exception("template not found " + code);
+			} 
+			var templatestring = template.Source.Attr(BSharpSyntax.TemplateValueAttribute);
+			return InterpolateSingleString(source, templatestring);
+		}
+
+		private string InterpolateSingleString(XElement source, string templatestring){
+			var dict = new Dictionary<string, string>();
+			foreach (var a in source.Attributes()){
+				dict[a.Name.LocalName] = a.Value;
+			}
+
+			var result = templater.Interpolate(templatestring, dict);
+			return result;
 		}
 
 		private void BuildDictionaryIndex() {
@@ -393,9 +467,21 @@ namespace Qorpent.BSharp {
 		{
 			if (RawClasses.ContainsKey(cls.FullName))
 			{
-				if (RawClasses[cls.FullName] != cls)
-				{
-					Errors.Add(BSharpErrors.DuplicateClassNames(cls, RawClasses[cls.FullName]));
+				
+				if (RawClasses[cls.FullName] != cls){
+					var current = RawClasses[cls.FullName];
+					var currentPriority = current.Source.Attr(BSharpSyntax.PriorityAttribute).ToInt();
+					var givenPriority = cls.Source.Attr(BSharpSyntax.PriorityAttribute).ToInt();
+					if (givenPriority > currentPriority){
+						RawClasses[cls.FullName] = cls;
+					}
+					else{
+						//если же они совпадают, то значит это дублирующиеся классы
+						if (givenPriority == currentPriority){
+							Errors.Add(BSharpErrors.DuplicateClassNames(cls, RawClasses[cls.FullName]));
+						}
+					}
+					
 				}
 			}
 			else
@@ -629,7 +715,7 @@ namespace Qorpent.BSharp {
 			if (_built) return;
 			Overrides = RawClasses.Values.Where(
 				_ => _.Is(BSharpClassAttributes.Override))
-				.OrderBy(_=>_.Source.Attr(BSharpSyntax.ClassOverridePriorityAttribute).ToInt())
+				.OrderBy(_=>_.Source.Attr(BSharpSyntax.PriorityAttribute).ToInt())
 				.ToList();
 			Extensions = RawClasses.Values.Where(
 				_ => _.Is(BSharpClassAttributes.Extension))

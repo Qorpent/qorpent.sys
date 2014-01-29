@@ -107,6 +107,14 @@ namespace Qorpent.BSharp {
 		/// Признак класса - генератора
 		/// </summary>
 		Generator = 1<<23,
+		/// <summary>
+		/// Соединения
+		/// </summary>
+		Connection = 1<<24,
+		/// <summary>
+		/// Шаблоны
+		/// </summary>
+		Template = 1<<25,
 		
 	}
 }

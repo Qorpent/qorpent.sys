@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -221,8 +222,18 @@ namespace Qorpent.BSharp {
             
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		[Inject]
+		public IBSharpSqlAdapter SqlAdapter{
+			get { return _sqlAdapter ?? (_sqlAdapter = new BSharpSqlAdapter()); }
+			set { _sqlAdapter = value; }
+		}
 
-        LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
+
+		LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
+		private IBSharpSqlAdapter _sqlAdapter;
 
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns) {
 			foreach (XElement e in src.Elements()) {
@@ -254,13 +265,14 @@ namespace Qorpent.BSharp {
 					yield return def;
 				}else if (e.Name.LocalName == BSharpSyntax.Generator)
 				{
-					var code = "gen" + Guid.NewGuid().ToString().Replace("-", "");
-					e.SetAttributeValue("classCode",e.Attr("code"));
-					e.SetAttributeValue("className",e.Attr("name"));
-					e.SetAttributeValue("code",code);
-					var def = new BSharpClass(CurrentBuildContext) { Source = e, Name = code, Namespace = ns ?? string.Empty };
-					def.Set(BSharpClassAttributes.Generator);
-					yield return def;
+					yield return PrepareGenerator(ns, e);
+				}
+				else if (e.Name.LocalName == BSharpSyntax.Connection){
+					yield return PrepareConnection(ns, e);
+				}
+				else if (e.Name.LocalName == BSharpSyntax.Template)
+				{
+					yield return PrepareTemplate(ns, e);
 				}
 				else
 				{
@@ -268,6 +280,40 @@ namespace Qorpent.BSharp {
 					if(null!=def)yield return def;
 				}
 			}
+		}
+
+		private IBSharpClass PrepareTemplate(string ns, XElement e)
+		{
+			var _code = e.Attr(BSharpSyntax.ClassNameAttribute);
+			var code = BSharpSyntax.GenerateTemplateClassName( _code);
+			e.SetAttr(BSharpSyntax.ConnectionCodeAttribute, e.Attr("code"));
+			e.SetAttr(BSharpSyntax.ClassNameAttribute, code);
+			e.SetAttr(BSharpSyntax.TemplateValueAttribute, e.Value);
+			var def = new BSharpClass(CurrentBuildContext) { Source = e, Name = code, Namespace = ns ?? string.Empty };
+			def.Set(BSharpClassAttributes.Template);
+			return def;
+		}
+
+		private IBSharpClass PrepareConnection(string ns, XElement e){
+			var mode = e.Attr(BSharpSyntax.ConnecitonModeAttribute, "sql");
+			var _code = e.Attr(BSharpSyntax.ClassNameAttribute);
+			var code = BSharpSyntax.GenerateConnectionClassName(mode, _code);
+			e.SetAttr(BSharpSyntax.ConnectionCodeAttribute, e.Attr("code"));
+			e.SetAttr(BSharpSyntax.ClassNameAttribute, code);
+			e.SetAttr(BSharpSyntax.ConnectionStringAttribute, e.Value);
+			var def = new BSharpClass(CurrentBuildContext){Source = e, Name = code, Namespace = ns ?? string.Empty};
+			def.Set(BSharpClassAttributes.Connection);
+			return def;
+		}
+
+		private IBSharpClass PrepareGenerator(string ns, XElement e){
+			var code = "gen" + Guid.NewGuid().ToString().Replace("-", "");
+			e.SetAttributeValue(BSharpSyntax.GeneratorClassCodeAttribute, e.Attr("code"));
+			e.SetAttributeValue(BSharpSyntax.GeneratorClassNameAttribute, e.Attr("name"));
+			e.SetAttributeValue("code", code);
+			var def = new BSharpClass(CurrentBuildContext){Source = e, Name = code, Namespace = ns ?? string.Empty};
+			def.Set(BSharpClassAttributes.Generator);
+			return def;
 		}
 
 		/// <summary>

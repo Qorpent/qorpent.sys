@@ -63,11 +63,20 @@ namespace Qorpent.Utils.Extensions {
 		/// <returns></returns>
 		public static string ToSafePath(this string str){
 			var sb = new StringBuilder();
+			int cnt = 0;
+			bool wasletter = false;
 			foreach (var c in str)
 			{
-				if (c == ':' || c == '?' || c == '*' || c == '|' || c == '<' || c == '>')
+				if (c == '?' || c == '*' || c == '|' || c == '<' || c == '>')
 				{
 					sb.Append('_');
+				}else if (c == ':'){
+					if (wasletter && cnt == 1){
+						sb.Append(':');
+					}
+					else{
+						sb.Append('_');
+					}
 				}
 				else if (c == '"')
 				{
@@ -76,7 +85,9 @@ namespace Qorpent.Utils.Extensions {
 				else
 				{
 					sb.Append(c);
+					wasletter = true;
 				}
+				cnt++;
 			}
 			return sb.ToString();
 		}
