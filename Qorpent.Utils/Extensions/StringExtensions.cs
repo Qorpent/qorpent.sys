@@ -37,6 +37,49 @@ namespace Qorpent.Utils.Extensions {
 			get { return _helper; }
 			set { _helper = value; }
 		}
+		/// <summary>
+		/// Замещает символы, не совместимые с именем файла
+		/// </summary>
+		/// <param name="str"></param>
+		/// <returns></returns>
+		public static string ToSafeFileName(this string str){
+			var sb = new StringBuilder();
+			foreach (var c in str){
+				if (c == '/' || c == '\\' || c == ':' || c == '?' || c == '*' || c == '|' ||c=='<'||c=='>'){
+					sb.Append('_');
+				}else if (c == '"'){
+					sb.Append('\'');
+				}
+				else{
+					sb.Append(c);
+				}
+			}
+			return sb.ToString();
+		}
+		/// <summary>
+		/// Замещает символы, не совместимые с путем
+		/// </summary>
+		/// <param name="str"></param>
+		/// <returns></returns>
+		public static string ToSafePath(this string str){
+			var sb = new StringBuilder();
+			foreach (var c in str)
+			{
+				if (c == ':' || c == '?' || c == '*' || c == '|' || c == '<' || c == '>')
+				{
+					sb.Append('_');
+				}
+				else if (c == '"')
+				{
+					sb.Append('\'');
+				}
+				else
+				{
+					sb.Append(c);
+				}
+			}
+			return sb.ToString();
+		}
 
         /// <summary>
         ///     Проверяет, что исходная строка имеет хотя бы одно вхождение StartsWith

@@ -185,7 +185,7 @@ namespace Qorpent.BSharp {
 		}
 
 		XmlInterpolation genInt = new XmlInterpolation();
-		private  int autogenIndex = 0;
+		private static int autogenIndex = 0;
 		private void ExecuteGenerator(XElement generator, string ns)
 		{
 			var datasets = generator.Elements(BSharpSyntax.Dataset).ToArray();
@@ -225,7 +225,7 @@ namespace Qorpent.BSharp {
 						realcode += "_" + autogenIndex++;
 					}
 				}
-				clselement.SetAttributeValue("code", realcode);
+				clselement.SetAttributeValue("code",realcode);
 				clselement.SetAttributeValue("name",className);
 				foreach (var xElement in elementSet)
 				{
