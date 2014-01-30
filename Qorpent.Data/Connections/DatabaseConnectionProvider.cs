@@ -145,30 +145,11 @@ namespace Qorpent.Data.Connections {
 					}else {
 						return Activator.CreateInstance(component.ConnectionType, component.ConnectionString) as IDbConnection;
 					}
-				}else if(name.Contains(";")) { //full connection string
-					var connectionString = name;
-					if (connectionString.StartsWith("ProviderName"))
-					{
-						var parsematch = Regex.Match(connectionString, @"^ProviderName=([^;]+);([\s\S]+)$");
-						var providername = parsematch.Groups[1].Value;
-						var connstring = parsematch.Groups[2].Value;
-						if(providername.ToUpper()=="NPGSQL") {
-							if(File.Exists(Path.Combine(EnvironmentInfo.BinDirectory,"Npgsql.dll"))) {
-								return GetPostGresConnection(connstring);
-							}else {
-								throw new QorpentException("cannot connect to PostGres because Npgsql not exists in application");
-							}
-						}
-						var provider = System.Data.Common.DbProviderFactories.GetFactory(providername);
-						var result = provider.CreateConnection();
-						result.ConnectionString = connstring;
-						return result;
-					}
-					else {
-						return new SqlConnection(connectionString);
-					}
+				}else if(name.Contains(";")){
+					//full connection string
+					return DatabaseExtensions.CreateDatabaseConnecitonFromString(name);
 				}
-			    if (defaultConnectionString.IsNotEmpty())
+				if (defaultConnectionString.IsNotEmpty())
 			    {
 			        return new SqlConnection(defaultConnectionString);
 			    }
@@ -176,36 +157,7 @@ namespace Qorpent.Data.Connections {
 			}
 		}
 
-		private Assembly _npgsqlassembly = null;
-		private Type _npgsqlconnectiontype;
-
-		Assembly NpgSQLAssembly {
-			get {
-				if(null==_npgsqlassembly) {
-					_npgsqlassembly =
-						AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.ToLower().StartsWith("npgsql"));
-					if(null==_npgsqlassembly) {
-						_npgsqlassembly = Assembly.LoadFrom("Npgsql.dll");
-					}
-				}
-				return _npgsqlassembly;
-			}
-		}
-
-		Type NpgSQLConnectionType {
-			get {
-				if(_npgsqlconnectiontype==null) {
-					_npgsqlconnectiontype = NpgSQLAssembly.GetType("Npgsql.NpgsqlConnection");
-				}
-				return _npgsqlconnectiontype;
-			}
-		}
-
-		private IDbConnection GetPostGresConnection(string connstring) {
-			return (IDbConnection)Activator.CreateInstance(NpgSQLConnectionType, connstring);
-		}
-
-	    /// <summary>
+		/// <summary>
 	    /// Получить строку подключения по имени
 	    /// </summary>
 	    /// <param name="name"></param>

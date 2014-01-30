@@ -115,10 +115,7 @@ namespace Qorpent.BSharp {
 				) {
 				if (null == TargetClassName) {
 					TargetClassName = Name;
-					var name = flags.ToString() + "_" + Name +"_" +Source.Attr("name");
-					if (null != _context.Get(name, Namespace)) {
-						name += "_" + EXTCOUNTER++;
-					}
+					var name = flags.ToString() + "_" + Name +"_" +Source.Attr("name")+ "_" + EXTCOUNTER++;
 					Name = name;
 				}
 				_attributes = _attributes | BSharpClassAttributes.Explicit;

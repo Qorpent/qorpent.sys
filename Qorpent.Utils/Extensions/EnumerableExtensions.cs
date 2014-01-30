@@ -91,8 +91,8 @@ namespace Qorpent.Utils.Extensions {
 		/// <typeparam name="T"></typeparam>
 		/// <param name="_sources"></param>
 		/// <returns></returns>
-		public static T[][] Combine<T>(this IEnumerable<IEnumerable<T>> _sources)
-		{
+		public static T[][] Combine<T>(this IEnumerable<IEnumerable<T>> _sources){
+			_sources = _sources.Where(_ => _ != null && _.Count() != 0);
 			if(null==_sources) return new T[][] { };
 			var sources = _sources.ToArray();
 			if ( 0 == sources.Length) return new T[][] { };

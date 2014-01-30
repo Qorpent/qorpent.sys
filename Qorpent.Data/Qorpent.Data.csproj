@@ -22,11 +22,13 @@
     <Compile Include="REST\AddConnection.cs" />
     <Compile Include="REST\ConnectionsAction.cs" />
     <Compile Include="REST\RemoveConnection.cs" />
-    <None Include="*.import" />
+    <None Include="Qorpent.Core.import" />
+    <None Include="Qorpent.Utils.import" />
     <None Include="*.export" />
     <Compile Include="Connections\DatabaseConnectionProvider.cs" />
     <EmbeddedResource Include=".\**\*.*resource" />
-    <QorpentReference Include="*.import" />
+    <QorpentReference Include="Qorpent.Core.import" />
+    <QorpentReference Include="Qorpent.Utils.import" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Configuration" />
@@ -34,7 +36,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Utils.import" />
