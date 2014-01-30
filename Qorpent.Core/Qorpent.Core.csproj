@@ -101,6 +101,8 @@
     <Compile Include="Config\ConfigRenderType.cs" />
     <Compile Include="Config\DictionaryCompatibleConfig.cs" />
     <Compile Include="Config\IConfig.cs" />
+    <Compile Include="Config\TreeConfigBase.cs" />
+    <Compile Include="Config\TreeConfigBaseElementsList.cs" />
     <Compile Include="ConvertExtensions.cs" />
     <Compile Include="Data\DocumentStorageOptions.cs" />
     <Compile Include="Data\IDocumentStorage.cs" />
