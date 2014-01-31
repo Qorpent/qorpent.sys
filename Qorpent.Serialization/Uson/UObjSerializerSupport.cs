@@ -232,6 +232,10 @@ namespace Qorpent.Uson
 				{
 					result.Properties[p.Key] = ToUson(p.Value,null,noParseJson);
 				}
+				foreach (var p in ((UObj)obj).Array)
+				{
+					result.Array.Add(p);
+				}
 				return result;
 			}
 			if (obj is JsonItem)
