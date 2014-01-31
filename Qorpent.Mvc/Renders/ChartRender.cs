@@ -92,7 +92,7 @@ namespace Qorpent.Mvc.Renders {
             if (context.ActionResult is XElement) {
                 var xElement = context.ActionResult as XElement;
                 config.DataType = "XML";
-                config.Type = xElement.Attribute("dtype").Value;
+                config.Type = xElement.Attribute("graphtype").Value;
                 return (context.ActionResult as XElement).ToString();
             }
 
