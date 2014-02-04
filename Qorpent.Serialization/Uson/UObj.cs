@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Uson
 {
@@ -247,7 +248,17 @@ namespace Qorpent.Uson
 			}
 			return true;
 		}
-	
+
+	    
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+	    public UObj push(IEnumerable<object> args)
+	    {
+	       return  push((object[]) args.ToArray());
+	    }
 		/// <summary>
 		/// 
 		/// </summary>
