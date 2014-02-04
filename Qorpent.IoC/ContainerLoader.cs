@@ -274,15 +274,23 @@ namespace Qorpent.IoC {
 		/// </summary>
 		/// <param name="assembly"> </param>
 		/// <param name="requireManifest"> </param>
+		/// <param name="context"></param>
 		/// <returns> </returns>
-		public IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly, bool requireManifest = false) {
+		public IEnumerable<IComponentDefinition> LoadAssembly(Assembly assembly, bool requireManifest = false, object context=null) {
 			if (assembly == null) {
 				throw new ArgumentNullException("assembly");
 			}
+			//if assembly setupers exists - they will be called instead of auto-configuration
+			var initializers = assembly.GetTypes().Where(_ => null != _.GetCustomAttribute<ContainerInitializerAttribute>()).ToArray();
+			if (0 != initializers.Length){
+				return initializers.Select(_ => _.Create<IContainerInitializer>())
+					.SelectMany(_ => _.Setup(_container, context));
+				
+			}
 			var am = new AssemblyManifestDefinition(assembly, needExportAttribute: false);
 			var result = new List<IComponentDefinition>();
-			if (null != am.Descriptor || !requireManifest) {
-				foreach (var definition in am.ComponentDefinitions) {
+			if (null != am.Descriptor || !requireManifest){
+				foreach (var definition in am.ComponentDefinitions){
 					var component = definition.GetComponent();
 					_container.Register(component);
 					result.Add(component);

@@ -16,6 +16,7 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/IContainerSetup.cs
 #endregion
+
 namespace Qorpent.IoC {
 	/// <summary>
 	/// 	instances that will be called to additionally setup container after building

@@ -112,6 +112,8 @@
     <Compile Include="Graphs\Dot\BuilderExtensions.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
     <Compile Include="IoC\ComponentDefinitionWrapper.cs" />
+    <Compile Include="IoC\ContainerInitializerAttribute.cs" />
+    <Compile Include="IoC\IContainerInitializer.cs" />
     <Compile Include="IoC\IFactory.cs" />
     <Compile Include="IO\FileDescriptor.cs" />
     <Compile Include="IO\FileSearchOptions.cs" />
