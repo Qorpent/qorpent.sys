@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Config;
 using Qorpent.LogicalExpressions;
+using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.LogicalExpressions;
 
@@ -31,6 +32,7 @@ namespace Qorpent.BSharp {
 			get { return Get<IDictionary<string, IBSharpClass>>(RAWCLASSES); }
 			set { Set(RAWCLASSES, value); }
 		}
+
 
 		/// <summary>
 		///     Классы с непроинициализированным наследованием
@@ -156,6 +158,231 @@ namespace Qorpent.BSharp {
 			return new IBSharpClass[] {};
 		}
 
+		/// <summary>
+		/// Выполняет генераторы, формируя дополнительные классы
+		/// </summary>
+		public void ExecuteGenerators()
+		{
+
+			var generators = RawClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Generator)).ToArray();
+			foreach (var cls in generators)
+			{
+				RawClasses.Remove(cls.FullName);
+			}
+			foreach (var generator in generators)
+			{
+				ExecuteGenerator(generator);
+			}
+			foreach (var bSharpClass in RawClasses.Values.Where(_=>_.Is(BSharpClassAttributes.Dataset)||_.Is(BSharpClassAttributes.Connection)||_.Is(BSharpClassAttributes.Template)).ToArray())
+			{
+				RawClasses.Remove(bSharpClass.FullName);
+			}
+		}
+
+		private void ExecuteGenerator(IBSharpClass generator)
+		{
+			ExecuteGenerator(new XElement(generator.Source),generator.Namespace);
+		}
+		/// <summary>
+		/// Возвращает строку соединения
+		/// </summary>
+		/// <param name="code"></param>
+		/// <param name="mode"></param>
+		/// <param name="ns"></param>
+		/// <returns></returns>
+		private string GetConnectionString(string code, string mode, string ns){
+			var cls = GetConnection(mode, code, ns);
+			if (null == cls) return null;
+			return cls.Source.Attr(BSharpSyntax.ConnectionStringAttribute);
+		}
+		/// <summary>
+		/// Возвращает класс соединения
+		/// </summary>
+		/// <param name="mode"></param>
+		/// <param name="code"></param>
+		/// <param name="ns"></param>
+		/// <returns></returns>
+		private IBSharpClass GetConnection(string mode, string code, string ns){
+			return Get(BSharpSyntax.GenerateConnectionClassName(mode, code),ns);
+		}
+
+		XmlInterpolation genInt = new XmlInterpolation();
+		private static int autogenIndex = 0;
+		private void ExecuteGenerator(XElement generator, string ns)
+		{
+			var datasets = generator.Elements(BSharpSyntax.Dataset).ToArray();
+			var classCode = generator.Attr(BSharpSyntax.GeneratorClassCodeAttribute);
+			var className = generator.Attr(BSharpSyntax.GeneratorClassNameAttribute);
+			var ca = generator.Attribute(BSharpSyntax.GeneratorClassCodeAttribute);
+
+
+			if (null != ca)
+			{
+				ca.Remove();
+				
+			}
+			var na = generator.Attribute(BSharpSyntax.GeneratorClassNameAttribute);
+			if (null != na)
+			{
+				na.Remove();
+			}
+			
+			var resolvedDatasets = datasets.Select(_ => GetDataSet(_, ns).ToArray()).ToArray();
+			foreach (var dataset in datasets)
+			{
+				dataset.Remove();
+			}
+			var combinations = resolvedDatasets.Combine().ToArray();
+			
+			foreach (var elementSet in combinations)
+			{
+				GenerateVariant(generator, ns, classCode, className, elementSet);
+			}
+		}
+
+		private void GenerateVariant(XElement generator, string ns, string classCode, string className, XElement[] elementSet){
+			var clselement = new XElement(BSharpSyntax.Class);
+			var realcode = classCode;
+			if (string.IsNullOrWhiteSpace(realcode) || !realcode.Contains("${")){
+				if (string.IsNullOrWhiteSpace(realcode)){
+					realcode = "auto_class_" + autogenIndex++;
+				}
+				else{
+					realcode += "_" + autogenIndex++;
+				}
+			}
+			clselement.SetAttributeValue("code", realcode);
+			clselement.SetAttributeValue("name", className);
+			foreach (var xElement in elementSet){
+				foreach (var a in xElement.Attributes()){
+					clselement.SetAttributeValue(a.Name, a.Value);
+				}
+			}
+			genInt.Interpolate(clselement);
+			foreach (var a in generator.Attributes()){
+				if (a.Name != "code" && a.Name != "name" && a.Name != "id"){
+					clselement.SetAttributeValue(a.Name, a.Value);
+				}
+			}
+
+			clselement.Add(generator.Elements());
+			var cls = Compiler.ReadSingleClassSource(clselement, ns);
+			RegisterClassInIndex(cls);
+		}
+
+
+		private IEnumerable<XElement> GetDataSet(string code, string ns, bool optional)
+		{
+			var realcode = BSharpSyntax.DatasetClassCodePrefix + code;
+			var targetcls = Get(realcode, ns);
+			// not existed optional dataset support
+			
+			if (null == targetcls ){
+				if (optional){
+					return new XElement[]{};
+				}
+				else{
+					throw new Exception("dataset " + ns + "." + code + " not found");
+
+				}
+			}
+			return GetDataSet(targetcls.Source, targetcls.Namespace);
+		}
+
+		private IEnumerable<XElement> GetDataSet(XElement source, string ns){
+
+			var mode = source.Attr(BSharpSyntax.ConnecitonModeAttribute,"native");
+			if (mode != "native"){
+				if (mode == "sql"){
+
+					foreach (var item in GetSqlDataSet(source,ns)){
+						yield return item;
+
+					}
+				}
+				else{
+					throw new Exception("not defined mode "+mode);
+				}
+			}
+			
+
+			foreach (var attr in source.Attributes())
+			{
+				if (attr.Name == BSharpSyntax.DatasetImport)
+				{
+					foreach (var e in GetDataSet(attr.Value,ns,false))
+					{
+						yield return e;
+					}
+				}
+
+				if (attr.Name=="code" && string.IsNullOrWhiteSpace(source.Attr(BSharpSyntax.DatasetImport)) && source.Parent.Name.LocalName==BSharpSyntax.Generator)
+				{
+					foreach (var e in GetDataSet(attr.Value, ns, source.Describe().Name == "optional" || source.Attr("optional").ToBool()))
+					{
+						yield return e;
+					}
+				}
+			}
+
+			foreach (var element in source.Elements())
+			{
+				if (element.Name == BSharpSyntax.DatasetImport)
+				{
+					foreach (var e in GetDataSet(element.Attr("code"), ns,element.Describe().Name=="optional"||element.Attr("optional").ToBool()))
+					{
+						yield return e;
+					}
+				}else if (element.Name == BSharpSyntax.DatasetItem)
+				{
+					yield return element;
+				}
+			}
+		}
+		/// <summary>
+		/// Считывает SQL-набор данных
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="ns"></param>
+		/// <returns></returns>
+		private IEnumerable<XElement> GetSqlDataSet(XElement source, string ns){
+			var connectionCode = source.Attr("connection","default");
+			var query = source.Attr("query");
+			if (query.StartsWith("#")){
+				query = GetTemplate(query.Substring(1), source, ns);
+			}
+			else{
+				query = InterpolateSingleString(source, query);
+			}
+			if (string.IsNullOrWhiteSpace(query)){
+				return new XElement[]{};
+			}
+			var connection = GetConnectionString(connectionCode, "sql", ns);
+			if (null == connection){
+				throw new Exception("sql connection with code "+connectionCode+" not found");
+			}
+			return Compiler.SqlAdapter.ExecuteReader(connection, query,BSharpSyntax.DatasetItem);
+		}
+		StringInterpolation templater = new StringInterpolation();
+		private string GetTemplate(string code, XElement source, string ns){
+			var template = Get(BSharpSyntax.GenerateTemplateClassName(code), ns);
+			if (null == template){
+				throw new Exception("template not found " + code);
+			} 
+			var templatestring = template.Source.Attr(BSharpSyntax.TemplateValueAttribute);
+			return InterpolateSingleString(source, templatestring);
+		}
+
+		private string InterpolateSingleString(XElement source, string templatestring){
+			var dict = new Dictionary<string, string>();
+			foreach (var a in source.Attributes()){
+				dict[a.Name.LocalName] = a.Value;
+			}
+
+			var result = templater.Interpolate(templatestring, dict);
+			return result;
+		}
+
 		private void BuildDictionaryIndex() {
 			Dictionaries = Dictionaries ?? new Dictionary<string, IList<ExportRecord>>();
 			foreach (var cls in Working.Where(_ => _.Is(BSharpClassAttributes.RequireDictionaryRegistration))) {
@@ -232,18 +459,37 @@ namespace Qorpent.BSharp {
 				Errors = new List<BSharpError>();
 			}
 			foreach (var cls in rawclasses) {
-				if (RawClasses.ContainsKey(cls.FullName)) {
-					if (RawClasses[cls.FullName] != cls) {
-						Errors.Add(BSharpErrors.DuplicateClassNames(cls, RawClasses[cls.FullName]));
-					}
-				}
-				else {
-					RawClasses[cls.FullName] = cls;
-				}
+				RegisterClassInIndex(cls);
 			}
 		}
 
-		
+		private void RegisterClassInIndex(IBSharpClass cls)
+		{
+			if (RawClasses.ContainsKey(cls.FullName))
+			{
+				
+				if (RawClasses[cls.FullName] != cls){
+					var current = RawClasses[cls.FullName];
+					var currentPriority = current.Source.Attr(BSharpSyntax.PriorityAttribute).ToInt();
+					var givenPriority = cls.Source.Attr(BSharpSyntax.PriorityAttribute).ToInt();
+					if (givenPriority > currentPriority){
+						RawClasses[cls.FullName] = cls;
+					}
+					else{
+						//если же они совпадают, то значит это дублирующиеся классы
+						if (givenPriority == currentPriority){
+							Errors.Add(BSharpErrors.DuplicateClassNames(cls, RawClasses[cls.FullName]));
+						}
+					}
+					
+				}
+			}
+			else
+			{
+				RawClasses[cls.FullName] = cls;
+			}
+		}
+
 
 		/// <summary>
 		///     Присоединяет и склеивается с другим результатом
@@ -360,12 +606,12 @@ namespace Qorpent.BSharp {
 			if (_resolveclassCache.ContainsKey(key)) {
 				return _resolveclassCache[key];
 			}
-			IBSharpClass import = null;
+			IBSharpClass result = null;
 			if (!String.IsNullOrWhiteSpace(code)) {
 				if (code.Contains(BSharpSyntax.ClassPathDelimiter))
 				{
 					if (RawClasses.ContainsKey(code)) {
-						import = RawClasses[code];
+						result = RawClasses[code];
 					}
 				}
 				else if (ns.Contains(BSharpSyntax.ClassPathDelimiter))
@@ -375,7 +621,7 @@ namespace Qorpent.BSharp {
 						if (i == -1) {
 							var probe = code;
 							if (RawClasses.ContainsKey(probe)) {
-								import = RawClasses[probe];
+								result = RawClasses[probe];
 								break;
 							}
 						}
@@ -386,7 +632,7 @@ namespace Qorpent.BSharp {
 							}
 							probe += code;
 							if (RawClasses.ContainsKey(probe)) {
-								import = RawClasses[probe];
+								result = RawClasses[probe];
 								break;
 							}
 						}
@@ -398,21 +644,21 @@ namespace Qorpent.BSharp {
 					var probe = ns+"." + code;
 					if (RawClasses.ContainsKey(probe))
 					{
-						import = RawClasses[probe];
+						result = RawClasses[probe];
 					}
 					
 				}
 			}
-			if (null == import) {
-				if (RawClasses.ContainsKey(code))
+			if (null == result) {
+				if (null!=RawClasses && RawClasses.ContainsKey(code))
 				{
-					import = RawClasses[code];
+					result = RawClasses[code];
 				}
 			}
-			if (null != import) {
-				_resolveclassCache[key] = import;
+			if (null != result) {
+				_resolveclassCache[key] = result;
 			}
-			return import;
+			return result;
 		}
 		/// <summary>
 		/// Возвращает коллекцию классов по типу классов
@@ -469,7 +715,7 @@ namespace Qorpent.BSharp {
 			if (_built) return;
 			Overrides = RawClasses.Values.Where(
 				_ => _.Is(BSharpClassAttributes.Override))
-				.OrderBy(_=>_.Source.Attr(BSharpSyntax.ClassOverridePriorityAttribute).ToInt())
+				.OrderBy(_=>_.Source.Attr(BSharpSyntax.PriorityAttribute).ToInt())
 				.ToList();
 			Extensions = RawClasses.Values.Where(
 				_ => _.Is(BSharpClassAttributes.Extension))

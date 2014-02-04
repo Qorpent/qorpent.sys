@@ -267,6 +267,14 @@ namespace Qorpent.IoC {
 		}
 
 		/// <summary>
+		/// Устанавливает признак обновления версии локального контейнера
+		/// </summary>
+		public void Upgrade()
+		{
+			this.TimeStamp = DateTime.Now;
+		}
+
+		/// <summary>
 		/// 	registers extension for this container
 		/// </summary>
 		/// <param name="extension"> The extension. </param>
@@ -595,6 +603,15 @@ namespace Qorpent.IoC {
 			}
 			OutgoingCache.Clear();
 			Pool.Clear();
+		}
+
+		/// <summary>
+		/// Время последнего изменения 
+		/// </summary>
+		public DateTime TimeStamp
+		{
+			get { return _timeStamp; }
+			private set { _timeStamp = value; }
 		}
 
 
@@ -976,5 +993,6 @@ namespace Qorpent.IoC {
 			new Dictionary<Thread, Dictionary<object, IComponentDefinition>>();
 
 		private IUserLog _log;
+		private DateTime _timeStamp = DateTime.Now;
 	}
 }

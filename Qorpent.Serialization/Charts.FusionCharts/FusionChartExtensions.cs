@@ -35,24 +35,46 @@ namespace Qorpent.Charts.FusionCharts {
             return chart.Is(FusionChartGroupedType.Compination);
         }
         /// <summary>
+        ///     Признак того, что график мультисерийный
+        /// </summary>
+        /// <param name="fusionChartType">Тип графика</param>
+        /// <returns>Признак того, что график мультисерийный</returns>
+        public static bool IsMultiserial(this FusionChartType fusionChartType) {
+            return fusionChartType.Is(FusionChartGroupedType.MultiSeries);
+        }
+        /// <summary>
+        ///     Признак того, что график односерийный
+        /// </summary>
+        /// <param name="fusionChartType">Тип графика</param>
+        /// <returns>Признак того, что график односерийный</returns>
+        public static bool IsSingleSeries(this FusionChartType fusionChartType) {
+            return fusionChartType.Is(FusionChartGroupedType.SingleSeries);
+        }
+        /// <summary>
+        ///     Признак того, что график относится к комбинированным
+        /// </summary>
+        /// <param name="fusionChartType">Тип графика</param>
+        /// <returns>Признак того, что график комбинированный</returns>
+        public static bool IsCombined(this FusionChartType fusionChartType) {
+            return fusionChartType.Is(FusionChartGroupedType.Compination);
+        }
+        /// <summary>
+        ///     Проверить, что тип графика попадает в указанную группу
+        /// </summary>
+        /// <param name="fusionChartType">Тип графика</param>
+        /// <param name="groupedType">Тип группы</param>
+        /// <returns>Признак того, что представление графика попадает в указанную группу</returns>
+        public static bool Is(this FusionChartType fusionChartType, FusionChartGroupedType groupedType) {
+            return (fusionChartType & (FusionChartType)groupedType) == fusionChartType;
+        }
+        /// <summary>
         ///     Проверить, что представление графика попадает в указанную группу
         /// </summary>
         /// <param name="chart">Представление графика</param>
         /// <param name="groupedType">Тип группы</param>
         /// <returns>Признак того, что представление графика попадает в указанную группу</returns>
         public static bool Is(this IChart chart, FusionChartGroupedType groupedType) {
-            if (chart.Config == null) {
-                return false;
-            }
-
-            var f = chart.Config.Type.To<FusionChartType>();
-            if (
-                (f & (FusionChartType)groupedType) == f
-            ) {
-                return true;
-            }
-
-            return false;
+            return chart.EnsureConfig().Type.To<FusionChartType>().Is(groupedType);
         }
         /// <summary>
         ///     Возвращает перечисление категорий, относящихся к графику
@@ -773,14 +795,6 @@ namespace Qorpent.Charts.FusionCharts {
         /// <returns>Минимальное значение всего чарта относительно оси Y с учётом трендлайнов</returns>
         public static double GetYMaxValueWholeChart(this IChart chart) {
             return chart.TrendLines.Children.Any() ? chart.GetMaxDatasetSetValue().Maximal(chart.GetMaxTrendlineValue()) : chart.GetMaxDatasetSetValue();
-        }
-        /// <summary>
-        ///     Нормализация чарта
-        /// </summary>
-        /// <param name="chart">Исходное представление чарта</param>
-        /// <returns>Замыкание на нормализованный чарт</returns>
-        public static IChart Normalize(this IChart chart) {
-            return new FusionChartsNormalizerFactory().Normalize(chart);
         }
         /// <summary>
         ///     Проверяет наличие датасетов в чарте

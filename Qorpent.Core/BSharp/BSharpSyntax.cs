@@ -16,6 +16,45 @@ namespace Qorpent.BSharp {
 		/// Ключевое слово,обозначающее заголовок класса
 		/// </summary>
 		public const string Class = "class";
+
+		/// <summary>
+		/// Ключевое слово,обозначающее источник данных для генерации классов
+		/// </summary>
+		public const string Dataset = "dataset";
+		/// <summary>
+		/// Ключевое слово шаблона
+		/// </summary>
+		public const string Template = "template";
+		/// <summary>
+		/// Ключевое слово,обозначающее источник данных для генерации классов
+		/// </summary>
+		public const string DatasetImport = "ref";
+		/// <summary>
+		/// Ключевое слово,обозначающее источник данных для генерации классов
+		/// </summary>
+		public const string DatasetItem = "item";
+
+		/// <summary>
+		/// Префикс кода класса набора данных
+		/// </summary>
+		public const string DatasetClassCodePrefix = "__ds_";
+
+		/// <summary>
+		/// Ключевое слово,обозначающее генератор классов
+		/// </summary>
+		public const string Generator = "generator";
+		/// <summary>
+		/// Подставной код класса для генератора
+		/// </summary>
+		public const string GeneratorClassCodeAttribute = "class.code";
+		/// <summary>
+		/// Подставное имя класса для генератора
+		/// </summary>
+		public const string GeneratorClassNameAttribute = "class.name";
+		/// <summary>
+		/// Соединение
+		/// </summary>
+		public const string Connection = "connection";
 		/// <summary>
 		/// Разделитель полного имени класса (путь) 
 		/// </summary>
@@ -31,11 +70,30 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Атрибут приоритета перекрытия класса
 		/// </summary>
-		public const string ClassOverridePriorityAttribute = "priority";
+		public const string PriorityAttribute = "priority";
+
+
+		/// <summary>
+		/// Собственный код соединения
+		/// </summary>
+		public const string ConnectionCodeAttribute = "connection.code";
+
+		/// <summary>
+		/// Строка соединения
+		/// </summary>
+		public const string TemplateValueAttribute = "template.value";
+		/// <summary>
+		/// Строка соединения
+		/// </summary>
+		public const string ConnectionStringAttribute = "connection.string";
+		/// <summary>
+		/// Атрибут режима соединения
+		/// </summary>
+		public const string ConnecitonModeAttribute = "mode";
 		/// <summary>
 		/// Атрибут приоритета перекрытия класса
 		/// </summary>
-		public const string ClassExtensionPriorityAttribute = ClassOverridePriorityAttribute;
+		public const string ClassExtensionPriorityAttribute = PriorityAttribute;
 		/// <summary>
 		/// Признак абстрактного класса
 		/// </summary>
@@ -178,5 +236,29 @@ namespace Qorpent.BSharp {
 		/// Признак внедряемого класса (не может использоваться самостоятельно, не включается отдельно в библиотеки)
 		/// </summary>
 		public const string EmbedAttribute = "embed";
+		/// <summary>
+		/// Элемент ссылки на другой файл в качестве "требуемого"
+		/// </summary>
+		public const string Require = "require";
+
+		/// <summary>
+		/// Формирует имя класса соединения
+		/// </summary>
+		/// <param name="mode"></param>
+		/// <param name="code"></param>
+		/// <returns></returns>
+		public static string GenerateConnectionClassName(string mode, string code){
+			return "connection_" + mode + "_" + code;
+		}
+
+		/// <summary>
+		/// Формирует имя класса строкового шаблона
+		/// </summary>
+		/// <param name="code"></param>
+		/// <returns></returns>
+		public static string GenerateTemplateClassName( string code)
+		{
+			return "template_"  + code;
+		}
 	}
 }

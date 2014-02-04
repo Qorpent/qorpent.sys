@@ -1,14 +1,17 @@
-﻿namespace Qorpent.Charts.FusionCharts {
+﻿using System;
+using Qorpent.Utils;
+
+namespace Qorpent.Charts.FusionCharts {
     /// <summary>
-    /// 
+    ///     Нормалайзер цветов чарта
     /// </summary>
-    public class FusionChartsNumberScalingNormalizer : FusionChartsAbstractNormalizer {
+    public class FusionChartsColorNormalizer : FusionChartsAbstractNormalizer {
         /// <summary>
         /// 
         /// </summary>
-        public FusionChartsNumberScalingNormalizer() {
-            Area = ChartNormalizerArea.Formatting;
-            Code = FusionChartsNormalizerCodes.ScalingNormalizer;
+        public FusionChartsColorNormalizer() {
+            Code = FusionChartsNormalizerCodes.ColorNormalizer;
+            Area = ChartNormalizerArea.Colors;
         }
         /// <summary>
         ///     Нормализация чарта
@@ -17,12 +20,14 @@
         /// <param name="normalized">абстрактное представление нормализованного чарта</param>
         /// <returns>Замыкание на абстрактное представление нормализованного чарта</returns>
         public override IChartNormalized Normalize(IChart chart, IChartNormalized normalized) {
-            if (chart.Config != null) {
-                if (!chart.Config.UseDefaultScaling) {
-                    chart.SetDefaultNumberScaling();
+            foreach (var dataset in chart.Datasets.Children) {
+                if (string.IsNullOrWhiteSpace(dataset.GetColor())) {
+                    continue;
                 }
-            } else {
-                chart.SetDefaultNumberScaling();
+
+                if (Convert.ToInt32(dataset.GetColor(), 16) / 20 > 1) {
+                    normalized.AddFixedAttribute(dataset, FusionChartApi.Dataset_Color, new Hex("FF0000"));
+                }
             }
 
             return normalized;

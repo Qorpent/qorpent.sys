@@ -98,7 +98,23 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		SrcPkgSet = Abstract | Static | Override | Extension 
 			| RequireLinking | RequireClassResolution | RequireDictionaryResolution
-			| RequireAdvancedIncludes | RequireDictionaryRegistration | Shema
+			| RequireAdvancedIncludes | RequireDictionaryRegistration | Shema,
+		/// <summary>
+		/// Признак класса-набора данных
+		/// </summary>
+		Dataset = 1<<22,
+		/// <summary>
+		/// Признак класса - генератора
+		/// </summary>
+		Generator = 1<<23,
+		/// <summary>
+		/// Соединения
+		/// </summary>
+		Connection = 1<<24,
+		/// <summary>
+		/// Шаблоны
+		/// </summary>
+		Template = 1<<25,
 		
 	}
 }

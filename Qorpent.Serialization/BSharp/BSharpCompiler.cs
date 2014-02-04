@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Qorpent.Bxl;
 using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Log;
@@ -81,7 +83,10 @@ namespace Qorpent.BSharp {
 		/// <param name="sources"></param>
 		/// <param name="preparedContext"></param>
 		/// <returns></returns>
-		public IBSharpContext Compile(IEnumerable<XElement> sources , IBSharpContext preparedContext = null) {
+		public IBSharpContext Compile(IEnumerable<XElement> sources , IBSharpContext preparedContext = null){
+			//if (this.DoProcessRequires){
+				sources = ProcessRequires(sources);
+			//}
 			var cfg = GetConfig();
 			if (cfg.SingleSource) {
 				return BuildBatch(sources,preparedContext);
@@ -97,6 +102,56 @@ namespace Qorpent.BSharp {
 				result.Merge(subresult);
 			}
 			return result;
+		}
+		/// <summary>
+		/// Опция для обработки директивы require  в исходных файлах
+		/// </summary>
+		public bool DoProcessRequires { get; set; }
+
+		private IEnumerable<XElement> ProcessRequires(IEnumerable<XElement> sources){
+			if (DoProcessRequires){
+				var filenames = sources.ToDictionary(_ => Path.GetFullPath(_.Describe().File).NormalizePath(), _ => _);
+				foreach (var src in filenames.ToArray()){
+					ProcessRequires(src.Value, src.Key, filenames);
+				}
+				return filenames.Values.ToArray();
+			}
+			else{
+				foreach (var src in sources){
+					var requires = src.Elements("requre").ToArray();
+					if (requires.Length != 0){
+						requires.Remove();
+						log.Warn("requre options in "+src.Describe().File+" ignored");
+					}
+				}
+				return sources;
+			}
+			
+		}
+		BxlParser requireBxl =new BxlParser();
+
+		private void ProcessRequires(XElement source,string filename, Dictionary<string, XElement> filenames){
+			var requires = source.Elements(BSharpSyntax.Require).ToArray();
+			if (requires.Length != 0){
+				var dir = Path.GetDirectoryName(filename);
+				requires.Remove();
+				foreach (var require in requires){
+					var file = require.Attr("code")+".bxls";
+					
+					if (!Path.IsPathRooted(file)){
+						file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
+					} 
+					if(filenames.ContainsKey(file))continue;
+					if (File.Exists(file)){
+						var src = requireBxl.Parse(File.ReadAllText(file), file);
+						filenames[file] = src;
+						ProcessRequires(src, file, filenames);
+					}
+					else{
+						this.log.Error("cannot  find required module "+require.Attr("code")+" for "+source.Describe().File);
+					}
+				}
+			}
 		}
 
 		private IBSharpContext BuildSingle(XElement source) {
@@ -129,9 +184,9 @@ namespace Qorpent.BSharp {
 		/// <returns></returns>
 		protected virtual IBSharpContext BuildIndex(IEnumerable<XElement> sources) {
 			CurrentBuildContext = new BSharpContext(this);
-			var baseindex = IndexizeRawClasses(sources);
-			
+			var baseindex = IndexizeRawClasses(sources).ToArray();
 			CurrentBuildContext.Setup(baseindex);
+			CurrentBuildContext.ExecuteGenerators();
 			CurrentBuildContext.Build();
 			return CurrentBuildContext;
 		}
@@ -167,8 +222,18 @@ namespace Qorpent.BSharp {
             
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		[Inject]
+		public IBSharpSqlAdapter SqlAdapter{
+			get { return _sqlAdapter ?? (_sqlAdapter = new BSharpSqlAdapter()); }
+			set { _sqlAdapter = value; }
+		}
 
-        LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
+
+		LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
+		private IBSharpSqlAdapter _sqlAdapter;
 
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns) {
 			foreach (XElement e in src.Elements()) {
@@ -193,36 +258,101 @@ namespace Qorpent.BSharp {
 					foreach (IBSharpClass e_ in IndexizeRawClasses(e, _ns)) {
 						yield return e_;
 					}
-				}
-				else {
-					var selfcode = e.Attr("code");
-					var __ns = ns ?? string.Empty;
-					if (selfcode.Contains(".")) {
-						var lastdot = selfcode.LastIndexOf('.');
-						var _nsadd = selfcode.Substring(0, lastdot);
-						selfcode = selfcode.Substring(lastdot+1);
-						if (string.IsNullOrWhiteSpace(__ns)) {
-							__ns = _nsadd;
-						}
-						else {
-							__ns = __ns + "." + _nsadd;
-						}
-					}
-					var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = selfcode, Namespace = __ns};
-					if (null != def.Source.Attribute("_file")) {
-						def.Source.SetAttributeValue("_dir",Path.GetDirectoryName(def.Source.Attr("_file")).Replace("\\","/"));
-					}
-                    if (!IsOverrideMatch(def)) continue;
-					SetupInitialOrphanState(e, def);
-					ParseImports(e, def);
-					ParseCompoundElements(e, def);
-
+				}else if (e.Name.LocalName == BSharpSyntax.Dataset)
+				{
+					var def = new BSharpClass(CurrentBuildContext) { Source = e, Name = BSharpSyntax.DatasetClassCodePrefix+e.Attr("code"), Namespace = ns ?? string.Empty };
+					def.Set(BSharpClassAttributes.Dataset);
 					yield return def;
+				}else if (e.Name.LocalName == BSharpSyntax.Generator)
+				{
+					yield return PrepareGenerator(ns, e);
+				}
+				else if (e.Name.LocalName == BSharpSyntax.Connection){
+					yield return PrepareConnection(ns, e);
+				}
+				else if (e.Name.LocalName == BSharpSyntax.Template)
+				{
+					yield return PrepareTemplate(ns, e);
+				}
+				else
+				{
+					var def = ReadSingleClassSource(e, ns);
+					if(null!=def)yield return def;
 				}
 			}
 		}
 
-        private bool IsOverrideMatch(BSharpClass def)
+		private IBSharpClass PrepareTemplate(string ns, XElement e)
+		{
+			var _code = e.Attr(BSharpSyntax.ClassNameAttribute);
+			var code = BSharpSyntax.GenerateTemplateClassName( _code);
+			e.SetAttr(BSharpSyntax.ConnectionCodeAttribute, e.Attr("code"));
+			e.SetAttr(BSharpSyntax.ClassNameAttribute, code);
+			e.SetAttr(BSharpSyntax.TemplateValueAttribute, e.Value);
+			var def = new BSharpClass(CurrentBuildContext) { Source = e, Name = code, Namespace = ns ?? string.Empty };
+			def.Set(BSharpClassAttributes.Template);
+			return def;
+		}
+
+		private IBSharpClass PrepareConnection(string ns, XElement e){
+			var mode = e.Attr(BSharpSyntax.ConnecitonModeAttribute, "sql");
+			var _code = e.Attr(BSharpSyntax.ClassNameAttribute);
+			var code = BSharpSyntax.GenerateConnectionClassName(mode, _code);
+			e.SetAttr(BSharpSyntax.ConnectionCodeAttribute, e.Attr("code"));
+			e.SetAttr(BSharpSyntax.ClassNameAttribute, code);
+			e.SetAttr(BSharpSyntax.ConnectionStringAttribute, e.Value);
+			var def = new BSharpClass(CurrentBuildContext){Source = e, Name = code, Namespace = ns ?? string.Empty};
+			def.Set(BSharpClassAttributes.Connection);
+			return def;
+		}
+
+		private IBSharpClass PrepareGenerator(string ns, XElement e){
+			var code = "gen" + Guid.NewGuid().ToString().Replace("-", "");
+			e.SetAttributeValue(BSharpSyntax.GeneratorClassCodeAttribute, e.Attr("code"));
+			e.SetAttributeValue(BSharpSyntax.GeneratorClassNameAttribute, e.Attr("name"));
+			e.SetAttributeValue("code", code);
+			var def = new BSharpClass(CurrentBuildContext){Source = e, Name = code, Namespace = ns ?? string.Empty};
+			def.Set(BSharpClassAttributes.Generator);
+			return def;
+		}
+
+		/// <summary>
+		/// Считать исходный 
+		/// </summary>
+		/// <param name="e"></param>
+		/// <param name="ns"></param>
+		/// <returns></returns>
+		public IBSharpClass ReadSingleClassSource(XElement e, string ns)
+		{
+			var selfcode = e.Attr("code");
+			var __ns = ns ?? string.Empty;
+			if (selfcode.Contains("."))
+			{
+				var lastdot = selfcode.LastIndexOf('.');
+				var _nsadd = selfcode.Substring(0, lastdot);
+				selfcode = selfcode.Substring(lastdot + 1);
+				if (string.IsNullOrWhiteSpace(__ns))
+				{
+					__ns = _nsadd;
+				}
+				else
+				{
+					__ns = __ns + "." + _nsadd;
+				}
+			}
+			var def = new BSharpClass(CurrentBuildContext) {Source = e, Name = selfcode, Namespace = __ns};
+			if (null != def.Source.Attribute("_file"))
+			{
+				def.Source.SetAttributeValue("_dir", Path.GetDirectoryName(def.Source.Attr("_file")).Replace("\\", "/"));
+			}
+			if (!IsOverrideMatch(def)) return null;
+			SetupInitialOrphanState(e, def);
+			ParseImports(e, def);
+			ParseCompoundElements(e, def);
+			return def;
+		}
+
+		private bool IsOverrideMatch(BSharpClass def)
         {
             if (def.Source.Name.LocalName == BSharpSyntax.ClassOverrideKeyword || def.Source.Name.LocalName == BSharpSyntax.ClassExtensionKeyword)
             {

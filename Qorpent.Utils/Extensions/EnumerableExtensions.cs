@@ -74,7 +74,46 @@ namespace Qorpent.Utils.Extensions {
 		public static bool IsNotEmpty(this IEnumerable e) {
 			return !IsEmptyCollection(e);
 		}
+		/// <summary>
+		/// Формирует все комбинации элементов списков
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="sources"></param>
+		/// <returns></returns>
+		public static T[][] Combine<T>(params IEnumerable<T>[] sources)
+		{
+			return Combine((IEnumerable<IEnumerable<T>>)sources);
+		}
 
+		/// <summary>
+		/// Формирует все комбинации элементов списков
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="_sources"></param>
+		/// <returns></returns>
+		public static T[][] Combine<T>(this IEnumerable<IEnumerable<T>> _sources){
+			_sources = _sources.Where(_ => _ != null && _.Count() != 0);
+			if(null==_sources) return new T[][] { };
+			var sources = _sources.ToArray();
+			if ( 0 == sources.Length) return new T[][] { };
+			if (1 == sources.Length)
+			{
+				return sources.First().Select(_ => new[] {_}).ToArray();
+			}
+			var result = sources.First().Join(sources.ElementAt(1), _ => 0, _ => 0, (a1, b1) => new[] { a1, b1 }).ToArray();
+			for (var i = 2; i < sources.Length; i++)
+			{
+				result = result.Join(sources[i], _ => 0, _ => 0, (a1, b1) =>
+				{
+					var x = new T[i + 1];
+					a1.CopyTo(x, 0);
+					x[i] = b1;
+					return x;
+
+				}).ToArray();
+			}
+			return result;
+		}
 
 		/// <summary>
 		/// Applyes <paramref name="expression"/> for each element in set

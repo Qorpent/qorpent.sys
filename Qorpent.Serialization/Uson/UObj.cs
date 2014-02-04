@@ -50,6 +50,26 @@ namespace Qorpent.Uson
 				
 			}
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="uobj"></param>
+		/// <returns></returns>
+		public static implicit operator bool(UObj uobj)
+		{
+			if (null == uobj) return false;
+			if (uobj.UObjMode == UObjMode.Fake) return false;
+			if (uobj.UObjMode == UObjMode.Array) return uobj.Array!=null && uobj.Array.Count!=0;
+			if (uobj.UObjMode == UObjMode.Default) return true;
+			if (uobj.UObjMode == UObjMode.Value)
+			{
+				return uobj.Properties["__value"].ToBool();
+			}
+			return true;
+		}
+		
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -189,6 +209,10 @@ namespace Qorpent.Uson
 			var idx = indexes[0];
 			if (this.UObjMode == UObjMode.Default)
 			{
+				if (!Properties.ContainsKey(idx.ToString()))
+				{
+					Properties[idx.ToString()] = new UObj { UObjMode = UObjMode.Fake, Parent = this };
+				}
 				if (this._properties != null && this._properties.ContainsKey(idx.ToString()))
 				{
 					result = this._properties[idx.ToString()];
@@ -206,6 +230,7 @@ namespace Qorpent.Uson
 					result = _array[(int) idx];
 				}
 			}
+			
 			return true;
 		}
 		/// <summary>
@@ -259,6 +284,15 @@ namespace Qorpent.Uson
 	    {
 	       return  push((object[]) args.ToArray());
 	    }
+		/// <summary>
+		/// Проверяет наличие свойства
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public bool isDefined(string name){
+			return Properties.ContainsKey(name);
+
+		}
 		/// <summary>
 		/// 
 		/// </summary>

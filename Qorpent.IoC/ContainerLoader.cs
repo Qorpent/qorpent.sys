@@ -228,7 +228,7 @@ namespace Qorpent.IoC {
 					foreach (var mvca in _mvcassemblies)
 					{
 						var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(_ => _.GetName().Name == mvca);
-						if(null==assembly) AppDomain.CurrentDomain.Load(mvca);
+						if(null==assembly) assembly = AppDomain.CurrentDomain.Load(mvca);
 						if (null != assembly) {
 							mvcfactory.Register(assembly);
 						}

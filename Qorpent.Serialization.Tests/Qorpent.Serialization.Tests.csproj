@@ -15,6 +15,7 @@
     <Compile Include="BSharp\BSharpCodeBuilderTest.cs" />
     <Compile Include="BSharp\ClassReference.cs" />
     <Compile Include="BSharp\DictionarySupport.cs" />
+    <Compile Include="BSharp\GeneratorTest.cs" />
     <Compile Include="BSharp\Matcher\SingleConditionTests.cs" />
     <Compile Include="BSharp\Runtime\BSharpLibraryClassProviderTest.cs" />
     <Compile Include="BSharp\Schema\AttributeRuleTest.cs" />
@@ -28,7 +29,6 @@
     <Compile Include="bxl_serializer_test.cs" />
     <Compile Include="ChartExtensionsTests.cs" />
     <Compile Include="Charts\ChartExtensionsTests.cs" />
-    <Compile Include="Charts\NormalizerTests.cs" />
     <Compile Include="coverage_only_tests.cs" />
     <Compile Include="DefaultSelectorTests.cs" />
     <Compile Include="Dot\ColorTest.cs" />

@@ -19,6 +19,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -275,7 +280,7 @@ namespace Qorpent.Utils.Extensions
 			else {
 				cmdbuilder.Append(" ");
 			}
-			if (!string.IsNullOrWhiteSpace(paramlist)) {
+			if (!String.IsNullOrWhiteSpace(paramlist)) {
 				cmdbuilder.Append(RewriteParamList(paramlist, IsSupportNamedParameters(dbtype),
 				                                   GetPrefixOfInnerParameter(dbtype),
 				                                   GetPrefixOfOuterParameter(dbtype), GetAssignOperator(dbtype)));
@@ -416,13 +421,13 @@ namespace Qorpent.Utils.Extensions
 				case DatabaseEngineType.SqlServer:
 					return "@";
 				case DatabaseEngineType.Postgres:
-					return string.Empty;
+					return String.Empty;
 				case DatabaseEngineType.MySql:
-					return string.Empty;
+					return String.Empty;
 				case DatabaseEngineType.Oracle:
-					return string.Empty;
+					return String.Empty;
 				default:
-					return string.Empty;
+					return String.Empty;
 			}
 	    }
 
@@ -652,7 +657,7 @@ namespace Qorpent.Utils.Extensions
 			var reader = connection.CreateCommand(command, parameters, timeout).ExecuteReader(CommandBehavior.SingleResult);
 			try
 			{
-				var result = new Dictionary<string,  IList<T>>();
+				var result = new Dictionary<string, IList<T>>();
 				while (reader.Read()) {
 					var key = reader[0] as string;
 					var value = reader[1].To<T>();
@@ -703,5 +708,63 @@ namespace Qorpent.Utils.Extensions
                 connection.Close();
             }
         }
-    }
+
+		/// <summary>
+		/// Утилитная функция для формирования объекта соединения из строки
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public static IDbConnection CreateDatabaseConnecitonFromString(string name){
+			var connectionString = name;
+			if (connectionString.StartsWith("ProviderName")){
+				var parsematch = Regex.Match(connectionString, @"^ProviderName=([^;]+);([\s\S]+)$");
+				var providername = parsematch.Groups[1].Value;
+				var connstring = parsematch.Groups[2].Value;
+				if (providername.ToUpper() == "NPGSQL"){
+					if (File.Exists(Path.Combine(EnvironmentInfo.BinDirectory, "Npgsql.dll"))){
+						return GetPostGresConnection(connstring);
+					}
+					else{
+						throw new QorpentException("cannot connect to PostGres because Npgsql not exists in application");
+					}
+				}
+				var provider = DbProviderFactories.GetFactory(providername);
+				var result = provider.CreateConnection();
+				result.ConnectionString = connstring;
+				return result;
+			}
+			else{
+				return new SqlConnection(connectionString);
+			}
+		}
+
+		private static Assembly _npgsqlassembly = null;
+		private static Type _npgsqlconnectiontype;
+
+		private static Assembly NpgSQLAssembly {
+			get {
+				if(null==_npgsqlassembly) {
+					_npgsqlassembly =
+						AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.ToLower().StartsWith("npgsql"));
+					if(null==_npgsqlassembly) {
+						_npgsqlassembly = Assembly.LoadFrom("Npgsql.dll");
+					}
+				}
+				return _npgsqlassembly;
+			}
+		}
+
+		private static Type NpgSQLConnectionType {
+			get {
+				if(_npgsqlconnectiontype==null) {
+					_npgsqlconnectiontype = NpgSQLAssembly.GetType("Npgsql.NpgsqlConnection");
+				}
+				return _npgsqlconnectiontype;
+			}
+		}
+
+		private static IDbConnection GetPostGresConnection(string connstring) {
+			return (IDbConnection)Activator.CreateInstance(NpgSQLConnectionType, connstring);
+		}
+	}
 }

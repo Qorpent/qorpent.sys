@@ -53,6 +53,7 @@
     <Compile Include="BSharp\IBSharpContext.cs" />
     <Compile Include="BSharp\IBSharpElement.cs" />
     <Compile Include="BSharp\IBSharpImport.cs" />
+    <Compile Include="BSharp\IBSharpSqlAdapter.cs" />
     <Compile Include="BSharp\Runtime\BSharpActivationType.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeActivatorService.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeClassDescriptor.cs" />
@@ -100,6 +101,8 @@
     <Compile Include="Config\ConfigRenderType.cs" />
     <Compile Include="Config\DictionaryCompatibleConfig.cs" />
     <Compile Include="Config\IConfig.cs" />
+    <Compile Include="Config\TreeConfigBase.cs" />
+    <Compile Include="Config\TreeConfigBaseElementsList.cs" />
     <Compile Include="ConvertExtensions.cs" />
     <Compile Include="Data\DocumentStorageOptions.cs" />
     <Compile Include="Data\IDocumentStorage.cs" />

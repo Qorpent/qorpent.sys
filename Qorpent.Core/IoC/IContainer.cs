@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Core/IContainer.cs
 #endregion
 
+using System;
 using System.Collections.Generic;
 
 namespace Qorpent.IoC {
@@ -156,7 +157,8 @@ namespace Qorpent.IoC {
 	///		
 	///		}</code>
 	///</example>
-	public interface IContainer : ITypeResolver, IComponentRegistry {
+	public interface 
+		IContainer : ITypeResolver, IComponentRegistry {
 		///<summary>
 		///	Если <c>true</c> - то при отсутствии запрашиваемого сервиса будет возвращаться не Null, а <see
 		///	 cref="ContainerException" />
@@ -170,6 +172,14 @@ namespace Qorpent.IoC {
 		/// 	<invariant>Очистка очищает внутрненнее состояние и кэши контейнера, регистрации компонент это не касается, компоненты остаются в прежней конфигурации</invariant>
 		/// </remarks>
 		void CleanUp();
+		/// <summary>
+		/// Время последнего изменения 
+		/// </summary>
+		DateTime TimeStamp { get; }
+		/// <summary>
+		/// Устанавливает признак обновления версии локального контейнера
+		/// </summary>
+	    void Upgrade();
 
 
 		///<summary>

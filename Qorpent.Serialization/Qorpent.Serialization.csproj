@@ -18,6 +18,7 @@
     <Compile Include="AbstractCanvas\ICanvasPrimitive.cs" />
     <Compile Include="BSharp\BSharpCodeBuilder.cs" />
     <Compile Include="BSharp\BSharpErrors.cs" />
+    <Compile Include="BSharp\BSharpSqlAdapter.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderBase.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderDefaults.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderExtensionBase.cs" />
@@ -50,22 +51,12 @@
     <Compile Include="Charts.FusionCharts\API_auto.cs" />
     <Compile Include="Charts.FusionCharts\Api_dict_auto.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartAttributeDescriptor.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartChart.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartChartAttributes.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartColor.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartDataType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartElementType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartExtensions.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartGroupedType.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartRender.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartsAbstractNormalizer.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartsAnchorsNormalizer.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartsNormalizerFactory.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartsNormalizerCodes.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartsNumberScalingNormalizer.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartsPositionNormalizer.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartsScaleNormalizer.cs" />
-    <Compile Include="Charts.FusionCharts\FusionChartsValuesNormalizer.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartType.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartWrapper.cs" />
     <Compile Include="Charts\ChartBuilder.cs" />
@@ -165,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -175,5 +167,4 @@
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
-  <ItemGroup />
 </Project>

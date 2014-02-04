@@ -66,6 +66,16 @@ namespace Qorpent.Charts {
             return baseElement;
         }
         /// <summary>
+        ///     Добавление элементов к элементу
+        /// </summary>
+        /// <param name="baseElement">Исходное представление элемента</param>
+        /// <param name="element">Элемент для добавления</param>
+        /// <returns>Замыкание на исходный элемент</returns>
+        public static IChartElement Add(this IChartElement baseElement, IEnumerable<IChartElement> element) {
+            element.ForEach(_ => baseElement.Add(_));
+            return baseElement;
+        }
+        /// <summary>
         ///     Добавление элемента к чарту
         /// </summary>
         /// <param name="chart">Исходное представление чарта</param>

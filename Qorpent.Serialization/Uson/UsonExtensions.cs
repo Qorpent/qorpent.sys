@@ -3,7 +3,9 @@ using System.Collections;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Xml;
+using System.Xml.Linq;
 using Qorpent.Json;
 using Qorpent.Serialization;
 
@@ -22,6 +24,9 @@ namespace Qorpent.Uson
 		public static UObj ToUson(this object obj)
 		{
 			if (obj is UObj) return (UObj) obj;
+			if (obj is XElement){
+				return XmlToUson((XElement) obj,true);
+			}
 			var result = UObjSerializerSupport.ToUson(obj) ;
 			if (result is UObj) return (UObj) result;
 			var real = new UObj();
@@ -29,6 +34,33 @@ namespace Qorpent.Uson
 			real.UObjMode = UObjMode.Value;
 			return real;
 		}
+
+		/// <summary>
+		/// Конвертирует XElement в UObj
+		/// </summary>
+		/// <param name="e"></param>
+		/// <param name="root"></param>
+		/// <returns></returns>
+		public static UObj XmlToUson(XElement e,bool root){
+			dynamic result = new UObj();
+			dynamic target = result;
+			if (root){
+				result[e.Name.LocalName] = new object();
+				target = result[e.Name.LocalName];
+			}
+			foreach (var attribute in e.Attributes()){
+				target[attribute.Name.LocalName] = attribute.Value;
+			}
+			var eldict = e.Elements().GroupBy(_ => _.Name.LocalName, _ => _);
+			foreach (var grp in eldict){
+				foreach (var element in grp){
+					var item = XmlToUson(element, false);
+					target[grp.Key].push(item);
+				}
+			}
+			return result;
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -89,7 +121,7 @@ namespace Qorpent.Uson
 			}else if (obj.UObjMode == UObjMode.Value)
 			{
 				var val = obj.Properties["__value"];
-				if (val == null)
+				if (val != null)
 				{
 					ToJsonValue(output, mode, val);
 				}
@@ -386,23 +418,22 @@ namespace Qorpent.Uson
 					}
 				}
 			}
-			else
-			{
-				writer.WriteAttributeString("_array","true");
-				foreach (var p in obj.Array)
-				{
-					if (null == p)
-					{
+			else if (obj.UObjMode == UObjMode.Array){
+				writer.WriteAttributeString("_array", "true");
+				foreach (var p in obj.Array){
+					if (null == p){
 						writer.WriteElementString("item", "");
-					}else if (p is string || p.GetType().IsValueType)
-					{
+					}
+					else if (p is string || p.GetType().IsValueType){
 						writer.WriteElementString("item", ToXmlValue(p));
 					}
-					else
-					{
-						WriteXml(p as UObj,"item",null,writer,mode);
+					else{
+						WriteXml(p as UObj, "item", null, writer, mode);
 					}
 				}
+			}
+			else{
+				writer.WriteElementString("value",obj.Properties["__value"].ToString());
 			}
 			writer.WriteEndElement();
 		}

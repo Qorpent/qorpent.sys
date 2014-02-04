@@ -161,14 +161,14 @@ namespace Qorpent.Config {
 			}
 		}
 
-		/// <summary>
-		/// Получить приведенную типизированную опцию
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="name"></param>
-		/// <param name="def"></param>
-		/// <returns></returns>
-		public T Get<T>(string name, T def = default(T)) {
+	    /// <summary>
+	    /// Получить приведенную типизированную опцию
+	    /// </summary>
+	    /// <typeparam name="T"></typeparam>
+	    /// <param name="name"></param>
+	    /// <param name="def"></param>
+	    /// <returns></returns>
+	    public T Get<T>(string name, T def = default(T)) {
 			if (name.StartsWith(".")) {
 				return ReturnIerachical(name, def);
 			}
