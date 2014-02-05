@@ -394,9 +394,10 @@ namespace Qorpent.BSharp {
                 {
                     __cls.IncludedClasses.Add(includecls);
                 }
-			
-				var includeelement = new XElement(includecls.Compiled);
-				var usebody = null != i.Attribute(BSharpSyntax.IncludeBodyModifier) || i.GetName() == BSharpSyntax.IncludeBodyModifier;
+                
+			    var includeelement = new XElement(includecls.Compiled);
+                
+			    var usebody = null != i.Attribute(BSharpSyntax.IncludeBodyModifier) || i.GetName() == BSharpSyntax.IncludeBodyModifier;
 				var nochild = null != i.Attribute(BSharpSyntax.IncludeNoChildModifier) || i.GetName() == BSharpSyntax.IncludeNoChildModifier;
 				needReInterpolate = needReInterpolate || includeelement.HasAttributes(contains: BSharpSyntax.IncludeInterpolationAncor+"{", skipself: usebody);
 
@@ -406,6 +407,14 @@ namespace Qorpent.BSharp {
 				}
 				else {
 					ExctractIncludeClass(i, nochild, includeelement, includecls);
+                    var ename = i.Attr(BSharpSyntax.IncludeElementNameModifier);
+                    if (!string.IsNullOrWhiteSpace(ename)) {
+                        includeelement.Name = ename;
+                        if (i.Attr(BSharpSyntax.IncludeKeepCodeModifier).ToBool()) {
+                            includeelement.SetAttributeValue("code", includecls.Name);
+                        }
+                    }
+
 					if (IsIncludeClassMatch(i, includeelement)) {
 						i.ReplaceWith(includeelement);
 					}
@@ -529,11 +538,22 @@ namespace Qorpent.BSharp {
 				if(a.Name.LocalName=="code") continue;
 				if (a.Name.LocalName == "name") continue;
 				if (a.Name.LocalName == BSharpSyntax.IncludeBodyModifier) continue;
-                if (null == trg.Attribute(a.Name.LocalName)) {
-                    trg.SetAttributeValue(a.Name, a.Value);    
+                if (a.Name.LocalName == BSharpSyntax.IncludeNoChildModifier) continue;
+                if (a.Name.LocalName == BSharpSyntax.IncludeElementNameModifier) continue;
+                    if (a.Name.LocalName.StartsWith("__TILD__")) {
+                        trg.SetAttributeValue(a.Name.LocalName.Substring("__TILD__".Length), a.Value);
+                    } else if (a.Name.LocalName.StartsWith("__PLUS__")) {
+                        var localName = a.Name.LocalName.Substring("__PLUS__".Length);
+                        if (trg.Attribute(localName) == null) {
+                            trg.SetAttributeValue(localName, a.Value);
+                        }
+                    } else {
+                        if (null == trg.Attribute(a.Name.LocalName)) {
+                            trg.SetAttributeValue(a.Name, a.Value);
+                        }
+                    }
                 }
 				
-			}
 		}
 		private void StoreParentParameters(XElement src, XElement trg)
 		{

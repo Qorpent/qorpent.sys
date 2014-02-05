@@ -655,6 +655,19 @@ namespace Qorpent.BSharp {
 					result = RawClasses[code];
 				}
 			}
+
+            if (null == result) {
+                var variants = RawClasses.Values.Where(_ => ("." + _.FullName).EndsWith("." + code));
+                if (variants.Count() == 1) {
+                    result = variants.First();
+                } else {
+                    variants = variants.Where(_ => _.Namespace.Contains(ns));
+                    if (variants.Count() == 1) {
+                        result = variants.First();
+                    }
+                }
+            }
+
 			if (null != result) {
 				_resolveclassCache[key] = result;
 			}

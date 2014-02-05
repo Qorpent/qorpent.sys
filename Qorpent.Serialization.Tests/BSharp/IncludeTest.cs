@@ -19,6 +19,36 @@ class B x=2
 			Assert.AreEqual(1, result.Compiled.Descendants("A").Count());
 			Assert.AreEqual("1", result.Compiled.Descendants("test").First().Attr("code"));
 		}
+        [TestCase("+", "x", "10", "1")]
+        [TestCase("~", "x", "10", "10")]
+        [TestCase("+", "y", "1", "1")]
+        [TestCase("~", "y", "1", "1")]
+        public void CanIncludeWithNonLiteralAttrName(string op, string operand, string value, string expected) {
+            var code = @"
+class A x=1
+class B x=2
+	include A """ + op + operand + @"""=""" + value + @"""
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled);
+            Assert.AreEqual(expected,result.Compiled.Element("A").Attr(operand));
+        }
+
+
+
+
+        [Test]
+        public void CanIncludeWithElementRename() {
+            var code = @"
+class A x=1
+class B x=2
+	include A element=chelios
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled.ToString());
+            Assert.AreEqual(1, result.Compiled.Descendants("chelios").Count());
+
+        }
 
 
 		[Test]
@@ -155,6 +185,21 @@ class B x=2
 			Assert.AreEqual("1", result.Compiled.Descendants("test").First().Attr("code"));
 		}
 
+
+        [Test]
+        public void CanResolveNoNameSpace() {
+            var code = @"
+namespace A
+    class A 
+namespace B
+    class B
+	    include A
+";
+            var result = Compile(code).Get("B");
+            Console.WriteLine(result.Compiled);
+            Assert.AreEqual(1, result.Compiled.Descendants("A.A").Count());
+        }
+
         [Test]
         public void SelectClauseForBody()
         {
@@ -205,6 +250,9 @@ class B x=2
 </class>", result.Compiled.ToString());
 
         }
+
+
+
 
 
         [Test]
