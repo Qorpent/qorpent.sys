@@ -166,6 +166,17 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public const string IncludeNoChildModifier = "nochild";
 
+
+        /// <summary>
+        /// Модификатор include, изменяющий имя целевого элемента
+        /// </summary>
+        public const string IncludeElementNameModifier = "element";
+
+        /// <summary>
+        /// Модификатор include, изменяющий имя целевого элемента
+        /// </summary>
+        public const string IncludeKeepCodeModifier = "keepcode";
+
 		/// <summary>
 		/// Описание условия для включения элементов в режиме body для Include
 		/// </summary>
@@ -241,7 +252,7 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public const string Require = "require";
 
-		/// <summary>
+	    /// <summary>
 		/// Формирует имя класса соединения
 		/// </summary>
 		/// <param name="mode"></param>
