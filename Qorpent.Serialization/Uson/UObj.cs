@@ -273,7 +273,17 @@ namespace Qorpent.Uson
 			}
 			return true;
 		}
-	
+
+	    
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+	    public UObj push(IEnumerable<object> args)
+	    {
+	       return  push((object[]) args.ToArray());
+	    }
 		/// <summary>
 		/// Проверяет наличие свойства
 		/// </summary>

@@ -166,6 +166,66 @@ namespace Qorpent.Utils.Extensions {
 			return default(V);
 		}
 
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="dict"></param>
+        /// <param name="correctNames"></param>
+	    /// <typeparam name="R"></typeparam>
+	    /// <returns></returns>
+	    public static R Create<R>(this IDictionary<string, object> dict,bool correctNames=false) where R : class, new()
+	    {
+	       return dict.Apply(new R(), correctNames);
+	    }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static R Apply<T,R>(this IDictionary<string,T> dict, R target, bool correctNames = false)
+        {
+            if (null == target) return target;
+            if (null == dict) return target;
+            var type = target.GetType();
+            foreach (var property in dict)
+            {
+                var prop = type.FindValueMember(property.Key, true, false, false, true);
+                if (null == prop && correctNames && property.Key.Contains("_"))
+                {
+                    var correctedName = property.Key.Replace("_", "");
+                    prop = type.FindValueMember(correctedName, true, false, false, true);
+                }
+                if (null != prop)
+                {
+                    try
+                    {
+                        prop.Set(target, property.Value.ToTargetType(prop.Type));
+                    }
+                    catch
+                    {
+                        throw;
+                    }
+                }
+            }
+            return target;
+        }
+
+
+
+        /// <summary>
+        /// Возврат с дефолтным значением из словаря типа строка-строка
+        /// </summary>
+        /// <param name="dictionary"></param>
+        /// <param name="key"></param>
+        /// <param name="defval"></param>
+        /// <typeparam name="V"></typeparam>
+        /// <returns></returns>
+        public static V SafeGet<V>(this IDictionary<string,string> dictionary, string key, V defval = default(V))
+        {
+            if (null == dictionary) return defval;
+            if (dictionary.ContainsKey(key)) return dictionary[key].To<V>();
+            return defval;
+        }
+
 		/// <summary>
 		/// Защищенный метод получения значения из словаря
 		/// </summary>
