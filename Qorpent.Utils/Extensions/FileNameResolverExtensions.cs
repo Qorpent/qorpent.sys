@@ -485,7 +485,15 @@ namespace Qorpent.Utils.Extensions {
 				}
 			}
 		}
-
+        /// <summary>
+        ///     ѕолучение последней даты записи в директорию 
+        /// </summary>
+        /// <param name="resolver"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static DateTime GetDirectoryLastWriteTime(this IFileNameResolver resolver, string name) {
+            return new DirectoryInfo(resolver.Resolve(name)).GetFiles().Select(_ => _.LastWriteTime).Max();
+        }
 		/// <summary>
 		/// 	Writes content to file
 		/// </summary>
