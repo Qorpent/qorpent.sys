@@ -57,15 +57,6 @@ namespace Qorpent.Utils.Extensions {
 			return sb.ToString();
 		}
 		/// <summary>
-		///		Реализация SQL-подобной LIKE выборки по перечислению строк
-		/// </summary>
-		/// <param name="strings">Исходное перечисление строк</param>
-		/// <param name="pattern">Паттерн для поиска</param>
-		/// <returns>Перечислеине строк, совпадающих по паттерну</returns>
-		public static IEnumerable<string> Like(this IEnumerable<string> strings, string pattern) {
-			return strings.Where(_ => Regex.IsMatch(_, pattern.Replace("%", ".*").Replace("_", ".")));
-		}
-		/// <summary>
 		/// Замещает символы, не совместимые с путем
 		/// </summary>
 		/// <param name="str"></param>
