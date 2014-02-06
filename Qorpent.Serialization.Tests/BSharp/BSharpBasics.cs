@@ -143,6 +143,7 @@ namespace X.Y.Z
 
 
 		[Test]
+        [Ignore("allow singleton anywhere resolution")]
 		public void UnresolvedNamespaceNoRoot()
 		{
 			var result = Compile(@"
@@ -153,6 +154,19 @@ namespace X
 			Assert.AreEqual(1, result.Orphans.Count);
 			
 		}
+        [Test]
+        
+        public void UnresolvedNamespaceNoRootNew() {
+            var result = Compile(@"
+namespace Z
+	class custom abstract
+namespace Y
+	class custom abstract
+namespace X
+	custom A");
+            Assert.AreEqual(1, result.Orphans.Count);
+
+        }
 		[Test]
 		public void MergesInner() {
 			var result = Compile(@"

@@ -197,6 +197,13 @@ namespace Qorpent.Serialization.Tests.Uson
 			Console.WriteLine(uobj.ToJson());
 			Assert.AreEqual(@"{""x"":[1,2,3]}", uobj.ToJson());
 		}
+
+
+		[Test]
+		public void IntToJson(){
+			var o = 3.ToUson();
+			Assert.AreEqual("3",o.ToJson());
+		}
 	}
 
 	

@@ -226,6 +226,7 @@ class A
 
 
 		[Test]
+        [Ignore("now singleton resolution existed")]
 		public void NotDirectClassReference()
 		{
 			var code = @"
@@ -241,7 +242,7 @@ class A x=^B
 			Assert.AreEqual(BSharpErrorType.NotDirectClassReference, error.Type);
 			Assert.AreEqual("Y.B", result.Get("A").Compiled.Attr("x"));
 		}
-
+     
 
         [Test]
         public void BugBadErrorCatchOnClassReference()
