@@ -104,7 +104,7 @@ namespace Qorpent.Json {
 		}
 
 	    private JsonTokenType DetermineAutoType() {
-            if (Value == "null") return JsonTokenType.Null;
+            if (Value == null || Value == "null") return JsonTokenType.Null;
 	        if (Value == "true" || Value== "false")return JsonTokenType.Bool;
 	        if (Regex.IsMatch(Value, @"^-?\d+(\.\d+)?$")) return JsonTokenType.Number;
             return JsonTokenType.String;
