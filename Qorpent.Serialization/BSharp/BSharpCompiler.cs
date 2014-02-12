@@ -19,6 +19,14 @@ namespace Qorpent.BSharp {
 	/// </summary>
 	[ContainerComponent(ServiceType = typeof(IBSharpCompiler))]
 	public  class BSharpCompiler :  ServiceBase,IBSharpCompiler {
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public BSharpCompiler(){
+			this.DoProcessRequires = true;
+		}
+
 		private IBSharpConfig _config;
 		IUserLog log {
 			get { return GetConfig().Log; }

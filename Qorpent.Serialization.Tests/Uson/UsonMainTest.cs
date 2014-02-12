@@ -49,6 +49,14 @@ namespace Qorpent.Serialization.Tests.Uson
 			Console.WriteLine(x.ToJson());
 			Assert.AreEqual(@"{""1"":2,""x"":false,""z"":""ccc""}",x.ToJson());
 		}
+		[Test]
+		public void UsdJson()
+		{
+			var x = "{\"$query\":{\"x\":1}}".ToUson();
+			Console.WriteLine(x.ToJson());
+			Assert.AreEqual("{\"$query\":{\"x\":1}}", x.ToJson());
+		}
+
 
 		[Test]
 		public void FromJson()
