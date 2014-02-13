@@ -30,6 +30,10 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Порядковый номер внутри ряда
         /// </summary>
         public int Index { get; set; }
+        /// <summary>
+        ///     Нужно ли прятать данное значение
+        /// </summary>
+        public bool Hide { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>

@@ -39,8 +39,8 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <summary>
         ///     Серии
         /// </summary>
-        public IEnumerable<BrickDataSetSeria> Series {
-            get { return _series.Values.AsEnumerable(); }
+        public BrickDataSetSeria[] Series {
+            get { return _series.Values.ToArray(); }
         }
         /// <summary>
         ///     Перечисление категорий
@@ -336,8 +336,8 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// <param name="serianum"></param>
 		/// <param name="rownum"></param>
 		/// <param name="value"></param>
-		public void Add(int serianum, int rownum, decimal value) {
-			Add(serianum, rownum, value, false);
+		public DataItem Add(int serianum, int rownum, decimal value) {
+			return Add(serianum, rownum, value, false);
 		}
         /// <summary>
         ///     Добавление категории
@@ -389,7 +389,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// <param name="rownum"></param>
 		/// <param name="value"></param>
 		/// <param name="secondscale"></param>
-		public void Add(int serianum, int rownum, decimal value, bool secondscale) {
+		public DataItem Add(int serianum, int rownum, decimal value, bool secondscale) {
 			var row = ResolveRow(serianum, rownum, secondscale?ScaleType.Second:ScaleType.First);
 		    var item = new DataItem {Value = value, Index = row.Items.Count, LabelHeight = LabelHeight};
             if (!_series.ContainsKey(serianum)) {
@@ -399,6 +399,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
                 _series[serianum].Add(row);
             }
 			row.Items.Add(item);
+		    return item;
 		}
 		/// <summary>
 		/// Возвращает элемент данных по позиции
