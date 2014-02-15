@@ -26,6 +26,10 @@ namespace Qorpent.IO {
 		/// Стандартный MIME для HTML
 		/// </summary>
 		public const string HTML = "text/html";
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string JSON = "application/json";
 
 		/// <summary>
 		/// Converts extension to mime type

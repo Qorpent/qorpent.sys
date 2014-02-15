@@ -68,7 +68,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// <summary>
 		/// 
 		/// </summary>
-		public BrickDataSet Calculate() {
+		public virtual  BrickDataSet Calculate() {
 			CalculateFirstScale();
 
 			if (Rows.Any(_ => _.ScaleType == ScaleType.Second)) {

@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.Xml.Linq;
 using Qorpent.Charts;
+using Qorpent.IO;
+using Qorpent.Uson;
 
 namespace Qorpent.Mvc.Renders {
     /// <summary>
@@ -19,11 +21,25 @@ namespace Qorpent.Mvc.Renders {
             var script = string.Empty;
 
             var datascript = RenderDataScript(context, config);
+
+
+		
+
             var error = string.Empty;
 
             if (string.IsNullOrWhiteSpace(datascript)) {
                 error = "Нет данных для отображения";
             }
+
+			if (context.Get("__format") == "json"){
+				dynamic result = new UObj();
+				result.config = config;
+				result.data = datascript;
+				result.error = error;
+				context.ContentType = MimeHelper.JSON;
+				context.Output.Write(result.ToJson().Replace("\\\'","'"));
+				return;
+			}
 
             var id = config.Id;
             var container = config.Container;
@@ -33,6 +49,8 @@ namespace Qorpent.Mvc.Renders {
                 script += string.Format(@"
 <div class=""fusinchart-container{0}"" id=""{1}"">{2}</div>", string.IsNullOrEmpty(error) ? " fusionchart-error" : "", container, error);
             }
+
+			
 
             if (string.IsNullOrWhiteSpace(error)) {
                 script += string.Format(@"

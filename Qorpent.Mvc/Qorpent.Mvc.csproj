@@ -124,6 +124,7 @@
     <EmbeddedResource Include="Renders\ActionFormViews\ActionFormMain.1_ru_resb" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />

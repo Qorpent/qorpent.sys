@@ -74,6 +74,10 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 				return result;
 			}
 		}
+		/// <summary>
+		/// Связанный объект
+		/// </summary>
+		public object Tag { get; set; }
 
 		/// <summary>
 		/// Нормализованное значение

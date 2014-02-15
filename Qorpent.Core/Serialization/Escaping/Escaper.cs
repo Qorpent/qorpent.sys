@@ -97,8 +97,12 @@ namespace Qorpent.Serialization
                 str = str.Replace("\t", "\\t");
             }
             if (-1 != str.IndexOf('\'')) {
-                str = str.Replace("'", "\'");
+                str = str.Replace("'", "\\\'");
             }
+			if (-1 != str.IndexOf('\"'))
+			{
+				str = str.Replace("\"", "\\\"");
+			}
 	        if (enquote) str = "'" + str + "'";
             return str;
         }
