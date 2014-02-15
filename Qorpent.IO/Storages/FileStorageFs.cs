@@ -10,22 +10,43 @@ namespace Qorpent.IO.Storages {
     /// </summary>
     public class FileStorageFs : IFileStorageExtended {
         /// <summary>
+        /// 
+        /// </summary>
+        private DirectoryInfo _workingDirectory;
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Path { get; set; }
+        /// <summary>
         ///     Текущая рабочая директория
         /// </summary>
-        public DirectoryInfo WorkingDirectory { get; private set; }
+        public DirectoryInfo WorkingDirectory {
+            get { return _workingDirectory ?? (_workingDirectory = new DirectoryInfo(Path)); }
+            private set { _workingDirectory = value; }
+        }
         /// <summary>
         ///     Поддерживаемый функционал
         /// </summary>
-        public FileStorageAbilities Abilities { get; private set; }
+        public FileStorageAbilities Abilities {
+            get { return FileStorageAbilities.Persist; }
+        }
+        /// <summary>
+        ///     Движок на файловой системе
+        /// </summary>
+        public FileStorageFs() {}
+        /// <summary>
+        ///     Движок на файловой системе
+        /// </summary>
+        /// <param name="path">Путь к храниилщу</param>
+        public FileStorageFs(string path) : this(new DirectoryInfo(path)) { }
         /// <summary>
         ///     Движок на файловой системе
         /// </summary>
         /// <param name="workingDirectory">Рабочая директория</param>
         public FileStorageFs(DirectoryInfo workingDirectory) {
             WorkingDirectory = workingDirectory;
-            Abilities = FileStorageAbilities.Persist;
+            Path = workingDirectory.FullName;
         }
-
         /// <summary>
         ///     Запись элемента в низкоуровневое хранилище
         /// </summary>
@@ -123,7 +144,7 @@ namespace Qorpent.IO.Storages {
         /// <param name="file">Дескриптор</param>
         /// <returns></returns>
         private string GenerateElementDirectory(IFileDescriptor file) {
-            return Path.Combine(WorkingDirectory.FullName, Path.GetDirectoryName(file.Path));
+            return System.IO.Path.Combine(WorkingDirectory.FullName, System.IO.Path.GetDirectoryName(file.Path));
         }
         /// <summary>
         ///     Генерирует путь до файла
@@ -131,7 +152,7 @@ namespace Qorpent.IO.Storages {
         /// <param name="file">Представление элемента</param>
         /// <returns>Полный путь</returns>
         private string GeneratePath(IFileDescriptor file) {
-            return Path.Combine(GenerateElementDirectory(file), Path.GetFileName(file.Path));
+            return System.IO.Path.Combine(GenerateElementDirectory(file), System.IO.Path.GetFileName(file.Path));
         }
     }
 }

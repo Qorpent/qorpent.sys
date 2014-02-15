@@ -42,6 +42,7 @@
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />
     <Compile Include="Storages\FileStorageHashedDirectory.cs" />
     <Compile Include="Storages\FileStorageVcsStorage.cs" />
+    <Compile Include="Storages\PlainFileStorage.cs" />
     <Compile Include="StreamProxy.cs" />
     <Compile Include="VcsStorage\VcsCommit.cs" />
     <Compile Include="Web\ProxySelectorHelper.cs" />
