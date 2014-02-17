@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace Qorpent.Security.Cryptography.Sources {
     /// <summary>
@@ -33,13 +34,16 @@ namespace Qorpent.Security.Cryptography.Sources {
             if (!CorrectConfiguration(action)) {
                 throw new Exception("Incorrect configuration");
             }
-
+			var md5 = MD5.Create();
+			
             switch (action.ActionType) {
                 case CryptoProviderActionType.Verify: return Verify(action);
                 case CryptoProviderActionType.Sign: return Sign(action);
                 case CryptoProviderActionType.GenerateCertificate: throw new NotImplementedException();
                 case CryptoProviderActionType.GenerateRequest: throw new NotImplementedException();
                 case CryptoProviderActionType.None: return null;
+
+		            
                 default: return null;
             }
         }

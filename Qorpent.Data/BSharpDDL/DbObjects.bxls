@@ -1,0 +1,70 @@
+namespace Qorpent.Db
+
+	class BaseObject "Абстрактные определения и константы" abstract
+		datatype int tsql=int psql=int
+		datatype long tsql=bigint psql=bigint
+		datatype string tsql=nvarchar(255) psql=varchar(255)
+		datatype bigstring tsql=nvarchar(400) psql=varchar(400)
+		datatype text tsql=nvarchar(max) psql=text
+		_timestampstr = "CAST(CAST(CURRENT_TIMESTAMP as float) as char)"
+
+	BaseObject DataDictionary "Определение словаря (с поддержкой иерархии)" abstract
+		fullname = "[${schema}].[${name}]"
+		int Id "Локальный идентификатор" primarykey identity
+		string Code "Уникальный код" unique default="'NOCODE_' + ${_timestampstr}"
+		string Name "Название" default="'NONAME_' + ${_timestampstr}"
+		string Value "Значение"
+		string Tag "Теги"
+		string SecurityInfo "Некая информация о безопасности"
+		string ParentCode "Код родительской сущности" cascadeupdates reftable="${fullname}" reffield="Code" default =-1
+		string Path "Полный путь"
+		ensure record 
+			Id = -1
+			Code = "${name}_ROOT"
+			Name = "${name}_ROOT"
+			ParentCode = -1
+		create function "[${schema}].[getPath]" 
+			int Id "Идентификатор элемента таблицы ${fullname}"
+			returns string
+			as language=tsql : """
+				if ( @Id = -1 ) return '/';
+				declare @code nvarchar(255);
+				declare @parentcode nvarchar(255);
+				select @code = Code, @parentcode = ParentCode from ${fullname} where Id = @Id
+				declare @result nvarchar(255) set @result = '/' + @code+ '/' ;
+				while ( @parentcode != -1 ) begin
+					select @code = Code, @parentcode = ParentCode from ${fullname} where Id = @Id
+					@result = '/'+@code + @result
+				end
+				return @result
+			"""
+		create trigger "[${schema}].[${name}_set_path_on_insert]" afterinsert
+			as language=tsql : """
+				update ${fullname} set Path = [${schema}].[getPath](Id) where Id in (select Id from inserted)
+			"""
+			
+		create trigger "[${schema}].[${name}_set_path_on_update]" afterupdatecolumns="Code,ParentCode"
+			as language=tsql : """
+				declare @ids table (id int)
+				insert @ids select id from inserted 
+				insert @ids select id from ${fullname} src join updated u on src.Path like '%/'+ u.Code+'/%'
+				update ${fullname} set Path = [${schema}].[getPath](Id) where Id in (select id from @ids)
+			"""
+		ensure index "[${schema}].${name}_by_code_index" unique
+			use Code
+			include Name
+			include Tag
+		
+		ensure index "[${schema}].${name}_by_path_index" unique
+			use Path
+			include Code
+			include Name
+			include Tag
+			
+		ensure index "[${schema}].${name}_by_tag_index" unique
+			use Path
+			include Code
+			include Name
+			include Tag
+		
+		
