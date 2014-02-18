@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Qorpent.Utils.Extensions {
 	/// <summary>
@@ -267,6 +268,16 @@ namespace Qorpent.Utils.Extensions {
 			return _helper.FindAllValueMembers(type, attributeType, publicOnly, readableOnly, assignableOnly);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="assembly"></param>
+		/// <param name="pattarn"></param>
+		/// <returns></returns>
+		public static IEnumerable<string> FindAllResourceNames(this Assembly assembly,string pattarn){
+			return assembly.GetManifestResourceNames().Where(_ => Regex.IsMatch(_, pattarn));
+		}
+ 
 
 		
 		/// <summary>

@@ -8,6 +8,7 @@
     <AssemblyName>Qorpent.Data</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BSharpDDL\DataObjectsSourcePackageForBShart.cs" />
     <Compile Include="Connections\ConfigBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
@@ -22,6 +23,7 @@
     <Compile Include="REST\AddConnection.cs" />
     <Compile Include="REST\ConnectionsAction.cs" />
     <Compile Include="REST\RemoveConnection.cs" />
+    <EmbeddedResource Include="BSharpDDL\DbObjects.bxls" />
     <None Include="Qorpent.Core.import" />
     <None Include="Qorpent.Utils.import" />
     <None Include="*.export" />

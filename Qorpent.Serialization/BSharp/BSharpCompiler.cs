@@ -26,7 +26,16 @@ namespace Qorpent.BSharp {
 		public BSharpCompiler(){
 			this.DoProcessRequires = true;
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public static BSharpCompiler CreateDefault(){
+			var cfg = new BSharpConfig{UseInterpolation = true, SingleSource = true};
+			var result = new BSharpCompiler();
+			result.Initialize(cfg);
+			return result;
+		}
 		private IBSharpConfig _config;
 		IUserLog log {
 			get { return GetConfig().Log; }
@@ -138,25 +147,44 @@ namespace Qorpent.BSharp {
 		}
 		BxlParser requireBxl =new BxlParser();
 
+		
+
 		private void ProcessRequires(XElement source,string filename, Dictionary<string, XElement> filenames){
 			var requires = source.Elements(BSharpSyntax.Require).ToArray();
 			if (requires.Length != 0){
 				var dir = Path.GetDirectoryName(filename);
 				requires.Remove();
 				foreach (var require in requires){
-					var file = require.Attr("code")+".bxls";
 					
-					if (!Path.IsPathRooted(file)){
-						file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
-					} 
-					if(filenames.ContainsKey(file))continue;
-					if (File.Exists(file)){
-						var src = requireBxl.Parse(File.ReadAllText(file), file);
-						filenames[file] = src;
-						ProcessRequires(src, file, filenames);
+					var name = require.Attr("code");
+					if (filenames.ContainsKey(name)) continue;
+					
+					var pkgservice = ResolveService<IBSharpSourceCodeProvider>(name + ".bssrcpkg");
+					if (null != pkgservice){
+						filenames[name] = new XElement("stub");
+						foreach (var element in pkgservice.GetSources(this,null).ToArray()){
+							var fn = element.Describe().File;
+							if (!filenames.ContainsKey(fn)){
+								filenames[fn] = element;
+							}
+						}
 					}
 					else{
-						this.log.Error("cannot  find required module "+require.Attr("code")+" for "+source.Describe().File);
+
+						var file = require.Attr("code") + ".bxls";
+
+						if (!Path.IsPathRooted(file)){
+							file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
+						}
+						if (filenames.ContainsKey(file)) continue;
+						if (File.Exists(file)){
+							var src = requireBxl.Parse(File.ReadAllText(file), file);
+							filenames[file] = src;
+							ProcessRequires(src, file, filenames);
+						}
+						else{
+							this.log.Error("cannot  find required module " + require.Attr("code") + " for " + source.Describe().File);
+						}
 					}
 				}
 			}

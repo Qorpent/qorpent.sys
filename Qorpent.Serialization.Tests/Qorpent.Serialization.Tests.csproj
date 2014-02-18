@@ -17,6 +17,7 @@
     <Compile Include="BSharp\DictionarySupport.cs" />
     <Compile Include="BSharp\GeneratorTest.cs" />
     <Compile Include="BSharp\Matcher\SingleConditionTests.cs" />
+    <Compile Include="BSharp\RequireSupportForPreBuildPackages.cs" />
     <Compile Include="BSharp\Runtime\BSharpLibraryClassProviderTest.cs" />
     <Compile Include="BSharp\Schema\AttributeRuleTest.cs" />
     <Compile Include="BSharp\Schema\ElementRuleTest.cs" />
@@ -105,6 +106,10 @@
     <ProjectReference Include="..\Qorpent.Core.Tests\Qorpent.Core.Tests.csproj">
       <Project>{880F65EA-1A22-4672-A137-FFC912902046}</Project>
       <Name>Qorpent.Core.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Data\Qorpent.Data.csproj">
+      <Project>{e762abb0-9982-444c-a2b5-23b5866954f3}</Project>
+      <Name>Qorpent.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Qorpent.IO\Qorpent.IO.csproj">
       <Project>{426c92df-3c40-426c-b0be-40a1df9044c2}</Project>

@@ -53,6 +53,7 @@
     <Compile Include="BSharp\IBSharpContext.cs" />
     <Compile Include="BSharp\IBSharpElement.cs" />
     <Compile Include="BSharp\IBSharpImport.cs" />
+    <Compile Include="BSharp\IBSharpSourceCodeProvider.cs" />
     <Compile Include="BSharp\IBSharpSqlAdapter.cs" />
     <Compile Include="BSharp\Runtime\BSharpActivationType.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeActivatorService.cs" />
@@ -109,7 +110,10 @@
     <Compile Include="Data\IParametersProvider.cs" />
     <Compile Include="Data\ParamAttribute.cs" />
     <Compile Include="Dsl\ReplaceDescriptor.cs" />
+    <Compile Include="FilterExtensions.cs" />
+    <Compile Include="FilterState.cs" />
     <Compile Include="Graphs\Dot\BuilderExtensions.cs" />
+    <Compile Include="IFilter.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
     <Compile Include="IoC\ComponentDefinitionWrapper.cs" />
     <Compile Include="IoC\ContainerInitializerAttribute.cs" />
