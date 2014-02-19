@@ -78,7 +78,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// Связанный объект
 		/// </summary>
 		public object Tag { get; set; }
-
 		/// <summary>
 		/// Нормализованное значение
 		/// </summary>
@@ -104,6 +103,14 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         public decimal MatchNormalizedLabelMax(LabelPosition labelPosition) {
             if (labelPosition != LabelPosition.Below) return NormalizedValue + LabelHeight;
             return NormalizedValue;
+        }
+        /// <summary>
+        ///     Типизированное получение тега
+        /// </summary>
+        /// <typeparam name="T">Типизация выходного значения</typeparam>
+        /// <returns>Типизированное значение тега</returns>
+        public T GetTag<T>() {
+            return (T) Tag;
         }
         /// <summary>
         ///     Приведение <see cref="DataItem"/> к строке
