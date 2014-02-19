@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// <summary>
-	/// Ряд данных
+	///     Ряд данных
 	/// </summary>
-	public class DataRow {
+    public class DataRow : IEnumerable<DataItem> {
 		/// <summary>
-		/// 
+        ///     Ряд данных
 		/// </summary>
 		public DataRow() {
 			Items = new List<DataItem>();
@@ -26,6 +27,20 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// <summary>
 		/// Значения в серии
 		/// </summary>
-		public IList<DataItem> Items { get; private set; } 
+		public IList<DataItem> Items { get; private set; }
+        /// <summary>
+        ///     Получение <see cref="IEnumerable"/> по <see cref="DataItem"/>
+        /// </summary>
+        /// <returns><see cref="IEnumerable"/> по <see cref="DataItem"/></returns>
+        public IEnumerator<DataItem> GetEnumerator() {
+            return Items.GetEnumerator();
+        }
+        /// <summary>
+        ///     Получение <see cref="IEnumerable"/> по <see cref="DataItem"/>
+        /// </summary>
+        /// <returns><see cref="IEnumerable"/> по <see cref="DataItem"/></returns>
+	    IEnumerator IEnumerable.GetEnumerator() {
+	        return GetEnumerator();
+	    }
 	}
 }
