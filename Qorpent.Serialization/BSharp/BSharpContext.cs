@@ -266,7 +266,7 @@ namespace Qorpent.BSharp {
 			}
 
 			clselement.Add(generator.Elements());
-			var cls = Compiler.ReadSingleClassSource(clselement, ns);
+			var cls = Compiler.ReadSingleClassSource(clselement, ns,null);
 			RegisterClassInIndex(cls);
 		}
 

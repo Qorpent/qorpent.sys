@@ -104,6 +104,12 @@ namespace Qorpent.BSharp {
 		string Prototype { get; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		[SerializeNotNullOnly]
+		string AliasImportCode { get; set; }
+
+		/// <summary>
 		/// Возвращает true при наличии флага
 		/// </summary>
 		/// <param name="attribute"></param>

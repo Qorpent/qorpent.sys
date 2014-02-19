@@ -46,8 +46,9 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <param name="e"></param>
 		/// <param name="ns"></param>
+		/// <param name="aliases"></param>
 		/// <returns></returns>
-		IBSharpClass ReadSingleClassSource(XElement e, string ns);
+		IBSharpClass ReadSingleClassSource(XElement e, string ns, IDictionary<string,string> aliases );
 
 		/// <summary>
 		/// 

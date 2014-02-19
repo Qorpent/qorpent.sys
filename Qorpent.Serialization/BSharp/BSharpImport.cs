@@ -45,6 +45,11 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		[SerializeNotNullOnly]
 		public XElement Source { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		[SerializeNotNullOnly]
+		public string Alias { get; set; }
 
 		/// <summary>
 		/// Проверяет условные импорты
