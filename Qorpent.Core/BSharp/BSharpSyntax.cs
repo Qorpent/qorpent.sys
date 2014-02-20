@@ -12,6 +12,11 @@ namespace Qorpent.BSharp {
 		/// Ключевое слово, открывающее пространство имен
 		/// </summary>
 		public const string Namespace = "namespace";
+
+		/// <summary>
+		/// Корневой элемент использования типов
+		/// </summary>
+		public const string AliasImport = "using";
 		/// <summary>
 		/// Ключевое слово,обозначающее заголовок класса
 		/// </summary>

@@ -178,7 +178,12 @@ namespace Qorpent.BSharp {
 				return Compiled.Attr(BSharpSyntax.ClassPrototypeAttribute);
 			}
 		}
-		
+		/// <summary>
+		/// 
+		/// </summary>
+		[Serialize]
+		public string AliasImportCode { get; set; }
+
 
 		/// <summary>
 		///     Код первичного класса импорта

@@ -270,8 +270,9 @@ namespace Qorpent.BSharp {
 
 		LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
 		private IBSharpSqlAdapter _sqlAdapter;
-
-		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns) {
+		static string[] ignores = new string[] { "code", "name", "_file", "_line" };
+		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns){
+			var aliases = new Dictionary<string, string>();
 			foreach (XElement e in src.Elements()) {
 				var _ns = "";
 				if (e.Name.LocalName == BSharpSyntax.Namespace) {
@@ -294,7 +295,21 @@ namespace Qorpent.BSharp {
 					foreach (IBSharpClass e_ in IndexizeRawClasses(e, _ns)) {
 						yield return e_;
 					}
-				}else if (e.Name.LocalName == BSharpSyntax.Dataset)
+				}
+
+				else if(e.Name.LocalName==BSharpSyntax.AliasImport){
+					
+					foreach (var attr in e.Attributes()){
+						if (-1 == Array.IndexOf(ignores, attr.Name.LocalName)){
+							aliases[attr.Name.LocalName] = attr.Value;
+						}
+					}
+				}
+				else if (e.Name.LocalName == BSharpSyntax.Require)
+				{
+					continue;
+				}
+				else if (e.Name.LocalName == BSharpSyntax.Dataset)
 				{
 					var def = new BSharpClass(CurrentBuildContext) { Source = e, Name = BSharpSyntax.DatasetClassCodePrefix+e.Attr("code"), Namespace = ns ?? string.Empty };
 					def.Set(BSharpClassAttributes.Dataset);
@@ -312,7 +327,7 @@ namespace Qorpent.BSharp {
 				}
 				else
 				{
-					var def = ReadSingleClassSource(e, ns);
+					var def = ReadSingleClassSource(e, ns,aliases);
 					if(null!=def)yield return def;
 				}
 			}
@@ -357,8 +372,9 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <param name="e"></param>
 		/// <param name="ns"></param>
+		/// <param name="aliases"></param>
 		/// <returns></returns>
-		public IBSharpClass ReadSingleClassSource(XElement e, string ns)
+		public IBSharpClass ReadSingleClassSource(XElement e, string ns, IDictionary<string, string> aliases)
 		{
 			var selfcode = e.Attr("code");
 			var __ns = ns ?? string.Empty;
@@ -382,8 +398,8 @@ namespace Qorpent.BSharp {
 				def.Source.SetAttributeValue("_dir", Path.GetDirectoryName(def.Source.Attr("_file")).Replace("\\", "/"));
 			}
 			if (!IsOverrideMatch(def)) return null;
-			SetupInitialOrphanState(e, def);
-			ParseImports(e, def);
+			SetupInitialOrphanState(e, def,aliases);
+			ParseImports(e, def, aliases);
 			ParseCompoundElements(e, def);
 			return def;
 		}
@@ -403,7 +419,7 @@ namespace Qorpent.BSharp {
             return true;
         }
 
-		private static void SetupInitialOrphanState(XElement e, IBSharpClass def) {
+		private static void SetupInitialOrphanState(XElement e, IBSharpClass def,IDictionary<string,string> aliases ) {
 			if (null != e.Attribute("abstract") || e.Attr("name") == "abstract") {
 				def.Set(BSharpClassAttributes.Abstract);
 			}
@@ -425,12 +441,21 @@ namespace Qorpent.BSharp {
 			else {
 				def.Set(BSharpClassAttributes.Orphan);
 				def.DefaultImportCode = e.Name.LocalName;
+				if (null!=aliases && aliases.ContainsKey(def.DefaultImportCode)){
+					def.AliasImportCode = def.DefaultImportCode;
+					def.DefaultImportCode = aliases[def.DefaultImportCode];
+				}
 			}
 		}
 
-		private static void ParseImports(XElement e, IBSharpClass def) {
+		private static void ParseImports(XElement e, IBSharpClass def, IDictionary<string, string> aliases) {
 			foreach (XElement i in e.Elements("import")) {
 				var import = new BSharpImport {Condition = i.Attr("if"), TargetCode = i.Attr("code"), Source = i};
+				if (null!=aliases && aliases.ContainsKey(import.TargetCode)){
+					import.Alias = import.TargetCode;
+					import.TargetCode = aliases[import.TargetCode];
+					
+				}
 				def.SelfImports.Add(import);
 			}
 		}

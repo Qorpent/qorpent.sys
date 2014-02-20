@@ -2,31 +2,36 @@ namespace Qorpent.Db
 
 	class BaseObject "Абстрактные определения и константы" abstract
 		schema=dbo
-		datatype int
-		datatype bigint
-		datatype string tsql=nvarchar(255) psql=varchar(255)
-		datatype bigstring tsql=nvarchar(400) psql=varchar(400)
-		datatype text tsql=nvarchar(max) psql=text
-		datatype datetime
-		datatype bool tsql=bit psql=boolean
+		
+		element datatype
+		datatype int type=Int32
+		datatype long type=Int64
+		datatype string type=String size=255
+		datatype shortstring type=String size=20
+		datatype longstring type=String size=400
+		datatype text type=String size=-1
+		datatype datetime type=DateTime
+		datatype decimal type=Decimal size=18 precession=6
+		datatype bool type=Boolean
 		_timestampstr = "CAST(CAST(CURRENT_TIMESTAMP as float) as char)"
+		fullname = "${schema}.${code}"
 		
 
-	BaseObject DataDictionary "Определение словаря (с поддержкой иерархии)" abstract
-		fullname = "[${schema}].[${code}]"
+	class Table "Абстрактная таблица" abstract prototype=dbtable
+		import BaseObject
+		int Id "Локальный уникальный идентификатор" primarykey identity idx=10
+		
+
+	Table DataDictionary "Определение словаря (с поддержкой иерархии)" abstract
 		int Id "Локальный идентификатор" primarykey identity
 		string Code "Уникальный код" unique default="'NOCODE_' + ${_timestampstr}"
 		string Name "Название" default="'NONAME_' + ${_timestampstr}"
 		string Value "Значение"
 		string Tag "Теги"
 		string SecurityInfo "Некая информация о безопасности"
-		string ParentCode "Код родительской сущности" cascadeupdates reftable="${fullname}" reffield="Code" default ="/"
+		string ParentCode "Код родительской сущности" ref="${fullname}.Code" 
 		string Path "Полный путь"
-		ensure record 
-			Id = -1
-			Code = "/"
-			Name = "${code}_ROOT"
-			ParentCode = -1
+
 		create function "[${schema}].[${.code}_getPath]" 
 			int Id "Идентификатор элемента таблицы ${fullname}"
 			returns string
