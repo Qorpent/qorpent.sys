@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
@@ -17,13 +18,12 @@ namespace Qorpent.Config {
         /// <summary>
         ///     Базовый класс для конфигураций
         /// </summary>
-		public ConfigBase() {}
-
+		public ConfigBase() { }
 		/// <summary>
 		///     Базовый класс для унаследованной
 		/// </summary>
 		public ConfigBase(IConfig parent) {
-			this.SetParent(parent);
+			SetParent(parent);
 		}
 	    /// <summary>
 	    ///     Поддержка наследования от родителя
@@ -63,7 +63,6 @@ namespace Qorpent.Config {
 		/// </summary>
 		protected bool _freezed;
 		private IConfig _parent;
-
 	    /// <summary>
 		/// Конвертирует XML в словарь
 		/// </summary>
@@ -231,7 +230,54 @@ namespace Qorpent.Config {
 
 		    throw new Exception("unknown format " + rendertype);
 		}
-
+		/// <summary>
+		///		Перекрытие текущего конфига другим конфгом
+		/// </summary>
+		/// <param name="config">Конфиг для перекрытия</param>
+		/// <param name="insertNotExists">Нужно ли вставлять значения в текущий конфиг из переданного, если в данном конфиге такого ключа не существует</param>
+		public void Override(IConfig config, bool insertNotExists = true) {
+			Override(config as IDictionary<string, object>, insertNotExists);
+		}
+		/// <summary>
+		///		Перекрытие текущего конфига другим конфгом
+		/// </summary>
+		/// <param name="config">Конфиг для перекрытия</param>
+		/// <param name="insertNotExists">Нужно ли вставлять значения в текущий конфиг из переданного, если в данном конфиге такого ключа не существует</param>
+		public void Override(IDictionary<string, object> config, bool insertNotExists = true) {
+			Override(config as IEnumerable<KeyValuePair<string, object>>, insertNotExists);
+		}
+		/// <summary>
+		///		Перекрытие текущего конфига другим конфгом
+		/// </summary>
+		/// <param name="config">Конфиг для перекрытия</param>
+		/// <param name="insertNotExists">Нужно ли вставлять значения в текущий конфиг из переданного, если в данном конфиге такого ключа не существует</param>
+		public void Override(IEnumerable<KeyValuePair<string, object>> config, bool insertNotExists = true) {
+			foreach (var item in config) {
+				if (insertNotExists) {
+					this[item.Key] = item.Value;
+				} else {
+					if (Exists(item.Key)) {
+						this[item.Key] = item.Value;
+					}
+				}
+			}
+		}
+		/// <summary>
+		///     SQL-подобная LIKE выборка имени элемента по ключу элемента
+		/// </summary>
+		/// <param name="pattern">Исходный паттерн</param>
+		/// <returns>Перечисление попавших под паттерн по имени элементов конфига</returns>
+		public IEnumerable<KeyValuePair<string, object>> Like(string pattern) {
+			return this.Where(_ => Regex.IsMatch(_.Key, pattern.Replace("%", ".*").Replace("_", ".")));
+		}
+		/// <summary>
+		///		Определяет признак наличия элмента конфига по ключу
+		/// </summary>
+		/// <param name="key">Ключ</param>
+		/// <returns>Признак наличия элемента конфига по ключу</returns>
+		public bool Exists(string key) {
+			return Get<object>(key) != null;
+		}
 	    private string GenerateSimpleBxl() {
 			var asdict = this as IDictionary<string,object>;
 			var sb = new StringBuilder();

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Qorpent.Config;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// <summary>
 	///     Описывает набор данных для обсчета
 	/// </summary>
-	public class BrickDataSet {
+	public class BrickDataSet : ConfigBase{
         /// <summary>
         ///     Внутрениий список категорий
         /// </summary>
@@ -16,6 +17,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Внутренний список серий
         /// </summary>
         private readonly Dictionary<int, BrickDataSetSeria> _series = new Dictionary<int, BrickDataSetSeria>();
+		/// <summary>
+		///		Перечисление по айтемам данных
+		/// </summary>
+		public IEnumerable<DataItem> Items {
+			get { return _items; }
+		}
 		/// <summary>
 		/// Рассчитанный размер первой шкалы
 		/// </summary>
@@ -43,19 +50,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             get { return _series.Values.ToArray(); }
         }
         /// <summary>
-        ///     Перечисление категорий
-        /// </summary>
-	    public IEnumerable<string> Categories {
-            get { return _categories.AsEnumerable(); }
-	    }
-        /// <summary>
         ///     Описывает набор данных для обсчета
         /// </summary>
-        public BrickDataSet() {
-            Rows = new List<DataRow>();
-            Preferences = new UserPreferences();
-            LabelHeight = 20;
-        }
+        public BrickDataSet() : this(20) { }
         /// <summary>
         ///     Описывает набор данных для обсчета
         /// </summary>
@@ -328,6 +325,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         /// <param name="seria">Искомая серия</param>
         public void Remove(BrickDataSetSeria seria) {
+	        foreach (var item in seria) {
+		        _items.Remove(item);
+	        }
             _series.Remove(_series.FirstOrDefault(_ => _.Value == seria).Key);
         }
 		/// <summary>
@@ -399,6 +399,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
                 _series[serianum].Add(row);
             }
 			row.Items.Add(item);
+			_items.Add(item);
 		    return item;
 		}
 		/// <summary>
@@ -407,6 +408,8 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		public DataItem GetItem(int serianum, int rownum, int pos) {
 			return GetItem(serianum, rownum, pos, false);
 		}
+
+		private readonly List<DataItem> _items = new List<DataItem>();
 		/// <summary>
 		/// Возвращает элемент данных по позиции
 		/// </summary>
@@ -429,7 +432,15 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			}
 			return result;
 		}
-	    /// <summary>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator<DataItem> GetEnumerator() {
+			return _items.GetEnumerator();
+		}
+
+		/// <summary>
 	    /// 
 	    /// </summary>
 	    /// <returns></returns>
@@ -443,9 +454,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <returns></returns>
         public static BrickDataSet Parse(string dataset) {
             throw new NotImplementedException();
-        }
-        private IEnumerable<decimal> ParseSeria(string seria) {
-            return seria.Split(new[] {','}).Select(Convert.ToDecimal);
         }
 	}
 }

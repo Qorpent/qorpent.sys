@@ -80,18 +80,5 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             json += "]";
             return json.Replace("},]", "}\r\n\t\t]");
         }
-        /// <summary>
-        ///     Отрисовка категорий
-        /// </summary>
-        /// <param name="brickDataSet">Исходный датасет</param>
-        /// <returns>JSON массив categories</returns>
-        public static string RenderCategories(this BrickDataSet brickDataSet) {
-            var json = "\r\n\"categories\" : [\r\n\t{\"category\" : [";
-            foreach (var _ in brickDataSet.Categories) {
-                json += "\r\n\t\t{ \"label\" : \"" + _.Replace("\"", "\\\"") + "\"},";
-            }
-            json += "]}]";
-            return json.Replace("},]}]", "}\r\n\t]}\r\n]\r\n");
-        }
     }
 }
