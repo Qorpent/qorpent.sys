@@ -585,7 +585,7 @@ namespace Qorpent.Utils.Extensions
 		/// <returns></returns>
 		/// <exception cref="ArgumentNullException"></exception>
 		public static T[] 
-            ExecuteOrm<T>(this IDbConnection connection, object command,object parameters=null,int timeout = 30, bool close = false) where T:new(){
+            ExecuteOrm<T>(this IDbConnection connection, object command,object parameters=null,int timeout = 30, bool close = true) where T:new(){
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
             var result = new List<T>();
