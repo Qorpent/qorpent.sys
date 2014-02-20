@@ -79,7 +79,7 @@ namespace Qorpent.Utils.Extensions
 					return DatabaseEngineType.Undefined;
 			}
 		}
-       
+
 
 		/// <summary>
 		/// Выполняет запрос без результатов
@@ -88,43 +88,51 @@ namespace Qorpent.Utils.Extensions
 		/// <param name="command"></param>
 		/// <param name="parameters"></param>
 		/// <param name="timeout"></param>
+		/// <param name="close"></param>
 		/// <exception cref="Exception"></exception>
 		public static void ExecuteNonQuery(this IDbConnection connection, object command,
-										   object parameters = null, int timeout=30)
+										   object parameters = null, int timeout=30, bool close = false)
 		{
 			connection.WellOpen();
 			IDbCommand cmd = connection.CreateCommand(command, parameters,timeout);
 			cmd.CommandTimeout = timeout;
-			try
-			{
+			try{
 				cmd.ExecuteNonQuery();
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex){
 				throw new Exception("error in query:" + cmd.CommandText, ex);
-            }
+			}
+			finally{
+				if (close){
+					connection.Close();
+				}
+			}
 		}
 
 
-	    /// <summary>
-	    /// Вызывает запрос на скалярное значение
-	    /// </summary>
-	    /// <param name="connection"></param>
-	    /// <param name="command"></param>
-	    /// <param name="parameters"></param>
-	    /// <param name="defValue"></param>
-	    /// <param name="timeout"></param>
-	    /// <typeparam name="T"></typeparam>
-	    /// <returns></returns>
-	    /// <exception cref="ArgumentNullException"></exception>
-	    public static T ExecuteScalar<T>(this IDbConnection connection, object command,
-                                         object parameters=null, T defValue=default(T) , int timeout = 30)
+		/// <summary>
+		/// Вызывает запрос на скалярное значение
+		/// </summary>
+		/// <param name="connection"></param>
+		/// <param name="command"></param>
+		/// <param name="parameters"></param>
+		/// <param name="defValue"></param>
+		/// <param name="timeout"></param>
+		/// <param name="close"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		/// <exception cref="ArgumentNullException"></exception>
+		public static T ExecuteScalar<T>(this IDbConnection connection, object command,
+                                         object parameters=null, T defValue=default(T) , int timeout = 30, bool close = false)
         {
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
             var result = connection.CreateCommand(command, parameters, timeout).ExecuteScalar();
             if (null == result) return defValue;
             if (result is DBNull) return defValue;
+			if (close){
+				connection.Close();
+			}
             return result.To<T>();
         }
 
@@ -565,18 +573,19 @@ namespace Qorpent.Utils.Extensions
         }
 
 
-	    /// <summary>
-	    ///  Эмулирует работу ORM - прошивает именованными полями свойства объектов
-	    /// </summary>
-	    /// <param name="connection"></param>
-	    /// <param name="command"></param>
-	    /// <param name="parameters"></param>
-	    /// <param name="timeout"></param>
-	    /// <typeparam name="T"></typeparam>
-	    /// <returns></returns>
-	    /// <exception cref="ArgumentNullException"></exception>
-	    public static T[] 
-            ExecuteOrm<T>(this IDbConnection connection, object command,object parameters=null,int timeout = 30) where T:new(){
+		/// <summary>
+		///  Эмулирует работу ORM - прошивает именованными полями свойства объектов
+		/// </summary>
+		/// <param name="connection"></param>
+		/// <param name="command"></param>
+		/// <param name="parameters"></param>
+		/// <param name="timeout"></param>
+		/// <param name="close"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		/// <exception cref="ArgumentNullException"></exception>
+		public static T[] 
+            ExecuteOrm<T>(this IDbConnection connection, object command,object parameters=null,int timeout = 30, bool close = false) where T:new(){
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
             var result = new List<T>();
@@ -597,7 +606,9 @@ namespace Qorpent.Utils.Extensions
             finally
             {
                 reader.Close();
-                connection.Close();
+	            if (close){
+		            connection.Close();
+	            }
             }
             return result.ToArray();
         }

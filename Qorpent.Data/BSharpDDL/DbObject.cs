@@ -53,13 +53,17 @@ namespace Qorpent.Data.BSharpDDL
 				objarray.OfType<DbTable>().SelectMany(_ => _.Fields.Values).Where(_ => _.IsRef).ToArray();
 			foreach (var dbField in fkeys){
 				var table = objarray.OfType<DbTable>().FirstOrDefault(_ =>{
-					if (_.Name == dbField.RefTable) return true;
-					if ((_.Schema + "." + _.Name) == dbField.RefTable) return true;
+					var simplified = dbField.RefTable.Replace("[", "").Replace("]", "");
+					if (_.Name == simplified) return true;
+					if ((_.Schema + "." + _.Name) == simplified) return true;
 					return false;
 				});
 				if (null != table){
 					dbField.RefTable = table.Schema + "." + table.Name;
 					table.RequireDefaultRecord = true;
+					if (table == dbField.Table){
+						dbField.NoCascadeUpdates = true;
+					}else
 					if (!dbField.Table.InDependency.Contains(table)){
 						dbField.Table.InDependency.Add(table);
 						table.OutDependency.Add(dbField.Table);
@@ -178,7 +182,7 @@ namespace Qorpent.Data.BSharpDDL
 				}
 			}
 			else{
-				throw new Exception("cannot create DBObject for this sourceClass");
+				throw new Exception("cannot create DBObject for this sourceClass "+sourceClass.Name+" "+sourceClass.Prototype);
 			}
 			
 		}

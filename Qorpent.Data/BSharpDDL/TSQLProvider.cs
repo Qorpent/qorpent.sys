@@ -57,11 +57,13 @@ CREATE PROCEDURE #ensureunq @t nvarchar(255), @f nvarchar(255) as begin
 	end
 END
 GO
-CREATE PROCEDURE #ensurefk @t nvarchar(255), @f nvarchar(255) , @rt nvarchar(255), @rf nvarchar(255) as begin
+CREATE PROCEDURE #ensurefk @t nvarchar(255), @f nvarchar(255) , @rt nvarchar(255), @rf nvarchar(255), @cu bit as begin
 	declare @n nvarchar(255) set @n = 'FK_'+upper(replace(@t,'.','_'))+'_'+upper(@f)
+	declare @upd nvarchar(255) set @upd = ' ON UPDATE CASCADE '
+	if(@cu = 0) set @upd = ''
 	if not exists (SELECT *  FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS 
     WHERE CONSTRAINT_NAME = @n) begin
-		declare @q nvarchar(max) set @q = 'ALTER TABLE '+@t+' ADD CONSTRAINT '+@n+' FOREIGN KEY ('+@f+')  REFERENCES '+@rt +'('+@rf+') ON UPDATE CASCADE '
+		declare @q nvarchar(max) set @q = 'ALTER TABLE '+@t+' ADD CONSTRAINT '+@n+' FOREIGN KEY ('+@f+')  REFERENCES '+@rt +'('+@rf+')'+@upd
 		exec sp_executesql @q
 	end
 END
@@ -80,8 +82,8 @@ GO");
 					}
 					if (nonpkfield.IsRef)
 					{
-						sb.AppendLine(string.Format("exec #ensurefk '{0}.{1}','{2}','{3}','{4}'", nonpkfield.Table.Schema, nonpkfield.Table.Name,
-													nonpkfield.Name,nonpkfield.RefTable,nonpkfield.RefField));
+						sb.AppendLine(string.Format("exec #ensurefk '{0}.{1}','{2}','{3}','{4}',{5}", nonpkfield.Table.Schema, nonpkfield.Table.Name,
+							nonpkfield.Name,nonpkfield.RefTable,nonpkfield.RefField,nonpkfield.NoCascadeUpdates?0:1));
 						CheckScriptDelimiter(mode, sb);
 					}
 				}
@@ -122,8 +124,16 @@ GO");
 
 			WriteSafeModeFileds(mode, hintObject, _fields, sb);
 
+			GenerateRequiredRecord(dbTable, mode, sb, fullname, _fields);
+
+			WriteTableDescription(dbTable, mode, sb);
+			return sb.ToString();
+		}
+
+		private void GenerateRequiredRecord(DbTable dbTable, DbGenerationMode mode, StringBuilder sb, string fullname,
+		                                    DbField[] _fields){
 			if (dbTable.RequireDefaultRecord){
-				sb.AppendLine(string.Format("IF NOT EXISTS (SELECT TOP 1 Id from {0} where Id=-1) BEGIN",fullname));
+				sb.AppendLine(string.Format("IF NOT EXISTS (SELECT TOP 1 Id from {0} where Id=-1) BEGIN", fullname));
 				var pk = _fields.First(_ => _.IsPrimaryKey);
 				if (pk.IsIdentity){
 					sb.AppendLine("\tSET IDENTITY_INSERT " + fullname + " ON");
@@ -131,20 +141,21 @@ GO");
 				var intos = "Id";
 				var values = "-1";
 				if (_fields.Any(_ => _.Name == "Code" && _.IsUnique)){
-					intos = "Id,Code";
-					values = "-1,'/'";
+					intos += ",Code";
+					values += ",'/'";
+				}
+				if (_fields.Any(_ => _.Name == "Name"))
+				{
+					intos += ",Name";
+					values+= ",'/'";
 				}
 				sb.AppendLine(string.Format("\tINSERT INTO {0} ({1}) VALUES ({2}) ", fullname, intos, values));
-				if (pk.IsIdentity)
-				{
+				if (pk.IsIdentity){
 					sb.AppendLine("\tSET IDENTITY_INSERT " + fullname + " OFF");
 				}
 				sb.AppendLine("END");
-				CheckScriptDelimiter(mode,sb);
+				CheckScriptDelimiter(mode, sb);
 			}
-
-			WriteTableDescription(dbTable, mode, sb);
-			return sb.ToString();
 		}
 
 		private  void WriteTableDescription(DbTable dbTable, DbGenerationMode mode, StringBuilder sb){
@@ -232,7 +243,8 @@ GO");
 			{
 				result += " IDENTITY (10,10) ";
 			}
-			var refname = field.Table.Schema.ToUpper() + "_" + field.Table.Name.ToUpper() + "_" + field.Name.ToUpper();
+			var refname = field.Name.ToUpper();
+			if(null!=field.Table)refname=field.Table.Schema.ToUpper() + "_" + field.Table.Name.ToUpper() + "_" + field.Name.ToUpper();
 			if (field.IsPrimaryKey)
 			{
 				result += " CONSTRAINT PK_" + refname + " PRIMARY KEY";
@@ -246,7 +258,10 @@ GO");
 				}
 				if (field.IsRef){
 					result += " CONSTRAINT FK_" + refname + " FOREIGN KEY REFERENCES " + field.RefTable + " (" + field.RefField +
-						") ON UPDATE CASCADE ";
+						")  ";
+					if (!field.NoCascadeUpdates){
+						result += " ON UPDATE CASCADE ";
+					}
 				}
 			}
 			if (null!=field.DefaultValue){

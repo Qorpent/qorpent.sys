@@ -159,6 +159,10 @@ namespace Qorpent.Data.BSharpDDL{
 		public bool IsRef{
 			get { return !string.IsNullOrWhiteSpace(RefTable); }
 		}
+		/// <summary>
+		/// Признак того, что не требуется формировать каскады обновлений для IsRef
+		/// </summary>
+		public bool NoCascadeUpdates { get; set; }
 
 		private void SetRef(string attr){
 			if(string.IsNullOrWhiteSpace(attr))return;
