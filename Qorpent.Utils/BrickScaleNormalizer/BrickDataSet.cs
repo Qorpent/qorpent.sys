@@ -8,7 +8,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// <summary>
 	///     Описывает набор данных для обсчета
 	/// </summary>
-	public class BrickDataSet : ConfigBase{
+	public class BrickDataSet : ConfigBase {
         /// <summary>
         ///     Внутрениий список категорий
         /// </summary>
