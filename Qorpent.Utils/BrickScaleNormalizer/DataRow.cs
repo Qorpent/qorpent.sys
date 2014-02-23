@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// <summary>
@@ -48,6 +49,13 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
                 }
                 Items.Add(dataItem);
             }
+        }
+        /// <summary>
+        ///     Приведение <see cref="DataRow"/> к <see cref="string"/>
+        /// </summary>
+        /// <returns><see cref="DataRow"/> в виде <see cref="string"/></returns>
+        public override string ToString() {
+            return Items.Aggregate(string.Empty, (_, __) => _ + "," + __, _ => _.Trim(new[] { ',' }));
         }
         /// <summary>
         ///     Получение <see cref="IEnumerable"/> по <see cref="DataItem"/>

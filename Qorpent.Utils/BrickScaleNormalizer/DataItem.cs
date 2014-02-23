@@ -31,6 +31,10 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         public int Index { get; set; }
         /// <summary>
+        ///     Индекс внутри датасета (порядковый номер вставки)
+        /// </summary>
+        public int DatasetIndex { get; set; }
+        /// <summary>
         ///     Нужно ли прятать данное значение
         /// </summary>
         public bool Hide { get; set; }

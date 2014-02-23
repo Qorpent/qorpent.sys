@@ -75,6 +75,13 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             Collisions.SelectMany(_ => _.SelectVeryHot()).ForEach(_ => _.HideLabel());
         }
         /// <summary>
+        ///     Приведение <see cref="DataItemColon"/> к <see cref="string"/>
+        /// </summary>
+        /// <returns><see cref="DataItemColon"/> в виде <see cref="string"/></returns>
+        public override string ToString() {
+            return this.Aggregate(string.Empty, (_, __) => _ + "," + __, _ => _.Trim(new[] {','}));
+        }
+        /// <summary>
         ///     Получение <see cref="IEnumerator"/> по <see cref="DataItem"/>
         /// </summary>
         /// <returns><see cref="IEnumerator"/> по <see cref="DataItem"/></returns>

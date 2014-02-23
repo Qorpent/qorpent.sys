@@ -10,6 +10,10 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// </summary>
 	public class BrickDataSet : ConfigBase {
         /// <summary>
+        ///     Текущий индекс элемента данных, вставленного в датасет
+        /// </summary>
+	    private int _currentDataItemIndex;
+        /// <summary>
         ///     Внутренний список серий
         /// </summary>
         private readonly List<BrickDataSetSeria> _series = new List<BrickDataSetSeria>();
@@ -335,8 +339,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// <param name="value"></param>
 		/// <param name="secondscale"></param>
 		public DataItem Add(int serianum, int rownum, decimal value, bool secondscale) {
-		    var item = new DataItem {Value = value, LabelHeight = LabelHeight};
-		    EnsureRow(serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First).Add(item);
+            var item = new DataItem { Value = value, LabelHeight = LabelHeight, DatasetIndex = _currentDataItemIndex };
+		    _currentDataItemIndex++;
+            Insert(serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First, item);
 		    return item;
 		}
         /// <summary>

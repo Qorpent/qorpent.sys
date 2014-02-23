@@ -222,7 +222,6 @@ namespace Qorpent.Utils.Tests.BrickScale {
         /// <summary>
         ///     Тест показывает то, что поддерживается две оси с множеством серий и рядов
         /// </summary>
-        [Explicit]
         [Test]
         public void MultiLineTwoScaleWithRowsBuildColonsTest() {
             var ds = GetEmptyDataSet(SeriaCalcMode.Linear, 200);
