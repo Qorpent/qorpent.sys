@@ -10,31 +10,29 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// </summary>
 	public class BrickDataSet : ConfigBase {
         /// <summary>
-        ///     Внутрениий список категорий
-        /// </summary>
-        private readonly List<string> _categories = new List<string>();
-        /// <summary>
         ///     Внутренний список серий
         /// </summary>
-        private readonly Dictionary<int, BrickDataSetSeria> _series = new Dictionary<int, BrickDataSetSeria>();
+        private readonly List<BrickDataSetSeria> _series = new List<BrickDataSetSeria>();
 		/// <summary>
-		///		Перечисление по айтемам данных
-		/// </summary>
-		public IEnumerable<DataItem> Items {
-			get { return _items; }
-		}
-		/// <summary>
-		/// Рассчитанный размер первой шкалы
+		///     Рассчитанный размер первой шкалы
 		/// </summary>
 		public Scale FirstScale { get; set; }
 		/// <summary>
-		/// Рассчитанный вариант второй шкалы
+		///     Рассчитанный вариант второй шкалы
 		/// </summary>
 		public Scale SecondScale { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public IList<DataRow> Rows { get; private set; }
+	    /// <summary>
+	    ///     Ряды данных внутри датасета
+	    /// </summary>
+	    public IEnumerable<DataRow> Rows {
+            get { return _series.SelectMany(_ => _.Rows).ToList(); }
+	    }
+        /// <summary>
+        ///     Перечисление элементов данных
+        /// </summary>
+	    public IEnumerable<DataItem> DataItems {
+            get { return _series.SelectMany(_ => _); }
+	    }
 		/// <summary>
 		/// Требования пользователя
 		/// </summary>
@@ -47,7 +45,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Серии
         /// </summary>
         public BrickDataSetSeria[] Series {
-            get { return _series.Values.ToArray(); }
+            get { return _series.ToArray(); }
         }
         /// <summary>
         ///     Описывает набор данных для обсчета
@@ -58,7 +56,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         /// <param name="lableHeight">Размер лычки в пикселях</param>
         public BrickDataSet(int lableHeight) {
-            Rows = new List<DataRow>();
             Preferences = new UserPreferences();
             LabelHeight = lableHeight;
         }
@@ -161,8 +158,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
                         SourceMinValue = realMin,
                         SourceMaxValue = realMax
                     };
-                    req.Setup(Preferences.Y, Preferences.YMin, Preferences.YMax, Preferences.YTop.ToString(),
-                              Preferences.YSignDelta.ToString());
+                    req.Setup(Preferences.Y, Preferences.YMin, Preferences.YMax, Preferences.YTop.ToString(), Preferences.YSignDelta.ToString());
                     var cat = new BrickCatalog();
                     var result = cat.GetBestVariant(req);
                     FirstScale = new Scale { Prepared = true, Min = result.ResultMinValue, Max = result.ResultMaxValue, DivLines = result.ResultDivCount };
@@ -212,7 +208,8 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 				if (rows.Length == 0) continue;
 				var maxCount = rows.Select(_ => _.Items.Count).Max();
 				var scaleRow = InitNormalizedScaleRow(scaleType, maxCount);
-				result.Rows.Add(scaleRow);
+				//result.Rows.Add(scaleRow); я хер знает что с этим говнищем теперь делать
+                result.EnsureSeria(0).Add(scaleRow);
 				var serias = rows.GroupBy(_ => _.SeriaNumber).ToArray();
 				for (var i = 0; i < maxCount; i++)
 				{
@@ -222,8 +219,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 					var currentNegMax =  decimal.MinValue;
 					var currentNegMin = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum) ? 0 : decimal.MaxValue;
 
-					foreach (var seria in serias)
-					{
+					foreach (var seria in serias) {
 						var seriaPosMax = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum) ? 0 : decimal.MinValue;
 						var seriaNegMin = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum) ? 0 : decimal.MaxValue;
 						foreach (var row in seria) {
@@ -231,54 +227,43 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 							if (i < row.Items.Count) {
 								val = row.Items[i].Value;
 							}
-							if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum))
-							{
+							if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum)) {
 								if (val >= 0) {
 									if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum)) {
 										currentPosMax += val;
 									}
 									seriaPosMax += val;
-								}
-								else {
+								} else {
 									if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum)) {
 										currentNegMin += val;
 									}
 									seriaNegMin += val;
 								}
 								
-							}
-							else
-							{
-								if (val >= 0)
-								{
+							} else {
+								if (val >= 0) {
 									currentPosMax = Math.Max(val,currentPosMax);
 									currentPosMin = Math.Min(val, currentPosMin);
-								}
-								else
-								{
+								} else {
 									currentNegMin = Math.Min(val,currentNegMin);
 									currentNegMax = Math.Max(val, currentNegMax);
 								}
 							}
 						}
-						if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum) ) {
-
+						if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.SeriaSum)) {
 							currentNegMax = Math.Max(currentNegMax, seriaNegMin);
 							currentPosMin = Math.Min(currentPosMin, seriaPosMax);
-							if (!(0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum))) {
+							if (0 == (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum)) {
 								currentPosMax = Math.Max(currentPosMax, seriaPosMax);
 								currentNegMin = Math.Min(currentNegMin, seriaNegMin);
 							}
 						}
 						
 					}
-					if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum))
-					{
+					if (0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum)) {
 						scaleRow.Items[i].PosMax += currentPosMax;
 						scaleRow.Items[i].NegMin += currentNegMin;
-					}
-					else
-					{
+					} else {
 						scaleRow.Items[i].PosMax = Math.Max(currentPosMax, scaleRow.Items[i].PosMax);
 						scaleRow.Items[i].NegMin = Math.Min(currentNegMin, scaleRow.Items[i].NegMin);
 						scaleRow.Items[i].NegMax = Math.Max(currentNegMax, scaleRow.Items[i].NegMax);
@@ -291,12 +276,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		}
 
 		private DataRow InitNormalizedScaleRow(ScaleType scaleType, int maxCount) {
-			var scaleRow = new DataRow();
-			scaleRow.ScaleType = scaleType;
-
-
-			for (var i = 0; i < maxCount; i++) {
-				scaleRow.Items.Add(new DataItem {
+			var scaleRow = new DataRow {ScaleType = scaleType};
+            for (var i = 0; i < maxCount; i++) {
+				scaleRow.Add(new DataItem {
 					NegMin = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum) ? 0 : decimal.MaxValue,
 					PosMax = 0 != (Preferences.SeriaCalcMode & SeriaCalcMode.CrossSeriaSum) ? 0 : decimal.MinValue,
 					PosMin = decimal.MaxValue,
@@ -325,10 +307,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         /// <param name="seria">Искомая серия</param>
         public void Remove(BrickDataSetSeria seria) {
-	        foreach (var item in seria) {
-		        _items.Remove(item);
-	        }
-            _series.Remove(_series.FirstOrDefault(_ => _.Value == seria).Key);
+            _series.Remove(seria);
         }
 		/// <summary>
 		/// 
@@ -340,47 +319,13 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			return Add(serianum, rownum, value, false);
 		}
         /// <summary>
-        ///     Добавление категории
-        /// </summary>
-        /// <param name="label">Метка категории</param>
-        public void AddCategory(string label) {
-            if (!_categories.Contains(label)) {
-                _categories.Add(label);
-            }
-        }
-        /// <summary>
         ///     Установка имени серии
         /// </summary>
         /// <param name="serianum">Номер серии</param>
         /// <param name="name">Имя серии</param>
         public void SetSeriaName(int serianum, string name) {
-            if (_series.ContainsKey(serianum)) {
-                _series[serianum].Set("seriesname", name);
-            }
-        }
-        /// <summary>
-        ///     Установка мета-информации серии
-        /// </summary>
-        /// <param name="serianum">Номер серии</param>
-        /// <param name="key">Ключ</param>
-        /// <param name="value">Значение</param>
-        public void SetSeriaMeta(int serianum, string key, string value) {
-            if (_series.ContainsKey(serianum)) {
-                _series[serianum].Set(key, value);
-            }
-        }
-        /// <summary>
-        ///     Получение мета-информации по ключу
-        /// </summary>
-        /// <param name="serianum">Номер серии</param>
-        /// <param name="key">Ключ</param>
-        /// <returns>Значение по ключу или <see cref="string.Empty"/></returns>
-        public string GetSeriaMeta(int serianum, string key) {
-            if (_series.ContainsKey(serianum)) {
-                return _series[serianum].Get(key);
-            }
-
-            return string.Empty;
+            var seria = EnsureSeria(serianum);
+            seria.Set("seriesname", name);
         }
 		/// <summary>
 		/// 
@@ -390,26 +335,49 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// <param name="value"></param>
 		/// <param name="secondscale"></param>
 		public DataItem Add(int serianum, int rownum, decimal value, bool secondscale) {
-			var row = ResolveRow(serianum, rownum, secondscale?ScaleType.Second:ScaleType.First);
-		    var item = new DataItem {Value = value, Index = row.Items.Count, LabelHeight = LabelHeight};
-            if (!_series.ContainsKey(serianum)) {
-               _series.Add(serianum, new BrickDataSetSeria(serianum));
-            }
-            if (!_series[serianum].Contains(row)) {
-                _series[serianum].Add(row);
-            }
-			row.Items.Add(item);
-			_items.Add(item);
+		    var item = new DataItem {Value = value, LabelHeight = LabelHeight};
+		    EnsureRow(serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First).Add(item);
 		    return item;
 		}
+        /// <summary>
+        ///     Вставка элемента данных в датасет
+        /// </summary>
+        /// <param name="serianum">Номер серии</param>
+        /// <param name="rownum">Номер ряда</param>
+        /// <param name="scaleType">Тип шкалы, к которой относится элемент данных</param>
+        /// <param name="dataItem">Элемент данных</param>
+        public void Insert(int serianum, int rownum, ScaleType scaleType, DataItem dataItem) {
+            EnsureRow(serianum, rownum, scaleType).Add(dataItem);
+        }
+        /// <summary>
+        ///     Убеждается в наличии серии и производит добавление в случае отсутствия
+        /// </summary>
+        /// <param name="serianum">Номер серии</param>
+        /// <returns>Серия с указанным идентификатором</returns>
+        public BrickDataSetSeria EnsureSeria(int serianum) {
+            lock (_series) {
+                if (_series.All(_ => _.SeriaNumber != serianum)) {
+                    _series.Add(new BrickDataSetSeria(serianum));
+                }
+            }
+            return _series.FirstOrDefault(_ => _.SeriaNumber == serianum);
+        }
+	    /// <summary>
+	    ///     Убеждается в наличии ряда в указанной серии и производит инициализацию при необходимости
+	    /// </summary>
+	    /// <param name="serianum">Номер серии</param>
+	    /// <param name="rownum">Номер ряда внутри серии</param>
+	    /// <param name="scaleType">Тип шкалы</param>
+	    /// <returns>Представления ряда данных</returns>
+	    public DataRow EnsureRow(int serianum, int rownum, ScaleType scaleType) {
+            return EnsureSeria(serianum).EnsureRow(rownum, scaleType);
+        }
 		/// <summary>
 		/// Возвращает элемент данных по позиции
 		/// </summary>
 		public DataItem GetItem(int serianum, int rownum, int pos) {
 			return GetItem(serianum, rownum, pos, false);
 		}
-
-		private readonly List<DataItem> _items = new List<DataItem>();
 		/// <summary>
 		/// Возвращает элемент данных по позиции
 		/// </summary>
@@ -419,41 +387,16 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// <param name="secondscale"></param>
 		/// <returns></returns>
 		public DataItem GetItem(int serianum, int rownum, int pos, bool secondscale) {
-			var row = ResolveRow(serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First);
+			var row = EnsureRow(serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First);
 			if (pos < row.Items.Count) return row.Items[pos];
 			return new DataItem();
 		}
-
-		private DataRow ResolveRow(int serianum, int rownum, ScaleType scaleType) {
-			var result = Rows.FirstOrDefault(_ => _.RowNumber == rownum && _.SeriaNumber == serianum && _.ScaleType == scaleType);
-			if (null == result) {
-				result = new DataRow {ScaleType = scaleType, RowNumber = rownum, SeriaNumber = serianum};
-				Rows.Add(result);
-			}
-			return result;
-		}
 		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerator<DataItem> GetEnumerator() {
-			return _items.GetEnumerator();
-		}
-
-		/// <summary>
-	    /// 
+	    ///     Приведение <see cref="BrickDataSet"/> к <see cref="string"/>
 	    /// </summary>
-	    /// <returns></returns>
+	    /// <returns>Строковое представление <see cref="BrickDataSet"/></returns>
 	    public override string ToString() {
 	        return string.Join(";", this.GetSeries().Select(_ => _.ToString()));
 	    }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataset"></param>
-        /// <returns></returns>
-        public static BrickDataSet Parse(string dataset) {
-            throw new NotImplementedException();
-        }
 	}
 }

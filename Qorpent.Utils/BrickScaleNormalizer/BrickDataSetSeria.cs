@@ -25,6 +25,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             get { return Get("seriesname"); }
         }
         /// <summary>
+        ///     Ряды данных внутри серии
+        /// </summary>
+        public IEnumerable<DataRow> Rows {
+            get { return _rows.AsEnumerable(); }
+        }
+        /// <summary>
         ///     Мета-информация
         /// </summary>
         public Dictionary<string, string> Meta { get; private set; }
@@ -62,6 +68,23 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             }
 
             _rows.Add(dataRow);
+        }
+
+        /// <summary>
+        ///     Убеждается в наличии ряда и создаёт его при необходимости
+        /// </summary>
+        /// <param name="rownum">Номер ряда</param>
+        /// <param name="scaleType">Тип шкалы</param>
+        /// <returns>Экземпляр <see cref="DataRow"/>, представляющий ряд</returns>
+        public DataRow EnsureRow(int rownum, ScaleType scaleType = ScaleType.First) {
+            var row = _rows.FirstOrDefault(_ => _.RowNumber == rownum && _.ScaleType == scaleType);
+            lock (_rows) {
+                if (row == null) {
+                    row = new DataRow {RowNumber = rownum, SeriaNumber = SeriaNumber, ScaleType = scaleType};
+                    _rows.Add(row);
+                }
+            }
+            return row;
         }
         /// <summary>
         ///     Установка мета-информации по колючу

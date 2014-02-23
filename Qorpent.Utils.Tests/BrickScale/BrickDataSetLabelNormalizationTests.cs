@@ -23,12 +23,12 @@ namespace Qorpent.Utils.Tests.BrickScale {
             ds.Add(1, 1, 10);
             ds.Add(2, 1, 10);
             ds.Calculate();
-            Assert.AreEqual(10, ds.Rows[0].Items[0].Value);
-            Assert.AreEqual(10, ds.Rows[1].Items[0].Value);
+            Assert.AreEqual(10, ds.Rows.ToArray()[0].Items[0].Value);
+            Assert.AreEqual(10, ds.Rows.ToArray()[1].Items[0].Value);
             Assert.IsTrue(
-                ((ds.Rows[0].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden) && !ds.Rows[1].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden)))
+                ((ds.Rows.ToArray()[0].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden) && !ds.Rows.ToArray()[1].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden)))
                     ||
-                ((ds.Rows[1].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden) && !ds.Rows[0].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden)))
+                ((ds.Rows.ToArray()[1].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden) && !ds.Rows.ToArray()[0].Items[0].LabelPosition.HasFlag(LabelPosition.Hidden)))
             );
         }
         [Test]
@@ -41,24 +41,24 @@ namespace Qorpent.Utils.Tests.BrickScale {
             ds.Add(2, 1, 55);
             ds.Add(2, 1, 41);
             ds.Calculate();
-            Console.WriteLine(ds.Rows[0].Items[0].LabelPosition + ", " + ds.Rows[1].Items[0].LabelPosition);
-            Console.WriteLine(ds.Rows[0].Items[1].LabelPosition + ", " + ds.Rows[1].Items[1].LabelPosition);
-            Console.WriteLine(ds.Rows[0].Items[2].LabelPosition + ", " + ds.Rows[1].Items[2].LabelPosition);
-            Assert.AreEqual(10, ds.Rows[0].Items[0].Value);
-            Assert.AreEqual(50, ds.Rows[0].Items[1].Value);
-            Assert.AreEqual(40, ds.Rows[0].Items[2].Value);
-            Assert.AreEqual(50, ds.Rows[1].Items[0].Value);
-            Assert.AreEqual(55, ds.Rows[1].Items[1].Value);
-            Assert.AreEqual(41, ds.Rows[1].Items[2].Value);
+            Console.WriteLine(ds.Rows.ToArray()[0].Items[0].LabelPosition + ", " + ds.Rows.ToArray()[1].Items[0].LabelPosition);
+            Console.WriteLine(ds.Rows.ToArray()[0].Items[1].LabelPosition + ", " + ds.Rows.ToArray()[1].Items[1].LabelPosition);
+            Console.WriteLine(ds.Rows.ToArray()[0].Items[2].LabelPosition + ", " + ds.Rows.ToArray()[1].Items[2].LabelPosition);
+            Assert.AreEqual(10, ds.Rows.ToArray()[0].Items[0].Value);
+            Assert.AreEqual(50, ds.Rows.ToArray()[0].Items[1].Value);
+            Assert.AreEqual(40, ds.Rows.ToArray()[0].Items[2].Value);
+            Assert.AreEqual(50, ds.Rows.ToArray()[1].Items[0].Value);
+            Assert.AreEqual(55, ds.Rows.ToArray()[1].Items[1].Value);
+            Assert.AreEqual(41, ds.Rows.ToArray()[1].Items[2].Value);
             // Первая пара слишком далеко друг от друга, так что они Auto
-            Assert.AreEqual(LabelPosition.Auto, ds.Rows[0].Items[0].LabelPosition);
-            Assert.AreEqual(LabelPosition.Auto, ds.Rows[1].Items[0].LabelPosition);
+            Assert.AreEqual(LabelPosition.Auto, ds.Rows.ToArray()[0].Items[0].LabelPosition);
+            Assert.AreEqual(LabelPosition.Auto, ds.Rows.ToArray()[1].Items[0].LabelPosition);
             // Вторая пара уже близко, так что лэйбел меньшего значения снизу, большего — вверху
-            Assert.AreEqual(LabelPosition.Below, ds.Rows[0].Items[1].LabelPosition);
-            Assert.AreEqual(LabelPosition.Above, ds.Rows[1].Items[1].LabelPosition);
+            Assert.AreEqual(LabelPosition.Below, ds.Rows.ToArray()[0].Items[1].LabelPosition);
+            Assert.AreEqual(LabelPosition.Above, ds.Rows.ToArray()[1].Items[1].LabelPosition);
             // Вначале я думал, что алгоритм должен отключить один из лэйблов, но он смог развести, так что правлю тест
-            Assert.AreEqual(LabelPosition.Below, ds.Rows[0].Items[2].LabelPosition);
-            Assert.AreEqual(LabelPosition.Above, ds.Rows[1].Items[2].LabelPosition);
+            Assert.AreEqual(LabelPosition.Below, ds.Rows.ToArray()[0].Items[2].LabelPosition);
+            Assert.AreEqual(LabelPosition.Above, ds.Rows.ToArray()[1].Items[2].LabelPosition);
         }
         /// <summary>
         ///     Это реально лютый тест. По моим представлениям, отработал даже лучше, чем я предполагал.
@@ -222,6 +222,7 @@ namespace Qorpent.Utils.Tests.BrickScale {
         /// <summary>
         ///     Тест показывает то, что поддерживается две оси с множеством серий и рядов
         /// </summary>
+        [Explicit]
         [Test]
         public void MultiLineTwoScaleWithRowsBuildColonsTest() {
             var ds = GetEmptyDataSet(SeriaCalcMode.Linear, 200);

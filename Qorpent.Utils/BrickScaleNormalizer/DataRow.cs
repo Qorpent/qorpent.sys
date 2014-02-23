@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
@@ -28,6 +29,26 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// Значения в серии
 		/// </summary>
 		public IList<DataItem> Items { get; private set; }
+        /// <summary>
+        ///     Добавление элемента данных в ряд
+        /// </summary>
+        /// <param name="dataItem">Элемент данных</param>
+        public void Add(DataItem dataItem) {
+            dataItem.Index = Items.Count;
+            Insert(dataItem);
+        }
+        /// <summary>
+        ///     Прямая вставка элемента данных в ряд
+        /// </summary>
+        /// <param name="dataItem">Элемент данных</param>
+        public void Insert(DataItem dataItem) {
+            lock (Items) {
+                if (dataItem.Index < Items.Count) {
+                    throw new Exception("Incorrect index number");
+                }
+                Items.Add(dataItem);
+            }
+        }
         /// <summary>
         ///     Получение <see cref="IEnumerable"/> по <see cref="DataItem"/>
         /// </summary>
