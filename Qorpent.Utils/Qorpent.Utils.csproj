@@ -78,6 +78,7 @@
     <Compile Include="Extensions\UniSqlQuery.cs" />
     <Compile Include="FuzzyLogic\FuzzySet.cs" />
     <Compile Include="Hex.cs" />
+    <Compile Include="Iterator.cs" />
     <Compile Include="ListUtils.cs" />
     <Compile Include="LogicalExpressions\ConjunctionNode.cs" />
     <Compile Include="LogicalExpressions\ContainerInfo.cs" />
