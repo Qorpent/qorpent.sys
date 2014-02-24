@@ -16,7 +16,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <summary>
         ///     Внутренний список серий
         /// </summary>
-        private readonly List<BrickDataSetSeria> _series = new List<BrickDataSetSeria>();
+        private readonly Dictionary<int, List<BrickDataSetSeria>> _sets = new Dictionary<int, List<BrickDataSetSeria>>();
 		/// <summary>
 		///     Рассчитанный размер первой шкалы
 		/// </summary>
@@ -29,13 +29,13 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    ///     Ряды данных внутри датасета
 	    /// </summary>
 	    public IEnumerable<DataRow> Rows {
-            get { return _series.SelectMany(_ => _.Rows).ToList(); }
+            get { return _sets.Values.SelectMany(_ => _).SelectMany(_ => _.Rows).ToList(); }
 	    }
         /// <summary>
         ///     Перечисление элементов данных
         /// </summary>
 	    public IEnumerable<DataItem> DataItems {
-            get { return _series.SelectMany(_ => _); }
+            get { return _sets.Values.SelectMany(_ => _).SelectMany(_ => _); }
 	    }
 		/// <summary>
 		/// Требования пользователя
@@ -49,7 +49,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Серии
         /// </summary>
         public BrickDataSetSeria[] Series {
-            get { return _series.ToArray(); }
+            get { return _sets.Values.SelectMany(_ => _).ToArray(); }
         }
         /// <summary>
         ///     Описывает набор данных для обсчета
@@ -311,7 +311,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         /// <param name="seria">Искомая серия</param>
         public void Remove(BrickDataSetSeria seria) {
-            _series.Remove(seria);
+            foreach (var set in _sets) {
+                set.Value.Remove(seria);
+            }
         }
 		/// <summary>
 		/// 
@@ -331,51 +333,61 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             var seria = EnsureSeria(serianum);
             seria.Set("seriesname", name);
         }
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="serianum"></param>
-		/// <param name="rownum"></param>
-		/// <param name="value"></param>
-		/// <param name="secondscale"></param>
-		public DataItem Add(int serianum, int rownum, decimal value, bool secondscale) {
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="serianum"></param>
+	    /// <param name="rownum"></param>
+	    /// <param name="value"></param>
+	    /// <param name="secondscale"></param>
+	    /// <param name="setnumber"></param>
+	    public DataItem Add(int serianum, int rownum, decimal value, bool secondscale, int setnumber = 0) {
             var item = new DataItem { Value = value, LabelHeight = LabelHeight, DatasetIndex = _currentDataItemIndex };
 		    _currentDataItemIndex++;
-            Insert(serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First, item);
+            Insert(setnumber, serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First, item);
 		    return item;
 		}
-        /// <summary>
-        ///     Вставка элемента данных в датасет
-        /// </summary>
-        /// <param name="serianum">Номер серии</param>
-        /// <param name="rownum">Номер ряда</param>
-        /// <param name="scaleType">Тип шкалы, к которой относится элемент данных</param>
-        /// <param name="dataItem">Элемент данных</param>
-        public void Insert(int serianum, int rownum, ScaleType scaleType, DataItem dataItem) {
-            EnsureRow(serianum, rownum, scaleType).Add(dataItem);
+	    /// <summary>
+	    ///     Вставка элемента данных в датасет
+	    /// </summary>
+	    /// <param name="setnumber">Номер сета</param>
+	    /// <param name="serianum">Номер серии</param>
+	    /// <param name="rownum">Номер ряда</param>
+	    /// <param name="scaleType">Тип шкалы, к которой относится элемент данных</param>
+	    /// <param name="dataItem">Элемент данных</param>
+	    public void Insert(int setnumber, int serianum, int rownum, ScaleType scaleType, DataItem dataItem) {
+            EnsureRow(serianum, rownum, scaleType, setnumber).Add(dataItem);
         }
-        /// <summary>
-        ///     Убеждается в наличии серии и производит добавление в случае отсутствия
-        /// </summary>
-        /// <param name="serianum">Номер серии</param>
-        /// <returns>Серия с указанным идентификатором</returns>
-        public BrickDataSetSeria EnsureSeria(int serianum) {
-            lock (_series) {
-                if (_series.All(_ => _.SeriaNumber != serianum)) {
-                    _series.Add(new BrickDataSetSeria(serianum));
-                }
+
+	    /// <summary>
+	    ///     Убеждается в наличии серии и производит добавление в случае отсутствия
+	    /// </summary>
+	    /// <param name="serianum">Номер серии</param>
+	    /// <param name="setnumber"></param>
+	    /// <returns>Серия с указанным идентификатором</returns>
+	    public BrickDataSetSeria EnsureSeria(int serianum, int setnumber = 0) {
+            if (!_sets.ContainsKey(setnumber)) {
+                _sets.Add(setnumber, new List<BrickDataSetSeria>());
             }
-            return _series.FirstOrDefault(_ => _.SeriaNumber == serianum);
-        }
+	        var seria = _sets[setnumber].FirstOrDefault(_ => _.SeriaNumber == serianum);
+            if (seria == null) {
+                seria = new BrickDataSetSeria(serianum);
+                _sets[setnumber].Add(seria);
+            }
+	        return seria;
+	    }
+
 	    /// <summary>
 	    ///     Убеждается в наличии ряда в указанной серии и производит инициализацию при необходимости
 	    /// </summary>
 	    /// <param name="serianum">Номер серии</param>
 	    /// <param name="rownum">Номер ряда внутри серии</param>
 	    /// <param name="scaleType">Тип шкалы</param>
+	    /// <param name="setnumber"></param>
 	    /// <returns>Представления ряда данных</returns>
-	    public DataRow EnsureRow(int serianum, int rownum, ScaleType scaleType) {
-            return EnsureSeria(serianum).EnsureRow(rownum, scaleType);
+	    public DataRow EnsureRow(int serianum, int rownum, ScaleType scaleType, int setnumber = 0) {
+            return EnsureSeria(serianum, setnumber).EnsureRow(rownum, scaleType);
         }
 		/// <summary>
 		/// Возвращает элемент данных по позиции
