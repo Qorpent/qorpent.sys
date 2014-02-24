@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Qorpent.Utils.BrickScaleNormalizer;
 
 namespace Qorpent.Utils.Tests.BrickScale {

@@ -6,10 +6,24 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// Единица значения
 	/// </summary>
 	public class DataItem {
-        /// <summary>
-		/// Исходное значение
+		/// <summary>
+		///		Значение
 		/// </summary>
-		public decimal Value { get; set; }
+	    private decimal _value;
+		/// <summary>
+		///		Признак того, что занчение было проинициализировано
+		/// </summary>
+		public bool IsValueInitialized { get; set; }
+	    /// <summary>
+	    /// Исходное значение
+	    /// </summary>
+	    public decimal Value {
+		    get { return _value; }
+			set {
+				_value = value;
+				IsValueInitialized = true;
+			}
+	    }
 		/// <summary>
 		/// Коллектор позитивных сумм при нормализации
 		/// </summary>
