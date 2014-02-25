@@ -16,7 +16,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <summary>
         ///     Внутренний список серий
         /// </summary>
-        private readonly Dictionary<int, List<BrickDataSetSeria>> _sets = new Dictionary<int, List<BrickDataSetSeria>>();
+        private readonly List<BrickDataSetSeria> _series = new List<BrickDataSetSeria>();
 		/// <summary>
 		///     Рассчитанный размер первой шкалы
 		/// </summary>
@@ -29,13 +29,13 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    ///     Ряды данных внутри датасета
 	    /// </summary>
 	    public IEnumerable<DataRow> Rows {
-            get { return _sets.Values.SelectMany(_ => _).SelectMany(_ => _.Rows).ToList(); }
+            get { return _series.SelectMany(_ => _.Rows).ToList(); }
 	    }
         /// <summary>
         ///     Перечисление элементов данных
         /// </summary>
 	    public IEnumerable<DataItem> DataItems {
-            get { return _sets.Values.SelectMany(_ => _).SelectMany(_ => _); }
+            get { return _series.SelectMany(_ => _); }
 	    }
 		/// <summary>
 		/// Требования пользователя
@@ -49,7 +49,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Серии
         /// </summary>
         public BrickDataSetSeria[] Series {
-            get { return _sets.Values.SelectMany(_ => _).ToArray(); }
+            get { return _series.ToArray(); }
         }
         /// <summary>
         ///     Описывает набор данных для обсчета
@@ -311,17 +311,16 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         /// <param name="seria">Искомая серия</param>
         public void Remove(BrickDataSetSeria seria) {
-            foreach (var set in _sets) {
-                set.Value.Remove(seria);
-            }
+            _series.Remove(seria);
         }
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="serianum"></param>
-		/// <param name="rownum"></param>
-		/// <param name="value"></param>
-		public DataItem Add(int serianum, int rownum, decimal value) {
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="serianum"></param>
+	    /// <param name="rownum"></param>
+	    /// <param name="value"></param>
+	    /// <param name="setnum"></param>
+	    public DataItem Add(int serianum, int rownum, decimal value, int setnum = 0) {
 			return Add(serianum, rownum, value, false);
 		}
 	    /// <summary>
@@ -331,79 +330,75 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    /// <param name="rownum"></param>
 	    /// <param name="value"></param>
 	    /// <param name="secondscale"></param>
-	    /// <param name="setnumber"></param>
-	    public DataItem Add(int serianum, int rownum, decimal value, bool secondscale, int setnumber = 0) {
+	    /// <param name="setnum"></param>
+	    public DataItem Add(int serianum, int rownum, decimal value, bool secondscale, int setnum = 0) {
             var item = new DataItem { Value = value, LabelHeight = LabelHeight, DatasetIndex = _currentDataItemIndex };
 		    _currentDataItemIndex++;
-            Insert(setnumber, serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First, item);
+            Insert(setnum, serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First, item);
 		    return item;
 		}
+        /// <summary>
+        /// Возвращает элемент данных по позиции
+        /// </summary>
+        public DataItem GetItem(int serianum, int rownum, int pos) {
+            return GetItem(serianum, rownum, pos, false);
+        }
+        /// <summary>
+        /// Возвращает элемент данных по позиции
+        /// </summary>
+        /// <param name="serianum"></param>
+        /// <param name="rownum"></param>
+        /// <param name="pos"></param>
+        /// <param name="secondscale"></param>
+        /// <param name="setnum"></param>
+        /// <returns></returns>
+        public DataItem GetItem(int serianum, int rownum, int pos, bool secondscale, int setnum = 0) {
+            var row = EnsureRow(setnum, serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First);
+            if (pos < row.Items.Count) return row.Items[pos];
+            return new DataItem();
+        }
+        /// <summary>
+        ///     Приведение <see cref="BrickDataSet"/> к <see cref="string"/>
+        /// </summary>
+        /// <returns>Строковое представление <see cref="BrickDataSet"/></returns>
+        public override string ToString() {
+            return string.Join(";", this.GetSeries().Select(_ => _.ToString()));
+        }
 	    /// <summary>
 	    ///     Вставка элемента данных в датасет
 	    /// </summary>
-	    /// <param name="setnumber">Номер сета</param>
+	    /// <param name="setnum">номер сета</param>
 	    /// <param name="serianum">Номер серии</param>
 	    /// <param name="rownum">Номер ряда</param>
 	    /// <param name="scaleType">Тип шкалы, к которой относится элемент данных</param>
 	    /// <param name="dataItem">Элемент данных</param>
-	    public void Insert(int setnumber, int serianum, int rownum, ScaleType scaleType, DataItem dataItem) {
-            EnsureRow(serianum, rownum, scaleType, setnumber).Add(dataItem);
+	    protected void Insert(int setnum, int serianum, int rownum, ScaleType scaleType, DataItem dataItem) {
+            EnsureRow(setnum, serianum, rownum, scaleType).Add(dataItem);
         }
-
 	    /// <summary>
 	    ///     Убеждается в наличии серии и производит добавление в случае отсутствия
 	    /// </summary>
 	    /// <param name="serianum">Номер серии</param>
-	    /// <param name="setnumber"></param>
+	    /// <param name="setnum">Номер сета</param>
 	    /// <returns>Серия с указанным идентификатором</returns>
-	    public BrickDataSetSeria EnsureSeria(int serianum, int setnumber = 0) {
-            if (!_sets.ContainsKey(setnumber)) {
-                _sets.Add(setnumber, new List<BrickDataSetSeria>());
-            }
-	        var seria = _sets[setnumber].FirstOrDefault(_ => _.SeriaNumber == serianum);
+	    protected BrickDataSetSeria EnsureSeria(int serianum, int setnum = 0) {
+	        var seria = _series.FirstOrDefault(_ => _.SeriaNumber == serianum && _.SetNumber == setnum);
             if (seria == null) {
-                seria = new BrickDataSetSeria(serianum);
-                _sets[setnumber].Add(seria);
+                seria = new BrickDataSetSeria(serianum, setnum);
+                _series.Add(seria);
             }
 	        return seria;
 	    }
-
 	    /// <summary>
 	    ///     Убеждается в наличии ряда в указанной серии и производит инициализацию при необходимости
 	    /// </summary>
+	    /// <param name="setnum">Номер сета</param>
 	    /// <param name="serianum">Номер серии</param>
 	    /// <param name="rownum">Номер ряда внутри серии</param>
 	    /// <param name="scaleType">Тип шкалы</param>
-	    /// <param name="setnumber"></param>
 	    /// <returns>Представления ряда данных</returns>
-	    public DataRow EnsureRow(int serianum, int rownum, ScaleType scaleType, int setnumber = 0) {
-            return EnsureSeria(serianum, setnumber).EnsureRow(rownum, scaleType);
+	    protected DataRow EnsureRow(int setnum, int serianum, int rownum, ScaleType scaleType) {
+            return EnsureSeria(serianum, setnum).EnsureRow(rownum, scaleType);
         }
-		/// <summary>
-		/// Возвращает элемент данных по позиции
-		/// </summary>
-		public DataItem GetItem(int serianum, int rownum, int pos) {
-			return GetItem(serianum, rownum, pos, false);
-		}
-		/// <summary>
-		/// Возвращает элемент данных по позиции
-		/// </summary>
-		/// <param name="serianum"></param>
-		/// <param name="rownum"></param>
-		/// <param name="pos"></param>
-		/// <param name="secondscale"></param>
-		/// <returns></returns>
-		public DataItem GetItem(int serianum, int rownum, int pos, bool secondscale) {
-			var row = EnsureRow(serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First);
-			if (pos < row.Items.Count) return row.Items[pos];
-			return new DataItem();
-		}
-		/// <summary>
-	    ///     Приведение <see cref="BrickDataSet"/> к <see cref="string"/>
-	    /// </summary>
-	    /// <returns>Строковое представление <see cref="BrickDataSet"/></returns>
-	    public override string ToString() {
-	        return string.Join(";", this.GetSeries().Select(_ => _.ToString()));
-	    }
 	}
 }
