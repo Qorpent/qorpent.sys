@@ -100,6 +100,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// Положение лычки
 		/// </summary>
 		public LabelPosition LabelPosition { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public DataItem() {
+			IsValueInitialized = false;
+		}
         /// <summary>
         /// 
         /// </summary>

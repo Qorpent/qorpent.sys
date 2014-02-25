@@ -28,8 +28,6 @@ namespace Qorpent.Utils.Tests.BrickScale {
             ds.Add(2, 1, 50);
             ds.Add(2, 1, 55);
             ds.Add(2, 1, 41);
-            ds.SetSeriaName(1, "first");
-            ds.SetSeriaName(2, "second");
             var series = ds.GetSeries().ToArray();
             var firstSeria = series[0].ToArray();
             var secondSeria = series[1].ToArray();
@@ -40,8 +38,6 @@ namespace Qorpent.Utils.Tests.BrickScale {
             Assert.AreEqual(50, secondSeria[0].Value);
             Assert.AreEqual(55, secondSeria[1].Value);
             Assert.AreEqual(41, secondSeria[2].Value);
-            Assert.AreEqual("first", series[0].Name);
-            Assert.AreEqual("second", series[1].Name);
         }
         [Test]
         public void CanRemoveZeroSeries() {
@@ -52,8 +48,6 @@ namespace Qorpent.Utils.Tests.BrickScale {
             ds.Add(2, 1, 0);
             ds.Add(2, 1, 0);
             ds.Add(2, 1, 0);
-            ds.SetSeriaName(1, "first");
-            ds.SetSeriaName(2, "second");
             var series = ds.GetSeries().ToArray();
             var firstSeria = series[0].ToArray();
             var secondSeria = series[1].ToArray();
@@ -64,8 +58,6 @@ namespace Qorpent.Utils.Tests.BrickScale {
             Assert.AreEqual(0, secondSeria[0].Value);
             Assert.AreEqual(0, secondSeria[1].Value);
             Assert.AreEqual(0, secondSeria[2].Value);
-            Assert.AreEqual("first", series[0].Name);
-            Assert.AreEqual("second", series[1].Name);
             ds.RemoveSeriesWhereAllValuesIs(0);
             series = ds.GetSeries().ToArray();
             Assert.AreEqual(1, series.Length);

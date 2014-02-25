@@ -9,27 +9,27 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// </summary>
     public class DataRow : IEnumerable<DataItem> {
 		/// <summary>
-        ///     Ряд данных
-		/// </summary>
-		public DataRow() {
-			Items = new List<DataItem>();
-		}
-		/// <summary>
-		/// Шкала
+		///		Шкала
 		/// </summary>
 		public ScaleType ScaleType { get; set; }
 		/// <summary>
-		/// Номер ряда
+		///		Номер ряда
 		/// </summary>
 		public int RowNumber { get; set; }
 		/// <summary>
-		/// Номер серии
+		///		Номер серии
 		/// </summary>
 		public int SeriaNumber { get; set; }
 		/// <summary>
 		/// Значения в серии
 		/// </summary>
 		public IList<DataItem> Items { get; private set; }
+		/// <summary>
+		///     Ряд данных
+		/// </summary>
+		public DataRow() {
+			Items = new List<DataItem>();
+		}
         /// <summary>
         ///     Добавление элемента данных в ряд
         /// </summary>

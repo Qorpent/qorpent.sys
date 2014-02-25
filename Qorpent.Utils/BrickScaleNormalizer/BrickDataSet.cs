@@ -324,16 +324,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		public DataItem Add(int serianum, int rownum, decimal value) {
 			return Add(serianum, rownum, value, false);
 		}
-        /// <summary>
-        ///     Установка имени серии
-        /// </summary>
-        /// <param name="serianum">Номер серии</param>
-        /// <param name="name">Имя серии</param>
-        public void SetSeriaName(int serianum, string name) {
-            var seria = EnsureSeria(serianum);
-            seria.Set("seriesname", name);
-        }
-
 	    /// <summary>
 	    /// 
 	    /// </summary>

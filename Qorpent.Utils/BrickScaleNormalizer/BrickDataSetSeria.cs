@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
     /// <summary>
@@ -19,44 +18,17 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         public int SeriaNumber { get; private set; }
         /// <summary>
-        ///     Имя серии
-        /// </summary>
-        public string Name {
-            get { return Get("seriesname"); }
-        }
-        /// <summary>
         ///     Ряды данных внутри серии
         /// </summary>
         public IEnumerable<DataRow> Rows {
             get { return _rows.AsEnumerable(); }
         }
         /// <summary>
-        ///     Мета-информация
-        /// </summary>
-        public Dictionary<string, string> Meta { get; private set; }
-        /// <summary>
         ///     Представление серии из <see cref="DataRow"/>
         /// </summary>
         /// <param name="seriaNumber">Номер серии</param>
         public BrickDataSetSeria(int seriaNumber) {
             SeriaNumber = seriaNumber;
-            Meta = new Dictionary<string, string>();
-        }
-        /// <summary>
-        ///     Представление серии из <see cref="DataRow"/>
-        /// </summary>
-        /// <param name="seriaNumber">Номер серии</param>
-        /// <param name="rows">Перечисление <see cref="DataRow"/>, присущих данной серии</param>
-        public BrickDataSetSeria(int seriaNumber, IEnumerable<DataRow> rows) : this(seriaNumber) {
-            rows.ForEach(Add);
-        }
-        /// <summary>
-        ///     Определяет признак наличия <see cref="DataRow"/> в серии
-        /// </summary>
-        /// <param name="row">Исследуемый экземпляр <see cref="DataRow"/></param>
-        /// <returns>Признак наличия <see cref="DataRow"/> в серии</returns>
-        public bool Contains(DataRow row) {
-            return _rows.Contains(row);
         }
         /// <summary>
         ///     Добавление <see cref="DataRow"/> в серию
@@ -69,7 +41,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 
             _rows.Add(dataRow);
         }
-
         /// <summary>
         ///     Убеждается в наличии ряда и создаёт его при необходимости
         /// </summary>
@@ -85,30 +56,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
                 }
             }
             return row;
-        }
-        /// <summary>
-        ///     Установка мета-информации по колючу
-        /// </summary>
-        /// <param name="key">Ключ</param>
-        /// <param name="value">Значение</param>
-        public void Set(string key, string value) {
-            if (Meta.ContainsKey(key)) {
-                Meta[key] = value;
-            } else {
-                Meta.Add(key, value);
-            }
-        }
-        /// <summary>
-        ///     Получение мета-информации по ключу
-        /// </summary>
-        /// <param name="key">Ключ</param>
-        /// <returns>Значение по ключу или <see cref="string.Empty"/></returns>
-        public string Get(string key) {
-            if (Meta.ContainsKey(key)) {
-                return Meta[key];
-            }
-
-            return string.Empty;
         }
         /// <summary>
         ///     Получение <see cref="IEnumerator{T}"/> по <see cref="DataRow"/>
