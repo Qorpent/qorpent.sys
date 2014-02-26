@@ -100,6 +100,7 @@
     <Compile Include="StringHelper.cs" />
     <Compile Include="Extensions\TagHelper.cs" />
     <Compile Include="StringInterpolation.cs" />
+    <Compile Include="Tagged.cs" />
     <Compile Include="ValueMember.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="ReflectionExtensionsException.cs" />

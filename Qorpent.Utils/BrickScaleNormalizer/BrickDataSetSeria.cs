@@ -8,7 +8,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
     /// <summary>
     ///     Представление серии из <see cref="DataRow"/>
     /// </summary>
-    public class BrickDataSetSeria : IEnumerable<DataItem> {
+    public class BrickDataSetSeria : Tagged, IEnumerable<DataItem> {
         /// <summary>
         ///     Внутренний список <see cref="DataRow"/>, присущих данной серии
         /// </summary>
