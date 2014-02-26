@@ -76,7 +76,22 @@ namespace Qorpent.Utils.Extensions {
 			}
 			return target;
 		}
-
+		///  <summary>
+		/// 		Возвращает все типы из указанной сорки, имеющий типизрованный атрибут
+		///  </summary>
+		///  <typeparam name="T">Типзиация искомого атрибута</typeparam>
+		///  <param name="assembly">Сборка</param>
+		/// <param name="condition">Условие</param>
+		/// <returns>Массив типов</returns>
+		public static Type[] GetTypesWithAttribute<T>(this Assembly assembly, Func<T, bool> condition = null) where T : Attribute {
+			return assembly.GetTypes().Where(_ => {
+				var attribute = _.GetCustomAttribute<T>();
+				if (attribute == null) {
+					return false;
+				}
+				return condition == null || condition(attribute);
+			}).ToArray();
+		}
 		/// <summary>
 		/// Конвертирует общеизвестное имя типа в тип
 		/// </summary>
