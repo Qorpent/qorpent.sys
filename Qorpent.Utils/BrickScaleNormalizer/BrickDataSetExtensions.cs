@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
@@ -39,5 +40,20 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         public static void RemoveSeriesWhereAllValuesIs(this BrickDataSet dataSet, decimal value) {
             dataSet.Series.Where(_ => _.All(__ => __.Value.Equals(value))).ToList().ForEach(dataSet.Remove);
         }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dataset"></param>
+		public static void PrintDataset(this BrickDataSet dataset) {
+			foreach (var seria in dataset.Series) {
+				Console.WriteLine("Seria: " + seria.SeriaNumber);
+				foreach (var row in seria.Rows) {
+					Console.WriteLine("\tRow: {0}, Sum: {1}", row.RowNumber, row.Sum(_ => _.Value));
+					foreach (var item in row) {
+						Console.WriteLine("\t\tItem: {0}, Value: {1}", item.Index, item.Value);
+					}
+				}
+			}
+		}
     }
 }

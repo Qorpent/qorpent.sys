@@ -7,7 +7,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	/// <summary>
 	///     Ряд данных
 	/// </summary>
-    public class DataRow : IEnumerable<DataItem> {
+    public class DataRow : Tagged, IEnumerable<DataItem> {
 		/// <summary>
 		///		Шкала
 		/// </summary>

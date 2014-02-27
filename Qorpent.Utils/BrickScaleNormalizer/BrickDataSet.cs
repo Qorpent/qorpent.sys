@@ -181,7 +181,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		
 
 		private bool _isNormalizedRecord;
-		private BrickDataSet _normalizedSet;
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -195,15 +195,8 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 					return seria.Items.Select(_ => _.Max).Max();
 				}
 
-				return EnsureNormalized().GetMax(scaleType);
+				return GetNormalizedRecord().GetMax(scaleType);
 		}
-        /// <summary>
-        ///     Собирает нормализованный экземпляр <see cref="BrickDataSet"/>
-        /// </summary>
-        /// <returns>Нормализованный экземпляр <see cref="BrickDataSet"/></returns>
-        public BrickDataSet EnsureNormalized() {
-            return _normalizedSet ?? (_normalizedSet = GetNormalizedRecord());
-        }
 
 	    private BrickDataSet GetNormalizedRecord() {
 			var result = new BrickDataSet {_isNormalizedRecord = true};
@@ -212,7 +205,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 				if (rows.Length == 0) continue;
 				var maxCount = rows.Select(_ => _.Items.Count).Max();
 				var scaleRow = InitNormalizedScaleRow(scaleType, maxCount);
-				//result.Rows.Add(scaleRow); я хер знает что с этим говнищем теперь делать
                 result.EnsureSeria(0).Add(scaleRow);
 				var serias = rows.GroupBy(_ => _.SeriaNumber).ToArray();
 				for (var i = 0; i < maxCount; i++)
@@ -304,7 +296,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
                 return null == seria ? 0 : seria.Items.Select(_ => _.Min).Min();
             }
 
-			return EnsureNormalized().GetMin(scaleType);
+			return GetNormalizedRecord().GetMin(scaleType);
 		}
         /// <summary>
         ///     Удаление указанной серии из жатасета
@@ -350,10 +342,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <param name="rownum"></param>
         /// <param name="pos"></param>
         /// <param name="secondscale"></param>
-        /// <param name="setnum"></param>
         /// <returns></returns>
-        public DataItem GetItem(int serianum, int rownum, int pos, bool secondscale, int setnum = 0) {
-            var row = EnsureRow(setnum, serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First);
+        public DataItem GetItem(int serianum, int rownum, int pos, bool secondscale) {
+            var row = EnsureRow(serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First);
             if (pos < row.Items.Count) return row.Items[pos];
             return new DataItem();
         }
@@ -373,7 +364,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    /// <param name="scaleType">Тип шкалы, к которой относится элемент данных</param>
 	    /// <param name="dataItem">Элемент данных</param>
 	    protected void Insert(int setnum, int serianum, int rownum, ScaleType scaleType, DataItem dataItem) {
-            EnsureRow(setnum, serianum, rownum, scaleType).Add(dataItem);
+            EnsureRow(serianum, rownum, scaleType).Add(dataItem);
         }
 	    /// <summary>
 	    ///     Убеждается в наличии серии и производит добавление в случае отсутствия
@@ -392,13 +383,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    /// <summary>
 	    ///     Убеждается в наличии ряда в указанной серии и производит инициализацию при необходимости
 	    /// </summary>
-	    /// <param name="setnum">Номер сета</param>
 	    /// <param name="serianum">Номер серии</param>
 	    /// <param name="rownum">Номер ряда внутри серии</param>
 	    /// <param name="scaleType">Тип шкалы</param>
 	    /// <returns>Представления ряда данных</returns>
-	    protected DataRow EnsureRow(int setnum, int serianum, int rownum, ScaleType scaleType) {
-            return EnsureSeria(serianum, setnum).EnsureRow(rownum, scaleType);
+	    protected DataRow EnsureRow(int serianum, int rownum, ScaleType scaleType) {
+            return EnsureSeria(serianum).EnsureRow(rownum, scaleType);
         }
 	}
 }
