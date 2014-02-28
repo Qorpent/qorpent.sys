@@ -60,6 +60,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.IO.Tests", "Qorpent
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "qorpent.sys.doc", "qorpent.sys.doc\qorpent.sys.doc.shfbproj", "{1BEEC5B3-2079-4C8F-8589-2543DAA9127F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.EmbedCode", "Qorpent.EmbedCode\Qorpent.EmbedCode.csproj", "{55E63174-CFA1-4555-BF3B-DA7AFAD92819}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -180,6 +182,12 @@ Global
 		{1BEEC5B3-2079-4C8F-8589-2543DAA9127F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1BEEC5B3-2079-4C8F-8589-2543DAA9127F}.SQL2008|Any CPU.ActiveCfg = Release|Any CPU
 		{1BEEC5B3-2079-4C8F-8589-2543DAA9127F}.SQL2008|Any CPU.Build.0 = Release|Any CPU
+		{55E63174-CFA1-4555-BF3B-DA7AFAD92819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55E63174-CFA1-4555-BF3B-DA7AFAD92819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55E63174-CFA1-4555-BF3B-DA7AFAD92819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55E63174-CFA1-4555-BF3B-DA7AFAD92819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55E63174-CFA1-4555-BF3B-DA7AFAD92819}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{55E63174-CFA1-4555-BF3B-DA7AFAD92819}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

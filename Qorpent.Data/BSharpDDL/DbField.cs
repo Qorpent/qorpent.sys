@@ -123,6 +123,13 @@ namespace Qorpent.Data.BSharpDDL{
 			this.IsUnique = xml.Attr("unique").ToBool();
 			this.Idx = xml.Attr("idx").ToInt();
 			SetRef(xml.Attr("ref"));
+			SetRef(xml.Attr("to"));
+			if (this.DataType.Code == "ref"){
+				if (string.IsNullOrWhiteSpace(RefTable)){
+					this.RefTable = this.Table.Schema + "." + this.Name;
+					this.RefField = "Id";
+				}
+			}
 			var name = xml.Attr("name");
 			this.Comment = "";
 			if (name == "primarykey")
@@ -168,6 +175,9 @@ namespace Qorpent.Data.BSharpDDL{
 			if(string.IsNullOrWhiteSpace(attr))return;
 			var splitter = attr.LastIndexOf('.');
 			var tableref = attr.Substring(0, splitter);
+			if (!tableref.Contains(".")){
+				tableref = Table.Schema + "." + tableref;
+			}
 			var fieldref = attr.Substring(splitter + 1);
 			this.RefTable = tableref;
 			this.RefField = fieldref;
