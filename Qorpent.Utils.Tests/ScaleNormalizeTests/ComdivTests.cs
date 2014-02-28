@@ -27,11 +27,12 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
         [TestCase("523,450,383,313,197,69", 0, 600, 5, true, 600,0,false)]
         [TestCase("98.5,96.5,10.8,101.1", 0, 120, 3, true, 300,0,true)]
         [TestCase("3726,10610,8558,9264,1942", 0, 12000, 3, true, 300,0,false)]
-        [TestCase("3120.5,1865.6,1399.6,1883.6,1330.9,772.6,237.3", 0, 3200, 5, true, 600,0 ,true)]
+        [TestCase("3120.5,1865.6,1399.6,1883.6,1330.9,772.6,237.3", 0, 3200, 7, true, 600,0 ,true)]
         [TestCase("16322.3,14065.2,10489.5,11295.5,7335.3,4008.1", 0, 18000, 3, true, 300,0, true)]
         [TestCase("1484,1558,1445,1434,1453", 0, 1600, 7, true, 600,0,true)]
         [TestCase("543,520,528,516,494,490,523,555,547,526", 0, 600, 5, true, 600,0, true)]
         [TestCase("0,1250000", 0, 2000000, 3, true, 300,0, true)]
+        [TestCase("19.26,19.21,19.23,19.05", 0, 20, 3, true, 300,-1, true)]
 		public void UchalGokTests(string dataRow, double expectedMin, double expectedMax, double divline, bool checkDivlines, int height, int minvalue, bool upperlabel ) {
 			ExecuteScaleTest(dataRow, expectedMin, expectedMax, divline, checkDivlines, height, minvalue, upperlabel);
 		}

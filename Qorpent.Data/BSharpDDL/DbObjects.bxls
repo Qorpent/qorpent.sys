@@ -2,7 +2,7 @@ namespace Qorpent.Db
 
 	class BaseObject "Абстрактные определения и константы" abstract
 		schema=dbo
-		
+		isdataobject = true
 		element datatype
 		datatype int type=Int32
 		datatype long type=Int64
@@ -21,13 +21,16 @@ namespace Qorpent.Db
 		import BaseObject
 		int Id "Локальный уникальный идентификатор" primarykey identity idx=10
 		
-
-	Table DataDictionary "Определение словаря (с поддержкой иерархии)" abstract
-		int Id "Локальный идентификатор" primarykey identity
+		
+	Table Entity "Сущность" abstract 
 		string Code "Уникальный код" unique default="'NOCODE_' + ${_timestampstr}"
 		string Name "Название" default="'NONAME_' + ${_timestampstr}"
+		datetime Timestamp "Штамп обновления в модели 'версия'" default = CURRENT_TIMESTAMP
+		longstring Tag "Теги"
+
+	Entity Dictionary "Определение словаря (с поддержкой иерархии)" abstract
+		
 		string Value "Значение"
-		string Tag "Теги"
 		string SecurityInfo "Некая информация о безопасности"
 		string ParentCode "Код родительской сущности" ref="${fullname}.Code" 
 		string Path "Полный путь"
@@ -61,19 +64,19 @@ namespace Qorpent.Db
 			"""
 		ensure index "[${schema}].${.code}_by_code_index" unique
 			use Code
-			include Name
-			include Tag
+			includes Name
+			includes Tag
 		
 		ensure index "[${schema}].${.code}_by_path_index" unique
 			use Path
-			include Code
-			include Name
-			include Tag
+			includes Code
+			includes Name
+			includes Tag
 			
 		ensure index "[${schema}].${.code}_by_tag_index" unique
 			use Path
-			include Code
-			include Name
-			include Tag
+			includes Code
+			includes Name
+			includes Tag
 		
 		

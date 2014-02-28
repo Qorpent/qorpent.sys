@@ -13,5 +13,6 @@
 		/// </summary>
 		/// <returns></returns>
 		IBSharpContext Build();
+
 	}
 }

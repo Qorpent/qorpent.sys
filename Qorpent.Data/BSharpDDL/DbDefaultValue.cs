@@ -43,6 +43,18 @@ namespace Qorpent.Data.BSharpDDL{
 				else{
 					if (dbField.DataType.DbType == DbType.String){
 						result.Value = attr;
+					}else if (dbField.DataType.DbType == DbType.DateTime){
+						try{
+							attr.ToDate();
+							result.DefaultValueType =DbDefaultValueType.Native;
+							
+							result.Value = attr;
+						}
+						catch{
+							result.DefaultValueType = DbDefaultValueType.Expression;
+
+							result.Value = attr;
+						}
 					}
 					else{
 						result.Value = attr.ToDecimal();

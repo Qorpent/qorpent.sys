@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<IsTest>True</IsTest>
+    <Configuration>Debug</Configuration>
+	<ProjectGuid>422A4108-5E0A-48FE-A0CD-8FA8ECAF49A5</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.EmbedCode.Tests</RootNamespace>
+    <AssemblyName>Qorpent.EmbedCode.Tests</AssemblyName>
+	<AssemblyNameBase>Qorpent.EmbedCode</AssemblyNameBase>
+  </PropertyGroup>
+   <ItemGroup>
+	<None Include="*.import" />
+	<None Include="*.export" />
+	<EmbeddedResource Include=".\**\*.*resource"/>
+ </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+
+</Project>
