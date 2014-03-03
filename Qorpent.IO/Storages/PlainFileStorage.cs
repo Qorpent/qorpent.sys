@@ -119,7 +119,7 @@ namespace Qorpent.IO.Storages {
         /// <param name="filename">Имя файла</param>
         /// <param name="data">Байтовые денные</param>
         public void Write(string filename, byte[] data) {
-            using (var stream = GetStream(filename, FileMode.Truncate, FileAccess.Write, FileShare.Read)) {
+            using (var stream = GetStream(filename, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read)) {
                 stream.Write(data, 0, data.Length);
             }
         }
@@ -132,7 +132,7 @@ namespace Qorpent.IO.Storages {
         /// <param name="share">Режим совместного использования файла</param>
         /// <returns>Поток до файла</returns>
         public FileStream GetStream(string filename, FileMode mode, FileAccess access, FileShare share = FileShare.None) {
-            return _directory.GetFiles(filename)[0].Open(mode, access, share);
+            return File.Open(Path.Combine(_workingDirectory, filename), mode, access, share);
         }
         /// <summary>
         ///     Получение перечисления имён файлов в хранилище
