@@ -31,7 +31,7 @@ namespace Qorpent.Mvc.Renders {
                 error = "Нет данных для отображения";
             }
 
-			if (context.Get("__format") == "json"){
+			if (context.Get("format") == "json"){
 				dynamic result = new UObj();
 				result.config = config;
 				result.data = datascript;
@@ -65,7 +65,7 @@ namespace Qorpent.Mvc.Renders {
                 context.ContentType = "text/html";   
             }
 
-            if (!string.IsNullOrWhiteSpace(context.Get("__standalone"))) {
+            if (!string.IsNullOrWhiteSpace(context.Get("standalone"))) {
                 script = @"
 <html>
 <header>
@@ -85,13 +85,13 @@ namespace Qorpent.Mvc.Renders {
 
         private IChartConfig PrepareChartConfig(IMvcContext context) {
             var result = new ChartConfig {
-                Id = context.Get("__id", DateTime.Now.Ticks).ToString(CultureInfo.InvariantCulture),
-                Container = context.Get("__container", string.Empty),
-                Width = context.Get("__width", "400"),
-                Height = context.Get("__height", "300"),
-                Debug = context.Get("__debug", "0"),
-                Type = context.Get("__type", "Column2D"),
-                Divlines = context.Get("__divlines", -1)
+                Id = context.Get("id", DateTime.Now.Ticks).ToString(CultureInfo.InvariantCulture),
+                Container = context.Get("container", string.Empty),
+                Width = context.Get("width", "400"),
+                Height = context.Get("height", "300"),
+                Debug = context.Get("debug", "0"),
+                Type = context.Get("type", "Column2D"),
+                Divlines = context.Get("divlines", -1)
             };
             var specAttrs = context.GetAll("fc");
             foreach (var attr in specAttrs) {
