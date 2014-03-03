@@ -28,9 +28,14 @@ namespace Qorpent.Data.BSharpDDL{
 
 		protected abstract void CheckScriptDelimiter(DbGenerationMode mode, StringBuilder sb);
 		protected abstract string GetEnsureSchema(string schema,DbGenerationMode mode);
+		
 
 		public virtual string GetSql(IEnumerable<DbObject> objects, DbGenerationMode mode, object hintObject){
 			var schemas = objects.Select(_ => _.Schema).Distinct();
+			var sequencefields =
+				objects.OfType<DbTable>()
+				       .Where(_ => _.Fields.Values.Any(__ => __.IsIdentity))
+				       .Select(_ => _.Fields.Values.First(__ => __.IsIdentity)).ToArray();
 			var ordered = GetOrderedObjects(objects);
 			var sb = new StringBuilder();
 
@@ -41,6 +46,9 @@ namespace Qorpent.Data.BSharpDDL{
 					sb.AppendLine(GetSql(dbObject, mode, hintObject));
 					CheckScriptDelimiter(mode, sb);
 				}
+				foreach (var fld in sequencefields){
+					sb.AppendLine(GetDropSequence(fld));
+				}
 				foreach (var schema in schemas){
 					sb.AppendLine(this.GetDropSchema(schema));
 					CheckScriptDelimiter(mode,sb);
@@ -48,8 +56,10 @@ namespace Qorpent.Data.BSharpDDL{
 			}
 			else{
 				GenerateTemporalUtils(sb, mode, hintObject);
-				sb.AppendLine(string.Join("\r\n", schemas.Select(_ => GetEnsureSchema(_, mode))));
+				sb.AppendLine(string.Join("\r\nGO\r\n", schemas.Select(_ => GetEnsureSchema(_, mode))));
+				sb.AppendLine(string.Join("\r\nGO\r\n", sequencefields.Select(GetEnsureSequence)));
 				CheckScriptDelimiter(mode, sb);
+
 				foreach (var dbObject in ordered){
 					sb.AppendLine(GetSql(dbObject, mode, hintObject));
 					CheckScriptDelimiter(mode, sb);
@@ -62,9 +72,25 @@ namespace Qorpent.Data.BSharpDDL{
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="dbField"></param>
+		/// <returns></returns>
+		protected abstract string GetEnsureSequence(DbField dbField);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fld"></param>
+		/// <returns></returns>
+		protected abstract string GetDropSequence(DbField fld);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="schema"></param>
 		/// <returns></returns>
 		protected abstract string GetDropSchema(string schema);
+		
 
 
 		/// <summary>

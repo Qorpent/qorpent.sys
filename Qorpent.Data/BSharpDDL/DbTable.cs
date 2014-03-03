@@ -87,6 +87,10 @@ namespace Qorpent.Data.BSharpDDL{
 				{
 					yield return new DbTrigger().Initialize(this, e);
 				}
+				if (e.Name == "view")
+				{
+					yield return new DbView().Initialize(this, e);
+				}
 				var n = e.Name.LocalName;
 				DbDataType type = null;
 				if (Types.ContainsKey(n))
@@ -125,5 +129,9 @@ namespace Qorpent.Data.BSharpDDL{
 				Set(TYPES, value);
 			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public DbFileGroup FileGroup { get; set; }
 	}
 }

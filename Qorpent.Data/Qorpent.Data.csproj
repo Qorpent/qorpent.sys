@@ -15,6 +15,7 @@
     <Compile Include="BSharpDDL\DbDefaultValueType.cs" />
     <Compile Include="BSharpDDL\DbDialect.cs" />
     <Compile Include="BSharpDDL\DbField.cs" />
+    <Compile Include="BSharpDDL\DbFileGroup.cs" />
     <Compile Include="BSharpDDL\DbFunction.cs" />
     <Compile Include="BSharpDDL\DbGenerationMode.cs" />
     <Compile Include="BSharpDDL\DbObject.cs" />
@@ -22,6 +23,7 @@
     <Compile Include="BSharpDDL\DbObjectType.cs" />
     <Compile Include="BSharpDDL\DbTable.cs" />
     <Compile Include="BSharpDDL\DbTrigger.cs" />
+    <Compile Include="BSharpDDL\DbView.cs" />
     <Compile Include="BSharpDDL\GenerateTsqlScriptsTask.cs" />
     <Compile Include="BSharpDDL\ISqlProvider.cs" />
     <Compile Include="BSharpDDL\Parameter.cs" />
