@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,10 @@ namespace Qorpent.Data.BSharpDDL
 	/// Определение DDL объекта
 	/// </summary>
 	public abstract class DbObject : TreeConfigBase<DbObject>{
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IDictionary<string, DbDataType> _types;
 		private const string INDEP = "indep";
 		private const string OUTDEP = "outdep";
 		private const string SCHEMA = "schema";
@@ -21,6 +26,13 @@ namespace Qorpent.Data.BSharpDDL
 		private const string CREATETYPE = "createtype";
 		private const string OBJECTTYPE = "objecttype";
 		private const string COMMENT = "comment";
+		private const string BODY = "body";
+		/// <summary>
+		/// 
+		/// </summary>
+		public string FullName{
+			get { return Schema + "." + Name; }
+		}
 
 		/// <summary>
 		/// Возвращает SQL строку в заданном диалекте
@@ -61,12 +73,19 @@ namespace Qorpent.Data.BSharpDDL
 				if (null != table){
 					dbField.RefTable = table.Schema + "." + table.Name;
 					table.RequireDefaultRecord = true;
+					//if (dbField.DataType.Code == "ref"){
+						var realfld = table.Fields[dbField.RefField];
+						dbField.DataType = realfld.DataType;
+					//}
 					if (table == dbField.Table){
 						dbField.NoCascadeUpdates = true;
 					}else
 					if (!dbField.Table.InDependency.Contains(table)){
 						dbField.Table.InDependency.Add(table);
 						table.OutDependency.Add(dbField.Table);
+					}
+					if (dbField.DataType.DbType == DbType.String){
+						dbField.DefaultValue = new DbDefaultValue{Value = "/",DefaultValueType=DbDefaultValueType.String};
 					}
 				}
 			}
@@ -144,6 +163,15 @@ namespace Qorpent.Data.BSharpDDL
 			get { return Get(CREATETYPE, DbObjectCreateType.Ensure); }
 			set { Set(CREATETYPE,value); }
 		}
+
+		/// <summary>
+		/// Тело объекта
+		/// </summary>
+		public string Body{
+			get { return Get<string>(BODY); }
+			set { Set(BODY,value); }
+		}
+
 		/// <summary>
 		/// Перекрыть для настройки DBObject из B# класса
 		/// </summary>
@@ -160,6 +188,12 @@ namespace Qorpent.Data.BSharpDDL
 			Name = xml.Describe().Code;
 			Schema = xml.Attr("schema",Schema);
 			Comment = xml.Attr("name",Comment);
+			var body = xml.Value;
+			if (body.StartsWith("("))
+			{
+				body = body.Substring(1, body.Length - 2);
+			}
+			Body = body;
 			yield break;
 		}
 		/// <summary>
@@ -204,6 +238,30 @@ namespace Qorpent.Data.BSharpDDL
 				throw new Exception("cannot create DBObject for this XML");
 			}
 			return result;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="obj"></param>
+		public virtual void SetParent(DbObject obj){
+			this.ParentElement = obj;
+			InDependency.Add(obj);
+			obj.OutDependency.Add(this);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="tab"></param>	
+		/// <param name="e"></param>
+		/// <returns></returns>
+		public DbObject Initialize(DbTable tab, XElement e){
+			this._types = tab.Types;
+			SetParent(tab);
+			
+			Setup(e);
+			this.Schema = tab.Schema;
+			return this;
 		}
 	}
 }

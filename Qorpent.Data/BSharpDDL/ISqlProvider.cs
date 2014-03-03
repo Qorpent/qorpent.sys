@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Qorpent.Data.BSharpDDL{
 	/// <summary>
@@ -22,32 +21,5 @@ namespace Qorpent.Data.BSharpDDL{
 		/// <param name="hintObject"></param>
 		/// <returns></returns>
 		string GetSql(IEnumerable<DbObject> objects, DbGenerationMode mode, object hintObject);
-	}
-	/// <summary>
-	/// 
-	/// </summary>
-	[Flags]
-	public enum DbGenerationMode{
-		/// <summary>
-		/// Неопределенный режим
-		/// </summary>
-		None,
-		/// <summary>
-		/// Признак генерации в режиме скрипта
-		/// </summary>
-		Script,
-		/// <summary>
-		/// Признак генерации в рамках процедуры
-		/// </summary>
-		Procedure,
-		/// <summary>
-		/// Признак генерации в защищенном режиме
-		/// </summary>
-		Safe,
-		/// <summary>
-		/// Особый режим с постепенным накатом части обновлений
-		/// </summary>
-		Patch
-
 	}
 }

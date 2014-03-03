@@ -33,17 +33,39 @@ namespace Qorpent.Data.BSharpDDL{
 			var schemas = objects.Select(_ => _.Schema).Distinct();
 			var ordered = GetOrderedObjects(objects);
 			var sb = new StringBuilder();
-			GenerateTemporalUtils(sb, mode, hintObject);
-			sb.AppendLine(string.Join("\r\n", schemas.Select(_=>GetEnsureSchema(_,mode))));
-			CheckScriptDelimiter(mode, sb);
-			foreach (var dbObject in ordered){
-				sb.AppendLine(GetSql(dbObject, mode, hintObject));
-				CheckScriptDelimiter(mode,sb);
+
+			if (mode.HasFlag(DbGenerationMode.Drop)){
+				ordered = ordered.Reverse().ToArray();
+				foreach (var dbObject in ordered)
+				{
+					sb.AppendLine(GetSql(dbObject, mode, hintObject));
+					CheckScriptDelimiter(mode, sb);
+				}
+				foreach (var schema in schemas){
+					sb.AppendLine(this.GetDropSchema(schema));
+					CheckScriptDelimiter(mode,sb);
+				}
 			}
-			GenerateConstraints(ordered,sb, mode, hintObject);
-			DropTemporalUtils(sb, mode, hintObject);
+			else{
+				GenerateTemporalUtils(sb, mode, hintObject);
+				sb.AppendLine(string.Join("\r\n", schemas.Select(_ => GetEnsureSchema(_, mode))));
+				CheckScriptDelimiter(mode, sb);
+				foreach (var dbObject in ordered){
+					sb.AppendLine(GetSql(dbObject, mode, hintObject));
+					CheckScriptDelimiter(mode, sb);
+				}
+				GenerateConstraints(ordered, sb, mode, hintObject);
+				DropTemporalUtils(sb, mode, hintObject);
+			}
 			return sb.ToString();
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="schema"></param>
+		/// <returns></returns>
+		protected abstract string GetDropSchema(string schema);
+
 
 		/// <summary>
 		/// 

@@ -6,6 +6,7 @@ using System.Reflection;
 using Qorpent.Bxl;
 using Qorpent.IO.Resources;
 using Qorpent.IoC;
+using Qorpent.Serialization;
 
 namespace Qorpent.BSharp.Builder {
     /// <summary>
@@ -165,15 +166,26 @@ namespace Qorpent.BSharp.Builder {
         /// <param name="extensionDescriptor"></param>
         /// <returns></returns>
 	    private IEnumerable<Type> GetExtensionTypes(string extensionDescriptor) {
-            if (extensionDescriptor.Contains(",")) yield return Type.GetType(extensionDescriptor);
-            var assembly = Assembly.Load(extensionDescriptor);
-            foreach (var t in assembly.GetTypes()) {
-                if (typeof (IBSharpBuilderExtension).IsAssignableFrom(t)) {
-                    if (!t.IsAbstract) {
-                        yield return t;
-                    }
-                }
-            }
+	        if (extensionDescriptor.IsLiteral(EscapingType.JsonLiteral)){
+		        var pkg = Container.FindComponent(typeof (IBSharpBuilderExtension), extensionDescriptor + ".bsbext");
+		        if (null != pkg){
+			        yield return pkg.ImplementationType;
+		        }
+		        else{
+			        throw new Exception("cannot find IBSharpBuilderExtension for " + extensionDescriptor + ".bsbext");
+		        }
+	        }
+	        else{
+		        if (extensionDescriptor.Contains(",")) yield return Type.GetType(extensionDescriptor);
+		        var assembly = Assembly.Load(extensionDescriptor);
+		        foreach (var t in assembly.GetTypes()){
+			        if (typeof (IBSharpBuilderExtension).IsAssignableFrom(t)){
+				        if (!t.IsAbstract){
+					        yield return t;
+				        }
+			        }
+		        }
+	        }
         }
 
 	    /// <summary>

@@ -15,6 +15,7 @@ namespace Qorpent.Data.BSharpDDL{
 			ObjectType = DbObjectType.Table;
 		}
 		private const string FIELDS = "fields";
+		private const string TYPES = "types";
 		private const string REQUIREDEFAULTRECORD = "requiredefaultrecord";
 		/// <summary>
 		/// Входящие зависимости
@@ -64,31 +65,65 @@ namespace Qorpent.Data.BSharpDDL{
 				yield return adv;
 			}
 			var types_ = xml.Elements("datatype").Select(DbDataType.Create);
-			var types = new Dictionary<string,DbDataType>();
+			this.Types = new Dictionary<string,DbDataType>();
 			foreach (var t in types_){
-				if (!(types.ContainsKey(t.Code))){
-					types[t.Code] = t;
+				if (!(Types.ContainsKey(t.Code)))
+				{
+					Types[t.Code] = t;
 				}
 			}
 			var deftypes = DbDataType.GetDefaultTypes();
+			foreach (var dbDataType in deftypes){
+				if (!Types.ContainsKey(dbDataType.Key))
+				{
+					Types[dbDataType.Key] = dbDataType.Value;
+				}
+			}
 			foreach (var e in xml.Elements()){
+				if (e.Name == "function"){
+					yield return new DbFunction().Initialize(this,e);
+				}
+				if (e.Name == "trigger")
+				{
+					yield return new DbTrigger().Initialize(this, e);
+				}
 				var n = e.Name.LocalName;
 				DbDataType type = null;
-				if (types.ContainsKey(n)){
-					type = types[n];
-				}else if (deftypes.ContainsKey(n)){
-					type = deftypes[n];
+				if (Types.ContainsKey(n))
+				{
+					type = Types[n];
 				}
 				if (null != type){
 					var code = e.Attr("code");
-					if (!this.Fields.ContainsKey(code)){
+					if (!Fields.ContainsKey(code)){
 						AddField(DbField.CreateField(this, type, e));
 					}
-
+				}else if (n == "ref"){
+					var code = e.Attr("code");
+					type = new DbDataType{Code="ref"};
+					if (!Fields.ContainsKey(code))
+					{
+						AddField(DbField.CreateField(this, type, e));
+					}
 				}
+				
 			}
 			yield break;
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public IDictionary<string, DbDataType> Types{
+			get{
+				var result = Get<IDictionary<string, DbDataType>>(TYPES);
+				if (null == result){
+					Set(TYPES, result = new Dictionary<string, DbDataType>());
+				}
+				return result;
+			}
+			set{
+				Set(TYPES, value);
+			}
+		}
 	}
 }

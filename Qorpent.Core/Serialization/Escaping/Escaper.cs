@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Text;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization
 {
@@ -73,6 +74,14 @@ namespace Qorpent.Serialization
 
 	        return sb.ToString();
         }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="str"></param>
+		/// <returns></returns>
+		public static string ToSqlString( this object str ){
+			return str.ToStr().Replace("'", "''");
+		}
 
         private static string ToBxlMultiLineString(string str) {
             if (-1 == str.IndexOf('\r') && -1 == str.IndexOf('\n')) {

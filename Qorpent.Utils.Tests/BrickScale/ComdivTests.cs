@@ -61,6 +61,8 @@ namespace Qorpent.Utils.Tests.ScaleNormalizeTests {
 		[TestCase("0,1187234.00000", 0, 1500000, 4, true, 325, 0, true)]
 
 		[TestCase("-36187,0", -40000, 10000, 4, true, 325, 0, true)]
+
+		[TestCase("19.26,19.21,19.23,19.05", 19.05, 19.30, 4, true, 300, -1, true)]
         public void UchalGokFixedTests(string dataRow, double expectedMin, double expectedMax, double divline, bool checkDivlines, int height, int minvalue, bool upperlabel) {
             ExecuteScaleTest(dataRow, expectedMin, expectedMax, divline, checkDivlines, height, minvalue, upperlabel);
         }

@@ -27,35 +27,39 @@
 		/// Процедура
 		/// </summary>
 		Procedure = 1<<4,
-
+		/// <summary>
+		/// 
+		/// </summary>
+		Trigger = 1<<5,
 		/// <summary>
 		/// Псевдоним
 		/// </summary>
-		Alias = 1<<5,
+		Alias = 1<<6,
 		/// <summary>
 		/// Сборка
 		/// </summary>
-		ClrAssembly = 1<<6,
+		ClrAssembly = 1<<7,
 		/// <summary>
 		/// CLR Тип
 		/// </summary>
-		ClrType = 1<<7,
+		ClrType = 1<<8,
 		/// <summary>
 		/// CLR функция
 		/// </summary>
-		ClrFunction = 1<<8,
+		ClrFunction = 1<<9,
 		/// <summary>
 		/// CLR процедура
 		/// </summary>
-		ClrProcedure = 1<<9,
+		ClrProcedure = 1<<10,
 		/// <summary>
 		/// CLR триггер
 		/// </summary>
-		ClrTrigger = 1<<10,
+		ClrTrigger = 1<<11,
 
 		/// <summary>
 		/// Поле таблицы
 		/// </summary>
-		Field = 1 << 11,
+		Field = 1 << 12,
+		
 	}
 }

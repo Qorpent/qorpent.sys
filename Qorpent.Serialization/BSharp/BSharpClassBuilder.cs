@@ -760,7 +760,10 @@ namespace Qorpent.BSharp {
 				{
 					e.Attribute(BSharpSyntax.ConditionalAttribute).Remove();
 				}
-				e.Attributes().Where(_ => _.Name.LocalName[0]==BSharpSyntax.PrivateAttributePrefix || string.IsNullOrEmpty(_.Value)).Remove();
+				e.Attributes().Where(_ =>
+					(_.Name.LocalName[0]==BSharpSyntax.PrivateAttributePrefix || string.IsNullOrEmpty(_.Value))&&
+					!(_.Name.LocalName.StartsWith("__AT__"))
+					).Remove();
 			}
 
 			foreach (var m in _cls.AllElements.Where(_ => _.Type != BSharpElementType.Define).Select(_ => _.Name).Distinct()) {

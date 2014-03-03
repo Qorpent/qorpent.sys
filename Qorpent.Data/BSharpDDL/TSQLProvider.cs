@@ -3,19 +3,98 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data.BSharpDDL{
 	internal class TSQLProvider : SqlProviderBase{
 		public override string GetSql(DbObject dbObject, DbGenerationMode mode, object hintObject){
-			switch (dbObject.ObjectType){
+			
+			if (mode.HasFlag(DbGenerationMode.Drop)){
+				var prefix = "IF OBJECT_ID('" + dbObject.FullName + "') IS NOT NULL DROP ";
+				switch (dbObject.ObjectType)
+				{
+					case DbObjectType.Table:
+						return prefix+"TABLE " + dbObject.FullName;
+					case DbObjectType.Function:
+						return prefix +"FUNCTION " + dbObject.FullName;
+					case DbObjectType.Procedure:
+						return prefix+"PROCEDURE " + dbObject.FullName;
+					case DbObjectType.Trigger:
+						return prefix+"TRIGGER " + dbObject.FullName;
+					default:
+						throw new NotImplementedException(dbObject.ObjectType.ToString());
+				}
+			}
+			else{
+				switch (dbObject.ObjectType){
 					case DbObjectType.Field:
 						return GetField(dbObject as DbField, mode, hintObject);
 					case DbObjectType.Table:
 						return GetTable(dbObject as DbTable, mode, hintObject);
-				default:
-					throw new NotImplementedException(dbObject.ObjectType.ToString());
+					case DbObjectType.Function:
+						return GetFunction(dbObject as DbFunction, mode, hintObject);
+					case DbObjectType.Trigger:
+						return GetTrigger(dbObject as DbTrigger, mode, hintObject);
+					case DbObjectType.Procedure:
+						return GetProcedure(dbObject as DbFunction, mode, hintObject);
+					default:
+						throw new NotImplementedException(dbObject.ObjectType.ToString());
+				}
 			}
+
+		}
+
+		private string GetTrigger(DbTrigger dbTrigger, DbGenerationMode mode, object hintObject){
+			var sb = new StringBuilder();
+			var name = dbTrigger.Schema + "." + dbTrigger.Name;
+			var tablename = dbTrigger.ParentElement.Schema + "." + dbTrigger.ParentElement.Name;
+			sb.AppendLine(string.Format("IF OBJECT_ID('{0}') IS NOT NULL DROP TRIGGER {0}", name,tablename));
+			CheckScriptDelimiter(mode, sb);
+			sb.AppendLine("-- " + dbTrigger.Comment);
+			var trigtype = "AFTER";
+			if (dbTrigger.Before){
+				trigtype = "INSTEAD OF";
+			}
+			var operations = new List<string>();
+			if(dbTrigger.Insert)operations.Add("INSERT");
+			if (dbTrigger.Update) operations.Add("UPDATE");
+			if (dbTrigger.Delete) operations.Add("DELETE");
+			var ops = string.Join(",", operations);
+			
+			sb.AppendLine(string.Format("CREATE TRIGGER {0}  ON {1} {2} {3} AS BEGIN", name,tablename,trigtype,ops));
+			sb.AppendLine(dbTrigger.Body);
+			sb.AppendLine("END");
+			return sb.ToString();
+		}
+
+		private string GetProcedure(DbFunction dbFunction, DbGenerationMode mode, object hintObject){
+			var sb = new StringBuilder();
+			var name = dbFunction.Schema + "." + dbFunction.Name;
+			sb.AppendLine(string.Format("IF OBJECT_ID('{0}') IS NOT NULL DROP PROC {0}", name));
+			CheckScriptDelimiter(mode, sb);
+			sb.AppendLine("-- " + dbFunction.Comment);
+			sb.AppendLine(string.Format("CREATE PROCEDURE {0}  {1}  AS BEGIN", name,
+				string.Join(", ", dbFunction.Parameters.Select(_ => "@" + _.Code + " " + GetSql(_.DataType)+" = null"))
+				));
+			sb.AppendLine(dbFunction.Body);
+			sb.AppendLine("END");
+			return sb.ToString();
+		}
+
+		private string GetFunction(DbFunction dbFunction, DbGenerationMode mode, object hintObject){
+			var sb = new StringBuilder();
+			var name = dbFunction.Schema + "." + dbFunction.Name;
+			sb.AppendLine(string.Format("IF OBJECT_ID('{0}') IS NOT NULL DROP FUNCTION {0}", name));
+			CheckScriptDelimiter(mode,sb);
+			sb.AppendLine("-- " + dbFunction.Comment);
+			sb.AppendLine(string.Format("CREATE FUNCTION {0} ( {1} ) RETURNS {2} AS BEGIN", name ,
+				string.Join(", ",dbFunction.Parameters.Select(_=>"@"+_.Code+" "+GetSql(_.DataType))),
+				GetSql(dbFunction.ReturnType)
+				));
+			sb.AppendLine( dbFunction.Body);
+			sb.AppendLine("END");
+			return sb.ToString();
 		}
 
 
@@ -59,33 +138,41 @@ END
 GO
 CREATE PROCEDURE #ensurefk @t nvarchar(255), @f nvarchar(255) , @rt nvarchar(255), @rf nvarchar(255), @cu bit as begin
 	declare @n nvarchar(255) set @n = 'FK_'+upper(replace(@t,'.','_'))+'_'+upper(@f)
-	declare @upd nvarchar(255) set @upd = ' ON UPDATE CASCADE '
-	if(@cu = 0) set @upd = ''
+	--declare @upd nvarchar(255) set @upd = ' ON UPDATE CASCADE '
+	--if(@cu = 0) set @upd = ''
 	if not exists (SELECT *  FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS 
     WHERE CONSTRAINT_NAME = @n) begin
-		declare @q nvarchar(max) set @q = 'ALTER TABLE '+@t+' ADD CONSTRAINT '+@n+' FOREIGN KEY ('+@f+')  REFERENCES '+@rt +'('+@rf+')'+@upd
+		declare @q nvarchar(max) set @q = 'ALTER TABLE '+@t+' ADD CONSTRAINT '+@n+' FOREIGN KEY ('+@f+')  REFERENCES '+@rt +'('+@rf+')' --+@upd
 		exec sp_executesql @q
 	end
 END
 GO");
 			}
 		}
+		/// <summary>
+		/// /
+		/// </summary>
+		/// <param name="schema"></param>
+		/// <returns></returns>
+		protected override string GetDropSchema(string schema){
+			return string.Format("IF SCHEMA_ID('{0}') IS NOT NULL DROP SCHEMA {0}", schema);
+		}
 
 		protected override void GenerateConstraints(DbObject[] ordered, StringBuilder sb, DbGenerationMode mode, object hintObject){
 			if (mode.HasFlag(DbGenerationMode.Safe)){
 				var nonpkfields = ordered.OfType<DbTable>().SelectMany(_ => _.Fields.Values).Where(_ => !_.IsPrimaryKey);
-				foreach (var nonpkfield in nonpkfields){
-					if (nonpkfield.IsUnique){
-						sb.AppendLine(string.Format("exec #ensureunq '{0}.{1}','{2}'", nonpkfield.Table.Schema, nonpkfield.Table.Name,
-						                            nonpkfield.Name));
+				foreach (var unq in nonpkfields.Where(_=>_.IsUnique)){
+						sb.AppendLine(string.Format("exec #ensureunq '{0}.{1}','{2}'", unq.Table.Schema, unq.Table.Name,
+						                            unq.Name));
 						CheckScriptDelimiter(mode,sb);
-					}
-					if (nonpkfield.IsRef)
-					{
-						sb.AppendLine(string.Format("exec #ensurefk '{0}.{1}','{2}','{3}','{4}',{5}", nonpkfield.Table.Schema, nonpkfield.Table.Name,
-							nonpkfield.Name,nonpkfield.RefTable,nonpkfield.RefField,nonpkfield.NoCascadeUpdates?0:1));
+					
+					
+				}
+				foreach (var refer in nonpkfields.Where(_=>_.IsRef)){
+
+						sb.AppendLine(string.Format("exec #ensurefk '{0}.{1}','{2}','{3}','{4}',{5}", refer.Table.Schema, refer.Table.Name,
+							refer.Name, refer.RefTable, refer.RefField, refer.NoCascadeUpdates ? 0 : 1));
 						CheckScriptDelimiter(mode, sb);
-					}
 				}
 			}
 		}
@@ -161,11 +248,11 @@ GO");
 		private  void WriteTableDescription(DbTable dbTable, DbGenerationMode mode, StringBuilder sb){
 			if (!string.IsNullOrWhiteSpace(dbTable.Comment)){
 				CheckStartSafeBlock(mode, sb);
-				sb.AppendLine("EXECUTE sp_addextendedproperty N'MS_Description', '" + dbTable.Comment + "', N'SCHEMA', N'" +
+				sb.AppendLine("EXECUTE sp_addextendedproperty N'MS_Description', '" + dbTable.Comment.ToSqlString() + "', N'SCHEMA', N'" +
 				              dbTable.Schema + "', N'TABLE', N'" + dbTable.Name + "'");
 				if (mode.HasFlag(DbGenerationMode.Safe)){
 					WriteEndSafeBlock(sb);
-					sb.AppendLine("EXECUTE sp_updateextendedproperty N'MS_Description', '" + dbTable.Comment + "', N'SCHEMA', N'" +
+					sb.AppendLine("EXECUTE sp_updateextendedproperty N'MS_Description', '" + dbTable.Comment.ToSqlString() + "', N'SCHEMA', N'" +
 					              dbTable.Schema + "', N'TABLE', N'" + dbTable.Name + "'");
 					WriteEndExceptionBlock(sb);
 				}
@@ -173,9 +260,9 @@ GO");
 			foreach (var fld in dbTable.Fields.Values.Where(_ => !string.IsNullOrWhiteSpace(_.Comment)))
 			{
 				CheckStartSafeBlock(mode, sb);
-				sb.AppendLine("EXECUTE sp_addextendedproperty N'MS_Description', '" + fld.Comment + "', N'SCHEMA', N'" +
+				sb.AppendLine("EXECUTE sp_addextendedproperty N'MS_Description', '" + fld.Comment.ToSqlString() + "', N'SCHEMA', N'" +
 							  dbTable.Schema + "', N'TABLE', N'" + dbTable.Name + "', N'COLUMN', N'" + fld.Name + "'");
-				CheckException(mode, sb, "EXECUTE sp_updateextendedproperty N'MS_Description', '" + fld.Comment + "', N'SCHEMA', N'" +
+				CheckException(mode, sb, "EXECUTE sp_updateextendedproperty N'MS_Description', '" + fld.Comment.ToSqlString() + "', N'SCHEMA', N'" +
 							  dbTable.Schema + "', N'TABLE', N'" + dbTable.Name + "', N'COLUMN', N'" + fld.Name + "'");
 				CheckScriptDelimiter(mode, sb);
 			}
@@ -185,7 +272,7 @@ GO");
 			if (mode.HasFlag(DbGenerationMode.Safe)){
 				foreach (var fld in _fields.Where(_ => !_.IsPrimaryKey)){
 					sb.AppendLine(string.Format("EXEC #ensurefld '{0}.{1}','{2}','{3}'", fld.Table.Schema, fld.Table.Name, fld.Name,
-					                            GetField(fld, mode, hintObject, true).Replace("'","''")));
+					                            GetField(fld, mode, hintObject, true).ToSqlString()));
 					CheckScriptDelimiter(mode, sb);
 				}
 			}
@@ -259,9 +346,9 @@ GO");
 				if (field.IsRef){
 					result += " CONSTRAINT FK_" + refname + " FOREIGN KEY REFERENCES " + field.RefTable + " (" + field.RefField +
 						")  ";
-					if (!field.NoCascadeUpdates){
-						result += " ON UPDATE CASCADE ";
-					}
+					//if (!field.NoCascadeUpdates){
+					//	result += " ON UPDATE CASCADE ";
+					//}
 				}
 			}
 			if (null!=field.DefaultValue){
@@ -276,23 +363,28 @@ GO");
 			if (dbObject.IsPrimaryKey) return "";
 			if (defaultValue.DefaultValueType == DbDefaultValueType.Native){
 				if (dbObject.DataType.DbType == DbType.String){
-					return " DEFAULT '" + defaultValue.Value.ToStr().Replace("'", "''") + "'";
-				}else if (dbObject.DataType.DbType == DbType.Decimal){
+					return " DEFAULT '" + defaultValue.Value.ToSqlString() + "'";
+				}
+				if (dbObject.DataType.DbType == DbType.Decimal){
 					return " DEFAULT " + defaultValue.Value.ToDecimal();
-				}else if (dbObject.DataType.DbType == DbType.DateTime){
-					return " DEFAULT '" + defaultValue.Value.ToDate().ToString("yyyy-MM-dd hh:mm:ss") + "'";
 				}
-				else{
-					return " DEFAULT " + defaultValue.Value.ToInt();
+				if (dbObject.DataType.DbType == DbType.DateTime){
+					try{
+						return " DEFAULT '" + defaultValue.Value.ToDate().ToString("yyyyMMdd hh:mm:ss") + "'";
+					}
+					catch{
+						return " DEFAULT (" + defaultValue.Value + ")";
+					}
 				}
-			}else if (defaultValue.DefaultValueType == DbDefaultValueType.String){
-				return " DEFAULT '" + defaultValue.Value.ToStr().Replace("'","''") + "'";
+				return " DEFAULT " + defaultValue.Value.ToInt();
 			}
-			else{
-				return " DEFAULT (" + defaultValue.Value.ToStr()+")";
+			if (defaultValue.DefaultValueType == DbDefaultValueType.String){
+				return " DEFAULT '" + defaultValue.Value.ToSqlString() + "'";
 			}
+			return " DEFAULT (" + defaultValue.Value.ToStr()+")";
 		}
 
+		
 
 		protected override string GetSql(DbDataType dataType){
 			switch (dataType.DbType){
@@ -323,6 +415,8 @@ GO");
 					return "decimal(" + dsize + "," + precession + ")";
 				case DbType.Double:
 					return "float";
+				case DbType.DateTime:
+					return "datetime";
 				default: throw new Exception("unknown type "+dataType.DbType );
 
 			}
