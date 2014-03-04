@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -303,11 +304,11 @@ namespace Qorpent.Serialization {
 		/// </remarks>
 		private void SerializeArray(string name, Array value) {
 			_s.BeginArray(name,value.Length);
-			var i = 0;
+			var i = -1;
 			foreach (var val in value) {
-				_s.BeginArrayEntry(i);
-				InternalSerialize(i.ToString(), val);
 				i++;
+				_s.BeginArrayEntry(i);
+				InternalSerialize(i.ToString(CultureInfo.InvariantCulture), val);
 				_s.EndArrayEntry(i == value.Length - 1);
 				
 			}
