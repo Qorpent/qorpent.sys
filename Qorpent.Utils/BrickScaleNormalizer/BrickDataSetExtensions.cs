@@ -48,7 +48,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			foreach (var seria in dataset.Series) {
 				Console.WriteLine("Seria: " + seria.SeriaNumber);
 				foreach (var row in seria.Rows) {
-					Console.WriteLine("\tRow: {0}, Sum: {1}", row.RowNumber, row.Sum(_ => _.Value));
+					Console.WriteLine("\tRow: {0}, Sum: {1}, Scale: {2}", row.RowNumber, row.Sum(_ => _.Value), row.ScaleType.ToString());
 					foreach (var item in row) {
 						Console.WriteLine("\t\tItem: {0}, Value: {1}", item.Index, item.Value);
 					}

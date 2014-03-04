@@ -13,6 +13,15 @@ namespace Qorpent.Serialization.Tests.Json
 	public class InvalidXmlToJson
 	{
 		[Test]
+		public void IncorrectSerializingListOfObjects() {
+			var objList = new List<object> {new {a = "a"}, new {a = "b"}};
+			var serializer = new JsonSerializer();
+			var json = serializer.Serialize("root", objList);
+			json = json.Replace("\"", "'").Replace(" ", "");
+			Console.WriteLine(json);
+			Assert.AreEqual("[{'a':'a'},{'a':'b'}]", json);
+		}
+		[Test]
 		public void NoTrailCommas(){
 			var xml = XElement.Parse(@"
 <a a='b'>
