@@ -174,7 +174,8 @@ namespace Qorpent.Serialization {
                 if (e.Attribute("__isarray") != null) {
                     elements = e.Elements();
                 }
-	            _s.BeginArray(e.Name.LocalName,elements.Count());
+		        var realc = elements.Count();
+	            _s.BeginArray(e.Name.LocalName,realc);
 	            var i = 0;
 	            foreach (var x in elements) {
 	                _s.BeginArrayEntry(i++);
@@ -185,12 +186,12 @@ namespace Qorpent.Serialization {
 	                else {
 	                    SerializeElement(x);
 	                }
-	                _s.EndArrayEntry(i == c);
+	                _s.EndArrayEntry(i == realc);
 	            }
 	            _s.EndArray();
 	            c -= elements.Count();
 	        }
-	        _s.EndObjectItem(c == 0);
+	        _s.EndObjectItem(c <= 0);
 	        return c;
 	    }
 
@@ -306,8 +307,9 @@ namespace Qorpent.Serialization {
 			foreach (var val in value) {
 				_s.BeginArrayEntry(i);
 				InternalSerialize(i.ToString(), val);
-				_s.EndArrayEntry(i == value.Length - 1);
 				i++;
+				_s.EndArrayEntry(i == value.Length - 1);
+				
 			}
 			_s.EndArray();
 		}
