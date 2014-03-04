@@ -14,10 +14,10 @@ namespace Qorpent.Scaffolding
 	class DataType "Типы данных для взаимодействия приложения с сервером" abstract prototype=ui-data
 		
 		
-	DataType Enum "Перечисление" abstract
+	DataType Enum "Перечисление" enum abstract
 		element item
 		
-	DataType Struct "Структура" abstract
+	DataType Struct "Структура" struct abstract
 		element enum "Описание перечислений"
 		element string "Описание строк"
 		element int "Целые"

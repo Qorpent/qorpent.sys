@@ -17,7 +17,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\AppSpecificationBSharpSource.cs" />
-    <Compile Include="Sql\DataCompilerExtensions.cs" />
+    <Compile Include="Application\ApplicationCompilerExtensions.cs" />
+    <Compile Include="Application\GenerateDataTypesInCSharpTask.cs" />
+    <Compile Include="CodeGeneratorTaskBase.cs" />
     <Compile Include="Sql\DataObjectsSourcePackageForBShart.cs" />
     <Compile Include="Sql\DbDataType.cs" />
     <Compile Include="Sql\DbDefaultValue.cs" />

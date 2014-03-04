@@ -1,61 +1,55 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Qorpent.BSharp;
-using Qorpent.BSharp.Builder;
-using Qorpent.Integration.BSharp.Builder.Tasks;
+using Qorpent.Scaffolding.SqlGeneration;
 
-namespace Qorpent.Scaffolding.SqlGeneration{
+namespace Qorpent.Scaffolding.Sql{
 	/// <summary>
 	/// 
 	/// </summary>
-	public class GenerateTsqlScriptsTask : BSharpBuilderTaskBase
+	public class GenerateTsqlScriptsTask : CodeGeneratorTaskBase
 	{
-		private IBSharpContext _context;
-
 		/// <summary>
-		/// Индекс
+		/// 
 		/// </summary>
-		public const int INDEX = TaskConstants.WriteWorkingOutputTaskIndex + 10;
-		/// <summary>
-		/// Формирует задачу посткомиляции для построения ZETA INDEX
-		/// </summary>
-		public GenerateTsqlScriptsTask()
+		/// <param name="dbobjectclasses"></param>
+		/// <returns></returns>
+		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] dbobjectclasses)
 		{
-			Phase = BSharpBuilderPhase.PostProcess;
-			Index =  INDEX;
-	 
-
-		}
-
-		/// <summary>
-		/// Трансформирует классы прототипа BIZINDEX в полноценные карты соотношения тем, блоков, подсистем
-		/// </summary>
-		/// <param name="context"></param>
-		public override void Execute(IBSharpContext context)
-		{
-			_context = context;
-			Project.Log.Info("GenerateTSQLScriptsTask called");
-			var dbobjectclasses = _context.ResolveAll("attr:isdataobject").ToArray();
 			var dbobjects = dbobjectclasses.SelectMany(_ => DbObject.Create(_, _context)).ToArray();
-			var outdir = GetOutDir();
-			var safetsqlf = Path.Combine(outdir, Project.ProjectName + ".MSSQL.safe.sql");
-			var nsafetsqlf = Path.Combine(outdir, Project.ProjectName + ".MSSQL.sql");
-			var dropsqlf = Path.Combine(outdir, Project.ProjectName + ".MSSQL.drop.sql");
-			File.WriteAllText(safetsqlf,DbObject.GetSql(dbobjects,DbGenerationMode.Script|DbGenerationMode.Safe,DbDialect.TSQL,Project));
-			File.WriteAllText(nsafetsqlf,DbObject.GetSql(dbobjects,DbGenerationMode.Script,DbDialect.TSQL,Project));
-			File.WriteAllText(dropsqlf, DbObject.GetSql(dbobjects, DbGenerationMode.Script | DbGenerationMode.Drop, DbDialect.TSQL, Project));
-		}
+			var safetsqlf =  Project.ProjectName + ".MSSQL.safe.sql";
+			var nsafetsqlf = Project.ProjectName + ".MSSQL.sql";
+			var dropsqlf = Project.ProjectName + ".MSSQL.drop.sql";
 
-		private string GetOutDir(){
-			var basedir = Project.Get("SqlDir", "Sql");
-			if (string.IsNullOrWhiteSpace(basedir)){
-				basedir = "Sql";
-			}
-			if (!Path.IsPathRooted(basedir)){
-				basedir = Path.Combine(Project.GetOutputDirectory(), basedir);
-			}
-			Directory.CreateDirectory(basedir);
-			return basedir;
+
+			yield return
+				new Production{
+					FileName = safetsqlf,
+					Content = DbObject.GetSql(dbobjects, DbGenerationMode.Script | DbGenerationMode.Safe, DbDialect.TSQL, Project)
+				};
+
+			yield return
+				new Production
+				{
+					FileName = nsafetsqlf,
+					Content = DbObject.GetSql(dbobjects, DbGenerationMode.Script, DbDialect.TSQL, Project)
+				};
+
+			yield return
+				new Production
+				{
+					FileName = dropsqlf,
+					Content = DbObject.GetSql(dbobjects, DbGenerationMode.Script | DbGenerationMode.Drop, DbDialect.TSQL, Project)
+				};
+
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public GenerateTsqlScriptsTask():base(){
+			ClassSearchCriteria = "attr:isdataobject";
+			DefaultOutputName = "Sql";
+		}
+		
 	}
 }
