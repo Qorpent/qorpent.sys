@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Data.BSharpDDL{
+namespace Qorpent.Scaffolding.SqlGeneration{
 	/// <summary>
 	/// 
 	/// </summary>

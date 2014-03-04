@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Qorpent.Data.BSharpDDL{
+namespace Qorpent.Scaffolding.SqlGeneration{
 	/// <summary>
 	/// Провайдер саппора Sql
 	/// </summary>

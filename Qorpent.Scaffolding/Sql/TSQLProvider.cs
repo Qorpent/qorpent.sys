@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Data.BSharpDDL{
+namespace Qorpent.Scaffolding.SqlGeneration{
 	internal class TSQLProvider : SqlProviderBase{
 
 		public TSQLProvider(){

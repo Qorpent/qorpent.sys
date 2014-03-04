@@ -4,7 +4,7 @@ using Qorpent.BSharp;
 using Qorpent.BSharp.Builder;
 using Qorpent.Integration.BSharp.Builder.Tasks;
 
-namespace Qorpent.Data.BSharpDDL{
+namespace Qorpent.Scaffolding.SqlGeneration{
 	/// <summary>
 	/// 
 	/// </summary>

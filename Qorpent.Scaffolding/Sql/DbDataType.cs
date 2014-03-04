@@ -3,7 +3,7 @@ using System.Data;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Data.BSharpDDL{
+namespace Qorpent.Scaffolding.SqlGeneration{
 	/// <summary>
 	/// Тип данных
 	/// </summary>

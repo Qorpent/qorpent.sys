@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace Qorpent.Data.BSharpDDL{
+namespace Qorpent.Scaffolding.SqlGeneration{
 	internal abstract class SqlProviderBase : ISqlProvider{
 		protected const int DEFAULTSTRINGSIZE =255;
 		protected const int DEFAULTDECIMALSIZE = 18;

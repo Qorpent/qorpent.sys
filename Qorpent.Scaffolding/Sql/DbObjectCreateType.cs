@@ -1,4 +1,4 @@
-﻿namespace Qorpent.Data.BSharpDDL{
+﻿namespace Qorpent.Scaffolding.SqlGeneration{
 	/// <summary>
 	/// Режим создания объекта
 	/// </summary>

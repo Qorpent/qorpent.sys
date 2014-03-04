@@ -1,4 +1,4 @@
-﻿namespace Qorpent.Data.BSharpDDL{
+﻿namespace Qorpent.Scaffolding.SqlGeneration{
 	/// <summary>
 	/// Параметр функции или процедуры
 	/// </summary>

@@ -1,8 +1,7 @@
-﻿using System;
-using Qorpent.BSharp.Builder;
+﻿using Qorpent.BSharp.Builder;
 using Qorpent.IoC;
 
-namespace Qorpent.Data.BSharpDDL{
+namespace Qorpent.Scaffolding.SqlGeneration{
 	/// <summary>
 	/// Расширения компилятора B# для работы с DDL B#
 	/// </summary>
