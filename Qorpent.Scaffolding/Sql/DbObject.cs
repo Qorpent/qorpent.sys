@@ -1,20 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Data.BSharpDDL
+namespace Qorpent.Scaffolding.SqlGeneration
 {
 	/// <summary>
 	/// Определение DDL объекта
 	/// </summary>
 	public abstract class DbObject : TreeConfigBase<DbObject>{
+		/// <summary>
+		/// Признак генерации из готового файла SQL
+		/// </summary>
+		public bool IsRawSql { get; set; }
+		/// <summary>
+		/// "Сырой SQL"
+		/// </summary>
+		public string RawSql { get; set; }
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -55,9 +63,33 @@ namespace Qorpent.Data.BSharpDDL
 		/// <returns></returns>
 		public static string GetSql(IEnumerable<DbObject> allobjects, DbGenerationMode mode = DbGenerationMode.Script,
 		                            DbDialect dialect = DbDialect.TSQL, object hintObject = null){
+
 			var objarray = allobjects.ToArray();
 			SetupForeignKeyDependency(objarray);
+			SetupFileGroups(objarray);
 			return SqlProvider.Get(dialect).GetSql(objarray, mode, hintObject);
+		}
+
+		private static void SetupFileGroups(DbObject[] objarray){
+			var filegroups = objarray.OfType<DbFileGroup>().ToDictionary(_=>_.Name,_=>_);
+			var tables = objarray.OfType<DbTable>().ToArray();
+			foreach (var dbTable in tables){
+				if (dbTable.FileGroupName == "PRIMARY") continue;
+				
+				if (!string.IsNullOrWhiteSpace(dbTable.FileGroupName)){
+					var name = dbTable.FileGroupName.SmartSplit(false, true, '.').Last();
+					if (!filegroups.ContainsKey(name)){
+						throw new Exception("cannot find group " + name + " for " + dbTable.Name);
+					}
+					var fgroup = filegroups[name];
+					dbTable.FileGroupName = fgroup.Name;
+					dbTable.FileGroup = fgroup;
+				}
+				else{
+					dbTable.FileGroupName = "PRIMARY";
+				}
+			}
+
 		}
 
 		private static void SetupForeignKeyDependency(DbObject[] objarray){
@@ -178,8 +210,21 @@ namespace Qorpent.Data.BSharpDDL
 		/// <param name="sourceClass"></param>
 		/// <param name="context"></param>
 		protected virtual IEnumerable<DbObject> Setup(IBSharpClass sourceClass, IBSharpContext context=null){
+			this.SourceClass = sourceClass;
+			this.Context = context;
 			return Setup(sourceClass.Compiled);
+			
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IBSharpContext Context { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IBSharpClass SourceClass { get; set; }
+
 		/// <summary>
 		/// Перекрыть для настройки DBObject из XML
 		/// </summary>
@@ -187,7 +232,14 @@ namespace Qorpent.Data.BSharpDDL
 		protected virtual IEnumerable<DbObject> Setup(XElement xml){
 			Name = xml.Describe().Code;
 			Schema = xml.Attr("schema",Schema);
+			if (string.IsNullOrWhiteSpace(Schema)){
+				Schema = xml.Parent.Attr("schema");
+			}
 			Comment = xml.Attr("name",Comment);
+			SetupFileGroup(xml);
+			if (xml.Attr("external").ToBool()){
+				ReadExternalSql(Path.GetDirectoryName(xml.ResolveAttr("file")),xml.Attr("external"));
+			}
 			var body = xml.Value;
 			if (body.StartsWith("("))
 			{
@@ -196,6 +248,34 @@ namespace Qorpent.Data.BSharpDDL
 			Body = body;
 			yield break;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="xml"></param>
+		private void SetupFileGroup(XElement xml){
+			var filegroup = xml.Attr("filegroup");
+			FileGroupName = filegroup;
+		}
+		/// <summary>
+		/// Имя файловой группы
+		/// </summary>
+		public string FileGroupName { get; set; }
+
+		private void ReadExternalSql(string dir, string attr){
+			var name = this.GetType().Name + "_" + Schema + "_" + Name + ".sql";
+			if (attr != "1"){
+				name = attr;
+			}
+			var file = Path.Combine(dir, name);
+			if (!File.Exists(file)){
+				throw new Exception("File "+file+" required for "+this.Schema+"."+this.Name+" not found");
+			}
+			var sql = File.ReadAllText(file);
+			this.IsRawSql = true;
+			this.RawSql = sql;
+		}
+
+
 		/// <summary>
 		/// Создать объект из B# класса
 		/// </summary>
@@ -208,6 +288,10 @@ namespace Qorpent.Data.BSharpDDL
 			{
 				result = new DbTable();
 			}
+			else if (sourceClass.Prototype == "filegroup"){
+				result = new DbFileGroup();
+			}
+
 			if (null != result){
 				var advanced = result.Setup(sourceClass).ToArray();
 				yield return result;
@@ -259,7 +343,7 @@ namespace Qorpent.Data.BSharpDDL
 			this._types = tab.Types;
 			SetParent(tab);
 			
-			Setup(e);
+			Setup(e).ToArray();
 			this.Schema = tab.Schema;
 			return this;
 		}

@@ -139,6 +139,10 @@ namespace Qorpent.Mvc.Binding {
 			get { return TargetType.FullName; }
 		}
 
+		/// <summary>
+		/// Префикс параметров в Web при биндинге словарей в структурах
+		/// </summary>
+		public string ParameterPrefix { get; set; }
 
 		/// <summary>
 		/// 	Back reference to target bind type

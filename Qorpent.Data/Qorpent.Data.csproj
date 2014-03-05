@@ -8,26 +8,6 @@
     <AssemblyName>Qorpent.Data</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BSharpDDL\DataCompilerExtensions.cs" />
-    <Compile Include="BSharpDDL\DataObjectsSourcePackageForBShart.cs" />
-    <Compile Include="BSharpDDL\DbDataType.cs" />
-    <Compile Include="BSharpDDL\DbDefaultValue.cs" />
-    <Compile Include="BSharpDDL\DbDefaultValueType.cs" />
-    <Compile Include="BSharpDDL\DbDialect.cs" />
-    <Compile Include="BSharpDDL\DbField.cs" />
-    <Compile Include="BSharpDDL\DbFunction.cs" />
-    <Compile Include="BSharpDDL\DbGenerationMode.cs" />
-    <Compile Include="BSharpDDL\DbObject.cs" />
-    <Compile Include="BSharpDDL\DbObjectCreateType.cs" />
-    <Compile Include="BSharpDDL\DbObjectType.cs" />
-    <Compile Include="BSharpDDL\DbTable.cs" />
-    <Compile Include="BSharpDDL\DbTrigger.cs" />
-    <Compile Include="BSharpDDL\GenerateTsqlScriptsTask.cs" />
-    <Compile Include="BSharpDDL\ISqlProvider.cs" />
-    <Compile Include="BSharpDDL\Parameter.cs" />
-    <Compile Include="BSharpDDL\SqlProvider.cs" />
-    <Compile Include="BSharpDDL\SqlProviderBase.cs" />
-    <Compile Include="BSharpDDL\TSQLProvider.cs" />
     <Compile Include="Connections\ConfigBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
@@ -42,7 +22,6 @@
     <Compile Include="REST\AddConnection.cs" />
     <Compile Include="REST\ConnectionsAction.cs" />
     <Compile Include="REST\RemoveConnection.cs" />
-    <EmbeddedResource Include="BSharpDDL\DbObjects.bxls" />
     <None Include="Qorpent.Core.import" />
     <None Include="Qorpent.Utils.import" />
     <None Include="*.export" />

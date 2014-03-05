@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Data.BSharpDDL{
+namespace Qorpent.Scaffolding.SqlGeneration{
 	internal class TSQLProvider : SqlProviderBase{
+
+		public TSQLProvider(){
+			UseNewFeatures = true;
+		}
 		public override string GetSql(DbObject dbObject, DbGenerationMode mode, object hintObject){
 			
 			if (mode.HasFlag(DbGenerationMode.Drop)){
 				var prefix = "IF OBJECT_ID('" + dbObject.FullName + "') IS NOT NULL DROP ";
 				switch (dbObject.ObjectType)
 				{
+					case  DbObjectType.FileGroup:
+						return "";
+				
 					case DbObjectType.Table:
 						return prefix+"TABLE " + dbObject.FullName;
 					case DbObjectType.Function:
@@ -22,12 +30,24 @@ namespace Qorpent.Data.BSharpDDL{
 						return prefix+"PROCEDURE " + dbObject.FullName;
 					case DbObjectType.Trigger:
 						return prefix+"TRIGGER " + dbObject.FullName;
+					case DbObjectType.View:
+						return prefix + "VIEW " + dbObject.FullName;
 					default:
 						throw new NotImplementedException(dbObject.ObjectType.ToString());
 				}
 			}
 			else{
+				if (dbObject.IsRawSql){
+					var sb = new StringBuilder();
+					var normalized = NormalizeSql(dbObject,dbObject.RawSql);
+					sb.AppendLine(normalized);
+					CheckScriptDelimiter(mode,sb);
+					return sb.ToString();
+
+				}
 				switch (dbObject.ObjectType){
+					case DbObjectType.FileGroup:
+						return GetFileGroup(dbObject as DbFileGroup, mode, hintObject);
 					case DbObjectType.Field:
 						return GetField(dbObject as DbField, mode, hintObject);
 					case DbObjectType.Table:
@@ -38,11 +58,74 @@ namespace Qorpent.Data.BSharpDDL{
 						return GetTrigger(dbObject as DbTrigger, mode, hintObject);
 					case DbObjectType.Procedure:
 						return GetProcedure(dbObject as DbFunction, mode, hintObject);
+					case DbObjectType.View:
+						return GetView(dbObject as DbView, mode, hintObject);
 					default:
 						throw new NotImplementedException(dbObject.ObjectType.ToString());
 				}
 			}
 
+		}
+		private string tobit(object any){
+			return any.ToBool() ? "1" : "0";
+		}
+		private string GetFileGroup(DbFileGroup dbFileGroup, DbGenerationMode mode, object hintObject){
+			var sb = new StringBuilder();
+			sb.AppendLine(string.Format("exec #ensurefg '{0}',{1},{2},{3},{4}", dbFileGroup.Name ,dbFileGroup.FileCount,dbFileGroup.FileSize,tobit(dbFileGroup.WithIdx),tobit(dbFileGroup.IsDefault)));
+				 return sb.ToString();
+		}
+
+		private string NormalizeSql(DbObject dbObject, string rawSql){
+			var result = rawSql;
+			if (rawSql.Contains("--PARENT_FIELD_SET--")){
+				var sb = new StringBuilder();
+				foreach (var fld in (dbObject.ParentElement as DbTable).Fields.Values.OrderBy(_=>_.Idx)){
+					sb.AppendLine(fld.Name + ", --" + fld.Comment);
+				}
+				result = result.Replace("--PARENT_FIELD_SET--", sb.ToString());
+			}
+			result = EmbedReferenceSubQueries(dbObject,result);
+			return result;
+		}
+
+		private static string EmbedReferenceSubQueries(DbObject obj,string result){
+			return Regex.Replace(result,
+			                       @"(?ix)--\s*PARENT_REF_SET\sFOR\s\((?<fields>[^\)]+)\)\sWITH\s\((?<outers>[^\)]+)\)\s*--",
+			                       match
+			                       => {
+				                       var fields = match.Groups["fields"].Value.SmartSplit();
+									   var outers = match.Groups["outers"].Value.SmartSplit();
+				                       var sb = new StringBuilder();
+				                       foreach (var field in fields){
+					                       var table = obj.ParentElement as DbTable; 
+					                       var fld = table.Fields[field];
+					                       foreach (var outer in outers){
+						                       sb.AppendLine(
+							                       string.Format("(select x.{1} from {0} x where x.Id = {2}.{3}.{4}) as {4}{1},",
+							                                     fld.RefTable, outer, table.Schema, table.Name, fld.Name
+								                       ));
+					                       }
+				                       }
+
+				                       return sb.ToString();
+			                       });
+			
+		}
+
+		private string GetView(DbView dbView, DbGenerationMode mode, object hintObject){
+			var sb = new StringBuilder();
+			var name = dbView.Schema + "." + dbView.Name;
+			sb.AppendLine(string.Format("CREATE VIEW {0}   AS ", name));
+			var sql = NormalizeSql(dbView, dbView.Body).Trim();
+			if (sql.EndsWith(",")){
+				sql = sql.Substring(0, sql.Length - 1);
+			}
+			if (!sql.Contains("SELECT")){
+				sql = " SELECT \r\n" + sql + "\r\n FROM " + dbView.ParentElement.Schema +
+				      "." + dbView.ParentElement.Name;
+			}
+			sb.AppendLine(sql);
+			return sb.ToString();
 		}
 
 		private string GetTrigger(DbTrigger dbTrigger, DbGenerationMode mode, object hintObject){
@@ -63,7 +146,7 @@ namespace Qorpent.Data.BSharpDDL{
 			var ops = string.Join(",", operations);
 			
 			sb.AppendLine(string.Format("CREATE TRIGGER {0}  ON {1} {2} {3} AS BEGIN", name,tablename,trigtype,ops));
-			sb.AppendLine(dbTrigger.Body);
+			sb.AppendLine(NormalizeSql(dbTrigger,dbTrigger.Body));
 			sb.AppendLine("END");
 			return sb.ToString();
 		}
@@ -77,7 +160,7 @@ namespace Qorpent.Data.BSharpDDL{
 			sb.AppendLine(string.Format("CREATE PROCEDURE {0}  {1}  AS BEGIN", name,
 				string.Join(", ", dbFunction.Parameters.Select(_ => "@" + _.Code + " " + GetSql(_.DataType)+" = null"))
 				));
-			sb.AppendLine(dbFunction.Body);
+			sb.AppendLine(NormalizeSql(dbFunction,dbFunction.Body));
 			sb.AppendLine("END");
 			return sb.ToString();
 		}
@@ -92,7 +175,7 @@ namespace Qorpent.Data.BSharpDDL{
 				string.Join(", ",dbFunction.Parameters.Select(_=>"@"+_.Code+" "+GetSql(_.DataType))),
 				GetSql(dbFunction.ReturnType)
 				));
-			sb.AppendLine( dbFunction.Body);
+			sb.AppendLine( NormalizeSql(dbFunction,dbFunction.Body));
 			sb.AppendLine("END");
 			return sb.ToString();
 		}
@@ -105,16 +188,84 @@ namespace Qorpent.Data.BSharpDDL{
 		}
 
 		protected override string GetEnsureSchema(string schema,DbGenerationMode mode){
+			if (schema == "dbo") return "";
 			if (mode.HasFlag(DbGenerationMode.Safe)){
-				return "IF SCHEMA_ID('" + schema + "') IS NULL EXEC sp_executesql N'CREATE SCHEMA " + schema + "'";
+				return "IF SCHEMA_ID('" + schema + "') IS NULL EXEC sp_executesql N'CREATE SCHEMA " + schema + "' \r\nGO\r\n";
 			}
 			else{
-				return "CREATE SCHEMA " + schema;
+				return "CREATE SCHEMA " + schema + "\r\nGO\r\n";
 			}
 			
 		}
+		/// <summary>
+		/// Использовать новые фичи
+		/// </summary>
+		public bool UseNewFeatures { get; set; }
+
+		protected override string GetEnsureSequence(DbField dbField){
+			if (!UseNewFeatures) return "";
+			var name = dbField.Table.Schema + "." + dbField.Table.Name + "_SEQ";
+			var dtype = GetSql(dbField.DataType);
+			return string.Format("IF OBJECT_ID('{0}') IS NULL CREATE SEQUENCE {0} AS {1} START WITH 10  INCREMENT BY 10 CACHE 10",name,dtype);
+		}
+
+		protected override string GetDropSequence(DbField fld){
+			if (!UseNewFeatures) return "";
+			var name = fld.Table.Schema + "." + fld.Table.Name + "_SEQ";
+			return string.Format("DROP SEQUENCE {0}", name);
+		}
 
 		protected override void GenerateTemporalUtils (StringBuilder sb, DbGenerationMode mode, object hintObject){
+			sb.AppendLine(@"
+IF OBJECT_ID('tempdb..#ensurefg') IS NOT NULL DROP PROC #ensurefg
+GO
+CREATE PROCEDURE #ensurefg @n nvarchar(255),@filecount int = 1, @filesize int = 100, @withidx bit = 0, @isdefault bit = 0 AS begin
+	declare @q nvarchar(max) 
+	set @filesize = isnull(@filesize,100)
+	if @filesize <=3 set @filesize  =3
+	set @filecount = ISNULL(@filecount,1)
+	if @filecount < 1 set @filecount= 1
+	set @withidx = isnull(@withidx,0)
+	set @isdefault = isnull(@isdefault,0)
+	set @q = 'ALTER DATABASE '+DB_NAME()+' ADD FILEGROUP '+@n
+	print @q
+	BEGIN TRY
+		exec sp_executesql @q
+	END TRY
+	BEGIN CATCH
+	END CATCH
+	declare @basepath nvarchar(255) set @basepath = reverse((Select top 1 filename from sys.sysfiles))
+	set @basepath = REVERSE( RIGHT( @basepath, len(@basepath)-CHARINDEX('\',@basepath)+1))
+
+	declare @c int set @c = @filecount 
+	while @c >= 1 begin
+		BEGIN TRY
+			set @q='ALTER DATABASE '+DB_NAME()+' ADD FILE ( NAME = N'''+DB_NAME()+'_'+@n+cast(@c as nvarchar(255))+''', FILENAME = N'''+
+				@basepath+'z3_'+@n+cast(@c as nvarchar(255))+'.ndf'' , SIZE = '+cast(@filesize as nvarchar(255))+'MB , FILEGROWTH = 5% ) TO FILEGROUP ['+@n+']'
+			print @q
+			exec sp_executesql @q
+		END TRY
+		BEGIN CATCH
+		END CATCH
+		set @c = @c - 1
+	end
+
+	IF @isdefault = 1 BEGIN
+		set @q='ALTER DATABASE '+DB_NAME()+' MODIFY FILEGROUP '+@n+' DEFAULT '
+		BEGIN TRY
+			exec sp_executesql @q
+		END TRY 
+		BEGIN CATCH
+		END CATCH
+	end
+
+	IF @withidx = 1 BEGIN
+		set @n = @n +'IDX'
+		exec #ensurefg @n, @filecount,@filesize,0,0
+	END
+end
+GO
+");
 			if (mode.HasFlag(DbGenerationMode.Safe)){
 				sb.AppendLine(@"
 IF OBJECT_ID('tempdb..#ensurefld') IS NOT NULL DROP PROC #ensurefld
@@ -155,6 +306,7 @@ GO");
 		/// <param name="schema"></param>
 		/// <returns></returns>
 		protected override string GetDropSchema(string schema){
+			if (schema == "dbo") return "";
 			return string.Format("IF SCHEMA_ID('{0}') IS NOT NULL DROP SCHEMA {0}", schema);
 		}
 
@@ -185,12 +337,14 @@ GO");
 				sb.AppendLine("DROP PROC #ensurefk");
 				CheckScriptDelimiter(mode, sb);
 			}
+			sb.AppendLine("DROP PROC #ensurefg");
 		}
 
 
 		private string GetTable(DbTable dbTable, DbGenerationMode mode, object hintObject){
 			var sb = new StringBuilder();
 			CheckStartSafeBlock(mode,sb);
+		
 			var fullname = GetFullName(dbTable,mode);
 			if (!string.IsNullOrWhiteSpace(dbTable.Comment)){
 				sb.AppendLine("-- " + dbTable.Comment);
@@ -204,7 +358,7 @@ GO");
 			}
 			sb.AppendLine(string.Join(",\r\n", fields.Select(_ => GetInTableFieldString(mode, hintObject, _))));
 
-			sb.AppendLine(")");
+			sb.AppendLine(") ON ["+dbTable.FileGroupName+"]");
 			CheckException(mode, sb,  "IF (ERROR_NUMBER()=2714) PRINT 'Таблица \"" + dbTable.Schema + "." + dbTable.Name +
 			                    "\" была создана ранее'");
 			CheckScriptDelimiter(mode,sb);
@@ -222,7 +376,7 @@ GO");
 			if (dbTable.RequireDefaultRecord){
 				sb.AppendLine(string.Format("IF NOT EXISTS (SELECT TOP 1 Id from {0} where Id=-1) BEGIN", fullname));
 				var pk = _fields.First(_ => _.IsPrimaryKey);
-				if (pk.IsIdentity){
+				if (pk.IsIdentity && !UseNewFeatures){
 					sb.AppendLine("\tSET IDENTITY_INSERT " + fullname + " ON");
 				}
 				var intos = "Id";
@@ -237,7 +391,7 @@ GO");
 					values+= ",'/'";
 				}
 				sb.AppendLine(string.Format("\tINSERT INTO {0} ({1}) VALUES ({2}) ", fullname, intos, values));
-				if (pk.IsIdentity){
+				if (pk.IsIdentity && !UseNewFeatures){
 					sb.AppendLine("\tSET IDENTITY_INSERT " + fullname + " OFF");
 				}
 				sb.AppendLine("END");
@@ -328,7 +482,13 @@ GO");
 			
 			if (field.IsIdentity)
 			{
-				result += " IDENTITY (10,10) ";
+				if (UseNewFeatures){
+					var seq = field.Table.Schema + "." + field.Table.Name + "_SEQ";
+					result += " DEFAULT  (NEXT VALUE FOR " + seq + ") ";
+				}
+				else{
+					result += " IDENTITY (10,10) ";
+				}
 			}
 			var refname = field.Name.ToUpper();
 			if(null!=field.Table)refname=field.Table.Schema.ToUpper() + "_" + field.Table.Name.ToUpper() + "_" + field.Name.ToUpper();

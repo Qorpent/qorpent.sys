@@ -1,0 +1,35 @@
+namespace Qorpent.Scaffolding
+
+	class UI "Базовое абстрактное определение  пользовательского интерфейса"  prototype=ui abstract
+		element zone "Зона, область на рабочем экране"
+		element block "Блок - участок зоны, отведенный под элементы управления"
+		element control "Элемент управления"
+	
+	UI DefaultLayoutUI "Типовая развертка приложения с тулбаром, статусом, левой и правой областью" abstract
+		zone Header position=top
+		zone Control position=left
+		zone Content position=right
+		zone Footer position=bottom
+		
+	class DataType "Типы данных для взаимодействия приложения с сервером" abstract prototype=ui-data
+		
+		
+	DataType Enum "Перечисление" enum abstract
+		element item
+		
+	DataType Struct "Структура" struct abstract
+		element enum "Описание перечислений"
+		element string "Описание строк"
+		element int "Целые"
+		element any "Произвольный объект"
+		element xml "XML"
+		
+	Struct Item "Единица чего-то"
+		int Id "Идентификатор элемента" 
+		string Code "Код элемента"
+		string Name "Полное имя" 
+		string ShortName "Краткое имя" optional
+		string Comment "Комментарий" optional
+		
+	class Action "Действие" abstract prototype=ui-action
+		

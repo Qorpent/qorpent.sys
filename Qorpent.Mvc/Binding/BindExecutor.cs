@@ -18,6 +18,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.Utils;
@@ -191,10 +192,29 @@ namespace Qorpent.Mvc.Binding {
                 else {
                     var clsdict = obj.ToDict();
                     foreach (var p in clsdict) {
-                        var v = context.Get(p.Key,null);
-                        if (!string.IsNullOrWhiteSpace(v)) {
-                            obj.SetValue(p.Key,v, true, true, false, true, true);
-                        }
+	                    if (p.Value is IDictionary<string, string>){
+		                    var _prefix = ".";
+		                    var bind =
+			                    obj.GetType()
+			                       .GetProperty(p.Key)
+			                       .GetCustomAttributes(typeof (BindAttribute), true)
+			                       .FirstOrDefault() as BindAttribute;
+							if (null != bind && !string.IsNullOrWhiteSpace(bind.ParameterPrefix)){
+								_prefix = bind.ParameterPrefix;
+							}
+							var parameters = context.GetAll(_prefix );
+		                    var dict = p.Value as IDictionary<string, string>;
+		                    
+							foreach (var valuePair in parameters){
+								dict[valuePair.Key] = valuePair.Value;
+							}
+	                    }
+	                    else{
+		                    var v = context.Get(p.Key, null);
+		                    if (!string.IsNullOrWhiteSpace(v)){
+			                    obj.SetValue(p.Key, v, true, true, false, true, true);
+		                    }
+	                    }
                     }
                 }
 			    converted = obj;

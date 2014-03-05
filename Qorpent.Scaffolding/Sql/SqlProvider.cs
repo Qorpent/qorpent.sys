@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Qorpent.Data.BSharpDDL{
+namespace Qorpent.Scaffolding.SqlGeneration{
 	/// <summary>
 	/// Фабричный класс для языковой поддержки
 	/// </summary>

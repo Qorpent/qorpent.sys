@@ -42,6 +42,7 @@
     <Compile Include="GraphTests.cs" />
     <Compile Include="iocconfiguationtest.cs" />
     <Compile Include="Json\AF768Tests.cs" />
+    <Compile Include="Json\InvalidXmlToJson.cs" />
     <Compile Include="Json\LexerTests.cs" />
     <Compile Include="Json\ParserTest.cs" />
     <Compile Include="json_serializer_test.cs" />

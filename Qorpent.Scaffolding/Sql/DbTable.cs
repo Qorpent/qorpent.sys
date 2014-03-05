@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Data.BSharpDDL{
+namespace Qorpent.Scaffolding.SqlGeneration{
 	/// <summary>
 	/// Описывает таблицы
 	/// </summary>
@@ -87,6 +86,10 @@ namespace Qorpent.Data.BSharpDDL{
 				{
 					yield return new DbTrigger().Initialize(this, e);
 				}
+				if (e.Name == "view")
+				{
+					yield return new DbView().Initialize(this, e);
+				}
 				var n = e.Name.LocalName;
 				DbDataType type = null;
 				if (Types.ContainsKey(n))
@@ -125,5 +128,9 @@ namespace Qorpent.Data.BSharpDDL{
 				Set(TYPES, value);
 			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public DbFileGroup FileGroup { get; set; }
 	}
 }

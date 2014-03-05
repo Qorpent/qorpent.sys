@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{6934ABA6-5D22-4C03-9591-211E9A930D40}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Scaffolding</RootNamespace>
+    <AssemblyName>Qorpent.Scaffolding</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <EmbeddedResource Include="Application\AppSpecification.bxls" />
+    <None Include="Qorpent.Scaffolding.export" />
+    <None Include="Qorpent.Serialization.import" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+    <EmbeddedResource Include="Sql\DbObjects.bxls" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application\AppSpecificationBSharpSource.cs" />
+    <Compile Include="Application\ApplicationCompilerExtensions.cs" />
+    <Compile Include="Application\GenerateDataTypesInTypeScriptTask.cs" />
+    <Compile Include="Application\GenerateJsonUiSpecification.cs" />
+    <Compile Include="Application\GenerateServerActions.cs" />
+    <Compile Include="BSharpClassRef.cs" />
+    <Compile Include="Application\GenerateDataTypesInCSharpTask.cs" />
+    <Compile Include="CodeGeneratorTaskBase.cs" />
+    <Compile Include="Sql\DataObjectsSourcePackageForBShart.cs" />
+    <Compile Include="Sql\DbDataType.cs" />
+    <Compile Include="Sql\DbDefaultValue.cs" />
+    <Compile Include="Sql\DbDefaultValueType.cs" />
+    <Compile Include="Sql\DbDialect.cs" />
+    <Compile Include="Sql\DbField.cs" />
+    <Compile Include="Sql\DbFileGroup.cs" />
+    <Compile Include="Sql\DbFunction.cs" />
+    <Compile Include="Sql\DbGenerationMode.cs" />
+    <Compile Include="Sql\DbObject.cs" />
+    <Compile Include="Sql\DbObjectCreateType.cs" />
+    <Compile Include="Sql\DbObjectType.cs" />
+    <Compile Include="Sql\DbTable.cs" />
+    <Compile Include="Sql\DbTrigger.cs" />
+    <Compile Include="Sql\DbView.cs" />
+    <Compile Include="Sql\GenerateTsqlScriptsTask.cs" />
+    <Compile Include="Sql\ISqlProvider.cs" />
+    <Compile Include="Sql\Parameter.cs" />
+    <Compile Include="Sql\SqlProvider.cs" />
+    <Compile Include="Sql\SqlProviderBase.cs" />
+    <Compile Include="Sql\TSQLProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>

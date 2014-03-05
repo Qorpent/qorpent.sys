@@ -1,20 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Bxl;
 using Qorpent.IoC;
+using Qorpent.Scaffolding.Sql;
 using Qorpent.Utils.Extensions;
-namespace Qorpent.Data.BSharpDDL
+
+namespace Qorpent.Scaffolding.Application
 {
 	/// <summary>
 	/// Поставщик исходни	ков для расширений по генерации данных
 	/// </summary>
-	[ContainerComponent(Lifestyle.Transient, Name = "data.bssrcpkg", ServiceType = typeof(IBSharpSourceCodeProvider))]
-	public class DataObjectsSourcePackageForBShart : ServiceBase, IBSharpSourceCodeProvider{
+	[ContainerComponent(Lifestyle.Transient, Name = "app.bssrcpkg", ServiceType = typeof(IBSharpSourceCodeProvider))]
+	public class AppSpecificationBSharpSource : ServiceBase, IBSharpSourceCodeProvider{
 		[Inject] private IBxlParser parser { get; set; }
 
 		/// <summary>
@@ -24,7 +22,7 @@ namespace Qorpent.Data.BSharpDDL
 		/// <param name="context"></param>
 		/// <returns></returns>
 		public IEnumerable<XElement> GetSources(IBSharpCompiler compiler, IBSharpContext context){
-			foreach (var rname in typeof(DataObjectsSourcePackageForBShart).Assembly.FindAllResourceNames("BSharpDDL")){
+			foreach (var rname in typeof(DataObjectsSourcePackageForBShart).Assembly.FindAllResourceNames("Application")){
 				var resource = typeof (DataObjectsSourcePackageForBShart).Assembly.ReadManifestResource(rname);
 				yield return parser.Parse(resource, rname);
 			}

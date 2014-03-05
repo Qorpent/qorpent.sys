@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Qorpent.BSharp;
 using Qorpent.Bxl;
-using Qorpent.Data.BSharpDDL;
-using Qorpent.Uson;
+using Qorpent.Scaffolding.SqlGeneration;
 
 namespace Qorpent.Data.Tests.DDL
 {
