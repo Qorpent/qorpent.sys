@@ -1,4 +1,5 @@
-﻿using Qorpent.BSharp.Builder;
+﻿using System.Text;
+using Qorpent.BSharp.Builder;
 using Qorpent.Integration.BSharp.Builder.Tasks;
 using Qorpent.IoC;
 
@@ -15,6 +16,9 @@ namespace Qorpent.Scaffolding.Application{
 		protected override void PrepareTasks()
 		{
 			Tasks.Add(new GenerateDataTypesInCSharpTask());
+			Tasks.Add(new GenerateServerActions());
+			Tasks.Add(new GenerateDataTypesInTypeScriptTask());
+			Tasks.Add(new GenerateJsonUiSpecification());
 		}
 	}
 }

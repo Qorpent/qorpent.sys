@@ -22,7 +22,7 @@ test x='1' y=3
 		test3  y='${x}${.y}'
 	", "", BxlParserOptions.PerformInterpolation);
 			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<root>
+			Assert.AreEqual(@"<root _file=""code.bxl"">
   <test _file=""code.bxl"" _line=""2"" x=""1"" y=""3"">
     <test2 _file=""code.bxl"" _line=""3"" x=""132"">
       <test3 _file=""code.bxl"" _line=""4"" y=""1323"" />
@@ -78,7 +78,7 @@ test
 ns = 'http://myns'
 test");
 			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<root xmlns:ns=""http://myns"">
+			Assert.AreEqual(@"<root xmlns:ns=""http://myns"" _file=""code.bxl"">
   <test _file=""code.bxl"" _line=""3"" />
 </root>".LfOnly(), res.ToString().LfOnly());
 		}
@@ -92,7 +92,7 @@ e1 :
 	qxi::import direct//impA	
 	qxi::import direct//impD delay");
 			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<root xmlns:qxi=""http://qorpent/xml/include"">
+			Assert.AreEqual(@"<root xmlns:qxi=""http://qorpent/xml/include"" _file=""code.bxl"">
   <e1 _file=""code.bxl"" _line=""2"">
     <qxi:include _file=""code.bxl"" _line=""3"" code=""direct//inclA"" id=""direct//inclA"" />
     <qxi:include _file=""code.bxl"" _line=""4"" code=""direct//inclD"" id=""direct//inclD"" name=""delay"" />
@@ -113,7 +113,7 @@ e1 :
 	qxi::import direct//impD delay");
 
 			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<root xmlns:qxi=""http://qorpent/xml/include"">
+			Assert.AreEqual(@"<root xmlns:qxi=""http://qorpent/xml/include"" _file=""code.bxl"">
   <e1 _file=""code.bxl"" _line=""3"">
     <qxi:include _file=""code.bxl"" _line=""4"" code=""direct//inclA"" id=""direct//inclA"" />
     <qxi:include _file=""code.bxl"" _line=""5"" code=""direct//inclD"" id=""direct//inclD"" name=""delay"" />
@@ -154,7 +154,7 @@ x=2"));
 ns = 'http://myns'
 ns::test ns::attr=2");
 			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<root xmlns:ns=""http://myns"">
+			Assert.AreEqual(@"<root xmlns:ns=""http://myns"" _file=""code.bxl"">
   <ns:test _file=""code.bxl"" _line=""3"" ns:attr=""2"" />
 </root>".LfOnly(), res.ToString().LfOnly());
 		}
@@ -165,7 +165,7 @@ ns::test ns::attr=2");
 ns = 'http://myns'
 ns::test");
 			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<root xmlns:ns=""http://myns"">
+			Assert.AreEqual(@"<root xmlns:ns=""http://myns"" _file=""code.bxl"">
   <ns:test _file=""code.bxl"" _line=""3"" />
 </root>".LfOnly(), res.ToString().LfOnly());
 		}

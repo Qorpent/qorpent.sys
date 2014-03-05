@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Qorpent.BSharp;
 using Qorpent.BSharp.Builder;
 using Qorpent.Integration.BSharp.Builder.Tasks;
@@ -29,6 +30,15 @@ namespace Qorpent.Scaffolding{
 		/// Индекс
 		/// </summary>
 		public const int INDEX = TaskConstants.WriteWorkingOutputTaskIndex + 10;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected const string CommonHeader = @"
+//////////////////////////////////////////////////////////////////////
+////       AUTO-GENERATED WITH  GenerateDataTypesInCSharpTask     ////
+//////////////////////////////////////////////////////////////////////
+";
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -78,6 +88,7 @@ namespace Qorpent.Scaffolding{
 		
 
 		private string GetOutDir(){
+			if (string.IsNullOrWhiteSpace(DefaultOutputName)) return Project.GetOutputDirectory();
 			var basedir = Project.Get(DefaultOutputName+"Dir", DefaultOutputName);
 			if (string.IsNullOrWhiteSpace(basedir)){
 				basedir = DefaultOutputName;
@@ -93,5 +104,20 @@ namespace Qorpent.Scaffolding{
 		/// </summary>
 		/// <param name="targetclasses"></param>
 		protected abstract IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="summary"></param>
+		/// <param name="lang"></param>
+		protected static void WriteMemberSummary(StringBuilder sb, string summary,string lang = "cs"){
+			if (lang == "cs"){
+				sb.AppendLine("\t\t///<summary>\r\n\t\t///\t" + summary + "\r\n\t\t///</summary>");
+			}
+			if (lang == "ts"){
+				sb.AppendLine("\t\t\t// " + summary);
+			}
+		}
 	}
 }

@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using Qorpent.BSharp;
-using Qorpent.Scaffolding.SqlGeneration;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Application{
@@ -13,13 +10,6 @@ namespace Qorpent.Scaffolding.Application{
 	/// Формирует типы данных для приложения на C#
 	/// </summary>
 	public class GenerateDataTypesInCSharpTask : CodeGeneratorTaskBase{
-		
-		private const string CommonHeader = @"
-//////////////////////////////////////////////////////////////////////
-////       AUTO-GENERATED WITH  GenerateDataTypesInCSharpTask     ////
-//////////////////////////////////////////////////////////////////////
-";
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -54,7 +44,8 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("namespace " + e.Namespace + " {");
 			sb.AppendLine("\t///<summary>\r\n\t///\t" + e.Compiled.Attr("name") + "\r\n\t///</summary>");
 			sb.AppendLine("\t[Serialize]");
-			sb.AppendLine("\tpublic class " + e.Name + " {");
+			sb.AppendLine("\tpublic partial class " + e.Name + " {");
+			 
 			foreach (var field in e.Compiled.Elements()){
 				GenerateField(e, field, refcache,sb);
 			}
@@ -65,6 +56,7 @@ namespace Qorpent.Scaffolding.Application{
 		}
 		
 		private void GenerateField(IBSharpClass cls, XElement field, Dictionary<string, IBSharpClass> refcache, StringBuilder sb){
+			sb.AppendLine();
 			var type = field.Name.LocalName;
 			if (type == "any"){
 				type = "object";
@@ -73,11 +65,36 @@ namespace Qorpent.Scaffolding.Application{
 			}
 			var name = field.Attr("code");
 			var comment = field.Attr("name");
-			WriteMemberSummary(sb,comment);
-			sb.AppendLine("\t\t[Serialize]");
-			sb.AppendLine(string.Format("\t\tpublic {0} {1} {{get;set;}}", type, name));
+			
+
+			var attr = "Serialize";
+			if (field.Attr("optional").ToBool())
+			{
+				attr = "SerializeNotNullOnly";
+			}
+			if (field.Attr("noreturn").ToBool())
+			{
+				attr = "IgnoreSerialize";
+			}
+
+			
+			WriteMemberSummary(sb, comment);
+			sb.AppendLine("\t\t[" + attr + "]");
+
+			if (type == "dictionary"){
+				var prefix = field.Attr("param-prefix",name+".");
+				sb.AppendLine("\t\t[Bind(ParameterPrefix=\"" + prefix + "\")]");
+				sb.AppendLine(string.Format("\t\tpublic IDictionary<string,string> {0} {{get{{return __{1};}}}}", name,name.ToLower()));
+				sb.AppendLine(string.Format("\t\tprivate IDictionary<string,string> __{0} = new Dictionary<string,string>();",
+											 name.ToLower()));
+			}
+			else{
+				sb.AppendLine(string.Format("\t\tpublic {0} {1} {{get;set;}}", type, name));
+			}
+
 		}
 
+	
 		private Production GenerateEnum(IBSharpClass e, Dictionary<string, IBSharpClass> refcache){
 			var result = new Production{FileName = e.FullName + ".cs"};
 			var sb = new StringBuilder();
@@ -93,21 +110,41 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("\t///<summary>\r\n\t///\t" + summary + "\r\n\t///</summary>");
 			sb.AppendLine("\t[Flags]");
 			sb.AppendLine("\tpublic enum " + e.Name + " : "+type+" {");
+			sb.AppendLine();
+			WriteMemberSummary(sb, "Отсутвующее значение");
+			sb.AppendLine("\t\tUndefined = 0,");
 			var val = 1;
+			bool wascustom = false;
+			bool wasreserved = false;
 			foreach (var item in items ){
+				sb.AppendLine();
+				var code = item.Attr("code");
 				summary = item.Attr("name");
 				WriteMemberSummary(sb, summary);
-				sb.AppendLine("\t\t" + item.Attr("code")+" = "+val+",");
+				sb.AppendLine("\t\t" + code+" = "+val+",");
+				if (code == "Custom"){
+					wascustom = true;
+				}else if (code == "Reserved"){
+					wasreserved = true;
+				}
 				val *= 2;
 			}
+			if (!wascustom){
+				sb.AppendLine();
+				WriteMemberSummary(sb, "Пользовательский тип");
+				sb.AppendLine("\t\tCustom = "+val+",");
+				val *= 2;
+			}
+			if (!wasreserved){
+				sb.AppendLine();
+				WriteMemberSummary(sb, "Зарезервированное значение");
+				sb.AppendLine("\t\tReserved = " + val + ",");
+			}
+			
 			sb.AppendLine("\t}");
 			sb.AppendLine("}");
 			result.Content = sb.ToString();
 			return result;
-		}
-
-		private static void WriteMemberSummary(StringBuilder sb, string summary){
-			sb.AppendLine("\t\t///<summary>\r\n\t\t///\t" + summary + "\r\n\t\t///</summary>");
 		}
 
 
@@ -118,7 +155,7 @@ namespace Qorpent.Scaffolding.Application{
 			: base()
 		{
 			ClassSearchCriteria = "ui-data";
-			DefaultOutputName = "CSharp";
+			DefaultOutputName = "CSharp/DataTypes";
 		}
 
 		

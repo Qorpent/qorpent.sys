@@ -29,6 +29,18 @@ namespace X
 		}
 
 		[Test]
+		public void ArraySyntaxSupport()
+		{
+			var code = @"
+namespace X
+	class A
+	class B x=^A*
+";
+			var result = Compile(code).Get("B").Compiled;
+			Assert.AreEqual("X.A*", result.Attr("x"));
+		}
+
+		[Test]
 		public void CrossNamespaceTest()
 		{
 			var code = @"

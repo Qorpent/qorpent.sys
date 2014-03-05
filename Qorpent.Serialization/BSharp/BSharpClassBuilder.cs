@@ -327,9 +327,16 @@ namespace Qorpent.BSharp {
 			foreach (var a in _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes())) {
 				if (a.Value.StartsWith("^")) {
 					var clsname = a.Value.Substring(1);
+					var isarray = clsname.EndsWith("*");
+					if (isarray){
+						clsname = clsname.Substring(0, clsname.Length - 1);
+					}
 					var normallyresolvedClass = _context.Get(clsname, _cls.Namespace);
 					if (null != normallyresolvedClass) {
 						a.Value = normallyresolvedClass.FullName;
+						if (isarray){
+							a.Value += "*";
+						}
                         var __cls = _cls as BSharpClass;
                         if (null != __cls && !__cls.ReferencedClasses.Contains(normallyresolvedClass))
                         {

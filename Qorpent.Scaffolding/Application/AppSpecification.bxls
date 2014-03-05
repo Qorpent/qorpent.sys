@@ -25,11 +25,11 @@ namespace Qorpent.Scaffolding
 		element xml "XML"
 		
 	Struct Item "Единица чего-то"
-		int Id "Идентификатор элемента"
+		int Id "Идентификатор элемента" 
 		string Code "Код элемента"
-		string Name "Полное имя"
-		string ShortName "Краткое имя"
-		string Comment "Комментарий"
+		string Name "Полное имя" 
+		string ShortName "Краткое имя" optional
+		string Comment "Комментарий" optional
 		
 	class Action "Действие" abstract prototype=ui-action
 		

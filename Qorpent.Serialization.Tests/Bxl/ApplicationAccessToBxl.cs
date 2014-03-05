@@ -34,7 +34,7 @@ namespace Qorpent.Bxl.Tests {
 		public void CanUseBxlFromApplication() {
 			Application.Current = null; //force recreation
 			Assert.IsInstanceOf<BxlService>(Application.Current.Bxl);
-			Assert.AreEqual(@"<root>
+			Assert.AreEqual(@"<root _file=""code.bxl"">
   <x _file=""code.bxl"" _line=""1"" />
 </root>".LfOnly()
 			                , Application.Current.Bxl.Parse("x").ToString().LfOnly());

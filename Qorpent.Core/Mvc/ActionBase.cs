@@ -422,4 +422,23 @@ namespace Qorpent.Mvc {
 		private IRoleResolver _roles;
 		private bool? _supportnmd;
 	}
+
+	/// <summary>
+	/// Типизированый по результату контроллер 
+	/// </summary>
+	/// <typeparam name="TResult"></typeparam>
+	public abstract class ActionBase<TResult>: ActionBase{
+		/// <summary>
+		/// Основная фаза - тело действия
+		/// </summary>
+		/// <returns> </returns>
+		protected override object MainProcess(){
+			return GetResult();
+		}
+		/// <summary>
+		/// Требует перекрытия в дочерних классах
+		/// </summary>
+		/// <returns></returns>
+		protected abstract TResult GetResult();
+	}
 }
