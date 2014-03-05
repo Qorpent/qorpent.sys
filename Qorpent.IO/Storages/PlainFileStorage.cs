@@ -36,13 +36,15 @@ namespace Qorpent.IO.Storages {
         /// </summary>
         /// <param name="filename">Имя файла</param>
         /// <param name="data">Строкове денные</param>
-        void Write(string filename, string data);
+        /// <param name="fileMode">Указание на режим открытия файла</param>
+        void Write(string filename, string data, FileMode fileMode = FileMode.OpenOrCreate);
         /// <summary>
         ///     Запись данных в файл в хранилище
         /// </summary>
         /// <param name="filename">Имя файла</param>
         /// <param name="data">Байтовые денные</param>
-        void Write(string filename, byte[] data);
+        /// <param name="fileMode">Указание на режим открытия файла</param>
+        void Write(string filename, byte[] data, FileMode fileMode = FileMode.OpenOrCreate);
         /// <summary>
         ///     Получение потока до файла
         /// </summary>
@@ -110,16 +112,18 @@ namespace Qorpent.IO.Storages {
         /// </summary>
         /// <param name="filename">Имя файла</param>
         /// <param name="data">Строкове денные</param>
-        public void Write(string filename, string data) {
-            Write(filename, Encoding.UTF8.GetBytes(data));
+        /// <param name="fileMode">Указание на режим открытия файла</param>
+        public void Write(string filename, string data, FileMode fileMode = FileMode.OpenOrCreate) {
+            Write(filename, Encoding.UTF8.GetBytes(data), fileMode);
         }
         /// <summary>
         ///     Запись данных в файл в хранилище
         /// </summary>
         /// <param name="filename">Имя файла</param>
         /// <param name="data">Байтовые денные</param>
-        public void Write(string filename, byte[] data) {
-            using (var stream = GetStream(filename, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read)) {
+        /// <param name="fileMode">Указание на режим открытия файла</param>
+        public void Write(string filename, byte[] data, FileMode fileMode = FileMode.OpenOrCreate) {
+            using (var stream = GetStream(filename, fileMode, FileAccess.Write, FileShare.Read)) {
                 stream.Write(data, 0, data.Length);
             }
         }
