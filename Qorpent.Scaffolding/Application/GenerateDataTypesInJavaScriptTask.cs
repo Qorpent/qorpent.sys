@@ -54,7 +54,7 @@ namespace Qorpent.Scaffolding.Application{
 				GenerateField(e, field, refcache,sb);
 			}
 			sb.AppendLine("\t\t__TERMINAL : null");
-			sb.AppendLine("\t}");
+			sb.AppendLine("\t};");
 			return sb.ToString();
 		}
 		
