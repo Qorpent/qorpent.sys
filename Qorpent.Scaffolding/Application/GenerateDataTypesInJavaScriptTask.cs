@@ -22,7 +22,7 @@ namespace Qorpent.Scaffolding.Application{
 			var sb = new StringBuilder();
 			sb.AppendLine("// Type definitions for " + Project.ProjectName);
 			sb.AppendLine();
-			sb.AppendLine("define (\"" + Project.ProjectName + "-datatypes" + "\",[], function() {");
+			sb.AppendLine("define ([], function() {");
 			sb.AppendLine("\tvar result = {};");
 			var enums = targetclasses.Where(_ => _.Compiled.Attr("enum").ToBool() ).ToArray();
 			var structs = targetclasses.Where(_ => _.Compiled.Attr("struct").ToBool()).ToArray();
@@ -53,7 +53,7 @@ namespace Qorpent.Scaffolding.Application{
 			foreach (var field in e.Compiled.Elements()){
 				GenerateField(e, field, refcache,sb);
 			}
-			sb.AppendLine("\t\t__TERMINAL : null");
+			sb.AppendLine("\t\t__TERMINAL = null");
 			sb.AppendLine("\t};");
 			return sb.ToString();
 		}
@@ -120,7 +120,7 @@ namespace Qorpent.Scaffolding.Application{
 				}
 			}
 
-			sb.AppendLine(string.Format("\t\tresult.{0} = {1},",  name, val));
+			sb.AppendLine(string.Format("\t\tthis.{0} = {1},",  name, val));
 			
 
 		}
@@ -136,7 +136,7 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine(basis +" = {");
 			WriteMemberSummary(sb, "Отсутвующее значение = 0", "js");
 			sb.AppendLine("\t\tUndefined : 'Undefined',");
-			sb2.AppendLine("\t\t\tUndefined : 0;");
+			sb2.AppendLine("\t\t\tUndefined : 0,");
 
 			var val = 1;
 			bool wascustom = false;
