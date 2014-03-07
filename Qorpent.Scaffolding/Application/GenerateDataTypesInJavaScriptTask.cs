@@ -72,9 +72,18 @@ namespace Qorpent.Scaffolding.Application{
 				type = "XElement";
 			}
 			bool isarray = false;
+			bool isenum = false;
+			string enumval = "";
 			if (type.EndsWith("*")){
 				isarray = true;
 				type = type.Substring(0, type.Length - 1);
+			}
+			if (refcache.ContainsKey(type)){
+				var tp = refcache[type];
+				if (tp.Compiled.Attr("enum").ToBool()){
+					isenum = true;
+					enumval = tp.Compiled.Element("item").Attr("code");
+				}
 			}
 			var name = field.Attr("code");
 			var comment = field.Attr("name");
@@ -88,6 +97,8 @@ namespace Qorpent.Scaffolding.Application{
 
 			if (isarray){
 				val = "[]";
+			}else if (isenum){
+				val = type + ".Undefined";
 			}
 			else{
 				if (type == "string"){
