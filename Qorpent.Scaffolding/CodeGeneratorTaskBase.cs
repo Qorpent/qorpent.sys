@@ -118,6 +118,10 @@ namespace Qorpent.Scaffolding{
 			if (lang == "ts"){
 				sb.AppendLine("\t\t\t// " + summary);
 			}
+			if (lang == "js")
+			{
+				sb.AppendLine("\t\t// " + summary);
+			}
 		}
 	}
 }

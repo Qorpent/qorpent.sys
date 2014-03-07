@@ -18,12 +18,16 @@
   <ItemGroup>
     <Compile Include="Application\AppSpecificationBSharpSource.cs" />
     <Compile Include="Application\ApplicationCompilerExtensions.cs" />
-    <Compile Include="Application\GenerateDataTypesInTypeScriptTask.cs" />
+    <Compile Include="Application\GenerateDataTypesInJavaScriptTask.cs" />
+    <Compile Include="Application\GenerateDataTypesInTypeScriptTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Application\GenerateJsonUiSpecification.cs" />
     <Compile Include="Application\GenerateServerActions.cs" />
     <Compile Include="BSharpClassRef.cs" />
     <Compile Include="Application\GenerateDataTypesInCSharpTask.cs" />
     <Compile Include="CodeGeneratorTaskBase.cs" />
+    <Compile Include="Sql\ApplicationCompilerExtensions.cs" />
     <Compile Include="Sql\DataObjectsSourcePackageForBShart.cs" />
     <Compile Include="Sql\DbDataType.cs" />
     <Compile Include="Sql\DbDefaultValue.cs" />

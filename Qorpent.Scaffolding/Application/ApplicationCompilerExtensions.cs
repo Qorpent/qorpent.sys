@@ -18,6 +18,7 @@ namespace Qorpent.Scaffolding.Application{
 			Tasks.Add(new GenerateDataTypesInCSharpTask());
 			Tasks.Add(new GenerateServerActions());
 			Tasks.Add(new GenerateDataTypesInTypeScriptTask());
+			Tasks.Add(new GenerateDataTypesInJavaScriptTask());
 			Tasks.Add(new GenerateJsonUiSpecification());
 		}
 	}
