@@ -18,6 +18,10 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         private readonly List<BrickDataSetSeria> _series = new List<BrickDataSetSeria>();
 		/// <summary>
+		///		Линии тренда
+		/// </summary>
+		private readonly List<DataItem> _trendlines = new List<DataItem>();
+		/// <summary>
 		///     Рассчитанный размер первой шкалы
 		/// </summary>
 		public Scale FirstScale { get; set; }
@@ -37,6 +41,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    public IEnumerable<DataItem> DataItems {
             get { return _series.SelectMany(_ => _); }
 	    }
+		/// <summary>
+		///		Линии тренда
+		/// </summary>
+		public IEnumerable<DataItem> Trendlines {
+			get { return _trendlines.AsEnumerable(); }
+		}
 		/// <summary>
 		/// Требования пользователя
 		/// </summary>
@@ -315,6 +325,24 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    public DataItem Add(int serianum, int rownum, decimal value, int setnum = 0) {
 			return Add(serianum, rownum, value, false);
 		}
+		/// <summary>
+		///		Добавление линии тренда в датасет
+		/// </summary>
+		/// <param name="value">Значение, на котором должна находиться линия тренда</param>
+		/// <returns>Элемент данных, представляющий линию тренда</returns>
+		public DataItem AddTrendLine(decimal value) {
+			return AddTrendLine(new DataItem {Value = value});
+		}
+		/// <summary>
+		///		Добавление элемента данных как линию тренда
+		/// </summary>
+		/// <param name="dataItem">Элемент данных</param>
+		/// <returns>Замыкание на элемент данных</returns>
+		public DataItem AddTrendLine(DataItem dataItem) {
+			_trendlines.Add(dataItem);
+			dataItem.IsTrendLineValue = true;
+			return dataItem;
+		}
 	    /// <summary>
 	    /// 
 	    /// </summary>
@@ -326,7 +354,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    public DataItem Add(int serianum, int rownum, decimal value, bool secondscale, int setnum = 0) {
             var item = new DataItem { Value = value, LabelHeight = LabelHeight, DatasetIndex = _currentDataItemIndex };
 		    _currentDataItemIndex++;
-            Insert(setnum, serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First, item);
+            Insert(serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First, item);
 		    return item;
 		}
         /// <summary>
@@ -358,12 +386,11 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    /// <summary>
 	    ///     Вставка элемента данных в датасет
 	    /// </summary>
-	    /// <param name="setnum">номер сета</param>
 	    /// <param name="serianum">Номер серии</param>
 	    /// <param name="rownum">Номер ряда</param>
 	    /// <param name="scaleType">Тип шкалы, к которой относится элемент данных</param>
 	    /// <param name="dataItem">Элемент данных</param>
-	    protected void Insert(int setnum, int serianum, int rownum, ScaleType scaleType, DataItem dataItem) {
+	    protected void Insert(int serianum, int rownum, ScaleType scaleType, DataItem dataItem) {
             EnsureRow(serianum, rownum, scaleType).Add(dataItem);
         }
 	    /// <summary>

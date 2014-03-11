@@ -25,6 +25,10 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			}
 	    }
 		/// <summary>
+		///		Признак того, что это значение трендлайна
+		/// </summary>
+		public bool IsTrendLineValue { get; set; }
+		/// <summary>
 		/// Коллектор позитивных сумм при нормализации
 		/// </summary>
 		public decimal PosMax { get; set; }
