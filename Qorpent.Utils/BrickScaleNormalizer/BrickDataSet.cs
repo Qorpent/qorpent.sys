@@ -370,12 +370,11 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    ///     Убеждается в наличии серии и производит добавление в случае отсутствия
 	    /// </summary>
 	    /// <param name="serianum">Номер серии</param>
-	    /// <param name="setnum">Номер сета</param>
 	    /// <returns>Серия с указанным идентификатором</returns>
-	    protected BrickDataSetSeria EnsureSeria(int serianum, int setnum = 0) {
-	        var seria = _series.FirstOrDefault(_ => _.SeriaNumber == serianum && _.SetNumber == setnum);
+	    protected BrickDataSetSeria EnsureSeria(int serianum) {
+	        var seria = _series.FirstOrDefault(_ => _.SeriaNumber == serianum);
             if (seria == null) {
-                seria = new BrickDataSetSeria(serianum, setnum);
+                seria = new BrickDataSetSeria(serianum);
                 _series.Add(seria);
             }
 	        return seria;

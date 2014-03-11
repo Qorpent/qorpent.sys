@@ -18,10 +18,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         public int SeriaNumber { get; private set; }
         /// <summary>
-        ///     Номер сета, к которой относится серия
-        /// </summary>
-        public int SetNumber { get; private set; }
-        /// <summary>
         ///     Ряды данных внутри серии
         /// </summary>
         public IEnumerable<DataRow> Rows {
@@ -31,15 +27,8 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Представление серии из <see cref="DataRow"/>
         /// </summary>
         /// <param name="seriaNumber">Номер серии</param>
-        public BrickDataSetSeria(int seriaNumber) : this(seriaNumber, 0) { }
-        /// <summary>
-        ///     Представление серии из <see cref="DataRow"/>
-        /// </summary>
-        /// <param name="seriaNumber">Номер серии</param>
-        /// <param name="setNumber">Номер сета</param>
-        public BrickDataSetSeria(int seriaNumber, int setNumber) {
+        public BrickDataSetSeria(int seriaNumber) {
             SeriaNumber = seriaNumber;
-            SetNumber = setNumber;
         }
         /// <summary>
         ///     Добавление <see cref="DataRow"/> в серию
