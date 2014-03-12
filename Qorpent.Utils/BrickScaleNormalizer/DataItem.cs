@@ -5,7 +5,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
     /// <summary>
 	/// Единица значения
 	/// </summary>
-	public class DataItem {
+	public class DataItem : Tagged {
 		/// <summary>
 		///		Значение
 		/// </summary>
