@@ -59,6 +59,14 @@ namespace Qorpent.Charts.FusionCharts {
             return fusionChartType.Is(FusionChartGroupedType.Compination);
         }
         /// <summary>
+        ///     Признак того, что график относится к стековым
+        /// </summary>
+        /// <param name="fusionChartType">Тип графика</param>
+        /// <returns>Признак того, что график стековым</returns>
+		public static bool IsStacked(this FusionChartType fusionChartType) {
+			return fusionChartType.Is(FusionChartGroupedType.Stacked);
+		}
+        /// <summary>
         ///     Проверить, что тип графика попадает в указанную группу
         /// </summary>
         /// <param name="fusionChartType">Тип графика</param>
