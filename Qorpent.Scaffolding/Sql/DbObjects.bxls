@@ -4,6 +4,9 @@ namespace Qorpent.Db
 		schema=dbo
 		isdataobject = true
 		element datatype
+		element trigger
+		element function
+		element view
 		datatype int type=Int32
 		datatype long type=Int64
 		datatype string type=String size=255

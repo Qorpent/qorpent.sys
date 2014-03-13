@@ -98,6 +98,9 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 				                       var sb = new StringBuilder();
 				                       foreach (var field in fields){
 					                       var table = obj.ParentElement as DbTable; 
+										   if (!table.Fields.ContainsKey(field)){
+											   throw new Exception("table "+table.Name+" doesn't contains field "+field);
+										   }
 					                       var fld = table.Fields[field];
 					                       foreach (var outer in outers){
 						                       sb.AppendLine(
@@ -212,11 +215,13 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 		protected override string GetDropSequence(DbField fld){
 			if (!UseNewFeatures) return "";
 			var name = fld.Table.Schema + "." + fld.Table.Name + "_SEQ";
-			return string.Format("DROP SEQUENCE {0}", name);
+			return string.Format("IF OBJECT_ID('{0}') IS NOT NULL DROP SEQUENCE {0}", name);
 		}
 
 		protected override void GenerateTemporalUtils (StringBuilder sb, DbGenerationMode mode, object hintObject){
 			sb.AppendLine(@"
+SET NOCOUNT ON
+GO
 IF OBJECT_ID('tempdb..#ensurefg') IS NOT NULL DROP PROC #ensurefg
 GO
 CREATE PROCEDURE #ensurefg @n nvarchar(255),@filecount int = 1, @filesize int = 100, @withidx bit = 0, @isdefault bit = 0 AS begin
@@ -228,7 +233,6 @@ CREATE PROCEDURE #ensurefg @n nvarchar(255),@filecount int = 1, @filesize int = 
 	set @withidx = isnull(@withidx,0)
 	set @isdefault = isnull(@isdefault,0)
 	set @q = 'ALTER DATABASE '+DB_NAME()+' ADD FILEGROUP '+@n
-	print @q
 	BEGIN TRY
 		exec sp_executesql @q
 	END TRY
@@ -242,7 +246,6 @@ CREATE PROCEDURE #ensurefg @n nvarchar(255),@filecount int = 1, @filesize int = 
 		BEGIN TRY
 			set @q='ALTER DATABASE '+DB_NAME()+' ADD FILE ( NAME = N'''+DB_NAME()+'_'+@n+cast(@c as nvarchar(255))+''', FILENAME = N'''+
 				@basepath+'z3_'+@n+cast(@c as nvarchar(255))+'.ndf'' , SIZE = '+cast(@filesize as nvarchar(255))+'MB , FILEGROWTH = 5% ) TO FILEGROUP ['+@n+']'
-			print @q
 			exec sp_executesql @q
 		END TRY
 		BEGIN CATCH

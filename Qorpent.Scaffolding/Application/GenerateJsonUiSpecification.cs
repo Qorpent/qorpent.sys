@@ -90,7 +90,7 @@ namespace Qorpent.Scaffolding.Application{
 				}
 				else{
 					if (!order.Contains(v.Attr("code"))) order.Add(v.Attr("code"));
-					dict[v.Attr("code")] = v.ToUson();
+					dict[v.Attr("code")] =v.Attributes().ToDictionary(_=>_.Name.LocalName,_=>_.Value).ToUson();
 				}
 			}
 			
