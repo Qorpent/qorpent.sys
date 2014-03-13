@@ -72,7 +72,7 @@ namespace Qorpent.Scaffolding.Application{
 		private void BindValues(dynamic control, XElement[] dvalues){
 			
 			var order = new List<string>();
-			var dict = new Dictionary<string, string>();
+			var dict = new Dictionary<string, dynamic>();
 			foreach (var v in dvalues ){
 				if (v.Name.LocalName == "values"){
 					var importfrom = v.Attr("import-from");
@@ -80,17 +80,17 @@ namespace Qorpent.Scaffolding.Application{
 						var enumeration = _context.Get(importfrom);
 						foreach (var element in enumeration.Compiled.Elements("item")){
 							if (!order.Contains(element.Attr("code"))) order.Add(element.Attr("code"));
-							dict[element.Attr("code")] = element.Attr("name");
+							dict[element.Attr("code")] = new { code = element.Attr("code"), name = element.Attr("name") }.ToUson();
 						}
 					}
 					foreach (var attribute in v.Attributes()){
 						if (!order.Contains(attribute.Name.LocalName)) order.Add(attribute.Name.LocalName);
-						dict[attribute.Name.LocalName] = attribute.Value;
+						dict[attribute.Name.LocalName] = new { code = attribute.Name.LocalName, name = attribute.Value }.ToUson();
 					}
 				}
 				else{
 					if (!order.Contains(v.Attr("code"))) order.Add(v.Attr("code"));
-					dict[v.Attr("code")] = v.Attr("code");
+					dict[v.Attr("code")] = v.ToUson();
 				}
 			}
 			
@@ -98,8 +98,8 @@ namespace Qorpent.Scaffolding.Application{
 			
 
 			foreach (var code in order){
-				var name = dict[code];
-				control.values.push(new{code, name});
+				var obj = dict[code];
+				control.values.push(obj);
 			}
 		}
 
