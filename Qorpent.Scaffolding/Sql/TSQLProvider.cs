@@ -71,7 +71,7 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 		}
 		private string GetFileGroup(DbFileGroup dbFileGroup, DbGenerationMode mode, object hintObject){
 			var sb = new StringBuilder();
-			sb.AppendLine(string.Format("exec #ensurefg '{0}',{1},{2},{3},{4}", dbFileGroup.Name ,dbFileGroup.FileCount,dbFileGroup.FileSize,tobit(dbFileGroup.WithIdx),tobit(dbFileGroup.IsDefault)));
+			sb.AppendLine(string.Format("exec __ensurefg '{0}',{1},{2},{3},{4}", dbFileGroup.Name ,dbFileGroup.FileCount,dbFileGroup.FileSize,tobit(dbFileGroup.WithIdx),tobit(dbFileGroup.IsDefault)));
 				 return sb.ToString();
 		}
 
@@ -222,9 +222,9 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 			sb.AppendLine(@"
 SET NOCOUNT ON
 GO
-IF OBJECT_ID('tempdb..#ensurefg') IS NOT NULL DROP PROC #ensurefg
+IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 GO
-CREATE PROCEDURE #ensurefg @n nvarchar(255),@filecount int = 1, @filesize int = 100, @withidx bit = 0, @isdefault bit = 0 AS begin
+CREATE PROCEDURE __ensurefg @n nvarchar(255),@filecount int = 1, @filesize int = 100, @withidx bit = 0, @isdefault bit = 0 AS begin
 	declare @q nvarchar(max) 
 	set @filesize = isnull(@filesize,100)
 	if @filesize <=3 set @filesize  =3
@@ -264,24 +264,24 @@ CREATE PROCEDURE #ensurefg @n nvarchar(255),@filecount int = 1, @filesize int = 
 
 	IF @withidx = 1 BEGIN
 		set @n = @n +'IDX'
-		exec #ensurefg @n, @filecount,@filesize,0,0
+		exec __ensurefg @n, @filecount,@filesize,0,0
 	END
 end
 GO
 ");
 			if (mode.HasFlag(DbGenerationMode.Safe)){
 				sb.AppendLine(@"
-IF OBJECT_ID('tempdb..#ensurefld') IS NOT NULL DROP PROC #ensurefld
-IF OBJECT_ID('tempdb..#ensureunq') IS NOT NULL DROP PROC #ensureunq
-IF OBJECT_ID('tempdb..#ensurefk') IS NOT NULL DROP PROC #ensurefk
+IF OBJECT_ID('__ensurefld') IS NOT NULL DROP PROC __ensurefld
+IF OBJECT_ID('__ensureunq') IS NOT NULL DROP PROC __ensureunq
+IF OBJECT_ID('__ensurefk') IS NOT NULL DROP PROC __ensurefk
 GO
-CREATE PROCEDURE #ensurefld @t nvarchar(255), @f nvarchar(255) , @sql nvarchar(max) as begin
+CREATE PROCEDURE __ensurefld @t nvarchar(255), @f nvarchar(255) , @sql nvarchar(max) as begin
 	declare @q  nvarchar(max) set @q = 'ALTER TABLE  '+@t+' ADD '+@f+' '+@sql
 	IF NOT EXISTS ( SELECT TOP 1 * FROM sys.columns where object_id = OBJECT_ID(@t) and name = @f ) 
 		EXEC sp_executesql @q
 END
 GO
-CREATE PROCEDURE #ensureunq @t nvarchar(255), @f nvarchar(255) as begin
+CREATE PROCEDURE __ensureunq @t nvarchar(255), @f nvarchar(255) as begin
 	declare @n nvarchar(255) set @n = 'UQ_'+upper(replace(@t,'.','_'))+'_'+upper(@f)
 	if not exists (SELECT *  FROM INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE 
     WHERE CONSTRAINT_NAME = @n) begin
@@ -290,7 +290,7 @@ CREATE PROCEDURE #ensureunq @t nvarchar(255), @f nvarchar(255) as begin
 	end
 END
 GO
-CREATE PROCEDURE #ensurefk @t nvarchar(255), @f nvarchar(255) , @rt nvarchar(255), @rf nvarchar(255), @cu bit as begin
+CREATE PROCEDURE __ensurefk @t nvarchar(255), @f nvarchar(255) , @rt nvarchar(255), @rf nvarchar(255), @cu bit as begin
 	declare @n nvarchar(255) set @n = 'FK_'+upper(replace(@t,'.','_'))+'_'+upper(@f)
 	--declare @upd nvarchar(255) set @upd = ' ON UPDATE CASCADE '
 	--if(@cu = 0) set @upd = ''
@@ -317,7 +317,7 @@ GO");
 			if (mode.HasFlag(DbGenerationMode.Safe)){
 				var nonpkfields = ordered.OfType<DbTable>().SelectMany(_ => _.Fields.Values).Where(_ => !_.IsPrimaryKey);
 				foreach (var unq in nonpkfields.Where(_=>_.IsUnique)){
-						sb.AppendLine(string.Format("exec #ensureunq '{0}.{1}','{2}'", unq.Table.Schema, unq.Table.Name,
+						sb.AppendLine(string.Format("exec __ensureunq '{0}.{1}','{2}'", unq.Table.Schema, unq.Table.Name,
 						                            unq.Name));
 						CheckScriptDelimiter(mode,sb);
 					
@@ -325,7 +325,7 @@ GO");
 				}
 				foreach (var refer in nonpkfields.Where(_=>_.IsRef)){
 
-						sb.AppendLine(string.Format("exec #ensurefk '{0}.{1}','{2}','{3}','{4}',{5}", refer.Table.Schema, refer.Table.Name,
+						sb.AppendLine(string.Format("exec __ensurefk '{0}.{1}','{2}','{3}','{4}',{5}", refer.Table.Schema, refer.Table.Name,
 							refer.Name, refer.RefTable, refer.RefField, refer.NoCascadeUpdates ? 0 : 1));
 						CheckScriptDelimiter(mode, sb);
 				}
@@ -335,12 +335,12 @@ GO");
 		protected override void DropTemporalUtils(StringBuilder sb, DbGenerationMode mode, object hintObject)
 		{
 			if (mode.HasFlag(DbGenerationMode.Safe)){
-				sb.AppendLine("DROP PROC #ensurefld");
-				sb.AppendLine("DROP PROC #ensureunq");
-				sb.AppendLine("DROP PROC #ensurefk");
+				sb.AppendLine("DROP PROC __ensurefld");
+				sb.AppendLine("DROP PROC __ensureunq");
+				sb.AppendLine("DROP PROC __ensurefk");
 				CheckScriptDelimiter(mode, sb);
 			}
-			sb.AppendLine("DROP PROC #ensurefg");
+			sb.AppendLine("DROP PROC __ensurefg");
 		}
 
 
@@ -359,7 +359,7 @@ GO");
 			if (mode.HasFlag(DbGenerationMode.Safe)){
 				fields = fields.Where(_ => _.IsPrimaryKey).ToArray();
 			}
-			sb.AppendLine(string.Join(",\r\n", fields.Select(_ => GetInTableFieldString(mode, hintObject, _))));
+			sb.AppendLine(string.Join(",\r\n", fields.OrderBy(_=>_.Idx).Select(_ => GetInTableFieldString(mode, hintObject, _))));
 
 			sb.AppendLine(") ON ["+dbTable.FileGroupName+"]");
 			CheckException(mode, sb,  "IF (ERROR_NUMBER()=2714) PRINT 'Таблица \"" + dbTable.Schema + "." + dbTable.Name +
@@ -428,7 +428,7 @@ GO");
 		private void WriteSafeModeFileds(DbGenerationMode mode, object hintObject, DbField[] _fields, StringBuilder sb){
 			if (mode.HasFlag(DbGenerationMode.Safe)){
 				foreach (var fld in _fields.Where(_ => !_.IsPrimaryKey)){
-					sb.AppendLine(string.Format("EXEC #ensurefld '{0}.{1}','{2}','{3}'", fld.Table.Schema, fld.Table.Name, fld.Name,
+					sb.AppendLine(string.Format("EXEC __ensurefld '{0}.{1}','{2}','{3}'", fld.Table.Schema, fld.Table.Name, fld.Name,
 					                            GetField(fld, mode, hintObject, true).ToSqlString()));
 					CheckScriptDelimiter(mode, sb);
 				}

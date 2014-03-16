@@ -24,6 +24,8 @@ namespace Qorpent.Db
 		import BaseObject
 		int Id "Локальный уникальный идентификатор" primarykey identity idx=10
 		
+	BaseObject FileGroup prototype=filegroup abstract
+		element file
 		
 	Table Entity "Сущность" abstract 
 		string Code "Уникальный код" unique default="'NOCODE_' + ${_timestampstr}"
