@@ -321,8 +321,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    /// <param name="serianum"></param>
 	    /// <param name="rownum"></param>
 	    /// <param name="value"></param>
-	    /// <param name="setnum"></param>
-	    public DataItem Add(int serianum, int rownum, decimal value, int setnum = 0) {
+	    public DataItem Add(int serianum, int rownum, decimal value) {
 			return Add(serianum, rownum, value, false);
 		}
 		/// <summary>
@@ -350,8 +349,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 	    /// <param name="rownum"></param>
 	    /// <param name="value"></param>
 	    /// <param name="secondscale"></param>
-	    /// <param name="setnum"></param>
-	    public DataItem Add(int serianum, int rownum, decimal value, bool secondscale, int setnum = 0) {
+	    public DataItem Add(int serianum, int rownum, decimal value, bool secondscale) {
             var item = new DataItem { Value = value, LabelHeight = LabelHeight, DatasetIndex = _currentDataItemIndex };
 		    _currentDataItemIndex++;
             Insert(serianum, rownum, secondscale ? ScaleType.Second : ScaleType.First, item);

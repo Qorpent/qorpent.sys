@@ -17,6 +17,10 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		public int RowNumber { get; set; }
 		/// <summary>
+		///		Признак того, что ряд скрыт
+		/// </summary>
+		public bool Hidden { get; set; }
+		/// <summary>
 		///		Номер серии
 		/// </summary>
 		public int SeriaNumber { get; set; }
