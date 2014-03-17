@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Qorpent.Scaffolding.SqlGeneration{
+namespace Qorpent.Scaffolding.Sql{
 	/// <summary>
 	/// 
 	/// </summary>

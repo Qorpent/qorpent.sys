@@ -3,7 +3,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.SqlGeneration{
+namespace Qorpent.Scaffolding.Sql{
 	/// <summary>
 	/// Описывает поле в таблицах
 	/// </summary>
@@ -154,7 +154,7 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 			}
 			this.DefaultValue = DbDefaultValue.Create(this, xml.Attr("default"), xml);
 			if (this.IsRef){
-				this.DefaultValue.Value = -1;
+				this.DefaultValue.Value = 0;
 				if (this.DataType.DbType == DbType.String){
 					this.DefaultValue.Value = "/";
 				}

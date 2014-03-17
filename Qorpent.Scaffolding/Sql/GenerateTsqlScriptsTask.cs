@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Qorpent.BSharp;
-using Qorpent.Scaffolding.SqlGeneration;
 
 namespace Qorpent.Scaffolding.Sql{
 	/// <summary>

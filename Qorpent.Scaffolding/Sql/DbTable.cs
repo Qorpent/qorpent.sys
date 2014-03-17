@@ -2,7 +2,7 @@
 using System.Linq;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.SqlGeneration{
+namespace Qorpent.Scaffolding.Sql{
 	/// <summary>
 	/// Описывает таблицы
 	/// </summary>
@@ -79,16 +79,32 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 				}
 			}
 			foreach (var e in xml.Elements()){
-				if (e.Name == "function"){
+				if (e.Name == "function" || e.Name=="void"){
 					yield return new DbFunction().Initialize(this,e);
+					continue;
+				}
+				if (e.Name == "partitioned"){
+					var dbpart = new DbAutoPartition().Initialize(this, e);
+					dbpart.Name = this.Name + "_AUTO_SPLIT_PARTITION";
+					yield return dbpart;
+					var dbscheme = new DbPartitionScheme().Initialize(this, e);
+					dbscheme.Name = this.Name + "_PARTITION";
+					dbscheme.InDependency.Clear();
+					dbscheme.OutDependency.Add(this);
+					InDependency.Add(dbscheme);
+					yield return dbscheme;
+					this.PartitionScheme = (DbPartitionScheme)dbscheme;
+					continue;
 				}
 				if (e.Name == "trigger")
 				{
 					yield return new DbTrigger().Initialize(this, e);
+					continue;
 				}
 				if (e.Name == "view")
 				{
 					yield return new DbView().Initialize(this, e);
+					continue;
 				}
 				var n = e.Name.LocalName;
 				DbDataType type = null;
@@ -97,9 +113,16 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 					type = Types[n];
 				}
 				if (null != type){
-					var code = e.Attr("code");
-					if (!Fields.ContainsKey(code)){
-						AddField(DbField.CreateField(this, type, e));
+					if (!string.IsNullOrWhiteSpace(e.Value) || e.Attributes().Any(_ => _.Name.LocalName.StartsWith("@"))){ //marks 'methods'
+						yield return new DbFunction().Initialize(this, e);
+						continue;
+					}
+					else{
+
+						var code = e.Attr("code");
+						if (!Fields.ContainsKey(code)){
+							AddField(DbField.CreateField(this, type, e));
+						}
 					}
 				}else if (n == "ref"){
 					var code = e.Attr("code");
@@ -113,6 +136,12 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 			}
 			yield break;
 		}
+		/// <summary>
+		/// Схема партицирования
+		/// </summary>
+		public DbPartitionScheme PartitionScheme { get; set; }
+
+
 		/// <summary>
 		/// 
 		/// </summary>

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace Qorpent.Scaffolding.SqlGeneration{
+namespace Qorpent.Scaffolding.Sql{
 	internal abstract class SqlProviderBase : ISqlProvider{
 		protected const int DEFAULTSTRINGSIZE =255;
 		protected const int DEFAULTDECIMALSIZE = 18;
@@ -15,14 +15,21 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 		/// <param name="objects"></param>
 		/// <returns></returns>
 		protected DbObject[] GetOrderedObjects(IEnumerable<DbObject> objects){
-			return objects.OrderBy(_ => _, new DBObjectComparer()).ToArray();
+			foreach (var o in objects){
+				o.UpgadeRank();
+			}
+			var result = objects.OrderBy(_ => _.ObjectType).ThenBy(_=>_.Rank).ToArray();
+			return result;
 		}
 
 		class DBObjectComparer : IComparer<DbObject>{
 			public int Compare(DbObject x, DbObject y){
 				if (x.InDependency.Contains(y)) return 1;
 				if (y.InDependency.Contains(x)) return -1;
-				return x.ObjectType.CompareTo(y.ObjectType);
+				if (x.ObjectType != y.ObjectType){
+					return x.ObjectType.CompareTo(y.ObjectType);	
+				}
+				return x.InDependency.Count.CompareTo(y.InDependency.Count);
 			}
 		}
 
@@ -117,7 +124,11 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 		/// <param name="mode"></param>
 		/// <param name="hintObject"></param>
 		protected abstract void GenerateTemporalUtils(StringBuilder sb, DbGenerationMode mode, object hintObject);
-
-		protected abstract string GetSql(DbDataType dataType);
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dataType"></param>
+		/// <returns></returns>
+		public abstract string GetSql(DbDataType dataType);
 	}
 }

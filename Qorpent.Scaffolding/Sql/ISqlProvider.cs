@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Qorpent.Scaffolding.SqlGeneration{
+namespace Qorpent.Scaffolding.Sql{
 	/// <summary>
 	/// Провайдер саппора Sql
 	/// </summary>

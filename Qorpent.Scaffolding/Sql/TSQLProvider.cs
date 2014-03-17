@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.SqlGeneration{
+namespace Qorpent.Scaffolding.Sql{
 	internal class TSQLProvider : SqlProviderBase{
 
 		public TSQLProvider(){
@@ -32,6 +32,12 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 						return prefix+"TRIGGER " + dbObject.FullName;
 					case DbObjectType.View:
 						return prefix + "VIEW " + dbObject.FullName;
+					case DbObjectType.AutoPartition:
+						return "IF OBJECT_ID('" + dbObject.ParentElement.FullName + "AlignPartitions') IS NOT NULL DROP PROC "+dbObject.ParentElement.FullName + "AlignPartitions";
+					case DbObjectType.PartitionScheme :
+						return "if exists (select * from sys.partition_schemes where name = '" + dbObject.Schema+"_"+dbObject.Name + "') DROP " + " PARTITION SCHEME "
+							+ dbObject.Schema + "_" + dbObject.Name + "\r\nGO\r\n" +
+							"if exists (select * from sys.partition_functions where name = '" + dbObject.Schema + "_" + dbObject.Name + "Func') DROP " + " PARTITION FUNCTION " + dbObject.Schema + "_" + dbObject.Name + "Func";
 					default:
 						throw new NotImplementedException(dbObject.ObjectType.ToString());
 				}
@@ -60,12 +66,69 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 						return GetProcedure(dbObject as DbFunction, mode, hintObject);
 					case DbObjectType.View:
 						return GetView(dbObject as DbView, mode, hintObject);
+					case DbObjectType.PartitionScheme:
+						return GetPartitionScheme(dbObject as DbPartitionScheme, mode, hintObject);
+					case DbObjectType.AutoPartition:
+						return GetAutoPartition(dbObject as DbAutoPartition, mode, hintObject);
 					default:
 						throw new NotImplementedException(dbObject.ObjectType.ToString());
 				}
 			}
 
 		}
+
+		private string GetAutoPartition(DbAutoPartition dbAutoPartition, DbGenerationMode mode, object hintObject){
+			var sb = new StringBuilder();
+			var dtype = GetSql(((DbTable) dbAutoPartition.ParentElement).Fields[dbAutoPartition.PartitionField].DataType);
+			sb.AppendLine("CREATE PROC " + dbAutoPartition.ParentElement.FullName + "AlignPartitions AS BEGIN");
+			sb.AppendFormat(@"declare @fullparts table ( num int, limit {0})
+while ( 1 = 1 ) begin
+	delete @fullparts
+	insert @fullparts (num) 
+		select partition_number from sys.dm_db_partition_stats where object_id = OBJECT_ID('{1}') and index_id =0 and row_count > 1000000
+	if (select count (*) from @fullparts ) = 0  break;
+	update @fullparts set limit = lq.{2} from (
+		select part, min({2}) as {2} from (
+		select  part, {2},sum(cnt) over (order by {2}) as sum from (
+		select  $PARTITION.{3}_{4}_PARTITIONFunc({2}) as part,{2},count(*) as cnt from {1}
+		where $PARTITION.{3}_{4}_PARTITIONFunc({2}) in (select num from @fullparts)
+		group by {2},$PARTITION.{3}_{4}_PARTITIONFunc({2})
+		) as t 
+		)as c where c.sum >=900000 group by part 
+	) as lq join @fullparts f2 on f2.num = lq.part
+	declare @q nvarchar(max) set @q = ''
+	if '{0}' = 'datetime' 
+		select @q = @q + '
+			ALTER PARTITION SCHEME {3}_{4}_PARTITION NEXT USED {5}
+			ALTER PARTITION FUNCTION {3}_{4}_PARTITIONFunc() SPLIT RANGE ('''+convert(varchar(10),limit,112)+''')
+		' from @fullparts
+	else 
+			select @q = @q + '
+			ALTER PARTITION SCHEME {3}_{4}_PARTITION NEXT USED {5}
+			ALTER PARTITION FUNCTION {3}_{4}_PARTITIONFunc() SPLIT RANGE ('+cast(limit as varchar(20))+')
+		' from @fullparts
+	print @q
+	exec sp_executesql @q
+end
+
+", dtype, dbAutoPartition.ParentElement.FullName, 
+	dbAutoPartition.PartitionField,dbAutoPartition.ParentElement.Schema,dbAutoPartition.ParentElement.Name,dbAutoPartition.ParentElement.FileGroupName);
+			sb.AppendLine("END");
+
+			return sb.ToString();
+		}
+
+		private string GetPartitionScheme(DbPartitionScheme dbPartitionScheme, DbGenerationMode mode, object hintObject){
+			var sb = new StringBuilder();
+			var type = GetSql(((DbTable) dbPartitionScheme.ParentElement).Fields[dbPartitionScheme.PartitionField].DataType);
+			sb.AppendLine("CREATE PARTITION FUNCTION " + dbPartitionScheme.Schema+"_"+dbPartitionScheme.Name + "Func (" + type + ")");
+			sb.AppendLine("AS RANGE LEFT FOR VALUES ( '" +dbPartitionScheme.PartitionStart + "')");
+			CheckScriptDelimiter(mode,sb);
+			sb.AppendLine("CREATE PARTITION SCHEME " + dbPartitionScheme.Schema + "_" + dbPartitionScheme.Name + " AS PARTITION " + dbPartitionScheme.Schema + "_" + dbPartitionScheme.Name +
+			              "Func ALL TO (" + ((DbTable) dbPartitionScheme.ParentElement).FileGroup.Name + " )");
+			return sb.ToString();
+		}
+
 		private string tobit(object any){
 			return any.ToBool() ? "1" : "0";
 		}
@@ -360,8 +423,12 @@ GO");
 				fields = fields.Where(_ => _.IsPrimaryKey).ToArray();
 			}
 			sb.AppendLine(string.Join(",\r\n", fields.OrderBy(_=>_.Idx).Select(_ => GetInTableFieldString(mode, hintObject, _))));
-
-			sb.AppendLine(") ON ["+dbTable.FileGroupName+"]");
+			if (null == dbTable.PartitionScheme){
+				sb.AppendLine(") ON [" + dbTable.FileGroupName + "]");
+			}
+			else{
+				sb.AppendLine(") ON " + dbTable.Schema+"_"+dbTable.PartitionScheme.Name + " ("+dbTable.PartitionScheme.PartitionField+")");
+			}
 			CheckException(mode, sb,  "IF (ERROR_NUMBER()=2714) PRINT 'Таблица \"" + dbTable.Schema + "." + dbTable.Name +
 			                    "\" была создана ранее'");
 			CheckScriptDelimiter(mode,sb);
@@ -377,13 +444,13 @@ GO");
 		private void GenerateRequiredRecord(DbTable dbTable, DbGenerationMode mode, StringBuilder sb, string fullname,
 		                                    DbField[] _fields){
 			if (dbTable.RequireDefaultRecord){
-				sb.AppendLine(string.Format("IF NOT EXISTS (SELECT TOP 1 Id from {0} where Id=-1) BEGIN", fullname));
+				sb.AppendLine(string.Format("IF NOT EXISTS (SELECT TOP 1 Id from {0} where Id=0) BEGIN", fullname));
 				var pk = _fields.First(_ => _.IsPrimaryKey);
 				if (pk.IsIdentity && !UseNewFeatures){
 					sb.AppendLine("\tSET IDENTITY_INSERT " + fullname + " ON");
 				}
 				var intos = "Id";
-				var values = "-1";
+				var values = "0";
 				if (_fields.Any(_ => _.Name == "Code" && _.IsUnique)){
 					intos += ",Code";
 					values += ",'/'";
@@ -498,6 +565,9 @@ GO");
 			if (field.IsPrimaryKey)
 			{
 				result += " CONSTRAINT PK_" + refname + " PRIMARY KEY";
+				if (field.Table.PartitionScheme != null){
+					result += " NONCLUSTERED ON " + field.Table.FileGroup.Name;
+				}
 			}
 			if (!mode.HasFlag(DbGenerationMode.Safe)){
 				
@@ -505,6 +575,9 @@ GO");
 				
 				if (field.IsUnique){
 					result += " CONSTRAINT UQ_" + refname + " UNIQUE";
+					if (field.Table.PartitionScheme != null){
+						result += "( " + field.Table.PartitionScheme.PartitionField + ", " + field.Name + ")";
+					}
 				}
 				if (field.IsRef){
 					result += " CONSTRAINT FK_" + refname + " FOREIGN KEY REFERENCES " + field.RefTable + " (" + field.RefField +
@@ -548,8 +621,12 @@ GO");
 		}
 
 		
-
-		protected override string GetSql(DbDataType dataType){
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dataType"></param>
+		/// <returns></returns>
+		public override string GetSql(DbDataType dataType){
 			switch (dataType.DbType){
 					case DbType.AnsiString:
 						goto case DbType.String;

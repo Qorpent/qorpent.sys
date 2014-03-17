@@ -613,6 +613,9 @@ namespace Qorpent.BSharp {
 										e.Elements().Remove();
 										e.Add(o.Elements());
 									}
+									if (!string.IsNullOrWhiteSpace(o.Value)){
+										e.Value = o.Value;
+									}
 								}else if (over.Type == BSharpElementType.Extension) {
 									foreach (var a in o.Attributes())
 									{
@@ -622,7 +625,10 @@ namespace Qorpent.BSharp {
 									}
 									if (o.HasElements)
 									{
-										e.Add(o.Elements());
+										e.Add(o.Elements());									
+									}
+									if (!string.IsNullOrWhiteSpace(o.Value)){
+										e.Value += o.Value;
 									}
 								}
 

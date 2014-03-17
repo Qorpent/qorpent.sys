@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Qorpent.BSharp;
 using Qorpent.Bxl;
-using Qorpent.Scaffolding.SqlGeneration;
+using Qorpent.Scaffolding.Sql;
 
 namespace Qorpent.Data.Tests.DDL
 {

@@ -8,7 +8,7 @@ using Qorpent.BSharp;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.SqlGeneration
+namespace Qorpent.Scaffolding.Sql
 {
 	/// <summary>
 	/// Определение DDL объекта
@@ -23,6 +23,20 @@ namespace Qorpent.Scaffolding.SqlGeneration
 		/// </summary>
 		public string RawSql { get; set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Rank { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public void UpgadeRank(){
+			Rank++;
+			foreach (var dep in OutDependency.Where(_=>_.ObjectType==this.ObjectType)){
+				dep.UpgadeRank();
+			}
+		}
+		
 		/// <summary>
 		/// 
 		/// </summary>
@@ -240,12 +254,13 @@ namespace Qorpent.Scaffolding.SqlGeneration
 			if (xml.Attr("external").ToBool()){
 				ReadExternalSql(Path.GetDirectoryName(xml.ResolveAttr("file")),xml.Attr("external"));
 			}
-			var body = xml.Value;
-			if (body.StartsWith("("))
-			{
-				body = body.Substring(1, body.Length - 2);
+			if (string.IsNullOrWhiteSpace(this.Body)){
+				var body = xml.Value;
+				if (body.StartsWith("(")){
+					body = body.Substring(1, body.Length - 2);
+				}
+				Body = body;
 			}
-			Body = body;
 			yield break;
 		}
 		/// <summary>
@@ -263,7 +278,7 @@ namespace Qorpent.Scaffolding.SqlGeneration
 
 		private void ReadExternalSql(string dir, string attr){
 			var name = this.GetType().Name + "_" + Schema + "_" + Name + ".sql";
-			if (attr != "1"){
+			if (attr != "1" && attr!="true"){
 				name = attr;
 			}
 			var file = Path.Combine(dir, name);
@@ -271,8 +286,12 @@ namespace Qorpent.Scaffolding.SqlGeneration
 				throw new Exception("File "+file+" required for "+this.Schema+"."+this.Name+" not found");
 			}
 			var sql = File.ReadAllText(file);
-			this.IsRawSql = true;
-			this.RawSql = sql;
+			if (sql.ToUpper().Trim().StartsWith("CREATE")){
+				this.IsRawSql = true;
+				this.RawSql = sql;
+			}else{
+				this.Body = sql;
+			}
 		}
 
 

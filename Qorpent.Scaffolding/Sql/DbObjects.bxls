@@ -7,6 +7,8 @@ namespace Qorpent.Db
 		element trigger
 		element function
 		element view
+		element void
+
 		datatype int type=Int32
 		datatype long type=Int64
 		datatype string type=String size=255
@@ -16,6 +18,8 @@ namespace Qorpent.Db
 		datatype datetime type=DateTime
 		datatype decimal type=Decimal size=18 precession=6
 		datatype bool type=Boolean
+
+
 		_timestampstr = "CAST(CAST(CURRENT_TIMESTAMP as float) as char)"
 		fullname = "${schema}.${code}"
 		
@@ -44,12 +48,12 @@ namespace Qorpent.Db
 			int Id "Идентификатор элемента таблицы ${fullname}"
 			returns string
 			as language=tsql : """
-				if ( @Id = -1 ) return '/';
+				if ( @Id = 0 ) return '/';
 				declare @code nvarchar(255);
 				declare @parentcode nvarchar(255);
 				select @code = Code, @parentcode = ParentCode from ${fullname} where Id = @Id
 				declare @result nvarchar(255) set @result = '/' + @code+ '/' ;
-				while ( @parentcode != -1 ) begin
+				while ( @parentcode != 0 ) begin
 					select @code = Code, @parentcode = ParentCode from ${fullname} where Id = @Id
 					@result = '/'+@code + @result
 				end

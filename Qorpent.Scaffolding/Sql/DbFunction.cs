@@ -3,7 +3,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.SqlGeneration{
+namespace Qorpent.Scaffolding.Sql{
 	/// <summary>
 	/// 
 	/// </summary>
@@ -33,13 +33,26 @@ namespace Qorpent.Scaffolding.SqlGeneration{
 
 		private void SetupReturnType(XElement xml){
 			var returntype = xml.Attr("returns");
-			if (string.IsNullOrWhiteSpace(returntype) || "void" == returntype){
+			if(string.IsNullOrWhiteSpace(returntype) && xml.Name.LocalName!="void" && xml.Name.LocalName!="function"){
+				returntype = xml.Name.LocalName;
+			}
+			if (string.IsNullOrWhiteSpace(returntype) || "void" == returntype || "void"==xml.Name.LocalName){
 				IsProcedure = true;
 				ObjectType = DbObjectType.Procedure;
 			}
 			else{
 				IsProcedure = false;
 				ReturnType = _types[returntype];
+			}
+			if (string.IsNullOrWhiteSpace(this.Body)){ //abstract methods
+				if (IsProcedure){
+					Body = "THROW 50003, '" + this.FullName + " not implemented', 1";
+				}
+				else{
+					var tsql = new TSQLProvider();
+					var tp = tsql.GetSql(_types[returntype]);
+					Body = "return cast( (cast ('Error 50003, "+this.FullName+" not implemented') ) as " + tp + ")";
+				}
 			}
 		}
 

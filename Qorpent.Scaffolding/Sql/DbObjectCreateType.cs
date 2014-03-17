@@ -1,4 +1,4 @@
-﻿namespace Qorpent.Scaffolding.SqlGeneration{
+﻿namespace Qorpent.Scaffolding.Sql{
 	/// <summary>
 	/// Режим создания объекта
 	/// </summary>

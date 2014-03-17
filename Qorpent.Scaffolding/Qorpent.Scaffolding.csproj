@@ -29,6 +29,7 @@
     <Compile Include="CodeGeneratorTaskBase.cs" />
     <Compile Include="Sql\ApplicationCompilerExtensions.cs" />
     <Compile Include="Sql\DataObjectsSourcePackageForBShart.cs" />
+    <Compile Include="Sql\DbPartitionScheme.cs" />
     <Compile Include="Sql\DbDataType.cs" />
     <Compile Include="Sql\DbDefaultValue.cs" />
     <Compile Include="Sql\DbDefaultValueType.cs" />
@@ -40,6 +41,7 @@
     <Compile Include="Sql\DbObject.cs" />
     <Compile Include="Sql\DbObjectCreateType.cs" />
     <Compile Include="Sql\DbObjectType.cs" />
+    <Compile Include="Sql\DbAutoPartition.cs" />
     <Compile Include="Sql\DbTable.cs" />
     <Compile Include="Sql\DbTrigger.cs" />
     <Compile Include="Sql\DbView.cs" />
