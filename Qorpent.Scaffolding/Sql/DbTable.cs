@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Qorpent.Utils.Extensions;
 
@@ -161,5 +162,19 @@ namespace Qorpent.Scaffolding.Sql{
 		/// 
 		/// </summary>
 		public DbFileGroup FileGroup { get; set; }
+		/// <summary>
+		/// Проверяет внешние ключи, которые требуется сформировать позже в сейфовом режиме
+		/// </summary>
+		/// <param name="tables"></param>
+		public void CheckLateReferences(DbTable[] tables){
+			var fkeys = Fields.Values.Where(_ => _.IsRef).ToArray();
+			var thisidx = Array.IndexOf(tables, this);
+			var requirecheck = tables.Skip(thisidx + 1).ToArray();
+			foreach (var fkey in fkeys){
+				if (requirecheck.Any(_ => _.FullName == fkey.RefTable)){
+					fkey.IsLateRef = true;
+				}
+			}
+		}
 	}
 }

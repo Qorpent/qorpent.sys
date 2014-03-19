@@ -266,6 +266,19 @@ end
 		/// </summary>
 		public bool UseNewFeatures { get; set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="lates"></param>
+		protected override void DropLateRefs(StringBuilder sb, DbField[] lates){
+			foreach (var l in lates){
+				var refname = GetRefName(l);
+				sb.AppendLine("ALTER TABLE " + l.Table.FullName + " DROP CONSTRAINT FK_" + refname);
+				sb.AppendLine("GO");
+			}
+		}
+
 		protected override string GetEnsureSequence(DbField dbField){
 			if (!UseNewFeatures) return "";
 			var name = dbField.Table.Schema + "." + dbField.Table.Name + "_SEQ";
@@ -377,18 +390,27 @@ GO");
 		protected override void GenerateConstraints(DbObject[] ordered, StringBuilder sb, DbGenerationMode mode, object hintObject){
 			if (mode.HasFlag(DbGenerationMode.Safe)){
 				var nonpkfields = ordered.OfType<DbTable>().SelectMany(_ => _.Fields.Values).Where(_ => !_.IsPrimaryKey);
-				foreach (var unq in nonpkfields.Where(_=>_.IsUnique)){
-						sb.AppendLine(string.Format("exec __ensureunq '{0}.{1}','{2}'", unq.Table.Schema, unq.Table.Name,
-						                            unq.Name));
-						CheckScriptDelimiter(mode,sb);
-					
-					
-				}
-				foreach (var refer in nonpkfields.Where(_=>_.IsRef)){
+				foreach (var unq in nonpkfields.Where(_ => _.IsUnique)){
+					sb.AppendLine(string.Format("exec __ensureunq '{0}.{1}','{2}'", unq.Table.Schema, unq.Table.Name,
+					                            unq.Name));
+					CheckScriptDelimiter(mode, sb);
 
-						sb.AppendLine(string.Format("exec __ensurefk '{0}.{1}','{2}','{3}','{4}',{5}", refer.Table.Schema, refer.Table.Name,
-							refer.Name, refer.RefTable, refer.RefField, refer.NoCascadeUpdates ? 0 : 1));
-						CheckScriptDelimiter(mode, sb);
+
+				}
+				foreach (var refer in nonpkfields.Where(_ => _.IsRef)){
+
+					sb.AppendLine(string.Format("exec __ensurefk '{0}.{1}','{2}','{3}','{4}',{5}", refer.Table.Schema, refer.Table.Name,
+					                            refer.Name, refer.RefTable, refer.RefField, refer.NoCascadeUpdates ? 0 : 1));
+					CheckScriptDelimiter(mode, sb);
+				}
+			}
+			else{
+
+				var lates = ordered.OfType<DbTable>().SelectMany(_ => _.Fields.Values).Where(_ => _.IsLateRef).ToArray();
+				foreach (var dbField in lates){
+					var constr = "ALTER TABLE " + dbField.Table.FullName + " ADD " + GetFKey(dbField);
+					sb.AppendLine(constr);
+					CheckScriptDelimiter(mode,sb);
 				}
 			}
 		}
@@ -577,18 +599,34 @@ GO");
 						result += "( " + field.Table.PartitionScheme.PartitionField + ", " + field.Name + ")";
 					}
 				}
-				if (field.IsRef){
-					result += " CONSTRAINT FK_" + refname + " FOREIGN KEY REFERENCES " + field.RefTable + " (" + field.RefField +
-						")  ";
-					if (!field.NoCascadeUpdates){
-						result += " ON UPDATE CASCADE ";
-					}
+				if (field.IsRef && !field.IsLateRef){
+					var fkey = GetFKey(field);
+					result += fkey;
 				}
 			}
+
 			if (null!=field.DefaultValue){
 				result += GetSql(field, field.DefaultValue);
 			}
 			return result;
+		}
+
+		private static string GetFKey(DbField field){
+			var _refname = GetRefName(field);
+			var fkey = " CONSTRAINT FK_" + _refname +  " FOREIGN KEY ("+field.Name+") REFERENCES " + field.RefTable + " (" + field.RefField +
+			           ")  ";
+			//lates cannot be cascaded
+			/*if (!field.NoCascadeUpdates){
+				fkey += " ON UPDATE CASCADE ";
+			}*/
+			return fkey;
+		}
+
+		private static string GetRefName(DbField field){
+			var _refname = field.Name.ToUpper();
+			if (null != field.Table)
+				_refname = field.Table.Schema.ToUpper() + "_" + field.Table.Name.ToUpper() + "_" + field.Name.ToUpper();
+			return _refname;
 		}
 
 		private string GetSql(DbField dbObject, DbDefaultValue defaultValue){

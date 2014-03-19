@@ -104,6 +104,10 @@ namespace Qorpent.Scaffolding.Sql{
 			get { return Get<string>(REFFIELD); }
 			set { Set(REFFIELD, value); }
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool IsLateRef { get; set; }
 
 		/// <summary>
 		/// Перекрыть для настройки DBObject из XML

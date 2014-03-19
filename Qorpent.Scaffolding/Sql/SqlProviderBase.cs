@@ -19,6 +19,10 @@ namespace Qorpent.Scaffolding.Sql{
 				o.UpgadeRank();
 			}
 			var result = objects.OrderBy(_ => _.ObjectType).ThenBy(_=>_.Rank).ToArray();
+			var tables = result.OfType<DbTable>().ToArray();
+			foreach (var dbTable in tables){
+				dbTable.CheckLateReferences(tables);
+			}
 			return result;
 		}
 
@@ -36,6 +40,8 @@ namespace Qorpent.Scaffolding.Sql{
 			var sb = new StringBuilder();
 
 			if (mode.HasFlag(DbGenerationMode.Drop)){
+				var lates = ordered.OfType<DbTable>().SelectMany(_ => _.Fields.Values).Where(_ => _.IsLateRef).ToArray();
+				DropLateRefs(sb,lates);
 				ordered = ordered.Reverse().ToArray();
 				foreach (var dbObject in ordered)
 				{
@@ -65,6 +71,14 @@ namespace Qorpent.Scaffolding.Sql{
 			}
 			return sb.ToString();
 		}
+
+		/// <summary>
+		/// Очистка от ранних референсов
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="lates"></param>
+		protected abstract void DropLateRefs(StringBuilder sb, DbField[] lates);
+
 		/// <summary>
 		/// 
 		/// </summary>
