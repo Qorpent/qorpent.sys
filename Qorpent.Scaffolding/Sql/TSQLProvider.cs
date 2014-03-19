@@ -167,8 +167,8 @@ end
 					                       var fld = table.Fields[field];
 					                       foreach (var outer in outers){
 						                       sb.AppendLine(
-							                       string.Format("(select x.{1} from {0} x where x.Id = {2}.{3}.{4}) as {4}{1},",
-							                                     fld.RefTable, outer, table.Schema, table.Name, fld.Name
+							                       string.Format("(select x.{1} from {0} x where x.{5} = {2}.{3}.{4}) as {4}{1},",
+							                                     fld.RefTable, outer, table.Schema, table.Name, fld.Name,fld.RefField
 								                       ));
 					                       }
 				                       }
@@ -183,11 +183,9 @@ end
 			var name = dbView.Schema + "." + dbView.Name;
 			sb.AppendLine(string.Format("CREATE VIEW {0}   AS ", name));
 			var sql = NormalizeSql(dbView, dbView.Body).Trim();
-			if (sql.EndsWith(",")){
-				sql = sql.Substring(0, sql.Length - 1);
-			}
+		
 			if (!sql.Contains("SELECT")){
-				sql = " SELECT \r\n" + sql + "\r\n FROM " + dbView.ParentElement.Schema +
+				sql = " SELECT \r\n" + sql + "\r\n 1 as _TERMINATE FROM " + dbView.ParentElement.Schema +
 				      "." + dbView.ParentElement.Name;
 			}
 			sb.AppendLine(sql);
@@ -582,9 +580,9 @@ GO");
 				if (field.IsRef){
 					result += " CONSTRAINT FK_" + refname + " FOREIGN KEY REFERENCES " + field.RefTable + " (" + field.RefField +
 						")  ";
-					//if (!field.NoCascadeUpdates){
-					//	result += " ON UPDATE CASCADE ";
-					//}
+					if (!field.NoCascadeUpdates){
+						result += " ON UPDATE CASCADE ";
+					}
 				}
 			}
 			if (null!=field.DefaultValue){

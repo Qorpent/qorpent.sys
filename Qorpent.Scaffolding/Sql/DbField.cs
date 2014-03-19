@@ -124,6 +124,10 @@ namespace Qorpent.Scaffolding.Sql{
 			this.Idx = xml.Attr("idx").ToInt();
 			SetRef(xml.Attr("ref"));
 			SetRef(xml.Attr("to"));
+			if (xml.Attr("nocascade").ToBool())
+			{
+				this.NoCascadeUpdates = true;
+			}
 			if (this.DataType.Code == "ref"){
 				if (string.IsNullOrWhiteSpace(RefTable)){
 					this.RefTable = this.Table.Schema + "." + this.Name;
@@ -144,6 +148,7 @@ namespace Qorpent.Scaffolding.Sql{
 			{
 				this.IsUnique = true;
 			}
+			
 			else
 			{
 				this.Comment = name;

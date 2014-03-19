@@ -628,7 +628,13 @@ namespace Qorpent.BSharp {
 										e.Add(o.Elements());									
 									}
 									if (!string.IsNullOrWhiteSpace(o.Value)){
-										e.Value += o.Value;
+										//join embeded code
+										if (o.Value.StartsWith("(") && o.Value.EndsWith(")") && e.Value.StartsWith("(") && e.Value.EndsWith(")")){
+											e.Value = e.Value.Substring(0, e.Value.Length - 1) + o.Value.Substring(1);
+										}
+										else{
+											e.Value += o.Value;
+										}
 									}
 								}
 

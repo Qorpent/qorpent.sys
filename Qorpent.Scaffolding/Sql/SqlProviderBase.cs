@@ -22,17 +22,6 @@ namespace Qorpent.Scaffolding.Sql{
 			return result;
 		}
 
-		class DBObjectComparer : IComparer<DbObject>{
-			public int Compare(DbObject x, DbObject y){
-				if (x.InDependency.Contains(y)) return 1;
-				if (y.InDependency.Contains(x)) return -1;
-				if (x.ObjectType != y.ObjectType){
-					return x.ObjectType.CompareTo(y.ObjectType);	
-				}
-				return x.InDependency.Count.CompareTo(y.InDependency.Count);
-			}
-		}
-
 		protected abstract void CheckScriptDelimiter(DbGenerationMode mode, StringBuilder sb);
 		protected abstract string GetEnsureSchema(string schema,DbGenerationMode mode);
 		

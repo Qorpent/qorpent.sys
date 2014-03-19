@@ -2,7 +2,7 @@
 	/// <summary>
 	/// Тип объекта DDL
 	/// </summary>
-	public enum DbObjectType{
+	public enum DbObjectType:long{
 		/// <summary>
 		/// Неопределенный
 		/// </summary>
@@ -71,7 +71,7 @@
 		/// <summary>
 		/// Поле таблицы
 		/// </summary>
-		Field = 1 << 14,
+		Field = 1 << 15,
 		
 		
 	}

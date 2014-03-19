@@ -47,6 +47,12 @@
     <Compile Include="BrickScaleNormalizer\ScaleType.cs" />
     <Compile Include="BrickScaleNormalizer\SeriaCalcMode.cs" />
     <Compile Include="BrickScaleNormalizer\UserPreferences.cs" />
+    <Compile Include="Collections\BTreeIndex\BTreeBucket.cs" />
+    <Compile Include="Collections\BTreeIndex\BTreeIndex.cs" />
+    <Compile Include="Collections\BTreeIndex\BTreeUtils.cs" />
+    <Compile Include="Collections\BTreeIndex\BTreeValue.cs" />
+    <Compile Include="Collections\BTreeIndex\IBTreeStorage.cs" />
+    <Compile Include="Collections\BTreeIndex\StubBTreeStorage.cs" />
     <Compile Include="Collections\IMap.cs" />
     <Compile Include="Collections\IMapItem.cs" />
     <Compile Include="Collections\Map.cs" />

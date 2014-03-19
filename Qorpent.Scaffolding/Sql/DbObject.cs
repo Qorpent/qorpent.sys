@@ -30,10 +30,13 @@ namespace Qorpent.Scaffolding.Sql
 		/// <summary>
 		/// 
 		/// </summary>
-		public void UpgadeRank(){
-			Rank++;
+		public void UpgadeRank(int i =1, IList<DbObject> visited=null ){
+			if (null != visited && visited.Contains(this)) return;
+			visited = visited ?? new List<DbObject>();
+			Rank+=i;
+			visited.Add(this);
 			foreach (var dep in OutDependency.Where(_=>_.ObjectType==this.ObjectType)){
-				dep.UpgadeRank();
+				dep.UpgadeRank(i+1,visited);
 			}
 		}
 		
@@ -105,7 +108,14 @@ namespace Qorpent.Scaffolding.Sql
 			}
 
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString(){
+			return string.Format("{0}: {1}.{2}", this.ObjectType, this.Schema, this.Name);
 
+		}
 		private static void SetupForeignKeyDependency(DbObject[] objarray){
 			var fkeys =
 				objarray.OfType<DbTable>().SelectMany(_ => _.Fields.Values).Where(_ => _.IsRef).ToArray();
@@ -123,9 +133,9 @@ namespace Qorpent.Scaffolding.Sql
 						var realfld = table.Fields[dbField.RefField];
 						dbField.DataType = realfld.DataType;
 					//}
-					if (table == dbField.Table){
+					if (table == dbField.Table || fkeys.Any(_=>dbField!=_ && _.Table==dbField.Table && _.RefTable==dbField.RefTable)){
 						dbField.NoCascadeUpdates = true;
-					}else
+					}
 					if (!dbField.Table.InDependency.Contains(table)){
 						dbField.Table.InDependency.Add(table);
 						table.OutDependency.Add(dbField.Table);
