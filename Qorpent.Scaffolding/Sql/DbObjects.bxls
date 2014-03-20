@@ -1,6 +1,6 @@
 namespace Qorpent.Db
-
 	class BaseObject "Абстрактные определения и константы" abstract
+		file=${_file}
 		schema=dbo
 		isdataobject = true
 		element datatype
@@ -8,7 +8,6 @@ namespace Qorpent.Db
 		element function
 		element view
 		element void
-
 		datatype int type=Int32
 		datatype long type=Int64
 		datatype string type=String size=255
@@ -18,59 +17,133 @@ namespace Qorpent.Db
 		datatype datetime type=DateTime
 		datatype decimal type=Decimal size=18 precession=6
 		datatype bool type=Boolean
-
-
 		_timestampstr = "CAST(CAST(CURRENT_TIMESTAMP as float) as char)"
 		fullname = "${schema}.${code}"
-		
-
-	class Table "Абстрактная таблица" abstract prototype=dbtable
-		import BaseObject
-		int Id "Локальный уникальный идентификатор" primarykey identity idx=10
-		
-	BaseObject FileGroup prototype=filegroup abstract
+	
+	BaseObject FileGroupBase prototype=filegroup abstract
 		element file
+
+	class TableBase "Абстрактная таблица" abstract prototype=dbtable
+		import BaseObject
+		int Id "Идентификатор" primarykey identity idx=10
+		datetime Version "Версия записи" default=(CURRENT_TIMESTAMP) idx=980
+		int ImportId "Идентификатор старой сущности при миграции" idx=990
+		view "${.code}Full" "Вид полного нормализованного представления строк" : (
+			--PARENT_FIELD_SET--
+		)
+
+	class IWithCode "Сущность с кодом" abstract
+		string Code "Уникальный запоминаемый бизнес-код" unique idx=200
+		string "${.code}GetCode" @id=int : (
+			return (select Code from ${fullname} where Id = @id )
+		)
+		string "${.code}GetId" @code=string  : (
+			return (select Id from ${fullname} where Code = @code )
+		)
+		
+	class IWithName "Сущность с именем" abstract
+		string Name "Читаемое имя" idx=205
+		
+	class IWithIdx "Сущность с порядковым номером" abstract
+		int Idx "Порядковый номер в списках" idx=215
+	
+	class IWithExtendedName "Сущность с расширенями имени"
+		string OuterCode "Внешний код для связи со сторонними системами"  idx=210
+		string ShortName "Сокращенное имя" idx=220
+		longstring FullName "Полное имя" idx=225
+		string Comment "Комментарий" idx=230
+		
+	class IWithCodeHistory "Поддержка ведения истории кодов" abstract
+		import IWithCode
+		string AliasCodes "Устаревшие коды"
+			comment = "Позволяет замещать коды с сохранением истории их изменений, при нахождении ID по коду система учитывает и текущий код и прежние коды"
+			bsharp = "Копируется"
+			idx=970
+		trigger "${.code}_UPDATE_ALIAS_CODE" "Триггер прокачки прежних кодов сущности" update : (
+			if ( UPDATE (Code) ) begin
+				update ${fullname} set AliasCodes = replace( r.AliasCodes+'/'+d.Code+'/','//','/' )	
+					from deleted d join ${fullname} r on r.Id = d.Id and r.Code!=d.Code and r.AliasCodes not like '%/'+d.Code+'/%'
+			end		
+		)
+	
+	class IWithUpgradeSequence "Интерфейс для поддержания автоматического обновления последовательностей" abstract
+		trigger "${.code}_UPGRADE_SEQUENCE" "Триггер обновления SEQUENCE" update insert : (
+			if ( UPDATE (Id) ) begin
+				declare @maxid int set @maxid  = (select max(Id) from ${fullname})
+				declare @currentseq int set @currentseq = (SELECT cast(current_value as int) FROM sys.sequences WHERE name = '${.code}_SEQ'  and schema_id = SCHEMA_ID('${.schema}'))
+				if @currentseq <  @maxid begin
+					set @currentseq = ( (@maxid  + 10) / 10 ) * 10
+					declare @q nvarchar(max) set @q = N'ALTER SEQUENCE ${fullname}_SEQ RESTART WITH ' + cast(@currentseq as nvarchar(255))
+					exec sp_executesql @q
+				end
+			end		
+		)
+		
+	class IEntity "Описание сущности" abstract
+	
+	
+
+
+		
+	
 		
 	Table Entity "Сущность" abstract 
 		string Code "Уникальный код" unique default="'NOCODE_' + ${_timestampstr}"
 		string Name "Название" default="'NONAME_' + ${_timestampstr}"
-		datetime Timestamp "Штамп обновления в модели 'версия'" default = CURRENT_TIMESTAMP
 		longstring Tag "Теги"
 
-	Entity Dictionary "Определение словаря (с поддержкой иерархии)" abstract
+	class IWithHierarchy "Интерфейс иерархической сущности" abstract
+		ref Parent "Ссылка на родительский элемент" to="${fullname}.Id" idx=233
+		string Path "Сформированный полный путь сущности" idx=234
+		string "${.code}GetPath" "Расчет полного пути к элементу" @id=int   : (
+			declare @code nvarchar(255), @parent int, @result nvarchar(255);
+			if ( isnull(@id,0) = 0 ) return '/';
+			select @code = Code, @parent = Parent from ${fullname} where Id = @id;
+			if ( isnull(@parent,0) = 0 ) return '/'+@code+'/';
+			return ${fullname}GetPath( @parent ) + @code + '/';
+		)
+		trigger "${.code}_INSERT_INIT_PATH" "Триггер прокачки пути при добавлении элемента" insert : (
+			update ${fullname} set Path = ${fullname}GetPath(Id) where Id in (select Id from inserted)
+		)
+		trigger "${.code}_UPDATE_SET_PATH" "Триггер прокачки пути при обновлении элемента" update : (
+			if ( UPDATE (Code) or Update(Parent) ) begin
+				update ${fullname} set Path = ${fullname}GetPath(t.Id) 
+					from deleted d join ${fullname} t on t.Path like '%/'+d.Code+'/%'
+			end		
+		)
+		+view "${.code}Full" "Вид полного нормализованного представления строк" : (
+			--PARENT_REF_SET FOR (Parent) WITH (Code,Name) --
+		)
+
+	class IWithActivity "Интерфейс сущности со сроками существования" abstract
+		datetime Start "Признак начала существования элемента" default=19000101 idx=240 
+		datetime Finish "Признак окончания существования элемента" default=30000101 idx=245
+		bool Active "Признак общей активности"
+		bool ${.code}IsActive @id=int @d=datetime : (
+			if exists (
+				select top 1 this.id from ${fullname} this where this.id = @id and this.Active = 1 and @d between this.Start and this.Finish
+			) return 1
+			return 0
+		)
 		
+	class IWithMetadataBind "Связывает сущность с банком метаданных" abstract
+		string MetaBaseCode "Код в некоей базе метаданных" idx=910
+		string Revision "Ревизия, логическая версия" idx=911
+		
+	class IWithTag "Привязывает поддердку тегов" abstract
+		longstring Tag "Теги" idx=250
+		
+	class IWithGroups "Привязывает поддердку групп" abstract
+		longstring Groups "Список групп" idx = 810
+	
+	class IWithSecurityInfo "Привязывает поддердку групп" abstract
+		string SecurityInfo "Условия доступа" idx = 912
+
+	Entity IDictionary "Определение словаря (с поддержкой иерархии)" abstract
+		import IWithHierarchy
 		string Value "Значение"
 		string SecurityInfo "Некая информация о безопасности"
-		string ParentCode "Код родительской сущности" ref="${fullname}.Code" 
-		string Path "Полный путь"
-
-		create function "[${schema}].[${.code}_getPath]" 
-			int Id "Идентификатор элемента таблицы ${fullname}"
-			returns string
-			as language=tsql : """
-				if ( @Id = 0 ) return '/';
-				declare @code nvarchar(255);
-				declare @parentcode nvarchar(255);
-				select @code = Code, @parentcode = ParentCode from ${fullname} where Id = @Id
-				declare @result nvarchar(255) set @result = '/' + @code+ '/' ;
-				while ( @parentcode != 0 ) begin
-					select @code = Code, @parentcode = ParentCode from ${fullname} where Id = @Id
-					@result = '/'+@code + @result
-				end
-				return @result
-			"""
-		create trigger "[${schema}].[${.code}_set_path_on_insert]" afterinsert
-			as language=tsql : """
-				update ${fullname} set Path = [${schema}].[getPath](Id) where Id in (select Id from inserted)
-			"""
-			
-		create trigger "[${schema}].[${.code}_set_path_on_update]" afterupdatecolumns="Code,ParentCode"
-			as language=tsql : """
-				declare @ids table (id int)
-				insert @ids select id from inserted 
-				insert @ids select id from ${fullname} src join updated u on src.Path like '%/'+ u.Code+'/%'
-				update ${fullname} set Path = [${schema}].[getPath](Id) where Id in (select id from @ids)
-			"""
+		
 		ensure index "[${schema}].${.code}_by_code_index" unique
 			use Code
 			includes Name
