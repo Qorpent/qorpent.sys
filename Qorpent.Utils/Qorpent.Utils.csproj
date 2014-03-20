@@ -63,6 +63,7 @@
     <Compile Include="ConsoleArgumentHelper.cs" />
     <Compile Include="ConsoleRenderHelper.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />
+    <Compile Include="Extensions\ConfigExtensions.cs" />
     <Compile Include="Extensions\DatabaseEngineType.cs" />
     <Compile Include="Extensions\DatabaseExtensions.cs" />
     <Compile Include="Extensions\ContainerExtensions.cs" />

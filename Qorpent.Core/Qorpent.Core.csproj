@@ -103,6 +103,7 @@
     <Compile Include="Config\DictionaryCompatibleConfig.cs" />
     <Compile Include="Config\HierarchyElement.cs" />
     <Compile Include="Config\IConfig.cs" />
+    <Compile Include="Config\Source.cs" />
     <Compile Include="Config\TreeConfigBase.cs" />
     <Compile Include="Config\TreeConfigBaseElementsList.cs" />
     <Compile Include="ConvertExtensions.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="IO\IHashedDirectory.cs" />
     <Compile Include="IO\IStreamProxy.cs" />
     <Compile Include="Model\AttributedEntity.cs" />
+    <Compile Include="Model\IWithResult.cs" />
     <Compile Include="Mvc\MvcClient.cs" />
     <Compile Include="IO\Resources\DefaultResourceProvider.cs" />
     <Compile Include="IO\Resources\IResource.cs" />
