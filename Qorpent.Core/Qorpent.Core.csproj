@@ -40,6 +40,7 @@
     <Compile Include="BSharp\Builder\BSharpBuilderPhase.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderTargets.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderTargetType.cs" />
+    <Compile Include="BSharp\Builder\BSharpProjectExtensions.cs" />
     <Compile Include="BSharp\Builder\IBSharpBuilder.cs" />
     <Compile Include="BSharp\Builder\IBSharpBuilderExtension.cs" />
     <Compile Include="BSharp\Builder\IBSharpBuilderTask.cs" />

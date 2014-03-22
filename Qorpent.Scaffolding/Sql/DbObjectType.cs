@@ -72,7 +72,14 @@
 		/// Поле таблицы
 		/// </summary>
 		Field = 1 << 15,
-		
-		
+
+		/// <summary>
+		/// 
+		/// </summary>
+		Sequence = 1<<16,
+		/// <summary>
+		///
+		/// </summary>
+		Schema = 1<<17
 	}
 }

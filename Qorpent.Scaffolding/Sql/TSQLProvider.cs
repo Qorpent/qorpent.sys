@@ -319,7 +319,7 @@ CREATE PROCEDURE __ensurefg @n nvarchar(255),@filecount int = 1, @filesize int =
 	while @c >= 1 begin
 		BEGIN TRY
 			set @q='ALTER DATABASE '+DB_NAME()+' ADD FILE ( NAME = N'''+DB_NAME()+'_'+@n+cast(@c as nvarchar(255))+''', FILENAME = N'''+
-				@basepath+'z3_'+@n+cast(@c as nvarchar(255))+'.ndf'' , SIZE = '+cast(@filesize as nvarchar(255))+'MB , FILEGROWTH = 5% ) TO FILEGROUP ['+@n+']'
+				@basepath+DB_NAME()+'_'+@n+cast(@c as nvarchar(255))+'.ndf'' , SIZE = '+cast(@filesize as nvarchar(255))+'MB , FILEGROWTH = 5% ) TO FILEGROUP ['+@n+']'
 			exec sp_executesql @q
 		END TRY
 		BEGIN CATCH
@@ -388,6 +388,7 @@ GO");
 		}
 
 		protected override void GenerateConstraints(DbObject[] ordered, StringBuilder sb, DbGenerationMode mode, object hintObject){
+
 			if (mode.HasFlag(DbGenerationMode.Safe)){
 				var nonpkfields = ordered.OfType<DbTable>().SelectMany(_ => _.Fields.Values).Where(_ => !_.IsPrimaryKey);
 				foreach (var unq in nonpkfields.Where(_ => _.IsUnique)){
