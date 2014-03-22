@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.XDiff{
 	/// <summary>
@@ -15,10 +16,54 @@ namespace Qorpent.Utils.XDiff{
 		/// </summary>
 		/// <param name="diffs"></param>
 		/// <param name="target"></param>
-		public static void Apply(this IEnumerable<XDiffItem> diffs,XElement target){
+		/// <param name="options"></param>
+		public static XElement Apply(this IEnumerable<XDiffItem> diffs,XElement target, XDiffOptions options = null){
+			options = options ?? new XDiffOptions();
+			IDictionary<string, string> movereplaces = new Dictionary<string, string>();
 			foreach (var diff in diffs.ToArray()){
-				diff.Apply(target);
+				if (diff.CanChangeHierarchyTarget){
+					FillDictionary(movereplaces,diff);
+				}else if (diff.CanChangeHierarchyTarget){
+					while (movereplaces.ContainsKey(diff.NewValue)){
+						diff.NewValue = movereplaces[diff.NewValue];
+					}	
+				}
+				diff.Apply(target,true,options);
 			}
+			return target;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		private  static void FillDictionary(IDictionary<string, string> map, XDiffItem diff ){
+			var id = diff.BasisElement.Attribute("id");
+			var code = diff.BasisElement.Attribute("code");
+			var oldname = diff.BasisElement.Name.LocalName;
+			if (diff.Action == XDiffAction.RenameElement){
+				
+				var newname = diff.NewValue;
+				if (null != id){
+					map[oldname + "-id-" + id.Value] = newname + "-id-" + id.Value;
+
+				}
+				if (null != code){
+					map[oldname + "-code-" + code.Value] = newname + "-code-" + code.Value;
+				}
+				
+			}else if (diff.Action == XDiffAction.ChangeAttribute){
+				if (diff.NewestAttribute.Name.LocalName == "code"){
+					map[oldname + "-code-" + code.Value] = oldname + "-code-" + diff.NewestAttribute.Value;
+					map["code-" + code.Value] = "code-" + diff.NewestAttribute.Value;
+				}
+				else if (diff.NewestAttribute.Name.LocalName == "id")
+				{
+					map[oldname + "-id-" + id.Value] = oldname + "-id-" + diff.NewestAttribute.Value;
+					map["id-" + id.Value] = "id-" + diff.NewestAttribute.Value;
+				}
+			}
+
+
 		}
 
 		/// <summary>
@@ -88,5 +133,47 @@ namespace Qorpent.Utils.XDiff{
 				
 			}
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <param name="__options"></param>
+		/// <returns></returns>
+		public static bool IsJoined(XElement a, XElement b, XDiffOptions __options){
+			//тут не на кодах, id используется как первичный ключ
+			var aid = __options.ChangeIds? null : a.Attribute("id");
+			var haid = aid != null;
+			var bid = __options.ChangeIds ? null : b.Attribute("id");
+			var hbid = bid != null;
+			var acode = a.Attribute("code");
+			var hacode = acode != null;
+			var bcode = b.Attribute("code");
+			var hbcode = bcode != null;
+
+			if (!haid && !hacode) return false; //no identity on a
+			if (!hbid && !hbcode) return false; //no idenityt on a
+
+			var testvala = "";
+			var testvalb = "";
+			if (haid && hbid){ // both on ids
+				testvala = aid.Value;
+				testvalb = bid.Value;
+			}else if (hacode && hbcode){
+				testvala = acode.Value;
+				testvalb = bcode.Value;
+			}
+			else{
+				return false; //some incompability checks
+			}
+			if (testvala != testvalb) return false;
+			if (__options.IsNameIndepended){
+				return true;
+			}
+			return a.Name.LocalName == b.Name.LocalName;
+		}
+
+		
 	}
 }

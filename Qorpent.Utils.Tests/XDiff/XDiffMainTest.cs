@@ -106,11 +106,35 @@ namespace Qorpent.Utils.Tests.XDiff
 
 			var result = GetResult(b, n);
 			Assert.AreEqual(@"ChangeAttribute n0
-	BasisAttribute code :2
+	BasisElement name=z id=1
 	NewestAttribute code :4
 ChangeAttribute n1
-	BasisAttribute code :4
+	BasisElement name=z id=3
 	NewestAttribute code :2", result);
+		}
+
+		[Test]
+		public void CanAppplyPatch()
+		{
+			var b = XElement.Parse("<a><z id='1' code='2'/><z id='3' code='4'/></a>");
+			var n = XElement.Parse("<a><z id='3' code='2'/><z id='1' code='4'/></a>");
+			Assert.True(new XDiffGenerator().IsDifferent(b, n));
+			var result = new XDiffGenerator().GetDiff(b,n).Apply(b);
+			Console.WriteLine(result.ToString());
+			Assert.False(new XDiffGenerator().IsDifferent(b,n));
+		}
+
+		[Test]
+		public void CanAppplyPatchHierarchcallyWithNameChanges()
+		{
+			var b = XElement.Parse("<a><z code='2' name='y'/><z id='3' code='4'><x id='5' name='x'/></z></a>");
+			var n = XElement.Parse("<a><u code='2' name='y'><y id='5' name='x'/></u><z id='3' code='4'></z></a>");
+			var opts = new XDiffOptions{IsHierarchy = true, IsNameIndepended = true};
+			GetResult(b, n, opts);
+			Assert.True(new XDiffGenerator(opts).IsDifferent(b, n));
+			var result = new XDiffGenerator(opts).GetDiff(b, n).Apply(b,opts);
+			Console.WriteLine(result.ToString());
+			Assert.False(new XDiffGenerator(opts).IsDifferent(b, n));
 		}
 
 		[Test]
@@ -121,10 +145,10 @@ ChangeAttribute n1
 
 			var result = GetResult(b, n,new XDiffOptions{ChangeIds = true});
 			Assert.AreEqual(@"ChangeAttribute n0
-	BasisAttribute id :1
+	BasisElement name=z id=1
 	NewestAttribute id :3
 ChangeAttribute n1
-	BasisAttribute id :3
+	BasisElement name=z id=3
 	NewestAttribute id :1", result);
 		}
 
@@ -182,7 +206,8 @@ DeleteElement n1
 			var result = GetResult(b, n, new XDiffOptions{IsNameIndepended = true});
 			Assert.AreEqual(@"RenameElement n0
 	BasisElement name=z code=1
-	NewestElement name=y code=1", result);
+	NewValue : y
+", result);
 
 		}
 

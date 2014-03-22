@@ -31,38 +31,6 @@ namespace Qorpent.Utils.XDiff
 			return GetDiff(basis, newest).Any();
 		}
 
-		bool IsJoined(XElement a, XElement b){
-			//тут не на кодах, id используется как первичный ключ
-			var aid = _options.ChangeIds? null : a.Attribute("id");
-			var haid = aid != null;
-			var bid = _options.ChangeIds ? null : b.Attribute("id");
-			var hbid = bid != null;
-			var acode = a.Attribute("code");
-			var hacode = acode != null;
-			var bcode = b.Attribute("code");
-			var hbcode = bcode != null;
-
-			if (!haid && !hacode) return false; //no identity on a
-			if (!hbid && !hbcode) return false; //no idenityt on a
-
-			var testvala = "";
-			var testvalb = "";
-			if (haid && hbid){ // both on ids
-				testvala = aid.Value;
-				testvalb = bid.Value;
-			}else if (hacode && hbcode){
-				testvala = acode.Value;
-				testvalb = bcode.Value;
-			}
-			else{
-				return false; //some incompability checks
-			}
-			if (testvala != testvalb) return false;
-			if (_options.IsNameIndepended){
-				return true;
-			}
-			return a.Name.LocalName == b.Name.LocalName;
-		}
 		/// <summary>
 		/// 
 		/// </summary>
@@ -82,7 +50,7 @@ namespace Qorpent.Utils.XDiff
 			var matchhash = GetMatchedElements(belements, nelements);
 			foreach (var e in matchhash){
 				if (e.b.Name.LocalName != e.ns[0].Name.LocalName){
-					yield return new XDiffItem{Action = XDiffAction.RenameElement, BasisElement = e.b, NewestElement = e.ns[0]};
+					yield return new XDiffItem{Action = XDiffAction.RenameElement, BasisElement = e.b, NewValue = e.ns[0].Name.LocalName};
 				}
 				var valb = string.Join(Environment.NewLine,
 				                       e.b.Nodes().Except(e.b.Elements().Where(_ => null != _.Attribute("__parent"))));
@@ -124,34 +92,43 @@ namespace Qorpent.Utils.XDiff
 								new XDiffItem{Action = XDiffAction.ChangeHierarchyPosition, BasisElement = e.b, NewValue = ma.na.Value};
 							continue;
 						}
-						yield return new XDiffItem{Action = XDiffAction.ChangeAttribute, BasisAttribute = ma.ba, NewestAttribute = ma.na};
+						yield return new XDiffItem{Action = XDiffAction.ChangeAttribute, BasisElement = e.b, NewestAttribute = ma.na};
 					}
 				}
 			}
 		}
 
 		private IEnumerable<XDiffItem> ProcessDeleteElements(XElement[] belements, XElement[] nelements){
-			var deletedelements = belements.Where(__ => !nelements.Any(_ => IsJoined(_, __))).ToArray();
+			var deletedelements = belements.Where(__ => !nelements.Any(_ => XDiffExtensions.IsJoined(_, __,_options))).ToArray();
 			foreach (var deletedelement in deletedelements){
 				yield return new XDiffItem{Action = XDiffAction.DeleteElement, BasisElement = deletedelement};
 			}
 		}
 
 		private IEnumerable<XDiffItem> ProcessNewElements(XElement[] nelements, XElement[] belements){
-			var newelements = nelements.Where(__ => !belements.Any(_ => IsJoined(_, __))).ToArray();
+			var newelements = nelements.Where(__ => !belements.Any(_ => XDiffExtensions.IsJoined(_, __,_options))).ToArray();
 			foreach (var newelement in newelements){
 				yield return new XDiffItem{Action = XDiffAction.CreateElement, NewestElement = newelement};
 			}
 		}
 
+		/// <summary>
+		/// Промежуточный класс JOIN для одинаковых групп элементов
+		/// </summary>
+		private class XDiffMatch
+		{
+			public XElement b;
+			public XElement[] ns;
+		}
+
 		private XDiffMatch[] GetMatchedElements(XElement[] belements, XElement[] nelements){
 			var matchhash =
 				belements
-					.Select(_ => new XDiffMatch{b = _, ns = nelements.Where(__ => IsJoined(__, _)).ToArray()})
+					.Select(_ => new XDiffMatch{b = _, ns = nelements.Where(__ => XDiffExtensions.IsJoined(__, _,_options)).ToArray()})
 					.Where(_ => _.ns.Length != 0).ToArray();
 			var reversehash =
 				nelements
-					.Select(_ => new XDiffMatch{b = _, ns = belements.Where(__ => IsJoined(__, _)).ToArray()})
+					.Select(_ => new XDiffMatch{b = _, ns = belements.Where(__ => XDiffExtensions.IsJoined(__, _,_options)).ToArray()})
 					.Where(_ => _.ns.Length != 0).ToArray();
 			if (matchhash.Union(reversehash).Any(_ => _.ns.Length > 1)){
 				var sb = new StringBuilder();
@@ -166,14 +143,6 @@ namespace Qorpent.Utils.XDiff
 				throw new Exception(sb.ToString());
 			}
 			return matchhash;
-		}
-
-		/// <summary>
-		/// Промежуточный класс JOIN для одинаковых групп элементов
-		/// </summary>
-		private class XDiffMatch{
-			public XElement b;
-			public XElement[] ns;
 		}
 
 		private void PrepareIndexes(XElement basis, XElement newest, out XElement[] belements, out XElement[] nelements){
