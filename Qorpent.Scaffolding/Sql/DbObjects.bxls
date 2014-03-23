@@ -8,6 +8,7 @@ namespace Qorpent.Db
 		element function
 		element view
 		element void
+		element index
 		datatype int type=Int32
 		datatype long type=Int64
 		datatype string type=String size=255

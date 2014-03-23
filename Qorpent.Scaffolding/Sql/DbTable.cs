@@ -107,6 +107,9 @@ namespace Qorpent.Scaffolding.Sql{
 					yield return new DbView().Initialize(this, e);
 					continue;
 				}
+				if (e.Name == "index"){
+					yield return new DbIndex().Initialize(this, e);
+				}
 				var n = e.Name.LocalName;
 				DbDataType type = null;
 				if (Types.ContainsKey(n))

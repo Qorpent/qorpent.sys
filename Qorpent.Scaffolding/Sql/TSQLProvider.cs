@@ -32,6 +32,8 @@ namespace Qorpent.Scaffolding.Sql{
 						return prefix+"TRIGGER " + dbObject.FullName;
 					case DbObjectType.View:
 						return prefix + "VIEW " + dbObject.FullName;
+					case DbObjectType.Index:
+						return "if exists(select * from sys.indexes where name = '"+dbObject.Name+"' and object_id = object_id('"+dbObject.ParentElement.FullName+"')) DROP INDEX " + dbObject.Name + " ON " + dbObject.ParentElement.FullName;
 					case DbObjectType.AutoPartition:
 						return "IF OBJECT_ID('" + dbObject.ParentElement.FullName + "AlignPartitions') IS NOT NULL DROP PROC "+dbObject.ParentElement.FullName + "AlignPartitions";
 					case DbObjectType.PartitionScheme :
@@ -66,6 +68,8 @@ namespace Qorpent.Scaffolding.Sql{
 						return GetProcedure(dbObject as DbFunction, mode, hintObject);
 					case DbObjectType.View:
 						return GetView(dbObject as DbView, mode, hintObject);
+					case DbObjectType.Index:
+						return GetIndex(dbObject as DbIndex, mode, hintObject);
 					case DbObjectType.PartitionScheme:
 						return GetPartitionScheme(dbObject as DbPartitionScheme, mode, hintObject);
 					case DbObjectType.AutoPartition:
@@ -75,6 +79,16 @@ namespace Qorpent.Scaffolding.Sql{
 				}
 			}
 
+		}
+
+		private string GetIndex(DbIndex dbIndex, DbGenerationMode mode, object hintObject){
+			dbIndex.Verify();
+			var result =  "CREATE INDEX " + dbIndex.Name + " ON " + dbIndex.ParentElement.FullName + " (" +
+			       string.Join(",", dbIndex.Fields) + ")";
+			if (0 != dbIndex.Includes.Count){
+				result += " INCLUDE (" + string.Join(",", dbIndex.Includes) + ")";
+			}
+			return result;
 		}
 
 		private string GetAutoPartition(DbAutoPartition dbAutoPartition, DbGenerationMode mode, object hintObject){

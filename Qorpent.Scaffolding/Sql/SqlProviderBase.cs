@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Qorpent.BSharp.Builder;
 using Qorpent.Utils.Extensions;
 
@@ -36,6 +37,16 @@ namespace Qorpent.Scaffolding.Sql{
 			if (p.IsSet("DO_" + t.ToString().ToUpperInvariant())) return true;
 			if (p.IsSet("NO_ANY")) return false;
 			if (p.IsSet("NO_" + t.ToString().ToUpperInvariant())) return false;
+			return true;
+		}
+		bool CheckCond(IBSharpProject p, DbObject o){
+			var t = o.ObjectType;
+			if (p.IsSet("DO_" + t.ToString().ToUpperInvariant())) return true;
+			if (p.IsSet("NO_ANY")) return false;
+			if (p.IsSet("NO_" + t.ToString().ToUpperInvariant())) return false;
+			if (p.IsSet("NAMEREGEX")){
+				if (!Regex.IsMatch(o.FullName,p.GetCondition("NAMEREGEX"))) return false;
+			}
 			return true;
 		}
 		public virtual string GetSql(IEnumerable<DbObject> objects, DbGenerationMode mode, object hintObject){
@@ -98,7 +109,7 @@ namespace Qorpent.Scaffolding.Sql{
 		private void RenderObject(DbGenerationMode mode, object hintObject, DbObject dbObject, IBSharpProject ibsp,
 		                          StringBuilder sb){
 
-			if (!CheckCond(ibsp, dbObject.ObjectType)) return;
+			if (!CheckCond(ibsp, dbObject)) return;
 			var script = GetSql(dbObject, mode, hintObject);
 			if (!string.IsNullOrWhiteSpace(script)){
 				sb.AppendLine(script);
