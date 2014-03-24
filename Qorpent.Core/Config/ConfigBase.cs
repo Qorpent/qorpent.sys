@@ -10,7 +10,7 @@ namespace Qorpent.Config {
 	/// <summary>
 	///     Ѕазовый класс дл€ конфигураций
 	/// </summary>
-	public partial class ConfigBase : Source, IConfig {
+	public partial class ConfigBase : IConfig {
         /// <summary>
         ///     ¬нутренний экземпл€р переменной, определ€ющий поддержку наследовани€
         /// </summary>
