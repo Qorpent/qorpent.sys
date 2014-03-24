@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using Qorpent.BSharp.Builder;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Sql{
 	internal abstract class SqlProviderBase : ISqlProvider{
@@ -29,8 +33,25 @@ namespace Qorpent.Scaffolding.Sql{
 		protected abstract void CheckScriptDelimiter(DbGenerationMode mode, StringBuilder sb);
 		protected abstract string GetEnsureSchema(string schema,DbGenerationMode mode);
 		
-
+		bool CheckCond(IBSharpProject p, DbObjectType t){
+			if (p.IsSet("DO_" + t.ToString().ToUpperInvariant())) return true;
+			if (p.IsSet("NO_ANY")) return false;
+			if (p.IsSet("NO_" + t.ToString().ToUpperInvariant())) return false;
+			return true;
+		}
+		bool CheckCond(IBSharpProject p, DbObject o){
+			var t = o.ObjectType;
+			if (p.IsSet("DO_" + t.ToString().ToUpperInvariant())) return true;
+			if (p.IsSet("NO_ANY")) return false;
+			if (p.IsSet("NO_" + t.ToString().ToUpperInvariant())) return false;
+			if (p.IsSet("NAMEREGEX")){
+				if (!Regex.IsMatch(o.FullName,p.GetCondition("NAMEREGEX"))) return false;
+			}
+			return true;
+		}
 		public virtual string GetSql(IEnumerable<DbObject> objects, DbGenerationMode mode, object hintObject){
+			var ibsp = hintObject as IBSharpProject;
+			
 			var schemas = objects.Select(_ => _.Schema).Distinct();
 			var sequencefields =
 				objects.OfType<DbTable>()
@@ -40,36 +61,60 @@ namespace Qorpent.Scaffolding.Sql{
 			var sb = new StringBuilder();
 
 			if (mode.HasFlag(DbGenerationMode.Drop)){
-				var lates = ordered.OfType<DbTable>().SelectMany(_ => _.Fields.Values).Where(_ => _.IsLateRef).ToArray();
-				DropLateRefs(sb,lates);
+
+				if (CheckCond(ibsp,DbObjectType.Table)){
+					var lates = ordered.OfType<DbTable>().SelectMany(_ => _.Fields.Values).Where(_ => _.IsLateRef).ToArray();
+					DropLateRefs(sb, lates);
+				}
 				ordered = ordered.Reverse().ToArray();
-				foreach (var dbObject in ordered)
+				foreach (var dbObject in ordered){
+					RenderObject(mode, hintObject, dbObject, ibsp, sb);
+				}
+				if (CheckCond(ibsp, DbObjectType.Sequence))
 				{
-					sb.AppendLine(GetSql(dbObject, mode, hintObject));
-					CheckScriptDelimiter(mode, sb);
+					foreach (var fld in sequencefields){
+						sb.AppendLine(GetDropSequence(fld));
+					}
 				}
-				foreach (var fld in sequencefields){
-					sb.AppendLine(GetDropSequence(fld));
-				}
-				foreach (var schema in schemas){
-					sb.AppendLine(this.GetDropSchema(schema));
-					CheckScriptDelimiter(mode,sb);
+				if (CheckCond(ibsp, DbObjectType.Schema))
+				{
+					foreach (var schema in schemas){
+						sb.AppendLine(this.GetDropSchema(schema));
+						CheckScriptDelimiter(mode, sb);
+					}
 				}
 			}
 			else{
 				GenerateTemporalUtils(sb, mode, hintObject);
-				sb.AppendLine(string.Join("\r\nGO\r\n", schemas.Select(_ => GetEnsureSchema(_, mode))));
-				sb.AppendLine(string.Join("\r\nGO\r\n", sequencefields.Select(GetEnsureSequence)));
-				CheckScriptDelimiter(mode, sb);
-
-				foreach (var dbObject in ordered){
-					sb.AppendLine(GetSql(dbObject, mode, hintObject));
+				if (CheckCond(ibsp, DbObjectType.Schema)){
+					sb.AppendLine(string.Join("\r\nGO\r\n", schemas.Select(_ => GetEnsureSchema(_, mode))));
+				}
+				if (CheckCond(ibsp, DbObjectType.Sequence)){
+					sb.AppendLine(string.Join("\r\nGO\r\n", sequencefields.Select(GetEnsureSequence)));
 					CheckScriptDelimiter(mode, sb);
 				}
-				GenerateConstraints(ordered, sb, mode, hintObject);
+
+				foreach (var dbObject in ordered){
+					RenderObject(mode,hintObject,dbObject,ibsp,sb);
+				}
+
+				if (CheckCond(ibsp, DbObjectType.Table)){
+					GenerateConstraints(ordered, sb, mode, hintObject);
+				}
 				DropTemporalUtils(sb, mode, hintObject);
 			}
 			return sb.ToString();
+		}
+
+		private void RenderObject(DbGenerationMode mode, object hintObject, DbObject dbObject, IBSharpProject ibsp,
+		                          StringBuilder sb){
+
+			if (!CheckCond(ibsp, dbObject)) return;
+			var script = GetSql(dbObject, mode, hintObject);
+			if (!string.IsNullOrWhiteSpace(script)){
+				sb.AppendLine(script);
+				CheckScriptDelimiter(mode, sb);
+			}
 		}
 
 		/// <summary>

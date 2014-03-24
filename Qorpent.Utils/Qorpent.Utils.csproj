@@ -114,6 +114,11 @@
     <Compile Include="ReflectionHelper.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
+    <Compile Include="XDiff\XDiffAction.cs" />
+    <Compile Include="XDiff\XDiffExtensions.cs" />
+    <Compile Include="XDiff\XDiffItem.cs" />
+    <Compile Include="XDiff\XDiffOptions.cs" />
+    <Compile Include="XDiff\XDiffGenerator.cs" />
     <Compile Include="XmlInterpolation.cs" />
   </ItemGroup>
   <ItemGroup>

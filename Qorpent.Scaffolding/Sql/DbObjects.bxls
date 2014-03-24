@@ -8,6 +8,7 @@ namespace Qorpent.Db
 		element function
 		element view
 		element void
+		element index
 		datatype int type=Int32
 		datatype long type=Int64
 		datatype string type=String size=255
@@ -80,17 +81,11 @@ namespace Qorpent.Db
 		)
 		
 	class IEntity "Описание сущности" abstract
-	
-	
-
-
-		
-	
-		
-	Table Entity "Сущность" abstract 
-		string Code "Уникальный код" unique default="'NOCODE_' + ${_timestampstr}"
-		string Name "Название" default="'NONAME_' + ${_timestampstr}"
-		longstring Tag "Теги"
+		import IWithCode
+		import IWithIdx
+		import IWithName
+		import IWithActivity
+		import IWithTag
 
 	class IWithHierarchy "Интерфейс иерархической сущности" abstract
 		ref Parent "Ссылка на родительский элемент" to="${fullname}.Id" idx=233
@@ -138,27 +133,8 @@ namespace Qorpent.Db
 	
 	class IWithSecurityInfo "Привязывает поддердку групп" abstract
 		string SecurityInfo "Условия доступа" idx = 912
-
-	Entity IDictionary "Определение словаря (с поддержкой иерархии)" abstract
-		import IWithHierarchy
+		
+	class IWithValue "Привязывает поддердку групп" abstract
 		string Value "Значение"
-		string SecurityInfo "Некая информация о безопасности"
-		
-		ensure index "[${schema}].${.code}_by_code_index" unique
-			use Code
-			includes Name
-			includes Tag
-		
-		ensure index "[${schema}].${.code}_by_path_index" unique
-			use Path
-			includes Code
-			includes Name
-			includes Tag
-			
-		ensure index "[${schema}].${.code}_by_tag_index" unique
-			use Path
-			includes Code
-			includes Name
-			includes Tag
-		
+	
 		

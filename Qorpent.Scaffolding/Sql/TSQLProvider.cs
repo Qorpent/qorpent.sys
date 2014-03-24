@@ -32,6 +32,8 @@ namespace Qorpent.Scaffolding.Sql{
 						return prefix+"TRIGGER " + dbObject.FullName;
 					case DbObjectType.View:
 						return prefix + "VIEW " + dbObject.FullName;
+					case DbObjectType.Index:
+						return "if exists(select * from sys.indexes where name = '"+dbObject.Name+"' and object_id = object_id('"+dbObject.ParentElement.FullName+"')) DROP INDEX " + dbObject.Name + " ON " + dbObject.ParentElement.FullName;
 					case DbObjectType.AutoPartition:
 						return "IF OBJECT_ID('" + dbObject.ParentElement.FullName + "AlignPartitions') IS NOT NULL DROP PROC "+dbObject.ParentElement.FullName + "AlignPartitions";
 					case DbObjectType.PartitionScheme :
@@ -66,6 +68,8 @@ namespace Qorpent.Scaffolding.Sql{
 						return GetProcedure(dbObject as DbFunction, mode, hintObject);
 					case DbObjectType.View:
 						return GetView(dbObject as DbView, mode, hintObject);
+					case DbObjectType.Index:
+						return GetIndex(dbObject as DbIndex, mode, hintObject);
 					case DbObjectType.PartitionScheme:
 						return GetPartitionScheme(dbObject as DbPartitionScheme, mode, hintObject);
 					case DbObjectType.AutoPartition:
@@ -75,6 +79,16 @@ namespace Qorpent.Scaffolding.Sql{
 				}
 			}
 
+		}
+
+		private string GetIndex(DbIndex dbIndex, DbGenerationMode mode, object hintObject){
+			dbIndex.Verify();
+			var result =  "CREATE INDEX " + dbIndex.Name + " ON " + dbIndex.ParentElement.FullName + " (" +
+			       string.Join(",", dbIndex.Fields) + ")";
+			if (0 != dbIndex.Includes.Count){
+				result += " INCLUDE (" + string.Join(",", dbIndex.Includes) + ")";
+			}
+			return result;
 		}
 
 		private string GetAutoPartition(DbAutoPartition dbAutoPartition, DbGenerationMode mode, object hintObject){
@@ -319,7 +333,7 @@ CREATE PROCEDURE __ensurefg @n nvarchar(255),@filecount int = 1, @filesize int =
 	while @c >= 1 begin
 		BEGIN TRY
 			set @q='ALTER DATABASE '+DB_NAME()+' ADD FILE ( NAME = N'''+DB_NAME()+'_'+@n+cast(@c as nvarchar(255))+''', FILENAME = N'''+
-				@basepath+'z3_'+@n+cast(@c as nvarchar(255))+'.ndf'' , SIZE = '+cast(@filesize as nvarchar(255))+'MB , FILEGROWTH = 5% ) TO FILEGROUP ['+@n+']'
+				@basepath+DB_NAME()+'_'+@n+cast(@c as nvarchar(255))+'.ndf'' , SIZE = '+cast(@filesize as nvarchar(255))+'MB , FILEGROWTH = 5% ) TO FILEGROUP ['+@n+']'
 			exec sp_executesql @q
 		END TRY
 		BEGIN CATCH
@@ -388,6 +402,7 @@ GO");
 		}
 
 		protected override void GenerateConstraints(DbObject[] ordered, StringBuilder sb, DbGenerationMode mode, object hintObject){
+
 			if (mode.HasFlag(DbGenerationMode.Safe)){
 				var nonpkfields = ordered.OfType<DbTable>().SelectMany(_ => _.Fields.Values).Where(_ => !_.IsPrimaryKey);
 				foreach (var unq in nonpkfields.Where(_ => _.IsUnique)){
