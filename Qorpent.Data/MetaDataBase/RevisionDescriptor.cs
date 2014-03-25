@@ -19,6 +19,11 @@ namespace Qorpent.Data.MetaDataBase{
 		public DateTime RevisionTime { get; set; }
 
 		/// <summary>
+		/// Имя пользователя
+		/// </summary>
+		public string UserName { get; set; }
+
+		/// <summary>
 		/// Сверяет идентичность версий
 		/// </summary>
 		/// <param name="other"></param>

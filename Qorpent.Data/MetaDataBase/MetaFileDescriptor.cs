@@ -31,7 +31,7 @@ namespace Qorpent.Data.MetaDataBase{
 		/// </summary>
 		public void CheckHash(){
 			if (string.IsNullOrWhiteSpace(Hash)){
-				if (string.IsNullOrWhiteSpace(Content)) return;
+				if (null==Content) return;
 				Hash = Convert.ToBase64String(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(Content)));
 			}
 		}
@@ -41,7 +41,7 @@ namespace Qorpent.Data.MetaDataBase{
 		/// <returns></returns>
 		public bool IsFullyDefined(){
 			if (string.IsNullOrWhiteSpace(Code)) return false;
-			if (string.IsNullOrWhiteSpace(Content)) return false;
+			if (null==Content) return false;
 			CheckHash();
 			return true;
 		}

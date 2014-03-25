@@ -11,7 +11,7 @@ namespace Qorpent.Data.MetaDataBase{
 		/// </summary>
 		/// <param name="descriptor"></param>
 		/// <returns></returns>
-		protected static MetaFileDescriptor CheckRegstrable(MetaFileDescriptor descriptor){
+		protected  MetaFileDescriptor CheckRegstrable(MetaFileDescriptor descriptor){
 			if (!descriptor.IsFullyDefined()){
 				throw new Exception("cannot register not fully qualified descriptor");
 			}
@@ -22,8 +22,27 @@ namespace Qorpent.Data.MetaDataBase{
 			if (savedescriptor.RevisionTime.Year <= 1900){
 				savedescriptor.RevisionTime = DateTime.Now;
 			}
+			if (string.IsNullOrWhiteSpace(savedescriptor.Name))
+			{
+				savedescriptor.Name = savedescriptor.Code;
+			}
+
+			if (string.IsNullOrWhiteSpace(savedescriptor.UserName)){
+				savedescriptor.UserName = GetDefaultUserName();
+				if (savedescriptor.UserName.Contains("\\")){
+					savedescriptor.UserName = savedescriptor.UserName.Split('\\')[1];
+				}
+			}
 			return savedescriptor;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		protected virtual string GetDefaultUserName(){
+			return Applications.Application.Current.Principal.CurrentUser.Identity.Name;
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -35,12 +54,9 @@ namespace Qorpent.Data.MetaDataBase{
 		public MetaFileDescriptor Register(MetaFileDescriptor descriptor){
 
 			MetaFileDescriptor savedescriptor = null;
-			if (AutoRevision){
-				savedescriptor = descriptor.Copy();
-			}
-			else{
+			
 				savedescriptor = CheckRegstrable(descriptor);
-			}
+			
 			InternalRegister(savedescriptor);
 			return savedescriptor.Copy();
 		}

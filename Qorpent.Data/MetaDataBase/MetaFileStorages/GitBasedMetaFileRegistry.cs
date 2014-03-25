@@ -42,6 +42,8 @@ namespace Qorpent.Data.MetaDataBase{
 		 /// </summary>
 		public GitBasedMetaFileRegistry(){
 			 AutoRevision = true;
+			 RemoteName = "origin";
+			 Branch = "master";
 		 }
 
 		private bool _initialized = false;
@@ -57,6 +59,7 @@ namespace Qorpent.Data.MetaDataBase{
 				_git = new GitHelper{DirectoryName = DirectoryName,Branch = Branch,RemoteName = RemoteName,RemoteUrl = RemoteUrl, AuthorName = AuthorName,AuthorEmail = AuthorEmail};
 				_git.Connect();
 				_git.FixBranchState();
+				_initialized = true;
 			}
 		}
 
@@ -78,12 +81,23 @@ namespace Qorpent.Data.MetaDataBase{
 				Comment = info.Comment,
 				Content = content,
 				Revision = info.ShortHash,
-				RevisionTime = info.LocalRevisionTime
+				RevisionTime = info.LocalRevisionTime,
+				UserName = info.Author
 			};
 			result.CheckHash();
 			return result;
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		protected override string GetDefaultUserName()
+		{
+			if (!string.IsNullOrWhiteSpace(AuthorName)){
+				return AuthorName;
+			}
+			return base.GetDefaultUserName();
+		}
 		
 
 		/// <summary>
@@ -125,7 +139,7 @@ namespace Qorpent.Data.MetaDataBase{
 		/// <returns></returns>
 		public override IEnumerable<string> GetCodes(string prefix = null){
 			Initialize();
-			return _git.GetFileList().Where(_ => _.StartsWith(prefix) || ("/" + _).StartsWith(prefix));
+			return _git.GetFileList().Where(_ => null==prefix || _.StartsWith(prefix) || ("/" + _).StartsWith(prefix));
 		}
 
 		/// <summary>

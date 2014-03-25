@@ -42,7 +42,7 @@ namespace Qorpent.Data.MetaDataBase{
 			MetaFileDescriptor[] result = null;
 			InDb(c => result = c.ExecuteOrm<MetaFileDescriptor>(@"
 select MDFileCode as Code,MDFileName as Name,Content as Content,Comment,Revision as Revision,RevisionTime as RevisionTime,
-Hash as Hash from [qptmds].[MDFileContentFull] where MDFileCode=@Code and Revision = @Revision", new {descriptor.Code,descriptor.Revision}));
+Hash as Hash , UserName from [qptmds].[MDFileContentFull] where MDFileCode=@Code and Revision = @Revision", new {descriptor.Code,descriptor.Revision}));
 			return result.FirstOrDefault();
 		}
 
@@ -52,7 +52,8 @@ Hash as Hash from [qptmds].[MDFileContentFull] where MDFileCode=@Code and Revisi
 		/// <returns></returns>
 		public override IEnumerable<string> GetCodes(string prefix = null){
 			string[] result = null;
-			InDb(c => result = c.ExecuteList<string>("select Code from qptmds.MDFile where Code like @prefix+'%' ",new{prefix}).ToArray());
+			prefix = prefix ?? "";
+			InDb(c => result = c.ExecuteList<string>("select Code from qptmds.MDFile where ''=@prefix or  Code like  @prefix+'%' ",new{prefix}).ToArray());
 			return result;
 		}
 
@@ -73,7 +74,7 @@ Hash as Hash from [qptmds].[MDFileContentFull] where MDFileCode=@Code and Revisi
 		/// <param name="savedescriptor"></param>
 		protected override void InternalRegister(MetaFileDescriptor savedescriptor){
 			const string commandText =
-				"exec [qptmds].[MDFileRegister] @code=@Code, @name=@Name, @content=@Content, @hash=@Hash, @revision=@Revision, @filetime=@RevisionTime, @comment=@Comment";
+				"exec [qptmds].[MDFileRegister] @code=@Code, @name=@Name, @content=@Content, @hash=@Hash, @revision=@Revision, @filetime=@RevisionTime, @comment=@Comment, @username = @UserName";
 			InDb(c => c.ExecuteNonQuery(commandText, savedescriptor));
 		}
 		
@@ -106,7 +107,7 @@ Hash as Hash from [qptmds].[MDFileContentFull] where MDFileCode=@Code and Revisi
 		public override MetaFileDescriptor GetCurrent(string code){
 			MetaFileDescriptor[] result = null;
 			InDb(c => result = c.ExecuteOrm<MetaFileDescriptor>(@"
-select Code,Name,ActiveRevisionContent as Content,ActiveRevisionRevision as Revision,ActiveRevisionComment as Comment,ActiveRevisionRevisionTime as RevisionTime,
+select Code,Name,ActiveRevisionContent as Content,ActiveRevisionUserName as UserName, ActiveRevisionRevision as Revision,ActiveRevisionComment as Comment,ActiveRevisionRevisionTime as RevisionTime,
 ActiveRevisionHash as Hash from [qptmds].[MDFileFull] where Code=@code", new { code }));
 			return result.FirstOrDefault();
 		}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using NUnit.Framework;
 
 namespace Qorpent.Utils.Tests
@@ -25,7 +26,7 @@ namespace Qorpent.Utils.Tests
 		[Test]
 		public void CanInitDirWithQorpentSys()
 		{
-			var githelper = new GitHelper { DirectoryName = dirname,RemoteUrl = "https://comdiv:aqsw123e@assoi-git.ugmk.com:8601/qorpent.kernel.git"};
+			var githelper = new GitHelper { DirectoryName = dirname,RemoteUrl = "g:/repos/qorpent.kernel"};
 			githelper.Connect();
 			Assert.True(Directory.Exists(dirname+"\\default-content"));
 			
@@ -33,7 +34,7 @@ namespace Qorpent.Utils.Tests
 		[Test]
 		public void CanGetContent()
 		{
-			var githelper = new GitHelper { DirectoryName = dirname, RemoteUrl = "https://comdiv:aqsw123e@assoi-git.ugmk.com:8601/qorpent.kernel.git" };
+			var githelper = new GitHelper { DirectoryName = dirname, RemoteUrl = "g:/repos/qorpent.kernel" };
 			githelper.Connect();
 			var content = githelper.GetContent("LICENSE");
 			StringAssert.StartsWith("Copyright 2007-2014",content);
@@ -80,6 +81,20 @@ namespace Qorpent.Utils.Tests
 		}
 
 		[Test]
+		public void CanGetFileListUnicode()
+		{
+			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = Applications.Application.Current.Principal.CurrentUser.Identity.Name };
+			githelper.Connect();
+			var initial = githelper.GetCommitId();
+			var initialList = githelper.GetFileList();
+			Assert.False(initialList.Any(_ => _ == "абв"));
+			githelper.WriteAndCommit("абв", "a", "is a");
+			var first = githelper.GetCommitId();
+			Assert.True(githelper.GetFileList().Any(_ => _ == "абв"));
+			Assert.AreEqual("a", githelper.GetContent("абв"));
+		}
+
+		[Test]
 		public void CanGetCommitInfo(){
 			var now = DateTime.Now;
 			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = "test" };
@@ -95,6 +110,20 @@ namespace Qorpent.Utils.Tests
 			var now2 = DateTime.Now;
 			Assert.True(info.LocalRevisionTime>=now.AddSeconds(-1) && info.LocalRevisionTime<=now2.AddSeconds(1));
 		}
+
+
+
+		[Test]
+		public void CanGetUnicodeCommitInfo()
+		{
+			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = "test" };
+			githelper.Connect();
+			githelper.WriteAndCommit("x", "a", "it is сообщение");
+			var info = githelper.GetCommitInfo();
+			Assert.AreEqual("it is сообщение", info.Comment);
+			
+		}
+
 
 		[Test]
 		public void CanGetFileHistory(){
