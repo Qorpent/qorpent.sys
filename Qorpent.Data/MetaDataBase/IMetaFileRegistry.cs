@@ -50,5 +50,10 @@ namespace Qorpent.Data.MetaDataBase
 		/// <param name="code"></param>
 		/// <returns></returns>
 		bool Exists(string code);
+
+		/// <summary>
+		/// Производит некую перезагрузку, очистку, по умолчанию не делает ничего
+		/// </summary>
+		void Refresh();
 	}
 }

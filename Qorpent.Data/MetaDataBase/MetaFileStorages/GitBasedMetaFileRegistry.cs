@@ -35,8 +35,14 @@ namespace Qorpent.Data.MetaDataBase{
 		/// 
 		/// </summary>
 		public string AuthorEmail { get; set; }
-		
 
+		/// <summary>
+		/// Производит некую перезагрузку, очистку, по умолчанию не делает ничего
+		/// </summary>
+		public override void Refresh()
+		{
+			_git.FixBranchState();
+		}
 		 /// <summary>
 		 /// 
 		 /// </summary>

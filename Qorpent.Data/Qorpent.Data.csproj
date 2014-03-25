@@ -13,11 +13,14 @@
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
     <Compile Include="MetaDataBase\IMetaFileRegistry.cs" />
+    <Compile Include="MetaDataBase\MetaDataSyncService.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\GitBasedMetaFileRegistry.cs" />
+    <Compile Include="MetaDataBase\MetaFileStorages\ICustomMerger.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\InMemoryMetaFileRegistry.cs" />
     <Compile Include="MetaDataBase\MetaFileDescriptor.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\MergeFlags.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\MetaFileRegistryBase.cs" />
+    <Compile Include="MetaDataBase\MetaFileStorages\MetaFileRegistryDelta.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\MetaFileRegistryExtensions.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\MetaFileRegistryMerger.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\SqlBasedMetaFileRegistry.cs" />

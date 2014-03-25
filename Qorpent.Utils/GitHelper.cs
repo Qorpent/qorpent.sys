@@ -84,7 +84,6 @@ namespace Qorpent.Utils{
 		/// <param name="timeout"></param>
 		/// <returns></returns>
 		public string ExecuteCommand(string command, string args = "", int timeout = 0){
-			if (0 == timeout) timeout = 1000;
 			var startInfo = new ProcessStartInfo
 			{
 				RedirectStandardOutput = true,
@@ -106,6 +105,12 @@ namespace Qorpent.Utils{
 			{
 
 				process = Process.Start(startInfo);
+				if (timeout != 0){
+					var finished = process.WaitForExit(timeout);
+					if (!finished){
+						throw new Exception("timeouted");
+					}
+				}
 				result = process.StandardOutput.ReadToEnd();
 				process.WaitForExit(timeout);
 				
@@ -137,7 +142,7 @@ namespace Qorpent.Utils{
 		/// Init command
 		/// </summary>
 		public string Init(){
-			return ExecuteCommand("init",timeout:1000);
+			return ExecuteCommand("init");
 		}
 		/// <summary>
 		/// Add or replace remote to url
@@ -161,7 +166,7 @@ namespace Qorpent.Utils{
 		public string Fetch(string remoteName = "", string branch = ""){
 			remoteName = remoteName ?? "";
 			branch = branch ?? "";
-			return ExecuteCommand("fetch", remoteName + " " + branch,timeout:10000);
+			return ExecuteCommand("fetch", remoteName + " " + branch);
 		}
 		/// <summary>
 		/// Добавление файлов к выборке
@@ -178,6 +183,9 @@ namespace Qorpent.Utils{
 			}
 			return ExecuteCommand("add", args);
 		}
+
+
+
 
 		/// <summary>
 		/// Сформировать коммит
@@ -314,7 +322,7 @@ namespace Qorpent.Utils{
 			if (options != MergeStrategyOption.None){
 				args = "-X" + options.ToString().ToLower() + " " + args;
 			}
-			return ExecuteCommand("merge", args, timeout:10000);
+			return ExecuteCommand("merge", args);
 		}
 		/// <summary>
 		/// 
@@ -510,6 +518,42 @@ namespace Qorpent.Utils{
 			return result;
 		}
 	}
+	/// <summary>
+	/// 
+	/// </summary>
+	[Flags]
+	public enum GirFileState{
+		/// <summary>
+		/// Нет изменений
+		/// </summary>
+		None =0,
+		/// <summary>
+		/// Измененный
+		/// </summary>
+		Modified = 1,
+		/// <summary>
+		/// Добавленный
+		/// </summary>
+		Added =2 ,
+		/// <summary>
+		/// Удаленный
+		/// </summary>
+		Deleted = 4,
+		/// <summary>
+		///Переименованный
+		/// </summary>
+		Renamed =8,
+		/// <summary>
+		/// Скопированный
+		/// </summary>
+		Copied =16,
+		/// <summary>
+		/// Обновленный, но не смерженный
+		/// </summary>
+		UpdatedButUnmerged =32,
+		
+	}
+
 	/// <summary>
 	/// 
 	/// </summary>

@@ -60,6 +60,12 @@ namespace Qorpent.Data.MetaDataBase{
 			InternalRegister(savedescriptor);
 			return savedescriptor.Copy();
 		}
+		/// <summary>
+		/// Производит некую перезагрузку, очистку, по умолчанию не делает ничего
+		/// </summary>
+		public virtual void Refresh(){
+			
+		}
 
 		/// <summary>
 		/// Устанавливает указанную ревизию в качестве текущей (не требует контента)
