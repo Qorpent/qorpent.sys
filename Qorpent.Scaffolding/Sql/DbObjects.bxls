@@ -122,7 +122,7 @@ namespace Qorpent.Db
 		)
 		
 	class IWithMetadataBind "Связывает сущность с банком метаданных" abstract
-		string MetaBaseCode "Код в некоей базе метаданных" idx=910
+		ref MetaFile "Файл метаданных" idx=910 to="${_metatable}.Id"
 		string Revision "Ревизия, логическая версия" idx=911
 		
 	class IWithTag "Привязывает поддердку тегов" abstract

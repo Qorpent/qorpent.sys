@@ -110,6 +110,9 @@ namespace Qorpent.Utils.Extensions
 		}
 
 
+		
+
+
 		/// <summary>
 		/// Вызывает запрос на скалярное значение
 		/// </summary>
