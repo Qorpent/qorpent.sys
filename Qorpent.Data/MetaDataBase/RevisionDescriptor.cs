@@ -6,6 +6,10 @@ namespace Qorpent.Data.MetaDataBase{
 	/// </summary>
 	public class RevisionDescriptor{
 		/// <summary>
+		/// DB integration ID
+		/// </summary>
+		public int Id { get; set; }
+		/// <summary>
 		/// Номер ревизии
 		/// </summary>
 		public string Revision { get; set; }

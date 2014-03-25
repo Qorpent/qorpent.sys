@@ -41,7 +41,7 @@ namespace Qorpent.Data.MetaDataBase{
 		public override MetaFileDescriptor GetByRevision(MetaFileDescriptor descriptor){
 			MetaFileDescriptor[] result = null;
 			InDb(c => result = c.ExecuteOrm<MetaFileDescriptor>(@"
-select MDFileCode as Code,MDFileName as Name,Content as Content,Comment,Revision as Revision,RevisionTime as RevisionTime,
+select MDFileId as Id, MDFileCode as Code,MDFileName as Name,Content as Content,Comment,Revision as Revision,RevisionTime as RevisionTime,
 Hash as Hash , UserName from [qptmds].[MDFileContentFull] where MDFileCode=@Code and Revision = @Revision", new {descriptor.Code,descriptor.Revision}));
 			return result.FirstOrDefault();
 		}
@@ -96,7 +96,7 @@ Hash as Hash , UserName from [qptmds].[MDFileContentFull] where MDFileCode=@Code
 		/// <returns></returns>
 		public override IEnumerable<RevisionDescriptor> GetRevisions(string code){
 			RevisionDescriptor[] result = null;
-			InDb(c => result = c.ExecuteOrm<RevisionDescriptor>("select Revision,RevisionTime,Hash from [qptmds].[MDFileContentFull] where MDFileCode=@code order by RevisionTime desc",new{code}));
+			InDb(c => result = c.ExecuteOrm<RevisionDescriptor>("select Id, Revision,RevisionTime,Hash from [qptmds].[MDFileContentFull] where MDFileCode=@code order by RevisionTime desc",new{code}));
 			return result;
 		}
 		/// <summary>
