@@ -64,13 +64,10 @@ namespace Qorpent.Data.MetaDataBase{
 			if (null != existed){
 				return;
 			}
-
 			Ensure(savedescriptor.Code);
-
 			_registry[savedescriptor.Code].Add(savedescriptor);
-			if (null == _active[savedescriptor.Code]){
-				_active[savedescriptor.Code] = savedescriptor;
-			}
+			_active[savedescriptor.Code] = savedescriptor;
+			
 		}
 
 		/// <summary>

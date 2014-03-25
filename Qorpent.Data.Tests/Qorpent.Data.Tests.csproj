@@ -12,6 +12,8 @@
   <ItemGroup>
     <Compile Include="ConnectionLoaderTest.cs" />
     <Compile Include="DDL\SqlGeneration.cs" />
+    <Compile Include="MetaDataBase\FileStorageMergeTest.cs" />
+    <Compile Include="MetaDataBase\GitBasedStorageTest.cs" />
     <Compile Include="MetaDataBase\SqlFileStorageTest.cs" />
     <None Include="*.import" />
     <None Include="*.export" />

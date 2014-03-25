@@ -41,9 +41,7 @@ namespace Qorpent.Data.MetaDataBase{
 		/// <returns></returns>
 		public bool IsFullyDefined(){
 			if (string.IsNullOrWhiteSpace(Code)) return false;
-			if (string.IsNullOrWhiteSpace(Name)) return false;
 			if (string.IsNullOrWhiteSpace(Content)) return false;
-
 			CheckHash();
 			return true;
 		}

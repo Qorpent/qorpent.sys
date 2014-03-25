@@ -16,8 +16,10 @@
     <Compile Include="MetaDataBase\MetaFileStorages\GitBasedMetaFileRegistry.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\InMemoryMetaFileRegistry.cs" />
     <Compile Include="MetaDataBase\MetaFileDescriptor.cs" />
+    <Compile Include="MetaDataBase\MetaFileStorages\MergeFlags.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\MetaFileRegistryBase.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\MetaFileRegistryExtensions.cs" />
+    <Compile Include="MetaDataBase\MetaFileStorages\MetaFileRegistryMerger.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\SqlBasedMetaFileRegistry.cs" />
     <Compile Include="MetaDataBase\RevisionDescriptor.cs" />
     <Compile Include="MetaStorage\IMetaFacade.cs" />

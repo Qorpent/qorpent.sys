@@ -24,13 +24,23 @@ namespace Qorpent.Data.MetaDataBase{
 			}
 			return savedescriptor;
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool AutoRevision { get; set; }
 		/// <summary>
 		/// Дописывает (при отсутствии файл в список ревийзий)
 		/// </summary>
 		/// <param name="descriptor"></param>
 		public MetaFileDescriptor Register(MetaFileDescriptor descriptor){
-			var savedescriptor = CheckRegstrable(descriptor);
+
+			MetaFileDescriptor savedescriptor = null;
+			if (AutoRevision){
+				savedescriptor = descriptor.Copy();
+			}
+			else{
+				savedescriptor = CheckRegstrable(descriptor);
+			}
 			InternalRegister(savedescriptor);
 			return savedescriptor.Copy();
 		}

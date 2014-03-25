@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Qorpent.Data.MetaDataBase;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data.Tests.MetaDataBase
 {
-
-	
-
 	[TestFixture]
 	public class SqlFileStorageTest{
 		private SqlBasedMetaFileRegistry sqlmd;
