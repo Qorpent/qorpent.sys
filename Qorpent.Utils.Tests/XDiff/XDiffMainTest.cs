@@ -206,8 +206,7 @@ DeleteElement n1
 			var result = GetResult(b, n, new XDiffOptions{IsNameIndepended = true});
 			Assert.AreEqual(@"RenameElement n0
 	BasisElement name=z code=1
-	NewValue : y
-", result);
+	NewValue : y", result);
 
 		}
 

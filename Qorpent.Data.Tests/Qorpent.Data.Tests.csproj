@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Include="ConnectionLoaderTest.cs" />
     <Compile Include="DDL\SqlGeneration.cs" />
+    <Compile Include="MetaDataBase\SqlFileStorageTest.cs" />
     <None Include="*.import" />
     <None Include="*.export" />
     <EmbeddedResource Include=".\**\*.*resource" />

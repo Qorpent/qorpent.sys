@@ -12,6 +12,14 @@
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
+    <Compile Include="MetaDataBase\IMetaFileRegistry.cs" />
+    <Compile Include="MetaDataBase\MetaFileStorages\GitBasedMetaFileRegistry.cs" />
+    <Compile Include="MetaDataBase\MetaFileStorages\InMemoryMetaFileRegistry.cs" />
+    <Compile Include="MetaDataBase\MetaFileDescriptor.cs" />
+    <Compile Include="MetaDataBase\MetaFileStorages\MetaFileRegistryBase.cs" />
+    <Compile Include="MetaDataBase\MetaFileStorages\MetaFileRegistryExtensions.cs" />
+    <Compile Include="MetaDataBase\MetaFileStorages\SqlBasedMetaFileRegistry.cs" />
+    <Compile Include="MetaDataBase\RevisionDescriptor.cs" />
     <Compile Include="MetaStorage\IMetaFacade.cs" />
     <Compile Include="MetaStorage\IMetaStorage.cs" />
     <Compile Include="MetaStorage\IMetaSynchronizer.cs" />

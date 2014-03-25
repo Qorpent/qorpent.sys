@@ -82,7 +82,9 @@
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\UniSqlConst.cs" />
     <Compile Include="Extensions\UniSqlQuery.cs" />
+    <Compile Include="FileSystemHelper.cs" />
     <Compile Include="FuzzyLogic\FuzzySet.cs" />
+    <Compile Include="GitHelper.cs" />
     <Compile Include="Hex.cs" />
     <Compile Include="Iterator.cs" />
     <Compile Include="ListUtils.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="LogicalExpressions\LiteralNode.cs" />
     <Compile Include="LogicalExpressions\LogicalExpressionEvaluator.cs" />
     <Compile Include="LogicalExpressions\LogicalExpressionParser.cs" />
+    <Compile Include="MergeStrategyOption.cs" />
     <Compile Include="ParamMappingHelper.cs" />
     <Compile Include="Scaling\ScaleApproximated.cs" />
     <Compile Include="Scaling\ScaleNormalizeCache.cs" />
