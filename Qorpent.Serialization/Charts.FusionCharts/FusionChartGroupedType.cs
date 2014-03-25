@@ -40,8 +40,7 @@
             FusionChartType.StackedColumn3D |
             FusionChartType.StackedArea2D |
             FusionChartType.StackedBar2D |
-            FusionChartType.StackedBar3D |
-            FusionChartType.MSStackedColumn2D,
+            FusionChartType.StackedBar3D,
 
         /// <summary>
         /// Комбинированные
