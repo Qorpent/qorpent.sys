@@ -83,6 +83,7 @@ namespace Qorpent.Data.MetaDataBase
 				var tree = srcxml.Attr("tree").ToBool();
 				var ignorenames = srcxml.Attr("ignore-names").ToBool();
 				var table = srcxml.Attr("table");
+				var schema = srcxml.Attr("schema");
 				var differ =
 					new XDiffGenerator(new XDiffOptions{ChangeIds = changeids, IsHierarchy = tree, IsNameIndepended = ignorenames});
 				var delta = differ.GetDiff(basexml, srcxml);
@@ -90,6 +91,7 @@ namespace Qorpent.Data.MetaDataBase
 					var record = new DatabaseUpdateRecord();
 					record.FileDelta = md;
 					record.DiffItem = item;
+					record.Schema = schema;
 					if (string.IsNullOrWhiteSpace(table)){
 						record.TargetTable = (item.BasisElement ?? item.NewestElement).Name.LocalName;
 						if (ignorenames && item.Action == XDiffAction.RenameElement){

@@ -5,6 +5,11 @@ namespace Qorpent.Data.MetaDataBase{
 	/// Запись о плановом обновлении
 	/// </summary>
 	public class DatabaseUpdateRecord{
+		private static int __Id = 1;
+		/// <summary>
+		/// 
+		/// </summary>
+		public  int Id = __Id++;
 		/// <summary>
 		/// Целевая таблица
 		/// </summary>
@@ -18,6 +23,12 @@ namespace Qorpent.Data.MetaDataBase{
 		/// </summary>
 		public string TargetCode { get; set; }
 		/// <summary>
+		/// 
+		/// </summary>
+		public string FullTableName{
+			get { return (string.IsNullOrWhiteSpace(Schema) ? "dbo" : Schema) + "." + TargetTable; }
+		}
+		/// <summary>
 		/// Ссылка на файл, с зарегистрированной дельтой
 		/// </summary>
 		public MetaFileRegistryDelta FileDelta { get; set; }
@@ -30,6 +41,32 @@ namespace Qorpent.Data.MetaDataBase{
 		/// Sql комманда, запланированная к выполнению
 		/// </summary>
 		public string SqlCommand { get; set; }
-
+		/// <summary>
+		/// Схема в таблице данных
+		/// </summary>
+		public string Schema { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public string Error { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public string ErrorCode { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public string FullCode{
+			get { return FullTableName + "." + TargetId + "." + TargetCode; }
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public DatabaseUpdateRecord Copy(){
+			var result = MemberwiseClone() as DatabaseUpdateRecord;
+			result.Id = __Id++;
+			return result;
+		}
 	}
 }

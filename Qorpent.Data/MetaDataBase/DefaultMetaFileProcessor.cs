@@ -8,21 +8,6 @@ using Qorpent.Utils.XDiff;
 
 namespace Qorpent.Data.MetaDataBase{
 	/// <summary>
-	/// Выполняет обработку файлов
-	/// </summary>
-	public interface IMetaFileProcessor{
-		/// <summary>
-		/// Встраивает выявленное изменение в общий лог
-		/// </summary>
-		void Prepare(string sqlconnection, IEnumerable<DatabaseUpdateRecord> givendelta, LinkedList<DatabaseUpdateRecord> workinglist, LinkedList<DatabaseUpdateRecord> errorlist);
-		/// <summary>
-		/// Выполняет обновления
-		/// </summary>
-		/// <param name="sqlconnection"></param>
-		/// <param name="records"></param>
-		void Execute(string sqlconnection, IEnumerable<DatabaseUpdateRecord> records);
-	}
-	/// <summary>
 	/// Процессор по умолчанию
 	/// </summary>
 	public class DefaultMetaFileProcessor : IMetaFileProcessor{
@@ -106,10 +91,10 @@ namespace Qorpent.Data.MetaDataBase{
 		private void CheckDeletes(){
 			if (!Online) return;
 			var query = string.Join("\r\nunion\r\n",
-									creates.Union(deletes).Select(
-										_ =>
-										string.Format(
-											"select {0},(selct top 1 id from {3} where (0= {1} or Id={1}) and (''='{2}' or Code='{2}') ) ")));
+			                        creates.Union(deletes).Select(
+				                        _ =>
+				                        string.Format(
+					                        "select {0},(selct top 1 id from {3} where (0= {1} or Id={1}) and (''='{2}' or Code='{2}') ) ")));
 			var dict = getc().ExecuteDictionaryReader(query);
 			var excludes = dict.Where(_ => _.Value == null).Select(_ => _.Key.ToInt()).ToArray();
 			var _deletes = deletes.ToArray();

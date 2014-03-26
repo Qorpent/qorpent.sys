@@ -636,13 +636,13 @@ namespace Qorpent.Utils.Extensions
                 while (reader.Read())
                 {
                     if (reader.FieldCount == 2) {
-                        result[reader[0] as string] = reader[1];
+                        result[reader[0].ToStr()] = reader[1];
                     }else {
                         var subresult = new List<object>();
                         for(int i = 1; i< reader.FieldCount; i++) {
                             subresult.Add(reader[i]);
                         }
-                        result[reader[0] as string] = subresult.ToArray();
+                        result[reader[0].ToStr()] = subresult.ToArray();
                     }
                 }
                 return result;
