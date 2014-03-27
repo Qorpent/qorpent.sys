@@ -42,7 +42,7 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("using System.Collections.Generic;");
 
 			sb.AppendLine("namespace " + e.Namespace + " {");
-			sb.AppendLine("\t///<summary>\r\n\t///\t" + e.Compiled.Attr("name") + "\r\n\t///</summary>");
+			sb.AppendLine("\t/// <summary>\r\n\t///\t" + e.Compiled.Attr("name") + "\r\n\t/// </summary>");
 			sb.AppendLine("\t[Serialize]");
 			sb.AppendLine("\tpublic partial class " + e.Name + " {");
 			 
@@ -84,8 +84,8 @@ namespace Qorpent.Scaffolding.Application{
 			if (type == "dictionary"){
 				var prefix = field.Attr("param-prefix",name+".");
 				sb.AppendLine("\t\t[Bind(ParameterPrefix=\"" + prefix + "\")]");
-				sb.AppendLine(string.Format("\t\tpublic IDictionary<string,string> {0} {{get{{return __{1};}}}}", name,name.ToLower()));
-				sb.AppendLine(string.Format("\t\tprivate IDictionary<string,string> __{0} = new Dictionary<string,string>();",
+				sb.AppendLine(string.Format("\t\tpublic IDictionary<string, string> {0} {{get{{return __{1};}}}}", name,name.ToLower()));
+				sb.AppendLine(string.Format("\t\tprivate IDictionary<string, string> __{0} = new Dictionary<string, string>();",
 											 name.ToLower()));
 			}
 			else{
@@ -107,7 +107,7 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("using System;");
 			sb.AppendLine("namespace " + e.Namespace + " {");
 			var summary = e.Compiled.Attr("name");
-			sb.AppendLine("\t///<summary>\r\n\t///\t" + summary + "\r\n\t///</summary>");
+			sb.AppendLine("\t/// <summary>\r\n\t///\t" + summary + "\r\n\t/// </summary>");
 			sb.AppendLine("\t[Flags]");
 			sb.AppendLine("\tpublic enum " + e.Name + " : "+type+" {");
 			sb.AppendLine();

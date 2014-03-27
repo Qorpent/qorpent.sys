@@ -32,9 +32,9 @@ namespace Qorpent.Scaffolding.Application{
 			var sb = new StringBuilder();
 			sb.AppendLine(CommonHeader);
 			sb.AppendLine("using System;");
-			sb.AppendLine("using Qorpent.Mvc;");
 			sb.AppendLine("using System.Collections.Generic;");
-
+			sb.AppendLine("using Qorpent.Mvc;");
+			sb.AppendLine("using Qorpent.Mvc.Binding;");
 
 			var resultclass = new BSharpClassRef( e.Compiled.Attr("Result"));
 			var argumentclass =new BSharpClassRef( e.Compiled.Attr("Arguments"));
@@ -50,16 +50,18 @@ namespace Qorpent.Scaffolding.Application{
 			}
 
 			sb.AppendLine("namespace " + e.Namespace + " {");
-			sb.AppendLine("\t///<summary>\r\n\t///\t" + e.Compiled.Attr("name") + "\r\n\t///</summary>");
+			sb.AppendLine("\t/// <summary>\r\n\t///\t" + e.Compiled.Attr("name") + "\r\n\t/// </summary>");
 			var controller = e.Compiled.Attr("controller");
 			var actionname = controller + "." + e.Name.ToLower();
 			sb.AppendLine(string.Format("\t[Action(\"{0}\")]",actionname));
 			
 			
 			sb.AppendLine("\tpublic partial class " + e.Name + ": ActionBase<"+resultclass.Name+"> {");
-			WriteMemberSummary(sb,"Call argumets due to specification");
-			sb.AppendLine("\t\t[Bind]");
-			sb.AppendLine("\t\tpublic "+argumentclass.Name +" Args{get;set;}");
+			if (!string.IsNullOrWhiteSpace(argumentclass.Name)) {
+				WriteMemberSummary(sb,"Call argumets due to specification");
+				sb.AppendLine("\t\t[Bind]");
+				sb.AppendLine("\t\tpublic "+argumentclass.Name +" Args { get; set; }");
+			}
 			sb.AppendLine("\t}");
 			sb.AppendLine("}");
 			result.Content = sb.ToString();
