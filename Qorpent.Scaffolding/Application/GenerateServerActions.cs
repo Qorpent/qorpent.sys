@@ -38,10 +38,10 @@ namespace Qorpent.Scaffolding.Application{
 
 			var resultclass = new BSharpClassRef( e.Compiled.Attr("Result"));
 			var argumentclass =new BSharpClassRef( e.Compiled.Attr("Arguments"));
-			if (resultclass.Namespace != e.Namespace){
+			if (resultclass.Namespace != e.Namespace && !string.IsNullOrWhiteSpace(resultclass.Namespace)){
 				sb.AppendLine("using" + resultclass.Namespace + ";");
 			}
-			if (argumentclass.Namespace != e.Namespace && argumentclass.Namespace != resultclass.Namespace){
+			if (argumentclass.Namespace != e.Namespace && argumentclass.Namespace != resultclass.Namespace && !string.IsNullOrWhiteSpace(argumentclass.Namespace)){
 				sb.AppendLine("using" + argumentclass.Namespace + ";");
 			}
 			
