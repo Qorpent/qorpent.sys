@@ -39,7 +39,7 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("using Qorpent.Serialization;");
 			sb.AppendLine("using System.Xml;");
 			sb.AppendLine("using System.Xml.Linq;");
-			sb.AppendLine("using System.Collection.Generic;");
+			sb.AppendLine("using System.Collections.Generic;");
 
 			sb.AppendLine("namespace " + e.Namespace + " {");
 			sb.AppendLine("\t///<summary>\r\n\t///\t" + e.Compiled.Attr("name") + "\r\n\t///</summary>");

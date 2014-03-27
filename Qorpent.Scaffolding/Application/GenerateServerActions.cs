@@ -33,7 +33,7 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine(CommonHeader);
 			sb.AppendLine("using System;");
 			sb.AppendLine("using Qorpent.Mvc;");
-			sb.AppendLine("using System.Collection.Generic;");
+			sb.AppendLine("using System.Collections.Generic;");
 
 
 			var resultclass = new BSharpClassRef( e.Compiled.Attr("Result"));
