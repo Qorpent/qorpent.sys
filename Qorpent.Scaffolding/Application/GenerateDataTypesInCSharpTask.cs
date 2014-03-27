@@ -37,6 +37,7 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine(CommonHeader);
 			sb.AppendLine("using System;");
 			sb.AppendLine("using Qorpent.Serialization;");
+			sb.AppendLine("using Qorpent.Mvc.Binding;");
 			sb.AppendLine("using System.Xml;");
 			sb.AppendLine("using System.Xml.Linq;");
 			sb.AppendLine("using System.Collections.Generic;");
