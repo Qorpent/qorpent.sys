@@ -31,7 +31,7 @@ namespace Qorpent.Mvc.Renders {
                 error = "Нет данных для отображения";
             }
 
-			if (context.Get("format") == "json"){
+			if (context.Get("format", context.Get("__format")) == "json") {
 				dynamic result = new UObj();
 				result.config = config;
 				result.data = datascript;
