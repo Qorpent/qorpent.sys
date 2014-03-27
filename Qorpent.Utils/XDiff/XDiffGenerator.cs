@@ -73,6 +73,13 @@ namespace Qorpent.Utils.XDiff
 							new XDiffItem{Action = XDiffAction.ChangeHierarchyPosition, BasisElement = e.b, NewValue = newattribute.Value};
 						continue;
 					}
+					if (newattribute.Name.LocalName.StartsWith("set-"))
+					{
+						var realname = newattribute.Name.LocalName.Substring(4);
+						yield return new XDiffItem { Action = XDiffAction.ChangeAttribute, BasisElement = e.b, NewestAttribute = new XAttribute(realname, newattribute.Value) };
+						continue;
+						;
+					}
 					yield return new XDiffItem{Action = XDiffAction.CreateAttribute, BasisElement = e.b, NewestAttribute = newattribute};
 				}
 				foreach (var delattribute in delattributes){
@@ -90,6 +97,12 @@ namespace Qorpent.Utils.XDiff
 						if (ma.na.Name.LocalName == "__parent"){
 							yield return
 								new XDiffItem{Action = XDiffAction.ChangeHierarchyPosition, BasisElement = e.b, NewValue = ma.na.Value};
+							continue;
+
+						}
+						if (ma.na.Name.LocalName.StartsWith("set-")){
+							var realname = ma.na.Name.LocalName.Substring(4);
+							yield return new XDiffItem { Action = XDiffAction.ChangeAttribute, BasisElement = e.b, NewestAttribute = new XAttribute(realname,ma.na.Value) };
 							continue;
 						}
 						yield return new XDiffItem{Action = XDiffAction.ChangeAttribute, BasisElement = e.b, NewestAttribute = ma.na};

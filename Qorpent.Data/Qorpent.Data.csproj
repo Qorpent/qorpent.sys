@@ -12,7 +12,11 @@
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
+    <Compile Include="MetaDataBase\DatabaseUpdateRecord.cs" />
+    <Compile Include="MetaDataBase\DefaultMetaFileProcessor.cs" />
+    <Compile Include="MetaDataBase\IMetaFileProcessor.cs" />
     <Compile Include="MetaDataBase\IMetaFileRegistry.cs" />
+    <Compile Include="MetaDataBase\InvalidDataSyncException.cs" />
     <Compile Include="MetaDataBase\MetaDataSyncService.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\GitBasedMetaFileRegistry.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\ICustomMerger.cs" />
