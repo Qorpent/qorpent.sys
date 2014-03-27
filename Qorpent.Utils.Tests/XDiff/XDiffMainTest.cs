@@ -265,6 +265,20 @@ DeleteElement n1
 
 		}
 
+
+		[Test]
+		public void CanChangeCodeWithSet()
+		{
+			var b = XElement.Parse("<a><z code='1'/></a>");
+			var n = XElement.Parse("<a><z code='1' set-code='2'/></a>");
+
+
+			var result = GetResult(b, n, new XDiffOptions());
+			Assert.AreEqual(@"ChangeAttribute n0
+	BasisElement name=z code=1
+	NewestAttribute code :2", result);
+
+		}
 	
 
 		[Test]

@@ -1,39 +1,54 @@
-﻿namespace Qorpent.Utils.XDiff{
+﻿using System;
+
+namespace Qorpent.Utils.XDiff{
 	/// <summary>
 	/// Действия, типы разностных элементов
 	/// </summary>
+	[Flags]
 	public enum XDiffAction{
 		/// <summary>
 		/// Новый элемент
 		/// </summary>
-		CreateElement,
+		CreateElement = 1,
+
 		/// <summary>
 		/// Изменение значения элемента
 		/// </summary>
-		ChangeElement,
+		ChangeElement = 2,
+
 		/// <summary>
 		/// Добавленный атрибут
 		/// </summary>
-		CreateAttribute,
+		CreateAttribute = 4,
+
 		/// <summary>
 		/// Изменение значения атрибута
 		/// </summary>
-		ChangeAttribute,
+		ChangeAttribute = 8,
+
 		/// <summary>
 		/// У элемента изменилось имя (при смешанных списках как у строк)
 		/// </summary>
-		RenameElement,
+		RenameElement = 16,
+
 		/// <summary>
 		/// Удаленный элемент
 		/// </summary>
-		DeleteElement,
+		DeleteElement = 32,
+
 		/// <summary>
 		/// Удаленный атрибут
 		/// </summary>
-		DeleteAttribute,
+		DeleteAttribute = 64,
+
 		/// <summary>
 		/// Изменение положения в иерерхии
 		/// </summary>
-		ChangeHierarchyPosition,
+		ChangeHierarchyPosition = 128,
+
+		/// <summary>
+		/// Типовые операции по добавлению и обновлению данных
+		/// </summary>
+		MainCreateOrUpdate = CreateElement | ChangeElement | CreateAttribute | ChangeAttribute | ChangeHierarchyPosition
 	}
 }

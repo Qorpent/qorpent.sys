@@ -1,12 +1,69 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.XDiff;
 
 namespace Qorpent.Data.MetaDataBase{
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public interface IDatabaseUpdateRecordMerger{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="source"></param>
+		/// <returns></returns>
+		DatabaseUpdateRecord Merge(IEnumerable<DatabaseUpdateRecord> source);
+	}
+
+
+	/// <summary>
+	/// Стандартный мержер обновлений по объекту - формирует сводный апдейт
+	/// </summary>
+	public class DefaultDatabaseUpdateRecordMerger : IDatabaseUpdateRecordMerger
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="source"></param>
+		/// <returns></returns>
+		public DatabaseUpdateRecord Merge(IEnumerable<DatabaseUpdateRecord> source){
+			var result = new DatabaseUpdateRecord();
+			var key = DatabaseUpdateRecord.GetObjectKey(source);
+			var tableandschema = key.Table.Split('.');
+			result.Schema = tableandschema.Length == 1 ? "dbo" : tableandschema[0];
+			result.TargetTable = tableandschema.Length == 1 ? tableandschema[0] : tableandschema[1];
+			result.TargetId = key.Id;
+			result.TargetCode = key.Code;
+			DetermineFileSource(source, result);
+			var updates = source.Where(_ => 0 != (_.DiffItem.Action & XDiffAction.MainCreateOrUpdate)).ToArray();
+			var deletes = source.Where(_ => _.DiffItem.Action == XDiffAction.DeleteElement).ToArray();
+			if (0 == deletes.Length + updates.Length) return null;
+			if (0 == updates.Length && 0 != deletes.Length){
+				result.DiffItem = new XDiffItem{Action = XDiffAction.DeleteElement};
+			}
+			else{
+				
+			}
+			return result;
+		}
+
+		private static void DetermineFileSource(IEnumerable<DatabaseUpdateRecord> source, DatabaseUpdateRecord result){
+			var mainfilesrc = source.
+				Where(_ => _.DiffItem.Action == XDiffAction.CreateElement).OrderBy(_ => _.DiffItem.NewestElement.ToString().Length)
+			                        .FirstOrDefault();
+			if (null != mainfilesrc){
+				result.FileDelta = mainfilesrc.FileDelta;
+			}
+		}
+	}
+
 	/// <summary>
 	/// Процессор по умолчанию
 	/// </summary>
@@ -27,25 +84,23 @@ namespace Qorpent.Data.MetaDataBase{
 		/// <summary>
 		/// 
 		/// </summary>
-		protected LinkedList<DatabaseUpdateRecord> creates;
-		/// <summary>
-		/// 
-		/// </summary>
 		protected LinkedList<DatabaseUpdateRecord> ignored;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected LinkedList<DatabaseUpdateRecord> deletes;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected LinkedList<DatabaseUpdateRecord> renames;
+		
 		/// <summary>
 		/// 
 		/// </summary>
 		protected DatabaseUpdateRecord[] commands;
 
-		private LinkedList<DatabaseUpdateRecord> changes;
+		private LinkedList<DatabaseUpdateRecord> grouped;
+		private IDatabaseUpdateRecordMerger _merger;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public IDatabaseUpdateRecordMerger Merger{
+			get { return _merger ?? (_merger=new DefaultDatabaseUpdateRecordMerger()); }
+			set { _merger = value; }
+		}
 
 
 		bool Online{
@@ -59,35 +114,19 @@ namespace Qorpent.Data.MetaDataBase{
 			lock (this){
 				connection = sqlconnection;
 				alldeltas = new LinkedList<DatabaseUpdateRecord>(givendelta);
+				grouped = new LinkedList<DatabaseUpdateRecord>(DatabaseUpdateRecord.Group(alldeltas).Values.Select(_=>Merger.Merge(_)));
+					
 				working = workinglist;
 				error = errorlist;
-				creates = new LinkedList<DatabaseUpdateRecord>(alldeltas.Where(_ => _.DiffItem.Action == XDiffAction.CreateElement));
-				deletes = new LinkedList<DatabaseUpdateRecord>(alldeltas.Where(_ => _.DiffItem.Action == XDiffAction.CreateElement));
-				renames = new LinkedList<DatabaseUpdateRecord>(alldeltas.Where(_ => _.DiffItem.Action == XDiffAction.RenameElement));
-				changes = new LinkedList<DatabaseUpdateRecord>(alldeltas.Where(_ => _.DiffItem.Action == XDiffAction.ChangeAttribute|| _.DiffItem.Action==XDiffAction.CreateAttribute|| _.DiffItem.Action==XDiffAction.ChangeHierarchyPosition));
-				foreach (var rename in renames){
-					//by default renames are not ignored but removed from default agile
-					alldeltas.Remove(rename);
-				}
 				CheckTables();
-				CheckCrossFileMovements();
-				CheckCreates();
-				CheckDeletes();
-				foreach (var c in creates){
-					working.AddLast(c);
-				}
-				foreach (var c in changes)
-				{
-					working.AddLast(c);
-				}
-				foreach (var c in deletes)
-				{
-					working.AddLast(c);
-				}
+			//	CheckCrossFileMovements();
+			//	CheckCreates();
+			//	CheckDeletes();
+				
 			}
 			
 		}
-
+		/*
 		private void CheckDeletes(){
 			if (!Online) return;
 			var query = string.Join("\r\nunion\r\n",
@@ -146,6 +185,7 @@ namespace Qorpent.Data.MetaDataBase{
 				}
 			}
 		}
+		 */
 
 		IDbConnection getc(){
 			return Applications.Application.Current.DatabaseConnections.GetConnection(connection);
@@ -155,7 +195,7 @@ namespace Qorpent.Data.MetaDataBase{
 		/// </summary>
 		protected virtual  void CheckTables(){
 			if (!Online) return;
-			var tables = alldeltas.GroupBy(_ => _.FullTableName, _ => _);
+			var tables = grouped.GroupBy(_ => _.FullTableName, _ => _);
 			var query = string.Join("\r\nunion\r\n", tables.Select(_ =>string.Format("select '{0}' as code,object_id('{0}') as id ")));
 			var dict = getc().ExecuteDictionaryReader(query);
 			var excludes = dict.Where(_ => _.Value == null).Select(_ => _.Key).ToArray();
@@ -193,29 +233,33 @@ namespace Qorpent.Data.MetaDataBase{
 				}
 			}
 		}
+
 		/// <summary>
 		/// Сформировать SQL по указанным командам
 		/// </summary>
 		/// <param name="records"></param>
+		/// <param name="comments"></param>
 		/// <returns></returns>
-		public string GetSql(IEnumerable<DatabaseUpdateRecord> records){
+		public string GetSql(IEnumerable<DatabaseUpdateRecord> records, bool comments =false){
 			commands = records.ToArray();
-			CheckSql();
-			var script = CollectSql();
+			CheckSql(comments);
+			var script = CollectSql(comments);
 			return script;
 		}
 
-		private string CollectSql(){
+		private string CollectSql(bool comments){
 			var sb = new StringBuilder();
 			foreach (var databaseUpdateRecord in commands){
-				sb.AppendLine();
-				sb.AppendLine("-- " + databaseUpdateRecord);
+				if (comments){
+					sb.AppendLine();
+					sb.AppendLine("/* " + databaseUpdateRecord + " */");
+				}
 				sb.AppendLine(databaseUpdateRecord.SqlCommand);
 			}
 			return sb.ToString();
 		}
 
-		private void CheckSql(){
+		private void CheckSql(bool comments){
 			foreach (var command in commands){
 				if (string.IsNullOrWhiteSpace(command.SqlCommand)){
 					command.SqlCommand = BuildSql(command);
@@ -230,36 +274,86 @@ namespace Qorpent.Data.MetaDataBase{
 		protected virtual  string BuildSql(DatabaseUpdateRecord command){
 			if (command.DiffItem.Action == XDiffAction.CreateElement){
 				return BuildCreateNewSql(command);
+			}else if (command.DiffItem.Action == XDiffAction.CreateAttribute ||
+			          command.DiffItem.Action == XDiffAction.ChangeAttribute){
+				return BuildUpdateSql(command);
 			}
 			return "-- it will be nice";
 		}
+
+		private string BuildUpdateSql(DatabaseUpdateRecord command){
+			var xe = new XElement("a", command.DiffItem.NewestAttribute);
+			var updict = CreateFieldDictionary(xe).ToArray();
+			var trgdict = CreateFieldDictionary(command.DiffItem.BasisElement);
+			var where = "";
+			if (trgdict.ContainsKey("Id")){
+				where = string.Format("Id = {0}", trgdict["Id"]);
+			}
+			else{
+				where = string.Format("Code = '{0}'", trgdict["Code"].ToSqlString());
+			}
+			var cmd = string.Format("update {0} set {1} = '{2}', Acitve = 1, Version = (getdate())  where {3}", command.FullTableName, updict[0].Key, updict[0].Value.ToSqlString(),
+			                        where);
+			return cmd;
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="command"></param>
 		/// <returns></returns>
 		protected virtual string BuildCreateNewSql(DatabaseUpdateRecord command){
-			var dict = CreateFieldDictionary(command).ToArray();
-			var fieldlist = string.Join(",", dict.Select(_ => _.Key));
-			var valuelist = string.Join(",", dict.Select(_ => " '" + _.Value + "'"));
-			return string.Format("insert {0} ({1}) values ({2})", command.FullTableName, fieldlist, valuelist);
+			var dict_ = CreateFieldDictionary(command.DiffItem.NewestElement);
+			if (!dict_.ContainsKey("Active")){
+				dict_["Active"] = "1";
+			}
+			if (!dict_.ContainsKey("Version")){
+				dict_["Version"] = "(getdate())";
+			}
+			var dict = dict_.ToArray();
+			var fieldlist = string.Join(", ", dict.Select(_ => _.Key));
+			var valuelist = string.Join(", ", dict.Select(_ => GetSqlVar(_.Value)));
+			
+			var where = "";
+			var update = "";
+			if (dict_.ContainsKey("Id")){
+				where = "Id = " + dict_["Id"].ToInt();
+				update = CollectUpdates(dict.Where(_ => _.Key != "Id"));
+			}
+			else{
+				where = "Code = '" + dict_["Code"].ToSqlString() + "'";
+				update = CollectUpdates(dict.Where(_ => _.Key != "Code"));
+			}
+			return string.Format(@"
+if exists (select top 1 id from {0} where {3}) 
+uupdate {0} set {4} where {3}
+else insert {0} ({1}) values ({2})", command.FullTableName, fieldlist, valuelist,where,update);
 		}
+
+		private string GetSqlVar(string value){
+			if (value.ToInt() != 0) return value;
+			if (value.StartsWith("(") && value.EndsWith(")")) return value;
+			return "'" + value.ToSqlString() + "'";
+		}
+
+		private string CollectUpdates(IEnumerable<KeyValuePair<string, string>> set){
+			return string.Join(", ", set.Select(_ => _.Key + " = " + GetSqlVar(_.Value)));
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="command"></param>
 		/// <returns></returns>
-		protected virtual  IDictionary<string,string> CreateFieldDictionary(DatabaseUpdateRecord command){
+		protected virtual  IDictionary<string,string> CreateFieldDictionary(XElement e){
 			var result = new Dictionary<string, string>();
 			var tag = "";
-			foreach (var a in command.DiffItem.NewestElement.Attributes()){
+			foreach (var a in e.Attributes()){
 				if (a.Name.LocalName.ToLower() == "id"){
 					if (a.Value.ToInt() != 0){
 						result["Id"] = a.Value;
 					}
-					else{
-						continue;
-					}
+					continue;
+					
 				}
 				if (a.Name.LocalName.ToLower() == "code")
 				{
@@ -280,14 +374,14 @@ namespace Qorpent.Data.MetaDataBase{
 				
 				if (a.Name.LocalName.StartsWith("tag.")){
 					var tagname = a.Name.LocalName.Substring(4);
-					TagHelper.SetValue(tag, tagname, a.Value);
+					tag = TagHelper.SetValue(tag, tagname, a.Value);
 					continue;
 				}
 
 				result[a.Name.LocalName] = a.Value;
 			}
-			if (!string.IsNullOrWhiteSpace(command.DiffItem.NewestElement.Value)){
-				result["Data"] = command.DiffItem.NewestElement.Value;
+			if (!string.IsNullOrWhiteSpace(e.Value)){
+				result["Data"] =e.Value;
 			}
 			if (!string.IsNullOrWhiteSpace(tag)){
 				result["Tag"] = tag;

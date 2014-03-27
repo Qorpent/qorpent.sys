@@ -13,6 +13,7 @@
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
     <Compile Include="MetaDataBase\DatabaseUpdateRecord.cs" />
+    <Compile Include="MetaDataBase\DefaultMetaFileProcessor.cs" />
     <Compile Include="MetaDataBase\IMetaFileProcessor.cs" />
     <Compile Include="MetaDataBase\IMetaFileRegistry.cs" />
     <Compile Include="MetaDataBase\InvalidDataSyncException.cs" />
