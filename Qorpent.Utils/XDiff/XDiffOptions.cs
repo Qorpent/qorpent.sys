@@ -7,6 +7,13 @@ namespace Qorpent.Utils.XDiff{
 	/// </summary>
 	public class XDiffOptions{
 		/// <summary>
+		/// 
+		/// </summary>
+		public XDiffOptions(){
+			IncludeActions = XDiffAction.All;
+			ErrorActions = XDiffAction.None;
+		}
+		/// <summary>
 		/// Признак того, что набор элементов это древовидный список (требует предварительного "уплощения" для обработки)
 		/// </summary>
 		public bool IsHierarchy { get; set; }
@@ -27,5 +34,14 @@ namespace Qorpent.Utils.XDiff{
 		/// 
 		/// </summary>
 		public IDictionary<string, string> RefMaps { get; set; }
+
+		/// <summary>
+		/// Маска операций, которые должны возвращаться диффом
+		/// </summary>
+		public XDiffAction IncludeActions { get; set; }
+		/// <summary>
+		/// Маска действий, которые при наличии должны вызывать ошибку
+		/// </summary>
+		public XDiffAction ErrorActions { get; set; }
 	}
 }

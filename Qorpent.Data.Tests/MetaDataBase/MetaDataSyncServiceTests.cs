@@ -246,7 +246,7 @@ data tree=1
 			{
 				Code = "Columns",
 				Content = @"
-data schema=z3 ref-z3-obj-parent=z3.obj
+data schema=z3
 	obj KUEM4 'b' parent = KUEM3
 	obj KUEM2 'a' parent = 352
 	obj KUEM3 'b' parent = KUEM

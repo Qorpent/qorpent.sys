@@ -7,6 +7,10 @@ namespace Qorpent.Utils.XDiff{
 	[Flags]
 	public enum XDiffAction{
 		/// <summary>
+		/// 
+		/// </summary>
+		None = 0,
+		/// <summary>
 		/// Новый элемент
 		/// </summary>
 		CreateElement = 1,
@@ -53,6 +57,10 @@ namespace Qorpent.Utils.XDiff{
 		/// <summary>
 		/// Обновления по атрибутам
 		/// </summary>
-		AttributeCreateOrUpdate = CreateAttribute | ChangeAttribute 
+		AttributeCreateOrUpdate = CreateAttribute | ChangeAttribute ,
+		/// <summary>
+		/// Все
+		/// </summary>
+		All = 0xFFFF
 	}
 }

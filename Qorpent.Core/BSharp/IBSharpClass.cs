@@ -110,6 +110,22 @@ namespace Qorpent.BSharp {
 		string AliasImportCode { get; set; }
 
 		/// <summary>
+		/// Возвращает селектор классов для 
+		/// </summary>
+		string PatchTarget { get; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		BSharpPatchBehavior PatchBehavior { get; }
+
+		/// <summary>
+		/// Прототип класса
+		/// </summary>
+		[Serialize]
+		int Priority { get; }
+
+		/// <summary>
 		/// Возвращает true при наличии флага
 		/// </summary>
 		/// <param name="attribute"></param>

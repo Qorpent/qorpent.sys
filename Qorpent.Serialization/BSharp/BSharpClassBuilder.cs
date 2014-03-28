@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Qorpent.Serialization;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 using Qorpent.Utils.LogicalExpressions;
+using Qorpent.Utils.XDiff;
 
 namespace Qorpent.BSharp {
 	/// <summary>
@@ -86,6 +88,10 @@ namespace Qorpent.BSharp {
                 {
                     PerformCrossClassLinking();
                 }
+
+				else if (BuildPhase.ApplyPatch == phase){
+					ApplyPatch();
+				}
 			}
 		}
 
@@ -114,7 +120,62 @@ namespace Qorpent.BSharp {
         {
             ResolveAdvancedIncludes();
             ResolveDictionaries();
+
         }
+
+		private void ApplyPatch(){
+			if (string.IsNullOrWhiteSpace(_cls.PatchTarget) || _cls.PatchTarget.Contains("NOTRESOLVED::") ||
+				_cls.PatchTarget.Contains("AMBIGOUS::")){
+				_context.RegisterError(BSharpErrors.PatchUndefinedTarget(_cls,_cls.Compiled));					
+				return;
+			}
+			if (_cls.PatchBehavior == BSharpPatchBehavior.Invalid){
+				_context.RegisterError(BSharpErrors.PatchInvalidBehavior(_cls, _cls.Compiled));
+				return;
+					
+			}
+			var targets = _context.ResolveAll(_cls.PatchTarget,_cls.Namespace);
+			
+
+			foreach (var target in targets){
+				lock (target){
+					Log.Trace("Apply patch "+_cls.FullName+" to "+target.FullName);
+					try{
+						var difference = EvalDiff(target);
+						Log.Debug(difference.LogToString());
+						
+					}
+					catch (Exception ex){
+						_context.RegisterError(BSharpErrors.PatchError(_cls,target,ex.Message,ex));
+					}
+
+				}
+				
+			}
+		}
+
+		private IEnumerable<XDiffItem> EvalDiff(IBSharpClass target){
+			var opts = new XDiffOptions{
+				IsHierarchy = true,
+				IncludeActions =
+					XDiffAction.ChangeAttribute | XDiffAction.CreateAttribute | XDiffAction.CreateElement | XDiffAction.ChangeElement |
+					XDiffAction.ChangeHierarchyPosition
+			};
+			if (_cls.PatchBehavior == BSharpPatchBehavior.ErrorOnNew){
+				opts.ErrorActions |= XDiffAction.CreateElement;
+			}
+			else if (_cls.PatchBehavior == BSharpPatchBehavior.NoneOnNew){
+				opts.IncludeActions &= ~XDiffAction.CreateElement;
+			}
+			var diff = new XDiffGenerator(opts);
+
+			var difference = diff.GetDiff(target.Compiled, _cls.Compiled).ToArray();
+			difference.Apply(target.Compiled, opts);
+			foreach (var e in target.Compiled.DescendantsAndSelf()){
+				e.SetAttributeValue("__parent",null);
+			}
+			return difference;
+		}
 
 		private void ResolveAdvancedIncludes() {
 			if (!_cls.Is(BSharpClassAttributes.RequireAdvancedIncludes)) return;

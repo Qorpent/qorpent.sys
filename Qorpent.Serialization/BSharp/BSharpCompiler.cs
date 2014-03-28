@@ -4,6 +4,8 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Xml.Linq;
 using Qorpent.Bxl;
 using Qorpent.Config;
@@ -374,9 +376,21 @@ namespace Qorpent.BSharp {
 		/// <param name="ns"></param>
 		/// <param name="aliases"></param>
 		/// <returns></returns>
-		public IBSharpClass ReadSingleClassSource(XElement e, string ns, IDictionary<string, string> aliases)
-		{
+		public IBSharpClass ReadSingleClassSource(XElement e, string ns, IDictionary<string, string> aliases){
+			bool anonym = false;
 			var selfcode = e.Attr("code");
+			if (string.IsNullOrWhiteSpace(selfcode)){
+				var clsbody = new XElement(e);
+				foreach (var e_ in clsbody.DescendantsAndSelf()){
+					e_.SetAttributeValue("_file", null);
+					e_.SetAttributeValue("_line", null);	
+				}
+				
+				selfcode = "cls"+(
+					BitConverter.ToUInt64(MD5.Create().ComputeHash(Encoding.Unicode.GetBytes(clsbody.ToString())),0));
+				e.SetAttributeValue("code",selfcode);
+				anonym = true;
+			}
 			var __ns = ns ?? string.Empty;
 			if (selfcode.Contains("."))
 			{
@@ -396,6 +410,9 @@ namespace Qorpent.BSharp {
 			if (null != def.Source.Attribute("_file"))
 			{
 				def.Source.SetAttributeValue("_dir", Path.GetDirectoryName(def.Source.Attr("_file")).Replace("\\", "/"));
+			}
+			if (anonym){
+				def.Set(BSharpClassAttributes.Anonymous);
 			}
 			if (!IsOverrideMatch(def)) return null;
 			SetupInitialOrphanState(e, def,aliases);
@@ -420,15 +437,22 @@ namespace Qorpent.BSharp {
         }
 
 		private static void SetupInitialOrphanState(XElement e, IBSharpClass def,IDictionary<string,string> aliases ) {
-			if (null != e.Attribute("abstract") || e.Attr("name") == "abstract") {
+			if (null != e.Attribute(BSharpSyntax.ClassAbstractModifier) || e.Attr(BSharpSyntax.ClassNameAttribute) == BSharpSyntax.ClassAbstractModifier)
+			{
 				def.Set(BSharpClassAttributes.Abstract);
 			}
-			if (null != e.Attribute("static") || e.Attr("name") == "static")
+			if (null != e.Attribute(BSharpSyntax.ClassStaticModifier) || e.Attr("name") == BSharpSyntax.ClassStaticModifier)
 			{
 				def.Set(BSharpClassAttributes.Static);
 			}
-			if (e.Name.LocalName == "class") {
+			if (e.Name.LocalName == BSharpSyntax.Class) {
 				def.Set(BSharpClassAttributes.Explicit);
+			}
+			if (e.Name.LocalName == BSharpSyntax.PatchClassKeyword)
+			{
+				def.Set(BSharpClassAttributes.Explicit);
+				def.Set(BSharpClassAttributes.Patch);
+				def.Set(BSharpClassAttributes.Embed);
 			}
             else if (e.Name.LocalName == BSharpSyntax.ClassOverrideKeyword)
             {
@@ -524,62 +548,89 @@ namespace Qorpent.BSharp {
 		/// <returns></returns>
 		protected virtual void LinkClasses(IEnumerable<XElement> sources, IBSharpContext context) {
 			context.BuildLinkingIndex();
-			if (!context.RequireLinking()) return;
+			var requirelink = context.RequireLinking();
+			var requirepatch = context.RequirePatching();
+			if (!(requirelink || requirepatch)) return;
 			if (Debugger.IsAttached)
 			{
-				foreach (var c in context.Get(BSharpContextDataType.Working).Where(_=>_.Is(BSharpClassAttributes.RequireLinking)))
-				{
-					try
-					{
-						BSharpClassBuilder.Build(BuildPhase.AutonomeLink, this, c, context);
+				if (requirelink){
+					foreach (var c in context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
+						){
+						try{
+							BSharpClassBuilder.Build(BuildPhase.AutonomeLink, this, c, context);
+						}
+						catch (Exception ex){
+							c.Error = ex;
+						}
 					}
-					catch (Exception ex)
-					{
-						c.Error = ex;
+					context.ClearBuildTasks();
+					foreach (var c in context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
+						){
+						try{
+							BSharpClassBuilder.Build(BuildPhase.CrossClassLink, this, c, context);
+						}
+						catch (Exception ex){
+							c.Error = ex;
+						}
 					}
+					context.ClearBuildTasks();
 				}
-				context.ClearBuildTasks();
-                foreach (var c in context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.RequireLinking)))
-                {
-                    try
-                    {
-                        BSharpClassBuilder.Build(BuildPhase.CrossClassLink, this, c, context);
-                    }
-                    catch (Exception ex)
-                    {
-                        c.Error = ex;
-                    }
-                }
-                context.ClearBuildTasks();
+				if (requirepatch){
+					foreach (var c in context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.Patch)).OrderBy(_ => _.Priority))
+					{
+						try{
+							BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, c, context);
+						}
+						catch (Exception ex){
+							c.Error = ex;
+						}
+					}
+					context.ClearBuildTasks();
+				}
 			}
 			else
 			{
-				context.Get(BSharpContextDataType.Working).Where(_=>_.Is(BSharpClassAttributes.RequireLinking)).AsParallel().ForAll(
-					_ =>
-					{
-						try
-						{
-							BSharpClassBuilder.Build(BuildPhase.AutonomeLink, this, _, context);
-						}
-						catch (Exception ex)
-						{
-							_.Error = ex;
-						}
-					})
-					;
-                context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.RequireLinking)).AsParallel().ForAll(
-                    _ =>
-                    {
-                        try
-                        {
-                            BSharpClassBuilder.Build(BuildPhase.CrossClassLink, this, _, context);
-                        }
-                        catch (Exception ex)
-                        {
-                            _.Error = ex;
-                        }
-                    })
-                    ;
+				if (requirelink){
+					context.Get(BSharpContextDataType.Working)
+					       .Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
+					       .AsParallel()
+					       .ForAll(
+						       _ =>{
+							       try{
+								       BSharpClassBuilder.Build(BuildPhase.AutonomeLink, this, _, context);
+							       }
+							       catch (Exception ex){
+								       _.Error = ex;
+							       }
+						       })
+						;
+					context.Get(BSharpContextDataType.Working)
+					       .Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
+					       .AsParallel()
+					       .ForAll(
+						       _ =>{
+							       try{
+								       BSharpClassBuilder.Build(BuildPhase.CrossClassLink, this, _, context);
+							       }
+							       catch (Exception ex){
+								       _.Error = ex;
+							       }
+						       })
+						;
+				}
+				if (requirepatch){
+					context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.Patch)).OrderBy(_=>_.Priority).Select(
+						_ =>{
+							try{
+								BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
+							}
+							catch (Exception ex){
+								_.Error = ex;
+							}
+							return "";
+						}).ToArray()
+						;
+				}
 			}
 		}
 	}

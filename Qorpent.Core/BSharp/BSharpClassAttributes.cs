@@ -115,6 +115,16 @@ namespace Qorpent.BSharp {
 		/// Шаблоны
 		/// </summary>
 		Template = 1<<25,
-		
+
+		/// <summary>
+		/// Класс без явного указания кода
+		/// </summary>
+		Anonymous = 1<<26,
+
+		/// <summary>
+		/// Класс Patch для применения на целевой
+		/// </summary>
+		Patch = 1<<27,
+
 	}
 }

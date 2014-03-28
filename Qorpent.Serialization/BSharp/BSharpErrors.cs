@@ -140,6 +140,62 @@ namespace Qorpent.BSharp {
 			};
 		}
 
+
+		/// <summary>
+		/// Ошибка включения несуществующего класса
+		/// </summary>
+		/// <param name="cls"></param>
+		/// <param name="e"></param>
+		/// <returns></returns>
+		public static BSharpError PatchUndefinedTarget(IBSharpClass cls, XElement e)
+		{
+			return new BSharpError
+			{
+				Level = ErrorLevel.Error,
+				Phase = BSharpCompilePhase.Patching,
+				Type = BSharpErrorType.PatchUndefinedTarget,
+				ClassName = cls.FullName,
+				Xml = e,
+				Message = "В патче не указан селектор целевых классов"
+			};
+		}
+		/// <summary>
+		/// Ошибка включения несуществующего класса
+		/// </summary>
+		/// <returns></returns>
+		public static BSharpError PatchError(IBSharpClass cls,IBSharpClass altcls,  string diff, Exception error)
+		{
+			return new BSharpError
+			{
+				Level = ErrorLevel.Error,
+				Phase = BSharpCompilePhase.Patching,
+				Type = BSharpErrorType.PatchError,
+				ClassName = cls.FullName,
+				AltClass =  altcls,
+				Message = diff,
+				Error = error
+			};
+		}
+
+		/// <summary>
+		/// Ошибка включения несуществующего класса
+		/// </summary>
+		/// <param name="cls"></param>
+		/// <param name="e"></param>
+		/// <returns></returns>
+		public static BSharpError PatchInvalidBehavior(IBSharpClass cls, XElement e)
+		{
+			return new BSharpError
+			{
+				Level = ErrorLevel.Error,
+				Phase = BSharpCompilePhase.Patching,
+				Type = BSharpErrorType.PatchError,
+				ClassName = cls.FullName,
+				Xml = e,
+				Message = "В патче указан несуществующий тип поведения для новых элементов"
+			};
+		}
+
 		/// <summary>
 		/// Ошибка включения несуществующего класса
 		/// </summary>

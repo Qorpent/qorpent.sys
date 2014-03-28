@@ -14,6 +14,10 @@
         /// <summary>
         /// Линковка между классами
         /// </summary>
-        CrossClassLink
+        CrossClassLink,
+		/// <summary>
+		/// Применение патчей
+		/// </summary>
+		ApplyPatch
 	}
 }

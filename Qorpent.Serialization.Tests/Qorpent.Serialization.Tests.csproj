@@ -12,11 +12,13 @@
   <ItemGroup>
     <Compile Include="BSharpJsonParserTests.cs" />
     <Compile Include="BSharp\AdvancedIncludeTest.cs" />
+    <Compile Include="BSharp\AnonymousClassSupport.cs" />
     <Compile Include="BSharp\BSharpCodeBuilderTest.cs" />
     <Compile Include="BSharp\ClassReference.cs" />
     <Compile Include="BSharp\DictionarySupport.cs" />
     <Compile Include="BSharp\GeneratorTest.cs" />
     <Compile Include="BSharp\Matcher\SingleConditionTests.cs" />
+    <Compile Include="BSharp\PatchClassSupport.cs" />
     <Compile Include="BSharp\RequireSupportForPreBuildPackages.cs" />
     <Compile Include="BSharp\Runtime\BSharpLibraryClassProviderTest.cs" />
     <Compile Include="BSharp\Schema\AttributeRuleTest.cs" />

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using Qorpent.Serialization;
 
 namespace Qorpent.BSharp {
@@ -17,7 +16,7 @@ namespace Qorpent.BSharp {
 		/// Корневой элемент использования типов
 		/// </summary>
 		public const string AliasImport = "using";
-		/// <summary>
+		/// <summary>"nname"
 		/// Ключевое слово,обозначающее заголовок класса
 		/// </summary>
 		public const string Class = "class";
@@ -56,6 +55,34 @@ namespace Qorpent.BSharp {
 		/// Подставное имя класса для генератора
 		/// </summary>
 		public const string GeneratorClassNameAttribute = "class.name";
+
+		/// <summary>
+		/// Ключевое слово для инициализации патча
+		/// </summary>
+		public const string PatchClassKeyword = "patch";
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string PatchTargetAttribute = "for";
+		/// <summary>
+		/// Описатель действия патча при создании элемента
+		/// </summary>
+		public const string PatchCreateBehavior = "new";
+
+		/// <summary>
+		/// Создание элементов игнорируется
+		/// </summary>
+		public const string PatchCreateBehaviorNone = "none";
+		/// <summary>
+		/// При необходимости создания элемента формируется ошибка (по умолчанию)
+		/// </summary>
+		public const string PatchCreateBehaviorError = "error";
+		/// <summary>
+		/// При создании элемента - он создается
+		/// </summary>
+		public const string PatchCreateBehaviorCreate = "create";
+
+
 		/// <summary>
 		/// Соединение
 		/// </summary>

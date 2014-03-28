@@ -102,5 +102,11 @@ namespace Qorpent.BSharp {
 		/// Выполняет генераторы, формируя дополнительные классы
 		/// </summary>
 		void ExecuteGenerators();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		bool RequirePatching();
 	}
 }

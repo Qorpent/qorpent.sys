@@ -158,8 +158,13 @@ namespace Qorpent.BSharp {
 			
 
 			var basetype = Get(query, ns);
+		
 			if (null != basetype) {
-				return Working.Where(_ => _.AllImports.Contains( basetype));
+				var result = Working.Where(_ =>  _.AllImports.Contains( basetype)).ToList();
+				if (!basetype.Is(BSharpClassAttributes.Abstract)){
+					result.Add(basetype);
+				}
+				return result.ToArray();
 			}
 			return new IBSharpClass[] {};
 		}
@@ -482,9 +487,11 @@ namespace Qorpent.BSharp {
 						RawClasses[cls.FullName] = cls;
 					}
 					else{
-						//если же они совпадают, то значит это дублирующиеся классы
-						if (givenPriority == currentPriority){
-							Errors.Add(BSharpErrors.DuplicateClassNames(cls, RawClasses[cls.FullName]));
+						if (!cls.Is(BSharpClassAttributes.Anonymous)){ // doubling of anonymous classed can be smoothed
+							//если же они совпадают, то значит это дублирующиеся классы
+							if (givenPriority == currentPriority){
+								Errors.Add(BSharpErrors.DuplicateClassNames(cls, RawClasses[cls.FullName]));
+							}
 						}
 					}
 					
@@ -876,6 +883,13 @@ namespace Qorpent.BSharp {
 		/// <returns></returns>
 		public bool RequireLinking() {
 			return Working.Any(_ => _.Is(BSharpClassAttributes.RequireLinking));
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public bool RequirePatching(){
+			return Working.Any(_ => _.Is(BSharpClassAttributes.Patch));
 		}
 
 		private void ResolveImports()
