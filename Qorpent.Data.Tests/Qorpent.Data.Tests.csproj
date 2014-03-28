@@ -15,6 +15,7 @@
     <Compile Include="MetaDataBase\FileStorageMergeTest.cs" />
     <Compile Include="MetaDataBase\GitBasedStorageTest.cs" />
     <Compile Include="MetaDataBase\ImportGitIntoSql.cs" />
+    <Compile Include="MetaDataBase\MetaDataSyncServiceTests.cs" />
     <Compile Include="MetaDataBase\MetaFileProcessorTest.cs" />
     <Compile Include="MetaDataBase\SqlFileStorageTest.cs" />
     <None Include="*.import" />

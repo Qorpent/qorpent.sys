@@ -1,4 +1,7 @@
-﻿namespace Qorpent.Utils.XDiff{
+﻿using System.Collections.Generic;
+using System.Xml.Linq;
+
+namespace Qorpent.Utils.XDiff{
 	/// <summary>
 	/// 
 	/// </summary>
@@ -16,5 +19,13 @@
 		/// If true  - only codes are used to detect  identity
 		/// </summary>
 		public bool ChangeIds { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public XElement SrcXml { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public IDictionary<string, string> RefMaps { get; set; }
 	}
 }

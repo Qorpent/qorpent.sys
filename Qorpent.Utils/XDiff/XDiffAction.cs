@@ -49,6 +49,10 @@ namespace Qorpent.Utils.XDiff{
 		/// <summary>
 		/// Типовые операции по добавлению и обновлению данных
 		/// </summary>
-		MainCreateOrUpdate = CreateElement | ChangeElement | CreateAttribute | ChangeAttribute | ChangeHierarchyPosition
+		MainCreateOrUpdate = CreateElement | ChangeElement | CreateAttribute | ChangeAttribute | ChangeHierarchyPosition,
+		/// <summary>
+		/// Обновления по атрибутам
+		/// </summary>
+		AttributeCreateOrUpdate = CreateAttribute | ChangeAttribute 
 	}
 }

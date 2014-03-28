@@ -942,7 +942,10 @@ namespace Qorpent.Bxl {
 					_anon[_level].count++;
 				}
 				if (!_options.HasFlag(BxlParserOptions.OnlyCodeAttribute)) {
-					_current.SetAttributeValue(XName.Get(ANON_ID), _prefix + _value);
+					if (_current.Attribute("id") == null || _current.Attribute("id").Value == ""){
+						_current.SetAttributeValue(XName.Get(ANON_ID), _prefix + _value);
+					}
+					
 					_anon[_level].count++;
 				}
 				_anon[_level].hasCodeId = true;

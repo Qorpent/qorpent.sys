@@ -41,9 +41,18 @@ namespace Qorpent.Utils.XDiff
 			XElement[] nelements;
 			PrepareIndexes(basis, newest, out belements, out nelements);
 			if(basis==newest)yield break;
-			foreach (var x in ProcessNewElements(nelements, belements)) yield return x;
-			foreach (var xDiffItem in ProcessChangedElements(belements, nelements)) yield return xDiffItem;
-			foreach (var x in ProcessDeleteElements(belements, nelements)) yield return x;
+			foreach (var x in ProcessNewElements(nelements, belements)){
+				x.Options = _options;
+				yield return x;
+			}
+			foreach (var x in ProcessChangedElements(belements, nelements)){
+				x.Options = _options;
+				yield return x;
+			}
+			foreach (var x in ProcessDeleteElements(belements, nelements)){
+				x.Options = _options;
+				yield return x;
+			}
 		}
 
 		private IEnumerable<XDiffItem> ProcessChangedElements(XElement[] belements, XElement[] nelements){

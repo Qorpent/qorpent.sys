@@ -95,7 +95,7 @@ namespace Qorpent.Data.MetaDataBase{
 		/// <summary>
 		/// Sql комманда, запланированная к выполнению
 		/// </summary>
-		public string SqlCommand { get; set; }
+		public string BaseSqlCommand { get; set; }
 		/// <summary>
 		/// Схема в таблице данных
 		/// </summary>
@@ -114,6 +114,9 @@ namespace Qorpent.Data.MetaDataBase{
 		public string FullCode{
 			get { return FullTableName + "." + TargetId + "." + TargetCode; }
 		}
+		///
+		public string ExtendedSqlCommand { get; set; }
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -181,7 +184,7 @@ namespace Qorpent.Data.MetaDataBase{
 		public static ObjectKey GetObjectKey(IEnumerable<DatabaseUpdateRecord> databaseUpdateRecords){
 			var result = new ObjectKey();
 			foreach (var databaseUpdateRecord in databaseUpdateRecords){
-				result.Table = databaseUpdateRecord.TargetTable;
+				result.Table = databaseUpdateRecord.FullTableName;
 				if (0 != databaseUpdateRecord.TargetId){
 					result.Id = databaseUpdateRecord.TargetId;
 				}
@@ -190,31 +193,6 @@ namespace Qorpent.Data.MetaDataBase{
 				}
 			}
 			return result;
-		}
-	}
-	/// <summary>
-	/// Структура привязки к объекту
-	/// </summary>
-	public struct ObjectKey{
-		/// <summary>
-		/// Таблица
-		/// </summary>
-		public string Table { get; set; }
-		/// <summary>
-		/// Идентификатор
-		/// </summary>
-		public int Id { get; set; }
-		/// <summary>
-		/// Код
-		/// </summary>
-		public string Code { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public override string ToString(){
-			return string.Format("{0}.{1}.{2}", Table, Id, Code);
-
 		}
 	}
 }

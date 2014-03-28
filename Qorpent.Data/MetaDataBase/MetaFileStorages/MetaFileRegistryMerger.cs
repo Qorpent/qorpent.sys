@@ -27,7 +27,7 @@ namespace Qorpent.Data.MetaDataBase{
 		public void Merge(IMetaFileRegistry target, IMetaFileRegistry source, MergeFlags flags = MergeFlags.Default ){
 			var pairs = GetDelta(target, source);
 			if (null != CustomMerger){
-				pairs = CustomMerger.Merge(pairs);
+				CustomMerger.Merge(pairs);
 			}
 			Merge(flags, pairs);
 		}

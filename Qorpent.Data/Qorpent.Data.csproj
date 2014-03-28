@@ -13,7 +13,9 @@
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
     <Compile Include="MetaDataBase\DatabaseUpdateRecord.cs" />
+    <Compile Include="MetaDataBase\DefaultDatabaseUpdateRecordMerger.cs" />
     <Compile Include="MetaDataBase\DefaultMetaFileProcessor.cs" />
+    <Compile Include="MetaDataBase\IDatabaseUpdateRecordMerger.cs" />
     <Compile Include="MetaDataBase\IMetaFileProcessor.cs" />
     <Compile Include="MetaDataBase\IMetaFileRegistry.cs" />
     <Compile Include="MetaDataBase\InvalidDataSyncException.cs" />
@@ -28,6 +30,7 @@
     <Compile Include="MetaDataBase\MetaFileStorages\MetaFileRegistryExtensions.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\MetaFileRegistryMerger.cs" />
     <Compile Include="MetaDataBase\MetaFileStorages\SqlBasedMetaFileRegistry.cs" />
+    <Compile Include="MetaDataBase\ObjectKey.cs" />
     <Compile Include="MetaDataBase\RevisionDescriptor.cs" />
     <Compile Include="MetaStorage\IMetaFacade.cs" />
     <Compile Include="MetaStorage\IMetaStorage.cs" />
