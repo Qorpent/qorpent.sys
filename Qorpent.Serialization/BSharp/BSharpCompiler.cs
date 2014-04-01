@@ -437,7 +437,7 @@ namespace Qorpent.BSharp {
         }
 
 		private static void SetupInitialOrphanState(XElement e, IBSharpClass def,IDictionary<string,string> aliases ) {
-			if (null != e.Attribute(BSharpSyntax.ClassAbstractModifier) || e.Attr(BSharpSyntax.ClassNameAttribute) == BSharpSyntax.ClassAbstractModifier)
+			if (null != e.Attribute(BSharpSyntax.ClassAbstractModifier) || e.Attr("name") == BSharpSyntax.ClassAbstractModifier)
 			{
 				def.Set(BSharpClassAttributes.Abstract);
 			}

@@ -20,7 +20,7 @@ namespace Qorpent.Serialization.Tests.BSharp
 			var code = @"
 require data
 class mytable1
-	import Qorpent.Db.DataDictionary
+	import Qorpent.Db.TableBase
 ";
 
 			var result = BSharpCompiler.CreateDefault().Compile(new[] { new BxlParser().Parse(code) }); 

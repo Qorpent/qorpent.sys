@@ -118,6 +118,10 @@
       <Project>{426c92df-3c40-426c-b0be-40a1df9044c2}</Project>
       <Name>Qorpent.IO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Scaffolding\Qorpent.Scaffolding.csproj">
+      <Project>{6934aba6-5d22-4c03-9591-211e9a930d40}</Project>
+      <Name>Qorpent.Scaffolding</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
 </Project>

@@ -427,6 +427,13 @@ namespace X
 			Assert.AreEqual("A", result.Abstracts[0].Name);
 			Assert.AreEqual("X.A", result.Abstracts[0].FullName);
 		}
+
+		[Test]
+		public void AbstractsNotIncluded(){
+			var result = Compile(@"class x abstract");
+			Assert.AreEqual(0,result.Working.Count);
+		}
+
 		[Test]
 		public void CanInterpolate()
 		{
