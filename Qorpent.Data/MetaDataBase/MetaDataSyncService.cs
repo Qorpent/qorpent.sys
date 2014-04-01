@@ -12,6 +12,10 @@ using Qorpent.Utils.XDiff;
 
 namespace Qorpent.Data.MetaDataBase
 {
+
+	
+
+
 	/// <summary>
 	/// Сервис по обcлуживанию и синхронизации локальной БД
 	/// </summary>
@@ -32,6 +36,12 @@ namespace Qorpent.Data.MetaDataBase
 		/// Соедингение с целевой БД
 		/// </summary>
 		public string SqlConnection { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public string LastSql{
+			get { return MetaFileProcessor.LastSql; }
+		}
 
 		/// <summary>
 		/// Целевое хранилище с текущими даннымми
@@ -45,11 +55,19 @@ namespace Qorpent.Data.MetaDataBase
 		public IMetaFileRegistry SourceStorage { get; set; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public string IncludeRegex { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public string ExcludeRegex { get; set; }
+		/// <summary>
 		/// Выполняет синхронизацию через БД
 		/// </summary>
 		public void Synchronize(){
 			Prepare();
-			var merger = new MetaFileRegistryMerger{CustomMerger = this};
+			var merger = new MetaFileRegistryMerger{CustomMerger = this, ExcludeRegex = ExcludeRegex,IncludeRegex = IncludeRegex};
 			merger.Merge(TargetStorage,SourceStorage,MergeFlags.Snapshot);
 		}
 
@@ -57,6 +75,7 @@ namespace Qorpent.Data.MetaDataBase
 			if (null == MetaFileProcessor) throw new Exception("MetaFileProcessor not set");
 			if (null == TargetStorage) throw new Exception("TargetStorage not set");
 			if (null == SourceStorage) throw new Exception("LocalStorage not set");
+			
 			TargetStorage.Refresh();
 			SourceStorage.Refresh();
 		}

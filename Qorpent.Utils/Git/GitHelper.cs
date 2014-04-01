@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.Threading;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Utils{
+namespace Qorpent.Utils.Git{
 	/// <summary>
 	/// 
 	/// </summary>
@@ -47,6 +46,10 @@ namespace Qorpent.Utils{
 		/// <summary>
 		/// 
 		/// </summary>
+		public string Password { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
 		public string AuthorEmail { get; set; }
 		/// <summary>
 		/// 
@@ -68,11 +71,16 @@ namespace Qorpent.Utils{
 		public GitHelper Connect()
 		{
 			Directory.CreateDirectory(DirectoryName);
-			var gitpath = Path.Combine(DirectoryName, "\\.git");
-			if (!Directory.Exists(gitpath))
-			{
+			var gitpath = Path.Combine(DirectoryName, ".git");
+			if (!Directory.Exists(gitpath)){
 				InitializeRepository();
 			}
+			else{
+
+				RemoteSet(RemoteName, RemoteUrl);
+				Checkout(Branch);
+			}
+			Fetch();
 			return this;
 		}
 
@@ -88,10 +96,11 @@ namespace Qorpent.Utils{
 			{
 				RedirectStandardOutput = true,
 				RedirectStandardError = true,
+				RedirectStandardInput = true,
 				FileName = "git",
 				Arguments = command+" "+ args,
 				UseShellExecute = false,
-				WorkingDirectory = DirectoryName,
+				WorkingDirectory = DirectoryName ?? Environment.CurrentDirectory,
 				CreateNoWindow = true,
 				
 			};
@@ -101,31 +110,46 @@ namespace Qorpent.Utils{
 			var message = "";
 			Process process = null;
 			string result = "";
-			try
-			{
+			try{
 
 				process = Process.Start(startInfo);
+				if (command != "ls-remote"){
+
+
+
+					result = process.StandardOutput.ReadToEnd();
+
+				}
+				else{
+					process.WaitForExit(1000);
+				}
+
 				if (timeout != 0){
 					var finished = process.WaitForExit(timeout);
 					if (!finished){
 						throw new Exception("timeouted");
 					}
 				}
-				result = process.StandardOutput.ReadToEnd();
-				process.WaitForExit(timeout);
-				
+
+
 			}
-			catch (Exception ex)
-			{
-				
-				if (null != process)
-				{
+			catch (Exception ex){
+
+				if (null != process){
 					message += process.StandardOutput.ReadToEnd();
 					message += "\r\n--------------------------------\r\n";
 					message += process.StandardError.ReadToEnd();
 				}
 				Console.WriteLine(message);
 				throw new Exception(message, ex);
+			}
+			finally{
+				try{
+					process.Kill();
+				}
+				catch{
+					
+				}
 			}
 
 			var error = process.StandardError.ReadToEnd();
@@ -134,6 +158,14 @@ namespace Qorpent.Utils{
 			if(!string.IsNullOrWhiteSpace(error))msg+="\r\n--------------------------------\r\n" + error;
 			if (DebugMode){
 				Console.WriteLine(msg);
+			}
+
+			if (process.ExitCode != 0){
+				if (string.IsNullOrWhiteSpace(error)){
+					error = process.StandardOutput.ReadToEnd();
+					
+				}
+				throw new Exception("git error " + process.ExitCode + " " + error);
 			}
 			return msg.Trim();
 
@@ -145,18 +177,82 @@ namespace Qorpent.Utils{
 			return ExecuteCommand("init");
 		}
 		/// <summary>
+		/// Получить упрощенный список измененных файлов
+		/// </summary>
+		/// <param name="fromref"></param>
+		/// <param name="toref"></param>
+		/// <returns></returns>
+		public FileRecord[] GetChangedFilesList(string fromref = "HEAD", string toref="WORKING_TREE"){
+			if (string.IsNullOrWhiteSpace(toref)){
+				toref = "WORKING_TREE";
+			}
+			if (string.IsNullOrWhiteSpace(fromref)){
+				if (toref == "WORKING_TREE"){
+					fromref = "HEAD";
+				}
+				else{
+					var refs = ExecuteCommand("log", "-n2 --format=%h~ " + toref).SmartSplit(false, true, '~');
+					if (refs.Count >= 2){
+						fromref = refs[1];
+					}
+				}
+			}
+
+			if (toref == "WORKING_TREE"){
+				var rawchanged = ExecuteCommand("status", "-s").SmartSplit(false,true,'\r','\n');
+				return rawchanged.Select(_ => (FileRecord)_).ToArray();
+			}
+
+			if (string.IsNullOrWhiteSpace(fromref)){
+				var raw = ExecuteCommand("log", "-n1 --name-status --format=\"%h`\" " + toref);
+				var files = raw.SmartSplit(false, true, '`').Last().SmartSplit(false,true,'\r','\n');
+				return files.Select(_ => (FileRecord)_).ToArray();
+
+			}
+			string[] rawchanges = null;
+			if (fromref == toref){
+				rawchanges = ExecuteCommand("log", "-n1 --name-status --format=\"`%h`\" " + toref).SmartSplit(false, true, '`').ToArray();	
+			}
+			else{
+				rawchanges = ExecuteCommand("log", " --name-status --format=\"`%h`\" " + fromref + ".." + toref).SmartSplit(false, true, '`').ToArray();	
+			}
+			
+			var result = new List<FileRecord>();
+			for (var i = 1; i < rawchanges.Length; i += 2){
+				var files = rawchanges[i].SmartSplit(false, true, '\r', '\n').Select(_ => (FileRecord)_).ToArray();
+				foreach (var file in files){
+					if (!result.Contains(file)){
+						result.Add(file);
+					}
+				}
+			}
+			return result.ToArray();
+		}
+
+
+		/// <summary>
 		/// Add or replace remote to url
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="url"></param>
-		public string RemoteSet(string name, string url){
+		public string RemoteSet(string name="", string url=""){
+			if (string.IsNullOrWhiteSpace(name)){
+				name = RemoteName;
+			}
+			if (string.IsNullOrWhiteSpace(url)){
+				url = RemoteUrl;
+			}
+			var _u = url;
+			if (!string.IsNullOrWhiteSpace(Password) && !_u.Contains("@")){
+				_u = _u.Replace("://", "://" + AuthorName + ":" + Password + "@");
+			}
 			try{
 				ExecuteCommand("remote", "rm " + name);
 			}
 			catch{
 				
 			}
-			return ExecuteCommand("remote", "add " + name + " \"" + url + "\"");
+			return ExecuteCommand("remote", "add " + name + " \"" + _u + "\"");
 		}
 		/// <summary>
 		/// 
@@ -166,7 +262,8 @@ namespace Qorpent.Utils{
 		public string Fetch(string remoteName = "", string branch = ""){
 			remoteName = remoteName ?? "";
 			branch = branch ?? "";
-			return ExecuteCommand("fetch", remoteName + " " + branch);
+			ExecuteCommand("fetch", "--tags " + remoteName + " " + branch);
+			return ExecuteCommand("fetch",remoteName + " " + branch);
 		}
 		/// <summary>
 		/// Добавление файлов к выборке
@@ -211,17 +308,21 @@ namespace Qorpent.Utils{
 				}
 				args += " --author \"" + author + "\"";
 			}
-	
-
-			var result = ExecuteCommand("commit", args);
-			if (result.Contains("fatal: No existing author")){
-				if (autoemail){
-					args = args.Substring(0, args.Length - 1);
-					args += " <" + GetAuthorName() + "@auto." + Environment.MachineName + ".com>\"";
-					result = ExecuteCommand("commit", args);
-				}
-				else{
-					throw new Exception("invalid author");
+			string result = "";
+			try{
+				result = ExecuteCommand("commit", args);
+				
+			}
+			catch(Exception ex) {
+				if (ex.Message.Contains("fatal: No existing author")){
+					if (autoemail){
+						args = args.Substring(0, args.Length - 1);
+						args += " <" + GetAuthorName() + "@auto." + Environment.MachineName + ".com>\"";
+						result = ExecuteCommand("commit", args);
+					}
+					else{
+						throw new Exception("invalid author");
+					}
 				}
 			}
 
@@ -232,9 +333,10 @@ namespace Qorpent.Utils{
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="amend"></param>
-		public void CommitAllChanges(string message = "", bool amend = false){
+		public string  CommitAllChanges(string message = "", bool amend = false){
 			Add();
 			Commit(message, amend);
+			return GetCommitId();
 		}
 		/// <summary>
 		/// Записать отдельный файл с созданием версии
@@ -243,10 +345,11 @@ namespace Qorpent.Utils{
 		/// <param name="content"></param>
 		/// <param name="message"></param>
 		/// <param name="amend"></param>
-		public void WriteAndCommit(string path, string content, string message = "", bool amend = false){
+		public string WriteAndCommit(string path, string content, string message = "", bool amend = false){
 			WriteFile(path,content);
 			Add(path);
 			Commit(message, amend);
+			return GetCommitId();
 		}
 
 		/// <summary>
@@ -288,7 +391,7 @@ namespace Qorpent.Utils{
 			}
 			var result = ExecuteCommand("log", "--format=\"%H|%ct|%cN|%cE|%aN|%aE|%s`\" " + path);
 			var hists = result.SmartSplit(false, true, '`');
-			return hists.Select(ParseGitCommitInfo).ToArray();
+			return hists.Select(GitUtils.ParseGitCommitInfo).ToArray();
 		}
 
 		/// <summary>
@@ -335,6 +438,41 @@ namespace Qorpent.Utils{
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="fromcommit"></param>
+		/// <param name="tocommit"></param>
+		/// <returns></returns>
+		public RevisionDistance GetDistance(string fromcommit="", string tocommit=""){
+			if (string.IsNullOrWhiteSpace(fromcommit)){
+				fromcommit = Branch;
+			}
+			if (string.IsNullOrWhiteSpace(tocommit)){
+				tocommit = RemoteName+"/"+Branch;
+			}
+			var result = new RevisionDistance();
+			var result_ = ExecuteCommand("rev-list", fromcommit + ".." + tocommit);
+			result.Forward = result_.SmartSplit(false, true, '\r', '\n').Count;
+			result_ = ExecuteCommand("rev-list", tocommit + ".." + fromcommit);
+			result.Behind = result_.SmartSplit(false, true, '\r', '\n').Count;
+			return result;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="tag"></param>
+		public void SetTag(string tag){
+			try{
+				ExecuteCommand("tag", "-d " + tag);
+			}
+			finally {
+				ExecuteCommand("tag", tag);
+			}
+		}
+
+		
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="code"></param>
 		/// <param name="content"></param>
 		public void WriteFile(string code, string content){
@@ -351,26 +489,45 @@ namespace Qorpent.Utils{
 		/// <summary>
 		/// 
 		/// </summary>
-		public void InitializeRepository()
+		public void InitializeRepository(bool throwErrroOnBranchFix = false)
 		{
 			Init();
 			if (!string.IsNullOrWhiteSpace(RemoteUrl)){
 				RemoteSet(RemoteName, RemoteUrl);
-				FixBranchState();
-			}
-			else{
-				WriteFile(".gitignore","*.tmp\r\n*~.*");
-				Add();
+				try{
+					FixBranchState();
+				}
+				catch{
+					if (throwErrroOnBranchFix) throw;
+					Checkout(Branch);
+				}
+
 				
-				Commit("init");
 			}
+			WriteFile(".gitignore", "*.tmp\r\n*~.*");
+			Add();
+			Commit("init");
+
+			if (!string.IsNullOrWhiteSpace(RemoteUrl)){
+				Push();
+			}
+			
+
 		}
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public string Push(){
-			return ExecuteCommand("push", RemoteName+" "+Branch);
+		public string Push(bool tags = false, bool force = false){
+			var args = "";
+			if (tags){
+				args += " --tags";
+			}
+			if (force){
+				args += " --force";
+			}
+			args += " " + RemoteName + " " + Branch;
+			return ExecuteCommand("push",args);
 		}
 
 		/// <summary>
@@ -407,32 +564,8 @@ namespace Qorpent.Utils{
 			}
 			return ExecuteCommand("rev-parse", refcode);
 		}
-		static IDictionary<int,int> haskeliocharset = new Dictionary<int, int>();
-		private const string haskel =
-			@"\320\220\320\221\320\222\320\223\320\224\320\225\320\226\320\227\320\230\320\231\320\232\320\233\320\234\320\235\320\236\320\237\320\240\320\241\320\242\320\243\320\244\320\245\320\246\320\247\320\250\320\251\320\252\320\253\320\254\320\255\320\256\320\257\320\260\320\261\320\262\320\263\320\264\320\265\320\266\320\267\320\270\320\271\320\272\320\273\320\274\320\275\320\276\320\277\321\200\321\201\321\202\321\203\321\204\321\205\321\206\321\207\321\210\321\211\321\212\321\213\321\214\321\215\321\216\321\217";
-		static GitHelper(){
-			var ints = haskel.SmartSplit(false, true, '\\').Select(_=>_.ToInt()).ToArray();
-			var idx = 0;
-			int i = 0;
 
-				for (i = (int) 'А'; i <= (int) 'Я'; i++){
-					
-					var fst = ints[idx++];
-					var sec = ints[idx++];
-					haskeliocharset[fst*1000+ sec] = i;
-
-				}
-				for (i = (int) 'а'; i <= (int) 'я'; i++){
-			
-					var fst = ints[idx++];
-					var sec = ints[idx++];
-					haskeliocharset[fst * 1000 + sec] = i;
-				}
-				haskeliocharset[320201] = 'Ё';
-				haskeliocharset[321221] = 'ё';
-			
-
-		}
+		
 
 		/// <summary>
 		/// 
@@ -444,19 +577,7 @@ namespace Qorpent.Utils{
 				refcode = "HEAD";
 			}
 			var list = ExecuteCommand("ls-tree", "--name-only --full-name  -r " + refcode);
-			return list.SmartSplit(false, true, '\r', '\n').Select(_ =>{
-				var result = _;
-				result = Regex.Replace(result, @"\\(\d+)\\(\d+)", m =>{
-					string r = "";
-						r = ((char) haskeliocharset[m.Groups[1].Value.ToInt()*1000+m.Groups[2].Value.ToInt()]).ToString();
-					
-					return r;
-				});
-				if (result.StartsWith("\"") && _.EndsWith("\"")){
-					return result.Substring(1, result.Length - 2);
-				}
-				return result;
-			}).ToArray();
+			return list.SmartSplit(false, true, '\r', '\n').Select(GitUtils.ConvertToValidFileName).ToArray();
 		}
 
 		/// <summary>
@@ -489,110 +610,8 @@ namespace Qorpent.Utils{
 				refcode = "HEAD";
 			}
 			var data = ExecuteCommand("show", "--format=\"%H|%ct|%cN|%cE|%aN|%aE|%s\"  --quiet \"" + refcode + "\"");
-			return ParseGitCommitInfo(data);
+			return GitUtils.ParseGitCommitInfo(data);
 
 		}
-
-		private static GitCommitInfo ParseGitCommitInfo(string data){
-			var parts = data.Split('|');
-			if (parts.Length != 7){
-				throw new Exception("cannot parse data as valid commit info '"+data+"'");
-			}
-			var result = new GitCommitInfo{
-				Hash = parts[0],
-				ShortHash = parts[0].Substring(0, 7),
-				Commiter = parts[2],
-				CommiterEmail = parts[3],
-				Author = parts[4],
-				AuthorEmail = parts[5],
-				
-				GlobalRevisionTime = new DateTime(1970, 1, 1).AddSeconds(Convert.ToInt32(parts[1]))
-			};
-			var comment = parts[6];
-			if (!string.IsNullOrWhiteSpace(comment)){
-				comment = Encoding.UTF8.GetString(Encoding.GetEncoding(1251).GetBytes(comment));
-				result.Comment = comment;
-			}
-
-			result.LocalRevisionTime = result.GlobalRevisionTime.ToLocalTime();
-			return result;
-		}
-	}
-	/// <summary>
-	/// 
-	/// </summary>
-	[Flags]
-	public enum GirFileState{
-		/// <summary>
-		/// Нет изменений
-		/// </summary>
-		None =0,
-		/// <summary>
-		/// Измененный
-		/// </summary>
-		Modified = 1,
-		/// <summary>
-		/// Добавленный
-		/// </summary>
-		Added =2 ,
-		/// <summary>
-		/// Удаленный
-		/// </summary>
-		Deleted = 4,
-		/// <summary>
-		///Переименованный
-		/// </summary>
-		Renamed =8,
-		/// <summary>
-		/// Скопированный
-		/// </summary>
-		Copied =16,
-		/// <summary>
-		/// Обновленный, но не смерженный
-		/// </summary>
-		UpdatedButUnmerged =32,
-		
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	public class GitCommitInfo{
-		/// <summary>
-		/// 
-		/// </summary>
-		public string Hash { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public string ShortHash { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public string Author { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public string AuthorEmail { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public DateTime LocalRevisionTime { get; set; }
-		/// <summary>
-		/// Глобальное время
-		/// </summary>
-		public DateTime GlobalRevisionTime { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public string Commiter { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public string CommiterEmail { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public string Comment { get; set; }
 	}
 }

@@ -147,7 +147,7 @@ namespace Qorpent.Data.Connections {
 					}
 				}else if(name.Contains(";")){
 					//full connection string
-					return DatabaseExtensions.CreateDatabaseConnecitonFromString(name);
+					return DatabaseExtensions.CreateDatabaseConnectionFromString(name);
 				}
 				if (defaultConnectionString.IsNotEmpty())
 			    {

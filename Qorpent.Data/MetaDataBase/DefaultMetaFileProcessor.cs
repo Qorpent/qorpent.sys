@@ -79,7 +79,7 @@ namespace Qorpent.Data.MetaDataBase{
 		protected virtual  void CheckTables(){
 			if (!Online) return;
 			var tables = grouped.GroupBy(_ => _.FullTableName, _ => _);
-			var query = string.Join("\r\nunion\r\n", tables.Select(_ =>string.Format("select '{0}' as code,object_id('{0}') as id ")));
+			var query = string.Join("\r\nunion\r\n", tables.Select(_ =>string.Format("select '{0}' as code,object_id('{0}') as id ",_)));
 			var dict = getc().ExecuteDictionaryReader(query);
 			var excludes = dict.Where(_ => _.Value == null).Select(_ => _.Key).ToArray();
 			foreach (var exclude in excludes){
@@ -102,15 +102,15 @@ namespace Qorpent.Data.MetaDataBase{
 				var script = GetSql(records);
 				using (var c = getc()){
 					c.Open();
-					var t = c.BeginTransaction();
+					//var t = c.BeginTransaction();
 					try{
 						var com = c.CreateCommand(script);
 						com.ExecuteNonQuery();
-						t.Commit();
+					//	t.Commit();
 						
 					}
 					catch {
-						t.Rollback();
+						//t.Rollback();
 						throw;
 					}
 				}
@@ -129,6 +129,10 @@ namespace Qorpent.Data.MetaDataBase{
 			var script = CollectSql(comments);
 			return script;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public string LastSql { get; private set; }
 
 		private string CollectSql(bool comments){
 			var sb = new StringBuilder();
@@ -172,7 +176,8 @@ namespace Qorpent.Data.MetaDataBase{
 	throw;
  end catch
 ");
-			return sb.ToString();
+			LastSql = sb.ToString();
+			return LastSql;
 		}
 
 		private void CheckSql(bool comments){

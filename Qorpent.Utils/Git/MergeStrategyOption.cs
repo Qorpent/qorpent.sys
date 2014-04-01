@@ -1,4 +1,4 @@
-namespace Qorpent.Utils{
+namespace Qorpent.Utils.Git{
 	/// <summary>
 	/// Перечисление стратегий
 	/// </summary>

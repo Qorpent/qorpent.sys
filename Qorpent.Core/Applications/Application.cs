@@ -19,6 +19,7 @@
 using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using Qorpent.Bxl;
 using Qorpent.Data;
@@ -471,13 +472,25 @@ namespace Qorpent.Applications {
 			return _appsync;
 		}
 
+		private Task starter;
+
 		/// <summary>
 		/// 	Called by web- infrastructure to execute statrtup - MUST BE ASYNC
 		/// </summary>
-		public void PerformAsynchronousStartup() {
-			var thread = new Thread(PerformSynchronousStartup);
-			thread.Start();
-			//ThreadPool.QueueUserWorkItem(x => PerformSynchronousStartup());
+		public void PerformAsynchronousStartup(){
+			starter = Task.Run(() => PerformSynchronousStartup());
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public void WaitStartUp(){
+			if (null != starter){
+				starter.Wait();
+			}else if (IsInStartup){
+				while (IsInStartup){
+					Thread.Sleep(20);
+				}
+			}
 		}
 
 		/// <summary>

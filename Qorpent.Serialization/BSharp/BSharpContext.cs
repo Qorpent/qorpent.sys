@@ -302,7 +302,7 @@ namespace Qorpent.BSharp {
 
 		private IEnumerable<XElement> GetDataSet(XElement source, string ns){
 
-			var mode = source.Attr(BSharpSyntax.ConnecitonModeAttribute,"native");
+			var mode = source.Attr(BSharpSyntax.ConnectionModeAttribute,"native");
 			if (mode != "native"){
 				if (mode == "sql"){
 

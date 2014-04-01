@@ -348,7 +348,7 @@ namespace Qorpent.BSharp {
 		}
 
 		private IBSharpClass PrepareConnection(string ns, XElement e){
-			var mode = e.Attr(BSharpSyntax.ConnecitonModeAttribute, "sql");
+			var mode = e.Attr(BSharpSyntax.ConnectionModeAttribute, "sql");
 			var _code = e.Attr(BSharpSyntax.ClassNameAttribute);
 			var code = BSharpSyntax.GenerateConnectionClassName(mode, _code);
 			e.SetAttr(BSharpSyntax.ConnectionCodeAttribute, e.Attr("code"));

@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Qorpent.Data.MetaDataBase;
 using Qorpent.Utils;
+using Qorpent.Utils.Git;
 
 namespace Qorpent.Data.Tests.MetaDataBase{
 	[TestFixture]

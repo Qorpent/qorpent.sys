@@ -23,5 +23,9 @@ namespace Qorpent.Data.MetaDataBase{
 		/// <param name="comments"></param>
 		/// <returns></returns>
 		string GetSql(IEnumerable<DatabaseUpdateRecord> records, bool comments = false);
+		/// <summary>
+		/// Трассировка последнего скрипта SQL
+		/// </summary>
+		string LastSql { get; }
 	}
 }

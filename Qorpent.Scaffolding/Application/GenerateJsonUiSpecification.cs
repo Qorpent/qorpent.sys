@@ -23,14 +23,28 @@ namespace Qorpent.Scaffolding.Application{
 		/// <param name="targetclasses"></param>
 		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses){
 			foreach (var targetclass in targetclasses){
-				yield return GenerateUI(targetclass);
+				yield return GenerateUI(targetclass,"json");
+				yield return GenerateUI(targetclass,"js");
 			}
 		}
 
 
-		private Production GenerateUI(IBSharpClass targetclass){
-			var result = new Production{FileName = targetclass.FullName + ".ui.json"};
-			dynamic obj = new UObj();
+		private Production GenerateUI(IBSharpClass targetclass,string ext){
+			var result = new Production{FileName = targetclass.FullName + ".ui."+ext};
+			var obj = GetJson(targetclass);
+			if (ext == "json"){
+				result.Content = obj.ToJson();
+			}
+			else{
+				result.Content = "//ui specification\r\ndefine([],function(){return " + obj.ToJson() + "});";
+			}
+			return result;
+		}
+
+		private UObj _obj = null;
+		private dynamic GetJson(IBSharpClass targetclass){
+			if (null != _obj) return _obj;
+			dynamic obj = _obj = new UObj();
 			obj.level = "ui";
 			var trg = obj;
 			StoreAttributes(targetclass.Compiled, trg);
@@ -39,22 +53,21 @@ namespace Qorpent.Scaffolding.Application{
 			var controls = targetclass.Compiled.Elements("control");
 			foreach (var z in zones){
 				dynamic zone = new UObj();
-				StoreAttributes(z,zone);
+				StoreAttributes(z, zone);
 				var zb = blocks.Where(_ => _.Attr("zone") == z.Attr("code"));
 
 				foreach (var b in zb){
 					dynamic block = new UObj();
-					StoreAttributes(b,block);
+					StoreAttributes(b, block);
 
 					var bc = controls.Where(_ => _.Attr("block") == b.Attr("code"));
 					foreach (var c in bc){
 						dynamic control = new UObj();
 						StoreAttributes(c, control);
-						
-						var values = c.Elements().Where(_=>_.Name.LocalName=="value"||_.Name.LocalName=="values").ToArray();
-						
-							BindValues(control, values);
-						
+
+						var values = c.Elements().Where(_ => _.Name.LocalName == "value" || _.Name.LocalName == "values").ToArray();
+
+						BindValues(control, values);
 
 
 						block.controls.push(control);
@@ -64,9 +77,7 @@ namespace Qorpent.Scaffolding.Application{
 				}
 				obj.zones.push(zone);
 			}
-
-			result.Content = obj.ToJson();
-			return result;
+			return obj;
 		}
 
 		private void BindValues(dynamic control, XElement[] dvalues){

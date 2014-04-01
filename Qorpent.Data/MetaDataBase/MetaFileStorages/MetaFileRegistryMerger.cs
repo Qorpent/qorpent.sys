@@ -56,6 +56,11 @@ namespace Qorpent.Data.MetaDataBase{
 		/// </summary>
 		public bool Debug { get; set; }
 		/// <summary>
+		/// 
+		/// </summary>
+		public string IncludeRegex { get; set; }
+
+		/// <summary>
 		/// Расчитывает разницу между актуальныйм и сводимым репозиторием
 		/// </summary>
 		/// <param name="target"></param>
@@ -88,10 +93,10 @@ namespace Qorpent.Data.MetaDataBase{
 		}
 
 		private bool IsMatch(string arg){
-			if (string.IsNullOrWhiteSpace(ExcludeRegex)){
-				return true;
-			}
-			return !Regex.IsMatch(arg, ExcludeRegex);
+			
+			if (!string.IsNullOrWhiteSpace(ExcludeRegex) && Regex.IsMatch(arg, ExcludeRegex)) return false;
+			if (!string.IsNullOrWhiteSpace(IncludeRegex) && !Regex.IsMatch(arg, IncludeRegex)) return false;
+			return true;
 		}
 	}
 }

@@ -16,6 +16,9 @@ namespace Qorpent.Core.Tests {
         public void TestsSetUp() {
             _service = new ServiceEmulation();
         }
-		
+		[Test]
+		public void testTimeSpan(){
+			Console.WriteLine( (DateTime.Now - DateTime.Today).ToString(@"hh\:mm\:ss"));
+		}
     }
 }

@@ -121,7 +121,7 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Атрибут режима соединения
 		/// </summary>
-		public const string ConnecitonModeAttribute = "mode";
+		public const string ConnectionModeAttribute = "mode";
 		/// <summary>
 		/// Атрибут приоритета перекрытия класса
 		/// </summary>
