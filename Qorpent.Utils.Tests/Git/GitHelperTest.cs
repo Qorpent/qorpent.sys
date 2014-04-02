@@ -149,6 +149,55 @@ namespace Qorpent.Utils.Tests
 			Assert.True(info.LocalRevisionTime>=now.AddSeconds(-1) && info.LocalRevisionTime<=now2.AddSeconds(1));
 		}
 
+		[Test]
+		public void CanGetDistance(){
+			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = "test" };
+			githelper.Connect();
+			var c1 = githelper.WriteAndCommit("x", "a", "message");
+			var c2 = githelper.WriteAndCommit("x", "b", "message");
+			var dist1 = githelper.GetDistance(c1, c2);
+			Assert.AreEqual(0,dist1.Behind);
+			Assert.AreEqual(1,dist1.Forward);
+			Assert.True(dist1.IsForwardable);
+			var dist2 = githelper.GetDistance(c2, c1);
+			Assert.AreEqual(1, dist2.Behind);
+			Assert.AreEqual(0, dist2.Forward);
+			Assert.True(dist2.IsUpdateable);
+			githelper.Checkout(c1);
+			var c3 = githelper.WriteAndCommit("x", "c", "message");
+			var dist3 = githelper.GetDistance(c2, c3);
+			Assert.AreEqual(1, dist3.Behind);
+			Assert.AreEqual(1, dist3.Forward);
+			Assert.False(dist3.IsUpdateable);
+			Assert.False(dist3.IsForwardable);
+		}
+
+		[Test]
+		public void CanGetNullDistanceOnUnknown()
+		{
+			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = "test" };
+			githelper.Connect();
+			
+			var dist1 = githelper.GetDistance("x","y");
+			Assert.Null(dist1);
+		}
+
+		[Test]
+		public void CanGetNonExistedCommitAsNull()
+		{
+			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = "test" };
+			githelper.Connect();
+			var info = githelper.GetCommitInfo("nonexisted");
+			Assert.Null(info);
+		}
+
+		[Test]
+		[Explicit]
+		public void InvalidCommitMessage(){
+			var gh = new GitHelper{DirectoryName = @"C:\z3projects\assoi\comdiv\work\local"}.Connect();
+			var inf = gh.GetCommitInfo();
+			Assert.AreEqual("Привет!",inf.Comment);
+		}
 
 
 		[Test]

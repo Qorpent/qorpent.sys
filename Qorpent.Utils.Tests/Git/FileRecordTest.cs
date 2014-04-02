@@ -32,6 +32,16 @@ namespace Qorpent.Utils.Tests.Git
 		}
 
 		[Test]
+		public void NewModifiedFile()
+		{
+			var result = new FileRecord(" M test2");
+			Assert.AreEqual(FileState.NotModified, result.FirstState);
+			Assert.AreEqual(FileState.Modified, result.SecondState);
+			Assert.AreEqual("test2", result.FileName);
+			
+		}
+
+		[Test]
 		public void CanParseWithWS(){
 			var result = new FileRecord("?? a b");
 			Assert.AreEqual(FileState.Untracked, result.FirstState);
@@ -51,7 +61,7 @@ namespace Qorpent.Utils.Tests.Git
 		[Test]
 		public void CanParseComplex(){
 			var result = new FileRecord("DU  \"a\\320\\247 - b\" -> \"a\\320\\247 - b2\"");
-			Assert.AreEqual(FileState.Delted, result.FirstState);
+			Assert.AreEqual(FileState.Deleted, result.FirstState);
 			Assert.AreEqual(FileState.Updated, result.SecondState);
 			Assert.AreEqual("aЧ - b", result.FileName);
 			Assert.AreEqual("aЧ - b2", result.NewFileName);

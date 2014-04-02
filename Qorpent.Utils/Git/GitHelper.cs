@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using Qorpent.Utils.Extensions;
 
@@ -78,10 +79,38 @@ namespace Qorpent.Utils.Git{
 			else{
 
 				RemoteSet(RemoteName, RemoteUrl);
-				Checkout(Branch);
+				if (!IsWaitMergeCommit() && 0==GetChangedFilesList().Length){
+					Checkout(Branch);
+				}
 			}
-			Fetch();
+			if (!string.IsNullOrWhiteSpace(RemoteUrl)){
+				if (!IsWaitMergeCommit()){
+					Fetch();
+				}
+			}
 			return this;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="command"></param>
+		/// <param name="parameters"></param>
+		public void Tortoise(string command, object parameters = null){
+			var args = "/command:" + command;
+			if (null != parameters){
+				var dict = parameters.ToDict();
+				args += " " + string.Join(" ", dict.Select(_ => "/" + _.Key + ":\"" + _.Value + "\""));
+			}
+			var startInfo = new ProcessStartInfo
+			{
+				FileName = "tortoisegitproc",
+				Arguments = args,
+				UseShellExecute = false,
+				WorkingDirectory = DirectoryName ?? Environment.CurrentDirectory,
+				
+			};
+
+			Process.Start(startInfo);
 		}
 
 		/// <summary>
@@ -102,6 +131,8 @@ namespace Qorpent.Utils.Git{
 				UseShellExecute = false,
 				WorkingDirectory = DirectoryName ?? Environment.CurrentDirectory,
 				CreateNoWindow = true,
+				StandardOutputEncoding = Encoding.GetEncoding(1251),
+				
 				
 			};
 			if (DebugMode){
@@ -167,9 +198,29 @@ namespace Qorpent.Utils.Git{
 				}
 				throw new Exception("git error " + process.ExitCode + " " + error);
 			}
-			return msg.Trim();
+
+			return msg;
 
 		}
+		/// <summary>
+		/// Восстанавливает единичный файл в рабочей директории
+		/// </summary>
+		/// <param name="file"></param>
+		/// <returns></returns>
+		public string ResetSingleFile(string file){
+			try{
+				ExecuteCommand("reset", " HEAD \"" + file + "\"");
+				return ExecuteCommand("checkout", " -- \"" + file + "\"");
+			}
+			catch (Exception ex){
+				if (ex.Message.Contains("did not match any file")){
+					File.Delete(Path.Combine(DirectoryName,file));
+					return "";
+				}
+				throw;
+			}
+		}
+
 		/// <summary>
 		/// Init command
 		/// </summary>
@@ -199,13 +250,13 @@ namespace Qorpent.Utils.Git{
 			}
 
 			if (toref == "WORKING_TREE"){
-				var rawchanged = ExecuteCommand("status", "-s").SmartSplit(false,true,'\r','\n');
+				var rawchanged = ExecuteCommand("status", "-s").SmartSplit(false,false,'\r','\n');
 				return rawchanged.Select(_ => (FileRecord)_).ToArray();
 			}
 
 			if (string.IsNullOrWhiteSpace(fromref)){
 				var raw = ExecuteCommand("log", "-n1 --name-status --format=\"%h`\" " + toref);
-				var files = raw.SmartSplit(false, true, '`').Last().SmartSplit(false,true,'\r','\n');
+				var files = raw.SmartSplit(false, true, '`').Last().SmartSplit(false,false,'\r','\n');
 				return files.Select(_ => (FileRecord)_).ToArray();
 
 			}
@@ -219,7 +270,7 @@ namespace Qorpent.Utils.Git{
 			
 			var result = new List<FileRecord>();
 			for (var i = 1; i < rawchanges.Length; i += 2){
-				var files = rawchanges[i].SmartSplit(false, true, '\r', '\n').Select(_ => (FileRecord)_).ToArray();
+				var files = rawchanges[i].SmartSplit(false, false, '\r', '\n').Select(_ => (FileRecord)_).ToArray();
 				foreach (var file in files){
 					if (!result.Contains(file)){
 						result.Add(file);
@@ -362,22 +413,32 @@ namespace Qorpent.Utils.Git{
 			if (hard) args += " --hard";
 			return ExecuteCommand("reset", args);
 		}
+
 		/// <summary>
 		/// Специальная команда показа контента файла
 		/// </summary>
 		/// <param name="path"></param>
 		/// <param name="commit"></param>
+		/// <param name="returnNullOnNotExisted"></param>
 		/// <returns></returns>
-		public string GetContent(string path, string commit=null){
-			if (string.IsNullOrWhiteSpace(commit)){
-				commit = "HEAD";
+		public string GetContent(string path, string commit=null, bool returnNullOnNotExisted = true){
+			try{
+				if (string.IsNullOrWhiteSpace(commit)){
+					commit = "HEAD";
+				}
+				var args = commit + ":" + path;
+				var result = ExecuteCommand("show", args);
+				if (result.Contains("fatal: Path '" + path)){
+					return null;
+				}
+				return result;
 			}
-			var args = commit + ":" + path;
-			var result = ExecuteCommand("show", args);
-			if (result.Contains("fatal: Path '" + path)){
-				return null;
+			catch (Exception ex){
+				if (ex.Message.Contains("does not exist")){
+					if (returnNullOnNotExisted) return null;
+				}
+				throw;
 			}
-			return result;
 		}
 
 		/// <summary>
@@ -393,6 +454,14 @@ namespace Qorpent.Utils.Git{
 			var hists = result.SmartSplit(false, true, '`');
 			return hists.Select(GitUtils.ParseGitCommitInfo).ToArray();
 		}
+		/// <summary>
+		/// Проверяет состояние незавершенного мержа
+		/// </summary>
+		/// <returns></returns>
+		public bool IsWaitMergeCommit(){
+			var raw = ExecuteCommand("status");
+			return raw.Contains("fixed but you are still merging");
+		}
 
 		/// <summary>
 		/// Производит Checkout на бранч
@@ -404,9 +473,14 @@ namespace Qorpent.Utils.Git{
 			{
 				return ExecuteCommand("checkout", " " + branch);
 			}
-			catch{
-				if (createIfNotExists){
-					return ExecuteCommand("checkout", "-b " + branch);
+			catch(Exception e){
+				if (e.Message.Contains("did not match")){
+					if (createIfNotExists){
+						return ExecuteCommand("checkout", "-b " + branch);
+					}
+				}
+				if (e.Message.Contains("need to resolve")){
+					throw new Exception("has active conflicted merge");
 				}
 				throw;
 			}
@@ -435,36 +509,52 @@ namespace Qorpent.Utils.Git{
 		public string GetFullPath(string code){
 			return Path.GetFullPath(Path.Combine(DirectoryName, code));
 		}
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="fromcommit"></param>
 		/// <param name="tocommit"></param>
+		/// <param name="nullOnUnknown"></param>
 		/// <returns></returns>
-		public RevisionDistance GetDistance(string fromcommit="", string tocommit=""){
-			if (string.IsNullOrWhiteSpace(fromcommit)){
-				fromcommit = Branch;
+		public RevisionDistance GetDistance(string fromcommit="", string tocommit="", bool nullOnUnknown = true){
+			try{
+				if (string.IsNullOrWhiteSpace(fromcommit)){
+					fromcommit = Branch;
+				}
+				if (string.IsNullOrWhiteSpace(tocommit)){
+					tocommit = RemoteName + "/" + Branch;
+				}
+				var result = new RevisionDistance();
+				var result_ = ExecuteCommand("rev-list", fromcommit + ".." + tocommit);
+				result.Forward = result_.SmartSplit(false, true, '\r', '\n').Count;
+				result_ = ExecuteCommand("rev-list", tocommit + ".." + fromcommit);
+				result.Behind = result_.SmartSplit(false, true, '\r', '\n').Count;
+				return result;
 			}
-			if (string.IsNullOrWhiteSpace(tocommit)){
-				tocommit = RemoteName+"/"+Branch;
+			catch (Exception ex){
+				if (ex.Message.Contains("unknown revision")){
+					if (nullOnUnknown) return null;
+				}
+				throw;
 			}
-			var result = new RevisionDistance();
-			var result_ = ExecuteCommand("rev-list", fromcommit + ".." + tocommit);
-			result.Forward = result_.SmartSplit(false, true, '\r', '\n').Count;
-			result_ = ExecuteCommand("rev-list", tocommit + ".." + fromcommit);
-			result.Behind = result_.SmartSplit(false, true, '\r', '\n').Count;
-			return result;
 		}
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="tag"></param>
-		public void SetTag(string tag){
+		/// <param name="refer"></param>
+		public void SetTag(string tag, string refer=null){
+			if (string.IsNullOrWhiteSpace(refer)) refer = "HEAD";
 			try{
 				ExecuteCommand("tag", "-d " + tag);
 			}
+			catch{
+				
+			}
 			finally {
-				ExecuteCommand("tag", tag);
+				ExecuteCommand("tag", "-f " +tag+" "+refer);
 			}
 		}
 
@@ -504,21 +594,24 @@ namespace Qorpent.Utils.Git{
 
 				
 			}
-			WriteFile(".gitignore", "*.tmp\r\n*~.*");
-			Add();
-			Commit("init");
+			if (!File.Exists(Path.Combine(DirectoryName, ".gitignore"))){
+				WriteFile(".gitignore", "*.tmp\r\n*~.*");
+				Add();
+				Commit("init");
 
-			if (!string.IsNullOrWhiteSpace(RemoteUrl)){
-				Push();
+				if (!string.IsNullOrWhiteSpace(RemoteUrl)){
+					Push();
+				}
 			}
-			
+
 
 		}
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public string Push(bool tags = false, bool force = false){
+		public string Push(bool tags = false, bool force = false, string remote=null){
+			if (string.IsNullOrWhiteSpace(remote)) remote = RemoteName;
 			var args = "";
 			if (tags){
 				args += " --tags";
@@ -526,7 +619,7 @@ namespace Qorpent.Utils.Git{
 			if (force){
 				args += " --force";
 			}
-			args += " " + RemoteName + " " + Branch;
+			args += " " + remote + " " + Branch;
 			return ExecuteCommand("push",args);
 		}
 
@@ -600,17 +693,27 @@ namespace Qorpent.Utils.Git{
 				File.SetLastWriteTime(GetFullPath(path),commitinfo.LocalRevisionTime);
 			}
 		}
+
 		/// <summary>
 		/// Возвращает информацию о коммите
 		/// </summary>
 		/// <param name="refcode"></param>
+		/// <param name="returnNullIfNotExisted"></param>
 		/// <returns></returns>
-		public GitCommitInfo GetCommitInfo(string refcode=null){
-			if (string.IsNullOrWhiteSpace(refcode)){
-				refcode = "HEAD";
+		public GitCommitInfo GetCommitInfo(string refcode=null, bool returnNullIfNotExisted = true){
+			try{
+				if (string.IsNullOrWhiteSpace(refcode)){
+					refcode = "HEAD";
+				}
+				var data = ExecuteCommand("show", "--format=\"%H|%ct|%cN|%cE|%aN|%aE|%s\"  --quiet \"" + refcode + "\"");
+				return GitUtils.ParseGitCommitInfo(data);
 			}
-			var data = ExecuteCommand("show", "--format=\"%H|%ct|%cN|%cE|%aN|%aE|%s\"  --quiet \"" + refcode + "\"");
-			return GitUtils.ParseGitCommitInfo(data);
+			catch(Exception ex){
+				if (ex.Message.Contains("unknown")){
+					if (returnNullIfNotExisted) return null;
+				}
+				throw;
+			}
 
 		}
 	}

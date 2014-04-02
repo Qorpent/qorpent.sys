@@ -46,7 +46,7 @@ U           U    unmerged, both modified
 		/// <summary>
 		/// Удален
 		/// </summary>
-		Delted = 4,
+		Deleted = 4,
 		/// <summary>
 		/// Добавлен
 		/// </summary>

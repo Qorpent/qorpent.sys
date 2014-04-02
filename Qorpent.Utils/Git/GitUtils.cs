@@ -96,7 +96,7 @@ namespace Qorpent.Utils.Git{
 				case ' ':
 				case '\t': return FileState.NotModified;
 				case 'M': return FileState.Modified;
-				case 'D': return FileState.Delted;
+				case 'D': return FileState.Deleted;
 				case 'A': return FileState.Added;
 				case 'U': return FileState.Updated;
 				case 'R': return FileState.Renamed;
@@ -117,7 +117,7 @@ namespace Qorpent.Utils.Git{
 			{
 				case FileState.NotModified: return ' ';
 				case FileState.Modified : return  'M';
-				case FileState.Delted : return  'D';
+				case FileState.Deleted : return  'D';
 				case FileState.Added :return 'A';
 				case FileState.Updated:  return 'U';
 				case FileState.Renamed : return 'R';
@@ -127,5 +127,6 @@ namespace Qorpent.Utils.Git{
 				default: return 'X';
 			}
 		}
+
 	}
 }

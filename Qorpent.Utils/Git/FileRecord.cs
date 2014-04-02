@@ -40,12 +40,12 @@ namespace Qorpent.Utils.Git{
 		/// </summary>
 		public bool IsConflict{
 			get{
-				if (0 != (FirstState & (FileState.Delted | FileState.Added | FileState.Updated)) && FirstState == SecondState)
+				if (0 != (FirstState & (FileState.Deleted | FileState.Added | FileState.Updated)) && FirstState == SecondState)
 					return true;
 				if (FirstState == FileState.Added && SecondState == FileState.Updated) return true;
-				if (FirstState == FileState.Updated && SecondState == FileState.Delted) return true;
+				if (FirstState == FileState.Updated && SecondState == FileState.Deleted) return true;
 				if (FirstState == FileState.Updated && SecondState == FileState.Added) return true;
-				if (FirstState == FileState.Delted && SecondState == FileState.Updated) return true;
+				if (FirstState == FileState.Deleted && SecondState == FileState.Updated) return true;
 				return false;
 			}
 		}
