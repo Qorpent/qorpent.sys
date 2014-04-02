@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.Git{
@@ -40,6 +41,10 @@ namespace Qorpent.Utils.Git{
 		/// Требуемый бранч
 		/// </summary>
 		public string Branch { get; set; }
+		/// <summary>
+		/// Бранч от которого следует откалываться по умолчанию
+		/// </summary>
+		public string BaseBranch { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>
@@ -80,6 +85,13 @@ namespace Qorpent.Utils.Git{
 
 				RemoteSet(RemoteName, RemoteUrl);
 				if (!IsWaitMergeCommit() && 0==GetChangedFilesList().Length){
+					var basebranch = BaseBranch;
+					if (string.IsNullOrWhiteSpace(basebranch)){
+						basebranch = "master";
+					}
+					if (null == GetCommitInfo(Branch)){
+						Checkout(basebranch);
+					}
 					Checkout(Branch);
 				}
 			}
@@ -298,23 +310,38 @@ namespace Qorpent.Utils.Git{
 				_u = _u.Replace("://", "://" + AuthorName + ":" + Password + "@");
 			}
 			try{
-				ExecuteCommand("remote", "rm " + name);
+				return ExecuteCommand("remote", "set-url " + name + " \"" + _u + "\"");
 			}
 			catch{
-				
+				try{
+					ExecuteCommand("remote", "rm " + name);
+				}
+				catch{
+
+				}
+				return ExecuteCommand("remote", "add " + name + " \"" + _u + "\"");
 			}
-			return ExecuteCommand("remote", "add " + name + " \"" + _u + "\"");
 		}
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="remoteName"></param>
 		/// <param name="branch"></param>
-		public string Fetch(string remoteName = "", string branch = ""){
-			remoteName = remoteName ?? "";
+		/// <param name="tags"></param>
+		public string Fetch(string remoteName = "", string branch = "", bool tags=true){
+			remoteName = remoteName ?? RemoteName;
 			branch = branch ?? "";
-			ExecuteCommand("fetch", "--tags " + remoteName + " " + branch);
-			return ExecuteCommand("fetch",remoteName + " " + branch);
+			if (tags){
+				var task1 = Task.Run(() => ExecuteCommand("fetch", "--tags " + remoteName));
+				var task2 = Task.Run(() => ExecuteCommand("fetch", remoteName + " " + branch));
+				Task.WaitAll(task1, task2);
+				return task2.Result;
+			}
+			else{
+				return ExecuteCommand("fetch", remoteName + " " + branch);
+			}
+			
 		}
 		/// <summary>
 		/// Добавление файлов к выборке
@@ -526,10 +553,11 @@ namespace Qorpent.Utils.Git{
 					tocommit = RemoteName + "/" + Branch;
 				}
 				var result = new RevisionDistance();
-				var result_ = ExecuteCommand("rev-list", fromcommit + ".." + tocommit);
-				result.Forward = result_.SmartSplit(false, true, '\r', '\n').Count;
-				result_ = ExecuteCommand("rev-list", tocommit + ".." + fromcommit);
-				result.Behind = result_.SmartSplit(false, true, '\r', '\n').Count;
+				var ft = Task.Run(() => ExecuteCommand("rev-list", fromcommit + ".." + tocommit));
+				var bt = Task.Run(() =>ExecuteCommand("rev-list", tocommit + ".." + fromcommit));
+				Task.WaitAll(ft, bt);
+				result.Forward = ft.Result.SmartSplit(false, true, '\r', '\n').Count;
+				result.Behind = bt.Result.SmartSplit(false, true, '\r', '\n').Count;
 				return result;
 			}
 			catch (Exception ex){
