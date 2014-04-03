@@ -658,6 +658,15 @@ namespace Qorpent.Utils.Git{
 			if (!string.IsNullOrWhiteSpace(RemoteName)){
 				Fetch(RemoteName);
 			}
+			var basebranch = BaseBranch;
+			if (string.IsNullOrWhiteSpace(basebranch))
+			{
+				basebranch = "master";
+			}
+			if (null == GetCommitInfo(Branch))
+			{
+				Checkout(basebranch);
+			}
 			Checkout(Branch);
 			if (!string.IsNullOrWhiteSpace(RemoteName)){
 				try{
