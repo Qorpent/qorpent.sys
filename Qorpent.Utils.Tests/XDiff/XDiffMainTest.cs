@@ -113,6 +113,51 @@ ChangeAttribute n1
 	NewestAttribute code :2", result);
 		}
 
+
+
+		[Test]
+		public void CanFilterActions()
+		{
+			var b = XElement.Parse("<a><z id='1' code='2'/><z id='3' code='4'/></a>");
+			var n = XElement.Parse("<a><z id='3' code='2'/><z id='1' code='4'/><z id='5'/></a>");
+
+			var result = GetResult(b, n);
+			Assert.AreEqual(@"CreateElement n0
+	NewestElement : (<z id='5' />)
+ChangeAttribute n1
+	BasisElement name=z id=1
+	NewestAttribute code :4
+ChangeAttribute n2
+	BasisElement name=z id=3
+	NewestAttribute code :2", result);
+			var opts = new XDiffOptions();
+			opts.IncludeActions = opts.IncludeActions & ~XDiffAction.CreateElement;
+			result = GetResult(b, n, opts);
+			Assert.AreEqual(@"ChangeAttribute n0
+	BasisElement name=z id=1
+	NewestAttribute code :4
+ChangeAttribute n1
+	BasisElement name=z id=3
+	NewestAttribute code :2", result);
+
+			opts = new XDiffOptions();
+			opts.IncludeActions = opts.IncludeActions & ~XDiffAction.ChangeAttribute;
+			result = GetResult(b, n, opts);
+			Assert.AreEqual(@"CreateElement n0
+	NewestElement : (<z id='5' />)", result);
+		}
+
+		[Test]
+		public void CanPreventActions()
+		{
+			var b = XElement.Parse("<a><z id='1' code='2'/><z id='3' code='4'/></a>");
+			var n = XElement.Parse("<a><z id='3' code='2'/><z id='1' code='4'/><z id='5'/></a>");
+			var opts = new XDiffOptions();
+			opts.ErrorActions = opts.ErrorActions | XDiffAction.CreateElement;
+			Assert.Throws<Exception>(()=> GetResult(b, n, opts));
+		}
+
+
 		[Test]
 		public void CanAppplyPatch()
 		{

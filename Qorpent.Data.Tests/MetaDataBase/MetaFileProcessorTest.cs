@@ -13,6 +13,8 @@ namespace Qorpent.Data.Tests.MetaDataBase
 	[TestFixture]
 	public class MetaFileProcessorTest
 	{
+
+
 		[Test]
 		public void CanGenerateInsertScript(){
 			var r = new DatabaseUpdateRecord();
@@ -24,7 +26,7 @@ namespace Qorpent.Data.Tests.MetaDataBase
 			var sql = new DefaultMetaFileProcessor().GetSql(new[]{r}, false).Replace("\"","'");
 			Console.WriteLine(sql);
 			StringAssert.Contains(@"if exists (select top 1 id from x.t where Id = 1) 
-uupdate x.t set Code = 'aaa', Name = 'bbb', SomeField = 'x', Tag = '/x:2/', Active = 1, Version = (getdate()) where Id = 1
+update x.t set Code = 'aaa', Name = 'bbb', SomeField = 'x', Tag = '/x:2/', Active = 1, Version = (getdate()) where Id = 1
 else insert x.t (Id, Code, Name, SomeField, Tag, Active, Version) values (1, 'aaa', 'bbb', 'x', '/x:2/', 1, (getdate()))", sql);
 		}
 
@@ -116,6 +118,11 @@ else insert x.t (Id, Code, Name, SomeField, Tag, Active, Version) values (1, 'aa
 			var sql = new DefaultMetaFileProcessor().GetSql(new[] { r }, false).Replace("\"", "'");
 			Console.WriteLine(sql);
 			StringAssert.Contains(@"delete x.t where Code = 'aaa'", sql);
+		}
+
+		[Test]
+		public void CanBuildNormalSqlFromDiff(){
+			
 		}
 	}
 }

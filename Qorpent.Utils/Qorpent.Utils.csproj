@@ -84,7 +84,13 @@
     <Compile Include="Extensions\UniSqlQuery.cs" />
     <Compile Include="FileSystemHelper.cs" />
     <Compile Include="FuzzyLogic\FuzzySet.cs" />
-    <Compile Include="GitHelper.cs" />
+    <Compile Include="Git\FileRecord.cs" />
+    <Compile Include="Git\FileState.cs" />
+    <Compile Include="Git\GirFileState.cs" />
+    <Compile Include="Git\GitCommitInfo.cs" />
+    <Compile Include="Git\GitHelper.cs" />
+    <Compile Include="Git\GitUtils.cs" />
+    <Compile Include="Git\RevisionDistance.cs" />
     <Compile Include="Hex.cs" />
     <Compile Include="Iterator.cs" />
     <Compile Include="ListUtils.cs" />
@@ -96,7 +102,7 @@
     <Compile Include="LogicalExpressions\LiteralNode.cs" />
     <Compile Include="LogicalExpressions\LogicalExpressionEvaluator.cs" />
     <Compile Include="LogicalExpressions\LogicalExpressionParser.cs" />
-    <Compile Include="MergeStrategyOption.cs" />
+    <Compile Include="Git\MergeStrategyOption.cs" />
     <Compile Include="ParamMappingHelper.cs" />
     <Compile Include="Scaling\ScaleApproximated.cs" />
     <Compile Include="Scaling\ScaleNormalizeCache.cs" />

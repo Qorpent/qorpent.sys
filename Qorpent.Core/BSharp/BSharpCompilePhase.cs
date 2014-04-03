@@ -31,5 +31,9 @@ namespace Qorpent.BSharp {
         /// Фаза для расширений компилятора после выполнения сведений и интерполяций, но до 
         /// </summary>
 	    PreSimpleInclude =1<<5,
+		/// <summary>
+		/// Фаза наложения патчей
+		/// </summary>
+		Patching =1<<6,
 	}
 }

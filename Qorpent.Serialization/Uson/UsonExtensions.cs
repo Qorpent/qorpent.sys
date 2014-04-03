@@ -221,7 +221,7 @@ namespace Qorpent.Uson
 			}
 			else if (item is string)
 			{
-				output.Write("\"" + (item as string).Escape(EscapingType.JsonValue) + "\"");
+				output.Write("\"" + (item as string).Escape(EscapingType.JsonValue).Replace("\\'", "'") + "\"");
 			}
 			else if (item is bool)
 			{
@@ -245,7 +245,7 @@ namespace Qorpent.Uson
 			}
 			else
 			{
-				output.Write("\"" + item.ToString().Escape(EscapingType.JsonValue) + "\"");
+				output.Write("\"" + item.ToString().Escape(EscapingType.JsonValue).Replace("\\'","'") + "\"");
 			}
 		}
 

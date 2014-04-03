@@ -237,5 +237,10 @@ namespace Qorpent.Applications {
 		/// <param name="createContext"> </param>
 		/// <returns> </returns>
 		IMvcContext CreateContext(object createContext);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void WaitStartUp();
 	}
 }

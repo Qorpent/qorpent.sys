@@ -728,7 +728,7 @@ namespace Qorpent.Utils.Extensions
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		public static IDbConnection CreateDatabaseConnecitonFromString(string name){
+		public static IDbConnection CreateDatabaseConnectionFromString(string name){
 			var connectionString = name;
 			if (connectionString.StartsWith("ProviderName")){
 				var parsematch = Regex.Match(connectionString, @"^ProviderName=([^;]+);([\s\S]+)$");

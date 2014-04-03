@@ -27,7 +27,7 @@ namespace Qorpent.Data.MetaDataBase{
 		public void Merge(IMetaFileRegistry target, IMetaFileRegistry source, MergeFlags flags = MergeFlags.Default ){
 			var pairs = GetDelta(target, source);
 			if (null != CustomMerger){
-				pairs = CustomMerger.Merge(pairs);
+				CustomMerger.Merge(pairs);
 			}
 			Merge(flags, pairs);
 		}
@@ -55,6 +55,11 @@ namespace Qorpent.Data.MetaDataBase{
 		/// 
 		/// </summary>
 		public bool Debug { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public string IncludeRegex { get; set; }
+
 		/// <summary>
 		/// Расчитывает разницу между актуальныйм и сводимым репозиторием
 		/// </summary>
@@ -88,10 +93,10 @@ namespace Qorpent.Data.MetaDataBase{
 		}
 
 		private bool IsMatch(string arg){
-			if (string.IsNullOrWhiteSpace(ExcludeRegex)){
-				return true;
-			}
-			return !Regex.IsMatch(arg, ExcludeRegex);
+			
+			if (!string.IsNullOrWhiteSpace(ExcludeRegex) && Regex.IsMatch(arg, ExcludeRegex)) return false;
+			if (!string.IsNullOrWhiteSpace(IncludeRegex) && !Regex.IsMatch(arg, IncludeRegex)) return false;
+			return true;
 		}
 	}
 }

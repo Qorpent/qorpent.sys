@@ -35,6 +35,7 @@
     <Compile Include="BSharp\BSharpElementType.cs" />
     <Compile Include="BSharp\BSharpError.cs" />
     <Compile Include="BSharp\BSharpErrorType.cs" />
+    <Compile Include="BSharp\BSharpPatchBehavior.cs" />
     <Compile Include="BSharp\BSharpSyntax.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderOutputAttributes.cs" />
     <Compile Include="BSharp\Builder\BSharpBuilderPhase.cs" />

@@ -71,6 +71,51 @@ namespace Qorpent.BSharp {
             get { return _referencedDictionaries ?? (_referencedDictionaries = new List<string>()); }
         }
 
+		private string _patchTarget = null;
+		/// <summary>
+		/// Возвращает селектор классов для 
+		/// </summary>
+		public string PatchTarget{
+			get{
+				if (!Is(BSharpClassAttributes.Patch)) return null;
+				if (null == _patchTarget){
+					_patchTarget = Compiled.Attr(BSharpSyntax.PatchTargetAttribute);
+				}
+				return _patchTarget;
+			}
+		}
+
+		BSharpPatchBehavior _patchBehavior = BSharpPatchBehavior.None;
+		/// <summary>
+		/// 
+		/// </summary>
+		public BSharpPatchBehavior PatchBehavior{
+			get{
+				if (!Is(BSharpClassAttributes.Patch)) return BSharpPatchBehavior.None;
+				if (BSharpPatchBehavior.None == _patchBehavior){
+					
+					var _val = Compiled.Attr(BSharpSyntax.PatchCreateBehavior);
+					if (string.IsNullOrWhiteSpace(_val)){
+						_patchBehavior = BSharpPatchBehavior.Default;
+					}
+					else if (_val == BSharpSyntax.PatchCreateBehaviorNone){
+						_patchBehavior = BSharpPatchBehavior.NoneOnNew;
+					}
+					else if (_val == BSharpSyntax.PatchCreateBehaviorCreate)
+					{
+						_patchBehavior = BSharpPatchBehavior.CreateOnNew;
+					}
+					else if (_val == BSharpSyntax.PatchCreateBehaviorError){
+						_patchBehavior = BSharpPatchBehavior.ErrorOnNew;
+					}
+					else{
+						_patchBehavior = BSharpPatchBehavior.Invalid;
+					}
+				}
+				return _patchBehavior;
+			}
+		}
+
 		/// <summary>
 		/// Атрибуты класса
 		/// </summary>
@@ -176,6 +221,19 @@ namespace Qorpent.BSharp {
 		public string Prototype {
 			get {
 				return Compiled.Attr(BSharpSyntax.ClassPrototypeAttribute);
+			}
+		}
+
+		/// <summary>
+		/// Прототип класса
+		/// </summary>
+		[Serialize]
+		public int Priority
+		{
+			get
+			{
+				var p = Compiled.Attr(BSharpSyntax.PriorityAttribute).ToInt();
+				return p;
 			}
 		}
 		/// <summary>

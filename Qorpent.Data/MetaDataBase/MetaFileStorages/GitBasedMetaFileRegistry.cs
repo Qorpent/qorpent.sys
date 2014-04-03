@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Qorpent.Utils;
+using Qorpent.Utils.Git;
 
 namespace Qorpent.Data.MetaDataBase{
 	/// <summary>
@@ -41,6 +42,7 @@ namespace Qorpent.Data.MetaDataBase{
 		/// </summary>
 		public override void Refresh()
 		{
+			Initialize();
 			_git.FixBranchState();
 		}
 		 /// <summary>

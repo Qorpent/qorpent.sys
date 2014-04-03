@@ -89,5 +89,16 @@ namespace Qorpent.BSharp {
         /// Не найден словарь
         /// </summary>
         NotResolvedDictionaryElement = 440,
+
+		/// <summary>
+		/// У патча не указана цель
+		/// </summary>
+		PatchUndefinedTarget = 510,
+
+
+		/// <summary>
+		/// У патча указано неверное поведение
+		/// </summary>
+		PatchError = 520,
 	}
 }

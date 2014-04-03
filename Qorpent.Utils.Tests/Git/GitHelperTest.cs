@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using Qorpent.Utils.Git;
 
 namespace Qorpent.Utils.Tests
 {
@@ -31,6 +32,43 @@ namespace Qorpent.Utils.Tests
 			Assert.True(Directory.Exists(dirname+"\\default-content"));
 			
 		}
+
+		[Test]
+		public void CanInitDirWithQorpentSysClone()
+		{
+			var githelper = new GitHelper { DirectoryName = dirname, AuthorName="comdiv",Password = "aqsw123e",RemoteUrl = "https://assoi-git.ugmk.com:8601/qorpent.kernel.git" };
+			githelper.Connect();
+			Assert.True(Directory.Exists(dirname + "\\default-content"));
+
+		}
+
+
+		[Test]
+		public void CanGetChangedList()
+		{
+			var githelper = new GitHelper { DirectoryName = dirname };
+			githelper.Connect();
+			githelper.WriteFile("x","1");
+			githelper.WriteFile("y","1");
+			var changed = githelper.GetChangedFilesList();
+			Assert.AreEqual(2,changed.Length);
+			Assert.True(changed.Any(_=>_.FileName=="x"));
+			Assert.True(changed.Any(_=>_.FileName=="y"));
+			var ver1 = githelper.CommitAllChanges("1");
+			changed = githelper.GetChangedFilesList();
+			Assert.AreEqual(0, changed.Length);
+			changed = githelper.GetChangedFilesList(toref:"HEAD");
+			Assert.AreEqual(2, changed.Length);
+			var ver2 = githelper.WriteAndCommit("x", "2", "2");
+			changed = githelper.GetChangedFilesList(toref: "HEAD");
+			Assert.AreEqual(1, changed.Length);
+			var ver3 = githelper.WriteAndCommit("y", "2", "3");
+			changed = githelper.GetChangedFilesList(toref: "HEAD");
+			Assert.AreEqual(1, changed.Length);
+			changed = githelper.GetChangedFilesList(fromref:ver1,toref: "HEAD");
+			Assert.AreEqual(2, changed.Length);
+		}
+
 		[Test]
 		public void CanGetContent()
 		{
@@ -111,6 +149,55 @@ namespace Qorpent.Utils.Tests
 			Assert.True(info.LocalRevisionTime>=now.AddSeconds(-1) && info.LocalRevisionTime<=now2.AddSeconds(1));
 		}
 
+		[Test]
+		public void CanGetDistance(){
+			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = "test" };
+			githelper.Connect();
+			var c1 = githelper.WriteAndCommit("x", "a", "message");
+			var c2 = githelper.WriteAndCommit("x", "b", "message");
+			var dist1 = githelper.GetDistance(c1, c2);
+			Assert.AreEqual(0,dist1.Behind);
+			Assert.AreEqual(1,dist1.Forward);
+			Assert.True(dist1.IsForwardable);
+			var dist2 = githelper.GetDistance(c2, c1);
+			Assert.AreEqual(1, dist2.Behind);
+			Assert.AreEqual(0, dist2.Forward);
+			Assert.True(dist2.IsUpdateable);
+			githelper.Checkout(c1);
+			var c3 = githelper.WriteAndCommit("x", "c", "message");
+			var dist3 = githelper.GetDistance(c2, c3);
+			Assert.AreEqual(1, dist3.Behind);
+			Assert.AreEqual(1, dist3.Forward);
+			Assert.False(dist3.IsUpdateable);
+			Assert.False(dist3.IsForwardable);
+		}
+
+		[Test]
+		public void CanGetNullDistanceOnUnknown()
+		{
+			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = "test" };
+			githelper.Connect();
+			
+			var dist1 = githelper.GetDistance("x","y");
+			Assert.Null(dist1);
+		}
+
+		[Test]
+		public void CanGetNonExistedCommitAsNull()
+		{
+			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = "test" };
+			githelper.Connect();
+			var info = githelper.GetCommitInfo("nonexisted");
+			Assert.Null(info);
+		}
+
+		[Test]
+		[Explicit]
+		public void InvalidCommitMessage(){
+			var gh = new GitHelper{DirectoryName = @"C:\z3projects\assoi\comdiv\work\local"}.Connect();
+			var inf = gh.GetCommitInfo();
+			Assert.AreEqual("Привет!",inf.Comment);
+		}
 
 
 		[Test]

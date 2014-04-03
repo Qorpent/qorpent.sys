@@ -21,7 +21,7 @@ namespace Qorpent.BSharp{
 		}
 
 		private static IEnumerable<XElement> InternalExecuteReader(string connection, string query, string elementName){
-			using (var c = DatabaseExtensions.CreateDatabaseConnecitonFromString(connection)){
+			using (var c = DatabaseExtensions.CreateDatabaseConnectionFromString(connection)){
 				c.Open();
 				var cmd = c.CreateCommand();
 				cmd.CommandText = query;

@@ -41,9 +41,32 @@ namespace Qorpent.Utils.XDiff
 			XElement[] nelements;
 			PrepareIndexes(basis, newest, out belements, out nelements);
 			if(basis==newest)yield break;
-			foreach (var x in ProcessNewElements(nelements, belements)) yield return x;
-			foreach (var xDiffItem in ProcessChangedElements(belements, nelements)) yield return xDiffItem;
-			foreach (var x in ProcessDeleteElements(belements, nelements)) yield return x;
+				foreach (var x in ProcessNewElements(nelements, belements)){
+					if(!Check(x))continue;
+					x.Options = _options;
+					yield return x;
+				}
+			
+			
+			foreach (var x in ProcessChangedElements(belements, nelements)){
+				if (!Check(x)) continue;
+				x.Options = _options;
+				yield return x;
+			}
+
+				foreach (var x in ProcessDeleteElements(belements, nelements)){
+					if (!Check(x)) continue;
+					x.Options = _options;
+					yield return x;
+				}
+			
+		}
+
+		private bool Check(XDiffItem x){
+			if (x.Action == (x.Action & _options.ErrorActions)){
+				throw new Exception("Error Diff occured "+ new[]{x}.LogToString());
+			}
+			return _options.IncludeActions.HasFlag(x.Action);
 		}
 
 		private IEnumerable<XDiffItem> ProcessChangedElements(XElement[] belements, XElement[] nelements){
@@ -78,7 +101,7 @@ namespace Qorpent.Utils.XDiff
 						var realname = newattribute.Name.LocalName.Substring(4);
 						yield return new XDiffItem { Action = XDiffAction.ChangeAttribute, BasisElement = e.b, NewestAttribute = new XAttribute(realname, newattribute.Value) };
 						continue;
-						;
+						
 					}
 					yield return new XDiffItem{Action = XDiffAction.CreateAttribute, BasisElement = e.b, NewestAttribute = newattribute};
 				}

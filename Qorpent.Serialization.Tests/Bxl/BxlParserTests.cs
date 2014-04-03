@@ -47,6 +47,15 @@ test1 a b c
 		}
 
 		[Test]
+		public void AnonCodeNotOverrideDirectlySetId(){
+			String bxl = @"a id=1 a";
+			IBxlParser p = new BxlParser();
+			XElement res = p.Parse(bxl).Elements().First();
+			Console.WriteLine(res);
+			Assert.AreEqual("1",res.Attr("id"));
+		}
+
+		[Test]
 		public void CanGetAttributeValue() {
 			String bxl = @"
 test1 x=1 y=2 x=3

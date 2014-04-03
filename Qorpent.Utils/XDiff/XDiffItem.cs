@@ -44,6 +44,10 @@ namespace Qorpent.Utils.XDiff{
 				return false;
 			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public XDiffOptions Options { get; set; }
 
 		/// <summary>
 		/// Применяет разницу к исходному элементу

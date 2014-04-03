@@ -94,11 +94,12 @@ namespace Qorpent.Db
 			declare @code nvarchar(255), @parent int, @result nvarchar(255);
 			if ( isnull(@id,0) = 0 ) return '/';
 			select @code = Code, @parent = Parent from ${fullname} where Id = @id;
-			if ( isnull(@parent,0) = 0 ) return '/'+@code+'/';
-			return ${fullname}GetPath( @parent ) + @code + '/';
+			if ( isnull(@parent,0) = 0 ) return isnull('/'+@code+'/','_NULL_');
+			return ISNULL( ${fullname}GetPath( @parent ) + @code + '/', '_NULL_');
 		)
 		trigger "${.code}_INSERT_INIT_PATH" "Триггер прокачки пути при добавлении элемента" insert : (
 			update ${fullname} set Path = ${fullname}GetPath(Id) where Id in (select Id from inserted)
+			update ${fullname} set Path = ${fullname}GetPath(Id) where Path like '%_NULL_%'
 		)
 		trigger "${.code}_UPDATE_SET_PATH" "Триггер прокачки пути при обновлении элемента" update : (
 			if ( UPDATE (Code) or Update(Parent) ) begin

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -9,61 +8,6 @@ using Qorpent.Utils.Extensions;
 using Qorpent.Utils.XDiff;
 
 namespace Qorpent.Data.MetaDataBase{
-
-	/// <summary>
-	/// 
-	/// </summary>
-	public interface IDatabaseUpdateRecordMerger{
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="source"></param>
-		/// <returns></returns>
-		DatabaseUpdateRecord Merge(IEnumerable<DatabaseUpdateRecord> source);
-	}
-
-
-	/// <summary>
-	/// Стандартный мержер обновлений по объекту - формирует сводный апдейт
-	/// </summary>
-	public class DefaultDatabaseUpdateRecordMerger : IDatabaseUpdateRecordMerger
-	{
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="source"></param>
-		/// <returns></returns>
-		public DatabaseUpdateRecord Merge(IEnumerable<DatabaseUpdateRecord> source){
-			var result = new DatabaseUpdateRecord();
-			var key = DatabaseUpdateRecord.GetObjectKey(source);
-			var tableandschema = key.Table.Split('.');
-			result.Schema = tableandschema.Length == 1 ? "dbo" : tableandschema[0];
-			result.TargetTable = tableandschema.Length == 1 ? tableandschema[0] : tableandschema[1];
-			result.TargetId = key.Id;
-			result.TargetCode = key.Code;
-			DetermineFileSource(source, result);
-			var updates = source.Where(_ => 0 != (_.DiffItem.Action & XDiffAction.MainCreateOrUpdate)).ToArray();
-			var deletes = source.Where(_ => _.DiffItem.Action == XDiffAction.DeleteElement).ToArray();
-			if (0 == deletes.Length + updates.Length) return null;
-			if (0 == updates.Length && 0 != deletes.Length){
-				result.DiffItem = new XDiffItem{Action = XDiffAction.DeleteElement};
-			}
-			else{
-				
-			}
-			return result;
-		}
-
-		private static void DetermineFileSource(IEnumerable<DatabaseUpdateRecord> source, DatabaseUpdateRecord result){
-			var mainfilesrc = source.
-				Where(_ => _.DiffItem.Action == XDiffAction.CreateElement).OrderBy(_ => _.DiffItem.NewestElement.ToString().Length)
-			                        .FirstOrDefault();
-			if (null != mainfilesrc){
-				result.FileDelta = mainfilesrc.FileDelta;
-			}
-		}
-	}
-
 	/// <summary>
 	/// Процессор по умолчанию
 	/// </summary>
@@ -115,77 +59,16 @@ namespace Qorpent.Data.MetaDataBase{
 				connection = sqlconnection;
 				alldeltas = new LinkedList<DatabaseUpdateRecord>(givendelta);
 				grouped = new LinkedList<DatabaseUpdateRecord>(DatabaseUpdateRecord.Group(alldeltas).Values.Select(_=>Merger.Merge(_)));
-					
 				working = workinglist;
 				error = errorlist;
 				CheckTables();
-			//	CheckCrossFileMovements();
-			//	CheckCreates();
-			//	CheckDeletes();
-				
+				foreach (var record in grouped){
+					working.AddLast(record);
+				}
 			}
 			
 		}
-		/*
-		private void CheckDeletes(){
-			if (!Online) return;
-			var query = string.Join("\r\nunion\r\n",
-			                        creates.Union(deletes).Select(
-				                        _ =>
-				                        string.Format(
-					                        "select {0},(selct top 1 id from {3} where (0= {1} or Id={1}) and (''='{2}' or Code='{2}') ) ")));
-			var dict = getc().ExecuteDictionaryReader(query);
-			var excludes = dict.Where(_ => _.Value == null).Select(_ => _.Key.ToInt()).ToArray();
-			var _deletes = deletes.ToArray();
-			foreach (var exclude in excludes)
-			{
-				var ex = _deletes.First(_ => _.Id == exclude);
-				deletes.Remove(ex);
-				alldeltas.Remove(ex);
-				ignored.AddFirst(ex);
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		protected virtual void CheckCreates(){
-			if (!Online) return;
-			var query = string.Join("\r\nunion\r\n",
-			                        creates.Union(deletes).Select(
-				                        _ =>
-				                        string.Format(
-					                        "select {0},(selct top 1 id from {3} where (0= {1} or Id={1}) and (''='{2}' or Code='{2}') ) ")));
-			var dict = getc().ExecuteDictionaryReader(query);
-			var excludes = dict.Where(_ => _.Value != null).Select(_ => _.Key.ToInt()).ToArray();
-			var _creates = creates.ToArray();
-			foreach (var exclude in excludes){
-				var ex = _creates.First(_ => _.Id == exclude);
-				creates.Remove(ex);
-				ex.ErrorCode = "DBR";
-				ex.Error = "Данный элемент уже существует в БД";
-				alldeltas.Remove(ex);
-				error.AddFirst(ex);
-			}
-		}
-
-		private void CheckCrossFileMovements(){
-			var crossfilemoves = creates.Join(deletes, _ => _.FullCode, _ => _.FullCode, (f, s) => new{f, s}).ToArray();
-			foreach (var crossfilemove in crossfilemoves){
-				deletes.Remove(crossfilemove.s);
-				creates.Remove(crossfilemove.f);
-				var x1 = new XElement("a", crossfilemove.s.DiffItem.BasisElement);
-				var x2 = new XElement("a", crossfilemove.f.DiffItem.NewestElement);
-				var differ = new XDiffGenerator();
-				var diff = differ.GetDiff(x1, x2);
-				foreach (var diffItem in diff){
-					var cpy = crossfilemove.f.Copy();
-					cpy.DiffItem = diffItem;
-					alldeltas.AddFirst(cpy);
-				}
-			}
-		}
-		 */
+		
 
 		IDbConnection getc(){
 			return Applications.Application.Current.DatabaseConnections.GetConnection(connection);
@@ -196,7 +79,7 @@ namespace Qorpent.Data.MetaDataBase{
 		protected virtual  void CheckTables(){
 			if (!Online) return;
 			var tables = grouped.GroupBy(_ => _.FullTableName, _ => _);
-			var query = string.Join("\r\nunion\r\n", tables.Select(_ =>string.Format("select '{0}' as code,object_id('{0}') as id ")));
+			var query = string.Join("\r\nunion\r\n", tables.Select(_ =>string.Format("select '{0}' as code,object_id('{0}') as id ",_)));
 			var dict = getc().ExecuteDictionaryReader(query);
 			var excludes = dict.Where(_ => _.Value == null).Select(_ => _.Key).ToArray();
 			foreach (var exclude in excludes){
@@ -219,15 +102,15 @@ namespace Qorpent.Data.MetaDataBase{
 				var script = GetSql(records);
 				using (var c = getc()){
 					c.Open();
-					var t = c.BeginTransaction();
+					//var t = c.BeginTransaction();
 					try{
 						var com = c.CreateCommand(script);
 						com.ExecuteNonQuery();
-						t.Commit();
+					//	t.Commit();
 						
 					}
 					catch {
-						t.Rollback();
+						//t.Rollback();
 						throw;
 					}
 				}
@@ -246,56 +129,102 @@ namespace Qorpent.Data.MetaDataBase{
 			var script = CollectSql(comments);
 			return script;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public string LastSql { get; private set; }
 
 		private string CollectSql(bool comments){
 			var sb = new StringBuilder();
+			var tables = commands.Select(_ => _.FullTableName.ToLower()).Distinct();
+			sb.Append(@" begin tran
+ begin try
+");
+			foreach (var table in tables){
+				sb.AppendLine(string.Format("alter table {0} nocheck constraint all", table));
+			}
 			foreach (var databaseUpdateRecord in commands){
 				if (comments){
 					sb.AppendLine();
 					sb.AppendLine("/* " + databaseUpdateRecord + " */");
 				}
-				sb.AppendLine(databaseUpdateRecord.SqlCommand);
+				sb.AppendLine(databaseUpdateRecord.BaseSqlCommand);
 			}
-			return sb.ToString();
+
+			foreach (var databaseUpdateRecord in commands)
+			{
+				if (!string.IsNullOrWhiteSpace(databaseUpdateRecord.ExtendedSqlCommand)){
+					sb.AppendLine(databaseUpdateRecord.ExtendedSqlCommand);
+				}
+			}
+			sb.AppendLine("declare @c table (t nvarchar(255), c nvarchar(255), w nvarchar(255))");
+			foreach (var table in tables)
+			{
+				sb.AppendLine(string.Format("alter table {0} check constraint all", table));
+			}
+			foreach (var table in tables)
+			{
+				sb.AppendLine(string.Format("insert @c (t,c,w) exec sp_executesql N'DBCC CHECKCONSTRAINTS (''{0}'')'", table));
+			}
+			sb.Append(@"if ((select count(*) from @c)!=0) begin
+			select * from @c;
+			throw 51012 , 'patch violates constraints', 1;
+		end else commit
+ end try
+ begin catch
+	if (@@TRANCOUNT!=0) rollback;
+	throw;
+ end catch
+");
+			LastSql = sb.ToString();
+			return LastSql;
 		}
 
 		private void CheckSql(bool comments){
 			foreach (var command in commands){
-				if (string.IsNullOrWhiteSpace(command.SqlCommand)){
-					command.SqlCommand = BuildSql(command);
+				if (string.IsNullOrWhiteSpace(command.BaseSqlCommand)){
+					command.BaseSqlCommand = BuildBaseSql(command);
+					command.ExtendedSqlCommand = BuildExtendedSql(command);
 				}
 			}
 		}
+
+		private string BuildExtendedSql(DatabaseUpdateRecord command){
+			var sb = new StringBuilder();
+			if (command.DiffItem.Action == XDiffAction.CreateElement )
+			{
+				var dict = CreateExtendedFieldDictionary(command);
+			
+				if (dict.Count != 0){
+					var where = "";
+					if (command.TargetId != 0){
+						where = "Id = " + command.TargetId;
+					}
+					else{
+						where = "Code = '" + command.TargetCode.ToSqlString() + "'";
+					}
+					foreach (var p in dict){
+						sb.AppendLine(string.Format("update {0} set {1} = {2} where {3}", command.FullTableName, p.Key, p.Value,where));
+					}
+				}
+			}
+			return sb.ToString();
+
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="command"></param>
 		/// <returns></returns>
-		protected virtual  string BuildSql(DatabaseUpdateRecord command){
+		protected virtual  string BuildBaseSql(DatabaseUpdateRecord command){
 			if (command.DiffItem.Action == XDiffAction.CreateElement){
 				return BuildCreateNewSql(command);
-			}else if (command.DiffItem.Action == XDiffAction.CreateAttribute ||
-			          command.DiffItem.Action == XDiffAction.ChangeAttribute){
-				return BuildUpdateSql(command);
 			}
 			return "-- it will be nice";
 		}
 
-		private string BuildUpdateSql(DatabaseUpdateRecord command){
-			var xe = new XElement("a", command.DiffItem.NewestAttribute);
-			var updict = CreateFieldDictionary(xe).ToArray();
-			var trgdict = CreateFieldDictionary(command.DiffItem.BasisElement);
-			var where = "";
-			if (trgdict.ContainsKey("Id")){
-				where = string.Format("Id = {0}", trgdict["Id"]);
-			}
-			else{
-				where = string.Format("Code = '{0}'", trgdict["Code"].ToSqlString());
-			}
-			var cmd = string.Format("update {0} set {1} = '{2}', Acitve = 1, Version = (getdate())  where {3}", command.FullTableName, updict[0].Key, updict[0].Value.ToSqlString(),
-			                        where);
-			return cmd;
-		}
+	
 
 		/// <summary>
 		/// 
@@ -303,7 +232,7 @@ namespace Qorpent.Data.MetaDataBase{
 		/// <param name="command"></param>
 		/// <returns></returns>
 		protected virtual string BuildCreateNewSql(DatabaseUpdateRecord command){
-			var dict_ = CreateFieldDictionary(command.DiffItem.NewestElement);
+			var dict_ = CreateBaseFieldDictionary(command);
 			if (!dict_.ContainsKey("Active")){
 				dict_["Active"] = "1";
 			}
@@ -316,7 +245,7 @@ namespace Qorpent.Data.MetaDataBase{
 			
 			var where = "";
 			var update = "";
-			if (dict_.ContainsKey("Id")){
+			if (dict_.ContainsKey("Id") && !command.DiffItem.Options.ChangeIds){
 				where = "Id = " + dict_["Id"].ToInt();
 				update = CollectUpdates(dict.Where(_ => _.Key != "Id"));
 			}
@@ -326,8 +255,8 @@ namespace Qorpent.Data.MetaDataBase{
 			}
 			return string.Format(@"
 if exists (select top 1 id from {0} where {3}) 
-uupdate {0} set {4} where {3}
-else insert {0} ({1}) values ({2})", command.FullTableName, fieldlist, valuelist,where,update);
+update {0} set {4} where {3}
+else insert {0} ({1}) values ({2})", command.FullTableName.ToLower(), fieldlist, valuelist,where,update);
 		}
 
 		private string GetSqlVar(string value){
@@ -344,7 +273,48 @@ else insert {0} ({1}) values ({2})", command.FullTableName, fieldlist, valuelist
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		protected virtual  IDictionary<string,string> CreateFieldDictionary(XElement e){
+		protected virtual IDictionary<string, string> CreateExtendedFieldDictionary(DatabaseUpdateRecord cmd)
+		{
+
+			XElement e = cmd.DiffItem.NewestElement;
+			var result = new Dictionary<string, string>();
+			foreach (var a in e.Attributes())
+			{
+				if (null != cmd.DiffItem.Options.RefMaps){
+					var mapkey = "ref-" + cmd.Schema + "-" + cmd.TargetTable + "-" + a.Name.LocalName.ToLower();
+					if (cmd.DiffItem.Options.RefMaps.ContainsKey(mapkey)){
+						//no reference
+						if (a.Value != "0" && a.Value != "" && a.Value.ToInt() == 0){
+							result[a.Name.LocalName] = "(select Id from " + cmd.DiffItem.Options.RefMaps[mapkey] + " where Code = '" +
+							                           a.Value.ToSqlString() + "')";
+							continue;
+						}
+						
+					}
+				}
+				if (a.Name.LocalName.ToLower() == "parent")
+				{
+					//no reference
+					if (a.Value != "0" && a.Value != "" && a.Value.ToInt() == 0)
+					{
+						result[a.Name.LocalName] = "(select Id from " + cmd.FullTableName + " where Code = '" +
+												   a.Value.ToSqlString() + "')";
+					}
+					
+				}
+
+			}
+			
+			return result;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		protected virtual IDictionary<string, string> CreateBaseFieldDictionary(DatabaseUpdateRecord cmd){
+
+			XElement e = cmd.DiffItem.NewestElement;
 			var result = new Dictionary<string, string>();
 			var tag = "";
 			foreach (var a in e.Attributes()){
@@ -371,17 +341,51 @@ else insert {0} ({1}) values ({2})", command.FullTableName, fieldlist, valuelist
 					}
 					continue;
 				}
-				
-				if (a.Name.LocalName.StartsWith("tag.")){
+
+				if (a.Name.LocalName.StartsWith("tag.") || a.Name.LocalName.StartsWith("tag-"))
+				{
 					var tagname = a.Name.LocalName.Substring(4);
 					tag = TagHelper.SetValue(tag, tagname, a.Value);
 					continue;
 				}
 
+				if (null != cmd.DiffItem.Options.RefMaps){
+					var mapkey = "ref-" + cmd.Schema + "-" + cmd.TargetTable + "-" + a.Name.LocalName.ToLower();
+					if (cmd.DiffItem.Options.RefMaps.ContainsKey(mapkey)){
+						//no reference
+						if (a.Value != "0" && a.Value != "" && a.Value.ToInt() == 0){
+							continue; //this field must be set further
+						}
+						else{
+							result[a.Name.LocalName] = a.Value.ToInt().ToString();
+							continue;
+
+						}
+					}
+				}
+				if (a.Name.LocalName.ToLower() == "parent"){
+					//no reference
+					if (a.Value != "0" && a.Value != "" && a.Value.ToInt() == 0)
+					{
+						continue; //this field must be set further
+					}
+					else
+					{
+						result[a.Name.LocalName] = a.Value.ToInt().ToString();
+						continue;
+
+					}
+				}
+
 				result[a.Name.LocalName] = a.Value;
 			}
 			if (!string.IsNullOrWhiteSpace(e.Value)){
-				result["Data"] =e.Value;
+				if (e.Value.StartsWith("<")){
+					result["Data"] = e.Value;
+				}
+				else{
+					result["Comment"] = e.Value;
+				}
 			}
 			if (!string.IsNullOrWhiteSpace(tag)){
 				result["Tag"] = tag;
