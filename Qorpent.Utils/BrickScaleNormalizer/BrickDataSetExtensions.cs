@@ -55,5 +55,37 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 				}
 			}
 		}
+		/// <summary>
+		///		Безопасная печать <see cref="BrickDataSet.Preferences"/> с проверкой на NOT NULL
+		/// </summary>
+		/// <param name="dataSet">Исходный датасет</param>
+		public static void PrintPreferences(this BrickDataSet dataSet) {
+			if (dataSet != null && dataSet.Preferences != null) {
+				dataSet.Preferences.PrintPreferences();
+			}
+		}
+		/// <summary>
+		///		Печатает на экран предпочтения пользователя
+		/// </summary>
+		/// <param name="preferences">Исходный экземпляр предпочтений пользователя</param>
+		public static void PrintPreferences(this UserPreferences preferences) {
+			Console.WriteLine(preferences.AsString());
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="preferences"></param>
+		/// <returns></returns>
+		public static string AsString(this UserPreferences preferences) {
+			var result = string.Empty;
+			foreach (var property in preferences.GetType().GetProperties()) {
+				var value = property.GetValue(preferences);
+				if (value == null) {
+					continue;
+				}
+				result += string.Format("{0}: {1},\n", property.Name, value.ToString());
+			}
+			return result;
+		}
     }
 }

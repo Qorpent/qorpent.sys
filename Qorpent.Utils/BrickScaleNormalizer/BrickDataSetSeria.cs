@@ -57,6 +57,13 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             }
             return row;
         }
+		/// <summary>
+		///		Удаление указанного ряда данных из серии
+		/// </summary>
+		/// <param name="row">Ряд</param>
+		public void Remove(DataRow row) {
+			_rows.Remove(row);
+		}
         /// <summary>
         ///     Получение <see cref="IEnumerator{T}"/> по <see cref="DataRow"/>
         /// </summary>
