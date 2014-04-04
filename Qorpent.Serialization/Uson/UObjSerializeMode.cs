@@ -17,7 +17,10 @@ namespace Qorpent.Uson
 		/// Информация об исходном типе
 		/// </summary>
 		KeepType =1,
-
+		/// <summary>
+		/// Вместо JSON используется javascript-нотация
+		/// </summary>
+		Javascript = 2,
 		
 	}
 }

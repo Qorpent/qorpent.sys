@@ -17,7 +17,7 @@ namespace Qorpent.Scaffolding.Application{
 		/// <returns></returns>
 		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses){
 			var production = new Production{
-				FileName = Project.ProjectName+"-datatypes" + ".js"
+				FileName = Project.ProjectName+"_types" + ".js"
 			};
 			var sb = new StringBuilder();
 			sb.AppendLine("// Type definitions for " + Project.ProjectName);

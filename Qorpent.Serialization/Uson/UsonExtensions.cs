@@ -164,7 +164,12 @@ namespace Qorpent.Uson
 				{
 					hasprop = true;
 				}
-				output.Write("\"" + property.Key + "\"");
+				if (mode.HasFlag(UObjSerializeMode.Javascript)){
+					output.Write(property.Key);
+				}
+				else{
+					output.Write("\"" + property.Key + "\"");
+				}
 				output.Write(":");
 				ToJsonValue(output,mode,property.Value);
 			}
@@ -219,9 +224,16 @@ namespace Qorpent.Uson
 			{
 				ToJson(((UObj) item),output, mode);
 			}
-			else if (item is string)
-			{
-				output.Write("\"" + (item as string).Escape(EscapingType.JsonValue).Replace("\\'", "'") + "\"");
+			else if (item is string){
+				var s = item as string;
+				if (s.StartsWith("javascript://")){
+					s = s.Substring("javascript://".Length);
+					if (mode.HasFlag(UObjSerializeMode.Javascript)){
+						output.Write(s);
+					}
+					return;
+				}
+				output.Write("\"" + s.Escape(EscapingType.JsonValue).Replace("\\'", "'") + "\"");
 			}
 			else if (item is bool)
 			{

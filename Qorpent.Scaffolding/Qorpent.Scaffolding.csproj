@@ -18,6 +18,7 @@
   <ItemGroup>
     <Compile Include="Application\AppSpecificationBSharpSource.cs" />
     <Compile Include="Application\ApplicationCompilerExtensions.cs" />
+    <Compile Include="Application\GenerateActionsInJavaScript.cs" />
     <Compile Include="Application\GenerateDataTypesInJavaScriptTask.cs" />
     <Compile Include="Application\GenerateDataTypesInTypeScriptTask.cs">
       <SubType>Code</SubType>

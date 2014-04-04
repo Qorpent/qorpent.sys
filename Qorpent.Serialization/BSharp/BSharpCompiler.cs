@@ -103,18 +103,21 @@ namespace Qorpent.BSharp {
 		/// <param name="preparedContext"></param>
 		/// <returns></returns>
 		public IBSharpContext Compile(IEnumerable<XElement> sources , IBSharpContext preparedContext = null){
+			IBSharpContext result = preparedContext ?? new BSharpContext(this);
+			if (null == result.Compiler)
+			{
+				result.Compiler = this;
+			}
 			//if (this.DoProcessRequires){
-				sources = ProcessRequires(sources);
+				sources = ProcessRequires(sources,result);
 			//}
 			var cfg = GetConfig();
 			if (cfg.SingleSource) {
-				return BuildBatch(sources,preparedContext);
+				return BuildBatch(sources,result);
 				
 			}
-			IBSharpContext result = preparedContext ?? new BSharpContext(this);
-			if (null == result.Compiler) {
-				result.Compiler = this;
-			}
+			
+			
 			
 			foreach (XElement src in sources) {
 				var subresult = BuildSingle(src);
@@ -127,11 +130,11 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public bool DoProcessRequires { get; set; }
 
-		private IEnumerable<XElement> ProcessRequires(IEnumerable<XElement> sources){
+		private IEnumerable<XElement> ProcessRequires(IEnumerable<XElement> sources, IBSharpContext context){
 			if (DoProcessRequires){
 				var filenames = sources.ToDictionary(_ => Path.GetFullPath(_.Describe().File).NormalizePath(), _ => _);
 				foreach (var src in filenames.ToArray()){
-					ProcessRequires(src.Value, src.Key, filenames);
+					ProcessRequires(src.Value, src.Key, filenames,context);
 				}
 				return filenames.Values.ToArray();
 			}
@@ -140,7 +143,9 @@ namespace Qorpent.BSharp {
 					var requires = src.Elements("requre").ToArray();
 					if (requires.Length != 0){
 						requires.Remove();
-						log.Warn("requre options in "+src.Describe().File+" ignored");
+						var message = "requre options in " + src.Describe().File + " ignored";
+						context.RegisterError(new BSharpError{Level = ErrorLevel.Warning,Phase = BSharpCompilePhase.SourceIndexing,Message = message,Xml=src});
+						log.Warn(message);
 					}
 				}
 				return sources;
@@ -151,7 +156,7 @@ namespace Qorpent.BSharp {
 
 		
 
-		private void ProcessRequires(XElement source,string filename, Dictionary<string, XElement> filenames){
+		private void ProcessRequires(XElement source,string filename, Dictionary<string, XElement> filenames,IBSharpContext context ){
 			var requires = source.Elements(BSharpSyntax.Require).ToArray();
 			if (requires.Length != 0){
 				var dir = Path.GetDirectoryName(filename);
@@ -182,10 +187,12 @@ namespace Qorpent.BSharp {
 						if (File.Exists(file)){
 							var src = requireBxl.Parse(File.ReadAllText(file), file);
 							filenames[file] = src;
-							ProcessRequires(src, file, filenames);
+							ProcessRequires(src, file, filenames,context);
 						}
 						else{
-							this.log.Error("cannot  find required module " + require.Attr("code") + " for " + source.Describe().File);
+							var message = "cannot  find required module " + require.Attr("code") + " for " + source.Describe().File;
+							context.RegisterError(new BSharpError{Level = ErrorLevel.Error,Phase = BSharpCompilePhase.SourceIndexing,Message = message,Xml=require});
+							this.log.Error(message);
 						}
 					}
 				}
