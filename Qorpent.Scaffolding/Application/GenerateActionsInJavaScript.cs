@@ -31,7 +31,7 @@ namespace Qorpent.Scaffolding.Application{
 				var cls = targetclasses[i];
 				var name = cls.Compiled.Attr("controller") + "_" + cls.Name;
 				sb.AppendLine("\t\t\t" + name + ": actionBuilder($http,siteroot,{");
-				var attrs = cls.Compiled.Attributes().ToArray();
+				var attrs = cls.Compiled.Attributes().Where(_=>_.Name.LocalName!="prototype" && _.Name.LocalName!="fullcode").ToArray();
 				for (var j = 0; j < attrs.Length;j++ ){
 					var a = attrs[j];
 					var aname = a.Name.LocalName;
@@ -56,7 +56,7 @@ namespace Qorpent.Scaffolding.Application{
 						}
 
 					}
-					sb.AppendLine("\t\t\t\t" + aname.ToLower() + " : " + val + (j==attrs.Length-1? ",":""));
+					sb.AppendLine("\t\t\t\t" + aname.ToLower() + " : " + val + (j!=attrs.Length-1? ",":""));
 				}
 	
 				if (i == targetclasses.Length - 1){
