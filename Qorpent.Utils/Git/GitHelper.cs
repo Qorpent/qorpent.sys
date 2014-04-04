@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -113,10 +114,11 @@ namespace Qorpent.Utils.Git{
 				UseShellExecute = false,
 				WorkingDirectory = DirectoryName ?? Environment.CurrentDirectory,
 				
+				
 			};
-
-			Process.Start(startInfo);
+			Process.Start(startInfo).EnsureForeground();
 		}
+		
 
 		/// <summary>
 		/// 
@@ -613,19 +615,20 @@ namespace Qorpent.Utils.Git{
 					Checkout(Branch);
 				}
 
-				
-			}
-			if (!File.Exists(Path.Combine(DirectoryName, ".gitignore"))){
-				WriteFile(".gitignore", "*.tmp\r\n*~.*");
-				Add();
-				Commit("init");
 
-				if (!string.IsNullOrWhiteSpace(RemoteUrl)){
-					Push();
+			}
+			else{
+				if (!File.Exists(Path.Combine(DirectoryName, ".gitignore"))){
+					WriteFile(".gitignore", "*.tmp\r\n*~.*");
+					Add();
+					Commit("init");
+
+					if (!string.IsNullOrWhiteSpace(RemoteUrl)){
+						Push();
+					}
 				}
+
 			}
-
-
 		}
 		/// <summary>
 		/// 

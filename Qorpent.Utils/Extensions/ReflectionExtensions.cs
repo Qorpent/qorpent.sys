@@ -29,6 +29,8 @@ namespace Qorpent.Utils.Extensions {
 	/// 	Extensions to work over reflection
 	/// </summary>
 	public static class ReflectionExtensions {
+
+		
 		private static ReflectionHelper _helper;
 
 		static ReflectionExtensions() {
