@@ -78,6 +78,8 @@ namespace Qorpent.IO {
 					return "application/x-rar-compressed";
 				case "xml":
 					return "text/xml";
+				case "wiki":
+					return "text/plain";
 			}
 
 			return "bin/unknown";

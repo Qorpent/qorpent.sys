@@ -105,7 +105,9 @@ namespace Qorpent.Bxl {
 			foreach (char c in code) {
 				_info.CharIndex++;
 				_info.Column++;
-
+				if (c == '\t'){
+					_info.Column += 3;
+				}
 				map[(int)_mode](c);
 
 				if (c == '\r' || c == '\n' && _last != '\r') {
@@ -126,7 +128,7 @@ namespace Qorpent.Bxl {
 			}
 
 			if (_stack.IsNotEmpty())
-				throw new BxlException("invalid quotes or braces");
+				throw new BxlException("invalid quotes or braces",_info.Clone());
 			if (!options.HasFlag(BxlParserOptions.NoLexData)){
 				_root.SetAttr("_file", filename);
 			}
@@ -235,7 +237,7 @@ namespace Qorpent.Bxl {
 				case ',':
 					return;
 				case '=':
-					throw new BxlException("unexpected symbol " + c, _info);
+					throw new BxlException("unexpected symbol " + c, _info.Clone());
 				case ' ':
 					if (++_symbolCount == TAB_SPACE_COUNT) {
 						_symbolCount = 0;
@@ -256,10 +258,10 @@ namespace Qorpent.Bxl {
 						_tabs--;
 					return;
 				case '\\':
-					throw new BxlException("escape not in string", _info);
+					throw new BxlException("escape not in string", _info.Clone());
 				case '(':
 				case ')':
-					throw new BxlException("unexpected symbol " + c, _info);
+					throw new BxlException("unexpected symbol " + c, _info.Clone());
 				case '#':
 					map[(int)_mode]('\n');
 					_stack.Push((char)_mode);
@@ -275,7 +277,7 @@ namespace Qorpent.Bxl {
 		private void processNewLine(char c) {
 			char s = _stack.Peek();
 			if (s == '\'' || s == '"')
-				throw new BxlException("new line in regular string", _info);
+				throw new BxlException("new line in regular string", _info.Clone());
 
 			_symbolCount = 0;
 			_tabs = _tabIgnore;
@@ -297,7 +299,7 @@ namespace Qorpent.Bxl {
 				case ',':
 					return;
 				case '=':
-					throw new BxlException("unexpected symbol " + c, _info);
+					throw new BxlException("unexpected symbol " + c, _info.Clone());
 				case ' ':
 					_symbolCount++;
 					_mode = ReadMode.Indent;
@@ -310,10 +312,10 @@ namespace Qorpent.Bxl {
 					map[(int)_mode](c);
 					return;
 				case '\\':
-					throw new BxlException("escape not in string", _info);
+					throw new BxlException("escape not in string", _info.Clone());
 				case '(':
 				case ')':
-					throw new BxlException("unexpected symbol " + c, _info);
+					throw new BxlException("unexpected symbol " + c, _info.Clone());
 				case '#':
 					map[(int)_mode]('\n');
 					_stack.Push((char)_mode);
@@ -337,7 +339,7 @@ namespace Qorpent.Bxl {
 					if (_value.Length != 0)
 						addNode();
 					if (_prefix.Length != 0)
-						throw new BxlException("unexpected symbol " + c, _info);
+						throw new BxlException("unexpected symbol " + c, _info.Clone());
 					_stack.Push((char)ReadMode.AttributeName);
 					_mode = ReadMode.Quoting1;
 					return;
@@ -345,7 +347,7 @@ namespace Qorpent.Bxl {
 					if (_value.Length != 0)
 						addNode();
 					if (_prefix.Length != 0)
-						throw new BxlException("unexpected symbol " + c, _info);
+						throw new BxlException("unexpected symbol " + c, _info.Clone());
 					_stack.Push((char)ReadMode.AttributeName);
 					_stack.Push(c);
 					_mode = ReadMode.SingleLineString;
@@ -366,7 +368,7 @@ namespace Qorpent.Bxl {
 					_mode = ReadMode.NewLine;
 					return;
 				case '\\':
-					throw new BxlException("escape not in string", _info);
+					throw new BxlException("escape not in string", _info.Clone());
 				case '#':
 					map[(int)_mode]('\n');
 					_stack.Push((char)_mode);
@@ -391,14 +393,14 @@ namespace Qorpent.Bxl {
 					return;
 				case '"':
 					if (_prefix.Length != 0)
-						throw new BxlException("unexpected symbol " + c, _info);
+						throw new BxlException("unexpected symbol " + c, _info.Clone());
 					addAnonAttribute();
 					_stack.Push((char)_mode);
 					_mode = ReadMode.Quoting1;
 					return;
 				case '\'':
 					if (_prefix.Length != 0)
-						throw new BxlException("unexpected symbol " + c, _info);
+						throw new BxlException("unexpected symbol " + c, _info.Clone());
 					addAnonAttribute();
 					_stack.Push((char)_mode);
 					_stack.Push(c);
@@ -406,7 +408,7 @@ namespace Qorpent.Bxl {
 					return;
 				case '=':
 					if (_isExpression)
-						throw new BxlException("can not assign to expression", _info);
+						throw new BxlException("can not assign to expression", _info.Clone());
 					saveValue();
 					_isString = false;
 					_isExpression = false;
@@ -424,7 +426,7 @@ namespace Qorpent.Bxl {
 					_mode = ReadMode.NewLine;
 					return;
 				case '\\':
-					throw new BxlException("escape not in string", _info);
+					throw new BxlException("escape not in string", _info.Clone());
 				case '(':
 					addAnonAttribute();
 					if (_buf.Length == 0) {
@@ -468,7 +470,7 @@ namespace Qorpent.Bxl {
 					_mode = ReadMode.SingleLineString;
 					return;
 				case '=':
-					throw new BxlException("unexpected symbol " + c, _info);
+					throw new BxlException("unexpected symbol " + c, _info.Clone());
 				case '\t':
 				case ',':
 				case ' ':
@@ -480,12 +482,12 @@ namespace Qorpent.Bxl {
 				case '\r':
 				case '\n':
 					if (_buf.Length == 0 && !_isString)
-						throw new BxlException("empty attribute value", _info);
+						throw new BxlException("empty attribute value", _info.Clone());
 					addAttributeValue();
 					_mode = ReadMode.NewLine;
 					return;
 				case '\\':
-					throw new BxlException("escape not in string", _info);
+					throw new BxlException("escape not in string", _info.Clone());
 				case '(':
 					if (_buf.Length == 0) {
 						_stack.Push((char)_mode);
@@ -523,7 +525,7 @@ namespace Qorpent.Bxl {
 					return;
 				case '\r':
 				case '\n':
-					throw new BxlException("new line in regular string", _info);
+					throw new BxlException("new line in regular string", _info.Clone());
 				case '\\':
 					_stack.Push((char)_mode);
 					_mode = ReadMode.EscapingBackSlash;
@@ -547,7 +549,7 @@ namespace Qorpent.Bxl {
 					return;
 				case '\n':
 				case '\r':
-					throw new BxlException("new line in regular string", _info);
+					throw new BxlException("new line in regular string", _info.Clone());
 				case '\\':
 					_stack.Push('"');
 					_stack.Push((char)ReadMode.SingleLineString);
@@ -638,9 +640,9 @@ namespace Qorpent.Bxl {
 			switch (c) {
 				case ':':
 				case '=':
-					throw new BxlException("unexpected symbol " + c, _info);
+					throw new BxlException("unexpected symbol " + c, _info.Clone());
 				case '\\':
-					throw new BxlException("escape not in string", _info);
+					throw new BxlException("escape not in string", _info.Clone());
 				case ',':
 				case ' ':
 				case '\t':
@@ -699,7 +701,7 @@ namespace Qorpent.Bxl {
 					_mode = ReadMode.Commentary;
 					return;
 				default:
-					throw new BxlException("unexpected symbol " + c, _info);
+					throw new BxlException("unexpected symbol " + c, _info.Clone());
 			}
 		}
 
@@ -713,9 +715,9 @@ namespace Qorpent.Bxl {
 					return;
 				case '=':
 				case '(':
-					throw new BxlException("unexpected symbol " + c, _info);
+					throw new BxlException("unexpected symbol " + c, _info.Clone());
 				case '\\':
-					throw new BxlException("escape not in string", _info);
+					throw new BxlException("escape not in string", _info.Clone());
 				case '"':
 					_stack.Push((char)ReadMode.NamespaceName);
 					_mode = ReadMode.Quoting1;
@@ -777,7 +779,7 @@ namespace Qorpent.Bxl {
 						_stack.Push(c);
 						_mode = ReadMode.Expression;
 					} else
-						throw new BxlException("unexpected symbol " + c, _info);
+						throw new BxlException("unexpected symbol " + c, _info.Clone());
 					return;
 				case '"':
 					if (_value.Length != 0) {
@@ -785,7 +787,7 @@ namespace Qorpent.Bxl {
 						_stack.Push((char)ReadMode.AttributeName);
 						_mode = ReadMode.Quoting1;
 					} else
-						throw new BxlException("unexpected symbol " + c, _info);
+						throw new BxlException("unexpected symbol " + c, _info.Clone());
 					return;
 				case '\'':
 					if (_value.Length != 0) {
@@ -794,7 +796,7 @@ namespace Qorpent.Bxl {
 						_stack.Push(c);
 						_mode = ReadMode.SingleLineString;
 					} else
-						throw new BxlException("unexpected symbol " + c, _info);
+						throw new BxlException("unexpected symbol " + c, _info.Clone());
 					return;
 				case '\n':
 				case '\r':
@@ -803,7 +805,7 @@ namespace Qorpent.Bxl {
 					_mode = ReadMode.NewLine;
 					return;
 				case '\\':
-					throw new BxlException("escaping not in string", _info);
+					throw new BxlException("escaping not in string", _info.Clone());
 				case '#':
 					map[(int)_mode]('\n');
 					_stack.Push((char)_mode);
@@ -824,13 +826,13 @@ namespace Qorpent.Bxl {
 				case ':':
 				case ',':
 				case '=':
-					throw new BxlException("unexpected symbol " + c, _info);
+					throw new BxlException("unexpected symbol " + c, _info.Clone());
 				case '"':
 					if (_buf.Length == 0) {
 						_stack.Push((char)_mode);
 						_mode = ReadMode.Quoting1;
 					} else
-						throw new BxlException("unexpected symbol " + c, _info);
+						throw new BxlException("unexpected symbol " + c, _info.Clone());
 					return;
 				case '\'':
 					if (_buf.Length == 0) {
@@ -838,7 +840,7 @@ namespace Qorpent.Bxl {
 						_stack.Push(c);
 						_mode = ReadMode.SingleLineString;
 					} else
-						throw new BxlException("unexpected symbol " + c, _info);
+						throw new BxlException("unexpected symbol " + c, _info.Clone());
 					return;
 				case '\t':
 				case ' ':
@@ -853,10 +855,10 @@ namespace Qorpent.Bxl {
 						addNamespace();
 						_mode = ReadMode.Start;
 					} else
-						throw new BxlException("unexpected symbol " + c, _info);
+						throw new BxlException("unexpected symbol " + c, _info.Clone());
 					return;
 				case '\\':
-					throw new BxlException("escaping not in string", _info);
+					throw new BxlException("escaping not in string", _info.Clone());
 				case '(':
 					if (_buf.Length == 0) {
 						_stack.Push((char)_mode);
@@ -884,7 +886,7 @@ namespace Qorpent.Bxl {
 			switch (c) {
 				case ':':
 					if (_value.Length == 0)
-						throw new BxlException("wrong namespace", _info);
+						throw new BxlException("wrong namespace", _info.Clone());
 					_prefix = _value;
 					_value = "";
 					_mode = (ReadMode)_stack.Pop();
@@ -932,7 +934,7 @@ namespace Qorpent.Bxl {
 			if (_value.Length == 0)
 				return;
 			if (_current == _root)
-				throw new BxlException("adding attribute to root not allowed", _info);
+				throw new BxlException("adding attribute to root not allowed", _info.Clone());
 
 			if (!_anon[_level].hasCodeId) {
 				if (_prefix.Length != 0)
@@ -1020,9 +1022,9 @@ namespace Qorpent.Bxl {
 		private void addAttributeValue() {
 			// checking for empty _buf must be implemented in invoker !
 			if (_value.Length == 0)
-				throw new BxlException("empty attribute name", _info);
+				throw new BxlException("empty attribute name", _info.Clone());
 			if (_current == _root)
-				throw new BxlException("adding attribute to root not allowed", _info);
+				throw new BxlException("adding attribute to root not allowed", _info.Clone());
 
 			String ns = resolveNamespace();
 			String s = _buf.ToString();
@@ -1067,7 +1069,7 @@ namespace Qorpent.Bxl {
 		private void addNamespace() {
 			// checking for empty _buf must be implemented in invoker !
 			if (_value.Length == 0)
-				throw new BxlException("empty namespace name", _info);
+				throw new BxlException("empty namespace name", _info.Clone());
 			String s = _value.Escape(EscapingType.XmlName);
 			_root.SetAttributeValue(XNamespace.Xmlns + s, _buf.ToString());
 			_isExpression = false;

@@ -56,6 +56,14 @@ namespace Qorpent.Serialization.Tests.Uson
 			Console.WriteLine(x.ToJson());
 			Assert.AreEqual("{\"$query\":{\"x\":1}}", x.ToJson());
 		}
+		void t(string data, bool data2){
+			Console.WriteLine(data,data2);	
+		}
+		[Test]
+		public void CanSupplyDefaultParameters(){
+			dynamic o = new UObj();
+			t(o.first,o.second);
+		}
 
 
 		[Test]

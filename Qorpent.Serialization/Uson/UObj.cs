@@ -234,6 +234,32 @@ namespace Qorpent.Uson
 			return true;
 		}
 		/// <summary>
+		/// Конвертация в строку
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static implicit operator string(UObj obj){
+			if (null == obj) return "";
+			if (obj.UObjMode == UObjMode.Fake) return "";
+			if (obj.UObjMode == UObjMode.Value) return obj.Properties["__value"].ToStr();
+			return obj.ToJson();
+		}
+
+		/// <summary>
+		/// Конвертация в строку
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static implicit operator int(UObj obj)
+		{
+			if (null == obj) return 0;
+			if (obj.UObjMode == UObjMode.Fake) return 0;
+			if (obj.UObjMode == UObjMode.Value) return obj.Properties["__value"].ToInt();
+			if (obj.UObjMode == UObjMode.Array) return obj.Array.Count;
+			return obj.Properties.Count;
+		}
+
+		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="binder"></param>

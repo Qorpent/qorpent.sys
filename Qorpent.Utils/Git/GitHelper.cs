@@ -85,14 +85,7 @@ namespace Qorpent.Utils.Git{
 
 				RemoteSet(RemoteName, RemoteUrl);
 				if (!IsWaitMergeCommit() && 0==GetChangedFilesList().Length){
-					var basebranch = BaseBranch;
-					if (string.IsNullOrWhiteSpace(basebranch)){
-						basebranch = "master";
-					}
-					if (null == GetCommitInfo(Branch)){
-						Checkout(basebranch);
-					}
-					Checkout(Branch);
+					EnsureBranch();
 				}
 			}
 			if (!string.IsNullOrWhiteSpace(RemoteUrl)){
@@ -658,16 +651,7 @@ namespace Qorpent.Utils.Git{
 			if (!string.IsNullOrWhiteSpace(RemoteName)){
 				Fetch(RemoteName);
 			}
-			var basebranch = BaseBranch;
-			if (string.IsNullOrWhiteSpace(basebranch))
-			{
-				basebranch = "master";
-			}
-			if (null == GetCommitInfo(Branch))
-			{
-				Checkout(basebranch);
-			}
-			Checkout(Branch);
+			EnsureBranch();
 			if (!string.IsNullOrWhiteSpace(RemoteName)){
 				try{
 					Merge(RemoteName, Branch);
@@ -684,6 +668,24 @@ namespace Qorpent.Utils.Git{
 			Commit("after merge");
 			Push();
 		}
+
+		private void EnsureBranch(){
+			var basebranch = BaseBranch;
+			if (string.IsNullOrWhiteSpace(basebranch)){
+				basebranch = "master";
+			}
+			if (null == GetCommitInfo(Branch)){
+				Checkout(basebranch);
+				if (null == GetCommitInfo("origin/" + basebranch)){
+					ExecuteCommand("push", RemoteName + " " + basebranch);
+				}
+			}
+			Checkout(Branch);
+			if (null == GetCommitInfo("origin/" + Branch)){
+				Push();
+			}
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>

@@ -34,6 +34,7 @@ namespace Qorpent.BSharp {
 				Type = BSharpErrorType.OrphanImport,
 				Data = i,
 				ClassName = cls.FullName,
+				Class = cls,
 				Message = "Импортируемый класс является сиротским и соответственно импорт реально не производится"
 			};
 		}
@@ -53,6 +54,7 @@ namespace Qorpent.BSharp {
 				Type = BSharpErrorType.NotResolvedImport,
 				Data = i,
 				ClassName = cls.FullName,
+				Class = cls,
 				Message = "В качестве источника для импорта указан несуществующий класс"
 			};
 		}
@@ -68,6 +70,7 @@ namespace Qorpent.BSharp {
 				Type = BSharpErrorType.RecycleImport,
 				Data = i,
 				ClassName = cls.FullName + " [ from root : " +root+" ]",
+				Class = cls,
 				Message = "Циклические ссылки означают ошибки в построении иерархии, при импорте такие ссылки игнорируются"
 			};
 		}
@@ -135,6 +138,7 @@ namespace Qorpent.BSharp {
 				Phase = BSharpCompilePhase.IncludeProcessing,
 				Type = BSharpErrorType.NotResolvedInclude,
 				ClassName = cls.FullName,
+				Class = cls,
 				Xml = e,
 				Message = "Попытка включить несуществующий класс"
 			};
@@ -155,6 +159,7 @@ namespace Qorpent.BSharp {
 				Phase = BSharpCompilePhase.Patching,
 				Type = BSharpErrorType.PatchUndefinedTarget,
 				ClassName = cls.FullName,
+				Class = cls,
 				Xml = e,
 				Message = "В патче не указан селектор целевых классов"
 			};
@@ -171,6 +176,7 @@ namespace Qorpent.BSharp {
 				Phase = BSharpCompilePhase.Patching,
 				Type = BSharpErrorType.PatchError,
 				ClassName = cls.FullName,
+				Class = cls,
 				AltClass =  altcls,
 				Message = diff,
 				Error = error
@@ -191,6 +197,7 @@ namespace Qorpent.BSharp {
 				Phase = BSharpCompilePhase.Patching,
 				Type = BSharpErrorType.PatchError,
 				ClassName = cls.FullName,
+				Class = cls,
 				Xml = e,
 				Message = "В патче указан несуществующий тип поведения для новых элементов"
 			};
@@ -210,6 +217,7 @@ namespace Qorpent.BSharp {
 				Phase = BSharpCompilePhase.IncludeProcessing,
 				Type = BSharpErrorType.OrphanInclude,
 				ClassName = cls.FullName,
+				Class = cls,
 				Xml = e,
 				Message = "Попытка включить класс-сироту"
 			};
@@ -227,6 +235,7 @@ namespace Qorpent.BSharp {
 				Phase = BSharpCompilePhase.IncludeProcessing,
 				Type = BSharpErrorType.EmptyInclude,
 				ClassName = cls.FullName,
+				Class = cls,
 				Xml = e,
 				Message = "Инклуд, включаемый в режиме body не имеет контента, возможно ошибка в коде"
 			};
@@ -277,6 +286,7 @@ namespace Qorpent.BSharp {
 				Type = BSharpErrorType.IgnoredImport,
 				Data = i,
 				ClassName = cls.FullName,
+				Class = cls,
 				Message = "Импортируемый класс является гнорируемым по признаку if"
 			};
 		}
@@ -295,6 +305,7 @@ namespace Qorpent.BSharp {
 				ClassName = cls.FullName,
 				Xml = parent,
 				Data = clsname,
+				Class = cls,
 				Message = "Ссылка на класс разрешена косвенно по имени, а не по стеку пространств имен"
 			};
 		}
@@ -312,6 +323,7 @@ namespace Qorpent.BSharp {
 				ClassName = cls.FullName,
 				Xml = parent,
 				Data = clsname,
+				Class = cls,
 				Message = "Двойственная ссылка на класс - было найдено несколько кандидатов"
 			};
 		}
@@ -332,6 +344,7 @@ namespace Qorpent.BSharp {
 				ClassName = cls.FullName,
 				Xml = parent,
 				Data = clsname,
+				Class = cls,
 				Message = "Не найден класс, на который указывает ссылка"
 			};
 		}
