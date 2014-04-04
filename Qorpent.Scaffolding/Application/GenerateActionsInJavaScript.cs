@@ -24,7 +24,7 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("// Type definitions for " + Project.ProjectName);
 			sb.AppendLine();
 			sb.AppendLine("define ([\""+Project.ProjectName+"_types\",\"actionBuilder\"], function(types,actionBuilder) {");
-			sb.AppendLine("\t function  ($http, siteroot) {");
+			sb.AppendLine("\treturn  function  ($http, siteroot) {");
 			sb.AppendLine("\t\treturn {");
 
 			for (var i = 0; i < targetclasses.Length; i++){
