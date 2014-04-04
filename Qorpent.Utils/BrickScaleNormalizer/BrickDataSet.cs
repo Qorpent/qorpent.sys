@@ -54,7 +54,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <summary>
         ///     Размер «лычки» в пикселях
         /// </summary>
-        public int LabelHeight { get; private set; }
+        public int LabelHeight { get; set; }
         /// <summary>
         ///     Серии
         /// </summary>
@@ -108,7 +108,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		}
 
 		private bool IsRequireLabelPositionCalculate() {
-			return 0!=(Preferences.SeriaCalcMode & (SeriaCalcMode.SeriaLinear|SeriaCalcMode.CrossSeriaLinear))  && Rows.Select(_=>_.SeriaNumber).Distinct().Count()>1;
+			return 0 != (Preferences.SeriaCalcMode & (SeriaCalcMode.SeriaLinear | SeriaCalcMode.CrossSeriaLinear)); // && Rows.Select(_=>_.SeriaNumber).Distinct().Count()>1;
 		}
         /// <summary>
         ///     Собирает абстрактные олонки значений
@@ -121,7 +121,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Производит обсчёт расположения лэйблов значений и пытается максимально раздвинуть их между собой
         /// </summary>
 		private void CalculateLabelPosition() {
-            Task[] tasks = BuildColons().Select(CalculateLabelPositionAsync).ToArray();
+            Task<DataItemColon>[] tasks = BuildColons().Select(CalculateLabelPositionAsync).ToArray();
             Task.WaitAll(tasks);
         }
         /// <summary>
@@ -309,12 +309,19 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			return GetNormalizedRecord().GetMin(scaleType);
 		}
         /// <summary>
-        ///     Удаление указанной серии из жатасета
+        ///     Удаление указанной серии из датасета
         /// </summary>
         /// <param name="seria">Искомая серия</param>
         public void Remove(BrickDataSetSeria seria) {
             _series.Remove(seria);
         }
+		/// <summary>
+		///		Удаление указанного ряда данных из датасета
+		/// </summary>
+		/// <param name="row">Ряд данных</param>
+		public void Remove(DataRow row) {
+			EnsureSeria(row.SeriaNumber).Remove(row);
+		}
 	    /// <summary>
 	    /// 
 	    /// </summary>

@@ -15,7 +15,6 @@ namespace Qorpent.Utils.Tests
 		public void SetUp() {
 			_si = new StringInterpolation();
 		}
-
 		[TestCase("${a}","")]
 		[TestCase("${a}${b}","")]
 		[TestCase("x${a}y${b}z","xyz")]
@@ -33,7 +32,7 @@ namespace Qorpent.Utils.Tests
 		{
 			Assert.AreEqual(result, _si.Interpolate(src));
 		}
-
+		[TestCase("$${a}", "a:1", "$1")]
 		[TestCase("${a}","a:1","1")]
 		[TestCase("${a} ${b}","a:1|b:25","1 25")]
 		[TestCase("${ab} ${bc}","ab:1|bc","1 ")]

@@ -158,7 +158,10 @@ namespace Qorpent.Utils
 				_currentChar = _sourceString[_idx];
 				// сначала обеспечиваем поведении при наличии открытого текущего анкора
 				if (_wasAncor) {
-
+					if (_currentChar == AncorSymbol) {
+						_targetBuffer.Append(AncorSymbol);
+						continue;
+					}
 					//теперь следующий вариант - проверяем, находимся ли мы уже в блоке данных
 					if (!_wasOpen) {
 

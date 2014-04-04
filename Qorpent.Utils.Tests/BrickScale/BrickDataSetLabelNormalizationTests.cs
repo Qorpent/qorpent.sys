@@ -263,6 +263,136 @@ namespace Qorpent.Utils.Tests.BrickScale {
             Assert.AreEqual(28, colons[1].Items[7].Value);
         }
     }
+	[Explicit]
+	public class ProductionTests : BrickDataSetTestBase {
+		/// <summary>
+		///		Версия графика ПРОДАЖИ -> Динамика цен и себестоимость -> Цена и себестоимость реализации золото в слитках по данным на 03.04.2014 16:00
+		///		на базе ecot
+		/// </summary>
+		public BrickDataSet EcotSalesSebestAgBdsVersion {
+			get {
+				var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 325);
+				ds.Add(0, 0, 1600000);
+				ds.Add(0, 0, 1609995);
+				ds.Add(0, 0, 1407646);
+				ds.Add(0, 0, 1408383);
+				ds.Add(0, 0, 1300002);
+				ds.Add(0, 0, 1420464);
+				ds.Add(0, 0, 1200000);
+				ds.Add(1, 0, 1557686);
+				ds.Add(1, 0, 1688037);
+				ds.Add(1, 0, 1713031);
+				ds.Add(1, 0, 1555403);
+				ds.Add(1, 0, 1115985);
+				ds.Add(1, 0, 1496643);
+				ds.Add(1, 0, 1184710);
+				ds.Add(2, 0, 1387940);
+				ds.Add(2, 0, 1506492);
+				ds.Add(2, 0, 1542788);
+				ds.Add(2, 0, 1391386);
+				ds.Add(2, 0, 976984);
+				ds.Add(2, 0, 1334491);
+				ds.Add(2, 0, 1011155);
+				return ds;
+			}
+		}
+		/// <summary>
+		///		Версия графика ПРОДАЖИ -> Динамика цен и себестоимость -> Цена и себестоимость реализации золото в слитках по данным на 03.04.2014 16:00
+		///		на базе zdev
+		/// </summary>
+		public BrickDataSet ZdevSalesSebestAgBdsVersion {
+			get {
+				var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 325);
+				ds.Add(0, 0, 1600000);
+				ds.Add(0, 0, 1609995);
+				ds.Add(0, 0, 1407646);
+				ds.Add(0, 0, 1408383);
+				ds.Add(0, 0, 1300002);
+				ds.Add(0, 0, 1420464);
+				ds.Add(0, 0, 1200000);
+				ds.Add(0, 1, 1557686);
+				ds.Add(0, 1, 1688037);
+				ds.Add(0, 1, 1713031);
+				ds.Add(0, 1, 1555403);
+				ds.Add(0, 1, 1115985);
+				ds.Add(0, 1, 1496643);
+				ds.Add(0, 1, 1184710);
+				ds.Add(0, 2, 1387940);
+				ds.Add(0, 2, 1506492);
+				ds.Add(0, 2, 1542788);
+				ds.Add(0, 2, 1391386);
+				ds.Add(0, 2, 976984);
+				ds.Add(0, 2, 1334491);
+				ds.Add(0, 2, 1011155);
+				return ds;
+			}
+		}
+		[TestCase("ecot", "0")]
+		[TestCase("zdev", "0")]
+		[TestCase("ecot", "auto")]
+		[TestCase("zdev", "auto")]
+		public void SebestAgSlitkiSeriaAsDataset(string versionCode, string ymin) {
+			BrickDataSet ds;
+			if (versionCode == "ecot") {
+				ds = EcotSalesSebestAgBdsVersion;
+			} else if (versionCode == "zdev") {
+				ds = ZdevSalesSebestAgBdsVersion;
+			} else {
+				throw new NotSupportedException();
+			}
+			ds.Preferences.Height = 325;
+			ds.Preferences.YMin = ymin;
+			ds.Calculate();
+			var colons = ds.BuildColons().ToArray();
+
+			Console.WriteLine("Прочая информация о датасете:");
+			Console.WriteLine("LabelHeight: {0}", ds.LabelHeight);
+			ds.PrintPreferences();
+			
+
+			colons[0].AsserIsCorrectLabelPosition(1600000, LabelPosition.Above);
+			colons[0].AsserIsCorrectLabelPosition(1557686, LabelPosition.Below);
+			colons[0].AsserIsCorrectLabelPosition(1387940, LabelPosition.Below);
+
+
+			colons[1].AsserIsCorrectLabelPosition(1609995, LabelPosition.Below);
+			colons[1].AsserIsCorrectLabelPosition(1688037, LabelPosition.Above);
+			colons[1].AsserIsCorrectLabelPosition(1506492, LabelPosition.Below);
+
+			
+			colons[2].AsserIsCorrectLabelPosition(1407646, LabelPosition.Auto);
+			colons[2].AsserIsCorrectLabelPosition(1713031, LabelPosition.Above);
+			colons[2].AsserIsCorrectLabelPosition(1542788, LabelPosition.Above);
+
+
+			colons[3].AsserIsCorrectLabelPosition(1408383, LabelPosition.Above);
+			colons[3].AsserIsCorrectLabelPosition(1555403, LabelPosition.Above);
+			colons[3].AsserIsCorrectLabelPosition(1391386, LabelPosition.Below);
+
+
+			colons[4].AsserIsCorrectLabelPosition(1300002, LabelPosition.Auto);
+			colons[4].AsserIsCorrectLabelPosition(1115985, LabelPosition.Below);
+			colons[4].AsserIsCorrectLabelPosition(976984, LabelPosition.Below);
+
+
+			colons[5].AsserIsCorrectLabelPosition(1420464, LabelPosition.Below);
+			colons[5].AsserIsCorrectLabelPosition(1496643, LabelPosition.Above);
+			colons[5].AsserIsCorrectLabelPosition(1334491, LabelPosition.Below);
+
+
+			colons[6].AsserIsCorrectLabelPosition(1200000, LabelPosition.Above);
+			colons[6].AsserIsCorrectLabelPosition(1184710, LabelPosition.Below);
+			colons[6].AsserIsCorrectLabelPosition(1011155, LabelPosition.Below);
+		}
+	}
+
+	internal static class BrickDatasetTestBaseHelper {
+		public static void AsserIsCorrectLabelPosition(this DataItemColon colon, decimal value, LabelPosition labelPosition) {
+			var dataItem = colon.FirstOrDefault(_ => _.Value == value);
+			Assert.IsNotNull(dataItem);
+			Assert.AreEqual(labelPosition, dataItem.LabelPosition);
+		 }
+	}
     public class BrickDataSetTestBase {
         /// <summary>
         /// 
