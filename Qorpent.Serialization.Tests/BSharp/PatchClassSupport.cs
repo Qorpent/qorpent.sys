@@ -65,6 +65,27 @@ patch for=^A:
 
 
 		[Test]
+		public void PatchWithInternals()
+		{
+			var code = @"
+class A
+	x a
+patch for=^A new=create:
+	x a name2 
+		val 1
+";
+			var result = Compile(code).Get("A");
+			var str = result.Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(str);
+			Assert.AreEqual(@"<class code='A' fullcode='A'>
+  <x code='a' name='name2'>
+    <val code='1' />
+  </x>
+</class>", str);
+		}
+
+
+		[Test]
 		public void HierarchicalPatch()
 		{
 			var code = @"
