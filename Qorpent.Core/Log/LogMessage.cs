@@ -37,6 +37,11 @@ namespace Qorpent.Log {
 			User = Environment.UserDomainName + "/" + Environment.UserName;
 		}
 		/// <summary>
+		/// 
+		/// </summary>
+		[SerializeNotNullOnly]
+		public object Data { get; set; }
+		/// <summary>
 		/// 	ָלÿ כמדדונא
 		/// </summary>
 		public string Name { get; set; }
@@ -93,6 +98,14 @@ namespace Qorpent.Log {
 		/// 	Context of mvc calling
 		/// </summary>
 		[IgnoreSerialize] public IMvcContext MvcContext { get; set; }
+
+		private  DateTime basis = new DateTime(2014,1,1);
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Timestamp{
+			get { return (int)((Time - basis).TotalSeconds); }
+		}
 		/// <summary>
 		/// 	Generates BXL-like representation of LogMessage
 		/// </summary>

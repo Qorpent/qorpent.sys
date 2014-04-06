@@ -58,6 +58,15 @@ namespace Qorpent.BSharp.Builder {
 
             project.SrcClass = bSharpClass;
 
+	        foreach (var e in bSharpClass.Compiled.Elements()){
+		        if (!string.IsNullOrWhiteSpace(e.Value)){
+			        project.Set("_" + e.Name.LocalName, e.Value);
+		        }
+		        else{
+					project.Set("_" + e.Name.LocalName, e.Attr("code"));
+		        }
+	        }
+
             return project;
         }
         /// <summary>

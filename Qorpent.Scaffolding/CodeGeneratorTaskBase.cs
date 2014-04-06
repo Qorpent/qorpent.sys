@@ -89,7 +89,11 @@ namespace Qorpent.Scaffolding{
 
 		private string GetOutDir(){
 			if (string.IsNullOrWhiteSpace(DefaultOutputName)) return Project.GetOutputDirectory();
-			var basedir = Project.Get(DefaultOutputName+"Dir", DefaultOutputName);
+			var basedir = Project.Get(DefaultOutputName + "Dir", DefaultOutputName);
+			if (Project.ContainsKey("_" + DefaultOutputName + "Dir")){
+				basedir = Project.Get<string>("_" + DefaultOutputName + "Dir");
+			}
+			
 			if (string.IsNullOrWhiteSpace(basedir)){
 				basedir = DefaultOutputName;
 			}

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using Qorpent.BSharp;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Application{
@@ -48,12 +49,11 @@ namespace Qorpent.Scaffolding.Application{
 		private string GenerateStruct(IBSharpClass e, Dictionary<string, IBSharpClass> refcache, StringBuilder sb){
 
 			sb.AppendLine("\t// " + e.Compiled.Attr("name"));
-			sb.AppendLine("\tresult." + e.Name + " = function(){");
+			sb.AppendLine("\tvar "+e.Name+"= result." + e.Name + " = function(){");
 			 
 			foreach (var field in e.Compiled.Elements()){
 				GenerateField(e, field, refcache,sb);
 			}
-			sb.AppendLine("\t\t__TERMINAL = null");
 			sb.AppendLine("\t};");
 			return sb.ToString();
 		}
@@ -93,34 +93,43 @@ namespace Qorpent.Scaffolding.Application{
 			WriteMemberSummary(sb,comment,"js");
 
 
-			var val = "";
+			var val = field.Value;
 
-			if (isarray){
-				val = "[]";
-			}else if (isenum){
-				val = type + ".Undefined";
-			}
-			else{
-				if (type == "string"){
-					val = "new String()";
+			if (string.IsNullOrWhiteSpace(val)){
+				if (isarray){
+					val = "[]";
 				}
-				else if (type == "any"){
-					val = "{}";
-				}
-				else if (type == "int" || type == "decimal"){
-					val = "0";
-				}
-				else if (type == "bool"){
-					val = "false";
-				}else if (type == "datetime"){
-					val = "new Date(1900,0,1)";
+				else if (isenum){
+					val = type + ".Undefined";
 				}
 				else{
-					val = "new result." + type + "()";
+					if (type == "string"){
+						val = "\"\"";
+					}
+					else if (type == "any"){
+						val = "{}";
+					}
+					else if (type == "int" || type == "decimal"){
+						val = "0";
+					}
+					else if (type == "bool"){
+						val = "false";
+					}
+					else if (type == "datetime"){
+						val = "new Date(1900,0,1)";
+					}
+					else{
+						val = "new result." + type + "()";
+					}
+				}
+			}
+			else{
+				if(val.StartsWith("(")&& val.EndsWith(")")){
+					val = "\"" + val.Substring(1,val.Length-2).Escape(EscapingType.JsonValue).Replace("\\'", "'") + "\"";
 				}
 			}
 
-			sb.AppendLine(string.Format("\t\tthis.{0} = {1},",  name, val));
+			sb.AppendLine(string.Format("\t\tthis.{0} = {1};",  name, val));
 			
 
 		}
@@ -132,7 +141,7 @@ namespace Qorpent.Scaffolding.Application{
 			var summary = e.Compiled.Attr("name");
 			sb.AppendLine("\t//" + summary );
 			var sb2 = new StringBuilder();
-			var basis = "\tresult." + e.Name;
+			var basis = "\tvar "+e.Name+" = result." + e.Name;
 			sb.AppendLine(basis +" = {");
 			WriteMemberSummary(sb, "Отсутвующее значение = 0", "js");
 			sb.AppendLine("\t\tUndefined : 'Undefined',");
@@ -143,8 +152,12 @@ namespace Qorpent.Scaffolding.Application{
 			bool wasreserved = false;
 			foreach (var item in items ){
 				var code = item.Attr("code");
-				var name = item.Attr("name"); 
-				WriteEnumMember(sb,sb2, name, val, basis, code);
+				var name = item.Attr("name");
+				var _val = val;
+				if (!string.IsNullOrWhiteSpace(item.Value)){
+					_val = item.Value.ToInt();
+				}
+				WriteEnumMember(sb,sb2, name, _val, basis, code);
 				if (code == "Custom"){
 					wascustom = true;
 				}else if (code == "Reserved"){
@@ -185,7 +198,7 @@ namespace Qorpent.Scaffolding.Application{
 			: base()
 		{
 			ClassSearchCriteria = "ui-data";
-			DefaultOutputName = "";
+			DefaultOutputName = "Js";
 		}
 
 		

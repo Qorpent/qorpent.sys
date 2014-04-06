@@ -11,6 +11,7 @@ namespace Qorpent.Scaffolding.Application{
 	/// Формирует типы данных для приложения на C#
 	/// </summary>
 	public class GenerateActionsInJavaScriptTask : CodeGeneratorTaskBase{
+		
 		/// <summary>
 		/// 
 		/// </summary>
@@ -29,7 +30,11 @@ namespace Qorpent.Scaffolding.Application{
 
 			for (var i = 0; i < targetclasses.Length; i++){
 				var cls = targetclasses[i];
-				var name = cls.Compiled.Attr("controller") + "_" + cls.Name;
+				var name = cls.Name;
+				if (!string.IsNullOrWhiteSpace(cls.Compiled.Attr("controller")))
+				{
+					name = cls.Compiled.Attr("controller") + "_" + cls.Name;
+				}
 				sb.AppendLine("\t\t\t" + name + ": actionBuilder($http,siteroot,{");
 				var attrs = cls.Compiled.Attributes().Where(_=>_.Name.LocalName!="prototype" && _.Name.LocalName!="fullcode").ToArray();
 				for (var j = 0; j < attrs.Length;j++ ){
@@ -37,6 +42,9 @@ namespace Qorpent.Scaffolding.Application{
 					var aname = a.Name.LocalName;
 					if (aname == "prototype" || aname == "fullcode") continue;
 					var val = a.Value;
+					if (aname == "Url"){
+						aname = "url";
+					}
 					if (aname == "Result" || aname == "Arguments")
 					{
 						if (val.EndsWith("*"))
@@ -85,7 +93,7 @@ namespace Qorpent.Scaffolding.Application{
 			: base()
 		{
 			ClassSearchCriteria = "ui-action";
-			DefaultOutputName = "";
+			DefaultOutputName = "Js";
 		}
 
 		

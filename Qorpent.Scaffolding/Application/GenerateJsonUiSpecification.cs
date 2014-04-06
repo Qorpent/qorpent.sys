@@ -15,6 +15,7 @@ namespace Qorpent.Scaffolding.Application{
 		/// </summary>
 		public GenerateJsonUiSpecification(){
 			this.ClassSearchCriteria = "ui";
+			this.DefaultOutputName = "Js";
 		}
 
 		/// <summary>
