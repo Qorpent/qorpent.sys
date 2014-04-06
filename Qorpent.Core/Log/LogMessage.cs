@@ -107,6 +107,16 @@ namespace Qorpent.Log {
 			get { return (int)((Time - basis).TotalSeconds); }
 		}
 		/// <summary>
+		/// Признак требования на реагирование
+		/// </summary>
+		public bool RequireAccept { get; set; }
+
+		/// <summary>
+		/// Признак обработанного сообщения
+		/// </summary>
+		public bool Accepted { get; set; }
+
+		/// <summary>
 		/// 	Generates BXL-like representation of LogMessage
 		/// </summary>
 		/// <returns> </returns>
