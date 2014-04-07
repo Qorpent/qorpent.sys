@@ -12,7 +12,7 @@ namespace Qorpent.Utils.Git{
         /// <param name="other"></param>
         /// <returns></returns>
 	    protected bool Equals(FileRecord other) {
-	        return FirstState == other.FirstState && SecondState == other.SecondState && string.Equals(FileName, other.FileName) && string.Equals(NewFileName, other.NewFileName);
+			return FirstState == other.FirstState && SecondState == other.SecondState && string.Equals(FileName, other.FileName) && string.Equals(Level, other.Level) && string.Equals(NewFileName, other.NewFileName);
 	    }
 
 	    /// <summary>
@@ -89,6 +89,10 @@ namespace Qorpent.Utils.Git{
 				return false;
 			}
 		}
+		/// <summary>
+		/// Уровень файла (логическое свойство для клиентских систем)
+		/// </summary>
+		public string Level { get; set; }
 
 		/// <summary>
 		/// Локальное имя файла
