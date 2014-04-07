@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Xml.Linq;
+using Qorpent.Dsl;
 using Qorpent.Serialization;
-
+using Qorpent.Utils.Extensions;
 namespace Qorpent.BSharp {
 	/// <summary>
 	/// Структура, описывающая ошибки компиляции
 	/// </summary>
 	[Serialize]
 	public class BSharpError {
+		private LexInfo _lexInfo;
+
 		/// <summary>
 		/// Уровень опасности ошибки
 		/// </summary>
@@ -61,6 +64,40 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		[SerializeNotNullOnly]
 		public IBSharpClass AltClass { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <exception cref="NotImplementedException"></exception>
+		public LexInfo LexInfo{
+			get{
+				if (null == _lexInfo){
+					var lexinfo = new LexInfo();
+					if (Xml != null)
+					{
+						var desc = Xml.Describe();
+						lexinfo.File = desc.File;
+						lexinfo.Line = desc.Line;
+						lexinfo.Column = desc.Column;
+					}
+					else if (Class != null)
+					{
+						var xml = Class.Source;
+						var desc = xml.Describe();
+						lexinfo.File = desc.File;
+						lexinfo.Line = desc.Line;
+						lexinfo.Column = desc.Column;
+					}
+					if (string.IsNullOrWhiteSpace(lexinfo.File))
+					{
+						lexinfo.File = "Общая ошибка компиляции";
+					}
+					_lexInfo = lexinfo;
+				}
+				return _lexInfo;
+			}
+		}
+
 		/// <summary>
 		/// Конвертирует строку для лога
 		/// </summary>
@@ -69,5 +106,6 @@ namespace Qorpent.BSharp {
 			return String.Format(@"{0}:{1} {2} ({4},{5})", Type, Phase, Message, Xml, 
 				null==Class?ClassName:Class.FullName,null==AltClass?"":AltClass.FullName);
 		}
+
 	}
 }

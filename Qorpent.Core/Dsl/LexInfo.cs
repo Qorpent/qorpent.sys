@@ -28,6 +28,46 @@ namespace Qorpent.Dsl {
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		protected bool Equals(LexInfo other){
+			return Column == other.Column && string.Equals(File, other.File) && Line == other.Line;
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type. 
+		/// </summary>
+		/// <returns>
+		/// A hash code for the current <see cref="T:System.Object"/>.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode(){
+			unchecked{
+				int hashCode = Column;
+				hashCode = (hashCode*397) ^ (File != null ? File.GetHashCode() : 0);
+				hashCode = (hashCode*397) ^ Line;
+				return hashCode;
+			}
+		}
+
+		/// <summary>
+		/// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// true if the specified object  is equal to the current object; otherwise, false.
+		/// </returns>
+		/// <param name="obj">The object to compare with the current object. </param><filterpriority>2</filterpriority>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((LexInfo) obj);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public LexInfo() {
 			
 		}
