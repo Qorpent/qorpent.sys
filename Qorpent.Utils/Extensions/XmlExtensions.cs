@@ -75,19 +75,8 @@ namespace Qorpent.Utils.Extensions {
             if (x.Value == name) return true;
             return false;
         }
-		/// <summary>
-		/// 	Возвращает только собственное значение элемента (конкатенация текстовых элементов через пробел)
-		/// </summary>
-		/// <param name="xElement"> </param>
-		/// <returns> </returns>
-		public static string SelfValue(this XElement xElement) {
-			if (xElement == null) {
-				throw new ArgumentNullException("xElement");
-			}
-			return xElement.Nodes().OfType<XText>().Select(x => x.Value).ConcatString(" ");
-		}
 
-        /// <summary>
+		/// <summary>
         /// Формирует сериализуемый в  JSON XML-массив в соответствии с внутренними соглашениями по коду
         /// </summary>
         /// <param name="items"></param>
@@ -119,15 +108,6 @@ namespace Qorpent.Utils.Extensions {
 			return !selfonly && e.Elements().Any(c => HasAttributes(c, attributename, contains));
 		}
 
-		/// <summary>
-		/// 	returns qorpent/bxl bound descriptor of XElement
-		/// </summary>
-		/// <param name="x"> </param>
-		/// <param name="explicitname"></param>
-		/// <returns> </returns>
-		public static XmlElementDescriptor Describe(this XElement x,bool explicitname = false) {
-			return new XmlElementDescriptor(x,explicitname);
-		}
 		/// <summary>
 		/// Получает значение атрибута id, code или само значение элемента
 		/// </summary>
@@ -161,22 +141,6 @@ namespace Qorpent.Utils.Extensions {
 			return def;
 		}
 
-		
-		/// <summary>
-		/// 	resolves firstly matched attribute or returns empty string
-		/// </summary>
-		/// <param name="e"> </param>
-		/// <param name="candidates"> </param>
-		/// <returns> </returns>
-		public static string ChooseAttr(this XElement e, params string[] candidates) {
-			foreach (var candidate in candidates) {
-				var a = e.Attribute(candidate);
-				if (null != a) {
-					return a.Value;
-				}
-			}
-			return String.Empty;
-		}
 
 		/// <summary>
 		/// 	Returns not-null string Value of elemnt's attribute (null-safe, existence-ignorance)
@@ -464,87 +428,6 @@ namespace Qorpent.Utils.Extensions {
 		#endregion
 
 		#region Nested type: XmlElementDescriptor
-
-		/// <summary>
-		/// 	describes main qorpent attributes
-		/// </summary>
-		public class XmlElementDescriptor {
-			/// <summary>
-			/// 	creates descriptor for element
-			/// </summary>
-			/// <param name="element"> </param>
-			/// <param name="explicitname"></param>
-			public XmlElementDescriptor(XElement element,bool explicitname = false) {
-				Id = element.ChooseAttr("__id", "id", "__code", "code");
-				Code = element.ChooseAttr("__code", "code", "__id", "id");
-				Name = element.ChooseAttr("__name", "name");
-				if (!explicitname) {
-					if (Name.IsEmpty()) {
-						Name = element.Value;
-					}
-					if (Name.IsEmpty()) {
-						Name = Code;
-					}
-				}
-				File = element.ChooseAttr("_file", "__file");
-				Line = element.ChooseAttr("_line", "__line").ToInt();
-				Column = element.ChooseAttr("_col", "__col").ToInt();
-				Value = element.SelfValue();
-			}
-
-			/// <summary>
-			/// 	Собственное значение элемента
-			/// </summary>
-			public string Value { get; set; }
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <returns></returns>
-			public string GetEfficienValue()
-			{
-				if (!string.IsNullOrWhiteSpace(Value)) return Value;
-				if (!string.IsNullOrWhiteSpace(Name)) return Name;
-				return Code;
-			}
-
-			/// <summary>
-			/// 	returns lexical ing
-			/// </summary>
-			/// <returns> </returns>
-			public string ToWhereString() {
-				return String.Format(" at {0}({1}:{2})", File, Line, Column);
-			}
-
-			/// <summary>
-			/// 	Code of element
-			/// </summary>
-			public readonly string Code;
-
-			/// <summary>
-			/// 	Column of element
-			/// </summary>
-			public readonly int Column;
-
-			/// <summary>
-			/// 	File of element
-			/// </summary>
-			public readonly string File;
-
-			/// <summary>
-			/// 	Id of element
-			/// </summary>
-			public readonly string Id;
-
-			/// <summary>
-			/// 	Line of element
-			/// </summary>
-			public readonly int Line;
-
-			/// <summary>
-			/// 	Name of element
-			/// </summary>
-			public readonly string Name;
-		}
 
 		#endregion
         /// <summary>

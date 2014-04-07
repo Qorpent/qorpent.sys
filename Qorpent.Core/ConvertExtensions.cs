@@ -24,6 +24,131 @@ using System.Linq;
 using System.Xml.Linq;
 
 namespace Qorpent.Utils.Extensions {
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public static class BaseXmlExtensions{
+		/// <summary>
+		/// 	returns qorpent/bxl bound descriptor of XElement
+		/// </summary>
+		/// <param name="x"> </param>
+		/// <param name="explicitname"></param>
+		/// <returns> </returns>
+		public static XmlElementDescriptor Describe(this XElement x,bool explicitname = false) {
+			return new XmlElementDescriptor(x,explicitname);
+		}
+
+		/// <summary>
+		/// 	describes main qorpent attributes
+		/// </summary>
+		public class XmlElementDescriptor {
+			/// <summary>
+			/// 	creates descriptor for element
+			/// </summary>
+			/// <param name="element"> </param>
+			/// <param name="explicitname"></param>
+			public XmlElementDescriptor(XElement element,bool explicitname = false) {
+				Id = element.ChooseAttr("__id", "id", "__code", "code");
+				Code = element.ChooseAttr("__code", "code", "__id", "id");
+				Name = element.ChooseAttr("__name", "name");
+				if (!explicitname) {
+					if (String.IsNullOrWhiteSpace(Name)) {
+						Name = element.Value;
+					}
+					if (String.IsNullOrWhiteSpace(Name)) {
+						Name = Code;
+					}
+				}
+				File = element.ChooseAttr("_file", "__file");
+				Line = ConvertExtensions.ToInt(element.ChooseAttr("_line", "__line"));
+				Column = ConvertExtensions.ToInt(element.ChooseAttr("_col", "__col"));
+				Value = element.SelfValue();
+			}
+
+			/// <summary>
+			/// 	Собственное значение элемента
+			/// </summary>
+			public string Value { get; set; }
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <returns></returns>
+			public string GetEfficienValue()
+			{
+				if (!String.IsNullOrWhiteSpace(Value)) return Value;
+				if (!String.IsNullOrWhiteSpace(Name)) return Name;
+				return Code;
+			}
+
+			/// <summary>
+			/// 	returns lexical ing
+			/// </summary>
+			/// <returns> </returns>
+			public string ToWhereString() {
+				return String.Format(" at {0}({1}:{2})", File, Line, Column);
+			}
+
+			/// <summary>
+			/// 	Code of element
+			/// </summary>
+			public readonly string Code;
+
+			/// <summary>
+			/// 	Column of element
+			/// </summary>
+			public readonly int Column;
+
+			/// <summary>
+			/// 	File of element
+			/// </summary>
+			public readonly string File;
+
+			/// <summary>
+			/// 	Id of element
+			/// </summary>
+			public readonly string Id;
+
+			/// <summary>
+			/// 	Line of element
+			/// </summary>
+			public readonly int Line;
+
+			/// <summary>
+			/// 	Name of element
+			/// </summary>
+			public readonly string Name;
+		}
+
+		/// <summary>
+		/// 	resolves firstly matched attribute or returns empty string
+		/// </summary>
+		/// <param name="e"> </param>
+		/// <param name="candidates"> </param>
+		/// <returns> </returns>
+		public static string ChooseAttr(this XElement e, params string[] candidates) {
+			foreach (var candidate in candidates) {
+				var a = e.Attribute(candidate);
+				if (null != a) {
+					return a.Value;
+				}
+			}
+			return String.Empty;
+		}
+
+		/// <summary>
+		/// 	Возвращает только собственное значение элемента (конкатенация текстовых элементов через пробел)
+		/// </summary>
+		/// <param name="xElement"> </param>
+		/// <returns> </returns>
+		public static string SelfValue(this XElement xElement) {
+			if (xElement == null) {
+				throw new ArgumentNullException("xElement");
+			}
+			return string.Join(" ",xElement.Nodes().OfType<XText>().Select(x => x.Value));
+		}
+	}
+
 	///<summary>
 	///	Contains utility functoins for safe and lightweight type and str->type conversion
 	///</summary>
