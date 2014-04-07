@@ -49,8 +49,9 @@ namespace Qorpent.Scaffolding.Application{
 		private string GenerateStruct(IBSharpClass e, Dictionary<string, IBSharpClass> refcache, StringBuilder sb){
 
 			sb.AppendLine("\t// " + e.Compiled.Attr("name"));
-			sb.AppendLine("\tvar "+e.Name+"= result." + e.Name + " = function(){");
-			 
+			sb.AppendLine("\tvar "+e.Name+"= result." + e.Name + " = function(args){");
+			sb.AppendLine("\t\targs=args||{}");
+			sb.AppendLine("\t\tthis.__getClassInfo=function(){return {name:\""+e.FullName+"\"}};");
 			foreach (var field in e.Compiled.Elements()){
 				GenerateField(e, field, refcache,sb);
 			}
@@ -128,8 +129,11 @@ namespace Qorpent.Scaffolding.Application{
 					val = "\"" + val.Substring(1,val.Length-2).Escape(EscapingType.JsonValue).Replace("\\'", "'") + "\"";
 				}
 			}
+			if (!val.StartsWith("\"") && !val.All(_=>_=='.'||char.IsLetter(_))){
+				val = "(" + val + ")";
+			}
 
-			sb.AppendLine(string.Format("\t\tthis.{0} = {1};",  name, val));
+			sb.AppendLine(string.Format("\t\tthis.{0} = args.hasOwnProperty(\"{0}\") ? args.{0} : ( args.hasOwnProperty(\"{2}\") ? args.{2} : {1}) ;", name, val, name.ToLower()));
 			
 
 		}
