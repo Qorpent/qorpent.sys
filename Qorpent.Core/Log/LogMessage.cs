@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Core/LogMessage.cs
 #endregion
 using System;
+using System.Security.Cryptography;
 using System.Text;
 using Qorpent.Dsl;
 using Qorpent.Mvc;
@@ -35,6 +36,7 @@ namespace Qorpent.Log {
 			Time = DateTime.Now;
 			//TODO chacnge user to new current user
 			User = Environment.UserDomainName + "/" + Environment.UserName;
+		    Id = BitConverter.ToUInt32( MD5.Create().ComputeHash(Guid.NewGuid().ToByteArray()), 0);
 		}
 		/// <summary>
 		/// 
@@ -115,8 +117,12 @@ namespace Qorpent.Log {
 		/// Признак обработанного сообщения
 		/// </summary>
 		public bool Accepted { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public long Id { get; set; }
 
-		/// <summary>
+	    /// <summary>
 		/// 	Generates BXL-like representation of LogMessage
 		/// </summary>
 		/// <returns> </returns>
