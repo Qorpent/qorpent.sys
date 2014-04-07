@@ -128,19 +128,30 @@ namespace Qorpent.Utils.Git{
 		/// <param name="timeout"></param>
 		/// <returns></returns>
 		public string ExecuteCommand(string command, string args = "", int timeout = 0){
-			var startInfo = new ProcessStartInfo
-			{
+			try{
+				return InternalExecuteCommand(command, args, timeout);
+			}
+			catch (Exception e){
+				if (e.Message.Contains("lock")){
+					Thread.Sleep(1000);
+					return InternalExecuteCommand(command, args, timeout);
+				}
+				throw;
+			}
+			
+		}
+
+		private string InternalExecuteCommand(string command, string args, int timeout){
+			var startInfo = new ProcessStartInfo{
 				RedirectStandardOutput = true,
 				RedirectStandardError = true,
 				RedirectStandardInput = true,
 				FileName = "git",
-				Arguments = command+" "+ args,
+				Arguments = command + " " + args,
 				UseShellExecute = false,
 				WorkingDirectory = DirectoryName ?? Environment.CurrentDirectory,
 				CreateNoWindow = true,
 				StandardOutputEncoding = Encoding.GetEncoding(1251),
-				
-				
 			};
 			if (DebugMode){
 				Console.WriteLine(command + " " + args);
@@ -149,14 +160,9 @@ namespace Qorpent.Utils.Git{
 			Process process = null;
 			string result = "";
 			try{
-
 				process = Process.Start(startInfo);
 				if (command != "ls-remote"){
-
-
-
 					result = process.StandardOutput.ReadToEnd();
-
 				}
 				else{
 					process.WaitForExit(1000);
@@ -168,11 +174,8 @@ namespace Qorpent.Utils.Git{
 						throw new Exception("timeouted");
 					}
 				}
-
-
 			}
 			catch (Exception ex){
-
 				if (null != process){
 					message += process.StandardOutput.ReadToEnd();
 					message += "\r\n--------------------------------\r\n";
@@ -186,14 +189,13 @@ namespace Qorpent.Utils.Git{
 					process.Kill();
 				}
 				catch{
-					
 				}
 			}
 
 			var error = process.StandardError.ReadToEnd();
 
 			var msg = result;
-			if(!string.IsNullOrWhiteSpace(error))msg+="\r\n--------------------------------\r\n" + error;
+			if (!string.IsNullOrWhiteSpace(error)) msg += "\r\n--------------------------------\r\n" + error;
 			if (DebugMode){
 				Console.WriteLine(msg);
 			}
@@ -201,14 +203,13 @@ namespace Qorpent.Utils.Git{
 			if (process.ExitCode != 0){
 				if (string.IsNullOrWhiteSpace(error)){
 					error = process.StandardOutput.ReadToEnd();
-					
 				}
 				throw new Exception("git error " + process.ExitCode + " " + error);
 			}
 
 			return msg;
-
 		}
+
 		/// <summary>
 		/// Восстанавливает единичный файл в рабочей директории
 		/// </summary>
