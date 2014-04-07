@@ -3,8 +3,159 @@ using System.Linq;
 using NUnit.Framework;
 using Qorpent.Charts;
 using Qorpent.Utils.BrickScaleNormalizer;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.Tests.BrickScale {
+	[Explicit]
+	[TestFixture]
+	public class DataColonBestVariantHelperTests {
+		/// <summary>
+		///		Максимальное значение по шкале
+		/// </summary>
+		const decimal ScaleMax = 100;
+		/// <summary>
+		///		Минимальное значение по шкале
+		/// </summary>
+		const decimal ScaleMin = 0;
+		/// <summary>
+		///		Высота шкалы
+		/// </summary>
+		const decimal Height = 100;
+		/// <summary>
+		///		Порядок расположения данных в шкале
+		/// </summary>
+		const ColonDataItemOrder Order = ColonDataItemOrder.Real;
+		/// <summary>
+		///		Высота лычки
+		/// </summary>
+		private const decimal LabelHeight = 27;
+		/// <summary>
+		///		Эземпляр хэлпера
+		/// </summary>
+		private DataColonLabelHelper _colonLabelHelper;
+		[SetUp]
+		public void SetUp() {
+			_colonLabelHelper = new DataColonLabelHelper {
+				Height = Height,
+				LabelHeight = LabelHeight,
+				Order = Order,
+				ScaleMax = ScaleMax,
+				ScaleMin = ScaleMin
+			};
+		}
+		[TestCase(new[] {52, 48}, new[] {LabelPosition.Above, LabelPosition.Below}, new int[] {})]
+		[TestCase(new[] {52, 48, 0}, new[] {LabelPosition.Above, LabelPosition.Below, LabelPosition.Hidden}, new[] {2})]
+		public void IsCorrectDecision(decimal[] input, LabelPosition[] expected, int[] hideIndexes) {
+			var index = 0;
+			foreach (var value in input) {
+				var dataItem = new DataItem {Value = value};
+				dataItem.NormalizedValue = BrickDataSetHelper.GetNormalizedValue(ScaleMin, ScaleMax, Height, dataItem.Value);
+				_colonLabelHelper.Add(dataItem);
+				if (index.IsIn(hideIndexes)) {
+					dataItem.Hide = true;
+				}
+				index++;
+			}
+			_colonLabelHelper.EnsureBestLabels();
+			var orderedPositions = _colonLabelHelper.GetOrderedItems().ToArray();
+			Assert.AreEqual(orderedPositions.Length, expected.Length);
+			for (var i = 0; i < expected.Length; i++) {
+				Assert.AreEqual(expected[i], orderedPositions[i]);
+			}
+		}
+	}
+	[TestFixture(Description = "Фикстура для тестирования корректности получениея всех возможных вариантов лычек")]
+	public class DataColonGetPossibleVariantsTests {
+		/// <summary>
+		///		Эземпляр хэлпера
+		/// </summary>
+		private DataColonLabelHelper _colonLabelHelper;
+		/// <summary>
+		///		Установка теста
+		/// </summary>
+		[SetUp]
+		public void SetUp() {
+			_colonLabelHelper = new DataColonLabelHelper();
+		}
+		[TestCase(new[] {10, 20, 30}, 27, 0)]
+		[TestCase(new[] {10, 20, -1}, 27, 1)]
+		[TestCase(new[] {10, -1}, 9, 1)]
+		public void IsCorrectRotation(int[] values, int expectedCount, int hiddenInEachItemExpectedCount) {
+			foreach (var value in values) {
+				var dataItem = new DataItem();
+				if (value < 0) {
+					dataItem.Hide = true;
+				}
+				_colonLabelHelper.Add(dataItem);
+			}
+			var rotation = _colonLabelHelper.GetPossibleVariants().ToArray();
+			Assert.AreEqual(expectedCount, rotation.Length);
+			Assert.IsTrue(rotation.All(_ => _.Count(__ => __ == LabelPosition.Hidden) == hiddenInEachItemExpectedCount));
+		}
+	}
+	[TestFixture]
+	public class DataColonLabelHelperOrderTests {
+		/// <summary>
+		///		Эземпляр хэлпера
+		/// </summary>
+		private DataColonLabelHelper _colonLabelHelper;
+		[SetUp]
+		public void SetUp() {
+			_colonLabelHelper = new DataColonLabelHelper {
+				new DataItem {Value = 50},
+				new DataItem {Value = 40},
+				new DataItem {Value = 70}
+			};
+		}
+		[Test]
+		public void IsCorrectAsSuppliedOrder() {
+			_colonLabelHelper.Order = ColonDataItemOrder.AsSupplied;
+			var ordered = _colonLabelHelper.GetOrderedItems().ToArray();
+			Assert.AreEqual(3, ordered.Length);
+			Assert.AreEqual(50, ordered[0].Value);
+			Assert.AreEqual(40, ordered[1].Value);
+			Assert.AreEqual(70, ordered[2].Value);
+		}
+		[Test]
+		public void IsCorrectInvertedOrder() {
+			_colonLabelHelper.Order = ColonDataItemOrder.Inverted;
+			var ordered = _colonLabelHelper.GetOrderedItems().ToArray();
+			Assert.AreEqual(3, ordered.Length);
+			Assert.AreEqual(70, ordered[0].Value);
+			Assert.AreEqual(50, ordered[1].Value);
+			Assert.AreEqual(40, ordered[2].Value);
+		}
+		[Test]
+		public void IsCorrectRealOrder() {
+			_colonLabelHelper.Order = ColonDataItemOrder.Real;
+			var ordered = _colonLabelHelper.GetOrderedItems().ToArray();
+			Assert.AreEqual(3, ordered.Length);
+			Assert.AreEqual(40, ordered[0].Value);
+			Assert.AreEqual(50, ordered[1].Value);
+			Assert.AreEqual(70, ordered[2].Value);
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /// <summary>
     ///     Фикстура, тестирующая разнесение лэйблов в графике
     /// </summary>
@@ -17,6 +168,7 @@ namespace Qorpent.Utils.Tests.BrickScale {
             brick.Calculate();
             var colons = brick.GetColons();
         }
+
         [Test]
         public void CanHideLabelWhenTwoLabelsDiffersAboutOnePixel() {
             var ds = GetEmptyDataSet(SeriaCalcMode.SeriaLinear, 200);
@@ -384,6 +536,18 @@ namespace Qorpent.Utils.Tests.BrickScale {
 			colons[6].AsserIsCorrectLabelPosition(1184710, LabelPosition.Below);
 			colons[6].AsserIsCorrectLabelPosition(1011155, LabelPosition.Below);
 		}
+		[Test]
+		public void SebestAgSlitkiSingleColonTest() {
+			var colon = new DataItemColon {Min = 800000, Max = 1800000, Height = 175};
+			colon.Add(1609995);
+			colon.Add(1688037);
+			colon.Add(1506492);
+			colon.MinimizeTemperature();
+			colon.PrintColon();
+			colon.AsserIsCorrectLabelPosition(1506492, LabelPosition.Below);
+			colon.AsserIsCorrectLabelPosition(1688037, LabelPosition.Above);
+			colon.AsserIsCorrectLabelPosition(1609995, LabelPosition.Auto);
+		}
 	}
 
 	internal static class BrickDatasetTestBaseHelper {
@@ -391,6 +555,17 @@ namespace Qorpent.Utils.Tests.BrickScale {
 			var dataItem = colon.FirstOrDefault(_ => _.Value == value);
 			Assert.IsNotNull(dataItem);
 			Assert.AreEqual(labelPosition, dataItem.LabelPosition);
+		 }
+		 public static string DescribeColon(this DataItemColon colon) {
+			 var result = string.Empty;
+			 foreach (var item in colon) {
+				 result += string.Format("Value: {0}, LabelPosition: {1}\n", item.Value, item.LabelPosition);
+			 }
+			 return result;
+		 }
+		 public static void PrintColon(this DataItemColon colon) {
+			Console.WriteLine("Min: {0}, Max: {1}", colon.Min, colon.Max);
+			 Console.WriteLine(colon.DescribeColon());
 		 }
 	}
     public class BrickDataSetTestBase {

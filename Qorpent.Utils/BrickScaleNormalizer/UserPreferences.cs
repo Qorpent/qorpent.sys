@@ -25,6 +25,18 @@
 		/// </summary>
 		public int Height { get; set; }
 		/// <summary>
+		///		С легендой
+		/// </summary>
+		public bool WithLegend { get; set; }
+		/// <summary>
+		///		С заголовком
+		/// </summary>
+		public bool WithCaption { get; set; }
+		/// <summary>
+		///		С подзаголовком
+		/// </summary>
+		public bool WithSubCaption { get; set; }
+		/// <summary>
 		/// Общее определение шкалы Y
 		/// </summary>
 		public string Y { get; set; }
@@ -32,7 +44,6 @@
 		/// Общее определение шкалы SY
 		/// </summary>
 		public string SY { get; set; }
-
 		/// <summary>
 		/// Рекомендованный минимум по Y
 		/// </summary>

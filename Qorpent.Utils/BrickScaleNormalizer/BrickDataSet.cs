@@ -64,7 +64,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <summary>
         ///     Описывает набор данных для обсчета
         /// </summary>
-        public BrickDataSet() : this(20) { }
+        public BrickDataSet() : this(27) { }
         /// <summary>
         ///     Описывает набор данных для обсчета
         /// </summary>
@@ -101,7 +101,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			    var scale = scaleType == ScaleType.First ? FirstScale : SecondScale;
 			    foreach (var row in data) {
 			        foreach (var item in row.Items) {
-			            item.NormalizedValue = (item.Value - scale.Min)/scale.ValueInPixel;
+				        item.NormalizedValue = BrickDataSetHelper.GetNormalizedValue(scale.Min, item.Value, scale.ValueInPixel);
 			        }
 			    }
 			}
@@ -121,7 +121,8 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Производит обсчёт расположения лэйблов значений и пытается максимально раздвинуть их между собой
         /// </summary>
 		private void CalculateLabelPosition() {
-            Task<DataItemColon>[] tasks = BuildColons().Select(CalculateLabelPositionAsync).ToArray();
+	        var colons = BuildColons().ToArray();
+            Task<DataItemColon>[] tasks = colons.Select(CalculateLabelPositionAsync).ToArray();
             Task.WaitAll(tasks);
         }
         /// <summary>
@@ -178,7 +179,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
                     FirstScale = new Scale { Prepared = true, Min = result.ResultMinValue, Max = result.ResultMaxValue, DivLines = result.ResultDivCount };
                 }
 
-				FirstScale.ValueInPixel = (FirstScale.Max - FirstScale.Min) / Preferences.Height;
+				FirstScale.ValueInPixel = BrickDataSetHelper.GetValuesInPixel(FirstScale.Min, FirstScale.Max, Preferences.Height);
 			}
 			else {
 				FirstScale = new Scale();

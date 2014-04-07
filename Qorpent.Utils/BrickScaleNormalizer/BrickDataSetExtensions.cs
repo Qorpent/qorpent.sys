@@ -30,7 +30,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <param name="dataSet">Датасет</param>
         /// <returns>Упорядоченное перечисление колонок данных графика в виде <see cref="DataItemColon"/></returns>
         public static IEnumerable<DataItemColon> GetColons(this BrickDataSet dataSet) {
-            return dataSet.DataItems.GroupBy(_ => _.Index).Select(_ => new DataItemColon(dataSet, _.OrderBy(__ => __.DatasetIndex)));
+            return dataSet.DataItems.GroupBy(_ => _.Index).Select(_ => new DataItemColon(dataSet, _));
         }
         /// <summary>
         ///     Удаляет серии, где все значения равны указанному

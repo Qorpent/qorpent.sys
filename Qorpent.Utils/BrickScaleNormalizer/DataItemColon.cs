@@ -12,7 +12,19 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Внутренний список <see cref="DataItem"/>
         /// </summary>
         private readonly List<DataItem> _dataItems = new List<DataItem>();
-        /// <summary>
+		/// <summary>
+		/// 
+		/// </summary>
+	    private decimal? _min;
+		/// <summary>
+		/// 
+		/// </summary>
+	    private decimal? _height;
+		/// <summary>
+		/// 
+		/// </summary>
+	    private decimal? _max;
+	    /// <summary>
         ///     Внутреннее перечисление коллизий
         /// </summary>
         private IEnumerable<DataItemLabelCollision> Collisions {
@@ -21,10 +33,43 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <summary>
         ///     Внутренее значение температуры колонки
         /// </summary>
-        private decimal Temperature {
+        public decimal Temperature {
             get { return Collisions.Any() ? Collisions.Select(_ => _.Temperature).Sum()/Collisions.Count() : 0; }
         }
-        /// <summary>
+		/// <summary>
+		/// 
+		/// </summary>
+		public decimal Min {
+			get { 
+				if (null != _min) return _min.Value;
+				if (null != DataSet) return DataSet.FirstScale.Min;
+				return 0;
+			}
+			set { _min = value; }
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public decimal Max {
+			get { 
+				if (null != _max) return _max.Value;
+				if (null != DataSet) return DataSet.FirstScale.Max;
+				return decimal.MaxValue;
+			}
+			set { _max = value; }
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public decimal Height {
+			get { 
+				if (null != _height) return _height.Value;
+				if (null != DataSet) return DataSet.Preferences.Height;
+				return 300;
+			}
+			set { _height = value; }
+		}
+	    /// <summary>
         ///     Базовый датасет, к которому относится колонка
         /// </summary>
         public BrickDataSet DataSet { get; private set; }
@@ -74,6 +119,23 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             Collisions.SelectMany(_ => _.SelectSimilar()).ForEach(_ => _.HideLabel());
             Collisions.SelectMany(_ => _.SelectVeryHot()).ForEach(_ => _.HideLabel());
         }
+		/// <summary>
+		///		Добавление численного значения
+		/// </summary>
+		/// <param name="value">Значение</param>
+		public void Add(decimal value) {
+			Add(new DataItem {Value = value});
+		}
+		/// <summary>
+		///		Добавление <see cref="DataItem"/>
+		/// </summary>
+		/// <param name="dataItem"></param>
+		public void Add(DataItem dataItem) {
+			if (null == DataSet && 0 == dataItem.NormalizedValue) {
+				dataItem.NormalizedValue = BrickDataSetHelper.GetNormalizedValue(Min, Max, Height, dataItem.Value);
+			}
+			_dataItems.Add(dataItem);
+		}
         /// <summary>
         ///     Приведение <see cref="DataItemColon"/> к <see cref="string"/>
         /// </summary>
@@ -111,14 +173,14 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         /// <returns>Выбранный вариант расположения лэйблов</returns>
         private LabelPosition[] BuildBestLabelPositionsVariant() {
-            return new LabelPositionVariants(this).Select(_ => new KeyValuePair<decimal, LabelPosition[]>(Apply(_), _)).OrderBy(_ => _.Key).FirstOrDefault().Value;
+            return new LabelPositionVariants(this).OrderBy(_=>_.Item1).First().Item2;
         }
         /// <summary>
         ///     Последовательно применяет переданный массив <see cref="LabelPosition"/> к данной колонке
         /// </summary>
         /// <param name="labelPositions">Массив <see cref="LabelPosition"/></param>
         /// <returns>Температура колонки после применения переданного массива позиций лэйблов</returns>
-        private decimal Apply(LabelPosition[] labelPositions) {
+        public decimal Apply(LabelPosition[] labelPositions) {
             var items = this.ToArray();
             for (var i = 0; i < labelPositions.Length; i++) {
                 items[i].LabelPosition = labelPositions[i];

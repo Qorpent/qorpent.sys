@@ -35,7 +35,13 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Общая температура конфликта
         /// </summary>
         public decimal Temperature {
-            get { return Conflicts.Any() ? Conflicts.Select(_ => DataItem.Temperature(_)).Sum() / Conflicts.Count() : 0; }
+            get {
+	            var conflicts = Conflicts.ToArray();
+				if (conflicts.Length == 0) {
+					return 0;
+				}
+	            return conflicts.Sum(_ => DataItem.Temperature(_))/conflicts.Length;
+            }
         }
         /// <summary>
         ///     Представление единичной коллизии (наезжания) двух лэйблов чарта
