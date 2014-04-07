@@ -15,7 +15,7 @@ namespace Qorpent.BSharp {
 		/// <param name="other"></param>
 		/// <returns></returns>
 		protected bool Equals(BSharpError other){
-			return Equals(_lexInfo, other._lexInfo) && Level == other.Level && Type == other.Type && Phase == other.Phase && string.Equals(Message, other.Message) && string.Equals(ClassName, other.ClassName);
+			return Equals(LexInfo, other.LexInfo) && Level == other.Level && Type == other.Type && Phase == other.Phase && string.Equals(Message, other.Message) && string.Equals(ClassName, other.ClassName);
 		}
 		/// <summary>
 		/// 
