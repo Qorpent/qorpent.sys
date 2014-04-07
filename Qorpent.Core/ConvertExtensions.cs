@@ -157,9 +157,14 @@ namespace Qorpent.Utils.Extensions {
 		/// 	Null-safe (in/out) conversion to string of any object
 		/// </summary>
 		/// <param name="x"> </param>
+		/// <param name="dateformat"></param>
+		/// <param name="decimalformat"></param>
 		/// <returns> </returns>
-		public static string ToStr(this object x) {
-			return x == null ? String.Empty : x.ToString();
+		public static string ToStr(this object x, string dateformat = null, string decimalformat = null){
+			if (x == null) return String.Empty;
+			if (null != dateformat && x is DateTime) return ((DateTime) x).ToString(dateformat);
+			if (null != decimalformat && x is decimal) return ((decimal) x).ToString(decimalformat);
+			return x.ToString();
 		}
 		/// <summary>
 		/// Checks that value is in range

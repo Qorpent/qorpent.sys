@@ -187,7 +187,7 @@ namespace Qorpent.Uson
 			}
 		}
 
-
+		static  readonly  object  locker = new object();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -197,108 +197,91 @@ namespace Qorpent.Uson
 		/// <returns></returns>
 		public static object ToUson(object obj,UObj parent = null, bool noParseJson = false)
 		{
-			if (obj is string && !noParseJson)
-			{
-				var s = obj.ToString().Trim();
-				if (s.StartsWith("{") && s.EndsWith("}"))
-				{
-					return new JsonParser().Parse(s).ToUson();
-				}
-			
-			}
+			lock (locker){
+				if (obj is string && !noParseJson){
+					var s = obj.ToString().Trim();
+					if (s.StartsWith("{") && s.EndsWith("}")){
+						return new JsonParser().Parse(s).ToUson();
+					}
 
-			if (obj is string)
-			{
-				var s = obj as string;
-				if (s == "0") return 0m;
-				var dec = s.ToDecimal(true);
-				if (dec != 0)
-				{
-					return dec;
 				}
-				return s;
-			}
 
-			if (obj == null || obj.GetType().IsValueType)
-			{
+				if (obj is string){
+					var s = obj as string;
+					if (s == "0") return 0m;
+					var dec = s.ToDecimal(true);
+					if (dec != 0){
+						return dec;
+					}
+					return s;
+				}
 
-				return obj;
-			}
-			var result = new UObj { Parent = parent, _srctype = obj.GetType()};
-			if (obj is UObj)
-			{
-				result.UObjMode = (obj as UObj).UObjMode;
-				foreach (var p in ((UObj)obj).Properties)
-				{
-					result.Properties[p.Key] = ToUson(p.Value,null,noParseJson);
+				if (obj == null || obj.GetType().IsValueType){
+
+					return obj;
 				}
-				foreach (var p in ((UObj)obj).Array)
-				{
-					result.Array.Add(p);
+				var result = new UObj{Parent = parent, _srctype = obj.GetType()};
+				if (obj is UObj){
+					result.UObjMode = (obj as UObj).UObjMode;
+					foreach (var p in ((UObj) obj).Properties){
+						result.Properties[p.Key] = ToUson(p.Value, null, noParseJson);
+					}
+					foreach (var p in ((UObj) obj).Array){
+						result.Array.Add(p);
+					}
+					return result;
 				}
+				if (obj is JsonItem){
+					if (obj is JsonObject){
+						foreach (var p in ((JsonObject) obj).Properties){
+							result.Properties[p.Name.Value] = ToUson(p.Value, null, noParseJson);
+						}
+						return result;
+					}
+					else if (obj is JsonArray){
+						foreach (var p in ((JsonArray) obj).Values){
+							result.Array.Add(ToUson(p.Value, null, noParseJson));
+						}
+						return result;
+					}
+					else if (obj is JsonValue){
+						var jv = (JsonValue) obj;
+						if (jv.Type == JsonTokenType.String) return ToUson(jv.Value, null, noParseJson);
+						if (jv.Type == JsonTokenType.Number) return decimal.Parse(jv.Value);
+						if (jv.Type == JsonTokenType.Null) return null;
+						if (jv.Type == JsonTokenType.Bool) return Boolean.Parse(jv.Value);
+						return ToUson(jv.Value, null, noParseJson);
+					}
+
+				}
+				if (obj is Array){
+					result.UObjMode = UObjMode.Array;
+					foreach (var item in ((IEnumerable) obj)){
+						result.Array.Add(ToUson(item, null, noParseJson));
+					}
+				}
+				else if (obj.GetType().Name.StartsWith("Dictionary")){
+					result.UObjMode = UObjMode.Default;
+					foreach (dynamic item in ((IEnumerable) obj)){
+						result.Properties[item.Key.ToString()] = ToUson(item.Value);
+					}
+
+				}
+				else if (obj.GetType().Name.StartsWith("List")){
+					result.UObjMode = UObjMode.Array;
+					foreach (var item in ((IEnumerable) obj)){
+						result.Array.Add(ToUson(item, null, noParseJson));
+					}
+				}
+
+				else{
+					foreach (var p in SerializableItem.GetSerializableItems(obj)){
+						result.Properties[p.Name] = ToUson(p.Value, null, noParseJson);
+					}
+				}
+
 				return result;
 			}
-			if (obj is JsonItem)
-			{
-				if (obj is JsonObject)
-				{
-					foreach (var p in ((JsonObject)obj).Properties)
-					{
-						result.Properties[p.Name.Value] = ToUson(p.Value, null, noParseJson);
-					}
-					return result;
-				}
-				else if (obj is JsonArray)
-				{
-					foreach (var p in ((JsonArray)obj).Values)
-					{
-						result.Array.Add(ToUson(p.Value, null, noParseJson));
-					}
-					return result;
-				}else if (obj is JsonValue)
-				{
-					var jv = (JsonValue) obj;
-					if(jv.Type==JsonTokenType.String)return ToUson(jv.Value,null,noParseJson);
-					if(jv.Type==JsonTokenType.Number)return decimal.Parse( jv.Value);
-					if (jv.Type == JsonTokenType.Null) return null;
-					if (jv.Type == JsonTokenType.Bool) return Boolean.Parse(jv.Value);
-					return ToUson(jv.Value, null, noParseJson);
-				}
-				
-			}
-			if (obj is Array)
-			{
-				result.UObjMode = UObjMode.Array;
-				foreach (var item in ((IEnumerable)obj))
-				{
-					result.Array.Add(ToUson(item, null, noParseJson));
-				}
-			}else if (obj.GetType().Name.StartsWith("Dictionary"))
-			{
-				result.UObjMode = UObjMode.Default;
-				foreach (dynamic item in ((IEnumerable)obj))
-				{
-					result.Properties[item.Key.ToString()] = ToUson(item.Value);
-				}
-	
-			}else if (obj.GetType().Name.StartsWith("List"))
-			{
-				result.UObjMode = UObjMode.Array;
-				foreach (var item in ((IEnumerable)obj))
-				{
-					result.Array.Add(ToUson(item, null, noParseJson));
-				}
-			}
-
-			else
-			{
-				foreach (var p in SerializableItem.GetSerializableItems(obj))
-				{
-					result.Properties[p.Name] = ToUson(p.Value, null, noParseJson);
-				}	
-			}
-			
-			return result;
 		}
 		/// <summary>
 		/// 
