@@ -6,6 +6,46 @@ namespace Qorpent.Utils.Git{
 	/// </summary>
 	[Serialize]
 	public class FileRecord{
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+	    protected bool Equals(FileRecord other) {
+	        return FirstState == other.FirstState && SecondState == other.SecondState && string.Equals(FileName, other.FileName) && string.Equals(NewFileName, other.NewFileName);
+	    }
+
+	    /// <summary>
+	    /// Serves as a hash function for a particular type. 
+	    /// </summary>
+	    /// <returns>
+	    /// A hash code for the current <see cref="T:System.Object"/>.
+	    /// </returns>
+	    /// <filterpriority>2</filterpriority>
+	    public override int GetHashCode() {
+	        unchecked {
+	            int hashCode = (int) FirstState;
+	            hashCode = (hashCode*397) ^ (int) SecondState;
+	            hashCode = (hashCode*397) ^ (FileName != null ? FileName.GetHashCode() : 0);
+	            hashCode = (hashCode*397) ^ (NewFileName != null ? NewFileName.GetHashCode() : 0);
+	            return hashCode;
+	        }
+	    }
+
+	    /// <summary>
+	    /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+	    /// </summary>
+	    /// <returns>
+	    /// true if the specified object  is equal to the current object; otherwise, false.
+	    /// </returns>
+	    /// <param name="obj">The object to compare with the current object. </param><filterpriority>2</filterpriority>
+	    public override bool Equals(object obj) {
+	        if (ReferenceEquals(null, obj)) return false;
+	        if (ReferenceEquals(this, obj)) return true;
+	        if (obj.GetType() != this.GetType()) return false;
+	        return Equals((FileRecord) obj);
+	    }
+
 		/// <summary>
 		/// 
 		/// </summary>
