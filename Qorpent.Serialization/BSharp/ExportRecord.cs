@@ -44,7 +44,7 @@ namespace Qorpent.BSharp {
 		/// <returns></returns>
 		public string Resolve(string element) {
 			foreach (var n in names) {
-				var el = cls.Compiled.Descendants(n).FirstOrDefault(_ => element == XmlExtensions.Attr(_, "code"));
+				var el = cls.Compiled.Descendants(n).FirstOrDefault(_ => element == CoreExtensions.Attr(_, "code"));
 				if (null != el) {
 					var val = el.Value;
 					return val + "|" + cls.FullName + ":" + n + ":" + element;

@@ -26,14 +26,7 @@ namespace Qorpent.Utils.Extensions {
 	/// 	Some methods for Enumerables
 	/// </summary>
 	public static class EnumerableExtensions {
-		/// <summary>
-		/// 	test if enumerable is null or no elements or all elements are nulls
-		/// </summary>
-		/// <param name="e"> </param>
-		/// <returns> </returns>
-		public static bool IsEmptyCollection(this IEnumerable e) {
-			return null == e || !e.OfType<object>().Any();
-		}
+		
 
 		/// <summary>
 		/// 
@@ -66,14 +59,7 @@ namespace Qorpent.Utils.Extensions {
         public static bool IsIn<T>(this T obj, IEnumerable<T> objs) {
             return objs.Any(_ => _.Equals(obj));
         }
-		/// <summary>
-		/// 	test if enumerable is not null and contains not null elements
-		/// </summary>
-		/// <param name="e"> </param>
-		/// <returns> </returns>
-		public static bool IsNotEmpty(this IEnumerable e) {
-			return !IsEmptyCollection(e);
-		}
+		
 		/// <summary>
 		/// Формирует все комбинации элементов списков
 		/// </summary>

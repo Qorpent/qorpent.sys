@@ -24,135 +24,10 @@ using System.Linq;
 using System.Xml.Linq;
 
 namespace Qorpent.Utils.Extensions {
-
-	/// <summary>
-	/// 
-	/// </summary>
-	public static class BaseXmlExtensions{
-		/// <summary>
-		/// 	returns qorpent/bxl bound descriptor of XElement
-		/// </summary>
-		/// <param name="x"> </param>
-		/// <param name="explicitname"></param>
-		/// <returns> </returns>
-		public static XmlElementDescriptor Describe(this XElement x,bool explicitname = false) {
-			return new XmlElementDescriptor(x,explicitname);
-		}
-
-		/// <summary>
-		/// 	describes main qorpent attributes
-		/// </summary>
-		public class XmlElementDescriptor {
-			/// <summary>
-			/// 	creates descriptor for element
-			/// </summary>
-			/// <param name="element"> </param>
-			/// <param name="explicitname"></param>
-			public XmlElementDescriptor(XElement element,bool explicitname = false) {
-				Id = element.ChooseAttr("__id", "id", "__code", "code");
-				Code = element.ChooseAttr("__code", "code", "__id", "id");
-				Name = element.ChooseAttr("__name", "name");
-				if (!explicitname) {
-					if (String.IsNullOrWhiteSpace(Name)) {
-						Name = element.Value;
-					}
-					if (String.IsNullOrWhiteSpace(Name)) {
-						Name = Code;
-					}
-				}
-				File = element.ChooseAttr("_file", "__file");
-				Line = ConvertExtensions.ToInt(element.ChooseAttr("_line", "__line"));
-				Column = ConvertExtensions.ToInt(element.ChooseAttr("_col", "__col"));
-				Value = element.SelfValue();
-			}
-
-			/// <summary>
-			/// 	Собственное значение элемента
-			/// </summary>
-			public string Value { get; set; }
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <returns></returns>
-			public string GetEfficienValue()
-			{
-				if (!String.IsNullOrWhiteSpace(Value)) return Value;
-				if (!String.IsNullOrWhiteSpace(Name)) return Name;
-				return Code;
-			}
-
-			/// <summary>
-			/// 	returns lexical ing
-			/// </summary>
-			/// <returns> </returns>
-			public string ToWhereString() {
-				return String.Format(" at {0}({1}:{2})", File, Line, Column);
-			}
-
-			/// <summary>
-			/// 	Code of element
-			/// </summary>
-			public readonly string Code;
-
-			/// <summary>
-			/// 	Column of element
-			/// </summary>
-			public readonly int Column;
-
-			/// <summary>
-			/// 	File of element
-			/// </summary>
-			public readonly string File;
-
-			/// <summary>
-			/// 	Id of element
-			/// </summary>
-			public readonly string Id;
-
-			/// <summary>
-			/// 	Line of element
-			/// </summary>
-			public readonly int Line;
-
-			/// <summary>
-			/// 	Name of element
-			/// </summary>
-			public readonly string Name;
-		}
-
-		/// <summary>
-		/// 	resolves firstly matched attribute or returns empty string
-		/// </summary>
-		/// <param name="e"> </param>
-		/// <param name="candidates"> </param>
-		/// <returns> </returns>
-		public static string ChooseAttr(this XElement e, params string[] candidates) {
-			foreach (var candidate in candidates) {
-				var a = e.Attribute(candidate);
-				if (null != a) {
-					return a.Value;
-				}
-			}
-			return String.Empty;
-		}
-
-		/// <summary>
-		/// 	Возвращает только собственное значение элемента (конкатенация текстовых элементов через пробел)
-		/// </summary>
-		/// <param name="xElement"> </param>
-		/// <returns> </returns>
-		public static string SelfValue(this XElement xElement) {
-			if (xElement == null) {
-				throw new ArgumentNullException("xElement");
-			}
-			return string.Join(" ",xElement.Nodes().OfType<XText>().Select(x => x.Value));
-		}
-	}
-
 	///<summary>
 	///	Contains utility functoins for safe and lightweight type and str->type conversion
 	///</summary>
-	public static class ConvertExtensions {
+	public static class CoreExtensions {
 		/// <summary>
 		/// 	Null-safe (in/out) conversion to string of any object
 		/// </summary>
@@ -165,6 +40,26 @@ namespace Qorpent.Utils.Extensions {
 			if (null != dateformat && x is DateTime) return ((DateTime) x).ToString(dateformat);
 			if (null != decimalformat && x is decimal) return ((decimal) x).ToString(decimalformat);
 			return x.ToString();
+		}
+
+		/// <summary>
+		/// 	test if enumerable is not null and contains not null elements
+		/// </summary>
+		/// <param name="e"> </param>
+		/// <returns> </returns>
+		public static bool IsNotEmpty(this IEnumerable e)
+		{
+			return !IsEmptyCollection(e);
+		}
+
+		/// <summary>
+		/// 	test if enumerable is null or no elements or all elements are nulls
+		/// </summary>
+		/// <param name="e"> </param>
+		/// <returns> </returns>
+		public static bool IsEmptyCollection(this IEnumerable e)
+		{
+			return null == e || !e.OfType<object>().Any();
 		}
 		/// <summary>
 		/// Checks that value is in range
@@ -213,7 +108,7 @@ namespace Qorpent.Utils.Extensions {
 			}
 			var s = x as string;
 			if (s != null) {
-				if (string.IsNullOrWhiteSpace(s)) {
+				if (String.IsNullOrWhiteSpace(s)) {
 					return false;
 				}
 				if ("0" == s) {
@@ -328,7 +223,7 @@ namespace Qorpent.Utils.Extensions {
 				if (x is string) {
 					
 					converted = true;
-					if (string.IsNullOrWhiteSpace(x as string)) {
+					if (String.IsNullOrWhiteSpace(x as string)) {
 						return Activator.CreateInstance(type);
 					}
                     return ConvertEnum(type, x as string);
@@ -350,7 +245,7 @@ namespace Qorpent.Utils.Extensions {
 				}
 				if (type == typeof (DateTime)) {
 					var ds = x.ToStr();
-					if (string.IsNullOrWhiteSpace(ds)) {
+					if (String.IsNullOrWhiteSpace(ds)) {
 						converted = false;
 						return new DateTime(1900, 1, 1);
 					}
@@ -382,7 +277,7 @@ namespace Qorpent.Utils.Extensions {
 			}
 			catch (Exception ex) {
 				throw new FormatException(
-					string.Format("Cannot convert {0} of type {1} to {2}", "x", x == null ? "no type" : x.GetType().FullName, type),
+					String.Format("Cannot convert {0} of type {1} to {2}", "x", x == null ? "no type" : x.GetType().FullName, type),
 					ex);
 			}
 		}
@@ -418,7 +313,7 @@ namespace Qorpent.Utils.Extensions {
 				return (DateTime) obj;
 			}
 			var s = obj.ToStr();
-			if (string.IsNullOrWhiteSpace(s)) {
+			if (String.IsNullOrWhiteSpace(s)) {
 				return new DateTime(1900, 1, 1);
 			}
 			return DateTime.ParseExact(s, QorpentConst.Date.StandardDateFormats, CultureInfo.InvariantCulture,
@@ -522,7 +417,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="obj"> </param>
 		/// <returns> </returns>
 		public static IDictionary<string, object> ToDict(this object obj) {
-			if(obj is IDictionary<string,object>) {
+			if(obj is IDictionary<string, object>) {
 				return (IDictionary<string, object>) obj;
 			}
             if (obj is IDictionary<string, string>) {
@@ -538,5 +433,158 @@ namespace Qorpent.Utils.Extensions {
 
 		// ReSharper restore InconsistentNaming
 		// ReSharper restore MemberCanBePrivate.Global
+		/// <summary>
+		/// 	returns qorpent/bxl bound descriptor of XElement
+		/// </summary>
+		/// <param name="x"> </param>
+		/// <param name="explicitname"></param>
+		/// <returns> </returns>
+		public static XmlElementDescriptor Describe(this XElement x,bool explicitname = false) {
+			return new XmlElementDescriptor(x,explicitname);
+		}
+
+		/// <summary>
+		/// 	describes main qorpent attributes
+		/// </summary>
+		public class XmlElementDescriptor {
+			/// <summary>
+			/// 	creates descriptor for element
+			/// </summary>
+			/// <param name="element"> </param>
+			/// <param name="explicitname"></param>
+			public XmlElementDescriptor(XElement element,bool explicitname = false) {
+				Id = element.ChooseAttr("__id", "id", "__code", "code");
+				Code = element.ChooseAttr("__code", "code", "__id", "id");
+				Name = element.ChooseAttr("__name", "name");
+				if (!explicitname) {
+					if (String.IsNullOrWhiteSpace(Name)) {
+						Name = element.Value;
+					}
+					if (String.IsNullOrWhiteSpace(Name)) {
+						Name = Code;
+					}
+				}
+				File = element.ChooseAttr("_file", "__file");
+				Line = ToInt(element.ChooseAttr("_line", "__line"));
+				Column = ToInt(element.ChooseAttr("_col", "__col"));
+				Value = element.SelfValue();
+			}
+
+			/// <summary>
+			/// 	Собственное значение элемента
+			/// </summary>
+			public string Value { get; set; }
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <returns></returns>
+			public string GetEfficienValue()
+			{
+				if (!String.IsNullOrWhiteSpace(Value)) return Value;
+				if (!String.IsNullOrWhiteSpace(Name)) return Name;
+				return Code;
+			}
+
+			/// <summary>
+			/// 	returns lexical ing
+			/// </summary>
+			/// <returns> </returns>
+			public string ToWhereString() {
+				return String.Format(" at {0}({1}:{2})", File, Line, Column);
+			}
+
+			/// <summary>
+			/// 	Code of element
+			/// </summary>
+			public readonly string Code;
+
+			/// <summary>
+			/// 	Column of element
+			/// </summary>
+			public readonly int Column;
+
+			/// <summary>
+			/// 	File of element
+			/// </summary>
+			public readonly string File;
+
+			/// <summary>
+			/// 	Id of element
+			/// </summary>
+			public readonly string Id;
+
+			/// <summary>
+			/// 	Line of element
+			/// </summary>
+			public readonly int Line;
+
+			/// <summary>
+			/// 	Name of element
+			/// </summary>
+			public readonly string Name;
+		}
+
+		/// <summary>
+		/// 	resolves firstly matched attribute or returns empty string
+		/// </summary>
+		/// <param name="e"> </param>
+		/// <param name="candidates"> </param>
+		/// <returns> </returns>
+		public static string ChooseAttr(this XElement e, params string[] candidates) {
+			foreach (var candidate in candidates) {
+				var a = e.Attribute(candidate);
+				if (null != a) {
+					return a.Value;
+				}
+			}
+			return String.Empty;
+		}
+
+		/// <summary>
+		/// 	Возвращает только собственное значение элемента (конкатенация текстовых элементов через пробел)
+		/// </summary>
+		/// <param name="xElement"> </param>
+		/// <returns> </returns>
+		public static string SelfValue(this XElement xElement) {
+			if (xElement == null) {
+				throw new ArgumentNullException("xElement");
+			}
+			return String.Join(" ",xElement.Nodes().OfType<XText>().Select(x => x.Value));
+		}
+
+		/// <summary>
+		///     Устанавливает атрибут, если значение не null
+		/// </summary>
+		/// <param name="parent"></param>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		public static XElement SetAttr(this XElement parent, string name, object value) {
+			if (value != null) {
+				if (value is string) {
+					if (String.IsNullOrWhiteSpace(value as string)) {
+						return parent;
+					}
+				}
+
+				parent.SetAttributeValue(name, value);
+			}
+
+			return parent;
+		}
+
+		/// <summary>
+		/// 	Returns not-null string Value of elemnt's attribute (null-safe, existence-ignorance)
+		/// </summary>
+		/// <param name="sourceElement"> Element from which attribute requested </param>
+		/// <param name="name"> name of requested attribute (can be string) </param>
+		/// <param name="defaultvalue"> default Value if not attribute existed </param>
+		/// <returns> string representation of attribute or empty string </returns>
+		public static string Attr(this XElement sourceElement, XName name, string defaultvalue = "") {
+			if (null == sourceElement) {
+				return defaultvalue;
+			}
+			var attr = sourceElement.Attribute(name);
+			return null == attr ? defaultvalue : attr.Value;
+		}
 	}
 }
