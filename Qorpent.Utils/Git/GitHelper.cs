@@ -235,13 +235,25 @@ namespace Qorpent.Utils.Git{
 		public string Init(){
 			return ExecuteCommand("init");
 		}
+
 		/// <summary>
 		/// Получить упрощенный список измененных файлов
 		/// </summary>
 		/// <param name="fromref"></param>
 		/// <param name="toref"></param>
+		/// <param name="level"></param>
 		/// <returns></returns>
-		public FileRecord[] GetChangedFilesList(string fromref = "HEAD", string toref="WORKING_TREE"){
+		public FileRecord[] GetChangedFilesList(string fromref = "HEAD", string toref="WORKING_TREE", string level = ""){
+			var result =InternalGetFileChanges(fromref, toref);
+			if (!string.IsNullOrWhiteSpace(level)){
+				foreach (var fileRecord in result){
+					fileRecord.Level = level;
+				}
+			}
+			return result;
+		}
+
+		private FileRecord[] InternalGetFileChanges(string fromref, string toref){
 			if (string.IsNullOrWhiteSpace(toref)){
 				toref = "WORKING_TREE";
 			}
@@ -258,27 +270,30 @@ namespace Qorpent.Utils.Git{
 			}
 
 			if (toref == "WORKING_TREE"){
-				var rawchanged = ExecuteCommand("status", "-s").SmartSplit(false,false,'\r','\n');
-				return rawchanged.Select(_ => (FileRecord)_).ToArray();
+				var rawchanged = ExecuteCommand("status", "-s").SmartSplit(false, false, '\r', '\n');
+				return rawchanged.Select(_ => (FileRecord) _).ToArray();
 			}
 
 			if (string.IsNullOrWhiteSpace(fromref)){
 				var raw = ExecuteCommand("log", "-n1 --name-status --format=\"%h`\" " + toref);
-				var files = raw.SmartSplit(false, true, '`').Last().SmartSplit(false,false,'\r','\n');
-				return files.Select(_ => (FileRecord)_).ToArray();
-
+				var files = raw.SmartSplit(false, true, '`').Last().SmartSplit(false, false, '\r', '\n');
+				return files.Select(_ => (FileRecord) _).ToArray();
 			}
 			string[] rawchanges = null;
 			if (fromref == toref){
-				rawchanges = ExecuteCommand("log", "-n1 --name-status --format=\"`%h`\" " + toref).SmartSplit(false, true, '`').ToArray();	
+				rawchanges =
+					ExecuteCommand("log", "-n1 --name-status --format=\"`%h`\" " + toref).SmartSplit(false, true, '`').ToArray();
 			}
 			else{
-				rawchanges = ExecuteCommand("log", " --name-status --format=\"`%h`\" " + fromref + ".." + toref).SmartSplit(false, true, '`').ToArray();	
+				rawchanges =
+					ExecuteCommand("log", " --name-status --format=\"`%h`\" " + fromref + ".." + toref)
+						.SmartSplit(false, true, '`')
+						.ToArray();
 			}
-			
+
 			var result = new List<FileRecord>();
 			for (var i = 1; i < rawchanges.Length; i += 2){
-				var files = rawchanges[i].SmartSplit(false, false, '\r', '\n').Select(_ => (FileRecord)_).ToArray();
+				var files = rawchanges[i].SmartSplit(false, false, '\r', '\n').Select(_ => (FileRecord) _).ToArray();
 				foreach (var file in files){
 					if (!result.Contains(file)){
 						result.Add(file);

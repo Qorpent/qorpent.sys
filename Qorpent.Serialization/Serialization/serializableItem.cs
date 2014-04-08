@@ -110,6 +110,7 @@ namespace Qorpent.Serialization {
 		public bool IsSerializable {
 			get {
 				var result = false;
+				if (null == Member) return false;
 				if(!_issercache.ContainsKey(Member)) {
 					result = InternalGetIsSerializable();
 					_issercache[Member] = result;	

@@ -143,26 +143,12 @@ namespace Qorpent.Utils.Extensions {
 
 
 		/// <summary>
-		/// 	Returns not-null string Value of elemnt's attribute (null-safe, existence-ignorance)
-		/// </summary>
-		/// <param name="sourceElement"> Element from which attribute requested </param>
-		/// <param name="name"> name of requested attribute (can be string) </param>
-		/// <param name="defaultvalue"> default Value if not attribute existed </param>
-		/// <returns> string representation of attribute or empty string </returns>
-		public static string Attr(this XElement sourceElement, XName name, string defaultvalue = "") {
-			if (null == sourceElement) {
-				return defaultvalue;
-			}
-			var attr = sourceElement.Attribute(name);
-			return null == attr ? defaultvalue : attr.Value;
-		}
-		/// <summary>
 		/// Резолюция атрибута Code
 		/// </summary>
 		/// <param name="e"></param>
 		/// <returns></returns>
 		public static string GetCode(this XElement e) {
-			return Attr(e, "code");
+			return CoreExtensions.Attr(e, "code");
 		}
 		/// <summary>
 		/// Резолюция атрибута name
@@ -171,7 +157,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <returns></returns>
 		public static string GetName(this XElement e)
 		{
-			return Attr(e, "name");
+			return CoreExtensions.Attr(e, "name");
 		}
 
 		/// <summary>
@@ -564,24 +550,5 @@ namespace Qorpent.Utils.Extensions {
 	        parent.Add(element);
 	        return element;
 	    }
-        /// <summary>
-        ///     Устанавливает атрибут, если значение не null
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public static XElement SetAttr(this XElement parent, string name, object value) {
-            if (value != null) {
-                if (value is string) {
-                    if (string.IsNullOrWhiteSpace(value as string)) {
-                        return parent;
-                    }
-                }
-
-                parent.SetAttributeValue(name, value);
-            }
-
-            return parent;
-        }
 	}
 }

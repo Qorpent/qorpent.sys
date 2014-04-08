@@ -17,13 +17,16 @@
 // PROJECT ORIGIN: Qorpent.Core/LexInfo.cs
 #endregion
 
+#if !EMBEDQPT
 using Qorpent.Serialization;
-
+#endif
 namespace Qorpent.Dsl {
 	/// <summary>
 	/// 	Описывает информацию о позиции исходных файлов в BXL файле
 	/// </summary>
+#if !EMBEDQPT
 	[Serialize]
+#endif
 	public class LexInfo {
 		/// <summary>
 		/// 
@@ -108,37 +111,49 @@ namespace Qorpent.Dsl {
 		/// <summary>
 		/// 	****************************************Not-lined char index in whole file
 		/// </summary>
+		#if !EMBEDQPT
 		[SerializeNotNullOnly]
+#endif
 		public int CharIndex;
 
 		/// <summary>
 		/// 	Колонка количества символов в строке
 		/// </summary>
+#if !EMBEDQPT
 		[SerializeNotNullOnly]
+#endif
 		public int Column;
 
 		/// <summary>
 		/// 	Имя исходного файла
 		/// </summary>
+#if !EMBEDQPT
 		[SerializeNotNullOnly]
+#endif
 		public string File;
 
 		/// <summary>
         /// 	Длина описанного элемента кода
 		/// </summary>
+#if !EMBEDQPT
 		[SerializeNotNullOnly]
+#endif
 		public int Length;
 
 		/// <summary>
 		/// 	Номер строки, описываемый элементом код
 		/// </summary>
+#if !EMBEDQPT
 		[SerializeNotNullOnly]
+#endif
 		public int Line;
 
 		/// <summary>
 		/// Дополнительный контекст
 		/// </summary>
+#if !EMBEDQPT
 		[SerializeNotNullOnly]
+#endif
 		public string Context;
 	}
 }

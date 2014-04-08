@@ -1,7 +1,29 @@
+using System;
 using NUnit.Framework;
 using Qorpent.Utils.BrickScaleNormalizer;
 
 namespace Qorpent.Utils.Tests.BrickScale.DataColonNormalizer {
+	/// <summary>
+	/// 
+	/// </summary>
+	[TestFixture]
+	public class DataColonProductionTests : DataColonTestBase {
+		[Test]
+		public void Case1() {
+			ColonLabelHelper.Height = 237;
+			ColonLabelHelper.ScaleMin = 800000;
+			ColonLabelHelper.ScaleMax = 1800000;
+			ColonLabelHelper.LabelHeight = 36;
+			ColonLabelHelper.Order = ColonDataItemOrder.Real;
+			ColonLabelHelper.Add(new DataItem {Value = 1600000, LabelPosition = LabelPosition.Above});
+			ColonLabelHelper.Add(new DataItem {Value = 1557686, LabelPosition = LabelPosition.Above});
+			ColonLabelHelper.Add(new DataItem {Value = 1387940, LabelPosition = LabelPosition.Above});
+			ColonLabelHelper.EnsureBestLabels();
+			foreach (var orderedItem in ColonLabelHelper.GetOrderedItems()) {
+				Console.WriteLine("Value: {0}, Position: {1}", orderedItem.Value, orderedItem.LabelPosition);
+			}
+		}
+	}
 	/// <summary>
 	///		Фикстура для тестирования корректности вычисленя температуры
 	/// </summary>
@@ -16,11 +38,13 @@ namespace Qorpent.Utils.Tests.BrickScale.DataColonNormalizer {
 			ColonLabelHelper.Add(new DataItem {Value = 50, LabelPosition = LabelPosition.Above});
 			Assert.AreEqual(double.PositiveInfinity, ColonLabelHelper.GetTemperature());
 		}
+		[Explicit]
 		[Test(Description = "Тест выражает то, что температра бесконечна, если лычка вылезает за рамки графика сверху")]
 		public void IsInfinityWhenLabelPositionHigerThanScaleAbove() {
 			ColonLabelHelper.Add(new DataItem {Value = 100, LabelPosition = LabelPosition.Above});
 			Assert.AreEqual(double.PositiveInfinity, ColonLabelHelper.GetTemperature());
 		}
+		[Explicit]
 		[Test(Description = "Тест выражает то, что температра бесконечна, если лычка вылезает за рамки графика снизу")]
 		public void IsInfinityWhenLabelPositionHigerThanScaleBelow() {
 			ColonLabelHelper.Add(new DataItem {Value = 0, LabelPosition = LabelPosition.Below});

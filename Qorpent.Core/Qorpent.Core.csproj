@@ -107,7 +107,7 @@
     <Compile Include="Config\IConfig.cs" />
     <Compile Include="Config\TreeConfigBase.cs" />
     <Compile Include="Config\TreeConfigBaseElementsList.cs" />
-    <Compile Include="ConvertExtensions.cs" />
+    <Compile Include="CoreExtensions.cs" />
     <Compile Include="Data\DocumentStorageOptions.cs" />
     <Compile Include="Data\IDocumentStorage.cs" />
     <Compile Include="Data\IParametersProvider.cs" />

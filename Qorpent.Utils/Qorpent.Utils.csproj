@@ -36,10 +36,7 @@
     <Compile Include="BrickScaleNormalizer\DataItem.cs" />
     <Compile Include="BrickScaleNormalizer\BrickDataSet.cs" />
     <Compile Include="BrickScaleNormalizer\DataItemColon.cs" />
-    <Compile Include="BrickScaleNormalizer\DataItemColonExtensions.cs" />
     <Compile Include="BrickScaleNormalizer\DataItemExtensions.cs" />
-    <Compile Include="BrickScaleNormalizer\DataItemLabelCollision.cs" />
-    <Compile Include="BrickScaleNormalizer\DataItemLabelCollisionExtensions.cs" />
     <Compile Include="BrickScaleNormalizer\DataRow.cs" />
     <Compile Include="BrickScaleNormalizer\LabelPosition.cs" />
     <Compile Include="BrickScaleNormalizer\LabelPositionVariants.cs" />

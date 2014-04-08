@@ -475,5 +475,14 @@ namespace Qorpent.Uson
 			}
 			return this;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public object SmartResolve(string id){
+			return _properties.Where(_ => _.Key.ToLower() == id.ToLower()).Select(_=>_.Value).FirstOrDefault();
+			
+		}
 	}
 }

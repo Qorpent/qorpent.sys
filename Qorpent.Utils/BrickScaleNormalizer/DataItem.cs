@@ -106,7 +106,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			    double position;
 			    if (LabelPosition == LabelPosition.Hidden) {
 				    position = Convert.ToDouble(NormalizedValue);
-			    } else if (LabelPosition == LabelPosition.Above) {
+			    } else if (LabelPosition == LabelPosition.Above || LabelPosition == LabelPosition.Auto) {
 				    position = Convert.ToDouble(NormalizedValue) + (LabelHeight/2.0);
 			    } else if (LabelPosition == LabelPosition.Below) {
 				    position = Convert.ToDouble(NormalizedValue) - (LabelHeight/2.0);

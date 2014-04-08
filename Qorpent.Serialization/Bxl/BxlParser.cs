@@ -4,21 +4,30 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Qorpent.BSharp;
+using Qorpent.Serialization;
 using Qorpent.Dsl;
+using Qorpent.Utils.Extensions;
+
+#if !EMBEDQPT
+using Qorpent.BSharp;
 using Qorpent.Events;
 using Qorpent.IoC;
-using Qorpent.Serialization;
 using Qorpent.Utils;
-using Qorpent.Utils.Extensions;
+#endif
 
 namespace Qorpent.Bxl {
 	/// <summary>
 	/// 
 	/// </summary>
+#if !EMBEDQPT
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof(IBxlParser))]
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof(ISpecialXmlParser), Name = "bxl.xml.parser")]
-	public class BxlParser : IBxlParser, ISpecialXmlParser {
+#endif
+	public class BxlParser  
+#if !EMBEDQPT
+		:IBxlParser, ISpecialXmlParser 
+#endif
+	{
 		private const String NAMESPACE = "namespace::";
 		private const String CODE = "code";
 		private const String ID = "id";
@@ -92,15 +101,15 @@ namespace Qorpent.Bxl {
 		/// <param name="options"></param>
 		/// <returns></returns>
 		public XElement Parse(string code = null, string filename = "code.bxl", BxlParserOptions options = BxlParserOptions.None) {
-			if (code.IsEmpty()) {
-				if (filename.IsEmpty())
+			if (string.IsNullOrWhiteSpace(code)) {
+				if (string.IsNullOrWhiteSpace(filename))
 					return new XElement("root");
 				code = File.ReadAllText(filename);
 			}
 
-			if (filename.IsEmpty())
+			if (string.IsNullOrWhiteSpace(filename)){
 				filename = "code.bxl";
-
+			}
 			init(filename, options);
 			foreach (char c in code) {
 				_info.CharIndex++;
@@ -132,16 +141,18 @@ namespace Qorpent.Bxl {
 			if (!options.HasFlag(BxlParserOptions.NoLexData)){
 				_root.SetAttr("_file", filename);
 			}
+#if !EMBEDQPT
 			if (options.HasFlag(BxlParserOptions.BSharp)) {
 				_root = CompileWithBSharp(options, _root);
-			}else
+			}
 
-			if (options.HasFlag(BxlParserOptions.PerformInterpolation)) {
+			else if (options.HasFlag(BxlParserOptions.PerformInterpolation)) {
 				_root = new XmlInterpolation().Interpolate(_root);
 			}
+#endif
 			return _root;
 		}
-
+#if !EMBEDQPT
 		/// <summary>
 		///		Generates BXL code from XML with given settings
 		/// </summary>
@@ -155,7 +166,7 @@ namespace Qorpent.Bxl {
 		XElement ISpecialXmlParser.ParseXml(string srccode) {
 			return Parse(srccode, "isxp");
 		}
-
+#endif
 		private void init(String filename, BxlParserOptions options) {
 			_options = options;
 			_info = new LexInfo(filename, 1);
@@ -186,7 +197,7 @@ namespace Qorpent.Bxl {
 			_current = _root;
 			_mode = ReadMode.Start;
 		}
-
+#if !EMBEDQPT
 		private static XElement CompileWithBSharp(BxlParserOptions options, XElement result) {
 			var compileroptions = new BSharpConfig {
 				UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation),
@@ -216,7 +227,7 @@ namespace Qorpent.Bxl {
 			return result;
 		}
 
-
+#endif
 
 		//		processing current state
 

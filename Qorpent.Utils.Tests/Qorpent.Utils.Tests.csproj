@@ -23,8 +23,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BrickScale\BrickDataRecordMiniMaxTest.cs" />
-    <Compile Include="BrickScale\BrickDataSetLabelNormalizationTests.cs" />
-    <Compile Include="BrickScale\BrickDataSetUsabulityTests.cs" />
     <Compile Include="BrickScale\ComdivTests.cs" />
     <Compile Include="BrickScale\DataColonNormalizer\DataColonBestVariantHelperTests.cs" />
     <Compile Include="BrickScale\DataColonNormalizer\DataColonGetPossibleVariantsTests.cs" />

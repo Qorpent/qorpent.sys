@@ -59,7 +59,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		///		Признак того, что конфигурация корректная
 		/// </summary>
 		public bool IsCorrectConfig {
-			get { return this.Min(_ => _.Value) <= ScaleMin && this.Max(_ => _.Value) <= ScaleMax; }
+			get { return this.Min(_ => _.Value) >= ScaleMin && this.Max(_ => _.Value) <= ScaleMax; }
 		}
 		/// <summary>
 		///		Порядок расположения элементов данных
@@ -133,7 +133,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		/// <returns>Замыкание на текущий <see cref="DataColonLabelHelper"/></returns>
 		public DataColonLabelHelper EnsureBestLabels() {
-			if (IsCorrectConfig) {
+			if (!IsCorrectConfig) {
 				throw new Exception("Некорректная конфигурация");
 			}
 			EnsureNormalized();
@@ -172,9 +172,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// <returns>Температура колонки</returns>
 		public double GetTemperature() {
 			EnsureNormalized();
-			if (IsScaleOverlap) {
-				return double.PositiveInfinity;
-			}
+
 			if (IsAmbiguous) {
 				return double.PositiveInfinity;
 			}
@@ -288,79 +286,4 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			}
 		}
 	}
-
-
-
-
-
-
-    /// <summary>
-    ///     Представление набора вариантов для <see cref="DataItemColon"/>
-    /// </summary>
-    internal class LabelPositionVariants : IEnumerable<Tuple<decimal,LabelPosition[]>> {
-        /// <summary>
-        ///     Количество элементов в <see cref="DataItemColon"/>
-        /// </summary>
-        private readonly DataItemColon _colon;
-        /// <summary>
-        ///     Представление набора вариантов для <see cref="DataItemColon"/>
-        /// </summary>
-        /// <param name="colon">Экземпляр <see cref="DataItemColon"/></param>
-        public LabelPositionVariants(DataItemColon colon) {
-            _colon = colon;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<Tuple<decimal,LabelPosition[]>> Get() {
-            var values = new List<string>();
-            var v = _colon.Count();
-            for (var ch = 'a'; ch <= 'c'; ch++) values.Add(ch.ToString(CultureInfo.InvariantCulture));
-
-            for (var i = 1; i < v; i++) {
-                var newValues = new List<string>();
-                values.DoForEach(_ => { for (var ch = 'a'; ch <= 'c'; ch++) newValues.Add(_ + ch); });
-                values = newValues;
-            }
-
-            var indexes = GetHiddenIndexes().ToList();
-
-            foreach (var el in values) {
-                var c = new LabelPosition[v];
-                var k = 0;
-                foreach (var ch in el.ToCharArray()) {
-                    switch (ch) {
-                        case 'a': c[k] = LabelPosition.Auto; break;
-                        case 'b': c[k] = LabelPosition.Above; break;
-                        case 'c': c[k] = LabelPosition.Below; break;
-                    }
-                    k++;
-                }
-                indexes.ForEach(_ => c[_] = LabelPosition.Hidden);
-	            _colon.Apply(c);
-	            var result = new Tuple<decimal,LabelPosition[]>(_colon.Temperature, c);
-                yield return result;
-            }
-        }
-        private IEnumerable<int> GetHiddenIndexes() {
-            var itemNum = -1;
-            var hidden = _colon.Select(_ => new KeyValuePair<int, LabelPosition>(++itemNum, _.LabelPosition));
-            return hidden.Where(_ => _.Value == LabelPosition.Hidden).Select(_ => _.Key);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<Tuple<decimal, LabelPosition[]>> GetEnumerator() {
-            return Get().GetEnumerator();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator() {
-            return GetEnumerator();
-        }
-    }
 }

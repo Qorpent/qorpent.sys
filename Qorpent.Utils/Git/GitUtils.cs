@@ -64,7 +64,7 @@ namespace Qorpent.Utils.Git{
 		}
 
 		static GitUtils(){
-			var ints = haskel.SmartSplit(false, true, '\\').Select(_=>ConvertExtensions.ToInt(_)).ToArray();
+			var ints = haskel.SmartSplit(false, true, '\\').Select(_=>CoreExtensions.ToInt(_)).ToArray();
 			var idx = 0;
 			int i = 0;
 
