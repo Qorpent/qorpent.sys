@@ -121,9 +121,20 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Производит обсчёт расположения лэйблов значений и пытается максимально раздвинуть их между собой
         /// </summary>
 		private void CalculateLabelPosition() {
-	        var colons = BuildColons().ToArray();
-            Task<DataItemColon>[] tasks = colons.Select(CalculateLabelPositionAsync).ToArray();
-            Task.WaitAll(tasks);
+			var helper = new DataColonLabelHelper {
+				LabelHeight = LabelHeight,
+				ScaleMax = GetMax(),
+				ScaleMin = GetMin(),
+				Height = Preferences.Height,
+				Order = ColonDataItemOrder.Real
+			};
+	        foreach (var colon in BuildColons()) {
+				helper.Clear();
+		        foreach (var dataItem in colon) {
+			        helper.Add(dataItem);
+		        }
+		        helper.EnsureBestLabels();
+	        }
         }
         /// <summary>
         ///     Производит обсчёт расположения лэйблов внутри одной колонки
