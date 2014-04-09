@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Serialization;
+using Qorpent.Uson;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Application{
@@ -64,7 +65,15 @@ namespace Qorpent.Scaffolding.Application{
 						}
 
 					}
-					sb.AppendLine("\t\t\t\t" + aname.ToLower() + " : " + val + (j!=attrs.Length-1? ",":""));
+					sb.AppendLine("\t\t\t\t" + aname.ToLower() + " : " + val + ",");
+				}
+
+				var parameters = cls.Compiled.Element("Parameters");
+				if (null != parameters){
+					sb.AppendLine("\t\t\t\tparameters: " + parameters.ToJson());
+				}
+				else{
+					sb.AppendLine("\t\t\t\tparameters : null");
 				}
 	
 				if (i == targetclasses.Length - 1){
