@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Qorpent.Config;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
@@ -64,7 +63,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <summary>
         ///     Описывает набор данных для обсчета
         /// </summary>
-        public BrickDataSet() : this(20) { }
+        public BrickDataSet() : this(27) { }
         /// <summary>
         ///     Описывает набор данных для обсчета
         /// </summary>
@@ -101,7 +100,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			    var scale = scaleType == ScaleType.First ? FirstScale : SecondScale;
 			    foreach (var row in data) {
 			        foreach (var item in row.Items) {
-			            item.NormalizedValue = (item.Value - scale.Min)/scale.ValueInPixel;
+				        item.NormalizedValue = BrickDataSetHelper.GetNormalizedValue(scale.Min, item.Value, scale.ValueInPixel);
 			        }
 			    }
 			}
@@ -114,31 +113,27 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Собирает абстрактные олонки значений
         /// </summary>
         /// <returns>Перечисление абстрактных колонок значений</returns>
-        public IEnumerable<DataItemColon> BuildColons() {
+        public IEnumerable<DataItem[]> BuildColons() {
             return this.GetColons();
         }
         /// <summary>
         ///     Производит обсчёт расположения лэйблов значений и пытается максимально раздвинуть их между собой
         /// </summary>
 		private void CalculateLabelPosition() {
-            Task<DataItemColon>[] tasks = BuildColons().Select(CalculateLabelPositionAsync).ToArray();
-            Task.WaitAll(tasks);
-        }
-        /// <summary>
-        ///     Производит обсчёт расположения лэйблов внутри одной колонки
-        /// </summary>
-        /// <param name="colon">Представление колонки данных</param>
-        private DataItemColon CalculateLabelPosition(DataItemColon colon) {
-            colon.MinimizeTemperature();
-            return colon;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="colon"></param>
-        /// <returns></returns>
-        private async Task<DataItemColon> CalculateLabelPositionAsync(DataItemColon colon) {
-            return await Task<DataItemColon>.Factory.StartNew(() => CalculateLabelPosition(colon));
+			var helper = new DataColonLabelHelper {
+				LabelHeight = LabelHeight,
+				ScaleMax = FirstScale.Max,
+				ScaleMin = FirstScale.Min,
+				Height = Preferences.Height,
+				Order = ColonDataItemOrder.Real
+			};
+	        foreach (var colon in BuildColons()) {
+				helper.Clear();
+		        foreach (var dataItem in colon) {
+			        helper.Add(dataItem);
+		        }
+		        helper.EnsureBestLabels();
+	        }
         }
 		private void CalculateSecondScale() {
 			if (0 == Preferences.SYFixMin && 0 == Preferences.SYFixMin && 0 == Preferences.SYFixDiv)
@@ -178,7 +173,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
                     FirstScale = new Scale { Prepared = true, Min = result.ResultMinValue, Max = result.ResultMaxValue, DivLines = result.ResultDivCount };
                 }
 
-				FirstScale.ValueInPixel = (FirstScale.Max - FirstScale.Min) / Preferences.Height;
+				FirstScale.ValueInPixel = BrickDataSetHelper.GetValuesInPixel(FirstScale.Min, FirstScale.Max, Preferences.Height);
 			}
 			else {
 				FirstScale = new Scale();

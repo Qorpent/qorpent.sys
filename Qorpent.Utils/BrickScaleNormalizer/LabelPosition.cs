@@ -4,10 +4,6 @@
 	/// </summary>
 	public enum LabelPosition {
 		/// <summary>
-		///     Автоматически
-		/// </summary>
-		Auto = 0,
-		/// <summary>
 		///     Сверху
 		/// </summary>
 		Above = 1,
@@ -18,6 +14,10 @@
 		/// <summary>
 		/// Скрытый
 		/// </summary>
-		Hidden,
+		Hidden = 3,
+		/// <summary>
+		///     Автоматически
+		/// </summary>
+		Auto = Above,
 	}
 }

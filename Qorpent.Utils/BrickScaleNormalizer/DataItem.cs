@@ -69,6 +69,54 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
             get { return MatchNormalizedLabelMax(LabelPosition); }
 		}
 		/// <summary>
+		///		Нормализованная верхняя граница лычки
+		/// </summary>
+	    public double NormalizedLabelTop {
+		    get {
+			    var position = NormalizedLabelPosition;
+			    double top;
+				if (LabelPosition == LabelPosition.Hidden) {
+					top = position;
+				} else {
+					top = position + (LabelHeight/2.0);
+				}
+			    return top;
+		    }
+	    }
+		/// <summary>
+		///		Нормализованная нижняя граница лычки
+		/// </summary>
+	    public double NormalizedLabelBottom {
+		    get {
+			    var position = NormalizedLabelPosition;
+			    double bottom;
+				if (LabelPosition == LabelPosition.Hidden) {
+					bottom = position;
+				} else {
+					bottom = position - (LabelHeight/2.0);
+				}
+			    return bottom;
+		    }
+	    }
+		/// <summary>
+		///		Нормализованная позиция центра лычки с учётом <see cref="LabelHeight"/> и <see cref="LabelPosition"/>
+		/// </summary>
+	    public double NormalizedLabelPosition {
+		    get {
+			    double position;
+			    if (LabelPosition == LabelPosition.Hidden) {
+				    position = Convert.ToDouble(NormalizedValue);
+			    } else if (LabelPosition == LabelPosition.Above || LabelPosition == LabelPosition.Auto) {
+				    position = Convert.ToDouble(NormalizedValue) + (LabelHeight/2.0);
+			    } else if (LabelPosition == LabelPosition.Below) {
+				    position = Convert.ToDouble(NormalizedValue) - (LabelHeight/2.0);
+			    } else {
+				    throw new Exception("Cannot determine label position");
+			    }
+			    return position;
+		    }
+	    }
+		/// <summary>
 		///     Размер «лычки» в пикселях
 		/// </summary>
 		public int LabelHeight = 10;
