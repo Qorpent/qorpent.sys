@@ -107,6 +107,17 @@ namespace Qorpent.Utils.Extensions {
 			}
 			return !selfonly && e.Elements().Any(c => HasAttributes(c, attributename, contains));
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool HasAttribute(this XElement e, string name) {
+            if (null == e) return false;
+            if (string.IsNullOrWhiteSpace(name)) return false;
+            return null != e.Attribute(name);
+        }
 
 		/// <summary>
 		/// Получает значение атрибута id, code или само значение элемента

@@ -41,7 +41,7 @@ namespace Qorpent.Uson
 		/// <param name="e"></param>
 		/// <param name="root"></param>
 		/// <returns></returns>
-		public static UObj XmlToUson(XElement e,bool root){
+		public static UObj XmlToUson(this XElement e,bool root=false){
 			dynamic result = new UObj();
 			dynamic target = result;
 			if (root){
@@ -60,6 +60,17 @@ namespace Qorpent.Uson
 			}
 			return result;
 		}
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="e"></param>
+	    /// <param name="root"></param>
+	    /// <param name="mode"></param>
+	    /// <returns></returns>
+	    public static string ToJson(this XElement e, bool root = false, UObjSerializeMode mode=  UObjSerializeMode.Javascript) {
+            return e.XmlToUson(root).ToJson(mode);
+        }
 
 		/// <summary>
 		/// 
