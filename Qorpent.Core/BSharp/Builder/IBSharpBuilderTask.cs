@@ -18,6 +18,11 @@
 		int Index { get; }
 
 		/// <summary>
+		/// Признак задачи, которая может быть асинхронной
+		/// </summary>
+		bool Async { get; set; }
+
+		/// <summary>
 		/// Установить целевой проект
 		/// </summary>
 		/// <param name="project"></param>

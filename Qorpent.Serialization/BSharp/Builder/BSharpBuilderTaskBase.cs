@@ -31,5 +31,10 @@
 		/// Номер внутри фазы
 		/// </summary>
 		public int Index { get; set; }
+
+		/// <summary>
+		/// Признак задачи, которая может быть асинхронной
+		/// </summary>
+		public bool Async { get; set; }
 	}
 }

@@ -24,21 +24,21 @@ namespace Qorpent.Scaffolding.Sql{
 			yield return
 				new Production{
 					FileName = safetsqlf,
-					Content = DbObject.GetSql(dbobjects, DbGenerationMode.Script | DbGenerationMode.Safe, DbDialect.TSQL, Project)
+					GetContent = ()=> DbObject.GetSql(dbobjects, DbGenerationMode.Script | DbGenerationMode.Safe, DbDialect.TSQL, Project)
 				};
 
 			yield return
 				new Production
 				{
 					FileName = nsafetsqlf,
-					Content = DbObject.GetSql(dbobjects, DbGenerationMode.Script, DbDialect.TSQL, Project)
+					GetContent =()=> DbObject.GetSql(dbobjects, DbGenerationMode.Script, DbDialect.TSQL, Project)
 				};
 
 			yield return
 				new Production
 				{
 					FileName = dropsqlf,
-					Content = DbObject.GetSql(dbobjects, DbGenerationMode.Script | DbGenerationMode.Drop, DbDialect.TSQL, Project)
+					GetContent = ()=>DbObject.GetSql(dbobjects, DbGenerationMode.Script | DbGenerationMode.Drop, DbDialect.TSQL, Project)
 				};
 
 		}
