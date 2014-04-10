@@ -25,6 +25,7 @@ namespace Qorpent.Utils.Tests
 
 
 		[Test]
+		[Explicit]
 		public void CanInitDirWithQorpentSys()
 		{
 			var githelper = new GitHelper { DirectoryName = dirname,RemoteUrl = "g:/repos/qorpent.kernel"};
@@ -70,8 +71,8 @@ namespace Qorpent.Utils.Tests
 		}
 
 		[Test]
-		public void CanGetContent()
-		{
+		[Explicit]
+		public void CanGetContent() {
 			var githelper = new GitHelper { DirectoryName = dirname, RemoteUrl = "g:/repos/qorpent.kernel" };
 			githelper.Connect();
 			var content = githelper.GetContent("LICENSE");
@@ -173,6 +174,7 @@ namespace Qorpent.Utils.Tests
 		}
 
 		[Test]
+		[Explicit]
 		public void CanGetNullDistanceOnUnknown()
 		{
 			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = "test" };
