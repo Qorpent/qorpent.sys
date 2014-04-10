@@ -32,7 +32,11 @@ namespace Qorpent.Scaffolding.Application{
 		}
 
 		private Production GenerateStruct(IBSharpClass e, Dictionary<string, IBSharpClass> refcache){
-			var result = new Production{FileName = e.FullName + ".cs"};
+			var result = new Production{FileName = e.FullName + ".cs", GetContent = () => GenerateInternal(e, refcache)};
+			return result;
+		}
+
+		private string GenerateInternal(IBSharpClass e, Dictionary<string, IBSharpClass> refcache){
 			var sb = new StringBuilder();
 			sb.AppendLine(CommonHeader);
 			sb.AppendLine("using System;");
@@ -46,16 +50,15 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("\t/// <summary>\r\n\t///\t" + e.Compiled.Attr("name") + "\r\n\t/// </summary>");
 			sb.AppendLine("\t[Serialize]");
 			sb.AppendLine("\tpublic partial class " + e.Name + " {");
-			 
+
 			foreach (var field in e.Compiled.Elements()){
-				GenerateField(e, field, refcache,sb);
+				GenerateField(e, field, refcache, sb);
 			}
 			sb.AppendLine("\t}");
 			sb.AppendLine("}");
-			result.Content = sb.ToString();
-			return result;
+			return sb.ToString();
 		}
-		
+
 		private void GenerateField(IBSharpClass cls, XElement field, Dictionary<string, IBSharpClass> refcache, StringBuilder sb){
 			sb.AppendLine();
 			var type = field.Name.LocalName;
@@ -97,7 +100,11 @@ namespace Qorpent.Scaffolding.Application{
 
 	
 		private Production GenerateEnum(IBSharpClass e, Dictionary<string, IBSharpClass> refcache){
-			var result = new Production{FileName = e.FullName + ".cs"};
+			var result = new Production{FileName = e.FullName + ".cs", GetContent = () => GenerateInternal(e)};
+			return result;
+		}
+
+		private static string GenerateInternal(IBSharpClass e){
 			var sb = new StringBuilder();
 			var items = e.Compiled.Elements("item").ToArray();
 			var type = "int";
@@ -110,22 +117,23 @@ namespace Qorpent.Scaffolding.Application{
 			var summary = e.Compiled.Attr("name");
 			sb.AppendLine("\t/// <summary>\r\n\t///\t" + summary + "\r\n\t/// </summary>");
 			sb.AppendLine("\t[Flags]");
-			sb.AppendLine("\tpublic enum " + e.Name + " : "+type+" {");
+			sb.AppendLine("\tpublic enum " + e.Name + " : " + type + " {");
 			sb.AppendLine();
 			WriteMemberSummary(sb, "Отсутвующее значение");
 			sb.AppendLine("\t\tUndefined = 0,");
 			var val = 1;
 			bool wascustom = false;
 			bool wasreserved = false;
-			foreach (var item in items ){
+			foreach (var item in items){
 				sb.AppendLine();
 				var code = item.Attr("code");
 				summary = item.Attr("name");
 				WriteMemberSummary(sb, summary);
-				sb.AppendLine("\t\t" + code+" = "+val+",");
+				sb.AppendLine("\t\t" + code + " = " + val + ",");
 				if (code == "Custom"){
 					wascustom = true;
-				}else if (code == "Reserved"){
+				}
+				else if (code == "Reserved"){
 					wasreserved = true;
 				}
 				val *= 2;
@@ -133,7 +141,7 @@ namespace Qorpent.Scaffolding.Application{
 			if (!wascustom){
 				sb.AppendLine();
 				WriteMemberSummary(sb, "Пользовательский тип");
-				sb.AppendLine("\t\tCustom = "+val+",");
+				sb.AppendLine("\t\tCustom = " + val + ",");
 				val *= 2;
 			}
 			if (!wasreserved){
@@ -141,11 +149,10 @@ namespace Qorpent.Scaffolding.Application{
 				WriteMemberSummary(sb, "Зарезервированное значение");
 				sb.AppendLine("\t\tReserved = " + val + ",");
 			}
-			
+
 			sb.AppendLine("\t}");
 			sb.AppendLine("}");
-			result.Content = sb.ToString();
-			return result;
+			return sb.ToString();
 		}
 
 

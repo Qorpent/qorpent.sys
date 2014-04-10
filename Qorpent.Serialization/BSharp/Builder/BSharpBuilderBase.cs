@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Qorpent.Bxl;
 using Qorpent.IO.Resources;
 using Qorpent.IoC;
@@ -219,18 +220,29 @@ namespace Qorpent.BSharp.Builder {
 		protected virtual void PostVerify(IBSharpContext result) {
 			ExecutePhase(result, BSharpBuilderPhase.PostVerify);
 		}
-
+		IList<Task> pending = new List<Task>();
 		private void ExecutePhase(IBSharpContext result, BSharpBuilderPhase phase) {
 			Log.Trace("\tstart phase "+phase);
+			
 			foreach (var t in Tasks.Where(_ => _.Phase == phase).OrderBy(_ => _.Index)) {
 				Log.Trace("\t\t"+t.GetType().Name + " started");
-				t.Execute(result);
-				Log.Trace("\t\t"+t.GetType().Name+" executed");
+				if (t.Async){
+					pending.Add(Task.Run(()=>ExecuteTask(result,t)));
+				}
+				else{
+					ExecuteTask(result, t);
+				}
 			}
+			Task.WaitAll(pending.ToArray());
 			Log.Trace("\tend phase " + phase);
 		}
 
-		/// <summary>
+	    private void ExecuteTask(IBSharpContext result, IBSharpBuilderTask t){
+		    t.Execute(result);
+		    Log.Trace("\t\t" + t.GetType().Name + " executed");
+	    }
+
+	    /// <summary>
 		/// 
 		/// </summary>
 		/// <param name="result"></param>

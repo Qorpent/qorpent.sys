@@ -207,7 +207,7 @@ namespace Qorpent.Utils.Git{
 				throw new Exception("git error " + process.ExitCode + " " + error);
 			}
 
-			return msg;
+			return msg.Trim(new[] {'\r', '\n', ' '});
 		}
 
 		/// <summary>
@@ -713,7 +713,11 @@ namespace Qorpent.Utils.Git{
 			if (string.IsNullOrWhiteSpace(refcode)){
 				refcode = "HEAD";
 			}
-			return ExecuteCommand("rev-parse", refcode);
+			var commit = ExecuteCommand("rev-parse", refcode);
+			if (string.IsNullOrWhiteSpace(commit)) {
+				throw new Exception("Cannot get commti code");
+			}
+			return commit.Trim(new[] {'\r', '\n', ' '});
 		}
 
 		
