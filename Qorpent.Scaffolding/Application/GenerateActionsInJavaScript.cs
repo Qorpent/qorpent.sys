@@ -46,6 +46,9 @@ namespace Qorpent.Scaffolding.Application{
 					if (aname == "Url"){
 						aname = "url";
 					}
+                    if (aname == "SupportsAsync") {
+                        val = "supportsAsync";
+                    }
 					if (aname == "Result" || aname == "Arguments")
 					{
 						if (val.EndsWith("*"))

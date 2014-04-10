@@ -56,7 +56,7 @@ namespace Qorpent.Scaffolding.Application {
                 var api = apictor($http); 
                 $scope.view = '{0}.html';
 ", code, string.Join("','", deps.Keys), string.Join(",", deps.Keys), Project.ProjectName));
-            var datael = xml.Elements().First(x => x.Attr("code") == "data");
+            var datael = xml.Elements().FirstOrDefault(x => x.Attr("code") == "data");
             if (null != datael) {
                 sb.AppendLine("\t\t\t\t$scope.data = {};");
                 if (!deps.ContainsKey("refresh")) {
