@@ -53,6 +53,9 @@ namespace Qorpent.Utils.Git{
 				
 				GlobalRevisionTime = new DateTime(1970, 1, 1).AddSeconds(Convert.ToInt32(parts[1]))
 			};
+			if (!string.IsNullOrWhiteSpace(result.Hash)) {
+				result.Hash = result.Hash.Trim(new[] {'\r', '\n', ' '});
+			}
 			var comment = parts[6];
 			if (!String.IsNullOrWhiteSpace(comment)){
 				comment = Encoding.UTF8.GetString(Encoding.GetEncoding(1251).GetBytes(comment));

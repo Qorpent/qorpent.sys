@@ -72,6 +72,7 @@ namespace Qorpent.IO.Tests.Web
 			StringAssert.Contains("<html", s);
 		}
 		[Test]
+		[Explicit]
 		public void GetGetDataExtensionApiHttpsIgnoreNonTrust()
 		{
 			StringAssert.Contains("<html", res.GetString("https://localhost", new ResourceConfig{AcceptAllCeritficates=true}));
