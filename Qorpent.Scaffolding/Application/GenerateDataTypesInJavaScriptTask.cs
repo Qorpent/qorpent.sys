@@ -134,6 +134,7 @@ namespace Qorpent.Scaffolding.Application{
 			if (!val.StartsWith("\"") && !val.All(_=>_=='.'||char.IsLetter(_))){
 				val = "(" + val + ")";
 			}
+          
 
 			sb.AppendLine(string.Format("\t\tthis.{0} = args.hasOwnProperty(\"{0}\") ? args.{0} : ( args.hasOwnProperty(\"{2}\") ? args.{2} : {1}) ;", name, val, name.ToLower()));
 			

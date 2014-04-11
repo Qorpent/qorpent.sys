@@ -108,8 +108,12 @@ namespace Qorpent.Uson
 		{
 			get { return _array ?? (_array = new List<object>()); }
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+	    public bool IgnoreCase { get; set; }
 
-		/// <summary>
+	    /// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
@@ -170,8 +174,16 @@ namespace Qorpent.Uson
 			
 			if (!Properties.ContainsKey(binder.Name))
 			{
+                if (IgnoreCase) {
+                    var p = Properties.FirstOrDefault(_ => _.Key.ToLower() == binder.Name.ToLower());
+                    if (!string.IsNullOrWhiteSpace(p.Key)) {
+                        result = p.Value;
+                        return true;
+                    }
+                }
 				Properties[binder.Name] = new UObj {UObjMode = UObjMode.Fake, Parent = this};
 			}
+            
 			result = Properties[binder.Name];
 			return true;
 		}
