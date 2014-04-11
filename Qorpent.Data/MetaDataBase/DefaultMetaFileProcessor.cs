@@ -79,7 +79,8 @@ namespace Qorpent.Data.MetaDataBase{
 		protected virtual  void CheckTables(){
 			if (!Online) return;
 			var tables = grouped.GroupBy(_ => _.FullTableName, _ => _);
-			var query = string.Join("\r\nunion\r\n", tables.Select(_ =>string.Format("select '{0}' as code,object_id('{0}') as id ",_)));
+			var query = string.Join("\r\nunion\r\n", tables.Select(_ =>string.Format("select '{0}' as code,object_id('{0}') as id ",_.Key)).ToArray());
+			if(string.IsNullOrWhiteSpace(query))return;
 			var dict = getc().ExecuteDictionaryReader(query);
 			var excludes = dict.Where(_ => _.Value == null).Select(_ => _.Key).ToArray();
 			foreach (var exclude in excludes){

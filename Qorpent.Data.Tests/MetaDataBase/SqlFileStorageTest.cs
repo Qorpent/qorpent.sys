@@ -9,6 +9,7 @@ using Qorpent.Utils.Extensions;
 namespace Qorpent.Data.Tests.MetaDataBase
 {
 	[TestFixture]
+	[Ignore("will be implemented another way")]
 	public class SqlFileStorageTest{
 		private SqlBasedMetaFileRegistry sqlmd;
 
