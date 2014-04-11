@@ -21,6 +21,13 @@ namespace Qorpent.Utils.Git{
 			get { return Forward == 0 && Behind == 0; }
 		}
 		/// <summary>
+		/// ѕризнак отсутстви€ дистанции
+		/// </summary>
+		public bool IsConflict
+		{
+			get { return Forward != 0 && Behind != 0; }
+		}
+		/// <summary>
 		/// ѕризнак бранча, который может быть обновлен до цели
 		/// </summary>
 		public bool IsForwardable{

@@ -15,6 +15,8 @@ namespace Qorpent.Utils.Git{
 	/// </summary>
 	public class GitHelper
 	{
+		private bool _connected;
+
 		/// <summary>
 		/// Режим отладки
 		/// </summary>
@@ -75,8 +77,10 @@ namespace Qorpent.Utils.Git{
 		/// <summary>
 		/// Инициализирует и настраиват директорию
 		/// </summary>
-		public GitHelper Connect()
-		{
+		public GitHelper Connect(){
+
+			if (_connected) return this;
+
 			Directory.CreateDirectory(DirectoryName);
 			var gitpath = Path.Combine(DirectoryName, ".git");
 			if (!Directory.Exists(gitpath)){
@@ -95,6 +99,7 @@ namespace Qorpent.Utils.Git{
 					Fetch();
 				}
 			}
+			_connected = true;
 			return this;
 		}
 		/// <summary>
@@ -566,11 +571,11 @@ namespace Qorpent.Utils.Git{
 					tocommit = RemoteName + "/" + Branch;
 				}
 				var result = new RevisionDistance();
-				var ft = Task.Run(() => ExecuteCommand("rev-list", fromcommit + ".." + tocommit));
-				var bt = Task.Run(() =>ExecuteCommand("rev-list", tocommit + ".." + fromcommit));
+				var ft = Task.Run(() =>GetCommitList(fromcommit, tocommit));
+				var bt = Task.Run(() =>GetCommitList(tocommit,fromcommit));
 				Task.WaitAll(ft, bt);
-				result.Forward = ft.Result.SmartSplit(false, true, '\r', '\n').Count;
-				result.Behind = bt.Result.SmartSplit(false, true, '\r', '\n').Count;
+				result.Forward = ft.Result.Length;
+				result.Behind = bt.Result.Length;
 				return result;
 			}
 			catch (Exception ex){
@@ -579,6 +584,15 @@ namespace Qorpent.Utils.Git{
 				}
 				throw;
 			}
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fromcommit"></param>
+		/// <param name="tocommit"></param>
+		/// <returns></returns>
+		public string[] GetCommitList(string fromcommit, string tocommit){
+			return ExecuteCommand("rev-list", fromcommit + ".." + tocommit).SmartSplit(false, true, '\r', '\n').ToArray();
 		}
 
 		/// <summary>
@@ -716,11 +730,21 @@ namespace Qorpent.Utils.Git{
 			if (string.IsNullOrWhiteSpace(refcode)){
 				refcode = "HEAD";
 			}
-			var commit = ExecuteCommand("rev-parse", refcode);
+			var commit = ResolveRef(refcode);
 			if (string.IsNullOrWhiteSpace(commit)) {
 				throw new Exception("Cannot get commti code");
 			}
-			return commit.Trim(new[] {'\r', '\n', ' '});
+			return commit;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="refcode"></param>
+		/// <returns></returns>
+		public string ResolveRef(string refcode ){
+			return (ExecuteCommand("rev-parse", refcode) ?? "").Trim(new[]{'\r','\n',' '});
+
 		}
 
 		
