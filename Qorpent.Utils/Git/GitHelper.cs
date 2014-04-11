@@ -491,7 +491,7 @@ namespace Qorpent.Utils.Git{
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
-		public GitCommitInfo[] GetHistory(string path){
+		public GitCommitInfo[] GetHistory(string path=""){
 			if (!string.IsNullOrWhiteSpace(path)){
 				path = "\"" + path + "\"";
 			}

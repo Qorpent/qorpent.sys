@@ -41,5 +41,23 @@ namespace Qorpent.Utils.Git{
 		/// 
 		/// </summary>
 		public string Comment { get; set; }
+
+        /// <summary>
+        /// Клиентский признак сведения с неким бранчем
+        /// </summary>
+        public bool Merged { get; set; }
+
+	    private bool? _automerge;
+	    /// <summary>
+	    /// Автоматический коммит на слияние
+	    /// </summary>
+	    public bool IsAutoMergeCommit {
+	        get {
+                if (null == _automerge) {
+                    _automerge =  this.Comment.StartsWith("Merge remote-tracking branch");
+                }
+	            return _automerge.Value;
+	        }
+	    }
 	}
 }
