@@ -4,6 +4,7 @@ using Qorpent.Data.MetaDataBase;
 
 namespace Qorpent.Data.Tests.MetaDataBase{
 	[TestFixture]
+	[Ignore("will be implemented another way")]
 	public class MetaDataSyncServiceTests
 	{
 		private MetaDataSyncService sync;

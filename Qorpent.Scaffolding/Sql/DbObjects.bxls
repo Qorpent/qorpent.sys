@@ -48,7 +48,7 @@ namespace Qorpent.Db
 	class IWithIdx "Сущность с порядковым номером" abstract
 		int Idx "Порядковый номер в списках" idx=215
 	
-	class IWithExtendedName "Сущность с расширенями имени"
+	class IWithExtendedName "Сущность с расширенями имени" abstract
 		string OuterCode "Внешний код для связи со сторонними системами"  idx=210
 		string ShortName "Сокращенное имя" idx=220
 		longstring FullName "Полное имя" idx=225

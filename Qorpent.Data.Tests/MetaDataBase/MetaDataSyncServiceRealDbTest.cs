@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
+using System.Threading;
 using NUnit.Framework;
 using Qorpent.Data.MetaDataBase;
 using Qorpent.Utils;
@@ -9,11 +11,13 @@ using Qorpent.Utils.Git;
 
 namespace Qorpent.Data.Tests.MetaDataBase{
 	[TestFixture]
+	[Ignore("will be implemented another way")]
 	public class MetaDataSyncServiceRealDbTest{
 		private const string dirname = "MetaDataSyncServiceRealDbTest";
 		const string connection = "Data Source=(local);Initial Catalog=z3;Integrated Security=True;Application Name=ecohome";
 		[SetUp]
 		public void Setup(){
+			FileSystemHelper.KillDirectory(dirname);
 			InDbNQ("create schema test");
 			InDbNQ("drop table test.mds2");
 			InDbNQ("drop table test.mds");
@@ -44,8 +48,9 @@ parent int not null foreign key references test.mds (id) default 0, mds int not 
 					c.ExecuteNonQuery(query);
 					return true;
 				}
-				catch{
+				catch(Exception ex){
 					if (throwError) throw;
+					Console.WriteLine(query+" "+ex.Message);
 					return false;
 				}
 				
@@ -76,18 +81,23 @@ parent int not null foreign key references test.mds (id) default 0, mds int not 
 		[Test]
 		public void UpgradeTest()
 		{
+
 			var gh = new GitHelper { DirectoryName = dirname }.Connect();
 			gh.WriteAndCommit("mdf1", "test.mds x y");
 			gh.WriteAndCommit("mdf2", "test.mds a b");
+			
 			var sync = new MetaDataSyncService { SqlConnection = connection, IncludeRegex = "mdf" };
 			sync.TargetStorage = new InMemoryMetaFileRegistry();
 			sync.SourceStorage = new GitBasedMetaFileRegistry { DirectoryName = dirname, };
 			sync.Synchronize();
+			Console.WriteLine(sync.LastSql);
 			var cnt = InDb(c => c.ExecuteScalar<int>("select count(id) from test.mds where id!=0"));
 			Assert.AreEqual(2, cnt);
-			gh.WriteAndCommit("mdf1", "test.mds x y1");
-			gh.WriteAndCommit("mdf2", "test.mds a b1");
+			Console.WriteLine(gh.WriteAndCommit("mdf1", "test.mds x y1"));
+			Console.WriteLine(gh.WriteAndCommit("mdf2", "test.mds a b1"));
+			Thread.Sleep(1000);
 			sync.Synchronize();
+			
 			Console.WriteLine(sync.LastSql);
 			cnt = InDb(c => c.ExecuteScalar<int>("select count(id) from test.mds where name in('y1','b1')"));
 			Assert.AreEqual(2, cnt);

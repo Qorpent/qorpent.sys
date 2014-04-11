@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using NUnit.Framework;
 using Qorpent.Data.MetaDataBase;
@@ -11,6 +8,7 @@ using Qorpent.Utils.XDiff;
 namespace Qorpent.Data.Tests.MetaDataBase
 {
 	[TestFixture]
+	[Ignore("will be implemented another way")]
 	public class MetaFileProcessorTest
 	{
 

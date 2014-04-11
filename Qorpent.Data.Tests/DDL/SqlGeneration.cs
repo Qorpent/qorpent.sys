@@ -24,27 +24,14 @@ namespace Qorpent.Data.Tests.DDL
 			var fld = DbField.CreateField(null, type, xml);
 			Assert.AreEqual(sql,fld.GetSql());
 		}
-		[Test]
-		public void DictionaryTest(){
-			var code = @"
-require data
-using dict=Qorpent.Db.DataDictionary
-dict Category 'дерево категорий' schema=x	
-";
-
-			var bs = BSharpCompiler.CreateDefault();
-			var src = new BxlParser().Parse(code);
-			var result = bs.Compile(new[] { src });
-			var objects = result.Get(BSharpContextDataType.Working).SelectMany(_ => DbObject.Create(_, result));
-			Console.WriteLine(DbObject.GetSql(objects));
-		}
+	
 
 		[TestCase(DbGenerationMode.Script | DbGenerationMode.Safe)]
 		[TestCase(DbGenerationMode.Script)]
 		public void CreateTableFromBSharp(DbGenerationMode mode){
 			var code = @"
 require data
-using table=Qorpent.Db.Table
+using table=Qorpent.Db.TableBase
 table mytable abstract
 	schema=x
 mytable first 'Просто табличка для примера'

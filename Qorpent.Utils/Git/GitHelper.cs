@@ -83,10 +83,11 @@ namespace Qorpent.Utils.Git{
 				InitializeRepository();
 			}
 			else{
-
-				RemoteSet(RemoteName, RemoteUrl);
-				if (!IsWaitMergeCommit() && 0==GetChangedFilesList().Length){
-					EnsureBranch();
+				if (!string.IsNullOrWhiteSpace(RemoteUrl)){
+					RemoteSet(RemoteName, RemoteUrl);
+					if (!IsWaitMergeCommit() && 0 == GetChangedFilesList().Length){
+						EnsureBranch();
+					}
 				}
 			}
 			if (!string.IsNullOrWhiteSpace(RemoteUrl)){
@@ -316,6 +317,7 @@ namespace Qorpent.Utils.Git{
 			if (string.IsNullOrWhiteSpace(url)){
 				url = RemoteUrl;
 			}
+			if (string.IsNullOrWhiteSpace(url)) return "false";
 			var _u = url;
 			if (!string.IsNullOrWhiteSpace(Password) && !_u.Contains("@")){
 				_u = _u.Replace("://", "://" + AuthorName + ":" + Password + "@");
@@ -667,6 +669,7 @@ namespace Qorpent.Utils.Git{
 		/// Переключается и синхронихзируется с удаленным бранчем
 		/// </summary>
 		public void FixBranchState(bool resetOnMergeProblems = true){
+			if (string.IsNullOrWhiteSpace(RemoteUrl)) return;
 			if (!string.IsNullOrWhiteSpace(RemoteName)){
 				Fetch(RemoteName);
 			}

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -211,12 +212,15 @@ namespace Qorpent.Utils.Extensions
 				query.CommandTimeout = timeout;
 			    var strcommand = command.ToString();
 				var realcommand = RewriteSql(strcommand, DetermineDbType(connection));
+			Debug.Assert(!string .IsNullOrWhiteSpace(realcommand),"1");
 			    query.CommandText = realcommand;
+				Debug.Assert(!string.IsNullOrWhiteSpace(query.CommandText), "2");
 			    if (null != parameters) {
 				    
 						PrepareParameters(realcommand, parameters.ToDict(), query);
 				    
 			    }
+				Debug.Assert(!string.IsNullOrWhiteSpace(query.CommandText), "3");
 			    return query;
 		    }
 	    }

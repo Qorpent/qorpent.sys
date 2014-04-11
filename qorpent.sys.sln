@@ -75,6 +75,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Integration.BSharp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Integration.BSharp.Builder.Exe", "..\qorpent.integration\Qorpent.Integration.BSharp.Builder.Exe\Qorpent.Integration.BSharp.Builder.Exe.csproj", "{CCB8EB2C-9F96-47F4-90E9-E6F7247EDF8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "updateRemotes", "updateRemotes\updateRemotes.csproj", "{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -225,6 +227,12 @@ Global
 		{CCB8EB2C-9F96-47F4-90E9-E6F7247EDF8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CCB8EB2C-9F96-47F4-90E9-E6F7247EDF8E}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{CCB8EB2C-9F96-47F4-90E9-E6F7247EDF8E}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.SQL2008|Any CPU.ActiveCfg = Release|Any CPU
+		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.SQL2008|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
