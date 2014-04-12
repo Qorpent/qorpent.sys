@@ -47,14 +47,22 @@ namespace Qorpent.Utils.Tests {
                 CreateNoWindow = true,
                 StandardOutputEncoding = Encoding.GetEncoding(1251),
             });
+            var setSslVerifyProcess = Process.Start(new ProcessStartInfo {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                RedirectStandardInput = true,
+                FileName = "git",
+                Arguments = "config --global http.sslVerify false",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                StandardOutputEncoding = Encoding.GetEncoding(1251),
+            });
             if (setEmailProcess == null || setNameProcess == null) {
                 throw new Exception("Cannot set user name or email");
             }
-            setEmailProcess.Start();
-            setNameProcess.Start();
             setEmailProcess.WaitForExit();
             setNameProcess.WaitForExit();
-
+            setSslVerifyProcess.WaitForExit();
         }
     }
 }
