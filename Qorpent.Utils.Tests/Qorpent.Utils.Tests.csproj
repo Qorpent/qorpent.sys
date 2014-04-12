@@ -38,6 +38,7 @@
     <Compile Include="DatabaseExtensionsTest.cs" />
     <Compile Include="EnumerableExtensionsTest.cs" />
     <Compile Include="Git\FileRecordTest.cs" />
+    <Compile Include="Git\GitFuxtureInitializer.cs" />
     <Compile Include="Git\GitHelperTest.cs" />
     <Compile Include="HexTests.cs" />
     <Compile Include="MathTests.cs" />

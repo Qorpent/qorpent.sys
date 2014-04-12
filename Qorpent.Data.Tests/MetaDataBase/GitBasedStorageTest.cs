@@ -2,6 +2,7 @@
 using Qorpent.Data.MetaDataBase;
 using Qorpent.Utils;
 using Qorpent.Utils.Git;
+using Qorpent.Utils.Tests;
 
 namespace Qorpent.Data.Tests.MetaDataBase{
 	[TestFixture]
@@ -9,7 +10,10 @@ namespace Qorpent.Data.Tests.MetaDataBase{
 		private string dirname;
 		private GitHelper git;
 		private GitBasedMetaFileRegistry gitmd;
-
+        [TestFixtureSetUp]
+        public void FixtureSetUp() {
+            GitFuxtureInitializer.SetUpFixture();
+        }
 		[SetUp]
 		public void SetUp(){
 			dirname = "GitBasedStorageTest";
