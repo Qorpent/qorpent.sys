@@ -351,12 +351,12 @@ namespace Qorpent.Utils.Git{
 		/// <param name="branch"></param>
 		/// <param name="tags"></param>
 		public string Fetch(string remoteName = "", string branch = "", bool tags=true){
-			remoteName = remoteName ?? RemoteName;
+			remoteName =string.IsNullOrWhiteSpace( remoteName) ? RemoteName :remoteName;
 			branch = branch ?? "";
 			if (tags){
 				var task1 = Task.Run(() => ExecuteCommand("fetch", "--tags " + remoteName));
 				var task2 = Task.Run(() => ExecuteCommand("fetch", remoteName + " " + branch));
-				Task.WaitAll(task1, task2);
+				Task.WaitAll(new[]{task1, task2},5000);
 				return task2.Result;
 			}
 			else{

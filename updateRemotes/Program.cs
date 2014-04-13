@@ -15,15 +15,17 @@ namespace updateRemotes
 			var user = ah.ReadLineSafety("User:");
 			var pass = ah.ReadLineSafety("Pass:");
 			foreach (var repo in new[]{
-				"qorpent.kernel","qorpent.sys","qorpent.integration",
-				"Zeta.Extreme","minerva"
+				"qorpent.kernel","qorpent.sys","qorpent.integration"
+		
 			}){
 				var helper = new GitHelper{
 					DirectoryName = "g:/repos/" + repo,
 					RemoteName = "gp",
-					AuthorName = "comdiv",
-					RemoteUrl = "https://gitpull"
-				};
+					AuthorName = user,
+					Password = pass,
+					RemoteUrl = "https://gitpool.ru:8180/qorpent/"+repo.Replace(".","-")+".git"
+				}.Connect();
+				helper.RemoteSet();
 			}
 		}
 	}

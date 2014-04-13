@@ -1,8 +1,8 @@
-using Qorpent.Serialization;
+п»їusing Qorpent.Serialization;
 
 namespace Qorpent.Utils.Git{
 	/// <summary>
-	/// Запись об измененном файле
+	/// Р—Р°РїРёСЃСЊ РѕР± РёР·РјРµРЅРµРЅРЅРѕРј С„Р°Р№Р»Рµ
 	/// </summary>
 	[Serialize]
 	public class FileRecord{
@@ -67,7 +67,7 @@ namespace Qorpent.Utils.Git{
 			SecondState = GitUtils.ConvertToValidState(rawState[1]);
 		}
 		/// <summary>
-		/// Статус
+		/// РЎС‚Р°С‚СѓСЃ
 		/// </summary>
 		public FileState FirstState { get; set; }
 		/// <summary>
@@ -76,7 +76,7 @@ namespace Qorpent.Utils.Git{
 		public FileState SecondState { get; set; }
 
 		/// <summary>
-		/// Определяет конфликтность состояния
+		/// РћРїСЂРµРґРµР»СЏРµС‚ РєРѕРЅС„Р»РёРєС‚РЅРѕСЃС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёСЏ
 		/// </summary>
 		public bool IsConflict{
 			get{
@@ -90,16 +90,16 @@ namespace Qorpent.Utils.Git{
 			}
 		}
 		/// <summary>
-		/// Уровень файла (логическое свойство для клиентских систем)
+		/// РЈСЂРѕРІРµРЅСЊ С„Р°Р№Р»Р° (Р»РѕРіРёС‡РµСЃРєРѕРµ СЃРІРѕР№СЃС‚РІРѕ РґР»СЏ РєР»РёРµРЅС‚СЃРєРёС… СЃРёСЃС‚РµРј)
 		/// </summary>
 		public string Level { get; set; }
 
 		/// <summary>
-		/// Локальное имя файла
+		/// Р›РѕРєР°Р»СЊРЅРѕРµ РёРјСЏ С„Р°Р№Р»Р°
 		/// </summary>
 		public string FileName { get; set; }
 		/// <summary>
-		/// Второе имя файла
+		/// Р’С‚РѕСЂРѕРµ РёРјСЏ С„Р°Р№Р»Р°
 		/// </summary>
 		public string NewFileName { get; set; }
 		/// <summary>
