@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using Qorpent.Charts;
 using Qorpent.IO;
 using Qorpent.Uson;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Renders {
     /// <summary>
@@ -183,7 +184,7 @@ namespace Qorpent.Mvc.Renders {
 	        if (source is XElement) {
 		        var xElement =source as XElement;
 		        config.DataType = "XML";
-		        config.Type = xElement.Attribute("graphtype").Value;
+		        config.Type = xElement.Attr("graphtype");
 		        return source.ToString();
 	        } else if(source is string) {
 		        return source as string;

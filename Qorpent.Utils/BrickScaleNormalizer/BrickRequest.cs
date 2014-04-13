@@ -32,7 +32,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// Пустой конструктор
 		/// </summary>
 		public BrickRequest() {
-			
+			Scale = 1;
 		}
 
 		/// <summary>
@@ -40,7 +40,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		/// <param name="srcmaxvalue"></param>
 		/// <param name="usehat"></param>
-		public BrickRequest(decimal srcmaxvalue, bool usehat =false) {
+		public BrickRequest(decimal srcmaxvalue, bool usehat =false) :this(){
 			SourceMaxValue = srcmaxvalue;
 			MinPixelTop = usehat ? DefaultPixelTopHat : 0;
 		}
@@ -282,6 +282,13 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 					MinimalScaleBehavior = MiniamlScaleBehavior.MatchMin;
 				}
 			}
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public BrickRequest Copy() {
+			return (BrickRequest) MemberwiseClone();
 		}
 	}
 }
