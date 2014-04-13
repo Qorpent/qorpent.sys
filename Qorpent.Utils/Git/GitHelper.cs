@@ -88,6 +88,9 @@ namespace Qorpent.Utils.Git{
 			}
 			else{
 				if (!string.IsNullOrWhiteSpace(RemoteUrl)){
+					if (RemoteUrl.Contains("https")){
+						ExecuteCommand("config", "--global http.sslVerify false");
+					}
 					RemoteSet(RemoteName, RemoteUrl);
 					if (!IsWaitMergeCommit() && 0 == GetChangedFilesList().Length){
 						EnsureBranch();
