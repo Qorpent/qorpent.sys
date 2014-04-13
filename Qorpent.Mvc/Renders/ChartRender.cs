@@ -135,6 +135,7 @@ namespace Qorpent.Mvc.Renders {
 				return ChartConfig.Create(context.ActionResult as Exception);
 			}
 
+
 			var result = new ChartConfig {
                 Id = context.Get("id", DateTime.Now.Ticks).ToString(CultureInfo.InvariantCulture),
                 Container = context.Get("container", string.Empty),
@@ -149,9 +150,15 @@ namespace Qorpent.Mvc.Renders {
                 result.Set(attr.Key, attr.Value);
             }
 
+
+
 		    if (context.ActionResult is ChartState) {
 			    result.State = context.ActionResult as ChartState;
+		    } else {
+			    result.NativeResult = context.ActionResult;
 		    }
+
+
 
 		    return result;
         }
@@ -173,7 +180,7 @@ namespace Qorpent.Mvc.Renders {
 		        var xElement =source as XElement;
 		        config.DataType = "XML";
 		        config.Type = xElement.Attribute("graphtype").Value;
-		        return (context.ActionResult as XElement).ToString();
+		        return source.ToString();
 	        } else if(source is string) {
 		        return source as string;
 	        }
