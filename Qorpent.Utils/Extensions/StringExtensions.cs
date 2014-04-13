@@ -335,7 +335,16 @@ namespace Qorpent.Utils.Extensions {
 			return Regex.IsMatch(str, pattern, compiled ? RegexOptions.Compiled : RegexOptions.None);
 		}
 
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="baseString"></param>
+		/// <param name="pattern"></param>
+		/// <param name="options"></param>
+		/// <returns></returns>
+		public static bool RegexIsMatch(this string baseString, string pattern, RegexOptions options = RegexOptions.None) {
+			return Regex.IsMatch(baseString, pattern, options);
+		}
 		/// <summary>
 		/// Простой шоткат для Regex.Replace в виде расширения
 		/// </summary>

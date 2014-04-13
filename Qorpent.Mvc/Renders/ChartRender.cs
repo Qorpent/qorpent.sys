@@ -42,13 +42,17 @@ namespace Qorpent.Mvc.Renders {
 		    var script = @"<div class='chart_Error chart_Error_'"+config.State.Level+"'>";
 			if (!string.IsNullOrWhiteSpace(config.State.Title)){
 				script += "<h3>" + config.State.Title + "</h3>";
+			} else if (null != config.State.Exception) {
+				script += "<p>Произошла ошибка " + config.State.Exception.GetType().Name + "</p>"; 
 			}
-			if (!string.IsNullOrWhiteSpace(config.State.Message)){
-				script += "<p>" + config.State.Message.Replace("\r\n", "<br/>")+"</p>";
+			if (!string.IsNullOrWhiteSpace(config.State.Message)) {
+				script += "<p>" + config.State.Message.Replace("\r\n", "<br/>") + "</p>";
+			} else if (null != config.State.Exception) {
+				script += "<p>" + config.State.Exception.Message.Replace("\r\n", "<br/>") + "</p>";
 			}
 			if (null != config.State.Exception){
 				script += "<button onclick='$(\"#" + id + "\").toggle()'>Показать подробности ошибки</button>";
-				script += "<textarea id='" + id + "' style='display:none'>" + config.State.Exception + "</textarea>";
+				script += "<BR /><textarea rows='30' cols='120' id='" + id + "' style='display:none'>" + config.State.Exception + "</textarea>";
 			}
 		    script += "</div>";
 			if (!string.IsNullOrWhiteSpace(context.Get("standalone")))
