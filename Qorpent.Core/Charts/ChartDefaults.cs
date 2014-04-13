@@ -7,6 +7,10 @@
         /// 
         /// </summary>
         public const string ChartElementParentProperty = "ChartElementParentProperty";
+		/// <summary>
+		/// 
+		/// </summary>
+        public const string ChartState = "ChartState";
         /// <summary>
         /// 
         /// </summary>
@@ -134,5 +138,11 @@
         ///     Опция, указывающая на то, нужно ли зарезать шапку
         /// </summary>
         public const string KeepHead = "KeepHead";
+		/// <summary>
+		/// 
+		/// </summary>
+        public const string NativeResult = "NativeResult";
+
+	   
     }
 }

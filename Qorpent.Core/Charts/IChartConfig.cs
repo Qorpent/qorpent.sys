@@ -1,4 +1,6 @@
-﻿using Qorpent.Config;
+﻿using System;
+using System.Runtime.Serialization;
+using Qorpent.Config;
 
 namespace Qorpent.Charts {
     /// <summary>
@@ -65,8 +67,97 @@ namespace Qorpent.Charts {
         ///     Признак того, нужно ли удерживать шапку
         /// </summary>
         bool KeepHead { get; set; }
+		/// <summary>
+		/// Состояние графика
+		/// </summary>
+	    ChartState State { get; set; }
+		/// <summary>
+		/// Нативный результат
+		/// </summary>
+	    object NativeResult { get; set; }
     }
-    /// <summary>
+
+	/// <summary>
+	/// Описатель состояния графика
+	/// </summary>
+	public class ChartState {
+	/// <summary>
+	/// 
+	/// </summary>
+		public ChartState() {
+			
+		}
+	
+		/// <summary>
+		/// Общая степень готовности и адекватности графика
+		/// </summary>
+		public ErrorLevel Level { get; set; }
+		/// <summary>
+		///		Экзепшен, если есть
+		/// </summary>
+		public Exception Exception { get; set; }
+		/// <summary>
+		///		Заголовок, сопровождающий график
+		/// </summary>
+		public string Title { get; set; }
+		/// <summary>
+		///		Сообщение, сопровождающее график
+		/// </summary>
+		public string Message { get; set; }
+		/// <summary>
+		///		Признак того, что всё нормально и можно рисовать
+		/// </summary>
+		public bool IsNormal {
+			get { return Exception == null && Level <= ErrorLevel.Warning; }
+		}
+	}
+	/// <summary>
+	/// 
+	/// </summary>
+	[Serializable]
+	public class ChartException : Exception {
+		//
+		// For guidelines regarding the creation of new exception types, see
+		//    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpconerrorraisinghandlingguidelines.asp
+		// and
+		//    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
+		//
+		/// <summary>
+		/// 
+		/// </summary>
+		public ChartException() {
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="config"></param>
+		public ChartException(string message, IChartConfig config) : base(message) {
+			this.Config = config;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public IChartConfig Config { get; private set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="config"></param>
+		/// <param name="inner"></param>
+		public ChartException(string message, IChartConfig config, Exception inner) : base(message, inner) {
+			Config = config;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="info"></param>
+		/// <param name="context"></param>
+		protected ChartException(SerializationInfo info, StreamingContext context) : base(info, context) {
+		}
+	}
+	/// <summary>
     /// 
     /// </summary>
     public enum ChartShowValuesAs {

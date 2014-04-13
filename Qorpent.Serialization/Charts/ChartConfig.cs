@@ -1,10 +1,12 @@
-﻿using Qorpent.Config;
+﻿using System;
+using Qorpent.Config;
 
 namespace Qorpent.Charts {
     /// <summary>
     ///     Имплементация конфига чарта
     /// </summary>
     public class ChartConfig : ConfigBase, IChartConfig {
+		
         /// <summary>
         ///     Тип чарта
         /// </summary>
@@ -32,6 +34,14 @@ namespace Qorpent.Charts {
         public string MaxValue {
             get { return Get<string>(ChartDefaults.ChartMaxValueAttributeName); }
             set { Set(ChartDefaults.ChartMaxValueAttributeName, value); }
+        }
+
+	    /// <summary>
+	    ///     Минимальное значение чарта
+	    /// </summary>
+	    public object NativeResult {
+            get { return Get<object>(ChartDefaults.NativeResult); }
+            set { Set(ChartDefaults.NativeResult, value); }
         }
         /// <summary>
         ///     Минимальное значение чарта
@@ -97,7 +107,15 @@ namespace Qorpent.Charts {
             get { return Get<bool>(ChartDefaults.KeepHead, true); }
             set { Set(ChartDefaults.KeepHead, value); }
         }
-        /// <summary>
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    public ChartState State {
+			get { return Ensure(ChartDefaults.ChartState, new ChartState()); }
+            set { Set(ChartDefaults.ChartState, value); }    
+	    }
+
+	    /// <summary>
         ///     Указывает как показывать число
         /// </summary>
         public ChartShowValuesAs ShowValuesAs {
@@ -115,5 +133,22 @@ namespace Qorpent.Charts {
             FitAxis = true;
             ShowValuesAs = ChartShowValuesAs.AsIs;
         }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="error"></param>
+		public static IChartConfig Create(Exception error) {
+			IChartConfig result = null;
+			if (error is ChartException) {
+				result = ((ChartException) error).Config ?? new ChartConfig();
+
+			} else {
+				result = new ChartConfig();
+			}
+			result.State.Level = ErrorLevel.Fatal;
+			result.State.Exception = error;
+			return result;
+		}
+
     }
 }

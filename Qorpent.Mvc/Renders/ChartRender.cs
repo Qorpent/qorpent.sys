@@ -10,50 +10,63 @@ namespace Qorpent.Mvc.Renders {
     /// Render для отрисовки графиков Fusionchart
     /// </summary>
     [Render("chart")]
-    public class ChartRender: RenderBase {
+    public  class ChartRender: RenderBase {
         /// <summary>
         /// Renders given context
         /// </summary>
         /// <param name="context"></param>
         public override void Render(IMvcContext context) {
-            
-            var config = PrepareChartConfig(context);
-            var script = string.Empty;
 
-            var datascript = RenderDataScript(context, config);
+	        IChartConfig config = PrepareChartConfig(context);
+	        var script = string.Empty;
 
+	        if (config.State.IsNormal) {
+		        script = GetNormalChartContent(context, config);
+	        } else {
+		        script = GetErrorChartContent(context, config);
+	        }
 
-		
+	        context.Output.Write(script);
+        }
 
-            var error = string.Empty;
+	    private string GetErrorChartContent(IMvcContext context, IChartConfig config) {
+		    throw new NotImplementedException();
+	    }
 
-            if (string.IsNullOrWhiteSpace(datascript)) {
-                error = "Нет данных для отображения";
-            }
-
-			if (context.Get("format", context.Get("__format")) == "json") {
-				dynamic result = new UObj();
-				result.config = config;
-				result.data = datascript;
-				result.error = error;
-				context.ContentType = MimeHelper.JSON;
-				context.Output.Write(result.ToJson().Replace("\\\'","'"));
-				return;
+	    private string GetNormalChartContent(IMvcContext context, IChartConfig config) {
+		    var datascript = RenderDataScript(context, config);
+			if (string.IsNullOrWhiteSpace(datascript)) {
+				return GetErrorChartContent(context, config);
 			}
+		    var script = "";
+		    var error = string.Empty;
 
-            var id = config.Id;
-            var container = config.Container;
+		    if (string.IsNullOrWhiteSpace(datascript)) {
+			    error = "Нет данных для отображения";
+		    }
 
-            if (string.IsNullOrWhiteSpace(container)) {
-                container = "fc-container-" + id;
-                script += string.Format(@"
+		    if (context.Get("format", context.Get("__format")) == "json") {
+			    dynamic result = new UObj();
+			    result.config = config;
+			    result.data = datascript;
+			    result.error = error;
+			    context.ContentType = MimeHelper.JSON;
+			    context.Output.Write(result.ToJson().Replace("\\\'", "'"));
+			    return script;
+		    }
+
+		    var id = config.Id;
+		    var container = config.Container;
+
+		    if (string.IsNullOrWhiteSpace(container)) {
+			    container = "fc-container-" + id;
+			    script += string.Format(@"
 <div class=""fusinchart-container{0}"" id=""{1}"">{2}</div>", string.IsNullOrEmpty(error) ? " fusionchart-error" : "", container, error);
-            }
+		    }
 
-			
 
-            if (string.IsNullOrWhiteSpace(error)) {
-                script += string.Format(@"
+		    if (string.IsNullOrWhiteSpace(error)) {
+			    script += string.Format(@"
 <div style=""display:none"" id=""fc-data-{1}"">{5}</div>
 <script type=""text/javascript""><!--
     FusionCharts.setCurrentRenderer('javascript');
@@ -62,11 +75,11 @@ namespace Qorpent.Mvc.Renders {
     myChart.render('{6}');
 // -->
 </script>", config.Type, id, config.Width, config.Height, config.Debug, datascript.Replace("<", "&lt;"), container, config.DataType);
-                context.ContentType = "text/html";   
-            }
+			    context.ContentType = "text/html";
+		    }
 
-            if (!string.IsNullOrWhiteSpace(context.Get("standalone"))) {
-                script = @"
+		    if (!string.IsNullOrWhiteSpace(context.Get("standalone"))) {
+			    script = @"
 <html>
 <header>
 </header>
@@ -78,13 +91,19 @@ namespace Qorpent.Mvc.Renders {
 " + script + @"
 </body>
 </html>";
-            }
+		    }
+		    return script;
+	    }
 
-            context.Output.Write(script);
-        }
+	    private IChartConfig PrepareChartConfig(IMvcContext context) {
+            if (context.ActionResult is IChartConfig) {
+				return context.ActionResult as IChartConfig;
+			}
+			if (context.ActionResult is Exception) {
+				return ChartConfig.Create(context.ActionResult as Exception);
+			}
 
-        private IChartConfig PrepareChartConfig(IMvcContext context) {
-            var result = new ChartConfig {
+			var result = new ChartConfig {
                 Id = context.Get("id", DateTime.Now.Ticks).ToString(CultureInfo.InvariantCulture),
                 Container = context.Get("container", string.Empty),
                 Width = context.Get("width", "400"),
@@ -97,7 +116,12 @@ namespace Qorpent.Mvc.Renders {
             foreach (var attr in specAttrs) {
                 result.Set(attr.Key, attr.Value);
             }
-            return result;
+
+		    if (context.ActionResult is ChartState) {
+			    result.State = context.ActionResult as ChartState;
+		    }
+
+		    return result;
         }
 
         /// <summary>
@@ -107,12 +131,20 @@ namespace Qorpent.Mvc.Renders {
         /// <param name="config"></param>
         /// <returns></returns>
         private string RenderDataScript(IMvcContext context, IChartConfig config) {
-            if (context.ActionResult is XElement) {
-                var xElement = context.ActionResult as XElement;
-                config.DataType = "XML";
-                config.Type = xElement.Attribute("graphtype").Value;
-                return (context.ActionResult as XElement).ToString();
-            }
+	        var source = config.NativeResult;
+			if (null == source) {
+				config.State.Message = "Отсутствуют данные для отрисовки";
+				config.State.Level = ErrorLevel.Error;
+				return null;
+			}
+	        if (source is XElement) {
+		        var xElement =source as XElement;
+		        config.DataType = "XML";
+		        config.Type = xElement.Attribute("graphtype").Value;
+		        return (context.ActionResult as XElement).ToString();
+	        } else if(source is string) {
+		        return source as string;
+	        }
 
             return string.Empty;
         }
@@ -123,8 +155,10 @@ namespace Qorpent.Mvc.Renders {
         /// <param name="error"></param>
         /// <param name="context"></param>
         public override void RenderError(Exception error, IMvcContext context) {
-            context.ContentType = "text/plain";
-            context.Output.Write(error.ToString());
+            var config = ChartConfig.Create(error);
+	        var script = GetErrorChartContent(context, config);
+	        context.StatusCode = 500;
+			context.Output.Write(script);
         }
     }
 }
