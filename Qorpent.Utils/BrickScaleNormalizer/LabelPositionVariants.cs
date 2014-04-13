@@ -255,7 +255,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 
             for (var i = 1; i < v; i++) {
                 var newValues = new List<string>();
-                values.DoForEach(_ => { for (var ch = 'a'; ch <= 'c'; ch++) newValues.Add(_ + ch); });
+                EnumerableExtensions.DoForEach(values, _ => { for (var ch = 'a'; ch <= 'c'; ch++) newValues.Add(_ + ch); });
                 values = newValues;
             }
 

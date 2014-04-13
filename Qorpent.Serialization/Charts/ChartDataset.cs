@@ -51,7 +51,7 @@ namespace Qorpent.Charts {
         /// </summary>
         /// <param name="dataItems">Перечисление значений датасета</param>
         public ChartDataset(IEnumerable<IChartDataItem> dataItems) {
-            dataItems.ForEach(Add);
+            LinqExtensions.DoForEach(dataItems, Add);
         }
     }
 }

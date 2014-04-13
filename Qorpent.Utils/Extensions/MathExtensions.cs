@@ -51,7 +51,7 @@ namespace Qorpent.Utils.Extensions {
         /// <returns>Результат суммирования</returns>
         public static double Sigma(this IEnumerable<double> numbers) {
             var result = 0.0;
-            numbers.DoForEach(_ => result += _);
+            EnumerableExtensions.DoForEach(numbers, _ => result += _);
             return result;
         }
         /// <summary>
@@ -109,7 +109,7 @@ namespace Qorpent.Utils.Extensions {
         /// <param name="dividers">Перечисление делителей</param>
         /// <param name="action">Действие</param>
         public static void IfDivisible(this double number, IEnumerable<int> dividers, Action<double> action) {
-            dividers.DoForEach(_ => {
+            EnumerableExtensions.DoForEach(dividers, _ => {
                 if ((number%_).ToInt() == 0) {
                     action(_);
                 }

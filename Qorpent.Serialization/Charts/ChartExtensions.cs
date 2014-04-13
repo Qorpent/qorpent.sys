@@ -72,7 +72,7 @@ namespace Qorpent.Charts {
         /// <param name="element">Элемент для добавления</param>
         /// <returns>Замыкание на исходный элемент</returns>
         public static IChartElement Add(this IChartElement baseElement, IEnumerable<IChartElement> element) {
-            element.ForEach(_ => baseElement.Add(_));
+            LinqExtensions.DoForEach(element, _ => baseElement.Add(_));
             return baseElement;
         }
         /// <summary>
@@ -177,9 +177,9 @@ namespace Qorpent.Charts {
         public static BrickDataSet ToBrickDataset(this IChart chart) {
             var ds = new BrickDataSet();
             var seria = 0;
-            chart.Datasets.Children.ForEach(_ => {
+            LinqExtensions.DoForEach(chart.Datasets.Children, _ => {
                 seria++;
-                _.Children.DoForEach(__ => ds.Add(seria, 0, __.GetValue()));
+                EnumerableExtensions.DoForEach(_.Children, __ => ds.Add(seria, 0, __.GetValue()));
             });
             return ds;
         }
@@ -190,7 +190,7 @@ namespace Qorpent.Charts {
         /// <returns>Эквивалентный экземпляр <see cref="IChart"/></returns>
         public static IChart ToChart(this BrickDataSet brickDataSet) {
             var chart = new Chart();
-            brickDataSet.GetSeries().DoForEach(_ => chart.Add(new ChartDataset(_.Select(__ => new ChartSet().SetValue(__.Value).SetLabelPosition(__.LabelPosition)))));
+            EnumerableExtensions.DoForEach(brickDataSet.GetSeries(), _ => chart.Add(new ChartDataset(_.Select(__ => new ChartSet().SetValue(__.Value).SetLabelPosition(__.LabelPosition)))));
             for (var i = 0; i < chart.Datasets.Children.Select(_ => _.Children.Count()).Max(); i++) {
                 chart.Add(new ChartCategory().SetLabelValue(""));
             }

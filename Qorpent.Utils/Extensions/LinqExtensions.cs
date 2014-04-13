@@ -43,7 +43,7 @@ namespace Qorpent.Utils.Extensions {
         /// <typeparam name="T">Типизация перечисляемого значения</typeparam>
         /// <param name="enumerable">Исходной перечисление</param>
         /// <param name="action">Дейстие</param>
-        public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action) {
+        public static void DoForEach<T>(this IEnumerable<T> enumerable, Action<T> action) {
             foreach (var _ in enumerable) {
                 action(_);
             }
@@ -56,7 +56,7 @@ namespace Qorpent.Utils.Extensions {
         /// <param name="enumerable">Исходное перечисление</param>
         /// <param name="func">Функция</param>
         /// <returns>Результирующее перечисление</returns>
-        public static IEnumerable<TResult> ForEach<T, TResult>(IEnumerable<T> enumerable, Func<T, TResult> func) {
+        public static IEnumerable<TResult> DoForEach<T, TResult>(IEnumerable<T> enumerable, Func<T, TResult> func) {
             return enumerable.Select(func);
         }
     }

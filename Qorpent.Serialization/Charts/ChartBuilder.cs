@@ -23,8 +23,7 @@ namespace Qorpent.Charts {
             foreach (var ds in datasets) {
                 var dataset = new ChartDataset();
 
-                ds.SmartSplit(false, true, new[] { ',' }).DoForEach(
-                    _ => dataset.Add(new ChartSet().SetValue(_.ToDecimal()))
+                EnumerableExtensions.DoForEach(ds.SmartSplit(false, true, new[] { ',' }), _ => dataset.Add(new ChartSet().SetValue(_.ToDecimal()))
                 );
 
 

@@ -59,7 +59,7 @@ namespace Qorpent.Utils.Scaling {
         /// <param name="approximated">Представление аппроксимированной и улучшенной шкалы</param>
         private void Clean(ScaleApproximated approximated) {
             var hash = GetHash(approximated);
-            _cache.Where(_ => _.Key == hash).ToList().DoForEach(_ => _cache.Remove(_));
+            EnumerableExtensions.DoForEach(_cache.Where(_ => _.Key == hash).ToList(), _ => _cache.Remove(_));
         }
     }
 }

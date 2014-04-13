@@ -34,11 +34,11 @@ namespace Qorpent.Charts.FusionCharts {
             _snappedChart = chart;
 
             // копируем представление сетов датасетов в контекст
-            chart.Datasets.Children.SelectMany(_ => _.Children).DoForEach(_ => _.DoForEach(__ => AddFixedAttribute(_, __.Key, __.Value)));
+            EnumerableExtensions.DoForEach(chart.Datasets.Children.SelectMany(_ => _.Children), _ => EnumerableExtensions.DoForEach(_, __ => AddFixedAttribute(_, __.Key, __.Value)));
             // копируем представление трендлайнов в контекст
-            chart.TrendLines.Children.DoForEach(_ => _.DoForEach(__ => AddFixedAttribute(_, __.Key, __.Value)));
-            chart.Datasets.Children.DoForEach(_ => _.DoForEach(__ => AddFixedAttribute(_, __.Key, __.Value)));
-            chart.DoForEach(_ => AddFixedAttribute(chart, _.Key, _.Value));
+            EnumerableExtensions.DoForEach(chart.TrendLines.Children, _ => EnumerableExtensions.DoForEach(_, __ => AddFixedAttribute(_, __.Key, __.Value)));
+            EnumerableExtensions.DoForEach(chart.Datasets.Children, _ => EnumerableExtensions.DoForEach(_, __ => AddFixedAttribute(_, __.Key, __.Value)));
+            EnumerableExtensions.DoForEach(chart, _ => AddFixedAttribute(chart, _.Key, _.Value));
         }
         /// <summary>
         ///     Применение нолрмализованных параметров к переданному чурта

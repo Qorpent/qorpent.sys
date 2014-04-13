@@ -164,7 +164,7 @@ namespace Qorpent.Utils.FuzzyLogic {
         /// <param name="sets">Массив сетов</param>
         /// <returns>Замыкание на исходный сет</returns>
         public static IFuzzySet<T> Merge<T>(this IFuzzySet<T> fuzzySet, params IFuzzySet<T>[] sets) {
-            sets.DoForEach(_ => fuzzySet.Merge(_));
+            EnumerableExtensions.DoForEach(sets, _ => fuzzySet.Merge(_));
             return fuzzySet;
         }
         /// <summary>
@@ -175,7 +175,7 @@ namespace Qorpent.Utils.FuzzyLogic {
         /// <param name="toMegeFuzzySet">Сет для для мержа</param>
         /// <returns>Замыкание на исходный сет</returns>
         public static IFuzzySet<T> Merge<T>(this IFuzzySet<T> fuzzySet, IFuzzySet<T> toMegeFuzzySet) {
-            toMegeFuzzySet.Where(_ => !fuzzySet.Any(__ => __.Equals(_))).DoForEach(fuzzySet.Insert);
+            EnumerableExtensions.DoForEach(toMegeFuzzySet.Where(_ => !fuzzySet.Any(__ => __.Equals(_))), fuzzySet.Insert);
             return fuzzySet;
         }
         /// <summary>
@@ -186,7 +186,7 @@ namespace Qorpent.Utils.FuzzyLogic {
         /// <param name="values">Перечисление массивов элементов</param>
         /// <returns>Замыкание на исходный сет</returns>
         public static IFuzzySet<T> InsertRange<T>(this IFuzzySet<T> fuzzySet, params T[] values) {
-            values.DoForEach(_ => fuzzySet.InsertRange(_));
+            EnumerableExtensions.DoForEach(values, _ => fuzzySet.InsertRange(_));
             return fuzzySet;
         }
     }
