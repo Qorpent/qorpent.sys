@@ -6,12 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using NUnit.Framework;
+
 using Qorpent.Utils.XDiff;
 
 namespace Qorpent.Utils.Tests.XDiff
 {
 	[TestFixture]
-	public class XDiff2MainTest
+	public class XDiffTest
 	{
 
 		[Test]
@@ -21,10 +22,10 @@ namespace Qorpent.Utils.Tests.XDiff
 			var x1 = new XElement("x1");
 			var x2 = new XElement("x2");
 			var rnd = new Random();
-			for (var i = 0; i < 1000; i++)
+			for (var i = 0; i < 50000; i++)
 			{
 				var id1 = i + 3;
-				var id2 = 1000 - i + 4;
+				var id2 = 50000 - i + 4;
 				var n1 = rnd.Next(1000000);
 				var n2 = rnd.Next(1000000);
 				x1.Add(new XElement("x", new XAttribute("id", id1)
@@ -47,20 +48,20 @@ namespace Qorpent.Utils.Tests.XDiff
 
 			var gen = new XDiffGenerator();
 			var sw = Stopwatch.StartNew();
-			Console.WriteLine("NO ASYNC ...");
-			for (var i = 0; i < 10; i++)
+			/*Console.WriteLine("NO ASYNC ...");
+			for (var i = 0; i < 2; i++)
 			{
 				var diff = gen.GetDiff(x1, x2).ToArray();
 				//Console.WriteLine(diff.LogToString());
 				Console.WriteLine(i + " " + diff.Length);
 			}
 			sw.Stop();
-			Console.WriteLine(sw.Elapsed);
+			Console.WriteLine(sw.Elapsed);*/
 			Console.WriteLine("ASYNC ...");
 			sw = Stopwatch.StartNew();
-			for (var i = 0; i < 10; i++)
+			for (var i = 0; i < 2; i++)
 			{
-				var diff = gen.GetDiff2(x1, x2).ToArray();
+				var diff = gen.GetDiff(x1, x2).ToArray();
 				Console.WriteLine(i + " " + diff.Length);
 			}
 			sw.Stop();
@@ -71,7 +72,7 @@ namespace Qorpent.Utils.Tests.XDiff
 		public void CanDetectChanges(){
 			var b = XElement.Parse("<a><b code='1' x='1' name='a'/></a>");
 			var n = XElement.Parse("<a><b code='1' x='1' name='b'/></a>");
-			Assert.True(new XDiffGenerator().IsDifferent2(b,n));
+			Assert.True(new XDiffGenerator().IsDiff(b,n));
 		}
 
 		[Test]
@@ -79,7 +80,7 @@ namespace Qorpent.Utils.Tests.XDiff
 		{
 			var b = XElement.Parse("<a><b code='1' x='1' name='a'  /></a>");
 			var n = XElement.Parse("<a><b code='1' x='1'   name='a'/></a>");
-			Assert.False(new XDiffGenerator().IsDifferent2(b, n));
+			Assert.False(new XDiffGenerator().IsDiff(b, n));
 		}
 
 		[Test]
@@ -87,7 +88,7 @@ namespace Qorpent.Utils.Tests.XDiff
 		{
 			var b = XElement.Parse("<a><b code='1' x='1' name='a'/><b code='2'  name='x' x='z'/></a>");
 			var n = XElement.Parse("<a><b code='2'  name='x' x='z'/><b code='1'  name='a' x='1'/></a>");
-			Assert.False(new XDiffGenerator().IsDifferent2(b, n));
+			Assert.False(new XDiffGenerator().IsDiff(b, n));
 		}
 
 		[Test]
@@ -219,10 +220,10 @@ ChangeAttribute n1
 		{
 			var b = XElement.Parse("<a><z id='1' code='2' name='2'/><z id='3' code='3' name='4'/></a>");
 			var n = XElement.Parse("<a><z id='3' set-code='4' name='2'/><z id='1' set-code='3' name='4'/></a>");
-			Assert.True(new XDiffGenerator().IsDifferent2(b, n));
-			var result = new XDiffGenerator().GetDiff2(b,n).Apply(b);
+			Assert.True(new XDiffGenerator().IsDiff(b, n));
+			var result = new XDiffGenerator().GetDiff(b,n).Apply(b);
 			Console.WriteLine(result.ToString());
-			Assert.False(new XDiffGenerator().IsDifferent2(b,n));
+			Assert.False(new XDiffGenerator().IsDiff(b,n));
 		}
 
 		[Test]
@@ -232,10 +233,10 @@ ChangeAttribute n1
 			var n = XElement.Parse("<a><u code='2' name='y'><y id='5' name='x'/></u><z id='3' code='4'></z></a>");
 			var opts = new XDiffOptions{IsHierarchy = true, IsNameIndepended = true};
 			GetResult(b, n, opts);
-			Assert.True(new XDiffGenerator(opts).IsDifferent2(b, n));
-			var result = new XDiffGenerator(opts).GetDiff2(b, n).Apply(b,opts);
+			Assert.True(new XDiffGenerator(opts).IsDiff(b, n));
+			var result = new XDiffGenerator(opts).GetDiff(b, n).Apply(b,opts);
 			Console.WriteLine(result.ToString());
-			Assert.False(new XDiffGenerator(opts).IsDifferent2(b, n));
+			Assert.False(new XDiffGenerator(opts).IsDiff(b, n));
 		}
 
 		[Test]
@@ -342,13 +343,42 @@ DeleteElement n1
 
 		}
 
+		[Test]
+		public void BugFromBSharpPatchTest()
+		{
+			var b = XElement.Parse("<a><z code='1'><y code='2'/></z><b code='3'/></a>");
+			var n = XElement.Parse("<a><z code='1'></z><b code='3'><y code='2'/></b></a>");
+
+
+			var result = GetResult(b, n, new XDiffOptions { IsHierarchy = true });
+			Assert.AreEqual(@"ChangeHierarchyPosition n0
+	BasisElement name=y code=2 parent=z-code-1
+	NewValue : b-code-3", result);
+
+		}
+
+		[Test]
+		public void BugFromBSharpApplyPatchTest()
+		{
+			var b = XElement.Parse("<a><z code='1'><y code='2'/></z><b code='3'/></a>");
+			var n = XElement.Parse("<a><z code='1'></z><b code='3'><y code='2'/></b></a>");
+
+
+			var result = GetResult(b, n, new XDiffOptions { IsHierarchy = true });
+			Assert.AreEqual(@"ChangeHierarchyPosition n0
+	BasisElement name=y code=2 parent=z-code-1
+	NewValue : b-code-3", result);
+			new XDiffGenerator(new XDiffOptions{IsHierarchy = true}).GetDiff(b,n).Apply(b,new XDiffOptions{IsHierarchy = true});
+			Console.WriteLine(b);
+		}
+
 		[Test]	
 		[Ignore("same items in patch are merged")]
 		public void ErrorOnDoubleDetectionInNew()
 		{
 			var b = XElement.Parse("<a><z code='1'/></a>");
 			var n = XElement.Parse("<a><z code='1'/><z code='1'/></a>");
-			Assert.Throws<Exception>(() => new XDiffGenerator().IsDifferent2(b, n));
+			Assert.Throws<Exception>(() => new XDiffGenerator().IsDiff(b, n));
 
 		}
 		[Test]
@@ -356,7 +386,7 @@ DeleteElement n1
 		{
 			var b = XElement.Parse("<a><z id='1' code='1'/></a>");
 			var n = XElement.Parse("<a><z id='1' code='1'/><z id='2' code='1'/></a>");
-			Assert.Throws<Exception>(() => new XDiffGenerator().IsDifferent2(b, n));
+			Assert.Throws<Exception>(() => new XDiffGenerator().IsDiff(b, n));
 
 		}
 
@@ -365,7 +395,7 @@ DeleteElement n1
 		{
 			var b = XElement.Parse("<a><z code='1'/><z code='1'/></a>");
 			var n = XElement.Parse("<a><z code='1'/></a>");
-			Assert.Throws<Exception>(() => new XDiffGenerator().IsDifferent2(b, n));
+			Assert.Throws<Exception>(() => new XDiffGenerator().IsDiff(b, n));
 
 		}
 
@@ -374,7 +404,7 @@ DeleteElement n1
 		{
 			var b = XElement.Parse("<a><z id='1' code='1'/></a>");
 			var n = XElement.Parse("<a><z code='1'/><z id='1' code='2'/></a>");
-			Assert.Throws<Exception>(() => new XDiffGenerator().IsDifferent2(b, n));
+			Assert.Throws<Exception>(() => new XDiffGenerator().IsDiff(b, n));
 
 		}
 
@@ -416,15 +446,14 @@ DeleteElement n1
 
 			var result = GetResult(b, n, new XDiffOptions { IsHierarchy = true });
 			Assert.AreEqual(@"ChangeHierarchyPosition n0
-	BasisElement name=s code=3 parent=z-code-1
-	NewValue : ''", result);
+	BasisElement name=s code=3 parent=z-code-1", result);
 
 		}
 
 
 
 		private static string GetResult(XElement b, XElement n, XDiffOptions opts = null){
-			var result = new XDiffGenerator(opts).GetDiff2(b, n).LogToString().Replace("\"", "'").Trim();
+			var result = new XDiffGenerator(opts).GetDiff(b, n).LogToString().Replace("\"", "'").Trim();
 			Console.WriteLine(result);
 			return result;
 		}

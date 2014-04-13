@@ -49,8 +49,7 @@
     <Compile Include="StringInterpolationMainTests.cs" />
     <Compile Include="TagHelperTest.cs" />
     <Compile Include="UniSqlTest.cs" />
-    <Compile Include="XDiff\XDiff2MainTest.cs" />
-    <Compile Include="XDiff\XDiffMainTest.cs" />
+    <Compile Include="XDiff\XDiffTest.cs" />
     <Compile Include="XmlExtensionsTest.cs" />
     <Compile Include="XmlInterpolationTests.cs" />
   </ItemGroup>
