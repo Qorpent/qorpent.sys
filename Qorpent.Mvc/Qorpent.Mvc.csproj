@@ -138,7 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
-      <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
+      <Project>{21971f28-8ed8-4f50-b623-e9db2658af54}</Project>
       <Name>Qorpent.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
