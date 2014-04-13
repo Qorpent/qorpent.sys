@@ -25,6 +25,12 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			}
 	    }
 		/// <summary>
+		/// 
+		/// </summary>
+	    public decimal AbsValue{
+		    get { return Math.Abs(Value); }
+	    }
+		/// <summary>
 		///		Признак того, что это значение трендлайна
 		/// </summary>
 		public bool IsTrendLineValue { get; set; }

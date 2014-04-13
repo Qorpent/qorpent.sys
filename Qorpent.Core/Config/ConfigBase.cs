@@ -116,8 +116,17 @@ namespace Qorpent.Config {
 			}
 
 			options[name] = value;
+			OnSet(name, value);
 		}
-		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		protected virtual  void OnSet(string name, object value){
+
+		}
+
 
 		private T ReturnIerachical<T>(string name, T def) {
 			var basis = name.Replace(".", "");
