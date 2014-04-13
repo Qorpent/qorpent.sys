@@ -73,7 +73,17 @@ namespace Qorpent.Utils.BrickScaleNormalizer
 		/// <returns></returns>
 		public BrickVariant GetBestVariant(BrickRequest request) {
 			if (request.SourceMinValue == request.SourceMaxValue) {
-				return GetSafeVariant(request);
+				if (request.SourceMinValue != 0 && request.MinimalScaleBehavior == MiniamlScaleBehavior.KeepZero){
+					if (request.SourceMinValue > 0){
+						request.SourceMinValue = 0;
+					}
+					else{
+						request.SourceMaxValue = 0;
+					}
+				}
+				else{
+					return GetSafeVariant(request);
+				}
 			}
 			var result = GetAllVariants(request).Select(_ => _.Optimize()).OrderBy(_ => _, new BrickVariantComparer()).FirstOrDefault();
 			if (null == result) {

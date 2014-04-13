@@ -309,6 +309,9 @@ class A
 ";
 			var result = Compile(code);
 			var errors = result.GetErrors();
+			foreach (var bSharpError in errors){
+				Console.WriteLine(bSharpError.ToLogString());
+			}
 			Assert.AreEqual(2, errors.Count());
 			var error = errors.ElementAt(0);
 			Assert.NotNull(error);

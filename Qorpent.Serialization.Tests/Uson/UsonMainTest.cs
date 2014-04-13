@@ -37,7 +37,7 @@ namespace Qorpent.Serialization.Tests.Uson
 			Assert.AreEqual(@"{""a"":{""_srctype"":""Qorpent.Serialization.Tests.Uson.UsonMainTest+test, Qorpent.Serialization.Tests"",""A"":3,""B"":4}}", uobj.ToJson(UObjSerializeMode.KeepType));
 			uobj.a = new object[] {"x", 1, true, new DateTime(2002, 5, 2)};
 			Console.WriteLine(uobj.ToJson());
-			Assert.AreEqual(@"{""a"":[""x"",1,true,""2002-05-02 12:00:00""]}", uobj.ToJson());
+			Assert.AreEqual(@"{""a"":[""x"",1,true,""2002-05-02 00:00:00""]}", uobj.ToJson());
 			Assert.AreEqual(1,uobj.a[1]);
 			Assert.AreEqual(null,uobj.a[10]);
 		}

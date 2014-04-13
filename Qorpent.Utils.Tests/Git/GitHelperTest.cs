@@ -40,6 +40,7 @@ namespace Qorpent.Utils.Tests {
 		}
 
 		[Test]
+		[Explicit]
 		public void CanInitDirWithQorpentSysClone()
 		{
 			var githelper = new GitHelper { DirectoryName = dirname, AuthorName="comdiv",Password = "aqsw123e",RemoteUrl = "https://assoi-git.ugmk.com:8601/qorpent.kernel.git" };
