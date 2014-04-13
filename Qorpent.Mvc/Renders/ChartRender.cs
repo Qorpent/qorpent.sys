@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using Qorpent.Charts;
 using Qorpent.IO;
 using Qorpent.Uson;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Renders {
     /// <summary>
@@ -42,13 +43,17 @@ namespace Qorpent.Mvc.Renders {
 		    var script = @"<div class='chart_Error chart_Error_'"+config.State.Level+"'>";
 			if (!string.IsNullOrWhiteSpace(config.State.Title)){
 				script += "<h3>" + config.State.Title + "</h3>";
+			} else if (null != config.State.Exception) {
+				script += "<p>Произошла ошибка " + config.State.Exception.GetType().Name + "</p>"; 
 			}
-			if (!string.IsNullOrWhiteSpace(config.State.Message)){
-				script += "<p>" + config.State.Message.Replace("\r\n", "<br/>")+"</p>";
+			if (!string.IsNullOrWhiteSpace(config.State.Message)) {
+				script += "<p>" + config.State.Message.Replace("\r\n", "<br/>") + "</p>";
+			} else if (null != config.State.Exception) {
+				script += "<p>" + config.State.Exception.Message.Replace("\r\n", "<br/>") + "</p>";
 			}
 			if (null != config.State.Exception){
 				script += "<button onclick='$(\"#" + id + "\").toggle()'>Показать подробности ошибки</button>";
-				script += "<textarea id='" + id + "' style='display:none'>" + config.State.Exception + "</textarea>";
+				script += "<BR /><textarea rows='30' cols='120' id='" + id + "' style='display:none'>" + config.State.Exception + "</textarea>";
 			}
 		    script += "</div>";
 			if (!string.IsNullOrWhiteSpace(context.Get("standalone")))
@@ -179,7 +184,7 @@ namespace Qorpent.Mvc.Renders {
 	        if (source is XElement) {
 		        var xElement =source as XElement;
 		        config.DataType = "XML";
-		        config.Type = xElement.Attribute("graphtype").Value;
+		        config.Type = xElement.Attr("graphtype");
 		        return source.ToString();
 	        } else if(source is string) {
 		        return source as string;

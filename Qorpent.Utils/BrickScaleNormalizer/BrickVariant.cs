@@ -80,6 +80,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </remarks>
 		public int BrickCount {
 			get {
+				if (0 == BrickSize) return 0;
 				if (-1 == _brickCount) {
 					_brickCount =  Convert.ToInt32(Math.Floor(Request.MaxValue / BrickSize))+1;
 					while (TopMarginePixels < Request.MinPixelTop) {
@@ -215,6 +216,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		public decimal ResultMinValue {
 			get {
+				if (BrickCount == 0) {
+					return Request.SourceMinValue;
+				}
 				var realbricksize = ResultBrickSize;
 				
 				if (Request.MinimalScaleBehavior== MiniamlScaleBehavior.MatchMin) {
@@ -251,6 +255,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		public decimal ResultMaxValue {
 			get {
+				if (BrickCount == 0) {
+					return Request.SourceMaxValue;
+				}
 				var realbricksize = ResultBrickSize;
 				var minvalue = ResultMinValue;
 				var realmaxval = ResultBrickSize*BrickCount + minvalue;
@@ -276,11 +283,30 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		public int ResultDivCount {
 			get {
+				if (ResultBrickSize == 0) {
+					return 0;
+				}
 				var result = (int)((ResultMaxValue - ResultMinValue)/ResultBrickSize);
 				 result = result - 1;
 				if (result <= 0) return 0;
 				return result;
 			}
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="request"></param>
+		public void BuildForEqual(BrickRequest request) {
+			var r = request.Copy();
+			if (request.SourceMinValue == 0) {
+				r.SourceMaxValue = 100;
+			}else if (request.SourceMinValue < 0) {
+				r.SourceMaxValue = 0;
+			} else {
+				r.SourceMaxValue = r.SourceMinValue;
+				r.SourceMinValue = 0;
+			}
+			this.Request = r;
 		}
 	}
 }
