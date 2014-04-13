@@ -30,7 +30,40 @@ namespace Qorpent.Mvc.Renders {
         }
 
 	    private string GetErrorChartContent(IMvcContext context, IChartConfig config) {
-		    throw new NotImplementedException();
+			if (context.Get("format", context.Get("__format")) == "json")
+			{
+				dynamic result = new UObj();
+				result.config = config;			
+				result.error = config.State.Message;
+				context.ContentType = MimeHelper.JSON;
+				return result.ToJson();
+			}
+		    var id = "g"+Guid.NewGuid().ToString().Replace("-", "");
+		    var script = @"<div class='chart_Error chart_Error_'"+config.State.Level+"'>";
+			if (!string.IsNullOrWhiteSpace(config.State.Title)){
+				script += "<h3>" + config.State.Title + "</h3>";
+			}
+			if (!string.IsNullOrWhiteSpace(config.State.Message)){
+				script += "<p>" + config.State.Message.Replace("\r\n", "<br/>")+"</p>";
+			}
+			if (null != config.State.Exception){
+				script += "<button onclick='$(\"#" + id + "\").toggle()'>Показать подробности ошибки</button>";
+				script += "<textarea id='" + id + "' style='display:none'>" + config.State.Exception + "</textarea>";
+			}
+		    script += "</div>";
+			if (!string.IsNullOrWhiteSpace(context.Get("standalone")))
+			{
+				script = @"
+<html>
+<header>
+</header>
+<body>
+<script type=""text/javascript"" src=""../scripts/jquery.min.js""></script>
+" + script + @"
+</body>
+</html>";
+			}
+		    return script;
 	    }
 
 	    private string GetNormalChartContent(IMvcContext context, IChartConfig config) {
@@ -51,8 +84,7 @@ namespace Qorpent.Mvc.Renders {
 			    result.data = datascript;
 			    result.error = error;
 			    context.ContentType = MimeHelper.JSON;
-			    context.Output.Write(result.ToJson().Replace("\\\'", "'"));
-			    return script;
+				return result.ToJson().Replace("\\\'", "'");
 		    }
 
 		    var id = config.Id;

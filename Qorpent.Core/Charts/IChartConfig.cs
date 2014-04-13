@@ -87,6 +87,8 @@ namespace Qorpent.Charts {
 		public ChartState() {
 			
 		}
+
+
 	
 		/// <summary>
 		/// Общая степень готовности и адекватности графика
