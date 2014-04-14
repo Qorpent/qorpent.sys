@@ -37,27 +37,6 @@ namespace Qorpent.Utils.Extensions {
             list.Remove(value);
             list.Insert(0, value);
         }
-        /// <summary>
-        ///     Обёртка надо foreach
-        /// </summary>
-        /// <typeparam name="T">Типизация перечисляемого значения</typeparam>
-        /// <param name="enumerable">Исходной перечисление</param>
-        /// <param name="action">Дейстие</param>
-        public static void DoForEach<T>(this IEnumerable<T> enumerable, Action<T> action) {
-            foreach (var _ in enumerable) {
-                action(_);
-            }
-        }
-        /// <summary>
-        ///     Обёртка надо foreach
-        /// </summary>
-        /// <typeparam name="T">Типизация перечисляемого значения</typeparam>
-        /// <typeparam name="TResult">Типизация возвращаемого перечисления</typeparam>
-        /// <param name="enumerable">Исходное перечисление</param>
-        /// <param name="func">Функция</param>
-        /// <returns>Результирующее перечисление</returns>
-        public static IEnumerable<TResult> DoForEach<T, TResult>(IEnumerable<T> enumerable, Func<T, TResult> func) {
-            return enumerable.Select(func);
-        }
+       
     }
 }

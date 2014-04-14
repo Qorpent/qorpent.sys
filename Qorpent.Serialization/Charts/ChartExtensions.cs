@@ -72,7 +72,7 @@ namespace Qorpent.Charts {
         /// <param name="element">Элемент для добавления</param>
         /// <returns>Замыкание на исходный элемент</returns>
         public static IChartElement Add(this IChartElement baseElement, IEnumerable<IChartElement> element) {
-            LinqExtensions.DoForEach(element, _ => baseElement.Add(_));
+            element.DoForEach(_ => Add(baseElement, (IChartElement) _));
             return baseElement;
         }
         /// <summary>
@@ -177,9 +177,9 @@ namespace Qorpent.Charts {
         public static BrickDataSet ToBrickDataset(this IChart chart) {
             var ds = new BrickDataSet();
             var seria = 0;
-            LinqExtensions.DoForEach(chart.Datasets.Children, _ => {
-                seria++;
-                EnumerableExtensions.DoForEach(_.Children, __ => ds.Add(seria, 0, __.GetValue()));
+            chart.Datasets.Children.DoForEach(_ => {
+	            seria++;
+	            _.Children.DoForEach(__ => ds.Add(seria, 0, FusionChartExtensions.GetValue(__)));
             });
             return ds;
         }

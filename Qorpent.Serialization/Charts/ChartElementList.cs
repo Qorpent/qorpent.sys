@@ -41,7 +41,7 @@ namespace Qorpent.Charts {
         /// </summary>
         /// <param name="items"></param>
         public void AddRange(IEnumerable<C> items) {
-            LinqExtensions.DoForEach(items, Add);
+            items.DoForEach(Add);
         }
     }
 }
