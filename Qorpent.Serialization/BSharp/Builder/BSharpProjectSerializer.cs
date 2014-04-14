@@ -46,6 +46,13 @@ namespace Qorpent.BSharp.Builder {
                 project.InputExtensions = inputExtension.Attribute("code").Value;
             }
 
+			var ignoreElements = bSharpClass.Compiled.Element("IgnoreElements");
+			if (ignoreElements != null)
+			{
+				project.IgnoreElements = ignoreElements.Attribute("code").Value;
+			}
+
+
             var generateGraph = bSharpClass.Compiled.Element("GenerateGraph");
             if (null != generateGraph) {
                 project.GenerateGraph = true;

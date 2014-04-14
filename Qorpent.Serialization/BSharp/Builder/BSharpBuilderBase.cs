@@ -223,8 +223,8 @@ namespace Qorpent.BSharp.Builder {
 		IList<Task> pending = new List<Task>();
 		private void ExecutePhase(IBSharpContext result, BSharpBuilderPhase phase) {
 			Log.Trace("\tstart phase "+phase);
-			
-			foreach (var t in Tasks.Where(_ => _.Phase == phase).OrderBy(_ => _.Index)) {
+			var tasks = Tasks.Where(_ => _.Phase == phase).OrderBy(_ => _.Index).ToArray();
+			foreach (var t in tasks) {
 				Log.Trace("\t\t"+t.GetType().Name + " started");
 				if (t.Async){
 					pending.Add(Task.Run(()=>ExecuteTask(result,t)));

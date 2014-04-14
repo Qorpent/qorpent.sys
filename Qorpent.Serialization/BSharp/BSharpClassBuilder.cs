@@ -334,7 +334,7 @@ namespace Qorpent.BSharp {
 			CleanupElementsWithConditions();
 			
 			MergeInternals();
-			InterpolateElements();
+			InterpolateElements(_cls.Is(BSharpClassAttributes.Generic)?'^':'$');
 			PerformMergingWithElements();
 			
 			CleanupElementsWithConditions();
@@ -915,6 +915,7 @@ namespace Qorpent.BSharp {
 		{
 			if (GetConfig().UseInterpolation)
 			{
+				
 				var xi = new XmlInterpolation{AncorSymbol = ancor};
 				xi.Interpolate(_cls.Compiled);
 			}
@@ -922,9 +923,14 @@ namespace Qorpent.BSharp {
 
 		private void InterpolateFields()
 		{
+			// у генериков на этой фазе еще производится полная донастройка элементов по анкору ^
+			
 			if (GetConfig().UseInterpolation)
 			{
+				
+				
 				var si = new StringInterpolation();
+				si.AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '^' : '$';
 
 				for (int i = 0; i <= 3; i++)
 				{
@@ -935,6 +941,7 @@ namespace Qorpent.BSharp {
 						_cls.ParamIndex.Set(v.Key, si.Interpolate(s, _cls.ParamSourceIndex));
 					}
 				}
+				
 			}
 		}
 
