@@ -39,6 +39,7 @@ namespace Qorpent.Utils.XDiff{
 			get {
 				if (Action == XDiffAction.RenameElement) return true;
 				if (Action == XDiffAction.ChangeAttribute){
+					if (null == NewestAttribute) return false;
 					if (NewestAttribute.Name.LocalName == "id") return true;
 					if (NewestAttribute.Name.LocalName == "code") return true;
 				}
@@ -167,7 +168,14 @@ namespace Qorpent.Utils.XDiff{
 				}
 				return target;
 			}
-			e.SetAttributeValue(NewestAttribute.Name.LocalName,NewestAttribute.Value);
+			if (null == NewestAttribute){
+				foreach (var a in NewestElement.Attributes()){
+					e.SetAttributeValue(a.Name, a.Value);
+				}
+			}
+			else{
+				e.SetAttributeValue(NewestAttribute.Name.LocalName, NewestAttribute.Value);
+			}
 			return target;
 		}
 
@@ -200,7 +208,14 @@ namespace Qorpent.Utils.XDiff{
 				}
 				return target;
 			}
-			e.SetAttributeValue(NewestAttribute.Name.LocalName, NewestAttribute.Value);
+			if (null == NewestAttribute){
+				foreach (var a in NewestElement.Attributes()){
+					e.SetAttributeValue(a.Name,a.Value);
+				}
+			}
+			else{
+				e.SetAttributeValue(NewestAttribute.Name.LocalName, NewestAttribute.Value);
+			}
 			return target;
 		}
 

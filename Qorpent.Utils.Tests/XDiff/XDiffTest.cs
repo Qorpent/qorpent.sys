@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,55 +18,43 @@ namespace Qorpent.Utils.Tests.XDiff
 
 		[Test]
 		[Explicit]
-		public void LargeXmlPerformanceTest()
-		{
-			var x1 = new XElement("x1");
-			var x2 = new XElement("x2");
-			var rnd = new Random();
-			for (var i = 0; i < 50000; i++)
-			{
-				var id1 = i + 3;
-				var id2 = 50000 - i + 4;
-				var n1 = rnd.Next(1000000);
-				var n2 = rnd.Next(1000000);
-				x1.Add(new XElement("x", new XAttribute("id", id1)
-					, new XAttribute("name", n1)
-					, new XAttribute("name1", n1)
-					, new XAttribute("name2", n1)
-					, new XAttribute("name3", n1)
-					));
+		public void LargeXmlPerformanceTest(){
+			var sb = new StringBuilder();
+			for (var c = 500; c <= 100000; c+=500){
+				var x1 = new XElement("x1");
+				var x2 = new XElement("x2");
+				var rnd = new Random();
+				for (var i = 0; i < c; i++){
+					var id1 = i + 3;
+					var id2 = c - i + 4;
+					var n1 = rnd.Next(1000000);
+					var n2 = rnd.Next(1000000);
+					x1.Add(new XElement("x", new XAttribute("id", id1)
+					                    , new XAttribute("name", n1)
+					                    , new XAttribute("name1", n1)
+					                    , new XAttribute("name2", n1)
+					                    , new XAttribute("name3", n1)
+						       ));
 
-				x2.Add(new XElement("x", new XAttribute("id", id2)
-					, new XAttribute("name", n2)
-					, new XAttribute("name1", n2)
-					, new XAttribute("nam2", n2)
-					, new XAttribute("nam3", n2)
-					, new XAttribute("name4", n2)
-					));
-			}
-			Console.WriteLine("xml built");
-
-
-			var gen = new XDiffGenerator();
-			var sw = Stopwatch.StartNew();
-			/*Console.WriteLine("NO ASYNC ...");
-			for (var i = 0; i < 2; i++)
-			{
+					x2.Add(new XElement("x", new XAttribute("id", id2)
+					                    , new XAttribute("name", n2)
+					                    , new XAttribute("name1", n2)
+					                    , new XAttribute("nam2", n2)
+					                    , new XAttribute("nam3", n2)
+					                    , new XAttribute("name4", n2)
+						       ));
+				}
+				var gen = new XDiffGenerator(new XDiffOptions{MergeAttributeChanges = true, TreatNewAttributesAsChanges = true});
+				var sw = Stopwatch.StartNew();
 				var diff = gen.GetDiff(x1, x2).ToArray();
-				//Console.WriteLine(diff.LogToString());
-				Console.WriteLine(i + " " + diff.Length);
+				sw.Stop();
+				sb.AppendFormat("{0};{1}\r\n",c,sw.Elapsed.TotalMilliseconds);
+				Console.WriteLine("{0}\t\t{1}", c, sw.Elapsed.TotalMilliseconds);
+				
 			}
-			sw.Stop();
-			Console.WriteLine(sw.Elapsed);*/
-			Console.WriteLine("ASYNC ...");
-			sw = Stopwatch.StartNew();
-			for (var i = 0; i < 2; i++)
-			{
-				var diff = gen.GetDiff(x1, x2).ToArray();
-				Console.WriteLine(i + " " + diff.Length);
-			}
-			sw.Stop();
-			Console.WriteLine(sw.Elapsed);
+
+			Console.WriteLine(sb.ToString());
+			File.WriteAllText(@"g:\repos\xdifftiming.csv",sb.ToString());
 		}
 
 		[Test]
@@ -212,6 +201,66 @@ ChangeAttribute n1
 			var opts = new XDiffOptions();
 			opts.ErrorActions = opts.ErrorActions | XDiffAction.CreateElement;
 			Assert.Throws<Exception>(()=> GetResult(b, n, opts));
+		}
+
+		[Test]
+		public void CanMergeFieldUpdatesAndApplyThem()
+		{
+			var b = XElement.Parse("<a><z id='1' name='2' a='3' b='4' c='5'/></a>");
+			var n = XElement.Parse("<a><z id='1' name='2' a='6' b='4' c='7'/></a>");
+			var opts = new XDiffOptions{MergeAttributeChanges=true};
+			var diff = new XDiffGenerator(opts).GetDiff(b, n).ToArray();
+			var log = diff.LogToString();
+			Console.WriteLine(log);
+			Assert.AreEqual(1, diff.Length);
+			Assert.AreEqual(@"ChangeAttribute n0
+	BasisElement name=z id=1
+	NewestElement : (<update a=""6"" c=""7"" />)
+",log);
+			
+			diff.Apply(b,opts);
+			Assert.False(new XDiffGenerator().IsDiff(b,n));
+		}
+
+		[Test]
+		public void CanMergeSeparateNewAndUpdatedAttributes()
+		{
+			var b = XElement.Parse("<a><z id='1' name='2' a='3' b='4' c='5'/></a>");
+			var n = XElement.Parse("<a><z id='1' name='2' a='6' b='4' c='7' d='8' e='9'/></a>");
+			var opts = new XDiffOptions { MergeAttributeChanges = true };
+			var diff = new XDiffGenerator(opts).GetDiff(b, n).ToArray();
+			var log = diff.LogToString();
+			Console.WriteLine(log);
+			Assert.AreEqual(2, diff.Length);
+			Assert.AreEqual(@"CreateAttribute n0
+	BasisElement name=z id=1
+	NewestElement : (<insert d=""8"" e=""9"" />)
+ChangeAttribute n1
+	BasisElement name=z id=1
+	NewestElement : (<update a=""6"" c=""7"" />)
+", log);
+
+			diff.Apply(b, opts);
+			Assert.False(new XDiffGenerator().IsDiff(b, n));
+		}
+
+		[Test]
+		public void CanMergeNonSeparateNewAndUpdatedAttributes()
+		{
+			var b = XElement.Parse("<a><z id='1' name='2' a='3' b='4' c='5'/></a>");
+			var n = XElement.Parse("<a><z id='1' name='2' a='6' b='4' c='7' d='8' e='9'/></a>");
+			var opts = new XDiffOptions { MergeAttributeChanges = true,TreatNewAttributesAsChanges = true};
+			var diff = new XDiffGenerator(opts).GetDiff(b, n).ToArray();
+			var log = diff.LogToString();
+			Console.WriteLine(log);
+			Assert.AreEqual(1, diff.Length);
+			Assert.AreEqual(@"ChangeAttribute n0
+	BasisElement name=z id=1
+	NewestElement : (<update a=""6"" c=""7"" d=""8"" e=""9"" />)
+", log);
+
+			diff.Apply(b, opts);
+			Assert.False(new XDiffGenerator().IsDiff(b, n));
 		}
 
 

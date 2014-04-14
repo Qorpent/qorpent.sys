@@ -110,6 +110,10 @@ namespace Qorpent.Utils.XDiff{
 		}
 
 		private static void WriteElement(string name, TextWriter output, XElement d,bool fullelements,XDiffAction action){
+			if (d.Name.LocalName == "update" || d.Name.LocalName == "insert"){
+				output.WriteLine("\t" + name + " : (" + d.ToString().Replace("(", "\\(").Replace(")", "\\)") + ")");
+				return;
+			}
 			fullelements = fullelements || (name == "NewestElement" && action == XDiffAction.CreateElement);
 			
 			if (fullelements){

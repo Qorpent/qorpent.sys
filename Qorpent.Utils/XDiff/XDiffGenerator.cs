@@ -125,6 +125,13 @@ namespace Qorpent.Utils.XDiff{
 			}
 
 			if (_options.IncludeActions.HasFlag(XDiffAction.ChangeAttribute | XDiffAction.CreateAttribute)){
+				XElement create_collector = (_options.MergeAttributeChanges && !_options.TreatNewAttributesAsChanges)
+					                            ? new XElement("insert")
+					                            : null;
+ 
+				XElement update_collector = (_options.MergeAttributeChanges )
+					                            ? new XElement("update")
+					                            : null;
 				foreach (XAttribute attribute in newest.Attributes()){
 					if (attribute.Name.LocalName == "id" && !_options.ChangeIds){
 						continue;
@@ -140,12 +147,35 @@ namespace Qorpent.Utils.XDiff{
 						a = new XAttribute(a.Name.LocalName.Substring(4), a.Value);
 					}
 
-					if (null == xd.b.Attribute(a.Name) && _options.IncludeActions.HasFlag(XDiffAction.CreateAttribute)){
-						yield return new XDiffItem{Action = XDiffAction.CreateAttribute, BasisElement = xd.b, NewestAttribute = a};
+					if (null == xd.b.Attribute(a.Name) && (_options.IncludeActions.HasFlag(XDiffAction.CreateAttribute)||_options.TreatNewAttributesAsChanges)){
+						if (_options.MergeAttributeChanges){
+							(_options.TreatNewAttributesAsChanges?update_collector:create_collector).SetAttributeValue(a.Name,a.Value);
+						}
+						else{
+							yield return
+								new XDiffItem{
+									Action = _options.TreatNewAttributesAsChanges ? XDiffAction.ChangeAttribute : XDiffAction.CreateAttribute,
+									BasisElement = xd.b,
+									NewestAttribute = a
+								};
+						}
 					}
 					else if (attribute.Value != xd.b.Attr(a.Name.LocalName) && _options.IncludeActions.HasFlag(XDiffAction.ChangeAttribute)){
-						yield return new XDiffItem{Action = XDiffAction.ChangeAttribute, BasisElement = xd.b, NewestAttribute = a};
+						if (_options.MergeAttributeChanges){
+							update_collector.SetAttributeValue(a.Name, a.Value);
+						}
+						else{
+							yield return new XDiffItem{Action = XDiffAction.ChangeAttribute, BasisElement = xd.b, NewestAttribute = a};
+						}
 					}
+				}
+
+				
+				if (null != create_collector){
+					foreach (var i in ProcessCollector(xd, create_collector, XDiffAction.CreateAttribute)) yield return i;
+				}
+				if (null != update_collector){
+					foreach (var i in ProcessCollector(xd, update_collector, XDiffAction.ChangeAttribute)) yield return i;
 				}
 			}
 
@@ -168,6 +198,19 @@ namespace Qorpent.Utils.XDiff{
 				if (xd.b.Name.LocalName != newest.Name.LocalName){
 					yield return
 						new XDiffItem{Action = XDiffAction.RenameElement, BasisElement = xd.b, NewValue = newest.Name.LocalName};
+				}
+			}
+		}
+
+		private static IEnumerable<XDiffItem> ProcessCollector(XDiffMatch xd, XElement create_collector, XDiffAction action){
+			var len = create_collector.Attributes().Count();
+			if (len != 0){
+				if (len == 1){
+					yield return
+						new XDiffItem{Action = action, BasisElement = xd.b, NewestAttribute = create_collector.Attributes().First()};
+				}
+				else{
+					yield return new XDiffItem{Action = action, BasisElement = xd.b, NewestElement = create_collector};
 				}
 			}
 		}

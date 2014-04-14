@@ -43,5 +43,15 @@ namespace Qorpent.Utils.XDiff{
 		/// Маска действий, которые при наличии должны вызывать ошибку
 		/// </summary>
 		public XDiffAction ErrorActions { get; set; }
+		/// <summary>
+		/// При включении данной опции объединяет все обновления по атрибутам одной цели в один Diff с промежуточным элементом- контенером
+		/// </summary>
+		public bool MergeAttributeChanges { get; set; }
+
+		/// <summary>
+		/// Передает все команды создания атрибутов как ИЗМЕНЕНИЯ атрибутов
+		/// </summary>
+		/// <remarks></remarks>
+		public bool TreatNewAttributesAsChanges { get; set; }
 	}
 }
