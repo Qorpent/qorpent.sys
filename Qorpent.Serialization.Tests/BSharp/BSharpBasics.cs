@@ -179,6 +179,54 @@ class B
 		}
 
 		[Test]
+		public void BaseGenericSupport(){
+			var result = Compile(@"
+class BASE t=1
+class A test='`{code}${code}${t}' generic
+	import BASE
+class B 
+	import A
+class C t=2
+	import B");
+
+			var b = result.Get("B");
+			var c = result.Get("C");
+			Assert.AreEqual("AB1",b.Compiled.Attr("test"));
+			Assert.AreEqual("AC2",c.Compiled.Attr("test"));
+		}
+
+		[Test]
+		public void GenericSupportWithInternals()
+		{
+			var result = Compile(@"
+class BASE abstract
+	element X
+	X '`{index}`{index2}${key}' name='${_name`{index}}'
+class A index=1 index2=2 generic
+	import BASE
+class B index=2 index2=3 generic
+	import BASE
+class C index=4 index2=5 generic
+	import BASE
+class Final key=x 
+	_name1 = a
+	_name2 = b
+	_name4 = c
+	import A
+	import B
+	import C
+");
+
+			var b = result.Get("Final");
+			Console.WriteLine(b.Compiled.ToString().Replace("\"","'"));
+			Assert.AreEqual(@"<class code='Final' key='x' fullcode='Final' name='generic' index='4' index2='5'>
+  <X code='45x' name='c' />
+  <X code='23x' name='b' />
+  <X code='12x' name='a' />
+</class>", b.Compiled.ToString().Replace("\"", "'"));
+		}
+
+		[Test]
 		public void MergesInnerNonStatic()
 		{
 			var result = Compile(@"

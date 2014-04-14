@@ -334,7 +334,7 @@ namespace Qorpent.BSharp {
 			CleanupElementsWithConditions();
 			
 			MergeInternals();
-			InterpolateElements(_cls.Is(BSharpClassAttributes.Generic)?'^':'$');
+			InterpolateElements(_cls.Is(BSharpClassAttributes.Generic)?'`':'$');
 			PerformMergingWithElements();
 			
 			CleanupElementsWithConditions();
@@ -930,7 +930,7 @@ namespace Qorpent.BSharp {
 				
 				
 				var si = new StringInterpolation();
-				si.AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '^' : '$';
+				si.AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$';
 
 				for (int i = 0; i <= 3; i++)
 				{

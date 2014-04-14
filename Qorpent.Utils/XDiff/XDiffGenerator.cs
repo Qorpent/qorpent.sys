@@ -280,7 +280,7 @@ namespace Qorpent.Utils.XDiff{
 			if (_options.IsHierarchy){
 				SetupParentAttribute(newest, e);
 			}
-			var ep = new EndpointPack{Id = id, IsSource = true, Key = key, Element = e, Bag = new ConcurrentBag<XElement>()};
+			var ep = new EndpointPack{ Key = key, Element = e, Bag = new ConcurrentBag<XElement>()};
 			ep.Bag.Add(e);
 			src[id] = ep;
 			EndpointPack _idpack = null;
@@ -323,7 +323,6 @@ namespace Qorpent.Utils.XDiff{
 						throw new Exception("ambigous source (4)" + ep.Key);
 					}
 					if (null != _.Source){
-						_idpack = _.Source; //it's not problem if same as code binding
 						_.Source.Bag.Add(e);
 						ep.IsBound = true;
 					}
@@ -337,7 +336,6 @@ namespace Qorpent.Utils.XDiff{
 					return _;
 				});
 			}
-			return;
 		}
 
 		private void RegisterBase(XElement basis, ref int trgid, XElement e, ConcurrentDictionary<int, EndpointPack> trg,
@@ -411,9 +409,7 @@ namespace Qorpent.Utils.XDiff{
 		private class EndpointPack{
 			public ConcurrentBag<XElement> Bag;
 			public XElement Element;
-			public int Id;
 			public bool IsBound;
-			public bool IsSource;
 			public XDiffKey Key;
 		}
 
