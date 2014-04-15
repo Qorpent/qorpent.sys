@@ -124,7 +124,8 @@ namespace Qorpent.Mvc.Renders {
 <script type=""text/javascript"" src=""../scripts/jquery.min.js""></script>
 <script type=""text/javascript"" src=""../scripts/FusionCharts.js""></script>
 <script type=""text/javascript"" src=""../scripts/FusionCharts.HC.js""></script>
-<script type=""text/javascript"" src=""../scripts/FusionCharts.HC.Charts.js""></script>
+<script type=""text/javascript"" src=""../scripts/FusionCharts.HC.PowerCharts.js""></script>
+<script type=""text/javascript"" src=""../scripts/FusionCharts.HC.Widgets.js""></script>
 " + script + @"
 </body>
 </html>";

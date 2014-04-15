@@ -134,7 +134,14 @@ using System;
   
     ///<summary>ScrollCombi2D</summary>
     ScrollCombi2D = ((long)1)<<42,    
-  
+	/// <summary>
+	/// 
+	/// </summary>
+  Radar = ((long)1)<<43,
+  /// <summary>
+  /// 
+  /// </summary>
+  Pyramid = ((long)1)<<44
     }
 }
   

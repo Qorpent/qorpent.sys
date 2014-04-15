@@ -7,7 +7,7 @@
         /// Графики с одной серией
         /// </summary>
         SingleSeries = 
-            (FusionChartType.Column2D |
+            FusionChartType.Column2D |
                    FusionChartType.Column3D |
                    FusionChartType.Pie2D |
                    FusionChartType.Pie3D |
@@ -17,7 +17,7 @@
                    FusionChartType.Doughnut2D |
                    FusionChartType.Doughnut3D |
                    FusionChartType.Pareto2D |
-                   FusionChartType.Pareto3D),
+                   FusionChartType.Pareto3D | FusionChartType.Pyramid,
 
         /// <summary>
         /// Мультисерийные
@@ -30,7 +30,8 @@
             FusionChartType.MSArea |
             FusionChartType.MSBar2D |
             FusionChartType.MSBar3D |
-            FusionChartType.Marimekko,
+            FusionChartType.Marimekko|
+			FusionChartType.Radar,
 
         /// <summary>
         /// Состыкованные
