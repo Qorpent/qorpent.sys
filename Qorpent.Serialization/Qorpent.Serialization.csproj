@@ -31,6 +31,8 @@
     <Compile Include="BSharp\Matcher\ConditionGroup.cs" />
     <Compile Include="BSharp\Matcher\ConditionType.cs" />
     <Compile Include="BSharp\Matcher\SingleCondition.cs" />
+    <Compile Include="BSharp\Preprocessor\CleanupElementOperation.cs" />
+    <Compile Include="BSharp\Preprocessor\ElementToAttributeOperation.cs" />
     <Compile Include="BSharp\Preprocessor\ExtendedPreprocessorTask.cs" />
     <Compile Include="BSharp\Preprocessor\PreprocessOperation.cs" />
     <Compile Include="BSharp\Preprocessor\PreprocessorCommand.cs" />

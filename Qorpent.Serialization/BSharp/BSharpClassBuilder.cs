@@ -925,6 +925,7 @@ namespace Qorpent.BSharp {
 			}
 		}
 
+
 		private void InterpolateFields()
 		{
 			// у генериков на этой фазе еще производится полная донастройка элементов по анкору ^
@@ -935,14 +936,28 @@ namespace Qorpent.BSharp {
 				
 				var si = new StringInterpolation();
 				si.AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$';
+				bool requireInterpolateNames = _cls.ParamIndex.Keys.Any(_ => _.Contains("__LBLOCK__"));
+				
 
 				for (int i = 0; i <= 3; i++)
 				{
-					foreach (var v in _cls.ParamIndex.ToArray()) {
+					foreach (var v in _cls.ParamIndex.ToArray()){
+						var key = v.Key;
+						if (requireInterpolateNames){
+							var esckey = key.Unescape(EscapingType.XmlName);
+							if (-1 != esckey.IndexOf('{')){
+								var _key = si.Interpolate(esckey, _cls.ParamSourceIndex).Escape(EscapingType.XmlName);
+								if (_key != key){
+									_cls.ParamIndex.Remove(key);
+									_cls.ParamIndex[_key] = v.Value;
+									key = _key;
+								}
+							}
+						}
 						var s = v.Value as string;
 						if (null == s) continue;
 						if (-1 == s.IndexOf('{')) continue;
-						_cls.ParamIndex.Set(v.Key, si.Interpolate(s, _cls.ParamSourceIndex));
+						_cls.ParamIndex.Set(key, si.Interpolate(s, _cls.ParamSourceIndex));
 					}
 				}
 				

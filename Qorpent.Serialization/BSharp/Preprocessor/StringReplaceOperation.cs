@@ -21,6 +21,11 @@ namespace Qorpent.Scaffolding.Sql{
 			foreach (var text in el.Nodes().OfType<XText>()){
 				Execute(text);
 			}
+			if (Level == "all"){
+				foreach (var descendant in el.Descendants()){
+					Execute(descendant);
+				}
+			}
 		}
 
 		private void Execute(XText text){
@@ -47,6 +52,10 @@ namespace Qorpent.Scaffolding.Sql{
 		/// 
 		/// </summary>
 		public string To;
+		/// <summary>
+		/// 
+		/// </summary>
+		public string Level;
 		/// <summary>
 		/// 
 		/// </summary>

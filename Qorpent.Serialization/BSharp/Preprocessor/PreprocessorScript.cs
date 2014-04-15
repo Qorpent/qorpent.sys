@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.BSharp.Builder;
@@ -22,12 +24,27 @@ namespace Qorpent.Scaffolding.Sql{
 			_e.Elements("command").DoForEach(_ => Commands.Add(new PreprocessorCommand(_project,_)));
 		}
 
+		private Regex _fileRegex = null;
+
+		public string File{
+			get { return _file; }
+			set{
+				_file = value;
+				if (_file[0] == '/' && _file[_file.Length - 1] == '/'){
+					_fileRegex = new Regex(_file.Substring(1,_file.Length-2));
+				}
+			}
+		}
+
 		readonly IList<PreprocessorCommand> Commands =new List<PreprocessorCommand>();
+		private string _file;
+
 		public override void Execute(XElement e=null){
-		//	_project.Log.Trace("Start preprocessor "+_e.Attr("code"));
+			_project.Log.Info("Start preprocessor "+_e.Attr("code"));
+			var sw = Stopwatch.StartNew();
 			var srcdegree = Parallel ? Environment.ProcessorCount : 1;
 			var commands = Commands.OrderBy(_ => _.Index).ToArray();
-			_project.Sources.AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(src =>
+			_project.Sources.Where(IsMatch).AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(src =>
 			{
 				IList<Task> pending = new List<Task>();
 				foreach (var command in commands){
@@ -40,7 +57,17 @@ namespace Qorpent.Scaffolding.Sql{
 				}
 				Task.WaitAll(pending.ToArray());
 			});
-	//		_project.Log.Trace("Finish preprocessor " + _e.Attr("code"));
+			sw.Stop();
+			_project.Log.Info("Finish preprocessor " + _e.Attr("code")+" "+sw.Elapsed );
+		}
+
+		private bool IsMatch(XElement arg){
+			if (string.IsNullOrWhiteSpace(File)) return true;
+			var file = arg.Describe().File;
+			if (null != _fileRegex){
+				return _fileRegex.IsMatch(file);
+			}
+			return file.Contains(File);
 		}
 	}
 }

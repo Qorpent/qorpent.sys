@@ -196,6 +196,33 @@ class C t=2
 		}
 
 		[Test]
+		public void CanInterpolateAttributeNames(){
+			var result = Compile(@"
+class A test${t}=${t} 
+class B t=2
+	import A");
+
+			var b = result.Get("B");
+			Console.WriteLine(b.Compiled);
+			Assert.AreEqual("2", b.Compiled.Attr("test2"));
+		}
+
+		[Test]
+		public void GenericAttributeNames()
+		{
+			var result = Compile(@"
+class BASE t=1
+class A test`{t}${t}='${t}' t=2 generic
+	import BASE
+class B t=3
+	import A");
+
+			var b = result.Get("B");
+			Console.WriteLine(b.Compiled);
+			Assert.AreEqual("3", b.Compiled.Attr("test23"));
+		}
+
+		[Test]
 		public void GenericSupportWithInternals()
 		{
 			var result = Compile(@"

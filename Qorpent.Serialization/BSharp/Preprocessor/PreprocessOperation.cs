@@ -21,8 +21,12 @@ namespace Qorpent.Scaffolding.Sql{
 					return e.Apply(new RenameElementOperation());
 				case "stringreplace":
 					return e.Apply(new StringReplaceOperation());
+				case "cleanupelement":
+					return e.Apply(new CleanupElementOperation());
 				case "setattribute":
 					return e.Apply(new SetAttributeOperation());
+				case "elementtoattribute":
+					return e.Apply(new ElementToAttributeOperation());
 				default:
 					throw new Exception("unkonown operation "+e.Name.LocalName);			
 			}
