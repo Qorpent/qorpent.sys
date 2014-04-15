@@ -200,10 +200,11 @@ namespace Qorpent.Uson
 			lock (locker){
 				if (obj is string && !noParseJson){
 					var s = obj.ToString().Trim();
-					if (s[0]=='{' && s[s.Length-1]=='}'){
-						return new JsonParser().Parse(s).ToUson();
+					if (0 != s.Length){
+						if (s[0] == '{' && s[s.Length - 1] == '}'){
+							return new JsonParser().Parse(s).ToUson();
+						}
 					}
-
 				}
 
 				if (obj is string){
