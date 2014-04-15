@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Preprocessor{

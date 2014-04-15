@@ -47,6 +47,8 @@ namespace Qorpent.BSharp.Preprocessor{
 					return e.Apply(new PushToGlobalOperation().InitProject(project));
 				case "bindglobal":
 					return e.Apply(new BindGlobalOperation().InitProject(project));
+				case "executegenerator":
+					return e.Apply(new ExecuteCodeGeneratorOperation().InitProject(project));
 				default:
 					throw new Exception("unkonown operation "+e.Name.LocalName);			
 			}

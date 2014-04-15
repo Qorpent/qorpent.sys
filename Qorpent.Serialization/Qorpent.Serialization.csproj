@@ -34,7 +34,9 @@
     <Compile Include="BSharp\Preprocessor\BindGlobalOperation.cs" />
     <Compile Include="BSharp\Preprocessor\CleanupElementOperation.cs" />
     <Compile Include="BSharp\Preprocessor\ElementToAttributeOperation.cs" />
+    <Compile Include="BSharp\Preprocessor\ExecuteCodeGenerator.cs" />
     <Compile Include="BSharp\Preprocessor\ExtendedPreprocessorTask.cs" />
+    <Compile Include="BSharp\Preprocessor\ISourceCodeGenerator.cs" />
     <Compile Include="BSharp\Preprocessor\PreprocessOperation.cs" />
     <Compile Include="BSharp\Preprocessor\PreprocessorCommand.cs" />
     <Compile Include="BSharp\Preprocessor\PreprocessorCommandBase.cs" />

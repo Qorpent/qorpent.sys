@@ -100,7 +100,7 @@ namespace Qorpent.Log {
         /// 	Базовая реализация логгера
         /// </summary>
 		public BaseLogger() {
-			WriteTimeOut = 5000;
+			WriteTimeOut = 15000;
 			ErrorBehavior = InternalLoggerErrorBehavior.Log | InternalLoggerErrorBehavior.Ignore;
 			Available = true;
 		}
@@ -170,7 +170,7 @@ namespace Qorpent.Log {
 					throw ex;
 				}
 
-				WriteTimeOut = 1000;
+				WriteTimeOut = 15000;
 			}
 		}
         /// <summary>

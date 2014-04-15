@@ -588,23 +588,31 @@ namespace Qorpent.Utils.Extensions
 		/// <param name="parameters"></param>
 		/// <param name="timeout"></param>
 		/// <param name="close"></param>
+		/// <param name="map"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		/// <exception cref="ArgumentNullException"></exception>
 		public static T[] 
-            ExecuteOrm<T>(this IDbConnection connection, object command,object parameters=null,int timeout = 30, bool close = true) where T:new(){
+            ExecuteOrm<T>(this IDbConnection connection, object command,object parameters=null,int timeout = 30, bool close = true, object map = null) where T:new(){
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
             var result = new List<T>();
 	        var cmd = connection.CreateCommand(command, parameters, timeout);
 	        cmd.CommandTimeout = 0;
             var reader = cmd.ExecuteReader();
+			IDictionary<string, string> dict = null;
+			if (null != map){
+				dict = map.ToDict().ToDictionary(_ => _.Key, _ => _.Value.ToStr());
+			}
             try
             {
                 while (reader.Read()||reader.NextResult()) {
                     var item = new T();
                     for(int i=0;i<reader.FieldCount;i++) {
                         var name = reader.GetName(i);
+						if (null != dict && dict.ContainsKey(name.ToLower())){
+							name = dict[name.ToLower()];
+						}
                         item.SetValue(name, reader[i] is DBNull ? null : reader[i],ignoreNotFound:true);
                     }
                     result.Add(item);

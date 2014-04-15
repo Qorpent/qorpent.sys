@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -24,6 +25,8 @@ namespace Qorpent.BSharp.Preprocessor{
 		/// </summary>
 		/// <param name="context"></param>
 		public override void Execute(IBSharpContext context){
+			Project.Log.Warn("Выполняется предвариательная обработка кода ВНИМАНИЕ - данный функционал не считается безопасным");
+			var sw = Stopwatch.StartNew();
 			//сначла собираем скрипты
 			var scripts = ExtractScrtips(Project.Sources).OrderBy(_=>_.Index).ToArray();
 			IList<Task> pendingScripts = new List<Task>();
@@ -36,6 +39,8 @@ namespace Qorpent.BSharp.Preprocessor{
 				}
 			}
 			Task.WaitAll(pendingScripts.ToArray());
+			sw.Stop();
+			Project.Log.Warn("Предвариательная обработка кода выполнялась "+sw.Elapsed);
 		}
 
 		private IEnumerable<PreprocessorScript> ExtractScrtips(IEnumerable<XElement> sources){
