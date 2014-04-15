@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Linq;
+using Qorpent.BSharp.Builder;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Sql{
@@ -10,10 +11,25 @@ namespace Qorpent.Scaffolding.Sql{
 		/// <summary>
 		/// 
 		/// </summary>
+		protected IBSharpProject _project;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="project"></param>
+		public PreprocessOperation InitProject(IBSharpProject project){
+			_project = project;
+			return this;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="project"></param>
 		/// <param name="e"></param>
 		/// <returns></returns>
 		/// <exception cref="Exception"></exception>
-		public static PreprocessOperation Create(XElement e){
+		public static PreprocessOperation Create(IBSharpProject project, XElement e){
+			
 			switch (e.Name.LocalName){
 				case "renameattribute" :
 					return e.Apply(new RenameAttributeOperation());
@@ -27,6 +43,8 @@ namespace Qorpent.Scaffolding.Sql{
 					return e.Apply(new SetAttributeOperation());
 				case "elementtoattribute":
 					return e.Apply(new ElementToAttributeOperation());
+				case "pushtoglobal":
+					return e.Apply(new PushToGlobalOperation().InitProject(project));
 				default:
 					throw new Exception("unkonown operation "+e.Name.LocalName);			
 			}

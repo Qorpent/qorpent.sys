@@ -31,5 +31,10 @@ namespace Qorpent.BSharp {
 		/// Элементы корневого уровня для игнора
 		/// </summary>
 		string[] IgnoreElements { get; set; }
+
+		/// <summary>
+		///Глобальные константы
+		/// </summary>
+		IConfig Global { get; set; }
 	}
 }

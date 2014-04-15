@@ -70,5 +70,9 @@ namespace Qorpent.BSharp {
 			get { return Get<string[]>(IGNOREELEMENTS, null); }
 			set { Set(IGNOREELEMENTS, value); }
 		}
+		/// <summary>
+		///Глобальные константы
+		/// </summary>
+		public IConfig Global { get; set; }
 	}
 }

@@ -93,7 +93,8 @@ namespace Qorpent.BSharp {
 		/// <param name="compilerConfig"></param>
 		public void Initialize(IBSharpConfig compilerConfig) {
 			_config = compilerConfig;
-		}
+		    _global = _config.Global ?? new ConfigBase{UseInheritance = false};
+	    }
 
 
 		/// <summary>
@@ -275,11 +276,19 @@ namespace Qorpent.BSharp {
 			get { return _sqlAdapter ?? (_sqlAdapter = new BSharpSqlAdapter()); }
 			set { _sqlAdapter = value; }
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public IConfig Global{
+			get { return _global; }
+		}
 
 
 		LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
 		private IBSharpSqlAdapter _sqlAdapter;
 		static string[] ignores = new string[] { "code", "name", "_file", "_line" };
+		private IConfig _global;
+
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns){
 			
 			var aliases = new Dictionary<string, string>();

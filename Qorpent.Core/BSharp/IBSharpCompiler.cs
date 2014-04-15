@@ -55,5 +55,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		[Inject]
 		IBSharpSqlAdapter SqlAdapter { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		IConfig Global { get; }
 	}
 }

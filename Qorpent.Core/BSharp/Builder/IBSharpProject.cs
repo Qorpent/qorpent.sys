@@ -121,6 +121,11 @@ namespace Qorpent.BSharp.Builder {
 		string IgnoreElements { get; set; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		IConfig Global { get;  }
+
+		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>

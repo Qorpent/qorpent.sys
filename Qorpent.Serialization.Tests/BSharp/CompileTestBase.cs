@@ -2,14 +2,19 @@
 using System.Linq;
 using Qorpent.BSharp;
 using Qorpent.Bxl;
+using Qorpent.Config;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
 	public class CompileTestBase {
-		protected BSharpContext Compile(string code, IDictionary<string,string> conditions=null) {
+		protected BSharpContext Compile(string code, IDictionary<string,string> conditions=null, object globals =null ) {
 			var xml = new BxlParser().Parse(code, "c.bxl");
 			var cfg = new BSharpConfig();
 			cfg.UseInterpolation = true;
 			cfg.Conditions = conditions;
+			if (null != globals){
+				cfg.Global = new ConfigBase(globals.ToDict()){UseInheritance = false};
+			}
 			var compiler = new BSharpCompiler();
 			compiler.Initialize(cfg);
 			return  (BSharpContext)compiler.Compile(new[] {xml});

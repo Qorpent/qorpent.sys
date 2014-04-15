@@ -54,9 +54,11 @@ namespace Qorpent.Utils
 		/// </summary>
 		/// <param name="target"></param>
 		/// <param name="source"></param>
+		/// <param name="source2"></param>
 		/// <returns></returns>
-		public string Interpolate(string target, object source = null) {
+		public string Interpolate(string target, object source = null, IDictionary<string,object> source2 = null) {
 			//оптимизация возврата исходной строки где нет вообще контента
+			_source2 = source2;
 			if (string.IsNullOrWhiteSpace(target)) {
 				return target;
 			}
@@ -150,6 +152,7 @@ namespace Qorpent.Utils
 		private StringBuilder _currentSubst;
 		private StringBuilder _currentCode;
 		private bool _resolved;
+		private IDictionary<string, object> _source2;
 
 
 		private void Interpolate() {
@@ -258,7 +261,14 @@ namespace Qorpent.Utils
 				format = fullcode.Split('%')[1];
 			}
 			_currentCode.Clear();
-			if (!_source.ContainsKey(code)) return false;
+			if (!_source.ContainsKey(code)){
+				if (null != _source2 && _source2.ContainsKey(code))
+				{
+					_currentSubst.Append(_source2[code]);
+					return true;
+				}
+				return false;
+			}
 			var val = _source[code];
 			if (null == val) return false;
 
@@ -283,6 +293,7 @@ namespace Qorpent.Utils
 			}
 			
 			if (string.IsNullOrEmpty(strval)) {
+				
 				return false;
 			}
 			if (null != val) {

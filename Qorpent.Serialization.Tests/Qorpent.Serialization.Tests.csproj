@@ -17,6 +17,8 @@
     <Compile Include="BSharp\ClassReference.cs" />
     <Compile Include="BSharp\DictionarySupport.cs" />
     <Compile Include="BSharp\GeneratorTest.cs" />
+    <Compile Include="BSharp\GenericSupport.cs" />
+    <Compile Include="BSharp\GlobalSupport.cs" />
     <Compile Include="BSharp\Matcher\SingleConditionTests.cs" />
     <Compile Include="BSharp\PatchClassSupport.cs" />
     <Compile Include="BSharp\Preprocessor\StringReplacerTest.cs" />

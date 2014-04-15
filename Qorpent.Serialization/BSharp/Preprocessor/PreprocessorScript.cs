@@ -44,7 +44,7 @@ namespace Qorpent.Scaffolding.Sql{
 			var sw = Stopwatch.StartNew();
 			var srcdegree = Parallel ? Environment.ProcessorCount : 1;
 			var commands = Commands.OrderBy(_ => _.Index).ToArray();
-			_project.Sources.Where(IsMatch).AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(src =>
+			_project.Sources.Where(IsMatch).ToArray().AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(src =>
 			{
 				IList<Task> pending = new List<Task>();
 				foreach (var command in commands){

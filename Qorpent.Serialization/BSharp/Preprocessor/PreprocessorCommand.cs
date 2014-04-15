@@ -23,7 +23,7 @@ namespace Qorpent.Scaffolding.Sql{
 		public override void Execute(XElement e =null ){
 		//	_project.Log.Trace("Start command " + _e.Attr("code"));
 			var srcdegree = Parallel ? Environment.ProcessorCount : 1;
-			var selector = GetElements(e);
+			var selector = GetElements(e).ToArray();
 			selector.AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(el =>{
 				foreach (var operation in Operations){
 					operation.Execute(el);
@@ -35,7 +35,7 @@ namespace Qorpent.Scaffolding.Sql{
 		{
 			base.Initialize();
 			foreach (var element in _e.Elements()){
-				var operation = PreprocessOperation.Create(element);
+				var operation = PreprocessOperation.Create(_project,element);
 				if (null != operation){
 					Operations.Add(operation);
 				}

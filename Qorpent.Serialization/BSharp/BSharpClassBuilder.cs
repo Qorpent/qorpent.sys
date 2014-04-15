@@ -639,23 +639,20 @@ namespace Qorpent.BSharp {
 		}
 
 		private void PerformMergingWithElements() {
-			var names = _cls.Compiled.Elements().Select(_ => _.Name.LocalName).Distinct().ToArray();
+
 			foreach (var root in _cls.AllElements.Where(_ => _.Type == BSharpElementType.Define).ToArray()) {
 				var allroots = _cls.Compiled.Descendants(root.Name).ToArray();
 				var groupedroots = allroots.GroupBy(_ => _.GetCode());
-				foreach (var doublers in groupedroots.Where(_ => _.Count() > 1))
-				{
+				foreach(var doublers in groupedroots.Where(_=>_.Count()>1)) {
 					doublers.Skip(1).Remove();
 				}
+
 				var alloverrides =
 					_cls.AllElements.Where(_ => _.Type != BSharpElementType.Define && _.TargetName == root.Name).ToArray();
-				
                 //если нет целевых элементов, то не обрабатываем мержи
-                if (alloverrides.All(_ => -1 == Array.IndexOf(names,_.Name))) {
+                if (!_cls.Compiled.Elements().Any(_ => alloverrides.Any(__ => __.Name == _.Name.LocalName))) {
                     continue;
                 }
-
-				
 //				foreach (var over in alloverrides) {
 					foreach (var g in groupedroots) {
 						var e = g.First();
@@ -805,7 +802,10 @@ namespace Qorpent.BSharp {
 			
 		}
 		
-		private bool IsMatch(XElement arg) {
+		private bool IsMatch(XElement arg){
+			//due to fact that generics just prepare template for override classes it doesn't exclude 
+			//anything from elements due to conditions
+			if (_cls.Is(BSharpClassAttributes.Generic)) return true;
 			var cond = arg.Attr(BSharpSyntax.ConditionalAttribute);
 			if (string.IsNullOrWhiteSpace(cond)) {
 				return true;
@@ -830,8 +830,10 @@ namespace Qorpent.BSharp {
 			}
 			_cls.Compiled.Attributes(BSharpSyntax.ClassAbstractModifier).Remove();
 			_cls.Compiled.Attributes(BSharpSyntax.ClassStaticModifier).Remove();
+			_cls.Compiled.Attributes(BSharpSyntax.ClassGenericModifier).Remove();
 			_cls.Compiled.Elements(BSharpSyntax.ClassImportDefinition).Remove();
 			_cls.Compiled.Elements(BSharpSyntax.ClassElementDefinition).Remove();
+			
 			foreach (var e in _cls.Compiled.DescendantsAndSelf())
 			{
 				if (null != e.Attribute("id")) {
@@ -840,9 +842,11 @@ namespace Qorpent.BSharp {
 					}
 
 				}
-				if (null != e.Attribute(BSharpSyntax.ConditionalAttribute))
-				{
-					e.Attribute(BSharpSyntax.ConditionalAttribute).Remove();
+				//generics MUST keep "if" attribute alive
+				if (!_cls.Is(BSharpClassAttributes.Generic)){
+					if (null != e.Attribute(BSharpSyntax.ConditionalAttribute)){
+						e.Attribute(BSharpSyntax.ConditionalAttribute).Remove();
+					}
 				}
 				e.Attributes().Where(_ =>
 					(_.Name.LocalName[0]==BSharpSyntax.PrivateAttributePrefix || string.IsNullOrEmpty(_.Value))&&
@@ -868,6 +872,7 @@ namespace Qorpent.BSharp {
 			{
 				_cls.ParamIndex.Set(p.Key, p.Value);
 			}
+			
 
 		}
 
@@ -904,6 +909,7 @@ namespace Qorpent.BSharp {
 					}
 				}
 			}
+			
 			return current;
 		}
 
@@ -957,7 +963,7 @@ namespace Qorpent.BSharp {
 						var s = v.Value as string;
 						if (null == s) continue;
 						if (-1 == s.IndexOf('{')) continue;
-						_cls.ParamIndex.Set(key, si.Interpolate(s, _cls.ParamSourceIndex));
+						_cls.ParamIndex.Set(key, si.Interpolate(s, _cls.ParamSourceIndex, _compiler.Global));
 					}
 				}
 				

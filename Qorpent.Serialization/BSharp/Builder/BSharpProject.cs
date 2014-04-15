@@ -175,7 +175,8 @@ namespace Qorpent.BSharp.Builder {
             set { Set(TARGETS, value); }
         }
 	    IUserLog _log =  new StubUserLog();
-	
+		private IConfig _global;
+
 
 		/// <summary>
 		/// Журнал проекта
@@ -279,6 +280,12 @@ namespace Qorpent.BSharp.Builder {
 		public string IgnoreElements{
 			get { return Get<string>(IGNORE_ELEMENTS); }
 			set { Set(IGNORE_ELEMENTS, value); }
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public IConfig Global{
+			get { return _global ?? (_global = new ConfigBase{UseInheritance = false}); }
 		}
 
 

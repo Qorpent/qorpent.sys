@@ -40,6 +40,7 @@
     <Compile Include="BSharp\Preprocessor\PreprocessorScript.cs" />
     <Compile Include="BSharp\Preprocessor\PreprocessorSourcePackageForBSharp.cs" />
     <Compile Include="BSharp\Preprocessor\DataCompilerExtensions.cs" />
+    <Compile Include="BSharp\Preprocessor\PushToGlobalOperation.cs" />
     <Compile Include="BSharp\Preprocessor\RenameAttributeOperation.cs" />
     <Compile Include="BSharp\Preprocessor\RenameElementOperation.cs" />
     <Compile Include="BSharp\Preprocessor\SetAttributeOperation.cs" />
