@@ -57,6 +57,11 @@ namespace Qorpent.BSharp.Builder {
 		TreeNamespace = 1 << 7,
 
 		/// <summary>
+		/// Классы распределяются по прототипам, а не по пространствам имен
+		/// </summary>
+		PrototypeAlign = 1 << 8,
+
+		/// <summary>
 		/// По умолчанию просто выводится директория с плоскими нэймспэйсами
 		/// </summary>
         Default = IncludeWork | PlainNamespace,
