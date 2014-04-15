@@ -40,7 +40,7 @@ namespace Qorpent.Utils
 		/// <summary>
 		/// Строка - заместитель пустой при посдстановках
 		/// </summary>
-		public string EmptyStringReplacer = "_EMPTY_";
+		public char EmptyStringReplacer = '¶';
 
 		private StringBuilder _targetBuffer;
 		private StringBuilder _currentBuffer;
@@ -183,11 +183,8 @@ namespace Qorpent.Utils
 						if (!(_resolved||_indefault)) {
 							TryResolve();
 						}
-						
-						var subst = _currentSubst.ToString();
-						
-						if (subst != EmptyStringReplacer) {
-							_targetBuffer.Append(subst);	
+						if (_currentSubst.Length != 0 && _currentSubst[0]!=EmptyStringReplacer){
+							_targetBuffer.Append(_currentSubst);
 						}
 					}
 					//ситуаця ошибки синтаксиса, сжимаем текущий поток

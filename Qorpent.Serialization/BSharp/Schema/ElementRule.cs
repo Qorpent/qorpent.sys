@@ -23,10 +23,10 @@ namespace Qorpent.BSharp.Schema {
 		public ElementRule(XElement s) {
 			var code = s.GetCode();
 			var type = RuleType.Allow;
-			if (code.StartsWith("+")) {
+			if (code[0]=='+') {
 				this.ForseStrict = true;
 				code = code.Replace("+", "");
-			}else if (code.StartsWith("-")) {
+			}else if (code[0]=='-') {
 				type = RuleType.Deny;
 				code = code.Replace("-", "");
 			}

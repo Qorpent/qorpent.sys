@@ -324,7 +324,7 @@ namespace Qorpent.Serialization {
 				    (Value is Array)) {
 					return true;
 				}
-				if (Value != null && Value.GetType().Name.StartsWith("<")) {
+				if (Value != null && Value.GetType().Name[0]=='<') {
 					return true;
 				}
 				return IsAttrSetted<SerializeAttribute>(Type) ;

@@ -36,7 +36,7 @@ namespace Qorpent.Utils.Tests
 		[TestCase("${a}","a:1","1")]
 		[TestCase("${a} ${b}","a:1|b:25","1 25")]
 		[TestCase("${ab} ${bc}","ab:1|bc","1 ")]
-		[TestCase("${ab} ${bc}","ab:1|bc:_EMPTY_","1 ")]
+		[TestCase("${ab} ${bc}", "ab:1|bc:¶", "1 ")]
 		public void SimpleSubstitutions(string src,string datasrc, string result) {
 			var data = ComplexStringExtension.Parse(datasrc);
 			var realresult = _si.Interpolate(src,data);
@@ -70,7 +70,7 @@ namespace Qorpent.Utils.Tests
 
 		[TestCase("${a,b}", "a|b:2", "2" , Description="first is empty")]
 		[TestCase("${a,b}", "a:1|b:2", "1" , Description="first is not empty")]
-		[TestCase("${a,b}", "a:_EMPTY_|b:2", "" , Description="first is explicitly empty")]
+		[TestCase("${a,b}", "a:¶|b:2", "", Description = "first is explicitly empty")]
 		[TestCase("${a,b}", "b:2", "2")]
 		[TestCase("${c,b}", "b:2|c:3", "3")]
 		[TestCase("${a,b} ${c,d,e} ${e,d,c}", "b:2|c:3|e:4", "2 3 4")]

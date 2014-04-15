@@ -2,13 +2,16 @@
 	/// <summary>
 	/// </summary>
 	public class BSharpElement : IBSharpElement {
+		private string _name;
+		private string _targetName;
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="other"></param>
 		/// <returns></returns>
 		protected bool Equals(IBSharpElement other) {
-			return string.Equals(Name, other.Name) && string.Equals(TargetName, other.TargetName) && Type == other.Type;
+			return string.Equals(_name, other.Name) && string.Equals(_targetName, other.TargetName) && Type == other.Type;
 		}
 
 		/// <summary>
@@ -29,12 +32,18 @@
 
 		/// <summary>
 		/// </summary>
-		public string Name { get; set; }
+		public string Name{
+			get { return _name; }
+			set { _name = value; }
+		}
 
 		/// <summary>
 		///     Имя цели мержинга (рут)
 		/// </summary>
-		public string TargetName { get; set; }
+		public string TargetName{
+			get { return _targetName; }
+			set { _targetName = value; }
+		}
 
 		/// <summary>
 		///     Тип импорта

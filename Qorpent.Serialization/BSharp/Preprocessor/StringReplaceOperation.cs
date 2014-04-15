@@ -61,7 +61,7 @@ namespace Qorpent.Scaffolding.Sql{
 			get { return _from; }
 			set {
 				_from = value; 
-				if (_from.StartsWith("/") && _from.EndsWith("/")){
+				if (_from[0]=='/' && _from[_from.Length-1]=='/'){
 					_regex = new Regex(_from.Substring(1,_from.Length-2));
 				}
 			}

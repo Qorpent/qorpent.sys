@@ -106,7 +106,7 @@ namespace Qorpent.Serialization
                 return type != "object" && type != "array";
             }
             if (xml.HasElements) return false;
-            if (xml.Attributes().Any(_ => !_.Name.LocalName.StartsWith("_"))) return false;
+            if (xml.Attributes().Any(_ => _.Name.LocalName[0] != '_')) return false;
             return true;
         }
         
