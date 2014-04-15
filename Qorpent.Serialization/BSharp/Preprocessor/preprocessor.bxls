@@ -1,0 +1,8 @@
+namespace Qorpent.BSharp
+	class PreprocessScript "Сценарий для препроцессора" abstract embed
+		index = 0 # порядок выполнения сценария
+		async = false # призак того, что остальные скрипты не обязаны дожидаться окончания этого
+		parallel = false  # признак обработки всех источников в паралель (а на уровне команды - элементов)
+		element command
+	
+		

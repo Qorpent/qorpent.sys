@@ -46,7 +46,7 @@ namespace Qorpent.BSharp.Builder {
         /// <summary>
         /// 
         /// </summary>
-        public const string OrphansOutputDirectory = DefaultOutputDirectory + "\\.orphans";
+        public const string OrphansOutputDirectory = ".orphans";
         /// <summary>
         ///     Имя классета внутри документа
         /// </summary>

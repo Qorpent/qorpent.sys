@@ -26,5 +26,10 @@ namespace Qorpent.BSharp {
 		/// Журнал проекта
 		/// </summary>
 		IUserLog Log { get; set; }
+
+		/// <summary>
+		/// Элементы корневого уровня для игнора
+		/// </summary>
+		string[] IgnoreElements { get; set; }
 	}
 }

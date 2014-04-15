@@ -281,9 +281,18 @@ namespace Qorpent.BSharp {
 		private IBSharpSqlAdapter _sqlAdapter;
 		static string[] ignores = new string[] { "code", "name", "_file", "_line" };
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns){
+			
 			var aliases = new Dictionary<string, string>();
 			foreach (XElement e in src.Elements()) {
 				var _ns = "";
+				if (null != _config.IgnoreElements && 0 != _config.IgnoreElements.Length)
+				{
+					if (-1 != Array.IndexOf(_config.IgnoreElements, e.Name.LocalName)){
+						continue;
+						
+					}
+				}
+
 				if (e.Name.LocalName == BSharpSyntax.Namespace) {
                     var ifa = e.Attr("if");
                     if (!string.IsNullOrWhiteSpace(ifa))
@@ -341,6 +350,7 @@ namespace Qorpent.BSharp {
 				}
 			}
 		}
+		
 
 		private IBSharpClass PrepareTemplate(string ns, XElement e)
 		{
@@ -443,13 +453,22 @@ namespace Qorpent.BSharp {
             return true;
         }
 
-		private static void SetupInitialOrphanState(XElement e, IBSharpClass def,IDictionary<string,string> aliases ) {
+		private  void SetupInitialOrphanState(XElement e, IBSharpClass def,IDictionary<string,string> aliases ) {
 			if (null != e.Attribute(BSharpSyntax.ClassAbstractModifier) || e.Attr("name") == BSharpSyntax.ClassAbstractModifier)
 			{
 				def.Set(BSharpClassAttributes.Abstract);
 			}
+			
+
 			if (null != e.Attribute(BSharpSyntax.ClassStaticModifier) || e.Attr("name") == BSharpSyntax.ClassStaticModifier)
 			{
+				def.Set(BSharpClassAttributes.Static);
+			}
+
+			if (null != e.Attribute(BSharpSyntax.ClassGenericModifier) || e.Attr("name") == BSharpSyntax.ClassGenericModifier)
+			{
+				def.Set(BSharpClassAttributes.Generic);
+				def.Set(BSharpClassAttributes.Abstract);
 				def.Set(BSharpClassAttributes.Static);
 			}
 			if (e.Name.LocalName == BSharpSyntax.Class) {

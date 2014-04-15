@@ -17,6 +17,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public const string SINGLESOURCE = "singlesource";
 		/// <summary>
+		/// Перечень корневых элементов, которые должны быть проигнорированы
+		/// </summary>
+		public const string IGNOREELEMENTS = "ignoreelements";
+		/// <summary>
 		/// Условия компиляции
 		/// </summary>
 		public const string CONDITIONS = "conditions";
@@ -57,6 +61,14 @@ namespace Qorpent.BSharp {
 		public IDictionary<string, string> Conditions {
 			get { return Get<IDictionary<string,string>>(CONDITIONS); }
 			set { Set(CONDITIONS, value); }
+		}
+
+		/// <summary>
+		/// Элементы корневого уровня для игнора
+		/// </summary>
+		public string[] IgnoreElements{
+			get { return Get<string[]>(IGNOREELEMENTS, null); }
+			set { Set(IGNOREELEMENTS, value); }
 		}
 	}
 }

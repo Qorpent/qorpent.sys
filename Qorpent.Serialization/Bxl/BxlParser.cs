@@ -980,43 +980,6 @@ namespace Qorpent.Bxl {
 					_current.SetAttributeValue(XName.Get(_value.Escape(EscapingType.XmlName), resolveNamespace()), ANON_VALUE);
 			}
 
-			/**********
-
-		    switch (_anonCount[_level]) {
-			    case 0:
-				    
-				    if (!_options.HasFlag(BxlParserOptions.OnlyIdAttibute)) {
-					    _current.SetAttributeValue(XName.Get(ANON_CODE), _prefix + _value);
-						_anonCount[_level]++;
-				    }
-				    if (!_options.HasFlag(BxlParserOptions.OnlyCodeAttribute)) {
-					    _current.SetAttributeValue(XName.Get(ANON_ID), _prefix + _value);
-						_anonCount[_level]++;
-				    }
-					
-				    _prefix = "";
-				    break;
-				case 1:
-				case 2:
-					if (_prefix.Length != 0)
-						_prefix += "::";
-					_current.SetAttributeValue(XName.Get(ANON_NAME), _prefix + _value);
-					_anonCount[_level]++;
-				    _prefix = "";
-				    break;
-				default:
-				    if (_isString || _isExpression) {
-						// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-						_anonCount[_level]++;
-					    String name = ANON_PREFIX + (_anonCount[_level]);
-
-						// namespace not needed because this anonymous string attribute can not be declared with namespace prefix
-						_current.SetAttributeValue(XName.Get(name), _value);
-				    } else
-						_current.SetAttributeValue(XName.Get(_value.Escape(EscapingType.XmlName), resolveNamespace()), ANON_VALUE);
-				    break;
-		    }
-			 ***/
 			_isExpression = false;
 			_isString = false;
 			_value = "";

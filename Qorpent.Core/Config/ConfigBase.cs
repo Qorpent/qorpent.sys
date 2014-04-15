@@ -116,17 +116,9 @@ namespace Qorpent.Config {
 			}
 
 			options[name] = value;
-			OnSet(name, value);
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="value"></param>
-		protected virtual  void OnSet(string name, object value){
 
 		}
-
+	
 
 		private T ReturnIerachical<T>(string name, T def) {
 			var basis = name.Replace(".", "");
@@ -189,17 +181,17 @@ namespace Qorpent.Config {
 				yield return options[name];
 			}
 
-            if (!UseInheritance)
+            if (!_useInheritance)
             {
                 yield return null;
             }
 			
             if (
-                (null != GetParent())
+                (null != _parent)
             ) {
                 
 
-				foreach (var p in ((ConfigBase) GetParent()).AllByName(name)) {
+				foreach (var p in ((ConfigBase) _parent).AllByName(name)) {
 					yield return p;
 				}
 			}
@@ -213,14 +205,14 @@ namespace Qorpent.Config {
 	    /// <param name="def"></param>
 	    /// <returns></returns>
 	    public T Get<T>(string name, T def = default(T)) {
-			if (name.StartsWith(".")) {
+			if (name[0]=='.') {
 				return ReturnIerachical(name, def);
 			}
 
 			if (!options.ContainsKey(name)) {
-				if (null != GetParent()) {
-				    if (UseInheritance) {
-				        return GetParent().Get(name, def);
+				if (null != _parent) {
+				    if (_useInheritance) {
+				        return _parent.Get(name, def);
 				    }
 				}
 
@@ -252,12 +244,12 @@ namespace Qorpent.Config {
 		/// <param name="withParent"></param>
 		/// <returns></returns>
 		public IEnumerable<string> GetNames(bool withParent = false) {
-			if (!withParent || null == GetParent()) {
+			if (!withParent || null == _parent) {
 			    return options.Keys;
 			}
 
-		    if (UseInheritance) {
-		        return options.Keys.Union(GetParent().GetNames(true)).Distinct();
+		    if (_useInheritance) {
+		        return options.Keys.Union(_parent.GetNames(true)).Distinct();
 		    }
 
             return new List<string>();

@@ -192,14 +192,15 @@ namespace Qorpent.Mvc {
 				datax = "<empty></empty>";
 			}
 			datax = datax.Trim();
-
+			if(datax.Length==0)return new XElement("empty");
 			//try get by usual xml
-			if (datax.StartsWith("<")) {
+			if (datax[0]=='<') {
 				return XElement.Parse(datax);
 			}
 
 			//if it's {} code - try to parse as json
-			if (datax.StartsWith("{")) {
+			if (datax[0] == '{')
+			{
 				return ResolveService<ISpecialXmlParser>("json.xml.parser").ParseXml(datax);
 			}
 			//otherwise try parse as bxl

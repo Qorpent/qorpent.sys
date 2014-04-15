@@ -23,25 +23,25 @@ namespace Qorpent.BSharp.Schema {
 			var type = RuleType.Allow;
 			var action = RuleActionType.None;
 			var value = val;
-			if (code.StartsWith("+")) {
-				code = code.Replace("+", "");
+			if (code[0]=='+') {
+				code = code.Substring(1);
 				if (!string.IsNullOrWhiteSpace(value) && value != "1") {
 					action = RuleActionType.Rename;
 				}
-			}else if (code.StartsWith("-")) {
-				code = code.Replace("-", "");
+			}else if (code[0]=='-') {
+				code = code.Substring(1);
 				action =RuleActionType.Remove;
-			}else if (code.StartsWith("!")) {
-				code = code.Replace("!", "");
+			}else if (code[0]=='!') {
+				code = code.Substring(1);
 				type = RuleType.Deny;
 			}
-			else if (code.StartsWith("@")) {
-				code = code.Replace("@", "");
+			else if (code[0]=='@') {
+				code = code.Substring(1);
 				type = RuleType.Require;
 			}
-			else if (code.StartsWith("~"))
+			else if (code[0]=='~')
 			{
-				code = code.Replace("~", "");
+				code = code.Substring(1);
 				type = RuleType.Obsolete;
 			}
 			Code = code;

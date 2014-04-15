@@ -56,14 +56,14 @@ namespace Qorpent.Config {
 		}
 
 		bool IDictionary<string, object>.ContainsKey(string key) {
-			if (key.StartsWith(".")) {
-				var keyparent = this.GetParent() as IDictionary<string,object>;
+			if (key[0]=='.') {
+				var keyparent = this._parent as IDictionary<string,object>;
 				if (null == keyparent) return false;
 				return keyparent.ContainsKey(key.Substring(1));
 			}
 			if (options.ContainsKey(key)) return true;
-		    if (UseInheritance) {
-		        var parent = GetParent() as IDictionary<string, object>;
+		    if (_useInheritance) {
+		        var parent = _parent as IDictionary<string, object>;
 		        if (null != parent) {
 		            return parent.ContainsKey(key);
 		        }
@@ -99,7 +99,7 @@ namespace Qorpent.Config {
 
 		ICollection<string> IDictionary<string, object>.Keys {
 			get {
-				var parent = GetParent() as IDictionary<string, object>;
+				var parent = _parent as IDictionary<string, object>;
 				if (null == parent) {
 					return options.Keys;
 				}

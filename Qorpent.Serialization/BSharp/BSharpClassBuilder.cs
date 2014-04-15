@@ -334,7 +334,7 @@ namespace Qorpent.BSharp {
 			CleanupElementsWithConditions();
 			
 			MergeInternals();
-			InterpolateElements();
+			InterpolateElements(_cls.Is(BSharpClassAttributes.Generic)?'`':'$');
 			PerformMergingWithElements();
 			
 			CleanupElementsWithConditions();
@@ -386,7 +386,7 @@ namespace Qorpent.BSharp {
 			if (!_cls.Is(BSharpClassAttributes.RequireClassResolution)) return;
 			//найдем все атрибуты, начинающиеся на ^
 			foreach (var a in _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes())) {
-				if (a.Value.StartsWith("^")) {
+				if (a.Value[0]=='^') {
 					var clsname = a.Value.Substring(1);
 					var isarray = clsname.EndsWith("*");
 					if (isarray){
@@ -639,19 +639,23 @@ namespace Qorpent.BSharp {
 		}
 
 		private void PerformMergingWithElements() {
-
+			var names = _cls.Compiled.Elements().Select(_ => _.Name.LocalName).Distinct().ToArray();
 			foreach (var root in _cls.AllElements.Where(_ => _.Type == BSharpElementType.Define).ToArray()) {
 				var allroots = _cls.Compiled.Descendants(root.Name).ToArray();
 				var groupedroots = allroots.GroupBy(_ => _.GetCode());
-				foreach(var doublers in groupedroots.Where(_=>_.Count()>1)) {
+				foreach (var doublers in groupedroots.Where(_ => _.Count() > 1))
+				{
 					doublers.Skip(1).Remove();
 				}
 				var alloverrides =
 					_cls.AllElements.Where(_ => _.Type != BSharpElementType.Define && _.TargetName == root.Name).ToArray();
+				
                 //если нет целевых элементов, то не обрабатываем мержи
-                if (!_cls.Compiled.Elements().Any(_ => alloverrides.Any(__ => __.Name == _.Name.LocalName))) {
+                if (alloverrides.All(_ => -1 == Array.IndexOf(names,_.Name))) {
                     continue;
                 }
+
+				
 //				foreach (var over in alloverrides) {
 					foreach (var g in groupedroots) {
 						var e = g.First();
@@ -690,7 +694,7 @@ namespace Qorpent.BSharp {
 									}
 									if (!string.IsNullOrWhiteSpace(o.Value)){
 										//join embeded code
-										if (o.Value.StartsWith("(") && o.Value.EndsWith(")") && e.Value.StartsWith("(") && e.Value.EndsWith(")")){
+										if (o.Value[0]=='(' && o.Value[o.Value.Length-1]==')' && e.Value[0]=='(' && e.Value[e.Value.Length]==')'){
 											e.Value = e.Value.Substring(0, e.Value.Length - 1) + o.Value.Substring(1);
 										}
 										else{
@@ -915,26 +919,48 @@ namespace Qorpent.BSharp {
 		{
 			if (GetConfig().UseInterpolation)
 			{
+				
 				var xi = new XmlInterpolation{AncorSymbol = ancor};
 				xi.Interpolate(_cls.Compiled);
 			}
 		}
 
+
 		private void InterpolateFields()
 		{
+			// у генериков на этой фазе еще производится полная донастройка элементов по анкору ^
+			
 			if (GetConfig().UseInterpolation)
 			{
+				
+				
 				var si = new StringInterpolation();
+				si.AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$';
+				bool requireInterpolateNames = _cls.ParamIndex.Keys.Any(_ => _.Contains("__LBLOCK__"));
+				
 
 				for (int i = 0; i <= 3; i++)
 				{
-					foreach (var v in _cls.ParamIndex.ToArray()) {
+					foreach (var v in _cls.ParamIndex.ToArray()){
+						var key = v.Key;
+						if (requireInterpolateNames){
+							var esckey = key.Unescape(EscapingType.XmlName);
+							if (-1 != esckey.IndexOf('{')){
+								var _key = si.Interpolate(esckey, _cls.ParamSourceIndex).Escape(EscapingType.XmlName);
+								if (_key != key){
+									_cls.ParamIndex.Remove(key);
+									_cls.ParamIndex[_key] = v.Value;
+									key = _key;
+								}
+							}
+						}
 						var s = v.Value as string;
 						if (null == s) continue;
 						if (-1 == s.IndexOf('{')) continue;
-						_cls.ParamIndex.Set(v.Key, si.Interpolate(s, _cls.ParamSourceIndex));
+						_cls.ParamIndex.Set(key, si.Interpolate(s, _cls.ParamSourceIndex));
 					}
 				}
+				
 			}
 		}
 

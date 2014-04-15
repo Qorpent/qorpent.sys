@@ -115,7 +115,12 @@ namespace Qorpent.BSharp.Builder {
 	    /// </summary>
 	    string JsonModuleName { get; set; }
 
-	    /// <summary>
+		/// <summary>
+		/// Список элементов исходного кода, которые игнорируются в качестве классов, просто пропускаются
+		/// </summary>
+		string IgnoreElements { get; set; }
+
+		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>

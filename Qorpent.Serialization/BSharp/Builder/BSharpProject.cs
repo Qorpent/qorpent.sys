@@ -75,6 +75,7 @@ namespace Qorpent.BSharp.Builder {
 	    private const string EXTENSIONS = "extensions";
         private const string SRCCLASS = "srcclass";
 		private const string JSON_MODULE_NAME = "json_module_name";
+		private const string IGNORE_ELEMENTS = "ignore_elements";
         private IList<IBSharpCompilerExtension> _compilerExtensions = new List<IBSharpCompilerExtension>();
         /// <summary>
         /// Расширения компилятора
@@ -271,6 +272,13 @@ namespace Qorpent.BSharp.Builder {
 		public string JsonModuleName {
 			get { return Get<string>(JSON_MODULE_NAME); }
 			set { Set(JSON_MODULE_NAME, value); }
+		}
+		/// <summary>
+		/// Список элементов исходного кода, которые игнорируются в качестве классов, просто пропускаются
+		/// </summary>
+		public string IgnoreElements{
+			get { return Get<string>(IGNORE_ELEMENTS); }
+			set { Set(IGNORE_ELEMENTS, value); }
 		}
 
 

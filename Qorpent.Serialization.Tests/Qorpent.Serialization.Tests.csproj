@@ -19,6 +19,7 @@
     <Compile Include="BSharp\GeneratorTest.cs" />
     <Compile Include="BSharp\Matcher\SingleConditionTests.cs" />
     <Compile Include="BSharp\PatchClassSupport.cs" />
+    <Compile Include="BSharp\Preprocessor\StringReplacerTest.cs" />
     <Compile Include="BSharp\RequireSupportForPreBuildPackages.cs" />
     <Compile Include="BSharp\Runtime\BSharpLibraryClassProviderTest.cs" />
     <Compile Include="BSharp\Schema\AttributeRuleTest.cs" />

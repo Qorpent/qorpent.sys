@@ -359,7 +359,7 @@ namespace Qorpent.BSharp {
 		private IEnumerable<XElement> GetSqlDataSet(XElement source, string ns){
 			var connectionCode = source.Attr("connection","default");
 			var query = source.Attr("query");
-			if (query.StartsWith("#")){
+			if (query[0]=='#'){
 				query = GetTemplate(query.Substring(1), source, ns);
 			}
 			else{

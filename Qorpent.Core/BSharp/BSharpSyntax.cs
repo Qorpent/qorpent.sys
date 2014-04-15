@@ -130,6 +130,11 @@ namespace Qorpent.BSharp {
 		/// Признак абстрактного класса
 		/// </summary>
 		public const string ClassAbstractModifier = "abstract";
+
+		/// <summary>
+		/// Признак класса- генерика
+		/// </summary>
+		public const string ClassGenericModifier = "generic";
 		/// <summary>
 		/// Признак статичского класса
 		/// </summary>
