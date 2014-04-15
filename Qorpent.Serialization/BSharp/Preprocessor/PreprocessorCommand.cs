@@ -4,9 +4,8 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.BSharp.Builder;
-using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Sql{
+namespace Qorpent.BSharp.Preprocessor{
 	internal class PreprocessorCommand : PreprocessorCommandBase{
 		/// <summary>
 		/// 

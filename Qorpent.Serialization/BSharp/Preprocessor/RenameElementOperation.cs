@@ -1,7 +1,7 @@
 ﻿using System.Xml.Linq;
 using Qorpent.Serialization;
 
-namespace Qorpent.Scaffolding.Sql{
+namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
 	/// 
 	/// </summary>

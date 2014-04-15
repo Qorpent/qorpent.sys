@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using Qorpent.BSharp.Builder;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Sql{
+namespace Qorpent.BSharp.Preprocessor{
 	internal abstract class PreprocessorCommandBase{
 		protected IBSharpProject _project;
 		public int Index;

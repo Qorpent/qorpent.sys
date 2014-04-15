@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using Qorpent.BSharp.Builder;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Sql{
+namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
 	/// 
 	/// </summary>
@@ -45,6 +45,8 @@ namespace Qorpent.Scaffolding.Sql{
 					return e.Apply(new ElementToAttributeOperation());
 				case "pushtoglobal":
 					return e.Apply(new PushToGlobalOperation().InitProject(project));
+				case "bindglobal":
+					return e.Apply(new BindGlobalOperation().InitProject(project));
 				default:
 					throw new Exception("unkonown operation "+e.Name.LocalName);			
 			}

@@ -8,7 +8,7 @@ using System.Xml.Linq;
 using Qorpent.BSharp.Builder;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Sql{
+namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
 	/// Описывает скрипт препроцессора
 	/// </summary>
@@ -24,6 +24,7 @@ namespace Qorpent.Scaffolding.Sql{
 			_e.Elements("command").DoForEach(_ => Commands.Add(new PreprocessorCommand(_project,_)));
 		}
 
+		public bool Staged;
 		private Regex _fileRegex = null;
 
 		public string File{
@@ -44,8 +45,27 @@ namespace Qorpent.Scaffolding.Sql{
 			var sw = Stopwatch.StartNew();
 			var srcdegree = Parallel ? Environment.ProcessorCount : 1;
 			var commands = Commands.OrderBy(_ => _.Index).ToArray();
-			_project.Sources.Where(IsMatch).ToArray().AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(src =>
-			{
+			if (Staged){
+				RunStaged(srcdegree, commands);
+			}
+			else{
+				RunNonStaged(srcdegree, commands);
+			}
+			sw.Stop();
+			_project.Log.Info("Finish preprocessor " + _e.Attr("code")+" "+sw.Elapsed );
+		}
+
+		private void RunStaged(int srcdegree, IEnumerable<PreprocessorCommand> commands){
+			foreach (var command in commands){
+				_project.Sources.Where(IsMatch).ToArray().AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(src =>
+				{
+					command.Execute(src);
+				});
+			}
+		}
+
+		private void RunNonStaged(int srcdegree, IEnumerable<PreprocessorCommand> commands){
+			_project.Sources.Where(IsMatch).ToArray().AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(src =>{
 				IList<Task> pending = new List<Task>();
 				foreach (var command in commands){
 					if (command.Async){
@@ -57,8 +77,6 @@ namespace Qorpent.Scaffolding.Sql{
 				}
 				Task.WaitAll(pending.ToArray());
 			});
-			sw.Stop();
-			_project.Log.Info("Finish preprocessor " + _e.Attr("code")+" "+sw.Elapsed );
 		}
 
 		private bool IsMatch(XElement arg){

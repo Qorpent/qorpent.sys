@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-namespace Qorpent.Scaffolding.Sql{
+namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
 	/// 
 	/// </summary>

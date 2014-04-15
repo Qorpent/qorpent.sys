@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
-using Qorpent.BSharp;
 using Qorpent.Bxl;
 using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Sql
+namespace Qorpent.BSharp.Preprocessor
 {
 	/// <summary>
 	/// Поставщик исходни	ков для расширений по генерации данных

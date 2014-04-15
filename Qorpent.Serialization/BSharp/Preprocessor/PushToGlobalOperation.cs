@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Sql{
+namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
 	/// 
 	/// </summary>

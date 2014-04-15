@@ -1,7 +1,7 @@
 ﻿using Qorpent.BSharp.Builder;
 using Qorpent.IoC;
 
-namespace Qorpent.Scaffolding.Sql{
+namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
 	/// Расширения компилятора B# для работы с DDL B#
 	/// </summary>

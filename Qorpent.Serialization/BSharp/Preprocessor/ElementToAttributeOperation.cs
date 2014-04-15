@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Sql{
+namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
 	/// 
 	/// </summary>
