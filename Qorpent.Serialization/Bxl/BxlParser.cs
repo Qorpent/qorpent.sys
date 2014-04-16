@@ -203,10 +203,7 @@ namespace Qorpent.Bxl {
 				UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation),
 				SingleSource =  true
 			};
-			var compiler = new BSharpCompiler();
-			compiler.DoProcessRequires = true;
-			compiler.Initialize(compileroptions);
-			var compileresult = compiler.Compile(new[] { result });
+			var compileresult = BSharpCompiler.Compile(new[] { result },compileroptions);
 			var newresult = new XElement("bsharp");
 
 			foreach (var w in compileresult.Get(BSharpContextDataType.Working)) {

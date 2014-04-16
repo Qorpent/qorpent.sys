@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
+using Qorpent.BSharp;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
@@ -63,6 +65,17 @@ namespace X
 			Assert.AreEqual("custom", result.Working[0].DefaultImportCode);
 			Assert.NotNull(result.Working[0].DefaultImport);
 			Assert.AreEqual("custom", result.Working[0].DefaultImport.Name);
+		}
+
+
+		[Test]
+		public void MergableAsyncCall(){
+			var ctx = new BSharpContext();
+			var p1 = BSharpCompiler.CompileAsync("class A").ContinueWith(_=>ctx.Merge(_.Result));
+			var p2 = BSharpCompiler.CompileAsync("class B").ContinueWith(_ => ctx.Merge(_.Result));
+			var p3 = BSharpCompiler.CompileAsync("class C").ContinueWith(_ => ctx.Merge(_.Result));
+			Task.WaitAll(p1, p2, p3);
+			Assert.AreEqual(3,ctx.Working.Count);
 		}
 
 		[Test]
@@ -175,7 +188,7 @@ class A
 class B
 	import A
 	test 2");
-			Assert.AreEqual(2, result.Working[1].Compiled.Elements("test").Count());
+			Assert.AreEqual(2, result.Get("B").Compiled.Elements("test").Count());
 		}
 
 		
@@ -204,8 +217,8 @@ class A
 class B _y = 2
 	import A
 	");
-			Console.WriteLine(result.Working[1].Compiled);
-			Assert.AreEqual("22", result.Working[1].Compiled.Element("test").Attr("code"));
+			Console.WriteLine(result.Get("B").Compiled);
+			Assert.AreEqual("22", result.Get("B").Compiled.Element("test").Attr("code"));
 		}
 
 
@@ -269,7 +282,7 @@ class A static
 class B y = 2
 	import A
 	");
-			var c = result.Working[1].Compiled;
+			var c = result.Get("B").Compiled;
 			Console.WriteLine(c);
 			Assert.AreEqual("1",c.Attr("x"));
 			Assert.AreEqual("2",c.Attr("y"));
@@ -287,7 +300,7 @@ class A
 class B y = 2 
 	import A
 	");
-			var c = result.Working[1].Compiled;
+			var c = result.Get("B").Compiled;
 			Console.WriteLine(c);
 			Assert.AreEqual("1", c.Attr("x"));
 			Assert.AreEqual("2", c.Attr("y"));
@@ -316,12 +329,10 @@ custom A
 custom B
 	import A");
 			Assert.AreEqual(2, result.Working.Count);
-			Assert.AreEqual("A", result.Working[0].Name);
-			Assert.AreEqual("B", result.Working[1].Name);
-			Assert.AreEqual(1, result.Working[1].SelfImports.Count);
-			Assert.AreEqual("A", result.Working[1].SelfImports[0].TargetCode);
-			Assert.NotNull( result.Working[1].SelfImports[0].Target);
-			Assert.AreEqual("A",result.Working[1].SelfImports[0].Target.Name);
+			Assert.AreEqual(1, result.Get("B").SelfImports.Count);
+			Assert.AreEqual("A", result.Get("B").SelfImports[0].TargetCode);
+			Assert.NotNull(result.Get("B").SelfImports[0].Target);
+			Assert.AreEqual("A", result.Get("B").SelfImports[0].Target.Name);
 			
 		}
 
@@ -339,11 +350,9 @@ custom B
 custom C
 custom D");
 			Assert.AreEqual(4, result.Working.Count);
-			Assert.AreEqual("A", result.Working[0].Name);
-			Assert.AreEqual("B", result.Working[1].Name);
-			Assert.AreEqual(4, result.Working[1].AllImports.Count());
+			Assert.AreEqual(4, result.Get("B").AllImports.Count());
 			CollectionAssert.AreEqual(new[]{"custom","C","D","A"},
-				result.Working[1].AllImports.Select(_=>_.Name).ToArray()
+				result.Get("B").AllImports.Select(_=>_.Name).ToArray()
 				);
 		}
 
@@ -363,11 +372,9 @@ custom B
 custom C
 custom D");
 			Assert.AreEqual(4, result.Working.Count);
-			Assert.AreEqual("A", result.Working[0].Name);
-			Assert.AreEqual("B", result.Working[1].Name);
-			Assert.AreEqual(4, result.Working[1].AllImports.Count());
+			Assert.AreEqual(4, result.Get("B").AllImports.Count());
 			CollectionAssert.AreEqual(new[] { "custom", "C", "D", "A" },
-				result.Working[1].AllImports.Select(_ => _.Name).ToArray()
+				result.Get("B").AllImports.Select(_ => _.Name).ToArray()
 				);
 		}
 
@@ -423,12 +430,10 @@ thema mythema
 custom A
 A B");
 			Assert.AreEqual(2, result.Orphans.Count);
-			Assert.AreEqual("A", result.Orphans[0].Name);
-			Assert.AreEqual("B", result.Orphans[1].Name);
-			Assert.AreEqual("custom", result.Orphans[0].DefaultImportCode);
-			Assert.AreEqual("A", result.Orphans[1].DefaultImportCode);
-			Assert.Null(result.Orphans[0].DefaultImport);
-			Assert.NotNull(result.Orphans[1].DefaultImport);
+			Assert.AreEqual("custom", result.Orphans.First(_=>_.Name=="A").DefaultImportCode);
+			Assert.AreEqual("A", result.Orphans.First(_ => _.Name == "B").DefaultImportCode);
+			Assert.Null(result.Orphans.First(_ => _.Name == "A").DefaultImport);
+			Assert.NotNull(result.Orphans.First(_ => _.Name == "B").DefaultImport);
 		}
 
 		[Test]
@@ -468,24 +473,26 @@ namespace X
 
 
 			var result = Compile(@"
-class custom abstract
-	_priv=ZZZ
-	x=1
-	y='${x}${x}'
-	z='${y}!'
+
 namespace X
 	custom A c='${u:3}' x='${c}${.x}${_priv}2'
 		import B
 		any '${c}${x}!!!'
 	custom B
-		x=4");
+		x=4
+class custom abstract
+	_priv=ZZZ
+	x=1
+	y='${x}${x}'
+	z='${y}!'
+");
 			Assert.AreEqual(2, result.Working.Count);
-			var xml = result.Working[0].Compiled;
+			var xml = result.Get("A").Compiled;
 			Console.WriteLine(xml);
 			Console.WriteLine("=================================");
-			Console.WriteLine(result.Working[0].ParamSourceIndex.ToString(ConfigRenderType.SimpleBxl));
+			Console.WriteLine(result.Get("A").ParamSourceIndex.ToString(ConfigRenderType.SimpleBxl));
 			Console.WriteLine("=====================================");
-			Console.WriteLine(result.Working[0].ParamIndex.ToString(ConfigRenderType.SimpleBxl));
+			Console.WriteLine(result.Get("A").ParamIndex.ToString(ConfigRenderType.SimpleBxl));
 			Assert.AreEqual("34ZZZ2", xml.Attr("x"));
 			Assert.AreEqual("34ZZZ234ZZZ2", xml.Attr("y"));
 			Assert.AreEqual("34ZZZ234ZZZ2!", xml.Attr("z"));
@@ -512,9 +519,9 @@ custom Y 'yed' _y
 custom Z 'zed' _x _y
 ");
 			Assert.AreEqual(3, result.Working.Count);
-			Assert.AreEqual("1", result.Working[0].Compiled.Attribute("test").Value);
-			Assert.AreEqual("2", result.Working[1].Compiled.Attribute("test").Value);
-			Assert.AreEqual("123", result.Working[2].Compiled.Attribute("test").Value);
+			Assert.AreEqual("1", result.Get("X").Compiled.Attribute("test").Value);
+			Assert.AreEqual("2", result.Get("Y").Compiled.Attribute("test").Value);
+			Assert.AreEqual("123", result.Get("Z").Compiled.Attribute("test").Value);
 			Console.WriteLine(result.Working[2].Compiled);
 		}
 	}

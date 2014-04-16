@@ -7,6 +7,13 @@ namespace Qorpent.BSharp {
 	///     Конфигурация для компилятора BxlSharp
 	/// </summary>
 	public class BSharpConfig : ConfigBase, IBSharpConfig {
+		/// <summary>
+		/// 
+		/// </summary>
+		public BSharpConfig(){
+			UseInterpolation = true;
+			SingleSource = true;
+		}
 	    /// <summary>
 		///     Флаг использования интерполяций
 		/// </summary>
@@ -16,6 +23,10 @@ namespace Qorpent.BSharp {
 		///     Флаг режима объединения источников
 		/// </summary>
 		public const string SINGLESOURCE = "singlesource";
+		/// <summary>
+		/// Флаг обработки конструкции Requre
+		/// </summary>
+		public const string DOREQUIRE = "dorequire";
 		/// <summary>
 		/// Перечень корневых элементов, которые должны быть проигнорированы
 		/// </summary>
@@ -36,6 +47,7 @@ namespace Qorpent.BSharp {
 			get { return Get(USEINTERPOLATION, false); }
 			set { Set(USEINTERPOLATION, value); }
 		}
+
 
 		/// <summary>
 		///     Если включено все исходники рассматриваются как один большой источник
@@ -74,5 +86,12 @@ namespace Qorpent.BSharp {
 		///Глобальные константы
 		/// </summary>
 		public IConfig Global { get; set; }
+		/// <summary>
+		/// Признак необходимости выполнять Require
+		/// </summary>
+		public bool DoProcessRequires{
+			get { return Get(DOREQUIRE, true); }
+			set { Set(DOREQUIRE, value); }
+		}
 	}
 }

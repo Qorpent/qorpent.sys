@@ -587,18 +587,24 @@ namespace Qorpent.BSharp {
                     }
                 }
             }
+			if (null != subresult.PrototypeMap){
+				if (null == PrototypeMap){
+					PrototypeMap = new Dictionary<string, IBSharpClass[]>();
+				}
+				foreach (var p in subresult.PrototypeMap)
+				{
 
-		    foreach (var p in subresult.PrototypeMap) {
-                if (null == PrototypeMap) {
-                    PrototypeMap = new Dictionary<string, IBSharpClass[]>();
-                }
-		        if (!PrototypeMap.ContainsKey(p.Key)) {
-		            PrototypeMap[p.Key] = p.Value;
-		        }
-		        else {
-		            PrototypeMap[p.Key] = PrototypeMap[p.Key].Union(p.Value).Distinct().ToArray();
-		        }
-		    }
+					if (!PrototypeMap.ContainsKey(p.Key))
+					{
+						PrototypeMap[p.Key] = p.Value;
+					}
+					else
+					{
+						PrototypeMap[p.Key] = PrototypeMap[p.Key].Union(p.Value).Distinct().ToArray();
+					}
+				}
+			}
+		    
 		}
 
 		private IDictionary<string, IBSharpClass> _resolveclassCache = new Dictionary<string, IBSharpClass>();

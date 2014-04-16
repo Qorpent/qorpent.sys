@@ -24,7 +24,7 @@ class A x=1
 			var error = errors.FirstOrDefault();
 			Assert.NotNull(error);
 			Assert.AreEqual(BSharpErrorType.DuplicateClassNames,error.Type);
-			Assert.AreEqual("1",error.Class.Source.Attribute("x").Value);
+			Assert.AreEqual("A",error.Class.Source.Attribute("code").Value);
 		}
 
 		[Test]

@@ -43,7 +43,7 @@ namespace Qorpent.BSharp {
             }
 
             _bSharpCompiler.Initialize(config);
-            var compiled = _bSharpCompiler.Compile(list);
+            var compiled = _bSharpCompiler.Compile(list,(IBSharpContext)null);
             _bSharpContext.Merge(compiled);
         }
         /// <summary>

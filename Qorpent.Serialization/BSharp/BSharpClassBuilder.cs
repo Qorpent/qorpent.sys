@@ -789,9 +789,6 @@ namespace Qorpent.BSharp {
 			foreach (var e in _cls.AllImports.Reverse())
 			{
 				if (e.Is(BSharpClassAttributes.Static)) {
-					if (!e.Is(BSharpClassAttributes.Built)) {
-						Build(BuildPhase.Compile, _compiler,e,_context);
-					}
 					_cls.Compiled.Add(e.Compiled.Elements().Where(IsMatch));
 				}
 				else {
@@ -893,9 +890,6 @@ namespace Qorpent.BSharp {
 				current = selfconfig;
 				if (i.Is(BSharpClassAttributes.Static) && _cls != i)
 				{
-					if (!i.Is(BSharpClassAttributes.Built)) {
-						Build(BuildPhase.Compile, _compiler, i, _context);
-					}
 					foreach (var p in i.ParamIndex)
 					{
 						current.Set(p.Key, p.Value);
@@ -938,8 +932,6 @@ namespace Qorpent.BSharp {
 			
 			if (GetConfig().UseInterpolation)
 			{
-				
-				
 				var si = new StringInterpolation();
 				si.AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$';
 				bool requireInterpolateNames = _cls.ParamIndex.Keys.Any(_ => _.Contains("__LBLOCK__"));

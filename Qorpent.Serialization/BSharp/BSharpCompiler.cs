@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Bxl;
 using Qorpent.Config;
@@ -26,18 +27,105 @@ namespace Qorpent.BSharp {
 		/// 
 		/// </summary>
 		public BSharpCompiler(){
-			this.DoProcessRequires = true;
+			_config = new BSharpConfig();
 		}
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
 		public static BSharpCompiler CreateDefault(){
-			var cfg = new BSharpConfig{UseInterpolation = true, SingleSource = true};
+			var cfg = new BSharpConfig{UseInterpolation = true, SingleSource = true, DoProcessRequires = true};
 			var result = new BSharpCompiler();
 			result.Initialize(cfg);
 			return result;
 		}
+		/// <summary>
+		/// Выполнить компиляцию исходного кода
+		/// </summary>
+		/// <param name="sources"></param>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public static IBSharpContext Compile(IEnumerable<XElement> sources, IBSharpConfig config = null){
+			var compiler = null == config ? CreateDefault() : new BSharpCompiler();
+			if (null != config){
+				compiler.Initialize(config);
+			}
+			return compiler.Compile(sources,(IBSharpContext)null);
+		}
+		/// <summary>
+		/// Асинхронно выполнить компиляцию кода
+		/// </summary>
+		/// <param name="sources"></param>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public async static Task<IBSharpContext> CompileAsync(IEnumerable<XElement> sources, IBSharpConfig config = null){
+			return await Task.Run(() => Compile(sources, config));
+		}
+		/// <summary>
+		/// Скомпилировать отдельный XElement
+		/// </summary>
+		/// <param name="e"></param>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public static IBSharpContext Compile(XElement e, IBSharpConfig config= null){
+			return Compile(new[]{e}, config);
+		}
+		/// <summary>
+		/// Асинхронная компиляция отдельного XElement
+		/// </summary>
+		/// <param name="e"></param>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public async static Task<IBSharpContext> CompileAsync(XElement e, IBSharpConfig config = null)
+		{
+			return await Task.Run(()=>Compile(e, config));
+		}
+
+
+		/// <summary>
+		/// Скомпилировать код на BXL
+		/// </summary>
+		/// <param name="bxl"></param>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public static IBSharpContext Compile(string bxl, IBSharpConfig config = null)
+		{
+			return Compile(new[] { new BxlParser().Parse(bxl) }, config);
+		}
+
+		/// <summary>
+		/// Скомпилировать код на BXL
+		/// </summary>
+		/// <param name="bxl"></param>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public async static Task<IBSharpContext> CompileAsync(string bxl, IBSharpConfig config = null)
+		{
+			return await Task.Run(()=>Compile(bxl, config));
+		}
+		
+
+		/// <summary>
+		/// Скомпилировать набор BXL
+		/// </summary>
+		/// <param name="bxls"></param>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public static IBSharpContext Compile(IEnumerable<string> bxls, IBSharpConfig config = null){
+			var bxl = new BxlParser();
+			var xmls = bxls.Select((_, i) => bxl.Parse(_, "code" + i + ".bxl"));
+			return Compile(xmls, config);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="bxls"></param>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public async static Task<IBSharpContext> CompileAsync(IEnumerable<string> bxls, IBSharpConfig config = null){
+			return await Task.Run(() => Compile(bxls, config));
+		}
+
 		private IBSharpConfig _config;
 		IUserLog log {
 			get { return GetConfig().Log; }
@@ -70,10 +158,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <returns></returns>
 		public IConfig GetConditions() {
-			return new ConfigBase(GetConfig().Conditions);
+			return new ConfigBase(_config.Conditions);
 		}
 
-	    private IList<IBSharpCompilerExtension> _extensions = new List<IBSharpCompilerExtension>();
+	    private readonly IList<IBSharpCompilerExtension> _extensions = new List<IBSharpCompilerExtension>();
 
 	    /// <summary>
 	    /// Выполняет расширения
@@ -104,23 +192,13 @@ namespace Qorpent.BSharp {
 		/// <param name="preparedContext"></param>
 		/// <returns></returns>
 		public IBSharpContext Compile(IEnumerable<XElement> sources , IBSharpContext preparedContext = null){
-			IBSharpContext result = preparedContext ?? new BSharpContext(this);
-			if (null == result.Compiler)
-			{
-				result.Compiler = this;
+			var result = preparedContext ?? new BSharpContext(this);
+			result.Compiler = this;
+			sources = ProcessRequires(sources,result);
+			if (_config.SingleSource) {
+				return BuildBatch(sources,result);	
 			}
-			//if (this.DoProcessRequires){
-				sources = ProcessRequires(sources,result);
-			//}
-			var cfg = GetConfig();
-			if (cfg.SingleSource) {
-				return BuildBatch(sources,result);
-				
-			}
-			
-			
-			
-			foreach (XElement src in sources) {
+			foreach (var src in sources) {
 				var subresult = BuildSingle(src);
 				result.Merge(subresult);
 			}
@@ -129,34 +207,40 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Опция для обработки директивы require  в исходных файлах
 		/// </summary>
-		public bool DoProcessRequires { get; set; }
+		public bool DoProcessRequires { get { return _config.DoProcessRequires; } }
 
 		private IEnumerable<XElement> ProcessRequires(IEnumerable<XElement> sources, IBSharpContext context){
 			if (DoProcessRequires){
-				var filenames = sources.ToDictionary(_ => Path.GetFullPath(_.Describe().File).NormalizePath(), _ => _);
-				foreach (var src in filenames.ToArray()){
-					ProcessRequires(src.Value, src.Key, filenames,context);
-				}
-				return filenames.Values.ToArray();
+				return GetSourcesWithRequireProcessing(sources, context);
 			}
-			else{
-				foreach (var src in sources){
-					var requires = src.Elements("requre").ToArray();
-					if (requires.Length != 0){
-						requires.Remove();
-						var message = "requre options in " + src.Describe().File + " ignored";
-						context.RegisterError(new BSharpError{Level = ErrorLevel.Warning,Phase = BSharpCompilePhase.SourceIndexing,Message = message,Xml=src});
-						log.Warn(message);
-					}
-				}
-				return sources;
-			}
-			
+			return GetSourcesWithRequireIgnorance(sources, context);
 		}
-		BxlParser requireBxl =new BxlParser();
 
-		
+		private IEnumerable<XElement> GetSourcesWithRequireIgnorance(IEnumerable<XElement> sources, IBSharpContext context){
+			foreach (var src in sources){
+				var requires = src.Elements(BSharpSyntax.Require).ToArray();
+				if (requires.Length != 0){
+					requires.Remove();
+					var message = "requre options in " + src.Describe().File + " ignored";
+					context.RegisterError(new BSharpError{
+						Level = ErrorLevel.Warning,
+						Phase = BSharpCompilePhase.SourceIndexing,
+						Message = message,
+						Xml = src
+					});
+					log.Warn(message);
+				}
+			}
+			return sources;
+		}
 
+		private IEnumerable<XElement> GetSourcesWithRequireProcessing(IEnumerable<XElement> sources, IBSharpContext context){
+			var filenames = sources.ToDictionary(_ => Path.GetFullPath(_.Describe().File).NormalizePath(), _ => _);
+			filenames.ToArray().AsParallel().ForAll(src => ProcessRequires(src.Value, src.Key, filenames, context));
+			return filenames.Values.ToArray();
+		}
+
+		readonly BxlParser _requireBxl =new BxlParser();
 		private void ProcessRequires(XElement source,string filename, Dictionary<string, XElement> filenames,IBSharpContext context ){
 			var requires = source.Elements(BSharpSyntax.Require).ToArray();
 			if (requires.Length != 0){
@@ -186,7 +270,7 @@ namespace Qorpent.BSharp {
 						}
 						if (filenames.ContainsKey(file)) continue;
 						if (File.Exists(file)){
-							var src = requireBxl.Parse(File.ReadAllText(file), file);
+							var src = _requireBxl.Parse(File.ReadAllText(file), file);
 							filenames[file] = src;
 							ProcessRequires(src, file, filenames,context);
 						}
@@ -238,12 +322,14 @@ namespace Qorpent.BSharp {
 		}
 
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(IEnumerable<XElement> sources) {
-			foreach (XElement src in sources) {
-			    Preprocess(src);
-				foreach (IBSharpClass e in IndexizeRawClasses(src, "")) {
-					yield return e;
+			var buffer = new ConcurrentBag<IBSharpClass>();
+			sources.AsParallel().ForAll(src =>{
+				Preprocess(src);
+				foreach (IBSharpClass e in IndexizeRawClasses(src, "")){
+					buffer.Add(e);
 				}
-			}
+			});
+			return buffer;
 		}
 
         private void Preprocess(XElement src)
@@ -286,7 +372,7 @@ namespace Qorpent.BSharp {
 
 		LogicalExpressionEvaluator eval = new LogicalExpressionEvaluator();
 		private IBSharpSqlAdapter _sqlAdapter;
-		static string[] ignores = new string[] { "code", "name", "_file", "_line" };
+		static string[] ignores = new[] { "code", "name", "_file", "_line" };
 		private IConfig _global;
 
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns){
@@ -543,35 +629,22 @@ namespace Qorpent.BSharp {
 		/// <param name="context"></param>
 		/// <returns></returns>
 		protected virtual void CompileClasses(IEnumerable<XElement> sources, IBSharpContext context) {
-			if (Debugger.IsAttached) {
-				foreach (var c in context.Get(BSharpContextDataType.Working)) {
-					try
-					{
-						BSharpClassBuilder.Build(BuildPhase.Compile,  this, c, context);
-					}
-					catch (Exception ex)
-					{
-						c.Error = ex;
-					}
-				}
-				context.ClearBuildTasks();
-                
-			}
-			else {
-				context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
-					_ =>
-					{
-						try
-						{
-							BSharpClassBuilder.Build(BuildPhase.Compile,  this, _, context);
-						}
-						catch (Exception ex)
-						{
-							_.Error = ex;
-						}
-					})
-					;	
+			//статические классы нужно строить до всех остальных
+			context.Get(BSharpContextDataType.Statics).AsParallel().ForAll(
+				_ => CompileSingle(context, _))
+				;	
+			context.Get(BSharpContextDataType.Working).AsParallel().ForAll(
+				_ => CompileSingle(context, _))
+				;	
   
+		}
+
+		private void CompileSingle(IBSharpContext context, IBSharpClass _){
+			try{
+				BSharpClassBuilder.Build(BuildPhase.Compile, this, _, context);
+			}
+			catch (Exception ex){
+				_.Error = ex;
 			}
 		}
 

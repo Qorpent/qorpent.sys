@@ -23,7 +23,7 @@ class mytable1
 	import Qorpent.Db.TableBase
 ";
 
-			var result = BSharpCompiler.CreateDefault().Compile(new[] { new BxlParser().Parse(code) }); 
+			var result = BSharpCompiler.Compile(new[] { new BxlParser().Parse(code) },(IBSharpConfig)null); 
 			var cls = result.Get("mytable1");
 			Assert.NotNull(cls);
 			Assert.GreaterOrEqual(cls.Compiled.Elements("datatype").Count(),5);

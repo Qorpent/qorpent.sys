@@ -36,5 +36,9 @@ namespace Qorpent.BSharp {
 		///Глобальные константы
 		/// </summary>
 		IConfig Global { get; set; }
+		/// <summary>
+		/// Опция обработки конструкций Requires
+		/// </summary>
+		bool DoProcessRequires { get; set; }
 	}
 }

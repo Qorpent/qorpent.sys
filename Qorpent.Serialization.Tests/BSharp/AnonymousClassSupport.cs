@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Qorpent.Serialization.Tests.BSharp{
@@ -14,8 +15,8 @@ class
 ";
 			var result = Compile(code);
 			Assert.AreEqual(2,result.Working.Count);
-			Assert.AreEqual("cls11345936565850091083", result.Working[0].Name);
-			Assert.AreEqual("cls17333115036514700609", result.Working[1].Name);
+			Assert.True(result.Working.Any(_ => _.Name == "cls11345936565850091083"));
+			Assert.True(result.Working.Any(_ => _.Name == "cls17333115036514700609"));
 		}
 
 
