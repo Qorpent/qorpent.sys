@@ -49,6 +49,15 @@ namespace Qorpent.Utils.Tests {
 
 		}
 
+		[Test]
+		public void CanCheckRemoteConnection()
+		{
+			var githelper = new GitHelper { RemoteUrl = "https://assoi-git.ugmk.com:8601/qorpent.kernel.git" };
+			Assert.True(githelper.IsRemoteAccessible());
+			githelper.RemoteUrl = "https://non-existed:9899/qorpent.kernel.git";
+			Assert.False(githelper.IsRemoteAccessible());
+		}
+
 
 		[Test]
 		public void CanGetChangedList()

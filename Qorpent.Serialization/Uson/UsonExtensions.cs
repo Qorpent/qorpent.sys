@@ -264,7 +264,7 @@ namespace Qorpent.Uson
 			}
 			else if (item is DateTime)
 			{
-				output.Write("\"" + ((DateTime) item).ToString("yyyy-MM-dd HH:mm:ss") + "\"");
+				output.Write("\"" + ((DateTime) item).ToString("yyyy-MM-ddTHH:mm:ss") + "\"");
 			}
 			else
 			{
@@ -300,7 +300,7 @@ namespace Qorpent.Uson
 			}
 			else if (item is DateTime)
 			{
-				return ((DateTime)item).ToString("yyyy-MM-dd hh:mm:ss");
+				return ((DateTime)item).ToString("yyyy-MM-ddThh:mm:ss");
 			}
 			else
 			{

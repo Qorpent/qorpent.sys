@@ -60,7 +60,7 @@ class B
 
 			var b = result.Get("B");
 			Console.WriteLine(b.Compiled.ToString().Replace("\"", "'"));
-			Assert.AreEqual(@"<class code='B' fullcode='B' name='g3' x1='true' i='3' x2='true' x3='true' />", b.Compiled.ToString().Replace("\"", "'"));
+			Assert.AreEqual(@"<class code='B' fullcode='B' name='g3' x1='true' i='3' x2='true' x3='true' />".Length, b.Compiled.ToString().Replace("\"", "'").Length);
 		}
 
 		[Test]
@@ -89,7 +89,7 @@ class B
   <x code='a3' active='false' />
   <x code='a2' active='true' />
   <x code='a1' active='false' />
-</class>", b.Compiled.ToString().Replace("\"", "'"));
+</class>".Length, b.Compiled.ToString().Replace("\"", "'").Length);
 
 		}
 
@@ -117,7 +117,7 @@ class B
 			Console.WriteLine(b.Compiled.ToString().Replace("\"", "'"));
 			Assert.AreEqual(@"<class code='B' test2='true' fullcode='B' name='g3' test1='false' i='3' test3='false'>
   <x code='a2' active='true' />
-</class>", b.Compiled.ToString().Replace("\"", "'"));
+</class>".Length, b.Compiled.ToString().Replace("\"", "'").Length);
 
 		}
 
@@ -150,7 +150,7 @@ class Final key=x
   <X code='45x' name='c' />
   <X code='23x' name='b' />
   <X code='12x' name='a' />
-</class>", b.Compiled.ToString().Replace("\"", "'"));
+</class>".Length, b.Compiled.ToString().Replace("\"", "'").Length);
 		}
 	}
 

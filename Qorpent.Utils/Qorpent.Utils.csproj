@@ -58,8 +58,12 @@
     <Compile Include="Collections\StringMap.cs" />
     <Compile Include="ComplexStringExtension.cs" />
     <Compile Include="ComplexStringHelper.cs" />
-    <Compile Include="ConsoleArgumentHelper.cs" />
-    <Compile Include="ConsoleRenderHelper.cs" />
+    <Compile Include="ConsoleSupport\ConsoleApplicationListener.cs" />
+    <Compile Include="ConsoleSupport\ConsoleApplicationResult.cs" />
+    <Compile Include="ConsoleSupport\ConsoleApplicationHandler.cs" />
+    <Compile Include="ConsoleSupport\ConsoleArgumentHelper.cs" />
+    <Compile Include="ConsoleSupport\ConsoleRenderHelper.cs" />
+    <Compile Include="ConsoleSupport\IConsoleApplicationListener.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />
     <Compile Include="Extensions\ConfigExtensions.cs" />
     <Compile Include="Extensions\DatabaseEngineType.cs" />

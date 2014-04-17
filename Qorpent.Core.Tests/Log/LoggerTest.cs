@@ -50,6 +50,7 @@ namespace Qorpent.Core.Tests.Log {
 
 
 		[Test]
+		[Explicit]
 		public void CanThrowTimeOut() {
 			var m = new simplewriter {timeout = 1050};
 			var logger = new BaseLogger {Writers = new[] {m}};

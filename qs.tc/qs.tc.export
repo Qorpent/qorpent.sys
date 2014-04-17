@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Choose>
+    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' != 'Release'  and Exists('$(AllBinPath)\qs.tc.dll')">
+      <ItemGroup>
+        <Reference Include="qs.tc">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(AllBinPath)\qs.tc.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' == 'Release' ">
+      <ItemGroup>
+        <Reference Include="qs.tc">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(AllReleasePath)\qs.tc.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <ProjectReference Include="..\..\qorpent.sys\qs.tc\qs.tc.csproj">
+          <Name>qs.tc</Name>
+        </ProjectReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+</Project>

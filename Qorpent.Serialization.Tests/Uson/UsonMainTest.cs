@@ -37,7 +37,7 @@ namespace Qorpent.Serialization.Tests.Uson
 			Assert.AreEqual(@"{""a"":{""_srctype"":""Qorpent.Serialization.Tests.Uson.UsonMainTest+test, Qorpent.Serialization.Tests"",""A"":3,""B"":4}}", uobj.ToJson(UObjSerializeMode.KeepType));
 			uobj.a = new object[] {"x", 1, true, new DateTime(2002, 5, 2)};
 			Console.WriteLine(uobj.ToJson());
-			Assert.AreEqual(@"{""a"":[""x"",1,true,""2002-05-02 00:00:00""]}", uobj.ToJson());
+			Assert.AreEqual(@"{""a"":[""x"",1,true,""2002-05-02T00:00:00""]}", uobj.ToJson());
 			Assert.AreEqual(1,uobj.a[1]);
 			Assert.AreEqual(null,uobj.a[10]);
 		}
@@ -122,12 +122,12 @@ namespace Qorpent.Serialization.Tests.Uson
 		{
 			var uobj = new {a = 1, b = new {x = "x", c = new DateTime(2012, 1, 1)},d=new object[]{null,1,"z"}}.ToUson();
 			Console.WriteLine(uobj.ToXmlString());
-			Assert.AreEqual(@"<result a=""1""><b x=""x"" c=""2012-01-01 12:00:00"" /><d _array=""true""><item /><item>1</item><item>z</item></d></result>",uobj.ToXmlString());
+			Assert.AreEqual(@"<result a=""1""><b x=""x"" c=""2012-01-01T12:00:00"" /><d _array=""true""><item /><item>1</item><item>z</item></d></result>",uobj.ToXmlString());
 			var xe = uobj.ToXElement();
 			Console.WriteLine(xe.ToString());
 			Assert.AreEqual(
 @"<result a=""1"">
-  <b x=""x"" c=""2012-01-01 12:00:00"" />
+  <b x=""x"" c=""2012-01-01T12:00:00"" />
   <d _array=""true"">
     <item />
     <item>1</item>

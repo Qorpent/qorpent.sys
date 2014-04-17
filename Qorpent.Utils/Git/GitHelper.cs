@@ -121,13 +121,32 @@ namespace Qorpent.Utils.Git{
 				FileName = "tortoisegitproc",
 				Arguments = args,
 				UseShellExecute = false,
-				WorkingDirectory = DirectoryName ?? Environment.CurrentDirectory,
-				
-				
+				WorkingDirectory = DirectoryName ?? Environment.CurrentDirectory,				
 			};
 			Process.Start(startInfo).EnsureForeground();
 		}
-		
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="command"></param>
+		/// <param name="args"></param>
+		/// <param name="timeout"></param>
+		/// <param name="allowinvstate"></param>
+		/// <returns></returns>
+		public string ExecuteCommand(string command, string args = "", int timeout = 0, bool allowinvstate = false){
+			var result = ExecuteCommandDetailed(command, args, timeout);
+			return PrepareResult(allowinvstate, result);
+		}
+
+		private static string PrepareResult(bool allowinvstate, ConsoleApplicationResult result){
+			if (null != result.Exception) throw result.Exception;
+			if (!allowinvstate && 0 != result.State){
+				throw new Exception("Invalid State " + result.State + "\r\n" + result.Output + result.Error);
+			}
+			return result.Output.Trim(new[]{'\r', '\n', ' '});
+		}
 
 		/// <summary>
 		/// 
@@ -136,87 +155,66 @@ namespace Qorpent.Utils.Git{
 		/// <param name="args"></param>
 		/// <param name="timeout"></param>
 		/// <returns></returns>
-		public string ExecuteCommand(string command, string args = "", int timeout = 0){
-			try{
-				return InternalExecuteCommand(command, args, timeout);
-			}
-			catch (Exception e){
-				if (e.Message.Contains("lock")){
-					Thread.Sleep(1000);
-					return InternalExecuteCommand(command, args, timeout);
-				}
-				throw;
-			}
-			
+		public ConsoleApplicationResult ExecuteCommandDetailed(string command, string args, int timeout){
+
+			return PrepareCall(command, args, timeout).Run();
 		}
 
-		private string InternalExecuteCommand(string command, string args, int timeout){
-			var startInfo = new ProcessStartInfo{
-				RedirectStandardOutput = true,
-				RedirectStandardError = true,
-				RedirectStandardInput = true,
-				FileName = "git",
-				Arguments = command + " " + args,
-				UseShellExecute = false,
+		private ConsoleApplicationHandler PrepareCall(string command, string args, int timeout){
+			if ((command == "fetch" || command=="push"||command=="clone") && !string.IsNullOrWhiteSpace(RemoteUrl) && RemoteUrl.StartsWith("http")){
+				if (!IsRemoteAccessible()){
+					throw new Exception("Cannot perform "+command+" because remote url "+RemoteUrl+" is not accessible");
+				}
+			}
+			return new ConsoleApplicationHandler{
+				ExePath = "git", 
 				WorkingDirectory = DirectoryName ?? Environment.CurrentDirectory,
-				CreateNoWindow = true,
-				StandardOutputEncoding = Encoding.GetEncoding(1251),
+				Arguments = command + " " + args,
+				NoWindow = true,
+				Timeout = timeout
 			};
-			if (DebugMode){
-				Console.WriteLine(command + " " + args);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public bool IsRemoteAccessible(){
+			if (string.IsNullOrWhiteSpace(RemoteUrl)){
+				return true;
 			}
-			var message = "";
-			Process process = null;
-			string result = "";
-			try{
-				process = Process.Start(startInfo);
-				if (command != "ls-remote"){
-					result = process.StandardOutput.ReadToEnd();
-				}
-				else{
-					process.WaitForExit(1000);
-				}
+			if (RemoteUrl.StartsWith("http")){
+				var uri = new Uri(RemoteUrl);
+				var host = uri.Host;
+				var port = uri.Port;
+				var cli = new System.Net.Sockets.TcpClient();
+				var t = cli.ConnectAsync(host, port);
+				return t.Wait(200);
+			}
+			return Directory.Exists(RemoteUrl);
+		}
 
-				if (timeout != 0){
-					var finished = process.WaitForExit(timeout);
-					if (!finished){
-						throw new Exception("timeouted");
-					}
-				}
-			}
-			catch (Exception ex){
-				if (null != process){
-					message += process.StandardOutput.ReadToEnd();
-					message += "\r\n--------------------------------\r\n";
-					message += process.StandardError.ReadToEnd();
-				}
-				Console.WriteLine(message);
-				throw new Exception(message, ex);
-			}
-			finally{
-				try{
-					process.Kill();
-				}
-				catch{
-				}
-			}
-
-			var error = process.StandardError.ReadToEnd();
-
-			var msg = result;
-			if (!string.IsNullOrWhiteSpace(error)) msg += "\r\n--------------------------------\r\n" + error;
-			if (DebugMode){
-				Console.WriteLine(msg);
-			}
-
-			if (process.ExitCode != 0){
-				if (string.IsNullOrWhiteSpace(error)){
-					error = process.StandardOutput.ReadToEnd();
-				}
-				throw new Exception("git error " + process.ExitCode + " " + error);
-			}
-
-			return msg.Trim(new[] {'\r', '\n', ' '});
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="command"></param>
+		/// <param name="args"></param>
+		/// <param name="timeout"></param>
+		/// <param name="allowinvstate"></param>
+		/// <returns></returns>
+		public async Task<string> ExecuteCommandAsync(string command, string args = "", int timeout = 0, bool allowinvstate = false)
+		{
+			var result = await ExecuteCommandDetailedAsync(command, args, timeout);
+			return PrepareResult(allowinvstate, result);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="command"></param>
+		/// <param name="args"></param>
+		/// <param name="timeout"></param>
+		/// <returns></returns>
+		public async Task<ConsoleApplicationResult> ExecuteCommandDetailedAsync(string command, string args, int timeout){
+			return await PrepareCall(command,args,timeout).RunAsync();
 		}
 
 		/// <summary>

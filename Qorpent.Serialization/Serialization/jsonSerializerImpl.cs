@@ -77,7 +77,7 @@ namespace Qorpent.Serialization {
 			}
 			else if (value is DateTime) {
 				var d = (DateTime) value;
-				Output.Write("\""+d.ToString("yyyy-MM-dd HH:mm:ss")+"\"");
+				Output.Write("\""+d.ToString("yyyy-MM-ddTHH:mm:ss")+"\"");
 			}
 			else if (value is int || value is long) {
 				Output.Write(value.ToString());

@@ -33,6 +33,7 @@
     <Compile Include="CombinationalTest.cs" />
     <Compile Include="ComplexStringHelperTest.cs" />
     <Compile Include="ComplexStringTest.cs" />
+    <Compile Include="ConsoleApplicationSupport\ConsoleHandlerTests.cs" />
     <Compile Include="ConsoleArgumentHelperTest.cs" />
     <Compile Include="ConvertExtensionsTest.cs" />
     <Compile Include="DatabaseExtensionsTest.cs" />
@@ -67,6 +68,10 @@
     <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
       <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
       <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\qs.tc\qs.tc.csproj">
+      <Project>{6dbf93d0-8767-4052-8022-17087dae8bde}</Project>
+      <Name>qs.tc</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

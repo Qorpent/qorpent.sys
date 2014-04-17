@@ -129,7 +129,7 @@ namespace Qorpent.Serialization.Tests {
 
 		[Test]
 		public void datetime_serialized() {
-			test(new DateTime(2010, 1, 12, 13, 15, 36), "\"2010-01-12 13:15:36\"");
+			test(new DateTime(2010, 1, 12, 13, 15, 36), "\"2010-01-12T13:15:36\"");
 		}
 
 		[Test]

@@ -42,9 +42,8 @@ mytable second 'Вторая табличка для примера'
 	
 ";
 
-			var bs = BSharpCompiler.CreateDefault();
-			var src = new BxlParser().Parse(code);
-			var result = bs.Compile(new[]{src});
+			
+			var result = BSharpCompiler.Compile(code);
 			var objects = result.Get(BSharpContextDataType.Working).SelectMany(_=>DbObject.Create(_,result));
 			Console.WriteLine(DbObject.GetSql(objects,mode));
 			
