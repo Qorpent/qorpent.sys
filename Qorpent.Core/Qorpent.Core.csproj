@@ -183,6 +183,7 @@
     <Compile Include="Model\IWithVersion.cs" />
     <Compile Include="Mvc\Binding\ICustomBindConverter.cs" />
     <Compile Include="Mvc\ViewNotFoundException.cs" />
+    <Compile Include="ScheduledTask.cs" />
     <Compile Include="Security\AccessProviderService.cs" />
     <Compile Include="Security\ICredentialStorage.cs" />
     <Compile Include="Security\IWithRoleContext.cs" />
