@@ -341,5 +341,27 @@ namespace Qorpent.Config {
 			}
 			return sb.ToString();
 		}
+
+		private bool _stornated = false;
+		/// <summary>
+		/// Выносит уникальные параметры на максимальный уровень вверх
+		/// </summary>
+		public void Stornate(){
+			lock (this){
+				if (_stornated) return;
+				if (null != _parent){
+					_parent.Stornate();
+					foreach (var _ in _parent)
+					{
+						if (!options.ContainsKey(_.Key))
+						{
+							options[_.Key] = _.Value;
+						}
+					}
+				}
+				
+				_stornated = true;
+			}
+		}
 	}
 }

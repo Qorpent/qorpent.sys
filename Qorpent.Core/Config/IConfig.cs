@@ -41,5 +41,10 @@ namespace Qorpent.Config {
 		/// <param name="rendertype"></param>
 		/// <returns></returns>
 		string ToString(ConfigRenderType rendertype);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void Stornate();
 	}
 }

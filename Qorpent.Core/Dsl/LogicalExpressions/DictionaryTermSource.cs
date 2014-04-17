@@ -27,53 +27,41 @@ namespace Qorpent.LogicalExpressions {
 	/// 	system provided simple dictionary based term source - all existed, non empty pairs treated as bool, other false
 	/// 	(changed from Qweb where just ContainsKey was checked)
 	/// </summary>
-	public class DictionaryTermSource : LogicTermSource {
+	public class DictionaryTermSource<V> : LogicTermSource {
 		/// <summary>
 		/// 	creates new instance
 		/// </summary>
 		/// <param name="dict"> </param>
-		public DictionaryTermSource(IDictionary<string, string> dict) {
+		public DictionaryTermSource(IDictionary<string, V> dict) {
 			_all = dict;
 		}
-		/// <summary>
-		/// 	creates new instance
-		/// </summary>
-		/// <param name="dict"> </param>
-		public DictionaryTermSource(IDictionary<string, object> dict)
-		{
-			_all = dict.ToDictionary(_=>_.Key,_=>_.Value.ToStr());
-		}
-
+	
 		/// <summary>
 		/// 	returns string Value of term
 		/// </summary>
 		/// <param name="name"> </param>
 		/// <returns> </returns>
 		public override string Value(string name) {
-			return _all.ContainsKey(name) ? _all[name] : "";
+			return _all.ContainsKey(name) ? _all[name].ToStr() : "";
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public override IDictionary<string, string> GetAll(){
+			if (typeof (V) == typeof(string)) return _all as IDictionary<string, string>;
+			return _all.ToDictionary(_ => _.Key, _ => _.Value.ToStr());
 		}
 
-		/// <summary>
-		/// 	return all handled terms
-		/// </summary>
-		/// <returns> </returns>
-		public override IDictionary<string, string> GetAll() {
-			return _all;
-		}
 
 		/// <summary>
 		/// 	returns bool equivalent of term
 		/// </summary>
 		/// <param name="name"> </param>
 		/// <returns> </returns>
-		public override bool Get(string name) {
-			return _all.ContainsKey(name) &&
-#if !SQL2008
-			       !string.IsNullOrWhiteSpace(_all[name])
-#else
-						!string.IsNullOrEmpty(all[name])
-#endif
-			       && _all[name] != "0" && _all[name].ToUpperInvariant() != "FALSE";
+		public override bool Get(string name){
+			var val = Value(name);
+			return !string.IsNullOrWhiteSpace(val) && val != "0" && val.ToUpperInvariant() != "FALSE";
 		}
 
 		/// <summary>
@@ -86,6 +74,6 @@ namespace Qorpent.LogicalExpressions {
 			return _all.ContainsKey(name) && Equals(value, _all[name]);
 		}
 
-		private readonly IDictionary<string, string> _all;
+		private readonly IDictionary<string, V> _all;
 	}
 }

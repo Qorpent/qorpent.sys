@@ -39,24 +39,19 @@ namespace Qorpent.BSharp {
 		/// <param name="compiler"></param>
 		/// <param name="cls"></param>
 		/// <param name="context"></param>
-		public static void Build(BuildPhase phase, IBSharpCompiler compiler, IBSharpClass cls, IBSharpContext context) {
-			new BSharpClassBuilder(compiler, cls, context).Build(phase);
+		public static void Build(BuildPhase phase, IBSharpCompiler compiler, IBSharpClass cls, IBSharpContext context){
+			var _cls = cls as BSharpClass;
+			if (null == _cls){
+				new BSharpClassBuilder(compiler,cls,context).Build(phase);
+				return;
+			}
+			
+			if (null ==_cls.Builder){
+				_cls.Builder =  new BSharpClassBuilder(compiler, _cls, context);
+			}
+			_cls.Builder.Build(phase);
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="phase"></param>
-		/// <param name="compiler"></param>
-		/// <param name="cls"></param>
-		/// <param name="context"></param>
-		public static Task BuildAsync(BuildPhase phase, BSharpCompiler compiler, IBSharpClass cls, BSharpContext context)
-		{
-			var task = new Task(() => new BSharpClassBuilder(compiler, cls, context).Build(phase));
-			cls.BuildTask = task;
-			task.Start();
-			return task;
-		}
 		/// <summary>
 		/// 
 		/// </summary>
@@ -76,7 +71,7 @@ namespace Qorpent.BSharp {
 		public void Build(BuildPhase phase)
 		{
 			
-			lock (_cls) {
+		
 				if (BuildPhase.Compile == phase) {
 					PerformCompilation();
 				}
@@ -92,7 +87,7 @@ namespace Qorpent.BSharp {
 				else if (BuildPhase.ApplyPatch == phase){
 					ApplyPatch();
 				}
-			}
+			
 		}
 
         private void PerformAutonomeLinking()
@@ -330,23 +325,15 @@ namespace Qorpent.BSharp {
 			IntializeMergeIndexes();
 			InterpolateFields();
 			BindParametersToCompiledClass();
-
 			CleanupElementsWithConditions();
-			
 			MergeInternals();
-			InterpolateElements(_cls.Is(BSharpClassAttributes.Generic)?'`':'$');
+			InterpolateElements();
 			PerformMergingWithElements();
-			
 			CleanupElementsWithConditions();
-
             ExecutePreSimpleIncludeExtensions();
-
 			ProcessSimpleIncludes();
-
 			CleanupPrivateMembers();
-
 			CheckoutRequireLinkingRequirements();
-
 		}
 
 	    private void ExecutePreSimpleIncludeExtensions() {
@@ -712,51 +699,33 @@ namespace Qorpent.BSharp {
 		private bool CheckExistedLink()
 		{
 			if (_cls.Is(BSharpClassAttributes.Linked)) return true;
-			lock (_cls)
+			if (_cls.Is(BSharpClassAttributes.InLink))
 			{
-				if (_cls.Is(BSharpClassAttributes.InLink))
+				for (var i = 0; i <= 10; i++)
 				{
-					if (null != _cls.BuildTask)
+					Thread.Sleep(5);
+					if (_cls.Is(BSharpClassAttributes.Linked))
 					{
-						_cls.BuildTask.Wait();
+						break;
 					}
-					else
-					{
-						for (var i = 0; i <= 10; i++)
-						{
-							Thread.Sleep(10);
-							if (_cls.Is(BSharpClassAttributes.Linked))
-							{
-								break;
-							}
-						}
-					}
-					if (_cls.Is(BSharpClassAttributes.Linked)) return true;
-				}
+				}	
 			}
-			return false;
+			return _cls.Is(BSharpClassAttributes.Linked);
 		}
 		private bool CheckExistedBuild() {
 			if (_cls.Is(BSharpClassAttributes.Built)) return true;
-			lock (_cls) {
-				if (_cls.Is(BSharpClassAttributes.InBuild))
-				{
-					if (null != _cls.BuildTask) {
-						_cls.BuildTask.Wait();
-					}
-					else {
-						for (var i = 0; i <= 10; i++) {
-							Thread.Sleep(10);
-							if (_cls.Is(BSharpClassAttributes.Built))
-							{
-								break;
-							}
+			if (_cls.Is(BSharpClassAttributes.InBuild))
+			{					
+					for (var i = 0; i <= 10; i++) {
+						Thread.Sleep(5);
+						if (_cls.Is(BSharpClassAttributes.Built))
+						{
+							break;
 						}
 					}
-					if (_cls.Is(BSharpClassAttributes.Built)) return true;
-				}
+	
 			}
-			return false;
+			return _cls.Is(BSharpClassAttributes.Built);
 		}
 
 		private void IntializeMergeIndexes()
@@ -815,7 +784,7 @@ namespace Qorpent.BSharp {
 				compilerOptions.SetParent(srcp);
 				srcp = compilerOptions;
 			}
-			var src = new DictionaryTermSource(srcp);
+			var src = new DictionaryTermSource<object>(srcp);
 			return new LogicalExpressionEvaluator().Eval(cond, src);
 		}
 
@@ -903,7 +872,7 @@ namespace Qorpent.BSharp {
 					}
 				}
 			}
-			
+			current.Stornate();
 			return current;
 		}
 
@@ -915,8 +884,11 @@ namespace Qorpent.BSharp {
 			}
 		}
 
-		private void InterpolateElements(char ancor='$')
-		{
+		private void InterpolateElements(char ancor = '\0'){
+			if (ancor == '\0'){
+				ancor = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$';
+			}
+			
 			if (GetConfig().UseInterpolation)
 			{
 				
@@ -935,10 +907,8 @@ namespace Qorpent.BSharp {
 				var si = new StringInterpolation();
 				si.AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$';
 				bool requireInterpolateNames = _cls.ParamIndex.Keys.Any(_ => _.Contains("__LBLOCK__"));
-				
-
-				for (int i = 0; i <= 3; i++)
-				{
+				while (true){
+					bool changed = false;
 					foreach (var v in _cls.ParamIndex.ToArray()){
 						var key = v.Key;
 						if (requireInterpolateNames){
@@ -946,6 +916,7 @@ namespace Qorpent.BSharp {
 							if (-1 != esckey.IndexOf('{')){
 								var _key = si.Interpolate(esckey, _cls.ParamSourceIndex).Escape(EscapingType.XmlName);
 								if (_key != key){
+									changed = true;
 									_cls.ParamIndex.Remove(key);
 									_cls.ParamIndex[_key] = v.Value;
 									key = _key;
@@ -955,8 +926,13 @@ namespace Qorpent.BSharp {
 						var s = v.Value as string;
 						if (null == s) continue;
 						if (-1 == s.IndexOf('{')) continue;
-						_cls.ParamIndex.Set(key, si.Interpolate(s, _cls.ParamSourceIndex, _compiler.Global));
+						var newval = si.Interpolate(s, _cls.ParamSourceIndex, _compiler.Global);
+						if (newval != s){
+							changed = true;
+							_cls.ParamIndex.Set(key, newval);
+						}
 					}
+					if(!changed)break;
 				}
 				
 			}

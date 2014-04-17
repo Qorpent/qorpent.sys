@@ -392,7 +392,7 @@ namespace Qorpent.BSharp {
                     var ifa = e.Attr("if");
                     if (!string.IsNullOrWhiteSpace(ifa))
                     {
-                        var terms = new DictionaryTermSource(this.GetConditions());
+                        var terms = new DictionaryTermSource<object>(GetConditions());
                         if (!eval.Eval(ifa, terms))
                         {
                             continue;
@@ -541,7 +541,7 @@ namespace Qorpent.BSharp {
                 if (!string.IsNullOrWhiteSpace(ifa))
                 {
                     def.Source.Attribute("if").Remove();
-                    var terms = new DictionaryTermSource(GetConditions());
+                    var terms = new DictionaryTermSource<object>(GetConditions());
                     return eval.Eval(ifa, terms);
                 }
             }
@@ -659,45 +659,7 @@ namespace Qorpent.BSharp {
 			var requirelink = context.RequireLinking();
 			var requirepatch = context.RequirePatching();
 			if (!(requirelink || requirepatch)) return;
-			if (Debugger.IsAttached)
-			{
-				if (requirelink){
-					foreach (var c in context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
-						){
-						try{
-							BSharpClassBuilder.Build(BuildPhase.AutonomeLink, this, c, context);
-						}
-						catch (Exception ex){
-							c.Error = ex;
-						}
-					}
-					context.ClearBuildTasks();
-					foreach (var c in context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
-						){
-						try{
-							BSharpClassBuilder.Build(BuildPhase.CrossClassLink, this, c, context);
-						}
-						catch (Exception ex){
-							c.Error = ex;
-						}
-					}
-					context.ClearBuildTasks();
-				}
-				if (requirepatch){
-					foreach (var c in context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.Patch)).OrderBy(_ => _.Priority))
-					{
-						try{
-							BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, c, context);
-						}
-						catch (Exception ex){
-							c.Error = ex;
-						}
-					}
-					context.ClearBuildTasks();
-				}
-			}
-			else
-			{
+			
 				if (requirelink){
 					context.Get(BSharpContextDataType.Working)
 					       .Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
@@ -739,7 +701,7 @@ namespace Qorpent.BSharp {
 						}).ToArray()
 						;
 				}
-			}
+			
 		}
 	}
 }

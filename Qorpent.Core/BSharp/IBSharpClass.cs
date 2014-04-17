@@ -124,7 +124,7 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		[Serialize]
 		int Priority { get; }
-
+		
 		/// <summary>
 		/// Возвращает true при наличии флага
 		/// </summary>

@@ -430,5 +430,9 @@ namespace Qorpent.BSharp {
 				return DefaultImport.IsOrphaned;
 			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public BSharpClassBuilder Builder { get; set; }
 	}
 }

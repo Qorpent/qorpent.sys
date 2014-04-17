@@ -59,7 +59,7 @@ namespace Qorpent.BSharp {
 		public bool Match(IConfig config) {
 			if (string.IsNullOrWhiteSpace(Condition)) return true;
 			if (null == config) return true;
-			var src = new DictionaryTermSource(config);
+			var src = new DictionaryTermSource<object>(config);
 			return logical.Eval(Condition, src);
 		}
 	}

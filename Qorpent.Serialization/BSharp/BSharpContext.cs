@@ -784,7 +784,7 @@ namespace Qorpent.BSharp {
 						options.Set(a.Name.LocalName, a.Value);
 					}
 				}
-				var src = new DictionaryTermSource(options);
+				var src = new DictionaryTermSource<object>(options);
 				if (!new LogicalExpressionEvaluator().Eval(c.Source.Attr(BSharpSyntax.ConditionalAttribute), src))
 				{
 					c.Set(BSharpClassAttributes.Ignored);

@@ -82,7 +82,7 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// <param name="dict"> </param>
 		/// <returns> </returns>
 		public static LogicTermSource Create(IDictionary<string, string> dict) {
-			return new DictionaryTermSource(dict);
+			return new DictionaryTermSource<string>(dict);
 		}
 	}
 
