@@ -84,58 +84,65 @@ namespace Qorpent.Utils
 		/// <returns></returns>
 		public async Task<ConsoleApplicationResult> RunAsync(){
 			return await Task.Run(() =>{
+
 				var result = new ConsoleApplicationResult();
 				var startinfo = PrepareStrartInfo();
 				var process = new Process{StartInfo = startinfo};
-				var output = new StringBuilder();
-				var error = new StringBuilder();
-
-				process.OutputDataReceived += (s, e) =>{
-					output.AppendLine(e.Data);
-					if (null != Listener){
-						Listener.EmitOutput(e.Data);
-						CheckMessage(process);
-					}
-				};
-				process.ErrorDataReceived += (s, e) =>{
-					error.AppendLine(e.Data);
-					if (null != Listener)
-					{
-						Listener.EmitOutput(e.Data);
-						CheckMessage(process);
-					}
-				};
-				
 				try{
-					var wellFinish = false;
-					process.Start();
-					process.BeginOutputReadLine();
-					process.BeginErrorReadLine();
-					CheckMessage(process);
-					if (0 != Timeout){
-						wellFinish = process.WaitForExit(Timeout);
-						result.Timeouted = !wellFinish;
-					}
-					else{
-						process.WaitForExit();
-						wellFinish = true;
-					}
-					if (!wellFinish){
-						if (!process.HasExited){
-							process.Kill();
+					var output = new StringBuilder();
+					var error = new StringBuilder();
+
+					process.OutputDataReceived += (s, e) =>{
+						output.AppendLine(e.Data);
+						if (null != Listener){
+							Listener.EmitOutput(e.Data);
+							CheckMessage(process);
 						}
+					};
+					process.ErrorDataReceived += (s, e) =>{
+						error.AppendLine(e.Data);
+						if (null != Listener){
+							Listener.EmitOutput(e.Data);
+							CheckMessage(process);
+						}
+					};
+
+					try{
+						var wellFinish = false;
+						process.Start();
+						process.BeginOutputReadLine();
+						process.BeginErrorReadLine();
+						CheckMessage(process);
+						if (0 != Timeout){
+							wellFinish = process.WaitForExit(Timeout);
+							result.Timeouted = !wellFinish;
+						}
+						else{
+							process.WaitForExit();
+							wellFinish = true;
+						}
+						if (!wellFinish){
+							if (!process.HasExited){
+								process.Kill();
+							}
+						}
+						result.State = process.ExitCode;
+						result.Output = output.ToString();
+						result.Error = error.ToString();
+
 					}
-					result.State = process.ExitCode;
-					result.Output = output.ToString();
-					result.Error = error.ToString();
+					catch (Exception ex){
+						result.Exception = ex;
 
-				}
-				catch (Exception ex){
-					result.Exception = ex;
-					
-				}
+					}
 
-				return result;
+					return result;
+				}
+				finally{
+					if (!process.HasExited){
+						process.Kill();
+					}
+				}
 			});
 		}
 

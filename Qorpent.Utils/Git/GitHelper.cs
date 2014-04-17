@@ -352,14 +352,9 @@ namespace Qorpent.Utils.Git{
 			remoteName =string.IsNullOrWhiteSpace( remoteName) ? RemoteName :remoteName;
 			branch = branch ?? "";
 			if (tags){
-				var task1 = Task.Run(() => ExecuteCommand("fetch", "--tags " + remoteName));
-				var task2 = Task.Run(() => ExecuteCommand("fetch", remoteName + " " + branch));
-				Task.WaitAll(new[]{task1, task2},5000);
-				return task2.Result;
+				ExecuteCommand("fetch", "--tags " + remoteName);	
 			}
-			else{
-				return ExecuteCommand("fetch", remoteName + " " + branch);
-			}
+			return ExecuteCommand("fetch", remoteName + " " + branch);
 			
 		}
 		/// <summary>
