@@ -208,8 +208,9 @@ namespace Qorpent.Config {
 			if (name[0]=='.') {
 				return ReturnIerachical(name, def);
 			}
-
-			if (!options.ContainsKey(name)) {
+			
+			if (!options.ContainsKey(name)){
+				if (_stornated) return def;
 				if (null != _parent) {
 				    if (_useInheritance) {
 				        return _parent.Get(name, def);

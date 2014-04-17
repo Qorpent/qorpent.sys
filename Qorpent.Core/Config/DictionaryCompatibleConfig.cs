@@ -8,14 +8,21 @@ namespace Qorpent.Config {
 	/// </summary>
 	public partial class ConfigBase : IDictionary<string,object> {
 		IEnumerator<KeyValuePair<string, object>> IEnumerable<KeyValuePair<string, object>>.GetEnumerator() {
+			if (_stornated){
+				return options.GetEnumerator();
+			}
 			return EnumerateAll().GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator() {
+			if (_stornated){
+				return options.GetEnumerator();
+			}
 			return EnumerateAll().GetEnumerator();
 		}
 
 		private IEnumerable<KeyValuePair<string,object>>  EnumerateAll() {
+			
 			return ((IDictionary<string,object>)this).Keys.Select(_ => new KeyValuePair<string, object>(_, Get<object>(_)));
 		}
 
@@ -48,7 +55,11 @@ namespace Qorpent.Config {
 		}
 
 		int ICollection<KeyValuePair<string, object>>.Count {
-			get { return ((IDictionary<string,object>)this).Keys.Count; }
+			
+			get{
+				if (_stornated) return options.Count;
+				return ((IDictionary<string,object>)this).Keys.Count;
+			}
 		}
 
 		bool ICollection<KeyValuePair<string, object>>.IsReadOnly {
@@ -62,6 +73,7 @@ namespace Qorpent.Config {
 				return keyparent.ContainsKey(key.Substring(1));
 			}
 			if (options.ContainsKey(key)) return true;
+			if (_stornated) return false;
 		    if (_useInheritance) {
 		        var parent = _parent as IDictionary<string, object>;
 		        if (null != parent) {
@@ -98,7 +110,8 @@ namespace Qorpent.Config {
 		}
 
 		ICollection<string> IDictionary<string, object>.Keys {
-			get {
+			get{
+				if (_stornated) return options.Keys;
 				var parent = _parent as IDictionary<string, object>;
 				if (null == parent) {
 					return options.Keys;
@@ -108,7 +121,10 @@ namespace Qorpent.Config {
 		}
 
 		ICollection<object> IDictionary<string, object>.Values {
-			get { return((IDictionary<string,object>)this).Keys.Select(_ => this[_]).ToArray(); }
+			get{
+				if (_stornated) return options.Values;
+				return((IDictionary<string,object>)this).Keys.Select(_ => this[_]).ToArray();
+			}
 		}
 
 		
