@@ -34,6 +34,7 @@
     <Compile Include="Events\ResetEventDataTest.cs" />
     <Compile Include="Log\DefaultLogManagerTest.cs" />
     <Compile Include="Log\LoggerTest.cs" />
+    <Compile Include="Log\SessionLogTest.cs" />
     <Compile Include="Model\EntityTagTest.cs" />
     <Compile Include="Model\HierarchyExtensionTest.cs" />
     <Compile Include="Mvc\MvcCallInfoTest.cs" />

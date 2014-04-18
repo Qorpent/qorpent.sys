@@ -16,10 +16,69 @@ namespace Qorpent.Uson
 	/// </summary>
 	public sealed class UObj:DynamicObject
 	{
+		
+		/// <summary>
+		/// /
+		/// </summary>
+		/// <returns></returns>
+		public override int GetHashCode(){
+			unchecked{
+				int hashCode = (_srctype != null ? _srctype.GetHashCode() : 0);
+				hashCode = (hashCode*397) ^ (_properties != null ? _properties.GetHashCode() : 0);
+				hashCode = (hashCode*397) ^ (_array != null ? _array.GetHashCode() : 0);
+				hashCode = (hashCode*397) ^ (int) _uObjMode;
+				hashCode = (hashCode*397) ^ (Parent != null ? Parent.GetHashCode() : 0);
+				hashCode = (hashCode*397) ^ IgnoreCase.GetHashCode();
+				return hashCode;
+			}
+		}
+
 		internal Type _srctype = null;
 		private IDictionary<string, object> _properties;
 		private IList<object> _array; 
 		private UObjMode _uObjMode;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public override bool Equals(object obj){
+			if (null == obj) return this.UObjMode == UObjMode.Fake || (this.UObjMode == UObjMode.Value && this.Properties["__value"] == null);
+			if (!(obj is UObj)) return this.UObjMode == UObjMode.Value && this.Properties["__value"] != null && this.Properties["__value"].Equals(obj);
+			var uobj = obj as UObj;
+			if (uobj.UObjMode != this.UObjMode) return false;
+			if (uobj.UObjMode == UObjMode.Default){
+				if (Properties.Count != uobj.Properties.Count) return false;
+				foreach (var property in Properties){
+					if (!uobj.Properties.ContainsKey(property.Key)) return false;
+					var val = uobj.Properties[property.Key];
+					var myval = property.Value;
+					if(null==val && null==myval)continue;
+					if (null == val || null == myval) return false;
+					if (!val.Equals(myval)) return false;
+				}
+			}
+			else if (uobj.UObjMode == UObjMode.Array)
+			{
+				if (Array.Count != uobj.Array.Count) return false;
+				for (var i = 0; i < Array.Count; i++){
+					var val = uobj.Array[i];
+					var myval = Array[i];
+					if (null == val && null == myval) continue;
+					if (null == val || null == myval) return false;
+					if (!val.Equals(myval)) return false;
+				}
+			}else if (uobj.UObjMode == UObjMode.Value){
+				var val = uobj.Properties["__value"];
+				var myval = Properties["__value"];
+				if (null == val && null == myval) return true;
+				if (null == val || null == myval) return false;
+				if (!val.Equals(myval)) return false;
+			}
+			return true;
+		}
+		
 		/// <summary>
 		/// 
 		/// </summary>

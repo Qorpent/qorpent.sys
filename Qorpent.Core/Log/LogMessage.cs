@@ -31,7 +31,8 @@ namespace Qorpent.Log {
 	public class LogMessage {
 		/// <summary>
 		/// </summary>
-		public LogMessage() {
+		public LogMessage(){
+			Active = true;
 			Server = Environment.MachineName;
 			Time = DateTime.Now;
 			//TODO chacnge user to new current user
@@ -121,8 +122,12 @@ namespace Qorpent.Log {
         /// 
         /// </summary>
         public long Id { get; set; }
+		/// <summary>
+		/// Признак активности сообщения
+		/// </summary>
+		public bool Active { get; set; }
 
-	    /// <summary>
+		/// <summary>
 		/// 	Generates BXL-like representation of LogMessage
 		/// </summary>
 		/// <returns> </returns>
