@@ -60,6 +60,36 @@ namespace Qorpent.Utils.Git{
 		/// 
 		/// </summary>
 		public string AuthorEmail { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		HashSet<string> MergeCache = new HashSet<string>();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="from"></param>
+		/// <param name="to"></param>
+		/// <param name="usecache"></param>
+		/// <returns></returns>
+		public bool IsMerged(string from = null, string to = null, bool usecache = false){
+			if (string.IsNullOrWhiteSpace(from)) from = "HEAD";
+			if (string.IsNullOrWhiteSpace(to)) to = "origin/" + Branch;
+			var key = from + ":" + to;
+			if (usecache){
+				if (MergeCache.Contains(key)) return true;
+			}
+			var dist = GetDistance(from, to);
+			if (dist.IsForwardable||dist.IsZero){
+				if (usecache){
+					MergeCache.Add(key);
+				}
+				return true;
+			}
+			return false;
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -92,13 +122,13 @@ namespace Qorpent.Utils.Git{
 						ExecuteCommand("config", "--global http.sslVerify false");
 					}
 					RemoteSet(RemoteName, RemoteUrl);
-					if (!IsWaitMergeCommit() && 0 == GetChangedFilesList().Length){
+					if (!IsWaitMergeCommit() && 0 == GetChangedFilesList().Length && IsRemoteAccessible()){
 						EnsureBranch();
 					}
 				}
 			}
 			if (!string.IsNullOrWhiteSpace(RemoteUrl)){
-				if (!IsWaitMergeCommit()){
+				if (!IsWaitMergeCommit() && IsRemoteAccessible()){
 					Fetch();
 				}
 			}
@@ -145,7 +175,7 @@ namespace Qorpent.Utils.Git{
 			if (!allowinvstate && 0 != result.State){
 				throw new Exception("Invalid State " + result.State + "\r\n" + result.Output + result.Error);
 			}
-			return result.Output.Trim(new[]{'\r', '\n', ' '});
+			return (result.Output??"").Trim(new[]{'\r', '\n', ' '});
 		}
 
 		/// <summary>
@@ -159,11 +189,21 @@ namespace Qorpent.Utils.Git{
 
 			return PrepareCall(command, args, timeout).Run();
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool NoErrorOnNotConnected { get; set;}
+		/// <summary>
+		/// 
+		/// </summary>
+		public event Action OnNotConnected;
 
 		private ConsoleApplicationHandler PrepareCall(string command, string args, int timeout){
 			if ((command == "fetch" || command=="push"||command=="clone") && !string.IsNullOrWhiteSpace(RemoteUrl) && RemoteUrl.StartsWith("http")){
 				if (!IsRemoteAccessible()){
-					throw new Exception("Cannot perform "+command+" because remote url "+RemoteUrl+" is not accessible");
+					if(null!=OnNotConnected)OnNotConnected.Invoke();
+					if(!NoErrorOnNotConnected)throw new Exception("Cannot perform "+command+" because remote url "+RemoteUrl+" is not accessible");
+					return ConsoleApplicationHandler.Null;
 				}
 			}
 			return new ConsoleApplicationHandler{
@@ -188,7 +228,7 @@ namespace Qorpent.Utils.Git{
 				var port = uri.Port;
 				var cli = new System.Net.Sockets.TcpClient();
 				var t = cli.ConnectAsync(host, port);
-				return t.Wait(200);
+				return t.Wait(500);
 			}
 			return Directory.Exists(RemoteUrl);
 		}
@@ -486,12 +526,18 @@ namespace Qorpent.Utils.Git{
 		/// 
 		/// </summary>
 		/// <param name="path"></param>
+		/// <param name="since"></param>
 		/// <returns></returns>
-		public GitCommitInfo[] GetHistory(string path=""){
+		public GitCommitInfo[] GetHistory(string path="",string since = null ){
 			if (!string.IsNullOrWhiteSpace(path)){
 				path = "\"" + path + "\"";
 			}
-			var result = ExecuteCommand("log", "--format=\"%H|%ct|%cN|%cE|%aN|%aE|%s`\" " + path);
+			var args = "--format=\"%H|%ct|%cN|%cE|%aN|%aE|%s`\" " + path;
+			if (!string.IsNullOrWhiteSpace(since)){
+				args = "--since \"" + since + "\" " + args;
+			}
+			
+			var result = ExecuteCommand("log", args);
 			var hists = result.SmartSplit(false, true, '`');
 			return hists.Select(GitUtils.ParseGitCommitInfo).ToArray();
 		}

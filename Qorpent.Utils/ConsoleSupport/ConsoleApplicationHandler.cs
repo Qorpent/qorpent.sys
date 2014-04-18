@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Qorpent.Utils
@@ -10,8 +11,11 @@ namespace Qorpent.Utils
 	/// <summary>
 	/// Safe and friendly wrapper for console application
 	/// </summary>
-	public class ConsoleApplicationHandler
-	{
+	public class ConsoleApplicationHandler{
+		/// <summary>
+		/// Счетчик вызовыов
+		/// </summary>
+		public static int Calls;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -67,6 +71,24 @@ namespace Qorpent.Utils
 		/// 
 		/// </summary>
 		public bool NoWindow { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		static ConsoleApplicationHandler _null = new ConsoleApplicationHandler{IsStub=true};
+		/// <summary>
+		/// Если включе стаб, то процесс в реальности не выполняется, а только шлется событие OnStub
+		/// </summary>
+		public bool IsStub { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public event Action<ConsoleApplicationHandler,ConsoleApplicationResult> OnStub;
+		/// <summary>
+		/// 
+		/// </summary>
+		public static ConsoleApplicationHandler Null{
+			get { return _null; }
+		}
 
 		/// <summary>
 		/// 
@@ -84,7 +106,12 @@ namespace Qorpent.Utils
 		/// <returns></returns>
 		public async Task<ConsoleApplicationResult> RunAsync(){
 			return await Task.Run(() =>{
-
+				if (IsStub){
+					var res = new ConsoleApplicationResult();
+					if(null!=OnStub)OnStub.Invoke(this, new ConsoleApplicationResult());
+					return res;
+				}
+				Interlocked.Increment(ref Calls);
 				var result = new ConsoleApplicationResult();
 				var startinfo = PrepareStrartInfo();
 				var process = new Process{StartInfo = startinfo};

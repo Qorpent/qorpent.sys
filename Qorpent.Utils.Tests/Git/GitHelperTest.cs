@@ -28,6 +28,36 @@ namespace Qorpent.Utils.Tests {
 			Assert.True(Directory.Exists(dirname+"\\.git"));
 		}
 
+		
+	    [Test]
+	    public void MergeCanBeTested(){
+			var githelper = new GitHelper { DirectoryName = dirname }.Connect();
+		    githelper.ExecuteCommand("branch", "x");
+		    githelper.WriteAndCommit("x.txt", "xxx");
+		    Assert.True(githelper.IsMerged("x", "HEAD"));
+		    githelper.Checkout("x");
+			githelper.WriteAndCommit("y.txt", "yyy");
+		    githelper.Checkout(githelper.Branch);
+			Assert.False(githelper.IsMerged("x", "HEAD"));
+	    }
+
+		[Test]
+		public void MergeCanUseCache()
+		{
+			var githelper = new GitHelper { DirectoryName = dirname }.Connect();
+			var c1 = githelper.GetCommitId();
+			githelper.ExecuteCommand("branch", "x");
+			githelper.WriteAndCommit("x.txt", "xxx");
+			ConsoleApplicationHandler.Calls = 0;
+			Assert.True(githelper.IsMerged(c1, "HEAD"));
+			Assert.True(githelper.IsMerged(c1, "HEAD"));
+			Assert.AreEqual(4,ConsoleApplicationHandler.Calls);
+			ConsoleApplicationHandler.Calls = 0;
+			Assert.True(githelper.IsMerged(c1, "HEAD",true));
+			Assert.True(githelper.IsMerged(c1, "HEAD", true));
+			Assert.AreEqual(2, ConsoleApplicationHandler.Calls);
+		}
+
 
 		[Test]
 		[Explicit]

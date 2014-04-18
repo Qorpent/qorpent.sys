@@ -1,4 +1,5 @@
 using System;
+using Qorpent.Serialization;
 
 namespace Qorpent.Utils.Git{
 	/// <summary>
@@ -59,5 +60,10 @@ namespace Qorpent.Utils.Git{
 	            return _automerge.Value;
 	        }
 	    }
+		/// <summary>
+		/// Расширяемое поле для дополнительных данных
+		/// </summary>
+		[SerializeNotNullOnly]
+		public object CustomData { get; set; }
 	}
 }
