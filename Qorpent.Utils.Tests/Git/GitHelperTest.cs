@@ -28,6 +28,19 @@ namespace Qorpent.Utils.Tests {
 			Assert.True(Directory.Exists(dirname+"\\.git"));
 		}
 
+		[Test]
+		public void CanReadTags(){
+			var githelper = new GitHelper { DirectoryName = dirname }.Connect();
+			githelper.WriteAndCommit("a", "b");
+			githelper.SetTag("a");
+			githelper.WriteAndCommit("c", "d");
+			githelper.SetTag("b");
+			githelper.WriteAndCommit("e", "f");
+			githelper.SetTag("c");
+			var tags = githelper.GetTags();
+			Assert.AreEqual(3,tags.Length);
+			CollectionAssert.AreEquivalent(tags.Select(_=>_.Name),new[]{"a","b","c"});
+		}
 		
 	    [Test]
 	    public void MergeCanBeTested(){

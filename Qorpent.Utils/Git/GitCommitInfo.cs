@@ -65,5 +65,9 @@ namespace Qorpent.Utils.Git{
 		/// </summary>
 		[SerializeNotNullOnly]
 		public object CustomData { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public string Name { get; set; }
 	}
 }

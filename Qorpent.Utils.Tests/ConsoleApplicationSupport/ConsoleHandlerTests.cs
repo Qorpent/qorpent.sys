@@ -40,7 +40,7 @@ namespace Qorpent.Utils.Tests.ConsoleApplicationSupport
 			h.Timeout = 1000;
 			var r = h.Run();
 			Assert.True(r.Timeouted);
-			Assert.AreEqual("hello\r\n", r.Output);
+			Assert.AreEqual("hello\r\n\r\n", r.Output);
 		}
 
 		[Test]

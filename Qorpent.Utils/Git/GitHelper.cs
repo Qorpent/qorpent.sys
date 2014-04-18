@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.Git{
+
+	
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -88,6 +91,21 @@ namespace Qorpent.Utils.Git{
 				return true;
 			}
 			return false;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public GitCommitInfo[] GetTags(){
+			var data = ExecuteCommand("show-ref", "--tags",allowinvstate:true);
+			var lines = data.SmartSplit(false, true, '\r', '\n');
+			return lines.Select(_ =>{
+				var pair = _.SmartSplit(false, true, ' ');
+				var hash = pair[0];
+				var name = pair[1].Substring(10);
+				var commit = new GitCommitInfo{Hash = hash, ShortHash = hash.Substring(0, 7), Name = name};
+				return commit;
+			}).ToArray();
 		}
 
 		/// <summary>
@@ -846,6 +864,15 @@ namespace Qorpent.Utils.Git{
 				throw;
 			}
 
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public void DropAllTags(){
+			var tags = GetTags();
+			if (0 != tags.Length){
+				ExecuteCommand("tag", "-d " + string.Join(" ", tags.Select(_ => _.Name)));
+			}
 		}
 	}
 }
