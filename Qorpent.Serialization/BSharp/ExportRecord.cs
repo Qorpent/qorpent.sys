@@ -47,6 +47,9 @@ namespace Qorpent.BSharp {
 				var el = cls.Compiled.Descendants(n).FirstOrDefault(_ => element == CoreExtensions.Attr(_, "code"));
 				if (null != el) {
 					var val = el.Value;
+					if (string.IsNullOrWhiteSpace(val)){
+						val = el.Attr("name");
+					}
 					return val + "|" + cls.FullName + ":" + n + ":" + element;
 				}
 			}

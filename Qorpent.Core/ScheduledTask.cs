@@ -24,7 +24,13 @@ namespace Qorpent
 			StartInterval = 1000;
 			AfterSuccessInterval = 60000;
 			AfterErrorInterval = 60000;
+			WaitInterval = 30000;
 		}
+		/// <summary>
+		/// Время ожидания выполнения
+		/// </summary>
+		public int WaitInterval { get; set; }
+
 		/// <summary>
 		/// Время до первого запуска
 		/// </summary>
@@ -42,31 +48,36 @@ namespace Qorpent
 		/// 
 		/// </summary>
 		public Exception LastError { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public Action OnStart { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public Action OnBeforeExecute { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public Action OnSucces { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public Action OnComplete { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public Action OnError { get; set; }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public Action OnStop { get; set; }
+		public event Action<ScheduledTask> OnStart;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public event Action<ScheduledTask> OnBeforeExecute;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public event Action<ScheduledTask> OnSuccess;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public event Action<ScheduledTask> OnComplete;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public event Action<ScheduledTask> OnError;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public event Action<ScheduledTask> OnStop;
 
 		/// <summary>
 		/// Продолжать активность после ошибки
@@ -93,36 +104,50 @@ namespace Qorpent
 			_started = true;
 			_timer = new Timer(Execute,true,StartInterval,Timeout.Infinite);	
 			if (null != OnStart){
-				OnStart();
+				OnStart.Invoke(this);
 			}
 		}
 
 		private void Execute(object state){
 			if (!_started) return;
 			if (null != OnBeforeExecute){
-				OnBeforeExecute();
+				OnBeforeExecute.Invoke(this);
 			}
 			var t = ExecuteWorker();
-			t.Wait();
-			if (null != OnComplete){
-				OnComplete();
+			var normaltime = false;
+			try{
+				normaltime = t.Wait(WaitInterval);
 			}
-			if (t.IsFaulted){
-				LastError = t.Exception;
-				if (null != OnError){
-					OnError();
-				}
-				if (ProceedOnError){
-					_timer = new Timer(Execute, true, AfterErrorInterval, Timeout.Infinite);	
-				}
-				else{
-					WasStoppedAfterError = true;
-					Stop();
-					
-				}
+			catch{
+			}
+
+			if (null != OnComplete){
+				OnComplete.Invoke(this);
+			}
+
+			if (t.IsFaulted || !normaltime){
+				var ex = t.Exception ?? new Exception("timeout");
+				AfterError(ex);
 			}
 			else{
+				if (null != OnSuccess){
+					OnSuccess.Invoke(this);
+				}
 				_timer = new Timer(Execute, true, AfterSuccessInterval, Timeout.Infinite);
+			}
+		}
+
+		private void AfterError(Exception ex){
+			LastError = ex;
+			if (null != OnError){
+				OnError.Invoke(this);
+			}
+			if (ProceedOnError){
+				_timer = new Timer(Execute, true, AfterErrorInterval, Timeout.Infinite);
+			}
+			else{
+				WasStoppedAfterError = true;
+				Stop();
 			}
 		}
 
@@ -134,7 +159,7 @@ namespace Qorpent
 			_started = false;
 			if (null != OnStop)
 			{
-				OnStop();
+				OnStop.Invoke(this);
 			}
 		}
 
