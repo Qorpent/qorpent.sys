@@ -244,7 +244,12 @@ namespace Qorpent.Uson
 					}
 					return;
 				}
-				output.Write("\"" + s.Escape(EscapingType.JsonValue).Replace("\\'", "'") + "\"");
+			    if (mode == UObjSerializeMode.Javascript && (s == "true" || s == "false")) {
+			        output.Write(s);
+			    }
+			    else {
+			        output.Write("\"" + s.Escape(EscapingType.JsonValue).Replace("\\'", "'") + "\"");
+			    }
 			}
 			else if (item is bool)
 			{

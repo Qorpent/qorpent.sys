@@ -13,7 +13,8 @@ namespace Qorpent.Uson
 	/// <summary>
 	/// 
 	/// </summary>
-	public static class UObjSerializerSupport
+	public static class 
+        UObjSerializerSupport
 	{
 		/// <summary>
 		/// 
@@ -117,6 +118,8 @@ namespace Qorpent.Uson
 			{
 				output.Write("null");
 			}
+
+            
 			else if (item is UObj)
 			{
 				ToJson(((UObj) item),output, mode);
@@ -145,9 +148,14 @@ namespace Qorpent.Uson
 			{
 				output.Write("\"" + ((DateTime) item).ToString("yyyy-MM-ddThh:mm:ss") + "\"");
 			}
-			else
-			{
-				output.Write("\"" + item.ToString().Escape(EscapingType.JsonValue) + "\"");
+			else {
+			    var str = item.ToString();
+			    if (mode == UObjSerializeMode.Javascript && (str == "true" || str == "false")) {
+			        output.Write(str);
+			    }
+			    else {
+			        output.Write("\"" + str.Escape(EscapingType.JsonValue) + "\"");
+			    }
 			}
 		}
 
