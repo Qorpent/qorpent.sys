@@ -59,6 +59,7 @@ namespace Qorpent.Bxl {
 		private bool _isExpression;
 		private char _last;
 		private LexInfo _info;
+		private readonly CharStack _expStack = new CharStack();
 
 		private int _level;
 		private List<Stats> _anon;
@@ -441,6 +442,8 @@ namespace Qorpent.Bxl {
 						_stack.Push((char)_mode);
 						_stack.Push(c);
 						_mode = ReadMode.Expression;
+						_expStack.Clear();
+						_expStack.Push(c);
 					}
 					_buf.Append(c);
 					return;
@@ -501,6 +504,8 @@ namespace Qorpent.Bxl {
 						_stack.Push((char)_mode);
 						_stack.Push(c);
 						_mode = ReadMode.Expression;
+						_expStack.Clear();
+						_expStack.Push(c);
 					}
 					_buf.Append(c);
 					return;
@@ -623,20 +628,49 @@ namespace Qorpent.Bxl {
 
 		private void processExpression(char c) {
 			_isExpression = true;
+			char last = '\0';
 			switch (c) {
 				case '\\':
 					_stack.Push((char)_mode);
 					_mode = ReadMode.EscapingBackSlash;
 					return;
 				case '(':
+					_expStack.Push(c);
 					_buf.Append(c);
-					_stack.Push(c);
+					_stack.Push('(');
 					return;
 				case ')':
+					if (0 == _expStack.Count) throw new BxlException("exp stack finished before needed ", _info.Clone()); ;
+					last = _expStack.Pop();
+					if (last != '(') throw new BxlException("non matched expression ", _info.Clone());
 					_buf.Append(c);
 					_stack.Pop();
 					if (_stack.Peek() != '(')
 						_mode = (ReadMode)_stack.Pop();
+					return;
+				case '[':
+					_expStack.Push(c);
+					_buf.Append(c);
+					_stack.Push('(');
+					return;
+				case ']':
+					if (0 == _expStack.Count) throw new BxlException("exp stack finished before needed ", _info.Clone()); ;
+					last = _expStack.Pop();
+					if (last != '[') throw new BxlException("non matched expression ", _info.Clone());
+					_buf.Append(c);
+					_stack.Pop();
+					return;
+				case '{':
+					_expStack.Push(c);
+					_buf.Append(c);
+					_stack.Push('(');
+					return;
+				case '}':
+					if (0 == _expStack.Count) throw new BxlException("exp stack finished before needed ", _info.Clone()); ;
+					last = _expStack.Pop();
+					if (last != '{') throw new BxlException("non matched expression ", _info.Clone());
+					_buf.Append(c);
+					_stack.Pop();
 					return;
 				default:
 					_buf.Append(c);
@@ -674,7 +708,10 @@ namespace Qorpent.Bxl {
 					if (_buf.Length == 0) {
 						_stack.Push((char)_mode);
 						_stack.Push(c);
+
 						_mode = ReadMode.Expression;
+						_expStack.Clear();
+						_expStack.Push('(');
 					}
 					_buf.Append(c);
 					return;
@@ -783,9 +820,12 @@ namespace Qorpent.Bxl {
 				case '(':
 					if (_value.Length != 0) {
 						addNode();
+
 						_stack.Push((char)ReadMode.AttributeName);
 						_stack.Push(c);
 						_mode = ReadMode.Expression;
+						_expStack.Clear();
+						_expStack.Push(c);
 					} else
 						throw new BxlException("unexpected symbol " + c, _info.Clone());
 					return;
@@ -872,6 +912,8 @@ namespace Qorpent.Bxl {
 						_stack.Push((char)_mode);
 						_stack.Push(c);
 						_mode = ReadMode.Expression;
+						_expStack.Clear();
+						_expStack.Push(c);
 					}
 					_buf.Append(c);
 					return;
@@ -959,7 +1001,9 @@ namespace Qorpent.Bxl {
 					_anon[_level].count++;
 				}
 				_anon[_level].hasCodeId = true;
-			} else if (!_anon[_level].hasName) {
+			}
+			else if (!_anon[_level].hasName && !_current.Attributes().Any(_ => _.Name.LocalName != "id" && _.Name.LocalName != "code" && _.Name.LocalName != "_file" && _.Name.LocalName != "_line"))
+			{
 				if (_prefix.Length != 0)
 					_prefix += "::";
 				_current.SetAttributeValue(XName.Get(ANON_NAME), _prefix + _value);

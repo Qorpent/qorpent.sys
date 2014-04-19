@@ -34,6 +34,7 @@
     <Compile Include="BSharp\BSharpContextDataType.cs" />
     <Compile Include="BSharp\BSharpElementType.cs" />
     <Compile Include="BSharp\BSharpError.cs" />
+    <Compile Include="BSharp\BSharpErrorDigest.cs" />
     <Compile Include="BSharp\BSharpErrorType.cs" />
     <Compile Include="BSharp\BSharpPatchBehavior.cs" />
     <Compile Include="BSharp\BSharpSyntax.cs" />

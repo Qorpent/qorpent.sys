@@ -31,6 +31,44 @@ test2
 		}
 
 		[Test]
+		public void PreventNameAnonymAfterAnyNamed(){
+			var code = @"
+e c x=1 n
+";
+			var b = new BxlParser().Parse(code,"",BxlParserOptions.NoLexData);
+			Console.WriteLine(b.ToString().Replace("\"", "'"));
+			Assert.AreEqual(@"<root>
+  <e code='c' id='c' x='1' n='1' />
+</root>", b.ToString().Replace("\"", "'"));
+		}
+
+		[Test]
+		public void NameAnonymAfterNoAnyNamed()
+		{
+			var code = @"
+e c  n x=1
+";
+			var b = new BxlParser().Parse(code, "", BxlParserOptions.NoLexData);
+			Console.WriteLine(b.ToString().Replace("\"", "'"));
+			Assert.AreEqual(@"<root>
+  <e code='c' id='c' name='n' x='1' />
+</root>", b.ToString().Replace("\"", "'"));
+		}
+
+		[Test]
+		public void NotOverrideId()
+		{
+			var code = @"
+e id=1 c  n x=1
+";
+			var b = new BxlParser().Parse(code, "", BxlParserOptions.NoLexData);
+			Console.WriteLine(b.ToString().Replace("\"", "'"));
+			Assert.AreEqual(@"<root>
+  <e id='1' code='c' name='n' x='1' />
+</root>", b.ToString().Replace("\"", "'"));
+		}
+
+		[Test]
 		public void CanGetAnonymousAttribute() {
 			String bxl = @"
 test1 a b c
@@ -204,6 +242,58 @@ nested (expression)
 
 			XElement test1 = res.Elements().First();
 			Assert.AreEqual(test1.Attribute(XName.Get("qwerty")).Value, "(\r\nnested (expression)\r\n)");
+		}
+
+		[Test]
+		public void CanUseNestedDifferentBrakesExpression()
+		{
+			String bxl = @"test1 qwerty=(
+nested (expression[x{2}])
+)
+";
+			IBxlParser p = new BxlParser();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+			XElement test1 = res.Elements().First();
+			Assert.AreEqual(test1.Attribute(XName.Get("qwerty")).Value, "(\r\nnested (expression[x{2}])\r\n)");
+		}
+
+		[Test]
+		public void CannotUseExtraEndExpressions()
+		{
+			String bxl = @"test1 qwerty=(
+nested (expression[x{2}]))
+)
+";
+			IBxlParser p = new BxlParser();
+			Assert.Throws<BxlException>(() => p.Parse(bxl));
+
+		}
+
+		[Test]
+		public void CannotUseExtraBeginExpressions()
+		{
+			String bxl = @"test1 qwerty=(((
+(nested (expression[x{2}])
+)
+";
+			IBxlParser p = new BxlParser();
+			Assert.Throws<BxlException>(() => p.Parse(bxl));
+
+		}
+
+
+		[Test]
+		public void CannotUseNestedIfBrokenBrakesExpression()
+		{
+			String bxl = @"test1 qwerty=(
+nested (expression[x{2]})
+)
+";
+			IBxlParser p = new BxlParser();
+			Assert.Throws<BxlException>(() => p.Parse(bxl));
+
 		}
 
 		[Test]

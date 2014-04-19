@@ -146,7 +146,7 @@ class Final key=x
 
 			var b = result.Get("Final");
 			Console.WriteLine(b.Compiled.ToString().Replace("\"", "'"));
-			Assert.AreEqual(@"<class code='Final' key='x' fullcode='Final' name='generic' index='4' index2='5'>
+			Assert.AreEqual(@"<class code='Final' key='x' fullcode='Final' index='4' index2='5'>
   <X code='45x' name='c' />
   <X code='23x' name='b' />
   <X code='12x' name='a' />

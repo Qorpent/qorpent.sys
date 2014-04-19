@@ -569,6 +569,16 @@ namespace Qorpent.BSharp {
 			if (e.Name.LocalName == BSharpSyntax.Class) {
 				def.Set(BSharpClassAttributes.Explicit);
 			}
+			if (null != e.Attribute(BSharpSyntax.EmbedAttribute) || e.Attr("name") == BSharpSyntax.EmbedAttribute){
+				def.Set(BSharpClassAttributes.Embed);
+				if (e.Attr("name") == BSharpSyntax.EmbedAttribute){
+					e.Attribute("name").Remove();
+
+				}
+				else{
+					e.Attribute(BSharpSyntax.EmbedAttribute).Remove();
+				}
+			}
 			if (e.Name.LocalName == BSharpSyntax.PatchClassKeyword)
 			{
 				def.Set(BSharpClassAttributes.Explicit);

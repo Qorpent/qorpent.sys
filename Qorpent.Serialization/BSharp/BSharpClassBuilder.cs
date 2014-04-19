@@ -502,7 +502,18 @@ namespace Qorpent.BSharp {
 			includeelement.Attribute(BSharpSyntax.ClassFullNameAttribute).Remove();
 			includeelement.Attribute(BSharpSyntax.ClassNameAttribute).Remove();
 			var a = includeelement.Attribute("id");
+
 			if (null != a) a.Remove();
+			var sc = includeelement.Attribute("set-code");
+			if (null != sc){
+				includeelement.SetAttributeValue("code",sc.Value);
+				sc.Remove();
+			}
+			var sen = includeelement.Attribute("set-elname");
+			if (null != sen){
+				includeelement.Name = sen.Value;
+				sen.Remove();
+			}
 			if (cls.Is(BSharpClassAttributes.RequireLateInterpolation)) {
 				_lateincluder.Interpolate(includeelement, i);
 			}

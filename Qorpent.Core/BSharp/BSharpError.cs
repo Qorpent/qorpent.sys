@@ -21,6 +21,16 @@ namespace Qorpent.BSharp {
 		/// 
 		/// </summary>
 		/// <returns></returns>
+		public BSharpErrorDigest GetDigest(){
+		
+			return new BSharpErrorDigest{ErrorLevel=Level, Phase=Phase,Message= Message,Type= Type,ClassName=ClassName, FileName=LexInfo.File,Line= LexInfo.Line, Column= LexInfo.Column};
+		
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		public override int GetHashCode(){
 			unchecked{
 				int hashCode = (_lexInfo != null ? _lexInfo.GetHashCode() : 0);

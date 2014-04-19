@@ -19,6 +19,31 @@ class B x=2
 			Assert.AreEqual(1, result.Compiled.Descendants("A").Count());
 			Assert.AreEqual("1", result.Compiled.Descendants("test").First().Attr("code"));
 		}
+
+		[Test]
+		public void NormalInclideAwaredInterpolation(){
+			var code = @"
+class point X=%{_x}%{_mes} Y=%{_y}%{_mes} coords='[%{_x}:%{_y}]' embed
+class polyline _mes = px
+	include point _x=2 _y=3 
+	include point _x=10 _y=30
+	include point _x=20 _y=-40
+	include point _x=2 _y=3
+";
+
+
+			var result = Compile(code);
+			var xml = result.Get("polyline").Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(xml);
+			Assert.AreEqual(@"<class code='polyline' fullcode='polyline'>
+  <point X='2px' Y='3px' coords='[2:3]' />
+  <point X='10px' Y='30px' coords='[10:30]' />
+  <point X='20px' Y='-40px' coords='[20:-40]' />
+  <point X='2px' Y='3px' coords='[2:3]' />
+</class>", xml);
+
+		}
+
         [TestCase("+", "x", "10", "1")]
         [TestCase("~", "x", "10", "10")]
         [TestCase("+", "y", "1", "1")]
