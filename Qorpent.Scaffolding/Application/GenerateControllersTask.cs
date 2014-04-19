@@ -68,7 +68,7 @@ namespace Qorpent.Scaffolding.Application {
                 deps[scode] = s;
             }
             sb.Append(string.Format(@"
-        .controller('{3}_{0}', ['$scope','$http','{1}', function ($scope, $http, {2}) {{ 
+        .controller('{3}_{0}', ['$scope','$http','$rootScope','{1}', function ($scope, $http, $rootScope, {2}) {{ 
                 $scope.api = Api($http); 
                 $scope.view = '{0}.html';
 ", code, string.Join("','", deps.Values.Select(_ => _.ChooseAttr("type", "code")).Distinct()), string.Join(",", deps.Values.Select(_ => _.ChooseAttr("type", "code")).Distinct()), Project.ProjectName));
@@ -146,7 +146,13 @@ namespace Qorpent.Scaffolding.Application {
                     el.Value.SetAttr("args", "javascript://$scope." + args);
                     advanced.AppendLine("\t\t\t\t$scope.$watch('" + args + "', function(n,o){$scope." + target +
                                         "_refresh.refresh.run();},true);");
+					
                 }
+	            var subscribe = el.Value.Attr("subscribe");
+				if (!string.IsNullOrWhiteSpace(subscribe)){
+					advanced.AppendLine("\t\t\t\t$rootScope.$on('" + subscribe + "', function(n,o){$scope." + target +
+					                    "_refresh.refresh.run();});");
+				}
             }
         }
 

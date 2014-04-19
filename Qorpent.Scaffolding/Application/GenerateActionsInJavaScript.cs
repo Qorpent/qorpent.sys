@@ -33,15 +33,20 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine();
 			sb.AppendLine("define ([\"" + Project.ProjectName + "_types\",\"actionBuilder\"], function(types,actionBuilder) {");
 			sb.AppendLine("\treturn  function  ($http, siteroot) {");
-			sb.AppendLine("\t\treturn {");
-
+			for (var i = 0; i < targetclasses.Length; i++){
+				var _cls = targetclasses[i];
+				sb.AppendLine("\t\tvar __" + _cls.Name + " = null;");
+			}
+			sb.AppendLine("\t\tvar __result = {};");
+			sb.AppendLine();
+			
 			for (var i = 0; i < targetclasses.Length; i++){
 				var cls = targetclasses[i];
 				var name = cls.Name;
 				if (!string.IsNullOrWhiteSpace(cls.Compiled.Attr("controller"))){
 					name = cls.Compiled.Attr("controller") + "_" + cls.Name;
 				}
-				sb.AppendLine("\t\t\t" + name + ": actionBuilder($http,siteroot,{");
+				sb.AppendLine("\t\tObject.defineProperty(__result,'" + name + "',{get : function(){  return __"+name+"||(__"+name+" = actionBuilder($http,siteroot,{");
 				var attrs =
 					cls.Compiled.Attributes().Where(_ => _.Name.LocalName != "prototype" && _.Name.LocalName != "fullcode").ToArray();
 				for (var j = 0; j < attrs.Length; j++){
@@ -70,29 +75,25 @@ namespace Qorpent.Scaffolding.Application{
 							val = "\"" + val + "\"";
 						}
 					}
-					sb.AppendLine("\t\t\t\t" + aname.ToLower() + " : " + val + ",");
+					sb.AppendLine("\t\t\t" + aname.ToLower() + " : " + val + ",");
 				}
 
 				var parameters = cls.Compiled.Element("Parameters");
 				if (null != parameters){
-					sb.AppendLine("\t\t\t\tparameters: " + parameters.ToJson());
+					sb.AppendLine("\t\t\tparameters: " + parameters.ToJson());
 				}
 				else{
-					sb.AppendLine("\t\t\t\tparameters : null");
+					sb.AppendLine("\t\t\tparameters : null");
 				}
-
-				if (i == targetclasses.Length - 1){
-					sb.AppendLine("\t\t\t})");
-				}
-				else{
-					sb.AppendLine("\t\t\t}),");
-				}
+				sb.AppendLine("\t\t}))},writeable:false});");
+				sb.AppendLine();
 			}
 
 
-			sb.AppendLine("\t\t}");
+			sb.AppendLine("\t\treturn __result;");
 			sb.AppendLine("\t}");
 			sb.AppendLine("});");
+			
 			return sb.ToString();
 		}
 
