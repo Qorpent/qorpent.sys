@@ -48,7 +48,7 @@ namespace Qorpent.Log
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<LogMessage> GetLog(SessionLogQuery query= null){
+		public IEnumerable<LogMessage> Get(SessionLogQuery query= null){
 			query = query?? new SessionLogQuery();
 			foreach (var message in _log){
 				if (!message.Active) continue;
@@ -104,7 +104,7 @@ namespace Qorpent.Log
 				else{
 					bool changed = !string.IsNullOrWhiteSpace(message.Message) && (message.Message != realmessage.Message);
 					changed = changed || message.Level != realmessage.Level;
-
+					changed = changed || message.ETag != realmessage.ETag;
 					if (!changed){
 						if (null != message.Data && null != realmessage.Data){
 							if (null != cfg.CustomComparer){
@@ -128,7 +128,7 @@ namespace Qorpent.Log
 					if (!string.IsNullOrWhiteSpace(message.Message)){
 						realmessage.Message = message.Message;
 					}
-
+					realmessage.ETag = message.ETag;
 					realmessage.Accepted = message.Accepted;
 
 					realmessage.Data = message.Data;

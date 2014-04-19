@@ -60,6 +60,11 @@ namespace Qorpent.Log {
 		/// 	StartWrite message itself
 		/// </summary>
 		public string Message { get; set; }
+
+		/// <summary>
+		/// Вариант ETag для сверки кэша, для кастомного использования
+		/// </summary>
+		public string ETag { get; set; }
 		/// <summary>
 		/// 	Объект - "держатель" хост журнала, может пониматься как SourceObject, но
 		/// 	это зависит от характера использования журнала

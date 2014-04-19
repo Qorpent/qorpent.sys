@@ -20,17 +20,17 @@ namespace Qorpent.Core.Tests.Log{
 			var m3 = sl.Register(new LogMessage { Code = "a", Level = LogLevel.Error, Time = time.AddSeconds(30) });
 			var m4 = sl.Register(new LogMessage { Code = "a", Level = LogLevel.Warning, Time = time.AddSeconds(40) ,RequireAccept = true,Accepted = true});
 			var m5 = sl.Register(new LogMessage { Code = "a", Level = LogLevel.Warning, Time = time.AddSeconds(50) ,RequireAccept = true, Active = false});
-			Assert.AreEqual(4,sl.GetLog().Count());
-			Assert.AreEqual(4,sl.GetLog(new SessionLogQuery{StartLevel = LogLevel.Warning}).Count());
-			Assert.AreEqual(2,sl.GetLog(new SessionLogQuery{StartLevel = LogLevel.Error}).Count());
-			Assert.AreEqual(0,sl.GetLog(new SessionLogQuery{StartLevel = LogLevel.Fatal}).Count());
-			Assert.AreEqual(3,sl.GetLog(new SessionLogQuery{StartTimestamp = m1.Timestamp}).Count());
-			Assert.AreEqual(2,sl.GetLog(new SessionLogQuery{StartTimestamp = m2.Timestamp}).Count());
-			Assert.AreEqual(1,sl.GetLog(new SessionLogQuery{StartTimestamp = m3.Timestamp}).Count());
-			Assert.AreEqual(0,sl.GetLog(new SessionLogQuery{StartTimestamp = m4.Timestamp}).Count());
-			Assert.AreEqual(2,sl.GetLog(new SessionLogQuery{OnlyRequests = true}).Count());
-			Assert.AreEqual(1,sl.GetLog(new SessionLogQuery{OnlyAccepted = true}).Count());
-			Assert.AreEqual(1,sl.GetLog(new SessionLogQuery{OnlyNotAccepted = true}).Count());
+			Assert.AreEqual(4,sl.Get().Count());
+			Assert.AreEqual(4,sl.Get(new SessionLogQuery{StartLevel = LogLevel.Warning}).Count());
+			Assert.AreEqual(2,sl.Get(new SessionLogQuery{StartLevel = LogLevel.Error}).Count());
+			Assert.AreEqual(0,sl.Get(new SessionLogQuery{StartLevel = LogLevel.Fatal}).Count());
+			Assert.AreEqual(3,sl.Get(new SessionLogQuery{StartTimestamp = m1.Timestamp}).Count());
+			Assert.AreEqual(2,sl.Get(new SessionLogQuery{StartTimestamp = m2.Timestamp}).Count());
+			Assert.AreEqual(1,sl.Get(new SessionLogQuery{StartTimestamp = m3.Timestamp}).Count());
+			Assert.AreEqual(0,sl.Get(new SessionLogQuery{StartTimestamp = m4.Timestamp}).Count());
+			Assert.AreEqual(2,sl.Get(new SessionLogQuery{OnlyRequests = true}).Count());
+			Assert.AreEqual(1,sl.Get(new SessionLogQuery{OnlyAccepted = true}).Count());
+			Assert.AreEqual(1,sl.Get(new SessionLogQuery{OnlyNotAccepted = true}).Count());
 		}
 
 		[Test]
