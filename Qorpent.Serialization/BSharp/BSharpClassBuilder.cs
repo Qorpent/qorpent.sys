@@ -497,6 +497,9 @@ namespace Qorpent.BSharp {
 			if (nochild) {
 				includeelement.Elements().Remove();
 			}
+			foreach (var source in i.Attributes().Where(_=>_.Value[0]==BSharpSyntax.ClassReferencePrefix)) {
+				source.Value = _context.Get(source.Value.Substring(1)).FullName;
+			}
 			StoreIncludeParameters(i, includeelement);
 			includeelement.Name = includeelement.Attr(BSharpSyntax.ClassFullNameAttribute);
 			includeelement.Attribute(BSharpSyntax.ClassFullNameAttribute).Remove();

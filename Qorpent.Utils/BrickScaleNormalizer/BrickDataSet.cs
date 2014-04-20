@@ -101,22 +101,32 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			    foreach (var row in data) {
 			        foreach (var item in row.Items) {
 				        item.NormalizedValue = BrickDataSetHelper.GetNormalizedValue(scale.Min, item.Value, scale.ValueInPixel);
+						if (scaleType == ScaleType.First) {
+							item.NormalizedValue += Preferences.FisrtScaleMormalizeCorrector;
+						} else if (scaleType == ScaleType.Second) {
+							item.NormalizedValue += Preferences.SecondScaleNormalizeCorrector;
+						}
+						if (item.NormalizedValue < 0) {
+							item.NormalizedValue = 0;
+						}
 			        }
 			    }
 			}
 		}
 
 		private bool IsRequireLabelPositionCalculate() {
-			return 0 != (Preferences.SeriaCalcMode & (SeriaCalcMode.SeriaLinear | SeriaCalcMode.CrossSeriaLinear)); // && Rows.Select(_=>_.SeriaNumber).Distinct().Count()>1;
+			return 0 != (Preferences.SeriaCalcMode & (SeriaCalcMode.SeriaLinear | SeriaCalcMode.CrossSeriaLinear));
 		}
-        /// <summary>
-        ///     Собирает абстрактные олонки значений
-        /// </summary>
-        /// <returns>Перечисление абстрактных колонок значений</returns>
-        public IEnumerable<DataItem[]> BuildColons() {
-            return this.GetColons();
-        }
-        /// <summary>
+
+		/// <summary>
+		///     Собирает абстрактные олонки значений
+		/// </summary>
+		/// <returns>Перечисление абстрактных колонок значений</returns>
+		public IEnumerable<DataItem[]> BuildColons() {
+			return this.GetColons();
+		}
+
+		/// <summary>
         ///     Производит обсчёт расположения лэйблов значений и пытается максимально раздвинуть их между собой
         /// </summary>
 		private void CalculateLabelPosition() {

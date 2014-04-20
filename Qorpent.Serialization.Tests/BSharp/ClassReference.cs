@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
@@ -26,6 +27,22 @@ namespace X
 ";
 			var result = Compile(code).Get("B").Compiled;
 			Assert.AreEqual("X.A", result.Attr("x"));
+		}
+
+
+		[Test]
+		public void CanResolveReferenceInInclude()
+		{
+			var code = @"
+namespace X
+	class A
+	class B u='z%{cls}' embed
+	class C
+		include B cls=^A
+";
+			var result = Compile(code).Get("C").Compiled;
+			Console.WriteLine(result);
+			Assert.AreEqual("zX.A", result.Element("X.B").Attr("u"));
 		}
 
 		[Test]

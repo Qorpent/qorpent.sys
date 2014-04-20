@@ -56,12 +56,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		public decimal LabelHeight { get; set; }
 		/// <summary>
-		///		Признак того, что конфигурация корректная
-		/// </summary>
-		public bool IsCorrectConfig {
-			get { return this.Min(_ => _.Value) >= ScaleMin && this.Max(_ => _.Value) <= ScaleMax; }
-		}
-		/// <summary>
 		///		Порядок расположения элементов данных
 		/// </summary>
 		public ColonDataItemOrder Order { get; set; }
@@ -133,9 +127,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		/// <returns>Замыкание на текущий <see cref="DataColonLabelHelper"/></returns>
 		public DataColonLabelHelper EnsureBestLabels() {
-			if (!IsCorrectConfig) {
-				throw new Exception("Некорректная конфигурация");
-			}
 			EnsureNormalized();
 			var variants = GetPossibleVariants();
 			var tournament = variants.Select(_ => new KeyValuePair<double, LabelPosition[]>(Apply(_).GetTemperature(), _)).ToArray();
@@ -155,9 +146,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 			if (Order == ColonDataItemOrder.AsSupplied) {
 				enumerable = this;
 			} else if (Order == ColonDataItemOrder.Inverted) {
-				enumerable = this.OrderByDescending(_ => _.Value);
+				enumerable = this.OrderByDescending(_ => _.NormalizedValue);
 			} else if (Order == ColonDataItemOrder.Real) {
-				enumerable = this.OrderBy(_ => _.Value);
+				enumerable = this.OrderBy(_ => _.NormalizedValue);
 			} else {
 				throw new NotSupportedException("Неизвестная комбинация порядка расположения элементов данных");
 			}
@@ -238,6 +229,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 				return;
 			}
 			foreach (var dataItem in _dataItems) {
+				if (0 != dataItem.NormalizedValue) {
+					continue;
+				}
 				dataItem.NormalizedValue = BrickDataSetHelper.GetNormalizedValue(ScaleMin, ScaleMax, Height, dataItem.Value);
 				dataItem.LabelHeight = LabelHeight.ToInt();
 			}

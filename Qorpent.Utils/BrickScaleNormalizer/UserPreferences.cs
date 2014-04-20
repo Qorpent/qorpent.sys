@@ -14,7 +14,6 @@
 			SYMin = "0";
 			YMax = "auto";
 			SYMax = "auto";
-
 		}
 		/// <summary>
 		/// Режим приведения серий
@@ -100,5 +99,13 @@
 		/// Фиксированное число дивлайнов по SY
 		/// </summary>
 		public int SYFixDiv { get; set; }
+		/// <summary>
+		///		
+		/// </summary>
+		public int FisrtScaleMormalizeCorrector { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public int SecondScaleNormalizeCorrector { get; set; }
 	}
 }

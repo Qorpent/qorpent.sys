@@ -32,7 +32,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="chart">Представление графика</param>
         /// <returns>Признак того, что график комбинированный</returns>
         public static bool IsCombined(this IChart chart) {
-            return chart.Is(FusionChartGroupedType.Compination);
+            return chart.Is(FusionChartGroupedType.Combination);
         }
         /// <summary>
         ///     Признак того, что график мультисерийный
@@ -56,7 +56,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <param name="fusionChartType">Тип графика</param>
         /// <returns>Признак того, что график комбинированный</returns>
         public static bool IsCombined(this FusionChartType fusionChartType) {
-            return fusionChartType.Is(FusionChartGroupedType.Compination);
+            return fusionChartType.Is(FusionChartGroupedType.Combination);
         }
         /// <summary>
         ///     Признак того, что график относится к стековым

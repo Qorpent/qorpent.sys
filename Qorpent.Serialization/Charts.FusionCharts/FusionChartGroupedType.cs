@@ -41,12 +41,14 @@
             FusionChartType.StackedColumn3D |
             FusionChartType.StackedArea2D |
             FusionChartType.StackedBar2D |
-            FusionChartType.StackedBar3D,
+            FusionChartType.StackedBar3D |
+			FusionChartType.MSStackedColumn2D
+			,
 
         /// <summary>
         /// Комбинированные
         /// </summary>
-        Compination =
+        Combination =
             FusionChartType.MSCombi3D |
             FusionChartType.MSCombi2D |
             FusionChartType.MSColumnLine3D |
@@ -55,8 +57,7 @@
             FusionChartType.MSCombiDY2D |
             FusionChartType.MSColumn3DLineDY |
             FusionChartType.StackedColumn3DLineDY |
-            FusionChartType.MSStackedColumn2DLineDY |
-            FusionChartType.MSStackedColumn2D
+            FusionChartType.MSStackedColumn2DLineDY
             
     }
 }
