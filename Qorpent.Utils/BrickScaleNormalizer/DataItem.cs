@@ -163,7 +163,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		public DataItem() {
 			IsValueInitialized = false;
-			LabelPosition = LabelPosition.Above;
 		}
         /// <summary>
         /// 
