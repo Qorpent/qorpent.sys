@@ -310,6 +310,12 @@ namespace Qorpent.Utils.Git{
 		/// <returns></returns>
 		public FileRecord[] GetChangedFilesList(string fromref = "HEAD", string toref="WORKING_TREE", string level = ""){
 			var result =InternalGetFileChanges(fromref, toref);
+			foreach (var fileRecord in result){
+				var fullname = Path.Combine(DirectoryName, fileRecord.FileName);
+				if (File.Exists(fullname)){
+					fileRecord.LastWriteTime = File.GetLastWriteTime(fullname);
+				}
+			}
 			if (!string.IsNullOrWhiteSpace(level)){
 				foreach (var fileRecord in result){
 					fileRecord.Level = level;

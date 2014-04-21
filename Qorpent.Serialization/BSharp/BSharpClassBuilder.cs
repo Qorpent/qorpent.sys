@@ -177,10 +177,10 @@ namespace Qorpent.BSharp {
 			XElement[] includes = null;
 			while (0!=(includes =
 			       _cls.Compiled.Descendants(BSharpSyntax.IncludeBlock)
-			           .Where(_ => _.GetCode()==BSharpSyntax.IncludeAllModifier)
+			           .Where(_ => _.GetCode()==BSharpSyntax.IncludeAllModifier && null==_.Attribute(BSharpSyntax.NoProcessDirective))
 			           .ToArray()).Length) {
 				foreach (var i in includes) {
-   
+					
 					var query = i.GetName();
 					if (query == BSharpSyntax.IncludeBodyModifier || query == BSharpSyntax.IncludeNoChildModifier) {
 						query = "";
@@ -322,6 +322,7 @@ namespace Qorpent.BSharp {
 
 		private void InternalBuild() {
 			InitializeBuildIndexes();
+			DownFallEmbedAttribute();
 			IntializeMergeIndexes();
 			InterpolateFields();
 			BindParametersToCompiledClass();
@@ -335,13 +336,25 @@ namespace Qorpent.BSharp {
 			CleanupPrivateMembers();
 			CheckoutRequireLinkingRequirements();
 		}
+		/// <summary>
+		/// we require implicitly descent embed state
+		/// </summary>
+		private void DownFallEmbedAttribute(){
+			if(_cls.Is(BSharpClassAttributes.Embed))return;
+			if (_cls.AllImports.Any(_ => _.Is(BSharpClassAttributes.Embed))){
+				_cls.Set(BSharpClassAttributes.Embed);
+			}
+		}
 
-	    private void ExecutePreSimpleIncludeExtensions() {
+		private void ExecutePreSimpleIncludeExtensions() {
 	        _compiler.CallExtensions(_cls, _context, BSharpCompilePhase.PreSimpleInclude);
 	    }
 
-	    private void CheckoutRequireLinkingRequirements() {
+	    private void CheckoutRequireLinkingRequirements(){
+		    bool ispureEmbed = _cls.Is(BSharpClassAttributes.Embed) && !_cls.Is(BSharpClassAttributes.Patch);
+		    if (ispureEmbed) return;
 			var attrs = _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes());
+			
 			foreach (var a in attrs) {
 				var val = a.Value;
 				if (string.IsNullOrWhiteSpace(val) || val.Length < 2) continue;
@@ -360,11 +373,6 @@ namespace Qorpent.BSharp {
 			}
 			if (_cls.Compiled.DescendantsAndSelf().Any(_ => _.Attributes().Any(__ => __.Value.Contains("%{")))) {
 				_cls.Set(BSharpClassAttributes.RequireLateInterpolation);
-			}
-
-			if (_cls.Compiled.Attr(BSharpSyntax.EmbedAttribute).ToBool())
-			{
-				_cls.Set(BSharpClassAttributes.Embed);
 			}
 		}
 
@@ -416,8 +424,9 @@ namespace Qorpent.BSharp {
             ProcessSimpleIncludes() {
 			XElement[] includes;
 			var needReInterpolate = false;
-			while ((includes = _cls.Compiled.Descendants(BSharpSyntax.IncludeBlock).Where(_=>_.GetCode()!=BSharpSyntax.IncludeAllModifier).ToArray()).Length != 0) {
-				foreach (var i in includes) {
+			while ((includes = _cls.Compiled.Descendants(BSharpSyntax.IncludeBlock).Where(_=>_.GetCode()!=BSharpSyntax.IncludeAllModifier && null==_.Attribute(BSharpSyntax.NoProcessDirective)).ToArray()).Length != 0) {
+				
+				foreach (var i in includes){
 					needReInterpolate = ProcessSimpleInclude(i, needReInterpolate);
 				}				
 			}

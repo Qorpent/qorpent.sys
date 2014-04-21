@@ -1,4 +1,5 @@
-﻿using Qorpent.Serialization;
+﻿using System;
+using Qorpent.Serialization;
 
 namespace Qorpent.Utils.Git{
 	/// <summary>
@@ -12,7 +13,7 @@ namespace Qorpent.Utils.Git{
         /// <param name="other"></param>
         /// <returns></returns>
 	    protected bool Equals(FileRecord other) {
-			return FirstState == other.FirstState && SecondState == other.SecondState && string.Equals(FileName, other.FileName) && string.Equals(Level, other.Level) && string.Equals(NewFileName, other.NewFileName);
+			return FirstState == other.FirstState && SecondState == other.SecondState && string.Equals(FileName, other.FileName) && string.Equals(Level, other.Level) && string.Equals(NewFileName, other.NewFileName) && LastWriteTime==other.LastWriteTime;
 	    }
 
 	    /// <summary>
@@ -102,6 +103,11 @@ namespace Qorpent.Utils.Git{
 		/// Второе имя файла
 		/// </summary>
 		public string NewFileName { get; set; }
+		/// <summary>
+		/// Локальное время файловой системы
+		/// </summary>
+		public DateTime LastWriteTime { get; set; }
+
 		/// <summary>
 		/// 
 		/// </summary>
