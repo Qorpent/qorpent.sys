@@ -34,6 +34,13 @@ namespace Qorpent.Log
 				return message;
 			}
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        public void Accept(string code) {
+            Get(code).Accepted = true;
+        }
 
 		/// <summary>
 		/// 

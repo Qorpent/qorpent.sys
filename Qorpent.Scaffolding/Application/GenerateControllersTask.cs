@@ -69,7 +69,7 @@ namespace Qorpent.Scaffolding.Application {
             }
             sb.Append(string.Format(@"
         .controller('{3}_{0}', ['$scope','$http','$rootScope','{1}', function ($scope, $http, $rootScope, {2}) {{ 
-                $scope.api = Api($http); 
+                $scope.api = Api($http, $rootScope);
                 $scope.view = '{0}.html';
 ", code, string.Join("','", deps.Values.Select(_ => _.ChooseAttr("type", "code")).Distinct()), string.Join(",", deps.Values.Select(_ => _.ChooseAttr("type", "code")).Distinct()), Project.ProjectName));
 
@@ -148,10 +148,12 @@ namespace Qorpent.Scaffolding.Application {
                                         "_refresh.refresh.run();},true);");
 					
                 }
-	            var subscribe = el.Value.Attr("subscribe");
-				if (!string.IsNullOrWhiteSpace(subscribe)){
-					advanced.AppendLine("\t\t\t\t$rootScope.$on('" + subscribe + "', function(n,o){$scope." + target +
-					                    "_refresh.refresh.run();});");
+                var subscribtions = el.Value.Elements("subscribe").ToArray();
+				if (subscribtions.Length > 0) {
+                    foreach (var s in subscribtions) {
+                        advanced.AppendLine("\t\t\t\t$rootScope.$on('" + s.Attr("code") + "', function(n,o){$scope." + target +
+                                           "_refresh.refresh.run();});");   
+				    }
 				}
             }
         }
