@@ -30,6 +30,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public const string Template = "template";
 		/// <summary>
+		/// Директива для отключения обработки стандартных конструций (в основном INCLUDE)
+		/// </summary>
+		public const string NoProcessDirective = "__no_process";
+		/// <summary>
 		/// Ключевое слово,обозначающее источник данных для генерации классов
 		/// </summary>
 		public const string DatasetImport = "ref";

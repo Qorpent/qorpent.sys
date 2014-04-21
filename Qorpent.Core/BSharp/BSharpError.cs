@@ -23,8 +23,25 @@ namespace Qorpent.BSharp {
 		/// <returns></returns>
 		public BSharpErrorDigest GetDigest(){
 		
-			return new BSharpErrorDigest{ErrorLevel=Level, Phase=Phase,Message= Message,Type= Type,ClassName=ClassName, FileName=LexInfo.File,Line= LexInfo.Line, Column= LexInfo.Column};
+			return new BSharpErrorDigest{
+				ErrorLevel=Level, 
+				Phase=Phase,Message= Message,
+				Type= Type,
+				ClassName=ResolvedClassName(), 
+				FileName=LexInfo.File,
+				Line= LexInfo.Line, 
+				Column= LexInfo.Column
+			};
 		
+		}
+
+		private string ResolvedClassName(){
+			if (!string.IsNullOrWhiteSpace(ClassName)) return ClassName;
+			if (null == Class && null == AltClass) return "без привязки";
+			if (null != Class && null == AltClass) return Class.FullName;
+			if (null != AltClass && null == Class) return ":"+AltClass.FullName;
+			if (Class.FullName == AltClass.FullName) return Class.FullName;
+			return Class.FullName + ":" + AltClass.FullName;
 		}
 
 		/// <summary>
@@ -126,13 +143,14 @@ namespace Qorpent.BSharp {
 						lexinfo.Line = desc.Line;
 						lexinfo.Column = desc.Column;
 					}
-					else if (Class != null)
-					{
-						var xml = Class.Source;
-						var desc = xml.Describe();
-						lexinfo.File = desc.File;
-						lexinfo.Line = desc.Line;
-						lexinfo.Column = desc.Column;
+					if (string.IsNullOrWhiteSpace(lexinfo.File)){
+						if (Class != null){
+							var xml = Class.Source;
+							var desc = xml.Describe();
+							lexinfo.File = desc.File;
+							lexinfo.Line = desc.Line;
+							lexinfo.Column = desc.Column;
+						}
 					}
 					if (string.IsNullOrWhiteSpace(lexinfo.File))
 					{
