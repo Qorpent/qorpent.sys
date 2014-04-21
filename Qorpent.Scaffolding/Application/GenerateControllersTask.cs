@@ -60,7 +60,7 @@ namespace Qorpent.Scaffolding.Application {
             var sb = new StringBuilder();
             var deps = new Dictionary<string, XElement>();
             var advanced = new StringBuilder();
-            if (xml.Elements("item").Any(_=>!string.IsNullOrWhiteSpace(_.Attr("persistentCode"))) && deps.All(_ => _.Value.Attr("type") != "settings")) {
+            if (xml.Elements().Any(_=>!string.IsNullOrWhiteSpace(_.Attr("persistentCode"))) && deps.All(_ => _.Value.Attr("type") != "settings")) {
                 deps["settings"] = new XElement("service", new XAttribute("type", "settings"), new XAttribute("before","true"));
             }
             foreach (var s in xml.Elements("service")) {
