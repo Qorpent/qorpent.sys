@@ -65,6 +65,40 @@ patch for=^A:
 
 
 		[Test]
+		public void InternalElementsCreation()
+		{
+			var code = @"
+class controller
+controller notifications
+	service repomanager level=local
+	item notifications action=GetMainEvents
+patch for=notifications new=create
+	service refresh_notifincations target=notifications auto=1 persistentCode=zdev3-notifications-autorefresh
+		subscribe UPDATE_NOTIFICATIONS
+	item notificationsquery type=LogQuery
+		parameters NotAcceptedOnly=true
+	item notifications args=notificationsquery
+";
+			var ctx = Compile(code);
+			var result = ctx.Get("notifications");
+			var str = result.Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(str);
+			Assert.AreEqual(0,ctx.GetErrors(ErrorLevel.Error).Count());
+
+			Assert.AreEqual(@"<controller code='notifications' fullcode='notifications'>
+  <service code='repomanager' level='local' />
+  <item code='notifications' action='GetMainEvents' args='notificationsquery' />
+  <service code='refresh_notifincations' target='notifications' auto='1' persistentCode='zdev3-notifications-autorefresh'>
+    <subscribe code='UPDATE_NOTIFICATIONS' />
+  </service>
+  <item code='notificationsquery' type='LogQuery'>
+    <parameters NotAcceptedOnly='true' />
+  </item>
+</controller>".Length, str.Length);
+		}
+
+
+		[Test]
 		public void PatchWithInternals()
 		{
 			var code = @"

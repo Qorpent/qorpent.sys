@@ -20,7 +20,12 @@ namespace Qorpent.Utils.XDiff{
 		public static XElement Apply(this IEnumerable<XDiffItem> diffs,XElement target, XDiffOptions options = null){
 			options = options ?? new XDiffOptions();
 			IDictionary<string, string> movereplaces = new Dictionary<string, string>();
-			foreach (var diff in diffs.ToArray()){
+			var orderedDiffs = diffs.
+			OrderBy(_ => _.Action)
+				.ThenByDescending(_ => null == _.NewestElement ? 0 : _.NewestElement.Descendants().Count())
+				.ToArray();
+			foreach (var diff in orderedDiffs)
+			{
 				if (diff.CanChangeHierarchyTarget){
 					FillDictionary(movereplaces,diff);
 				}else if (diff.CanChangeHierarchyTarget){

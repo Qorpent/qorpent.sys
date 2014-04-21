@@ -136,8 +136,9 @@ namespace Qorpent.BSharp {
 				lock (target){
 					Log.Trace("Apply patch "+_cls.FullName+" to "+target.FullName);
 					try{
-						var difference = EvalDiff(target);
-						Log.Debug(difference.LogToString());
+						EvalDiff(target);
+						//var difference = EvalDiff(target);
+						//Log.Debug(difference.LogToString());
 						
 					}
 					catch (Exception ex){
@@ -164,11 +165,15 @@ namespace Qorpent.BSharp {
 			}
 			var diff = new XDiffGenerator(opts);
 
-			var difference = diff.GetDiff(target.Compiled, _cls.Compiled).ToArray();
+			var difference = diff.GetDiff(target.Compiled, _cls.Compiled);
+
 			difference.Apply(target.Compiled, opts);
-			foreach (var e in target.Compiled.DescendantsAndSelf()){
-				e.SetAttributeValue("__parent",null);
+
+			foreach (var descendant in target.Compiled.Descendants()){
+				var p = descendant.Attribute("__parent");
+				if(null!=p)p.Remove();
 			}
+			
 			return difference;
 		}
 

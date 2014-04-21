@@ -282,7 +282,17 @@ namespace Qorpent.Utils.XDiff{
 			if (null == t){
 				throw new Exception("cannot find target parent elment "+parent);
 			}
-			t.Add(new XElement(NewestElement));
+			if (options.IsHierarchy){ //мы должны порождать элементы без дочек во избежание дублирования, дочки накатятся сами
+				var header = new XElement(NewestElement);
+				header.Elements().Remove();
+				var p = header.Attribute("__parent");
+				if(null!=p)p.Remove();
+				t.Add(header);
+			}
+			else{
+				t.Add(new XElement(NewestElement));	
+			}
+			
 			return target;
 		}
 
