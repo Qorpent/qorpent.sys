@@ -294,10 +294,22 @@ namespace Qorpent.BSharp {
 	        IBSharpContext context = BuildIndex(batch);
 	        CompileClasses(batch, context);
 	        LinkClasses(batch, context);
+			ExecuteDefinitions(batch,context);
 	        return context;
 	    }
 
-	    private IBSharpContext BuildBatch(IEnumerable<XElement> sources, IBSharpContext preparedContext) {
+		private void ExecuteDefinitions(XElement[] batch, IBSharpContext context){
+			context.Get(BSharpContextDataType.Working).Where(_ => 0 != _.AllEvaluations.Count()).AsParallel().ForAll(_ =>{
+				try{
+					BSharpClassBuilder.Build(BuildPhase.Evaluate, this, _, context);
+				}
+				catch (Exception ex){
+					_.Error = ex;
+				}
+			});
+		}
+
+		private IBSharpContext BuildBatch(IEnumerable<XElement> sources, IBSharpContext preparedContext) {
 			XElement[] batch = sources.ToArray();
             var context = Build(batch);
 			if (null != preparedContext) {
@@ -530,7 +542,14 @@ namespace Qorpent.BSharp {
 			SetupInitialOrphanState(e, def,aliases);
 			ParseImports(e, def, aliases);
 			ParseCompoundElements(e, def);
+			ParseDefinitions(e, def);
 			return def;
+		}
+
+		private void ParseDefinitions(XElement e, BSharpClass def){
+			foreach (XElement i in e.Elements(BSharpSyntax.ClassEvaluateDefinition)){
+				def.SelfEvaluations.Add(new BSharpEvaluation{Source = i});
+			}
 		}
 
 		private bool IsOverrideMatch(BSharpClass def)
@@ -616,7 +635,7 @@ namespace Qorpent.BSharp {
 		}
 
 		private static void ParseCompoundElements(XElement e, IBSharpClass def) {
-			foreach (XElement i in e.Elements("element")) {
+			foreach (XElement i in e.Elements(BSharpSyntax.ClassElementDefinition)) {
 				var merge = new BSharpElement();
 				merge.Name = i.Attr("code");
 				merge.Type = BSharpElementType.Define;
@@ -698,6 +717,7 @@ namespace Qorpent.BSharp {
 						       })
 						;
 				}
+			
 				if (requirepatch){
 					context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.Patch)).OrderBy(_=>_.Priority).Select(
 						_ =>{

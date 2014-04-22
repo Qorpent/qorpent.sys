@@ -67,29 +67,6 @@ n g
 		}
 
 		[Test]
-public void TryFindBugInParsing()
-		{
-			var code = @"
-namespace Graph.Sample.Tests
-	fixture SP_MChRP_ORG ""Себестоимость продукции / МЕДЬ ЧЕРНОВАЯ. Расходы передела (предприятия)""
-		h=${_hl}
-		include call cls=^CuChernGraphRash 
-			fixed = ""излишне опять делит на 1000  - realvalues не цепляет скины""	
-		include call cls=^CuChernGraphObchras h=${_hl}
-			problem = """"
-";
-			var b = new BxlParser().Parse(code, "", BxlParserOptions.NoLexData);
-			Console.WriteLine(b.ToString().Replace("\"", "'"));
-			Assert.AreEqual(@"<root>
-  <namespace code='Graph.Sample.Tests' id='Graph.Sample.Tests'>
-    <fixture code='SP_MChRP_ORG' id='SP_MChRP_ORG' name='Себестоимость продукции / МЕДЬ ЧЕРНОВАЯ. Расходы передела (предприятия)' h='${_hl}'>
-      <include code='call' id='call' cls='^CuChernGraphRash' fixed='излишне опять делит на 1000  - realvalues не цепляет скины' />
-      <include code='call' id='call' cls='^CuChernGraphObchras' h='${_hl}' problem='' />
-    </fixture>
-  </namespace>
-</root>", b.ToSqlString().Replace("\"", "'"));
-		}
-		[Test]
 		public void ValidlyParsesEmptyStrings(){
 			var code = @"
 x x='' y="""" z=""""""""""""  : """"

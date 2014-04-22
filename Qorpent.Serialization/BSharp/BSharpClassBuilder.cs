@@ -84,13 +84,25 @@ namespace Qorpent.BSharp {
                     PerformCrossClassLinking();
                 }
 
+				else if (BuildPhase.Evaluate == phase)
+				{
+					PerformEvaluation();
+				}
 				else if (BuildPhase.ApplyPatch == phase){
 					ApplyPatch();
 				}
 			
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		private void PerformEvaluation(){
+			foreach (var definition in _cls.AllEvaluations){
+				definition.Evaluate(_cls);
+			}
+		}
 
-        private void PerformAutonomeLinking()
+		private void PerformAutonomeLinking()
         {
 			if (CheckExistedLink()) return;
 			_cls.Set(BSharpClassAttributes.InLink);
@@ -323,16 +335,28 @@ namespace Qorpent.BSharp {
 			_cls.Remove(BSharpClassAttributes.InBuild);
 			_cls.Set(BSharpClassAttributes.Built);
 		}
+		private void GetInheritedSourceIndex()
+		{
+			_cls.Compiled = new XElement(_cls.Source);
+			_cls.Compiled.Elements(BSharpSyntax.ClassImportDefinition).Remove();
+			_cls.Compiled.Elements(BSharpSyntax.ClassElementDefinition).Remove();
+			_cls.Compiled.Elements(BSharpSyntax.ClassEvaluateDefinition).Remove();
+			_cls.ParamSourceIndex = BuildParametersConfig();
+		}
 
 
 		private void InternalBuild() {
+			GetInheritedSourceIndex();
+			SupplyClassAttributesForEvaluations();
 			InitializeBuildIndexes();
-			DownFallEmbedAttribute();
+			DownFallEmbedAttribute();			
 			IntializeMergeIndexes();
+			
 			InterpolateFields();
 			BindParametersToCompiledClass();
 			CleanupElementsWithConditions();
 			MergeInternals();
+			SupplyEvaluationsForElements();
 			InterpolateElements();
 			PerformMergingWithElements();
 			CleanupElementsWithConditions();
@@ -341,6 +365,34 @@ namespace Qorpent.BSharp {
 			CleanupPrivateMembers();
 			CheckoutRequireLinkingRequirements();
 		}
+
+		private void SupplyClassAttributesForEvaluations(){
+			
+			foreach (var d in _cls.AllEvaluations){
+				if (d.ResultType == "attribute" && d.Target=="class"){
+					if (null == _cls.Compiled.Attribute(d.Code)  && !_cls.ParamSourceIndex.ContainsKey(d.Code)){
+						_cls.Compiled.SetAttributeValue(d.Code,d.Value);
+					}
+				}
+			}
+		}
+
+		private void SupplyEvaluationsForElements()
+		{
+
+			foreach (var d in _cls.AllEvaluations)
+			{
+				if (d.ResultType == "attribute" && d.Target == "elements")
+				{
+					foreach (var element in _cls.Compiled.Elements()){
+						if (null == element.Attribute(d.Code)){
+							element.SetAttributeValue(d.Code,d.Value);
+						}
+					}
+				}
+			}
+		}
+
 		/// <summary>
 		/// we require implicitly descent embed state
 		/// </summary>
@@ -510,6 +562,9 @@ namespace Qorpent.BSharp {
 
 		private XmlInterpolation _lateincluder = new XmlInterpolation{AncorSymbol = '%'};
 		private void ExctractIncludeClass(XElement i, bool nochild, XElement includeelement, IBSharpClass cls) {
+			foreach (var eval in cls.AllEvaluations){
+				_cls.AllEvaluations.Add(eval.Bind(includeelement));
+			}
 			if (nochild) {
 				includeelement.Elements().Remove();
 			}
@@ -829,6 +884,7 @@ namespace Qorpent.BSharp {
 			_cls.Compiled.Attributes(BSharpSyntax.ClassGenericModifier).Remove();
 			_cls.Compiled.Elements(BSharpSyntax.ClassImportDefinition).Remove();
 			_cls.Compiled.Elements(BSharpSyntax.ClassElementDefinition).Remove();
+			_cls.Compiled.Elements(BSharpSyntax.ClassEvaluateDefinition).Remove();
 			
 			foreach (var e in _cls.Compiled.DescendantsAndSelf())
 			{
@@ -858,10 +914,7 @@ namespace Qorpent.BSharp {
 
 		private void InitializeBuildIndexes()
 		{
-			_cls.Compiled = new XElement(_cls.Source);
-			_cls.Compiled.Elements(BSharpSyntax.ClassImportDefinition).Remove();
-			_cls.Compiled.Elements(BSharpSyntax.ClassElementDefinition).Remove();
-			_cls.ParamSourceIndex = BuildParametersConfig();
+			
 			_cls.ParamIndex = new ConfigBase();
 			_cls.Compiled.SetAttributeValue(BSharpSyntax.ClassFullNameAttribute, _cls.FullName);
 			foreach (var p in _cls.ParamSourceIndex)
@@ -871,6 +924,8 @@ namespace Qorpent.BSharp {
 			
 
 		}
+
+		
 
 		/// <summary>
 		///     Возвращает XML для резолюции атрибутов

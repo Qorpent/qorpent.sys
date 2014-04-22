@@ -42,6 +42,11 @@ namespace Qorpent.BSharp {
 		IList<IBSharpImport> SelfImports { get; }
 
 		/// <summary>
+		///     Явные импорты
+		/// </summary>
+		IList<BSharpEvaluation> SelfEvaluations { get; }
+
+		/// <summary>
 		///     Определение сводимых элементов
 		/// </summary>
 		IList<IBSharpElement> SelfElements { get; }
@@ -90,6 +95,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <value></value>
 		IEnumerable<IBSharpClass> AllImports { get; }
+		/// <summary>
+		/// Все определения в классе
+		/// </summary>
+		IList<BSharpEvaluation> AllEvaluations { get; }
 
 		/// <summary>
 		///     Полная проверка статуса Orphan

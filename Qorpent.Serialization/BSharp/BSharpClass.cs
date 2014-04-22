@@ -262,6 +262,13 @@ namespace Qorpent.BSharp {
 		public IList<IBSharpImport> SelfImports { get; private set; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public IList<BSharpEvaluation> SelfEvaluations{
+			get { return _selfdefs ?? (_selfdefs = new List<BSharpEvaluation>()); }
+		}
+
+		/// <summary>
 		///     Определение сводимых элементов
 		/// </summary>
 		[IgnoreSerialize]
@@ -337,6 +344,7 @@ namespace Qorpent.BSharp {
 
 		private IBSharpClass[] _cachedImports;
 		private IBSharpContext _context;
+		private IList<BSharpEvaluation> _selfdefs;
 
 		/// <summary>
 		///     Возвращает полное перечисление импортируемых классов в порядке их накатывания
@@ -350,6 +358,41 @@ namespace Qorpent.BSharp {
 					_cachedImports = GetAllImports(FullName, new ConfigBase()).Distinct().ToArray();
 					return _cachedImports;
 				}
+			}
+		}
+
+		private List<BSharpEvaluation> _cachedDefs;
+
+		/// <summary>
+		/// Все определения в классе
+		/// </summary>
+		public IList<BSharpEvaluation> AllEvaluations{
+			get{
+				if (null == _cachedDefs){
+					_cachedDefs = BuildAllEvaluations().ToList();
+				}
+				return _cachedDefs;
+			}
+		}
+
+		private IEnumerable<BSharpEvaluation> BuildAllEvaluations(){
+
+			var vhash = new HashSet<string>();
+			var hash = new HashSet<string>();
+			vhash.Add(FullName);
+			foreach (var evaluation in SelfEvaluations){
+				if (hash.Contains(evaluation.Code)) continue;
+				hash.Add(evaluation.Code);
+				yield return evaluation;
+			}
+			foreach (var i in AllImports){
+				if(vhash.Contains(i.FullName))continue;
+				foreach (var evaluation in i.SelfEvaluations){
+					if (hash.Contains(evaluation.Code)) continue;
+					hash.Add(evaluation.Code);
+					yield return evaluation;
+				}
+	
 			}
 		}
 

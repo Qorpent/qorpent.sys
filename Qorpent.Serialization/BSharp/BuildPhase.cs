@@ -16,8 +16,13 @@
         /// </summary>
         CrossClassLink,
 		/// <summary>
+		/// Вычисление определений
+		/// </summary>
+		Evaluate,
+		/// <summary>
 		/// Применение патчей
 		/// </summary>
-		ApplyPatch
+		ApplyPatch,
+		
 	}
 }

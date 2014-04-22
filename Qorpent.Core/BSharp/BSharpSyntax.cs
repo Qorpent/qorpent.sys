@@ -155,6 +155,11 @@ namespace Qorpent.BSharp {
 		/// Определение элемента класса
 		/// </summary>
 		public const string ClassElementDefinition= "element";
+
+		/// <summary>
+		/// Определение методов класса
+		/// </summary>
+		public const string ClassEvaluateDefinition = "eval";
 		/// <summary>
 		/// Зарезервированный атрибут класса, указывющий его прототип
 		/// </summary>

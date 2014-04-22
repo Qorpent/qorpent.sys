@@ -32,6 +32,7 @@
     <Compile Include="BSharp\BSharpClassAttributes.cs" />
     <Compile Include="BSharp\BSharpCompilePhase.cs" />
     <Compile Include="BSharp\BSharpContextDataType.cs" />
+    <Compile Include="BSharp\BSharpEvaluation.cs" />
     <Compile Include="BSharp\BSharpElementType.cs" />
     <Compile Include="BSharp\BSharpError.cs" />
     <Compile Include="BSharp\BSharpErrorDigest.cs" />
