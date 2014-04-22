@@ -56,7 +56,11 @@ namespace Qorpent.Utils
 		/// <param name="source"></param>
 		/// <param name="source2"></param>
 		/// <returns></returns>
-		public string Interpolate(string target, object source = null, IDictionary<string,object> source2 = null) {
+		public string Interpolate(string target, object source = null, IDictionary<string,object> source2 = null){
+			if (string.IsNullOrEmpty(target)) return target;
+			if (-1 == target.IndexOf(AncorSymbol)) return target;
+			if (-1 == target.IndexOf('{')) return target;
+			if (-1 == target.IndexOf('}')) return target;
 			//оптимизация возврата исходной строки где нет вообще контента
 			_source2 = source2;
 			if (string.IsNullOrWhiteSpace(target)) {

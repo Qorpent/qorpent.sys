@@ -932,8 +932,7 @@ namespace Qorpent.BSharp {
 			
 			if (GetConfig().UseInterpolation)
 			{
-				var si = new StringInterpolation();
-				si.AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$';
+				var si = new StringInterpolation{AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$'};
 				bool requireInterpolateNames = _cls.ParamIndex.Keys.Any(_ => _.Contains("__LBLOCK__"));
 				while (true){
 					bool changed = false;
@@ -953,7 +952,7 @@ namespace Qorpent.BSharp {
 						}
 						var s = v.Value as string;
 						if (null == s) continue;
-						if (-1 == s.IndexOf('{')) continue;
+						if (-1 == s.IndexOf('{') || -1==s.IndexOf(si.AncorSymbol)) continue;
 						var newval = si.Interpolate(s, _cls.ParamSourceIndex, _compiler.Global);
 						if (newval != s){
 							changed = true;
