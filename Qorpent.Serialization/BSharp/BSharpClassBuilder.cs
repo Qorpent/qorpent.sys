@@ -356,6 +356,10 @@ namespace Qorpent.BSharp {
 	    }
 
 	    private void CheckoutRequireLinkingRequirements(){
+			if (_cls.Compiled.DescendantsAndSelf().Any(_ => _.Value.Contains("%{") || _.Attributes().Any(__ => __.Value.Contains("%{"))))
+			{
+				_cls.Set(BSharpClassAttributes.RequireLateInterpolation);
+			}
 		    bool ispureEmbed = _cls.Is(BSharpClassAttributes.Embed) && !_cls.Is(BSharpClassAttributes.Patch);
 		    if (ispureEmbed) return;
 			var attrs = _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes());
@@ -376,9 +380,7 @@ namespace Qorpent.BSharp {
 			{
 				_cls.Set(BSharpClassAttributes.RequireAdvancedIncludes);
 			}
-			if (_cls.Compiled.DescendantsAndSelf().Any(_ => _.Attributes().Any(__ => __.Value.Contains("%{")))) {
-				_cls.Set(BSharpClassAttributes.RequireLateInterpolation);
-			}
+			
 		}
 
 
@@ -511,7 +513,7 @@ namespace Qorpent.BSharp {
 			if (nochild) {
 				includeelement.Elements().Remove();
 			}
-			foreach (var source in i.Attributes().Where(_=>_.Value[0]==BSharpSyntax.ClassReferencePrefix)) {
+			foreach (var source in i.Attributes().Where(_=>!string.IsNullOrWhiteSpace(_.Value) && _.Value[0]==BSharpSyntax.ClassReferencePrefix)) {
 				source.Value = _context.Get(source.Value.Substring(1)).FullName;
 			}
 			StoreIncludeParameters(i, includeelement);

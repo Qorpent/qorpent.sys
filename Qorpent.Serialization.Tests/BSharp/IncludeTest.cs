@@ -43,7 +43,50 @@ class polyline _mes = px
 </class>", xml);
 
 		}
+	[Test]
+		public void EmbedIntoElementTest(){
+			var code = @"
+class c embed
+	p : %{a}
+class x
+	include c 
+		a = ""xxx""
+";
 
+
+		var result = Compile(code);
+			var xml = result.Get("x").Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(xml);
+			Assert.AreEqual(@"<class code='x' fullcode='x'>
+  <c a='xxx'>
+    <p>xxx</p>
+  </c>
+</class>", xml);
+
+		}
+
+	[Test]
+	public void NoBugOnEmptyStringAttribute()
+	{
+		var code = @"
+class c embed
+	p : %{a}
+class x
+	include c 
+		a = """"
+";
+
+
+		var result = Compile(code);
+		var xml = result.Get("x").Compiled.ToString().Replace("\"", "'");
+		Console.WriteLine(xml);
+		Assert.AreEqual(@"<class code='x' fullcode='x'>
+  <c>
+    <p></p>
+  </c>
+</class>", xml);
+
+	}
         [TestCase("+", "x", "10", "1")]
         [TestCase("~", "x", "10", "10")]
         [TestCase("+", "y", "1", "1")]

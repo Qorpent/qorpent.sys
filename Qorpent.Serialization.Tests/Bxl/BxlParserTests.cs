@@ -42,6 +42,68 @@ e c x=1 n
 </root>", b.ToString().Replace("\"", "'"));
 		}
 
+
+		[Test]
+		public void ValidlyParsesEmptyStringsBasis()
+		{
+			var code = @"
+n g
+	f s ""X""
+		i c a=b
+			p = """"
+		i c a=b
+			p = """"
+";
+			var b = new BxlParser().Parse(code, "", BxlParserOptions.NoLexData);
+			Console.WriteLine(b.ToString().Replace("\"", "'"));
+			Assert.AreEqual(@"<root>
+  <n code='g' id='g'>
+    <f code='s' id='s' name='X'>
+      <i code='c' id='c' a='b' p='' />
+      <i code='c' id='c' a='b' p='' />
+    </f>
+  </n>
+</root>", b.ToSqlString().Replace("\"", "'"));
+		}
+
+		[Test]
+public void TryFindBugInParsing()
+		{
+			var code = @"
+namespace Graph.Sample.Tests
+	fixture SP_MChRP_ORG ""Себестоимость продукции / МЕДЬ ЧЕРНОВАЯ. Расходы передела (предприятия)""
+		h=${_hl}
+		include call cls=^CuChernGraphRash 
+			fixed = ""излишне опять делит на 1000  - realvalues не цепляет скины""	
+		include call cls=^CuChernGraphObchras h=${_hl}
+			problem = """"
+";
+			var b = new BxlParser().Parse(code, "", BxlParserOptions.NoLexData);
+			Console.WriteLine(b.ToString().Replace("\"", "'"));
+			Assert.AreEqual(@"<root>
+  <namespace code='Graph.Sample.Tests' id='Graph.Sample.Tests'>
+    <fixture code='SP_MChRP_ORG' id='SP_MChRP_ORG' name='Себестоимость продукции / МЕДЬ ЧЕРНОВАЯ. Расходы передела (предприятия)' h='${_hl}'>
+      <include code='call' id='call' cls='^CuChernGraphRash' fixed='излишне опять делит на 1000  - realvalues не цепляет скины' />
+      <include code='call' id='call' cls='^CuChernGraphObchras' h='${_hl}' problem='' />
+    </fixture>
+  </namespace>
+</root>", b.ToSqlString().Replace("\"", "'"));
+		}
+		[Test]
+		public void ValidlyParsesEmptyStrings(){
+			var code = @"
+x x='' y="""" z=""""""""""""  : """"
+	a = """"
+y a=1
+";
+			var b = new BxlParser().Parse(code, "", BxlParserOptions.NoLexData);
+			Console.WriteLine(b.ToString().Replace("\"", "'"));
+			Assert.AreEqual(@"<root>
+  <x x='' y='' z='' a=''></x>
+  <y a='1' />
+</root>",b.ToSqlString().Replace("\"","'"));
+		}
+
 		[Test]
 		public void NameAnonymAfterNoAnyNamed()
 		{
