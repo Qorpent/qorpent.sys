@@ -111,7 +111,7 @@ namespace Qorpent.Mvc.Renders {
     myChart.set{7}Data($('#fc-data-{1}').text());
     myChart.render('{6}');
 // -->
-</script>", config.Type, id, config.Width, config.Height, config.Debug, datascript.Replace("<", "&lt;"), container, config.DataType);
+</script>", config.Type, id, config.Width, config.Height, config.Debug, datascript.Replace("<", "&lt;").Replace("&quot;","&amp;quot;"), container, config.DataType);
 			    context.ContentType = "text/html";
 		    }
 
