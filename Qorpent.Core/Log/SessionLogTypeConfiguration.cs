@@ -11,8 +11,9 @@ namespace Qorpent.Log{
 		/// </summary>
 		/// <param name="code"></param>
 		/// <param name="comparer"></param>
+		/// <param name="triggerAccept"></param>
 		/// <returns></returns>
-		public static SessionLogTypeConfiguration ApplicationAlert(string code,IEqualityComparer comparer = null){
+		public static SessionLogTypeConfiguration ApplicationAlert(string code,IEqualityComparer comparer = null, string[] triggerAccept = null){
 			return new SessionLogTypeConfiguration{
 				Code = code,
 				IsSingleton = true,
@@ -21,6 +22,7 @@ namespace Qorpent.Log{
 				AutoAcceptBelow = LogLevel.Info,
 				AutoRemoveBelow = LogLevel.Trace,
 				CustomComparer = comparer,
+				TriggerAccept = triggerAccept,
 				UpgradeTime = true
 			};
 		}
@@ -36,6 +38,11 @@ namespace Qorpent.Log{
 		/// 
 		/// </summary>
 		public bool RequireAccept { get; set; }
+
+		/// <summary>
+		/// Коды событий, автоматически акцептемых при снятии данного события
+		/// </summary>
+		public string[] TriggerAccept { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>

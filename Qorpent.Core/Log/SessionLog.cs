@@ -39,7 +39,19 @@ namespace Qorpent.Log
         /// </summary>
         /// <param name="code"></param>
         public void Accept(string code) {
-            Get(code).Accepted = true;
+			if(!_config.ContainsKey(code))throw new Exception("cannot accept not configured message");
+	        var _existed = Get(code);
+	        if (null == _existed) return;
+	        _existed.Accepted = true;
+			_existed.Level = LogLevel.Trace;
+	        var cfg = _config[code];
+			if (null != cfg.TriggerAccept){
+				foreach (var c in cfg.TriggerAccept){
+					if (_config.ContainsKey(c)){
+						Accept(c);
+					}
+				}
+			}
         }
 
 		/// <summary>

@@ -96,5 +96,13 @@ namespace Qorpent.Utils.Git{
 		/// 
 		/// </summary>
 		public string Name { get; set; }
+		/// <summary>
+		/// Признак собственного коммита
+		/// </summary>
+		public bool IsOwnCommit { get; set; }
+		/// <summary>
+		/// Автор, разрезольвенный по собственной логике
+		/// </summary>
+		public string ResolvedAuthor { get; set; }
 	}
 }
