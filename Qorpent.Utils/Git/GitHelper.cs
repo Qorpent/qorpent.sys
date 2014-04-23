@@ -551,8 +551,10 @@ namespace Qorpent.Utils.Git{
 		/// </summary>
 		/// <param name="path"></param>
 		/// <param name="since"></param>
+		/// <param name="all"></param>
+		/// <param name="nomerges"></param>
 		/// <returns></returns>
-		public GitCommitInfo[] GetHistory(string path="",string since = null ){
+		public GitCommitInfo[] GetHistory(string path="",string since = null , bool all = false, bool nomerges = false){
 			if (!string.IsNullOrWhiteSpace(path)){
 				path = "\"" + path + "\"";
 			}
@@ -560,7 +562,14 @@ namespace Qorpent.Utils.Git{
 			if (!string.IsNullOrWhiteSpace(since)){
 				args = "--since \"" + since + "\" " + args;
 			}
-			
+
+			if (all){
+				args = " --all " + args;
+			}
+			if (nomerges){
+				args = " --no-merges " + args;
+			}
+
 			var result = ExecuteCommand("log", args);
 			var hists = result.SmartSplit(false, true, '`');
 			return hists.Select(GitUtils.ParseGitCommitInfo).ToArray();
