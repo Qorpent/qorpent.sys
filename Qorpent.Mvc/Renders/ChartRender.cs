@@ -75,6 +75,7 @@ namespace Qorpent.Mvc.Renders {
 	    }
 
 	    private string GetNormalChartContent(IMvcContext context, IChartConfig config) {
+		    var comments = GetComments(context).Aggregate(string.Empty, (_, __) => _ + __);
 		    var datascript = RenderDataScript(context, config);
 			if (string.IsNullOrWhiteSpace(datascript)) {
 				return GetErrorChartContent(context, config);
@@ -101,7 +102,7 @@ namespace Qorpent.Mvc.Renders {
 		    if (string.IsNullOrWhiteSpace(container)) {
 			    container = "fc-container-" + id;
 			    script += string.Format(@"
-<div class=""assoiGraphContainer""><div class=""fusinchart-container{0}"" id=""{1}"">{2}</div>{3}</div>", string.IsNullOrEmpty(error) ? " fusionchart-error" : "", container, error, GetComments(context).Aggregate(string.Empty, (_, __) => _ + __));
+<div class=""assoiGraphContainer""><div class=""fusinchart-container{0}"" id=""{1}"">{2}</div>{3}</div>", string.IsNullOrEmpty(error) ? " fusionchart-error" : "", container, error, comments);
 		    }
 
 
@@ -200,6 +201,7 @@ namespace Qorpent.Mvc.Renders {
 		        var xElement =source as XElement;
 		        config.DataType = "XML";
 		        config.Type = xElement.Attr("graphtype");
+				RemoveComments(xElement);
 		        return source.ToString();
 	        } else if(source is string) {
 		        return source as string;
@@ -207,6 +209,13 @@ namespace Qorpent.Mvc.Renders {
 
             return string.Empty;
         }
+		/// <summary>
+		///		Удаление комментов
+		/// </summary>
+		/// <param name="graphConfig"></param>
+		private void RemoveComments(XElement graphConfig) {
+			graphConfig.Descendants("comments").Remove();
+		}
 		/// <summary>
 		///		Получение перечисление блоков с комментариями
 		/// </summary>
