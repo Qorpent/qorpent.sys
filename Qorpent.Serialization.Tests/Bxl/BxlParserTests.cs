@@ -81,6 +81,61 @@ y a=1
 </root>",b.ToSqlString().Replace("\"","'"));
 		}
 
+		[TestCase("e (a))")]
+		[TestCase("e ((a)")]
+		[TestCase("e ([a)")]
+		[TestCase("e (a])")]
+		[TestCase("e ({a)")]
+		[TestCase("e (a})")]
+		[TestCase("e (a)+(b)")]
+		[TestCase("e (a)+[b]")]
+		[TestCase("a (fun(x){return x*2;)")]
+		[TestCase("a (fun(x)return x*2;})")]
+		[TestCase("a (fun(x{return x*2;})")]
+		[TestCase("a (fun(x){return x*2;}})")]
+		public void ErrorOnInvalidExpressions(string code){
+
+			Assert.Throws<BxlException>(
+				() => Console.WriteLine(new BxlParser().Parse(code)));
+		}
+		[TestCase("a (((a)))")]
+		[TestCase("a (((a+b)))")]
+		[TestCase("a ((a+b)+(b+c))")]
+		[TestCase("a ((a+b)+ [b+c])")]
+		[TestCase("a (fun(x){return x*2;})")]
+		public void ParsesValidExpressions(string code){
+			Console.WriteLine(new BxlParser().Parse(code));
+		}
+		[TestCase("a (((a)))","(((a)))")]
+		public void KeepLeadingBraceInAnoExpressions(string code,string test){
+			var x = new BxlParser().Parse(code);
+			Assert.AreEqual(test,x.Element("a").Attr("code"));
+		}
+
+		[TestCase("a code=(((a)))", "(((a)))")]
+		public void KeepLeadingBraceInAttrValExpressions(string code, string test)
+		{
+			var x = new BxlParser().Parse(code);
+			Assert.AreEqual(test, x.Element("a").Attr("code"));
+		}
+
+
+		public void AllowValidExpressions(){
+			
+		}
+
+		[TestCase("a fn(c)")]
+		[TestCase("a x=fn(c)")]
+		public void AllowFunctionCallLikeValues(string code){
+			Console.WriteLine(new BxlParser().Parse(code));
+		}
+
+		[TestCase("a fn(c)=x")]
+		public void AllowFunctionCallLikeNames(string code)
+		{
+			Console.WriteLine(new BxlParser().Parse(code));
+		}
+
 		[Test]
 		public void NameAnonymAfterNoAnyNamed()
 		{
@@ -549,6 +604,26 @@ test1 a b
 
 			String bxl = GetType().Assembly.ReadManifestResource(filename);
 			var xml1 = new BxlParser().Parse(bxl);
+		}
+	
+
+		[Test]
+		public void TryFindBug()
+		{
+			var code = @"
+formula 999 'ВСЕГО расходов на собственные нужды' nosum  formula=(
+			$m600?
+		)
+			title 1000 'Расчет для строки   ""Расходы на собственные нужды"" в форме  ""Финансовые результаты""' 
+				formula 1010 'Результат деятельности объектов соцкультбыта формы 4'  : (
+					$m6001020? + $m6001030? - $m6001040? - $m6001050? - $m6001061?
+				)
+				primary 1015 'в том числе без отражения в форме 6' 
+				sum 1020 'Выручка от продаж (форма 4 АХД)' 
+					formula 1021 'Продажа услуг (работ) соцсферы'  : (
+						$m21401009?
+					)";
+			Console.WriteLine(new BxlParser().Parse(code));
 		}
 	}
 }

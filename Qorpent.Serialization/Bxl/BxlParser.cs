@@ -284,6 +284,10 @@ namespace Qorpent.Bxl {
 		}
 
 		private void processNewLine(char c) {
+			if (char.IsWhiteSpace(c))
+			{
+				_expStack.Clear();
+			}
 			char s = _stack.Peek();
 			if (s == '\'' || s == '"')
 				throw new BxlException("new line in regular string", _info.Clone());
@@ -394,6 +398,12 @@ namespace Qorpent.Bxl {
 		}
 
 		private void processAttributeName(char c) {
+			if (!char.IsWhiteSpace(c) && c!='=' && c!=','){
+				if (_expStack.Count != 0){
+					throw new BxlException("not terminated expression",lexinfo:_info.Clone());
+				}
+			}
+			
 			switch (c) {
 				case ':':
 					saveValue();
@@ -448,6 +458,7 @@ namespace Qorpent.Bxl {
 					_buf.Append(c);
 					return;
 				case ')':
+					if(_expStack.Count!=0)throw new BxlException("invalid expression finishing");
 					if (_buf.Length != 0)
 						_buf.Append(c);
 					return;
@@ -464,6 +475,9 @@ namespace Qorpent.Bxl {
 		}
 
 		private void processAttributeValue(char c) {
+			if (char.IsWhiteSpace(c)){
+				_expStack.Clear();
+			}
 			switch (c) {
 				case ':':
 					if (_buf.Length == 0 && !_isString)
@@ -645,8 +659,13 @@ namespace Qorpent.Bxl {
 					if (last != '(') throw new BxlException("non matched expression ", _info.Clone());
 					_buf.Append(c);
 					_stack.Pop();
-					if (_stack.Peek() != '(')
-						_mode = (ReadMode)_stack.Pop();
+					if (_expStack.Count == 0){
+						_expStack.Push('\0');
+					}
+					if (_stack.Peek() != '('){
+						
+						_mode = (ReadMode) _stack.Pop();
+					}
 					return;
 				case '[':
 					_expStack.Push(c);
@@ -657,6 +676,10 @@ namespace Qorpent.Bxl {
 					if (0 == _expStack.Count) throw new BxlException("exp stack finished before needed ", _info.Clone()); ;
 					last = _expStack.Pop();
 					if (last != '[') throw new BxlException("non matched expression ", _info.Clone());
+					if (_expStack.Count == 0)
+					{
+						_expStack.Push('\0');
+					}
 					_buf.Append(c);
 					_stack.Pop();
 					return;
@@ -669,6 +692,10 @@ namespace Qorpent.Bxl {
 					if (0 == _expStack.Count) throw new BxlException("exp stack finished before needed ", _info.Clone()); ;
 					last = _expStack.Pop();
 					if (last != '{') throw new BxlException("non matched expression ", _info.Clone());
+					if (_expStack.Count == 0)
+					{
+						_expStack.Push('\0');
+					}
 					_buf.Append(c);
 					_stack.Pop();
 					return;
@@ -823,6 +850,7 @@ namespace Qorpent.Bxl {
 
 						_stack.Push((char)ReadMode.AttributeName);
 						_stack.Push(c);
+						_buf.Append(c);
 						_mode = ReadMode.Expression;
 						_expStack.Clear();
 						_expStack.Push(c);
