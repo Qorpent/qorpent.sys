@@ -217,8 +217,8 @@ namespace Qorpent.Mvc.Renders {
 			if (xmlGraphConfig != null) {
 				foreach (var xmlComment in xmlGraphConfig.XPathSelectElements("//comments/comment")) {
 					yield return string.Format(
-						@"<div style=""font-size: {0};text-align: {1};left: {2}px;top: {3}px"" class=""assoiGraphComment"">{4}</div>",
-						xmlComment.Attr("fontsize", "11px", true),
+						@"<div style=""font-size: {0};text-align: {1};left: {2};top: {3}"" class=""assoiGraphComment"">{4}</div>",
+						xmlComment.Attr("fontsize", "11pt", true),
 						xmlComment.Attr("textalign", "left", true),
 						xmlComment.Attr("left", "0", true),
 						xmlComment.Attr("top", "0", true),
