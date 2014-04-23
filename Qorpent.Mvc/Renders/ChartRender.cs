@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using Qorpent.Charts;
 using Qorpent.IO;
 using Qorpent.Uson;
@@ -98,7 +101,7 @@ namespace Qorpent.Mvc.Renders {
 		    if (string.IsNullOrWhiteSpace(container)) {
 			    container = "fc-container-" + id;
 			    script += string.Format(@"
-<div class=""fusinchart-container{0}"" id=""{1}"">{2}</div>", string.IsNullOrEmpty(error) ? " fusionchart-error" : "", container, error);
+<div class=""assoiGraphContainer""><div class=""fusinchart-container{0}"" id=""{1}"">{2}</div>{3}</div>", string.IsNullOrEmpty(error) ? " fusionchart-error" : "", container, error, GetComments(context).Aggregate(string.Empty, (_, __) => _ + __));
 		    }
 
 
@@ -119,6 +122,17 @@ namespace Qorpent.Mvc.Renders {
 			    script = @"
 <html>
 <header>
+	<style type=""text/css"">
+		.assoiGraphContainer { position: relative;}
+		.assoiGraphComment {
+			position: absolute;
+			background: #FFFED6;
+			border: 1px #006699 dotted;
+			color: #000;
+			padding: 5px 8px 5px 8px;
+		}
+	</style>
+	<title>График АССОИ</title>
 </header>
 <body>
 <script type=""text/javascript"" src=""../scripts/jquery.min.js""></script>
@@ -193,7 +207,26 @@ namespace Qorpent.Mvc.Renders {
 
             return string.Empty;
         }
-
+		/// <summary>
+		///		Получение перечисление блоков с комментариями
+		/// </summary>
+		/// <param name="context">Контекст рендера</param>
+		/// <returns>Перечисление HTML-блоков</returns>
+		public IEnumerable<string> GetComments(IMvcContext context) {
+			var xmlGraphConfig = context.ActionResult as XElement;
+			if (xmlGraphConfig != null) {
+				foreach (var xmlComment in xmlGraphConfig.XPathSelectElements("//comments/comment")) {
+					yield return string.Format(
+						@"<div style=""font-size: {0};text-align: {1};left: {2}px;top: {3}px"" class=""assoiGraphComment"">{4}</div>",
+						xmlComment.Attr("fontsize", "11px", true),
+						xmlComment.Attr("textalign", "left", true),
+						xmlComment.Attr("left", "0", true),
+						xmlComment.Attr("top", "0", true),
+						xmlComment.Value
+					);
+				}
+			}
+		}
         /// <summary>
         /// 
         /// </summary>

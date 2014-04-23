@@ -578,13 +578,19 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="sourceElement"> Element from which attribute requested </param>
 		/// <param name="name"> name of requested attribute (can be string) </param>
 		/// <param name="defaultvalue"> default Value if not attribute existed </param>
+		/// <param name="returnDefaultIfEmpty">Returns default value even if value is not null, but is an empty string</param>
 		/// <returns> string representation of attribute or empty string </returns>
-		public static string Attr(this XElement sourceElement, XName name, string defaultvalue = "") {
+		public static string Attr(this XElement sourceElement, XName name, string defaultvalue = "", bool returnDefaultIfEmpty = false) {
 			if (null == sourceElement) {
 				return defaultvalue;
 			}
 			var attr = sourceElement.Attribute(name);
-			return null == attr ? defaultvalue : attr.Value;
+			var value = null == attr ? defaultvalue : attr.Value;
+			 
+			if (!returnDefaultIfEmpty) {
+				return value ?? defaultvalue;
+			}
+			return string.IsNullOrWhiteSpace(value) ? defaultvalue : value;
 		}
 	}
 }
