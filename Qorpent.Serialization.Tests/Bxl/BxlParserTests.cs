@@ -112,6 +112,19 @@ y a=1
 			Assert.AreEqual(test,x.Element("a").Attr("code"));
 		}
 
+		[Test]
+		public void MustBeParsed(){
+			var code = @"
+a
+z (c-d ( ) )
+";
+			Console.WriteLine(new BxlParser().Parse(code));
+
+		}
+
+
+
+
 		[TestCase("a code=(((a)))", "(((a)))")]
 		public void KeepLeadingBraceInAttrValExpressions(string code, string test)
 		{

@@ -391,6 +391,13 @@ namespace Qorpent.Bxl {
 					if (_value.Length != 0) {
 						addNode();
 						_mode = ReadMode.AttributeName;
+						if (c == '('){
+							_stack.Push((char)_mode);
+							_stack.Push('(');
+							_mode = ReadMode.Expression;
+							_expStack.Clear();
+							_expStack.Push('(');
+						}
 					}
 					_buf.Append(c);
 					return;
