@@ -1,0 +1,150 @@
+﻿{style:float:right;}Языки BXL/B# - руководство{style}
+{style:float:left;}Быстрый старт - hello world на BXL{style}
+[bx-index Вернуться к оглавлению]
+= Быстрый старт - hello world на BXL
+
+/ Внимание! Для нормального ознакомления с BXL вы должны иметь базовые представления об XML. Если вы еще ничего не знаете, то посмотрите, например [http://www.ibm.com/developerworks/ru/library/x-newxml/]
+
+== Итак, начнем по традиции с самого простого примера:
+[[code]]
+hello : world
+[[/code]]
+[[script-last type=bxl]]
+
+/ Итак - мы получили простенький элемент, но нам для этого не пришлось делать тега закрытия и использовать уголковые разделители
+
+== Естественно, что нам также нужны вложенные элементы и независимость от языка
+[[code]]
+server
+	http : 80
+	https : 443
+	rdp : 3882
+	stats : 40741
+[[/code]]
+[[script-last type=bxl]]
+
+== И конечно нужны атрибуты
+[[code]]
+server localaddr=192.168.23.17
+	http : 80
+	https : 443
+	rdp localonly=true : 3882
+	stats : 40741
+[[/code]]
+[[script-last type=bxl]]
+
+/ Как видно, кавычки у атрибутов также не требуются... 
+
+== Но если атрибуты по-сложнее, то кавычки можно применять
+
+Причем как "...", так и '...', так и многострочные """...""", так и выражения в скобках ()
+
+[[code]]
+server localaddr=192.168.23.17 admin="Иванов Игорь Львович"
+	http : 80
+	https : 443
+	rdp localonly=true : 3882
+	stats : 40741
+	comment : """
+		этот сервер является основным внешним шлюзом
+		наших приложений
+		внимательно все следим за ним
+	"""
+[[/code]]
+[[script-last type=bxl]]
+
+/ Но пока BXL по виду ничем не отличается от XML, главные особенности начинаются дальше
+
+== XML требует, чтобы атрибуты предшествовали элементам и шли только в заголовке, а BXL - нет
+
+И это очень сильно увеличивает читаемость и простоту генерации и ручного набора кода.
+
+Усовершенствуем и разовьем наш пример
+
+[[code]]
+server code=mainserver
+	localaddr=192.168.23.17
+	remoteaddr=34.223.121.89
+	domain=corporate.ru
+	gateway
+		service code=http port=80
+		service code=https port=443
+		service code=rdp port=3882 localonly=true
+		service code=stats port=40741
+	admin="Иванов Игорь Львович"
+	adminemail=ilivanov@corporate.ru
+	comment : """
+		этот сервер является основным внешним шлюзом
+		наших приложений
+		внимательно все следим за ним
+	"""
+[[/code]]
+[[script-last type=bxl]]
+
+/ Как видите - вложенные элементы и атрибуты идут в том порядке, как нам удобно и как в заголовке, так и "под" элементами см. [bx-bxl-attr Атрибуты в BXL]
+
+== Но благодаря концепции атрибутов идентичности и анонимным атрибутам, BXL может быть еще лаконичнее см. [bx-bxl-idattr Идентичность элементов и анонимные атрибуты в BXL]
+
+[[code]]
+server mainserver
+	localaddr=192.168.23.17
+	remoteaddr=34.223.121.89
+	domain=corporate.ru
+	gateway
+		service http port=80
+		service https port=443
+		service rdp port=3882 localonly
+		service stats port=40741
+	admin="Иванов Игорь Львович"
+	adminemail=ilivanov@corporate.ru
+	comment : """
+		этот сервер является основным внешним шлюзом
+		наших приложений
+		внимательно все следим за ним
+	"""
+[[/code]]
+[[script-last type=bxl]]
+
+== Нужны пространства имен? Тоже просто
+
+[[code]]
+my = "http://outnamespace.com"
+server mainserver
+	my::spectag role my::surface=all-farms
+	localaddr=192.168.23.17
+	remoteaddr=34.223.121.89
+	domain=corporate.ru
+	gateway
+		service http port=80
+		service https port=443
+		service rdp port=3882 localonly
+		service stats port=40741
+	admin="Иванов Игорь Львович"
+	adminemail=ilivanov@corporate.ru
+	comment : """
+		этот сервер является основным внешним шлюзом
+		наших приложений
+		внимательно все следим за ним
+	"""
+[[/code]]
+[[script-last type=bxl]]
+
+== А почему бы в именах не использвать спецсимволы? (в XML нельзя)
+
+[[code]]
+server mainserver
+	security
+		+group admins 
+		+group specal_users
+		-group public
+		+user 'ourdomain\\mainadmin' comment="на практике и пока не в группе, но нужен в работе"
+[[/code]]
+[[script-last type=bxl]]
+
+/ Мы смогли наглядно через имя элемента выразить действие  (+/-) и при этом это все равно XML! см. [bx-bxl-literals Литералы и строки BXL]
+
+== Материалы для дальнейшего освоения
+
+% [bx-bxl-syntax Общие сведения о синтаксисе BXL]
+% [bx-bxl-literals Литералы и строки BXL]
+% [bx-bxl-identity Идентичность элементов в BXL]

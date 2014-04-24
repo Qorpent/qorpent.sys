@@ -1,0 +1,366 @@
+﻿{style:float:right;}Языки BXL/B# - руководство{style}
+{style:float:left;}Формальное определение синтаксиса BXL{style}
+[bx-index Вернуться к оглавлению]
+= Формальное определение синтаксиса BXL
+
+В данном разделе дается общее определение синтаксиса BXL, подробные примеры и разъяснения нюансов поведения даны в соответствующих разделах справки
+
+Ниже приведено формальное определение со следующими условными обозначениями:
+
+% XXX - не обязательный элемент
+
+% {XXX} - обязательный элемент
+
+% XXX* - множественный необязаетеьный элемет 0..∞
+
+% {XXX*} -  обязательный множественный элемент 1..∞
+
+% XXX | YYY - выбор
+
+==Комментарии:
+
+В BXL поддерживаются однострочные суффиксные комментарии от символа #
+[[code]]
+# вся строка комментарий
+element # конец строки комментарий
+[[/code]]
+
+/ Комментарии не рассматриваются как элемент синтаксиса и при парсинге игнорируются ***соответственно понятия прагмы в BXL нет и не планируется***
+
+== Классы символов
+
+Символы в BXL подразделяются на следующие классы:
+[[code]]
+ANY = *  #любой символ
+WS = [ SPACE TAB RET NL] #любой пробельный символ
+LEVEL = {SPACE*4} | TAB # для выражения уровня используется либо 4-х кратный пробел либо табулятор
+NEWLINE = [RET NL]
+SPECS = [:,="'\]  # специальные символы
+STRINGLIMITS = ["']
+MULTISTRINGLIMITS = """
+ESCAPER = \
+LITERALS = ANY -WS -SPEC # все символы за исключением пробельных и специальных считаются литеральными
+ESCAPED = \' | \" | \\ | \r | \n
+EXPOPEN = (
+EXPCLOSE = )
+EXPBREAKERS = [()[]{}]
+STRINGSIMBOL = ANY - STRINGLIMITS -ESCAPER - NEWLINE + ESCAPED
+[[/code]]
+
+== Общий порядок обработки
+
+BXL разбирается по-строчно, то есть символы RET и NL рассматриваются как терминаторы строки
+Исключением являются многострочные строки и выражения которые могут пересекать границы строк
+
+[[code]]
+BXLLINE = LEVEL* DATA NL
+[[/code]]
+
+Пример трех строк с уровнем
+[[code]]
+parent val=1				# у этой строки уровень 0
+	child val=2				# у этой строки уровень 1
+		superchild val=3	# у этой строки уровень 2
+[[/code]]
+[[script-last type=bxl]]
+== Примитивы 
+
+
+Для выражения данных в  BXL поддерживается три вида примитивов со следующим определением
+[[code]]
+PRIMITIVE = LITERAL | STRING | MULTISTRING | EXPRESSION
+LITERAL = {LITERALS}*
+STRING = {STRINGLIMITS} STRINGSIMBOL* {STRINGLIMITS} # строки обрамляются одинаковыми кавычками или апострофами
+MULTISTRING = {MULTISTRINGLIMITS} ANY* {MULTISTRINGLIMITS} # строки с тройными кавычками содержат что угодно
+EXPRESSION = {EXPOPEN} ANY* {EXPCLOSE} --> CONTROL WITH EXPBREAKERS # выражения поддерживают встроенный контролль проверки целостности по скобкам 
+[[/code]]
+
+=== Примеры литералов
+[[code]]
+# примеры литералов
+literals :
+	ABC : "Обчные литералы"
+	122 : "Целое число может быть литералом"
+	122.0 : "И дробь - литерал"
+	-122.0 : "И отрицательная дробь - литерал"
+	_ : "Подчеркивание - литерал"
+	* : "Любой не специальный символ - литерал"
+	^char.main-/*int : "Любое их сочетание - все еще литерал"
+[[/code]]
+[[script-last type=bxl]]
+
+=== Примеры в которых можно ошибиться, не учитывая сути литералов
+Ошибочные литералы содержат недопустимые символы
+[[code]]
+error no=equals  # не будет ошибкой, но парсится НЕ как литерал а как атрибут
+[[/code]]
+[[script-last type=bxl]]
+[[code]]
+error no,commas  # нет ошибки, но неверный парс - запятая зарезервирована как разделитель
+[[/code]]
+[[script-last type=bxl]]
+
+[[code]]
+error no\\escape  # ошибка - ESCAPE разрешен только в строках
+[[/code]]
+[[script-last type=bxl]]
+
+[[code]]
+error no:doubler  # нет ошибки, но другой парс - двоеточие отделяет значение ЭЛЕМЕНТА от заголовка
+[[/code]]
+[[script-last type=bxl]]
+
+
+
+
+=== Примеры строк
+[[code]]
+# примеры строка
+strings :
+	single_2q : "Простая строка в кавычках"
+	single_2q_esc : "Простая строка в кавычках с \"ESCSAPE\""
+	single_1q : 'Простая строка в апострофах'
+	single_1q_esc : 'Простая строка в апострофах с \'ESCSAPE\''
+	multiline : """
+		Многострочная
+		строка
+		с любыми "кавычками" и 'апострофами'
+	"""
+[[/code]]
+[[script-last type=bxl]]
+
+=== Примеры выражений
+[[code]]
+expressions
+	ex1 (a+1)             #выражение как атрибут по умолчанию
+	ex2 val=(a+1[0])      #выражение как значение именованного атрибута
+	ex2 : ({
+		var x = (2 * y ) + sqrt(array[1,2] * 12);
+		return (x/(2-y));
+	}) # развернутое выражение как значение элемента
+[[/code]]
+[[script-last type=bxl]]
+
+/ но главная суть выражение - не просто быть еще одним видом многострочных строк, а встроенный контроль целостности по скобкам
+
+[[code]]
+error (a+1)) # лишняя закрывающая
+[[/code]]
+[[script-last type=bxl]]
+
+[[code]]
+error val=(a+1[[0]) # лишняя открывающая
+[[/code]]
+[[script-last type=bxl]]
+
+[[code]]
+error : ({
+		var x = (2 * y ) + sqrt(array{1,2] * 12);
+		return (x/(2-y));
+	}) # неверная комбинация скобок в array{1,2]
+[[/code]]
+[[script-last type=bxl]]
+
+
+==Каждый файл BXL образует МОДУЛЬ со следующей структурой:
+
+[[code]]
+MODULE :
+	NAMESPACEDEFINITION* # определение пространств имен
+	LEVEL*0 ELEMENT *  # определения корневых элементов
+[[/code]]
+
+/ Примечание - из описания следует, что модуль может быть пустым
+
+
+
+== Определение пространств имен
+
+Пространства имен поддерживаются BXL для совместимости с XML, в спецификациях, полностью написанных на BXL пространства имен практичесик не используются
+
+[[code]]
+NAMESPACEDEFINITION :
+	{PREFIX} {=} {NAMESPACE}
+PREFIX = LITERAL
+NAMESPACE = PRIMITIVE
+[[/code]]	
+
+Пример определения пространства имен:
+
+[[code]]
+x = "http://mycorp.com" # определяем пространство
+x::myelement x::myattr=1 # используем пространство
+[[/code]]
+[[script-last type=bxl]]
+
+/ Префиксы пространств имен используются только при парсе BXL (по спецификации XElement/DOM префиксы относятся ко времени парса и не хранятся в элементах)
+
+== Определение элемента
+[[code]]
+ELEMENT = {HEADER} {NEWLINE} BODY
+HEADER =ELEMENTLEVEL {NAME} IDENTITY ATTRIBUTES ELEMENTVALUE #атрибуты могут ОПЦИОНАЛЬНО разделяться запятыми для удобства чтения
+ELEMENTLEVEL = LEVEL*
+NAME= (PREFIX{::}){LITERAL}
+PREFIX = LITERAL
+ATTRIBUTES = (ATTRIBUTE|,)*
+ELEMENTVALUE = {:} PRIMITIVE
+IDNTITY =   # идентичность элемента одна из главных концепций - она состоит из 3-х атрибутов id,code, name - первые 2 считаются синонимичными ключами, второе - читемым именем
+	1) {NAMEDID} {CODEATTR} NAME
+	2) {CODEATTR} {NAMEDID} NAME
+	3) {CODEORID} NAME
+NAMEDID = {id} {=} {ATTRVALUE}
+CODEATTR = ( {code} {=} {ATTRVALUE} ) | ANOATTR
+CODEORID = ANOATTR
+NAME = ({name} {=} {ATTRVALUE} ) | ANOATTR
+
+ATTRIBUTE = NAMEDATTRIBUTE | ANOATTRIBUTE
+NAMEATTRIBUTE = {ATTRNAME}{=}{ATTRVALUE}
+ATTRNAME = LITERAL
+ATTRVALUE = PRIMITIVE
+ANOATTRIBUTE = FLAGATTR | ANOATTR # фомально определение в этом файле дано не будет - читайте руководство в части анонимных атрибутов
+BODY = ({ELEMENTLEVEL}{LEVEL} (ELEMENT | ({NAMEDATTRIBUTE} (ATTRIBUTE|,)*)))*
+[[/code]]
+
+Определение не слишком простое, давайте разберем на примерах
+% Просто элемент (минимальный пример элемента)
+[[code]]
+# ELEMENTLEVEL=0 {NAME}="x" IDENTITY=NULL ATTRIBUTES=NULL ELEMENTVALUE=NULL BODY=NULL
+x   
+[[/code]]
+[[script-last type=bxl]]
+
+% Элемент со значением
+[[code]]
+# ELEMENTLEVEL=0 {NAME}="x" IDENTITY=NULL ATTRIBUTES=NULL ELEMENTVALUE="1" BODY=NULL
+x : 1  
+[[/code]]
+[[script-last type=bxl]]
+
+% Элемент с именованным атрибутом и значением
+[[code]]
+# ELEMENTLEVEL=0 {NAME}="x" IDENTITY=NULL ATTRIBUTES="y=z" ELEMENTVALUE="1" BODY=NULL
+x y=z : 1  
+[[/code]]
+[[script-last type=bxl]]
+
+% Элемент с базовой идентичностью, именованным атрибутом и значением
+[[code]]
+# ELEMENTLEVEL=0 {NAME}="x" IDENTITY="id=A code=A" ATTRIBUTES="y=z" ELEMENTVALUE="1" BODY=NULL
+x A y=z : 1  
+[[/code]]
+[[script-last type=bxl]]
+
+% Элемент с базовой идентичностью, именем, именованным атрибутом и значением
+[[code]]
+# ELEMENTLEVEL=0 {NAME}="x" IDENTITY="id=A code=A name=B" ATTRIBUTES="y=z" ELEMENTVALUE="1" BODY=NULL
+x A B y=z : 1  
+[[/code]]
+[[script-last type=bxl]]
+
+
+% Элемент с полной идентичностью, именем, именованным атрибутом и значением, помещенный в пространство имен
+[[code]]
+# ELEMENTLEVEL=0 {NAME}="h::x" IDENTITY="id=23 code=A name=B" ATTRIBUTES="y=z" ELEMENTVALUE="1" BODY=NULL
+h = "http://ours"
+h::x id=23 A B y=z : 1  
+[[/code]]
+[[script-last type=bxl]]
+
+% Все тот же элемент, но теперь еще и с дочерним элементами
+[[code]]
+# ELEMENTLEVEL=0 {NAME}="h::x" IDENTITY="id=23 code=A name=B" ATTRIBUTES="y=z" ELEMENTVALUE="1" BODY=NOT NULL
+h = "http://ours"
+h::x id=23 A B y=z : 1  
+	y : child1
+	z : child2
+[[/code]]
+[[script-last type=bxl]]
+
+
+% Все тот же элемент, но теперь еще и с дочерним элементами и поздним определением атрибутов
+[[code]]
+# ELEMENTLEVEL=0 {NAME}="h::x" IDENTITY="id=23 code=A name=B" ATTRIBUTES="y=z" ELEMENTVALUE="1" BODY=NOT NULL
+
+h = "http://ours"
+h::x id=23 A B y=z : 1  
+	y 1: child1
+	z 1: child2
+		zc : "child of Z..."
+	k = here # в XML нельзя определить атрибут вне заголовка , а в BXL - можно, если уровень по табуляции верный
+[[/code]]
+[[script-last type=bxl]]
+
+% Элемент с флаговыми (булевскими) атрибутами
+
+[[code]]
+item mycode myname flag active somehint
+[[/code]]
+[[script-last type=bxl]]
+
+/ как вы видите - ЛИТЕРАЛЬНЫЕ атрибуты без пары имя-значение и не относящиеся к идентичности трактуются как булевские флаги
+
+Такое поведение позволяет разбирать выражения в духе языков высокого уровня
+[[code]]
+trigger mytrigger on=mytable before insert update delete recursive 
+string myvariable "Моя переменная" public virtual property get set
+[[/code]]
+[[script-last type=bxl]]
+
+
+% Элемент с анонимными (строковыми) атрибутами
+
+[[code]]
+item mycode myname "flag" "active" "somehint"
+[[/code]]
+[[script-last type=bxl]]
+
+/ если в качестве атрибута без пары имя-значения вне идентичности была использована строка, она трактуется как ЗНАЧЕНИЕ атриубута, имя которому присваивается автоматически
+
+
+== Дополнительные примечания
+
+% BXL позволяет использовать запятую как разделитель между атрибутами, в том числе и после последнего и во вложенных,
+что может повысить читаемость. Например такая форма эквивалентна предыдущему примеру:
+
+[[code]]
+h = "http://ours"
+h::x id=23, A, B, y=z, : 1  
+	y 1,: child1
+	z 1,: child2
+		zc : "child of Z..."
+	k = here,,,,, # запятая - символ только для глаз - вне строк BXL их ВСЕГДА игнорирует полностью, как пробелы
+[[/code]]
+[[script-last type=bxl]]
+
+/ По сути - запятая это "видимый глазом пробел" для BXL
+
+% BXL не требует наличия двоеточия в конце элемента, если значение пустое, но и не запрещает:
+
+[[code]]
+# оба варианта допустимы
+
+here :
+	ok
+here
+	ok too
+[[/code]]
+[[script-last type=bxl]]
+
+НО! Если значение не пустое, разница будет существенной:
+[[code]]
+here : "value"
+	it is real value!
+here "value"
+	it is not real value!
+[[/code]]
+[[script-last type=bxl]]
+
+См. также:
+
+% [bx-bxl-qstart Hello world BXL - начальные сведения о BXL]
+% [bx-bxl-literals Подробнее о литералах BXL]
+% [bx-bxl-identity Идентичность элементов в BXL]
+
+
+
+
