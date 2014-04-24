@@ -545,7 +545,14 @@ namespace Qorpent.Utils.Git{
 				throw;
 			}
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rev"></param>
+        /// <returns></returns>
+        public string GetParentCommit(string rev) {
+            return ExecuteCommand("log", "-2 " + rev + " --format=%h").Split('\r', '\n').Last().Trim();
+        }
 		/// <summary>
 		/// 
 		/// </summary>
