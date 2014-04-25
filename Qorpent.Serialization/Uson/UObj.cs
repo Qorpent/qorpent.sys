@@ -333,6 +333,21 @@ namespace Qorpent.Uson
 			return obj.Properties.Count;
 		}
 
+
+		/// <summary>
+		/// Конвертация в строку
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static implicit operator long(UObj obj)
+		{
+			if (null == obj) return 0;
+			if (obj.UObjMode == UObjMode.Fake) return 0;
+			if (obj.UObjMode == UObjMode.Value) return obj.Properties["__value"].ToLong();
+			if (obj.UObjMode == UObjMode.Array) return obj.Array.Count;
+			return obj.Properties.Count;
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>

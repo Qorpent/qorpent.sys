@@ -57,7 +57,7 @@ namespace Qorpent.Log
 		/// 
 		/// </summary>
 		/// <param name="id"></param>
-		public void Accept(int id){
+		public void Accept(long id){
 			var m = _log.FirstOrDefault(_ => _.Id == id);
 			if (null != m){
 				m.Accepted = true;

@@ -364,10 +364,43 @@ namespace Qorpent.Utils.Extensions {
 			if (x is int) {
 				return (int) x;
 			}
+			if (x is long)
+			{
+				return Convert.ToInt32(x);
+			}
 			if (x is decimal || x is double || x is Single) {
 				return Convert.ToInt32(x);
 			}
 			return Convert.ToInt32(x.ToDecimal(true));
+		}
+		/// <summary>
+		/// 	converts object to Int32 null safe
+		/// </summary>
+		/// <param name="x"> </param>
+		/// <returns> </returns>
+		public static long ToLong(this object x)
+		{
+			if (null == x)
+			{
+				return 0;
+			}
+			if (Equals(String.Empty, x))
+			{
+				return 0;
+			}
+			if (x is int)
+			{
+				return (int)x;
+			}
+			if (x is long)
+			{
+				return (long)x;
+			}
+			if (x is decimal || x is double || x is Single)
+			{
+				return Convert.ToInt64(x);
+			}
+			return Convert.ToInt64(x.ToDecimal(true));
 		}
 
 		/// <summary>
