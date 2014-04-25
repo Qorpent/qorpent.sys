@@ -107,6 +107,10 @@ namespace Qorpent.Utils.Git{
 		/// Локальное время файловой системы
 		/// </summary>
 		public DateTime LastWriteTime { get; set; }
+		/// <summary>
+		/// Псевдоним, пользовательское имя
+		/// </summary>
+		public string UserFriendlyName { get; set; }
 
 		/// <summary>
 		/// 
