@@ -53,6 +53,16 @@ namespace Qorpent.Log
 				}
 			}
         }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		public void Accept(int id){
+			var m = _log.FirstOrDefault(_ => _.Id == id);
+			if (null != m){
+				m.Accepted = true;
+			}
+		}
 
 		/// <summary>
 		/// 
@@ -72,6 +82,7 @@ namespace Qorpent.Log
 			foreach (var message in _log){
 				if (!message.Active) continue;
 				if (message.Level < query.StartLevel) continue;
+				if (!string.IsNullOrWhiteSpace(query.Code) && query.Code != message.Code) continue;
 				if (0 != query.StartTimestamp){
 					if(message.Timestamp<=query.StartTimestamp)continue;
 				}

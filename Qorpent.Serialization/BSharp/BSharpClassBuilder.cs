@@ -574,7 +574,14 @@ namespace Qorpent.BSharp {
 			StoreIncludeParameters(i, includeelement);
 			includeelement.Name = includeelement.Attr(BSharpSyntax.ClassFullNameAttribute);
 			includeelement.Attribute(BSharpSyntax.ClassFullNameAttribute).Remove();
-			includeelement.Attribute(BSharpSyntax.ClassNameAttribute).Remove();
+			var keepcode = includeelement.Attribute("keepcode");
+			if (null != keepcode){
+				keepcode.Remove();
+			}
+			else{
+				includeelement.Attribute(BSharpSyntax.ClassNameAttribute).Remove();
+			}
+			
 			var a = includeelement.Attribute("id");
 
 			if (null != a) a.Remove();
@@ -588,6 +595,12 @@ namespace Qorpent.BSharp {
 				includeelement.Name = sen.Value;
 				sen.Remove();
 			}
+			else{
+				if (null != i.Attribute("element")){
+					includeelement.Name = i.Attribute("element").Value;
+				}
+			}
+			
 			if (cls.Is(BSharpClassAttributes.RequireLateInterpolation)) {
 				_lateincluder.Interpolate(includeelement, i);
 			}

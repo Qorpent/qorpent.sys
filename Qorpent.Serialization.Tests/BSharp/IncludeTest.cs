@@ -21,6 +21,26 @@ class B x=2
 		}
 
 		[Test]
+		public void IncludeAllWithWhereAndCrossList(){
+			var @code = @"
+class a
+	include all t
+		where g&+=""default ${.code}""
+class _t prototype=t abstract
+_t X g='default'
+_t Y g='a'
+_t Z g='z'
+";
+			var result = Compile(code);
+			var x = result.Get("a").Compiled.ToString().Replace("\"", "'");
+			Console.Write(x);
+			Assert.AreEqual(@"<class code='a' fullcode='a'>
+  <Y g='a' prototype='t' />
+  <X g='default' prototype='t' />
+</class>",x);
+		}
+
+		[Test]
 		public void NormalInclideAwaredInterpolation(){
 			var code = @"
 class point X=%{_x}%{_mes} Y=%{_y}%{_mes} coords='[%{_x}:%{_y}]' embed

@@ -131,6 +131,10 @@ namespace Qorpent.Log {
 		/// Признак активности сообщения
 		/// </summary>
 		public bool Active { get; set; }
+		/// <summary>
+		/// Logical staging
+		/// </summary>
+		public int Stage { get; set; }
 
 		/// <summary>
 		/// 	Generates BXL-like representation of LogMessage
