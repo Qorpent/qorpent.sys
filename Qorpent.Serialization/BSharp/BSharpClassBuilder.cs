@@ -181,6 +181,17 @@ namespace Qorpent.BSharp {
 
 			difference.Apply(target.Compiled, opts);
 
+		    foreach (var attribute in _cls.Compiled.Attributes()) {
+		        if(attribute.Name.LocalName=="for")continue;
+		        if(attribute.Name.LocalName=="id")continue;
+		        if(attribute.Name.LocalName=="code")continue;
+		        if(attribute.Name.LocalName=="name")continue;
+		        if(attribute.Name.LocalName=="fullcode")continue;
+                if (attribute.Name.LocalName == "new") continue;
+                target.Compiled.SetAttributeValue(attribute.Name,attribute.Value);
+
+		    }
+
 			foreach (var descendant in target.Compiled.Descendants()){
 				var p = descendant.Attribute("__parent");
 				if(null!=p)p.Remove();
