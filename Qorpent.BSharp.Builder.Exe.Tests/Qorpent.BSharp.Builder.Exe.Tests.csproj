@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IsTest>True</IsTest>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{EA3F4734-6D2C-4D50-A889-D7A0B69C4E36}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.BSharp.Builder.Exe.Tests</RootNamespace>
+    <AssemblyName>Qorpent.BSharp.Builder.Exe.Tests</AssemblyName>
+    <AssemblyNameBase>Qorpent.BSharp.Builder.Exe</AssemblyNameBase>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>

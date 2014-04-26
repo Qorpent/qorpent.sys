@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{E31B62A2-2FEF-4EF9-AADC-21B24885E035}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Host.Exe</RootNamespace>
+    <AssemblyName>Qorpent.Host</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+    <EmbeddedResource Include="Resources\glyphicons-halflings-regular.ttf" />
+    <EmbeddedResource Include="Resources\glyphicons-halflings-regular.woff" />
+    <EmbeddedResource Include="Resources\angular.min.js.map" />
+    <EmbeddedResource Include="Resources\actionBuilder.wiki" />
+    <EmbeddedResource Include="Resources\qObject.wiki" />
+    <EmbeddedResource Include="Resources\bootstrap-theme.css.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DefaultRequestHandlerFactory.cs" />
+    <Compile Include="Handlers\WikiHandler.cs" />
+    <Compile Include="HostServerStaticResolver.cs" />
+    <Compile Include="SmartXmlHandler.cs" />
+    <Compile Include="Static\FileContentDescriptor.cs" />
+    <Compile Include="Handlers\DelegateHandler.cs" />
+    <Compile Include="Handlers\StaticFileHandler.cs" />
+    <Compile Include="Handlers\StaticHandler.cs" />
+    <Compile Include="Handlers\UsonHandler.cs" />
+    <Compile Include="HostApplicationMode.cs" />
+    <Compile Include="HostBinding.cs" />
+    <Compile Include="HostConfig.cs" />
+    <Compile Include="HostConstants.cs" />
+    <Compile Include="IHostServerInitializer.cs" />
+    <Compile Include="IHostServerStaticResolver.cs" />
+    <Compile Include="IStaticContentHostServce.cs" />
+    <Compile Include="Qweb\HostMvcContext.cs" />
+    <Compile Include="HostSchema.cs" />
+    <Compile Include="HostServer.cs" />
+    <Compile Include="HostServerState.cs" />
+    <Compile Include="HostRequestHandler.cs" />
+    <Compile Include="Qweb\HostQwebHandler.cs" />
+    <Compile Include="Static\ResourceContentDescriptor.cs" />
+    <Compile Include="StaticContentDescriptor.cs" />
+    <Compile Include="Utils\HttpListenerContextExtensions.cs" />
+    <Compile Include="Utils\MiltipartReadContext.cs" />
+    <Compile Include="Utils\PostFile.cs" />
+    <Compile Include="IHostServer.cs" />
+    <Compile Include="IRequestHandler.cs" />
+    <Compile Include="IRequestHandlerFactory.cs" />
+    <Compile Include="Handlers\NotFoundHandler.cs" />
+    <Compile Include="HostExtensions.cs" />
+    <Compile Include="Utils\RequestDataRetriever.cs" />
+    <Compile Include="Utils\RequestParameterSet.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\qorpent.sys\Qorpent.Core\Qorpent.Core.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC91290A209}</Project>
+      <Name>Qorpent.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\qorpent.sys\Qorpent.Mvc\Qorpent.Mvc.csproj">
+      <Project>{96885c8f-ad20-41b4-86ee-bc9b3d47d9f9}</Project>
+      <Name>Qorpent.Mvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\qorpent.sys\Qorpent.Serialization\Qorpent.Serialization.csproj">
+      <Project>{21971f28-8ed8-4f50-b623-e9db2658af54}</Project>
+      <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\qorpent.sys\Qorpent.Utils\Qorpent.Utils.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
+      <Name>Qorpent.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\angular.js" />
+    <EmbeddedResource Include="Resources\bootstrap.css" />
+    <EmbeddedResource Include="Resources\require.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\app.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\jquery.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\starter.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\glyphicons-halflings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\bootstrap-custom.css" />
+    <EmbeddedResource Include="Resources\bootstrap.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\wiki.html" />
+    <EmbeddedResource Include="Resources\wiki.css" />
+    <EmbeddedResource Include="Resources\wiki.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\syntax.wiki" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\actionBuilder.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\qObject.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\bootstrap-theme.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\moment.min.js" />
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>

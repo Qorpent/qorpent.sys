@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="wiki.css"/>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="wiki.js"></script>
+    <script type="text/javascript">
+        $(function() {
+           $('#wikiresult').html(qwiki.toHTML($('#wikisource').html().replace(/&gt;/g,'>').replace(/&lt;/g,'<').replace(/&amp;/g,'&')));
+        });
+    </script>
+</head>
+    <body style="padding: 20px">
+        <div style="display:none" id="wikisource">
+            ${wikipage}
+        </div>
+        <div>Qorpent WIKI © Comdiv 2011-2014 <a href="wiki?syntax">справка по синтаксису</a> </div>
+        <div id="wikiresult">
+            
+        </div>
+    </body>
+</html>

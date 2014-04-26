@@ -1,0 +1,491 @@
+﻿@media print{
+	.wiki hr {
+		page-break-before : always ;
+		visibility : hidden;
+	}
+	.wiki .sample hr {
+		page-break-before : avoid !important ;
+		visibility : visible !important;
+	}
+}
+error {
+    display:block;
+    border:solid 1px red;
+}
+error:before {
+    content : attr(text);
+}
+
+.wiki {
+	counter-reset : wiki-head-1 0 wiki-list-1 0 wiki-ref 0 wiki-img 0 wiki-file 0 wiki-sample 0 wiki-code 0 wiki-table 0;
+}
+
+.wiki-code, .wiki-sample {
+	counter-reset :  wiki-list-1 0;
+}
+
+.wiki-img {
+	counter-increment : wiki-img;
+	padding : 10px;
+}
+.wiki-img img {
+	padding : 3px;
+	margin : 3px;
+	border: solid 2px gray;
+}
+.wiki-img-title{
+	page-break-after :avoid;
+	font-size:10pt;
+	
+}
+.wiki-img-title:before {
+	content : "Рис. " counter(wiki-img) ". " ;
+}
+
+.wiki p {
+	counter-reset : wiki-list-1 0;
+	text-align : justify;
+	text-indent : 30px;
+}
+
+.wiki p, .wiki-list {
+	margin-top : 6pt;
+}
+
+
+.wiki .sample {
+	counter-increment : wiki-sample;
+	background-color: #fafacc;
+	border : solid 1px gray;
+	padding : 5px;
+}
+
+.wiki table {
+	counter-increment : wiki-table;
+	border-collapse : collapse;
+}
+
+.wiki .wiki-link { 	
+	counter-increment : wiki-ref;
+	color : #0088CC;
+	cursor : pointer;
+}
+.wiki .wiki-link:hover{ 	
+	text-decoration : underline;
+}
+
+.wiki table td,  .wiki table th {
+	border: solid 1px gray;
+	padding : 2px;
+}
+.wiki table th {
+	background-color: #eeeeee;
+}
+
+.wiki h1 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 18pt;	
+	counter-increment : wiki-head-1;
+	counter-reset : wiki-head-2;
+}
+
+.wiki .sample h1, .wiki .sample h2, .wiki .sample h3,.wiki .sample h4,.wiki .sample h5,.wiki .sample h6 {
+	counter-increment : none;
+	counter-reset : none;
+}
+
+.wiki h1:before {
+	content : counter(wiki-head-1) " " ;
+}
+
+.wiki h2 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 16pt;
+	padding-left : 10px;
+	counter-increment : wiki-head-2;
+	counter-reset : wiki-head-3;
+}
+
+.wiki h2:before {
+	content : counter(wiki-head-1) "." counter(wiki-head-2) " " ;
+}
+
+.wiki h3 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 14pt;
+	padding-left : 20px;
+	counter-increment : wiki-head-3;
+	counter-reset : wiki-head-4;
+}
+
+.wiki h3:before {
+	content : counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) " " ;
+}
+
+
+.wiki h4 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 14pt;
+	font-style :italic;
+	padding-left : 30px;
+	counter-increment : wiki-head-4;
+	counter-reset : wiki-head-5;
+}
+.wiki h4:before {
+	content : counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." counter(wiki-head-4) " " ;
+}
+
+
+
+.wiki h5 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 12pt;
+	font-style :italic;
+	padding-left : 40px;
+	counter-increment : wiki-head-5;
+	counter-reset : wiki-head-6;
+	
+}
+
+
+.wiki h5:before {
+	
+	content : counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." counter(wiki-head-4) "." counter(wiki-head-5) " " ;
+}
+
+
+
+.wiki h6 {
+	margin-top : 6px;
+	margin-bottom : 3px;
+	font-size : 10pt;
+	font-style :italic;
+	padding-left : 50px;
+	counter-increment : wiki-head-6;
+	
+}
+.wiki h6:before {
+	
+	content : counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." counter(wiki-head-4) "." counter(wiki-head-5) "." counter(wiki-head-6) "." ;
+}
+
+
+.wiki .wiki-list {
+	text-align : justify;
+}
+.wiki .wiki-list-1 {
+	padding-left : 50px;
+	counter-increment : wiki-list-1;
+	counter-reset : wiki-list-2;
+}
+.wiki .wiki-list-1:before {
+	content : "●    ";
+}
+.wiki .wiki-list-1.number:before {
+	content : counter(wiki-list-1) ".";
+}
+.wiki .wiki-list-2 {
+	padding-left : 70px;
+	counter-increment : wiki-list-2;	
+	counter-reset : wiki-list-3;
+}
+.wiki .wiki-list-2:before {
+	content : "○    ";
+}
+.wiki .wiki-list-2.number:before {
+	content : counter(wiki-list-1) "." counter(wiki-list-2) "." ;
+}
+
+
+.wiki .wiki-list-3{
+	padding-left : 90px;
+	counter-increment : wiki-list-3;
+	counter-reset : wiki-list-4;
+}
+.wiki .wiki-list-3:before {
+	content : "¤    ";
+}
+.wiki .wiki-list-3.number:before {
+	content : counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) "." ;
+}
+
+.wiki .wiki-list-4 {
+	padding-left : 60px;
+	counter-increment : wiki-list-4;
+	counter-reset : wiki-list-5;	
+}
+.wiki .wiki-list-4:before {
+	content : "●    ";
+}
+.wiki .wiki-list-4.number:before {
+	content : counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) "." counter(wiki-list-4) "." ;
+}
+
+.wiki .wiki-list-5 {
+	counter-increment : wiki-list-5;
+	counter-reset : wiki-list-6;
+	padding-left : 130px;
+}
+.wiki .wiki-list-5:before {
+	content : "○    ";
+}
+.wiki .wiki-list-5.number:before {
+	content : counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) "." counter(wiki-list-4) "." counter(wiki-list-5) "." ;
+}
+
+.wiki .wiki-list-6 {	
+	counter-increment : wiki-list-6;
+	padding-left : 150px;
+	
+}
+
+.wiki .wiki-list-6:before {
+	content : "¤    ";
+}
+.wiki .wiki-list-6.number:before {
+	content : counter(wiki-list-1) "." counter(wiki-list-2) "." counter(wiki-list-3) "." counter(wiki-list-4) "." counter(wiki-list-5) "." counter(wiki-list-6) "." ;
+}
+
+
+
+.wiki .wiki-code {
+	background-color : #ffffAA;
+	padding : 5pt;
+	font-family : consolas;
+	font-size:8pt;
+    width: 1000px;
+    margin-left: 30px;
+    
+}
+
+.wiki .wiki-code .comment {
+	color : green;
+	font-style : italic;
+}
+
+.wiki .wiki-code .string {
+	color : brown;
+	font-weight : bold;
+}
+
+.wiki .wiki-code .number {
+	color : black;
+	font-weight : bold;
+}
+
+.wiki .wiki-code .delimiter {
+	color : darkgreen;
+	font-weight : bold;
+}
+
+.wiki .wiki-code .operator {
+	color : darkgreen;
+}
+
+.wiki .wiki-code .keyword {
+	color : blue;
+}
+.wiki .wiki-code .type {
+	color : brown;
+}
+
+
+
+.wiki-article {
+    position: relative;
+}
+
+.wiki-body>form {
+    margin-bottom: 10px ;
+}
+
+.wiki-controls {
+    position: absolute;
+    right: 0;
+    display: inline;
+    top: 0;
+}
+
+.wiki-file-message {
+    position: absolute;
+    font-size: 8pt;
+    color: rgb(128, 128, 128);
+    right: 0;
+}
+
+.wiki-controls button {
+
+}
+
+.wiki-controls .progress {
+    display: inline-block;
+    width: 100px;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.wiki-edit {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    font-size: 90%;
+    line-height: 16px;
+    margin-top: 4px;
+}
+
+.wiki-title-edit {
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    font-size: 90%;
+    line-height: 16px;
+    margin-top: 27px;
+    height: 30px !important;
+}
+
+.wiki-info {
+    font-size: 13px;
+    color: grey;
+}
+
+.wiki-info .label {
+    margin-left: 4px;
+}
+
+.wiki-title {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: bold;
+    margin: 2px 0;
+}
+
+.details-article {
+    margin-top: 10px;
+}
+
+.details-article table {
+    font-size: 90%;
+}
+
+.details-article .btn-link {
+    display: block;
+}
+
+.widget:hover>.widget-wiki-help {
+    display: block;
+}
+
+.widget-wiki-help {
+    position: absolute;
+    display: none;
+    right: -3px;
+    bottom: -3px;
+    cursor: pointer;
+    width: 10px;
+    height: 10px;
+    margin-left: 3px;
+    background: url("../img/question-small-white.png") no-repeat center;
+    z-index: 3;
+}
+
+.wiki .dot-slot, .wiki .xml-slot {
+	border : dashed 1px gray;
+	padding:10px;
+	margin : 5px;
+	background-color : #F5F5F5;
+
+}
+
+.wiki .wiki-outline {
+    background-color: lightgoldenrodyellow;
+    border: solid 1px gray;
+    padding: 10px;
+    padding-left: 40px;
+    font-style: italic;
+    margin-left: 50px;
+    width: 800px;
+    border-left: solid 10px cornflowerblue;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.wiki .xml-element, .wiki .xml-attr , .wiki.xml-op{
+	font-weight:bold;
+}
+.wiki .xml-attr{
+	color: purple;
+	font-style: italic;
+}
+.wiki .xml-attr-val{
+	color: green;
+	font-style: italic;
+}
+.wiki .xml-element{
+	color: blue;
+}
+.wiki .xml-op{
+	color:brown;
+}
+
+.wiki .xml-slot {
+	font-size:8pt;
+
+}
+
+.wk-x {
+    background-color: peachpuff;
+    padding : 5pt;
+	font-family : consolas;
+	font-size:8pt;
+    width: 1000px;
+    margin-left: 30px;
+    
+}
+.wk-x-error {
+    background-color: coral;
+    padding : 5pt;
+	font-family : consolas;
+	font-size:8pt;
+    width: 1000px;
+    margin-left: 30px;
+}
+
+
+.wk-x-error-Error {
+    background-color: brown;
+    color: white;
+    padding : 5pt;
+	font-family : consolas;
+	font-size:8pt;
+    width: 1000px;
+    margin-left: 30px;
+}
+
+.wk-x-error-Warrning {
+    background-color: blue;
+    color: yellow;
+}
+
+.wk-x-o, .wk-x-c, .wk-x-ae {
+    color: saddlebrown;
+
+}
+
+.wk-x-en, .wk-x-an {
+    color: #0088cc;
+}
+
+.wk-x-en {
+    font-weight: bold;
+}
+
+.wk-x-av, .wk-x-t {
+    font-weight: bold;
+}

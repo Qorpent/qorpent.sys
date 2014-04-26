@@ -1,0 +1,63 @@
+﻿=ACTION BUILDER
+
+ASSUME that $http is angular $http instance, that can be
+
+	got in service/controller constructor
+	
+	==Example 1: very simple action
+		[[code]]
+		var ping = createAction ( $http, { url:'/ping' } ); //while siteroot is second argument it can be skipped
+		ping().success(function(result){console.log(result);});
+	[[/code]]
+	==Example 2: qweb action with "strongly-typed" parameters and result
+	[[code]]
+		function sqrquery (){
+			this.x = 1;
+			this.y = 1;
+		}
+		function sqrresult (){
+			this.sqr = 0;
+			this.perimiter = 0;
+		}		
+		var calcsquare = createAction ( $http, { controller : 'sample', type:'json', name : 'calcsquare', arguments : myquery, result : sqrresult });
+		calcsquare ( { X:23 } ); // will send /sample/name.json.qweb?x=23&y=1 with case and all parameters corrected
+		[[/code]]
+	==Example 3 : calling with $http extensions ( withCredentials options and MYHEADER will be set )
+	[[code]]
+		var ping = createAction ( $http, { url:'/ping' } );
+		ping ( { hq_withCredentials : true, hd_MYHEADER : 'mydata' } ); // will send /ping with withCredentials $http option an MYHEADER=mydata header
+		[[/code]]
+	==Example 4 : provide header with query constructor 
+	[[code]]
+		function searchQuery (args) {
+			this.pattern = "*";
+			this.type = "all";
+			if(args && typeof(args)=="string"){
+				this.pattern = args;
+			}
+			this.hd_CLIENT_TIMESTAMP = new Date();
+		}
+		var search = createAction ( $http, { url : '/search' , arguments : searchQuery }  );
+		search ( 'abc' ); will send /search?pattern=abc&type=all and  CLIENT_TIMESTAMP with current client date will be added
+		[[/code]]
+	==Example 4 : config can provide extensions too
+
+	[[code]]
+		var search = createAction ( $http, { url : '/search' , arguments : searchQuery, hq_withCredentials : true }  );
+		//now all calls of search() will be with withCredentials
+		[[/code]]
+	==Example 5: any option in config can be function(args) from args, for ex: url
+	[[code]]
+		var ping = createAction ( $http, { url : function(args){ return '/ping/'+JSON.stringify(args)+'/';}});
+		ping({a:1}) will be call to /ping/{a:1}/?a=1
+		[[/code]]
+	
+	See all supported request parameters for angular at http://docs.angularjs.org/api/ng/service/$http
+	
+
+***Attention - if u want to use wrapped data in result alwais use this mode of call:***
+	[[code]]
+		action( {...}, function(...){}),
+		not action( {...} ).success(function(...){}), - because here it will be native $http handler, not managed
+		[[/code]]
+	

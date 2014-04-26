@@ -1,0 +1,55 @@
+﻿= PLANALYZE 
+	planalize is magic method to embed arguments and make plain object for GET/POST both for form-like and json
+	
+	! planalize returns planalized COPY of source object
+	
+== Ex 1 - remove nulls or replace with ""
+	[[code]]
+		q.planalize({x:1,y:null},null,true,true,true) == {x:1, y:""}	
+		q.planalize({x:1,y:null},null,false,true,true) == {x:1}	
+		[[/code]]
+	
+== Ex 2 - substitute functions with calls with args or simple remove them
+	[[code]]
+		q.planalize({x:1,z:function(a){return a.y*3;}},{y:2},true,true,true) == {x:1, z:6}
+		q.planalize({x:1,z:function(a){return a.y*3;}},{y:2},true,false,true) == {x:1}
+	[[/code]]
+== Ex 3 - stringify inner objects with function calls recursivelly
+	[[code]]
+		q.planalize({x:1,y:{z:function(a){return a.y*3;}}},{y:2},true,true,true) == {x:1, y :"{z:6}"} //usefull for GET parameters
+		q.planalize({x:1,y:{z:function(a){return a.y*3;}}},{y:2},true,true,false) == {x:1, y : {z:6}} // usefull for JSON data
+	[[/code]]
+	
+= EXTEND
+	
+	qObject.extend is close to $.extend, and _.extend but have some magic
+	! extend is executed on TARGET, not COPY
+	
+== it's case-matching (due to simple inter-link between js-like and c#-like code) - so it keeps data 'strongly-typed'
+	[[code]]
+		extend({Year:0, MyData:0}, {year:3, mydata:4}) == {Year:3, MyData: 4}
+		[[/code]]
+== it can control on not-in-source properties with parameter extendprefix
+	[[code]]
+		extend({Year:0,MyData:0},{year:3,mydata:4,period:120}) == {Year:0,MyData:0,period:120} (as usual)
+		extend({Year:0,MyData:0},{year:3,mydata:4,period:120},true) == {Year:0,MyData:0,period:120} (same)
+		extend({Year:0,MyData:0},{year:3,mydata:4,period:120},'.') == {Year:0,MyData:0,".period":120} (with given prefix)
+		extend({Year:0,MyData:0},{year:3,mydata:4,period:120},false) == {Year:0,MyData:0} (prevent extensions)
+		[[/code]]
+== it has simple regex-based filter to EXCLUDE properties from extend
+	[[code]]
+		extend({Year:0,MyData:0},{year:3,mydata:4,period:120,_data:33},'.') == {Year:0,MyData:0,".period":120,"._data":33} (not filtered)
+		extend({Year:0,MyData:0},{year:3,mydata:4,period:120,_data:33},'.',/_/) == {Year:0,MyData:0,".period":120} (filtered)
+		[[/code]]
+	
+= applyHttpExtensions	
+
+	is special method for preparing $http, $ajax like calls
+
+	for example:
+
+	[[code]]
+	applyHttpExtensions ({ url : '/x' }  , { year:3, period:4, hd_XXXX :23, hq_withCredentials : true})
+		== { url : '/x', headers : { XXXX : 23} , withCredentials : true }
+		[[/code]]
+	so it filters properties with hd_ and hq_ prefixes and applys them to target;

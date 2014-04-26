@@ -1,0 +1,68 @@
+.navbar {
+    border-radius: 0;
+    border-width: 0 0 1px 0;
+}
+
+label {
+    cursor: pointer;
+}
+
+/*.btn+.btn {
+    margin-left: 5px;
+}*/
+
+.form-group>label {
+    font-size: 85%;
+}
+
+span.glyphicon {
+    cursor: pointer;
+}
+
+.checkbox>label:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+a.list-group-item:hover {
+    cursor: pointer;
+}
+
+a.btn+a.btn {
+    margin-right: 5px;
+}
+
+.btn-group {
+    
+}
+
+.form-group>input[type=text]+input[type=text] {
+    margin-top: 8px;
+}
+
+.form-group>input[type=text]+button {
+    margin-top: 8px;
+}
+
+.form-group {
+    margin-bottom: 8px;
+}
+
+select.form-control {
+    padding: 6px;
+}
+
+.form-group {
+    white-space: nowrap;
+    word-wrap: normal;
+}
+
+.form-group>button {
+    display: inline-block;
+    float: none;
+}
+
+.list-group-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

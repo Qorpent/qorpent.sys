@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{9F8A9B7F-0CAD-47A3-A3C7-F7AC3158864A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.BSharp.Builder</RootNamespace>
+    <AssemblyName>Qorpent.BSharp.Builder</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BSharpBuilder.cs" />
+    <Compile Include="BSharpBuilderClassUtils.cs" />
+    <Compile Include="BSharpBuilderFsUtils.cs" />
+    <Compile Include="BSharpBuilderWriteManager.cs" />
+    <Compile Include="BSharpBuilderWriteTarget.cs" />
+    <Compile Include="BSharpBuilderExtensions.cs" />
+    <Compile Include="Tasks\GenerateJsonModuleTask.cs" />
+    <Compile Include="Helpers\DirectoryFileFilter.cs" />
+    <Compile Include="Helpers\ClassFilter.cs" />
+    <Compile Include="Tasks\GenerateClassGraphTask.cs" />
+    <Compile Include="Tasks\CleanUpTask.cs" />
+    <Compile Include="Tasks\GenerateIndexTask.cs" />
+    <Compile Include="Tasks\GenerateLibPackageTask.cs" />
+    <Compile Include="Tasks\GeneratePackageTaskBase.cs" />
+    <Compile Include="Tasks\GenerateSrcPackageTask.cs" />
+    <Compile Include="Tasks\LoadAllSourcesTask.cs" />
+    <Compile Include="Tasks\CompileBSharpTask.cs" />
+    <Compile Include="Tasks\ResolveClassesAndNamespacesTask.cs" />
+    <Compile Include="Tasks\WriteTasks\WriteErrorInfoTask.cs" />
+    <Compile Include="Tasks\WriteTasks\WriteOrphansOutputTask.cs" />
+    <Compile Include="Tasks\WriteTaskBase.cs" />
+    <Compile Include="Tasks\WriteTasks\WriteWorkingOutputTask.cs" />
+    <Compile Include="WritePrettyErrorDigest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Tasks\WriteTasks\errors.xslt" />
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>
