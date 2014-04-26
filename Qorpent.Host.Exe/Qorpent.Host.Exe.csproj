@@ -43,7 +43,7 @@
       <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
       <Name>Qorpent.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Qorpent.Host\Qorpent.Host.Exe.csproj">
+    <ProjectReference Include="..\Qorpent.Host\Qorpent.Host.csproj">
       <Project>{e31b62a2-2fef-4ef9-aadc-21b24885e035}</Project>
       <Name>Qorpent.Host</Name>
     </ProjectReference>
