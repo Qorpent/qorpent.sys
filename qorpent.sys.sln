@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Core", "Qorpent.Core\Qorpent.Core.csproj", "{880F65EA-1A22-4672-A137-FFC91290A209}"
@@ -68,16 +67,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Scaffolding.Tests",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3C9D25F6-1BEE-4E53-9FA3-CD7DCB0FD03B}"
 	ProjectSection(SolutionItems) = preProject
-		..\qorpent.integration\Qorpent.Integration.BSharp.Builder\Qorpent.Integration.BSharp.Builder.csproj = ..\qorpent.integration\Qorpent.Integration.BSharp.Builder\Qorpent.Integration.BSharp.Builder.csproj
+		Qorpent.BSharp.Builder\Qorpent.BSharp.Builder.csproj = Qorpent.BSharp.Builder\Qorpent.BSharp.Builder.csproj
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Integration.BSharp.Builder", "..\qorpent.integration\Qorpent.Integration.BSharp.Builder\Qorpent.Integration.BSharp.Builder.csproj", "{9F8A9B7F-0CAD-47A3-A3C7-F7AC3158864A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.BSharp.Builder", "Qorpent.BSharp.Builder\Qorpent.BSharp.Builder.csproj", "{9F8A9B7F-0CAD-47A3-A3C7-F7AC3158864A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Integration.BSharp.Builder.Exe", "..\qorpent.integration\Qorpent.Integration.BSharp.Builder.Exe\Qorpent.Integration.BSharp.Builder.Exe.csproj", "{CCB8EB2C-9F96-47F4-90E9-E6F7247EDF8E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.BSharp.Builder.Exe", "Qorpent.BSharp.Builder.Exe\Qorpent.BSharp.Builder.Exe.csproj", "{CCB8EB2C-9F96-47F4-90E9-E6F7247EDF8E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "updateRemotes", "updateRemotes\updateRemotes.csproj", "{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "qs.tc", "qs.tc\qs.tc.csproj", "{6DBF93D0-8767-4052-8022-17087DAE8BDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Host", "Qorpent.Host\Qorpent.Host.csproj", "{E31B62A2-2FEF-4EF9-AADC-21B24885E035}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Host.Tests", "Qorpent.Host.Tests\Qorpent.Host.Tests.csproj", "{AE0B26CF-9B06-4310-B538-839A909DA571}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -241,6 +244,18 @@ Global
 		{6DBF93D0-8767-4052-8022-17087DAE8BDE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6DBF93D0-8767-4052-8022-17087DAE8BDE}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{6DBF93D0-8767-4052-8022-17087DAE8BDE}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{AE0B26CF-9B06-4310-B538-839A909DA571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE0B26CF-9B06-4310-B538-839A909DA571}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE0B26CF-9B06-4310-B538-839A909DA571}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE0B26CF-9B06-4310-B538-839A909DA571}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE0B26CF-9B06-4310-B538-839A909DA571}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{AE0B26CF-9B06-4310-B538-839A909DA571}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -257,5 +272,6 @@ Global
 		{4F6F2194-F11D-4CC6-8BB1-7D20F97EC082} = {690AA1DD-503E-47C0-AA58-53529331D847}
 		{96A49FC6-0C38-4DFB-ABED-D1682B7EFF2D} = {690AA1DD-503E-47C0-AA58-53529331D847}
 		{6DBF93D0-8767-4052-8022-17087DAE8BDE} = {690AA1DD-503E-47C0-AA58-53529331D847}
+		{AE0B26CF-9B06-4310-B538-839A909DA571} = {690AA1DD-503E-47C0-AA58-53529331D847}
 	EndGlobalSection
 EndGlobal

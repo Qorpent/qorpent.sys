@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Choose>
+    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' != 'Release'  and Exists('$(AllBinPath)\Qorpent.Host.dll')">
+      <ItemGroup>
+        <Reference Include="Qorpent.Host">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(AllBinPath)\Qorpent.Host.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' == 'Release' ">
+      <ItemGroup>
+        <Reference Include="Qorpent.Host">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(AllReleasePath)\Qorpent.Host.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <ProjectReference Include="..\..\qorpent.integration\Qorpent.Host\Qorpent.Host.Exe.csproj">
+          <Name>Qorpent.Host</Name>
+        </ProjectReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+</Project>

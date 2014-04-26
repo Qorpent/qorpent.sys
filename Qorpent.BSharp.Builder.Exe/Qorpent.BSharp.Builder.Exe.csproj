@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{CCB8EB2C-9F96-47F4-90E9-E6F7247EDF8E}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Qorpent.BSharp.Builder.Exe</RootNamespace>
+    <AssemblyName>bsc</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\qorpent.sys\Qorpent.Core\Qorpent.Core.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC91290A209}</Project>
+      <Name>Qorpent.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\qorpent.sys\Qorpent.Serialization\Qorpent.Serialization.csproj">
+      <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
+      <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\qorpent.sys\Qorpent.Utils\Qorpent.Utils.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
+      <Name>Qorpent.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.BSharp.Builder\Qorpent.BSharp.Builder.csproj">
+      <Project>{9f8a9b7f-0cad-47a3-a3c7-f7ac3158864a}</Project>
+      <Name>Qorpent.BSharp.Builder</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>
