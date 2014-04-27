@@ -12,9 +12,9 @@ namespace Qorpent.Utils.Tests.BrickScale.DataColonNormalizer {
 		[SetUp]
 		public void SetUp() {
 			_colonLabelHelper = new DataColonLabelHelper {
-				new DataItem {Value = 50},
-				new DataItem {Value = 40},
-				new DataItem {Value = 70}
+				new DataItem {NormalizedValue = 50},
+				new DataItem {NormalizedValue = 40},
+				new DataItem {NormalizedValue = 70}
 			};
 		}
 		[Test]
@@ -22,27 +22,27 @@ namespace Qorpent.Utils.Tests.BrickScale.DataColonNormalizer {
 			_colonLabelHelper.Order = ColonDataItemOrder.AsSupplied;
 			var ordered = _colonLabelHelper.GetOrderedItems().ToArray();
 			Assert.AreEqual(3, ordered.Length);
-			Assert.AreEqual(50, ordered[0].Value);
-			Assert.AreEqual(40, ordered[1].Value);
-			Assert.AreEqual(70, ordered[2].Value);
+            Assert.AreEqual(50, ordered[0].NormalizedValue);
+            Assert.AreEqual(40, ordered[1].NormalizedValue);
+            Assert.AreEqual(70, ordered[2].NormalizedValue);
 		}
 		[Test]
 		public void IsCorrectInvertedOrder() {
 			_colonLabelHelper.Order = ColonDataItemOrder.Inverted;
 			var ordered = _colonLabelHelper.GetOrderedItems().ToArray();
 			Assert.AreEqual(3, ordered.Length);
-			Assert.AreEqual(50, ordered[0].Value);
-			Assert.AreEqual(40, ordered[1].Value);
-			Assert.AreEqual(70, ordered[2].Value);
+            Assert.AreEqual(70, ordered[0].NormalizedValue);
+            Assert.AreEqual(50, ordered[1].NormalizedValue);
+            Assert.AreEqual(40, ordered[2].NormalizedValue);
 		}
 		[Test]
 		public void IsCorrectRealOrder() {
 			_colonLabelHelper.Order = ColonDataItemOrder.Real;
 			var ordered = _colonLabelHelper.GetOrderedItems().ToArray();
 			Assert.AreEqual(3, ordered.Length);
-			Assert.AreEqual(50, ordered[0].Value);
-			Assert.AreEqual(40, ordered[1].Value);
-			Assert.AreEqual(70, ordered[2].Value);
+            Assert.AreEqual(40, ordered[0].NormalizedValue);
+            Assert.AreEqual(50, ordered[1].NormalizedValue);
+            Assert.AreEqual(70, ordered[2].NormalizedValue);
 		}
 	}
 }
