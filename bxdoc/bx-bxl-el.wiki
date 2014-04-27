@@ -1,0 +1,6 @@
+﻿{style:float:right;}Языки BXL/B# - руководство{style}
+{style:float:left;}Быстрый старт - hello world на BXL{style}
+[bx-index Вернуться к оглавлению]
+= Элементы в BXL
+
+Синтаксис BXL элементов достаточно подробно описан в 

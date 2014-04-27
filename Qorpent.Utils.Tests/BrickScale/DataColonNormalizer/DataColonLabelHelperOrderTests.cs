@@ -16,6 +16,7 @@ namespace Qorpent.Utils.Tests.BrickScale.DataColonNormalizer {
 				new DataItem {Value = 40},
 				new DataItem {Value = 70}
 			};
+			_colonLabelHelper.EnsureBestLabels();
 		}
 		[Test]
 		public void IsCorrectAsSuppliedOrder() {
@@ -31,17 +32,17 @@ namespace Qorpent.Utils.Tests.BrickScale.DataColonNormalizer {
 			_colonLabelHelper.Order = ColonDataItemOrder.Inverted;
 			var ordered = _colonLabelHelper.GetOrderedItems().ToArray();
 			Assert.AreEqual(3, ordered.Length);
-			Assert.AreEqual(70, ordered[0].Value);
-			Assert.AreEqual(50, ordered[1].Value);
-			Assert.AreEqual(40, ordered[2].Value);
+			Assert.AreEqual(50, ordered[0].Value);
+			Assert.AreEqual(40, ordered[1].Value);
+			Assert.AreEqual(70, ordered[2].Value);
 		}
 		[Test]
 		public void IsCorrectRealOrder() {
 			_colonLabelHelper.Order = ColonDataItemOrder.Real;
 			var ordered = _colonLabelHelper.GetOrderedItems().ToArray();
 			Assert.AreEqual(3, ordered.Length);
-			Assert.AreEqual(40, ordered[0].Value);
-			Assert.AreEqual(50, ordered[1].Value);
+			Assert.AreEqual(50, ordered[0].Value);
+			Assert.AreEqual(40, ordered[1].Value);
 			Assert.AreEqual(70, ordered[2].Value);
 		}
 	}

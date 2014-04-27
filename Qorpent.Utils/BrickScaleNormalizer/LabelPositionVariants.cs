@@ -233,6 +233,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 					continue;
 				}
 				dataItem.NormalizedValue = BrickDataSetHelper.GetNormalizedValue(ScaleMin, ScaleMax, Height, dataItem.Value);
+				if(dataItem.NormalizedValue<0)throw new Exception("Normalized value below zero - marks that scales was counted invalid");
 				dataItem.LabelHeight = LabelHeight.ToInt();
 			}
 			_isNormalized = true;
