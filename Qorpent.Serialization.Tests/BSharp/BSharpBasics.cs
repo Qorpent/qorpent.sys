@@ -51,6 +51,17 @@ custom A");
 			Assert.AreEqual("custom", result.Working[0].DefaultImport.Name);
 		}
 
+		[Test]
+		public void CycleInterpolation(){
+			var result = Compile(@"
+class A name='${x}' x=1
+A B name='${name} 1'
+"
+);
+			Assert.AreEqual(1,result.GetErrors(ErrorLevel.Error).Count());
+			
+		}
+
 		
 
 		[Test]

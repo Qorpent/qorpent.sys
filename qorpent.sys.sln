@@ -92,6 +92,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bxdoc", "bxdoc", "{59578442
 		bsdoc\bx-index.wiki = bsdoc\bx-index.wiki
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.BxlParser.Exe", "Qorpent.BxlParser.Exe\Qorpent.BxlParser.Exe.csproj", "{85E43634-91E4-4DB8-A3BC-E90FA681C24E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -272,6 +274,12 @@ Global
 		{43AE4275-6E9C-41DC-AEE9-EC54FC739B87}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43AE4275-6E9C-41DC-AEE9-EC54FC739B87}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{43AE4275-6E9C-41DC-AEE9-EC54FC739B87}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{85E43634-91E4-4DB8-A3BC-E90FA681C24E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85E43634-91E4-4DB8-A3BC-E90FA681C24E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85E43634-91E4-4DB8-A3BC-E90FA681C24E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85E43634-91E4-4DB8-A3BC-E90FA681C24E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85E43634-91E4-4DB8-A3BC-E90FA681C24E}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{85E43634-91E4-4DB8-A3BC-E90FA681C24E}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

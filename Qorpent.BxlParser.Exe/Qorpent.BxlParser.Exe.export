@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Choose>
+    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' != 'Release'  and Exists('$(AllBinPath)\Qorpent.BxlParser.Exe.dll')">
+      <ItemGroup>
+        <Reference Include="Qorpent.BxlParser.Exe">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(AllBinPath)\Qorpent.BxlParser.Exe.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="'$(NoProjRef)'=='True' and '$(Configuration)' == 'Release' ">
+      <ItemGroup>
+        <Reference Include="Qorpent.BxlParser.Exe">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(AllReleasePath)\Qorpent.BxlParser.Exe.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <ProjectReference Include="..\..\qorpent.sys\Qorpent.BxlParser.Exe\Qorpent.BxlParser.Exe.csproj">
+          <Name>Qorpent.BxlParser.Exe</Name>
+        </ProjectReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+</Project>

@@ -55,8 +55,9 @@ namespace Qorpent.Utils
 		/// <param name="target"></param>
 		/// <param name="source"></param>
 		/// <param name="source2"></param>
+		/// <param name="controlkey"></param>
 		/// <returns></returns>
-		public string Interpolate(string target, object source = null, IDictionary<string,object> source2 = null){
+		public string Interpolate(string target, object source = null, IDictionary<string,object> source2 = null, string controlkey = null){
 			if (string.IsNullOrEmpty(target)) return target;
 			if (-1 == target.IndexOf(AncorSymbol)) return target;
 			if (-1 == target.IndexOf('{')) return target;
@@ -92,6 +93,7 @@ namespace Qorpent.Utils
 			_currentCode = new StringBuilder();
 			_wasAncor = false;
 			_wasOpen = false;
+			_controlKey = controlkey;
 			Interpolate();
 			// если есть остаточное открытие - значит у нас не до конца была произведена подстановка
 			// мы должны допотставить данные из currentBuffer
@@ -157,6 +159,7 @@ namespace Qorpent.Utils
 		private StringBuilder _currentCode;
 		private bool _resolved;
 		private IDictionary<string, object> _source2;
+		private string _controlKey;
 
 
 		private void Interpolate() {
@@ -272,6 +275,9 @@ namespace Qorpent.Utils
 					return true;
 				}
 				return false;
+			}
+			if (!string.IsNullOrWhiteSpace(_controlKey) && _controlKey == code){
+				throw new Exception("Cyclic interpolation");
 			}
 			var val = _source[code];
 			if (null == val) return false;

@@ -6,14 +6,29 @@
 % [bx-preview Предисловие]
 % [bx-legend Обозначения и примеры]
 % BXL
-%% [bx-bxl-qstart Быстрый старт - hello world BXL]
-%% [bx-bxl-syntax Формальное определение синтаксиса BXL]
-%% [bx-bxl-literals Примитивы BXL - литералы , строки, выражения]
-%% [bx-bxl-el Элементы в BXL]
-%% [bx-bxl-attr Атрибуты в BXL]
-%% [bx-bxl-idattr Идентичность элементов и анонимные атрибуты в BXL]
+%% [bx-bxl-qstart Быстрый старт BXL]
+%% [bx-bxl-syntax Общее определение]
+%% [bx-bxl-literals Примитивы - литералы , строки, выражения]
+%% [bx-bxl-el Элементы ]
+%% [bx-bxl-attr Атрибуты]
+%% [bx-bxl-idattr Идентичность элементов и анонимные атрибуты ]
 % B#
 %% [bx-bs-preview Введение в B#]
-%% [bx-bs-classresolution B# - пространства имен, классы и область видимости]
+%% [bx-bs-nsclasses Классы и пространства имен]
+%% [bx-bs-inheritance Наследование]
+%% [bx-bs-interpolation Интерполяция]
+%% [bx-bs-privates Приватные атрибуты]
+%% [bx-bs-overrides Перекрытие классов]
+%% [bx-bs-elements Элементы классов]  - {style:color:red}статья будет написана позже{style}
+%% [bx-bs-includes Включения] - {style:color:red}статья будет написана позже{style}
+%% [bx-bs-classref Ссылки на классы] - {style:color:red}статья будет написана позже{style}
+%% [bx-bs-patches Патчи] - {style:color:red}статья будет написана позже{style}
+%% [bx-bs-dictionaries Словари] - {style:color:red}статья будет написана позже{style}
+%% [bx-bs-datasets Наборы данных и генераторы классов] - {style:color:red}статья будет написана позже{style}
+%% [bx-bs-datasets Глобальные переменные] - {style:color:red}статья будет написана позже{style}
+% B# изнутри
+%% [bx-bsi-compiler Архитектура компилятора] - {style:color:red}статья будет написана позже{style}
+%% [bx-bsi-extensions Расширения] - {style:color:red}статья будет написана позже{style}
+% BSC - консольный сборщик проектов на B#  - {style:color:red}статья будет написана позже{style}
 
 

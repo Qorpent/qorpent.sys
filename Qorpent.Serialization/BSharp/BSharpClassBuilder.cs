@@ -1035,7 +1035,7 @@ namespace Qorpent.BSharp {
 						var s = v.Value as string;
 						if (null == s) continue;
 						if (-1 == s.IndexOf('{') || -1==s.IndexOf(si.AncorSymbol)) continue;
-						var newval = si.Interpolate(s, _cls.ParamSourceIndex, _compiler.Global);
+						var newval = si.Interpolate(s, _cls.ParamSourceIndex, _compiler.Global,key);
 						if (newval != s){
 							changed = true;
 							_cls.ParamIndex.Set(key, newval);

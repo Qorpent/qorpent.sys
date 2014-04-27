@@ -166,7 +166,7 @@ qwiki.processCode = function (processor, curline) {
 	curline = curline.replace(/(\#[^"']+)$/g, "<span _CLASS_ATTR_'comment'>$1</span>");
 	curline = curline.replace(/(^\#[\s\S]+)(?=__BR__)/g, "<span _CLASS_ATTR_'comment'>$1</span>");
 	curline = curline.replace(
-		/\b((var)|(for)|(return)|(foreach)|(while)|(case)|(switch)|(in)|(out)|(include)|(embed)|(private)|(public)|(protected)|(void)|(function)|(class)|(namespace)|(using)|(select)|(where)|(group by)|(order by)|(null)|(true)|(false))\b/g,
+		/\b((var)|(for)|(return)|(import)|(foreach)|(abstract)|(embed)|(while)|(case)|(switch)|(in)|(out)|(include)|(embed)|(private)|(public)|(protected)|(void)|(function)|(class)|(namespace)|(using)|(select)|(where)|(group by)|(order by)|(null)|(true)|(false))\b/g,
 		"<span _CLASS_ATTR_'keyword'>$1</span>");
 	curline = curline.replace(
 		/\b((int)|(string)|(DateTime)|(decimal)|(bool)|(nvarchar)|(datetime)|(bit)|(byte)|(float)|(long)|(bigint))\b/g,

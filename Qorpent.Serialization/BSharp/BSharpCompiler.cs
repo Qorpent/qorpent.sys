@@ -521,6 +521,8 @@ namespace Qorpent.BSharp {
 				var lastdot = selfcode.LastIndexOf('.');
 				var _nsadd = selfcode.Substring(0, lastdot);
 				selfcode = selfcode.Substring(lastdot + 1);
+				e.SetAttributeValue("code",selfcode);
+				e.SetAttributeValue("id",selfcode);
 				if (string.IsNullOrWhiteSpace(__ns))
 				{
 					__ns = _nsadd;
@@ -673,6 +675,7 @@ namespace Qorpent.BSharp {
 				BSharpClassBuilder.Build(BuildPhase.Compile, this, _, context);
 			}
 			catch (Exception ex){
+				context.RegisterError(BSharpErrors.Generic(ex,ErrorLevel.Error));
 				_.Error = ex;
 			}
 		}
