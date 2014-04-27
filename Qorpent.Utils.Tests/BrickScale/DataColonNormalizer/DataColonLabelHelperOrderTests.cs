@@ -16,7 +16,6 @@ namespace Qorpent.Utils.Tests.BrickScale.DataColonNormalizer {
 				new DataItem {Value = 40},
 				new DataItem {Value = 70}
 			};
-			_colonLabelHelper.EnsureBestLabels();
 		}
 		[Test]
 		public void IsCorrectAsSuppliedOrder() {
