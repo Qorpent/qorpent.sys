@@ -27,6 +27,8 @@
       <DocumentationSource sourceFile="..\Qorpent.Mvc\Qorpent.Mvc.csproj" />
       <DocumentationSource sourceFile="..\Qorpent.Serialization\Qorpent.Serialization.csproj" />
       <DocumentationSource sourceFile="..\Qorpent.Utils\Qorpent.Utils.csproj" />
+      <DocumentationSource sourceFile="..\Qorpent.BSharp.Builder\Qorpent.BSharp.Builder.csproj" />
+      <DocumentationSource sourceFile="..\Qorpent.Host\Qorpent.Host.csproj" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
@@ -43,73 +45,74 @@
     <NamingMethod>MemberName</NamingMethod>
     <HelpTitle>A Sandcastle Documented Class Library</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
-    <VisibleItems>Attributes, InheritedMembers, Internals, Privates, Protected, SealedProtected, PrivateFields</VisibleItems>
+    <VisibleItems>Attributes, InheritedMembers, Internals, Protected, SealedProtected</VisibleItems>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="Qorpent" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Applications" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.BSharp" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.BSharp.Builder" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.BSharp.Matcher" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.BSharp.Runtime" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.BSharp.Schema" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Bxl" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Config" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Data" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Dsl" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Dsl.LogicalExpressions" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Dsl.XmlInclude" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Events" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Graphs" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Graphs.Dot" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Graphs.Dot.Builder" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Graphs.Dot.Types" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IO" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IO.DirtyVersion" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IO.DirtyVersion.Mapping" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IO.DirtyVersion.Storage" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IO.FileDescriptors" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IO.Resources" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IO.Storages" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IO.VcsStorage" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IO.Web" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IO.Zip" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IoC" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.IoC.BSharp" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Json" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Log" isDocumented="True">Пространство имён, хранящее классы, предоставляющие функционал для регистрации состояний и/или событий системы</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Qorpent.LogicalExpressions" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Model" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc" isDocumented="True">Обеспечивает доступ к внутреннему АПИ по средствам внешних комутируемых интерфейсов</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Qorpent.Mvc.Actions" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.Actions.Helpers" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.Actions.Wiki" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.Binding" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.HttpHandler" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.Loader" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.QView" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.Remoting" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.Renders" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.Renders.ActionFormViews" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.Renders.LoginViews" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.Security" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Mvc.UI" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Qxi" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Security" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Security.Watchdog" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Selector" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Selector.Implementations" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Serialization" isDocumented="True">Содержит классы для преобразования объектов и XElement в требуемый клиентский формат (XML,JSON и т.д.). 
+      <NamespaceSummaryItem name="Qorpent.Applications" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.BSharp" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.BSharp.Builder" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.BSharp.Matcher" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.BSharp.Runtime" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.BSharp.Schema" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Bxl" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Config" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Data" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Dsl" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Dsl.LogicalExpressions" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Dsl.XmlInclude" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Events" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Graphs" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Graphs.Dot" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Graphs.Dot.Builder" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Graphs.Dot.Types" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IO" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IO.DirtyVersion" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IO.DirtyVersion.Mapping" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IO.DirtyVersion.Storage" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IO.FileDescriptors" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IO.Resources" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IO.Storages" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IO.VcsStorage" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IO.Web" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IO.Zip" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IoC" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.IoC.BSharp" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Json" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Log" isDocumented="True">Пространство имён, хранящее классы, предоставляющие функционал для регистрации состояний и/или событий системы</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Qorpent.LogicalExpressions" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Model" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc" isDocumented="True">Обеспечивает доступ к внутреннему АПИ по средствам внешних комутируемых интерфейсов</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Qorpent.Mvc.Actions" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.Actions.Helpers" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.Actions.Wiki" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.Binding" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.HttpHandler" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.Loader" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.QView" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.Remoting" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.Renders" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.Renders.ActionFormViews" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.Renders.LoginViews" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.Security" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Mvc.UI" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Qxi" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Security" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Security.Watchdog" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Selector" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Selector.Implementations" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Serialization" isDocumented="True">Содержит классы для преобразования объектов и XElement в требуемый клиентский формат (XML,JSON и т.д.). 
 Используется в инфраструктуре рендеров Qorpent.Mvc для формирования исходящего потока в заданном формате.
 В клиентском коде может использоваться как заментель штатной инфраструктуры сериализации.
 
 В обычном пользовательском коде рекомендуется использовать &lt;see cref="Qorpent.Serialization.ISerializerFactory"/&gt;,
 доступный через &lt;see cref="Qorpent.Applications.IApplication.Serialization" /&gt;</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Qorpent.Utils" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Utils.Collections" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Utils.Extensions" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Utils.LogicalExpressions" isDocumented="True" />
-<NamespaceSummaryItem name="Qorpent.Wiki" isDocumented="True" />
-<NamespaceSummaryItem name="(global)" isDocumented="True" /></NamespaceSummaries>
+      <NamespaceSummaryItem name="Qorpent.Utils" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Utils.Collections" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Utils.Extensions" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Utils.LogicalExpressions" isDocumented="True" />
+      <NamespaceSummaryItem name="Qorpent.Wiki" isDocumented="True" />
+      <NamespaceSummaryItem name="(global)" isDocumented="True" />
+    </NamespaceSummaries>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional

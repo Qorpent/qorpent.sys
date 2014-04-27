@@ -47,8 +47,8 @@ namespace Qorpent.Host.Lib.Tests
 			new{
 				sum = q.a + q.b,
 				diff = q.b - q.a,
-				perc = q.b/q.a*100,
-				div = (q.b - q.a)/q.a*100,
+				perc = q.b/(decimal)q.a*100,
+				div = (q.b - q.a)/(decimal)q.a*100,
 				mid = (q.a + q.b)/2
 			});
 

@@ -188,6 +188,7 @@ namespace Qorpent.BSharp {
 		        if(attribute.Name.LocalName=="name")continue;
 		        if(attribute.Name.LocalName=="fullcode")continue;
                 if (attribute.Name.LocalName == "new") continue;
+                if (attribute.Name.LocalName == "priority") continue;
                 target.Compiled.SetAttributeValue(attribute.Name,attribute.Value);
 
 		    }
