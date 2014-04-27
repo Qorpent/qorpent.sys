@@ -1,0 +1,38 @@
+﻿{style:float:right;}Языки BXL/B# - руководство{style}
+{style:float:left;}Основные соглашения{style}
+[bx-index Вернуться к оглавлению]
+
+
+= Основные соглашения
+
+== Примеры в данном руководстве
+
+Вначале идет пример кода (в данном случае это B#)
+[[code]]
+class point X=%{_x}%{_mes} Y=%{_y}%{_mes} coords='[%{_x}:%{_y}]' embed
+class polyline _mes = px _x=2 _y=3
+	include point
+	include point _x=10 _y=30
+[[/code]]
+
+Ниже - результат трансляции в XML
+
+[[script-last type=bsharp]]
+
+Иногда для демонстрации ошибок, они также будут выводиться:
+
+[[code]]
+must close="quotes
+[[/code]]
+[[script-last type=bxl]]
+
+и другой пример
+
+
+[[code]]
+class A
+noclass B
+[[/code]]
+[[script-last type=bsharp]]
+
+

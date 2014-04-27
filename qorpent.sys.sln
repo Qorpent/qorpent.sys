@@ -84,6 +84,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Host.Tests", "Qorpe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Host.Exe", "Qorpent.Host.Exe\Qorpent.Host.Exe.csproj", "{43AE4275-6E9C-41DC-AEE9-EC54FC739B87}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bxdoc", "bxdoc", "{59578442-A317-46B0-902D-3218F0CCE29C}"
+	ProjectSection(SolutionItems) = preProject
+		bsdoc\bx-bxl-literals.wiki = bsdoc\bx-bxl-literals.wiki
+		bsdoc\bx-bxl-qstart.wiki = bsdoc\bx-bxl-qstart.wiki
+		bsdoc\bx-bxl-syntax.wiki = bsdoc\bx-bxl-syntax.wiki
+		bsdoc\bx-index.wiki = bsdoc\bx-index.wiki
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

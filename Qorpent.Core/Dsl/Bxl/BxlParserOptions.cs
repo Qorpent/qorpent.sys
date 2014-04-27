@@ -23,7 +23,7 @@ namespace Qorpent.Bxl {
 	/// 	Set of flags to configure bxl parsing process
 	/// </summary>
 	[Flags]
-	public enum BxlParserOptions {
+	public enum BxlParserOptions:short {
 		/// <summary>
 		/// 	default zero option
 		/// </summary>
@@ -70,5 +70,13 @@ namespace Qorpent.Bxl {
 		/// Специальное расширение BSharp для преобразование в DOT
 		/// </summary>
 		DotFilter = 256,
+		/// <summary>
+		/// Запрещает корневые атрибуты
+		/// </summary>
+		PreventRootAttributes = 512,
+		/// <summary>
+		/// Запрещает дублирование атрибутов (кроме id,code,name)
+		/// </summary>
+		PreventDoubleAttributes =1024,
 	}
 }

@@ -113,6 +113,17 @@ y a=1
 		}
 
 		[Test]
+		public void BugInExpressionParseIfCommentFollow(){
+			var code = @"a ()#";
+			var x = new BxlParser().Parse(code).ToString().Replace("\"","\'");
+			Console.WriteLine(x);
+			Assert.AreEqual(@"<root _file='code.bxl'>
+  <a _file='code.bxl' _line='1' code='()' id='()' />
+</root>",x);
+
+		}
+
+		[Test]
 		public void MustBeParsed(){
 			var code = @"
 a
@@ -589,6 +600,64 @@ test
 			XElement res = p.Parse(bxl, "qqqq", BxlParserOptions.NoLexData | BxlParserOptions.OnlyIdAttibute | BxlParserOptions.SafeAttributeNames | BxlParserOptions.ExtractSingle);
 			Console.WriteLine(res);
 			Assert.AreEqual(res.Attributes().First().Name.LocalName, "__id");
+		}
+		[Test]
+		public void AllowRootAttributesByDefault(){
+			String bxl = @"
+a
+x=1";
+			var res = new BxlParser().Parse(bxl).ToString().Replace("\"","\'");
+			Console.WriteLine(res);
+			Assert.AreEqual(@"<root x='1' _file='code.bxl'>
+  <a _file='code.bxl' _line='2' />
+</root>", res);
+		}
+
+		[Test]
+		public void NamedAttributesExceptIdentityBreaksIdentityStack(){
+			var code = @"
+a x y z b=1
+a b=1 x y z
+a id=2 x y z
+";
+			var res = new BxlParser().Parse(code,options:BxlParserOptions.NoLexData).ToString().Replace("\"", "\'");
+			Console.WriteLine(res);
+			Assert.AreEqual(@"<root>
+  <a code='x' id='x' name='y' z='1' b='1' />
+  <a b='1' x='1' y='1' z='1' />
+  <a id='2' code='x' name='y' z='1' />
+</root>", res);
+		}
+
+		[Test]
+		public void AllowDoubledAttributesByDefault()
+		{
+			String bxl = @"
+a x=1 x=2";
+			var res = new BxlParser().Parse(bxl).ToString().Replace("\"", "\'");
+			Console.WriteLine(res);
+			Assert.AreEqual(@"<root _file='code.bxl'>
+  <a _file='code.bxl' _line='2' x='2' />
+</root>", res);
+		}
+
+		[Test]
+		public void DisableDoubledAttributesWithOption()
+		{
+			String bxl = @"
+a x=1 x=2";
+			Assert.Throws<BxlException>(() => new BxlParser().Parse(bxl, options: BxlParserOptions.PreventDoubleAttributes).ToString().Replace("\"", "\'"));
+		}
+
+		[Test]
+		
+		public void DisableRootAttributesWithOption()
+		{
+			String bxl = @"
+a
+x=1";
+			Assert.Throws<BxlException>(()=> new BxlParser().Parse(bxl,options:BxlParserOptions.PreventRootAttributes).ToString().Replace("\"", "\'"));
+			
 		}
 
 		[Test]

@@ -405,7 +405,7 @@ namespace Qorpent.Bxl {
 		}
 
 		private void processAttributeName(char c) {
-			if (!char.IsWhiteSpace(c) && c!='=' && c!=','){
+			if (!char.IsWhiteSpace(c) && c!='=' && c!=',' && c!=' ' && c!='\t' && c!='#'){
 				if (_expStack.Count != 0){
 					throw new BxlException("not terminated expression",lexinfo:_info.Clone());
 				}
@@ -470,6 +470,7 @@ namespace Qorpent.Bxl {
 						_buf.Append(c);
 					return;
 				case '#':
+					saveValue();
 					map[(int)_mode]('\n');
 					_stack.Push((char)_mode);
 					_mode = ReadMode.Commentary;
@@ -1018,9 +1019,10 @@ namespace Qorpent.Bxl {
 		private void addAnonAttribute() {
 			if (_value.Length == 0)
 				return;
-			if (_current == _root)
-				throw new BxlException("adding attribute to root not allowed", _info.Clone());
-
+			if (_current == _root){
+				if(_options.HasFlag(BxlParserOptions.PreventRootAttributes))
+					throw new BxlException("adding attribute to root not allowed  if strict PreventRootAttributes mode set on", _info.Clone());
+			}
 			if (!_anon[_level].hasCodeId) {
 				if (_prefix.Length != 0)
 					_prefix += "::";
@@ -1073,13 +1075,31 @@ namespace Qorpent.Bxl {
 			// checking for empty _buf must be implemented in invoker !
 			if (_value.Length == 0)
 				throw new BxlException("empty attribute name", _info.Clone());
-			if (_current == _root)
-				throw new BxlException("adding attribute to root not allowed", _info.Clone());
+			if (_current == _root){
+				if (_options.HasFlag(BxlParserOptions.PreventRootAttributes)){
+					throw new BxlException("adding attribute to root not allowed  if strict PreventRootAttributes mode set on", _info.Clone());
+				}
+			}
+				
 
 			String ns = resolveNamespace();
 			String s = _buf.ToString();
 			_buf.Clear();
-			_current.SetAttributeValue(XName.Get(_value.Escape(EscapingType.XmlName), ns), s);
+			var name = XName.Get(_value.Escape(EscapingType.XmlName), ns);
+			if (_options.HasFlag(BxlParserOptions.PreventDoubleAttributes)){
+				if (name != "id" && name != "code" && name != "name"){
+					if (null != _current.Attribute(name)){
+						throw new BxlException("cannot add doubled attributes if strict PreventDoubleAttributes mode set on" );
+					}
+				}
+			}
+			if (name != "id" && name != "code" && name != "name" &&  _level!=-1){
+
+				_anon[_level].count += 3;
+				_anon[_level].hasCodeId= true;
+				_anon[_level].hasName = true;
+			}
+			_current.SetAttributeValue(name, s);
 			_isExpression = false;
 			_isString = false;
 			_value = "";

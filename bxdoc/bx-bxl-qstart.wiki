@@ -108,6 +108,7 @@ server mainserver
 == Нужны пространства имен? Тоже просто
 
 [[code]]
+##showroot -- это спецтег для wiki, чтобы в результатах показывался корневой элемент
 my = "http://outnamespace.com"
 server mainserver
 	my::spectag role my::surface=all-farms

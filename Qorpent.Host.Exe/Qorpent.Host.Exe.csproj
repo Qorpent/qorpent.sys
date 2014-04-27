@@ -11,7 +11,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
     <None Include="*.import" />
@@ -56,4 +56,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>killtask qrs.exe
+exit 0</PostBuildEvent>
+  </PropertyGroup>
 </Project>
