@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Qorpent.Json;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Uson
 {
@@ -53,7 +54,7 @@ namespace Qorpent.Uson
 			}
 			var eldict = e.Elements().GroupBy(_ => _.Name.LocalName, _ => _);
 			foreach (var grp in eldict){
-				foreach (var element in grp){
+				foreach (var element in grp.OrderBy(_=>_.Attr("code"))){
 					var item = XmlToUson(element, false);
 					target[grp.Key].push(item);
 				}

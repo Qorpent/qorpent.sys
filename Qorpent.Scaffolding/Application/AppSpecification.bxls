@@ -32,4 +32,36 @@ namespace Qorpent.Scaffolding
 		string Comment "Комментарий" optional
 		
 	class Action "Действие" abstract prototype=ui-action
+
+	Enum LogLevel "Тип сообщения лога"
+		item All "Все" : 0
+		item Debug "Отладка" : 1
+		item Trace "Трассировка" : 2
+		item Info "Информационные сообщения" : 4
+		item Warning "Предупреждение" : 8
+		item Error "Ошибка" : 16
+		item Fatal "Фатальная ошибка" : 32
+		item None "Никакой" : 64
 		
+	Struct SearchString "Строка поиска"
+		string Pattern "Паттерн поиска"
+		
+	Struct AcceptCall "Запрос на фиксацию задачи"
+		int Id "Идентификатор задачи"
+		
+	Struct LogQuery "Запрос журнала сообщений"
+		int Timestamp "Начальный таймстэмп" : 0
+		LogLevel Level "Уровень сообщения" : LogLevel.All
+		bool NotAcceptedOnly "Только не обработанные" : false
+		bool AcceptedOnly "Только обработанные" : false
+	
+	Struct LogMessage "Сообщение журнала"
+		int Timestamp "Начальный таймстэмп"
+		int Id "Идентификатор сообщения" 
+		string Code "Код сообщения"
+		LogLevel Level "Уровень сообщения" : LogLevel.Info
+		string Time "Время  записи в читаемом формате" : "new Date()"
+		string Message "Сообщение" : (без комментариев)
+		object Data "Дополнительная информация" : {}
+		bool Accepted "Информация об акцептации и снятии сообщения" : false
+		bool RequireAccept "Признак необходимости акцептации" : false
