@@ -26,6 +26,7 @@
 %% [bx-bs-dictionaries Словари] - {style:color:red}статья будет написана позже{style}
 %% [bx-bs-datasets Наборы данных и генераторы классов] - {style:color:red}статья будет написана позже{style}
 %% [bx-bs-datasets Глобальные переменные] - {style:color:red}статья будет написана позже{style}
+%% [bx-bs-require Явная модульность при помощи require] - {style:color:red}статья будет написана позже{style}
 % B# изнутри
 %% [bx-bsi-compiler Архитектура компилятора] - {style:color:red}статья будет написана позже{style}
 %% [bx-bsi-extensions Расширения] - {style:color:red}статья будет написана позже{style}

@@ -35,6 +35,22 @@
       <Project>{9f8a9b7f-0cad-47a3-a3c7-f7ac3158864a}</Project>
       <Name>Qorpent.BSharp.Builder</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Data\Qorpent.Data.csproj">
+      <Project>{e762abb0-9982-444c-a2b5-23b5866954f3}</Project>
+      <Name>Qorpent.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Host\Qorpent.Host.csproj">
+      <Project>{e31b62a2-2fef-4ef9-aadc-21b24885e035}</Project>
+      <Name>Qorpent.Host</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IoC\Qorpent.IoC.csproj">
+      <Project>{62f22ffa-a1cf-4a74-838c-9ab33a9442ea}</Project>
+      <Name>Qorpent.IoC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Scaffolding\Qorpent.Scaffolding.csproj">
+      <Project>{6934aba6-5d22-4c03-9591-211e9a930d40}</Project>
+      <Name>Qorpent.Scaffolding</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

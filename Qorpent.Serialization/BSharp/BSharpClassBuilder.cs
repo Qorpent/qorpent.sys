@@ -738,6 +738,9 @@ namespace Qorpent.BSharp {
 		private void PerformMergingWithElements() {
 
 			foreach (var root in _cls.AllElements.Where(_ => _.Type == BSharpElementType.Define).ToArray()) {
+
+				try{
+
 				var allroots = _cls.Compiled.Descendants(root.Name).ToArray();
 				var groupedroots = allroots.GroupBy(_ => _.GetCode());
 				foreach(var doublers in groupedroots.Where(_=>_.Count()>1)) {
@@ -788,7 +791,7 @@ namespace Qorpent.BSharp {
 									}
 									if (!string.IsNullOrWhiteSpace(o.Value)){
 										//join embeded code
-										if (o.Value[0]=='(' && o.Value[o.Value.Length-1]==')' && e.Value[0]=='(' && e.Value[e.Value.Length]==')'){
+										if ( o.Value[0]=='(' && o.Value[o.Value.Length-1]==')' && e.Value[0]=='(' && e.Value[e.Value.Length-1]==')'){
 											e.Value = e.Value.Substring(0, e.Value.Length - 1) + o.Value.Substring(1);
 										}
 										else{
@@ -800,9 +803,16 @@ namespace Qorpent.BSharp {
 								o.Remove();	
 							}
 						}
+
 						
 					}
-	//			}
+
+				}
+				catch (Exception e)
+				{
+					throw e;
+				}
+					
 			}
 			
 		}
