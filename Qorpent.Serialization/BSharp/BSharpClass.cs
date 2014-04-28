@@ -85,6 +85,22 @@ namespace Qorpent.BSharp {
 			}
 		}
 
+		private bool? _patchPlain = null;
+		/// <summary>
+		/// Возвращает селектор классов для 
+		/// </summary>
+		public bool PatchPlain
+		{
+			get{
+				if (!Is(BSharpClassAttributes.Patch)) return false;
+				if (null == _patchPlain)
+				{
+					_patchPlain = Compiled.Attr(BSharpSyntax.PatchPlainAttribute).ToBool();
+				}
+				return _patchPlain.Value;
+			}
+		}
+
 		BSharpPatchBehavior _patchBehavior = BSharpPatchBehavior.None;
 		/// <summary>
 		/// 

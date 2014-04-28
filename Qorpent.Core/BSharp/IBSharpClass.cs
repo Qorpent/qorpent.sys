@@ -133,7 +133,12 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		[Serialize]
 		int Priority { get; }
-		
+
+		/// <summary>
+		/// Возвращает селектор классов для 
+		/// </summary>
+		bool PatchPlain { get; }
+
 		/// <summary>
 		/// Возвращает true при наличии флага
 		/// </summary>

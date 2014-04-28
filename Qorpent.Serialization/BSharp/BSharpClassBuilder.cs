@@ -169,6 +169,9 @@ namespace Qorpent.BSharp {
 					XDiffAction.ChangeAttribute | XDiffAction.CreateAttribute | XDiffAction.CreateElement | XDiffAction.ChangeElement |
 					XDiffAction.ChangeHierarchyPosition
 			};
+			if (_cls.PatchPlain){
+				opts.IncludeActions = opts.IncludeActions & ~XDiffAction.ChangeHierarchyPosition;
+			}
 			if (_cls.PatchBehavior == BSharpPatchBehavior.ErrorOnNew){
 				opts.ErrorActions |= XDiffAction.CreateElement;
 			}
@@ -182,12 +185,13 @@ namespace Qorpent.BSharp {
 			difference.Apply(target.Compiled, opts);
 
 		    foreach (var attribute in _cls.Compiled.Attributes()) {
-		        if(attribute.Name.LocalName=="for")continue;
+		        if(attribute.Name.LocalName==BSharpSyntax.PatchTargetAttribute)continue;
 		        if(attribute.Name.LocalName=="id")continue;
 		        if(attribute.Name.LocalName=="code")continue;
 		        if(attribute.Name.LocalName=="name")continue;
 		        if(attribute.Name.LocalName=="fullcode")continue;
-                if (attribute.Name.LocalName == "new") continue;
+				if (attribute.Name.LocalName == BSharpSyntax.PatchPlainAttribute) continue;
+				if (attribute.Name.LocalName == BSharpSyntax.PatchCreateBehavior) continue;
                 if (attribute.Name.LocalName == "priority") continue;
                 target.Compiled.SetAttributeValue(attribute.Name,attribute.Value);
 

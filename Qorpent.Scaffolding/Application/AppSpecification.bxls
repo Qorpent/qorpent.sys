@@ -13,6 +13,9 @@ namespace Qorpent.Scaffolding
 		
 	class DataType "Типы данных для взаимодействия приложения с сервером" abstract prototype=ui-data
 		
+	class Controller abstract prototype=ui-controller
+
+	class Layout abstract prototype=ui-layout
 		
 	DataType Enum "Перечисление" enum abstract
 		element item

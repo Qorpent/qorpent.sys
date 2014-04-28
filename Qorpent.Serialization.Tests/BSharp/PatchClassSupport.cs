@@ -118,6 +118,26 @@ patch for=^A new=create:
 </class>", str);
 		}
 
+		[Test]
+		public void PlainToTreePatch(){
+			var code = @"
+class A 
+	x a
+		y b 
+patch for=^A plain:
+	x a name1
+	y b name2
+";
+			var result = Compile(code).Get("A");
+			var str = result.Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(str);
+			Assert.AreEqual(@"<class code='A' fullcode='A'>
+  <x code='a' name='name1'>
+    <y code='b' name='name2' />
+  </x>
+</class>", str);
+		}
+	
 
 		[Test]
 		public void HierarchicalPatch()

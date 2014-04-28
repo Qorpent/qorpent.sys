@@ -69,6 +69,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public const string PatchTargetAttribute = "for";
 		/// <summary>
+		/// 
+		/// </summary>
+		public const string PatchPlainAttribute = "plain";
+		/// <summary>
 		/// Описатель действия патча при создании элемента
 		/// </summary>
 		public const string PatchCreateBehavior = "new";
