@@ -122,5 +122,17 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\moment.min.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\empty.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\nglayout.js" />
+    <EmbeddedResource Include="Resources\refresh.js" />
+    <EmbeddedResource Include="Resources\settings.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\app.css" />
+    <EmbeddedResource Include="Resources\nglayout.css" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

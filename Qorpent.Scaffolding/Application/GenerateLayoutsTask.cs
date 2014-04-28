@@ -99,8 +99,15 @@ namespace Qorpent.Scaffolding.Application {
             }
             ctrlel.SetAttributeValue("layout-item","1");
 	        var include = new XElement("ng-include").SetAttr("src", "view");
-           
-			ctrlel.Add(include);
+           if (null != e.Attribute("view")){
+	           include.SetAttr("src", "'" + e.Attr("view") + ".html'");
+           }
+		    if (!string.IsNullOrWhiteSpace(e.Attr("name"))){
+			    var outer = new XElement("div", new XAttribute("ng-init", "title='" + e.Attr("name") + "'"));
+				outer.Add(include);
+			    include = outer;
+		    }
+		    ctrlel.Add(include);
 			root.Add(ctrlel);
 	    }
 

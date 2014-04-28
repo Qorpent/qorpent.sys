@@ -245,8 +245,13 @@ namespace Qorpent.Utils.Git{
 				var host = uri.Host;
 				var port = uri.Port;
 				var cli = new System.Net.Sockets.TcpClient();
-				var t = cli.ConnectAsync(host, port);
-				return t.Wait(500);
+				try{
+					var t = cli.ConnectAsync(host, port);
+					return t.Wait(500);
+				}
+				catch{
+					return false;
+				}
 			}
 			return Directory.Exists(RemoteUrl);
 		}

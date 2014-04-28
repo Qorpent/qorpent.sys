@@ -1,0 +1,57 @@
+define([
+    'angular'
+], function(angular) {
+    function Settings() {
+        var self = this;
+        Object.keys(localStorage).forEach(function(k) {
+            var i = localStorage.getItem(k);
+            self[k] = !self.isJson(i) ? i : JSON.parse(i);
+        });
+    }
+
+    Settings.prototype.set = function(k, v) {
+        if (typeof k == 'object') {
+            var self = this;
+            Object.keys(k).forEach(function(key) {
+                self.set(key, k[key]);
+            });
+        }
+        else if (typeof k == 'string') {
+            if (typeof v == 'object') {
+                this[k] = v;
+                v = JSON.stringify(v);
+            } else {
+                this[k] = !this.isJson(v) ? v : JSON.parse(v);
+            }
+            localStorage.setItem(k, v);
+            return v;
+        }
+    };
+
+    Settings.prototype.isJson = function(s) {
+        return (typeof s == 'string' && s != '' && (s.trim().indexOf('{') == 0 || s.trim().indexOf('[') == 0  || s.trim() == 'true' || s.trim() == 'false'));
+    };
+
+    Settings.prototype.get = function(k) {
+        if (!this[k]) {
+            this[k] = false;
+            localStorage.setItem(k, 'false');
+        }
+        return this[k];
+    };
+
+    angular.module('settings', [])
+        .factory('settings', function() {
+            var settings = new Settings();
+            return function($scope) {
+                $scope.settings = settings;
+                $scope.$watch('settings', function(n, o) {
+                    Object.keys(n).forEach(function(k) {
+                        if (n[k] != o[k]) {
+                            $scope.settings.set(k, n[k]);
+                        }
+                    });
+                }, true);
+            }
+        });
+});

@@ -1,0 +1,187 @@
+﻿@import url("refresher.css");
+@import url("nglayout.css");
+
+.no-margin {
+    margin: 0;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+layout {
+    margin: 3px;
+}
+
+layout[root] {
+    margin: 0;
+}
+
+.label.status {
+    font-size: 50%;
+    vertical-align: top;
+    margin-right: 5px;
+    margin-top: 5px;
+    display: inline-block;
+}
+
+.dropdown>button {
+    margin-top: 10px;
+}
+
+.dropdown-menu a>.glyphicon {
+    margin-right: 5px;
+}
+
+#toolbar {
+    margin-bottom: 0;
+}
+
+#console {
+    height: 250px;
+    background-color: white;
+    padding-top: 38px;
+}
+
+#console.ng-hide {
+    height: 0;
+}
+
+#console h6 {
+    color: white;
+}
+
+#localHistory>.notification-table {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#localHistory {
+    min-width: 565px;
+}
+
+table.localhistory {
+    width: 100%;
+    font-size: 90%;
+    min-width: 400px;
+    color: #414141;
+}
+
+table.localhistory tr.merged_true td {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+table.localhistory td.localhistory-type {
+    width: 5px;
+    padding: 0;
+}
+
+table.localhistory tr.merged_true td.localhistory-type {
+    background-color: #3E8F3E;
+    /* border-color: #C4ECC4; */
+}
+
+table.localhistory tr.merged_true.isautomerge_true td.localhistory-type {
+    background-color: #F1F1F1;
+    /* border-color: #ECE2C4; */
+}
+
+table.localhistory tr.request_CanBeSet td.localhistory-type {
+    background-color: #D43F3A;
+}
+
+table.localhistory tr.request_IsInRequest td.localhistory-type {
+    background-color: #e8c44b;
+}
+
+table.localhistory tr.request_IsRequest td.localhistory-type {
+    background-color: #f4e6e8;
+}
+
+table.localhistory td {
+    white-space: nowrap;
+}
+
+table.localhistory td.localhistory-commands {
+    width: 75px;
+    text-align: right;
+}
+
+table.localhistory td.localhistory-commands>i.checked {
+    opacity: .2;
+}
+
+table.localhistory td:last-child {
+    width: 118px;
+}
+
+table.localhistory td:first-child {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+table.localhistory-hideautocommits .isautomerge_true {
+    display: none;
+}
+
+.localhistory-filters {
+    border-top: 1px solid lightgray;
+    font-size: 90%;
+}
+
+.localhistory-filters .date {
+    display: inline-block;
+}
+
+.localhistory-filters>.checkbox {
+    margin: 5px 0;
+}
+
+.localhistory-filters select {
+    padding: 2px 6px;
+    height: 24px;
+}
+
+.localhistory-filters>.checkbox input {
+    margin-top: 3px;
+}
+
+.localhistory-from {
+    width: 110px;
+}
+
+.localhistory-comment {
+    max-width: 300px;
+    width: 300px;
+}
+
+.localhistory-comment>.label {
+    border: 1px solid #D5D5D5;
+    font-size: 90%;
+    color: #666;
+    background-color: #F5F5F5;
+}
+
+.localhistory-from>input {
+    padding: 2px 8px !important;
+    height: 24px !important;
+}
+
+.localhistory-from>span {
+    height: 24px !important;
+    padding: 2px 6px !important;
+}
+
+.localhistory-from>span>i {
+    font-size: 10px !important;
+}
+
+.notifications-zone .refresh-notifications {
+    font-size: 50px;
+    color: #FFF;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.1), 0 0 1px rgba(0, 0, 0, 0.2);
+    margin: 50px auto;
+    display: block;
+    width: 50px;
+}
