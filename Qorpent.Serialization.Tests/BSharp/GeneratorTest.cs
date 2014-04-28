@@ -17,6 +17,21 @@ generator Y
 		}
 
 		[Test]
+		public void CanSupplyImportClause()
+		{
+			var result = Compile(@"
+class A x=1 abstract
+dataset cls
+	item _cls = A
+generator ${_cls}X
+	dataset cls
+	import ${_cls}
+");
+			var cls = result.Get("AX");
+			Assert.AreEqual("1",cls.Compiled.Attr("x"));
+		}
+
+		[Test]
 		public void CanGenerateWithOneDataSetSimple()
 		{
 			var code = @"

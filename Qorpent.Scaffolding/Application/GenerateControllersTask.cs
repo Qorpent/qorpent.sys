@@ -104,7 +104,18 @@ namespace Qorpent.Scaffolding.Application {
                     watcher = "\t\t\t\t$scope.$watch('" + item.Attr("code") + "',function(n,o){$scope.settings.set('" + persistent +
                               "',n)},true);";
 
+                }else if (item.HasElements){
+	                var uson = new UObj();
+	                foreach (var e in item.Elements()){
+		                var u = e.XmlToUson();
+		                u.Properties["itemtype"] = e.Name.LocalName;
+		                uson.push(u);
+	                }
+
+	                typestr = uson.ToJson(UObjSerializeMode.Javascript);
                 }
+
+
                 sb.AppendLine("\t\t\t\t$scope."+item.Attr("code")+" = "+typestr+";");
                 if (!string.IsNullOrWhiteSpace(watcher)) {
                     sb.AppendLine(watcher);

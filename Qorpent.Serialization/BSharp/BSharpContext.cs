@@ -276,7 +276,15 @@ namespace Qorpent.BSharp {
 				}
 			}
 
-			clselement.Add(generator.Elements());
+			foreach (var e in generator.Elements()){
+				var ex = e;
+				if (ex.Name.LocalName == "import"){
+					ex = new XElement(e);
+					genInt.Interpolate(ex, clselement);
+				}
+				clselement.Add(ex);
+			}
+
 			var cls = Compiler.ReadSingleClassSource(clselement, ns,null);
 			RegisterClassInIndex(cls);
 		}

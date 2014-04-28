@@ -42,6 +42,19 @@ e c x=1 n
 </root>", b.ToString().Replace("\"", "'"));
 		}
 
+		[Test]
+		public void PreventNameAnonymAfterAnyNamedWithoutCode()
+		{
+			var code = @"
+e x=1 n
+";
+			var b = new BxlParser().Parse(code, "", BxlParserOptions.NoLexData);
+			Console.WriteLine(b.ToString().Replace("\"", "'"));
+			Assert.AreEqual(@"<root>
+  <e x='1' n='1' />
+</root>", b.ToString().Replace("\"", "'"));
+		}
+
 
 		[Test]
 		public void ValidlyParsesEmptyStringsBasis()
