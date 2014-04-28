@@ -74,14 +74,14 @@ namespace Qorpent.Scaffolding.Application {
 ", code, string.Join("','", deps.Values.Select(_ => _.ChooseAttr("type", "code")).Distinct()), string.Join(",", deps.Values.Select(_ => _.ChooseAttr("type", "code")).Distinct()), Project.ProjectName));
 
             var items = xml.Elements("item");
-            foreach (var e in deps.Where(_ => _.Value.Attr("before").ToBool())) {
+            foreach (var e in deps.Where(_ => _.Value.Attr("before").ToBool()).OrderBy(_=>_.Key)) {
                 var type = e.Value.ChooseAttr("type", "code");
                 if (type == "refresh") {
                     SetupRefresh(targetclass, e, advanced);
                 }
                 sb.AppendLine("\t\t\t\t" + type + "($scope," + e.Value.ToJson() + ");");
             }
-            foreach (var item in items) {
+            foreach (var item in items.OrderBy(_=>_.Attr("code"))) {
                 var type = item.Attr("type");
                 var typestr = "{}";
                 var watcher = "";
@@ -111,7 +111,7 @@ namespace Qorpent.Scaffolding.Application {
                 }
             }
          
-            foreach (var e in deps.Where(_=>!_.Value.Attr("before").ToBool())) {
+            foreach (var e in deps.Where(_=>!_.Value.Attr("before").ToBool()).OrderBy(_=>_.Key)) {
                 var type = e.Value.ChooseAttr("type", "code");
                 if (type=="refresh") {
                     SetupRefresh(targetclass, e,advanced);
@@ -150,7 +150,7 @@ namespace Qorpent.Scaffolding.Application {
                 }
                 var subscribtions = el.Value.Elements("subscribe").ToArray();
 				if (subscribtions.Length > 0) {
-                    foreach (var s in subscribtions) {
+                    foreach (var s in subscribtions.OrderBy(_=>_.Attr("code"))) {
                         advanced.AppendLine("\t\t\t\t$rootScope.$on('" + s.Attr("code") + "', function(n,o){$scope." + target +
                                            "_refresh.refresh.run();});");   
 				    }
