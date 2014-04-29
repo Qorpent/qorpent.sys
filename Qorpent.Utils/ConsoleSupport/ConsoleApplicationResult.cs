@@ -29,7 +29,7 @@ namespace Qorpent.Utils{
 		/// 
 		/// </summary>
 		public bool IsOK{
-			get { return null == Exception && 0 == State && string.IsNullOrWhiteSpace(Error); }
+			get { return null == Exception && 0 == State; }
 		}
 		/// <summary>
 		/// 
@@ -39,10 +39,14 @@ namespace Qorpent.Utils{
 		public void Merge(ConsoleApplicationHandler h,ConsoleApplicationResult res){
 			Timeouted = Timeouted || res.Timeouted;
 			Exception = Exception ?? res.Exception;
-			if (0 == State) State = res.State;
-			Output += "Command: " + h.ExePath + " " + h.Arguments + "\r\n" + res.Output;
+			if (0 == State){
+				State = res.State;
+				Output += "Command: " + h.ExePath + " " + h.Arguments + "\r\n" + res.Output+res.Error;
+			}
+			
+			
 			if (0 != State){
-				Error += "Command: " + h.ExePath + " " + h.Arguments + "\r\n" + res.Error;
+				Error += "Command: " + h.ExePath + " " + h.Arguments + "\r\n" + res.Error+res.Output;
 			}
 
 		}
