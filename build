@@ -1,8 +1,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<Tests>True</Tests>
+	</PropertyGroup>
 	<ItemGroup>
 		<Project Include=".\Qorpent.Core\*.csproj;.\Qorpent.Utils\*.csproj" />
 		<Project Include=".\**\*.csproj" Exclude=".\commons\*.csproj;.\**\*.Tests.csproj;.\Qorpent.MongoDBIntegration\*.csproj" />
-		<Project Include=".\**\*.Tests.csproj" Exclude=".\Qorpent.MongoDBIntegration.Tests\*.csproj" />
+		<Project Condition="$(Tests)" Include=".\**\*.Tests.csproj" Exclude=".\Qorpent.MongoDBIntegration.Tests\*.csproj" />
 	</ItemGroup>
 	<Target Name="Build">
 		<MSBuild Projects="@(Project)" Properties="NoProjRef=True" />

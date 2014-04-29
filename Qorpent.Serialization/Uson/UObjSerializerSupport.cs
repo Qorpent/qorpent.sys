@@ -195,7 +195,7 @@ namespace Qorpent.Uson
 			}
 		}
 
-		static  readonly  object  locker = new object();
+	//	static  readonly  object  locker = new object();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -205,7 +205,7 @@ namespace Qorpent.Uson
 		/// <returns></returns>
 		public static object ToUson(object obj,UObj parent = null, bool noParseJson = false)
 		{
-			lock (locker){
+		//	lock (locker){
 				if (obj is string && !noParseJson){
 					var s = obj.ToString().Trim();
 					if (0 != s.Length){
@@ -290,7 +290,7 @@ namespace Qorpent.Uson
 				}
 
 				return result;
-			}
+	//		}
 		}
 		/// <summary>
 		/// 
