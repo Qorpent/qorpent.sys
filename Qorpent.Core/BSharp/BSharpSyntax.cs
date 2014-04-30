@@ -301,8 +301,21 @@ namespace Qorpent.BSharp {
 		/// Элемент ссылки на другой файл в качестве "требуемого"
 		/// </summary>
 		public const string Require = "require";
+		/// <summary>
+		/// Определение глобальой константы (констант)
+		/// </summary>
+		public const string ConstantDefinition = "const";
 
-	    /// <summary>
+		/// <summary>
+		/// Переопределение глобальой константы (констант)
+		/// </summary>
+		public static readonly string ConstantOverrideDefinition = "~".Escape(EscapingType.XmlName)+ConstantDefinition;
+		/// <summary>
+		/// Дефолт глобальной константы
+		/// </summary>
+		public static readonly string ConstantDefaultDefinition = "+".Escape(EscapingType.XmlName)+ConstantDefinition;
+
+		/// <summary>
 		/// Формирует имя класса соединения
 		/// </summary>
 		/// <param name="mode"></param>

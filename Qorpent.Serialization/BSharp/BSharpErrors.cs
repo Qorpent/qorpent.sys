@@ -386,5 +386,22 @@ namespace Qorpent.BSharp {
                 Message = "Не найдено указанное значение словаря"
             };
 	    }
+
+		/// <summary>
+		/// Ошибка дублированной константы
+		/// </summary>
+		/// <param name="src"></param>
+		/// <param name="attribute"></param>
+		/// <returns></returns>
+		public static BSharpError DoubleConstantDefinition(XElement src, XAttribute attribute){
+			return new BSharpError{
+				Level = ErrorLevel.Error,
+				Phase = BSharpCompilePhase.SourceIndexing,
+				Type = BSharpErrorType.DoubleConstantDefinition,
+				Message = "Обнаружено дублирующееся определение константы " + attribute.Name.LocalName,
+				Data = attribute,
+				Xml = src
+			};
+		}
 	}
 }

@@ -12,6 +12,8 @@ using Qorpent.Bxl;
 using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Log;
+using Qorpent.Serialization;
+using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils.LogicalExpressions;
@@ -327,10 +329,56 @@ namespace Qorpent.BSharp {
 		protected virtual IBSharpContext BuildIndex(IEnumerable<XElement> sources) {
 			CurrentBuildContext = new BSharpContext(this);
 			var baseindex = IndexizeRawClasses(sources).ToArray();
+			SetupGlobals();
 			CurrentBuildContext.Setup(baseindex);
 			CurrentBuildContext.ExecuteGenerators();
 			CurrentBuildContext.Build();
 			return CurrentBuildContext;
+		}
+
+		private readonly IDictionary<string,string> _baseglobals = new Dictionary<string, string>(); 
+		private readonly IDictionary<string,string> _overlobals = new Dictionary<string, string>(); 
+		private readonly IDictionary<string,string> _extlobals = new Dictionary<string, string>(); 
+
+		private void SetupGlobals(){
+			bool requireInterpolation = false;
+			foreach (var baseglobal in _overlobals)
+			{
+				if (!_global.ContainsKey(baseglobal.Key))
+				{
+					requireInterpolation = requireInterpolation || baseglobal.Value.Contains("~{");
+					_global[baseglobal.Key] = baseglobal.Value;
+				}
+			}
+			foreach (var baseglobal in _baseglobals){
+				if (!_global.ContainsKey(baseglobal.Key)){
+					requireInterpolation = requireInterpolation || baseglobal.Value.Contains("~{");
+					_global[baseglobal.Key] = baseglobal.Value;
+				}
+			}
+			
+			foreach (var baseglobal in _extlobals)
+			{
+				if (!_global.ContainsKey(baseglobal.Key))
+				{
+					requireInterpolation = requireInterpolation || baseglobal.Value.Contains("~{");
+					_global[baseglobal.Key] = baseglobal.Value;
+				}
+			}
+			if (requireInterpolation){
+				var si = new StringInterpolation{AncorSymbol = '~'};
+				var haschanges = true;
+				while (haschanges){
+					haschanges = false;
+					foreach (var current in _global.Where(_=>_.Value is string && ((string)_.Value).Contains("~{")).ToArray()){
+						var newval = si.Interpolate((string) current.Value, _global);
+						if (newval != (string)current.Value){
+							_global[current.Key] = newval;
+							haschanges = true;
+						}
+					}
+				}
+			}
 		}
 
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(IEnumerable<XElement> sources) {
@@ -399,6 +447,7 @@ namespace Qorpent.BSharp {
 						
 					}
 				}
+				
 
 				if (e.Name.LocalName == BSharpSyntax.Namespace) {
                     var ifa = e.Attr("if");
@@ -430,6 +479,10 @@ namespace Qorpent.BSharp {
 						}
 					}
 				}
+				else if (e.Name.LocalName == BSharpSyntax.ConstantDefinition || e.Name.LocalName==BSharpSyntax.ConstantOverrideDefinition ||e.Name.LocalName==BSharpSyntax.ConstantDefaultDefinition){
+					PrepareGlobals(e);
+				}
+				
 				else if (e.Name.LocalName == BSharpSyntax.Require)
 				{
 					continue;
@@ -457,7 +510,25 @@ namespace Qorpent.BSharp {
 				}
 			}
 		}
-		
+
+		private void PrepareGlobals(XElement src){
+			var target = _baseglobals;
+			if (src.Name.LocalName.StartsWith(XmlName.Commons['~'])){
+				target = _overlobals;
+			}else if (src.Name.LocalName.StartsWith(XmlName.Commons['+'])){
+				target = _extlobals;
+			}
+			foreach (var a in src.Attributes()){
+				if (target == _baseglobals){
+					if (target.ContainsKey(a.Name.LocalName)){
+						CurrentBuildContext.RegisterError(BSharpErrors.DoubleConstantDefinition(src,a));
+						continue;
+					}
+				}
+				target[a.Name.LocalName] = a.Value;
+			}
+		}
+
 
 		private IBSharpClass PrepareTemplate(string ns, XElement e)
 		{

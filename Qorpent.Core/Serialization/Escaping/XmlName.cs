@@ -5,9 +5,12 @@ namespace Qorpent.Serialization
     /// <summary>
     /// <see cref="EscapingType.XmlName" />
     /// </summary>
-    class XmlName : IEscapeProvider
+    public class XmlName : IEscapeProvider
     {
-        private static readonly Dictionary<char, string> _common = new Dictionary<char, string>()
+		/// <summary>
+		/// 
+		/// </summary>
+	    public static readonly Dictionary<char, string> Commons = new Dictionary<char, string>()
             {
                 {'+', "__PLUS__"},
                 {'?', "__ASK__"},
@@ -94,27 +97,43 @@ namespace Qorpent.Serialization
                 {"__NLINE__", '\n'},
 				{"__BAPOS__",'`'},
             };
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
         public Dictionary<char, string> GetFirst()
         {
             return _first;
         }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
         public Dictionary<char, string> GetCommon()
         {
-            return _common;
+            return Commons;
         }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
         public OptimizedEscapeDictionary GetUnescape()
         {
             return _unescape;
         }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
         public string GetUnicodePattern()
         {
             return "__0x __";
         }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="c"></param>
+		/// <returns></returns>
         public bool NeedEscapeUnicode(char c)
         {
             // standard ASCII exclude control characters

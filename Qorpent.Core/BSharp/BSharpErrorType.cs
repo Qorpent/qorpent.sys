@@ -19,6 +19,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		OrphanClass = 110,
 		/// <summary>
+		/// Дублированная константа
+		/// </summary>
+		DoubleConstantDefinition = 120,
+		/// <summary>
 		/// Класс был создан из override-конструкции
 		/// </summary>
 		ClassCreatedFormOverride = 1010,
@@ -100,5 +104,6 @@ namespace Qorpent.BSharp {
 		/// У патча указано неверное поведение
 		/// </summary>
 		PatchError = 520,
+		
 	}
 }
