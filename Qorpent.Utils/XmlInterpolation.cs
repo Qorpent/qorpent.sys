@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Config;
 
@@ -64,6 +65,10 @@ namespace Qorpent.Utils {
 		/// значения - 1,true - ниже, all - что либо другое - этот и ниже
 		/// </summary>
 		public string StopAttribute { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public IDictionary<string,object> SecondSource { get; set; }
 
 		private bool InterpolateDataToElement(XElement source, IConfig datasource) {
 			bool processchild = true;
@@ -80,7 +85,7 @@ namespace Qorpent.Utils {
 			foreach (var a in source.Attributes()) {
 				var val = a.Value;
 				if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol)) {
-					val = _stringInterpolation.Interpolate(val,datasource);
+					val = _stringInterpolation.Interpolate(val,datasource,SecondSource);
 					a.Value = val;
 					datasource.Set(a.Name.LocalName, val);
 				}
@@ -90,7 +95,7 @@ namespace Qorpent.Utils {
 
 					var val = t.Value;
 					if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol)) {
-						val = _stringInterpolation.Interpolate(val, datasource);
+						val = _stringInterpolation.Interpolate(val, datasource,SecondSource);
 						t.Value = val;
 					}
 				}

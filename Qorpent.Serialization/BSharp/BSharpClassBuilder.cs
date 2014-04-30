@@ -1016,9 +1016,9 @@ namespace Qorpent.BSharp {
 			
 			if (GetConfig().UseInterpolation)
 			{
-				
-				var xi = new XmlInterpolation{AncorSymbol = ancor};
-				xi.Interpolate(_cls.Compiled,_compiler.Global);
+
+				var xi = new XmlInterpolation { AncorSymbol = ancor, SecondSource = _compiler.Global };
+				xi.Interpolate(_cls.Compiled); //,_compiler.Global);
 			}
 		}
 
