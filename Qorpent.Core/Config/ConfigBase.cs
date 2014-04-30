@@ -204,7 +204,10 @@ namespace Qorpent.Config {
 	    /// <param name="name"></param>
 	    /// <param name="def"></param>
 	    /// <returns></returns>
-	    public T Get<T>(string name, T def = default(T)) {
+	    public T Get<T>(string name, T def = default(T)){
+		    if (null == name || name.Length == 0){
+			    throw new ArgumentException("name");
+		    }
 			if (name[0]=='.') {
 				return ReturnIerachical(name, def);
 			}

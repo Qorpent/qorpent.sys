@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -1017,7 +1018,7 @@ namespace Qorpent.BSharp {
 			{
 				
 				var xi = new XmlInterpolation{AncorSymbol = ancor};
-				xi.Interpolate(_cls.Compiled);
+				xi.Interpolate(_cls.Compiled,_compiler.Global);
 			}
 		}
 

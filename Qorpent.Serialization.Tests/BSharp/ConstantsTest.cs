@@ -15,6 +15,30 @@ class A a=${x} b=${y}
 			Assert.AreEqual("2",a.Compiled.Attr("b"));
 		}
 
+		[Test]
+		public void CanApplyToInternals(){
+			var code = @"
+const x=1 y=2
+class A 
+	internal a=${x} b=${y}
+";
+			var a = Compile(code).Get("A");
+			Assert.AreEqual("1", a.Compiled.Element("internal").Attr("a"));
+			Assert.AreEqual("2", a.Compiled.Element("internal").Attr("b"));
+		}
+
+
+		[Test]
+		public void CannotProvideßíâ()
+		{
+			var code = @"
+const _ßÍÂ=11
+class A a=""${_ßÍÂ:_ßÍÂ}""
+";
+			var a = Compile(code).Get("A");
+			Assert.AreEqual("11", a.Compiled.Attr("a"));
+		}
+
 
 		[Test]
 		public void GlobalsAreCatched()
