@@ -86,29 +86,71 @@ namespace Qorpent.Scaffolding.Application {
 	    }
 
 	    private void GenerateWidget(XElement root, XElement e){
-            var ctrlel = new XElement("widget", new XAttribute("height", "max"), new XAttribute("width", "max"), new XAttribute("orientation","vertical"));
-			ctrlel.SetAttr("ng-controller", GetControllerName(e.Attr("code")))
-				  .SetAttr("class", e.Attr("class"));
-            foreach (var a in e.Attributes()) {
-                if (a.Name.LocalName == "code") continue;
-                if (a.Name.LocalName == "controller") continue;
-                if (a.Name.LocalName == "withtitle") continue;
-                if (a.Name.LocalName == "titlelevel") continue;
-                if (a.Name.LocalName == "name") continue;
-                ctrlel.SetAttributeValue(a.Name, a.Value);
-            }
-            ctrlel.SetAttributeValue("layout-item","1");
-	        var include = new XElement("ng-include").SetAttr("src", "view");
-           if (null != e.Attribute("view")){
-	           include.SetAttr("src", "'" + e.Attr("view") + ".html'");
-           }
-		    if (!string.IsNullOrWhiteSpace(e.Attr("name"))){
-			    var outer = new XElement("div", new XAttribute("ng-init", "title='" + e.Attr("name") + "'"));
-				outer.Add(include);
-			    include = outer;
-		    }
-		    ctrlel.Add(include);
-			root.Add(ctrlel);
+			if (e.HasElements){
+				var outerel = new XElement("layout", new XAttribute("height", "max"), new XAttribute("width", "max")).SetAttr("id", e.Attr("code"));
+				outerel.SetAttr("ng-controller", GetControllerName(e.Attr("code")))
+					  .SetAttr("class", e.Attr("class"))
+					  .SetAttr("orientation","vertical");
+				outerel.SetAttributeValue("layout-item", "1");
+				foreach (var v in e.Elements()){
+
+
+					var ctrlel = new XElement("widget", new XAttribute("height", "max"), new XAttribute("width", "max"),
+					                          new XAttribute("orientation", "vertical"));
+
+					foreach (var a in v.Attributes()){
+						if (a.Name.LocalName == "code") continue;
+						if (a.Name.LocalName == "controller") continue;
+						if (a.Name.LocalName == "withtitle") continue;
+						if (a.Name.LocalName == "titlelevel") continue;
+						if (a.Name.LocalName == "name") continue;
+						ctrlel.SetAttributeValue(a.Name, a.Value);
+					}
+					ctrlel.SetAttributeValue("layout-item", "1");
+					var include = new XElement("ng-include").SetAttr("src", "view");
+					if (null != v.Attribute("code")){
+						include.SetAttr("src", "'" + v.Attr("code") + ".html'");
+					}
+					if (!string.IsNullOrWhiteSpace(v.Attr("name"))){
+						var outer = new XElement("div", new XAttribute("ng-init", "title='" + v.Attr("name") + "'"));
+						outer.Add(include);
+						include = outer;
+					}
+					ctrlel.Add(include);
+					outerel.Add(ctrlel);
+				}
+
+				root.Add(outerel);
+			}
+			else{
+				var ctrlel = new XElement("widget", new XAttribute("height", "max"), new XAttribute("width", "max"), new XAttribute("orientation", "vertical"));
+				ctrlel.SetAttr("ng-controller", GetControllerName(e.Attr("code")))
+					  .SetAttr("class", e.Attr("class"));
+				foreach (var a in e.Attributes())
+				{
+					if (a.Name.LocalName == "code") continue;
+					if (a.Name.LocalName == "controller") continue;
+					if (a.Name.LocalName == "withtitle") continue;
+					if (a.Name.LocalName == "titlelevel") continue;
+					if (a.Name.LocalName == "name") continue;
+					ctrlel.SetAttributeValue(a.Name, a.Value);
+				}
+				ctrlel.SetAttributeValue("layout-item", "1");
+				var include = new XElement("ng-include").SetAttr("src", "view");
+				if (null != e.Attribute("view"))
+				{
+					include.SetAttr("src", "'" + e.Attr("view") + ".html'");
+				}
+				if (!string.IsNullOrWhiteSpace(e.Attr("name")))
+				{
+					var outer = new XElement("div", new XAttribute("ng-init", "title='" + e.Attr("name") + "'"));
+					outer.Add(include);
+					include = outer;
+				}
+				ctrlel.Add(include);
+				root.Add(ctrlel);
+			}
+            
 	    }
 
 	    private void GenerateBlock(XElement root, XElement e){
