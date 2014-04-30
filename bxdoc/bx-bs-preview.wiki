@@ -63,7 +63,7 @@ group domain=portal
 
 [[code]]
 class group domain=portal
-	server srv2 addr="${domain}.${name}.com"
+	server srv2 addr="${domain}.${code}.com"
 [[/code]]
 [[script-last type=bsharp]]
 
@@ -73,11 +73,11 @@ class group domain=portal
 
 [[code]]
 class group domain=portal
-	server srv1 addr="${domain}.${name}.com"
-	server srv2 addr="${domain}.${name}.com"
-	server srv3 addr="${domain}.${name}.com"
-	server srv4 addr="${domain}.${name}.com"
-	server srv5 addr="${domain}.${name}.com"
+	server srv1 addr="${domain}.${code}.com"
+	server srv2 addr="${domain}.${code}.com"
+	server srv3 addr="${domain}.${code}.com"
+	server srv4 addr="${domain}.${code}.com"
+	server srv5 addr="${domain}.${code}.com"
 [[/code]]
 [[script-last type=bsharp]]
 
