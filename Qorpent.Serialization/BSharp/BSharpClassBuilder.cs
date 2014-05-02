@@ -367,21 +367,22 @@ namespace Qorpent.BSharp {
 			SupplyClassAttributesForEvaluations();
 			InitializeBuildIndexes();
 			DownFallEmbedAttribute();			
-			IntializeMergeIndexes();
-			
+			IntializeMergeIndexes();	
 			InterpolateFields();
 			BindParametersToCompiledClass();
 			CleanupElementsWithConditions();
 			MergeInternals();
 			SupplyEvaluationsForElements();
-			InterpolateElements();
+			InterpolateElements(codeonly:true);
 			PerformMergingWithElements();
+			InterpolateElements();
 			CleanupElementsWithConditions();
             ExecutePreSimpleIncludeExtensions();
 			ProcessSimpleIncludes();
 			CleanupPrivateMembers();
 			CheckoutRequireLinkingRequirements();
 		}
+
 
 		private void SupplyClassAttributesForEvaluations(){
 			
@@ -1009,17 +1010,18 @@ namespace Qorpent.BSharp {
 			}
 		}
 
-		private void InterpolateElements(char ancor = '\0'){
+		private void InterpolateElements(char ancor = '\0', bool codeonly = false){
 			if (ancor == '\0'){
 				ancor = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$';
 			}
 			
 			if (GetConfig().UseInterpolation)
 			{
-
-				var xi = new XmlInterpolation { AncorSymbol = ancor, SecondSource = _compiler.Global };
+				
+				var xi = new XmlInterpolation { AncorSymbol = ancor, SecondSource = _compiler.Global, CodeOnly = codeonly,Level=codeonly?1:0};
 				xi.Interpolate(_cls.Compiled); //,_compiler.Global);
 			}
+
 		}
 
 

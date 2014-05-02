@@ -19,13 +19,14 @@
 %% [bx-bs-interpolation Интерполяция]
 %% [bx-bs-privates Приватные атрибуты]
 %% [bx-bs-overrides Перекрытие классов]
-%% [bx-bs-elements Элементы классов]  - {style:color:red}статья будет написана позже{style}
+%% [bx-bs-elements Элементы классов]
 %% [bx-bs-includes Включения] - {style:color:red}статья будет написана позже{style}
 %% [bx-bs-classref Ссылки на классы] - {style:color:red}статья будет написана позже{style}
 %% [bx-bs-patches Патчи] - {style:color:red}статья будет написана позже{style}
 %% [bx-bs-dictionaries Словари] - {style:color:red}статья будет написана позже{style}
 %% [bx-bs-datasets Наборы данных и генераторы классов] - {style:color:red}статья будет написана позже{style}
 %% [bx-bs-datasets Глобальные переменные] - {style:color:red}статья будет написана позже{style}
+%% [bx-bs-evaluates Вычисляемые значения] - {style:color:red}статья будет написана позже{style}
 %% [bx-bs-require Явная модульность при помощи require] - {style:color:red}статья будет написана позже{style}
 % B# изнутри
 %% [bx-bsi-compiler Архитектура компилятора] - {style:color:red}статья будет написана позже{style}

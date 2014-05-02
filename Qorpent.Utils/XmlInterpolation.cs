@@ -22,16 +22,21 @@ namespace Qorpent.Utils {
 		/// рекурсивно по всей подветке
 		/// </summary>
 		/// <returns></returns>
-		public XElement Interpolate(XElement source, IConfig baseconfig= null) {
-			return InternalInterpolate(source, baseconfig);
+		public XElement Interpolate(XElement source, IConfig baseconfig= null){
+			var level = Level;
+			if (level <= 0){
+				level = int.MaxValue;
+			}
+			return InternalInterpolate(source, baseconfig,level);
 		}
 
-		private XElement InternalInterpolate(XElement source, IConfig parentconfig) {
+		private XElement InternalInterpolate(XElement source, IConfig parentconfig,int level) {
 			var datasource = PrepareDataSource(source, parentconfig);
 			var processchild = InterpolateDataToElement(source, datasource);
-			if (processchild) {
+			if (processchild && level>=1){
+				level--;
 				foreach (var e in source.Elements()) {
-					InternalInterpolate(e, datasource);
+					InternalInterpolate(e, datasource,level);
 				}
 			}
 			return source;
@@ -42,7 +47,8 @@ namespace Qorpent.Utils {
 		/// <param name="source"></param>
 		/// <param name="baseelement"></param>
 		/// <returns></returns>
-		public XElement Interpolate(XElement source, XElement baseelement) {
+		public XElement Interpolate(XElement source, XElement baseelement){
+
 			var datasources = baseelement.AncestorsAndSelf().Reverse().ToArray();
 			ConfigBase cfg = null;
 			foreach (var element in datasources) {
@@ -69,6 +75,14 @@ namespace Qorpent.Utils {
 		/// 
 		/// </summary>
 		public IDictionary<string,object> SecondSource { get; set; }
+		/// <summary>
+		/// Обработка только атрибута code
+		/// </summary>
+		public bool CodeOnly { get; set; }
+		/// <summary>
+		/// Уровень обхода
+		/// </summary>
+		public int Level { get; set; }
 
 		private bool InterpolateDataToElement(XElement source, IConfig datasource) {
 			bool processchild = true;
@@ -82,24 +96,39 @@ namespace Qorpent.Utils {
 					}
 				}
 			}
-			foreach (var a in source.Attributes()) {
-				var val = a.Value;
-				if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol)) {
-					val = _stringInterpolation.Interpolate(val,datasource,SecondSource);
-					a.Value = val;
-					datasource.Set(a.Name.LocalName, val);
+			if (CodeOnly){
+				foreach (var a in source.Attributes())
+				{
+					if (a.Name.LocalName == "code" || a.Name.LocalName == "id"){
+						var val = a.Value;
+						if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol)){
+							val = _stringInterpolation.Interpolate(val, datasource, SecondSource);
+							a.Value = val;
+							datasource.Set(a.Name.LocalName, val);
+						}
+					}
 				}
 			}
-	
-				foreach (var t in source.Nodes().OfType<XText>()) {
+			else{
+				foreach (var a in source.Attributes()){
+					var val = a.Value;
+					if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol)){
+						val = _stringInterpolation.Interpolate(val, datasource, SecondSource);
+						a.Value = val;
+						datasource.Set(a.Name.LocalName, val);
+					}
+				}
+
+				foreach (var t in source.Nodes().OfType<XText>()){
 
 					var val = t.Value;
-					if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol)) {
-						val = _stringInterpolation.Interpolate(val, datasource,SecondSource);
+					if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol)){
+						val = _stringInterpolation.Interpolate(val, datasource, SecondSource);
 						t.Value = val;
 					}
 				}
-				
+
+			}
 			return processchild;
 		}
 
