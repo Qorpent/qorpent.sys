@@ -136,10 +136,11 @@ b::e1", "myfile", BxlParserOptions.NoLexData);
 		}
 
 		[Test]
+		[Ignore("now it's allowed")]
 		public void NotAllowAttributesAtRoot() {
-			Assert.Throws<BxlException>(() => new BxlParser().Parse(@"
+			Assert.Throws<BxlException>(() => Console.WriteLine( new BxlParser().Parse(@"
 test 
-x=2"));
+x=2")));
 		}
 
 		[Test]

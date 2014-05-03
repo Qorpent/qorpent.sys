@@ -1,4 +1,4 @@
-using NUnit.Framework;
+Ôªøusing NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp{
@@ -55,11 +55,11 @@ class A
 
 
 		[Test]
-		public void CannotProvideﬂÌ‚()
+		public void CannotProvide–Ø–Ω–≤()
 		{
 			var code = @"
-const _ﬂÕ¬=11
-class A a=""${_ﬂÕ¬:_ﬂÕ¬}""
+const _–Ø–ù–í=11
+class A a=""${_–Ø–ù–í:_–Ø–ù–í}""
 ";
 			var a = Compile(code).Get("A");
 			Assert.AreEqual("11", a.Compiled.Attr("a"));
