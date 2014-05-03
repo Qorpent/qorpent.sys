@@ -9,6 +9,21 @@ namespace Qorpent.Serialization.Tests.BSharp {
 	[TestFixture]
 	public class MergeContentTests : CompileTestBase {
 
+		[Test]
+		public void CanMergeWithLocalAttributes(){
+			var code = @"
+class A
+    element item
+    item 1 y=${x}${x} x=1
+		body ${y}
+class B
+	import A
+    ~item 1 x=2
+";
+			var result = Compile(code).Get("B");
+			Assert.AreEqual("22",result.Compiled.Element("item").Element("body").Attr("code"));
+		}
+
         [Test]
         public void CanExtendNotCodedElements()
         {

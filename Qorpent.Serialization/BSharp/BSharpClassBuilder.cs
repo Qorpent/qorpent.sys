@@ -466,6 +466,11 @@ namespace Qorpent.BSharp {
 					}
 					var normallyresolvedClass = _context.Get(clsname, _cls.Namespace);
 					if (null != normallyresolvedClass) {
+						if (normallyresolvedClass.Is(BSharpClassAttributes.Abstract)){
+							a.Value = "ABSTRACT::" + normallyresolvedClass.FullName;
+							_context.RegisterError(BSharpErrors.AbstractClassReference(_cls, a.Parent, normallyresolvedClass.FullName));
+							continue;
+						}
 						a.Value = normallyresolvedClass.FullName;
 						if (isarray){
 							a.Value += "*";

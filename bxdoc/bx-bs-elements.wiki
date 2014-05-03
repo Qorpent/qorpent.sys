@@ -190,3 +190,5 @@ class myFarm
 		service back "https:1${port}"
 [[/code]]
 [[script-last type=bsharp]]
+
+См. далее  [bx-bs-classref Ссылки на классы]

@@ -327,6 +327,25 @@ namespace Qorpent.BSharp {
 				Message = "Двойственная ссылка на класс - было найдено несколько кандидатов"
 			};
 		}
+
+		/// <summary>
+		/// Неоднозначная косвенная ссылка на класс
+		/// </summary>
+		/// <returns></returns>
+		public static BSharpError AbstractClassReference(IBSharpClass cls, XElement parent, string clsname)
+		{
+			return new BSharpError
+			{
+				Level = ErrorLevel.Error,
+				Phase = BSharpCompilePhase.ReferenceResolution,
+				Type = BSharpErrorType.AbstractClassReference,
+				ClassName = cls.FullName,
+				Xml = parent,
+				Data = clsname,
+				Class = cls,
+				Message = "Ссылка на абстрактный класс"
+			};
+		}
 		/// <summary>
 		/// Ошибка неразрешенной ссылки на класс
 		/// </summary>

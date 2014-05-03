@@ -118,7 +118,7 @@ namespace Qorpent.Host
 				sb.AppendLine("<div class='wk-x-error'>");
 				foreach (var element in e.Elements()){
 					if (element.Name.LocalName != "bx-error") continue;
-					Append(sb, element.Value, "wk-x-error-"+element.Attr("level"));
+					Append(sb, element.Value, "wk-x-error-"+element.Attr("level"),tagname:"div");
 				}
 				sb.AppendLine("</div>");
 			}
@@ -213,9 +213,10 @@ namespace Qorpent.Host
 			
 		}
 
-		private void Append(StringBuilder b,string content, string cls,bool escape =true){
+		private void Append(StringBuilder b,string content, string cls,bool escape =true, string tagname = "span"){
+			tagname = tagname ?? "span";
 			content = escape ? content.Trim().Replace("&", "&amp;").Replace("<", "&lt;").Replace("\n", "<br/>").Replace("\r","").Replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;") : content;
-			b.Append("<span class='wk-x-" + cls + "'>" +content  + "</span>");
+			b.Append("<"+tagname+" class='wk-x-" + cls + "'>" +content  + "</"+tagname+">");
 		}
 
 		private XElement BSharpExecutor(string arg){

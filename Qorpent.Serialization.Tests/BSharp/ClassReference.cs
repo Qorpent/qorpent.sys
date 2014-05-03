@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
@@ -13,6 +14,37 @@ class B x=^A
 ";
 			var result = Compile(code).Get("B").Compiled;
 			Assert.AreEqual("A",result.Attr("x"));
+		}
+
+
+		[Test]
+		public void CannotRefAbstractClasses()
+		{
+			var code = @"
+class A abstract
+class B x=^A
+";
+			var result = Compile(code).Get("B").Compiled;
+			Assert.AreEqual("ABSTRACT::A", result.Attr("x"));
+		}
+
+		[Test]
+		public void NoAmbiguityOnCoAbstractReferences()
+		{
+			var code = @"
+namespace A
+	namespace B
+		namespace C
+			class X abstract
+namespace D
+	namespace E
+		namespace F
+			class X
+class Target refto = ^X 
+class Target2 refto = ^F.X
+";
+			var result = Compile(code);
+			Assert.AreEqual(0,result.GetErrors(ErrorLevel.Error).ToArray().Length);
 		}
 
 

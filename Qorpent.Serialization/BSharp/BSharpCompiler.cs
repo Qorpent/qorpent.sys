@@ -519,6 +519,11 @@ namespace Qorpent.BSharp {
 				target = _extlobals;
 			}
 			foreach (var a in src.Attributes()){
+				if(a.Name.LocalName=="code")continue;
+				if(a.Name.LocalName=="id")continue;
+				if(a.Name.LocalName=="name")continue;
+				if(a.Name.LocalName=="_line")continue;
+				if(a.Name.LocalName=="_file")continue;
 				if (target == _baseglobals){
 					if (target.ContainsKey(a.Name.LocalName)){
 						CurrentBuildContext.RegisterError(BSharpErrors.DoubleConstantDefinition(src,a));

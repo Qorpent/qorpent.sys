@@ -81,6 +81,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		AmbigousClassReference = 420,
 		/// <summary>
+		/// Ссылка на абстрактный класс
+		/// </summary>
+		AbstractClassReference = 430,
+		/// <summary>
 		/// Ссылка на класс разрешена просто по имени
 		/// </summary>
 		NotDirectClassReference = 4010,

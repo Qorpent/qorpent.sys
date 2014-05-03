@@ -14,7 +14,33 @@ class A a=${x} b=${y}
 			Assert.AreEqual("1",a.Compiled.Attr("a"));
 			Assert.AreEqual("2",a.Compiled.Attr("b"));
 		}
+		[Test]
+		public void ConstantInterpolationInElements(){
+			var code = @"
+const 
+	valf=""${_v} ${_m}""
+	
+class A 
+	length value=${valf} _v=100 _m=km
+	speed value=${valf} _v=80 _m=km/h
+";
+			var a = Compile(code).Get("A");
+			Assert.AreEqual("100 km",a.Compiled.Element("length").Attr("value"));
+			Assert.AreEqual("80 km/h", a.Compiled.Element("speed").Attr("value"));
+		}
 
+		[Test]
+		public void InterpolationInElementsNoConstants_ControlTest()
+		{
+			var code = @"
+class A 
+	length value=""${_v} ${_m}"" _v=100 _m=km
+	speed value=""${_v} ${_m}"" _v=80 _m=km/h
+";
+			var a = Compile(code).Get("A");
+			Assert.AreEqual("100 km", a.Compiled.Element("length").Attr("value"));
+			Assert.AreEqual("80 km/h", a.Compiled.Element("speed").Attr("value"));
+		}
 		[Test]
 		public void CanApplyToInternals(){
 			var code = @"

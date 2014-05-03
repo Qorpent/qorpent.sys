@@ -110,23 +110,38 @@ namespace Qorpent.Utils {
 				}
 			}
 			else{
-				foreach (var a in source.Attributes()){
-					var val = a.Value;
-					if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol)){
-						val = _stringInterpolation.Interpolate(val, datasource, SecondSource);
-						a.Value = val;
-						datasource.Set(a.Name.LocalName, val);
+
+				bool changed = true;
+				while (changed){
+					changed = false;
+					foreach (var a in source.Attributes())
+					{
+						var val = a.Value;
+						if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol))
+						{
+							val = _stringInterpolation.Interpolate(val, datasource, SecondSource);
+							changed = changed || (val != a.Value);
+							a.Value = val;
+							datasource.Set(a.Name.LocalName, val);
+						}
 					}
 				}
+				changed = true;
+				while (changed){
+					changed = false;
+					foreach (var t in source.Nodes().OfType<XText>())
+					{
 
-				foreach (var t in source.Nodes().OfType<XText>()){
-
-					var val = t.Value;
-					if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol)){
-						val = _stringInterpolation.Interpolate(val, datasource, SecondSource);
-						t.Value = val;
+						var val = t.Value;
+						if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol))
+						{
+							val = _stringInterpolation.Interpolate(val, datasource, SecondSource);
+							changed = changed || val != t.Value;
+							t.Value = val;
+						}
 					}
 				}
+				
 
 			}
 			return processchild;
