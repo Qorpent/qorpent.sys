@@ -60,5 +60,6 @@ namespace Qorpent.BSharp {
 		/// 
 		/// </summary>
 		IConfig Global { get; }
+		
 	}
 }

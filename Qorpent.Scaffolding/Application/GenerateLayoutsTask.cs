@@ -92,7 +92,7 @@ namespace Qorpent.Scaffolding.Application {
 					  .SetAttr("class", e.Attr("class"))
 					  .SetAttr("orientation","vertical");
 				outerel.SetAttributeValue("layout-item", "1");
-				foreach (var v in e.Elements()){
+				foreach (var v in e.Elements().OrderBy(_=>_.Attr("order").ToInt())){
 
 
 					var ctrlel = new XElement("widget", new XAttribute("height", "max"), new XAttribute("width", "max"),

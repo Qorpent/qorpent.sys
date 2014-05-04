@@ -40,5 +40,9 @@ namespace Qorpent.BSharp {
 		/// Опция обработки конструкций Requires
 		/// </summary>
 		bool DoProcessRequires { get; set; }
+		/// <summary>
+		/// Признак сохранения исходно лексической информации
+		/// </summary>
+		bool KeepLexInfo { get; set; }
 	}
 }

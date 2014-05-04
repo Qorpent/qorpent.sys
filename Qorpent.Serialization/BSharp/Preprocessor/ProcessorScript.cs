@@ -12,17 +12,20 @@ namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
 	/// Описывает скрипт препроцессора
 	/// </summary>
-	internal class PreprocessorScript : PreprocessorCommandBase{
+	internal class ProcessorScript : PreprocessorCommandBase{
 		/// <summary>
 		/// 
 		/// </summary>
-		public PreprocessorScript(IBSharpProject project,XElement e) : base(project, e){
+		public ProcessorScript(IBSharpProject project,XElement e,BSharpBuilderPhase phase) : base(project, e){
+			this._phase = phase;
 		}
 		protected override void Initialize()
 		{
 			base.Initialize();
 			_e.Elements("command").DoForEach(_ => Commands.Add(new PreprocessorCommand(_project,_)));
 		}
+
+		
 
 		public bool Staged;
 		private Regex _fileRegex = null;
@@ -39,6 +42,7 @@ namespace Qorpent.BSharp.Preprocessor{
 
 		readonly IList<PreprocessorCommand> Commands =new List<PreprocessorCommand>();
 		private string _file;
+		private BSharpBuilderPhase _phase;
 
 		public override void Execute(XElement e=null){
 			_project.Log.Info("Start preprocessor "+_e.Attr("code"));
@@ -57,15 +61,25 @@ namespace Qorpent.BSharp.Preprocessor{
 
 		private void RunStaged(int srcdegree, IEnumerable<PreprocessorCommand> commands){
 			foreach (var command in commands){
-				_project.Sources.Where(IsMatch).ToArray().AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(src =>
+				GetAllXmlList().Where(IsMatch).ToArray().AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(src =>
 				{
 					command.Execute(src);
 				});
 			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<XElement> GetAllXmlList(){
+			if (_phase == BSharpBuilderPhase.PreProcess){
+				return _project.Sources;	
+			}
+			return _project.Context.Get(BSharpContextDataType.Working).Select(_ => _.Compiled).ToArray();
+		}
 
 		private void RunNonStaged(int srcdegree, IEnumerable<PreprocessorCommand> commands){
-			_project.Sources.Where(IsMatch).ToArray().AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(src =>{
+			GetAllXmlList().Where(IsMatch).ToArray().AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(src =>{
 				IList<Task> pending = new List<Task>();
 				foreach (var command in commands){
 					if (command.Async){

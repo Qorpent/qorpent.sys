@@ -15,9 +15,15 @@ namespace Qorpent.BSharp.Preprocessor{
 		/// <summary>
 		/// 
 		/// </summary>
-		public ExtendedPreprocessorTask(){
-			Phase = BSharpBuilderPhase.PreProcess;
-			Index = TaskConstants.LoadAllSourcesTaskIndex+10;
+		public ExtendedPreprocessorTask(BSharpBuilderPhase phase){
+
+			Phase = phase;
+			if (phase == BSharpBuilderPhase.PreProcess){
+				Index = TaskConstants.LoadAllSourcesTaskIndex + 10;
+			}
+			else{
+				Index = TaskConstants.CompileBSharpTaskIndex + 10;
+			}
 		}
 
 		/// <summary>
@@ -25,7 +31,9 @@ namespace Qorpent.BSharp.Preprocessor{
 		/// </summary>
 		/// <param name="context"></param>
 		public override void Execute(IBSharpContext context){
-			Project.Log.Warn("Выполняется предвариательная обработка кода ВНИМАНИЕ - данный функционал не считается безопасным");
+			var message = Phase==BSharpBuilderPhase.PreProcess? "предварительная":"дополнительная";
+			
+			Project.Log.Warn("Выполняется "+message+" обработка кода ВНИМАНИЕ - данный функционал не считается безопасным");
 			var sw = Stopwatch.StartNew();
 			//сначла собираем скрипты
 			var scripts = ExtractScrtips(Project.Sources).OrderBy(_=>_.Index).ToArray();
@@ -40,11 +48,11 @@ namespace Qorpent.BSharp.Preprocessor{
 			}
 			Task.WaitAll(pendingScripts.ToArray());
 			sw.Stop();
-			Project.Log.Warn("Предвариательная обработка кода выполнялась "+sw.Elapsed);
+			Project.Log.Warn(message+" обработка кода выполнялась "+sw.Elapsed);
 		}
 
-		private IEnumerable<PreprocessorScript> ExtractScrtips(IEnumerable<XElement> sources){
-			var result = new ConcurrentBag<PreprocessorScript>();
+		private IEnumerable<ProcessorScript> ExtractScrtips(IEnumerable<XElement> sources){
+			var result = new ConcurrentBag<ProcessorScript>();
 			sources.AsParallel().ForAll(_ =>{
 				foreach (var s in ExtractScripts(_)){
 					result.Add(s);
@@ -53,14 +61,18 @@ namespace Qorpent.BSharp.Preprocessor{
 			return result;
 		}
 
-		private IEnumerable<PreprocessorScript> ExtractScripts(XElement e){
+		private IEnumerable<ProcessorScript> ExtractScripts(XElement e){
 			var usingElement = e.Elements("using").FirstOrDefault();//вначае должен быть импорт псевдонима
 			if(null==usingElement)yield break;
-			var import = usingElement.Attributes().FirstOrDefault(_ => _.Value == "Qorpent.BSharp.PreprocessScript");
+			var type = "Qorpent.BSharp.PreprocessScript";
+			if (Phase != BSharpBuilderPhase.PreProcess){
+				type = "Qorpent.BSharp.PostprocessScript";
+			}
+			var import = usingElement.Attributes().FirstOrDefault(_ => _.Value == type);
 			if(null==import)yield break;
 			var alias = import.Name.LocalName;
 			foreach (var scripte in e.Elements(alias)){
-				yield return new PreprocessorScript(Project,scripte);
+				yield return new ProcessorScript(Project,scripte,Phase);
 			}
 		}
 	}

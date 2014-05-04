@@ -287,6 +287,14 @@ namespace Qorpent.BSharp.Builder {
 		public IConfig Global{
 			get { return _global ?? (_global = new ConfigBase{UseInheritance = false}); }
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public IBSharpCompiler Compiler { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public IBSharpContext Context { get; set; }
 
 
 		/// <summary>

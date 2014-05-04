@@ -124,6 +124,14 @@ namespace Qorpent.BSharp.Builder {
 		/// 
 		/// </summary>
 		IConfig Global { get;  }
+		/// <summary>
+		/// 
+		/// </summary>
+		IBSharpCompiler Compiler { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		IBSharpContext Context { get; set; }
 
 		/// <summary>
 		/// Возвращает путь к целевой директории

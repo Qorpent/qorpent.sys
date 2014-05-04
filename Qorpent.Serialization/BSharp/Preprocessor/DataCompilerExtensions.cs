@@ -13,7 +13,8 @@ namespace Qorpent.BSharp.Preprocessor{
 		/// </summary>
 		protected override void PrepareTasks()
 		{
-			Tasks.Add(new ExtendedPreprocessorTask());
+			Tasks.Add(new ExtendedPreprocessorTask(BSharpBuilderPhase.PreProcess));
+			Tasks.Add(new ExtendedPreprocessorTask(BSharpBuilderPhase.PostProcess));
 			
 		}
 	}

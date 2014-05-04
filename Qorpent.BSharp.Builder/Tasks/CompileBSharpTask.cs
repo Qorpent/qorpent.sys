@@ -22,13 +22,17 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
 		/// <param name="context"></param>
 		public override void Execute(IBSharpContext context) {
 			var compiler = new BSharpCompiler();
+			Project.Compiler = compiler;
 		    foreach (var e in Project.CompilerExtensions ) {
 		        compiler.Extensions.Add(e);
 		    }
 		    var cfg = GetConfig();
+
 			compiler.Initialize(cfg);
             compiler.Compile(Project.Sources, context);
+			Project.Context = context;
             HandleErrorStream(context);
+
 		}
 
         private IBSharpConfig GetConfig() {
@@ -37,7 +41,11 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
                 UseInterpolation = true,
 				IgnoreElements = Project.IgnoreElements.SmartSplit().ToArray(),
 				Global = Project.Global,
+				
             };
+			if (null != Project && null != Project.SrcClass){
+				config.KeepLexInfo = Project.SrcClass.Compiled.Attr("KeepLexInfo").ToBool();
+			}
 
             config.SetParent(Project);
 

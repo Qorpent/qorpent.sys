@@ -28,6 +28,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public const string DOREQUIRE = "dorequire";
 		/// <summary>
+		/// 
+		/// </summary>
+		public const string KEEPLEXINFO = "keeplexinfo";
+		/// <summary>
 		/// Перечень корневых элементов, которые должны быть проигнорированы
 		/// </summary>
 		public const string IGNOREELEMENTS = "ignoreelements";
@@ -93,5 +97,14 @@ namespace Qorpent.BSharp {
 			get { return Get(DOREQUIRE, true); }
 			set { Set(DOREQUIRE, value); }
 		}
+		/// <summary>
+		/// Признак необходимости выполнять Require
+		/// </summary>
+		public bool KeepLexInfo
+		{
+			get { return Get(KEEPLEXINFO, true); }
+			set { Set(KEEPLEXINFO, value); }
+		}
+
 	}
 }

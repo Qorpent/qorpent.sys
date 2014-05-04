@@ -949,6 +949,7 @@ namespace Qorpent.BSharp {
 				e.Attributes().Where(_ =>
 					(_.Name.LocalName[0]==BSharpSyntax.PrivateAttributePrefix || string.IsNullOrEmpty(_.Value))&&
 					!(_.Name.LocalName.StartsWith("__AT__"))
+					&& (!(_compiler.GetConfig().KeepLexInfo && (_.Name.LocalName=="_file"||_.Name.LocalName=="_line")))
 					).Remove();
 			}
 

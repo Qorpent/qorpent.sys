@@ -40,7 +40,7 @@
     <Compile Include="BSharp\Preprocessor\PreprocessOperation.cs" />
     <Compile Include="BSharp\Preprocessor\PreprocessorCommand.cs" />
     <Compile Include="BSharp\Preprocessor\PreprocessorCommandBase.cs" />
-    <Compile Include="BSharp\Preprocessor\PreprocessorScript.cs" />
+    <Compile Include="BSharp\Preprocessor\ProcessorScript.cs" />
     <Compile Include="BSharp\Preprocessor\PreprocessorSourcePackageForBSharp.cs" />
     <Compile Include="BSharp\Preprocessor\DataCompilerExtensions.cs" />
     <Compile Include="BSharp\Preprocessor\PushToGlobalOperation.cs" />

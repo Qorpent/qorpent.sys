@@ -1,4 +1,6 @@
-﻿namespace Qorpent.BSharp.Builder {
+﻿using Qorpent.IoC;
+
+namespace Qorpent.BSharp.Builder {
 	/// <summary>
 	/// 
 	/// </summary>
@@ -14,5 +16,10 @@
 		/// <returns></returns>
 		IBSharpContext Build();
 
+		/// <summary>
+		/// Компилятор
+		/// </summary>
+		[Inject]
+		IBSharpCompiler Compiler { get; set; }
 	}
 }
