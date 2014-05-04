@@ -178,11 +178,13 @@ namespace Qorpent.BSharp.Builder {
 	        }
 	        else{
 		        if (extensionDescriptor.Contains(",")) yield return Type.GetType(extensionDescriptor);
-		        var assembly = Assembly.Load(extensionDescriptor);
-		        foreach (var t in assembly.GetTypes()){
-			        if (typeof (IBSharpBuilderExtension).IsAssignableFrom(t)){
-				        if (!t.IsAbstract){
-					        yield return t;
+		        else{
+			        var assembly = Assembly.Load(extensionDescriptor);
+			        foreach (var t in assembly.GetTypes()){
+				        if (typeof (IBSharpBuilderExtension).IsAssignableFrom(t)){
+					        if (!t.IsAbstract){
+						        yield return t;
+					        }
 				        }
 			        }
 		        }

@@ -20,7 +20,7 @@ namespace Qorpent.Serialization.Tests.BSharp {
 			var parser = new BxlParser();
 			var idx = 0;
 			var xmls = code.Select(_ => parser.Parse(_, (idx++) + ".bxl")).ToArray();
-			var cfg = new BSharpConfig{SingleSource = single};
+			var cfg = new BSharpConfig{SingleSource = single,KeepLexInfo = false};
 			var result = BSharpCompiler.Compile(xmls,cfg);
 			return (BSharpContext)result;
 

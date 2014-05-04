@@ -102,7 +102,7 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public bool KeepLexInfo
 		{
-			get { return Get(KEEPLEXINFO, true); }
+			get { return Get(KEEPLEXINFO, false); }
 			set { Set(KEEPLEXINFO, value); }
 		}
 

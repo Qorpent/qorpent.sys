@@ -574,6 +574,17 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="e"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public static string AttrOrValue(this XElement e, string name){
+			if (null != e.Attribute(name)) return e.Attribute(name).Value;
+			return e.Value;
+		}
+
+		/// <summary>
 		/// 	¬озвращает только собственное значение элемента (конкатенаци€ текстовых элементов через пробел)
 		/// </summary>
 		/// <param name="xElement"> </param>

@@ -59,6 +59,21 @@ namespace Qorpent.Utils.Extensions {
         public static bool IsIn<T>(this T obj, IEnumerable<T> objs) {
             return objs.Any(_ => _.Equals(obj));
         }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="start"></param>
+		/// <param name="end"></param>
+		/// <returns></returns>
+		public static int[] Range(this int start, int end){
+			var result = new int[end - start + 1];
+			var c = 0;
+			for (var i = start; i <= end; i++){
+				result[c++] = i;
+			}
+			return result;
+		}
 		
 		/// <summary>
 		/// Формирует все комбинации элементов списков

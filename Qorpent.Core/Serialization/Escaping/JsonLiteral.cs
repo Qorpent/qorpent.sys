@@ -15,6 +15,7 @@ namespace Qorpent.Serialization.Escaping
             {
                 {'\\', "__BSLASH__"},
                 {'"', "__QUOT__"},
+                {',', "__COMMA__"},
             };
 
         private static readonly Dictionary<char, string> _first = new Dictionary<char, string>();

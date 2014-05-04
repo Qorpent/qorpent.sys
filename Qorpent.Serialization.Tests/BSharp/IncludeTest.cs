@@ -20,6 +20,22 @@ class B x=2
 			Assert.AreEqual("1", result.Compiled.Descendants("test").First().Attr("code"));
 		}
 
+
+		[Test]
+		public void IncludeAllWithElementName()
+		{
+			var code = @"
+class Z.A prototype=X x=1
+class B
+	include all X element=z keepcode
+";
+			var result = Compile(code).Get("B").Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(result);
+			Assert.AreEqual(@"<class code='B' fullcode='B'>
+  <z code='A' prototype='X' x='1' fullcode='Z.A' />
+</class>".Length, result.Length);
+		}
+
 		[Test]
 		public void IncludeAllWithWhereAndCrossList(){
 			var @code = @"

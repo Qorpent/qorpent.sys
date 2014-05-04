@@ -600,6 +600,7 @@ namespace Qorpent.BSharp {
 			var keepcode = includeelement.Attribute("keepcode");
 			if (null != keepcode){
 				keepcode.Remove();
+				includeelement.SetAttributeValue("fullcode",cls.FullName);
 			}
 			else{
 				includeelement.Attribute(BSharpSyntax.ClassNameAttribute).Remove();
