@@ -4,6 +4,24 @@ using Qorpent.Utils.Extensions;
 namespace Qorpent.Serialization.Tests.BSharp{
 	[TestFixture]
 	public class ConstantsTest:CompileTestBase{
+
+		[Test]
+		public void ConstantAndElementNameCombination(){
+			var code = @"
+const XXX=A
+class basis abstract
+	element form
+basis sub abstract
+	form A x=1
+basis inter
+	import sub
+	~form ${XXX}
+";
+			var res = Compile(code).Get("inter");
+			Assert.AreEqual("1",res.Compiled.Element("form").Attr("x"));
+		}
+
+
 		[Test]
 		public void CanUseConstants(){
 			var code = @"

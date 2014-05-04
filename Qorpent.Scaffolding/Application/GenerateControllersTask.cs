@@ -71,11 +71,11 @@ namespace Qorpent.Scaffolding.Application {
                 var scode = s.Attr("code");
                 deps[scode] = s;
             }
-	        var deplist = string.Join("','", deps.Values.Select(_ => _.ChooseAttr("type", "code")).Distinct());
+			var deplist = string.Join("','", deps.Values.Select(_ => _.ChooseAttr("type", "code")).Distinct().OrderBy(_ => _));
 			if (!string.IsNullOrWhiteSpace(deplist)){
 				deplist = ", '" + deplist + "'";
 			}
-	        var calllist = string.Join(",", deps.Values.Select(_ => _.ChooseAttr("type", "code")).Distinct());
+	        var calllist = string.Join(",", deps.Values.Select(_ => _.ChooseAttr("type", "code")).Distinct().OrderBy(_=>_));
 			if (!string.IsNullOrWhiteSpace(calllist)){
 				calllist = ", " + calllist;
 			}

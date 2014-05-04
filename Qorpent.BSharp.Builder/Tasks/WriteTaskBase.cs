@@ -99,7 +99,13 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
                     BSharpBuilderClassUtils.GetRelativeDirByNamespace(bSharpClass.FullName)
                 );
             } else {
-                target.Entity = target.Entity.XPathSelectElement("//" + BSharpBuilderDefaults.BSharpClassContainerName);
+				if (!Project.SrcClass.Compiled.Attr("NoWrapOutput").ToBool()){
+					target.Entity = target.Entity.XPathSelectElement("//" + BSharpBuilderDefaults.BSharpClassContainerName);
+				}
+				else{
+					target.Entity = target.Entity.Elements().First();
+				}
+                
             }
 		
             return target;
@@ -134,7 +140,8 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
         ///     Обёртывает класс с классет
         /// </summary>
         /// <param name="entity"></param>
-        private XElement GenerateBSharpClasset(XElement entity) {
+        private XElement GenerateBSharpClasset(XElement entity){
+	        if (Project.SrcClass.Compiled.Attr("NoWrapOutput").ToBool()) return entity;
             var xElement = new XElement(BSharpBuilderDefaults.BSharpClassContainerName);
             xElement.SetAttributeValue("code", entity.ChooseAttr("fullcode","code"));
             xElement.Add(entity);
