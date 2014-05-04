@@ -9,7 +9,7 @@ namespace Qorpent.BSharp.Preprocessor{
 		public int Index;
 		public bool Async;
 		public bool Parallel;
-		protected XElement _e;
+		private XElement _e;
 
 		/// <summary>
 		/// 
@@ -18,6 +18,10 @@ namespace Qorpent.BSharp.Preprocessor{
 			_e = e;
 			_project = project;
 			Initialize();
+		}
+
+		public XElement Source{
+			get { return _e; }
 		}
 
 		protected virtual void Initialize(){

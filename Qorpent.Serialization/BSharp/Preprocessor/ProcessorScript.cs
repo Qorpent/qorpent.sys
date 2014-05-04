@@ -22,7 +22,7 @@ namespace Qorpent.BSharp.Preprocessor{
 		protected override void Initialize()
 		{
 			base.Initialize();
-			_e.Elements("command").DoForEach(_ => Commands.Add(new PreprocessorCommand(_project,_)));
+			Source.Elements("command").DoForEach(_ => Commands.Add(new PreprocessorCommand(_project,_)));
 		}
 
 		
@@ -45,7 +45,7 @@ namespace Qorpent.BSharp.Preprocessor{
 		private BSharpBuilderPhase _phase;
 
 		public override void Execute(XElement e=null){
-			_project.Log.Info("Start preprocessor "+_e.Attr("code"));
+			_project.Log.Info("Start preprocessor "+Source.Attr("code"));
 			var sw = Stopwatch.StartNew();
 			var srcdegree = Parallel ? Environment.ProcessorCount : 1;
 			var commands = Commands.OrderBy(_ => _.Index).ToArray();
@@ -56,7 +56,7 @@ namespace Qorpent.BSharp.Preprocessor{
 				RunNonStaged(srcdegree, commands);
 			}
 			sw.Stop();
-			_project.Log.Info("Finish preprocessor " + _e.Attr("code")+" "+sw.Elapsed );
+			_project.Log.Info("Finish preprocessor " + Source.Attr("code")+" "+sw.Elapsed );
 		}
 
 		private void RunStaged(int srcdegree, IEnumerable<PreprocessorCommand> commands){

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.BSharp.Builder;
 using Qorpent.Integration.BSharp.Builder.Tasks;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
@@ -58,7 +59,7 @@ namespace Qorpent.BSharp.Preprocessor{
 					result.Add(s);
 				}
 			});
-			return result;
+			return result.OrderBy(_=>_.Source.Attr("order").ToInt());
 		}
 
 		private IEnumerable<ProcessorScript> ExtractScripts(XElement e){
@@ -71,7 +72,10 @@ namespace Qorpent.BSharp.Preprocessor{
 			var import = usingElement.Attributes().FirstOrDefault(_ => _.Value == type);
 			if(null==import)yield break;
 			var alias = import.Name.LocalName;
+			int order = 1;
 			foreach (var scripte in e.Elements(alias)){
+				order += 10;
+				scripte.SetAttributeValue("order",order);
 				yield return new ProcessorScript(Project,scripte,Phase);
 			}
 		}

@@ -33,7 +33,7 @@ namespace Qorpent.BSharp.Preprocessor{
 		protected override void Initialize()
 		{
 			base.Initialize();
-			foreach (var element in _e.Elements()){
+			foreach (var element in Source.Elements()){
 				var operation = PreprocessOperation.Create(_project,element);
 				if (null != operation){
 					Operations.Add(operation);
