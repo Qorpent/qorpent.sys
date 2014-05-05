@@ -16,7 +16,11 @@ namespace Qorpent.BSharp.Preprocessor{
 				                 : new[]{el.Attr("code")};
 			var value = el.Value;
 			foreach (var code in codes){
-				_project.Global.Set(code, value);
+				lock (_project.Global)
+				{
+					_project.Global.Set(code, value);
+				
+				}
 			}
 			
 		}
