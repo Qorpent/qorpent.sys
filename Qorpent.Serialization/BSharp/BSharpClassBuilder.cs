@@ -787,7 +787,7 @@ namespace Qorpent.BSharp {
 										e.Elements().Remove();
 										e.Add(o.Elements());
 									}
-									if (!string.IsNullOrWhiteSpace(o.Value)){
+									if (!string.IsNullOrWhiteSpace(o.Value) && !o.HasElements){
 										e.Value = o.Value;
 									}
 								}else if (over.Type == BSharpElementType.Extension) {
@@ -801,7 +801,7 @@ namespace Qorpent.BSharp {
 									{
 										e.Add(o.Elements());									
 									}
-									if (!string.IsNullOrWhiteSpace(o.Value)){
+									if (!string.IsNullOrWhiteSpace(o.Value) && !o.HasElements){
 										//join embeded code
 										if ( o.Value[0]=='(' && o.Value[o.Value.Length-1]==')' && e.Value[0]=='(' && e.Value[e.Value.Length-1]==')'){
 											e.Value = e.Value.Substring(0, e.Value.Length - 1) + o.Value.Substring(1);

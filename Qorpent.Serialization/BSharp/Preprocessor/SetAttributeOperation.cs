@@ -16,14 +16,24 @@ namespace Qorpent.BSharp.Preprocessor{
 			if (!string.IsNullOrWhiteSpace(SubstSrc)){
 				var subst = el.Attr(SubstSrc);
 				if (string.IsNullOrWhiteSpace(SubstRx)){
-					val = string.Format(val, subst);
+					if (string.IsNullOrWhiteSpace(val)){
+						val = subst;
+					}
+					else{
+						val = string.Format(val, subst);
+					}
 				}
 				else{
 					_rx = _rx ?? new Regex(SubstRx);
 					val = _rx.Replace(subst, val);
 				}
 			}
-			el.SetAttributeValue(Name,val);
+			if (Name == "__value"){
+				el.Value = val;
+			}
+			else{
+				el.SetAttributeValue(Name, val);
+			}
 		}
 		/// <summary>
 		/// 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
@@ -50,6 +51,54 @@ class A x=2
             Assert.NotNull(a);
             Assert.AreEqual("2",a.Compiled.Descendants("test").First().Attr("y"));
         }
+
+
+
+		[Test]
+		public void ExtendWithElementValues()
+		{
+			var code = @"
+class A abstract
+	element el
+	el 1
+		row 1
+A B
+	+el 1
+		row 2 : 'test'	
+	
+";
+			var a = Compile(code).Get("B").Compiled.ToString().Replace("\"","'");
+			Console.WriteLine(a);
+			Assert.AreEqual(@"<A code='B' fullcode='B'>
+  <el code='1'>
+    <row code='1' />
+    <row code='2'>test</row>
+  </el>
+</A>", a);
+		}
+
+		[Test]
+		public void OverrideWithElementValues()
+		{
+			var code = @"
+class A abstract
+	element el
+	el 1
+		row 1
+A B
+	~el 1
+		row 2 : 'test'	
+	
+";
+			var a = Compile(code).Get("B").Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(a);
+			Assert.AreEqual(@"<A code='B' fullcode='B'>
+  <el code='1'>
+    <row code='2'>test</row>
+  </el>
+</A>", a);
+		}
+
 
 		[Test]
 		public void CanOverrideAttribute()

@@ -101,9 +101,16 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
             } else {
 				if (!Project.SrcClass.Compiled.Attr("NoWrapOutput").ToBool()){
 					target.Entity = target.Entity.XPathSelectElement("//" + BSharpBuilderDefaults.BSharpClassContainerName);
+
 				}
 				else{
 					target.Entity = target.Entity.Elements().First();
+					if (Project.SrcClass.Compiled.Attr("PrototypeAsName").ToBool()){
+						var proto = target.Entity.Attr("prototype");
+						if (!string.IsNullOrWhiteSpace(proto)){
+							target.Entity.Name = proto;
+						}
+					}
 				}
                 
             }
