@@ -194,7 +194,11 @@ namespace Qorpent.BSharp {
 				if (attribute.Name.LocalName == BSharpSyntax.PatchPlainAttribute) continue;
 				if (attribute.Name.LocalName == BSharpSyntax.PatchCreateBehavior) continue;
                 if (attribute.Name.LocalName == "priority") continue;
-                target.Compiled.SetAttributeValue(attribute.Name,attribute.Value);
+			    var name = attribute.Name.LocalName;
+				if (name.StartsWith("set-")){
+					name = name.Substring(4);
+				}
+                target.Compiled.SetAttributeValue(name,attribute.Value);
 
 		    }
 
