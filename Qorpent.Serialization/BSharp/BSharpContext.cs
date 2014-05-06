@@ -910,7 +910,8 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <returns></returns>
 		public bool RequrePostProcess(){
-			return Working.Any(_ => _.Compiled.Descendants(BSharpSyntax.ElementRemoveBeforeDirective).Any());
+			return Working.Any(_ => _.Compiled.Descendants(BSharpSyntax.PostProcessRemoveBefore).Any() 
+				|| _.Compiled.Descendants(BSharpSyntax.PostProcessSelectElements).Any());
 		}
 
 		private void ResolveImports()

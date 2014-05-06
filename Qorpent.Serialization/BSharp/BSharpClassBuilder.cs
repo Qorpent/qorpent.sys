@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using Qorpent.BSharp.Matcher;
 using Qorpent.Config;
 using Qorpent.Log;
@@ -100,7 +101,18 @@ namespace Qorpent.BSharp {
 		}
 
 		private void DoPostProcess(){
-			var removebefores = _cls.Compiled.Descendants(BSharpSyntax.ElementRemoveBeforeDirective).ToArray();
+			var selects = _cls.Compiled.Descendants(BSharpSyntax.PostProcessSelectElements).ToArray();
+			foreach (var e in selects){
+				var xpath = e.Attr("xpath");
+				var elements = _cls.Compiled.XPathSelectElements(xpath).Select(_=>new XElement(_)).ToArray();
+				if (0 != elements.Length){
+					e.ReplaceWith(elements);
+				}
+				else{
+					e.Remove();
+				}
+			}
+			var removebefores = _cls.Compiled.Descendants(BSharpSyntax.PostProcessRemoveBefore).ToArray();
 			foreach (var removebefore in removebefores){
 				var code = removebefore.Attr("code");
 				removebefore.ElementsBeforeSelf(code).ToArray().Remove();

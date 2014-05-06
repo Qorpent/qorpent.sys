@@ -195,9 +195,11 @@ namespace Qorpent.BSharp.Builder {
 		/// Построить проект
 		/// </summary>
 		/// <returns></returns>
-		public IBSharpContext Build() {
+		public IBSharpContext Build(){
+		    
 			Log.Trace("build start");
 			var result = GetInitialContext();
+			Project.Context = result;
 			Log.Trace("initial context ready");
 			PreProcess(result);
 			PreVerify(result);
