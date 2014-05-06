@@ -151,6 +151,41 @@ class A x=1 y=1
 			Assert.AreEqual("4", result.Compiled.Attr("z"));
 		}
 
+
+		[Test]
+		public void RemoveBeforeSupport()
+		{
+			var code = @"
+class colset abstract
+colset cs_a
+	row A
+	col A
+	col B
+colset cs_b
+	row B
+	col D
+	col C
+class base
+	element out
+	out X
+		include cs_a body
+base other
+	+out X
+		remove-before col
+		include cs_b body
+";
+			var result = Compile(code).Get("other").Compiled.ToString().Replace("\"","'");
+			Console.WriteLine(result);
+			Assert.AreEqual(@"<base code='other' fullcode='other'>
+  <out code='X'>
+    <row code='A' id='cs_a' />
+    <row code='B' id='cs_b' />
+    <col code='D' id='cs_b' />
+    <col code='C' id='cs_b' />
+  </out>
+</base>",result);
+		}
+
         [Test]
         public void CanOverrideElement()
         {

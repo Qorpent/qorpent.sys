@@ -766,7 +766,8 @@ namespace Qorpent.BSharp {
 			context.BuildLinkingIndex();
 			var requirelink = context.RequireLinking();
 			var requirepatch = context.RequirePatching();
-			if (!(requirelink || requirepatch)) return;
+			var requirepostprocess = context.RequrePostProcess();
+			if (!(requirelink || requirepatch || requirepostprocess)) return;
 			
 				if (requirelink){
 					context.Get(BSharpContextDataType.Working)
@@ -809,6 +810,11 @@ namespace Qorpent.BSharp {
 							return "";
 						}).ToArray()
 						;
+				}
+
+				if (requirepostprocess)
+				{
+					context.Get(BSharpContextDataType.Working).AsParallel().ForAll(_ => BSharpClassBuilder.Build(BuildPhase.PostProcess,this,_,context));
 				}
 			
 		}

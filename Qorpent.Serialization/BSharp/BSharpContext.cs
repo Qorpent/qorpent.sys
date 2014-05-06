@@ -905,6 +905,13 @@ namespace Qorpent.BSharp {
 		public bool RequirePatching(){
 			return Working.Any(_ => _.Is(BSharpClassAttributes.Patch));
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public bool RequrePostProcess(){
+			return Working.Any(_ => _.Compiled.Descendants(BSharpSyntax.ElementRemoveBeforeDirective).Any());
+		}
 
 		private void ResolveImports()
 		{

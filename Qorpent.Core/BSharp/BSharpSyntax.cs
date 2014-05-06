@@ -290,6 +290,11 @@ namespace Qorpent.BSharp {
 		/// </summary>
         public static readonly string ElementExtensionPrefix = "+".Escape(EscapingType.XmlName);
 		/// <summary>
+		/// Директива расширенного мержинга элементов, форсирующая удаленния опеделенной группы контента до текущего расширения
+		/// </summary>
+        public static readonly string ElementRemoveBeforeDirective = "remove-before";
+        
+		/// <summary>
 		/// Префикс приватного атрибута
 		/// </summary>
 		public const char PrivateAttributePrefix = '_';

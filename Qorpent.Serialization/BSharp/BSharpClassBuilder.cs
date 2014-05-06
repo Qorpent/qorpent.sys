@@ -92,8 +92,22 @@ namespace Qorpent.BSharp {
 				else if (BuildPhase.ApplyPatch == phase){
 					ApplyPatch();
 				}
+				else if (BuildPhase.PostProcess == phase)
+				{
+					DoPostProcess();
+				}
 			
 		}
+
+		private void DoPostProcess(){
+			var removebefores = _cls.Compiled.Descendants(BSharpSyntax.ElementRemoveBeforeDirective).ToArray();
+			foreach (var removebefore in removebefores){
+				var code = removebefore.Attr("code");
+				removebefore.ElementsBeforeSelf(code).ToArray().Remove();
+				removebefore.Remove();
+			}
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>

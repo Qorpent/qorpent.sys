@@ -108,5 +108,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <returns></returns>
 		bool RequirePatching();
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		bool RequrePostProcess();
 	}
 }
