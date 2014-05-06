@@ -145,8 +145,8 @@
 
                 };
                 host.refresh.run();
-                host.refresh.auto = options.auto;
-                if (!!options.persistentCode) {
+                host.refresh.auto = !!options.auto;
+                if (!host.refresh.auto && !!options.persistentCode) {
                     host.refresh.auto = !!JSON.parse(localStorage.getItem(options.persistentCode) || "false");
                 }
                 host.refresh.checkAuto();
