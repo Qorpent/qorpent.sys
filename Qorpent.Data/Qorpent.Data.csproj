@@ -12,6 +12,10 @@
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
+    <Compile Include="DataDiff\DataTableDiffGenerator.cs" />
+    <Compile Include="DataDiff\DataDiffItem.cs" />
+    <Compile Include="DataDiff\DataDiffTable.cs" />
+    <Compile Include="DataDiff\DiffPair.cs" />
     <Compile Include="MetaDataBase\DatabaseUpdateRecord.cs" />
     <Compile Include="MetaDataBase\DefaultDatabaseUpdateRecordMerger.cs" />
     <Compile Include="MetaDataBase\DefaultMetaFileProcessor.cs" />

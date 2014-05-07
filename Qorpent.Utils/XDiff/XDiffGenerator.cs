@@ -285,7 +285,7 @@ namespace Qorpent.Utils.XDiff{
 			src[id] = ep;
 			EndpointPack _idpack = null;
 			EndpointPack _idtrg = null;
-			if (!string.IsNullOrWhiteSpace(key.Id)){
+			if (!string.IsNullOrWhiteSpace(key.Id) && 0!=key.Id.ToInt()){
 				idinter.AddOrUpdate(_id, _ => new InterPack{Source = _idpack = ep}, (k, _) =>{
 					if (null != _.Source){
 						_idpack = _.Source; //it's not problem if same as code binding
@@ -396,7 +396,7 @@ namespace Qorpent.Utils.XDiff{
 				if (!_options.IsNameIndepended){
 					parentRef += parentKey.Name + "-";
 				}
-				if (!string.IsNullOrWhiteSpace(parentKey.Id)){
+				if (!string.IsNullOrWhiteSpace(parentKey.Id) && 0!=parentKey.Id.ToInt()){
 					parentRef += "id-" + parentKey.Id;
 				}
 				else{

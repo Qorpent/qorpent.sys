@@ -11,6 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ConnectionLoaderTest.cs" />
+    <Compile Include="DataDiff\BasicDiffTest.cs" />
     <Compile Include="DDL\SqlGeneration.cs" />
     <Compile Include="MetaDataBase\FileStorageMergeTest.cs" />
     <Compile Include="MetaDataBase\GitBasedStorageTest.cs" />
@@ -42,6 +43,7 @@
       <Name>Qorpent.Utils.Tests</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <PropertyGroup>
     <PostBuildEvent>if exist "..\..\..\Npgsql2\src\bin\Debug4\npgsql.dl" xcopy ..\..\..\Npgsql2\src\bin\Debug4\npgsql.dll $(OutDir) /s/d/y</PostBuildEvent>
