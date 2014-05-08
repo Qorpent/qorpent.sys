@@ -13,13 +13,6 @@
     <Compile Include="ConnectionLoaderTest.cs" />
     <Compile Include="DataDiff\BasicDiffTest.cs" />
     <Compile Include="DDL\SqlGeneration.cs" />
-    <Compile Include="MetaDataBase\FileStorageMergeTest.cs" />
-    <Compile Include="MetaDataBase\GitBasedStorageTest.cs" />
-    <Compile Include="MetaDataBase\ImportGitIntoSql.cs" />
-    <Compile Include="MetaDataBase\MetaDataSyncServiceRealDbTest.cs" />
-    <Compile Include="MetaDataBase\MetaDataSyncServiceTests.cs" />
-    <Compile Include="MetaDataBase\MetaFileProcessorTest.cs" />
-    <Compile Include="MetaDataBase\SqlFileStorageTest.cs" />
     <None Include="*.import" />
     <None Include="*.export" />
     <EmbeddedResource Include=".\**\*.*resource" />
