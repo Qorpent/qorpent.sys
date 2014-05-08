@@ -16,6 +16,7 @@
     <Compile Include="DataDiff\DataDiffItem.cs" />
     <Compile Include="DataDiff\DataDiffTable.cs" />
     <Compile Include="DataDiff\DiffPair.cs" />
+    <Compile Include="DataDiff\DiffPairGenerator.cs" />
     <Compile Include="DataDiff\SqlDiffGenerator.cs" />
     <Compile Include="DataDiff\TableDiffGeneratorContext.cs" />
     <Compile Include="REST\AddConnection.cs" />

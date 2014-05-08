@@ -80,27 +80,38 @@ namespace Qorpent.Data.DataDiff
 				var item = ResolveItem(table, id, code);
 				if (null != d.NewestElement){
 					foreach (var a in d.NewestElement.Attributes()){
-						var name = a.Name.LocalName.ToLower();
-						if (name == "id" || name == "code" || name == "_file" || name == "_line"){
-							continue;
-						}
-						if (name.StartsWith("update-")){
-							name = "set_" + name.Substring(7);
-						}
-						if (name == "__parent"){
-							name = "set_parent";
-						}
+						var name = AdaptName(a);
+						if (name == "id") continue;
+						if (name == "code") continue;
+						if (name == "_file") continue;
+						if (name == "_line") continue;
 						if (_context.IgnoreFields.Contains(name)) continue;
 						item.Fields[name] = a.Value;
 					}
 				}
 				else if (null != d.NewestAttribute){
-					item.Fields[d.NewestAttribute.Name.LocalName] = d.NewestAttribute.Value;
+					var name = AdaptName(d.NewestAttribute);
+					if (_context.IgnoreFields.Contains(name)) continue;
+					item.Fields[name] = d.NewestAttribute.Value;
 				}
 				else{
 					item.Fields["set_parent"] = d.NewValue ?? "";
 				}
 			}
+		}
+
+		private static string AdaptName(XAttribute a){
+			var name = a.Name.LocalName.ToLower();
+			if (name == "id" || name == "code" || name == "_file" || name == "_line"){
+				return name;
+			}
+			if (name.StartsWith("update-")){
+				name = "set_" + name.Substring(7);
+			}
+			if (name == "__parent"){
+				name = "set_parent";
+			}
+			return name;
 		}
 
 		private static DataDiffItem ResolveItem(DataDiffTable table, int id, string code){

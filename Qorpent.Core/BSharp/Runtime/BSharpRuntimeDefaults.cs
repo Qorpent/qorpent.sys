@@ -13,7 +13,7 @@ namespace Qorpent.BSharp.Runtime {
 	    /// <summary>
 		/// Расширение для классов BSharp на диске
 		/// </summary>
-		public const string BSHARP_CLASS_FILE_EXTENSION = "bsclass"; 
+		public const string BSHARP_CLASS_FILE_EXTENSION = "bs.xml"; 
 
 		/// <summary>
 		/// Bsharp class header name

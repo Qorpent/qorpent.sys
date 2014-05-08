@@ -259,6 +259,11 @@ namespace Qorpent.Data.DataDiff{
 					_output.Write(", parent int");
 					_output.Write(", parent_code nvarchar(255)");
 				}
+				else if (fld == "parent")
+				{
+					_output.Write(", parent int");
+					_output.Write(", parent_code nvarchar(255)");
+				}
 				else{
 					_output.Write(", " + fld + " nvarchar(max)");
 				}

@@ -36,9 +36,8 @@ namespace Qorpent.BSharp.Runtime {
 			}
 		}
 
-        private bool IsStandaloneFile(string RootDirectory, string fn)
-        {
-            throw new System.NotImplementedException();
+        private bool IsStandaloneFile(string RootDirectory, string fn){
+	        return true;
         }
 
 		/// <summary>
@@ -49,6 +48,7 @@ namespace Qorpent.BSharp.Runtime {
 			XElement xml = XElement.Load(descriptor.ResourceName);
 			var cls = new BSharpRuntimeClass(Container) {Definition = xml};
 			descriptor.CachedClass = cls;
+			descriptor.CachedClass.Loaded = true;
 		}
 
 		/// <summary>
