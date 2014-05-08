@@ -16,6 +16,8 @@
     <Compile Include="DataDiff\DataDiffItem.cs" />
     <Compile Include="DataDiff\DataDiffTable.cs" />
     <Compile Include="DataDiff\DiffPair.cs" />
+    <Compile Include="DataDiff\SqlDiffGenerator.cs" />
+    <Compile Include="DataDiff\TableDiffGeneratorContext.cs" />
     <Compile Include="MetaDataBase\DatabaseUpdateRecord.cs" />
     <Compile Include="MetaDataBase\DefaultDatabaseUpdateRecordMerger.cs" />
     <Compile Include="MetaDataBase\DefaultMetaFileProcessor.cs" />

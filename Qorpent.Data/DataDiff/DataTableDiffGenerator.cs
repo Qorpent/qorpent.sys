@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
@@ -30,9 +31,11 @@ namespace Qorpent.Data.DataDiff
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public void  GetTableDiff(){
+		public void  Generate(){
 			var result = new ConcurrentDictionary<string, DataDiffTable>();
-			_diffs.AsParallel().ForAll(_ => Collect(_, result));
+			foreach (var diffPair in _diffs){
+				Collect(diffPair,result);
+			}
 			_context.Tables = result.Values;
 		}
 
@@ -49,8 +52,12 @@ namespace Qorpent.Data.DataDiff
 				TreatNewAttributesAsChanges = true,
 				IncludeActions = XDiffAction.RenameElement | XDiffAction.MainCreateOrUpdate
 			};
+			var sw = Stopwatch.StartNew();
 			var diff = new XDiffGenerator(diffconfig).GetDiff(basis,updated).ToArray();
+			
 			Collect(dynamicname, baseTableName, diff, result);
+			sw.Stop();
+			Console.WriteLine("diff of " + baseTableName + " : " + sw.Elapsed);
 		}
 
 		private void Collect(bool dynamicname, string baseTableName, IEnumerable<XDiffItem> diffs, ConcurrentDictionary<string, DataDiffTable> dataDiffTables){
@@ -83,6 +90,7 @@ namespace Qorpent.Data.DataDiff
 						if (name == "__parent"){
 							name = "set_parent";
 						}
+						if (_context.IgnoreFields.Contains(name)) continue;
 						item.Fields[name] = a.Value;
 					}
 				}

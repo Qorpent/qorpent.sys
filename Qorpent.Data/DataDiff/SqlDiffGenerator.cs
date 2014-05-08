@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data.DataDiff{
 	/// <summary>
@@ -19,7 +20,7 @@ namespace Qorpent.Data.DataDiff{
 			if (null == _context.SqlOutput){
 				_context.SqlOutput = Console.Out;
 			}
-			this._tables = _context.Tables.ToArray();
+			this._tables = _context.Tables.OrderBy(_=>_.TableName).ToArray();
 			this._output = _context.SqlOutput;
 			
 		}
@@ -30,7 +31,7 @@ namespace Qorpent.Data.DataDiff{
 		/// <summary>
 		/// Записать скрипт в переданный поток
 		/// </summary>
-		public void GenerateScript(){
+		public void Generate(){
 			
 			WriteStart();
 			WriteBody();
@@ -38,15 +39,243 @@ namespace Qorpent.Data.DataDiff{
 		}
 
 		private void WriteFinish(){
-			throw new NotImplementedException();
+			_output.WriteLine("\t-- return of foreign keys contraints");
+			foreach (var table in _tables)
+			{
+				_output.WriteLine("\talter table {0} check constraint all", table.TableName);
+			}
+			foreach (var table in _tables)
+			{
+				_output.WriteLine("\tinsert @c (t,c,w) exec sp_executesql N'DBCC CHECKCONSTRAINTS (''{0}'')'", table.TableName);
+			}
+			_output.WriteLine(@"	-- this code allows late control over foreighn keys
+		if ((select count(*) from @c)!=0) begin
+		select * from @c;
+		throw 51012 , 'patch violates constraints', 1;
+	end else commit");
+			_output.WriteLine("END TRY");
+			_output.WriteLine("BEGIN CATCH");
+			_output.WriteLine("\tif (@@TRANCOUNT!=0) rollback;");
+			_output.WriteLine("\tthrow");
+			_output.WriteLine("END CATCH");
 		}
 
 		private void WriteBody(){
-			throw new NotImplementedException();
+			int i = 1;
+			foreach (var table in _tables){
+				var tn = "t" + i++;
+				var allfields = table.Definitions.SelectMany(_ => _.Fields.Keys).Distinct().OrderBy(_=>_).ToArray();
+				_output.WriteLine("\t--"+table.TableName+ " base insert and update");	
+				GenerateTempTableDeclaration(tn, allfields, table);
+				GenerateInsertTemp(tn, allfields, table);
+				GenerateExistsBinding(tn, allfields, table);
+				
+			}
+			i = 1;
+			foreach (var table in _tables)
+			{
+				var tn = "t" + i++;
+				var allfields = table.Definitions.SelectMany(_ => _.Fields.Keys).Distinct().OrderBy(_ => _).ToArray();
+				_output.WriteLine("\t--" + table.TableName + " fk_binding");	
+				GenerateFKBinding(tn, allfields, table);
+			}
+			i = 1;
+			foreach (var table in _tables)
+			{
+				var tn = "t" + i++;
+				var allfields = table.Definitions.SelectMany(_ => _.Fields.Keys).Distinct().OrderBy(_ => _).ToArray();
+				_output.WriteLine("\t--" + table.TableName + " main update");
+				GenerateMainUpdate(tn, allfields, table);
+			}
+		}
+
+		private void GenerateMainUpdate(string tn, string[] allfields, DataDiffTable table){
+			_output.Write("\t\tupdate {0} set ",table.TableName);
+			for (var i = 0;i<allfields.Length;i++){
+				var name = allfields[i];
+				if (name == "set_id"){
+					name = "id";
+				}
+				if (name == "set_code"){
+					name = "code";
+				}
+				if (name == "set_parent"){
+					name = "parent";
+				}
+				_output.Write("{0} = isnull(x.{2}{0},{1}.{0})", name, table.TableName, (name == "id" || name == "code") ? "set_" : "");
+				if (i != allfields.Length - 1){
+					_output.Write(", ");
+				}
+			}
+			_output.WriteLine("from @{0} x join {1} on x.id = {1}.id ",tn,table.TableName);
+		}
+
+		private void GenerateFKBinding(string tn, string[] allfields, DataDiffTable table){
+			foreach (var map in table.Mappings){
+				_output.WriteLine("\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.code = code ),-9999) where {1} is null and {1}_code is not null ",tn,map.Key,map.Value);
+			}
+			if (-1 != Array.IndexOf(allfields, "set_parent")){
+				_output.WriteLine("\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.code = parent_code ),-9999) where {1} is null and {1}_code is not null ", tn, "parent",table.TableName);
+			}
+		}
+
+		private void GenerateExistsBinding(string tn, string[] allfields, DataDiffTable table){
+			_output.WriteLine("\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)",tn,table.TableName);
+			_output.WriteLine("\t\t\tinsert {1} (id,code) select id,isnull(code,id) from @{0} where _exists = 0 and id is not null",tn,table.TableName);
+			_output.WriteLine("\t\t\tinsert {1} (code) select code from @{0} where _exists = 0 and code is not null and id is null", tn, table.TableName);
+			_output.WriteLine("\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)", tn, table.TableName);
+		}
+
+		private void GenerateInsertTemp(string tn, string[] allfields, DataDiffTable table){
+			_output.Write("\t\tinsert @{0} (id,code",tn);
+			foreach (var allfield in allfields){
+				if (table.Mappings.ContainsKey(allfield)){
+					_output.Write(", {0}, {0}_code", allfield);
+				}
+				else if (allfield == "set_parent" ||allfield=="parent"){
+					_output.Write(",parent ,parent_code");
+				}
+				else{
+					_output.Write(",{0}", allfield);
+				}
+			}
+			_output.WriteLine(") values");
+			var defs = table.Definitions.OrderBy(_ => _.Id).ThenBy(_ => _.Code).ToArray();
+			for (var i = 0; i < defs.Length;i++ ){
+				var def = defs[i];
+				_output.Write("\t\t\t(");
+
+				if (0 == def.Id){
+					_output.Write("null");
+				}
+				else{
+					_output.Write("'{0}'", def.Id);
+				}
+				if (string.IsNullOrWhiteSpace(def.Code)){
+					_output.Write(", null");
+				}
+				else{
+					_output.Write(",'{0}'", def.Code);
+				}
+
+				foreach (var allfield in allfields){
+					if (table.Mappings.ContainsKey(allfield)){
+						OutMappedField(def,allfield);
+					}
+					else if (allfield == "set_parent" ||allfield=="parent"){
+						OutParentField(def);
+					}
+					else{
+						OutUsualField(def, allfield);
+					}
+				}
+
+				if (i != table.Definitions.Count - 1){
+					_output.WriteLine("),");
+				}
+				else{
+					_output.WriteLine(")");
+				}
+			}
+			
+		}
+
+		private void OutMappedField(DataDiffItem def, string allfield){
+			if (def.Fields.ContainsKey(allfield)){
+				var val = def.Fields[allfield];
+				var ival = val.ToInt();
+				if (val == ""){ //сброс ссылки
+					_output.Write(", 0, null");	
+				}else if (ival != 0){
+					_output.Write(", {0}, null", ival);
+				}
+				else{
+					_output.Write(", null, '{0}'", val.Replace("'","''"));
+				}
+			}
+			else
+			{
+				_output.Write(", null, null");
+			}
+		}
+
+		private void OutParentField(DataDiffItem def){
+			if (def.Fields.ContainsKey("set_parent") ){
+				var val = def.Fields["set_parent"].Split('-').Last();
+				var ival = val.ToInt();
+				if (val == "")
+				{ //сброс ссылки
+					_output.Write(", 0, null");
+				}
+				else if (ival != 0)
+				{
+					_output.Write(", {0}, null", ival);
+				}
+				else
+				{
+					_output.Write(", null, '{0}'", val.Replace("'", "''"));
+				}
+			}
+			else if (def.Fields.ContainsKey("parent")){
+				var val = def.Fields["parent"];
+				var ival = val.ToInt();
+				if (val == "")
+				{ //сброс ссылки
+					_output.Write(", 0, null");
+				}
+				else if (ival != 0)
+				{
+					_output.Write(", {0}, null", ival);
+				}
+				else
+				{
+					_output.Write(", null, '{0}'", val.Replace("'", "''"));
+				}
+			}
+			else{
+				_output.Write(", null, null");
+			}
+		}
+
+		
+
+		private void OutUsualField(DataDiffItem def, string allfield){
+			if (def.Fields.ContainsKey(allfield)){
+				_output.Write(", '" + def.Fields[allfield].Replace("'", "''") + "'");
+			}
+			else{
+				_output.Write(", null");
+			}
+		}
+
+		private void GenerateTempTableDeclaration(string tn, string[] allfields, DataDiffTable table){
+			_output.Write("\tdeclare @" + tn + " table ( id int, code nvarchar(255), _exists bit default 0 ");
+			foreach (var fld in allfields){
+				if (table.Mappings.ContainsKey(fld)){
+					_output.Write(", " + fld + " int");
+					_output.Write(", " + fld + "_code nvarchar(255)");
+				}
+				else if (fld == "set_parent"){
+					_output.Write(", parent int");
+					_output.Write(", parent_code nvarchar(255)");
+				}
+				else{
+					_output.Write(", " + fld + " nvarchar(max)");
+				}
+			}
+			_output.WriteLine(")");
 		}
 
 		private void WriteStart(){
-			throw new NotImplementedException();
+			_output.WriteLine("BEGIN TRAN");
+			_output.WriteLine("\t --table for storing check constraints problems");
+			_output.WriteLine("\tdeclare @c table (t nvarchar(255), c nvarchar(255), w nvarchar(255))");
+			_output.WriteLine("BEGIN TRY");
+			_output.WriteLine("--switch off foreign keys");
+			foreach (var table in _tables)
+			{
+				_output.WriteLine("\talter table {0} nocheck constraint all", table.TableName);
+			}
 		}
 	}
 }

@@ -7,6 +7,13 @@ namespace Qorpent.Data.DataDiff{
 	/// </summary>
 	public class TableDiffGeneratorContext{
 		/// <summary>
+		/// 
+		/// </summary>
+		public TableDiffGeneratorContext(){
+			InTransaction = true;
+			IgnoreFields = new List<string>();
+		}
+		/// <summary>
 		/// Подготовленные пары XML для сравнения
 		/// </summary>
 		public IEnumerable<DiffPair> DiffPairs { get; set; } 
@@ -23,5 +30,9 @@ namespace Qorpent.Data.DataDiff{
 		/// Признак необходимости использования транзакций
 		/// </summary>
 		public bool InTransaction { get; set; }
+		/// <summary>
+		/// Поля, которые игнорируются при формировании дифа
+		/// </summary>
+		public IList<string> IgnoreFields { get; private set; }
 	}
 }

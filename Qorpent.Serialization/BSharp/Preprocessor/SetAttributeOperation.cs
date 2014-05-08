@@ -13,7 +13,8 @@ namespace Qorpent.BSharp.Preprocessor{
 		public override void Execute(XElement el){
 			var val = Value;
 			if (!string.IsNullOrWhiteSpace(SubstSrc)){
-				var subst = el.Attr(SubstSrc);
+				
+				var subst = (SubstSrc=="__value"||SubstSrc =="VALUE")? el.Value: el.Attr(SubstSrc);
 				if (string.IsNullOrWhiteSpace(SubstRx)){
 					if (string.IsNullOrWhiteSpace(val)){
 						val = subst;
@@ -27,7 +28,7 @@ namespace Qorpent.BSharp.Preprocessor{
 					val = _rx.Replace(subst, val);
 				}
 			}
-			if (Name == "__value"){
+			if (Name == "__value" ||Name=="VALUE"){
 				el.Value = val;
 			}
 			else{
@@ -42,6 +43,8 @@ namespace Qorpent.BSharp.Preprocessor{
 		/// 
 		/// </summary>
 		public string Value;
+
+	
 
 
 		public string SubstSrc;

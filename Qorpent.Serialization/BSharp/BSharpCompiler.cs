@@ -72,6 +72,19 @@ namespace Qorpent.BSharp {
 		public static IBSharpContext Compile(XElement e, IBSharpConfig config= null){
 			return Compile(new[]{e}, config);
 		}
+
+		/// <summary>
+		/// Компилирует директорию
+		/// </summary>
+		/// <param name="dirname"></param>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public static IBSharpContext CompileDirectory(string dirname, IBSharpConfig config = null){
+			var parser = new BxlParser();
+			var sources = Directory.GetFiles(dirname, "*.bxls").Select(_ => parser.Parse(File.ReadAllText(_), _));
+			return Compile(sources, config);
+
+		}
 		/// <summary>
 		/// Асинхронная компиляция отдельного XElement
 		/// </summary>
