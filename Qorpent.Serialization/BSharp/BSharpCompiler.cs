@@ -81,7 +81,7 @@ namespace Qorpent.BSharp {
 		/// <returns></returns>
 		public static IBSharpContext CompileDirectory(string dirname, IBSharpConfig config = null){
 			var parser = new BxlParser();
-			var sources = Directory.GetFiles(dirname, "*.bxls").Select(_ => parser.Parse(File.ReadAllText(_), _));
+			var sources = Directory.GetFiles(dirname, "*.bxls",SearchOption.AllDirectories).Select(_ => parser.Parse(File.ReadAllText(_), _));
 			return Compile(sources, config);
 
 		}
