@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -39,30 +41,94 @@ namespace Qorpent.Host.Handlers
                 abspath = DefaultPage;
             }
 			var staticdescriptor = server.Static.Get(abspath, callcontext);
-			if (null == staticdescriptor){
-				callcontext.Finish("no file found", "text/plain; charset=utf-8", status: 404);
+			//в случае, если запрошен HTML и он отсутствует, то в качестве результата возвращаем стартуовую страницу 
+			//указанного в начале имени приложения (для этого в видимости должен находится скрипт с контроллерами приложения
+			if (null == staticdescriptor && abspath.EndsWith(".html")){
+				RunApplication(server,callcontext, callbackEndPoint, cancel, abspath);
 				return;
 			}
-			var filetime = callcontext.SetLastModified(staticdescriptor.GetLastVersion());
-			if (filetime <= callcontext.GetIfModifiedSince())
+			if (null == staticdescriptor && abspath.EndsWith("-starter.js"))
 			{
+				RunApplicationStarter(server, callcontext, callbackEndPoint, cancel, abspath);
+				return;
+			}
+			if (null == staticdescriptor){
+				FinishWirh404(callcontext);
+				return;
+			}
+			Finish200(callcontext, staticdescriptor);
+		}
+
+		private void RunApplicationStarter(IHostServer server, HttpListenerContext callcontext, string callbackEndPoint, CancellationToken cancel, string abspath){
+			if (_applicationCache[abspath] == null){
+				var appname = Path.GetFileNameWithoutExtension(abspath).Split('-')[0];
+				var appexists = server.Static.Get(appname + "_controllers.js") != null;
+				if (appexists)
+				{
+
+					var template = server.Static.Get("template.starter.js", callcontext).Read();
+
+					var apphtml = string.Format(template, appname);
+					_applicationCache[abspath] = new FixedContentDescriptor(apphtml, abspath);
+				}
+				else
+				{
+					_applicationCache[abspath] = null;
+				}
+			}
+			Finish(callcontext,abspath);
+		}
+
+		private static void Finish200(HttpListenerContext callcontext, StaticContentDescriptor staticdescriptor){
+			var filetime = callcontext.SetLastModified(staticdescriptor.GetLastVersion());
+			if (filetime <= callcontext.GetIfModifiedSince()){
 				callcontext.Finish("", status: 304);
 			}
-			else
-			{
-				callcontext.Response.AddHeader("Qorpent-Disposition",staticdescriptor.FullName);
+			else{
+				callcontext.Response.AddHeader("Qorpent-Disposition", staticdescriptor.FullName);
 				if (staticdescriptor.IsFixedContent){
 					callcontext.Finish(staticdescriptor.FixedContent, staticdescriptor.MimeType + "; charset=utf-8");
-
 				}
 				else{
-				    using (var s = staticdescriptor.Open()) {
-				        callcontext.Finish(s, staticdescriptor.MimeType + "; charset=utf-8");
-                        s.Close();
-				    }
-
+					using (var s = staticdescriptor.Open()){
+						callcontext.Finish(s, staticdescriptor.MimeType + "; charset=utf-8");
+						s.Close();
+					}
 				}
-				
+			}
+		}
+
+		private static void FinishWirh404(HttpListenerContext callcontext){
+			callcontext.Finish("no file found", "text/plain; charset=utf-8", status: 404);
+		}
+
+		//кэш страниц, являющихся приложениями
+		static IDictionary<string, StaticContentDescriptor> _applicationCache = new Dictionary<string, StaticContentDescriptor>();
+		private void RunApplication(IHostServer server, HttpListenerContext context, string callbackEndPoint, CancellationToken cancel, string abspath){
+			if (!_applicationCache.ContainsKey(abspath)){
+				var appname = Path.GetFileNameWithoutExtension(abspath);
+				var appexists = server.Static.Get(appname + "_controllers.js") != null;
+				if (appexists){
+
+					var template = server.Static.Get("template.app.html", context).Read();
+
+					var apphtml = string.Format(template, appname);
+					_applicationCache[abspath] = new FixedContentDescriptor(apphtml, abspath);
+				}
+				else{
+					_applicationCache[abspath] = null;
+				}
+			}
+
+			Finish(context, abspath);
+		}
+
+		private static void Finish(HttpListenerContext context, string abspath){
+			if (null == _applicationCache[abspath]){
+				FinishWirh404(context);
+			}
+			else{
+				Finish200(context, _applicationCache[abspath]);
 			}
 		}
 	}

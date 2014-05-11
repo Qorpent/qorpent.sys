@@ -37,5 +37,17 @@ namespace Qorpent.Host{
 		/// </summary>
 		/// <returns></returns>
 		public abstract Stream Open();
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public string Read(){
+			if (!string.IsNullOrWhiteSpace(FixedContent)){
+				return FixedContent;
+			}
+			using (var sw = new StreamReader(Open())){
+				return sw.ReadToEnd();
+			}
+		}
 	}
 }
