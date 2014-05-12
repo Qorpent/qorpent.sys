@@ -290,6 +290,15 @@ namespace Qorpent.BSharp {
 		/// </summary>
         public static readonly string ElementExtensionPrefix = "+".Escape(EscapingType.XmlName);
 		/// <summary>
+		/// Директива постпроцессора на уделение части элементов сверху
+		/// </summary>
+        public static readonly string PostProcessRemoveBefore = "remove-before";
+		/// <summary>
+		/// Директива постпроцессора на выборку элементов
+		/// </summary>
+        public static readonly string PostProcessSelectElements = "select-elements";
+        
+		/// <summary>
 		/// Префикс приватного атрибута
 		/// </summary>
 		public const char PrivateAttributePrefix = '_';

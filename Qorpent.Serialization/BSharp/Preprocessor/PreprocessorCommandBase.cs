@@ -10,7 +10,7 @@ namespace Qorpent.BSharp.Preprocessor{
 		public bool Async;
 		public bool Parallel;
 		private XElement _e;
-
+		public string Code;
 		/// <summary>
 		/// 
 		/// </summary>

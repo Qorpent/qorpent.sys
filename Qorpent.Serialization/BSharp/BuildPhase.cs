@@ -23,6 +23,9 @@
 		/// Применение патчей
 		/// </summary>
 		ApplyPatch,
-		
+		/// <summary>
+		/// Постобработка
+		/// </summary>
+		PostProcess
 	}
 }

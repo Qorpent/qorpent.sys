@@ -99,13 +99,13 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
                     BSharpBuilderClassUtils.GetRelativeDirByNamespace(bSharpClass.FullName)
                 );
             } else {
-				if (!Project.SrcClass.Compiled.Attr("NoWrapOutput").ToBool()){
+				if (null!=Project && null!=Project.SrcClass && !Project.SrcClass.Compiled.Attr("NoWrapOutput").ToBool()){
 					target.Entity = target.Entity.XPathSelectElement("//" + BSharpBuilderDefaults.BSharpClassContainerName);
 
 				}
 				else{
 					target.Entity = target.Entity.Elements().First();
-					if (Project.SrcClass.Compiled.Attr("PrototypeAsName").ToBool()){
+					if (Project!=null && Project.SrcClass!=null &&  Project.SrcClass.Compiled.Attr("PrototypeAsName").ToBool()){
 						var proto = target.Entity.Attr("prototype");
 						if (!string.IsNullOrWhiteSpace(proto)){
 							target.Entity.Name = proto;
@@ -148,8 +148,10 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
         /// </summary>
         /// <param name="entity"></param>
         private XElement GenerateBSharpClasset(XElement entity){
-	        if (Project.SrcClass.Compiled.Attr("NoWrapOutput").ToBool()) return entity;
-            var xElement = new XElement(BSharpBuilderDefaults.BSharpClassContainerName);
+	        if (null != Project && null!=Project.SrcClass){
+		        if (Project.SrcClass.Compiled.Attr("NoWrapOutput").ToBool()) return entity;
+	        }
+	        var xElement = new XElement(BSharpBuilderDefaults.BSharpClassContainerName);
             xElement.SetAttributeValue("code", entity.ChooseAttr("fullcode","code"));
             xElement.Add(entity);
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using Qorpent.BSharp.Matcher;
 using Qorpent.Config;
 using Qorpent.Log;
@@ -92,8 +93,33 @@ namespace Qorpent.BSharp {
 				else if (BuildPhase.ApplyPatch == phase){
 					ApplyPatch();
 				}
+				else if (BuildPhase.PostProcess == phase)
+				{
+					DoPostProcess();
+				}
 			
 		}
+
+		private void DoPostProcess(){
+			var selects = _cls.Compiled.Descendants(BSharpSyntax.PostProcessSelectElements).ToArray();
+			foreach (var e in selects){
+				var xpath = e.Attr("xpath");
+				var elements = _cls.Compiled.XPathSelectElements(xpath).Select(_=>new XElement(_)).ToArray();
+				if (0 != elements.Length){
+					e.ReplaceWith(elements);
+				}
+				else{
+					e.Remove();
+				}
+			}
+			var removebefores = _cls.Compiled.Descendants(BSharpSyntax.PostProcessRemoveBefore).ToArray();
+			foreach (var removebefore in removebefores){
+				var code = removebefore.Attr("code");
+				removebefore.ElementsBeforeSelf(code).ToArray().Remove();
+				removebefore.Remove();
+			}
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -194,7 +220,11 @@ namespace Qorpent.BSharp {
 				if (attribute.Name.LocalName == BSharpSyntax.PatchPlainAttribute) continue;
 				if (attribute.Name.LocalName == BSharpSyntax.PatchCreateBehavior) continue;
                 if (attribute.Name.LocalName == "priority") continue;
-                target.Compiled.SetAttributeValue(attribute.Name,attribute.Value);
+			    var name = attribute.Name.LocalName;
+				if (name.StartsWith("set-")){
+					name = name.Substring(4);
+				}
+                target.Compiled.SetAttributeValue(name,attribute.Value);
 
 		    }
 

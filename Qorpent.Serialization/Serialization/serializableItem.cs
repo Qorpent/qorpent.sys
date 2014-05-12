@@ -109,21 +109,23 @@ namespace Qorpent.Serialization {
 		/// </remarks>
 		public bool IsSerializable {
 			get {
-				var result = false;
-				if (null == Member) return false;
-				if(!_issercache.ContainsKey(Member)) {
-					result = InternalGetIsSerializable();
-					_issercache[Member] = result;	
-				}else {
-					result = _issercache[Member];
-				}
-				if(!result) return false;
+	
+					var result = false;
+					if (null == Member) return false;
+					if (!_issercache.ContainsKey(Member)){
+						result = InternalGetIsSerializable();
+						_issercache[Member] = result;
+					}
+					else{
+						result = _issercache[Member];
+					}
+					if (!result) return false;
+
+					if (CheckNull()){
+						return true;
+					}
+					return false;
 				
-				if (CheckNull())
-				{
-					return true;
-				}
-				return false;
 			}
 		}
 
@@ -182,6 +184,7 @@ namespace Qorpent.Serialization {
 		/// </remarks>
 		public Type Type { get; private set; }
 
+		private static readonly object sync = new object();
 		/// <summary>
 		/// 	Gets the serializable items.
 		/// </summary>
@@ -190,17 +193,21 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		public static IEnumerable<SerializableItem> GetSerializableItems(object target) {
-			var result = target.GetType().GetFields()
-				.Select(field => new SerializableItem(field, target))
-				.ToList();
-			foreach (var field in target.GetType().GetProperties()) {
-				try {
-					result.Add(new SerializableItem(field, target));
+			lock (sync){
+				var result = target.GetType().GetFields()
+				                   .Select(field => new SerializableItem(field, target))
+				                   .ToList();
+				foreach (var field in target.GetType().GetProperties()){
+					try{
+						result.Add(new SerializableItem(field, target));
+					}
+					catch (TargetInvocationException){
+					}
+					catch (TargetParameterCountException){
+					}
 				}
-				catch (TargetInvocationException) {}
-				catch (TargetParameterCountException) {}
+				return result.Where(x => x.IsSerializable).ToArray();
 			}
-			return result.Where(x => x.IsSerializable);
 		}
 
 		/// <summary>

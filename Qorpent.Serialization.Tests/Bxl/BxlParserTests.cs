@@ -692,6 +692,18 @@ test1 a b
 			Assert.AreEqual(t2.Attribute("name").Value, "anon2");
 		}
 
+		[Test]
+		public void AnonymousSupport()
+		{
+			String bxl = @"
+test1 c x=1 'anonymous'";
+
+			IBxlParser p = new BxlParser();
+			XElement res = p.Parse(bxl);
+			Console.WriteLine(res);
+
+		}
+
 
 		[TestCase("demo.import.forms.m600.bxls")]
 		[TestCase("presentation_ocm_structure.hql")]

@@ -72,6 +72,19 @@ namespace Qorpent.BSharp {
 		public static IBSharpContext Compile(XElement e, IBSharpConfig config= null){
 			return Compile(new[]{e}, config);
 		}
+
+		/// <summary>
+		/// Компилирует директорию
+		/// </summary>
+		/// <param name="dirname"></param>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public static IBSharpContext CompileDirectory(string dirname, IBSharpConfig config = null){
+			var parser = new BxlParser();
+			var sources = Directory.GetFiles(dirname, "*.bxls",SearchOption.AllDirectories).Select(_ => parser.Parse(File.ReadAllText(_), _));
+			return Compile(sources, config);
+
+		}
 		/// <summary>
 		/// Асинхронная компиляция отдельного XElement
 		/// </summary>
@@ -766,7 +779,8 @@ namespace Qorpent.BSharp {
 			context.BuildLinkingIndex();
 			var requirelink = context.RequireLinking();
 			var requirepatch = context.RequirePatching();
-			if (!(requirelink || requirepatch)) return;
+			var requirepostprocess = context.RequrePostProcess();
+			if (!(requirelink || requirepatch || requirepostprocess)) return;
 			
 				if (requirelink){
 					context.Get(BSharpContextDataType.Working)
@@ -809,6 +823,11 @@ namespace Qorpent.BSharp {
 							return "";
 						}).ToArray()
 						;
+				}
+
+				if (requirepostprocess)
+				{
+					context.Get(BSharpContextDataType.Working).AsParallel().ForAll(_ => BSharpClassBuilder.Build(BuildPhase.PostProcess,this,_,context));
 				}
 			
 		}

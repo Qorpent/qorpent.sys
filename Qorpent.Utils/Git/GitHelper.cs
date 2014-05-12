@@ -123,6 +123,10 @@ namespace Qorpent.Utils.Git{
 			return a??"" + AuthorEmail??"";
 		}
 		/// <summary>
+		/// 
+		/// </summary>
+		public bool NoAutoPush { get; set; }
+		/// <summary>
 		/// Инициализирует и настраиват директорию
 		/// </summary>
 		public GitHelper Connect(){
@@ -162,7 +166,7 @@ namespace Qorpent.Utils.Git{
 			var args = "/command:" + command;
 			if (null != parameters){
 				var dict = parameters.ToDict();
-				args += " " + string.Join(" ", dict.Select(_ => "/" + _.Key + ":\"" + _.Value + "\""));
+				args += " " + string.Join( " ",dict.Select(_ => "/" + _.Key + ":\"" + _.Value + "\""));
 			}
 			var startInfo = new ProcessStartInfo
 			{
@@ -179,7 +183,7 @@ namespace Qorpent.Utils.Git{
 		/// 
 		/// </summary>
 		/// <param name="command"></param>
-		/// <param name="args"></param>
+		/// <param name="args"></param>"
 		/// <param name="timeout"></param>
 		/// <param name="allowinvstate"></param>
 		/// <returns></returns>
@@ -799,13 +803,18 @@ namespace Qorpent.Utils.Git{
 			}
 			if (null == GetCommitInfo(Branch)){
 				Checkout(basebranch);
-				if (null == GetCommitInfo("origin/" + basebranch)){
-					ExecuteCommand("push", RemoteName + " " + basebranch);
+				if (!NoAutoPush){
+					if (null == GetCommitInfo("origin/" + basebranch)){
+
+						ExecuteCommand("push", RemoteName + " " + basebranch);
+					}
 				}
 			}
 			Checkout(Branch);
-			if (null == GetCommitInfo("origin/" + Branch)){
-				Push();
+			if (!NoAutoPush){
+				if (null == GetCommitInfo("origin/" + Branch)){
+					Push();
+				}
 			}
 		}
 

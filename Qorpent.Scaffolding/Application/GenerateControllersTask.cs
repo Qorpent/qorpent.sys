@@ -50,7 +50,7 @@ namespace Qorpent.Scaffolding.Application {
             if (targetclasses.SelectMany(_=>_.Compiled.Elements("item")).Any(_ => !string.IsNullOrWhiteSpace(_.Attr("persistentCode"))) && services.All(_ => _ != "settings")) {
                services.Add("settings");
             }
-	        var svcall = string.Join("','", services);
+	        var svcall = string.Join("','", services.OrderBy(_=>_));
 			if (!string.IsNullOrWhiteSpace(svcall)){
 				svcall = ", '" + svcall + "'";
 			}

@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestHandlerFactory.cs" />
+    <Compile Include="FixedContentDescriptor.cs" />
     <Compile Include="Handlers\WikiHandler.cs" />
     <Compile Include="HostServerStaticResolver.cs" />
     <Compile Include="SmartXmlHandler.cs" />
@@ -133,6 +134,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\app.css" />
     <EmbeddedResource Include="Resources\nglayout.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\template.app.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\template.starter.js" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

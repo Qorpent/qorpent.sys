@@ -30,7 +30,7 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
 
 			compiler.Initialize(cfg);
             compiler.Compile(Project.Sources, context);
-			Project.Context = context;
+			
             HandleErrorStream(context);
 
 		}
