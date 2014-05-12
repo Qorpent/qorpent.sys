@@ -87,6 +87,7 @@ namespace Qorpent.Data.DataDiff
 			if (!string.IsNullOrWhiteSpace(rev)){
 				_context.Log.Trace("begin checkout "+rev);
 				_githelper.Checkout(rev);
+				_context.ResolvedUpdateRevision = _githelper.GetCommitId();
 				_context.Log.Trace("end checkout " + rev);
 				var bscStarter = new ConsoleApplicationHandler();
 				bscStarter.ExePath = "bsc";
