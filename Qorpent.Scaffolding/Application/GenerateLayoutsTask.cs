@@ -96,7 +96,7 @@ namespace Qorpent.Scaffolding.Application {
 
 
 					var ctrlel = new XElement("widget", new XAttribute("height", "max"), new XAttribute("width", "max"),
-					                          new XAttribute("orientation", "vertical"));
+                                              new XAttribute("orientation", "vertical"), new XAttribute("id", v.Attr("code")));
 
 					foreach (var a in v.Attributes()){
 						if (a.Name.LocalName == "code") continue;
@@ -116,14 +116,21 @@ namespace Qorpent.Scaffolding.Application {
 						outer.Add(include);
 						include = outer;
 					}
-					ctrlel.Add(include);
+				    var widgetHeader = new XElement("div", new XAttribute("class", "layout__widget-header"));
+				    var widgetBody = new XElement("div", new XAttribute("class", "layout__widget-body"));
+                    if (!string.IsNullOrWhiteSpace(v.Attr("title"))) {
+                        widgetHeader.SetValue(v.Attr("title"));
+				    }
+                    widgetBody.Add(include);
+                    ctrlel.Add(widgetHeader);
+					ctrlel.Add(widgetBody);
 					outerel.Add(ctrlel);
 				}
 
 				root.Add(outerel);
 			}
 			else{
-				var ctrlel = new XElement("widget", new XAttribute("height", "max"), new XAttribute("width", "max"), new XAttribute("orientation", "vertical"));
+                var ctrlel = new XElement("widget", new XAttribute("height", "max"), new XAttribute("width", "max"), new XAttribute("orientation", "vertical"), new XAttribute("id", e.Attr("code")));
 				ctrlel.SetAttr("ng-controller", GetControllerName(e.Attr("code")))
 					  .SetAttr("class", e.Attr("class"));
 				foreach (var a in e.Attributes())
@@ -147,7 +154,11 @@ namespace Qorpent.Scaffolding.Application {
 					outer.Add(include);
 					include = outer;
 				}
-				ctrlel.Add(include);
+                var widgetHeader = new XElement("div", new XAttribute("class", "layout__widget-header"));
+                var widgetBody = new XElement("div", new XAttribute("class", "layout__widget-body"));
+                widgetBody.Add(include);
+                ctrlel.Add(widgetHeader);
+                ctrlel.Add(widgetBody);
 				root.Add(ctrlel);
 			}
             
