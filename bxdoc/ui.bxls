@@ -1,0 +1,18 @@
+require app
+namespace Ugmk.Assoi.Team
+
+	Struct ToXmlQuery
+		string Lang : "bxl"
+		string Format : "wiki"
+		
+
+    Action ToXml "Запрос на публикацию"
+        Url = "/toxml"
+		Arguments = ^ToXmlQuery
+
+
+    Controller BxlDev
+
+	Layout dev
+		layout main "Основная рабочая зона"
+			widget ^BxlDev

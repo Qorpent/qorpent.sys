@@ -25,7 +25,32 @@ namespace Qorpent.Scaffolding.Application {
 	            GetContent = () => GenerateInternal(targetclasses),
             };
 	        yield return production;
+	        production = new Production{
+		        FileName = Project.ProjectName + "-root.js",
+		        GetContent = () => GenerateRootController()
+	        };
+	        yield return production;
         }
+
+	    private string GenerateRootController(){
+		    var mainlayout = Project.Context.ResolveAll("ui-layout").First();
+		    var fname = mainlayout.Compiled.Attr("filename");
+			if (string.IsNullOrWhiteSpace(fname)){
+				fname = Project.ProjectName + "_" + mainlayout.Name;
+			}
+		    var sb = new StringBuilder();
+		    sb.AppendFormat(
+				"define(['angular','{0}_types','{0}_api','{0}_controllers','nglayout'],function(angular,types,apictor){{\r\n",
+			    Project.ProjectName);
+			sb.AppendFormat("\tangular.module('app',['{0}_controllers','Layout'])\r\n", Project.ProjectName);
+		    sb.AppendLine("\t\t.controller('root',function($scope,$http){");
+		    sb.AppendLine("\t\t\t$scope.api = apictor($http);");
+		    sb.AppendFormat("\t\t\t$scope.layout = '{0}.html';\r\n",fname);
+		    sb.AppendLine("\t\t});");
+		    sb.AppendLine("\t}");
+		    sb.AppendLine(");");
+		    return sb.ToString();
+	    }
 
 	    private string GenerateInternal(IBSharpClass[] targetclasses){
 		    var result = "";

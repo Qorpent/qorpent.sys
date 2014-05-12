@@ -60,7 +60,7 @@ namespace Qorpent.Host.Handlers
 		}
 
 		private void RunApplicationStarter(IHostServer server, HttpListenerContext callcontext, string callbackEndPoint, CancellationToken cancel, string abspath){
-			if (_applicationCache[abspath] == null){
+			if (!_applicationCache.ContainsKey(abspath)){
 				var appname = Path.GetFileNameWithoutExtension(abspath).Split('-')[0];
 				var appexists = server.Static.Get(appname + "_controllers.js") != null;
 				if (appexists)
@@ -68,7 +68,7 @@ namespace Qorpent.Host.Handlers
 
 					var template = server.Static.Get("template.starter.js", callcontext).Read();
 
-					var apphtml = string.Format(template, appname);
+					var apphtml = template.Replace("__APPNAME__", appname);
 					_applicationCache[abspath] = new FixedContentDescriptor(apphtml, abspath);
 				}
 				else

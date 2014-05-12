@@ -1,0 +1,9 @@
+class bxlui
+	LogLevel Error
+	Extension app
+	Layout PlainNamespace+IncludeWork
+	OutputDirectory ./.output
+	JsDir ../js
+	ViewDir ../views
+	Exclude 
+		Path Samples

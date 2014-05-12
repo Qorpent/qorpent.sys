@@ -26,3 +26,6 @@ qorpent.sys.doc/obj
 
 
 UpgradeLog*
+
+.output
+.tmp

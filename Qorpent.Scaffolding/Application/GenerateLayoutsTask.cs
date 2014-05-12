@@ -17,7 +17,7 @@ namespace Qorpent.Scaffolding.Application {
         protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses) {
 
             foreach (var targetclass in targetclasses) {
-                var filename = targetclass.Name + ".html";
+                var filename = Project.ProjectName+"_"+ targetclass.Name + ".html";
                 if (targetclass.Compiled.Attr("filename").IsNotEmpty()) {
                     filename = targetclass.Compiled.Attr("filename") + ".html";
                 }
