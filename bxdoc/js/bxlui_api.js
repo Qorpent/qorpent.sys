@@ -11,6 +11,8 @@ define (["bxlui_types","actionBuilder"], function(types,actionBuilder) {
 			name : "Запрос на публикацию",
 			url : "/toxml",
 			arguments : types.ToXmlQuery,
+			method : "QPOST",
+			postfield : "Script",
 			parameters : null
 		}))},writeable:false});
 

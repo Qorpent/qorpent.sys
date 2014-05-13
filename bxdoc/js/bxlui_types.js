@@ -55,13 +55,23 @@ define ([], function() {
 	};
 
 	// Структура
+	var BxOptions= result.BxOptions = function(args){
+		args=args||{}
+		this.__getClassInfo=function(){return {name:"Ugmk.Assoi.Team.BxOptions"}};
+		// 
+		this.AutoCompile = args.hasOwnProperty("AutoCompile") ? args.AutoCompile : ( args.hasOwnProperty("autocompile") ? args.autocompile : false) ;
+	};
+
+	// Структура
 	var ToXmlQuery= result.ToXmlQuery = function(args){
 		args=args||{}
 		this.__getClassInfo=function(){return {name:"Ugmk.Assoi.Team.ToXmlQuery"}};
 		// 
-		this.Lang = args.hasOwnProperty("Lang") ? args.Lang : ( args.hasOwnProperty("lang") ? args.lang : bxl) ;
+		this.Lang = args.hasOwnProperty("Lang") ? args.Lang : ( args.hasOwnProperty("lang") ? args.lang : ('bxl')) ;
 		// 
-		this.Format = args.hasOwnProperty("Format") ? args.Format : ( args.hasOwnProperty("format") ? args.format : wiki) ;
+		this.Format = args.hasOwnProperty("Format") ? args.Format : ( args.hasOwnProperty("format") ? args.format : ('wiki')) ;
+		// 
+		this.Script = args.hasOwnProperty("Script") ? args.Script : ( args.hasOwnProperty("script") ? args.script : "") ;
 	};
 
 	// Сообщение журнала

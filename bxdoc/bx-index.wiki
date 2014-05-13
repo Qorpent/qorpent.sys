@@ -1,6 +1,7 @@
 ﻿{style:float:right;}Языки BXL/B# - руководство{style}
 {style:float:left;}Старт{style}
 
+/ Для опробации кода вы можете пользоваться [bxlui.html испытательным стендом ~ target=_blank]
 
 = Оглавление
 % [bx-preview Предисловие]

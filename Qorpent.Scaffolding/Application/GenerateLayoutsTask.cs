@@ -91,6 +91,9 @@ namespace Qorpent.Scaffolding.Application {
 				outerel.SetAttr("ng-controller", GetControllerName(e.Attr("code")))
 					  .SetAttr("class", e.Attr("class"))
 					  .SetAttr("orientation","vertical");
+				if (e.Attr("name") == "horizontal" || e.Attr("horizontal").ToBool() || e.Attr("orientation") == "horizontal"){
+					outerel.SetAttr("orientation", "horizontal");
+				}
 				outerel.SetAttributeValue("layout-item", "1");
 				foreach (var v in e.Elements().OrderBy(_=>_.Attr("order").ToInt())){
 
