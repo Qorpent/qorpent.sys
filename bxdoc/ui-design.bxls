@@ -1,0 +1,17 @@
+namespace Ugmk.Assoi.Team
+
+	patch for=ToXml
+		Url= "/toxml"
+		Method = 'QPOST'
+		PostField = Script
+
+    patch for=BxlDev new=create
+		service bxldev_ext
+		item bxquery persistent
+		item bxoptions persistent=1
+
+	patch for=dev new=create
+		layout main horizontal
+			widget ^BxlDev horizontal
+				view bxlui_editor "Редактор исходного кода" order=1  height=max width=max
+				view bxlui_result "Результат" order=2 height=max width=max

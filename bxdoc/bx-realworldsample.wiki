@@ -1,0 +1,174 @@
+﻿{style:float:right;}Языки BXL/B# - руководство{style}
+{style:float:left;}Примеры реального использования{style}
+
+В данном разделе приведены примеры практического использования BXL/B#
+
+= Конфигурация контейнера инверсии
+
+Подобные файлы конфигураций используются в многомодульных приложениях на базе Qorpent
+
+[[code]]
+transient default-zeta-context UsmDbContext : IZetaContext
+transient zeta-security-manager SecurityManager : ISecurityManager
+	ContextDescriptor = zeta_security_db
+
+transient zeta.roleresolver ZetaRoleResolverExtension : IRoleResolverExtension
+	ContextDescriptor = zeta_security_db
+
+transient SecurityScriptExecutor : ISecurityScriptExecutor
+[[/code]]
+
+% синтаксис сжатый и явно выражает цикл жизни компонента, тип сервиса, имплементации имя, параметры при конструировании, 
+% ничего лишнего
+% конфигурация получается гораздо более сжатой, нежели у Windsore или Spring
+
+= Спецификация серверного API, типов JSON при передачи и пользовательского интерфейса
+
+Ниже приведен полный код спецификации интерфейса [bxlui.html стенда испытания BXL/B# ~ target=_blank]
+
+[[code]]
+ # первый файл (формируется бизнес-аналитиком)
+require app
+namespace Ugmk.Assoi.Team
+
+	Struct ToXmlQuery
+		string Lang : "'bxl'"
+		string Format : "'wiki'"
+		string Script : ""
+	
+	Struct BxOptions 
+		bool AutoCompile
+		int Timeout : 300
+		
+    Action ToXml "Запрос на публикацию" Arguments = ^ToXmlQuery
+
+    Controller BxlDev
+		item bxquery type=^ToXmlQuery
+		item bxoptions type=^BxOptions
+
+	Layout dev
+		layout main "Главная рабочая зона"
+			widget ^BxlDev "Испытательный стенд"
+				
+ # второй файл (заголовки убраны для примера в WIKI) - формируется веб-мастером, является уточнением исходной спецификации в преломлении конкретной реализации
+namespace Ugmk.Assoi.Team
+
+	patch for=ToXml
+		Url= "/toxml"
+		Method = 'QPOST'
+		PostField = Script
+
+	patch for=BxlDev new=create
+		service bxldev_ext
+		item bxquery  persistent=1
+		item bxoptions  persistent=1
+		
+	patch for=dev
+		layout main
+			widget ^BxlDev
+				view bxlui_editor "Редактор исходного кода" order=1  height=max width=max
+				view bxlui_result "Результат" order=2 height=max width=max
+			
+[[/code]]
+
+% посредством конструкции patch четко производится разделение слоев спецификации на область бизнес-логики и на область верстки и веб-мастеринга
+% спецификация не зависит от целевой инфраструктуры и потенциально совместима с любым MVC (в нашем случае производится генерация оснастки на require+angular)
+% на основе этой спецификации автоматически формируются необходимые JavaScript, HTML и CS/JAVA файлы
+% спецификация обеспечивает целостность по типам передаваемых и принимаемых значений с серверного API
+% на ручную доработку вынесен самый минимум - по сути помимо спецификации (компетенция бизнес-аналитика) остается только сформировать виды bxlui_editor, bxlui_result (компетенция верстальщика) и расширение  bxldev_ext
+% благодаря разделению слоев с общим уровнем приложения можно ознакомиться на базе спецификации бизнес-аналитика, не вдаваясь в ненужные подробности, например в тонкости вызова веб-метода /toxml с разнесением параметров в QUERY и POSTDATA
+% инструкция ***require app*** подключает системный библиотечный модуль, соответственно можно формировать полноценные заготовки любых спецификаций и конфигурировать их как библиотеки расширения B#
+
+= Конфигурация общей среды разработки
+
+Это пример сжатия конфигураций для различных профилей разработчиков одного проекта, с поддержкой наследования и перекрытия параметров
+
+Используется в одном из проектов как средство управления локальными и общими репозиториями и системой публикации (пример существенно упрощен, ряд моментов удален из соображений безопасности)
+
+[[code]]
+class user prototype=user abstract
+class command prototype=command abstract   type=cmd 
+
+user masterzerg 		"Иванов Петр Иванович" 		email='ipi@gmail.com'	publisher dbupdater
+user bosser 		"Сергеев Юрий Анефедович" 	email='sua@mypersonal.com' 	publisher
+
+class superproj prototype=devproj abstract
+	rootdir = "c:/projects"
+	project = "SuperProject"
+	remote = "https://23.145.78.156/super-project.git"
+	dbconnection = "Data Source=23.145.78.157;Initial Catalog=testbase;Persist Security Info=True;Application Name=${code}_dev;User ID=%{UserName}_sql;Password=%{Password}"
+	localdir = "${project}/local"
+	publishdir = "${project}/publish"
+	localbranch = "${project}_%{UserName}"
+	publishbranch = "${project}_publish"
+	devrepo="c:/rep"
+	extracontent
+		item "${rootdir}/repo/extras"
+	content 
+		item "${rootdir}/${project}/local/Draft/somepages"
+	password="(NCE)"
+	include all command element=command keepcode
+		where grp&+="default ${.user}"
+
+superproj masterzerg_work machine=masterzerg-pk profile=work user=masterzerg 
+	devrepo="d:/code"
+	tmpsrv="z:/bak"
+superproj masterzerg_home machine=homepc profile=home user=masterzerg 
+	devrepo="c:/code"
+superproj bosser machine="123-ПК" profile=work user=bosser
+	devrepo="c:/r
+
+command oldprezcommand "Копирование на запасной сервак (только для старшего)" grp="masterzerg" embed
+	xcopy "${rootdir}\\pres*.hql" ${tmpsrv} args="/y"
+	xcopy "${rootdir}\\temp*.bxl" ${tmpsrv} args="/y"
+
+[[/code]]
+
+% Есть возможность указать общую и частную политики
+% Директива include позволяет выполнить условный импорт одних частей спецификации в другие, в данном случае команду получат только профили пользователя masterzerg
+% Легко заметить, что скрипт команды с вызовом xcopy очень близок к типовому BASH/BAT скрипту по виду и читаемости, хотя на самом деле трансформируется в XML и проходит дополнительную проверку доводку команды
+
+= Пример настройки виджетов графиков для отчетной системы поддержки принятия решений
+
+[[code]]
+namespace Graph.Sample
+	class UgolGraphDob 'Динамика добычи и реализации угля' abstract
+		import ZetaGraphBase
+		role="FIN_, DR_, MTR_, COST_",
+		key='Prod_UGOL',
+		targetgroup="div_UGOL;grp_G1",
+		process="top_management;production"
+		numberscalevalue="1,1,1"
+		sum=div_UGOL #pr_stobj=obj_1067		
+		slideformat=twobigslots,
+		measure="тыс. т "
+		ymin=auto
+		typecol=^ColsetMonthB1
+		
+	class UgolGraphStruct 'Структура добычи угля'
+		import UgolGraphDob
+		hide=true
+		ref m140511
+		ref m140512
+		ref m140513	
+		
+	class UgolGraphTovar 'Объем добычи и товарного угля '
+		import UgolGraphDob
+		usearea=1,
+		ref m140510 "Объем добычи угля,тыс.т"
+		ref m140523 "Товарный уголь, тыс. т"
+		
+	class UgolGraphRealiz 'Объем товарного и реализованного угля '
+		import UgolGraphDob
+		usearea=1, 
+		colors='1CB209,57B4CC'
+		row 'Реализованный уголь,тыс.т' formula='$m15098700@SLKOL.conto("BA090_01,BA090_08")? '
+		ref m140523 "Товарный уголь, тыс. т"	
+
+[[/code]]
+
+
+В данном примере хорошо видна модель наследования в B#
+
+
+

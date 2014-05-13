@@ -10,21 +10,13 @@ namespace Ugmk.Assoi.Team
 		bool AutoCompile
 		int Timeout : 300
 		
-    Action ToXml "Запрос на публикацию"
-        Url = "/toxml"
-		Arguments = ^ToXmlQuery
-		Method = 'QPOST'
-		PostField = Script
-
+    Action ToXml "Запрос на публикацию" Arguments = ^ToXmlQuery
 
     Controller BxlDev
-		service bxldev_ext
-		item bxquery type=^ToXmlQuery persistent
-		item bxoptions type=^BxOptions persistent
+		item bxquery type=^ToXmlQuery
+		item bxoptions type=^BxOptions
 
 	Layout dev
-		layout main "Главная рабочая зона" horizontal
-			widget ^BxlDev "Испытательный стенд"  horizontal
-				view bxlui_editor "Редактор исходного кода" order=1  height=max width=max
-				view bxlui_result "Результат" order=2 height=max width=max
+		layout main "Главная рабочая зона"
+			widget ^BxlDev "Испытательный стенд"
 				
