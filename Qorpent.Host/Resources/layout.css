@@ -1,7 +1,7 @@
 layout {
     /*border: 2px solid blue;*/
     display: flex;
-    flex-basis: auto;
+    flex-basis: 0px; /* Не ставить тут auto, а то начинается магия */
     justify-content: flex-start;
     /*align-content: flex-start;*/
 }
@@ -11,6 +11,7 @@ layout[root] {
 }
 
 widget {
+    flex-direction: column;
     /*border: 1px dashed red;*/
     display: flex;/*
     border-radius: 4px;*/
@@ -21,6 +22,36 @@ widget {
         inset 0 1px 0 rgba(0,0,0,0.1),
         0 1px 2px rgba(0,0,0,0.2);*/
 }
+
+splitter {
+    display: block;
+    background-color: gray;
+    box-shadow: inset 1px 1px white, inset -1px -1px white;
+}
+
+widget>.layout__widget-body {
+    overflow: auto;
+}
+
+widget>.layout__widget-header {
+    overflow: hidden;
+    height: 25px;
+    font-size: 80%;
+    font-weight: bold;
+    text-transform: uppercase;
+    flex-grow: 0;
+    flex-shrink: 0;
+    position: relative;
+}
+
+/*widget>.layout__widget-header:after {
+    content: "\e106";
+    display: block;
+    position: absolute;
+    top: 2px;
+    right: 0;
+    font-family: 'Glyphicons Halflings';
+}*/
 
 widget:last-child {
     margin-bottom: 0;
@@ -87,9 +118,26 @@ layout[orientation="vertical"]>widget[height="max"] {
     flex-shrink: 1;
 }
 
-widget>* {
-    width: 100%;
-    overflow-y: auto;
+layout[orientation="horizontal"]>splitter {
+    width: 5px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    cursor: col-resize;
+}
+
+.layout__container.splitting_horizontal {
+    cursor: col-resize;
+}
+
+.layout__container.splitting_vertical {
+    cursor: row-resize;
+}
+
+layout[orientation="vertical"]>splitter {
+    height: 5px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    cursor: row-resize;
 }
 
 .widget-empty {

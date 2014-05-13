@@ -116,13 +116,13 @@ namespace Qorpent.Scaffolding.Application {
 						outer.Add(include);
 						include = outer;
 					}
-				    var widgetHeader = new XElement("div", new XAttribute("class", "layout__widget-header"));
-				    var widgetBody = new XElement("div", new XAttribute("class", "layout__widget-body"));
                     if (!string.IsNullOrWhiteSpace(v.Attr("title"))) {
+                        var widgetHeader = new XElement("div", new XAttribute("class", "layout__widget-header"));
                         widgetHeader.SetValue(v.Attr("title"));
-				    }
+                        ctrlel.Add(widgetHeader);
+                    } 
+                    var widgetBody = new XElement("div", new XAttribute("class", "layout__widget-body"));
                     widgetBody.Add(include);
-                    ctrlel.Add(widgetHeader);
 					ctrlel.Add(widgetBody);
 					outerel.Add(ctrlel);
 				}
@@ -154,17 +154,24 @@ namespace Qorpent.Scaffolding.Application {
 					outer.Add(include);
 					include = outer;
 				}
-                var widgetHeader = new XElement("div", new XAttribute("class", "layout__widget-header"));
+                if (!string.IsNullOrWhiteSpace(e.Attr("title"))) {
+                    var widgetHeader = new XElement("div", new XAttribute("class", "layout__widget-header"));
+                    widgetHeader.SetValue(e.Attr("title"));
+                    ctrlel.Add(widgetHeader);
+                }
                 var widgetBody = new XElement("div", new XAttribute("class", "layout__widget-body"));
                 widgetBody.Add(include);
-                ctrlel.Add(widgetHeader);
                 ctrlel.Add(widgetBody);
 				root.Add(ctrlel);
 			}
             
 	    }
 
-	    private void GenerateBlock(XElement root, XElement e){
+        private XElement GenerateSplitterElement(XElement root, XElement e) {
+            return new XElement("splitter", new XAttribute("id", root.Attr("code") + "_splitter"));
+        }
+
+	    private void GenerateBlock(XElement root, XElement e) {
             var zoneel = new XElement(e.Name, new XAttribute("height", "max"), new XAttribute("width", "max")).SetAttr("id", e.Attr("code"));
 		foreach (var attr in e.Attributes())
 				{
@@ -173,9 +180,18 @@ namespace Qorpent.Scaffolding.Application {
 
         zoneel.SetAttributeValue("layout-item", "1");
 			root.Add(zoneel);
-		    foreach (var c in e.Elements()){
-				GenerateSingleElement(zoneel,c);
+	        XElement splitterel = null;
+		    foreach (var c in e.Elements()) {
+		        if (c.Name.LocalName == "splitter") {
+		            splitterel = GenerateSplitterElement(zoneel, c);
+                    continue;
+		        }
+		        GenerateSingleElement(zoneel,c);
 		    }
+            if (null != splitterel) {
+                root.SetAttr("split", 1);
+                root.Add(splitterel);
+            }
 	    }
 
 

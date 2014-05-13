@@ -127,19 +127,21 @@
     <EmbeddedResource Include="Resources\empty.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\nglayout.js" />
     <EmbeddedResource Include="Resources\refresh.js" />
     <EmbeddedResource Include="Resources\settings.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\app.css" />
-    <EmbeddedResource Include="Resources\nglayout.css" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\template.app.html" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\template.starter.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\layout.css" />
+    <EmbeddedResource Include="Resources\layout.js" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>
