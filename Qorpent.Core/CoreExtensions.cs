@@ -636,5 +636,22 @@ namespace Qorpent.Utils.Extensions {
 			}
 			return string.IsNullOrWhiteSpace(value) ? defaultvalue : value;
 		}
+		/// <summary>
+		/// ѕроизводит резолюцию значений атрибутов, имен атрибутов и возвращает максимально валидный результат
+		/// </summary>
+		/// <param name="e"></param>
+		/// <param name="names"></param>
+		/// <returns></returns>
+		public static string GetSmartValue(this XElement e,params string[] names){
+			foreach (var name in names){
+				if (null != e.Attribute(name)) return e.Attribute(name).Value;
+				if (e.Attributes().Any(_ => _.Value == name))
+				{
+					return "1";
+				}	
+			}
+			return "";
+
+		}
 	}
 }

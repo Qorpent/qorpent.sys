@@ -5,10 +5,10 @@
                 $scope.view = 'BxlDev.html';
 				$scope.title= 'BxlDev';
 				settings($scope,{before:true,type:"settings"});
-				$scope.bxoptions = new Types.BxOptions($.extend({},$scope.settings.get('bxlui-bxoptions')));
-				$scope.$watch('bxoptions',function(n,o){$scope.settings.set('bxlui-bxoptions',n)},true);
-				$scope.bxquery = new Types.ToXmlQuery($.extend({},$scope.settings.get('bxlui-bxquery')));
-				$scope.$watch('bxquery',function(n,o){$scope.settings.set('bxlui-bxquery',n)},true);
+				$scope.bxoptions = new Types.BxOptions($.extend({},$scope.settings.get('bxlui-BxlDev-bxoptions')));
+				$scope.$watch('bxoptions',function(n,o){$scope.settings.set('bxlui-BxlDev-bxoptions',n)},true);
+				$scope.bxquery = new Types.ToXmlQuery($.extend({},$scope.settings.get('bxlui-BxlDev-bxquery')));
+				$scope.$watch('bxquery',function(n,o){$scope.settings.set('bxlui-BxlDev-bxquery',n)},true);
 				bxldev_ext($scope,{code:"bxldev_ext"});
 
 		}])

@@ -60,6 +60,8 @@ define ([], function() {
 		this.__getClassInfo=function(){return {name:"Ugmk.Assoi.Team.BxOptions"}};
 		// 
 		this.AutoCompile = args.hasOwnProperty("AutoCompile") ? args.AutoCompile : ( args.hasOwnProperty("autocompile") ? args.autocompile : false) ;
+		// 
+		this.Timeout = args.hasOwnProperty("Timeout") ? args.Timeout : ( args.hasOwnProperty("timeout") ? args.timeout : (300)) ;
 	};
 
 	// Структура

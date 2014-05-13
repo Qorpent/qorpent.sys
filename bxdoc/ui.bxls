@@ -8,6 +8,7 @@ namespace Ugmk.Assoi.Team
 	
 	Struct BxOptions 
 		bool AutoCompile
+		int Timeout : 300
 		
     Action ToXml "Запрос на публикацию"
         Url = "/toxml"
@@ -18,8 +19,8 @@ namespace Ugmk.Assoi.Team
 
     Controller BxlDev
 		service bxldev_ext
-		item bxquery type=^ToXmlQuery persistentCode=bxlui-bxquery
-		item bxoptions type=^BxOptions persistentCode=bxlui-bxoptions
+		item bxquery type=^ToXmlQuery persistent
+		item bxoptions type=^BxOptions persistent
 
 	Layout dev
 		layout main "Главная рабочая зона" horizontal
