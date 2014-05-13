@@ -47,6 +47,10 @@
       <Project>{e31b62a2-2fef-4ef9-aadc-21b24885e035}</Project>
       <Name>Qorpent.Host</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Scaffolding\Qorpent.Scaffolding.csproj">
+      <Project>{6934aba6-5d22-4c03-9591-211e9a930d40}</Project>
+      <Name>Qorpent.Scaffolding</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
