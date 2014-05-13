@@ -6,6 +6,7 @@
 = Оглавление
 % [bx-preview Предисловие]
 % [bx-legend Обозначения и примеры]
+% [bx-realworldsample Примеры из уже действующих решений]
 % BXL
 %% [bx-bxl-qstart Быстрый старт BXL]
 %% [bx-bxl-syntax Общее определение]

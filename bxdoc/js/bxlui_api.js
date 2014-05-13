@@ -9,8 +9,8 @@ define (["bxlui_types","actionBuilder"], function(types,actionBuilder) {
 		Object.defineProperty(__result,'ToXml',{get : function(){  return __ToXml||(__ToXml = actionBuilder($http,siteroot,{
 			code : "ToXml",
 			name : "Запрос на публикацию",
-			url : "/toxml",
 			arguments : types.ToXmlQuery,
+			url : "/toxml",
 			method : "QPOST",
 			postfield : "Script",
 			parameters : null

@@ -14,11 +14,11 @@
 							if (myId == $scope.__compileQueryCounter){
 								$scope.compile();
 							}
-						},1000);
+						},$scope.bxoptions.Timeout);
 					}
 				}
-				$scope.$watch ( 'bxquery.Script', $scope.checkAutoCompile);
-				$scope.$watch ( 'bxoptions.AutoCompile', $scope.checkAutoCompile);
+				$scope.$watch ( 'bxquery', $scope.checkAutoCompile,true);
+				$scope.$watch ( 'bxoptions', $scope.checkAutoCompile,true);
 				
 				$scope.compile = function(){
 					$scope.api.ToXml ( $scope.bxquery, function(r) {

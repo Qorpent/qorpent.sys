@@ -72,7 +72,7 @@ namespace Qorpent.Scaffolding.Application {
                              .Select(_ => _.ChooseAttr("type","code"))
                              .Distinct()
                              .ToList();
-            if (targetclasses.SelectMany(_=>_.Compiled.Elements("item")).Any(_ => !string.IsNullOrWhiteSpace(_.Attr("persistentCode"))) && services.All(_ => _ != "settings")) {
+            if (targetclasses.SelectMany(_=>_.Compiled.Elements("item")).Any(_ => _.GetSmartValue("persistent","persistentCode").ToBool()) && services.All(_ => _ != "settings")) {
                services.Add("settings");
             }
 	        var svcall = string.Join("','", services.OrderBy(_=>_));
@@ -89,7 +89,8 @@ namespace Qorpent.Scaffolding.Application {
             var sb = new StringBuilder();
             var deps = new Dictionary<string, XElement>();
             var advanced = new StringBuilder();
-            if (xml.Elements().Any(_=>!string.IsNullOrWhiteSpace(_.Attr("persistentCode"))) && deps.All(_ => _.Value.Attr("type") != "settings")) {
+			if (xml.Elements().Any(_ => _.GetSmartValue("persistent", "persistentCode").ToBool()) && deps.All(_ => _.Value.Attr("type") != "settings"))
+			{
                 deps["settings"] = new XElement("service", new XAttribute("type", "settings"), new XAttribute("before","true"));
             }
             foreach (var s in xml.Elements("service")) {
@@ -119,17 +120,21 @@ namespace Qorpent.Scaffolding.Application {
             var items = xml.Elements("item");
             foreach (var e in deps.Where(_ => _.Value.Attr("before").ToBool()).OrderBy(_=>_.Key)) {
                 var type = e.Value.ChooseAttr("type", "code");
-                if (type == "refresh") {
+				UnifyPersistentCode(targetclass, e);
+	            if (type == "refresh") {
                     SetupRefresh(targetclass, e, advanced);
                 }
-                sb.AppendLine("\t\t\t\t" + type + "($scope," + e.Value.ToJson() + ");");
+	            sb.AppendLine("\t\t\t\t" + type + "($scope," + e.Value.ToJson() + ");");
             }
             foreach (var item in items.OrderBy(_=>_.Attr("code"))) {
                 var type = item.Attr("type");
                 var typestr = "{}";
                 var watcher = "";
                 if (!string.IsNullOrWhiteSpace(type)) {
-                    var persistent = item.Attr("persistentCode");
+                    var persistent = item.GetSmartValue("persistent","persistentCode");
+					if (persistent == "1"){
+						persistent = Project.ProjectName + "-" + xml.Attr("code")+"-"+ item.Attr("code");
+					}
                    
                     dynamic ext = new UObj();
                     var parameters = item.Element("parameters");
@@ -167,6 +172,7 @@ namespace Qorpent.Scaffolding.Application {
          
             foreach (var e in deps.Where(_=>!_.Value.Attr("before").ToBool()).OrderBy(_=>_.Key)) {
                 var type = e.Value.ChooseAttr("type", "code");
+				UnifyPersistentCode(targetclass, e);
                 if (type=="refresh") {
                     SetupRefresh(targetclass, e,advanced);
                 }
@@ -181,7 +187,18 @@ namespace Qorpent.Scaffolding.Application {
             return sb.ToString();
         }
 
-        private void SetupRefresh(IBSharpClass targetclass, KeyValuePair<string, XElement> el, StringBuilder advanced) {
+	    private void UnifyPersistentCode(IBSharpClass targetclass, KeyValuePair<string, XElement> e){
+		    var pc = e.Value.GetSmartValue("persistent", "persistentCode");
+		    if (pc == "1"){
+			    pc = Project.ProjectName + "-" + targetclass.Name + "-" + e.Value.Attr("target")+"-refresh";
+		    }
+		    if (pc.ToBool()){
+			    e.Value.SetAttr("persistent", pc);
+			    e.Value.SetAttr("persistentCode", pc);
+		    }
+	    }
+
+	    private void SetupRefresh(IBSharpClass targetclass, KeyValuePair<string, XElement> el, StringBuilder advanced) {
             var target = el.Value.Attr("target");
             var action = el.Value.Attr("action");
             var args = el.Value.Attr("args");

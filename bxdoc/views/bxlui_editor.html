@@ -6,10 +6,12 @@
 			<option value="bxl">BXL</option>
 			<option value="bsharp">B#</option>
 		</select>
-		<button class="form-control input-sm" ng-click="compile()">Компилировать</button>
+		<button ng-if="!bxoptions.AutoCompile" class="form-control input-sm btn btn-success" ng-click="compile()">Компилировать</button>
 		<label>Автокомпиляция: </label>
 		<input class="form-control input-sm" type="checkbox" ng-model="bxoptions.AutoCompile"/>
+		<label ng-if="bxoptions.AutoCompile">Задержка (мс): </label>
+		<input ng-if="bxoptions.AutoCompile" class="form-control input-sm"  ng-model="bxoptions.Timeout"/>
 	</div> 
-	<textarea class="form-control input-sm" ng-model="bxquery.Script" cols="80" rows="30" >
+	<textarea style="margin:10px" class="form-control input-sm" ng-model="bxquery.Script" cols="80" rows="30" >
 	</textarea>
 </div>
