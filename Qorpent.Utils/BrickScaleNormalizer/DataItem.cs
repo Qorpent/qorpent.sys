@@ -2,34 +2,10 @@
 using System.Globalization;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
-    /// <summary>
+	/// <summary>
 	/// Единица значения
 	/// </summary>
-	public class DataItem : Tagged {
-		/// <summary>
-		///		Значение
-		/// </summary>
-	    private decimal _value;
-		/// <summary>
-		///		Признак того, что занчение было проинициализировано
-		/// </summary>
-		public bool IsValueInitialized { get; set; }
-	    /// <summary>
-	    /// Исходное значение
-	    /// </summary>
-	    public decimal Value {
-		    get { return _value; }
-			set {
-				_value = value;
-				IsValueInitialized = true;
-			}
-	    }
-		/// <summary>
-		/// 
-		/// </summary>
-	    public decimal AbsValue{
-		    get { return Math.Abs(Value); }
-	    }
+	public class DataItem : NumericDataItem {
 		/// <summary>
 		///		Признак того, что это значение трендлайна
 		/// </summary>
@@ -158,12 +134,6 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// Положение лычки
 		/// </summary>
 		public LabelPosition LabelPosition { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		public DataItem() {
-			IsValueInitialized = false;
-		}
         /// <summary>
         /// 
         /// </summary>

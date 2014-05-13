@@ -225,7 +225,7 @@ qwiki.getReference = function(processor,addr,name,tail){
 	
 	if(addr.match(/\.((png)|(gif)|(jpg)|(jpeg))$/)){
 		return "<img src='"+addr+"' title='"+name+"' "+tail+" />";
-	}else if (addr.match(/^http/)) {
+	}else if (addr.match(/^http/) || addr.match(/\.html$/)) {
 	    return "<a href='" + addr + "' " + tail + " >" + name + "</a>";
 	}else if (addr.match(/^href:/)) {
 	    return "<a href='" + addr.replace('href:','') + "' " + tail + " >" + name + "</a>";

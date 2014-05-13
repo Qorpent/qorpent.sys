@@ -18,12 +18,13 @@ namespace Qorpent.Data.DataDiff{
 				throw new Exception("SqlDiffGenerator: tables are not defined");
 			}
 			if (null == _context.SqlOutput){
-				_context.SqlOutput = Console.Out;
+				_context.SqlOutput = sw;
 			}
 			this._tables = _context.Tables.OrderBy(_=>_.TableName).ToArray();
 			this._output = _context.SqlOutput;
 			
 		}
+		private StringWriter sw = new StringWriter();
 		private DataDiffTable[] _tables;
 		private TextWriter _output;
 		private TableDiffGeneratorContext _context;
@@ -36,6 +37,9 @@ namespace Qorpent.Data.DataDiff{
 			WriteStart();
 			WriteBody();
 			WriteFinish();
+			if (_context.SqlOutput == sw){
+				_context.SqlScript = sw.ToString();
+			}
 		}
 
 		private void WriteFinish(){

@@ -1,0 +1,29 @@
+require app
+namespace Ugmk.Assoi.Team
+
+	Struct ToXmlQuery
+		string Lang : "'bxl'"
+		string Format : "'wiki'"
+		string Script : ""
+	
+	Struct BxOptions 
+		bool AutoCompile
+		
+    Action ToXml "Запрос на публикацию"
+        Url = "/toxml"
+		Arguments = ^ToXmlQuery
+		Method = 'QPOST'
+		PostField = Script
+
+
+    Controller BxlDev
+		service bxldev_ext
+		item bxquery type=^ToXmlQuery persistentCode=bxlui-bxquery
+		item bxoptions type=^BxOptions persistentCode=bxlui-bxoptions
+
+	Layout dev
+		layout main "Главная рабочая зона" horizontal
+			widget ^BxlDev "Испытательный стенд"  horizontal
+				view bxlui_editor "Редактор исходного кода" order=1  height=max width=max
+				view bxlui_result "Результат" order=2 height=max width=max
+				

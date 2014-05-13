@@ -222,6 +222,8 @@ define(['qObject'], function (qObject) {
 			
 			var query = this.getQuery ( args );
 			var method = this.method || 'GET';
+			var qpost = this.method=="QPOST";
+			
 
 			var planoptions = new planalizeOptions();
 			if (method == "POST" && this.jsonify) {
@@ -233,18 +235,26 @@ define(['qObject'], function (qObject) {
 		        planoptions.skipfalses = false;
 		    }
 		    var data = planalize(query.params, args, planoptions);
-			
+			var senddata = null;
+			if (qpost){
+				senddata = data[config.postfield];
+				delete data[config.postfield];
+			}
 			var callinfo = { 
-				method : method, 
+				method : qpost?"POST":method, 
 				url :this.getUrl(args,_hint), 
-				params : method=='POST' ?  null : data ,
-				data : method=='POST' ? data : null
+				params : qpost ? data : (method=='POST' ?  null : data) ,
+				data : qpost?senddata: ( method=='POST' ? data : null)
 			};
 		    // remove difference between $.ajax and angular $http
             if (!!$ && callinfo.params) {
                 if ($http == $.ajax) {
                     callinfo.data = callinfo.params;
                     delete callinfo.params;
+					if (qpost){
+						callinfo.url=callinfo.url+"?"+$.param(callinfo.data);
+						callinfo.data = senddata;
+					}
                 }
             }
 			

@@ -7,13 +7,24 @@ namespace Qorpent.Data.DataDiff{
 	/// Контекст выполнения генерации XDiffTable
 	/// </summary>
 	public class TableDiffGeneratorContext{
+
 		/// <summary>
 		/// 
 		/// </summary>
 		public TableDiffGeneratorContext(){
 			InTransaction = true;
 			IgnoreFields = new List<string>();
+			MetadataTable = "qptmds.MDFile";
 		}
+		/// <summary>
+		/// Строка соединения с SQL
+		/// </summary>
+		public string SqlConnectionString { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public string MetadataTable { get; set; }
 		/// <summary>
 		///Корневая директория репозитория
 		/// </summary>
@@ -82,5 +93,14 @@ namespace Qorpent.Data.DataDiff{
 		/// Журнал
 		/// </summary>
 		public IUserLog Log { get; set; }
+		/// <summary>
+		/// Кэшированный SQL скрипт
+		/// </summary>
+		public string SqlScript { get; set; }
+		/// <summary>
+		/// Результирующая ревизия обновления
+		/// </summary>
+		public string ResolvedUpdateRevision { get; set; }
+
 	}
 }

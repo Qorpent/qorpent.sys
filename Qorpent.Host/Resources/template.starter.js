@@ -6,7 +6,7 @@
             'angular': { 'exports': 'angular' }
         }
     });
-    require(['jquery', 'bootstrap', '{0}-root'], function ($) {
+    require(['jquery', 'bootstrap', '__APPNAME__-root'], function ($) {
         $(function () {
             $('body').html('<div ng-controller="root"><ng-include src="layout"/></div>');
             angular.bootstrap(window.document, ["app"]);

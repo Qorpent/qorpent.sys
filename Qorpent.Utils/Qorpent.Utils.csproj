@@ -41,6 +41,7 @@
     <Compile Include="BrickScaleNormalizer\LabelPosition.cs" />
     <Compile Include="BrickScaleNormalizer\LabelPositionVariants.cs" />
     <Compile Include="BrickScaleNormalizer\MiniamlScaleBehavior.cs" />
+    <Compile Include="BrickScaleNormalizer\NumericDataItem.cs" />
     <Compile Include="BrickScaleNormalizer\Scale.cs" />
     <Compile Include="BrickScaleNormalizer\ScaleType.cs" />
     <Compile Include="BrickScaleNormalizer\SeriaCalcMode.cs" />
