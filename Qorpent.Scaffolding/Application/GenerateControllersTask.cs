@@ -40,7 +40,7 @@ namespace Qorpent.Scaffolding.Application {
 			}
 		    var sb = new StringBuilder();
 		    sb.AppendFormat(
-				"define(['angular','{0}_types','{0}_api','{0}_controllers','nglayout'],function(angular,types,apictor){{\r\n",
+				"define(['angular','{0}_types','{0}_api','{0}_controllers','layout'],function(angular,types,apictor){{\r\n",
 			    Project.ProjectName);
 			sb.AppendFormat("\tangular.module('app',['{0}_controllers','Layout'])\r\n", Project.ProjectName);
 		    sb.AppendLine("\t\t.controller('root',function($scope,$http){");
