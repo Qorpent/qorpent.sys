@@ -36,7 +36,11 @@ namespace Qorpent.Data.DataDiff{
 		/// <summary>
 		/// Мэпинг внешних ключей между таблицами
 		/// </summary>
-		public IDictionary<string, string> Mappings { get; private set; } 
+		public IDictionary<string, string> Mappings { get; private set; }
+		/// <summary>
+		/// Признак использования для связки истории кодов
+		/// </summary>
+		public bool UseAliasCodes { get; set; }
 
 		/// <summary>
 		/// 

@@ -37,6 +37,17 @@ namespace Qorpent.Data.DataDiff
 				Collect(diffPair,result);
 			}
 			_context.Tables = result.Values;
+			foreach (var table in _context.Tables){
+				var maps = _context.Mappings.Where(_ =>_.FromTable=="*" || _.FromTable.ToLowerInvariant() == table.TableName.ToLowerInvariant());
+				foreach (var map in maps){
+					if (map.FromField.ToLowerInvariant() == "aliascodes"){
+						table.UseAliasCodes = true;
+					}
+					else{
+						table.Mappings[map.FromField.ToLowerInvariant()] = map.ToTable;
+					}
+				}
+			}
 		}
 
 		private void Collect(DiffPair pair, ConcurrentDictionary<string, DataDiffTable> result){

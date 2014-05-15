@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Log;
 using Qorpent.Utils;
+using Qorpent.Utils.Extensions;
 using Qorpent.Utils.Git;
 
 namespace Qorpent.Data.DataDiff
@@ -109,6 +110,19 @@ namespace Qorpent.Data.DataDiff
 						var name = cls.Name;
 						var xml = cls.GetClassElement();
 						result[name] = xml;
+					}
+					var maps = clsProvider.FindClasses(prototype: _context.BSharpMapPrototype).ToArray();
+					foreach (var map in maps){
+						foreach (var r in map.Definition.Elements("ref")){
+							var fromtable = r.ChooseAttr("table","code");
+							var fromfield = r.Attr("name","code");
+							var totable = r.Value;
+							if (string.IsNullOrWhiteSpace(totable)){
+								var cls = clsProvider.GetRuntimeClass(fromfield);
+								totable = cls.Definition.Attr("table");
+							}
+							_context.Mappings.Add(new TableMap(fromtable, fromfield, totable));
+						}
 					}
 				}
 				else{

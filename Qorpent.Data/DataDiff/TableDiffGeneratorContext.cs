@@ -15,6 +15,9 @@ namespace Qorpent.Data.DataDiff{
 			InTransaction = true;
 			IgnoreFields = new List<string>();
 			MetadataTable = "qptmds.MDFile";
+			BSharpPrototype = "db-meta";
+			BSharpMapPrototype = "db-map";
+			Mappings = new List<TableMap>();
 		}
 		/// <summary>
 		/// Строка соединения с SQL
@@ -101,6 +104,14 @@ namespace Qorpent.Data.DataDiff{
 		/// Результирующая ревизия обновления
 		/// </summary>
 		public string ResolvedUpdateRevision { get; set; }
-
+		/// <summary>
+		/// Прототип мапингов для диффа
+		/// </summary>
+		public string BSharpMapPrototype { get; set; }
+		/// <summary>
+		/// Определения схемы
+		/// </summary>
+		public IList<TableMap> Mappings { get; private set; }
+			
 	}
 }

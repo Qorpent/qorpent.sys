@@ -33,6 +33,7 @@ namespace Qorpent.BSharp.Runtime {
 		            if (Cache.ContainsKey(name)) {
 		                return name;
 		            }
+			        return Cache.Keys.FirstOrDefault(_ => _.Split('.').Last() == name);
 		        }
 
 		        string[] nssplit = rootnamespace.Split('.');
@@ -68,7 +69,12 @@ namespace Qorpent.BSharp.Runtime {
 		public IBSharpRuntimeClass GetRuntimeClass(string fullname) {
 			lock (this) {
 				if (!IndexWasBuilt) Refresh();
-				if (!Cache.ContainsKey(fullname)) return null;
+				if (!Cache.ContainsKey(fullname)){
+					fullname = Resolve(fullname, "");
+					if (!Cache.ContainsKey(fullname)){
+						return null;
+					}
+				}
 				BSharpRuntimeClassDescriptor descriptor = Cache[fullname];
 				if (null == descriptor.CachedClass || !descriptor.CachedClass.Loaded || !IsActual(descriptor) ) {
 					ReloadClass(descriptor);

@@ -124,10 +124,34 @@ namespace Qorpent.Data.DataDiff{
 		}
 
 		private void GenerateExistsBinding(string tn, string[] allfields, DataDiffTable table){
-			_output.WriteLine("\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)",tn,table.TableName);
-			_output.WriteLine("\t\t\tinsert {1} (id,code) select id,isnull(code,id) from @{0} where _exists = 0 and id is not null",tn,table.TableName);
-			_output.WriteLine("\t\t\tinsert {1} (code) select code from @{0} where _exists = 0 and code is not null and id is null", tn, table.TableName);
-			_output.WriteLine("\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)", tn, table.TableName);
+			if (table.UseAliasCodes){
+				_output.WriteLine(
+					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id or this.aliascodes lile '%/'+temp.code+'/%')",
+					tn, table.TableName);
+				_output.WriteLine(
+					"\t\t\tinsert {1} (id,code) select id,isnull(code,id) from @{0} where _exists = 0 and id is not null", tn,
+					table.TableName);
+				_output.WriteLine(
+					"\t\t\tinsert {1} (code) select code from @{0} where _exists = 0 and code is not null and id is null", tn,
+					table.TableName);
+				_output.WriteLine(
+					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id  or this.aliascodes lile '%/'+temp.code+'/%')",
+					tn, table.TableName);
+			}
+			else{
+				_output.WriteLine(
+					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)",
+					tn, table.TableName);
+				_output.WriteLine(
+					"\t\t\tinsert {1} (id,code) select id,isnull(code,id) from @{0} where _exists = 0 and id is not null", tn,
+					table.TableName);
+				_output.WriteLine(
+					"\t\t\tinsert {1} (code) select code from @{0} where _exists = 0 and code is not null and id is null", tn,
+					table.TableName);
+				_output.WriteLine(
+					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)",
+					tn, table.TableName);
+			}
 		}
 
 		private void GenerateInsertTemp(string tn, string[] allfields, DataDiffTable table){

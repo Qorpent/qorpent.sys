@@ -22,6 +22,7 @@
     <Compile Include="DataDiff\SqlSourceRevisionRetriever.cs" />
     <Compile Include="DataDiff\SqlUpdateApplyer.cs" />
     <Compile Include="DataDiff\TableDiffGeneratorContext.cs" />
+    <Compile Include="DataDiff\TableMap.cs" />
     <Compile Include="REST\AddConnection.cs" />
     <Compile Include="REST\ConnectionsAction.cs" />
     <Compile Include="REST\RemoveConnection.cs" />

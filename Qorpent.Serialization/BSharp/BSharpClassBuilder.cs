@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -490,6 +492,12 @@ namespace Qorpent.BSharp {
 			foreach (var a in _cls.Compiled.DescendantsAndSelf().SelectMany(_ => _.Attributes())) {
 				if (a.Value[0]=='^') {
 					var clsname = a.Value.Substring(1);
+					var xpath = "";
+					if (clsname.Contains("(")){
+						var xpstart = clsname.IndexOf('(');
+						xpath = clsname.Substring(xpstart);
+						clsname = clsname.Substring(0, xpstart);
+					}
 					var isarray = clsname.EndsWith("*");
 					if (isarray){
 						clsname = clsname.Substring(0, clsname.Length - 1);
@@ -504,6 +512,33 @@ namespace Qorpent.BSharp {
 						a.Value = normallyresolvedClass.FullName;
 						if (isarray){
 							a.Value += "*";
+						}
+						if (!string.IsNullOrWhiteSpace(xpath)){
+							var xpathresult = normallyresolvedClass.Compiled.XPathEvaluate(xpath);
+							if (xpathresult.GetType().IsValueType){
+								a.Value = xpathresult.ToStr();
+							}
+							else{
+								var ie = (xpathresult as IEnumerable).OfType<object>();
+								var sb = new StringBuilder();
+								foreach (var xNode in ie){
+									var attr = xNode as XAttribute;
+									if (null != attr){
+										sb.Append(attr.Value);
+									}
+									var e = xNode as XElement;
+									if (null != e){
+										sb.Append(e.Value);
+									}
+									var t = xNode as XText;
+									if (null != t)
+									{
+										sb.Append(t.Value);
+									}
+								}
+							
+								a.Value = sb.ToString();
+							}
 						}
                         var __cls = _cls as BSharpClass;
                         if (null != __cls && !__cls.ReferencedClasses.Contains(normallyresolvedClass))
