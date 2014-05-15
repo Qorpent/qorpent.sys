@@ -113,13 +113,15 @@ namespace Qorpent.Data.DataDiff
 					}
 					var maps = clsProvider.FindClasses(prototype: _context.BSharpMapPrototype).ToArray();
 					foreach (var map in maps){
-						foreach (var r in map.Definition.Elements("ref")){
+						foreach (var r in map.Definition.Descendants("ref")){
 							var fromtable = r.ChooseAttr("table","code");
-							var fromfield = r.Attr("name","code");
+							var fromfield = r.ChooseAttr("name","code");
 							var totable = r.Value;
 							if (string.IsNullOrWhiteSpace(totable)){
-								var cls = clsProvider.GetRuntimeClass(fromfield);
-								totable = cls.Definition.Attr("table");
+								var cls = dbclasses.FirstOrDefault(_ => _.Fullname.EndsWith("." + fromfield));
+								if (null != cls){
+									totable = cls.Definition.Elements().First().Attr("table");
+								}
 							}
 							_context.Mappings.Add(new TableMap(fromtable, fromfield, totable));
 						}

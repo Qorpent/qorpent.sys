@@ -112,6 +112,9 @@ namespace Qorpent.Data.DataDiff{
 		/// Определения схемы
 		/// </summary>
 		public IList<TableMap> Mappings { get; private set; }
-			
+		/// <summary>
+		/// Запрет на применение SQL к БД
+		/// </summary>
+		public bool NoApply { get; set; }
 	}
 }

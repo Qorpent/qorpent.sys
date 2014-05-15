@@ -71,7 +71,7 @@ namespace Qorpent.BSharp.Runtime {
 				if (!IndexWasBuilt) Refresh();
 				if (!Cache.ContainsKey(fullname)){
 					fullname = Resolve(fullname, "");
-					if (!Cache.ContainsKey(fullname)){
+					if (null==fullname || !Cache.ContainsKey(fullname)){
 						return null;
 					}
 				}

@@ -116,7 +116,22 @@ namespace Qorpent.Data.DataDiff{
 
 		private void GenerateFKBinding(string tn, string[] allfields, DataDiffTable table){
 			foreach (var map in table.Mappings){
-				_output.WriteLine("\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.code = code ),-9999) where {1} is null and {1}_code is not null ",tn,map.Key,map.Value);
+				if (-1 != Array.IndexOf(allfields, map.Key.ToLowerInvariant())){
+					var t = map.Value;
+					var usealiascodes =
+						_context.Mappings.Any(
+							_ => (_.FromTable.ToLowerInvariant() == t.ToLowerInvariant()||_.FromTable=="*") && _.FromField.ToLowerInvariant() == "aliascodes");
+					if (usealiascodes){
+						_output.WriteLine(
+							"\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.code = {1}_code or {2}.aliascodes like '%/'+{1}_code+'/%' ),-9999) where {1} is null and {1}_code is not null ",
+							tn, map.Key, map.Value);
+					}
+					else{
+						_output.WriteLine(
+							"\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.code = {1}_code ),-9999) where {1} is null and {1}_code is not null ",
+							tn, map.Key, map.Value);
+					}
+				}
 			}
 			if (-1 != Array.IndexOf(allfields, "set_parent")){
 				_output.WriteLine("\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.code = parent_code ),-9999) where {1} is null and {1}_code is not null ", tn, "parent",table.TableName);
@@ -126,7 +141,7 @@ namespace Qorpent.Data.DataDiff{
 		private void GenerateExistsBinding(string tn, string[] allfields, DataDiffTable table){
 			if (table.UseAliasCodes){
 				_output.WriteLine(
-					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id or this.aliascodes lile '%/'+temp.code+'/%')",
+					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id or this.aliascodes like '%/'+temp.code+'/%')",
 					tn, table.TableName);
 				_output.WriteLine(
 					"\t\t\tinsert {1} (id,code) select id,isnull(code,id) from @{0} where _exists = 0 and id is not null", tn,
@@ -135,7 +150,7 @@ namespace Qorpent.Data.DataDiff{
 					"\t\t\tinsert {1} (code) select code from @{0} where _exists = 0 and code is not null and id is null", tn,
 					table.TableName);
 				_output.WriteLine(
-					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id  or this.aliascodes lile '%/'+temp.code+'/%')",
+					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id  or this.aliascodes like '%/'+temp.code+'/%')",
 					tn, table.TableName);
 			}
 			else{
@@ -155,12 +170,17 @@ namespace Qorpent.Data.DataDiff{
 		}
 
 		private void GenerateInsertTemp(string tn, string[] allfields, DataDiffTable table){
-			_output.Write("\t\tinsert @{0} (id,code",tn);
+			var chunknumber= 0;
+			while(GenerateChunk(tn, allfields, table, chunknumber++)){}
+		}
+
+		private bool GenerateChunk(string tn, string[] allfields, DataDiffTable table, int st){
+			_output.Write("\t\tinsert @{0} (id,code", tn);
 			foreach (var allfield in allfields){
 				if (table.Mappings.ContainsKey(allfield)){
 					_output.Write(", {0}, {0}_code", allfield);
 				}
-				else if (allfield == "set_parent" ||allfield=="parent"){
+				else if (allfield == "set_parent" || allfield == "parent"){
 					_output.Write(",parent ,parent_code");
 				}
 				else{
@@ -169,7 +189,9 @@ namespace Qorpent.Data.DataDiff{
 			}
 			_output.WriteLine(") values");
 			var defs = table.Definitions.OrderBy(_ => _.Id).ThenBy(_ => _.Code).ToArray();
-			for (var i = 0; i < defs.Length;i++ ){
+			bool last = false;
+			for (var i = st*1000; i < defs.Length && i < st*1000 + 1000; i++){
+				if (i == defs.Length - 1) last = true;
 				var def = defs[i];
 				_output.Write("\t\t\t(");
 
@@ -188,9 +210,9 @@ namespace Qorpent.Data.DataDiff{
 
 				foreach (var allfield in allfields){
 					if (table.Mappings.ContainsKey(allfield)){
-						OutMappedField(def,allfield);
+						OutMappedField(def, allfield);
 					}
-					else if (allfield == "set_parent" ||allfield=="parent"){
+					else if (allfield == "set_parent" || allfield == "parent"){
 						OutParentField(def);
 					}
 					else{
@@ -198,14 +220,15 @@ namespace Qorpent.Data.DataDiff{
 					}
 				}
 
-				if (i != table.Definitions.Count - 1){
+				if (i != table.Definitions.Count - 1 && i != st * 1000 + 1000-1)
+				{
 					_output.WriteLine("),");
 				}
 				else{
 					_output.WriteLine(")");
 				}
 			}
-			
+			return !last;
 		}
 
 		private void OutMappedField(DataDiffItem def, string allfield){

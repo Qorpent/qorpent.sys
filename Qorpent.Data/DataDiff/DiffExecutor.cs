@@ -44,12 +44,17 @@ namespace Qorpent.Data.DataDiff
 			if (_context.Tables.Any()){
 				new SqlDiffGenerator(_context).Generate();
 				_context.Log.Trace("sql script prepared");
-				if (!string.IsNullOrWhiteSpace(_context.SqlConnectionString)){
-					new SqlUpdateApplyer(_context).Update();
-					_context.Log.Trace("sql database updated");
+				if (_context.NoApply){
+					_context.Log.Trace("Применение изменений к БД отключено");
 				}
 				else{
-					_context.Log.Trace("sql not set up - no real apply to server");	
+					if (!string.IsNullOrWhiteSpace(_context.SqlConnectionString)){
+						new SqlUpdateApplyer(_context).Update();
+						_context.Log.Trace("sql database updated");
+					}
+					else{
+						_context.Log.Trace("sql not set up - no real apply to server");
+					}
 				}
 			}
 			else{
