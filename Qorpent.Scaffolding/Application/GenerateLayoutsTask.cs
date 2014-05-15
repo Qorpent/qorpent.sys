@@ -34,7 +34,8 @@ namespace Qorpent.Scaffolding.Application {
 		    PrepareElement(xml);
 			var rootelement = new XElement("div")
                 .SetAttr("ng-controller", "LayoutController")
-                .SetAttr("class", "layout__container");
+                .SetAttr("class", "layout__container")
+                .SetAttr("ng-class", "'splitting_' + splittingmode");
 	        var subroot = new XElement("layout",new XAttribute("root","1"),new XAttribute("layout-item","1"),new XAttribute("height","max"),new XAttribute("width","max"));
             foreach (var a in targetclass.Compiled.Attributes()) {
                 if(a.Name.LocalName=="code")continue;
