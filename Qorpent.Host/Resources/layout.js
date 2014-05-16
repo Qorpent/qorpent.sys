@@ -33,21 +33,62 @@ define([
                     xend: e.screenX,
                     yend: e.screenY
                 });
-                var d;
+               var delta;
                 var data = s.data();
+				var minsize = 10;
+				var maxsize = 90;
+				var emaxsize = 100;
+				var eminsize = 0;
+				var emaxsize2 = 0;
+				var eminsize2 = 100;
                 if (data.mode == 'horizontal') {
-                    d = Math.round((data.xstart - data.xend)*100/(data.parent.width()));
+					var eminsize = Math.round(parseInt((data.prev.css('min-width')||'0px').replace('px',''))*100/data.parent.width());
+					var emaxsize = Math.round(parseInt((data.prev.css('max-width')||'5000px').replace('px',''))*100/data.parent.width());
+					var eminsize2 = 100-Math.round(parseInt((data.next.css('min-width')||'0px').replace('px',''))*100/data.parent.width());
+					var emaxsize2 = 100-Math.round(parseInt((data.next.css('max-width')||'5000px').replace('px',''))*100/data.parent.width());
+                    delta = (data.xend - data.xstart)*100.0/data.parent.width();
                 } else {
-                    d = Math.round((data.ystart - data.yend)*100/(data.parent.height()));
+					var eminsize = Math.round(parseInt((data.prev.css('min-height')||'0px').replace('px',''))*100/data.parent.height());
+					var emaxsize = Math.round(parseInt((data.prev.css('max-height')||'5000px').replace('px',''))*100/data.parent.height());
+					var eminsize2 =100- Math.round(parseInt((data.next.css('min-height')||'0px').replace('px',''))*100/data.parent.height());
+					var emaxsize2 =100- Math.round(parseInt((data.next.css('max-height')||'5000px').replace('px',''))*100/data.parent.height());
+                    delta = (data.yend - data.ystart)*100.0/data.parent.height();
                 }
+				if (eminsize > minsize){
+					minsize = eminsize;
+				}
+				if(emaxsize2 < minsize){
+					minsize -= (minsize - eminsize2)/2;
+				}
+				if(emaxsize < maxsize){
+					maxsize = emaxsize;
+				}
+				if(eminsize2 > maxsize){
+					maxsize += (eminsize2 - maxsize)/2;
+				}
                 var pos = {};
-                pos.a = (parseInt(data.prev.css('flex-grow')) - d).toString();
-                pos.b = (parseInt(data.next.css('flex-grow')) + d).toString();
-                data.prev.css('flex-grow', pos.a);
-                data.next.css('flex-grow', pos.b);
-                s.data('pos', pos);
-                $scope.settings.set(data.prev.attr('id'), pos.a);
+                pos.a = (parseFloat(data.prev.css('flex-grow')) );
+                pos.b = (parseFloat(data.next.css('flex-grow')) );
+				var total = Math.round(pos.a+pos.b);
+				pos.a += delta;
+				if(pos.a < minsize){
+					pos.a = minsize;
+				}
+				if(pos.a > maxsize){
+					pos.a = maxsize;
+				}
+				pos.b = total - pos.a;
+				
+				
+				data.prev.css('flex-grow', pos.a.toString());
+                data.next.css('flex-grow', pos.b.toString());
+
+				s.data('pos', pos);
+				$scope.settings.set(data.prev.attr('id'), pos.a);
                 $scope.settings.set(data.next.attr('id'), pos.b);
+                
+                
+               
             });
         })
         .directive('layoutItem', function() {
