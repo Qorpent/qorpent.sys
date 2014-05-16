@@ -4,6 +4,7 @@ layout {
     flex-basis: 0px; /* Не ставить тут auto, а то начинается магия */
     justify-content: flex-start;
     /*align-content: flex-start;*/
+
 }
 
 layout[root] {
@@ -16,21 +17,76 @@ widget {
     display: flex;/*
     border-radius: 4px;*/
     margin-bottom: 1px;
-    box-shadow: 0 1px 0 #fefefe,
-    inset 0 -1px 0 #dfdfdf;
     /*box-shadow:
         inset 0 1px 0 rgba(0,0,0,0.1),
         0 1px 2px rgba(0,0,0,0.2);*/
 }
 
+layout,
+widget {
+    flex: 1 1 0;
+}
+
+layout[width="min"],
+layout[height="min"],
+widget[width="min"],
+widget[height="min"],
+layout[width*="px"],
+layout[height*="px"],
+widget[width*="px"],
+widget[height*="px"],
+layout[width*="pt"],
+layout[height*="pt"],
+widget[width*="pt"],
+widget[height*="pt"] {
+    flex: 0 0 auto;
+}
+
+[orientation="horizontal"]>widget {
+    box-shadow: inset -1px 0 0 #dfdfdf;
+}
+
+[orientation="vertical"]>widget {
+    box-shadow: inset 0 -1px 0 #dfdfdf;
+}
+
+/* SPLITTER SETUP */
+
 splitter {
     display: block;
     background-color: gray;
-    box-shadow: inset 1px 1px white, inset -1px -1px white;
+    box-shadow: inset 2px 2px white, inset -2px -2px white;
+}
+
+
+layout[orientation="horizontal"]>splitter {
+    width: 8px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    cursor: col-resize;
+}
+
+.layout__container.splitting_horizontal {
+    cursor: col-resize;
+}
+
+.layout__container.splitting_vertical {
+    cursor: row-resize;
+}
+
+layout[orientation="vertical"]>splitter {
+    height: 5px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    cursor: row-resize;
 }
 
 widget>.layout__widget-body {
     overflow: auto;
+}
+
+widget[overflow="inherit"]>.layout__widget-body {
+    overflow: inherit;
 }
 
 widget>.layout__widget-header {
@@ -73,14 +129,6 @@ layout[root][orientation="horizontal"] {
     flex-wrap: nowrap;
 }
 
-layout[width],
-layout[height],
-widget[width],
-widget[height] {
-    flex-grow: 0;
-    flex-shrink: 0;
-}
-
 layout[orientation="vertical"] {
     flex-direction: column;
     flex-wrap: nowrap;
@@ -106,40 +154,6 @@ layout[root][height="max"] {
     max-height: 100%;
 }
 
-layout[height="max"][width="max"] {
-    flex-grow: 1;
-    flex-shrink: 1;
-}
-
-layout[orientation="horizontal"]>widget[width="max"],
-layout[orientation="vertical"]>widget[height="max"] {
-    display : flex;
-    flex-grow: 1;
-    flex-shrink: 1;
-}
-
-layout[orientation="horizontal"]>splitter {
-    width: 5px;
-    flex-grow: 0;
-    flex-shrink: 0;
-    cursor: col-resize;
-}
-
-.layout__container.splitting_horizontal {
-    cursor: col-resize;
-}
-
-.layout__container.splitting_vertical {
-    cursor: row-resize;
-}
-
-layout[orientation="vertical"]>splitter {
-    height: 5px;
-    flex-grow: 0;
-    flex-shrink: 0;
-    cursor: row-resize;
-}
-
 .widget-empty {
     border: dashed 2px blue;
     font-size: 8pt;
@@ -152,7 +166,7 @@ layout[orientation="vertical"]>splitter {
 
 .widget-empty {
     margin: 5px;
-    border: dashed 1px gray;
+    border: dashed 1px #C9C9C9;
     font-size: 8pt;
     color: gray;
 }
