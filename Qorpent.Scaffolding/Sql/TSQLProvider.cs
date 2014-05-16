@@ -486,16 +486,20 @@ GO");
 				}
 				var intos = "Id";
 				var values = "0";
+				var uvalues = "-9999";
 				if (_fields.Any(_ => _.Name == "Code" && _.IsUnique)){
 					intos += ",Code";
 					values += ",'/'";
+					uvalues += ",'UNDEF'";
 				}
 				if (_fields.Any(_ => _.Name == "Name"))
 				{
 					intos += ",Name";
 					values+= ",'/'";
+					uvalues += ",'UNDEF'";
 				}
 				sb.AppendLine(string.Format("\tINSERT INTO {0} ({1}) VALUES ({2}) ", fullname, intos, values));
+				sb.AppendLine(string.Format("\tINSERT INTO {0} ({1}) VALUES ({2}) ", fullname, intos, uvalues));
 				if (pk.IsIdentity && !UseNewFeatures){
 					sb.AppendLine("\tSET IDENTITY_INSERT " + fullname + " OFF");
 				}

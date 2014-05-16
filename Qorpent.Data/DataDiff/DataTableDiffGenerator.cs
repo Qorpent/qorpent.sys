@@ -43,8 +43,20 @@ namespace Qorpent.Data.DataDiff
 					if (map.FromField.ToLowerInvariant() == "aliascodes"){
 						table.UseAliasCodes = true;
 					}
+					else if (map.FromField.ToLowerInvariant() == "revision"){
+						table.UseRevisions = true;
+					}
 					else{
 						table.Mappings[map.FromField.ToLowerInvariant()] = map.ToTable;
+					}
+				}
+			}
+
+			foreach (var table in _context.Tables){
+				if (table.UseRevisions && !string.IsNullOrWhiteSpace(_context.ResolvedUpdateRevision)){
+					foreach (var item in table.Definitions){
+						item.Fields["metafile"] = _context.ProjectName + ".project";
+						item.Fields["revision"] = _context.ResolvedUpdateRevision.Substring(0,7);
 					}
 				}
 			}

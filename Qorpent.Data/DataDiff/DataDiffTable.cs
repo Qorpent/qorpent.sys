@@ -41,6 +41,10 @@ namespace Qorpent.Data.DataDiff{
 		/// Признак использования для связки истории кодов
 		/// </summary>
 		public bool UseAliasCodes { get; set; }
+		/// <summary>
+		/// Признак того, что все обновления должны включать в себя код проекта и ревизию в проекте при обновлении
+		/// </summary>
+		public bool UseRevisions { get; set; }
 
 		/// <summary>
 		/// 

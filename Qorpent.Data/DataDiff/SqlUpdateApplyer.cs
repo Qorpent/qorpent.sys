@@ -45,17 +45,19 @@ namespace Qorpent.Data.DataDiff{
 			using (var connection = new DatabaseConnectionProvider().GetConnection(_context.SqlConnectionString))
 			{
 				connection.Open();
+
 				var exproc = connection.ExecuteScalar<int>("select object_id('" + _context.MetadataTable + "Register')");
 				if (0 == exproc)
 				{
 					throw new Exception("В целевой БД отсутвует процедура " + _context.MetadataTable+"Register");
 				}
-				
-				connection.ExecuteNonQuery(_context.SqlScript);
-
+				//сначала надо прорегистрировать скрипт, и только потом его выполнять, так как на него могут идти ссылки
 				var register = "exec " + _context.MetadataTable +
 							   "Register @code=@code,@name=@code,@content=@content, @hash=@hash,@revision=@revision,@filetime=@filetime";
-				connection.ExecuteNonQuery(register, new { code = _context.ProjectName+".project", content = _context.SqlScript, filetime = DateTime.Now, hash = _context.ResolvedUpdateRevision, revision = _context.ResolvedUpdateRevision.Substring(0, 7) });
+				connection.ExecuteNonQuery(register, new { code = _context.ProjectName + ".project", content = _context.SqlScript, filetime = DateTime.Now, hash = _context.ResolvedUpdateRevision, revision = _context.ResolvedUpdateRevision.Substring(0, 7) });
+				connection.ExecuteNonQuery(_context.SqlScript,timeout:30000);
+
+				
 			}
 		}
 	}
