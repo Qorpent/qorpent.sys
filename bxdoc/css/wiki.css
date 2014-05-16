@@ -63,9 +63,10 @@ error:before {
 
 .wiki .sample {
 	counter-increment : wiki-sample;
-	background-color: #fafacc;
-	border : solid 1px gray;
-	padding : 5px;
+	padding: 10px 20px;
+	margin: 30px 30px 30px 50px;
+	background-color: rgba(233, 243, 0, 0.1);
+	border: solid 6px rgba(180, 187, 0, 0.1);
 }
 
 .wiki table {
@@ -129,6 +130,8 @@ error:before {
 	padding-left : 20px;
 	counter-increment : wiki-head-3;
 	counter-reset : wiki-head-4;
+	font-size: 14pt;
+	font-weight: bold;
 	margin: 15px 0 10px 0;
 }
 
@@ -138,13 +141,11 @@ error:before {
 
 
 .wiki h4 {
-	margin-top : 6px;
-	margin-bottom : 3px;
 	font-size : 14pt;
-	font-style :italic;
 	padding-left : 30px;
 	counter-increment : wiki-head-4;
 	counter-reset : wiki-head-5;
+	margin: 15px 0 10px 0;
 }
 .wiki h4:before {
 	content : counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." counter(wiki-head-4) " " ;
@@ -153,14 +154,13 @@ error:before {
 
 
 .wiki h5 {
-	margin-top : 6px;
-	margin-bottom : 3px;
-	font-size : 12pt;
+	font-size: 12pt;
 	font-style :italic;
 	padding-left : 40px;
 	counter-increment : wiki-head-5;
 	counter-reset : wiki-head-6;
 	
+	margin: 15px 0 10px 0;
 }
 
 
@@ -172,13 +172,12 @@ error:before {
 
 
 .wiki h6 {
-	margin-top : 6px;
-	margin-bottom : 3px;
-	font-size : 10pt;
+	font-size: 10pt;
 	font-style :italic;
 	padding-left : 50px;
 	counter-increment : wiki-head-6;
 	
+	margin: 15px 0 10px 0;
 }
 .wiki h6:before {
 	
@@ -229,7 +228,7 @@ error:before {
 }
 
 .wiki .wiki-list-4 {
-	padding-left : 60px;
+	padding-left: 110px;
 	counter-increment : wiki-list-4;
 	counter-reset : wiki-list-5;	
 }
