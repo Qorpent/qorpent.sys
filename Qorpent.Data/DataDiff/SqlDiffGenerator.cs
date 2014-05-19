@@ -292,7 +292,7 @@ namespace Qorpent.Data.DataDiff{
 
 		private void OutUsualField(DataDiffItem def, string allfield){
 			if (def.Fields.ContainsKey(allfield)){
-				_output.Write(", '" + def.Fields[allfield].Replace("'", "''") + "'");
+				_output.Write(", '" + def.Fields[allfield].Replace("'", "''").Trim() + "'");
 			}
 			else{
 				_output.Write(", null");
