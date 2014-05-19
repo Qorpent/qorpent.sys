@@ -116,5 +116,9 @@ namespace Qorpent.Data.DataDiff{
 		/// Запрет на применение SQL к БД
 		/// </summary>
 		public bool NoApply { get; set; }
+		/// <summary>
+		/// Признак необходимости полного апдейта, независимо от наличия дельты с прошлым апдейтом (force-update)
+		/// </summary>
+		public bool FullUpdate { get; set; }
 	}
 }
