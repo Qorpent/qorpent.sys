@@ -3,6 +3,15 @@
     border-width: 0 0 1px 0;
 }
 
+.table>thead>tr>th,
+.table>tbody>tr>th,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>tbody>tr>td,
+.table>tfoot>tr>td {
+    padding: 6px 8px;
+}
+
 label {
     cursor: pointer;
 }
