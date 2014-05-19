@@ -57,12 +57,18 @@ namespace Qorpent.Data.DataDiff
 		/// </summary>
 		public void Generate(){
 			Directory.CreateDirectory(_context.RootDirectory);
+			IDictionary<string, XElement> sourceClasses = new Dictionary<string, XElement>();
 			_context.Log.Trace("start initialize git");
 			PrepareGitRepository();
 			_context.Log.Info("git initialized");
-			_context.Log.Trace("start base proj reading");
-			IDictionary<string, XElement> sourceClasses = GetBSharpClasses(_context.GitBaseRevision);
-			_context.Log.Trace("end base proj reading");
+			if (_context.FullUpdate){
+				_context.Log.Trace("full update mode");
+			}
+			else{
+				_context.Log.Trace("start base proj reading");
+				sourceClasses = GetBSharpClasses(_context.GitBaseRevision);
+				_context.Log.Trace("end base proj reading");
+			}
 			_context.Log.Trace("start update proj reading");
 			IDictionary<string, XElement> updatedClasses = GetBSharpClasses(_context.GitUpdateRevision);
 			_context.Log.Trace("end base proj reading");
@@ -122,6 +128,7 @@ namespace Qorpent.Data.DataDiff
 				_context.Log.Trace("begin checkout "+rev);
 				_githelper.Checkout(rev);
 				_context.ResolvedUpdateRevision = _githelper.GetCommitId();
+				
 				_context.Log.Trace("end checkout " + rev);
 				var bscStarter = new ConsoleApplicationHandler();
 				bscStarter.ExePath = "bsc";

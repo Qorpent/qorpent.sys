@@ -53,8 +53,8 @@ namespace Qorpent.Data.DataDiff{
 				}
 				//сначала надо прорегистрировать скрипт, и только потом его выполнять, так как на него могут идти ссылки
 				var register = "exec " + _context.MetadataTable +
-							   "Register @code=@code,@name=@code,@content=@content, @hash=@hash,@revision=@revision,@filetime=@filetime";
-				connection.ExecuteNonQuery(register, new { code = _context.ProjectName + ".project", content = _context.SqlScript, filetime = DateTime.Now, hash = _context.ResolvedUpdateRevision, revision = _context.ResolvedUpdateRevision.Substring(0, 7) });
+							   "Register @code=@code,@name=@code,@content=@content, @hash=@hash,@revision=@revision,@filetime=@filetime,@comment=@comment";
+				connection.ExecuteNonQuery(register, new { code = _context.ProjectName + ".project",comment=_context.FullUpdate||!_context.GitBaseRevision.ToBool()?"full":"diff", content = _context.SqlScript, filetime = DateTime.Now, hash = _context.ResolvedUpdateRevision, revision = _context.ResolvedUpdateRevision.Substring(0, 7) });
 				connection.ExecuteNonQuery(_context.SqlScript,timeout:30000);
 
 				
