@@ -16,6 +16,8 @@ namespace Qorpent.Scaffolding
 	class Controller abstract prototype=ui-controller
 
 	class Layout abstract prototype=ui-layout
+
+	class Menu abstract prototype=ui-menu
 		
 	DataType Enum "Перечисление" enum abstract
 		element item

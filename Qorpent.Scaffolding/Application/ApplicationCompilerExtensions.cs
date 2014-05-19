@@ -23,6 +23,7 @@ namespace Qorpent.Scaffolding.Application{
 			Tasks.Add(new GenerateActionsInJavaScriptTask());
             Tasks.Add(new GenerateLayoutsTask());
             Tasks.Add(new GenerateControllersTask());
+            Tasks.Add(new GenerateMenuTask());
 		}
 	}
 }

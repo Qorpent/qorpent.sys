@@ -22,6 +22,7 @@
     <Compile Include="Application\GenerateControllersTask.cs" />
     <Compile Include="Application\GenerateDataTypesInJavaScriptTask.cs" />
     <Compile Include="Application\GenerateLayoutsTask.cs" />
+    <Compile Include="Application\GenerateMenuTask.cs" />
     <Compile Include="Application\GenerateServerActions.cs" />
     <Compile Include="BSharpClassRef.cs" />
     <Compile Include="Application\GenerateDataTypesInCSharpTask.cs" />

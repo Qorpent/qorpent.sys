@@ -65,9 +65,14 @@ table.localhistory {
     font-size: 90%;
     min-width: 400px;
     color: #414141;
+    table-layout: fixed;
 }
 
-table.localhistory tr.merged_true td {
+table td.functions>* {
+    float: right;
+}
+
+table.localhistory td {
     overflow-x: hidden;
     text-overflow: ellipsis;
 }
@@ -108,12 +113,14 @@ table.localhistory td.localhistory-commands {
     text-align: right;
 }
 
+table.localhistory .localhistory-comment
+
 table.localhistory td.localhistory-commands>i.checked {
     opacity: .2;
 }
 
 table.localhistory td:last-child {
-    width: 118px;
+    width: 100px;
 }
 
 table.localhistory td:first-child {
@@ -161,6 +168,7 @@ table.localhistory-hideautocommits .isautomerge_true {
     font-size: 90%;
     color: #666;
     background-color: #F5F5F5;
+    margin-right: 4px;
 }
 
 .localhistory-from>input {
