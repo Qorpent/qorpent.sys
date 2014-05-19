@@ -77,6 +77,39 @@ namespace Qorpent.Data.DataDiff
 				result[name] = diff;
 			}
 			_context.DiffPairs = result.Values.ToArray();
+			FixCodeUpdates();
+			
+		}
+
+		private void FixCodeUpdates(){
+			foreach (var diffPair in _context.DiffPairs){
+				foreach (var d in diffPair.Updated.Descendants()){
+					var id = d.Attr("id").ToInt();
+					if (0 != id){
+						var rescode = d.Attr("code");
+						var idmatched = diffPair.Base.Descendants(d.Name).FirstOrDefault(_ => _.Attr("id").ToInt() == id);
+						var codematched = diffPair.Base.Descendants(d.Name).FirstOrDefault(_ => _.Attr("code") == rescode);
+						if (null == idmatched){
+							if (null != codematched){
+								d.SetAttributeValue("update-code", rescode);
+								d.Attribute("code").Remove();
+							}
+
+						}
+						else{
+							
+							var basecode = idmatched.Attr("code");
+							if (string.IsNullOrWhiteSpace(rescode)){
+								d.Attribute("code").Remove();
+							}
+							else if (rescode != basecode){
+								d.SetAttributeValue("update-code", rescode);
+								d.Attribute("code").Remove();
+							}
+						}
+					}
+				}
+			}
 		}
 
 		private IDictionary<string, XElement> GetBSharpClasses(string rev){

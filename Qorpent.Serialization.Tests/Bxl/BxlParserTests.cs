@@ -30,6 +30,19 @@ test2
 			Assert.AreEqual(res.Elements().Last().Attribute("_line").Value, "7");
 		}
 
+		[TestCase(@"e x='\n'","\n")]
+		[TestCase("e x=\"\\n\"", "\n")]
+		[TestCase(@"e x='\r'", "\r")]
+		[TestCase("e x=\"\\r\"", "\r")]
+		[TestCase(@"e x='\t'", "\t")]
+		[TestCase("e x=\"\\t\"", "\t")]
+		[TestCase(@"e x='\\'", "\\")]
+		public void CanGetSingleNewLineSymbol(string c,string r){
+			var code =c;
+			var b = new BxlParser().Parse(code, "", BxlParserOptions.NoLexData);
+			Assert.AreEqual(r,b.Element("e").Attr("x"));
+		}
+
 		[Test]
 		public void PreventNameAnonymAfterAnyNamed(){
 			var code = @"

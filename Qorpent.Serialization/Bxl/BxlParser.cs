@@ -572,6 +572,14 @@ namespace Qorpent.Bxl {
 		}
 
 		private void processEscapingBackSlash(char c) {
+			if (c == 't'){
+				c = '\t';
+			}
+			else if(c=='n'){
+				c = '\n';
+			}else if (c == 'r'){
+				c = '\r';
+			}
 			_buf.Append(c);
 			_mode = (ReadMode)_stack.Pop();
 		}
