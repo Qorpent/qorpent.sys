@@ -4,7 +4,6 @@ layout {
     flex-basis: 0px; /* Не ставить тут auto, а то начинается магия */
     justify-content: flex-start;
     /*align-content: flex-start;*/
-
 }
 
 layout[root] {

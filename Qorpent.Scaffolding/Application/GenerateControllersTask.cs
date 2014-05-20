@@ -32,20 +32,25 @@ namespace Qorpent.Scaffolding.Application {
 	        yield return production;
         }
 
-	    private string GenerateRootController(){
+	    private string GenerateRootController() {
+	        var rootservices = _context.ResolveAll("ui-service");
 		    var mainlayout = Project.Context.ResolveAll("ui-layout").First();
 		    var fname = mainlayout.Compiled.Attr("filename");
 			if (string.IsNullOrWhiteSpace(fname)){
 				fname = Project.ProjectName + "_" + mainlayout.Name;
 			}
 		    var sb = new StringBuilder();
-		    sb.AppendFormat(
-				"define(['angular','{0}_types','{0}_api','{0}_controllers','layout','menu'],function(angular,types,apictor){{\r\n",
-			    Project.ProjectName);
-			sb.AppendFormat("\tangular.module('app',['{0}_controllers','Layout'])\r\n", Project.ProjectName);
-		    sb.AppendLine("\t\t.controller('root',function($scope,$http){");
-		    sb.AppendLine("\t\t\t$scope.api = apictor($http);");
-		    sb.AppendFormat("\t\t\t$scope.layout = '{0}.html';\r\n",fname);
+	        var servicenames = rootservices.Select(_ => _.Compiled.Attr("code"));
+		    sb.AppendFormat(@"define(
+    ['angular','{0}_types','{0}_api','{0}_controllers','layout','menu',{1}], function(angular,types,apictor){{
+        angular.module('app',['{0}_controllers','Layout','Menu',{1}])
+            .controller('root',function($scope,$http,{2}){{
+                $scope.api = apictor($http);
+                $scope.layout = '{3}.html';
+", Project.ProjectName, "'" + String.Join("','", servicenames) + "'", String.Join(",", servicenames), fname);
+	        foreach (var service in rootservices.Select(_ => _.Compiled)) {
+                sb.AppendLine("\t\t\t\t" + service.Attr("code") + "($scope," + service.ToJson() + ");");
+	        }
 		    sb.AppendLine("\t\t});");
 		    sb.AppendLine("\t}");
 		    sb.AppendLine(");");

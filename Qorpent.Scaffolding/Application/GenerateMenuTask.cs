@@ -29,19 +29,25 @@ namespace Qorpent.Scaffolding.Application {
                 new XAttribute("class", "menu__root menu__ribbon"),
                 new XAttribute("id", root.Attr("code")));
             var menugroups = new XElement("menu",
+                new XAttribute("groups", 1),
+                new XAttribute("for", root.Attr("code") + "Items"),
                 new XAttribute("class", "menu__text menu__horizontal"),
                 new XAttribute("id", root.Attr("code") + "Groups"));
             var menubody = new XElement("menu",
+                new XAttribute("items", 1),
                 new XAttribute("class", "menu__withicons menu__horizontal"),
                 new XAttribute("id", root.Attr("code") + "Items"));
             foreach (var g in root.Elements("MenuGroup")) {
                 foreach (var m in g.Elements("MenuItem")) {
-                    menubody.Add(GenerateIconItem(m));
+                    menubody.Add(GenerateIconItem(m)
+                        .SetAttr("group", g.Attr("code"))
+                        .SetAttr("menu-item", 1));
                 }
-                menugroups.Add(GenerateTextItem(g));
+                menugroups.Add(GenerateTextItem(g)
+                    .SetAttr("code", g.Attr("code")));
             }
-            menuroot.Add(menubody);
             menuroot.Add(menugroups);
+            menuroot.Add(menubody);
             return menuroot.ToString();
         }
 
@@ -77,7 +83,15 @@ namespace Qorpent.Scaffolding.Application {
         }
 
         private static string GenerateSimpleMenu(XElement root) {
-            return "";
+            var menubody = new XElement("menu",
+                new XAttribute("items", 1),
+                new XAttribute("class", "menu__withicons menu__horizontal"),
+                new XAttribute("id", root.Attr("code") + "Items"));
+            foreach (var m in root.Elements("MenuItem")) {
+                menubody.Add(GenerateIconItem(m)
+                    .SetAttr("menu-item", 1));
+            }
+            return menubody.ToString();
         }
 
         /// <summary>
