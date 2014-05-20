@@ -101,6 +101,8 @@ namespace Qorpent.Scaffolding.Sql{
 				if (CheckCond(ibsp, DbObjectType.Table)){
 					GenerateConstraints(ordered, sb, mode, hintObject);
 				}
+
+
 				DropTemporalUtils(sb, mode, hintObject);
 			}
 			return sb.ToString();

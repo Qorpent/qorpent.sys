@@ -24,6 +24,8 @@ namespace Qorpent.Db
 	BaseObject FileGroupBase prototype=filegroup abstract
 		element file
 
+	class DbScript "Прокси класс для связываения внешнего скрипта SQL в состав генерации" prototype=dbscript
+
 	class TableBase "Абстрактная таблица" abstract prototype=dbtable
 		import BaseObject
 		int Id "Идентификатор" primarykey identity idx=10
@@ -32,6 +34,7 @@ namespace Qorpent.Db
 		view "${.code}Full" "Вид полного нормализованного представления строк" : (
 			--PARENT_FIELD_SET--
 		)
+
 
 	class IWithCode "Сущность с кодом" abstract
 		string Code "Уникальный запоминаемый бизнес-код" unique idx=200

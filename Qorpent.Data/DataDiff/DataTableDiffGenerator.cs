@@ -39,16 +39,36 @@ namespace Qorpent.Data.DataDiff
 			_context.Tables = result.Values;
 			foreach (var table in _context.Tables){
 				var maps = _context.Mappings.Where(_ =>_.FromTable=="*" || _.FromTable.ToLowerInvariant() == table.TableName.ToLowerInvariant());
+				bool wasnoaliascodes = false;
+				bool wasnorevisions = false;
 				foreach (var map in maps){
 					if (map.FromField.ToLowerInvariant() == "aliascodes"){
-						table.UseAliasCodes = true;
+						if (!wasnoaliascodes){
+							table.UseAliasCodes = true;
+						}
+					}else if (map.FromField.ToLowerInvariant() == "no-aliascodes"){
+						table.UseAliasCodes = false;
+						wasnoaliascodes = true;
 					}
 					else if (map.FromField.ToLowerInvariant() == "revision"){
-						table.UseRevisions = true;
+						if (!wasnorevisions){
+							table.UseRevisions = true;
+						}
+					}else if (map.FromField.ToLowerInvariant() == "no-revision"){
+						table.UseRevisions = false;
+						wasnorevisions = true;
+					}
+					else if (map.FromField.ToLowerInvariant() == "no-code")
+					{
+						table.NoCode = true;
 					}
 					else{
 						table.Mappings[map.FromField.ToLowerInvariant()] = map.ToTable;
 					}
+				}
+				var indexes = _context.Indexes.Where(_ => _.FromTable == "*" || _.FromTable.ToLowerInvariant() == table.TableName.ToLowerInvariant());
+				foreach (var tableMap in indexes){
+					table.DisableIndexes.Add(tableMap.FromField);
 				}
 			}
 

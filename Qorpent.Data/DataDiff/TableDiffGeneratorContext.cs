@@ -18,6 +18,7 @@ namespace Qorpent.Data.DataDiff{
 			BSharpPrototype = "db-meta";
 			BSharpMapPrototype = "db-map";
 			Mappings = new List<TableMap>();
+			Indexes = new List<TableMap>();
 		}
 		/// <summary>
 		/// Строка соединения с SQL
@@ -112,6 +113,10 @@ namespace Qorpent.Data.DataDiff{
 		/// Определения схемы
 		/// </summary>
 		public IList<TableMap> Mappings { get; private set; }
+		/// <summary>
+		/// Мапинги отключаемых индексов
+		/// </summary>
+		public IList<TableMap> Indexes { get; private set; }
 		/// <summary>
 		/// Запрет на применение SQL к БД
 		/// </summary>

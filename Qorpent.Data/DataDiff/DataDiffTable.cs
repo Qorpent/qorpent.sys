@@ -19,11 +19,17 @@ namespace Qorpent.Data.DataDiff{
 			Definitions = new List<DataDiffItem>();
 			Sources = new List<XDiffItem>();
 			Mappings = new Dictionary<string, string>();
+			DisableIndexes = new List<string>();
 		}
 		/// <summary>
 		/// Имя целевой табицы
 		/// </summary>
 		public string TableName { get; set; }
+
+		/// <summary>
+		/// Индексы, которые надо отключать перед прокачкой таблицы
+		/// </summary>
+		public IList<string> DisableIndexes { get; private set; }
 
 		/// <summary>
 		/// Итоговые определения
@@ -45,6 +51,10 @@ namespace Qorpent.Data.DataDiff{
 		/// Признак того, что все обновления должны включать в себя код проекта и ревизию в проекте при обновлении
 		/// </summary>
 		public bool UseRevisions { get; set; }
+		/// <summary>
+		/// Признак того, что в таблице не используется поле код (только ID)
+		/// </summary>
+		public bool NoCode { get; set; }
 
 		/// <summary>
 		/// 

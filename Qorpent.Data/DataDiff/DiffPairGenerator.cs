@@ -106,11 +106,15 @@ namespace Qorpent.Data.DataDiff
 							
 							var basecode = idmatched.Attr("code");
 							if (string.IsNullOrWhiteSpace(rescode)){
-								d.Attribute("code").Remove();
+								if (null != d.Attribute("code")){
+									d.Attribute("code").Remove();
+								}
 							}
 							else if (rescode != basecode){
 								d.SetAttributeValue("update-code", rescode);
-								d.Attribute("code").Remove();
+								if (null != d.Attribute("code")){
+									d.Attribute("code").Remove();
+								}
 							}
 						}
 					}
@@ -164,6 +168,11 @@ namespace Qorpent.Data.DataDiff
 								}
 							}
 							_context.Mappings.Add(new TableMap(fromtable, fromfield, totable));
+						}
+						foreach (var r in map.Definition.Descendants("disable")){
+							var fromtable = r.ChooseAttr("table","code");
+							var fromfield = r.ChooseAttr("name","code");
+							_context.Indexes.Add(new TableMap(fromtable, fromfield, fromfield));
 						}
 					}
 				}

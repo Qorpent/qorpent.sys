@@ -47,6 +47,10 @@ namespace Qorpent.Data.DataDiff{
 			foreach (var table in _tables)
 			{
 				_output.WriteLine("\talter table {0} check constraint all", table.TableName);
+				foreach (var disableIndex in table.DisableIndexes)
+				{
+					_output.WriteLine("\tALTER INDEX {0} ON {1} REBUILD", disableIndex, table.TableName);
+				}
 			}
 			foreach (var table in _tables)
 			{
@@ -153,7 +157,7 @@ namespace Qorpent.Data.DataDiff{
 					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id  or this.aliascodes like '%/'+temp.code+'/%')",
 					tn, table.TableName);
 			}
-			else{
+			else if (!table.NoCode){
 				_output.WriteLine(
 					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)",
 					tn, table.TableName);
@@ -166,6 +170,14 @@ namespace Qorpent.Data.DataDiff{
 				_output.WriteLine(
 					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)",
 					tn, table.TableName);
+			}
+			else{
+				_output.WriteLine(
+					"\t\t\tupdate @{0} set _exists =1 from {1} this join @{0} temp on ( temp.id=this.id)",
+					tn, table.TableName);
+				_output.WriteLine(
+					"\t\t\tinsert {1} (id) select id  from @{0} where _exists = 0 and id is not null", tn,
+					table.TableName);
 			}
 		}
 
@@ -292,7 +304,11 @@ namespace Qorpent.Data.DataDiff{
 
 		private void OutUsualField(DataDiffItem def, string allfield){
 			if (def.Fields.ContainsKey(allfield)){
-				_output.Write(", '" + def.Fields[allfield].Replace("'", "''").Trim() + "'");
+				var val = def.Fields[allfield].Replace("'", "''").Trim();
+				if (val.IndexOf(',')!=0 && val.ToDecimal(safe:true) != 0){
+					val = val.Replace(",", ".");
+				}
+				_output.Write(", '" + val + "'");
 			}
 			else{
 				_output.Write(", null");
@@ -331,7 +347,11 @@ namespace Qorpent.Data.DataDiff{
 			foreach (var table in _tables)
 			{
 				_output.WriteLine("\talter table {0} nocheck constraint all", table.TableName);
+				foreach (var disableIndex in table.DisableIndexes){
+					_output.WriteLine("\tALTER INDEX {0} ON {1} DISABLE",disableIndex,table.TableName);
+				}
 			}
+			
 		}
 	}
 }

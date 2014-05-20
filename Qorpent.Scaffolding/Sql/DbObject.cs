@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Qorpent.BSharp;
+using Qorpent.BSharp.Builder;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
@@ -84,7 +86,51 @@ namespace Qorpent.Scaffolding.Sql
 			var objarray = allobjects.ToArray();
 			SetupForeignKeyDependency(objarray);
 			SetupFileGroups(objarray);
-			return SqlProvider.Get(dialect).GetSql(objarray, mode, hintObject);
+			var proj = hintObject as IBSharpProject;
+		
+			var sql = SqlProvider.Get(dialect).GetSql(objarray, mode, hintObject);
+
+			if (null != proj){
+				sql = PrepareExternalSql(sql,proj);
+			}
+
+			return sql;
+		}
+
+		private static string PrepareExternalSql(string sql, IBSharpProject proj){
+			var ctx = proj.Context;
+			if (null == ctx) return sql;
+			var scripts = ctx.ResolveAll("dbscript");
+			var befores = scripts.Where(_ => _.Compiled.GetSmartValue("before").ToBool()).ToArray();
+			var afters = scripts.Where(_ => _.Compiled.GetSmartValue("after").ToBool()).ToArray();
+			if (0 == befores.Length && 0 == afters.Length) return sql;
+			var sb = new StringBuilder();
+			foreach (var before in befores){
+				AppendScript(proj, before, ctx, sb);
+			}
+			sb.AppendLine(sql);
+			sb.AppendLine("GO");
+			foreach (var after in afters)
+			{
+				AppendScript(proj, after, ctx, sb);
+			}
+			
+			return sb.ToString();
+		}
+
+		private static void AppendScript(IBSharpProject proj, IBSharpClass before, IBSharpContext ctx, StringBuilder sb){
+			var code = before.Name;
+			var file = Directory.GetFiles(proj.GetRootDirectory(), code + ".sql",SearchOption.AllDirectories).FirstOrDefault();
+			if (null == file){
+				var message = "cannot find sql file with code " + code + " in " + proj.GetRootDirectory();
+				proj.Log.Error(message);
+				ctx.RegisterError(new BSharpError { Message = message});
+			}
+			else{
+				var script = File.ReadAllText(file);
+				sb.AppendLine(script);
+				sb.AppendLine("GO");
+			}
 		}
 
 		private static void SetupFileGroups(DbObject[] objarray){
