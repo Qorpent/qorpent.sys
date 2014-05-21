@@ -18,80 +18,162 @@ namespace Qorpent.Scaffolding.Application {
                 var c = targetclass.Compiled;
                 yield return new Production {
                     FileName = c.Attr("code") + "-menu.html",
-                    GetContent = () => c.Elements("MenuGroup").ToArray().Length > 0 ? GenerateGroupedMenu(c) : GenerateSimpleMenu(c)
+                    GetContent = () => GenrateMenu(c)
                 };
             }
         }
 
-        private static string GenerateGroupedMenu(XElement root) {
-            var menuroot = new XElement("div",
-                new XAttribute("root", 1),
-                new XAttribute("class", "menu__root menu__ribbon"),
-                new XAttribute("id", root.Attr("code")));
-            var menugroups = new XElement("menu",
-                new XAttribute("groups", 1),
-                new XAttribute("for", root.Attr("code") + "Items"),
-                new XAttribute("class", "menu__text menu__horizontal"),
-                new XAttribute("id", root.Attr("code") + "Groups"));
-            var menubody = new XElement("menu",
-                new XAttribute("items", 1),
-                new XAttribute("class", "menu__withicons menu__horizontal"),
-                new XAttribute("id", root.Attr("code") + "Items"));
-            foreach (var g in root.Elements("MenuGroup")) {
+        private string GenrateMenu(XElement root) {
+            switch (root.Attr("type")) {
+                case "ribbon" : return GenerateRibbonMenu(root);
+                case "inline": return GenerateInlineMenu(root);
+                case "dropdown": return GenerateDropdownMenu(root);
+                default: return GenerateInlineMenu(root);
+            }
+        }
+
+        private static XElement GenerateMenuItem(XElement el) {
+            if (!el.HasAttribute("type")) el.SetAttr("type", "text");
+            switch (el.Attr("type")) {
+                case "text" : return GenerateTextItem(el);
+                case "icon": return GenerateIconItem(el);
+                case "icon_with_text": return GenerateIconWithTextItem(el);
+                default: return GenerateTextItem(el);
+            }
+        }
+
+        private static XElement GenerateDropdownGroup(XElement el) {
+            var result = GenerateMenuItem(el);
+            result.SetAttr("menu-group", 1);
+            result.SetAttr("code", el.Attr("code"));
+            var menuGroup = new XElement("div", new XAttribute("class", "submenu"));
+            foreach (var m in el.Elements("MenuItem")) {
+                menuGroup.Add(m.HasElements ? GenerateDropdownGroup(m) : GenerateDropdownItem(m));
+            }
+            result.Add(menuGroup);
+            return result;
+        }
+
+        private static XElement GenerateDropdownItem(XElement el) {
+            var result = GenerateMenuItem(el);
+            result.SetAttr("menu-item", 1);
+            result.SetAttr("group", el.Parent.Attr("code"));
+            return result;
+        }
+
+        private string GenerateRibbonMenu(XElement root) {
+            var menuRoot = GenerateMenuRoot(root);
+            var menuGroups = GenerateMenuElement(root);
+            menuGroups.SetAttr("id", root.Attr("code") + "_Groups");
+            menuGroups.SetAttr("class", menuGroups.Attr("class") + " menu__ribbon-groups");
+            var menuBody = GenerateMenuElement(root);
+            menuBody.SetAttr("id", root.Attr("code") + "_Items");
+            menuBody.SetAttr("class", menuBody.Attr("class") + " menu__ribbon-items");
+            foreach (var g in root.Elements("MenuItem")) {
                 foreach (var m in g.Elements("MenuItem")) {
-                    menubody.Add(GenerateIconItem(m)
+                    menuBody.Add(GenerateMenuItem(m)
                         .SetAttr("group", g.Attr("code"))
                         .SetAttr("menu-item", 1));
                 }
-                menugroups.Add(GenerateTextItem(g)
+                menuGroups.Add(GenerateMenuItem(g)
+                    .SetAttr("menu-group", 1)
                     .SetAttr("code", g.Attr("code")));
             }
-            menuroot.Add(menugroups);
-            menuroot.Add(menubody);
-            return menuroot.ToString();
+            menuRoot.Add(menuGroups);
+            menuRoot.Add(menuBody);
+            return menuRoot.ToString();
+        }
+
+        private static XElement GenerateMenuRoot(XElement root) {
+            var menuRoot = new XElement("div",
+                new XAttribute("menu", root.Attr("type")),
+                new XAttribute("class", "menu__root menu__" + root.Attr("type")),
+                new XAttribute("id", root.Attr("code") + "_Menu"));
+            return menuRoot;
+        }
+
+        private static XElement GenerateMenuElement(XElement root) {
+            var orientation = root.Attr("orientation");
+            var menuElement = new XElement("div",
+                new XAttribute("class", "menu__" + (orientation == "" ? "horizontal" : orientation)));
+            return menuElement;
+        }
+
+        private static string GenerateDropdownMenu(XElement root) {
+            var menuRoot = GenerateMenuRoot(root);
+            var menuBody = GenerateMenuElement(root);
+            menuBody.SetAttr("id", root.Attr("code") + "_Items");
+            foreach (var g in root.Elements("MenuItem")) {
+                if (g.HasElements) {
+                    menuBody.Add(GenerateDropdownGroup(g)
+                        .SetAttr("code", g.Attr("code"))
+                        .SetAttr("menu-group", 1));
+                }
+                else {
+                    menuBody.Add(GenerateDropdownItem(g)
+                        .SetAttr("group", g.Attr("code"))
+                        .SetAttr("menu-item", 1));
+                }
+            }
+            menuRoot.Add(menuBody);
+            return menuRoot.ToString();
         }
 
         private static XElement GenerateIconItem(XElement el) {
             var result = new XElement("div",
                 new XAttribute("class", "menu__item"));
+            CopyAttributes(result, el);
             var icon = new XElement("div",
-                new XAttribute("class", "menu__item-icon"));
+                new XAttribute("class", "icon"));
             if (el.HasAttribute("iconclass")) {
                 icon.Add(new XElement("i", new XAttribute("class", el.Attr("iconclass"))));
-            }
-            else if (el.HasAttribute("iconsrc")) {
+            } else if (el.HasAttribute("iconsrc")) {
                 icon.Add(new XElement("img", new XAttribute("src", el.Attr("iconsrc"))));
-            }
-            else if (el.HasAttribute("view")) {
+            } else if (el.HasAttribute("view")) {
                 icon.Add(new XElement("ng-include", new XAttribute("src", el.Attr("view"))));
             }
+            result.Add(icon);
+            return result;
+        }
+
+        private static void CopyAttributes(XElement target, XElement el) {
+            var ignoreAttributes = new[] { "code", "name", "iconclass" };
+            foreach (var a in el.Attributes().Where(_ => !_.Name.ToString().IsIn(ignoreAttributes))) {
+                target.SetAttr(a.Name.ToString(), a.Value);
+            }
+        }
+
+        private static XElement GenerateIconWithTextItem(XElement el) {
+            var result = GenerateIconItem(el);
+            result.SetAttr("class", "menu__item");
             var title = new XElement("div",
                 new XAttribute("class", "menu__item-title"));
             title.SetValue(el.HasAttribute("title") ? el.Attr("title") : el.Attr("name"));
-            result.Add(icon);
             result.Add(title);
             return result;
         }
 
         private static XElement GenerateTextItem(XElement el) {
             var result = new XElement("div",
-                                         new XAttribute("class", "menu__item"));
+                new XAttribute("class", "menu__item"));
+            CopyAttributes(result, el);
             var link = new XElement("a", new XAttribute("href", ""));
             link.SetValue(el.Attr("name"));
             result.Add(link);
             return result;
         }
 
-        private static string GenerateSimpleMenu(XElement root) {
-            var menubody = new XElement("menu",
-                new XAttribute("items", 1),
-                new XAttribute("class", "menu__withicons menu__horizontal"),
-                new XAttribute("id", root.Attr("code") + "Items"));
+        private static string GenerateInlineMenu(XElement root) {
+            var menuRoot = GenerateMenuRoot(root);
+            var menuBody = GenerateMenuElement(root);
+            menuBody.SetAttr("items", 1);
+            menuBody.SetAttr("id", root.Attr("code") + "_Items");
             foreach (var m in root.Elements("MenuItem")) {
-                menubody.Add(GenerateIconItem(m)
+                menuBody.Add(GenerateMenuItem(m)
                     .SetAttr("menu-item", 1));
             }
-            return menubody.ToString();
+            menuRoot.Add(menuBody);
+            return menuRoot.ToString();
         }
 
         /// <summary>

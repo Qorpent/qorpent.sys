@@ -17,7 +17,7 @@ namespace Qorpent.Scaffolding
 
 	class Layout abstract prototype=ui-layout
 
-	class Menu abstract prototype=ui-menu
+	class Menu abstract prototype=ui-menu type=text
 
 	class Service abstract prototype=ui-service
 		
