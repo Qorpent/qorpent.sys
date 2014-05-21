@@ -125,5 +125,9 @@ namespace Qorpent.Data.DataDiff{
 		/// Признак необходимости полного апдейта, независимо от наличия дельты с прошлым апдейтом (force-update)
 		/// </summary>
 		public bool FullUpdate { get; set; }
+		/// <summary>
+		/// Только регистрация версии
+		/// </summary>
+		public bool OnlyRegister { get; set; }
 	}
 }
