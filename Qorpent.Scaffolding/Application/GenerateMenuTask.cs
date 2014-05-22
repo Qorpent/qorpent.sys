@@ -46,6 +46,7 @@ namespace Qorpent.Scaffolding.Application {
             var result = GenerateMenuItem(el);
             result.SetAttr("menu-group", 1);
             result.SetAttr("code", el.Attr("code"));
+            result.SetAttr("class", result.Attr("class") + " open-" + (el.HasAttribute("direction") ? el.Attr("direction") : "right"));
             var menuGroup = new XElement("div", new XAttribute("class", "submenu"));
             foreach (var m in el.Elements("MenuItem")) {
                 menuGroup.Add(m.HasElements ? GenerateDropdownGroup(m) : GenerateDropdownItem(m));
@@ -127,6 +128,10 @@ namespace Qorpent.Scaffolding.Application {
                 new XAttribute("class", "icon"));
             if (el.HasAttribute("iconclass")) {
                 icon.Add(new XElement("i", new XAttribute("class", el.Attr("iconclass"))));
+            } else if (el.HasAttribute("icon")) {
+                icon.Add(new XElement("i", new XAttribute("class", el.Attr("icon"))));
+            } else if (el.HasAttribute("src")) {
+                icon.Add(new XElement("img", new XAttribute("src", el.Attr("src"))));
             } else if (el.HasAttribute("iconsrc")) {
                 icon.Add(new XElement("img", new XAttribute("src", el.Attr("iconsrc"))));
             } else if (el.HasAttribute("view")) {
@@ -137,7 +142,7 @@ namespace Qorpent.Scaffolding.Application {
         }
 
         private static void CopyAttributes(XElement target, XElement el) {
-            var ignoreAttributes = new[] { "code", "name", "iconclass" };
+            var ignoreAttributes = new[] { "code", "name", "iconclass", "icon" };
             foreach (var a in el.Attributes().Where(_ => !_.Name.ToString().IsIn(ignoreAttributes))) {
                 target.SetAttr(a.Name.ToString(), a.Value);
             }
@@ -157,7 +162,7 @@ namespace Qorpent.Scaffolding.Application {
             var result = new XElement("div",
                 new XAttribute("class", "menu__item"));
             CopyAttributes(result, el);
-            var link = new XElement("a", new XAttribute("href", ""));
+            var link = new XElement("div", new XAttribute("class", "menu__item-title"));
             link.SetValue(el.Attr("name"));
             result.Add(link);
             return result;
