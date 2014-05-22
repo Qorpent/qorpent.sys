@@ -67,6 +67,7 @@ namespace Qorpent.Scaffolding{
 				}
 				if (production.CanBeSaved){
 					Project.Log.Info("Write " + filename);
+					Directory.CreateDirectory(Path.GetDirectoryName(filename));
 					File.WriteAllText(filename, production.GetContent());
 				}
 				else{

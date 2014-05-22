@@ -27,8 +27,12 @@
     <Compile Include="BSharpClassRef.cs" />
     <Compile Include="Application\GenerateDataTypesInCSharpTask.cs" />
     <Compile Include="CodeGeneratorTaskBase.cs" />
+    <Compile Include="Orm\DataCompilerExtensions.cs" />
+    <Compile Include="Orm\GeneratePokoClassDataAdapter.cs" />
+    <Compile Include="Orm\GeneratePokoClasses.cs" />
+    <Compile Include="Orm\OrmGenerationExtensions.cs" />
     <Compile Include="Production.cs" />
-    <Compile Include="Sql\ApplicationCompilerExtensions.cs" />
+    <Compile Include="Sql\DataCompilerExtensions.cs" />
     <Compile Include="Sql\DataObjectsSourcePackageForBShart.cs" />
     <Compile Include="Sql\DbIndex.cs" />
     <Compile Include="Sql\DbPartitionScheme.cs" />
