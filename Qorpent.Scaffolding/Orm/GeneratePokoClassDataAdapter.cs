@@ -73,11 +73,16 @@ namespace Qorpent.Scaffolding.Orm{
 				var name = ormField.Item2.Attr("code");
 				if (string.IsNullOrWhiteSpace(ormField.Item3)){ //ref
 					type = "Int32";
-					name += "Id";
+					var sfx= "Id";
 					if (ormField.Item2.Attr("to").EndsWith(".Code")){
 						type = "String";
-						name += "Code";
+						sfx = "Code";
 					}
+					name += sfx;
+					
+				}
+				if (name == "Idx"){
+					name = "Index";
 				}
 				o.AppendLine("\t\t\t\tresult." + name + " = reader.Get" + type + "(" + i + ");");
 				i++;
@@ -95,14 +100,18 @@ namespace Qorpent.Scaffolding.Orm{
 				if (string.IsNullOrWhiteSpace(ormField.Item3))
 				{ //ref
 					type = "Int32";
-					name += "Id";
+					var pfx = "Id";
 					if (ormField.Item2.Attr("to").EndsWith(".Code"))
 					{
 						type = "String";
-						name += "Code";
+						pfx = "Code";
 					}
+					name += pfx;
 				}
-				o.AppendLine("\t\t\t\t\t\tcase \"" + name.ToLower() + "\": result."+name+" = Convert.To"+type+"(val);break;");
+				if (name == "Idx"){
+					name = "Index";
+				}
+				o.AppendLine("\t\t\t\t\t\tcase \"" + name.ToLower() + "\": result."+name+" = Convert.To"+type+"(value);break;");
 				i++;
 			}
 			o.AppendLine("\t\t\t\t\t}");
@@ -178,9 +187,8 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("using System;");
 			o.AppendLine("using System.Collections.Generic;");
 			o.AppendLine("using System.Text;");
+			o.AppendLine("using System.Data;");
 			o.AppendLine("#if !NOQORPENT");
-			o.AppendLine("using Qorpent.Serialization;");
-			o.AppendLine("using Qorpent.Model;");
 			o.AppendLine("using Qorpent.Data;");
 			o.AppendLine("#endif");
 			o.AppendFormat("namespace {0}.Adapters {{\r\n", targetclass.Namespace);

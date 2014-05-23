@@ -98,7 +98,9 @@ namespace Qorpent.Data.DataDiff
 						if (null == idmatched){
 							if (null != codematched){
 								d.SetAttributeValue("update-code", rescode);
-								d.Attribute("code").Remove();
+								if (null != d.Attribute("code")){
+									d.Attribute("code").Remove();
+								}
 							}
 
 						}

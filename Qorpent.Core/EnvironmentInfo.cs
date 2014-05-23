@@ -267,14 +267,26 @@ namespace Qorpent {
 		}
 
 		/// <summary>
+		/// Список команд системы
+		/// </summary>
+		public static readonly string[] SystemProcesses = new[]{
+			"mkdir", "xcopy", "del", "copy", "rm"
+		};
+
+		/// <summary>
 		///Разрешает имя исполнимого файла с учетом параметров среды
 		/// </summary>
 		/// <param name="executableName"></param>
 		/// <returns></returns>
 		public static string GetExecutablePath(string executableName) {
+			if (-1 != Array.IndexOf(SystemProcesses, executableName)){
+				return executableName;
+			}
+			
 			if (!executableName.EndsWith(".exe")) {
 				executableName += ".exe";
 			}
+			
 			executableName = executableName.ToLower();
 			if (!ResolvedExeCache.ContainsKey(executableName)) {
 				string result = null;

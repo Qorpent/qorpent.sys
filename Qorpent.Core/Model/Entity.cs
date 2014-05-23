@@ -97,7 +97,7 @@ namespace Qorpent.Model {
 		/// <summary>
 		///     Helper code that maps any foreign coding system
 		/// </summary>
-		public string OuterCode { get; set; }
+		public virtual string OuterCode { get; set; }
 
 		/// <summary>
 	    /// Общий метод установления некоего контекстного объекта, использование зависит от реализации

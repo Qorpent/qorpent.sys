@@ -101,6 +101,10 @@ namespace Qorpent.Data.DataDiff{
 			_output.Write("\t\tupdate {0} set ",table.TableName);
 			for (var i = 0;i<allfields.Length;i++){
 				var name = allfields[i];
+				if (table.NoCode && name == "code") continue;
+				if (table.NoCode && name == "set_code") continue;
+				if (!table.UseAliasCodes && name == "aliascodes") continue;
+				
 				if (name == "set_id"){
 					name = "id";
 				}
@@ -143,6 +147,21 @@ namespace Qorpent.Data.DataDiff{
 		}
 
 		private void GenerateExistsBinding(string tn, string[] allfields, DataDiffTable table){
+			if (!table.NoCode)
+			{
+				_output.WriteLine(
+					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)",
+					tn, table.TableName);
+				_output.WriteLine(
+					"\t\t\tinsert {1} (id,code) select id,isnull(code,id) from @{0} where _exists = 0 and id is not null", tn,
+					table.TableName);
+				_output.WriteLine(
+					"\t\t\tinsert {1} (code) select code from @{0} where _exists = 0 and code is not null and id is null", tn,
+					table.TableName);
+				_output.WriteLine(
+					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)",
+					tn, table.TableName);
+			}else 
 			if (table.UseAliasCodes){
 				_output.WriteLine(
 					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id or this.aliascodes like '%/'+temp.code+'/%')",
@@ -157,20 +176,7 @@ namespace Qorpent.Data.DataDiff{
 					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id  or this.aliascodes like '%/'+temp.code+'/%')",
 					tn, table.TableName);
 			}
-			else if (!table.NoCode){
-				_output.WriteLine(
-					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)",
-					tn, table.TableName);
-				_output.WriteLine(
-					"\t\t\tinsert {1} (id,code) select id,isnull(code,id) from @{0} where _exists = 0 and id is not null", tn,
-					table.TableName);
-				_output.WriteLine(
-					"\t\t\tinsert {1} (code) select code from @{0} where _exists = 0 and code is not null and id is null", tn,
-					table.TableName);
-				_output.WriteLine(
-					"\t\t\tupdate @{0} set id = this.id, code=this.code, _exists =1 from {1} this join @{0} temp on (temp.code = this.code or temp.id=this.id)",
-					tn, table.TableName);
-			}
+			 
 			else{
 				_output.WriteLine(
 					"\t\t\tupdate @{0} set _exists =1 from {1} this join @{0} temp on ( temp.id=this.id)",
@@ -187,7 +193,7 @@ namespace Qorpent.Data.DataDiff{
 		}
 
 		private bool GenerateChunk(string tn, string[] allfields, DataDiffTable table, int st){
-			_output.Write("\t\tinsert @{0} (id,code", tn);
+			_output.Write("\t\tinsert @{0} (id"+(table.NoCode?"":", code"), tn);
 			foreach (var allfield in allfields){
 				if (table.Mappings.ContainsKey(allfield)){
 					_output.Write(", {0}, {0}_code", allfield);
@@ -213,11 +219,13 @@ namespace Qorpent.Data.DataDiff{
 				else{
 					_output.Write("'{0}'", def.Id);
 				}
-				if (string.IsNullOrWhiteSpace(def.Code)){
-					_output.Write(", null");
-				}
-				else{
-					_output.Write(",'{0}'", def.Code);
+				if (!table.NoCode){
+					if (string.IsNullOrWhiteSpace(def.Code)){
+						_output.Write(", null");
+					}
+					else{
+						_output.Write(",'{0}'", def.Code);
+					}
 				}
 
 				foreach (var allfield in allfields){
@@ -316,7 +324,7 @@ namespace Qorpent.Data.DataDiff{
 		}
 
 		private void GenerateTempTableDeclaration(string tn, string[] allfields, DataDiffTable table){
-			_output.Write("\tdeclare @" + tn + " table ( id int, code nvarchar(255), _exists bit default 0 ");
+			_output.Write("\tdeclare @" + tn + " table ( id int, "+(table.NoCode?"":"code nvarchar(255),")+" _exists bit default 0 ");
 			foreach (var fld in allfields){
 				if (table.Mappings.ContainsKey(fld)){
 					_output.Write(", " + fld + " int");

@@ -27,11 +27,11 @@ namespace Qorpent.Db
 	class DbScript "Прокси класс для связываения внешнего скрипта SQL в состав генерации" prototype=dbscript
 
 	class TableBase "Абстрактная таблица" abstract prototype=dbtable
-		qorpent-interface IWithId
+		qorpent-interface IWithId 
 		qorpent-interface IWithVersion
 		import BaseObject
-		int Id "Идентификатор" primarykey identity idx=10
-		datetime Version "Версия записи" default=(CURRENT_TIMESTAMP) idx=980
+		int Id "Идентификатор" primarykey identity idx=10  qorpent-override=Entity
+		datetime Version "Версия записи" default=(CURRENT_TIMESTAMP) idx=980  qorpent-override=Entity
 		int ImportId "Идентификатор старой сущности при миграции" idx=990
 		view "${.code}Full" "Вид полного нормализованного представления строк" : (
 			--PARENT_FIELD_SET--
@@ -40,7 +40,7 @@ namespace Qorpent.Db
 
 	class IWithCode "Сущность с кодом" abstract
 		qorpent-interface IWithCode
-		string Code "Уникальный запоминаемый бизнес-код" unique idx=200
+		string Code "Уникальный запоминаемый бизнес-код" unique idx=200 qorpent-override=Entity
 		string "${.code}GetCode" @id=int : (
 			return (select Code from ${fullname} where Id = @id )
 		)
@@ -50,18 +50,18 @@ namespace Qorpent.Db
 		
 	class IWithName "Сущность с именем" abstract
 		qorpent-interface IWithName
-		string Name "Читаемое имя" idx=205
+		string Name "Читаемое имя" idx=205  qorpent-override=Entity
 		
 	class IWithIdx "Сущность с порядковым номером" abstract
 		qorpent-interface IWithIndex
-		int Idx "Порядковый номер в списках" idx=215
+		int Idx "Порядковый номер в списках" idx=215  qorpent-override=Entity
 	
 	class IWithExtendedName "Сущность с расширенями имени" abstract
 		qorpent-interface IWithComment
-		string OuterCode "Внешний код для связи со сторонними системами"  idx=210
+		string OuterCode "Внешний код для связи со сторонними системами"  idx=210 qorpent-override=Entity
 		string ShortName "Сокращенное имя" idx=220
 		longstring FullName "Полное имя" idx=225
-		longstring Comment "Комментарий" idx=230
+		longstring Comment "Комментарий" idx=230  qorpent-override=Entity
 		
 	class IWithCodeHistory "Поддержка ведения истории кодов" abstract
 		import IWithCode
@@ -90,7 +90,7 @@ namespace Qorpent.Db
 		)
 		
 	class IEntity "Описание сущности" abstract
-		qorpent-interface IEntity
+		qorpent-interface Entity
 		import IWithCode
 		import IWithIdx
 		import IWithName
@@ -138,7 +138,7 @@ namespace Qorpent.Db
 		
 	class IWithTag "Привязывает поддердку тегов" abstract
 		qorpent-interface IWithTag
-		longstring Tag "Теги" idx=250
+		longstring Tag "Теги" idx=250 qorpent-override=Entity
 		
 	class IWithGroups "Привязывает поддердку групп" abstract
 		longstring Groups "Список групп" idx = 810
