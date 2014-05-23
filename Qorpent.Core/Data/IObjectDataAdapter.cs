@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Qorpent.Model;
 
@@ -29,6 +30,6 @@ namespace Qorpent.Data{
 		/// <returns></returns>
 		string PrepareSelectQuery(object conditions = null, object hints = null);
 	}
-	 
+
 	
 }
