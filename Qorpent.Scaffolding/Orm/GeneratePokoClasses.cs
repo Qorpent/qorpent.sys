@@ -82,12 +82,20 @@ namespace Qorpent.Scaffolding.Orm{
 					clsname = incomeref.Item1.FullName;
 				}
 				GenerateField(incomeref.Item2, "IList<" + clsname + ">", name, "(" + incomeref.Item1.Name + "  привязка )",
-				              "?? (_" + name.ToLower() + " = new List<" + clsname + ">())");
+				              "?? (Native" + name + " = new List<" + clsname + ">())");
 			}
 		}
 
 		private void GenerateOwnFields(IBSharpClass targetclass, XElement x){
+			var interfaces = targetclass.Compiled.Elements("qorpent-interface").Select(_ => _.Attr("code")).ToList();
 			foreach (var of in targetclass.GetOrmFields()){
+				var qorpentHide = of.Item2.Attr("qorpent-hide");
+				var qorpentOverride = of.Item2.Attr("qorpent-override");
+				var noqorpent = interfaces.Contains(qorpentHide);
+				var over = interfaces.Contains(qorpentOverride);
+				if (noqorpent){
+					o.AppendLine("#if NOQORPENT");
+				}
 				var e = of.Item2;
 				var dtype = of.Item3;
 				var name = e.Attr("code");
@@ -97,7 +105,7 @@ namespace Qorpent.Scaffolding.Orm{
 					if (e.Attr("code") == "Parent")
 					{
 						GenerateField(e, "IList<" + targetclass.Name + ">", "Children", "Дочерние объекты",
-									  " ?? (_children = new List<" + targetclass.Name + ">())");
+									  " ?? (NativeChildren = new List<" + targetclass.Name + ">())");
 					}
 				}
 				else
@@ -106,7 +114,11 @@ namespace Qorpent.Scaffolding.Orm{
 					{
 						name = "Index";
 					}
-					GenerateField(e, dtype, name);
+					GenerateField(e, dtype, name,over:over);
+				}
+				if (noqorpent)
+				{
+					o.AppendLine("#endif");
 				}
 			}
 
@@ -162,7 +174,7 @@ namespace Qorpent.Scaffolding.Orm{
 			GenerateField(e, dtype, name);
 		}
 
-		private void GenerateField(XElement e, string dtype, string name, string subcomment=null, string init = null){
+		private void GenerateField(XElement e, string dtype, string name, string subcomment=null, string init = null, bool over =false){
 			var sermode = e.Attr("serialize");
 			string serattribute = null;
 			if (!string.IsNullOrWhiteSpace(sermode)){
@@ -201,10 +213,18 @@ namespace Qorpent.Scaffolding.Orm{
 				o.AppendLine("\t\t[" + serattribute + "]");
 				o.AppendLine("#endif");
 			}
-			o.AppendFormat("\t\tpublic virtual {0} {1} {{get {{return _{2}{3};}} set{{_{2}=value;}}}}\r\n", dtype, name,
-			               name.ToLower(),init);
+			if (over){
+				o.AppendLine("#if NOQORPENT");
+				o.AppendFormat("\t\tpublic virtual {0} {1} {{get {{return Native{1}{2};}} set{{Native{1}=value;}}}}\r\n", dtype, name, init);
+				o.AppendLine("#else");
+				o.AppendFormat("\t\tpublic override {0} {1} {{get {{return Native{1}{2};}} set{{Native{1}=value;}}}}\r\n", dtype, name, init);
+				o.AppendLine("#endif");
+			}
+			else{
+				o.AppendFormat("\t\tpublic virtual {0} {1} {{get {{return Native{1}{2};}} set{{Native{1}=value;}}}}\r\n", dtype, name, init);
+			}
 			o.AppendLine("\t\t///<summary>Direct access to " + name + "</summary>");
-			o.AppendFormat("\t\tprotected {0} _{1};\r\n", dtype, name.ToLower());
+			o.AppendFormat("\t\tprotected {0} Native{1};\r\n", dtype, name);
 			o.AppendLine();
 		}
 

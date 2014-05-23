@@ -19,6 +19,7 @@ namespace Qorpent.Scaffolding.Orm{
 			var x = cls.Compiled;
 			var datatypes = x.Elements("datatype")
 			                 .ToDictionary(_ => CoreExtensions.Attr(_, "code"), _ => CoreExtensions.Attr(_, "type"));
+			IDictionary<string,Tuple<IBSharpClass, XElement, string>> result = new Dictionary<string, Tuple<IBSharpClass, XElement, string>>();
 			foreach (var e in x.Elements().OrderBy(_ => _.Attr("idx")).ThenBy(_ => _.Attr("code")))
 			{
 				if (string.IsNullOrWhiteSpace(e.Value))
@@ -27,14 +28,27 @@ namespace Qorpent.Scaffolding.Orm{
 					if (e.Name.LocalName == "ref" || datatypes.ContainsKey(e.Name.LocalName))
 					{
 						if (e.Name.LocalName == "ref"){
-							yield return new Tuple<IBSharpClass, XElement, string>(cls, e, "");
+							result[e.Attr("code")] = new Tuple<IBSharpClass, XElement, string>(cls, e, "");
 						}
 						else{
-							yield return new Tuple<IBSharpClass, XElement, string>(cls, e, datatypes[e.Name.LocalName]);
+							if (result.ContainsKey(e.Name.LocalName)){
+								var existed = result[e.Name.LocalName];
+								var qattrs = existed.Item2.Attributes().Where(_ => _.Name.LocalName.StartsWith("qorpent-"));
+								result[e.Attr("code")] = new Tuple<IBSharpClass, XElement, string>(cls, e, datatypes[e.Name.LocalName]);
+								foreach (var qattr in qattrs){
+									if (null == e.Attribute(qattr.Name)){
+										e.SetAttributeValue(qattr.Name,qattr.Value);
+									}
+								}
+							}
+							else{
+								result[e.Attr("code")] = new Tuple<IBSharpClass, XElement, string>(cls, e, datatypes[e.Name.LocalName]);
+							}
 						}
 					}
 				}
 			}
+			return result.Values;
 		}
 	}
 }
