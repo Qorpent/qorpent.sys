@@ -125,7 +125,7 @@ namespace Qorpent.Scaffolding.Application {
                 new XAttribute("class", "menu__item"));
             CopyAttributes(result, el);
             var icon = new XElement("div",
-                new XAttribute("class", "icon"));
+                new XAttribute("class", "icon menu__item-icon menu__item-element"));
             if (el.HasAttribute("iconclass")) {
                 icon.Add(new XElement("i", new XAttribute("class", el.Attr("iconclass"))));
             } else if (el.HasAttribute("icon")) {
@@ -152,7 +152,7 @@ namespace Qorpent.Scaffolding.Application {
             var result = GenerateIconItem(el);
             result.SetAttr("class", "menu__item");
             var title = new XElement("div",
-                new XAttribute("class", "menu__item-title"));
+                new XAttribute("class", "menu__item-title menu__item-element"));
             title.SetValue(el.HasAttribute("title") ? el.Attr("title") : el.Attr("name"));
             result.Add(title);
             return result;
@@ -162,7 +162,7 @@ namespace Qorpent.Scaffolding.Application {
             var result = new XElement("div",
                 new XAttribute("class", "menu__item"));
             CopyAttributes(result, el);
-            var link = new XElement("div", new XAttribute("class", "menu__item-title"));
+            var link = new XElement("div", new XAttribute("class", "menu__item-title menu__item-element"));
             link.SetValue(el.Attr("name"));
             result.Add(link);
             return result;
