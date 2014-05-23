@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -120,6 +121,28 @@ namespace Qorpent.Utils
 			Interlocked.Increment(ref Calls);
 			var result = new ConsoleApplicationResult();
 			var startinfo = PrepareStrartInfo();
+			result.StartInfo = startinfo;
+
+			if (ExePath == "del"){
+				var fullpath = Path.Combine(startinfo.WorkingDirectory, startinfo.Arguments.Replace("\"", "").Trim());
+				var mask = Path.GetFileName(fullpath);
+				var dir = Path.GetDirectoryName(fullpath);
+				try{
+					if (Directory.Exists(dir)){
+						var files = Directory.GetFiles(dir, mask);
+						foreach (var file in files){
+							File.Delete(file);
+						}
+					}
+					result.State = 0;
+				}
+				catch(Exception ex){
+					result.State = -1;
+					result.Exception = ex;
+				}
+				return result;
+			}
+
 			var process = new Process{StartInfo = startinfo};
 			try{
 				var output = new StringBuilder();

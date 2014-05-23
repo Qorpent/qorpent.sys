@@ -181,7 +181,20 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("\t\t///" + e.Attr("name")+" "+subcomment);
 			o.AppendLine("\t\t///</summary>");
 			if (e.Attr("comment").ToBool()){
-				o.AppendLine("\t\t///<remarks>" + e.Attr("comment") + "</remarks>");
+				var commentline = e.Attr("comment").SmartSplit(false, true, '\r', '\n');
+				if (commentline.Count > 0){
+					if (commentline.Count == 1){
+						o.AppendLine("\t\t///<remarks>" + e.Attr("comment") + "</remarks>");
+					}
+					else{
+						o.AppendLine("\t\t///<remarks>");
+						foreach (var cl in commentline){
+							o.AppendLine("\t\t///" + cl);
+						}
+						o.AppendLine("\t\t///</remarks>");
+					}
+				}
+				
 			}
 			if (null != serattribute){
 				o.AppendLine("#if !NOQORPENT");

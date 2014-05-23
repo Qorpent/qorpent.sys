@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace Qorpent.Utils{
 	/// <summary>
@@ -29,8 +30,20 @@ namespace Qorpent.Utils{
 		/// 
 		/// </summary>
 		public bool IsOK{
-			get { return null == Exception && 0 == State; }
+			get{
+				if (null == Exception && 0 == State) return true;
+				if (null == StartInfo) return false;
+				if (StartInfo.FileName.Contains("mkdir") || StartInfo.FileName.Contains("netsh")){
+					return State > 0;
+				}
+				return false;
+			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public ProcessStartInfo StartInfo { get; set; }
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -40,7 +53,7 @@ namespace Qorpent.Utils{
 			Timeouted = Timeouted || res.Timeouted;
 			Exception = Exception ?? res.Exception;
 			if (0 == State){
-				State = res.State;
+				State = res.IsOK?0:res.State;
 				Output += "Command: " + h.ExePath + " " + h.Arguments + "\r\n" + res.Output+res.Error;
 			}
 			

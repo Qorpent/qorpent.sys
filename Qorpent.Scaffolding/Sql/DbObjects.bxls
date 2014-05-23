@@ -90,7 +90,7 @@ namespace Qorpent.Db
 		)
 		
 	class IEntity "Описание сущности" abstract
-		qorpent-interface IEntity
+		qorpent-interface Entity
 		import IWithCode
 		import IWithIdx
 		import IWithName

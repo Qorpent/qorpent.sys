@@ -29,6 +29,6 @@ namespace Qorpent.Data{
 		/// <returns></returns>
 		string PrepareSelectQuery(object conditions = null, object hints = null);
 	}
-
+	 
 	
 }
