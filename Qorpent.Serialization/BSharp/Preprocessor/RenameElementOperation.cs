@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿#pragma warning disable 649
+using System.Xml.Linq;
 using Qorpent.Serialization;
 
 namespace Qorpent.BSharp.Preprocessor{
