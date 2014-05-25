@@ -21,7 +21,7 @@ namespace Qorpent.Charts.FusionCharts {
         /// <exception cref="NotImplementedException"></exception>
         public FusionChartWrapper(IChartElement element, IChartConfig config) {
             _element = element;
-            _config = config;
+            _config = config??_config;
             _elementName = determineName(_element);
             _eltype = _elementName.To<FusionChartElementType>();
             _charttype = config.Type.To<FusionChartType>();

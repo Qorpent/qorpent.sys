@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable 649
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.BSharp.Builder;
 using Qorpent.Utils.Extensions;
