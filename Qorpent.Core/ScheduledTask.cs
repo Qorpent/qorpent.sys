@@ -20,7 +20,8 @@ namespace Qorpent
 		/// </summary>
 		/// <param name="worker"></param>
 		public ScheduledTask(Action worker){
-			this._worker = worker;
+			_worker = worker;
+			_timer = _timer ?? _timer; //avoid warning in mono
 			StartInterval = 1000;
 			AfterSuccessInterval = 60000;
 			AfterErrorInterval = 60000;
@@ -102,7 +103,6 @@ namespace Qorpent
 		public void Start(){
 			if (_started) return;
 			_started = true;
-			_timer = new Timer(Execute,true,StartInterval,Timeout.Infinite);	
 			if (null != OnStart){
 				OnStart.Invoke(this);
 			}
