@@ -8,7 +8,8 @@
     <AssemblyName>Qorpent.Serialization</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <NoWarn>CS0649</NoWarn>
+    <NoWarn>
+    </NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AbstractCanvas\Canvas.cs" />
