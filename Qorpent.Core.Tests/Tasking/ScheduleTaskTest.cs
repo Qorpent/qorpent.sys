@@ -16,13 +16,14 @@ namespace Qorpent.Core.Tests.Tasking
 			var times = 0;
 			ScheduledTask s = null;
 			s = new ScheduledTask(() =>{
+				Console.WriteLine("CanRunRegular "+times);
 				times++;
 				if (times == 3){
 					s.Stop();
 				}
 			}){StartInterval = 10, AfterSuccessInterval = 10};
 			s.Start();
-			Thread.Sleep(100);
+			Thread.Sleep(1000);
 			Assert.AreEqual(3,times);
 		}
 
@@ -45,7 +46,7 @@ namespace Qorpent.Core.Tests.Tasking
 			}) { StartInterval = 10, AfterSuccessInterval = 10, AfterErrorInterval = 10,ProceedOnError = true};
 			s.OnError += _ => errors++;
 			s.Start();
-			Thread.Sleep(100);
+			Thread.Sleep(1000);
 			Assert.AreEqual(4, times);
 			Assert.AreEqual(1, errors);
 		}
