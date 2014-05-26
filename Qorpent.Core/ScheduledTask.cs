@@ -103,6 +103,7 @@ namespace Qorpent
 		public void Start(){
 			if (_started) return;
 			_started = true;
+			_timer = new Timer(Execute, true, StartInterval, Timeout.Infinite);	
 			if (null != OnStart){
 				OnStart.Invoke(this);
 			}
