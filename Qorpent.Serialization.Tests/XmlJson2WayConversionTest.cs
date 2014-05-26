@@ -27,7 +27,7 @@ namespace Qorpent.Serialization.Tests
         }
 
         private static string SimplifyStep(string json) {
-            json = json.Trim().Replace("  ", " ").Replace("\t", "").Replace("\r\n", "").Replace(" : ", ":")
+            json = json.Trim().Replace("  ", " ").Replace("\t", "").Replace("\r", "").Replace(" : ", ":").Replace("\n","")
                        .Replace(" [", "[")
                        .Replace(" {", "{")
                        .Replace(" ]", "]")

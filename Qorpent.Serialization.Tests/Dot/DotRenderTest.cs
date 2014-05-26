@@ -20,7 +20,7 @@ namespace Qorpent.Serialization.Tests.Dot {
             var r = render(g);
             Assert.AreEqual(@"digraph test {
 }
-",r);
+".Replace("\r", ""), r.Replace("\r", ""));
         }
         [Test]
         public void SimpleGraphNoNodes()
@@ -31,7 +31,7 @@ namespace Qorpent.Serialization.Tests.Dot {
             Assert.AreEqual(@"digraph test {
 	a -> b;
 }
-", r);
+".Replace("\r", ""), r.Replace("\r", ""));
 
         }
 
@@ -52,7 +52,7 @@ namespace Qorpent.Serialization.Tests.Dot {
 	_0x0031b [label=""1b"";];
 	_0x0031a -> _0x0031b;
 }
-", r);
+".Replace("\r",""), r.Replace("\r",""));
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace Qorpent.Serialization.Tests.Dot {
 	b [label=b;shape=Mcircle;style=filled;fillcolor=""red:blue"";];
 	a -> b [arrowhead=lcurverobox;arrowtail=obox;dir=both;];
 }
-", r);
+".Replace("\r",""), r.Replace("\r",""));
         }
     }
 }
