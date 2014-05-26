@@ -34,7 +34,7 @@ namespace Qorpent.Security.Cryptography.Sources {
             if (!CorrectConfiguration(action)) {
                 throw new Exception("Incorrect configuration");
             }
-			var md5 = MD5.Create();
+		
 			
             switch (action.ActionType) {
                 case CryptoProviderActionType.Verify: return Verify(action);
