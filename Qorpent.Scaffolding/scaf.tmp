@@ -1,0 +1,333 @@
+XBuild Engine Version 12.0
+Mono, Version 3.4.1.0
+Copyright (C) 2005-2013 Various Mono authors
+
+Build started 5/26/2014 12:36:01 PM.
+__________________________________________________
+Project "/home/comdiv/repos/qorpent.sys/Qorpent.Scaffolding/Qorpent.Scaffolding.csproj" (default target(s)):
+	Target BeforeBuild:
+		Copying file from '/home/comdiv/repos/qorpent.kernel/default-content/Auto_AssemblyInfo.cs' to '/home/comdiv/repos/.build/tmp/Qorpent.Scaffolding_VersionInfo.cs'
+		Copying file from '/home/comdiv/repos/qorpent.sys/manifest' to '/home/comdiv/repos/.build/tmp/qorpent.sys.pkg-manifest'
+		Updating File "/home/comdiv/repos/qorpent.sys/Qorpent.Scaffolding/../../.build/tmp/Qorpent.Scaffolding_VersionInfo.cs".
+		  Replaced matches with "Qorpent.Scaffolding".
+		Updating File "/home/comdiv/repos/qorpent.sys/Qorpent.Scaffolding/../../.build/tmp/Qorpent.Scaffolding_VersionInfo.cs".
+		  Replaced matches with "Debug".
+		Updating File "/home/comdiv/repos/qorpent.sys/Qorpent.Scaffolding/../../.build/tmp/Qorpent.Scaffolding_VersionInfo.cs".
+		  Replaced matches with "1.0.0.0".
+	Target PrepareForBuild:
+		Configuration: Debug Platform: AnyCPU
+	Target GenerateSatelliteAssemblies:
+	No input files were specified for target GenerateSatelliteAssemblies, skipping.
+	Target GenerateTargetFrameworkMonikerAttribute:
+	Skipping target "GenerateTargetFrameworkMonikerAttribute" because its outputs are up-to-date.
+	Target CoreCompile:
+		Tool /usr/local/lib/mono/4.5/mcs.exe execution started with arguments: /noconfig /debug:full /debug+ /keyfile:/home/comdiv/repos/qorpent.sys/Qorpent.Scaffolding/../../qorpent.kernel/default-content/qorpent.snk /optimize- /out:obj/Debug/Qorpent.Scaffolding.dll /resource:obj/Debug/Qorpent.Scaffolding.Application.AppSpecification.bxls /resource:obj/Debug/Qorpent.Scaffolding.Sql.DbObjects.bxls /resource:obj/Debug/Qorpent.Scaffolding.qorpent.sys.pkg-manifest Application/AppSpecificationBSharpSource.cs Application/ApplicationCompilerExtensions.cs Application/GenerateActionsInJavaScript.cs Application/GenerateControllersTask.cs Application/GenerateDataTypesInJavaScriptTask.cs Application/GenerateLayoutsTask.cs Application/GenerateMenuTask.cs Application/GenerateServerActions.cs BSharpClassRef.cs Application/GenerateDataTypesInCSharpTask.cs CodeGeneratorTaskBase.cs Orm/GenerateModel.cs Orm/DataCompilerExtensions.cs Orm/GeneratePokoClassDataAdapter.cs Orm/GeneratePokoClasses.cs Orm/OrmGenerationExtensions.cs Production.cs Sql/DataCompilerExtensions.cs Sql/DataObjectsSourcePackageForBShart.cs Sql/DbIndex.cs Sql/DbPartitionScheme.cs Sql/DbDataType.cs Sql/DbDefaultValue.cs Sql/DbDefaultValueType.cs Sql/DbDialect.cs Sql/DbField.cs Sql/DbFileGroup.cs Sql/DbFunction.cs Sql/DbGenerationMode.cs Sql/DbObject.cs Sql/DbObjectCreateType.cs Sql/DbObjectType.cs Sql/DbAutoPartition.cs Sql/DbTable.cs Sql/DbTrigger.cs Sql/DbView.cs Sql/GenerateTsqlScriptsTask.cs Sql/ISqlProvider.cs Sql/Parameter.cs Sql/SqlProvider.cs Sql/SqlProviderBase.cs Sql/TSQLProvider.cs /home/comdiv/repos/qorpent.sys/Qorpent.Scaffolding/../../.build/tmp/Qorpent.Scaffolding_VersionInfo.cs ../PackageAssemblyInfo.cs /target:library /warnaserror+ /define:"DEBUG;TRACE;Unix" /doc:/home/comdiv/repos/qorpent.sys/Qorpent.Scaffolding/../../.build/bin/Qorpent.Scaffolding.XML /nostdlib /reference:/usr/local/lib/mono/4.5/Microsoft.CSharp.dll /reference:/usr/local/lib/mono/4.5/System.Data.dll /reference:/usr/local/lib/mono/4.5/System.Xml.dll /reference:/usr/local/lib/mono/4.5/System.Xml.Linq.dll /reference:/usr/local/lib/mono/4.5/System.dll /reference:/usr/local/lib/mono/4.5/System.Core.dll /reference:/usr/local/lib/mono/4.5/mscorlib.dll /warn:4
+Application/AppSpecificationBSharpSource.cs(3,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/AppSpecificationBSharpSource.cs(4,7): error CS0234: The type or namespace name `Bxl' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/AppSpecificationBSharpSource.cs(5,7): error CS0234: The type or namespace name `IoC' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/AppSpecificationBSharpSource.cs(7,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/ApplicationCompilerExtensions.cs(2,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/ApplicationCompilerExtensions.cs(3,7): error CS0234: The type or namespace name `Integration' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/ApplicationCompilerExtensions.cs(4,7): error CS0234: The type or namespace name `IoC' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateActionsInJavaScript.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateActionsInJavaScript.cs(6,7): error CS0234: The type or namespace name `Serialization' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateActionsInJavaScript.cs(7,7): error CS0234: The type or namespace name `Uson' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateActionsInJavaScript.cs(8,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateControllersTask.cs(7,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateControllersTask.cs(8,7): error CS0234: The type or namespace name `Uson' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateControllersTask.cs(9,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateDataTypesInJavaScriptTask.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateDataTypesInJavaScriptTask.cs(6,7): error CS0234: The type or namespace name `Serialization' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateDataTypesInJavaScriptTask.cs(7,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateLayoutsTask.cs(4,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateLayoutsTask.cs(5,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateMenuTask.cs(4,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateMenuTask.cs(5,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateServerActions.cs(3,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateServerActions.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(6,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+CodeGeneratorTaskBase.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+CodeGeneratorTaskBase.cs(6,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+CodeGeneratorTaskBase.cs(7,7): error CS0234: The type or namespace name `Integration' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Orm/GenerateModel.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Orm/GenerateModel.cs(6,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Orm/DataCompilerExtensions.cs(2,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Orm/DataCompilerExtensions.cs(3,7): error CS0234: The type or namespace name `IoC' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Orm/GeneratePokoClassDataAdapter.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Orm/GeneratePokoClassDataAdapter.cs(6,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Orm/GeneratePokoClasses.cs(6,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Orm/GeneratePokoClasses.cs(7,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Orm/OrmGenerationExtensions.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Orm/OrmGenerationExtensions.cs(6,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DataCompilerExtensions.cs(1,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DataCompilerExtensions.cs(2,7): error CS0234: The type or namespace name `IoC' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DataObjectsSourcePackageForBShart.cs(3,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DataObjectsSourcePackageForBShart.cs(4,7): error CS0234: The type or namespace name `Bxl' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DataObjectsSourcePackageForBShart.cs(5,7): error CS0234: The type or namespace name `IoC' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DataObjectsSourcePackageForBShart.cs(6,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbIndex.cs(5,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbPartitionScheme.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbDataType.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbDefaultValue.cs(3,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbField.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbFileGroup.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbFunction.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbObject.cs(8,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbObject.cs(9,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbObject.cs(10,7): error CS0234: The type or namespace name `Config' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbObject.cs(11,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbTable.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/DbTrigger.cs(2,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/GenerateTsqlScriptsTask.cs(3,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/SqlProviderBase.cs(6,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/SqlProviderBase.cs(7,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/TSQLProvider.cs(7,7): error CS0234: The type or namespace name `Serialization' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Sql/TSQLProvider.cs(8,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+Application/AppSpecificationBSharpSource.cs(15,46): error CS0246: The type or namespace name `ServiceBase' could not be found. Are you missing an assembly reference?
+Application/AppSpecificationBSharpSource.cs(15,59): error CS0246: The type or namespace name `IBSharpSourceCodeProvider' could not be found. Are you missing an assembly reference?
+Application/ApplicationCompilerExtensions.cs(11,47): error CS0246: The type or namespace name `BSharpBuilderExtensionBase' could not be found. Are you missing an assembly reference?
+Application/ApplicationCompilerExtensions.cs(11,75): error CS0246: The type or namespace name `IBSharpBuilderExtension' could not be found. Are you missing an assembly reference?
+CodeGeneratorTaskBase.cs(13,48): error CS0246: The type or namespace name `BSharpBuilderTaskBase' could not be found. Are you missing an assembly reference?
+Orm/DataCompilerExtensions.cs(11,39): error CS0246: The type or namespace name `BSharpBuilderExtensionBase' could not be found. Are you missing an assembly reference?
+Orm/DataCompilerExtensions.cs(11,67): error CS0246: The type or namespace name `IBSharpBuilderExtension' could not be found. Are you missing an assembly reference?
+Sql/DataCompilerExtensions.cs(10,40): error CS0246: The type or namespace name `BSharpBuilderExtensionBase' could not be found. Are you missing an assembly reference?
+Sql/DataCompilerExtensions.cs(10,68): error CS0246: The type or namespace name `IBSharpBuilderExtension' could not be found. Are you missing an assembly reference?
+Sql/DataObjectsSourcePackageForBShart.cs(14,51): error CS0246: The type or namespace name `ServiceBase' could not be found. Are you missing an assembly reference?
+Sql/DataObjectsSourcePackageForBShart.cs(14,64): error CS0246: The type or namespace name `IBSharpSourceCodeProvider' could not be found. Are you missing an assembly reference?
+Sql/DbObject.cs(18,35): error CS0246: The type or namespace name `TreeConfigBase' could not be found. Are you missing an assembly reference?
+Application/AppSpecificationBSharpSource.cs(16,20): error CS0246: The type or namespace name `IBxlParser' could not be found. Are you missing an assembly reference?
+Application/AppSpecificationBSharpSource.cs(24,43): error CS0246: The type or namespace name `IBSharpCompiler' could not be found. Are you missing an assembly reference?
+Application/AppSpecificationBSharpSource.cs(24,69): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+Application/ApplicationCompilerExtensions.cs(16,27): error CS0115: `Qorpent.Scaffolding.Application.ApplicationCompilerExtensions.PrepareTasks()' is marked as an override but no suitable method found to override
+CodeGeneratorTaskBase.cs(30,13): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+CodeGeneratorTaskBase.cs(56,32): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+CodeGeneratorTaskBase.cs(102,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateActionsInJavaScript.cs(21,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateActionsInJavaScript.cs(29,35): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateControllersTask.cs(21,69): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateControllersTask.cs(60,38): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateControllersTask.cs(70,31): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateControllersTask.cs(74,34): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateControllersTask.cs(91,49): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateControllersTask.cs(195,39): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateControllersTask.cs(206,32): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInJavaScriptTask.cs(19,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInJavaScriptTask.cs(27,35): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInJavaScriptTask.cs(52,33): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInJavaScriptTask.cs(52,68): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInJavaScriptTask.cs(65,30): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInJavaScriptTask.cs(65,83): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInJavaScriptTask.cs(145,31): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInJavaScriptTask.cs(145,66): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateLayoutsTask.cs(17,69): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateLayoutsTask.cs(32,42): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateMenuTask.cs(16,69): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateServerActions.cs(24,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateServerActions.cs(30,37): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(18,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(34,37): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(34,72): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(39,35): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(39,70): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(62,30): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(62,83): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(102,35): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(102,70): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Application/GenerateDataTypesInCSharpTask.cs(107,42): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GenerateModel.cs(39,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/DataCompilerExtensions.cs(16,27): error CS0115: `Qorpent.Scaffolding.Orm.OrmCompilerExtensions.PrepareTasks()' is marked as an override but no suitable method found to override
+Orm/GeneratePokoClassDataAdapter.cs(39,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClassDataAdapter.cs(54,38): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClassDataAdapter.cs(65,43): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClassDataAdapter.cs(124,47): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClassDataAdapter.cs(134,36): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClassDataAdapter.cs(184,32): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClasses.cs(42,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClasses.cs(59,38): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClasses.cs(69,41): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClasses.cs(89,34): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClasses.cs(129,29): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClasses.cs(148,28): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/GeneratePokoClasses.cs(236,32): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Orm/OrmGenerationExtensions.cs(18,35): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Sql/DataCompilerExtensions.cs(15,27): error CS0115: `Qorpent.Scaffolding.Sql.DataCompilerExtensions.PrepareTasks()' is marked as an override but no suitable method found to override
+Sql/DataObjectsSourcePackageForBShart.cs(15,20): error CS0246: The type or namespace name `IBxlParser' could not be found. Are you missing an assembly reference?
+Sql/DataObjectsSourcePackageForBShart.cs(23,43): error CS0246: The type or namespace name `IBSharpCompiler' could not be found. Are you missing an assembly reference?
+Sql/DataObjectsSourcePackageForBShart.cs(23,69): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+Sql/DbObject.cs(100,56): error CS0246: The type or namespace name `IBSharpProject' could not be found. Are you missing an assembly reference?
+Sql/DbObject.cs(121,36): error CS0246: The type or namespace name `IBSharpProject' could not be found. Are you missing an assembly reference?
+Sql/DbObject.cs(121,57): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Sql/DbObject.cs(121,78): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+Sql/DbObject.cs(282,49): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Sql/DbObject.cs(282,75): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+Sql/DbObject.cs(291,13): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+Sql/DbObject.cs(296,13): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Sql/DbObject.cs(360,46): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Sql/DbObject.cs(360,72): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+Sql/GenerateTsqlScriptsTask.cs(16,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+Sql/SqlProviderBase.cs(36,18): error CS0246: The type or namespace name `IBSharpProject' could not be found. Are you missing an assembly reference?
+Sql/SqlProviderBase.cs(42,18): error CS0246: The type or namespace name `IBSharpProject' could not be found. Are you missing an assembly reference?
+Sql/SqlProviderBase.cs(111,90): error CS0246: The type or namespace name `IBSharpProject' could not be found. Are you missing an assembly reference?
+	Task "Csc" execution -- FAILED
+	Done building target "CoreCompile" in project "/home/comdiv/repos/qorpent.sys/Qorpent.Scaffolding/Qorpent.Scaffolding.csproj".-- FAILED
+Done building project "/home/comdiv/repos/qorpent.sys/Qorpent.Scaffolding/Qorpent.Scaffolding.csproj".-- FAILED
+
+Build FAILED.
+Errors:
+
+/home/comdiv/repos/qorpent.sys/Qorpent.Scaffolding/Qorpent.Scaffolding.csproj (default targets) ->
+/usr/local/lib/mono/4.5/Microsoft.CSharp.targets (CoreCompile target) ->
+
+	Application/AppSpecificationBSharpSource.cs(3,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/AppSpecificationBSharpSource.cs(4,7): error CS0234: The type or namespace name `Bxl' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/AppSpecificationBSharpSource.cs(5,7): error CS0234: The type or namespace name `IoC' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/AppSpecificationBSharpSource.cs(7,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/ApplicationCompilerExtensions.cs(2,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/ApplicationCompilerExtensions.cs(3,7): error CS0234: The type or namespace name `Integration' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/ApplicationCompilerExtensions.cs(4,7): error CS0234: The type or namespace name `IoC' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateActionsInJavaScript.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateActionsInJavaScript.cs(6,7): error CS0234: The type or namespace name `Serialization' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateActionsInJavaScript.cs(7,7): error CS0234: The type or namespace name `Uson' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateActionsInJavaScript.cs(8,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateControllersTask.cs(7,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateControllersTask.cs(8,7): error CS0234: The type or namespace name `Uson' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateControllersTask.cs(9,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateDataTypesInJavaScriptTask.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateDataTypesInJavaScriptTask.cs(6,7): error CS0234: The type or namespace name `Serialization' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateDataTypesInJavaScriptTask.cs(7,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateLayoutsTask.cs(4,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateLayoutsTask.cs(5,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateMenuTask.cs(4,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateMenuTask.cs(5,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateServerActions.cs(3,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateServerActions.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(6,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	CodeGeneratorTaskBase.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	CodeGeneratorTaskBase.cs(6,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	CodeGeneratorTaskBase.cs(7,7): error CS0234: The type or namespace name `Integration' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Orm/GenerateModel.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Orm/GenerateModel.cs(6,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Orm/DataCompilerExtensions.cs(2,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Orm/DataCompilerExtensions.cs(3,7): error CS0234: The type or namespace name `IoC' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Orm/GeneratePokoClassDataAdapter.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Orm/GeneratePokoClassDataAdapter.cs(6,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Orm/GeneratePokoClasses.cs(6,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Orm/GeneratePokoClasses.cs(7,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Orm/OrmGenerationExtensions.cs(5,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Orm/OrmGenerationExtensions.cs(6,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DataCompilerExtensions.cs(1,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DataCompilerExtensions.cs(2,7): error CS0234: The type or namespace name `IoC' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DataObjectsSourcePackageForBShart.cs(3,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DataObjectsSourcePackageForBShart.cs(4,7): error CS0234: The type or namespace name `Bxl' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DataObjectsSourcePackageForBShart.cs(5,7): error CS0234: The type or namespace name `IoC' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DataObjectsSourcePackageForBShart.cs(6,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbIndex.cs(5,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbPartitionScheme.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbDataType.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbDefaultValue.cs(3,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbField.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbFileGroup.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbFunction.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbObject.cs(8,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbObject.cs(9,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbObject.cs(10,7): error CS0234: The type or namespace name `Config' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbObject.cs(11,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbTable.cs(4,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/DbTrigger.cs(2,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/GenerateTsqlScriptsTask.cs(3,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/SqlProviderBase.cs(6,7): error CS0234: The type or namespace name `BSharp' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/SqlProviderBase.cs(7,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/TSQLProvider.cs(7,7): error CS0234: The type or namespace name `Serialization' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Sql/TSQLProvider.cs(8,7): error CS0234: The type or namespace name `Utils' does not exist in the namespace `Qorpent'. Are you missing an assembly reference?
+	Application/AppSpecificationBSharpSource.cs(15,46): error CS0246: The type or namespace name `ServiceBase' could not be found. Are you missing an assembly reference?
+	Application/AppSpecificationBSharpSource.cs(15,59): error CS0246: The type or namespace name `IBSharpSourceCodeProvider' could not be found. Are you missing an assembly reference?
+	Application/ApplicationCompilerExtensions.cs(11,47): error CS0246: The type or namespace name `BSharpBuilderExtensionBase' could not be found. Are you missing an assembly reference?
+	Application/ApplicationCompilerExtensions.cs(11,75): error CS0246: The type or namespace name `IBSharpBuilderExtension' could not be found. Are you missing an assembly reference?
+	CodeGeneratorTaskBase.cs(13,48): error CS0246: The type or namespace name `BSharpBuilderTaskBase' could not be found. Are you missing an assembly reference?
+	Orm/DataCompilerExtensions.cs(11,39): error CS0246: The type or namespace name `BSharpBuilderExtensionBase' could not be found. Are you missing an assembly reference?
+	Orm/DataCompilerExtensions.cs(11,67): error CS0246: The type or namespace name `IBSharpBuilderExtension' could not be found. Are you missing an assembly reference?
+	Sql/DataCompilerExtensions.cs(10,40): error CS0246: The type or namespace name `BSharpBuilderExtensionBase' could not be found. Are you missing an assembly reference?
+	Sql/DataCompilerExtensions.cs(10,68): error CS0246: The type or namespace name `IBSharpBuilderExtension' could not be found. Are you missing an assembly reference?
+	Sql/DataObjectsSourcePackageForBShart.cs(14,51): error CS0246: The type or namespace name `ServiceBase' could not be found. Are you missing an assembly reference?
+	Sql/DataObjectsSourcePackageForBShart.cs(14,64): error CS0246: The type or namespace name `IBSharpSourceCodeProvider' could not be found. Are you missing an assembly reference?
+	Sql/DbObject.cs(18,35): error CS0246: The type or namespace name `TreeConfigBase' could not be found. Are you missing an assembly reference?
+	Application/AppSpecificationBSharpSource.cs(16,20): error CS0246: The type or namespace name `IBxlParser' could not be found. Are you missing an assembly reference?
+	Application/AppSpecificationBSharpSource.cs(24,43): error CS0246: The type or namespace name `IBSharpCompiler' could not be found. Are you missing an assembly reference?
+	Application/AppSpecificationBSharpSource.cs(24,69): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+	Application/ApplicationCompilerExtensions.cs(16,27): error CS0115: `Qorpent.Scaffolding.Application.ApplicationCompilerExtensions.PrepareTasks()' is marked as an override but no suitable method found to override
+	CodeGeneratorTaskBase.cs(30,13): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+	CodeGeneratorTaskBase.cs(56,32): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+	CodeGeneratorTaskBase.cs(102,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateActionsInJavaScript.cs(21,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateActionsInJavaScript.cs(29,35): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateControllersTask.cs(21,69): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateControllersTask.cs(60,38): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateControllersTask.cs(70,31): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateControllersTask.cs(74,34): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateControllersTask.cs(91,49): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateControllersTask.cs(195,39): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateControllersTask.cs(206,32): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInJavaScriptTask.cs(19,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInJavaScriptTask.cs(27,35): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInJavaScriptTask.cs(52,33): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInJavaScriptTask.cs(52,68): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInJavaScriptTask.cs(65,30): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInJavaScriptTask.cs(65,83): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInJavaScriptTask.cs(145,31): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInJavaScriptTask.cs(145,66): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateLayoutsTask.cs(17,69): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateLayoutsTask.cs(32,42): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateMenuTask.cs(16,69): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateServerActions.cs(24,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateServerActions.cs(30,37): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(18,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(34,37): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(34,72): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(39,35): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(39,70): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(62,30): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(62,83): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(102,35): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(102,70): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Application/GenerateDataTypesInCSharpTask.cs(107,42): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GenerateModel.cs(39,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/DataCompilerExtensions.cs(16,27): error CS0115: `Qorpent.Scaffolding.Orm.OrmCompilerExtensions.PrepareTasks()' is marked as an override but no suitable method found to override
+	Orm/GeneratePokoClassDataAdapter.cs(39,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClassDataAdapter.cs(54,38): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClassDataAdapter.cs(65,43): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClassDataAdapter.cs(124,47): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClassDataAdapter.cs(134,36): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClassDataAdapter.cs(184,32): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClasses.cs(42,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClasses.cs(59,38): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClasses.cs(69,41): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClasses.cs(89,34): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClasses.cs(129,29): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClasses.cs(148,28): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/GeneratePokoClasses.cs(236,32): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Orm/OrmGenerationExtensions.cs(18,35): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Sql/DataCompilerExtensions.cs(15,27): error CS0115: `Qorpent.Scaffolding.Sql.DataCompilerExtensions.PrepareTasks()' is marked as an override but no suitable method found to override
+	Sql/DataObjectsSourcePackageForBShart.cs(15,20): error CS0246: The type or namespace name `IBxlParser' could not be found. Are you missing an assembly reference?
+	Sql/DataObjectsSourcePackageForBShart.cs(23,43): error CS0246: The type or namespace name `IBSharpCompiler' could not be found. Are you missing an assembly reference?
+	Sql/DataObjectsSourcePackageForBShart.cs(23,69): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+	Sql/DbObject.cs(100,56): error CS0246: The type or namespace name `IBSharpProject' could not be found. Are you missing an assembly reference?
+	Sql/DbObject.cs(121,36): error CS0246: The type or namespace name `IBSharpProject' could not be found. Are you missing an assembly reference?
+	Sql/DbObject.cs(121,57): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Sql/DbObject.cs(121,78): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+	Sql/DbObject.cs(282,49): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Sql/DbObject.cs(282,75): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+	Sql/DbObject.cs(291,13): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+	Sql/DbObject.cs(296,13): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Sql/DbObject.cs(360,46): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Sql/DbObject.cs(360,72): error CS0246: The type or namespace name `IBSharpContext' could not be found. Are you missing an assembly reference?
+	Sql/GenerateTsqlScriptsTask.cs(16,63): error CS0246: The type or namespace name `IBSharpClass' could not be found. Are you missing an assembly reference?
+	Sql/SqlProviderBase.cs(36,18): error CS0246: The type or namespace name `IBSharpProject' could not be found. Are you missing an assembly reference?
+	Sql/SqlProviderBase.cs(42,18): error CS0246: The type or namespace name `IBSharpProject' could not be found. Are you missing an assembly reference?
+	Sql/SqlProviderBase.cs(111,90): error CS0246: The type or namespace name `IBSharpProject' could not be found. Are you missing an assembly reference?
+
+	 0 Warning(s)
+	 147 Error(s)
+
+Time Elapsed 00:00:00.6547500
