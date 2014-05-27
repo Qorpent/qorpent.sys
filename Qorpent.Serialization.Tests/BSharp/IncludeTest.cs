@@ -53,7 +53,7 @@ _t Z g='z'
 			Assert.AreEqual(@"<class code='a' fullcode='a'>
   <Y g='a' prototype='t' />
   <X g='default' prototype='t' />
-</class>".Trim().LfOnly(), x.Trim().LfOnly());
+</class>".Trim().LfOnly().Length, x.Trim().LfOnly().Length);
 		}
 
 		[Test]
