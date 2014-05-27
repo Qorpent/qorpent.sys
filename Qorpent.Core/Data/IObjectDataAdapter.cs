@@ -29,7 +29,8 @@ namespace Qorpent.Data{
 		/// <param name="hints">некии опции генерации (зависят от реализации)</param>
 		/// <returns></returns>
 		string PrepareSelectQuery(object conditions = null, object hints = null);
-	}
 
-	
+		///<summary>Implementation of GetTableName</summary>
+		string GetTableName(object options = null);
+	}
 }

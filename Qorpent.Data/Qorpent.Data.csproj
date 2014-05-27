@@ -12,6 +12,7 @@
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
+    <Compile Include="DataCache\ObjectDataCache.cs" />
     <Compile Include="DataDiff\DataTableDiffGenerator.cs" />
     <Compile Include="DataDiff\DataDiffItem.cs" />
     <Compile Include="DataDiff\DataDiffTable.cs" />
@@ -46,6 +47,7 @@
       <Name>Qorpent.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Utils.import" />

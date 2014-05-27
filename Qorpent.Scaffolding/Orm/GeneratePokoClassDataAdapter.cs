@@ -55,11 +55,19 @@ namespace Qorpent.Scaffolding.Orm{
 			o = new StringBuilder();
 			var x = targetclass.Compiled;
 			WriteStartClass(targetclass, x);
+			WriteGetTableQuery(targetclass, x);
 			WriteGetSelectQuery(targetclass, x);
 			WriteSingleRecordProcessor(targetclass, x);
 			WriteEnumerableReaderProcessor(targetclass, x);
 			WriteEndClass();
 			return o.ToString();
+		}
+
+		private void WriteGetTableQuery(IBSharpClass targetclass, XElement e){
+			o.AppendLine("\t\t///<summary>Implementation of GetTableName</summary>");
+			o.AppendLine("\t\tpublic string GetTableName(object options = null) {");
+			o.AppendLine("\t\t\treturn \""+targetclass.Compiled.Attr("fullname")+"\";");
+			o.AppendLine("\t\t}");
 		}
 
 		private void WriteSingleRecordProcessor(IBSharpClass targetclass, XElement xElement){
