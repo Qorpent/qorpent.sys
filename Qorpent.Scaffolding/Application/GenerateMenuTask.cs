@@ -33,13 +33,23 @@ namespace Qorpent.Scaffolding.Application {
         }
 
         private static XElement GenerateMenuItem(XElement el) {
-            if (!el.HasAttribute("type")) el.SetAttr("type", "text");
-            switch (el.Attr("type")) {
-                case "text" : return GenerateTextItem(el);
-                case "icon": return GenerateIconItem(el);
-                case "icon_with_text": return GenerateIconWithTextItem(el);
-                default: return GenerateTextItem(el);
+            if (el.Attr("name") == "divider") {
+                return GenerateMenuDivider();
+            } else {
+                if (!el.HasAttribute("type")) el.SetAttr("type", "text");
+                switch (el.Attr("type")) {
+                    case "text": return GenerateTextItem(el);
+                    case "icon": return GenerateIconItem(el);
+                    case "icon_with_text": return GenerateIconWithTextItem(el);
+                    default: return GenerateTextItem(el);
+                }   
             }
+        }
+
+        private static XElement GenerateMenuDivider() {
+            return new XElement("div", 
+                new XAttribute("class", "menu__item menu__item-divider"),
+                new XAttribute("type", "divider"));
         }
 
         private static XElement GenerateDropdownGroup(XElement el) {
