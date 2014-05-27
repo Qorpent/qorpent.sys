@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.BSharp;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp{
 	[TestFixture]
@@ -60,7 +61,7 @@ patch for=^A:
 			Console.WriteLine(str);
 			Assert.AreEqual(@"<class code='A' fullcode='A'>
   <x code='a' name='name2' shortname='n' idx='1' />
-</class>", str);
+</class>".Trim().LfOnly(), str.Trim().LfOnly());
 		}
 
 
@@ -94,7 +95,7 @@ patch for=notifications new=create
   <item code='notificationsquery' type='LogQuery'>
     <parameters NotAcceptedOnly='true' />
   </item>
-</controller>".Length, str.Length);
+</controller>".Trim().LfOnly().Length, str.Trim().LfOnly().Length);
 		}
 
 
@@ -115,7 +116,7 @@ patch for=^A new=create:
   <x code='a' name='name2'>
     <val code='1' />
   </x>
-</class>".Replace("\r", ""), str.Replace("\r", ""));
+</class>".Trim().LfOnly(), str.Trim().LfOnly());
 		}
 
 		[Test]
@@ -135,7 +136,7 @@ patch for=^A plain:
   <x code='a' name='name1'>
     <y code='b' name='name2' />
   </x>
-</class>".Replace("\r", ""), str.Replace("\r", ""));
+</class>".Trim().LfOnly(), str.Trim().LfOnly());
 		}
 	
 
@@ -157,7 +158,7 @@ patch for=^A:
   <x code='a' name='name2' shortname='n' idx='1'>
     <y code='b' name='name2' />
   </x>
-</class>".Replace("\r", ""), str.Replace("\r", ""));
+</class>".Trim().LfOnly(), str.Trim().LfOnly());
 		}
 
 		[Test]
@@ -180,7 +181,7 @@ patch for=^A:
   <x code='b'>
     <y code='b' />
   </x>
-</class>".Replace("\r", ""), str.Replace("\r", ""));
+</class>".Trim().LfOnly(), str.Trim().LfOnly());
 		}
 
 		[Test]
@@ -199,7 +200,7 @@ patch for=^A priority=100:
 			Console.WriteLine(str);
 			Assert.AreEqual(@"<class code='A' fullcode='A'>
   <x code='a' name='name2' shortname='n' idx='3' />
-</class>".Replace("\r", ""), str.Replace("\r", ""));
+</class>".Trim().LfOnly(), str.Trim().LfOnly());
 		}
 
 		[Test]
@@ -217,7 +218,7 @@ patch for=^A
 			Console.WriteLine(str);
 			Assert.AreEqual(@"<class code='A' fullcode='A'>
   <x code='a' name='name1' shortname='n' />
-</class>".Replace("\r", ""), str.Replace("\r", "")); //not changed!!!
+</class>".Trim().LfOnly(), str.Trim().LfOnly()); //not changed!!!
 			Assert.True(Compile(code).Errors.Any(_=>_.Type==BSharpErrorType.PatchError));
 		}
 
@@ -237,7 +238,7 @@ patch for=^A new=none
 			Console.WriteLine(str);
 			Assert.AreEqual(@"<class code='A' fullcode='A'>
   <x code='a' name='name1' shortname='n' idx='3' />
-</class>".Replace("\r", ""), str.Replace("\r", "")); //not changed!!!
+</class>".Trim().LfOnly(), str.Trim().LfOnly()); //not changed!!!
 			Assert.False(Compile(code).Errors.Any(_ => _.Type == BSharpErrorType.PatchError));
 		}
 
@@ -258,7 +259,7 @@ patch for=^A new=create
 			Assert.AreEqual(@"<class code='A' fullcode='A'>
   <x code='a' name='name1' shortname='n' idx='3' />
   <x code='b' idx='4' />
-</class>".Replace("\r", ""), str.Replace("\r", "")); //not changed!!!
+</class>".Trim().LfOnly(), str.Trim().LfOnly()); //not changed!!!
 			Assert.False(Compile(code).Errors.Any(_ => _.Type == BSharpErrorType.PatchError));
 		}
 

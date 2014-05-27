@@ -89,7 +89,7 @@ class B
   <x code='a3' active='false' />
   <x code='a2' active='true' />
   <x code='a1' active='false' />
-</class>".Length, b.Compiled.ToString().Replace("\"", "'").Length);
+</class>".Trim().LfOnly().Length, b.Compiled.ToString().Replace("\"", "'").Trim().LfOnly().Length);
 
 		}
 
@@ -117,7 +117,7 @@ class B
 			Console.WriteLine(b.Compiled.ToString().Replace("\"", "'"));
 			Assert.AreEqual(@"<class code='B' test2='true' fullcode='B' name='g3' test1='false' i='3' test3='false'>
   <x code='a2' active='true' />
-</class>".Length, b.Compiled.ToString().Replace("\"", "'").Length);
+</class>".Trim().LfOnly().Length, b.Compiled.ToString().Replace("\"", "'").Trim().LfOnly().Length);
 
 		}
 
@@ -150,7 +150,7 @@ class Final key=x
   <X code='45x' name='c' />
   <X code='23x' name='b' />
   <X code='12x' name='a' />
-</class>".Length, b.Compiled.ToString().Replace("\"", "'").Length);
+</class>".Trim().LfOnly().Length, b.Compiled.ToString().Replace("\"", "'").Trim().LfOnly().Length);
 		}
 	}
 

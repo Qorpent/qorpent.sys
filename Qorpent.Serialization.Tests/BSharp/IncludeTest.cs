@@ -33,7 +33,7 @@ class B
 			Console.WriteLine(result);
 			Assert.AreEqual(@"<class code='B' fullcode='B'>
   <z code='A' prototype='X' x='1' fullcode='Z.A' />
-</class>".Length, result.Length);
+</class>".Trim().LfOnly().Length, result.Trim().LfOnly().Length);
 		}
 
 		[Test]
@@ -53,7 +53,7 @@ _t Z g='z'
 			Assert.AreEqual(@"<class code='a' fullcode='a'>
   <Y g='a' prototype='t' />
   <X g='default' prototype='t' />
-</class>",x);
+</class>".Trim().LfOnly(), x.Trim().LfOnly());
 		}
 
 		[Test]
@@ -76,7 +76,7 @@ class polyline _mes = px
   <point X='10px' Y='30px' coords='[10:30]' />
   <point X='20px' Y='-40px' coords='[20:-40]' />
   <point X='2px' Y='3px' coords='[2:3]' />
-</class>", xml);
+</class>".Trim().LfOnly(), xml.Trim().LfOnly());
 
 		}
 	[Test]
@@ -97,7 +97,7 @@ class x
   <c a='xxx'>
     <p>xxx</p>
   </c>
-</class>", xml);
+</class>".Trim().LfOnly(), xml.Trim().LfOnly());
 
 		}
 
@@ -120,7 +120,7 @@ class x
   <c>
     <p></p>
   </c>
-</class>", xml);
+</class>".Trim().LfOnly(), xml.Trim().LfOnly());
 
 	}
         [TestCase("+", "x", "10", "1")]
@@ -321,7 +321,6 @@ class B x=2
             var sec = result.Compiled.Descendants("test").ElementAt(1);
             Assert.AreEqual("4",sec.Attr("b"));
             Assert.Null(sec.Attribute("z"));
-
         }
 
 
@@ -351,7 +350,7 @@ class B x=2
     <test code=""a1"" x=""3"" y=""4"" id=""A"" />
     <test code=""a4"" x=""3"" y=""3"" id=""A"" />
   </group>
-</class>", result.Compiled.ToString());
+</class>".Trim().LfOnly(), result.Compiled.ToString().Trim().LfOnly());
 
         }
 
@@ -379,7 +378,7 @@ class B x=2
   <x code=""a"" x=""1"" y=""5"" id=""A"" />
   <x code=""a1"" x=""3"" y=""4"" id=""A"" />
   <x code=""b"" x=""1"" y=""1"" z=""3"" id=""A"" />
-</class>", result.Compiled.ToString());
+</class>".Trim().LfOnly(), result.Compiled.ToString().Trim().LfOnly());
 
         }
 
@@ -413,7 +412,7 @@ class B x=2
     <test code=""a4"" y=""3"" />
     <test code=""a1"" y=""4"" />
   </group>
-</class>", result.Compiled.ToString());
+</class>".Trim().LfOnly(), result.Compiled.ToString().Trim().LfOnly());
 
         }
 
@@ -501,7 +500,7 @@ class B x=2
     <test code=""a4"" b=""3"" />
     <test code=""a1"" b=""4"" />
   </mygroup>
-</class>",result.Compiled.ToString());
+</class>".Trim().LfOnly(),result.Compiled.ToString().Trim().LfOnly());
         }
 
 		[Test]
