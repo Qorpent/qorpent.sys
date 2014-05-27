@@ -19,6 +19,9 @@ namespace Qorpent.Data.DataDiff{
 			BSharpMapPrototype = "db-map";
 			Mappings = new List<TableMap>();
 			Indexes = new List<TableMap>();
+			ExcludeTables =  new List<string>();
+			IncludeTables =  new List<string>();
+			SqlScripts = new List<string>();
 		}
 		/// <summary>
 		/// Строка соединения с SQL
@@ -100,7 +103,7 @@ namespace Qorpent.Data.DataDiff{
 		/// <summary>
 		/// Кэшированный SQL скрипт
 		/// </summary>
-		public string SqlScript { get; set; }
+		public IList<string> SqlScripts { get; private set; }
 		/// <summary>
 		/// Результирующая ревизия обновления
 		/// </summary>
@@ -129,5 +132,14 @@ namespace Qorpent.Data.DataDiff{
 		/// Только регистрация версии
 		/// </summary>
 		public bool OnlyRegister { get; set; }
+		/// <summary>
+		/// Таблицы, которые должны быть исключены из скрипта
+		/// </summary>
+		public IList<string> ExcludeTables { get; set; }
+
+		/// <summary>
+		/// Таблицы, которые должны быть включены в скрипт
+		/// </summary>
+		public IList<string> IncludeTables { get; set; }
 	}
 }

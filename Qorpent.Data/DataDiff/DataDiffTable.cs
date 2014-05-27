@@ -20,7 +20,13 @@ namespace Qorpent.Data.DataDiff{
 			Sources = new List<XDiffItem>();
 			Mappings = new Dictionary<string, string>();
 			DisableIndexes = new List<string>();
+			ScriptFile = "";
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public string ScriptFile { get; set; }
+
 		/// <summary>
 		/// Имя целевой табицы
 		/// </summary>

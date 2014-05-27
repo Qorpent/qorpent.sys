@@ -21,6 +21,13 @@ namespace Qorpent.Data.DataDiff{
 				_context.SqlOutput = sw;
 			}
 			this._tables = _context.Tables.OrderBy(_=>_.TableName).ToArray();
+			var cnt = _tables.SelectMany(_ => _.Definitions).Count();
+			if (cnt >= 10000){
+				this._filegroups = _tables.GroupBy(_ => _.ScriptFile).ToArray();
+			}
+			else{
+				this._filegroups = _tables.GroupBy(_ => "MAIN").ToArray();
+			}
 			this._output = _context.SqlOutput;
 			
 		}
@@ -28,18 +35,31 @@ namespace Qorpent.Data.DataDiff{
 		private DataDiffTable[] _tables;
 		private TextWriter _output;
 		private TableDiffGeneratorContext _context;
+		private IGrouping<string, DataDiffTable>[] _filegroups;
+		private string _script;
 
 		/// <summary>
 		/// Записать скрипт в переданный поток
 		/// </summary>
 		public void Generate(){
 			
-			WriteStart();
-			WriteBody();
-			WriteFinish();
-			if (_context.SqlOutput == sw){
-				_context.SqlScript = sw.ToString();
+			
+			foreach (var tablegroup in _filegroups.OrderBy(_=>_.Key)){
+				_tables = tablegroup.ToArray();
+				_script = tablegroup.Key;
+				_context.Log.Trace("start : "+_script );
+				WriteStart();
+				WriteBody();
+				WriteFinish();
+				if (_context.SqlOutput == sw)
+				{
+					_context.SqlScripts.Add( sw.ToString());
+					_output = _context.SqlOutput = sw = new StringWriter();
+				}
+				_context.Log.Trace("finish : " + _script);
 			}
+			
+			
 		}
 
 		private void WriteFinish(){
@@ -66,6 +86,7 @@ namespace Qorpent.Data.DataDiff{
 			_output.WriteLine("\tif (@@TRANCOUNT!=0) rollback;");
 			_output.WriteLine("\tthrow");
 			_output.WriteLine("END CATCH");
+			_output.WriteLine("-- END OF SCRIPT: "+_script);
 		}
 
 		private void WriteBody(){
@@ -347,6 +368,7 @@ namespace Qorpent.Data.DataDiff{
 		}
 
 		private void WriteStart(){
+			_output.WriteLine("-- START OF SCRIPT: "+_script);
 			_output.WriteLine("BEGIN TRAN");
 			_output.WriteLine("\t --table for storing check constraints problems");
 			_output.WriteLine("\tdeclare @c table (t nvarchar(255), c nvarchar(255), w nvarchar(255))");

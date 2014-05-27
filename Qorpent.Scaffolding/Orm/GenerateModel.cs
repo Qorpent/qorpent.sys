@@ -75,7 +75,7 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("\t\t///<summary>Retrieve data adapter by type</summary>");
 			o.AppendLine("\t\tpublic object GetAdapter(Type objectType){");
 			o.AppendLine("\t\t\tswitch(objectType.Name){");
-			foreach (var t in _context.ResolveAll("dbtable")){
+			foreach (var t in _context.ResolveAll("dbtable").OrderBy(_=>_.Name)){
 				var tn = t.Name;
 				if (t.Namespace != ns){
 					tn = t.FullName;

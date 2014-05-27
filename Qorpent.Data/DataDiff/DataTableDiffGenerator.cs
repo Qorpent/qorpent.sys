@@ -89,6 +89,10 @@ namespace Qorpent.Data.DataDiff
 			var mixed = pair.Updated.Attr("mixed").ToBool();
 			var dynamicname = mixed|| string.IsNullOrWhiteSpace(baseTableName);
 			var hierarchy = pair.Updated.Attr("tree").ToBool();
+			var script = pair.Updated.Attr("script");
+			if (string.IsNullOrWhiteSpace(script)){
+				script = "10_Main";
+			}
 			var diffconfig = new XDiffOptions{
 				IsHierarchy = hierarchy,
 				MergeAttributeChanges = true,
@@ -98,12 +102,12 @@ namespace Qorpent.Data.DataDiff
 			var sw = Stopwatch.StartNew();
 			var diff = new XDiffGenerator(diffconfig).GetDiff(basis,updated).ToArray();
 			
-			Collect(dynamicname, baseTableName, diff, result);
+			Collect(dynamicname, baseTableName, diff, result,script);
 			sw.Stop();
 			Console.WriteLine("diff of " + baseTableName + " : " + sw.Elapsed);
 		}
 
-		private void Collect(bool dynamicname, string baseTableName, IEnumerable<XDiffItem> diffs, ConcurrentDictionary<string, DataDiffTable> dataDiffTables){
+		private void Collect(bool dynamicname, string baseTableName, IEnumerable<XDiffItem> diffs, ConcurrentDictionary<string, DataDiffTable> dataDiffTables, string script){
 			
 			foreach (var d in diffs){
 				var tableName = baseTableName;
@@ -113,7 +117,17 @@ namespace Qorpent.Data.DataDiff
 				if (dynamicname){
 					tableName = ename;
 				}
+				if (_context.ExcludeTables.Contains(tableName)){
+					continue;
+				}
+				if (0 != _context.IncludeTables.Count && !_context.IncludeTables.Contains(tableName))
+				{
+					continue;
+				}
 				var table = dataDiffTables.GetOrAdd(tableName, _ => new DataDiffTable{TableName = _});
+				if (string.IsNullOrWhiteSpace(table.ScriptFile)){
+					table.ScriptFile = script;
+				}
 				table.Sources.Add(d);
 				var id = src.Attr("id").ToInt();
 				var code = src.Attr("code");

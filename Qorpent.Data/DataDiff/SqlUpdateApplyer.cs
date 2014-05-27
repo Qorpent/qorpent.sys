@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Qorpent.Data.Connections;
 using Qorpent.Utils.Extensions;
 
@@ -18,7 +19,7 @@ namespace Qorpent.Data.DataDiff{
 			if (string.IsNullOrWhiteSpace(context.ProjectName)){
 				throw new Exception("Require ProjectName to be set in context");
 			}
-			if (string.IsNullOrWhiteSpace(context.SqlScript)){
+			if (context.SqlScripts.Count==0){
 				throw new Exception("Require SqlScript to be set in context");
 			}
 			if (string.IsNullOrWhiteSpace(context.ResolvedUpdateRevision))
@@ -55,12 +56,18 @@ namespace Qorpent.Data.DataDiff{
 				var register = "exec " + _context.MetadataTable +
 							   "Register @code=@code,@name=@code,@content=@content, @hash=@hash,@revision=@revision,@filetime=@filetime,@comment=@comment";
 
-				connection.ExecuteNonQuery(register, new { code = _context.ProjectName + ".project",comment=_context.FullUpdate||!_context.GitBaseRevision.ToBool()?"full":"diff", content = _context.SqlScript, filetime = DateTime.Now, hash = _context.ResolvedUpdateRevision, revision = _context.ResolvedUpdateRevision.Substring(0, 7) });
+				connection.ExecuteNonQuery(register, new { code = _context.ProjectName + ".project",comment=_context.FullUpdate||!_context.GitBaseRevision.ToBool()?"full":"diff", content = string.Join("\r\nGO\r\n", _context.SqlScripts), filetime = DateTime.Now, hash = _context.ResolvedUpdateRevision, revision = _context.ResolvedUpdateRevision.Substring(0, 7) });
 				if (_context.OnlyRegister){
 					_context.Log.Trace("Включен режим 'только регистрация', сам скрипт обновления не выполняется");
 				}
 				else{
-					connection.ExecuteNonQuery(_context.SqlScript, timeout: 30000);
+
+					foreach (var script in _context.SqlScripts){
+						_context.Log.Trace("Begin ExecuteSql : '"+script.Substring(0,Math.Min(100,script.Length))+"' at "+DateTime.Now.ToString());
+						connection.ExecuteNonQuery(script, timeout: 30000);
+						_context.Log.Trace("End ExecuteSql : '" + script.Substring(0, Math.Min(100, script.Length)) + "' at " + DateTime.Now.ToString());
+					}
+					
 				}
 
 			}
