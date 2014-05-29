@@ -53,7 +53,10 @@ namespace Qorpent {
 			if(!Qorpent.Security.Watchdog.Paranoid.Provider.OK) throw new  Qorpent.Security.Watchdog.ParanoidException(Qorpent.Security.Watchdog.ParanoidState.GeneralError);
 		}
 #endif
-
+		/// <summary>
+		/// Признак принудительного игнорирования текущего приложения
+		/// </summary>
+		public bool IgnoreDefaultApplication{ get; set; }
 
 		/// <summary>
 		/// 	Максимально релевантный для экземпляра контейнер, не NULL
@@ -70,7 +73,12 @@ namespace Qorpent {
 				if (null != Application) {
 					return Application.Container;
 				}
-				return Applications.Application.Current.Container;
+				if (!IgnoreDefaultApplication){
+					return Applications.Application.Current.Container;
+				}
+				else{
+					return null;
+				}
 			}
 		}
 

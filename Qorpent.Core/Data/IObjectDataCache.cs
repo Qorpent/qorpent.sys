@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 
 namespace Qorpent.Data{
 	/// <summary>
@@ -10,13 +11,14 @@ namespace Qorpent.Data{
 		/// </summary>
 		/// <returns></returns>
 		int GetNextId();
-		
+
 		/// <summary>
 		/// Возвращает сущность по коду или ID
 		/// </summary>
 		/// <param name="key"></param>
+		/// <param name="connection"></param>
 		/// <returns></returns>
-		T Get(object key);
+		T Get(object key,IDbConnection connection=null);
 
 		/// <summary>
 		/// Проверить наличие
@@ -41,7 +43,8 @@ namespace Qorpent.Data{
 		/// </summary>
 		/// <param name="query"></param>
 		/// <param name="options"></param>
+		/// <param name="connection"></param>
 		/// <returns></returns>
-		T[] GetAll(object query, object options);
+		T[] GetAll(object query, object options, IDbConnection connection=null);
 	}
 }

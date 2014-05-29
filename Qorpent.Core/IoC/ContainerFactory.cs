@@ -192,41 +192,43 @@ namespace Qorpent.IoC {
 			var defaultAttribute =
 				assembly.GetCustomAttributes(typeof (ContainerAttribute), false).OfType<ContainerAttribute>().FirstOrDefault();
 			defaultAttribute = defaultAttribute ?? new ContainerComponentAttribute(Lifestyle.Transient);
-			var components = from t in assembly.GetTypes()
-			                 where !t.IsAbstract
-			                 let a =
-				                 t.GetCustomAttributes(typeof (ContainerComponentAttribute), true).OfType
-				                 <ContainerComponentAttribute>().ToArray()
-			                 where 0 != a.Length
-			                 select new {t, a};
-			foreach (var c in components) {
-				foreach (var a in c.a) {
+			var types = assembly.GetTypes();
+			types.AsParallel().ForAll(_ => {
+				if (_.IsAbstract) return;
+				var a = _.GetCustomAttributes(typeof (ContainerComponentAttribute), true).OfType
+					<ContainerComponentAttribute>().ToArray();
+				if (a.Length == 0) return;
+				foreach (var attr in a){
 					var component = container.EmptyComponent();
-					if (c.t != null && c.t.BaseType != null) {
-						var stype = (a.ServiceType ??
-// ReSharper disable PossibleNullReferenceException
-						             c.t.GetInterfaces().Except(c.t.BaseType.GetInterfaces()).FirstOrDefault(
-							             x => x != typeof (IContainerBound))) ??
-// ReSharper restore PossibleNullReferenceException
-						            c.t;
-						component.ServiceType = stype;
-					}
-					component.ImplementationType = c.t;
-					component.Lifestyle = a.Lifestyle;
-					if (a.Lifestyle == Lifestyle.Default) {
+						var stype = (attr.ServiceType ??
+							// ReSharper disable PossibleNullReferenceException
+									 _.GetInterfaces().Except(_.BaseType.GetInterfaces()).FirstOrDefault(
+										 x => x != typeof(IContainerBound))) ??
+							// ReSharper restore PossibleNullReferenceException
+									_;
+					component.ServiceType = stype;
+					component.ImplementationType = _;
+					component.Lifestyle = attr.Lifestyle;
+					if (attr.Lifestyle == Lifestyle.Default)
+					{
 						component.Lifestyle = defaultAttribute.Lifestyle;
 					}
-					component.Name = a.Name;
-					component.Priority = a.Priority;
-					if (component.Priority == -1) {
+					component.Name = attr.Name;
+					component.Priority = attr.Priority;
+					if (component.Priority == -1)
+					{
 						component.Priority = defaultAttribute.Priority;
 					}
-					if (component.Priority == -1) {
+					if (component.Priority == -1)
+					{
 						component.Priority = 1000;
 					}
 					container.Register(component);
 				}
-			}
+			});
+
+			
+			
 		}
 
 		/// <summary>
@@ -270,6 +272,9 @@ namespace Qorpent.IoC {
 		/// 	applys only if container don't contains same typed services
 		/// </remarks>
 		public static void SetupWellKnownContainerServices(IContainer result) {
+			
+
+
 			foreach (var c in (
 				                  from wn in WellKnownRegistry
 				                  join cc in result.GetComponents()

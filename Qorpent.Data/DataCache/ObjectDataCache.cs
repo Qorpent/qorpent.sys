@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Qorpent.Applications;
+using Qorpent.Data.Connections;
+using Qorpent.IoC;
+using Qorpent.Log;
 using Qorpent.Model;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
@@ -14,8 +17,32 @@ namespace Qorpent.Data.DataCache
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class ObjectDataCache<T>:IObjectDataCache<T> where T:class,new(){
+	
+		/// <summary>
+		/// Служба генерации соединений
+		/// </summary>
+		[Inject]
+		protected  IDatabaseConnectionProvider ConnectionProvider{
+			get { return _connectionProvider??(_connectionProvider =new DatabaseConnectionProvider{IgnoreDefaultApplication = true}); }
+			set { _connectionProvider = value; }
+		}
+		/// <summary>
+		/// Журнал общих событий
+		/// </summary>
+		public IUserLog Log{
+			get { return _log ?? (_log= StubUserLog.Default); }
+			set { _log = value; }
+		}
 
-
+		/// <summary>
+		/// Журнал событий SQL
+		/// </summary>
+		public IUserLog SqlLog{
+			get { return _sqlLog ?? (_sqlLog=StubUserLog.Default); }
+			set{
+				_sqlLog = value;
+			}
+		}
 
 		private const int COMMONIDBASE = -100;
 		private const int COMMONIDSTEP = -10;
@@ -65,13 +92,14 @@ namespace Qorpent.Data.DataCache
 		/// Возвращает сущность по коду или ID
 		/// </summary>
 		/// <param name="key"></param>
+		/// <param name="connection"></param>
 		/// <returns></returns>
-		public T Get(object key){
+		public T Get(object key, IDbConnection connection = null){
 			int id; string code;
 			var isid = IsId(key, out id, out code);
 			if (isid){
 				if (!_nativeCache.ContainsKey(id)){
-					UpdateCache("(Id = "+id+")");
+					UpdateCache("(Id = "+id+")",connection:connection);
 				}
 				if (!_nativeCache.ContainsKey(id)){
 					_nativeCache[id] = null;
@@ -81,7 +109,7 @@ namespace Qorpent.Data.DataCache
 			else{
 				if (!_nativeCodeCache.ContainsKey(code))
 				{
-					UpdateCache("(Code = '" + code.ToSqlString()+"')");
+					UpdateCache("(Code = '" + code.ToSqlString()+"')",connection:connection);
 				}
 				if (!_nativeCodeCache.ContainsKey(code))
 				{
@@ -175,18 +203,23 @@ namespace Qorpent.Data.DataCache
 		/// </summary>
 		protected bool _allLoadWasCalled;
 
+		private IUserLog _log;
+		private IDatabaseConnectionProvider _connectionProvider;
+		private IUserLog _sqlLog;
+
 		/// <summary>
 		/// Возвращает все по запросу
 		/// </summary>
 		/// <param name="query"></param>
 		/// <param name="options"></param>
+		/// <param name="connection"></param>
 		/// <returns></returns>
-		public T[] GetAll(object query= null, object options = null){
+		public T[] GetAll(object query= null, object options = null, IDbConnection connection = null){
 			if (null == query || (query is string && string.IsNullOrWhiteSpace((string) query))){
 				if (_allLoadWasCalled){
 					return _nativeCache.Values.ToArray();
 				}
-				UpdateCache("");
+				UpdateCache("",options,connection);
 				_allLoadWasCalled = true;
 				return _nativeCache.Values.ToArray();
 			}
@@ -194,7 +227,7 @@ namespace Qorpent.Data.DataCache
 			if (null!=nativequery){
 				return _nativeCache.Values.Where(nativequery).ToArray();
 			}
-			var ids = UpdateCache(query as string,options);
+			var ids = UpdateCache(query as string,options,connection);
 			return ids.Select(_ => _nativeCache[_]).ToArray();
 		}
 
@@ -203,18 +236,36 @@ namespace Qorpent.Data.DataCache
 		/// </summary>
 		/// <param name="query"></param>
 		/// <param name="options"></param>
-		protected int[] UpdateCache(string query, object options = null){
+		/// <param name="connection"></param>
+		protected int[] UpdateCache(string query, object options = null, IDbConnection connection = null){
 			lock (_nativeCache){
 				
 				var allids = new List<int>();
 				bool cascade = true;
-				using (var c = Application.Current.DatabaseConnections.GetConnection(ConnectionString)){
-					UpdateSingleQuery(query, options, c, allids, cascade);
-					c.Close();
+				if (null == connection){
+					//no self created
+					using (var c = ConnectionProvider.GetConnection(ConnectionString)){
+						if (string.IsNullOrWhiteSpace(c.ConnectionString)){
+							throw new Exception("bad connection!");
+						}
+						UpdateSingleQuery(query, options, c, allids, cascade);
+						c.Close();
+					}
 				}
+				else{
+					UpdateSingleQuery(query, options, connection, allids, cascade);
+				}
+				
 				return allids.ToArray();
 			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public IDictionary<int,T> NativeCache{
+			get { return _nativeCache; }
+		}
+
 		/// <summary>
 		/// Низкоуровневый метод обновления после запроса
 		/// </summary>
@@ -229,9 +280,13 @@ namespace Qorpent.Data.DataCache
 			if (!string.IsNullOrWhiteSpace(query)){
 				q += " where " + query;
 			}
+			if (string.IsNullOrWhiteSpace(c.ConnectionString)){
+				throw new Exception("bad connection string!!!");
+			}
 			c.WellOpen();
 			var cmd = c.CreateCommand(q);
 			var ids = new List<int>();
+			SqlLog.Trace(q);
 			using (var idsReader = cmd.ExecuteReader()){
 				while (idsReader.Read()){
 					var id = idsReader.GetInt32(0);
@@ -245,9 +300,11 @@ namespace Qorpent.Data.DataCache
 			}
 			if (ids.Count != 0){
 				q = "(Id in (" + string.Join(",", ids) + "))";
+				
 				cmd = c.CreateCommand(Adapter.PrepareSelectQuery(q));
+				SqlLog.Trace(cmd.CommandText);
 				using (var reader = cmd.ExecuteReader()){
-					var items = Adapter.ProcessRecordSet(reader).ToArray();
+					var items = Adapter.ProcessRecordSet(reader,true).ToArray();
 					foreach (var item in items){
 						Set(item);
 					}
