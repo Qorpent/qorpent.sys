@@ -27,6 +27,7 @@
     <Compile Include="BSharpClassRef.cs" />
     <Compile Include="Application\GenerateDataTypesInCSharpTask.cs" />
     <Compile Include="CodeGeneratorTaskBase.cs" />
+    <Compile Include="Orm\GenerateExtendedCachedModel.cs" />
     <Compile Include="Orm\GenerateModel.cs" />
     <Compile Include="Orm\DataCompilerExtensions.cs" />
     <Compile Include="Orm\GeneratePokoClassDataAdapter.cs" />

@@ -67,7 +67,7 @@ namespace Qorpent.Scaffolding.Orm{
 		}
 
 		private void GenerateIncomeReferences(IBSharpClass targetclass){
-			var incomerefs = FindIncomeRefes(targetclass).OrderBy(_ => _.Item1.Name).ThenBy(_ => _.Item2.Attr("code")).Where(_=>_.Item2.Attr("reverse").ToBool()).ToArray();
+			var incomerefs = OrmGenerationExtensions.FindIncomeRefes(_context,targetclass).OrderBy(_ => _.Item1.Name).ThenBy(_ => _.Item2.Attr("code")).ToArray();
 			foreach (var incomeref in incomerefs){
 				var name = incomeref.Item2.Attr("code");
 				var basename = incomeref.Item1.Name + (incomeref.Item1.Name.EndsWith("s") ? "es" : "s");
@@ -126,24 +126,7 @@ namespace Qorpent.Scaffolding.Orm{
 
 		
 
-		private IEnumerable<Tuple<IBSharpClass, XElement>> FindIncomeRefes(IBSharpClass t){
-			var tables = _context.ResolveAll("dbtable");
-			foreach (var s in tables){
-				var refs = s.Compiled.Elements("ref");
-				foreach (var r in refs){
-					if(r.Attr("code")=="Parent")continue;
-					var to = r.Attr("to");
-					if (string.IsNullOrWhiteSpace(to)){
-						to = r.Attr("code") + ".Id";
-					}
-					var fld = to.Split('.').Last();
-					var cls = to.Substring(0, to.Length - fld.Length - 1);
-					if (t.Name == cls || t.Compiled.Attr("fullname") == cls){
-						yield return new Tuple<IBSharpClass,XElement>(s,r);
-					}
-				}
-			}
-		}
+		
 
 		private void GenerateRef(IBSharpClass targetclass, XElement e, string name){
 			string dtype;
