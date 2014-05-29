@@ -70,7 +70,7 @@ namespace Qorpent.Utils.Collections{
         /// <param name="to">цель</param>
         /// <returns>массив источников</returns>
         public F[] Reverse(T to){
-            return Enumerable.Select(this.Where(GetReveresePredicate(to)), GetReverseConverter()).Distinct().ToArray();
+            return Enumerable.Select(this.Where(GetreversePredicate(to)), GetReverseConverter()).Distinct().ToArray();
         }
 
         #endregion
@@ -117,7 +117,7 @@ namespace Qorpent.Utils.Collections{
         /// </summary>
         /// <param name="to">ключ цели</param>
         /// <returns>ламбда проверки цели, по умолчанию m => m.To.Equals(ConvertTo)</returns>
-        protected virtual Func<IMapItem<F, T>, bool> GetReveresePredicate(T to){
+        protected virtual Func<IMapItem<F, T>, bool> GetreversePredicate(T to){
             return m =>
                    {
                        //Contract.Assume(m != null);

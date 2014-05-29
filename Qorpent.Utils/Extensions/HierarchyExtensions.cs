@@ -11,7 +11,7 @@ namespace Qorpent.Utils.Extensions {
 
 		
 		/// <summary>
-		///     Normalizes <see cref="IWithHierarchy{TEntity}.Parent" /> of children items of given root
+		///     Normalizes <see cref="IWithSimpleHierarchy{TEntity}.Parent" /> of children items of given root
 		/// </summary>
 		/// <param name="root">root item of hierarchy</param>
 		/// <typeparam name="T"></typeparam>
@@ -53,7 +53,7 @@ namespace Qorpent.Utils.Extensions {
 	
 
 		/// <summary>
-		///     Normalizes <see cref="IWithHierarchy{TEntity}.Parent" /> and <see cref="IWithHierarchy{TEntity}.Children" />  in set
+		///     Normalizes <see cref="IWithSimpleHierarchy{TEntity}.Parent" /> and <see cref="IWithSimpleHierarchy{TEntity}.Children" />  in set
 		/// </summary>
 		/// <param name="items">set of elements that must be joined into hierarchy</param>
 		/// <typeparam name="T"></typeparam>
