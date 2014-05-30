@@ -85,6 +85,10 @@ namespace Qorpent.Scaffolding.Orm{
 			             referto + " with " + reference.Attr("code") + " (" +
 			             reference.Attr("name") + ")</summary>");
 			o.AppendLine("\t\tpublic bool AutoLoad" + t.Name + reference.Attr("code") + " = "+reference.Attr("auto").ToBool().ToString().ToLowerInvariant()+";");
+			o.AppendLine("\t\t///<summary>Marks active auto foreign key link from " + t.Name + " to " +
+						 referto + " with " + reference.Attr("code") + " (" +
+						 reference.Attr("name") + ") as LazyLoad </summary>");
+			o.AppendLine("\t\tpublic bool Lazy" + t.Name + reference.Attr("code") + " = " + reference.Attr("lazy").ToBool().ToString().ToLowerInvariant() + ";");
 		}
 
 		private void SetupBackCollectionMarker(string referto, Dictionary<string, IBSharpClass> cmap, Dictionary<string, IBSharpClass> tmap, XElement reference,
@@ -100,9 +104,7 @@ namespace Qorpent.Scaffolding.Orm{
 			else{
 				throw new Exception("cannot find corresponding reference in model " + reference.ToString());
 			}
-			o.AppendLine("\t\t///<summary>Marks active auto collection in " + reftablecls + " of " +
-			             t.Name + " with " + reference.Attr("code") + " (" +
-			             reference.Attr("name") + ")</summary>");
+			
 			var multname = t.Name;
 			if (reference.Attr("reverse") != "1"){
 				multname = reference.Attr("reverse");
@@ -118,7 +120,14 @@ namespace Qorpent.Scaffolding.Orm{
 					multname += "By" + reference.Attr("code");
 				}
 			}
+			o.AppendLine("\t\t///<summary>Marks active auto collection in " + reftablecls + " of " +
+						 t.Name + " with " + reference.Attr("code") + " (" +
+						 reference.Attr("name") + ")</summary>");
 			o.AppendLine("\t\tpublic bool AutoLoad" + reftablecls.Name + multname  + "=" + reference.Attr("reverse-auto").ToBool().ToString().ToLowerInvariant() + ";");
+			o.AppendLine("\t\t///<summary>Marks active auto collection in " + reftablecls + " of " +
+						 t.Name + " with " + reference.Attr("code") + " (" +
+						 reference.Attr("name") + ") as Lazy</summary>");
+			o.AppendLine("\t\tpublic bool Lazy" + reftablecls.Name + multname + "=" + reference.Attr("reverse-lazy").ToBool().ToString().ToLowerInvariant() + ";");
 		}
 
 		private void GenerateGetAdapterMethods(string ns){

@@ -73,13 +73,13 @@ namespace Qorpent.Scaffolding.Orm{
 
 		private void GenerateSetupLinksMethod(string ns){
 			o.AppendLine("\t\t///<summary>Setup auto load behavior for linked classes</summary>");
-			o.AppendLine("\t\tprotected void SetupLoadBehavior<T>(ObjectDataCache<T> cache)where T:class,new(){");
+			o.AppendLine("\t\tprotected virtual void SetupLoadBehavior<T>(ObjectDataCache<T> cache)where T:class,new(){");
 			o.AppendLine("\t\t\tswitch(typeof(T).Name){");
 			IList<Tuple<IBSharpClass,XElement[],Tuple<IBSharpClass,XElement>[]>> dataToGenerate = new List<Tuple<IBSharpClass, XElement[], Tuple<IBSharpClass, XElement>[]>>();
 			foreach (var t in _tables){
 				var ownrefs = t.Compiled.Elements("ref").ToArray();
 				var incomes = OrmGenerationExtensions.FindIncomeRefes(_context, t,true).ToArray();
-				if (0 == ownrefs.Length && 0 == incomes.Length) continue;
+				//if (0 == ownrefs.Length && 0 == incomes.Length) continue;
 				o.AppendLine("\t\t\t\tcase \"" + t.Name + "\" : Setup" + t.Name + "LoadBehavior(cache as ObjectDataCache<"+t.Name+">);break;");
 				dataToGenerate.Add(new Tuple<IBSharpClass, XElement[], Tuple<IBSharpClass, XElement>[]>(t,ownrefs,incomes));
 			}
@@ -142,16 +142,24 @@ namespace Qorpent.Scaffolding.Orm{
 			var alprop = "AutoLoad" + propname;
 
 			o.AppendLine("\t\t\t\t\tif(" + alprop + "){");
+
 			o.AppendLine("\t\t\t\t\t\tvar q = string.Format(\"(" + code + " in ({0}))\",inids);");
 			var cache = colt.Name;
 			if (code == "Parent"){
 				cache = "cache";
 			}
-			o.AppendLine("\t\t\t\t\t\tvar nestIds = " + cache + ".UpdateSingleQuery(q, ctx,c, null, true);");
-			o.AppendLine("\t\t\t\t\t\tforeach(var nid in nestIds){");
-			o.AppendLine("\t\t\t\t\t\t\tvar n=" + cache + ".Get(nid);");
-			o.AppendLine("\t\t\t\t\t\t\tvar t=cache.Get(n."+code+"Id);");
-			o.AppendLine("\t\t\t\t\t\t\tt."+mname+".Add(n);");
+			o.AppendLine("\t\t\t\t\t\tif(Lazy" + propname + "){");
+			o.AppendLine("\t\t\t\t\t\t\tforeach(var t in targets){");
+			o.AppendLine("\t\t\t\t\t\t\t\tif(t.Id == -9999||t.Id==0)continue;");
+			o.AppendLine("\t\t\t\t\t\t\t\tt." + mname + "= new ObjectDataCacheBindLazyList<"+colt.Name+">{Query=q,Cache=mycache};");
+			o.AppendLine("\t\t\t\t\t\t\t}");
+			o.AppendLine("\t\t\t\t\t\t}else{");
+			o.AppendLine("\t\t\t\t\t\t\tvar nestIds = " + cache + ".UpdateSingleQuery(q, ctx,c, null, true);");
+			o.AppendLine("\t\t\t\t\t\t\tforeach(var nid in nestIds){");
+			o.AppendLine("\t\t\t\t\t\t\t\tvar n=" + cache + ".Get(nid);");
+			o.AppendLine("\t\t\t\t\t\t\t\tvar t=cache.Get(n."+code+"Id);");
+			o.AppendLine("\t\t\t\t\t\t\t\tt."+mname+".Add(n);");
+			o.AppendLine("\t\t\t\t\t\t\t}");
 			o.AppendLine("\t\t\t\t\t\t}");
 			o.AppendLine("\t\t\t\t\t}");
 
@@ -170,7 +178,8 @@ namespace Qorpent.Scaffolding.Orm{
 				fld = parts[parts.Length - 1];
 			}
 			o.AppendLine("\t\t\t\t\tif(AutoLoad" + t.Name + code + " && null==t." + code +(fld=="Id"? (" && -9999 != t."+code+fld):"")+   "){");
-			o.AppendLine("\t\t\t\t\t\tt." + code + "=" + cls + ".Get(t." + code + fld + ",c);");
+			
+			o.AppendLine("\t\t\t\t\t\tt." + code + "= (Lazy"+t.Name+code+"?(" + cls + ".Get(t." + code + fld + ",c)):"+cls+".Lazy);");
 			o.AppendLine("\t\t\t\t\t}");
 		}
 

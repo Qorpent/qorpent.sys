@@ -246,6 +246,10 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine(" {");
 			o.AppendLine("#else");
 			o.AppendFormat("\tpublic partial class {0} {{\r\n", targetclass.Name);
+			o.AppendLine("\t\t///<summary>Инстанция - логический Null</summary>");
+			o.AppendLine("\t\tpublic static readonly " + targetclass.Name + " Null = new " + targetclass.Name + "();");
+			o.AppendLine("\t\t///<summary>Инстанция - логический Lazy</summary>");
+			o.AppendLine("\t\tpublic static readonly " + targetclass.Name + " Lazy = new " + targetclass.Name + "();");
 			o.AppendLine("#endif");
 		}
 	}
