@@ -104,7 +104,7 @@ namespace Qorpent.Data.DataDiff
 			
 			Collect(dynamicname, baseTableName, diff, result,script);
 			sw.Stop();
-			Console.WriteLine("diff of " + baseTableName + " : " + sw.Elapsed);
+			_context.Log.Debug("diff of " + baseTableName + " : " + sw.Elapsed);
 		}
 
 		private void Collect(bool dynamicname, string baseTableName, IEnumerable<XDiffItem> diffs, ConcurrentDictionary<string, DataDiffTable> dataDiffTables, string script){

@@ -12,7 +12,9 @@
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
+    <Compile Include="DataCache\ILazyCollection.cs" />
     <Compile Include="DataCache\ObjectDataCache.cs" />
+    <Compile Include="DataCache\ObjectDataCacheBindLazyList.cs" />
     <Compile Include="DataDiff\DataTableDiffGenerator.cs" />
     <Compile Include="DataDiff\DataDiffItem.cs" />
     <Compile Include="DataDiff\DataDiffTable.cs" />

@@ -20,18 +20,10 @@ using System.Collections.Generic;
 
 namespace Qorpent.Model {
 	/// <summary>
-	/// 	Модельный интерфейс - Нечто с иерархией, понимаемой как родитель, путь, дочерние
+	/// 
 	/// </summary>
-	public interface IWithHierarchy<TEntity> where TEntity: IWithCode {
-		/// <summary>
-		/// 	Прямой идентификатор родителя
-		/// </summary>
-		int? ParentId { get; set; }
-		/// <summary>
-		///		CODE of parent
-		/// </summary>
-		string ParentCode { get; set; }
-
+	/// <typeparam name="TEntity"></typeparam>
+	public interface IWithSimpleHierarchy<TEntity> where TEntity : IWithCode{
 		/// <summary>
 		/// 	Ссылка на родительский объект
 		/// </summary>
@@ -41,6 +33,20 @@ namespace Qorpent.Model {
 		/// 	Коллекция дочерних объектов
 		/// </summary>
 		ICollection<TEntity> Children { get; set; }
+	}
+
+	/// <summary>
+	/// 	Модельный интерфейс - Нечто с иерархией, понимаемой как родитель, путь, дочерние
+	/// </summary>
+	public interface IWithHierarchy<TEntity> : IWithSimpleHierarchy<TEntity> where TEntity: IWithCode {
+		/// <summary>
+		/// 	Прямой идентификатор родителя
+		/// </summary>
+		int? ParentId { get; set; }
+		/// <summary>
+		///		CODE of parent
+		/// </summary>
+		string ParentCode { get; set; }
 
 		/// <summary>
 		/// 	Cached path of entity
@@ -54,13 +60,13 @@ namespace Qorpent.Model {
 		bool HasChildren();
 
 		/// <summary>
-		///  Check that <see cref="Parent"/> is fully set
+		/// Check that parent is not null
 		/// </summary>
 		/// <returns></returns>
 		bool HasParent();
 
 		/// <summary>
-		///  Check that <see cref="Parent"/> is somehow defined (with Id or Code may be)
+		///  Check that Parent is somehow defined (with Id or Code may be)
 		/// </summary>
 		/// <returns></returns>
 		bool IsParentDefined();

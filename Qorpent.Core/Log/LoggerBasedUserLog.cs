@@ -198,7 +198,11 @@ namespace Qorpent.Log {
 		/// </summary>
 		public LogLevel Level {
 			get { return _level == LogLevel.All ? (_level = _loggers.Select(x => x.Level).Min()) : _level; }
-			set { }
+			set{
+				foreach (var logger in _loggers){
+					logger.Level = value;
+				}
+			}
 		}
 
 

@@ -67,7 +67,7 @@ namespace Qorpent.Scaffolding.Orm{
 		}
 
 		private void GenerateIncomeReferences(IBSharpClass targetclass){
-			var incomerefs = FindIncomeRefes(targetclass).OrderBy(_ => _.Item1.Name).ThenBy(_ => _.Item2.Attr("code")).ToArray();
+			var incomerefs = OrmGenerationExtensions.FindIncomeRefes(_context,targetclass).OrderBy(_ => _.Item1.Name).ThenBy(_ => _.Item2.Attr("code")).ToArray();
 			foreach (var incomeref in incomerefs){
 				var name = incomeref.Item2.Attr("code");
 				var basename = incomeref.Item1.Name + (incomeref.Item1.Name.EndsWith("s") ? "es" : "s");
@@ -81,7 +81,7 @@ namespace Qorpent.Scaffolding.Orm{
 				if (incomeref.Item1.Namespace != targetclass.Namespace){
 					clsname = incomeref.Item1.FullName;
 				}
-				GenerateField(incomeref.Item2, "IList<" + clsname + ">", name, "(" + incomeref.Item1.Name + "  привязка )",
+				GenerateField(incomeref.Item2, "ICollection<" + clsname + ">", name, "(" + incomeref.Item1.Name + "  привязка )",
 				              "?? (Native" + name + " = new List<" + clsname + ">())");
 			}
 		}
@@ -104,7 +104,7 @@ namespace Qorpent.Scaffolding.Orm{
 					GenerateRef(targetclass, e, name);
 					if (e.Attr("code") == "Parent")
 					{
-						GenerateField(e, "IList<" + targetclass.Name + ">", "Children", "Дочерние объекты",
+						GenerateField(e, "ICollection<" + targetclass.Name + ">", "Children", "Дочерние объекты",
 									  " ?? (NativeChildren = new List<" + targetclass.Name + ">())");
 					}
 				}
@@ -126,24 +126,7 @@ namespace Qorpent.Scaffolding.Orm{
 
 		
 
-		private IEnumerable<Tuple<IBSharpClass, XElement>> FindIncomeRefes(IBSharpClass t){
-			var tables = _context.ResolveAll("dbtable");
-			foreach (var s in tables){
-				var refs = s.Compiled.Elements("ref");
-				foreach (var r in refs){
-					if(r.Attr("code")=="Parent")continue;
-					var to = r.Attr("to");
-					if (string.IsNullOrWhiteSpace(to)){
-						to = r.Attr("code") + ".Id";
-					}
-					var fld = to.Split('.').Last();
-					var cls = to.Substring(0, to.Length - fld.Length - 1);
-					if (t.Name == cls || t.Compiled.Attr("fullname") == cls){
-						yield return new Tuple<IBSharpClass,XElement>(s,r);
-					}
-				}
-			}
-		}
+		
 
 		private void GenerateRef(IBSharpClass targetclass, XElement e, string name){
 			string dtype;
@@ -156,7 +139,7 @@ namespace Qorpent.Scaffolding.Orm{
 				dtype = "Int32";
 			}
 			else{
-				dtype = "String";
+				dtype = "string";
 			}
 			GenerateField(e, dtype, name + fld, "(Идентификатор)");
 			dtype = refval.Substring(0, refval.Length - fld.Length - 1);
@@ -263,6 +246,10 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine(" {");
 			o.AppendLine("#else");
 			o.AppendFormat("\tpublic partial class {0} {{\r\n", targetclass.Name);
+			o.AppendLine("\t\t///<summary>Инстанция - логический Null</summary>");
+			o.AppendLine("\t\tpublic static readonly " + targetclass.Name + " Null = new " + targetclass.Name + "();");
+			o.AppendLine("\t\t///<summary>Инстанция - логический Lazy</summary>");
+			o.AppendLine("\t\tpublic static readonly " + targetclass.Name + " Lazy = new " + targetclass.Name + "();");
 			o.AppendLine("#endif");
 		}
 	}

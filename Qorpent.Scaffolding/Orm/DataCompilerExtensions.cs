@@ -19,6 +19,7 @@ namespace Qorpent.Scaffolding.Orm{
 			Tasks.Add(new GeneratePokoClasses());
 			Tasks.Add(new GeneratePokoClassDataAdapter());
 			Tasks.Add(new GenerateModel());
+			Tasks.Add(new GenerateExtendedCachedModel());
 			
 		}
 	}

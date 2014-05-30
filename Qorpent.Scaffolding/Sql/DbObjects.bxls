@@ -98,7 +98,8 @@ namespace Qorpent.Db
 		import IWithTag
 
 	class IWithHierarchy "Интерфейс иерархической сущности" abstract
-		ref Parent "Ссылка на родительский элемент" to="${fullname}.Id" idx=233
+		qorpent-interface "IWithSimpleHierarchy<${.code}>"
+		ref Parent "Ссылка на родительский элемент" to="${fullname}.Id" idx=233 reverse=Children auto
 		string Path "Сформированный полный путь сущности" idx=234
 		string "${.code}GetPath" "Расчет полного пути к элементу" @id=int   : (
 			declare @code nvarchar(255), @parent int, @result nvarchar(255);

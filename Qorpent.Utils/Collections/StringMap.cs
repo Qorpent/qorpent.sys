@@ -62,7 +62,7 @@ namespace Qorpent.Utils.Collections{
 	    /// </summary>
 	    /// <param name="to">ключ цели</param>
 	    /// <returns>ламбда проверки цели, по умолчанию m => m.To.Equals(ConvertTo)</returns>
-	    protected override Func<IMapItem<string, string>, bool> GetReveresePredicate(string to){
+	    protected override Func<IMapItem<string, string>, bool> GetreversePredicate(string to){
             return m => (!IgnoreCase && (m.To == to)) || (IgnoreCase && (m.To.ToUpper() == to.ToUpper()));
         }
 
@@ -88,12 +88,12 @@ namespace Qorpent.Utils.Collections{
         /// <param name="to"></param>
         /// <returns></returns>
         public string[] ReverseAll(string to){
-            var result = new List<string>(this.Where(GetReveresePredicate(to)).Select(GetReverseConverter()).Distinct().ToList());      
+            var result = new List<string>(this.Where(GetreversePredicate(to)).Select(GetReverseConverter()).Distinct().ToList());      
             var cnt = 1;
             while (cnt != 0) {
                 cnt = 0;
                 foreach (var i in result.ToArray()) {
-                    var refs = this.Where(GetReveresePredicate(i)).Select(GetReverseConverter()).Distinct().ToArray();
+                    var refs = this.Where(GetreversePredicate(i)).Select(GetReverseConverter()).Distinct().ToArray();
                     foreach (var r in refs) {
                         if(!result.Contains(r)) {
                             result.Add(r);

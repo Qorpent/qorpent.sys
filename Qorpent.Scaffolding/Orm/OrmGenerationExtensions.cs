@@ -13,6 +13,38 @@ namespace Qorpent.Scaffolding.Orm{
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="t"></param>
+		/// <param name="withParents"></param>
+		/// <returns></returns>
+		public static IEnumerable<Tuple<IBSharpClass, XElement>> FindIncomeRefes(IBSharpContext context,IBSharpClass t, bool withParents = false)
+		{
+			var tables = context.ResolveAll("dbtable");
+			foreach (var s in tables)
+			{
+				var refs = s.Compiled.Elements("ref");
+				foreach (var r in refs)
+				{
+					if (!withParents && r.Attr("code") == "Parent") continue;
+					if (!r.Attr("reverse").ToBool()) continue;
+					var to = r.Attr("to");
+					if (string.IsNullOrWhiteSpace(to))
+					{
+						to = r.Attr("code") + ".Id";
+					}
+					var fld = to.Split('.').Last();
+					var cls = to.Substring(0, to.Length - fld.Length - 1);
+					if (t.Name == cls || t.Compiled.Attr("fullname") == cls)
+					{
+						yield return new Tuple<IBSharpClass, XElement>(s, r);
+					}
+				}
+			}
+		} 
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="cls"></param>
 		/// <returns></returns>
 		public static IEnumerable<Tuple<IBSharpClass, XElement, string>> GetOrmFields(this IBSharpClass cls){
@@ -50,5 +82,6 @@ namespace Qorpent.Scaffolding.Orm{
 			}
 			return result.Values;
 		}
+
 	}
 }
