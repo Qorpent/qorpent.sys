@@ -100,6 +100,7 @@ namespace Qorpent.Scaffolding.Application {
                 new XAttribute("menu", root.Attr("type")),
                 new XAttribute("class", "menu__root menu__" + root.Attr("type")),
                 new XAttribute("id", root.Attr("code") + "_Menu"));
+            CopyAttributes(menuRoot, root);
             return menuRoot;
         }
 
@@ -151,16 +152,19 @@ namespace Qorpent.Scaffolding.Application {
             return result;
         }
 
-        private static void CopyAttributes(XElement target, XElement el) {
-            var ignoreAttributes = new[] { "code", "name", "iconclass", "icon" };
+        private static void CopyAttributes(XElement target, XElement el = null) {
+            if (null == el) el = target;
+            var ignoreAttributes = new[] { "code", "name", "iconclass", "icon", "prototype", "fullcode", "action" };
             foreach (var a in el.Attributes().Where(_ => !_.Name.ToString().IsIn(ignoreAttributes))) {
                 target.SetAttr(a.Name.ToString(), a.Value);
+            }
+            if (el.HasAttribute("action")) {
+                target.SetAttr("ng-click", el.Attr("action"));
             }
         }
 
         private static XElement GenerateIconWithTextItem(XElement el) {
             var result = GenerateIconItem(el);
-            result.SetAttr("class", "menu__item");
             var title = new XElement("div",
                 new XAttribute("class", "menu__item-title menu__item-element"));
             title.SetValue(el.HasAttribute("title") ? el.Attr("title") : el.Attr("name"));

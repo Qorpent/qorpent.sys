@@ -1,0 +1,254 @@
+menu {
+    padding: 0;
+    margin: 0;
+}
+
+.menu__item {
+    cursor: pointer;
+}
+
+.menu__item>.menu__item-title:hover {
+    text-decoration: none
+}
+
+.menu__ribbon {
+}
+
+.menu__item.menu__item-divider {
+    background-color: lightgray;
+}
+
+.menu__dropdown>.menu__horizontal .menu__item.menu__item-divider {
+    height: 1px;
+    padding: 0;
+}
+
+.menu__ribbon-groups>.menu__item.menu__item-divider,
+.menu__dropdown>.menu__horizontal [menu-group]+.menu__item-divider {
+    height: 100%;
+    width: 1px;
+    padding: 0;
+    vertical-align: top;
+}
+
+.menu__dropdown>.menu__horizontal,
+.menu__ribbon>.menu__ribbon-groups {
+    height: 30px;
+    box-shadow: inset 0 -1px 0 lightgray;
+    padding: 0 5px;
+    font-size: 12px;
+}
+
+.menu__dropdown>.menu__horizontal>.menu__item,
+.menu__ribbon-groups>.menu__item {
+    display: inline-block;
+    padding: 5px 10px;
+}
+
+.menu__dropdown>.menu__horizontal>.menu__item.hover,
+.menu__ribbon-groups>.menu__item.active {
+    /*padding: 4px 3px;
+    font-size: 14px;*/
+    box-shadow: 0 3px 0 #428BCA;
+}
+
+.menu__ribbon>.menu__ribbon-items {
+    height: 70px;
+    padding: 0 5px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.menu__inline .menu__item,
+.menu__ribbon-items>.menu__item {
+    display: inline-block;
+    text-align: center;
+    padding: 5px;
+}
+
+.menu__ribbon-items>.menu__item.menu__item-divider {
+    width: 1px;
+    padding: 0;
+    height: 100%;
+}
+
+.menu__ribbon-items>.menu__item {
+    height: 62px;
+    max-width: 128px;
+    vertical-align: top;
+}
+
+.menu__dropdown .menu__item[type="icon"]>.menu__item-title:after {
+    content: "|";
+    color: transparent;
+}
+
+.menu__item[type="icon"] .icon,
+.menu__item[type="icon_with_text"] .icon {
+    color: #FFF;
+    text-align: center;
+}
+
+.menu__inline .menu__item[type="icon"] .icon,
+.menu__inline .menu__item[type="icon_with_text"] .icon,
+.menu__ribbon-items .menu__item[type="icon"] .icon,
+.menu__ribbon-items .menu__item[type="icon_with_text"] .icon {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    font-size: 24px;
+    line-height: 28px;
+    border-radius: 10px;
+}
+
+.menu__ribbon-groups .menu__item[type="icon_with_text"]>.menu__item-title,
+.menu__dropdown .menu__item[type="icon_with_text"]>.menu__item-title {
+    margin-left: 19px;
+}
+
+.menu__ribbon-groups .menu__item[type="icon"] .icon,
+.menu__ribbon-groups  .menu__item[type="icon_with_text"] .icon,
+.menu__dropdown .menu__item[type="icon"] .icon,
+.menu__dropdown .menu__item[type="icon_with_text"] .icon {
+    width: 15px;
+    height: 15px;
+    padding: 2px;
+    font-size: 10px;
+    line-height: 12px;
+    border-radius: 4px;
+    float: left;
+}
+
+.menu__inline .menu__item[type="icon_with_text"] .icon,
+.menu__ribbon-items .menu__item[type="icon_with_text"] .icon {
+    margin: 3px auto 2px auto;
+}
+
+.menu__ribbon-groups .menu__item[type="icon_with_text"] .icon,
+.menu__dropdown .menu__item[type="icon_with_text"] .icon {
+    margin: 1px auto;
+}
+
+.menu__ribbon-items .menu__item-title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.menu__dropdown .menu__item>.submenu {
+    position: absolute;
+    display: none;
+    background-color: white;
+    margin-top: 5px;
+    border: 1px solid lightgray;
+    padding: 5px 0;
+    min-width: 100px;
+    max-width: 200px;
+}
+
+.menu__dropdown>div>.menu__item>.submenu {
+    box-shadow: 0 -2px 0 #428BCA;
+    border-top-color: #428BCA;
+}
+
+.menu__dropdown>.menu__horizontal .submenu .submenu {
+    margin-top: -28px;
+}
+
+.menu__dropdown>.menu__horizontal>.menu__item[menu-group] {
+    position: relative;
+}
+
+.menu__dropdown>.menu__horizontal>.menu__item[menu-group].open-right>.submenu {
+
+}
+
+.menu__dropdown>.menu__horizontal>.menu__item[menu-group].open-left>.submenu {
+    right: 0;
+}
+
+
+.menu__dropdown>.menu__horizontal>.menu__item.open-right>.submenu {
+    margin-left: -11px;
+}
+
+.menu__dropdown>.menu__horizontal .submenu>.menu__item.open-left>.submenu {
+    right: 100%;
+}
+
+.menu__dropdown>.menu__horizontal .submenu>.menu__item.open-right>.submenu {
+    left: 100%;
+}
+
+.menu__dropdown .menu__item[menu-item]:hover>.icon,
+.menu__dropdown .menu__item[menu-group].hover>.icon {
+    background: white !important;
+    color: #428BCA;
+}
+
+.menu__ribbon-groups .menu__item>.icon,
+.menu__dropdown .menu__item>.icon {
+    display: inline-block;
+
+}
+
+.menu__dropdown .submenu>.menu__item.hover {
+
+}
+
+.menu__dropdown .menu__item.hover>.submenu {
+    display: block;
+}
+
+.menu__dropdown .menu__item>.menu__item-title {
+    /* color: #428BCA; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.menu__dropdown .menu__item[menu-item]:hover>.menu__item-title:after {
+    content: attr(title);
+    display: block;
+    position: absolute;
+    top: -1px;
+    padding: 1px;
+    background-color: #428BCA;
+}
+
+.menu__dropdown .menu__item[menu-item]:hover>.menu__item-title,
+.menu__dropdown .menu__item[menu-group].hover>.menu__item-title {
+    color: white;
+    position: relative;
+}
+
+.menu__dropdown .menu__item[menu-item]:hover,
+.menu__dropdown .menu__item[menu-group].hover {
+    background-color: #428BCA;
+    box-shadow: 1px 0 0 #428BCA, -1px 0 0 #428BCA;
+}
+
+.menu__dropdown .menu__item[view]:hover {
+    background-color: white;
+    box-shadow: 1px 0 0 lightgray, -1px 0 0 lightgray;
+}
+
+.menu__dropdown .submenu>.menu__item {
+    padding: 5px 10px;
+}
+
+.menu__dropdown .submenu>.menu__item[menu-group].open-left>.menu__item-title:before,
+.menu__dropdown .submenu>.menu__item[menu-group].open-right>.menu__item-title:after {
+    font-family: FontAwesome;
+    font-size: 90%;
+}
+
+.menu__dropdown .submenu>.menu__item[menu-group].open-right>.menu__item-title:after {
+    content: "\f0da";
+    margin-left: 7px;
+}
+
+.menu__dropdown .submenu>.menu__item[menu-group].open-left>.menu__item-title:before {
+    content: "\f0d9";
+    margin-right: 7px;
+}
