@@ -196,19 +196,46 @@ namespace Qorpent.Scaffolding.Orm{
 				o.AppendLine("\t\t[" + serattribute + "]");
 				o.AppendLine("#endif");
 			}
+			var ltype = dtype.ToLower();
 			if (over){
 				o.AppendLine("#if NOQORPENT");
 				o.AppendFormat("\t\tpublic virtual {0} {1} {{get {{return Native{1}{2};}} set{{Native{1}=value;}}}}\r\n", dtype, name, init);
 				o.AppendLine("#else");
-				o.AppendFormat("\t\tpublic override {0} {1} {{get {{return Native{1}{2};}} set{{Native{1}=value;}}}}\r\n", dtype, name, init);
+
+				if (IsNonLazyType(ltype))
+				{
+					o.AppendFormat(
+						"\t\tpublic override {0} {1} {{get {{return Native{1}{2};}} set{{Native{1}=value;}}}}\r\n", dtype, name,
+						init);
+				}
+				else{
+					o.AppendFormat(
+						"\t\tpublic override {0} {1} {{get {{return ((null!=Native{1}{2} as {0}.Lazy )?( Native{1}{2} = (({0}.Lazy) Native{1}{2} ).GetLazy(Native{1}{2}) ): Native{1}{2} );}} set{{Native{1}=value;}}}}\r\n", dtype, name,
+						init);
+				}
 				o.AppendLine("#endif");
 			}
 			else{
-				o.AppendFormat("\t\tpublic virtual {0} {1} {{get {{return Native{1}{2};}} set{{Native{1}=value;}}}}\r\n", dtype, name, init);
+				if (IsNonLazyType(ltype))
+				{
+					o.AppendFormat("\t\tpublic virtual {0} {1} {{get {{return Native{1}{2};}} set{{Native{1}=value;}}}}\r\n", dtype, name, init);
+				
+				}
+				else
+				{
+					o.AppendFormat(
+						"\t\tpublic virtual {0} {1} {{get {{return ((null!=Native{1}{2} as {0}.Lazy )?( Native{1}{2} = (({0}.Lazy) Native{1}{2} ).GetLazy(Native{1}{2}) ): Native{1}{2} );}} set{{Native{1}=value;}}}}\r\n", dtype, name,
+						init);
+				}
+				
 			}
 			o.AppendLine("\t\t///<summary>Direct access to " + name + "</summary>");
 			o.AppendFormat("\t\tprotected {0} Native{1};\r\n", dtype, name);
 			o.AppendLine();
+		}
+
+		private static bool IsNonLazyType(string ltype){
+			return ltype == "int32" || ltype == "string" || ltype == "decimal" || ltype == "bool" || ltype == "boolean" || ltype == "datetime" || ltype.Contains("icollection");
 		}
 
 		private void WriteEndClass(){
@@ -246,11 +273,13 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine(" {");
 			o.AppendLine("#else");
 			o.AppendFormat("\tpublic partial class {0} {{\r\n", targetclass.Name);
-			o.AppendLine("\t\t///<summary>Инстанция - логический Null</summary>");
-			o.AppendLine("\t\tpublic static readonly " + targetclass.Name + " Null = new " + targetclass.Name + "();");
-			o.AppendLine("\t\t///<summary>Инстанция - логический Lazy</summary>");
-			o.AppendLine("\t\tpublic static readonly " + targetclass.Name + " Lazy = new " + targetclass.Name + "();");
+
 			o.AppendLine("#endif");
+			o.AppendLine("\t\t///<summary>Lazy load nest type</summary>");
+			o.AppendLine("\t\tpublic class Lazy:" + targetclass.Name + "{");
+			o.AppendLine("\t\t\t///<summary>Function to get lazy</summary>");
+			o.AppendLine("\t\t\tpublic Func<" + targetclass.Name + "," + targetclass.Name + "> GetLazy;");
+			o.AppendLine("\t\t}");
 		}
 	}
 }

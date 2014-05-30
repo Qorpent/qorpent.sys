@@ -97,7 +97,7 @@ namespace Qorpent.Scaffolding.Orm{
 				o.AppendLine("\t\t\t\tforeach(var t in targets){");
 				o.AppendLine("\t\t\t\t\tif(t.Id == -9999||t.Id==0)continue;");
 				foreach (var element in setupinfo.Item2){
-					GenerateSetupOwnRef(t, element);
+					GenerateSetupOwnRef(t, element, ns);
 				}
 				o.AppendLine("\t\t\t\t}");
 				if (setupinfo.Item3.Length != 0)
@@ -151,7 +151,7 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("\t\t\t\t\t\tif(Lazy" + propname + "){");
 			o.AppendLine("\t\t\t\t\t\t\tforeach(var t in targets){");
 			o.AppendLine("\t\t\t\t\t\t\t\tif(t.Id == -9999||t.Id==0)continue;");
-			o.AppendLine("\t\t\t\t\t\t\t\tt." + mname + "= new ObjectDataCacheBindLazyList<"+colt.Name+">{Query=q,Cache=mycache};");
+			o.AppendLine("\t\t\t\t\t\t\t\tt." + mname + "= new ObjectDataCacheBindLazyList<"+colt.FullName+">{Query=q,Cache="+cache+"};");
 			o.AppendLine("\t\t\t\t\t\t\t}");
 			o.AppendLine("\t\t\t\t\t\t}else{");
 			o.AppendLine("\t\t\t\t\t\t\tvar nestIds = " + cache + ".UpdateSingleQuery(q, ctx,c, null, true);");
@@ -165,7 +165,7 @@ namespace Qorpent.Scaffolding.Orm{
 
 		}
 
-		private void GenerateSetupOwnRef(IBSharpClass t, XElement e){
+		private void GenerateSetupOwnRef(IBSharpClass t, XElement e, string ns){
 			var code = e.Attr("code");
 			var cls = e.Attr("to");
 			var fld = "Id";
@@ -179,7 +179,7 @@ namespace Qorpent.Scaffolding.Orm{
 			}
 			o.AppendLine("\t\t\t\t\tif(AutoLoad" + t.Name + code + " && null==t." + code +(fld=="Id"? (" && -9999 != t."+code+fld):"")+   "){");
 			
-			o.AppendLine("\t\t\t\t\t\tt." + code + "= (Lazy"+t.Name+code+"?(" + cls + ".Get(t." + code + fld + ",c)):"+cls+".Lazy);");
+			o.AppendLine("\t\t\t\t\t\tt." + code + "= (!Lazy"+t.Name+code+"?(" + cls + ".Get(t." + code + fld + ",c)): new "+cls+".Lazy{GetLazy=_=>"+cls+".Get(t."+code+fld+")});");
 			o.AppendLine("\t\t\t\t\t}");
 		}
 
