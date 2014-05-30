@@ -86,7 +86,8 @@ namespace Qorpent.Scaffolding.Application {
 		    }
 	    }
 
-	    private void GenerateWidget(XElement root, XElement e){
+	    private void GenerateWidget(XElement root, XElement e) {
+	        var controller = _context.ResolveAll("ui-controller").FirstOrDefault(_ => _.FullName == e.Attr("code"));
 			if (e.HasElements){
 				var outerel = new XElement("layout", new XAttribute("height", "max"), new XAttribute("width", "max")).SetAttr("id", e.Attr("code"));
 				outerel.SetAttr("ng-controller", GetControllerName(e.Attr("code")))
@@ -164,7 +165,23 @@ namespace Qorpent.Scaffolding.Application {
                     ctrlel.Add(widgetHeader);
                 }
                 var widgetBody = new XElement("div", new XAttribute("class", "layout__widget-body"));
-                widgetBody.Add(include);
+                if (null != controller) {
+                    var incdiv = new XElement("div");
+                    incdiv.Add(include);
+                    widgetBody.Add(incdiv);
+                    var menuElements = controller.Compiled.Elements("menu").ToArray();
+                    if (menuElements.Length > 0) {
+                        foreach (var m in menuElements) {
+                            var inc = new XElement("ng-include",new XAttribute("src","'" + m.Attr("code").Split('.').Last() + "-menu.html'"));
+                            var div = new XElement("div");
+                            div.Add(inc);
+                            widgetBody.Add(div);
+                        }
+                    }
+                }
+                else {
+                    widgetBody.Add(include);
+                }
                 ctrlel.Add(widgetBody);
 				root.Add(ctrlel);
 			}

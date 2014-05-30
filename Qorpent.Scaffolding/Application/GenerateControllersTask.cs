@@ -27,6 +27,7 @@ namespace Qorpent.Scaffolding.Application {
 	        yield return production;
 	        production = new Production{
 		        FileName = Project.ProjectName + "-root.js",
+                OnlyIfAutogenrate = true,
 		        GetContent = () => GenerateRootController()
 	        };
 	        yield return production;
@@ -242,6 +243,7 @@ namespace Qorpent.Scaffolding.Application {
             : base() {
             ClassSearchCriteria = "ui-controller";
             DefaultOutputName = "Js";
+         
         }
 
 

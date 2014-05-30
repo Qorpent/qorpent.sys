@@ -143,5 +143,9 @@
     <EmbeddedResource Include="Resources\layout.css" />
     <EmbeddedResource Include="Resources\layout.js" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\menu.css" />
+    <Content Include="Resources\menu.js" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>
