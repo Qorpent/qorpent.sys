@@ -14,5 +14,34 @@
     <None Include="*.export" />
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
+      <Project>{880f65ea-1a22-4672-a137-ffc91290a209}</Project>
+      <Name>Qorpent.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Data\Qorpent.Data.csproj">
+      <Project>{e762abb0-9982-444c-a2b5-23b5866954f3}</Project>
+      <Name>Qorpent.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IoC\Qorpent.IoC.csproj">
+      <Project>{62f22ffa-a1cf-4a74-838c-9ab33a9442ea}</Project>
+      <Name>Qorpent.IoC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IO\Qorpent.IO.csproj">
+      <Project>{426c92df-3c40-426c-b0be-40a1df9044c2}</Project>
+      <Name>Qorpent.IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
+      <Project>{21971f28-8ed8-4f50-b623-e9db2658af54}</Project>
+      <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
+      <Project>{880f65ea-1a22-4672-a137-ffc912902112}</Project>
+      <Name>Qorpent.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SqlAndOrm\ModelCoreTests.cs" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>
