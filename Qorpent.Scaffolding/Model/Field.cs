@@ -195,15 +195,15 @@ namespace Qorpent.Scaffolding.Model{
 			}
 			IsAutoLoadReverseByDefault = e.Attr("reverse-auto").ToBool();
 			IsLazyLoadReverseByDefault = e.Attr("reverse-lazy").ToBool();
-			var refto = e.Attr("to",Name+".Id");
+			var refto = e.Attr("to", Name + ".PrimaryKey");
 			if (!refto.Contains(".")){
-				refto += ".Id";
+				refto += ".PrimaryKey";
 			}
 			var refparts = refto.Split('.');
 			ReferenceTable = refparts[refparts.Length - 2].ToLowerInvariant();
 			ReferenceField = refparts[refparts.Length - 1].ToLowerInvariant();
 			DataType = MyClass.DataTypeMap["int"];
-			if (ReferenceField.ToLowerInvariant() != "id"){
+			if (ReferenceField.ToLowerInvariant() == "code"){
 				DataType = MyClass.DataTypeMap["string"];
 			}
 		}

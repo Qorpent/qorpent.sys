@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Qorpent.BSharp;
+using Qorpent.Scaffolding.Sql;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model{
 	/// <summary>
@@ -60,8 +62,36 @@ namespace Qorpent.Scaffolding.Model{
 			SetClassRanks();
 			//теперь выявляем циркулярные ссылки
 			DetermineCircularLinks();
-			
+			//обеспечивает целостность расположения таблиц
+			SetupAllocation();
+
 		}
+
+		private void SetupAllocation(){
+			var allocations = Classes.Values.Select(_ => _.AllocationInfo).ToArray();
+			foreach (var allocationInfo in allocations){
+				var cls = Context.Get(allocationInfo.FileGroup);
+				if (null != cls && cls.FullName == allocationInfo.FileGroup){
+					allocationInfo.FileGroupClass = cls;
+					allocationInfo.FileGroup = cls.Compiled.Attr("sqlname", cls.Name);
+				}
+				if (allocationInfo.Partitioned && null == allocationInfo.PartitionField){
+					if (string.IsNullOrWhiteSpace(allocationInfo.PartitionFieldName)){
+						ProcessNullPartitionField(allocationInfo.MyClass);
+					}
+					else{
+						var fld = allocationInfo.MyClass[allocationInfo.PartitionFieldName];
+						if (null == fld){
+							ProcessInvalidPartitionField(allocationInfo.MyClass);
+						}
+						else{
+							allocationInfo.PartitionField = fld;
+						}
+					}
+				}
+			}
+		}
+
 		/// <summary>
 		/// Компилирует модель из кода B#
 		/// </summary>
@@ -113,10 +143,14 @@ namespace Qorpent.Scaffolding.Model{
 				if (null == reference.ReferenceClass){
 					var refcls = Resolve(reference.ReferenceTable);
 					if (null != refcls){
-						if (refcls.Fields.ContainsKey(reference.ReferenceField)){
-							var reffld = refcls.Fields[reference.ReferenceField];
+						if (reference.ReferenceField=="primarykey" || refcls.Fields.ContainsKey(reference.ReferenceField)){
+							var reffld = reference.ReferenceField == "primarykey" ? refcls.PrimaryKey : refcls.Fields[reference.ReferenceField];
 							reference.DataType = reffld.DataType;
+							reference.ReferenceField = reffld.Name;
 							reference.ReferenceClass = refcls;
+							reference.DefaultSqlValue = reference.DataType.IsString
+								                            ? new DefaultValue{DefaultValueType = DbDefaultValueType.String, Value = "/"}
+								                            : new DefaultValue{DefaultValueType = DbDefaultValueType.Native, Value = 0};
 							refcls.ReverseFields[reference.ReverseCollectionName] = reference;
 						}
 						else{
@@ -128,6 +162,30 @@ namespace Qorpent.Scaffolding.Model{
 					}
 				}
 			}
+		}
+
+		private void ProcessNullPartitionField(PersistentClass cls)
+		{
+			var error = new BSharpError
+			{
+				Class = cls.TargetClass,
+				Level = ErrorLevel.Error,
+				Message = "Таблица отмечена к партицированию, но поле не указано"
+			};
+			Errors.Add(error);
+			Context.RegisterError(error);
+		}
+
+		private void ProcessInvalidPartitionField(PersistentClass cls)
+		{
+			var error = new BSharpError
+			{
+				Class = cls.TargetClass,
+				Level = ErrorLevel.Error,
+				Message = "Поле, отмеченное к партицироанию не найдено"
+			};
+			Errors.Add(error);
+			Context.RegisterError(error);
 		}
 
 		private void ProcessInvalidReferenceError(Field reference){

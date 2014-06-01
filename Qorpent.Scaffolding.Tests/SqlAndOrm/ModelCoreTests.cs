@@ -59,6 +59,38 @@ class X prototype=dbtable
 		}
 
 		[Test]
+		public void CanSetReferenceToCustomPk(){
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+table X
+	string myid primarykey=1
+table Y
+	ref X
+");
+			Assert.True(model.IsValid);
+			Assert.False(model["x"].Fields.ContainsKey("id"));
+			Assert.AreEqual("myid",model["y"]["x"].ReferenceField);
+			Assert.AreEqual("/",model["y"]["x"].DefaultSqlValue.Value);
+		}
+
+		[Test]
+		public void CanSetReferenceToNonCustomPk()
+		{
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+table X
+	string Code
+table Y
+	ref X to=X.Code
+");
+			Assert.True(model.IsValid);
+			Assert.True(model["x"].Fields.ContainsKey("id"));
+			Assert.AreEqual("Code", model["y"]["x"].ReferenceField);
+			Assert.AreEqual("/", model["y"]["x"].DefaultSqlValue.Value);
+		}
+
+
+		[Test]
 		public void SimpleReferenceSupport()
 		{
 			var model = PersistentModel.Compile(@"
@@ -195,6 +227,89 @@ table category
 			Assert.True(cparent.IsAutoLoadReverseByDefault);
 			Assert.True(cparent.IsLazyLoadReverseByDefault);
 			Assert.False(cparent.IsLazyLoadByDefault);
+		}
+
+		[Test]
+		public void CanDetectNonValidTableRef(){
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+table a
+	ref b
+");
+			Assert.False(model.IsValid);
+		}
+		[Test]
+		public void CanDetectNonValidTableFieldRef()
+		{
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+table a
+table b
+	ref a to=a.x
+");
+			Assert.False(model.IsValid);
+		}
+
+
+		[Test]
+		public void CanApplyDefaultFileGroup()
+		{
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+table a
+");
+			Assert.AreEqual("SECONDARY",model["a"].AllocationInfo.FileGroup);
+		}
+
+		[Test]
+		public void CanApplyFileGroup()
+		{
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+table a filegroup=TEST
+");
+			Assert.AreEqual("TEST", model["a"].AllocationInfo.FileGroup);
+		}
+
+		[Test]
+		public void CanApplyFileGroupWithAttr()
+		{
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+class X.TEST
+table a filegroup=^X.TEST
+");
+			Assert.AreEqual("TEST", model["a"].AllocationInfo.FileGroup);
+			Assert.AreEqual(model.Context.Get("X.TEST"),model["a"].AllocationInfo.FileGroupClass);
+		}
+
+		[Test]
+		public void CanApplyFileGroupWithAttrToCustomName()
+		{
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+class X.TEST sqlname=T2
+table a filegroup=^X.TEST
+");
+			Assert.AreEqual("T2", model["a"].AllocationInfo.FileGroup);
+			Assert.AreEqual(model.Context.Get("X.TEST"), model["a"].AllocationInfo.FileGroupClass);
+		}
+
+		[Test]
+		public void CanSetupPartitioning()
+		{
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+table a
+	partitioned with=x start=2
+	int X
+");
+			var t = model["a"];
+			Assert.AreEqual("SECONDARY",t.AllocationInfo.FileGroup);
+			Assert.True(t.AllocationInfo.Partitioned);
+			Assert.AreEqual("x",t.AllocationInfo.PartitionFieldName);
+			Assert.AreEqual(t["x"],t.AllocationInfo.PartitionField);
+			Assert.AreEqual(2,t.AllocationInfo.PartitioningStart);
 		}
 	}
 }

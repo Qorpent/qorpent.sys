@@ -15,14 +15,26 @@ namespace Qorpent.Scaffolding.Model
 		/// Настраивает отдельный хранимый класс из B#
 		/// </summary>
 		/// <param name="c"></param>
-		public PersistentClass Setup(IBSharpClass c)
-		{
+		public PersistentClass Setup(IBSharpClass c){
 			var xml = c.Compiled;
 			ReadMainData(c, xml);
 			ReadDataTypes(c,xml);
 			ReadFields(c,xml);
 			ReadAdvancedDataObjects(c, xml);
+			ReadAllocationInfo(c, xml);
 			return this;
+		}
+
+		private void ReadAllocationInfo(IBSharpClass c, XElement xml){
+			var a = new AllocationInfo{MyClass = this};
+			this.AllocationInfo = a;
+			a.FileGroup = xml.Attr("filegroup", a.FileGroup);
+			var pt = xml.Element("partitioned");
+			if (null != pt){
+				a.Partitioned = true;
+				a.PartitionFieldName = pt.Attr("with");
+				a.PartitioningStart = pt.Attr("start").ToInt();
+			}
 		}
 
 		private void ReadAdvancedDataObjects(IBSharpClass c, XElement xml){
@@ -44,6 +56,10 @@ namespace Qorpent.Scaffolding.Model
 		/// Связанные Sql-объекты
 		/// </summary>
 		public IList<SqlObject> SqlObjects { get; private set; }
+		/// <summary>
+		/// Информация о физическом размещении объекта
+		/// </summary>
+		public AllocationInfo AllocationInfo { get; set; }
 
 		private void ReadFields(IBSharpClass c, XElement xml){
 			foreach (var e in xml.Elements()){

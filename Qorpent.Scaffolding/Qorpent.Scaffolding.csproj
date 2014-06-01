@@ -27,6 +27,7 @@
     <Compile Include="BSharpClassRef.cs" />
     <Compile Include="Application\GenerateDataTypesInCSharpTask.cs" />
     <Compile Include="CodeGeneratorTaskBase.cs" />
+    <Compile Include="Model\AllocationInfo.cs" />
     <Compile Include="Model\SqlObject.cs" />
     <Compile Include="Model\SqlObjectType.cs" />
     <Compile Include="Model\DefaultValue.cs" />
