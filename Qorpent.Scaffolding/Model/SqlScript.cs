@@ -1,0 +1,147 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+using Qorpent.BSharp;
+using Qorpent.Utils.Extensions;
+
+namespace Qorpent.Scaffolding.Model{
+	/// <summary>
+	/// Описатель для скриптов
+	/// </summary>
+	public class SqlScript{
+		/// <summary>
+		/// 
+		/// </summary>
+		public SqlScript(){
+			SubScripts = new List<SqlScript>();
+			Position = ScriptPosition.After;
+			SqlDialect = SqlDialect.Ansi;
+		}
+		/// <summary>
+		/// Название скрипта
+		/// </summary>
+		public string Name { get; set; }
+		/// <summary>
+		/// Комментарий к скрипту
+		/// </summary>
+		public string Comment { get; set; }
+		/// <summary>
+		/// Текст скрипта
+		/// </summary>
+		public string Text { get; set; }
+		/// <summary>
+		/// Дескриптор внешнего скрипта
+		/// </summary>
+		public string External { get; set; }
+		/// <summary>
+		/// Под-скрипты
+		/// </summary>
+		public IList<SqlScript> SubScripts { get; private set; }
+		/// <summary>
+		/// Позиция выполнения скрипта
+		/// </summary>
+		public ScriptPosition Position { get; set; }
+		/// <summary>
+		/// Режим применения скрипта (при создании или при удалении)
+		/// </summary>
+		public ScriptMode Mode { get; set; }
+		/// <summary>
+		/// Диалект, для которого применяется
+		/// </summary>
+		public SqlDialect SqlDialect { get; set; }
+		/// <summary>
+		/// Возвращает реальные скрипты н
+		/// </summary>
+		/// <param name="dialect"></param>
+		/// <param name="position"></param>
+		/// <param name="mode"></param>
+		/// <returns></returns>
+		public IEnumerable<SqlScript> GetRealScripts(SqlDialect dialect, ScriptPosition position, ScriptMode mode){
+			if (0 == SubScripts.Count){
+				if (SqlDialect == SqlDialect.Ansi || dialect == SqlDialect){
+					if (Mode == mode){
+						if (Position == position){
+							yield return this;
+						}
+					}
+				}
+			}
+			else{
+				foreach (var subScript in SubScripts){
+					foreach (var rs in subScript.GetRealScripts(dialect,position,mode)){
+						yield return rs;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="model"></param>
+		/// <param name="cls"></param>
+		/// <param name="definition"></param>
+		/// <returns></returns>
+		public SqlScript Setup(PersistentModel model, IBSharpClass cls, XElement definition){
+			Model = model;
+			MyClass = cls;
+			Definition = definition;
+			Name = definition.Attr("code");
+			Comment = definition.Attr("name");
+			External = definition.Attr("external");
+			Position = definition.Attr("position", "After").To<ScriptPosition>();
+			Mode = definition.Attr("mode", "Create").To<ScriptMode>();
+			SqlDialect = definition.Attr("dialect", "Ansi").To<SqlDialect>();
+			Directory = Path.GetDirectoryName(definition.Attr("file", Environment.CurrentDirectory + "/1.bxls"));
+			var subscripts = definition.Elements("script").ToArray();
+			if (0 == subscripts.Length){
+				if (string.IsNullOrWhiteSpace(External)){
+					Text = definition.Value;
+				}
+				else{
+					var filename = Path.Combine(Directory, External);
+					if (File.Exists(filename)){
+						Text = File.ReadAllText(filename);
+					}
+					else{
+						Text = "-- ERROR : cannot find file " + filename;
+						Model.RegisterError(new BSharpError{Level = ErrorLevel.Error,Xml = definition,Message = "Не могу найти файл скрипта "+filename });
+					}
+				}
+			}
+			else{
+				foreach (var subscriptdef in definition.Elements("script")){
+					var subscript = new SqlScript();
+					subscript.Parent = this;
+					subscript.Setup(Model, cls, subscriptdef);
+					SubScripts.Add(subscript);
+				}
+			}
+			return this;
+		}
+		/// <summary>
+		/// Родительский скрипт
+		/// </summary>
+		public SqlScript Parent { get; set; }
+		/// <summary>
+		/// Директория скрипта
+		/// </summary>
+		public string Directory { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public XElement Definition { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IBSharpClass MyClass { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		protected PersistentModel Model { get; set; }
+	}
+}

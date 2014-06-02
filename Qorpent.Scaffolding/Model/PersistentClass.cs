@@ -28,7 +28,7 @@ namespace Qorpent.Scaffolding.Model
 		private void ReadAllocationInfo(IBSharpClass c, XElement xml){
 			var a = new AllocationInfo{MyClass = this};
 			this.AllocationInfo = a;
-			a.FileGroup = xml.Attr("filegroup", a.FileGroup);
+			a.FileGroupName = xml.Attr("filegroup", a.FileGroupName);
 			var pt = xml.Element("partitioned");
 			if (null != pt){
 				a.Partitioned = true;
@@ -141,7 +141,13 @@ namespace Qorpent.Scaffolding.Model
 		/// <returns></returns>
 		public Field this[string name]
 		{
-			get { return Fields[name.ToLowerInvariant()]; }
+			get{
+				var n = name.ToLowerInvariant();
+				if (Fields.ContainsKey(n)){
+					return Fields[n];
+				}
+				return null;
+			}
 		}
 		/// <summary>
 		/// Поля класса/таблицы

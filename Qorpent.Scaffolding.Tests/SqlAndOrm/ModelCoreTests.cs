@@ -251,65 +251,10 @@ table b
 		}
 
 
-		[Test]
-		public void CanApplyDefaultFileGroup()
-		{
-			var model = PersistentModel.Compile(@"
-class table prototype=dbtable abstract
-table a
-");
-			Assert.AreEqual("SECONDARY",model["a"].AllocationInfo.FileGroup);
-		}
+		
 
-		[Test]
-		public void CanApplyFileGroup()
-		{
-			var model = PersistentModel.Compile(@"
-class table prototype=dbtable abstract
-table a filegroup=TEST
-");
-			Assert.AreEqual("TEST", model["a"].AllocationInfo.FileGroup);
-		}
+		
 
-		[Test]
-		public void CanApplyFileGroupWithAttr()
-		{
-			var model = PersistentModel.Compile(@"
-class table prototype=dbtable abstract
-class X.TEST
-table a filegroup=^X.TEST
-");
-			Assert.AreEqual("TEST", model["a"].AllocationInfo.FileGroup);
-			Assert.AreEqual(model.Context.Get("X.TEST"),model["a"].AllocationInfo.FileGroupClass);
-		}
-
-		[Test]
-		public void CanApplyFileGroupWithAttrToCustomName()
-		{
-			var model = PersistentModel.Compile(@"
-class table prototype=dbtable abstract
-class X.TEST sqlname=T2
-table a filegroup=^X.TEST
-");
-			Assert.AreEqual("T2", model["a"].AllocationInfo.FileGroup);
-			Assert.AreEqual(model.Context.Get("X.TEST"), model["a"].AllocationInfo.FileGroupClass);
-		}
-
-		[Test]
-		public void CanSetupPartitioning()
-		{
-			var model = PersistentModel.Compile(@"
-class table prototype=dbtable abstract
-table a
-	partitioned with=x start=2
-	int X
-");
-			var t = model["a"];
-			Assert.AreEqual("SECONDARY",t.AllocationInfo.FileGroup);
-			Assert.True(t.AllocationInfo.Partitioned);
-			Assert.AreEqual("x",t.AllocationInfo.PartitionFieldName);
-			Assert.AreEqual(t["x"],t.AllocationInfo.PartitionField);
-			Assert.AreEqual(2,t.AllocationInfo.PartitioningStart);
-		}
+		
 	}
 }

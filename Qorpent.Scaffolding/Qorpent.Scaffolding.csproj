@@ -28,7 +28,10 @@
     <Compile Include="Application\GenerateDataTypesInCSharpTask.cs" />
     <Compile Include="CodeGeneratorTaskBase.cs" />
     <Compile Include="Model\AllocationInfo.cs" />
+    <Compile Include="Model\ScriptMode.cs" />
+    <Compile Include="Model\ScriptPosition.cs" />
     <Compile Include="Model\SqlObject.cs" />
+    <Compile Include="Model\SqlObjects\FileGroup.cs" />
     <Compile Include="Model\SqlObjectType.cs" />
     <Compile Include="Model\DefaultValue.cs" />
     <Compile Include="Model\Field.cs" />
@@ -37,6 +40,7 @@
     <Compile Include="Model\PersistentModel.cs" />
     <Compile Include="Model\SqlDataType.cs" />
     <Compile Include="Model\SqlDialect.cs" />
+    <Compile Include="Model\SqlScript.cs" />
     <Compile Include="Orm\GenerateExtendedCachedModel.cs" />
     <Compile Include="Orm\GenerateModel.cs" />
     <Compile Include="Orm\DataCompilerExtensions.cs" />
@@ -90,8 +94,6 @@
       <Name>Qorpent.Utils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\SqlObjects\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

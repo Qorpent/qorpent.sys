@@ -16,8 +16,29 @@ namespace Qorpent.Scaffolding.Model{
 			Classes = new Dictionary<string, PersistentClass>();
 			DatabaseSqlObjects = new List<SqlObject>();
 			Errors = new List<BSharpError>();
+			ExtendedScripts = new List<SqlScript>();
 			TablePrototype = "dbtable";
+			FileGroupPrototype = "filegroup";
+			ScriptPrototype = "dbscript";
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="error"></param>
+		public void RegisterError(BSharpError error){
+			Errors.Add(error);
+			Context.RegisterError(error);
+		}
+		/// <summary>
+		/// Прототип дополнительных скриптов
+		/// </summary>
+		public string ScriptPrototype { get; set; }
+
+		/// <summary>
+		/// BS прототип для файловых групп
+		/// </summary>
+		public string FileGroupPrototype { get; set; }
+
 		/// <summary>
 		/// Имя прототипа для таблиц
 		/// </summary>
@@ -41,8 +62,16 @@ namespace Qorpent.Scaffolding.Model{
 				DatabaseSqlObjects.Add(obj);
 			}
 			BuildModel();
+			ReadScripts();
 			return this;
 		}
+
+		private void ReadScripts(){
+			foreach (var scriptDef in Context.ResolveAll(ScriptPrototype)){
+				this.ExtendedScripts.Add(new SqlScript().Setup(this,scriptDef,scriptDef.Compiled));
+			}
+		}
+
 		/// <summary>
 		/// Признак неправильной модели
 		/// </summary>
@@ -70,10 +99,9 @@ namespace Qorpent.Scaffolding.Model{
 		private void SetupAllocation(){
 			var allocations = Classes.Values.Select(_ => _.AllocationInfo).ToArray();
 			foreach (var allocationInfo in allocations){
-				var cls = Context.Get(allocationInfo.FileGroup);
-				if (null != cls && cls.FullName == allocationInfo.FileGroup){
-					allocationInfo.FileGroupClass = cls;
-					allocationInfo.FileGroup = cls.Compiled.Attr("sqlname", cls.Name);
+				var cls = Context.Get(allocationInfo.FileGroupName);
+				if (null != cls && cls.FullName == allocationInfo.FileGroupName){
+					allocationInfo.FileGroupName = cls.Compiled.Attr("sqlname", cls.Name).ToUpper();
 				}
 				if (allocationInfo.Partitioned && null == allocationInfo.PartitionField){
 					if (string.IsNullOrWhiteSpace(allocationInfo.PartitionFieldName)){
@@ -249,6 +277,22 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// Коллекция объектов уровня БД
 		/// </summary>
-		public IList<SqlObject> DatabaseSqlObjects { get; private set; } 
+		public IList<SqlObject> DatabaseSqlObjects { get; private set; }
+
+		/// <summary>
+		/// Дополнительные SQL - скрипты для построения схемы
+		/// </summary>
+		public IList<SqlScript> ExtendedScripts { get; private set; }
+		/// <summary>
+		/// Возваращает все скрипты для указанной позиции и языка в генерации
+		/// </summary>
+		/// <param name="dialect"></param>
+		/// <param name="mode"></param>
+		/// <param name="position"></param>
+		/// <returns></returns>
+		public IEnumerable<SqlScript> GetScripts(SqlDialect dialect, ScriptMode mode, ScriptPosition position){
+			return ExtendedScripts.SelectMany(_ => _.GetRealScripts(dialect, position, mode));
+		} 
+	
 	}
 }

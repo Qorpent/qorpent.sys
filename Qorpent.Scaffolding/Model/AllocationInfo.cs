@@ -1,4 +1,5 @@
 ﻿using Qorpent.BSharp;
+using Qorpent.Scaffolding.Model.SqlObjects;
 
 namespace Qorpent.Scaffolding.Model{
 	/// <summary>
@@ -9,7 +10,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// 
 		/// </summary>
 		public AllocationInfo(){
-			FileGroup = "SECONDARY";
+			FileGroupName = "SECONDARY";
 		}
 		/// <summary>
 		/// 
@@ -18,7 +19,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// Файловая группа
 		/// </summary>
-		public string FileGroup { get; set; }
+		public string FileGroupName { get; set; }
 		/// <summary>
 		/// Признак партицирования
 		/// </summary>
@@ -38,6 +39,6 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// 
 		/// </summary>
-		public IBSharpClass FileGroupClass { get; set; }
+		public FileGroup FileGroup { get; set; }
 	}
 }
