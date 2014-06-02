@@ -12,6 +12,8 @@ namespace Qorpent.Scaffolding.Model{
 	/// Описывает целостную промежуточную модель данных
 	/// </summary>
 	public class PersistentModel{
+		private PersistentClass[] _cachedTables;
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -84,6 +86,12 @@ namespace Qorpent.Scaffolding.Model{
 					ExtendedScripts.Add(new SqlScript { Name = "sys:support_for_filegroups_begin", Mode = ScriptMode.Create, SqlDialect = SqlDialect.SqlServer, Position = ScriptPosition.Before, Text = DefaultScripts.SqlServerCreatePeramble });
 					ExtendedScripts.Add(new SqlScript { Name = "sys:support_for_filegroups_end", Mode = ScriptMode.Create, SqlDialect = SqlDialect.SqlServer, Position = ScriptPosition.After, Text = DefaultScripts.SqlServerCreateFinisher });
 				}
+			}
+			if (GenerationOptions.IncludeDialect.HasFlag(SqlDialect.PostGres)){
+				ExtendedScripts.Add(new SqlScript { Name = "sys:psql_start", Mode = ScriptMode.Create, SqlDialect = SqlDialect.PostGres, Position = ScriptPosition.Before, Text = DefaultScripts.PostgresqlPeramble });
+				ExtendedScripts.Add(new SqlScript { Name = "sys:psql_end", Mode = ScriptMode.Create, SqlDialect = SqlDialect.PostGres, Position = ScriptPosition.After, Text = DefaultScripts.PostgresqlFinisher });
+				ExtendedScripts.Add(new SqlScript { Name = "sys:psql_start", Mode = ScriptMode.Drop, SqlDialect = SqlDialect.PostGres, Position = ScriptPosition.Before, Text = DefaultScripts.PostgresqlPeramble });
+				ExtendedScripts.Add(new SqlScript { Name = "sys:psql_end", Mode = ScriptMode.Drop, SqlDialect = SqlDialect.PostGres, Position = ScriptPosition.After, Text = DefaultScripts.PostgresqlFinisher });
 			}
 		}
 
@@ -350,7 +358,7 @@ namespace Qorpent.Scaffolding.Model{
 			if(mode==ScriptMode.Drop && !GenerationOptions.GenerateDropScript)yield break;
 			if(!GenerationOptions.IncludeDialect.HasFlag(dialect))yield break;
 			if (mode == ScriptMode.Create){
-				foreach (var writer in GetCreateWriters(dialect)){
+				foreach (var writer in GetCreateOrderedWriters(dialect)){
 					yield return writer;
 				}
 			}
@@ -361,33 +369,32 @@ namespace Qorpent.Scaffolding.Model{
 		}
 
 		private IEnumerable<SqlCommandWriter> GetDropWriters(SqlDialect dialect){
-			foreach (var schema in DatabaseSqlObjects.OfType<Schema>())
-			{
-				yield return new SchemaWriter(schema)
-				{
-					Dialect = dialect,
-					Mode = ScriptMode.Create,
-					Optional = true
-				};
+			return GetCreateOrderedWriters(dialect, ScriptMode.Drop).Reverse();
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		protected PersistentClass[] Tables{
+			get{
+				return _cachedTables ??
+				       (_cachedTables = Classes.Values.OrderByDescending(_ => _.Rank).ThenBy(_ => _.Name).ToArray());
 			}
 		}
 
-		private IEnumerable<SqlCommandWriter> GetCreateWriters(SqlDialect dialect){
-			var tables = Classes.Values.OrderByDescending(_ => _.Rank).ThenBy(_ => _.Name).ToArray();
-			
-			foreach (var script in GetScripts(dialect,ScriptMode.Create, ScriptPosition.Before)){
+		private IEnumerable<SqlCommandWriter> GetCreateOrderedWriters(SqlDialect dialect,ScriptMode mode = ScriptMode.Create){
+			foreach (var script in GetScripts(dialect,mode, ScriptPosition.Before)){
 				yield return new ScriptWriter(script){
 					Model = this,
-					Mode = ScriptMode.Create,
+					Mode = mode,
 					Dialect = dialect,
 				};
 			}
-			if (GenerationOptions.Supports(SqlObjectType.FileGroup)){
+			if (GenerationOptions.Supports(SqlObjectType.FileGroup) && mode==ScriptMode.Create){
 				foreach (var fg in DatabaseSqlObjects.OfType<FileGroup>()){
 					yield return new FileGroupWriter(fg){
 						Model = this,
 						Dialect = dialect,
-						Mode = ScriptMode.Create
+						Mode = mode
 					};
 				}
 			}
@@ -396,54 +403,63 @@ namespace Qorpent.Scaffolding.Model{
 					yield return new SchemaWriter(schema){
 						Model = this,
 						Dialect = dialect,
-						Mode = ScriptMode.Create
+						Mode = mode,
+						Optional = true
 					};
 				}
 			}
 			if (GenerationOptions.Supports(SqlObjectType.Sequence)){
-				foreach (var sequence in tables.SelectMany(_ => _.SqlObjects.OfType<Sequence>())){
+				foreach (var sequence in Tables.SelectMany(_ => _.SqlObjects.OfType<Sequence>())){
 					yield return new SequenceWriter(sequence){
 						Model = this,
 						Dialect = dialect,
-						Mode = ScriptMode.Create,
+						Mode = mode,
 						Optional = true,
 					};
 				}
 			}
 			if (GenerationOptions.Supports(SqlObjectType.Table)){
-				foreach (var script in GetScripts(dialect, ScriptMode.Create, ScriptPosition.BeforeTables))
+				foreach (var script in GetScripts(dialect, mode, ScriptPosition.BeforeTables))
 				{
 					yield return new ScriptWriter(script)
 					{
 						Model = this,
-						Mode = ScriptMode.Create,
+						Mode = mode,
 						Dialect = dialect,
 					};
 				}
-				foreach (var cls in tables){
+				foreach (var cls in Tables)
+				{
 					yield return new TableWriter(cls){
 						Model = this,
 						Dialect = dialect,
-						Mode = ScriptMode.Create,
+						Mode = mode,
 					};
 				}
-				foreach (var script in GetScripts(dialect, ScriptMode.Create, ScriptPosition.AfterTables))
+				foreach (var circularRef in Tables.SelectMany(_=>_.Fields.Values.Where(__=>__.GetIsCircular()))){
+					yield return new LateForeignKeyWriter(circularRef){
+						Model = this,
+						Dialect = dialect,
+						Mode = mode
+					};
+				}
+				foreach (var script in GetScripts(dialect, mode, ScriptPosition.AfterTables))
 				{
 					yield return new ScriptWriter(script)
 					{
 						Model = this,
-						Mode = ScriptMode.Create,
+						Mode = mode,
 						Dialect = dialect,
 					};
 				}
 			}
 
-			foreach (var script in GetScripts(dialect, ScriptMode.Create, ScriptPosition.After))
+			foreach (var script in GetScripts(dialect, mode, ScriptPosition.After))
 			{
 				yield return new ScriptWriter(script)
 				{
 					Model = this,
-					Mode = ScriptMode.Create,
+					Mode = mode,
 					Dialect = dialect,
 				};
 			}

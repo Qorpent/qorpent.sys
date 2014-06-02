@@ -111,14 +111,14 @@ namespace Qorpent.Scaffolding.Model{
 			if (Dialect == SqlDialect.SqlServer){
 				Output.WriteLine("end try begin catch print ERROR_MESSAGE() end catch");
 			}else if (Dialect == SqlDialect.PostGres){
-				Output.WriteLine("EXCEPTION WHEN OTHERS THEN RAISE NOTICE 'error occured'; END;");
+				Output.WriteLine("EXCEPTION WHEN OTHERS THEN raise notice '% %', SQLERRM, SQLSTATE; END;");
 			}
 		}
 
 		private void WriteStartOptionalBlock(){
 			if (Dialect == SqlDialect.SqlServer){
 				Output.WriteLine("begin try");
-			}else if (Dialect == SqlDialect.Oracle){
+			}else if (Dialect == SqlDialect.PostGres){
 				Output.WriteLine("BEGIN");
 			}
 		}
@@ -127,7 +127,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// 
 		/// </summary>
 		protected virtual void WriteComment(){
-			if (NoComment) return;
+			if (NoComment || string.IsNullOrWhiteSpace(Comment)) return;
 			if (string.IsNullOrWhiteSpace(Comment)){
 				Comment = "begin command " + this.GetType().Name;
 			}
@@ -143,9 +143,6 @@ namespace Qorpent.Scaffolding.Model{
 			if (NoDelimiter) return;
 			if (Dialect == SqlDialect.SqlServer){
 				Output.WriteLine("GO");
-			}
-			else{
-				Output.WriteLine("-- END COMMAND");
 			}
 		}
 

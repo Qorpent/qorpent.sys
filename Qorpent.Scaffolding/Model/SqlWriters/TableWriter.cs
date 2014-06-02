@@ -27,16 +27,22 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// </summary>
 		/// <returns></returns>
 		protected override string GetText(){
-			var sb = new StringBuilder();
-			sb.AppendLine("CREATE TABLE " + Table.FullSqlName + " (");
-			var fields = Table.Fields.Values.OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
-			for (var f = 0; f < fields.Length; f++){
-				WriteField(fields[f],sb,f==fields.Length-1);	
+			if (Mode == ScriptMode.Create){
+				var sb = new StringBuilder();
+				sb.AppendLine("CREATE TABLE " + Table.FullSqlName + " (");
+				var fields = Table.Fields.Values.OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
+				for (var f = 0; f < fields.Length; f++){
+					WriteField(fields[f], sb, f == fields.Length - 1);
+				}
+				sb.Append(")");
+				WriteAllocation(sb);
+				sb.Append(";");
+				sb.AppendLine();
+				return sb.ToString();
 			}
-			sb.Append(")");
-			WriteAllocation(sb);
-			sb.AppendLine();
-			return sb.ToString();
+			else{
+				return "DROP TABLE " + Table.FullSqlName + ";";
+			}
 		}
 
 		private void WriteAllocation(StringBuilder sb){
@@ -123,7 +129,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 					sb.Append("(NEXT VALUE FOR " + seqname + ")");
 				}
 				else if (Dialect == SqlDialect.PostGres){
-					sb.Append("(nextval('" + seqname + "')");
+					sb.Append("(nextval('" + seqname + "'))");
 				}
 				else{
 					sb.Append("0");

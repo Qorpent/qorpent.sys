@@ -69,5 +69,28 @@ GO
 		public const string SqlServerCreateFinisher = @"
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 ";
+		/// <summary>
+		/// Преамбуда POSTGRESQL скрипта
+		/// </summary>
+		public const string PostgresqlPeramble = @"
+DROP FUNCTION IF EXISTS ___script();
+CREATE FUNCTION ___script () returns int as $$ BEGIN
+CREATE SCHEMA IF NOT EXISTS dbo ; --mssql matching
+";
+		/// <summary>
+		/// Финиширующий скрипт для SQL-server
+		/// </summary>
+		public const string PostgresqlFinisher = @"
+RETURN 1;
+EXCEPTION
+	WHEN OTHERS THEN BEGIN 
+		raise notice '% %', SQLERRM, SQLSTATE;
+		RETURN 0;
+	END;
+END;
+$$ LANGUAGE plpgsql;
+SELECT ___script();
+DROP FUNCTION IF EXISTS ___script();
+";
 	}
 }

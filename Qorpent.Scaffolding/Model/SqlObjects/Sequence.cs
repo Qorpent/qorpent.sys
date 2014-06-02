@@ -14,6 +14,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			ObjectType = SqlObjectType.Sequence;
 			PreTable = true;
 			Step = 10;
+			Start = 10;
 		}
 		/// <summary>
 		/// 
@@ -26,7 +27,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		{
 			base.Setup(model, cls, bscls, xml);
 			if (null != xml){
-				this.Start = xml.Attr("start", "0").ToInt();
+				this.Start = xml.Attr("start", "10").ToInt();
 				this.Step = xml.Attr("step", "10").ToInt();
 			}
 			this.Name = cls.Name + "_SEQ";

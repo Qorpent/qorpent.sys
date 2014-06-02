@@ -54,12 +54,33 @@ Script sys:support_for_filegroups_end (C,S,R)
 
 
 		[Test]
+		public void CircularLinksGenerationOrder()
+		{
+			var digest = GetDigest(@"
+class table prototype=dbtable abstract
+table a
+	ref b
+table b
+	ref a
+");
+			Assert.AreEqual(@"
+Script sys:support_for_filegroups_begin (C,S,R)
+FileGroup SECONDARY (C,S,R)
+Sequence dbo.b_SEQ (C,S,O)
+Sequence dbo.a_SEQ (C,S,O)
+Table dbo.b (C,S,R)
+Table dbo.a (C,S,R)
+FK dbo_b_a_a_Id_FK (C,S,R)
+FK dbo_a_b_b_Id_FK (C,S,R)
+Script sys:support_for_filegroups_end (C,S,R)
+".Trim(), digest);
+		}
+
+		[Test]
 		public void BasicSqlServerScript()
 		{
 			var digest = GetScript("class a prototype=dbtable");
 			Assert.AreEqual(@"
--- begin command ScriptWriter
-
 SET NOCOUNT ON
 GO
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
@@ -111,28 +132,77 @@ GO
 
 GO
 
--- begin command FileGroupWriter
 exec __ensurefg @n='SECONDARY', @filecount=1, @filesize=10, @withidx=0, @isdefault=1
 GO
 
--- begin command SequenceWriter
 begin try
-CREATE SEQUENCE dbo.a_SEQ AS int START WITH 0 INCREMENT BY 10;
+CREATE SEQUENCE dbo.a_SEQ AS int START WITH 10 INCREMENT BY 10;
 end try begin catch print ERROR_MESSAGE() end catch
 GO
 
--- begin command TableWriter
 CREATE TABLE dbo.a (
 	Id int NOT NULL CONSTRAINT dbo_a_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.a_SEQ)
-) ON SECONDARY
+) ON SECONDARY;
 
 GO
 
--- begin command ScriptWriter
 
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 
 GO
+".Trim(), digest);
+		}
+
+		[Test]
+		public void BasicPostgrsqlServerScript()
+		{
+			var digest = GetScript("class a prototype=dbtable",dialect:SqlDialect.PostGres);
+			Assert.AreEqual(@"
+
+DROP FUNCTION IF EXISTS ___script();
+CREATE FUNCTION ___script () returns int as $$ BEGIN
+CREATE SCHEMA IF NOT EXISTS dbo ; --mssql matching
+
+
+-- SCHEMAERROR: FileGroups are not implemented for PostGres
+
+BEGIN
+CREATE SEQUENCE dbo.a_SEQ INCREMENT BY 10 START WITH 10;
+EXCEPTION WHEN OTHERS THEN raise notice '% %', SQLERRM, SQLSTATE; END;
+
+CREATE TABLE dbo.a (
+	Id int NOT NULL CONSTRAINT dbo_a_Id_PK PRIMARY KEY DEFAULT (nextval('dbo.a_SEQ'))
+) TABLESPACE SECONDARY;
+
+
+
+RETURN 1;
+EXCEPTION
+	WHEN OTHERS THEN BEGIN 
+		raise notice '% %', SQLERRM, SQLSTATE;
+		RETURN 0;
+	END;
+END;
+$$ LANGUAGE plpgsql;
+SELECT ___script();
+DROP FUNCTION IF EXISTS ___script();
+".Trim(), digest);
+		}
+
+
+		[Test]
+		public void BasicSqlServerDropScript()
+		{
+			var digest = GetScript("class a prototype=dbtable",ScriptMode.Drop);
+			Assert.AreEqual(@"
+DROP TABLE dbo.a;
+GO
+
+begin try
+DROP SEQUENCE dbo.a_SEQ;
+end try begin catch print ERROR_MESSAGE() end catch
+GO
+
 ".Trim(), digest);
 		}
 	}

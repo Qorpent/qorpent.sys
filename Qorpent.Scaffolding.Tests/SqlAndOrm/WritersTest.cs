@@ -29,9 +29,9 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 			Assert.AreEqual(test,writer.ToString().Trim());
 		}
 
-		[TestCase("x", 5, 20, SqlDialect.SqlServer, ScriptMode.Create, "CREATE SEQUENCE dbo.x_SEQ AS int START WITH 0 INCREMENT BY 10;")]
+		[TestCase("x", 5, 20, SqlDialect.SqlServer, ScriptMode.Create, "CREATE SEQUENCE dbo.x_SEQ AS int START WITH 10 INCREMENT BY 10;")]
 		[TestCase("x", 5, 20, SqlDialect.SqlServer, ScriptMode.Drop, "DROP SEQUENCE dbo.x_SEQ;")]
-		[TestCase("x", 5, 20, SqlDialect.PostGres, ScriptMode.Create, "CREATE SEQUENCE dbo.x_SEQ INCREMENT BY 10 START WITH 0;")]
+		[TestCase("x", 5, 20, SqlDialect.PostGres, ScriptMode.Create, "CREATE SEQUENCE dbo.x_SEQ INCREMENT BY 10 START WITH 10;")]
 		[TestCase("x", 5, 20, SqlDialect.PostGres, ScriptMode.Drop, "DROP SEQUENCE dbo.x_SEQ;")]
 		public void SequenceWriter(string name, int start, int step, SqlDialect dialect,ScriptMode mode, string test){
 			var pt = new PersistentClass{Name = name, Schema = "dbo"};
@@ -45,6 +45,16 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 class table prototype=dbtable abstract
 table master
 	string Code 'Код' unique idx=20
+table slave
+	datetime Version idx=30
+	ref master idx=40
+";
+
+		private const string CircularModel = @"
+class table prototype=dbtable abstract
+table master
+	string Code 'Код' unique idx=20
+	ref slave idx=30
 table slave
 	datetime Version idx=30
 	ref master idx=40
@@ -67,7 +77,7 @@ table slave
 			Assert.AreEqual(@"CREATE TABLE dbo.master (
 	Id int NOT NULL CONSTRAINT dbo_master_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.master_SEQ),
 	Code nvarchar(255) NOT NULL CONSTRAINT dbo_master_Code_UNQ UNIQUE DEFAULT ''
-) ON SECONDARY
+) ON SECONDARY;
 ".Trim(), scr.Trim());
 			var slave = model["slave"];
 			var swr = new TableWriter(slave)
@@ -83,7 +93,60 @@ table slave
 	Id int NOT NULL CONSTRAINT dbo_slave_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.slave_SEQ),
 	Version datetime NOT NULL DEFAULT 0,
 	master int NOT NULL CONSTRAINT dbo_slave_master_master_Id_FK FOREIGN KEY REFERENCES dbo.master (Id) DEFAULT 0
-) ON SECONDARY".Trim(), scr.Trim());
+) ON SECONDARY;".Trim(), scr.Trim());
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Test]
+		public void CircularPreventFkes()
+		{
+			var model = PersistentModel.Compile(CircularModel);
+			var master = model["master"];
+			var mwr = new TableWriter(master)
+			{
+				Dialect = SqlDialect.SqlServer,
+				NoDelimiter = true,
+				NoComment = true,
+				Mode = ScriptMode.Create
+			};
+			var scr = mwr.ToString();
+			Console.WriteLine(scr);
+			Assert.AreEqual(@"CREATE TABLE dbo.master (
+	Id int NOT NULL CONSTRAINT dbo_master_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.master_SEQ),
+	Code nvarchar(255) NOT NULL CONSTRAINT dbo_master_Code_UNQ UNIQUE DEFAULT '',
+	slave int NOT NULL DEFAULT 0
+) ON SECONDARY;
+".Trim(), scr.Trim());
+			var slave = model["slave"];
+			var swr = new TableWriter(slave)
+			{
+				Dialect = SqlDialect.SqlServer,
+				NoDelimiter = true,
+				NoComment = true,
+				Mode = ScriptMode.Create
+			};
+			scr = swr.ToString();
+			Console.WriteLine(scr);
+			Assert.AreEqual(@"CREATE TABLE dbo.slave (
+	Id int NOT NULL CONSTRAINT dbo_slave_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.slave_SEQ),
+	Version datetime NOT NULL DEFAULT 0,
+	master int NOT NULL DEFAULT 0
+) ON SECONDARY;".Trim(), scr.Trim());
+		}
+
+		[TestCase(SqlDialect.SqlServer, ScriptMode.Create, "ALTER TABLE dbo.slave ADD CONSTRAINT dbo_slave_master_master_Id_FK FOREIGN KEY REFERENCES dbo.master (Id);")]
+		[TestCase(SqlDialect.PostGres, ScriptMode.Create, "ALTER TABLE dbo.slave ADD CONSTRAINT dbo_slave_master_master_Id_FK FOREIGN KEY REFERENCES dbo.master (Id) DEFERABLE;")]
+		[TestCase(SqlDialect.SqlServer, ScriptMode.Drop, "ALTER TABLE dbo.slave DROP CONSTRAINT dbo_slave_master_master_Id_FK;")]
+		public void LateFKGenerator(SqlDialect dialect, ScriptMode mode,string test){
+			var model = PersistentModel.Compile(CircularModel);
+			var cref = model["slave"]["master"];
+			var crefwr = new LateForeignKeyWriter(cref){NoDelimiter = true, NoComment = true, Dialect = dialect,Mode = mode};
+			var result = crefwr.ToString().Trim();
+			Console.WriteLine(result);
+			Assert.AreEqual(test, result);
 		}
 	}
 }
