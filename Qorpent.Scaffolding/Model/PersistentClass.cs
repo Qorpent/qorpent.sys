@@ -34,7 +34,7 @@ namespace Qorpent.Scaffolding.Model
 			if (null != pt){
 				a.Partitioned = true;
 				a.PartitionFieldName = pt.Attr("with");
-				a.PartitioningStart = pt.Attr("start").ToInt();
+				a.PartitioningStart = pt.Attr("start");
 			}
 		}
 

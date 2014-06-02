@@ -418,6 +418,20 @@ namespace Qorpent.Scaffolding.Model{
 					};
 				}
 			}
+
+			if (GenerationOptions.Supports(SqlObjectType.PartitionScheme) && IsSupportPartitioning(dialect))
+			{
+				foreach (var part in Tables.SelectMany(_ => _.SqlObjects.OfType<PartitionDefinition>()))
+				{
+					yield return new PartitionDefinitionWriter(part)
+					{
+						Model = this,
+						Dialect = dialect,
+						Mode = mode,
+						Optional = true,
+					};
+				}
+			}
 			if (GenerationOptions.Supports(SqlObjectType.Table)){
 				foreach (var script in GetScripts(dialect, mode, ScriptPosition.BeforeTables))
 				{
@@ -435,6 +449,7 @@ namespace Qorpent.Scaffolding.Model{
 						Dialect = dialect,
 						Mode = mode,
 					};
+
 				}
 				foreach (var circularRef in Tables.SelectMany(_=>_.Fields.Values.Where(__=>__.GetIsCircular()))){
 					yield return new LateForeignKeyWriter(circularRef){
@@ -443,6 +458,7 @@ namespace Qorpent.Scaffolding.Model{
 						Mode = mode
 					};
 				}
+				
 				foreach (var script in GetScripts(dialect, mode, ScriptPosition.AfterTables))
 				{
 					yield return new ScriptWriter(script)

@@ -29,6 +29,9 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		protected override string GetText(){
 			if (Mode == ScriptMode.Create){
 				var sb = new StringBuilder();
+				if (!string.IsNullOrWhiteSpace(Table.Comment) && !NoComment){
+					sb.AppendLine("-- " + Table.Comment);
+				}
 				sb.AppendLine("CREATE TABLE " + Table.FullSqlName + " (");
 				var fields = Table.Fields.Values.OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
 				for (var f = 0; f < fields.Length; f++){
@@ -49,7 +52,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			if (Dialect == SqlDialect.SqlServer){
 				var name = Table.AllocationInfo.FileGroup.Name;
 				if (Table.AllocationInfo.Partitioned && Model.IsSupportPartitioning(SqlDialect.SqlServer)){
-					name = Table.FullSqlName.Replace(".", "_") + "_PARTITION ( " + Table.AllocationInfo.PartitionField + ")";
+					name = Table.FullSqlName.Replace(".", "_") + "_PARTITION ( " + Table.AllocationInfo.PartitionField.Name + ")";
 				}
 				sb.Append(" ON " + name);
 			}
@@ -59,6 +62,9 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		}
 
 		private void WriteField(Field field, StringBuilder sb,bool last){
+			if (!string.IsNullOrWhiteSpace(field.Comment) && !NoComment){
+				sb.AppendLine("\t-- " + field.Comment);
+			}
 			sb.AppendFormat("\t{0} {1} NOT NULL", field.Name,field.DataType.ResolveSqlDataType(Dialect) );
 			WritePrimaryKey(field, sb);
 			WriteUnique(field, sb);
@@ -87,8 +93,12 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 
 		private void WritePrimaryKey(Field field, StringBuilder sb){
 			if (!field.IsPrimaryKey) return;
-			if (field.Table.AllocationInfo.Partitioned && Model.IsSupportPartitioning(Dialect)) return;
-			sb.Append(" CONSTRAINT " + field.GetConstraintName("PK") + " PRIMARY KEY");
+			if (field.Table.AllocationInfo.Partitioned && Model.IsSupportPartitioning(Dialect)){
+				sb.Append(" CONSTRAINT " + field.GetConstraintName("PK") + " PRIMARY KEY NONCLUSTERED ON "+field.Table.AllocationInfo.FileGroup.Name);
+			}
+			else{
+				sb.Append(" CONSTRAINT " + field.GetConstraintName("PK") + " PRIMARY KEY");
+			}
 		}
 
 		private void WriteDefaultValue(Field field, StringBuilder sb){

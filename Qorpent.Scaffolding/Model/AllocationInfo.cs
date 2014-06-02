@@ -35,7 +35,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// Первый разделитель партицирования
 		/// </summary>
-		public int PartitioningStart { get; set; }
+		public string PartitioningStart { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>

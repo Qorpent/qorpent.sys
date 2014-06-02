@@ -170,6 +170,11 @@ namespace Qorpent.Scaffolding.Model{
 				seq.Setup(null,cls,null,null);
 				yield return seq;
 			}
+			if (cls.Model.GenerationOptions.GeneratePartitions && cls.AllocationInfo.Partitioned){
+				var part = new PartitionDefinition();
+				part.Setup(null, cls, null, null);
+				yield return part;
+			}
 		}
 		/// <summary>
 		/// Формирует специальные объекты, определенные в таблице, конкретный элемент

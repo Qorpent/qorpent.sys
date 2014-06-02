@@ -30,8 +30,10 @@
     <Compile Include="Model\AllocationInfo.cs" />
     <Compile Include="Model\DefaultScripts.cs" />
     <Compile Include="Model\GenerationOptions.cs" />
+    <Compile Include="Model\SqlObjects\PartitionDefinition.cs" />
     <Compile Include="Model\SqlWriters\LateForeignKeyWriter.cs" />
     <Compile Include="Model\SqlObjects\Sequence.cs" />
+    <Compile Include="Model\SqlWriters\PartitionDefinitionWriter.cs" />
     <Compile Include="Model\SqlWriters\ScriptWriter.cs" />
     <Compile Include="Model\SqlWriters\FileGroupWriter.cs" />
     <Compile Include="Model\SqlWriters\SchemaWriter.cs" />

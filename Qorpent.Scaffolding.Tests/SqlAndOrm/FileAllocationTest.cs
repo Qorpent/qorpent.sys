@@ -83,7 +83,7 @@ table a
 			Assert.True(t.AllocationInfo.Partitioned);
 			Assert.AreEqual("x", t.AllocationInfo.PartitionFieldName);
 			Assert.AreEqual(t["x"], t.AllocationInfo.PartitionField);
-			Assert.AreEqual(2, t.AllocationInfo.PartitioningStart);
+			Assert.AreEqual("2", t.AllocationInfo.PartitioningStart);
 		}
 		/// <summary>
 		/// 
