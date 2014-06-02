@@ -20,10 +20,11 @@ namespace Qorpent.Scaffolding.Model
 			ReadMainData(c, xml);
 			ReadDataTypes(c,xml);
 			ReadFields(c,xml);
-			ReadAdvancedDataObjects(c, xml);
 			ReadAllocationInfo(c, xml);
 			return this;
 		}
+
+
 
 		private void ReadAllocationInfo(IBSharpClass c, XElement xml){
 			var a = new AllocationInfo{MyClass = this};
@@ -37,21 +38,7 @@ namespace Qorpent.Scaffolding.Model
 			}
 		}
 
-		private void ReadAdvancedDataObjects(IBSharpClass c, XElement xml){
-			foreach (var obj in SqlObject.CreateDefaults(this)){
-				obj.MyClass = this;
-				SqlObjects.Add(obj);
-			}
-			foreach (var e in xml.Elements())
-			{
-				var name = e.Name.LocalName;
-				if(name=="ref")continue;
-				if(this.DataTypeMap.ContainsKey(name) && string.IsNullOrWhiteSpace(e.Value))continue;
-				foreach (var obj in SqlObject.Create(this,e)){
-					SqlObjects.Add(obj);
-				}
-			}
-		}
+		
 		/// <summary>
 		/// Связанные Sql-объекты
 		/// </summary>
@@ -83,7 +70,7 @@ namespace Qorpent.Scaffolding.Model
 			this.TargetClass = c;
 			this.Name = c.Name;
 			this.Namespace = c.Namespace;
-			this.Schema = xml.Attr("schema", "dbo");
+			this.Schema = xml.Attr("schema", "dbo").ToLowerInvariant();
 			this.Comment = xml.Attr("name");
 		}
 

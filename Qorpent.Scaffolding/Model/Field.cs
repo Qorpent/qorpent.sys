@@ -17,7 +17,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// Класс (таблица) - контейнер
 		/// </summary>
-		public PersistentClass MyClass { get; set; }
+		public PersistentClass Table { get; set; }
 		/// <summary>
 		/// Имя поля
 		/// </summary>
@@ -126,7 +126,7 @@ namespace Qorpent.Scaffolding.Model{
 						_reverseCollectionName = CustomReverseName;
 					}
 					else{
-						var multName = MyClass.Name;
+						var multName = Table.Name;
 						if (multName.EndsWith("s")){
 							multName += "es";
 						}
@@ -151,7 +151,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <param name="cls"></param>
 		/// <returns></returns>
 		public Field Setup(IBSharpClass c, XElement e, PersistentClass cls){
-			this.MyClass = cls;
+			this.Table = cls;
 			this.Definition = e;
 			SetupCommon(c, e);
 			if (e.Name.LocalName == "ref"){
@@ -175,26 +175,39 @@ namespace Qorpent.Scaffolding.Model{
 			Idx = e.Attr("idx").ToInt();
 			
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="suffix"></param>
+		/// <returns></returns>
+		public string GetConstraintName(string suffix){
+			if (suffix == "FK"){
+				return Table.FullSqlName.Replace(".", "_") + "_" + Name + "_" + ReferenceClass.Name+"_"+ReferenceField+"_" + suffix;
+			}
+			return Table.FullSqlName.Replace(".", "_") + "_" + Name + "_" + suffix;
+		}
+
 
 		private void SetupUsualField(IBSharpClass c, XElement e){
-			DataType = MyClass.DataTypeMap[e.Name.LocalName];
-			IsPrimaryKey = e.Attr("primarykey").ToBool();
-			IsUnique = e.Attr("unique").ToBool();
-			IsAutoIncrement = e.Attr("identity").ToBool();
+			DataType = Table.DataTypeMap[e.Name.LocalName];
+			IsPrimaryKey = e.GetSmartValue("primarykey").ToBool();
+			IsUnique = e.GetSmartValue("unique").ToBool();
+			IsAutoIncrement = e.GetSmartValue("identity").ToBool();
 		}
 
 		private void SetupReference(IBSharpClass c, XElement e){
 			IsReference = true;
-			IsAutoLoadByDefault = e.Attr("auto").ToBool();
-			IsLazyLoadByDefault = e.Attr("lazy").ToBool();
-			IsReverese = e.Attr("reverse").ToBool();
+			IsAutoLoadByDefault = e.GetSmartValue("auto").ToBool();
+			IsLazyLoadByDefault = e.GetSmartValue("lazy").ToBool();
+			IsReverese = e.GetSmartValue("reverse").ToBool();
 			//проверяем, что реверс указан не как флаг, а как имя коллекции
-			if (IsReverese && 0 == e.Attr("reverse").ToInt()){
-				
-				CustomReverseName = e.Attr("reverse");
+			if (IsReverese && 0 == e.GetSmartValue("reverse").ToInt())
+			{
+
+				CustomReverseName = e.GetSmartValue("reverse");
 			}
-			IsAutoLoadReverseByDefault = e.Attr("reverse-auto").ToBool();
-			IsLazyLoadReverseByDefault = e.Attr("reverse-lazy").ToBool();
+			IsAutoLoadReverseByDefault = e.GetSmartValue("reverse-auto").ToBool();
+			IsLazyLoadReverseByDefault = e.GetSmartValue("reverse-lazy").ToBool();
 			var refto = e.Attr("to", Name + ".PrimaryKey");
 			if (!refto.Contains(".")){
 				refto += ".PrimaryKey";
@@ -202,9 +215,9 @@ namespace Qorpent.Scaffolding.Model{
 			var refparts = refto.Split('.');
 			ReferenceTable = refparts[refparts.Length - 2].ToLowerInvariant();
 			ReferenceField = refparts[refparts.Length - 1].ToLowerInvariant();
-			DataType = MyClass.DataTypeMap["int"];
+			DataType = Table.DataTypeMap["int"];
 			if (ReferenceField.ToLowerInvariant() == "code"){
-				DataType = MyClass.DataTypeMap["string"];
+				DataType = Table.DataTypeMap["string"];
 			}
 		}
 		/// <summary>
@@ -212,7 +225,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		public bool GetIsCircular(){
 			if(IsCircular.HasValue)return IsCircular.Value;
-			if (!IsReference || null==ReferenceClass || ReferenceClass==MyClass){
+			if (!IsReference || null==ReferenceClass || ReferenceClass==Table){
 				IsCircular = false;
 				return false;
 			}

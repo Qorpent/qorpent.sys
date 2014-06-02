@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using Qorpent.BSharp;
+using Qorpent.Scaffolding.Model.SqlObjects;
+using Qorpent.Scaffolding.Model.SqlWriters;
 using Qorpent.Scaffolding.Sql;
 using Qorpent.Utils.Extensions;
 
@@ -20,7 +23,13 @@ namespace Qorpent.Scaffolding.Model{
 			TablePrototype = "dbtable";
 			FileGroupPrototype = "filegroup";
 			ScriptPrototype = "dbscript";
+			GenerationOptions = new GenerationOptions();
 		}
+		/// <summary>
+		/// Настройки генерации продукций
+		/// </summary>
+		public GenerationOptions GenerationOptions { get; set; }
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -58,6 +67,7 @@ namespace Qorpent.Scaffolding.Model{
 				pclass.Model = this;
 				Classes[pclass.FullSqlName.ToLowerInvariant()] = pclass;
 			}
+			SetupDefaultScripts();
 			foreach (var obj in SqlObject.CreateDatabaseWide(this)){
 				DatabaseSqlObjects.Add(obj);
 			}
@@ -65,6 +75,19 @@ namespace Qorpent.Scaffolding.Model{
 			ReadScripts();
 			return this;
 		}
+
+		private void SetupDefaultScripts(){
+			if (GenerationOptions.IncludeDialect.HasFlag(SqlDialect.SqlServer) && GenerationOptions.GenerateCreateScript)
+			{
+				if (GenerationOptions.Supports(SqlObjectType.FileGroup))
+				{
+					ExtendedScripts.Add(new SqlScript { Name = "sys:support_for_filegroups_begin", Mode = ScriptMode.Create, SqlDialect = SqlDialect.SqlServer, Position = ScriptPosition.Before, Text = DefaultScripts.SqlServerCreatePeramble });
+					ExtendedScripts.Add(new SqlScript { Name = "sys:support_for_filegroups_end", Mode = ScriptMode.Create, SqlDialect = SqlDialect.SqlServer, Position = ScriptPosition.After, Text = DefaultScripts.SqlServerCreateFinisher });
+				}
+			}
+		}
+
+
 
 		private void ReadScripts(){
 			foreach (var scriptDef in Context.ResolveAll(ScriptPrototype)){
@@ -93,7 +116,13 @@ namespace Qorpent.Scaffolding.Model{
 			DetermineCircularLinks();
 			//обеспечивает целостность расположения таблиц
 			SetupAllocation();
+			BuildAdvancedObjects();
+		}
 
+		private void BuildAdvancedObjects(){
+			foreach (var persistentClass in Classes.Values){
+				ReadAdvancedDataObjects(persistentClass,persistentClass.TargetClass.Compiled);
+			}
 		}
 
 		private void SetupAllocation(){
@@ -118,6 +147,7 @@ namespace Qorpent.Scaffolding.Model{
 					}
 				}
 			}
+			
 		}
 
 		/// <summary>
@@ -146,7 +176,7 @@ namespace Qorpent.Scaffolding.Model{
 					c.Fields["id"].IsAutoIncrement = true;
 				}
 				else{
-					c.Fields["id"] = new Field{MyClass = c, DataType = c.DataTypeMap["int"], Name = "Id", Idx = 10,IsPrimaryKey =true,IsAutoIncrement = true};
+					c.Fields["id"] = new Field{Table = c, DataType = c.DataTypeMap["int"], Name = "Id", Idx = 10,IsPrimaryKey =true,IsAutoIncrement = true};
 				}
 			}
 		}
@@ -218,12 +248,12 @@ namespace Qorpent.Scaffolding.Model{
 
 		private void ProcessInvalidReferenceError(Field reference){
 			var error = new BSharpError{
-				Class = reference.MyClass.TargetClass,
+				Class = reference.Table.TargetClass,
 				Level = ErrorLevel.Error,
 				Xml = reference.Definition,
 				Message =
 					"Не могу найти в модели целевой таблицы для поля " + reference.Name + " объекта " +
-					reference.MyClass.FullCodeName + " с ссылкой на " + reference.ReferenceTable
+					reference.Table.FullCodeName + " с ссылкой на " + reference.ReferenceTable
 			};
 			Errors.Add(error);
 			Context.RegisterError(error);
@@ -232,12 +262,12 @@ namespace Qorpent.Scaffolding.Model{
 		{
 			var error = new BSharpError
 			{
-				Class = reference.MyClass.TargetClass,
+				Class = reference.Table.TargetClass,
 				Level = ErrorLevel.Error,
 				Xml = reference.Definition,
 				Message =
 					"Не могу найти в модели целевого поля таблицы для поля " + reference.Name + " объекта " +
-					reference.MyClass.FullCodeName + " с ссылкой на " + reference.ReferenceTable + " ("+reference.ReferenceField+")"
+					reference.Table.FullCodeName + " с ссылкой на " + reference.ReferenceTable + " ("+reference.ReferenceField+")"
 			};
 			Errors.Add(error);
 			Context.RegisterError(error);
@@ -292,7 +322,143 @@ namespace Qorpent.Scaffolding.Model{
 		/// <returns></returns>
 		public IEnumerable<SqlScript> GetScripts(SqlDialect dialect, ScriptMode mode, ScriptPosition position){
 			return ExtendedScripts.SelectMany(_ => _.GetRealScripts(dialect, position, mode));
-		} 
-	
+		}
+		private void ReadAdvancedDataObjects(PersistentClass cls, XElement xml)
+		{
+			foreach (var obj in SqlObject.CreateDefaults(cls))
+			{
+				obj.MyClass = cls;
+				cls.SqlObjects.Add(obj);
+			}
+			foreach (var e in xml.Elements())
+			{
+				var name = e.Name.LocalName;
+				if (name == "ref") continue;
+				if (cls.DataTypeMap.ContainsKey(name) && string.IsNullOrWhiteSpace(e.Value)) continue;
+				foreach (var obj in SqlObject.Create(cls, e))
+				{
+					cls.SqlObjects.Add(obj);
+				}
+			}
+		}
+		/// <summary>
+		/// Получить последовательность генерации
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<SqlCommandWriter> GetWriters(SqlDialect dialect, ScriptMode mode){
+			if(mode==ScriptMode.Create && !GenerationOptions.GenerateCreateScript)yield break;
+			if(mode==ScriptMode.Drop && !GenerationOptions.GenerateDropScript)yield break;
+			if(!GenerationOptions.IncludeDialect.HasFlag(dialect))yield break;
+			if (mode == ScriptMode.Create){
+				foreach (var writer in GetCreateWriters(dialect)){
+					yield return writer;
+				}
+			}
+			else foreach (var writer in GetDropWriters(dialect))
+			{
+				yield return writer;
+			}
+		}
+
+		private IEnumerable<SqlCommandWriter> GetDropWriters(SqlDialect dialect){
+			foreach (var schema in DatabaseSqlObjects.OfType<Schema>())
+			{
+				yield return new SchemaWriter(schema)
+				{
+					Dialect = dialect,
+					Mode = ScriptMode.Create,
+					Optional = true
+				};
+			}
+		}
+
+		private IEnumerable<SqlCommandWriter> GetCreateWriters(SqlDialect dialect){
+			var tables = Classes.Values.OrderByDescending(_ => _.Rank).ThenBy(_ => _.Name).ToArray();
+			
+			foreach (var script in GetScripts(dialect,ScriptMode.Create, ScriptPosition.Before)){
+				yield return new ScriptWriter(script){
+					Model = this,
+					Mode = ScriptMode.Create,
+					Dialect = dialect,
+				};
+			}
+			if (GenerationOptions.Supports(SqlObjectType.FileGroup)){
+				foreach (var fg in DatabaseSqlObjects.OfType<FileGroup>()){
+					yield return new FileGroupWriter(fg){
+						Model = this,
+						Dialect = dialect,
+						Mode = ScriptMode.Create
+					};
+				}
+			}
+			if (GenerationOptions.Supports(SqlObjectType.Schema)){
+				foreach (var schema in DatabaseSqlObjects.OfType<Schema>()){
+					yield return new SchemaWriter(schema){
+						Model = this,
+						Dialect = dialect,
+						Mode = ScriptMode.Create
+					};
+				}
+			}
+			if (GenerationOptions.Supports(SqlObjectType.Sequence)){
+				foreach (var sequence in tables.SelectMany(_ => _.SqlObjects.OfType<Sequence>())){
+					yield return new SequenceWriter(sequence){
+						Model = this,
+						Dialect = dialect,
+						Mode = ScriptMode.Create,
+						Optional = true,
+					};
+				}
+			}
+			if (GenerationOptions.Supports(SqlObjectType.Table)){
+				foreach (var script in GetScripts(dialect, ScriptMode.Create, ScriptPosition.BeforeTables))
+				{
+					yield return new ScriptWriter(script)
+					{
+						Model = this,
+						Mode = ScriptMode.Create,
+						Dialect = dialect,
+					};
+				}
+				foreach (var cls in tables){
+					yield return new TableWriter(cls){
+						Model = this,
+						Dialect = dialect,
+						Mode = ScriptMode.Create,
+					};
+				}
+				foreach (var script in GetScripts(dialect, ScriptMode.Create, ScriptPosition.AfterTables))
+				{
+					yield return new ScriptWriter(script)
+					{
+						Model = this,
+						Mode = ScriptMode.Create,
+						Dialect = dialect,
+					};
+				}
+			}
+
+			foreach (var script in GetScripts(dialect, ScriptMode.Create, ScriptPosition.After))
+			{
+				yield return new ScriptWriter(script)
+				{
+					Model = this,
+					Mode = ScriptMode.Create,
+					Dialect = dialect,
+				};
+			}
+			
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dialect"></param>
+		/// <returns></returns>
+		public bool IsSupportPartitioning(SqlDialect dialect){
+			if (!GenerationOptions.GeneratePartitions) return false;
+			return dialect == SqlDialect.SqlServer;
+
+		}
+		
 	}
 }

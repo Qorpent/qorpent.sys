@@ -5,6 +5,9 @@ using Qorpent.Scaffolding.Model;
 
 namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 {
+
+
+
 	/// <summary>
 	/// Тесты  для проверки работоспособности модели
 	/// </summary>

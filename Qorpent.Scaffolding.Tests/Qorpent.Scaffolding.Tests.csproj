@@ -41,9 +41,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SqlAndOrm\DigestSqlScriptTest.cs" />
     <Compile Include="SqlAndOrm\FileAllocationTest.cs" />
     <Compile Include="SqlAndOrm\ModelCoreTests.cs" />
     <Compile Include="SqlAndOrm\ExtendedScriptTest.cs" />
+    <Compile Include="SqlAndOrm\WritersTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

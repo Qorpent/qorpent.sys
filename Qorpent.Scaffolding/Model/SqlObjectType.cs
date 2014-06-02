@@ -80,6 +80,10 @@
 		/// <summary>
 		///
 		/// </summary>
-		Schema = 1<<17
+		Schema = 1<<17,
+		/// <summary>
+		/// Все
+		/// </summary>
+		All = 1<<24
 	}
 }

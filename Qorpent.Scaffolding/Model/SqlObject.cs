@@ -10,6 +10,8 @@ namespace Qorpent.Scaffolding.Model{
 	/// 
 	/// </summary>
 	public abstract class SqlObject{
+		private string _name;
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -50,8 +52,10 @@ namespace Qorpent.Scaffolding.Model{
 			Model = model;
 			BSClass = bscls;
 			Definition = xml;
-			Name = xml.ChooseAttr("sqlname", "code");
-			Comment = xml.Attr("name");
+			if (null != xml){
+				Name = xml.ChooseAttr("sqlname", "code");
+				Comment = xml.Attr("name");
+			}
 
 		}
 		/// <summary>
@@ -67,7 +71,19 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// Имя SQL
 		/// </summary>
-		public string Name { get; set; }
+		public string Name{
+			get { return _name; }
+			set{
+				_name = value;
+				if (UpperCase){
+					_name = _name.ToUpperInvariant();
+				}
+				if (LowerCase){
+					_name = _name.ToLowerInvariant();
+				}
+			}
+		}
+
 		/// <summary>
 		/// Схема SQL
 		/// </summary>
@@ -85,13 +101,36 @@ namespace Qorpent.Scaffolding.Model{
 		}
 
 		/// <summary>
+		/// Требование к именам - иметь верхний регистр
+		/// </summary>
+		public bool UpperCase { get; set; }
+
+		/// <summary>
+		/// Требование чтобы имена были в нижнем регистре
+		/// </summary>
+		public bool LowerCase { get; set; }
+
+		/// <summary>
 		/// Формирует глобальные объекты уровня базы данных
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
 		public static IEnumerable<SqlObject> CreateDatabaseWide(PersistentModel model){
+			foreach (var schema in GenerateSchemas(model)){
+				yield return schema;
+			}
 			foreach (var fgroup in GenerateFileGroups(model)){
 				yield return fgroup;
+			}
+			
+			
+		}
+
+		private static IEnumerable<SqlObject> GenerateSchemas(PersistentModel model){
+			foreach (var schema in model.Classes.Values.Select(_ => _.Schema.ToLowerInvariant()).Distinct().ToArray())
+			{
+				if ("dbo" == schema) continue;
+				yield return new Schema{Name = schema.ToLowerInvariant()};
 			}
 		}
 
@@ -111,7 +150,7 @@ namespace Qorpent.Scaffolding.Model{
 				pcls.AllocationInfo.FileGroup = fgs[pcls.AllocationInfo.FileGroupName];
 			}
 			if (!fgs.ContainsKey("SECONDARY")){
-				fgs["SECONDARY"] = new FileGroup{Name = "SECONDARY", IsDefault = true};
+				fgs["SECONDARY"] = new FileGroup{Name = "SECONDARY"};
 			}
 			var hasdef = fgs.Values.Any(_ => _.IsDefault);
 			if (!hasdef){
@@ -126,7 +165,11 @@ namespace Qorpent.Scaffolding.Model{
 		/// <param name="cls"></param>
 		/// <returns></returns>
 		public static IEnumerable<SqlObject> CreateDefaults(PersistentClass cls){
-			yield break;
+			if (cls.PrimaryKey.IsAutoIncrement){
+				var seq = new Sequence();
+				seq.Setup(null,cls,null,null);
+				yield return seq;
+			}
 		}
 		/// <summary>
 		/// Формирует специальные объекты, определенные в таблице, конкретный элемент

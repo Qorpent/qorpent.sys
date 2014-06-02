@@ -38,6 +38,25 @@ table a filegroup=^X.TEST
 			Assert.AreEqual(model.DatabaseSqlObjects[0], model["a"].AllocationInfo.FileGroup);
 		}
 
+
+		[Test]
+		public void CanSetupFileGroup()
+		{
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+class test prototype=filegroup	withidx	isdefault 
+	filesize=20
+	filecount=40
+");
+			var fg = model.DatabaseSqlObjects.OfType<FileGroup>().FirstOrDefault(_ => _.Name == "TEST");
+			Assert.NotNull(fg);
+			Assert.True(fg.IsDefault);
+			Assert.False(model.DatabaseSqlObjects.OfType<FileGroup>().First(_=>_.Name=="SECONDARY").IsDefault);
+			Assert.True(fg.WithIndex);
+			Assert.AreEqual(20,fg.FileSize);
+			Assert.AreEqual(40,fg.FileCount);
+		}
+
 		[Test]
 		public void CanApplyFileGroupWithAttrToCustomName()
 		{
@@ -109,6 +128,23 @@ table a
 	partitioned with=X
 ");
 			Assert.False(model.IsValid);
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Test]
+		public void SchemasAreConfiguredToCreate()
+		{
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+table a schema=Test
+");
+			Assert.True(model.IsValid);
+			Assert.AreEqual("test.a",model["a"].FullSqlName);
+			Assert.AreEqual("test",model["a"].Schema);
+			Assert.NotNull(model.DatabaseSqlObjects.OfType<Schema>().FirstOrDefault(_=>_.Name=="test"));
 		}
 	}
 }
