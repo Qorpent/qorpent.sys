@@ -37,12 +37,18 @@ namespace Qorpent.Scaffolding.Application {
                 return GenerateMenuDivider();
             } else {
                 if (!el.HasAttribute("type")) el.SetAttr("type", "text");
+                XElement result;
                 switch (el.Attr("type")) {
-                    case "text": return GenerateTextItem(el);
-                    case "icon": return GenerateIconItem(el);
-                    case "icon_with_text": return GenerateIconWithTextItem(el);
-                    default: return GenerateTextItem(el);
-                }   
+                    case "text": result = GenerateTextItem(el); break;
+                    case "icon": result = GenerateIconItem(el); break;
+                    case "icon_with_text": result = GenerateIconWithTextItem(el); break;
+                    default: result = GenerateTextItem(el); break;
+                }
+                CopyAttributes(result, el);
+                if (el.HasAttribute("action")) {
+                    result.Attr("ng-click", el.Attr("action"));
+                }
+                return result;
             }
         }
 
@@ -134,7 +140,6 @@ namespace Qorpent.Scaffolding.Application {
         private static XElement GenerateIconItem(XElement el) {
             var result = new XElement("div",
                 new XAttribute("class", "menu__item"));
-            CopyAttributes(result, el);
             var icon = new XElement("div",
                 new XAttribute("class", "icon menu__item-icon menu__item-element"));
             if (el.HasAttribute("iconclass")) {
@@ -149,6 +154,11 @@ namespace Qorpent.Scaffolding.Application {
                 icon.Add(new XElement("ng-include", new XAttribute("src", el.Attr("view"))));
             }
             result.Add(icon);
+            if (el.Attr("type") == "icon") {
+                var title = new XElement("div",
+                   new XAttribute("class", "menu__item-title menu__item-element"));
+                result.Add(title);
+            }
             return result;
         }
 
@@ -175,7 +185,6 @@ namespace Qorpent.Scaffolding.Application {
         private static XElement GenerateTextItem(XElement el) {
             var result = new XElement("div",
                 new XAttribute("class", "menu__item"));
-            CopyAttributes(result, el);
             var link = new XElement("div", new XAttribute("class", "menu__item-title menu__item-element"));
             link.SetValue(el.Attr("name"));
             result.Add(link);

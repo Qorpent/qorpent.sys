@@ -144,6 +144,7 @@
     <EmbeddedResource Include="Resources\layout.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\errorcatcher.js" />
     <Content Include="Resources\menu.css" />
     <Content Include="Resources\menu.js" />
   </ItemGroup>
