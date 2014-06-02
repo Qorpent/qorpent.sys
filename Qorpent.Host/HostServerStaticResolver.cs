@@ -89,17 +89,37 @@ namespace Qorpent.Host{
 			return result;
 		}
 
-		private static int MatchTail(string path1, string path2){
-			path1 = path1.NormalizePath().ToLower();
-			path2 = path2.NormalizePath().ToLower();
-			var commonlen = Math.Min(path1.Length, path2.Length);
-			for (var i = 0; i < commonlen; i++){
-				if (path1[path1.Length - 1 - i] != path2[path2.Length - 1 - i]) return i;
-			}
-			return -1;
+		private static int MatchTail(string path1, string path2) {
+		    var subfolder = "";
+		    var ext = Path.GetExtension(path2).Substring(1);
+            if (ext == "html") {
+                subfolder = "views";
+            }else if (ext == "js") {
+                subfolder = "js";
+            }else if (ext == "css") {
+                subfolder = "css";
+            }
+		    if (string.IsNullOrWhiteSpace(subfolder)) {
+		        return InternalMatchTail(path1, path2);
+		    }
+		    var usualprobe = InternalMatchTail(path1, path2);
+		    var normpath = Path.Combine(Path.GetDirectoryName(path2), subfolder + "/" + Path.GetFileName(path2));
+		    var normprobe = InternalMatchTail(path1, normpath);
+		    return Math.Max(usualprobe, normprobe);
 		}
 
-		private StaticContentDescriptor ResolveByResources(string name, object context, bool withextensions){
+	    private static int InternalMatchTail(string path1, string path2) {
+	        path1 = path1.NormalizePath().ToLower();
+	        path2 = path2.NormalizePath().ToLower();
+	        var commonlen = Math.Min(path1.Length, path2.Length);
+	        var i = 0;
+	        for (i=i = 0; i < commonlen; i++) {
+	            if (path1[path1.Length - 1 - i] != path2[path2.Length - 1 - i]) return i+1;
+	        }
+	        return i;
+	    }
+
+	    private StaticContentDescriptor ResolveByResources(string name, object context, bool withextensions){
 			var local = Path.GetFileName(name) ?? "";
 			var resolvedResourcePair = (
 				                           from k in _resources

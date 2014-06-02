@@ -11,6 +11,12 @@ menu {
     text-decoration: none
 }
 
+.menu__item-title>a:hover,
+.menu__item-title>a {
+    color: inherit;
+    text-decoration: none;
+}
+
 .menu__ribbon {
 }
 
@@ -39,10 +45,14 @@ menu {
     font-size: 12px;
 }
 
-.menu__dropdown>.menu__horizontal>.menu__item,
+.menu__dropdown .menu__item,
 .menu__ribbon-groups>.menu__item {
     display: inline-block;
-    padding: 5px 10px;
+    padding: 5px;
+}
+
+.menu__dropdown .menu__item[type="icon"] {
+    padding-right: 3px;
 }
 
 .menu__dropdown>.menu__horizontal>.menu__item.hover,
@@ -55,8 +65,6 @@ menu {
 .menu__ribbon>.menu__ribbon-items {
     height: 70px;
     padding: 0 5px;
-    font-size: 11px;
-    font-weight: bold;
 }
 
 .menu__inline .menu__item,
@@ -64,6 +72,8 @@ menu {
     display: inline-block;
     text-align: center;
     padding: 5px;
+    font-size: 11px;
+    font-weight: bold;
 }
 
 .menu__ribbon-items>.menu__item.menu__item-divider {
@@ -72,8 +82,9 @@ menu {
     height: 100%;
 }
 
+.menu__inline .menu__item,
 .menu__ribbon-items>.menu__item {
-    height: 62px;
+    height: 70px;
     max-width: 128px;
     vertical-align: top;
 }
@@ -129,6 +140,7 @@ menu {
     margin: 1px auto;
 }
 
+.menu__inline .menu__item-title,
 .menu__ribbon-items .menu__item-title {
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -235,6 +247,7 @@ menu {
 
 .menu__dropdown .submenu>.menu__item {
     padding: 5px 10px;
+    width: 100%;
 }
 
 .menu__dropdown .submenu>.menu__item[menu-group].open-left>.menu__item-title:before,

@@ -43,8 +43,8 @@ namespace Qorpent.Scaffolding.Application {
 		    var sb = new StringBuilder();
 	        var servicenames = rootservices.Select(_ => _.Compiled.Attr("code"));
 		    sb.AppendFormat(@"define(
-    ['angular','{0}_types','{0}_api','{0}_controllers','layout','menu',{1}], function(angular,types,apictor){{
-        angular.module('app',['{0}_controllers','Layout','Menu',{1}])
+    ['angular','errorcatcher','{0}_types','{0}_api','{0}_controllers','layout','menu',{1}], function(angular,errorcatcher,types,apictor){{
+        angular.module('app',['ErrorCatcher','{0}_controllers','Layout','Menu',{1}])
             .controller('root',function($scope,$http,{2}){{
                 $scope.api = apictor($http);
                 $scope.layout = '{3}.html';

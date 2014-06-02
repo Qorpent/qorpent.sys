@@ -112,7 +112,7 @@ namespace Qorpent.Scaffolding.Application {
 						ctrlel.SetAttributeValue(a.Name, a.Value);
 					}
 					ctrlel.SetAttributeValue("layout-item", "1");
-					var include = new XElement("ng-include").SetAttr("src", "view");
+					var include = new XElement("ng-include", " ").SetAttr("src", "view");
 					if (null != v.Attribute("code")){
 						include.SetAttr("src", "'" + v.Attr("code") + ".html'");
 					}
@@ -148,7 +148,7 @@ namespace Qorpent.Scaffolding.Application {
 					ctrlel.SetAttributeValue(a.Name, a.Value);
 				}
 				ctrlel.SetAttributeValue("layout-item", "1");
-				var include = new XElement("ng-include").SetAttr("src", "view");
+				var include = new XElement("ng-include", " ").SetAttr("src", "view");
 				if (null != e.Attribute("view"))
 				{
 					include.SetAttr("src", "'" + e.Attr("view") + ".html'");
@@ -172,7 +172,7 @@ namespace Qorpent.Scaffolding.Application {
                     var menuElements = controller.Compiled.Elements("menu").ToArray();
                     if (menuElements.Length > 0) {
                         foreach (var m in menuElements) {
-                            var inc = new XElement("ng-include",new XAttribute("src","'" + m.Attr("code").Split('.').Last() + "-menu.html'"));
+                            var inc = new XElement("ng-include", " ",new XAttribute("src","'" + m.Attr("code").Split('.').Last() + "-menu.html'"));
                             var div = new XElement("div");
                             div.Add(inc);
                             widgetBody.Add(div);
