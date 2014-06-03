@@ -176,7 +176,7 @@ menu {
 }
 
 .menu__dropdown>.menu__horizontal>.menu__item[menu-group].open-left>.submenu {
-    right: 0;
+    right: -1px;
 }
 
 
