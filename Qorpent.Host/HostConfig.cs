@@ -305,5 +305,9 @@ namespace Qorpent.Host
 	    /// Список путей для поиска статического контента
 	    /// </summary>
 	    public IList<string> ExtendedContentFolders { get; private set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public string DefaultPage { get; set; }
 	}
 }

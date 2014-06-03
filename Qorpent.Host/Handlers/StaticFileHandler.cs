@@ -38,7 +38,12 @@ namespace Qorpent.Host.Handlers
 		public void Run(IHostServer server, HttpListenerContext callcontext, string callbackEndPoint, CancellationToken cancel){
 			var abspath = callcontext.Request.Url.AbsolutePath;
             if (string.IsNullOrWhiteSpace(abspath) || abspath == "/") {
-                abspath = DefaultPage;
+	            if (!string.IsNullOrWhiteSpace(server.Config.DefaultPage)){
+		            abspath = server.Config.DefaultPage;
+	            }
+	            else{
+		            abspath = DefaultPage;
+	            }
             }
 			var staticdescriptor = server.Static.Get(abspath, callcontext);
 			//в случае, если запрошен HTML и он отсутствует, то в качестве результата возвращаем стартуовую страницу 
