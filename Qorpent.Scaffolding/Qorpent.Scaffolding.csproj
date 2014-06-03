@@ -31,7 +31,13 @@
     <Compile Include="Model\DefaultScripts.cs" />
     <Compile Include="Model\GenerationOptions.cs" />
     <Compile Include="Model\SqlCommandWriterFactory.cs" />
+    <Compile Include="Model\SqlFunction.cs" />
+    <Compile Include="Model\SqlWriters\SqlFunctionWriter.cs" />
     <Compile Include="Model\SqlObjects\PartitionDefinition.cs" />
+    <Compile Include="Model\SqlObjects\SqlTrigger.cs" />
+    <Compile Include="Model\SqlObjects\SqlView.cs" />
+    <Compile Include="Model\SqlWriters\SqlTriggerWriter.cs" />
+    <Compile Include="Model\SqlWriters\SqlViewWriter.cs" />
     <Compile Include="Model\SqlWriters\LateForeignKeyWriter.cs" />
     <Compile Include="Model\SqlObjects\Sequence.cs" />
     <Compile Include="Model\SqlWriters\PartitionDefinitionWriter.cs" />
@@ -41,7 +47,7 @@
     <Compile Include="Model\ScriptMode.cs" />
     <Compile Include="Model\ScriptPosition.cs" />
     <Compile Include="Model\SqlCommandWriter.cs" />
-    <Compile Include="Model\SqlObject.cs" />
+    <Compile Include="Model\SqlObjects\SqlObject.cs" />
     <Compile Include="Model\SqlObjects\FileGroup.cs" />
     <Compile Include="Model\SqlObjects\Schema.cs" />
     <Compile Include="Model\SqlObjectType.cs" />

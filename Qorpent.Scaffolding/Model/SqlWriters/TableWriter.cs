@@ -22,6 +22,8 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// </summary>
 		public PersistentClass Table { get; set; }
 
+		
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -33,7 +35,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 					sb.AppendLine("-- " + Table.Comment);
 				}
 				sb.AppendLine("CREATE TABLE " + Table.FullSqlName + " (");
-				var fields = Table.Fields.Values.OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
+				var fields = Table.GetOrderedFields();
 				for (var f = 0; f < fields.Length; f++){
 					WriteField(fields[f], sb, f == fields.Length - 1);
 				}
@@ -41,11 +43,42 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				WriteAllocation(sb);
 				sb.Append(";");
 				sb.AppendLine();
+				SetSqlComment(sb,Table,null);
+				foreach (var f in fields)
+				{
+					SetSqlComment(sb, f.Table, f);
+				}
+				
 				return sb.ToString();
 			}
 			else{
 				return "DROP TABLE " + Table.FullSqlName + ";";
 			}
+		}
+
+
+		private void SetSqlComment(StringBuilder sb, PersistentClass table, Field fld){
+			var comment = table.Comment;
+			if (null != fld) comment = fld.Comment;
+			if (string.IsNullOrWhiteSpace(comment)) return;
+			if (Dialect == SqlDialect.SqlServer){
+				sb.AppendFormat("EXECUTE sp_addextendedproperty N'MS_Description', '{0}', N'SCHEMA', N'{1}', N'TABLE', N'{2}'",
+									comment.ToSqlString(), table.Schema, table.Name);
+				if (null != fld){
+					sb.AppendFormat(", N'COLUMN', '{0}'", fld.Name);
+				}
+				
+			}else if (Dialect == SqlDialect.PostGres){
+				if (null == fld){
+					sb.AppendFormat("COMMENT ON TABLE {0} IS '{1}'", table.FullSqlName, comment.ToSqlString());
+				}
+				else{
+					sb.AppendFormat("COMMENT ON COLUMN {0}.{1} IS '{2}'", table.FullSqlName, fld.Name, comment.ToSqlString());
+				}
+			}
+			sb.Append(";");
+			sb.AppendLine();
+
 		}
 
 		private void WriteAllocation(StringBuilder sb){
@@ -59,6 +92,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			else if(Dialect==SqlDialect.PostGres){
 				sb.Append(" TABLESPACE " + Table.AllocationInfo.FileGroup.Name);
 			}
+			
 		}
 
 		private void WriteField(Field field, StringBuilder sb,bool last){
@@ -76,6 +110,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			else{
 				sb.AppendLine();
 			}
+			
 		}
 
 		private void WriteForeignKey(Field field, StringBuilder sb){
@@ -83,6 +118,9 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			if (!field.IsReference) return;
 			if (field.GetIsCircular()) return;
 			sb.Append(" CONSTRAINT " + field.GetConstraintName("FK") + " FOREIGN KEY REFERENCES "+field.ReferenceClass.FullSqlName+" ("+field.ReferenceField+")");
+			if (Dialect == SqlDialect.PostGres){
+				sb.Append(" DEFERRABLE");
+			}
 		}
 
 		private void WriteUnique(Field field, StringBuilder sb){

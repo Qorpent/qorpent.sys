@@ -2,10 +2,9 @@
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.BSharp;
-using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Model{
+namespace Qorpent.Scaffolding.Model.SqlObjects{
 	/// <summary>
 	/// 
 	/// </summary>
@@ -111,6 +110,26 @@ namespace Qorpent.Scaffolding.Model{
 		public bool LowerCase { get; set; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public string Body { get; set; }
+
+		/// <summary>
+		/// Диалект
+		/// </summary>
+		public SqlDialect Dialect { get; set; }
+
+		/// <summary>
+		/// Файл определением (только тело)
+		/// </summary>
+		public string ExternalBody { get; set; }
+
+		/// <summary>
+		/// Файл с внешним (полным) определением
+		/// </summary>
+		public string External { get; set; }
+
+		/// <summary>
 		/// Формирует глобальные объекты уровня базы данных
 		/// </summary>
 		/// <param name="model"></param>
@@ -183,7 +202,49 @@ namespace Qorpent.Scaffolding.Model{
 		/// <param name="e"></param>
 		/// <returns></returns>
 		public static IEnumerable<SqlObject> Create(PersistentClass cls, XElement e){
-			yield break;
+			foreach (var element in e.Elements()){
+				var name = element.Name.LocalName;
+				if (name == "trigger"){
+					var trigger = new SqlTrigger();
+					trigger.Setup(null,cls,null,e);
+					yield return trigger;
+				}else if (name == "view"){
+					var view = new SqlView();
+					view.Setup(null, cls, null, e);
+					yield return view;
+				}else if (name == "function" || name=="void" || !string.IsNullOrWhiteSpace(element.Value) ){
+					var function = new SqlFunction();
+					function.Setup(null, cls, null, e);
+					yield return function;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Возвращает контент
+		/// </summary>
+		/// <returns></returns>
+		public string ResolveBody(){
+			if (!string.IsNullOrWhiteSpace(Body) && Body != "NULL") return Body;
+			if (!string.IsNullOrWhiteSpace(ExternalBody)){
+				return Model.ResolveExternalContent(this.Definition, ExternalBody);
+			}
+			if (!string.IsNullOrWhiteSpace(External))
+			{
+				return Model.ResolveExternalContent(this.Definition, External);
+			}
+			return "print 'NO BODY'";
+		}
+
+		/// <summary>
+		/// Определяет, является ли объект полностью детерминированным на создание внешним скриптом
+		/// </summary>
+		/// <returns></returns>
+		public bool IsFullyExternal(){
+			if (!string.IsNullOrWhiteSpace(Body) && Body != "NULL") return false;
+			if (!string.IsNullOrWhiteSpace(ExternalBody)) return false;
+			if (!string.IsNullOrWhiteSpace(External)) return true;
+			return false;
 		}
 	}
 }

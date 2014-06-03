@@ -13,11 +13,12 @@ namespace Qorpent.Scaffolding.Model
 		/// <summary>
 		/// Начало скрипта SQL
 		/// </summary>
-		public const string SqlServerCreatePeramble = @"
+		public static readonly string SqlServerCreatePeramble = @"
 SET NOCOUNT ON
 GO
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 GO
+" + @"
 CREATE PROCEDURE __ensurefg @n nvarchar(255),@filecount int = 1, @filesize int = 100, @withidx bit = 0, @isdefault bit = 0 AS begin
 	declare @q nvarchar(max) 
 	set @filesize = isnull(@filesize,100)
@@ -61,6 +62,8 @@ CREATE PROCEDURE __ensurefg @n nvarchar(255),@filecount int = 1, @filesize int =
 		exec __ensurefg @n, @filecount,@filesize,0,0
 	END
 end
+
+".Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ") + @"
 GO
 ";
 		/// <summary>

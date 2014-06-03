@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.BSharp;
+using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model
@@ -23,8 +24,13 @@ namespace Qorpent.Scaffolding.Model
 			ReadAllocationInfo(c, xml);
 			return this;
 		}
-
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public Field[] GetOrderedFields(){
+			return Fields.Values.OrderByDescending(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
+		}
 
 		private void ReadAllocationInfo(IBSharpClass c, XElement xml){
 			var a = new AllocationInfo{MyClass = this};

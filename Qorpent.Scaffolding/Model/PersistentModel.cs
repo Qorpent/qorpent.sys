@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.BSharp;
@@ -94,7 +96,26 @@ namespace Qorpent.Scaffolding.Model{
 				ExtendedScripts.Add(new SqlScript { Name = "sys:psql_end", Mode = ScriptMode.Drop, SqlDialect = SqlDialect.PostGres, Position = ScriptPosition.After, Text = DefaultScripts.PostgresqlFinisher });
 			}
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="definition"></param>
+		/// <param name="descriptor"></param>
+		/// <returns></returns>
+		public string ResolveExternalContent(XElement definition, string descriptor){
+			var Directory = Path.GetDirectoryName(definition.Attr("file", Environment.CurrentDirectory + "/1.bxls"));
+			var filename = Path.Combine(Directory, descriptor);
+			if (File.Exists(filename))
+			{
+				return File.ReadAllText(filename);
+			}
+			else
+			{
+				RegisterError(new BSharpError { Level = ErrorLevel.Error, Xml = definition, Message = "Не могу найти файл скрипта " + filename });
+				return "-- ERROR : cannot find file " + filename;
+				
+			}
+		}
 
 
 		private void ReadScripts(){
@@ -410,7 +431,22 @@ namespace Qorpent.Scaffolding.Model{
 			foreach (var script in GetScripts(dialect, mode, ScriptPosition.AfterTables)){
 				yield return script;
 			}
+
+			foreach (var function in Tables.SelectMany(_=>_.SqlObjects.OfType<SqlFunction>())){
+				yield return function;
+			}
+			foreach (var view in Tables.SelectMany(_ => _.SqlObjects.OfType<SqlView>()))
+			{
+				yield return view;
+			}
+			foreach (var trigger in Tables.SelectMany(_ => _.SqlObjects.OfType<SqlTrigger>()))
+			{
+				yield return trigger;
+			}
+
 			
+			
+
 			foreach (var script in GetScripts(dialect, mode, ScriptPosition.After)){
 				yield return script;
 			}

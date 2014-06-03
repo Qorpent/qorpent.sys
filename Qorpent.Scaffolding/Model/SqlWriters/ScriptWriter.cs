@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Scaffolding.Model{
+﻿using Qorpent.Scaffolding.Model.SqlObjects;
+
+namespace Qorpent.Scaffolding.Model.SqlWriters{
 	/// <summary>
 	/// 
 	/// </summary>

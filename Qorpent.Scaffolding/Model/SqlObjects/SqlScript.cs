@@ -6,7 +6,7 @@ using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Model{
+namespace Qorpent.Scaffolding.Model.SqlObjects{
 	/// <summary>
 	/// Описатель для скриптов
 	/// </summary>
@@ -94,21 +94,14 @@ namespace Qorpent.Scaffolding.Model{
 			Position = definition.Attr("position", "After").To<ScriptPosition>();
 			Mode = definition.Attr("mode", "Create").To<ScriptMode>();
 			SqlDialect = definition.Attr("dialect", "Ansi").To<SqlDialect>();
-			Directory = Path.GetDirectoryName(definition.Attr("file", Environment.CurrentDirectory + "/1.bxls"));
+			
 			var subscripts = definition.Elements("script").ToArray();
 			if (0 == subscripts.Length){
 				if (string.IsNullOrWhiteSpace(External)){
 					Text = definition.Value;
 				}
 				else{
-					var filename = Path.Combine(Directory, External);
-					if (File.Exists(filename)){
-						Text = File.ReadAllText(filename);
-					}
-					else{
-						Text = "-- ERROR : cannot find file " + filename;
-						Model.RegisterError(new BSharpError{Level = ErrorLevel.Error,Xml = definition,Message = "Не могу найти файл скрипта "+filename });
-					}
+					Text = model.ResolveExternalContent(definition, External);
 				}
 			}
 			else{
