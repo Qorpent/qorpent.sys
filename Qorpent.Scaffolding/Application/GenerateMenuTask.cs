@@ -143,9 +143,9 @@ namespace Qorpent.Scaffolding.Application {
             var icon = new XElement("div",
                 new XAttribute("class", "icon menu__item-icon menu__item-element"));
             if (el.HasAttribute("iconclass")) {
-                icon.Add(new XElement("i", new XAttribute("class", el.Attr("iconclass"))));
+                icon.Add(new XElement("i", " ", new XAttribute("class", el.Attr("iconclass"))));
             } else if (el.HasAttribute("icon")) {
-                icon.Add(new XElement("i", new XAttribute("class", el.Attr("icon"))));
+                icon.Add(new XElement("i", " ", new XAttribute("class", el.Attr("icon"))));
             } else if (el.HasAttribute("src")) {
                 icon.Add(new XElement("img", new XAttribute("src", el.Attr("src"))));
             } else if (el.HasAttribute("iconsrc")) {

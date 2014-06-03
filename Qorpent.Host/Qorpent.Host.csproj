@@ -121,7 +121,7 @@
     <EmbeddedResource Include="Resources\bootstrap-theme.css" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\moment.min.js" />
+    <EmbeddedResource Include="Resources\moment.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\empty.html" />
