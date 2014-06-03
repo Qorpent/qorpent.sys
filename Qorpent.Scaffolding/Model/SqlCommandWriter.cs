@@ -197,5 +197,7 @@ namespace Qorpent.Scaffolding.Model{
 		protected virtual string GetDigestFinisher(){
 			return this.GetType().Name;
 		}
+
+		
 	}
 }

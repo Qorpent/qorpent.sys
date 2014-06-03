@@ -357,18 +357,15 @@ namespace Qorpent.Scaffolding.Model{
 			if(mode==ScriptMode.Create && !GenerationOptions.GenerateCreateScript)yield break;
 			if(mode==ScriptMode.Drop && !GenerationOptions.GenerateDropScript)yield break;
 			if(!GenerationOptions.IncludeDialect.HasFlag(dialect))yield break;
-			if (mode == ScriptMode.Create){
-				foreach (var writer in GetCreateOrderedWriters(dialect)){
-					yield return writer;
-				}
+			var factory = new SqlCommandWriterFactory{Mode = mode, Dialect = dialect, Model = this};
+			var objset = mode == ScriptMode.Create ? GetCreateOrderedWriters(dialect) : GetDropWriters(dialect);
+			foreach (var w in factory.Get(objset)){
+				yield return w;
 			}
-			else foreach (var writer in GetDropWriters(dialect))
-			{
-				yield return writer;
-			}
+			
 		}
 
-		private IEnumerable<SqlCommandWriter> GetDropWriters(SqlDialect dialect){
+		private IEnumerable<object> GetDropWriters(SqlDialect dialect){
 			return GetCreateOrderedWriters(dialect, ScriptMode.Drop).Reverse();
 		}
 		/// <summary>
@@ -381,103 +378,41 @@ namespace Qorpent.Scaffolding.Model{
 			}
 		}
 
-		private IEnumerable<SqlCommandWriter> GetCreateOrderedWriters(SqlDialect dialect,ScriptMode mode = ScriptMode.Create){
+		private IEnumerable<object> GetCreateOrderedWriters(SqlDialect dialect,ScriptMode mode = ScriptMode.Create){
 			foreach (var script in GetScripts(dialect,mode, ScriptPosition.Before)){
-				yield return new ScriptWriter(script){
-					Model = this,
-					Mode = mode,
-					Dialect = dialect,
-				};
+				yield return script;
 			}
-			if (GenerationOptions.Supports(SqlObjectType.FileGroup) && mode==ScriptMode.Create){
-				foreach (var fg in DatabaseSqlObjects.OfType<FileGroup>()){
-					yield return new FileGroupWriter(fg){
-						Model = this,
-						Dialect = dialect,
-						Mode = mode
-					};
-				}
+			foreach (var fg in DatabaseSqlObjects.OfType<FileGroup>()){
+				yield return fg;
 			}
-			if (GenerationOptions.Supports(SqlObjectType.Schema)){
-				foreach (var schema in DatabaseSqlObjects.OfType<Schema>()){
-					yield return new SchemaWriter(schema){
-						Model = this,
-						Dialect = dialect,
-						Mode = mode,
-						Optional = true
-					};
-				}
-			}
-			if (GenerationOptions.Supports(SqlObjectType.Sequence)){
-				foreach (var sequence in Tables.SelectMany(_ => _.SqlObjects.OfType<Sequence>())){
-					yield return new SequenceWriter(sequence){
-						Model = this,
-						Dialect = dialect,
-						Mode = mode,
-						Optional = true,
-					};
-				}
-			}
-
-			if (GenerationOptions.Supports(SqlObjectType.PartitionScheme) && IsSupportPartitioning(dialect))
+			foreach (var schema in DatabaseSqlObjects.OfType<Schema>())
 			{
-				foreach (var part in Tables.SelectMany(_ => _.SqlObjects.OfType<PartitionDefinition>()))
-				{
-					yield return new PartitionDefinitionWriter(part)
-					{
-						Model = this,
-						Dialect = dialect,
-						Mode = mode,
-						Optional = true,
-					};
-				}
+				yield return schema;
 			}
-			if (GenerationOptions.Supports(SqlObjectType.Table)){
-				foreach (var script in GetScripts(dialect, mode, ScriptPosition.BeforeTables))
-				{
-					yield return new ScriptWriter(script)
-					{
-						Model = this,
-						Mode = mode,
-						Dialect = dialect,
-					};
-				}
-				foreach (var cls in Tables)
-				{
-					yield return new TableWriter(cls){
-						Model = this,
-						Dialect = dialect,
-						Mode = mode,
-					};
+			foreach (var sequence in Tables.SelectMany(_ => _.SqlObjects.OfType<Sequence>())){
+				yield return sequence;
+			}
+			foreach (var part in Tables.SelectMany(_ => _.SqlObjects.OfType<PartitionDefinition>())){
+				yield return part;
+			}
+			
+			foreach (var script in GetScripts(dialect, mode, ScriptPosition.BeforeTables)){
+				yield return script;
+			}
+			foreach (var cls in Tables){
+				yield return cls;
 
-				}
-				foreach (var circularRef in Tables.SelectMany(_=>_.Fields.Values.Where(__=>__.GetIsCircular()))){
-					yield return new LateForeignKeyWriter(circularRef){
-						Model = this,
-						Dialect = dialect,
-						Mode = mode
-					};
-				}
+			}
+			foreach (var circularRef in Tables.SelectMany(_=>_.Fields.Values.Where(__=>__.GetIsCircular()))){
+				yield return circularRef;
+			}
 				
-				foreach (var script in GetScripts(dialect, mode, ScriptPosition.AfterTables))
-				{
-					yield return new ScriptWriter(script)
-					{
-						Model = this,
-						Mode = mode,
-						Dialect = dialect,
-					};
-				}
+			foreach (var script in GetScripts(dialect, mode, ScriptPosition.AfterTables)){
+				yield return script;
 			}
-
-			foreach (var script in GetScripts(dialect, mode, ScriptPosition.After))
-			{
-				yield return new ScriptWriter(script)
-				{
-					Model = this,
-					Mode = mode,
-					Dialect = dialect,
-				};
+			
+			foreach (var script in GetScripts(dialect, mode, ScriptPosition.After)){
+				yield return script;
 			}
 			
 		}

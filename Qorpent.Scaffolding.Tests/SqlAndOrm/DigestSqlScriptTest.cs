@@ -257,7 +257,6 @@ table b
 ",dialect:SqlDialect.PostGres);
 			Assert.AreEqual(@"
 Script sys:psql_start (C,P,R)
-FileGroup SECONDARY (C,P,R)
 Sequence dbo.a_SEQ (C,P,O)
 Sequence dbo.b_SEQ (C,P,O)
 Table dbo.a (C,P,R)
@@ -372,13 +371,10 @@ GO
 		{
 			var digest = GetScript("class a prototype=dbtable",dialect:SqlDialect.PostGres);
 			Assert.AreEqual(@"
-
 DROP FUNCTION IF EXISTS ___script();
 CREATE FUNCTION ___script () returns int as $$ BEGIN
 CREATE SCHEMA IF NOT EXISTS dbo ; --mssql matching
 
-
--- SCHEMAERROR: FileGroups are not implemented for PostGres
 
 BEGIN
 CREATE SEQUENCE dbo.a_SEQ INCREMENT BY 10 START WITH 10;
