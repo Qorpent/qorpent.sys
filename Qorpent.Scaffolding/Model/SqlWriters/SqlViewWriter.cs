@@ -78,7 +78,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 									   {
 										   throw new Exception("table " + table.Name + " doesn't contains field " + field);
 									   }
-									   var fld = table.Fields[field];
+									   var fld = table.Fields[field.ToLowerInvariant()];
 									   foreach (var outer in outers)
 									   {
 										   sb.AppendLine(

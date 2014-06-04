@@ -13,7 +13,6 @@
     <Compile Include="ConnectionLoaderTest.cs" />
     <Compile Include="DataDiff\BasicDiffTest.cs" />
     <Compile Include="DataDiff\RealWorldExample.cs" />
-    <Compile Include="DDL\SqlGeneration.cs" />
     <None Include="*.import" />
     <None Include="*.export" />
     <EmbeddedResource Include=".\**\*.*resource" />

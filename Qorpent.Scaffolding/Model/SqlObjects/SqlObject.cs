@@ -169,17 +169,22 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		private static IEnumerable<SqlObject> GenerateFileGroups(PersistentModel model){
 			var fgs = new Dictionary<string, FileGroup>();
 			foreach (var fgd in model.Context.ResolveAll(model.FileGroupPrototype)){
-				var fg = new FileGroup();
-				fg.Setup(model,null,fgd,fgd.Compiled);
-				fg.Name = fg.Name.ToUpper();
-				fgs[fg.Name.ToUpper()] = fg;
+				FgFromClass(model, fgd, fgs);
 			}
 			foreach (var pcls in model.Classes.Values){
 				pcls.AllocationInfo.FileGroupName = pcls.AllocationInfo.FileGroupName.ToUpper();
-				if (!fgs.ContainsKey(pcls.AllocationInfo.FileGroupName)){
-					fgs[pcls.AllocationInfo.FileGroupName] = new FileGroup{Name = pcls.AllocationInfo.FileGroupName};
+				var _pcls = model.Context.Get(pcls.AllocationInfo.FileGroupName);
+				if (null != _pcls ){
+
+					pcls.AllocationInfo.FileGroup = FgFromClass(model, _pcls, fgs); 
 				}
-				pcls.AllocationInfo.FileGroup = fgs[pcls.AllocationInfo.FileGroupName];
+				else{
+					if (!fgs.ContainsKey(pcls.AllocationInfo.FileGroupName)){
+						fgs[pcls.AllocationInfo.FileGroupName] = new FileGroup{Name = pcls.AllocationInfo.FileGroupName};
+					}
+					pcls.AllocationInfo.FileGroup = fgs[pcls.AllocationInfo.FileGroupName];
+				}
+				
 			}
 			if (!fgs.ContainsKey("SECONDARY")){
 				fgs["SECONDARY"] = new FileGroup{Name = "SECONDARY"};
@@ -189,6 +194,16 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 				fgs["SECONDARY"].IsDefault = true;
 			}
 			return fgs.Values;
+		}
+
+		private static FileGroup FgFromClass(PersistentModel model, IBSharpClass fgd, Dictionary<string, FileGroup> fgs){
+			if (fgs.ContainsKey(fgd.Name)) return fgs[fgd.Name];
+			var fg = new FileGroup();
+			fg.Setup(model, null, fgd, fgd.Compiled);
+			fg.Name = fg.Name.ToUpper();
+			fgs[fg.Name.ToUpper()] = fg;
+			return fg;
+
 		}
 
 		/// <summary>
