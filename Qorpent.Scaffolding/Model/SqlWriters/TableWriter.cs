@@ -43,6 +43,8 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				WriteAllocation(sb);
 				sb.Append(";");
 				sb.AppendLine();
+				GenerateDefaultRows(sb,0,"/","NULL/ROOT");
+				GenerateDefaultRows(sb,-9999,"ERR","ERROR/LOST",-9999);
 				SetSqlComment(sb,Table,null);
 				foreach (var f in fields)
 				{
@@ -54,6 +56,37 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			else{
 				return "DROP TABLE " + Table.FullSqlName + ";";
 			}
+		}
+
+		private void GenerateDefaultRows(StringBuilder sb,int id, string code, string name, int parent=0){
+			sb.Append("IF NOT EXISTS (SELECT TOP 1 * FROM "+Table.FullSqlName+" where "+Table.PrimaryKey.Name+"="+id+")  INSERT " + Table.FullSqlName + " (" + Table.PrimaryKey.Name);
+			if (Table.Fields.ContainsKey("code")){
+				sb.Append(", " + Table.Fields["code"].Name);
+			}
+			if (Table.Fields.ContainsKey("name"))
+			{
+				sb.Append(", " + Table.Fields["name"].Name);
+			}
+			if (Table.Fields.ContainsKey("parent"))
+			{
+				sb.Append(", " + Table.Fields["parent"].Name);
+			}
+			sb.Append(") VALUES ("+id);
+			if (Table.Fields.ContainsKey("code"))
+			{
+				sb.Append(", '"+code+"'");
+			}
+			if (Table.Fields.ContainsKey("name"))
+			{
+				sb.Append(", '" + name.ToSqlString() + "'");
+			}
+			if (Table.Fields.ContainsKey("parent"))
+			{
+				sb.Append(", " + parent);
+			}
+			sb.Append(");");
+			sb.AppendLine();
+			
 		}
 
 
