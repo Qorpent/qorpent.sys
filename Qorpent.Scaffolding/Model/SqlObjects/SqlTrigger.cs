@@ -23,14 +23,6 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			this.Update = xml.GetSmartValue("update").ToBool();
 			this.Delete = xml.GetSmartValue("delete").ToBool();
 			this.Before = xml.GetSmartValue("before").ToBool();
-			this.External = xml.GetSmartValue("external");
-			this.ExternalBody = xml.GetSmartValue("externalbody");
-			this.Dialect = SqlDialect.Ansi;
-			var dialect = xml.GetSmartValue("dialect");
-			if (!string.IsNullOrWhiteSpace(dialect)){
-				this.Dialect = dialect.To<SqlDialect>();
-			}
-			this.Body = xml.Value;
 			return this;
 		}
 

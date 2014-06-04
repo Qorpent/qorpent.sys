@@ -340,6 +340,19 @@ class a prototype=dbtable
 		print 25;
 	)
 ";
+
+		private string sampleProc = @"
+class a prototype=dbtable
+	void ${.code}_test @i-int-out=2 @x=string : (
+		print 1;
+	)
+	int ${.code}_test2 @i=bool : (
+		return 2;
+	)
+	function ${.code}_test3 @i=int returns=bool : (
+		return 1;
+	)
+";
 		private string simpleTriggerExternalBody = @"
 class a prototype=dbtable
 	trigger '${.code}_x' insert externalbody=simpleTriggerExternalBody.sql
@@ -360,6 +373,75 @@ TRIGGER a_x (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 		}
 
+		[Test]
+		public void TableWithFunctionsDigest()
+		{
+			var digest = GetDigest(sampleProc);
+			Assert.AreEqual(@"Script sys:support_for_filegroups_begin (C,S,R)
+FileGroup SECONDARY (C,S,R)
+Sequence dbo.a_SEQ (C,S,O)
+Table dbo.a (C,S,R)
+PROCEDURE a_test (C,S,R)
+FUNCTION a_test2 (C,S,R)
+FUNCTION a_test3 (C,S,R)
+Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
+		}
+
+		[Test]
+		public void TableWithFunctionsScript()
+		{
+			var digest = GetScript(sampleProc);
+			Assert.AreEqual(@"SET NOCOUNT ON
+GO
+IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
+GO
+ CREATE PROCEDURE __ensurefg @n nvarchar(255),@filecount int = 1, @filesize int = 100, @withidx bit = 0, @isdefault bit = 0 AS begin declare @q nvarchar(max) set @filesize = isnull(@filesize,100) if @filesize <=3 set @filesize =3 set @filecount = ISNULL(@filecount,1) if @filecount < 1 set @filecount= 1 set @withidx = isnull(@withidx,0) set @isdefault = isnull(@isdefault,0) set @q = 'ALTER DATABASE '+DB_NAME()+' ADD FILEGROUP '+@n BEGIN TRY exec sp_executesql @q END TRY BEGIN CATCH END CATCH declare @basepath nvarchar(255) set @basepath = reverse((Select top 1 filename from sys.sysfiles)) set @basepath = REVERSE( RIGHT( @basepath, len(@basepath)-CHARINDEX('\',@basepath)+1)) declare @c int set @c = @filecount while @c >= 1 begin BEGIN TRY set @q='ALTER DATABASE '+DB_NAME()+' ADD FILE ( NAME = N'''+DB_NAME()+'_'+@n+cast(@c as nvarchar(255))+''', FILENAME = N'''+ @basepath+DB_NAME()+'_'+@n+cast(@c as nvarchar(255))+'.ndf'' , SIZE = '+cast(@filesize as nvarchar(255))+'MB , FILEGROWTH = 5% ) TO FILEGROUP ['+@n+']' exec sp_executesql @q END TRY BEGIN CATCH END CATCH set @c = @c - 1 end IF @isdefault = 1 BEGIN set @q='ALTER DATABASE '+DB_NAME()+' MODIFY FILEGROUP '+@n+' DEFAULT ' BEGIN TRY exec sp_executesql @q END TRY BEGIN CATCH END CATCH end IF @withidx = 1 BEGIN set @n = @n +'IDX' exec __ensurefg @n, @filecount,@filesize,0,0 END end 
+GO
+
+GO
+
+exec __ensurefg @n='SECONDARY', @filecount=1, @filesize=10, @withidx=0, @isdefault=1
+GO
+
+begin try
+CREATE SEQUENCE dbo.a_SEQ AS int START WITH 10 INCREMENT BY 10;
+end try begin catch print ERROR_MESSAGE() end catch
+GO
+
+CREATE TABLE dbo.a (
+	Id int NOT NULL CONSTRAINT dbo_a_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.a_SEQ)
+) ON SECONDARY;
+
+GO
+
+IF OBJECT_ID('dbo.a_test') IS NOT NULL DROP PROCEDURE dbo.a_test;
+GO
+CREATE PROCEDURE dbo.a_test @i int = '2' OUTPUT,@x nvarchar(255) AS BEGIN
+print 1;
+END;
+GO
+
+IF OBJECT_ID('dbo.a_test2') IS NOT NULL DROP FUNCTION dbo.a_test2;
+GO
+CREATE FUNCTION dbo.a_test2 ( @i bit ) RETURNS int AS BEGIN
+return 2;
+END;
+GO
+
+IF OBJECT_ID('dbo.a_test3') IS NOT NULL DROP FUNCTION dbo.a_test3;
+GO
+CREATE FUNCTION dbo.a_test3 ( @i int ) RETURNS bit AS BEGIN
+return 1;
+END;
+GO
+
+
+IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
+
+GO".Trim(), digest.Trim());
+		}
+
+		
 		[Test]
 		public void TableWithTriggerScript()
 		{

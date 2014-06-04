@@ -24,7 +24,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <summary>
 		/// Ссылка на класс-контейнер
 		/// </summary>
-		public PersistentClass MyClass { get; set; }
+		public PersistentClass Table { get; set; }
 		/// <summary>
 		/// B# с определением
 		/// </summary>
@@ -47,7 +47,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <param name="xml"></param>
 		/// <returns></returns>
 		public virtual SqlObject Setup(PersistentModel model, PersistentClass cls, IBSharpClass bscls, XElement xml){
-			MyClass = cls;
+			Table = cls;
 			Model = model;
 			BSClass = bscls;
 			if (null == Model && null != cls){
@@ -57,7 +57,17 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			if (null != xml){
 				Name = xml.ChooseAttr("sqlname", "code");
 				Comment = xml.Attr("name");
+				this.External = xml.GetSmartValue("external");
+				this.ExternalBody = xml.GetSmartValue("externalbody");
+				this.Dialect = SqlDialect.Ansi;
+				var dialect = xml.GetSmartValue("dialect");
+				if (!string.IsNullOrWhiteSpace(dialect))
+				{
+					this.Dialect = dialect.To<SqlDialect>();
+				}
+				this.Body = xml.Value;
 			}
+			
 			return this;
 		}
 		/// <summary>

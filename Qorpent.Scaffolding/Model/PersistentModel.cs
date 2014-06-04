@@ -356,7 +356,7 @@ namespace Qorpent.Scaffolding.Model{
 		{
 			foreach (var obj in SqlObject.CreateDefaults(cls))
 			{
-				obj.MyClass = cls;
+				obj.Table = cls;
 				cls.SqlObjects.Add(obj);
 			}
 			foreach (var e in xml.Elements())
