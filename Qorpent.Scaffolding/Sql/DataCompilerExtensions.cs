@@ -14,6 +14,8 @@ namespace Qorpent.Scaffolding.Sql{
 		/// </summary>
 		protected override void PrepareTasks()
 		{
+		
+			Tasks.Add(new PrepareModelTask());
 			Tasks.Add(new GenerateTsqlScriptsTask());
 			
 		}

@@ -59,7 +59,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		IBSharpCompiler Compiler { get; set; }
 
-		
+		/// <summary>
+		/// 
+		/// </summary>
+		IDictionary<string, object> ExtendedData { get; }
 
 
 		/// <summary>

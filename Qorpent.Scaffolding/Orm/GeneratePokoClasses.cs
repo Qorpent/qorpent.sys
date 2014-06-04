@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using Qorpent.BSharp;
+using Qorpent.Scaffolding.Model;
+using Qorpent.Scaffolding.Sql;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Orm{
@@ -25,6 +27,18 @@ namespace Qorpent.Scaffolding.Orm{
 			ClassSearchCriteria = "dbtable";
 			DefaultOutputName = "Orm";
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		public override void Execute(IBSharpContext context){
+			this.Model = (PersistentModel) context.ExtendedData[PrepareModelTask.DefaultModelName];
+			base.Execute(context);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		protected PersistentModel Model { get; set; }
 
 		/// <summary>
 		/// 
@@ -40,10 +54,10 @@ namespace Qorpent.Scaffolding.Orm{
 		/// <param name="targetclasses"></param>
 		/// <returns></returns>
 		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses){
-			foreach (var targetclass in targetclasses){
+			foreach (var cls in Model.Classes.Values){
 				var prod = new Production{
-					FileName = "DataTypes/" +targetclass.Name + ".cs",
-					GetContent = () => GenerateSingleClass(targetclass)
+					FileName = "DataTypes/" +cls.Name + ".cs",
+					GetContent = () => GenerateSingleClass(cls)
 				};
 				yield return prod;
 			}
@@ -56,55 +70,47 @@ namespace Qorpent.Scaffolding.Orm{
 		/// </summary>
 		/// <param name="targetclass"></param>
 		/// <returns></returns>
-		private string GenerateSingleClass(IBSharpClass targetclass){
+		private string GenerateSingleClass(PersistentClass targetclass){
 			o = new StringBuilder();
-			var x = targetclass.Compiled;
-			WriteStartClass(targetclass, x);	
-			GenerateOwnFields(targetclass, x);
+			WriteStartClass(targetclass);	
+			GenerateOwnFields(targetclass);
 			GenerateIncomeReferences(targetclass);
 			WriteEndClass();
 			return o.ToString();
 		}
 
-		private void GenerateIncomeReferences(IBSharpClass targetclass){
-			var incomerefs = OrmGenerationExtensions.FindIncomeRefes(_context,targetclass).OrderBy(_ => _.Item1.Name).ThenBy(_ => _.Item2.Attr("code")).ToArray();
+		private void GenerateIncomeReferences(PersistentClass targetclass)
+		{
+			var incomerefs = targetclass.ReverseFields.Values.Where(_=>_.IsReverese).OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
 			foreach (var incomeref in incomerefs){
-				var name = incomeref.Item2.Attr("code");
-				var basename = incomeref.Item1.Name + (incomeref.Item1.Name.EndsWith("s") ? "es" : "s");
-				if (name == targetclass.Name){
-					name = basename;
+				var name = incomeref.ReverseCollectionName;
+				var cls = incomeref.Table.TargetClass;
+				var clsname = cls.Name;
+				if (cls.Namespace != targetclass.Namespace){
+					clsname = cls.FullName;
 				}
-				else{
-					name = basename + "By" + incomeref.Item2.Attr("code");
-				}
-				var clsname = incomeref.Item1.Name;
-				if (incomeref.Item1.Namespace != targetclass.Namespace){
-					clsname = incomeref.Item1.FullName;
-				}
-				GenerateField(incomeref.Item2, "ICollection<" + clsname + ">", name, "(" + incomeref.Item1.Name + "  привязка )",
+				GenerateField(incomeref, "ICollection<" + clsname + ">", name, "(" + incomeref.Name + "  привязка )",
 				              "?? (Native" + name + " = new List<" + clsname + ">())");
 			}
 		}
 
-		private void GenerateOwnFields(IBSharpClass targetclass, XElement x){
-			var interfaces = targetclass.Compiled.Elements("qorpent-interface").Select(_ => _.Attr("code")).ToList();
-			foreach (var of in targetclass.GetOrmFields()){
-				var qorpentHide = of.Item2.Attr("qorpent-hide");
-				var qorpentOverride = of.Item2.Attr("qorpent-override");
+		private void GenerateOwnFields(PersistentClass targetclass){
+			var interfaces = targetclass.CSharpInterfaces;
+			foreach (var of in targetclass.GetOrderedFields()){
+				var qorpentHide = of.Definition.Attr("qorpent-hide");
+				var qorpentOverride = of.Definition.Attr("qorpent-override");
 				var noqorpent = interfaces.Contains(qorpentHide);
 				var over = interfaces.Contains(qorpentOverride);
 				if (noqorpent){
 					o.AppendLine("#if NOQORPENT");
 				}
-				var e = of.Item2;
-				var dtype = of.Item3;
-				var name = e.Attr("code");
-				if (e.Name.LocalName == "ref")
+				var name = of.Name;
+				if (of.IsReference)
 				{
-					GenerateRef(targetclass, e, name);
-					if (e.Attr("code") == "Parent")
+					GenerateRef(of);
+					if (of.Name == "Parent")
 					{
-						GenerateField(e, "ICollection<" + targetclass.Name + ">", "Children", "Дочерние объекты",
+						GenerateField(of, "ICollection<" + targetclass.Name + ">", "Children", "Дочерние объекты",
 									  " ?? (NativeChildren = new List<" + targetclass.Name + ">())");
 					}
 				}
@@ -114,7 +120,7 @@ namespace Qorpent.Scaffolding.Orm{
 					{
 						name = "Index";
 					}
-					GenerateField(e, dtype, name,over:over);
+					GenerateField(of, "", name,over:over);
 				}
 				if (noqorpent)
 				{
@@ -128,37 +134,30 @@ namespace Qorpent.Scaffolding.Orm{
 
 		
 
-		private void GenerateRef(IBSharpClass targetclass, XElement e, string name){
+		private void GenerateRef(Field f){
 			string dtype;
-			var refval = e.Attr("to");
-			if (string.IsNullOrWhiteSpace(refval)){
-				refval = name + ".Id";
-			}
-			var fld = refval.Split('.').Last();
-			if (fld == "Id"){
-				dtype = "Int32";
-			}
-			else{
-				dtype = "string";
-			}
-			GenerateField(e, dtype, name + fld, "(Идентификатор)");
-			dtype = refval.Substring(0, refval.Length - fld.Length - 1);
-
-			var clsname = dtype.Split('.').Last();
-			var cls = _context.Get(clsname);
+			GenerateField(f, "", f.Name +f.ReferenceField, "(Идентификатор)");
+			var cls = f.ReferenceClass.TargetClass;
 			string nsname = cls.Namespace;
-
-			if (nsname == targetclass.Namespace){
+			if (nsname == f.Table.TargetClass.Namespace){
 				dtype = cls.Name;
 			}
 			else{
 				dtype = cls.FullName;
 			}
-			GenerateField(e, dtype, name);
+			GenerateField(f, dtype);
 		}
 
-		private void GenerateField(XElement e, string dtype, string name, string subcomment=null, string init = null, bool over =false){
-			var sermode = e.Attr("serialize");
+		private void GenerateField(Field fld, string dtype = "", string name="", string subcomment = "", string init = null, bool over = false)
+		{
+			if (string.IsNullOrWhiteSpace(dtype)){
+				dtype = fld.DataType.CSharpDataType;
+			}
+			if (string.IsNullOrWhiteSpace(name)){
+				name = fld.Name;
+			}
+
+			var sermode = fld.Definition.Attr("serialize");
 			string serattribute = null;
 			if (!string.IsNullOrWhiteSpace(sermode)){
 				if ("ignore" == sermode){
@@ -173,13 +172,13 @@ namespace Qorpent.Scaffolding.Orm{
 			}
 
 			o.AppendLine("\t\t///<summary>");
-			o.AppendLine("\t\t///" + e.Attr("name")+" "+subcomment);
+			o.AppendLine("\t\t///" +fld.Comment+" "+subcomment);
 			o.AppendLine("\t\t///</summary>");
-			if (e.Attr("comment").ToBool()){
-				var commentline = e.Attr("comment").SmartSplit(false, true, '\r', '\n');
+			if (fld.Definition.Attr("comment").ToBool()){
+				var commentline = fld.Definition.Attr("comment").SmartSplit(false, true, '\r', '\n');
 				if (commentline.Count > 0){
 					if (commentline.Count == 1){
-						o.AppendLine("\t\t///<remarks>" + e.Attr("comment") + "</remarks>");
+						o.AppendLine("\t\t///<remarks>" + fld.Definition.Attr("comment") + "</remarks>");
 					}
 					else{
 						o.AppendLine("\t\t///<remarks>");
@@ -243,7 +242,7 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("}");
 		}
 
-		private void WriteStartClass(IBSharpClass targetclass, XElement x){
+		private void WriteStartClass(PersistentClass targetclass){
 			o.AppendLine(Header);
 			o.AppendLine("using System;");
 			o.AppendLine("using System.Collections.Generic;");
@@ -253,12 +252,12 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("#endif");
 			o.AppendFormat("namespace {0} {{\r\n", targetclass.Namespace);
 			o.AppendLine("\t///<summary>");
-			o.AppendLine("\t///" + x.Attr("name"));
+			o.AppendLine("\t///" +targetclass.Comment);
 			o.AppendLine("\t///</summary>");
 			o.AppendLine("#if !NOQORPENT");
 			o.AppendLine("\t[Serialize]");
 			o.AppendFormat("\tpublic partial class {0} ",targetclass.Name);
-			var interfaces = targetclass.Compiled.Elements("qorpent-interface").OrderBy(_=>_.Attr("code"));
+			var interfaces = targetclass.CSharpInterfaces;
 			var fst = true;
 			foreach (var i in interfaces){
 				if (fst){
@@ -268,7 +267,7 @@ namespace Qorpent.Scaffolding.Orm{
 				else{
 					o.Append(", ");
 				}
-				o.Append(i.Attr("code"));
+				o.Append(i);
 			}
 			o.AppendLine(" {");
 			o.AppendLine("#else");

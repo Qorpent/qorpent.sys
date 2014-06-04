@@ -91,6 +91,7 @@
     <Compile Include="Sql\GenerateTsqlScriptsTask.cs" />
     <Compile Include="Sql\ISqlProvider.cs" />
     <Compile Include="Sql\Parameter.cs" />
+    <Compile Include="Sql\PrepareModelTask.cs" />
     <Compile Include="Sql\SqlProvider.cs" />
     <Compile Include="Sql\SqlProviderBase.cs" />
     <Compile Include="Sql\TSQLProvider.cs" />

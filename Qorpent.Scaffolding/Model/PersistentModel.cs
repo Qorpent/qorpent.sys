@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Scaffolding.Model.SqlObjects;
@@ -344,6 +345,24 @@ namespace Qorpent.Scaffolding.Model{
 		/// Дополнительные SQL - скрипты для построения схемы
 		/// </summary>
 		public IList<SqlScript> ExtendedScripts { get; private set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dialect"></param>
+		/// <param name="mode"></param>
+		/// <returns></returns>
+		public string GetScript(SqlDialect dialect, ScriptMode mode){
+			var sb = new StringBuilder();
+			foreach (var sw in GetWriters(dialect,mode)){
+				if (null == sw) continue;
+				var subresult = sw.ToString();
+				if (!string.IsNullOrWhiteSpace(subresult)){
+					sb.AppendLine(subresult);
+				}
+			}
+			return sb.ToString();
+		}
 		/// <summary>
 		/// Возваращает все скрипты для указанной позиции и языка в генерации
 		/// </summary>

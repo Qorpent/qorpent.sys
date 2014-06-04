@@ -84,6 +84,6 @@
 		/// <summary>
 		/// Все
 		/// </summary>
-		All = 1<<24
+		All = 1<<0xFFFF
 	}
 }

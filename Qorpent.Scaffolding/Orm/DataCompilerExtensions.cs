@@ -15,7 +15,7 @@ namespace Qorpent.Scaffolding.Orm{
 		/// </summary>
 		protected override void PrepareTasks()
 		{
-			
+			Tasks.Add(new PrepareModelTask());
 			Tasks.Add(new GeneratePokoClasses());
 			Tasks.Add(new GeneratePokoClassDataAdapter());
 			Tasks.Add(new GenerateModel());

@@ -26,6 +26,11 @@ namespace Qorpent.BSharp {
 		private const string PROTOTYPE_MAP = "prototypemap";
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public IDictionary<string, object> ExtendedData { get; private set; }
+
+		/// <summary>
 		///     Исходные сырые определения классов
 		/// </summary>
 		public IDictionary<string, IBSharpClass> RawClasses {
@@ -460,6 +465,7 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public BSharpContext(IBSharpCompiler compiler = null) {
 			this.Compiler = compiler;
+			ExtendedData = new Dictionary<string, object>();
 		}
 		/// <summary>
 		/// Компилятор

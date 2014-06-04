@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Qorpent.BSharp;
+using Qorpent.Scaffolding.Model;
 
 namespace Qorpent.Scaffolding.Sql{
 	/// <summary>
@@ -13,32 +13,41 @@ namespace Qorpent.Scaffolding.Sql{
 		/// </summary>
 		/// <param name="dbobjectclasses"></param>
 		/// <returns></returns>
-		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] dbobjectclasses)
-		{
-			var dbobjects = dbobjectclasses.SelectMany(_ => DbObject.Create(_, _context)).ToArray();
-			var safetsqlf =  Project.ProjectName + ".MSSQL.safe.sql";
+		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] dbobjectclasses){
+
+			var model = (PersistentModel)_context.ExtendedData[PrepareModelTask.DefaultModelName];
 			var nsafetsqlf = Project.ProjectName + ".MSSQL.sql";
 			var dropsqlf = Project.ProjectName + ".MSSQL.drop.sql";
+			var nsafetsqlfpg = Project.ProjectName + ".PG.sql";
+			var dropsqlfpg = Project.ProjectName + ".PG.drop.sql";
 
 
-			yield return
-				new Production{
-					FileName = safetsqlf,
-					GetContent = ()=> DbObject.GetSql(dbobjects, DbGenerationMode.Script | DbGenerationMode.Safe, DbDialect.TSQL, Project)
-				};
-
+		
 			yield return
 				new Production
 				{
 					FileName = nsafetsqlf,
-					GetContent =()=> DbObject.GetSql(dbobjects, DbGenerationMode.Script, DbDialect.TSQL, Project)
+					GetContent =()=>model.GetScript(SqlDialect.SqlServer, ScriptMode.Create)
 				};
 
 			yield return
 				new Production
 				{
 					FileName = dropsqlf,
-					GetContent = ()=>DbObject.GetSql(dbobjects, DbGenerationMode.Script | DbGenerationMode.Drop, DbDialect.TSQL, Project)
+					GetContent = () => model.GetScript(SqlDialect.SqlServer, ScriptMode.Drop)
+				};
+			yield return
+				new Production
+				{
+					FileName = nsafetsqlfpg,
+					GetContent = () => model.GetScript(SqlDialect.PostGres, ScriptMode.Create)
+				};
+
+			yield return
+				new Production
+				{
+					FileName = dropsqlfpg,
+					GetContent = () => model.GetScript(SqlDialect.PostGres, ScriptMode.Drop)
 				};
 
 		}
