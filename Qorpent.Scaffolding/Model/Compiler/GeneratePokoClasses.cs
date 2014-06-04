@@ -193,7 +193,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 				o.AppendFormat("\t\tpublic virtual {0} {1} {{get {{return Native{1}{2};}} set{{Native{1}=value;}}}}\r\n", dtype, name, init);
 				o.AppendLine("#else");
 
-				if (IsNonLazyType(ltype))
+				if ((ltype==fld.DataType.CSharpDataType.ToLower()) || IsNonLazyType(ltype))
 				{
 					o.AppendFormat(
 						"\t\tpublic override {0} {1} {{get {{return Native{1}{2};}} set{{Native{1}=value;}}}}\r\n", dtype, name,
@@ -207,7 +207,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 				o.AppendLine("#endif");
 			}
 			else{
-				if (IsNonLazyType(ltype))
+				if ((ltype == fld.DataType.CSharpDataType.ToLower()) || IsNonLazyType(ltype))
 				{
 					o.AppendFormat("\t\tpublic virtual {0} {1} {{get {{return Native{1}{2};}} set{{Native{1}=value;}}}}\r\n", dtype, name, init);
 				

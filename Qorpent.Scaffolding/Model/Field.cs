@@ -4,6 +4,7 @@ using Qorpent.BSharp;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model{
+	
 	/// <summary>
 	/// Описывает поле в хранимом классе
 	/// </summary>
@@ -161,6 +162,7 @@ namespace Qorpent.Scaffolding.Model{
 				SetupUsualField(c,e);
 			}
 			SetupDefaultValue(c,e);
+
 			return this;
 		}
 
@@ -193,6 +195,12 @@ namespace Qorpent.Scaffolding.Model{
 			IsPrimaryKey = e.GetSmartValue("primarykey").ToBool();
 			IsUnique = e.GetSmartValue("unique").ToBool();
 			IsAutoIncrement = e.GetSmartValue("identity").ToBool();
+			var csharptype = e.GetSmartValue("csharp-type");
+			if (!string.IsNullOrWhiteSpace(csharptype)){
+				var realtype = DataType.Copy();
+				realtype.CSharpDataType = csharptype;
+				DataType = realtype;
+			}
 		}
 
 		private void SetupReference(IBSharpClass c, XElement e){

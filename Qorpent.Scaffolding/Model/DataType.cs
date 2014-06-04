@@ -9,11 +9,21 @@ namespace Qorpent.Scaffolding.Model{
 	/// Описание типа данных для класса
 	/// </summary>
 	public class DataType{
+		private string _readerCSharpDataType;
+		private string _cSharpDataType;
+
 		/// <summary>
 		/// 
 		/// </summary>
 		public DataType(){
 			SqlDataTypes = new Dictionary<SqlDialect, SqlDataType>();
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public DataType Copy(){
+			return this.MemberwiseClone() as DataType;
 		}
 		/// <summary>
 		/// Признак строкового параметра
@@ -28,6 +38,13 @@ namespace Qorpent.Scaffolding.Model{
 		{
 			get { return CSharpDataType.ToLowerInvariant() == "datetime"; }
 		}
+		/// <summary>
+		/// Тип данных на ридере
+		/// </summary>
+		public string ReaderCSharpDataType{
+			get { return string.IsNullOrWhiteSpace(_readerCSharpDataType)?CSharpDataType:_readerCSharpDataType; }
+			set { _readerCSharpDataType = value; }
+		}
 
 		/// <summary>
 		/// Код типа данных в BSharp
@@ -36,7 +53,16 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// Тип C#
 		/// </summary>
-		public string CSharpDataType { get; set; }
+		public string CSharpDataType{
+			get { return _cSharpDataType; }
+			set{
+				_cSharpDataType = value;
+				if (string.IsNullOrWhiteSpace(_readerCSharpDataType)){
+					_readerCSharpDataType = value;
+				}
+			}
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>

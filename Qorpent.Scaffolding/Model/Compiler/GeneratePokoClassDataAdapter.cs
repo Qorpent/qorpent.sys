@@ -87,7 +87,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			o.AppendLine("\t\t\tif ( nativeorder ) {");
 			var i = 0;
 			foreach (var ormField in targetclass.GetOrderedFields()){
-				var type = ormField.DataType.CSharpDataType;
+				var type = ormField.DataType.ReaderCSharpDataType;
 				var name = ormField.Name;
 				if (ormField.IsReference){ //ref
 					name+= ormField.ReferenceField;
@@ -95,7 +95,11 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 				if (name == "Idx"){
 					name = "Index";
 				}
-				o.AppendLine("\t\t\t\tresult." + name + " = reader.Get" + type + "(" + i + ");");
+				var cast = "";
+				if (type != ormField.DataType.CSharpDataType){
+					cast = "(" + ormField.DataType.CSharpDataType + ")";
+				}
+				o.AppendLine("\t\t\t\tresult." + name + " = "+cast+"reader.Get" + type + "(" + i + ");");
 				i++;
 			}
 			o.AppendLine("\t\t\t}else{");
@@ -105,7 +109,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			o.AppendLine("\t\t\t\t\tif(value is DBNull)continue;");
 			o.AppendLine("\t\t\t\t\tswitch(name){");
 			foreach (var ormField in targetclass.GetOrderedFields()){
-				var type = ormField.DataType.CSharpDataType;
+				var type = ormField.DataType.ReaderCSharpDataType;
 				var name = ormField.Name;
 				if (ormField.IsReference)
 				{
@@ -114,7 +118,14 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 				if (name == "Idx"){
 					name = "Index";
 				}
-				o.AppendLine("\t\t\t\t\t\tcase \"" + name.ToLower() + "\": result."+name+" = Convert.To"+type+"(value);break;");
+				if (type != ormField.DataType.CSharpDataType){
+					o.AppendLine("\t\t\t\t\t\tcase \"" + name.ToLower() + "\": result." + name + " = ("+ormField.DataType.CSharpDataType+")" +
+							 "value;break;");
+				}
+				else{
+					o.AppendLine("\t\t\t\t\t\tcase \"" + name.ToLower() + "\": result." + name + " = Convert.To" + type +
+					             "(value);break;");
+				}
 				i++;
 			}
 			o.AppendLine("\t\t\t\t\t}");

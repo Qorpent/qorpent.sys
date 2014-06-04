@@ -25,16 +25,22 @@ namespace Qorpent.Model {
 		/// Formula's definition
 		/// </summary>
 		string Formula { get; set; }
-
 		/// <summary>
 		/// Formula's type
 		/// </summary>
 		string FormulaType { get; set; }
-
 		/// <summary>
 		/// Formula's activity flag
 		/// </summary>
 		bool IsFormula { get; set; }
+		/// <summary>
+		/// Пользовательский тип расчета
+		/// </summary>
+		EvalType EvalType { get; set; }
+		/// <summary>
+		/// Приоритет расчета
+		/// </summary>
+		int EvalPriority { get; set; }
 	}
 
 	
