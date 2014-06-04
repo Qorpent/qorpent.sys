@@ -52,5 +52,15 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			}
 			return sb.ToString();
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		protected override string GetDigestFinisher(){
+			return "TRIGGER " + Trigger.Name;
+		}
+
+
 	}
 }

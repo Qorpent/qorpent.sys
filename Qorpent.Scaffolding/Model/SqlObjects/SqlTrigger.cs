@@ -13,7 +13,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <param name="bscls"></param>
 		/// <param name="xml"></param>
 		/// <returns></returns>
-		public override void Setup(PersistentModel model, PersistentClass cls, BSharp.IBSharpClass bscls, System.Xml.Linq.XElement xml)
+		public override SqlObject Setup(PersistentModel model, PersistentClass cls, BSharp.IBSharpClass bscls, System.Xml.Linq.XElement xml)
 		{
 			base.Setup(model, cls, bscls, xml);
 			this.TableName = cls.FullSqlName;
@@ -31,7 +31,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 				this.Dialect = dialect.To<SqlDialect>();
 			}
 			this.Body = xml.Value;
-
+			return this;
 		}
 
 		/// <summary>
