@@ -189,7 +189,7 @@ namespace Qorpent.Scaffolding.Application {
 	    }
 
         private XElement GenerateSplitterElement(XElement root, XElement e) {
-            return new XElement("splitter", new XAttribute("id", root.Attr("code") + "_splitter"));
+            return new XElement("splitter", " ", new XAttribute("id", root.Attr("code") + "_splitter"));
         }
 
 	    private void GenerateBlock(XElement root, XElement e) {
