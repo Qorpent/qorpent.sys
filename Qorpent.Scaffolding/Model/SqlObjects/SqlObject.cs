@@ -50,6 +50,9 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			MyClass = cls;
 			Model = model;
 			BSClass = bscls;
+			if (null == Model && null != cls){
+				Model = cls.Model;
+			}
 			Definition = xml;
 			if (null != xml){
 				Name = xml.ChooseAttr("sqlname", "code");
