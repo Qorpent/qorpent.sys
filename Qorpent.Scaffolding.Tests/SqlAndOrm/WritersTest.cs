@@ -46,18 +46,18 @@ class table prototype=dbtable abstract
 table master
 	string Code 'Код' unique idx=20
 table slave
-	datetime Version idx=30
-	ref master idx=40
+	datetime Version  'Версия'  idx=30
+	ref master 'Главный объект' idx=40
 ";
 
 		private const string CircularModel = @"
 class table prototype=dbtable abstract
 table master
 	string Code 'Код' unique idx=20
-	ref slave idx=30
+	ref slave  'Младший объект' idx=30
 table slave
-	datetime Version idx=30
-	ref master idx=40
+	datetime Version 'Версия' idx=30
+	ref master 'Главный объект' idx=40
 ";
 		/// <summary>
 		/// 
@@ -75,9 +75,11 @@ table slave
 			var scr = mwr.ToString();
 			Console.WriteLine(scr);
 			Assert.AreEqual(@"CREATE TABLE dbo.master (
-	Id int NOT NULL CONSTRAINT dbo_master_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.master_SEQ),
-	Code nvarchar(255) NOT NULL CONSTRAINT dbo_master_Code_UNQ UNIQUE DEFAULT ''
+	Code nvarchar(255) NOT NULL CONSTRAINT dbo_master_Code_UNQ UNIQUE DEFAULT '',
+	Id int NOT NULL CONSTRAINT dbo_master_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.master_SEQ)
 ) ON SECONDARY;
+EXECUTE sp_addextendedproperty N'MS_Description', 'Код', N'SCHEMA', N'dbo', N'TABLE', N'master', N'COLUMN', 'Code';
+
 ".Trim(), scr.Trim());
 			var slave = model["slave"];
 			var swr = new TableWriter(slave)
@@ -90,10 +92,54 @@ table slave
 			scr = swr.ToString();
 			Console.WriteLine(scr);
 			Assert.AreEqual(@"CREATE TABLE dbo.slave (
-	Id int NOT NULL CONSTRAINT dbo_slave_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.slave_SEQ),
+	master int NOT NULL CONSTRAINT dbo_slave_master_master_Id_FK FOREIGN KEY REFERENCES dbo.master (Id) DEFAULT 0,
 	Version datetime NOT NULL DEFAULT 0,
-	master int NOT NULL CONSTRAINT dbo_slave_master_master_Id_FK FOREIGN KEY REFERENCES dbo.master (Id) DEFAULT 0
-) ON SECONDARY;".Trim(), scr.Trim());
+	Id int NOT NULL CONSTRAINT dbo_slave_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.slave_SEQ)
+) ON SECONDARY;
+EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'master';
+EXECUTE sp_addextendedproperty N'MS_Description', 'Версия', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'Version';".Trim(), scr.Trim());
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Test]
+		public void TableWriterWithPkUniqueAndForeignKeyPostgresql()
+		{
+			var model = PersistentModel.Compile(SimpleModel);
+			var master = model["master"];
+			var mwr = new TableWriter(master)
+			{
+				Dialect = SqlDialect.PostGres,
+				NoDelimiter = true,
+				NoComment = true,
+				Mode = ScriptMode.Create
+			};
+			var scr = mwr.ToString();
+			Console.WriteLine(scr);
+			Assert.AreEqual(@"CREATE TABLE dbo.master (
+	Code varchar(255) NOT NULL CONSTRAINT dbo_master_Code_UNQ UNIQUE DEFAULT '',
+	Id int NOT NULL CONSTRAINT dbo_master_Id_PK PRIMARY KEY DEFAULT (nextval('dbo.master_SEQ'))
+) TABLESPACE SECONDARY;
+COMMENT ON COLUMN dbo.master.Code IS 'Код';
+".Trim(), scr.Trim());
+			var slave = model["slave"];
+			var swr = new TableWriter(slave)
+			{
+				Dialect = SqlDialect.PostGres,
+				NoDelimiter = true,
+				NoComment = true,
+				Mode = ScriptMode.Create
+			};
+			scr = swr.ToString();
+			Console.WriteLine(scr);
+			Assert.AreEqual(@"CREATE TABLE dbo.slave (
+	master int NOT NULL CONSTRAINT dbo_slave_master_master_Id_FK FOREIGN KEY REFERENCES dbo.master (Id) DEFERRABLE DEFAULT 0,
+	Version datetime NOT NULL DEFAULT 0,
+	Id int NOT NULL CONSTRAINT dbo_slave_Id_PK PRIMARY KEY DEFAULT (nextval('dbo.slave_SEQ'))
+) TABLESPACE SECONDARY;
+COMMENT ON COLUMN dbo.slave.master IS 'Главный объект';
+COMMENT ON COLUMN dbo.slave.Version IS 'Версия';".Trim(), scr.Trim());
 		}
 
 
@@ -115,10 +161,12 @@ table slave
 			var scr = mwr.ToString();
 			Console.WriteLine(scr);
 			Assert.AreEqual(@"CREATE TABLE dbo.master (
-	Id int NOT NULL CONSTRAINT dbo_master_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.master_SEQ),
+	slave int NOT NULL DEFAULT 0,
 	Code nvarchar(255) NOT NULL CONSTRAINT dbo_master_Code_UNQ UNIQUE DEFAULT '',
-	slave int NOT NULL DEFAULT 0
+	Id int NOT NULL CONSTRAINT dbo_master_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.master_SEQ)
 ) ON SECONDARY;
+EXECUTE sp_addextendedproperty N'MS_Description', 'Младший объект', N'SCHEMA', N'dbo', N'TABLE', N'master', N'COLUMN', 'slave';
+EXECUTE sp_addextendedproperty N'MS_Description', 'Код', N'SCHEMA', N'dbo', N'TABLE', N'master', N'COLUMN', 'Code';
 ".Trim(), scr.Trim());
 			var slave = model["slave"];
 			var swr = new TableWriter(slave)
@@ -131,10 +179,12 @@ table slave
 			scr = swr.ToString();
 			Console.WriteLine(scr);
 			Assert.AreEqual(@"CREATE TABLE dbo.slave (
-	Id int NOT NULL CONSTRAINT dbo_slave_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.slave_SEQ),
+	master int NOT NULL DEFAULT 0,
 	Version datetime NOT NULL DEFAULT 0,
-	master int NOT NULL DEFAULT 0
-) ON SECONDARY;".Trim(), scr.Trim());
+	Id int NOT NULL CONSTRAINT dbo_slave_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.slave_SEQ)
+) ON SECONDARY;
+EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'master';
+EXECUTE sp_addextendedproperty N'MS_Description', 'Версия', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'Version';".Trim(), scr.Trim());
 		}
 
 		[TestCase(SqlDialect.SqlServer, ScriptMode.Create, "ALTER TABLE dbo.slave ADD CONSTRAINT dbo_slave_master_master_Id_FK FOREIGN KEY REFERENCES dbo.master (Id);")]
@@ -147,6 +197,33 @@ table slave
 			var result = crefwr.ToString().Trim();
 			Console.WriteLine(result);
 			Assert.AreEqual(test, result);
+		}
+
+		[Test]
+		public void TriggerTest(){
+			var trigger = new SqlTrigger{Insert = true, TableName = "dbo.x", Name = "x_insert", Body="print 1;"};
+			var writer = new SqlTriggerWriter(trigger){Dialect = SqlDialect.SqlServer,Mode = ScriptMode.Create,NoComment = true};
+			var res = writer.ToString();
+			Console.WriteLine(res);
+			Assert.AreEqual(@"IF OBJECT_ID('dbo.x_insert') IS NOT NULL DROP TRIGGER dbo.x_insert;
+GO
+CREATE TRIGGER dbo.x_insert ON dbo.x FOR INSERT AS BEGIN
+print 1;
+END;
+GO".Trim(), writer.ToString().Trim());
+
+			trigger.Update = true;
+			trigger.Delete = true;
+			trigger.Before = true;
+			writer = new SqlTriggerWriter(trigger) { Dialect = SqlDialect.SqlServer, Mode = ScriptMode.Create, NoComment = true };
+			res = writer.ToString();
+			Console.WriteLine(res);
+			Assert.AreEqual(@"IF OBJECT_ID('dbo.x_insert') IS NOT NULL DROP TRIGGER dbo.x_insert;
+GO
+CREATE TRIGGER dbo.x_insert ON dbo.x INSTEAD OF INSERT,UPDATE,DELETE AS BEGIN
+print 1;
+END;
+GO".Trim(), writer.ToString().Trim());
 		}
 	}
 }

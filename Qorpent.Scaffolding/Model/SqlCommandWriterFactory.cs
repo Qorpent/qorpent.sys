@@ -50,6 +50,19 @@ namespace Qorpent.Scaffolding.Model{
 				}else if (source is Field){
 					if (!Model.GenerationOptions.Supports(SqlObjectType.Table)) continue;
 					yield return new LateForeignKeyWriter(source as Field) { Dialect = Dialect, Mode = Mode, Model = Model };
+				}else if (source is SqlTrigger)
+				{
+					if (!Model.GenerationOptions.Supports(SqlObjectType.Trigger)) continue;
+					yield return new SqlTriggerWriter(source as SqlTrigger) { Dialect = Dialect, Mode = Mode, Model = Model };
+				}else if (source is SqlFunction)
+				{
+					if (!Model.GenerationOptions.Supports(SqlObjectType.Function)) continue;
+					yield return new SqlFunctionWriter(source as SqlFunction) { Dialect = Dialect, Mode = Mode, Model = Model };
+				}
+				else if (source is SqlView)
+				{
+					if (!Model.GenerationOptions.Supports(SqlObjectType.View)) continue;
+					yield return new SqlViewWriter(source as SqlView) { Dialect = Dialect, Mode = Mode, Model = Model };
 				}
 			}
 		}
