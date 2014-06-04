@@ -12,6 +12,8 @@ namespace Qorpent.Scaffolding.Model
 	/// </summary>
 	public class PersistentClass
 	{
+	
+
 		/// <summary>
 		/// Настраивает отдельный хранимый класс из B#
 		/// </summary>
@@ -22,8 +24,16 @@ namespace Qorpent.Scaffolding.Model
 			ReadDataTypes(c,xml);
 			ReadFields(c,xml);
 			ReadAllocationInfo(c, xml);
+			ReadInterfaces(c, xml);
 			return this;
 		}
+
+		private void ReadInterfaces(IBSharpClass c, XElement xml){
+			foreach (var e in xml.Elements("qorpent-interface").Union(xml.Elements("interface")).Select(_=>_.Attr("code")).Distinct()){
+				CSharpInterfaces.Add(e);	
+			}
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -44,6 +54,10 @@ namespace Qorpent.Scaffolding.Model
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		public IList<string> CSharpInterfaces { get; private set; } 
 		
 		/// <summary>
 		/// Связанные Sql-объекты
@@ -93,6 +107,7 @@ namespace Qorpent.Scaffolding.Model
 			ReverseFields = new Dictionary<string, Field>();
 			DataTypeMap = DataType.GetDefaultMapping();
 			SqlObjects = new List<SqlObject>();
+			CSharpInterfaces = new List<string>();
 		}
 		/// <summary>
 		/// Каталог типов данных

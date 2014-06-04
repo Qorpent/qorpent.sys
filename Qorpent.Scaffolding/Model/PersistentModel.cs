@@ -80,6 +80,8 @@ namespace Qorpent.Scaffolding.Model{
 			return this;
 		}
 
+		
+
 		private void SetupDefaultScripts(){
 			if (GenerationOptions.IncludeDialect.HasFlag(SqlDialect.SqlServer) && GenerationOptions.GenerateCreateScript)
 			{
@@ -452,6 +454,7 @@ namespace Qorpent.Scaffolding.Model{
 			}
 			
 		}
+
 		/// <summary>
 		/// 
 		/// </summary>
