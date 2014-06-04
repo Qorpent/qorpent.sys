@@ -6,14 +6,14 @@ using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Orm{
+namespace Qorpent.Scaffolding.Model.Compiler{
 	/// <summary>
 	/// Формирует вспомогательный класс адаптера для DataReader
 	/// </summary>
 	public class GenerateExtendedCachedModel: CodeGeneratorTaskBase
 	{
 		private StringBuilder o;
-		private IBSharpClass[] _tables;
+		private PersistentClass[] _tables;
 
 		/// <summary>
 		/// 
@@ -24,6 +24,21 @@ namespace Qorpent.Scaffolding.Orm{
 			ClassSearchCriteria = "dbtable";
 			DefaultOutputName = "Orm";
 		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		public override void Execute(IBSharpContext context)
+		{
+			this.Model = (PersistentModel)context.ExtendedData[PrepareModelTask.DefaultModelName];
+			base.Execute(context);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		protected PersistentModel Model { get; set; }
 
 		/// <summary>
 		/// 
@@ -49,8 +64,8 @@ namespace Qorpent.Scaffolding.Orm{
 
 		private string GenerateModelClass(){
 			o = new StringBuilder();
-			_tables = _context.ResolveAll("dbtable").OrderBy(_ => _.Name).ToArray();
-			var ns = _tables.Select(_ => _.Namespace).GroupBy(_ => _).OrderByDescending(_ => _.Count()).First().Key;
+			_tables = Model.Classes.Values.OrderBy(_ => _.Name).ToArray();
+			var ns = Model.Classes.Values.Select(_ => _.Namespace).First();
 			o.AppendLine(Header);
 			o.AppendLine("using System;");
 			o.AppendLine("using Qorpent.Data;");
@@ -75,20 +90,16 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("\t\t///<summary>Setup auto load behavior for linked classes</summary>");
 			o.AppendLine("\t\tprotected virtual void SetupLoadBehavior<T>(ObjectDataCache<T> cache)where T:class,new(){");
 			o.AppendLine("\t\t\tswitch(typeof(T).Name){");
-			IList<Tuple<IBSharpClass,XElement[],Tuple<IBSharpClass,XElement>[]>> dataToGenerate = new List<Tuple<IBSharpClass, XElement[], Tuple<IBSharpClass, XElement>[]>>();
 			foreach (var t in _tables){
-				var ownrefs = t.Compiled.Elements("ref").ToArray();
-				var incomes = OrmGenerationExtensions.FindIncomeRefes(_context, t,true).ToArray();
-				//if (0 == ownrefs.Length && 0 == incomes.Length) continue;
 				o.AppendLine("\t\t\t\tcase \"" + t.Name + "\" : Setup" + t.Name + "LoadBehavior(cache as ObjectDataCache<"+t.Name+">);break;");
-				dataToGenerate.Add(new Tuple<IBSharpClass, XElement[], Tuple<IBSharpClass, XElement>[]>(t,ownrefs,incomes));
 			}
 			o.AppendLine("\t\t\t\tdefault: break;");
 			o.AppendLine("\t\t\t}");
 			o.AppendLine("\t\t}");
 
-			foreach (var setupinfo in dataToGenerate){
-				var t = setupinfo.Item1;
+			foreach (var t in _tables){
+				var ownrefs = t.GetOrderedFields().Where(_ => _.IsReference).ToArray();
+				var incomes = t.ReverseFields.Values.Where(_ => _.IsReverese).OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
 				o.AppendLine("\t\t///<summary></summary>");
 				o.AppendLine("\t\tprotected void Setup" + t.Name + "LoadBehavior(ObjectDataCache<"+t.Name+"> cache){");
 				o.AppendLine("\t\t\tcache.OnAfterUpdateCache+= (s,ids,c,ctx) => {");
@@ -96,18 +107,16 @@ namespace Qorpent.Scaffolding.Orm{
 				o.AppendLine("\t\t\t\tvar targets = ids.Select(_=>mycache.Get(_,c)).ToArray();");
 				o.AppendLine("\t\t\t\tforeach(var t in targets){");
 				o.AppendLine("\t\t\t\t\tif(t.Id == -9999||t.Id==0)continue;");
-				foreach (var element in setupinfo.Item2){
-					GenerateSetupOwnRef(t, element, ns);
+				foreach (var element in ownrefs){
+					GenerateSetupOwnRef(element);
 				}
 				o.AppendLine("\t\t\t\t}");
-				if (setupinfo.Item3.Length != 0)
+				if (incomes.Length != 0)
 				{
 					o.AppendLine("\t\t\t\tif (ids.Count > 0 && !(ids.Count == 1 && (ids[0] == 0 || ids[0]==-9999))){");
 					o.AppendLine("\t\t\t\t\tvar inids = string.Join(\",\",ids.Where(_=>_!=0 && _!=-9999));");
-					foreach (var source in setupinfo.Item3.OrderBy(_=>_.Item1.Name).ToArray()){
-						var colt = source.Item1;
-						var revref = source.Item2;
-						GenerateSetupCollection(t, colt, revref);
+					foreach (var source in incomes.OrderBy(_=>_.Name).ToArray()){
+						GenerateSetupCollection(source);
 					}
 					o.AppendLine("\t\t\t\t}");
 				}
@@ -116,70 +125,37 @@ namespace Qorpent.Scaffolding.Orm{
 			}
 		}
 
-		private void GenerateSetupCollection(IBSharpClass t, IBSharpClass colt, XElement revref){
-			var code = revref.Attr("code");
-	
-			var mname = colt.Name;
-			if (mname.EndsWith("s")){
-				mname += "es";
-			}
-			else{
-				mname += "s";
-			}
-			if (code == "Parent")
-			{
-				mname = "Children";
-			}
+		private void GenerateSetupCollection(Field f){
 			
-			if (code != t.Name && code!="Parent")
-			{
-				
-				mname += "By" + code;
-				
-			}
-			var propname = t.Name + mname;
-			
-			var alprop = "AutoLoad" + propname;
+			var alprop = "AutoLoad" + f.ReverseCollectionName;
 
 			o.AppendLine("\t\t\t\t\tif(" + alprop + "){");
 
-			o.AppendLine("\t\t\t\t\t\tvar q = string.Format(\"(" + code + " in ({0}))\",inids);");
-			var cache = colt.Name;
-			if (code == "Parent"){
+			o.AppendLine("\t\t\t\t\t\tvar q = string.Format(\"(" + f.Name + " in ({0}))\",inids);");
+			var cache = f.Table.TargetClass.Name;
+			if (f.Name == "Parent"){
 				cache = "cache";
 			}
-			o.AppendLine("\t\t\t\t\t\tif(Lazy" + propname + "){");
+			o.AppendLine("\t\t\t\t\t\tif(Lazy" + f.ReverseCollectionName + "){");
 			o.AppendLine("\t\t\t\t\t\t\tforeach(var t in targets){");
 			o.AppendLine("\t\t\t\t\t\t\t\tif(t.Id == -9999||t.Id==0)continue;");
-			o.AppendLine("\t\t\t\t\t\t\t\tt." + mname + "= new ObjectDataCacheBindLazyList<"+colt.FullName+">{Query=q,Cache="+cache+"};");
+			o.AppendLine("\t\t\t\t\t\t\t\tt." + f.ReverseCollectionName + "= new ObjectDataCacheBindLazyList<"+f.Table.FullCodeName+">{Query=q,Cache="+cache+"};");
 			o.AppendLine("\t\t\t\t\t\t\t}");
 			o.AppendLine("\t\t\t\t\t\t}else{");
 			o.AppendLine("\t\t\t\t\t\t\tvar nestIds = " + cache + ".UpdateSingleQuery(q, ctx,c, null, true);");
 			o.AppendLine("\t\t\t\t\t\t\tforeach(var nid in nestIds){");
 			o.AppendLine("\t\t\t\t\t\t\t\tvar n=" + cache + ".Get(nid);");
-			o.AppendLine("\t\t\t\t\t\t\t\tvar t=cache.Get(n."+code+"Id);");
-			o.AppendLine("\t\t\t\t\t\t\t\tt."+mname+".Add(n);");
+			o.AppendLine("\t\t\t\t\t\t\t\tvar t=cache.Get(n."+f.Name+"Id);");
+			o.AppendLine("\t\t\t\t\t\t\t\tt."+f.ReverseCollectionName+".Add(n);");
 			o.AppendLine("\t\t\t\t\t\t\t}");
 			o.AppendLine("\t\t\t\t\t\t}");
 			o.AppendLine("\t\t\t\t\t}");
 
 		}
 
-		private void GenerateSetupOwnRef(IBSharpClass t, XElement e, string ns){
-			var code = e.Attr("code");
-			var cls = e.Attr("to");
-			var fld = "Id";
-			if (string.IsNullOrWhiteSpace(cls)){
-				cls = e.Attr("code");
-			}
-			else{
-				var parts = cls.Split('.');
-				cls = parts[parts.Length - 2];
-				fld = parts[parts.Length - 1];
-			}
-			o.AppendLine("\t\t\t\t\tif(AutoLoad" + t.Name + code + " && null==t." + code +(fld=="Id"? (" && -9999 != t."+code+fld):"")+   "){");
-			
-			o.AppendLine("\t\t\t\t\t\tt." + code + "= (!Lazy"+t.Name+code+"?(" + cls + ".Get(t." + code + fld + ",c)): new "+cls+".Lazy{GetLazy=_=>"+cls+".Get(t."+code+fld+")});");
+		private void GenerateSetupOwnRef(Field f){
+			o.AppendLine("\t\t\t\t\tif(AutoLoad" + f.Table.TargetClass.Name + f.Name + " && null==t." + f.Name +(f.Name.ToLowerInvariant()=="id"? (" && -9999 != t."+f.Name+f.ReferenceField):"")+   "){");
+			o.AppendLine("\t\t\t\t\t\tt." + f.Name + "= (!Lazy" + f.Table.TargetClass.Name + "?(" + f.Table.TargetClass.Name + ".Get(t." + f.Table.TargetClass.Name + f.ReferenceField + ",c)): new " + f.Table.TargetClass.Name + ".Lazy{GetLazy=_=>" + f.Table.TargetClass.Name + ".Get(t." + f.Name + f.ReferenceField + ")});");
 			o.AppendLine("\t\t\t\t\t}");
 		}
 

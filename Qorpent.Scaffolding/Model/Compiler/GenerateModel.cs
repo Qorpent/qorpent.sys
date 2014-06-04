@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 using Qorpent.BSharp;
-using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Orm{
+namespace Qorpent.Scaffolding.Model.Compiler{
 	/// <summary>
 	/// Формирует вспомогательный класс адаптера для DataReader
 	/// </summary>
@@ -32,6 +29,21 @@ namespace Qorpent.Scaffolding.Orm{
 ////       AUTO-GENERATED WITH  GenerateModel     ////
 //////////////////////////////////////////////////////////////////////
 ";
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		public override void Execute(IBSharpContext context)
+		{
+			this.Model = (PersistentModel)context.ExtendedData[PrepareModelTask.DefaultModelName];
+			base.Execute(context);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		protected PersistentModel Model { get; set; }
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -48,7 +60,7 @@ namespace Qorpent.Scaffolding.Orm{
 
 		private string GenerateModelClass(){
 			o = new StringBuilder();
-			var ns = _context.ResolveAll("dbtable").Select(_ => _.Namespace).GroupBy(_ => _).OrderByDescending(_ => _.Count()).First().Key;
+			var ns = Model.Classes.Values.Select(_=>_.Namespace).First();
 			o.AppendLine(Header);
 			o.AppendLine("using System;");
 			o.AppendLine("#if !NOQORPENT");
@@ -65,69 +77,38 @@ namespace Qorpent.Scaffolding.Orm{
 		}
 		
 		private void GenerateReferenceBehaviorMarkers(string ns){
-			var tables = _context.ResolveAll("dbtable").OrderBy(_=>_.Name).ToArray();
-			var cmap = tables.ToDictionary(_ => _.Name, _ => _);
-			var tmap = tables.ToDictionary(_ => _.Compiled.Attr("fullname"), _ => _);
+			var tables = Model.Classes.Values.OrderBy(_ => _.Name);
 			foreach (var t in tables){
-				foreach (var reference in t.Compiled.Elements("ref")){
-					var referto = reference.Attr("to", reference.Attr("to", reference.Attr("code") + ".Id"));
-					SetupDirectMarker(t, referto, reference);
-					if (reference.Attr("reverse").ToBool()){
-						SetupBackCollectionMarker(referto, cmap, tmap, reference, t);
+				foreach (var reference in t.Fields.Values.Where(_=>_.IsReference)){
+					SetupDirectMarker(t,reference);
+					if (reference.IsReverese){
+						SetupBackCollectionMarker(t, reference);
 					}
 				}
 				
 			}
 		}
 
-		private void SetupDirectMarker(IBSharpClass t, string referto, XElement reference){
+		private void SetupDirectMarker(PersistentClass t,  Field reference){
 			o.AppendLine("\t\t///<summary>Marks active auto foreign key link from " + t.Name + " to " +
-			             referto + " with " + reference.Attr("code") + " (" +
-			             reference.Attr("name") + ")</summary>");
-			o.AppendLine("\t\tpublic bool AutoLoad" + t.Name + reference.Attr("code") + " = "+reference.Attr("auto").ToBool().ToString().ToLowerInvariant()+";");
+			             reference.ReferenceClass.Name + " with " + reference.ReferenceField + " (" +
+			             reference.Comment + ")</summary>");
+			o.AppendLine("\t\tpublic bool AutoLoad" + t.Name + reference.Name + " = "+reference.IsAutoLoadByDefault.ToString().ToLowerInvariant()+";");
 			o.AppendLine("\t\t///<summary>Marks active auto foreign key link from " + t.Name + " to " +
-						 referto + " with " + reference.Attr("code") + " (" +
-						 reference.Attr("name") + ") as LazyLoad </summary>");
-			o.AppendLine("\t\tpublic bool Lazy" + t.Name + reference.Attr("code") + " = " + reference.Attr("lazy").ToBool().ToString().ToLowerInvariant() + ";");
+						 reference.ReferenceClass.Name + " with " + reference.ReferenceField + " (" +
+						 reference.Comment + ") as LazyLoad </summary>");
+			o.AppendLine("\t\tpublic bool Lazy" + t.Name + reference.Name + " = " + reference.IsLazyLoadByDefault.ToString().ToLowerInvariant() + ";");
 		}
 
-		private void SetupBackCollectionMarker(string referto, Dictionary<string, IBSharpClass> cmap, Dictionary<string, IBSharpClass> tmap, XElement reference,
-		                                       IBSharpClass t){
-			var reftable = referto.Substring(0, referto.LastIndexOf('.'));
-			IBSharpClass reftablecls = null;
-			if (cmap.ContainsKey(reftable)){
-				reftablecls = cmap[reftable];
-			}
-			else if (tmap.ContainsKey(reftable)){
-				reftablecls = tmap[reftable];
-			}
-			else{
-				throw new Exception("cannot find corresponding reference in model " + reference.ToString());
-			}
-			
-			var multname = t.Name;
-			if (reference.Attr("reverse") != "1"){
-				multname = reference.Attr("reverse");
-			}
-			else{
-				if (multname.EndsWith("s")){
-					multname += "es";
-				}
-				else{
-					multname += "s";
-				}
-				if (reference.Attr("code") != reftablecls.Name){
-					multname += "By" + reference.Attr("code");
-				}
-			}
-			o.AppendLine("\t\t///<summary>Marks active auto collection in " + reftablecls + " of " +
-						 t.Name + " with " + reference.Attr("code") + " (" +
-						 reference.Attr("name") + ")</summary>");
-			o.AppendLine("\t\tpublic bool AutoLoad" + reftablecls.Name + multname  + "=" + reference.Attr("reverse-auto").ToBool().ToString().ToLowerInvariant() + ";");
-			o.AppendLine("\t\t///<summary>Marks active auto collection in " + reftablecls + " of " +
-						 t.Name + " with " + reference.Attr("code") + " (" +
-						 reference.Attr("name") + ") as Lazy</summary>");
-			o.AppendLine("\t\tpublic bool Lazy" + reftablecls.Name + multname + "=" + reference.Attr("reverse-lazy").ToBool().ToString().ToLowerInvariant() + ";");
+		private void SetupBackCollectionMarker(PersistentClass t, Field reference){
+			o.AppendLine("\t\t///<summary>Marks active auto collection in " + reference.Table.Name + " of " +
+						 t.Name + " with " + reference.Name + " (" +
+						 reference.Comment + ")</summary>");
+			o.AppendLine("\t\tpublic bool AutoLoad" + reference.ReverseCollectionName  + "=" + reference.IsAutoLoadReverseByDefault.ToString().ToLowerInvariant() + ";");
+			o.AppendLine("\t\t///<summary>Marks active auto collection in " + reference.Table.Name + " of " +
+						 t.Name + " with " + reference.Name + " (" +
+						 reference.Comment + ") as Lazy</summary>");
+			o.AppendLine("\t\tpublic bool Lazy" + reference.ReverseCollectionName+ "=" + reference.IsLazyLoadReverseByDefault.ToString().ToLowerInvariant() + ";");
 		}
 
 		private void GenerateGetAdapterMethods(string ns){

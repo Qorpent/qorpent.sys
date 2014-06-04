@@ -1,7 +1,6 @@
 ﻿using Qorpent.BSharp.Builder;
-using Qorpent.Scaffolding.Model;
 
-namespace Qorpent.Scaffolding.Sql{
+namespace Qorpent.Scaffolding.Model.Compiler{
 	/// <summary>
 	/// 
 	/// </summary>

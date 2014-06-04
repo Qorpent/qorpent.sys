@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Qorpent.BSharp;
 using Qorpent.Scaffolding.Model.SqlObjects;
-using Qorpent.Scaffolding.Sql;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 

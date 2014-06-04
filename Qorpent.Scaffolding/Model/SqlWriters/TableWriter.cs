@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text;
 using Qorpent.Scaffolding.Model.SqlObjects;
-using Qorpent.Scaffolding.Sql;
 using Qorpent.Serialization;
 
 namespace Qorpent.Scaffolding.Model.SqlWriters{

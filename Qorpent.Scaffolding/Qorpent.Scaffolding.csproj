@@ -13,11 +13,12 @@
     <None Include="Qorpent.Scaffolding.export" />
     <None Include="Qorpent.Serialization.import" />
     <EmbeddedResource Include=".\**\*.*resource" />
-    <EmbeddedResource Include="Sql\DbObjects.bxls" />
+    <EmbeddedResource Include="Model\Compiler\DbObjects.bxls" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\AppSpecificationBSharpSource.cs" />
     <Compile Include="Application\ApplicationCompilerExtensions.cs" />
+    <Compile Include="Application\DataObjectsSourcePackageForBShart.cs" />
     <Compile Include="Application\GenerateActionsInJavaScript.cs" />
     <Compile Include="Application\GenerateControllersTask.cs" />
     <Compile Include="Application\GenerateDataTypesInJavaScriptTask.cs" />
@@ -28,6 +29,7 @@
     <Compile Include="Application\GenerateDataTypesInCSharpTask.cs" />
     <Compile Include="CodeGeneratorTaskBase.cs" />
     <Compile Include="Model\AllocationInfo.cs" />
+    <Compile Include="Model\DbDefaultValueType.cs" />
     <Compile Include="Model\DefaultScripts.cs" />
     <Compile Include="Model\GenerationOptions.cs" />
     <Compile Include="Model\SqlCommandWriterFactory.cs" />
@@ -62,39 +64,14 @@
     <Compile Include="Model\SqlObjects\SqlScript.cs" />
     <Compile Include="Model\SqlWriters\SequenceWriter.cs" />
     <Compile Include="Model\SqlWriters\TableWriter.cs" />
-    <Compile Include="Orm\GenerateExtendedCachedModel.cs" />
-    <Compile Include="Orm\GenerateModel.cs" />
-    <Compile Include="Orm\DataCompilerExtensions.cs" />
-    <Compile Include="Orm\GeneratePokoClassDataAdapter.cs" />
-    <Compile Include="Orm\GeneratePokoClasses.cs" />
-    <Compile Include="Orm\OrmGenerationExtensions.cs" />
+    <Compile Include="Model\Compiler\GenerateExtendedCachedModel.cs" />
+    <Compile Include="Model\Compiler\GenerateModel.cs" />
+    <Compile Include="Model\Compiler\GeneratePokoClassDataAdapter.cs" />
+    <Compile Include="Model\Compiler\GeneratePokoClasses.cs" />
     <Compile Include="Production.cs" />
-    <Compile Include="Sql\DataCompilerExtensions.cs" />
-    <Compile Include="Sql\DataObjectsSourcePackageForBShart.cs" />
-    <Compile Include="Sql\DbIndex.cs" />
-    <Compile Include="Sql\DbPartitionScheme.cs" />
-    <Compile Include="Sql\DbDataType.cs" />
-    <Compile Include="Sql\DbDefaultValue.cs" />
-    <Compile Include="Sql\DbDefaultValueType.cs" />
-    <Compile Include="Sql\DbDialect.cs" />
-    <Compile Include="Sql\DbField.cs" />
-    <Compile Include="Sql\DbFileGroup.cs" />
-    <Compile Include="Sql\DbFunction.cs" />
-    <Compile Include="Sql\DbGenerationMode.cs" />
-    <Compile Include="Sql\DbObject.cs" />
-    <Compile Include="Sql\DbObjectCreateType.cs" />
-    <Compile Include="Sql\DbObjectType.cs" />
-    <Compile Include="Sql\DbAutoPartition.cs" />
-    <Compile Include="Sql\DbTable.cs" />
-    <Compile Include="Sql\DbTrigger.cs" />
-    <Compile Include="Sql\DbView.cs" />
-    <Compile Include="Sql\GenerateTsqlScriptsTask.cs" />
-    <Compile Include="Sql\ISqlProvider.cs" />
-    <Compile Include="Sql\Parameter.cs" />
-    <Compile Include="Sql\PrepareModelTask.cs" />
-    <Compile Include="Sql\SqlProvider.cs" />
-    <Compile Include="Sql\SqlProviderBase.cs" />
-    <Compile Include="Sql\TSQLProvider.cs" />
+    <Compile Include="Model\Compiler\DataCompilerExtensions.cs" />
+    <Compile Include="Model\Compiler\GenerateTsqlScriptsTask.cs" />
+    <Compile Include="Model\Compiler\PrepareModelTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

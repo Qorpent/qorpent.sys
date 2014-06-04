@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 using Qorpent.BSharp;
-using Qorpent.Scaffolding.Model;
-using Qorpent.Scaffolding.Sql;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Orm{
+namespace Qorpent.Scaffolding.Model.Compiler{
 	/// <summary>
 	/// Задача по генерации Poko-классов модели на основе DataMapping,
 	/// данные классы являются PurePOKO, то есть даже не наследуют никаких интерфейсов

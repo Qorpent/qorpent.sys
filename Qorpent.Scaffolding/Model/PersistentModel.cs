@@ -6,8 +6,6 @@ using System.Text;
 using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Scaffolding.Model.SqlObjects;
-using Qorpent.Scaffolding.Model.SqlWriters;
-using Qorpent.Scaffolding.Sql;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model{

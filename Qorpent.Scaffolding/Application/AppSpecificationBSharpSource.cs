@@ -3,7 +3,6 @@ using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Bxl;
 using Qorpent.IoC;
-using Qorpent.Scaffolding.Sql;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Application

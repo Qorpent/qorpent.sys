@@ -3,8 +3,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Qorpent.Scaffolding.Model.SqlObjects;
-using Qorpent.Scaffolding.Sql;
-using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model.SqlWriters{
