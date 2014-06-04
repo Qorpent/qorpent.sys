@@ -127,16 +127,17 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 
 		private void GenerateSetupCollection(Field f){
 			
-			var alprop = "AutoLoad" + f.ReverseCollectionName;
+			var alprop = "AutoLoad" + f.ReferenceClass.Name+ f.ReverseCollectionName;
 
 			o.AppendLine("\t\t\t\t\tif(" + alprop + "){");
 
 			o.AppendLine("\t\t\t\t\t\tvar q = string.Format(\"(" + f.Name + " in ({0}))\",inids);");
-			var cache = f.Table.TargetClass.Name;
+			var cache = 
+				"this."+f.Table.TargetClass.Name;
 			if (f.Name == "Parent"){
 				cache = "cache";
 			}
-			o.AppendLine("\t\t\t\t\t\tif(Lazy" + f.ReverseCollectionName + "){");
+			o.AppendLine("\t\t\t\t\t\tif(Lazy" + f.ReferenceClass.Name+ f.ReverseCollectionName + "){");
 			o.AppendLine("\t\t\t\t\t\t\tforeach(var t in targets){");
 			o.AppendLine("\t\t\t\t\t\t\t\tif(t.Id == -9999||t.Id==0)continue;");
 			o.AppendLine("\t\t\t\t\t\t\t\tt." + f.ReverseCollectionName + "= new ObjectDataCacheBindLazyList<"+f.Table.FullCodeName+">{Query=q,Cache="+cache+"};");
@@ -155,7 +156,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 
 		private void GenerateSetupOwnRef(Field f){
 			o.AppendLine("\t\t\t\t\tif(AutoLoad" + f.Table.TargetClass.Name + f.Name + " && null==t." + f.Name +(f.Name.ToLowerInvariant()=="id"? (" && -9999 != t."+f.Name+f.ReferenceField):"")+   "){");
-			o.AppendLine("\t\t\t\t\t\tt." + f.Name + "= (!Lazy" + f.Table.TargetClass.Name + "?(" + f.Table.TargetClass.Name + ".Get(t." + f.Table.TargetClass.Name + f.ReferenceField + ",c)): new " + f.Table.TargetClass.Name + ".Lazy{GetLazy=_=>" + f.Table.TargetClass.Name + ".Get(t." + f.Name + f.ReferenceField + ")});");
+			o.AppendLine("\t\t\t\t\t\tt." + f.Name + "= (!Lazy" + f.Table.TargetClass.Name+f.Name + "?(this." + f.ReferenceClass.Name + ".Get(t." + f.Name + f.ReferenceField + ",c)): new " + f.ReferenceClass.Name + ".Lazy{GetLazy=_=>this." + f.ReferenceClass.Name + ".Get(t." + f.Name + f.ReferenceField + ")});");
 			o.AppendLine("\t\t\t\t\t}");
 		}
 

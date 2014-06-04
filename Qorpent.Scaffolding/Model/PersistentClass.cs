@@ -29,7 +29,8 @@ namespace Qorpent.Scaffolding.Model
 		}
 
 		private void ReadInterfaces(IBSharpClass c, XElement xml){
-			foreach (var e in xml.Elements("qorpent-interface").Union(xml.Elements("interface")).Select(_=>_.Attr("code")).Distinct()){
+			foreach (var e in xml.Elements("qorpent-interface").Union(xml.Elements("interface")).Select(_=>_.Attr("code")).Distinct()
+				.OrderBy(_=>_.StartsWith("I")?"ZZZ"+_:_)){
 				CSharpInterfaces.Add(e);	
 			}
 		}
@@ -39,7 +40,7 @@ namespace Qorpent.Scaffolding.Model
 		/// </summary>
 		/// <returns></returns>
 		public Field[] GetOrderedFields(){
-			return Fields.Values.OrderByDescending(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
+			return Fields.Values.OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
 		}
 
 		private void ReadAllocationInfo(IBSharpClass c, XElement xml){

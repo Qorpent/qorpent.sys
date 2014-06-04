@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Qorpent.BSharp;
 
@@ -103,8 +104,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			o.AppendLine("\t\t\t\t\tvar value = reader.GetValue(i);");
 			o.AppendLine("\t\t\t\t\tif(value is DBNull)continue;");
 			o.AppendLine("\t\t\t\t\tswitch(name){");
-			foreach (var ormField in targetclass.GetOrderedFields())
-			{
+			foreach (var ormField in targetclass.GetOrderedFields()){
 				var type = ormField.DataType.CSharpDataType;
 				var name = ormField.Name;
 				if (ormField.IsReference)

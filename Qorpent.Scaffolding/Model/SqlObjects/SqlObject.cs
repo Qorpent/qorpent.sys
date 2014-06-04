@@ -172,10 +172,10 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 				FgFromClass(model, fgd, fgs);
 			}
 			foreach (var pcls in model.Classes.Values){
-				pcls.AllocationInfo.FileGroupName = pcls.AllocationInfo.FileGroupName.ToUpper();
 				var _pcls = model.Context.Get(pcls.AllocationInfo.FileGroupName);
+				pcls.AllocationInfo.FileGroupName = pcls.AllocationInfo.FileGroupName.ToUpper();
+				
 				if (null != _pcls ){
-
 					pcls.AllocationInfo.FileGroup = FgFromClass(model, _pcls, fgs); 
 				}
 				else{
@@ -197,7 +197,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		}
 
 		private static FileGroup FgFromClass(PersistentModel model, IBSharpClass fgd, Dictionary<string, FileGroup> fgs){
-			if (fgs.ContainsKey(fgd.Name)) return fgs[fgd.Name];
+			if (fgs.ContainsKey(fgd.Name)) return fgs[fgd.Name.ToUpper()];
 			var fg = new FileGroup();
 			fg.Setup(model, null, fgd, fgd.Compiled);
 			fg.Name = fg.Name.ToUpper();

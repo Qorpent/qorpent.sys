@@ -79,7 +79,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 		private void GenerateReferenceBehaviorMarkers(string ns){
 			var tables = Model.Classes.Values.OrderBy(_ => _.Name);
 			foreach (var t in tables){
-				foreach (var reference in t.Fields.Values.Where(_=>_.IsReference)){
+				foreach (var reference in t.GetOrderedFields().Where(_=>_.IsReference)){
 					SetupDirectMarker(t,reference);
 					if (reference.IsReverese){
 						SetupBackCollectionMarker(t, reference);
@@ -104,11 +104,11 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			o.AppendLine("\t\t///<summary>Marks active auto collection in " + reference.Table.Name + " of " +
 						 t.Name + " with " + reference.Name + " (" +
 						 reference.Comment + ")</summary>");
-			o.AppendLine("\t\tpublic bool AutoLoad" + reference.ReverseCollectionName  + "=" + reference.IsAutoLoadReverseByDefault.ToString().ToLowerInvariant() + ";");
+			o.AppendLine("\t\tpublic bool AutoLoad" + reference.ReferenceClass.Name + reference.ReverseCollectionName  + "=" + reference.IsAutoLoadReverseByDefault.ToString().ToLowerInvariant() + ";");
 			o.AppendLine("\t\t///<summary>Marks active auto collection in " + reference.Table.Name + " of " +
 						 t.Name + " with " + reference.Name + " (" +
 						 reference.Comment + ") as Lazy</summary>");
-			o.AppendLine("\t\tpublic bool Lazy" + reference.ReverseCollectionName+ "=" + reference.IsLazyLoadReverseByDefault.ToString().ToLowerInvariant() + ";");
+			o.AppendLine("\t\tpublic bool Lazy" + reference.ReferenceClass.Name + reference.ReverseCollectionName + "=" + reference.IsLazyLoadReverseByDefault.ToString().ToLowerInvariant() + ";");
 		}
 
 		private void GenerateGetAdapterMethods(string ns){

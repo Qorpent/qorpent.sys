@@ -173,7 +173,7 @@ namespace Qorpent.Scaffolding.Model{
 			Name = e.Attr("code");
 			Comment = e.Attr("name");
 			Idx = e.Attr("idx").ToInt();
-			
+			if (0 == Idx) Idx = 99999;
 		}
 		/// <summary>
 		/// 

@@ -77,7 +77,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 
 		private void GenerateIncomeReferences(PersistentClass targetclass)
 		{
-			var incomerefs = targetclass.ReverseFields.Values.Where(_=>_.IsReverese).OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
+			var incomerefs = targetclass.ReverseFields.Values.Where(_=>_.IsReverese ).OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
 			foreach (var incomeref in incomerefs){
 				var name = incomeref.ReverseCollectionName;
 				var cls = incomeref.Table.TargetClass;
@@ -104,11 +104,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 				if (of.IsReference)
 				{
 					GenerateRef(of);
-					if (of.Name == "Parent")
-					{
-						GenerateField(of, "ICollection<" + targetclass.Name + ">", "Children", "Дочерние объекты",
-									  " ?? (NativeChildren = new List<" + targetclass.Name + ">())");
-					}
+					
 				}
 				else
 				{
@@ -230,7 +226,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 		}
 
 		private static bool IsNonLazyType(string ltype){
-			return ltype == "int32" || ltype == "string" || ltype == "decimal" || ltype == "bool" || ltype == "boolean" || ltype == "datetime" || ltype.Contains("icollection");
+			return ltype == "int32" || ltype=="int" || ltype == "string" || ltype == "decimal" || ltype == "bool" || ltype == "boolean" || ltype == "datetime" || ltype.Contains("icollection");
 		}
 
 		private void WriteEndClass(){
