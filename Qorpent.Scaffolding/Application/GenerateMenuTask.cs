@@ -45,6 +45,7 @@ namespace Qorpent.Scaffolding.Application {
                     default: result = GenerateTextItem(el); break;
                 }
                 CopyAttributes(result, el);
+                result.SetAttr("class", result.Attr("class") + " menu__item-" + (el.HasAttribute("size") ? el.Attr("size") : "small"));
                 if (el.HasAttribute("action")) {
                     result.Attr("ng-click", el.Attr("action"));
                 }
@@ -88,6 +89,8 @@ namespace Qorpent.Scaffolding.Application {
             menuBody.SetAttr("class", menuBody.Attr("class") + " menu__ribbon-items");
             foreach (var g in root.Elements("MenuItem")) {
                 foreach (var m in g.Elements("MenuItem")) {
+                    // по-умолчанию кнопки в риббон-меню - большие
+                    if (!m.HasAttribute("size")) m.SetAttr("size", "large");
                     menuBody.Add(GenerateMenuItem(m)
                         .SetAttr("group", g.Attr("code"))
                         .SetAttr("menu-item", 1));
@@ -164,7 +167,7 @@ namespace Qorpent.Scaffolding.Application {
 
         private static void CopyAttributes(XElement target, XElement el = null) {
             if (null == el) el = target;
-            var ignoreAttributes = new[] { "code", "name", "iconclass", "icon", "prototype", "fullcode", "action" };
+            var ignoreAttributes = new[] { "code", "name", "iconclass", "icon", "prototype", "fullcode", "action", "size" };
             foreach (var a in el.Attributes().Where(_ => !_.Name.ToString().IsIn(ignoreAttributes))) {
                 target.SetAttr(a.Name.ToString(), a.Value);
             }
