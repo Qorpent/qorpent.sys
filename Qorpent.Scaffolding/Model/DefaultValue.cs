@@ -1,5 +1,4 @@
 ﻿using System.Xml.Linq;
-using Qorpent.Scaffolding.Sql;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model{

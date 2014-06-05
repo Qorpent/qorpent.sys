@@ -78,8 +78,9 @@ table slave
 	Code nvarchar(255) NOT NULL CONSTRAINT dbo_master_Code_UNQ UNIQUE DEFAULT '',
 	Id int NOT NULL CONSTRAINT dbo_master_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.master_SEQ)
 ) ON SECONDARY;
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.master where Id=0)  INSERT dbo.master (Id, Code) VALUES (0, '/');
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.master where Id=-9999)  INSERT dbo.master (Id, Code) VALUES (-9999, 'ERR');
 EXECUTE sp_addextendedproperty N'MS_Description', 'Код', N'SCHEMA', N'dbo', N'TABLE', N'master', N'COLUMN', 'Code';
-
 ".Trim(), scr.Trim());
 			var slave = model["slave"];
 			var swr = new TableWriter(slave)
@@ -96,6 +97,8 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Код', N'SCHEMA', N'dbo', N
 	Version datetime NOT NULL DEFAULT 0,
 	Id int NOT NULL CONSTRAINT dbo_slave_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.slave_SEQ)
 ) ON SECONDARY;
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.slave where Id=0)  INSERT dbo.slave (Id) VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.slave where Id=-9999)  INSERT dbo.slave (Id) VALUES (-9999);
 EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'master';
 EXECUTE sp_addextendedproperty N'MS_Description', 'Версия', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'Version';".Trim(), scr.Trim());
 		}
@@ -121,6 +124,8 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Версия', N'SCHEMA', N'd
 	Code varchar(255) NOT NULL CONSTRAINT dbo_master_Code_UNQ UNIQUE DEFAULT '',
 	Id int NOT NULL CONSTRAINT dbo_master_Id_PK PRIMARY KEY DEFAULT (nextval('dbo.master_SEQ'))
 ) TABLESPACE SECONDARY;
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.master where Id=0)  INSERT dbo.master (Id, Code) VALUES (0, '/');
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.master where Id=-9999)  INSERT dbo.master (Id, Code) VALUES (-9999, 'ERR');
 COMMENT ON COLUMN dbo.master.Code IS 'Код';
 ".Trim(), scr.Trim());
 			var slave = model["slave"];
@@ -138,6 +143,8 @@ COMMENT ON COLUMN dbo.master.Code IS 'Код';
 	Version datetime NOT NULL DEFAULT 0,
 	Id int NOT NULL CONSTRAINT dbo_slave_Id_PK PRIMARY KEY DEFAULT (nextval('dbo.slave_SEQ'))
 ) TABLESPACE SECONDARY;
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.slave where Id=0)  INSERT dbo.slave (Id) VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.slave where Id=-9999)  INSERT dbo.slave (Id) VALUES (-9999);
 COMMENT ON COLUMN dbo.slave.master IS 'Главный объект';
 COMMENT ON COLUMN dbo.slave.Version IS 'Версия';".Trim(), scr.Trim());
 		}
@@ -165,6 +172,8 @@ COMMENT ON COLUMN dbo.slave.Version IS 'Версия';".Trim(), scr.Trim());
 	Code nvarchar(255) NOT NULL CONSTRAINT dbo_master_Code_UNQ UNIQUE DEFAULT '',
 	Id int NOT NULL CONSTRAINT dbo_master_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.master_SEQ)
 ) ON SECONDARY;
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.master where Id=0)  INSERT dbo.master (Id, Code) VALUES (0, '/');
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.master where Id=-9999)  INSERT dbo.master (Id, Code) VALUES (-9999, 'ERR');
 EXECUTE sp_addextendedproperty N'MS_Description', 'Младший объект', N'SCHEMA', N'dbo', N'TABLE', N'master', N'COLUMN', 'slave';
 EXECUTE sp_addextendedproperty N'MS_Description', 'Код', N'SCHEMA', N'dbo', N'TABLE', N'master', N'COLUMN', 'Code';
 ".Trim(), scr.Trim());
@@ -183,6 +192,8 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Код', N'SCHEMA', N'dbo', N
 	Version datetime NOT NULL DEFAULT 0,
 	Id int NOT NULL CONSTRAINT dbo_slave_Id_PK PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.slave_SEQ)
 ) ON SECONDARY;
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.slave where Id=0)  INSERT dbo.slave (Id) VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM dbo.slave where Id=-9999)  INSERT dbo.slave (Id) VALUES (-9999);
 EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'master';
 EXECUTE sp_addextendedproperty N'MS_Description', 'Версия', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'Version';".Trim(), scr.Trim());
 		}

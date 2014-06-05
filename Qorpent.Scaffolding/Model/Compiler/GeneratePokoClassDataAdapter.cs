@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Text;
-using System.Xml.Linq;
 using Qorpent.BSharp;
-using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Scaffolding.Orm{
+namespace Qorpent.Scaffolding.Model.Compiler{
 	/// <summary>
 	/// Формирует вспомогательный класс адаптера для DataReader
 	/// </summary>
@@ -22,6 +20,19 @@ namespace Qorpent.Scaffolding.Orm{
 			ClassSearchCriteria = "dbtable";
 			DefaultOutputName = "Orm";
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		public override void Execute(IBSharpContext context)
+		{
+			this.Model = (PersistentModel)context.ExtendedData[PrepareModelTask.DefaultModelName];
+			base.Execute(context);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		protected PersistentModel Model { get; set; }
 
 		/// <summary>
 		/// 
@@ -37,7 +48,7 @@ namespace Qorpent.Scaffolding.Orm{
 		/// <param name="targetclasses"></param>
 		/// <returns></returns>
 		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses){
-			foreach (var targetclass in targetclasses){
+			foreach (var targetclass in Model.Classes.Values){
 				var prod = new Production{
 					FileName = "Adapters/" +targetclass.Name + "DataAdapter.cs",
 					GetContent = () => GenerateSingleClass(targetclass)
@@ -51,48 +62,44 @@ namespace Qorpent.Scaffolding.Orm{
 		/// </summary>
 		/// <param name="targetclass"></param>
 		/// <returns></returns>
-		private string GenerateSingleClass(IBSharpClass targetclass){
+		private string GenerateSingleClass(PersistentClass targetclass){
 			o = new StringBuilder();
-			var x = targetclass.Compiled;
-			WriteStartClass(targetclass, x);
-			WriteGetTableQuery(targetclass, x);
-			WriteGetSelectQuery(targetclass, x);
-			WriteSingleRecordProcessor(targetclass, x);
-			WriteEnumerableReaderProcessor(targetclass, x);
+			WriteStartClass(targetclass);
+			WriteGetTableQuery(targetclass);
+			WriteGetSelectQuery(targetclass);
+			WriteSingleRecordProcessor(targetclass);
+			WriteEnumerableReaderProcessor(targetclass);
 			WriteEndClass();
 			return o.ToString();
 		}
 
-		private void WriteGetTableQuery(IBSharpClass targetclass, XElement e){
+		private void WriteGetTableQuery(PersistentClass targetclass){
 			o.AppendLine("\t\t///<summary>Implementation of GetTableName</summary>");
 			o.AppendLine("\t\tpublic string GetTableName(object options = null) {");
-			o.AppendLine("\t\t\treturn \""+targetclass.Compiled.Attr("fullname")+"\";");
+			o.AppendLine("\t\t\treturn \""+targetclass.FullSqlName+"\";");
 			o.AppendLine("\t\t}");
 		}
 
-		private void WriteSingleRecordProcessor(IBSharpClass targetclass, XElement xElement){
+		private void WriteSingleRecordProcessor(PersistentClass targetclass){
 			o.AppendLine("\t\t///<summary>Implementation of ProcessRecord</summary>");
 			o.AppendLine("\t\tpublic "+targetclass.Name+" ProcessRecord(IDataReader reader, bool nativeorder = false) {");
 			o.AppendLine("\t\t\tvar result = new " + targetclass.Name + "();");
 			o.AppendLine("\t\t\tif ( nativeorder ) {");
 			var i = 0;
-			foreach (var ormField in targetclass.GetOrmFields()){
-				var type = ormField.Item3;
-				var name = ormField.Item2.Attr("code");
-				if (string.IsNullOrWhiteSpace(ormField.Item3)){ //ref
-					type = "Int32";
-					var sfx= "Id";
-					if (ormField.Item2.Attr("to").EndsWith(".Code")){
-						type = "String";
-						sfx = "Code";
-					}
-					name += sfx;
-					
+			foreach (var ormField in targetclass.GetOrderedFields()){
+				var type = ormField.DataType.ReaderCSharpDataType;
+				var name = ormField.Name;
+				if (ormField.IsReference){ //ref
+					name+= ormField.ReferenceField;
 				}
 				if (name == "Idx"){
 					name = "Index";
 				}
-				o.AppendLine("\t\t\t\tresult." + name + " = reader.Get" + type + "(" + i + ");");
+				var cast = "";
+				if (type != ormField.DataType.CSharpDataType){
+					cast = "(" + ormField.DataType.CSharpDataType + ")";
+				}
+				o.AppendLine("\t\t\t\tresult." + name + " = "+cast+"reader.Get" + type + "(" + i + ");");
 				i++;
 			}
 			o.AppendLine("\t\t\t}else{");
@@ -101,25 +108,24 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("\t\t\t\t\tvar value = reader.GetValue(i);");
 			o.AppendLine("\t\t\t\t\tif(value is DBNull)continue;");
 			o.AppendLine("\t\t\t\t\tswitch(name){");
-			foreach (var ormField in targetclass.GetOrmFields())
-			{
-				var type = ormField.Item3;
-				var name = ormField.Item2.Attr("code");
-				if (string.IsNullOrWhiteSpace(ormField.Item3))
-				{ //ref
-					type = "Int32";
-					var pfx = "Id";
-					if (ormField.Item2.Attr("to").EndsWith(".Code"))
-					{
-						type = "String";
-						pfx = "Code";
-					}
-					name += pfx;
+			foreach (var ormField in targetclass.GetOrderedFields()){
+				var type = ormField.DataType.ReaderCSharpDataType;
+				var name = ormField.Name;
+				if (ormField.IsReference)
+				{
+					name += ormField.ReferenceField;
 				}
 				if (name == "Idx"){
 					name = "Index";
 				}
-				o.AppendLine("\t\t\t\t\t\tcase \"" + name.ToLower() + "\": result."+name+" = Convert.To"+type+"(value);break;");
+				if (type != ormField.DataType.CSharpDataType){
+					o.AppendLine("\t\t\t\t\t\tcase \"" + name.ToLower() + "\": result." + name + " = ("+ormField.DataType.CSharpDataType+")" +
+							 "value;break;");
+				}
+				else{
+					o.AppendLine("\t\t\t\t\t\tcase \"" + name.ToLower() + "\": result." + name + " = Convert.To" + type +
+					             "(value);break;");
+				}
 				i++;
 			}
 			o.AppendLine("\t\t\t\t\t}");
@@ -129,7 +135,7 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("\t\t}");
 		}
 
-		private void WriteEnumerableReaderProcessor(IBSharpClass targetclass, XElement xElement)
+		private void WriteEnumerableReaderProcessor(PersistentClass targetclass)
 		{
 			o.AppendLine("\t\t///<summary>Implementation of ProcessRecordSet</summary>");
 			o.AppendLine("\t\tpublic IEnumerable<" + targetclass.Name + "> ProcessRecordSet(IDataReader reader, bool nativeorder = false) {");
@@ -139,32 +145,27 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("\t\t}");
 		}
 
-		private void WriteGetSelectQuery(IBSharpClass targetclass, XElement x){
+		private void WriteGetSelectQuery(PersistentClass targetclass){
 			o.AppendLine("\t\t///<summary>Implementation of PrepareSelectQuery</summary>");
 			o.AppendLine("\t\tpublic string PrepareSelectQuery(object conditions = null, object hints = null) {");
 			o.AppendLine("\t\t\tvar sb = new StringBuilder();");
 			o.Append("\t\t\tsb.Append(\"select ");
 			bool fst = true;
-			foreach (var of in targetclass.GetOrmFields()){
+			foreach (var of in targetclass.GetOrderedFields()){
 				if (fst){
 					fst = false;
 				}
 				else{
 					o.Append(", ");
 				}
-				var n = of.Item2.Attr("code");
+				var n = of.Name;
 				
 				var rn = n;
-				if (of.Item2.Name.LocalName == "ref"){
-					var sfx = "Id";
-					if (of.Item2.Attr("to").EndsWith("Code")){
-						sfx = "Code";
-					}
-					rn += sfx;
+				if (of.IsReference){
+					rn += of.ReferenceField;
 				}
 				if (n == "Idx"){
 					rn = "\\\"Index\\\"";
-
 				}
 				o.Append(n);
 				if (rn != n){
@@ -172,7 +173,7 @@ namespace Qorpent.Scaffolding.Orm{
 				}
 
 			}
-			o.Append(" from " + targetclass.Compiled.Attr("fullname")+" \");");
+			o.Append(" from " + targetclass.FullSqlName+" \");");
 			o.AppendLine();
 			o.AppendLine("\t\t\tvar where = conditions as string;");
 			o.AppendLine("\t\t\tif ( null != where ) {");
@@ -189,7 +190,7 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("}");
 		}
 
-		private void WriteStartClass(IBSharpClass targetclass, XElement x)
+		private void WriteStartClass(PersistentClass targetclass)
 		{
 			o.AppendLine(Header);
 			o.AppendLine("using System;");
@@ -201,7 +202,7 @@ namespace Qorpent.Scaffolding.Orm{
 			o.AppendLine("#endif");
 			o.AppendFormat("namespace {0}.Adapters {{\r\n", targetclass.Namespace);
 			o.AppendLine("\t///<summary>");
-			o.AppendLine("\t/// Data Adapter for " + x.Attr("name"));
+			o.AppendLine("\t/// Data Adapter for " + targetclass.Name);
 			o.AppendLine("\t///</summary>");
 			o.AppendLine("#if !NOQORPENT");
 			o.AppendFormat("\tpublic partial class {0}DataAdapter : IObjectDataAdapter<{0}> {{\r\n", targetclass.Name);

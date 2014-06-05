@@ -23,7 +23,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <param name="cls"></param>
 		/// <param name="bscls"></param>
 		/// <param name="xml"></param>
-		public override void Setup(PersistentModel model, PersistentClass cls, BSharp.IBSharpClass bscls, System.Xml.Linq.XElement xml)
+		public override SqlObject Setup(PersistentModel model, PersistentClass cls, BSharp.IBSharpClass bscls, System.Xml.Linq.XElement xml)
 		{
 			base.Setup(model, cls, bscls, xml);
 			if (null != xml){
@@ -38,7 +38,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			else{
 				this.DataType = cls.DataTypeMap["int"];
 			}
-
+			return this;
 		}
 		/// <summary>
 		/// 

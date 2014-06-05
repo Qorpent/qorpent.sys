@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Scaffolding.Model.SqlObjects;
-using Qorpent.Scaffolding.Model.SqlWriters;
-using Qorpent.Scaffolding.Sql;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model{
@@ -79,6 +78,8 @@ namespace Qorpent.Scaffolding.Model{
 			ReadScripts();
 			return this;
 		}
+
+		
 
 		private void SetupDefaultScripts(){
 			if (GenerationOptions.IncludeDialect.HasFlag(SqlDialect.SqlServer) && GenerationOptions.GenerateCreateScript)
@@ -342,6 +343,24 @@ namespace Qorpent.Scaffolding.Model{
 		/// Дополнительные SQL - скрипты для построения схемы
 		/// </summary>
 		public IList<SqlScript> ExtendedScripts { get; private set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dialect"></param>
+		/// <param name="mode"></param>
+		/// <returns></returns>
+		public string GetScript(SqlDialect dialect, ScriptMode mode){
+			var sb = new StringBuilder();
+			foreach (var sw in GetWriters(dialect,mode)){
+				if (null == sw) continue;
+				var subresult = sw.ToString();
+				if (!string.IsNullOrWhiteSpace(subresult)){
+					sb.AppendLine(subresult);
+				}
+			}
+			return sb.ToString();
+		}
 		/// <summary>
 		/// Возваращает все скрипты для указанной позиции и языка в генерации
 		/// </summary>
@@ -356,7 +375,7 @@ namespace Qorpent.Scaffolding.Model{
 		{
 			foreach (var obj in SqlObject.CreateDefaults(cls))
 			{
-				obj.MyClass = cls;
+				obj.Table = cls;
 				cls.SqlObjects.Add(obj);
 			}
 			foreach (var e in xml.Elements())
@@ -452,6 +471,7 @@ namespace Qorpent.Scaffolding.Model{
 			}
 			
 		}
+
 		/// <summary>
 		/// 
 		/// </summary>

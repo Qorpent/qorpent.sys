@@ -24,7 +24,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <summary>
 		/// Ссылка на класс-контейнер
 		/// </summary>
-		public PersistentClass MyClass { get; set; }
+		public PersistentClass Table { get; set; }
 		/// <summary>
 		/// B# с определением
 		/// </summary>
@@ -46,16 +46,29 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <param name="bscls"></param>
 		/// <param name="xml"></param>
 		/// <returns></returns>
-		public virtual void Setup(PersistentModel model, PersistentClass cls, IBSharpClass bscls, XElement xml){
-			MyClass = cls;
+		public virtual SqlObject Setup(PersistentModel model, PersistentClass cls, IBSharpClass bscls, XElement xml){
+			Table = cls;
 			Model = model;
 			BSClass = bscls;
+			if (null == Model && null != cls){
+				Model = cls.Model;
+			}
 			Definition = xml;
 			if (null != xml){
 				Name = xml.ChooseAttr("sqlname", "code");
 				Comment = xml.Attr("name");
+				this.External = xml.GetSmartValue("external");
+				this.ExternalBody = xml.GetSmartValue("externalbody");
+				this.Dialect = SqlDialect.Ansi;
+				var dialect = xml.GetSmartValue("dialect");
+				if (!string.IsNullOrWhiteSpace(dialect))
+				{
+					this.Dialect = dialect.To<SqlDialect>();
+				}
+				this.Body = xml.Value;
 			}
-
+			
+			return this;
 		}
 		/// <summary>
 		/// Комментарий
@@ -156,17 +169,22 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		private static IEnumerable<SqlObject> GenerateFileGroups(PersistentModel model){
 			var fgs = new Dictionary<string, FileGroup>();
 			foreach (var fgd in model.Context.ResolveAll(model.FileGroupPrototype)){
-				var fg = new FileGroup();
-				fg.Setup(model,null,fgd,fgd.Compiled);
-				fg.Name = fg.Name.ToUpper();
-				fgs[fg.Name.ToUpper()] = fg;
+				FgFromClass(model, fgd, fgs);
 			}
 			foreach (var pcls in model.Classes.Values){
+				var _pcls = model.Context.Get(pcls.AllocationInfo.FileGroupName);
 				pcls.AllocationInfo.FileGroupName = pcls.AllocationInfo.FileGroupName.ToUpper();
-				if (!fgs.ContainsKey(pcls.AllocationInfo.FileGroupName)){
-					fgs[pcls.AllocationInfo.FileGroupName] = new FileGroup{Name = pcls.AllocationInfo.FileGroupName};
+				
+				if (null != _pcls ){
+					pcls.AllocationInfo.FileGroup = FgFromClass(model, _pcls, fgs); 
 				}
-				pcls.AllocationInfo.FileGroup = fgs[pcls.AllocationInfo.FileGroupName];
+				else{
+					if (!fgs.ContainsKey(pcls.AllocationInfo.FileGroupName)){
+						fgs[pcls.AllocationInfo.FileGroupName] = new FileGroup{Name = pcls.AllocationInfo.FileGroupName};
+					}
+					pcls.AllocationInfo.FileGroup = fgs[pcls.AllocationInfo.FileGroupName];
+				}
+				
 			}
 			if (!fgs.ContainsKey("SECONDARY")){
 				fgs["SECONDARY"] = new FileGroup{Name = "SECONDARY"};
@@ -178,6 +196,16 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			return fgs.Values;
 		}
 
+		private static FileGroup FgFromClass(PersistentModel model, IBSharpClass fgd, Dictionary<string, FileGroup> fgs){
+			if (fgs.ContainsKey(fgd.Name)) return fgs[fgd.Name.ToUpper()];
+			var fg = new FileGroup();
+			fg.Setup(model, null, fgd, fgd.Compiled);
+			fg.Name = fg.Name.ToUpper();
+			fgs[fg.Name.ToUpper()] = fg;
+			return fg;
+
+		}
+
 		/// <summary>
 		/// Формирует стандартные объекты для таблицы
 		/// </summary>
@@ -185,14 +213,10 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <returns></returns>
 		public static IEnumerable<SqlObject> CreateDefaults(PersistentClass cls){
 			if (cls.PrimaryKey.IsAutoIncrement){
-				var seq = new Sequence();
-				seq.Setup(null,cls,null,null);
-				yield return seq;
+				yield return new Sequence().Setup(null, cls, null, null);
 			}
 			if (cls.Model.GenerationOptions.GeneratePartitions && cls.AllocationInfo.Partitioned){
-				var part = new PartitionDefinition();
-				part.Setup(null, cls, null, null);
-				yield return part;
+				yield return new PartitionDefinition().Setup(null, cls, null, null);
 			}
 		}
 		/// <summary>
@@ -202,22 +226,15 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <param name="e"></param>
 		/// <returns></returns>
 		public static IEnumerable<SqlObject> Create(PersistentClass cls, XElement e){
-			foreach (var element in e.Elements()){
-				var name = element.Name.LocalName;
+				var name = e.Name.LocalName;
 				if (name == "trigger"){
-					var trigger = new SqlTrigger();
-					trigger.Setup(null,cls,null,e);
-					yield return trigger;
+					yield return new SqlTrigger().Setup(null, cls, null, e);
 				}else if (name == "view"){
-					var view = new SqlView();
-					view.Setup(null, cls, null, e);
-					yield return view;
-				}else if (name == "function" || name=="void" || !string.IsNullOrWhiteSpace(element.Value) ){
-					var function = new SqlFunction();
-					function.Setup(null, cls, null, e);
-					yield return function;
+					yield return new SqlView().Setup(null, cls, null, e);
+				}else if (name == "function" || name=="void" || !string.IsNullOrWhiteSpace(e.Value) ){
+					yield return new SqlFunction().Setup(null, cls, null, e);
 				}
-			}
+			
 		}
 
 		/// <summary>
@@ -225,12 +242,19 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// </summary>
 		/// <returns></returns>
 		public string ResolveBody(){
+			var result = GetRawBody().Trim();
+			if (result.StartsWith("(") && result.EndsWith(")")){
+				result = result.Substring(1, result.Length - 2).Trim();
+			}
+			return result;
+		}
+
+		private string GetRawBody(){
 			if (!string.IsNullOrWhiteSpace(Body) && Body != "NULL") return Body;
 			if (!string.IsNullOrWhiteSpace(ExternalBody)){
 				return Model.ResolveExternalContent(this.Definition, ExternalBody);
 			}
-			if (!string.IsNullOrWhiteSpace(External))
-			{
+			if (!string.IsNullOrWhiteSpace(External)){
 				return Model.ResolveExternalContent(this.Definition, External);
 			}
 			return "print 'NO BODY'";

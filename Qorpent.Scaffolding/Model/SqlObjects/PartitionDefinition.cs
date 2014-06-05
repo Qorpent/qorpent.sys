@@ -13,7 +13,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <param name="cls"></param>
 		/// <param name="bscls"></param>
 		/// <param name="xml"></param>
-		public override void Setup(PersistentModel model, PersistentClass cls, IBSharpClass bscls, XElement xml)
+		public override SqlObject Setup(PersistentModel model, PersistentClass cls, IBSharpClass bscls, XElement xml)
 		{
 			base.Setup(model, cls, bscls, xml);
 			this.Allocation = cls.AllocationInfo;
@@ -26,6 +26,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			else{
 				this.Type = "int";
 			}
+			return this;
 		}
 		/// <summary>
 		/// 

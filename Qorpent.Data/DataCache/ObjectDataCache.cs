@@ -17,7 +17,8 @@ namespace Qorpent.Data.DataCache
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class ObjectDataCache<T>:IObjectDataCache<T> where T:class,new(){
-	
+		
+
 		/// <summary>
 		/// Служба генерации соединений
 		/// </summary>
@@ -167,7 +168,7 @@ namespace Qorpent.Data.DataCache
 			string code = "";
 			var vid = value as IWithId;
 			
-			if (null==vid || -9999 == vid.Id ){
+			if (null==vid || ( vid.Id < 0 && vid.Id!=-9999) ){
 				id = GetNextId();
 				if (null != vid){
 					vid.Id = id;

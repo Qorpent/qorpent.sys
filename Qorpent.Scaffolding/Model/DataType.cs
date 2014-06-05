@@ -9,11 +9,21 @@ namespace Qorpent.Scaffolding.Model{
 	/// Описание типа данных для класса
 	/// </summary>
 	public class DataType{
+		private string _readerCSharpDataType;
+		private string _cSharpDataType;
+
 		/// <summary>
 		/// 
 		/// </summary>
 		public DataType(){
 			SqlDataTypes = new Dictionary<SqlDialect, SqlDataType>();
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public DataType Copy(){
+			return this.MemberwiseClone() as DataType;
 		}
 		/// <summary>
 		/// Признак строкового параметра
@@ -28,6 +38,13 @@ namespace Qorpent.Scaffolding.Model{
 		{
 			get { return CSharpDataType.ToLowerInvariant() == "datetime"; }
 		}
+		/// <summary>
+		/// Тип данных на ридере
+		/// </summary>
+		public string ReaderCSharpDataType{
+			get { return string.IsNullOrWhiteSpace(_readerCSharpDataType)?CSharpDataType:_readerCSharpDataType; }
+			set { _readerCSharpDataType = value; }
+		}
 
 		/// <summary>
 		/// Код типа данных в BSharp
@@ -36,7 +53,16 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// Тип C#
 		/// </summary>
-		public string CSharpDataType { get; set; }
+		public string CSharpDataType{
+			get { return _cSharpDataType; }
+			set{
+				_cSharpDataType = value;
+				if (string.IsNullOrWhiteSpace(_readerCSharpDataType)){
+					_readerCSharpDataType = value;
+				}
+			}
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -62,7 +88,7 @@ namespace Qorpent.Scaffolding.Model{
 			var result = new Dictionary<string, DataType>();
 			result["int"] = new DataType{
 				Code = "int",
-				CSharpDataType = "int",
+				CSharpDataType = "Int32",
 				SqlDataTypes ={
 					{SqlDialect.Ansi, new SqlDataType{Name = "integer"}},
 					{SqlDialect.SqlServer, new SqlDataType{Name = "int"}},
@@ -72,7 +98,7 @@ namespace Qorpent.Scaffolding.Model{
 			result["long"] = new DataType
 			{
 				Code = "long",
-				CSharpDataType = "long",
+				CSharpDataType = "Int64",
 				SqlDataTypes ={
 					{SqlDialect.Ansi, new SqlDataType{Name = "bigint"}},
 				}
@@ -80,7 +106,7 @@ namespace Qorpent.Scaffolding.Model{
 			result["bool"] = new DataType
 			{
 				Code = "bool",
-				CSharpDataType = "bool",
+				CSharpDataType = "Boolean",
 				SqlDataTypes ={
 					{SqlDialect.Ansi, new SqlDataType{Name = "boolean"}},
 					{SqlDialect.SqlServer, new SqlDataType{Name = "bit"}},
@@ -101,7 +127,7 @@ namespace Qorpent.Scaffolding.Model{
 			result["decimal"] = new DataType
 			{
 				Code = "decimal",
-				CSharpDataType = "decimal",
+				CSharpDataType = "Decimal",
 				SqlDataTypes ={
 					{SqlDialect.Ansi, new SqlDataType{Name = "numeric",Size = 18,Precession = 6}},
 					{SqlDialect.SqlServer, new SqlDataType{Name = "decimal",Size = 18,Precession = 6}},
@@ -111,7 +137,7 @@ namespace Qorpent.Scaffolding.Model{
 			result["string"] = new DataType
 			{
 				Code = "string",
-				CSharpDataType = "string",
+				CSharpDataType = "String",
 				SqlDataTypes ={
 					{SqlDialect.Ansi, new SqlDataType{Name = "varchar",Size = 255}},
 					{SqlDialect.SqlServer, new SqlDataType{Name = "nvarchar",Size = 255}},
@@ -122,7 +148,7 @@ namespace Qorpent.Scaffolding.Model{
 			result["shortstring"] = new DataType
 			{
 				Code = "shortstring",
-				CSharpDataType = "string",
+				CSharpDataType = "String",
 				SqlDataTypes ={
 					{SqlDialect.Ansi, new SqlDataType{Name = "varchar",Size = 20}},
 					{SqlDialect.SqlServer, new SqlDataType{Name = "nvarchar",Size = 20}},
@@ -133,7 +159,7 @@ namespace Qorpent.Scaffolding.Model{
 			result["longstring"] = new DataType
 			{
 				Code = "longstring",
-				CSharpDataType = "string",
+				CSharpDataType = "String",
 				SqlDataTypes ={
 					{SqlDialect.Ansi, new SqlDataType{Name = "varchar",Size = 400}},
 					{SqlDialect.SqlServer, new SqlDataType{Name = "nvarchar",Size = 400}},
@@ -143,7 +169,7 @@ namespace Qorpent.Scaffolding.Model{
 			result["text"] = new DataType
 			{
 				Code = "text",
-				CSharpDataType = "string",
+				CSharpDataType = "String",
 				SqlDataTypes ={
 					{SqlDialect.Ansi, new SqlDataType{Name = "varchar",Size = 8000}},
 					{SqlDialect.SqlServer, new SqlDataType{Name = "nvarchar",Size = -1}},
@@ -161,7 +187,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <returns></returns>
 		public DataType Setup(IBSharpClass c, XElement dt){
 			Code = dt.Attr("code");
-			CSharpDataType = dt.Attr("scharp", Code);
+			CSharpDataType = dt.ChooseAttr("scharp","type", Code);
 			string ansitype = dt.Attr("sql", Code);
 			int size = dt.Attr("size").ToInt();
 			int precession = dt.Attr("precession").ToInt();

@@ -38,13 +38,14 @@ namespace Qorpent.Scaffolding.Model.SqlObjects
 		/// <param name="xml"></param>
 		/// <param name="model"></param>
 		/// <param name="cls"></param>
-		public override void Setup(PersistentModel model, PersistentClass cls, IBSharpClass bscls, XElement xml)
+		public override SqlObject Setup(PersistentModel model, PersistentClass cls, IBSharpClass bscls, XElement xml)
 		{
 			base.Setup(model,cls,bscls,xml);
 			WithIndex = xml.Attr("withidx","0").ToBool();
 			FileSize = xml.Attr("filesize","10").ToInt();
 			FileCount = xml.Attr("filecount","1").ToInt();
 			IsDefault = xml.Attr("isdefault","0").ToBool();
+			return this;
 		}
 
 

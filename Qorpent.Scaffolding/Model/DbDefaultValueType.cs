@@ -1,8 +1,8 @@
-﻿namespace Qorpent.Scaffolding.Sql{
+﻿namespace Qorpent.Scaffolding.Model{
 	/// <summary>
 	/// 
 	/// </summary>
-	public enum DbDialect{
+	public enum DbDefaultValueType{
 		/// <summary>
 		/// 
 		/// </summary>
@@ -10,10 +10,14 @@
 		/// <summary>
 		/// 
 		/// </summary>
-		TSQL,
+		Native,
 		/// <summary>
 		/// 
 		/// </summary>
-		PSQL
+		Expression,
+		/// <summary>
+		/// 
+		/// </summary>
+		String
 	}
 }
