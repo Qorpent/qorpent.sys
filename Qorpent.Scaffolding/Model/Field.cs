@@ -80,6 +80,14 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		public bool IsLazyLoadReverseByDefault { get; set; }
 		/// <summary>
+		/// Признак того, что целевой объект должен клонироваться по умолчанию при вызове Clone
+		/// </summary>
+		public bool IsCloneByDefault { get; set; }
+		/// <summary>
+		/// Признак того, что целевая коллекция должна клонироваться по умолчанию при вызове Clone
+		/// </summary>
+		public bool IsReverseCloneByDefault { get; set; }
+		/// <summary>
 		/// Пользовательское имя для обратной коллекции
 		/// </summary>
 		public string CustomReverseName { get; set; }
@@ -99,6 +107,25 @@ namespace Qorpent.Scaffolding.Model{
 		/// Перекрытие размерности типа данных для данного поля
 		/// </summary>
 		public int Size { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool Resolve { get; set; }
+		/// <summary>
+		/// Приоритет при резолюции
+		/// </summary>
+		public int ResolvePriority { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public ResolveType ResolveType { get{
+			if (!Resolve) return ResolveType.None;
+			if (!Table.ResolveAble) return ResolveType.None;
+			if (Name == "Tag") return ResolveType.Tag;
+			if (IsReference) return ResolveType.Delegate;
+			if (Name.Contains("Properites") || DataType.CSharpDataType.Contains("Dictionary")) return ResolveType.Dictionary;
+			return ResolveType.List;
+		} }
 
 		/// <summary>
 		/// Признак того, что проход по данной ссылке может привести к циркулярным проходам
@@ -176,6 +203,8 @@ namespace Qorpent.Scaffolding.Model{
 			Comment = e.Attr("name");
 			Idx = e.Attr("idx").ToInt();
 			if (0 == Idx) Idx = 99999;
+			Resolve = e.GetSmartValue("resolve").ToBool();
+			ResolvePriority = e.GetSmartValue("resolve").ToInt();
 		}
 		/// <summary>
 		/// 
@@ -216,6 +245,9 @@ namespace Qorpent.Scaffolding.Model{
 			}
 			IsAutoLoadReverseByDefault = e.GetSmartValue("reverse-auto").ToBool();
 			IsLazyLoadReverseByDefault = e.GetSmartValue("reverse-lazy").ToBool();
+			IsCloneByDefault = e.GetSmartValue("clone").ToBool();
+			IsReverseCloneByDefault = e.GetSmartValue("reverse-clone").ToBool();
+			
 			var refto = e.Attr("to", Name + ".PrimaryKey");
 			if (!refto.Contains(".")){
 				refto += ".PrimaryKey";

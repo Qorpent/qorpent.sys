@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using NUnit.Framework;
 using Qorpent.BSharp.Preprocessor;
-using Qorpent.Scaffolding.Sql;
 
 namespace Qorpent.Serialization.Tests.BSharp.Preprocessor
 {
