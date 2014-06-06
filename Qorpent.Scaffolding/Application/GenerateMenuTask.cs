@@ -45,6 +45,7 @@ namespace Qorpent.Scaffolding.Application {
                     default: result = GenerateTextItem(el); break;
                 }
                 CopyAttributes(result, el);
+                /*result.SetAttr("menu-title", el.Attr("name"));*/
                 result.SetAttr("class", result.Attr("class") + " menu__item-" + (el.HasAttribute("size") ? el.Attr("size") : "small"));
                 if (el.HasAttribute("action")) {
                     result.Attr("ng-click", el.Attr("action"));
