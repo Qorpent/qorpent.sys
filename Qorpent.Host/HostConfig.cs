@@ -26,10 +26,12 @@ namespace Qorpent.Host
 		/// <param name="xml"></param>
 		public HostConfig(XElement xml):this()
 		{
+			Cached = new List<string>();
 			if (null != xml)
 			{
 				LoadXmlConfig(xml);
 			}
+			
 			
 		}
 		/// <summary>
@@ -84,6 +86,10 @@ namespace Qorpent.Host
 			{
 				ExcludeConfigMasks.Add(e.Describe().GetEfficienValue());
 			}
+			foreach (var e in xml.Elements("cache")){
+				Cached.Add(e.Value);
+			}
+			ForceNoCache = xml.Attr("forcenocache").ToBool();
 		}
 		/// <summary>
 		/// 
@@ -309,5 +315,13 @@ namespace Qorpent.Host
 		/// 
 		/// </summary>
 		public string DefaultPage { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool ForceNoCache { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public IList<string> Cached { get; private set; }
 	}
 }

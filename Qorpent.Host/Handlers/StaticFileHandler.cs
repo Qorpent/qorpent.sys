@@ -61,7 +61,7 @@ namespace Qorpent.Host.Handlers
 				FinishWirh404(callcontext);
 				return;
 			}
-			Finish200(callcontext, staticdescriptor);
+			Finish200(server,callcontext, staticdescriptor);
 		}
 
 		private void RunApplicationStarter(IHostServer server, HttpListenerContext callcontext, string callbackEndPoint, CancellationToken cancel, string abspath){
@@ -81,16 +81,19 @@ namespace Qorpent.Host.Handlers
 					_applicationCache[abspath] = null;
 				}
 			}
-			Finish(callcontext,abspath);
+			Finish(server,callcontext,abspath);
 		}
 
-		private static void Finish200(HttpListenerContext callcontext, StaticContentDescriptor staticdescriptor){
+		private static void Finish200(IHostServer server, HttpListenerContext callcontext, StaticContentDescriptor staticdescriptor){
 			var filetime = callcontext.SetLastModified(staticdescriptor.GetLastVersion());
 			if (filetime <= callcontext.GetIfModifiedSince()){
 				callcontext.Finish("", status: 304);
 			}
 			else{
 				callcontext.Response.AddHeader("Qorpent-Disposition", staticdescriptor.FullName);
+				if (server.Config.ForceNoCache){
+					callcontext.Response.AddHeader("Cache-Control", "no-cache, must-revalidate");	
+				}
 				if (staticdescriptor.IsFixedContent){
 					callcontext.Finish(staticdescriptor.FixedContent, staticdescriptor.MimeType + "; charset=utf-8");
 				}
@@ -125,15 +128,15 @@ namespace Qorpent.Host.Handlers
 				}
 			}
 
-			Finish(context, abspath);
+			Finish(server,context, abspath);
 		}
 
-		private static void Finish(HttpListenerContext context, string abspath){
+		private static void Finish(IHostServer server,HttpListenerContext context, string abspath){
 			if (null == _applicationCache[abspath]){
 				FinishWirh404(context);
 			}
 			else{
-				Finish200(context, _applicationCache[abspath]);
+				Finish200(server, context, _applicationCache[abspath]);
 			}
 		}
 	}

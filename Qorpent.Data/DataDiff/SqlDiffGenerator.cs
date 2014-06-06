@@ -152,7 +152,10 @@ namespace Qorpent.Data.DataDiff{
 							_ => (_.FromTable.ToLowerInvariant() == t.ToLowerInvariant()||_.FromTable=="*") && _.FromField.ToLowerInvariant() == "aliascodes");
 					if (usealiascodes){
 						_output.WriteLine(
-							"\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.code = {1}_code or {2}.aliascodes like '%/'+{1}_code+'/%' ),-9999) where {1} is null and {1}_code is not null ",
+							"\t\tupdate @{0} set {1} = (select id from {2} where {2}.code = {1}_code ) where {1} is null and {1}_code is not null ",
+							tn, map.Key, map.Value);
+						_output.WriteLine(
+							"\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.aliascodes like '%/'+{1}_code+'/%' ),-9999) where {1} is null and {1}_code is not null ",
 							tn, map.Key, map.Value);
 					}
 					else{

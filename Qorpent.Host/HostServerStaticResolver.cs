@@ -123,7 +123,7 @@ namespace Qorpent.Host{
 			var local = Path.GetFileName(name) ?? "";
 			var resolvedResourcePair = (
 				                           from k in _resources
-				                           where k.Key.EndsWith(local)
+				                           where k.Key.EndsWith("."+local)
 				                           let weight = MatchTail(k.Key, local)
 				                           orderby weight descending
 				                           select new {k.Key,k.Value}
