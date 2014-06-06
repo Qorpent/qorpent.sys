@@ -76,10 +76,6 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 				}
 				else
 				{
-					if (name == "Idx")
-					{
-						name = "Index";
-					}
 					GenerateField(of, "", name,over:over);
 				}
 				if (noqorpent)

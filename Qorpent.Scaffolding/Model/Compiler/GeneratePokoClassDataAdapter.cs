@@ -60,9 +60,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 				if (ormField.IsReference){ //ref
 					name+= ormField.ReferenceField;
 				}
-				if (name == "Idx"){
-					name = "Index";
-				}
+				
 				var cast = "";
 				if (type != ormField.DataType.CSharpDataType){
 					cast = "(" + ormField.DataType.CSharpDataType + ")";
@@ -83,9 +81,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 				{
 					name += ormField.ReferenceField;
 				}
-				if (name == "Idx"){
-					name = "Index";
-				}
+			
 				if (type != ormField.DataType.CSharpDataType){
 					o.AppendLine("\t\t\t\t\t\tcase \"" + name.ToLower() + "\": result." + name + " = ("+ormField.DataType.CSharpDataType+")" +
 							 "value;break;");

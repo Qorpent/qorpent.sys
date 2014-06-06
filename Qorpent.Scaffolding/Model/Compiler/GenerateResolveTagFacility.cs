@@ -32,14 +32,27 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			Namespace(DefaultNamespce);
 			Summary("Options for tag resolution in model");
 			Class("ResolveTagOptions");
-			Summary("Defult instance");
+			Summary("Defult instance for full resolution");
 			Write("public static readonly ResolveTagOptions Default  = new ResolveTagOptions();");
+			Summary("Default instance for resolution on only one level");
+			Write("public static readonly ResolveTagOptions SelfOnly = new ResolveTagOptions{");
+			IndentLevel++;
+			foreach (var table in Tables.Where(_ => _.ResolveAble))
+			{
+				foreach (var fld in table.GetOrderedFields().Where(_ => _.Resolve && _.IsReference))
+				{
+					var name = table.Name + fld.Name;
+					Write(name+"=false,");
+				}
+			}
+			IndentLevel--;
+			Write("};");
 			foreach (var table in Tables.Where(_ => _.ResolveAble))
 			{
 				foreach (var fld in table.GetOrderedFields().Where(_=>_.Resolve)){
 					var name = table.Name + fld.Name;
 					Summary(name + " can be used in resolution");
-					Write("public bool " + name + " = " + true + ";");
+					Write("public bool " + name + " = true;");
 				}	
 			}
 			Close();
@@ -61,24 +74,24 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 					Write("public static string ResolveTag(this " + table.Name + " target, string name, ResolveTagOptions options = null) {");
 						IndentLevel++;
 						Write("if(null==target)return \"\";");
-						Write("if(string.IsNullOrWhitespace(name))return \"\";");
+						Write("if(string.IsNullOrWhiteSpace(name))return \"\";");
 						Write("options = options ?? ResolveTagOptions.Default;");
 						Write("var result = string.Empty;");
 						foreach (var fld in table.GetOrderedFields().Where(_=>_.ResolveType!=ResolveType.None).OrderBy(_=>_.ResolvePriority)){
 							Write("if (options." + table.Name + fld.Name + "){");
 							IndentLevel++;
 							if (fld.ResolveType == ResolveType.Delegate){
-								Write("result = "+fld.Name+".ResolveTag(name);");
+								Write("result = target."+fld.Name+".ResolveTag(name);");
 							}else if (fld.ResolveType == ResolveType.Tag){
-								Write("result = TagHelper.Value ( " + fld.Name + ", name);");
+								Write("result = TagHelper.Value ( target." + fld.Name + ", name);");
 							}
 							else if (fld.ResolveType == ResolveType.List){
-								Write("result = " + fld.Name + ".SmartSplit().Contains(name)?name:\"\"");
+								Write("result = target." + fld.Name + ".SmartSplit().Contains(name)?name:\"\";");
 							}
 							else if (fld.ResolveType == ResolveType.Dictionary){
-								Write("if(" + fld.Name + ".ContainsKey(name) result = " + fld.Name + "[name]'");
+								Write("if(target." + fld.Name + ".ContainsKey(name) result = target." + fld.Name + "[name];");
 							}
-							Write("if (!string.IsNullOrWhitespace(result))return result;");
+							Write("if (!string.IsNullOrWhiteSpace(result))return result;");
 							Close();
 						}
 						Write("return result??\"\";");

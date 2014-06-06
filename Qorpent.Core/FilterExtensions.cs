@@ -19,7 +19,7 @@ namespace Qorpent{
 			if (null == target) return null;
 			if (null == filters) return target;
 			context = context ?? new ConfigBase();
-			foreach (var filter in filters.OrderBy(_=>_.Index)){
+			foreach (var filter in filters.OrderBy(_=>_.Idx)){
 				if (filter.IsMatch(target, context)){
 					var state = filter.Apply(target, context);
 					if (state == FilterState.Finished) break;

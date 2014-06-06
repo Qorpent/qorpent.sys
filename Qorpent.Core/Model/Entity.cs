@@ -44,7 +44,7 @@ namespace Qorpent.Model {
 		/// <summary>
 		/// User-defined order index
 		/// </summary>
-		public virtual int Index { get; set; }
+		public virtual int Idx { get; set; }
 
 
 		/// <summary>
@@ -121,7 +121,10 @@ namespace Qorpent.Model {
 		/// <returns></returns>
 		public string GetSortKey()
 		{
-			return string.Format("{0:00000}_{1}_{2}", Index, OuterCode ?? "", Code);
+			return string.Format("{0:00000}_{1}_{2}", Idx, OuterCode ?? "", Code);
 		}
+
+
+
 	}
 }

@@ -24,6 +24,6 @@ namespace Qorpent.Model {
 		/// <summary>
 		/// User-defined order index
 		/// </summary>
-		int Index { get; set; }
+		int Idx { get; set; }
 	}
 }

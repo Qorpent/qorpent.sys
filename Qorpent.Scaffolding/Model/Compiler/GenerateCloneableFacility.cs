@@ -73,12 +73,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 								Write("else result." + fld.Name + " = target." + fld.Name + ";");
 							}
 							else{
-								var name = fld.Name;
-								if (name == "Idx")
-								{
-									name = "Index";
-								}
-								Write("result." + name + " = target." + name + ";");
+								Write("result." + fld.Name + " = target." + fld.Name + ";");
 							}
 						}
 						foreach (var fld in table.GetOrderedReverse().Where(_=>_.IsReverese )){
