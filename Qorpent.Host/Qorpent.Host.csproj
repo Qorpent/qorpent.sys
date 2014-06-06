@@ -20,6 +20,7 @@
     <EmbeddedResource Include="Resources\actionBuilder.wiki" />
     <EmbeddedResource Include="Resources\qObject.wiki" />
     <EmbeddedResource Include="Resources\bootstrap-theme.css.map" />
+    <EmbeddedResource Include="Resources\manifest.cache" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestHandlerFactory.cs" />

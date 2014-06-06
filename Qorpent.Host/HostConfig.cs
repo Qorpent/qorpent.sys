@@ -26,7 +26,7 @@ namespace Qorpent.Host
 		/// <param name="xml"></param>
 		public HostConfig(XElement xml):this()
 		{
-			Cached = new List<string>();
+			
 			if (null != xml)
 			{
 				LoadXmlConfig(xml);
@@ -167,6 +167,7 @@ namespace Qorpent.Host
 			LogLevel = LogLevel.Info;
 			ContentFolders = new List<string>();
 			ExtendedContentFolders = new List<string>();
+			Cached = new List<string>();
 		}
 
 		private string _configFolder;

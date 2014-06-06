@@ -91,8 +91,11 @@ namespace Qorpent.Host.Handlers
 			}
 			else{
 				callcontext.Response.AddHeader("Qorpent-Disposition", staticdescriptor.FullName);
-				if (server.Config.ForceNoCache){
-					callcontext.Response.AddHeader("Cache-Control", "no-cache, must-revalidate");	
+				if (server.Config.Cached.Contains(Path.GetFileName(staticdescriptor.FullName))){
+					callcontext.Response.AddHeader("Cache-Control","public, max-age=86400");
+				}
+				else if (server.Config.ForceNoCache){
+					callcontext.Response.AddHeader("Cache-Control", "no-cache, must-revalidate");
 				}
 				if (staticdescriptor.IsFixedContent){
 					callcontext.Finish(staticdescriptor.FixedContent, staticdescriptor.MimeType + "; charset=utf-8");
