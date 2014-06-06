@@ -47,7 +47,7 @@ namespace Qorpent.Security {
 		/// <summary>
 		/// 	An index of object
 		/// </summary>
-		public int Index { get; set; }
+		public int Idx { get; set; }
 
 		/// <summary>
 		/// 	Resolves roles with config files

@@ -20,6 +20,8 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			Tasks.Add(new GeneratePokoClassDataAdapter());
 			Tasks.Add(new GenerateModel());
 			Tasks.Add(new GenerateExtendedCachedModel());
+			Tasks.Add(new GenerateCloneableFacility());
+			Tasks.Add(new GenerateResolveTagFacility());
 			
 		}
 	}

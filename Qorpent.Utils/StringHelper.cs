@@ -28,7 +28,7 @@ namespace Qorpent.Utils {
 	/// </summary>
 	public class StringHelper {
 		/// <summary>
-		/// 	simple wrapper over IsNullOrWhitespace with compliance to 3.5
+		/// 	simple wrapper over IsNullOrWhiteSpace with compliance to 3.5
 		/// </summary>
 		/// <param name="stringToTest"> string to test if it's empty </param>
 		/// <returns> </returns>
@@ -42,7 +42,7 @@ namespace Qorpent.Utils {
 		}
 
 		/// <summary>
-		/// 	simple negative wrapper over IsNullOrWhitespace with compliance to 3.5
+		/// 	simple negative wrapper over IsNullOrWhiteSpace with compliance to 3.5
 		/// </summary>
 		/// <param name="stringToTest"> string to test if it's not empty </param>
 		/// <returns> </returns>

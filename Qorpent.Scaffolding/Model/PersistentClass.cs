@@ -29,7 +29,7 @@ namespace Qorpent.Scaffolding.Model
 		}
 
 		private void ReadInterfaces(IBSharpClass c, XElement xml){
-			foreach (var e in xml.Elements("qorpent-interface").Union(xml.Elements("interface")).Select(_=>_.Attr("code")).Distinct()
+			foreach (var e in xml.Elements("implements").Select(_ => _.Attr("code")).Distinct()
 				.OrderBy(_=>_.StartsWith("I")?"ZZZ"+_:_)){
 				CSharpInterfaces.Add(e);	
 			}
@@ -41,6 +41,15 @@ namespace Qorpent.Scaffolding.Model
 		/// <returns></returns>
 		public Field[] GetOrderedFields(){
 			return Fields.Values.OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public Field[] GetOrderedReverse()
+		{
+			return ReverseFields.Values.OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
 		}
 
 		private void ReadAllocationInfo(IBSharpClass c, XElement xml){
@@ -93,6 +102,8 @@ namespace Qorpent.Scaffolding.Model
 			this.Namespace = c.Namespace;
 			this.Schema = xml.Attr("schema", "dbo").ToLowerInvariant();
 			this.Comment = xml.Attr("name");
+			this.Cloneable = xml.GetSmartValue("cloneable").ToBool();
+			this.ResolveAble = xml.GetSmartValue("resolve").ToBool();
 		}
 
 		/// <summary>
@@ -217,6 +228,15 @@ namespace Qorpent.Scaffolding.Model
 		/// 
 		/// </summary>
 		public int Rank { get; set; }
+		/// <summary>
+		/// Признак сущности, подлежащей клонированию
+		/// </summary>
+		public bool Cloneable { get; set; }
+		/// <summary>
+		/// Признак поддержки резолюции тегов
+		/// </summary>
+		public bool ResolveAble { get; set; }
+
 		/// <summary>
 		/// 
 		/// </summary>

@@ -92,7 +92,7 @@ namespace Qorpent.Mvc.UI {
 		/// <summary>
 		/// 	Индекс виджета
 		/// </summary>
-		public int Index { get; set; }
+		public int Idx { get; set; }
 
 		/// <summary>
 		/// 	Роль доступа к виджету

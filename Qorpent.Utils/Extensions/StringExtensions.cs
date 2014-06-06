@@ -165,7 +165,7 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		/// <summary>
-		/// 	Extension-like wrapper over string.IsNullOrWhitespace
+		/// 	Extension-like wrapper over string.IsNullOrWhiteSpace
 		/// </summary>
 		/// <param name="stringToTest"> string to test if it's empty </param>
 		/// <returns> </returns>
@@ -174,7 +174,7 @@ namespace Qorpent.Utils.Extensions {
 		}
 
 		/// <summary>
-		/// 	Extension-like wrapper over negation string.IsNullOrWhitespace
+		/// 	Extension-like wrapper over negation string.IsNullOrWhiteSpace
 		/// </summary>
 		/// <param name="stringToTest"> string to test if it's empty </param>
 		/// <returns> </returns>

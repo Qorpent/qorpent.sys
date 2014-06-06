@@ -385,7 +385,7 @@ namespace Qorpent.IoC {
 						component.ActivationCount++;
 						result.Add(component.Implementation ?? CreateInstance(component, ctorArguments));
 					}
-					foreach (var obj in result.OfType<IWithIndex>().OrderBy(x => x.Index)) {
+					foreach (var obj in result.OfType<IWithIndex>().OrderBy(x => x.Idx)) {
 						yield return obj;
 					}
 				}
