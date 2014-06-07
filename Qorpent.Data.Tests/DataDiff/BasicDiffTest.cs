@@ -55,7 +55,8 @@ x table=test tree
 	b y2 n3
 ");
 			Assert.AreEqual(
-@"BEGIN TRAN
+@"-- START OF SCRIPT: MAIN
+BEGIN TRAN
 	 --table for storing check constraints problems
 	declare @c table (t nvarchar(255), c nvarchar(255), w nvarchar(255))
 BEGIN TRY
@@ -63,7 +64,7 @@ BEGIN TRY
 	alter table test nocheck constraint all
 	--test base insert and update
 	declare @t1 table ( id int, code nvarchar(255), _exists bit default 0 , name nvarchar(max), parent int, parent_code nvarchar(255))
-		insert @t1 (id,code,name,parent ,parent_code) values
+		insert @t1 (id, code,name,parent ,parent_code) values
 			(null,'y2', null, 0, null),
 			(null,'y3', 'n4', null, 'x')
 			update @t1 set id = this.id, code=this.code, _exists =1 from test this join @t1 temp on (temp.code = this.code or temp.id=this.id)
@@ -87,6 +88,7 @@ BEGIN CATCH
 	if (@@TRANCOUNT!=0) rollback;
 	throw
 END CATCH
+-- END OF SCRIPT: MAIN
 ", diff);
 		}
 

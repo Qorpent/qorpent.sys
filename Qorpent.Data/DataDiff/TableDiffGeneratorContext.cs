@@ -22,6 +22,7 @@ namespace Qorpent.Data.DataDiff{
 			ExcludeTables =  new List<string>();
 			IncludeTables =  new List<string>();
 			SqlScripts = new List<string>();
+			Log = StubUserLog.Default;
 		}
 		/// <summary>
 		/// Строка соединения с SQL
