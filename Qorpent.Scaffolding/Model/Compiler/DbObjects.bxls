@@ -18,6 +18,7 @@ namespace Qorpent.Db
 		datatype datetime type=DateTime
 		datatype decimal type=Decimal size=18 precession=6
 		datatype bool type=Boolean
+		datatype dictso type="IDictionary<string,object>"
 		_timestampstr = "CAST(CAST(CURRENT_TIMESTAMP as float) as char)"
 		fullname = "${schema}.${code}"
 	
@@ -32,7 +33,7 @@ namespace Qorpent.Db
 		import BaseObject
 		int Id "Идентификатор" primarykey identity idx=10  override=Entity
 		datetime Version "Версия записи" default=(CURRENT_TIMESTAMP) idx=980  override=Entity
-		int ImportId "Идентификатор старой сущности при миграции" idx=990
+		int ImportId "Идентификатор старой сущности при миграции" idx=990 nocode
 		view "${.code}Full" "Вид полного нормализованного представления строк" : (
 			--PARENT_FIELD_SET--
 		)
@@ -96,6 +97,10 @@ namespace Qorpent.Db
 		import IWithName
 		import IWithActivity
 		import IWithTag
+
+	class IWithProperties  "Интерфейс класс с локальными свойствами на уровне объектного кода"
+		implements IWithProperties
+		dictso LocalProperties resolve=5 nosql clone qorpent-hide=Entity
 
 	class IWithHierarchy "Интерфейс иерархической сущности" abstract
 		implements "IWithSimpleHierarchy<${.code}>"

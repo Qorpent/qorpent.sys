@@ -122,7 +122,8 @@ namespace Qorpent.Utils {
 		/// <param name="type"> </param>
 		/// <typeparam name="T"> </typeparam>
 		/// <returns> </returns>
-		public T Create<T>(Type type) {
+		public T Create<T>(Type type){
+			if (null == type) return default(T);
 			return (T) Activator.CreateInstance(type);
 		}
 

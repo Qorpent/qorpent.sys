@@ -45,7 +45,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 
 		private void GenerateIncomeReferences(PersistentClass targetclass)
 		{
-			var incomerefs = targetclass.ReverseFields.Values.Where(_=>_.IsReverese ).OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
+			var incomerefs = targetclass.GetOrderedReverse().Where(_=>_.IsReverese && !_.NoCode).ToArray();
 			foreach (var incomeref in incomerefs){
 				var name = incomeref.ReverseCollectionName;
 				var cls = incomeref.Table.TargetClass;
@@ -60,7 +60,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 
 		private void GenerateOwnFields(PersistentClass targetclass){
 			var interfaces = targetclass.CSharpInterfaces;
-			foreach (var of in targetclass.GetOrderedFields()){
+			foreach (var of in targetclass.GetOrderedFields().Where(_=>!_.NoCode)){
 				var qorpentHide = of.Definition.Attr("qorpent-hide");
 				var qorpentOverride = of.Definition.Attr("override");
 				var noqorpent = interfaces.Contains(qorpentHide);

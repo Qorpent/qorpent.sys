@@ -258,45 +258,80 @@ namespace Qorpent.BSharp {
 		readonly BxlParser _requireBxl =new BxlParser();
 		private void ProcessRequires(XElement source,string filename, Dictionary<string, XElement> filenames,IBSharpContext context ){
 			var requires = source.Elements(BSharpSyntax.Require).ToArray();
-			if (requires.Length != 0){
-				var dir = Path.GetDirectoryName(filename);
-				requires.Remove();
-				foreach (var require in requires){
-					
-					var name = require.Attr("code");
-					if (filenames.ContainsKey(name)) continue;
-					
-					var pkgservice = ResolveService<IBSharpSourceCodeProvider>(name + ".bssrcpkg");
-					if (null != pkgservice){
-						filenames[name] = new XElement("stub");
-						foreach (var element in pkgservice.GetSources(this,null).ToArray()){
-							var fn = element.Describe().File;
-							if (!filenames.ContainsKey(fn)){
-								filenames[fn] = element;
-							}
-						}
-					}
-					else{
-
-						var file = require.Attr("code") + ".bxls";
-
-						if (!Path.IsPathRooted(file)){
-							file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
-						}
-						if (filenames.ContainsKey(file)) continue;
-						if (File.Exists(file)){
-							var src = _requireBxl.Parse(File.ReadAllText(file), file);
-							filenames[file] = src;
-							ProcessRequires(src, file, filenames,context);
-						}
-						else{
-							var message = "cannot  find required module " + require.Attr("code") + " for " + source.Describe().File;
-							context.RegisterError(new BSharpError{Level = ErrorLevel.Error,Phase = BSharpCompilePhase.SourceIndexing,Message = message,Xml=require});
-							this.log.Error(message);
-						}
-					}
+			foreach (var require in requires){
+				var name = require.GetCode();
+				if (filenames.ContainsKey(name)) continue;
+				var pkgservice = ResolvePackage(name);
+				if (null != pkgservice){
+					ProcessRequiresWithSourcePackage(filenames, name, pkgservice);
+				}
+				else{
+					ProcessRequiresWithFileReference(source, filenames, context, require, filename);
 				}
 			}
+			requires.Remove();
+		}
+
+		private void ProcessRequiresWithFileReference(XElement source, Dictionary<string, XElement> filenames, IBSharpContext context, XElement require,string filename){
+			var dir = Path.GetDirectoryName(filename);
+			var file = require.Attr("code") + ".bxls";
+
+			if (!Path.IsPathRooted(file)){
+				file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
+			}
+			if (filenames.ContainsKey(file)) return;
+			if (File.Exists(file)){
+				var src = _requireBxl.Parse(File.ReadAllText(file), file);
+				filenames[file] = src;
+				ProcessRequires(src, file, filenames, context);
+			}
+			else{
+				var message = "cannot  find required module " + require.Attr("code") + " for " + source.Describe().File;
+				context.RegisterError(new BSharpError{
+					Level = ErrorLevel.Error,
+					Phase = BSharpCompilePhase.SourceIndexing,
+					Message = message,
+					Xml = require
+				});
+				this.log.Error(message);
+			}
+		}
+
+		private void ProcessRequiresWithSourcePackage(Dictionary<string, XElement> filenames, string name, IBSharpSourceCodeProvider pkgservice){
+			filenames[name] = new XElement("stub");
+			foreach (var element in pkgservice.GetSources(this, null).ToArray()){
+				var fn = element.Describe().File;
+				if (!filenames.ContainsKey(fn)){
+					filenames[fn] = element;
+				}
+			}
+		}
+
+		private IBSharpSourceCodeProvider ResolvePackage(string name){
+			IBSharpSourceCodeProvider pkgservice = null;
+			//some well knowns
+			if (name == "data"){
+				pkgservice =
+					Type.GetType("Qorpent.Scaffolding.Model.Compiler.DataObjectsSourcePackageForBShart, Qorpent.Scaffolding", false)
+					    .Create<IBSharpSourceCodeProvider>();
+			}
+			else if (name == "app"){
+				pkgservice =
+					Type.GetType("Qorpent.Scaffolding.Application.AppSpecificationBSharpSource, Qorpent.Scaffolding", false)
+					    .Create<IBSharpSourceCodeProvider>();
+			}
+
+			else if (name == "preprocessor")
+			{
+				pkgservice =
+					Type.GetType("Qorpent.BSharp.Preprocessor.PreprocessorSourcePackageForBSharp, Qorpent.Serialization", false)
+						.Create<IBSharpSourceCodeProvider>();
+			}
+			if (null == pkgservice){
+				//fallback to IoC resolution of pkg
+				pkgservice = ResolveService<IBSharpSourceCodeProvider>(name + ".bssrcpkg");
+			}
+			return pkgservice;
 		}
 
 		private IBSharpContext BuildSingle(XElement source) {

@@ -17,15 +17,21 @@
 // PROJECT ORIGIN: Qorpent.Core/Entity.cs
 #endregion
 using System;
+using System.Collections.Generic;
 
 namespace Qorpent.Model {
 	/// <summary>
 	/// Simple <see cref="IEntity"/> implementation
 	/// </summary>
-	public class Entity : IEntity {
+	public class Entity : IEntity, IWithProperties
+	{
 	    private object _context;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IDictionary<string, object> _localProperties;
 
-	    /// <summary>
+		/// <summary>
 		/// PK ID in database terms
 		/// </summary>
 		public virtual int Id { get; set; }
@@ -124,7 +130,12 @@ namespace Qorpent.Model {
 			return string.Format("{0:00000}_{1}_{2}", Idx, OuterCode ?? "", Code);
 		}
 
-
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public IDictionary<string, object> LocalProperties{
+			get { return _localProperties??(_localProperties=new Dictionary<string, object>()); }
+			set { _localProperties = value; }
+		}
 	}
 }

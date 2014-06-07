@@ -49,7 +49,7 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 Script sys:support_for_filegroups_begin (C,S,R)
 FileGroup SECONDARY (C,S,R)
 Sequence dbo.a_SEQ (C,S,O)
-Table dbo.a (C,S,R)
+Table dbo.a (Id) (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)
 
 ".Trim(), digest);
@@ -74,8 +74,8 @@ Sequence dbo.a_SEQ (C,S,O)
 Sequence dbo.b_SEQ (C,S,O)
 PARTDEF dbo_a_PARTITION (C,S,O)
 PARTDEF dbo_b_PARTITION (C,S,O)
-Table dbo.a (C,S,R)
-Table dbo.b (C,S,R)
+Table dbo.a (Id, selector) (C,S,R)
+Table dbo.b (Id, ver) (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)
 ".Trim(), digest);
 		}
@@ -223,8 +223,8 @@ table b
 Script sys:psql_start (C,P,R)
 Sequence dbo.a_SEQ (C,P,O)
 Sequence dbo.b_SEQ (C,P,O)
-Table dbo.a (C,P,R)
-Table dbo.b (C,P,R)
+Table dbo.a (Id, selector) (C,P,R)
+Table dbo.b (Id, ver) (C,P,R)
 Script sys:psql_end (C,P,R)
 ".Trim(), digest);
 		}
@@ -245,8 +245,8 @@ Script sys:support_for_filegroups_begin (C,S,R)
 FileGroup SECONDARY (C,S,R)
 Sequence dbo.b_SEQ (C,S,O)
 Sequence dbo.a_SEQ (C,S,O)
-Table dbo.b (C,S,R)
-Table dbo.a (C,S,R)
+Table dbo.b (Id, a) (C,S,R)
+Table dbo.a (Id, b) (C,S,R)
 FK dbo_b_a_a_Id_FK (C,S,R)
 FK dbo_a_b_b_Id_FK (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)
@@ -376,7 +376,7 @@ class a prototype=dbtable
 			Assert.AreEqual(@"Script sys:support_for_filegroups_begin (C,S,R)
 FileGroup SECONDARY (C,S,R)
 Sequence dbo.a_SEQ (C,S,O)
-Table dbo.a (C,S,R)
+Table dbo.a (Id) (C,S,R)
 TRIGGER a_x (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 		}
@@ -388,7 +388,7 @@ Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 			Assert.AreEqual(@"Script sys:support_for_filegroups_begin (C,S,R)
 FileGroup SECONDARY (C,S,R)
 Sequence dbo.a_SEQ (C,S,O)
-Table dbo.a (C,S,R)
+Table dbo.a (Id) (C,S,R)
 PROCEDURE a_test (C,S,R)
 FUNCTION a_test2 (C,S,R)
 FUNCTION a_test3 (C,S,R)
@@ -607,8 +607,8 @@ a b prototype=dbtable
 FileGroup SECONDARY (C,S,R)
 Sequence dbo.a_SEQ (C,S,O)
 Sequence dbo.b_SEQ (C,S,O)
-Table dbo.a (C,S,R)
-Table dbo.b (C,S,R)
+Table dbo.a (Id, code, name) (C,S,R)
+Table dbo.b (Id, a, code, name) (C,S,R)
 VIEW b_v (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 		}
@@ -663,10 +663,10 @@ GO
 IF OBJECT_ID('dbo.b_v') IS NOT NULL DROP VIEW dbo.b_v;
 GO
 CREATE VIEW dbo.b_v AS SELECT 
+Id, --
 a, --
 code, --
 name, --
-Id, --
 
 		(select x.code from dbo.a x where x.Id = dbo.b.a) as acode,
 (select x.name from dbo.a x where x.Id = dbo.b.a) as aname,

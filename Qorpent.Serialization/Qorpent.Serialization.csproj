@@ -53,6 +53,7 @@
     <Compile Include="BSharp\Preprocessor\RenameElementOperation.cs" />
     <Compile Include="BSharp\Preprocessor\SetAttributeOperation.cs" />
     <Compile Include="BSharp\Preprocessor\StringReplaceOperation.cs" />
+    <Compile Include="BSharp\ResourceBasedSrcBSharpProvider.cs" />
     <Compile Include="BSharp\Runtime\BSharpClassProviderBase.cs" />
     <Compile Include="BSharp\Runtime\BSharpFileBasedClassProvider.cs" />
     <Compile Include="BSharp\Runtime\BSharpGenericClassProvider.cs" />

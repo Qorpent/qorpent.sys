@@ -60,8 +60,8 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			o.AppendLine("\t\t}");
 
 			foreach (var t in Tables){
-				var ownrefs = t.GetOrderedFields().Where(_ => _.IsReference).ToArray();
-				var incomes = t.ReverseFields.Values.Where(_ => _.IsReverese).OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
+				var ownrefs = t.GetOrderedFields().Where(_ => _.IsReference && !_.NoCode && !_.NoSql).ToArray();
+				var incomes = t.GetOrderedReverse().Where(_ => _.IsReverese && !_.NoCode && !_.NoSql).OrderBy(_ => _.Idx).ThenBy(_ => _.Name).ToArray();
 				o.AppendLine("\t\t///<summary></summary>");
 				o.AppendLine("\t\tprotected void Setup" + t.Name + "LoadBehavior(ObjectDataCache<"+t.Name+"> cache){");
 				o.AppendLine("\t\t\tcache.OnAfterUpdateCache+= (s,ids,c,ctx) => {");

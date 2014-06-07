@@ -20,6 +20,14 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		public PersistentClass Table { get; set; }
 		/// <summary>
+		/// Признак свойства не для схемы SQL
+		/// </summary>
+		public bool NoSql { get; set; }
+		/// <summary>
+		/// Признак свойства не для кода
+		/// </summary>
+		public bool NoCode { get; set; }
+		/// <summary>
 		/// Имя поля
 		/// </summary>
 		public string Name { get; set; }
@@ -205,6 +213,9 @@ namespace Qorpent.Scaffolding.Model{
 			if (0 == Idx) Idx = 99999;
 			Resolve = e.GetSmartValue("resolve").ToBool();
 			ResolvePriority = e.GetSmartValue("resolve").ToInt();
+			NoSql = e.GetSmartValue("nosql").ToBool();
+			NoCode = e.GetSmartValue("nocode").ToBool();
+			IsCloneByDefault = e.GetSmartValue("clone").ToBool();
 		}
 		/// <summary>
 		/// 
@@ -245,7 +256,7 @@ namespace Qorpent.Scaffolding.Model{
 			}
 			IsAutoLoadReverseByDefault = e.GetSmartValue("reverse-auto").ToBool();
 			IsLazyLoadReverseByDefault = e.GetSmartValue("reverse-lazy").ToBool();
-			IsCloneByDefault = e.GetSmartValue("clone").ToBool();
+			
 			IsReverseCloneByDefault = e.GetSmartValue("reverse-clone").ToBool();
 			
 			var refto = e.Attr("to", Name + ".PrimaryKey");

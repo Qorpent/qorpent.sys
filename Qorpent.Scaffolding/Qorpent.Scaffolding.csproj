@@ -18,7 +18,7 @@
   <ItemGroup>
     <Compile Include="Application\AppSpecificationBSharpSource.cs" />
     <Compile Include="Application\ApplicationCompilerExtensions.cs" />
-    <Compile Include="Application\DataObjectsSourcePackageForBShart.cs" />
+    <Compile Include="Model\Compiler\DataObjectsSourcePackageForBShart.cs" />
     <Compile Include="Application\GenerateActionsInJavaScript.cs" />
     <Compile Include="Application\GenerateControllersTask.cs" />
     <Compile Include="Application\GenerateDataTypesInJavaScriptTask.cs" />

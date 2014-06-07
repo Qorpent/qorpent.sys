@@ -39,7 +39,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			IndentLevel++;
 			foreach (var table in Tables.Where(_ => _.ResolveAble))
 			{
-				foreach (var fld in table.GetOrderedFields().Where(_ => _.Resolve && _.IsReference))
+				foreach (var fld in table.GetOrderedFields().Where(_ => _.Resolve && _.IsReference && !_.NoCode))
 				{
 					var name = table.Name + fld.Name;
 					Write(name+"=false,");
@@ -49,7 +49,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			Write("};");
 			foreach (var table in Tables.Where(_ => _.ResolveAble))
 			{
-				foreach (var fld in table.GetOrderedFields().Where(_=>_.Resolve)){
+				foreach (var fld in table.GetOrderedFields().Where(_=>_.Resolve && !_.NoCode)){
 					var name = table.Name + fld.Name;
 					Summary(name + " can be used in resolution");
 					Write("public bool " + name + " = true;");
@@ -77,7 +77,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 						Write("if(string.IsNullOrWhiteSpace(name))return \"\";");
 						Write("options = options ?? ResolveTagOptions.Default;");
 						Write("var result = string.Empty;");
-						foreach (var fld in table.GetOrderedFields().Where(_=>_.ResolveType!=ResolveType.None).OrderBy(_=>_.ResolvePriority)){
+						foreach (var fld in table.GetOrderedFields().Where(_=>_.ResolveType!=ResolveType.None && !_.NoCode).OrderBy(_=>_.ResolvePriority)){
 							Write("if (options." + table.Name + fld.Name + "){");
 							IndentLevel++;
 							if (fld.ResolveType == ResolveType.Delegate){
@@ -89,7 +89,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 								Write("result = target." + fld.Name + ".SmartSplit().Contains(name)?name:\"\";");
 							}
 							else if (fld.ResolveType == ResolveType.Dictionary){
-								Write("if(target." + fld.Name + ".ContainsKey(name) result = target." + fld.Name + "[name];");
+								Write("if(target." + fld.Name + ".ContainsKey(name)) result = ((target." + fld.Name + "[name])??string.Empty).ToString();");
 							}
 							Write("if (!string.IsNullOrWhiteSpace(result))return result;");
 							Close();

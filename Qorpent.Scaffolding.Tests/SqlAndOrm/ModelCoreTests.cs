@@ -31,10 +31,32 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 			Assert.AreEqual("Id",pk.Name);
 			Assert.True(pk.IsPrimaryKey);
 			Assert.True(pk.IsAutoIncrement);
-			Assert.AreEqual("int",pk.DataType.CSharpDataType);
+			Assert.AreEqual("Int32", pk.DataType.CSharpDataType);
 			Assert.True(cls.Fields.ContainsKey("id"),"field must be regestered in cls with lowercase");
 		}
 
+		[Test]
+		public void CanUseDataPackage(){
+			var model = PersistentModel.Compile(@"
+require data
+TableBase TheTable
+	import IEntity
+"
+				);
+			var create = model.GetDigest(SqlDialect.SqlServer, ScriptMode.Create);
+			Console.WriteLine(create);
+			Assert.AreEqual(@"
+Script sys:support_for_filegroups_begin (C,S,R)
+FileGroup SECONDARY (C,S,R)
+Sequence dbo.TheTable_SEQ (C,S,O)
+Table dbo.TheTable (Id, Code, Name, Idx, Start, Finish, Tag, Version, ImportId, Active) (C,S,R)
+FUNCTION TheTableIsActive (C,S,R)
+FUNCTION TheTableGetCode (C,S,R)
+FUNCTION TheTableGetId (C,S,R)
+VIEW TheTableFull (C,S,R)
+Script sys:support_for_filegroups_end (C,S,R)
+Script DbScript (C,S,R)".Trim(), create.Trim());
+		}
 
 		[Test]
 		public void CanApplySchemaAndNamespace()
@@ -56,7 +78,7 @@ class X prototype=dbtable
 	long Id");
 			Assert.True(model.IsValid);
 			var fld = model["dbo.x"]["id"];
-			Assert.AreEqual("long",fld.DataType.CSharpDataType);
+			Assert.AreEqual("Int64", fld.DataType.CSharpDataType);
 			Assert.True(fld.IsPrimaryKey);
 			Assert.True(fld.IsAutoIncrement);
 		}

@@ -362,6 +362,26 @@ namespace Qorpent.Scaffolding.Model{
 			return sb.ToString();
 		}
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dialect"></param>
+		/// <param name="mode"></param>
+		/// <returns></returns>
+		public string GetDigest(SqlDialect dialect, ScriptMode mode)
+		{
+			var sb = new StringBuilder();
+			foreach (var sw in GetWriters(dialect, mode))
+			{
+				if (null == sw) continue;
+				var subresult = sw.GetDigest();
+				if (!string.IsNullOrWhiteSpace(subresult))
+				{
+					sb.AppendLine(subresult);
+				}
+			}
+			return sb.ToString();
+		}
+		/// <summary>
 		/// Возваращает все скрипты для указанной позиции и языка в генерации
 		/// </summary>
 		/// <param name="dialect"></param>

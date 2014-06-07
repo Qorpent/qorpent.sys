@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Qorpent.BSharp;
 
@@ -54,7 +55,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			o.AppendLine("\t\t\tvar result = new " + targetclass.Name + "();");
 			o.AppendLine("\t\t\tif ( nativeorder ) {");
 			var i = 0;
-			foreach (var ormField in targetclass.GetOrderedFields()){
+			foreach (var ormField in targetclass.GetOrderedFields().Where(_=>!_.NoSql && !_.NoCode)){
 				var type = ormField.DataType.ReaderCSharpDataType;
 				var name = ormField.Name;
 				if (ormField.IsReference){ //ref
@@ -74,7 +75,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			o.AppendLine("\t\t\t\t\tvar value = reader.GetValue(i);");
 			o.AppendLine("\t\t\t\t\tif(value is DBNull)continue;");
 			o.AppendLine("\t\t\t\t\tswitch(name){");
-			foreach (var ormField in targetclass.GetOrderedFields()){
+			foreach (var ormField in targetclass.GetOrderedFields().Where(_=>!_.NoSql && !_.NoCode)){
 				var type = ormField.DataType.ReaderCSharpDataType;
 				var name = ormField.Name;
 				if (ormField.IsReference)
@@ -115,7 +116,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			o.AppendLine("\t\t\tvar sb = new StringBuilder();");
 			o.Append("\t\t\tsb.Append(\"select ");
 			bool fst = true;
-			foreach (var of in targetclass.GetOrderedFields()){
+			foreach (var of in targetclass.GetOrderedFields().Where(_=>!_.NoSql && !_.NoCode)){
 				if (fst){
 					fst = false;
 				}
@@ -127,9 +128,6 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 				var rn = n;
 				if (of.IsReference){
 					rn += of.ReferenceField;
-				}
-				if (n == "Idx"){
-					rn = "\\\"Index\\\"";
 				}
 				o.Append(n);
 				if (rn != n){

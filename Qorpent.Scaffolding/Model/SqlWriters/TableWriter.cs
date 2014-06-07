@@ -34,7 +34,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 					sb.AppendLine("-- " + Table.Comment);
 				}
 				sb.AppendLine("CREATE TABLE " + Table.FullSqlName + " (");
-				var fields = Table.GetOrderedFields();
+				var fields = Table.GetOrderedFields().Where(_=>!_.NoSql).ToArray();
 				for (var f = 0; f < fields.Length; f++){
 					WriteField(fields[f], sb, f == fields.Length - 1);
 				}
@@ -226,7 +226,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// <returns></returns>
 		protected override string GetDigestFinisher()
 		{
-			return "Table " + Table.FullSqlName;
+			return "Table " + Table.FullSqlName+" ("+string.Join(", ",Table.GetOrderedFields().Where(_=>!_.NoSql).Select(_=>_.Name))+")";
 		}
 	}
 }
