@@ -98,6 +98,9 @@ define([
                     $el = $($el);
                     var id = $attrs.id;
                     var css = {};
+                    if (!!$attrs.root && !!$attrs.name) {
+                        document.title = $attrs.name;
+                    }
                     if ($attrs.width) {
                         css.width = $attrs.width;
                     }
