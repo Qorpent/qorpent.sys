@@ -23,6 +23,7 @@
 
 #endregion
 
+using System;
 using NUnit.Framework;
 using Qorpent.Dsl;
 
