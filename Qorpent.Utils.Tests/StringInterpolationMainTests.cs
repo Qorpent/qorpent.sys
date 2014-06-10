@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Qorpent.Uson;
 
 namespace Qorpent.Utils.Tests
 {
@@ -20,6 +21,10 @@ namespace Qorpent.Utils.Tests
 		[TestCase("x${a}y${b}z","xyz")]
 		public void CanReplaceWithEmptiesIfNoSourceGiven(string src, string result) {
 			Assert.AreEqual(result,_si.Interpolate(src));
+		}
+		[Test]
+		public void CanInterpolateUObj(){
+			Assert.AreEqual("12", _si.Interpolate("${x}${y}", new { x = 1, y = 2 }.ToUson()));
 		}
 
 		[TestCase("$a}", "$a}")]

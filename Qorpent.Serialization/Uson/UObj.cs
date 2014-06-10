@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
@@ -14,7 +15,7 @@ namespace Qorpent.Uson
 	/// <summary>
 	/// Динамический класс для представления промежуточных объектов
 	/// </summary>
-	public sealed class UObj:DynamicObject
+	public sealed class UObj:DynamicObject,IEnumerable<KeyValuePair<string, object>>
 	{
 		
 		/// <summary>
@@ -32,11 +33,39 @@ namespace Qorpent.Uson
 				return hashCode;
 			}
 		}
+		/// <summary>
+		/// Возвращает свойства как словарь
+		/// </summary>
+		/// <returns></returns>
+		IEnumerator IEnumerable.GetEnumerator(){
+			return GetEnumerator();
+		}
 
 		internal Type _srctype = null;
 		private IDictionary<string, object> _properties;
 		private IList<object> _array; 
 		private UObjMode _uObjMode;
+		/// <summary>
+		/// Возвращает свойства как словарь
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator<KeyValuePair<string, object>> GetEnumerator(){
+			if (UObjMode == UObjMode.Fake){
+				yield break;
+			}
+			else if (UObjMode == UObjMode.Value){
+				yield return new KeyValuePair<string, object>("value", Properties["__value"]);
+			}
+			else if (UObjMode == UObjMode.Array){
+				for(var i=0;i<this.Array.Count;i++){
+					yield return new KeyValuePair<string, object>("i" + i, Array[i]);
+				}
+			}else if (UObjMode == UObjMode.Default){
+				foreach (var property in Properties){
+					yield return new KeyValuePair<string, object>(property.Key,property.Value);
+				}
+			}
+		}
 
 		/// <summary>
 		/// 

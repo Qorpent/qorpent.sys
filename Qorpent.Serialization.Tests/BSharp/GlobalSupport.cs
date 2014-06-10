@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Qorpent.BSharp;
+using Qorpent.Uson;
 
 namespace Qorpent.Serialization.Tests.BSharp{
 	[TestFixture]
@@ -10,6 +11,20 @@ namespace Qorpent.Serialization.Tests.BSharp{
 		public void CanInterpolateWithGlobals(){
 			var result = Compile(@"
 class A a=z${x} b=${y} y=3",null,new{x=1,y=2,z=3});
+			var a = result.Get("A");
+			var x = a.Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(x);
+			Assert.AreEqual("<class code='A' a='z1' b='3' y='3' fullcode='A' />", x);
+		}
+
+		[Test]
+		public void CanUseUObj(){
+			dynamic g = new UObj();
+			g.x = 1;
+			g.y = 2;
+			g.z = 3;
+			var result = Compile(@"
+class A a=z${x} b=${y} y=3", null, g);
 			var a = result.Get("A");
 			var x = a.Compiled.ToString().Replace("\"", "'");
 			Console.WriteLine(x);
