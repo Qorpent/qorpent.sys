@@ -18,6 +18,17 @@ class A a=z${x} b=${y} y=3",null,new{x=1,y=2,z=3});
 		}
 
 		[Test]
+		public void BugCanInterpolateWithGlobalsForReports()
+		{
+			var result = Compile(@"
+class A y='${tp.year:2014}' p='${tp.period:1}'", null, new Dictionary<string,object>{{"tp.year",2013},{"tp.period",2}});
+			var a = result.Get("A");
+			var x = a.Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(x);
+			Assert.AreEqual("<class code='A' y='2013' p='2' fullcode='A' />", x);
+		}
+
+		[Test]
 		public void CanUseUObj(){
 			dynamic g = new UObj();
 			g.x = 1;
