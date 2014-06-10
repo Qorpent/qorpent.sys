@@ -56,44 +56,47 @@ namespace Qorpent.Utils
 		/// <param name="source"></param>
 		/// <returns></returns>
 		public string Interpolate(string target, object source = null) {
-			//оптимизация возврата исходной строки где нет вообще контента
-			if (string.IsNullOrWhiteSpace(target)) {
-				return target;
-			}
-			//оптимизация возврата исходной строки при отсутствии анкоров
-			if (target.All(_ => _ != AncorSymbol)) {
-				return target;
-			}
-			if (null == source) {
-				source = DefaultSubst;
-			}
-			if (source is IDictionary<string, object>)
-			{
-				_source = (IDictionary<string, object>)source;
-			}else if (source is IDictionary<string, string>) {
-				_source = ((IDictionary<string, string>)source).ToDictionary(_=>_.Key,GetValue);
-			}
-			else {
-				_source = new Dictionary<string, object>();
-				foreach (var getval in Extensions.ReflectionExtensions.FindAllValueMembers(source.GetType(), null, true, true)) {
-					_source[getval.Member.Name] = getval.Get(source);
+	
+				//оптимизация возврата исходной строки где нет вообще контента
+				if (string.IsNullOrWhiteSpace(target)){
+					return target;
 				}
-			}
-			_sourceString = target;
-			_targetBuffer = new StringBuilder();
-			_currentBuffer = new StringBuilder();
-			_currentSubst = new StringBuilder();
-			_currentCode = new StringBuilder();
-			_wasAncor = false;
-			_wasOpen = false;
-			Interpolate();
-			// если есть остаточное открытие - значит у нас не до конца была произведена подстановка
-			// мы должны допотставить данные из currentBuffer
-			if (_wasOpen) {
-				StornateTail();
-			}
+				//оптимизация возврата исходной строки при отсутствии анкоров
+				if (target.All(_ => _ != AncorSymbol)){
+					return target;
+				}
+				if (null == source){
+					source = DefaultSubst;
+				}
+				if (source is IDictionary<string, object>){
+					_source = (IDictionary<string, object>) source;
+				}
+				else if (source is IDictionary<string, string>){
+					_source = ((IDictionary<string, string>) source).ToDictionary(_ => _.Key, GetValue);
+				}
+				else{
+					_source = new Dictionary<string, object>();
+					foreach (var getval in Extensions.ReflectionExtensions.FindAllValueMembers(source.GetType(), null, true, true)){
+						_source[getval.Member.Name] = getval.Get(source);
+					}
+				}
+				_sourceString = target;
+				_targetBuffer = new StringBuilder();
+				_currentBuffer = new StringBuilder();
+				_currentSubst = new StringBuilder();
+				_currentCode = new StringBuilder();
+				_wasAncor = false;
+				_wasOpen = false;
+				Interpolate();
+				// если есть остаточное открытие - значит у нас не до конца была произведена подстановка
+				// мы должны допотставить данные из currentBuffer
+				if (_wasOpen){
+					StornateTail();
+				}
 
-			return _targetBuffer.ToString();
+				return _targetBuffer.ToString();
+			
+		
 		}
 		/// <summary>
 		/// Префикс для преобразования строковых значений в даты
@@ -110,6 +113,7 @@ namespace Qorpent.Utils
 		public string IntParsePrefix = "int~";
 		private  object GetValue(KeyValuePair<string, string> _) {
 			var s = _.Value;
+			if (null == s) return "";
 			if (s.StartsWith(DateTimeParsePrefix))
 			{
 				return DateTime.Parse(s.Substring(DateTimeParsePrefix.Length), CultureInfo.InvariantCulture);
