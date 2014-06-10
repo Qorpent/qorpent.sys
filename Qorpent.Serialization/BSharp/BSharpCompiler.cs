@@ -105,7 +105,7 @@ namespace Qorpent.BSharp {
 		/// <returns></returns>
 		public static IBSharpContext Compile(string bxl, IBSharpConfig config = null)
 		{
-			return Compile(new[] { new BxlParser().Parse(bxl) }, config);
+			return Compile(new[] {GetXml(bxl,0) }, config);
 		}
 
 		/// <summary>
@@ -127,10 +127,29 @@ namespace Qorpent.BSharp {
 		/// <param name="config"></param>
 		/// <returns></returns>
 		public static IBSharpContext Compile(IEnumerable<string> bxls, IBSharpConfig config = null){
-			var bxl = new BxlParser();
-			var xmls = bxls.Select((_, i) => bxl.Parse(_, "code" + i + ".bxl"));
+			
+			var xmls = bxls.Select(GetXml);
 			return Compile(xmls, config);
 		}
+		
+		private static XElement GetXml(string _,int i){
+			var bxl = new BxlParser();
+			if (_.Length <= 255){
+				var lines = _.SmartSplit(false, true, '\r', '\n');
+				if (lines.Count == 1){
+					try{
+						if (File.Exists(_)){
+							var fullpath = Path.GetFullPath(_);
+							return bxl.Parse(File.ReadAllText(fullpath), fullpath);
+						}
+					}
+					catch{
+					}
+				}
+			}
+			return bxl.Parse(_, "code" + i + ".bxl");
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -197,6 +216,11 @@ namespace Qorpent.BSharp {
 		public void Initialize(IBSharpConfig compilerConfig) {
 			_config = compilerConfig;
 		    _global = _config.Global ?? new ConfigBase{UseInheritance = false};
+		    if (null != compilerConfig.Conditions){
+			    foreach (var cond in compilerConfig.Conditions){
+				    _global[cond.Key] = cond.Value;
+			    }
+		    }
 	    }
 
 

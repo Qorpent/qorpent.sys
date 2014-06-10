@@ -89,7 +89,7 @@ namespace Qorpent.Utils.Extensions {
 				}
 				cnt++;
 			}
-			return sb.ToString();
+			return sb.ToString().Replace("//","/");
 		}
 
         /// <summary>

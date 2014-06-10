@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
+using Qorpent.Uson;
 
 namespace Qorpent.Utils.Tests
 {
@@ -21,6 +23,24 @@ namespace Qorpent.Utils.Tests
 		public void CanReplaceWithEmptiesIfNoSourceGiven(string src, string result) {
 			Assert.AreEqual(result,_si.Interpolate(src));
 		}
+		[Test]
+		public void CanInterpolateUObj(){
+			Assert.AreEqual("12", _si.Interpolate("${x}${y}", new { x = 1, y = 2 }.ToUson()));
+		}
+
+
+		[Test]
+		public void CanInterpolateWithDots()
+		{
+			Assert.AreEqual("12", _si.Interpolate("${t.x}${t.y}", null, new Dictionary<string, object>{{"t.x",1},{"t.y",2}}));
+		}
+
+		[Test]
+		public void CanInterpolateWithDotsAndDefaults()
+		{
+			Assert.AreEqual("12013", _si.Interpolate("${t.x:2}${t.y:2013}", null, new Dictionary<string, object> { { "t.x", 1 } }));
+		}
+		
 
 		[TestCase("$a}", "$a}")]
 		[TestCase("$a} ${b", "$a} ${b")]

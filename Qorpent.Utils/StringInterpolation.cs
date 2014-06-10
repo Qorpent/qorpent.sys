@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils
 {
@@ -79,6 +80,11 @@ namespace Qorpent.Utils
 				_source = (IDictionary<string, object>)source;
 			}else if (source is IDictionary<string, string>) {
 				_source = ((IDictionary<string, string>)source).ToDictionary(_=>_.Key,GetValue);
+			}else if (source is IEnumerable<KeyValuePair<string, object>>){
+				_source = new Dictionary<string, object>();
+				foreach (var values in (IEnumerable<KeyValuePair<string, object>>)source){
+					_source[values.Key] = values.Value.ToStr();
+				}
 			}
 			else {
 				_source = new Dictionary<string, object>();
@@ -268,6 +274,7 @@ namespace Qorpent.Utils
 				format = fullcode.Split('%')[1];
 			}
 			_currentCode.Clear();
+			
 			if (!_source.ContainsKey(code)){
 				if (null != _source2 && _source2.ContainsKey(code))
 				{
