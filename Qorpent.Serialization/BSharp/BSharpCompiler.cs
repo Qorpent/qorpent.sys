@@ -197,6 +197,11 @@ namespace Qorpent.BSharp {
 		public void Initialize(IBSharpConfig compilerConfig) {
 			_config = compilerConfig;
 		    _global = _config.Global ?? new ConfigBase{UseInheritance = false};
+		    if (null != compilerConfig.Conditions){
+			    foreach (var cond in compilerConfig.Conditions){
+				    _global[cond.Key] = cond.Value;
+			    }
+		    }
 	    }
 
 
