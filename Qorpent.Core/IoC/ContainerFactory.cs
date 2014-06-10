@@ -170,16 +170,21 @@ namespace Qorpent.IoC {
 		/// <param name="container"> </param>
 		/// <param name="filename"> </param>
 		public static void DumpContainer(IContainer container, string filename = "./container.dump") {
-			var file = Path.GetFullPath(filename);
-			var dir = Path.GetDirectoryName(file);
-			Debug.Assert(!string.IsNullOrWhiteSpace(dir), "dir != null");
-			Directory.CreateDirectory(dir);
-			using (var s = new StreamWriter(file)) {
-				foreach (var componentDefinition in container.GetComponents()) {
-					s.Write(componentDefinition);
-					s.WriteLine();
+			try{
+				var file = Path.GetFullPath(filename);
+				var dir = Path.GetDirectoryName(file);
+				Debug.Assert(!string.IsNullOrWhiteSpace(dir), "dir != null");
+				Directory.CreateDirectory(dir);
+				using (var s = new StreamWriter(file)){
+					foreach (var componentDefinition in container.GetComponents()){
+						s.Write(componentDefinition);
+						s.WriteLine();
+					}
+					s.Flush();
 				}
-				s.Flush();
+			}
+			catch{
+				//it is not critical
 			}
 		}
 
