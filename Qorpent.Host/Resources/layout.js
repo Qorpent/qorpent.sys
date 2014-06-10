@@ -42,16 +42,16 @@ define([
 				var emaxsize2 = 0;
 				var eminsize2 = 100;
                 if (data.mode == 'horizontal') {
-					var eminsize = Math.round(parseInt((data.prev.css('min-width')||'0px').replace('px',''))*100/data.parent.width());
-					var emaxsize = Math.round(parseInt((data.prev.css('max-width')||'5000px').replace('px',''))*100/data.parent.width());
-					var eminsize2 = 100-Math.round(parseInt((data.next.css('min-width')||'0px').replace('px',''))*100/data.parent.width());
-					var emaxsize2 = 100-Math.round(parseInt((data.next.css('max-width')||'5000px').replace('px',''))*100/data.parent.width());
+					eminsize = Math.round(parseInt((data.prev.css('min-width')||'0px').replace('px',''))*100/data.parent.width());
+					emaxsize = Math.round(parseInt((data.prev.css('max-width')||'5000px').replace('px',''))*100/data.parent.width());
+					eminsize2 = 100-Math.round(parseInt((data.next.css('min-width')||'0px').replace('px',''))*100/data.parent.width());
+					emaxsize2 = 100-Math.round(parseInt((data.next.css('max-width')||'5000px').replace('px',''))*100/data.parent.width());
                     delta = (data.xend - data.xstart)*100.0/data.parent.width();
                 } else {
-					var eminsize = Math.round(parseInt((data.prev.css('min-height')||'0px').replace('px',''))*100/data.parent.height());
-					var emaxsize = Math.round(parseInt((data.prev.css('max-height')||'5000px').replace('px',''))*100/data.parent.height());
-					var eminsize2 =100-Math.round(parseInt((data.next.css('min-height')||'0px').replace('px',''))*100/data.parent.height());
-					var emaxsize2 =100- Math.round(parseInt((data.next.css('max-height')||'5000px').replace('px',''))*100/data.parent.height());
+					eminsize = Math.round(parseInt((data.prev.css('min-height')||'0px').replace('px',''))*100/data.parent.height());
+					emaxsize = Math.round(parseInt((data.prev.css('max-height')||'5000px').replace('px',''))*100/data.parent.height());
+					eminsize2 =100-Math.round(parseInt((data.next.css('min-height')||'0px').replace('px',''))*100/data.parent.height());
+					emaxsize2 =100- Math.round(parseInt((data.next.css('max-height')||'5000px').replace('px',''))*100/data.parent.height());
                     delta = (data.yend - data.ystart)*100.0/data.parent.height();
                 }
 				if (eminsize > minsize){

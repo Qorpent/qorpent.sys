@@ -13,6 +13,21 @@ define([
         return {h:h,s:s,l:l};
     };
 
+    var colorLuminance = function(hex, lum) {
+        hex = String(hex).replace(/[^0-9a-f]/gi, '');
+        if (hex.length < 6) {
+            hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+        }
+        lum = lum || 0;
+        var rgb = "#", c, i;
+        for (i = 0; i < 3; i++) {
+            c = parseInt(hex.substr(i*2,2), 16);
+            c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+            rgb += ("00"+c).substr(c.length);
+        }
+        return rgb;
+    };
+
     angular.module('Menu', [])
         .directive('menu', function() {
             var activateMenuGroup = function(menu, group) {
@@ -216,9 +231,16 @@ define([
                     return function (scope, el, attrs) {
                         el = $(el);
                         if (attrs.type == 'icon_with_text' || attrs.type == 'icon') {
-                            var c = getRandomHsl();
-                            el.find('.icon').first().css('background',
-                                    'linear-gradient(to top, hsl(' + c.h + ',' + c.s + '%,' + c.l + '%),hsl(' + (c.h + 10) + ',' + c.s + '%,' + (c.l - 20) + '%))');
+                            var startcolor, endcolor;
+                            if (!!attrs.color) {
+                                startcolor = attrs.color.indexOf('#') == 0 ? attrs.color : '#' + attrs.color;
+                                endcolor = colorLuminance(startcolor, -0,5);
+                            } else {
+                                var c = getRandomHsl();
+                                startcolor = 'hsl(' + c.h + ',' + c.s + '%,' + c.l + '%)';
+                                endcolor = 'hsl(' + (c.h + 10) + ',' + c.s + '%,' + (c.l - 20) + '%)';
+                            }
+                            el.find('.icon').first().css('background', 'linear-gradient(to top, ' + startcolor + ',' + endcolor + ')');
                         }
                         if (!!attrs.url && !!attrs.model) {
                             $.getJSON(attrs.action, {}, function(data) {
