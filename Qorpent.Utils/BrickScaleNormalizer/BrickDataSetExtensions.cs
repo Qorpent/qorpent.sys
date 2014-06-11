@@ -20,8 +20,11 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         /// <param name="dataSet">Датасет</param>
         /// <returns>Упорядоченное перечисление колонок данных графика в виде <see cref="DataItemColon"/></returns>
-        public static IEnumerable<DataItem[]> GetColons(this BrickDataSet dataSet) {
-            return dataSet.DataItems.GroupBy(_ => _.Index).Select(_ => _.Select(__ => __).ToArray());
+        public static IEnumerable<DataItemColon> GetColons(this BrickDataSet dataSet) {
+            var subresult = dataSet.DataItems.GroupBy(_ => _.Index).Select(_ => _.Select(__ => __).ToArray());
+	        foreach (var ds in subresult){
+		        yield return new DataItemColon(ds);
+	        }
         }
 		/// <summary>
 		/// 

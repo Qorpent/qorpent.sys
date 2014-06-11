@@ -122,7 +122,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		///     Собирает абстрактные олонки значений
 		/// </summary>
 		/// <returns>Перечисление абстрактных колонок значений</returns>
-		public IEnumerable<DataItem[]> BuildColons() {
+		public IEnumerable<DataItemColon> BuildColons() {
 			return this.GetColons();
 		}
 

@@ -24,6 +24,20 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         public DataItemColon(IEnumerable<DataItem> dataItems) {
 	        _dataItems = dataItems.ToArray();
         }
+		/// <summary>
+		/// 
+		/// </summary>
+	    public int Length{
+		    get { return Items.Length; }
+	    }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="idx"></param>
+		/// <returns></returns>
+	    public DataItem this[int idx]{
+		    get { return Items[idx]; }
+	    }
         /// <summary>
         ///     Приведение <see cref="DataItemColon"/> к <see cref="string"/>
         /// </summary>

@@ -289,7 +289,10 @@ namespace Qorpent.BSharp {
 				}
 				clselement.Add(ex);
 			}
-
+			foreach (var a in clselement.Attributes())
+			{
+				a.Value = a.Value.Replace("~{", "${");
+			}
 			var cls = Compiler.ReadSingleClassSource(clselement, ns,null);
 			RegisterClassInIndex(cls);
 		}

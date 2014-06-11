@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using NUnit.Framework;
+using Qorpent.BSharp;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp
@@ -14,6 +17,21 @@ dataset X
 generator Y
 ").Errors;
 			Assert.AreEqual(0,result.Count);
+		}
+
+		[Test]
+		public void CanSupplyInterpolableParameters()
+		{
+			var result = Compile(@"
+class A year=1 abstract
+generator
+	import A
+	dataset
+		item u=~{year}~{year}
+");
+			var cls = result.Get(BSharpContextDataType.Working).First();
+			Console.WriteLine(cls.Compiled);
+			Assert.AreEqual("11", cls.Compiled.Attr("u"));
 		}
 
 		[Test]
