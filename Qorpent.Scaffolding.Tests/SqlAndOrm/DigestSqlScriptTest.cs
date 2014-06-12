@@ -344,30 +344,30 @@ GO
 
 		private string simpleTrigger = @"
 class a prototype=dbtable
-	trigger '${.code}_x' insert : (
+	trigger '_x' insert : (
 		print 25;
 	)
 ";
 
 		private string sampleProc = @"
 class a prototype=dbtable
-	void ${.code}_test @i-int-out=2 @x=string : (
+	void _test @i-int-out=2 @x=string : (
 		print 1;
 	)
-	int ${.code}_test2 @i=bool : (
+	int _test2 @i=bool : (
 		return 2;
 	)
-	function ${.code}_test3 @i=int returns=bool : (
+	function _test3 @i=int returns=bool : (
 		return 1;
 	)
 ";
 		private string simpleTriggerExternalBody = @"
 class a prototype=dbtable
-	trigger '${.code}_x' insert externalbody=simpleTriggerExternalBody.sql
+	trigger '_x' insert externalbody=simpleTriggerExternalBody.sql
 ";
 		private string simpleTriggerExternalFull = @"
 class a prototype=dbtable
-	trigger '${.code}_x' insert external=simpleTriggerExternalFull.sql
+	trigger '_x' insert external=simpleTriggerExternalFull.sql
 ";
 
 		[Test]
@@ -377,7 +377,7 @@ class a prototype=dbtable
 FileGroup SECONDARY (C,S,R)
 Sequence dbo.a_SEQ (C,S,O)
 Table dbo.a (Id) (C,S,R)
-TRIGGER a_x (C,S,R)
+TRIGGER dbo.a_x (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 		}
 
@@ -389,9 +389,9 @@ Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 FileGroup SECONDARY (C,S,R)
 Sequence dbo.a_SEQ (C,S,O)
 Table dbo.a (Id) (C,S,R)
-PROCEDURE a_test (C,S,R)
-FUNCTION a_test2 (C,S,R)
-FUNCTION a_test3 (C,S,R)
+PROCEDURE dbo.a_test (C,S,R)
+FUNCTION dbo.a_test2 (C,S,R)
+FUNCTION dbo.a_test3 (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 		}
 
@@ -593,7 +593,7 @@ class a prototype=dbtable
 	string name
 a b prototype=dbtable
 	ref a
-	view ${.code}_v : (
+	view _v : (
 		--PARENT_FIELD_SET--
 		--PARENT_REF_SET FOR (a) WITH (code,name) --
 	)
@@ -609,7 +609,7 @@ Sequence dbo.a_SEQ (C,S,O)
 Sequence dbo.b_SEQ (C,S,O)
 Table dbo.a (Id, code, name) (C,S,R)
 Table dbo.b (Id, a, code, name) (C,S,R)
-VIEW b_v (C,S,R)
+VIEW dbo.b_v (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 		}
 

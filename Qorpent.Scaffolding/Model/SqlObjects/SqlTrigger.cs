@@ -6,6 +6,13 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 	/// </summary>
 	public class SqlTrigger : SqlObject{
 		/// <summary>
+		/// 
+		/// </summary>
+		public SqlTrigger()
+		{
+			UseTablePrefixedName = true;
+		}
+		/// <summary>
 		/// Формирует SQL-объект
 		/// </summary>
 		/// <param name="model"></param>
@@ -45,10 +52,5 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// 
 		/// </summary>
 		public bool Insert { get; set; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public string TableName { get; set; }
 	}
 }

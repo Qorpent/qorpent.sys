@@ -29,7 +29,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				return "-- !ВНИМАНИЕ НА ДАННЫЙ МОМЕНТ РЕАЛИЗАЦИЯ ГЕНЕРАЦИИ ТРИГЕРОВ ЕСТЬ ТОЛЬКО ДЛЯ MS SQL";
 			}
 			var sb = new StringBuilder();
-			sb.AppendLine("IF OBJECT_ID('${Schema}.${Name}') IS NOT NULL DROP TRIGGER ${Schema}.${Name};");
+			sb.AppendLine("IF OBJECT_ID('${FullName}') IS NOT NULL DROP TRIGGER ${FullName};");
 			sb.AppendLine("GO");
 
 			var body = Trigger.ResolveBody();
@@ -44,7 +44,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 						                          Trigger.Delete ? "DELETE" : null
 					                          }.Where(_ => null != _));
 					var mode = Trigger.Before ? " INSTEAD OF " : " FOR ";
-					sb.Append("CREATE TRIGGER ${Schema}.${Name} ON ${TableName}" + mode + targets + " AS BEGIN");
+					sb.Append("CREATE TRIGGER ${FullName} ON ${TableName}" + mode + targets + " AS BEGIN");
 					sb.AppendLine();
 					sb.AppendLine(body);
 					sb.Append("END;");
@@ -58,7 +58,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// </summary>
 		/// <returns></returns>
 		protected override string GetDigestFinisher(){
-			return "TRIGGER " + Trigger.Name;
+			return "TRIGGER " + Trigger.FullName;
 		}
 
 

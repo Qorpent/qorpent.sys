@@ -33,7 +33,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		protected override string GetText()
 		{
 			var sb = new StringBuilder();
-			sb.AppendLine("IF OBJECT_ID('${Schema}.${Name}') IS NOT NULL DROP VIEW ${Schema}.${Name};");
+			sb.AppendLine("IF OBJECT_ID('${FullName}') IS NOT NULL DROP VIEW ${FullName};");
 			sb.AppendLine("GO");
 
 			var body = ParseSpecialBody( View.ResolveBody());
@@ -45,7 +45,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				}
 				else
 				{
-					sb.Append("CREATE VIEW ${Schema}.${Name} AS SELECT ");
+					sb.Append("CREATE VIEW ${FullName} AS SELECT ");
 					sb.AppendLine();
 					sb.AppendLine(body);
 					sb.AppendLine();
@@ -101,7 +101,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// <returns></returns>
 		protected override string GetDigestFinisher()
 		{
-			return "VIEW " + View.Name;
+			return "VIEW " + View.FullName;
 		}
 	}
 }

@@ -4,6 +4,11 @@
 	/// </summary>
 	public class SqlView : SqlObject
 	{
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public SqlView(){
+			UseTablePrefixedName = true;
+		}
 	}
 }

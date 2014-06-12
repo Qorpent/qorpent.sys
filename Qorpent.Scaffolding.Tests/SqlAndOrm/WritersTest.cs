@@ -212,13 +212,13 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект',
 
 		[Test]
 		public void TriggerTest(){
-			var trigger = new SqlTrigger{Insert = true, TableName = "dbo.x", Name = "x_insert", Body="print 1;"};
+			var trigger = new SqlTrigger{Insert = true, TableName = "dbo.x", Name = "OnInsert", Body="print 1;"};
 			var writer = new SqlTriggerWriter(trigger){Dialect = SqlDialect.SqlServer,Mode = ScriptMode.Create,NoComment = true};
 			var res = writer.ToString();
 			Console.WriteLine(res);
-			Assert.AreEqual(@"IF OBJECT_ID('dbo.x_insert') IS NOT NULL DROP TRIGGER dbo.x_insert;
+			Assert.AreEqual(@"IF OBJECT_ID('dbo.xOnInsert') IS NOT NULL DROP TRIGGER dbo.xOnInsert;
 GO
-CREATE TRIGGER dbo.x_insert ON dbo.x FOR INSERT AS BEGIN
+CREATE TRIGGER dbo.xOnInsert ON dbo.x FOR INSERT AS BEGIN
 print 1;
 END;
 GO".Trim(), writer.ToString().Trim());
@@ -229,9 +229,9 @@ GO".Trim(), writer.ToString().Trim());
 			writer = new SqlTriggerWriter(trigger) { Dialect = SqlDialect.SqlServer, Mode = ScriptMode.Create, NoComment = true };
 			res = writer.ToString();
 			Console.WriteLine(res);
-			Assert.AreEqual(@"IF OBJECT_ID('dbo.x_insert') IS NOT NULL DROP TRIGGER dbo.x_insert;
+			Assert.AreEqual(@"IF OBJECT_ID('dbo.xOnInsert') IS NOT NULL DROP TRIGGER dbo.xOnInsert;
 GO
-CREATE TRIGGER dbo.x_insert ON dbo.x INSTEAD OF INSERT,UPDATE,DELETE AS BEGIN
+CREATE TRIGGER dbo.xOnInsert ON dbo.x INSTEAD OF INSERT,UPDATE,DELETE AS BEGIN
 print 1;
 END;
 GO".Trim(), writer.ToString().Trim());

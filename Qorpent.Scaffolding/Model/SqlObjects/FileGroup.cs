@@ -23,6 +23,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects
 			UpperCase = true;
 			FileSize = 10;
 			FileCount = 1;
+			UseSchemaName = false;
 		}
 
 		/// <summary>

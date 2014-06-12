@@ -14,6 +14,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		public SqlFunction(){
 			Arguments = new Dictionary<string, SqlFunctionArgument>();
+			UseTablePrefixedName = true;
 		}
 		/// <summary>
 		/// 

@@ -38,7 +38,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			if (Function.IsProcedure){
 				itemname = "PROCEDURE";
 			}
-			sb.AppendLine("IF OBJECT_ID('${Schema}.${Name}') IS NOT NULL DROP "+itemname+" ${Schema}.${Name};");
+			sb.AppendLine("IF OBJECT_ID('${FullName}') IS NOT NULL DROP "+itemname+" ${FullName};");
 			sb.AppendLine("GO");
 
 			var body = Function.ResolveBody();
@@ -52,10 +52,10 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				{
 					var arguments = string.Join(",",Function.Arguments.Values.OrderBy(_=>_.Index).Select(GetArgumentString));
 					if (Function.IsProcedure){
-						sb.Append("CREATE PROCEDURE ${Schema}.${Name} " + arguments);
+						sb.Append("CREATE PROCEDURE ${FullName} " + arguments);
 					}
 					else{
-						sb.Append("CREATE FUNCTION ${Schema}.${Name} ( " + arguments + " ) RETURNS " +
+						sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " ) RETURNS " +
 						          Function.ReturnType.ResolveSqlDataType(SqlDialect.SqlServer));
 					}
 					sb.Append(" AS BEGIN");
@@ -94,7 +94,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// <returns></returns>
 		protected override string GetDigestFinisher()
 		{
-			return (Function.IsProcedure? "PROCEDURE":"FUNCTION")+" " + Function.Name;
+			return (Function.IsProcedure? "PROCEDURE":"FUNCTION")+" " + Function.FullName;
 		}
 	}
 }

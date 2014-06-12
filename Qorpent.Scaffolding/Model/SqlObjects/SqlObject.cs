@@ -16,11 +16,22 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// </summary>
 		public SqlObject(){
 			Schema = "dbo";
+			UseSchemaName = true;
+			UseTablePrefixedName = false;
 		}
 		/// <summary>
 		/// Тип объекта
 		/// </summary>
 		public SqlObjectType ObjectType { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool UseSchemaName { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool UseTablePrefixedName { get; set; }
 		/// <summary>
 		/// Ссылка на класс-контейнер
 		/// </summary>
@@ -68,6 +79,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 				this.Body = xml.Value;
 			}
 			
+			
 			return this;
 		}
 		/// <summary>
@@ -105,10 +117,34 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// </summary>
 		public string FullName{
 			get{
-				if (string.IsNullOrWhiteSpace(Schema)){
+				if (string.IsNullOrWhiteSpace(Schema))
+				{
 					Schema = "dbo";
 				}
-				return Schema + "." + Name;
+				if (string.IsNullOrWhiteSpace(Name)){
+					Name = "DEFAULT";
+				}
+				var result = Name;
+				if (UseTablePrefixedName)
+				{
+					if (null != Table && !result.StartsWith(Table.FullSqlName) && !result.Contains("."))
+					{
+						result = Table.FullSqlName + result;
+					}
+					if (!string.IsNullOrWhiteSpace(TableName) && !result.StartsWith(TableName) && !result.Contains("."))
+					{
+						result = TableName+ result;
+					}
+				}
+				else if (UseSchemaName)
+				{
+					if (!result.Contains("."))
+					{
+						result = Schema + "." + result;
+					}
+				}
+
+				return result;
 			}
 		}
 
@@ -141,6 +177,11 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// Файл с внешним (полным) определением
 		/// </summary>
 		public string External { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public string TableName { get; set; }
 
 		/// <summary>
 		/// Формирует глобальные объекты уровня базы данных
