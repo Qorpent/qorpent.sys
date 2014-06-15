@@ -47,6 +47,9 @@ namespace Qorpent.Scaffolding.Application {
                 CopyAttributes(result, el);
                 /*result.SetAttr("menu-title", el.Attr("name"));*/
                 result.SetAttr("class", result.Attr("class") + " menu__item-" + (el.HasAttribute("size") ? el.Attr("size") : "small"));
+                if (el.HasAttribute("class")) {
+                    result.SetAttr("class", result.Attr("class") + " " + el.Attr("class"));
+                }
                 if (el.HasAttribute("action")) {
                     result.Attr("ng-click", el.Attr("action"));
                 }
@@ -168,7 +171,7 @@ namespace Qorpent.Scaffolding.Application {
 
         private static void CopyAttributes(XElement target, XElement el = null) {
             if (null == el) el = target;
-            var ignoreAttributes = new[] { "code", "name", "iconclass", "icon", "prototype", "fullcode", "action", "size" };
+            var ignoreAttributes = new[] { "code", "name", "iconclass", "icon", "prototype", "fullcode", "action", "size", "class" };
             foreach (var a in el.Attributes().Where(_ => !_.Name.ToString().IsIn(ignoreAttributes))) {
                 target.SetAttr(a.Name.ToString(), a.Value);
             }

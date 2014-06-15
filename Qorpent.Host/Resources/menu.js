@@ -1,36 +1,36 @@
 define([
     'angular',
     'jquery'
-], function(angular, $) {
-    $(document).on('click', function() {
-         $('.menu__item.hover').removeClass('hover');
+], function (angular, $) {
+    $(document).on('click', function () {
+        $('.menu__item.hover').removeClass('hover');
     });
 
-    var getRandomHsl = function() {
+    var getRandomHsl = function () {
         var h = Math.floor(Math.random() * 360);
         var s = Math.floor(Math.random() * 20) + 50;
         var l = Math.floor(Math.random() * 20) + 50;
-        return {h:h,s:s,l:l};
+        return { h: h, s: s, l: l };
     };
 
-    var colorLuminance = function(hex, lum) {
+    var colorLuminance = function (hex, lum) {
         hex = String(hex).replace(/[^0-9a-f]/gi, '');
         if (hex.length < 6) {
-            hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+            hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
         }
         lum = lum || 0;
         var rgb = "#", c, i;
         for (i = 0; i < 3; i++) {
-            c = parseInt(hex.substr(i*2,2), 16);
+            c = parseInt(hex.substr(i * 2, 2), 16);
             c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
-            rgb += ("00"+c).substr(c.length);
+            rgb += ("00" + c).substr(c.length);
         }
         return rgb;
     };
 
     angular.module('Menu', [])
-        .directive('menu', function() {
-            var activateMenuGroup = function(menu, group) {
+        .directive('menu', function () {
+            var activateMenuGroup = function (menu, group) {
                 var items = menu.find('div:last-child>.menu__item');
                 var groups = menu.find('div:first-child>.menu__item');
                 groups.removeClass('active');
@@ -41,15 +41,15 @@ define([
 
             return {
                 restrict: 'A',
-                link: function(scope, el, attrs) {
-                    scope.click = function() {
+                link: function (scope, el, attrs) {
+                    scope.click = function () {
 
                     };
 
                     el = $(el);
                     var settings = scope.settings.get(attrs.id);
-                    var initRibbonMenu = function() {
-                        el.on('click', 'div:first-child>.menu__item', function(e) {
+                    var initRibbonMenu = function () {
+                        el.on('click', 'div:first-child>.menu__item', function (e) {
                             var g = $(e.currentTarget.className == 'menu__item' ? e.currentTarget : e.currentTarget.parentElement).attr('code');
                             scope.settings.set(attrs.id, { activegroup: g });
                             activateMenuGroup(el, g);
@@ -66,8 +66,8 @@ define([
                             activateMenuGroup(el, settings.activegroup);
                         }
                     };
-                    var initDropdownMenu = function() {
-                        el.on('mouseenter', '.menu__item>.menu__item-element', function(e) {
+                    var initDropdownMenu = function () {
+                        el.on('mouseenter', '.menu__item>.menu__item-element', function (e) {
                             $('.menu__item.hover').removeClass('hover');
                             var p = $(e.target).parents('.menu__item[menu-group]');
                             p.addClass('hover');
@@ -78,7 +78,7 @@ define([
                                 p.first().addClass('open-right').removeClass('open-left');
                             }
                         });
-                        el.on('click', function(e) {
+                        el.on('click', function (e) {
                             e.stopPropagation();
                         });
                     };
@@ -91,33 +91,41 @@ define([
                     else if (attrs.menu == 'dropdown') {
                         initDropdownMenu();
                     }
+                    el.on('click', '.menu__item', function (e) {
+                        var t = $(e.target);
+                        var item = t.hasClass('.menu__item') ? t : t.parents('.menu__item').first();
+                        if (!!item.attr('url')) {
+                            window.open(item.attr('url'), '_blank');
+                        }
+                    });
                 }
             }
         })
-        .directive('menuItem', function() {
-            var wrapMenuItem = function(m) {
+        .directive('menuItem', function () {
+            var wrapMenuItem = function (m) {
                 if (!m.Type && !m.type) m.type = 'text';
             };
 
-            var generateSubmenu = function(data) {
+            var generateSubmenu = function (data) {
                 var submenu = $('<div class="submenu"/>');
-                $.each(data, function(i, m) {
+                $.each(data, function (i, m) {
                     var menuItem = generateMenuItem(m);
                     submenu.append(menuItem);
                 });
                 return submenu;
             };
 
-            var generateSubmenuFromModel = function(options) {
+            var generateSubmenuFromModel = function (options) {
                 var submenu = $('<div class="submenu"/>');
                 var expression = options.modelName;
                 if (!options.wrapperName) {
-                    expression =  options.wrapperName + '(' + expression + ')';
+                    expression = options.wrapperName + '(' + expression + ')';
                 }
-                if (!options.filter) {
-                    expression += ' | ' + options.filter;
+                if (!!options.filterName) {
+                    expression += ' | ' + options.filterName;
                 }
-                var html = '<div class="menu__item menu__item-element" menu-item ng-repeat="m in ' + expression + '">\
+                // Если меню динамическое, то нужно позаботиться о методе exec в текущем скоупе!
+                var html = '<div class="menu__item" type="text" menu-item ng-repeat="m in ' + expression + '" ng-click="exec(m)" ng-class="\'menu__item-\' + (!!m.size ? m.size : \'small\')">\
     <div ng-if="(m.type || m.Type) == \'text\' || (m.type || m.Type) == null" class="menu__item-title menu__item-element" ng-bind="(m.name || m.Name)">\
     <div ng-if="(m.type || m.Type) == \'view\'" class="menu__item-view menu__item-element" ng-bind="(m.name || m.Name)">\
         <ng-include ng-src="\' + (m.view.indexOf(\'.html\') != -1 ? m.view : m.view + \'.html\')\'" />\
@@ -131,35 +139,35 @@ define([
                 return submenu.html(html);
             };
 
-            var generateMenuItem = function(m) {
+            var generateMenuItem = function (m) {
                 m.type = m.type || m.Type || 'text';
                 switch (m.type) {
-                    case 'text' : return generateTextItem(m);
-                    case 'icon_with_text' : return generateTextWithIconItem(m);
+                    case 'text': return generateTextItem(m);
+                    case 'icon_with_text': return generateTextWithIconItem(m);
                 }
             };
 
-            var generateTextItem = function(m) {
+            var generateTextItem = function (m) {
                 var result = generateMenuItemBase(m);
                 result.append($('<div class="menu__item-title menu__item-element" />').text(m.Name));
                 return result;
             };
 
-            var generateViewItem = function(m) {
+            var generateViewItem = function (m) {
                 var result = $('<div class="menu__item-view menu__item-element" />');
                 var attrView = m.attr('view');
                 result.append('<ng-include src="\'' + (attrView.indexOf('.html') != -1 ? attrView : attrView + '.html') + '\'" />');
                 return result;
             };
 
-            var generateTextWithIconItem = function(m) {
+            var generateTextWithIconItem = function (m) {
                 var result = generateMenuItemBase(m);
                 result.append(generateIconItem(m));
                 result.append(generateTextItem(m));
                 return result;
             };
 
-            var generateIconItem = function(m) {
+            var generateIconItem = function (m) {
                 var result = $('<div class="icon menu__item-icon menu__item-element" />');
                 var iconAttr = m.icon || m.iconclass;
                 if (!!iconAttr && iconAttr != '') {
@@ -172,7 +180,7 @@ define([
                 }
             };
 
-            var generateMenuItemBase = function(m) {
+            var generateMenuItemBase = function (m) {
                 var result = $('<div class="menu__item menu__item-element" menu-item />')
                     .attr('type', m.type);
                 m.action = m.action || m.Action || null;
@@ -182,7 +190,7 @@ define([
                 return result;
             };
 
-            var getMenuOptions = function(attrs) {
+            var getMenuOptions = function (attrs) {
                 return {
                     modelName: attrs.model,
                     wrapperName: attrs.wrapper || '',
@@ -193,6 +201,7 @@ define([
             return {
                 restrict: 'A',
                 compile: function (el, attrs) {
+                    el = $(el);
                     if (!!attrs.view) {
                         var viewItem = generateViewItem(el);
                         el.empty().append(viewItem);
@@ -207,26 +216,26 @@ define([
                         el.append(submenu);
                         el.removeAttr('menu-item').attr('menu-group', 1);
                     }
-                    if (!!attrs.url) { // Это можно использовать для статического JSON'а
-                        if (!!attrs.model) {
-                            var options = getMenuOptions(attrs);
-                            var submenu = generateSubmenuFromModel(options);
-                            el.append(submenu);
-                            el.removeAttr('menu-item').attr('menu-group', 1);
-                        } else {
-                            $.getJSON(attrs.url, {}, function(data) {
-                                var submenu = generateSubmenu(data);
-                                el.append(submenu);
-                                el.removeAttr('menu-item').attr('menu-group', 1);
-                                el.on('click', '.menu__item', function(e) {
-                                    var action = e.target.classList.contains('menu__item') ?
-                                        e.target.getAttribute('action') :
-                                        e.target.parentNode.getAttribute('action');
-                                    eval(action);
-                                });
-                            });
-                        }
-                    }
+                    /*if (!!attrs.url) { // Это можно использовать для статического JSON'а
+                     if (!!attrs.model) {
+                     var options = getMenuOptions(attrs);
+                     var submenu = generateSubmenuFromModel(options);
+                     el.append(submenu);
+                     el.removeAttr('menu-item').attr('menu-group', 1);
+                     } else {
+                     $.getJSON(attrs.url, {}, function(data) {
+                     var submenu = generateSubmenu(data);
+                     el.append(submenu);
+                     el.removeAttr('menu-item').attr('menu-group', 1);
+                     el.on('click', '.menu__item', function(e) {
+                     var action = e.target.classList.contains('menu__item') ?
+                     e.target.getAttribute('action') :
+                     e.target.parentNode.getAttribute('action');
+                     eval(action);
+                     });
+                     });
+                     }
+                     }*/
 
                     return function (scope, el, attrs) {
                         el = $(el);
@@ -234,7 +243,7 @@ define([
                             var startcolor, endcolor;
                             if (!!attrs.color) {
                                 startcolor = attrs.color.indexOf('#') == 0 ? attrs.color : '#' + attrs.color;
-                                endcolor = colorLuminance(startcolor, -0,5);
+                                endcolor = colorLuminance(startcolor, -0.5);
                             } else {
                                 var c = getRandomHsl();
                                 startcolor = 'hsl(' + c.h + ',' + c.s + '%,' + c.l + '%)';
@@ -243,7 +252,7 @@ define([
                             el.find('.icon').first().css('background', 'linear-gradient(to top, ' + startcolor + ',' + endcolor + ')');
                         }
                         if (!!attrs.url && !!attrs.model) {
-                            $.getJSON(attrs.action, {}, function(data) {
+                            $.getJSON(attrs.action, {}, function (data) {
                                 scope[attrs.model] = data;
                             });
                         }
@@ -251,10 +260,10 @@ define([
                 }
             }
         })
-        .directive('menuGroup', function() {
+        .directive('menuGroup', function () {
             return {
                 restrict: 'A',
-                link: function(scope, el, attrs) {
+                link: function (scope, el, attrs) {
                     el = $(el);
                     if (attrs.type == 'icon_with_text' || attrs.type == 'icon') {
                         var c = getRandomHsl();
