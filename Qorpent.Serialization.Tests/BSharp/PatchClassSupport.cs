@@ -66,6 +66,27 @@ patch for=^A:
 
 
 		[Test]
+		public void MatchNamePatch()
+		{
+			var code = @"
+class A
+	x a 
+	y a 
+patch for=^A elementname=match: 
+	x a name1
+	y a name2
+";
+			var result = Compile(code).Get("A");
+			var str = result.Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(str);
+			Assert.AreEqual(@"<class code='A' fullcode='A'>
+  <x code='a' name='name1' />
+  <y code='a' name='name2' />
+</class>".Trim().LfOnly(), str.Trim().LfOnly());
+		}
+
+
+		[Test]
 		public void InternalElementsCreation()
 		{
 			var code = @"

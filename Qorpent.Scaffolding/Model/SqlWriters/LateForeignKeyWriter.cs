@@ -22,7 +22,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			if (Mode == ScriptMode.Create){
 				string result = "ALTER TABLE " + CircularRef.Table.FullSqlName + " ADD CONSTRAINT " +
 				                CircularRef.GetConstraintName("FK") +
-				                " FOREIGN KEY REFERENCES " + CircularRef.ReferenceClass.FullSqlName + " (" +
+				                " FOREIGN KEY ("+CircularRef.Name.SqlQuoteName()+") REFERENCES " + CircularRef.ReferenceClass.FullSqlName + " (" +
 				                CircularRef.ReferenceField.SqlQuoteName() +
 				                ")";
 				if (Dialect == SqlDialect.PostGres){

@@ -142,7 +142,10 @@ namespace Qorpent.BSharp {
 		/// <param name="ns"></param>
 		/// <returns></returns>
 		public IEnumerable<IBSharpClass> ResolveAll(string query, string ns) {
-
+			if (query.Contains(";")){
+				var subqueries = query.SmartSplit(false, true, ';');
+				return subqueries.SelectMany(_ => ResolveAll(_, ns)).Distinct();
+			}
 			if (query.StartsWith("attr:")){
 				var attrname = query.Substring(5);
 				return Working.Where(_ => _.Compiled.Attr(attrname).ToBool());

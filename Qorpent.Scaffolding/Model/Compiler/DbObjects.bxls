@@ -9,15 +9,25 @@ namespace Qorpent.Db
 		element view
 		element void
 		element index
-		datatype int type=Int32
-		datatype long type=Int64
-		datatype string type=String size=255
-		datatype shortstring type=String size=20
-		datatype longstring type=String size=400
-		datatype text type=String size=-1
-		datatype datetime type=DateTime
-		datatype decimal type=Decimal size=18 precession=6
-		datatype bool type=Boolean
+		element int
+		element long
+		element string
+		element text
+		element shortstring
+		element longstring
+		element text
+		element datetime
+		element bool
+		element dictso
+		datatype int type=Int32 sql=int
+		datatype long type=Int64 sql=bigint
+		datatype string type=String size=255 sql=nvarchar
+		datatype shortstring type=String size=20 sql=nvarchar
+		datatype longstring type=String size=400 sql=nvarchar
+		datatype text type=String size=-1 sql=nvarchar
+		datatype datetime type=DateTime sql=datetime
+		datatype decimal type=Decimal size=18 precession=6 sql=decimal
+		datatype bool type=Boolean sql=bit
 		datatype dictso type="IDictionary<string,object>"
 		_timestampstr = "CAST(CAST(CURRENT_TIMESTAMP as float) as char)"
 		fullname = "${schema}.${code}"
@@ -25,7 +35,7 @@ namespace Qorpent.Db
 	BaseObject FileGroupBase prototype=filegroup abstract
 		element file
 
-	class DbScript "Прокси класс для связываения внешнего скрипта SQL в состав генерации" prototype=dbscript
+	class DbScript "Прокси класс для связываения внешнего скрипта SQL в состав генерации" prototype=dbscript abstract
 
 	class TableBase "Абстрактная таблица" abstract prototype=dbtable
 		implements IWithId 
@@ -34,19 +44,18 @@ namespace Qorpent.Db
 		int Id "Идентификатор" primarykey identity idx=10  override=Entity
 		datetime Version "Версия записи" default=(CURRENT_TIMESTAMP) idx=980  override=Entity
 		int ImportId "Идентификатор старой сущности при миграции" idx=990 nocode
-		view "${.code}Full" "Вид полного нормализованного представления строк" : (
-			--PARENT_FIELD_SET--
-		)
+		view Full 
+			selffields
 
 
 	class IWithCode "Сущность с кодом" abstract
 		implements IWithCode
 		string Code "Уникальный запоминаемый бизнес-код" unique idx=200 override=Entity
-		string "${.code}GetCode" @id=int : (
-			return (select Code from ${fullname} where Id = @id )
+		string GetCode @id=int : (
+			return (select Code from @this where Id = @id )
 		)
-		string "${.code}GetId" @code=string  : (
-			return (select Id from ${fullname} where Code = @code )
+		string GetId @code=string  : (
+			return (select Id from @this where Code = @code )
 		)
 		
 	class IWithName "Сущность с именем" abstract
@@ -70,17 +79,17 @@ namespace Qorpent.Db
 			comment = "Позволяет замещать коды с сохранением истории их изменений, при нахождении ID по коду система учитывает и текущий код и прежние коды"
 			bsharp = "Копируется"
 			idx=970
-		trigger "${.code}_UPDATE_ALIAS_CODE" "Триггер прокачки прежних кодов сущности" update : (
+		trigger UpdateAliasCode "Триггер прокачки прежних кодов сущности" update : (
 			if ( UPDATE (Code) ) begin
-				update ${fullname} set AliasCodes = replace( r.AliasCodes+'/'+d.Code+'/','//','/' )	
-					from deleted d join ${fullname} r on r.Id = d.Id and r.Code!=d.Code and r.AliasCodes not like '%/'+d.Code+'/%'
+				update @this set AliasCodes = replace( r.AliasCodes+'/'+d.Code+'/','//','/' )	
+					from deleted d join @this r on r.Id = d.Id and r.Code!=d.Code and r.AliasCodes not like '%/'+d.Code+'/%'
 			end		
 		)
 	
 	class IWithUpgradeSequence "Интерфейс для поддержания автоматического обновления последовательностей" abstract
-		trigger "${.code}_UPGRADE_SEQUENCE" "Триггер обновления SEQUENCE" update insert : (
+		trigger UpgradeSequence "Триггер обновления SEQUENCE" update insert : (
 			if ( UPDATE (Id) ) begin
-				declare @maxid int set @maxid  = (select max(Id) from ${fullname})
+				declare @maxid int set @maxid  = (select max(Id) from @this )
 				declare @currentseq int set @currentseq = (SELECT cast(current_value as int) FROM sys.sequences WHERE name = '${.code}_SEQ'  and schema_id = SCHEMA_ID('${.schema}'))
 				if @currentseq <  @maxid begin
 					set @currentseq = ( (@maxid  + 10) / 10 ) * 10
@@ -106,34 +115,35 @@ namespace Qorpent.Db
 		implements "IWithSimpleHierarchy<${.code}>"
 		ref Parent "Ссылка на родительский элемент" to="${fullname}.Id" idx=233 reverse=Children auto resolve=100
 		string Path "Сформированный полный путь сущности" idx=234
-		string "${.code}GetPath" "Расчет полного пути к элементу" @id=int   : (
+		string GetPath "Расчет полного пути к элементу" @id=int   : (
 			declare @code nvarchar(255), @parent int, @result nvarchar(255);
 			if ( isnull(@id,0) = 0 ) return '/';
-			select @code = Code, @parent = Parent from ${fullname} where Id = @id;
+			select @code = Code, @parent = Parent from @this where Id = @id;
 			if ( isnull(@parent,0) = 0 ) return isnull('/'+@code+'/','_NULL_');
-			return ISNULL( ${fullname}GetPath( @parent ) + @code + '/', '_NULL_');
+			return ISNULL( @this.GetPath( @parent ) + @code + '/', '_NULL_');
 		)
-		trigger "${.code}_INSERT_INIT_PATH" "Триггер прокачки пути при добавлении элемента" insert : (
+		trigger InsertInitPath "Триггер прокачки пути при добавлении элемента" insert : (
 			update ${fullname} set Path = ${fullname}GetPath(Id) where Id in (select Id from inserted)
 			update ${fullname} set Path = ${fullname}GetPath(Id) where Path like '%_NULL_%'
 		)
-		trigger "${.code}_UPDATE_SET_PATH" "Триггер прокачки пути при обновлении элемента" update : (
+		trigger UpdateSetPath "Триггер прокачки пути при обновлении элемента" update : (
 			if ( UPDATE (Code) or Update(Parent) ) begin
-				update ${fullname} set Path = ${fullname}GetPath(t.Id) 
-					from deleted d join ${fullname} t on t.Path like '%/'+d.Code+'/%'
+				update ${fullname} set Path = @this.GetPath(t.Id) 
+					from deleted d join @this t on t.Path like '%/'+d.Code+'/%'
 			end		
 		)
-		+view "${.code}Full" "Вид полного нормализованного представления строк" : (
-			--PARENT_REF_SET FOR (Parent) WITH (Code,Name) --
-		)
+		+view Full "Вид полного нормализованного представления строк"
+			reffields
+				by Parent
+				use Code,Name
 
 	class IWithActivity "Интерфейс сущности со сроками существования" abstract
-		datetime Start "Признак начала существования элемента" default=19000101 idx=240 
-		datetime Finish "Признак окончания существования элемента" default=30000101 idx=245
+		datetime Start "Признак начала существования элемента" default=('19000101') idx=240 
+		datetime Finish "Признак окончания существования элемента" default=('30000101') idx=245
 		bool Active "Признак общей активности"
-		bool ${.code}IsActive @id=int @d=datetime : (
+		bool IsActive @id=int @d=datetime : (
 			if exists (
-				select top 1 this.id from ${fullname} this where this.id = @id and this.Active = 1 and @d between this.Start and this.Finish
+				select top 1 this.id from @this this where this.id = @id and this.Active = 1 and @d between this.Start and this.Finish
 			) return 1
 			return 0
 		)

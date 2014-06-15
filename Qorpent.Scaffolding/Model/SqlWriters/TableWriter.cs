@@ -64,6 +64,13 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			if (Table.Fields.ContainsKey("parent")){
 				sb.Append(", " + Table.Fields["parent"].Name.SqlQuoteName());
 			}
+			if (id == -1){
+				var refs = Table.GetReferences().Where(_ => !_.NoSql && _.Name != "Parent");
+				foreach (var r in refs){
+					sb.Append(", " + r.Name.SqlQuoteName());
+				}
+
+			}
 			sb.Append(") VALUES (" + id);
 			if (Table.Fields.ContainsKey("code")){
 				sb.Append(", '" + code + "'");
@@ -73,6 +80,18 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			}
 			if (Table.Fields.ContainsKey("parent")){
 				sb.Append(", " + parent);
+			}
+			if (id == -1){
+				var refs = Table.GetReferences().Where(_ => !_.NoSql && _.Name != "Parent");
+				foreach (var r in refs){
+					if (r.DataType.IsString){
+						sb.Append(", 'ERR'");
+					}
+					else{
+						sb.Append(", -1");
+					}
+				}
+
 			}
 			sb.Append(");");
 			sb.AppendLine();
@@ -107,7 +126,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			if (Dialect == SqlDialect.SqlServer){
 				string name = Table.AllocationInfo.FileGroup.Name;
 				if (Table.AllocationInfo.Partitioned && Model.IsSupportPartitioning(SqlDialect.SqlServer)){
-					name = Table.FullSqlName.Replace(".", "_") + "_PARTITION ( " + Table.AllocationInfo.PartitionField.Name + ")";
+					name = Table.FullSqlName.Replace(".", "_").Replace("\"","") + "_PARTITION ( " + Table.AllocationInfo.PartitionField.Name + ")";
 				}
 				sb.Append(" ON " + name);
 			}

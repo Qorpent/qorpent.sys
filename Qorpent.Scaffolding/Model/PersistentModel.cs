@@ -24,10 +24,15 @@ namespace Qorpent.Scaffolding.Model{
 			Errors = new List<BSharpError>();
 			ExtendedScripts = new List<SqlScript>();
 			TablePrototype = "dbtable";
+			TableAttribute = "persistent";
 			FileGroupPrototype = "filegroup";
 			ScriptPrototype = "dbscript";
 			GenerationOptions = new GenerationOptions();
 		}
+		/// <summary>
+		/// Имя атрибута для поиска классов по атрибутам
+		/// </summary>
+		public string TableAttribute { get; set; }
 
 		/// <summary>
 		///     Настройки генерации продукций
@@ -113,7 +118,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <returns></returns>
 		public PersistentModel Setup(IBSharpContext context){
 			Context = context;
-			IEnumerable<IBSharpClass> tables = Context.ResolveAll(TablePrototype);
+			IEnumerable<IBSharpClass> tables = Context.ResolveAll(TablePrototype+";attr:"+TableAttribute);
 			foreach (IBSharpClass table in tables){
 				var pclass = new PersistentClass();
 				pclass.Setup(table);

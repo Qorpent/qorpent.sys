@@ -57,7 +57,8 @@ namespace Qorpent.Scaffolding{
 		{
 			_context = context;
 			Project.Log.Info(GetType().Name+" called");
-			var targetclasses = _context.ResolveAll(ClassSearchCriteria).ToArray();
+			
+			var targetclasses = string.IsNullOrWhiteSpace(ClassSearchCriteria)?new IBSharpClass[]{} : _context.ResolveAll(ClassSearchCriteria).ToArray();
 			var outdir = GetOutDir();
 			foreach (var production in InternalGenerate(targetclasses)){
 				var filename = production.FileName;

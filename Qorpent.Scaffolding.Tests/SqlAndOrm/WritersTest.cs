@@ -254,8 +254,8 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Версия', N'SCHEMA', N'd
 EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'master';".Trim(), scr.Trim());
 		}
 
-		[TestCase(SqlDialect.SqlServer, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY REFERENCES \"dbo\".\"master\" (\"id\");")]
-		[TestCase(SqlDialect.PostGres, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY REFERENCES \"dbo\".\"master\" (\"id\") DEFERABLE;")]
+		[TestCase(SqlDialect.SqlServer, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY (\"master\") REFERENCES \"dbo\".\"master\" (\"id\");")]
+		[TestCase(SqlDialect.PostGres, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY (\"master\") REFERENCES \"dbo\".\"master\" (\"id\") DEFERABLE;")]
 		[TestCase(SqlDialect.SqlServer, ScriptMode.Drop, "ALTER TABLE \"dbo\".\"slave\" DROP CONSTRAINT dbo_slave_master_master_id_fk;")]
 		public void LateFKGenerator(SqlDialect dialect, ScriptMode mode,string test){
 			var model = PersistentModel.Compile(CircularModel);
@@ -393,12 +393,44 @@ class b prototype=dbtable
 	view Full
 		selffields
 		reffields
-			ref a
-			to Code
-			to Name
+			by a
+			use Code Name
 ");
 			var view = model["b"].SqlObjects.OfType<SqlView>().First();
 			var writer = new SqlViewWriter(view){NoComment = true};
+			var res = writer.ToString();
+			Console.WriteLine(res.Replace("\"", "\"\""));
+			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""bFull""') IS NOT NULL DROP VIEW ""dbo"".""bFull"";
+GO
+CREATE VIEW ""dbo"".""bFull"" AS SELECT 
+""id"", --
+""code"", --
+""a"", --
+(select x.""code"" from ""dbo"".""a"" x where x.""id"" = ""dbo"".""b"".""a"") as aCode,
+(select x.""name"" from ""dbo"".""a"" x where x.""id"" = ""dbo"".""b"".""a"") as aName,
+
+1 as __TERMINAL FROM ""dbo"".""b""
+".Trim(), res.Trim());
+		}
+
+		[Test]
+		public void RefFreeViewTest()
+		{
+			var model = PersistentModel.Compile(@"
+class a prototype=dbtable
+	string Code
+	string Name
+class b prototype=dbtable
+	string Code
+	ref a
+	view Full
+		selffields
+		reffields free
+			by a, nosuch
+			use Code Name NoSuch
+");
+			var view = model["b"].SqlObjects.OfType<SqlView>().First();
+			var writer = new SqlViewWriter(view) { NoComment = true };
 			var res = writer.ToString();
 			Console.WriteLine(res.Replace("\"", "\"\""));
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""bFull""') IS NOT NULL DROP VIEW ""dbo"".""bFull"";

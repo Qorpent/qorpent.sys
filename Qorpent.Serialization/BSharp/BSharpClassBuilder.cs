@@ -198,6 +198,9 @@ namespace Qorpent.BSharp {
 					XDiffAction.ChangeAttribute | XDiffAction.CreateAttribute | XDiffAction.CreateElement | XDiffAction.ChangeElement |
 					XDiffAction.ChangeHierarchyPosition
 			};
+			if (target.PatchNameBehavior == BSharpPatchNameBehavior.Match){
+				opts.IsNameIndepended = false;
+			}
 			if (_cls.PatchPlain){
 				opts.IncludeActions = opts.IncludeActions & ~XDiffAction.ChangeHierarchyPosition;
 			}
@@ -221,6 +224,7 @@ namespace Qorpent.BSharp {
 		        if(attribute.Name.LocalName=="fullcode")continue;
 				if (attribute.Name.LocalName == BSharpSyntax.PatchPlainAttribute) continue;
 				if (attribute.Name.LocalName == BSharpSyntax.PatchCreateBehavior) continue;
+				if (attribute.Name.LocalName == BSharpSyntax.PatchNameBehavior) continue;
                 if (attribute.Name.LocalName == "priority") continue;
 			    var name = attribute.Name.LocalName;
 				if (name.StartsWith("set-")){

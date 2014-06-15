@@ -132,6 +132,37 @@ namespace Qorpent.BSharp {
 			}
 		}
 
+		BSharpPatchNameBehavior _patchNameBehavior = BSharpPatchNameBehavior.None;
+		/// <summary>
+		/// 
+		/// </summary>
+		public BSharpPatchNameBehavior PatchNameBehavior
+		{
+			get
+			{
+				if (!Is(BSharpClassAttributes.Patch)) return BSharpPatchNameBehavior.None;
+				if (BSharpPatchNameBehavior.None == _patchNameBehavior)
+				{
+
+					var _val = Compiled.Attr(BSharpSyntax.PatchNameBehavior);
+					if (string.IsNullOrWhiteSpace(_val))
+					{
+						_patchNameBehavior = BSharpPatchNameBehavior.Default;
+					}
+					else if (_val == BSharpSyntax.PatchNameBehaviorFree)
+					{
+						_patchNameBehavior = BSharpPatchNameBehavior.Free;
+					}
+					else if (_val == BSharpSyntax.PatchNameBehaviorMatch)
+					{
+						_patchNameBehavior = BSharpPatchNameBehavior.Match;
+					}
+					
+				}
+				return _patchNameBehavior;
+			}
+		}
+
 		/// <summary>
 		/// Атрибуты класса
 		/// </summary>

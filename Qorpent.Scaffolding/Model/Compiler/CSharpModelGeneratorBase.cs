@@ -8,12 +8,6 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 	public abstract class CSharpModelGeneratorBase : CodeGeneratorTaskBase{
 		/// <summary>
 		/// </summary>
-		public CSharpModelGeneratorBase(){
-			ClassSearchCriteria = "dbtable";
-		}
-
-		/// <summary>
-		/// </summary>
 		protected PersistentModel Model { get; set; }
 
 		/// <summary>

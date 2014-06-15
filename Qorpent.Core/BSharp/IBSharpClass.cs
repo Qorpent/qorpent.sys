@@ -140,6 +140,11 @@ namespace Qorpent.BSharp {
 		bool PatchPlain { get; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		BSharpPatchNameBehavior PatchNameBehavior { get; }
+
+		/// <summary>
 		/// Возвращает true при наличии флага
 		/// </summary>
 		/// <param name="attribute"></param>

@@ -32,7 +32,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			base.Setup(model, cls, bscls, xml);
 			Allocation = cls.AllocationInfo;
 			FileGroup = Allocation.FileGroup.Name;
-			Name = cls.FullSqlName.Replace(".", "_") + "_PARTITION";
+			Name = cls.FullSqlName.Replace(".", "_").Replace("\"","") + "_PARTITION";
 			Start = Allocation.PartitioningStart;
 			if (null != Allocation.PartitionField){
 				Type = Allocation.PartitionField.DataType.ResolveSqlDataType(SqlDialect.SqlServer);

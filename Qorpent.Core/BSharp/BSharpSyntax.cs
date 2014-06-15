@@ -90,6 +90,21 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		public const string PatchCreateBehaviorCreate = "create";
 
+		/// <summary>
+		/// Описатель поведения патча по именам элементов
+		/// </summary>
+		public const string PatchNameBehavior = "elementname";
+
+		/// <summary>
+		/// Описатель поведения патча по именам элементов - точное совпадение
+		/// </summary>
+		public const string PatchNameBehaviorMatch = "match";
+
+
+		/// <summary>
+		/// Описатель поведения патча по именам элементов - не точное совпадение
+		/// </summary>
+		public const string PatchNameBehaviorFree = "free";
 
 		/// <summary>
 		/// Соединение

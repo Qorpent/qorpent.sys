@@ -121,15 +121,23 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			Position = definition.Attr("position", "After").To<ScriptPosition>();
 			Mode = definition.Attr("mode", "Create").To<ScriptMode>();
 			SqlDialect = definition.Attr("dialect", "Ansi").To<SqlDialect>();
+			if (string.IsNullOrWhiteSpace(definition.Value)){
+				External = Name;
+			}
+			if (!string.IsNullOrWhiteSpace(External) && !External.EndsWith(".sql")){
+				External += ".sql";
+			}
 
 			XElement[] subscripts = definition.Elements("script").ToArray();
 			if (0 == subscripts.Length){
-				if (string.IsNullOrWhiteSpace(External)){
+				
+				if (string.IsNullOrWhiteSpace(External) ){
 					Text = definition.Value;
 				}
 				else{
 					Text = model.ResolveExternalContent(definition, External);
 				}
+
 			}
 			else{
 				foreach (XElement subscriptdef in definition.Elements("script")){

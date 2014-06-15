@@ -45,9 +45,10 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 						sb.Append(GetSelfFieldSet());
 					}
 					foreach (XElement element in View.Definition.Elements("reffields")){
-						string[] rnames = element.Elements("ref").Select(_ => _.GetCode()).ToArray();
-						string[] fields = element.Elements("to").Select(_ => _.GetCode()).ToArray();
-						WriteRefFields(rnames, fields, sb);
+						var free = element.GetSmartValue("free").ToBool();
+						string[] rnames = element.Elements("by").SelectMany(_ => _.CollectFlags()).ToArray();
+						string[] fields = element.Elements("use").SelectMany(_ => _.CollectFlags()).ToArray();
+						WriteRefFields(rnames, fields, sb,free);
 					}
 
 					sb.AppendLine(body);
@@ -58,10 +59,13 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			return sb.ToString();
 		}
 
-		private void WriteRefFields(IEnumerable<string> rnames, ICollection<string> fields, StringBuilder sb){
+		private void WriteRefFields(IEnumerable<string> rnames, ICollection<string> fields, StringBuilder sb,bool free){
 			PersistentClass table = View.Table;
 			foreach (string refname in rnames){
 				if (!table.Fields.ContainsKey(refname.ToLowerInvariant())){
+					if (free){
+						continue;
+					}
 					throw new Exception("table " + table.Name + " doesn't contains field " + refname);
 				}
 				Field fld = table.Fields[refname.ToLowerInvariant()];
@@ -69,6 +73,9 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				PersistentClass rtable = fld.ReferenceClass;
 				foreach (string fname in fields){
 					if (!rtable.Fields.ContainsKey(fname.ToLowerInvariant())){
+						if (free){
+							continue;
+						}
 						throw new Exception("referenced table " + rtable.Name + " doesn't contains field " + fname);
 					}
 					Field rfld = rtable.Fields[fname.ToLowerInvariant()];
@@ -96,7 +103,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				                     IList<string> fields = match.Groups["fields"].Value.SmartSplit();
 				                     IList<string> outers = match.Groups["outers"].Value.SmartSplit();
 				                     var sb = new StringBuilder();
-				                     WriteRefFields(fields, outers, sb);
+				                     WriteRefFields(fields, outers, sb,false);
 
 				                     return sb.ToString();
 			                     }).Trim();

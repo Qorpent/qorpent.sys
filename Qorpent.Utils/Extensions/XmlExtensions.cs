@@ -75,6 +75,23 @@ namespace Qorpent.Utils.Extensions {
             if (x.Value == name) return true;
             return false;
         }
+		/// <summary>
+		/// Специальная обработка для элементов вида item F1 F2 F3 ... с учетом BXL кодов и _file, _line
+		/// </summary>
+		/// <param name="e"></param>
+		/// <returns></returns>
+		public static IEnumerable<string> CollectFlags(this XElement e){
+			var result = new List<string>();
+			foreach (var a in e.Attributes()){
+				var name = a.Name.LocalName;
+				if (name == "_file" || name == "_line"||name=="__parent") continue;
+				var val = a.Value;
+				if(val=="1")result.Add(name);
+				else if (name == "id" || name == "code" || name == "name") result.Add(val);
+				else result.Add(name);
+			}
+			return result.Distinct().ToArray();
+		}
 
 		/// <summary>
         /// Формирует сериализуемый в  JSON XML-массив в соответствии с внутренними соглашениями по коду
