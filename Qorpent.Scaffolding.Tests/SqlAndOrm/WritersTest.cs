@@ -335,6 +335,29 @@ GO".Trim(), res.Trim());
 		}
 
 
+		[Test]
+		public void SqlFunctionTestWithFuncReference()
+		{
+			var model = PersistentModel.Compile(@"
+class a prototype=dbtable
+	int GetValue @s-int=1 @v=int : (
+		exec @this.proc
+		return (select @s*id+@v + @this.GetValue(@s,@v) from @this where @this.Id=0)
+	)");
+			var f = model["a"].SqlObjects.OfType<SqlFunction>().First();
+			var writer = new SqlFunctionWriter(f) { Dialect = SqlDialect.SqlServer, NoComment = true };
+			var res = writer.ToString();
+			Console.WriteLine(res.Replace("\"", "\"\""));
+			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""aGetValue""') IS NOT NULL DROP FUNCTION ""dbo"".""aGetValue"";
+GO
+CREATE FUNCTION ""dbo"".""aGetValue"" ( @s int = '1',@v int ) RETURNS int AS BEGIN
+exec ""dbo"".""aproc""
+		return (select @s*id+@v + ""dbo"".""aGetValue""(@s,@v) from ""dbo"".""a"" where ""dbo"".""a"".Id=0)
+END;
+GO".Trim(), res.Trim());
+		}
+
+
 		
 
 		[Test]
