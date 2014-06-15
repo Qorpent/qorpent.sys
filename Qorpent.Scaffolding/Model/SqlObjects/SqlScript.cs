@@ -121,7 +121,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			Position = definition.Attr("position", "After").To<ScriptPosition>();
 			Mode = definition.Attr("mode", "Create").To<ScriptMode>();
 			SqlDialect = definition.Attr("dialect", "Ansi").To<SqlDialect>();
-			if (string.IsNullOrWhiteSpace(definition.Value)){
+			if (string.IsNullOrWhiteSpace(definition.Value) && string.IsNullOrWhiteSpace(External)){
 				External = Name;
 			}
 			if (!string.IsNullOrWhiteSpace(External) && !External.EndsWith(".sql")){

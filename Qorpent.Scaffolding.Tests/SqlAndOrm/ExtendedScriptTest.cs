@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.Scaffolding.Model;
@@ -51,6 +52,7 @@ class X prototype=dbscript
 			File.WriteAllText("CanReadExternal.sql","--echo x");
 			var model = PersistentModel.Compile(@"class X prototype=dbscript external=CanReadExternal.sql");
 			var script = model.ExtendedScripts.First(_ => _.Name == "X");
+			Console.WriteLine(script.Text);
 			Assert.AreEqual("--echo x", script.Text);
 		}
 	}

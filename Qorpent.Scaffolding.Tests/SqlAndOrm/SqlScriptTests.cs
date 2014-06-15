@@ -71,8 +71,33 @@ Script sys:support_for_filegroups_begin (C,S,R)
 FileGroup SECONDARY (C,S,R)
 Sequence ""dbo"".""a_seq"" (C,S,O)
 Sequence ""dbo"".""b_seq"" (C,S,O)
-PARTDEF ""dbo""_""a""_PARTITION (C,S,O)
-PARTDEF ""dbo""_""b""_PARTITION (C,S,O)
+PARTDEF dbo_a_PARTITION (C,S,O)
+PARTDEF dbo_b_PARTITION (C,S,O)
+Table ""dbo"".""a"" (Id, selector) (C,S,R)
+Table ""dbo"".""b"" (Id, ver) (C,S,R)
+Script sys:support_for_filegroups_end (C,S,R)
+".Trim(), digest);
+		}
+
+		[Test]
+		public void CanUsePersistentAttribute()
+		{
+			var digest = GetDigest(@"
+class table persistent=1 abstract
+table a
+	partitioned with=selector start=2
+	int selector
+table b
+	partitioned with=ver start='19900101'
+	datetime ver
+");
+			Assert.AreEqual(@"
+Script sys:support_for_filegroups_begin (C,S,R)
+FileGroup SECONDARY (C,S,R)
+Sequence ""dbo"".""a_seq"" (C,S,O)
+Sequence ""dbo"".""b_seq"" (C,S,O)
+PARTDEF dbo_a_PARTITION (C,S,O)
+PARTDEF dbo_b_PARTITION (C,S,O)
 Table ""dbo"".""a"" (Id, selector) (C,S,R)
 Table ""dbo"".""b"" (Id, ver) (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)
@@ -117,18 +142,18 @@ GO
 
 begin try
 
-CREATE PARTITION FUNCTION ""dbo""_""a""_PARTITIONFunc (int)
+CREATE PARTITION FUNCTION dbo_a_PARTITIONFunc (int)
 AS RANGE LEFT FOR VALUES ('2')
-CREATE PARTITION SCHEME ""dbo""_""a""_PARTITION AS PARTITION ""dbo""_""a""_PARTITIONFunc ALL TO (SECONDARY)
+CREATE PARTITION SCHEME dbo_a_PARTITION AS PARTITION dbo_a_PARTITIONFunc ALL TO (SECONDARY)
 
 end try begin catch print ERROR_MESSAGE() end catch
 GO
 
 begin try
 
-CREATE PARTITION FUNCTION ""dbo""_""b""_PARTITIONFunc (datetime)
+CREATE PARTITION FUNCTION dbo_b_PARTITIONFunc (datetime)
 AS RANGE LEFT FOR VALUES ('19900101')
-CREATE PARTITION SCHEME ""dbo""_""b""_PARTITION AS PARTITION ""dbo""_""b""_PARTITIONFunc ALL TO (SECONDARY)
+CREATE PARTITION SCHEME dbo_b_PARTITION AS PARTITION dbo_b_PARTITIONFunc ALL TO (SECONDARY)
 
 end try begin catch print ERROR_MESSAGE() end catch
 GO
@@ -136,7 +161,7 @@ GO
 CREATE TABLE ""dbo"".""a"" (
 	""id"" int NOT NULL CONSTRAINT dbo_a_id_pk PRIMARY KEY NONCLUSTERED ON SECONDARY DEFAULT (NEXT VALUE FOR ""dbo"".""a_seq""),
 	""selector"" int NOT NULL DEFAULT 0
-) ON ""dbo""_""a""_PARTITION ( selector);
+) ON dbo_a_PARTITION ( selector);
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
 
@@ -145,7 +170,7 @@ GO
 CREATE TABLE ""dbo"".""b"" (
 	""id"" int NOT NULL CONSTRAINT dbo_b_id_pk PRIMARY KEY NONCLUSTERED ON SECONDARY DEFAULT (NEXT VALUE FOR ""dbo"".""b_seq""),
 	""ver"" datetime NOT NULL DEFAULT 0
-) ON ""dbo""_""b""_PARTITION ( ver);
+) ON dbo_b_PARTITION ( ver);
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=0)  INSERT ""dbo"".""b"" (""id"") VALUES (0);
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT ""dbo"".""b"" (""id"") VALUES (-1);
 
@@ -179,16 +204,16 @@ GO
 
 begin try
 
-DROP PARTITION SCHEME ""dbo""_""b""_PARTITION 
-DROP PARTITION FUNCTION ""dbo""_""b""_PARTITIONFunc
+DROP PARTITION SCHEME dbo_b_PARTITION 
+DROP PARTITION FUNCTION dbo_b_PARTITIONFunc
 
 end try begin catch print ERROR_MESSAGE() end catch
 GO
 
 begin try
 
-DROP PARTITION SCHEME ""dbo""_""a""_PARTITION 
-DROP PARTITION FUNCTION ""dbo""_""a""_PARTITIONFunc
+DROP PARTITION SCHEME dbo_a_PARTITION 
+DROP PARTITION FUNCTION dbo_a_PARTITIONFunc
 
 end try begin catch print ERROR_MESSAGE() end catch
 GO
@@ -620,6 +645,7 @@ Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 		{
 			var digest = GetScript(sampleView);
 			Assert.AreEqual(@"
+
 SET NOCOUNT ON
 GO
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
@@ -659,7 +685,7 @@ CREATE TABLE ""dbo"".""b"" (
 	""name"" nvarchar(255) NOT NULL DEFAULT ''
 ) ON SECONDARY;
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=0)  INSERT ""dbo"".""b"" (""id"", ""code"", ""name"") VALUES (0, '/', 'NULL/ROOT');
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT ""dbo"".""b"" (""id"", ""code"", ""name"") VALUES (-1, 'ERR', 'ERROR/LOST');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT ""dbo"".""b"" (""id"", ""code"", ""name"", ""a"") VALUES (-1, 'ERR', 'ERROR/LOST', -1);
 
 GO
 

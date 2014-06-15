@@ -112,7 +112,7 @@ class " + name + @" prototype=dbtable
 	""{0}"" int NOT NULL CONSTRAINT dbo_{0}_{0}_{0}_id_fk FOREIGN KEY REFERENCES ""dbo"".""{0}"" (""id"") DEFAULT 0
 ) ON SECONDARY;
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""{0}"" where ""id""=0)  INSERT ""dbo"".""{0}"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""{0}"" where ""id""=-1)  INSERT ""dbo"".""{0}"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""{0}"" where ""id""=-1)  INSERT ""dbo"".""{0}"" (""id"", ""{0}"") VALUES (-1, -1);
 ".Trim(),name), scr.Trim());
 		}
 		/// <summary>
@@ -129,7 +129,7 @@ IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""{0}"" where ""id""=-1)  INSERT ""db
 				Mode = ScriptMode.Create
 			};
 			var scr = mwr.ToString();
-			Console.WriteLine(scr);
+			Console.WriteLine(scr.Replace("\"", "\"\""));
 			Assert.AreEqual(@"CREATE TABLE ""dbo"".""master"" (
 	""id"" int NOT NULL CONSTRAINT dbo_master_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""master_seq""),
 	""code"" nvarchar(255) NOT NULL CONSTRAINT dbo_master_code_unq UNIQUE DEFAULT ''
@@ -147,16 +147,18 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Код', N'SCHEMA', N'dbo', N
 				Mode = ScriptMode.Create
 			};
 			scr = swr.ToString();
-			Console.WriteLine(scr);
-			Assert.AreEqual(@"CREATE TABLE ""dbo"".""slave"" (
+			Console.WriteLine(scr.Replace("\"","\"\""));
+			Assert.AreEqual(@"
+CREATE TABLE ""dbo"".""slave"" (
 	""id"" int NOT NULL CONSTRAINT dbo_slave_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""slave_seq""),
 	""version"" datetime NOT NULL DEFAULT 0,
 	""master"" int NOT NULL CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY REFERENCES ""dbo"".""master"" (""id"") DEFAULT 0
 ) ON SECONDARY;
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""slave"" where ""id""=0)  INSERT ""dbo"".""slave"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""slave"" where ""id""=-1)  INSERT ""dbo"".""slave"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""slave"" where ""id""=-1)  INSERT ""dbo"".""slave"" (""id"", ""master"") VALUES (-1, -1);
 EXECUTE sp_addextendedproperty N'MS_Description', 'Версия', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'version';
-EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'master';".Trim(), scr.Trim());
+EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'master';
+".Trim(), scr.Trim());
 		}
 
 		/// <summary>
@@ -175,8 +177,9 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект',
 				Mode = ScriptMode.Create
 			};
 			var scr = mwr.ToString();
-			Console.WriteLine(scr);
-			Assert.AreEqual(@"CREATE TABLE ""dbo"".""master"" (
+			Console.WriteLine(scr.Replace("\"","\"\""));
+			Assert.AreEqual(@"
+CREATE TABLE ""dbo"".""master"" (
 	""id"" int NOT NULL CONSTRAINT dbo_master_id_pk PRIMARY KEY DEFAULT (nextval('""dbo"".""master_seq""')),
 	""code"" varchar(255) NOT NULL CONSTRAINT dbo_master_code_unq UNIQUE DEFAULT ''
 ) TABLESPACE SECONDARY;
@@ -193,14 +196,14 @@ COMMENT ON COLUMN ""dbo"".""master"".""code"" IS 'Код';
 				Mode = ScriptMode.Create
 			};
 			scr = swr.ToString();
-			Console.WriteLine(scr);
+			Console.WriteLine(scr.Replace("\"", "\"\""));
 			Assert.AreEqual(@"CREATE TABLE ""dbo"".""slave"" (
 	""id"" int NOT NULL CONSTRAINT dbo_slave_id_pk PRIMARY KEY DEFAULT (nextval('""dbo"".""slave_seq""')),
 	""version"" datetime NOT NULL DEFAULT 0,
 	""master"" int NOT NULL CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY REFERENCES ""dbo"".""master"" (""id"") DEFERRABLE DEFAULT 0
 ) TABLESPACE SECONDARY;
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""slave"" where ""id""=0)  INSERT ""dbo"".""slave"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""slave"" where ""id""=-1)  INSERT ""dbo"".""slave"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""slave"" where ""id""=-1)  INSERT ""dbo"".""slave"" (""id"", ""master"") VALUES (-1, -1);
 COMMENT ON COLUMN ""dbo"".""slave"".""version"" IS 'Версия';
 COMMENT ON COLUMN ""dbo"".""slave"".""master"" IS 'Главный объект';".Trim(), scr.Trim());
 		}
@@ -223,13 +226,14 @@ COMMENT ON COLUMN ""dbo"".""slave"".""master"" IS 'Главный объект';
 			};
 			var scr = mwr.ToString();
 			Console.WriteLine(scr.Replace("\"","\"\""));
-			Assert.AreEqual(@"CREATE TABLE ""dbo"".""master"" (
+			Assert.AreEqual(@"
+CREATE TABLE ""dbo"".""master"" (
 	""id"" int NOT NULL CONSTRAINT dbo_master_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""master_seq""),
 	""code"" nvarchar(255) NOT NULL CONSTRAINT dbo_master_code_unq UNIQUE DEFAULT '',
 	""slave"" int NOT NULL DEFAULT 0
 ) ON SECONDARY;
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""master"" where ""id""=0)  INSERT ""dbo"".""master"" (""id"", ""code"") VALUES (0, '/');
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""master"" where ""id""=-1)  INSERT ""dbo"".""master"" (""id"", ""code"") VALUES (-1, 'ERR');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""master"" where ""id""=-1)  INSERT ""dbo"".""master"" (""id"", ""code"", ""slave"") VALUES (-1, 'ERR', -1);
 EXECUTE sp_addextendedproperty N'MS_Description', 'Код', N'SCHEMA', N'dbo', N'TABLE', N'master', N'COLUMN', 'code';
 EXECUTE sp_addextendedproperty N'MS_Description', 'Младший объект', N'SCHEMA', N'dbo', N'TABLE', N'master', N'COLUMN', 'slave';
 ".Trim(), scr.Trim());
@@ -243,15 +247,17 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Младший объект',
 			};
 			scr = swr.ToString();
 			Console.WriteLine(scr.Replace("\"", "\"\""));
-			Assert.AreEqual(@"CREATE TABLE ""dbo"".""slave"" (
+			Assert.AreEqual(@"
+CREATE TABLE ""dbo"".""slave"" (
 	""id"" int NOT NULL CONSTRAINT dbo_slave_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""slave_seq""),
 	""version"" datetime NOT NULL DEFAULT 0,
 	""master"" int NOT NULL DEFAULT 0
 ) ON SECONDARY;
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""slave"" where ""id""=0)  INSERT ""dbo"".""slave"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""slave"" where ""id""=-1)  INSERT ""dbo"".""slave"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""slave"" where ""id""=-1)  INSERT ""dbo"".""slave"" (""id"", ""master"") VALUES (-1, -1);
 EXECUTE sp_addextendedproperty N'MS_Description', 'Версия', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'version';
-EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'master';".Trim(), scr.Trim());
+EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект', N'SCHEMA', N'dbo', N'TABLE', N'slave', N'COLUMN', 'master';
+".Trim(), scr.Trim());
 		}
 
 		[TestCase(SqlDialect.SqlServer, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY (\"master\") REFERENCES \"dbo\".\"master\" (\"id\");")]

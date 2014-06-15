@@ -51,12 +51,11 @@ Script sys:support_for_filegroups_begin (C,S,R)
 FileGroup SECONDARY (C,S,R)
 Sequence ""dbo"".""thetable_seq"" (C,S,O)
 Table ""dbo"".""thetable"" (Id, Code, Name, Idx, Start, Finish, Tag, Version, ImportId, Active) (C,S,R)
-FUNCTION ""dbo"".""thetableTheTableIsActive"" (C,S,R)
-FUNCTION ""dbo"".""thetableTheTableGetCode"" (C,S,R)
-FUNCTION ""dbo"".""thetableTheTableGetId"" (C,S,R)
-VIEW ""dbo"".""thetableTheTableFull"" (C,S,R)
-Script sys:support_for_filegroups_end (C,S,R)
-Script DbScript (C,S,R)".Trim(), create.Trim());
+FUNCTION ""dbo"".""thetableIsActive"" (C,S,R)
+FUNCTION ""dbo"".""thetableGetCode"" (C,S,R)
+FUNCTION ""dbo"".""thetableGetId"" (C,S,R)
+VIEW ""dbo"".""thetableFull"" (C,S,R)
+Script sys:support_for_filegroups_end (C,S,R)".Trim(), create.Trim());
 		}
 
 		[Test]
