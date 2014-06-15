@@ -1,57 +1,56 @@
-﻿using Qorpent.Utils.Extensions;
+﻿using System.Xml.Linq;
+using Qorpent.BSharp;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model.SqlObjects{
 	/// <summary>
-	/// Схема
+	///     Схема
 	/// </summary>
-	public class Sequence : SqlObject
-	{
+	public class Sequence : SqlObject{
 		/// <summary>
-		/// 
 		/// </summary>
-		public Sequence()
-		{
+		public Sequence(){
 			ObjectType = SqlObjectType.Sequence;
 			PreTable = true;
 			Step = 10;
 			Start = 10;
 		}
+
 		/// <summary>
-		/// 
+		/// </summary>
+		public DataType DataType { get; set; }
+
+		/// <summary>
+		///     Шаг приращения
+		/// </summary>
+		public int Step { get; set; }
+
+		/// <summary>
+		///     начальный индекс
+		/// </summary>
+		public int Start { get; set; }
+
+		/// <summary>
 		/// </summary>
 		/// <param name="model"></param>
 		/// <param name="cls"></param>
 		/// <param name="bscls"></param>
 		/// <param name="xml"></param>
-		public override SqlObject Setup(PersistentModel model, PersistentClass cls, BSharp.IBSharpClass bscls, System.Xml.Linq.XElement xml)
-		{
+		public override SqlObject Setup(PersistentModel model, PersistentClass cls, IBSharpClass bscls, XElement xml){
 			base.Setup(model, cls, bscls, xml);
 			if (null != xml){
-				this.Start = xml.Attr("start", "10").ToInt();
-				this.Step = xml.Attr("step", "10").ToInt();
+				Start = xml.Attr("start", "10").ToInt();
+				Step = xml.Attr("step", "10").ToInt();
 			}
-			this.Name = cls.Name + "_SEQ";
-			this.Schema = cls.Schema;
+			Name = cls.Name + "_SEQ";
+			Schema = cls.Schema;
 			if (null != cls.PrimaryKey){
-				this.DataType = cls.PrimaryKey.DataType;
+				DataType = cls.PrimaryKey.DataType;
 			}
 			else{
-				this.DataType = cls.DataTypeMap["int"];
+				DataType = cls.DataTypeMap["int"];
 			}
 			return this;
 		}
-		/// <summary>
-		/// 
-		/// </summary>
-		public DataType DataType { get; set; }
-
-		/// <summary>
-		/// Шаг приращения
-		/// </summary>
-		public int Step { get; set; }
-		/// <summary>
-		/// начальный индекс
-		/// </summary>
-		public int Start { get; set; }
 	}
 }

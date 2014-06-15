@@ -2,31 +2,32 @@
 
 namespace Qorpent.Scaffolding.Model{
 	/// <summary>
-	/// 
 	/// </summary>
 	[Flags]
 	public enum SqlDialect{
 		/// <summary>
-		/// Условный тип - без генерации
+		///     Условный тип - без генерации
 		/// </summary>
 		None = 0,
-		
+
 		/// <summary>
-		/// Стандарт ANSI
+		///     Стандарт ANSI
 		/// </summary>
 		Ansi = 1,
+
 		/// <summary>
-		/// SqlServer
+		///     SqlServer
 		/// </summary>
-		SqlServer =2 ,
+		SqlServer = 2,
+
 		/// <summary>
-		/// PostGresql
+		///     PostGresql
 		/// </summary>
-		PostGres =4,
+		PostGres = 4,
+
 		/// <summary>
-		/// Oracle
+		///     Oracle
 		/// </summary>
 		Oracle = 8,
-		
 	}
 }

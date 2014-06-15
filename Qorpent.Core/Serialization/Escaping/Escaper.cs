@@ -83,6 +83,46 @@ namespace Qorpent.Serialization
 			return str.ToStr().Replace("'", "''");
 		}
 
+	    /// <summary>
+	    /// Заключает строку в кавычки
+	    /// </summary>
+	    /// <param name="s"></param>
+	    /// <param name="lowercase">Приводить к нижнему регистру</param>
+	    /// <returns></returns>
+	    public static string SqlQuoteName(this string s,bool lowercase = true){
+			if (string.IsNullOrWhiteSpace(s)){
+				return "\"\"";
+			}
+			if (-1 == s.IndexOfAny(new[] { '"', '.' }))
+			{
+				return "\"" + s.ToLowerInvariant() + "\"";
+			}
+			var sb = new StringBuilder();
+			sb.Append('"');
+			for (var i = 0; i < s.Length; i++){
+				var c = s[i];
+				if (c == '.'){
+					sb.Append('"');
+					sb.Append('.');
+					sb.Append('"');
+				}else  if (c == '"'){
+					continue;
+				}
+				else{
+					if (lowercase){
+						sb.Append(char.ToLower(c));
+					}
+					else{
+						sb.Append(c);
+					}
+					
+				}
+			}
+			sb.Append('"');
+			return sb.ToString();
+		}
+		
+
         private static string ToBxlMultiLineString(string str) {
             if (-1 == str.IndexOf('\r') && -1 == str.IndexOf('\n')) {
                 return ToBxlSingleLineString(str);

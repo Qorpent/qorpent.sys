@@ -168,7 +168,7 @@ namespace Qorpent.Data.DataCache
 			string code = "";
 			var vid = value as IWithId;
 			
-			if (null==vid || ( vid.Id < 0 && vid.Id!=-9999) ){
+			if (null==vid || ( vid.Id < 0 && vid.Id!=-1) ){
 				id = GetNextId();
 				if (null != vid){
 					vid.Id = id;

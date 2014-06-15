@@ -4,27 +4,24 @@ using Qorpent.Scaffolding.Model.SqlObjects;
 
 namespace Qorpent.Scaffolding.Model.SqlWriters{
 	/// <summary>
-	/// 
 	/// </summary>
 	public class SqlTriggerWriter : SqlCommandWriter{
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="sqlTrigger"></param>
 		public SqlTriggerWriter(SqlTrigger sqlTrigger){
-			this.Trigger = sqlTrigger;
-			this.Parameters = sqlTrigger;
+			Trigger = sqlTrigger;
+			Parameters = sqlTrigger;
 		}
+
 		/// <summary>
-		/// 
 		/// </summary>
 		public SqlTrigger Trigger { get; set; }
+
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
-		protected override string GetText()
-		{
+		protected override string GetText(){
 			if (Dialect != SqlDialect.SqlServer){
 				return "-- !ВНИМАНИЕ НА ДАННЫЙ МОМЕНТ РЕАЛИЗАЦИЯ ГЕНЕРАЦИИ ТРИГЕРОВ ЕСТЬ ТОЛЬКО ДЛЯ MS SQL";
 			}
@@ -32,18 +29,18 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			sb.AppendLine("IF OBJECT_ID('${FullName}') IS NOT NULL DROP TRIGGER ${FullName};");
 			sb.AppendLine("GO");
 
-			var body = Trigger.ResolveBody();
+			string body = Trigger.ResolveBody();
 			if (Mode == ScriptMode.Create){
 				if (Trigger.IsFullyExternal()){
 					sb.Append(body);
 				}
 				else{
-					var targets = string.Join(",",
-					                          new[]{
-						                          Trigger.Insert ? "INSERT" : null, Trigger.Update ? "UPDATE" : null,
-						                          Trigger.Delete ? "DELETE" : null
-					                          }.Where(_ => null != _));
-					var mode = Trigger.Before ? " INSTEAD OF " : " FOR ";
+					string targets = string.Join(",",
+					                             new[]{
+						                             Trigger.Insert ? "INSERT" : null, Trigger.Update ? "UPDATE" : null,
+						                             Trigger.Delete ? "DELETE" : null
+					                             }.Where(_ => null != _));
+					string mode = Trigger.Before ? " INSTEAD OF " : " FOR ";
 					sb.Append("CREATE TRIGGER ${FullName} ON ${TableName}" + mode + targets + " AS BEGIN");
 					sb.AppendLine();
 					sb.AppendLine(body);
@@ -54,13 +51,10 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
 		protected override string GetDigestFinisher(){
 			return "TRIGGER " + Trigger.FullName;
 		}
-
-
 	}
 }

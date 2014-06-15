@@ -2,31 +2,25 @@ using Qorpent.Scaffolding.Model.SqlObjects;
 
 namespace Qorpent.Scaffolding.Model.SqlWriters{
 	/// <summary>
-	/// 
 	/// </summary>
-	public class SequenceWriter : SqlCommandWriter
-	{
+	public class SequenceWriter : SqlCommandWriter{
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="sequence"></param>
-		public SequenceWriter(Sequence sequence)
-		{
-			this.Sequence = sequence;
-			this.Parameters = sequence;
+		public SequenceWriter(Sequence sequence){
+			Sequence = sequence;
+			Parameters = sequence;
 		}
+
 		/// <summary>
-		/// 
 		/// </summary>
 		public Sequence Sequence { get; set; }
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
-		protected override string GetText()
-		{
-			if (Mode == ScriptMode.Create ){
+		protected override string GetText(){
+			if (Mode == ScriptMode.Create){
 				if (Dialect == SqlDialect.SqlServer){
 					return "CREATE SEQUENCE ${FullName} AS " + Sequence.DataType.ResolveSqlDataType(Dialect) +
 					       " START WITH ${Start} INCREMENT BY ${Step};";
@@ -36,20 +30,17 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				}
 			}
 			else{
-				if (Dialect == SqlDialect.SqlServer || Dialect==SqlDialect.PostGres){
+				if (Dialect == SqlDialect.SqlServer || Dialect == SqlDialect.PostGres){
 					return "DROP SEQUENCE ${FullName};";
 				}
-				
 			}
 			return "";
-
 		}
+
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
-		protected override string GetDigestFinisher()
-		{
+		protected override string GetDigestFinisher(){
 			if (Dialect == SqlDialect.SqlServer || Dialect == SqlDialect.PostGres){
 				return "Sequence " + Sequence.FullName;
 			}

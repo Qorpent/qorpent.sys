@@ -2,29 +2,30 @@
 
 namespace Qorpent.Scaffolding.Model{
 	/// <summary>
-	/// Описатель типа данных SQL
+	///     Описатель типа данных SQL
 	/// </summary>
 	public class SqlDataType{
 		/// <summary>
-		/// Название
-		/// </summary>
-		public string Name { get; set; }
-		/// <summary>
-		/// Размер
-		/// </summary>
-		public int Size { get; set; }
-		/// <summary>
-		/// Точность
-		/// </summary>
-		public int Precession { get; set; }
-
-		/// <summary>
-		/// 
 		/// </summary>
 		public static readonly SqlDataType Default = new SqlDataType{Name = "varchar", Size = 255};
 
 		/// <summary>
-		/// Прямое приведение к строке для упрощенного составления строк - выражений
+		///     Название
+		/// </summary>
+		public string Name { get; set; }
+
+		/// <summary>
+		///     Размер
+		/// </summary>
+		public int Size { get; set; }
+
+		/// <summary>
+		///     Точность
+		/// </summary>
+		public int Precession { get; set; }
+
+		/// <summary>
+		///     Прямое приведение к строке для упрощенного составления строк - выражений
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
@@ -33,7 +34,7 @@ namespace Qorpent.Scaffolding.Model{
 		}
 
 		/// <summary>
-		/// Converts to valis sql string
+		///     Converts to valis sql string
 		/// </summary>
 		/// <returns></returns>
 		public override string ToString(){

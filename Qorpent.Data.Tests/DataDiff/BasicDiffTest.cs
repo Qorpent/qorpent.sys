@@ -72,7 +72,7 @@ BEGIN TRY
 			insert test (code) select code from @t1 where _exists = 0 and code is not null and id is null
 			update @t1 set id = this.id, code=this.code, _exists =1 from test this join @t1 temp on (temp.code = this.code or temp.id=this.id)
 	--test fk_binding
-		update @t1 set parent = isnull((select id from test where test.code = parent_code ),-9999) where parent is null and parent_code is not null 
+		update @t1 set parent = isnull((select id from test where test.code = parent_code ),-1) where parent is null and parent_code is not null 
 	--test main update
 		update test set name = isnull(x.name,test.name), parent = isnull(x.parent,test.parent)from @t1 x join test on x.id = test.id 
 	-- return of foreign keys contraints

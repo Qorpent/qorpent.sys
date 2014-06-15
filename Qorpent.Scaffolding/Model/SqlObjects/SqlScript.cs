@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.BSharp;
@@ -8,51 +6,81 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model.SqlObjects{
 	/// <summary>
-	/// Описатель для скриптов
+	///     Описатель для скриптов
 	/// </summary>
 	public class SqlScript{
 		/// <summary>
-		/// 
 		/// </summary>
 		public SqlScript(){
 			SubScripts = new List<SqlScript>();
 			Position = ScriptPosition.After;
 			SqlDialect = SqlDialect.Ansi;
 		}
+
 		/// <summary>
-		/// Название скрипта
+		///     Название скрипта
 		/// </summary>
 		public string Name { get; set; }
+
 		/// <summary>
-		/// Комментарий к скрипту
+		///     Комментарий к скрипту
 		/// </summary>
 		public string Comment { get; set; }
+
 		/// <summary>
-		/// Текст скрипта
+		///     Текст скрипта
 		/// </summary>
 		public string Text { get; set; }
+
 		/// <summary>
-		/// Дескриптор внешнего скрипта
+		///     Дескриптор внешнего скрипта
 		/// </summary>
 		public string External { get; set; }
+
 		/// <summary>
-		/// Под-скрипты
+		///     Под-скрипты
 		/// </summary>
 		public IList<SqlScript> SubScripts { get; private set; }
+
 		/// <summary>
-		/// Позиция выполнения скрипта
+		///     Позиция выполнения скрипта
 		/// </summary>
 		public ScriptPosition Position { get; set; }
+
 		/// <summary>
-		/// Режим применения скрипта (при создании или при удалении)
+		///     Режим применения скрипта (при создании или при удалении)
 		/// </summary>
 		public ScriptMode Mode { get; set; }
+
 		/// <summary>
-		/// Диалект, для которого применяется
+		///     Диалект, для которого применяется
 		/// </summary>
 		public SqlDialect SqlDialect { get; set; }
+
 		/// <summary>
-		/// Возвращает реальные скрипты н
+		///     Родительский скрипт
+		/// </summary>
+		public SqlScript Parent { get; set; }
+
+		/// <summary>
+		///     Директория скрипта
+		/// </summary>
+		public string Directory { get; set; }
+
+		/// <summary>
+		/// </summary>
+		public XElement Definition { get; set; }
+
+		/// <summary>
+		/// </summary>
+		protected IBSharpClass MyClass { get; set; }
+
+		/// <summary>
+		/// </summary>
+		protected PersistentModel Model { get; set; }
+
+		/// <summary>
+		///     Возвращает реальные скрипты н
 		/// </summary>
 		/// <param name="dialect"></param>
 		/// <param name="position"></param>
@@ -69,8 +97,8 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 				}
 			}
 			else{
-				foreach (var subScript in SubScripts){
-					foreach (var rs in subScript.GetRealScripts(dialect,position,mode)){
+				foreach (SqlScript subScript in SubScripts){
+					foreach (SqlScript rs in subScript.GetRealScripts(dialect, position, mode)){
 						yield return rs;
 					}
 				}
@@ -78,7 +106,6 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="model"></param>
 		/// <param name="cls"></param>
@@ -94,8 +121,8 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			Position = definition.Attr("position", "After").To<ScriptPosition>();
 			Mode = definition.Attr("mode", "Create").To<ScriptMode>();
 			SqlDialect = definition.Attr("dialect", "Ansi").To<SqlDialect>();
-			
-			var subscripts = definition.Elements("script").ToArray();
+
+			XElement[] subscripts = definition.Elements("script").ToArray();
 			if (0 == subscripts.Length){
 				if (string.IsNullOrWhiteSpace(External)){
 					Text = definition.Value;
@@ -105,7 +132,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 				}
 			}
 			else{
-				foreach (var subscriptdef in definition.Elements("script")){
+				foreach (XElement subscriptdef in definition.Elements("script")){
 					var subscript = new SqlScript();
 					subscript.Parent = this;
 					subscript.Setup(Model, cls, subscriptdef);
@@ -114,27 +141,5 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			}
 			return this;
 		}
-		/// <summary>
-		/// Родительский скрипт
-		/// </summary>
-		public SqlScript Parent { get; set; }
-		/// <summary>
-		/// Директория скрипта
-		/// </summary>
-		public string Directory { get; set; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public XElement Definition { get; set; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		protected IBSharpClass MyClass { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		protected PersistentModel Model { get; set; }
 	}
 }

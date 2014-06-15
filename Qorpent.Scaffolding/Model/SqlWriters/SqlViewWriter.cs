@@ -1,106 +1,122 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using Qorpent.Scaffolding.Model.SqlObjects;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model.SqlWriters{
 	/// <summary>
-	/// 
 	/// </summary>
-	public class SqlViewWriter : SqlCommandWriter
-	{
+	public class SqlViewWriter : SqlCommandWriter{
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="view"></param>
-		public SqlViewWriter(SqlView view)
-		{
-			this.View = view;
-			this.Parameters = view;
+		public SqlViewWriter(SqlView view){
+			View = view;
+			Parameters = view;
 		}
+
 		/// <summary>
-		/// 
 		/// </summary>
 		public SqlView View { get; set; }
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
-		protected override string GetText()
-		{
+		protected override string GetText(){
 			var sb = new StringBuilder();
 			sb.AppendLine("IF OBJECT_ID('${FullName}') IS NOT NULL DROP VIEW ${FullName};");
 			sb.AppendLine("GO");
 
-			var body = ParseSpecialBody( View.ResolveBody());
-			if (Mode == ScriptMode.Create)
-			{
-				if (View.IsFullyExternal())
-				{
+			string body = ParseSpecialBody(View.ResolveBody());
+			if (Mode == ScriptMode.Create){
+				if (View.IsFullyExternal()){
 					sb.Append(body);
 				}
-				else
-				{
+				else{
 					sb.Append("CREATE VIEW ${FullName} AS SELECT ");
 					sb.AppendLine();
+					if (null != View.Definition.Element("selffields")){
+						sb.Append(GetSelfFieldSet());
+					}
+					foreach (XElement element in View.Definition.Elements("reffields")){
+						string[] rnames = element.Elements("ref").Select(_ => _.GetCode()).ToArray();
+						string[] fields = element.Elements("to").Select(_ => _.GetCode()).ToArray();
+						WriteRefFields(rnames, fields, sb);
+					}
+
 					sb.AppendLine(body);
+					sb.AppendLine("1 as __TERMINAL FROM " + View.Table.FullSqlName);
 					sb.AppendLine();
 				}
 			}
 			return sb.ToString();
 		}
 
-		private string ParseSpecialBody(string body){
-			if (body.Contains("--PARENT_FIELD_SET--"))
-			{
-				var sb = new StringBuilder();
-				foreach (var fld in View.Table.Fields.Values.OrderBy(_ => _.Idx))
-				{
-					sb.AppendLine(fld.Name + ", --" + fld.Comment);
+		private void WriteRefFields(IEnumerable<string> rnames, ICollection<string> fields, StringBuilder sb){
+			PersistentClass table = View.Table;
+			foreach (string refname in rnames){
+				if (!table.Fields.ContainsKey(refname.ToLowerInvariant())){
+					throw new Exception("table " + table.Name + " doesn't contains field " + refname);
 				}
+				Field fld = table.Fields[refname.ToLowerInvariant()];
+				if (fld.NoSql) continue;
+				PersistentClass rtable = fld.ReferenceClass;
+				foreach (string fname in fields){
+					if (!rtable.Fields.ContainsKey(fname.ToLowerInvariant())){
+						throw new Exception("referenced table " + rtable.Name + " doesn't contains field " + fname);
+					}
+					Field rfld = rtable.Fields[fname.ToLowerInvariant()];
+					if (rfld.NoSql) continue;
+					sb.AppendLine(
+						string.Format("(select x.{1} from {0} x where x.{5} = {2}.{3}.{4}) as {6}{7},",
+						              fld.ReferenceClass.FullSqlName, fname.SqlQuoteName(), table.Schema.SqlQuoteName(),
+						              table.Name.SqlQuoteName(), fld.Name.SqlQuoteName(), fld.ReferenceField.SqlQuoteName(),
+						              fld.Name, fname
+							));
+				}
+			}
+		}
+
+
+		private string ParseSpecialBody(string body){
+			if (body.Contains("--PARENT_FIELD_SET--")){
+				StringBuilder sb = GetSelfFieldSet();
 				body = body.Replace("--PARENT_FIELD_SET--", sb.ToString());
 			}
-			body= Regex.Replace(body,
-							   @"(?ix)--\s*PARENT_REF_SET\sFOR\s\((?<fields>[^\)]+)\)\sWITH\s\((?<outers>[^\)]+)\)\s*--",
-							   match
-							   =>
-							   {
-								   var fields = match.Groups["fields"].Value.SmartSplit();
-								   var outers = match.Groups["outers"].Value.SmartSplit();
-								   var sb = new StringBuilder();
-								   foreach (var field in fields){
-									   var table = View.Table;
-									   if (!table.Fields.ContainsKey(field.ToLowerInvariant()))
-									   {
-										   throw new Exception("table " + table.Name + " doesn't contains field " + field);
-									   }
-									   var fld = table.Fields[field.ToLowerInvariant()];
-									   foreach (var outer in outers)
-									   {
-										   sb.AppendLine(
-											   string.Format("(select x.{1} from {0} x where x.{5} = {2}.{3}.{4}) as {4}{1},",
-															 fld.ReferenceClass.FullSqlName, outer, table.Schema, table.Name, fld.Name, fld.ReferenceField
-												   ));
-									   }
-								   }
+			body = Regex.Replace(body,
+			                     @"(?ix)--\s*PARENT_REF_SET\sFOR\s\((?<fields>[^\)]+)\)\sWITH\s\((?<outers>[^\)]+)\)\s*--",
+			                     match
+			                     =>{
+				                     IList<string> fields = match.Groups["fields"].Value.SmartSplit();
+				                     IList<string> outers = match.Groups["outers"].Value.SmartSplit();
+				                     var sb = new StringBuilder();
+				                     WriteRefFields(fields, outers, sb);
 
-								   return sb.ToString();
-							   }).Trim();
-				body += Environment.NewLine+"1 as __TERMINAL FROM " + View.Table.FullSqlName;
-			
+				                     return sb.ToString();
+			                     }).Trim();
+
+
 			return body;
 		}
 
+		private StringBuilder GetSelfFieldSet(){
+			var sb = new StringBuilder();
+			foreach (Field fld in View.Table.Fields.Values.Where(_ => !_.NoSql).OrderBy(_ => _.Idx)){
+				sb.AppendLine(fld.Name.SqlQuoteName() + ", --" + fld.Comment);
+			}
+			return sb;
+		}
+
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
-		protected override string GetDigestFinisher()
-		{
+		protected override string GetDigestFinisher(){
 			return "VIEW " + View.FullName;
 		}
 	}

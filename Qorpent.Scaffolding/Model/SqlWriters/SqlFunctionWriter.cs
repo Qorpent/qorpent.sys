@@ -4,53 +4,42 @@ using Qorpent.Serialization;
 
 namespace Qorpent.Scaffolding.Model.SqlWriters{
 	/// <summary>
-	/// 
 	/// </summary>
-	public class SqlFunctionWriter : SqlCommandWriter
-	{
+	public class SqlFunctionWriter : SqlCommandWriter{
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="function"></param>
-		public SqlFunctionWriter(SqlFunction function)
-		{
-			this.Function = function;
-			this.Parameters = function;
+		public SqlFunctionWriter(SqlFunction function){
+			Function = function;
+			Parameters = function;
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		public SqlFunction Function { get; set; }
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
-		protected override string GetText()
-		{
-			if (Dialect != SqlDialect.SqlServer)
-			{
+		protected override string GetText(){
+			if (Dialect != SqlDialect.SqlServer){
 				return "-- ! ВНИМАНИЕ НА ДАННЫЙ МОМЕНТ РЕАЛИЗАЦИЯ ГЕНЕРАЦИИ ФУНКЦИЙ ЕСТЬ ТОЛЬКО ДЛЯ MS SQL";
 			}
 			var sb = new StringBuilder();
-			var itemname = "FUNCTION";
+			string itemname = "FUNCTION";
 			if (Function.IsProcedure){
 				itemname = "PROCEDURE";
 			}
-			sb.AppendLine("IF OBJECT_ID('${FullName}') IS NOT NULL DROP "+itemname+" ${FullName};");
+			sb.AppendLine("IF OBJECT_ID('${FullName}') IS NOT NULL DROP " + itemname + " ${FullName};");
 			sb.AppendLine("GO");
 
-			var body = Function.ResolveBody();
-			if (Mode == ScriptMode.Create)
-			{
-				if (Function.IsFullyExternal())
-				{
+			string body = Function.ResolveBody();
+			if (Mode == ScriptMode.Create){
+				if (Function.IsFullyExternal()){
 					sb.Append(body);
 				}
-				else
-				{
-					var arguments = string.Join(",",Function.Arguments.Values.OrderBy(_=>_.Index).Select(GetArgumentString));
+				else{
+					string arguments = string.Join(",", Function.Arguments.Values.OrderBy(_ => _.Index).Select(GetArgumentString));
 					if (Function.IsProcedure){
 						sb.Append("CREATE PROCEDURE ${FullName} " + arguments);
 					}
@@ -74,7 +63,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			sb.Append(arg.DataType.ResolveSqlDataType(SqlDialect.SqlServer));
 			if (null != arg.DefaultValue){
 				sb.Append(" = ");
-				var str = arg.DefaultValue.Value.ToString();
+				string str = arg.DefaultValue.Value.ToString();
 				if (str.StartsWith("(")){
 					sb.Append(str);
 				}
@@ -89,12 +78,10 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
-		protected override string GetDigestFinisher()
-		{
-			return (Function.IsProcedure? "PROCEDURE":"FUNCTION")+" " + Function.FullName;
+		protected override string GetDigestFinisher(){
+			return (Function.IsProcedure ? "PROCEDURE" : "FUNCTION") + " " + Function.FullName;
 		}
 	}
 }

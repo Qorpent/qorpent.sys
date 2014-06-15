@@ -1,14 +1,15 @@
 ﻿namespace Qorpent.Scaffolding.Model{
 	/// <summary>
-	/// Режим скрипта
+	///     Режим скрипта
 	/// </summary>
 	public enum ScriptMode{
 		/// <summary>
-		/// При создании
+		///     При создании
 		/// </summary>
 		Create,
+
 		/// <summary>
-		/// При уничтожении
+		///     При уничтожении
 		/// </summary>
 		Drop
 	}

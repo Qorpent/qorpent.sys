@@ -2,24 +2,24 @@ using Qorpent.Scaffolding.Model.SqlObjects;
 
 namespace Qorpent.Scaffolding.Model.SqlWriters{
 	/// <summary>
-	/// 
 	/// </summary>
-	public class PartitionDefinitionWriter: SqlCommandWriter{
+	public class PartitionDefinitionWriter : SqlCommandWriter{
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="definition"></param>
 		public PartitionDefinitionWriter(PartitionDefinition definition){
 			Definition = definition;
 			Parameters = definition;
-			
 		}
+
 		/// <summary>
-		/// 
+		/// </summary>
+		public PartitionDefinition Definition { get; set; }
+
+		/// <summary>
 		/// </summary>
 		/// <returns></returns>
-		protected override string GetText()
-		{
+		protected override string GetText(){
 			if (Dialect == SqlDialect.SqlServer){
 				if (Mode == ScriptMode.Create){
 					return @"
@@ -37,12 +37,8 @@ DROP PARTITION FUNCTION ${Name}Func
 			}
 			return "";
 		}
+
 		/// <summary>
-		/// 
-		/// </summary>
-		public PartitionDefinition Definition { get; set; }
-		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
 		protected override string GetDigestFinisher(){

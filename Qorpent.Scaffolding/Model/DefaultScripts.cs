@@ -1,17 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Qorpent.Scaffolding.Model
-{
+﻿namespace Qorpent.Scaffolding.Model{
 	/// <summary>
-	/// Скрипты по умолчанию
+	///     Скрипты по умолчанию
 	/// </summary>
 	public static class DefaultScripts{
 		/// <summary>
-		/// Начало скрипта SQL
+		///     Финиширующий скрипт для SQL-server
+		/// </summary>
+		public const string SqlServerCreateFinisher = @"
+IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
+";
+
+		/// <summary>
+		///     Преамбуда POSTGRESQL скрипта
+		/// </summary>
+		public const string PostgresqlPeramble = @"
+DROP FUNCTION IF EXISTS ___script();
+CREATE FUNCTION ___script () returns int as $$ BEGIN
+CREATE SCHEMA IF NOT EXISTS dbo ; --mssql matching
+";
+
+		/// <summary>
+		///     Финиширующий скрипт для SQL-server
+		/// </summary>
+		public const string PostgresqlFinisher = @"
+RETURN 1;
+EXCEPTION
+	WHEN OTHERS THEN BEGIN 
+		raise notice '% %', SQLERRM, SQLSTATE;
+		RETURN 0;
+	END;
+END;
+$$ LANGUAGE plpgsql;
+SELECT ___script();
+DROP FUNCTION IF EXISTS ___script();
+";
+
+		/// <summary>
+		///     Начало скрипта SQL
 		/// </summary>
 		public static readonly string SqlServerCreatePeramble = @"
 SET NOCOUNT ON
@@ -65,35 +90,6 @@ end
 
 ".Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ") + @"
 GO
-";
-		/// <summary>
-		/// Финиширующий скрипт для SQL-server
-		/// </summary>
-		public const string SqlServerCreateFinisher = @"
-IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
-";
-		/// <summary>
-		/// Преамбуда POSTGRESQL скрипта
-		/// </summary>
-		public const string PostgresqlPeramble = @"
-DROP FUNCTION IF EXISTS ___script();
-CREATE FUNCTION ___script () returns int as $$ BEGIN
-CREATE SCHEMA IF NOT EXISTS dbo ; --mssql matching
-";
-		/// <summary>
-		/// Финиширующий скрипт для SQL-server
-		/// </summary>
-		public const string PostgresqlFinisher = @"
-RETURN 1;
-EXCEPTION
-	WHEN OTHERS THEN BEGIN 
-		raise notice '% %', SQLERRM, SQLSTATE;
-		RETURN 0;
-	END;
-END;
-$$ LANGUAGE plpgsql;
-SELECT ___script();
-DROP FUNCTION IF EXISTS ___script();
 ";
 	}
 }

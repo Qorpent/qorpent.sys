@@ -1,11 +1,9 @@
 ﻿namespace Qorpent.Scaffolding.Model.SqlObjects{
 	/// <summary>
-	/// Обертка над SQL видом
+	///     Обертка над SQL видом
 	/// </summary>
-	public class SqlView : SqlObject
-	{
+	public class SqlView : SqlObject{
 		/// <summary>
-		/// 
 		/// </summary>
 		public SqlView(){
 			UseTablePrefixedName = true;

@@ -650,6 +650,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="names"></param>
 		/// <returns></returns>
 		public static string GetSmartValue(this XElement e,params string[] names){
+			if (null == e) return "";
 			foreach (var name in names){
 				if (null != e.Attribute(name)) return e.Attribute(name).Value;
 				if (e.Attributes().Any(_ => _.Value == name))

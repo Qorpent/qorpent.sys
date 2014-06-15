@@ -155,18 +155,18 @@ namespace Qorpent.Data.DataDiff{
 							"\t\tupdate @{0} set {1} = (select id from {2} where {2}.code = {1}_code ) where {1} is null and {1}_code is not null ",
 							tn, map.Key, map.Value);
 						_output.WriteLine(
-							"\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.aliascodes like '%/'+{1}_code+'/%' ),-9999) where {1} is null and {1}_code is not null ",
+							"\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.aliascodes like '%/'+{1}_code+'/%' ),-1) where {1} is null and {1}_code is not null ",
 							tn, map.Key, map.Value);
 					}
 					else{
 						_output.WriteLine(
-							"\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.code = {1}_code ),-9999) where {1} is null and {1}_code is not null ",
+							"\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.code = {1}_code ),-1) where {1} is null and {1}_code is not null ",
 							tn, map.Key, map.Value);
 					}
 				}
 			}
 			if (-1 != Array.IndexOf(allfields, "set_parent")){
-				_output.WriteLine("\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.code = parent_code ),-9999) where {1} is null and {1}_code is not null ", tn, "parent",table.TableName);
+				_output.WriteLine("\t\tupdate @{0} set {1} = isnull((select id from {2} where {2}.code = parent_code ),-1) where {1} is null and {1}_code is not null ", tn, "parent",table.TableName);
 			}
 		}
 

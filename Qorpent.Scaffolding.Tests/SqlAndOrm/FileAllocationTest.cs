@@ -142,7 +142,7 @@ class table prototype=dbtable abstract
 table a schema=Test
 ");
 			Assert.True(model.IsValid);
-			Assert.AreEqual("test.a",model["a"].FullSqlName);
+			Assert.AreEqual("\"test\".\"a\"",model["a"].FullSqlName);
 			Assert.AreEqual("test",model["a"].Schema);
 			Assert.NotNull(model.DatabaseSqlObjects.OfType<Schema>().FirstOrDefault(_=>_.Name=="test"));
 		}

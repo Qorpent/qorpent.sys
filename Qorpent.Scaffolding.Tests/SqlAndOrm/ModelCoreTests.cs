@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Qorpent.BSharp;
 using Qorpent.Scaffolding.Model;
+using Qorpent.Serialization;
 
 namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 {
@@ -20,11 +21,11 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 		public void BasicTableParseWithDefaults(){
 			var model =PersistentModel.Compile(@"class X prototype=dbtable");
 			Assert.True(model.IsValid);
-			Assert.True(model.Classes.ContainsKey("dbo.x"),"must contains key for table as full sql name with default dbo schema and in lower case");
-			var cls = model.Classes["dbo.x"];
+			Assert.True(model.Classes.ContainsKey("\"dbo\".\"x\""),"must contains key for table as full sql name with default dbo schema and in lower case");
+			var cls = model.Classes["dbo.x".SqlQuoteName()];
 			Assert.AreEqual("X",cls.Name);
 			Assert.AreEqual("X",cls.FullCodeName);
-			Assert.AreEqual("dbo.X",cls.FullSqlName);
+			Assert.AreEqual("dbo.X".SqlQuoteName(),cls.FullSqlName);
 			Assert.AreEqual("dbo",cls.Schema);
 			Assert.NotNull(cls.PrimaryKey,"all tables must implicitly include primary key");
 			var pk = cls.PrimaryKey;
@@ -44,16 +45,16 @@ TableBase TheTable
 "
 				);
 			var create = model.GetDigest(SqlDialect.SqlServer, ScriptMode.Create);
-			Console.WriteLine(create);
+			Console.WriteLine(create.Replace("\"","\"\""));
 			Assert.AreEqual(@"
 Script sys:support_for_filegroups_begin (C,S,R)
 FileGroup SECONDARY (C,S,R)
-Sequence dbo.TheTable_SEQ (C,S,O)
-Table dbo.TheTable (Id, Code, Name, Idx, Start, Finish, Tag, Version, ImportId, Active) (C,S,R)
-FUNCTION dbo.TheTableTheTableIsActive (C,S,R)
-FUNCTION dbo.TheTableTheTableGetCode (C,S,R)
-FUNCTION dbo.TheTableTheTableGetId (C,S,R)
-VIEW dbo.TheTableTheTableFull (C,S,R)
+Sequence ""dbo"".""thetable_seq"" (C,S,O)
+Table ""dbo"".""thetable"" (Id, Code, Name, Idx, Start, Finish, Tag, Version, ImportId, Active) (C,S,R)
+FUNCTION ""dbo"".""thetableTheTableIsActive"" (C,S,R)
+FUNCTION ""dbo"".""thetableTheTableGetCode"" (C,S,R)
+FUNCTION ""dbo"".""thetableTheTableGetId"" (C,S,R)
+VIEW ""dbo"".""thetableTheTableFull"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)
 Script DbScript (C,S,R)".Trim(), create.Trim());
 		}
@@ -63,11 +64,11 @@ Script DbScript (C,S,R)".Trim(), create.Trim());
 		{
 			var model = PersistentModel.Compile(@"class A.X prototype=dbtable schema=test");
 			Assert.True(model.IsValid);
-			Assert.True(model.Classes.ContainsKey("test.x"), "must apply test schema");
-			var cls = model.Classes["test.x"];
+			Assert.True(model.Classes.ContainsKey("test.x".SqlQuoteName()), "must apply test schema");
+			var cls = model.Classes["test.x".SqlQuoteName()];
 			Assert.AreEqual("X", cls.Name);
 			Assert.AreEqual("A.X", cls.FullCodeName);
-			Assert.AreEqual("test.X", cls.FullSqlName);
+			Assert.AreEqual("test.X".SqlQuoteName(), cls.FullSqlName);
 			Assert.AreEqual("test", cls.Schema);
 		}
 
@@ -200,7 +201,13 @@ table Y
 			Assert.AreEqual(x.ReverseFields[reference.ReverseCollectionName], reference);
 			Assert.True(reference.IsReverese, "явно указан атрибут реверса");
 		}
-
+		[Test]
+		public void CanResolveTableByPartialName(){
+			var model = PersistentModel.Compile(@"
+class table prototype=dbtable abstract
+table A");
+			Assert.NotNull(model.Resolve("a"));
+		}
 		[Test]
 		public void CanCheckCirculars()
 		{

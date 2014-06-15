@@ -18,7 +18,16 @@
   <ItemGroup>
     <Compile Include="Application\AppSpecificationBSharpSource.cs" />
     <Compile Include="Application\ApplicationCompilerExtensions.cs" />
-    <Compile Include="Model\Compiler\DataObjectsSourcePackageForBShart.cs" />
+    <Compile Include="Model\CodeWriters\BaseModelWriter.cs" />
+    <Compile Include="Model\CodeWriters\CloneFacilityWriter.cs" />
+    <Compile Include="Model\CodeWriters\CloneOptionsWriter.cs" />
+    <Compile Include="Model\CodeWriters\CodeWriterBase.cs" />
+    <Compile Include="Model\CodeWriters\ExtendedModelWriter.cs" />
+    <Compile Include="Model\CodeWriters\PokoAdapterWriter.cs" />
+    <Compile Include="Model\CodeWriters\PokoClassWriter.cs" />
+    <Compile Include="Model\CodeWriters\ResolveTagFacilityWriter.cs" />
+    <Compile Include="Model\CodeWriters\ResolveTagOptionsWriter.cs" />
+    <Compile Include="Model\Compiler\DataObjectsSourcePackageForBSharp.cs" />
     <Compile Include="Application\GenerateActionsInJavaScript.cs" />
     <Compile Include="Application\GenerateControllersTask.cs" />
     <Compile Include="Application\GenerateDataTypesInJavaScriptTask.cs" />
@@ -71,7 +80,7 @@
     <Compile Include="Model\Compiler\GenerateExtendedCachedModel.cs" />
     <Compile Include="Model\Compiler\GenerateModel.cs" />
     <Compile Include="Model\Compiler\GeneratePokoClassDataAdapter.cs" />
-    <Compile Include="Model\Compiler\GeneratePokoClasses.cs" />
+    <Compile Include="Model\Compiler\GeneratePokoClassesTask.cs" />
     <Compile Include="Production.cs" />
     <Compile Include="Model\Compiler\DataCompilerExtensions.cs" />
     <Compile Include="Model\Compiler\GenerateTsqlScriptsTask.cs" />

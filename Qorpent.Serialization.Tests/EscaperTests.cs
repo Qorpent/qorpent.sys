@@ -138,5 +138,15 @@ namespace Qorpent.Serialization.Tests
         {
             Assert.AreEqual(Escaper.IsLiteral(c, type), res);
         }
+		[TestCase("\"dbo.test\"", "\"dbo\".\"test\"")]
+		[TestCase("\"dbo.Test\"", "\"dbo\".\"test\"")]
+		[TestCase("dbo.\"test\"", "\"dbo\".\"test\"")]
+		[TestCase("\"dbo\".\"test\"", "\"dbo\".\"test\"")]
+		[TestCase("dbo.test", "\"dbo\".\"test\"")]
+		[TestCase("test","\"test\"")]
+		[TestCase("\"test\"","\"test\"")]
+		public void CanEnquoteSqlNames(string input, string result){
+			Assert.AreEqual(result,input.SqlQuoteName());
+		}
     }
 }

@@ -1,30 +1,29 @@
 ﻿namespace Qorpent.Scaffolding.Model{
 	/// <summary>
-	/// 
 	/// </summary>
 	public class SqlFunctionArgument{
 		/// <summary>
-		/// Порядок в вызове
+		///     Порядок в вызове
 		/// </summary>
 		public int Index { get; set; }
 
 		/// <summary>
-		/// Название аргумента
+		///     Название аргумента
 		/// </summary>
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Тип данных
+		///     Тип данных
 		/// </summary>
 		public DataType DataType { get; set; }
 
 		/// <summary>
-		/// Значение по умолчанию
+		///     Значение по умолчанию
 		/// </summary>
 		public DefaultValue DefaultValue { get; set; }
 
 		/// <summary>
-		/// Возвращаемый аргумент
+		///     Возвращаемый аргумент
 		/// </summary>
 		public bool IsOutput { get; set; }
 	}

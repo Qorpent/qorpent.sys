@@ -1,26 +1,29 @@
 ﻿namespace Qorpent.Scaffolding.Model{
 	/// <summary>
-	/// 
 	/// </summary>
 	public enum ResolveType{
 		/// <summary>
-		/// Без резолюции
+		///     Без резолюции
 		/// </summary>
 		None,
+
 		/// <summary>
-		/// Как тег
+		///     Как тег
 		/// </summary>
 		Tag,
+
 		/// <summary>
-		/// Делегиуют
+		///     Делегиуют
 		/// </summary>
 		Delegate,
+
 		/// <summary>
-		/// Список
+		///     Список
 		/// </summary>
 		List,
+
 		/// <summary>
-		/// Системный словарь
+		///     Системный словарь
 		/// </summary>
 		Dictionary
 	}
