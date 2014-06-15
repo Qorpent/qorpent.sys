@@ -45,7 +45,7 @@ namespace .Adapters {
 		public override string PrepareSelectQuery(object conditions = null, object hints = null) {
 #endif
 			var sb = new StringBuilder();
-			sb.Append(""select ""id"" from \""dbo\"".\""a\"" "");
+			sb.Append(""select \""id\"" from \""dbo\"".\""a\"" "");
 			var where = conditions as string;
 			if ( null != where ) {
 				sb.Append("" where "");
@@ -139,7 +139,7 @@ namespace .Adapters {
 		public override string PrepareSelectQuery(object conditions = null, object hints = null) {
 #endif
 			var sb = new StringBuilder();
-			sb.Append(""select ""id"", ""b"" as ""bid"" from \""dbo\"".\""a\"" "");
+			sb.Append(""select \""id\"", \""b\"" as \""bid\"" from \""dbo\"".\""a\"" "");
 			var where = conditions as string;
 			if ( null != where ) {
 				sb.Append("" where "");
@@ -236,7 +236,7 @@ namespace .Adapters {
 		public override string PrepareSelectQuery(object conditions = null, object hints = null) {
 #endif
 			var sb = new StringBuilder();
-			sb.Append(""select ""id"", ""x"" from \""dbo\"".\""a\"" "");
+			sb.Append(""select \""id\"", \""x\"" from \""dbo\"".\""a\"" "");
 			var where = conditions as string;
 			if ( null != where ) {
 				sb.Append("" where "");

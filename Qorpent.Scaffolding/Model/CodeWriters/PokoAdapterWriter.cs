@@ -138,9 +138,9 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 					rn += of.ReferenceField;
 				}
 				rn = rn.SqlQuoteName();
-				o.Write(n);
+				o.Write(n.Replace("\"","\\\""));
 				if (rn != n){
-					o.Write(" as " + rn + "");
+					o.Write(" as " + rn.Replace("\"", "\\\"") + "");
 				}
 			}
 			o.Write(" from " + Cls.FullSqlName.Replace("\"", "\\\"") + " \");");

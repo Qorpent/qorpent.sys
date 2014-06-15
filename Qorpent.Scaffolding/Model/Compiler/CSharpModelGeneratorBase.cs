@@ -30,6 +30,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 		public override void Execute(IBSharpContext context){
 			Model = (PersistentModel) context.ExtendedData[PrepareModelTask.DefaultModelName];
 			Tables = Model.Classes.Values.OrderBy(_ => _.Name).ToArray();
+			DefaultOutputName = "Orm";
 			base.Execute(context);
 		}
 	}
