@@ -1,7 +1,10 @@
-﻿namespace Qorpent.Scaffolding.Model{
+﻿using System;
+
+namespace Qorpent.Scaffolding.Model{
 	/// <summary>
 	///     Тип объекта DDL
 	/// </summary>
+	[Flags]
 	public enum SqlObjectType : long{
 		/// <summary>
 		///     Неопределенный
@@ -94,7 +97,10 @@
 		/// <summary>
 		/// </summary>
 		Schema = 1 << 17,
-
+		/// <summary>
+		/// 
+		/// </summary>
+		Script = 1<<18,
 		/// <summary>
 		///     Все
 		/// </summary>

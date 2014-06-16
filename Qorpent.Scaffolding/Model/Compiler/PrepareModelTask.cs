@@ -1,5 +1,7 @@
-﻿using Qorpent.BSharp;
+﻿using System.Linq;
+using Qorpent.BSharp;
 using Qorpent.BSharp.Builder;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model.Compiler{
 	/// <summary>
@@ -20,7 +22,36 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 		/// <param name="context"></param>
 		public override void Execute(IBSharpContext context){
 			if (!context.ExtendedData.ContainsKey(DefaultModelName)){
-				PersistentModel model = new PersistentModel().Setup(context);
+				var gopts = new GenerationOptions();
+				gopts.IncludeSqlObjectTypes = SqlObjectType.All;
+				gopts.ExcludeSqlObjectTypes = SqlObjectType.None;
+
+				var conds = context.Compiler.GetConditions();
+				if (conds.ContainsKey("EX_ALL")){
+					gopts.ExcludeSqlObjectTypes = SqlObjectType.All;
+				}
+				if (conds.Any(_=>_.Key.StartsWith("DO_")))
+				{
+					gopts.IncludeSqlObjectTypes = SqlObjectType.None;
+					gopts.ExcludeSqlObjectTypes = SqlObjectType.All;
+				}
+				foreach (var c in context.Compiler.GetConditions())
+				{
+					if (c.Key.StartsWith("DO_")||c.Key.StartsWith("EX_")){
+						if(c.Key=="EX_ALL")continue;
+						var type = c.Key.Substring(3);
+						var tp = type.To<SqlObjectType>(true);
+						if (tp != SqlObjectType.None){
+							if (c.Key.StartsWith("DO_")){
+								gopts.IncludeSqlObjectTypes |= tp;
+							}
+							else{
+								gopts.ExcludeSqlObjectTypes |= tp;
+							}
+						}
+					}
+				}
+				PersistentModel model = new PersistentModel{GenerationOptions = gopts}.Setup(context);
 				context.ExtendedData[DefaultModelName] = model;
 			}
 		}

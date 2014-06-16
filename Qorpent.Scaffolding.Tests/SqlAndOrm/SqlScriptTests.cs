@@ -50,6 +50,7 @@ Script sys:support_for_filegroups_begin (C,S,R)
 FileGroup SECONDARY (C,S,R)
 Sequence ""dbo"".""a_seq"" (C,S,O)
 Table ""dbo"".""a"" (Id) (C,S,R)
+TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)
 ".Trim(), digest);
 		}
@@ -75,7 +76,12 @@ PARTDEF dbo_a_PARTITION (C,S,O)
 PARTDEF dbo_b_PARTITION (C,S,O)
 Table ""dbo"".""a"" (Id, selector) (C,S,R)
 Table ""dbo"".""b"" (Id, ver) (C,S,R)
+PROCEDURE ""dbo"".""aalignpartitions"" (C,S,R)
+PROCEDURE ""dbo"".""balignpartitions"" (C,S,R)
+TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" (C,S,R)
+TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)
+
 ".Trim(), digest);
 		}
 
@@ -100,6 +106,10 @@ PARTDEF dbo_a_PARTITION (C,S,O)
 PARTDEF dbo_b_PARTITION (C,S,O)
 Table ""dbo"".""a"" (Id, selector) (C,S,R)
 Table ""dbo"".""b"" (Id, ver) (C,S,R)
+PROCEDURE ""dbo"".""aalignpartitions"" (C,S,R)
+PROCEDURE ""dbo"".""balignpartitions"" (C,S,R)
+TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" (C,S,R)
+TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)
 ".Trim(), digest);
 		}
@@ -176,6 +186,90 @@ IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT ""dbo"
 
 GO
 
+IF OBJECT_ID('""dbo"".""aalignpartitions""') IS NOT NULL DROP PROCEDURE ""dbo"".""aalignpartitions"";
+GO
+CREATE PROCEDURE ""dbo"".""aalignpartitions""  AS BEGIN
+declare @fullparts table ( num int, limit int)
+while ( 1 = 1 ) begin
+	delete @fullparts
+	insert @fullparts (num) 
+		select partition_number from sys.dm_db_partition_stats where object_id = OBJECT_ID('""dbo"".""a""') and index_id =0 and row_count > 1000000
+	if (select count (*) from @fullparts ) = 0  break;
+	update @fullparts set limit = lq.selector from (
+		select part, min(selector) as selector from (
+		select  part, selector,sum(cnt) over (order by selector) as sum from (
+		select  $PARTITION.dbo_a_PARTITIONFunc(selector) as part,selector,count(*) as cnt from ""dbo"".""a""
+		where $PARTITION.dbo_a_PARTITIONFunc(selector) in (select num from @fullparts)
+		group by selector,$PARTITION.dbo_a_PARTITIONFunc(selector)
+		) as t 
+		)as c where c.sum >=900000 group by part 
+	) as lq join @fullparts f2 on f2.num = lq.part
+	declare @q nvarchar(max) set @q = ''
+	if 'int' = 'datetime' 
+		select @q = @q + '
+			ALTER PARTITION SCHEME dbo_a_PARTITION NEXT USED SECONDARY
+			ALTER PARTITION FUNCTION dbo_a_PARTITIONFunc() SPLIT RANGE ('''+convert(varchar(10),limit,112)+''')
+		' from @fullparts
+	else 
+			select @q = @q + '
+			ALTER PARTITION SCHEME dbo_a_PARTITION NEXT USED SECONDARY
+			ALTER PARTITION FUNCTION dbo_a_PARTITIONFunc() SPLIT RANGE ('+cast(limit as varchar(20))+')
+		' from @fullparts
+	print @q
+	exec sp_executesql @q
+end
+END;
+GO
+
+IF OBJECT_ID('""dbo"".""balignpartitions""') IS NOT NULL DROP PROCEDURE ""dbo"".""balignpartitions"";
+GO
+CREATE PROCEDURE ""dbo"".""balignpartitions""  AS BEGIN
+declare @fullparts table ( num int, limit datetime)
+while ( 1 = 1 ) begin
+	delete @fullparts
+	insert @fullparts (num) 
+		select partition_number from sys.dm_db_partition_stats where object_id = OBJECT_ID('""dbo"".""b""') and index_id =0 and row_count > 1000000
+	if (select count (*) from @fullparts ) = 0  break;
+	update @fullparts set limit = lq.ver from (
+		select part, min(ver) as ver from (
+		select  part, ver,sum(cnt) over (order by ver) as sum from (
+		select  $PARTITION.dbo_b_PARTITIONFunc(ver) as part,ver,count(*) as cnt from ""dbo"".""b""
+		where $PARTITION.dbo_b_PARTITIONFunc(ver) in (select num from @fullparts)
+		group by ver,$PARTITION.dbo_b_PARTITIONFunc(ver)
+		) as t 
+		)as c where c.sum >=900000 group by part 
+	) as lq join @fullparts f2 on f2.num = lq.part
+	declare @q nvarchar(max) set @q = ''
+	if 'datetime' = 'datetime' 
+		select @q = @q + '
+			ALTER PARTITION SCHEME dbo_b_PARTITION NEXT USED SECONDARY
+			ALTER PARTITION FUNCTION dbo_b_PARTITIONFunc() SPLIT RANGE ('''+convert(varchar(10),limit,112)+''')
+		' from @fullparts
+	else 
+			select @q = @q + '
+			ALTER PARTITION SCHEME dbo_b_PARTITION NEXT USED SECONDARY
+			ALTER PARTITION FUNCTION dbo_b_PARTITIONFunc() SPLIT RANGE ('+cast(limit as varchar(20))+')
+		' from @fullparts
+	print @q
+	exec sp_executesql @q
+end
+END;
+GO
+
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""a"" from deleted d join ""dbo"".""a"" on ""dbo"".""a"".id = d.id where ""dbo"".""a"".id not in (0,-1)
+END;
+GO
+
+IF OBJECT_ID('""dbo"".""bPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""b"" from deleted d join ""dbo"".""b"" on ""dbo"".""b"".id = d.id where ""dbo"".""b"".id not in (0,-1)
+END;
+GO
+
 
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 
@@ -196,6 +290,26 @@ table b
 	datetime ver
 ",ScriptMode.Drop);
 			Assert.AreEqual(@"
+IF OBJECT_ID('""dbo"".""bPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"";
+GO
+
+GO
+
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+
+GO
+
+IF OBJECT_ID('""dbo"".""balignpartitions""') IS NOT NULL DROP PROCEDURE ""dbo"".""balignpartitions"";
+GO
+
+GO
+
+IF OBJECT_ID('""dbo"".""aalignpartitions""') IS NOT NULL DROP PROCEDURE ""dbo"".""aalignpartitions"";
+GO
+
+GO
+
 DROP TABLE ""dbo"".""b"";
 GO
 
@@ -273,6 +387,8 @@ Table ""dbo"".""b"" (Id, a) (C,S,R)
 Table ""dbo"".""a"" (Id, b) (C,S,R)
 FK dbo_b_a_a_id_fk (C,S,R)
 FK dbo_a_b_b_id_fk (C,S,R)
+TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"" (C,S,R)
+TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)
 ".Trim(), digest);
 		}
@@ -282,6 +398,7 @@ Script sys:support_for_filegroups_end (C,S,R)
 		{
 			var digest = GetScript("class a prototype=dbtable");
 			Assert.AreEqual(@"
+
 SET NOCOUNT ON
 GO
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
@@ -307,10 +424,18 @@ IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"
 
 GO
 
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""a"" from deleted d join ""dbo"".""a"" on ""dbo"".""a"".id = d.id where ""dbo"".""a"".id not in (0,-1)
+END;
+GO
+
 
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 
 GO
+
 ".Trim(), digest);
 		}
 
@@ -356,6 +481,11 @@ DROP FUNCTION IF EXISTS ___script();
 		{
 			var digest = GetScript("class a prototype=dbtable",ScriptMode.Drop);
 			Assert.AreEqual(@"
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+
+GO
+
 DROP TABLE ""dbo"".""a"";
 GO
 
@@ -363,6 +493,7 @@ begin try
 DROP SEQUENCE ""dbo"".""a_seq"";
 end try begin catch print ERROR_MESSAGE() end catch
 GO
+
 
 ".Trim(), digest);
 		}
@@ -402,6 +533,7 @@ class a prototype=dbtable
 FileGroup SECONDARY (C,S,R)
 Sequence ""dbo"".""a_seq"" (C,S,O)
 Table ""dbo"".""a"" (Id) (C,S,R)
+TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" (C,S,R)
 TRIGGER ""dbo"".""a_x"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 		}
@@ -417,6 +549,7 @@ Table ""dbo"".""a"" (Id) (C,S,R)
 PROCEDURE ""dbo"".""a_test"" (C,S,R)
 FUNCTION ""dbo"".""a_test2"" (C,S,R)
 FUNCTION ""dbo"".""a_test3"" (C,S,R)
+TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 		}
 
@@ -424,7 +557,9 @@ Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 		public void TableWithFunctionsScript()
 		{
 			var digest = GetScript(sampleProc);
-			Assert.AreEqual(@"SET NOCOUNT ON
+			Assert.AreEqual(@"
+
+SET NOCOUNT ON
 GO
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 GO
@@ -451,22 +586,29 @@ GO
 
 IF OBJECT_ID('""dbo"".""a_test""') IS NOT NULL DROP PROCEDURE ""dbo"".""a_test"";
 GO
-CREATE PROCEDURE ""dbo"".""a_test"" @i int = '2' OUTPUT,@x nvarchar(255) AS BEGIN
+CREATE PROCEDURE ""dbo"".""a_test"" @i int = '2' OUTPUT,@x nvarchar(255) = null  AS BEGIN
 print 1;
 END;
 GO
 
 IF OBJECT_ID('""dbo"".""a_test2""') IS NOT NULL DROP FUNCTION ""dbo"".""a_test2"";
 GO
-CREATE FUNCTION ""dbo"".""a_test2"" ( @i bit ) RETURNS int AS BEGIN
+CREATE FUNCTION ""dbo"".""a_test2"" ( @i bit = null  ) RETURNS int AS BEGIN
 return 2;
 END;
 GO
 
 IF OBJECT_ID('""dbo"".""a_test3""') IS NOT NULL DROP FUNCTION ""dbo"".""a_test3"";
 GO
-CREATE FUNCTION ""dbo"".""a_test3"" ( @i int ) RETURNS bit AS BEGIN
+CREATE FUNCTION ""dbo"".""a_test3"" ( @i int = null  ) RETURNS bit AS BEGIN
 return 1;
+END;
+GO
+
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""a"" from deleted d join ""dbo"".""a"" on ""dbo"".""a"".id = d.id where ""dbo"".""a"".id not in (0,-1)
 END;
 GO
 
@@ -483,6 +625,7 @@ GO
 		{
 			var digest = GetScript(simpleTrigger);
 			Assert.AreEqual(@"
+
 SET NOCOUNT ON
 GO
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
@@ -506,6 +649,13 @@ CREATE TABLE ""dbo"".""a"" (
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
 
+GO
+
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""a"" from deleted d join ""dbo"".""a"" on ""dbo"".""a"".id = d.id where ""dbo"".""a"".id not in (0,-1)
+END;
 GO
 
 IF OBJECT_ID('""dbo"".""a_x""') IS NOT NULL DROP TRIGGER ""dbo"".""a_x"";
@@ -533,6 +683,7 @@ GO".Trim(), digest.Trim());
 			File.WriteAllText("simpleTriggerExternalBody.sql", "print 45;");
 			var digest = GetScript(simpleTriggerExternalBody);
 			Assert.AreEqual(@"
+
 SET NOCOUNT ON
 GO
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
@@ -558,6 +709,13 @@ IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"
 
 GO
 
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""a"" from deleted d join ""dbo"".""a"" on ""dbo"".""a"".id = d.id where ""dbo"".""a"".id not in (0,-1)
+END;
+GO
+
 IF OBJECT_ID('""dbo"".""a_x""') IS NOT NULL DROP TRIGGER ""dbo"".""a_x"";
 GO
 CREATE TRIGGER ""dbo"".""a_x"" ON ""dbo"".""a"" FOR INSERT AS BEGIN
@@ -569,6 +727,7 @@ GO
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 
 GO
+
 ".Trim(), digest.Trim());
 		}
 
@@ -577,7 +736,8 @@ GO
 		{
 			File.WriteAllText("simpleTriggerExternalFull.sql", "create trigger dbo.a_xxx on dbo.a for delete as begin print 15; end;");
 			var digest = GetScript(simpleTriggerExternalFull);
-			Assert.AreEqual(@"SET NOCOUNT ON
+			Assert.AreEqual(@"
+SET NOCOUNT ON
 GO
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 GO
@@ -600,6 +760,13 @@ CREATE TABLE ""dbo"".""a"" (
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
 
+GO
+
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""a"" from deleted d join ""dbo"".""a"" on ""dbo"".""a"".id = d.id where ""dbo"".""a"".id not in (0,-1)
+END;
 GO
 
 IF OBJECT_ID('""dbo"".""a_x""') IS NOT NULL DROP TRIGGER ""dbo"".""a_x"";
@@ -637,6 +804,8 @@ Sequence ""dbo"".""b_seq"" (C,S,O)
 Table ""dbo"".""a"" (Id, code, name) (C,S,R)
 Table ""dbo"".""b"" (Id, a, code, name) (C,S,R)
 VIEW ""dbo"".""b_v"" (C,S,R)
+TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" (C,S,R)
+TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
 		}
 
@@ -704,10 +873,26 @@ CREATE VIEW ""dbo"".""b_v"" AS SELECT
 
 GO
 
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""a"" from deleted d join ""dbo"".""a"" on ""dbo"".""a"".id = d.id where ""dbo"".""a"".id not in (0,-1)
+END;
+GO
+
+IF OBJECT_ID('""dbo"".""bPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""b"" from deleted d join ""dbo"".""b"" on ""dbo"".""b"".id = d.id where ""dbo"".""b"".id not in (0,-1)
+END;
+GO
+
 
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 
 GO
+
+
 ".Trim(), digest.Trim());
 		}
 
@@ -774,6 +959,14 @@ CREATE TABLE ""dbo"".""a"" (
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
 
+GO
+
+-- begin command SqlTriggerWriter
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""a"" from deleted d join ""dbo"".""a"" on ""dbo"".""a"".id = d.id where ""dbo"".""a"".id not in (0,-1)
+END;
 GO
 
 -- begin command ScriptWriter

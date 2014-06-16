@@ -334,7 +334,7 @@ class a prototype=dbtable
 			Console.WriteLine(res.Replace("\"", "\"\""));
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""aGetValue""') IS NOT NULL DROP FUNCTION ""dbo"".""aGetValue"";
 GO
-CREATE FUNCTION ""dbo"".""aGetValue"" ( @s int = '1',@v int ) RETURNS int AS BEGIN
+CREATE FUNCTION ""dbo"".""aGetValue"" ( @s int = '1',@v int = null  ) RETURNS int AS BEGIN
 return (select @s*id+@v from ""dbo"".""a"")
 END;
 GO".Trim(), res.Trim());
@@ -356,7 +356,7 @@ class a prototype=dbtable
 			Console.WriteLine(res.Replace("\"", "\"\""));
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""aGetValue""') IS NOT NULL DROP FUNCTION ""dbo"".""aGetValue"";
 GO
-CREATE FUNCTION ""dbo"".""aGetValue"" ( @s int = '1',@v int ) RETURNS int AS BEGIN
+CREATE FUNCTION ""dbo"".""aGetValue"" ( @s int = '1',@v int = null  ) RETURNS int AS BEGIN
 exec ""dbo"".""aproc""
 		return (select @s*id+@v + ""dbo"".""aGetValue""(@s,@v) from ""dbo"".""a"" where ""dbo"".""a"".Id=0)
 END;
@@ -380,7 +380,7 @@ class a prototype=dbtable
 			Console.WriteLine(res.Replace("\"", "\"\""));
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""aGetValue""') IS NOT NULL DROP PROCEDURE ""dbo"".""aGetValue"";
 GO
-CREATE PROCEDURE ""dbo"".""aGetValue"" @s int = '1',@v int AS BEGIN
+CREATE PROCEDURE ""dbo"".""aGetValue"" @s int = '1',@v int = null  AS BEGIN
 select @s*id+@v from ""dbo"".""a""
 END;
 GO".Trim(), res.Trim());

@@ -453,7 +453,10 @@ namespace Qorpent.Scaffolding.Model{
 		/// <param name="position"></param>
 		/// <returns></returns>
 		public IEnumerable<SqlScript> GetScripts(SqlDialect dialect, ScriptMode mode, ScriptPosition position){
-			return ExtendedScripts.SelectMany(_ => _.GetRealScripts(dialect, position, mode));
+			if (GenerationOptions.Supports(SqlObjectType.Script)){
+				return ExtendedScripts.SelectMany(_ => _.GetRealScripts(dialect, position, mode));
+			}
+			return new SqlScript[]{};
 		}
 
 		private void ReadAdvancedDataObjects(PersistentClass cls, XElement xml){
@@ -491,9 +494,11 @@ namespace Qorpent.Scaffolding.Model{
 		}
 
 		private IEnumerable<object> GetCreateOrderedWriters(SqlDialect dialect, ScriptMode mode = ScriptMode.Create){
-			foreach (SqlScript script in GetScripts(dialect, mode, ScriptPosition.Before)){
-				yield return script;
-			}
+			
+				foreach (SqlScript script in GetScripts(dialect, mode, ScriptPosition.Before)){
+					yield return script;
+				}
+			
 			foreach (FileGroup fg in DatabaseSqlObjects.OfType<FileGroup>()){
 				yield return fg;
 			}
@@ -522,12 +527,15 @@ namespace Qorpent.Scaffolding.Model{
 			}
 
 			foreach (SqlFunction function in Tables.SelectMany(_ => _.SqlObjects.OfType<SqlFunction>())){
+				if(function.Dialect==SqlDialect.None||function.Dialect==dialect||function.Dialect==SqlDialect.Ansi)
 				yield return function;
 			}
 			foreach (SqlView view in Tables.SelectMany(_ => _.SqlObjects.OfType<SqlView>())){
+				if (view.Dialect == SqlDialect.None || view.Dialect == dialect || view.Dialect == SqlDialect.Ansi)
 				yield return view;
 			}
 			foreach (SqlTrigger trigger in Tables.SelectMany(_ => _.SqlObjects.OfType<SqlTrigger>())){
+				if (trigger.Dialect == SqlDialect.None || trigger.Dialect == dialect || trigger.Dialect == SqlDialect.Ansi)
 				yield return trigger;
 			}
 

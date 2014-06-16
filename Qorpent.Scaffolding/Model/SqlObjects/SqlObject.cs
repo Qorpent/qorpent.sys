@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.BSharp;
@@ -249,7 +250,72 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			}
 			if (cls.Model.GenerationOptions.GeneratePartitions && cls.AllocationInfo.Partitioned){
 				yield return new PartitionDefinition().Setup(null, cls, null, null);
+				if (null != cls.AllocationInfo.PartitionField){
+					yield return GetAutoPartition(cls);
+				}
 			}
+			yield return PreventDeleteSysTrigger(cls);
+
+		}
+
+		private static SqlTrigger PreventDeleteSysTrigger(PersistentClass cls){
+			var result = new SqlTrigger();
+			result.Dialect = SqlDialect.SqlServer;
+			result.Table = cls;
+			result.Name = "PreventDeletionOfSystemDefinedRows";
+			result.Delete = true;
+			result.Before = true;
+			result.Body = "delete @this from deleted d join @this on @this.id = d.id where @this.id not in (0,-1)";
+			return result;
+		}
+
+		private static SqlFunction GetAutoPartition(PersistentClass cls)
+		{
+			var sb = new StringBuilder();
+			var a = cls.AllocationInfo;
+			
+			var dtype = a.PartitionField.DataType.ResolveSqlDataType(SqlDialect.SqlServer);
+			var result = new SqlFunction();
+			result.UseTablePrefixedName = false;
+			result.UseSchemaName = true;
+			result.Schema = cls.Schema;
+			result.Name = cls.Name + "AlignPartitions";
+			result.IsProcedure = true;
+			result.Dialect = SqlDialect.SqlServer;
+
+			sb.AppendFormat(@"declare @fullparts table ( num int, limit {0})
+while ( 1 = 1 ) begin
+	delete @fullparts
+	insert @fullparts (num) 
+		select partition_number from sys.dm_db_partition_stats where object_id = OBJECT_ID('{1}') and index_id =0 and row_count > 1000000
+	if (select count (*) from @fullparts ) = 0  break;
+	update @fullparts set limit = lq.{2} from (
+		select part, min({2}) as {2} from (
+		select  part, {2},sum(cnt) over (order by {2}) as sum from (
+		select  $PARTITION.{3}_{4}_PARTITIONFunc({2}) as part,{2},count(*) as cnt from {1}
+		where $PARTITION.{3}_{4}_PARTITIONFunc({2}) in (select num from @fullparts)
+		group by {2},$PARTITION.{3}_{4}_PARTITIONFunc({2})
+		) as t 
+		)as c where c.sum >=900000 group by part 
+	) as lq join @fullparts f2 on f2.num = lq.part
+	declare @q nvarchar(max) set @q = ''
+	if '{0}' = 'datetime' 
+		select @q = @q + '
+			ALTER PARTITION SCHEME {3}_{4}_PARTITION NEXT USED {5}
+			ALTER PARTITION FUNCTION {3}_{4}_PARTITIONFunc() SPLIT RANGE ('''+convert(varchar(10),limit,112)+''')
+		' from @fullparts
+	else 
+			select @q = @q + '
+			ALTER PARTITION SCHEME {3}_{4}_PARTITION NEXT USED {5}
+			ALTER PARTITION FUNCTION {3}_{4}_PARTITIONFunc() SPLIT RANGE ('+cast(limit as varchar(20))+')
+		' from @fullparts
+	print @q
+	exec sp_executesql @q
+end
+", dtype, cls.FullSqlName,
+	a.PartitionField.Name, cls.Schema, cls.Name, a.FileGroupName);
+			result.Body = sb.ToString();
+			return result;
 		}
 
 		/// <summary>

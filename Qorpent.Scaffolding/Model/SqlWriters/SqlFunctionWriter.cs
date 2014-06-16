@@ -71,6 +71,9 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 					sb.Append("'" + str.ToSqlString() + "'");
 				}
 			}
+			else{
+				sb.Append(" = null ");
+			}
 			if (arg.IsOutput){
 				sb.Append(" OUTPUT");
 			}

@@ -55,6 +55,7 @@ FUNCTION ""dbo"".""thetableIsActive"" (C,S,R)
 FUNCTION ""dbo"".""thetableGetCode"" (C,S,R)
 FUNCTION ""dbo"".""thetableGetId"" (C,S,R)
 VIEW ""dbo"".""thetableFull"" (C,S,R)
+TRIGGER ""dbo"".""thetablePreventDeletionOfSystemDefinedRows"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), create.Trim());
 		}
 
