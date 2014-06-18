@@ -80,6 +80,10 @@ namespace Qorpent.IO {
 					return "text/xml";
 				case "wiki":
 					return "text/plain";
+				case "woff":
+					return "application/x-font-woff";
+				case "json":
+					return "application/json";
 			}
 
 			return "bin/unknown";

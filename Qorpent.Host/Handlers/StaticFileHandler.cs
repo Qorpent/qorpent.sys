@@ -76,7 +76,7 @@ namespace Qorpent.Host.Handlers
 					var template = server.Static.Get("template.starter.js", callcontext).Read();
 
 					var apphtml = template.Replace("__APPNAME__", appname);
-					_applicationCache[abspath] = new FixedContentDescriptor(apphtml, abspath);
+					_applicationCache[abspath] = new FixedContentDescriptor(apphtml, abspath){MimeType = "text/javascript"};
 				}
 				else
 				{
@@ -126,7 +126,7 @@ namespace Qorpent.Host.Handlers
 					var template = server.Static.Get("template.app.html", context).Read();
 
 					var apphtml = string.Format(template, appname);
-					_applicationCache[abspath] = new FixedContentDescriptor(apphtml, abspath);
+					_applicationCache[abspath] = new FixedContentDescriptor(apphtml, abspath){MimeType = "text/html"};
 				}
 				else{
 					_applicationCache[abspath] = null;
