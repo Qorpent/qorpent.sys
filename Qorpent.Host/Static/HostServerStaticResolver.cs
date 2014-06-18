@@ -27,7 +27,7 @@ namespace Qorpent.Host.Static{
 			_folders = _host.Config.ContentFolders.ToList();
 			_folders.Add(_host.Config.RootFolder);
 			_assemblies = _host.Config.AutoconfigureAssemblies.Select(Assembly.Load).ToList();
-			_assemblies.Insert(0, typeof (IHostServer).Assembly);
+			_assemblies.Insert(0, typeof (HostServer).Assembly);
 			_resources = new Dictionary<string, Tuple<Assembly, string>>();
 			foreach (Assembly assembly in _assemblies){
 				foreach (string name in assembly.GetManifestResourceNames()){
