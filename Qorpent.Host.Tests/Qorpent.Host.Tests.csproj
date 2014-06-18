@@ -18,8 +18,10 @@
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthProtocolTest.cs" />
     <Compile Include="BasicServerTests.cs" />
     <Compile Include="RequestDataRetrieverTest.cs" />
+    <Compile Include="SimpleSocketTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -28,6 +30,10 @@
     <ProjectReference Include="..\..\qorpent.sys\Qorpent.IoC\Qorpent.IoC.csproj">
       <Project>{62f22ffa-a1cf-4a74-838c-9ab33a9442ea}</Project>
       <Name>Qorpent.IoC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
+      <Project>{880f65ea-1a22-4672-a137-ffc91290a209}</Project>
+      <Name>Qorpent.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
