@@ -1,10 +1,10 @@
 ﻿using System.IO;
 
-namespace Qorpent.Host.Exe.SimpleSockets{
+namespace Qorpent.IO{
 	/// <summary>
 	/// Интерфейс для поддержки оптимизированной бинарной сериализации
 	/// </summary>
-	public interface ISimpleSocketSerializable{
+	public interface IBinarySerializable{
 		/// <summary>
 		/// Считать объект из ридера
 		/// </summary>

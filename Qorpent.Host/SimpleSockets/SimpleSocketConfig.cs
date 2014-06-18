@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Qorpent.Config;
 
-namespace Qorpent.Host.Exe.SimpleSockets{
+namespace Qorpent.Host.SimpleSockets{
 	/// <summary>
 	/// Конфигурация BinaryServer
 	/// </summary>

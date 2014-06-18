@@ -1,15 +1,13 @@
 ﻿using System.Net;
 using System.Threading;
 
-namespace Qorpent.Host
-{
+namespace Qorpent.Host{
 	/// <summary>
-	/// Хэндлер запросов
+	///     Хэндлер запросов
 	/// </summary>
-	public interface IRequestHandler
-	{
+	public interface IRequestHandler{
 		/// <summary>
-		/// Выполняет указанный запрос
+		///     Выполняет указанный запрос
 		/// </summary>
 		/// <param name="server"></param>
 		/// <param name="callcontext"></param>

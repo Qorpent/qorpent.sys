@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using Qorpent.Host.Static;
 using Qorpent.Host.Utils;
 using Qorpent.Utils.Extensions;
 
@@ -28,6 +29,7 @@ namespace Qorpent.Host.Handlers
         /// 
         /// </summary>
         public string DefaultPage { get; set; }
+
 		/// <summary>
 		/// 
 		/// </summary>

@@ -3,8 +3,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Qorpent.Host.Exe.Security;
-using Qorpent.Host.Exe.SimpleSockets;
+using Qorpent.Host.Security;
+using Qorpent.Host.SimpleSockets;
 
 namespace Qorpent.Host.Tests{
 	[TestFixture]

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Qorpent.Host.Exe.SimpleSockets{
+namespace Qorpent.Host{
 	/// <summary>
 	/// Интерфейс хэндлера
 	/// </summary>
@@ -12,6 +12,6 @@ namespace Qorpent.Host.Exe.SimpleSockets{
 		/// </summary>
 		/// <param name="request"></param>
 		/// <returns></returns>
-		Task Execute(SimpleSocketRequest<T, R> request);
+		Task Execute(ISimpleSocketRequest<T, R> request);
 	}
 }

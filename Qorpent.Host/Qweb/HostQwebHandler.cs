@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using Qorpent.Mvc;
 using Qorpent.Mvc.HttpHandler;
+using Qorpent.Security;
 
 namespace Qorpent.Host.Qweb
 {
@@ -22,7 +23,7 @@ namespace Qorpent.Host.Qweb
 		/// <param name="cancel"></param>
 		public void Run(IHostServer server, HttpListenerContext callcontext, string callbackEndPoint, CancellationToken cancel)
 		{
-			SetCurrentUser(server, callcontext);
+			SetCurrentUser(server, callcontext.User);
 			callcontext.Response.ContentEncoding = Encoding.UTF8;
 			callcontext.Response.Headers["Content-Encoding"] = "utf-8";
 			var context = server.Application.Container.Get<IMvcContext>(null,server, callcontext, callbackEndPoint, cancel);
@@ -54,17 +55,10 @@ namespace Qorpent.Host.Qweb
 
 		}
 
-		private static void SetCurrentUser(IHostServer server, HttpListenerContext callcontext)
+		private static void SetCurrentUser(IHostServer server,IPrincipal user)
 		{
-			var identity = callcontext.Request.Headers.Get("Qorpent-Impersonate");
-			if (string.IsNullOrWhiteSpace(identity))
-			{
-				identity = "admin";
-			}
-
-			server.Application.Principal.SetCurrentUser(
-				new GenericPrincipal(new GenericIdentity(identity), null)
-				);
+			
+			server.Application.Principal.SetCurrentUser(user);
 		}
 
 		private void RenderResult(IMvcContext context)
@@ -97,7 +91,7 @@ namespace Qorpent.Host.Qweb
 		private void ExecuteWithoutResult(IMvcContext context)
 		{
 			CheckNotModified(context);
-			context.AuthrizeResult = Security.AuthorizationResult.OK;
+			context.AuthrizeResult = AuthorizationResult.OK;
 		}
 
 		private void EvaluateActionResult(IMvcContext context)

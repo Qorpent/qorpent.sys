@@ -4,8 +4,9 @@ using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using Qorpent.IO;
 
-namespace Qorpent.Host.Exe.SimpleSockets{
+namespace Qorpent.Host.SimpleSockets{
 	/// <summary>
 	/// 
 	/// </summary>
@@ -84,10 +85,10 @@ namespace Qorpent.Host.Exe.SimpleSockets{
 				}
 			}
 			var stream = new MemoryStream(buffer,4,size-8);
-			if (typeof (ISimpleSocketSerializable).IsAssignableFrom(typeof (T))){
+			if (typeof (IBinarySerializable).IsAssignableFrom(typeof (T))){
 				var result = Activator.CreateInstance<T>();
 				var br = new BinaryReader(stream,Encoding.UTF8);
-				((ISimpleSocketSerializable) result).Read(br);
+				((IBinarySerializable) result).Read(br);
 				return result;
 			}
 			else{
@@ -101,9 +102,9 @@ namespace Qorpent.Host.Exe.SimpleSockets{
 		public static async Task SendDataAsync(this Socket s, object data){
 			var stream = new MemoryStream();
 			stream.Write(QUOTE_SEQUENCE, 0, 4);
-			if (data is ISimpleSocketSerializable){
+			if (data is IBinarySerializable){
 				using (var w = new BinaryWriter(stream, Encoding.UTF8,true)){
-					((ISimpleSocketSerializable) data).Write(w);
+					((IBinarySerializable) data).Write(w);
 				}
 			}
 			else

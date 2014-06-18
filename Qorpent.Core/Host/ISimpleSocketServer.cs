@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace Qorpent.Host.Exe.SimpleSockets{
+namespace Qorpent.Host{
 	/// <summary>
 	/// 
 	/// </summary>

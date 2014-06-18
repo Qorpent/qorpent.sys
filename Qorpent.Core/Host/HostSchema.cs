@@ -1,18 +1,16 @@
-﻿namespace Qorpent.Host
-{
+﻿namespace Qorpent.Host{
 	/// <summary>
-	/// Тип привязки
+	///     Тип привязки
 	/// </summary>
-	public enum HostSchema
-	{
+	public enum HostSchema{
 		/// <summary>
-		/// Http
+		///     Http
 		/// </summary>
 		Http,
+
 		/// <summary>
-		/// Https
+		///     Https
 		/// </summary>
 		Https
-
 	}
 }

@@ -4,7 +4,7 @@ using System.Reflection;
 using Qorpent.IO;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Host{
+namespace Qorpent.Host.Static{
 	/// <summary>
 	/// Статический источник для ресурсов
 	/// </summary>

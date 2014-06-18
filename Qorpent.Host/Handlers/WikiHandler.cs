@@ -9,7 +9,6 @@ namespace Qorpent.Host.Handlers{
 	/// Хэндлер для вики-страниц
 	/// </summary>
 	public class WikiHandler:IRequestHandler{
-		
 		/// <summary>
 		/// 
 		/// </summary>

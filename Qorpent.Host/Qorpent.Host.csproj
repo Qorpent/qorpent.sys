@@ -4,7 +4,7 @@
     <Configuration>Debug</Configuration>
     <ProjectGuid>{E31B62A2-2FEF-4EF9-AADC-21B24885E035}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Qorpent.Host.Exe</RootNamespace>
+    <RootNamespace>Qorpent.Host</RootNamespace>
     <AssemblyName>Qorpent.Host</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -24,52 +24,43 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestHandlerFactory.cs" />
-    <Compile Include="FixedContentDescriptor.cs" />
+    <Compile Include="Static\FixedContentDescriptor.cs" />
     <Compile Include="Handlers\WikiHandler.cs" />
-    <Compile Include="HostServerStaticResolver.cs" />
+    <Compile Include="Static\HostServerStaticResolver.cs" />
     <Compile Include="Security\AuthProtocolClient.cs" />
     <Compile Include="Security\AuthProtocolRequestType.cs" />
     <Compile Include="Security\AuthProtocolResponseType.cs" />
     <Compile Include="Security\AuthProtocolStatus.cs" />
     <Compile Include="Security\AuthProtocol.cs" />
-    <Compile Include="Security\TokenInfo.cs" />
-    <Compile Include="SimpleSockets\ISimpleSocketServer.cs" />
+    <Compile Include="Security\DefaultAuthenticationProvider.cs" />
+    <Compile Include="Security\DefaultAuthHandler.cs" />
+    <Compile Include="Security\Encryptor.cs" />
+    <Compile Include="Security\QorpentHostIdentity.cs" />
+    <Compile Include="Security\QorpentHostPrincipal.cs" />
+    <Compile Include="Security\UserInfo.cs" />
+    <Compile Include="Security\TokenType.cs" />
+    <Compile Include="Security\WinLogon.cs" />
     <Compile Include="SimpleSockets\SimpleSocket.cs" />
     <Compile Include="SimpleSockets\SimpleSocketClient.cs" />
     <Compile Include="SimpleSockets\SimpleSocketRequest.cs" />
     <Compile Include="SimpleSockets\SimpleSocketConfig.cs" />
-    <Compile Include="SimpleSockets\ISimpleSocketSerializable.cs" />
-    <Compile Include="SimpleSockets\ISimpleSocketHandler.cs" />
     <Compile Include="SimpleSockets\SimpleSocketServer.cs" />
     <Compile Include="SimpleSockets\SocketAwaitable.cs" />
     <Compile Include="SimpleSockets\SocketExtensions.cs" />
-    <Compile Include="SmartXmlHandler.cs" />
+    <Compile Include="Handlers\SmartXmlHandler.cs" />
     <Compile Include="Static\FileContentDescriptor.cs" />
     <Compile Include="Handlers\DelegateHandler.cs" />
     <Compile Include="Handlers\StaticFileHandler.cs" />
     <Compile Include="Handlers\StaticHandler.cs" />
     <Compile Include="Handlers\UsonHandler.cs" />
-    <Compile Include="HostApplicationMode.cs" />
-    <Compile Include="HostBinding.cs" />
-    <Compile Include="HostConfig.cs" />
-    <Compile Include="HostConstants.cs" />
-    <Compile Include="IHostServerInitializer.cs" />
-    <Compile Include="IHostServerStaticResolver.cs" />
-    <Compile Include="IStaticContentHostServce.cs" />
     <Compile Include="Qweb\HostMvcContext.cs" />
-    <Compile Include="HostSchema.cs" />
     <Compile Include="HostServer.cs" />
-    <Compile Include="HostServerState.cs" />
     <Compile Include="HostRequestHandler.cs" />
     <Compile Include="Qweb\HostQwebHandler.cs" />
     <Compile Include="Static\ResourceContentDescriptor.cs" />
-    <Compile Include="StaticContentDescriptor.cs" />
     <Compile Include="Utils\HttpListenerContextExtensions.cs" />
     <Compile Include="Utils\MiltipartReadContext.cs" />
     <Compile Include="Utils\PostFile.cs" />
-    <Compile Include="IHostServer.cs" />
-    <Compile Include="IRequestHandler.cs" />
-    <Compile Include="IRequestHandlerFactory.cs" />
     <Compile Include="Handlers\NotFoundHandler.cs" />
     <Compile Include="HostExtensions.cs" />
     <Compile Include="Utils\RequestDataRetriever.cs" />

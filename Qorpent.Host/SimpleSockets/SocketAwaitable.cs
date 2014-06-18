@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Qorpent.Host.Exe.SimpleSockets{
+namespace Qorpent.Host.SimpleSockets{
 	/// <summary>
 	/// 
 	/// </summary>

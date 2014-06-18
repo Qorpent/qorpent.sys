@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Qorpent.Host.Exe.SimpleSockets{
+namespace Qorpent.Host.SimpleSockets{
 	/// <summary>
 	/// Tcp listener wrapper with call/result binary protocol
 	/// </summary>

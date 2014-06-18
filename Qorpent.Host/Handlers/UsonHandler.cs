@@ -30,6 +30,7 @@ namespace Qorpent.Host.Handlers
 		{
 			this._handler = executeDelegate;
 		}
+
 		/// <summary>
 		/// 
 		/// </summary>

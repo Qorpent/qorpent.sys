@@ -6,7 +6,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Qorpent.Host.Exe.SimpleSockets;
+using Qorpent.Host.SimpleSockets;
+using Qorpent.IO;
 
 namespace Qorpent.Host.Tests
 {
@@ -29,7 +30,7 @@ namespace Qorpent.Host.Tests
 		/// <summary>
 		/// Пример обменного протокола
 		/// </summary>
-		class SimpleData:ISimpleSocketSerializable{
+		class SimpleData:IBinarySerializable{
 			public bool IsResult;
 			public byte Command;
 			public int Arg;

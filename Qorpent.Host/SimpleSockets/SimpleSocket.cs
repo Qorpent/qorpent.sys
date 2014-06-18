@@ -1,7 +1,7 @@
 using System;
-using Qorpent.Host.Exe.Security;
+using Qorpent.Host.Security;
 
-namespace Qorpent.Host.Exe.SimpleSockets
+namespace Qorpent.Host.SimpleSockets
 {
 	/// <summary>
 	/// 

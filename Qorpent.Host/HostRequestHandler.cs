@@ -1,94 +1,82 @@
 ﻿using System;
-using System.IO;
 using System.Net;
-using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace Qorpent.Host
-{
-	internal class HostRequestHandler
-	{
-		private HostServer _server;
-		private HttpListenerContext _context;
-		private CancellationToken _cancel;
+namespace Qorpent.Host{
+	internal class HostRequestHandler{
+		private readonly CancellationToken _cancel;
+		private readonly HttpListenerContext _context;
+		private readonly HostServer _server;
 
-		public HostRequestHandler(HostServer server,HttpListenerContext context)
-		{
+		public HostRequestHandler(HostServer server, HttpListenerContext context){
 			_server = server;
 			_context = context;
 			_cancel = _server._cancel;
 		}
 
-		public void Execute()
-		{
-			var callbackEndPoint = _context.Request.Headers.Get("qorpent-callback-endpoint");
+		public void Execute(){
+			_server.Auth.Authenticate(_context);
+			string callbackEndPoint = _context.Request.Headers.Get("qorpent-callback-endpoint");
 			_context.Response.Headers["Server"] = "Qorpent RESTFull Server 0.1";
 			_context.Response.ContentType = "application/json; charset=utf-8";
-			if (String.IsNullOrWhiteSpace(callbackEndPoint))
-			{
+			CopyCookies();
+			if (String.IsNullOrWhiteSpace(callbackEndPoint)){
 				ProcessSyncRequest();
 			}
-			else
-			{
+			else{
 				ProcessAsyncRequest(callbackEndPoint);
 			}
-				
 		}
 
-		
+		private void CopyCookies(){
+			foreach (Cookie cookie in _context.Request.Cookies){
+				if (cookie.Name == _server.Config.AuthCookieName){
+					continue;
+				}
+				_context.Response.Cookies.Add(cookie);
+			}
+		}
 
 
-
-		private void ProcessAsyncRequest(string callbackEndPoint)
-		{
-			try
-			{
+		private void ProcessAsyncRequest(string callbackEndPoint){
+			try{
 				FinishAsyncRequest();
 				ProcessRequest(callbackEndPoint);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e){
 				FailRequest(e);
 			}
 		}
 
 
-		private void FinishAsyncRequest()
-		{
+		private void FinishAsyncRequest(){
 			_context.Response.StatusCode = 200;
-			var content = Encoding.UTF8.GetBytes("OK");
+			byte[] content = Encoding.UTF8.GetBytes("OK");
 			_context.Response.OutputStream.Write(content, 0, content.Length);
 			_context.Response.Close();
 		}
 
-		private void FailRequest(Exception exception)
-		{
+		private void FailRequest(Exception exception){
 			_context.Response.StatusCode = 500;
-			var content = Encoding.UTF8.GetBytes(exception.ToString());
+			byte[] content = Encoding.UTF8.GetBytes(exception.ToString());
 			_context.Response.OutputStream.Write(content, 0, content.Length);
 			_context.Response.Close();
 		}
 
-		private void ProcessSyncRequest()
-		{
-			try
-			{
+		private void ProcessSyncRequest(){
+			try{
 				ProcessRequest(null);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e){
 				FailRequest(e);
 			}
 		}
 
-		private void ProcessRequest(string callbackEndPoint)
-		{
+		private void ProcessRequest(string callbackEndPoint){
 			_server.RequestCount++;
-			var handler = _server.Factory.GetHandler(_server, _context, callbackEndPoint);
+			IRequestHandler handler = _server.Factory.GetHandler(_server, _context, callbackEndPoint);
 			handler.Run(_server, _context, callbackEndPoint, _cancel);
-			
 		}
 	}
 }

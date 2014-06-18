@@ -1,48 +1,43 @@
-﻿namespace Qorpent.Host
-{
+﻿namespace Qorpent.Host{
 	/// <summary>
-	/// Биндинг хоста
+	///     Биндинг хоста
 	/// </summary>
-	public class HostBinding
-	{
+	public class HostBinding{
 		/// <summary>
-		/// 
 		/// </summary>
-		public HostBinding()
-		{
+		public HostBinding(){
 			AppName = "/";
 		}
+
 		/// <summary>
-		/// 
 		/// </summary>
 		public string AppName { get; set; }
+
 		/// <summary>
-		/// Порт
+		///     Порт
 		/// </summary>
 		public int Port { get; set; }
+
 		/// <summary>
-		/// Интерфейс
+		///     Интерфейс
 		/// </summary>
 		public string Interface { get; set; }
 
 		/// <summary>
-		/// Схема (HTTP/S)
+		///     Схема (HTTP/S)
 		/// </summary>
 		public HostSchema Schema { get; set; }
 
-		
+
 		/// <summary>
-		/// Преобразует биндинг в префикс листенера
+		///     Преобразует биндинг в префикс листенера
 		/// </summary>
 		/// <returns></returns>
-		public override string ToString()
-		{
-			if (!AppName.EndsWith("/"))
-			{
+		public override string ToString(){
+			if (!AppName.EndsWith("/")){
 				AppName += "/";
 			}
-			if (!AppName.StartsWith("/"))
-			{
+			if (!AppName.StartsWith("/")){
 				AppName = "/" + AppName;
 			}
 			return Schema.ToString().ToLower() + "://" + Interface + ":" + Port + AppName;

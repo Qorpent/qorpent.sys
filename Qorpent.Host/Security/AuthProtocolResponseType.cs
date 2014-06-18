@@ -1,37 +1,42 @@
 ﻿using System;
 
-namespace Qorpent.Host.Exe.Security{
+namespace Qorpent.Host.Security{
 	/// <summary>
-	/// 
 	/// </summary>
 	[Flags]
-	public enum AuthProtocolResponseType:byte{
+	public enum AuthProtocolResponseType : byte{
 		/// <summary>
-		/// Пустой
+		///     Пустой
 		/// </summary>
-		None =0,
+		None = 0,
+
 		/// <summary>
-		/// Положительный результат
+		///     Положительный результат
 		/// </summary>
 		True = 1,
+
 		/// <summary>
-		/// Отрицательный результат
+		///     Отрицательный результат
 		/// </summary>
-		False =2 ,
+		False = 2,
+
 		/// <summary>
-		/// Ошибка
+		///     Ошибка
 		/// </summary>
 		Error = 4,
+
 		/// <summary>
-		/// Токен (при аутентификации)
+		///     Токен (при аутентификации)
 		/// </summary>
 		Token = 8,
+
 		/// <summary>
-		/// Сигнатура 
+		///     Сигнатура
 		/// </summary>
 		Sygnature = 16,
+
 		/// <summary>
-		/// Статусная информация
+		///     Статусная информация
 		/// </summary>
 		State = 32,
 	}

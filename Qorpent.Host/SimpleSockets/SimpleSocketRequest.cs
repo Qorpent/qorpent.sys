@@ -1,11 +1,11 @@
 ﻿using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Qorpent.Host.Exe.SimpleSockets{
+namespace Qorpent.Host.SimpleSockets{
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SimpleSocketRequest<T,R>{
+	public class SimpleSocketRequest<T,R> : ISimpleSocketRequest<T, R>{
 		/// <summary>
 		/// 
 		/// </summary>
