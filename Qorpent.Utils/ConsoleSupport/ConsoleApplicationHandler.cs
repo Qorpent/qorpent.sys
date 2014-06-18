@@ -131,7 +131,18 @@ namespace Qorpent.Utils
 					if (Directory.Exists(dir)){
 						var files = Directory.GetFiles(dir, mask);
 						foreach (var file in files){
-							File.Delete(file);
+							try{
+								File.Delete(file);
+							}
+							catch{
+								try{
+									Thread.Sleep(10);
+									File.Delete(file);
+								}
+								catch{
+									
+								}
+							}
 						}
 					}
 					result.State = 0;
