@@ -114,11 +114,12 @@ namespace Qorpent.Scaffolding.Application {
             sb.Append(string.Format(@"
         .controller('{3}_{0}', ['$scope','$http','$rootScope'{1}, function ($scope, $http, $rootScope{2}) {{ 
                 $scope.api = Api($http, $rootScope);
-                $scope.view = '{4}.html';
+                $scope.{6} = '{4}.html';
 				$scope.title= '{5}';
 ", code, deplist, calllist, Project.ProjectName,
  targetclass.Compiled.ChooseAttr("view", "code"),
- targetclass.Compiled.ChooseAttr("name", "code")
+ targetclass.Compiled.ChooseAttr("name", "code"),
+ (targetclass.Compiled.Element("menu")==null)?"view":"_view"
  )
  
  );

@@ -90,7 +90,7 @@ namespace Qorpent.Scaffolding.Application {
 	        var controller = _context.ResolveAll("ui-controller").FirstOrDefault(_ => _.FullName == e.Attr("code"));
 			if (e.HasElements){
 				var outerel = new XElement("layout", new XAttribute("height", "max"), new XAttribute("width", "max")).SetAttr("id", e.Attr("code"));
-                outerel.SetAttr("ng-controller", GetControllerName(e.Attr("controller") ?? e.Attr("code")))
+                outerel.SetAttr("ng-controller", GetControllerName(e.ChooseAttr("controller","code")))
 					  .SetAttr("class", e.Attr("class"))
 					  .SetAttr("orientation","vertical");
 				if (e.Attr("name") == "horizontal" || e.Attr("horizontal").ToBool() || e.Attr("orientation") == "horizontal"){
@@ -112,22 +112,26 @@ namespace Qorpent.Scaffolding.Application {
 						ctrlel.SetAttributeValue(a.Name, a.Value);
 					}
 					ctrlel.SetAttributeValue("layout-item", "1");
-					var include = new XElement("ng-include", " ").SetAttr("src", "view");
-					if (null != v.Attribute("code")){
-						include.SetAttr("src", "'" + v.Attr("code") + ".html'");
-					}
-					if (!string.IsNullOrWhiteSpace(v.Attr("name"))){
-						var outer = new XElement("div", new XAttribute("ng-init", "title='" + v.Attr("name") + "'"));
-						outer.Add(include);
-						include = outer;
-					}
-                    if (!string.IsNullOrWhiteSpace(v.Attr("title"))) {
-                        var widgetHeader = new XElement("div", new XAttribute("class", "layout__widget-header"));
-                        widgetHeader.SetValue(v.Attr("title"));
-                        ctrlel.Add(widgetHeader);
-                    } 
-                    var widgetBody = new XElement("div", new XAttribute("class", "layout__widget-body"));
-                    widgetBody.Add(include);
+					
+						var include = new XElement("ng-include", " ").SetAttr("src", "view");
+						if (null != v.Attribute("code")){
+							include.SetAttr("src", "'" + v.Attr("code") + ".html'");
+						}
+						if (!string.IsNullOrWhiteSpace(v.Attr("name"))){
+							var outer = new XElement("div", new XAttribute("ng-init", "title='" + v.Attr("name") + "'"));
+							outer.Add(include);
+							include = outer;
+						}
+						if (!string.IsNullOrWhiteSpace(v.Attr("title"))){
+							var widgetHeader = new XElement("div", new XAttribute("class", "layout__widget-header"));
+							widgetHeader.SetValue(v.Attr("title"));
+							ctrlel.Add(widgetHeader);
+						}
+						var widgetBody = new XElement("div", new XAttribute("class", "layout__widget-body"));
+						
+						widgetBody.Add(include);
+					
+					
 					ctrlel.Add(widgetBody);
 					outerel.Add(ctrlel);
 				}
