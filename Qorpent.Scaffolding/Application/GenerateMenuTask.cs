@@ -128,17 +128,28 @@ namespace Qorpent.Scaffolding.Application {
             var menuRoot = GenerateMenuRoot(root);
             var menuBody = GenerateMenuElement(root);
             menuBody.SetAttr("id", root.Attr("code") + "_Items");
-            foreach (var g in root.Elements("MenuItem")) {
-                if (g.HasElements) {
-                    menuBody.Add(GenerateDropdownGroup(g)
-                        .SetAttr("code", g.Attr("code"))
-                        .SetAttr("menu-group", 1));
-                }
-                else {
-                    menuBody.Add(GenerateDropdownItem(g)
-                        .SetAttr("group", g.Attr("code"))
-                        .SetAttr("menu-item", 1));
-                }
+            if (root.HasElements) {
+                foreach (var g in root.Elements("MenuItem")) {
+                    if (g.HasElements) {
+                        menuBody.Add(GenerateDropdownGroup(g)
+                            .SetAttr("code", g.Attr("code"))
+                            .SetAttr("menu-group", 1));
+                    } else {
+                        var menuItem = GenerateDropdownItem(g)
+                            .SetAttr("group", g.Attr("code"))
+                            .SetAttr("menu-item", 1);
+                        if (g.HasAttribute("model")) {
+                            menuItem
+                            .SetAttr("code", g.Attr("code"))
+                            .SetAttr("menu-group", 1);
+                            menuItem.Add(GenerateSubmenuFromModel(g));
+                        }
+                        menuBody.Add(menuItem);
+                    }
+                }  
+            }
+            else if (root.HasAttribute("model")) {
+                 menuBody.Add(GenerateMenuFromModel(root));
             }
             menuRoot.Add(menuBody);
             return menuRoot.ToString();
@@ -148,7 +159,7 @@ namespace Qorpent.Scaffolding.Application {
             var result = new XElement("div",
                 new XAttribute("class", "menu__item"));
             var icon = new XElement("div",
-                new XAttribute("class", "icon menu__item-icon menu__item-element"));
+                new XAttribute("class", "icon menu__item-icon menu__item-element"), new XAttribute("menu-icon", 1));
             if (el.HasAttribute("iconclass")) {
                 icon.Add(new XElement("i", " ", new XAttribute("class", el.Attr("iconclass"))));
             } else if (el.HasAttribute("icon")) {
@@ -158,7 +169,7 @@ namespace Qorpent.Scaffolding.Application {
             } else if (el.HasAttribute("iconsrc")) {
                 icon.Add(new XElement("img", new XAttribute("src", el.Attr("iconsrc"))));
             } else if (el.HasAttribute("view")) {
-                icon.Add(new XElement("ng-include", new XAttribute("src", el.Attr("view"))));
+                icon.Add(new XElement("ng-include", new XAttribute("src", el.Attr("view")), " "));
             }
             result.Add(icon);
             if (el.Attr("type") == "icon") {
@@ -171,7 +182,7 @@ namespace Qorpent.Scaffolding.Application {
 
         private static void CopyAttributes(XElement target, XElement el = null) {
             if (null == el) el = target;
-            var ignoreAttributes = new[] { "code", "name", "iconclass", "icon", "prototype", "fullcode", "action", "size", "class" };
+            var ignoreAttributes = new[] { "code", "name", "iconclass", "icon", "prototype", "fullcode", "action", "size", "class", "titleclass", "wrapper", "model" };
             foreach (var a in el.Attributes().Where(_ => !_.Name.ToString().IsIn(ignoreAttributes))) {
                 target.SetAttr(a.Name.ToString(), a.Value);
             }
@@ -183,7 +194,7 @@ namespace Qorpent.Scaffolding.Application {
         private static XElement GenerateIconWithTextItem(XElement el) {
             var result = GenerateIconItem(el);
             var title = new XElement("div",
-                new XAttribute("class", "menu__item-title menu__item-element"));
+                new XAttribute("class", (el.Attr("titleclass") + "menu__item-title menu__item-element").Trim()));
             title.SetValue(el.HasAttribute("title") ? el.Attr("title") : el.Attr("name"));
             result.Add(title);
             return result;
@@ -192,9 +203,63 @@ namespace Qorpent.Scaffolding.Application {
         private static XElement GenerateTextItem(XElement el) {
             var result = new XElement("div",
                 new XAttribute("class", "menu__item"));
-            var link = new XElement("div", new XAttribute("class", "menu__item-title menu__item-element"));
+            var link = new XElement("div", new XAttribute("class", (el.Attr("titleclass") + " menu__item-title menu__item-element").Trim()));
             link.SetValue(el.Attr("name"));
             result.Add(link);
+            return result;
+        }
+
+        private static XElement GenerateMenuFromModel(XElement el) {
+            if (!el.HasAttribute("model")) return null;
+            var expression = el.Attr("model");
+            if (el.HasAttribute("wrapper")) {
+                expression = el.Attr("wrapper") + '(' + expression + ')';
+            }
+            if (el.HasAttribute("filter")) {
+                expression += " | " + el.Attr("filter");
+            }
+            var result = new XElement("div",
+                new XAttribute("class", "menu__item"),
+                new XAttribute("menu-item", 1),
+                new XAttribute("ng-repeat", "m in " + expression),
+                new XAttribute("ng-click", "exec(m)"),
+                new XAttribute("ng-class", "'menu__item-' + (!!m.size ? m.size : 'small') + (m.Name == 'divider' ? ' menu__item-divider' : '')"),
+                new XAttribute("color", "{{m.color || m.Color}}"),
+                new XAttribute("type", "{{m.type || m.Type}}"),
+                new XElement("div",
+                    new XAttribute("ng-if", "(m.type || m.Type) == \'view\' && m.Name != \'divider\'"),
+                    new XAttribute("class", "menu__item-title menu__item-element" + (el.HasAttribute("titleclass") ? " " + el.Attr("titleclass") : "")),
+                    new XElement("ng-include",
+                        new XAttribute("ng-src", "\' + (m.view.indexOf(\'.html\') != -1 ? m.view : m.view + \'.html\')\'"),
+                        " "
+                    )
+                ),
+                new XElement("div",
+                    new XAttribute("ng-if", "(m.type || m.Type) == \'icon_with_text\' && m.Name != \'divider\'"),
+                    new XAttribute("class", "icon menu__item-icon menu__item-element"),
+                    new XAttribute("menu-icon", 1),
+                    new XAttribute("color", "{{m.color || m.Color}}"),
+                    new XElement("img",
+                        new XAttribute("ng-if", "(m.icon || m.Icon).indexOf(\'/\') != -1"),
+                        new XAttribute("ng-src", "m.icon || m.Icon")
+                    ),
+                    new XElement("i",
+                        new XAttribute("ng-if", "(m.icon || m.Icon).indexOf(\'/\') == -1"),
+                        new XAttribute("ng-class", "m.icon || m.Icon")
+                    )
+                ),
+                    new XElement("div",
+                        new XAttribute("ng-if", "m.Name != \'divider\'"),
+                        new XAttribute("class", "menu__item-title menu__item-element" + (el.HasAttribute("titleclass") ? " " + el.Attr("titleclass") : "")),
+                        new XAttribute("ng-bind", "(m.name || m.Name)")
+                    )
+            );
+            return result;
+        }
+
+        private static XElement GenerateSubmenuFromModel(XElement root) {
+            var result = new XElement("div", new XAttribute("class", "submenu"));
+            result.Add(GenerateMenuFromModel(root));
             return result;
         }
 
@@ -203,9 +268,14 @@ namespace Qorpent.Scaffolding.Application {
             var menuBody = GenerateMenuElement(root);
             menuBody.SetAttr("items", 1);
             menuBody.SetAttr("id", root.Attr("code") + "_Items");
-            foreach (var m in root.Elements("MenuItem")) {
-                menuBody.Add(GenerateMenuItem(m)
-                    .SetAttr("menu-item", 1));
+            if (root.HasAttribute("model")) {
+                menuBody.Add(GenerateMenuFromModel(root));
+            }
+            else {
+                foreach (var m in root.Elements("MenuItem")) {
+                    menuBody.Add(GenerateMenuItem(m)
+                        .SetAttr("menu-item", 1));
+                }   
             }
             menuRoot.Add(menuBody);
             return menuRoot.ToString();
