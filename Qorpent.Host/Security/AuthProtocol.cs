@@ -9,6 +9,10 @@ namespace Qorpent.Host.Exe.Security
 	/// </summary>
 	public class AuthProtocol:ISimpleSocketSerializable{
 		/// <summary>
+		/// 
+		/// </summary>
+		public const int DefaultPort = 10511;
+		/// <summary>
 		/// Запрос
 		/// </summary>
 		public AuthProtocolRequestType Request;

@@ -1,4 +1,5 @@
 using System;
+using Qorpent.Host.Exe.Security;
 
 namespace Qorpent.Host.Exe.SimpleSockets
 {
@@ -18,7 +19,11 @@ namespace Qorpent.Host.Exe.SimpleSockets
 			{
 				throw new ArgumentNullException("handler");
 			}
-			return new SimpleSocketServer<T, R>(handler, config ?? new SimpleSocketConfig());
+			var port = SimpleSocketConfig.DEFAULT_PORT;
+			if (typeof (T) == typeof (AuthProtocol)){
+				port = AuthProtocol.DefaultPort;
+			}
+			return new SimpleSocketServer<T, R>(handler, config ?? new SimpleSocketConfig{Port = port});
 		}
 	
 	}

@@ -20,7 +20,7 @@ namespace Qorpent.Host.Exe.Security{
 		/// </summary>
 		/// <param name="client"></param>
 		public AuthProtocolClient(SimpleSocketClient<AuthProtocol, AuthProtocol> client = null){
-			_client = client ?? new SimpleSocketClient<AuthProtocol, AuthProtocol>();
+			_client = client ?? new SimpleSocketClient<AuthProtocol, AuthProtocol>(new SimpleSocketConfig{Port = AuthProtocol.DefaultPort});
 		}
 		/// <summary>
 		/// 

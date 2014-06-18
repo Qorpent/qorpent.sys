@@ -87,7 +87,7 @@ namespace Qorpent.Host.Exe.SimpleSockets{
 		}
 
 		private void SetupSocket(){
-			_listener = new Socket(SocketType.Stream, ProtocolType.Tcp);
+			_listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			_listener.Bind(_config.GetEndPoint());
 			_listener.Listen((int)SocketOptionName.MaxConnections);
 
