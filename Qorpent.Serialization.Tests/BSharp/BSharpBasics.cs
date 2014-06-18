@@ -199,6 +199,7 @@ class A
 class B
 	import A
 	test 2");
+			Console.WriteLine(result["B"].Compiled);
 			Assert.AreEqual(2, result.Get("B").Compiled.Elements("test").Count());
 		}
 
@@ -252,7 +253,7 @@ class B _y = 2
 		public void MergesInnerStaticInHierarchy()
 		{
 			var result = Compile(@"
-class A abstract
+class A abstract explicit
 	test 1
 	test 2
 A B static abstract

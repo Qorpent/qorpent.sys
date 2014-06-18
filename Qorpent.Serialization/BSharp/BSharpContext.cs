@@ -38,6 +38,16 @@ namespace Qorpent.BSharp {
 			set { Set(RAWCLASSES, value); }
 		}
 
+		/// <summary>
+		/// Обертка для поиска классов
+		/// </summary>
+		/// <returns></returns>
+		public IBSharpClass this[string name, string ns = null]
+		{
+			get { return Get(name, ns); }
+		}
+
+
 
 		/// <summary>
 		///     Классы с непроинициализированным наследованием

@@ -116,5 +116,11 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <returns></returns>
 		bool RequrePostProcess();
+
+		/// <summary>
+		/// Обертка для поиска классов
+		/// </summary>
+		/// <returns></returns>
+		IBSharpClass this[string name, string ns = null] { get; }
 	}
 }

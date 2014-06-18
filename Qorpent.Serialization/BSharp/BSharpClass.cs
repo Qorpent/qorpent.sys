@@ -409,6 +409,7 @@ namespace Qorpent.BSharp {
 		}
 
 		private List<BSharpEvaluation> _cachedDefs;
+		private Dictionary<string, IBSharpElement> _elementRegistry;
 
 		/// <summary>
 		/// Все определения в классе
@@ -448,11 +449,54 @@ namespace Qorpent.BSharp {
 		/// Собирает все определения мержей из класса
 		/// </summary>
 		/// <returns></returns>
-		private IEnumerable<IBSharpElement> GetAllElements() {
-			return AllImports.SelectMany(_ => _.SelfElements).Union(SelfElements).Distinct();
+		private IEnumerable<IBSharpElement> GetAllElements( ){
+
+			lock (this){
+				if (null == _elementRegistry){
+					_elementRegistry = new Dictionary<string, IBSharpElement>();
+					var imports = AllImports.ToArray();
+					if (!Is(BSharpClassAttributes.Cycle)){
+						foreach (var c in imports){
+							if (!c.Is(BSharpClassAttributes.Cycle)){
+								foreach (var edef in c.AllElements.ToArray()){
+									RegisterElement(edef);
+								}
+							}
+						}
+					}
+					foreach (var edef in SelfElements){
+						RegisterElement(edef);
+					}
+					
+					foreach (var registered in _elementRegistry.ToArray()){
+						if (!_elementRegistry.ContainsKey(registered.Value.TargetName)){
+							_elementRegistry[registered.Value.TargetName] = new BSharpElement{
+								Implicit = true,
+								Name = registered.Value.TargetName,
+								TargetName = registered.Value.TargetName,
+								Type = BSharpElementType.Define
+							};
+						}
+					}
+				}
+
+				return _elementRegistry.Values;
+			}
 		}
 
-		
+		private void RegisterElement(IBSharpElement edef){
+			var name = edef.Name;
+			if (_elementRegistry.ContainsKey(name)){
+				var existed = _elementRegistry[name];
+				if (existed.Implicit||(!edef.Implicit)){
+					_elementRegistry[name] = edef;
+				}
+			}
+			else{
+				_elementRegistry[name] = edef;
+			}
+		}
+
 
 		private IEnumerable<IBSharpClass> GetAllImports(string root,IConfig config) {
 
@@ -494,6 +538,7 @@ namespace Qorpent.BSharp {
 					}
 					else {
 						_context.RegisterError(BSharpErrors.RecycleImport(this,root,i));
+						this.Set(BSharpClassAttributes.Cycle);
 					}
 				}
 			}

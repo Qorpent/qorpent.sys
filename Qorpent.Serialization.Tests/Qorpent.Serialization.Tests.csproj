@@ -30,6 +30,7 @@
     <Compile Include="BSharp\Schema\AttributeRuleTest.cs" />
     <Compile Include="BSharp\Schema\ElementRuleTest.cs" />
     <Compile Include="BSharp\SetKeyword.cs" />
+    <Compile Include="BSharp\V1_2\Q188ImplicitElements.cs" />
     <Compile Include="Bxl\Ap286ParserTests.cs" />
     <Compile Include="Bxl\BxlParserCompatibilityTests.cs" />
     <Compile Include="Bxl\BxlParserTests.cs" />

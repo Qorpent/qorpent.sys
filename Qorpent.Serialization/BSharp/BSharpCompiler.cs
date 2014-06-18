@@ -41,6 +41,8 @@ namespace Qorpent.BSharp {
 			result.Initialize(cfg);
 			return result;
 		}
+		
+
 		/// <summary>
 		/// Выполнить компиляцию исходного кода
 		/// </summary>
@@ -692,8 +694,59 @@ namespace Qorpent.BSharp {
 			SetupInitialOrphanState(e, def,aliases);
 			ParseImports(e, def, aliases);
 			ParseCompoundElements(e, def);
+			ParseImplicitElements(e, def);
 			ParseDefinitions(e, def);
 			return def;
+		}
+
+		private void ParseImplicitElements(XElement el, BSharpClass def){
+			if (el.GetSmartValue(BSharpSyntax.ExplicitClassMarker).ToBool()) return;
+			var candidates = new Dictionary<string, IList<string>>();
+			var exists = def.SelfElements.Select(_ => _.TargetName).Union(def.SelfElements.Select(_=>_.Name)).Distinct().ToList();
+			foreach (var e in el.Elements()){
+				var n = e.Name.LocalName;
+				bool over = false;
+				bool ext = false;
+				if (n.StartsWith("__PLUS__") || n.StartsWith("__TILD__")){
+					if (n.StartsWith("__PLUS__")){
+						over = true;
+					}
+					else{
+						ext = true;
+					}
+					n = n.Substring(8);
+				}
+				if (n == BSharpSyntax.ClassElementDefinition) continue;
+				if (n == BSharpSyntax.ClassImportDefinition) continue;
+				if (!over && !ext){
+					if (exists.Contains(n)) continue;
+				}
+				if (!candidates.ContainsKey(n)){
+					candidates[n] = new List<string>();
+				}
+				if (null == candidates[n]) continue;
+				var code = e.GetCode();
+				if (string.IsNullOrWhiteSpace(code)){
+					candidates[n] = null;
+					continue;
+				}
+				if (!(over || ext)){
+					if (candidates[n].Contains(code)){
+						candidates[n] = null;
+						continue;
+					}
+				}	
+
+				candidates[n].Add(code);
+			}
+			foreach (var candidate in candidates.Where(_=>_.Value!=null).Select(_=>_.Key).ToArray()){
+				var edef = new BSharpElement();
+				edef.Name = candidate;
+				edef.TargetName = candidate;
+				edef.Type = BSharpElementType.Define;
+				edef.Implicit = true;
+				def.SelfElements.Add(edef);
+			}
 		}
 
 		private void ParseDefinitions(XElement e, BSharpClass def){
@@ -788,6 +841,7 @@ namespace Qorpent.BSharp {
 			foreach (XElement i in e.Elements(BSharpSyntax.ClassElementDefinition)) {
 				var merge = new BSharpElement();
 				merge.Name = i.Attr("code");
+				merge.TargetName = i.Attr("code");
 				merge.Type = BSharpElementType.Define;
 				if (i.Attribute("override") != null) {
 					merge.Type = BSharpElementType.Override;
@@ -799,6 +853,7 @@ namespace Qorpent.BSharp {
 				}
 				def.SelfElements.Add(merge);
 			}
+			
 		}
 
 		/// <summary>

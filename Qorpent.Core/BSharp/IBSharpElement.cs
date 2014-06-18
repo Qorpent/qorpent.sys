@@ -16,5 +16,10 @@
 		///     Тип импорта
 		/// </summary>
 		BSharpElementType Type { get; set; }
+		/// <summary>
+		/// implicit element type mark
+		/// </summary>
+		/// <remarks>Added to v1.2 due to Q-188</remarks>
+		bool Implicit { get; set; }
 	}
 }

@@ -11,7 +11,7 @@
 		/// <param name="other"></param>
 		/// <returns></returns>
 		protected bool Equals(IBSharpElement other) {
-			return string.Equals(_name, other.Name) && string.Equals(_targetName, other.TargetName) && Type == other.Type;
+			return string.Equals(_name, other.Name) && string.Equals(_targetName, other.TargetName) && Type == other.Type && Implicit==other.Implicit;
 		}
 
 		/// <summary>
@@ -26,6 +26,7 @@
 				int hashCode = (Name != null ? Name.GetHashCode() : 0);
 				hashCode = (hashCode*397) ^ (TargetName != null ? TargetName.GetHashCode() : 0);
 				hashCode = (hashCode*397) ^ (int) Type;
+				hashCode = (hashCode*397) ^ (Implicit?1:0);
 				return hashCode;
 			}
 		}
@@ -49,6 +50,10 @@
 		///     Тип импорта
 		/// </summary>
 		public BSharpElementType Type { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool Implicit { get; set; }
 
 		/// <summary>
 		/// 

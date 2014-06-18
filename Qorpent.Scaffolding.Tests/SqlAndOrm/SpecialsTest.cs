@@ -70,7 +70,7 @@ CREATE TABLE ""dbo"".""b"" (
 	""code"" nvarchar(255) NOT NULL DEFAULT ''
 ) ON SECONDARY;
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=0)  INSERT ""dbo"".""b"" (""id"", ""code"") VALUES (0, '/');
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT ""dbo"".""b"" (""id"", ""code"") VALUES (-1, 'ERR');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT ""dbo"".""b"" (""id"", ""code"", ""a"") VALUES (-1, 'ERR', -1);
 
 GO
 
@@ -81,11 +81,26 @@ CREATE VIEW ""dbo"".""bFull"" AS SELECT
 ""id"", --
 ""code"", --
 ""a"", --
-(select x.""code"" from ""dbo"".""a"" x where x.""id"" = ""dbo"".""b"".""a"") as aCode,
 
 1 as __TERMINAL FROM ""dbo"".""b""
 
 
+GO
+
+-- begin command SqlTriggerWriter
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""a"" from deleted d join ""dbo"".""a"" on ""dbo"".""a"".id = d.id where ""dbo"".""a"".id not in (0,-1)
+END;
+GO
+
+-- begin command SqlTriggerWriter
+IF OBJECT_ID('""dbo"".""bPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""b"" from deleted d join ""dbo"".""b"" on ""dbo"".""b"".id = d.id where ""dbo"".""b"".id not in (0,-1)
+END;
 GO
 
 -- begin command ScriptWriter
@@ -93,6 +108,7 @@ GO
 IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 
 GO
+
 ".Trim(),script.Trim());
 		}
 	}

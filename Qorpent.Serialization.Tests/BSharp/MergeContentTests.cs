@@ -77,10 +77,10 @@ class A
 		[Test]
 		public void CanRedefineElement() {
 			const string noelementcode = @"
-class base
-base A
+class base 
+base A explicit
 	item X y=1
-base B
+base B explicit
 	import A
 	item X y=2
 ";

@@ -13,6 +13,10 @@ namespace Qorpent.BSharp {
 		public const string Namespace = "namespace";
 
 		/// <summary>
+		/// Отключает имплицитную настройку элементов
+		/// </summary>
+		public const string ExplicitClassMarker = "explicit";
+		/// <summary>
 		/// Корневой элемент использования типов
 		/// </summary>
 		public const string AliasImport = "using";
