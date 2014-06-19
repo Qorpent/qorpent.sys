@@ -41,6 +41,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\AppModelBasicTests.cs" />
+    <Compile Include="Application\AppModelBasicTestsBase.cs" />
     <Compile Include="SqlAndOrm\BaseModelGeneratorTests.cs" />
     <Compile Include="SqlAndOrm\CloneFacilityWriter.cs" />
     <Compile Include="SqlAndOrm\SqlScriptTests.cs" />
@@ -58,5 +60,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

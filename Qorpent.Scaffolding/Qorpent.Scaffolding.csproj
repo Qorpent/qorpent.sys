@@ -16,8 +16,14 @@
     <EmbeddedResource Include="Model\Compiler\DbObjects.bxls" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\AppSpecificationBSharpSource.cs" />
-    <Compile Include="Application\ApplicationCompilerExtensions.cs" />
+    <Compile Include="Application\AppAction.cs" />
+    <Compile Include="Application\ApplicationModel.cs" />
+    <Compile Include="Application\AppObject.cs" />
+    <Compile Include="Application\AppStruct.cs" />
+    <Compile Include="Application\AppSyntax.cs" />
+    <Compile Include="Application\Compile\AppSpecificationBSharpSource.cs" />
+    <Compile Include="Application\Compile\ApplicationCompilerExtensions.cs" />
+    <Compile Include="Application\StructField.cs" />
     <Compile Include="Model\CodeWriters\BaseModelWriter.cs" />
     <Compile Include="Model\CodeWriters\CloneFacilityWriter.cs" />
     <Compile Include="Model\CodeWriters\CloneOptionsWriter.cs" />
@@ -28,14 +34,14 @@
     <Compile Include="Model\CodeWriters\ResolveTagFacilityWriter.cs" />
     <Compile Include="Model\CodeWriters\ResolveTagOptionsWriter.cs" />
     <Compile Include="Model\Compiler\DataObjectsSourcePackageForBSharp.cs" />
-    <Compile Include="Application\GenerateActionsInJavaScript.cs" />
-    <Compile Include="Application\GenerateControllersTask.cs" />
-    <Compile Include="Application\GenerateDataTypesInJavaScriptTask.cs" />
-    <Compile Include="Application\GenerateLayoutsTask.cs" />
-    <Compile Include="Application\GenerateMenuTask.cs" />
-    <Compile Include="Application\GenerateServerActions.cs" />
+    <Compile Include="Application\Compile\GenerateActionsInJavaScriptTask.cs" />
+    <Compile Include="Application\Compile\GenerateControllersTask.cs" />
+    <Compile Include="Application\Compile\GenerateDataTypesInJavaScriptTask.cs" />
+    <Compile Include="Application\Compile\GenerateLayoutsTask.cs" />
+    <Compile Include="Application\Compile\GenerateMenuTask.cs" />
+    <Compile Include="Application\Compile\GenerateServerActions.cs" />
     <Compile Include="BSharpClassRef.cs" />
-    <Compile Include="Application\GenerateDataTypesInCSharpTask.cs" />
+    <Compile Include="Application\Compile\GenerateDataTypesInCSharpTask.cs" />
     <Compile Include="CodeGeneratorTaskBase.cs" />
     <Compile Include="Model\AllocationInfo.cs" />
     <Compile Include="Model\Compiler\GenerateResolveTagFacility.cs" />
