@@ -512,6 +512,7 @@ namespace Qorpent.BSharp {
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(XElement src, string ns){
 			
 			var aliases = new Dictionary<string, string>();
+			var rns = ns;
 			foreach (XElement e in src.Elements()) {
 				var _ns = "";
 				if (null != _config.IgnoreElements && 0 != _config.IgnoreElements.Length)
@@ -533,12 +534,18 @@ namespace Qorpent.BSharp {
                             continue;
                         }
                     }
-
-					if (string.IsNullOrWhiteSpace(ns)) {
+					if (null==e.Parent.Parent && !e.Elements().Any()){
+						//plain namespace definition
+						rns = e.Attr("code");
+					}
+					else{
+						rns = ns;
+					}
+					if (string.IsNullOrWhiteSpace(rns)) {
 						_ns = e.Attr("code");
 					}
 					else {
-						_ns = ns + "." + e.Attr("code");
+						_ns = rns + "." + e.Attr("code");
 					}
 					foreach (IBSharpClass e_ in IndexizeRawClasses(e, _ns)) {
 						yield return e_;
@@ -563,23 +570,23 @@ namespace Qorpent.BSharp {
 				}
 				else if (e.Name.LocalName == BSharpSyntax.Dataset)
 				{
-					var def = new BSharpClass(CurrentBuildContext) { Source = e, Name = BSharpSyntax.DatasetClassCodePrefix+e.Attr("code"), Namespace = ns ?? string.Empty };
+					var def = new BSharpClass(CurrentBuildContext) { Source = e, Name = BSharpSyntax.DatasetClassCodePrefix+e.Attr("code"), Namespace = rns ?? string.Empty };
 					def.Set(BSharpClassAttributes.Dataset);
 					yield return def;
 				}else if (e.Name.LocalName == BSharpSyntax.Generator)
 				{
-					yield return PrepareGenerator(ns, e);
+					yield return PrepareGenerator(rns, e);
 				}
 				else if (e.Name.LocalName == BSharpSyntax.Connection){
-					yield return PrepareConnection(ns, e);
+					yield return PrepareConnection(rns, e);
 				}
 				else if (e.Name.LocalName == BSharpSyntax.Template)
 				{
-					yield return PrepareTemplate(ns, e);
+					yield return PrepareTemplate(rns, e);
 				}
 				else
 				{
-					var def = ReadSingleClassSource(e, ns,aliases);
+					var def = ReadSingleClassSource(e, rns,aliases);
 					if(null!=def)yield return def;
 				}
 			}

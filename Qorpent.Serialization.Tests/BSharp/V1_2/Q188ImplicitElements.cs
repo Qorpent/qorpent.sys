@@ -8,6 +8,7 @@ namespace Qorpent.Serialization.Tests.BSharp.V1_2
 	/// <summary>
 	/// #Q-188 неявная самонастройка элементов
 	/// </summary>
+	[TestFixture]
 	public class Q188ImplicitElements
 	{
 		[TestCase("")]
