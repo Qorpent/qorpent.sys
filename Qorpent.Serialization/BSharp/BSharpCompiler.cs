@@ -697,7 +697,15 @@ namespace Qorpent.BSharp {
 			if (anonym){
 				def.Set(BSharpClassAttributes.Anonymous);
 			}
+			if (def.Source.GetSmartValue(BSharpSyntax.ExplicitClassMarker).ToBool()){
+				def.Set(BSharpClassAttributes.ExplicitElements);
+			}
+			if (def.Source.GetSmartValue(BSharpSyntax.PartialClass).ToBool())
+			{
+				def.Set(BSharpClassAttributes.Partial);
+			}
 			if (!IsOverrideMatch(def)) return null;
+			
 			SetupInitialOrphanState(e, def,aliases);
 			ParseImports(e, def, aliases);
 			ParseCompoundElements(e, def);
@@ -707,7 +715,7 @@ namespace Qorpent.BSharp {
 		}
 
 		private void ParseImplicitElements(XElement el, BSharpClass def){
-			if (el.GetSmartValue(BSharpSyntax.ExplicitClassMarker).ToBool()) return;
+			if (def.Is(BSharpClassAttributes.ExplicitElements)) return;
 			var candidates = new Dictionary<string, IList<string>>();
 			var exists = def.SelfElements.Select(_ => _.TargetName).Union(def.SelfElements.Select(_=>_.Name)).Distinct().ToList();
 			foreach (var e in el.Elements()){

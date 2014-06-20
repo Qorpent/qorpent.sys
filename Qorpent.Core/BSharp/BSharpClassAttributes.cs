@@ -5,7 +5,7 @@ namespace Qorpent.BSharp {
 	/// Атрибуты класса BSharp
 	/// </summary>
 	[Flags]
-	public enum BSharpClassAttributes {
+	public enum BSharpClassAttributes:long {
 		/// <summary>
 		/// Класс создан без указания импота по умолчанию с ключевым словом class
 		/// </summary>
@@ -134,5 +134,13 @@ namespace Qorpent.BSharp {
 		/// Marks cycled class
 		/// </summary>
 		Cycle = 1<<29,
+		/// <summary>
+		/// Класс, запрещающий неявныйрасчет элементов	
+		/// </summary>
+		ExplicitElements = 1<<30,
+		/// <summary>
+		/// Партицированный класс
+		/// </summary>
+		Partial = 1<<31,
 	}
 }

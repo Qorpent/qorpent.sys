@@ -31,6 +31,7 @@
     <Compile Include="BSharp\Schema\ElementRuleTest.cs" />
     <Compile Include="BSharp\SetKeyword.cs" />
     <Compile Include="BSharp\V1_2\Q188ImplicitElements.cs" />
+    <Compile Include="BSharp\V1_2\Q189TruePartialClasses.cs" />
     <Compile Include="BSharp\V1_2\Q196PlainNamespaces.cs" />
     <Compile Include="Bxl\Ap286ParserTests.cs" />
     <Compile Include="Bxl\BxlParserCompatibilityTests.cs" />

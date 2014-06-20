@@ -16,6 +16,11 @@ namespace Qorpent.BSharp {
 		/// Отключает имплицитную настройку элементов
 		/// </summary>
 		public const string ExplicitClassMarker = "explicit";
+
+		/// <summary>
+		/// Помечает партицированные классы
+		/// </summary>
+		public const string PartialClass = "partial";
 		/// <summary>
 		/// Корневой элемент использования типов
 		/// </summary>

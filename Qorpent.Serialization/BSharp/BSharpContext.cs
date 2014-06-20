@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -311,6 +312,8 @@ namespace Qorpent.BSharp {
 		}
 
 
+		Dictionary<string,IList<IBSharpClass>> PartialsRegistry =new Dictionary<string, IList<IBSharpClass>>();
+
 		private IEnumerable<XElement> GetDataSet(string code, string ns, bool optional)
 		{
 			var realcode = BSharpSyntax.DatasetClassCodePrefix + code;
@@ -499,8 +502,127 @@ namespace Qorpent.BSharp {
 			if (null == Errors) {
 				Errors = new List<BSharpError>();
 			}
-			foreach (var cls in rawclasses) {
-				RegisterClassInIndex(cls);
+			foreach (var cls in rawclasses){
+				if (cls.Is(BSharpClassAttributes.Partial)){
+					if (!PartialsRegistry.ContainsKey(cls.FullName)){
+						PartialsRegistry[cls.FullName] = new List<IBSharpClass>();
+
+					}
+					PartialsRegistry[cls.FullName].Add(cls);
+				}
+				else{
+					RegisterClassInIndex(cls);
+				}
+				
+			}
+			RegisterPartials();
+		}
+
+		private void RegisterPartials(){
+			foreach (var partialSet in PartialsRegistry.Values){
+				var merged = JoinPartials(partialSet);
+				if (null != merged){
+					RegisterClassInIndex(merged);
+				}
+			}
+		}
+
+		private IBSharpClass JoinPartials(IEnumerable<IBSharpClass> partials){
+			IBSharpClass basis = partials.First();
+			bool reg = true;
+			if (RawClasses.ContainsKey(basis.FullName)){
+				basis = RawClasses[basis.FullName];
+				reg = false;
+			}
+			foreach (var cls in partials){
+				if (basis == cls) continue;
+				MergePartial(basis, cls);
+			}
+			if(reg)return basis;
+			return null;
+		}
+
+		private void MergePartial(IBSharpClass basis, IBSharpClass cls){
+			basis.Set(cls.GetAttributes());
+			foreach (var attribute in cls.Source.Attributes()){
+				var n = attribute.Name.LocalName;
+				var v = attribute.Value;
+				if(n=="_file"||n=="_line"||n=="code"||n=="id")continue;
+				var ex = basis.Source.Attr(n);
+				if (ex == v) continue;
+				if (string.IsNullOrWhiteSpace(ex)){
+					basis.Source.SetAttr(n, v);
+				}
+				else{
+					RegisterError(new BSharpError
+					{
+						Class = basis,
+						AltClass = cls,
+						Level = ErrorLevel.Error,
+						Type = BSharpErrorType.PartialError,
+						Message = "Conflict Attribute: " + n
+					});
+				}
+			}
+			foreach (var element in cls.Source.Elements()){
+				if (string.IsNullOrWhiteSpace(element.GetCode())){
+					RegisterError(new BSharpError
+					{
+						Class = basis,
+						AltClass = cls,
+						Level = ErrorLevel.Error,
+						Type = BSharpErrorType.PartialError,
+						Xml = element,
+						Message = "Only coded elements can be used in partials"
+					});
+					continue;
+				}
+				var existed = basis.Source.Elements(element.Name).FirstOrDefault(_ => _.GetCode() == element.GetCode());
+				if (null == existed){
+					basis.Source.Add(element);
+				}
+				else{
+					if (element.Elements().Any()){
+						if (existed.Elements().Any()){
+							RegisterError(new BSharpError{
+								Class = basis,
+								AltClass = cls,
+								Level = ErrorLevel.Error,
+								Type = BSharpErrorType.PartialError,
+								Xml = element,
+								Message = "Body conflict in element"
+							});
+							continue;
+						}
+						else{
+							existed.Add(element.Elements());
+						}
+					}
+					foreach (var attribute in element.Attributes())
+					{
+						var n = attribute.Name.LocalName;
+						var v = attribute.Value;
+						if (n == "_file" || n == "_line" || n == "code" || n=="id") continue;
+						var ex = existed.Attr(n);
+						if (ex == v) continue;
+						if (string.IsNullOrWhiteSpace(ex))
+						{
+							existed.SetAttr(n, v);
+						}
+						else
+						{
+							RegisterError(new BSharpError
+							{
+								Class = basis,
+								AltClass = cls,
+								Level = ErrorLevel.Error,
+								Type = BSharpErrorType.PartialError,
+								Xml= element,
+								Message = "Conflict Attribute In Element: " + n
+							});
+						}
+					}
+				}
 			}
 		}
 

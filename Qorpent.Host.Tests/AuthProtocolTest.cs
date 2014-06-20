@@ -31,7 +31,7 @@ namespace Qorpent.Host.Tests{
 		}
 
 		public class FakeAuthHandler:ISimpleSocketHandler<AuthProtocol,AuthProtocol>{
-			public async Task Execute(SimpleSocketRequest<AuthProtocol, AuthProtocol> request){
+			public async Task Execute(ISimpleSocketRequest<AuthProtocol, AuthProtocol> request){
 				var req = await request.GetQuery();
 				var result = new AuthProtocol();
 				if (req.Request == AuthProtocolRequestType.State){
@@ -72,6 +72,7 @@ namespace Qorpent.Host.Tests{
 				result.Response = AuthProtocolResponseType.True|AuthProtocolResponseType.State;
 				result.State = AuthProtocolStatus.None;
 			}
+
 		}
 	}
 }

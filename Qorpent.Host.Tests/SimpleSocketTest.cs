@@ -18,7 +18,7 @@ namespace Qorpent.Host.Tests
 		/// 
 		/// </summary>
 		class HelloWorldHandler :ISimpleSocketHandler<int,string>{
-			public async Task Execute(SimpleSocketRequest<int, string> request){
+			public async Task Execute(ISimpleSocketRequest<int, string> request){
 				var q =await request.GetQuery();
 				if (q == 1){
 					await request.Send("hello",true);
@@ -68,7 +68,7 @@ namespace Qorpent.Host.Tests
 		/// </summary>
 		class Calculator : ISimpleSocketHandler<SimpleData, SimpleData>
 		{
-			public async Task Execute(SimpleSocketRequest<SimpleData, SimpleData> request)
+			public async Task Execute(ISimpleSocketRequest<SimpleData, SimpleData> request)
 			{
 				var q = await request.GetQuery();
 				q.IsResult = true;

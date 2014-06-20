@@ -108,6 +108,9 @@ namespace Qorpent.BSharp {
 		/// У патча указано неверное поведение
 		/// </summary>
 		PatchError = 520,
-		
+		/// <summary>
+		/// А партиала указан дублирующий атрибут
+		/// </summary>
+		PartialError = 610,
 	}
 }
