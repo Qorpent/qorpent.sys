@@ -245,13 +245,15 @@ namespace Qorpent.Scaffolding.Application {
                     ),
                     new XElement("i",
                         new XAttribute("ng-if", "(m.icon || m.Icon).indexOf(\'/\') == -1"),
-                        new XAttribute("ng-class", "m.icon || m.Icon")
+                        new XAttribute("ng-class", "m.icon || m.Icon"),
+                        " "
                     )
                 ),
                     new XElement("div",
                         new XAttribute("ng-if", "m.Name != \'divider\'"),
                         new XAttribute("class", "menu__item-title menu__item-element" + (el.HasAttribute("titleclass") ? " " + el.Attr("titleclass") : "")),
-                        new XAttribute("ng-bind", "(m.name || m.Name)")
+                        new XAttribute("ng-bind", "(m.name || m.Name)"),
+                        " "
                     )
             );
             return result;
