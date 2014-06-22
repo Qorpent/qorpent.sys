@@ -46,10 +46,19 @@ namespace Qorpent.Utils.Extensions {
 		/// <summary>
 		/// Форматирует MD5Hash в строку из цифр с игнорированием ноля
 		/// </summary>
+		/// <param name="text"></param>
+		/// <returns></returns>
+		public static string MD5BasedDigitHash(this string text){
+			var data = Encoding.UTF8.GetBytes(text);
+			return Md5BasedDigitHash(data);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="data"></param>
 		/// <returns></returns>
-		public static string MD5BasedDigitHash(this string data){
-			var hash = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(data));
+		public static string Md5BasedDigitHash(byte[] data){
+			var hash = MD5.Create().ComputeHash(data);
 			var result = new StringBuilder();
 			var fst = BitConverter.ToUInt64(hash, 0);
 			var sec = BitConverter.ToUInt64(hash, 8);

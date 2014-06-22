@@ -44,6 +44,10 @@
     <Compile Include="Storages\FileStorageVcsStorage.cs" />
     <Compile Include="Storages\PlainFileStorage.cs" />
     <Compile Include="StreamProxy.cs" />
+    <Compile Include="Syncronization\DirectoryStructure.cs" />
+    <Compile Include="Syncronization\DirectorySynchronization.cs" />
+    <Compile Include="Syncronization\FileItem.cs" />
+    <Compile Include="Syncronization\FileOperation.cs" />
     <Compile Include="VcsStorage\VcsCommit.cs" />
     <Compile Include="Web\ProxySelectorHelper.cs" />
     <Compile Include="Web\WebResource.cs" />

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<IsTest>True</IsTest>
+    <Configuration>Debug</Configuration>
+	<ProjectGuid>457603EB-69C6-4A2B-8EB3-D7127FDA8A03</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Syncer.Tests</RootNamespace>
+    <AssemblyName>Qorpent.Syncer.Tests</AssemblyName>
+	<AssemblyNameBase>Qorpent.Syncer</AssemblyNameBase>
+  </PropertyGroup>
+   <ItemGroup>
+	<None Include="*.import" />
+	<None Include="*.export" />
+	<EmbeddedResource Include=".\**\*.*resource"/>
+ </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+
+</Project>
