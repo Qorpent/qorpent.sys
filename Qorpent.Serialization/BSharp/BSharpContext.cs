@@ -219,7 +219,13 @@ namespace Qorpent.BSharp{
 				}
 				return result.ToArray();
 			}
-			return new IBSharpClass[]{};
+
+			if (PrototypeMap == null){
+				return RawClasses.Values.Where(_ => _.Source.Attr("prototype")==query).ToArray();
+			}
+			else{
+				return new IBSharpClass[]{};
+			}
 		}
 
 		/// <summary>
@@ -854,6 +860,12 @@ namespace Qorpent.BSharp{
 
 		private void MergePartial(IBSharpClass basis, IBSharpClass cls){
 			basis.Set(cls.GetAttributes());
+			foreach (var import in cls.SelfImports){
+				if (basis.SelfImports.All(_ => _.TargetCode != import.TargetCode)){
+					basis.SelfImports.Add(import);
+
+				}
+			}
 			foreach (XAttribute attribute in cls.Source.Attributes()){
 				string n = attribute.Name.LocalName;
 				string v = attribute.Value;

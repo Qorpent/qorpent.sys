@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Qorpent.BSharp;
 using Qorpent.Utils.Extensions;
@@ -43,6 +44,23 @@ class A partial y=2 abstract
 			var cls = clses.First();
 			Assert.True(cls.Is(BSharpClassAttributes.Abstract));
 			Assert.True(cls.Is(BSharpClassAttributes.ExplicitElements));
+
+		}
+
+		[Test]
+		public void ImportsMerged()
+		{
+			var ctx = BSharpCompiler.Compile(@"
+class X a=1
+class Y b=2
+class A partial x=1
+	import X
+class A partial y=2
+	import Y
+");
+			var cls = ctx["A"];
+			Console.WriteLine(cls.Compiled.ToString().Replace("\"","\"\""));
+			Assert.AreEqual(@"<class code=""A"" name=""partial"" y=""2"" x=""1"" fullcode=""A"" a=""1"" b=""2"" />".Trim().LfOnly(), cls.Compiled.ToString().Trim().LfOnly());
 
 		}
 
