@@ -79,7 +79,7 @@ namespace Qorpent.BSharp {
 			get{
 				if (!Is(BSharpClassAttributes.Patch)) return null;
 				if (null == _patchTarget){
-					_patchTarget = Compiled.Attr(BSharpSyntax.PatchTargetAttribute);
+					_patchTarget = Source.Attr(BSharpSyntax.PatchTargetAttribute);
 				}
 				return _patchTarget;
 			}
@@ -95,40 +95,58 @@ namespace Qorpent.BSharp {
 				if (!Is(BSharpClassAttributes.Patch)) return false;
 				if (null == _patchPlain)
 				{
-					_patchPlain = Compiled.Attr(BSharpSyntax.PatchPlainAttribute).ToBool();
+					_patchPlain = Source.Attr(BSharpSyntax.PatchPlainAttribute).ToBool();
 				}
 				return _patchPlain.Value;
 			}
 		}
 
-		BSharpPatchBehavior _patchBehavior = BSharpPatchBehavior.None;
+		BSharpPatchCreateBehavior _patchBehavior = BSharpPatchCreateBehavior.None;
 		/// <summary>
 		/// 
 		/// </summary>
-		public BSharpPatchBehavior PatchBehavior{
+		public BSharpPatchCreateBehavior PatchCreateBehavior
+		{
 			get{
-				if (!Is(BSharpClassAttributes.Patch)) return BSharpPatchBehavior.None;
-				if (BSharpPatchBehavior.None == _patchBehavior){
-					
-					var _val = Compiled.Attr(BSharpSyntax.PatchCreateBehavior);
+				if (!Is(BSharpClassAttributes.Patch)) return BSharpPatchCreateBehavior.None;
+				if (BSharpPatchCreateBehavior.None == _patchBehavior)
+				{
+
+					var _val = Source.Attr(BSharpSyntax.PatchCreateBehavior);
 					if (string.IsNullOrWhiteSpace(_val)){
-						_patchBehavior = BSharpPatchBehavior.Default;
+						_patchBehavior = BSharpPatchCreateBehavior.Default;
 					}
 					else if (_val == BSharpSyntax.PatchCreateBehaviorNone){
-						_patchBehavior = BSharpPatchBehavior.NoneOnNew;
+						_patchBehavior = BSharpPatchCreateBehavior.NoneOnNew;
 					}
 					else if (_val == BSharpSyntax.PatchCreateBehaviorCreate)
 					{
-						_patchBehavior = BSharpPatchBehavior.CreateOnNew;
+						_patchBehavior = BSharpPatchCreateBehavior.CreateOnNew;
 					}
 					else if (_val == BSharpSyntax.PatchCreateBehaviorError){
-						_patchBehavior = BSharpPatchBehavior.ErrorOnNew;
+						_patchBehavior = BSharpPatchCreateBehavior.ErrorOnNew;
 					}
 					else{
-						_patchBehavior = BSharpPatchBehavior.Invalid;
+						_patchBehavior = BSharpPatchCreateBehavior.Invalid;
 					}
 				}
 				return _patchBehavior;
+			}
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public BSharpPatchPhase PatchPhase{
+			get{
+				var result = BSharpPatchPhase.After;
+				if (Source.GetSmartValue(BSharpSyntax.PatchBeforeAttribute).ToBool()){
+					result = BSharpPatchPhase.Before;
+				}
+				else if (Source.GetSmartValue(BSharpSyntax.PatchAfterBuildAttribute).ToBool())
+				{
+					result = BSharpPatchPhase.AfterBuild;
+				}
+				return result;
 			}
 		}
 
@@ -144,7 +162,7 @@ namespace Qorpent.BSharp {
 				if (BSharpPatchNameBehavior.None == _patchNameBehavior)
 				{
 
-					var _val = Compiled.Attr(BSharpSyntax.PatchNameBehavior);
+					var _val = Source.Attr(BSharpSyntax.PatchNameBehavior);
 					if (string.IsNullOrWhiteSpace(_val))
 					{
 						_patchNameBehavior = BSharpPatchNameBehavior.Default;
@@ -173,7 +191,7 @@ namespace Qorpent.BSharp {
 		/// <param name="attribute"></param>
 		/// <returns></returns>
 		public bool Is(BSharpClassAttributes attribute) {
-			return _attributes.HasFlag(attribute);
+			return 0!=(_attributes&attribute);
 		}
 
 		/// <summary>

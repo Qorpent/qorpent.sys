@@ -22,8 +22,9 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <param name="code"></param>
 		/// <param name="ns"></param>
+		/// <param name="usemeta"></param>
 		/// <returns></returns>
-		IBSharpClass Get( string code, string ns = null);
+		IBSharpClass Get(string code, string ns = null, bool usemeta = false);
 
 		/// <summary>
 		/// Возвращает коллекцию классов по типу классов
@@ -64,6 +65,16 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		IDictionary<string, object> ExtendedData { get; }
 
+		/// <summary>
+		///    Определения  для псеавдоклассов
+		/// </summary>
+		IDictionary<string, IBSharpClass> MetaClasses { get; }
+
+		/// <summary>
+		///     Исходные сырые определения классов
+		/// </summary>
+		IDictionary<string, IBSharpClass> RawClasses { get; }
+
 
 		/// <summary>
 		/// Очищает данные по задачам
@@ -99,8 +110,9 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <param name="query"></param>
 		/// <param name="basens"></param>
+		/// <param name="usemeta"></param>
 		/// <returns></returns>
-		IEnumerable<IBSharpClass> ResolveAll(string query, string basens =null);
+		IEnumerable<IBSharpClass> ResolveAll(string query, string basens = null, bool usemeta = false);
 		/// <summary>
 		/// Выполняет генераторы, формируя дополнительные классы
 		/// </summary>

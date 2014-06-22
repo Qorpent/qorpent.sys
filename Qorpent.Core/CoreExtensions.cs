@@ -21,6 +21,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Xml.Linq;
 
 namespace Qorpent.Utils.Extensions {
@@ -40,6 +42,20 @@ namespace Qorpent.Utils.Extensions {
 			if (null != dateformat && x is DateTime) return ((DateTime) x).ToString(dateformat);
 			if (null != decimalformat && x is decimal) return ((decimal) x).ToString(decimalformat);
 			return x.ToString();
+		}
+		/// <summary>
+		/// Форматирует MD5Hash в строку из цифр с игнорированием ноля
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public static string MD5BasedDigitHash(this string data){
+			var hash = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(data));
+			var result = new StringBuilder();
+			var fst = BitConverter.ToUInt64(hash, 0);
+			var sec = BitConverter.ToUInt64(hash, 8);
+			result.Append(fst);
+			result.Append(sec);
+			return result.ToString();
 		}
 
 		/// <summary>

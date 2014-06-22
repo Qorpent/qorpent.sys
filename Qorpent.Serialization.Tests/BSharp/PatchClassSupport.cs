@@ -11,8 +11,8 @@ namespace Qorpent.Serialization.Tests.BSharp{
 		public void PatchCompiledButNotIncludedIntoLibPkg(){
 			var code = "patch";
 			var result = Compile(code);
-			Assert.AreEqual(1, result.Working.Count);
-			Assert.True(result.Working[0].Is(BSharpClassAttributes.Patch));
+			Assert.AreEqual(1, result.MetaClasses.Count);
+			Assert.True(result.MetaClasses.Values.First().Is(BSharpClassAttributes.Patch));
 			Assert.AreEqual(0,result.Get(BSharpContextDataType.LibPkg).Count());
 		}
 
@@ -21,24 +21,24 @@ namespace Qorpent.Serialization.Tests.BSharp{
 		{
 			var code = "patch";
 			var result = Compile(code);
-			Assert.AreEqual(1, result.Working.Count);
+			Assert.AreEqual(1, result.MetaClasses.Count);
 			Assert.AreEqual(1, result.Errors.Count);
 			Assert.AreEqual(BSharpErrorType.PatchUndefinedTarget,result.Errors[0].Type);
 			
 		}
 
-		[TestCase(BSharpSyntax.PatchCreateBehaviorCreate,BSharpPatchBehavior.CreateOnNew)]
-		[TestCase(BSharpSyntax.PatchCreateBehaviorError, BSharpPatchBehavior.ErrorOnNew)]
-		[TestCase(BSharpSyntax.PatchCreateBehaviorNone, BSharpPatchBehavior.NoneOnNew)]
-		[TestCase("", BSharpPatchBehavior.ErrorOnNew)]
-		[TestCase("zzzz",BSharpPatchBehavior.Invalid)]
-		public void InvalidBehaviorCauseError(string value, BSharpPatchBehavior patchtype)
+		[TestCase(BSharpSyntax.PatchCreateBehaviorCreate,BSharpPatchCreateBehavior.CreateOnNew)]
+		[TestCase(BSharpSyntax.PatchCreateBehaviorError, BSharpPatchCreateBehavior.ErrorOnNew)]
+		[TestCase(BSharpSyntax.PatchCreateBehaviorNone, BSharpPatchCreateBehavior.NoneOnNew)]
+		[TestCase("", BSharpPatchCreateBehavior.ErrorOnNew)]
+		[TestCase("zzzz",BSharpPatchCreateBehavior.Invalid)]
+		public void InvalidBehaviorCauseError(string value, BSharpPatchCreateBehavior patchtype)
 		{
 			var code = "patch for=x new='"+value+"'";
 			var result = Compile(code);
-			Assert.AreEqual(1, result.Working.Count);
-			Assert.AreEqual(patchtype,result.Working[0].PatchBehavior);
-			if (patchtype == BSharpPatchBehavior.Invalid){
+			Assert.AreEqual(1, result.MetaClasses.Count);
+			Assert.AreEqual(patchtype, result.MetaClasses.Values.First().PatchCreateBehavior);
+			if (patchtype == BSharpPatchCreateBehavior.Invalid){
 				Assert.AreEqual(1, result.Errors.Count);
 				Assert.AreEqual(BSharpErrorType.PatchError, result.Errors[0].Type);
 			}
@@ -62,6 +62,35 @@ patch for=^A:
 			Assert.AreEqual(@"<class code='A' fullcode='A'>
   <x code='a' name='name2' shortname='n' idx='1' />
 </class>".Trim().LfOnly(), str.Trim().LfOnly());
+		}
+
+		[Test]
+		public void SimpleBeforePatch()
+		{
+			var code = @"
+class A x=1
+patch for=^A y=${x} before
+";
+			var result = Compile(code).Get("A");
+			var str = result.Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(str);
+			Assert.AreEqual(@"<class code='A' x='1' y='1' fullcode='A' />".Trim().LfOnly(), str.Trim().LfOnly());
+		}
+
+		
+
+
+		[Test]
+		public void PatchWithInterpolations()
+		{
+			var code = @"
+class A
+patch for=^A x=1 y=${x}:
+";
+			var result = Compile(code).Get("A");
+			var str = result.Compiled.ToString().Replace("\"", "'");
+			Console.WriteLine(str);
+			Assert.AreEqual(@"<class code='A' fullcode='A' x='1' y='1' />".Trim().LfOnly(), str.Trim().LfOnly());
 		}
 
 

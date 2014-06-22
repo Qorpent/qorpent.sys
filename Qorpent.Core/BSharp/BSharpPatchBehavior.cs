@@ -5,7 +5,7 @@ namespace Qorpent.BSharp{
 	/// 
 	/// </summary>
 	[Flags]
-	public enum BSharpPatchBehavior{
+	public enum BSharpPatchCreateBehavior{
 		/// <summary>
 		/// 
 		/// </summary>

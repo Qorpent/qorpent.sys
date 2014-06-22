@@ -15,8 +15,12 @@ class
 ";
 			var result = Compile(code);
 			Assert.AreEqual(2,result.Working.Count);
-			Assert.True(result.Working.Any(_ => _.Name == "cls11345936565850091083"));
-			Assert.True(result.Working.Any(_ => _.Name == "cls17333115036514700609"));
+			foreach (var cls in result.Working)
+			{
+				Console.WriteLine(cls.Name);
+			}
+			Assert.NotNull(result.Get("cls_280606649690895021695363653119788766"));
+			Assert.NotNull(result.Get("cls_606214790536978727312106354395331582241"));
 		}
 
 
@@ -30,7 +34,12 @@ class
 	a
 ";
 			var result = Compile(code);
-			Assert.AreEqual("cls11345936565850091083", result.Working[0].Name);
+
+			foreach (var cls in result.Working)
+			{
+				Console.WriteLine(cls.Name);
+			}
+			Assert.AreEqual("cls_606214790536978727312106354395331582241", result.Working[0].Name);
 			if (2 == result.Working.Count)
 			{
 				Console.WriteLine(result.Working[1].Name);

@@ -165,15 +165,25 @@ namespace Qorpent.BSharp {
 				_context.RegisterError(BSharpErrors.PatchUndefinedTarget(_cls,_cls.Compiled));					
 				return;
 			}
-			if (_cls.PatchBehavior == BSharpPatchBehavior.Invalid){
+			if (_cls.PatchCreateBehavior == BSharpPatchCreateBehavior.Invalid){
 				_context.RegisterError(BSharpErrors.PatchInvalidBehavior(_cls, _cls.Compiled));
 				return;
 					
 			}
-			var targets = _context.ResolveAll(_cls.PatchTarget,_cls.Namespace);
+			var targets = _context.ResolveAll(_cls.PatchTarget, _cls.Namespace);
 			
 
 			foreach (var target in targets){
+				if (null == _cls.Compiled)
+				{
+					if (_cls.PatchPhase != BSharpPatchPhase.Before){
+						Build(BuildPhase.Compile);
+					}
+					if (_cls.PatchPhase == BSharpPatchPhase.After){
+						Build(BuildPhase.AutonomeLink);
+						Build(BuildPhase.CrossClassLink);
+					}
+				}
 				lock (target){
 					Log.Trace("Apply patch "+_cls.FullName+" to "+target.FullName);
 					try{
@@ -204,19 +214,30 @@ namespace Qorpent.BSharp {
 			if (_cls.PatchPlain){
 				opts.IncludeActions = opts.IncludeActions & ~XDiffAction.ChangeHierarchyPosition;
 			}
-			if (_cls.PatchBehavior == BSharpPatchBehavior.ErrorOnNew){
+			if (_cls.PatchCreateBehavior == BSharpPatchCreateBehavior.ErrorOnNew){
 				opts.ErrorActions |= XDiffAction.CreateElement;
 			}
-			else if (_cls.PatchBehavior == BSharpPatchBehavior.NoneOnNew){
+			else if (_cls.PatchCreateBehavior == BSharpPatchCreateBehavior.NoneOnNew){
 				opts.IncludeActions &= ~XDiffAction.CreateElement;
 			}
 			var diff = new XDiffGenerator(opts);
+			IEnumerable<XDiffItem> difference;
+			if (_cls.PatchPhase == BSharpPatchPhase.Before){
+				difference = diff.GetDiff(target.Source, _cls.Source);
 
-			var difference = diff.GetDiff(target.Compiled, _cls.Compiled);
+				difference.Apply(target.Source, opts);
+			}
+			else{
+				 difference = diff.GetDiff(target.Compiled, _cls.Compiled);
 
-			difference.Apply(target.Compiled, opts);
-
-		    foreach (var attribute in _cls.Compiled.Attributes()) {
+				difference.Apply(target.Compiled, opts);
+			}
+			var attrsrc = _cls.Compiled;
+			if (_cls.PatchPhase == BSharpPatchPhase.Before){
+				attrsrc = _cls.Source;
+			}
+			foreach (var attribute in  attrsrc.Attributes())
+			{
 		        if(attribute.Name.LocalName==BSharpSyntax.PatchTargetAttribute)continue;
 		        if(attribute.Name.LocalName=="id")continue;
 		        if(attribute.Name.LocalName=="code")continue;
@@ -225,14 +246,22 @@ namespace Qorpent.BSharp {
 				if (attribute.Name.LocalName == BSharpSyntax.PatchPlainAttribute) continue;
 				if (attribute.Name.LocalName == BSharpSyntax.PatchCreateBehavior) continue;
 				if (attribute.Name.LocalName == BSharpSyntax.PatchNameBehavior) continue;
+				if (attribute.Name.LocalName == BSharpSyntax.PatchBeforeAttribute) continue;
+				if (attribute.Name.LocalName == BSharpSyntax.PatchAfterBuildAttribute) continue;
+				if (attribute.Name.LocalName == BSharpSyntax.PatchAfterAttribute) continue;
                 if (attribute.Name.LocalName == "priority") continue;
 			    var name = attribute.Name.LocalName;
 				if (name.StartsWith("set-")){
 					name = name.Substring(4);
 				}
-                target.Compiled.SetAttributeValue(name,attribute.Value);
+				if (_cls.PatchPhase == BSharpPatchPhase.Before){
+					target.Source.SetAttributeValue(name, attribute.Value);
+				}
+				else{
+					target.Compiled.SetAttributeValue(name, attribute.Value);
+				}
 
-		    }
+			}
 
 			foreach (var descendant in target.Compiled.Descendants()){
 				var p = descendant.Attribute("__parent");
@@ -255,7 +284,7 @@ namespace Qorpent.BSharp {
 					if (query == BSharpSyntax.IncludeBodyModifier || query == BSharpSyntax.IncludeNoChildModifier) {
 						query = "";
 					}
-					var sources = _context.ResolveAll(query, _cls.Namespace).ToArray();
+					var sources = _context.ResolveAll(query, basens: _cls.Namespace).ToArray();
 					if (0 == sources.Length) {
 						i.Remove();
 						continue;
@@ -506,7 +535,7 @@ namespace Qorpent.BSharp {
 					if (isarray){
 						clsname = clsname.Substring(0, clsname.Length - 1);
 					}
-					var normallyresolvedClass = _context.Get(clsname, _cls.Namespace);
+					var normallyresolvedClass = _context.Get(clsname, ns: _cls.Namespace);
 					if (null != normallyresolvedClass) {
 						if (normallyresolvedClass.Is(BSharpClassAttributes.Abstract)){
 							a.Value = "ABSTRACT::" + normallyresolvedClass.FullName;
@@ -594,7 +623,7 @@ namespace Qorpent.BSharp {
 				return needReInterpolate;
 			}
 
-			var includecls = _context.Get(code, _cls.Namespace);
+			var includecls = _context.Get(code, ns: _cls.Namespace);
 			if (null == includecls) {
 				_context.RegisterError(BSharpErrors.NotResolvedInclude(_cls, i));
 				i.Remove();
@@ -1019,7 +1048,7 @@ namespace Qorpent.BSharp {
 				e.Attributes().Where(_ =>
 					(_.Name.LocalName[0]==BSharpSyntax.PrivateAttributePrefix || string.IsNullOrEmpty(_.Value))&&
 					!(_.Name.LocalName.StartsWith("__AT__"))
-					&& (!(_compiler.GetConfig().KeepLexInfo && (_.Name.LocalName=="_file"||_.Name.LocalName=="_line")))
+					&& (!(_compiler.GetConfig().KeepLexInfo && (_.Name.LocalName == "_file" || _.Name.LocalName == "_line" || _.Name.LocalName == "_dir")))
 					).Remove();
 			}
 

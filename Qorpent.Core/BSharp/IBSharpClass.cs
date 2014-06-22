@@ -126,7 +126,7 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// 
 		/// </summary>
-		BSharpPatchBehavior PatchBehavior { get; }
+		BSharpPatchCreateBehavior PatchCreateBehavior { get; }
 
 		/// <summary>
 		/// Прототип класса
@@ -143,6 +143,11 @@ namespace Qorpent.BSharp {
 		/// 
 		/// </summary>
 		BSharpPatchNameBehavior PatchNameBehavior { get; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		BSharpPatchPhase PatchPhase { get; }
 
 		/// <summary>
 		/// Возвращает true при наличии флага

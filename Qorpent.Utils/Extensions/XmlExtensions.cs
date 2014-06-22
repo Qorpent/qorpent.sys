@@ -55,6 +55,24 @@ namespace Qorpent.Utils.Extensions {
             throw new Exception("multiple instance");
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="element"></param>
+		/// <returns></returns>
+		public static XElement NoEvidenceCopy(this XElement element){
+			var result = new XElement(element);
+			foreach (var e in result.DescendantsAndSelf()){
+				var _file = e.Attribute("_file");
+				if(null!=_file)_file.Remove();
+				var _line = e.Attribute("_line");
+				if (null != _line) _line.Remove();
+				var _dir = e.Attribute("_dir");
+				if (null != _dir) _dir.Remove();
+			}
+			return result;
+		}
+
 
         /// <summary>
         /// имя атрибута с уникаьным номером элемента по умолчанию

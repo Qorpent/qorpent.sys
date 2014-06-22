@@ -33,6 +33,7 @@
     <Compile Include="BSharp\V1_2\Q188ImplicitElements.cs" />
     <Compile Include="BSharp\V1_2\Q189TruePartialClasses.cs" />
     <Compile Include="BSharp\V1_2\Q196PlainNamespaces.cs" />
+    <Compile Include="BSharp\V1_2\Q197MetaClassDetection.cs" />
     <Compile Include="Bxl\Ap286ParserTests.cs" />
     <Compile Include="Bxl\BxlParserCompatibilityTests.cs" />
     <Compile Include="Bxl\BxlParserTests.cs" />

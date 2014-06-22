@@ -81,6 +81,21 @@ namespace Qorpent.BSharp {
 		/// 
 		/// </summary>
 		public const string PatchPlainAttribute = "plain";
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string PatchBeforeAttribute = "before";
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string PatchAfterBuildAttribute = "build";
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string PatchAfterAttribute = "after";
 		/// <summary>
 		/// Описатель действия патча при создании элемента
 		/// </summary>

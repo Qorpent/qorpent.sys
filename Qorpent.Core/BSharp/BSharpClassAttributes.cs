@@ -5,7 +5,7 @@ namespace Qorpent.BSharp {
 	/// Атрибуты класса BSharp
 	/// </summary>
 	[Flags]
-	public enum BSharpClassAttributes:long {
+	public enum BSharpClassAttributes:ulong {
 		/// <summary>
 		/// Класс создан без указания импота по умолчанию с ключевым словом class
 		/// </summary>
@@ -13,86 +13,86 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Явный признак класса-сироты
 		/// </summary>
-		Orphan = 1<<1,
+		Orphan = (ulong)1<<1,
 		/// <summary>
 		/// Признак абстрактного класса
 		/// </summary>
-		Abstract = 1<<2,
+		Abstract = (ulong)1<<2,
 		/// <summary>
 		/// Признак статического класса
 		/// </summary>
-		Static = 1<<3,
+		Static = (ulong)1<<3,
 		/// <summary>
 		/// Признак того что это класс-присадка для перекрытия реального класса
 		/// </summary>
-		Override = 1<<4,
+		Override = (ulong)1<<4,
 		/// <summary>
 		/// Признак того что это класс-присадка для дополнения реального класса
 		/// </summary>
-		Extension = 1<<5,
+		Extension = (ulong)1<<5,
 		/// <summary>
 		/// Признак состояния в процесс билда
 		/// </summary>
-		InBuild = 1<<6,
+		InBuild = (ulong)1<<6,
 		/// <summary>
 		/// Флаг завершенного построения
 		/// </summary>
-		Built = 1<<7,
+		Built = (ulong)1<<7,
 		/// <summary>
 		/// Флаг ошибки в классе
 		/// </summary>
-		Error = 1<<8,
+		Error = (ulong)1<<8,
 		/// <summary>
 		/// Проигнорированный
 		/// </summary>
-		Ignored =1<<9,
+		Ignored =(ulong)1<<9,
 		/// <summary>
 		/// В стадии ликовки
 		/// </summary>
-		InLink = 1<<10,
+		InLink = (ulong)1<<10,
 		/// <summary>
 		/// Стадия линковки завершена
 		/// </summary>
-		Linked = 1<<11,
+		Linked = (ulong)1<<11,
 		/// <summary>
 		/// Признак необходимости линковки
 		/// </summary>
-		RequireLinking = 1<<13,
+		RequireLinking = (ulong)1<<13,
 		/// <summary>
 		/// Признак необходимости разрешения классов
 		/// </summary>
-		RequireClassResolution = 1<<14,
+		RequireClassResolution = (ulong)1<<14,
 		/// <summary>
 		/// Потребность в резолюции словарей
 		/// </summary>
-		RequireDictionaryResolution = 1<<15,
+		RequireDictionaryResolution = (ulong)1<<15,
 
 		/// <summary>
 		/// Потребность в резолюции дополнительных инклудов
 		/// </summary>
-		RequireAdvancedIncludes = 1 << 16,
+		RequireAdvancedIncludes = (ulong)1 << 16,
 		/// <summary>
 		/// Необходимость регистрации словаря
 		/// </summary>
-		RequireDictionaryRegistration = 1<<17,
+		RequireDictionaryRegistration = (ulong)1<<17,
 
 		/// <summary>
 		/// Библиотечный, не изменяемый класс
 		/// </summary>
-		Library  =1 << 18,
+		Library = (ulong)1 << 18,
 
 		/// <summary>
 		/// Признак класса - схемы
 		/// </summary>
-		Shema = 1<<19,
+		Shema = (ulong)1<<19,
 		/// <summary>
 		/// Признак необходимости позднего биндинга при интерполяции
 		/// </summary>
-		RequireLateInterpolation = 1 << 20,
+		RequireLateInterpolation = (ulong)1 << 20,
 		/// <summary>
 		/// Признак внедряемого класса
 		/// </summary>
-		Embed = 1<<21,
+		Embed = (ulong)1<<21,
 		/// <summary>
 		/// Набор флагов для пакета исходников
 		/// </summary>
@@ -102,45 +102,53 @@ namespace Qorpent.BSharp {
 		/// <summary>
 		/// Признак класса-набора данных
 		/// </summary>
-		Dataset = 1<<22,
+		Dataset = (ulong)1<<22,
 		/// <summary>
 		/// Признак класса - генератора
 		/// </summary>
-		Generator = 1<<23,
+		Generator = (ulong)1<<23,
 		/// <summary>
 		/// Соединения
 		/// </summary>
-		Connection = 1<<24,
+		Connection = (ulong)1<<24,
 		/// <summary>
 		/// Шаблоны
 		/// </summary>
-		Template = 1<<25,
+		Template = (ulong)1<<25,
 
 		/// <summary>
 		/// Класс без явного указания кода
 		/// </summary>
-		Anonymous = 1<<26,
+		Anonymous = (ulong)1<<26,
 
 		/// <summary>
 		/// Класс Patch для применения на целевой
 		/// </summary>
-		Patch = 1<<27,
+		Patch = (ulong)1<<27,
 
 		/// <summary>
 		/// Признак класса - генерика - ведет себя близко к статику (обрабатывается в ту же фазу), но интерполирует не по дефолтному ${...}, а по ^{...}
 		/// </summary>
-		Generic = 1 << 28,
+		Generic = (ulong)1 << 28,
 		/// <summary>
 		/// Marks cycled class
 		/// </summary>
-		Cycle = 1<<29,
+		Cycle = (ulong)1<<29,
 		/// <summary>
 		/// Класс, запрещающий неявныйрасчет элементов	
 		/// </summary>
-		ExplicitElements = 1<<30,
+		ExplicitElements = (ulong)1<<30,
 		/// <summary>
 		/// Партицированный класс
 		/// </summary>
-		Partial = 1<<31,
+		Partial = (ulong)1<<31,
+		/// <summary>
+		/// Классы директивного контроля над XML (препроцессор и постпроцессор)
+		/// </summary>
+		Direct = (ulong)1<<32,
+		/// <summary>
+		/// Набор мета-классов, не участвуют в компиляции, а являются расширением компилятора
+		/// </summary>
+		MetaClass = Patch | Generator | Dataset | Direct | Connection | Template,
 	}
 }

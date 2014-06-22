@@ -641,7 +641,7 @@ namespace Qorpent.BSharp {
 		}
 
 		private IBSharpClass PrepareGenerator(string ns, XElement e){
-			var code = "gen" + Guid.NewGuid().ToString().Replace("-", "");
+			var code = "generator_" + e.NoEvidenceCopy().ToString().MD5BasedDigitHash();
 			e.SetAttributeValue(BSharpSyntax.GeneratorClassCodeAttribute, e.Attr("code"));
 			e.SetAttributeValue(BSharpSyntax.GeneratorClassNameAttribute, e.Attr("name"));
 			e.SetAttributeValue("code", code);
@@ -666,9 +666,8 @@ namespace Qorpent.BSharp {
 					e_.SetAttributeValue("_file", null);
 					e_.SetAttributeValue("_line", null);	
 				}
-				
-				selfcode = "cls"+(
-					BitConverter.ToUInt64(MD5.Create().ComputeHash(Encoding.Unicode.GetBytes(clsbody.ToString())),0));
+
+				selfcode = "cls_" + e.NoEvidenceCopy().ToString().MD5BasedDigitHash();
 				e.SetAttributeValue("code",selfcode);
 				anonym = true;
 			}
@@ -878,6 +877,21 @@ namespace Qorpent.BSharp {
 		/// <param name="context"></param>
 		/// <returns></returns>
 		protected virtual void CompileClasses(IEnumerable<XElement> sources, IBSharpContext context) {
+			context.MetaClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Patch) && _.PatchPhase==BSharpPatchPhase.Before).OrderBy(_ => _.Priority).Select(
+						_ =>
+						{
+							try
+							{
+								BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
+							}
+							catch (Exception ex)
+							{
+								_.Error = ex;
+							}
+							return "";
+						}).ToArray()
+						;
+
 			//статические классы нужно строить до всех остальных
 			context.Get(BSharpContextDataType.Statics).AsParallel().ForAll(
 				_ => CompileSingle(context, _))
@@ -909,8 +923,23 @@ namespace Qorpent.BSharp {
 			var requirelink = context.RequireLinking();
 			var requirepatch = context.RequirePatching();
 			var requirepostprocess = context.RequrePostProcess();
-			if (!(requirelink || requirepatch || requirepostprocess)) return;
-			
+			context.MetaClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Patch) && _.PatchPhase == BSharpPatchPhase.AfterBuild).OrderBy(_ => _.Priority).Select(
+						_ =>
+						{
+							try
+							{
+								BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
+							}
+							catch (Exception ex)
+							{
+								_.Error = ex;
+							}
+							return "";
+						}).ToArray()
+						;
+
+				
+				
 				if (requirelink){
 					context.Get(BSharpContextDataType.Working)
 					       .Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
@@ -940,25 +969,29 @@ namespace Qorpent.BSharp {
 						;
 				}
 			
-				if (requirepatch){
-					context.Get(BSharpContextDataType.Working).Where(_ => _.Is(BSharpClassAttributes.Patch)).OrderBy(_=>_.Priority).Select(
-						_ =>{
-							try{
-								BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
-							}
-							catch (Exception ex){
-								_.Error = ex;
-							}
-							return "";
-						}).ToArray()
-						;
-				}
+				context.MetaClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Patch)&& _.PatchPhase==BSharpPatchPhase.After).OrderBy(_ => _.Priority).Select(
+					_ =>
+					{
+						try
+						{
+							BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
+						}
+						catch (Exception ex)
+						{
+							_.Error = ex;
+						}
+						return "";
+					}).ToArray()
+					;
+				
 
 				if (requirepostprocess)
 				{
-					context.Get(BSharpContextDataType.Working).AsParallel().ForAll(_ => BSharpClassBuilder.Build(BuildPhase.PostProcess,this,_,context));
+					context.Get(BSharpContextDataType.Working).AsParallel().ForAll(_ => BSharpClassBuilder.Build(BuildPhase.PostProcess, this, _, context));
 				}
+				
 			
 		}
+
 	}
 }
