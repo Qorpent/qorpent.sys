@@ -29,7 +29,7 @@ namespace Qorpent.IO.Syncronization{
 		public XElement GetStampFile(){
 			Directory.CreateDirectory(Folder);
 			var infos = Directory.GetFiles(Folder).OrderBy(_ => _).Select(_ => new FileInfo(_)).Where(_=>_.Name!=SyncFileName).ToArray();
-			var lastver = infos.AsParallel().Max(_ => _.LastWriteTime);
+			var lastver = infos.Length==0?DateTime.MinValue: infos.AsParallel().Max(_ => _.LastWriteTime);
 			var dirver = Directory.GetLastWriteTime(Folder);
 			if (dirver > lastver) lastver = dirver;
 			var syncfile = Path.Combine(Folder, SyncFileName);
