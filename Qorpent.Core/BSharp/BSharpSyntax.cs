@@ -16,6 +16,10 @@ namespace Qorpent.BSharp {
 		/// Отключает имплицитную настройку элементов
 		/// </summary>
 		public const string ExplicitClassMarker = "explicit";
+		/// <summary>
+		/// Специальное значение для explicit, указывающее распространение на все дочерние классы
+		/// </summary>
+		public const string ExplicitClassPropagateValue = "propagate";
 
 		/// <summary>
 		/// Помечает партицированные классы

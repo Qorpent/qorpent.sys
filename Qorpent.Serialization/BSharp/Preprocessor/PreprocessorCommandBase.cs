@@ -41,5 +41,6 @@ namespace Qorpent.BSharp.Preprocessor{
 		/// Выполняет сам скрип
 		/// </summary>
 		public abstract void Execute(XElement e);
+		
 	}
 }

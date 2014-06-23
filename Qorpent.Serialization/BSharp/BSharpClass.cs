@@ -497,7 +497,13 @@ namespace Qorpent.BSharp {
 						}
 					}
 				}
-
+				if (AllImports.Any(_ => _.Source.Attr(BSharpSyntax.ExplicitClassMarker) == BSharpSyntax.ExplicitClassPropagateValue)){
+					foreach (var element in _elementRegistry.ToArray()){
+						if (element.Value.Implicit){
+							_elementRegistry.Remove(element.Key);
+						}
+					}
+				}
 				return _elementRegistry.Values;
 			}
 		}

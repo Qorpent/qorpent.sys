@@ -16,7 +16,7 @@ namespace Qorpent.IO.Tests
 		[Explicit]
 		[Test]
 		public void SyncThemasDiff(){
-			var sync = new DirectorySynchronization(@"C:\z3projects\assoi\local\Draft\themas\.old\thema", @"C:\mnt\testthemas133");
+			var sync = new DirectorySynchronization(@"C:\z3projects\assoi\local\Draft\themas\.old\thema", @"C:\mnt\testthemas");
 			foreach (var fileItem in sync.GetDifference()){
 				Console.WriteLine(fileItem);
 			}
@@ -27,7 +27,7 @@ namespace Qorpent.IO.Tests
 		[Test]
 		public void SyncThemas()
 		{
-			var sync = new DirectorySynchronization(@"C:\z3projects\assoi\local\Draft\themas\.old\thema", @"C:\mnt\testthemas133"){Log=ConsoleLogWriter.CreateLog("main",customFormat:"${Message}")};
+			var sync = new DirectorySynchronization(@"C:\z3projects\assoi\local\Draft\themas\.old\thema", @"C:\mnt\testthemas"){Log=ConsoleLogWriter.CreateLog("main",customFormat:"${Message}")};
 			sync.Synchronize();
 		}
 	}

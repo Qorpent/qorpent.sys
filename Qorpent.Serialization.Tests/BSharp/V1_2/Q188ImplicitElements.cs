@@ -104,5 +104,26 @@ class Y
 			Assert.AreEqual(BSharpElementType.Override, b.Type);
 			
 		}
+
+
+		[Test]
+		public void CanSetOffExplicitWithPropagation(){
+			var ctx = BSharpCompiler.Compile(@"
+class A explicit=propagate
+class B
+	x 1
+class C
+	import A
+	import B
+");
+			var b = ctx["B"];
+			Console.WriteLine(b.Compiled);
+			var be = b.AllElements.FirstOrDefault(_ => _.Name == "x");
+			Assert.NotNull(be);
+			var c = ctx["C"];
+			Console.WriteLine(c.Compiled);
+			var ce = c.AllElements.FirstOrDefault(_ => _.Name == "x");
+			Assert.Null(ce);
+		}
 	}
 }

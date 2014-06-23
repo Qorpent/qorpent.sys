@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.BSharp.Builder;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Preprocessor{
 	internal class PreprocessorCommand : PreprocessorCommandBase{
@@ -18,10 +20,27 @@ namespace Qorpent.BSharp.Preprocessor{
 		/// </summary>
 		public string For;
 		/// <summary>
+		/// 
+		/// </summary>
+		public string File;
+		/// <summary>
 		/// Выполняет сам скрип
 		/// </summary>
 		public override void Execute(XElement e =null ){
 		//	_project.Log.Trace("Start command " + _e.Attr("code"));
+			var file = e.Attr("_file");
+			if (!string.IsNullOrWhiteSpace(file) && !string.IsNullOrWhiteSpace(File)){
+				if (File.StartsWith("/") && File.EndsWith("/")){
+					if (!Regex.IsMatch(file, File.Substring(1, File.Length - 2), RegexOptions.IgnoreCase)){
+						return;
+					}
+				}
+				else{
+					if (!file.ToLowerInvariant().EndsWith(File.ToLowerInvariant())){
+						return;
+					}
+				}
+			}
 			var srcdegree = Parallel ? Environment.ProcessorCount : 1;
 			var selector = GetElements(e).ToArray();
 			selector.AsParallel().WithDegreeOfParallelism(srcdegree).ForAll(el =>{
@@ -47,7 +66,7 @@ namespace Qorpent.BSharp.Preprocessor{
 			if (string.IsNullOrWhiteSpace(For) || "ALLELEMENTS" == For) return src.Descendants();
 			return src.XPathSelectElements(For);
 		}
-
+		
 		public readonly IList<PreprocessOperation> Operations = new List<PreprocessOperation>();
 	}
 }
