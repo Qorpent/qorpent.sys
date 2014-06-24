@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Qorpent.BSharp;
 using Qorpent.Bxl;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
@@ -46,10 +47,21 @@ namespace Qorpent.Host
 				{
 					configXml = XElement.Load(configFile);
 				}
-				else
-				{
+				else if (configFile.EndsWith(".bxl")){
 					configXml = new BxlParser().Parse(File.ReadAllText(configFile), configFile);
 				}
+				else{
+					Environment.CurrentDirectory = Path.GetDirectoryName(configFile);
+					configXml = BSharpCompiler.Compile(configFile)[Path.GetFileNameWithoutExtension(configFile)].Compiled;
+				}
+
+				cfg.LoadXmlConfig(configXml);
+			}
+			else if (argdicts.Count == 1 && argdicts.ContainsKey("arg1")){
+				var configFile = argdicts["arg1"];
+				if (!configFile.EndsWith(".bxls")) configFile += ".bxls";
+				Environment.CurrentDirectory = Path.GetDirectoryName(Path.GetFullPath(configFile));
+				var configXml = BSharpCompiler.Compile(configFile)[Path.GetFileNameWithoutExtension(configFile)].Compiled;
 				cfg.LoadXmlConfig(configXml);
 			}
 			if (argdicts.ContainsKey("root"))
