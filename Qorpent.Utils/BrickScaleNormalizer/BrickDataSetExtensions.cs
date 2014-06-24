@@ -21,7 +21,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <param name="dataSet">Датасет</param>
         /// <returns>Упорядоченное перечисление колонок данных графика в виде <see cref="DataItemColon"/></returns>
         public static IEnumerable<DataItemColon> GetColons(this BrickDataSet dataSet) {
-            var subresult = dataSet.DataItems.GroupBy(_ => _.Index).Select(_ => _.Select(__ => __).ToArray());
+            var subresult = dataSet.DataItems.GroupBy(_ => _.Idx).Select(_ => _.Select(__ => __).ToArray());
 	        foreach (var ds in subresult){
 		        yield return new DataItemColon(ds);
 	        }
@@ -36,7 +36,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 				foreach (var row in seria.Rows) {
 					Console.WriteLine("\tRow: {0}, Sum: {1}, Scale: {2}", row.RowNumber, row.Sum(_ => _.Value), row.ScaleType.ToString());
 					foreach (var item in row) {
-						Console.WriteLine("\t\tItem: {0}, Value: {1}", item.Index, item.Value);
+						Console.WriteLine("\t\tItem: {0}, Value: {1}", item.Idx, item.Value);
 					}
 				}
 			}
