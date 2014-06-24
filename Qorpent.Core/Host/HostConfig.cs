@@ -211,6 +211,7 @@ namespace Qorpent.Host{
 			AuthCookieName = ResolveConfigWithXml(xml, AuthCookieName, HostConstants.AuthCookieName);
 			AuthCookieDomain = ResolveConfigWithXml(xml, AuthCookieDomain, HostConstants.AuthCookieDomain);
 			EncryptBasis = ResolveConfigWithXml(xml, Guid.NewGuid().ToString(), HostConstants.EncryptBasis);
+			DefaultPage = ResolveConfigWithXml(xml, "default.html", HostConstants.DefaultPage);
 			foreach (XElement bind in xml.Elements(HostConstants.BindingXmlName)){
 				var hostbind = new HostBinding();
 				hostbind.Port = bind.Attr(HostConstants.PortXmlName).ToInt();
@@ -227,6 +228,19 @@ namespace Qorpent.Host{
 				if (string.IsNullOrWhiteSpace(hostbind.Interface)){
 					hostbind.Interface = HostConstants.DefaultBindingInterface;
 				}
+				this.Bindings.Add(hostbind);
+				
+			}
+
+			foreach (XElement e in xml.Elements(HostConstants.ContentFolder))
+			{
+				
+				ContentFolders.Add(e.Attr("code"));
+			}
+			foreach (XElement e in xml.Elements(HostConstants.ExContentFolder))
+			{
+
+				ExtendedContentFolders.Add(e.Attr("code"));
 			}
 			foreach (XElement e in xml.Elements(HostConstants.IncludeConfigXmlName)){
 				IncludeConfigMasks.Add(e.Describe().GetEfficienValue());

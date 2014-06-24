@@ -21,6 +21,11 @@
     <EmbeddedResource Include="Resources\qObject.wiki" />
     <EmbeddedResource Include="Resources\bootstrap-theme.css.map" />
     <EmbeddedResource Include="Resources\manifest.cache" />
+    <EmbeddedResource Include="Resources\fontawesome-webfont.eot" />
+    <EmbeddedResource Include="Resources\fontawesome-webfont.ttf" />
+    <EmbeddedResource Include="Resources\fontawesome-webfont.woff" />
+    <EmbeddedResource Include="Resources\FontAwesome.otf" />
+    <EmbeddedResource Include="Resources\OpenSans-Light-webfont.woff" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestHandlerFactory.cs" />
@@ -79,8 +84,8 @@
       <Project>{21971f28-8ed8-4f50-b623-e9db2658af54}</Project>
       <Name>Qorpent.Serialization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\qorpent.sys\Qorpent.Utils\Qorpent.Utils.csproj">
-      <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
+    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
+      <Project>{880f65ea-1a22-4672-a137-ffc912902112}</Project>
       <Name>Qorpent.Utils</Name>
     </ProjectReference>
   </ItemGroup>
@@ -154,8 +159,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\font-awesome.css" />
     <EmbeddedResource Include="Resources\errorcatcher.js" />
-    <Content Include="Resources\menu.css" />
-    <Content Include="Resources\menu.js" />
+    <EmbeddedResource Include="Resources\menu.css" />
+    <EmbeddedResource Include="Resources\menu.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\fontawesome-webfont.svg" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

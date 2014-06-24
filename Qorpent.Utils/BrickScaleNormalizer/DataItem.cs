@@ -29,7 +29,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <summary>
         ///     Порядковый номер внутри ряда
         /// </summary>
-        public int Index { get; set; }
+        public int Idx { get; set; }
         /// <summary>
         ///     Индекс внутри датасета (порядковый номер вставки)
         /// </summary>

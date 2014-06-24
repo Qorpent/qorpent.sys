@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Host{
+﻿using System.Xml.Linq;
+
+namespace Qorpent.Host{
 	/// <summary>
 	///     Константы настройки хоста
 	/// </summary>
@@ -124,5 +126,22 @@
 		///     Базис ключа аутентификации
 		/// </summary>
 		public const string EncryptBasis = "EncryptBasis";
+
+		/// <summary>
+		///   Папки с контентом
+		/// </summary>
+		public const string ContentFolder = "ContentFolder";
+
+		/// <summary>
+		///   Папки с контентом
+		/// </summary>
+		public const string ExContentFolder = "ExContentFolder";
+
+		/// <summary>
+		///   Страница по умолчанию
+		/// </summary>
+		public const string DefaultPage = "DefaultPage";
+
+		
 	}
 }

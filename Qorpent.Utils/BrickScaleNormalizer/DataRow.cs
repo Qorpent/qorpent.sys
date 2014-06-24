@@ -39,7 +39,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// </summary>
         /// <param name="dataItem">Элемент данных</param>
         public void Add(DataItem dataItem) {
-            dataItem.Index = Items.Count;
+            dataItem.Idx = Items.Count;
             Insert(dataItem);
         }
         /// <summary>
@@ -48,7 +48,7 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         /// <param name="dataItem">Элемент данных</param>
         public void Insert(DataItem dataItem) {
             lock (Items) {
-                if (dataItem.Index < Items.Count) {
+                if (dataItem.Idx < Items.Count) {
                     throw new Exception("Incorrect index number");
                 }
                 Items.Add(dataItem);

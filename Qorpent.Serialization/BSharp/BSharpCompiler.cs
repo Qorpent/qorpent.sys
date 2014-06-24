@@ -107,6 +107,7 @@ namespace Qorpent.BSharp {
 		/// <returns></returns>
 		public static IBSharpContext Compile(string bxl, IBSharpConfig config = null)
 		{
+
 			return Compile(new[] {GetXml(bxl,0) }, config);
 		}
 

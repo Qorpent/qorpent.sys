@@ -61,7 +61,7 @@ menu {
 .menu__dropdown .menu__item,
 .menu__ribbon-groups>.menu__item {
     display: inline-block;
-    padding: 5px;
+    padding: 5px 10px;
     color: black;
 }
 
@@ -168,7 +168,7 @@ menu {
 }
 
 .menu__dropdown>div>.menu__item.open-right>.submenu {
-    margin-left: -6px;
+    margin-left: -11px;
 }
 
 .menu__dropdown .submenu .submenu {
@@ -209,6 +209,7 @@ menu {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-top: 1px;
 }
 
 /*
@@ -222,15 +223,12 @@ menu {
 }
 */
 
-
-.menu__dropdown .menu__item[menu-item]:hover>.menu__item-title,
-.menu__dropdown .menu__item[menu-group].hover>.menu__item-title {
-    color: white;
-}
-
-.menu__dropdown .menu__item[menu-item]:hover,
+.menu__dropdown .menu__item[type="text"]:hover,
+.menu__dropdown .menu__item[type="icon_with_text"]:hover,
+.menu__dropdown .menu__item[type="icon"]:hover,
 .menu__dropdown .menu__item[menu-group].hover {
     position: relative;
+    color: white;
     background-color: #428BCA;
     box-shadow: 1px 0 0 #428BCA, -1px 0 0 #428BCA;
 }
@@ -243,6 +241,11 @@ menu {
 .menu__dropdown .submenu>.menu__item {
     padding: 5px 10px;
     width: 100%;
+}
+
+.menu__dropdown>div>.menu__item>.menu__item-title,
+.menu__inline .menu__item-title {
+    font-weight: bold;
 }
 
 .submenu>.menu__item[menu-group].open-left {
