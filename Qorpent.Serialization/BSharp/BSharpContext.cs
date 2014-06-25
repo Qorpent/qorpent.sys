@@ -1079,5 +1079,15 @@ namespace Qorpent.BSharp{
 				}
 			}
 		}
+
+		XElement IXmlConfigSource.Get(string code) {
+			var result = Get(code, "");
+			if (null == result) return null;
+			return result.Compiled;
+		}
+
+		IEnumerable<XElement> IXmlConfigSource.Find(string query) {
+			return ResolveAll(query).Select(_ => _.Compiled);
+		}
 	}
 }
