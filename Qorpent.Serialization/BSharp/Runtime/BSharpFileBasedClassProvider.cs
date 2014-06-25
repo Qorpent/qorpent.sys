@@ -1,16 +1,12 @@
 ﻿using System.IO;
 using System.Xml.Linq;
 
-namespace Qorpent.BSharp.Runtime {
-
-   
-
-
+namespace Qorpent.BSharp.Runtime{
 	/// <summary>
 	///     Источник классов BSharp на основе директории
 	///     имя ресурса для дескриптора - имя файла, работает с плоскими директориями
 	/// </summary>
-	public class BSharpFileBasedClassProvider : BSharpClassProviderBase {
+	public class BSharpFileBasedClassProvider : BSharpClassProviderBase{
 		/// <summary>
 		///     Корневая директория,содержащая классы
 		/// </summary>
@@ -19,34 +15,35 @@ namespace Qorpent.BSharp.Runtime {
 		/// <summary>
 		///     Строит список из всех кдассов с расширением ".bsclass"
 		/// </summary>
-		protected override void RebuildIndex() {
+		protected override void RebuildIndex(){
 			Cache.Clear();
-			foreach (string fn in Directory.GetFiles(RootDirectory, "*."+BSharpRuntimeDefaults.BSHARP_CLASS_FILE_EXTENSION, SearchOption.AllDirectories)) {
-                if (IsStandaloneFile(RootDirectory,fn))
-                {
-                    string fullname = Path.GetFileNameWithoutExtension(fn);
-                    var desc = new BSharpRuntimeClassDescriptor
-                    {
-                        ResourceName = fn,
-                        Fullname = fullname,
-                        LastWrite = File.GetLastWriteTime(fn)
-                    };
-                    Cache[fullname] = desc;
-                }
+			foreach (
+				string fn in
+					Directory.GetFiles(RootDirectory, "*." + BSharpRuntimeDefaults.BSHARP_CLASS_FILE_EXTENSION,
+					                   SearchOption.AllDirectories)){
+				if (IsStandaloneFile(RootDirectory, fn)){
+					string fullname = Path.GetFileNameWithoutExtension(fn);
+					var desc = new BSharpRuntimeClassDescriptor{
+						ResourceName = fn,
+						Fullname = fullname,
+						LastWrite = File.GetLastWriteTime(fn)
+					};
+					Cache[fullname] = desc;
+				}
 			}
 		}
 
-        private bool IsStandaloneFile(string RootDirectory, string fn){
-	        return true;
-        }
+		private bool IsStandaloneFile(string RootDirectory, string fn){
+			return true;
+		}
 
 		/// <summary>
 		///     Перегружает класс из файла на диске
 		/// </summary>
 		/// <param name="descriptor"></param>
-		protected override void ReloadClass(BSharpRuntimeClassDescriptor descriptor) {
+		protected override void ReloadClass(BSharpRuntimeClassDescriptor descriptor){
 			XElement xml = XElement.Load(descriptor.ResourceName);
-			var cls = new BSharpRuntimeClass(Container) {Definition = xml};
+			var cls = new BSharpRuntimeClass(Container){Definition = xml};
 			descriptor.CachedClass = cls;
 			descriptor.CachedClass.Loaded = true;
 		}
@@ -56,7 +53,7 @@ namespace Qorpent.BSharp.Runtime {
 		/// </summary>
 		/// <param name="descriptor"></param>
 		/// <returns></returns>
-		protected override bool IsActual(BSharpRuntimeClassDescriptor descriptor) {
+		protected override bool IsActual(BSharpRuntimeClassDescriptor descriptor){
 			return descriptor.LastWrite >= File.GetLastWriteTime(descriptor.ResourceName);
 		}
 	}

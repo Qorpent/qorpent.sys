@@ -5,27 +5,20 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
-	/// 
 	/// </summary>
-	internal class PushToGlobalOperation : PreprocessOperation
-	{
-
+	internal class PushToGlobalOperation : PreprocessOperation{
+		public bool Split;
 
 		public override void Execute(XElement el){
 			string[] codes = Split
 				                 ? el.Attr("code").SmartSplit(false, true, ',', '/', ';', ' ').ToArray()
 				                 : new[]{el.Attr("code")};
-			var value = el.Value;
-			foreach (var code in codes){
-				lock (_project.Global)
-				{
+			string value = el.Value;
+			foreach (string code in codes){
+				lock (_project.Global){
 					_project.Global.Set(code, value);
-				
 				}
 			}
-			
 		}
-
-		public bool Split;
 	}
 }

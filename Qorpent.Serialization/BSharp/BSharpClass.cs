@@ -7,73 +7,89 @@ using Qorpent.Config;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.BSharp {
+namespace Qorpent.BSharp{
 	/// <summary>
 	/// </summary>
 	[Serialize]
-	public class BSharpClass : IBSharpClass {
+	public class BSharpClass : IBSharpClass{
+		private static int EXTCOUNTER = 1;
+		private readonly IBSharpContext _context;
+		private List<IBSharpElement> _allelements;
+
+		/// <summary>
+		///     Атрибуты класса
+		/// </summary>
+		private BSharpClassAttributes _attributes;
+
+		private List<BSharpEvaluation> _cachedDefs;
+		private IBSharpClass[] _cachedImports;
+		private Dictionary<string, IBSharpElement> _elementRegistry;
+
+		private IList<IBSharpClass> _includedClasses;
+		private IList<IBSharpClass> _lateIncludedClasses;
+		private BSharpPatchCreateBehavior _patchBehavior = BSharpPatchCreateBehavior.None;
+		private BSharpPatchNameBehavior _patchNameBehavior = BSharpPatchNameBehavior.None;
+		private bool? _patchPlain;
+		private string _patchTarget;
+		private IList<IBSharpClass> _referencedClasses;
+		private IList<string> _referencedDictionaries;
+		private IList<BSharpEvaluation> _selfdefs;
+
 		/// <summary>
 		/// </summary>
-		public BSharpClass(IBSharpContext context) {
+		public BSharpClass(IBSharpContext context){
 			SelfElements = new List<IBSharpElement>();
 			SelfImports = new List<IBSharpImport>();
 			_context = context;
 		}
 
 		/// <summary>
+		///     Сериализуемая версия атрибутов
 		/// </summary>
 		[SerializeNotNullOnly]
-		public string Name { get; set; }
-		/// <summary>
-		/// Сериализуемая версия атрибутов
-		/// </summary>
-		[SerializeNotNullOnly]
-		public BSharpClassAttributes Attributes {
+		public BSharpClassAttributes Attributes{
 			get { return _attributes; }
 		}
 
-        private IList<IBSharpClass> _includedClasses;
-        private IList<IBSharpClass> _referencedClasses;
-        private IList<string> _referencedDictionaries;
-        private IList<IBSharpClass> _lateIncludedClasses;
-
-        /// <summary>
-        /// 
-        /// </summary>
-       [IgnoreSerialize]
-        public IList<IBSharpClass> IncludedClasses
-        {
-            get { return _includedClasses ?? (_includedClasses = new List<IBSharpClass>()); }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        [IgnoreSerialize]
-        public IList<IBSharpClass> LateIncludedClasses
-        {
-            get { return _lateIncludedClasses ?? (_lateIncludedClasses = new List<IBSharpClass>()); }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [IgnoreSerialize]
-        public IList<IBSharpClass> ReferencedClasses
-        {
-            get { return _referencedClasses ?? (_referencedClasses = new List<IBSharpClass>()); }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        [IgnoreSerialize]
-        public IList<string> ReferencedDictionaries
-        {
-            get { return _referencedDictionaries ?? (_referencedDictionaries = new List<string>()); }
-        }
-
-		private string _patchTarget = null;
 		/// <summary>
-		/// Возвращает селектор классов для 
+		/// </summary>
+		[IgnoreSerialize]
+		public IList<IBSharpClass> IncludedClasses{
+			get { return _includedClasses ?? (_includedClasses = new List<IBSharpClass>()); }
+		}
+
+		/// <summary>
+		/// </summary>
+		[IgnoreSerialize]
+		public IList<IBSharpClass> LateIncludedClasses{
+			get { return _lateIncludedClasses ?? (_lateIncludedClasses = new List<IBSharpClass>()); }
+		}
+
+		/// <summary>
+		/// </summary>
+		[IgnoreSerialize]
+		public IList<IBSharpClass> ReferencedClasses{
+			get { return _referencedClasses ?? (_referencedClasses = new List<IBSharpClass>()); }
+		}
+
+		/// <summary>
+		/// </summary>
+		[IgnoreSerialize]
+		public IList<string> ReferencedDictionaries{
+			get { return _referencedDictionaries ?? (_referencedDictionaries = new List<string>()); }
+		}
+
+		/// <summary>
+		/// </summary>
+		public BSharpClassBuilder Builder { get; set; }
+
+		/// <summary>
+		/// </summary>
+		[SerializeNotNullOnly]
+		public string Name { get; set; }
+
+		/// <summary>
+		///     Возвращает селектор классов для
 		/// </summary>
 		public string PatchTarget{
 			get{
@@ -85,42 +101,33 @@ namespace Qorpent.BSharp {
 			}
 		}
 
-		private bool? _patchPlain = null;
 		/// <summary>
-		/// Возвращает селектор классов для 
+		///     Возвращает селектор классов для
 		/// </summary>
-		public bool PatchPlain
-		{
+		public bool PatchPlain{
 			get{
 				if (!Is(BSharpClassAttributes.Patch)) return false;
-				if (null == _patchPlain)
-				{
+				if (null == _patchPlain){
 					_patchPlain = Source.Attr(BSharpSyntax.PatchPlainAttribute).ToBool();
 				}
 				return _patchPlain.Value;
 			}
 		}
 
-		BSharpPatchCreateBehavior _patchBehavior = BSharpPatchCreateBehavior.None;
 		/// <summary>
-		/// 
 		/// </summary>
-		public BSharpPatchCreateBehavior PatchCreateBehavior
-		{
+		public BSharpPatchCreateBehavior PatchCreateBehavior{
 			get{
 				if (!Is(BSharpClassAttributes.Patch)) return BSharpPatchCreateBehavior.None;
-				if (BSharpPatchCreateBehavior.None == _patchBehavior)
-				{
-
-					var _val = Source.Attr(BSharpSyntax.PatchCreateBehavior);
+				if (BSharpPatchCreateBehavior.None == _patchBehavior){
+					string _val = Source.Attr(BSharpSyntax.PatchCreateBehavior);
 					if (string.IsNullOrWhiteSpace(_val)){
 						_patchBehavior = BSharpPatchCreateBehavior.Default;
 					}
 					else if (_val == BSharpSyntax.PatchCreateBehaviorNone){
 						_patchBehavior = BSharpPatchCreateBehavior.NoneOnNew;
 					}
-					else if (_val == BSharpSyntax.PatchCreateBehaviorCreate)
-					{
+					else if (_val == BSharpSyntax.PatchCreateBehaviorCreate){
 						_patchBehavior = BSharpPatchCreateBehavior.CreateOnNew;
 					}
 					else if (_val == BSharpSyntax.PatchCreateBehaviorError){
@@ -133,8 +140,8 @@ namespace Qorpent.BSharp {
 				return _patchBehavior;
 			}
 		}
+
 		/// <summary>
-		/// 
 		/// </summary>
 		public BSharpPatchPhase PatchPhase{
 			get{
@@ -142,126 +149,107 @@ namespace Qorpent.BSharp {
 				if (Source.GetSmartValue(BSharpSyntax.PatchBeforeAttribute).ToBool()){
 					result = BSharpPatchPhase.Before;
 				}
-				else if (Source.GetSmartValue(BSharpSyntax.PatchAfterBuildAttribute).ToBool())
-				{
+				else if (Source.GetSmartValue(BSharpSyntax.PatchAfterBuildAttribute).ToBool()){
 					result = BSharpPatchPhase.AfterBuild;
 				}
 				return result;
 			}
 		}
 
-		BSharpPatchNameBehavior _patchNameBehavior = BSharpPatchNameBehavior.None;
 		/// <summary>
-		/// 
 		/// </summary>
-		public BSharpPatchNameBehavior PatchNameBehavior
-		{
-			get
-			{
+		public BSharpPatchNameBehavior PatchNameBehavior{
+			get{
 				if (!Is(BSharpClassAttributes.Patch)) return BSharpPatchNameBehavior.None;
-				if (BSharpPatchNameBehavior.None == _patchNameBehavior)
-				{
-
-					var _val = Source.Attr(BSharpSyntax.PatchNameBehavior);
-					if (string.IsNullOrWhiteSpace(_val))
-					{
+				if (BSharpPatchNameBehavior.None == _patchNameBehavior){
+					string _val = Source.Attr(BSharpSyntax.PatchNameBehavior);
+					if (string.IsNullOrWhiteSpace(_val)){
 						_patchNameBehavior = BSharpPatchNameBehavior.Default;
 					}
-					else if (_val == BSharpSyntax.PatchNameBehaviorFree)
-					{
+					else if (_val == BSharpSyntax.PatchNameBehaviorFree){
 						_patchNameBehavior = BSharpPatchNameBehavior.Free;
 					}
-					else if (_val == BSharpSyntax.PatchNameBehaviorMatch)
-					{
+					else if (_val == BSharpSyntax.PatchNameBehaviorMatch){
 						_patchNameBehavior = BSharpPatchNameBehavior.Match;
 					}
-					
 				}
 				return _patchNameBehavior;
 			}
 		}
 
 		/// <summary>
-		/// Атрибуты класса
-		/// </summary>
-		private BSharpClassAttributes _attributes;
-		/// <summary>
-		/// Возвращает true при наличии флага
+		///     Возвращает true при наличии флага
 		/// </summary>
 		/// <param name="attribute"></param>
 		/// <returns></returns>
-		public bool Is(BSharpClassAttributes attribute) {
-			return 0!=(_attributes&attribute);
+		public bool Is(BSharpClassAttributes attribute){
+			return 0 != (_attributes & attribute);
 		}
 
 		/// <summary>
-		/// Возвращает полный комплект атрибутов
+		///     Возвращает полный комплект атрибутов
 		/// </summary>
 		/// <returns></returns>
-		public BSharpClassAttributes GetAttributes() {
+		public BSharpClassAttributes GetAttributes(){
 			return _attributes;
 		}
 
 		/// <summary>
-		/// Устанавливает определенные флаги
+		///     Устанавливает определенные флаги
 		/// </summary>
 		/// <param name="flags"></param>
-		public void Set(BSharpClassAttributes flags) {
+		public void Set(BSharpClassAttributes flags){
 			_attributes = _attributes | flags;
 			if (
-				flags==BSharpClassAttributes.RequireClassResolution
+				flags == BSharpClassAttributes.RequireClassResolution
 				||
-				flags==BSharpClassAttributes.RequireDictionaryResolution
+				flags == BSharpClassAttributes.RequireDictionaryResolution
 				||
-				flags==BSharpClassAttributes.RequireAdvancedIncludes
-				) {
-
+				flags == BSharpClassAttributes.RequireAdvancedIncludes
+				){
 				_attributes = _attributes | BSharpClassAttributes.RequireLinking;
 			}
 			else if (
-				flags==BSharpClassAttributes.Override
+				flags == BSharpClassAttributes.Override
 				||
-				flags==BSharpClassAttributes.Extension
-				) {
-				if (null == TargetClassName) {
+				flags == BSharpClassAttributes.Extension
+				){
+				if (null == TargetClassName){
 					TargetClassName = Name;
-					var name = flags.ToString() + "_" + Name +"_" +Source.Attr("name")+ "_" + EXTCOUNTER++;
+					string name = flags.ToString() + "_" + Name + "_" + Source.Attr("name") + "_" + EXTCOUNTER++;
 					Name = name;
 				}
 				_attributes = _attributes | BSharpClassAttributes.Explicit;
 				Remove(BSharpClassAttributes.Orphan);
 			}
-			else if (flags==BSharpClassAttributes.Explicit) {
+			else if (flags == BSharpClassAttributes.Explicit){
 				Remove(BSharpClassAttributes.Orphan);
 			}
 		}
+
 		/// <summary>
-		/// Снимает определенные флаги
+		///     Снимает определенные флаги
 		/// </summary>
 		/// <param name="flags"></param>
-		public void Remove(BSharpClassAttributes flags) {
+		public void Remove(BSharpClassAttributes flags){
 			_attributes = _attributes & ~flags;
 		}
 
-		private static int EXTCOUNTER = 1;
 		/// <summary>
-		/// Упрощенный доступ компилированному контенту
+		///     Упрощенный доступ компилированному контенту
 		/// </summary>
 		/// <param name="code"></param>
 		/// <returns></returns>
-		public string this[string code] {
-			get
-			{
-				var a = Compiled.Attribute(code);
+		public string this[string code]{
+			get{
+				XAttribute a = Compiled.Attribute(code);
 				if (null == a) return string.Empty;
 				return a.Value;
 			}
 		}
 
 
-
-
-	    /// <summary>
+		/// <summary>
 		///     Расширение имени, пакет, используется при конфликтующем разрешении имен
 		///     по умолчанию если классы указаны в Namespace резолюция ведется только в рамках
 		///     этого namespace, если без namespace, то глобально (RootNs)
@@ -273,36 +261,33 @@ namespace Qorpent.BSharp {
 		///     Полное имя
 		/// </summary>
 		[IgnoreSerialize]
-		public string FullName {
-			get {
+		public string FullName{
+			get{
 				if (string.IsNullOrWhiteSpace(Namespace)) return Name;
 				return Namespace + "." + Name;
 			}
 		}
+
 		/// <summary>
-		/// Прототип класса
+		///     Прототип класса
 		/// </summary>
 		[Serialize]
-		public string Prototype {
-			get {
-				return Compiled.Attr(BSharpSyntax.ClassPrototypeAttribute);
+		public string Prototype{
+			get { return Compiled.Attr(BSharpSyntax.ClassPrototypeAttribute); }
+		}
+
+		/// <summary>
+		///     Прототип класса
+		/// </summary>
+		[Serialize]
+		public int Priority{
+			get{
+				int p = Compiled.Attr(BSharpSyntax.PriorityAttribute).ToInt();
+				return p;
 			}
 		}
 
 		/// <summary>
-		/// Прототип класса
-		/// </summary>
-		[Serialize]
-		public int Priority
-		{
-			get
-			{
-				var p = Compiled.Attr(BSharpSyntax.PriorityAttribute).ToInt();
-				return p;
-			}
-		}
-		/// <summary>
-		/// 
 		/// </summary>
 		[Serialize]
 		public string AliasImportCode { get; set; }
@@ -327,7 +312,6 @@ namespace Qorpent.BSharp {
 		public IList<IBSharpImport> SelfImports { get; private set; }
 
 		/// <summary>
-		/// 
 		/// </summary>
 		public IList<BSharpEvaluation> SelfEvaluations{
 			get { return _selfdefs ?? (_selfdefs = new List<BSharpEvaluation>()); }
@@ -362,75 +346,56 @@ namespace Qorpent.BSharp {
 		[IgnoreSerialize]
 		public IConfig ParamIndex { get; set; }
 
-		private List<IBSharpElement> _allelements = null;
 		/// <summary>
-		/// Список всех определений мержа
+		///     Список всех определений мержа
 		/// </summary>
 		[IgnoreSerialize]
-		public List<IBSharpElement> AllElements {
-			get {
-				if (null == _allelements) {
+		public List<IBSharpElement> AllElements{
+			get{
+				if (null == _allelements){
 					_allelements = GetAllElements().ToList();
 				}
 				return _allelements;
 			}
 		}
+
 		/// <summary>
-		/// Текущая задача на построение
+		///     Текущая задача на построение
 		/// </summary>
 		[IgnoreSerialize]
 		public Task BuildTask { get; set; }
 
 		/// <summary>
-		/// Ошибка компиляции
+		///     Ошибка компиляции
 		/// </summary>
 		[SerializeNotNullOnly]
 		public Exception Error { get; set; }
 
-	
+
 		/// <summary>
-		/// Для расширений - имя целевого класса
+		///     Для расширений - имя целевого класса
 		/// </summary>
 		[SerializeNotNullOnly]
 		public string TargetClassName { get; set; }
 
 
 		/// <summary>
-		/// Метод построения собственного индекса параметров
-		/// </summary>
-		/// <returns></returns>
-		private IConfig BuildSelfParametesSource() {
-			var result = new ConfigBase();
-			foreach (var a in Source.Attributes()) {
-				result.Set(a.Name.LocalName, a.Value);
-			}
-			return result;
-		}
-
-		private IBSharpClass[] _cachedImports;
-		private IBSharpContext _context;
-		private IList<BSharpEvaluation> _selfdefs;
-
-		/// <summary>
 		///     Возвращает полное перечисление импортируемых классов в порядке их накатывания
 		/// </summary>
 		/// <value></value>
 		[IgnoreSerialize]
-		public IEnumerable<IBSharpClass> AllImports {
-			get {
+		public IEnumerable<IBSharpClass> AllImports{
+			get{
 				if (null != _cachedImports) return _cachedImports;
-				lock (this) {
+				lock (this){
 					_cachedImports = GetAllImports(FullName, new ConfigBase()).Distinct().ToArray();
 					return _cachedImports;
 				}
 			}
 		}
 
-		private List<BSharpEvaluation> _cachedDefs;
-		private Dictionary<string, IBSharpElement> _elementRegistry;
-
 		/// <summary>
-		/// Все определения в классе
+		///     Все определения в классе
 		/// </summary>
 		public IList<BSharpEvaluation> AllEvaluations{
 			get{
@@ -441,51 +406,81 @@ namespace Qorpent.BSharp {
 			}
 		}
 
-		private IEnumerable<BSharpEvaluation> BuildAllEvaluations(){
+		/// <summary>
+		///     Выполняет действия, необходимые для подготовки компиляции, выполняются в синхронном режиме
+		/// </summary>
+		public void PrepareForCompilation(){
+			if (null == _cachedImports) _cachedImports = AllImports.ToArray();
+		}
 
+		/// <summary>
+		///     Полная проверка статуса Orphan
+		/// </summary>
+		/// <value></value>
+		[SerializeNotNullOnly]
+		public bool IsOrphaned{
+			get{
+				if (Is(BSharpClassAttributes.Explicit)) return false;
+				if (Is(BSharpClassAttributes.Orphan)) return true;
+				if (null == DefaultImport) return true;
+				return DefaultImport.IsOrphaned;
+			}
+		}
+
+		/// <summary>
+		///     Метод построения собственного индекса параметров
+		/// </summary>
+		/// <returns></returns>
+		private IConfig BuildSelfParametesSource(){
+			var result = new ConfigBase();
+			foreach (XAttribute a in Source.Attributes()){
+				result.Set(a.Name.LocalName, a.Value);
+			}
+			return result;
+		}
+
+		private IEnumerable<BSharpEvaluation> BuildAllEvaluations(){
 			var vhash = new HashSet<string>();
 			var hash = new HashSet<string>();
 			vhash.Add(FullName);
-			foreach (var evaluation in SelfEvaluations){
+			foreach (BSharpEvaluation evaluation in SelfEvaluations){
 				if (hash.Contains(evaluation.Code)) continue;
 				hash.Add(evaluation.Code);
 				yield return evaluation;
 			}
-			foreach (var i in AllImports){
-				if(vhash.Contains(i.FullName))continue;
-				foreach (var evaluation in i.SelfEvaluations){
+			foreach (IBSharpClass i in AllImports){
+				if (vhash.Contains(i.FullName)) continue;
+				foreach (BSharpEvaluation evaluation in i.SelfEvaluations){
 					if (hash.Contains(evaluation.Code)) continue;
 					hash.Add(evaluation.Code);
 					yield return evaluation;
 				}
-	
 			}
 		}
 
 
 		/// <summary>
-		/// Собирает все определения мержей из класса
+		///     Собирает все определения мержей из класса
 		/// </summary>
 		/// <returns></returns>
-		private IEnumerable<IBSharpElement> GetAllElements( ){
-
+		private IEnumerable<IBSharpElement> GetAllElements(){
 			lock (this){
 				if (null == _elementRegistry){
 					_elementRegistry = new Dictionary<string, IBSharpElement>();
-					var imports = AllImports.ToArray();
+					IBSharpClass[] imports = AllImports.ToArray();
 					if (!Is(BSharpClassAttributes.Cycle)){
-						foreach (var c in imports){
+						foreach (IBSharpClass c in imports){
 							if (!c.Is(BSharpClassAttributes.Cycle)){
-								foreach (var edef in c.AllElements.ToArray()){
+								foreach (IBSharpElement edef in c.AllElements.ToArray()){
 									RegisterElement(edef);
 								}
 							}
 						}
 					}
-					foreach (var edef in SelfElements){
+					foreach (IBSharpElement edef in SelfElements){
 						RegisterElement(edef);
 					}
-					
+
 					foreach (var registered in _elementRegistry.ToArray()){
 						if (!_elementRegistry.ContainsKey(registered.Value.TargetName)){
 							_elementRegistry[registered.Value.TargetName] = new BSharpElement{
@@ -509,10 +504,10 @@ namespace Qorpent.BSharp {
 		}
 
 		private void RegisterElement(IBSharpElement edef){
-			var name = edef.Name;
+			string name = edef.Name;
 			if (_elementRegistry.ContainsKey(name)){
-				var existed = _elementRegistry[name];
-				if (existed.Implicit||(!edef.Implicit)){
+				IBSharpElement existed = _elementRegistry[name];
+				if (existed.Implicit || (!edef.Implicit)){
 					_elementRegistry[name] = edef;
 				}
 			}
@@ -522,76 +517,56 @@ namespace Qorpent.BSharp {
 		}
 
 
-		private IEnumerable<IBSharpClass> GetAllImports(string root,IConfig config) {
-
+		private IEnumerable<IBSharpClass> GetAllImports(string root, IConfig config){
 			var dict = ((IDictionary<string, object>) config);
-			var self = ((IDictionary<string, object>)BuildSelfParametesSource());
-			foreach (var p in self.Where(_=>_.Value!=null)) {
-				if (!dict.ContainsKey(p.Key) && !p.Value.ToStr().Contains("${")) {
+			var self = ((IDictionary<string, object>) BuildSelfParametesSource());
+			foreach (var p in self.Where(_ => _.Value != null)){
+				if (!dict.ContainsKey(p.Key) && !p.Value.ToStr().Contains("${")){
 					dict[p.Key] = p.Value;
 				}
 			}
 
-			if (null != DefaultImport) {
-				if (root != DefaultImport.FullName) {
-					foreach (var i in ((BSharpClass)DefaultImport).GetAllImports(root,config)) {
+			if (null != DefaultImport){
+				if (root != DefaultImport.FullName){
+					foreach (IBSharpClass i in ((BSharpClass) DefaultImport).GetAllImports(root, config)){
 						yield return i;
 					}
 					yield return DefaultImport;
 				}
 			}
 
-			
-
-
-			foreach (IBSharpImport i in SelfImports) {
-				if (null!=i.Target
-					&&
-					!i.Target.IsOrphaned
-					&& !i.Target.Is(BSharpClassAttributes.Ignored)
-					&& i.Match(config)
-					) {
-
-					if (root != i.Target.FullName) {
-						if (!i.Target.Is(BSharpClassAttributes.Static)) {
-							foreach (BSharpClass ic in ((BSharpClass) i.Target).GetAllImports(root, config)) {
+			foreach (IBSharpImport i in SelfImports){
+				if (null != i.Target
+				    &&
+				    !i.Target.IsOrphaned
+				    && !i.Target.Is(BSharpClassAttributes.Ignored)
+				    && i.Match(config)
+					){
+					if (root != i.Target.FullName){
+						if (!i.Target.Is(BSharpClassAttributes.Static)){
+							foreach (BSharpClass ic in ((BSharpClass) i.Target).GetAllImports(root, config)){
 								yield return ic;
 							}
 						}
 						yield return i.Target;
 					}
-					else {
-						_context.RegisterError(BSharpErrors.RecycleImport(this,root,i));
-						this.Set(BSharpClassAttributes.Cycle);
+					else{
+						if (!Is(BSharpClassAttributes.Cycle)){
+							_context.RegisterError(BSharpErrors.RecycleImport(this, root, i));
+							Set(BSharpClassAttributes.Cycle);
+						}
 					}
 				}
 			}
 
-			foreach (var i in SelfImports.Where(_ =>null!=_.Target && _.Target.IsOrphaned)) {
+			foreach (IBSharpImport i in SelfImports.Where(_ => null != _.Target && _.Target.IsOrphaned)){
 				_context.RegisterError(BSharpErrors.OrphanImport(this, i));
 			}
-			foreach (var i in SelfImports.Where(_ => null != _.Target && _.Target.Is(BSharpClassAttributes.Ignored) && _.Match(config)))
-			{
+			foreach (
+				IBSharpImport i in
+					SelfImports.Where(_ => null != _.Target && _.Target.Is(BSharpClassAttributes.Ignored) && _.Match(config))){
 				_context.RegisterError(BSharpErrors.IgnoredImport(this, i));
 			}
 		}
-
-		/// <summary>
-		///     Полная проверка статуса Orphan
-		/// </summary>
-		/// <value></value>
-		[SerializeNotNullOnly]
-		public bool IsOrphaned {
-			get {
-				if (Is(BSharpClassAttributes.Explicit)) return false;
-				if (Is(BSharpClassAttributes.Orphan)) return true;
-				if (null == DefaultImport) return true;
-				return DefaultImport.IsOrphaned;
-			}
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		public BSharpClassBuilder Builder { get; set; }
 	}
 }

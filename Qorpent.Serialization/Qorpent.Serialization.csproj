@@ -58,16 +58,6 @@
     <Compile Include="BSharp\Runtime\BSharpFileBasedClassProvider.cs" />
     <Compile Include="BSharp\Runtime\BSharpGenericClassProvider.cs" />
     <Compile Include="BSharp\Runtime\BSharpLibraryClassProvider.cs" />
-    <Compile Include="BSharp\Schema\AttributeRule.cs" />
-    <Compile Include="BSharp\Schema\ClassQuery.cs" />
-    <Compile Include="BSharp\Schema\ElementPolicy.cs" />
-    <Compile Include="BSharp\Schema\ElementRule.cs" />
-    <Compile Include="BSharp\Schema\IRule.cs" />
-    <Compile Include="BSharp\Schema\RuleActionType.cs" />
-    <Compile Include="BSharp\Schema\RuleBase.cs" />
-    <Compile Include="BSharp\Schema\RuleType.cs" />
-    <Compile Include="BSharp\Schema\Schema.cs" />
-    <Compile Include="BSharp\Schema\SchemaNote.cs" />
     <Compile Include="Charts.FusionCharts\ChartNormalized.cs" />
     <Compile Include="Charts.FusionCharts\FusionChartApi.cs" />
     <Compile Include="Charts.FusionCharts\ApiExtended.cs" />

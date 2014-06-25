@@ -5,17 +5,25 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
-	/// 
 	/// </summary>
-	internal class SetAttributeOperation : PreprocessOperation
-	{
+	internal class SetAttributeOperation : PreprocessOperation{
+		/// <summary>
+		/// </summary>
+		public string Name;
 
+		public string SubstRx;
+		public string SubstSrc;
+
+		/// <summary>
+		/// </summary>
+		public string Value;
+
+		private Regex _rx;
 
 		public override void Execute(XElement el){
-			var val = Value;
+			string val = Value;
 			if (!string.IsNullOrWhiteSpace(SubstSrc)){
-				
-				var subst = (SubstSrc=="__value"||SubstSrc =="VALUE")? el.Value: el.Attr(SubstSrc);
+				string subst = (SubstSrc == "__value" || SubstSrc == "VALUE") ? el.Value : el.Attr(SubstSrc);
 				if (string.IsNullOrWhiteSpace(SubstRx)){
 					if (string.IsNullOrWhiteSpace(val)){
 						val = subst;
@@ -29,28 +37,12 @@ namespace Qorpent.BSharp.Preprocessor{
 					val = _rx.Replace(subst, val);
 				}
 			}
-			if (Name == "__value" ||Name=="VALUE"){
+			if (Name == "__value" || Name == "VALUE"){
 				el.Value = val;
 			}
 			else{
 				el.SetAttributeValue(Name, val);
 			}
 		}
-		/// <summary>
-		/// 
-		/// </summary>
-		public string Name;
-		/// <summary>
-		/// 
-		/// </summary>
-		public string Value;
-
-	
-
-
-		public string SubstSrc;
-
-		public string SubstRx;
-		private Regex _rx;
 	}
 }

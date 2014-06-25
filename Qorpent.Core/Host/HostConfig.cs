@@ -228,7 +228,7 @@ namespace Qorpent.Host{
 				if (string.IsNullOrWhiteSpace(hostbind.Interface)){
 					hostbind.Interface = HostConstants.DefaultBindingInterface;
 				}
-				this.Bindings.Add(hostbind);
+				Bindings.Add(hostbind);
 				
 			}
 

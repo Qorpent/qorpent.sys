@@ -96,6 +96,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.BxlParser.Exe", "Qo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Syncer", "Qorpent.Syncer\Qorpent.Syncer.csproj", "{2E0E024B-31C4-464F-9F7E-3E9169E0EAF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bstimetest", "bstimetest\bstimetest.csproj", "{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -288,6 +290,12 @@ Global
 		{2E0E024B-31C4-464F-9F7E-3E9169E0EAF0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E0E024B-31C4-464F-9F7E-3E9169E0EAF0}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{2E0E024B-31C4-464F-9F7E-3E9169E0EAF0}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.SQL2008|Any CPU.ActiveCfg = Release|Any CPU
+		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.SQL2008|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

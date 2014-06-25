@@ -25,10 +25,9 @@
     <Compile Include="BSharp\PatchClassSupport.cs" />
     <Compile Include="BSharp\Preprocessor\PreprocessorLoadingAndUsingTest.cs" />
     <Compile Include="BSharp\Preprocessor\StringReplacerTest.cs" />
+    <Compile Include="BSharp\ProductionTimingTest.cs" />
     <Compile Include="BSharp\RequireSupportForPreBuildPackages.cs" />
     <Compile Include="BSharp\Runtime\BSharpLibraryClassProviderTest.cs" />
-    <Compile Include="BSharp\Schema\AttributeRuleTest.cs" />
-    <Compile Include="BSharp\Schema\ElementRuleTest.cs" />
     <Compile Include="BSharp\SetKeyword.cs" />
     <Compile Include="BSharp\V1_2\Q188ImplicitElements.cs" />
     <Compile Include="BSharp\V1_2\Q189TruePartialClasses.cs" />

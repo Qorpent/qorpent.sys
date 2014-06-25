@@ -1,30 +1,35 @@
-﻿namespace Qorpent.BSharp {
+﻿namespace Qorpent.BSharp{
 	/// <summary>
-	/// Большая фаза компиляции
+	///     Большая фаза компиляции
 	/// </summary>
-	public enum BuildPhase {
+	public enum BuildPhase{
 		/// <summary>
-		/// Компиляция
+		///     Компиляция
 		/// </summary>
 		Compile,
+
 		/// <summary>
-		/// Линковка на уровне отдельного класа
+		///     Линковка на уровне отдельного класа
 		/// </summary>
-	    AutonomeLink,
-        /// <summary>
-        /// Линковка между классами
-        /// </summary>
-        CrossClassLink,
+		AutonomeLink,
+
 		/// <summary>
-		/// Вычисление определений
+		///     Линковка между классами
+		/// </summary>
+		CrossClassLink,
+
+		/// <summary>
+		///     Вычисление определений
 		/// </summary>
 		Evaluate,
+
 		/// <summary>
-		/// Применение патчей
+		///     Применение патчей
 		/// </summary>
 		ApplyPatch,
+
 		/// <summary>
-		/// Постобработка
+		///     Постобработка
 		/// </summary>
 		PostProcess
 	}

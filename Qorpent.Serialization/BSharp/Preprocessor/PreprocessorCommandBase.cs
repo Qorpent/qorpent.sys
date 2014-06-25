@@ -6,16 +6,16 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Preprocessor{
 	internal abstract class PreprocessorCommandBase{
-		protected IBSharpProject _project;
-		public int Index;
+		private readonly XElement _e;
 		public bool Async;
-		public bool Parallel;
-		private XElement _e;
 		public string Code;
+		public int Index;
+		public bool Parallel;
+		protected IBSharpProject _project;
+
 		/// <summary>
-		/// 
 		/// </summary>
-		public PreprocessorCommandBase(IBSharpProject project,XElement e){
+		public PreprocessorCommandBase(IBSharpProject project, XElement e){
 			_e = e;
 			_project = project;
 			Initialize();
@@ -30,17 +30,16 @@ namespace Qorpent.BSharp.Preprocessor{
 		}
 
 		/// <summary>
-		/// выполняет скрипт асинхронно
+		///     выполняет скрипт асинхронно
 		/// </summary>
 		/// <returns></returns>
-		public Task ExecuteAsync(XElement e=null){
-			return Task.Run(()=>Execute(e));
+		public Task ExecuteAsync(XElement e = null){
+			return Task.Run(() => Execute(e));
 		}
 
 		/// <summary>
-		/// Выполняет сам скрип
+		///     Выполняет сам скрип
 		/// </summary>
 		public abstract void Execute(XElement e);
-		
 	}
 }

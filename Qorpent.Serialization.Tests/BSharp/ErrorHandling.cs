@@ -308,9 +308,16 @@ class A
 	import B
 ";
 			var result = Compile(code);
-			var errors = result.GetErrors();
+			var errors = result.GetErrors(ErrorLevel.Error);
 			foreach (var bSharpError in errors){
 				Console.WriteLine(bSharpError.ToLogString());
+			}
+			if (errors.Count() != 2){
+				foreach (var hint in result.GetErrors(ErrorLevel.Hint)){
+					if (hint.Level == ErrorLevel.Hint){
+						Console.WriteLine(hint.ToLogString());
+					}
+				}
 			}
 			Assert.AreEqual(2, errors.Count());
 			var error = errors.ElementAt(0);

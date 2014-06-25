@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp{
 	/// <summary>
-	/// Основная реализация SQL-адаптера
+	///     Основная реализация SQL-адаптера
 	/// </summary>
-	public class BSharpSqlAdapter:IBSharpSqlAdapter{
+	public class BSharpSqlAdapter : IBSharpSqlAdapter{
 		/// <summary>
-		/// Считывает набор данных и оборачивает в XML элемент с указанным именем, по умолчанию item - для dataset
+		///     Считывает набор данных и оборачивает в XML элемент с указанным именем, по умолчанию item - для dataset
 		/// </summary>
 		/// <param name="connection"></param>
 		/// <param name="query"></param>
@@ -21,15 +22,15 @@ namespace Qorpent.BSharp{
 		}
 
 		private static IEnumerable<XElement> InternalExecuteReader(string connection, string query, string elementName){
-			using (var c = DatabaseExtensions.CreateDatabaseConnectionFromString(connection)){
+			using (IDbConnection c = DatabaseExtensions.CreateDatabaseConnectionFromString(connection)){
 				c.Open();
-				var cmd = c.CreateCommand();
+				IDbCommand cmd = c.CreateCommand();
 				cmd.CommandText = query;
-				using (var r = cmd.ExecuteReader()){
+				using (IDataReader r = cmd.ExecuteReader()){
 					while (r.Read() || r.NextResult()){
 						var e = new XElement(elementName);
 						for (int i = 0; i < r.FieldCount; i++){
-							var name = r.GetName(i);
+							string name = r.GetName(i);
 							e.SetAttr(name, r[i] is DBNull ? "" : r[i]);
 						}
 						yield return e;

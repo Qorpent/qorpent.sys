@@ -6,23 +6,18 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Preprocessor{
 	/// <summary>
-	/// 
 	/// </summary>
-	internal class ElementToAttributeOperation : PreprocessOperation
-	{
-
+	internal class ElementToAttributeOperation : PreprocessOperation{
+		public string Name;
 
 		public override void Execute(XElement el){
-			var elements = el.Elements(Name).ToArray();
-			foreach (var element in elements){
-				var code = element.Attr("code").Escape(EscapingType.XmlName);
-				var val = element.Describe().Value;
-				el.SetAttributeValue(code,val);
+			XElement[] elements = el.Elements(Name).ToArray();
+			foreach (XElement element in elements){
+				string code = element.Attr("code").Escape(EscapingType.XmlName);
+				string val = element.Describe().Value;
+				el.SetAttributeValue(code, val);
 			}
 			elements.Remove();
 		}
-
-		public string Name;
-		
 	}
 }

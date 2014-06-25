@@ -43,37 +43,6 @@ namespace Qorpent.BSharp{
 			ExtendedData = new Dictionary<string, object>();
 		}
 
-		/// <summary>
-		///     Исходные сырые определения классов
-		/// </summary>
-		public IDictionary<string, IBSharpClass> RawClasses{
-			get{
-				var result = Get<IDictionary<string, IBSharpClass>>(RAWCLASSES);
-				if (null == result)
-				{
-					Set(RAWCLASSES, result = new Dictionary<string, IBSharpClass>());
-				}
-				return result;
-			}
-			set { Set(RAWCLASSES, value); }
-		}
-
-
-		/// <summary>
-		///    Определения  для псеавдоклассов
-		/// </summary>
-		public IDictionary<string, IBSharpClass> MetaClasses
-		{
-			get{
-				var result =  Get<IDictionary<string, IBSharpClass>>(METACLASSES);
-				if (null == result){
-					Set(METACLASSES, result = new Dictionary<string, IBSharpClass>());
-				}
-				return result;
-			}
-			set { Set(METACLASSES, value); }
-		}
-
 
 		/// <summary>
 		///     Классы с непроинициализированным наследованием
@@ -147,6 +116,35 @@ namespace Qorpent.BSharp{
 		}
 
 		/// <summary>
+		///     Исходные сырые определения классов
+		/// </summary>
+		public IDictionary<string, IBSharpClass> RawClasses{
+			get{
+				var result = Get<IDictionary<string, IBSharpClass>>(RAWCLASSES);
+				if (null == result){
+					Set(RAWCLASSES, result = new Dictionary<string, IBSharpClass>());
+				}
+				return result;
+			}
+			set { Set(RAWCLASSES, value); }
+		}
+
+
+		/// <summary>
+		///     Определения  для псеавдоклассов
+		/// </summary>
+		public IDictionary<string, IBSharpClass> MetaClasses{
+			get{
+				var result = Get<IDictionary<string, IBSharpClass>>(METACLASSES);
+				if (null == result){
+					Set(METACLASSES, result = new Dictionary<string, IBSharpClass>());
+				}
+				return result;
+			}
+			set { Set(METACLASSES, value); }
+		}
+
+		/// <summary>
 		/// </summary>
 		public IDictionary<string, object> ExtendedData { get; private set; }
 
@@ -188,7 +186,7 @@ namespace Qorpent.BSharp{
 			}
 			if (query.Contains(";")){
 				IList<string> subqueries = query.SmartSplit(false, true, ';');
-				return subqueries.SelectMany(_ => ResolveAll(_,  ns)).Distinct();
+				return subqueries.SelectMany(_ => ResolveAll(_, ns)).Distinct();
 			}
 			if (query.StartsWith("attr:")){
 				string attrname = query.Substring(5);
@@ -201,11 +199,10 @@ namespace Qorpent.BSharp{
 			if (query.EndsWith(".*")){
 				return Working.Where(_ => _.Namespace.StartsWith(query.Substring(0, query.Length - 2)));
 			}
-			if (null!=PrototypeMap && PrototypeMap.ContainsKey(query)){
+			if (null != PrototypeMap && PrototypeMap.ContainsKey(query)){
 				return PrototypeMap[query];
 			}
-			if (null != Dictionaries && Dictionaries.ContainsKey(query))
-			{
+			if (null != Dictionaries && Dictionaries.ContainsKey(query)){
 				return Dictionaries[query].Select(_ => _.cls);
 			}
 
@@ -221,7 +218,7 @@ namespace Qorpent.BSharp{
 			}
 
 			if (PrototypeMap == null){
-				return RawClasses.Values.Where(_ => _.Source.Attr("prototype")==query).ToArray();
+				return RawClasses.Values.Where(_ => _.Source.Attr("prototype") == query).ToArray();
 			}
 			else{
 				return new IBSharpClass[]{};
@@ -310,8 +307,7 @@ namespace Qorpent.BSharp{
 			foreach (var p in subresult.RawClasses){
 				RawClasses[p.Key] = p.Value;
 			}
-			foreach (var p in subresult.MetaClasses)
-			{
+			foreach (var p in subresult.MetaClasses){
 				MetaClasses[p.Key] = p.Value;
 			}
 
@@ -405,11 +401,10 @@ namespace Qorpent.BSharp{
 		/// <param name="usemeta"></param>
 		/// <returns></returns>
 		public IBSharpClass Get(string code, string ns = null, bool usemeta = false){
-			if (code.StartsWith("^"))
-			{
+			if (code.StartsWith("^")){
 				code = code.Substring(1);
 			}
-			var trg = usemeta?MetaClasses:RawClasses;
+			IDictionary<string, IBSharpClass> trg = usemeta ? MetaClasses : RawClasses;
 			if (null == ns){
 				IBSharpClass full = Working.FirstOrDefault(_ => _.FullName == code);
 				if (null != full) return full;
@@ -442,8 +437,7 @@ namespace Qorpent.BSharp{
 								probe += nsparts[j] + BSharpSyntax.ClassPathDelimiter;
 							}
 							probe += code;
-							if (trg.ContainsKey(probe))
-							{
+							if (trg.ContainsKey(probe)){
 								result = trg[probe];
 								break;
 							}
@@ -452,15 +446,13 @@ namespace Qorpent.BSharp{
 				}
 				else if (!String.IsNullOrWhiteSpace(ns)){
 					string probe = ns + "." + code;
-					if (trg.ContainsKey(probe))
-					{
+					if (trg.ContainsKey(probe)){
 						result = trg[probe];
 					}
 				}
 			}
 			if (null == result){
-				if (null != trg && trg.ContainsKey(code))
-				{
+				if (null != trg && trg.ContainsKey(code)){
 					result = trg[code];
 				}
 			}
@@ -576,8 +568,10 @@ namespace Qorpent.BSharp{
 		/// </summary>
 		/// <param name="error"></param>
 		public void RegisterError(BSharpError error){
-			if (null == Errors) Errors = new List<BSharpError>();
-			Errors.Add(error);
+			lock (this){
+				if (null == Errors) Errors = new List<BSharpError>();
+				Errors.Add(error);
+			}
 		}
 
 		/// <summary>
@@ -637,7 +631,7 @@ namespace Qorpent.BSharp{
 		/// <param name="ns"></param>
 		/// <returns></returns>
 		private IBSharpClass GetConnection(string mode, string code, string ns){
-			return Get(BSharpSyntax.GenerateConnectionClassName(mode, code), ns,true);
+			return Get(BSharpSyntax.GenerateConnectionClassName(mode, code), ns, true);
 		}
 
 		private void ExecuteGenerator(XElement generator, string ns){
@@ -709,7 +703,7 @@ namespace Qorpent.BSharp{
 
 		private IEnumerable<XElement> GetDataSet(string code, string ns, bool optional){
 			string realcode = BSharpSyntax.DatasetClassCodePrefix + code;
-			IBSharpClass targetcls = Get(realcode,  ns,true);
+			IBSharpClass targetcls = Get(realcode, ns, true);
 			// not existed optional dataset support
 
 			if (null == targetcls){
@@ -860,10 +854,9 @@ namespace Qorpent.BSharp{
 
 		private void MergePartial(IBSharpClass basis, IBSharpClass cls){
 			basis.Set(cls.GetAttributes());
-			foreach (var import in cls.SelfImports){
+			foreach (IBSharpImport import in cls.SelfImports){
 				if (basis.SelfImports.All(_ => _.TargetCode != import.TargetCode)){
 					basis.SelfImports.Add(import);
-
 				}
 			}
 			foreach (XAttribute attribute in cls.Source.Attributes()){
@@ -943,11 +936,9 @@ namespace Qorpent.BSharp{
 		}
 
 		private void RegisterClassInIndex(IBSharpClass cls){
-			var target = cls.Is(BSharpClassAttributes.MetaClass) ? MetaClasses : RawClasses;
-			if (target.ContainsKey(cls.FullName))
-			{
-				if (target[cls.FullName] != cls)
-				{
+			IDictionary<string, IBSharpClass> target = cls.Is(BSharpClassAttributes.MetaClass) ? MetaClasses : RawClasses;
+			if (target.ContainsKey(cls.FullName)){
+				if (target[cls.FullName] != cls){
 					IBSharpClass current = RawClasses[cls.FullName];
 					int currentPriority = current.Source.Attr(BSharpSyntax.PriorityAttribute).ToInt();
 					int givenPriority = cls.Source.Attr(BSharpSyntax.PriorityAttribute).ToInt();
@@ -966,7 +957,6 @@ namespace Qorpent.BSharp{
 				}
 			}
 			else{
-
 				if (cls.Is(BSharpClassAttributes.Patch)){
 					cls.Source = cls.Source.NoEvidenceCopy();
 				}

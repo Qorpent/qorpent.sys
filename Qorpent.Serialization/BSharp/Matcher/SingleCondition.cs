@@ -1,134 +1,126 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Qorpent.Utils.Extensions;
 using Qorpent.Serialization;
-using Qorpent.Serialization.Escaping;
+using Qorpent.Utils.Extensions;
 
-namespace Qorpent.BSharp.Matcher {
+namespace Qorpent.BSharp.Matcher{
 	/// <summary>
-	/// Единичное условие
+	///     Единичное условие
 	/// </summary>
-	public sealed class SingleCondition {
+	public sealed class SingleCondition{
 		private XElement _e;
 
 		/// <summary>
-		/// Создает условие из атрибута
+		///     Создает условие из атрибута
 		/// </summary>
 		/// <param name="a"></param>
-		public SingleCondition(XAttribute a) {
+		public SingleCondition(XAttribute a){
 			Value = a.Value;
 			ConditionType = ConditionType.Eq;
-			if ("NULL" == Value) {
+			if ("NULL" == Value){
 				ConditionType = ConditionType.IsNull;
 			}
-			else if("TRUE" == Value) {
+			else if ("TRUE" == Value){
 				ConditionType = ConditionType.IsTrue;
 			}
 			AttributeName = a.Name.LocalName;
-			if (a.Name.LocalName.Contains("__")) {
+			if (a.Name.LocalName.Contains("__")){
 				SetupFromSpecialName(a);
 			}
-			if (AttributeName == "xpath") {
+			if (AttributeName == "xpath"){
 				ConditionType = ConditionType.XPath;
 			}
 		}
 
-		private void SetupFromSpecialName(XAttribute a) {
-			var n = a.Name.LocalName;
-            if (n.Contains("!".Escape(EscapingType.XmlName)))
-            {
-				Negate = true;
-                n = n.Replace("!".Escape(EscapingType.XmlName), "");
-			}
-			if (Value.ToUpper() == "NULL") {
-				ConditionType = ConditionType.IsNull;
-			}else if (Value.ToUpper() == "TRUE") {
-				ConditionType = ConditionType.IsTrue;
-			}
-            if (n.EndsWith(">>".Escape(EscapingType.XmlName)))
-            {
-				ConditionType = ConditionType.Gr;
-            }
-            else if (n.EndsWith(">".Escape(EscapingType.XmlName)))
-            {
-				ConditionType = ConditionType.GrE;
-            }
-            else if (n.EndsWith("<<".Escape(EscapingType.XmlName)))
-            {
-				ConditionType= ConditionType.Le;
-            }
-            else if (n.EndsWith("<".Escape(EscapingType.XmlName)))
-            {
-				ConditionType = ConditionType.LeE;
-            }
-            else if (n.EndsWith("~".Escape(EscapingType.XmlName)))
-            {
-				ConditionType = ConditionType.Match;
-            }
-			else if (n.EndsWith("&+".Escape(EscapingType.XmlName)))
-			{
-				ConditionType = ConditionType.CrossList;
-			}
-			else if (n.EndsWith("&&".Escape(EscapingType.XmlName)))
-			{
-				ConditionType = ConditionType.IverseInList;
-			}
-            else if (n.EndsWith("&".Escape(EscapingType.XmlName)))
-            {
-				ConditionType = ConditionType.InList;
-            }
-
-			
-            else if (n.EndsWith("%".Escape(EscapingType.XmlName)))
-            {
-				ConditionType = ConditionType.Contains;
-			}
-			var idx = n.IndexOf("__");
-			if (-1 != idx) {
-				n = n.Substring(0, idx);
-			}
-			AttributeName = n;
-			
-		}
-
 		/// <summary>
-		/// Имя атрибута
+		///     Имя атрибута
 		/// </summary>
 		public string AttributeName { get; set; }
+
 		/// <summary>
-		/// Тип условия
+		///     Тип условия
 		/// </summary>
 		public ConditionType ConditionType { get; set; }
+
 		/// <summary>
-		/// Отрицание
+		///     Отрицание
 		/// </summary>
 		public bool Negate { get; set; }
+
 		/// <summary>
-		/// Значение
+		///     Значение
 		/// </summary>
 		public string Value { get; set; }
 
+		private void SetupFromSpecialName(XAttribute a){
+			string n = a.Name.LocalName;
+			if (n.Contains("!".Escape(EscapingType.XmlName))){
+				Negate = true;
+				n = n.Replace("!".Escape(EscapingType.XmlName), "");
+			}
+			if (Value.ToUpper() == "NULL"){
+				ConditionType = ConditionType.IsNull;
+			}
+			else if (Value.ToUpper() == "TRUE"){
+				ConditionType = ConditionType.IsTrue;
+			}
+			if (n.EndsWith(">>".Escape(EscapingType.XmlName))){
+				ConditionType = ConditionType.Gr;
+			}
+			else if (n.EndsWith(">".Escape(EscapingType.XmlName))){
+				ConditionType = ConditionType.GrE;
+			}
+			else if (n.EndsWith("<<".Escape(EscapingType.XmlName))){
+				ConditionType = ConditionType.Le;
+			}
+			else if (n.EndsWith("<".Escape(EscapingType.XmlName))){
+				ConditionType = ConditionType.LeE;
+			}
+			else if (n.EndsWith("~".Escape(EscapingType.XmlName))){
+				ConditionType = ConditionType.Match;
+			}
+			else if (n.EndsWith("&+".Escape(EscapingType.XmlName))){
+				ConditionType = ConditionType.CrossList;
+			}
+			else if (n.EndsWith("&&".Escape(EscapingType.XmlName))){
+				ConditionType = ConditionType.IverseInList;
+			}
+			else if (n.EndsWith("&".Escape(EscapingType.XmlName))){
+				ConditionType = ConditionType.InList;
+			}
+
+
+			else if (n.EndsWith("%".Escape(EscapingType.XmlName))){
+				ConditionType = ConditionType.Contains;
+			}
+			int idx = n.IndexOf("__");
+			if (-1 != idx){
+				n = n.Substring(0, idx);
+			}
+			AttributeName = n;
+		}
+
 		/// <summary>
-		/// Проверка условия на целевом элементе
+		///     Проверка условия на целевом элементе
 		/// </summary>
 		/// <param name="e"></param>
 		/// <returns></returns>
-		public bool IsMatch(XElement e) {
+		public bool IsMatch(XElement e){
 			_e = e;
-			var a = e.Attribute(AttributeName);
-            if (null == a && AttributeName == "localname") {
-                a= new XAttribute("localname",e.Name.LocalName);
-            }
-			var mainismatch = InternalIsMatch(a);
-			return Negate? !mainismatch : mainismatch;
+			XAttribute a = e.Attribute(AttributeName);
+			if (null == a && AttributeName == "localname"){
+				a = new XAttribute("localname", e.Name.LocalName);
+			}
+			bool mainismatch = InternalIsMatch(a);
+			return Negate ? !mainismatch : mainismatch;
 		}
 
-		private bool InternalIsMatch(XAttribute a) {
-			
-			switch (ConditionType) {
+		private bool InternalIsMatch(XAttribute a){
+			switch (ConditionType){
 				case ConditionType.Contains:
 					if (null == a) return false;
 					return a.Value.Contains(Value);
@@ -155,8 +147,8 @@ namespace Qorpent.BSharp.Matcher {
 					return Value.SmartSplit(false, true, ' ', ',', ';').Contains(a.Value);
 				case ConditionType.CrossList:
 					if (null == a) return false;
-					var l1 = a.Value.SmartSplit(false, true, ' ', ',', ';');
-					var l2 = Value.SmartSplit(false, true, ' ', ',', ';');
+					IList<string> l1 = a.Value.SmartSplit(false, true, ' ', ',', ';');
+					IList<string> l2 = Value.SmartSplit(false, true, ' ', ',', ';');
 					return l1.Intersect(l2).Any();
 				case ConditionType.IsTrue:
 					if (null == a) return false;
@@ -172,7 +164,6 @@ namespace Qorpent.BSharp.Matcher {
 					return _e.XPathSelectElements(Value).Any();
 				default:
 					throw new Exception("unknown condition " + ConditionType);
-
 			}
 		}
 	}
