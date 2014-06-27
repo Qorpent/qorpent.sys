@@ -60,6 +60,10 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		public ColonDataItemOrder Order { get; set; }
 		/// <summary>
+		///		Максимальное количество элементов данных
+		/// </summary>
+		public int MaxItems = 5;
+		/// <summary>
 		///		Признак того, что произошло перекрытие шкалы — лычка над или под видимой шкалой
 		/// </summary>
 		public bool IsScaleOverlap {
@@ -127,6 +131,9 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
 		/// </summary>
 		/// <returns>Замыкание на текущий <see cref="DataColonLabelHelper"/></returns>
 		public DataColonLabelHelper EnsureBestLabels() {
+			if (this.Count() > MaxItems) {
+				return this;
+			}
 			EnsureNormalized();
 			var variants = GetPossibleVariants();
 			var tournament = variants.Select(_ => new KeyValuePair<double, LabelPosition[]>(Apply(_).GetTemperature(), _)).ToArray();
