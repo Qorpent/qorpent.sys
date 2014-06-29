@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Qorpent.Config;
 
 namespace Qorpent.Utils.BrickScaleNormalizer {
@@ -130,21 +131,25 @@ namespace Qorpent.Utils.BrickScaleNormalizer {
         ///     Производит обсчёт расположения лэйблов значений и пытается максимально раздвинуть их между собой
         /// </summary>
 		private void CalculateLabelPosition() {
-			var helper = new DataColonLabelHelper {
-				LabelHeight = LabelHeight,
-				ScaleMax = FirstScale.Max,
-				ScaleMin = FirstScale.Min,
-				Height = Preferences.Height,
-				Order = ColonDataItemOrder.Real
-			};
-	        foreach (var colon in BuildColons()) {
+			var tasks = BuildColons().Select(_ => Task.Factory.StartNew(() => {
+				var helper = new DataColonLabelHelper {
+					LabelHeight = LabelHeight,
+					ScaleMax = FirstScale.Max,
+					ScaleMin = FirstScale.Min,
+					Height = Preferences.Height,
+					Order = ColonDataItemOrder.Real
+				};
+
 				helper.Clear();
-		        foreach (var dataItem in colon) {
-			        helper.Add(dataItem);
-		        }
-		        helper.EnsureBestLabels();
-	        }
-        }
+				foreach (var dataItem in _) {
+					helper.Add(dataItem);
+				}
+
+				helper.EnsureBestLabels();
+			})).ToArray();
+
+			Task.WaitAll(tasks);
+		}
 		private void CalculateSecondScale() {
 			if (0 == Preferences.SYFixMin && 0 == Preferences.SYFixMin && 0 == Preferences.SYFixDiv)
 			{
