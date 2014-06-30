@@ -120,6 +120,7 @@ namespace Qorpent.Db
 			if ( isnull(@id,0) = 0 ) return '/';
 			select @code = Code, @parent = Parent from @this where Id = @id;
 			if ( isnull(@parent,0) = 0 ) return isnull('/'+@code+'/','_NULL_');
+			if ( @parent = -1 ) return isnull('/'+@code+'/','_NULL_');
 			return ISNULL( @this.GetPath( @parent ) + @code + '/', '_NULL_');
 		)
 		trigger InsertInitPath "Триггер прокачки пути при добавлении элемента" insert : (
