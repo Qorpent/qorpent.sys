@@ -30,7 +30,7 @@ namespace Qorpent.Report {
 			}
 			
 			if (provider != null) {
-				return provider.Get(query).First();
+				return provider.Get(query).FirstOrDefault();
 			}
 			return null;
 		}
