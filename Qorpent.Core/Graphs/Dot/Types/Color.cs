@@ -13,7 +13,7 @@ namespace Qorpent.Graphs.Dot.Types {
         public Color(string nativeString) : this() {
             NativeString = nativeString;
         }
-
+	
 
         /// <summary>
         /// Определение цвета в DOT

@@ -24,10 +24,16 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 
 		private string GenerateSvg(){
 			var g = new Graph();
+			g.ColorScheme = "svg";
 			g.RankDir = RankDirType.LR;
 			foreach (var cls in Model.Classes.Values){
 				if (cls.TargetClass.Compiled.Attr("nosvg").ToBool()) continue;
 				var n = new Node{Code = cls.Name, Label = cls.Name, Tooltip = cls.Comment, Shape = NodeShapeType.Box3d};
+				var dotcolor = cls.TargetClass.Compiled.Attr("dot-color");
+				if (!string.IsNullOrWhiteSpace(dotcolor)){
+					n.Style = NodeStyleType.Filled;
+					n.FillColor = ColorAttribute.Single(Color.Create(dotcolor));
+				}
 				g.AddNode(n);
 				foreach (var r in cls.GetReferences()){
 					if (r.NoSql) continue;
