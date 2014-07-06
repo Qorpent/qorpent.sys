@@ -90,7 +90,7 @@ GO
 -- begin command SqlTriggerWriter
 IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
 GO
-CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON ""dbo"".""a"" INSTEAD OF DELETE AS BEGIN
 delete ""dbo"".""a"" from deleted d join ""dbo"".""a"" on ""dbo"".""a"".id = d.id where ""dbo"".""a"".id not in (0,-1)
 END;
 GO
@@ -98,7 +98,7 @@ GO
 -- begin command SqlTriggerWriter
 IF OBJECT_ID('""dbo"".""bPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"";
 GO
-CREATE TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"" ON  INSTEAD OF DELETE AS BEGIN
+CREATE TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"" ON ""dbo"".""b"" INSTEAD OF DELETE AS BEGIN
 delete ""dbo"".""b"" from deleted d join ""dbo"".""b"" on ""dbo"".""b"".id = d.id where ""dbo"".""b"".id not in (0,-1)
 END;
 GO
