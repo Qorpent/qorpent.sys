@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using Qorpent.Model;
 using Qorpent.Serialization;
 
 namespace Qorpent.Scaffolding.Model.CodeWriters{
@@ -22,9 +23,76 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			WriteGetSelectQuery();
 			WriteSingleRecordProcessor();
 			WriteEnumerableReaderProcessor();
+			WriteWriteAccessors();
 			WriteEndClass();
 		}
-
+		private void WriteWriteAccessors() {
+			var fields = Cls.GetOrderedFields().Where(_ => !_.NoSql && !_.NoCode).ToArray();
+			if (Cls.AccessMode.HasFlag(DbAccessMode.Write)) {
+				o.WriteLine("\t\t///<summary>Insert a record</summary>");
+				o.WriteLine("\t\t///<returns>Affected rows</returns>");
+				o.WriteLine("\t\tpublic int InsertRecord(IDbConnection connection, " + Cls.Name + " record) {");
+				o.WriteLine("\t\t\tvar sqlCommand = connection.CreateCommand();");
+				o.Write("\t\t\tconst string command = @\"INSERT INTO " + Cls.FullSqlName.SqlQuoteName().Replace("\"", "\"\"") + " (");
+				for (var i = 0; i < fields.Length; i++) {
+					o.Write(fields[i].Name.ToLowerInvariant());
+					if (i != fields.Length - 1) {
+						o.Write(", ");
+					}
+				}
+				o.Write(") VALUES (");
+				for (var i = 0; i < fields.Length; i++) {
+					o.Write("@" + fields[i].Name.ToLowerInvariant());
+					if (i != fields.Length - 1) {
+						o.Write(", ");
+					}
+				}
+				o.WriteLine(")\";");
+				o.WriteLine("\t\t\tsqlCommand.CommandText = command;");
+				for (var i = 0; i < fields.Length; i++) {
+					o.WriteLine("\t\t\tsqlCommand.Parameters.Add(record." + fields[i].Name + ");");
+				}
+				o.WriteLine("\t\t\tsqlCommand.Connection.Open();");
+				o.WriteLine("\t\t\tvar affected = sqlCommand.ExecuteNonQuery();");
+				o.WriteLine("\t\t\tsqlCommand.Connection.Close();");
+				o.WriteLine("\t\t\treturn affected;");
+				o.WriteLine("\t\t}");
+			}
+			if (Cls.AccessMode.HasFlag(DbAccessMode.ReadWrite)) {
+				if (IsIWithCode()) {
+					o.WriteLine("\t\t///<summary>Update a record by Code</summary>");
+					o.WriteLine("\t\t///<returns>Affected rows</returns>");
+					o.WriteLine("\t\tpublic int UpdateRecordByCode(IDbConnection connection, " + Cls.Name + " record) {");
+					o.WriteLine("\t\t\tvar sqlCommand = connection.CreateCommand();");
+					o.Write("\t\t\tconst string command = @\"UPDATE " + Cls.FullSqlName.SqlQuoteName().Replace("\"", "\"\"") + " SET ");
+					var updateFields = fields.Where(_ => _.Name.ToLowerInvariant() != "code").ToArray();
+					for (var i = 0; i < updateFields.Length; i++) {
+						var name = updateFields[i].Name.ToLowerInvariant();
+						o.Write(name  + " = @" + name);
+						if (i != updateFields.Length - 1) {
+							o.Write(", ");
+						}
+					}
+					o.WriteLine(" WHERE code = @code\";");
+					o.WriteLine("\t\t\tsqlCommand.CommandText = command;");
+					for (var i = 0; i < fields.Length; i++) {
+						o.WriteLine("\t\t\tsqlCommand.Parameters.Add(record." + fields[i].Name + ");");
+					}
+					o.WriteLine("\t\t\tsqlCommand.Connection.Open();");
+					o.WriteLine("\t\t\tvar affected = sqlCommand.ExecuteNonQuery();");
+					o.WriteLine("\t\t\tsqlCommand.Connection.Close();");
+					o.WriteLine("\t\t\treturn affected;");
+					o.WriteLine("\t\t}");
+				}
+			}
+		}
+		/// <summary>
+		///		Определяет признак того, что класс в том или ином виде поддерживает <see cref="IWithCode"/>
+		/// </summary>
+		/// <returns>Признак того, что класс в том или ином виде поддерживает <see cref="IWithCode"/></returns>
+		private bool IsIWithCode() {
+			return Cls.TargetClass.AllImports.Any(_ => _.Name.ToLowerInvariant() == "iwithcode");
+		}
 		private void WriteGetTableQuery(){
 			o.WriteLine("\t\t///<summary>Implementation of GetTableName</summary>");
 			o.WriteLine("#if NOQORPENT");
