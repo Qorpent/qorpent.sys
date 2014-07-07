@@ -25,6 +25,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("using Qorpent.Data.DataCache;");
 			o.WriteLine("using System.Linq;");
 			o.WriteLine("using System.Collections.Generic;");
+			o.Write("using {0}.DataCaches;\r\n", DefaultNamespce);
 			o.Write("namespace {0}.Adapters {{\r\n", DefaultNamespce);
 			o.WriteLine("\t///<summary>Model for " + DefaultNamespce + " definition</summary>");
 			o.WriteLine("\tpublic partial class Model {");
@@ -164,11 +165,11 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				if (DefaultNamespce != table.Namespace && !string.IsNullOrWhiteSpace(table.Namespace)){
 					n = table.Namespace + "." + n;
 				}
-				o.WriteLine("\t\tprivate ObjectDataCache<" + n + "> _" + table.Name + "Cache;");
+				o.WriteLine("\t\tprivate " + n + "DataCache _" + table.Name + "Cache;");
 				o.WriteLine("\t\t///<summary>Cache of " + table.Name + "</summary>");
 				o.WriteLine(
 					string.Format(
-						"\t\tpublic ObjectDataCache<{0}> {1} {{get {{ return _{1}Cache ?? (_{1}Cache = InitCache<{0}>());}}}}", n,
+						"\t\tpublic {0}DataCache {1} {{get {{ return _{1}Cache ?? (_{1}Cache = ({0}DataCache)InitCache<{0}>());}}}}", n,
 						table.Name));
 			}
 		}

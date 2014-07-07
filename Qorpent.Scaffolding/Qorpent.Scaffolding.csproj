@@ -33,6 +33,7 @@
     <Compile Include="Model\CodeWriters\ExtendedModelWriter.cs" />
     <Compile Include="Model\CodeWriters\PokoAdapterWriter.cs" />
     <Compile Include="Model\CodeWriters\PokoClassWriter.cs" />
+    <Compile Include="Model\CodeWriters\PokoObjectCacheWriter.cs" />
     <Compile Include="Model\CodeWriters\ResolveTagFacilityWriter.cs" />
     <Compile Include="Model\CodeWriters\ResolveTagOptionsWriter.cs" />
     <Compile Include="Model\Compiler\DataObjectsSourcePackageForBSharp.cs" />

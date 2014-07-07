@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.Scaffolding.Model;
+using Qorpent.Scaffolding.Model.CodeWriters;
 using Qorpent.Scaffolding.Model.SqlWriters;
 using Qorpent.Utils.Extensions;
 
@@ -63,7 +64,22 @@ GO".Trim().LfOnly(), code.Trim().LfOnly());
 		/// </summary>
 		[Test]
 		public void AdapterGotGeneratedSqlMethod(){
-			
+			var model = PersistentModel.Compile(SimplestTableFunction);
+			var b = model["B"];
+			var adaptgen = new PokoObjectCacheWriter(b);
+			var code = adaptgen.ToString();
+			Console.WriteLine(code);
+			Console.WriteLine(code.Replace("\"", "\"\""));
+			Assert.AreEqual(@"-- begin command SqlFunctionWriter
+IF OBJECT_ID('""dbo"".""bGetA""') IS NOT NULL DROP FUNCTION ""dbo"".""bGetA"";
+GO
+CREATE FUNCTION ""dbo"".""bGetA"" ( @id int = null  )
+RETURNS @result TABLE (""id"" int, ""x"" nvarchar(255)) AS BEGIN
+insert @result (id) select id from A
+RETURN;
+END;
+GO".Trim().LfOnly(), code.Trim().LfOnly());
+
 		}
 	}
 }

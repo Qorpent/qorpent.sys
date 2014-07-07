@@ -56,7 +56,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 					sb.Append(" AS BEGIN");
 					sb.AppendLine();
 					sb.AppendLine(body);
-					if (Function.ReturnType.IsTable){
+					if (null!=Function.ReturnType && Function.ReturnType.IsTable){
 						sb.AppendLine("RETURN;");
 					}
 					sb.Append("END;");
