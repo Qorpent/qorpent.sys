@@ -28,6 +28,10 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// </summary>
 		public bool IsProcedure { get; set; }
+		/// <summary>
+		/// Признак SQL-методов
+		/// </summary>
+		public SqlMethodOptions SqlMethod { get; set; }
 
 		/// <summary>
 		/// </summary>

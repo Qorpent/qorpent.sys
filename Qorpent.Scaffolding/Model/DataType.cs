@@ -26,6 +26,21 @@ namespace Qorpent.Scaffolding.Model{
 		}
 
 		/// <summary>
+		/// Признак табличного типа 
+		/// </summary>
+		public bool IsTable { get; set; }
+
+		/// <summary>
+		/// Признак целевого класса для IsTable и IsIdRef
+		/// </summary>
+		public PersistentClass TargetType { get; set; }
+
+		/// <summary>
+		/// Признак ссылочного (по ид) типа
+		/// </summary>
+		public bool IsIdRef { get; set; }
+
+		/// <summary>
 		///     Признак строкового параметра
 		/// </summary>
 		public bool IsDateTime{
