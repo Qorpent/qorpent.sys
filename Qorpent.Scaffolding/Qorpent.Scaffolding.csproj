@@ -49,6 +49,7 @@
     <Compile Include="Model\Compiler\GenerateResolveTagFacility.cs" />
     <Compile Include="Model\Compiler\CSharpModelGeneratorBase.cs" />
     <Compile Include="Model\Compiler\GenerateCloneableFacility.cs" />
+    <Compile Include="Model\Compiler\GenerateTableStructureFileTask.cs" />
     <Compile Include="Model\DbDefaultValueType.cs" />
     <Compile Include="Model\DefaultScripts.cs" />
     <Compile Include="Model\GenerationOptions.cs" />

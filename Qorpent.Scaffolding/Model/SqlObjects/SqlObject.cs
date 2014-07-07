@@ -262,6 +262,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			var result = new SqlTrigger();
 			result.Dialect = SqlDialect.SqlServer;
 			result.Table = cls;
+			result.TableName = cls.FullSqlName;
 			result.Name = "PreventDeletionOfSystemDefinedRows";
 			result.Delete = true;
 			result.Before = true;

@@ -85,7 +85,7 @@ namespace Qorpent.Graphs.Dot.Types {
                 }
             }
             if (arrow.HasFlag(ArrowType.Inv)) {
-                sb.Append("Inv");
+                sb.Append("inv");
             }
             else if (arrow.HasFlag(ArrowType.Dot)) {
                 sb.Append("dot");
@@ -97,10 +97,6 @@ namespace Qorpent.Graphs.Dot.Types {
             else if (arrow.HasFlag(ArrowType.Vee))
             {
                 sb.Append("vee");
-            }
-            else if (arrow.HasFlag(ArrowType.Inv))
-            {
-                sb.Append("inv");
             }
             else if (arrow.HasFlag(ArrowType.Diamond))
             {
@@ -114,6 +110,10 @@ namespace Qorpent.Graphs.Dot.Types {
             {
                 sb.Append("box");
             }
+			else if (arrow.HasFlag(ArrowType.Normal))
+			{
+				sb.Append("normal");
+			}
             return sb.ToString();
         }
     }
