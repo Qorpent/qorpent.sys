@@ -17,27 +17,50 @@ namespace Qorpent.Scaffolding.Application {
             IsValid = true;
             Actions = new Dictionary<string, AppAction>();
             Structs = new Dictionary<string, AppStruct>();
+            Controllers = new Dictionary<string, AppController>();
+            Menus = new Dictionary<string, AppMenu>();
+            Layouts = new Dictionary<string, AppLayout>();
             Errors = new List<BSharpError>();
+            Services = new Dictionary<string, AppService>();
         }
 
         /// <summary>
         /// Setup model for context
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="projectName"></param>
         /// <returns></returns>
-        public ApplicationModel Setup(IBSharpContext context) {
+        public ApplicationModel Setup(IBSharpContext context, string projectName = null) {
             this.Context = context;
+            if (null != projectName) {
+                this.ProjectName = projectName;
+            }
+            else {
+                this.ProjectName = "default_project_name";
+            }
             SetupActions(context);
             SetupStructs(context);
+            SetupLayout(context);
+            SetupControllers(context);
+            SetupMenus(context);
+            SetupServices(context);
             Bind();
             return this;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ProjectName { get; set; }
 
         private void Bind() {
             foreach (var s in Structs.Values.ToArray()) {
                 s.Bind();
             }
-            foreach (var a in Actions.Values.ToArray()   ) {
+            foreach (var a in Actions.Values.ToArray()) {
+                a.Bind();
+            }
+            foreach (var a in Layouts.Values.ToArray()) {
                 a.Bind();
             }
         }
@@ -63,15 +86,75 @@ namespace Qorpent.Scaffolding.Application {
             }
         }
 
+        private void SetupLayout(IBSharpContext context) {
+            var layoutClasses = context.ResolveAll("ui-layout").ToArray();
+            foreach (var layoutClass in layoutClasses) {
+                var layout = new AppLayout().Setup(layoutClass.Compiled, null, this);
+                Layouts[layout.Code] = layout;
+            }
+        }
+
+        private void SetupControllers(IBSharpContext context) {
+            var controllerClasses = context.ResolveAll("ui-controller").ToArray();
+            foreach (var controllerClass in controllerClasses) {
+                var controller = new AppController().Setup(this, controllerClass);
+                if (null != controller.MenuItems) {
+                    foreach (var m in controller.MenuItems) {
+                        var menu = Menus[m.Code];
+                        if (null != menu) {
+                            controller.Menus.Add(menu);
+                        }
+                    }   
+                }
+                Controllers[controller.Code] = controller;
+            }
+        }
+
+        private void SetupMenus(IBSharpContext context) {
+            var menuClasses = context.ResolveAll("ui-menu").ToArray();
+            foreach (var menuClass in menuClasses) {
+                var menu = new AppMenu().Setup(menuClass.Compiled);
+                Menus[menu.Code] = menu;
+            }
+        }
+
+        private void SetupServices(IBSharpContext context) {
+            var serviceClasses = context.ResolveAll("ui-service").ToArray();
+            foreach (var serviceClass in serviceClasses) {
+                var service = new AppService().Setup(serviceClass.Compiled);
+                Services[service.Code] = service;
+            }
+        }
+
         /// <summary>
         /// Действия
         /// </summary>
         public IDictionary<string, AppAction> Actions { get; private set; }
 
         /// <summary>
-        /// Действия
+        /// Сервисы
+        /// </summary>
+        public IDictionary<string, AppService> Services { get; private set; }
+
+        /// <summary>
+        /// Структуры
         /// </summary>
         public IDictionary<string, AppStruct> Structs { get; private set; }
+
+        /// <summary>
+        /// Лаяуты
+        /// </summary>
+        public IDictionary<string, AppLayout> Layouts { get; private set; }
+
+        /// <summary>
+        /// Контроллеры
+        /// </summary>
+        public IDictionary<string, AppController> Controllers { get; private set; }
+
+        /// <summary>
+        /// Менюхи
+        /// </summary>
+        public IDictionary<string, AppMenu> Menus { get; private set; }
 
         /// <summary>
         /// Дайджест-описание модели
@@ -120,6 +203,18 @@ namespace Qorpent.Scaffolding.Application {
             }
             if (typeof(T) == typeof(AppAction)) {
                 return Actions.Values.FirstOrDefault(_ => _.Code == reference || _.Class.FullName == reference) as T;
+            }
+            if (typeof(T) == typeof(AppMenu)) {
+                return Menus.Values.FirstOrDefault(_ => _.Code == reference || _.Class.FullName == reference) as T;
+            }
+            if (typeof(T) == typeof(AppLayout)) {
+                return Layouts.Values.FirstOrDefault(_ => _.Code == reference || _.Class.FullName == reference) as T;
+            }
+            if (typeof(T) == typeof(AppController)) {
+                return Controllers.Values.FirstOrDefault(_ => _.Code == reference || _.Class.FullName == reference) as T;
+            }
+            if (typeof(T) == typeof(AppService)) {
+                return Services.Values.FirstOrDefault(_ => _.Code == reference || _.Class.FullName == reference) as T;
             }
             throw new NotSupportedException(typeof(T).Name+" "+reference);
         }

@@ -41,8 +41,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\AppModelBasicTests.cs" />
+    <Compile Include="Application\AppActionTests.cs" />
+    <Compile Include="Application\AppActionWriterTests.cs" />
     <Compile Include="Application\AppModelBasicTestsBase.cs" />
+    <Compile Include="Application\AppServiceTests.cs" />
+    <Compile Include="Application\AppStructTests.cs" />
+    <Compile Include="Application\AppLayoutTest.cs" />
+    <Compile Include="Application\AppMenuTest.cs" />
     <Compile Include="SqlAndOrm\BaseModelGeneratorTests.cs" />
     <Compile Include="SqlAndOrm\CloneFacilityWriter.cs" />
     <Compile Include="SqlAndOrm\SqlScriptTests.cs" />
