@@ -400,7 +400,9 @@ namespace Qorpent.Scaffolding.Model{
 			if (null != byfullname) return byfullname;
 			PersistentClass bypartialname =
 				Classes.Values.FirstOrDefault(_ => _.Name.SqlQuoteName().ToLowerInvariant() == normalized);
-			return bypartialname;
+			if(null!= bypartialname)return  bypartialname;
+			PersistentClass byfullbsnanme = Classes.Values.FirstOrDefault(_ => _.TargetClass.FullName == reference);
+			return byfullbsnanme;
 		}
 
 		/// <summary>

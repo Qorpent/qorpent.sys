@@ -25,7 +25,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("using Qorpent.Data.DataCache;");
 			o.WriteLine("using System.Linq;");
 			o.WriteLine("using System.Collections.Generic;");
-			o.Write("using {0}.DataCaches;\r\n", DefaultNamespce);
+			o.Write("using {0}.ObjectCaches;\r\n", DefaultNamespce);
 			o.Write("namespace {0}.Adapters {{\r\n", DefaultNamespce);
 			o.WriteLine("\t///<summary>Model for " + DefaultNamespce + " definition</summary>");
 			o.WriteLine("\tpublic partial class Model {");
@@ -124,9 +124,23 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		private IUserLog _sqlLog;
 		///<summary>initiator for caches</summary>
 		protected ObjectDataCache<T> InitCache<T>()where T:class,new(){
-			var result = new ObjectDataCache<T>{ Adapter = GetAdapter<T>(), ConnectionProvider  = ConnectionProvider, Log= Log, SqlLog= SqlLog, ConnectionString = ConnectionString };
+			var result = CreateCache<T>();
+			result.Adapter = GetAdapter<T>();
+			result.ConnectionProvider = ConnectionProvider; 
+			result.Log = Log; 
+			result.SqlLog = SqlLog;
+			result.ConnectionString = ConnectionString;
 			SetupLoadBehavior(result);
 			return result;
+		}
+		///<summary>initiator for caches</summary>
+		protected ObjectDataCache<T> CreateCache<T>() where T:class,new(){
+			");
+			foreach (var table in Tables){
+				o.Write("if(typeof(T)==typeof({0}))return (new {0}DataCache{{Model=this}}) as ObjectDataCache<T>;\r\n", table.Name);
+			}
+			o.WriteLine(@"
+			return null;
 		}
 		///<summary>
 		///Sql connection descriptor

@@ -61,6 +61,14 @@ namespace Qorpent.Scaffolding.Model{
 					ReturnType = Table.DataTypeMap[dtype];
 				}
 			}
+			if (xml.GetSmartValue("sql-method").ToBool()){
+				var sqlm = SqlMethodOptions.IsMethod;
+				var opts = xml.GetSmartValue("sql-method");
+				if (!string.IsNullOrWhiteSpace(opts)){
+					sqlm |= opts.To<SqlMethodOptions>();
+				}
+				SqlMethod = sqlm;
+			}
 			int i = 0;
 			foreach (XAttribute a in xml.Attributes()){
 				string name = a.Name.LocalName.Unescape(EscapingType.XmlName);

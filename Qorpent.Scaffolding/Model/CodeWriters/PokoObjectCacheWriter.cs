@@ -23,7 +23,30 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		{
 			WriteStartClass();
 			WriteGetTableQuery();
+			WriteModelLink();
+			WriteSqlMethods();
 			WriteEndClass();
+		}
+
+		private void WriteSqlMethods(){
+			foreach (var method in Cls.SqlObjects.OfType<SqlFunction>().Where(_=>_.SqlMethod.HasFlag(SqlMethodOptions.IsMethod)).OrderBy(_=>_.Name)){
+				WriteSqlMethod(method);				
+			}
+		}
+
+		private void WriteSqlMethod(SqlFunction method){
+			o.WriteLine();
+			o.Write("\t\t///<summary>{0} (Id notation)</summary>\r\n", method.Comment);
+			o.Write("\t\tpublic {0}[] {1} (int {2}Id) {{\r\n", method.ReturnType.TargetType.Name, method.Name, Cls.Name.ToLowerInvariant());
+			o.Write(@"			return Model.{0}.GetAll (""select id from {1} ( ""+{2}Id+"")"");
+",method.ReturnType.TargetType.Name,method.FullName.Replace("\"","\\\""),Cls.Name.ToLowerInvariant());
+			o.WriteLine("\t\t}");
+			o.WriteLine();
+			o.Write("\t\t///<summary>{0}</summary>\r\n", method.Comment);
+			o.Write("\t\tpublic {0}[] {1} ({2} {3}) {{\r\n", method.ReturnType.TargetType.Name, method.Name, Cls.Name,Cls.Name.ToLowerInvariant());
+			o.Write(@"			return {0} ({1}.Id);
+", method.Name,Cls.Name.ToLowerInvariant());
+			o.WriteLine("\t\t}");
 		}
 
 		private void WriteGetTableQuery(){
@@ -33,6 +56,11 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("\t\t}");
 		}
 
+		private void WriteModelLink()
+		{
+			o.WriteLine("\t\t///<summary>Back reference to model</summary>");
+			o.Write("\t\tpublic {0}.Adapters.Model Model {{get;set;}}\r\n",DefaultNamespce);
+		}
 
 		private void WriteEndClass()
 		{
@@ -48,6 +76,8 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("using System.Text;");
 			o.WriteLine("using System.Data;");
 			o.WriteLine("using Qorpent.Data;");
+			o.WriteLine("using Qorpent.Data.DataCache;");
+			
 			o.Write("using {0}.Adapters;\r\n", Cls.Namespace);
 			o.Write("namespace {0}.ObjectCaches {{\r\n", Cls.Namespace);
 			o.WriteLine("\t///<summary>");

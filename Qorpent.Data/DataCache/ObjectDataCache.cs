@@ -277,10 +277,14 @@ namespace Qorpent.Data.DataCache
 		/// <param name="cascade"></param>
 		public List<int> UpdateSingleQuery(string query, object options, IDbConnection c, List<int> allids, bool cascade){
 			allids = allids ?? new List<int>();
-			var q = "select Id from " + Adapter.GetTableName();
-			if (!string.IsNullOrWhiteSpace(query)){
-				q += " where " + query;
+			var q = query;
+			if (!q.Contains("from")){
+				q = "select Id from " + Adapter.GetTableName();
+				if (!string.IsNullOrWhiteSpace(query)){
+					q += " where " + query;
+				}
 			}
+			
 			if (string.IsNullOrWhiteSpace(c.ConnectionString)){
 				throw new Exception("bad connection string!!!");
 			}

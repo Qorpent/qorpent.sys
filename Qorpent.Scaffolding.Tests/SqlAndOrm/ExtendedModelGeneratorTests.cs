@@ -24,6 +24,7 @@ using Qorpent.Data.Connections;
 using Qorpent.Data.DataCache;
 using System.Linq;
 using System.Collections.Generic;
+using Orm.ObjectCaches;
 namespace Orm.Adapters {
 	///<summary>Model for Orm definition</summary>
 	public partial class Model {
@@ -33,9 +34,21 @@ namespace Orm.Adapters {
 		private IUserLog _sqlLog;
 		///<summary>initiator for caches</summary>
 		protected ObjectDataCache<T> InitCache<T>()where T:class,new(){
-			var result = new ObjectDataCache<T>{ Adapter = GetAdapter<T>(), ConnectionProvider  = ConnectionProvider, Log= Log, SqlLog= SqlLog, ConnectionString = ConnectionString };
+			var result = CreateCache<T>();
+			result.Adapter = GetAdapter<T>();
+			result.ConnectionProvider = ConnectionProvider; 
+			result.Log = Log; 
+			result.SqlLog = SqlLog;
+			result.ConnectionString = ConnectionString;
 			SetupLoadBehavior(result);
 			return result;
+		}
+		///<summary>initiator for caches</summary>
+		protected ObjectDataCache<T> CreateCache<T>() where T:class,new(){
+			
+if(typeof(T)==typeof(a))return (new aDataCache{Model=this}) as ObjectDataCache<T>;
+
+			return null;
 		}
 		///<summary>
 		///Sql connection descriptor
@@ -66,9 +79,9 @@ namespace Orm.Adapters {
 				_sqlLog = value;
 			}
 		}
-		private ObjectDataCache<a> _aCache;
+		private aDataCache _aCache;
 		///<summary>Cache of a</summary>
-		public ObjectDataCache<a> a {get { return _aCache ?? (_aCache = InitCache<a>());}}
+		public aDataCache a {get { return _aCache ?? (_aCache = (aDataCache)InitCache<a>());}}
 		///<summary>Setup auto load behavior for linked classes</summary>
 		protected virtual void SetupLoadBehavior<T>(ObjectDataCache<T> cache)where T:class,new(){
 			switch(typeof(T).Name){
@@ -115,6 +128,7 @@ using Qorpent.Data.Connections;
 using Qorpent.Data.DataCache;
 using System.Linq;
 using System.Collections.Generic;
+using Orm.ObjectCaches;
 namespace Orm.Adapters {
 	///<summary>Model for Orm definition</summary>
 	public partial class Model {
@@ -124,9 +138,23 @@ namespace Orm.Adapters {
 		private IUserLog _sqlLog;
 		///<summary>initiator for caches</summary>
 		protected ObjectDataCache<T> InitCache<T>()where T:class,new(){
-			var result = new ObjectDataCache<T>{ Adapter = GetAdapter<T>(), ConnectionProvider  = ConnectionProvider, Log= Log, SqlLog= SqlLog, ConnectionString = ConnectionString };
+			var result = CreateCache<T>();
+			result.Adapter = GetAdapter<T>();
+			result.ConnectionProvider = ConnectionProvider; 
+			result.Log = Log; 
+			result.SqlLog = SqlLog;
+			result.ConnectionString = ConnectionString;
 			SetupLoadBehavior(result);
 			return result;
+		}
+		///<summary>initiator for caches</summary>
+		protected ObjectDataCache<T> CreateCache<T>() where T:class,new(){
+			
+if(typeof(T)==typeof(a))return (new aDataCache{Model=this}) as ObjectDataCache<T>;
+if(typeof(T)==typeof(b))return (new bDataCache{Model=this}) as ObjectDataCache<T>;
+if(typeof(T)==typeof(c))return (new cDataCache{Model=this}) as ObjectDataCache<T>;
+
+			return null;
 		}
 		///<summary>
 		///Sql connection descriptor
@@ -157,15 +185,15 @@ namespace Orm.Adapters {
 				_sqlLog = value;
 			}
 		}
-		private ObjectDataCache<a> _aCache;
+		private aDataCache _aCache;
 		///<summary>Cache of a</summary>
-		public ObjectDataCache<a> a {get { return _aCache ?? (_aCache = InitCache<a>());}}
-		private ObjectDataCache<b> _bCache;
+		public aDataCache a {get { return _aCache ?? (_aCache = (aDataCache)InitCache<a>());}}
+		private bDataCache _bCache;
 		///<summary>Cache of b</summary>
-		public ObjectDataCache<b> b {get { return _bCache ?? (_bCache = InitCache<b>());}}
-		private ObjectDataCache<c> _cCache;
+		public bDataCache b {get { return _bCache ?? (_bCache = (bDataCache)InitCache<b>());}}
+		private cDataCache _cCache;
 		///<summary>Cache of c</summary>
-		public ObjectDataCache<c> c {get { return _cCache ?? (_cCache = InitCache<c>());}}
+		public cDataCache c {get { return _cCache ?? (_cCache = (cDataCache)InitCache<c>());}}
 		///<summary>Setup auto load behavior for linked classes</summary>
 		protected virtual void SetupLoadBehavior<T>(ObjectDataCache<T> cache)where T:class,new(){
 			switch(typeof(T).Name){
@@ -251,7 +279,6 @@ namespace Orm.Adapters {
 		}
 	}
 }
-
 ".Trim(), code.Trim());
 		}
 	}
