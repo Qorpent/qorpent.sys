@@ -142,7 +142,8 @@ namespace Qorpent.Scaffolding.Application {
                             menuItem = GenerateDropdownGroup(g);
                             menuItem
                                 .SetAttr("code", g.Attr("code"))
-                                .SetAttr("menu-group", 1);
+                                .SetAttr("menu-group", 1)
+                                .SetAttr("model", g.Attr("model"));
                             menuItem.Add(GenerateSubmenuFromModel(g));
                         } else {
                             menuItem = GenerateDropdownItem(g);
@@ -268,8 +269,8 @@ namespace Qorpent.Scaffolding.Application {
         }
 
         private static XElement GenerateSubmenuFromModel(XElement root) {
-            var result = new XElement("div", new XAttribute("class", "submenu"));
-            result.Add(GenerateMenuFromModel(root));
+            var result = new XElement("div", new XAttribute("class", "submenu"), " ");
+            // result.Add(GenerateMenuFromModel(root));
             return result;
         }
 
