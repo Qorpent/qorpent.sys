@@ -31,6 +31,19 @@ namespace Qorpent.Scaffolding.Model{
 		public IList<SqlObject> SqlObjects { get; private set; }
 
 		/// <summary>
+		/// Ищет дочерние SQL-объекты по типу и имени
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public SqlObject this[SqlObjectType type,string name]{
+			get{
+				var objects = SqlObjects.Where(_ => _.Name.ToLowerInvariant() == name.ToLowerInvariant() || _.FullName.ToLowerInvariant() == name.ToLowerInvariant()).ToArray();
+				return objects.FirstOrDefault(_ => _.ObjectType == type);
+			}
+		}
+
+		/// <summary>
 		///     Информация о физическом размещении объекта
 		/// </summary>
 		public AllocationInfo AllocationInfo { get; set; }

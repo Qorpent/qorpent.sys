@@ -59,6 +59,7 @@
     <Compile Include="SqlAndOrm\PokoClassWriterTests.cs" />
     <Compile Include="SqlAndOrm\ResolveTagFacilityWriterTests.cs" />
     <Compile Include="SqlAndOrm\SpecialsTest.cs" />
+    <Compile Include="SqlAndOrm\TableFunctionsTest.cs" />
     <Compile Include="SqlAndOrm\WritersTest.cs" />
   </ItemGroup>
   <ItemGroup>

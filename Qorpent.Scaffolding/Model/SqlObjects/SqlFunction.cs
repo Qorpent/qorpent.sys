@@ -15,6 +15,7 @@ namespace Qorpent.Scaffolding.Model{
 		public SqlFunction(){
 			Arguments = new Dictionary<string, SqlFunctionArgument>();
 			UseTablePrefixedName = true;
+			ObjectType = SqlObjectType.Function;
 		}
 
 		/// <summary>
@@ -42,15 +43,23 @@ namespace Qorpent.Scaffolding.Model{
 		/// <returns></returns>
 		public override SqlObject Setup(PersistentModel model, PersistentClass cls, IBSharpClass bscls,
 		                                XElement xml){
+			model = model ?? cls.Model;
 			base.Setup(model, cls, bscls, xml);
+			
 			string xname = xml.Name.LocalName;
 			IsProcedure = xname == "void" || (xname == "function" && string.IsNullOrWhiteSpace(xml.Attr("returns")));
 			if (!IsProcedure){
-				string dtype = xname;
-				if (dtype == "function"){
-					dtype = xml.Attr("returns");
+				if (xname.EndsWith("__STAR__")){
+					ReturnType = GetTableType(model, xname.Substring(0, xname.Length - 8));
 				}
-				ReturnType = Table.DataTypeMap[dtype];
+				else{
+					string dtype = xname;
+					if (dtype == "function"){
+						dtype = xml.Attr("returns");
+					}
+
+					ReturnType = Table.DataTypeMap[dtype];
+				}
 			}
 			int i = 0;
 			foreach (XAttribute a in xml.Attributes()){
@@ -66,7 +75,12 @@ namespace Qorpent.Scaffolding.Model{
 					arg = Arguments[argname];
 					if (namepair.Length == 1){
 //only type determine
-						arg.DataType = Table.DataTypeMap[val];
+						if (Table.DataTypeMap.ContainsKey(val)){
+							arg.DataType = Table.DataTypeMap[val];
+						}
+						else{
+							arg.DataType = GetIdRefType(model,val,argname);
+						}
 					}
 					else{
 						bool hastype = false;
@@ -95,5 +109,31 @@ namespace Qorpent.Scaffolding.Model{
 			}
 			return this;
 		}
+
+		private DataType GetIdRefType(PersistentModel model, string clsname,string argname){
+			
+			
+			var cls = model[clsname];
+			if (null == cls)
+			{
+				model.RegisterError(new BSharpError { Message = "Не могу найти класса для ссылочного типа " + clsname });
+				return null;
+			}
+			var result = cls[argname].DataType.Copy();
+			result.IsIdRef = true;
+			result.TargetType = cls;
+			return result;
+		}
+
+		private DataType GetTableType(PersistentModel model, string clsname){
+			var cls = model[clsname];
+			if (null == cls){
+				model.RegisterError(new BSharpError{Message = "Не могу найти класса для табличного типа "+clsname});
+			}
+			var result = new DataType();
+			result.IsTable = true;
+			result.TargetType = cls;
+			return result;
+		} 
 	}
 }

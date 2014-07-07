@@ -44,16 +44,37 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 						sb.Append("CREATE PROCEDURE ${FullName} " + arguments);
 					}
 					else{
-						sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " ) RETURNS " +
-						          Function.ReturnType.ResolveSqlDataType(SqlDialect.SqlServer));
+						if (Function.ReturnType.IsTable){
+							sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " )\r\nRETURNS @result TABLE " +
+							          GetTableType(Function.ReturnType,SqlDialect.SqlServer));
+						}
+						else{
+							sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " ) RETURNS " +
+							          Function.ReturnType.ResolveSqlDataType(SqlDialect.SqlServer));
+						}
 					}
 					sb.Append(" AS BEGIN");
 					sb.AppendLine();
 					sb.AppendLine(body);
+					if (Function.ReturnType.IsTable){
+						sb.AppendLine("RETURN;");
+					}
 					sb.Append("END;");
 				}
 			}
 			return sb.ToString();
+		}
+
+		private string GetTableType(DataType returnType,SqlDialect dialect){
+			var result = new StringBuilder();
+			result.Append("(");
+			result.Append(string.Join(", ",
+			              returnType.TargetType.GetOrderedFields()
+			                        .Where(_ => !_.NoSql)
+			                        .Select(_ => _.Name.SqlQuoteName()+ " " + _.DataType.ResolveSqlDataType(dialect))));
+			result.Append(")");
+			return result.ToString();
+
 		}
 
 		private object GetArgumentString(SqlFunctionArgument arg){

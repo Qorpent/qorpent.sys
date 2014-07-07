@@ -89,6 +89,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		/// <remarks>Использует приоритет - прямое укзание диалекта, потом ANSI, потом varchar(255)</remarks>
 		public SqlDataType ResolveSqlDataType(SqlDialect dialect = SqlDialect.Ansi){
+			
 			if (SqlDataTypes.ContainsKey(dialect)){
 				return SqlDataTypes[dialect];
 			}

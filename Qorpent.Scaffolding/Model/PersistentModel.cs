@@ -118,7 +118,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <returns></returns>
 		public PersistentModel Setup(IBSharpContext context){
 			Context = context;
-			IEnumerable<IBSharpClass> tables = Context.ResolveAll(TablePrototype+";attr:"+TableAttribute);
+			IEnumerable<IBSharpClass> tables = Context.ResolveAll(TablePrototype+";attr:"+TableAttribute).ToArray();
 			foreach (IBSharpClass table in tables){
 				var pclass = new PersistentClass();
 				pclass.Setup(table);
