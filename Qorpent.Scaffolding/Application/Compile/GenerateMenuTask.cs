@@ -68,11 +68,13 @@ namespace Qorpent.Scaffolding.Application {
             result.SetAttr("menu-group", 1);
             result.SetAttr("code", el.Attr("code"));
             result.SetAttr("class", result.Attr("class") + " open-" + (el.HasAttribute("direction") ? el.Attr("direction") : "right"));
-            var menuGroup = new XElement("div", new XAttribute("class", "submenu"));
-            foreach (var m in el.Elements("MenuItem")) {
-                menuGroup.Add(m.HasElements ? GenerateDropdownGroup(m) : GenerateDropdownItem(m));
+            if (el.HasElements) {
+                var menuGroup = new XElement("div", new XAttribute("class", "submenu"));
+                foreach (var m in el.Elements("MenuItem")) {
+                    menuGroup.Add(m.HasElements ? GenerateDropdownGroup(m) : GenerateDropdownItem(m));
+                }
+                result.Add(menuGroup);   
             }
-            result.Add(menuGroup);
             return result;
         }
 
@@ -135,14 +137,18 @@ namespace Qorpent.Scaffolding.Application {
                             .SetAttr("code", g.Attr("code"))
                             .SetAttr("menu-group", 1));
                     } else {
-                        var menuItem = GenerateDropdownItem(g)
-                            .SetAttr("group", g.Attr("code"))
-                            .SetAttr("menu-item", 1);
+                        XElement menuItem;
                         if (g.HasAttribute("model")) {
+                            menuItem = GenerateDropdownGroup(g);
                             menuItem
-                            .SetAttr("code", g.Attr("code"))
-                            .SetAttr("menu-group", 1);
+                                .SetAttr("code", g.Attr("code"))
+                                .SetAttr("menu-group", 1);
                             menuItem.Add(GenerateSubmenuFromModel(g));
+                        } else {
+                            menuItem = GenerateDropdownItem(g);
+                            menuItem
+                                .SetAttr("group", g.Attr("code"))
+                                .SetAttr("menu-item", 1);
                         }
                         menuBody.Add(menuItem);
                     }
@@ -226,6 +232,8 @@ namespace Qorpent.Scaffolding.Application {
                 new XAttribute("ng-class", "'menu__item-' + (!!m.size ? m.size : 'small') + (m.Name == 'divider' ? ' menu__item-divider' : '')"),
                 new XAttribute("color", "{{m.color || m.Color}}"),
                 new XAttribute("type", "{{m.type || m.Type}}"),
+                new XAttribute("ng-include", "'menu-item.html'"),
+                " "/*,
                 new XElement("div",
                     new XAttribute("ng-if", "(m.type || m.Type) == \'view\' && m.Name != \'divider\'"),
                     new XAttribute("class", "menu__item-title menu__item-element" + (el.HasAttribute("titleclass") ? " " + el.Attr("titleclass") : "")),
@@ -254,7 +262,7 @@ namespace Qorpent.Scaffolding.Application {
                         new XAttribute("class", "menu__item-title menu__item-element" + (el.HasAttribute("titleclass") ? " " + el.Attr("titleclass") : "")),
                         new XAttribute("ng-bind", "(m.name || m.Name)"),
                         " "
-                    )
+                    )*/
             );
             return result;
         }

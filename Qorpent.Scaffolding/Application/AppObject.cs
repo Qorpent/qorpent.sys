@@ -1,12 +1,21 @@
-﻿using Qorpent.BSharp;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using System.Xml.Linq;
+using Qorpent.BSharp;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Application {
     /// <summary>
+/// 
+/// </summary>
+    public abstract class AppObjectBase {
+    }
+
+    /// <summary>
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class AppObject<T> where T:AppObject<T> {
+    public abstract class AppObject<T> : AppObjectBase where T:AppObject<T> {
         /// <summary>
         /// 
         /// </summary>
@@ -20,6 +29,50 @@ namespace Qorpent.Scaffolding.Application {
             this.Name = Class.Compiled.GetName();
             return (T)this;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="el"></param>
+        /// <returns></returns>
+        public virtual T Setup(XElement el) {
+            ApplyAttributes(el);
+            return (T) this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="el"></param>
+        public void ApplyAttributes(XElement el) {
+            this.Attributes = new Dictionary<string, string>();
+            el.Apply(this);
+            foreach (var attr in el.Attributes()) {
+                this.Attributes.Add(attr.Name.LocalName, attr.Value);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IDictionary<string, string> Attributes { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="el"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public virtual T Setup(XElement el, T parent) {
+            ApplyAttributes(el);
+            this.Parent = parent;
+            return (T)this;
+        }
+
+        /// <summary>
+        /// Ссылка на родительский объект (используется, например для лаяута)
+        /// </summary>
+        public T Parent { get; set; }
 
         /// <summary>
         /// 
@@ -39,6 +92,16 @@ namespace Qorpent.Scaffolding.Application {
         /// Читаемое имя, камент
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Order { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Grow { get; set; }
 
         /// <summary>
         /// 

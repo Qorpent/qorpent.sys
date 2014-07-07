@@ -17,8 +17,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\AppAction.cs" />
+    <Compile Include="Application\AppActionWriter.cs" />
     <Compile Include="Application\ApplicationModel.cs" />
     <Compile Include="Application\AppObject.cs" />
+    <Compile Include="Application\AppObjectWriterBase.cs" />
     <Compile Include="Application\AppStruct.cs" />
     <Compile Include="Application\AppSyntax.cs" />
     <Compile Include="Application\Compile\AppSpecificationBSharpSource.cs" />
