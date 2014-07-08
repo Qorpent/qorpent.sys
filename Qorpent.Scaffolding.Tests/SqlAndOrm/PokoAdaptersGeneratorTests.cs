@@ -106,12 +106,13 @@ namespace .Adapters {
 		private const string PokoQorpentAccessReadWriteExpected = PokoExpectedBase + PokoInsertExpected + @"
 		///<summary>Update a record by Code</summary>
 		///<returns>Affected rows</returns>
-		public int UpdateRecordByCode(IDbConnection connection, a record) {
+		public int UpdateRecordByCode(IDbConnection connection, String code, a record) {
 			var sqlCommand = connection.CreateCommand();
-			const string command = @""UPDATE """"dbo"""".""""a"""" SET id = @id WHERE code = @code"";
+			const string command = @""UPDATE """"dbo"""".""""a"""" SET id = @id WHERE code = @wherecode"";
 			sqlCommand.CommandText = command;
 			sqlCommand.Parameters.Add(record.Id);
 			sqlCommand.Parameters.Add(record.Code);
+			sqlCommand.Parameters.Add(code);
 			sqlCommand.Connection.Open();
 			var affected = sqlCommand.ExecuteNonQuery();
 			sqlCommand.Connection.Close();

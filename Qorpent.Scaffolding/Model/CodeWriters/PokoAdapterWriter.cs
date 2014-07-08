@@ -74,9 +74,9 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			return Cls.GetOrderedFields().Where(_ => !_.NoCode == inCode && !_.NoSql == inSql);
 		}
 		private void WriteUpdateMethod(Field byField) {
-			var fields = Cls.GetOrderedFields().Where(_ => !_.NoSql && !_.NoCode).ToArray();
+			var fields = GetFields().ToArray();
 			WriteSummary("Update a record by " + byField.Name, 2, "Affected rows");
-			o.WriteLine("\t\tpublic int UpdateRecordBy" + byField.Name + "(IDbConnection connection, " + Cls.Name + " record) {");
+			o.WriteLine("\t\tpublic int UpdateRecordBy" + byField.Name + "(IDbConnection connection, " + byField.DataType.CSharpDataType + " " + byField.Name.ToLowerInvariant() + ", " + Cls.Name + " record) {");
 			o.WriteLine("\t\t\tvar sqlCommand = connection.CreateCommand();");
 			o.Write("\t\t\tconst string command = @\"UPDATE " + Cls.FullSqlName.SqlQuoteName().Replace("\"", "\"\"") + " SET ");
 			var updateFields = fields.Where(_ => _.Name.ToLowerInvariant() != byField.Name.ToLowerInvariant()).ToArray();
@@ -87,11 +87,12 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 					o.Write(", ");
 				}
 			}
-			o.WriteLine(" WHERE " + byField.Name.ToLowerInvariant() + " = @" + byField.Name.ToLowerInvariant() + "\";");
+			o.WriteLine(" WHERE " + byField.Name.ToLowerInvariant() + " = @where" + byField.Name.ToLowerInvariant() + "\";");
 			o.WriteLine("\t\t\tsqlCommand.CommandText = command;");
 			for (var i = 0; i < fields.Length; i++) {
 				o.WriteLine("\t\t\tsqlCommand.Parameters.Add(record." + fields[i].Name + ");");
 			}
+			WriteLine("sqlCommand.Parameters.Add(" + byField.Name.ToLowerInvariant() + ");", 3);
 			o.WriteLine("\t\t\tsqlCommand.Connection.Open();");
 			o.WriteLine("\t\t\tvar affected = sqlCommand.ExecuteNonQuery();");
 			o.WriteLine("\t\t\tsqlCommand.Connection.Close();");
