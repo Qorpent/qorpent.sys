@@ -116,15 +116,18 @@ namespace .Adapters {
 			var affected = sqlCommand.ExecuteNonQuery();
 			sqlCommand.Connection.Close();
 			return affected;
-		}
+		}" + ClassEnding;
+		private const string ClassEnding = @"
 	}
 }";
+
 		private const string PokoQorpentAccessWriteOnlyClass = @"require data
 class a prototype=dbtable qorpent-access=Write
 	import IWithCode";
 		private const string PokoQorpentAccessReadWriteClass = @"require data
 class a prototype=dbtable qorpent-access=ReadWrite
 	import IWithCode";
+
 
 		[TestCase(@"class a prototype=dbtable", "a", DbAccessMode.Read)]
 		[TestCase(@"class a prototype=dbtable qorpent-access=Read", "a", DbAccessMode.Read)]

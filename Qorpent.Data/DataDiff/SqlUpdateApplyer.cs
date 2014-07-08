@@ -52,6 +52,7 @@ namespace Qorpent.Data.DataDiff{
 				{
 					throw new Exception("В целевой БД отсутвует процедура " + _context.MetadataTable+"Register");
 				}
+				Debugger.Launch();
 				//сначала надо прорегистрировать скрипт, и только потом его выполнять, так как на него могут идти ссылки
 				var register = "exec " + _context.MetadataTable +
 							   "Register @code=@code,@name=@code,@content=@content, @hash=@hash,@revision=@revision,@filetime=@filetime,@comment=@comment";
