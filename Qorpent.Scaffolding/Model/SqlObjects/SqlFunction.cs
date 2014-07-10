@@ -50,7 +50,8 @@ namespace Qorpent.Scaffolding.Model{
 			IsProcedure = xname == "void" || (xname == "function" && string.IsNullOrWhiteSpace(xml.Attr("returns")));
 			if (!IsProcedure){
 				if (xname.EndsWith("__STAR__")){
-					ReturnType = GetTableType(model, xname.Substring(0, xname.Length - 8));
+					var tp = xname.Substring(0, xname.Length - 8);
+					ReturnType = GetTableType(model, tp,cls);
 				}
 				else{
 					string dtype = xname;
@@ -87,7 +88,7 @@ namespace Qorpent.Scaffolding.Model{
 							arg.DataType = Table.DataTypeMap[val];
 						}
 						else{
-							arg.DataType = GetIdRefType(model,val,argname);
+							arg.DataType = GetIdRefType(model,val,argname,cls);
 						}
 					}
 					else{
@@ -118,10 +119,10 @@ namespace Qorpent.Scaffolding.Model{
 			return this;
 		}
 
-		private DataType GetIdRefType(PersistentModel model, string clsname,string argname){
+		private DataType GetIdRefType(PersistentModel model, string clsname, string argname, PersistentClass _cls){
 			
 			
-			var cls = model[clsname];
+			var cls = clsname=="this"?_cls: model[clsname];
 			if (null == cls)
 			{
 				model.RegisterError(new BSharpError { Message = "Не могу найти класса для ссылочного типа " + clsname });
@@ -133,8 +134,8 @@ namespace Qorpent.Scaffolding.Model{
 			return result;
 		}
 
-		private DataType GetTableType(PersistentModel model, string clsname){
-			var cls = model[clsname];
+		private DataType GetTableType(PersistentModel model, string clsname, PersistentClass _cls){
+			var cls = clsname == "this" ? _cls: model[clsname];
 			if (null == cls){
 				model.RegisterError(new BSharpError{Message = "Не могу найти класса для табличного типа "+clsname});
 			}

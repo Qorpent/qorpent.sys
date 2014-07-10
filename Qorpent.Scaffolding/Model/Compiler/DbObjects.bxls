@@ -139,6 +139,10 @@ namespace Qorpent.Db
 			reffields
 				by Parent
 				use Code,Name
+		this* GetAllChildren @id = this sql-method : (
+			declare @path nvarchar(400) set @path = (select path from @this where id = @id)
+			insert @result (id) select id from @this where Path like  @path+'%'
+		)
 
 	class IWithActivity "Интерфейс сущности со сроками существования" abstract
 		datetime Start "Признак начала существования элемента" default=('19000101') idx=240 
