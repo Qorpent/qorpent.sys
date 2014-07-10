@@ -241,6 +241,13 @@ if(typeof(T)==typeof(c))return (new cDataCache{Model=this}) as ObjectDataCache<T
 					if(t.Id == -1||t.Id==0)continue;
 					if(AutoLoadba && null==t.a){
 						t.a= (!Lazyba?(this.a.Get(t.aId,c)): new a.Lazy{GetLazy=_=>this.a.Get(t.aId)});
+if (!Lazyabs && !Lazyba && t.aId != 0 && t.aId != -1)
+			{
+				if (!t.a.bs.Contains(t))
+				{
+					t.a.bs.Add(t);
+				}
+			}
 					}
 				}
 				if (ids.Count > 0 && !(ids.Count == 1 && (ids[0] == 0 || ids[0]==-1))){
@@ -273,6 +280,13 @@ if(typeof(T)==typeof(c))return (new cDataCache{Model=this}) as ObjectDataCache<T
 					if(t.Id == -1||t.Id==0)continue;
 					if(AutoLoadcb && null==t.b){
 						t.b= (!Lazycb?(this.b.Get(t.bId,c)): new b.Lazy{GetLazy=_=>this.b.Get(t.bId)});
+if (!Lazybcs && !Lazycb && t.bId != 0 && t.bId != -1)
+			{
+				if (!t.b.cs.Contains(t))
+				{
+					t.b.cs.Add(t);
+				}
+			}
 					}
 				}
 			};
