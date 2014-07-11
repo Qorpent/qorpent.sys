@@ -13,8 +13,9 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 namespace Test
 class A persistent
 	string X
-class B persistent 
-	A* GetA ""Тест TF"" @id=^B sql-method : (
+class B persistent
+	string Code 
+	A* GetA ""Тест TF"" @code=^B sql-method : (
 		insert @result (id) select id from A
 	)
 ";
@@ -31,7 +32,7 @@ class B persistent
 			var dt = geta.ReturnType;
 			Assert.True(dt.IsTable, "Тип данных должен быть табличным");
 			Assert.AreEqual(a,dt.TargetType,"Тип возвращаемой таблицы должен быть A");
-			var arg = geta.Arguments["id"];
+			var arg = geta.Arguments["code"];
 			Assert.NotNull(arg,"Должен был считать аргумент @id");
 			Assert.True(arg.DataType.IsIdRef,"Тип аргумента должен быть ссылкой на Id");
 			Assert.AreEqual(b,arg.DataType.TargetType,"Тип ссылки по ID должен быть B");
@@ -53,7 +54,7 @@ class B persistent
 			Assert.AreEqual(@"-- begin command SqlFunctionWriter
 IF OBJECT_ID('""dbo"".""bGetA""') IS NOT NULL DROP FUNCTION ""dbo"".""bGetA"";
 GO
-CREATE FUNCTION ""dbo"".""bGetA"" ( @id int = null  )
+CREATE FUNCTION ""dbo"".""bGetA"" ( @code nvarchar(255) = null  )
 RETURNS @result TABLE (""id"" int, ""x"" nvarchar(255)) AS BEGIN
 insert @result (id) select id from A
 RETURN;
@@ -97,7 +98,12 @@ namespace Test.ObjectCaches {
 
 		///<summary>Тест TF (Id notation)</summary>
 		public A[] GetA (int bId) {
-			return Model.A.GetAll (""select id from \""dbo\"".\""bGetA\"" ( ""+bId+"")"");
+			return Model.A.GetAll (""select id from \""dbo\"".\""bGetA\"" ( '""+bId+""')"");
+		}
+
+		///<summary>Тест TF (Code notation)</summary>
+		public A[] GetA (string bCode) {
+			return Model.A.GetAll (""select id from \""dbo\"".\""bGetA\"" ( '""+bCode+""')"");
 		}
 
 		///<summary>Тест TF</summary>

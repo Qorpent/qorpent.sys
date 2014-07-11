@@ -139,8 +139,12 @@ namespace Qorpent.Db
 			reffields
 				by Parent
 				use Code,Name
-		this* GetAllChildren @id = this sql-method : (
-			declare @path nvarchar(400) set @path = (select path from @this where id = @id)
+		this* GetAllChildren @code = this sql-method : (
+			declare @path nvarchar(400)
+			if ISNUMERIC(@code) = 1
+				set @path = (select path from @this where id = @code)
+			else
+				set @path = (select path from @this where code = @code)
 			insert @result (id) select id from @this where Path like  @path+'%'
 		)
 
