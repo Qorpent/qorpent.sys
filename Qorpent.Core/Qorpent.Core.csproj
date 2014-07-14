@@ -169,6 +169,7 @@
     <Compile Include="Model\AttributedEntity.cs" />
     <Compile Include="Model\EvalType.cs" />
     <Compile Include="Model\IWithResult.cs" />
+    <Compile Include="Model\SummaType.cs" />
     <Compile Include="Mvc\MvcClient.cs" />
     <Compile Include="IO\Resources\DefaultResourceProvider.cs" />
     <Compile Include="IO\Resources\IResource.cs" />

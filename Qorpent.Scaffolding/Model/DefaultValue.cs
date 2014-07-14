@@ -59,9 +59,13 @@ namespace Qorpent.Scaffolding.Model{
 
 							result.Value = attr;
 						}
-					}
-					else{
-						result.Value = attr.ToDecimal();
+					} else {
+						try {
+							result.Value = attr.ToDecimal();
+						} catch {
+							result.DefaultValueType = DbDefaultValueType.Expression;
+							result.Value = attr;
+						}
 					}
 				}
 				result.IsDefault = false;
