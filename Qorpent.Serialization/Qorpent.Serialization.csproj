@@ -101,6 +101,7 @@
     <Compile Include="Graphs.Dot\DotGraphProvider.cs" />
     <Compile Include="Graphs.Dot\DotLanguageUtils.cs" />
     <Compile Include="Graphs.Dot\Cluster.cs" />
+    <Compile Include="Report\ColumnTitleFormatter.cs" />
     <Compile Include="Report\ContentItemExtensions.cs" />
     <Compile Include="Report\ContentItemQuery.cs" />
     <Compile Include="Report\IContentItem.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Report\ReportFactory.cs" />
     <Compile Include="Report\ReportFactoryConfig.cs" />
     <Compile Include="Report\ReportQuery.cs" />
+    <Compile Include="Report\TitleParams.cs" />
     <Compile Include="Serialization\DotScriptSerializer.cs" />
     <Compile Include="Serialization\DotSvgSerializer.cs" />
     <Compile Include="Graphs.Dot\Graph.cs" />

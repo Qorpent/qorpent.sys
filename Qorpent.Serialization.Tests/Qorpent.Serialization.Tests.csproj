@@ -70,6 +70,7 @@
     <Compile Include="Q48SerializeNotNullCollectionsTest.cs" />
     <Compile Include="Q51JsonXmlParserFail.cs" />
     <Compile Include="Q66EmbededXmlSerialization.cs" />
+    <Compile Include="Report\TitleFormatterTests.cs" />
     <Compile Include="Selector_Tests\CssSelectorImplTests.cs" />
     <Compile Include="Selector_Tests\RegexSelectorImplTest.cs" />
     <Compile Include="serialization_set_test.cs" />
