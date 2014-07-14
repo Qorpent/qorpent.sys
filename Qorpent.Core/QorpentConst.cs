@@ -87,7 +87,10 @@ namespace Qorpent {
 			/// 	Logical finish (max date) , conformant to sql limitations and reasonable max (3000-1-1)
 			/// </summary>
 			public static readonly DateTime End = new DateTime(3000, 1, 1);
-
+			/// <summary>
+			///		Дефолтная строка форматирования даты
+			/// </summary>
+			public const string DefaultFormat = "dd.MM.yyyy";
 			/// <summary>
 			/// 	Standard date formats for usage when standard DateTime.Parse fails
 			/// 	most of cases are of Ru style and It sortable ones

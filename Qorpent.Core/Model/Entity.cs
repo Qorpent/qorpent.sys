@@ -18,6 +18,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Model {
 	/// <summary>
@@ -88,7 +89,16 @@ namespace Qorpent.Model {
 			var length = endindex - startindex;
 			return Tag.Substring(startindex, length).Trim();
 		}
-
+		/// <summary>
+		///		Типизированное получение тега
+		/// </summary>
+		/// <typeparam name="T">Типизация результата</typeparam>
+		/// <param name="tagname">Имя тега</param>
+		/// <param name="def">Дефолтное значение</param>
+		/// <returns>Типизированный результат</returns>
+		public T TagGet<T>(string tagname, T def) {
+			return TagGet(tagname).To<T>();
+		}
 
 		/// <summary>
 		/// User's comment string
