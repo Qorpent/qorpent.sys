@@ -128,7 +128,10 @@ namespace Qorpent.Scaffolding.Model{
 		public Field PrimaryKey{
 			get { return Fields.Values.FirstOrDefault(_ => _.IsPrimaryKey); }
 		}
-
+		/// <summary>
+		///		Режим доступа до таблицы
+		/// </summary>
+		public DbAccessMode AccessMode { get; set; }
 
 		/// <summary>
 		/// </summary>
@@ -149,13 +152,30 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		/// <param name="c"></param>
 		public PersistentClass Setup(IBSharpClass c){
-			XElement xml = c.Compiled;
+			var xml = c.Compiled;
 			ReadMainData(c, xml);
 			ReadDataTypes(c, xml);
 			ReadFields(c, xml);
 			ReadAllocationInfo(c, xml);
 			ReadInterfaces(c, xml);
+			ResolveAccessMode(xml);
 			return this;
+		}
+		/// <summary>
+		///		Разрешает режим доступа к описываемой таблице
+		/// </summary>
+		/// <param name="xml">Скомпилированный ласс</param>
+		private void ResolveAccessMode(XElement xml) {
+			var accessMode = xml.Attr("qorpent-access").To(true, DbAccessMode.Read);
+			if (Fields.Values.Any(_ => _.IsUnique)) {
+				AccessMode = accessMode;
+			} else {
+				if (accessMode.HasFlag(DbAccessMode.Write)) {
+					AccessMode = DbAccessMode.Write;
+				} else {
+					AccessMode = DbAccessMode.Read;
+				}
+			}
 		}
 
 		private void ReadInterfaces(IBSharpClass c, XElement xml){

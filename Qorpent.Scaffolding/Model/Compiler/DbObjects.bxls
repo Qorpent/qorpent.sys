@@ -37,16 +37,18 @@ namespace Qorpent.Db
 
 	class DbScript "Прокси класс для связываения внешнего скрипта SQL в состав генерации" prototype=dbscript abstract
 
-	class TableBase "Абстрактная таблица" abstract prototype=dbtable
-		implements IWithId 
+	class TableBase "Абстрактная таблица" abstract prototype=dbtable 
 		implements IWithVersion
 		import BaseObject
-		int Id "Идентификатор" primarykey identity idx=10  override=Entity
-		datetime Version "Версия записи" default=(CURRENT_TIMESTAMP) idx=980  override=Entity
-		int ImportId "Идентификатор старой сущности при миграции" idx=990 nocode
+		import IWithId
 		view Full 
 			selffields
 
+	class IWithId "Сущность с идентификатором" abstract
+		implements IWithId
+		int Id "Идентификатор" primarykey identity idx=10  override=Entity
+		datetime Version "Версия записи" default=(CURRENT_TIMESTAMP) idx=980  override=Entity
+		int ImportId "Идентификатор старой сущности при миграции" idx=990 nocode
 
 	class IWithCode "Сущность с кодом" abstract
 		implements IWithCode
@@ -137,6 +139,14 @@ namespace Qorpent.Db
 			reffields
 				by Parent
 				use Code,Name
+		this* GetAllChildren @code = this sql-method : (
+			declare @path nvarchar(400)
+			if ISNUMERIC(@code) = 1
+				set @path = (select path from @this where id = @code)
+			else
+				set @path = (select path from @this where code = @code)
+			insert @result (id) select id from @this where Path like  @path+'%'
+		)
 
 	class IWithActivity "Интерфейс сущности со сроками существования" abstract
 		implements IWithDateRange

@@ -114,7 +114,19 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("\t\t\t\t\t\tt." + f.Name + "= (!Lazy" + f.Table.TargetClass.Name + f.Name + "?(this." +
 			            f.ReferenceClass.Name + ".Get(t." + f.Name + f.ReferenceField + ",c)): new " + f.ReferenceClass.Name +
 			            ".Lazy{GetLazy=_=>this." + f.ReferenceClass.Name + ".Get(t." + f.Name + f.ReferenceField + ")});");
+			if (f.IsReverese){
+				o.WriteLine(@"if (!Lazy" + f.ReferenceClass.Name+ f.ReverseCollectionName + @" && !Lazy" + f.Table.TargetClass.Name + f.Name + @" && t." + f.Name + f.ReferenceField + @" != 0 && t." + f.Name + f.ReferenceField + @" != -1)
+			{
+				if (!t."+f.Name+@"."+f.ReverseCollectionName+@".Contains(t))
+				{
+					t." + f.Name + @"." + f.ReverseCollectionName + @".Add(t);
+				}
+			}");
+			}
+
 			o.WriteLine("\t\t\t\t\t}");
+
+
 		}
 
 		private void GenerateSupportProperties(){
