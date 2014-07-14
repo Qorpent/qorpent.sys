@@ -44,7 +44,10 @@ namespace Qorpent.Scaffolding.Model{
 		///     Признак строкового параметра
 		/// </summary>
 		public bool IsDateTime{
-			get { return CSharpDataType.ToLowerInvariant() == "datetime"; }
+			get {
+				var cSharpType = CSharpDataType.ToLowerInvariant();
+				return cSharpType == "system.datetime" || cSharpType == "datetime";
+			}
 		}
 
 		/// <summary>

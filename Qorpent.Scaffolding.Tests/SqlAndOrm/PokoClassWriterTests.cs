@@ -7,6 +7,56 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 	[TestFixture]
 	public class PokoClassWriterTests{
 		[Test]
+		public void DefaultCSharpValueTest() {
+			var model = PersistentModel.Compile(@"
+class a prototype=dbtable
+	datetime Date ""DateTime"" csharp-default='Qorpent.QorpentConst.Date.End'
+");
+			var code = new PokoClassWriter(model["a"]) { WithHeader = false }.ToString().Replace("\"", "\"\"");
+			Console.WriteLine(code);
+			Assert.AreEqual(@"
+using System;
+using System.Collections.Generic;
+#if !NOQORPENT
+using Qorpent.Serialization;
+using Qorpent.Model;
+#endif
+namespace  {
+	///<summary>
+	///
+	///</summary>
+#if !NOQORPENT
+	[Serialize]
+#endif
+	public partial class a  {
+		///<summary>Lazy load nest type</summary>
+		public class Lazy:a{
+			///<summary>Function to get lazy</summary>
+			public Func<a,a> GetLazy;
+		}
+		///<summary>
+		/// 
+		///</summary>
+		public virtual Int32 Id {get {return NativeId;} set{NativeId=value;}}
+
+		///<summary>Direct access to Id</summary>
+		protected Int32 NativeId;
+
+
+		///<summary>
+		///DateTime 
+		///</summary>
+		public virtual System.DateTime Date {get {return NativeDate;} set{NativeDate=value;}}
+
+		///<summary>Direct access to Date</summary>
+		protected System.DateTime NativeDate = Qorpent.QorpentConst.Date.End;
+
+
+	}
+}".Trim(), code.Trim());
+
+		}
+		[Test]
 		public void SimplestTable()
 		{
 			var model = PersistentModel.Compile(@"

@@ -139,8 +139,10 @@ namespace Qorpent.Db
 				use Code,Name
 
 	class IWithActivity "Интерфейс сущности со сроками существования" abstract
-		datetime Start "Признак начала существования элемента" default=('19000101') idx=240 
-		datetime Finish "Признак окончания существования элемента" default=('30000101') idx=245
+		implements IWithDateRange
+		implements IWithActive
+		datetime Start "Признак начала существования элемента" default=('19000101') idx=240 csharp-default='Qorpent.QorpentConst.Date.Begin'
+		datetime Finish "Признак окончания существования элемента" default=('30000101') idx=245 csharp-default='Qorpent.QorpentConst.Date.End'
 		bool Active "Признак общей активности"
 		bool IsActive @id=int @d=datetime : (
 			if exists (
