@@ -53,5 +53,9 @@ namespace Qorpent.Utils.XDiff{
 		/// </summary>
 		/// <remarks></remarks>
 		public bool TreatNewAttributesAsChanges { get; set; }
+		/// <summary>
+		/// Рассматривать удаленные атрибуты как измененные до пустого значения
+		/// </summary>
+		public bool TreatDeleteAttributesAsChanges { get; set; }
 	}
 }

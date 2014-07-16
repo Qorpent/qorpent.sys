@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using NUnit.Framework;
-
+using Qorpent.Utils.Extensions;
 using Qorpent.Utils.XDiff;
 
 namespace Qorpent.Utils.Tests.XDiff
@@ -261,6 +261,28 @@ ChangeAttribute n1
 
 			diff.Apply(b, opts);
 			Assert.False(new XDiffGenerator().IsDiff(b, n));
+		}
+
+		[Test]
+		public void CanMergeNonSeparateDeleteAsChangesAttributes()
+		{
+			var b = XElement.Parse("<a><z id='1' name='2' a='3' b='4' c='5' x='aaa6'/></a>");
+			var n = XElement.Parse("<a><z id='1' name='2' a='3' b='3' /></a>");
+			var opts = new XDiffOptions { MergeAttributeChanges = true, TreatDeleteAttributesAsChanges = true };
+			var diff = new XDiffGenerator(opts).GetDiff(b, n).ToArray();
+			var log = diff.LogToString();
+			Console.WriteLine(log);
+			Assert.AreEqual(1, diff.Length);
+			Assert.AreEqual(@"ChangeAttribute n0
+	BasisElement name=z id=1
+	NewestElement : (<update b=""3"" c=""0"" x="""" />)
+".LfOnly().Trim(), log.LfOnly().Trim());
+
+			diff.Apply(b, opts);
+			Console.WriteLine(b);
+			Assert.AreEqual(@"<a>
+  <z id=""1"" name=""2"" a=""3"" b=""3"" c=""0"" x="""" />
+</a>".Trim().LfOnly(),b.ToString().Trim().LfOnly());
 		}
 
 
