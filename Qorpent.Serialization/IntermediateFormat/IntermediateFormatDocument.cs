@@ -66,7 +66,7 @@ namespace Qorpent.IntermediateFormat {
 			if (null == query){
 				throw new IntermediateFormatException("query was not given for document output",null);
 			}
-			var xml = GetXmlRepresentation(query);
+			var xml = ToXml(query);
 			if (query.Format == IntermediateFormatOutputType.Xml){
 				using (var sw = new StreamWriter(output, Encoding.UTF8)){
 					sw.Write(xml.ToString());
@@ -83,7 +83,8 @@ namespace Qorpent.IntermediateFormat {
 		/// </summary>
 		/// <param name="query"></param>
 		/// <returns></returns>
-		protected virtual  XElement GetXmlRepresentation(IntermediateFormatQuery query){
+		public virtual  XElement ToXml(IntermediateFormatQuery query=null){
+			query = query ?? Query;
 			var xser = new XmlSerializer();
 			var result = new XElement(IntermediateFormatSyntax.DocumentElement);
 			result.SetAttributeValue("code",Code);
@@ -111,7 +112,7 @@ namespace Qorpent.IntermediateFormat {
 				
 			}
 			foreach (var document in Children){
-				result.Add(document.GetXmlRepresentation(query));
+				result.Add(document.ToXml(query));
 			}
 			return result;
 		}

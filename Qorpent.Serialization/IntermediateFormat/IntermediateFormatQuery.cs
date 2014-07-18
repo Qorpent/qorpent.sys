@@ -39,6 +39,15 @@ namespace Qorpent.IntermediateFormat{
 			get { return Get<string>("logformat"); }
 			set { Set("logformat", value); }
 		}
+
+		/// <summary>
+		/// Формат ведения журнала обработки запроса
+		/// </summary>
+		public IntermediateFormatLayer Layers
+		{
+			get { return Get<IntermediateFormatLayer>("layers"); }
+			set { Set("layers", value); }
+		}
 		/// <summary>
 		/// Заносит недообработанные парамтеры в конфигурацию
 		/// </summary>
