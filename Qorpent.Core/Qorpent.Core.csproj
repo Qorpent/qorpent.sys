@@ -111,6 +111,7 @@
     <Compile Include="Config\DictionaryCompatibleConfig.cs" />
     <Compile Include="Config\HierarchyElement.cs" />
     <Compile Include="Config\IConfig.cs" />
+    <Compile Include="Config\IConfigurableFromDictionary.cs" />
     <Compile Include="Config\IXmlConfigSource.cs" />
     <Compile Include="Config\TreeConfigBase.cs" />
     <Compile Include="Config\TreeConfigBaseElementsList.cs" />
@@ -270,6 +271,8 @@
     <Compile Include="Serialization\ICustomSelectorImpl.cs" />
     <Compile Include="Graphs\IGraphConvertible.cs" />
     <Compile Include="Graphs\IGraphSource.cs" />
+    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatOutputType.cs" />
+    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatQuery.cs" />
     <Compile Include="Serialization\ISelector.cs" />
     <Compile Include="Serialization\ISelectorImpl.cs" />
     <Compile Include="Serialization\ISerializerXsltExtension.cs" />
