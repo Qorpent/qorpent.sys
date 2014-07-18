@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Qorpent.IntermediateFormat {
+namespace Qorpent.Serialization.IntermediateFormat {
 	/// <summary>
 	///		Описание слоёв документа промежуточного формата
 	/// </summary>
@@ -21,19 +21,23 @@ namespace Qorpent.IntermediateFormat {
 		/// <summary>
 		///		Особый слой (пересечение <see cref="Row"/> и <see cref="Col"/>)
 		/// </summary>
-		Special = 4,
+		SpecialRowCol = 4,
 		/// <summary>
 		///		Слой данных
 		/// </summary>
-		Data,
+		Data =8 ,
 		/// <summary>
 		///		Слой настроек
 		/// </summary>
-		Settings,
+		Settings=16,
 		/// <summary>
 		///		Слой информация
 		/// </summary>
-		Info,
+		Info=32,
+		/// <summary>
+		/// Отладочная информация
+		/// </summary>
+		Debug = 64,
 		/// <summary>
 		///		По умолчанию <see cref="Undefined"/>
 		/// </summary>
