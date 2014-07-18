@@ -101,10 +101,12 @@ namespace Qorpent.IntermediateFormat {
 					result.SetAttributeValue(key, value);
 				}
 				else{
-					if (value.GetType().IsDefined(typeof (SerializeAttribute), true)){
-						var xml = XElement.Parse(xser.Serialize("item", value));
+					if (value.GetType().IsDefined(typeof(SerializeAttribute), true) || value.GetType().Name.Contains("AnonymousType")){
+						var xml = XElement.Parse(xser.Serialize("body", value)).Elements().First();
 						var item = new XElement(IntermediateFormatSyntax.DocumentItemElement);
-						item.SetAttributeValue("type",value.GetType().FullName);
+						item.SetAttributeValue("code",key);
+						item.SetAttributeValue("type",value.GetType().Name);
+						
 						item.Add(xml);
 						result.Add(item);
 					}

@@ -6,10 +6,7 @@ namespace Qorpent.IntermediateFormat {
 	/// </summary>
 	[Flags]
 	public enum IntermediateFormatLayer:ulong {
-		/// <summary>
-		///		Неопределённый слой
-		/// </summary>
-		Undefined = 0,
+	
 		/// <summary>
 		///		Строка
 		/// </summary>
@@ -42,9 +39,6 @@ namespace Qorpent.IntermediateFormat {
 		/// Документ
 		/// </summary>
 		StandaloneDocument = 128,
-		/// <summary>
-		///		По умолчанию <see cref="Undefined"/>
-		/// </summary>
-		Default = Undefined
+		
 	}
 }
