@@ -70,6 +70,7 @@ namespace Qorpent.IntermediateFormat {
 			if (query.Format == IntermediateFormatOutputType.Xml){
 				using (var sw = new StreamWriter(output, Encoding.UTF8)){
 					sw.Write(xml.ToString());
+					sw.Flush();
 				}
 			}else if (query.Format == IntermediateFormatOutputType.Json){
 				throw new NotSupportedException("JSON is not supportedas output format  for now");
@@ -89,10 +90,12 @@ namespace Qorpent.IntermediateFormat {
 			result.SetAttributeValue("name",Name);
 			result.SetAttributeValue("prototype",Prototype);
 			result.SetAttributeValue("layer",Layer);
-			foreach (var pair in this){
+			foreach (var pair in options){
 				var key = pair.Key;
+				
 				if(IsSystemDefined(key))continue;
 				var value = pair.Value;
+				if (value == null || (value is string && string.IsNullOrWhiteSpace(value as string))) continue;
 				if (value.GetType().IsValueType || value is string){
 					result.SetAttributeValue(key, value);
 				}
