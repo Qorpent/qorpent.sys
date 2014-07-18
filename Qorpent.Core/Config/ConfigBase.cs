@@ -80,6 +80,12 @@ namespace Qorpent.Config {
 		public void SetParent(IConfig config) {
 			_parent = config;
 		}
+		/// <summary>
+		/// Сброс родительского конфига
+		/// </summary>
+		public void RemoveParent(){
+			_parent = null;
+		}
 
 		/// <summary>
 		/// Заморозка

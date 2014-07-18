@@ -271,6 +271,9 @@
     <Compile Include="Serialization\ICustomSelectorImpl.cs" />
     <Compile Include="Graphs\IGraphConvertible.cs" />
     <Compile Include="Graphs\IGraphSource.cs" />
+    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatDocument.cs" />
+    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatException.cs" />
+    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatInvalidQueryException.cs" />
     <Compile Include="Serialization\IntermediateFormat\IntermediateFormatOutputType.cs" />
     <Compile Include="Serialization\IntermediateFormat\IntermediateFormatQuery.cs" />
     <Compile Include="Serialization\ISelector.cs" />

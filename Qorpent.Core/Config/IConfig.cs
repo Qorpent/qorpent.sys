@@ -46,5 +46,10 @@ namespace Qorpent.Config {
 		/// 
 		/// </summary>
 		void Stornate();
+
+		/// <summary>
+		/// —брос родительского конфига
+		/// </summary>
+		void RemoveParent();
 	}
 }
