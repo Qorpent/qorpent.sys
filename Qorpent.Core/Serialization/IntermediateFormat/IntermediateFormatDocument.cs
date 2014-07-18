@@ -8,12 +8,22 @@ namespace Qorpent.Serialization.IntermediateFormat {
 	/// Переносимая структура в формате IntermediateDocument
 	/// </summary>
 	public class IntermediateFormatDocument: ConfigBase {
+		
 		/// <summary>
 		/// Ссылка на запрос - контейнер
 		/// </summary>
 		public IntermediateFormatQuery Query{
 			get { return Get<IntermediateFormatQuery>("query"); }
 			set { Set("query",value); }
+		}
+
+		/// <summary>
+		/// Ссылка на запрос - контейнер
+		/// </summary>
+		public IntermediateFormatLayer Layer
+		{
+			get { return Get<IntermediateFormatLayer>("layer"); }
+			set { Set("layer", value); }
 		}
 
 		/// <summary>

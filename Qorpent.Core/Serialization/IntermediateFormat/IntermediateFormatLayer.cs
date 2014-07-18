@@ -5,7 +5,7 @@ namespace Qorpent.Serialization.IntermediateFormat {
 	///		Описание слоёв документа промежуточного формата
 	/// </summary>
 	[Flags]
-	public enum IntermediateLayerFormat {
+	public enum IntermediateFormatLayer:ulong {
 		/// <summary>
 		///		Неопределённый слой
 		/// </summary>
@@ -38,6 +38,10 @@ namespace Qorpent.Serialization.IntermediateFormat {
 		/// Отладочная информация
 		/// </summary>
 		Debug = 64,
+		/// <summary>
+		/// Документ
+		/// </summary>
+		StandaloneDocument = 128,
 		/// <summary>
 		///		По умолчанию <see cref="Undefined"/>
 		/// </summary>

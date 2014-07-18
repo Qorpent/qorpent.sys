@@ -276,6 +276,7 @@
     <Compile Include="Serialization\IntermediateFormat\IntermediateFormatInvalidQueryException.cs" />
     <Compile Include="Serialization\IntermediateFormat\IntermediateFormatOutputType.cs" />
     <Compile Include="Serialization\IntermediateFormat\IntermediateFormatQuery.cs" />
+    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatLayer.cs" />
     <Compile Include="Serialization\ISelector.cs" />
     <Compile Include="Serialization\ISelectorImpl.cs" />
     <Compile Include="Serialization\ISerializerXsltExtension.cs" />
