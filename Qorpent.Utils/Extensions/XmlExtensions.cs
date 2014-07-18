@@ -301,7 +301,23 @@ namespace Qorpent.Utils.Extensions {
 			Apply(element, result);
 			return result;
 		}
-
+		/// <summary>
+		///		Применение атрибутов <see cref="XElement"/> к целевому объекту
+		/// </summary>
+		/// <typeparam name="T">Типизация целевого объекта</typeparam>
+		/// <param name="xElement">Исходный <see cref="XElement"/></param>
+		/// <returns>Результирующий объект</returns>
+		public static T Apply<T>(this XElement xElement) where T : class, new() {
+			var result = new T();
+			if (result is ICustomXmlApplyer) {
+				((ICustomXmlApplyer) result).Apply(xElement);
+			} else {
+				foreach (var attribute in xElement.Attributes()) {
+					result.SetValue(attribute.Name.LocalName, attribute.Value, true, true, true, true, true);
+				}
+			}
+			return result;
+		}
 		/// <summary>
 		/// 	Applys element's atributes to target object
 		/// </summary>
