@@ -68,5 +68,9 @@ namespace Qorpent.Mvc{
             Messages.Add(message);
             return this;
         }
+		/// <summary>
+		/// 
+		/// </summary>
+	    public static ValidationResult OK = new ValidationResult {IsValid = true};
     }
 }
