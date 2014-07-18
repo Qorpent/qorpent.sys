@@ -3,7 +3,7 @@ using Qorpent.Config;
 using Qorpent.Log;
 using Qorpent.Mvc;
 
-namespace Qorpent.Serialization.IntermediateFormat{
+namespace Qorpent.IntermediateFormat{
 	/// <summary>
 	/// Запрос на промежуточный формат
 	/// </summary>

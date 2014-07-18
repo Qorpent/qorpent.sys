@@ -16,13 +16,15 @@
 // 
 // PROJECT ORIGIN: Qorpent.Dsl/XmlInterpolationPreprocessor.cs
 #endregion
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Qorpent.Dsl;
 using Qorpent.IoC;
 
-namespace Qorpent.Dsl {
+namespace Qorpent.Qxi {
 	/// <summary>
 	/// 	Замещает в исходном XML конструкции вида ${} специальным набором вложенных элементов и заместителей
 	/// </summary>

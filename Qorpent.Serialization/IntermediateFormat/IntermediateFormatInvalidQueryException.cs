@@ -1,7 +1,7 @@
 ﻿using System;
 using Qorpent.Mvc;
 
-namespace Qorpent.Serialization.IntermediateFormat {
+namespace Qorpent.IntermediateFormat {
 	/// <summary>
 	/// Исключение неверной конфигурации запроса
 	/// </summary>

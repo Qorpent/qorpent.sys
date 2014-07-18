@@ -101,6 +101,13 @@
     <Compile Include="Graphs.Dot\DotGraphProvider.cs" />
     <Compile Include="Graphs.Dot\DotLanguageUtils.cs" />
     <Compile Include="Graphs.Dot\Cluster.cs" />
+    <Compile Include="IntermediateFormat\IntermediateFormatDocument.cs" />
+    <Compile Include="IntermediateFormat\IntermediateFormatException.cs" />
+    <Compile Include="IntermediateFormat\IntermediateFormatInvalidQueryException.cs" />
+    <Compile Include="IntermediateFormat\IntermediateFormatLayer.cs" />
+    <Compile Include="IntermediateFormat\IntermediateFormatOutputType.cs" />
+    <Compile Include="IntermediateFormat\IntermediateFormatQuery.cs" />
+    <Compile Include="IntermediateFormat\IntermediateFormatSyntax.cs" />
     <Compile Include="Report\ColumnTitleFormatter.cs" />
     <Compile Include="Report\ContentItemExtensions.cs" />
     <Compile Include="Report\ContentItemQuery.cs" />

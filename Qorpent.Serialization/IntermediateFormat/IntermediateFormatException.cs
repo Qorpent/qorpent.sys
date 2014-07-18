@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Qorpent.Serialization.IntermediateFormat {
+namespace Qorpent.IntermediateFormat {
 	/// <summary>
 	/// Общая ошибка ZIF
 	/// </summary>

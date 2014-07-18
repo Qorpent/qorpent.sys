@@ -271,12 +271,6 @@
     <Compile Include="Serialization\ICustomSelectorImpl.cs" />
     <Compile Include="Graphs\IGraphConvertible.cs" />
     <Compile Include="Graphs\IGraphSource.cs" />
-    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatDocument.cs" />
-    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatException.cs" />
-    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatInvalidQueryException.cs" />
-    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatOutputType.cs" />
-    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatQuery.cs" />
-    <Compile Include="Serialization\IntermediateFormat\IntermediateFormatLayer.cs" />
     <Compile Include="Serialization\ISelector.cs" />
     <Compile Include="Serialization\ISelectorImpl.cs" />
     <Compile Include="Serialization\ISerializerXsltExtension.cs" />
@@ -468,6 +462,8 @@
     <EmbeddedResource Include=".\**\*.*resource" />
     <QorpentReference Include="*.import" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Serialization\IntermediateFormat\" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

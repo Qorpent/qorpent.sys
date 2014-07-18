@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Qorpent.Serialization.IntermediateFormat {
+namespace Qorpent.IntermediateFormat {
 	/// <summary>
 	///		Описание слоёв документа промежуточного формата
 	/// </summary>
