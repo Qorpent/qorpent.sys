@@ -326,13 +326,13 @@ namespace Qorpent.Data.DataCache
 					Set(external);
 					var exids = new[]{((IWithId) external).Id};
 					if (cascade){
-						AfterUpdateCache(exids,c,options);
+						AfterUpdateCache(exids, c, new ObjectCacheHints { NoChildren = true });
 					}
 					return exids.ToList();
 				}
 			}
 			else{
-				var externals = FindByExternals(eq);
+				var externals = FindByExternals(eq).ToArray();
 				if (externals.Any()){
 					var exarray = externals.ToArray();
 					foreach (var e in externals.ToArray()){
@@ -340,7 +340,7 @@ namespace Qorpent.Data.DataCache
 					}
 					var exids = exarray.OfType<IWithId>().Select(_ => _.Id).ToArray();
 					if (cascade){
-						AfterUpdateCache(exids,c,options);
+						AfterUpdateCache(exids, c, new ObjectCacheHints { NoChildren = true });
 					}
 					return exids.ToList();
 				}

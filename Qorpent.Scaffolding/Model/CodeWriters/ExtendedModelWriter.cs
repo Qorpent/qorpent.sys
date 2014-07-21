@@ -83,7 +83,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		private void GenerateSetupCollection(Field f){
 			string alprop = "AutoLoad" + f.ReferenceClass.Name + f.ReverseCollectionName;
 
-			o.WriteLine("\t\t\t\t\tif(" + alprop + "){");
+			o.WriteLine("\t\t\t\t\tif((" + alprop + ") && (!(ctx is ObjectCacheHints) || ((ctx is ObjectCacheHints) && !((ObjectCacheHints) ctx).NoChildren))){");
 
 			o.WriteLine("\t\t\t\t\t\tvar q = string.Format(\"(" + f.Name + " in ({0}))\",inids);");
 			string cache =

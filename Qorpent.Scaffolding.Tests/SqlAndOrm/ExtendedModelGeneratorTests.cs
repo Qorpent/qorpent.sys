@@ -32,6 +32,15 @@ namespace Orm.Adapters {
 		private IUserLog _log;
 		private IDatabaseConnectionProvider _connectionProvider;
 		private IUserLog _sqlLog;
+		/// <summary>
+		/// Внешние провайдеры данных
+		/// </summary>
+		[Inject]
+		public IList<IExternalDataProvider> ExternalProviders{
+			get { return _externalProviders ?? (_externalProviders =  new List<IExternalDataProvider>()); }
+			set { _externalProviders = value; }
+		}
+		private IList<IExternalDataProvider> _externalProviders;
 		///<summary>initiator for caches</summary>
 		protected ObjectDataCache<T> InitCache<T>()where T:class,new(){
 			var result = CreateCache<T>();
@@ -40,6 +49,7 @@ namespace Orm.Adapters {
 			result.Log = Log; 
 			result.SqlLog = SqlLog;
 			result.ConnectionString = ConnectionString;
+			result.ExternalProviders = this.ExternalProviders;
 			SetupLoadBehavior(result);
 			return result;
 		}
@@ -136,6 +146,15 @@ namespace Orm.Adapters {
 		private IUserLog _log;
 		private IDatabaseConnectionProvider _connectionProvider;
 		private IUserLog _sqlLog;
+		/// <summary>
+		/// Внешние провайдеры данных
+		/// </summary>
+		[Inject]
+		public IList<IExternalDataProvider> ExternalProviders{
+			get { return _externalProviders ?? (_externalProviders =  new List<IExternalDataProvider>()); }
+			set { _externalProviders = value; }
+		}
+		private IList<IExternalDataProvider> _externalProviders;
 		///<summary>initiator for caches</summary>
 		protected ObjectDataCache<T> InitCache<T>()where T:class,new(){
 			var result = CreateCache<T>();
@@ -144,6 +163,7 @@ namespace Orm.Adapters {
 			result.Log = Log; 
 			result.SqlLog = SqlLog;
 			result.ConnectionString = ConnectionString;
+			result.ExternalProviders = this.ExternalProviders;
 			SetupLoadBehavior(result);
 			return result;
 		}
@@ -213,7 +233,7 @@ if(typeof(T)==typeof(c))return (new cDataCache{Model=this}) as ObjectDataCache<T
 				}
 				if (ids.Count > 0 && !(ids.Count == 1 && (ids[0] == 0 || ids[0]==-1))){
 					var inids = string.Join("","",ids.Where(_=>_!=0 && _!=-1));
-					if(AutoLoadabs){
+					if((AutoLoadabs) && (!(ctx is ObjectCacheHints) || ((ctx is ObjectCacheHints) && !((ObjectCacheHints) ctx).NoChildren))){
 						var q = string.Format(""(a in ({0}))"",inids);
 						if(Lazyabs){
 							foreach(var t in targets){
@@ -254,7 +274,7 @@ if (!Lazyabs && !Lazyba && t.aId != 0 && t.aId != -1)
 				}
 				if (ids.Count > 0 && !(ids.Count == 1 && (ids[0] == 0 || ids[0]==-1))){
 					var inids = string.Join("","",ids.Where(_=>_!=0 && _!=-1));
-					if(AutoLoadbcs){
+					if((AutoLoadbcs) && (!(ctx is ObjectCacheHints) || ((ctx is ObjectCacheHints) && !((ObjectCacheHints) ctx).NoChildren))){
 						var q = string.Format(""(b in ({0}))"",inids);
 						if(Lazybcs){
 							foreach(var t in targets){
@@ -297,6 +317,7 @@ if (!Lazybcs && !Lazycb && t.bId != 0 && t.bId != -1)
 		}
 	}
 }
+
 ".Trim(), code.Trim());
 		}
 	}
