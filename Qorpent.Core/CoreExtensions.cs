@@ -317,9 +317,14 @@ namespace Qorpent.Utils.Extensions {
             {
                 var result = Activator.CreateInstance(type);
                 var subitems = x.Split('+');
+	            var utype = Enum.GetUnderlyingType(type);
                 foreach (var s in subitems)
                 {
-                    result = (int)result | (int)ConvertEnum(type, s);
+	                if (utype == typeof (int)) {
+		                result = (int) result | (int) ConvertEnum(type, s);
+	                }else if (utype == typeof (ulong)) {
+		                result = (ulong) result | (ulong) ConvertEnum(type, s);
+	                }
                 }
                 return result;
             }
