@@ -17,7 +17,14 @@ namespace Qorpent.Data.DataCache
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class ObjectDataCache<T>:IObjectDataCache<T> where T:class,new(){
-		
+		/// <summary>
+		/// 
+		/// </summary>
+		[Inject]
+		public IList<IExternalDataProvider> ExternalProviders{
+			get { return _externalProviders; }
+			set { _externalProviders = value; }
+		}
 
 		/// <summary>
 		/// Служба генерации соединений
@@ -87,7 +94,23 @@ namespace Qorpent.Data.DataCache
 			}
 			
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public T GetByExternals(object key){
+			if (null == ExternalProviders || 0 == ExternalProviders.Count){
+				return null;
+			}
+			foreach (var externalDataProvider in ExternalProviders){
+				if (externalDataProvider.Supports<T>()){
+					var value = externalDataProvider.Get(this,key);
+					if (null != value) return value;
+				}
+			}
+			return null;
+		}
 
 		/// <summary>
 		/// Возвращает сущность по коду или ID
@@ -100,7 +123,9 @@ namespace Qorpent.Data.DataCache
 			var isid = IsId(key, out id, out code);
 			if (isid){
 				if (!_nativeCache.ContainsKey(id)){
-					UpdateCache("(Id = "+id+")",connection:connection);
+
+					UpdateCache("(Id = " + id + ")", connection: connection, options: new KeyQuery { Key = id });
+					
 				}
 				if (!_nativeCache.ContainsKey(id)){
 					_nativeCache[id] = null;
@@ -110,7 +135,7 @@ namespace Qorpent.Data.DataCache
 			else{
 				if (!_nativeCodeCache.ContainsKey(code))
 				{
-					UpdateCache("(Code = '" + code.ToSqlString()+"')",connection:connection);
+					UpdateCache("(Code = '" + code.ToSqlString() + "')", connection: connection, options: new KeyQuery{Key = code});
 				}
 				if (!_nativeCodeCache.ContainsKey(code))
 				{
@@ -119,6 +144,16 @@ namespace Qorpent.Data.DataCache
 				return _nativeCodeCache[code];
 			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		private class KeyQuery{
+			/// <summary>
+			/// 
+			/// </summary>
+			public object Key;
+		}
+		
 
 		/// <summary>
 		/// Проверяет что ключ - ID
@@ -207,6 +242,7 @@ namespace Qorpent.Data.DataCache
 		private IUserLog _log;
 		private IDatabaseConnectionProvider _connectionProvider;
 		private IUserLog _sqlLog;
+		private IList<IExternalDataProvider> _externalProviders =new List<IExternalDataProvider>();
 
 		/// <summary>
 		/// Возвращает все по запросу
@@ -276,6 +312,37 @@ namespace Qorpent.Data.DataCache
 		/// <param name="allids"></param>
 		/// <param name="cascade"></param>
 		public List<int> UpdateSingleQuery(string query, object options, IDbConnection c, List<int> allids, bool cascade){
+
+			object eq = query;
+			if (options is KeyQuery){
+				eq = (options as KeyQuery).Key;
+				var external = GetByExternals(eq);
+				if (null != external){
+					Set(external);
+					var exids = new[]{((IWithId) external).Id};
+					if (cascade){
+						AfterUpdateCache(exids,c,options);
+					}
+					return exids.ToList();
+				}
+			}
+			else{
+				var externals = FindByExternals(eq);
+				if (externals.Any()){
+					var exarray = externals.ToArray();
+					foreach (var e in externals.ToArray()){
+						Set(e);
+					}
+					var exids = exarray.OfType<IWithId>().Select(_ => _.Id).ToArray();
+					if (cascade){
+						AfterUpdateCache(exids,c,options);
+					}
+					return exids.ToList();
+				}
+			}
+			
+			
+
 			allids = allids ?? new List<int>();
 			var q = query;
 			if (!q.Contains("from")){
@@ -319,6 +386,21 @@ namespace Qorpent.Data.DataCache
 				}
 			}
 			return allids;
+		}
+
+		private IEnumerable<T> FindByExternals(object query){
+			if (null == ExternalProviders || 0 == ExternalProviders.Count) yield break;
+			foreach (var externalDataProvider in ExternalProviders){
+				if (externalDataProvider.Supports<T>(query)){
+					var externals = externalDataProvider.Find(this, query);
+					if (null != externals && externals.Any()){
+						foreach (var external in externals.ToArray()){
+							yield return external;
+						}
+						yield break;
+					}
+				}
+			}
 		}
 
 		/// <summary>

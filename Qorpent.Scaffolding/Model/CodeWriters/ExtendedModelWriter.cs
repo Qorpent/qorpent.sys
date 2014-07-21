@@ -134,6 +134,15 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		private IUserLog _log;
 		private IDatabaseConnectionProvider _connectionProvider;
 		private IUserLog _sqlLog;
+		/// <summary>
+		/// Внешние провайдеры данных
+		/// </summary>
+		[Inject]
+		public IList<IExternalDataProvider> ExternalProviders{
+			get { return _externalProviders ?? (_externalProviders =  new List<IExternalDataProvider>()); }
+			set { _externalProviders = value; }
+		}
+		private IList<IExternalDataProvider> _externalProviders;
 		///<summary>initiator for caches</summary>
 		protected ObjectDataCache<T> InitCache<T>()where T:class,new(){
 			var result = CreateCache<T>();
@@ -142,6 +151,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			result.Log = Log; 
 			result.SqlLog = SqlLog;
 			result.ConnectionString = ConnectionString;
+			result.ExternalProviders = this.ExternalProviders;
 			SetupLoadBehavior(result);
 			return result;
 		}
