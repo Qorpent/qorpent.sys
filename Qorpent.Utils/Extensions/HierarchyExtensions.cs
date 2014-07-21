@@ -48,7 +48,24 @@ namespace Qorpent.Utils.Extensions {
 			foreach (var i in item.Children.SelectMany(child => child.GetSelfAndDescendantsFromHierarchy())) {
 				yield return i;
 			}
-		}	
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="item"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static IEnumerable<T> GetSelfAndDescendantsFromSimpleHierarchy<T>(this T item)
+			where T : class, IWithSimpleHierarchy<T>, IWithCode, IWithId
+		{
+			if (null == item) yield break;
+			yield return item;
+			foreach (var i in item.Children.SelectMany(child => child.GetSelfAndDescendantsFromSimpleHierarchy()))
+			{
+				yield return i;
+			}
+		}
 
 	
 

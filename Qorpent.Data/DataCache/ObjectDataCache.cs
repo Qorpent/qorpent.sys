@@ -280,13 +280,18 @@ namespace Qorpent.Data.DataCache
 				var allids = new List<int>();
 				bool cascade = true;
 				if (null == connection){
-					//no self created
-					using (var c = ConnectionProvider.GetConnection(ConnectionString)){
-						if (string.IsNullOrWhiteSpace(c.ConnectionString)){
-							throw new Exception("bad connection!");
+					if (string.IsNullOrWhiteSpace(ConnectionString)){
+						UpdateSingleQuery(query, options, null, allids, cascade);
+					}
+					else{
+						//no self created
+						using (var c = ConnectionProvider.GetConnection(ConnectionString)){
+							if (string.IsNullOrWhiteSpace(c.ConnectionString)){
+								throw new Exception("bad connection!");
+							}
+							UpdateSingleQuery(query, options, c, allids, cascade);
+							c.Close();
 						}
-						UpdateSingleQuery(query, options, c, allids, cascade);
-						c.Close();
 					}
 				}
 				else{
@@ -344,6 +349,7 @@ namespace Qorpent.Data.DataCache
 			
 
 			allids = allids ?? new List<int>();
+			if (null == c) return allids;
 			var q = query;
 			if (!q.Contains("from")){
 				q = "select Id from " + Adapter.GetTableName();
