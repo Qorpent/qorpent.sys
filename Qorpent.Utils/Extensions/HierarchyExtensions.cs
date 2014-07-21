@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Qorpent.Model;
 
@@ -32,6 +33,32 @@ namespace Qorpent.Utils.Extensions {
 				c.NormalizeParentInHierarchy();
 			}
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static IEnumerable<T> GetSelfAndDescendantsFromSimpleHierarchy<T>(this T item, bool useDebug = false, int level = 0)
+			where T : class, IWithSimpleHierarchy<T>, IWithCode, IWithId {
+			if (null == item)
+				yield break;
+			yield return item;
+			if (useDebug) {
+				for (var i = 0; i < level; i++) {
+					Console.Write("\t");
+				}
+				Console.Write("Code: " + item.Code);
+				if (item.Children.Count > 0) {
+					Console.Write(" (children: " + item.Children.Count + ")");
+				}
+				Console.Write("\n");
+			}
+
+			foreach (var k in item.Children.SelectMany(child => child.GetSelfAndDescendantsFromSimpleHierarchy(useDebug, level + 1))) {
+				yield return k;
+			}
+		}	
 
 		/// <summary>
 		/// 

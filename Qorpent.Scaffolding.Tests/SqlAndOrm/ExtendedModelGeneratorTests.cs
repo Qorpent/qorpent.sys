@@ -225,7 +225,9 @@ if(typeof(T)==typeof(c))return (new cDataCache{Model=this}) as ObjectDataCache<T
 							foreach(var nid in nestIds){
 								var n=this.b.Get(nid);
 								var t=cache.Get(n.aId);
-								t.bs.Add(n);
+								if (!t.bs.Contains(n)) {
+									t.bs.Add(n);
+								}
 							}
 						}
 					}
@@ -264,7 +266,9 @@ if (!Lazyabs && !Lazyba && t.aId != 0 && t.aId != -1)
 							foreach(var nid in nestIds){
 								var n=this.c.Get(nid);
 								var t=cache.Get(n.bId);
-								t.cs.Add(n);
+								if (!t.cs.Contains(n)) {
+									t.cs.Add(n);
+								}
 							}
 						}
 					}

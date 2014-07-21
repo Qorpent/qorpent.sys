@@ -102,7 +102,9 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("\t\t\t\t\t\t\tforeach(var nid in nestIds){");
 			o.WriteLine("\t\t\t\t\t\t\t\tvar n=" + cache + ".Get(nid);");
 			o.WriteLine("\t\t\t\t\t\t\t\tvar t=cache.Get(n." + f.Name + "Id);");
-			o.WriteLine("\t\t\t\t\t\t\t\tt." + f.ReverseCollectionName + ".Add(n);");
+			o.WriteLine("\t\t\t\t\t\t\t\tif (!t." + f.ReverseCollectionName + ".Contains(n)) {");
+			o.WriteLine("\t\t\t\t\t\t\t\t\tt." + f.ReverseCollectionName + ".Add(n);");
+			o.WriteLine("\t\t\t\t\t\t\t\t}");
 			o.WriteLine("\t\t\t\t\t\t\t}");
 			o.WriteLine("\t\t\t\t\t\t}");
 			o.WriteLine("\t\t\t\t\t}");
