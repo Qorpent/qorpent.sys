@@ -51,7 +51,12 @@ namespace Qorpent.Core.Tests.Model
 			var all = _root.GetSelfAndDescendantsFromHierarchy().ToArray();
 			Assert.AreEqual(3,all.Length);
 		}
-
+		[Test]
+		public void CanEnumerateAllComplex() {
+			BuildComplexHierarchy();
+			var all = _root.GetSelfAndDescendantsFromSimpleHierarchy(true).ToArray();
+			Assert.AreEqual(8, all.Length);
+		}
 		/// <summary>
 		/// tests that cannot reassign invalidly setted parents
 		/// </summary>
@@ -61,7 +66,23 @@ namespace Qorpent.Core.Tests.Model
 			_child2.Parent = _root; //break of hierarchy
 			Assert.Throws<Exception>(_root.NormalizeParentInHierarchy);
 		}
-
+		private void BuildComplexHierarchy() {
+			_root = new Th {Code = "m111"};
+			var c11 = new Th {Code = "m111_1"};
+			var c12 = new Th {Code = "m111_2"};
+			_root.Children.Add(c11);
+			_root.Children.Add(c12);
+			var c111 = new Th {Code = "m111_1_1"};
+			var c112 = new Th {Code = "m111_1_2"};
+			c11.Children.Add(c111);
+			c11.Children.Add(c112);
+			var c121 = new Th {Code = "m111_2_1"};
+			c12.Children.Add(c121);
+			var c1211 = new Th {Code = "m111_2_1_1"};
+			c121.Children.Add(c1211);
+			var c12111 = new Th {Code = "m111_2_1_1"};
+			c1211.Children.Add(c12111);
+		}
 		private void BuildSimpleHierarchy() {
 			_root = new Th {Code = "root"};
 			_child = new Th {Code = "child"};
