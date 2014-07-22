@@ -32,6 +32,10 @@ namespace Qorpent.Serialization {
 	/// </remarks>
 	public class SerializableItem {
 		/// <summary>
+		///		Index
+		/// </summary>
+		public int Index { get; set; }
+		/// <summary>
 		///		NoIndex
 		/// </summary>
 		public bool NoIndex { get; set; }
@@ -74,6 +78,9 @@ namespace Qorpent.Serialization {
 			var classSa = Member.DeclaringType.GetFirstAttribute<SerializeAttribute>();
 			ApplyAttribute(classSa);
 			ApplyAttribute(sa);
+			if (Index == 0) {
+				Index = 1000;
+			}
 		}
 
 		private void ApplyAttribute(SerializeAttribute sa) {
@@ -82,6 +89,7 @@ namespace Qorpent.Serialization {
 					ItemName = sa.ItemName;
 				}
 				NoIndex = sa.NoIndex;
+				Index = sa.Index;
 				if (sa.CamelNames) {
 					Name = Name.Substring(0, 1).ToLower() + Name.Substring(1);
 				}
@@ -227,7 +235,7 @@ namespace Qorpent.Serialization {
 					catch (TargetParameterCountException){
 					}
 				}
-				return result.Where(x => x.IsSerializable).ToArray();
+				return result.Where(x => x.IsSerializable).OrderBy(_ => _.Index).ToArray();
 			}
 		}
 

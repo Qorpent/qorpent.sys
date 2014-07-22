@@ -27,6 +27,10 @@ namespace Qorpent.Serialization {
 		AllowMultiple = false, Inherited = true)]
 	public class SerializeAttribute : Attribute {
 		/// <summary>
+		///		Индекс
+		/// </summary>
+		public int Index { get; set; }
+		/// <summary>
 		///		Do not write __idx
 		/// </summary>
 		public bool NoIndex { get; set; }

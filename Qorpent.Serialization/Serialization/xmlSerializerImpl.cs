@@ -103,7 +103,7 @@ namespace Qorpent.Serialization {
 				) {
 				current.ReplaceWith(current.Elements().First());
 			}
-			if (current.Name.LocalName == "Children")
+			if (current.Name.LocalName.ToLowerInvariant() == "children")
 			{
 				if (!current.Elements().Any()) current.Remove();
 				else

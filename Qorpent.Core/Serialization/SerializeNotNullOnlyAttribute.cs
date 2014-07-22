@@ -23,5 +23,5 @@ namespace Qorpent.Serialization {
 	/// 	Mark that property must serialized only if Value is not null
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-	public class SerializeNotNullOnlyAttribute : Attribute {}
+	public class SerializeNotNullOnlyAttribute : SerializeAttribute {}
 }
