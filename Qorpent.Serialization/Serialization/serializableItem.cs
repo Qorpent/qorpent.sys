@@ -32,6 +32,10 @@ namespace Qorpent.Serialization {
 	/// </remarks>
 	public class SerializableItem {
 		/// <summary>
+		///		Item name
+		/// </summary>
+		public string ItemName { get; set; }
+		/// <summary>
 		/// 	Initializes a new instance of the <see cref="SerializableItem" /> class.
 		/// </summary>
 		/// <param name="name"> The name. </param>
@@ -59,8 +63,13 @@ namespace Qorpent.Serialization {
 			Member = field;
 			_valueprepared = true;
 			var sa = GetSerializeableAttribute();
-			if (null != sa && sa.CamelNames) {
-				Name = Name.Substring(0, 1).ToLower() + Name.Substring(1);
+			if (null != sa) {
+				if (!string.IsNullOrWhiteSpace(sa.ItemName)) {
+					ItemName = sa.ItemName;
+				}
+				if (sa.CamelNames) {
+					Name = Name.Substring(0, 1).ToLower() + Name.Substring(1);
+				}
 			}
 		}
 
@@ -88,9 +97,23 @@ namespace Qorpent.Serialization {
 			Member = property;
 			_target = target;
 			_valueprepared = false;
-			var sa = Member.DeclaringType.GetFirstAttribute<SerializeAttribute>();
-			if (null != sa && sa.CamelNames) {
-				Name = Name.Substring(0, 1).ToLower() + Name.Substring(1);
+			var sa = Member.GetFirstAttribute<SerializeAttribute>();
+			var classSa = Member.DeclaringType.GetFirstAttribute<SerializeAttribute>();
+			if (null != classSa) {
+				if (!string.IsNullOrWhiteSpace(classSa.ItemName)) {
+					ItemName = classSa.ItemName;
+				}
+				if (classSa.CamelNames) {
+					Name = Name.Substring(0, 1).ToLower() + Name.Substring(1);
+				}
+			}
+			if (null != sa) {
+				if (!string.IsNullOrWhiteSpace(sa.ItemName)) {
+					ItemName = sa.ItemName;
+				}
+				if (sa.CamelNames) {
+					Name = Name.Substring(0, 1).ToLower() + Name.Substring(1);
+				}
 			}
 		}
 

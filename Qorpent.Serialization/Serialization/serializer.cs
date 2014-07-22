@@ -214,9 +214,10 @@ namespace Qorpent.Serialization {
 		/// </summary>
 		/// <param name="name"> The name. </param>
 		/// <param name="value"> The value. </param>
+		/// <param name="itemName"></param>
 		/// <remarks>
 		/// </remarks>
-		private void InternalSerialize(string name, object value) {
+		private void InternalSerialize(string name, object value, string itemName = "item") {
 			name = name ?? (null == value ? "null" : value.GetType().Name);
 			if (null == value) {
 				_s.WriteFinal(null);
@@ -237,13 +238,13 @@ namespace Qorpent.Serialization {
 				_s.EndObject();
 			}
 			else if (typeof (Array).IsAssignableFrom(value.GetType())) {
-				SerializeArray(name, (Array) value);
+				SerializeArray(name, (Array) value, itemName);
 			}
 			else if (typeof (IDictionary).IsAssignableFrom(value.GetType())) {
 				SerializeDictionary(name, (IDictionary) value);
 			}
 			else if (typeof (IEnumerable).IsAssignableFrom(value.GetType())) {
-				SerializeArray(name, ((IEnumerable) value).OfType<object>().ToArray());
+				SerializeArray(name, ((IEnumerable) value).OfType<object>().ToArray(),itemName);
 			}
 			else {
 				if (_refcache.Contains(value)) {
@@ -269,7 +270,7 @@ namespace Qorpent.Serialization {
 			var c = items.Count();
 			foreach (var i in items) {
 				_s.BeginObjectItem(i.Name, i.IsFinal);
-				InternalSerialize(i.Name, i.Value);
+				InternalSerialize(i.Name, i.Value, i.ItemName);
 				_s.EndObjectItem(c == 1);
 				c--;
 			}
@@ -300,15 +301,16 @@ namespace Qorpent.Serialization {
 		/// </summary>
 		/// <param name="name"> The name. </param>
 		/// <param name="value"> The value. </param>
+		/// <param name="itemName"></param>
 		/// <remarks>
 		/// </remarks>
-		private void SerializeArray(string name, Array value) {
+		private void SerializeArray(string name, Array value, string itemName = "item") {
 			_s.BeginArray(name,value.Length);
 			var i = -1;
 			foreach (var val in value) {
 				i++;
-				_s.BeginArrayEntry(i);
-				InternalSerialize(i.ToString(CultureInfo.InvariantCulture), val);
+				_s.BeginArrayEntry(i, itemName);
+				InternalSerialize(itemName, val);
 				_s.EndArrayEntry(i == value.Length - 1);
 				
 			}

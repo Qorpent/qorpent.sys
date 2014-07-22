@@ -138,9 +138,10 @@ namespace Qorpent.Serialization {
 		/// 	Begins the array entry.
 		/// </summary>
 		/// <param name="idx"> The idx. </param>
+		/// <param name="name"></param>
 		/// <remarks>
 		/// </remarks>
-		void BeginArrayEntry(int idx);
+		void BeginArrayEntry(int idx, string name = "item");
 
 		/// <summary>
 		/// 	Ends the array entry.

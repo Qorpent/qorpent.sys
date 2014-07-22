@@ -241,11 +241,12 @@ namespace Qorpent.Serialization {
 		/// 	Begins the array entry.
 		/// </summary>
 		/// <param name="idx"> The idx. </param>
+		/// <param name="name"></param>
 		/// <remarks>
 		/// </remarks>
-		public void BeginArrayEntry(int idx) {
-
-			var e = new XElement("item", new XAttribute("__idx", idx));
+		public void BeginArrayEntry(int idx, string name = "item") {
+			name = name ?? "item";
+			var e = new XElement(name, new XAttribute("__idx", idx));
 			Current.Add(e);
 			_stack.Push(e);
 		}

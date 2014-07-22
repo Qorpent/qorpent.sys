@@ -27,6 +27,10 @@ namespace Qorpent.Serialization {
 		AllowMultiple = false, Inherited = true)]
 	public class SerializeAttribute : Attribute {
 		/// <summary>
+		///		collection element name
+		/// </summary>
+		public string ItemName { get; set; }
+		/// <summary>
 		/// 	Forces renaming during serialization to camel-case usefull for Json/Js
 		/// </summary>
 		public bool CamelNames { get; set; }
