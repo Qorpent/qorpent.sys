@@ -39,7 +39,7 @@ namespace Qorpent.Utils.Extensions {
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static IEnumerable<T> GetSelfAndDescendantsFromSimpleHierarchy<T>(this T item, bool useDebug = false, int level = 0)
+		public static IEnumerable<T> GetAllHierarchy<T>(this T item, bool useDebug = false, int level = 0)
 			where T : class, IWithSimpleHierarchy<T>, IWithCode, IWithId {
 			if (null == item)
 				yield break;
@@ -55,7 +55,7 @@ namespace Qorpent.Utils.Extensions {
 				Console.Write("\n");
 			}
 
-			foreach (var k in item.Children.SelectMany(child => child.GetSelfAndDescendantsFromSimpleHierarchy(useDebug, level + 1))) {
+			foreach (var k in item.Children.SelectMany(child => child.GetAllHierarchy(useDebug, level + 1))) {
 				yield return k;
 			}
 		}	

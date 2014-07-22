@@ -54,7 +54,7 @@ namespace Qorpent.Core.Tests.Model
 		[Test]
 		public void CanEnumerateAllComplex() {
 			BuildComplexHierarchy();
-			var all = _root.GetSelfAndDescendantsFromSimpleHierarchy(true).ToArray();
+			var all = _root.GetAllHierarchy(true).ToArray();
 			Assert.AreEqual(8, all.Length);
 		}
 		/// <summary>
