@@ -121,6 +121,7 @@
     <Compile Include="Data\IObjectDataAdapter.cs" />
     <Compile Include="Data\IObjectDataCache.cs" />
     <Compile Include="Data\IParametersProvider.cs" />
+    <Compile Include="Data\ObjectDataCacheHints.cs" />
     <Compile Include="Data\ParamAttribute.cs" />
     <Compile Include="Dsl\ReplaceDescriptor.cs" />
     <Compile Include="FilterExtensions.cs" />

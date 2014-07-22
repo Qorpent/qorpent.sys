@@ -117,14 +117,17 @@ namespace Qorpent.Data.DataCache
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="connection"></param>
+		/// <param name="options"></param>
 		/// <returns></returns>
-		public T Get(object key, IDbConnection connection = null){
+		public T Get(object key, IDbConnection connection = null, ObjectDataCacheHints options = null)
+		{
+			options = options ?? ObjectDataCacheHints.Empty;
 			int id; string code;
 			var isid = IsId(key, out id, out code);
 			if (isid){
 				if (!_nativeCache.ContainsKey(id)){
 
-					UpdateCache("(Id = " + id + ")", connection: connection, options: new KeyQuery { Key = id });
+					UpdateCache("(Id = " + id + ")", connection: connection, options: new ObjectDataCacheHints{KeyQuery = true,Key = id});
 					
 				}
 				if (!_nativeCache.ContainsKey(id)){
@@ -135,7 +138,7 @@ namespace Qorpent.Data.DataCache
 			else{
 				if (!_nativeCodeCache.ContainsKey(code))
 				{
-					UpdateCache("(Code = '" + code.ToSqlString() + "')", connection: connection, options: new KeyQuery{Key = code});
+					UpdateCache("(Code = '" + code.ToSqlString() + "')", connection: connection,options: new ObjectDataCacheHints { KeyQuery = true, Key = code });
 				}
 				if (!_nativeCodeCache.ContainsKey(code))
 				{
@@ -143,15 +146,6 @@ namespace Qorpent.Data.DataCache
 				}
 				return _nativeCodeCache[code];
 			}
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		private class KeyQuery{
-			/// <summary>
-			/// 
-			/// </summary>
-			public object Key;
 		}
 		
 
@@ -251,7 +245,9 @@ namespace Qorpent.Data.DataCache
 		/// <param name="options"></param>
 		/// <param name="connection"></param>
 		/// <returns></returns>
-		public T[] GetAll(object query= null, object options = null, IDbConnection connection = null){
+		public T[] GetAll(object query = null, IDbConnection connection = null, ObjectDataCacheHints options = null)
+		{
+			options = options ?? ObjectDataCacheHints.Empty;
 			if (null == query || (query is string && string.IsNullOrWhiteSpace((string) query))){
 				if (_allLoadWasCalled){
 					return _nativeCache.Values.ToArray();
@@ -274,7 +270,8 @@ namespace Qorpent.Data.DataCache
 		/// <param name="query"></param>
 		/// <param name="options"></param>
 		/// <param name="connection"></param>
-		protected int[] UpdateCache(string query, object options = null, IDbConnection connection = null){
+		protected int[] UpdateCache(string query, ObjectDataCacheHints options = null, IDbConnection connection = null){
+			
 			lock (_nativeCache){
 				
 				var allids = new List<int>();
@@ -316,17 +313,17 @@ namespace Qorpent.Data.DataCache
 		/// <param name="c"></param>
 		/// <param name="allids"></param>
 		/// <param name="cascade"></param>
-		public List<int> UpdateSingleQuery(string query, object options, IDbConnection c, List<int> allids, bool cascade){
-
+		public List<int> UpdateSingleQuery(string query, ObjectDataCacheHints options, IDbConnection c, List<int> allids, bool cascade){
+			options = options ?? ObjectDataCacheHints.Empty;
 			object eq = query;
-			if (options is KeyQuery){
-				eq = (options as KeyQuery).Key;
+			if (options.KeyQuery){
+				eq = options.Key;
 				var external = GetByExternals(eq);
 				if (null != external){
 					Set(external);
 					var exids = new[]{((IWithId) external).Id};
 					if (cascade){
-						AfterUpdateCache(exids, c, new ObjectCacheHints { NoChildren = true });
+						AfterUpdateCache(exids, c, new ObjectDataCacheHints { NoChildren = true });
 					}
 					return exids.ToList();
 				}
@@ -340,7 +337,7 @@ namespace Qorpent.Data.DataCache
 					}
 					var exids = exarray.OfType<IWithId>().Select(_ => _.Id).ToArray();
 					if (cascade){
-						AfterUpdateCache(exids, c, new ObjectCacheHints { NoChildren = true });
+						AfterUpdateCache(exids, c, new ObjectDataCacheHints { NoChildren = true });
 					}
 					return exids.ToList();
 				}
@@ -416,7 +413,7 @@ namespace Qorpent.Data.DataCache
 		/// <param name="ids"></param>
 		/// <param name="dbConnection"></param>
 		/// <param name="context"></param>
-		protected virtual void AfterUpdateCache(IList<int> ids, IDbConnection dbConnection, object context){
+		protected virtual void AfterUpdateCache(IList<int> ids, IDbConnection dbConnection, ObjectDataCacheHints context){
 			if (null != OnAfterUpdateCache){
 				OnAfterUpdateCache.Invoke(this,ids,dbConnection,context);
 			}
@@ -425,6 +422,6 @@ namespace Qorpent.Data.DataCache
 		/// <summary>
 		/// Событие обработки кастомного обновления кэша после прокачки из БД
 		/// </summary>
-		public event Action<object, IList<int>, IDbConnection,object> OnAfterUpdateCache;
+		public event Action<object, IList<int>, IDbConnection,ObjectDataCacheHints> OnAfterUpdateCache;
 	}
 }

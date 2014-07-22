@@ -60,6 +60,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				o.WriteLine("\t\tprotected void Setup" + t.Name + "LoadBehavior(ObjectDataCache<" + t.Name + "> cache){");
 				o.WriteLine("\t\t\tcache.OnAfterUpdateCache+= (s,ids,c,ctx) => {");
 				o.WriteLine("\t\t\t\tvar mycache = s as ObjectDataCache<" + t.Name + ">;");
+				o.WriteLine("\t\t\t\tctx = ctx??ObjectDataCacheHints.Empty;");
 				o.WriteLine("\t\t\t\tvar targets = ids.Select(_=>mycache.Get(_,c)).ToArray();");
 				o.WriteLine("\t\t\t\tforeach(var t in targets){");
 				o.WriteLine("\t\t\t\t\tif(t.Id == -1||t.Id==0)continue;");
@@ -83,7 +84,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		private void GenerateSetupCollection(Field f){
 			string alprop = "AutoLoad" + f.ReferenceClass.Name + f.ReverseCollectionName;
 
-			o.WriteLine("\t\t\t\t\tif((" + alprop + ") && (!(ctx is ObjectCacheHints) || ((ctx is ObjectCacheHints) && !((ObjectCacheHints) ctx).NoChildren))){");
+			o.WriteLine("\t\t\t\t\tif((" + alprop + ") && !ctx.NoChildren){");
 
 			o.WriteLine("\t\t\t\t\t\tvar q = string.Format(\"(" + f.Name + " in ({0}))\",inids);");
 			string cache =

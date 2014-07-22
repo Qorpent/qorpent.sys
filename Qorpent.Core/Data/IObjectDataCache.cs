@@ -16,9 +16,10 @@ namespace Qorpent.Data{
 		/// Возвращает сущность по коду или ID
 		/// </summary>
 		/// <param name="key"></param>
+		/// <param name="options"></param>
 		/// <param name="connection"></param>
 		/// <returns></returns>
-		T Get(object key,IDbConnection connection=null);
+		T Get(object key, IDbConnection connection = null, ObjectDataCacheHints options = null);
 
 		/// <summary>
 		/// Проверить наличие
@@ -45,6 +46,6 @@ namespace Qorpent.Data{
 		/// <param name="options"></param>
 		/// <param name="connection"></param>
 		/// <returns></returns>
-		T[] GetAll(object query, object options, IDbConnection connection=null);
+		T[] GetAll(object query, IDbConnection connection = null, ObjectDataCacheHints options = null);
 	}
 }
