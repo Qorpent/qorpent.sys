@@ -125,9 +125,9 @@ namespace Qorpent.Serialization {
 			Output.Write("]");
 		}
 
-		public void BeginArrayEntry(int idx, string name = "") {}
+		public void BeginArrayEntry(int idx, string name = "", bool noindex = false) {}
 
-		public void EndArrayEntry(bool last) {
+		public void EndArrayEntry(bool last, bool noindex = false) {
 			if (Current == ObjectSerializerState.Array) {
 				Output.Write(", ");
 			}

@@ -40,6 +40,18 @@ namespace Qorpent.Serialization.Tests {
 			X,
 			Y,
 		}
+		[Serialize]
+		public class DeadLion {
+			public int Id {
+				get { return 0; }
+			}
+		}
+		public class Dno {
+			[Serialize(ItemName = "dno", NoIndex = true)]
+			public DeadLion[]  DeadDnoCollection {
+				get { return new[] {new DeadLion(), new DeadLion() }; }
+			}
+		}
 		public class TestNamedCollection {
 			[Serialize(ItemName = "num")]
 			public int[] Values {
@@ -75,6 +87,11 @@ namespace Qorpent.Serialization.Tests {
 		public class nschild {
 			public int id;
 			[SerializeNotNullOnly] public int id2;
+		}
+		[Test]
+		public void CanDoNotIndexDeadLions() {
+			var t = new Dno();
+			test(t, @"<root><Dno><DeadDnoCollection><dno Id=""0"" /><dno Id=""0"" /></DeadDnoCollection></Dno></root>");
 		}
 		[Test]
 		public void IscorrectSerializeCollectionWithItemName() {

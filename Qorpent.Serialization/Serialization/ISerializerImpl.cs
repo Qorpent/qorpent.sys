@@ -139,17 +139,19 @@ namespace Qorpent.Serialization {
 		/// </summary>
 		/// <param name="idx"> The idx. </param>
 		/// <param name="name"></param>
+		/// <param name="noindex"></param>
 		/// <remarks>
 		/// </remarks>
-		void BeginArrayEntry(int idx, string name = "item");
+		void BeginArrayEntry(int idx, string name = "item", bool noindex = false);
 
 		/// <summary>
 		/// 	Ends the array entry.
 		/// </summary>
 		/// <param name="last"> if set to <c>true</c> [last]. </param>
+		/// <param name="noindex"></param>
 		/// <remarks>
 		/// </remarks>
-		void EndArrayEntry(bool last);
+		void EndArrayEntry(bool last, bool noindex = false);
 
 		/// <summary>
 		/// 	Flushes this instance.
