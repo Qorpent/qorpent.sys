@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Xsl;
 using Qorpent.Config;
 using Qorpent.Model;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.IntermediateFormat {
 	/// <summary>
@@ -69,8 +72,15 @@ namespace Qorpent.IntermediateFormat {
 			var xml = ToXml(query);
 			if (query.Format == IntermediateFormatOutputType.Xml){
 				using (var sw = new StreamWriter(output, Encoding.UTF8)){
-					sw.Write(xml.ToString());
+					if (string.IsNullOrWhiteSpace(query.Xslt)){
+						sw.Write(xml.ToString());
+					}
+					else{
+						WriteoutWithTransform(query, xml, sw);
+					}
+
 					sw.Flush();
+					
 				}
 			}else if (query.Format == IntermediateFormatOutputType.Json){
 				throw new NotSupportedException("JSON is not supportedas output format  for now");
@@ -78,6 +88,27 @@ namespace Qorpent.IntermediateFormat {
 				throw new NotSupportedException("BXL is not supported as output format for now");
 			}
 		}
+
+		private void WriteoutWithTransform(IntermediateFormatQuery query, XElement xml, StreamWriter sw){
+			var transform = new XslCompiledTransform();
+			var xsltfile = ResolveRealXsltPath(query.Xslt);
+			transform.Load(xsltfile, XsltSettings.TrustedXslt, new XmlUrlResolver());
+			var transformargs = new XsltArgumentList();
+			transformargs.AddExtensionObject("ext:doc", this);
+			transformargs.AddExtensionObject("ext:query", query);
+			foreach (var pair in query){
+				transformargs.AddParam(pair.Key, "", pair.Value.ToStr());
+			}
+			transform.Transform(xml.CreateReader(), transformargs, sw);
+		}
+
+		private string ResolveRealXsltPath(string xsltpath){
+			if (!xsltpath.EndsWith(".xslt")){
+				xsltpath += ".xslt";
+			}
+			return xsltpath;
+		}
+
 		/// <summary>
 		/// Формирует XML - представление документа
 		/// </summary>

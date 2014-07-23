@@ -48,6 +48,16 @@ namespace Qorpent.IntermediateFormat{
 			get { return Get<IntermediateFormatLayer>("layers"); }
 			set { Set("layers", value); }
 		}
+
+		/// <summary>
+		/// Файл XSLT для фильтрации контента при выгрузке в XML
+		/// </summary>
+		public string Xslt
+		{
+			get { return Get<string>("xslt"); }
+			set { Set("xslt", value); }
+		}
+
 		/// <summary>
 		/// Заносит недообработанные парамтеры в конфигурацию
 		/// </summary>
