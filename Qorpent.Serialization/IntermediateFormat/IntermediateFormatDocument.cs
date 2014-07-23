@@ -183,5 +183,14 @@ namespace Qorpent.IntermediateFormat {
 		public void RemoveChildDocument(IntermediateFormatDocument document){
 			_children.Remove(document);
 		}
+		/// <summary>
+		///		Типизированное получение дочернего элемента по индексу
+		/// </summary>
+		/// <typeparam name="T">Типизация дочернего элемента</typeparam>
+		/// <param name="index">Индекс</param>
+		/// <returns>Типизированный дочерний элемент</returns>
+		public T GetChild<T>(int index) where T : IntermediateFormatDocument {
+			return (T) Children[index];
+		}
 	}
 }
