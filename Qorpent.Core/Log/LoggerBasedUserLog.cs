@@ -157,7 +157,7 @@ namespace Qorpent.Log {
 		/// 	Writes out fully complicated message
 		/// </summary>
 		/// <param name="logmessage"> </param>
-		public void Write(LogMessage logmessage) {
+		public virtual void Write(LogMessage logmessage) {
 			if (IsDuplicatedMessage(logmessage)) {
 				return;
 			}
@@ -166,38 +166,52 @@ namespace Qorpent.Log {
 			if (null == logmessage.HostObject) {
 				logmessage.HostObject = HostObject;
 			}
-			foreach (var logger in _loggers) {
-				if (logger.Available && logger.Level <= logmessage.Level) {
-					try {
-						logger.Join();
-						logger.StartWrite(logmessage);
-					}
-					catch (LogException logerror) {
-						var errorlogic = logger.ErrorBehavior;
-						if (InternalLoggerErrorBehavior.None == errorlogic && null != _manager) {
-							errorlogic = _manager.ErrorBehavior;
+			if (null != _loggers){
+				foreach (var logger in _loggers){
+					if (logger.Available && logger.Level <= logmessage.Level){
+						try{
+							logger.Join();
+							logger.StartWrite(logmessage);
 						}
-						if (0 != (errorlogic & InternalLoggerErrorBehavior.AutoDisable)) {
-							logger.Available = false;
-						}
-						if (0 != (errorlogic & InternalLoggerErrorBehavior.Log)) {
-							if (_manager != null) {
-								_manager.LogFailSafe(new LogMessage {Error = logerror});
+						catch (LogException logerror){
+							var errorlogic = logger.ErrorBehavior;
+							if (InternalLoggerErrorBehavior.None == errorlogic && null != _manager){
+								errorlogic = _manager.ErrorBehavior;
 							}
-						}
-						if (0 != (errorlogic & InternalLoggerErrorBehavior.Throw)) {
-							throw;
+							if (0 != (errorlogic & InternalLoggerErrorBehavior.AutoDisable)){
+								logger.Available = false;
+							}
+							if (0 != (errorlogic & InternalLoggerErrorBehavior.Log)){
+								if (_manager != null){
+									_manager.LogFailSafe(new LogMessage{Error = logerror});
+								}
+							}
+							if (0 != (errorlogic & InternalLoggerErrorBehavior.Throw)){
+								throw;
+							}
 						}
 					}
 				}
 			}
+
+			foreach (var subLogger in SubLoggers){
+				subLogger.Write(logmessage);
+			}
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public IList<IUserLog> SubLoggers{
+			get { return _subLoggers; }
 		}
 
 		/// <summary>
 		/// 	Level of UserLog
 		/// </summary>
-		public LogLevel Level {
-			get { return _level == LogLevel.All ? (_level = _loggers.Select(x => x.Level).Min()) : _level; }
+		public virtual LogLevel Level {
+			get{
+				return _level == LogLevel.All ? (_level = _loggers.Select(x => x.Level).Min()) : _level;
+			}
 			set{
 				foreach (var logger in _loggers){
 					logger.Level = value;
@@ -251,5 +265,6 @@ namespace Qorpent.Log {
 		protected LogLevel LastExceptionLevel;
 
 		private LogLevel _level;
+		private IList<IUserLog> _subLoggers= new List<IUserLog>();
 	}
 }

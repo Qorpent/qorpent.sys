@@ -16,6 +16,9 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/IUserLog.cs
 #endregion
+
+using System.Collections.Generic;
+
 namespace Qorpent.Log {
 	/// <summary>
 	/// 	Abstract UserLog- user friendly API for calling log
@@ -85,5 +88,11 @@ namespace Qorpent.Log {
 		/// </summary>
 		/// <param name="logmessage"> </param>
 		void Write(LogMessage logmessage);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		IList<IUserLog> SubLoggers { get; }
+
 	}
 }
