@@ -16,6 +16,9 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/StubUserLog.cs
 #endregion
+
+using System.Collections.Generic;
+
 namespace Qorpent.Log {
 	/// <summary>
 	/// 	mute out logging
@@ -23,6 +26,7 @@ namespace Qorpent.Log {
 	public class StubUserLog : IUserLog {
 // ReSharper disable InconsistentNaming
 		private static readonly IUserLog _default = new StubUserLog();
+		private IList<IUserLog> _subLoggers =new List<IUserLog>();
 // ReSharper restore InconsistentNaming
 
 		/// <summary>
@@ -45,7 +49,11 @@ namespace Qorpent.Log {
 		/// <param name="message"> </param>
 		/// <param name="context"> </param>
 		/// <param name="host"> </param>
-		public void Debug(string message, object context = null, object host = null) {}
+		public void Debug(string message, object context = null, object host = null){
+			foreach (var subLogger in SubLoggers){
+				subLogger.Debug(message,context,host);
+			}
+		}
 
 		/// <summary>
 		/// 	Generate error UserLog message
@@ -53,7 +61,12 @@ namespace Qorpent.Log {
 		/// <param name="message"> </param>
 		/// <param name="context"> </param>
 		/// <param name="host"> </param>
-		public void Error(string message, object context = null, object host = null) {}
+		public void Error(string message, object context = null, object host = null){
+			foreach (var subLogger in SubLoggers)
+			{
+				subLogger.Error(message, context, host);
+			}
+		}
 
 		/// <summary>
 		/// 	Generate trace UserLog message
@@ -61,7 +74,12 @@ namespace Qorpent.Log {
 		/// <param name="message"> </param>
 		/// <param name="context"> </param>
 		/// <param name="host"> </param>
-		public void Trace(string message, object context = null, object host = null) {}
+		public void Trace(string message, object context = null, object host = null){
+			foreach (var subLogger in SubLoggers)
+			{
+				subLogger.Trace(message, context, host);
+			}
+		}
 
 		/// <summary>
 		/// 	Generate user info UserLog message
@@ -69,7 +87,12 @@ namespace Qorpent.Log {
 		/// <param name="item"> </param>
 		/// <param name="context"> </param>
 		/// <param name="host"> </param>
-		public void Info(string item, object context = null, object host = null) {}
+		public void Info(string item, object context = null, object host = null){
+			foreach (var subLogger in SubLoggers)
+			{
+				subLogger.Info(item, context, host);
+			}
+		}
 
 		/// <summary>
 		/// 	Generate warn UserLog message
@@ -77,7 +100,12 @@ namespace Qorpent.Log {
 		/// <param name="item"> </param>
 		/// <param name="context"> </param>
 		/// <param name="host"> </param>
-		public void Warn(string item, object context = null, object host = null) {}
+		public void Warn(string item, object context = null, object host = null){
+			foreach (var subLogger in SubLoggers)
+			{
+				subLogger.Warn(item, context, host);
+			}
+		}
 
 		/// <summary>
 		/// 	Generate fatal UserLog message
@@ -85,7 +113,12 @@ namespace Qorpent.Log {
 		/// <param name="message"> </param>
 		/// <param name="context"> </param>
 		/// <param name="host"> </param>
-		public void Fatal(string message, object context = null, object host = null) {}
+		public void Fatal(string message, object context = null, object host = null){
+			foreach (var subLogger in SubLoggers)
+			{
+				subLogger.Warn(message, context, host);
+			}
+		}
 
 		/// <summary>
 		/// </summary>
@@ -101,12 +134,28 @@ namespace Qorpent.Log {
 		/// <param name="message"> </param>
 		/// <param name="context"> </param>
 		/// <param name="host"> </param>
-		public void Write(LogLevel level, string message, object context, object host) {}
+		public void Write(LogLevel level, string message, object context, object host){
+			foreach (var subLogger in SubLoggers)
+			{
+				subLogger.Write(level,message, context, host);
+			}
+		}
 
 		/// <summary>
 		/// 	Writes out fully complicated message
 		/// </summary>
 		/// <param name="logmessage"> </param>
-		public void Write(LogMessage logmessage) {}
+		public void Write(LogMessage logmessage){
+			foreach (var subLogger in SubLoggers)
+			{
+				subLogger.Write(logmessage);
+			}
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		public IList<IUserLog> SubLoggers{
+			get { return _subLoggers; }
+		}
 	}
 }
