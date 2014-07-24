@@ -165,6 +165,20 @@ namespace Qorpent.Config {
 			return Get<T>(key);
 		}
 		/// <summary>
+		///		Убеждается в наличии элемента с соответствующей типизацией и если такового не присутствует,
+		///		инициализирует элемент конфига по переданному ключу указанным значением
+		/// </summary>
+		/// <typeparam name="T">Типизация значения элемента конфига</typeparam>
+		/// <param name="key">Ключ элемента конфига</param>
+		/// <param name="value">Значение для инициализации</param>
+		/// <returns>Значение элемента по ключу</returns>
+		public T Ensure<T>(string key, Func<T> value) {
+			if (!Exists<T>(key)) {
+				Set(key, value());
+			}
+			return Get<T>(key);
+		}
+		/// <summary>
 		///		Проверяет наличие типизированного значения конфига по ключу
 		/// </summary>
 		/// <typeparam name="T">Типизация значения конфига</typeparam>
