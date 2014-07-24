@@ -1,4 +1,5 @@
 ﻿using System;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Report {
 	/// <summary>
@@ -64,13 +65,13 @@ namespace Qorpent.Report {
 		///		
 		/// </summary>
 		public string StartPrevMonthLastDay {
-			get { return new DateTime(StartDate.Year, StartDate.Month, 1).AddDays(-1).ToString(QorpentConst.Date.DefaultFormat); }
+			get { return new DateTime(StartDate.Year, StartDate.Month, 1).AddDays(-1).AccomodateToYear(Year).ToString(QorpentConst.Date.DefaultFormat); }
 		}
 		/// <summary>
 		/// 
 		/// </summary>
 		public string FinishNextMonthFirstDay {
-			get { return new DateTime(FinishDate.Year, FinishDate.Month + 1, 1).ToString(QorpentConst.Date.DefaultFormat); }
+			get { return new DateTime(FinishDate.Year, FinishDate.Month + 1, 1).AccomodateToYear(Year).ToString(QorpentConst.Date.DefaultFormat); }
 		}
 		/// <summary>
 		/// 
