@@ -30,6 +30,15 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="log">Экземпляр лога</param>
 		/// <param name="message">Сообщение</param>
 		/// <param name="format">Данные для форматированного вывода</param>
+		public static void WriteDebug(this IUserLog log, string message, params string[] format) {
+			log.Write(LogLevel.Debug, message, format: format);
+		}
+		/// <summary>
+		///		Запись сообщения об ошибке
+		/// </summary>
+		/// <param name="log">Экземпляр лога</param>
+		/// <param name="message">Сообщение</param>
+		/// <param name="format">Данные для форматированного вывода</param>
 		public static void WriteError(this IUserLog log, string message, params string[] format) {
 			log.Write(LogLevel.Error, message, format: format);
 		}
