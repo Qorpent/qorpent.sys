@@ -28,7 +28,16 @@ namespace Qorpent.Report {
 		/// <returns></returns>
 		[Obsolete("OldZeta compatibility")]
 		public static string ResolveOrderedSubstitude(string template, TitleParams titleParams) {
-			return string.Format(template, titleParams.Year, titleParams.Period, titleParams.PeriodName, titleParams.Year - 1, titleParams.Start, titleParams.StartPrevMonthLastDay, titleParams.Finish, titleParams.FinishNextMonthFirstDay);
+			return string.Format(template,
+				titleParams.Year,
+				titleParams.Period,
+				titleParams.PeriodName,
+				titleParams.Year - 1,
+				titleParams.Start,
+				titleParams.StartPrevMonthLastDay,
+				titleParams.Finish,
+				titleParams.FinishNextMonthFirstDay
+			);
 		}
 	}
 }

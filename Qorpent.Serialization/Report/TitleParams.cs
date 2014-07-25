@@ -1,10 +1,14 @@
 ﻿using System;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Report {
 	/// <summary>
 	///		Параметры заголовка
 	/// </summary>
 	public class TitleParams {
+		private DateTime _finishDate;
+		private DateTime _startDate;
+
 		/// <summary>
 		///		Имя периода
 		/// </summary>
@@ -12,11 +16,19 @@ namespace Qorpent.Report {
 		/// <summary>
 		///		Дата старта
 		/// </summary>
-		public DateTime StartDate { get; set; }
+		public DateTime StartDate {
+			get { return _startDate.AccomodateToYear(Year); }
+			set { _startDate = value; }
+		}
+
 		/// <summary>
 		///		Дата финиша
 		/// </summary>
-		public DateTime FinishDate { get; set; }
+		public DateTime FinishDate {
+			get { return _finishDate.AccomodateToYear(Year); }
+			set { _finishDate = value; }
+		}
+
 		/// <summary>
 		///		Год
 		/// </summary>
@@ -70,7 +82,7 @@ namespace Qorpent.Report {
 		/// 
 		/// </summary>
 		public string FinishNextMonthFirstDay {
-			get { return new DateTime(FinishDate.Year, FinishDate.Month + 1, 1).ToString(QorpentConst.Date.DefaultFormat); }
+			get { return new DateTime(FinishDate.Year, FinishDate.Month, 1).AddDays(1).ToString(QorpentConst.Date.DefaultFormat); }
 		}
 		/// <summary>
 		/// 
