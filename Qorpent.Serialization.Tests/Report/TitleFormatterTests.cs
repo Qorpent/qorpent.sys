@@ -9,7 +9,6 @@ namespace Qorpent.Serialization.Tests.Report {
 		[TestCase(2013, 1, "{2} {0}", "I кв", "I кв 2013")]
 		[TestCase(2013, 2, "{2} {0}", "I пг", "I пг 2013")]
 		[TestCase(2013, 3, "{2} {0}", "9 мес", "9 мес 2013")]
-		[TestCase(2013, 2, "На {5}", "", "На 31.12.2013")]
 		public void IsCorrectTitleResolving(int year, int period, string format, string periodname, string expected) {
 			var f = new TitleParams { Year = year, Period = period, PeriodName = periodname };
 			Assert.AreEqual(expected, ColumnTitleFormatter.ResolveTitle(format, f));
