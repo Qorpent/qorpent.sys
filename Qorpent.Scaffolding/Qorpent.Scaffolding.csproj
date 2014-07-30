@@ -18,11 +18,21 @@
   <ItemGroup>
     <Compile Include="Application\AppAction.cs" />
     <Compile Include="Application\AppActionWriter.cs" />
+    <Compile Include="Application\AppController.cs" />
+    <Compile Include="Application\AppItem.cs" />
+    <Compile Include="Application\AppLayout.cs" />
     <Compile Include="Application\ApplicationModel.cs" />
+    <Compile Include="Application\AppMenu.cs" />
+    <Compile Include="Application\AppMenuItem.cs" />
+    <Compile Include="Application\AppMenuItemType.cs" />
+    <Compile Include="Application\AppMenuType.cs" />
     <Compile Include="Application\AppObject.cs" />
     <Compile Include="Application\AppObjectWriterBase.cs" />
+    <Compile Include="Application\AppService.cs" />
     <Compile Include="Application\AppStruct.cs" />
     <Compile Include="Application\AppSyntax.cs" />
+    <Compile Include="Application\AppView.cs" />
+    <Compile Include="Application\AppWidget.cs" />
     <Compile Include="Application\Compile\AppSpecificationBSharpSource.cs" />
     <Compile Include="Application\Compile\ApplicationCompilerExtensions.cs" />
     <Compile Include="Application\StructField.cs" />

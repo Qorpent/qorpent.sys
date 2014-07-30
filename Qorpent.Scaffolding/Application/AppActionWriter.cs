@@ -10,7 +10,7 @@ namespace Qorpent.Scaffolding.Application {
         /// </summary>
         /// <param name="output"></param>
         public override void Write(TextWriter output) {
-//            this._obj.
+
         }
     }
 }
