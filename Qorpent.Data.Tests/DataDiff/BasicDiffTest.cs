@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using NUnit.Framework;
 using Qorpent.Bxl;
 using Qorpent.Data.DataDiff;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data.Tests.DataDiff
 {
@@ -123,7 +124,8 @@ x table=test
 	i x n2
 ");
 			Assert.AreEqual(
-@"BEGIN TRAN
+@"-- START OF SCRIPT: MAIN
+BEGIN TRAN
 	 --table for storing check constraints problems
 	declare @c table (t nvarchar(255), c nvarchar(255), w nvarchar(255))
 BEGIN TRY
@@ -131,7 +133,7 @@ BEGIN TRY
 	alter table test nocheck constraint all
 	--test base insert and update
 	declare @t1 table ( id int, code nvarchar(255), _exists bit default 0 , name nvarchar(max))
-		insert @t1 (id,code,name) values
+		insert @t1 (id, code,name) values
 			(null,'x', 'n2')
 			update @t1 set id = this.id, code=this.code, _exists =1 from test this join @t1 temp on (temp.code = this.code or temp.id=this.id)
 			insert test (id,code) select id,isnull(code,id) from @t1 where _exists = 0 and id is not null
@@ -153,7 +155,8 @@ BEGIN CATCH
 	if (@@TRANCOUNT!=0) rollback;
 	throw
 END CATCH
-", diff);
+-- END OF SCRIPT: MAIN
+".Trim().LfOnly(), diff.Trim().LfOnly());
 		}
 
 		[Test]
@@ -188,7 +191,8 @@ x table=test
 	i x n2
 ");
 			Assert.AreEqual(
-@"BEGIN TRAN
+@"-- START OF SCRIPT: MAIN
+BEGIN TRAN
 	 --table for storing check constraints problems
 	declare @c table (t nvarchar(255), c nvarchar(255), w nvarchar(255))
 BEGIN TRY
@@ -196,7 +200,7 @@ BEGIN TRY
 	alter table test nocheck constraint all
 	--test base insert and update
 	declare @t1 table ( id int, code nvarchar(255), _exists bit default 0 , name nvarchar(max))
-		insert @t1 (id,code,name) values
+		insert @t1 (id, code,name) values
 			(null,'x', 'n2')
 			update @t1 set id = this.id, code=this.code, _exists =1 from test this join @t1 temp on (temp.code = this.code or temp.id=this.id)
 			insert test (id,code) select id,isnull(code,id) from @t1 where _exists = 0 and id is not null
@@ -218,6 +222,7 @@ BEGIN CATCH
 	if (@@TRANCOUNT!=0) rollback;
 	throw
 END CATCH
+-- END OF SCRIPT: MAIN
 ", diff);
 		}
 
@@ -255,7 +260,8 @@ x table=test
 	i x n2 x=1 y=2
 ");
 			Assert.AreEqual(
-@"BEGIN TRAN
+@"-- START OF SCRIPT: MAIN
+BEGIN TRAN
 	 --table for storing check constraints problems
 	declare @c table (t nvarchar(255), c nvarchar(255), w nvarchar(255))
 BEGIN TRY
@@ -263,7 +269,7 @@ BEGIN TRY
 	alter table test nocheck constraint all
 	--test base insert and update
 	declare @t1 table ( id int, code nvarchar(255), _exists bit default 0 , name nvarchar(max), x nvarchar(max), y nvarchar(max))
-		insert @t1 (id,code,name,x,y) values
+		insert @t1 (id, code,name,x,y) values
 			(null,'x', 'n2', '1', '2')
 			update @t1 set id = this.id, code=this.code, _exists =1 from test this join @t1 temp on (temp.code = this.code or temp.id=this.id)
 			insert test (id,code) select id,isnull(code,id) from @t1 where _exists = 0 and id is not null
@@ -285,7 +291,8 @@ BEGIN CATCH
 	if (@@TRANCOUNT!=0) rollback;
 	throw
 END CATCH
-", diff);
+-- END OF SCRIPT: MAIN
+".Trim().LfOnly(), diff.Trim().LfOnly());
 		}
 
 		[Test]
@@ -321,7 +328,8 @@ x table=test
 	i x x=1 y=2 update-id=23 update-code=x2
 ");
 			Assert.AreEqual(
-@"BEGIN TRAN
+@"-- START OF SCRIPT: MAIN
+BEGIN TRAN
 	 --table for storing check constraints problems
 	declare @c table (t nvarchar(255), c nvarchar(255), w nvarchar(255))
 BEGIN TRY
@@ -329,7 +337,7 @@ BEGIN TRY
 	alter table test nocheck constraint all
 	--test base insert and update
 	declare @t1 table ( id int, code nvarchar(255), _exists bit default 0 , set_code nvarchar(max), set_id nvarchar(max), x nvarchar(max), y nvarchar(max))
-		insert @t1 (id,code,set_code,set_id,x,y) values
+		insert @t1 (id, code,set_code,set_id,x,y) values
 			(null,'x', 'x2', '23', '1', '2')
 			update @t1 set id = this.id, code=this.code, _exists =1 from test this join @t1 temp on (temp.code = this.code or temp.id=this.id)
 			insert test (id,code) select id,isnull(code,id) from @t1 where _exists = 0 and id is not null
@@ -351,6 +359,7 @@ BEGIN CATCH
 	if (@@TRANCOUNT!=0) rollback;
 	throw
 END CATCH
+-- END OF SCRIPT: MAIN
 ", diff);
 		}
 
@@ -397,7 +406,8 @@ x
 	j y n2
 ");
 			Assert.AreEqual(
-@"BEGIN TRAN
+@"-- START OF SCRIPT: MAIN
+BEGIN TRAN
 	 --table for storing check constraints problems
 	declare @c table (t nvarchar(255), c nvarchar(255), w nvarchar(255))
 BEGIN TRY
@@ -406,7 +416,7 @@ BEGIN TRY
 	alter table j nocheck constraint all
 	--i base insert and update
 	declare @t1 table ( id int, code nvarchar(255), _exists bit default 0 , name nvarchar(max))
-		insert @t1 (id,code,name) values
+		insert @t1 (id, code,name) values
 			(null,'x', 'n2')
 			update @t1 set id = this.id, code=this.code, _exists =1 from i this join @t1 temp on (temp.code = this.code or temp.id=this.id)
 			insert i (id,code) select id,isnull(code,id) from @t1 where _exists = 0 and id is not null
@@ -414,7 +424,7 @@ BEGIN TRY
 			update @t1 set id = this.id, code=this.code, _exists =1 from i this join @t1 temp on (temp.code = this.code or temp.id=this.id)
 	--j base insert and update
 	declare @t2 table ( id int, code nvarchar(255), _exists bit default 0 , name nvarchar(max))
-		insert @t2 (id,code,name) values
+		insert @t2 (id, code,name) values
 			(null,'y', 'n2')
 			update @t2 set id = this.id, code=this.code, _exists =1 from j this join @t2 temp on (temp.code = this.code or temp.id=this.id)
 			insert j (id,code) select id,isnull(code,id) from @t2 where _exists = 0 and id is not null
@@ -441,7 +451,8 @@ BEGIN CATCH
 	if (@@TRANCOUNT!=0) rollback;
 	throw
 END CATCH
-", diff);
+-- END OF SCRIPT: MAIN
+".Trim().LfOnly(), diff.Trim().LfOnly());
 		}
 
 		private string GetDiffString(string basis, string updated){

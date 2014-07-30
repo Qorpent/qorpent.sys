@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Qorpent.Scaffolding.Model.SqlObjects;
+using Qorpent.Scaffolding.Model.SqlWriters;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
@@ -73,6 +76,18 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		/// <returns></returns>
 		protected abstract string GetText();
+
+		/// <summary>
+		/// Создает типизированный врайтер
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static SqlCommandWriter Create(SqlObject obj){
+			if(obj is SqlFunction)return new SqlFunctionWriter(obj as SqlFunction);
+			if(obj is SqlView)return new SqlFunctionWriter(obj as SqlFunction);
+			if(obj is SqlTrigger)return new SqlFunctionWriter(obj as SqlFunction);
+			throw new NotSupportedException("not supported type "+obj.GetType().FullName);
+		}
 
 		/// <summary>
 		/// </summary>

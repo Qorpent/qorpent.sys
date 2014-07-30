@@ -190,7 +190,7 @@ namespace Qorpent.BSharp{
 			}
 			if (query.StartsWith("attr:")){
 				string attrname = query.Substring(5);
-				return Working.Where(_ => _.Compiled.Attr(attrname).ToBool());
+				return Working.Where(_ => _.Compiled.GetSmartValue(attrname).ToBool());
 			}
 
 			if (string.IsNullOrWhiteSpace(query)){

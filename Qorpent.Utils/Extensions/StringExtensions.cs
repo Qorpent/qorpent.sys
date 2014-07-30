@@ -38,6 +38,21 @@ namespace Qorpent.Utils.Extensions {
 			set { _helper = value; }
 		}
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="trace"></param>
+		/// <returns></returns>
+		public static string FormatTraceToHtml(this string trace){
+			trace = trace
+							  .Replace("\r", "")
+							  .Replace("\n", "<br/>")
+							  .Replace("\t", "&#x160;&#x160;&#x160;&#x160;");
+			trace = Regex.Replace(trace, @"\sв\s+([\s\S]+?)(?=(\sв\s)|$)", " в <em>$1</em>");
+			trace = Regex.Replace(trace, @"[\S]+?:строка\s\d+", " в <strong>$0</strong>");
+			return trace;
+		}
+		
+		/// <summary>
 		/// Замещает символы, не совместимые с именем файла
 		/// </summary>
 		/// <param name="str"></param>

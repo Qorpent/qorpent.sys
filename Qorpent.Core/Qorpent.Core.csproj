@@ -111,6 +111,7 @@
     <Compile Include="Config\DictionaryCompatibleConfig.cs" />
     <Compile Include="Config\HierarchyElement.cs" />
     <Compile Include="Config\IConfig.cs" />
+    <Compile Include="Config\IConfigurableFromDictionary.cs" />
     <Compile Include="Config\IXmlConfigSource.cs" />
     <Compile Include="Config\TreeConfigBase.cs" />
     <Compile Include="Config\TreeConfigBaseElementsList.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Data\IObjectDataAdapter.cs" />
     <Compile Include="Data\IObjectDataCache.cs" />
     <Compile Include="Data\IParametersProvider.cs" />
+    <Compile Include="Data\ObjectDataCacheHints.cs" />
     <Compile Include="Data\ParamAttribute.cs" />
     <Compile Include="Dsl\ReplaceDescriptor.cs" />
     <Compile Include="FilterExtensions.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="IO\IFile.cs" />
     <Compile Include="IO\IHashedDirectory.cs" />
     <Compile Include="IO\IStreamProxy.cs" />
+    <Compile Include="Log\CollectionBasedUserLog.cs" />
     <Compile Include="Log\SessionLog.cs" />
     <Compile Include="Log\SessionLogClearQuery.cs" />
     <Compile Include="Log\SessionLogQuery.cs" />
@@ -169,6 +172,7 @@
     <Compile Include="Model\AttributedEntity.cs" />
     <Compile Include="Model\EvalType.cs" />
     <Compile Include="Model\IWithResult.cs" />
+    <Compile Include="Model\SummaType.cs" />
     <Compile Include="Mvc\MvcClient.cs" />
     <Compile Include="IO\Resources\DefaultResourceProvider.cs" />
     <Compile Include="IO\Resources\IResource.cs" />
@@ -460,6 +464,8 @@
     <EmbeddedResource Include=".\**\*.*resource" />
     <QorpentReference Include="*.import" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Serialization\IntermediateFormat\" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

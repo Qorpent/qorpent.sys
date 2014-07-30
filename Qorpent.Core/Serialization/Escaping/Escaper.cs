@@ -37,7 +37,7 @@ namespace Qorpent.Serialization
 				{
 					return "\"\"";
 				}
-				if (str.IsLiteral(EscapingType.BxlLiteral ) && !str.Contains("\\")) {
+				if (str.IsLiteral(EscapingType.BxlLiteral ) && !str.Contains("\\") && !str.Contains("#")) {
 					return str;
 				}
 				

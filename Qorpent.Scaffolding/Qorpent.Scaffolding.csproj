@@ -43,6 +43,7 @@
     <Compile Include="Model\CodeWriters\ExtendedModelWriter.cs" />
     <Compile Include="Model\CodeWriters\PokoAdapterWriter.cs" />
     <Compile Include="Model\CodeWriters\PokoClassWriter.cs" />
+    <Compile Include="Model\CodeWriters\PokoObjectCacheWriter.cs" />
     <Compile Include="Model\CodeWriters\ResolveTagFacilityWriter.cs" />
     <Compile Include="Model\CodeWriters\ResolveTagOptionsWriter.cs" />
     <Compile Include="Model\Compiler\DataObjectsSourcePackageForBSharp.cs" />
@@ -60,11 +61,13 @@
     <Compile Include="Model\Compiler\CSharpModelGeneratorBase.cs" />
     <Compile Include="Model\Compiler\GenerateCloneableFacility.cs" />
     <Compile Include="Model\Compiler\GenerateTableStructureFileTask.cs" />
+    <Compile Include="Model\DbAccessMode.cs" />
     <Compile Include="Model\DbDefaultValueType.cs" />
     <Compile Include="Model\DefaultScripts.cs" />
     <Compile Include="Model\GenerationOptions.cs" />
     <Compile Include="Model\ResolveType.cs" />
     <Compile Include="Model\SqlCommandWriterFactory.cs" />
+    <Compile Include="Model\SqlMethodOptions.cs" />
     <Compile Include="Model\SqlObjects\SqlFunction.cs" />
     <Compile Include="Model\SqlFunctionArgument.cs" />
     <Compile Include="Model\SqlWriters\SqlFunctionWriter.cs" />

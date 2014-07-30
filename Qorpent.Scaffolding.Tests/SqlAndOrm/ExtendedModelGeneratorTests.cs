@@ -24,6 +24,7 @@ using Qorpent.Data.Connections;
 using Qorpent.Data.DataCache;
 using System.Linq;
 using System.Collections.Generic;
+using Orm.ObjectCaches;
 namespace Orm.Adapters {
 	///<summary>Model for Orm definition</summary>
 	public partial class Model {
@@ -31,11 +32,33 @@ namespace Orm.Adapters {
 		private IUserLog _log;
 		private IDatabaseConnectionProvider _connectionProvider;
 		private IUserLog _sqlLog;
+		/// <summary>
+		/// Внешние провайдеры данных
+		/// </summary>
+		[Inject]
+		public IList<IExternalDataProvider> ExternalProviders{
+			get { return _externalProviders ?? (_externalProviders =  new List<IExternalDataProvider>()); }
+			set { _externalProviders = value; }
+		}
+		private IList<IExternalDataProvider> _externalProviders;
 		///<summary>initiator for caches</summary>
 		protected ObjectDataCache<T> InitCache<T>()where T:class,new(){
-			var result = new ObjectDataCache<T>{ Adapter = GetAdapter<T>(), ConnectionProvider  = ConnectionProvider, Log= Log, SqlLog= SqlLog, ConnectionString = ConnectionString };
+			var result = CreateCache<T>();
+			result.Adapter = GetAdapter<T>();
+			result.ConnectionProvider = ConnectionProvider; 
+			result.Log = Log; 
+			result.SqlLog = SqlLog;
+			result.ConnectionString = ConnectionString;
+			result.ExternalProviders = this.ExternalProviders;
 			SetupLoadBehavior(result);
 			return result;
+		}
+		///<summary>initiator for caches</summary>
+		protected ObjectDataCache<T> CreateCache<T>() where T:class,new(){
+			
+if(typeof(T)==typeof(a))return (new aDataCache{Model=this}) as ObjectDataCache<T>;
+
+			return null;
 		}
 		///<summary>
 		///Sql connection descriptor
@@ -66,9 +89,9 @@ namespace Orm.Adapters {
 				_sqlLog = value;
 			}
 		}
-		private ObjectDataCache<a> _aCache;
+		private aDataCache _aCache;
 		///<summary>Cache of a</summary>
-		public ObjectDataCache<a> a {get { return _aCache ?? (_aCache = InitCache<a>());}}
+		public aDataCache a {get { return _aCache ?? (_aCache = (aDataCache)InitCache<a>());}}
 		///<summary>Setup auto load behavior for linked classes</summary>
 		protected virtual void SetupLoadBehavior<T>(ObjectDataCache<T> cache)where T:class,new(){
 			switch(typeof(T).Name){
@@ -115,6 +138,7 @@ using Qorpent.Data.Connections;
 using Qorpent.Data.DataCache;
 using System.Linq;
 using System.Collections.Generic;
+using Orm.ObjectCaches;
 namespace Orm.Adapters {
 	///<summary>Model for Orm definition</summary>
 	public partial class Model {
@@ -122,11 +146,35 @@ namespace Orm.Adapters {
 		private IUserLog _log;
 		private IDatabaseConnectionProvider _connectionProvider;
 		private IUserLog _sqlLog;
+		/// <summary>
+		/// Внешние провайдеры данных
+		/// </summary>
+		[Inject]
+		public IList<IExternalDataProvider> ExternalProviders{
+			get { return _externalProviders ?? (_externalProviders =  new List<IExternalDataProvider>()); }
+			set { _externalProviders = value; }
+		}
+		private IList<IExternalDataProvider> _externalProviders;
 		///<summary>initiator for caches</summary>
 		protected ObjectDataCache<T> InitCache<T>()where T:class,new(){
-			var result = new ObjectDataCache<T>{ Adapter = GetAdapter<T>(), ConnectionProvider  = ConnectionProvider, Log= Log, SqlLog= SqlLog, ConnectionString = ConnectionString };
+			var result = CreateCache<T>();
+			result.Adapter = GetAdapter<T>();
+			result.ConnectionProvider = ConnectionProvider; 
+			result.Log = Log; 
+			result.SqlLog = SqlLog;
+			result.ConnectionString = ConnectionString;
+			result.ExternalProviders = this.ExternalProviders;
 			SetupLoadBehavior(result);
 			return result;
+		}
+		///<summary>initiator for caches</summary>
+		protected ObjectDataCache<T> CreateCache<T>() where T:class,new(){
+			
+if(typeof(T)==typeof(a))return (new aDataCache{Model=this}) as ObjectDataCache<T>;
+if(typeof(T)==typeof(b))return (new bDataCache{Model=this}) as ObjectDataCache<T>;
+if(typeof(T)==typeof(c))return (new cDataCache{Model=this}) as ObjectDataCache<T>;
+
+			return null;
 		}
 		///<summary>
 		///Sql connection descriptor
@@ -157,15 +205,15 @@ namespace Orm.Adapters {
 				_sqlLog = value;
 			}
 		}
-		private ObjectDataCache<a> _aCache;
+		private aDataCache _aCache;
 		///<summary>Cache of a</summary>
-		public ObjectDataCache<a> a {get { return _aCache ?? (_aCache = InitCache<a>());}}
-		private ObjectDataCache<b> _bCache;
+		public aDataCache a {get { return _aCache ?? (_aCache = (aDataCache)InitCache<a>());}}
+		private bDataCache _bCache;
 		///<summary>Cache of b</summary>
-		public ObjectDataCache<b> b {get { return _bCache ?? (_bCache = InitCache<b>());}}
-		private ObjectDataCache<c> _cCache;
+		public bDataCache b {get { return _bCache ?? (_bCache = (bDataCache)InitCache<b>());}}
+		private cDataCache _cCache;
 		///<summary>Cache of c</summary>
-		public ObjectDataCache<c> c {get { return _cCache ?? (_cCache = InitCache<c>());}}
+		public cDataCache c {get { return _cCache ?? (_cCache = (cDataCache)InitCache<c>());}}
 		///<summary>Setup auto load behavior for linked classes</summary>
 		protected virtual void SetupLoadBehavior<T>(ObjectDataCache<T> cache)where T:class,new(){
 			switch(typeof(T).Name){
@@ -185,7 +233,7 @@ namespace Orm.Adapters {
 				}
 				if (ids.Count > 0 && !(ids.Count == 1 && (ids[0] == 0 || ids[0]==-1))){
 					var inids = string.Join("","",ids.Where(_=>_!=0 && _!=-1));
-					if(AutoLoadabs){
+					if((AutoLoadabs) && (!(ctx is ObjectCacheHints) || ((ctx is ObjectCacheHints) && !((ObjectCacheHints) ctx).NoChildren))){
 						var q = string.Format(""(a in ({0}))"",inids);
 						if(Lazyabs){
 							foreach(var t in targets){
@@ -197,7 +245,9 @@ namespace Orm.Adapters {
 							foreach(var nid in nestIds){
 								var n=this.b.Get(nid);
 								var t=cache.Get(n.aId);
-								t.bs.Add(n);
+								if (!t.bs.Contains(n)) {
+									t.bs.Add(n);
+								}
 							}
 						}
 					}
@@ -213,11 +263,18 @@ namespace Orm.Adapters {
 					if(t.Id == -1||t.Id==0)continue;
 					if(AutoLoadba && null==t.a){
 						t.a= (!Lazyba?(this.a.Get(t.aId,c)): new a.Lazy{GetLazy=_=>this.a.Get(t.aId)});
+if (!Lazyabs && !Lazyba && t.aId != 0 && t.aId != -1)
+			{
+				if (!t.a.bs.Contains(t))
+				{
+					t.a.bs.Add(t);
+				}
+			}
 					}
 				}
 				if (ids.Count > 0 && !(ids.Count == 1 && (ids[0] == 0 || ids[0]==-1))){
 					var inids = string.Join("","",ids.Where(_=>_!=0 && _!=-1));
-					if(AutoLoadbcs){
+					if((AutoLoadbcs) && (!(ctx is ObjectCacheHints) || ((ctx is ObjectCacheHints) && !((ObjectCacheHints) ctx).NoChildren))){
 						var q = string.Format(""(b in ({0}))"",inids);
 						if(Lazybcs){
 							foreach(var t in targets){
@@ -229,7 +286,9 @@ namespace Orm.Adapters {
 							foreach(var nid in nestIds){
 								var n=this.c.Get(nid);
 								var t=cache.Get(n.bId);
-								t.cs.Add(n);
+								if (!t.cs.Contains(n)) {
+									t.cs.Add(n);
+								}
 							}
 						}
 					}
@@ -245,6 +304,13 @@ namespace Orm.Adapters {
 					if(t.Id == -1||t.Id==0)continue;
 					if(AutoLoadcb && null==t.b){
 						t.b= (!Lazycb?(this.b.Get(t.bId,c)): new b.Lazy{GetLazy=_=>this.b.Get(t.bId)});
+if (!Lazybcs && !Lazycb && t.bId != 0 && t.bId != -1)
+			{
+				if (!t.b.cs.Contains(t))
+				{
+					t.b.cs.Add(t);
+				}
+			}
 					}
 				}
 			};

@@ -74,6 +74,7 @@
     <Compile Include="Extensions\FileNameResolverExtensions.cs" />
     <Compile Include="Extensions\Html\XmlHtmlExtensions.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
+    <Compile Include="Extensions\LogExtensions.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="Extensions\OsExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />

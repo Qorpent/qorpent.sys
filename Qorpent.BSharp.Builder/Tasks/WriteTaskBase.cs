@@ -91,6 +91,10 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
                 target.Filename = bSharpClass.FullName;
             }
 
+			if (outputAttributes.HasFlag(BSharpBuilderOutputAttributes.PrototypeInName)){
+				target.Filename = bSharpClass.Prototype + "." + target.Filename;
+			}
+
             if (outputAttributes.HasFlag(BSharpBuilderOutputAttributes.SingleFile)) {
                 target.Filename = BSharpBuilderDefaults.SingleModeFilename;
                 target.MergeIfExists = true;
@@ -114,6 +118,8 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
 				}
                 
             }
+
+			
 		
             return target;
         }

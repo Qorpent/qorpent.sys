@@ -40,7 +40,34 @@ namespace Qorpent.Serialization.Tests {
 			X,
 			Y,
 		}
-
+		[Serialize]
+		public class DeadLion {
+			public int Id {
+				get { return 0; }
+			}
+		}
+		public class Dno {
+			[Serialize(ItemName = "dno", NoIndex = true)]
+			public DeadLion[]  DeadDnoCollection {
+				get { return new[] {new DeadLion(), new DeadLion() }; }
+			}
+		}
+		public class TestNamedCollection {
+			[Serialize(ItemName = "num")]
+			public int[] Values {
+				get { return new[] {10, 2, 30}; }
+			}
+		}
+		[Serialize]
+		public class Chelios {
+			public int Id { get; set; }
+		}
+		public class CheliosPrison {
+			[Serialize(ItemName = "chelios")]
+			public ICollection<Chelios> CheliosCollection {
+				get { return new List<Chelios> {new Chelios {Id = 1}, new Chelios {Id = -1}};}
+			}
+		}
 		public class parent {
 			public int X { get; set; }
 			[SerializeNotNullOnly] public int Y;
@@ -61,7 +88,21 @@ namespace Qorpent.Serialization.Tests {
 			public int id;
 			[SerializeNotNullOnly] public int id2;
 		}
-
+		[Test]
+		public void CanDoNotIndexDeadLions() {
+			var t = new Dno();
+			test(t, @"<root><Dno><DeadDnoCollection><dno Id=""0"" /><dno Id=""0"" /></DeadDnoCollection></Dno></root>");
+		}
+		[Test]
+		public void IscorrectSerializeCollectionWithItemName() {
+			var t = new CheliosPrison();
+			test(t, @"<root><CheliosPrison><CheliosCollection><chelios Id=""1"" __idx=""0"" /><chelios Id=""-1"" __idx=""1"" /></CheliosCollection></CheliosPrison></root>");
+		}
+		[Test]
+		public void IscorrectSerializeWithItemName() {
+			var t = new TestNamedCollection();
+			test(t, @"<root><TestNamedCollection><Values><num __idx=""0"">10</num><num __idx=""1"">2</num><num __idx=""2"">30</num></Values></TestNamedCollection></root>");
+		}
 		[Test]
 		public void array_serialized() {
 			var a = new object[] {1, true, "test!"};

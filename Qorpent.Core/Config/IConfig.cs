@@ -43,8 +43,17 @@ namespace Qorpent.Config {
 		string ToString(ConfigRenderType rendertype);
 
 		/// <summary>
+		/// Заморозка
+		/// </summary>
+		void Freeze();
+		/// <summary>
 		/// 
 		/// </summary>
 		void Stornate();
+
+		/// <summary>
+		/// Сброс родительского конфига
+		/// </summary>
+		void RemoveParent();
 	}
 }

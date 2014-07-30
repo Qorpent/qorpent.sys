@@ -17,7 +17,14 @@ namespace Qorpent.Data.DataCache
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class ObjectDataCache<T>:IObjectDataCache<T> where T:class,new(){
-		
+		/// <summary>
+		/// 
+		/// </summary>
+		[Inject]
+		public IList<IExternalDataProvider> ExternalProviders{
+			get { return _externalProviders; }
+			set { _externalProviders = value; }
+		}
 
 		/// <summary>
 		/// Служба генерации соединений
@@ -87,20 +94,41 @@ namespace Qorpent.Data.DataCache
 			}
 			
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public T GetByExternals(object key){
+			if (null == ExternalProviders || 0 == ExternalProviders.Count){
+				return null;
+			}
+			foreach (var externalDataProvider in ExternalProviders){
+				if (externalDataProvider.Supports<T>()){
+					var value = externalDataProvider.Get(this,key);
+					if (null != value) return value;
+				}
+			}
+			return null;
+		}
 
 		/// <summary>
 		/// Возвращает сущность по коду или ID
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="connection"></param>
+		/// <param name="options"></param>
 		/// <returns></returns>
-		public T Get(object key, IDbConnection connection = null){
+		public T Get(object key, IDbConnection connection = null, ObjectDataCacheHints options = null)
+		{
+			options = options ?? ObjectDataCacheHints.Empty;
 			int id; string code;
 			var isid = IsId(key, out id, out code);
 			if (isid){
 				if (!_nativeCache.ContainsKey(id)){
-					UpdateCache("(Id = "+id+")",connection:connection);
+
+					UpdateCache("(Id = " + id + ")", connection: connection, options: new ObjectDataCacheHints{KeyQuery = true,Key = id});
+					
 				}
 				if (!_nativeCache.ContainsKey(id)){
 					_nativeCache[id] = null;
@@ -110,7 +138,7 @@ namespace Qorpent.Data.DataCache
 			else{
 				if (!_nativeCodeCache.ContainsKey(code))
 				{
-					UpdateCache("(Code = '" + code.ToSqlString()+"')",connection:connection);
+					UpdateCache("(Code = '" + code.ToSqlString() + "')", connection: connection,options: new ObjectDataCacheHints { KeyQuery = true, Key = code });
 				}
 				if (!_nativeCodeCache.ContainsKey(code))
 				{
@@ -119,6 +147,7 @@ namespace Qorpent.Data.DataCache
 				return _nativeCodeCache[code];
 			}
 		}
+		
 
 		/// <summary>
 		/// Проверяет что ключ - ID
@@ -168,12 +197,7 @@ namespace Qorpent.Data.DataCache
 			string code = "";
 			var vid = value as IWithId;
 			
-			if (null==vid || ( vid.Id < 0 && vid.Id!=-1) ){
-				id = GetNextId();
-				if (null != vid){
-					vid.Id = id;
-				}
-			}
+
 			if (null != vid){
 				id = vid.Id;
 			}
@@ -207,6 +231,7 @@ namespace Qorpent.Data.DataCache
 		private IUserLog _log;
 		private IDatabaseConnectionProvider _connectionProvider;
 		private IUserLog _sqlLog;
+		private IList<IExternalDataProvider> _externalProviders =new List<IExternalDataProvider>();
 
 		/// <summary>
 		/// Возвращает все по запросу
@@ -215,7 +240,9 @@ namespace Qorpent.Data.DataCache
 		/// <param name="options"></param>
 		/// <param name="connection"></param>
 		/// <returns></returns>
-		public T[] GetAll(object query= null, object options = null, IDbConnection connection = null){
+		public T[] GetAll(object query = null, IDbConnection connection = null, ObjectDataCacheHints options = null)
+		{
+			options = options ?? ObjectDataCacheHints.Empty;
 			if (null == query || (query is string && string.IsNullOrWhiteSpace((string) query))){
 				if (_allLoadWasCalled){
 					return _nativeCache.Values.ToArray();
@@ -238,19 +265,25 @@ namespace Qorpent.Data.DataCache
 		/// <param name="query"></param>
 		/// <param name="options"></param>
 		/// <param name="connection"></param>
-		protected int[] UpdateCache(string query, object options = null, IDbConnection connection = null){
+		protected int[] UpdateCache(string query, ObjectDataCacheHints options = null, IDbConnection connection = null){
+			
 			lock (_nativeCache){
 				
 				var allids = new List<int>();
 				bool cascade = true;
 				if (null == connection){
-					//no self created
-					using (var c = ConnectionProvider.GetConnection(ConnectionString)){
-						if (string.IsNullOrWhiteSpace(c.ConnectionString)){
-							throw new Exception("bad connection!");
+					if (string.IsNullOrWhiteSpace(ConnectionString)){
+						UpdateSingleQuery(query, options, null, allids, cascade);
+					}
+					else{
+						//no self created
+						using (var c = ConnectionProvider.GetConnection(ConnectionString)){
+							if (string.IsNullOrWhiteSpace(c.ConnectionString)){
+								throw new Exception("bad connection!");
+							}
+							UpdateSingleQuery(query, options, c, allids, cascade);
+							c.Close();
 						}
-						UpdateSingleQuery(query, options, c, allids, cascade);
-						c.Close();
 					}
 				}
 				else{
@@ -275,12 +308,48 @@ namespace Qorpent.Data.DataCache
 		/// <param name="c"></param>
 		/// <param name="allids"></param>
 		/// <param name="cascade"></param>
-		public List<int> UpdateSingleQuery(string query, object options, IDbConnection c, List<int> allids, bool cascade){
-			allids = allids ?? new List<int>();
-			var q = "select Id from " + Adapter.GetTableName();
-			if (!string.IsNullOrWhiteSpace(query)){
-				q += " where " + query;
+		public List<int> UpdateSingleQuery(string query, ObjectDataCacheHints options, IDbConnection c, List<int> allids, bool cascade){
+			options = options ?? ObjectDataCacheHints.Empty;
+			object eq = query;
+			if (options.KeyQuery){
+				eq = options.Key;
+				var external = GetByExternals(eq);
+				if (null != external){
+					Set(external);
+					var exids = new[]{((IWithId) external).Id};
+					if (cascade){
+						AfterUpdateCache(exids, c, new ObjectDataCacheHints { NoChildren = true });
+					}
+					return exids.ToList();
+				}
 			}
+			else{
+				var externals = FindByExternals(eq).ToArray();
+				if (externals.Any()){
+					var exarray = externals.ToArray();
+					foreach (var e in externals.ToArray()){
+						Set(e);
+					}
+					var exids = exarray.OfType<IWithId>().Select(_ => _.Id).ToArray();
+					if (cascade){
+						AfterUpdateCache(exids, c, new ObjectDataCacheHints { NoChildren = true });
+					}
+					return exids.ToList();
+				}
+			}
+			
+			
+
+			allids = allids ?? new List<int>();
+			if (null == c) return allids;
+			var q = query;
+			if (!q.Contains("from")){
+				q = "select Id from " + Adapter.GetTableName();
+				if (!string.IsNullOrWhiteSpace(query)){
+					q += " where " + query;
+				}
+			}
+			
 			if (string.IsNullOrWhiteSpace(c.ConnectionString)){
 				throw new Exception("bad connection string!!!");
 			}
@@ -317,6 +386,21 @@ namespace Qorpent.Data.DataCache
 			return allids;
 		}
 
+		private IEnumerable<T> FindByExternals(object query){
+			if (null == ExternalProviders || 0 == ExternalProviders.Count) yield break;
+			foreach (var externalDataProvider in ExternalProviders){
+				if (externalDataProvider.Supports<T>(query)){
+					var externals = externalDataProvider.Find(this, query);
+					if (null != externals && externals.Any()){
+						foreach (var external in externals.ToArray()){
+							yield return external;
+						}
+						yield break;
+					}
+				}
+			}
+		}
+
 		/// <summary>
 		/// Выполняет действия после обновления кэша с учетом текущего соединения для оптимизации,
 		/// позволяет донастроить кастомные биндинги и увязки с моделью
@@ -324,7 +408,7 @@ namespace Qorpent.Data.DataCache
 		/// <param name="ids"></param>
 		/// <param name="dbConnection"></param>
 		/// <param name="context"></param>
-		protected virtual void AfterUpdateCache(IList<int> ids, IDbConnection dbConnection, object context){
+		protected virtual void AfterUpdateCache(IList<int> ids, IDbConnection dbConnection, ObjectDataCacheHints context){
 			if (null != OnAfterUpdateCache){
 				OnAfterUpdateCache.Invoke(this,ids,dbConnection,context);
 			}
@@ -333,6 +417,6 @@ namespace Qorpent.Data.DataCache
 		/// <summary>
 		/// Событие обработки кастомного обновления кэша после прокачки из БД
 		/// </summary>
-		public event Action<object, IList<int>, IDbConnection,object> OnAfterUpdateCache;
+		public event Action<object, IList<int>, IDbConnection,ObjectDataCacheHints> OnAfterUpdateCache;
 	}
 }

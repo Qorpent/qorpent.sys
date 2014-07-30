@@ -51,6 +51,7 @@
     <Compile Include="exceptions_need_to_be_fixed.cs" />
     <Compile Include="FusionChartsScaleNormalizerTests.cs" />
     <Compile Include="GraphTests.cs" />
+    <Compile Include="IntermediateFormat\IntermediateDocumentTest.cs" />
     <Compile Include="iocconfiguationtest.cs" />
     <Compile Include="Json\AF768Tests.cs" />
     <Compile Include="Json\InvalidXmlToJson.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Q48SerializeNotNullCollectionsTest.cs" />
     <Compile Include="Q51JsonXmlParserFail.cs" />
     <Compile Include="Q66EmbededXmlSerialization.cs" />
+    <Compile Include="Report\TitleFormatterTests.cs" />
     <Compile Include="Selector_Tests\CssSelectorImplTests.cs" />
     <Compile Include="Selector_Tests\RegexSelectorImplTest.cs" />
     <Compile Include="serialization_set_test.cs" />

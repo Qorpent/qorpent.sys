@@ -25,6 +25,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("using Qorpent.Data.DataCache;");
 			o.WriteLine("using System.Linq;");
 			o.WriteLine("using System.Collections.Generic;");
+			o.Write("using {0}.ObjectCaches;\r\n", DefaultNamespce);
 			o.Write("namespace {0}.Adapters {{\r\n", DefaultNamespce);
 			o.WriteLine("\t///<summary>Model for " + DefaultNamespce + " definition</summary>");
 			o.WriteLine("\tpublic partial class Model {");
@@ -59,6 +60,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				o.WriteLine("\t\tprotected void Setup" + t.Name + "LoadBehavior(ObjectDataCache<" + t.Name + "> cache){");
 				o.WriteLine("\t\t\tcache.OnAfterUpdateCache+= (s,ids,c,ctx) => {");
 				o.WriteLine("\t\t\t\tvar mycache = s as ObjectDataCache<" + t.Name + ">;");
+				o.WriteLine("\t\t\t\tctx = ctx??ObjectDataCacheHints.Empty;");
 				o.WriteLine("\t\t\t\tvar targets = ids.Select(_=>mycache.Get(_,c)).ToArray();");
 				o.WriteLine("\t\t\t\tforeach(var t in targets){");
 				o.WriteLine("\t\t\t\t\tif(t.Id == -1||t.Id==0)continue;");
@@ -82,7 +84,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		private void GenerateSetupCollection(Field f){
 			string alprop = "AutoLoad" + f.ReferenceClass.Name + f.ReverseCollectionName;
 
-			o.WriteLine("\t\t\t\t\tif(" + alprop + "){");
+			o.WriteLine("\t\t\t\t\tif((" + alprop + ") && !ctx.NoChildren){");
 
 			o.WriteLine("\t\t\t\t\t\tvar q = string.Format(\"(" + f.Name + " in ({0}))\",inids);");
 			string cache =
@@ -101,7 +103,9 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("\t\t\t\t\t\t\tforeach(var nid in nestIds){");
 			o.WriteLine("\t\t\t\t\t\t\t\tvar n=" + cache + ".Get(nid);");
 			o.WriteLine("\t\t\t\t\t\t\t\tvar t=cache.Get(n." + f.Name + "Id);");
-			o.WriteLine("\t\t\t\t\t\t\t\tt." + f.ReverseCollectionName + ".Add(n);");
+			o.WriteLine("\t\t\t\t\t\t\t\tif (!t." + f.ReverseCollectionName + ".Contains(n)) {");
+			o.WriteLine("\t\t\t\t\t\t\t\t\tt." + f.ReverseCollectionName + ".Add(n);");
+			o.WriteLine("\t\t\t\t\t\t\t\t}");
 			o.WriteLine("\t\t\t\t\t\t\t}");
 			o.WriteLine("\t\t\t\t\t\t}");
 			o.WriteLine("\t\t\t\t\t}");
@@ -113,7 +117,19 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("\t\t\t\t\t\tt." + f.Name + "= (!Lazy" + f.Table.TargetClass.Name + f.Name + "?(this." +
 			            f.ReferenceClass.Name + ".Get(t." + f.Name + f.ReferenceField + ",c)): new " + f.ReferenceClass.Name +
 			            ".Lazy{GetLazy=_=>this." + f.ReferenceClass.Name + ".Get(t." + f.Name + f.ReferenceField + ")});");
+			if (f.IsReverese){
+				o.WriteLine(@"if (!Lazy" + f.ReferenceClass.Name+ f.ReverseCollectionName + @" && !Lazy" + f.Table.TargetClass.Name + f.Name + @" && t." + f.Name + f.ReferenceField + @" != 0 && t." + f.Name + f.ReferenceField + @" != -1)
+			{
+				if (!t."+f.Name+@"."+f.ReverseCollectionName+@".Contains(t))
+				{
+					t." + f.Name + @"." + f.ReverseCollectionName + @".Add(t);
+				}
+			}");
+			}
+
 			o.WriteLine("\t\t\t\t\t}");
+
+
 		}
 
 		private void GenerateSupportProperties(){
@@ -121,11 +137,35 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		private IUserLog _log;
 		private IDatabaseConnectionProvider _connectionProvider;
 		private IUserLog _sqlLog;
+		/// <summary>
+		/// Внешние провайдеры данных
+		/// </summary>
+		[Inject]
+		public IList<IExternalDataProvider> ExternalProviders{
+			get { return _externalProviders ?? (_externalProviders =  new List<IExternalDataProvider>()); }
+			set { _externalProviders = value; }
+		}
+		private IList<IExternalDataProvider> _externalProviders;
 		///<summary>initiator for caches</summary>
 		protected ObjectDataCache<T> InitCache<T>()where T:class,new(){
-			var result = new ObjectDataCache<T>{ Adapter = GetAdapter<T>(), ConnectionProvider  = ConnectionProvider, Log= Log, SqlLog= SqlLog, ConnectionString = ConnectionString };
+			var result = CreateCache<T>();
+			result.Adapter = GetAdapter<T>();
+			result.ConnectionProvider = ConnectionProvider; 
+			result.Log = Log; 
+			result.SqlLog = SqlLog;
+			result.ConnectionString = ConnectionString;
+			result.ExternalProviders = this.ExternalProviders;
 			SetupLoadBehavior(result);
 			return result;
+		}
+		///<summary>initiator for caches</summary>
+		protected ObjectDataCache<T> CreateCache<T>() where T:class,new(){
+			");
+			foreach (var table in Tables){
+				o.Write("if(typeof(T)==typeof({0}))return (new {0}DataCache{{Model=this}}) as ObjectDataCache<T>;\r\n", table.Name);
+			}
+			o.WriteLine(@"
+			return null;
 		}
 		///<summary>
 		///Sql connection descriptor
@@ -164,11 +204,11 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				if (DefaultNamespce != table.Namespace && !string.IsNullOrWhiteSpace(table.Namespace)){
 					n = table.Namespace + "." + n;
 				}
-				o.WriteLine("\t\tprivate ObjectDataCache<" + n + "> _" + table.Name + "Cache;");
+				o.WriteLine("\t\tprivate " + n + "DataCache _" + table.Name + "Cache;");
 				o.WriteLine("\t\t///<summary>Cache of " + table.Name + "</summary>");
 				o.WriteLine(
 					string.Format(
-						"\t\tpublic ObjectDataCache<{0}> {1} {{get {{ return _{1}Cache ?? (_{1}Cache = InitCache<{0}>());}}}}", n,
+						"\t\tpublic {0}DataCache {1} {{get {{ return _{1}Cache ?? (_{1}Cache = ({0}DataCache)InitCache<{0}>());}}}}", n,
 						table.Name));
 			}
 		}

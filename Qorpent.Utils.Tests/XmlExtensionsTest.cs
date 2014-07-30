@@ -62,6 +62,22 @@ namespace Qorpent.Utils.Tests {
 			Assert.AreEqual("<hello />", result.ToString());
 		}
 
+		public class Serj {
+			public int Dno { get; set; }
+		}
+		[Test]
+		public void IsCorrectApplyMapping() {
+			const string xml = @"<r dnishe=""1"" />";
+			var serj = XElement.Parse(xml).Apply<Serj>(map:new {dnishe = "Dno"});
+			Assert.AreEqual(1, serj.Dno);
+		}
+		[Test]
+		public void IsCorrectApplyMappingWithNotExistingAttributesInSource() {
+			const string xml = @"<r serj_dnishe=""1"" />";
+			var serj = XElement.Parse(xml).Apply<Serj>(map: new { dnishe = "Dno" });
+			Assert.AreEqual(0, serj.Dno);
+		}
+
         [Test]
         public void IdsAreApplyed() {
             var src = XElement.Parse(@"

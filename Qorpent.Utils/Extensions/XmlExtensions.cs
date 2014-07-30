@@ -301,14 +301,14 @@ namespace Qorpent.Utils.Extensions {
 			Apply(element, result);
 			return result;
 		}
-
 		/// <summary>
 		/// 	Applys element's atributes to target object
 		/// </summary>
 		/// <param name="element"> </param>
 		/// <param name="result"> </param>
+		/// <param name="map"></param>
 		/// <param name="excludes"> </param>
-		public static T Apply<T>(this XElement element, T result = default(T), params string[] excludes) {
+		public static T Apply<T>(this XElement element, T result = default(T), object map = null, params string[] excludes) {
 			//if (typeof(T).FullName.StartsWith("System.Collections.Generic.IEnumerable")) {
 
 			//}
@@ -316,10 +316,16 @@ namespace Qorpent.Utils.Extensions {
 
 			//}
 			//else {
+			if (null == result) {
+				result = Activator.CreateInstance<T>();
+			}
 			foreach (var attribute in element.Attributes()) {
 				if(null!=excludes && -1!=Array.IndexOf(excludes,attribute.Name.LocalName))continue;
-
-				result.SetValue(attribute.Name.LocalName, attribute.Value, true, true, true, true, true);
+				var name = attribute.Name.LocalName;
+				if (null != map) {
+					name = map.GetValue(name, name, ignoreNotFound:true);
+				}
+				result.SetValue(name, attribute.Value, true, true, true, true, true);
 			}
 			if (result is ICustomXmlApplyer) {
 				((ICustomXmlApplyer) result).Apply(element);

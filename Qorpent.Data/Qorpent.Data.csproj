@@ -12,6 +12,7 @@
     <Compile Include="Connections\ContainerBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionProviderExtension.cs" />
     <Compile Include="Connections\FileBasedConnectionRegistryPersister.cs" />
+    <Compile Include="DataCache\IExternalDataProvider.cs" />
     <Compile Include="DataCache\ILazyCollection.cs" />
     <Compile Include="DataCache\ObjectDataCache.cs" />
     <Compile Include="DataCache\ObjectDataCacheBindLazyList.cs" />

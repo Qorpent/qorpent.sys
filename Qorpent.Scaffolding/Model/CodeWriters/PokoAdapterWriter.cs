@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Qorpent.Model;
 using Qorpent.Serialization;
 
 namespace Qorpent.Scaffolding.Model.CodeWriters{
@@ -22,9 +24,126 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			WriteGetSelectQuery();
 			WriteSingleRecordProcessor();
 			WriteEnumerableReaderProcessor();
+			WriteWriteAccessors();
 			WriteEndClass();
 		}
-
+		private void WriteWriteAccessors() {
+			var fields = Cls.GetOrderedFields().Where(_ => !_.NoSql && !_.NoCode).ToArray();
+			if (Cls.AccessMode.HasFlag(DbAccessMode.Write)) {
+				WriteSummary("Insert a record", 2, "Affected rows");
+				o.WriteLine("\t\tpublic int InsertRecord(IDbConnection connection, " + Cls.Name + " record) {");
+				o.WriteLine("\t\t\tvar sqlCommand = connection.CreateCommand();");
+				o.Write("\t\t\tconst string command = @\"INSERT INTO " + Cls.FullSqlName.SqlQuoteName().Replace("\"", "\"\"") + " (");
+				for (var i = 0; i < fields.Length; i++) {
+					o.Write(fields[i].Name.ToLowerInvariant());
+					if (i != fields.Length - 1) {
+						o.Write(", ");
+					}
+				}
+				o.Write(") VALUES (");
+				for (var i = 0; i < fields.Length; i++) {
+					o.Write("@" + fields[i].Name.ToLowerInvariant());
+					if (i != fields.Length - 1) {
+						o.Write(", ");
+					}
+				}
+				o.WriteLine(")\";");
+				o.WriteLine("\t\t\tsqlCommand.CommandText = command;");
+				for (var i = 0; i < fields.Length; i++) {
+					o.WriteLine("\t\t\tsqlCommand.Parameters.Add(record." + fields[i].Name + ");");
+				}
+				o.WriteLine("\t\t\tsqlCommand.Connection.Open();");
+				o.WriteLine("\t\t\tvar affected = sqlCommand.ExecuteNonQuery();");
+				o.WriteLine("\t\t\tsqlCommand.Connection.Close();");
+				o.WriteLine("\t\t\treturn affected;");
+				o.WriteLine("\t\t}");
+			}
+			if (Cls.AccessMode.HasFlag(DbAccessMode.ReadWrite)) {
+				foreach (var uniqueField in GetFields().Where(_ => _.IsUnique)) {
+					WriteUpdateMethod(uniqueField);
+				}
+			}
+		}
+		/// <summary>
+		///		Определяет перечисление полей
+		/// </summary>
+		/// <param name="inSql">Признак того, что поле содержится в SQL</param>
+		/// <param name="inCode">Признак того, чтополе содержится в коде</param>
+		/// <returns>Перечисление полей</returns>
+		private IEnumerable<Field> GetFields(bool inSql = true, bool inCode = true) {
+			return Cls.GetOrderedFields().Where(_ => !_.NoCode == inCode && !_.NoSql == inSql);
+		}
+		private void WriteUpdateMethod(Field byField) {
+			var fields = GetFields().ToArray();
+			WriteSummary("Update a record by " + byField.Name, 2, "Affected rows");
+			o.WriteLine("\t\tpublic int UpdateRecordBy" + byField.Name + "(IDbConnection connection, " + byField.DataType.CSharpDataType + " " + byField.Name.ToLowerInvariant() + ", " + Cls.Name + " record) {");
+			o.WriteLine("\t\t\tvar sqlCommand = connection.CreateCommand();");
+			o.Write("\t\t\tconst string command = @\"UPDATE " + Cls.FullSqlName.SqlQuoteName().Replace("\"", "\"\"") + " SET ");
+			var updateFields = fields.Where(_ => _.Name.ToLowerInvariant() != byField.Name.ToLowerInvariant()).ToArray();
+			for (var i = 0; i < updateFields.Length; i++) {
+				var name = updateFields[i].Name.ToLowerInvariant();
+				o.Write(name + " = @" + name);
+				if (i != updateFields.Length - 1) {
+					o.Write(", ");
+				}
+			}
+			o.WriteLine(" WHERE " + byField.Name.ToLowerInvariant() + " = @where" + byField.Name.ToLowerInvariant() + "\";");
+			o.WriteLine("\t\t\tsqlCommand.CommandText = command;");
+			for (var i = 0; i < fields.Length; i++) {
+				o.WriteLine("\t\t\tsqlCommand.Parameters.Add(record." + fields[i].Name + ");");
+			}
+			WriteLine("sqlCommand.Parameters.Add(" + byField.Name.ToLowerInvariant() + ");", 3);
+			o.WriteLine("\t\t\tsqlCommand.Connection.Open();");
+			o.WriteLine("\t\t\tvar affected = sqlCommand.ExecuteNonQuery();");
+			o.WriteLine("\t\t\tsqlCommand.Connection.Close();");
+			o.WriteLine("\t\t\treturn affected;");
+			o.WriteLine("\t\t}");
+		}
+		/// <summary>
+		///		Запись описания метода/поля
+		/// </summary>
+		/// <param name="summary">Описание</param>
+		/// <param name="level">Уровень (количество табуляций в начале строки)</param>
+		/// <param name="returns">Описание возвращаемого значения</param>
+		private void WriteSummary(string summary, int level = 2, string returns = null) {
+			WriteLine("///<summary>" + summary + "</summary>", level);
+			if (!string.IsNullOrWhiteSpace(returns)) {
+				WriteLine("///<returns>" + returns + "</returns>", level);
+			}
+		}
+		/// <summary>
+		///		Запись строки с отступами
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="level"></param>
+		private void WriteLine(string value, int level = 0) {
+			for (var i = 0; i < level; i++) {
+				o.Write("\t");
+			}
+			o.WriteLine(value);
+		}
+		/// <summary>
+		///		Определяет признак того, что класс в том или ином виде поддерживает <see cref="IWithCode"/>
+		/// </summary>
+		/// <returns>Признак того, что класс в том или ином виде поддерживает <see cref="IWithCode"/></returns>
+		private bool IsIWithCode() {
+			return IsImplements("iwithcode");
+		}
+		/// <summary>
+		///		Определяет признак того, что класс в том или ином виде поддерживает <see cref="IWithId"/>
+		/// </summary>
+		/// <returns>Признак того, что класс в том или ином виде поддерживает <see cref="IWithId"/></returns>
+		private bool IsIWithId() {
+			return IsImplements("iwithid");
+		}
+		/// <summary>
+		///		Определяет, имплементирует ли генерируемый класс указанный интерфейс в том или ином виде
+		/// </summary>
+		/// <param name="interfaceName">Название интерфейса</param>
+		/// <returns>Признак имплементации интерфейса</returns>
+		private bool IsImplements(string interfaceName) {
+			return Cls.TargetClass.AllImports.Any(_ => _.Name.ToLowerInvariant() == interfaceName.ToLowerInvariant());
+		}
 		private void WriteGetTableQuery(){
 			o.WriteLine("\t\t///<summary>Implementation of GetTableName</summary>");
 			o.WriteLine("#if NOQORPENT");

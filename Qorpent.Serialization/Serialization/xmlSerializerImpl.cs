@@ -103,7 +103,7 @@ namespace Qorpent.Serialization {
 				) {
 				current.ReplaceWith(current.Elements().First());
 			}
-			if (current.Name.LocalName == "Children")
+			if (current.Name.LocalName.ToLowerInvariant() == "children")
 			{
 				if (!current.Elements().Any()) current.Remove();
 				else
@@ -241,11 +241,16 @@ namespace Qorpent.Serialization {
 		/// 	Begins the array entry.
 		/// </summary>
 		/// <param name="idx"> The idx. </param>
+		/// <param name="name"></param>
+		/// <param name="noindex"></param>
 		/// <remarks>
 		/// </remarks>
-		public void BeginArrayEntry(int idx) {
-
-			var e = new XElement("item", new XAttribute("__idx", idx));
+		public void BeginArrayEntry(int idx, string name = "item", bool noindex = false) {
+			name = name ?? "item";
+			var e = new XElement(name);
+			if (!noindex) {
+				e.Add(new XAttribute("__idx", idx));
+			}
 			Current.Add(e);
 			_stack.Push(e);
 		}
@@ -254,13 +259,16 @@ namespace Qorpent.Serialization {
 		/// 	Ends the array entry.
 		/// </summary>
 		/// <param name="last"> if set to <c>true</c> [last]. </param>
+		/// <param name="noindex"></param>
 		/// <remarks>
 		/// </remarks>
-		public void EndArrayEntry(bool last) {
+		public void EndArrayEntry(bool last, bool noindex = false) {
 			var item = _stack.Pop();
 			if(item.Elements().Count()==1 ) {
 				var subst = item.Elements().First();
-				subst.SetAttributeValue("__idx",item.Attribute("__idx").Value);
+				if (!noindex) {
+					subst.SetAttributeValue("__idx", item.Attribute("__idx").Value);
+				}
 				item.ReplaceWith(subst);
 			}
 			//if (e.Elements("item").Count() == 1 && e.Elements().Count() == 1) {

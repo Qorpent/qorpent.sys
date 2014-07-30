@@ -26,10 +26,28 @@ namespace Qorpent.Scaffolding.Model{
 		}
 
 		/// <summary>
+		/// Признак табличного типа 
+		/// </summary>
+		public bool IsTable { get; set; }
+
+		/// <summary>
+		/// Признак целевого класса для IsTable и IsIdRef
+		/// </summary>
+		public PersistentClass TargetType { get; set; }
+
+		/// <summary>
+		/// Признак ссылочного (по ид) типа
+		/// </summary>
+		public bool IsIdRef { get; set; }
+
+		/// <summary>
 		///     Признак строкового параметра
 		/// </summary>
 		public bool IsDateTime{
-			get { return CSharpDataType.ToLowerInvariant() == "datetime"; }
+			get {
+				var cSharpType = CSharpDataType.ToLowerInvariant();
+				return cSharpType == "system.datetime" || cSharpType == "datetime";
+			}
 		}
 
 		/// <summary>
@@ -74,6 +92,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		/// <remarks>Использует приоритет - прямое укзание диалекта, потом ANSI, потом varchar(255)</remarks>
 		public SqlDataType ResolveSqlDataType(SqlDialect dialect = SqlDialect.Ansi){
+			
 			if (SqlDataTypes.ContainsKey(dialect)){
 				return SqlDataTypes[dialect];
 			}

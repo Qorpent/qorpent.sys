@@ -15,6 +15,7 @@ namespace Qorpent.Scaffolding.Model{
 		public SqlFunction(){
 			Arguments = new Dictionary<string, SqlFunctionArgument>();
 			UseTablePrefixedName = true;
+			ObjectType = SqlObjectType.Function;
 		}
 
 		/// <summary>
@@ -28,6 +29,10 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// </summary>
 		public bool IsProcedure { get; set; }
+		/// <summary>
+		/// Признак SQL-методов
+		/// </summary>
+		public SqlMethodOptions SqlMethod { get; set; }
 
 		/// <summary>
 		/// </summary>
@@ -38,15 +43,32 @@ namespace Qorpent.Scaffolding.Model{
 		/// <returns></returns>
 		public override SqlObject Setup(PersistentModel model, PersistentClass cls, IBSharpClass bscls,
 		                                XElement xml){
+			model = model ?? cls.Model;
 			base.Setup(model, cls, bscls, xml);
+			
 			string xname = xml.Name.LocalName;
 			IsProcedure = xname == "void" || (xname == "function" && string.IsNullOrWhiteSpace(xml.Attr("returns")));
 			if (!IsProcedure){
-				string dtype = xname;
-				if (dtype == "function"){
-					dtype = xml.Attr("returns");
+				if (xname.EndsWith("__STAR__")){
+					var tp = xname.Substring(0, xname.Length - 8);
+					ReturnType = GetTableType(model, tp,cls);
 				}
-				ReturnType = Table.DataTypeMap[dtype];
+				else{
+					string dtype = xname;
+					if (dtype == "function"){
+						dtype = xml.Attr("returns");
+					}
+
+					ReturnType = Table.DataTypeMap[dtype];
+				}
+			}
+			if (xml.GetSmartValue("sql-method").ToBool()){
+				var sqlm = SqlMethodOptions.IsMethod;
+				var opts = xml.GetSmartValue("sql-method");
+				if (!string.IsNullOrWhiteSpace(opts)){
+					sqlm |= opts.To<SqlMethodOptions>();
+				}
+				SqlMethod = sqlm;
 			}
 			int i = 0;
 			foreach (XAttribute a in xml.Attributes()){
@@ -62,7 +84,12 @@ namespace Qorpent.Scaffolding.Model{
 					arg = Arguments[argname];
 					if (namepair.Length == 1){
 //only type determine
-						arg.DataType = Table.DataTypeMap[val];
+						if (Table.DataTypeMap.ContainsKey(val)){
+							arg.DataType = Table.DataTypeMap[val];
+						}
+						else{
+							arg.DataType = GetIdRefType(model,val,argname,cls);
+						}
 					}
 					else{
 						bool hastype = false;
@@ -91,5 +118,31 @@ namespace Qorpent.Scaffolding.Model{
 			}
 			return this;
 		}
+
+		private DataType GetIdRefType(PersistentModel model, string clsname, string argname, PersistentClass _cls){
+			
+			
+			var cls = clsname=="this"?_cls: model[clsname];
+			if (null == cls)
+			{
+				model.RegisterError(new BSharpError { Message = "Не могу найти класса для ссылочного типа " + clsname });
+				return null;
+			}
+			var result = cls[argname].DataType.Copy();
+			result.IsIdRef = true;
+			result.TargetType = cls;
+			return result;
+		}
+
+		private DataType GetTableType(PersistentModel model, string clsname, PersistentClass _cls){
+			var cls = clsname == "this" ? _cls: model[clsname];
+			if (null == cls){
+				model.RegisterError(new BSharpError{Message = "Не могу найти класса для табличного типа "+clsname});
+			}
+			var result = new DataType();
+			result.IsTable = true;
+			result.TargetType = cls;
+			return result;
+		} 
 	}
 }

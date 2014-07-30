@@ -23,7 +23,7 @@ namespace Qorpent.Model {
 	/// 
 	/// </summary>
 	/// <typeparam name="TEntity"></typeparam>
-	public interface IWithSimpleHierarchy<TEntity> where TEntity : IWithCode{
+	public interface IWithSimpleHierarchy<TEntity> {
 		/// <summary>
 		/// 	—сылка на родительский объект
 		/// </summary>

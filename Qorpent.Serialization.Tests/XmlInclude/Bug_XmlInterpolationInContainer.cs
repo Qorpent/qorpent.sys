@@ -26,6 +26,7 @@
 using NUnit.Framework;
 using Qorpent.Dsl;
 using Qorpent.IoC;
+using Qorpent.Qxi;
 
 namespace Qorpent.Serialization.Tests.XmlInclude {
 	[TestFixture]

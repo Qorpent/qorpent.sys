@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Qorpent.Model;
 
@@ -36,6 +37,32 @@ namespace Qorpent.Utils.Extensions {
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static IEnumerable<T> GetAllHierarchy<T>(this T item, bool useDebug = false, int level = 0)
+			where T : class, IWithSimpleHierarchy<T>, IWithCode, IWithId {
+			if (null == item)
+				yield break;
+			yield return item;
+			if (useDebug) {
+				for (var i = 0; i < level; i++) {
+					Console.Write("\t");
+				}
+				Console.Write("Code: " + item.Code);
+				if (item.Children.Count > 0) {
+					Console.Write(" (children: " + item.Children.Count + ")");
+				}
+				Console.Write("\n");
+			}
+
+			foreach (var k in item.Children.SelectMany(child => child.GetAllHierarchy(useDebug, level + 1))) {
+				yield return k;
+			}
+		}	
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="item"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
@@ -48,7 +75,24 @@ namespace Qorpent.Utils.Extensions {
 			foreach (var i in item.Children.SelectMany(child => child.GetSelfAndDescendantsFromHierarchy())) {
 				yield return i;
 			}
-		}	
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="item"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static IEnumerable<T> GetSelfAndDescendantsFromSimpleHierarchy<T>(this T item)
+			where T : class, IWithSimpleHierarchy<T>, IWithCode, IWithId
+		{
+			if (null == item) yield break;
+			yield return item;
+			foreach (var i in item.Children.SelectMany(child => child.GetSelfAndDescendantsFromSimpleHierarchy()))
+			{
+				yield return i;
+			}
+		}
 
 	
 

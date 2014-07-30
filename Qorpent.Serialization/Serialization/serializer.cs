@@ -80,7 +80,7 @@ namespace Qorpent.Serialization {
 			}
 			else {
 				_s.Begin(name);
-				InternalSerialize(name, value);
+				InternalSerialize(name, value, "item", false);
 				_s.End();
 				_s.Flush();
 			}
@@ -214,9 +214,11 @@ namespace Qorpent.Serialization {
 		/// </summary>
 		/// <param name="name"> The name. </param>
 		/// <param name="value"> The value. </param>
+		/// <param name="itemName"></param>
+		/// <param name="noindex"></param>
 		/// <remarks>
 		/// </remarks>
-		private void InternalSerialize(string name, object value) {
+		private void InternalSerialize(string name, object value, string itemName, bool noindex) {
 			name = name ?? (null == value ? "null" : value.GetType().Name);
 			if (null == value) {
 				_s.WriteFinal(null);
@@ -237,13 +239,13 @@ namespace Qorpent.Serialization {
 				_s.EndObject();
 			}
 			else if (typeof (Array).IsAssignableFrom(value.GetType())) {
-				SerializeArray(name, (Array) value);
+				SerializeArray(name, (Array) value, itemName, noindex);
 			}
 			else if (typeof (IDictionary).IsAssignableFrom(value.GetType())) {
 				SerializeDictionary(name, (IDictionary) value);
 			}
 			else if (typeof (IEnumerable).IsAssignableFrom(value.GetType())) {
-				SerializeArray(name, ((IEnumerable) value).OfType<object>().ToArray());
+				SerializeArray(name, ((IEnumerable) value).OfType<object>().ToArray(),itemName, noindex);
 			}
 			else {
 				if (_refcache.Contains(value)) {
@@ -269,7 +271,7 @@ namespace Qorpent.Serialization {
 			var c = items.Count();
 			foreach (var i in items) {
 				_s.BeginObjectItem(i.Name, i.IsFinal);
-				InternalSerialize(i.Name, i.Value);
+				InternalSerialize(i.Name, i.Value, i.ItemName, i.NoIndex);
 				_s.EndObjectItem(c == 1);
 				c--;
 			}
@@ -288,7 +290,7 @@ namespace Qorpent.Serialization {
 			var c = value.Keys.Count;
 			foreach (var k in value.Keys) {
 				_s.BeginDictionaryEntry(k.ToString());
-				InternalSerialize("value", value[k]);
+				InternalSerialize("value", value[k], "item", false);
 				_s.EndDictionaryEntry(c == 1);
 				c--;
 			}
@@ -300,16 +302,18 @@ namespace Qorpent.Serialization {
 		/// </summary>
 		/// <param name="name"> The name. </param>
 		/// <param name="value"> The value. </param>
+		/// <param name="itemName"></param>
+		/// <param name="noindex"></param>
 		/// <remarks>
 		/// </remarks>
-		private void SerializeArray(string name, Array value) {
+		private void SerializeArray(string name, Array value, string itemName, bool noindex) {
 			_s.BeginArray(name,value.Length);
 			var i = -1;
 			foreach (var val in value) {
 				i++;
-				_s.BeginArrayEntry(i);
-				InternalSerialize(i.ToString(CultureInfo.InvariantCulture), val);
-				_s.EndArrayEntry(i == value.Length - 1);
+				_s.BeginArrayEntry(i, itemName, noindex);
+				InternalSerialize(itemName, val, itemName, noindex);
+				_s.EndArrayEntry(i == value.Length - 1, noindex);
 				
 			}
 			_s.EndArray();

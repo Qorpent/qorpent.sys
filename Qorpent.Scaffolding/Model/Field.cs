@@ -269,7 +269,11 @@ namespace Qorpent.Scaffolding.Model{
 		private void SetupUsualField(IBSharpClass c, XElement e){
 			DataType = Table.DataTypeMap[e.Name.LocalName];
 			IsPrimaryKey = e.GetSmartValue("primarykey").ToBool();
-			IsUnique = e.GetSmartValue("unique").ToBool();
+			if (!IsPrimaryKey) {
+				IsUnique = e.GetSmartValue("unique").ToBool();
+			} else {
+				IsUnique = true;
+			}
 			IsAutoIncrement = e.GetSmartValue("identity").ToBool();
 			string csharptype = e.GetSmartValue("csharp-type");
 			if (!string.IsNullOrWhiteSpace(csharptype)){

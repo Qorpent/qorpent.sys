@@ -10,7 +10,10 @@ namespace Qorpent.Scaffolding.Model{
 		///     Объект со значением
 		/// </summary>
 		public object Value { get; set; }
-
+		/// <summary>
+		///		Признак того, что значение по умолчанию отличается от default (T)
+		/// </summary>
+		public bool IsDefault { get; set; }
 		/// <summary>
 		///     Тип значения по умолчанию
 		/// </summary>
@@ -33,6 +36,7 @@ namespace Qorpent.Scaffolding.Model{
 				else{
 					result.Value = 0;
 				}
+				result.IsDefault = true;
 			}
 			else{
 				if (attr.Contains("'") || attr.Contains("(")){
@@ -55,11 +59,16 @@ namespace Qorpent.Scaffolding.Model{
 
 							result.Value = attr;
 						}
-					}
-					else{
-						result.Value = attr.ToDecimal();
+					} else {
+						try {
+							result.Value = attr.ToDecimal();
+						} catch {
+							result.DefaultValueType = DbDefaultValueType.Expression;
+							result.Value = attr;
+						}
 					}
 				}
+				result.IsDefault = false;
 			}
 			return result;
 		}

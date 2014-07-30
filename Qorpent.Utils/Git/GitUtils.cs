@@ -40,7 +40,7 @@ namespace Qorpent.Utils.Git{
 		/// <returns></returns>
 		public static GitCommitInfo ParseGitCommitInfo(string data){
 			var parts = data.Split('|');
-			if (parts.Length != 7){
+			if (parts.Length < 7){
 				throw new Exception("cannot parse data as valid commit info '"+data+"'");
 			}
 			var result = new GitCommitInfo{
@@ -59,6 +59,14 @@ namespace Qorpent.Utils.Git{
 			var comment = parts[6];
 			if (!String.IsNullOrWhiteSpace(comment)){
 				comment = Encoding.UTF8.GetString(Encoding.GetEncoding(1251).GetBytes(comment));
+				if (parts.Length > 7)
+				{
+					for (var i = 7; i < parts.Length - 1; i++)
+					{
+						var p = Encoding.UTF8.GetString(Encoding.GetEncoding(1251).GetBytes(parts[i]));
+						comment += "|" + p;
+					}
+				}
 				result.Comment = comment;
 			}
 

@@ -118,7 +118,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <returns></returns>
 		public PersistentModel Setup(IBSharpContext context){
 			Context = context;
-			IEnumerable<IBSharpClass> tables = Context.ResolveAll(TablePrototype+";attr:"+TableAttribute);
+			IEnumerable<IBSharpClass> tables = Context.ResolveAll(TablePrototype+";attr:"+TableAttribute).ToArray();
 			foreach (IBSharpClass table in tables){
 				var pclass = new PersistentClass();
 				pclass.Setup(table);
@@ -400,7 +400,9 @@ namespace Qorpent.Scaffolding.Model{
 			if (null != byfullname) return byfullname;
 			PersistentClass bypartialname =
 				Classes.Values.FirstOrDefault(_ => _.Name.SqlQuoteName().ToLowerInvariant() == normalized);
-			return bypartialname;
+			if(null!= bypartialname)return  bypartialname;
+			PersistentClass byfullbsnanme = Classes.Values.FirstOrDefault(_ => _.TargetClass.FullName == reference);
+			return byfullbsnanme;
 		}
 
 		/// <summary>

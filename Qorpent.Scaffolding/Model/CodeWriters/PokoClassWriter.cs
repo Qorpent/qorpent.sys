@@ -150,7 +150,11 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				}
 			}
 			o.WriteLine("\t\t///<summary>Direct access to " + name + "</summary>");
-			o.WriteLine("\t\tprotected {0} Native{1};\r\n", dtype, name);
+			if (fld.DefaultObjectValue == null || fld.DefaultObjectValue.IsDefault) {
+				o.WriteLine("\t\tprotected {0} Native{1};\r\n", dtype, name);
+			} else {
+				o.WriteLine("\t\tprotected {0} Native{1} = " + fld.DefaultObjectValue.Value + ";\r\n", dtype, name);
+			}
 			o.WriteLine();
 		}
 
