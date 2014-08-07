@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using NUnit.Framework;
@@ -44,6 +45,19 @@ namespace Qorpent.Serialization.Tests {
 		public class DeadLion {
 			public int Id {
 				get { return 0; }
+			}
+		}
+		[Serialize(IgnoreEnumerable = true)]
+		public class Chelioz : IEnumerable<DeadLion> {
+			public string Value {
+				get { return "qorpent"; }
+			}
+			public IEnumerator<DeadLion> GetEnumerator() {
+				return (new[] {new DeadLion()} as IEnumerable<DeadLion>).GetEnumerator();
+			}
+
+			IEnumerator IEnumerable.GetEnumerator() {
+				return GetEnumerator();
 			}
 		}
 		public class Dno {
@@ -87,6 +101,11 @@ namespace Qorpent.Serialization.Tests {
 		public class nschild {
 			public int id;
 			[SerializeNotNullOnly] public int id2;
+		}
+		[Test]
+		public void IgnoreEnumerableTest() {
+			var c = new Chelioz();
+			test(c, @"<root><Chelioz Value=""qorpent"" /></root>");
 		}
 		[Test]
 		public void CanDoNotIndexDeadLions() {

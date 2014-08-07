@@ -245,7 +245,17 @@ namespace Qorpent.Serialization {
 				SerializeDictionary(name, (IDictionary) value);
 			}
 			else if (typeof (IEnumerable).IsAssignableFrom(value.GetType())) {
-				SerializeArray(name, ((IEnumerable) value).OfType<object>().ToArray(),itemName, noindex);
+				if (IsEnumerableIgnoring(value)) {
+					if (_refcache.Contains(value)) {
+						SerializeClass("SERIALIZEPROBLEM", new { SERIALIZEPROBLEM = "pcircular reference" });
+						return;
+					}
+					_refcache.Add(value);
+					SerializeClass(name, value);
+					_refcache.Remove(value);
+				} else {
+					SerializeArray(name, ((IEnumerable) value).OfType<object>().ToArray(), itemName, noindex);
+				}
 			}
 			else {
 				if (_refcache.Contains(value)) {
@@ -257,7 +267,13 @@ namespace Qorpent.Serialization {
 				_refcache.Remove(value);
 			}
 		}
-
+		private bool IsEnumerableIgnoring(object value) {
+			var sa = value.GetType().GetFirstAttribute<SerializeAttribute>();
+			if (null == sa) {
+				return false;
+			}
+			return sa.IgnoreEnumerable;
+		}
 		/// <summary>
 		/// 	Serializes the class.
 		/// </summary>

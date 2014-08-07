@@ -35,6 +35,10 @@ namespace Qorpent.Serialization {
 		/// </summary>
 		public bool NoIndex { get; set; }
 		/// <summary>
+		///		Ignores enumerable implementation of marked class
+		/// </summary>
+		public bool IgnoreEnumerable { get; set; }
+		/// <summary>
 		///		collection element name
 		/// </summary>
 		public string ItemName { get; set; }
