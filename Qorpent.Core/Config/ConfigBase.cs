@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Config {
@@ -28,6 +29,7 @@ namespace Qorpent.Config {
 	    /// <summary>
 	    ///     Поддержка наследования от родителя
 	    /// </summary>
+	    [IgnoreSerialize]
 	    public bool UseInheritance {
             get { return _useInheritance; }
             set { _useInheritance = value; }
