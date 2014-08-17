@@ -14,9 +14,7 @@ namespace Qorpent.Serialization.Tests.Report {
 			Assert.AreEqual(expected, ColumnTitleFormatter.ResolveTitle(format, f));
 		}
 		[TestCase(2012, 4, "${PeriodName} ${Year}", "Год", "", "Год 2012")]
-		[TestCase(2012, 4, "${StartPrevMonthLastDay}", "", "23.02.2013", "31.01.2013")]
 		[TestCase(2012, 4, "${p} ${y}", "Год", "", "Год 2012")]
-		[TestCase(2012, 4, "${sld}", "", "23.02.2013", "31.01.2013")]
 		public void IsCorrectTitleBuildingWithInterPolation(int year, int period, string format, string periodname, string start, string expected) {
 			var f = new TitleParams { Year = year, Period = period, PeriodName = periodname };
 			if (!string.IsNullOrWhiteSpace(start)) {
