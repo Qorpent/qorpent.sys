@@ -54,13 +54,30 @@ namespace Qorpent.Selector.Implementations {
 		}
 		private string BuildConditionXpath(string condition) {
 			var subpaths = condition.SmartSplit(false, true, ' ');
+			var sp = subpaths.ToArray();
+			subpaths = new List<string>();
+			foreach (var s in sp){
+				var sps = s.SmartSplit(false, true, '+');
+				for (var i = 0; i < sps.Count; i++){
+					var _s = sps[i];
+					if (i != 0){
+						_s = "+" + _s;
+					}
+					subpaths.Add(_s);
+				}
+			}
 			var xsubpaths = subpaths.Select(BuildSubpath);
-			var result = "./" + string.Join("",xsubpaths);
+			var result = "." + string.Join("",xsubpaths);
 			return result;
 		}
 
-		private static string BuildSubpath(string condition) {
+		private static string BuildSubpath(string condition){
+			bool onelevel = condition.StartsWith("+");
+			if (onelevel){
+				condition = condition.Substring(1);
+			}
 		    var sc = condition.Split(':');
+
 			var match = Regex.Match(sc[0].Trim(), 
 					@"(?ix)^
 						(?<tag>[^\.\#].*?)?
@@ -103,7 +120,7 @@ namespace Qorpent.Selector.Implementations {
 				}
 			}
 
-			var result = "/" + tag;
+			var result = (onelevel?"/":"//") + tag;
 			if (0 != subconditions.Count) {
 				result += "[" + string.Join(" and ", subconditions) + "]";
 			}
