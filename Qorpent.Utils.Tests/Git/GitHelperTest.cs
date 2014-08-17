@@ -93,6 +93,7 @@ namespace Qorpent.Utils.Tests {
 		}
 
 		[Test]
+		[Explicit]
 		public void CanCheckRemoteConnection()
 		{
 			var githelper = new GitHelper { RemoteUrl = "https://assoi-git.ugmk.com:8601/qorpent.kernel.git" };

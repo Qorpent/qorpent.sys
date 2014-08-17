@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Qorpent.Scaffolding.Model;
 using Qorpent.Scaffolding.Model.CodeWriters;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 	[TestFixture]
@@ -103,6 +104,7 @@ if(typeof(T)==typeof(a))return (new aDataCache{Model=this}) as ObjectDataCache<T
 		protected void SetupaLoadBehavior(ObjectDataCache<a> cache){
 			cache.OnAfterUpdateCache+= (s,ids,c,ctx) => {
 				var mycache = s as ObjectDataCache<a>;
+				ctx = ctx??ObjectDataCacheHints.Empty;
 				var targets = ids.Select(_=>mycache.Get(_,c)).ToArray();
 				foreach(var t in targets){
 					if(t.Id == -1||t.Id==0)continue;
@@ -111,9 +113,7 @@ if(typeof(T)==typeof(a))return (new aDataCache{Model=this}) as ObjectDataCache<T
 		}
 	}
 }
-
-
-".Trim(), code.Trim());
+".Trim().LfOnly(), code.Trim().LfOnly());
 		}
 
 
@@ -227,13 +227,14 @@ if(typeof(T)==typeof(c))return (new cDataCache{Model=this}) as ObjectDataCache<T
 		protected void SetupaLoadBehavior(ObjectDataCache<a> cache){
 			cache.OnAfterUpdateCache+= (s,ids,c,ctx) => {
 				var mycache = s as ObjectDataCache<a>;
+				ctx = ctx??ObjectDataCacheHints.Empty;
 				var targets = ids.Select(_=>mycache.Get(_,c)).ToArray();
 				foreach(var t in targets){
 					if(t.Id == -1||t.Id==0)continue;
 				}
 				if (ids.Count > 0 && !(ids.Count == 1 && (ids[0] == 0 || ids[0]==-1))){
 					var inids = string.Join("","",ids.Where(_=>_!=0 && _!=-1));
-					if((AutoLoadabs) && (!(ctx is ObjectCacheHints) || ((ctx is ObjectCacheHints) && !((ObjectCacheHints) ctx).NoChildren))){
+					if((AutoLoadabs) && !ctx.NoChildren){
 						var q = string.Format(""(a in ({0}))"",inids);
 						if(Lazyabs){
 							foreach(var t in targets){
@@ -258,6 +259,7 @@ if(typeof(T)==typeof(c))return (new cDataCache{Model=this}) as ObjectDataCache<T
 		protected void SetupbLoadBehavior(ObjectDataCache<b> cache){
 			cache.OnAfterUpdateCache+= (s,ids,c,ctx) => {
 				var mycache = s as ObjectDataCache<b>;
+				ctx = ctx??ObjectDataCacheHints.Empty;
 				var targets = ids.Select(_=>mycache.Get(_,c)).ToArray();
 				foreach(var t in targets){
 					if(t.Id == -1||t.Id==0)continue;
@@ -274,7 +276,7 @@ if (!Lazyabs && !Lazyba && t.aId != 0 && t.aId != -1)
 				}
 				if (ids.Count > 0 && !(ids.Count == 1 && (ids[0] == 0 || ids[0]==-1))){
 					var inids = string.Join("","",ids.Where(_=>_!=0 && _!=-1));
-					if((AutoLoadbcs) && (!(ctx is ObjectCacheHints) || ((ctx is ObjectCacheHints) && !((ObjectCacheHints) ctx).NoChildren))){
+					if((AutoLoadbcs) && !ctx.NoChildren){
 						var q = string.Format(""(b in ({0}))"",inids);
 						if(Lazybcs){
 							foreach(var t in targets){
@@ -299,6 +301,7 @@ if (!Lazyabs && !Lazyba && t.aId != 0 && t.aId != -1)
 		protected void SetupcLoadBehavior(ObjectDataCache<c> cache){
 			cache.OnAfterUpdateCache+= (s,ids,c,ctx) => {
 				var mycache = s as ObjectDataCache<c>;
+				ctx = ctx??ObjectDataCacheHints.Empty;
 				var targets = ids.Select(_=>mycache.Get(_,c)).ToArray();
 				foreach(var t in targets){
 					if(t.Id == -1||t.Id==0)continue;
@@ -317,8 +320,7 @@ if (!Lazybcs && !Lazycb && t.bId != 0 && t.bId != -1)
 		}
 	}
 }
-
-".Trim(), code.Trim());
+".Trim().LfOnly(), code.Trim().LfOnly());
 		}
 	}
 }

@@ -31,7 +31,7 @@ x table=test tree
 ");
 			Assert.AreEqual(
 @"Update table : test
-Sources : 2
+Sources : 3
 Definitions : 2
 	Id: 0; Code: y2; set_parent: ; 
 	Id: 0; Code: y3; name: n4; set_parent: a-code-x; 

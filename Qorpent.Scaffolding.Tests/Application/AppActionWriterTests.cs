@@ -3,6 +3,7 @@ using Qorpent.Scaffolding.Application;
 
 namespace Qorpent.Scaffolding.Tests.Application {
     [TestFixture]
+	[Category("NOTC")]
     public class AppActionWriterTests : AppModelBasicTestsBase {
         [Test]
         public void CanReadActions() {
