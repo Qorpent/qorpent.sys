@@ -97,7 +97,7 @@ namespace Qorpent.Data.DataDiff
 				IsHierarchy = hierarchy,
 				MergeAttributeChanges = true,
 				TreatNewAttributesAsChanges = true,
-				TreatDeleteAttributesAsChanges = true,
+				TreatDeleteAttributesAsChanges = _context.EmptyAttributesAsUpdates,
 				IncludeActions = XDiffAction.RenameElement | XDiffAction.MainCreateOrUpdate
 			};
 			var sw = Stopwatch.StartNew();

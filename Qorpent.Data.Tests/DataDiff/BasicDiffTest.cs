@@ -306,7 +306,7 @@ x table=test
 @"
 x table=test
 	i x x=1 y=2 update-id=23 update-code=x2
-");
+",emptychange:false);
 			Assert.AreEqual(
 @"Update table : test
 Sources : 1
@@ -326,7 +326,7 @@ x table=test
 @"
 x table=test
 	i x x=1 y=2 update-id=23 update-code=x2
-");
+",emptyaschange:false);
 			Assert.AreEqual(
 @"-- START OF SCRIPT: MAIN
 BEGIN TRAN
@@ -455,28 +455,28 @@ END CATCH
 ".Trim().LfOnly(), diff.Trim().LfOnly());
 		}
 
-		private string GetDiffString(string basis, string updated){
-			var result = GetDiff(basis, updated);
+		private string GetDiffString(string basis, string updated, bool emptychange = true){
+			var result = GetDiff(basis, updated,emptychange);
 			var str = string.Join("\r\n-----\r\n",result.OrderBy(_ => _.TableName));
 			Console.WriteLine(str);
 			return str;
 		}
 
-		private string GetSqlString(string basis, string updated){
-			var tables = GetDiff(basis, updated);
+		private string GetSqlString(string basis, string updated, bool emptyaschange = true){
+			var tables = GetDiff(basis, updated,emptyaschange);
 			var sw = new StringWriter();
-			var ctx = new TableDiffGeneratorContext{Tables = tables, SqlOutput = sw};
+			var ctx = new TableDiffGeneratorContext{Tables = tables, SqlOutput = sw,EmptyAttributesAsUpdates =emptyaschange};
 			new SqlDiffGenerator(ctx).Generate();
 			Console.WriteLine(sw.ToString());
 			return sw.ToString();
 		}
 
-		private static IEnumerable<DataDiffTable> GetDiff(string basis, string updated){
+		private static IEnumerable<DataDiffTable> GetDiff(string basis, string updated, bool emptyaschange = true){
 			
 			var bx = basis.StartsWith("<") ? XElement.Parse(basis) : new BxlParser().Parse(basis).Elements().First();
 			var up = basis.StartsWith("<") ? XElement.Parse(updated) : new BxlParser().Parse(updated).Elements().First();
 			var diff = new DiffPair{Base = bx, Updated = up};
-			var context = new TableDiffGeneratorContext{DiffPairs =new[]{ diff}};
+			var context = new TableDiffGeneratorContext{DiffPairs =new[]{ diff},EmptyAttributesAsUpdates = emptyaschange};
 			new DataTableDiffGenerator(context).Generate();
 			return context.Tables;
 		}

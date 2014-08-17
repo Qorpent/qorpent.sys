@@ -23,6 +23,7 @@ namespace Qorpent.Data.DataDiff{
 			IncludeTables =  new List<string>();
 			SqlScripts = new List<string>();
 			Log = StubUserLog.Default;
+			EmptyAttributesAsUpdates = true;
 		}
 		/// <summary>
 		/// Строка соединения с SQL
@@ -142,5 +143,9 @@ namespace Qorpent.Data.DataDiff{
 		/// Таблицы, которые должны быть включены в скрипт
 		/// </summary>
 		public IList<string> IncludeTables { get; set; }
+		/// <summary>
+		/// Признак восприятия сброса атрибута как сброса значения атрибута
+		/// </summary>
+		public bool EmptyAttributesAsUpdates { get; set; }
 	}
 }
