@@ -19,6 +19,7 @@ namespace Qorpent.Db
 		element datetime
 		element bool
 		element dictso
+		element geometry
 		datatype int type=Int32 sql=int
 		datatype long type=Int64 sql=bigint
 		datatype string type=String size=255 sql=nvarchar
@@ -29,6 +30,7 @@ namespace Qorpent.Db
 		datatype decimal type=Decimal size=18 precession=6 sql=decimal
 		datatype bool type=Boolean sql=bit
 		datatype dictso type="IDictionary<string,object>"
+		datatype geometry type=String sql=geometry default=(geometry::Parse('POINT(0 0 NULL NULL)'))
 		_timestampstr = "CAST(CAST(CURRENT_TIMESTAMP as float) as char)"
 		fullname = "${schema}.${code}"
 	

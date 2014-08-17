@@ -44,11 +44,17 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 					if (null != View.Definition.Element("selffields")){
 						sb.Append(GetSelfFieldSet());
 					}
-					foreach (XElement element in View.Definition.Elements("reffields")){
+					foreach (var element in View.Definition.Elements("reffields")){
 						var free = element.GetSmartValue("free").ToBool();
 						string[] rnames = element.Elements("by").SelectMany(_ => _.CollectFlags()).ToArray();
 						string[] fields = element.Elements("use").SelectMany(_ => _.CollectFlags()).ToArray();
 						WriteRefFields(rnames, fields, sb,free);
+					}
+					foreach (var element in View.Definition.Elements())
+					{
+						if(element.Name.LocalName=="selffields")continue;
+						if (element.Name.LocalName == "reffields") continue;
+						sb.AppendLine("(" + element.AttrOrValue("code") + ") as " + element.Name.LocalName+",");
 					}
 
 					sb.AppendLine(body);

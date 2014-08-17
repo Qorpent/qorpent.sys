@@ -1,0 +1,111 @@
+#абстракции данных для Qorpent.Zeta.Model в обновленной версии
+require data
+namespace Qorpent.MetaDataSync
+	using dbobj=Qorpent.Db.BaseObject
+	# схема будет новая и короче прежней - чтобы не путать имена
+	dbobj MetaDataSyncDbObject "Базовый объект данных для схема qptmds" schema=qptmds abstract file="${_file}"
+	# элементарная таблица
+	MetaDataSyncDbObject Table "Базовая таблица данных для qptmds" abstract prototype=dbtable
+		int Id "Идентификатор" primarykey identity idx=10
+		datetime Version "Версия записи" default=(CURRENT_TIMESTAMP) idx=980
+	
+	Table FileBase "Реестр файлов" abstract
+		string Code "Код файла" unique
+		string Name "Читаемое имя файла"
+		int Lock "Признак установленной блокировки"
+		ref ActiveRevision "Текущая ревизия" to=${fullname}Content.Id
+		
+		void Register @code=string, @name=string, @content=text, @hash=string, @revision=string, 
+			@filetime=datetime , @comment =longstring, @username=string @select=bool : (
+			declare @id int set @id = (select Id from @this where Code = @code)
+			if (@id is not null) begin 
+				if(isnull(@name,'')!='')update @this set Name = @name where Id= @id
+			end else begin
+				set @id = NEXT VALUE FOR ${fullname}_SEQ
+				insert @this (Id,Code,Name) values (@id,@code,@name)
+			end
+			exec @this.ContentAppend @id, @content,@hash, @revision, @filetime, @comment, @username
+			if(@select = 1) select @id
+			return @id
+		)
+		
+		void Lock @id=int, @wait=bool : (
+			declare @cnt int
+			declare @lock int set @lock = NEXT VALUE FOR ${fullname}_SEQ
+			while (1 = 1) begin
+				update @this set Lock = @lock where Id = @id and Lock = 0
+				set @cnt = @@ROWCOUNT
+				if @cnt = 1 begin 
+					select @lock
+					return @lock
+				end 
+				if (@wait=1) waitfor delay '00:00:00.300'
+				else begin
+					select 0
+					return 0
+				end
+			end
+		)
+		
+		void Release @id=int,@lock=int : (
+			update @this set Lock = 0 where Id = @id and (Lock = @lock or @lock = 0)
+		)
+		
+		void Delete @code =string : (
+			update @this set activerevision = 0 where code =@code
+			delete ${fullname}ContentFull where MDFileCode =@code
+			delete @this where code =@code
+		)
+		
+		view Full "Вид полного нормализованного представления ячеек"
+			selffields
+			reffields
+				by ActiveRevision
+				use Revision,RevisionTime,Hash,Content,Comment,UserName
+		
+		
+	Table FileContentBase "Реестр содержимого файлов" abstract target="FileBase"
+		ref MDFile "Целевой файл" to="${target}.Id" index="${.code}_UNQ_FILE_REVISION"
+		datetime RevisionTime "Время создания ревизии"
+		string Revision "Ревизия" index="${.code}_UNQ_FILE_REVISION"
+		string Hash "Хэш контента"
+		longstring Comment "Комментарий"
+		text Content "Контент"
+		string UserName "Имя пользователя, внесшего изменения"
+		
+		void Append @fileid=int, @content=text, @hash=string, @revision=string, 
+			@filetime=datetime,@comment=longstring, @username=string @select=bool : (
+			declare @id int set @id = (select Id from @this where Revision = @revision and MDFile = @fileid )
+			if (@id is null) begin
+				set @id = NEXT VALUE FOR ${fullname}_SEQ
+				insert @this (Id,MDFile,RevisionTime,Revision,Hash,Content,Comment,UserName)
+					values(@id, @fileid, @filetime, @revision, @hash, @content,isnull(@comment,'no comment'),isnull(@username,USER_NAME()))
+				update  ${schema}.${target} set ActiveRevision = @id where id = @fileid
+			end 
+			if ((select ActiveRevision from ${schema}.${target} where id = @fileid) = 0) 
+				update  ${schema}.${target} set ActiveRevision = @id where id = @fileid
+			if(@select = 1) select @id
+			return @id
+		)
+		
+		void Checkout @code=string, @revision=string,@select =bool : (
+			declare @fileid int set @fileid = (select Id from ${schema}.${target} where Code= @code)
+			if (@fileid is null) THROW 50012 , 'Cannot find file',1
+			declare @revid int set @revid = (select Id from @this where MDFile = @fileid and Revision = @revision)
+			if (@revid is null) THROW 50013 , 'Cannot find revision',1
+			update  ${schema}.${target} set ActiveRevision = @revid where id = @fileid
+			if(@select = 1) select @revid
+			return @revid
+		)
+		
+		view "${.code}Full" "Вид полного нормализованного представления ячеек"
+			selffields
+			reffields
+				by MDFile
+				use Code,Name,ActiveRevision
+			
+	
+		
+	
+	
+	
