@@ -14,7 +14,7 @@ namespace Qorpent.Integration.BSharp.Builder.Helpers {
 		/// <param name="project"></param>
 		public static DirectoryFileFilter Create(IBSharpProject project) {
 			return new DirectoryFileFilter {
-				Root = project.GetRootDirectory(),
+				Roots = project.GetSourceDirectories().ToArray(),
 				SearchMasks =project.InputExtensions.Split(';').Select(_=>"*."+_).ToArray(),
 				Includes = project.Targets.Paths.Where(_ => _.Value == BSharpBuilderTargetType.Include).Select(_ => _.Key).ToArray(),
 				Excludes = project.Targets.Paths.Where(_ => _.Value == BSharpBuilderTargetType.Exclude).Select(_ => _.Key).ToArray()
@@ -28,7 +28,7 @@ namespace Qorpent.Integration.BSharp.Builder.Helpers {
 	    /// <summary>
 		/// Корневая директория
 		/// </summary>
-	    public string Root { get; set; }
+	    public string[] Roots { get; set; }
 
 	    /// <summary>
 		///     Поиск всех вхождений по указанным инклукдам
@@ -39,25 +39,24 @@ namespace Qorpent.Integration.BSharp.Builder.Helpers {
 		/// </returns>
 		public IEnumerable<string> Collect()
 		{
-			foreach (var mask in SearchMasks)
-			{
-				foreach (var f in
-						Directory.GetFiles(Root, mask, SearchOption.AllDirectories)
-					)
-				{
-					var normalized = f.Replace(Root, "").Replace("\\", "/");
-					if (Includes.Any())
-					{
-						if (!Includes.Any(normalized.Contains)) continue;
-					}
-					if (Excludes.Any())
-					{
-						if (Excludes.Any(normalized.Contains)) continue;
-					}
-					yield return f;
-				} 
-			}
-		}
+		    foreach (var root in Roots){
+
+			    foreach (var mask in SearchMasks){
+				    foreach (var f in
+					    Directory.GetFiles(root, mask, SearchOption.AllDirectories)
+					    ){
+					    var normalized = f.Replace(root, "").Replace("\\", "/");
+					    if (Includes.Any()){
+						    if (!Includes.Any(normalized.Contains)) continue;
+					    }
+					    if (Excludes.Any()){
+						    if (Excludes.Any(normalized.Contains)) continue;
+					    }
+					    yield return f;
+				    }
+			    }
+		    }
+	    }
 		/// <summary>
 		/// Фильтры на включение
 		/// </summary>

@@ -159,5 +159,10 @@ namespace Qorpent.BSharp.Builder {
 	    /// </summary>
 	    /// <param name="target"></param>
 	    IBSharpProject SafeOverrideProject(IBSharpProject target);
+		/// <summary>
+		/// Возвращает все директории с исходными файлами
+		/// </summary>
+		/// <returns></returns>
+		IEnumerable<string> GetSourceDirectories();
 	}
 }

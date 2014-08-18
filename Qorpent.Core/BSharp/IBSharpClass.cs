@@ -184,5 +184,6 @@ namespace Qorpent.BSharp {
 		/// Выполняет действия, необходимые для подготовки компиляции, выполняются в синхронном режиме
 		/// </summary>
 		void PrepareForCompilation();
+
 	}
 }

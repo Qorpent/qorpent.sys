@@ -83,6 +83,25 @@ namespace Qorpent.BSharp.Builder{
 		}
 
 		/// <summary>
+		/// Возвращает все директории с исходными файлами
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<string> GetSourceDirectories(){
+			yield return GetRootDirectory();
+			if (null != SourceDirectories){
+				foreach (var dir in SourceDirectories){
+					if (Path.IsPathRooted(dir)){
+						yield return dir;
+
+					}
+					else{
+						yield return Path.GetFullPath(Path.Combine(GetRootDirectory(), dir)).NormalizePath();
+					}
+				}
+			}
+		}
+
+		/// <summary>
 		///     Расширения компилятора
 		/// </summary>
 		public IList<IBSharpCompilerExtension> CompilerExtensions{
@@ -118,6 +137,15 @@ namespace Qorpent.BSharp.Builder{
 		public string DebugOutputDirectory{
 			get { return Get(DEBUG_OUTPUT_DIRECTORY, BSharpBuilderDefaults.DefaultDebugDirectory); }
 			set { Set(DEBUG_OUTPUT_DIRECTORY, value); }
+		}
+
+		/// <summary>
+		///     Исходящая папка для отладочной информации
+		/// </summary>
+		public IList<string> SourceDirectories
+		{
+			get { return Get<IList<string>>("sourcedirectories"); }
+			set { Set("sourcedirectories", value); }
 		}
 
 		/// <summary>

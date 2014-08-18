@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
@@ -59,7 +60,14 @@ namespace Qorpent.BSharp.Builder{
 			foreach (XElement e in extensions){
 				project.Extensions.Add(e.GetCode());
 			}
+			IEnumerable<XElement> sourcedirs = bSharpClass.Compiled.Elements("Source");
+			if (sourcedirs.Any()){
 
+				project.SourceDirectories = new List<string>();
+				foreach (XElement e in sourcedirs){
+					project.SourceDirectories.Add(e.GetCode());
+				}
+			}
 			project.SrcClass = bSharpClass;
 
 			foreach (XElement e in bSharpClass.Compiled.Elements()){

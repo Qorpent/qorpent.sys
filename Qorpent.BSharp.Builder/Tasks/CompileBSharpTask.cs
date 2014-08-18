@@ -22,6 +22,7 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
 		/// <param name="context"></param>
 		public override void Execute(IBSharpContext context) {
 			var compiler = new BSharpCompiler();
+			compiler.Log = Project.Log;
 			Project.Compiler = compiler;
 		    foreach (var e in Project.CompilerExtensions ) {
 		        compiler.Extensions.Add(e);

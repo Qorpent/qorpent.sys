@@ -118,6 +118,7 @@ namespace Qorpent.BSharp{
 			IBSharpContext result = preparedContext ?? new BSharpContext(this);
 			result.Compiler = this;
 			sources = ProcessRequires(sources, result);
+			Log.Info("Total Sources after require "+sources.Count());
 			if (_config.SingleSource){
 				return BuildBatch(sources, result);
 			}
@@ -379,12 +380,18 @@ namespace Qorpent.BSharp{
 
 		private void ProcessRequiresWithFileReference(XElement source, Dictionary<string, XElement> filenames,
 		                                              IBSharpContext context, XElement require, string filename){
+			
+			if (require.Attr("code").EndsWith("/")){
+				ProcessRequiresDirectory(source, filenames, context, require, filename);
+				return;
+			}
 			string dir = Path.GetDirectoryName(filename);
 			string file = require.Attr("code") + ".bxls";
 
 			if (!Path.IsPathRooted(file)){
 				file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
 			}
+
 			if (filenames.ContainsKey(file)) return;
 			if (File.Exists(file)){
 				XElement src = _requireBxl.Parse(File.ReadAllText(file), file);
@@ -394,6 +401,34 @@ namespace Qorpent.BSharp{
 			else{
 				string message = "cannot  find required module " + require.Attr("code") + " for " + source.Describe().File;
 				context.RegisterError(new BSharpError{
+					Level = ErrorLevel.Error,
+					Phase = BSharpCompilePhase.SourceIndexing,
+					Message = message,
+					Xml = require
+				});
+				log.Error(message);
+			}
+		}
+
+		private void ProcessRequiresDirectory(XElement source, Dictionary<string, XElement> filenames, IBSharpContext context, XElement require, string filename){
+			string curdir = Path.GetDirectoryName(filename);
+			string otherdir = require.Attr("code");
+			if (!Path.IsPathRooted(otherdir)){
+				otherdir = Path.GetFullPath(Path.Combine(curdir, otherdir)).NormalizePath();
+			}
+			if (Directory.Exists(otherdir)){
+				foreach (var file in Directory.GetFiles(otherdir,"*.bxls")){
+					if (filenames.ContainsKey(file)) continue;
+	
+						XElement src = _requireBxl.Parse(File.ReadAllText(file), file);
+						filenames[file] = src;
+						ProcessRequires(src, file, filenames, context);
+				}
+			}
+			else{
+				string message = "cannot  find required directory " + require.Attr("code") + " for " + source.Describe().File;
+				context.RegisterError(new BSharpError
+				{
 					Level = ErrorLevel.Error,
 					Phase = BSharpCompilePhase.SourceIndexing,
 					Message = message,
