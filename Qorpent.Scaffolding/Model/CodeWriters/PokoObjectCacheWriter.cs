@@ -49,9 +49,9 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("\t\t}");
 			o.WriteLine();
 			o.Write("\t\t///<summary>{0}</summary>\r\n", method.Comment);
-			o.Write("\t\tpublic {0}[] {1} ({2} {3}) {{\r\n", method.ReturnType.TargetType.Name, method.Name, Cls.Name,Cls.Name.ToLowerInvariant());
+			o.Write("\t\tpublic {0}[] {1} ({2} {3}) {{\r\n", method.ReturnType.TargetType.Name, method.Name, Cls.Name,Escaper.EscapeCSharpKeyword(Cls.Name.ToLowerInvariant()));
 			o.Write(@"			return {0} ({1}.Id);
-", method.Name,Cls.Name.ToLowerInvariant());
+", method.Name,Escaper.EscapeCSharpKeyword(Cls.Name.ToLowerInvariant()));
 			o.WriteLine("\t\t}");
 		}
 

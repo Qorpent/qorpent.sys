@@ -18,6 +18,9 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 
 		private bool _generated;
 
+
+		
+
 		/// <summary>
 		/// 
 		/// </summary>

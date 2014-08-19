@@ -8,8 +8,52 @@ namespace Qorpent.Serialization
     /// <summary>
     /// Univarsal character escaper
     /// </summary>
-    public static class Escaper
-    {
+    public static class Escaper{
+	    /// <summary>
+	    /// Ключевые слова C#
+	    /// </summary>
+	    public static readonly string[] CSharpKeywords = new[]{
+		    "abstract", "add", "as", "ascending",
+		    "async", "await", "base", "bool",
+		    "break", "by", "byte", "case",
+		    "catch", "char", "checked", "class",
+		    "const", "continue", "decimal", "default",
+		    "delegate", "descending", "do", "double",
+		    "dynamic", "else", "enum", "equals","event",
+		    "explicit", "extern", "false", "finally",
+		    "fixed", "float", "for", "foreach",
+		    "from", "get", "global", "goto",
+		    "group", "if", "implicit", "in",
+		    "int", "interface", "internal", "into",
+		    "is", "join", "let", "lock",
+		    "long", "namespace", "new", "null",
+		    "object", "on", "operator", "orderby",
+		    "out", "override", "params", "partial",
+		    "private", "protected", "public", "readonly",
+		    "ref", "remove", "return", "sbyte",
+		    "sealed", "select", "set", "short",
+		    "sizeof", "stackalloc", "static", "string",
+		    "struct", "switch", "this", "throw",
+		    "true", "try", "typeof", "uint",
+		    "ulong", "unchecked", "unsafe", "ushort",
+		    "using", "value", "var", "virtual",
+		    "void", "volatile", "where", "while",
+		    "yield"
+	    };
+
+	    
+		/// <summary>
+		/// Экранирует ключевые слова C#
+		/// </summary>
+		/// <param name="str"></param>
+		/// <returns></returns>
+		public static string EscapeCSharpKeyword(string str){
+			if (-1 != Array.IndexOf(CSharpKeywords, str)){
+				return "@" + str;
+			}
+			return str;
+		}
+
         /// <summary>
         /// Escape all symbols for given type
         /// </summary>
