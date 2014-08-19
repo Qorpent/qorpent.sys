@@ -257,7 +257,12 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 					rn += of.ReferenceField;
 				}
 				rn = rn.SqlQuoteName();
-				o.Write(n.Replace("\"","\\\""));
+				n = n.Replace("\"", "\\\"");
+				//геометрический тип трансформируем в nvarchar(max)
+				if (of.DataType.ResolveSqlDataType(SqlDialect.SqlServer) == "geometry"){
+					n = "CAST(" + n + " as nvarchar(max))";
+				}
+				o.Write(n);
 				if (rn != n){
 					o.Write(" as " + rn.Replace("\"", "\\\"") + "");
 				}
