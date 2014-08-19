@@ -259,7 +259,8 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				rn = rn.SqlQuoteName();
 				n = n.Replace("\"", "\\\"");
 				//геометрический тип трансформируем в nvarchar(max)
-				if (of.DataType.ResolveSqlDataType(SqlDialect.SqlServer) == "geometry"){
+				if (of.DataType.ResolveSqlDataType(SqlDialect.SqlServer).Name.StartsWith("geo"))
+				{
 					n = "CAST(" + n + " as nvarchar(max))";
 				}
 				o.Write(n);

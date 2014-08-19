@@ -171,6 +171,16 @@ namespace Qorpent.Scaffolding.Model{
 				}
 			};
 
+			result["geography"] = new DataType
+			{
+				Code = "geography",
+				CSharpDataType = "String",
+				SqlDataTypes ={
+					{SqlDialect.Ansi, new SqlDataType{Name = "varchar", Size = 255}},
+					{SqlDialect.SqlServer, new SqlDataType{Name = "geography"}},
+				}
+			};
+
 
 			result["shortstring"] = new DataType{
 				Code = "shortstring",
