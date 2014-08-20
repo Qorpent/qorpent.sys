@@ -256,7 +256,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				if (of.IsReference){
 					rn += of.ReferenceField;
 				}
-				rn = rn.SqlQuoteName();
+				rn = rn.SqlQuoteName().Replace("\"", "\\\"");
 				n = n.Replace("\"", "\\\"");
 				//геометрический тип трансформируем в nvarchar(max)
 				if (of.DataType.ResolveSqlDataType(SqlDialect.SqlServer).Name.StartsWith("geo"))
@@ -265,7 +265,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				}
 				o.Write(n);
 				if (rn != n){
-					o.Write(" as " + rn.Replace("\"", "\\\"") + "");
+					o.Write(" as " + rn + "");
 				}
 			}
 			o.Write(" from " + Cls.FullSqlName.Replace("\"", "\\\"") + " \");");
