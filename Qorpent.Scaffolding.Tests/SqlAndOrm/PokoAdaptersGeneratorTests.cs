@@ -281,7 +281,7 @@ namespace .Adapters {
 		public override string PrepareSelectQuery(object conditions = null, object hints = null) {
 #endif
 			var sb = new StringBuilder();
-			sb.Append(""select \""id\"" as \""id\"", CAST(\""gis\"" as nvarchar(max)) as \""gis\"" from \""dbo\"".\""a\"" "");
+			sb.Append(""select \""id\"", CAST(\""gis\"" as nvarchar(max)) as \""gis\"" from \""dbo\"".\""a\"" "");
 			var where = conditions as string;
 			if ( null != where ) {
 				sb.Append("" where "");
