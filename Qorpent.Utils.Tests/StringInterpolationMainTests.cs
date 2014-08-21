@@ -23,6 +23,12 @@ namespace Qorpent.Utils.Tests
 		public void CanReplaceWithEmptiesIfNoSourceGiven(string src, string result) {
 			Assert.AreEqual(result,_si.Interpolate(src));
 		}
+
+		[TestCase("${a}${{a}", "1${a}")]
+		public void CanEscapeInerpolationsOnStrFormatManer(string src, string result){
+			Assert.AreEqual(result,_si.Interpolate(src,new{a=1}));
+		}
+
 		[Test]
 		public void CanInterpolateUObj(){
 			Assert.AreEqual("12", _si.Interpolate("${x}${y}", new { x = 1, y = 2 }.ToUson()));

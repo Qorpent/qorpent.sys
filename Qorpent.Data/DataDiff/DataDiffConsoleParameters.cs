@@ -18,6 +18,13 @@ namespace Qorpent.Data.DataDiff
 		public DataDiffConsoleParameters(){
 			this.TreatAnonymousAsBSharpProjectReference = true;
 			RepositoryPath = "auto";
+			ProjectName = "bs-default";
+			ProjectDirectory = ".";
+			Prototype = "data";
+			OutputDirectory = ".sqldiff";
+			Branch = "master";
+			FullUpdate = false;
+			ApplyToDatabase = true;
 		}
 		/// <summary>
 		/// Путь к репозиторию
@@ -36,8 +43,32 @@ namespace Qorpent.Data.DataDiff
 		/// </summary>
 		public string Prototype { get; set; }
 		/// <summary>
+		/// Директория для SQL скриптов
+		/// </summary>
+		public string OutputDirectory { get; set; }
+		/// <summary>
 		/// Строка соединения
 		/// </summary>
 		public string Connection{ get; set; }
+		/// <summary>
+		/// Бранч в репозитории
+		/// </summary>
+		public string Branch { get; set; }
+
+		/// <summary>
+		/// Полное обновление
+		/// </summary>
+		public bool FullUpdate { get; set; }
+
+		/// <summary>
+		/// Регистрировать в таблице метафайлов SQL
+		/// </summary>
+		public bool RegisterInMetaTable { get; set; }
+
+		/// <summary>
+		/// Применить дельту к базе
+		/// </summary>
+		public bool ApplyToDatabase { get; set; }
+
 	}
 }

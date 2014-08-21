@@ -33,6 +33,7 @@
     <Compile Include="CombinationalTest.cs" />
     <Compile Include="ComplexStringHelperTest.cs" />
     <Compile Include="ComplexStringTest.cs" />
+    <Compile Include="ConsoleApplicationSupport\ConsoleDefaultApplicationBehavior.cs" />
     <Compile Include="ConsoleApplicationSupport\ConsoleHandlerTests.cs" />
     <Compile Include="ConsoleArgumentHelperTest.cs" />
     <Compile Include="ConvertExtensionsTest.cs" />

@@ -10,7 +10,7 @@ namespace Qorpent.XDiffDataUpdater
 	/// <summary>
 	/// Программа обновления БД из файлов метаданных
 	/// </summary>
-	public static class Programm
+	public static class Program
 	{
 		/// <summary>
 		/// 

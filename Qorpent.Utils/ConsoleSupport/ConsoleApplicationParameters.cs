@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Qorpent.BSharp;
 using Qorpent.Bxl;
+using Qorpent.Config;
 using Qorpent.Log;
 using Qorpent.Utils.Extensions;
 
@@ -11,15 +12,21 @@ namespace Qorpent.Utils{
 	/// <summary>
 	/// Базовые параметры консольных приложений
 	/// </summary>
-	public class ConsoleApplicationParameters{
+	public class ConsoleApplicationParameters:ConfigBase{
 		/// <summary>
 		/// Первый анонимный атрибут
 		/// </summary>
-		public string Arg1 { get; set; }
+		public string Arg1 {
+			get { return Get("arg1", ""); }
+			set { Set("arg1", value); }
+		}
 		/// <summary>
 		/// Запуск режима отладки
 		/// </summary>
-		public bool Debug { get; set; }
+		public bool Debug{
+			get { return Get("debug", false); }
+			set { Set("debug", value); }
+		}
 		/// <summary>
 		/// Уровень журнала
 		/// </summary>
@@ -27,11 +34,19 @@ namespace Qorpent.Utils{
 		/// <summary>
 		/// Формат журнала
 		/// </summary>
-		public string LogFormat { get; set; }
+		public string LogFormat
+		{
+			get { return Get("logformat", ""); }
+			set { Set("logformat", value); }
+		}
 		/// <summary>
 		/// Показать справку
 		/// </summary>
-		public bool Help { get; set; }
+		public bool Help
+		{
+			get { return Get("help", false); }
+			set { Set("help", value); }
+		}
 		/// <summary>
 		/// Журнал
 		/// </summary>
@@ -39,11 +54,15 @@ namespace Qorpent.Utils{
 		/// <summary>
 		/// Параметр изменения текущей директории
 		/// </summary>
-		public string WorkingDirectory { get; set; }
+		public string WorkingDirectory
+		{
+			get { return Get("workingdirectory", ""); }
+			set { Set("workingdirectory", value); }
+		}
 		/// <summary>
 		/// Отложенный конструктор, логика подготовки 
 		/// </summary>
-		public virtual void Initialize(string[] arguments){
+		public virtual void Initialize(params string[] arguments){
 			var helper = new ConsoleArgumentHelper();
 			Log = ConsoleLogWriter.CreateLog("main", LogLevel.Info, LogFormat);
 			helper.Apply(arguments,this);
@@ -53,7 +72,9 @@ namespace Qorpent.Utils{
 			if (TreatAnonymousAsBSharpProjectReference && !string.IsNullOrWhiteSpace(Arg1)){
 				try{
 					LoadFromBSharp(); // загружаем параметры из B#
+					LogFormat = LogFormat.Replace("@{", "${");
 					helper.Apply(arguments, this); //а потом перегружаем из аргументов (чтобы консоль перекрывала)
+
 				}
 				catch (Exception ex){
 					Log.Fatal(ex.Message,ex,this);
@@ -93,6 +114,25 @@ namespace Qorpent.Utils{
 				throw new Exception("cannot find config with name "+Arg1);
 			}
 			cls.Compiled.Apply(this);
+			foreach (var x in cls.Compiled.Attributes())
+			{
+				
+				var name = x.Name.LocalName;
+				if (!this.options.ContainsKey(name)){
+					Set(name, x.Value);
+				}
+			}
+			foreach (var x in cls.Compiled.Elements()){
+				var name = x.Name.LocalName;
+				if (!options.ContainsKey(name)){
+					var val = x.Attr("code");
+					if (string.IsNullOrWhiteSpace(val)){
+						val = x.Value;
+					}
+					Set(name, val);
+				}
+			}
+			
 		}
 
 		/// <summary>

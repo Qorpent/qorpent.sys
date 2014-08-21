@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Qorpent.Config;
 
 namespace Qorpent.Utils {
 	/// <summary>
@@ -101,7 +102,14 @@ namespace Qorpent.Utils {
 				var name = parameter.Key.Replace("-", "");
 				var value = parameter.Value;
 				_reflectionhelper.SetValue(result, name, value, ignoreNotFound: true, publicOnly: false);
+				if (result is IConfig){
+					var cfg = result as IConfig;
+					if (!cfg.ContainsKey(name)){
+						cfg.Set(name,value);
+					}
+				}
 			}
+			
 		}
 
 		private readonly ReflectionHelper _reflectionhelper;
