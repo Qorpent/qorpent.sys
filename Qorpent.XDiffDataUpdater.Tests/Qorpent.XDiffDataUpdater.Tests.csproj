@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<IsTest>True</IsTest>
+    <Configuration>Debug</Configuration>
+	<ProjectGuid>C537CF3D-8B85-4A57-BB33-B9B93EA7F1A5</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.XDiffDataUpdater.Tests</RootNamespace>
+    <AssemblyName>Qorpent.XDiffDataUpdater.Tests</AssemblyName>
+	<AssemblyNameBase>Qorpent.XDiffDataUpdater</AssemblyNameBase>
+  </PropertyGroup>
+   <ItemGroup>
+	<None Include="*.import" />
+	<None Include="*.export" />
+	<EmbeddedResource Include=".\**\*.*resource"/>
+ </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+
+</Project>

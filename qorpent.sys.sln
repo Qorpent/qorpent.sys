@@ -86,10 +86,31 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Host.Exe", "Qorpent
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bxdoc", "bxdoc", "{59578442-A317-46B0-902D-3218F0CCE29C}"
 	ProjectSection(SolutionItems) = preProject
+		bxdoc\bx-bs-classref.wiki = bxdoc\bx-bs-classref.wiki
+		bxdoc\bx-bs-elements.wiki = bxdoc\bx-bs-elements.wiki
+		bxdoc\bx-bs-globals.wiki = bxdoc\bx-bs-globals.wiki
+		bxdoc\bx-bs-inheritance.wiki = bxdoc\bx-bs-inheritance.wiki
+		bxdoc\bx-bs-interpolation.wiki = bxdoc\bx-bs-interpolation.wiki
+		bxdoc\bx-bs-nsclasses.wiki = bxdoc\bx-bs-nsclasses.wiki
+		bxdoc\bx-bs-overrides.wiki = bxdoc\bx-bs-overrides.wiki
+		bxdoc\bx-bs-patches.wiki = bxdoc\bx-bs-patches.wiki
+		bxdoc\bx-bs-preview.wiki = bxdoc\bx-bs-preview.wiki
+		bxdoc\bx-bs-privates.wiki = bxdoc\bx-bs-privates.wiki
+		bxdoc\bx-bxl-attr.wiki = bxdoc\bx-bxl-attr.wiki
+		bxdoc\bx-bxl-el.wiki = bxdoc\bx-bxl-el.wiki
+		bxdoc\bx-bxl-idattr.wiki = bxdoc\bx-bxl-idattr.wiki
 		bsdoc\bx-bxl-literals.wiki = bsdoc\bx-bxl-literals.wiki
+		bxdoc\bx-bxl-literals.wiki = bxdoc\bx-bxl-literals.wiki
 		bsdoc\bx-bxl-qstart.wiki = bsdoc\bx-bxl-qstart.wiki
+		bxdoc\bx-bxl-qstart.wiki = bxdoc\bx-bxl-qstart.wiki
 		bsdoc\bx-bxl-syntax.wiki = bsdoc\bx-bxl-syntax.wiki
+		bxdoc\bx-bxl-syntax.wiki = bxdoc\bx-bxl-syntax.wiki
 		bsdoc\bx-index.wiki = bsdoc\bx-index.wiki
+		bxdoc\bx-index.wiki = bxdoc\bx-index.wiki
+		bxdoc\bx-legend.wiki = bxdoc\bx-legend.wiki
+		bxdoc\bx-preview.wiki = bxdoc\bx-preview.wiki
+		bxdoc\bx-realworldsample.wiki = bxdoc\bx-realworldsample.wiki
+		bxdoc\ui.bsproj = bxdoc\ui.bsproj
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.BxlParser.Exe", "Qorpent.BxlParser.Exe\Qorpent.BxlParser.Exe.csproj", "{85E43634-91E4-4DB8-A3BC-E90FA681C24E}"
@@ -97,6 +118,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Syncer", "Qorpent.Syncer\Qorpent.Syncer.csproj", "{2E0E024B-31C4-464F-9F7E-3E9169E0EAF0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bstimetest", "bstimetest\bstimetest.csproj", "{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.XDiffDataUpdater", "Qorpent.XDiffDataUpdater\Qorpent.XDiffDataUpdater.csproj", "{89E22910-D2AA-41E2-9717-FC7B27DEC865}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -296,6 +319,12 @@ Global
 		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.SQL2008|Any CPU.ActiveCfg = Release|Any CPU
 		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.SQL2008|Any CPU.Build.0 = Release|Any CPU
+		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

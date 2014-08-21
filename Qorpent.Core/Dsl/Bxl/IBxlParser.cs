@@ -117,4 +117,6 @@ namespace Qorpent.Bxl {
 		/// <returns> </returns>
 		string Generate(XElement sourcexml, BxlGeneratorOptions options = null);
 	}
+
+	
 }

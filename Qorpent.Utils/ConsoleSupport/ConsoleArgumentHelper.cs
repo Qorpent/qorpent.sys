@@ -86,13 +86,22 @@ namespace Qorpent.Utils {
 		/// <returns> </returns>
 		public TArgs Parse<TArgs>(string[] args) where TArgs : new() {
 			var result = new TArgs();
+			Apply(args, result);
+			return result;
+		}
+		/// <summary>
+		/// применяет параметры к существующему классу
+		/// </summary>
+		/// <typeparam name="TArgs"></typeparam>
+		/// <param name="args"></param>
+		/// <param name="result"></param>
+		public void Apply<TArgs>(string[] args, TArgs result) where TArgs : new(){
 			var parseresult = ParseDictionary(args);
-			foreach (var parameter in parseresult) {
+			foreach (var parameter in parseresult){
 				var name = parameter.Key.Replace("-", "");
 				var value = parameter.Value;
 				_reflectionhelper.SetValue(result, name, value, ignoreNotFound: true, publicOnly: false);
 			}
-			return result;
 		}
 
 		private readonly ReflectionHelper _reflectionhelper;
