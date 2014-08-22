@@ -3,9 +3,12 @@
   <PropertyGroup>
     <Configuration>Debug</Configuration>
     <ProjectGuid>{89E22910-D2AA-41E2-9717-FC7B27DEC865}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Qorpent.XDiffDataUpdater</RootNamespace>
-    <AssemblyName>Qorpent.XDiffDataUpdater</AssemblyName>
+    <AssemblyName>xdbu</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <None Include="*.import" />

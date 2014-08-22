@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Qorpent.Data.DataDiff;
 using Qorpent.Log;
@@ -23,17 +24,17 @@ namespace Qorpent.XDiffDataUpdater
 				var parameters = new DataDiffConsoleParameters();
 				parameters.Initialize(args);
 				log = parameters.Log;
-				Execute(parameters);
+				var executor = new DataDiffConsololeExecutor();
+				executor.Execute(parameters);
 				return 0;
 			}
 			catch (Exception ex){
-				log.Fatal(ex.ToString(),ex);
+				log.Fatal(ex.ToString(), ex);
 				return -1;
 			}
-		}
-
-		private static void Execute(DataDiffConsoleParameters parameters){
-
+			finally{
+				Thread.Sleep(200);
+			}
 		}
 	}
 }

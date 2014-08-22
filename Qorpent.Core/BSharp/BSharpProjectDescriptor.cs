@@ -51,6 +51,7 @@ namespace Qorpent.BSharp
 			{
 				levels++;
 				path = Path.GetDirectoryName(path);
+				if (null == path) return;
 			}
 			RepositoryDirectory = path;	
 			var dir = "";

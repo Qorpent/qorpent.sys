@@ -16,21 +16,30 @@ namespace Qorpent.Data.DataDiff
 		public DataDiffConsoleParameters(){
 			TreatAnonymousAsBSharpProjectReference = true;
 			RepositoryDirectory = "auto";
-			ProjectName = "bs-default";
+			ProjectName = "";
 			ProjectDirectory = "auto";
 			Prototype = "data";
 			OutputDirectory = ".sqldiff";
 			Branch = "master";
 			FullUpdate = false;
 			ApplyToDatabase = true;
+			Server = "(local)";
+		}
+		/// <summary>
+		/// Путь к репозиторию
+		/// </summary>
+		public string CheckoutDirectory
+		{
+			get { return Get("checkoutdirectory", ""); }
+			set { Set("checkoutdirectory", value); }
 		}
 		/// <summary>
 		/// Путь к репозиторию
 		/// </summary>
 		public string RepositoryDirectory
 		{
-			get { return Get("repositorypath", ""); }
-			set { Set("repositorypath", value); }
+			get { return Get("repositorydirectory", ""); }
+			set { Set("repositorydirectory", value); }
 		}
 		/// <summary>
 		/// Путь к папке внутри репозитория
@@ -63,6 +72,23 @@ namespace Qorpent.Data.DataDiff
 		{
 			get { return Get("outputdirectory", ""); }
 			set { Set("outputdirectory", value); }
+		}
+
+		/// <summary>
+		/// SQL Server
+		/// </summary>
+		public string Server
+		{
+			get { return Get("server", ""); }
+			set { Set("server", value); }
+		}
+		/// <summary>
+		/// SQL Database Name
+		/// </summary>
+		public string Database
+		{
+			get { return Get("database", ""); }
+			set { Set("database", value); }
 		}
 		/// <summary>
 		/// Строка соединения
@@ -111,9 +137,9 @@ namespace Qorpent.Data.DataDiff
 		/// <summary>
 		/// Отложенный конструктор, логика подготовки 
 		/// </summary>
-		public override void Initialize(params string[] arguments)
+		protected override void InternalInitialize( string[] arguments)
 		{
-			base.Initialize(arguments);
+			base.InternalInitialize(arguments);
 			var projdesc = new BSharpProjectDescriptor();
 			projdesc.AutoSetup();
 			if (RepositoryDirectory == "auto"){
@@ -121,6 +147,17 @@ namespace Qorpent.Data.DataDiff
 				if (ProjectDirectory == "auto"){
 					ProjectDirectory = projdesc.ProjectDirectory;
 				}
+			}
+			if (string.IsNullOrWhiteSpace(CheckoutDirectory)){
+				CheckoutDirectory = Path.Combine(Path.GetTempPath(), ".xdiffupd", DateTime.Now.ToString("yyyyMMddHHmmss"));
+				
+			}
+			if (string.IsNullOrWhiteSpace(Connection)){
+				if (string.IsNullOrWhiteSpace(Database)){
+					Database = "temp";
+				}
+				Connection = string.Format("Data Source={0};Initial Catalog={1};Integrated Security=True;Application Name=xdbu",
+				                           Server, Database);
 			}
 		}
 

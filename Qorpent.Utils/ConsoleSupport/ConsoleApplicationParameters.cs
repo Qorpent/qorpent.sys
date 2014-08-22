@@ -14,6 +14,12 @@ namespace Qorpent.Utils{
 	/// </summary>
 	public class ConsoleApplicationParameters:ConfigBase{
 		/// <summary>
+		/// 
+		/// </summary>
+		public ConsoleApplicationParameters(){
+			LogFormat = "${Time} ${Message}";
+		}
+		/// <summary>
 		/// Первый анонимный атрибут
 		/// </summary>
 		public string Arg1 {
@@ -64,8 +70,8 @@ namespace Qorpent.Utils{
 		/// </summary>
 		public virtual void Initialize(params string[] arguments){
 			var helper = new ConsoleArgumentHelper();
+			helper.Apply(arguments, this);
 			Log = ConsoleLogWriter.CreateLog("main", LogLevel.Info, LogFormat);
-			helper.Apply(arguments,this);
 			if (!string.IsNullOrWhiteSpace(WorkingDirectory)){
 				Environment.CurrentDirectory = Path.GetFullPath(WorkingDirectory);
 			}
@@ -96,7 +102,21 @@ namespace Qorpent.Utils{
 				Log.Debug("debugger launched");
 				Debugger.Launch();
 			}
+			InternalInitialize(arguments);
+			Log.Debug("Resolved call parameters:");
+			foreach (var p in this)
+			{
+				Log.Debug(string.Format("{0,-20} : {1}", p.Key, p.Value));
+			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		protected virtual void InternalInitialize(string[] args){
+			
+		}
+
 		/// <summary>
 		/// Производит загрузку из проекта B#
 		/// </summary>
