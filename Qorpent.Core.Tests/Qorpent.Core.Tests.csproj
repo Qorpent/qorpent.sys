@@ -22,6 +22,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BSharp\ProjectDescriptorTest.cs" />
     <Compile Include="BSharp\Runtime\BSharpGenericProviderTest.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeActivatorTest.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeClassTest.cs" />
@@ -54,7 +55,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
- <!-- <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />-->
+  <!-- <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />-->
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />

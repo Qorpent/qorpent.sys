@@ -66,6 +66,8 @@ namespace Qorpent.Utils.Extensions {
 #endif
 		}
 
+		
+
 		/// <summary>
 		/// 	Probe paths for JS
 		/// </summary>

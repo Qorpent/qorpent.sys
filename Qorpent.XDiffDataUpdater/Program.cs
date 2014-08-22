@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Qorpent.Data.DataDiff;
+using Qorpent.Log;
 
 namespace Qorpent.XDiffDataUpdater
 {
@@ -17,16 +18,22 @@ namespace Qorpent.XDiffDataUpdater
 		/// </summary>
 		/// <param name="args"></param>
 		public static int Main(string[] args){
-			
+			var log = ConsoleLogWriter.CreateLog("main");
 			try{
 				var parameters = new DataDiffConsoleParameters();
 				parameters.Initialize(args);
+				log = parameters.Log;
+				Execute(parameters);
 				return 0;
 			}
 			catch (Exception ex){
-				Console.WriteLine(ex);
+				log.Fatal(ex.ToString(),ex);
 				return -1;
 			}
+		}
+
+		private static void Execute(DataDiffConsoleParameters parameters){
+
 		}
 	}
 }

@@ -164,6 +164,7 @@
     <Compile Include="IO\IFile.cs" />
     <Compile Include="IO\IHashedDirectory.cs" />
     <Compile Include="IO\IStreamProxy.cs" />
+    <Compile Include="BSharp\BSharpProjectDescriptor.cs" />
     <Compile Include="Log\CollectionBasedUserLog.cs" />
     <Compile Include="Log\SessionLog.cs" />
     <Compile Include="Log\SessionLogClearQuery.cs" />
