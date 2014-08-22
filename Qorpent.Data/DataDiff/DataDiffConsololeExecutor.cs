@@ -21,7 +21,8 @@ namespace Qorpent.Data.DataDiff{
 					NoApply = !parameters.RegisterInMetaTable &&  !parameters.ApplyToDatabase,
 					FullUpdate = parameters.FullUpdate,
 					OnlyRegister = !parameters.ApplyToDatabase && parameters.RegisterInMetaTable,
-					Log = parameters.Log
+					Log = parameters.Log,
+					BSharpPrototype = parameters.Prototype
 				};
 				ctx.Log.Info("Start updater");
 				new DiffExecutor(ctx).Execute();

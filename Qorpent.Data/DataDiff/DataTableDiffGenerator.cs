@@ -41,6 +41,7 @@ namespace Qorpent.Data.DataDiff
 				var maps = _context.Mappings.Where(_ =>_.FromTable=="*" || _.FromTable.ToLowerInvariant() == table.TableName.ToLowerInvariant());
 				bool wasnoaliascodes = false;
 				bool wasnorevisions = false;
+				
 				foreach (var map in maps){
 					if (map.FromField.ToLowerInvariant() == "aliascodes"){
 						if (!wasnoaliascodes){
