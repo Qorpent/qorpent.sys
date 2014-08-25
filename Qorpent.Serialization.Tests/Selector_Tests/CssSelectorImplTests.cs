@@ -49,5 +49,14 @@ namespace Qorpent.Serialization.Tests.Selector_Tests {
                 Assert.IsTrue(result.Contains(i));
             }
         }
+
+		[Test(Description = "not work with multiple")]
+		public void Bug_MI308_Reproduce(){
+			var selector = ".text p, .text div";
+			var xml = XElement.Parse("<div><div class='text'><div>a</div><p>b</p><span>z</span><p>c</p><div>d</div></div></div>");
+			var selectresult = new CssSelectorImpl().Select(xml,selector).ToArray();
+			Assert.AreEqual(4,selectresult.Length);
+			Assert.AreEqual("abcd",string.Join("",selectresult.Select(_=>_.Value)));
+		}
     }
 }
