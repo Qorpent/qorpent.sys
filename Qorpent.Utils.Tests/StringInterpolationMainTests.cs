@@ -24,6 +24,13 @@ namespace Qorpent.Utils.Tests
 			Assert.AreEqual(result,_si.Interpolate(src));
 		}
 
+		[Test]
+		public void MI_334_Invalid_Train_AncorTrim(){
+			var str = "xxx$";
+			var result = new StringInterpolation().Interpolate(str, new{x = 1});
+			Assert.AreEqual(str,result);
+		}
+
 		[TestCase("${a}${{a}", "1${a}")]
 		public void CanEscapeInerpolationsOnStrFormatManer(string src, string result){
 			Assert.AreEqual(result,_si.Interpolate(src,new{a=1}));

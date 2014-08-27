@@ -103,9 +103,14 @@ namespace Qorpent.Utils
 			Interpolate();
 			// если есть остаточное открытие - значит у нас не до конца была произведена подстановка
 			// мы должны допотставить данные из currentBuffer
-			if (_wasOpen) {
+			if (_wasAncor && !_wasOpen){
+				_targetBuffer.Append(AncorSymbol);
+			}
+			if (_wasOpen ) {
 				StornateTail();
 			}
+
+			
 
 			return _targetBuffer.ToString();
 		}

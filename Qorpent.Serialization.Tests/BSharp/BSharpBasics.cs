@@ -480,6 +480,17 @@ namespace X
 		}
 
 		[Test]
+		public void Bug_MI_334_Crop_Trail_Usd()
+		{
+		
+			var result = Compile(@"
+class x p='http://mstrok.ru/\\?id=\\d{4}\\d*$'");
+
+			var cls = result.Get("x");
+			Assert.AreEqual(@"http://mstrok.ru/\?id=\d{4}\d*$",cls.Compiled.Attr("p"));
+		}
+
+		[Test]
 		public void CanInterpolate()
 		{
 
