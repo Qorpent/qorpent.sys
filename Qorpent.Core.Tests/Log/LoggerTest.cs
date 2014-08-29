@@ -25,6 +25,7 @@
 
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Qorpent.Log;
 
@@ -88,5 +89,48 @@ namespace Qorpent.Core.Tests.Log {
 			var ex = Assert.Throws<LogException>(() => logger.Join());
 			StringAssert.Contains("myerror", ex.InnerException.Message);
 		}
+
+	    class LateLogger : ILogger {
+	        private string _message;
+	        private Task _task;
+	        public LogLevel Level { get; set; }
+	        public bool Available { get; set; }
+	        public string Name { get; set; }
+            public string OutResult { get; set; }
+	        public InternalLoggerErrorBehavior ErrorBehavior { get; set; }
+	        public bool IsApplyable(object context) {
+	            return true;
+	        }
+
+	        public void StartWrite(LogMessage message) {
+	            if (null != _task) _task.Wait();
+	            this._message = message.Message;
+	            this._task = Task.Run(() =>
+	            {
+                    Thread.Sleep(200);
+	                OutResult = _message;
+	            });
+	        }
+
+	        public void Join() {
+               if(null!=_task)
+	            _task.Wait();
+	        }
+	    }
+	    [Test]
+	    public void UserLogIsSynchronized_Q206() {
+	        var lateLogger = new LateLogger{Level = LogLevel.All,Available = true};
+            IUserLog log = new LoggerBasedUserLog(new []{lateLogger}){Level = LogLevel.All};
+            log.Trace("XXX");
+            Assert.AreNotEqual("XXX",lateLogger.OutResult);//сначала проверяем, что так-то все асинхронно
+            log.Synchronize();
+            Assert.AreEqual("XXX", lateLogger.OutResult);//но можно дождаться
+	        using (IUserLog slog = new LoggerBasedUserLog(new[] {lateLogger}) {Level = LogLevel.All}) {
+	            slog.Trace("YYY");
+	        }
+
+            Assert.AreEqual("YYY",lateLogger.OutResult);
+            
+	    }
 	}
 }

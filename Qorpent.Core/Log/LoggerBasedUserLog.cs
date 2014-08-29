@@ -31,7 +31,7 @@ namespace Qorpent.Log {
 		/// <param name="loggers"> </param>
 		/// <param name="manager"> </param>
 		/// <param name="name"> </param>
-		public LoggerBasedUserLog(IEnumerable<ILogger> loggers, ILogManager manager, string name) {
+		public LoggerBasedUserLog(IEnumerable<ILogger> loggers, ILogManager manager=null, string name="main") {
 			_loggers = loggers ?? new ILogger[] {};
 			_helper = new LogHelper();
 			_manager = manager;
@@ -246,7 +246,16 @@ namespace Qorpent.Log {
 			}
 			return false;
 		}
-
+        /// <summary>
+        /// Синхронизатор журнала
+        /// </summary>
+	    public void Synchronize()
+	    {
+            foreach (var logger in _loggers)
+            {
+                logger.Join();
+            }
+	    }
 		private readonly LogHelper _helper;
 		private readonly IEnumerable<ILogger> _loggers;
 		private readonly ILogManager _manager;
@@ -266,5 +275,14 @@ namespace Qorpent.Log {
 
 		private LogLevel _level;
 		private IList<IUserLog> _subLoggers= new List<IUserLog>();
+
+	    /// <summary>
+	    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+	    /// </summary>
+	    /// <filterpriority>2</filterpriority>
+	    public void Dispose()
+	    {
+	        Synchronize();
+	    }
 	}
 }

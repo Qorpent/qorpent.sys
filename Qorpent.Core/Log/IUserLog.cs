@@ -17,18 +17,20 @@
 // PROJECT ORIGIN: Qorpent.Core/IUserLog.cs
 #endregion
 
+using System;
 using System.Collections.Generic;
 
 namespace Qorpent.Log {
 	/// <summary>
 	/// 	Abstract UserLog- user friendly API for calling log
 	/// </summary>
-	public interface IUserLog {
+	public interface IUserLog:IDisposable
+	{
 		/// <summary>
 		/// 	Контекстный объект, к которому привязан данный логгер, контекстный объект будет 
 		/// 	транслироваться в журнал как <see cref="LogMessage.HostObject" />
 		/// </summary>
-		object HostObject { get; set; }
+		object HostObject { get; set; } 
 		/// <summary>
 		///     Уровень логгирования
 		/// </summary>
@@ -94,5 +96,9 @@ namespace Qorpent.Log {
 		/// </summary>
 		IList<IUserLog> SubLoggers { get; }
 
+	    /// <summary>
+	    /// Синхронизатор журнала
+	    /// </summary>
+	    void Synchronize();
 	}
 }

@@ -63,7 +63,7 @@ namespace Qorpent.Log {
 		/// <param name="level">”ровень логгировани€</param>
 		/// <param name="customFormat">ѕереопределЄнный формат сообщени€</param>
         /// <returns>Ёкземпл€р <see cref="IUserLog"/> c экземпл€ром <see cref="ConsoleLogWriter"/></returns>
-		public static IUserLog CreateLog(string logname, LogLevel level = LogLevel.Trace, string customFormat = "") {
+		public static IUserLog CreateLog(string logname="main", LogLevel level = LogLevel.Trace, string customFormat = "${Time} ${Message}") {
 			return new LoggerBasedUserLog(
 				new[]
 					{

@@ -157,5 +157,22 @@ namespace Qorpent.Log {
 		public IList<IUserLog> SubLoggers{
 			get { return _subLoggers; }
 		}
+
+	    /// <summary>
+	    /// Синхронизатор журнала
+	    /// </summary>
+	    public void Synchronize()
+	    {
+	        throw new System.NotImplementedException();
+	    }
+
+	    /// <summary>
+	    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+	    /// </summary>
+	    /// <filterpriority>2</filterpriority>
+	    public void Dispose()
+	    {
+	        throw new System.NotImplementedException();
+	    }
 	}
 }
