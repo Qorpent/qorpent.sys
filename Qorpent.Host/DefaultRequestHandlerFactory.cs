@@ -37,6 +37,10 @@ namespace Qorpent.Host{
 			if (path.IsEmpty() || path.Equals("/")){
 				return new StaticFileHandler();
 			}
+			if (_cache.ContainsKey(path))
+			{
+				return _cache[path];
+			}
 			if (path.Split('/').Last().Contains(".") && !path.EndsWith(".qweb")){
 				return new StaticFileHandler();
 			}
@@ -47,9 +51,7 @@ namespace Qorpent.Host{
 			if (path.StartsWith("/!") || path.StartsWith("/~") || path.StartsWith("/-")){
 				path = "/" + path.Substring(2);
 			}
-			if (_cache.ContainsKey(path)){
-				return _cache[path];
-			}
+			
 			if (path == "/wiki"){
 				return new WikiHandler();
 			}

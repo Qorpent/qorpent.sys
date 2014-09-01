@@ -39,6 +39,10 @@
     <Compile Include="FileDescriptors\FileFsBased.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
+    <Compile Include="Net\HttpEntity.cs" />
+    <Compile Include="Net\HttpEntityType.cs" />
+    <Compile Include="Net\HttpReader.cs" />
+    <Compile Include="Net\HttpScanerState.cs" />
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />
     <Compile Include="Storages\FileStorageHashedDirectory.cs" />
     <Compile Include="Storages\FileStorageVcsStorage.cs" />

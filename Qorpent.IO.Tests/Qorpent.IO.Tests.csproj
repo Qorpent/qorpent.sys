@@ -35,6 +35,7 @@
     <Compile Include="DirtyVersion\VersionedStorageTest.cs" />
     <Compile Include="FileResolverTest.cs" />
     <Compile Include="FileServiceTest.cs" />
+    <Compile Include="Net\HttpReaderTests.cs" />
     <Compile Include="StreamProxyTests.cs" />
     <Compile Include="SynchronizeWellKnownDirectory.cs" />
     <Compile Include="VcsStorageTests.cs" />
