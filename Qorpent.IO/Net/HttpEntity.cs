@@ -1,33 +1,55 @@
-﻿using System;
+﻿// Copyright 2007-2014  Qorpent Team - http://github.com/Qorpent
+// Supported by Media Technology LTD 
+//  
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//  
+//      http://www.apache.org/licenses/LICENSE-2.0
+//  
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// 
+// Created : 2014-09-01
+
+using System;
 
 namespace Qorpent.IO.Net{
 	/// <summary>
-	/// Сущность HTTP
+	///     Сущность HTTP
 	/// </summary>
 	public class HttpEntity{
 		/// <summary>
-		/// Тип сущности
-		/// </summary>
-		public HttpEntityType Type;
-		/// <summary>
-		/// Значение в виде бинарника
+		///     Значение в виде бинарника
 		/// </summary>
 		public byte[] BinaryData;
+
 		/// <summary>
-		/// Значение в виде строки
+		///     Ссылка на ошибку
 		/// </summary>
-		public string StringData;
+		public Exception Error;
+
 		/// <summary>
-		/// Значение в виде числа
+		///     Актуальная длина контента для BinaryData
+		/// </summary>
+		public int Length;
+
+		/// <summary>
+		///     Значение в виде числа
 		/// </summary>
 		public int NumericData;
+
 		/// <summary>
-		/// Актуальная длина контента для BinaryData
+		///     Значение в виде строки
 		/// </summary>
-		public int Length { get; set; }
+		public string StringData;
+
 		/// <summary>
-		/// Ссылка на ошибку
+		///     Тип сущности
 		/// </summary>
-		public Exception Error { get; set; }
+		public HttpEntityType Type;
 	}
 }
