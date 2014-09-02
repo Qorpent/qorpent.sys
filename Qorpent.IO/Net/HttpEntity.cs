@@ -1,4 +1,6 @@
-﻿namespace Qorpent.IO.Net{
+﻿using System;
+
+namespace Qorpent.IO.Net{
 	/// <summary>
 	/// Сущность HTTP
 	/// </summary>
@@ -19,5 +21,13 @@
 		/// Значение в виде числа
 		/// </summary>
 		public int NumericData;
+		/// <summary>
+		/// Актуальная длина контента для BinaryData
+		/// </summary>
+		public int Length { get; set; }
+		/// <summary>
+		/// Ссылка на ошибку
+		/// </summary>
+		public Exception Error { get; set; }
 	}
 }

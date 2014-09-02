@@ -33,7 +33,7 @@ namespace Qorpent.XDiffDataUpdater
 				return -1;
 			}
 			finally{
-				Thread.Sleep(200);
+				log.Synchronize();
 			}
 		}
 	}

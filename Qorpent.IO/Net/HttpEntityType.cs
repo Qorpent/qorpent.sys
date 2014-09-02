@@ -1,7 +1,10 @@
-﻿namespace Qorpent.IO.Net{
+﻿using System;
+
+namespace Qorpent.IO.Net{
 	/// <summary>
 	/// Тип значения HTTP
 	/// </summary>
+	[Flags]
 	public enum HttpEntityType{
 		/// <summary>
 		/// Неопределенное
@@ -40,17 +43,13 @@
 		/// </summary>
 		HeaderValue = 1<<7,
 		/// <summary>
-		/// Размер чанка
-		/// </summary>
-		ChunkLength = 1<<8,
-		/// <summary>
 		/// Данные чанка
 		/// </summary>
-		ChunkData = 1<<9,
+		Chunk = 1<<8,
 		/// <summary>
 		/// Начало контента
 		/// </summary>
-		ContentStart = 1<<10,
+		ContentStart = 1<<9,
 		/// <summary>
 		/// Ошибка
 		/// </summary>

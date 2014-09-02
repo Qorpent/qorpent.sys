@@ -42,7 +42,11 @@
     <Compile Include="Net\HttpEntity.cs" />
     <Compile Include="Net\HttpEntityType.cs" />
     <Compile Include="Net\HttpReader.cs" />
-    <Compile Include="Net\HttpScanerState.cs" />
+    <Compile Include="Net\HttpReaderException.cs" />
+    <Compile Include="Net\HttpReaderUtils.cs" />
+    <Compile Include="Net\HttpResult.cs" />
+    <Compile Include="Net\HttpReaderState.cs" />
+    <Compile Include="Net\IHttpReader.cs" />
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />
     <Compile Include="Storages\FileStorageHashedDirectory.cs" />
     <Compile Include="Storages\FileStorageVcsStorage.cs" />

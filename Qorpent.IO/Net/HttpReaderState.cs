@@ -2,7 +2,7 @@
 	/// <summary>
 	/// Состояния сканера HTTP
 	/// </summary>
-	public enum HttpScanerState{
+	public enum HttpReaderState{
 		/// <summary>
 		/// Начальное положение каретки
 		/// </summary>
@@ -26,7 +26,7 @@
 		/// <summary>
 		/// Начало контента
 		/// </summary>
-		StartContent =16,
+		Content =16,
 		/// <summary>
 		/// Позиция перед заголовком
 		/// </summary>
