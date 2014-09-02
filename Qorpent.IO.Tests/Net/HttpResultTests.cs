@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using NUnit.Framework;
 using Qorpent.IO.Net;
@@ -10,6 +11,11 @@ namespace Qorpent.IO.Tests.Net{
 		HttpResult GetResult(string http)
 		{
 			var mstr = new MemoryStream(Encoding.UTF8.GetBytes(http));
+			return new HttpResult(new HttpReader(mstr));
+		}
+		HttpResult GetResult(byte[] http)
+		{
+			var mstr = new MemoryStream(http);
 			return new HttpResult(new HttpReader(mstr));
 		}
 		[Test]
@@ -50,6 +56,53 @@ namespace Qorpent.IO.Tests.Net{
 			Assert.AreEqual(new DateTime(2024, 08, 29, 18, 18, 01).ToLocalTime(), cookie.Expires);
 			Assert.AreEqual(".yandex.ru", cookie.Domain);
 			Assert.AreEqual("/", cookie.Path);
+		}
+
+		[Test]
+		public void CanUnGZip(){
+			var dataStream = new MemoryStream();
+			var gzip = new GZipStream(dataStream,CompressionLevel.Optimal,true);
+			gzip.Write(Encoding.ASCII.GetBytes("hello world"),0,11);
+			gzip.Flush();
+			gzip.Close();
+			var data = new byte[dataStream.Position];
+			dataStream.Position = 0;
+			dataStream.Read(data, 0, data.Length);
+			var len = data.Length;
+			var ms = new MemoryStream();
+			var buff = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\nContent-Length: " + len + "\r\nContent-Type: gzip\r\n\r\n");
+			ms.Write(buff,0,buff.Length);
+			ms.Write(data,0,data.Length);
+			var http = new byte[ms.Position];
+			ms.Position = 0;
+			ms.Read(http, 0, http.Length);
+			var s = GetResult(http);
+			Console.WriteLine(s.ContentLength);
+			Assert.AreEqual("hello world",s.StringData);
+		}
+
+		[Test]
+		public void CanUnDeflate()
+		{
+			var dataStream = new MemoryStream();
+			var deflate = new DeflateStream(dataStream, CompressionLevel.Optimal, true);
+			deflate.Write(Encoding.ASCII.GetBytes("hello world"), 0, 11);
+			deflate.Flush();
+			deflate.Close();
+			var data = new byte[dataStream.Position];
+			dataStream.Position = 0;
+			dataStream.Read(data, 0, data.Length);
+			var len = data.Length;
+			var ms = new MemoryStream();
+			var buff = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\nContent-Length: " + len + "\r\nContent-Type: deflate\r\n\r\n");
+			ms.Write(buff, 0, buff.Length);
+			ms.Write(data, 0, data.Length);
+			var http = new byte[ms.Position];
+			ms.Position = 0;
+			ms.Read(http, 0, http.Length);
+			var s = GetResult(http);
+			Console.WriteLine(s.ContentLength);
+			Assert.AreEqual("hello world", s.StringData);
 		}
 	}
 }

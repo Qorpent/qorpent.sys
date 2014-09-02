@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Text;
 using Qorpent.Utils.Extensions;
@@ -145,6 +146,19 @@ namespace Qorpent.IO.Net{
 			}
 			set { _data = value; }
 		}
+		/// <summary>
+		/// Признак сжатия GZip
+		/// </summary>
+		public bool IsGZiped{
+			get { return ContentType.Contains("gzip"); }
+		}
+		/// <summary>
+		/// Признак сжатия GZip
+		/// </summary>
+		public bool IsDeflated
+		{
+			get { return ContentType.Contains("deflate"); }
+		}
 
 		private Encoding _encoding;
 		/// <summary>
@@ -186,26 +200,52 @@ namespace Qorpent.IO.Net{
 			if(null==_reader)return;
 			if (_contentRead) return;
 			if (!_headersRead) ReadHeaders();
+			_contentRead = true;
 			if (!_hasContent){
-				_contentRead = true;
 				return;
 			}
 			var ms = new MemoryStream();
+			var workingStream = ms;
+			
 			while (true){
 				var chunk = Read(HttpEntityType.Chunk | HttpEntityType.Finish);
 				if (chunk.Type == HttpEntityType.Chunk){
-					ms.Write(chunk.BinaryData,0,chunk.Length);
+					workingStream.Write(chunk.BinaryData,0,chunk.Length);
 				}
 				else{
 					break;
 				}
 			}
+			byte[] buffer = null;
+			if (IsGZiped || IsDeflated){
+				var src = ms;
+				src.Position = 0;
+				ms = new MemoryStream();
+				var zipbuf = new byte[1024];
+				using (
+					Stream zipped = (IsGZiped
+						            ? (Stream)new GZipStream(src, CompressionMode.Decompress)
+									: new DeflateStream(src, CompressionMode.Decompress)))
+				{
 
-			var buffer = new byte[ms.Position];
+					while (true){
+						var read = zipped.Read(zipbuf, 0, zipbuf.Length);
+						if (read <= 0){
+							break;
+						}
+						ms.Write(zipbuf, 0, read);
+						
+					}
+				}
+				
+			}
+			var length = ms.Position;
 			ms.Position = 0;
-			ms.Read(buffer,0,buffer.Length);
+			buffer = new byte[length];
+			ms.Read(buffer, 0, buffer.Length);
+
 			Data = buffer;
-			_contentRead = true;
+			
 		}
 
 		private void ReadHeaders(){
