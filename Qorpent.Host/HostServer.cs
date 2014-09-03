@@ -181,44 +181,66 @@ namespace Qorpent.Host{
 		}
 
 		private void OnRequest(Task<HttpListenerContext> task){
+            StartWaitNextRequest();
+			if (CheckInvalidStartupConditions(task)) return;
+			PrepareForCrossSiteScripting(task);
+			if (CheckOptionsMethodIsCalled(task)) return;
+		    new HostRequestHandler(this, task.Result).Execute();
+		}
 
-            
-            if (!_cancel.IsCancellationRequested){
-				StartRequestThread();
-			}
 
-
+		private bool CheckInvalidStartupConditions(Task<HttpListenerContext> task){
 			if (Application.IsInStartup){
 				task.Result.Response.Finish("application is in startup", status: 500);
-				return;
+				return true;
 			}
 			if (Application.StartupError != null){
 				task.Result.Response.Finish("startup error \r\n" + Application.StartupError, status: 500);
-				return;
+				return true;
 			}
-            
-            task.Result.Response.AddHeader("Access-Control-Allow-Origin", "*");
+			return false;
+		}
 
-		    if (task.Result.Request.Headers.AllKeys.Contains("Access-Control-Request-Headers"))
-		    {
-                task.Result.Response.AddHeader("Access-Control-Allow-Headers", task.Result.Request.Headers["Access-Control-Request-Headers"]);
-		    }
+		private void StartWaitNextRequest(){
+			if (!_cancel.IsCancellationRequested){
+				StartRequestThread();
+			}
+		}
 
-		    if (task.Result.Request.HttpMethod == "OPTIONS")
-		    {
-                task.Result.Response.AddHeader("Allow", "GET,POST,OPTIONS");
-                task.Result.Response.AddHeader("Public", "GET,POST,OPTIONS");
-                //task.Result.Response.Finish("");
+		private  void PrepareForCrossSiteScripting(Task<HttpListenerContext> task){
+			if (!string.IsNullOrWhiteSpace(Config.AccessAllowOrigin)){
+				task.Result.Response.AddHeader("Access-Control-Allow-Origin",Config.AccessAllowOrigin);
+				if (!string.IsNullOrWhiteSpace(Config.AccessAllowHeaders)){
+					
+					if ("*" == Config.AccessAllowHeaders){
+						if (task.Result.Request.Headers.AllKeys.Contains("Access-Control-Request-Headers")){
+							task.Result.Response.AddHeader("Access-Control-Allow-Headers",
+							                               task.Result.Request.Headers["Access-Control-Request-Headers"]);
+						}
+					}
+					else{
+						task.Result.Response.AddHeader("Access-Control-Allow-Headers",Config.AccessAllowHeaders);
+					}
+				}
+				
+				task.Result.Response.AddHeader("Access-Control-Allow-Credentials",Config.AccessAllowCredentials.ToString().ToLowerInvariant());
+				task.Result.Response.AddHeader("Access-Control-Allow-Methods",Config.AccessAllowMethods);
+				
+			}
+		}
 
-		        task.Result.Response.StatusCode = 200;
-                task.Result.Response.StatusDescription = "OK";
-                task.Result.Response.ContentLength64 = 0;
-		        task.Result.Response.Close();
+		private static bool CheckOptionsMethodIsCalled(Task<HttpListenerContext> task){
+			if (task.Result.Request.HttpMethod == "OPTIONS"){
+				task.Result.Response.AddHeader("Allow", "GET,POST,OPTIONS");
+				task.Result.Response.AddHeader("Public", "GET,POST,OPTIONS");
+				task.Result.Response.StatusCode = 200;
+				task.Result.Response.StatusDescription = "OK";
+				task.Result.Response.ContentLength64 = 0;
+				task.Result.Response.Close();
 
-		        return;
-		    }
-
-		    new HostRequestHandler(this, task.Result).Execute();
+				return true;
+			}
+			return false;
 		}
 
 		/// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using NUnit.Framework;
 
@@ -39,6 +40,34 @@ namespace Qorpent.Host.Lib.Tests
 			Assert.AreEqual("x", str);
 		}
 
+		[Test]
+		public void SupportsCrossSite(){
+			srv.On("/test", "test");
+			var req = WebRequest.Create("http://127.0.0.1:8094/test");
+			req.Headers["Access-Control-Request-Headers"] = "x-other";
+			var resp = req.GetResponse();
+			Assert.False(resp.Headers.AllKeys.Any(_ => _.StartsWith("Access-Control")));
+			srv.Config.AccessAllowOrigin = "*";
+			req = WebRequest.Create("http://127.0.0.1:8094/test");
+			req.Headers["Access-Control-Request-Headers"] = "x-other";
+			resp = req.GetResponse();
+			Assert.AreEqual(4, resp.Headers.AllKeys.Count(_ => _.StartsWith("Access-Control")));
+		}
+
+		[Test]
+		public void SupportsOptionsMethod()
+		{
+			srv.On("/test", "test");
+			srv.Config.AccessAllowOrigin = "*";
+			var req = WebRequest.Create("http://127.0.0.1:8094/test");
+			req.Headers["Access-Control-Request-Headers"] = "x-other";
+			req.Method = "OPTIONS";
+			var resp = (HttpWebResponse)req.GetResponse();
+			Assert.AreEqual(0,resp.ContentLength);
+			Assert.AreEqual(HttpStatusCode.OK,resp.StatusCode);
+			Assert.AreEqual(4, resp.Headers.AllKeys.Count(_ => _.StartsWith("Access-Control")));
+			Assert.True(!string.IsNullOrWhiteSpace(resp.Headers["Allow"]));
+		}
 
 		[Test]
 		public void Uson()
