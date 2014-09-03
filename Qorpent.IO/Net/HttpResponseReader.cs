@@ -25,7 +25,7 @@ namespace Qorpent.IO.Net{
 	/// <summary>
 	///     Класс для сканирования потока  и разбиения его в соответствии с протоколом HTTP
 	/// </summary>
-	public class HttpReader : IHttpReader{
+	public class HttpResponseReader : IHttpReader{
 		private readonly BinaryReader _binaryReader;
 		private readonly StringBuilder _builder = new StringBuilder();
 		private readonly char[] _charBuffer = new char[512];
@@ -65,7 +65,7 @@ namespace Qorpent.IO.Net{
 		///     Создает сканер в виде обертки над потоком
 		/// </summary>
 		/// <param name="stream"></param>
-		public HttpReader(Stream stream){
+		public HttpResponseReader(Stream stream){
 			_stream = stream;
 			_binaryReader = new BinaryReader(_stream, Encoding.ASCII);
 		}
@@ -122,7 +122,7 @@ namespace Qorpent.IO.Net{
 				return NextChunkedPart();
 			}
 			if (_contentLength == 0 && !_transferEncoding.Contains("chunked")){
-				throw new HttpReaderException("No valid content mode - no Content-Length or chunked determined while content exists");
+				throw new HttpException("No valid content mode - no Content-Length or chunked determined while content exists");
 			}
 			_contentstartsent = true;
 			return new HttpEntity{Type = HttpEntityType.ContentStart};
@@ -135,7 +135,7 @@ namespace Qorpent.IO.Net{
 					_finished = true;
 					return new HttpEntity{Type = HttpEntityType.Finish};
 				}
-				throw new HttpReaderException("unexpected EOF instead of full chunk");
+				throw new HttpException("unexpected EOF instead of full chunk");
 			}
 			var len = Convert.ToInt32(chunklen, 16);
 			if (0 == len){
@@ -147,7 +147,7 @@ namespace Qorpent.IO.Net{
 
 			_contentSize += len;
 			if (_contentSize > MaxAllowedContentSize){
-				throw new HttpReaderException("chunked content already has "+_contentSize+" size that greater than max allowed size "+MaxAllowedContentSize);
+				throw new HttpException("chunked content already has "+_contentSize+" size that greater than max allowed size "+MaxAllowedContentSize);
 			}
 			var buffer = new byte[len];
 			buffer[0] = _cachedByte;
@@ -175,7 +175,7 @@ namespace Qorpent.IO.Net{
 			}
 			_currentLength += len;
 			if (len == 0 && _currentLength < _contentLength){
-				throw new HttpReaderException("actual data length "+_currentLength+" is not equal to Content-Length "+_contentLength);
+				throw new HttpException("actual data length "+_currentLength+" is not equal to Content-Length "+_contentLength);
 			}
 			if (_currentLength == _contentLength){
 				_state = HttpReaderState.Finish;
@@ -187,7 +187,7 @@ namespace Qorpent.IO.Net{
 			var headerValue = ReadValue(MaxAllowedHeadersSize - _headerSize, spaceAllowed: true);
 			_headerSize += headerValue.Length;
 			if (_headerSize > MaxAllowedHeadersSize){
-				throw new HttpReaderException("header section of response "+_headerSize+" more than max allowed header size "+MaxAllowedHeadersSize);
+				throw new HttpException("header section of response "+_headerSize+" more than max allowed header size "+MaxAllowedHeadersSize);
 			}
 			ProcessMainHeaders(headerValue);
 			ReadNewLines();
@@ -205,11 +205,11 @@ namespace Qorpent.IO.Net{
 				_contentLength = headerValue.ToInt();
 
 				if (0 == _contentLength){
-					throw new HttpReaderException("invalid Content-Length header "+headerValue);
+					throw new HttpException("invalid Content-Length header "+headerValue);
 				}
 
 				if (_contentLength > MaxAllowedContentSize){
-					throw new HttpReaderException("Content-Lenght "+_contentLength+" exceed max value "+MaxAllowedHeadersSize);
+					throw new HttpException("Content-Lenght "+_contentLength+" exceed max value "+MaxAllowedHeadersSize);
 				}
 			}
 		}
@@ -218,7 +218,7 @@ namespace Qorpent.IO.Net{
 		private HttpEntity ReadHeaderName(){
 			var name = ReadValue(MaxAllowedHeadersSize - _headerSize);
 			if (!name.EndsWith(":")){
-				throw new HttpReaderException("Invalid header name "+name+" must end with symbol \":\"");
+				throw new HttpException("Invalid header name "+name+" must end with symbol \":\"");
 			}
 			SkipSpaces();
 			SetNewState(HttpReaderState.PreHeaderValue);
@@ -226,7 +226,7 @@ namespace Qorpent.IO.Net{
 			_lastHeaderName = name;
 			_headerSize += name.Length;
 			if (_headerSize > MaxAllowedHeadersSize){
-				throw new HttpReaderException("header section of response " + _headerSize + " more than max allowed header size " + MaxAllowedHeadersSize);
+				throw new HttpException("header section of response " + _headerSize + " more than max allowed header size " + MaxAllowedHeadersSize);
 			}
 			return new HttpEntity{Type = HttpEntityType.HeaderName, StringData = name};
 		}
@@ -263,22 +263,22 @@ namespace Qorpent.IO.Net{
 						_state = HttpReaderState.Finish;
 						return;
 					}
-					throw new HttpReaderException("unexpected EOF without \\r\\n\\r\\n combination");
+					throw new HttpException("unexpected EOF without \\r\\n\\r\\n combination");
 				}
 				var c = (char) _c;
 				if (c == '\r'){
-					if (waitn) throw new HttpReaderException("invalid crlf -  \\r after \\r");
+					if (waitn) throw new HttpException("invalid crlf -  \\r after \\r");
 					_builder.Append(c);
 					waitn = true;
 				}
 				else if (c == '\n'){
-					if (!waitn) throw new HttpReaderException("invalid crlf - \\n on not valid place");
+					if (!waitn) throw new HttpException("invalid crlf - \\n on not valid place");
 					_builder.Append(c);
 					waitn = false;
 				}
 				else{
 					if (_builder.Length != 2 && _builder.Length != 4){
-						throw new HttpReaderException("invalid crlf - invalid length "+_builder.Length);
+						throw new HttpException("invalid crlf - invalid length "+_builder.Length);
 					}
 					_cachedByte = (byte) _b;
 					_cachedLast = c;
@@ -293,7 +293,7 @@ namespace Qorpent.IO.Net{
 		private HttpEntity ReadState(){
 			var stateString = ReadValue(5);
 			var stateInt = stateString.ToInt();
-			if (0 == stateInt) throw new HttpReaderException("invalid state number - 0");
+			if (0 == stateInt) throw new HttpException("invalid state number - 0");
 			SkipSpaces();
 			SetNewState(HttpReaderState.StateName);
 			return new HttpEntity{Type = HttpEntityType.State, NumericData = stateInt};
@@ -302,11 +302,11 @@ namespace Qorpent.IO.Net{
 		private HttpEntity ReadVersion(){
 			var httpslash = _binaryReader.Read(_charBuffer, 0, 5);
 			if (5 != httpslash){
-				throw new HttpReaderException("cannot read preamble - just "+httpslash+" symbols read");
+				throw new HttpException("cannot read preamble - just "+httpslash+" symbols read");
 			}
 			var httpslashstr = new string(_charBuffer, 0, 5);
 			if (httpslashstr != "HTTP/"){
-				throw new HttpReaderException("invalid HTTP preamble "+httpslashstr);
+				throw new HttpException("invalid HTTP preamble "+httpslashstr);
 			}
 			_state = HttpReaderState.Version;
 			var version = ReadValue(4);
@@ -322,7 +322,7 @@ namespace Qorpent.IO.Net{
 			}
 			else{
 				if (!_alloweof){
-					throw new HttpReaderException("unexpected EOF on try set state "+_newstate);
+					throw new HttpException("unexpected EOF on try set state "+_newstate);
 				}
 			}
 		}
@@ -363,7 +363,7 @@ namespace Qorpent.IO.Net{
 						_state = HttpReaderState.Finish;
 						break;
 					}
-					throw new HttpReaderException("unexpected EOF during reading value");
+					throw new HttpException("unexpected EOF during reading value");
 				}
 
 				var c = (char) _charcode;
@@ -372,7 +372,7 @@ namespace Qorpent.IO.Net{
 					break;
 				}
 				if (len == maxlen){
-					throw new HttpReaderException("insuficient length of value - greater than allowed max "+maxlen);
+					throw new HttpException("insuficient length of value - greater than allowed max "+maxlen);
 				}
 				_builder.Append(c);
 				len++;
@@ -388,7 +388,7 @@ namespace Qorpent.IO.Net{
 			HttpEntity e;
 			while (null != (e = Next())){
 				if (throwError && e.Type == HttpEntityType.Error){
-					throw new HttpReaderException(e.Error.ToString());
+					throw new HttpException(e.Error.ToString());
 				}
 				yield return e;
 			}

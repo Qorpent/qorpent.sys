@@ -41,10 +41,12 @@
     <Compile Include="FileService.cs" />
     <Compile Include="Net\HttpEntity.cs" />
     <Compile Include="Net\HttpEntityType.cs" />
-    <Compile Include="Net\HttpReader.cs" />
-    <Compile Include="Net\HttpReaderException.cs" />
-    <Compile Include="Net\HttpReaderUtils.cs" />
-    <Compile Include="Net\HttpResult.cs" />
+    <Compile Include="Net\HttpRequest.cs" />
+    <Compile Include="Net\HttpRequestWriter.cs" />
+    <Compile Include="Net\HttpResponseReader.cs" />
+    <Compile Include="Net\HttpException.cs" />
+    <Compile Include="Net\HttpUtils.cs" />
+    <Compile Include="Net\HttpResponse.cs" />
     <Compile Include="Net\HttpReaderState.cs" />
     <Compile Include="Net\IHttpReader.cs" />
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />

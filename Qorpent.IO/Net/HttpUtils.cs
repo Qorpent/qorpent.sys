@@ -24,7 +24,7 @@ namespace Qorpent.IO.Net{
 	/// <summary>
 	///     Утилиты парсинга HTTP
 	/// </summary>
-	public static class HttpReaderUtils{
+	public static class HttpUtils{
 		/// <summary>
 		///     Преобразует хидер куки в набор объектов куки
 		/// </summary>
@@ -57,6 +57,29 @@ namespace Qorpent.IO.Net{
 				}
 			}
 			yield return current;
+		}
+		/// <summary>
+		/// Проверяет соответствие куки адресу
+		/// </summary>
+		/// <param name="cookie"></param>
+		/// <param name="uri"></param>
+		/// <returns></returns>
+		public static bool IsCookieMatch(Cookie cookie, Uri uri){
+			if (cookie.Expired) return false;
+			var path = uri.AbsolutePath;
+			var host = uri.Host;
+			if (!String.IsNullOrWhiteSpace(cookie.Domain)){
+				if (cookie.Domain.StartsWith(".")){
+					if (!host.EndsWith(cookie.Domain)) return false;
+				}
+				else{
+					if (cookie.Domain != host) return false;
+				}
+			}
+			if (!String.IsNullOrWhiteSpace(cookie.Path) && cookie.Path != "/"){
+				if (!path.StartsWith(cookie.Path)) return false;
+			}
+			return true;
 		}
 	}
 }

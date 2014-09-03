@@ -24,14 +24,14 @@ using Qorpent.IO.Net;
 namespace Qorpent.IO.Tests.Net{
 	[TestFixture]
 	public class HttpResultTests{
-		private HttpResult GetResult(string http){
+		private HttpResponse GetResult(string http){
 			var mstr = new MemoryStream(Encoding.UTF8.GetBytes(http));
-			return new HttpResult(new HttpReader(mstr));
+			return new HttpResponse(new HttpResponseReader(mstr));
 		}
 
-		private HttpResult GetResult(byte[] http){
+		private HttpResponse GetResult(byte[] http){
 			var mstr = new MemoryStream(http);
-			return new HttpResult(new HttpReader(mstr));
+			return new HttpResponse(new HttpResponseReader(mstr));
 		}
 
 		[Test]

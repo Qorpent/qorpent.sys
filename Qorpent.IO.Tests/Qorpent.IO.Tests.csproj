@@ -36,6 +36,7 @@
     <Compile Include="FileResolverTest.cs" />
     <Compile Include="FileServiceTest.cs" />
     <Compile Include="Net\HttpReaderTests.cs" />
+    <Compile Include="Net\HttpRequestWriterTest.cs" />
     <Compile Include="Net\HttpResultTests.cs" />
     <Compile Include="StreamProxyTests.cs" />
     <Compile Include="SynchronizeWellKnownDirectory.cs" />

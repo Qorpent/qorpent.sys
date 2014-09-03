@@ -22,23 +22,23 @@ namespace Qorpent.IO.Net{
 	///     Ошибки, связанные с разбором HTTP
 	/// </summary>
 	[Serializable]
-	public class HttpReaderException : IOException{
+	public class HttpException : IOException{
 		/// <summary>
 		/// </summary>
-		public HttpReaderException(){
+		public HttpException(){
 		}
 
 		/// <summary>
 		/// </summary>
 		/// <param name="message"></param>
-		public HttpReaderException(string message) : base(message){
+		public HttpException(string message) : base(message){
 		}
 
 		/// <summary>
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="inner"></param>
-		public HttpReaderException(string message, Exception inner) : base(message, inner){
+		public HttpException(string message, Exception inner) : base(message, inner){
 		}
 	}
 }

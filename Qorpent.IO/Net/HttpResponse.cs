@@ -26,7 +26,7 @@ namespace Qorpent.IO.Net{
 	/// <summary>
 	///     Класс, описывающий результат обработки HTTP протокола
 	/// </summary>
-	public class HttpResult{
+	public class HttpResponse{
 		private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
 		private readonly IHttpReader _reader;
 		private string _charset;
@@ -34,7 +34,7 @@ namespace Qorpent.IO.Net{
 		private int _contentLength;
 		private bool _contentRead;
 		private string _contentType;
-		private CookieCollection _cookies = new CookieCollection();
+		private CookieCollection _cookies;
 		private byte[] _data;
 		private Encoding _encoding;
 		private bool _hasContent;
@@ -46,21 +46,21 @@ namespace Qorpent.IO.Net{
 
 		/// <summary>
 		/// </summary>
-		public HttpResult(){
+		public HttpResponse(){
 		}
 
 		/// <summary>
 		///     Создает HttpResult в виде обертки над Stream
 		/// </summary>
-		public HttpResult(Stream stream){
-			_reader = new HttpReader(stream);
+		public HttpResponse(Stream stream){
+			_reader = new HttpResponseReader(stream);
 		}
 
 		/// <summary>
 		///     Создает HttpResult в виде обертки над HttpReader
 		/// </summary>
 		/// <param name="reader"></param>
-		public HttpResult(IHttpReader reader){
+		public HttpResponse(IHttpReader reader){
 			_reader = reader;
 		}
 
@@ -112,6 +112,7 @@ namespace Qorpent.IO.Net{
 		/// </summary>
 		public CookieCollection Cookies{
 			get{
+				if (null == _cookies) _cookies = new CookieCollection();
 				if (!_headersRead && null != _reader) ReadHeaders();
 				return _cookies;
 			}
@@ -281,14 +282,14 @@ namespace Qorpent.IO.Net{
 					Read(HttpEntityType.HeaderName | HttpEntityType.HeaderValue | HttpEntityType.ContentStart | HttpEntityType.Finish);
 				if (current.Type == HttpEntityType.Finish){
 					if (previous != null && previous.Type != HttpEntityType.HeaderValue){
-						throw new HttpReaderException("unexpected finish position");
+						throw new HttpException("unexpected finish position");
 					}
 					_contentRead = true;
 					break;
 				}
 				if (current.Type == HttpEntityType.ContentStart){
 					if (previous != null && previous.Type != HttpEntityType.HeaderValue){
-						throw new HttpReaderException("unexpected start content position");
+						throw new HttpException("unexpected start content position");
 					}
 					_hasContent = true;
 					break;
@@ -296,12 +297,12 @@ namespace Qorpent.IO.Net{
 
 				if (current.Type == HttpEntityType.HeaderName){
 					if (previous != null && previous.Type != HttpEntityType.HeaderValue){
-						throw new HttpReaderException("unexpected header name position");
+						throw new HttpException("unexpected header name position");
 					}
 				}
 				else if (current.Type == HttpEntityType.HeaderValue){
 					if (null == previous || previous.Type != HttpEntityType.HeaderName){
-						throw new HttpReaderException("unexpected header value position");
+						throw new HttpException("unexpected header value position");
 					}
 					RegisterHeader(previous.StringData, current.StringData);
 				}
@@ -322,8 +323,8 @@ namespace Qorpent.IO.Net{
 					Charset = parts[1].Split('=')[1];
 				}
 			}
-			else if (null != Cookies && name == "Set-Cookie"){
-				foreach (var cookie in HttpReaderUtils.ParseCookies(value)){
+			else if (null != _cookies && name == "Set-Cookie"){
+				foreach (var cookie in HttpUtils.ParseCookies(value)){
 					Cookies.Add(cookie);
 				}
 			}
@@ -337,17 +338,17 @@ namespace Qorpent.IO.Net{
 			var result = _reader.Next();
 			if (null == result){
 				if (allowNulls) return null;
-				throw new HttpReaderException("unexpected NULL HTTP entity");
+				throw new HttpException("unexpected NULL HTTP entity");
 			}
 			if (result.Type == HttpEntityType.Error){
 				if (throwError){
-					throw new HttpReaderException(result.Error.ToString());
+					throw new HttpException(result.Error.ToString());
 				}
 				return result;
 			}
 			if (typeFilter != HttpEntityType.Undefined){
 				if (!typeFilter.HasFlag(result.Type)){
-					throw new HttpReaderException("unexpected entity type " + result.Type);
+					throw new HttpException("unexpected entity type " + result.Type);
 				}
 			}
 			return result;

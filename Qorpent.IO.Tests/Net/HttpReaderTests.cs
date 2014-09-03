@@ -29,9 +29,9 @@ namespace Qorpent.IO.Tests.Net{
 	/// </summary>
 	[TestFixture(Description = "Проверка HTTP сканера")]
 	public class HttpReaderTests{
-		private HttpReader GetReader(string http){
+		private HttpResponseReader GetReader(string http){
 			var mstr = new MemoryStream(Encoding.UTF8.GetBytes(http));
-			return new HttpReader(mstr);
+			return new HttpResponseReader(mstr);
 		}
 
 		private const int bytesperlong = 4; // 32 / 8
@@ -113,7 +113,7 @@ namespace Qorpent.IO.Tests.Net{
 				socket.Connect(addr, 80);
 				socket.Send(Encoding.ASCII.GetBytes("GET / HTTP/1.1\r\nHost: www.yandex.ru\r\n\r\n"));
 				using (var s = new NetworkStream(socket)){
-					var reader = new HttpReader(s);
+					var reader = new HttpResponseReader(s);
 					var ms = new MemoryStream();
 					foreach (var chunk in reader.Read()){
 						if (chunk.Type == HttpEntityType.Chunk){
@@ -144,7 +144,7 @@ namespace Qorpent.IO.Tests.Net{
 					using (var ssl = new SslStream(s)){
 						ssl.AuthenticateAsClient("www.google.ru");
 						ssl.Write(Encoding.ASCII.GetBytes("GET / HTTP/1.1\r\nHost: www.google.ru\r\n\r\n"));
-						var reader = new HttpReader(ssl);
+						var reader = new HttpResponseReader(ssl);
 						var ms = new MemoryStream();
 						foreach (var chunk in reader.Read()){
 							//Console.WriteLine(chunk.Type);
@@ -269,7 +269,7 @@ namespace Qorpent.IO.Tests.Net{
 					var reciveCount = 0;
 					var totalCount = 0;
 					var ns = new NetworkStream(socket);
-					var r = new HttpReader(ns);
+					var r = new HttpResponseReader(ns);
 					r.Read().ToArray();
 					while (socket.Available != 0){
 						socket.Receive(bigbuff);
