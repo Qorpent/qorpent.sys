@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Sockets;
 using System.Text;
 using Qorpent.Utils.Extensions;
 
@@ -29,7 +30,7 @@ namespace Qorpent.IO.Net{
 		private readonly BinaryReader _binaryReader;
 		private readonly StringBuilder _builder = new StringBuilder();
 		private readonly char[] _charBuffer = new char[512];
-		private readonly Stream _stream;
+		private  Stream _stream;
 		private readonly byte[] sbuff = new byte[1];
 
 		/// <summary>
@@ -69,8 +70,12 @@ namespace Qorpent.IO.Net{
 			_stream = stream;
 			_binaryReader = new BinaryReader(_stream, Encoding.ASCII);
 		}
-
-
+		/// <summary>
+		/// Текущий статус
+		/// </summary>
+		public HttpReaderState State{
+			get { return _state; }
+		}
 
 
 		/// <summary>
@@ -79,7 +84,7 @@ namespace Qorpent.IO.Net{
 		/// <returns></returns>
 		public HttpEntity Next(){
 			try{
-				switch (_state){
+				switch (State){
 					case HttpReaderState.Start:
 						return ReadVersion();
 					case HttpReaderState.State:
@@ -130,7 +135,7 @@ namespace Qorpent.IO.Net{
 
 		private HttpEntity NextChunkedPart(){
 			var chunklen = ReadValue(6, eofAllowed: true);
-			if (_state == HttpReaderState.Finish){
+			if (State == HttpReaderState.Finish){
 				if (chunklen == "0"){
 					_finished = true;
 					return new HttpEntity{Type = HttpEntityType.Finish};
@@ -139,8 +144,8 @@ namespace Qorpent.IO.Net{
 			}
 			var len = Convert.ToInt32(chunklen, 16);
 			if (0 == len){
-				_state = HttpReaderState.Finish;
-				_finished = true;
+				SetFinish(true);
+				ReadNewLines(true);
 				return new HttpEntity{Type = HttpEntityType.Finish};
 			}
 			ReadNewLines();
@@ -161,6 +166,12 @@ namespace Qorpent.IO.Net{
 			return new HttpEntity{Type = HttpEntityType.Chunk, BinaryData = buffer, Length = len};
 		}
 
+		private void SetFinish(bool finished){
+			_state = HttpReaderState.Finish;
+			_finished = finished;
+			_stream = null; //frees reference to stream
+		}
+
 		private HttpEntity NextNonChunkedPart(){
 			var rest = Math.Min(_contentLength - _currentLength, DefaultBufferSize);
 			var buffer = new byte[rest];
@@ -178,7 +189,7 @@ namespace Qorpent.IO.Net{
 				throw new HttpException("actual data length "+_currentLength+" is not equal to Content-Length "+_contentLength);
 			}
 			if (_currentLength == _contentLength){
-				_state = HttpReaderState.Finish;
+				SetFinish(false);
 			}
 			return new HttpEntity{Type = HttpEntityType.Chunk, BinaryData = buffer, Length = len};
 		}
@@ -191,7 +202,7 @@ namespace Qorpent.IO.Net{
 			}
 			ProcessMainHeaders(headerValue);
 			ReadNewLines();
-			if (_state != HttpReaderState.Content){
+			if (State != HttpReaderState.Content){
 				SetNewState(HttpReaderState.PreHeader, true);
 			}
 			return new HttpEntity{Type = HttpEntityType.HeaderValue, StringData = headerValue};
@@ -235,7 +246,7 @@ namespace Qorpent.IO.Net{
 			var stateString = ReadValue(256, spaceAllowed: true);
 			var result = new HttpEntity{Type = HttpEntityType.StateName, StringData = stateString};
 			ReadNewLines();
-			if (_state != HttpReaderState.Content){
+			if (State != HttpReaderState.Content){
 				SetNewState(HttpReaderState.PreHeader, true);
 			}
 			return result;
@@ -243,7 +254,7 @@ namespace Qorpent.IO.Net{
 
 		/// <summary>
 		/// </summary>
-		private void ReadNewLines(){
+		private void ReadNewLines(bool chunkEof = false){
 			_builder.Clear();
 			var waitn = false;
 			if (_cachedLast == '\r'){
@@ -252,6 +263,7 @@ namespace Qorpent.IO.Net{
 				waitn = true;
 			}
 			while (true){
+				if(null==_stream)break;
 				var _b = -1;
 				var l = _stream.Read(sbuff, 0, 1);
 				if (0 != l){
@@ -260,7 +272,7 @@ namespace Qorpent.IO.Net{
 				int _c = (char) _b;
 				if (-1 == _b){
 					if (_builder.Length == 4){
-						_state = HttpReaderState.Finish;
+						SetFinish(false);
 						return;
 					}
 					throw new HttpException("unexpected EOF without \\r\\n\\r\\n combination");
@@ -275,6 +287,10 @@ namespace Qorpent.IO.Net{
 					if (!waitn) throw new HttpException("invalid crlf - \\n on not valid place");
 					_builder.Append(c);
 					waitn = false;
+					if (chunkEof && _builder.Length == 4){
+						SetFinish(false);
+						return;
+					}
 				}
 				else{
 					if (_builder.Length != 2 && _builder.Length != 4){
@@ -316,8 +332,8 @@ namespace Qorpent.IO.Net{
 		}
 
 		private void SetNewState(HttpReaderState _newstate, bool _alloweof = false){
-			if (_state == HttpReaderState.Error) return;
-			if (_state != HttpReaderState.Finish){
+			if (State == HttpReaderState.Error) return;
+			if (State != HttpReaderState.Finish){
 				_state = _newstate;
 			}
 			else{
@@ -334,7 +350,7 @@ namespace Qorpent.IO.Net{
 			while (true){
 				var _c = _binaryReader.Read();
 				if (-1 == _c){
-					_state = HttpReaderState.Finish;
+					SetFinish(false);
 					return;
 				}
 				if (((char) _c) != ' '){
@@ -360,7 +376,7 @@ namespace Qorpent.IO.Net{
 				var _charcode = _binaryReader.Read();
 				if (-1 == _charcode){
 					if (eofAllowed){
-						_state = HttpReaderState.Finish;
+						SetFinish(false);
 						break;
 					}
 					throw new HttpException("unexpected EOF during reading value");

@@ -45,6 +45,7 @@
     <Compile Include="Net\HttpRequestWriter.cs" />
     <Compile Include="Net\HttpResponseReader.cs" />
     <Compile Include="Net\HttpException.cs" />
+    <Compile Include="Net\HttpSocket.cs" />
     <Compile Include="Net\HttpUtils.cs" />
     <Compile Include="Net\HttpResponse.cs" />
     <Compile Include="Net\HttpReaderState.cs" />

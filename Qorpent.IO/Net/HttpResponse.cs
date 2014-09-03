@@ -15,6 +15,7 @@
 // 
 // Created : 2014-09-02
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -28,7 +29,7 @@ namespace Qorpent.IO.Net{
 	/// </summary>
 	public class HttpResponse{
 		private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
-		private readonly IHttpReader _reader;
+		private IHttpReader _reader;
 		private string _charset;
 		private string _connection;
 		private int _contentLength;
@@ -214,6 +215,10 @@ namespace Qorpent.IO.Net{
 				return Encoding.GetString(Data);
 			}
 		}
+		/// <summary>
+		/// Вызывается при завершении загрузки результата
+		/// </summary>
+		public event EventHandler OnSuccess;
 
 		private void ReadPreamble(){
 			if (null == _reader) return;
@@ -269,6 +274,10 @@ namespace Qorpent.IO.Net{
 			ms.Read(buffer, 0, buffer.Length);
 
 			Data = buffer;
+			if (null != OnSuccess){
+				OnSuccess(this, null);
+			}
+			_reader = null; //detach reader to free resources
 		}
 
 		private void ReadHeaders(){
@@ -352,6 +361,12 @@ namespace Qorpent.IO.Net{
 				}
 			}
 			return result;
+		}
+		/// <summary>
+		/// Force reading all
+		/// </summary>
+		public void Load(){
+			ReadContent();
 		}
 	}
 }
