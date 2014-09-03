@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Applications;
+using Qorpent.BSharp.Preprocessor;
 using Qorpent.Bxl;
 using Qorpent.Host.Handlers;
 using Qorpent.Host.Qweb;
@@ -179,9 +181,13 @@ namespace Qorpent.Host{
 		}
 
 		private void OnRequest(Task<HttpListenerContext> task){
-			if (!_cancel.IsCancellationRequested){
+
+            
+            if (!_cancel.IsCancellationRequested){
 				StartRequestThread();
 			}
+
+
 			if (Application.IsInStartup){
 				task.Result.Response.Finish("application is in startup", status: 500);
 				return;
@@ -190,7 +196,29 @@ namespace Qorpent.Host{
 				task.Result.Response.Finish("startup error \r\n" + Application.StartupError, status: 500);
 				return;
 			}
-			new HostRequestHandler(this, task.Result).Execute();
+            
+            task.Result.Response.AddHeader("Access-Control-Allow-Origin", "*");
+
+		    if (task.Result.Request.Headers.AllKeys.Contains("Access-Control-Request-Headers"))
+		    {
+                task.Result.Response.AddHeader("Access-Control-Allow-Headers", task.Result.Request.Headers["Access-Control-Request-Headers"]);
+		    }
+
+		    if (task.Result.Request.HttpMethod == "OPTIONS")
+		    {
+                task.Result.Response.AddHeader("Allow", "GET,POST,OPTIONS");
+                task.Result.Response.AddHeader("Public", "GET,POST,OPTIONS");
+                //task.Result.Response.Finish("");
+
+		        task.Result.Response.StatusCode = 200;
+                task.Result.Response.StatusDescription = "OK";
+                task.Result.Response.ContentLength64 = 0;
+		        task.Result.Response.Close();
+
+		        return;
+		    }
+
+		    new HostRequestHandler(this, task.Result).Execute();
 		}
 
 		/// <summary>
