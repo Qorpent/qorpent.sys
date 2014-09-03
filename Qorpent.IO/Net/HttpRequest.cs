@@ -19,7 +19,6 @@ namespace Qorpent.IO.Net
 			Headers = new Dictionary<string, string>();
 			AcceptEncoding = "gzip, deflate";
 			Method = "GET";
-			Connection = "Keep-Alive";
 			UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0";
 		}
 		/// <summary>
@@ -70,24 +69,5 @@ namespace Qorpent.IO.Net
 		/// Метод HTTP
 		/// </summary>
 		public string Method { get; set; }
-
-		/// <summary>
-		/// Заголовок "соединение"
-		/// </summary>
-		public string Connection
-		{
-			get
-			{
-				if (!Headers.ContainsKey("Connection"))
-				{
-					Headers["Connection"] = "Keep-Alive";
-				}
-				return Headers["Connection"];
-			}
-			set
-			{
-				Headers["Connection"] = value;
-			}
-		}
 	}
 }
