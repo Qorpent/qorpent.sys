@@ -39,6 +39,8 @@
     <Compile Include="Net\HttpRequestWriterTest.cs" />
     <Compile Include="Net\HttpResultTests.cs" />
     <Compile Include="Net\HttpSocketTests.cs" />
+    <Compile Include="Protocol\BasicProtocolTest.cs" />
+    <Compile Include="Protocol\SimpleProtocol.cs" />
     <Compile Include="StreamProxyTests.cs" />
     <Compile Include="SynchronizeWellKnownDirectory.cs" />
     <Compile Include="VcsStorageTests.cs" />

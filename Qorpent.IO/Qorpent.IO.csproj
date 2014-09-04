@@ -43,13 +43,20 @@
     <Compile Include="Net\HttpEntityType.cs" />
     <Compile Include="Net\HttpRequest.cs" />
     <Compile Include="Net\HttpRequestWriter.cs" />
+    <Compile Include="Net\HttpResponse2.cs" />
     <Compile Include="Net\HttpResponseReader.cs" />
     <Compile Include="Net\HttpException.cs" />
+    <Compile Include="Net\HttpResponseReader2.cs" />
     <Compile Include="Net\HttpSocket.cs" />
     <Compile Include="Net\HttpUtils.cs" />
     <Compile Include="Net\HttpResponse.cs" />
     <Compile Include="Net\HttpReaderState.cs" />
     <Compile Include="Net\IHttpReader.cs" />
+    <Compile Include="Protocols\Protocol.cs" />
+    <Compile Include="Protocols\ProtocolBuffer.cs" />
+    <Compile Include="Protocols\ProtocolBufferOptions.cs" />
+    <Compile Include="Protocols\ProtocolBufferPage.cs" />
+    <Compile Include="Protocols\ProtocolBufferResult.cs" />
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />
     <Compile Include="Storages\FileStorageHashedDirectory.cs" />
     <Compile Include="Storages\FileStorageVcsStorage.cs" />
@@ -78,6 +85,7 @@
     <Compile Include="VcsStorage\IVcsStoragePersister.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
