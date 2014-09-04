@@ -20,6 +20,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using Qorpent.Log;
 
 namespace Qorpent.IO.Protocols{
 	/// <summary>
@@ -30,6 +31,11 @@ namespace Qorpent.IO.Protocols{
 		///     Страницы буфера
 		/// </summary>
 		public readonly ProtocolBufferPage[] Pages;
+
+		/// <summary>
+		/// Журнал
+		/// </summary>
+		public IUserLog Log;
 
 		private readonly ProtocolBufferOptions _options;
 		private byte[] _buffer;
@@ -144,15 +150,20 @@ namespace Qorpent.IO.Protocols{
 				}
 				protocol.Start();
 				while (protocol.IsAlive && IsAlive(stream)){
+					if (null != Log) Log.Error("ProtocolBuffer : start step");
 					ProtocolBufferPage page = GetFreePage();
+					if (null != Log) Log.Error("ProtocolBuffer : page accessed at offset "+page.Offset);
 					page.State = ProtocolBufferPage.Write;
 					page.Size = await stream.ReadAsync(Buffer, page.Offset, _options.PageSize);
+					if (null != Log) Log.Error("ProtocolBuffer : read end for offset " + page.Offset + " with size " + page.Size);
 					if (0 == page.Size) continue;
 					page.State = ProtocolBufferPage.Data;
 					protocol.Process(page);
 				}
 				protocol.Join();
+				if (null != Log) Log.Error("ProtocolBuffer : protocol joined");
 				protocol.Finish();
+				if (null != Log) Log.Error("ProtocolBuffer : protocol finished");
 				result.Success = protocol.Success;
 				if (protocol.Error != null){
 					result.Success = false;
@@ -160,6 +171,7 @@ namespace Qorpent.IO.Protocols{
 				}
 			}
 			catch (Exception ex){
+				if (null != Log) Log.Error("ProtocolBuffer : error detected - "+ex.Message);
 				exception = ex;
 			}
 			finally{

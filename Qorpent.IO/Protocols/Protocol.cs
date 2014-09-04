@@ -18,12 +18,17 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Qorpent.Log;
 
 namespace Qorpent.IO.Protocols{
 	/// <summary>
 	///     Абстрактный класс протокола
 	/// </summary>
 	public abstract class Protocol{
+		/// <summary>
+		/// Журнал
+		/// </summary>
+		public IUserLog Log;
 		/// <summary>
 		///     Очередь буфферов на обработку
 		/// </summary>
@@ -64,6 +69,7 @@ namespace Qorpent.IO.Protocols{
 		/// </summary>
 		/// <param name="page"></param>
 		public void Process(ProtocolBufferPage page){
+			if(null!=Log)Log.Debug("Protocol: enque page");
 			PageQueue.Enqueue(page);
 			if (null == Worker || Worker.IsCompleted){
 				Worker = Task.Run((Action) InternalProcess);
@@ -74,24 +80,30 @@ namespace Qorpent.IO.Protocols{
 		///     Завершает обработку очереди и соединяет поток обработки
 		/// </summary>
 		public void Join(){
+			if (null != Log) Log.Debug("Protocol: start join");
 			if (null != Worker) Worker.Wait();
-			if (null != Error) return;
-			if (0 == PageQueue.Count) return;
-			InternalProcess();
+			if (null == Error && 0 != PageQueue.Count){
+				InternalProcess();
+			}
+			if (null != Log) Log.Debug("Protocol: end join");
 		}
 
 
 		private void InternalProcess(){
+			if (null != Log) Log.Debug("Protocol: start process");
 			ProtocolBufferPage page;
 			while (IsAlive && PageQueue.TryDequeue(out page)){
 				page.State = ProtocolBufferPage.Read;
 				try{
+					if (null != Log) Log.Debug("Protocol: start page");
 					ProcessPage(page);
+					if (null != Log) Log.Debug("Protocol: end page");
 				}
 				catch (IOException ioException){
 					Error = ioException;
 				}
 				catch (Exception error){
+					if (null != Log) Log.Error("Protocol: error detected - "+error.Message);
 					Error = new IOException(error.Message, error);
 				}
 				finally{
@@ -101,6 +113,7 @@ namespace Qorpent.IO.Protocols{
 			if (!IsAlive){
 				CleanupQueue();
 			}
+			if (null != Log) Log.Debug("Protocol: end process");
 		}
 
 		/// <summary>
