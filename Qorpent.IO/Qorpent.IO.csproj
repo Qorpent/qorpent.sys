@@ -39,16 +39,13 @@
     <Compile Include="FileDescriptors\FileFsBased.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
-    <Compile Include="Net\HttpEntity.cs" />
-    <Compile Include="Net\HttpEntityType.cs" />
+    <Compile Include="Net\HttpClient.cs" />
     <Compile Include="Net\HttpRequest.cs" />
     <Compile Include="Net\HttpRequestWriter.cs" />
-    <Compile Include="Net\HttpResponseReader.cs" />
-    <Compile Include="Net\HttpException.cs" />
-    <Compile Include="Net\HttpUtils.cs" />
     <Compile Include="Net\HttpResponse.cs" />
-    <Compile Include="Net\HttpReaderState.cs" />
-    <Compile Include="Net\IHttpReader.cs" />
+    <Compile Include="Net\HttpResponseReaderExecutor.cs" />
+    <Compile Include="Net\HttpResponseReader.cs" />
+    <Compile Include="Net\HttpUtils.cs" />
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />
     <Compile Include="Storages\FileStorageHashedDirectory.cs" />
     <Compile Include="Storages\FileStorageVcsStorage.cs" />
@@ -77,6 +74,7 @@
     <Compile Include="VcsStorage\IVcsStoragePersister.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />

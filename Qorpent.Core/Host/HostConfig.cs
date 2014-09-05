@@ -50,7 +50,30 @@ namespace Qorpent.Host{
 			Cached = new List<string>();
 			AuthCookieName = "QHAUTH";
 			AuthCookieDomain = "";
+			AccessAllowOrigin = "";
+			AccessAllowHeaders = "*";
+			AccessAllowMethods = "GET, POST, OPTIONS";
+			AccessAllowCredentials = true;
 		}
+		/// <summary>
+		/// Разрешение Cookie при работе с Cross-Site
+		/// </summary>
+		public bool AccessAllowCredentials { get; set; }
+
+		/// <summary>
+		/// Методы, разрешнные для Cross-Site-Scripting
+		/// </summary>
+		public string AccessAllowMethods { get; set; }
+
+		/// <summary>
+		/// Настройка доступа для Cross-Site-Scripting по хидеру 
+		/// </summary>
+		public string AccessAllowHeaders { get; set; }
+
+		/// <summary>
+		/// Настройка доступа для Cross-Site-Scripting по происхождению запроса
+		/// </summary>
+		public string AccessAllowOrigin { get; set; }
 
 		/// <summary>
 		/// </summary>
