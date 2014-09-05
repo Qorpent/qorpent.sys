@@ -26,7 +26,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				                CircularRef.ReferenceField.SqlQuoteName() +
 				                ")";
 				if (Dialect == SqlDialect.PostGres){
-					result += " DEFERABLE";
+					result += " DEFERRABLE";
 				}
 				result += ";";
 				return result;

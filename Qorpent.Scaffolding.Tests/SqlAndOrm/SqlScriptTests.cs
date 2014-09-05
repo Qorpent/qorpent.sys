@@ -172,17 +172,17 @@ CREATE TABLE ""dbo"".""a"" (
 	""id"" int NOT NULL CONSTRAINT dbo_a_id_pk PRIMARY KEY NONCLUSTERED ON SECONDARY DEFAULT (NEXT VALUE FOR ""dbo"".""a_seq""),
 	""selector"" int NOT NULL DEFAULT 0
 ) ON dbo_a_PARTITION ( selector);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (-1);
 
 GO
 
 CREATE TABLE ""dbo"".""b"" (
 	""id"" int NOT NULL CONSTRAINT dbo_b_id_pk PRIMARY KEY NONCLUSTERED ON SECONDARY DEFAULT (NEXT VALUE FOR ""dbo"".""b_seq""),
-	""ver"" datetime NOT NULL DEFAULT 0
+	""ver"" datetime NOT NULL DEFAULT ('19000101')
 ) ON dbo_b_PARTITION ( ver);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=0)  INSERT ""dbo"".""b"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT ""dbo"".""b"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=0)  INSERT INTO ""dbo"".""b"" (""id"") VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT INTO ""dbo"".""b"" (""id"") VALUES (-1);
 
 GO
 
@@ -419,8 +419,8 @@ GO
 CREATE TABLE ""dbo"".""a"" (
 	""id"" int NOT NULL CONSTRAINT dbo_a_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""a_seq"")
 ) ON SECONDARY;
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (-1);
 
 GO
 
@@ -456,8 +456,8 @@ EXCEPTION WHEN OTHERS THEN raise notice '% %', SQLERRM, SQLSTATE; END;
 CREATE TABLE ""dbo"".""a"" (
 	""id"" int NOT NULL CONSTRAINT dbo_a_id_pk PRIMARY KEY DEFAULT (nextval('""dbo"".""a_seq""'))
 ) TABLESPACE SECONDARY;
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (-1);
 
 
 
@@ -579,8 +579,8 @@ GO
 CREATE TABLE ""dbo"".""a"" (
 	""id"" int NOT NULL CONSTRAINT dbo_a_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""a_seq"")
 ) ON SECONDARY;
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (-1);
 
 GO
 
@@ -646,8 +646,8 @@ GO
 CREATE TABLE ""dbo"".""a"" (
 	""id"" int NOT NULL CONSTRAINT dbo_a_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""a_seq"")
 ) ON SECONDARY;
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (-1);
 
 GO
 
@@ -704,8 +704,8 @@ GO
 CREATE TABLE ""dbo"".""a"" (
 	""id"" int NOT NULL CONSTRAINT dbo_a_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""a_seq"")
 ) ON SECONDARY;
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (-1);
 
 GO
 
@@ -757,8 +757,8 @@ GO
 CREATE TABLE ""dbo"".""a"" (
 	""id"" int NOT NULL CONSTRAINT dbo_a_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""a_seq"")
 ) ON SECONDARY;
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (-1);
 
 GO
 
@@ -842,8 +842,8 @@ CREATE TABLE ""dbo"".""a"" (
 	""code"" nvarchar(255) NOT NULL DEFAULT '',
 	""name"" nvarchar(255) NOT NULL DEFAULT ''
 ) ON SECONDARY;
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"", ""code"", ""name"") VALUES (0, '/', 'NULL/ROOT');
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"", ""code"", ""name"") VALUES (-1, 'ERR', 'ERROR/LOST');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT INTO ""dbo"".""a"" (""id"", ""code"", ""name"") VALUES (0, '/', 'NULL/ROOT');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT INTO ""dbo"".""a"" (""id"", ""code"", ""name"") VALUES (-1, 'ERR', 'ERROR/LOST');
 
 GO
 
@@ -853,8 +853,8 @@ CREATE TABLE ""dbo"".""b"" (
 	""code"" nvarchar(255) NOT NULL DEFAULT '',
 	""name"" nvarchar(255) NOT NULL DEFAULT ''
 ) ON SECONDARY;
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=0)  INSERT ""dbo"".""b"" (""id"", ""code"", ""name"") VALUES (0, '/', 'NULL/ROOT');
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT ""dbo"".""b"" (""id"", ""code"", ""name"", ""a"") VALUES (-1, 'ERR', 'ERROR/LOST', -1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=0)  INSERT INTO ""dbo"".""b"" (""id"", ""code"", ""name"") VALUES (0, '/', 'NULL/ROOT');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT INTO ""dbo"".""b"" (""id"", ""code"", ""name"", ""a"") VALUES (-1, 'ERR', 'ERROR/LOST', -1);
 
 GO
 
@@ -956,8 +956,8 @@ GO
 CREATE TABLE ""dbo"".""a"" (
 	""id"" int NOT NULL CONSTRAINT dbo_a_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""a_seq"")
 ) ON SECONDARY;
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"") VALUES (0);
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"") VALUES (-1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (0);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT INTO ""dbo"".""a"" (""id"") VALUES (-1);
 
 GO
 

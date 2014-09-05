@@ -23,16 +23,16 @@ namespace Qorpent.Db
 		element geography
 		datatype int type=Int32 sql=int
 		datatype long type=Int64 sql=bigint
-		datatype string type=String size=255 sql=nvarchar
-		datatype shortstring type=String size=20 sql=nvarchar
-		datatype longstring type=String size=400 sql=nvarchar
-		datatype text type=String size=-1 sql=nvarchar
-		datatype datetime type=DateTime sql=datetime
+		datatype string type=String size=255 sql=nvarchar postgres=varchar
+		datatype shortstring type=String size=20 sql=nvarchar postgres=varchar
+		datatype longstring type=String size=400 sql=nvarchar postgres=varchar
+		datatype text type=String size=-1 sql=nvarchar postgres=text
+		datatype datetime type=DateTime sql=datetime postgres=timestamp
 		datatype decimal type=Decimal size=18 precession=6 sql=decimal
-		datatype bool type=Boolean sql=bit
+		datatype bool type=Boolean sql=bit postgres=boolean
 		datatype dictso type="IDictionary<string,object>"
-		datatype geometry type=String sql=geometry default=(geometry::Parse('POINT(0 0 NULL NULL)'))
-		datatype geography type=String sql=geography default=(geography::Parse('POINT(0 0 NULL NULL)'))
+		datatype geometry type=String sql=geometry default="('POINT(0 0)')"
+		datatype geography type=String sql=geography default="('POINT(0 0)')"
 		_timestampstr = "CAST(CAST(CURRENT_TIMESTAMP as float) as char)"
 		fullname = "${schema}.${code}"
 	

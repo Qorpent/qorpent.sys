@@ -58,8 +58,8 @@ CREATE TABLE ""dbo"".""a"" (
 	""id"" int NOT NULL CONSTRAINT dbo_a_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""a_seq""),
 	""code"" nvarchar(255) NOT NULL DEFAULT ''
 ) ON SECONDARY;
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT ""dbo"".""a"" (""id"", ""code"") VALUES (0, '/');
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT ""dbo"".""a"" (""id"", ""code"") VALUES (-1, 'ERR');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT INTO ""dbo"".""a"" (""id"", ""code"") VALUES (0, '/');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT INTO ""dbo"".""a"" (""id"", ""code"") VALUES (-1, 'ERR');
 
 GO
 
@@ -69,8 +69,8 @@ CREATE TABLE ""dbo"".""b"" (
 	""a"" int NOT NULL CONSTRAINT dbo_b_a_a_id_fk FOREIGN KEY REFERENCES ""dbo"".""a"" (""id"") DEFAULT 0,
 	""code"" nvarchar(255) NOT NULL DEFAULT ''
 ) ON SECONDARY;
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=0)  INSERT ""dbo"".""b"" (""id"", ""code"") VALUES (0, '/');
-IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT ""dbo"".""b"" (""id"", ""code"", ""a"") VALUES (-1, 'ERR', -1);
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=0)  INSERT INTO ""dbo"".""b"" (""id"", ""code"") VALUES (0, '/');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT INTO ""dbo"".""b"" (""id"", ""code"", ""a"") VALUES (-1, 'ERR', -1);
 
 GO
 

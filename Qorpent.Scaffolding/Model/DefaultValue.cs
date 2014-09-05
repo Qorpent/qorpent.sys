@@ -32,6 +32,10 @@ namespace Qorpent.Scaffolding.Model{
 			if (string.IsNullOrWhiteSpace(attr)){
 				if (dbField.DataType.IsString){
 					result.Value = "";
+				}else if (dbField.DataType.IsDateTime){
+					result.Value = "('19000101')";
+				}else if (dbField.DataType.IsBool){
+					result.Value = false;
 				}
 				else{
 					result.Value = 0;

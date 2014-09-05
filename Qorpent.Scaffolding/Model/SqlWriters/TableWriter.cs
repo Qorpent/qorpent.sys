@@ -31,7 +31,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				sb.AppendLine("CREATE TABLE " + Table.FullSqlName + " (");
 				Field[] fields = Table.GetOrderedFields().Where(_ => !_.NoSql).ToArray();
 				for (int f = 0; f < fields.Length; f++){
-					WriteField(fields[f], sb, f == fields.Length - 1);
+					WriteField(Dialect,fields[f], sb, f == fields.Length - 1);
 				}
 				sb.Append(")");
 				WriteAllocation(sb);
@@ -53,7 +53,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 
 		private void GenerateDefaultRows(StringBuilder sb, int id, string code, string name, int parent = 0){
 			sb.Append("IF NOT EXISTS (SELECT TOP 1 * FROM " + Table.FullSqlName + " where " +
-			          Table.PrimaryKey.Name.SqlQuoteName() + "=" + id + ")  INSERT " + Table.FullSqlName + " (" +
+			          Table.PrimaryKey.Name.SqlQuoteName() + "=" + id + ")  INSERT INTO " + Table.FullSqlName + " (" +
 			          Table.PrimaryKey.Name.SqlQuoteName());
 			if (Table.Fields.ContainsKey("code")){
 				sb.Append(", " + Table.Fields["code"].Name.SqlQuoteName());
@@ -135,7 +135,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			}
 		}
 
-		private void WriteField(Field field, StringBuilder sb, bool last){
+		private void WriteField(SqlDialect dialect,Field field, StringBuilder sb, bool last){
 			if (!string.IsNullOrWhiteSpace(field.Comment) && !NoComment){
 				sb.AppendLine("\t-- " + field.Comment);
 			}
@@ -143,7 +143,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			WritePrimaryKey(field, sb);
 			WriteUnique(field, sb);
 			WriteForeignKey(field, sb);
-			WriteDefaultValue(field, sb);
+			WriteDefaultValue(dialect,field, sb);
 			if (!last){
 				sb.AppendLine(",");
 			}
@@ -156,7 +156,8 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			if (field.IsPrimaryKey) return;
 			if (!field.IsReference) return;
 			if (field.GetIsCircular()) return;
-			sb.Append(" CONSTRAINT " + field.GetConstraintName("FK") + " FOREIGN KEY REFERENCES " +
+			var fk = Dialect == SqlDialect.PostGres ? " " : " FOREIGN KEY ";
+			sb.Append(" CONSTRAINT " + field.GetConstraintName("FK") + fk + "REFERENCES " +
 			          field.ReferenceClass.FullSqlName + " (" + field.ReferenceField.SqlQuoteName() + ")");
 			if (Dialect == SqlDialect.PostGres){
 				sb.Append(" DEFERRABLE");
@@ -180,25 +181,34 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			}
 		}
 
-		private void WriteDefaultValue(Field field, StringBuilder sb){
+		private void WriteDefaultValue(SqlDialect dialect, Field field, StringBuilder sb)
+		{
 			sb.Append(" DEFAULT ");
 			if (field.IsAutoIncrement){
 				WriteAutoIncrementDefault(field, sb);
 			}
 			else{
-				WriteUsualDefault(field, sb);
+				WriteUsualDefault(dialect,field, sb);
 			}
 		}
 
-		private void WriteUsualDefault(Field field, StringBuilder sb){
+		private void WriteUsualDefault(SqlDialect dialect,Field field, StringBuilder sb){
 			DefaultValue def = field.DefaultSqlValue;
 			switch (def.DefaultValueType){
+
 				case DbDefaultValueType.String:
 					sb.Append("'" + def.Value.ToSqlString() + "'");
 					return;
 				case DbDefaultValueType.Native:
 					if (def.Value == null || "".Equals(def.Value)){
 						sb.Append("''");
+					}else if (def.Value is bool){
+						if (dialect == SqlDialect.PostGres){
+							sb.Append(def.Value.ToString().ToLower());
+						}
+						else{
+							sb.Append("0");
+						}
 					}
 					else{
 						sb.Append(def.Value);

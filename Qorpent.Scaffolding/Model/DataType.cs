@@ -46,7 +46,7 @@ namespace Qorpent.Scaffolding.Model{
 		public bool IsDateTime{
 			get {
 				var cSharpType = CSharpDataType.ToLowerInvariant();
-				return cSharpType == "system.datetime" || cSharpType == "datetime";
+				return cSharpType == "system.datetime" || cSharpType == "datetime" || this.Code.Contains("date"); 
 			}
 		}
 
@@ -79,6 +79,12 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// </summary>
 		public IDictionary<SqlDialect, SqlDataType> SqlDataTypes { get; private set; }
+		/// <summary>
+		/// Признак булевого типа
+		/// </summary>
+		public bool IsBool{
+			get { return CSharpDataType == "Boolean"; }
+		}
 
 		/// <summary>
 		/// </summary>
@@ -139,7 +145,7 @@ namespace Qorpent.Scaffolding.Model{
 				SqlDataTypes ={
 					{SqlDialect.Ansi, new SqlDataType{Name = "time"}},
 					{SqlDialect.SqlServer, new SqlDataType{Name = "datetime"}},
-					{SqlDialect.PostGres, new SqlDataType{Name = "datetime"}},
+					{SqlDialect.PostGres, new SqlDataType{Name = "timestamp"}},
 				}
 			};
 
@@ -226,13 +232,14 @@ namespace Qorpent.Scaffolding.Model{
 			string ansitype = dt.Attr("sql", Code);
 			int size = dt.Attr("size").ToInt();
 			int precession = dt.Attr("precession").ToInt();
-			SqlDataTypes[SqlDialect.Ansi] = new SqlDataType{Name = ansitype, Size = size, Precession = precession};
+			SqlDataTypes[SqlDialect.Ansi] = new SqlDataType{Name = ansitype, Size = size, Precession = precession, Dialect = "ansi"};
 			foreach (string d in Enum.GetNames(typeof (SqlDialect))){
 				string normaltype = d.ToLowerInvariant();
 				if (normaltype == "ansi") continue;
 				string dialecttype = dt.Attr(normaltype);
 				if (!string.IsNullOrWhiteSpace(dialecttype)){
-					SqlDataTypes[d.To<SqlDialect>()] = new SqlDataType{Name = dialecttype, Size = size, Precession = precession};
+					var sqltype = new SqlDataType{Name = dialecttype, Size = size, Precession = precession, Dialect=normaltype};
+					SqlDataTypes[d.To<SqlDialect>()] = sqltype;
 				}
 			}
 			return this;

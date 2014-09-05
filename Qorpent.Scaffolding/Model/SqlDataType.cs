@@ -23,6 +23,10 @@ namespace Qorpent.Scaffolding.Model{
 		///     Точность
 		/// </summary>
 		public int Precession { get; set; }
+		/// <summary>
+		/// Диалект
+		/// </summary>
+		public string Dialect { get; set; }
 
 		/// <summary>
 		///     Прямое приведение к строке для упрощенного составления строк - выражений
@@ -41,18 +45,21 @@ namespace Qorpent.Scaffolding.Model{
 			var result = new StringBuilder();
 			result.Append(Name);
 			if (Size != 0){
-				result.Append('(');
-				if (Size <= 0){
-					result.Append("max");
+				if (!(Size < 0 && Dialect != "ansi" && Dialect!="sqlserver")){
+					result.Append('(');
+					if (Size <= 0){
+							result.Append("max");
+						
+					}
+					else{
+						result.Append(Size);
+					}
+					if (Precession != 0){
+						result.Append(',');
+						result.Append(Precession);
+					}
+					result.Append(")");
 				}
-				else{
-					result.Append(Size);
-				}
-				if (Precession != 0){
-					result.Append(',');
-					result.Append(Precession);
-				}
-				result.Append(")");
 			}
 			return result.ToString();
 		}

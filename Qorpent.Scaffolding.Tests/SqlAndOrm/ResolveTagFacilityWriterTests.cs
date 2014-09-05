@@ -132,6 +132,10 @@ b c prototype=dbtable resolve
 	ref b resolve
 ");
 			Assert.AreEqual(99999,model["b"]["a"].ResolvePriority);
+			Assert.True(model["c"]["b"].Resolve);
+			Assert.True(model["c"]["Tag"].Resolve);
+			Assert.True(model["c"]["Marks"].Resolve);
+			Assert.True(model["c"]["a"].Resolve);
 			var code = new ResolveTagFacilityWriter(model) { WithHeader = false }.ToString();
 			Console.WriteLine(code.Replace("\"", "\"\""));
 			Assert.AreEqual(@"
