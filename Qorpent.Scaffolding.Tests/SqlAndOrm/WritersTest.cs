@@ -261,7 +261,7 @@ EXECUTE sp_addextendedproperty N'MS_Description', 'Главный объект',
 		}
 
 		[TestCase(SqlDialect.SqlServer, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY (\"master\") REFERENCES \"dbo\".\"master\" (\"id\");")]
-		[TestCase(SqlDialect.PostGres, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY (\"master\") REFERENCES \"dbo\".\"master\" (\"id\") DEFERABLE;")]
+		[TestCase(SqlDialect.PostGres, ScriptMode.Create, "ALTER TABLE \"dbo\".\"slave\" ADD CONSTRAINT dbo_slave_master_master_id_fk FOREIGN KEY (\"master\") REFERENCES \"dbo\".\"master\" (\"id\") DEFERRABLE;")]
 		[TestCase(SqlDialect.SqlServer, ScriptMode.Drop, "ALTER TABLE \"dbo\".\"slave\" DROP CONSTRAINT dbo_slave_master_master_id_fk;")]
 		public void LateFKGenerator(SqlDialect dialect, ScriptMode mode,string test){
 			var model = PersistentModel.Compile(CircularModel);
