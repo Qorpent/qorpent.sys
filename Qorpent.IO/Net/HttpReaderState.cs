@@ -1,4 +1,4 @@
-﻿// Copyright 2007-2014  Qorpent Team - http://github.com/Qorpent
+﻿	// Copyright 2007-2014  Qorpent Team - http://github.com/Qorpent
 // Supported by Media Technology LTD 
 //  
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,6 +59,10 @@ namespace Qorpent.IO.Net{
 		///     Позиция перед значением хидера
 		/// </summary>
 		PreHeaderValue = 64,
+		/// <summary>
+		/// Чтение заголовков
+		/// </summary>
+		Headers = 128,
 
 		/// <summary>
 		///     Статус ошибка
@@ -69,5 +73,6 @@ namespace Qorpent.IO.Net{
 		///     Статус - завершено
 		/// </summary>
 		Finish = 1 << 29,
+		
 	}
 }

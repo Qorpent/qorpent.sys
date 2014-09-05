@@ -47,7 +47,7 @@ namespace Qorpent.IO.Protocols{
 		/// <summary>
 		///     Целевой буфер
 		/// </summary>
-		public readonly ProtocolBuffer ProtocolBuffer;
+		public readonly BufferManager BufferManager;
 
 		/// <summary>
 		///     Смещение в целевом буфере
@@ -67,10 +67,10 @@ namespace Qorpent.IO.Protocols{
 		/// <summary>
 		///     Создает страницу указанного буфера со смещением
 		/// </summary>
-		/// <param name="protocolBuffer"></param>
+		/// <param name="_bufferManager"></param>
 		/// <param name="offset"></param>
-		public ProtocolBufferPage(ProtocolBuffer protocolBuffer, int offset){
-			ProtocolBuffer = protocolBuffer;
+		public ProtocolBufferPage(BufferManager _bufferManager, int offset){
+			BufferManager = _bufferManager;
 			Offset = offset;
 		}
 
@@ -82,7 +82,7 @@ namespace Qorpent.IO.Protocols{
 		public byte this[int index]{
 			get{
 				if (index < 0 || index >= Size) throw new IOException("Try read behind page (this[i])");
-				return ProtocolBuffer.Buffer[index + Offset];
+				return BufferManager.Buffer[index + Offset];
 			}
 		}
 
@@ -98,7 +98,7 @@ namespace Qorpent.IO.Protocols{
 					throw new IOException("Try read behind page (this[s,i])");
 				}
 				var result = new byte[length - start];
-				Array.Copy(ProtocolBuffer.Buffer, Offset + start, result, 0, length);
+				Array.Copy(BufferManager.Buffer, Offset + start, result, 0, length);
 				return result;
 			}
 		}
@@ -120,11 +120,16 @@ namespace Qorpent.IO.Protocols{
 		/// <param name="offset"></param>
 		/// <param name="count"></param>
 		/// <returns></returns>
-		public int IndexOf(byte value, int offset, int count){
+		public int IndexOf(byte value, int offset, int count =-1){
+			if (count == -1){
+				count = Size - offset;
+			}
 			if (offset < 0 || count < 0 || (offset + count) > Size){
 				throw new IOException("Try search behind page (indexof(v,o,c)");
 			}
-			return Array.IndexOf(ProtocolBuffer.Buffer, offset + Offset, count);
+			var result = Array.IndexOf(BufferManager.Buffer, value, offset + Offset, count) - Offset;
+			if (result < -1) result = -1;
+			return result;
 		}
 
 		/// <summary>
@@ -140,7 +145,7 @@ namespace Qorpent.IO.Protocols{
 			if (start < 0 || start < 0 || (start + length) > Size){
 				throw new IOException("Try read behind page (readascii(s,l))");
 			}
-			return Encoding.ASCII.GetString(ProtocolBuffer.Buffer, Offset + start, length);
+			return Encoding.ASCII.GetString(BufferManager.Buffer, Offset + start, length);
 		}
 	}
 }

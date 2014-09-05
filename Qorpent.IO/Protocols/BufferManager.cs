@@ -17,16 +17,22 @@
 
 using System;
 using System.IO;
+using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using Qorpent.IO.Net;
 using Qorpent.Log;
 
 namespace Qorpent.IO.Protocols{
 	/// <summary>
 	///     Обобщенный асинхронный буфер для отправки транспорта с входящего потока в протокол
 	/// </summary>
-	public class ProtocolBuffer{
+	public class BufferManager{
+		/// <summary>
+		/// Буфер по умолчанию
+		/// </summary>
+		public static readonly BufferManager Default = new BufferManager();
 		/// <summary>
 		///     Страницы буфера
 		/// </summary>
@@ -43,7 +49,7 @@ namespace Qorpent.IO.Protocols{
 		/// <summary>
 		///     Создает буффер с указанным размером страницы и числом страниц
 		/// </summary>
-		public ProtocolBuffer(ProtocolBufferOptions protocolBufferOptions = null){
+		public BufferManager(ProtocolBufferOptions protocolBufferOptions = null){
 			_options = protocolBufferOptions ?? new ProtocolBufferOptions();
 			Buffer = new byte[_options.PageSize*_options.InitialPageCount];
 			Pages = new ProtocolBufferPage[_options.MaxPageCount];
@@ -90,7 +96,7 @@ namespace Qorpent.IO.Protocols{
 		///     Возвращает любую свободную страницу для записи
 		/// </summary>
 		/// <returns></returns>
-		private ProtocolBufferPage GetFreePage(){
+		public ProtocolBufferPage GetFreePage(){
 			ProtocolBufferPage result = null;
 			for (var trys = 0; trys < _options.MaxTryWriteCount; trys++){
 				ProtocolBufferPage candidate;
@@ -126,9 +132,64 @@ namespace Qorpent.IO.Protocols{
 		/// <param name="closeStream"></param>
 		/// <returns></returns>
 		public ProtocolBufferResult Read(Stream stream, Protocol protocol, bool closeStream = true){
-			var task = ReadAsync(stream, protocol, closeStream);
-			task.Wait();
-			return task.Result;
+			var result = new ProtocolBufferResult { Ok = true };
+			Exception exception = null;
+			var existedReadTimeout = 0;
+			try
+			{
+				if (stream is NetworkStream)
+				{
+					existedReadTimeout = stream.ReadTimeout;
+					stream.ReadTimeout = _options.StreamReadTimeout;
+				}
+				protocol.Start();
+
+				while (protocol.IsAlive)
+				{
+					if (null != Log) Log.Error("ProtocolBuffer : start step");
+					ProtocolBufferPage page = GetFreePage();
+					if (null != Log) Log.Error("ProtocolBuffer : page accessed at offset " + page.Offset);
+					page.State = ProtocolBufferPage.Write;
+					page.Size = stream.Read(Buffer, page.Offset, _options.PageSize);
+					if (null != Log) Log.Error("ProtocolBuffer : read end for offset " + page.Offset + " with size " + page.Size);
+					if (0 == page.Size) break;
+					page.State = ProtocolBufferPage.Data;
+					protocol.Process(page);
+				}
+				//protocol.Join();
+				if (null != Log) Log.Error("ProtocolBuffer : protocol joined");
+				protocol.Finish();
+				if (null != Log) Log.Error("ProtocolBuffer : protocol finished");
+				result.Success = protocol.Success;
+				if (protocol.Error != null)
+				{
+					result.Success = false;
+					result.Error = protocol.Error;
+				}
+			}
+			catch (Exception ex)
+			{
+				if (null != Log) Log.Error("ProtocolBuffer : error detected - " + ex.Message);
+				exception = ex;
+			}
+			finally
+			{
+				if (stream is NetworkStream)
+				{
+					stream.ReadTimeout = existedReadTimeout;
+				}
+				if (closeStream)
+				{
+					stream.Close();
+				}
+			}
+			if (null != exception)
+			{
+				result.Ok = false;
+				result.Success = false;
+				result.Error = exception;
+			}
+			return result;
 		}
 
 
@@ -140,54 +201,8 @@ namespace Qorpent.IO.Protocols{
 		/// <param name="closeStream"></param>
 		/// <returns></returns>
 		public async Task<ProtocolBufferResult> ReadAsync(Stream stream, Protocol protocol, bool closeStream = true){
-			var result = new ProtocolBufferResult{Ok = true};
-			Exception exception = null;
-			var existedReadTimeout = 0;
-			try{
-				if (stream is NetworkStream){
-					existedReadTimeout = stream.ReadTimeout;
-					stream.ReadTimeout = _options.StreamReadTimeout;
-				}
-				protocol.Start();
-				while (protocol.IsAlive && IsAlive(stream)){
-					if (null != Log) Log.Error("ProtocolBuffer : start step");
-					ProtocolBufferPage page = GetFreePage();
-					if (null != Log) Log.Error("ProtocolBuffer : page accessed at offset "+page.Offset);
-					page.State = ProtocolBufferPage.Write;
-					page.Size = await stream.ReadAsync(Buffer, page.Offset, _options.PageSize);
-					if (null != Log) Log.Error("ProtocolBuffer : read end for offset " + page.Offset + " with size " + page.Size);
-					if (0 == page.Size) continue;
-					page.State = ProtocolBufferPage.Data;
-					protocol.Process(page);
-				}
-				protocol.Join();
-				if (null != Log) Log.Error("ProtocolBuffer : protocol joined");
-				protocol.Finish();
-				if (null != Log) Log.Error("ProtocolBuffer : protocol finished");
-				result.Success = protocol.Success;
-				if (protocol.Error != null){
-					result.Success = false;
-					result.Error = protocol.Error;
-				}
-			}
-			catch (Exception ex){
-				if (null != Log) Log.Error("ProtocolBuffer : error detected - "+ex.Message);
-				exception = ex;
-			}
-			finally{
-				if (stream is NetworkStream){
-					stream.ReadTimeout = existedReadTimeout;	
-				}
-				if (closeStream){
-					stream.Close();
-				}
-			}
-			if (null != exception){
-				result.Ok = false;
-				result.Success = false;
-				result.Error = exception;
-			}
-			return result;
+			var task = Task.Run(() => Read(stream, protocol, closeStream));
+			return await task;
 		}
 
 		
@@ -197,19 +212,27 @@ namespace Qorpent.IO.Protocols{
 		/// </summary>
 		/// <param name="stream"></param>
 		private bool IsAlive(Stream stream){
-			if (stream is MemoryStream || stream is FileStream){
-				return stream.Position < stream.Length;
+			var testStream = stream;
+			if (stream is SslWithUnderlinedStream){
+				testStream = ((SslWithUnderlinedStream) stream).Underlined;
 			}
-			if (stream is NetworkStream){
-				var ns = stream as NetworkStream;
+
+			if (testStream is MemoryStream || testStream is FileStream)
+			{
+				return testStream.Position < testStream.Length;
+			}
+			if (testStream is NetworkStream)
+			{
+				var ns = testStream as NetworkStream;
+
 				if (ns.DataAvailable) return true;
-				if (_options.StreamWaitResponseTimeout > 0){
+				if (_options.StreamWaitResponseTimeout != 0){
 					Thread.Sleep(_options.StreamWaitResponseTimeout);
 					if (ns.DataAvailable) return true;
 				}
 				return false;
 			}
-			return stream.CanRead;
+			return testStream.CanRead;
 		}
 	}
 }

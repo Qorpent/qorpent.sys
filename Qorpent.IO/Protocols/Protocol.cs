@@ -64,40 +64,24 @@ namespace Qorpent.IO.Protocols{
 		public bool Success { get; protected set; }
 
 
+		
+
+
 		/// <summary>
-		///     ќбработка страницы протокола
+		/// ќбрабатывает страницу
 		/// </summary>
 		/// <param name="page"></param>
-		public void Process(ProtocolBufferPage page){
-			if(null!=Log)Log.Debug("Protocol: enque page");
-			PageQueue.Enqueue(page);
-			if (null == Worker || Worker.IsCompleted){
-				Worker = Task.Run((Action) InternalProcess);
-			}
-		}
-
-		/// <summary>
-		///     «авершает обработку очереди и соедин€ет поток обработки
-		/// </summary>
-		public void Join(){
-			if (null != Log) Log.Debug("Protocol: start join");
-			if (null != Worker) Worker.Wait();
-			if (null == Error && 0 != PageQueue.Count){
-				InternalProcess();
-			}
-			if (null != Log) Log.Debug("Protocol: end join");
-		}
-
-
-		private void InternalProcess(){
+		public void Process(ProtocolBufferPage page)
+		{
 			if (null != Log) Log.Debug("Protocol: start process");
-			ProtocolBufferPage page;
-			while (IsAlive && PageQueue.TryDequeue(out page)){
+
 				page.State = ProtocolBufferPage.Read;
 				try{
-					if (null != Log) Log.Debug("Protocol: start page");
-					ProcessPage(page);
-					if (null != Log) Log.Debug("Protocol: end page");
+					if (IsAlive){
+						if (null != Log) Log.Debug("Protocol: start page");
+						ProcessPage(page);
+						if (null != Log) Log.Debug("Protocol: end page");
+					}
 				}
 				catch (IOException ioException){
 					Error = ioException;
@@ -109,7 +93,7 @@ namespace Qorpent.IO.Protocols{
 				finally{
 					page.State = ProtocolBufferPage.Free;
 				}
-			}
+			
 			if (!IsAlive){
 				CleanupQueue();
 			}
@@ -124,7 +108,10 @@ namespace Qorpent.IO.Protocols{
 
 		private void CleanupQueue(){
 			ProtocolBufferPage page;
-			while (!PageQueue.IsEmpty) PageQueue.TryDequeue(out page);
+			while (!PageQueue.IsEmpty){
+				PageQueue.TryDequeue(out page);
+				page.State = ProtocolBufferPage.Free;
+			}
 		}
 		/// <summary>
 		///  оманда завершени€ обработки протокола

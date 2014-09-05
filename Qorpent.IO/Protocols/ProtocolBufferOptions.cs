@@ -38,9 +38,9 @@ namespace Qorpent.IO.Protocols{
 		/// <param name="maxTryWriteCount">Количество попыток поиска свободных страниц для записи</param>
 		/// <param name="streamWaitResponseTimeout">Время ожидания откика потока</param>
 		/// <param name="streamReadTimeout">Время ожидания чтения</param>
-		public ProtocolBufferOptions(int pageSize = 1024, int initialPageCount = 32, int maxPageCount = 64,
+		public ProtocolBufferOptions(int pageSize = 8192, int initialPageCount = 32, int maxPageCount = 64,
 		                             int waitPageTimeout = 20, int maxTryWriteCount = 3, int streamWaitResponseTimeout = 20,
-		                             int streamReadTimeout = 50){
+		                             int streamReadTimeout = 200){
 			initialPageCount = Math.Max(initialPageCount, 1);
 			waitPageTimeout = Math.Max(waitPageTimeout, 0);
 			maxTryWriteCount = Math.Max(maxTryWriteCount, 1);

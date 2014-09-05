@@ -4,21 +4,24 @@ using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+using Qorpent.IO.Protocols;
 
 namespace Qorpent.IO.Net{
 	/// <summary>
 	/// Класс, осуществляющий низкоуровневую работу по обеспечению выполнения запросов HTTP
 	/// </summary>
 	/// <remarks>Привязан к определенному EndPoint, исходя из истории запросов может использовать
-	/// Keep-Alive, при сбоях в соединении</remarks>
+	/// Keep-Alive, присбоях в соединении</remarks>
 	public class HttpSocket:IDisposable{
 		private readonly IPEndPoint _endpoint;
 		private readonly bool _secure;
 		private Stream _stream;
 		private Socket _socket;
 		private bool _reuse = false;
-		private HttpResponseReader _lastReader;
-		private HttpResponse _lastResponse;
+
+		private BufferManager _bufferManager;
+
+
 
 		/// <summary>
 		/// Автоматическая загрузка ресурса целиком (удобно в сценарии с Dispose при отпраке 
@@ -29,6 +32,14 @@ namespace Qorpent.IO.Net{
 		/// </summary>
 		public bool CloseAfterLoad { get; set; }
 
+		/// <summary>
+		/// Буфер протоколов
+		/// </summary>
+		public BufferManager BufferManager{
+			get { return _bufferManager ?? (_bufferManager = new BufferManager()); }
+			set { _bufferManager = value; }
+		}
+		HttpProtocol protocol =new HttpProtocol();
 
 		/// <summary>
 		/// 
@@ -70,7 +81,7 @@ namespace Qorpent.IO.Net{
 		/// </summary>
 		/// <param name="request"></param>
 		/// <returns></returns>
-		public HttpResponse Call(HttpRequest request){
+		public HttpResponse2 Call(HttpRequest request){
 			try{
 				Prepare();
 				Handshake(request);
@@ -82,22 +93,39 @@ namespace Qorpent.IO.Net{
 				throw;
 			}
 		}
-
-		private HttpResponse Recieve(){
-			_lastReader = new HttpResponseReader(_stream);
-			_lastResponse = new HttpResponse(_lastReader);
-			if (CloseAfterLoad){
-				_lastResponse.OnSuccess += CloseOnSuccess;
+		/// <summary>
+		/// Выполняет запрос и возвращает результат
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns></returns>
+		public HttpResponse2 Call3(HttpRequest request)
+		{
+			try
+			{
+				Prepare();
+				Handshake(request);
+				Send(request);
+				return Recieve3();
 			}
-			if (AutoLoad){
-				_lastResponse.Load();
+			catch
+			{
+				Close();
+				throw;
 			}
-			return _lastResponse;
 		}
 
-		private void CloseOnSuccess(object sender, EventArgs args){
-			Close();
+		private HttpResponse2 Recieve(){
+			var result = BufferManager.Read(_stream, protocol, true);
+			if(!result.Ok)throw new IOException("Error in protocol",result.Error);
+			return protocol.Response;
 		}
+
+		private HttpResponseReader3 reader;
+		private HttpResponse2 Recieve3(){
+			reader = reader ?? new HttpResponseReader3();
+			return reader.Read(_stream);
+		}
+
 
 		private void Send(HttpRequest request){
 			var httpwriter = new HttpRequestWriter(_stream);
@@ -144,7 +172,7 @@ namespace Qorpent.IO.Net{
 			Stream result = new NetworkStream(_socket){ReadTimeout = 30,WriteTimeout = 30};
 			
 			if (Secure){
-				result = new SslStream(result,true,UserCertificateValidationCallback);
+				result = new SslWithUnderlinedStream(result,true,UserCertificateValidationCallback);
 			}
 			return result;
 		}

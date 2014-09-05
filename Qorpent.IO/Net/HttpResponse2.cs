@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
@@ -92,11 +93,63 @@ namespace Qorpent.IO.Net{
 			}
 		}
 		/// <summary>
+		/// Ошибка респонза
+		/// </summary>
+		public IOException Error { get; set; }
+		/// <summary>
+		/// Признак сырых не обработанных данных в контенте
+		/// </summary>
+		public bool IsRawData { get; set; }
+		/// <summary>
+		/// Признак завершенного запроса
+		/// </summary>
+		public bool Success { get; set; }
+		/// <summary>
+		/// Признак отклика на чанках
+		/// </summary>
+		public bool Chunked { get; set; }
+
+		/// <summary>
+		/// Признак наличия конента
+		/// </summary>
+		public bool HasContent{
+			get { return ContentLength != 0 || Chunked; }
+		}
+		/// <summary>
+		/// Использован GZip
+		/// </summary>
+		public bool GZip { get; set; }
+		/// <summary>
+		/// Использован Deflate
+		/// </summary>
+		public bool Deflate { get; set; }
+
+		private const string HEADER_TRANSFER_ENCODING = "Transfer-Encoding";
+		private const string CHUNKED_MARK = "chunked";
+		private const string HEADER_CONTENT_LENGTH = "Content-Length";
+		private const string HEADER_CONTENT_TYPE = "Content-Type";
+		private const string GZIP_MARK = "gzip";
+		private const string DEFLATE_MARK = "deflate";
+
+		/// <summary>
 		/// Осуществляет процессинг хидера
 		/// </summary>
 		/// <param name="headerName"></param>
 		/// <param name="headerValue"></param>
 		public void AddHeader(string headerName, string headerValue){
+			if (headerName == HEADER_TRANSFER_ENCODING){
+				Chunked = headerValue.Contains(CHUNKED_MARK);
+			}else if (headerName == HEADER_CONTENT_LENGTH){
+				ContentLength = Convert.ToInt32(headerValue);
+			}
+			else if (headerName == HEADER_CONTENT_TYPE){
+				var csidx = headerValue.IndexOf("charset=");
+				if (csidx != -1){
+					Charset = headerValue.Substring(csidx + 8);
+				}
+				GZip = headerValue.Contains("gzip");
+				Deflate = headerValue.Contains("deflate");
+			}
 			Headers[headerName] = headerValue;
 		}
 	}

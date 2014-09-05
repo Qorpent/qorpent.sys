@@ -19,7 +19,7 @@ namespace Qorpent.IO.Tests.Protocol
 		private ProtocolBufferOptions bufoptions;
 		private byte[] buffer;
 		private MemoryStream stream;
-		private ProtocolBuffer protocolBuffer;
+		private BufferManager _bufferManager;
 		private SimpleProtocol protocol;
 		private ProtocolBufferResult result;
 
@@ -29,11 +29,11 @@ namespace Qorpent.IO.Tests.Protocol
 			Execute();
 			CheckOk();
 			Assert.AreEqual("hello world",protocol.Result);
-			Assert.True(protocolBuffer.Pages.Where(_=>null!=_).All(_=>_.State==ProtocolBufferPage.Free));
+			Assert.True(_bufferManager.Pages.Where(_=>null!=_).All(_=>_.State==ProtocolBufferPage.Free));
 		}
 
 		private void Execute(){
-			result = protocolBuffer.Read(stream, protocol);
+			result = _bufferManager.Read(stream, protocol);
 		}
 
 		private void CheckOk(){
@@ -50,8 +50,8 @@ namespace Qorpent.IO.Tests.Protocol
 			bufoptions = new ProtocolBufferOptions(pageSize: 2);
 			this.buffer = Encoding.ASCII.GetBytes("hello world");
 			this.stream = new MemoryStream(buffer);
-			this.protocolBuffer = new ProtocolBuffer(bufoptions);
-			protocolBuffer.Log = log;
+			this._bufferManager = new BufferManager(bufoptions);
+			_bufferManager.Log = log;
 			this.protocol = new SimpleProtocol();
 			protocol.Log = log;
 		}

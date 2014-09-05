@@ -23,6 +23,7 @@ using System.Net.Sockets;
 using System.Text;
 using NUnit.Framework;
 using Qorpent.IO.Net;
+using Qorpent.IO.Protocols;
 
 namespace Qorpent.IO.Tests.Net{
 	/// <summary>
