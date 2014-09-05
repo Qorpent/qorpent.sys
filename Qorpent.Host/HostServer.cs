@@ -369,6 +369,7 @@ namespace Qorpent.Host{
 		}
 
 		private void LoadContainer(){
+			IContainerLoader loader = _container.GetLoader();
 			if (Directory.Exists(Config.ConfigFolder)){
 				var xml = new XElement("result");
 				var bxl = new BxlParser();
@@ -378,12 +379,14 @@ namespace Qorpent.Host{
 						xml.Add(filexml.Elements());
 					}
 				}
-				IContainerLoader loader = _container.GetLoader();
 				loader.LoadManifest(xml, true);
-				foreach (string assemblyName in Config.AutoconfigureAssemblies){
-					Assembly assembly = Assembly.Load(assemblyName);
-					loader.LoadAssembly(assembly);
-				}
+			}
+			
+			
+			foreach (string assemblyName in Config.AutoconfigureAssemblies)
+			{
+				Assembly assembly = Assembly.Load(assemblyName);
+				loader.LoadAssembly(assembly);
 			}
 		}
 

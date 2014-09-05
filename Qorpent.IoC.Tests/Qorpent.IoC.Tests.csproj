@@ -41,6 +41,7 @@
     <Compile Include="InjectionsTest.cs" />
     <Compile Include="ITestService1.cs" />
     <Compile Include="ITestService2.cs" />
+    <Compile Include="SimpleContainerTest.cs" />
     <Compile Include="TestService1.cs" />
     <Compile Include="TestService2.cs" />
     <Compile Include="ZC_538Tests.cs" />

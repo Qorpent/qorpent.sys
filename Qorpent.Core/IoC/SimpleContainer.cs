@@ -50,7 +50,7 @@ namespace Qorpent.IoC {
 		/// <returns> </returns>
 		public T Get<T>(string name = null, params object[] ctorArgs) where T : class {
 			lock (this) {
-				return (T) Get(typeof (T), name);
+				return (T) Get(typeof (T), name, (object[])ctorArgs);
 			}
 		}
 
@@ -65,9 +65,10 @@ namespace Qorpent.IoC {
 			lock (this) {
 				var context = new ContainerContext
 					{Operation = ContainerOperation.BeforeGet, RequestedType = type, RequestedName = name};
+				
 				Process(context);
 				object o1;
-				if (PrepareResolvedObject(context, out o1)) {
+				if (PrepareResolvedObject(context, out o1,ctorArgs)) {
 					return o1;
 				}
 				if (!_typemap.ContainsKey(type)) {
@@ -85,7 +86,7 @@ namespace Qorpent.IoC {
 				}
 
 				context.ResolvedType = _typemap[type];
-				if (PrepareResolvedObject(context, out o1)) {
+				if (PrepareResolvedObject(context, out o1,ctorArgs)) {
 					return o1;
 				}
 				return null;
@@ -302,13 +303,13 @@ namespace Qorpent.IoC {
         }
 
 
-		private bool PrepareResolvedObject(ContainerContext context, out object o1) {
+		private bool PrepareResolvedObject(ContainerContext context, out object o1,object[] parameters) {
 			o1 = null;
 			if (null != context.ResolvedType) {
 				context.Operation = ContainerOperation.BeforeCreate;
 				Process(context);
 				if (null == context.Object) {
-					context.Object = Activator.CreateInstance(context.ResolvedType);
+					context.Object = Activator.CreateInstance(context.ResolvedType,(object[])parameters);
 				}
 				if (context.Object != null) {
 					context.Operation = ContainerOperation.AfterCreate;

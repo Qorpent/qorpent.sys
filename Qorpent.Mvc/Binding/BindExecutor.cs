@@ -88,7 +88,7 @@ namespace Qorpent.Mvc.Binding {
 			var isValid = true;
 			if (_bindattribute.Required) {
 				if (TargetType == typeof (string)) {
-					if (string.IsNullOrEmpty(val.ToString())) {
+					if (string.IsNullOrWhiteSpace(val.ToStr())) {
 						isValid = false;
 					}
 					else if (null != _bindattribute.ValidatePattern) {
