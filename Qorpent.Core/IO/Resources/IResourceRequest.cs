@@ -7,13 +7,13 @@ namespace Qorpent.IO.Resources {
 	/// </summary>
 	public interface IResourceRequest:IDisposable {
 		/// <summary>
-		/// Текущее состояние запроса
+		///		Текущее состояние запроса
 		/// </summary>
 		ResourceRequestState State { get; }
 		/// <summary>
-		/// Выполняет асинхронный запрос ресурса
+		///		Выполняет асинхронный запрос ресурса
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Задача на получение ресурса</returns>
 		Task<IResourceResponse> GetResponse(IResourceConfig config = null);
 		
 	}
