@@ -527,6 +527,17 @@ namespace Qorpent.Utils.Git{
 			if (hard) args += " --hard";
 			return ExecuteCommand("reset", args);
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="force"></param>
+		/// <returns></returns>
+		public string Clean(bool force = false)
+		{
+			var args = "";
+			if (force) args += " --f";
+			return ExecuteCommand("clean", args);
+		}
 
 		/// <summary>
 		/// Специальная команда показа контента файла

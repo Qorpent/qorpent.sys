@@ -131,6 +131,9 @@ namespace Qorpent.Data.DataDiff
 				rev = _context.GitBranch;
 			}
 			if (!string.IsNullOrWhiteSpace(rev)){
+				_context.Log.Trace("reset GIT pre "+rev);
+				_githelper.Reset(true);
+				_githelper.Clean(true);
 				_context.Log.Trace("begin checkout "+rev);
 				_githelper.Checkout(rev);
 				_context.ResolvedUpdateRevision = _githelper.GetCommitId();
