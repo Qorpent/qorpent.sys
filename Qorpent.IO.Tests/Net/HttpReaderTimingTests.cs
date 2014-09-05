@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Qorpent.Host;
 using Qorpent.IO.Net;
 
 namespace Qorpent.IO.Tests.Net{
 	[TestFixture]
-	public class HttpSocketTests{
+	[Explicit]
+	public class HttpReaderTimingTests{
 		private const string _html = "<html><body>привет</body></html>";
 		private const string _html2 = @"<html><body>
 <div>привет</div>
@@ -69,54 +67,8 @@ namespace Qorpent.IO.Tests.Net{
 			host.Stop();
 		}
 
-		[Test]
-		public void CanSimplyReadContent(){
-			var hs = new HttpSocket(httpend);
-			var response = hs.Call(new HttpRequest{Uri = new Uri("http://127.0.0.1:50651/x.html")});
-			var result = response.StringData;
-			Assert.AreEqual(_html,result);
-		}
 
-		[Test]
-		public void CanSimplyReadContentSsl()
-		{
-			var hs = new HttpSocket(httpsend,true);
-			var response = hs.Call(new HttpRequest { Uri = new Uri("https://127.0.0.1:50652/x.html") });
-			var result = response.StringData;
-			Assert.AreEqual(_html, result);
-		}
-
-
-		[Test]
-		public void CanDoAutoLoad(){
-			HttpResponse2 response = null;
-			using (var hs = new HttpSocket(httpend){AutoLoad = true}){
-				response = hs.Call(new HttpRequest { Uri = new Uri("http://127.0.0.1:50651/x.html") });	
-			}
-			Assert.AreEqual(_html, response.StringData);
-		}
-
-
-		[TestCase(10)]
-		[TestCase(100)]
-		[TestCase(1000)]
-		[TestCase(2000)]
-		[Explicit]
-		public void HttpSocket3Time(int count)
-		{
-			var ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 50651);
-			var hs = new HttpSocket(ep) { AutoLoad = true };
-			var req = new HttpRequest { Uri = new Uri("http://127.0.0.1:50651/x2.html") };
-			var sw = Stopwatch.StartNew();
-			for (var i = 0; i < count; i++)
-			{
-				var r = hs.Call3(req);
-				Assert.Greater(r.StringData.Length,10);
-
-			}
-			sw.Stop();
-			Console.WriteLine(sw.Elapsed);
-		}
+		
 
 		[TestCase(10)]
 		[TestCase(100)]
@@ -128,10 +80,10 @@ namespace Qorpent.IO.Tests.Net{
 			var ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 50651);
 			
 			var req = new HttpRequest { Uri = new Uri("http://127.0.0.1:50651/x2.html") };
-			var reader = new HttpResponseReader3();
+			var reader = new HttpResponseReader();
 			var sw = Stopwatch.StartNew();
 			for (var i = 0; i < count; i++){
-				HttpResponse2 r;
+				HttpResponse r;
 				using (var socket = new Socket(SocketType.Stream, ProtocolType.Tcp)){
 					socket.Connect(ep);
 					using (var s = new NetworkStream(socket)){
@@ -182,48 +134,8 @@ namespace Qorpent.IO.Tests.Net{
 			Console.WriteLine(sw.Elapsed);
 		}
 
-		[TestCase(10)]
-		[Explicit]
-		public void HttpSocket3TimeYandexRu(int count)
-		{
-			var ep = new IPEndPoint(Dns.GetHostAddresses("www.yandex.ru")[0], 80);
-			var hs = new HttpSocket(ep) { AutoLoad = true };
-			var req = new HttpRequest { Uri = new Uri("http://www.yandex.ru") };
-			var sw = Stopwatch.StartNew();
-			for (var i = 0; i < count; i++)
-			{
-				var r = hs.Call3(req);
-				Assert.Greater(r.StringData.Length, 10);
+	
 
-			}
-			sw.Stop();
-			Console.WriteLine(sw.Elapsed);
-		}
-
-		[TestCase(10)]
-		[Explicit]
-		public void HttpSocket3TimeYandexRuParallel(int count)
-		{
-			var ep = new IPEndPoint(Dns.GetHostAddresses("www.yandex.ru")[0], 80);
-			
-			var req = new HttpRequest { Uri = new Uri("http://www.yandex.ru") };
-			IList<Task<HttpResponse2>> tasks =new List<Task<HttpResponse2>>();
-			var sw = Stopwatch.StartNew();
-			for (var i = 0; i < count; i++)
-			{
-				var hs = new HttpSocket(ep) { AutoLoad = true };
-				tasks.Add(Task.Run(() => hs.Call3(req)));
-				
-
-			}
-			Task.WaitAll(tasks.ToArray());
-			foreach (var task in tasks){
-				Assert.True(task.IsCompleted);
-				Assert.Greater(task.Result.StringData.Length, 10);
-			}
-			sw.Stop();
-			Console.WriteLine(sw.Elapsed);
-		}
 
 		
 	}

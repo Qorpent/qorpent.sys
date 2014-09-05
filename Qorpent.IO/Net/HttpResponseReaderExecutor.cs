@@ -2,42 +2,8 @@
 using System.IO;
 using System.IO.Compression;
 using System.Text;
-using Qorpent.IO.Protocols;
 
 namespace Qorpent.IO.Net{
-	/// <summary>
-	/// 
-	/// </summary>
-	public class HttpResponseReader3{
-
-		/// <summary>
-		/// Размер буфера
-		/// </summary>
-		public int BufferSize { get; set; }
-
-		/// <summary>
-		/// Считывает результат запроса HTTP
-		/// </summary>
-		/// <param name="stream"></param>
-		/// <returns>Результат запроса</returns>
-		public HttpResponse2 Read(Stream stream){
-			using (var context = new HttpResponseReaderExecutor(stream,BufferSize)){
-				try{
-					context.Read();
-				}
-				catch (IOException knownError){
-					context.Result.Error = knownError;
-				}
-				catch (Exception error){
-					context.Result.Error = new IOException("General error occured", error);
-				}
-				return context.Result;
-			}
-		}
-
-		
-	}
-
 	internal class HttpResponseReaderExecutor:IDisposable{
 		public HttpResponseReaderExecutor(Stream stream, int bufferSize){
 			if (bufferSize <= 0){
@@ -45,13 +11,13 @@ namespace Qorpent.IO.Net{
 			}
 
 			Stream = stream;
-			Result = new HttpResponse2();
+			Result = new HttpResponse();
 			_buffer = new byte[bufferSize];
 			_hLineTerminals = new int[100];
 		}
 
 		private int _hLineTerminalsIndex = 0;
-		public HttpResponse2 Result;
+		public HttpResponse Result;
 		Stream Stream;
 		MemoryStream HeadersBuffer  = new MemoryStream();
 		MemoryStream DataBuffer = new MemoryStream();
@@ -207,6 +173,7 @@ namespace Qorpent.IO.Net{
 			else{
 				DataBuffer.Position = 0;
 				using (
+					
 					var rs = Result.GZip
 						         ? (Stream)new GZipStream(DataBuffer, CompressionMode.Decompress)
 						         : new DeflateStream(DataBuffer, CompressionMode.Decompress)){
@@ -214,10 +181,11 @@ namespace Qorpent.IO.Net{
 					var resultBuffer = new MemoryStream();
 					while (0!=(len=rs.Read(decompressBuffer,0,decompressBuffer.Length))){
 						resultBuffer.Write(decompressBuffer,0,len);
+
 					}
 					Result.Data = new byte[resultBuffer.Length];
 					var buffer = resultBuffer.GetBuffer();
-					Array.Copy(buffer, 0, Result.Data, 0, _currentDataLength);
+					Array.Copy(buffer, 0, Result.Data, 0, resultBuffer.Length);
 				}
 			}
 		}

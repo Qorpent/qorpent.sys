@@ -7,7 +7,7 @@ using Qorpent.IO.Net;
 
 namespace Qorpent.IO.Tests.Net{
 	[TestFixture(Description = "Проверка HTTP ридера в 3-е редакции")]
-	public class HttpResponseReader2Tests{
+	public class HttpResponseReaderTests{
 		private Stream GetStream(string http, Encoding enc=null){
 			enc = enc ?? Encoding.UTF8;
 			return new MemoryStream(enc.GetBytes(http));
@@ -60,7 +60,7 @@ namespace Qorpent.IO.Tests.Net{
 		{
 			var b = new StringBuilder();
 			var s = GetStream("HTTP/1.1 200 OK\r\n\r\n");
-			var reader = new HttpResponseReader3{BufferSize = pageSize};
+			var reader = new HttpResponseReader{BufferSize = pageSize};
 			var resp = reader.Read(s);
 			Assert.AreEqual(200,resp.State);
 			Assert.AreEqual("OK",resp.StateName);
@@ -85,7 +85,7 @@ namespace Qorpent.IO.Tests.Net{
 		{
 			var b = new StringBuilder();
 			var s = GetStream("HTTP/1.1 200 OK\r\nAaa: Bbb\r\nCcc: Ddd\r\n\r\n");
-			var reader = new HttpResponseReader3 { BufferSize = pageSize };
+			var reader = new HttpResponseReader { BufferSize = pageSize };
 			var resp = reader.Read(s);
 			Assert.AreEqual(200, resp.State);
 			Assert.AreEqual("OK", resp.StateName);
@@ -112,7 +112,7 @@ namespace Qorpent.IO.Tests.Net{
 		{
 			var b = new StringBuilder();
 			var s = GetStream("HTTP/1.1 200 OK\r\nAaa: Bbb\r\nCcc: Ddd\r\nContent-Length: 10\r\n\r\nABCDEFGHIJ");
-			var reader = new HttpResponseReader3{BufferSize = pageSize};
+			var reader = new HttpResponseReader{BufferSize = pageSize};
 			var resp = reader.Read(s);
 			Assert.AreEqual(200, resp.State);
 			Assert.AreEqual("OK", resp.StateName);
@@ -141,7 +141,7 @@ namespace Qorpent.IO.Tests.Net{
 		{
 			var b = new StringBuilder();
 			var s = GetStream("HTTP/1.1 200 OK\r\nAaa: Bbb\r\nCcc: Ddd\r\nTransfer-Encoding: chunked\r\n\r\n2\r\nAB\r\n3\r\nCDE\r\n5\r\nFGHIJ\r\n0\r\n");
-			var reader = new HttpResponseReader3{BufferSize = pageSize};
+			var reader = new HttpResponseReader{BufferSize = pageSize};
 			var resp = reader.Read(s);
 			Assert.AreEqual(200, resp.State);
 			Assert.AreEqual("OK", resp.StateName);
@@ -171,7 +171,7 @@ namespace Qorpent.IO.Tests.Net{
 		public void CanReadEncodedData(int pageSize)
 		{
 			var s = GetStream("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=Windows-1251\r\nAaa: Bbb\r\nCcc: Ddd\r\nContent-Length: 10\r\n\r\nабвгдежзик",Encoding.GetEncoding("Windows-1251"));
-			var reader = new HttpResponseReader3{BufferSize = pageSize};
+			var reader = new HttpResponseReader{BufferSize = pageSize};
 			var resp = reader.Read(s);
 			Assert.AreEqual(200, resp.State);
 			Assert.AreEqual("OK", resp.StateName);
