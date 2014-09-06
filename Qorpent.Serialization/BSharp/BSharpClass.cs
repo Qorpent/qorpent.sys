@@ -353,8 +353,13 @@ namespace Qorpent.BSharp{
 		[IgnoreSerialize]
 		public List<IBSharpElement> AllElements{
 			get{
-				if (null == _allelements){
-					_allelements = GetAllElements().ToList();
+				lock (this)
+				{
+					if (null == _allelements){
+
+						_allelements = GetAllElements().ToList();
+
+					}
 				}
 				return _allelements;
 			}
@@ -466,6 +471,7 @@ namespace Qorpent.BSharp{
 		/// <returns></returns>
 		private IEnumerable<IBSharpElement> GetAllElements(){
 			lock (this){
+
 				if (null == _elementRegistry){
 					_elementRegistry = new Dictionary<string, IBSharpElement>();
 					IBSharpClass[] imports = AllImports.ToArray();
@@ -481,13 +487,17 @@ namespace Qorpent.BSharp{
 									elements = c.AllElements.ToArray();
 								}
 								foreach (IBSharpElement edef in elements){
-									RegisterElement(edef);
+									if (null != edef){
+										RegisterElement(edef);
+									}
 								}
 							}
 						}
 					}
 					foreach (IBSharpElement edef in SelfElements){
-						RegisterElement(edef);
+						if (null != edef){
+							RegisterElement(edef);
+						}
 					}
 
 					foreach (var registered in _elementRegistry.ToArray()){

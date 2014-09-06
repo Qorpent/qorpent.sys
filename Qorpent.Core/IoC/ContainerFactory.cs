@@ -198,42 +198,45 @@ namespace Qorpent.IoC {
 				assembly.GetCustomAttributes(typeof (ContainerAttribute), false).OfType<ContainerAttribute>().FirstOrDefault();
 			defaultAttribute = defaultAttribute ?? new ContainerComponentAttribute(Lifestyle.Transient);
 			var types = assembly.GetTypes();
-			types.AsParallel().WithDegreeOfParallelism(1).ForAll(_ => {
-				if (_.IsAbstract) return;
-				var a = _.GetCustomAttributes(typeof (ContainerComponentAttribute), true).OfType
-					<ContainerComponentAttribute>().ToArray();
-				if (a.Length == 0) return;
-				foreach (var attr in a){
-					var component = container.EmptyComponent();
+			types.AsParallel().ForAll(_ =>{
+			//		foreach (var _ in types){
+				try{
+					if (_.IsAbstract) return;
+					var a = _.GetCustomAttributes(typeof (ContainerComponentAttribute), true).OfType
+						<ContainerComponentAttribute>().ToArray();
+					if (a.Length == 0) return;
+					foreach (var attr in a){
+						var component = container.EmptyComponent();
 						var stype = (attr.ServiceType ??
-							// ReSharper disable PossibleNullReferenceException
-									 _.GetInterfaces().Except(_.BaseType.GetInterfaces()).FirstOrDefault(
-										 x => x != typeof(IContainerBound))) ??
-							// ReSharper restore PossibleNullReferenceException
-									_;
-					component.ServiceType = stype;
-					component.ImplementationType = _;
-					component.Lifestyle = attr.Lifestyle;
-					if (attr.Lifestyle == Lifestyle.Default)
-					{
-						component.Lifestyle = defaultAttribute.Lifestyle;
+						             // ReSharper disable PossibleNullReferenceException
+						             _.GetInterfaces().Except(_.BaseType.GetInterfaces()).FirstOrDefault(
+							             x => x != typeof (IContainerBound))) ??
+						            // ReSharper restore PossibleNullReferenceException
+						            _;
+						component.ServiceType = stype;
+						component.ImplementationType = _;
+						component.Lifestyle = attr.Lifestyle;
+						if (attr.Lifestyle == Lifestyle.Default){
+							component.Lifestyle = defaultAttribute.Lifestyle;
+						}
+						component.Name = attr.Name;
+						component.Priority = attr.Priority;
+						if (component.Priority == -1){
+							component.Priority = defaultAttribute.Priority;
+						}
+						if (component.Priority == -1){
+							component.Priority = 1000;
+						}
+						container.Register(component);
 					}
-					component.Name = attr.Name;
-					component.Priority = attr.Priority;
-					if (component.Priority == -1)
-					{
-						component.Priority = defaultAttribute.Priority;
-					}
-					if (component.Priority == -1)
-					{
-						component.Priority = 1000;
-					}
-					container.Register(component);
+				}
+				catch (Exception e){
+					Console.Write("Error in register of " + _.Name, e);
 				}
 			});
 
-			
-			
+
+
 		}
 
 		/// <summary>
@@ -290,20 +293,22 @@ namespace Qorpent.IoC {
 					                  typeof (Assembly) != wn.ServiceType &&
 					                  typeof (IContainer) != wn.ServiceType &&
 					                  null != wn.ResolvedWellKnownType && !components.Any()
-				                  select new WellKnownAttachedComponentDefinition(wn))
+				                  select new WellKnownAttachedComponentDefinition(wn)).ToArray()
+		
 				) {
 				result.Register(c);
 			}
-
-			foreach (var plugAssembly in WellKnownRegistry.Where(x => x.ServiceType == typeof (Assembly))) {
+			var assemblies = WellKnownRegistry.Where(x => x.ServiceType == typeof (Assembly)).ToArray();
+			foreach (var plugAssembly in assemblies) {
 				Assembly assembly = null;
 				try {
 					assembly = Assembly.Load(plugAssembly.WellKnownTypeName);
 				}
 // ReSharper disable EmptyGeneralCatchClause
-				catch (Exception) {
+				catch (Exception ex) {
 // ReSharper restore EmptyGeneralCatchClause
 					//No means NO
+					var e = ex;
 				}
 				if (null != assembly) {
 					RegisterAssembly(result, assembly);

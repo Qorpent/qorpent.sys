@@ -153,7 +153,12 @@ base B
 		[Repeat(1000)]
 		[Category("NOTC")]
 		public void Q229_Build_536_CanOverrideElementBodyStability(){
-			CanOverrideElementBody();
+			try{
+				CanOverrideElementBody();
+			}
+			catch (Exception e){
+				Assert.Fail(e.ToString());
+			}
 		}
 
 		[Test]
@@ -170,9 +175,14 @@ base B
 	import A
 	itemset X y=2
 ";
-			var result = Compile(nooverride).Get("B").Compiled;
+			var result = Compile(nooverride).Get("B");
 			//Console.WriteLine(result);
-			Assert.AreEqual(1, result.Descendants("body").Count());
+			if (result.Compiled.Descendants("body").Count() != 1){
+				foreach (var ae in result.AllElements	){
+					Console.WriteLine(ae.Name+":"+ae.TargetName+":"+ae.Type+":"+ae.Implicit);
+				}
+			}
+			Assert.AreEqual(1, result.Compiled.Descendants("body").Count());
 			const string overridecode = @"
 class base
 	element item
@@ -186,14 +196,14 @@ base B
 	itemset X y=2
 		newbody
 ";
-			result = Compile(overridecode).Get("B").Compiled;
+			result = Compile(overridecode).Get("B");
 			var e = Compile(overridecode).Get("B").Error;
 			if (null != e) {
 				Console.WriteLine(e);
 			}
 			//Console.WriteLine(result);
-			Assert.AreEqual(0, result.Descendants("body").Count());
-			Assert.AreEqual(1, result.Descendants("newbody").Count());
+			Assert.AreEqual(0, result.Compiled.Descendants("body").Count());
+			Assert.AreEqual(1, result.Compiled.Descendants("newbody").Count());
 		}
 
 		[Test]

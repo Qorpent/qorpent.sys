@@ -301,93 +301,95 @@ namespace Qorpent.BSharp{
 		/// </summary>
 		/// <param name="othercontext"></param>
 		public void Merge(IBSharpContext othercontext){
-			var subresult = othercontext as BSharpContext;
+			lock (this){
+				var subresult = othercontext as BSharpContext;
 
 
-			foreach (var p in subresult.RawClasses){
-				RawClasses[p.Key] = p.Value;
-			}
-			foreach (var p in subresult.MetaClasses){
-				MetaClasses[p.Key] = p.Value;
-			}
+				foreach (var p in subresult.RawClasses){
+					RawClasses[p.Key] = p.Value;
+				}
+				foreach (var p in subresult.MetaClasses){
+					MetaClasses[p.Key] = p.Value;
+				}
 
-			if (null != subresult.Abstracts){
-				if (null == Abstracts){
-					Abstracts = new List<IBSharpClass>();
-				}
-				foreach (IBSharpClass a in subresult.Abstracts){
-					Abstracts.Add(a);
-				}
-			}
-			if (null != subresult.Orphans){
-				if (null == Orphans){
-					Orphans = new List<IBSharpClass>();
-				}
-				foreach (IBSharpClass a in subresult.Orphans){
-					Orphans.Add(a);
-				}
-			}
-			if (null != subresult.Working){
-				if (null == Working){
-					Working = new List<IBSharpClass>();
-				}
-				foreach (IBSharpClass a in subresult.Working){
-					Working.Add(a);
-				}
-			}
-
-			if (null != subresult.Overrides){
-				if (null == Overrides){
-					Overrides = new List<IBSharpClass>();
-				}
-				foreach (IBSharpClass a in subresult.Overrides){
-					Overrides.Add(a);
-				}
-			}
-
-			if (null != subresult.Extensions){
-				if (null == Extensions){
-					Extensions = new List<IBSharpClass>();
-				}
-				foreach (IBSharpClass a in subresult.Extensions){
-					Extensions.Add(a);
-				}
-			}
-
-			if (null != subresult.Errors){
-				if (null == Errors){
-					Errors = new List<BSharpError>();
-				}
-				foreach (BSharpError a in subresult.Errors){
-					Errors.Add(a);
-				}
-			}
-
-			if (null != subresult.Dictionaries){
-				Dictionaries = Dictionaries ?? new Dictionary<string, IList<ExportRecord>>();
-				foreach (var p in subresult.Dictionaries){
-					if (!Dictionaries.ContainsKey(p.Key)){
-						Dictionaries[p.Key] = new List<ExportRecord>();
+				if (null != subresult.Abstracts){
+					if (null == Abstracts){
+						Abstracts = new List<IBSharpClass>();
 					}
+					foreach (IBSharpClass a in subresult.Abstracts){
+						Abstracts.Add(a);
+					}
+				}
+				if (null != subresult.Orphans){
+					if (null == Orphans){
+						Orphans = new List<IBSharpClass>();
+					}
+					foreach (IBSharpClass a in subresult.Orphans){
+						Orphans.Add(a);
+					}
+				}
+				if (null != subresult.Working){
+					if (null == Working){
+						Working = new List<IBSharpClass>();
+					}
+					foreach (IBSharpClass a in subresult.Working){
+						Working.Add(a);
+					}
+				}
 
-					IList<ExportRecord> t = Dictionaries[p.Key];
-					foreach (ExportRecord  d in p.Value){
-						if (!t.Contains(d)){
-							t.Add(d);
+				if (null != subresult.Overrides){
+					if (null == Overrides){
+						Overrides = new List<IBSharpClass>();
+					}
+					foreach (IBSharpClass a in subresult.Overrides){
+						Overrides.Add(a);
+					}
+				}
+
+				if (null != subresult.Extensions){
+					if (null == Extensions){
+						Extensions = new List<IBSharpClass>();
+					}
+					foreach (IBSharpClass a in subresult.Extensions){
+						Extensions.Add(a);
+					}
+				}
+
+				if (null != subresult.Errors){
+					if (null == Errors){
+						Errors = new List<BSharpError>();
+					}
+					foreach (BSharpError a in subresult.Errors){
+						Errors.Add(a);
+					}
+				}
+
+				if (null != subresult.Dictionaries){
+					Dictionaries = Dictionaries ?? new Dictionary<string, IList<ExportRecord>>();
+					foreach (var p in subresult.Dictionaries){
+						if (!Dictionaries.ContainsKey(p.Key)){
+							Dictionaries[p.Key] = new List<ExportRecord>();
+						}
+
+						IList<ExportRecord> t = Dictionaries[p.Key];
+						foreach (ExportRecord d in p.Value){
+							if (!t.Contains(d)){
+								t.Add(d);
+							}
 						}
 					}
 				}
-			}
-			if (null != subresult.PrototypeMap){
-				if (null == PrototypeMap){
-					PrototypeMap = new Dictionary<string, IBSharpClass[]>();
-				}
-				foreach (var p in subresult.PrototypeMap){
-					if (!PrototypeMap.ContainsKey(p.Key)){
-						PrototypeMap[p.Key] = p.Value;
+				if (null != subresult.PrototypeMap){
+					if (null == PrototypeMap){
+						PrototypeMap = new Dictionary<string, IBSharpClass[]>();
 					}
-					else{
-						PrototypeMap[p.Key] = PrototypeMap[p.Key].Union(p.Value).Distinct().ToArray();
+					foreach (var p in subresult.PrototypeMap){
+						if (!PrototypeMap.ContainsKey(p.Key)){
+							PrototypeMap[p.Key] = p.Value;
+						}
+						else{
+							PrototypeMap[p.Key] = PrototypeMap[p.Key].Union(p.Value).Distinct().ToArray();
+						}
 					}
 				}
 			}

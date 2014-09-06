@@ -77,7 +77,12 @@ namespace X
 			Assert.NotNull(result.Working[0].DefaultImport);
 			Assert.AreEqual("custom", result.Working[0].DefaultImport.Name);
 		}
-
+		[Test]
+		[Repeat(1000)]
+		[Category("NOTC")]
+		public void Q229_MergableAsyncCall_Instability(){
+			MergableAsyncCall();
+		}
 
 		[Test]
 		public void MergableAsyncCall(){
