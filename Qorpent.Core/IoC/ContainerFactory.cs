@@ -198,8 +198,7 @@ namespace Qorpent.IoC {
 				assembly.GetCustomAttributes(typeof (ContainerAttribute), false).OfType<ContainerAttribute>().FirstOrDefault();
 			defaultAttribute = defaultAttribute ?? new ContainerComponentAttribute(Lifestyle.Transient);
 			var types = assembly.GetTypes();
-			//types.AsParallel().ForAll(_ => {
-			foreach(var _ in types){
+			types.AsParallel().WithDegreeOfParallelism(1).ForAll(_ => {
 				if (_.IsAbstract) return;
 				var a = _.GetCustomAttributes(typeof (ContainerComponentAttribute), true).OfType
 					<ContainerComponentAttribute>().ToArray();
@@ -231,7 +230,7 @@ namespace Qorpent.IoC {
 					}
 					container.Register(component);
 				}
-			}
+			});
 
 			
 			
