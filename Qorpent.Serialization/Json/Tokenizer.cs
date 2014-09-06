@@ -66,7 +66,7 @@ namespace Qorpent.Json {
 
 			//проверяем числа
 			if (innumber) {
-				if (CType.Dig == type || CType.Dot == type)
+				if (CType.Dig == type || CType.Dot == type )
 				{
 					currentbuffer += c;
 					yield break;
@@ -76,7 +76,7 @@ namespace Qorpent.Json {
 					throw new Exception("illegal symbol in number");
 				}
 
-				yield return JsonToken.Num(Convert.ToDecimal(currentbuffer));
+				yield return JsonToken.Num(Convert.ToDecimal(currentbuffer, CultureInfo.InvariantCulture));
 				currentbuffer = "";
 				innumber = false;
 			}
