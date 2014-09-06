@@ -84,6 +84,7 @@ namespace Qorpent.Utils{
 			var exeName = Path.Combine(targetDirectory, Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName));
 			Log.Trace("start "+exeName);
 			Process.Start(exeName, safedArgs);
+			Thread.Sleep(100);
 			Log.Debug("started");
 			return false;
 		}

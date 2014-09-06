@@ -88,7 +88,9 @@ namespace Qorpent.Host.Utils{
 		/// <returns></returns>
 		public static DateTime SetLastModified(this HttpListenerContext context, DateTime time)
 		{
-			return SetLastModified(context.Response, time);
+			var dt = SetLastModified(context.Response, time);
+			SetETag(context.Response,dt.ToOADate().ToString(CultureInfo.InvariantCulture));
+			return dt;
 		}
 
 		/// <summary>
