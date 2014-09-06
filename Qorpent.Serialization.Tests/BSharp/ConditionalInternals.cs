@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
@@ -17,6 +18,22 @@ class A
 			var result = Compile(code).Get("A");
 			Assert.AreEqual(3,result.Compiled.Elements().Count());
 		}
+
+		[Test]
+		[Category("NOTC")]
+		public void Q229_Build534_OverridenConditional_Stability(){
+			for (var i = 0; i < 1000; i++){
+				try{
+					OverridenConditional();
+				}
+				catch(Exception e){
+					Console.WriteLine(i);
+					Assert.Fail(e.ToString());
+				}
+			}
+		}
+
+		
 
 		[Test]
 		public void OverridenConditional()

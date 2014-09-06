@@ -24,7 +24,7 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 			Console.WriteLine(result.Replace("\"","\"\""));
 			return result.Trim();
 		}
-		string GetScript(string code, ScriptMode mode = ScriptMode.Create, SqlDialect dialect = SqlDialect.SqlServer)
+		string GetScript(string code, ScriptMode mode = ScriptMode.Create, SqlDialect dialect = SqlDialect.SqlServer, bool print = true)
 		{
 			var model = PersistentModel.Compile(code);
 			if (!model.IsValid) Assert.Fail("invalid model");
@@ -39,7 +39,9 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 
 			}
 			var result = sb.ToString();
-			Console.WriteLine(result.Replace("\"","\"\""));
+			if (print){
+				Console.WriteLine(result.Replace("\"", "\"\""));
+			}
 			return result.Trim();
 		}
 		[Test]
@@ -807,6 +809,94 @@ VIEW ""dbo"".""b_v"" (C,S,R)
 TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" (C,S,R)
 TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), digest.Trim());
+		}
+
+		[Test]
+		[Repeat(1000)]
+		[Category("NOTC")]
+		public void Q229_B533_TableWithViewScript_Stability(){
+			var digest = GetScript(sampleView,print:false);
+			Assert.AreEqual(@"
+
+SET NOCOUNT ON
+GO
+IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
+GO
+ CREATE PROCEDURE __ensurefg @n nvarchar(255),@filecount int = 1, @filesize int = 100, @withidx bit = 0, @isdefault bit = 0 AS begin declare @q nvarchar(max) set @filesize = isnull(@filesize,100) if @filesize <=3 set @filesize =3 set @filecount = ISNULL(@filecount,1) if @filecount < 1 set @filecount= 1 set @withidx = isnull(@withidx,0) set @isdefault = isnull(@isdefault,0) set @q = 'ALTER DATABASE '+DB_NAME()+' ADD FILEGROUP '+@n BEGIN TRY exec sp_executesql @q END TRY BEGIN CATCH END CATCH declare @basepath nvarchar(255) set @basepath = reverse((Select top 1 filename from sys.sysfiles)) set @basepath = REVERSE( RIGHT( @basepath, len(@basepath)-CHARINDEX('\',@basepath)+1)) declare @c int set @c = @filecount while @c >= 1 begin BEGIN TRY set @q='ALTER DATABASE '+DB_NAME()+' ADD FILE ( NAME = N'''+DB_NAME()+'_'+@n+cast(@c as nvarchar(255))+''', FILENAME = N'''+ @basepath+DB_NAME()+'_'+@n+cast(@c as nvarchar(255))+'.ndf'' , SIZE = '+cast(@filesize as nvarchar(255))+'MB , FILEGROWTH = 5% ) TO FILEGROUP ['+@n+']' exec sp_executesql @q END TRY BEGIN CATCH END CATCH set @c = @c - 1 end IF @isdefault = 1 BEGIN set @q='ALTER DATABASE '+DB_NAME()+' MODIFY FILEGROUP '+@n+' DEFAULT ' BEGIN TRY exec sp_executesql @q END TRY BEGIN CATCH END CATCH end IF @withidx = 1 BEGIN set @n = @n +'IDX' exec __ensurefg @n, @filecount,@filesize,0,0 END end 
+GO
+
+GO
+
+exec __ensurefg @n='SECONDARY', @filecount=1, @filesize=10, @withidx=0, @isdefault=1
+GO
+
+begin try
+CREATE SEQUENCE ""dbo"".""a_seq"" AS int START WITH 10 INCREMENT BY 10;
+end try begin catch print ERROR_MESSAGE() end catch
+GO
+
+begin try
+CREATE SEQUENCE ""dbo"".""b_seq"" AS int START WITH 10 INCREMENT BY 10;
+end try begin catch print ERROR_MESSAGE() end catch
+GO
+
+CREATE TABLE ""dbo"".""a"" (
+	""id"" int NOT NULL CONSTRAINT dbo_a_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""a_seq""),
+	""code"" nvarchar(255) NOT NULL DEFAULT '',
+	""name"" nvarchar(255) NOT NULL DEFAULT ''
+) ON SECONDARY;
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=0)  INSERT INTO ""dbo"".""a"" (""id"", ""code"", ""name"") VALUES (0, '/', 'NULL/ROOT');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""a"" where ""id""=-1)  INSERT INTO ""dbo"".""a"" (""id"", ""code"", ""name"") VALUES (-1, 'ERR', 'ERROR/LOST');
+
+GO
+
+CREATE TABLE ""dbo"".""b"" (
+	""id"" int NOT NULL CONSTRAINT dbo_b_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""b_seq""),
+	""a"" int NOT NULL CONSTRAINT dbo_b_a_a_id_fk FOREIGN KEY REFERENCES ""dbo"".""a"" (""id"") DEFAULT 0,
+	""code"" nvarchar(255) NOT NULL DEFAULT '',
+	""name"" nvarchar(255) NOT NULL DEFAULT ''
+) ON SECONDARY;
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=0)  INSERT INTO ""dbo"".""b"" (""id"", ""code"", ""name"") VALUES (0, '/', 'NULL/ROOT');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""b"" where ""id""=-1)  INSERT INTO ""dbo"".""b"" (""id"", ""code"", ""name"", ""a"") VALUES (-1, 'ERR', 'ERROR/LOST', -1);
+
+GO
+
+IF OBJECT_ID('""dbo"".""b_v""') IS NOT NULL DROP VIEW ""dbo"".""b_v"";
+GO
+CREATE VIEW ""dbo"".""b_v"" AS SELECT 
+""id"", --
+""a"", --
+""code"", --
+""name"", --
+
+		(select x.""code"" from ""dbo"".""a"" x where x.""id"" = ""dbo"".""b"".""a"") as acode,
+(select x.""name"" from ""dbo"".""a"" x where x.""id"" = ""dbo"".""b"".""a"") as aname,
+1 as __TERMINAL FROM ""dbo"".""b""
+
+
+GO
+
+IF OBJECT_ID('""dbo"".""aPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""aPreventDeletionOfSystemDefinedRows"" ON ""dbo"".""a"" INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""a"" from deleted d join ""dbo"".""a"" on ""dbo"".""a"".id = d.id where ""dbo"".""a"".id not in (0,-1)
+END;
+GO
+
+IF OBJECT_ID('""dbo"".""bPreventDeletionOfSystemDefinedRows""') IS NOT NULL DROP TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"";
+GO
+CREATE TRIGGER ""dbo"".""bPreventDeletionOfSystemDefinedRows"" ON ""dbo"".""b"" INSTEAD OF DELETE AS BEGIN
+delete ""dbo"".""b"" from deleted d join ""dbo"".""b"" on ""dbo"".""b"".id = d.id where ""dbo"".""b"".id not in (0,-1)
+END;
+GO
+
+
+IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
+
+GO
+
+
+".Trim(), digest.Trim());
 		}
 
 		[Test]

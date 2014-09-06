@@ -401,7 +401,7 @@ namespace Qorpent.BSharp{
 			IntializeMergeIndexes();
 			InterpolateFields();
 			BindParametersToCompiledClass();
-			CleanupElementsWithConditions();
+			//CleanupElementsWithConditions();
 			MergeInternals();
 			SupplyEvaluationsForElements();
 			InterpolateElements(codeonly: true);
@@ -803,7 +803,9 @@ namespace Qorpent.BSharp{
 		}
 
 		private void CleanupElementsWithConditions(){
-			_cls.Compiled.Descendants().Where(_ => !IsMatch(_)).Remove();
+			var elements = _cls.Compiled.Descendants().ToArray();
+			elements = elements.Where(_ => !IsMatch(_)).ToArray();
+			elements.Remove();
 		}
 
 		private void PerformMergingWithElements(){

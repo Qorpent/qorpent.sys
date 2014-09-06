@@ -149,7 +149,12 @@ base B
 			Assert.AreEqual("2", result.Element("item").Attr("y"));
 			Assert.AreEqual(0, result.Elements("itemset").Count());
 		}
-
+		[Test]
+		[Repeat(1000)]
+		[Category("NOTC")]
+		public void Q229_Build_536_CanOverrideElementBodyStability(){
+			CanOverrideElementBody();
+		}
 
 		[Test]
 		public void CanOverrideElementBody()
@@ -166,7 +171,7 @@ base B
 	itemset X y=2
 ";
 			var result = Compile(nooverride).Get("B").Compiled;
-			Console.WriteLine(result);
+			//Console.WriteLine(result);
 			Assert.AreEqual(1, result.Descendants("body").Count());
 			const string overridecode = @"
 class base
@@ -186,7 +191,7 @@ base B
 			if (null != e) {
 				Console.WriteLine(e);
 			}
-			Console.WriteLine(result);
+			//Console.WriteLine(result);
 			Assert.AreEqual(0, result.Descendants("body").Count());
 			Assert.AreEqual(1, result.Descendants("newbody").Count());
 		}

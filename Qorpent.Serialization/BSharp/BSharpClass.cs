@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Config;
@@ -471,7 +472,15 @@ namespace Qorpent.BSharp{
 					if (!Is(BSharpClassAttributes.Cycle)){
 						foreach (IBSharpClass c in imports){
 							if (!c.Is(BSharpClassAttributes.Cycle)){
-								foreach (IBSharpElement edef in c.AllElements.ToArray()){
+								IBSharpElement[] elements = null;
+								try{
+									elements = c.AllElements.ToArray();
+								}
+								catch{
+									Thread.Sleep(1);
+									elements = c.AllElements.ToArray();
+								}
+								foreach (IBSharpElement edef in elements){
 									RegisterElement(edef);
 								}
 							}
