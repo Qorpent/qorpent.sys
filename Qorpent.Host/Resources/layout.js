@@ -113,13 +113,23 @@ define([
                     if ($attrs.order) {
                         css.order = $attrs.order;
                     }
+                    var ch = $el.children().filter(function (i, c) { return c.tagName != 'SPLITTER' });
                     if (null != $attrs.split) {
-                        var ch = $el.children().filter(function(i,c){return c.tagName!='SPLITTER'});
+                        
                         $.each(ch, function(i, c) {
                             if (!$scope.settings.get($(c).attr('id'))) {
-                                $(c).css('flex-grow', Math.round(100/ch.length).toString());
+                                if ($attrs.grow) {
+                                    $(c).css('flex-grow', $attr.grow);
+                                } else {
+                                    $(c).css('flex-grow', Math.round(100 / ch.length).toString());
+                                }
                             }
                         });
+                    } else {
+                        
+                        if ($attrs.grow) {
+                            css['flex-grow'] = $attrs.grow;
+                        } 
                     }
                     $el.css(css);
                 }

@@ -54,6 +54,7 @@ namespace Qorpent.Host{
 			AccessAllowHeaders = "*";
 			AccessAllowMethods = "GET, POST, OPTIONS";
 			AccessAllowCredentials = true;
+			StaticContentMap = new Dictionary<string, string>();
 		}
 		/// <summary>
 		/// Разрешение Cookie при работе с Cross-Site
@@ -216,8 +217,11 @@ namespace Qorpent.Host{
 		/// <summary>
 		/// </summary>
 		public string EncryptBasis { get; set; }
+		/// <summary>
+		/// Мапинг юрлов в диретории для Static Handler
+		/// </summary>
+		public IDictionary<string, string> StaticContentMap { get; private set; }
 
-	
 
 		/// <summary>
 		///     Загружает конфигурационный файл из XML

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Static{
@@ -78,6 +79,17 @@ namespace Qorpent.Host.Static{
 			_cache.Clear();
 		}
 
+		IDictionary<string,string> masks = new Dictionary<string, string>();
+
+		/// <summary>
+		/// Устанавливает корневую директорю для части юрлов
+		/// </summary>
+		/// <param name="mask"></param>
+		/// <param name="rootdirectory"></param>
+		public void SetRoot(string mask, string rootdirectory){
+			masks[mask] = rootdirectory;
+		}
+
 		/// <summary>
 		/// </summary>
 		/// <param name="name"></param>
@@ -89,7 +101,22 @@ namespace Qorpent.Host.Static{
 			if (null == result){
 				result = ResolveByResources(name, context, withextensions);
 			}
+			if (null == result){
+				result = ResolveByMasks(name, context);
+			}
 			return result;
+		}
+
+		private StaticContentDescriptor ResolveByMasks(string name, object context){
+			foreach (var mask in masks){
+				if (Regex.IsMatch(name, mask.Key,RegexOptions.Compiled)){
+					var filename = Path.Combine(mask.Value, name.Substring(1));
+					if (File.Exists(filename)){
+						return new FileContentDescriptor(filename);
+					}
+				}
+			}
+			return null;
 		}
 
 		private static int MatchTail(string path1, string path2){

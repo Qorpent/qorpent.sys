@@ -20,5 +20,11 @@
 		///     Сброс кэша
 		/// </summary>
 		void DropCache();
+		/// <summary>
+		/// Устанавливает корневую директорю для части юрлов
+		/// </summary>
+		/// <param name="mask"></param>
+		/// <param name="rootdirectory"></param>
+		void SetRoot(string mask, string rootdirectory);
 	}
 }

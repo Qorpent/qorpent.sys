@@ -366,6 +366,9 @@ namespace Qorpent.Host{
 			Static = _container.Get<IHostServerStaticResolver>();
 			Auth = _container.Get<IAuthenticationProvider>();
 			Encryptor = _container.Get<IEncryptProvider>();
+			foreach (var map in Config.StaticContentMap){
+				Static.SetRoot(map.Key,map.Value);
+			}
 		}
 
 		private void LoadContainer(){
