@@ -199,9 +199,7 @@ namespace Qorpent.Mvc.Binding {
 			                       .GetProperty(p.Key)
 			                       .GetCustomAttributes(typeof (BindAttribute), true)
 			                       .FirstOrDefault() as BindAttribute;
-							if (null != bind && !string.IsNullOrWhiteSpace(bind.ParameterPrefix)){
-								_prefix = bind.ParameterPrefix;
-							}
+							
 							var parameters = context.GetAll(_prefix );
 		                    var dict = p.Value as IDictionary<string, string>;
 		                    
@@ -210,7 +208,12 @@ namespace Qorpent.Mvc.Binding {
 							}
 	                    }
 	                    else{
-		                    var v = context.Get(p.Key, null);
+		                    var pname = p.Key;
+							
+							if (!string.IsNullOrWhiteSpace(this._bindattribute.ParameterPrefix)){
+								pname = this._bindattribute.ParameterPrefix + pname;
+							}
+		                    var v = context.Get(pname, null);
 		                    if (!string.IsNullOrWhiteSpace(v)){
 			                    obj.SetValue(p.Key, v, true, true, false, true, true);
 		                    }
