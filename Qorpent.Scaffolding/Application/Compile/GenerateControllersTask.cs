@@ -111,18 +111,28 @@ namespace Qorpent.Scaffolding.Application {
 			if (!string.IsNullOrWhiteSpace(calllist)){
 				calllist = ", " + calllist;
 			}
-            sb.Append(string.Format(@"
-        .controller('{3}_{0}', ['$scope','$http','$rootScope'{1}, function ($scope, $http, $rootScope{2}) {{ 
+	        sb.Append(string.Format(@"
+        .controller('{3}_{0}', ['$scope','$http','$rootScope'{1},'$element', function ($scope, $http, $rootScope{2},$element) {{ 
                 $scope.api = Api($http, $rootScope);
-                $scope.{6} = '{4}.html';
-				$scope.title= '{5}';
-", code, deplist, calllist, Project.ProjectName,
+				$scope.$services = {{}};
+				$scope.$services.$element = $element;
+				$scope.$services.$http = $http;
+				$scope.$services.$rootScope = $rootScope;
+", code, deplist, calllist, Project.ProjectName));
+	        foreach (var dep in deps){
+		        sb.Append("\t\t\t\t$scope.$services." + dep.Key + "=" + dep.Key + ";");
+		        sb.AppendLine();
+	        }
+			sb.AppendFormat(
+               @"				$scope.{2} = '{0}.html';
+				$scope.title= '{1}';
+",
  targetclass.Compiled.ChooseAttr("view", "code"),
  targetclass.Compiled.ChooseAttr("name", "code"),
  (targetclass.Compiled.Element("menu")==null)?"view":"_view"
- )
- 
  );
+ 
+ 
 
             var items = xml.Elements("item");
             foreach (var e in deps.Where(_ => _.Value.Attr("before").ToBool()).OrderBy(_=>_.Key)) {
