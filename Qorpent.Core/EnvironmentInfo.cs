@@ -335,5 +335,146 @@ namespace Qorpent {
 			var p = new Process { StartInfo = processStart };
 			return p;
 		}
+		/// <summary>
+		/// Возвращает корневую директорию основного репозитория
+		/// </summary>
+		/// <param name="environmentFirst">true - глобальная настройка репозитория имеет приоритет, false (default) - локально определенный репозиторий имеет приоритет</param>
+		/// <returns></returns>
+		public static string GetRepositoryRoot(bool environmentFirst = false){
+			string result = null;
+			if (environmentFirst){
+				result = GetGlobalRepositoryRoot() ?? GetLocalRepositoryRoot();
+			}
+			else{
+				result = GetLocalRepositoryRoot() ?? GetGlobalRepositoryRoot();
+			}
+			return result;
+		}
+		/// <summary>
+		/// Директория из которой была создана Shadow-копия данного процесса
+		/// </summary>
+		public static string ShadowEvidence = "";
+		/// <summary>
+		/// Явно указанная директория в качестве корня репозитория
+		/// </summary>
+		public static string LocalRepositoryDirectory = "";
+
+		/// <summary>
+		/// Переменная для поиска глобального репозитория
+		/// </summary>
+		public static string GlobalRepositoryEnvironmentVariable = "REPOS";
+		/// <summary>
+		/// Явно указанный путь к глобальному репозиторию
+		/// </summary>
+		public static string GlobalRepositoryPath = "";
+
+		private static bool? _isShadow;
+		/// <summary>
+		/// Возвращает путь к теневым копиям приложений
+		/// </summary>
+		public static string GetShadowRoot(){
+			var result = Path.Combine(Path.GetTempPath(), ".qptshadow");
+			return result;
+		}
+		/// <summary>
+		/// Возвращает глобальный путь к Shadow-директории данного процесса
+		/// </summary>
+		/// <returns></returns>
+		public static string GetShadowDirecroty(){
+			var name = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
+			return NormalizePath( Path.Combine(GetShadowRoot(), name));
+		}
+
+		/// <summary>
+		/// Признак того,
+		/// </summary>
+		public static bool IsShadow{
+			get{
+				if (null == _isShadow){
+					return !string.IsNullOrWhiteSpace(ShadowEvidence) || NormalizePath(BinDirectory).StartsWith(GetShadowDirecroty());
+
+				}
+				return _isShadow.Value;
+			}
+			set { _isShadow = value; }
+		}
+
+		/// <summary>
+		/// Возвращает директорию глобального репозитория по переменной окружения 
+		/// </summary>
+		/// <returns></returns>
+		public static string GetGlobalRepositoryRoot(){
+			var result = GlobalRepositoryPath;
+			if (!string.IsNullOrWhiteSpace(result) && Directory.Exists(result)) return result;
+			result = "%" + GlobalRepositoryEnvironmentVariable + "%";
+			while (result.Contains("%")){
+				var expanded = Environment.ExpandEnvironmentVariables(result);
+				if (expanded == result) break;
+			}
+			if (!string.IsNullOrWhiteSpace(result) && !result.Contains("%") && Directory.Exists(result)) return result;
+			return null;
+
+		}
+		/// <summary>
+		/// Осуществляет поиск репозитория по контексту вызова процесса
+		/// </summary>
+		/// <returns></returns>
+		public static string GetLocalRepositoryRoot(){
+			string result = null;
+			if (!string.IsNullOrWhiteSpace(LocalRepositoryDirectory)){
+				result = Path.GetFullPath(LocalRepositoryDirectory);
+				if (Directory.Exists(result)) return result;
+			}
+			var binRoot = GetAdaptedBinaryDirectory().Replace("\\","/");
+			if (binRoot.Contains("/.build/")){ //marks in-repository run
+				return binRoot.Substring(0, binRoot.IndexOf("/.build/", System.StringComparison.Ordinal));
+			}
+			return null;
+		}
+		/// <summary>
+		/// Возвращает дирекорию запуска приложения с адаптацией под ShadowEvidence
+		/// </summary>
+		/// <returns></returns>
+		public static string GetAdaptedBinaryDirectory(){
+			if (string.IsNullOrWhiteSpace(ShadowEvidence)) return BinDirectory;
+			return Path.GetFullPath(ShadowEvidence);
+		}
+		/// <summary>
+		/// Возвращает интерполированную версию файла
+		/// </summary>
+		/// <param name="givenPath"></param>
+		/// <returns></returns>
+		public static string ResolvePath(string givenPath){
+			if (string.IsNullOrWhiteSpace(givenPath)) return givenPath;
+			givenPath = givenPath.ToLowerInvariant();
+			if (givenPath.Contains("@")){ //expand EnvironmentInfo macroses
+				givenPath = givenPath.Replace("@bin@", BinDirectory);
+				givenPath = givenPath.Replace("@cfg@", ConfigDirectory);
+				givenPath = givenPath.Replace("@root@", RootDirectory);
+				givenPath = givenPath.Replace("@abin@", GetAdaptedBinaryDirectory());
+				givenPath = givenPath.Replace("@repos@", GetRepositoryRoot());
+				givenPath = givenPath.Replace("@tmp@", TmpDirectory);
+			}
+			while (givenPath.Contains("%")){ //expand Environment variables
+				var newPath = Environment.ExpandEnvironmentVariables(givenPath);
+				if (newPath == givenPath) break;
+			}
+			return NormalizePath(givenPath);
+		}
+
+		/// <summary>
+		/// 	Removes illegal folder delimiters, converts to single '/' style (copy of Utils so private)
+		/// </summary>
+		/// <param name="path"> </param>
+		/// <returns> </returns>
+		private static string NormalizePath(this string path)
+		{
+			if (null == path)
+			{
+				return null;
+			}
+			return path.Replace("\\", "/").Replace("//", "/").Replace("//", "/").ToLower();
+		}
+
 	}
 }

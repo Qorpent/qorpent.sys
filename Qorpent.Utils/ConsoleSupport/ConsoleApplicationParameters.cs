@@ -66,6 +66,22 @@ namespace Qorpent.Utils{
 			set { Set("workingdirectory", value); }
 		}
 		/// <summary>
+		/// Происхождение из другой директории (для BIN)
+		/// </summary>
+		public string ShadowEvidence{
+			get { return Get("shadowevidence", ""); }
+			set { Set("shadowevidence", value); }
+		}
+		/// <summary>
+		/// Путь к репозиторию
+		/// </summary>
+		public string RepositoryPath
+		{
+			get { return Get("repositorypath", ""); }
+			set { Set("repositorypath", value); }
+		}
+
+		/// <summary>
 		/// Отложенный конструктор, логика подготовки 
 		/// </summary>
 		public virtual void Initialize(params string[] arguments){
@@ -90,6 +106,15 @@ namespace Qorpent.Utils{
 			if (!string.IsNullOrWhiteSpace(WorkingDirectory))
 			{
 				Environment.CurrentDirectory = Path.GetFullPath(WorkingDirectory);
+				EnvironmentInfo.RootDirectory = Environment.CurrentDirectory;
+
+			}
+			if (!string.IsNullOrWhiteSpace(RepositoryPath)){
+				EnvironmentInfo.LocalRepositoryDirectory = RepositoryPath;
+
+			}
+			if (!string.IsNullOrWhiteSpace(ShadowEvidence)){
+				EnvironmentInfo.ShadowEvidence = ShadowEvidence;
 			}
 			if (string.IsNullOrWhiteSpace(LogFormat)){
 				LogFormat = "${Time} ${Message}";

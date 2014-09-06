@@ -66,6 +66,7 @@
     <Compile Include="ConsoleSupport\ConsoleArgumentHelper.cs" />
     <Compile Include="ConsoleSupport\ConsoleRenderHelper.cs" />
     <Compile Include="ConsoleSupport\IConsoleApplicationListener.cs" />
+    <Compile Include="ConsoleSupport\ProcessSafeStart.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />
     <Compile Include="Extensions\ConfigExtensions.cs" />
     <Compile Include="Extensions\DatabaseEngineType.cs" />
