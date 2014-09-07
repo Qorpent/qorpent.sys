@@ -653,7 +653,33 @@ namespace Qorpent.Utils.Extensions {
 			return parent;
 		}
 
-		/// <summary>
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="sourceElement"></param>
+	    /// <param name="name"></param>
+	    /// <param name="defaultvalue"></param>
+	    /// <param name="returnDefaultIfEmpty"></param>
+	    /// <returns></returns>
+	    public static string El(this XElement sourceElement, XName name, string defaultvalue = "",
+	        bool returnDefaultIfEmpty = false) {
+
+            if (null == sourceElement) {
+                return defaultvalue;
+            }
+            var el = sourceElement.Element(name);
+            var value = null == el ? defaultvalue : el.Value;
+
+            if (!returnDefaultIfEmpty) {
+                return value ?? defaultvalue;
+            }
+            return string.IsNullOrWhiteSpace(value) ? defaultvalue : value;
+	    }
+
+
+
+	    /// <summary>
 		/// 	Returns not-null string Value of elemnt's attribute (null-safe, existence-ignorance)
 		/// </summary>
 		/// <param name="sourceElement"> Element from which attribute requested </param>
