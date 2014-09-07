@@ -66,6 +66,7 @@ namespace Qorpent.IO.Net{
 								response.Cookies.Add(cookie);
 							}
 						}
+						response.Request = request;
 						return response;
 					}
 				}
