@@ -10,12 +10,32 @@ namespace Qorpent.IO.Net{
 	public class HttpResponse{
 		private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
 		private Encoding _encoding;
-
+		/// <summary>
+		///		Запрос адреса
+		/// </summary>
+		public HttpRequest Request { get; set; }
 		/// <summary>
 		///     Статус
 		/// </summary>
 		public int State { get; set; }
-
+		/// <summary>
+		///		Признак перенаправления
+		/// </summary>
+		public bool IsRedirect {
+			get { return State >= 300 && State < 400; }
+		}
+		/// <summary>
+		///		Результирующай адрес документа
+		/// </summary>
+		public Uri Uri {
+			get { return Request.Uri; }
+		}
+		/// <summary>
+		///		Адрес перенаправления
+		/// </summary>
+		public Uri RedirectUri {
+			get { return new Uri(Headers["Location"]); }
+		}
 		/// <summary>
 		///     Название статуса
 		/// </summary>

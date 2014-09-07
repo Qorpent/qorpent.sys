@@ -56,12 +56,17 @@ namespace Qorpent.IO.Net{
 						var writer = new HttpRequestWriter(rs);
 						writer.Write(request);
 						var response = reader.Read(rs);
+						if (response.IsRedirect) {
+							request.Uri = response.RedirectUri;
+							return Call(request);
+						}
 						response.Cookies = response.Cookies ?? Cookies;
 						if (response.Headers.ContainsKey("Cookie")){
 							foreach (var cookie in HttpUtils.ParseCookies(response.Headers["Cookie"])){
 								response.Cookies.Add(cookie);
 							}
 						}
+						response.Request = request;
 						return response;
 					}
 				}
