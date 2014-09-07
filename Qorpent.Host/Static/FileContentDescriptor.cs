@@ -9,7 +9,6 @@ namespace Qorpent.Host.Static {
     /// </summary>
     public class FileContentDescriptor : StaticContentDescriptor {
         private string _path;
-        private byte[] _cachedData;
         private DateTime _cachedDate;
 
         /// <summary>
@@ -40,12 +39,7 @@ namespace Qorpent.Host.Static {
         /// </summary>
         public bool NoCheckVersion { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool UseMemoryCache { get; set; }
-
-        /// <summary>
+	    /// <summary>
         ///		
         /// </summary>
         public override DateTime GetLastVersion() {
@@ -64,10 +58,11 @@ namespace Qorpent.Host.Static {
         /// <returns></returns>
         public override Stream Open() {
             if (UseMemoryCache) {
-                if (null == _cachedData) {
-                    _cachedData = File.ReadAllBytes(_path);
+                if (null == FixedData) {
+                    this.FixedData = File.ReadAllBytes(_path);
+	                IsFixedContent = true;
                 }
-                return new MemoryStream(_cachedData);
+                return new MemoryStream(FixedData);
             }
             return File.OpenRead(_path);
         }

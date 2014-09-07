@@ -26,6 +26,16 @@ namespace Qorpent.Host{
 		public string FixedContent { get; set; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public bool UseMemoryCache { get; set; }
+
+		/// <summary>
+		/// Фиксированный байт-массив
+		/// </summary>
+		public byte[] FixedData { get; set; }
+
+		/// <summary>
 		/// </summary>
 		public abstract DateTime GetLastVersion();
 
