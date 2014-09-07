@@ -18,7 +18,10 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			Tasks.Add(new GenerateExtendedCachedModel());
 			Tasks.Add(new GenerateCloneableFacility());
 			Tasks.Add(new GenerateResolveTagFacility());
-			Tasks.Add(new GenerateTableStructureFileTask());
-		}
+            if (!string.IsNullOrWhiteSpace(EnvironmentInfo.GetExecutablePath("dot"))) { 
+			    Tasks.Add(new GenerateTableStructureFileTask());
+            }
+		
+        }
 	}
 }

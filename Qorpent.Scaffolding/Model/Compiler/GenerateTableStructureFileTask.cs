@@ -48,8 +48,10 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			var provider = new DotGraphProvider();
 			var render = GraphRender.Create(g);
 			var script = render.GenerateGraphScript();
+
 			var svg = provider.Generate(script, new GraphOptions{Format = "svg"});
-			return svg.ToString();
+			
+            return svg.ToString();
 		}
 	}
 }
