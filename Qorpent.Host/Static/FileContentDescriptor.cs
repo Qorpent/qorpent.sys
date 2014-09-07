@@ -57,14 +57,16 @@ namespace Qorpent.Host.Static {
         /// </summary>
         /// <returns></returns>
         public override Stream Open() {
-            if (UseMemoryCache) {
-                if (null == FixedData) {
-                    this.FixedData = File.ReadAllBytes(_path);
-	                IsFixedContent = true;
-                }
-                return new MemoryStream(FixedData);
-            }
-            return File.OpenRead(_path);
+	        lock (this){
+		        if (UseMemoryCache){
+			        if (null == FixedData){
+				        this.FixedData = File.ReadAllBytes(_path);
+				        IsFixedContent = true;
+			        }
+			        return new MemoryStream(FixedData);
+		        }
+		        return File.OpenRead(_path);
+	        }
         }
     }
 }
