@@ -334,8 +334,9 @@ namespace Qorpent.Utils.Extensions {
 		/// 	converts given object to DateTime with different formats
 		/// </summary>
 		/// <param name="obj"> </param>
+		/// <param name="safe"></param>
 		/// <returns> </returns>
-		public static DateTime ToDate(this object obj) {
+		public static DateTime ToDate(this object obj,bool safe = false) {
 			if (null == obj) {
 				return new DateTime(1900, 1, 1);
 			}
@@ -346,8 +347,15 @@ namespace Qorpent.Utils.Extensions {
 			if (String.IsNullOrWhiteSpace(s)) {
 				return new DateTime(1900, 1, 1);
 			}
-			return DateTime.ParseExact(s, QorpentConst.Date.StandardDateFormats, CultureInfo.InvariantCulture,
-			                           DateTimeStyles.AllowWhiteSpaces);
+			try{
+				return DateTime.ParseExact(s, QorpentConst.Date.StandardDateFormats, CultureInfo.InvariantCulture,
+				                           DateTimeStyles.AllowWhiteSpaces);
+			}
+			catch (Exception ex){
+				if(safe)return new DateTime(1900,1,1);
+				throw ex;
+			}
+
 		}
 
 	    /// <summary>
