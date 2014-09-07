@@ -15,7 +15,18 @@ namespace Qorpent.IO.Net{
 		///     Статус
 		/// </summary>
 		public int State { get; set; }
-
+		/// <summary>
+		///		Признак перенаправления
+		/// </summary>
+		public bool IsRedirect {
+			get { return State >= 300 && State < 400; }
+		}
+		/// <summary>
+		///		Адрес перенаправления
+		/// </summary>
+		public Uri RedirectUri {
+			get { return new Uri(Headers["Location"]); }
+		}
 		/// <summary>
 		///     Название статуса
 		/// </summary>
