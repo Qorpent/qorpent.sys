@@ -100,7 +100,16 @@ namespace Qorpent.Host.Handlers
 					callcontext.Response.AddHeader("Cache-Control", "no-cache, must-revalidate");
 				}
 				if (staticdescriptor.IsFixedContent){
-					callcontext.Finish(staticdescriptor.FixedContent, staticdescriptor.MimeType + "; charset=utf-8");
+					if (null != staticdescriptor.FixedData){
+						callcontext.Response.StatusCode = 200;
+						callcontext.Response.StatusDescription = "OK";
+						callcontext.Response.ContentType = staticdescriptor.MimeType;
+						callcontext.Response.OutputStream.Write(staticdescriptor.FixedData, 0, staticdescriptor.FixedData.Length);
+
+					}
+					else{
+						callcontext.Finish(staticdescriptor.FixedContent, staticdescriptor.MimeType + "; charset=utf-8");
+					}
 				}
 				else{
 					using (var s = staticdescriptor.Open()){

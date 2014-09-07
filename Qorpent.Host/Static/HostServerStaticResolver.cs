@@ -111,9 +111,9 @@ namespace Qorpent.Host.Static{
 			foreach (var mask in masks){
 				if (Regex.IsMatch(name, mask.Key,RegexOptions.Compiled)){
 					var filename = Path.Combine(mask.Value, name.Substring(1));
-					if (File.Exists(filename)){
-						return new FileContentDescriptor(filename);
-					}
+					//if (File.Exists(filename)){
+				    return new FileContentDescriptor(filename) {NoCheckVersion=true, UseMemoryCache = true} ;
+				    //}
 				}
 			}
 			return null;
