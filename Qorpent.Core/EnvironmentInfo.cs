@@ -176,7 +176,7 @@ namespace Qorpent {
 				}
 				return _configDirectory;
 			}
-			set { _configDirectory = Path.GetFullPath( value); }
+			set { _configDirectory =ResolvePath( value); }
 		}
 
 
@@ -459,7 +459,8 @@ namespace Qorpent {
 				var newPath = Environment.ExpandEnvironmentVariables(givenPath);
 				if (newPath == givenPath) break;
 			}
-			return NormalizePath(givenPath);
+
+			return NormalizePath(Path.GetFullPath(givenPath));
 		}
 
 		/// <summary>

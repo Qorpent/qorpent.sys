@@ -184,7 +184,11 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				if (type != ormField.DataType.CSharpDataType){
 					cast = "(" + ormField.DataType.CSharpDataType + ")";
 				}
-				o.WriteLine("\t\t\t\tresult." + name + " = " + cast + "reader.Get" + type + "(" + i + ");");
+				var cond = "";
+				if (ormField.IsReference && ormField.ReferenceClass.TargetClass == null){
+					cond = "if(!reader.IsDBNull("+i+"))";
+				}
+				o.WriteLine("\t\t\t\t"+cond+"result." + name + " = " + cast + "reader.Get" + type + "(" + i + ");");
 				i++;
 			}
 			o.WriteLine("\t\t\t}else{");

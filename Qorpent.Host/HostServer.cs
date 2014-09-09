@@ -314,6 +314,9 @@ namespace Qorpent.Host{
 			else{
 				_container = Application.Container;
 			}
+			if (Config.ApplicationMode == HostApplicationMode.FullStandalone){
+				_container.GetLoader().LoadDefaultManifest(true);
+			}
 			LoadContainer();
 			_InitializeDefaultServices();
 			if (Config.ApplicationMode != HostApplicationMode.Shared){

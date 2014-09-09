@@ -73,10 +73,8 @@ namespace Qorpent.IoC {
 		/// <exception cref="Exception"></exception>
 		public XElement ReadDefaultManifest() {
 			PrepareServices();
-			var result = new XElement("root");	
-			if (null == _resolver) {
-				return result;
-			}
+			var result = new XElement("root");
+			
 			var manifestfiles = GetManifestFileList();
 			
 			foreach (var manifestxml in manifestfiles.Select(LoadManifesFile)) {
@@ -103,15 +101,28 @@ namespace Qorpent.IoC {
 		}
 
 		private string[] GetManifestFileList() {
-			var manifestfiles = _resolver.ResolveAll(
+			IList<string> _result = new List<string>();
+			if (null != _resolver){
+				foreach (var f in _resolver.ResolveAll(
 				new FileSearchQuery
-					{
-						ExistedOnly = true,
-						PathType = FileSearchResultType.FullPath,
-						ProbeFiles = new[] {"*.ioc-manifest.xml", "*.ioc-manifest.bxl"},
-						ProbePaths = new[] {"~/", "~/.config", "~/bin", "~/sys", "~/usr"}
-					});
-			return manifestfiles;
+				{
+					ExistedOnly = true,
+					PathType = FileSearchResultType.FullPath,
+					ProbeFiles = new[] { "*.ioc-manifest.xml", "*.ioc-manifest.bxl" },
+					ProbePaths = new[] { "~/", "~/.config", "~/bin", "~/sys", "~/usr" }
+				}))
+				{
+					_result.Add(f);
+				}
+			}
+			if (Directory.Exists(EnvironmentInfo.ConfigDirectory)){
+				foreach (var f in Directory.GetFiles(EnvironmentInfo.ConfigDirectory, "*.ioc-manifest.*"))
+				{
+					_result.Add(f);
+				}
+			}
+
+			return _result.Select(_=>_.NormalizePath()).Distinct().ToArray();
 		}
 
 		private void PrepareServices() {

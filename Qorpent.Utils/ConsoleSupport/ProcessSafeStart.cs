@@ -80,7 +80,7 @@ namespace Qorpent.Utils{
 			}
 			Log.Trace("upgrade complete");
 			var args = Environment.GetCommandLineArgs();
-			var safedArgs = string.Join(" ", args.Skip(1).Select(_ => "\"" + _+ "\""));
+			var safedArgs = string.Join(" ", args.Skip(1).Select(_ => "\"" + (_.StartsWith("--shadow")?"--"+_.Substring(8):_)+ "\""));
 			safedArgs += " --shadowevidence \"" + binDir + "\"";
 			Log.Debug("adapted args "+safedArgs);
 			var exeName = Path.Combine(targetDirectory, Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName));
