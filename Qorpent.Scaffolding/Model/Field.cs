@@ -197,6 +197,10 @@ namespace Qorpent.Scaffolding.Model{
 				return _reverseCollectionName;
 			}
 		}
+		/// <summary>
+		/// Формула для автовычисляемого поля
+		/// </summary>
+		public string ComputeAs { get; set; }
 
 		/// <summary>
 		///     Резолюция полного типа данных для поля
@@ -247,6 +251,7 @@ namespace Qorpent.Scaffolding.Model{
 				ResolvePriority = 55555;
 			}
 			NoSql = e.GetSmartValue("nosql").ToBool();
+			ComputeAs = e.GetSmartValue("as").ToString();
 			NoCode = e.GetSmartValue("nocode").ToBool();
 			IsCloneByDefault = e.GetSmartValue("clone").ToBool();
 			//Name = PersistentClass.EscapeSqlName(Name);

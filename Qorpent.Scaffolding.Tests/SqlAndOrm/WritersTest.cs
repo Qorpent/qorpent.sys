@@ -76,6 +76,15 @@ table slave
 	datetime Version  'Версия'  idx=30
 	ref master 'Главный объект' idx=40
 ";
+		private const string SimpleModelWithComputeBy = @"
+class table prototype=dbtable abstract
+table master
+	string Code 'Код' unique idx=20
+	string Code2 'Код2' as=(code+'a')
+table slave
+	datetime Version  'Версия'  idx=30
+	ref master 'Главный объект' idx=40
+";
 
 		private const string CircularModel = @"
 class table prototype=dbtable abstract
@@ -115,6 +124,33 @@ IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""{0}"" where ""id""=0)  INSERT INTO 
 IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""{0}"" where ""id""=-1)  INSERT INTO ""dbo"".""{0}"" (""id"", ""{0}"") VALUES (-1, -1);
 ".Trim(),name), scr.Trim());
 		}
+
+		[Test]
+		public void ComputeAsFieldWriter(){
+			var model = PersistentModel.Compile(SimpleModelWithComputeBy);
+			var master = model["master"];
+			var mwr = new TableWriter(master)
+			{
+				Dialect = SqlDialect.SqlServer,
+				NoDelimiter = true,
+				NoComment = true,
+				Mode = ScriptMode.Create
+			};
+
+			var scr = mwr.ToString();
+			Console.WriteLine(scr.Replace("\"", "\"\""));
+			Assert.AreEqual(@"CREATE TABLE ""dbo"".""master"" (
+	""id"" int NOT NULL CONSTRAINT dbo_master_id_pk PRIMARY KEY DEFAULT (NEXT VALUE FOR ""dbo"".""master_seq""),
+	""code"" nvarchar(255) NOT NULL CONSTRAINT dbo_master_code_unq UNIQUE DEFAULT '',
+	""code2"" AS (code+'a')
+) ON SECONDARY;
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""master"" where ""id""=0)  INSERT INTO ""dbo"".""master"" (""id"", ""code"") VALUES (0, '/');
+IF NOT EXISTS (SELECT TOP 1 * FROM ""dbo"".""master"" where ""id""=-1)  INSERT INTO ""dbo"".""master"" (""id"", ""code"") VALUES (-1, 'ERR');
+EXECUTE sp_addextendedproperty N'MS_Description', 'Код', N'SCHEMA', N'dbo', N'TABLE', N'master', N'COLUMN', 'code';
+EXECUTE sp_addextendedproperty N'MS_Description', 'Код2', N'SCHEMA', N'dbo', N'TABLE', N'master', N'COLUMN', 'code2';
+".Trim(), scr.Trim());
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>

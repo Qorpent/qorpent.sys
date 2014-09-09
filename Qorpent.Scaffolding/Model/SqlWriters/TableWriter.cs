@@ -139,17 +139,30 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			if (!string.IsNullOrWhiteSpace(field.Comment) && !NoComment){
 				sb.AppendLine("\t-- " + field.Comment);
 			}
-			sb.AppendFormat("\t{0} {1} NOT NULL", field.Name.SqlQuoteName(), field.DataType.ResolveSqlDataType(Dialect));
-			WritePrimaryKey(field, sb);
-			WriteUnique(field, sb);
-			WriteForeignKey(field, sb);
-			WriteDefaultValue(dialect,field, sb);
+			if (!string.IsNullOrWhiteSpace(field.ComputeAs)){
+				sb.AppendFormat("\t{0} AS {1}", field.Name.SqlQuoteName(),field.ComputeAs);
+			}
+			else {
+				sb.AppendFormat("\t{0} {1} NOT NULL", field.Name.SqlQuoteName(), field.DataType.ResolveSqlDataType(Dialect));
+				WritePrimaryKey(field, sb);
+				WriteUnique(field, sb);
+				WriteForeignKey(field, sb);
+				WriteDefaultValue(dialect, field, sb);
+			}
+
 			if (!last){
 				sb.AppendLine(",");
 			}
 			else{
 				sb.AppendLine();
 			}
+		}
+
+		private void WriteComputeAs(SqlDialect dialect, Field field, StringBuilder sb){
+			sb.Append(" AS ");
+			sb.Append("(");
+			sb.Append(field.ComputeAs);
+			sb.Append(")");
 		}
 
 		private void WriteForeignKey(Field field, StringBuilder sb){
