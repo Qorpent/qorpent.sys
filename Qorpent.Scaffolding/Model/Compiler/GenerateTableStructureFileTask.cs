@@ -37,6 +37,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 				g.AddNode(n);
 				foreach (var r in cls.GetReferences()){
 					if (r.NoSql) continue;
+					if (null == r.ReferenceClass.TargetClass) continue;
 					if (r.ReferenceClass.TargetClass.Compiled.Attr("nosvg").ToBool()) continue;
 					var e = new Edge { From = cls.Name, To = r.ReferenceClass.Name, ArrowHead = new Arrow { MainType = ArrowType.Normal } };
 					if (r.IsReverese){

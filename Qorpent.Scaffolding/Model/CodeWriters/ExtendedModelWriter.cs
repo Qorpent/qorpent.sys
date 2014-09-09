@@ -65,6 +65,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				o.WriteLine("\t\t\t\tforeach(var t in targets){");
 				o.WriteLine("\t\t\t\t\tif(t.Id == -1||t.Id==0)continue;");
 				foreach (Field element in ownrefs){
+					if (null == element.ReferenceClass.TargetClass) continue; //reference to non-model class
 					GenerateSetupOwnRef(element);
 				}
 				o.WriteLine("\t\t\t\t}");

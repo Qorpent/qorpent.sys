@@ -139,11 +139,16 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			if (!string.IsNullOrWhiteSpace(field.Comment) && !NoComment){
 				sb.AppendLine("\t-- " + field.Comment);
 			}
+			string notnull="NOT NULL";
+			if (field.IsReference && field.ReferenceClass.TargetClass == null){
+				notnull = "";
+			}
+
 			if (!string.IsNullOrWhiteSpace(field.ComputeAs)){
 				sb.AppendFormat("\t{0} AS {1}", field.Name.SqlQuoteName(),field.ComputeAs);
 			}
 			else {
-				sb.AppendFormat("\t{0} {1} NOT NULL", field.Name.SqlQuoteName(), field.DataType.ResolveSqlDataType(Dialect));
+				sb.AppendFormat("\t{0} {1} {2}", field.Name.SqlQuoteName(), field.DataType.ResolveSqlDataType(Dialect),notnull);
 				WritePrimaryKey(field, sb);
 				WriteUnique(field, sb);
 				WriteForeignKey(field, sb);

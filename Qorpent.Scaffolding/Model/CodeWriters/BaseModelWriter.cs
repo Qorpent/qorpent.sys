@@ -32,8 +32,9 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			IOrderedEnumerable<PersistentClass> tables = Model.Classes.Values.OrderBy(_ => _.Name);
 			foreach (PersistentClass t in tables){
 				foreach (Field reference in t.GetOrderedFields().Where(_ => _.IsReference)){
+					if (null == reference.ReferenceClass.TargetClass) continue; //reference to outer
 					SetupDirectMarker(t, reference);
-					if (reference.IsReverese){
+					if (reference.IsReverese ){
 						SetupBackCollectionMarker(t, reference);
 					}
 				}

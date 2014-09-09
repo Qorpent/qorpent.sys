@@ -309,6 +309,9 @@ namespace Qorpent.Scaffolding.Model{
 			string[] refparts = refto.Split('.');
 			ReferenceTable = refparts[refparts.Length - 2].ToLowerInvariant();
 			ReferenceField = refparts[refparts.Length - 1].ToLowerInvariant();
+			if (refparts.Length > 2){
+				ReferenceSchema = refparts[refparts.Length - 3].ToLowerInvariant();
+			}
 			DataType = Table.DataTypeMap["int"];
 			if (ReferenceField.ToLowerInvariant() == "code"){
 				DataType = Table.DataTypeMap["string"];
@@ -318,6 +321,10 @@ namespace Qorpent.Scaffolding.Model{
 				ResolvePriority = 99999;
 			}
 		}
+		/// <summary>
+		/// Схема таблицы на ссылке
+		/// </summary>
+		public string ReferenceSchema { get; set; }
 
 		/// <summary>
 		///     Проверяет ссылеи на циркулярность и выставляет соответствующее свойство

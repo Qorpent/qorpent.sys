@@ -62,17 +62,21 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 
 
 		private void GenerateRef(Field f){
-			string dtype;
+			string dtype = "";
 			GenerateField(f, "", f.Name + f.ReferenceField, "(Идентификатор)");
 			IBSharpClass cls = f.ReferenceClass.TargetClass;
-			string nsname = cls.Namespace;
-			if (nsname == f.Table.TargetClass.Namespace){
-				dtype = cls.Name;
+			if (null != cls){
+				string nsname = cls.Namespace;
+				if (nsname == f.Table.TargetClass.Namespace){
+					dtype = cls.Name;
+				}
+				else{
+					dtype = cls.FullName;
+				}
+				GenerateField(f, dtype);
 			}
-			else{
-				dtype = cls.FullName;
-			}
-			GenerateField(f, dtype);
+			
+			
 		}
 
 		private void GenerateField(Field fld, string dtype = "", string name = "", string subcomment = "", string init = null,

@@ -335,7 +335,17 @@ namespace Qorpent.Scaffolding.Model{
 						}
 					}
 					else{
-						ProcessInvalidReferenceError(reference);
+						if (string.IsNullOrWhiteSpace(reference.ReferenceSchema)){
+							// marks not fully qualified and non referenced table
+							ProcessInvalidReferenceError(reference);
+						}
+						else{
+							reference.ReferenceClass = new PersistentClass{
+								Schema = reference.ReferenceSchema,
+								Name = reference.ReferenceTable,
+								Namespace =  reference.Table.Namespace
+							};
+						}
 					}
 				}
 			}
