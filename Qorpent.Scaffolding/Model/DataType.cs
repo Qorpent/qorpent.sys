@@ -85,6 +85,14 @@ namespace Qorpent.Scaffolding.Model{
 		public bool IsBool{
 			get { return CSharpDataType == "Boolean"; }
 		}
+		/// <summary>
+		/// Признак прямого определения типа
+		/// </summary>
+		public bool IsNative { get; set; }
+		/// <summary>
+		/// Прямой текст SQL
+		/// </summary>
+		public string SqlText { get; set; }
 
 		/// <summary>
 		/// </summary>

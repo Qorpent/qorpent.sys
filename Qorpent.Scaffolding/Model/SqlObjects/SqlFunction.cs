@@ -58,8 +58,12 @@ namespace Qorpent.Scaffolding.Model{
 					if (dtype == "function"){
 						dtype = xml.Attr("returns");
 					}
-
-					ReturnType = Table.DataTypeMap[dtype];
+					if (Table.DataTypeMap.ContainsKey(dtype)){
+						ReturnType = Table.DataTypeMap[dtype];
+					}
+					ReturnType = new DataType{IsNative = true, SqlText = dtype};
+					
+					
 				}
 			}
 			if (xml.GetSmartValue("sql-method").ToBool()){

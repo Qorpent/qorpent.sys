@@ -47,6 +47,9 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 						if (Function.ReturnType.IsTable){
 							sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " )\r\nRETURNS @result TABLE " +
 							          GetTableType(Function.ReturnType,SqlDialect.SqlServer));
+						}else if (Function.ReturnType.IsNative){
+							sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " )\r\nRETURNS " +
+							          Function.ReturnType.SqlText);
 						}
 						else{
 							sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " ) RETURNS " +
