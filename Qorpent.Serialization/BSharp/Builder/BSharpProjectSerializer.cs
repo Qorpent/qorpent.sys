@@ -14,8 +14,10 @@ namespace Qorpent.BSharp.Builder{
 		/// <param name="bSharpClass"></param>
 		/// <returns></returns>
 		public static BSharpProject TryParseBSharpProject(this IBSharpClass bSharpClass){
+			
+			
 			var project = new BSharpProject{IsFullyQualifiedProject = true};
-
+			project.Definition = bSharpClass.Compiled;
 			ParseIncludes(bSharpClass, project);
 			ParseExcludes(bSharpClass, project);
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Qorpent.Bxl;
 using Qorpent.IO.Resources;
@@ -95,6 +96,7 @@ namespace Qorpent.BSharp.Builder{
 			PostVerify(result);
 			PostProcess(result);
 			Log.Trace("build finished");
+			Task.WaitAll(pending.ToArray());
 			return result;
 		}
 
@@ -148,6 +150,7 @@ namespace Qorpent.BSharp.Builder{
 		/// <returns></returns>
 		protected virtual IBSharpProject CompileRealProject(){
 			IBSharpContext compiledProject = CompileInternalProject();
+			
 			return ConvertToBSharpBuilderProject(compiledProject);
 		}
 

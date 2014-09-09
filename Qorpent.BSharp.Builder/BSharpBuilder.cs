@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Qorpent.BSharp;
 using Qorpent.BSharp.Builder;
 using Qorpent.Integration.BSharp.Builder.Tasks;
@@ -63,6 +64,7 @@ namespace Qorpent.Integration.BSharp.Builder {
 		/// <returns></returns>
 		protected override IBSharpProject ConvertToBSharpBuilderProject(IBSharpContext compiledProject) {
 			var projectClass = compiledProject.Get(Project.ProjectName);
+			
 			if (null != projectClass) {
 				return GenerateProject(projectClass);
 			}
@@ -89,6 +91,7 @@ namespace Qorpent.Integration.BSharp.Builder {
 			);
 
 			var projectsContext = builder.Build();
+//			Console.WriteLine(projectsContext.Get(BSharpContextDataType.Working).First().Compiled.ToString());
 
 			if (projectsContext == null)
 			{

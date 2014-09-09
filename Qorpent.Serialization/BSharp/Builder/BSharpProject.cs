@@ -321,6 +321,10 @@ namespace Qorpent.BSharp.Builder{
 		/// <summary>
 		/// </summary>
 		public IBSharpContext Context { get; set; }
+		/// <summary>
+		/// Исходное определение в XML
+		/// </summary>
+		public XElement Definition { get; set; }
 
 
 		/// <summary>

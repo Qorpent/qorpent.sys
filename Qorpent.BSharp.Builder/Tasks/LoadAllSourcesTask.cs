@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using Qorpent.BSharp;
 using Qorpent.BSharp.Builder;
 using Qorpent.Bxl;
@@ -55,7 +56,12 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
 
         private void LoadBxlSources(IBSharpContext context) {
 			var bxlparser = new BxlParser();
-            foreach (var file in DirectoryFileFilter.Create(Project).Collect()) {
+	        if (null != Project.Definition){
+		        Project.Log.Debug(Project.SrcClass.Compiled.ToString());
+	        }
+	        var filter = DirectoryFileFilter.Create(Project);
+			PrintDebugFilter(filter);
+	        foreach (var file in filter.Collect().ToArray()) {
                 try {
                     var xml = bxlparser.Parse(null, file);
                     Project.Sources.Add(xml);
@@ -67,5 +73,25 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
 
             }
         }
+
+		private void PrintDebugFilter(DirectoryFileFilter filter){
+			Project.Log.Debug("Sources:");
+			Project.Log.Debug("\troots:");
+			foreach (var root in filter.Roots){
+				Project.Log.Debug("\t\t" + root);
+			}
+			Project.Log.Debug("\tmasks:");
+			foreach (var root in filter.SearchMasks){
+				Project.Log.Debug("\t\t" + root);
+			}
+			Project.Log.Debug("\tincludes:");
+			foreach (var root in filter.Includes){
+				Project.Log.Debug("\t\t" + root);
+			}
+			Project.Log.Debug("\texcludes:");
+			foreach (var root in filter.Excludes){
+				Project.Log.Debug("\t\t" + root);
+			}
+		}
 	}
 }

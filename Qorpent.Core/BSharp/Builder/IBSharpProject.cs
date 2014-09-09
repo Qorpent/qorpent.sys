@@ -134,6 +134,11 @@ namespace Qorpent.BSharp.Builder {
 		IBSharpContext Context { get; set; }
 
 		/// <summary>
+		/// Исходное определение в XML
+		/// </summary>
+		XElement Definition { get; set; }
+
+		/// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>
