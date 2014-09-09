@@ -152,7 +152,13 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				WritePrimaryKey(field, sb);
 				WriteUnique(field, sb);
 				WriteForeignKey(field, sb);
-				WriteDefaultValue(dialect, field, sb);
+				if (!(field.IsReference && null == field.ReferenceClass.TargetClass)){
+					WriteDefaultValue(dialect, field, sb); //not model references - only exception to get default value	
+				}
+				else{
+					sb.Append(" DEFAULT NULL");
+				}
+				
 			}
 
 			if (!last){
