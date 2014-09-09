@@ -91,12 +91,17 @@ define(['qObject'], function (qObject) {
 		};
 		result.getUrl = function (args, hint) {
 			siteroot = siteroot || '/';
-			if(!!this.url){
-			    var url = planalize(this.url, args, true, true, true);
-			    if ( !!hint) {
-			        url = "/"+hint + url.substring(1);
+			if (!!this.url) {
+			    if (this.url.match(/^http/)) {
+			        return this.url;
+			    } else {
+			        var url = planalize(this.url, args, true, true, true);
+			        if (!!hint) {
+			            url = "/" + hint + url.substring(1);
+			        }
+			        return (siteroot + url).replace(/\/\//, '/');
 			    }
-				return (siteroot + url).replace(/\/\//,'/');
+			    
 			}
 			var controller = planalize(this.controller,args);
 			var name = planalize(this.name,args);

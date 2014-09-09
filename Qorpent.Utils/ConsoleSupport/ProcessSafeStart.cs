@@ -72,6 +72,8 @@ namespace Qorpent.Utils{
 			foreach (var file in Directory.GetFiles(binDir,"*.*",SearchOption.AllDirectories)){
 				var f = file.NormalizePath().Replace(binDir,"");
 				var trg = Path.Combine(targetDirectory, f);
+				var trgDir = Path.GetDirectoryName(trg);
+				Directory.CreateDirectory(trgDir);
 				Log.Debug("copy " + file);
 				File.Copy(file,trg,true);
 				Log.Debug("ok");

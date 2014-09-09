@@ -82,6 +82,15 @@ namespace Qorpent.Utils{
 		}
 
 		/// <summary>
+		/// Путь к репозиторию
+		/// </summary>
+		public string ManifestPath
+		{
+			get { return Get("manifestpath", ""); }
+			set { Set("manifestpath", value); }
+		}
+
+		/// <summary>
 		/// Отложенный конструктор, логика подготовки 
 		/// </summary>
 		public virtual void Initialize(params string[] arguments){
@@ -115,6 +124,10 @@ namespace Qorpent.Utils{
 			}
 			if (!string.IsNullOrWhiteSpace(ShadowEvidence)){
 				EnvironmentInfo.ShadowEvidence = ShadowEvidence;
+			}
+			
+			if (!string.IsNullOrWhiteSpace(ManifestPath)){
+				EnvironmentInfo.ConfigDirectory = ManifestPath;
 			}
 			if (string.IsNullOrWhiteSpace(LogFormat)){
 				LogFormat = "${Time} ${Message}";

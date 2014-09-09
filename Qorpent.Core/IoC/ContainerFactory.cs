@@ -173,7 +173,7 @@ namespace Qorpent.IoC {
 			try{
 				var file = Path.GetFullPath(filename);
 				var dir = Path.GetDirectoryName(file);
-				Debug.Assert(!string.IsNullOrWhiteSpace(dir), "dir != null");
+				 Debug.Assert(!string.IsNullOrWhiteSpace(dir), "dir != null");
 				Directory.CreateDirectory(dir);
 				using (var s = new StreamWriter(file)){
 					foreach (var componentDefinition in container.GetComponents()){
