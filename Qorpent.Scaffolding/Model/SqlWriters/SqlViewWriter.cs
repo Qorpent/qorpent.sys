@@ -39,7 +39,11 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 					sb.Append(body);
 				}
 				else{
-					sb.Append("CREATE VIEW ${FullName} AS SELECT ");
+					bool isfullydefined = null!=body && body.Trim().ToLowerInvariant().StartsWith("select");
+					sb.Append("CREATE VIEW ${FullName} AS ");
+					if (!isfullydefined){
+						sb.Append("SELECT");
+					}
 					sb.AppendLine();
 					if (null != View.Definition.Element("selffields")){
 						sb.Append(GetSelfFieldSet());
@@ -58,7 +62,9 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 					}
 
 					sb.AppendLine(body);
-					sb.AppendLine("1 as __TERMINAL FROM " + View.Table.FullSqlName);
+					if (!isfullydefined){
+						sb.AppendLine("1 as __TERMINAL FROM " + View.Table.FullSqlName);
+					}
 					sb.AppendLine();
 				}
 			}

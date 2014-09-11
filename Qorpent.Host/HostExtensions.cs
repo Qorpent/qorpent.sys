@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Text;
 using Qorpent.Host.Handlers;
@@ -156,9 +157,14 @@ namespace Qorpent.Host{
 		public static void Finish(this HttpListenerResponse response, Stream stream, string mimeType, int status){
 			response.StatusCode = status;
 			response.ContentType = mimeType;
-			stream.CopyTo(response.OutputStream, 2 ^ 10);
-			response.OutputStream.Flush();
+			response.Headers["Content-Encoding"] = "gzip";
+			using (var g = new GZipStream(response.OutputStream,CompressionLevel.Optimal)){
+				stream.CopyTo(g, 2 ^ 14);
+				
+			}
 			response.Close();
+			
+			
 		}
 	}
 }

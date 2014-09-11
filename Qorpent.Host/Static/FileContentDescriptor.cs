@@ -10,6 +10,12 @@ namespace Qorpent.Host.Static {
     public class FileContentDescriptor : StaticContentDescriptor {
         private string _path;
         private DateTime _cachedDate;
+		/// <summary>
+		/// 
+		/// </summary>
+		public FileContentDescriptor(){
+			UseMemoryCache = true;
+		}
 
         /// <summary>
         /// 
