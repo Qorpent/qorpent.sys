@@ -65,7 +65,9 @@ namespace Qorpent.IO.Net{
 		/// <summary>
 		///     Исходный content-Type
 		/// </summary>
-		public string ContentType { get; set; }
+		public string ContentType {
+			get { return Headers.ContainsKey("Content-Type") ? Headers["Content-Type"] : null; }
+		}
 
 		/// <summary>
 		///     Исходное определение кодировки
