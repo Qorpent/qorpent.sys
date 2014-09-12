@@ -863,7 +863,7 @@ GO
 
 IF OBJECT_ID('""dbo"".""b_v""') IS NOT NULL DROP VIEW ""dbo"".""b_v"";
 GO
-CREATE VIEW ""dbo"".""b_v"" AS SELECT 
+CREATE VIEW ""dbo"".""b_v"" AS SELECT
 ""id"", --
 ""a"", --
 ""code"", --
@@ -950,7 +950,7 @@ GO
 
 IF OBJECT_ID('""dbo"".""b_v""') IS NOT NULL DROP VIEW ""dbo"".""b_v"";
 GO
-CREATE VIEW ""dbo"".""b_v"" AS SELECT 
+CREATE VIEW ""dbo"".""b_v"" AS SELECT
 ""id"", --
 ""a"", --
 ""code"", --

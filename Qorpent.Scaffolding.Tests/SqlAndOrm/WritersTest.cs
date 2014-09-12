@@ -349,7 +349,7 @@ class a prototype=dbtable
 			Console.WriteLine(res.Replace("\"","\"\""));
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""aFull""') IS NOT NULL DROP VIEW ""dbo"".""aFull"";
 GO
-CREATE VIEW ""dbo"".""aFull"" AS SELECT 
+CREATE VIEW ""dbo"".""aFull"" AS SELECT
 ""id"", --
 ""code"", --
 
@@ -444,7 +444,7 @@ class b prototype=dbtable
 			Console.WriteLine(res.Replace("\"", "\"\""));
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""bFull""') IS NOT NULL DROP VIEW ""dbo"".""bFull"";
 GO
-CREATE VIEW ""dbo"".""bFull"" AS SELECT 
+CREATE VIEW ""dbo"".""bFull"" AS SELECT
 ""id"", --
 ""code"", --
 ""a"", --
@@ -477,7 +477,7 @@ class b prototype=dbtable
 			Console.WriteLine(res.Replace("\"", "\"\""));
 			Assert.AreEqual(@"IF OBJECT_ID('""dbo"".""bFull""') IS NOT NULL DROP VIEW ""dbo"".""bFull"";
 GO
-CREATE VIEW ""dbo"".""bFull"" AS SELECT 
+CREATE VIEW ""dbo"".""bFull"" AS SELECT
 ""id"", --
 ""code"", --
 ""a"", --

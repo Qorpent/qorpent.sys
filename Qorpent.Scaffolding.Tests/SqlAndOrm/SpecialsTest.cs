@@ -77,7 +77,7 @@ GO
 -- begin command SqlViewWriter
 IF OBJECT_ID('""dbo"".""bFull""') IS NOT NULL DROP VIEW ""dbo"".""bFull"";
 GO
-CREATE VIEW ""dbo"".""bFull"" AS SELECT 
+CREATE VIEW ""dbo"".""bFull"" AS SELECT
 ""id"", --
 ""code"", --
 ""a"", --
