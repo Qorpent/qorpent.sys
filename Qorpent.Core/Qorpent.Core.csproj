@@ -157,6 +157,7 @@
     <Compile Include="IO\FileStorageAbilities.cs" />
     <Compile Include="IO\FileStorageExtensions.cs" />
     <Compile Include="IO\HashedDirectoryRecord.cs" />
+    <Compile Include="IO\IContentSource.cs" />
     <Compile Include="IO\IFileSource.cs" />
     <Compile Include="IO\IFileDescriptor.cs" />
     <Compile Include="IO\IFileStorage.cs" />

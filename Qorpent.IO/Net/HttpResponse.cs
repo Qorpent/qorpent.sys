@@ -103,16 +103,18 @@ namespace Qorpent.IO.Net{
 			}
 		}
 
+		private string _directdata;
 		/// <summary>
 		///     Возвращает строчное значение
 		/// </summary>
 		public string StringData
 		{
-			get
-			{
+			get{
+				if (null != _directdata) return _directdata;
 				if (null == Data) return "";
-				return Encoding.GetString(Data);
+				return _directdata = Encoding.GetString(Data);
 			}
+			set { _directdata = value; }
 		}
 		/// <summary>
 		/// Ошибка респонза

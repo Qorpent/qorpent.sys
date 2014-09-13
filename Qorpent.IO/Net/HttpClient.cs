@@ -10,7 +10,7 @@ namespace Qorpent.IO.Net{
 	/// <summary>
 	/// Обертка для работы с HTTP
 	/// </summary>
-	public class HttpClient{
+	public class HttpClient:IContentSource{
 		/// <summary>
 		///  Коллекция куки
 		/// </summary>
@@ -34,6 +34,20 @@ namespace Qorpent.IO.Net{
 				return resp.StringData;
 			}
 			throw new IOException("error in response",resp.Error);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="url"></param>
+		/// <returns></returns>
+		public byte[] GetData(string url){
+			var resp = Call(url);
+			if (resp.Success)
+			{
+				return resp.Data;
+			}
+			throw new IOException("error in response", resp.Error);
 		}
 
 		readonly HttpResponseReader reader = new HttpResponseReader();
