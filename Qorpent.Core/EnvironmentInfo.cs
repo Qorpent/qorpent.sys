@@ -455,12 +455,14 @@ namespace Qorpent {
 				givenPath = givenPath.Replace("@repos@", GetRepositoryRoot());
 				givenPath = givenPath.Replace("@tmp@", TmpDirectory);
 			}
-			while (givenPath.Contains("%")){ //expand Environment variables
-				var newPath = Environment.ExpandEnvironmentVariables(givenPath);
-				if (newPath == givenPath) break;
-			}
+			var newPath = givenPath;
+			while (newPath.Contains("%")){ //expand Environment variables
+				var _newPath = Environment.ExpandEnvironmentVariables(newPath);
+				if (_newPath == newPath) break;
+				newPath = _newPath;
 
-			return NormalizePath(Path.GetFullPath(givenPath));
+			}
+			return NormalizePath(Path.GetFullPath(newPath));
 		}
 
 		/// <summary>

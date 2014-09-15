@@ -28,7 +28,8 @@ namespace Qorpent.IO.Net{
 		///		Результирующай адрес документа
 		/// </summary>
 		public Uri Uri {
-			get { return Request.Uri; }
+			get { return _uri??Request.Uri; }
+			set { _uri = value; }
 		}
 		/// <summary>
 		///		Адрес перенаправления
@@ -66,7 +67,7 @@ namespace Qorpent.IO.Net{
 		///     Исходный content-Type
 		/// </summary>
 		public string ContentType {
-			get { return Headers.ContainsKey("Content-Type") ? Headers["Content-Type"] : null; }
+			get { return Headers.ContainsKey("Content-Type") ? Headers["Content-Type"] : ""; }
 		}
 
 		/// <summary>
@@ -104,6 +105,8 @@ namespace Qorpent.IO.Net{
 		}
 
 		private string _directdata;
+		private Uri _uri;
+
 		/// <summary>
 		///     Возвращает строчное значение
 		/// </summary>
@@ -137,7 +140,7 @@ namespace Qorpent.IO.Net{
 		/// Признак наличия конента
 		/// </summary>
 		public bool HasContent{
-			get { return ContentLength != 0 || Chunked; }
+			get { return ContentLength != 0 || Chunked || (null != Data && 0!=Data.Length) ; }
 		}
 		/// <summary>
 		/// Использован GZip
