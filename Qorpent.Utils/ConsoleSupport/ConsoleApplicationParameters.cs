@@ -36,7 +36,12 @@ namespace Qorpent.Utils{
 		/// <summary>
 		/// Уровень журнала
 		/// </summary>
-		public LogLevel LogLevel { get; set; }
+		public LogLevel LogLevel{
+			get{
+				return Get("loglevel", LogLevel.Info);
+			}
+			set { Set("loglevel", value); }
+		}
 		/// <summary>
 		/// Формат журнала
 		/// </summary>
@@ -88,6 +93,21 @@ namespace Qorpent.Utils{
 		{
 			get { return Get("manifestpath", ""); }
 			set { Set("manifestpath", value); }
+		}
+		/// <summary>
+		/// Признак явного отключения теневого запуска
+		/// </summary>
+		public bool NoShadow{
+			get { return Get("noshadow", false); }
+			set {Set("noshadow",value);}
+		}
+		/// <summary>
+		/// Признак явного включения теневого запуска
+		/// </summary>
+		public bool Shadow
+		{
+			get { return Get("shadow", false); }
+			set { Set("shadow", value); }
 		}
 
 		/// <summary>
