@@ -10,7 +10,7 @@ namespace Qorpent.Utils {
     ///     Парсер строк даты-времени для Web-ресурсов
     /// </summary>
     /// <remarks>Класс построен по принципу прецедента а не системного анализа дат</remarks>
-    public class WebDateParser{
+    public class WebDateTimeParser{
 	    private static readonly string[] Formats = new[]{
 		    "yyyy-MM-ddTHH:mm(:ss)?_TZ_",
 			"dd.MM.yyyy HH:mm Мск",
@@ -41,7 +41,7 @@ namespace Qorpent.Utils {
 	    };
 
 	    private static readonly Regex[] FormatRegexes = null;
-		static WebDateParser(){
+		static WebDateTimeParser(){
 			var regexes = new List<Regex>();
 			foreach (var format in Formats){
 				var regex = format.Replace("yyyy", @"(?<y>\d{4})")
@@ -68,7 +68,7 @@ namespace Qorpent.Utils {
 	    /// <param name="locale">Имя локали по умолчанию (по умолчанию будет текущая)</param>
 	    /// <param name="timeZone">При не null будет использоваться для перевода даты локальную</param>
 	    /// <returns>Распознанная дата-время</returns>
-	    public DateTime Parse(string dateTime, string sourceUrl= null , string locale = null, int? timeZone = null){
+	    public static DateTime Parse(string dateTime, string sourceUrl= null , string locale = null, int? timeZone = null){
 	        dateTime = PrepareDateTimeString(dateTime);
 		    foreach (var regex in FormatRegexes){
 		        var match = regex.Match(dateTime);
@@ -76,55 +76,10 @@ namespace Qorpent.Utils {
 			        if (null != Log){
 				        Log.Debug("Used pattern " + regex);
 			        }
-			        var culture = CultureInfo.InvariantCulture;
 			        int month = match.Groups["m"].Value.ToInt();
 			        if (!string.IsNullOrWhiteSpace(match.Groups["mn"].Value) && 0 == month){
 				        var monthName = match.Groups["mn"].Value;
-				        if (-1 == monthName.ToLowerInvariant().IndexOfAny("abcdefghijklmnopqrstuvwxyz".ToCharArray())){
-					        culture = CultureInfo.GetCultureInfo("RU-ru");
-				        }
-				        try{
-					        month = DateTime.ParseExact(monthName, "MMM", culture).Month;
-				        }
-				        catch{
-					        var lower = monthName.ToLowerInvariant();
-					        if (lower.StartsWith("янв") || lower.StartsWith("jan")){
-						        month = 1;
-					        }
-					        else if (lower.StartsWith("фев") || lower.StartsWith("feb")){
-						        month = 2;
-					        }
-					        else if (lower.StartsWith("мар") || lower.StartsWith("mar")){
-						        month = 3;
-					        }
-					        else if (lower.StartsWith("апр") || lower.StartsWith("apr")){
-						        month = 4;
-					        }
-					        else if (lower.StartsWith("ма") || lower.StartsWith("may")){
-						        month = 5;
-					        }
-					        else if (lower.StartsWith("июн") || lower.StartsWith("jun")){
-						        month = 6;
-					        }
-					        else if (lower.StartsWith("июл") || lower.StartsWith("jul")){
-						        month = 7;
-					        }
-					        else if (lower.StartsWith("авг") || lower.StartsWith("aug")){
-						        month = 8;
-					        }
-					        else if (lower.StartsWith("сен") || lower.StartsWith("sep")){
-						        month = 9;
-					        }
-					        else if (lower.StartsWith("окт") || lower.StartsWith("oct")){
-						        month = 10;
-					        }
-					        else if (lower.StartsWith("ноя") || lower.StartsWith("nov")){
-						        month = 11;
-					        }
-					        else if (lower.StartsWith("дек") || lower.StartsWith("dec")){
-						        month = 12;
-					        }
-				        }
+				        month = GetMonthNumber(locale, monthName);
 			        }
 			        var year = match.Groups["y"].Value.ToInt();
 			        bool isuniversal = false;
@@ -187,6 +142,57 @@ namespace Qorpent.Utils {
 		        }
 	        }
 		    return GetBySystemDefinedParsing(dateTime, locale);
+	    }
+
+	    private static int GetMonthNumber(string locale, string monthName){
+		    var parsedMonth = 0;
+		    var culture = CultureInfo.InvariantCulture;
+		    if (!string.IsNullOrWhiteSpace(locale)){
+			    culture = CultureInfo.GetCultureInfo(locale);
+		    }
+		    try{
+			    parsedMonth = DateTime.ParseExact(monthName, "MMM", culture).Month;
+		    }
+		    catch{
+			    var lower = monthName.ToLowerInvariant();
+			    if (lower.StartsWith("янв") || lower.StartsWith("jan")){
+				    parsedMonth = 1;
+			    }
+			    else if (lower.StartsWith("фев") || lower.StartsWith("feb")){
+				    parsedMonth = 2;
+			    }
+			    else if (lower.StartsWith("мар") || lower.StartsWith("mar")){
+				    parsedMonth = 3;
+			    }
+			    else if (lower.StartsWith("апр") || lower.StartsWith("apr")){
+				    parsedMonth = 4;
+			    }
+			    else if (lower.StartsWith("ма") || lower.StartsWith("may")){
+				    parsedMonth = 5;
+			    }
+			    else if (lower.StartsWith("июн") || lower.StartsWith("jun")){
+				    parsedMonth = 6;
+			    }
+			    else if (lower.StartsWith("июл") || lower.StartsWith("jul")){
+				    parsedMonth = 7;
+			    }
+			    else if (lower.StartsWith("авг") || lower.StartsWith("aug")){
+				    parsedMonth = 8;
+			    }
+			    else if (lower.StartsWith("сен") || lower.StartsWith("sep")){
+				    parsedMonth = 9;
+			    }
+			    else if (lower.StartsWith("окт") || lower.StartsWith("oct")){
+				    parsedMonth = 10;
+			    }
+			    else if (lower.StartsWith("ноя") || lower.StartsWith("nov")){
+				    parsedMonth = 11;
+			    }
+			    else if (lower.StartsWith("дек") || lower.StartsWith("dec")){
+				    parsedMonth = 12;
+			    }
+		    }
+		    return parsedMonth;
 	    }
 
 	    private static DateTime GetBySystemDefinedParsing(string dateTime, string locale){
