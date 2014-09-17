@@ -109,7 +109,7 @@
     <Compile Include="IntermediateFormat\IntermediateFormatQuery.cs" />
     <Compile Include="IntermediateFormat\IntermediateFormatSyntax.cs" />
     <Compile Include="PortableHtml\PortableHtmlSchemaErorr.cs" />
-    <Compile Include="PortableHtml\PortableHtmlSchemaValidator.cs" />
+    <Compile Include="PortableHtml\PortableHtmlSchema.cs" />
     <Compile Include="PortableHtml\PortableSchemaValidationResult.cs" />
     <Compile Include="Report\ColumnTitleFormatter.cs" />
     <Compile Include="Report\ContentItemExtensions.cs" />

@@ -7,7 +7,7 @@ namespace Qorpent.PortableHtml{
 	/// <summary>
 	/// Вспомогательный класс для проверки соответствия строки и/или XML стандарту PHTML
 	/// </summary>
-	public class PortableHtmlSchemaValidator{
+	public class PortableHtmlSchema{
 
 		/// <summary>
 		/// Перечень запрещенных элементов
@@ -28,6 +28,20 @@ namespace Qorpent.PortableHtml{
 		/// Допустимое локальное имя для рута
 		/// </summary>
 		public const string AllowedRootName = "div";
+
+		/// <summary>
+		/// Перечень запрещенных элементов
+		/// </summary>
+		public static readonly string[] DeprecatedAttributePrefixes = new[]{
+			"on","ng"
+		};
+
+		/// <summary>
+		/// Перечень запрещенных элементов
+		/// </summary>
+		public static readonly string[] DeprecatedAttributes = new[]{
+			"id","class","style","width","height","name","value"
+		};
 		/// <summary>
 		/// Вспомогательный метод проверки допустимости имени элемента в схеме
 		/// </summary>
@@ -35,6 +49,25 @@ namespace Qorpent.PortableHtml{
 		/// <returns></returns>
 		public static bool IsAllowedTag(string tagname){
 			return -1 == Array.IndexOf(DeprecatedElements, tagname.ToLowerInvariant());
+		}
+		/// <summary>
+		/// Метод проверки разрешенных атрибутов
+		/// </summary>
+		/// <param name="attributename"></param>
+		/// <returns></returns>
+		public static PortableHtmlSchemaErorr GetAttributeErrorState(string attributename){
+			var aname = attributename.ToLowerInvariant();
+			if (-1 != Array.IndexOf(DeprecatedAttributes, aname)){
+				if (aname == "id" ||  aname == "style" || aname=="class"){
+					return PortableHtmlSchemaErorr.CssAttributeDetected;
+				}
+				return PortableHtmlSchemaErorr.DeprecatedAttributeDetected;
+			}
+			if (DeprecatedAttributePrefixes.Any(aname.StartsWith)){
+				if (aname.StartsWith("on")) return PortableHtmlSchemaErorr.EventAttributeDetected;
+				return PortableHtmlSchemaErorr.AngularAttributeDetected;
+			}
+			return PortableHtmlSchemaErorr.None;
 		}
 
 		/// <summary>
@@ -77,7 +110,7 @@ namespace Qorpent.PortableHtml{
 				{
 					return new PortableSchemaValidationResult { SchemaError = PortableHtmlSchemaErorr.CdataDetected };
 				}
-				var realRoot = xml.Elements().First();
+				var realRoot = XElement.Parse(srcHtml);
 
 				if (realRoot.Name.LocalName != AllowedRootName){
 					return new PortableSchemaValidationResult { SchemaError = PortableHtmlSchemaErorr.InvalidRootTag };
@@ -111,9 +144,29 @@ namespace Qorpent.PortableHtml{
 			}
 			CheckNamespaces(srcXml, result);
 			CheckDeprecatedElements(srcXml,result);
+			CheckDeprecatedAttributes(srcXml,result);
 			return result;
 		}
+		/// <summary>
+		/// Проверяет наличие запрещенных атрибутов
+		/// </summary>
+		/// <param name="srcXml"></param>
+		/// <param name="result"></param>
+		private static void CheckDeprecatedAttributes(XElement srcXml, PortableSchemaValidationResult result)
+		{
+			foreach (var d in srcXml.DescendantsAndSelf())
+			{
+				foreach (var a in d.Attributes()){
+					result.SchemaError |= GetAttributeErrorState(a.Name.LocalName);
+				}
+			}
 
+		}
+		/// <summary>
+		/// Проверяет наличие запрещенных элементов из списка
+		/// </summary>
+		/// <param name="srcXml"></param>
+		/// <param name="result"></param>
 		private static void CheckDeprecatedElements(XElement srcXml, PortableSchemaValidationResult result){
 			var deprecates =
 				srcXml.Descendants()

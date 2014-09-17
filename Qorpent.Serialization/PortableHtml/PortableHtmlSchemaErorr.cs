@@ -90,6 +90,25 @@ namespace Qorpent.PortableHtml{
 		/// Обнаружена CDATA
 		/// </summary>
 		CdataDetected = 1 << 17,
-		
+		/// <summary>
+		/// Обнаружена неэкранированная закрывающая скобка	
+		/// </summary>
+		NonEscapedGt = 1<<18,
+		/// <summary>
+		/// Обнаружен атрибут-обработчик
+		/// </summary>
+		EventAttributeDetected = 1<<19,
+		/// <summary>
+		/// Обнаружен атрибут, значимый для CSS
+		/// </summary>
+		CssAttributeDetected = 1<<20,
+		/// <summary>
+		/// Обнаружен атрибут, связанный с AngularJS
+		/// </summary>
+		AngularAttributeDetected = 1<<21,
+		/// <summary>
+		/// Обнаружен иной запрещенный атрибут
+		/// </summary>
+		DeprecatedAttributeDetected = 1<<22,
 	}
 }

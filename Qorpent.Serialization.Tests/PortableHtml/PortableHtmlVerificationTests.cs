@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using NUnit.Framework;
@@ -11,7 +12,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 	public class PortableHtmlVerificationTests
 	{
 		private void testSchema(object srcHtml, bool isValid, PortableHtmlSchemaErorr error, Type exceptionType){
-			var result =(srcHtml is string || null==srcHtml)? PortableHtmlSchemaValidator.Validate((string)srcHtml):PortableHtmlSchemaValidator.Validate((XElement)srcHtml);
+			var result =(srcHtml is string || null==srcHtml)? PortableHtmlSchema.Validate((string)srcHtml):PortableHtmlSchema.Validate((XElement)srcHtml);
 			Assert.AreEqual(isValid,result.Ok,"Общий статус валидации неверен");
 			Assert.AreEqual(error,result.SchemaError, "Статус ошибки валидации неверен");
 			if (null != exceptionType){
@@ -126,6 +127,54 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 			testSchema(html, false, error, null);
 			html = "<div><" + tagName.ToUpper() + "/></div>";
 			testSchema(html, false, error, null);
+		}
+
+		[TestCase("<div>></div>",false)]
+		[TestCase("<div>&gt;</div>",true)]
+		[Test(Description = "Выполнение требования 'gt_always_entity'")]
+		public void NotAllowKeepNotEscapedCloseTagsInText(string srcHtml, bool result){
+			Assert.Ignore("Cannot be tested well");
+		}
+
+		[TestCase("<div><p onload='xx'/></div>",Description = "Обнаружение атрибутов 'on'")]
+		[TestCase("<div onload='xx'><p/></div>", Description = "Обнаружение атрибутов 'on'")]
+		[Test(Description = "Выполнение требования 'no_event_attributes'")]
+		public void NotAllowEventAttributes(string srcHtml)
+		{
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.EventAttributeDetected,null);
+		}
+
+		[TestCase("<div><p ng-bind='xx'/></div>", Description = "Обнаружение атрибутов 'angular'")]
+		[TestCase("<div ng-controller='xx'><p/></div>", Description = "Обнаружение атрибутов 'angular'")]
+		[Test(Description = "Выполнение требования 'no_angular_attributes'")]
+		public void NotAllowAngularAttributes(string srcHtml)
+		{
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.AngularAttributeDetected, null);
+		}
+
+
+		[TestCase("style", Description = "Обнаружение атрибутов 'code'")]
+		[TestCase("class", Description = "Обнаружение атрибутов 'style'")]
+		[TestCase("id", Description = "Обнаружение атрибутов 'id'")]
+		[Test(Description = "Выполнение требования 'no_[id,code,style]_attributes'")]
+		public void NotAllowCssAttributes(string attribute){
+			var srcHtml = "<div><p " + attribute + "='x'/></div>";
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.CssAttributeDetected, null);
+			srcHtml = "<div " + attribute + "='x'></div>";
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.CssAttributeDetected, null);
+		}
+
+		[TestCase("name", Description = "Обнаружение атрибутов 'name'")]
+		[TestCase("value", Description = "Обнаружение атрибутов 'value'")]
+		[TestCase("width", Description = "Обнаружение атрибутов 'height'")]
+		[TestCase("height", Description = "Обнаружение атрибутов 'width'")]
+		[Test(Description = "Выполнение требования 'no_[others]_attributes'")]
+		public void NotAllowedAttributes(string attribute)
+		{
+			var srcHtml = "<div><p " + attribute + "='x'/></div>";
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.DeprecatedAttributeDetected, null);
+			srcHtml = "<div " + attribute + "='x'></div>";
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.DeprecatedAttributeDetected, null);
 		}
 	}
 }
