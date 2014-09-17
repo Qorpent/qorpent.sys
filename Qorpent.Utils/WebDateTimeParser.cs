@@ -209,6 +209,10 @@ namespace Qorpent.Utils {
 		    if (DateTime.TryParse(dateTime, CultureInfo.InvariantCulture, parseOptions, out parsedDate)){
 			    return parsedDate;
 		    }
+			if (DateTime.TryParse(dateTime, CultureInfo.GetCultureInfo("Ru-ru"), parseOptions, out parsedDate))
+			{
+				return parsedDate;
+			}
 
 		    throw new Exception("datetime was not responsed");
 	    }
