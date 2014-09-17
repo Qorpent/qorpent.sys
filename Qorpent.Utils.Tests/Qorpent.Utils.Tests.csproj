@@ -38,6 +38,7 @@
     <Compile Include="ConsoleArgumentHelperTest.cs" />
     <Compile Include="ConvertExtensionsTest.cs" />
     <Compile Include="DatabaseExtensionsTest.cs" />
+    <Compile Include="WebDateTimeParserTest.cs" />
     <Compile Include="EnumerableExtensionsTest.cs" />
     <Compile Include="Git\FileRecordTest.cs" />
     <Compile Include="Git\GitFuxtureInitializer.cs" />
