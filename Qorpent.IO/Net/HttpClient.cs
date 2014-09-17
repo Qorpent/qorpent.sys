@@ -49,7 +49,14 @@ namespace Qorpent.IO.Net{
 			}
 			throw new IOException("error in response", resp.Error);
 		}
-
+		/// <summary>
+		///		Разрешает результирующий адрес документа
+		/// </summary>
+		/// <param name="uri">Исходный адрес документа</param>
+		/// <returns>Результирующий адрес документа</returns>
+		public string ResolveUri(string uri) {
+			return uri;
+		}
 		readonly HttpResponseReader reader = new HttpResponseReader();
 		/// <summary>
 		/// Выполнить запрос
