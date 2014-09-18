@@ -13,7 +13,7 @@ namespace Qorpent.PortableHtml{
 		/// <summary>
 		/// Перечень запрещенных элементов
 		/// </summary>
-		public static readonly string[] DeprecatedElements = new[]{
+		public static readonly string[] DangerousElements = new[]{
 			"script",
 			"object",
 			"embed",
@@ -55,7 +55,7 @@ namespace Qorpent.PortableHtml{
 		/// <param name="tagname"></param>
 		/// <returns></returns>
 		public static bool IsAllowedTag(string tagname){
-			return -1 == Array.IndexOf(DeprecatedElements, tagname.ToLowerInvariant());
+			return -1 == Array.IndexOf(DangerousElements, tagname.ToLowerInvariant());
 		}
 		/// <summary>
 		/// Метод проверки разрешенных атрибутов
@@ -305,8 +305,7 @@ namespace Qorpent.PortableHtml{
 				      .Where(_ => !IsAllowedTag(_.Name.LocalName))
 				      .ToArray();
 			foreach (var e in deprecates){
-				var error = (e.Name.LocalName.ToLowerInvariant() + "Detected").To<PortableHtmlSchemaErorr>();
-				context.SetError(error, e);
+				context.SetError(PortableHtmlSchemaErorr.DangerousElement, e);
 			}
 
 		}

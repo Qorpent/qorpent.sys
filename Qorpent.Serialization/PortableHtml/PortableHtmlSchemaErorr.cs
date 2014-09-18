@@ -41,51 +41,8 @@ namespace Qorpent.PortableHtml{
 		/// <summary>
 		/// Обнаружен тег Script
 		/// </summary>
-		ScriptDetected = 1<<7,
-		/// <summary>
-		/// Обнаружен тег OBJECT
-		/// </summary>
-		ObjectDetected = 1<<8,
-		/// <summary>
-		/// Обнаружен тег EMBED
-		/// </summary>
-		EmbedDetected = 1<<9,
-
-		/// <summary>
-		/// Обнаружен тег FORM
-		/// </summary>
-		FormDetected = 1 << 10,
-
-		/// <summary>
-		/// Обнаружен тег INPUT
-		/// </summary>
-		InputDetected = 1 << 11,
-
-		/// <summary>
-		/// Обнаружен тег BUTTON
-		/// </summary>
-		ButtonDetected = 1 << 12,
-
-		/// <summary>
-		/// Обнаружен тег SELECT
-		/// </summary>
-		SelectDetected = 1 << 13,
-
-		/// <summary>
-		/// Обнаружен тег TEXTAREA
-		/// </summary>
-		TextareaDetected = 1 << 14,
-
-		/// <summary>
-		/// Обнаружен тег IFRAME
-		/// </summary>
-		IframeDetected = 1 << 15,
-
-		/// <summary>
-		/// Обнаружен тег STYLE
-		/// </summary>
-		StyleDetected = 1 << 16,
-
+		DangerousElement = 1<<7,
+		
 		/// <summary>
 		/// Обнаружена CDATA
 		/// </summary>
@@ -125,35 +82,32 @@ namespace Qorpent.PortableHtml{
 		/// <summary>
 		/// Признак наличия ссылки на javascript	
 		/// </summary>
-		JavascriptLink =1<<26,
+		DangerousLink =1<<26,
 		/// <summary>
 		/// Признак недоверенной ссылки
 		/// </summary>
 		NonTrustedLink = 1<<27,
 		/// <summary>
-		/// Признак ссылки на локальный файл
+		/// Пустая или чистая хэш ссылка
 		/// </summary>
-		FileLink = 1<<28,
-	
+		EmptyOrHashedLink = (ulong)1 << 28,
+		/// <summary>
+		/// Обший описатель проблем с ссылками
+		/// </summary>
+		InvalidLink = DangerousLink|NonTrustedLink|EmptyOrHashedLink,
 		/// <summary>
 		/// У IMG не указан src
 		/// </summary>
-		NoRequiredSrcAttributeInImg = 1<<29,
+		NoRequiredSrcAttributeInImg = (ulong)1<<30,
 		/// <summary>
 		/// У A не указан HREF
 		/// </summary>
-		NoRequiredHrefAttributeInA = (ulong)1<<30,
+		NoRequiredHrefAttributeInA = (ulong)1<<31,
 		/// <summary>
 		/// Обнаружен тег EMBED
 		/// </summary>
-		AppletDetected = (ulong)1 << 31,
-		/// <summary>
-		/// Ссылка на данные в неразрешенном месте
-		/// </summary>
-		DataLink = (ulong)1<<32,
-		/// <summary>
-		/// Пустая или чистая хэш ссылка
-		/// </summary>
-		EmptyOrHashedLink = (ulong)1<<33,
+		AppletDetected = (ulong)1 << 32,
+
+	
 	}
 }

