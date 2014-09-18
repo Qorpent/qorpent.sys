@@ -110,5 +110,21 @@ namespace Qorpent.PortableHtml{
 		/// Обнаружен иной запрещенный атрибут
 		/// </summary>
 		DeprecatedAttributeDetected = 1<<22,
+		/// <summary>
+		/// Пустой элемент
+		/// </summary>
+		EmptyElement = 1<<23,
+		/// <summary>
+		/// Не пустой элемент IMG
+		/// </summary>
+		NonEmptyImg = 1<<24,
+		/// <summary>
+		/// Обнаружены имена тегов с верхним регистром
+		/// </summary>
+		UpperCaseDetected = 1<<25,
+		/// <summary>
+		/// Пустой документ, но с пробелами в Root
+		/// </summary>
+		SpacedRootInsteadOfNull = 1<<26,
 	}
 }

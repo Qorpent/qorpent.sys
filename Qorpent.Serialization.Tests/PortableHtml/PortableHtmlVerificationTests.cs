@@ -11,14 +11,18 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 	[TestFixture(Description = "Проверка верификатора PHTML - должен учитывать все нюансы схемы PHTML")]
 	public class PortableHtmlVerificationTests
 	{
-		private void testSchema(object srcHtml, bool isValid, PortableHtmlSchemaErorr error, Type exceptionType){
+		private void testSchema(object srcHtml, bool isValid = true, PortableHtmlSchemaErorr error = PortableHtmlSchemaErorr.None, Type exceptionType=null, bool exactState = true){
 			var result =(srcHtml is string || null==srcHtml)? PortableHtmlSchema.Validate((string)srcHtml):PortableHtmlSchema.Validate((XElement)srcHtml);
 			Assert.AreEqual(isValid,result.Ok,"Общий статус валидации неверен");
-			Assert.AreEqual(error,result.SchemaError, "Статус ошибки валидации неверен");
-			if (null != exceptionType){
-				Assert.NotNull(result.Exception,"Ожидалось исключение");
-				Assert.AreEqual(exceptionType,result.Exception.GetType(),"Исключение имеет неверный тип");
+			if (error == PortableHtmlSchemaErorr.None || exactState){
+				Assert.AreEqual(error, result.SchemaError, "Статус ошибки валидации неверен");
 			}
+			else{
+				Assert.True(result.SchemaError.HasFlag(error));
+			}
+			if (null == exceptionType) return;
+			Assert.NotNull(result.Exception,"Ожидалось исключение");
+			Assert.AreEqual(exceptionType,result.Exception.GetType(),"Исключение имеет неверный тип");
 		}
 
 		
@@ -29,7 +33,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[TestCase("<div></div><div></div>",false,PortableHtmlSchemaErorr.NoRootTag,Description = "Фрагменты не разрешены")]
 		[Test(Description = "Выполнение требования 'has_root_container'")]
 		public void RootDivElementRequired(string srcHtml, bool isValid, PortableHtmlSchemaErorr error){
-			testSchema(srcHtml,isValid,error,null);
+			testSchema(srcHtml,isValid,error);
 		}
 
 		[TestCase("<div></div>", true, PortableHtmlSchemaErorr.None, Description = "Требуется тег div")]
@@ -38,7 +42,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[Test(Description = "Выполнение требования 'has_root_container'")]
 		public void RootDivElementRequiredCover(string srcHtml, bool isValid, PortableHtmlSchemaErorr error)
 		{
-			testSchema(XElement.Parse(srcHtml), isValid, error, null);
+			testSchema(XElement.Parse(srcHtml), isValid, error);
 		}
 
 		[TestCase("", Description = "Требуется не пустой HTML на входе")]
@@ -48,7 +52,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[Test(Description = "Выполнение требования 'xml_compliant','html5_compliant'")]
 		public void InvalidOnEmptyString(string srcHtml)
 		{
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.EmptyInput, null);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.EmptyInput);
 		}
 
 		[TestCase("<div active></div", Description = "Требуется валидный XML")]
@@ -67,7 +71,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[TestCase("<!--x--><div></div>", Description = "Комментарии запрещены")]
 		[Test(Description = "Выполнение требования 'no_comments'")]
 		public void CommentsAreNotAllowed(string srcHtml){
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.CommentsDetected, null);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.CommentsDetected);
 		}
 
 		[TestCase("<div><p><!--x--></p></div>", Description = "Комментарии запрещены")]
@@ -75,7 +79,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[Test(Description = "Выполнение требования 'no_comments'")]
 		public void CommentsAreNotAllowedCover(string srcHtml)
 		{
-			testSchema(XElement.Parse(srcHtml), false, PortableHtmlSchemaErorr.CommentsDetected, null);
+			testSchema(XElement.Parse(srcHtml), false, PortableHtmlSchemaErorr.CommentsDetected, null,false);
 		}
 		
 		
@@ -85,13 +89,24 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[Test(Description = "Выполнение требования 'no_processing'")]
 		public void ProcessingInstructionsAreNotAllowed(string srcHtml)
 		{
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.ProcessingInstructionsDetected, null);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.ProcessingInstructionsDetected);
 		}
 		[TestCase("<div><?some ?></div>", Description = "Инструкции процессинга запрещены")]
 		[Test(Description = "Выполнение требования 'no_processing'")]
 		public void ProcessingInstructionsAreNotAllowedCover(string srcHtml)
 		{
-			testSchema(XElement.Parse(srcHtml), false, PortableHtmlSchemaErorr.ProcessingInstructionsDetected, null);
+			testSchema(XElement.Parse(srcHtml), false, PortableHtmlSchemaErorr.ProcessingInstructionsDetected);
+		}
+
+
+
+		[TestCase("<div><P>x</P></div>", Description = "Все элементы и атрибуты должны быть в нижнем регистре")]
+		[TestCase("<div><p A='1'>x</p></div>", Description = "Все элементы и атрибуты должны быть в нижнем регистре")]
+		[TestCase("<div><spaN>x</spaN></div>", Description = "Все элементы и атрибуты должны быть в нижнем регистре")]
+		[Test(Description = "Выполнение требования 'no_uppercase'")]
+		public void UppercaseInElementsOrAttributesAreNotAllowed(string srcHtml)
+		{
+			testSchema(XElement.Parse(srcHtml), false, PortableHtmlSchemaErorr.UpperCaseDetected);
 		}
 
 		[TestCase("<div xmlns:x='a'></div>",  Description = "Пространства имен не поддерживаются")]
@@ -100,14 +115,14 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[Test(Description = "Выполнение требования 'no_namespace'")]
 		public void NamespacesAreNotAllowed(string srcHtml)
 		{
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.NamespaceDeclarationDetected, null);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.NamespaceDeclarationDetected);
 		}
 		[TestCase("<![CDATA[x]]><div></div>", Description = "Блоки CDATA запрещены")]
 		[TestCase("<div><![CDATA[x]]></div>", Description = "Блоки CDATA запрещены")]
 		[TestCase("<div></div><![CDATA[x]]>", Description = "Блоки CDATA запрещены")]
 		[Test(Description = "Выполнение требования 'no_cdata'")]
 		public void CDataIsNotAllowed(string srcHtml){
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.CdataDetected, null);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.CdataDetected);
 		}
 
 		[TestCase("script",		Description = "Запрещенный тег")]
@@ -124,9 +139,9 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		public void DangerousTagsTestNotAllowed(string tagName){
 			var html = "<div><" + tagName + "/></div>";
 			var error = (tagName + "Detected").To<PortableHtmlSchemaErorr>();
-			testSchema(html, false, error, null);
+			testSchema(html, false, error);
 			html = "<div><" + tagName.ToUpper() + "/></div>";
-			testSchema(html, false, error, null);
+			testSchema(html, false, error);
 		}
 
 		[TestCase("<div>></div>",false)]
@@ -137,19 +152,19 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		}
 
 		[TestCase("<div><p onload='xx'/></div>",Description = "Обнаружение атрибутов 'on'")]
-		[TestCase("<div onload='xx'><p/></div>", Description = "Обнаружение атрибутов 'on'")]
+		[TestCase("<div onload='xx'><p>x</p></div>", Description = "Обнаружение атрибутов 'on'")]
 		[Test(Description = "Выполнение требования 'no_event_attributes'")]
 		public void NotAllowEventAttributes(string srcHtml)
 		{
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.EventAttributeDetected,null);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.EventAttributeDetected);
 		}
 
 		[TestCase("<div><p ng-bind='xx'/></div>", Description = "Обнаружение атрибутов 'angular'")]
-		[TestCase("<div ng-controller='xx'><p/></div>", Description = "Обнаружение атрибутов 'angular'")]
+		[TestCase("<div ng-controller='xx'><p>x</p></div>", Description = "Обнаружение атрибутов 'angular'")]
 		[Test(Description = "Выполнение требования 'no_angular_attributes'")]
 		public void NotAllowAngularAttributes(string srcHtml)
 		{
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.AngularAttributeDetected, null);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.AngularAttributeDetected);
 		}
 
 
@@ -159,9 +174,9 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[Test(Description = "Выполнение требования 'no_[id,code,style]_attributes'")]
 		public void NotAllowCssAttributes(string attribute){
 			var srcHtml = "<div><p " + attribute + "='x'/></div>";
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.CssAttributeDetected, null);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.CssAttributeDetected);
 			srcHtml = "<div " + attribute + "='x'></div>";
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.CssAttributeDetected, null);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.CssAttributeDetected);
 		}
 
 		[TestCase("name", Description = "Обнаружение атрибутов 'name'")]
@@ -172,9 +187,48 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		public void NotAllowedAttributes(string attribute)
 		{
 			var srcHtml = "<div><p " + attribute + "='x'/></div>";
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.DeprecatedAttributeDetected, null);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.DeprecatedAttributeDetected);
 			srcHtml = "<div " + attribute + "='x'></div>";
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.DeprecatedAttributeDetected, null);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.DeprecatedAttributeDetected);
+		}
+
+		[TestCase("<div/>",Description = "Empty")]
+		[TestCase("<div></div>",Description = "Empty")]
+		[TestCase("<div><p>simple</p></div>",Description = "Simple para")]
+		[TestCase("<div><p phtml_id='1'>simple</p></div>",Description = "Simple para with phtml")]
+		[TestCase("<div><p>simple <strong>x</strong></p></div>",Description = "Simple para with inline")]
+		[Test(Description = "Проверка на прохождение валидизации нормальными примерами")]
+		public void ValidCases(string srcHtml){
+			testSchema(srcHtml);
+		}
+
+
+		[TestCase("<div><p></p></div>", false,Description = "Обнаружение атрибутов 'angular'")]
+		[TestCase("<div><p>x<strong></strong></p></div>", false,Description = "Обнаружение атрибутов 'angular'")]
+		[TestCase("<div><p>x<img/></p></div>", true,Description = "Нормальный элемент с пустым IMG и не пустым P")]
+		[TestCase("<div><p><img/></p></div>", true,Description = "Нормальный элемент с пустым IMG и не пустым P")]
+		[Test(Description = "Выполнение требования 'no_empty_elements'")]
+		public void NoEmptyElementsAllowedExceptImg(string srcHtml,bool result)
+		{
+			testSchema(srcHtml, result, result?PortableHtmlSchemaErorr.None : PortableHtmlSchemaErorr.EmptyElement);
+		}
+
+		[TestCase("<div></div>", true, Description = "Пустой рутовый элемент разрешен")]
+		[TestCase("<div>\t</div>", false, Description = "Пробельный рутовый элемент не считается пустым")]
+		[TestCase("<div/>", true, Description = "Пустой рутовый элемент разрешен")]
+		[Test(Description = "Выполнение требования 'no_empty_elements' - специальный кейс для рута")]
+		public void SpacedRootNotAllowed(string srcHtml, bool result)
+		{
+			testSchema(srcHtml, result, result ? PortableHtmlSchemaErorr.None : PortableHtmlSchemaErorr.SpacedRootInsteadOfNull);
+		}
+		
+		[TestCase("<div><p>x<img/></p></div>", true, Description = "Закрытый пустой тег IMG")]
+		[TestCase("<div><p>x<img> </img></p></div>", false, Description = "Пустой тег IMG но с text() недопустим")]
+		[TestCase("<div><p>x<img>some</img></p></div>", false, Description = "Недопустимы заполненные IMG")]
+		[Test(Description = "Выполнение требования 'no_empty_elements'")]
+		public void NonEmptyImagesAreNotAllowed(string srcHtml, bool result)
+		{
+			testSchema(srcHtml, result, result ? PortableHtmlSchemaErorr.None : PortableHtmlSchemaErorr.NonEmptyImg);
 		}
 	}
 }

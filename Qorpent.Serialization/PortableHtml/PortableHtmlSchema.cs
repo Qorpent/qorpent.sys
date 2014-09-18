@@ -43,6 +43,11 @@ namespace Qorpent.PortableHtml{
 			"id","class","style","width","height","name","value"
 		};
 		/// <summary>
+		/// Элемент, который обязательно пустой
+		/// </summary>
+		public const string EmptyRequiredElement = "img";
+
+		/// <summary>
 		/// Вспомогательный метод проверки допустимости имени элемента в схеме
 		/// </summary>
 		/// <param name="tagname"></param>
@@ -110,7 +115,7 @@ namespace Qorpent.PortableHtml{
 				{
 					return new PortableSchemaValidationResult { SchemaError = PortableHtmlSchemaErorr.CdataDetected };
 				}
-				var realRoot = XElement.Parse(srcHtml);
+				var realRoot = XElement.Parse(srcHtml,LoadOptions.PreserveWhitespace|LoadOptions.SetLineInfo);
 
 				if (realRoot.Name.LocalName != AllowedRootName){
 					return new PortableSchemaValidationResult { SchemaError = PortableHtmlSchemaErorr.InvalidRootTag };
@@ -130,6 +135,10 @@ namespace Qorpent.PortableHtml{
 		/// </summary>
 		private class CheckedBySourceCheckerAnnotation{public static CheckedBySourceCheckerAnnotation Default=new CheckedBySourceCheckerAnnotation(); }
 		/// <summary>
+		/// Аннотация ранее проверенных (напрример запрещенных) элементов - не требуют перепроверки на прочие условия
+		/// </summary>
+		private class SkipInElementChecking { public static SkipInElementChecking Default = new SkipInElementChecking(); }
+		/// <summary>
 		/// Валидизация исходного XML
 		/// </summary>
 		/// <param name="srcXml">Элемент для проверки соответствия PHTML</param>
@@ -142,10 +151,71 @@ namespace Qorpent.PortableHtml{
 				CheckNoComments(srcXml, result);
 				CheckNoProcessingInstructions(srcXml, result);
 			}
-			CheckNamespaces(srcXml, result);
+			
 			CheckDeprecatedElements(srcXml,result);
+			CheckNamespaces(srcXml, result);
 			CheckDeprecatedAttributes(srcXml,result);
+			CheckUpperCase(srcXml,result);
+			CheckEmptyElements(srcXml,result);
+
 			return result;
+		}
+
+		/// <summary>
+		/// Проверяет наличие запрещенных атрибутов
+		/// </summary>
+		/// <param name="srcXml"></param>
+		/// <param name="result"></param>
+		private static void CheckUpperCase(XElement srcXml, PortableSchemaValidationResult result)
+		{
+			foreach (var e in srcXml.DescendantsAndSelf().Where(InChecking))
+			{
+				if (e.Name.LocalName.ToLowerInvariant() != e.Name.LocalName){
+					NoCheck(e);
+					result.SchemaError |= PortableHtmlSchemaErorr.UpperCaseDetected;
+				}
+				if (!InChecking(e)) continue;
+				foreach (var a in e.Attributes()){
+					if (a.Name.LocalName.ToLowerInvariant() != a.Name.LocalName){
+						NoCheck(e);
+						result.SchemaError |= PortableHtmlSchemaErorr.UpperCaseDetected;
+					}
+				}
+			}
+
+		}
+
+		/// <summary>
+		/// Проверяет наличие запрещенных атрибутов
+		/// </summary>
+		/// <param name="srcXml"></param>
+		/// <param name="result"></param>
+		private static void CheckEmptyElements(XElement srcXml, PortableSchemaValidationResult result)
+		{
+			if (InChecking(srcXml)&&!srcXml.Elements().Any()){
+				if (!string.IsNullOrEmpty(srcXml.Value)){
+					NoCheck(srcXml);
+					result.SchemaError|= PortableHtmlSchemaErorr.SpacedRootInsteadOfNull;
+				}
+			}
+
+			foreach (var e in srcXml.Descendants().Where(InChecking))
+			{
+				if (e.Name.LocalName == EmptyRequiredElement){
+					
+					if (e.Nodes().Any()){
+						NoCheck(e);
+						result.SchemaError |= PortableHtmlSchemaErorr.NonEmptyImg;
+					}
+				}
+				else{
+					if (string.IsNullOrWhiteSpace(e.Value) && !e.Descendants(EmptyRequiredElement).Any()){
+						NoCheck(e);
+						result.SchemaError|=PortableHtmlSchemaErorr.EmptyElement;
+					}
+				}
+			}
+
 		}
 		/// <summary>
 		/// Проверяет наличие запрещенных атрибутов
@@ -154,10 +224,16 @@ namespace Qorpent.PortableHtml{
 		/// <param name="result"></param>
 		private static void CheckDeprecatedAttributes(XElement srcXml, PortableSchemaValidationResult result)
 		{
-			foreach (var d in srcXml.DescendantsAndSelf())
+			foreach (var e in srcXml.DescendantsAndSelf().Where(InChecking))
 			{
-				foreach (var a in d.Attributes()){
-					result.SchemaError |= GetAttributeErrorState(a.Name.LocalName);
+				foreach (var a in e.Attributes()){
+					var state =  GetAttributeErrorState(a.Name.LocalName);
+					if (state != PortableHtmlSchemaErorr.None){
+						NoCheck(e);
+						result.SchemaError |= state;
+						break;
+					}
+					
 				}
 			}
 
@@ -170,15 +246,19 @@ namespace Qorpent.PortableHtml{
 		private static void CheckDeprecatedElements(XElement srcXml, PortableSchemaValidationResult result){
 			var deprecates =
 				srcXml.Descendants()
+					 .Where(InChecking)
 				      .Where(_ => !IsAllowedTag(_.Name.LocalName))
-				      .Select(_ => _.Name.LocalName.ToLowerInvariant())
-				      .Distinct()
 				      .ToArray();
-			foreach (var deprecate in deprecates){
-				var error = (deprecate + "Detected").To<PortableHtmlSchemaErorr>();
+			foreach (var e in deprecates){
+				NoCheck(e);
+				var error = (e.Name.LocalName.ToLowerInvariant() + "Detected").To<PortableHtmlSchemaErorr>();
 				result.SchemaError |= error;
 			}
 
+		}
+
+		private static bool InChecking(XElement _){
+			return null == _.Annotation<SkipInElementChecking>();
 		}
 
 
@@ -188,17 +268,24 @@ namespace Qorpent.PortableHtml{
 		/// <param name="srcXml"></param>
 		/// <param name="result"></param>
 		private static void CheckNamespaces(XElement srcXml, PortableSchemaValidationResult result){
-			foreach (var e in srcXml.DescendantsAndSelf()){
+			foreach (var e in srcXml.DescendantsAndSelf().Where(InChecking)){
 				if (e.Name.NamespaceName!=""){
+					NoCheck(e);
 					result.SchemaError|=PortableHtmlSchemaErorr.NamespaceDeclarationDetected;
 					return;
 				}
 				if (e.Attributes().Any(attribute => attribute.Name.NamespaceName != "" || attribute.Name.LocalName=="xmlns")){
+					NoCheck(e);
 					result.SchemaError |= PortableHtmlSchemaErorr.NamespaceDeclarationDetected;
 					return;
 				}
 			}
 		}
+
+		private static void NoCheck(XElement e){
+			e.AddAnnotation(SkipInElementChecking.Default);
+		}
+
 		/// <summary>
 		/// Проверка на отсутствие комментариев
 		/// </summary>
@@ -231,6 +318,7 @@ namespace Qorpent.PortableHtml{
 		/// <param name="result"></param>
 		private static void CheckRootElement(XElement srcXml, PortableSchemaValidationResult result){
 			if (srcXml.Name.LocalName != AllowedRootName){
+				NoCheck(srcXml);
 				result.SchemaError |= PortableHtmlSchemaErorr.InvalidRootTag;
 			}
 		}
