@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
@@ -16,6 +17,7 @@ namespace Qorpent.PortableHtml{
 			"script",
 			"object",
 			"embed",
+			"applet",
 			"iframe",
 			"style",
 			"form",
@@ -79,10 +81,13 @@ namespace Qorpent.PortableHtml{
 		/// Валидизация исходного HTML
 		/// </summary>
 		/// <param name="srcHtml">Строка HTML для проверки соответствия PHTML</param>
+		/// <param name="context">Контекст обработки PHTML (дополнительные настройки, опции, списки доверения)</param>
 		/// <returns></returns>
-		public static PortableSchemaValidationResult Validate(string srcHtml){
+		public static PortableHtmlContext Validate(string srcHtml, PortableHtmlContext context = null)
+		{
+			context = context ?? new PortableHtmlContext();
 			if (string.IsNullOrWhiteSpace(srcHtml)){
-				return new PortableSchemaValidationResult{SchemaError = PortableHtmlSchemaErorr.EmptyInput};
+				return context.SetError(PortableHtmlSchemaErorr.EmptyInput); 
 			}
 			var rootedHtml = "<root>" + srcHtml + "</root>";
 			try{
@@ -90,14 +95,14 @@ namespace Qorpent.PortableHtml{
 				
 				var rootElementsCount = xml.Elements().Count();
 				if (1 < rootElementsCount){
-					return new PortableSchemaValidationResult{SchemaError = PortableHtmlSchemaErorr.NoRootTag};
+					return context.SetError(PortableHtmlSchemaErorr.NoRootTag); 
 				}
 				//необходимо эту проверку вызывать в том числе здесь,
 				//так как иначе при передаче в XML могут быть проигнорированы трейловые комментарии
 				var hasComment = xml.DescendantNodes().OfType<XComment>().Any();
 				if (hasComment)
 				{
-					return new PortableSchemaValidationResult { SchemaError = PortableHtmlSchemaErorr.CommentsDetected };
+					return context.SetError(PortableHtmlSchemaErorr.CommentsDetected); 
 				}
 
 				//необходимо эту проверку вызывать в том числе здесь,
@@ -105,7 +110,7 @@ namespace Qorpent.PortableHtml{
 				var hasProcessing = xml.DescendantNodes().OfType<XProcessingInstruction>().Any();
 				if (hasProcessing)
 				{
-					return new PortableSchemaValidationResult { SchemaError = PortableHtmlSchemaErorr.ProcessingInstructionsDetected };
+					return context.SetError(PortableHtmlSchemaErorr.ProcessingInstructionsDetected); 
 				}
 
 				//необходимо эту проверку вызывать в том числе здесь,
@@ -113,19 +118,19 @@ namespace Qorpent.PortableHtml{
 				var hasCData = xml.DescendantNodes().OfType<XCData>().Any();
 				if (hasCData)
 				{
-					return new PortableSchemaValidationResult { SchemaError = PortableHtmlSchemaErorr.CdataDetected };
+					return context.SetError(PortableHtmlSchemaErorr.CdataDetected);
 				}
-				var realRoot = XElement.Parse(srcHtml,LoadOptions.PreserveWhitespace|LoadOptions.SetLineInfo);
+				var realRoot = XElement.Parse(srcHtml,LoadOptions.SetLineInfo);
 
 				if (realRoot.Name.LocalName != AllowedRootName){
-					return new PortableSchemaValidationResult { SchemaError = PortableHtmlSchemaErorr.InvalidRootTag };
+					return context.SetError(PortableHtmlSchemaErorr.InvalidRootTag);
 				}
 				//hack way to provide addition info to method
 				realRoot.AddAnnotation(CheckedBySourceCheckerAnnotation.Default);
-				return Validate(realRoot);
+				return Validate(realRoot,context);
 			}
-			catch (Exception e){
-				return new PortableSchemaValidationResult{SchemaError = PortableHtmlSchemaErorr.NonXml, Exception = e};
+			catch (XmlException e){
+				return context.SetError(PortableHtmlSchemaErorr.NonXml,e:e);
 			}
 			
 		}
@@ -133,52 +138,114 @@ namespace Qorpent.PortableHtml{
 		/// Hacked class to provide typed-annotation to xml to disable not required checking of XML after 
 		/// source string parsing
 		/// </summary>
-		private class CheckedBySourceCheckerAnnotation{public static CheckedBySourceCheckerAnnotation Default=new CheckedBySourceCheckerAnnotation(); }
-		/// <summary>
-		/// Аннотация ранее проверенных (напрример запрещенных) элементов - не требуют перепроверки на прочие условия
-		/// </summary>
-		private class SkipInElementChecking { public static SkipInElementChecking Default = new SkipInElementChecking(); }
+		private class CheckedBySourceCheckerAnnotation{public static readonly CheckedBySourceCheckerAnnotation Default=new CheckedBySourceCheckerAnnotation(); }
+		
+
 		/// <summary>
 		/// Валидизация исходного XML
 		/// </summary>
 		/// <param name="srcXml">Элемент для проверки соответствия PHTML</param>
+		/// <param name="context">Контекст обработки PHTML (дополнительные настройки, опции, списки доверения)</param>
 		/// <returns></returns>
-		public static PortableSchemaValidationResult Validate(XElement srcXml){
-			var result = new PortableSchemaValidationResult();
+		public static PortableHtmlContext Validate(XElement srcXml, PortableHtmlContext context = null)
+		{
+			context = context ?? new PortableHtmlContext();
+			context.SourceXml = srcXml;
 			//hack way to provide addition info to method
 			if (null == srcXml.Annotation<CheckedBySourceCheckerAnnotation>()){
-				CheckRootElement(srcXml, result);
-				CheckNoComments(srcXml, result);
-				CheckNoProcessingInstructions(srcXml, result);
+				CheckRootElement(context);
+				if (!context.IsActive) return context;
+				CheckNoComments(context);
+				if (!context.IsActive) return context;
+				CheckNoProcessingInstructions(context);
+				if (!context.IsActive) return context;
 			}
-			
-			CheckDeprecatedElements(srcXml,result);
-			CheckNamespaces(srcXml, result);
-			CheckDeprecatedAttributes(srcXml,result);
-			CheckUpperCase(srcXml,result);
-			CheckEmptyElements(srcXml,result);
 
-			return result;
+			CheckDeprecatedElements(context);
+			if (!context.IsActive) return context;
+			CheckNamespaces(context);
+			if (!context.IsActive) return context;
+			CheckDeprecatedAttributes(context);
+			if (!context.IsActive) return context;
+			CheckUpperCase(context);
+			if (!context.IsActive) return context;
+			CheckEmptyElements(context);
+			if (!context.IsActive) return context;
+			CheckAnchorLinks(context);
+			if (!context.IsActive) return context;
+			CheckImageLinks(context);
+
+			return context;
+		}
+
+		/// <summary>
+		/// Проверка валидности настройки ссылок у A и IMG
+		/// </summary>
+		/// <param name="context"></param>
+		private static void CheckImageLinks(PortableHtmlContext context){
+			var srcXml = context.SourceXml;
+			var images = srcXml.Descendants("img").Where(context.InChecking).ToArray();
+			
+			foreach (var img in images){
+				var src = img.Attribute("src");
+				if (null == src){
+					context.SetError(PortableHtmlSchemaErorr.NoRequiredSrcAttributeInImg, img);
+				}
+				else{
+					var error = context.GetUriTrustState(src.Value,true);
+					if (error != PortableHtmlSchemaErorr.None){
+						context.SetError(error, img);
+					}
+				}
+			}
+
+		
+		}
+
+		/// <summary>
+		/// Проверка валидности настройки ссылок у A и IMG
+		/// </summary>
+		/// <param name="context"></param>
+		private static void CheckAnchorLinks(PortableHtmlContext context)
+		{
+			var anchors = context.SourceXml.Descendants("a").Where(context.InChecking).ToArray();
+			foreach (var anchor in anchors)
+			{
+				var href = anchor.Attribute("href");
+				if (null == href)
+				{
+					context.SetError(PortableHtmlSchemaErorr.NoRequiredHrefAttributeInA, anchor);
+				}
+				else
+				{
+					var error = context.GetUriTrustState(href.Value, false);
+					if (error != PortableHtmlSchemaErorr.None)
+					{
+						context.SetError(error, anchor);
+					}
+				}
+
+				var target = anchor.Attribute("target");
+				if (null != target){
+					context.SetError(PortableHtmlSchemaErorr.DeprecatedAttributeDetected, a: target);
+				}
+			}
 		}
 
 		/// <summary>
 		/// Проверяет наличие запрещенных атрибутов
 		/// </summary>
-		/// <param name="srcXml"></param>
-		/// <param name="result"></param>
-		private static void CheckUpperCase(XElement srcXml, PortableSchemaValidationResult result)
-		{
-			foreach (var e in srcXml.DescendantsAndSelf().Where(InChecking))
+		/// <param name="context"></param>
+		private static void CheckUpperCase(PortableHtmlContext context){
+			foreach (var e in context.SourceXml.DescendantsAndSelf().Where(context.InChecking))
 			{
 				if (e.Name.LocalName.ToLowerInvariant() != e.Name.LocalName){
-					NoCheck(e);
-					result.SchemaError |= PortableHtmlSchemaErorr.UpperCaseDetected;
+					context.SetError(PortableHtmlSchemaErorr.UpperCaseDetected, e);
 				}
-				if (!InChecking(e)) continue;
+				if (!context.InChecking(e)) continue;
 				foreach (var a in e.Attributes()){
 					if (a.Name.LocalName.ToLowerInvariant() != a.Name.LocalName){
-						NoCheck(e);
-						result.SchemaError |= PortableHtmlSchemaErorr.UpperCaseDetected;
+						context.SetError(PortableHtmlSchemaErorr.UpperCaseDetected, a: a);
 					}
 				}
 			}
@@ -188,138 +255,112 @@ namespace Qorpent.PortableHtml{
 		/// <summary>
 		/// Проверяет наличие запрещенных атрибутов
 		/// </summary>
-		/// <param name="srcXml"></param>
-		/// <param name="result"></param>
-		private static void CheckEmptyElements(XElement srcXml, PortableSchemaValidationResult result)
-		{
-			if (InChecking(srcXml)&&!srcXml.Elements().Any()){
-				if (!string.IsNullOrEmpty(srcXml.Value)){
-					NoCheck(srcXml);
-					result.SchemaError|= PortableHtmlSchemaErorr.SpacedRootInsteadOfNull;
-				}
-			}
-
-			foreach (var e in srcXml.Descendants().Where(InChecking))
+		/// <param name="context"></param>
+		private static void CheckEmptyElements(PortableHtmlContext context){
+			foreach (var e in context.SourceXml.Descendants().Where(context.InChecking))
 			{
 				if (e.Name.LocalName == EmptyRequiredElement){
 					
 					if (e.Nodes().Any()){
-						NoCheck(e);
-						result.SchemaError |= PortableHtmlSchemaErorr.NonEmptyImg;
+						context.SetError(PortableHtmlSchemaErorr.NonEmptyImg, e);
+
 					}
 				}
 				else{
 					if (string.IsNullOrWhiteSpace(e.Value) && !e.Descendants(EmptyRequiredElement).Any()){
-						NoCheck(e);
-						result.SchemaError|=PortableHtmlSchemaErorr.EmptyElement;
+						context.SetError(PortableHtmlSchemaErorr.EmptyElement, e);
 					}
 				}
 			}
 
 		}
+
 		/// <summary>
 		/// Проверяет наличие запрещенных атрибутов
 		/// </summary>
-		/// <param name="srcXml"></param>
-		/// <param name="result"></param>
-		private static void CheckDeprecatedAttributes(XElement srcXml, PortableSchemaValidationResult result)
+		/// <param name="context"></param>
+		private static void CheckDeprecatedAttributes(PortableHtmlContext context)
 		{
-			foreach (var e in srcXml.DescendantsAndSelf().Where(InChecking))
+			foreach (var e in context.SourceXml.DescendantsAndSelf().Where(context.InChecking))
 			{
 				foreach (var a in e.Attributes()){
 					var state =  GetAttributeErrorState(a.Name.LocalName);
 					if (state != PortableHtmlSchemaErorr.None){
-						NoCheck(e);
-						result.SchemaError |= state;
-						break;
-					}
-					
+						context.SetError(state, a:a);
+					}					
 				}
 			}
 
 		}
+
 		/// <summary>
 		/// Проверяет наличие запрещенных элементов из списка
 		/// </summary>
-		/// <param name="srcXml"></param>
-		/// <param name="result"></param>
-		private static void CheckDeprecatedElements(XElement srcXml, PortableSchemaValidationResult result){
+		/// <param name="context"></param>
+		private static void CheckDeprecatedElements(PortableHtmlContext context)
+		{
 			var deprecates =
-				srcXml.Descendants()
-					 .Where(InChecking)
+				context.SourceXml.Descendants()
+					 .Where(context.InChecking)
 				      .Where(_ => !IsAllowedTag(_.Name.LocalName))
 				      .ToArray();
 			foreach (var e in deprecates){
-				NoCheck(e);
 				var error = (e.Name.LocalName.ToLowerInvariant() + "Detected").To<PortableHtmlSchemaErorr>();
-				result.SchemaError |= error;
+				context.SetError(error, e);
 			}
 
-		}
-
-		private static bool InChecking(XElement _){
-			return null == _.Annotation<SkipInElementChecking>();
 		}
 
 
 		/// <summary>
 		/// Проверка на отсутствие определения пространств имен
 		/// </summary>
-		/// <param name="srcXml"></param>
-		/// <param name="result"></param>
-		private static void CheckNamespaces(XElement srcXml, PortableSchemaValidationResult result){
-			foreach (var e in srcXml.DescendantsAndSelf().Where(InChecking)){
+		/// <param name="context"></param>
+		private static void CheckNamespaces(PortableHtmlContext context)
+		{
+			foreach (var e in context.SourceXml.DescendantsAndSelf().Where(context.InChecking)){
 				if (e.Name.NamespaceName!=""){
-					NoCheck(e);
-					result.SchemaError|=PortableHtmlSchemaErorr.NamespaceDeclarationDetected;
-					return;
+					context.SetError(PortableHtmlSchemaErorr.NamespaceDeclarationDetected, e);
 				}
-				if (e.Attributes().Any(attribute => attribute.Name.NamespaceName != "" || attribute.Name.LocalName=="xmlns")){
-					NoCheck(e);
-					result.SchemaError |= PortableHtmlSchemaErorr.NamespaceDeclarationDetected;
-					return;
+				foreach (var a in e.Attributes()){
+					if (a.Name.NamespaceName != "" || a.Name.LocalName == "xmlns"){
+						context.SetError(PortableHtmlSchemaErorr.NamespaceDeclarationDetected, a: a);
+					}
 				}
 			}
 		}
 
-		private static void NoCheck(XElement e){
-			e.AddAnnotation(SkipInElementChecking.Default);
-		}
+		
 
 		/// <summary>
 		/// Проверка на отсутствие комментариев
 		/// </summary>
-		/// <param name="srcXml"></param>
-		/// <param name="result"></param>
-		private static void CheckNoComments(XElement srcXml, PortableSchemaValidationResult result){
-			var hasComment = srcXml.DescendantNodes().OfType<XComment>().Any();
+		private static void CheckNoComments(PortableHtmlContext context)
+		{
+			var hasComment = context.SourceXml.DescendantNodes().OfType<XComment>().Any();
 			if (hasComment){
-				result.SchemaError |= PortableHtmlSchemaErorr.CommentsDetected;
+				context.SetError(PortableHtmlSchemaErorr.CommentsDetected);
 			}
 		}
 		/// <summary>
 		/// Проверка на отсутствие инструкций препроцессора
 		/// </summary>
-		/// <param name="srcXml"></param>
-		/// <param name="result"></param>
-		private static void CheckNoProcessingInstructions(XElement srcXml, PortableSchemaValidationResult result)
+		private static void CheckNoProcessingInstructions(PortableHtmlContext context)
 		{
-			var hasProcessingInstructions = srcXml.DescendantNodes().OfType<XProcessingInstruction>().Any();
-			if (hasProcessingInstructions)
-			{
-				result.SchemaError |= PortableHtmlSchemaErorr.ProcessingInstructionsDetected;
+			var hasProcessingInstructions = context.SourceXml.DescendantNodes().OfType<XProcessingInstruction>().Any();
+			if (hasProcessingInstructions){
+				context.SetError(PortableHtmlSchemaErorr.ProcessingInstructionsDetected);
 			}
 		}
 
 		/// <summary>
 		/// Проверка наличия корневого элемента div в соответствии с 'has_root_container'
 		/// </summary>
-		/// <param name="srcXml"></param>
-		/// <param name="result"></param>
-		private static void CheckRootElement(XElement srcXml, PortableSchemaValidationResult result){
+		/// <param name="context"></param>
+		private static void CheckRootElement(PortableHtmlContext context){
+			var srcXml = context.SourceXml;
 			if (srcXml.Name.LocalName != AllowedRootName){
-				NoCheck(srcXml);
-				result.SchemaError |= PortableHtmlSchemaErorr.InvalidRootTag;
+				context.SetError(PortableHtmlSchemaErorr.InvalidRootTag);
 			}
 		}
 	}

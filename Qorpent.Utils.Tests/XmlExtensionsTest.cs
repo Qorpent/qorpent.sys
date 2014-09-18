@@ -29,6 +29,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
@@ -60,6 +61,37 @@ namespace Qorpent.Utils.Tests {
 		public void XmlFromAnyTest(object src) {
 			var result = XmlExtensions.GetXmlFromAny(src);
 			Assert.AreEqual("<hello />", result.ToString());
+		}
+
+
+		[Test]
+		public void CanGetValidXPath(){
+			var xml = XElement.Parse(@"<a>
+<p/>
+<p/>
+<b a='1'/>
+<b a='2'>
+	<m a='3'/>
+	<n/>
+	<m/>
+</b>
+<a/>
+<a/>
+</a>");
+			foreach (var element in xml.Descendants()){
+				
+				var xpath = element.GetXPath();
+				Console.WriteLine(xpath);
+				Assert.AreEqual(element,xml.XPathSelectElement(xpath));
+				var elements = xml.XPathSelectElements(xpath);
+				Assert.AreEqual(1,elements.Count());
+
+				foreach (var a in element.Attributes()){
+					xpath = a.GetXPath();
+					Console.WriteLine(xpath);
+					Assert.AreEqual(a.Parent.GetXPath()+"/@"+a.Name.LocalName,xpath);
+				}
+			}
 		}
 
 		public class Serj {

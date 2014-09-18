@@ -54,6 +54,36 @@ namespace Qorpent.Utils.Extensions {
             }
             throw new Exception("multiple instance");
         }
+		/// <summary>
+		/// Возвращает полный путь от корня
+		/// </summary>
+		/// <param name="e"></param>
+		/// <returns></returns>
+		public static string GetXPath(this XElement e){
+			var result = "";
+			var current = e;
+			
+			while (null != current && null!=current.Parent){
+				if (!string.IsNullOrWhiteSpace(result)){
+					result = "/" + result;
+				}
+				var count = current.ElementsBeforeSelf(current.Name).Count()+1;
+				result = current.Name.LocalName + "[" + count + "]" +result;
+				current = current.Parent;
+			}
+			result = "./" + result;
+			return result;
+		}
+
+		/// <summary>
+		/// Возвращает полный путь от корня
+		/// </summary>
+		/// <param name="e"></param>
+		/// <returns></returns>
+		public static string GetXPath(this XAttribute e){
+			var elXPath = e.Parent.GetXPath();
+			return elXPath + "/@" + e.Name.LocalName;
+		}
 
 		/// <summary>
 		/// 

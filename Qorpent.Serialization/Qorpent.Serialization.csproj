@@ -108,9 +108,15 @@
     <Compile Include="IntermediateFormat\IntermediateFormatOutputType.cs" />
     <Compile Include="IntermediateFormat\IntermediateFormatQuery.cs" />
     <Compile Include="IntermediateFormat\IntermediateFormatSyntax.cs" />
-    <Compile Include="PortableHtml\PortableHtmlSchemaErorr.cs" />
-    <Compile Include="PortableHtml\PortableHtmlSchema.cs" />
-    <Compile Include="PortableHtml\PortableSchemaValidationResult.cs" />
+    <Compile Include="PortableHtml\PortableHtmlContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PortableHtml\PortableHtmlSchema.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PortableHtml\PortableHtmlSchemaErorr.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Report\ColumnTitleFormatter.cs" />
     <Compile Include="Report\ContentItemExtensions.cs" />
     <Compile Include="Report\ContentItemQuery.cs" />

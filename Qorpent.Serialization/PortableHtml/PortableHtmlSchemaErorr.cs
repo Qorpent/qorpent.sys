@@ -123,8 +123,37 @@ namespace Qorpent.PortableHtml{
 		/// </summary>
 		UpperCaseDetected = 1<<25,
 		/// <summary>
-		/// Пустой документ, но с пробелами в Root
+		/// Признак наличия ссылки на javascript	
 		/// </summary>
-		SpacedRootInsteadOfNull = 1<<26,
+		JavascriptLink =1<<26,
+		/// <summary>
+		/// Признак недоверенной ссылки
+		/// </summary>
+		NonTrustedLink = 1<<27,
+		/// <summary>
+		/// Признак ссылки на локальный файл
+		/// </summary>
+		FileLink = 1<<28,
+	
+		/// <summary>
+		/// У IMG не указан src
+		/// </summary>
+		NoRequiredSrcAttributeInImg = 1<<29,
+		/// <summary>
+		/// У A не указан HREF
+		/// </summary>
+		NoRequiredHrefAttributeInA = (ulong)1<<30,
+		/// <summary>
+		/// Обнаружен тег EMBED
+		/// </summary>
+		AppletDetected = (ulong)1 << 31,
+		/// <summary>
+		/// Ссылка на данные в неразрешенном месте
+		/// </summary>
+		DataLink = (ulong)1<<32,
+		/// <summary>
+		/// Пустая или чистая хэш ссылка
+		/// </summary>
+		EmptyOrHashedLink = (ulong)1<<33,
 	}
 }
