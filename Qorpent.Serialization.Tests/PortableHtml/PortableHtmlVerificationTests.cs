@@ -95,9 +95,10 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[Test(Description = "Покрытие для цикла выхода обхода атрибутов")]
 		public void CoverManyNestErrorsInDistinctStrategies()
 		{
-			var html = "<div><p><p>x<ul><li>x</li></ul></p></p></div>";
+			var html = "<div><p><p>x<ul>x<li>x</li></ul></p></p></div>";
 			var ctx = new PortableHtmlContext { Strategy = PortableHtmlVerificationStrategy.Full, Level = PortableHtmlStrictLevel.AllowLists };
 			PortableHtmlSchema.Validate(html, ctx);
+			
 			Assert.AreEqual(3, ctx.Errors.Count);
 			ctx = new PortableHtmlContext { Strategy = PortableHtmlVerificationStrategy.ForcedElementResult, Level = PortableHtmlStrictLevel.AllowLists };
 			PortableHtmlSchema.Validate(html, ctx);
@@ -470,6 +471,61 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 			Assert.AreEqual(errorcount, result.Errors.Count);
 		}
 
+		[TestCase("<div><ol><li>x</li></ol></div>", true, Description = "legal list")]
+		[TestCase("<div><ol><li>x</li><td>x</td></ol></div>", false, Description = "invalid tag for TD")]
+		[TestCase("<div><ol><li>x</li></ol><p><li>xxx</li></p></div>", false, Description = "illegal LI position")]
+		[TestCase("<div><ol></ol></div>", false, Description = "empty list list")]
+		[TestCase("<div><ol>x</ol></div>", false, Description = "illegal list")]
+		[TestCase("<div><ol>x<li>x</li></ol></div>", false, Description = "illegal list")]
+		[TestCase("<div><ol><strong>x</strong></ol></div>", false, Description = "illegal list")]
+		[TestCase("<div><ul><li>x</li></ul></div>",true,Description = "legal list")]
+		[TestCase("<div><ul><li>x</li><td>x</td></ul></div>",false,Description = "invalid tag for TD")]
+		[TestCase("<div><ul><li>x</li></ul><p><li>xxx</li></p></div>",false,Description = "illegal LI position")]
+		[TestCase("<div><ul></ul></div>",false,Description = "empty list list")]
+		[TestCase("<div><ul>x</ul></div>", false, Description = "illegal list")]
+		[TestCase("<div><ul>x<li>x</li></ul></div>", false, Description = "illegal list")]
+		[TestCase("<div><ul><strong>x</strong></ul></div>", false, Description = "illegal list")]
+		[Test(Description = "Соответствие схемы по спискам нормативу")]
+		public void ListSupport(string html, bool result){
+			var ctx = new PortableHtmlContext { Level = PortableHtmlStrictLevel.AllowLists|PortableHtmlStrictLevel.AllowTables };
+			ctx = PortableHtmlSchema.Validate(html, ctx);
+			Console.WriteLine(ctx);
+			if (result){
+				Assert.True(ctx.Ok);
+			}
+			else{
+				Assert.False(ctx.Ok);
+			}
+		}
+
+		[TestCase("<div><table><tr><td>x</td></tr></table></div>", true, Description = "minimal table")]
+		[TestCase("<div><table><tr><th>x</th></tr></table></div>", false, Description = "th in simple table")]
+		[TestCase("<div><table><tr><tbody><td>x</td></tbody></tr></table></div>", false, Description = "illegal tbody")]
+		[TestCase("<div><table><tr><thead><td>x</td></thead></tr></table></div>", false, Description = "illegal thead")]
+		[TestCase("<div><p><td>x</td></p></div>", false, Description = "illegal td position")]
+		[TestCase("<div><p><th>x</th></p></div>", false, Description = "illegal th position")]
+		[TestCase("<div><table><tbody><tr><td>x</td></tr></tbody></table></div>", true, Description = "table with tbody")]
+		[TestCase("<div><table><thead><tr><th>x</th></tr></thead><tbody><tr><td>x</td></tr></tbody></table></div>", true, Description = "table with tbody and thead")]
+		[TestCase("<div><table><tbody><tr><td>x</td></tr></tbody><thead><tr><th>x</th></tr></thead></table></div>", false, Description = "illegal order of thead and tbody")]
+		[TestCase("<div><table><thead><tr><th>x</th></tr></thead><tbody><tr><th>x</th></tr></tbody></table></div>", false, Description = "th in body")]
+		[TestCase("<div><table><thead><tr><td>x</td></tr></thead><tbody><tr><td>x</td></tr></tbody></table></div>", false, Description = "TD in header")]
+		[TestCase("<div><table><thead><tr><th>x</th></tr></thead><tr><td>x</td></tr></tbody></div>", false, Description = "rows beside head")]
+		[TestCase("<div><table><tr><th>x</th></tr><tbody><tr><td>x</td></tr></tbody></table></div>", false, Description = "rows beside tbody")]
+		[Test(Description = "Соответствие схемы по спискам нормативу")]
+		public void TableSupport(string html, bool result)
+		{
+			var ctx = new PortableHtmlContext { Level = PortableHtmlStrictLevel.AllowLists | PortableHtmlStrictLevel.AllowTables };
+			ctx = PortableHtmlSchema.Validate(html, ctx);
+			Console.WriteLine(ctx);
+			if (result)
+			{
+				Assert.True(ctx.Ok);
+			}
+			else
+			{
+				Assert.False(ctx.Ok);
+			}
+		}
 		
 	}
 }

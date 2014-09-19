@@ -141,7 +141,13 @@ namespace Qorpent.PortableHtml{
 		/// </summary>
 		UnknownElement = (ulong)1<<33,
 
-
-		
+		/// <summary>
+		/// Ошибки в структуре списка
+		/// </summary>
+		InvalidList = (ulong)1<<34,
+		/// <summary>
+		/// Ошибка в структуре таблицы
+		/// </summary>
+		InvalidTable = (ulong)1<<35,
 	}
 }

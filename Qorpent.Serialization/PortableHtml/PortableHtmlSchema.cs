@@ -245,11 +245,147 @@ namespace Qorpent.PortableHtml{
 			if (!context.IsActive) return context;
 			CheckNoTextElementsInlines(context);
 			if (!context.IsActive) return context;
-
 			if (context.Level.HasFlag(PortableHtmlStrictLevel.AllowBr)){
 				CheckBrPosition(context);
+				if (!context.IsActive) return context;
+			}
+			if (context.Level.HasFlag(PortableHtmlStrictLevel.AllowLists))
+			{
+				CheckListSchema(context);
+				if (!context.IsActive) return context;
+			}
+			if (context.Level.HasFlag(PortableHtmlStrictLevel.AllowTables))
+			{
+				CheckTableSchema(context);
+				if (!context.IsActive) return context;
 			}
 			return context;
+		}
+
+		private static void CheckTableSchema(PortableHtmlContext context){
+			var tables = context.SourceXml.Descendants("table").Where(context.InChecking);
+			var theads = context.SourceXml.Descendants("thead").Where(context.InChecking);
+			var tbodies = context.SourceXml.Descendants("tbody").Where(context.InChecking);
+			var trs = context.SourceXml.Descendants("tr").Where(context.InChecking);
+			var tds = context.SourceXml.Descendants("td").Where(context.InChecking);
+			var ths = context.SourceXml.Descendants("th").Where(context.InChecking);
+			foreach (var e in ths){
+				if (!context.IsActive) return;
+				var p = e.Parent;
+				var pp = p.Parent??new XElement("stub");
+				if (p.Name.LocalName != "tr"){
+					context.SetError(PortableHtmlSchemaErorr.InvalidTable, e);
+				}
+				if (!context.InChecking(e)) continue;
+				if (pp.Name.LocalName != "thead"){
+					context.SetError(PortableHtmlSchemaErorr.InvalidTable, e);
+				}
+
+			}
+			foreach (var e in tds)
+			{
+				if (!context.IsActive) return;
+				var p = e.Parent;
+				var pp = p.Parent ?? new XElement("stub");
+				if (p.Name.LocalName != "tr")
+				{
+					context.SetError(PortableHtmlSchemaErorr.InvalidTable, e);
+				}
+				if (!context.InChecking(e)) continue;
+				if (pp.Name.LocalName != "table" && pp.Name.LocalName != "tbody")
+				{
+					context.SetError(PortableHtmlSchemaErorr.InvalidTable, e);
+				}
+			}
+
+			foreach (var e in trs)
+			{
+				if (!context.IsActive) return;
+				var p = e.Parent;
+				if (p.Name.LocalName != "table" && p.Name.LocalName!="tbody" && p.Name.LocalName!="thead")
+				{
+					context.SetError(PortableHtmlSchemaErorr.InvalidTable, e);
+				}
+				foreach (var cell in  e.Elements().Where(context.InChecking)){
+					if (!context.IsActive) return;
+					if (cell.Name.LocalName != "td" && cell.Name.LocalName != "th"){
+						context.SetError(PortableHtmlSchemaErorr.InvalidTable, cell);	
+					}
+				}
+			}
+
+			foreach (var e in tbodies){
+				if (!context.IsActive) return;
+				if (e.Parent.Name.LocalName != "table"){
+					context.SetError(PortableHtmlSchemaErorr.InvalidTable, e);
+					if(!context.InChecking(e))continue;
+				}
+				if (e.ElementsAfterSelf().Any()){
+					context.SetError(PortableHtmlSchemaErorr.InvalidTable, e);
+					if (!context.InChecking(e)) continue;
+				}
+				var eb = e.ElementsBeforeSelf().ToArray();
+				if (eb.Length>1 || (eb.Length==1 && eb[0].Name.LocalName!="thead")){
+					context.SetError(PortableHtmlSchemaErorr.InvalidTable, e);
+				}
+			}
+
+			foreach (var e in theads)
+			{
+				if (!context.IsActive) return;
+				if (e.Parent.Name.LocalName != "table")
+				{
+					context.SetError(PortableHtmlSchemaErorr.InvalidTable, e);
+					if (!context.InChecking(e)) continue;
+				}
+				if (e.ElementsBeforeSelf().Any())
+				{
+					context.SetError(PortableHtmlSchemaErorr.InvalidTable, e);
+					if (!context.InChecking(e)) continue;
+				}
+				var eb = e.ElementsAfterSelf().ToArray();
+				if (eb.Length > 1 || (eb.Length == 1 && eb[0].Name.LocalName != "tbody"))
+				{
+					context.SetError(PortableHtmlSchemaErorr.InvalidTable, e);
+				}
+			}
+
+			foreach (var table in tables){
+				if (!context.IsActive) return;
+				foreach (var t in table.Elements().Where(context.InChecking)){
+					if (!context.IsActive) return;
+					var tn = t.Name.LocalName;
+					if (tn != "tbody" && tn != "tr" && tn != "thead"){
+						context.SetError(PortableHtmlSchemaErorr.InvalidTable, t);	
+					}
+				}
+			}
+		}
+
+		private static void CheckListSchema(PortableHtmlContext context){
+			var lists = context.SourceXml.Descendants().Where(_ => _.Name.LocalName == "ul" || _.Name.LocalName == "ol").Where(context.InChecking);
+			foreach (var e in lists)
+			{
+				if (!context.IsActive) return;
+				foreach (var ch in e.Elements())
+				{
+					if (ch.Name.LocalName != "li")
+					{
+						context.SetError(PortableHtmlSchemaErorr.InvalidList, ch);
+					}
+				}
+			}
+			if (!context.IsActive) return;
+			var listitems = context.SourceXml.Descendants("li").Where(context.InChecking);
+			foreach (var listitem in listitems)
+			{
+				if (!context.IsActive) return;
+				var pname = listitem.Parent.Name.LocalName;
+				if (pname != "ul" && pname != "ol")
+				{
+					context.SetError(PortableHtmlSchemaErorr.InvalidList, listitem);
+				}
+			}
 		}
 
 		private static void CheckBrPosition(PortableHtmlContext context){
@@ -319,7 +455,7 @@ namespace Qorpent.PortableHtml{
 				if (!context.InChecking(e)) continue;
 				if (-1 != Array.IndexOf(NoTextElements, e.Name.LocalName)){
 					foreach (var sube in e.Elements()){
-						if (-1 == Array.IndexOf(ParaElements, sube.Name.LocalName)){
+						if (-1 != Array.IndexOf(InlineElements, sube.Name.LocalName)){
 							context.SetError(PortableHtmlSchemaErorr.InlineInNonTextElement, e);
 						}
 					}
