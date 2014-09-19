@@ -97,7 +97,7 @@ namespace Qorpent {
 			/// </summary>
 			public static readonly string[] StandardDateFormats = new[]
 				{
-					"dd.MM.yyyy HH:mm", "dd.MM.yyyy", "yyyy-MM-dd HH:mm","yyyy-MM-dd HH:mm:ss","yyyyMMdd HH:mm","yyyyMMdd","yyyyMMdd HH:mm:ss",
+					"dd.MM.yyyy HH:mm:ss","dd.MM.yyyy HH:mm", "dd.MM.yyyy", "yyyy-MM-dd HH:mm","yyyy-MM-dd HH:mm:ss","yyyyMMdd HH:mm","yyyyMMdd","yyyyMMdd HH:mm:ss",
 					"yyyy-MM-dd", "yyyyMMddHHmm", "yyyyMMddHHmmss"
 				};
 		}
