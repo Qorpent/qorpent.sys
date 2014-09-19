@@ -44,11 +44,35 @@ namespace Qorpent.PortableHtml{
 			
 		};
 
+
+
+		/// <summary>
+		/// Набор разрешенных в Strict режиме элементов
+		/// </summary>
+		public static readonly string[] InlineElements = new[]{ 
+			"img",
+			"a",
+			"strong",
+			"em",
+			"u",
+			"sub",
+			"sup",
+			"del",
+			"span",
+		};
+
 		/// <summary>
 		/// Набор разрешенных элементов - корневых контейнеров
 		/// </summary>
 		public static readonly string[] ParaElements = new[]{
 			"p", "ul", "ol", "table"
+		};
+
+		/// <summary>
+		/// Набор разрешенных элементов - корневых контейнеров
+		/// </summary>
+		public static readonly string[] ContentElements = new[]{
+			"p", "li", "td", "th"
 		};
 
 		/// <summary>
@@ -104,7 +128,7 @@ namespace Qorpent.PortableHtml{
 		/// <summary>
 		/// Элемент, который обязательно пустой
 		/// </summary>
-		public const string EmptyRequiredElement = "img";
+		public readonly  static string[] EmptyRequiredElements =new[]{ "img","br"};
 
 		
 		
@@ -220,7 +244,38 @@ namespace Qorpent.PortableHtml{
 			CheckNoTextElementsText(context);
 			if (!context.IsActive) return context;
 			CheckNoTextElementsInlines(context);
+			if (!context.IsActive) return context;
+
+			if (context.Level.HasFlag(PortableHtmlStrictLevel.AllowBr)){
+				CheckBrPosition(context);
+			}
 			return context;
+		}
+
+		private static void CheckBrPosition(PortableHtmlContext context){
+			var brs = context.SourceXml.Descendants("br").Where(context.InChecking).ToArray();
+			foreach (var e in brs){
+				if (!context.IsActive) break;
+				var parentTag = e.Parent.Name.LocalName;
+				if (-1 == Array.IndexOf(ContentElements, parentTag)){
+					context.SetError(PortableHtmlSchemaErorr.InvalidBrPosition, e);
+					if(!context.InChecking(e))continue;
+				}
+				if (!checkBrNeighbro(e.PreviousNode) || !checkBrNeighbro(e.NextNode))
+				{
+					context.SetError(PortableHtmlSchemaErorr.InvalidBrPosition, e);
+				}
+			}
+		}
+
+		private static bool checkBrNeighbro(XNode br){
+			if (null == br) return false;
+			if (br is XText && !string.IsNullOrWhiteSpace(((XText) br).Value)) return true;
+			var e = br as XElement;
+			if (null == e) return false;
+			if ("br" == e.Name.LocalName) return false;
+			if (-1 == Array.IndexOf(InlineElements, e.Name.LocalName)) return false;
+			return true;
 		}
 
 		private static void CheckNestedParas(PortableHtmlContext context){
@@ -357,15 +412,15 @@ namespace Qorpent.PortableHtml{
 		private static void CheckEmptyElements(PortableHtmlContext context){
 			foreach (var e in context.SourceXml.Descendants().Where(context.InChecking))
 			{
-				if (e.Name.LocalName == EmptyRequiredElement){
+				if (-1 != Array.IndexOf(EmptyRequiredElements,e.Name.LocalName)){
 					
 					if (e.Nodes().Any()){
-						context.SetError(PortableHtmlSchemaErorr.NonEmptyImg, e);
+						context.SetError(PortableHtmlSchemaErorr.NonEmptyNonContentTag, e);
 
 					}
 				}
 				else{
-					if (string.IsNullOrWhiteSpace(e.Value) && !e.Descendants(EmptyRequiredElement).Any()){
+					if (string.IsNullOrWhiteSpace(e.Value) && !e.Descendants("img").Any()){
 						context.SetError(PortableHtmlSchemaErorr.EmptyElement, e);
 					}
 				}

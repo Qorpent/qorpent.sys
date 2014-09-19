@@ -60,6 +60,10 @@ namespace Qorpent.PortableHtml{
 		/// </summary>
 		NestedParaElements = 1 << 11,
 		/// <summary>
+		/// Неверная позиция для BR
+		/// </summary>
+		InvalidBrPosition = 1<<12,
+		/// <summary>
 		/// Текст в элементе, запрещающем его наличие
 		/// </summary>
 		TextInNonTextElement =1<<14,
@@ -98,7 +102,7 @@ namespace Qorpent.PortableHtml{
 		/// <summary>
 		/// Не пустой элемент IMG
 		/// </summary>
-		NonEmptyImg = 1<<24,
+		NonEmptyNonContentTag = 1<<24,
 		/// <summary>
 		/// Обнаружены имена тегов с верхним регистром
 		/// </summary>

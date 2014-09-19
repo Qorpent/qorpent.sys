@@ -257,8 +257,9 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		}
 
 
-		[TestCase("<div><p></p></div>", false,Description = "Обнаружение атрибутов 'angular'")]
-		[TestCase("<div><p>x<strong></strong></p></div>", false,Description = "Обнаружение атрибутов 'angular'")]
+		[TestCase("<div><p><strong><img src='x'/></strong></p></div>", true,Description = "Контент из картинки разрешен")]
+		[TestCase("<div><p></p></div>", false,Description = "Пустой P")]
+		[TestCase("<div><p>x<strong></strong></p></div>", false,Description = "Пустой strong")]
 		[TestCase("<div><p>x<img src='x'/></p></div>", true,Description = "Нормальный элемент с пустым IMG и не пустым P")]
 		[TestCase("<div><p><img src='x'/></p></div>", true,Description = "Нормальный элемент с пустым IMG и не пустым P")]
 		[Test(Description = "Выполнение требования 'no_empty_elements'")]
@@ -267,13 +268,38 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 			testSchema(srcHtml, result, result?PortableHtmlSchemaErorr.None : PortableHtmlSchemaErorr.EmptyElement);
 		}
 
+
+		[TestCase("<div><p>x<br/><br/>y</p></div>",false, Description = "BR can be used as splitter between texts")]
+		[TestCase("<div><p>x<br/>y</p></div>",true, Description = "BR can be used as splitter between texts")]
+		[TestCase("<div><p>x<br/><strong>y</strong></p></div>",true, Description = "BR can be used as splitter between texts")]
+		[TestCase("<div><p><strong>x</strong><br/><strong>y</strong></p></div>",true, Description = "BR can be used as splitter between texts")]
+		[TestCase("<div><p><strong>x</strong><br/>y</p></div>",true, Description = "BR can be used as splitter between texts")]
+		[TestCase("<div><p>x<br>a</br>y</p></div>",false, Description = "BR cannot have text")]
+		[TestCase("<div><p>x<br/></p></div>",false, Description = "BR cannot be used as finish element")]
+		[TestCase("<div><p><br/>x</p></div>",false, Description = "BR cannot be used as start element")]
+		[TestCase("<div><br/><p>x</p></div>",false,Description = "BR still is not allowed root content")]
+		[Test(Description = "Позволяет использовать BR при включенной опции")]
+		public void AllowBrIfOptionChoosed(string html,bool result){
+			var ctx = new PortableHtmlContext{Level = PortableHtmlStrictLevel.AllowBr};
+			ctx = PortableHtmlSchema.Validate(html,ctx);
+			Console.WriteLine(ctx);
+			Assert.AreEqual(result,ctx.Ok);
+			if (result){
+				Assert.AreEqual(PortableHtmlSchemaErorr.None, ctx.SchemaError);
+			}
+			else{
+				Assert.AreNotEqual(PortableHtmlSchemaErorr.None,ctx.SchemaError);
+			}
+
+		}
+
 		
 		[TestCase("<div><p>x<img src='x'/></p></div>", true, Description = "Закрытый пустой тег IMG")]
 		[TestCase("<div><p>x<img>some</img></p></div>", false, Description = "Недопустимы заполненные IMG")]
 		[Test(Description = "Выполнение требования 'no_empty_elements'")]
 		public void NonEmptyImagesAreNotAllowed(string srcHtml, bool result)
 		{
-			testSchema(srcHtml, result, result ? PortableHtmlSchemaErorr.None : PortableHtmlSchemaErorr.NonEmptyImg);
+			testSchema(srcHtml, result, result ? PortableHtmlSchemaErorr.None : PortableHtmlSchemaErorr.NonEmptyNonContentTag);
 		}
 
 		[TestCase("data",true,true,Description = "Для IMG разрешены data:")]
