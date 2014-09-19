@@ -117,6 +117,9 @@
     <Compile Include="PortableHtml\PortableHtmlSchemaErorr.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PortableHtml\PortableHtmlSchemaErorrDescription.cs" />
+    <Compile Include="PortableHtml\PortableHtmlStrictLevel.cs" />
+    <Compile Include="PortableHtml\PortableHtmlVerificationStrategy.cs" />
     <Compile Include="Report\ColumnTitleFormatter.cs" />
     <Compile Include="Report\ContentItemExtensions.cs" />
     <Compile Include="Report\ContentItemQuery.cs" />

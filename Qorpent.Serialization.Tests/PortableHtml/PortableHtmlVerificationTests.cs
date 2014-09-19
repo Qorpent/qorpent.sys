@@ -78,6 +78,34 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		public void ValidXmlRequired(string srcHtml){
 			testSchema(srcHtml, false, PortableHtmlSchemaErorr.NonXml, typeof(XmlException));
 		}
+		[Test(Description = "Покрытие для цикла выхода обхода атрибутов")]
+		public void CoverManyDeprecatedAttributesInRowInDistinctStrategies(){
+			var html = "<div><p a='1' b='2'>x</p><p/></div>";
+			var ctx = new PortableHtmlContext{Strategy = PortableHtmlVerificationStrategy.Full};
+			PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(3,ctx.Errors.Count);
+			ctx = new PortableHtmlContext { Strategy = PortableHtmlVerificationStrategy.ForcedElementResult };
+			PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(2, ctx.Errors.Count);
+			ctx = new PortableHtmlContext { Strategy = PortableHtmlVerificationStrategy.ForcedResult };
+			PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(1, ctx.Errors.Count);
+		}
+
+		[Test(Description = "Покрытие для цикла выхода обхода атрибутов")]
+		public void CoverManyNestErrorsInDistinctStrategies()
+		{
+			var html = "<div><p><p>x<ul><li>x</li></ul></p></p></div>";
+			var ctx = new PortableHtmlContext { Strategy = PortableHtmlVerificationStrategy.Full, Level = PortableHtmlStrictLevel.AllowLists };
+			PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(3, ctx.Errors.Count);
+			ctx = new PortableHtmlContext { Strategy = PortableHtmlVerificationStrategy.ForcedElementResult, Level = PortableHtmlStrictLevel.AllowLists };
+			PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(2, ctx.Errors.Count);
+			ctx = new PortableHtmlContext { Strategy = PortableHtmlVerificationStrategy.ForcedResult, Level = PortableHtmlStrictLevel.AllowLists };
+			PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(1, ctx.Errors.Count);
+		}
 
 
 		[TestCase("<div><p><!--x--></p></div>", Description = "Комментарии запрещены")]
@@ -116,7 +144,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 
 
 		[TestCase("<div><P>x</P></div>", Description = "Все элементы и атрибуты должны быть в нижнем регистре")]
-		[TestCase("<div><p A='1'>x</p></div>", Description = "Все элементы и атрибуты должны быть в нижнем регистре")]
+		[TestCase("<div><p PHTML_ID='1'>x</p></div>", Description = "Все элементы и атрибуты должны быть в нижнем регистре")]
 		[TestCase("<div><spaN>x</spaN></div>", Description = "Все элементы и атрибуты должны быть в нижнем регистре")]
 		[Test(Description = "Выполнение требования 'no_uppercase'")]
 		public void UppercaseInElementsOrAttributesAreNotAllowed(string srcHtml)
@@ -153,7 +181,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[TestCase("textarea",	Description = "Запрещенный тег")]
 		[Test(Description = "Выполнение требования 'deprecated_tags'")]
 		public void DangerousTagsTestNotAllowed(string tagName){
-			var html = "<div><" + tagName + "/></div>";
+			var html = "<div><" + tagName + "/><" + tagName + "/></div>"; //twice for coverage proposes
 			testSchema(html, false, PortableHtmlSchemaErorr.DangerousElement);
 			html = "<div><" + tagName.ToUpper() + "/></div>";
 			testSchema(html, false, PortableHtmlSchemaErorr.DangerousElement);
@@ -212,14 +240,15 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		public void NotAllowedAttributes(string attribute)
 		{
 			var srcHtml = "<div><p " + attribute + "='x'/></div>";
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.DeprecatedAttributeDetected);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.DangerousAttribute);
 			srcHtml = "<div " + attribute + "='x'></div>";
-			testSchema(srcHtml, false, PortableHtmlSchemaErorr.DeprecatedAttributeDetected);
+			testSchema(srcHtml, false, PortableHtmlSchemaErorr.DangerousAttribute);
 		}
 
 		[TestCase("<div/>",Description = "Empty")]
 		[TestCase("<div></div>",Description = "Empty")]
 		[TestCase("<div><p>simple</p></div>",Description = "Simple para")]
+		[TestCase("<div>\r\n\t<p>simple</p>\r\n</div>",Description = "Simple para pretty print")]
 		[TestCase("<div><p phtml_id='1'>simple</p></div>",Description = "Simple para with phtml")]
 		[TestCase("<div><p>simple <strong>x</strong></p></div>",Description = "Simple para with inline")]
 		[Test(Description = "Проверка на прохождение валидизации нормальными примерами")]
@@ -260,7 +289,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 			var attr = isImg ? "src" : "href";
 			var body = isImg ? "" : "x";
 			var afterColon = schema == "file" ? "///" : "";
-			var html = string.Format("<div><{0} {1}='{2}:{3}x'>{4}</{0}></div>", tag, attr,schema, afterColon, body);
+			var html = string.Format("<div><p><{0} {1}='{2}:{3}x'>{4}</{0}></p></div>", tag, attr,schema, afterColon, body);
 			testSchema(html,result,error);
 		}
 		[Test(Description="У всех IMG должен быть src")]
@@ -276,7 +305,145 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[Test(Description = "Target является запрещенным атрибутом для A")]
 		public void NotAllowTargetAttributeOnAnchor()
 		{
-			testSchema("<div><a href='x' target='_b'>ссылка</a></div>", false, PortableHtmlSchemaErorr.DeprecatedAttributeDetected);
+			testSchema("<div><a href='x' target='_b'>ссылка</a></div>", false, PortableHtmlSchemaErorr.DangerousAttribute);
 		}
+
+		[TestCase("")]
+		[TestCase("#")]
+		[TestCase("#x")]
+		[TestCase("javascript:alert()")]
+		[TestCase("file:///etc/hosts")]
+		[TestCase("data:image")]
+		[TestCase("http://hackers.org/x")]
+		[Test(Description = "Обнаружение недоверенных , опасных и неверных ссылок")]
+		public void PreventIllegalReferencesInHrefAndImages(string src){
+			var html = "<a href='" + src + "'>ref</a>";
+			testSchema("<div>"+html+"</div>", false, PortableHtmlSchemaErorr.InvalidLink,exactState:false);
+			if (!src.StartsWith("data:")){
+				html = "<img src='" + src + "'/>";
+				testSchema("<div>" + html + "</div>", false, PortableHtmlSchemaErorr.InvalidLink, exactState: false);
+			}
+		}
+
+		[TestCase("<div>x</div>")]
+		[TestCase("<div>x<p>x</p></div>")]
+		[Test(Description = "Выполнение требования no_root_text")]
+		public void TextNodesDirectlyUnderRootAreNotAllowed(string html){
+			testSchema(html,false,PortableHtmlSchemaErorr.RootText);
+		}
+		
+
+		[TestCase("<div><img src='x'/></div>")]
+		[TestCase("<div><a href='x'>ref</a></div>")]
+		[TestCase("<div><a href='x'>ref</a><strong>x</strong></div>",Description = "cover propose")]
+		[TestCase("<div><strong>x</strong></div>")]
+		[Test(Description = "Выполнение требования no_root_inline")]
+		public void InlineNodesDirectlyUnderRootAreNotAllowed(string html)
+		{
+			testSchema(html, false, PortableHtmlSchemaErorr.RootInline);
+		}
+
+		[TestCase("<div><p><strong><p>x</p></strong></p></div>")]
+		[TestCase("<div><p><p>x</p></p></div>")]
+		[Test(Description = "Выполнение требования no_root_inline")]
+		public void NestedParasAreNotAllowed(string html)
+		{
+			testSchema(html, false, PortableHtmlSchemaErorr.NestedParaElements);
+		}
+		[TestCase("<div><p><ul><li>xxx</li></ul></p></div>")]
+		[TestCase("<div><ul><li><p>xxx</p></li></ul></div>")]
+		[Test(Description = "Параграфы не должны содержать не только параграфов, но и списки")]
+		public void ListsInParasNotAllowed(string html){
+			var ctx = new PortableHtmlContext{Level = PortableHtmlStrictLevel.AllowLists};
+			var result = PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(PortableHtmlSchemaErorr.NestedParaElements, result.SchemaError);
+		}
+		[TestCase("<div><p><table><tbody><tr><td>x</td></tr></tbody></table></p></div>")]
+		[TestCase("<div><table><tbody><tr><td><p>x</p></td></tr></tbody></table></div>")]
+		[Test(Description = "Параграфы не должны содержать не только параграфов, но и таблицы")]
+		public void TablesInParasNotAllowed(string html)
+		{
+			var ctx = new PortableHtmlContext { Level = PortableHtmlStrictLevel.AllowTables };
+			var result = PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(PortableHtmlSchemaErorr.NestedParaElements, result.SchemaError);
+		}
+
+
+		[TestCase("<div><ol>a<li>xxx</li></ol></div>")]
+		[TestCase("<div><ul>a<li>xxx</li></ul></div>")]
+		[TestCase("<div><table><tbody><tr>a<td>x</td></tr></tbody></table></div>")]
+		[TestCase("<div><table><tbody><tr>a<td>x</td></tr></tbody></table></div>")]
+		[TestCase("<div><table><tbody>a<tr><td>x</td></tr></tbody></table></div>")]
+		[TestCase("<div><table>a<tbody><tr><td>x</td></tr></tbody></table></div>")]
+		[Test(Description = "Выполнение требования no_root_text")]
+		public void TextNodesDirectlyUnderContainersAreNotAllowed(string html)
+		{
+			var ctx = new PortableHtmlContext { Level = PortableHtmlStrictLevel.AllowExtensions };
+			var result = PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(PortableHtmlSchemaErorr.TextInNonTextElement, result.SchemaError);
+		}
+
+
+
+		[TestCase("<div><ol><strong>a</strong><li>xxx</li></ol></div>")]
+		[TestCase("<div><ul><strong>a</strong><li>xxx</li></ul></div>")]
+		[TestCase("<div><table><tbody><tr><strong>a</strong><td>x</td></tr></tbody></table></div>")]
+		[TestCase("<div><table><tbody><tr><strong>a</strong><td>x</td></tr></tbody></table></div>")]
+		[TestCase("<div><table><tbody><strong>a</strong><tr><td>x</td></tr></tbody></table></div>")]
+		[TestCase("<div><table><strong>a</strong><tbody><tr><td>x</td></tr></tbody></table></div>")]
+		[Test(Description = "Выполнение требования no_root_inline")]
+		public void InlineNodesDirectlyUnderContainersAreNotAllowed(string html)
+		{
+			var ctx = new PortableHtmlContext { Level = PortableHtmlStrictLevel.AllowExtensions };
+			var result = PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual( PortableHtmlSchemaErorr.InlineInNonTextElement,result.SchemaError);
+		}
+		
+		[TestCase("<div a='1'/>")]
+		[TestCase("<div><p a='1'>x</p></div>")]
+		[Test(Description = "По умолчанию все неизвестные атрибуты - ошибка")]
+		public void DisableUnknownAttributesByDefault(string html){
+			var ctx = new PortableHtmlContext();
+			var result = PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(PortableHtmlSchemaErorr.UnknownAttribute, result.SchemaError);
+		}
+
+		[TestCase("<div phtml_a='1'/>")]
+		[TestCase("<div><p phtml_a='1'>x</p></div>")]
+		[Test(Description = "phtml_* атрибуты разрешены")]
+		public void AllowsPhtmlAttributes(string html){
+			var ctx = new PortableHtmlContext ();
+			var result = PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(PortableHtmlSchemaErorr.None, result.SchemaError);
+		}
+
+		[TestCase("<div a='1'/>")]
+		[TestCase("<div><p a='1'>x</p></div>")]
+		[Test(Description = "Через специальную опцию можно разрешнить неизвестные атрибуты")]
+		public void AllowUnknownAttributesWithOption(string html){
+			var ctx = new PortableHtmlContext { Level = PortableHtmlStrictLevel.AllowUnknownAttributes };
+			var result = PortableHtmlSchema.Validate(html, ctx);
+			Assert.AreEqual(PortableHtmlSchemaErorr.None, result.SchemaError);
+		}
+
+		
+
+		[TestCase("<!--c--><DIV a='1' b='2'>x<p/><a href='#'/></DIV>", PortableHtmlVerificationStrategy.ForcedResult,1)]
+		[TestCase("<!--c--><DIV a='1' b='2'>x<p/><a href='#'/></DIV>", PortableHtmlVerificationStrategy.ForcedElementResult,6)]
+		[TestCase("<!--c--><DIV a='1' b='2'>x<p/><a href='#'/></DIV>", PortableHtmlVerificationStrategy.Full,10)]
+		[Test(Description = "Проверяем возможность сбора ошибок в стратегии 'ошибка на элемент'")]
+		public void StrategySupport(string html,PortableHtmlVerificationStrategy strategy,int errorcount )
+		{
+			var ctx = new PortableHtmlContext { Strategy = strategy};
+			var result = PortableHtmlSchema.Validate(html, ctx);
+			Assert.False(result.Ok);
+			foreach (var e in result.Errors)
+			{
+				Console.WriteLine("{0} {1} {2} {3}", e.Error, e.Line, e.Column, e.XPath);
+			}
+			Assert.AreEqual(errorcount, result.Errors.Count);
+		}
+
+		
 	}
 }

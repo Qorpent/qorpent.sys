@@ -72,5 +72,13 @@ namespace Qorpent.PortableHtml{
 		///     Связаннвя системная ошибка
 		/// </summary>
 		public Exception Exception { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString(){
+			return string.Format("{0} {1}:{2}/{3} {4}", Error, Line, Column, XPath, Exception == null ? "" : Exception.Message);
+		}
 	}
 }

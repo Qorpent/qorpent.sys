@@ -8,7 +8,7 @@ namespace Qorpent.PortableHtml{
 	/// <summary>
 	/// Вспомогательный класс для проверки соответствия строки и/или XML стандарту PHTML
 	/// </summary>
-	public class PortableHtmlSchema{
+	public static class PortableHtmlSchema{
 
 		/// <summary>
 		/// Перечень запрещенных элементов
@@ -26,10 +26,67 @@ namespace Qorpent.PortableHtml{
 			"select",
 			"textarea"
 		};
+
+		/// <summary>
+		/// Набор разрешенных в Strict режиме элементов
+		/// </summary>
+		public static readonly string[] StrictElements = new[]{ 
+			"p",
+			"img",
+			"a",
+			"strong",
+			"em",
+			"u",
+			"sub",
+			"sup",
+			"del",
+			"span",
+			
+		};
+
+		/// <summary>
+		/// Набор разрешенных элементов - корневых контейнеров
+		/// </summary>
+		public static readonly string[] ParaElements = new[]{
+			"p", "ul", "ol", "table"
+		};
+
+		/// <summary>
+		/// Набор элементов, которые не могут содержать никакого текста
+		/// </summary>
+		public static readonly string[] NoTextElements = new[]{
+			"ul","ol","br","table","thead","tbody","tr"
+		};
+
+		/// <summary>
+		/// Списочные элементы
+		/// </summary>
+		public static readonly string[] ListElements = new[]{
+			"ol",
+			"ul",
+			"li"
+		};
+
+		/// <summary>
+		/// Табличные элементы
+		/// </summary>
+		public static readonly string[] TableElements = new[]{ 
+			"table",
+			"thead",
+			"tbody",
+			"tr",
+			"th",
+			"td"
+		};
 		/// <summary>
 		/// Допустимое локальное имя для рута
 		/// </summary>
 		public const string AllowedRootName = "div";
+		/// <summary>
+		/// Имя тега BR
+		/// </summary>
+		public const string BrTag = "br";
+
 
 		/// <summary>
 		/// Перечень запрещенных элементов
@@ -49,33 +106,8 @@ namespace Qorpent.PortableHtml{
 		/// </summary>
 		public const string EmptyRequiredElement = "img";
 
-		/// <summary>
-		/// Вспомогательный метод проверки допустимости имени элемента в схеме
-		/// </summary>
-		/// <param name="tagname"></param>
-		/// <returns></returns>
-		public static bool IsAllowedTag(string tagname){
-			return -1 == Array.IndexOf(DangerousElements, tagname.ToLowerInvariant());
-		}
-		/// <summary>
-		/// Метод проверки разрешенных атрибутов
-		/// </summary>
-		/// <param name="attributename"></param>
-		/// <returns></returns>
-		public static PortableHtmlSchemaErorr GetAttributeErrorState(string attributename){
-			var aname = attributename.ToLowerInvariant();
-			if (-1 != Array.IndexOf(DeprecatedAttributes, aname)){
-				if (aname == "id" ||  aname == "style" || aname=="class"){
-					return PortableHtmlSchemaErorr.CssAttributeDetected;
-				}
-				return PortableHtmlSchemaErorr.DeprecatedAttributeDetected;
-			}
-			if (DeprecatedAttributePrefixes.Any(aname.StartsWith)){
-				if (aname.StartsWith("on")) return PortableHtmlSchemaErorr.EventAttributeDetected;
-				return PortableHtmlSchemaErorr.AngularAttributeDetected;
-			}
-			return PortableHtmlSchemaErorr.None;
-		}
+		
+		
 
 		/// <summary>
 		/// Валидизация исходного HTML
@@ -95,36 +127,40 @@ namespace Qorpent.PortableHtml{
 				
 				var rootElementsCount = xml.Elements().Count();
 				if (1 < rootElementsCount){
-					return context.SetError(PortableHtmlSchemaErorr.NoRootTag); 
+					context.SetError(PortableHtmlSchemaErorr.NoRootTag); 
 				}
+				if (!context.IsActive) return context;
 				//необходимо эту проверку вызывать в том числе здесь,
 				//так как иначе при передаче в XML могут быть проигнорированы трейловые комментарии
 				var hasComment = xml.DescendantNodes().OfType<XComment>().Any();
 				if (hasComment)
 				{
-					return context.SetError(PortableHtmlSchemaErorr.CommentsDetected); 
+					context.SetError(PortableHtmlSchemaErorr.CommentsDetected); 
 				}
-
+				if (!context.IsActive) return context;
 				//необходимо эту проверку вызывать в том числе здесь,
 				//так как иначе при передаче в XML могут быть проигнорированы трейловые инструкции
 				var hasProcessing = xml.DescendantNodes().OfType<XProcessingInstruction>().Any();
 				if (hasProcessing)
 				{
-					return context.SetError(PortableHtmlSchemaErorr.ProcessingInstructionsDetected); 
+					context.SetError(PortableHtmlSchemaErorr.ProcessingInstructionsDetected); 
 				}
+				if (!context.IsActive) return context;
 
 				//необходимо эту проверку вызывать в том числе здесь,
 				//так как иначе при передаче в XML могут быть проигнорированы трейловые CDATA
 				var hasCData = xml.DescendantNodes().OfType<XCData>().Any();
 				if (hasCData)
 				{
-					return context.SetError(PortableHtmlSchemaErorr.CdataDetected);
+					context.SetError(PortableHtmlSchemaErorr.CdataDetected);
 				}
+				if (!context.IsActive) return context;
 				var realRoot = XElement.Parse(srcHtml,LoadOptions.SetLineInfo);
 
 				if (realRoot.Name.LocalName != AllowedRootName){
-					return context.SetError(PortableHtmlSchemaErorr.InvalidRootTag);
+					context.SetError(PortableHtmlSchemaErorr.InvalidRootTag,realRoot);
 				}
+				if (!context.IsActive) return context;
 				//hack way to provide addition info to method
 				realRoot.AddAnnotation(CheckedBySourceCheckerAnnotation.Default);
 				return Validate(realRoot,context);
@@ -174,8 +210,75 @@ namespace Qorpent.PortableHtml{
 			CheckAnchorLinks(context);
 			if (!context.IsActive) return context;
 			CheckImageLinks(context);
-
+			if (!context.IsActive) return context;
+			CheckRootTextNodes(context);
+			if (!context.IsActive) return context;
+			CheckRootInlineElements(context);
+			if (!context.IsActive) return context;
+			CheckNestedParas(context);
+			if (!context.IsActive) return context;
+			CheckNoTextElementsText(context);
+			if (!context.IsActive) return context;
+			CheckNoTextElementsInlines(context);
 			return context;
+		}
+
+		private static void CheckNestedParas(PortableHtmlContext context){
+			foreach (var p in context.SourceXml.Descendants()){
+				if(!context.IsActive)break;
+				if (!context.InChecking(p)) continue;
+				if (-1 != Array.IndexOf(ParaElements, p.Name.LocalName)){
+					if (p.Parent != context.SourceXml){
+						context.SetError(PortableHtmlSchemaErorr.NestedParaElements, p);
+					}	
+				}
+			}
+		}
+
+		private static void CheckRootInlineElements(PortableHtmlContext context){
+			foreach (var e in context.SourceXml.Elements()){
+				if(!context.IsActive)break;
+				if (-1 == Array.IndexOf(ParaElements, e.Name.LocalName)){
+					context.SetError(PortableHtmlSchemaErorr.RootInline,e);
+				}
+			}
+		}
+
+		private static void CheckNoTextElementsText(PortableHtmlContext context)
+		{
+			foreach (var e in context.SourceXml.Descendants()){
+				if(!context.IsActive)break;
+				if(!context.InChecking(e))continue;
+				if (-1 != Array.IndexOf(NoTextElements, e.Name.LocalName)){
+					if (e.Nodes().OfType<XText>().Any()){
+						context.SetError(PortableHtmlSchemaErorr.TextInNonTextElement,e);
+					}
+				}
+			}
+			
+		}
+
+		private static void CheckNoTextElementsInlines(PortableHtmlContext context){
+			foreach (var e in context.SourceXml.Descendants()){
+				if (!context.IsActive) break;
+				if (!context.InChecking(e)) continue;
+				if (-1 != Array.IndexOf(NoTextElements, e.Name.LocalName)){
+					foreach (var sube in e.Elements()){
+						if (-1 == Array.IndexOf(ParaElements, sube.Name.LocalName)){
+							context.SetError(PortableHtmlSchemaErorr.InlineInNonTextElement, e);
+						}
+					}
+
+				}
+			}
+		}
+
+		private static void CheckRootTextNodes(PortableHtmlContext context)
+		{
+			if (context.SourceXml.Nodes().OfType<XText>().Any())
+			{
+				context.SetError(PortableHtmlSchemaErorr.RootText);
+			}
 		}
 
 		/// <summary>
@@ -223,11 +326,6 @@ namespace Qorpent.PortableHtml{
 					{
 						context.SetError(error, anchor);
 					}
-				}
-
-				var target = anchor.Attribute("target");
-				if (null != target){
-					context.SetError(PortableHtmlSchemaErorr.DeprecatedAttributeDetected, a: target);
 				}
 			}
 		}
@@ -283,8 +381,11 @@ namespace Qorpent.PortableHtml{
 		{
 			foreach (var e in context.SourceXml.DescendantsAndSelf().Where(context.InChecking))
 			{
+				if(!context.IsActive)break;
 				foreach (var a in e.Attributes()){
-					var state =  GetAttributeErrorState(a.Name.LocalName);
+					if (!context.IsActive) break;
+					if(!context.InChecking(e))break;
+					var state =  context.GetAttributeErrorState(a.Name.LocalName,a.Parent.Name.LocalName);
 					if (state != PortableHtmlSchemaErorr.None){
 						context.SetError(state, a:a);
 					}					
@@ -299,13 +400,12 @@ namespace Qorpent.PortableHtml{
 		/// <param name="context"></param>
 		private static void CheckDeprecatedElements(PortableHtmlContext context)
 		{
-			var deprecates =
-				context.SourceXml.Descendants()
-					 .Where(context.InChecking)
-				      .Where(_ => !IsAllowedTag(_.Name.LocalName))
-				      .ToArray();
-			foreach (var e in deprecates){
-				context.SetError(PortableHtmlSchemaErorr.DangerousElement, e);
+			foreach (var e in context.SourceXml.Descendants().Where(context.InChecking)){
+				if(!context.IsActive)break;
+				var error = context.GetTagState(e.Name.LocalName);
+				if (error != PortableHtmlSchemaErorr.None){
+					context.SetError(error, e);
+				}
 			}
 
 		}
@@ -359,7 +459,7 @@ namespace Qorpent.PortableHtml{
 		private static void CheckRootElement(PortableHtmlContext context){
 			var srcXml = context.SourceXml;
 			if (srcXml.Name.LocalName != AllowedRootName){
-				context.SetError(PortableHtmlSchemaErorr.InvalidRootTag);
+				context.SetError(PortableHtmlSchemaErorr.InvalidRootTag, srcXml);
 			}
 		}
 	}

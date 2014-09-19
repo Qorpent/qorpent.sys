@@ -42,7 +42,31 @@ namespace Qorpent.PortableHtml{
 		/// Обнаружен тег Script
 		/// </summary>
 		DangerousElement = 1<<7,
-		
+		/// <summary>
+		/// Текст непосредственно в корневом элементе
+		/// </summary>
+		RootText = 1<<8,
+
+		/// <summary>
+		/// Текст непосредственно в корневом элементе
+		/// </summary>
+		RootInline = 1 << 9,
+		/// <summary>
+		/// Неизвестный атрибут
+		/// </summary>
+		UnknownAttribute =1<<10,
+		/// <summary>
+		/// Вложенные параграфы
+		/// </summary>
+		NestedParaElements = 1 << 11,
+		/// <summary>
+		/// Текст в элементе, запрещающем его наличие
+		/// </summary>
+		TextInNonTextElement =1<<14,
+		/// <summary>
+		/// Инлайновый элемент в нетекстовом элементе
+		/// </summary>
+		InlineInNonTextElement =1<<15,
 		/// <summary>
 		/// Обнаружена CDATA
 		/// </summary>
@@ -66,7 +90,7 @@ namespace Qorpent.PortableHtml{
 		/// <summary>
 		/// Обнаружен иной запрещенный атрибут
 		/// </summary>
-		DeprecatedAttributeDetected = 1<<22,
+		DangerousAttribute = 1<<22,
 		/// <summary>
 		/// Пустой элемент
 		/// </summary>
@@ -108,6 +132,12 @@ namespace Qorpent.PortableHtml{
 		/// </summary>
 		AppletDetected = (ulong)1 << 32,
 
-	
+		/// <summary>
+		/// Элемент, не разрешенный по схеме
+		/// </summary>
+		UnknownElement = (ulong)1<<33,
+
+
+		
 	}
 }
