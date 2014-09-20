@@ -38,7 +38,10 @@ namespace Qorpent.PortableHtml{
 			{"i", "em"},
 			{"strike", "del"},
 		};
-
+		/// <summary>
+		/// Контсекст генерации PHTML
+		/// </summary>
+		public PortableHtmlContext Context { get; set; }
 		/// <summary>
 		///     Признак сохранения форматирования
 		/// </summary>
@@ -71,8 +74,29 @@ namespace Qorpent.PortableHtml{
 			if (!KeepFormatting){
 				RemoveFormatsFromTotallyFormattedParagraphs(result);
 			}
+			var ctx = Context ?? new PortableHtmlContext();
+			CheckSourceTrust(result, ctx);
 			result.Name = "div";
 			return result;
+		}
+
+		private void CheckSourceTrust(XElement result, PortableHtmlContext ctx){
+			foreach (var descendant in result.Descendants("img")){
+				var isTrust = ctx.GetUriTrustState(descendant.Attribute("src").Value, true) == PortableHtmlSchemaErorr.None;
+				if (!isTrust){
+					descendant.SetAttributeValue("phtml_src",descendant.Attribute("src").Value);
+					descendant.SetAttributeValue("src","/phtml_non_trust_image.png");
+				}
+			}
+			foreach (var descendant in result.Descendants("a"))
+			{
+				var isTrust = ctx.GetUriTrustState(descendant.Attribute("href").Value, false) == PortableHtmlSchemaErorr.None;
+				if (!isTrust)
+				{
+					descendant.SetAttributeValue("phtml_href", descendant.Attribute("href").Value);
+					descendant.SetAttributeValue("href", "/phtml_non_trust_link.html");
+				}
+			}
 		}
 
 		private void ReplaceLineBreaksToHtmlBreaks(XElement result){

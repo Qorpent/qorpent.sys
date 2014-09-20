@@ -15,9 +15,16 @@ namespace Qorpent.Serialization.Tests.PortableHtml {
 		private PortableHtmlConverter _converter;
 		[SetUp]
 		public void SetUp() {
-			_converter = new PortableHtmlConverter { KeepFormatting = false, ConvertHeadersToStrongs = true ,ConvertLineBreaksToHtmlBreaks = true};
+			_converter = new PortableHtmlConverter{
+				KeepFormatting = false, 
+				ConvertHeadersToStrongs = true ,
+				ConvertLineBreaksToHtmlBreaks = true,
+				Context = new PortableHtmlContext{Level = PortableHtmlStrictLevel.TrustAllLinks|PortableHtmlStrictLevel.TrustAllImages}
+			};
 		}
 		[TestCase(@"<div><p>Text1</p><div><img src=""img.png"" /></div><p>Text2</p></div>", @"<div><p>Text1</p><p><img src=""img.png"" /></p><p>Text2</p></div>")]
+		[TestCase(@"<div><p>Text1</p><div><img src=""#"" /></div><p>Text2</p></div>", @"<div><p>Text1</p><p><img  src='/phtml_non_trust_image.png' phtml_src='#' /></p><p>Text2</p></div>")]
+		[TestCase(@"<div><p>Text1</p><div><a href=""#"" >Ярлык</a></div><p>Text2</p></div>", @"<div><p>Text1</p><p><a href='/phtml_non_trust_link.html' phtml_href='#' >Ярлык</a></p><p>Text2</p></div>")]
 		[TestCase(@"<div><span>Text</span></div>", @"<div><p>Text</p></div>")]
 		[TestCase(@"<div><h1>Text</h1></div>", @"<div><p phtml_tag='h1'><strong>Text</strong></p></div>")]
 		[TestCase(@"<div><ol><li>Text</li><li>Text2</li></ol></div>", @"<div><p phtml_tag='li'>Text</p><p phtml_tag='li'>Text2</p></div>")]
@@ -84,7 +91,7 @@ text]]></r>", @"<div><p>Test</p><p>text</p></div>")]
 			Console.WriteLine(ex.ToString());
 			Console.WriteLine("\nRESULT:\n====================");
 			Console.WriteLine(r);
-			Assert.AreEqual(ex.ToString().Replace("\u00A0", " "), r.Replace("\u00A0", " "));
+			Assert.AreEqual(ex.ToString().Replace("\u00A0", " "),phtml.ToString().Replace("\u00A0", " "));
 			var ctx = PortableHtmlSchema.Validate(phtml, PortableHtmlStrictLevel.TrustAllImages | PortableHtmlStrictLevel.TrustAllLinks);
 			if (!ctx.Ok){
 				Console.WriteLine(ctx.ToString());
