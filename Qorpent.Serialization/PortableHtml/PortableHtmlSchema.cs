@@ -130,8 +130,16 @@ namespace Qorpent.PortableHtml{
 		/// </summary>
 		public readonly  static string[] EmptyRequiredElements =new[]{ "img","br"};
 
-		
-		
+
+		/// <summary>
+		/// Валидизация исходного HTML
+		/// </summary>
+		/// <param name="srcHtml">Строка HTML для проверки соответствия PHTML</param>
+		/// <param name="level"></param>
+		/// <returns></returns>
+		public static PortableHtmlContext Validate(string srcHtml,PortableHtmlStrictLevel level){
+			return Validate(srcHtml, new PortableHtmlContext{Level = level});
+		}
 
 		/// <summary>
 		/// Валидизация исходного HTML
@@ -199,7 +207,17 @@ namespace Qorpent.PortableHtml{
 		/// source string parsing
 		/// </summary>
 		private class CheckedBySourceCheckerAnnotation{public static readonly CheckedBySourceCheckerAnnotation Default=new CheckedBySourceCheckerAnnotation(); }
-		
+
+
+		/// <summary>
+		/// Валидизация исходного XML
+		/// </summary>
+		/// <param name="srcXml">Элемент для проверки соответствия PHTML</param>
+		/// <param name="level"></param>
+		/// <returns></returns>
+		public static PortableHtmlContext Validate(XElement srcXml,PortableHtmlStrictLevel level){
+			return Validate(srcXml, new PortableHtmlContext{Level = level});
+		}
 
 		/// <summary>
 		/// Валидизация исходного XML

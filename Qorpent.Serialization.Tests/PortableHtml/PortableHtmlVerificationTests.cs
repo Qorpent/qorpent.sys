@@ -252,6 +252,7 @@ namespace Qorpent.Serialization.Tests.PortableHtml
 		[TestCase("<div>\r\n\t<p>simple</p>\r\n</div>",Description = "Simple para pretty print")]
 		[TestCase("<div><p phtml_id='1'>simple</p></div>",Description = "Simple para with phtml")]
 		[TestCase("<div><p>simple <strong>x</strong></p></div>",Description = "Simple para with inline")]
+		[TestCase("<div><p><em><strong><img src='x'/></strong></em></p></div>", Description = "Вложенные INLINE разрешены")]
 		[Test(Description = "Проверка на прохождение валидизации нормальными примерами")]
 		public void ValidCases(string srcHtml){
 			testSchema(srcHtml);

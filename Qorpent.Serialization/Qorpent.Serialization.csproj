@@ -111,6 +111,7 @@
     <Compile Include="PortableHtml\PortableHtmlContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PortableHtml\PortableHtmlConverter.cs" />
     <Compile Include="PortableHtml\PortableHtmlSchema.cs">
       <SubType>Code</SubType>
     </Compile>
