@@ -208,15 +208,19 @@ namespace Qorpent.PortableHtml{
 				var post = p.NextNode;
 				if (null != pre &&
 				    !(pre is XElement && (((XElement) pre).Name.LocalName == "p" || ((XElement) pre).Name.LocalName == "br"))){
-					var prep = new XElement("p", pre);
+					var prep = new XElement("p");
+					pre.AddBeforeSelf(prep);
+					pre.Remove();
+					prep.Add(pre);
 					prep.SetAttributeValue("__auto", true); //annotations can be kiled in replaces,attributes better
-					pre.ReplaceWith(prep);
 				}
 				if (null != post &&
 				    !(post is XElement && (((XElement) post).Name.LocalName == "p" || ((XElement) post).Name.LocalName == "br"))){
-					var postp = new XElement("p", post);
+					var postp = new XElement("p");
+					post.AddBeforeSelf(postp);
+					post.Remove();
+					postp.Add(post);
 					postp.SetAttributeValue("__auto", true); //annotations can be kiled in replaces,attributes better
-					post.ReplaceWith(postp);
 				}
 				if (null != p.Parent) p.Remove();
 			}

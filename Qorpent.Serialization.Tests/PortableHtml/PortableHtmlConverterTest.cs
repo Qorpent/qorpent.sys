@@ -22,6 +22,17 @@ namespace Qorpent.Serialization.Tests.PortableHtml {
 				Context = new PortableHtmlContext{Level = PortableHtmlStrictLevel.TrustAllLinks|PortableHtmlStrictLevel.TrustAllImages}
 			};
 		}
+		[TestCase(@"    <div>
+      <br class='1' />
+      <em>
+        <br class='2' />
+        <span>От редакции</span>
+        <br class='3' />
+      </em>
+      <br class='4' />
+    </div>", @"<div>
+  <p>От редакции</p>
+</div>")]
 		[TestCase(@"<div>
   <p><span phtml_tag=""td""><img src=""alexey_chabin_lj/images/c43e6abe.gif"" /></span></p>
   <p></p>
