@@ -140,6 +140,7 @@ namespace Qorpent.PortableHtml{
 
 		private void ProcessTextTrimming(XElement result){
 			foreach (var t in result.DescendantNodes().OfType<XText>()){
+				if (t.Value.Length == 0) continue;
 				if (t.Value.Contains("&amp;")){
 					t.Value = t.Value.Replace("&amp;nbsp;", "\u00A0").Replace("&amp;lt;", "<").Replace("&amp;gt;", ">");
 				}

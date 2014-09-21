@@ -22,6 +22,30 @@ namespace Qorpent.Serialization.Tests.PortableHtml {
 				Context = new PortableHtmlContext{Level = PortableHtmlStrictLevel.TrustAllLinks|PortableHtmlStrictLevel.TrustAllImages}
 			};
 		}
+		[TestCase(@"<div>
+  <p><span phtml_tag=""td""><img src=""alexey_chabin_lj/images/c43e6abe.gif"" /></span></p>
+  <p></p>
+  <p><span phtml_tag=""td""><p><a href=""http://www.newsru.com/russia/09aug2014/prikaz.html"">""Они выполняли приказ"": арестованных в Ростовской области украинских военных отпустили</a></p><p><a href=""http://www.newsru.com/russia/09aug2014/prikaz.html"">Арестованные пятеро украинских военнослужащих из 72-й бригады освобождены без предъявления обвинений, сообщил в субботу официальный представитель Следственного комитета РФ Владимир Маркин.</a></p><p><a href=""http://www.newsru.com"">NEWSru.com</a></p></span></p>
+  <p></p>
+  <p>Когда совершается групповое преступление и ловят часть негодяев, как называется самый шустро соображающий из преступников?</p>
+  <p>-Свидетель!</p>
+</div>", @"<div>
+  <p>
+    <img src=""alexey_chabin_lj/images/c43e6abe.gif"" />
+  </p>
+  <p>
+    <a href=""http://www.newsru.com/russia/09aug2014/prikaz.html"">""Они выполняли приказ"": арестованных в Ростовской области украинских военных отпустили</a>
+  </p>
+  <p>
+    <a href=""http://www.newsru.com/russia/09aug2014/prikaz.html"">Арестованные пятеро украинских военнослужащих из 72-й бригады освобождены без предъявления обвинений, сообщил в субботу официальный представитель Следственного комитета РФ Владимир Маркин.</a>
+  </p>
+  <p>
+    <a href=""http://www.newsru.com"">NEWSru.com</a>
+  </p>
+  <p>Когда совершается групповое преступление и ловят часть негодяев, как называется самый шустро соображающий из преступников?</p>
+  <p>-Свидетель!</p>
+</div>")]
+		[TestCase(@"<div>Text<br /><br />Txet</div>", @"<div><p>Text</p><p>Txet</p></div>")]
 		[TestCase(@"<div><p>Text1</p><div><img src=""img.png"" /></div><p>Text2</p></div>", @"<div><p>Text1</p><p><img src=""img.png"" /></p><p>Text2</p></div>")]
 		[TestCase(@"<div><p>Text1</p><div><img src=""#"" /></div><p>Text2</p></div>", @"<div><p>Text1</p><p><img  src='/phtml_non_trust_image.png' phtml_src='#' /></p><p>Text2</p></div>")]
 		[TestCase(@"<div><p>Text1</p><div><a href=""#"" >Ярлык</a></div><p>Text2</p></div>", @"<div><p>Text1</p><p><a href='/phtml_non_trust_link.html' phtml_href='#' >Ярлык</a></p><p>Text2</p></div>")]
