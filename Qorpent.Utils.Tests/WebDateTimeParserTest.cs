@@ -149,6 +149,15 @@ namespace Qorpent.Utils.Tests
 			Assert.AreEqual(new DateTime(yesterday.Year,yesterday.Month,yesterday.Day, 22, 01, 0), date);
 		}
 
+
+		[Test]
+		public void MI_353_Invalid_DateParsing_JustMedia_NoYear()
+		{
+			var parser = new WebDateTimeParser();
+			var date = WebDateTimeParser.Parse("17 сентября в 22:01");
+			Assert.AreEqual(new DateTime(DateTime.Today.Year,9,17, 22, 01, 0), date);
+		}
+
 		[Test]
 		public void MI_344_Invalid_DateParsing_Upmonitor()
 		{

@@ -70,16 +70,24 @@ namespace Qorpent.PortableHtml{
 			}
 			CheckSourceTrust(result, ctx);
 			ProcessBreaks(result);
+			ExpandLinks(result);
 			CollapseParas(result);
 			ProcessRootNodes(result);
 			ProcessTextTrimming(result);
 			if (!KeepFormatting){
 				RemoveFormatsFromTotallyFormattedParagraphs(result);
 			}
-			
-			
+
+			Finalize(result);
 			result.Name = "div";
 			return result;
+		}
+
+		private void Finalize(XElement result){
+			foreach (var descendant in result.Descendants("p")){
+				descendant.SetAttributeValue("__auto",null);
+			}
+			
 		}
 
 		private void CheckSourceTrust(XElement result, PortableHtmlContext ctx){
@@ -140,7 +148,9 @@ namespace Qorpent.PortableHtml{
 						    .Where(
 							    _ =>
 							    null == _.Annotation<KeepFormat>() && _.Name.LocalName != "img" && _.Name.LocalName != "a" &&
-							    null == _.PreviousNode && null == _.NextNode).ToArray();
+							   ( (null == _.PreviousNode && null == _.NextNode )
+							   || (string.IsNullOrWhiteSpace(_.Value) && !_.Descendants("img").Any())
+							   )).ToArray();
 					if (0 == illegalFormats.Length) break;
 					foreach (var illegalFormat in illegalFormats){
 						illegalFormat.ReplaceWith(illegalFormat.Nodes());
@@ -151,6 +161,11 @@ namespace Qorpent.PortableHtml{
 
 		private void ProcessTextTrimming(XElement result){
 			foreach (var t in result.DescendantNodes().OfType<XText>()){
+				if (t.Parent == null) continue;
+				while (t.NextNode is XText){
+					t.Value += (t.NextNode as XText).Value;
+					t.NextNode.Remove();
+				}
 				if (t.Value.Length == 0) continue;
 				if (t.Value.Contains("&amp;")){
 					t.Value = t.Value.Replace("&amp;nbsp;", "\u00A0").Replace("&amp;lt;", "<").Replace("&amp;gt;", ">");
@@ -164,6 +179,8 @@ namespace Qorpent.PortableHtml{
 				if (wastail && t.NextNode is XElement){
 					t.Value += " ";
 				}
+				t.Value =Regex.Replace(t.Value, @"(\s)\s*", "$1");
+
 			}
 		}
 
@@ -206,10 +223,23 @@ namespace Qorpent.PortableHtml{
 		}
 
 		private static void CollapseParas(XElement result){
+			
 			foreach (var p in result.Descendants("p").Reverse().ToArray()){
 				if (p.Descendants("p").Any()){
 					p.ReplaceWith(p.Nodes());
 				}
+			}
+		}
+
+		private static void ExpandLinks(XElement result){
+			foreach (var linkedP in result.Descendants("a").Where(_ => _.Descendants("p").Any()).ToArray()){
+				foreach (var p in linkedP.Descendants("p").Reverse().ToArray()){
+					p.AddFirst(" ");
+					p.Add(" ");
+					p.ReplaceWith(p.Nodes());
+				}
+				var para = new XElement("p", linkedP);
+				linkedP.ReplaceWith(para);
 			}
 		}
 

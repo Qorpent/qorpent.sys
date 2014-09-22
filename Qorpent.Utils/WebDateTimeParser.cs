@@ -30,6 +30,7 @@ namespace Qorpent.Utils {
 		    "D.MM.yyyy,? HH:mm:ss",
 		    "D.MM.yyyy,? HH:mm",
 		    "D MMM yyyy HH:mm",
+		    "D MMM в HH:mm",
 		    "HH:mm dd.MM.yyyy",
 		    "D.MM.yyyy",
 		    "HH:mm:ss D.MM.yy",
@@ -217,7 +218,7 @@ namespace Qorpent.Utils {
 				return parsedDate;
 			}
 
-		    throw new Exception("datetime was not responsed");
+		    throw new Exception("datetime was not responsed "+dateTime);
 	    }
 
 	    /// <summary>

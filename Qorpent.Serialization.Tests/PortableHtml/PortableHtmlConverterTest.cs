@@ -57,6 +57,14 @@ namespace Qorpent.Serialization.Tests.PortableHtml {
   <p>-Свидетель!</p>
 </div>")]
 		[TestCase(@"<div>Text<br /><br />Txet</div>", @"<div><p>Text</p><p>Txet</p></div>")]
+
+		[TestCase(@"<div>a<strong></strong>a</div>", @"<div><p>aa</p></div>")]
+		[TestCase(@"<div>a<br/>b<br/>c</div>",@"<div><p>a</p><p>b</p><p>c</p></div>")]
+
+		[TestCase(@"<div>a<strong><img/></strong>a</div>", @"<div><p>aa</p></div>")]
+
+		[TestCase(@"<div __auto='True'>a<strong __auto='True'>x</strong>a</div>", @"<div><p>a<strong>x</strong>a</p></div>")]
+
 		[TestCase(@"<div><p>Text1</p><div><img src=""img.png"" /></div><p>Text2</p></div>", @"<div><p>Text1</p><p><img src=""img.png"" /></p><p>Text2</p></div>")]
 		[TestCase(@"<div><p>Text1</p><div><img src=""#"" /></div><p>Text2</p></div>", @"<div><p>Text1</p><p><img  src='/phtml_non_trust_image.png' phtml_src='#' /></p><p>Text2</p></div>")]
 		[TestCase(@"<div><p>Text1</p><div><a href=""#"" >Ярлык</a></div><p>Text2</p></div>", @"<div><p>Text1</p><p><a href='/phtml_non_trust_link.html' phtml_href='#' >Ярлык</a></p><p>Text2</p></div>")]
@@ -119,6 +127,27 @@ namespace Qorpent.Serialization.Tests.PortableHtml {
 </div>")]
 		[TestCase(@"<r><![CDATA[Test
 text]]></r>", @"<div><p>Test</p><p>text</p></div>")]
+		[TestCase(@"<p>
+              <br />
+              <a target='_blank' href='http://66.ru/news/incident/163250/photoreportage/' class='pic-with-repo'>
+                <br />
+                <img class=' qlevel-16 qpos-0' src='66_ru/images/e2bb16c2.jpg' />
+                <br />
+                <span class='pic-with-repo__text'>
+                  <br />
+                  <span class='pic-with-repo__text-pad'>
+                    <br />
+                    <span>Lada Kalina перевернулась на ул. Альпинистов</span>
+                    <br />
+                    <span class='pic-with-repo__count'>8 фотографий</span>
+                    <br />
+                  </span>
+                  <br />
+                </span>
+                <br />
+              </a>
+              <br />
+            </p>", @"<div><p><a href='http://66.ru/news/incident/163250/photoreportage/'><img src='66_ru/images/e2bb16c2.jpg' /> Lada Kalina перевернулась на ул. Альпинистов 8 фотографий</a></p></div>")]
 		public void Test(string source, string expected) {
 			var ex = XElement.Parse(expected);
 			Assert.True(PortableHtmlSchema.Validate(ex,PortableHtmlStrictLevel.TrustAllImages|PortableHtmlStrictLevel.TrustAllLinks).Ok);
@@ -130,7 +159,7 @@ text]]></r>", @"<div><p>Test</p><p>text</p></div>")]
 			Console.WriteLine(ex.ToString());
 			Console.WriteLine("\nRESULT:\n====================");
 			Console.WriteLine(r);
-			Assert.AreEqual(ex.ToString().Replace("\u00A0", " "),phtml.ToString().Replace("\u00A0", " "));
+			Assert.AreEqual(ex.ToString(SaveOptions.DisableFormatting).Replace("\u00A0", " "),phtml.ToString(SaveOptions.DisableFormatting).Replace("\u00A0", " "));
 			var ctx = PortableHtmlSchema.Validate(phtml, PortableHtmlStrictLevel.TrustAllImages | PortableHtmlStrictLevel.TrustAllLinks);
 			if (!ctx.Ok){
 				Console.WriteLine(ctx.ToString());
