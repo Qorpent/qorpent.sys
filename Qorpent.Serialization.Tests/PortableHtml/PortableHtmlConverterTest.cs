@@ -127,6 +127,36 @@ namespace Qorpent.Serialization.Tests.PortableHtml {
 </div>")]
 		[TestCase(@"<r><![CDATA[Test
 text]]></r>", @"<div><p>Test</p><p>text</p></div>")]
+		[TestCase(@"<div>
+  <p>
+    <br />
+    <span class='c2'>Добрый день!</span>
+    <br />
+    <br class='c3 qlevel-8 qpos-1' />
+    <br />
+    <span class='c2'>Прошу обратить внимание на адрес писем для Леонида Васильевича:</span>
+    <br />
+    <br class='c3 qlevel-8 qpos-3' />
+    <br />
+    <span class='c5'>
+      <br />
+      <strong class='c4'>655017, г. Абакан, п. Молодежный-11, ФКУ ИК-35<br class=' qlevel-10 qpos-0' />  Все тоже самое, только без отряда.</strong>
+      <br />
+    </span>
+    <br />
+    <br class='c3 qlevel-8 qpos-5' />
+    <br />
+    <span class='c2'>Что касаемо новостей, особых изменений нет - 'все нормально' - сидит.</span>
+    <br />
+  </p>
+</div>", @"<div>
+  <p>Добрый день!</p>
+  <p>Прошу обратить внимание на адрес писем для Леонида Васильевича:</p>
+  <p>655017, г. Абакан, п. Молодежный-11, ФКУ ИК-35</p>
+  <p>Все тоже самое, только без отряда.</p>
+  <p>Что касаемо новостей, особых изменений нет - 'все нормально' - сидит.</p>
+</div>")]
+
 		[TestCase(@"<p>
               <br />
               <a target='_blank' href='http://66.ru/news/incident/163250/photoreportage/' class='pic-with-repo'>

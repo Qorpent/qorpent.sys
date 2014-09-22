@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -71,6 +72,7 @@ namespace Qorpent.PortableHtml{
 			CheckSourceTrust(result, ctx);
 			ProcessBreaks(result);
 			ExpandLinks(result);
+			ExpandInlines(result);
 			CollapseParas(result);
 			ProcessRootNodes(result);
 			ProcessTextTrimming(result);
@@ -81,6 +83,15 @@ namespace Qorpent.PortableHtml{
 			Finalize(result);
 			result.Name = "div";
 			return result;
+		}
+
+		private void ExpandInlines(XElement result){
+			var inlines =
+				result.Descendants().Where(_ => -1 != Array.IndexOf(PortableHtmlSchema.InlineElements, _.Name.LocalName));
+			var badinlines = inlines.Where(_ => _.Descendants("p").Any());
+			foreach (var badinline in badinlines.Reverse().ToArray()){
+				badinline.ReplaceWith(badinline.Nodes());
+			}
 		}
 
 		private void Finalize(XElement result){
