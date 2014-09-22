@@ -149,5 +149,9 @@ namespace Qorpent.PortableHtml{
 		/// Ошибка в структуре таблицы
 		/// </summary>
 		InvalidTable = (ulong)1<<35,
+		/// <summary>
+		/// Неверный URI ссылки
+		/// </summary>
+		InvalidUri = (ulong)1<<36,
 	}
 }

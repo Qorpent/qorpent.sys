@@ -64,9 +64,11 @@ namespace Qorpent.PortableHtml{
 		/// <returns></returns>
 		public XElement Convert(XElement source){
 			var result = InitalCleanup(source);
+			var ctx = Context ?? new PortableHtmlContext();
 			if (ConvertLineBreaksToHtmlBreaks){
 				ReplaceLineBreaksToHtmlBreaks(result);
 			}
+			CheckSourceTrust(result, ctx);
 			ProcessBreaks(result);
 			CollapseParas(result);
 			ProcessRootNodes(result);
@@ -74,29 +76,38 @@ namespace Qorpent.PortableHtml{
 			if (!KeepFormatting){
 				RemoveFormatsFromTotallyFormattedParagraphs(result);
 			}
-			var ctx = Context ?? new PortableHtmlContext();
-			CheckSourceTrust(result, ctx);
+			
+			
 			result.Name = "div";
 			return result;
 		}
 
 		private void CheckSourceTrust(XElement result, PortableHtmlContext ctx){
-			foreach (var descendant in result.Descendants("img")){
-				var isTrust = ctx.GetUriTrustState(descendant.Attribute("src").Value, true) == PortableHtmlSchemaErorr.None;
-				if (!isTrust){
-					descendant.SetAttributeValue("phtml_src",descendant.Attribute("src").Value);
-					descendant.SetAttributeValue("src","/phtml_non_trust_image.png");
+			foreach (var descendant in result.Descendants("img").ToArray()){
+				if (null == descendant.Attribute("src") || string.IsNullOrWhiteSpace(descendant.Attribute("src").Value)){
+					descendant.Remove();
+				}
+				else{
+					var isTrust = ctx.GetUriTrustState(descendant.Attribute("src").Value, true) == PortableHtmlSchemaErorr.None;
+					if (!isTrust){
+						descendant.SetAttributeValue("phtml_src", descendant.Attribute("src").Value);
+						descendant.SetAttributeValue("src", "/phtml_non_trust_image.png");
+					}
 				}
 			}
-			foreach (var descendant in result.Descendants("a"))
-			{
-				var isTrust = ctx.GetUriTrustState(descendant.Attribute("href").Value, false) == PortableHtmlSchemaErorr.None;
-				if (!isTrust)
-				{
-					descendant.SetAttributeValue("phtml_href", descendant.Attribute("href").Value);
-					descendant.SetAttributeValue("href", "/phtml_non_trust_link.html");
+			foreach (var descendant in result.Descendants("a").ToArray()){
+				if (null == descendant.Attribute("href") || string.IsNullOrWhiteSpace(descendant.Attribute("href").Value)){
+					descendant.ReplaceWith(descendant.Nodes());
+				}
+				else{
+					var isTrust = ctx.GetUriTrustState(descendant.Attribute("href").Value, false) == PortableHtmlSchemaErorr.None;
+					if (!isTrust){
+						descendant.SetAttributeValue("phtml_href", descendant.Attribute("href").Value);
+						descendant.SetAttributeValue("href", "/phtml_non_trust_link.html");
+					}
 				}
 			}
+
 		}
 
 		private void ReplaceLineBreaksToHtmlBreaks(XElement result){

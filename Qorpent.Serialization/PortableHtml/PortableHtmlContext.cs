@@ -89,28 +89,33 @@ namespace Qorpent.PortableHtml{
 		/// <param name="isImg">Признак того, что это ссылка на рисунок</param>
 		/// <returns></returns>
 		public PortableHtmlSchemaErorr GetUriTrustState(string url, bool isImg = false){
-			if (string.IsNullOrWhiteSpace(url) || url.StartsWith("#")){
-				return PortableHtmlSchemaErorr.EmptyOrHashedLink;
+			try{
+				if (string.IsNullOrWhiteSpace(url) || url.StartsWith("#")){
+					return PortableHtmlSchemaErorr.EmptyOrHashedLink;
+				}
+				var uri = new Uri(url, UriKind.RelativeOrAbsolute);
+				if (!uri.IsAbsoluteUri) return PortableHtmlSchemaErorr.None;
+				if (uri.Scheme.ToLowerInvariant() == "data"){
+					if (isImg) return PortableHtmlSchemaErorr.None;
+					return PortableHtmlSchemaErorr.DangerousLink;
+				}
+				if (uri.Scheme.ToLowerInvariant() == "javascript"){
+					return PortableHtmlSchemaErorr.DangerousLink;
+				}
+				if (uri.Scheme.ToLowerInvariant() == "file"){
+					return PortableHtmlSchemaErorr.DangerousLink;
+				}
+				if (isImg && Level.HasFlag(PortableHtmlStrictLevel.TrustAllImages)) return PortableHtmlSchemaErorr.None;
+				if (!isImg && Level.HasFlag(PortableHtmlStrictLevel.TrustAllLinks)) return PortableHtmlSchemaErorr.None;
+				if (null != BaseUri && BaseUri.Host == uri.Host){
+					return PortableHtmlSchemaErorr.None;
+				}
+				if (TrustedHosts.Contains(uri.Host)) return PortableHtmlSchemaErorr.None;
+				return PortableHtmlSchemaErorr.NonTrustedLink;
 			}
-			var uri = new Uri(url, UriKind.RelativeOrAbsolute);
-			if (!uri.IsAbsoluteUri) return PortableHtmlSchemaErorr.None;
-			if (uri.Scheme.ToLowerInvariant() == "data"){
-				if (isImg) return PortableHtmlSchemaErorr.None;
-				return PortableHtmlSchemaErorr.DangerousLink;
+			catch (UriFormatException){
+				return PortableHtmlSchemaErorr.InvalidUri;
 			}
-			if (uri.Scheme.ToLowerInvariant() == "javascript"){
-				return PortableHtmlSchemaErorr.DangerousLink;
-			}
-			if (uri.Scheme.ToLowerInvariant() == "file"){
-				return PortableHtmlSchemaErorr.DangerousLink;
-			}
-			if (isImg && Level.HasFlag(PortableHtmlStrictLevel.TrustAllImages)) return PortableHtmlSchemaErorr.None;
-			if (!isImg && Level.HasFlag(PortableHtmlStrictLevel.TrustAllLinks)) return PortableHtmlSchemaErorr.None;
-			if (null != BaseUri && BaseUri.Host == uri.Host){
-				return PortableHtmlSchemaErorr.None;
-			}
-			if (TrustedHosts.Contains(uri.Host)) return PortableHtmlSchemaErorr.None;
-			return PortableHtmlSchemaErorr.NonTrustedLink;
 		}
 
 		/// <summary>

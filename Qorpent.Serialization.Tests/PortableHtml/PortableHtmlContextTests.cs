@@ -57,7 +57,8 @@ namespace Qorpent.Serialization.Tests.PortableHtml{
 		[TestCase("#")]
 		[TestCase("#xx")]
 		[TestCase(" ")]
-		public void DisallowEmptiesAndHashes(string url)
+		[TestCase("http://Конфуз с начальником управления")]
+		public void DisallowInvalidLinks(string url)
 		{
 			var ctx = new PortableHtmlContext();
 			Assert.AreNotEqual(PortableHtmlSchemaErorr.None, ctx.GetUriTrustState(url, false));
