@@ -59,6 +59,7 @@ namespace Qorpent.Utils {
 			}
 			FormatRegexes = regexes.ToArray();
 		}
+
 	    /// <summary>
 	    ///     Парсинг сроки дата-время произвольного формата, возвращает ЛОКАЛЬНУЮ дату-время
 	    /// </summary>
@@ -67,8 +68,9 @@ namespace Qorpent.Utils {
 	    /// <param name="sourceUrl">(на вырост) - возможность указать из какого источника получена дата</param>
 	    /// <param name="locale">Имя локали по умолчанию (по умолчанию будет текущая)</param>
 	    /// <param name="timeZone">При не null будет использоваться для перевода даты локальную</param>
+	    /// <param name="baseDate">Дата, от которой отсчитывается начальная в случае дат со смещением - сегодня, завтра и т.д.</param>
 	    /// <returns>Распознанная дата-время</returns>
-	    public static DateTime Parse(string dateTime, string sourceUrl= null , string locale = null, int? timeZone = null){
+	    public static DateTime Parse(string dateTime, string sourceUrl= null , string locale = null, int? timeZone = null, DateTime? baseDate = null){
 	        dateTime = PrepareDateTimeString(dateTime);
 		    foreach (var regex in FormatRegexes){
 		        var match = regex.Match(dateTime);
@@ -88,6 +90,7 @@ namespace Qorpent.Utils {
 			        var min = match.Groups["mm"].Value.ToInt();
 			        var sec = match.Groups["s"].Value.ToInt();
 			        var tz = match.Groups["tz"].Value.ToInt();
+			        var today = baseDate == null ? DateTime.Today : baseDate.Value.Date;
 					if (0 != tz){
 						timeZone = tz;
 					}
@@ -95,13 +98,13 @@ namespace Qorpent.Utils {
 						isuniversal = true;
 					}
 			        if (dateTime.ToLowerInvariant().Contains("вчера") && year == 0){
-				        var yesterday = DateTime.Today.AddDays(-1);
+				        var yesterday = today.AddDays(-1);
 				        year = yesterday.Year;
 				        month = yesterday.Month;
 				        day = yesterday.Day;
 			        }
 			        if (dateTime.ToLowerInvariant().Contains("сегодня") && year == 0){
-				        var yesterday = DateTime.Today;
+				        var yesterday = today;
 				        year = yesterday.Year;
 				        month = yesterday.Month;
 				        day = yesterday.Day;
