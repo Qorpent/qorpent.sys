@@ -1,6 +1,7 @@
 /**
  * Created by comdiv on 24.09.14.
  */
+(function(describe,it,before){
 describe("Thenum.Collections", function(){
     this.timeout(5000);
     describe("Extensions",function(){
@@ -12,56 +13,56 @@ describe("Thenum.Collections", function(){
            .forEach(function(pair){
            it("Enumeration#"+pair[0],function(){
                should.exist($.Enumeration.prototype[pair[0]]);
-               $()[pair[0]]().should.be.instanceOf($k[pair[1]]);
+               $()[pair[0]]().should.instanceOf($k[pair[1]]);
            });
        }) ;
     });
-    describe ("Linkedlist",function(){
+    describe("Linkedlist",function(){
         it("can be instantiated",function(){
-            var ll = new $k.LinkedList();
+            new $k.LinkedList();
         });
         it("can is an enumeration",function(){
             var ll = new $k.LinkedList();
-            ll.should.be.instanceOf($.Enumeration);
-            ll.any().should.be.false;
+            ll.should.instanceOf($.Enumeration);
+            ll.any().should.equal(false);
         });
         it("keeps real linked list",function(){
             var ll = new $k.LinkedList();
             ll.append(1);
             ll.append(2);
-            ll.any().should.be.true;
-            ll.count().should.be.equal(2);
-            ll.toArray().should.be.eql([1,2]);
-            ll.first.should.be.instanceOf($k.LinkedItem);
-            ll.first.value.should.be.equal(1);
-            ll.first.next.value.should.be.equal(2);
-            ll.last.should.be.instanceOf($k.LinkedItem);
-            ll.last.value.should.be.equal(2);
+            ll.any().should.equal(true);
+            ll.count().should.equal(2);
+            ll.toArray().should.eql([1,2]);
+            ll.first.should.instanceOf($k.LinkedItem);
+            ll.first.value.should.equal(1);
+            ll.first.next.value.should.equal(2);
+            ll.last.should.instanceOf($k.LinkedItem);
+            ll.last.value.should.equal(2);
         });
         it("#append(any)",function(){
            var ll = new $k.LinkedList();
             ll.append(1);
-            ll.first.value.should.be.equal(1);
-            ll.last.value.should.be.equal(1);
+            ll.first.value.should.equal(1);
+            ll.last.value.should.equal(1);
             ll.append(2);
-            ll.first.next.value.should.be.equal(2);
-            ll.last.value.should.be.equal(2);
+            ll.first.next.value.should.equal(2);
+            ll.last.value.should.equal(2);
             should.not.exist(ll.first.previous);
             should.not.exist(ll.last.next);
-            ll.last.previous.should.be.equal(ll.first);
+            ll.last.previous.should.equal(ll.first);
         });
         it("#prepend(any)",function(){
             var ll = new $k.LinkedList();
             ll.prepend(1);
-            ll.first.value.should.be.equal(1);
-            ll.last.value.should.be.equal(1);
+            ll.first.value.should.equal(1);
+            ll.last.value.should.equal(1);
             ll.prepend(2);
-            ll.first.next.value.should.be.equal(1);
-            ll.last.value.should.be.equal(1);
-            ll.first.value.should.be.equal(2);
+            ll.first.next.value.should.equal(1);
+            ll.last.value.should.equal(1);
+            ll.first.value.should.equal(2);
             should.not.exist(ll.first.previous);
             should.not.exist(ll.last.next);
-            ll.last.previous.should.be.equal(ll.first);
+            ll.last.previous.should.equal(ll.first);
         });
         it("#find (condition)",function(){
             var ll = new $k.LinkedList([1,2,3]);
@@ -78,151 +79,151 @@ describe("Thenum.Collections", function(){
             var ll = new $k.LinkedList([1,2,3]);
             ll.insertBefore(4,2);
             ll.insertBefore(5,3);
-            ll.count().should.be.equal(5);
-            ll.toArray().should.be.eql([1,4,2,5,3]);
+            ll.count().should.equal(5);
+            ll.toArray().should.eql([1,4,2,5,3]);
             ll.insertBefore(6,1);
-            ll.count().should.be.equal(6);
-            ll.toArray().should.be.eql([6,1,4,2,5,3]);
+            ll.count().should.equal(6);
+            ll.toArray().should.eql([6,1,4,2,5,3]);
         });
         it("#insertAfter(any,[key])",function(){
             var ll = new $k.LinkedList([1,2,3]);
             ll.insertAfter(4,2);
             ll.insertAfter(5,3);
-            ll.count().should.be.equal(5);
-            ll.toArray().should.be.eql([1,2,4,3,5]);
+            ll.count().should.equal(5);
+            ll.toArray().should.eql([1,2,4,3,5]);
             ll.insertAfter(6,1);
-            ll.count().should.be.equal(6);
-            ll.toArray().should.be.eql([1,6,2,4,3,5]);
+            ll.count().should.equal(6);
+            ll.toArray().should.eql([1,6,2,4,3,5]);
             ll.insertAfter(7,">2");
-            ll.toArray().should.be.eql([1,6,7,2,4,3,5]);
+            ll.toArray().should.eql([1,6,7,2,4,3,5]);
         });
         it("#replace(any,conditionOrItem))" , function(){
             var ll = new $k.LinkedList([1,3,2,3]);
             ll.replace(4,"_.next.value==3");
             ll.replace(5,"_.next.value==3 && _.previous.value==3");
-            ll.toArray().should.be.eql([4,3,5,3]);
+            ll.toArray().should.eql([4,3,5,3]);
         });
         it("#remove(conditionOrItem))" , function(){
             var ll = new $k.LinkedList([1,3,2,3]);
             ll.remove("_.next.value==3");
             ll.remove("_.next.value==3 && _.previous.value==3");
-            ll.toArray().should.be.eql([3,3]);
+            ll.toArray().should.eql([3,3]);
         });
 
         it("can be instantiated over other enumeration",function(){
            var ll = new $k.LinkedList([1,2,3]);
-            ll.any().should.be.true;
-            ll.count().should.be.equal(3);
-            ll.toArray().should.be.eql([1,2,3]);
+            ll.any().should.equal(true);
+            ll.count().should.equal(3);
+            ll.toArray().should.eql([1,2,3]);
 
         });
         it("can be keyed",function(){
             var ll = new $k.LinkedList([1,2,3],{onKey:"*2"});
-            ll.find(2).value.should.be.equal(1);
-            ll.find(4).value.should.be.equal(2);
-            ll.find(6).value.should.be.equal(3);
+            ll.find(2).value.should.equal(1);
+            ll.find(4).value.should.equal(2);
+            ll.find(6).value.should.equal(3);
         });
         it("can merge",function(){
             var ll = new $k.LinkedList([{k:"c1",x:2},{k:"c2", x:3}],{onKey:".k"});
-            ll.merge([{k:"c1",x:2},{k:"c3",x:4}]).should.be.eql({ removed: [], created: [ { k: 'c3', x: 4 } ], updated: [] });
-            ll.toArray().should.be.eql([ { k: 'c1', x: 2 }, { k: 'c2', x: 3 }, { k: 'c3', x: 4 } ]);
-            ll.merge([ { k: 'c1', x: 3 },  { k: 'c3', x: 5 } ],{replace:true}).should.be.eql({ removed: [],
+            ll.merge([{k:"c1",x:2},{k:"c3",x:4}]).should.eql({ removed: [], created: [ { k: 'c3', x: 4 } ], updated: [] });
+            ll.toArray().should.eql([ { k: 'c1', x: 2 }, { k: 'c2', x: 3 }, { k: 'c3', x: 4 } ]);
+            ll.merge([ { k: 'c1', x: 3 },  { k: 'c3', x: 5 } ],{replace:true}).should.eql({ removed: [],
                 created: [],
                 updated: [ { k: 'c1', x: 3 }, { k: 'c3', x: 5 } ] });
-            ll.toArray().should.be.eql([ { k: 'c1', x: 3 }, { k: 'c2', x: 3 }, { k: 'c3', x: 5 } ]);
-            ll.merge([ { k: 'c1', x: 4 },  { k: 'c3', x: 6 } ],{replace:false}).should.be.eql( { removed: [], created: [], updated: [] } );
-            ll.toArray().should.be.eql([ { k: 'c1', x: 3 }, { k: 'c2', x: 3 }, { k: 'c3', x: 5 } ]);
-            ll.merge([ { k: 'c1', x: 4 },  { k: 'c3', x: 6 } ],{replace:true,remove:true}).should.be.eql({ removed: [ { k: 'c2', x: 3 } ],
+            ll.toArray().should.eql([ { k: 'c1', x: 3 }, { k: 'c2', x: 3 }, { k: 'c3', x: 5 } ]);
+            ll.merge([ { k: 'c1', x: 4 },  { k: 'c3', x: 6 } ],{replace:false}).should.eql( { removed: [], created: [], updated: [] } );
+            ll.toArray().should.eql([ { k: 'c1', x: 3 }, { k: 'c2', x: 3 }, { k: 'c3', x: 5 } ]);
+            ll.merge([ { k: 'c1', x: 4 },  { k: 'c3', x: 6 } ],{replace:true,remove:true}).should.eql({ removed: [ { k: 'c2', x: 3 } ],
                 created: [],
                 updated: [ { k: 'c1', x: 4 }, { k: 'c3', x: 6 } ] } );
-            ll.toArray().should.be.eql( [ { k: 'c1', x: 4 }, { k: 'c3', x: 6 } ] );
+            ll.toArray().should.eql( [ { k: 'c1', x: 4 }, { k: 'c3', x: 6 } ] );
         });
     });
 
     describe("Stack",function(){
        it("creates collection in back order",function(){
            var stack = new $k.Stack([1,2,3]);
-           stack.toArray().should.be.eql([3,2,1]);
+           stack.toArray().should.eql([3,2,1]);
        }) ;
         it("#pop",function(){
             var stack = new $k.Stack([1,2,3]);
-            stack.pop().should.be.equal(3);
-            stack.toArray().should.be.eql([2,1]);
-            stack.pop().should.be.equal(2);
-            stack.toArray().should.be.eql([1]);
-            stack.pop().should.be.equal(1);
-            stack.toArray().should.be.eql([]);
+            stack.pop().should.equal(3);
+            stack.toArray().should.eql([2,1]);
+            stack.pop().should.equal(2);
+            stack.toArray().should.eql([1]);
+            stack.pop().should.equal(1);
+            stack.toArray().should.eql([]);
             should.not.exist(stack.pop());
         });
         it("#push",function(){
             var stack = new $k.Stack([1,2,3]);
-            stack.pop().should.be.equal(3);
-            stack.toArray().should.be.eql([2,1]);
+            stack.pop().should.equal(3);
+            stack.toArray().should.eql([2,1]);
             stack.push(4);
-            stack.toArray().should.be.eql([4,2,1]);
-            stack.pop().should.be.equal(4);
+            stack.toArray().should.eql([4,2,1]);
+            stack.pop().should.equal(4);
         });
     });
 
     describe("Queue",function(){
         it("#pop",function(){
             var queue = new $k.Queue([1,2,3]);
-            queue.pop().should.be.equal(1);
-            queue.toArray().should.be.eql([2,3]);
-            queue.pop().should.be.equal(2);
-            queue.toArray().should.be.eql([3]);
-            queue.pop().should.be.equal(3);
-            queue.toArray().should.be.eql([]);
+            queue.pop().should.equal(1);
+            queue.toArray().should.eql([2,3]);
+            queue.pop().should.equal(2);
+            queue.toArray().should.eql([3]);
+            queue.pop().should.equal(3);
+            queue.toArray().should.eql([]);
             should.not.exist(queue.pop());
         });
         it("#push",function(){
             var queue = new $k.Queue([1,2,3]);
-            queue.pop().should.be.equal(1);
-            queue.toArray().should.be.eql([2,3]);
+            queue.pop().should.equal(1);
+            queue.toArray().should.eql([2,3]);
             queue.push(4);
-            queue.toArray().should.be.eql([2,3,4]);
-            queue.pop().should.be.equal(2);
-            queue.pop().should.be.equal(3);
-            queue.pop().should.be.equal(4);
+            queue.toArray().should.eql([2,3,4]);
+            queue.pop().should.equal(2);
+            queue.pop().should.equal(3);
+            queue.pop().should.equal(4);
         });
     });
 
     describe("CycleList",function(){
        it("repeat it's elements cycle by cycle",function(){
            var cl = new $k.CycleList([1,2,3]);
-           cl.pop().should.be.equal(1);
-           cl.pop().should.be.equal(2);
-           cl.pop().should.be.equal(3);
-           cl.pop().should.be.equal(1);
-           cl.pop().should.be.equal(2);
-           cl.pop().should.be.equal(3);
+           cl.pop().should.equal(1);
+           cl.pop().should.equal(2);
+           cl.pop().should.equal(3);
+           cl.pop().should.equal(1);
+           cl.pop().should.equal(2);
+           cl.pop().should.equal(3);
        });
         it("we can append elements to queue",function(){
             var cl = new $k.CycleList([1,2,3]);
-            cl.pop().should.be.equal(1);
-            cl.pop().should.be.equal(2);
+            cl.pop().should.equal(1);
+            cl.pop().should.equal(2);
             cl.insertAfter(4);
-            cl.pop().should.be.equal(4);
-            cl.pop().should.be.equal(3);
-            cl.pop().should.be.equal(1);
-            cl.pop().should.be.equal(2);
-            cl.pop().should.be.equal(4);
-            cl.pop().should.be.equal(3);
+            cl.pop().should.equal(4);
+            cl.pop().should.equal(3);
+            cl.pop().should.equal(1);
+            cl.pop().should.equal(2);
+            cl.pop().should.equal(4);
+            cl.pop().should.equal(3);
         });
         it("#goto(key,offset)",function(){
             var cl = new $k.CycleList([1,2,3,4,5,6]);
             cl.goto(4,-2);
-            cl.pop().should.be.equal(3);
-            cl.pop().should.be.equal(4);
-            cl.pop().should.be.equal(5);
-            cl.pop().should.be.equal(6);
-            cl.pop().should.be.equal(1);
+            cl.pop().should.equal(3);
+            cl.pop().should.equal(4);
+            cl.pop().should.equal(5);
+            cl.pop().should.equal(6);
+            cl.pop().should.equal(1);
             cl.goto(5,3);
-            cl.pop().should.be.equal(3);
-            cl.pop().should.be.equal(4);
-            cl.pop().should.be.equal(5);
-            cl.pop().should.be.equal(6);
-            cl.pop().should.be.equal(1);
+            cl.pop().should.equal(3);
+            cl.pop().should.equal(4);
+            cl.pop().should.equal(5);
+            cl.pop().should.equal(6);
+            cl.pop().should.equal(1);
         })
     });
 
@@ -260,3 +261,4 @@ describe("Thenum.Collections", function(){
 
 
 });
+})(describe,it,before);

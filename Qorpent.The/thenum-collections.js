@@ -1,265 +1,270 @@
-if (typeof define !== 'function') {
-    var define = null;
+var module = module || undefined;
+var define = define || undefined;
+var window = window || {};
+if (typeof define !== 'function'){
     try{
         define = require('amdefine')(module);
     }catch(e){
-        define = function(dep,module){
-            window.$thenum = window.$thenum || {};
-            window.$thenum.collections = module(dep);
+        define = function(dep,mymodule){
+            window.$thenum = mymodule(dep);
         }
     }
 }
 define(["./thenum"],function($thenum){
     var $ =  (typeof  $thenum == "function" ? $thenum : $thenum.module);
-
-    var LinkedItem = function(value, previous,next ,key){
+    /**
+     *
+     * @param value
+     * @constructor
+     */
+    var LinkedItem = function (value) {
         this.value = value;
-        this.previous = previous;
-        this.next = next;
-        this.key = key;
-    }
+        this.previous = null;
+        this.next = null;
+        this.key = null;
+    };
 
-    var LinkedList = function(enumeration,options){
+    var LinkedList = function (enumeration, options) {
         this.first = null;
         this.last = null;
-        if(!!options){
-            if(!!options.onKey){
-                this.onKey = ($.GetCondition(options.onKey)).bind(this);
+        if (!!options) {
+            if (!!options.onKey) {
+                this.onKey = ($.getExpression(options.onKey)).bind(this);
             }
         }
-        if(enumeration){
-            enumeration  = $(enumeration);
-            while(enumeration.next()){
+        if (enumeration) {
+            enumeration = $(enumeration);
+            while (enumeration.next()) {
                 this.append(enumeration.current);
             }
         }
-    }
+    };
     LinkedList.prototype = Object.create($.Enumeration.prototype);
 
-    LinkedList.prototype.merge = function(other, options){
-        var result = {removed:[],created:[],updated:[]};
+    LinkedList.prototype.merge = function (other, options) {
+        var result = {removed: [], created: [], updated: []};
         var self = this;
         var doremove = !!options && !!options.remove;
         var doreplace = !!options && !!options.replace;
         var others = {};
-        $(other).each(function(_){
+        $(other).each(function (_) {
             others[self.getKey(_)] = _;
-        })
-        if(doremove){
+        });
+        if (doremove) {
             var todelete = [];
             this.reset();
-            while(this.next()){
+            while (this.next()) {
                 var val = this.currentItem;
                 var thiskey = this.getKey(val.value);
-                if(!others.hasOwnProperty(thiskey)){
+                if (!others.hasOwnProperty(thiskey)) {
                     todelete.push(this.currentItem);
                 }
             }
-            $(todelete).each(function(_){
+            $(todelete).each(function (_) {
                 result.removed.push(_.value);
-               self.remove(_);
+                self.remove(_);
             });
         }
         var currents = {};
-        this.each(function(_){
+        this.each(function (_) {
             currents[self.getKey(_)] = _;
         });
-        $(other).each(function(_){
-                var newkey = self.getKey(_);
-          if(!currents.hasOwnProperty(newkey)){
-              result.created.push(_);
-              if(!!this.push){
-                  self.push(_);
-              }else{
-                  self.append(_);
-              }
-          }else if(doreplace){
-              result.updated.push(_);
-            self.replace(_,newkey);
-          }
+        $(other).each(function (_) {
+            var newkey = self.getKey(_);
+            if (!currents.hasOwnProperty(newkey)) {
+                result.created.push(_);
+                if (!!this.push) {
+                    self.push(_);
+                } else {
+                    self.append(_);
+                }
+            } else if (doreplace) {
+                result.updated.push(_);
+                self.replace(_, newkey);
+            }
         });
         return result;
-    }
+    };
 
-    LinkedList.prototype.onGetValue = function(i){
-       if(i instanceof LinkedItem) return i.value;
-    }
-    LinkedList.prototype.baseNext = function(){
-        if($.StartOfEnumeration===this.current){
-            if(!this.first)return $.EndOfEnumeration;
+    LinkedList.prototype.onGetValue = function (i) {
+        if (i instanceof LinkedItem) return i.value;
+        return i;
+    };
+    LinkedList.prototype.baseNext = function () {
+        if ($.StartOfEnumeration === this.current) {
+            if (!this.first)return $.EndOfEnumeration;
             return this.first;
         }
-        if(!this.currentItem) return this.first;
-        if(!this.currentItem.next)return  $.EndOfEnumeration;
+        if (!this.currentItem) return this.first;
+        if (!this.currentItem.next)return  $.EndOfEnumeration;
         return this.currentItem.next;
-    }
-    LinkedList.prototype.find = function(condition){
-        condition = $.GetCondition(condition);
+    };
+    LinkedList.prototype.find = function (condition) {
+        condition = $.getExpression(condition);
         var current = this.first;
-        while(current){
-            if(typeof condition == "function"){
+        while (current) {
+            if (typeof condition == "function") {
 
-                if(condition(current.key))return current;
-                if(condition(current.value))return current;
-                if(condition(current))return current;
+                if (condition(current.key))return current;
+                if (condition(current.value))return current;
+                if (condition(current))return current;
             }
-            if(condition == current.key)return current;
-            if(condition == current.value)return current;
+            if (condition == current.key)return current;
+            if (condition == current.value)return current;
             current = current.next;
         }
         return null;
-    }
+    };
 
-    LinkedList.prototype.append = function(any){
+    LinkedList.prototype.append = function (any) {
         any = this.setupItem(any);
         any.previous = this.last;
-        if(this.last){
+        if (this.last) {
             this.last.next = any;
         }
         this.last = any;
-        if(!this.first)this.first = any;
+        if (!this.first)this.first = any;
         return this;
-    }
-    LinkedList.prototype.getKey = function(any){
-        if(!!this.onKey){
+    };
+    LinkedList.prototype.getKey = function (any) {
+        if (!!this.onKey) {
             return this.onKey(any);
         }
         return any;
-    }
-    LinkedList.prototype.setupItem = function(any){
-        if(!(any instanceof LinkedItem)){
-            any  = new LinkedItem(any);
+    };
+    LinkedList.prototype.setupItem = function (any) {
+        if (!(any instanceof LinkedItem)) {
+            any = new LinkedItem(any);
         }
-        if(!!this.onKey){
+        if (!!this.onKey) {
             any.key = this.onKey(any.value);
         }
         return any;
-    }
-    LinkedList.prototype.prepend = function(any){
+    };
+    LinkedList.prototype.prepend = function (any) {
         any = this.setupItem(any);
         any.next = this.first;
-        if(this.first){
+        if (this.first) {
             this.first.previous = any;
         }
         this.first = any;
-        if(!this.last)this.last = any;
+        if (!this.last)this.last = any;
         return this;
-    }
+    };
 
-    LinkedList.prototype.insertBefore = function(any,key){
+    LinkedList.prototype.insertBefore = function (any, key) {
         var target = this.__resolveTarget(key);
-        if(!target) {
+        if (!target) {
             throw "cannot find target for insert"
         }
         any = this.setupItem(any);
         any.next = target;
         any.previous = target.previous;
-        if(target.previous){
+        if (target.previous) {
             target.previous.next = any;
         }
         target.previous = any;
-        if(this.first==target){
+        if (this.first == target) {
             this.first = any;
         }
         return this;
-    }
-    LinkedList.prototype.insertAfter = function(any,key){
+    };
+    LinkedList.prototype.insertAfter = function (any, key) {
         var target = this.__resolveTarget(key);
-        if(!target) {
+        if (!target) {
             throw "cannot find target for insert"
         }
         any = this.setupItem(any);
         any.previous = target;
         any.next = target.next;
-        if(target.next){
+        if (target.next) {
             target.next.previous = any;
         }
         target.next = any;
-        if(this.last==target){
+        if (this.last == target) {
             this.last = any;
         }
         return this;
-    }
-    LinkedList.prototype.replace = function(any,key){
+    };
+    LinkedList.prototype.replace = function (any, key) {
         var target = this.__resolveTarget(key);
-        if(!target) {
+        if (!target) {
             throw "cannot getByKey target for insert"
         }
         any = this.setupItem(any);
         any.previous = target.previous;
         any.next = target.next;
-        if(any.previous)any.previous.next = any;
-        if(any.next)any.next.previous = any;
-        if(this.first==target){
+        if (any.previous)any.previous.next = any;
+        if (any.next)any.next.previous = any;
+        if (this.first == target) {
             this.first = any;
         }
-        if(this.last==target){
+        if (this.last == target) {
             this.last = any;
         }
-        delete  target;
         return this;
-    }
-    LinkedList.prototype.__resolveTarget = function(keyOrTarget){
-        if(!keyOrTarget)return this.currentItem || this.first;
-        if(keyOrTarget instanceof LinkedItem)return keyOrTarget;
+    };
+    LinkedList.prototype.__resolveTarget = function (keyOrTarget) {
+        if (!keyOrTarget)return this.currentItem || this.first;
+        if (keyOrTarget instanceof LinkedItem)return keyOrTarget;
         return this.find(keyOrTarget);
-    }
-    LinkedList.prototype.remove = function(key){
+    };
+    LinkedList.prototype.remove = function (key) {
         var target = this.__resolveTarget(key);
-        if(!target) {
+        if (!target) {
             throw "cannot getByKey target for insert"
         }
-        if(target.previous){
+        if (target.previous) {
             target.previous.next = target.next;
         }
-        if(target.next){
+        if (target.next) {
             target.next.previous = target.previous;
         }
-        if(this.first==target){
+        if (this.first == target) {
             this.first = target.next;
         }
-        if(this.last==target){
+        if (this.last == target) {
             this.last = target.previous;
-            if(!this.last){
+            if (!this.last) {
                 this.last = this.first;
             }
         }
-        if(this.currentItem===target){
+        if (this.currentItem === target) {
             this.currentItem = target.next | target.previous | this.first;
             this.current = this.currentItem.value;
         }
-        delete  target;
         return this;
-    }
+    };
 
-    var CycleList = function(source){
-        LinkedList.call(this,source);
-    }
+    var CycleList = function (source) {
+        LinkedList.call(this, source);
+    };
     CycleList.prototype = Object.create(LinkedList.prototype);
-    CycleList.prototype.pop = function(){
-        if(null==this.first){
+    CycleList.prototype.pop = function () {
+        if (null == this.first) {
             return null;
         }
-        if(this.next()){
+        if (this.next()) {
             return this.current;
         }
         this.reset();
         this.next();
         return this.current;
-    }
-    CycleList.prototype.push = function(any){
+    };
+    CycleList.prototype.push = function (any) {
         this.insertAfter(any);
-    }
+    };
     CycleList.prototype.goto =function(key,offset){
         var basis = this.find(key);
         if(null==basis)return;
+        var i;
         if(offset>0){
-            for(var i = 0;i<offset;i++){
+            for(i = 0;i<offset;i++){
                 if(basis.next)basis =basis.next;
                 else basis = this.first;
             }
         }else if (offset<0){
-            for(var i = 0;i>offset;i--){
+            for(i = 0;i>offset;i--){
                 if(basis.previous)basis =basis.previous;
                 else basis = this.last;
             }
@@ -268,49 +273,49 @@ define(["./thenum"],function($thenum){
         this.current = basis.value;
     };
 
-    var Stack = function(enumeration){
+    var Stack = function (enumeration) {
         LinkedList.call(this);
-        if(enumeration){
+        if (enumeration) {
             var self = this;
-            $(enumeration).each(function(_){
+            $(enumeration).each(function (_) {
                 self.push(_);
             });
         }
-    }
+    };
     Stack.prototype = Object.create(LinkedList.prototype);
-    Stack.prototype.push = function(any){
+    Stack.prototype.push = function (any) {
         this.prepend(any);
-    }
-    Stack.prototype.pop = function(){
-        if(null==this.first)return null;
+    };
+    Stack.prototype.pop = function () {
+        if (null == this.first)return null;
         var result = this.first.value;
         this.remove(this.first);
         this.reset();
         return result;
-    }
+    };
 
-    var Queue = function(enumeration){
-        LinkedList.call(this,enumeration);
+    var Queue = function (enumeration) {
+        LinkedList.call(this, enumeration);
 
-    }
+    };
     Queue.prototype = Object.create(LinkedList.prototype);
-    Queue.prototype.push = function(any){
+    Queue.prototype.push = function (any) {
         this.append(any);
-    }
+    };
     Queue.prototype.pop = Stack.prototype.pop;
 
-    $.Enumeration.prototype.toList = function(){
+    $.Enumeration.prototype.toList = function () {
         return new LinkedList(this);
-    }
-    $.Enumeration.prototype.toStack = function(){
+    };
+    $.Enumeration.prototype.toStack = function () {
         return new Stack(this);
-    }
-    $.Enumeration.prototype.toQueue = function(){
+    };
+    $.Enumeration.prototype.toQueue = function () {
         return new Queue(this);
-    }
-    $.Enumeration.prototype.toCycle = function(){
+    };
+    $.Enumeration.prototype.toCycle = function () {
         return new CycleList(this);
-    }
+    };
 
     var module = function(){};
     module.LinkedList = LinkedList;
