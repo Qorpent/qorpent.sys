@@ -1,48 +1,12 @@
 (function (define) {
-    define(["./the"], function ($the) {
+    define(["./thexpression"], function ($the) {
         return $the(function (root, privates) {
             var EndOfEnumeration = {};
             var StartOfEnumeration = {};
             var NUMBERCOUNTER = 1;
             var CHECKCOMPARER = 2;
-            /**
-             *
-             * @param funcOrExpression
-             * @param [hint]
-             * @returns {*}
-             */
-            var getExpression = function (funcOrExpression, hint) {
-                if (!funcOrExpression)return null;
-                if (typeof funcOrExpression == "number") {
-                    if (!hint)return funcOrExpression;
-                    if (hint === NUMBERCOUNTER) {
-                        var count = funcOrExpression;
-                        return function () {
-                            if (count == 0)return false;
-                            count--;
-                            return true;
-                        }
-                    } else {
-                        return funcOrExpression;
-                    }
-                }
-                if (typeof funcOrExpression == "function") {
-                    if (hint == CHECKCOMPARER) {
-                        if (funcOrExpression.toString().match(/^function\s*\(a\s*,b\s*\)/)) {
-                            funcOrExpression.__iscomparer__ = true;
-                        }
-                    }
-                    return funcOrExpression;
-                }
-                if (!funcOrExpression.match(/[\.=\-+<>&|*\/!()]/)) {
-                    return funcOrExpression;
-                }
-                if (!funcOrExpression.match(/_/)) {
-                    funcOrExpression = "_" + funcOrExpression;
-                }
-                funcOrExpression = "x = function(_,idx){ try{return " + funcOrExpression + ";}catch(e){return false;}}";
-                return eval(funcOrExpression);
-            };
+            var $ex = $the.expression;
+
             /**
              *
              * @param target target object of any type to be wrapped as enumeration
@@ -89,13 +53,13 @@
             };
 
             Enumeration.prototype.any = function (expr) {
-                return this.reset().next(getExpression(expr));
+                return this.reset().next($ex(expr));
             };
 
             Enumeration.prototype.toArray = function (expr) {
                 this.reset();
                 var result = [];
-                var e = getExpression(expr);
+                var e = $ex(expr);
                 while (this.next(e)) {
                     result.push(this.current);
                 }
@@ -105,7 +69,7 @@
             Enumeration.prototype.count = function (expr) {
                 this.reset();
                 var result = 0;
-                var e = getExpression(expr);
+                var e = $ex(expr);
                 while (this.next(e)) {
                     result++;
                 }
@@ -114,7 +78,7 @@
 
             Enumeration.prototype.first = function (condition) {
                 this.reset();
-                condition = getExpression(condition);
+                condition = $ex(condition);
                 if (this.next(condition)) {
                     return this.current;
                 }
@@ -122,7 +86,7 @@
             };
             Enumeration.prototype.firstOrDefault = function (condition, defaultValue) {
                 this.reset();
-                condition = getExpression(condition);
+                condition = $ex(condition);
                 if (this.next(condition)) {
                     return this.current;
                 }
@@ -130,7 +94,7 @@
             };
             Enumeration.prototype.where = function (condition) {
                 this.reset();
-                condition = getExpression(condition);
+                condition = $ex(condition);
                 return new Enumeration(this, function (e) {
                     e._baseEnumeration.next(condition);
                     return e._baseEnumeration.current;
@@ -152,7 +116,7 @@
             };
 
             Enumeration.prototype.select = function (projection) {
-                projection = getExpression(projection);
+                projection = $ex(projection);
                 return new Enumeration(this, function (e, eof) {
                     if (e._baseEnumeration.next()) {
                         var val = e._baseEnumeration.current;
@@ -164,7 +128,7 @@
             };
 
             Enumeration.prototype.distinct = function (keyfunc) {
-                keyfunc = getExpression(keyfunc);
+                keyfunc = $ex(keyfunc);
                 var cache = {};
                 return new Enumeration(this, function (e, eof) {
                     while (e._baseEnumeration.next()) {
@@ -196,10 +160,10 @@
             };
 
             Enumeration.prototype.order = function (keyOrComparer) {
-                keyOrComparer = getExpression(keyOrComparer, CHECKCOMPARER);
-                if (keyOrComparer && !keyOrComparer.__iscomparer__) {
-                    var keyFunc = keyOrComparer;
-                    keyOrComparer = function (a, b) {
+                var e = $ex(keyOrComparer, {annotate:true});
+                if (keyOrComparer && !e.annotation.comparer) {
+                    var keyFunc = e;
+                    e = function (a, b) {
                         return keyFunc(a) - keyFunc(b);
                     }
                 }
@@ -211,8 +175,8 @@
                     return eof;
                 }, {buffered: true, onBuffer: function () {
                     var self = this;
-                    if (!!keyOrComparer) {
-                        self._buffer.sort(keyOrComparer);
+                    if (!!e) {
+                        self._buffer.sort(e);
                     } else {
                         self._buffer.sort();
                     }
@@ -222,7 +186,7 @@
 
             Enumeration.prototype.except = function (other, keyFunc) {
                 other = thenum(other);
-                keyFunc = getExpression(keyFunc);
+                keyFunc = $ex(keyFunc);
 
                 return new Enumeration(this, function (e, eof) {
 
@@ -246,7 +210,7 @@
 
 
             Enumeration.prototype.skip = function (numOrFunc) {
-                var skipper = getExpression(numOrFunc, NUMBERCOUNTER);
+                var skipper = $ex(numOrFunc,  {counter:true});
                 var skipped = false;
                 return new Enumeration(this, function (e, eof) {
                     var self = this;
@@ -263,13 +227,13 @@
                     }
                     return eof;
                 }, {onReset: function () {
-                    skipper = getExpression(numOrFunc, NUMBERCOUNTER);
+                    skipper = $ex(numOrFunc,  {counter:true});
                     skipped = false;
                 }});
             };
 
             Enumeration.prototype.take = function (numOrFunc) {
-                var skipper = getExpression(numOrFunc, NUMBERCOUNTER);
+                var skipper = $ex(numOrFunc, {counter:true});
                 return new Enumeration(this, function (e, eof) {
                     var self = this;
                     var next = self._baseEnumeration.next();
@@ -280,7 +244,7 @@
                     }
                     return self._baseEnumeration.current;
                 }, {onReset: function () {
-                    skipper = getExpression(numOrFunc, NUMBERCOUNTER);
+                    skipper = $ex(numOrFunc,  {counter:true});
                 }});
             };
 
@@ -424,7 +388,6 @@
             thenum.KeyValuePair = KeyValuePair;
             thenum.EndOfEnumeration = EndOfEnumeration;
             thenum.StartOfEnumeration = StartOfEnumeration;
-            thenum.getExpression = getExpression;
 
         })
 

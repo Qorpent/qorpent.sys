@@ -6,15 +6,22 @@
         return $the(function (root) {
 
             var e = function (expr, options) {
-                if (typeof  expr === "undefined" ||null==expr) return e.nullFunction;
-                if (typeof  expr === "function")return expr;
+                if (typeof  expr === "undefined" ||null==expr) return null;
+                if (typeof  expr === "function"){
+                    expr.annotation = {};
+                    if(!!options && !!options.annotate){
+                        e.annotateFunction(expr,options);
+                    }
+                    return expr;
+                }
                 if(typeof  options ==="string"){
                     options = {type:options};
                 }
-                options = options || {type:"equal"};
+                options = options || {type:"check"};
                 if (!options.type) {
-                    options.type = "equal";
+                    options.type = "check";
                 }
+
                 if (!e.prototypes.hasOwnProperty(options.type))throw "type not registered " + options.type;
                 if (!options.hasOwnProperty("hasExpressionSymbols")) {
                     options.hasExpressionSymbols = false;
@@ -22,24 +29,44 @@
                         options.hasExpressionSymbols = !!expr.match(/[\.=\-+<>&|*\/!()]/);
                     }
                 }
-                return e.prototypes[options.type](expr, options);
+                var result =  e.prototypes[options.type](expr, options);
+                result.annotation = {};
+                return result;
+
             };
 
             e.nullFunction = function () {
                 return undefined;
             };
+
+            e.annotateFunction =  function(f,options){
+                f.annotation = f.annotation || {};
+                if (f.toString().match(/^function\s*\(a\s*,b\s*\)/)) {
+                    f.annotation.comparer = true;
+                }
+            };
+
             e.prototypes = {};
-            e.options = {};
-            e.prototypes.equal = function (expr, options) {
+
+            e.prototypes.check = function (expr, options) {
                 var result = null;
                 if (typeof expr === "number" || (typeof expr === "string" && !options.hasExpressionSymbols)) {
-                    result = function (_) {
-                        return _ == expr;
+                    if(!options.counter){
+                        result = function (_) {
+                            return _ == expr;
+                        }
+                    }else{
+                        var current = expr;
+                        result = function(_){
+                            if (current == 0)return false;
+                            current--;
+                            return true;
+                        }
                     }
                 } else if (typeof  expr === "string") {
                     var realExpr = expr;
-                    if (expr[0] != "_")realExpr = "_" + realExpr;
-                    realExpr = "_=function(_){return (" + realExpr + ");}";
+                    if (!expr.match(/_/))realExpr = "_" + realExpr;
+                    realExpr = "_=function(_,idx){try{return  (" + realExpr + ");}catch(e){return false;}}";
                     result = eval(realExpr);
                 }else if(expr instanceof RegExp){
                     result = function(_){

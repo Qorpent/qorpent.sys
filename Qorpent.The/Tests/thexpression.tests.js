@@ -9,16 +9,30 @@
             $(function(_){return _==1;})(2).should.equal(false);
         });
         it("null mean null",function(){
-            should.not.exist($()(1));
-            should.not.exist($(undefined)(1));
-            should.not.exist($(null)(1));
+            should.not.exist($());
+            should.not.exist($(undefined));
+            should.not.exist($(null));
         });
-        describe("equal mode (default behavior)",function(){
+        it("can detect 'comparer signature'",function(){
+            var f = $(function(a,b){},{annotate:true});
+            should.exist(f.annotation.comparer);
+            var f = $(function(arg){},{annotate:true});
+            should.not.exist(f.annotation.comparer);
+        });
+        describe("'check' mode (default behavior)",function(){
            it("number --> _==number",function(){
                $(1)(1).should.equal(true);
                $(1)("1").should.equal(true);
                $(1)(2).should.equal(false);
            });
+            it("number (counter option) --> number times of (true)",function(){
+                var f = $(3,{counter:true});
+                f().should.be.equal(true);
+                f().should.be.equal(true);
+                f().should.be.equal(true);
+                f().should.be.equal(false);
+                f().should.be.equal(false);
+            });
             it("string --> _==string",function(){
                 $("test")("test").should.equal(true);
                 $("test")("test2").should.equal(false);

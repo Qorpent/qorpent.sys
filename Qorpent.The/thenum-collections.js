@@ -19,7 +19,7 @@
                 this.last = null;
                 if (!!options) {
                     if (!!options.onKey) {
-                        this.onKey = ($.getExpression(options.onKey)).bind(this);
+                        this.onKey = ($the.expression(options.onKey)).bind(this);
                     }
                 }
                 if (enumeration) {
@@ -90,7 +90,7 @@
                 return this.currentItem.next;
             };
             LinkedList.prototype.find = function (condition) {
-                condition = $.getExpression(condition);
+                condition = $the.expression(condition);
                 var current = this.first;
                 while (current) {
                     if (typeof condition == "function") {

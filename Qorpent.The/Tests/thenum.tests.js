@@ -166,17 +166,6 @@ describe("the.collections.core", function(){
         });
     });
 
-    it("has simple expression matcher",function(){
-       var f1 = $.getExpression(function(_){return _=="test"});
-       var f2 = $.getExpression("_=='test'");
-       var f3 = $.getExpression("=='test'");
-       f1("test").should.equal(f2("test"));
-       f1("test").should.equal(f3("test"));
-        f1("notest").should.equal(f2("notest"));
-        f1("notest").should.equal(f3("notest"));
-
-    });
-
     describe("is LINQ like",function(){
         it("supports any([condition])",function(){
             var i = $([1,2,3]);
