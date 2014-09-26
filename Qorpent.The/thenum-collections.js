@@ -1,15 +1,4 @@
-var module = module || undefined;
-var define = define || undefined;
-var window = window || {};
-if (typeof define !== 'function'){
-    try{
-        define = require('amdefine')(module);
-    }catch(e){
-        define = function(dep,mymodule){
-            window.$thenum = mymodule(dep);
-        }
-    }
-}
+(function(define){
 define(["./thenum"],function($thenum){
     var $ =  (typeof  $thenum == "function" ? $thenum : $thenum.module);
     /**
@@ -326,3 +315,4 @@ define(["./thenum"],function($thenum){
 
     return module;
 });
+})(typeof define === "function" ? define : require('amdefine')(module))

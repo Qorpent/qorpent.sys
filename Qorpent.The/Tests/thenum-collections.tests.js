@@ -242,7 +242,7 @@ describe("Thenum.Collections", function(){
             requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
         }
         try{
-            requirejs(["../Dependency/chai","../thenum-collections","../thenum"], function($should,$kollection,$thenum){
+            requirejs(["chai","../thenum-collections","../thenum"], function($should,$kollection,$thenum){
                 should = $should.Should();
                 $k = $kollection;
                 $ = $thenum;

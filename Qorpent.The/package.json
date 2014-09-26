@@ -1,5 +1,8 @@
 {
-  "devDependencies": {
-    "mocha-teamcity-reporter": ">=0.0.1"
-  }
+    "devDependencies": {
+        "mocha": ">=1.21.4",
+        "mocha-teamcity-reporter": ">=0.0.1",
+        "chai": ">=1.9.1",
+        "requirejs": ">=2.1.15"
+    }
 }

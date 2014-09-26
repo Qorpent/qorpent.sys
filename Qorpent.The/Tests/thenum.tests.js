@@ -17,7 +17,7 @@ describe("Thenum", function(){
             requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
         }
         try{
-            requirejs(["../Dependency/chai","../thenum"], function($should,$thenum){
+            requirejs(["chai","../thenum"], function($should,$thenum){
                 should = $should.Should();
                 $ = $thenum;
                 done();
