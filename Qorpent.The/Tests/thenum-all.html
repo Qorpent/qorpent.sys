@@ -1,0 +1,21 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>JSLinks Browser Tests</title>
+    <link rel="stylesheet" href="../Dependency/mocha.css" />
+</head>
+<body>
+<div id="mocha"></div>
+<script src="../Dependency/require.js"></script>
+<script src="../Dependency/chai.js"></script>
+<script src="../Dependency/mocha.js"></script>
+<script>mocha.setup('bdd')</script>
+<script src="thenum-collections.tests.js"></script>
+<script src="thenum.tests.js"></script>
+
+<script>
+    //mocha.checkLeaks();
+    mocha.run();
+</script>
+</body>
+</html>

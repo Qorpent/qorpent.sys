@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "mocha-teamcity-reporter": ">=0.0.1"
+  }
+}
