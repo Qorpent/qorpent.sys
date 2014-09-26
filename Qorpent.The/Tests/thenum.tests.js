@@ -2,7 +2,7 @@
  * Created by comdiv on 24.09.14.
  */
 (function(describe,it,before){
-describe("Thenum", function(){
+describe("the.collections.core", function(){
     this.timeout(5000);
     var should =null;
     var $ = null;
@@ -19,7 +19,7 @@ describe("Thenum", function(){
         try{
             requirejs(["chai","../thenum"], function($should,$thenum){
                 should = $should.Should();
-                $ = $thenum;
+                $ = $thenum.enumeration;
                 done();
               });
         }catch(e){

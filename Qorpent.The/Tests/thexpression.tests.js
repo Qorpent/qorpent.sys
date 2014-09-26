@@ -1,0 +1,101 @@
+/**
+ * Created by comdiv on 24.09.14.
+ */
+(function (describe, it, before) {
+    describe("the.expression", function () {
+        this.timeout(5000);
+        it("proxise prepared functions",function(){
+            $(function(_){return _==1;})(1).should.equal(true);
+            $(function(_){return _==1;})(2).should.equal(false);
+        });
+        it("null mean null",function(){
+            should.not.exist($()(1));
+            should.not.exist($(undefined)(1));
+            should.not.exist($(null)(1));
+        });
+        describe("equal mode (default behavior)",function(){
+           it("number --> _==number",function(){
+               $(1)(1).should.equal(true);
+               $(1)("1").should.equal(true);
+               $(1)(2).should.equal(false);
+           });
+            it("string --> _==string",function(){
+                $("test")("test").should.equal(true);
+                $("test")("test2").should.equal(false);
+            });
+            it("exString --> func with expression",function(){
+                $(">2")(3).should.equal(true);
+                $("\_>2")(3).should.equal(true);
+                $(">2")(1).should.equal(false);
+                $("\_>2")(1).should.equal(false);
+            });
+            it("regex --> _.match(regex)",function(){
+                $(/test/)("test").should.equal(true);
+                $(/test/)("test23").should.equal(true);
+                $(/test/)("tst23").should.equal(false);
+            });
+            it("array (or mode - default) --> _ in [...], and recursive",function(){
+                $([1,2])(1).should.equal(true);
+                $([1,2])(2).should.equal(true);
+                $([1,2])(3).should.equal(false);
+                $([1,2,">2"])(3).should.equal(true);
+                $([1,2,">2"])(0).should.equal(false);
+            });
+            it("array (and mode) --> _ all [...],  and recursive",function(){
+                var c = [">2","<5"];
+                $([">2","<5"],{and:true})(3).should.equal(true);
+                $([">2","<5"],{and:true})(4).should.equal(true);
+                $([">2","<5"],{and:true})(5).should.equal(false);
+                $([">2","<5"],{and:true})(1).should.equal(false);
+            });
+            it("object (and mode - default) --> full pattern match ",function(){
+                $({x:">2", y:"<3"})({x:3,y:1}).should.be.equal(true);
+                $({x:">2", y:"<3"})({x:3,y:4}).should.be.equal(false);
+                $({x:">2", y:"<3"})({x:2,y:1}).should.be.equal(false);
+                $({x:">2", y:"<3"})({x:3,y:1,z:4}).should.be.equal(true);
+                $({x:">2", y:"<3"})({x:3,z:4}).should.be.equal(false);
+                $({x:">2", y:"<3","$z":"_.hasOwnProperty('z')"})({x:3,y:1}).should.be.equal(false);
+                $({x:">2", y:"<3","$z":"_.hasOwnProperty('z')"})({x:3,y:1,z:4}).should.be.equal(true);
+            });
+            it("object (or mode) --> partial pattern match ",function(){
+                $({x:">2", y:"<3"},{or:true})({x:3,y:1}).should.be.equal(true);
+                $({x:">2", y:"<3"},{or:true})({x:3,y:4}).should.be.equal(true);
+                $({x:">2", y:"<3"},{or:true})({x:2,y:1}).should.be.equal(true);
+                $({x:">2", y:"<3"},{or:true})({x:2,y:4}).should.be.equal(false);
+                $({x:">2", y:"<3","$z":"_.hasOwnProperty('z')"},{or:true})({x:3,y:1}).should.be.equal(true);
+                $({x:">2", y:"<3","$z":"_.hasOwnProperty('z')"},{or:true})({x:3,y:1,z:4}).should.be.equal(true);
+                $({x:">2", y:"<3","$z":"_.hasOwnProperty('z')"},{or:true})({x:1,y:4,z:4}).should.be.equal(true);
+                $({x:">2", y:"<3","$z":"_.hasOwnProperty('z')"},{or:true})({x:1,y:4}).should.be.equal(false);
+            });
+        });
+
+
+
+
+        var $ = null;
+        var should = null;
+        before(function (done) {
+            var requirejs = null;
+            try {
+                if (!!define) { //cause exception
+                    requirejs = require;
+                }
+            } catch (e) {
+                requirejs = require("requirejs");
+                requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
+            }
+            try {
+                requirejs(["chai", "../thexpression"], function ($should, $the) {
+                    should = $should.Should();
+                    $ = $the.expression;
+                    done();
+                });
+            } catch (e) {
+                console.log(e);
+                done();
+            }
+        });
+
+
+    });
+})(describe, it, before);

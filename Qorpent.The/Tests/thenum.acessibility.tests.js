@@ -1,7 +1,7 @@
 /**
  * Created by comdiv on 24.09.14.
  */
-describe("Thenum", function(){
+describe("the.collections", function(){
     this.timeout(300);
     describe ("is accessible and",function(){
         it("can be loaded by commonjs",function(){
@@ -23,7 +23,7 @@ describe("Thenum", function(){
 
 
 });
-describe("Thenum.Collections", function(){
+describe("the.collections", function(){
     this.timeout(300);
     describe ("is accessible and",function(){
         it("can be loaded by commonjs",function(){
