@@ -1,5 +1,5 @@
 (function (define) {
-    define(["./thenum"], function ($the) {
+    define(["./the-collections-core"], function ($the) {
         return $the(function (root, privates) {
             var $ = root.collections;
             /**

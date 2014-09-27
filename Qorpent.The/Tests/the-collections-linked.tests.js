@@ -2,7 +2,7 @@
  * Created by comdiv on 24.09.14.
  */
 (function(describe,it,before){
-describe("the.collections", function(){
+describe("the.collections.Linked", function(){
     this.timeout(5000);
     describe("Extensions",function(){
        [
@@ -240,7 +240,7 @@ describe("the.collections", function(){
             requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
         }
         try{
-            requirejs(["chai","../thollections"], function($should,$the){
+            requirejs(["chai","../the-collections-linked"], function($should,$the){
                 should = $should.Should();
                 $ = $the.collections;
                 done();

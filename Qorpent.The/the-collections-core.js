@@ -1,5 +1,5 @@
 (function (define) {
-    define(["./thexpression"], function ($the) {
+    define(["./the-expression"], function ($the) {
         return $the(function (root, privates) {
             var EndOfEnumeration = {};
             var StartOfEnumeration = {};

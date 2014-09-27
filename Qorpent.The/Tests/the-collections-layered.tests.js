@@ -2,13 +2,33 @@
  * Created by comdiv on 24.09.14.
  */
 (function (describe, it, before) {
-    describe("the.collections.Config", function () {
+    describe("the.collections.LayeredDictionary", function () {
         this.timeout(5000);
+        it("will be treated as enumeration",function(){
+            new $().should.instanceOf($e);
+        });
+        it("can be used as Enumeration",function(){
+            new $({x:1,y:2},{y:3,z:4}).toArray().should.eql([
+                {
+                    "key": "x",
+                    "value": 1
+                },
+                {
+                    "key": "y",
+                    "value": 3
+                },
+                {
+                    "key": "z",
+                    "value": 4
+                }
+            ]);
+
+        });
         it("can set values", function(){
             var c = new $();
             should.not.exist(c.index["x"]);
             c.set('x',1);
-            c.index["x"].should.equal(1);
+            c.internalIndex["x"].should.equal(1);
         });
         it("can get values", function(){
             var c = new $();
@@ -107,19 +127,19 @@
             var c = new $(cb1,cb2,cb3,{x:4,d:4});
 
             c.get('x').should.equal(4);
-            c.get('x',1).should.equal(3);
-            c.get('x',2).should.equal(2);
-            c.get('x',3).should.equal(1);
+            c.get('x',{mindepth:1}).should.equal(3);
+            c.get('x',{mindepth:2}).should.equal(2);
+            c.get('x',{mindepth:3}).should.equal(1);
 
             c.get('d').should.equal(4);
-            c.get('d',0,1).should.equal(4);
-            should.not.exist(c.get('d',1,1));
+            c.get('d',{maxdepth:5}).should.equal(4);
+            should.not.exist(c.get('d',[1,1]));
 
             c.get("a").should.equal(1);
-            c.get("a",1).should.equal(1);
-            c.get("a",1,5).should.equal(1);
-            should.not.exist(c.get("a",5));
-            should.not.exist(c.get("a",0,2));
+            c.get("a",{mindepth:1}).should.equal(1);
+            c.get("a",{mindepth:1,maxdepth:5}).should.equal(1);
+            should.not.exist(c.get("a",{mindepth:5}));
+            should.not.exist(c.get("a",{mindepth:4,maxdepth:5}));
         });
 
         it("can can be converted to plain object", function(){
@@ -151,6 +171,7 @@
 
 
         var $ = null;
+        var $e = null;
         var should = null;
         before(function (done) {
             var requirejs = null;
@@ -163,9 +184,10 @@
                 requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
             }
             try {
-                requirejs(["chai", "../thonfig"], function ($should, $the) {
+                requirejs(["chai", "../the-collections-layered"], function ($should, $the) {
                     should = $should.Should();
-                    $ = $the.collections.Config;
+                    $ = $the.collections.LayeredDictionary;
+                    $e = $the.collections.Enumeration;
                     done();
                 });
             } catch (e) {

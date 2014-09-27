@@ -17,7 +17,7 @@ describe("the.collections.core", function(){
             requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
         }
         try{
-            requirejs(["chai","../thenum"], function($should,$thenum){
+            requirejs(["chai","../the-collections-core"], function($should,$thenum){
                 should = $should.Should();
                 $ = $thenum.collections;
                 done();

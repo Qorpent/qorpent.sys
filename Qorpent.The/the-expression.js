@@ -2,24 +2,27 @@
  * Created by comdiv on 26.09.14.
  */
 (function (define) {
-    define(["./the"], function ($the) {
+    define(["./the-object"], function ($the) {
         return $the(function (root) {
-
+            var eOptions = function(){
+                this.type = "check";
+                this.annotate = false;
+                this.and = false;
+                this.or = false;
+                this.counter =false;
+            }
+            eOptions.__parse__ = function(str){
+                this.type = str;
+            }
             var e = function (expr, options) {
                 if (typeof  expr === "undefined" ||null==expr) return null;
+                options = $the.cast(eOptions,options);
                 if (typeof  expr === "function"){
                     expr.annotation = {};
                     if(!!options && !!options.annotate){
                         e.annotateFunction(expr,options);
                     }
                     return expr;
-                }
-                if(typeof  options ==="string"){
-                    options = {type:options};
-                }
-                options = options || {type:"check"};
-                if (!options.type) {
-                    options.type = "check";
                 }
 
                 if (!e.prototypes.hasOwnProperty(options.type))throw "type not registered " + options.type;
@@ -145,6 +148,7 @@
             };
 
             root.expression = e;
+            root.expression.ExpressionOptions = eOptions;
             root.expression.define = function (proto, processfuntion) {
                 e.prototypes[proto] = processfuntion;
             }
