@@ -6,7 +6,8 @@
 	
 	
 */
-define([], function () {
+define(["./the"], function ($the) {
+    return $the(function(root,privates){
     function PlanalizeOptions(args) {
         this.__PlanalizeOptions = true;
         this.emptyfornulls = true;
@@ -129,12 +130,12 @@ define([], function () {
 
         return target;
     }
-
-    return {
+    root.object = {
         planalize: planalize,
         extend: extend,
         extensionsRegex: extensionsRegex,
         applyHttpExtensions: applyHttpExtensions,
         PlanalizeOptions : PlanalizeOptions
     };
+    })
 });

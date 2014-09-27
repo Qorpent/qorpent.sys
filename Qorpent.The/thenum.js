@@ -20,7 +20,7 @@
                 this._index = -1;
                 if (!!options) {
                     if (!!options.referencedEnum) {
-                        this._referencedEnum = thenum(options.referencedEnum);
+                        this._referencedEnum = collections(options.referencedEnum);
                     }
                     if (!!options.buffered) {
                         this._buffered = true;
@@ -101,7 +101,7 @@
                 });
             };
             Enumeration.prototype.union = function (other) {
-                other = thenum(other);
+                other = collections(other);
                 this.reset();
                 other.reset();
                 return new Enumeration(this, function (e, eof) {
@@ -185,7 +185,7 @@
             };
 
             Enumeration.prototype.except = function (other, keyFunc) {
-                other = thenum(other);
+                other = collections(other);
                 keyFunc = $ex(keyFunc);
 
                 return new Enumeration(this, function (e, eof) {
@@ -356,10 +356,10 @@
 
             Enumeration.prototype._loadBuffer = function () {
                 this._buffer = this._baseEnumeration.toArray();
-                this._bufferIter = thenum(this._buffer);
+                this._bufferIter = collections(this._buffer);
                 if (!!this._referencedEnum) {
                     this._refbuffer = this._referencedEnum.toArray();
-                    this._refbufferIter = thenum(this._refbuffer);
+                    this._refbufferIter = collections(this._refbuffer);
                 }
             };
 
@@ -377,17 +377,28 @@
                 };
             }
 
-
-            var thenum = root.enumeration = function (target) {
+            var collections = function (target) {
                 if (target instanceof Enumeration)return target;
                 return new Enumeration(target);
             };
+            collections.Enumeration = Enumeration;
+            collections.KeyValuePair = KeyValuePair;
+            collections.EndOfEnumeration = EndOfEnumeration;
+            collections.StartOfEnumeration = StartOfEnumeration;
+
+            if(root.collections){
+                var oldcollections = root.collections;
+
+                for(var i in oldcollections){
+                    if(oldcollections.hasOwnProperty(i)){
+                        collections[i] = oldcollections[i];
+                    }
+                }
+            }
+            root.collections = collections;
 
 
-            thenum.Enumeration = Enumeration;
-            thenum.KeyValuePair = KeyValuePair;
-            thenum.EndOfEnumeration = EndOfEnumeration;
-            thenum.StartOfEnumeration = StartOfEnumeration;
+
 
         })
 

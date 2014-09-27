@@ -1,7 +1,7 @@
 (function (define) {
     define(["./thenum"], function ($the) {
         return $the(function (root, privates) {
-            var $ = root.enumeration;
+            var $ = root.collections;
             /**
              *
              * @param value

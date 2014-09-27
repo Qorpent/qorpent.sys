@@ -240,9 +240,9 @@ describe("the.collections", function(){
             requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
         }
         try{
-            requirejs(["chai","../thenum-collections"], function($should,$the){
+            requirejs(["chai","../thollections"], function($should,$the){
                 should = $should.Should();
-                $ = $the.enumeration;
+                $ = $the.collections;
                 done();
             });
         }catch(e){

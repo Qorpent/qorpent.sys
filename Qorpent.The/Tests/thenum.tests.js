@@ -19,7 +19,7 @@ describe("the.collections.core", function(){
         try{
             requirejs(["chai","../thenum"], function($should,$thenum){
                 should = $should.Should();
-                $ = $thenum.enumeration;
+                $ = $thenum.collections;
                 done();
               });
         }catch(e){
