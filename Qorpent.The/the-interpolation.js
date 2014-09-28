@@ -4,7 +4,7 @@
 (function (define) {
     define(["./the-object"], function ($the) {
         return $the(function (root,privates) {
-            var __interpolateString = function (str, source, options) {
+            var __interpolateString = privates.__interpolateString = function (str, source, options) {
                 return str.replace(options.getRegex(), function (_) {
                     var reference = _.substring(2, _.length - 1);
                     var value = options.isLayeredDictionary ? source.get(reference) : source[reference];
@@ -22,7 +22,7 @@
                 });
             };
 
-            var __interpolateObject = function (obj, source, options) {
+            var __interpolateObject = privates.__interpolateObject = function (obj, source, options) {
                 var realTarget = $the.clone(obj);
                 var realSource = __prepareSource(realTarget, source, options);
                 var recursive = 3;
@@ -38,7 +38,7 @@
                 }
                 for (i in realTarget) {
                     if (!realTarget.hasOwnProperty(i))continue;
-                    if (privates._isCloneable(realTarget[i])) {
+                    if ($the.isUserObject(realTarget[i])) {
                         realTarget[i] = __interpolateObject(realTarget[i], realSource, options);
                     }
                 }
@@ -88,7 +88,7 @@
                 if(typeof target==="string"){
                     return __interpolateString(target,source,options);
                 }
-                if(!privates._isCloneable(target))return target;
+                if(!$the.isUserObject(target))return target;
                 return __interpolateObject(target,source,options);
             };
             var opts = root.interpolate.InterpolationOptions = function(){

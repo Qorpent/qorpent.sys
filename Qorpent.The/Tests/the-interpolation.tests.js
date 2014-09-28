@@ -2,7 +2,7 @@
  * Created by comdiv on 24.09.14.
  */
 (function (describe, it, before) {
-    describe("the.interpolate", function () {
+    describe("the.interpolation", function () {
         this.timeout(5000);
 
         it("string(obj)",function(){
