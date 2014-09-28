@@ -127,7 +127,7 @@ describe("the.collections.linq", function(){
                 requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
             }
             try{
-                requirejs(["chai","../the-collections-linq","../the-expression"], function($should,$thenum){
+                requirejs(["./lib/chai","../the-collections-linq","../the-expression"], function($should,$thenum){
                     should = $should.Should();
                     $ = $thenum.collections;
                     done();

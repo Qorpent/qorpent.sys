@@ -79,7 +79,7 @@
                 requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
             }
             try {
-                requirejs(["chai", "../the-jsonify","../the-interpolation","../the-expression"], function ($should, $the) {
+                requirejs(["./lib/chai", "../the-jsonify","../the-interpolation","../the-expression"], function ($should, $the) {
                     should = $should.Should();
                     $ = $the.jsonify;
                     $root = $the;

@@ -120,7 +120,7 @@
                 requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
             }
             try {
-                requirejs(["chai", "../the-interpolation","../the-collections-layered"], function ($should, $the) {
+                requirejs(["./lib/chai", "../the-interpolation","../the-collections-layered"], function ($should, $the) {
                     should = $should.Should();
                     $ = $the.interpolate;
                     $l = $the.collections.LayeredDictionary;

@@ -132,7 +132,7 @@ describe("the.object", function(){
             requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
         }
         try{
-            requirejs(["chai","../the-object"], function($should,$the){
+            requirejs(["./lib/chai","../the-object"], function($should,$the){
                 should = $should.Should();
                 $ = $the.object;
                 done();

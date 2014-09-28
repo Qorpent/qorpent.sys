@@ -184,7 +184,7 @@
                 requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
             }
             try {
-                requirejs(["chai", "../the-collections-layered"], function ($should, $the) {
+                requirejs(["./lib/chai", "../the-collections-layered"], function ($should, $the) {
                     should = $should.Should();
                     $ = $the.collections.LayeredDictionary;
                     $e = $the.collections.Enumeration;

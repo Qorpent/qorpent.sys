@@ -99,7 +99,7 @@
                 requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
             }
             try {
-                requirejs(["chai", "../the-expression"], function ($should, $the) {
+                requirejs(["./lib/chai", "../the-expression"], function ($should, $the) {
                     should = $should.Should();
                     $ = $the.expression;
                     done();

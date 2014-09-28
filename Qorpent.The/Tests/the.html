@@ -2,14 +2,18 @@
 <head>
     <meta charset="utf-8">
     <title>JSLinks Browser Tests</title>
-    <link rel="stylesheet" href="mocha.css" />
+    <link rel="stylesheet" href="lib/mocha.css" />
 </head>
 <body>
 <div id="mocha"></div>
-<script src="require.js"></script>
-<script src="chai.js"></script>
-<script src="mocha.js"></script>
+<script src="lib/angular.js"></script>
+<script src="lib/require.js"></script>
+<script src="lib/jquery.js"></script>
+
+<script src="lib/chai.js"></script>
+<script src="lib/mocha.js"></script>
 <script>mocha.setup('bdd')</script>
+<script src="the-http.tests.js"></script>
 <script src="the-object.tests.js"></script>
 <script src="the-interpolation.tests.js"></script>
 <script src="the-jsonify.tests.js"></script>
@@ -18,6 +22,8 @@
 <script src="the-collections-linked.tests.js"></script>
 <script src="the-collections-core.tests.js"></script>
 <script src="the-collections-linq.tests.js"></script>
+
+<script src="the-action.tests.js"></script>
 
 <script>
     //mocha.checkLeaks();
