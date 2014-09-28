@@ -41,7 +41,7 @@
             should.not.exist(c.get("x"));
             c.set('x',1);
             c.get('x').should.equal(1);
-            c.set('x',null);
+            c.set('x',undefined);
             c.exists('x').should.equal(false);
         });
         it("remove accepts only one level", function(){
@@ -51,7 +51,7 @@
             c.get('x').should.equal(1);
             c.parent = new $({x:2});
             c.get('x').should.equal(1);
-            c.set('x',null);
+            c.set('x',undefined);
             c.exists('x').should.equal(true);
             c.get('x').should.equal(2);
         });

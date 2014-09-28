@@ -1,10 +1,10 @@
 (function (define) {
     define(["./the-expression"], function ($the) {
-        return $the(function (root, privates) {
+        return $the(function (root) {
             var EndOfEnumeration = {};
             var StartOfEnumeration = {};
-            var NUMBERCOUNTER = 1;
-            var CHECKCOMPARER = 2;
+
+
             var $ex = $the.expression;
 
             /**

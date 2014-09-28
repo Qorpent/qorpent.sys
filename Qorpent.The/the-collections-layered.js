@@ -4,10 +4,10 @@
 (function (define) {
     define(["./the-collections-core"], function ($the) {
         return $the(function ($root) {
-            var $ex = $root.object.extend;
+
             var $cast = $root.object.cast;
 
-            var LayeredDictionaryContext = function(mindepth, maxdepth,skip){
+            var LayeredDictionaryContext = function (mindepth, maxdepth, skip) {
                 if (null == mindepth)mindepth = 0;
                 if (null == maxdepth)maxdepth = 1 << 30;
                 if (null == skip)skip = 0;
@@ -15,10 +15,10 @@
                 this.maxdepth = Math.max(Number(maxdepth), 0) || 0;
                 this.skip = Math.max(Number(skip), 0) || 0;
                 this.maxdepth = Math.max(mindepth, maxdepth);
-                this.next =  function(skip){
-                    return new LayeredDictionaryContext(this.mindepth-1,this.maxdepth-1,skip?this.skip-1:this.skip);
+                this.next = function (skip) {
+                    return new LayeredDictionaryContext(this.mindepth - 1, this.maxdepth - 1, skip ? this.skip - 1 : this.skip);
                 }
-            }
+            };
             var LayeredDictionary = function () {
                 if(typeof this === "undefined" || !(this instanceof LayeredDictionary)){
                     return LayeredDictionary.build.apply(null,arguments);
@@ -28,6 +28,7 @@
                     this.apply(arguments[i]);
                 }
                 if(!!this.reset)this.reset();
+                return this;
             };
             $root.collections = $root.collections || {};
             $root.collections.LayeredDictionary = LayeredDictionary;
@@ -35,18 +36,18 @@
 
                 LayeredDictionary.prototype = Object.create($root.collections.Enumeration.prototype);
 
-                LayeredDictionary.prototype.reset  = function(){
+                LayeredDictionary.prototype.reset = function () {
                     $root.collections.Enumeration.prototype.reset.call(this);
                     this.keys = this.getKeys();
-                }
-                LayeredDictionary.prototype.baseNext  = function(){
+                };
+                LayeredDictionary.prototype.baseNext = function () {
                     this._index++;
-                    if(this._index < this.keys.length){
+                    if (this._index < this.keys.length) {
                         var key = this.keys[this._index];
-                        return new $root.collections.KeyValuePair(key,this.get(key));
+                        return new $root.collections.KeyValuePair(key, this.get(key));
                     }
                     return $root.collections.EndOfEnumeration;
-                }
+                };
 
 
 
@@ -90,7 +91,7 @@
              */
             LayeredDictionary.prototype.set = function (name, val) {
                 if (typeof name != "string" || !name)throw  "name must be not empty";
-                if (typeof val !== "undefined" && null != val) {
+                if (typeof val !== "undefined") {
                     this.internalIndex[name] = val;
                 }
                 else {
@@ -103,7 +104,7 @@
                 return _;
             };
             var exists = function (_) {
-                return (!(typeof _ == "undefined" || null == _));
+                return (!(typeof _ == "undefined" ));
             };
             /**
              * Обходит конфигурацию и вызывает переданную функцию при нахождении элемента в колбэке
@@ -118,7 +119,7 @@
                 hint = $cast(LayeredDictionaryContext,hint);
 
                 if (hint.mindepth > 0) {
-                    if (null == this.parent)return selector(null);
+                    if (null == this.parent)return selector(undefined);
                     return this.parent.select(name, selector, hint.next(false));
                 }
 
@@ -132,8 +133,8 @@
                     return selector(result);
                 }
 
-                if (hint.maxdepth == 0) return selector(null);
-                if (null == this.parent)return selector(null);
+                if (hint.maxdepth == 0) return selector(undefined);
+                if (null == this.parent)return selector(undefined);
                 return this.parent.select(name, selector, hint.next(false));
             };
 

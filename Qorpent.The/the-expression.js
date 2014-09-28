@@ -4,23 +4,23 @@
 (function (define) {
     define(["./the-object"], function ($the) {
         return $the(function (root) {
-            var eOptions = function(){
+            var eOptions = function () {
                 this.type = "check";
                 this.annotate = false;
                 this.and = false;
                 this.or = false;
-                this.counter =false;
-            }
-            eOptions.__parse__ = function(str){
+                this.counter = false;
+            };
+            eOptions.__parse__ = function (str) {
                 this.type = str;
-            }
+            };
             var e = function (expr, options) {
                 if (typeof  expr === "undefined" ||null==expr) return null;
                 options = $the.cast(eOptions,options);
                 if (typeof  expr === "function"){
                     expr.annotation = {};
                     if(!!options && !!options.annotate){
-                        e.annotateFunction(expr,options);
+                        e.annotateFunction(expr);
                     }
                     return expr;
                 }
@@ -42,7 +42,7 @@
                 return undefined;
             };
 
-            e.annotateFunction =  function(f,options){
+            e.annotateFunction =  function(f){
                 f.annotation = f.annotation || {};
                 if (f.toString().match(/^function\s*\(a\s*,b\s*\)/)) {
                     f.annotation.comparer = true;
@@ -60,7 +60,7 @@
                         }
                     }else{
                         var current = expr;
-                        result = function(_){
+                        result = function(){
                             if (current == 0)return false;
                             current--;
                             return true;
@@ -137,8 +137,6 @@
                                 }
                             }
                             return match;
-
-                            return false;
                         }
                     }
 

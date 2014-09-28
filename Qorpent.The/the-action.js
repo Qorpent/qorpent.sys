@@ -115,13 +115,13 @@ define(['qObject'], function (qObject) {
 			if ( this.isarray ) {
 				var arrayresult  = [];
 				for (var i=0; i<data.length; i++ ){
-					var item = this.result ? new this.result(args) : {};
+					var item = this.result ? new this.result() : {};
 					extend(item,data[i] || {});
 					arrayresult.push(item);
 				}
 				return arrayresult;
 			}else{
-				var singleresult =  this.result ? new this.result(args) :{};
+				var singleresult =  this.result ? new this.result() :{};
 				extend(singleresult, data || {});
 				return singleresult;
 			}

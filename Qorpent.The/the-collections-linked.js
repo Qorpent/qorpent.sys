@@ -1,6 +1,6 @@
 (function (define) {
     define(["./the-collections-core"], function ($the) {
-        return $the(function (root, privates) {
+        return $the(function (root) {
             var $ = root.collections;
             /**
              *
@@ -314,4 +314,4 @@
             $.Queue = Queue;
         });
     });
-})(typeof define === "function" ? define : require('amdefine')(module))
+})(typeof define === "function" ? define : require('amdefine')(module));

@@ -78,18 +78,22 @@
 
 
                     if(typeof trg !== "undefined"){
+                        var src = source[i];
                         if(options.cloneInternals && $iscloneable(target[trg])){
                             target[trg] = self.extend({},target[trg],ExtendOptions.DefaultClone);
+                        }
+                        if(options.cloneInternals && $iscloneable(src)){
+                            src = self.extend({},src,ExtendOptions.DefaultClone);
                         }
                         if(exists
                             && options.deep
                             && $iscloneable(target[trg])
-                            && $iscloneable(source[i])
+                            && $iscloneable(src)
                             ){
-                            self.extend(target[trg],source[i],options);
+                            self.extend(target[trg],src,options);
                         }else{
 
-                            target[trg] = source[i];
+                            target[trg] = src;
                         }
                     }
                 }
@@ -155,9 +159,14 @@
                 }
                 return $root.object.create(ctor, obj, options);
             };
+
+            $root.object.clone = function (obj) {
+                return self.extend({}, obj, ExtendOptions.DefaultClone);
+            };
             $root.cast =  $root.object.cast;
             $root.extend = $root.object.extend;
             $root.create = $root.object.create;
+            $root.clone = $root.object.clone;
         });
     });
 })(typeof define === "function" ? define : require('amdefine')(module));
