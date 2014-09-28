@@ -4,7 +4,7 @@
  */
 (function (define) {
     define(["./the"], function ($the) {
-        return $the(function ($root,$privates) {
+        return $the(function ($root) {
             var ExtendOptions =function(options){
                 if (!(this instanceof ExtendOptions)){
                     if(options instanceof ExtendOptions)return options;
@@ -17,7 +17,7 @@
                 this.clone = false;
                 this.cloneInternals = false;
                 this.functions = true;
-                this.filter = function(_,val,context){return !!_};
+                this.filter = function(_){return !!_};
                 if(!!options){
                     $root.object.extend(this,options);
                 }
@@ -96,16 +96,16 @@
                 }
                 return target;
             };
-            $root.isDefaultValue = function(obj){
-                if(null===obj)return true;
-                if(""===obj)return true;
-                if(0===obj)return true;
-                if(false===obj)return true;
-                if(Array.isArray(obj) && 0==obj.length)return true;
-                if($root.isUserObject(obj) ){
+            $root.isDefaultValue = function (obj) {
+                if (null === obj)return true;
+                if ("" === obj)return true;
+                if (0 === obj)return true;
+                if (false === obj)return true;
+                if (Array.isArray(obj) && 0 == obj.length)return true;
+                if ($root.isUserObject(obj)) {
                     var hasown = false;
-                    for(var i in obj){
-                        if(obj.hasOwnProperty(i)){
+                    for (var i in obj) {
+                        if (obj.hasOwnProperty(i)) {
                             hasown = true;
                             break;
                         }
@@ -113,7 +113,7 @@
                     return !hasown;
                 }
                 return false;
-            }
+            };
             $root.isUserObject = $root.object.isUserObject = function (obj) {
                 if(typeof obj==="undefined" || null===obj)return false;
                 if (typeof obj !== "object") return false;

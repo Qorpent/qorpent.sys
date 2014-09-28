@@ -60,9 +60,9 @@
         it("can filter options",function(){
             $({a:1,b:2,c:3},{filter:function(_,val){return _!="b" && val!=3}}).should.eql({a:1});
         });
-
-
-
+        it("can filter options (with expression module)",function(){
+            $({a:1,b:2,c:3},{filter:"_!='b' && arguments[1]!=3"}).should.eql({a:1});
+        });
 
         var $ = null;
         var $root = null;
@@ -79,7 +79,7 @@
                 requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
             }
             try {
-                requirejs(["chai", "../the-jsonify","../the-interpolation"], function ($should, $the) {
+                requirejs(["chai", "../the-jsonify","../the-interpolation","../the-expression"], function ($should, $the) {
                     should = $should.Should();
                     $ = $the.jsonify;
                     $root = $the;

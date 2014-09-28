@@ -150,24 +150,24 @@
             c.toObject().should.eql({x:4,d:4,c:3,b:2,a:1});
         });
 
-        it("can be built from chain",function(){
-            var c = $.build({x:1,y:1,z:1},{x:2,a:2},{y:3,b:3});
+        it("can be built from chain", function () {
+            var c = $.build({x: 1, y: 1, z: 1}, {x: 2, a: 2}, {y: 3, b: 3});
             c.get('x').should.equal(2);
             c.get('y').should.equal(3);
             c.get('z').should.equal(1);
             c.get('a').should.equal(2);
             c.get('b').should.equal(3);
-            c.get('x',1).should.equal(2);
-            c.get('x',2).should.equal(1);
-            var c = $({x:1,y:1,z:1},{x:2,a:2},{y:3,b:3}); //not "new" style
+            c.get('x', 1).should.equal(2);
+            c.get('x', 2).should.equal(1);
+            var c = $({x: 1, y: 1, z: 1}, {x: 2, a: 2}, {y: 3, b: 3}); //not "new" style
             c.get('x').should.equal(2);
             c.get('y').should.equal(3);
             c.get('z').should.equal(1);
             c.get('a').should.equal(2);
             c.get('b').should.equal(3);
-            c.get('x',1).should.equal(2);
-            c.get('x',2).should.equal(1);
-        })
+            c.get('x', 1).should.equal(2);
+            c.get('x', 2).should.equal(1);
+        });
 
 
         var $ = null;
