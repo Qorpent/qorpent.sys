@@ -1,7 +1,8 @@
 (function (define) {
     define(["./the-collections-core"], function ($the) {
-        return $the(function (root) {
+        return $the(function (root,privates) {
             var $ = root.collections;
+            var $ex = privates._collectionEx;
             /**
              *
              * @param value
@@ -19,7 +20,7 @@
                 this.last = null;
                 if (!!options) {
                     if (!!options.onKey) {
-                        this.onKey = ($the.expression(options.onKey)).bind(this);
+                        this.onKey = ($ex(options.onKey)).bind(this);
                     }
                 }
                 if (enumeration) {
@@ -90,7 +91,7 @@
                 return this.currentItem.next;
             };
             LinkedList.prototype.find = function (condition) {
-                condition = $the.expression(condition);
+                condition = $ex(condition);
                 var current = this.first;
                 while (current) {
                     if (typeof condition == "function") {

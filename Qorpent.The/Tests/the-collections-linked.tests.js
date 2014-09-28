@@ -240,7 +240,7 @@ describe("the.collections.Linked", function(){
             requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
         }
         try{
-            requirejs(["chai","../the-collections-linked"], function($should,$the){
+            requirejs(["chai","../the-collections-linked","../the-expression","../the-collections-linq"], function($should,$the){
                 should = $should.Should();
                 $ = $the.collections;
                 done();
