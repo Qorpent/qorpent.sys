@@ -44,6 +44,9 @@
         it("can eval functions",function(){
             $({a:1,b:function(){return this.a*20}},{evalfunctions:true}).should.eql({a:1,b:20});
         });
+        it("can remove privates",function(){
+            $({a:1,__a:1},{privates:false}).should.eql({a:1});
+        });
         it("can stringify internals",function(){
             $({a:1,b:{x:1}}).should.eql({a:1,b:{x:1}});
             $({a:1,b:{x:1}},{stringify:true}).should.eql({a:1,b:"{\"x\":1}"});

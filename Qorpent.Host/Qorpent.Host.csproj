@@ -165,5 +165,43 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\fontawesome-webfont.svg" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Qorpent.The\the-action.js">
+      <Link>Resources\the-action.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-collections-core.js">
+      <Link>Resources\the-collections-core.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-collections-layered.js">
+      <Link>Resources\the-collections-layered.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-collections-linked.js">
+      <Link>Resources\the-collections-linked.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-collections-linq.js">
+      <Link>Resources\the-collections-linq.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-expression.js">
+      <Link>Resources\the-expression.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-http-test.js">
+      <Link>Resources\the-http-test.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-http.js">
+      <Link>Resources\the-http.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-interpolation.js">
+      <Link>Resources\the-interpolation.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-jsonify.js">
+      <Link>Resources\the-jsonify.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-object.js">
+      <Link>Resources\the-object.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the.js">
+      <Link>Resources\the.js</Link>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

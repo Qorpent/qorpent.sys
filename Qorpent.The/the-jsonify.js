@@ -32,6 +32,7 @@
                     }
                     for (var i in realobj) {
                         if (!realobj.hasOwnProperty(i))continue;
+                        if(!options.privates && i.substring(0,2)=="__")continue;
                         if (!!options.filter && !options.filter(i, realobj[i], realobj))continue;
                         var newval = getValue(i, realobj[i], realobj, options);
                         if (typeof newval !== "undefined") {
@@ -84,6 +85,7 @@
                 this.defaults =true;
                 this.filter = null;
                 this.evalfunctions = false;
+                this.privates = true;
             };
         });
     });

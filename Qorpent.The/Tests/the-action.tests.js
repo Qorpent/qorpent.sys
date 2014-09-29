@@ -15,6 +15,25 @@
                    }
                })
             });
+            it("simplest short notation",function(done){
+                $({url:"good"})(function(data){
+                    data.should.eql({good:true});
+                    done();
+                });
+            });
+            it("simplest short notation (with args)",function(done){
+                $({url:"echo"})({a:1},function(data){
+                    data.should.eql({a:1});
+                    done();
+                });
+            });
+            it("simplest short notation (error)",function(done){
+                $({url:"bad"})(function(data,resp,error){
+                    should.not.exist(data);
+                    error.should.equal("some fail");
+                    done();
+                });
+            });
             it("simplest default success",function(done){
                 $({url:"good",success: function(data){
                     data.should.eql({good:true});
@@ -215,7 +234,9 @@
                 }
             } catch (e) {
                 requirejs = require("requirejs");
-                requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
+                requirejs.config({
+                    baseurbaseUrl: '.',
+                    nodeRequire: require});
             }
             try {
                 requirejs(["./lib/chai", "../the-action","../the-http-test","../the-interpolation"], function ($should, $the) {

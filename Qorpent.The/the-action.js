@@ -2,7 +2,8 @@
  * Action/Action builder module to wrapp HTTP/AJAX calls
  */
 (function (define) {
-    define(["./the-jsonify","./the-http"], function ($the) {
+    var dependency =["./the-jsonify","./the-http"];
+    define(dependency, function ($the) {
         return $the(function ($root,$privates) {
             var cast = $the.cast;
             var extend = $the.extend;
@@ -48,17 +49,16 @@
                 this.eventName = "";
                 this.jsonify = true;
                 this.delay = 0;
-                this.jsonifyOptions = {interpolate:true,defaults:false,stringify:true,evalfunctions:true,functions:false};
+                this.jsonifyOptions = {interpolate:true,defaults:false,stringify:true,evalfunctions:true,functions:false,privates:false};
                 this.__callMoniker  = 0;
                 return this;
             }
 
 
-            Action.prototype.execute = function (args, callinfo) {
-                args = args || {};
-                callinfo = cast(ActionCallInfo, callinfo || {},excast);
-                var delay = Math.max(this.delay,callinfo.delay);
-                var request  = this.createRequest(args,callinfo);
+            Action.prototype.execute = function () {
+                var a= this.normalizeParameters(arguments);
+                var delay = Math.max(this.delay, a.callinfo.delay);
+                var request  = this.createRequest(a.args, a.callinfo);
                 var self = this;
                 if(0!==delay){
                     self.__callMoniker++;
@@ -76,7 +76,7 @@
                 }
             };
 
-            Action.prototype.getUrl = function (args, callinfo) {
+            Action.prototype.getUrl = function (args,callinfo) {
                 callinfo = cast(ActionCallInfo,callinfo||{},excast );
                 var baseUrl = callinfo.baseUrl || this.baseUrl || "/";
                 var addressType = callinfo.addressType || this.addressType || "url";
@@ -94,6 +94,37 @@
                 }else{
                     throw "special urls are not supported for now"
                 }
+            }
+            Action.prototype.normalizeParameters=function(_args){
+                var args = null
+                var callinfo = null;
+                var success = null
+                var error = null;
+                var srcargs = _args;
+                var k = 0;
+                for(k = 0; k<srcargs.length ; k++){
+                    var val = srcargs[k];
+                     if(typeof val === "function"){
+                        if(!!success)error = val;
+                        else success = val;
+                    }else if(!!args || val instanceof ActionCallInfo){
+                        callinfo = val;
+                    }else{
+                        args = val;
+                    }
+
+                }
+                args= args || {};
+                callinfo = cast(ActionCallInfo,callinfo||{},excast);
+
+                if(success && !error){
+                    error = function(error,resp){
+                        success(null,resp,error);
+                    }
+                }
+                callinfo.success = success || callinfo.success;
+                callinfo.error = error || callinfo.error;
+                return {args:args,callinfo:callinfo};
             }
 
             var extensionsFalseFilter = function (_) {
@@ -166,10 +197,10 @@
                 }
                 var error = function(error,resp){
                     if(!!callinfo.error){
-                        callinfo.error(data,resp);
+                        callinfo.error(error,resp);
                     }
                     if(!!self.error && !callinfo.suppressDefault){
-                        self.error(data,resp);
+                        self.error(error,resp);
                     }
                     if(!!eventName && !!emitter && !callinfo.suppressDefault){
                         emitter.emit("ERROR:"+eventName,[error,resp,this]);
