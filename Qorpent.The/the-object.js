@@ -50,7 +50,7 @@
                 if (options.clone) {
                     target = self.extend({}, target, ExtendOptions.DefaultClone);
                 }
-                if(typeof source === "undefined" || null===source)return target;
+                if (typeof source === "undefined" || null === source)return target;
                 var trgKeys = {};
                 var srcKeys = {};
                 var i;
@@ -85,11 +85,7 @@
                         if (options.cloneInternals && $isusr(src)) {
                             src = self.clone(src);
                         }
-                        if (exists
-                            && options.deep
-                            && $isusr(target[trg])
-                            && $isusr(src)
-                            ) {
+                        if (exists && options.deep && $isusr(target[trg]) && $isusr(src)) {
                             self.extend(target[trg], src, options);
                         } else {
 
@@ -151,8 +147,7 @@
                     return self.cast(ctor, result);
                 } else if (typeof obj != "object" || obj instanceof RegExp) {
                     return self.cast(ctor, [obj]);
-                }
-                else {
+                } else {
                     result = Object.create(ctor.prototype);
                     ctor.apply(result, []);
                     self.extend(result, obj, options);

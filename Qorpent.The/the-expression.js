@@ -15,11 +15,11 @@
                 this.type = str;
             };
             var e = function (expr, options) {
-                if (typeof  expr === "undefined" ||null==expr) return null;
-                options = $the.cast(eOptions,options);
-                if (typeof  expr === "function"){
+                if (typeof  expr === "undefined" || null == expr) return null;
+                options = $the.cast(eOptions, options);
+                if (typeof  expr === "function") {
                     expr.annotation = {};
-                    if(!!options && !!options.annotate){
+                    if (!!options && !!options.annotate) {
                         e.annotateFunction(expr);
                     }
                     return expr;
@@ -32,7 +32,7 @@
                         options.hasExpressionSymbols = !!expr.match(/[\.=\-+<>&|*\/!()]/);
                     }
                 }
-                var result =  e.prototypes[options.type](expr, options);
+                var result = e.prototypes[options.type](expr, options);
                 result.annotation = {};
                 return result;
 
@@ -42,7 +42,7 @@
                 return undefined;
             };
 
-            e.annotateFunction =  function(f){
+            e.annotateFunction = function (f) {
                 f.annotation = f.annotation || {};
                 if (f.toString().match(/^function\s*\(a\s*,b\s*\)/)) {
                     f.annotation.comparer = true;
@@ -54,13 +54,13 @@
             e.prototypes.check = function (expr, options) {
                 var result = null;
                 if (typeof expr === "number" || (typeof expr === "string" && !options.hasExpressionSymbols)) {
-                    if(!options.counter){
+                    if (!options.counter) {
                         result = function (_) {
                             return _ == expr;
                         }
-                    }else{
+                    } else {
                         var current = expr;
-                        result = function(){
+                        result = function () {
                             if (current == 0)return false;
                             current--;
                             return true;
@@ -71,11 +71,11 @@
                     if (!expr.match(/_/))realExpr = "_" + realExpr;
                     realExpr = "_=function(_,idx){try{return  (" + realExpr + ");}catch(e){return false;}}";
                     result = eval(realExpr);
-                }else if(expr instanceof RegExp){
-                    result = function(_){
+                } else if (expr instanceof RegExp) {
+                    result = function (_) {
                         return !!_.match(expr);
                     }
-                }else if (Array.isArray(expr)) { //array support in "in" notation by default
+                } else if (Array.isArray(expr)) { //array support in "in" notation by default
                     if (!!options.and) {
                         result = function (_) {
                             var match = true;

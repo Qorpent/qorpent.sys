@@ -20,35 +20,34 @@
                 }
             };
             var LayeredDictionary = function () {
-                if(typeof this === "undefined" || !(this instanceof LayeredDictionary)){
-                    return LayeredDictionary.build.apply(null,arguments);
+                if (typeof this === "undefined" || !(this instanceof LayeredDictionary)) {
+                    return LayeredDictionary.build.apply(null, arguments);
                 }
                 this.internalIndex = {};
                 for (var i = 0; i < arguments.length; i++) {
                     this.apply(arguments[i]);
                 }
-                if(!!this.reset)this.reset();
+                if (!!this.reset)this.reset();
                 return this;
             };
             $root.collections = $root.collections || {};
             $root.collections.LayeredDictionary = LayeredDictionary;
             $root.collections.LayeredDictionaryContext = LayeredDictionaryContext;
 
-                LayeredDictionary.prototype = Object.create($root.collections.Enumeration.prototype);
+            LayeredDictionary.prototype = Object.create($root.collections.Enumeration.prototype);
 
-                LayeredDictionary.prototype.reset = function () {
-                    $root.collections.Enumeration.prototype.reset.call(this);
-                    this.keys = this.getKeys();
-                };
-                LayeredDictionary.prototype.baseNext = function () {
-                    this._index++;
-                    if (this._index < this.keys.length) {
-                        var key = this.keys[this._index];
-                        return new $root.collections.KeyValuePair(key, this.get(key));
-                    }
-                    return $root.collections.EndOfEnumeration;
-                };
-
+            LayeredDictionary.prototype.reset = function () {
+                $root.collections.Enumeration.prototype.reset.call(this);
+                this.keys = this.getKeys();
+            };
+            LayeredDictionary.prototype.baseNext = function () {
+                this._index++;
+                if (this._index < this.keys.length) {
+                    var key = this.keys[this._index];
+                    return new $root.collections.KeyValuePair(key, this.get(key));
+                }
+                return $root.collections.EndOfEnumeration;
+            };
 
 
             /**
@@ -79,7 +78,7 @@
                 } else {
                     throw "invalid object to apply";
                 }
-                if(!!this.reset)this.reset();
+                if (!!this.reset)this.reset();
                 return this;
             };
             /**
@@ -93,11 +92,10 @@
                 if (typeof name != "string" || !name)throw  "name must be not empty";
                 if (typeof val !== "undefined") {
                     this.internalIndex[name] = val;
-                }
-                else {
+                } else {
                     delete this.internalIndex[name];
                 }
-                if(!!this.reset)this.reset();
+                if (!!this.reset)this.reset();
                 return this;
             };
             var proxy = function (_) {
@@ -116,7 +114,7 @@
                 selector = selector || proxy;
                 if (typeof name != "string" || !name)throw  "name must be not empty";
 
-                hint = $cast(LayeredDictionaryContext,hint);
+                hint = $cast(LayeredDictionaryContext, hint);
 
                 if (hint.mindepth > 0) {
                     if (null == this.parent)return selector(undefined);
@@ -125,10 +123,10 @@
 
                 if (this.internalIndex.hasOwnProperty(name)) {
                     var result = this.internalIndex[name];
-                    if(hint.skip!=0){
+                    if (hint.skip != 0) {
                         var skipresult = null;
-                        if(this.parent)skipresult = this.parent.select(name, selector, hint.next(true));
-                        if(null!=skipresult)result = skipresult;
+                        if (this.parent)skipresult = this.parent.select(name, selector, hint.next(true));
+                        if (null != skipresult)result = skipresult;
                     }
                     return selector(result);
                 }
@@ -144,14 +142,14 @@
              * @param {LayeredDictionaryContext} [hint] подсказка к поиску
              */
             LayeredDictionary.prototype.exists = function (name, hint) {
-                return this.select(name, exists,hint);
+                return this.select(name, exists, hint);
             };
             /**
              * Возвращает значение параметра
              * @param {String} name имя параметра
              * @param {LayeredDictionaryContext} [hint]
              */
-            LayeredDictionary.prototype.get = function (name,hint) {
+            LayeredDictionary.prototype.get = function (name, hint) {
                 return this.select(name, proxy, hint);
             };
 
@@ -165,7 +163,7 @@
              */
             LayeredDictionary.prototype.visit = function (callback, hint, internalIndex) {
 
-                hint = $cast(LayeredDictionaryContext,hint);
+                hint = $cast(LayeredDictionaryContext, hint);
                 internalIndex = internalIndex || {};
 
                 if (hint.mindepth > 0) {
@@ -210,14 +208,14 @@
                 }, hint);
                 return result;
             };
-            LayeredDictionary.build = function(){
+            LayeredDictionary.build = function () {
                 var result = new LayeredDictionary();
-                for(var i =0;i<arguments.length;i++){
+                for (var i = 0; i < arguments.length; i++) {
                     var current = arguments[i];
-                    if(current instanceof LayeredDictionary){
+                    if (current instanceof LayeredDictionary) {
                         current.parent = result;
                         result = current;
-                    }else{
+                    } else {
                         current = new LayeredDictionary(current);
                         current.parent = result;
                         result = current;
@@ -225,9 +223,6 @@
                 }
                 return result;
             }
-
-
-
 
 
         });

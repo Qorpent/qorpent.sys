@@ -1,22 +1,23 @@
 (function (define) {
     define(["./the-object"], function ($the) {
-        return $the(function (root,privates) {
+        return $the(function (root, privates) {
             var EndOfEnumeration = {};
             var StartOfEnumeration = {};
 
 
-            var $ex = privates._collectionEx = function(valOrFunc,options){
-                if(!!$the.expression){
-                    return $the.expression(valOrFunc,options);
-                }else{
-                    if(typeof valOrFunc==="undefined"||null==valOrFunc){
-                        return function(){return true;}
-                    }
-                    else if(typeof valOrFunc==="function"){
+            var $ex = privates._collectionEx = function (valOrFunc, options) {
+                if (!!$the.expression) {
+                    return $the.expression(valOrFunc, options);
+                } else {
+                    if (typeof valOrFunc === "undefined" || null == valOrFunc) {
+                        return function () {
+                            return true;
+                        }
+                    } else if (typeof valOrFunc === "function") {
                         return valOrFunc;
-                    }else{
-                        return  function(_){
-                            return _===valOrFunc;
+                    } else {
+                        return  function (_) {
+                            return _ === valOrFunc;
                         }
                     }
                 }
@@ -54,8 +55,7 @@
                         this._array = target;
                     } else if (typeof target == "number") {
                         this._number = target;
-                    }
-                    else {
+                    } else {
                         this._object = target;
                         this._nameindex = [];
                         for (var i in this._object) {
@@ -68,7 +68,6 @@
             };
 
 
-
             Enumeration.prototype.toArray = function (expr) {
                 this.reset();
                 var result = [];
@@ -78,7 +77,6 @@
                 }
                 return result;
             };
-
 
 
             var KeyValuePair = function (key, value) {
@@ -158,8 +156,7 @@
                         return EndOfEnumeration;
                     }
                     return this._index;
-                }
-                else {
+                } else {
                     return EndOfEnumeration;
                 }
             };
@@ -219,18 +216,16 @@
             collections.EndOfEnumeration = EndOfEnumeration;
             collections.StartOfEnumeration = StartOfEnumeration;
 
-            if(root.collections){
+            if (root.collections) {
                 var oldcollections = root.collections;
 
-                for(var i in oldcollections){
-                    if(oldcollections.hasOwnProperty(i)){
+                for (var i in oldcollections) {
+                    if (oldcollections.hasOwnProperty(i)) {
                         collections[i] = oldcollections[i];
                     }
                 }
             }
             root.collections = collections;
-
-
 
 
         })

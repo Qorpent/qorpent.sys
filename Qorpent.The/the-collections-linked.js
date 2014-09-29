@@ -1,6 +1,6 @@
 (function (define) {
     define(["./the-collections-core"], function ($the) {
-        return $the(function (root,privates) {
+        return $the(function (root, privates) {
             var $ = root.collections;
             var $ex = privates._collectionEx;
             /**
@@ -251,13 +251,11 @@
                 var i;
                 if (offset > 0) {
                     for (i = 0; i < offset; i++) {
-                        if (basis.next)basis = basis.next;
-                        else basis = this.first;
+                        if (basis.next)basis = basis.next; else basis = this.first;
                     }
                 } else if (offset < 0) {
                     for (i = 0; i > offset; i--) {
-                        if (basis.previous)basis = basis.previous;
-                        else basis = this.last;
+                        if (basis.previous)basis = basis.previous; else basis = this.last;
                     }
                 }
                 this.currentItem = basis;

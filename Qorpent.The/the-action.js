@@ -2,12 +2,12 @@
  * Action/Action builder module to wrapp HTTP/AJAX calls
  */
 (function (define) {
-    var dependency =["./the-jsonify","./the-http"];
+    var dependency = ["./the-jsonify", "./the-http"];
     define(dependency, function ($the) {
-        return $the(function ($root,$privates) {
+        return $the(function ($root, $privates) {
             var cast = $the.cast;
             var extend = $the.extend;
-            var excast= $the.object.ExtendOptions.ExtendedCast;
+            var excast = $the.object.ExtendOptions.ExtendedCast;
             var $j = $the.jsonify;
             var $h = $the.http;
             var timeout = $the.timeout;
@@ -23,7 +23,7 @@
                 this.withCredentials = null;
                 this.suppressDefault = false;
                 this.eventName = "";
-                this.castResult =null;
+                this.castResult = null;
                 this.rawResult = false;
                 this.delay = 0;
             };
@@ -39,7 +39,7 @@
                 this.method = "GET";
                 this.arguments = null; //ctor function for arguments
                 this.result = null; //ctor function for result
-                this.castResult =true;
+                this.castResult = true;
                 this.headers = null;
                 this.extensions = null;
                 this.useparams = true;
@@ -49,111 +49,102 @@
                 this.eventName = "";
                 this.jsonify = true;
                 this.delay = 0;
-                this.jsonifyOptions = {interpolate:true,defaults:false,stringify:true,evalfunctions:true,functions:false,privates:false};
-                this.__callMoniker  = 0;
+                this.jsonifyOptions = {interpolate: true, defaults: false, stringify: true, evalfunctions: true, functions: false, privates: false};
+                this.__callMoniker = 0;
                 return this;
-            }
+            };
 
 
             Action.prototype.execute = function () {
-                var a= this.normalizeParameters(arguments);
+                var a = this.normalizeParameters(arguments);
                 var delay = Math.max(this.delay, a.callinfo.delay);
-                var request  = this.createRequest(a.args, a.callinfo);
+                var request = this.createRequest(a.args, a.callinfo);
                 var self = this;
-                if(0!==delay){
+                if (0 !== delay) {
                     self.__callMoniker++;
                     var myMoniker = self.__callMoniker; //interlocked-like syncronization
-                    timeout(
-                        function(){
-                            if(self.__callMoniker == myMoniker){
+                    timeout(function () {
+                            if (self.__callMoniker == myMoniker) {
                                 $h(request);
                             }
-                        }, delay
-                    );
+                        }, delay);
                     return null;
-                }else{
+                } else {
                     return $h(request);
                 }
             };
 
-            Action.prototype.getUrl = function (args,callinfo) {
-                callinfo = cast(ActionCallInfo,callinfo||{},excast );
+            Action.prototype.getUrl = function (args, callinfo) {
+                callinfo = cast(ActionCallInfo, callinfo || {}, excast);
                 var baseUrl = callinfo.baseUrl || this.baseUrl || "/";
                 var addressType = callinfo.addressType || this.addressType || "url";
-                if("url"===addressType){
+                if ("url" === addressType) {
                     var url = callinfo.url || this.url || "";
-                    if(!!args && url.indexOf('$')!=-1){
-                        if(!$the.interpolate){
+                    if (!!args && url.indexOf('$') != -1) {
+                        if (!$the.interpolate) {
                             console.warn("can lost interpolable urls while interpolation module not loaded")
-                        }else{
+                        } else {
                             url = $the.interpolate(url, args);
                         }
                     }
                     url = url || "";
-                    return ("/"+baseUrl+"/"+url).replace(/\/+/,"/");
-                }else{
+                    return ("/" + baseUrl + "/" + url).replace(/\/+/, "/");
+                } else {
                     throw "special urls are not supported for now"
                 }
-            }
-            Action.prototype.normalizeParameters=function(_args){
-                var args = null
+            };
+            Action.prototype.normalizeParameters = function (_args) {
+                var args = null;
                 var callinfo = null;
-                var success = null
+                var success = null;
                 var error = null;
-                var srcargs = _args;
-                var k = 0;
-                for(k = 0; k<srcargs.length ; k++){
-                    var val = srcargs[k];
-                     if(typeof val === "function"){
-                        if(!!success)error = val;
-                        else success = val;
-                    }else if(!!args || val instanceof ActionCallInfo){
+                for (var k = 0; k < _args.length; k++) {
+                    var val = _args[k];
+                    if (typeof val === "function") {
+                        if (!!success)error = val; else success = val;
+                    } else if (!!args || val instanceof ActionCallInfo) {
                         callinfo = val;
-                    }else{
+                    } else {
                         args = val;
                     }
 
                 }
-                args= args || {};
-                callinfo = cast(ActionCallInfo,callinfo||{},excast);
+                args = args || {};
+                callinfo = cast(ActionCallInfo, callinfo || {}, excast);
 
-                if(success && !error){
-                    error = function(error,resp){
-                        success(null,resp,error);
+                if (success && !error) {
+                    error = function (error, resp) {
+                        success(null, resp, error);
                     }
                 }
                 callinfo.success = success || callinfo.success;
                 callinfo.error = error || callinfo.error;
-                return {args:args,callinfo:callinfo};
-            }
+                return {args: args, callinfo: callinfo};
+            };
 
             var extensionsFalseFilter = function (_) {
                 return !_.match(extensionsRegex)
             };
-            var extensionsTrueFilter = function (_) {
-                return _.match(extensionsRegex)
-            };
-
             Action.prototype.createRequest = function (args, callinfo) {
                 args = args || {};
-                callinfo = cast(ActionCallInfo,callinfo||{},excast);
+                callinfo = cast(ActionCallInfo, callinfo || {}, excast);
 
                 //extract clean params
-                var url = this.getUrl(args,callinfo);
-                var result = { url: url, params: {}, headers:{}, extensions: {} };
+                var url = this.getUrl(args, callinfo);
+                var result = { url: url, params: {}, headers: {}, extensions: {} };
                 // store all properties execpt extensions into params
-                if(!!this.useparams){
+                if (!!this.useparams) {
                     extend(result.params, (!!this.arguments ? cast(this.arguments, args) : args), {filter: extensionsFalseFilter});  //arguments is special word
                     extend(result.params, this.parameters, {filter: extensionsFalseFilter});
                     extend(result.params, args || {}, {filter: extensionsFalseFilter});
-                    if(this.jsonify){
-                        var opts =  this.jsonifyOptions;
-                        if(!$the.interpolate && opts.interpolate){
+                    if (this.jsonify) {
+                        var opts = this.jsonifyOptions;
+                        if (!$the.interpolate && opts.interpolate) {
                             console.warn("my be lost interpolation while interpolation module not loaded");
                             opts = $the.clone(opts);
                             opts.interpolate = false;
                         }
-                        result.params = $j(result.params,opts);
+                        result.params = $j(result.params, opts);
                     }
                 }
 
@@ -161,91 +152,87 @@
 
                 applyHttpExtensions(result, this);
 
-                extend(result.headers,this.headers);
-                extend(result.headers,callinfo.headers);
-                extend(result.extensions,this.extensions);
-                extend(result.extensions,callinfo.extensions);
+                extend(result.headers, this.headers);
+                extend(result.headers, callinfo.headers);
+                extend(result.extensions, this.extensions);
+                extend(result.extensions, callinfo.extensions);
 
                 applyHttpExtensions(result, args);
 
-                var self =this;
+                var self = this;
                 var eventName = callinfo.eventName || this.eventName;
                 var emitter = callinfo.emitter || this.emitter;
                 var resultCtor = callinfo.result || this.result;
-                var castResult = (callinfo.castResult || this.castResult)&&!!resultCtor && !callinfo.rawResult;
-                var success = function(data,resp){
+                var castResult = (callinfo.castResult || this.castResult) && !!resultCtor && !callinfo.rawResult;
+                var success = function (data, resp) {
                     var realdata = data;
-                    if(castResult){
-                        if(Array.isArray(data)){
+                    if (castResult) {
+                        if (Array.isArray(data)) {
                             realdata = [];
-                            for(var i = 0;i<data.length;i++){
-                                realdata.push(cast(resultCtor,data[i],excast));
+                            for (var i = 0; i < data.length; i++) {
+                                realdata.push(cast(resultCtor, data[i], excast));
                             }
-                        }else if(typeof  data === "object"){
-                            realdata = cast(resultCtor,data,excast);
+                        } else if (typeof  data === "object") {
+                            realdata = cast(resultCtor, data, excast);
                         }
                     }
-                    if(!!callinfo.success){
-                        callinfo.success(realdata,resp);
+                    if (!!callinfo.success) {
+                        callinfo.success(realdata, resp);
                     }
-                    if(!!self.success && !callinfo.suppressDefault){
-                        self.success(realdata,resp);
+                    if (!!self.success && !callinfo.suppressDefault) {
+                        self.success(realdata, resp);
                     }
-                    if(!!eventName && !!emitter && !callinfo.suppressDefault){
-                        emitter.emit(eventName,[realdata,resp,self]);
+                    if (!!eventName && !!emitter && !callinfo.suppressDefault) {
+                        emitter.emit(eventName, [realdata, resp, self]);
                     }
-                }
-                var error = function(error,resp){
-                    if(!!callinfo.error){
-                        callinfo.error(error,resp);
+                };
+                var error = function (error, resp) {
+                    if (!!callinfo.error) {
+                        callinfo.error(error, resp);
                     }
-                    if(!!self.error && !callinfo.suppressDefault){
-                        self.error(error,resp);
+                    if (!!self.error && !callinfo.suppressDefault) {
+                        self.error(error, resp);
                     }
-                    if(!!eventName && !!emitter && !callinfo.suppressDefault){
-                        emitter.emit("ERROR:"+eventName,[error,resp,this]);
+                    if (!!eventName && !!emitter && !callinfo.suppressDefault) {
+                        emitter.emit("ERROR:" + eventName, [error, resp, this]);
                     }
-                }
-                result.success =success;
-                result.error =error;
+                };
+                result.success = success;
+                result.error = error;
 
                 var withCredentials = this.withCredentials;
-                if(null!=callinfo.withCredentials){
+                if (null != callinfo.withCredentials) {
                     withCredentials = callinfo.withCredentials;
                 }
-                if(withCredentials){
+                if (withCredentials) {
                     result.withCredentials = withCredentials;
                 }
 
-                if($the.isDefaultValue(result.headers)){
+                if ($the.isDefaultValue(result.headers)) {
                     delete result.headers;
                 }
-                if($the.isDefaultValue(result.extensions)){
+                if ($the.isDefaultValue(result.extensions)) {
                     delete result.extensions;
                 }
 
                 return result;
-            }
+            };
 
 
             var build = $root.action = Action.build = function (action, $transport, $emitter, $baseUrl) {
-                action = cast(Action, action||{}, excast);
+                action = cast(Action, action || {}, excast);
                 action.transport = $transport || action.transport;
                 action.baseUrl = $baseUrl || action.baseUrl;
-                action.emitter= $emitter || action.emitter;
+                action.emitter = $emitter || action.emitter;
                 var result = function () {
                     return action.execute.apply(action, arguments);
-                }
+                };
                 result.action = action;
                 result.createRequest = action.createRequest.bind(action);
                 result.getUrl = action.getUrl.bind(action);
                 result.__callMoniker = 0;
                 return result;
-            }
-
-            Action.prototype.transport = stubtransport;
-            Action.prototype.emitter = stubemitter;
-
+            };
 
             var extensionsRegex = /h[qd]_/;
 
@@ -255,7 +242,13 @@
 
             var stubemitter = $privates.stubemitter = {
 
-            }
+            };
+
+            Action.prototype.transport = stubtransport;
+            Action.prototype.emitter = stubemitter;
+
+
+
 
             var applyHttpExtensions = $privates.applyHttpExtensions = function (target, source) {
                 for (var s in source) {

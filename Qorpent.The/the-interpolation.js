@@ -3,7 +3,7 @@
  */
 (function (define) {
     define(["./the-object"], function ($the) {
-        return $the(function (root,privates) {
+        return $the(function (root, privates) {
             var __interpolateString = privates.__interpolateString = function (str, source, options) {
                 return str.replace(options.getRegex(), function (_) {
                     var reference = _.substring(2, _.length - 1);
@@ -76,29 +76,29 @@
                 return result;
             };
 
-            root.interpolate = function(target,source,options){
-                if(typeof target=="undefined"||null==target)return null;
-                options = $the.cast(opts,options);
+            root.interpolate = function (target, source, options) {
+                if (typeof target == "undefined" || null == target)return null;
+                options = $the.cast(opts, options);
                 source = source || {};
-                if(typeof source !== "object")return target;
-                if(!!$the.collections && !!$the.collections.LayeredDictionary && (source  instanceof $the.collections.LayeredDictionary )){
+                if (typeof source !== "object")return target;
+                if (!!$the.collections && !!$the.collections.LayeredDictionary && (source  instanceof $the.collections.LayeredDictionary )) {
                     options.isLayeredDictionary = true;
                     options.layeredDictionary = $the.collections.LayeredDictionary;
                 }
-                if(typeof target==="string"){
-                    return __interpolateString(target,source,options);
+                if (typeof target === "string") {
+                    return __interpolateString(target, source, options);
                 }
-                if(!$the.isUserObject(target))return target;
-                return __interpolateObject(target,source,options);
+                if (!$the.isUserObject(target))return target;
+                return __interpolateObject(target, source, options);
             };
-            var opts = root.interpolate.InterpolationOptions = function(){
+            var opts = root.interpolate.InterpolationOptions = function () {
                 this.anchor = "$";
-                this.start=  "{";
+                this.start = "{";
                 this.finish = "}";
-                this.isLayeredDictionary =false;
+                this.isLayeredDictionary = false;
                 this.regex = null;
-                this.getRegex = function(){
-                    return this.regex || (this.regex = new RegExp("\\"+this.anchor+"\\"+this.start+"[^\\"+this.finish+"]+"+"\\"+this.finish,"g"));
+                this.getRegex = function () {
+                    return this.regex || (this.regex = new RegExp("\\" + this.anchor + "\\" + this.start + "[^\\" + this.finish + "]+" + "\\" + this.finish, "g"));
                 }
             };
         });

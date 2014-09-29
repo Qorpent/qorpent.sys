@@ -22,8 +22,7 @@
                         result.push(jsonify(obj[i], options))
                     }
                     return result;
-                }
-                else if ($the.isUserObject(obj)) {
+                } else if ($the.isUserObject(obj)) {
                     result = {};
                     var realobj = obj;
                     if (options.interpolate) {
@@ -32,7 +31,7 @@
                     }
                     for (var i in realobj) {
                         if (!realobj.hasOwnProperty(i))continue;
-                        if(!options.privates && i.substring(0,2)=="__")continue;
+                        if (!options.privates && i.substring(0, 2) == "__")continue;
                         if (!!options.filter && !options.filter(i, realobj[i], realobj))continue;
                         var newval = getValue(i, realobj[i], realobj, options);
                         if (typeof newval !== "undefined") {
@@ -62,8 +61,7 @@
                 }
                 if (Array.isArray(obj)) {
                     return jsonify(obj);
-                }
-                else if ($the.isUserObject(obj)) {
+                } else if ($the.isUserObject(obj)) {
                     var newvalue = jsonify(obj);
                     if (options.stringify) {
                         newvalue = JSON.stringify(newvalue);
@@ -77,12 +75,12 @@
                 return obj;
             };
 
-            var JsonifyOptions = jsonify.JsonifyOptions = function(){
+            var JsonifyOptions = jsonify.JsonifyOptions = function () {
                 this.functions = true;
                 this.interpolate = false;
                 this.stringify = false;
-                this.nulls =true;
-                this.defaults =true;
+                this.nulls = true;
+                this.defaults = true;
                 this.filter = null;
                 this.evalfunctions = false;
                 this.privates = true;

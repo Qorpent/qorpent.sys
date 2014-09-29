@@ -1,6 +1,6 @@
 (function (define) {
-    define(["./the-collections-core","./the-expression"], function ($the) {
-        return $the(function (root,privates) {
+    define(["./the-collections-core", "./the-expression"], function ($the) {
+        return $the(function (root, privates) {
             var Enumeration = $the.collections.Enumeration;
             var $ex = privates._collectionEx;
             var collections = $the.collections;
@@ -103,7 +103,7 @@
             };
 
             Enumeration.prototype.order = function (keyOrComparer) {
-                var e = $ex(keyOrComparer, {annotate:true});
+                var e = $ex(keyOrComparer, {annotate: true});
                 if (keyOrComparer && !e.annotation.comparer) {
                     var keyFunc = e;
                     e = function (a, b) {
@@ -153,7 +153,7 @@
 
 
             Enumeration.prototype.skip = function (numOrFunc) {
-                var skipper = $ex(numOrFunc,  {counter:true});
+                var skipper = $ex(numOrFunc, {counter: true});
                 var skipped = false;
                 return new Enumeration(this, function (e, eof) {
                     var self = this;
@@ -170,13 +170,13 @@
                     }
                     return eof;
                 }, {onReset: function () {
-                    skipper = $ex(numOrFunc,  {counter:true});
+                    skipper = $ex(numOrFunc, {counter: true});
                     skipped = false;
                 }});
             };
 
             Enumeration.prototype.take = function (numOrFunc) {
-                var skipper = $ex(numOrFunc, {counter:true});
+                var skipper = $ex(numOrFunc, {counter: true});
                 return new Enumeration(this, function (e, eof) {
                     var self = this;
                     var next = self._baseEnumeration.next();
@@ -187,7 +187,7 @@
                     }
                     return self._baseEnumeration.current;
                 }, {onReset: function () {
-                    skipper = $ex(numOrFunc,  {counter:true});
+                    skipper = $ex(numOrFunc, {counter: true});
                 }});
             };
 
