@@ -50,6 +50,7 @@
                 if (options.clone) {
                     target = self.extend({}, target, ExtendOptions.DefaultClone);
                 }
+                if(typeof source === "undefined" || null===source)return target;
                 var trgKeys = {};
                 var srcKeys = {};
                 var i;

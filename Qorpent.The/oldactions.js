@@ -97,7 +97,7 @@ define(['./the-jsonify'], function ($the) {
 		};
 	    extend(result,config);
 		result.__delayTimeout = result.__delayTimeout || 500;
-		result.getQuery = function( args ){
+		result.createRequest = function( args ){
 			//extract clean params
 			var params = {};
 			extend ( params, (config.arguments ? new config.arguments(args) : {}) , '',  extensionsRegex);  //arguments is special word
@@ -247,7 +247,7 @@ define(['./the-jsonify'], function ($the) {
                 }
             }
 			
-			var query = this.getQuery ( args );
+			var query = this.createRequest ( args );
 			var method = this.method || 'GET';
 			var qpost = this.method=="QPOST";
 			

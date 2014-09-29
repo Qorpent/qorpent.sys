@@ -4,13 +4,13 @@
 (function (define) {
     define(["./the-object"], function ($the) {
         return $the(function ($root,$privates) {
-            var timeout = setTimeout;
-            if(typeof window!=="undefined"){
-                timeout =window.setTimeout;
-            }
+
+            var excast= $the.object.ExtendOptions.ExtendedCast;
+            var timeout = $the.timeout;
+            var tick = $the.tick;
             var h = $root.http = function(call){
                 var defaultTransport = h.DetectDefaultTransport()
-                var request = $the.cast(r,call,$the.object.ExtendOptions.ExtendedCast);
+                var request = $the.cast(Request,call,$the.object.ExtendOptions.ExtendedCast);
                 request.transport = call.transport;
                 var transport = request.transport || defaultTransport;
                 return transport.execute(request);
@@ -22,11 +22,24 @@
             }
 
 
-            var r = h.Request = function(){};
+
 
             var t = h.Transport = function(){};
 
+            var Request = h.Request = function(){
+                this.url = "/";
+                this.params= {};
+                this.headers= {};
+                this.withCredentials = true;
+                this.timeout = 0;
+                this.username = "";
+                this.password = "";
+                this.method = "GET";
+                this.contentType =  'application/x-www-form-urlencoded; charset=UTF-8';
+            }
+
             var resp = h.Response = function(request,transport){
+                request = $the.cast(Request,request,excast);
                 this.request= request;
                 this.transport = transport;
                 this.timeouted = false;
@@ -38,8 +51,12 @@
                 this.result = null;
             };
             resp.prototype.notify = function(eventName){
+                var name = eventName;
+                var self = this;
                 for(var i=0;i<listeners.length;i++){
-                    listeners[i](eventName,this);
+                    tick(function(){
+                        listeners[i](name,self);
+                    });
                 }
             }
             resp.prototype.execute = function(){
@@ -50,8 +67,10 @@
                         self.timeouted = true;
                         self.isError = true;
                         self.error = "timeout";
-                        if(!!self.request.onError){
-                            self.request.onError("timeout",self);
+                        if(!!self.request.error){
+                            tick(function(){
+                                self.request.error("timeout",self);
+                            });
                         }
                         self.notify("timeout");
                     },this.request.timeout)
@@ -65,8 +84,10 @@
                             self.success = true;
                             self.nativeResult = nativeResponse;
                             self.result = data;
-                            if(!!self.request.onSuccess){
-                                self.request.onSuccess(self.result,self);
+                            if(!!self.request.success){
+                                tick(function(){
+                                    self.request.success(self.result,self);
+                                });
                             }
                             self.notify("success");
                         },
@@ -76,8 +97,10 @@
                             self.nativeResult = nativeResponse;
                             self.isError =true;
                             self.error = data;
-                            if(!!self.request.onError){
-                                self.request.onError(self.error,self);
+                            if(!!self.request.error){
+                                tick(function(){
+                                    self.request.error(self.error,self);
+                                });
                             }
                             self.notify("error");
                         }
@@ -87,12 +110,17 @@
                     self.error = e;
                     self.complete = true;
                     if(!!self.request.onError){
+                        tick(function(){
                         self.request.onError(self.error,self);
+
+                        });
                     }
                     self.notify("error");
                 }
                 return this;
             }
+
+
 
             t.prototype.execute = function(request){
                 var result = new resp(request,this);
@@ -112,7 +140,7 @@
                 var jr = {};
                 jr.url = request.url;
                 jr.contentType  = request.contentType || 'application/x-www-form-urlencoded; charset=UTF-8';
-                jr.data = request.parameters || {};
+                jr.data = request.params || {};
                 jr.headers= request.headers || {};
                 jr.ifModified = true;
                 jr.password = request.password || "";
@@ -171,7 +199,6 @@
             };
             TestTransport.prototype = Object.create(t.prototype);
             TestTransport.prototype.callData = function(request,success,error){
-
                 var resp = null;
                 if(typeof request.response === "undefined"){
                     resp = TestTransport.responseFactory(request);
@@ -185,7 +212,20 @@
                     success(resp.data,resp);
                 }},t);
             }
-            TestTransport.responseFactory = function(req){return {}};
+            TestTransport.responseFactory =function(req){
+                if(req.url==="/good"){
+                    var res = {data:{good:true}};
+                    if(!!req.timeout){
+                        res.timeout = req.timeout+10;
+                    }
+                    return res;
+                }else if(req.url==="/echo"){
+                    return {data:req.params};
+                }
+                else{
+                    return {error:"some fail"};
+                }
+            };
 
 
             h.DefaultTransport  = null;

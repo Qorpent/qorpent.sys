@@ -14,11 +14,11 @@
                 $({
                     url:"sample.json",
                     transport: new $.JQueryTransport(),
-                    onSuccess : function(data,resp){
+                    success : function(data,resp){
                         data.should.eql({x:1});
                         done();
                     },
-                    onError : function(resp){
+                    error : function(resp){
                         resp.error.should.equal("");
                         done();
                     }
@@ -28,11 +28,11 @@
                 $({
                     url:"sample.json",
                     transport: new $.AngularTransport(),
-                    onSuccess : function(data,resp){
+                    success : function(data,resp){
                         data.should.eql({x:1});
                         done();
                     },
-                    onError : function(resp){
+                    error : function(resp){
                         resp.error.should.equal("");
                         done();
                     }
@@ -43,11 +43,11 @@
         it("can use TestTransport (success)",function(done){
             $({
                 url:"/good",
-                onSuccess : function(data){
+                success : function(data){
                     data.should.eql({good:true});
                     done();
                 },
-                onError : function(error){
+                error : function(error){
                     error.should.equal("");
                     done();
                 }
@@ -57,11 +57,11 @@
         it("can use TestTransport (error)",function(done){
             $({
                 url:"/bad",
-                onSuccess : function(data,resp){
+                success : function(data,resp){
                     data.should.equal("");
                     done();
                 },
-                onError : function(error,resp){
+                error : function(error,resp){
                     error.should.equal("some fail")
                     done();
                 }
@@ -72,11 +72,11 @@
             $({
                 url:"/good",
                 timeout:10,
-                onSuccess : function(data,resp){
+                success : function(data,resp){
                     data.should.equal("");
                     done();
                 },
-                onError : function(error,resp){
+                error : function(error,resp){
                     error.should.equal("timeout")
                     done();
                 }
@@ -101,17 +101,6 @@
                     should = $should.Should();
                     $ = $the.http;
                     $root = $the;
-                    $.TestTransport.responseFactory = function(req){
-                        if(req.url==="/good"){
-                            var res = {data:{good:true}};
-                            if(!!req.timeout){
-                                res.timeout = req.timeout+10;
-                            }
-                            return res;
-                        }  else{
-                            return {error:"some fail"};
-                        }
-                    };
                     $.DefaultTransport = new $.TestTransport();
                     done();
                 });

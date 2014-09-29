@@ -5,6 +5,73 @@
     describe("the.action", function () {
         this.timeout(5000);
 
+        describe("#execute",function(){
+            it("simplest test",function(done){
+               $({url:"good"})({},{
+                   success: function(data){
+                       data.should.eql({good:true});
+                       done();
+                   }
+               })
+            });
+            it("simplest default success",function(done){
+                $({url:"good",success: function(data){
+                    data.should.eql({good:true});
+                    done();
+                }})();
+            });
+            it("simplest emmiter",function(done){
+                var e = {
+                    emit: function(name,data){
+                        name.should.equal("TEST");
+                        data[0].should.eql({good:true});
+                        done();
+                    }
+                }
+                $({url:"good",emitter: e,eventName:"TEST"})();
+            });
+            it("strong typed result support",function(done){
+                var r = function(){this.GOOD=false};
+                $({url:"good",result:r, success: function(data){
+                    data.should.eql({GOOD:true});
+                    done();
+                }})();
+            });
+            it("strong typed  override result support",function(done){
+                var r = function(){this.GOOD=false};
+                var r2 = function(){this.Good=false};
+                $({url:"good",result:r, success: function(data){
+                    data.should.eql({Good:true});
+                    done();
+                }})({},{result:r2});
+            });
+            it("strong typed raw result override",function(done){
+                var r = function(){this.GOOD=false};
+                $({url:"good",result:r, success: function(data){
+                    data.should.eql({good:true});
+                    done();
+                }})({},{rawResult:true});
+            });
+            it("can call echo (test propose)",function(done){
+                $({url:"echo",success: function(data){
+                    data.should.eql({x:1});
+                    done();
+                }})({x:1});
+            });
+            it("can call delayed",function(done){
+                var res = [];
+                var a = $({url:"echo",delay:15,success:function(_){res.push(_)}});
+                setTimeout(function(){a({x:1})},10);
+                setTimeout(function(){a({x:2})},40);
+                setTimeout(function(){a({x:3})},50);
+                setTimeout(function(){a({x:4})},60);
+                setTimeout(function(){
+                    res.should.eql([{x:1},{x:4}]);
+                    done();
+                },200)
+            });
+        });
+
         describe("#getUrl",function(){
             it("simplest",function(){
                 $().getUrl().should.equal("/");
@@ -26,57 +93,85 @@
             });
         })
 
-        describe("#getQuery",function(){
+        describe("#createRequest",function(){
+            var delfun = function(req){
+                //removes trivials
+                delete req.success;
+                delete req.error;
+                delete req.method;
+                return req;
+            }
             it("simplest",function(){
-                $().getQuery({x:1}).should.eql({params:{x:1},extensions:{}});
+                delfun($().createRequest({x:1})).should.eql({ url: '/', params: { x: 1 }, withCredentials:true });
             });
 
             it("headers in callinfo",function(){
-                $().getQuery({x:1},{headers:{a:1}}).should.eql({params:{x:1},extensions:{headers:{a:1}}});
+                delfun($().createRequest({x:1},{headers:{a:1}})).should.eql({ url: '/',params:{x:1},headers:{a:1}, withCredentials:true});
             });
             it("can disable parameters",function(){
                 var a= $({useparams:false}).action;
                 a.useparams.should.equal(false);
-                a.getQuery({x:1},{headers:{a:1}}).should.eql({params:{},extensions:{headers:{a:1}}});
+                delfun(a.createRequest({x:1},{headers:{a:1}})).should.eql({ url: '/',params:{},headers:{a:1}, withCredentials:true});
 
             });
             it("can use strongly typed parameters",function(){
                var f = function(){this.a =1,this.b=2,this.d=4;};
-                $({arguments:f}).getQuery({A:3,B:2,C:3}).should.eql({params:{a:3,b:2,d:4,C:3},extensions:{}});
+                delfun($({arguments:f}).createRequest({A:3,B:2,C:3})).should.eql({ url: '/',params:{a:3,b:2,d:4,C:3}, withCredentials:true});
             });
             it("headers in action",function(){
                 var a = new $.Action();
                 a.headers = {a:1};
-                a.getQuery({x:1}).should.eql({params:{x:1},extensions:{headers:{a:1}}});
+                delfun(a.createRequest({x:1})).should.eql({ url: '/',params:{x:1},headers:{a:1}, withCredentials:true});
             });
             it("headers in args hd_ style",function(){
                 var a = new $.Action();
-                a.getQuery({x:1,hd_a:1}).should.eql({params:{x:1},extensions:{headers:{a:1}}});
+                delfun(a.createRequest({x:1,hd_a:1})).should.eql({ url: '/',params:{x:1},headers:{a:1}, withCredentials:true});
             });
             it("headers in actions hd_ style",function(){
                 var a = new $.Action();
                 a.hd_a = 1;
-                a.getQuery({x:1}).should.eql({params:{x:1},extensions:{headers:{a:1}}});
+                delfun(a.createRequest({x:1})).should.eql({ url: '/',params:{x:1},headers:{a:1}, withCredentials:true});
             });
 
             it("extensions in callinfo",function(){
                 var a = new $.Action();
-                a.getQuery({x:1},{extensions:{a:1}}).should.eql({params:{x:1},extensions:{a:1}});
+                delfun(a.createRequest({x:1},{extensions:{a:1}})).should.eql({ url: '/',params:{x:1},extensions:{a:1}, withCredentials:true});
             });
             it("extensions in action",function(){
                 var a = new $.Action();
                 a.extensions = {a:1};
-                a.getQuery({x:1}).should.eql({params:{x:1},extensions:{a:1}});
+                delfun(a.createRequest({x:1})).should.eql({ url: '/',params:{x:1},extensions:{a:1}, withCredentials:true});
             });
             it("extensions in args hq_ style",function(){
                 var a = new $.Action();
-                a.getQuery({x:1,hq_a:1}).should.eql({params:{x:1},extensions:{a:1}});
+                delfun(a.createRequest({x:1,hq_a:1})).should.eql({ url: '/',params:{x:1},extensions:{a:1}, withCredentials:true});
+            });
+            it("can disable credentials with action",function(){
+                var a = $({withCredentials:false});
+                delfun(a.createRequest({x:1})).should.eql({ url: '/',params:{x:1}});
+            });
+            it("can disable credentials with callinfo",function(){
+                var a = new $.Action();
+                delfun(a.createRequest({x:1},{withCredentials:false})).should.eql({ url: '/',params:{x:1}});
+            });
+            it("jsonify max by default",function(){
+                var a = new $.Action();
+                delfun(a.createRequest({x:1,y:null,z:0,a:false,b:{a:"${x}${x}"},c:function(){return this.x+23;}},{withCredentials:false})).should.eql({ url: '/',params:{x:1,b:"{\"a\":\"11\"}",c:24}});
+            });
+            it("jsonify can be disabled",function(){
+                var a = $({jsonify:false}).action;
+                delfun(a.createRequest({x:1,y:"${x}"},{withCredentials:false})).should.eql({ url: '/',params:{x:1,y:"${x}"}});
+            });
+            it("jsonify can be modified",function(){
+                var a = $({jsonifyOptions:{defaults:true}}).action;
+                delfun(a.createRequest({x:1,y:"${x}${x}",z:null},{withCredentials:false})).should.eql({ url: '/',params:{x:1,y:"11",z:null}});
             });
             it("extensions in actions hq_ style",function(){
                 var a = new $.Action();
                 a.hq_a = 1;
-                a.getQuery({x:1}).should.eql({params:{x:1},extensions:{a:1}});
+                delfun(a.createRequest({x:1})).should.eql({ url: '/',params:{x:1},extensions:{a:1}, withCredentials:true});
             });
+
             it("args/callinfo/action override priority for headers",function(){
                 var a = new $.Action();
                 a.headers= {a:1,b:2,c:3};
@@ -87,7 +182,7 @@
                     x:1,
                     hd_a : 4
                 }
-                a.getQuery(args,ci).should.eql({params:{x:1},extensions:{headers:{a:4,b:3,c:3}}});
+                delfun( a.createRequest(args,ci)).should.eql({url:"/", params:{x:1},headers:{a:4,b:3,c:3}, withCredentials:true});
             });
             it("args/callinfo/action override priority for extensions",function(){
                 var a = new $.Action();
@@ -99,14 +194,17 @@
                     x:1,
                     hq_a : 4
                 }
-                a.getQuery(args,ci).should.eql({params:{x:1},extensions:{a:4,b:3,c:3}});
+                delfun(a.createRequest(args,ci)).should.eql({url:"/", params:{x:1},extensions:{a:4,b:3,c:3}, withCredentials:true});
             });
         });
+
+
 
 
         var $ = null;
         var $root = null;
         var should = null;
+        var $h = null;
 
         before(function (done) {
             var requirejs = null;
@@ -123,6 +221,8 @@
                     should = $should.Should();
                     $ = $the.action;
                     $root = $the;
+                    $h = $the.http;
+                    $h.DefaultTransport = new $h.TestTransport();
                     done();
                 });
             } catch (e) {
