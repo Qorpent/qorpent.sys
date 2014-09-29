@@ -2,11 +2,10 @@
  * Action/Action builder module to wrapp HTTP/AJAX calls
  */
 (function (define) {
-    define(["./the-jsonify", "./the-interpolation","./the-http"], function ($the) {
+    define(["./the-jsonify","./the-http"], function ($the) {
         return $the(function ($root,$privates) {
             var cast = $the.cast;
             var extend = $the.extend;
-            var interpolate =$the.interpolate;
             var excast= $the.object.ExtendOptions.ExtendedCast;
             var $j = $the.jsonify;
             var $h = $the.http;
@@ -83,8 +82,12 @@
                 var addressType = callinfo.addressType || this.addressType || "url";
                 if("url"===addressType){
                     var url = callinfo.url || this.url || "";
-                    if(!!args && url.indexOf('$')){
-                        url = interpolate(url, args);
+                    if(!!args && url.indexOf('$')!=-1){
+                        if(!$the.interpolate){
+                            console.warn("can lost interpolable urls while interpolation module not loaded")
+                        }else{
+                            url = $the.interpolate(url, args);
+                        }
                     }
                     url = url || "";
                     return ("/"+baseUrl+"/"+url).replace(/\/+/,"/");
@@ -113,7 +116,13 @@
                     extend(result.params, this.parameters, {filter: extensionsFalseFilter});
                     extend(result.params, args || {}, {filter: extensionsFalseFilter});
                     if(this.jsonify){
-                        result.params = $j(result.params,this.jsonifyOptions);
+                        var opts =  this.jsonifyOptions;
+                        if(!$the.interpolate && opts.interpolate){
+                            console.warn("my be lost interpolation while interpolation module not loaded");
+                            opts = $the.clone(opts);
+                            opts.interpolate = false;
+                        }
+                        result.params = $j(result.params,opts);
                     }
                 }
 

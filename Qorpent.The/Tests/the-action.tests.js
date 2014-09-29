@@ -6,6 +6,7 @@
         this.timeout(5000);
 
         describe("#execute",function(){
+            this.timeout(2000);
             it("simplest test",function(done){
                $({url:"good"})({},{
                    success: function(data){
@@ -68,7 +69,7 @@
                 setTimeout(function(){
                     res.should.eql([{x:1},{x:4}]);
                     done();
-                },200)
+                },150)
             });
         });
 
@@ -217,7 +218,7 @@
                 requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
             }
             try {
-                requirejs(["./lib/chai", "../the-action"], function ($should, $the) {
+                requirejs(["./lib/chai", "../the-action","../the-http-test","../the-interpolation"], function ($should, $the) {
                     should = $should.Should();
                     $ = $the.action;
                     $root = $the;

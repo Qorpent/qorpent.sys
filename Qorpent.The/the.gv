@@ -1,0 +1,31 @@
+digraph {
+	rankdir=BT;
+	node[shape=box];
+	object->the;
+	expression->object;
+	collection -> object;
+	interpolation -> object;
+	jsonify -> object;
+
+	linked -> collection;	
+	layered -> collection;
+	linq -> collection;
+
+	http -> object;
+	action -> http;
+	action -> interpolation  [arrowhead=obox];
+	action -> jsonify;
+
+	expression -> collection   [dir=back,arrowtail=obox];
+	jsonify -> interpolation  [arrowhead=obox];
+	jsonify -> expression   [arrowhead=obox];
+	layered -> interpolation  [dir=back,arrowtail=obox];
+
+
+	http_test -> http;
+
+	{rank=same; collection expression jsonify interpolation http}
+	{rank=same; action http_test}
+
+	
+}

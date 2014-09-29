@@ -9,18 +9,39 @@
             var timeout = $the.timeout;
             var tick = $the.tick;
             var h = $root.http = function(call){
+                try{
                 var defaultTransport = h.DetectDefaultTransport()
                 var request = $the.cast(Request,call,$the.object.ExtendOptions.ExtendedCast);
+
                 request.transport = call.transport;
                 var transport = request.transport || defaultTransport;
+
                 return transport.execute(request);
+
+                }catch(e){
+                    if(call.error){
+                        call.error(e);  
+                    }
+                }
             };
 
             var listeners = $privates._httpSubscribtions = [];
             h.addListener = function(func){
                 listeners.push(func);
+                return h;
+            }
+            h.removeListener = function(func){
+                var idx = listeners.indexOf(func);
+                if(-1!=idx){
+                    listeners.splice(idx,1);
+                }
+                return h;
             }
 
+            h.cleanListeners = function(func){
+                listeners = $privates._httpSubscribtions = [];
+                return this;
+            }
 
 
 
@@ -194,38 +215,7 @@
                 error({erorr:"not implemented"});
             }
 
-            var TestTransport = h.TestTransport = function(){
-                t.call(this);
-            };
-            TestTransport.prototype = Object.create(t.prototype);
-            TestTransport.prototype.callData = function(request,success,error){
-                var resp = null;
-                if(typeof request.response === "undefined"){
-                    resp = TestTransport.responseFactory(request);
-                }
 
-                var t = resp.timeout || 20;
-                timeout(function(){
-                if(!!resp.error){
-                    error (resp.error,resp);
-                }else{
-                    success(resp.data,resp);
-                }},t);
-            }
-            TestTransport.responseFactory =function(req){
-                if(req.url==="/good"){
-                    var res = {data:{good:true}};
-                    if(!!req.timeout){
-                        res.timeout = req.timeout+10;
-                    }
-                    return res;
-                }else if(req.url==="/echo"){
-                    return {data:req.params};
-                }
-                else{
-                    return {error:"some fail"};
-                }
-            };
 
 
             h.DefaultTransport  = null;

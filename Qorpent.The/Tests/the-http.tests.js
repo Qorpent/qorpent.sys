@@ -52,6 +52,7 @@
                     done();
                 }
             });
+
         });
 
         it("can use TestTransport (error)",function(done){
@@ -97,7 +98,7 @@
                 requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
             }
             try {
-                requirejs(["./lib/chai", "../the-http"], function ($should, $the,$j) {
+                requirejs(["./lib/chai", "../the-http","../the-http-test"], function ($should, $the,$j) {
                     should = $should.Should();
                     $ = $the.http;
                     $root = $the;
