@@ -122,13 +122,20 @@
                 return {args: args, callinfo: callinfo};
             };
 
+            Action.prototype.prepareEmitter = function(){
+                if(!!this.emitter && !!this.eventName){
+                    var self = this;
+                    this.emitter.on("CALL:"+this.eventName,function(event,args){
+                        self.execute.apply(self,args);
+                    });
+                }
+            }
             var extensionsFalseFilter = function (_) {
                 return !_.match(extensionsRegex)
             };
             Action.prototype.createRequest = function (args, callinfo) {
                 args = args || {};
                 callinfo = cast(ActionCallInfo, callinfo || {}, excast);
-
                 //extract clean params
                 var url = this.getUrl(args, callinfo);
                 var result = { url: url, params: {}, headers: {}, extensions: {} };
@@ -220,10 +227,17 @@
 
 
             var build = $root.action = Action.build = function (action, $transport, $emitter, $baseUrl) {
+                action = action||{};
+                var t = action.transport || null;
+                var e = action.emitter || null;
+                delete action.transport;
+                delete action.emitter;
                 action = cast(Action, action || {}, excast);
-                action.transport = $transport || action.transport;
+                action.transport = $transport || t;
+                action.emitter = $emitter || e;
+
                 action.baseUrl = $baseUrl || action.baseUrl;
-                action.emitter = $emitter || action.emitter;
+
                 var result = function () {
                     return action.execute.apply(action, arguments);
                 };
@@ -231,6 +245,7 @@
                 result.createRequest = action.createRequest.bind(action);
                 result.getUrl = action.getUrl.bind(action);
                 result.__callMoniker = 0;
+                action.prepareEmitter();
                 return result;
             };
 

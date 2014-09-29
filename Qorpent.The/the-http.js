@@ -12,12 +12,9 @@
                 try {
                     var defaultTransport = h.DetectDefaultTransport();
                     var request = $the.cast(Request, call, $the.object.ExtendOptions.ExtendedCast);
-
                     request.transport = call.transport;
                     var transport = request.transport || defaultTransport;
-
                     return transport.execute(request);
-
                 } catch (e) {
                     if (call.error) {
                         call.error(e);
@@ -72,8 +69,21 @@
                 this.result = null;
             };
             resp.prototype.notify = function (eventName) {
-                var name = eventName;
                 var self = this;
+                var name = eventName;
+                if (name == "success") {
+                    if (!!self.request.success) {
+                        tick(function () {
+                            self.request.success(self.result, self);
+                        });
+                    }
+                } else if(name=="error" || name=="timeout") {
+                    if (!!self.request.error) {
+                        tick(function () {
+                            self.request.error(self.error, self);
+                        });
+                    }
+                }
                 for (var k = 0; k < listeners.length; i++) {
                     tick(function (i) {
                         listeners[i](name, self);
@@ -88,27 +98,18 @@
                         self.timeouted = true;
                         self.isError = true;
                         self.error = "timeout";
-                        if (!!self.request.error) {
-                            tick(function () {
-                                self.request.error("timeout", self);
-                            });
-                        }
                         self.notify("timeout");
                     }, this.request.timeout)
                 }
-
                 try {
+                    this.notify("begin");
                     this.transport.callData(this.request, function (data, nativeResponse) {
                         if (self.timeouted)return;
                         self.complete = true;
                         self.success = true;
                         self.nativeResult = nativeResponse;
                         self.result = data;
-                        if (!!self.request.success) {
-                            tick(function () {
-                                self.request.success(self.result, self);
-                            });
-                        }
+
                         self.notify("success");
                     }, function (data, nativeResponse) {
                         if (self.timeouted)return;
@@ -116,23 +117,12 @@
                         self.nativeResult = nativeResponse;
                         self.isError = true;
                         self.error = data;
-                        if (!!self.request.error) {
-                            tick(function () {
-                                self.request.error(self.error, self);
-                            });
-                        }
                         self.notify("error");
                     });
                 } catch (e) {
                     self.isError = true;
                     self.error = e;
                     self.complete = true;
-                    if (!!self.request.onError) {
-                        tick(function () {
-                            self.request.onError(self.error, self);
-
-                        });
-                    }
                     self.notify("error");
                 }
                 return this;

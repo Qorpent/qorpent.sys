@@ -46,9 +46,27 @@
                         name.should.equal("TEST");
                         data[0].should.eql({good:true});
                         done();
-                    }
+                    },
+                    on : function(){}
                 }
                 $({url:"good",emitter: e,eventName:"TEST"})();
+            });
+            it("call from emmiter",function(done){
+                var e = {
+                    emit: function(name,data){
+                        name.should.equal("TEST");
+                        data[0].should.eql({good:true});
+                        done();
+                    },
+                    on : function(name,func){
+                        this.callback = func
+                    },
+                    fire : function(){
+                        this.callback({},[{url:"good",emitter: e,eventName:"TEST"}])
+                    }
+                }
+                $({url:"good",emitter: e,eventName:"TEST"});
+                e.fire();
             });
             it("strong typed result support",function(done){
                 var r = function(){this.GOOD=false};
