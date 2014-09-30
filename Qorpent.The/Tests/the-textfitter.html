@@ -1,0 +1,64 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>JSLinks Browser Tests</title>
+    <link rel="stylesheet" href="lib/mocha.css"/>
+</head>
+<body style="display: flex; width:100%;height: 100%; background-color: gray; flex-direction: column;">
+<div id="something" style="flex:1; background-color:greenyellow;flex-grow: 5"></div>
+<div id="content"
+     style="flex:1;background-color:darkseagreen;flex-grow: 2;padding: 5px;display:table-cell;vertical-align:middle;font-family:tahoma; text-align: justify; font-weight:normal; border:solid 2px black;"></div>
+<script src="lib/require.js"></script>
+<script>
+    require(["../the-design-testfitter"],function($the){
+        var fit = $the.design.fitText;
+        var words = "Я пришел к тебе с приветом, \
+                    Рассказать, что солнце встало, \
+                    Что оно горячим светом \
+                    По листам затрепетало \
+                   Рассказать, что лес проснулся, \
+        Весь проснулся, веткой каждой, \
+                Каждой птицей встрепенулся \
+        И весенней полон жаждой \
+                    ".split(/\s+/);
+        var i = 0;
+
+        var update = function () {
+            var text = "";
+            //   if(i==10)return;
+
+            for (var k = 0; k <= i; k++) {
+                text = text + " " + words[k];
+
+            }
+            fit(document.getElementById("content"),text);
+            i++;
+            if (i <= (words.length - 1)) {
+                setTimeout(update, 4);
+            } else {
+                update2();
+            }
+        };
+        var update2 = function () {
+            var text = "";
+            for (var k = 0; k <= i; k++) {
+                text = text + " " + words[k];
+
+            }
+            fit(document.getElementById("content"),text);
+            i--;
+            if (i > 1) {
+                setTimeout(update2, 4);
+            } else {
+                update();
+            }
+        };
+        update();
+
+        window.addEventListener("resize", function () {
+            fit(document.getElementById("content"));
+        })
+    });
+</script>
+</body>
+</html>

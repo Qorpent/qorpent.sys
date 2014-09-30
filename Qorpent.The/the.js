@@ -20,6 +20,22 @@
         };
         the.timeout = timeout;
         the.tick = tick;
+
+        the.checkEnvironment = function () {
+            if (typeof window !== "undefined") {
+                if (typeof the.$angular === "undefined" && window.angular) {
+                    the.$angular = the.$angular || window.angular;
+                    if (typeof the.$angular.$__http === "undefined") {
+                        the.$angular.module("THE_ANGULAR_STUB", []);
+                        var injector = angular.injector(['THE_ANGULAR_STUB', 'ng']);
+                        the.$angular.$__http = injector.get("$http");
+                    }
+                }
+                the.$jQuery = the.$jQuery || window.$;
+            }
+        };
+
+
         return the;
     });
 })(typeof define === "function" ? define : require('amdefine')(module));

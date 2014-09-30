@@ -143,7 +143,7 @@
             };
             JQueryTransport.prototype = Object.create(t.prototype);
             JQueryTransport.prototype.callData = function (request, success, error) {
-                h.CheckEnvironment();
+                $the.checkEnvironment();
                 var jr = {};
                 jr.url = request.url;
                 jr.contentType = request.contentType || 'application/x-www-form-urlencoded; charset=UTF-8';
@@ -171,7 +171,7 @@
             };
             AngularTransport.prototype = Object.create(t.prototype);
             AngularTransport.prototype.callData = function (request, success, error) {
-                h.CheckEnvironment();
+                $the.checkEnvironment();
                 var ar = {};
                 ar.url = request.url;
                 ar.method = request.method || "GET";
@@ -199,21 +199,9 @@
 
 
             h.DefaultTransport = null;
-            h.CheckEnvironment = function () {
-                if (typeof window !== "undefined") {
-                    if (typeof $the.$angular === "undefined") {
-                        $the.$angular = $the.$angular || window.angular;
-                        if (typeof $the.$angular.$__http === "undefined") {
-                            $the.$angular.module("THE_ANGULAR_STUB", []);
-                            var injector = angular.injector(['THE_ANGULAR_STUB', 'ng']);
-                            $the.$angular.$__http = injector.get("$http");
-                        }
-                    }
-                    $the.$jQuery = $the.$jQuery || window.$;
-                }
-            };
+
             h.DetectDefaultTransport = function () {
-                h.CheckEnvironment();
+                $the.checkEnvironment();
                 if (null != h.DefaultTransport)return h.DefaultTransport;
 
                 if (!!$the.$jQuery) {
