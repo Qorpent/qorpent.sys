@@ -4,19 +4,21 @@
  */
 (function (define) {
     define(["./the"], function ($the) {
-        return $the(function ($root, $privates) {
+        return $the(function ($root) {
             $root.design = $root.design || {};
+            var textFitStyles = ["fontFamily", "fontWeight", "textAlign", "textIndent", "padding", "margin", "border", "verticalAlign"];
+            var fitAccurancy = 0.93;
+            var document = window.document;
             var fitter = null;
-            var createFitter = function () {
+            var createFitter = function() {
                 var result = document.createElement("div");
                 result.setAttribute("id", "fitter$element");
                 result.setAttribute("style", "position:absolute;visibility:hidden;z-index: -100; background-color:lightcoral;top:0;left:0;padding: 0px;margin: 0px;border:none;");
                 document.body.appendChild(result);
                 return result;
-            }
-            var textFitStyles = ["fontFamily", "fontWeight", "textAlign", "textIndent", "padding", "margin", "border", "verticalAlign"];
-            var fitAccurancy = 0.93;
-            var fitSingle = function (e, text, width, height) {
+            };
+
+            var fitSingle = function(e, text, width, height) {
                 fitter = fitter || createFitter();
                 for (var i = 0; i < textFitStyles.length; i++) {
                     fitter.style[textFitStyles[i]] = e.style[textFitStyles[i]];
@@ -51,7 +53,7 @@
                         e.textContent = t;
                     }
                 }
-            }
+            };
             var fit = $root.design.fitText = function (el, text, width, height) {
                 if (!!el.length) { //marks arrays an $(...) enums
                     for (var i = 0; i < el.length; i++) {
@@ -64,10 +66,10 @@
 
             $the.checkEnvironment();
             if (!!$the.$jQuery) {
-                $the.$jQuery.fn.fitText = function (text, width, height) {
+                $the.$jQuery.fn.fitText = function(text, width, height) {
                     fit(this, text, width, height);
                     return this;
-                }
+                };
             }
         });
     });

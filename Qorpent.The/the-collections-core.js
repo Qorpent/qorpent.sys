@@ -34,6 +34,8 @@
                 this.current = StartOfEnumeration;
                 this.onNext = onnext;
                 this._index = -1;
+                this.index = -1;
+                this._wasSetup = false;
                 if (!!options) {
                     if (!!options.referencedEnum) {
                         this._referencedEnum = collections(options.referencedEnum);
@@ -86,6 +88,13 @@
 
 
             Enumeration.prototype.next = function (condition) {
+                if(!this._wasSetup){
+                    this._wasSetup = true;
+                    if(!!this.onSetup){
+                        this.onSetup();
+                    }
+                }
+                condition = $ex(condition);
                 if (this.current === EndOfEnumeration)return false;
                 if (this.current === StartOfEnumeration && this._buffered) {
                     this._loadBuffer();
@@ -93,6 +102,10 @@
                         this.onBuffer(this);
                     }
                 }
+                if(!!this.onBeforeNext){
+                    this.onBeforeNext();
+                }
+
                 var newvalue = null;
                 while (true) {
                     if (this.onNext) {
@@ -110,9 +123,15 @@
                     if (newvalue === EndOfEnumeration)break;
                     if (!!condition) {
                         if (condition(this.current, this.index)) {
+                            if(!!this.onFetch){
+                                this.onFetch(this.current,this.index,this);
+                            }
                             break;
                         }
                     } else {
+                        if(!!this.onFetch){
+                            this.onFetch(this.current,this.index,this);
+                        }
                         break;
                     }
                 }
@@ -166,6 +185,7 @@
                 this._index = -1;
                 this.index = -1;
                 this.current = StartOfEnumeration;
+                this.currentItem = undefined;
                 if (!!this._baseEnumeration) {
                     this._baseEnumeration.reset();
                 }

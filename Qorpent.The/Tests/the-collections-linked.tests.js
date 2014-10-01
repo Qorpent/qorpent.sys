@@ -51,6 +51,7 @@ describe("the.collections.Linked", function(){
             should.not.exist(ll.last.next);
             ll.last.previous.should.equal(ll.first);
         });
+
         it("#prepend(any)",function(){
             var ll = new $.LinkedList();
             ll.prepend(1);
@@ -110,6 +111,76 @@ describe("the.collections.Linked", function(){
             ll.toArray().should.eql([3,3]);
         });
 
+        it("item#index",function(){
+            var ll = new $.LinkedList([1,2,3]);
+            ll.first.index.should.equal(0);
+            ll.first.next.index.should.equal(1);
+            ll.first.next.next.index.should.equal(2);
+
+        });
+        it("#indexOf",function(){
+            var ll = new $.LinkedList([3,2,1]);
+            ll.indexOf(3).should.equal(0);
+            ll.indexOf(2).should.equal(1);
+            ll.indexOf(1).should.equal(2);
+        });
+        it("#itemByIndex",function(){
+            var ll = new $.LinkedList([3,2,1]);
+            ll.itemByIndex(0).value.should.equal(3);
+            ll.itemByIndex(1).value.should.equal(2);
+            ll.itemByIndex(2).value.should.equal(1);
+
+        });
+        it("#byIndex",function(){
+            var ll = new $.LinkedList([3,2,1]);
+            ll.byIndex(0).should.equal(3);
+            ll.byIndex(1).should.equal(2);
+            ll.byIndex(2).should.equal(1);
+
+        });
+        it("#currentIndex",function(){
+            var ll = new $.LinkedList([3,2,1]);
+            ll.byIndex(0).should.equal(3);
+            ll.currentIndex.should.equal(-1);
+            ll.next();
+            ll.currentIndex.should.equal(0);
+            ll.currentIndex = 1;
+            ll.current.should.equal(2);
+        });
+
+        it("#goto",function(){
+            var ll = new $.LinkedList([-1,0,1,2,3,4,5,6,7]);
+            ll.goto(2);
+            ll.current.should.equal(2);
+            ll.currentIndex.should.equal(3);
+            ll.next();
+            ll.current.should.equal(3);
+            ll.goto(2,-1);
+            ll.current.should.equal(1);
+            ll.goto(2,2);
+            ll.current.should.equal(4);
+            ll.goto(2,-4);
+            should.not.exist(ll.currentItem);
+            ll.goto(2,10);
+            should.not.exist(ll.currentItem);
+        });
+
+        it("#gotoIndex",function(){
+            var ll = new $.LinkedList([7,6,5,4,3,2,1]);
+            ll.gotoIndex(2);
+            ll.current.should.equal(5);
+            ll.next();
+            ll.current.should.equal(4);
+            ll.gotoIndex(2,-1);
+            ll.current.should.equal(6);
+            ll.gotoIndex(2,2);
+            ll.current.should.equal(3);
+            ll.gotoIndex(2,-3);
+            should.not.exist(ll.currentItem);
+            ll.gotoIndex(2,10);
+            should.not.exist(ll.currentItem);
+        });
+
         it("can be instantiated over other enumeration",function(){
            var ll = new $.LinkedList([1,2,3]);
             ll.any().should.equal(true);
@@ -137,6 +208,59 @@ describe("the.collections.Linked", function(){
                 created: [],
                 updated: [ { k: 'c1', x: 4 }, { k: 'c3', x: 6 } ] } );
             ll.toArray().should.eql( [ { k: 'c1', x: 4 }, { k: 'c3', x: 6 } ] );
+        });
+        it("can merge default settings",function(){
+            var ll = new $.LinkedList([{k:"c1",x:2},{k:"c2", x:3}],{onKey:".k",replaceOnMerge:true,removeOnMerge:true});
+
+            ll.merge([{k:"c1",x:2},{k:"c3",x:4}],{replace:false,remove:false}).should.eql({ removed: [], created: [ { k: 'c3', x: 4 } ], updated: [] });
+            ll.toArray().should.eql([ { k: 'c1', x: 2 }, { k: 'c2', x: 3 }, { k: 'c3', x: 4 } ]);
+            ll.merge([ { k: 'c1', x: 3 },  { k: 'c3', x: 5 } ],{replace:true,remove:false}).should.eql({ removed: [],
+                created: [],
+                updated: [ { k: 'c1', x: 3 }, { k: 'c3', x: 5 } ] });
+            ll.toArray().should.eql([ { k: 'c1', x: 3 }, { k: 'c2', x: 3 }, { k: 'c3', x: 5 } ]);
+            ll.merge([ { k: 'c1', x: 4 },  { k: 'c3', x: 6 } ],{replace:false,remove:false}).should.eql( { removed: [], created: [], updated: [] } );
+            ll.toArray().should.eql([ { k: 'c1', x: 3 }, { k: 'c2', x: 3 }, { k: 'c3', x: 5 } ]);
+            ll.merge([ { k: 'c1', x: 4 },  { k: 'c3', x: 6 } ]).should.eql({ removed: [ { k: 'c2', x: 3 } ],
+                created: [],
+                updated: [ { k: 'c1', x: 4 }, { k: 'c3', x: 6 } ] } );
+            ll.toArray().should.eql( [ { k: 'c1', x: 4 }, { k: 'c3', x: 6 } ] );
+        });
+        it("#onSetup",function(){
+            var x = 0;
+            var ll = new $.LinkedList([1,2],{onSetup:function(){x=x+1}});
+            ll.next();
+            ll.next();
+            x.should.equal(1);
+        });
+        it("#onBeforeNext",function(){
+            var x = 0;
+            var ll = new $.LinkedList([1,2],{onBeforeNext:function(){x=x+1}});
+            ll.next();
+            ll.next();
+            x.should.equal(2);
+        });
+        it("#onFetch",function(){
+            var res = [];
+            var ll = new $.LinkedList([1,2,3,4],{onFetch:function(_){res.push(_)}});
+            ll.next(">1");
+            ll.next(">3");
+            res.should.eql([2,4]);
+        });
+        it("#onItemTrigger",function(){
+            var res = [];
+            var val = function(_){
+                if(null==_)return "";
+                return _.value;
+            }
+            var ll = new $.LinkedList(["aa","bb"],{
+                replaceOnMerge :true,
+                removeOnMerge:true,
+                onItemTrigger:function(op,n,o){
+                    res.push(op+":"+ val(n) +":"+ val(o));
+                }
+            });
+            ll.merge(["aa","cc"]);
+            res.should.eql(["insert:aa:","insert:bb:","delete::bb","update:aa:aa","insert:cc:"]);
         });
     });
 
