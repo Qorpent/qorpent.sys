@@ -71,6 +71,14 @@
                     return this;
                 };
             }
+            if(!!$the.$angular){
+                $the.$angular.module("the-textfitter",[])
+                    .directive("theTextFitter",function(){
+                        return function(scope,element,attrs){
+                           $the.tick(function(){ fit(element)});
+                        }
+                    });
+            }
         });
     });
 })(typeof define === "function" ? define : require('amdefine')(module));

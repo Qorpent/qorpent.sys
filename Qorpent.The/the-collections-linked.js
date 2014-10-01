@@ -61,7 +61,7 @@
                 if (doremove) {
                     var todelete = [];
                     this.eachItem(function(item){
-                        var thiskey = this.getKey(item.value);
+                        var thiskey = self.getKey(item.value);
                         if (!others.hasOwnProperty(thiskey)) {
                             todelete.push(item);
                         }

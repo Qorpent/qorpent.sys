@@ -204,8 +204,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Qorpent.The\the-design-testfitter.js">
-      <Link>Resources\the-design-testfitter.js</Link>
+    <EmbeddedResource Include="..\Qorpent.The\the-design-textfitter.js">
+      <Link>Resources\the-design-textfitter.js</Link>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
