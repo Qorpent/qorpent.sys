@@ -15,6 +15,7 @@
                     url:"sample.json",
                     transport: new $.JQueryTransport(),
                     success : function(data,resp){
+                        if(typeof data==="string")data =JSON.parse(data);
                         data.should.eql({x:1});
                         done();
                     },
