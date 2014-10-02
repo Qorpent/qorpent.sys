@@ -34,7 +34,7 @@
             fit(document.getElementById("content"),text);
             i++;
             if (i <= (words.length - 1)) {
-                setTimeout(update, 4);
+                setTimeout(update, 300);
             } else {
                 update2();
             }
@@ -48,7 +48,7 @@
             fit(document.getElementById("content"),text);
             i--;
             if (i > 1) {
-                setTimeout(update2, 4);
+                setTimeout(update2, 300);
             } else {
                 update();
             }

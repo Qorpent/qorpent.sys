@@ -213,20 +213,6 @@
                 }
             };
 
-            if (typeof Iterator !== "undefined" && typeof  StopIteration != "undefined") {
-                var v8Iterator = function (enumeration) {
-                    this._e = enumeration;
-                };
-                v8Iterator.prototype.next = function () {
-                    if (this._e.next())return this._e.current;
-                    throw StopIteration;
-                };
-                //noinspection JSUnusedGlobalSymbols
-                Enumeration.prototype.__iterator__ = function () {
-                    return new v8Iterator(this);
-                };
-            }
-
             var collections = function (target) {
                 if (target instanceof Enumeration)return target;
                 return new Enumeration(target);

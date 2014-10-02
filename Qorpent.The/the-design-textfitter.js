@@ -18,7 +18,7 @@
                 return result;
             };
 
-            var fitSingle = function(e, text, width, height) {
+            var fitSingle = function(e, text, height,width) {
                 fitter = fitter || createFitter();
                 for (var i = 0; i < textFitStyles.length; i++) {
                     fitter.style[textFitStyles[i]] = e.style[textFitStyles[i]];
@@ -66,8 +66,8 @@
 
             $the.checkEnvironment();
             if (!!$the.$jQuery) {
-                $the.$jQuery.fn.fitText = function(text, width, height) {
-                    fit(this, text, width, height);
+                $the.$jQuery.fn.fitText = function(text,  height,width) {
+                    fit(this, text, height,width);
                     return this;
                 };
             }
@@ -75,7 +75,9 @@
                 $the.$angular.module("the-textfitter",[])
                     .directive("theTextFitter",function(){
                         return function(scope,element,attrs){
-                           $the.tick(function(){ fit(element)});
+                            scope.$watch(attrs.theTextFitter,function(n){
+                                fit(element,n,attrs.theTextFitterHeight);
+                            });
                         }
                     });
             }

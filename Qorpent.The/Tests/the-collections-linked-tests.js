@@ -52,7 +52,7 @@ describe("the.collections.Linked", function(){
             ll.last.previous.should.equal(ll.first);
         });
 
-        it("#prepend(any)",function(){
+         it("#prepend(any)",function(){
             var ll = new $.LinkedList();
             ll.prepend(1);
             ll.first.value.should.equal(1);
@@ -76,7 +76,7 @@ describe("the.collections.Linked", function(){
             should.not.exist(ll.find(">3"));
             should.not.exist(ll.find("_.next.value==4"));
         });
-        it("#insertBefore(any,[key])",function(){
+       it("#insertBefore(any,[key])",function(){
             var ll = new $.LinkedList([1,2,3]);
             ll.insertBefore(4,2);
             ll.insertBefore(5,3);
@@ -104,7 +104,7 @@ describe("the.collections.Linked", function(){
             ll.replace(5,"_.next.value==3 && _.previous.value==3");
             ll.toArray().should.eql([4,3,5,3]);
         });
-        it("#remove(conditionOrItem))" , function(){
+         it("#remove(conditionOrItem))" , function(){
             var ll = new $.LinkedList([1,3,2,3]);
             ll.remove("_.next.value==3");
             ll.remove("_.next.value==3 && _.previous.value==3");
@@ -118,7 +118,7 @@ describe("the.collections.Linked", function(){
             ll.first.next.next.index.should.equal(2);
 
         });
-        it("#indexOf",function(){
+         it("#indexOf",function(){
             var ll = new $.LinkedList([3,2,1]);
             ll.indexOf(3).should.equal(0);
             ll.indexOf(2).should.equal(1);
@@ -138,7 +138,7 @@ describe("the.collections.Linked", function(){
             ll.byIndex(2).should.equal(1);
 
         });
-        it("#currentIndex",function(){
+         it("#currentIndex",function(){
             var ll = new $.LinkedList([3,2,1]);
             ll.byIndex(0).should.equal(3);
             ll.currentIndex.should.equal(-1);
@@ -165,7 +165,7 @@ describe("the.collections.Linked", function(){
             should.not.exist(ll.currentItem);
         });
 
-        it("#gotoIndex",function(){
+         it("#gotoIndex",function(){
             var ll = new $.LinkedList([7,6,5,4,3,2,1]);
             ll.gotoIndex(2);
             ll.current.should.equal(5);
@@ -181,7 +181,7 @@ describe("the.collections.Linked", function(){
             should.not.exist(ll.currentItem);
         });
 
-        it("can be instantiated over other enumeration",function(){
+         it("can be instantiated over other enumeration",function(){
            var ll = new $.LinkedList([1,2,3]);
             ll.any().should.equal(true);
             ll.count().should.equal(3);
@@ -189,10 +189,13 @@ describe("the.collections.Linked", function(){
 
         });
         it("can be keyed",function(){
+
             var ll = new $.LinkedList([1,2,3],{onKey:"*2"});
+            ll.onKey(2).should.equal(4);
             ll.find(2).value.should.equal(1);
             ll.find(4).value.should.equal(2);
             ll.find(6).value.should.equal(3);
+
         });
         it("can merge",function(){
             var ll = new $.LinkedList([{k:"c1",x:2},{k:"c2", x:3}],{onKey:".k"});

@@ -82,27 +82,6 @@ describe("the.collections.core", function(){
 
     });
 
-    try{
-        if(typeof Iterator!=="undefined"){
-            it("can be used with native iterator (only under Javascript 1.8)",function(){
-
-                var i = $({x:1,y:2});
-                var res = [];
-                for(var item in i){
-                    if(i.hasOwnProperty(item)){
-                        res.push(item);
-                    }
-                }
-                res.should.eql([ { key: 'x', value: 1 }, { key: 'y', value: 2 } ]);
-            });
-        }
-
-    }catch(e){
-        it("can be used with native iterator (only under Javascript 1.8)");
-    }
-
-
-
     describe("can iterates over",function(){
 
         it("arrays",function(){

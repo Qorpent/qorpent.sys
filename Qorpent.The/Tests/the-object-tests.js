@@ -75,6 +75,23 @@
                 $.cast(t, [1, 2]).should.instanceOf(t);
                 $.cast(t, [1, 2]).should.eql({a: 1, b: 2});
             });
+            it("can cast with functions",function(){
+               var f = function(){
+                   this.a = null;
+                   this.onKey = null;
+               };
+               var r = $.cast(f,{a:{c:1},onKey:function(){return this.a.c}});
+                r.onKey().should.equal(1);
+            });
+            it("can use extend in .ctor",function(){
+                var f = function(opts){
+                    this.a = null;
+                    this.onKey = null;
+                    $.extend(this,opts);
+                };
+                var r = new f({a:{c:1},onKey:function(){return this.a.c}});
+                r.onKey().should.equal(1);
+            });
             it("can cast from object strong type (default)", function () {
                 $.cast(t, {A: 1, B: 2, C: 3}).should.instanceOf(t);
                 $.cast(t, {A: 1, B: 2, C: 3}).should.eql({a: 1, b: 2});
