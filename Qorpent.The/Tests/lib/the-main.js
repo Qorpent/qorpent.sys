@@ -49,7 +49,12 @@ require.config({
                 ,"the-jsonify-tests"
                 ,"the-object-tests"
             ],function(){
-                mocha.run();
+               document.finished = false;
+                mocha.run(function(){
+                    if (typeof window.callPhantom === 'function') {
+                        window.callPhantom();
+                    }
+                });
             });
     }
 });
