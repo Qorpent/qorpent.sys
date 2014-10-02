@@ -3,7 +3,8 @@ require.config({
     paths: {
         "jquery" : "lib/jquery",
         "mocha" : "lib/mocha",
-        "angular" : "lib/angular"
+        "angular" : "lib/angular",
+        "teamcity" : "lib/teamcity"
     },
 
     shim: {
@@ -11,11 +12,17 @@ require.config({
             exports: "$"
         },
         mocha : {
-            init: function () {
-                this.mocha.setup({ui:"bdd",ignoreLeaks: true});
+            exports : 'mocha',
+            deps : ["teamcity"],
+            init: function (tc) {
+                mocha.setup({ui:"bdd",ignoreLeaks: true,reporter: function(runner) {
+                    new Mocha.reporters.HTML(runner);
+                    new tc(Mocha.reporters.Base,runner);
+                }});
                 return this.mocha;
             }
         },
+
         chai : {
             deps: ["mocha"]
         },
