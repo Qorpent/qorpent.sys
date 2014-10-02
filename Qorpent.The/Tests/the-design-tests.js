@@ -50,7 +50,7 @@
                 }]);
                 angular.bootstrap(angularElement[0],["fitText"]);
                 setTimeout(function(){
-                    angularSmallElement.css("font-size").replace(/px/,"").should.within(39,42);
+                    angularSmallElement.css("font-size").replace(/px/,"").should.within(38,42);
                     done();
                 },100)
 

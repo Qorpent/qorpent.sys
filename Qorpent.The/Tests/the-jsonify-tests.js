@@ -52,7 +52,9 @@
             $({a:1,b:{x:1}},{stringify:true}).should.eql({a:1,b:"{\"x\":1}"});
         });
         it("can stringify functions",function(){
-            $({a:1,b:function(){}},{stringify:true}).should.eql({a:1,b:"function (){}"});
+            var s =  $({a:1,b:function(){}},{stringify:true}); //fix for IE toString
+            s.b = s.b.replace(/\s+/,"");
+            s.should.eql({a:1,b:"function(){}"});
         });
         it("can call interpolations if the-interpolation loaded",function(){
             $({a:1,b:"${a}${a}"},{interpolate:true}).should.eql({a:1,b:"11"});
