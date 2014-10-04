@@ -487,5 +487,45 @@ CREATE VIEW ""dbo"".""bFull"" AS SELECT
 1 as __TERMINAL FROM ""dbo"".""b""
 ".Trim(), res.Trim());
 		}
+
+
+        [TestCase("x.y","x.y")]
+        [TestCase("y","test.y")]
+        [TestCase("this.y","\"test\".\"ay\"")]
+        public void ViewWithFromTest(string from,string result) {
+            var model = PersistentModel.Compile(@"
+class a prototype=dbtable schema=test
+    view y
+    view x from='"+from+@"'	
+");
+            var cls = model["a"];
+            Assert.AreEqual("test",cls.Schema);
+            var f = cls.SqlObjects.OfType<SqlView>().Last();
+            var writer = new SqlViewWriter(f) { Dialect = SqlDialect.SqlServer, NoComment = true };
+            var res = writer.ToString();
+            Console.WriteLine(res.Replace("\"", "\"\""));
+            Assert.AreEqual(@"IF OBJECT_ID('""test"".""ax""') IS NOT NULL DROP VIEW ""test"".""ax"";
+GO
+CREATE VIEW ""test"".""ax"" AS SELECT
+
+1 as __TERMINAL FROM ZZZZZZZ
+
+
+GO".Replace("ZZZZZZZ",result).Trim().Replace("\r",""), res.Trim().Replace("\r",""));
+        }
+        [Test]
+	    public void CannotRefereneUnknownViewWithThis() {
+            var model = PersistentModel.Compile(@"
+class a prototype=dbtable
+    view x from='this.Zzz'	
+");
+            var e = Assert.Throws<Exception>(() => {
+                new SqlViewWriter(model["a"].SqlObjects.OfType<SqlView>().First()).ToString();
+            });
+	        StringAssert.Contains("Zzz",e.Message);
+
+	    }
 	}
+
+
 }

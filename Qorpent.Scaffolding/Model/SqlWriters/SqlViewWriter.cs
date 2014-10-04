@@ -58,12 +58,34 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 					{
 						if(element.Name.LocalName=="selffields")continue;
 						if (element.Name.LocalName == "reffields") continue;
-						sb.AppendLine("(" + element.AttrOrValue("code") + ") as " + element.Name.LocalName+",");
-					}
+					    var attrOrValue = element.AttrOrValue("code");
+					    if (string.IsNullOrWhiteSpace(attrOrValue)) {
+                            sb.AppendLine(element.Name.LocalName + ",");
+                        } else { 
+					        sb.AppendLine("(" + attrOrValue + ") as " + element.Name.LocalName+",");
+                        }
+                    }
 
 					sb.AppendLine(body);
 					if (!isfullydefined){
-						sb.AppendLine("1 as __TERMINAL FROM " + View.Table.FullSqlName);
+					    var sourceTable = View.Table.FullSqlName;
+					    if (View.Definition.Attribute("from") != null) {
+					        sourceTable = View.Definition.Attr("from");
+					        if (!sourceTable.Contains(".")) {
+					            sourceTable = View.Table.Schema + "." + sourceTable;
+					        }
+					        if (sourceTable.StartsWith("this.")) {
+					            var viewCode = sourceTable.Split('.')[1];
+					            var refView =
+					                View.Table.SqlObjects.OfType<SqlView>()
+					                    .FirstOrDefault(_ => _.Name.ToLowerInvariant() == viewCode.ToLowerInvariant());
+					            if (refView == null) {
+					                throw new Exception("Referenced view not found " + viewCode);
+					            }
+					            sourceTable = refView.FullName;
+					        }
+					    }
+                        sb.AppendLine("1 as __TERMINAL FROM " + sourceTable);
 					}
 					sb.AppendLine();
 				}
