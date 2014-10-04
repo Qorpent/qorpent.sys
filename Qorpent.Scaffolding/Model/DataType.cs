@@ -131,7 +131,16 @@ namespace Qorpent.Scaffolding.Model{
 					{SqlDialect.PostGres, new SqlDataType{Name = "int"}},
 				}
 			};
-			result["long"] = new DataType{
+            result["float"] = new DataType {
+                Code = "float",
+                CSharpDataType = "double",
+                SqlDataTypes ={
+					{SqlDialect.Ansi, new SqlDataType{Name = "float"}},
+					{SqlDialect.SqlServer, new SqlDataType{Name = "float"}},
+					{SqlDialect.PostGres, new SqlDataType{Name = "float"}},
+				}
+            };
+            result["long"] = new DataType {
 				Code = "long",
 				CSharpDataType = "Int64",
 				SqlDataTypes ={
@@ -189,9 +198,11 @@ namespace Qorpent.Scaffolding.Model{
 			{
 				Code = "geography",
 				CSharpDataType = "String",
+                
 				SqlDataTypes ={
 					{SqlDialect.Ansi, new SqlDataType{Name = "varchar", Size = 255}},
 					{SqlDialect.SqlServer, new SqlDataType{Name = "geography"}},
+                    
 				}
 			};
 
