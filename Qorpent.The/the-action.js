@@ -141,9 +141,9 @@
                 var result = { url: url, params: {}, headers: {}, extensions: {} };
                 // store all properties execpt extensions into params
                 if (!!this.useparams) {
-                    extend(result.params, (!!this.arguments ? cast(this.arguments, args) : args), {filter: extensionsFalseFilter});  //arguments is special word
+                    result.params  = !!this.arguments ? new this.arguments() : {};
                     extend(result.params, this.parameters, {filter: extensionsFalseFilter});
-                    extend(result.params, args || {}, {filter: extensionsFalseFilter});
+                    extend(result.params, args || {}, {filter: extensionsFalseFilter,ignoreCase:true});
                     if (this.jsonify) {
                         var opts = this.jsonifyOptions;
                         if (!$the.interpolate && opts.interpolate) {

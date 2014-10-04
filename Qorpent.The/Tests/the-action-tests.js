@@ -156,6 +156,10 @@
                var f = function(){this.a =1,this.b=2,this.d=4;};
                 delfun($({arguments:f}).createRequest({A:3,B:2,C:3})).should.eql({ url: '/',params:{a:3,b:2,d:4,C:3}, withCredentials:true});
             });
+            it("can use strongly typed parameters - real sample",function(){
+                var f = function(){this.Pattern="a";};
+                delfun($({arguments:f}).createRequest({pattern:'b'})).should.eql({ url: '/',params:{Pattern:'b'}, withCredentials:true});
+            });
             it("headers in action",function(){
                 var a = new $.Action();
                 a.headers = {a:1};
