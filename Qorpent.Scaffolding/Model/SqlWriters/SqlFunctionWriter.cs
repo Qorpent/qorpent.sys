@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model.SqlWriters{
 	/// <summary>
@@ -48,8 +49,25 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 							sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " )\r\nRETURNS @result TABLE " +
 							          GetTableType(Function.ReturnType,SqlDialect.SqlServer));
 						}else if (Function.ReturnType.IsNative){
-							sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " ) RETURNS " +
-							          Function.ReturnType.SqlText);
+							var type = Function.ReturnType.SqlText; 
+							if (type.Contains(",")){
+								var fields = type.SmartSplit(false, true, ',');
+								type = "@result TABLE (";
+								var fst = true;
+								foreach(var f in fields){
+									if (!fst){
+										type += ", ";
+									}
+									fst = false;
+									var n = f;
+									if (!n.Contains(" ")){
+										n += " nvarchar(255)";
+									}
+									type += n;
+								}
+								type += ")";
+							}
+							sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " ) RETURNS " + type);
 						}
 						else{
 							sb.Append("CREATE FUNCTION ${FullName} ( " + arguments + " ) RETURNS " +
