@@ -19,6 +19,24 @@ class B persistent
 		insert @result (id) select id from A
 	)
 ";
+
+		private const string SimplestCustomTableFunction = @"
+namespace Test
+class A persistent
+	string Code 
+	function GetA ""Тест TF"" returns=""@result  TABLE (Id int)""  : (
+		insert @result (id) select id from A
+	)
+";
+
+		private const string SimplestCustomTableFunctionShort = @"
+namespace Test
+class A persistent
+	string Code 
+	function GetA ""Тест TF"" returns=""Id int,Code""  : (
+		insert @result (id) select id from A
+	)
+";
 		[Test]
 		public void CanParseTableFunction(){
 			var model = PersistentModel.Compile(SimplestTableFunction);
@@ -58,6 +76,50 @@ CREATE FUNCTION ""dbo"".""bGetA"" ( @code nvarchar(255) = null  )
 RETURNS @result TABLE (""id"" int, ""x"" nvarchar(255)) AS BEGIN
 insert @result (id) select id from A
 RETURN;
+END;
+GO".Trim().LfOnly(), code.Trim().LfOnly());
+		}
+
+		/// <summary>
+		/// Проверяем генератор SQL
+		/// </summary>
+		[Test]
+		public void SqlGenerationTestNoTypeShort()
+		{
+			var model = PersistentModel.Compile(SimplestCustomTableFunctionShort);
+			var func = model["A"][SqlObjectType.Function, "GetA"];
+			var sqlfuncwriter = SqlCommandWriter.Create(func);
+			sqlfuncwriter.Dialect = SqlDialect.SqlServer;
+			var code = sqlfuncwriter.ToString();
+			Console.WriteLine(code);
+			Console.WriteLine(code.Replace("\"", "\"\""));
+			Assert.AreEqual(@"-- begin command SqlFunctionWriter
+IF OBJECT_ID('""dbo"".""aGetA""') IS NOT NULL DROP FUNCTION ""dbo"".""aGetA"";
+GO
+CREATE FUNCTION ""dbo"".""aGetA"" (  ) RETURNS @result TABLE (Id int, Code nvarchar(255)) AS BEGIN
+insert @result (id) select id from A
+END;
+GO".Trim().LfOnly(), code.Trim().LfOnly());
+		}
+
+		/// <summary>
+		/// Проверяем генератор SQL
+		/// </summary>
+		[Test]
+		public void SqlGenerationTestNoType()
+		{
+			var model = PersistentModel.Compile(SimplestCustomTableFunction);
+			var func = model["A"][SqlObjectType.Function, "GetA"];
+			var sqlfuncwriter = SqlCommandWriter.Create(func);
+			sqlfuncwriter.Dialect = SqlDialect.SqlServer;
+			var code = sqlfuncwriter.ToString();
+			Console.WriteLine(code);
+			Console.WriteLine(code.Replace("\"", "\"\""));
+			Assert.AreEqual(@"-- begin command SqlFunctionWriter
+IF OBJECT_ID('""dbo"".""aGetA""') IS NOT NULL DROP FUNCTION ""dbo"".""aGetA"";
+GO
+CREATE FUNCTION ""dbo"".""aGetA"" (  ) RETURNS @result  TABLE (Id int) AS BEGIN
+insert @result (id) select id from A
 END;
 GO".Trim().LfOnly(), code.Trim().LfOnly());
 		}
