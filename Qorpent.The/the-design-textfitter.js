@@ -71,15 +71,19 @@
                     return this;
                 };
             }
-            if(!!$the.$angular){
-                $the.$angular.module("the-textfitter",[])
-                    .directive("theTextFitter",function(){
-                        return function(scope,element,attrs){
-                            scope.$watch(attrs.theTextFitter,function(n){
-                                fit(element,n,attrs.theTextFitterHeight);
+            $root.design.fitText.setupAngular = function () {
+                $the.checkEnvironment();
+                $the.$angular.module("the-textfitter", [])
+                    .directive("theTextFitter", function () {
+                        return function (scope, element, attrs) {
+                            scope.$watch(attrs.theTextFitter, function (n) {
+                                fit(element, n, attrs.theTextFitterHeight);
                             });
                         }
                     });
+            }
+            if(!!$the.$angular) {
+                $root.design.fitText.setupAngular();
             }
         });
     });
