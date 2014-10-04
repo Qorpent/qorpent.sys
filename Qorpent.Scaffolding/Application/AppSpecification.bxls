@@ -52,6 +52,7 @@ namespace Qorpent.Scaffolding
 		
 	Struct SearchString "Строка поиска"
 		string Pattern "Паттерн поиска"
+		string Type "Тип поиска"
 		
 	Struct AcceptCall "Запрос на фиксацию задачи"
 		int Id "Идентификатор задачи"
