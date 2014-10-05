@@ -49,7 +49,7 @@
                 this.eventName = "";
                 this.jsonify = true;
                 this.delay = 0;
-                this.jsonifyOptions = {interpolate: true, defaults: false, stringify: true, evalfunctions: true, functions: false, privates: false};
+                this.jsonifyOptions = {interpolate: false, defaults: false, stringify: true, evalfunctions: true, functions: false, privates: false};
                 this.__callMoniker = 0;
                 return this;
             };
@@ -147,7 +147,7 @@
                     if (this.jsonify) {
                         var opts = this.jsonifyOptions;
                         if (!$the.interpolate && opts.interpolate) {
-                            console.warn("my be lost interpolation while interpolation module not loaded");
+                            console.warn("may be lost interpolation while interpolation module not loaded");
                             opts = $the.clone(opts);
                             opts.interpolate = false;
                         }

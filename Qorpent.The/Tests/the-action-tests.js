@@ -196,8 +196,12 @@
                 var a = new $.Action();
                 delfun(a.createRequest({x:1},{withCredentials:false})).should.eql({ url: '/',params:{x:1}});
             });
-            it("jsonify max by default",function(){
+            it("default jsonify",function(){
                 var a = new $.Action();
+                delfun(a.createRequest({x:1,y:null,z:0,a:false,b:{a:"${x}${x}"},c:function(){return this.x+23;}},{withCredentials:false})).should.eql({ url: '/',params:{x:1,b:"{\"a\":\"${x}${x}\"}",c:24}});
+            });
+            it("interpolated jsonify",function(){
+                var a = new $({jsonifyOptions:{interpolate:true}})
                 delfun(a.createRequest({x:1,y:null,z:0,a:false,b:{a:"${x}${x}"},c:function(){return this.x+23;}},{withCredentials:false})).should.eql({ url: '/',params:{x:1,b:"{\"a\":\"11\"}",c:24}});
             });
             it("jsonify can be disabled",function(){
@@ -206,7 +210,7 @@
             });
             it("jsonify can be modified",function(){
                 var a = $({jsonifyOptions:{defaults:true}}).action;
-                delfun(a.createRequest({x:1,y:"${x}${x}",z:null},{withCredentials:false})).should.eql({ url: '/',params:{x:1,y:"11",z:null}});
+                delfun(a.createRequest({x:1,y:"x",z:null},{withCredentials:false})).should.eql({ url: '/',params:{x:1,y:"x",z:null}});
             });
             it("extensions in actions hq_ style",function(){
                 var a = new $.Action();

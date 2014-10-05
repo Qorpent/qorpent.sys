@@ -28,5 +28,6 @@ define([],function(){
         moment : {
             exports : "moment"
         }
-    }
+    },
+    deps:["jquery","angular","moment"]
 })});
