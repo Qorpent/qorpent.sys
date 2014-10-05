@@ -48,13 +48,17 @@ namespace Qorpent.Scaffolding.Application{
 				}
 
 				if (resultclass.IsArray){
-					resultclass.Name = "IList<" + resultclass.Name + ">";
+					resultclass.Name = "ICollection<" + resultclass.Name + ">";
 				}
 
 				sb.AppendLine("namespace " + e.Namespace + " {");
 				sb.AppendLine("\t/// <summary>\r\n\t///\t" + e.Compiled.Attr("name") + "\r\n\t/// </summary>");
 				var controller = e.Compiled.Attr("controller");
 				var actionname = controller + "." + e.Name.ToLower();
+			    if (actionname.StartsWith(".")) { //признак того что для Qweb сделан акшен на HOST
+			        var url = e.Compiled.Attr("url").SmartSplit(false,true,'/');
+			        actionname = url[0] + "." + url[1];
+			    }
 				sb.AppendLine(string.Format("\t[Action(\"{0}\")]", actionname));
 
 
