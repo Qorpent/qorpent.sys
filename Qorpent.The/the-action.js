@@ -168,6 +168,9 @@
 
                 var self = this;
                 var eventName = callinfo.eventName || this.eventName;
+                if(eventName==="disable")eventName = null;
+                var emits = callinfo.emits || this.emits;
+                if(emits==="disable")emits = null;
                 var emitter = callinfo.emitter || this.emitter;
                 var resultCtor = callinfo.result || this.result;
                 var castResult = (callinfo.castResult || this.castResult) && !!resultCtor && !callinfo.rawResult;
@@ -192,6 +195,11 @@
                     if (!!eventName && !!emitter && !callinfo.suppressDefault) {
                         emitter.emit(eventName, [realdata, resp, self]);
                     }
+                    if (emits && !!emitter) {
+                       emits.forEach(function(_){
+                           emitter.emit(_,[realdata, resp, self])
+                       })
+                    }
                 };
                 var error = function (error, resp) {
                     if (!!callinfo.error) {
@@ -202,6 +210,11 @@
                     }
                     if (!!eventName && !!emitter && !callinfo.suppressDefault) {
                         emitter.emit("ERROR:" + eventName, [error, resp, this]);
+                    }
+                    if (emits && !!emitter) {
+                        emits.forEach(function(_){
+                            emitter.emit("ERROR:"+_,[error, resp, self])
+                        })
                     }
                 };
                 result.success = success;

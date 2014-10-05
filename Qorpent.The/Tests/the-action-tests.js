@@ -51,6 +51,30 @@
                 }
                 $({url:"good",emitter: e,eventName:"TEST"})();
             });
+            it("action builde compatible emitter",function(done){
+                var called = {};
+                var e = {
+                    emit: function(name,data){
+                       called[name] = data[0];
+                    },
+                    on : function(){}
+                }
+                $({url:"good",emitter: e,eventName:"TEST",emits:["x","y"]})();
+                setTimeout(function(){
+                    called.should.eql({
+                        "TEST": {
+                            "good": true
+                        },
+                        "x": {
+                            "good": true
+                        },
+                        "y": {
+                            "good": true
+                        }
+                    });
+                    done();
+                },100);
+            });
             it("call from emmiter",function(done){
                 var e = {
                     emit: function(name,data){
