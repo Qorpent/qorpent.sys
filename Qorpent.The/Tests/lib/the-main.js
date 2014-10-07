@@ -4,7 +4,8 @@ require.config({
         "jquery" : "lib/jquery",
         "mocha" : "lib/mocha",
         "angular" : "lib/angular",
-        "teamcity" : "lib/teamcity"
+        "teamcity" : "lib/teamcity",
+        "angular-mocks" : "lib/angular-mocks"
     },
 
     shim: {
@@ -29,12 +30,16 @@ require.config({
         angular : {
             deps : ['jquery'],
             exports : 'angular'
+        },
+        "angular-mocks":{
+            deps: ['angular']
         }
     },
     deps : [
         'jquery',
         'angular',
-        'mocha'
+        'mocha',
+        'angular-mocks'
     ],
     callback : function() {
            require (["the-action-tests"

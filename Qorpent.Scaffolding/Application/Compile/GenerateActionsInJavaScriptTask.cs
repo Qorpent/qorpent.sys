@@ -78,7 +78,13 @@ namespace Qorpent.Scaffolding.Application{
 					sb.AppendLine("\t\t\t" + aname.ToLower() + " : " + val + ",");
 				}
                 var emits = cls.Compiled.Elements("emit");
-                if (emits.Count() > 0) {
+				foreach (var xElement in emits){
+					if (string.IsNullOrWhiteSpace(xElement.Attr("code"))){
+						xElement.SetAttributeValue("code",cls.Name.ToUpperInvariant());
+					}
+				}
+                if (emits.Any()) {
+
                     sb.AppendLine("\t\t\temits: " + "['" + string.Join("','", emits.OrderBy(_=>_.Attr("code")).Select(_=>_.Attr("code"))) + "'],");
                 }
 				var parameters = cls.Compiled.Element("Parameters");

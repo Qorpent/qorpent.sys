@@ -59,7 +59,15 @@
 						if(!options.validate(args)){
 							return;
 						}
-                        options.action(args, options.success, options.error, options.delayed ? 'delay':'');
+						var callinfo = {
+						    success: options.success,
+						    error: options.error,
+						};
+                        if (options.delayed) {
+                            callinfo.delay = 500;
+                        }
+                        
+                        options.action(args, callinfo);
                     },
                     runASyncWithAction: function() {
                         var args = options.args || {};

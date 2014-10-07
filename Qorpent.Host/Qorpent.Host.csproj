@@ -211,5 +211,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\common-main.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ui-bootstrap.min.js" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

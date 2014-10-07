@@ -8,7 +8,8 @@ define([],function(){
         moment : '.rjs/moment',
         layout : '.rjs/layout',
         settings : '.rjs/settings',
-        menu : '.rjs/menu',
+        menu: '.rjs/menu',
+        "ui-bootstrap":'.rjs/ui-bootstrap.min',
         "the" : '.rjs/the',
         "the-action" : '.rjs/the-action',
         "the-object" : '.rjs/the-object',
@@ -27,7 +28,10 @@ define([],function(){
         },
         moment : {
             exports : "moment"
+        },
+        "ui-bootstrap": {
+            deps : ['angular']
         }
     },
-    deps:["jquery","angular","moment"]
+    deps: ["jquery", "angular", "moment", "ui-bootstrap"]
 })});

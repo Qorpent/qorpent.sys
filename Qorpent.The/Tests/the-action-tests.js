@@ -40,17 +40,7 @@
                     done();
                 }})();
             });
-            it("simplest emmiter",function(done){
-                var e = {
-                    emit: function(name,data){
-                        name.should.equal("TEST");
-                        data[0].should.eql({good:true});
-                        done();
-                    },
-                    on : function(){}
-                }
-                $({url:"good",emitter: e,eventName:"TEST"})();
-            });
+
             it("action builde compatible emitter",function(done){
                 var called = {};
                 var e = {
@@ -83,6 +73,23 @@
                         done();
                     },
                     on : function(name,func){
+                        this.callback = func
+                    },
+                    fire : function(){
+                        this.callback({},[{url:"good",emitter: e,eventName:"TEST"}])
+                    }
+                }
+                $({url:"good",emitter: e,eventName:"TEST"});
+                e.fire();
+            });
+            it("call from emmiter (angular notation)",function(done){
+                var e = {
+                    $broadcast: function(name,data){
+                        name.should.equal("TEST");
+                        data[0].should.eql({good:true});
+                        done();
+                    },
+                    $on : function(name,func){
                         this.callback = func
                     },
                     fire : function(){

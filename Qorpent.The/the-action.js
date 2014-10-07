@@ -125,7 +125,8 @@
             Action.prototype.prepareEmitter = function(){
                 if(!!this.emitter && !!this.eventName){
                     var self = this;
-                    this.emitter.on("CALL:"+this.eventName,function(event,args){
+                    var on = this.emitter.on || this.emitter.$on;
+                    on.call(this.emitter,"CALL:"+this.eventName,function(event,args){
                         self.execute.apply(self,args);
                     });
                 }
@@ -174,6 +175,8 @@
                 var emitter = callinfo.emitter || this.emitter;
                 var resultCtor = callinfo.result || this.result;
                 var castResult = (callinfo.castResult || this.castResult) && !!resultCtor && !callinfo.rawResult;
+                var emit = !!emitter?  (emitter.emit || emitter.$broadcast) :null;
+
                 var success = function (data, resp) {
                     var realdata = data;
                     if (castResult) {
@@ -193,11 +196,11 @@
                         self.success(realdata, resp);
                     }
                     if (!!eventName && !!emitter && !callinfo.suppressDefault) {
-                        emitter.emit(eventName, [realdata, resp, self]);
+                        emit.call(emitter,eventName, [realdata, resp, self]);
                     }
                     if (emits && !!emitter) {
                        emits.forEach(function(_){
-                           emitter.emit(_,[realdata, resp, self])
+                           emit.call(emitter,_,[realdata, resp, self])
                        })
                     }
                 };
@@ -209,11 +212,11 @@
                         self.error(error, resp);
                     }
                     if (!!eventName && !!emitter && !callinfo.suppressDefault) {
-                        emitter.emit("ERROR:" + eventName, [error, resp, this]);
+                        emit.call(emitter,"ERROR:" + eventName, [error, resp, this]);
                     }
                     if (emits && !!emitter) {
                         emits.forEach(function(_){
-                            emitter.emit("ERROR:"+_,[error, resp, self])
+                            emit.call(emitter,"ERROR:"+_,[error, resp, self])
                         })
                     }
                 };
