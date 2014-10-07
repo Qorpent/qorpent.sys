@@ -72,80 +72,85 @@ namespace Qorpent.Utils {
 	    /// <param name="baseDate">Дата, от которой отсчитывается начальная в случае дат со смещением - сегодня, завтра и т.д.</param>
 	    /// <returns>Распознанная дата-время</returns>
 	    public static DateTime Parse(string dateTime, string sourceUrl= null , string locale = null, int? timeZone = null, DateTime? baseDate = null){
-	        dateTime = PrepareDateTimeString(dateTime);
-		    foreach (var regex in FormatRegexes){
-		        var match = regex.Match(dateTime);
-		        if (match.Success){
-			        if (null != Log){
-				        Log.Debug("Used pattern " + regex);
-			        }
-			        int month = match.Groups["m"].Value.ToInt();
-			        if (!string.IsNullOrWhiteSpace(match.Groups["mn"].Value) && 0 == month){
-				        var monthName = match.Groups["mn"].Value;
-				        month = GetMonthNumber(locale, monthName);
-			        }
-			        var year = match.Groups["y"].Value.ToInt();
-			        bool isuniversal = false;
-			        var day = match.Groups["d"].Value.ToInt();
-			        var hour = match.Groups["h"].Value.ToInt();
-			        var min = match.Groups["mm"].Value.ToInt();
-			        var sec = match.Groups["s"].Value.ToInt();
-			        var tz = match.Groups["tz"].Value.ToInt();
-			        var today = baseDate == null ? DateTime.Today : baseDate.Value.Date;
-					if (0 != tz){
-						timeZone = tz;
-					}
-					if (match.Value.Contains("GMT")){
-						isuniversal = true;
-					}
-			        if (dateTime.ToLowerInvariant().Contains("вчера") && year == 0){
-				        var yesterday = today.AddDays(-1);
-				        year = yesterday.Year;
-				        month = yesterday.Month;
-				        day = yesterday.Day;
-			        }
-			        if (dateTime.ToLowerInvariant().Contains("сегодня") && year == 0){
-				        var yesterday = today;
-				        year = yesterday.Year;
-				        month = yesterday.Month;
-				        day = yesterday.Day;
-			        }
-					
-					if (year == 0)
-					{
-						year = DateTime.Today.Year;
-					}
-					if (month == 0){
-						month = DateTime.Today.Month;
-					}
-					if (day == 0){
-						day = DateTime.Today.Day;
-					}
+		    var initalDateTime = dateTime;
+		    try{
+			    dateTime = PrepareDateTimeString(dateTime);
+			    foreach (var regex in FormatRegexes){
+				    var match = regex.Match(dateTime);
+				    if (match.Success){
+					    if (null != Log){
+						    Log.Debug("Used pattern " + regex);
+					    }
+					    int month = match.Groups["m"].Value.ToInt();
+					    if (!string.IsNullOrWhiteSpace(match.Groups["mn"].Value) && 0 == month){
+						    var monthName = match.Groups["mn"].Value;
+						    month = GetMonthNumber(locale, monthName);
+					    }
+					    var year = match.Groups["y"].Value.ToInt();
+					    bool isuniversal = false;
+					    var day = match.Groups["d"].Value.ToInt();
+					    var hour = match.Groups["h"].Value.ToInt();
+					    var min = match.Groups["mm"].Value.ToInt();
+					    var sec = match.Groups["s"].Value.ToInt();
+					    var tz = match.Groups["tz"].Value.ToInt();
+					    var today = baseDate == null ? DateTime.Today : baseDate.Value.Date;
+					    if (0 != tz){
+						    timeZone = tz;
+					    }
+					    if (match.Value.Contains("GMT")){
+						    isuniversal = true;
+					    }
+					    if (dateTime.ToLowerInvariant().Contains("вчера") && year == 0){
+						    var yesterday = today.AddDays(-1);
+						    year = yesterday.Year;
+						    month = yesterday.Month;
+						    day = yesterday.Day;
+					    }
+					    if (dateTime.ToLowerInvariant().Contains("сегодня") && year == 0){
+						    var yesterday = today;
+						    year = yesterday.Year;
+						    month = yesterday.Month;
+						    day = yesterday.Day;
+					    }
 
-					
-			        if (null != Log){
-				        Log.Debug(string.Format("Matched {0} {1} {2} {3} {4} {5}", year, month, day, hour, min, sec));
-			        }
-			        try{
-				        var dt = new DateTime(year, month, day, hour, min, sec);
-				        if (isuniversal){
-					        dt = dt.ToLocalTime();
-				        }
-				        if (match.Value.Contains("Мск")){
-					        dt = dt.AddHours(2);
-				        }
-						if (null != timeZone){
-							var offset = timeZone.Value;
-							dt = dt.ToUniversalTime().AddHours(offset);
-						}
-				        return  dt;
-			        }
-			        catch{
-				        break;
-			        }
-		        }
-	        }
-		    return GetBySystemDefinedParsing(dateTime, locale);
+					    if (year == 0){
+						    year = DateTime.Today.Year;
+					    }
+					    if (month == 0){
+						    month = DateTime.Today.Month;
+					    }
+					    if (day == 0){
+						    day = DateTime.Today.Day;
+					    }
+
+
+					    if (null != Log){
+						    Log.Debug(string.Format("Matched {0} {1} {2} {3} {4} {5}", year, month, day, hour, min, sec));
+					    }
+					    try{
+						    var dt = new DateTime(year, month, day, hour, min, sec);
+						    if (isuniversal){
+							    dt = dt.ToLocalTime();
+						    }
+						    if (match.Value.Contains("Мск")){
+							    dt = dt.AddHours(2);
+						    }
+						    if (null != timeZone){
+							    var offset = timeZone.Value;
+							    dt = dt.ToUniversalTime().AddHours(offset);
+						    }
+						    return dt;
+					    }
+					    catch{
+						    break;
+					    }
+				    }
+			    }
+			    return GetBySystemDefinedParsing(dateTime, locale);
+		    }
+		    catch (Exception e){
+			    throw new Exception("Дата не распознана: ("+initalDateTime+")",e);
+		    }
 	    }
 
 	    private static int GetMonthNumber(string locale, string monthName){
