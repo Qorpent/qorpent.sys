@@ -19,6 +19,7 @@ define([],function(){
         "the-expression" : '.rjs/the-expression',
         "the-collections" : '.rjs/the-collections',
         "the-collections-linked" : '.rjs/the-collections-linked',
+        "the-collections-linq" : '.rjs/the-collections-linq',
         "the-design-textfitter" : '.rjs/the-design-textfitter'
     },
     shim : {
