@@ -864,7 +864,7 @@ namespace Qorpent.BSharp{
 			foreach (XAttribute attribute in cls.Source.Attributes()){
 				string n = attribute.Name.LocalName;
 				string v = attribute.Value;
-				if (n == "_file" || n == "_line" || n == "code" || n == "id") continue;
+				if (n == "_file" || n == "_line" || n == "code" || n == "id" || n=="_dir") continue;
 				string ex = basis.Source.Attr(n);
 				if (ex == v) continue;
 				if (string.IsNullOrWhiteSpace(ex)){

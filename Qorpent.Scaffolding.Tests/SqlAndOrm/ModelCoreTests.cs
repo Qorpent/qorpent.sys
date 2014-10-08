@@ -55,6 +55,26 @@ class Y prototype=dbtable
 		}
 
 		[Test]
+		public void DetectsImplicitReferencesReal()
+		{
+			var model = PersistentModel.Compile(@"
+namespace Zeus.Model
+	class TritonDict prototype=dbtable
+	class Building prototype=dbtable
+		TritonDict Type 'Тип'");
+			var y = model["Building"];
+			var f = y.Fields["type"];
+			Assert.NotNull(f);
+			Assert.True(f.IsReference);
+			Assert.AreEqual("Type", f.Name);
+			Assert.AreEqual("integer", f.DataType.ResolveSqlDataType().Name);
+			Assert.AreEqual("Id", f.ReferenceField);
+			Assert.AreEqual("tritondict", f.ReferenceTable);
+			Assert.AreEqual("TritonDict", f.ReferenceClass.Name);
+
+		}
+
+		[Test]
 		public void CanUseDataPackage(){
 			var model = PersistentModel.Compile(@"
 require data
