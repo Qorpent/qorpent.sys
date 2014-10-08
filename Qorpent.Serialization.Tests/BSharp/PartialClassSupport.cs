@@ -11,8 +11,10 @@ namespace Qorpent.Serialization.Tests.BSharp {
 			const string code = @"
 class r ""test"" abstract partial _line=1 _file=file _dir=boo a=1
 class r ""test"" abstract partial _line=2 _file=elif _dir=oob b=2
+class X
+	import r
 ";
-			var r = Compile(code).Get("r");
+			var r = Compile(code).Get("X");
 			Assert.NotNull(r);
 			Console.WriteLine(r.Compiled.ToString());
 		}
