@@ -224,7 +224,7 @@ namespace Qorpent.Scaffolding.Model{
 			Table = cls;
 			Definition = e;
 			SetupCommon(c, e);
-			if (e.Name.LocalName == "ref"){
+			if (ImplicitRef || e.Name.LocalName == "ref"){
 				SetupReference(c, e);
 			}
 			else{
@@ -301,10 +301,16 @@ namespace Qorpent.Scaffolding.Model{
 			IsLazyLoadReverseByDefault = e.GetSmartValue("reverse-lazy").ToBool();
 
 			IsReverseCloneByDefault = e.GetSmartValue("reverse-clone").ToBool();
-
-			string refto = e.Attr("to", Name + ".PrimaryKey");
-			if (!refto.Contains(".")){
-				refto += ".PrimaryKey";
+			string refto = "";
+			if (ImplicitRef){
+				refto = e.Name.LocalName + ".PrimaryKey";
+			}
+			else{
+				refto = e.Attr("to", Name + ".PrimaryKey");
+				if (!refto.Contains("."))
+				{
+					refto += ".PrimaryKey";
+				}
 			}
 			string[] refparts = refto.Split('.');
 			ReferenceTable = refparts[refparts.Length - 2].ToLowerInvariant();
@@ -325,6 +331,10 @@ namespace Qorpent.Scaffolding.Model{
 		/// Схема таблицы на ссылке
 		/// </summary>
 		public string ReferenceSchema { get; set; }
+		/// <summary>
+		/// Признак неявной ссылки
+		/// </summary>
+		public bool ImplicitRef { get; set; }
 
 		/// <summary>
 		///     Проверяет ссылеи на циркулярность и выставляет соответствующее свойство

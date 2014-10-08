@@ -219,6 +219,13 @@ namespace Qorpent.Scaffolding.Model{
 					Field field = new Field().Setup(c, e, this);
 					Fields[field.Name.ToLowerInvariant()] = field;
 				}
+				else{
+					var reftype = c.Context.Get(name, c.Namespace);
+					if (null != reftype){
+						Field field = new Field{ImplicitRef =true}.Setup(c, e, this);
+						Fields[field.Name.ToLowerInvariant()] = field;
+					}
+				}
 			}
 		}
 

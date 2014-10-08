@@ -150,6 +150,11 @@ namespace Qorpent.BSharp {
 		BSharpPatchPhase PatchPhase { get; }
 
 		/// <summary>
+		/// Контекст класса
+		/// </summary>
+		IBSharpContext Context { get;}
+
+		/// <summary>
 		/// Возвращает true при наличии флага
 		/// </summary>
 		/// <param name="attribute"></param>

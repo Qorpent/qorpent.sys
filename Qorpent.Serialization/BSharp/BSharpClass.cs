@@ -13,6 +13,16 @@ namespace Qorpent.BSharp{
 	/// </summary>
 	[Serialize]
 	public class BSharpClass : IBSharpClass{
+		/// <summary>
+		/// Контекст класса
+		/// </summary>
+		public IBSharpContext Context
+		{
+			get{
+				return
+					_context;
+			}
+		}
 		private static int EXTCOUNTER = 1;
 		private readonly IBSharpContext _context;
 		private List<IBSharpElement> _allelements;

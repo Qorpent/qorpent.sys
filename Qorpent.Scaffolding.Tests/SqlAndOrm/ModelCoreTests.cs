@@ -37,6 +37,24 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 		}
 
 		[Test]
+		public void DetectsImplicitReferences(){
+			var model = PersistentModel.Compile(@"
+class X prototype=dbtable
+class Y prototype=dbtable
+	X myX");
+			var y = model["Y"];
+			var f = y.Fields["myx"];
+			Assert.NotNull(f);
+			Assert.True(f.IsReference);
+			Assert.AreEqual("myX",f.Name);
+			Assert.AreEqual("integer", f.DataType.ResolveSqlDataType().Name);
+			Assert.AreEqual("Id",f.ReferenceField);
+			Assert.AreEqual("x",f.ReferenceTable);
+			Assert.AreEqual("X",f.ReferenceClass.Name);
+
+		}
+
+		[Test]
 		public void CanUseDataPackage(){
 			var model = PersistentModel.Compile(@"
 require data
