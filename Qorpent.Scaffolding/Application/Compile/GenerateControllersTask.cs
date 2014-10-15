@@ -35,7 +35,8 @@ namespace Qorpent.Scaffolding.Application {
 
 	    private string GenerateRootController() {
 	        var rootservices = _context.ResolveAll("ui-service");
-		    var mainlayout = Project.Context.ResolveAll("ui-layout").First();
+		    var mainlayout = Project.Context.ResolveAll("ui-layout").FirstOrDefault();
+		    if (null == mainlayout) return string.Empty;
 		    var fname = mainlayout.Compiled.Attr("filename");
 			if (string.IsNullOrWhiteSpace(fname)){
 				fname = Project.ProjectName + "_" + mainlayout.Name;
