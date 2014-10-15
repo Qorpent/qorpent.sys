@@ -90,7 +90,7 @@ namespace Qorpent.Scaffolding.Application{
 			}
 			var name = field.Attr("code");
 			var comment = field.Attr("name");
-			
+			var isFunction = type == "function";
 			
 			
 			WriteMemberSummary(sb,comment,"js");
@@ -131,13 +131,15 @@ namespace Qorpent.Scaffolding.Application{
 					val = "\"" + val.Substring(1,val.Length-2).Escape(EscapingType.JsonValue).Replace("\\'", "'") + "\"";
 				}
 			}
-			if (!val.StartsWith("\"") && !val.All(_=>_=='.'||char.IsLetter(_))){
+			if (!val.StartsWith("\"") && !val.All(_=>_=='.'||char.IsLetter(_)) && !isFunction){
 				val = "(" + val + ")";
 			}
-          
 
-			sb.AppendLine(string.Format("\t\tthis.{0} = args.hasOwnProperty(\"{0}\") ? args.{0} : ( args.hasOwnProperty(\"{2}\") ? args.{2} : {1}) ;", name, val, name.ToLower()));
-			
+			if (isFunction) {
+				sb.AppendLine(string.Format("\t\tthis.{0} = function() {{\n\t\t\t{1}\n\t\t}}", name, val.Trim()));
+			} else {
+				sb.AppendLine(string.Format("\t\tthis.{0} = args.hasOwnProperty(\"{0}\") ? args.{0} : ( args.hasOwnProperty(\"{2}\") ? args.{2} : {1}) ;", name, val, name.ToLower()));
+			}
 
 		}
 
