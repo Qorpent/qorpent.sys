@@ -64,6 +64,37 @@
                 should.not.exist($.extend(x, {b: function () {
                 }}, {functions: false})["b"]);
             });
+
+        });
+
+        describe("#propertise",function(){
+           it("can bind properties",function(){
+               var obj = {
+                   _a  : 2,
+                   _b  : 3,
+                   a : {get:function(){return this._a*2},set:function(_){this._a = _;}},
+                   b : {get:function(){return this._b*3},set:function(_){this._b = _;}}
+               }
+               $.propertise(obj);
+               obj.a.should.equal(4);
+               obj.b.should.equal(9);
+               obj.a = 1;
+               obj.a.should.equal(2);
+           }) ;
+            it("can bind properties (prototype)",function(){
+                var cls = function(){
+                    this._a =2;
+                    this._b =3;
+                }
+                cls.prototype.a ={get:function(){return this._a*2},set:function(_){this._a = _;}};
+                cls.prototype.b ={get:function(){return this._b*3},set:function(_){this._b = _;}};
+                $.propertise(cls.prototype);
+                var obj = new cls();
+                obj.a.should.equal(4);
+                obj.b.should.equal(9);
+                obj.a = 1;
+                obj.a.should.equal(2);
+            }) ;
         });
 
         describe("#cast", function () {

@@ -43,7 +43,7 @@ define([
     angular.module('settings', [])
         .factory('settings', function() {
             var settings = new Settings();
-            return function($scope) {
+            var result = function($scope) {
                 $scope.settings = settings;
                 $scope.$watch('settings', function(n, o) {
                     Object.keys(n).forEach(function(k) {
@@ -52,6 +52,14 @@ define([
                         }
                     });
                 }, true);
+            };
+            result.set = function(n, v) {
+                return settings.set(n, v);
+            };
+            result.get = function(n) {
+                return  settings.get(n);
             }
+            return result;
+
         });
 });

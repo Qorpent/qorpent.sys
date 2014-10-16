@@ -173,6 +173,15 @@
                 return $root.object.create(ctor, obj, options);
             };
 
+            $root.object.propertise = function(obj){
+                for(var i in obj){
+                    if(obj.hasOwnProperty(i) &&(typeof obj[i] == "object") && ("get" in  obj[i])){
+                        Object.defineProperty(obj,i,obj[i]);
+                    }
+                }
+                return obj;
+            }
+
             $root.object.clone = function (obj) {
 
                 if (Array.isArray(obj)) {

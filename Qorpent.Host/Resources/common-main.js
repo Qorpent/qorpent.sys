@@ -17,7 +17,7 @@ define([],function(){
         "the-http" : '.rjs/the-http',
         "the-interpolation" : '.rjs/the-interpolation',
         "the-expression" : '.rjs/the-expression',
-        "the-collections" : '.rjs/the-collections',
+        "the-collections-core" : '.rjs/the-collections-core',
         "the-collections-linked" : '.rjs/the-collections-linked',
         "the-collections-linq" : '.rjs/the-collections-linq',
         "the-design-textfitter" : '.rjs/the-design-textfitter'
