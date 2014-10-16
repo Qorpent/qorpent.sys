@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -106,7 +107,21 @@ namespace Qorpent.Utils.Extensions {
 			}
 			return sb.ToString().Replace("//","/");
 		}
-
+		/// <summary>
+		///		Определяет MD5-хэш строки
+		/// </summary>
+		/// <param name="str">Исходная строка</param>
+		/// <param name="stringLength">Длина строки</param>
+		/// <returns>MD5 хэш</returns>
+		public static string GetMd5(this string str, int stringLength = -1) {
+			var stringBuilder = new StringBuilder();
+			var hash = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(str));
+			for (var i = 0; i < hash.Length; i++) {
+				stringBuilder.Append(hash[i].ToString("x2"));
+			}
+			if (stringLength == -1) return stringBuilder.ToString();
+			return stringBuilder.ToString().Substring(0, stringLength);
+		}
         /// <summary>
         ///     Проверяет, что исходная строка имеет хотя бы одно вхождение StartsWith
         /// </summary>
