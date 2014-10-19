@@ -4,6 +4,7 @@ using Qorpent.Scaffolding.Application;
 namespace Qorpent.Scaffolding.Tests.Application {
     [TestFixture]
 	[Category("NOTC")]
+	[Ignore]
     public class AppActionWriterTests : AppModelBasicTestsBase {
         [Test]
         public void CanReadActions() {

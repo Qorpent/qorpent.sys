@@ -1,5 +1,6 @@
 using System;
 using System.Data.SqlTypes;
+using System.Linq;
 using Microsoft.SqlServer.Server;
 
 namespace Qorpent.Integration.SqlExtensions {
@@ -38,18 +39,6 @@ namespace Qorpent.Integration.SqlExtensions {
         public static SqlDouble GetLon(SqlDouble x) {
             return  x*180/Pole;
         }
-
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="y"></param>
-        ///// <returns></returns>
-        //[SqlFunction(IsDeterministic = true, SystemDataAccess = SystemDataAccessKind.None, DataAccess = DataAccessKind.None)]
-        //public static SqlDouble GetLat(SqlDouble y) {
-        //    var lat = Math.Log(Math.Tan((double) ((90 + y) * Math.PI / 360))) / Math.PI * Pole;
-        //    return Math.Max(-20037508.34, Math.Min(lat, 20037508.34));
-        //}
 
        /// <summary>
         /// 

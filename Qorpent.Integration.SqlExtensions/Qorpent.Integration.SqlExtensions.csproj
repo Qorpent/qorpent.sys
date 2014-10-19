@@ -25,6 +25,7 @@
   <ItemGroup>
     <Compile Include="BxlFunctions.cs" />
     <Compile Include="GeneratorFunctions.cs" />
+    <Compile Include="HtmlFunctions.cs" />
     <Compile Include="RegexFunctions.cs" />
     <Compile Include="SpatialFunctions.cs" />
     <Compile Include="SqlRegexMatch.cs" />

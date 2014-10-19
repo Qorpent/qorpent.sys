@@ -355,6 +355,7 @@ namespace Qorpent.PortableHtml{
 		}
 
 		private void ProcessWellKnownElement(XElement e){
+			
 			var oldname = e.Name.LocalName;
 			e.Name = Tagmap[e.Name.LocalName];
 			if (e.Name == "img"){
@@ -396,6 +397,87 @@ namespace Qorpent.PortableHtml{
 		}
 		private class KeepFormat{
 			public static readonly KeepFormat Default = new KeepFormat();
+		}
+
+		/// <summary>
+		/// Вычисляет дайджест HTML и возвращает его 
+		/// </summary>
+		/// <param name="src"></param>
+		/// <param name="size"></param>
+		/// <returns></returns>
+		public string GetDigest(XElement src, int size = 400){
+			src.Descendants("img").ToArray().Remove();
+			var html = Convert(src);
+			var pars = html.Elements().ToArray();
+			if (pars.Length == 0){
+				return "(Документ не содержит текста)";
+			}
+			var strings = CollectSourceParasForDigest(size, pars);
+			var full = string.Join("... ", strings);
+			if (full.Length > size*1.05){
+				CropDigest(size, full, strings);
+			}
+			else{
+				NoCropDigest(strings);
+					
+			}
+			var result = string.Join(" ", strings);	
+			if (result.Trim().Length <= 3){
+				return "(Документ не содержит текста)";
+			}
+			return result;
+		}
+
+		private static void NoCropDigest(List<string> strings){
+			for (var i = 0; i < strings.Count - 1; i++){
+				if (strings[i].EndsWith(".")){
+					strings[i] += "..";
+				}
+				else{
+					strings[i] += "...";
+				}
+			}
+		}
+
+		private static void CropDigest(int size, string full, List<string> strings){
+			var crop = (full.Length - size)/strings.Count;
+			for (var i = 0; i < strings.Count; i++){
+				var str = strings[i];
+				if (str.Length - crop <= 20){
+					crop += crop/2;
+					continue;
+				}
+				var basis = str.Substring(0, str.Length - crop);
+				var ending = basis.LastIndexOf(' ');
+				basis = basis.Substring(0, ending);
+				if (!basis.EndsWith(".")){
+					basis = basis + "...";
+				}
+				else{
+					if (i != strings.Count - 1){
+						basis += "..";
+					}
+				}
+				strings[i] = basis;
+			}
+		}
+
+		private static List<string> CollectSourceParasForDigest(int size, XElement[] pars){
+			var strings = new List<string>();
+			strings.Add(pars[0].Value);
+			if (pars.Length >= 5 && size >= 600){
+				strings.Add(pars[pars.Length/2 - 1].Value);
+				strings.Add(pars[pars.Length/2 + 1].Value);
+			}
+			else{
+				if (pars.Length >= 3 && size >= 400){
+					strings.Add(pars[pars.Length/2].Value);
+				}
+			}
+			if (pars.Length >= 2 && size >= 200){
+				strings.Add(pars[pars.Length - 1].Value);
+			}
+			return strings;
 		}
 	}
 }
