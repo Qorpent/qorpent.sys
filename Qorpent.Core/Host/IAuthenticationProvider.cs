@@ -34,5 +34,12 @@ namespace Qorpent.Host{
 		/// </summary>
 		/// <param name="context"></param>
 		void Logout(HttpListenerContext context);
+
+		/// <summary>
+		/// Проверка аутентифицированного контекста
+		/// </summary>
+		/// <param name="context"></param>
+		/// <returns></returns>
+		bool IsAuth(HttpListenerContext context);
 	}
 }

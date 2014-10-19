@@ -167,7 +167,7 @@ namespace Qorpent.Host.Security{
 
 		private void SetTicketCookie(HttpListenerContext context, string ticket){
 			ticket = ticket ?? "";
-			var cookie = new Cookie(_server.Config.AuthCookieName, ticket, "/", _server.Config.AuthCookieDomain);
+			var cookie = new Cookie(_server.Config.AuthCookieName, ticket);
 			if (string.IsNullOrWhiteSpace(ticket)){
 				cookie.Expires = DateTime.Now.AddYears(-1);
 			}
@@ -176,6 +176,8 @@ namespace Qorpent.Host.Security{
 			}
 			context.Response.Cookies.Add(cookie);
 		}
+
+		
 
 		private UserInfo CheckTicket(string ticket){
 			if (_ticketCache.ContainsKey(ticket)) return _ticketCache[ticket];
@@ -193,6 +195,16 @@ namespace Qorpent.Host.Security{
 			}
 		}
 
+		/// <summary>
+		/// Проверка аутентифицированного контекста
+		/// </summary>
+		/// <param name="context"></param>
+		/// <returns></returns>
+		public bool IsAuth(HttpListenerContext context){
+			var result = !string.IsNullOrWhiteSpace(GetTicket(context));
+			context.Finish(result.ToString().ToLowerInvariant(),mimeType:"application/json");
+			return result;
+		}
 		private string GetTicket(HttpListenerContext context){
 			Cookie cookie = context.Request.Cookies[_server.Config.AuthCookieName];
 			if (null == cookie) return null;

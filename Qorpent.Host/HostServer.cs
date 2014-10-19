@@ -263,6 +263,7 @@ namespace Qorpent.Host{
 			this.OnContext("/toxml", _ => new SmartXmlHandler().Process(_));
 			this.OnContext("/logon", _ => Auth.Logon(_));
 			this.OnContext("/logout", _ => Auth.Logout(_));
+			this.OnContext("/isauth", _ => Auth.IsAuth(_));
 		}
 
 		/// <summary>
