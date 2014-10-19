@@ -71,10 +71,10 @@ namespace Qorpent.Scaffolding.Application{
 			var comment = field.Attr("name");
 			
 
-			var attr = "Serialize";
-			if (field.Attr("optional").ToBool())
+			var attr = "SerializeNotNullOnly";
+			if (field.Attr("required").ToBool())
 			{
-				attr = "SerializeNotNullOnly";
+				attr = "Serialize";
 			}
 			if (field.Attr("noreturn").ToBool())
 			{
