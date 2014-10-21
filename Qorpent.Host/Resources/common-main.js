@@ -9,7 +9,7 @@ define([],function(){
         layout : '.rjs/layout',
         settings : '.rjs/settings',
         menu: '.rjs/menu',
-        "ui-bootstrap":'.rjs/ui-bootstrap.min',
+        "ui-bootstrap":'.rjs/ui-bootstrap',
         "the" : '.rjs/the',
         "the-action" : '.rjs/the-action',
         "the-object" : '.rjs/the-object',

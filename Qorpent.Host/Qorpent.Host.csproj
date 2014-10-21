@@ -16,10 +16,10 @@
     <EmbeddedResource Include=".\**\*.*resource" />
     <EmbeddedResource Include="Resources\glyphicons-halflings-regular.ttf" />
     <EmbeddedResource Include="Resources\glyphicons-halflings-regular.woff" />
-    <EmbeddedResource Include="Resources\angular.min.js.map" />
+    <EmbeddedResource Include="Resources\angular-min-js.map" />
     <EmbeddedResource Include="Resources\actionBuilder.wiki" />
     <EmbeddedResource Include="Resources\qObject.wiki" />
-    <EmbeddedResource Include="Resources\bootstrap-theme.css.map" />
+    <EmbeddedResource Include="Resources\bootstrap-theme-css.map" />
     <EmbeddedResource Include="Resources\manifest.cache" />
     <EmbeddedResource Include="Resources\fontawesome-webfont.eot" />
     <EmbeddedResource Include="Resources\fontawesome-webfont.ttf" />
@@ -213,7 +213,7 @@
     <EmbeddedResource Include="Resources\common-main.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\ui-bootstrap.min.js" />
+    <EmbeddedResource Include="Resources\ui-bootstrap.js" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>
