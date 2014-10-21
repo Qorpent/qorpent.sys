@@ -38,5 +38,13 @@ namespace Qorpent.IO{
 			}
 
 		}
+
+		/// <summary>
+		/// Открытие потока на чтение
+		/// </summary>
+		/// <returns></returns>
+		public override Stream Open(){
+			return Assembly.GetManifestResourceStream(ResourceName);
+		}
 	}
 }

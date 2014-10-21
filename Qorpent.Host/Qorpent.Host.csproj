@@ -29,7 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestHandlerFactory.cs" />
-    <Compile Include="Static\FixedContentDescriptor.cs" />
     <Compile Include="Handlers\WikiHandler.cs" />
     <Compile Include="Static\HostServerStaticResolver.cs" />
     <Compile Include="Security\AuthProtocolClient.cs" />
@@ -53,7 +52,6 @@
     <Compile Include="SimpleSockets\SocketAwaitable.cs" />
     <Compile Include="SimpleSockets\SocketExtensions.cs" />
     <Compile Include="Handlers\SmartXmlHandler.cs" />
-    <Compile Include="Static\FileContentDescriptor.cs" />
     <Compile Include="Handlers\DelegateHandler.cs" />
     <Compile Include="Handlers\StaticFileHandler.cs" />
     <Compile Include="Handlers\StaticHandler.cs" />
@@ -62,7 +60,6 @@
     <Compile Include="HostServer.cs" />
     <Compile Include="HostRequestHandler.cs" />
     <Compile Include="Qweb\HostQwebHandler.cs" />
-    <Compile Include="Static\ResourceContentDescriptor.cs" />
     <Compile Include="Utils\HttpListenerContextExtensions.cs" />
     <Compile Include="Utils\MiltipartReadContext.cs" />
     <Compile Include="Utils\PostFile.cs" />
@@ -83,6 +80,10 @@
     <ProjectReference Include="..\..\qorpent.sys\Qorpent.Serialization\Qorpent.Serialization.csproj">
       <Project>{21971f28-8ed8-4f50-b623-e9db2658af54}</Project>
       <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IO\Qorpent.IO.csproj">
+      <Project>{426C92DF-3C40-426C-B0BE-40A1DF9044C2}</Project>
+      <Name>Qorpent.IO</Name>
     </ProjectReference>
     <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
       <Project>{880f65ea-1a22-4672-a137-ffc912902112}</Project>

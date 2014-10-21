@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Host{
+﻿using Qorpent.IO;
+
+namespace Qorpent.Host{
 	/// <summary>
 	/// </summary>
 	public interface IHostServerStaticResolver{
@@ -14,7 +16,7 @@
 		/// <param name="context"></param>
 		/// <param name="withextensions"></param>
 		/// <returns></returns>
-		StaticContentDescriptor Get(string name, object context = null, bool withextensions = false);
+		IWebFileRecord Get(string name, object context = null, bool withextensions = false);
 
 		/// <summary>
 		///     Сброс кэша

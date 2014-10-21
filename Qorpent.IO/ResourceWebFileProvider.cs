@@ -53,7 +53,12 @@ namespace Qorpent.IO{
 		protected override WebFileRecord GetRecord(string rawName){
 			var localname = rawName;
 			if (Prefix != "/") localname = Prefix + localname;
-			var result = new ResourceWebFileRecord() { Name = localname, Assembly = Assembly, ResourceName = _index[rawName] };
+			var result = new ResourceWebFileRecord(){
+				Name = localname, 
+				Assembly = Assembly,
+				ResourceName = _index[rawName],
+				FullName = "res://"+Assembly.GetName().Name+"/"+_index[rawName]
+			};
 			return result;
 		}
 		/// <summary>

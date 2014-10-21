@@ -43,6 +43,34 @@ namespace Qorpent.IO{
 		/// Возврат контента в виде строки
 		/// </summary>
 		/// <returns></returns>
-		string GetContent();
+		string Read();
+		/// <summary>
+		/// Полное имя
+		/// </summary>
+		string FullName { get; set; }
+		/// <summary>
+		/// Признак фиксированного контента
+		/// </summary>
+		bool IsFixedContent { get; set; }
+		/// <summary>
+		/// Фиксированный контент
+		/// </summary>
+		string FixedContent { get; set; }
+
+		/// <summary>
+		/// Фиксированные бинарные данные
+		/// </summary>
+		byte[] FixedData { get; set; }
+
+		/// <summary>
+		/// Тип MIME для файла
+		/// </summary>
+		string MimeType { get; set; }
+
+		/// <summary>
+		/// Открытие потока на чтение
+		/// </summary>
+		/// <returns></returns>
+		Stream Open();
 	}
 }

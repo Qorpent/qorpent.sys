@@ -24,7 +24,7 @@ namespace Qorpent.IO{
 			var localname = rawName.NormalizePath().Replace(Root, "");
 			if (!localname.StartsWith("/")) localname = "/" + localname;
 			if (Prefix != "/") localname = Prefix + localname;
-			var result = new FileSystemWebFileRecord{Name = localname, FileSystemName = rawName};
+			var result = new FileSystemWebFileRecord{Name = localname, FileSystemName = rawName,FullName = rawName};
 			return result;
 		}
 		/// <summary>

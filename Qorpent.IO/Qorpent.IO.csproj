@@ -41,6 +41,7 @@
     <Compile Include="FileService.cs" />
     <Compile Include="FileSystemWebFileProvider.cs" />
     <Compile Include="FileSystemWebFileRecord.cs" />
+    <Compile Include="FixedWebFileRecord.cs" />
     <Compile Include="Net\HttpClient.cs" />
     <Compile Include="Net\HttpRequest.cs" />
     <Compile Include="Net\HttpRequestWriter.cs" />

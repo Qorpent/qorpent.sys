@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading;
 using Qorpent.Host.Static;
 using Qorpent.Host.Utils;
+using Qorpent.IO;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Handlers
@@ -76,7 +77,7 @@ namespace Qorpent.Host.Handlers
 					var template = server.Static.Get("template.starter.js", callcontext).Read();
 
 					var apphtml = template.Replace("__APPNAME__", appname);
-					_applicationCache[abspath] = new FixedContentDescriptor(apphtml, abspath){MimeType = "text/javascript"};
+					_applicationCache[abspath] = new FixedWebFileRecord(abspath, "text/javascript", apphtml);
 				}
 				else
 				{
@@ -86,8 +87,8 @@ namespace Qorpent.Host.Handlers
 			Finish(server,callcontext,abspath);
 		}
 
-		private static void Finish200(IHostServer server, HttpListenerContext callcontext, StaticContentDescriptor staticdescriptor){
-			var filetime = callcontext.SetLastModified(staticdescriptor.GetLastVersion());
+		private static void Finish200(IHostServer server, HttpListenerContext callcontext, IWebFileRecord staticdescriptor){
+			var filetime = callcontext.SetLastModified(staticdescriptor.Version);
 			if (filetime <= callcontext.GetIfModifiedSince()){
 				callcontext.Finish("", status: 304);
 			}
@@ -125,7 +126,7 @@ namespace Qorpent.Host.Handlers
 		}
 
 		//кэш страниц, являющихся приложениями
-		static IDictionary<string, StaticContentDescriptor> _applicationCache = new Dictionary<string, StaticContentDescriptor>();
+		static IDictionary<string, IWebFileRecord> _applicationCache = new Dictionary<string, IWebFileRecord>();
 		private void RunApplication(IHostServer server, HttpListenerContext context, string callbackEndPoint, CancellationToken cancel, string abspath){
 			if (!_applicationCache.ContainsKey(abspath)){
 				var appname = Path.GetFileNameWithoutExtension(abspath);
@@ -135,7 +136,7 @@ namespace Qorpent.Host.Handlers
 					var template = server.Static.Get("template.app.html", context).Read();
 
 					var apphtml = string.Format(template, appname);
-					_applicationCache[abspath] = new FixedContentDescriptor(apphtml, abspath){MimeType = "text/html"};
+					_applicationCache[abspath] = new FixedWebFileRecord(abspath,"text/html",apphtml);
 				}
 				else{
 					_applicationCache[abspath] = null;

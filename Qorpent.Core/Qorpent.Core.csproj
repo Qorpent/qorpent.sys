@@ -136,7 +136,6 @@
     <Compile Include="Host\IAuthenticationProvider.cs" />
     <Compile Include="Host\IEncryptProvider.cs" />
     <Compile Include="Host\ISimpleSocketRequest.cs" />
-    <Compile Include="Host\StaticContentDescriptor.cs" />
     <Compile Include="IO\IBinarySerializable.cs" />
     <Compile Include="Host\IHostServer.cs" />
     <Compile Include="Host\IHostServerInitializer.cs" />

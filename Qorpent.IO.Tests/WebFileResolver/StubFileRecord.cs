@@ -14,5 +14,9 @@ namespace Qorpent.IO.Tests{
 		public override long Write(Stream output){
 			throw new NotImplementedException();
 		}
+
+		public override Stream Open(){
+			throw new NotImplementedException();
+		}
 	}
 }

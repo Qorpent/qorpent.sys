@@ -10,6 +10,9 @@ namespace Qorpent.IO{
 
 		private DateTime _version;
 		private string _eTag;
+		private string _mimeType;
+
+
 		/// <summary>
 		/// Локальное имя записи
 		/// </summary>
@@ -53,6 +56,24 @@ namespace Qorpent.IO{
 		/// <param name="output"></param>
 		public abstract long Write(Stream output);
 		/// <summary>
+		/// Открытие потока на чтение
+		/// </summary>
+		/// <returns></returns>
+		public abstract Stream Open();
+		/// <summary>
+		/// Тип MIME для файла
+		/// </summary>
+		public string MimeType{
+			get{
+				if (string.IsNullOrWhiteSpace(_mimeType)){
+					_mimeType =  MimeHelper.GetMimeByExtension(Path.GetExtension(Name));
+				}
+				return _mimeType;
+			}
+			set { _mimeType = value; }
+		}
+
+		/// <summary>
 		/// Возврат значения в виде массива байт
 		/// </summary>
 		/// <returns></returns>
@@ -67,7 +88,7 @@ namespace Qorpent.IO{
 		/// Возврат контента в виде строки
 		/// </summary>
 		/// <returns></returns>
-		public string GetContent(){
+		public string Read(){
 			var enc = Encoding ?? Encoding.UTF8;
 			var data = GetData();
 			var offset = 0;
@@ -77,9 +98,30 @@ namespace Qorpent.IO{
 			}
 			return enc.GetString(data, offset, data.Length - offset);
 		}
+
+		/// <summary>
+		/// Полное имя
+		/// </summary>
+		public string FullName { get; set; }
+
+		/// <summary>
+		/// Признак фиксированного контента
+		/// </summary>
+		public bool IsFixedContent { get; set; }
+
+		/// <summary>
+		/// Фиксированный контент
+		/// </summary>
+		public string FixedContent { get; set; }
+
 		/// <summary>
 		/// Кодировка
 		/// </summary>
 		public Encoding Encoding { get; set; }
+
+		/// <summary>
+		/// Фиксированные бинарные данные
+		/// </summary>
+		public byte[] FixedData { get; set; }
 	}
 }

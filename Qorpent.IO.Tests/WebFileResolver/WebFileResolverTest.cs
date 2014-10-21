@@ -84,13 +84,13 @@ namespace Qorpent.IO.Tests{
 			Assert.AreEqual("/xxx/a/a/b.c", provider.Find("/xxx/a/A/b.c").Name);
 
 
-			Assert.AreEqual("1", provider.Find("B.c", WebFileSerachMode.IgnorePath).GetContent());
-			Assert.AreEqual("1", provider.Find("/a/a/b.c", WebFileSerachMode.IgnorePath).GetContent());
-			Assert.AreEqual("4", provider.Find("a/a/b.c", WebFileSerachMode.ExactThenIgnore).GetContent());
-			Assert.AreEqual("3", provider.Find("/a/b/b.c", WebFileSerachMode.ExactThenIgnore).GetContent());
-			Assert.AreEqual("1", provider.Find("a/d/b.c", WebFileSerachMode.ExactThenIgnore).GetContent());
-			Assert.AreEqual("4", provider.Find("/a/A/b.c").GetContent());
-			Assert.AreEqual("4", provider.Find("/xxx/a/A/b.c").GetContent());
+			Assert.AreEqual("1", provider.Find("B.c", WebFileSerachMode.IgnorePath).Read());
+			Assert.AreEqual("1", provider.Find("/a/a/b.c", WebFileSerachMode.IgnorePath).Read());
+			Assert.AreEqual("4", provider.Find("a/a/b.c", WebFileSerachMode.ExactThenIgnore).Read());
+			Assert.AreEqual("3", provider.Find("/a/b/b.c", WebFileSerachMode.ExactThenIgnore).Read());
+			Assert.AreEqual("1", provider.Find("a/d/b.c", WebFileSerachMode.ExactThenIgnore).Read());
+			Assert.AreEqual("4", provider.Find("/a/A/b.c").Read());
+			Assert.AreEqual("4", provider.Find("/xxx/a/A/b.c").Read());
 		}
 
 		[Test]
@@ -112,13 +112,13 @@ namespace Qorpent.IO.Tests{
 			Assert.AreEqual("/xxx/a/a/b.c", provider.Find("/xxx/a/A/b.c").Name);
 
 
-			Assert.AreEqual("1", provider.Find("B.c", WebFileSerachMode.IgnorePath).GetContent());
-			Assert.AreEqual("1", provider.Find("/a/a/b.c", WebFileSerachMode.IgnorePath).GetContent());
-			Assert.AreEqual("4", provider.Find("a/a/b.c", WebFileSerachMode.ExactThenIgnore).GetContent());
-			Assert.AreEqual("3", provider.Find("/a/b/b.c", WebFileSerachMode.ExactThenIgnore).GetContent());
-			Assert.AreEqual("1", provider.Find("a/d/b.c", WebFileSerachMode.ExactThenIgnore).GetContent());
-			Assert.AreEqual("4", provider.Find("/a/A/b.c").GetContent());
-			Assert.AreEqual("4", provider.Find("/xxx/a/A/b.c").GetContent());
+			Assert.AreEqual("1", provider.Find("B.c", WebFileSerachMode.IgnorePath).Read());
+			Assert.AreEqual("1", provider.Find("/a/a/b.c", WebFileSerachMode.IgnorePath).Read());
+			Assert.AreEqual("4", provider.Find("a/a/b.c", WebFileSerachMode.ExactThenIgnore).Read());
+			Assert.AreEqual("3", provider.Find("/a/b/b.c", WebFileSerachMode.ExactThenIgnore).Read());
+			Assert.AreEqual("1", provider.Find("a/d/b.c", WebFileSerachMode.ExactThenIgnore).Read());
+			Assert.AreEqual("4", provider.Find("/a/A/b.c").Read());
+			Assert.AreEqual("4", provider.Find("/xxx/a/A/b.c").Read());
 		}
 		
 	}
