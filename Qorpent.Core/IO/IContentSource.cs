@@ -1,4 +1,4 @@
-﻿namespace Qorpent.IO.Net{
+﻿namespace Qorpent.IO{
 	/// <summary>
 	/// Обобщенный интерфейс источника контента
 	/// </summary>

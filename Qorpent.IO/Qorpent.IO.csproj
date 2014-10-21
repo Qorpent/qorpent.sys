@@ -39,6 +39,8 @@
     <Compile Include="FileDescriptors\FileFsBased.cs" />
     <Compile Include="FileNameResolver.cs" />
     <Compile Include="FileService.cs" />
+    <Compile Include="FileSystemWebFileProvider.cs" />
+    <Compile Include="FileSystemWebFileRecord.cs" />
     <Compile Include="Net\HttpClient.cs" />
     <Compile Include="Net\HttpRequest.cs" />
     <Compile Include="Net\HttpRequestWriter.cs" />
@@ -46,6 +48,8 @@
     <Compile Include="Net\HttpResponseReaderExecutor.cs" />
     <Compile Include="Net\HttpResponseReader.cs" />
     <Compile Include="Net\HttpUtils.cs" />
+    <Compile Include="ResourceWebFileProvider.cs" />
+    <Compile Include="ResourceWebFileRecord.cs" />
     <Compile Include="Storages\FileStorageDirtyVersion.cs" />
     <Compile Include="Storages\FileStorageHashedDirectory.cs" />
     <Compile Include="Storages\FileStorageVcsStorage.cs" />
@@ -56,6 +60,9 @@
     <Compile Include="Syncronization\FileItem.cs" />
     <Compile Include="Syncronization\FileOperation.cs" />
     <Compile Include="VcsStorage\VcsCommit.cs" />
+    <Compile Include="WebFileProvider.cs" />
+    <Compile Include="WebFileRecord.cs" />
+    <Compile Include="WebFileResolver.cs" />
     <Compile Include="Web\ProxySelectorHelper.cs" />
     <Compile Include="Web\WebResource.cs" />
     <Compile Include="Web\WebResourceProviderExtension.cs" />

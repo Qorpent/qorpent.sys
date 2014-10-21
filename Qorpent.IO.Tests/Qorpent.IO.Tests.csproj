@@ -42,7 +42,9 @@
     <Compile Include="SynchronizeWellKnownDirectory.cs" />
     <Compile Include="VcsStorageTests.cs" />
     <Compile Include="VcsStorageTestsBase.cs" />
-    <Compile Include="WebResourceProviderTests.cs" />
+    <Compile Include="WebFileResolver\StubFileRecord.cs" />
+    <Compile Include="WebFileResolver\StubWebStaticProvider.cs" />
+    <Compile Include="WebFileResolver\WebFileResolverTest.cs" />
     <Compile Include="Web\DefaultWorkingThroughResourceProvider.cs" />
     <Compile Include="VcsStorageWorkingWithStreamsTests.cs" />
   </ItemGroup>
@@ -60,5 +62,10 @@
       <Project>{E31B62A2-2FEF-4EF9-AADC-21B24885E035}</Project>
       <Name>Qorpent.Host</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebFileResolver\a\a\b.c" />
+    <EmbeddedResource Include="WebFileResolver\a\b.c" />
+    <EmbeddedResource Include="WebFileResolver\a\b\b.c" />
   </ItemGroup>
 </Project>

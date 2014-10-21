@@ -166,6 +166,10 @@
     <Compile Include="IO\IHashedDirectory.cs" />
     <Compile Include="IO\IStreamProxy.cs" />
     <Compile Include="BSharp\BSharpProjectDescriptor.cs" />
+    <Compile Include="IO\IWebFileProvider.cs" />
+    <Compile Include="IO\IWebFileRecord.cs" />
+    <Compile Include="IO\IWebFileResolver.cs" />
+    <Compile Include="IO\WebFileSerachMode.cs" />
     <Compile Include="Log\CollectionBasedUserLog.cs" />
     <Compile Include="Log\SessionLog.cs" />
     <Compile Include="Log\SessionLogClearQuery.cs" />
