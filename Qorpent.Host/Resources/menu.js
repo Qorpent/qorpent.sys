@@ -28,62 +28,52 @@ define([
         return rgb;
     };
 
-    function MenuGenerator() {
-        var that = this;
+    function MenuGenerator(el, attrs) {
+        var self = this;
+        this.rootElement = el;
+        this.modelName = attrs.model || attrs.Model || null;
+        this.wrapperName = attrs.wrapper || attrs.Wrapper || '';
+        this.filterName = attrs.filter || attrs.Filter || '';
 
-        this.generateSubmenu = function (data) {
+        this.generateSubmenu = function (m) {
+            m.items = m.Items || null;
+            if (!m.items) return;
             var submenu = $('<div class="submenu"/>');
-            $.each(data, function (i, m) {
-                var menuItem = generateMenuItem(m);
+            m.items.forEach(function(i) {
+                var menuItem = self.generateMenuItem(i);
                 submenu.append(menuItem);
             });
             return submenu;
         };
 
-        this.generateMenuFromModel = function (options) {
-            var result = $('<div />');
-            var expression = options.modelName;
-            if (!!options.wrapperName) {
-                expression = options.wrapperName + '(' + expression + ')';
-            }
-            if (!!options.filterName) {
-                expression += ' | ' + options.filterName;
-            }
-            // Если меню динамическое, то нужно позаботиться о методе exec в текущем скоупе!
-            var html = '<div class="menu__item" type="text" menu-item ng-repeat="m in ' + expression + '" ng-click="exec(m)" ng-class="\'menu__item-\' + (!!m.size ? m.size : \'small\')">\
-    <div ng-if="(m.type || m.Type) == \'text\' || (m.type || m.Type) == null" class="menu__item-title menu__item-element" ng-bind="(m.name || m.Name)">\
-    <div ng-if="(m.type || m.Type) == \'view\'" class="menu__item-view menu__item-element" ng-bind="(m.name || m.Name)">\
-        <ng-include ng-src="\' + (m.view.indexOf(\'.html\') != -1 ? m.view : m.view + \'.html\')\'" />\
-    </div>\
-    <div ng-if="(m.type || m.Type) == \'icon_with_text\'" class="icon menu__item-icon menu__item-element">\
-        <img ng-if="(m.icon || m.Icon).indexOf(\'/\') != -1" ng-src="(m.icon || m.Icon)" />\
-        <i ng-if="(m.icon || m.Icon).indexOf(\'/\') == -1" ng-class="(m.icon || m.Icon)"></i>\
-        <div ng-if="(m.type || m.Type) == \'icon_with_text\'" class="menu__item-title menu__item-element" ng-bind="(m.name || m.Name)">\
-    </div>\
-</div>';
-            return result.html(html);
-        };
-
-        this.generateSubmenuFromModel = function (options) {
-            var submenu = $('<div class="submenu"/>');
-            var menu = that.generateMenuFromModel(options);
-            return submenu.html(menu.html());
-        };
-
         this.generateMenuItem = function (m) {
             m.type = m.type || m.Type || 'text';
+            m.name = m.name || m.Name;
+            var result = this.generateMenuItemBase(m);
+            if (m.name == 'divider') {
+                return $('<div class="menu__item menu__item-divider" type="divider"/>');
+            }
             switch (m.type) {
                 case 'text' :
-                    return generateTextItem(m);
+                    result.append(this.generateTextItem(m)); break;
+                case 'icon' :
+                    result.append(this.generateIconItem(m)); break;
                 case 'icon_with_text' :
-                    return generateTextWithIconItem(m);
+                    result.append(this.generateIconItem(m)).append(this.generateTextItem(m)); break;
+                case 'view' :
+                    result.append(this.generateViewItem(m)); break;
             }
+
+            m.items = m.Items || null;
+            if (!!m.items) {
+                var submenu = this.generateSubmenu(m);
+                result.append(submenu);
+            }
+            return result;
         };
 
         this.generateTextItem = function (m) {
-            var result = generateMenuItemBase(m);
-            result.append($('<div class="menu__item-title menu__item-element" />').text(m.Name));
-            return result;
+            return $('<div class="menu__item-title menu__item-element" />').text(m.Name);
         };
 
         this.generateViewItem = function (m) {
@@ -93,16 +83,9 @@ define([
             return result;
         };
 
-        this.generateTextWithIconItem = function (m) {
-            var result = generateMenuItemBase(m);
-            result.append(generateIconItem(m));
-            result.append(generateTextItem(m));
-            return result;
-        };
-
         this.generateIconItem = function (m) {
-            var result = $('<div class="icon menu__item-icon menu__item-element" />');
-            var iconAttr = m.icon || m.iconclass;
+            var result = $('<div class="icon menu__item-icon menu__item-element" menu-icon="1" />');
+            var iconAttr = m.icon || m.Icon || m.iconclass;
             if (!!iconAttr && iconAttr != '') {
                 if (iconAttr.indexOf('/') != -1) {
                     result.append($('<img />').attr('src', iconAttr));
@@ -111,31 +94,69 @@ define([
                     result.append($('<i/>').addClass(iconAttr));
                 }
             }
-        };
-
-        this.generateMenuItemBase = function (m) {
-            var result = $('<div class="menu__item menu__item-element" menu-item />')
-                .attr('type', m.type);
-            m.action = m.action || m.Action || null;
-            if (!!m.action) {
-                result.attr('action', m.action);
-            }
             return result;
         };
 
-        this.getMenuOptions = function (attrs) {
-            return {
-                modelName: attrs.model,
-                wrapperName: attrs.wrapper || '',
-                filterName: attrs.filter || ''
+        this.generateMenuItemBase = function (m) {
+            var result = $('<div class="menu__item menu__item-element" />')
+                .attr('type', m.type);
+            result.addClass('menu__item-' + (!!m.size ? m.size : 'small'));
+            m.items = m.items || m.Items || null;
+            m.model = m.model || m.Model || null;
+            m.code = m.code || m.Code || null;
+            if (!!m.items || !!m.model) {
+                result.attr('menu-group', '1');
+                result.addClass('open-right');
+            } else {
+                result.attr('menu-item', '1');
             }
+            m.action = m.action || m.Action || null;
+            if (!!m.action && !!this.modelName && !m.items) {
+                result.attr('ng-click', "exec(" + this.modelName + ", '" + m.code + "')");
+            }
+            /*else if (!!m.action) {
+                result.attr('ng-click', m.action);
+            }*/
+            return result;
+        };
+
+        this.copyAttrs = function (m) {
+            var attrsToCopy = ['ng-if'];
+            Object.keys(m).forEach(function (a) {
+                if ($.inArray(attrsToCopy) != -1) {
+
+                }
+            });
+        };
+
+        this.isItemFiltered = function(item, filterAttr) {
+            var filter = eval("({" + filterAttr + "})"), result = false;
+            if (!!filter.filter) filter = filter.filter;
+            Object.keys(filter).forEach(function(f) {
+                if (!!item[f]) {
+                    result = (item[f] != filter[f]);
+                }
+            });
+            return result;
+        };
+
+        this.generateMenu = function (model) {
+            var result = $('<div/>');
+            if (model instanceof Array) {
+                model.forEach(function(m) {
+                    if (!!self.filterName && self.filterName != '') {
+                        !self.isItemFiltered(m, self.filterName) && result.append(self.generateMenuItem(m));
+                    } else {
+                        result.append(self.generateMenuItem(m));
+                    }
+                });
+            }
+            return result;
         };
     }
 
     angular.module('Menu', [])
-        .directive('menu', function () {
-            var menuGenerator = new MenuGenerator();
-
+        .directive('menu', function ($compile) {
             var activateMenuGroup = function (menu, group) {
                 var items = menu.find('div:last-child>.menu__item');
                 var groups = menu.find('div:first-child>.menu__item');
@@ -147,68 +168,68 @@ define([
 
             return {
                 restrict: 'A',
-                compile: function (el, attrs) {
+                link: function (scope, el, attrs) {
                     el = $(el);
-                    if (!!el.attr('model')) {
-                        var options = menuGenerator.getMenuOptions(attrs);
-                        el.find('[items]').append(menuGenerator.generateMenuFromModel(options).html());
-                    }
-
-                    return function (scope, el, attrs) {
-                        el = $(el);
-                        var settings = scope.settings.get(attrs.id);
-                        var initRibbonMenu = function () {
-                            el.on('click', 'div:first-child>.menu__item', function (e) {
-                                var g = $(e.currentTarget.className == 'menu__item' ? e.currentTarget : e.currentTarget.parentElement).attr('code');
-                                scope.settings.set(attrs.id, { activegroup: g });
-                                activateMenuGroup(el, g);
-                            });
-                            if (!settings.activegroup) {
-                                var defaultGroup = el.find('div:first-child>.menu__item[default]').first();
-                                if (defaultGroup.length == 0) {
-                                    defaultGroup = el.find('div:first-child>.menu__item').first();
-                                }
-                                var groupCode = defaultGroup.attr('code');
-                                scope.settings.set(attrs.id, { activegroup: groupCode });
-                                activateMenuGroup(el, groupCode);
-                            } else {
-                                activateMenuGroup(el, settings.activegroup);
-                            }
-                        };
-                        var initDropdownMenu = function () {
-                            el.on('mouseenter', '.menu__item>.menu__item-element', function (e) {
-                                $('.menu__item.hover').removeClass('hover');
-                                var p = $(e.target).parents('.menu__item[menu-group]');
-                                p.addClass('hover');
-                                if ($(window).width() - (p.first().offset().left + p.first().outerWidth()) < 200) {
-                                    p.first().addClass('open-left').removeClass('open-right');
-                                }
-                                else {
-                                    p.first().addClass('open-right').removeClass('open-left');
-                                }
-                            });
-                        };
-                        if (attrs.menu == 'ribbon') {
-                            initRibbonMenu();
-                        }
-                        else if (attrs.menu == 'inline') {
-
-                        }
-                        else if (attrs.menu == 'dropdown') {
-                            initDropdownMenu();
-                        }
-                        el.on('click', '.menu__item', function (e) {
-                            var t = $(e.target);
-                            var item = t.hasClass('.menu__item') ? t : t.parents('.menu__item').first();
-                            if (!!item.attr('url')) {
-                                window.open(item.attr('url'), '_blank');
-                            }
+                    var settings = scope.settings.get(attrs.id);
+                    if (!!attrs.model) {
+                        scope.$watch(attrs.model, function() {
+                            var menuGenerator = new MenuGenerator(el, attrs);
+                            var template = angular.element(menuGenerator.generateMenu(scope[attrs.model]).html());
+                            var menu = $compile(template)(scope);
+                            el.find('.menu__horizontal').empty().append(menu);
                         });
                     }
+                    var initRibbonMenu = function () {
+                        el.on('click', 'div:first-child>.menu__item', function (e) {
+                            var g = $(e.currentTarget.className == 'menu__item' ? e.currentTarget : e.currentTarget.parentElement).attr('code');
+                            scope.settings.set(attrs.id, { activegroup: g });
+                            activateMenuGroup(el, g);
+                        });
+                        if (!settings.activegroup) {
+                            var defaultGroup = el.find('div:first-child>.menu__item[default]').first();
+                            if (defaultGroup.length == 0) {
+                                defaultGroup = el.find('div:first-child>.menu__item').first();
+                            }
+                            var groupCode = defaultGroup.attr('code');
+                            scope.settings.set(attrs.id, { activegroup: groupCode });
+                            activateMenuGroup(el, groupCode);
+                        } else {
+                            activateMenuGroup(el, settings.activegroup);
+                        }
+                    };
+                    var initDropdownMenu = function () {
+                        el.on('mouseenter', '.menu__item>.menu__item-element', function (e) {
+                            $('.menu__item.hover').removeClass('hover');
+                            var p = $(e.target).parents('.menu__item[menu-group]');
+                            p.addClass('hover');
+                            if ($(window).width() - (p.first().offset().left + p.first().outerWidth()) < 200) {
+                                p.first().addClass('open-left').removeClass('open-right');
+                            }
+                            else {
+                                p.first().addClass('open-right').removeClass('open-left');
+                            }
+                        });
+                    };
+                    if (attrs.menu == 'ribbon') {
+                        initRibbonMenu();
+                    }
+                    else if (attrs.menu == 'inline') {
+
+                    }
+                    else if (attrs.menu == 'dropdown') {
+                        initDropdownMenu();
+                    }
+                    el.on('click', '.menu__item', function (e) {
+                        var t = $(e.target);
+                        var item = t.hasClass('.menu__item') ? t : t.parents('.menu__item').first();
+                        if (!!item.attr('url')) {
+                            window.open(item.attr('url'), '_blank');
+                        }
+                    });
                 }
             }
         })
-        .directive('menuItem', function () {
+        .directive('menuItem', function ($compile) {
             var wrapMenuItem = function (m) {
                 if (!m.Type && !m.type) m.type = 'text';
             };
@@ -217,6 +238,15 @@ define([
                 restrict: 'A',
                 link: function (scope, el, attrs) {
                     el = $(el);
+
+                    if (!!attrs.model) {
+                        scope.$watch(attrs.model, function() {
+                            var menuGenerator = new MenuGenerator(el, attrs);
+                            var template = angular.element(menuGenerator.generateMenu(scope[attrs.model]).html());
+                            var menu = $compile(template)(scope);
+                            el.find('.submenu').first().empty().append(menu);
+                        });
+                    }
                     if (!!attrs.url && !!attrs.model) {
                         $.getJSON(attrs.action, {}, function (data) {
                             scope[attrs.model] = data;
@@ -243,11 +273,19 @@ define([
                 }
             }
         })
-        .directive('menuGroup', function () {
+        .directive('menuGroup', function ($compile) {
             return {
                 restrict: 'A',
                 link: function (scope, el, attrs) {
                     el = $(el);
+                    if (!!attrs.model) {
+                        var menuGenerator = new MenuGenerator(el, attrs);
+                        scope.$watch(attrs.model, function() {
+                            var template = angular.element(menuGenerator.generateMenu(scope[attrs.model]).html());
+                            var menu = $compile(template)(scope);
+                            el.find('.submenu').first().empty().append(menu);
+                        });
+                    }
                     if (attrs.type == 'icon_with_text' || attrs.type == 'icon') {
                         var c = getRandomHsl();
                         el.find('.icon').first().css('background',
