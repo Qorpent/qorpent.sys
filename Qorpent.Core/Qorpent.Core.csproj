@@ -144,7 +144,6 @@
     <Compile Include="Host\IRequestHandlerFactory.cs" />
     <Compile Include="Host\ISimpleSocketHandler.cs" />
     <Compile Include="Host\ISimpleSocketServer.cs" />
-    <Compile Include="Host\IStaticContentHostServce.cs" />
     <Compile Include="IFilter.cs" />
     <Compile Include="IoC\BasicComponentDefinition.cs" />
     <Compile Include="IoC\ComponentDefinitionWrapper.cs" />

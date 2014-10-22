@@ -21,12 +21,12 @@ namespace Qorpent.Host.Static{
 			_host = server;
 			Resolver = new WebFileResolver();
 			foreach (var exf in _host.Config.ExtendedContentFolders){
-				Resolver.Register(new FileSystemWebFileProvider{ExactOnly = true,Root = exf});
+				Resolver.Register(new FileSystemWebFileProvider{ExactOnly = true,Root = EnvironmentInfo.ResolvePath( exf)});
 			}
 			foreach (var f in _host.Config.ContentFolders){
-				Resolver.Register(new FileSystemWebFileProvider { ExactOnly = false, Root = f });
+				Resolver.Register(new FileSystemWebFileProvider { ExactOnly = false, Root = EnvironmentInfo.ResolvePath( f) });
 			}
-			Resolver.Register(new FileSystemWebFileProvider { ExactOnly = false, Root = _host.Config.RootFolder });
+			Resolver.Register(new FileSystemWebFileProvider { ExactOnly = false, Root =EnvironmentInfo.ResolvePath(  _host.Config.RootFolder) });
 			foreach (var assembly in  _host.Config.AutoconfigureAssemblies.Select(Assembly.Load).ToArray()){
 				Resolver.Register(new ResourceWebFileProvider{Assembly = assembly});
 			}
