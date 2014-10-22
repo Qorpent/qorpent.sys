@@ -181,7 +181,7 @@ define([
                     }
                     var initRibbonMenu = function () {
                         el.on('click', 'div:first-child>.menu__item', function (e) {
-                            var g = $(e.currentTarget.className == 'menu__item' ? e.currentTarget : e.currentTarget.parentElement).attr('code');
+                            var g = $(e.currentTarget.classList.contains('menu__item') ? e.currentTarget : e.currentTarget.parentElement).attr('code');
                             scope.settings.set(attrs.id, { activegroup: g });
                             activateMenuGroup(el, g);
                         });
