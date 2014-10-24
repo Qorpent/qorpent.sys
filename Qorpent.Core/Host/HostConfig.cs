@@ -24,8 +24,9 @@ namespace Qorpent.Host{
 		private int _threadCount;
 		private string _tmpFolder;
 		private bool _useApplicationName;
+	    private IUserLog _log;
 
-		/// <summary>
+	    /// <summary>
 		///     Формирует конфиг из XML
 		/// </summary>
 		/// <param name="xml"></param>
@@ -55,6 +56,7 @@ namespace Qorpent.Host{
 			AccessAllowMethods = "GET, POST, OPTIONS";
 			AccessAllowCredentials = true;
 			StaticContentMap = new Dictionary<string, string>();
+            
 		}
 		/// <summary>
 		/// Разрешение Cookie при работе с Cross-Site
@@ -222,12 +224,21 @@ namespace Qorpent.Host{
 		/// </summary>
 		public IDictionary<string, string> StaticContentMap { get; private set; }
 
+	    /// <summary>
+	    /// Журнал
+	    /// </summary>
+	    public IUserLog Log
+	    {
+	        get { return _log ?? (_log = StubUserLog.Default); }
+	        set { _log = value; }
+	    }
 
-		/// <summary>
-		///     Загружает конфигурационный файл из XML
-		/// </summary>
-		/// <param name="xml"></param>
-		public void LoadXmlConfig(XElement xml){
+
+	    /// <summary>
+	    ///     Загружает конфигурационный файл из XML
+	    /// </summary>
+	    /// <param name="xml"></param>
+	    public void LoadXmlConfig(XElement xml){
 			RootFolder = ResolveConfigWithXml(xml, RootFolder, HostConstants.RootFolderXmlName);
 			ConfigFolder = ResolveConfigWithXml(xml, ConfigFolder, HostConstants.ConfigFolderXmlName);
 			DllFolder = ResolveConfigWithXml(xml, DllFolder, HostConstants.DllFolderXmlName);

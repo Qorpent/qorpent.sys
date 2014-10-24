@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -21,15 +22,24 @@ namespace Qorpent.Host.Static{
 			_host = server;
 			Resolver = new WebFileResolver();
 			foreach (var exf in _host.Config.ExtendedContentFolders){
+
+                _host.Config.Log.Info("Ex-Content from " + EnvironmentInfo.ResolvePath(exf) + " added");
 				Resolver.Register(new FileSystemWebFileProvider{ExactOnly = true,Root = EnvironmentInfo.ResolvePath( exf)});
 			}
 			foreach (var f in _host.Config.ContentFolders){
+
+                _host.Config.Log.Info("Content from " + EnvironmentInfo.ResolvePath(f) + " added");
 				Resolver.Register(new FileSystemWebFileProvider { ExactOnly = false, Root = EnvironmentInfo.ResolvePath( f) });
 			}
+
+            _host.Config.Log.Info("Root-Content from " + EnvironmentInfo.ResolvePath( _host.Config.RootFolder) + " added");
 			Resolver.Register(new FileSystemWebFileProvider { ExactOnly = false, Root =EnvironmentInfo.ResolvePath(  _host.Config.RootFolder) });
 			foreach (var assembly in  _host.Config.AutoconfigureAssemblies.Select(Assembly.Load).ToArray()){
+                _host.Config.Log.Info("Resource-Content from " + assembly.GetName().Name + " added");
 				Resolver.Register(new ResourceWebFileProvider{Assembly = assembly});
 			}
+
+            _host.Config.Log.Info("Resource-Content from Qorpent.Host added");
 			Resolver.Register(new ResourceWebFileProvider{Assembly = typeof(HostServer).Assembly});
 		}
 

@@ -326,6 +326,7 @@ namespace Qorpent.Host{
 			foreach (IHostServerInitializer i in _container.All<IHostServerInitializer>()){
 				i.Initialize(this);
 			}
+            
 		}
 
 		private void _InitializeForStandaloneApplication(){
