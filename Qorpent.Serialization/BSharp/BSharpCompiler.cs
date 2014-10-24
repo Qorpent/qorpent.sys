@@ -925,7 +925,6 @@ namespace Qorpent.BSharp{
 		protected virtual void LinkClasses(IEnumerable<XElement> sources, IBSharpContext context){
 			context.BuildLinkingIndex();
 			bool requirelink = context.RequireLinking();
-			bool requirepatch = context.RequirePatching();
 			bool requirepostprocess = context.RequrePostProcess();
 			context.MetaClasses.Values.Where(
 				_ => _.Is(BSharpClassAttributes.Patch) && _.PatchPhase == BSharpPatchPhase.AfterBuild)
