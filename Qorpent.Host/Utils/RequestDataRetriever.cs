@@ -68,7 +68,7 @@ namespace Qorpent.Host.Utils
 					result.PostData = str;
 					try
 					{
-						PrepareDictionaryData(result.Form, str,false);
+						PrepareDictionaryData(result.Form, str, _contentType != null && _contentType.Contains("application/x-www-form-urlencoded"));
 					}
 					catch
 					{
