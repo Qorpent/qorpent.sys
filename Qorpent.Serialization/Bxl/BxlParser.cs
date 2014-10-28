@@ -171,6 +171,7 @@ namespace Qorpent.Bxl {
 		private void init(String filename, BxlParserOptions options) {
 			_options = options;
 			_info = new LexInfo(filename, 1);
+            _expStack.Clear();
 			DEFAULT_NS_PREFIX = NAMESPACE + filename + "_";
 			String __ = "";
 			if (_options.HasFlag(BxlParserOptions.SafeAttributeNames)) {
