@@ -95,7 +95,15 @@ namespace Qorpent.BSharp.Builder{
 
 					}
 					else{
-						yield return Path.GetFullPath(Path.Combine(GetRootDirectory(), dir)).NormalizePath();
+					    if (dir.Contains("@"))
+					    {
+					        yield return EnvironmentInfo.ResolvePath(dir).NormalizePath();
+					    }
+					    else
+					    {
+					        yield return
+					            EnvironmentInfo.ResolvePath(Path.GetFullPath(Path.Combine(GetRootDirectory(), dir))).NormalizePath();
+					    }
 					}
 				}
 			}
