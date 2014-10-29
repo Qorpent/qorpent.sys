@@ -305,10 +305,10 @@ namespace Qorpent.IoC {
 					assembly = Assembly.Load(plugAssembly.WellKnownTypeName);
 				}
 // ReSharper disable EmptyGeneralCatchClause
-				catch (Exception ex) {
+				catch  {
 // ReSharper restore EmptyGeneralCatchClause
 					//No means NO
-					var e = ex;
+					
 				}
 				if (null != assembly) {
 					RegisterAssembly(result, assembly);

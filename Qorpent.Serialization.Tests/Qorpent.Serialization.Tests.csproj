@@ -38,6 +38,7 @@
     <Compile Include="Bxl\BxlParserTests.cs" />
     <Compile Include="Bxl\ApplicationAccessToBxl.cs" />
     <Compile Include="Bxl\BxlGeneratorTest.cs" />
+    <Compile Include="Bxl\ErrorInParsingOfWellKnownFile.cs" />
     <Compile Include="bxl_serializer_test.cs" />
     <Compile Include="ChartExtensionsTests.cs" />
     <Compile Include="Charts\ChartExtensionsTests.cs" />

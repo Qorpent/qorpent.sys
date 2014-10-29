@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Qorpent.Utils.Extensions;
@@ -33,10 +34,17 @@ namespace Qorpent.IO{
 		/// <param name="fn"></param>
 		/// <returns></returns>
 		protected override WebFileRecord FindFileNameOnly(string fn){
-			var filename = Path.GetFileName(fn);
-			var first = Directory.EnumerateFiles(Root, filename,SearchOption.AllDirectories).FirstOrDefault();
-			if(null!=first)return GetRecord(first);
-			return null;
+		    try
+		    {
+		        var filename = Path.GetFileName(fn);
+		        var first = Directory.EnumerateFiles(Root, filename, SearchOption.AllDirectories).FirstOrDefault();
+		        if (null != first) return GetRecord(first);
+		        return null;
+		    }
+		    catch (Exception e)
+		    {
+		        throw new IOException("Error with path '"+Root+"' on '"+fn+"'",e);
+		    }
 		}
 		/// <summary>
 		/// 

@@ -260,7 +260,7 @@ namespace Qorpent.Serialization {
 					return DateTime.MinValue != (DateTime) Value;
 				}
 				if (Type.IsEnum) {
-					return ((int)Value)!=0;
+					return (Value.ToInt())!=0;
 				}
 				if (Type.IsArray) {
 					return 0 != ((Array) Value).Length;
