@@ -261,8 +261,12 @@ define([
                 link: function (scope, el, attrs) {
                     el = $(el);
                     var startcolor, endcolor;
-                    if (!!attrs.color) {
-                        startcolor = attrs.color.indexOf('#') == 0 ? attrs.color : '#' + attrs.color;
+					var color = attrs.color;
+					if(!color && el.parent()) {
+						color = el.parent().attr('color');
+					}
+                    if (!!color) {
+                        startcolor = color.indexOf('#') == 0 ? color : '#' + color;
                         endcolor = colorLuminance(startcolor, -0.5);
                     } else {
                         var c = getRandomHsl();
