@@ -26,6 +26,14 @@ namespace Qorpent.Utils{
 			get { return Get("arg1", ""); }
 			set { Set("arg1", value); }
 		}
+        /// <summary>
+        /// Второй анонимный атрибут
+        /// </summary>
+        public string Arg2
+        {
+            get { return Get("arg2", ""); }
+            set { Set("arg2", value); }
+        }
 		/// <summary>
 		/// Запуск режима отладки
 		/// </summary>
@@ -161,19 +169,102 @@ namespace Qorpent.Utils{
 				Debugger.Launch();
 			}
 			InternalInitialize(arguments);
-			Log.Debug("Resolved call parameters:");
-			foreach (var p in this)
-			{
-				Log.Debug(string.Format("{0,-20} : {1}", p.Key, p.Value));
-			}
+			
+		    InternalCheckValid();
+
+
+            DebugPrintArguments();
 		}
-		/// <summary>
+        /// <summary>
+        /// выводит отладочную информацию о параметрах
+        /// </summary>
+	    protected virtual void DebugPrintArguments() {
+	        Log.Debug("Resolved call parameters:");
+	        foreach (var p in this) {
+	            Log.Debug(string.Format("{0,-20} : {1}", p.Key, p.Value));
+	        }
+	    }
+
+	    /// <summary>
+        /// Метод для проверки валидности параметров вызова
+        /// </summary>
+	    protected virtual void InternalCheckValid() {
+	    }
+
+	    /// <summary>
+	    /// Вспомогательный метод проверки наличия файла
+	    /// </summary>
+	    /// <param name="name"></param>
+	    /// <param name="value"></param>
+	    protected bool CheckFile(string name, string value) {
+            bool isValid = true;
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                Log.Error(name+" not set up");
+                isValid = false;
+            }
+            else
+            {
+                if (!File.Exists(value))
+                {
+                    Log.Error(name+"file '"+value+"'not exists");
+                    isValid = false;
+                }
+            }
+            return isValid;
+        }
+
+	    /// <summary>
+	    /// Вспомогательный метод для батчевой проверки валидности параметров в модели Assert
+	    /// </summary>
+	    /// <param name="message"></param>
+	    /// <param name="checks"></param>
+	    protected void Assert(string message,params bool[] checks) {
+            if (!checks.All(_ => _)) {
+                throw new Exception(message);
+            }
+	    }
+
+
+	    /// <summary>
 		/// 
 		/// </summary>
 		/// <param name="args"></param>
 		protected virtual void InternalInitialize(string[] args){
 			
 		}
+        /// <summary>
+        /// Определяет первый не пустой параметр из списка
+        /// </summary>
+        /// <param name="names"></param>
+        /// <returns></returns>
+	    public string Resolve(params string[] names) {
+            foreach (var name in names) {
+                var val = Get(name, "");
+                if (!string.IsNullOrWhiteSpace(val)) return val;
+            }
+            return "";
+        }
+
+	    /// <summary>
+	    /// Определяет файловый параметр с приведением его к полной нормализованной форме
+	    /// </summary>
+	    /// <param name="defaultExtension">Расширение по умолчанию</param>
+	    /// <param name="names"></param>
+	    /// <returns></returns>
+	    public string ResolveFileName(string defaultExtension, params string[] names) {
+            var result = Resolve(names);
+            if (string.IsNullOrWhiteSpace(result)) return result;
+            result = EnvironmentInfo.ResolvePath(result);
+            if (!string.IsNullOrWhiteSpace(defaultExtension)) {
+                if (Path.GetExtension(result) != defaultExtension) {
+                    if (!File.Exists(result) && File.Exists(result+defaultExtension)) {
+                        result += defaultExtension;
+                    }
+                }
+            }
+            return result;
+        }
 
 		/// <summary>
 		/// Производит загрузку из проекта B#
