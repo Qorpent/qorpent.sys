@@ -113,7 +113,7 @@ namespace Qorpent.Scaffolding.Application{
 		public GenerateActionsInJavaScriptTask()
 			: base()
 		{
-			ClassSearchCriteria = "ui-action";
+			ClassSearchCriteria = "ui-action|ui-api";
 			DefaultOutputName = "Js";
 		}
 

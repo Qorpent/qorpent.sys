@@ -16,6 +16,7 @@
     <Compile Include="BSharp\BSharpCodeBuilderTest.cs" />
     <Compile Include="BSharp\ClassReference.cs" />
     <Compile Include="BSharp\ConstantsTest.cs" />
+    <Compile Include="BSharp\ContextTests.cs" />
     <Compile Include="BSharp\EvaluationsSupport.cs" />
     <Compile Include="BSharp\DictionarySupport.cs" />
     <Compile Include="BSharp\GeneratorTest.cs" />

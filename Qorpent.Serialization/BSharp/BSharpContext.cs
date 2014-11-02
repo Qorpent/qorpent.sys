@@ -199,8 +199,8 @@ namespace Qorpent.BSharp{
 			if (query.EndsWith(".*")){
 				return Working.Where(_ => _.Namespace.StartsWith(query.Substring(0, query.Length - 2)));
 			}
-			if (null != PrototypeMap && PrototypeMap.ContainsKey(query)){
-				return PrototypeMap[query];
+			if (null != PrototypeMap && query.SmartSplit(false, true, '|').Any(_ => PrototypeMap.ContainsKey(_))) {
+				return query.SmartSplit(false, true, '|').SelectMany(_ => PrototypeMap[_]).ToArray();
 			}
 			if (null != Dictionaries && Dictionaries.ContainsKey(query)){
 				return Dictionaries[query].Select(_ => _.cls);
@@ -218,7 +218,7 @@ namespace Qorpent.BSharp{
 			}
 
 			if (PrototypeMap == null){
-				return RawClasses.Values.Where(_ => _.Source.Attr("prototype") == query).ToArray();
+				return query.SmartSplit(false, true, '|').SelectMany(_ => RawClasses.Values.Where(__ => __.Source.Attr("prototype") == _)).ToArray();
 			}
 			else{
 				return new IBSharpClass[]{};
