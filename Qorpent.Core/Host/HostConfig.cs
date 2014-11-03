@@ -337,5 +337,18 @@ namespace Qorpent.Host{
 			//			new HostBinding { Interface = HostConstants.DefaultBindingInterface, Port = HostConstants.DefaultBindingPort+1, Schema = HostSchema.Https }
 			//	);
 		}
+
+        /// <summary>
+        /// Добавляет биндинги по стандартным смещениям Qorpent
+        /// </summary>
+        /// <param name="appId"></param>
+	    public void AddQorpentBinding(int appId) {
+            var baseport = HostConstants.DefaultQorpentStartPort +
+                           appId*HostConstants.DefaultQorpentApplicationPortOffset;
+            Bindings.Add(new HostBinding { Port = baseport });
+            Bindings.Add(new HostBinding { Port = baseport+1, Schema = HostSchema.Https });
+            Bindings.Add(new HostBinding { Interface = "127.0.0.1", Port = baseport + 5 });
+            Bindings.Add(new HostBinding { Interface = "127.0.0.1", Port = baseport + 6, Schema = HostSchema.Https });
+	    }
 	}
 }

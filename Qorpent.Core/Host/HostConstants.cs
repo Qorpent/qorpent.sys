@@ -142,6 +142,14 @@ namespace Qorpent.Host{
 		/// </summary>
 		public const string DefaultPage = "DefaultPage";
 
-		
+        /// <summary>
+        /// Базовый порт Qorpent
+        /// </summary>
+	    public const int DefaultQorpentStartPort = 14000;
+        /// <summary>
+        /// Смещение номера приложения по портам
+        /// </summary>
+	    public const int DefaultQorpentApplicationPortOffset = 10;
+
 	}
 }
