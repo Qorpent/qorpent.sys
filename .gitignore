@@ -30,3 +30,5 @@ UpgradeLog*
 .output
 .tmp
 /Qorpent.The/Tests/lib/images/temp.png
+/Qorpent.The/node_modules
+/Qorpent.The/npm-debug.log

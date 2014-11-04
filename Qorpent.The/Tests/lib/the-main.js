@@ -48,6 +48,7 @@ require.config({
                 ,"the-collections-linked-tests"
                 ,"the-collections-linq-tests"
                 ,"the-design-tests"
+               ,"the-angular-tests"
                 ,"the-expression-tests"
                 ,"the-http-tests"
                ,"the-interpolation-tests"

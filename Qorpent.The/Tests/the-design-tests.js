@@ -66,7 +66,7 @@
             require(["./lib/chai", "../the-design-textfitter"], function ($should, $the) {
                 fit = $the.design.fitText;
                 $root = $the;
-                should = $should;
+                should = $should.Should();
                 $ = window.$;
                 angular = window.angular;
                 done();
