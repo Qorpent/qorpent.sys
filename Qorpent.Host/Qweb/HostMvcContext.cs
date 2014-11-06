@@ -117,6 +117,23 @@ namespace Qorpent.Host.Qweb
 			return Get(name);
 		}
 
+        /// <summary>
+        /// Специальный метод для совместимости с XSLT для возврата имени пользователя
+        /// </summary>>
+        /// <returns></returns>
+        public string xsltusername() {
+            return User.Identity.Name;
+        }
+
+        /// <summary>
+        /// Специальный метод для совместимости с XSLT для возврата имени пользователя
+        /// </summary>>
+        /// <returns></returns>
+        public string xslttime()
+        {
+            return DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
+        }
+
 
 		/// <summary>
 		/// 	Cookie отклика
