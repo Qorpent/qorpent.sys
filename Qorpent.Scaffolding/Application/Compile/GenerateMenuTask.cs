@@ -202,7 +202,7 @@ namespace Qorpent.Scaffolding.Application {
             var result = GenerateIconItem(el);
             var title = new XElement("div",
                 new XAttribute("class", (el.Attr("titleclass") + "menu__item-title menu__item-element").Trim()));
-            title.SetValue(el.HasAttribute("title") ? el.Attr("title") : el.Attr("name"));
+            title.SetValue(el.Attr("name"));
             result.Add(title);
             return result;
         }
