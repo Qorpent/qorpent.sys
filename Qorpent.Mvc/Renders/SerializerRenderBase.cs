@@ -109,6 +109,8 @@ namespace Qorpent.Mvc.Renders {
             //Q-14 common xpath/xslt support
 	        var xpath = context.Get("__xpath");
 	        var xslt = context.Get("__xslt");
+	        if (string.IsNullOrWhiteSpace(xpath)) xpath = context.Get("xpath__");
+	        if (string.IsNullOrWhiteSpace(xslt)) xslt = context.Get("xslt__");
 	        var objectToRender = context.ActionResult;
 	        if (!string.IsNullOrWhiteSpace(xpath) || !string.IsNullOrWhiteSpace(xslt)) {
 	            objectToRender = TransformResult(context,objectToRender, xpath, xslt);

@@ -25,6 +25,7 @@
                 this.eventName = "";
                 this.castResult = null;
                 this.rawResult = false;
+                this.parameters = {};
                 this.delay = 0;
                 //#Q-270
                 this.targetWindow = "";
@@ -161,6 +162,7 @@
                 if (!!this.useparams) {
                     result.params  = !!this.arguments ? new this.arguments() : {};
                     extend(result.params, this.parameters, {filter: extensionsFalseFilter});
+                    extend(result.params, callinfo.parameters, {filter: extensionsFalseFilter});
                     extend(result.params, args || {}, {filter: extensionsFalseFilter,ignoreCase:true});
                     if (this.jsonify) {
                         var opts = this.jsonifyOptions;
