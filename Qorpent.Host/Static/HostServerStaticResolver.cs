@@ -6,7 +6,7 @@ using System.Reflection;
 using Qorpent.IO;
 
 namespace Qorpent.Host.Static{
-	/// <summary>
+    /// <summary>
 	/// </summary>
 	public class HostServerStaticResolver : IHostServerStaticResolver{
 		private readonly ConcurrentDictionary<string, IWebFileRecord> _cache =

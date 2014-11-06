@@ -331,14 +331,12 @@ namespace Qorpent.Host{
 
 		private void _InitializeForStandaloneApplication(){
 			if (Config.ApplicationMode != HostApplicationMode.Shared){
+                _container.Unregister(_container.FindComponent(typeof(IFileNameResolver),""));
+                _container.Register(_container.NewComponent<IFileNameResolver, HostFileNameResolver>(implementation: new HostFileNameResolver(this)));
 				_container.Register(_container.NewComponent<IMvcContext, HostMvcContext>());
 				_container.Unregister(_container.FindComponent(typeof (IAction), "_sys.login.action"));
 				_container.Unregister(_container.FindComponent(typeof (IAction), "_sys.logout.action"));
-				try{
-					_container.FindComponent(typeof (IFileNameResolver), null).Parameters["Root"] = Config.RootFolder;
-				}
-				catch{
-				}
+
 				var logger = (BaseLogger) ConsoleLogWriter.CreateLogger(
 					level: Config.LogLevel,
 					customFormat: "${Level} ${Time} ${Message}"

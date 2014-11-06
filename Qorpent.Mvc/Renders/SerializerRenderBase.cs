@@ -25,6 +25,7 @@ using System.Xml.Xsl;
 using Qorpent.IO;
 using Qorpent.IoC;
 using Qorpent.Serialization;
+using Qorpent.Utils;
 
 namespace Qorpent.Mvc.Renders {
 	/// <summary>
@@ -119,10 +120,7 @@ namespace Qorpent.Mvc.Renders {
 	    }
 
 	    private object TransformResult(IMvcContext context, object objectToRender, string xpath, string xslt) {
-            //ñíà÷àëà ïðèâîäèì èñõîäíûé îáúåêò ê IXPathNavigable (÷òî íóæíî êàê äëÿ xpath, òàê è äëÿ xslt)
 	        var xnav = ConvertToXmlReader(objectToRender);
-            // åñëè ó íàñ åñòü ôèëüòðóþùåå óñëîâèå (çàïðîñ), òî ñíà÷àëà âûïîëíÿåì åãî è ïîëó÷àåì íîâûé
-            // äîêóìåíò
             if (!string.IsNullOrWhiteSpace(xpath)) {
                 xnav = FilterByXPath(xnav, xpath);
             }
@@ -136,7 +134,7 @@ namespace Qorpent.Mvc.Renders {
 	    private object TransformResultWithXslt(IMvcContext context, string xslt, IXPathNavigable xnav) {
 	        var resolvedxslt = FileNameResolver.Resolve(
 	            new FileSearchQuery {
-	                ProbePaths = new[] {"~/styles", "~/usr/xslt"},
+	                ProbePaths = new[] {"~/styles", "~/usr/xslt","~/report"},
 	                ProbeFiles = new[] {xslt + ".xslt", xslt},
 	                ExistedOnly = true,
 	                PathType = FileSearchResultType.FullPath,
@@ -151,8 +149,10 @@ namespace Qorpent.Mvc.Renders {
 	        var xw = XmlWriter.Create(sw);
 	        var args = new XsltArgumentList();
 	        args.AddExtensionObject("qorpent.mvc.context", context);
+            args.AddExtensionObject("qorpent://std", new XsltStdExtensions());
 	        foreach (var extension in XsltExtensions) {
 	            args.AddExtensionObject(extension.GetNamespace(), extension);
+                
 	        }
 	        transform.Transform(xnav, args, xw);
 	        xw.Flush();
