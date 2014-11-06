@@ -215,5 +215,23 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\ui-bootstrap.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\images\layers-2x.png" />
+    <EmbeddedResource Include="Resources\images\layers.png" />
+    <EmbeddedResource Include="Resources\images\marker-icon-2x.png" />
+    <EmbeddedResource Include="Resources\images\marker-icon.png" />
+    <EmbeddedResource Include="Resources\images\marker-shadow.png" />
+    <EmbeddedResource Include="Resources\images\markers-matte%402x.png" />
+    <EmbeddedResource Include="Resources\images\markers-matte.png" />
+    <EmbeddedResource Include="Resources\images\markers-plain.png" />
+    <EmbeddedResource Include="Resources\images\markers-shadow%402x.png" />
+    <EmbeddedResource Include="Resources\images\markers-shadow.png" />
+    <EmbeddedResource Include="Resources\images\markers-soft%402x.png" />
+    <EmbeddedResource Include="Resources\images\markers-soft.png" />
+    <EmbeddedResource Include="Resources\leaflet.awesome-markers.css" />
+    <EmbeddedResource Include="Resources\leaflet.awesome-markers.js" />
+    <EmbeddedResource Include="Resources\leaflet.css" />
+    <EmbeddedResource Include="Resources\leaflet.js" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>
