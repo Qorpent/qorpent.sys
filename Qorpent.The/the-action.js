@@ -176,9 +176,10 @@
 
                 var targetWindow = callinfo.targetWindow || this.targetWindow;
 
-                result.popup = !!targetWindow;
-                result.targetWindow = targetWindow;
-
+                if(!!targetWindow) {
+                    result.popup = true;
+                    result.targetWindow = targetWindow;
+                }
                 if(result.popup){
                    result.method = "GET";
                 }else {
