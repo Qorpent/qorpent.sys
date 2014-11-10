@@ -44,7 +44,7 @@ namespace Qorpent.Applications {
 				var application = (IApplication) Activator.CreateInstance(applicationtype);
 				application.Container = ContainerFactory.CreateDefault();
 				var files = application.Container.Get<IFileNameResolver>();
-				if (null != files){
+				if (null != files && (EnvironmentInfo.IsWeb || Environment.CommandLine.Contains("--containerdump")) ){
 					ContainerFactory.DumpContainer(application.Container,
 					                               application.Container.Get<IFileNameResolver>().Resolve(
 						                               FileSearchQuery.Leveled("~/.tmp/container.dump")));

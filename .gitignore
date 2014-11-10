@@ -32,3 +32,6 @@ UpgradeLog*
 /Qorpent.The/Tests/lib/images/temp.png
 /Qorpent.The/node_modules
 /Qorpent.The/npm-debug.log
+/Qorpent.The/.sass-cache
+/Qorpent.The/TheStyles/.sass-cache
+/Qorpent.The/TheStyles/tests/.sass-cache
