@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -517,15 +518,33 @@ namespace Qorpent.BSharp{
 		/// <returns></returns>
 		protected virtual IBSharpContext BuildIndex(IEnumerable<XElement> sources){
 			CurrentBuildContext = new BSharpContext(this);
-			IBSharpClass[] baseindex = IndexizeRawClasses(sources).ToArray();
-			SetupGlobals();
+			var baseindex = IndexizeRawClasses(sources).ToArray();
+		    SetupDefaultNamespace(baseindex);
+		    SetupGlobals();
 			CurrentBuildContext.Setup(baseindex);
 			CurrentBuildContext.ExecuteGenerators();
 			CurrentBuildContext.Build();
 			return CurrentBuildContext;
 		}
 
-		private void SetupGlobals(){
+	    private void SetupDefaultNamespace(IBSharpClass[] baseindex) {
+	        var defaultNamespace = GetConfig().DefaultNamespace ?? "";
+	        foreach (var cls in baseindex) {
+	            if (string.IsNullOrWhiteSpace(cls.Namespace) && !string.IsNullOrWhiteSpace(defaultNamespace)) {
+	                cls.Namespace = defaultNamespace;
+	            }
+	            else if (cls.Namespace.StartsWith(".")) {
+	                if (string.IsNullOrWhiteSpace(defaultNamespace)) {
+	                    cls.Namespace = cls.Namespace.Substring(1);
+	                }
+	                else {
+	                    cls.Namespace = defaultNamespace + cls.Namespace;
+	                }
+	            }
+	        }
+	    }
+
+	    private void SetupGlobals(){
 			bool requireInterpolation = false;
 			foreach (var baseglobal in _overlobals){
 				if (!_global.ContainsKey(baseglobal.Key)){
@@ -564,7 +583,7 @@ namespace Qorpent.BSharp{
 
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(IEnumerable<XElement> sources){
 			var buffer = new ConcurrentBag<IBSharpClass>();
-			sources.AsParallel().ForAll(src =>{
+		    sources.AsParallel().ForAll(src =>{
 				Preprocess(src);
 				foreach (IBSharpClass e in IndexizeRawClasses(src, "")){
 					buffer.Add(e);

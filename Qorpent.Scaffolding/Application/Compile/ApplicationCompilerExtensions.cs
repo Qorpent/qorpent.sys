@@ -21,9 +21,13 @@ namespace Qorpent.Scaffolding.Application{
 			Tasks.Add(new GenerateDataTypesInJavaScriptTask());
 		//	Tasks.Add(new GenerateJsonUiSpecification());
 			Tasks.Add(new GenerateActionsInJavaScriptTask());
-            Tasks.Add(new GenerateLayoutsTask());
-            Tasks.Add(new GenerateControllersTask());
-            Tasks.Add(new GenerateMenuTask());
+		    if (null == this.Project.Definition.Element("NoLayouts")) {
+		        Tasks.Add(new GenerateLayoutsTask());
+		    }
+		    if (null == this.Project.Definition.Element("NoControllers")) {
+		        Tasks.Add(new GenerateControllersTask());
+		    }
+		    Tasks.Add(new GenerateMenuTask());
 		}
 	}
 }

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using NUnit.Framework;
 using Qorpent.BSharp;
 using Qorpent.Config;
+using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp
@@ -19,6 +22,51 @@ namespace Qorpent.Serialization.Tests.BSharp
 			Assert.AreEqual(0, result.Orphans.Count);
 			Assert.AreEqual(1, result.Working.Count);
 		}
+
+	    [TestCase("ab",1)]
+	    [TestCase("Ab",8)]
+	    [TestCase("BA",3)]
+	    [TestCase("cD",0)]
+	    [TestCase("AB",2)]
+	    [TestCase("bA",3)]
+	    [TestCase("Ba",9)]
+	    [TestCase("cd",4)]
+	    [TestCase("CD",6)]
+	    [TestCase("dC",7)]
+	    [TestCase("DC",7)]
+	    public void Q274_SmartResolutionAtClassLevel(string name, int val) {
+	        var code = @"
+class a ab=1 AB=2 bA=3 
+    cd 4
+    CD 5 : 6
+    dC 7
+    ab 8
+    Ba 9
+";
+	        var cls = Compile(code)["a"];
+            Assert.AreEqual(val,cls[name].ToInt());
+	    }
+
+	    [Test]
+	    public void Q273_DefaultNameSpaceSupport() {
+	        var code = @"
+class a #no namespace
+namespace A #fully qualified
+    class b
+namespace .B #partial
+    class c
+";
+	        var resultEmptyDefault = Compile(code);
+            Assert.AreEqual("",resultEmptyDefault.Get("a").Namespace);
+            Assert.AreEqual("A",resultEmptyDefault.Get("b").Namespace);
+            Assert.AreEqual("B",resultEmptyDefault.Get("c").Namespace);
+
+            var resultNoEmptyDefault =  Compile(code, _cfg: new BSharpConfig {DefaultNamespace = "X"});
+            Assert.AreEqual("X", resultNoEmptyDefault.Get("a").Namespace);
+            Assert.AreEqual("A", resultNoEmptyDefault.Get("b").Namespace);
+            Assert.AreEqual("X.B", resultNoEmptyDefault.Get("c").Namespace);
+
+	    }
 
 		[Test]
 		public void CanCompileSingleClass() {
@@ -470,6 +518,21 @@ namespace X
 			var result = Compile(@"class x abstract");
 			Assert.AreEqual(0,result.Working.Count);
 		}
+
+	    [Test]
+	    public void ConditionalClassesTest() {
+	        var code = @"
+class a if='A'
+class na if='!A'
+class b if='B'
+class nb if='!B'
+";
+	        var result = Compile(code, new Dictionary<string, string> {{"A", "true"}});
+            Assert.NotNull(result["a"]);
+            Assert.NotNull(result["nb"]);
+            Assert.Null(result["na"]);
+            Assert.Null(result["b"]);
+	    }
 
 		[Test]
 		public void SimplestInterpolate(){

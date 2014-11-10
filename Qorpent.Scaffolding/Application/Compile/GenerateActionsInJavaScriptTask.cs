@@ -19,8 +19,13 @@ namespace Qorpent.Scaffolding.Application{
 		/// <param name="targetclasses"></param>
 		/// <returns></returns>
 		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses){
+            var modulename = Project.ModuleName;
+            if (string.IsNullOrWhiteSpace(modulename))
+            {
+                modulename = Project.ProjectName;
+            }
 			var production = new Production{
-				FileName = Project.ProjectName + "_api" + ".js",
+				FileName = modulename + "_api" + ".js",
 				GetContent = () => GenerateInternal(targetclasses)
 			};
 			yield return production;

@@ -14,7 +14,7 @@ namespace Qorpent.Scaffolding.Application{
 		/// </summary>
 		public GenerateServerActions(){
 			ClassSearchCriteria = "ui-action";
-			DefaultOutputName = "CSharp/Actions";
+			DefaultOutputName = "CSharp";
 		}
 		/// <summary>
 		/// 
@@ -28,7 +28,7 @@ namespace Qorpent.Scaffolding.Application{
 		}
 
 		private Production GetActionClass(IBSharpClass e){
-			var result = new Production { FileName = e.FullName + ".cs" };
+			var result = new Production { FileName = "Actions/"+ e.FullName + ".cs" };
 			result.GetContent = () =>{
 				var sb = new StringBuilder();
 				sb.AppendLine(CommonHeader);

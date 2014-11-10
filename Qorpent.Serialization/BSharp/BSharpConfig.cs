@@ -25,6 +25,10 @@ namespace Qorpent.BSharp{
 		/// <summary>
 		/// </summary>
 		public const string KEEPLEXINFO = "keeplexinfo";
+        /// <summary>
+        /// Пространство имен по умолчанию Q-273
+        /// </summary>
+        public const string DEFAULTNAMESPACE = "defaultnamespace";
 
 		/// <summary>
 		///     Перечень корневых элементов, которые должны быть проигнорированы
@@ -112,5 +116,14 @@ namespace Qorpent.BSharp{
 			get { return Get(KEEPLEXINFO, false); }
 			set { Set(KEEPLEXINFO, value); }
 		}
+
+	    /// <summary>
+	    /// Базовое пространство имен
+	    /// </summary>
+        public string DefaultNamespace
+        {
+            get { return Get(DEFAULTNAMESPACE, ""); }
+            set { Set(DEFAULTNAMESPACE, value); }
+        }
 	}
 }

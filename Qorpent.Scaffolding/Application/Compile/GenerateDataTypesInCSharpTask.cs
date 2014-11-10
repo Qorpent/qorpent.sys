@@ -32,7 +32,7 @@ namespace Qorpent.Scaffolding.Application{
 		}
 
 		private Production GenerateStruct(IBSharpClass e, Dictionary<string, IBSharpClass> refcache){
-			var result = new Production{FileName = e.FullName + ".cs", GetContent = () => GenerateInternal(e, refcache)};
+			var result = new Production{FileName = "DataTypes/" + e.FullName + ".cs", GetContent = () => GenerateInternal(e, refcache)};
 			return result;
 		}
 
@@ -100,7 +100,7 @@ namespace Qorpent.Scaffolding.Application{
 
 	
 		private Production GenerateEnum(IBSharpClass e, Dictionary<string, IBSharpClass> refcache){
-			var result = new Production{FileName = e.FullName + ".cs", GetContent = () => GenerateInternal(e)};
+			var result = new Production{FileName = "DataTypes/"+ e.FullName + ".cs", GetContent = () => GenerateInternal(e)};
 			return result;
 		}
 
@@ -163,7 +163,7 @@ namespace Qorpent.Scaffolding.Application{
 			: base()
 		{
 			ClassSearchCriteria = "ui-data";
-			DefaultOutputName = "CSharp/DataTypes";
+			DefaultOutputName = "CSharp";
 		}
 
 		

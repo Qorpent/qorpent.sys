@@ -138,7 +138,17 @@ namespace Qorpent.BSharp.Builder {
 		/// </summary>
 		XElement Definition { get; set; }
 
-		/// <summary>
+	    /// <summary>
+	    /// Пространство имен по умолчанию
+	    /// </summary>
+	    string DefaultNamespace { get; set; }
+
+	    /// <summary>
+	    /// Имя модуля для Web-генерации
+	    /// </summary>
+	    string ModuleName { get; set; }
+
+	    /// <summary>
 		/// Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>

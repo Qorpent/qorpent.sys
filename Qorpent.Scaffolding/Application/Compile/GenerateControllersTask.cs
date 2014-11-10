@@ -19,6 +19,7 @@ namespace Qorpent.Scaffolding.Application {
         /// <param name="targetclasses"></param>
         /// <returns></returns>
         protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses) {
+           
             var filename = Project.ProjectName + "_controllers.js";
             var production = new Production{
 	            FileName = filename,

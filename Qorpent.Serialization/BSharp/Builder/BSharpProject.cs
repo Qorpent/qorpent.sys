@@ -34,6 +34,8 @@ namespace Qorpent.BSharp.Builder{
 		private const string SRCCLASS = "srcclass";
 		private const string JSON_MODULE_NAME = "json_module_name";
 		private const string IGNORE_ELEMENTS = "ignore_elements";
+        private const string DEFAULTNAMESPCE = "defaultnamespace";
+        private const string MODULENAME = "modulename";
 
 		private static readonly string[] overrideAttributes = new[]{
 			OUTPUT_ATTRIBUTES,
@@ -334,8 +336,24 @@ namespace Qorpent.BSharp.Builder{
 		/// </summary>
 		public XElement Definition { get; set; }
 
+	    /// <summary>
+	    /// Пространство имен по умолчанию
+	    /// </summary>
+	    public string DefaultNamespace {
+            get { return Get<string>(DEFAULTNAMESPCE); }
+            set { Set(DEFAULTNAMESPCE, value); }
+	    }
 
-		/// <summary>
+        /// <summary>
+        /// Имя модуля для Web-генерации
+        /// </summary>
+        public string ModuleName
+        {
+            get { return Get<string>(MODULENAME); }
+            set { Set(MODULENAME, value); }
+        }
+
+	    /// <summary>
 		///     Возвращает путь к целевой директории
 		/// </summary>
 		/// <returns></returns>
