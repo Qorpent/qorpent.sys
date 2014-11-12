@@ -31,7 +31,7 @@ namespace Qorpent {
 	public static class EnvironmentInfo {
 		private static bool? _isWeb;
 
-
+		
 		private static bool? _isWebUtility;
 
 		private static string _rootDirectory;
@@ -108,7 +108,11 @@ namespace Qorpent {
 			get {
 				if (null == _rootDirectory) {
 					lock (Sync) {
-						if (IsWeb) {
+						if (IsShadow) {
+							_rootDirectory = GetShadowDirecroty();
+
+						}
+						else if (IsWeb) {
 							try {
 #if !SQL2008
 								_rootDirectory = GetHttpWrapper().GetAppDomainAppPath();
