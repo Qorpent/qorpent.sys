@@ -27,7 +27,7 @@ namespace Qorpent.Utils{
 		/// <returns></returns>
 		public  bool IsShadow(Process process = null){
 			process = process ?? Process.GetCurrentProcess();
-			var root = EnvironmentInfo.GetShadowDirecroty();
+			var root = EnvironmentInfo.GetShadowDirectory();
 			return process.MainModule.FileName.NormalizePath().StartsWith(root);
 		}
 		/// <summary>
@@ -60,7 +60,7 @@ namespace Qorpent.Utils{
 			Log.Warn("It's not shadow copy, require upgrade and restart");
 
 			Log.Trace("upgrade start");
-			var targetDirectory = EnvironmentInfo.GetShadowDirecroty();
+			var targetDirectory = EnvironmentInfo.GetShadowDirectory();
 			Directory.CreateDirectory(targetDirectory);
 			foreach (var file in Directory.GetFiles(targetDirectory,"*.*",SearchOption.AllDirectories)){
 				Log.Debug("delete "+file);

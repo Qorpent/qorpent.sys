@@ -40,7 +40,7 @@ namespace Qorpent.Host{
 		///     Формирует конфиг по умолчанию
 		/// </summary>
 		public HostConfig(){
-			RootFolder = EnvironmentInfo.RootDirectory;
+			RootFolder = EnvironmentInfo.GetResolvedRootDirectory();
 			_bindings = new List<HostBinding>();
 			IncludeConfigMasks = new List<string>();
 			ExcludeConfigMasks = new List<string>();
