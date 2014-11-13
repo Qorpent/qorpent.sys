@@ -1,0 +1,12 @@
+#!/bin/sh
+
+npm install requirejs
+npm install amdefine
+
+if [ "$1" != "localonly" ] ; then
+npm install -g typescript
+npm install -g phantomjs
+gem update --system
+gem install compass
+
+fi

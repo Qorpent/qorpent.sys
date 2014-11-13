@@ -1,0 +1,23 @@
+#!/bin/sh
+echo start clean
+rm -rf .output
+rm -rf .tmp
+rm -rf ./dist/css/*.css
+rm -rf ./dist/css/**/*.css
+rm -rf ./dist/css/*.map
+rm -rf ./dist/css/**/*.map
+rm -rf npm-debug.log
+rm -rf ./dist/js/*.js
+rm -rf ./dist/js/*.map
+rm -rf ./src/js/*_types.js
+rm -rf ./src/js/*_api.js
+rm -rf src/cs/auto
+rm -rf src/bxls/.output
+for f in $(find ./src/js -name *.ts); do
+    rm -rf ${f%.*}.js*
+    rm -rf ${f%.*}.d.ts*
+done
+for f in $(find ./src/css -name *.scss); do
+    rm -rf ${f%.*}.css*
+done
+echo clean finished
