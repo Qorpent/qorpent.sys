@@ -25,8 +25,10 @@ Features
 	a) [[nowiki]]...[[/nowiki]] - disable wiki formatting in enclosed block
 
 */
-(function(){
-var qwiki = window.qwiki = window.qwiki || {};
+define([],function(){
+ return (function(){
+
+var qwiki = {};
 
 qwiki.beforePreprocess = null;
 qwiki.afterPreprocess = null;
@@ -518,7 +520,7 @@ qwiki.create = function(text, logwriter){
 				var str = this.processed[i].replace(/__BLOCK__/g,'[[');
 				this.html+=str;
 			}
-			
+
 		}
 	};
 	this.setup(result);
@@ -678,5 +680,6 @@ qwiki.createTOC = function(text, logwriter){
         }
         return null;
     };
-
+	return qwiki;
 })();
+});

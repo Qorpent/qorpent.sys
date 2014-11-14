@@ -1,8 +1,7 @@
 /**
  * Created by comdiv on 26.09.14.
  */
-(function (define) {
-    define(["./the-object"], function ($the) {
+    define(["the-object"], function ($the) {
         return $the(function (root) {
             var eOptions = function () {
                 this.type = "check";
@@ -152,4 +151,3 @@
             }
         });
     });
-})(typeof define === "function" ? define : require('amdefine')(module));

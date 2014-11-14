@@ -1,5 +1,5 @@
-(function (define) {
-    define(["./the-collections-core"], function ($the) {
+
+    define(["the-collections-core"], function ($the) {
         return $the(function (root, privates) {
             var $ = root.collections;
             var $ex = privates._collectionEx;
@@ -446,4 +446,3 @@
             $.Queue = Queue;
         });
     });
-})(typeof define === "function" ? define : require('amdefine')(module));

@@ -1,8 +1,7 @@
 /**
  * Created by comdiv on 26.09.14.
  */
-(function (define) {
-    define(["./the-object"], function ($the) {
+    define(["the-object"], function ($the) {
         return $the(function (root, privates) {
             var __interpolateString = privates.__interpolateString = function (str, source, options) {
                 return str.replace(options.getRegex(), function (_) {
@@ -103,4 +102,3 @@
             };
         });
     });
-})(typeof define === "function" ? define : require('amdefine')(module));

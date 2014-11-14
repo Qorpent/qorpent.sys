@@ -1,8 +1,7 @@
 /**
  * Action/Action builder module to wrapp HTTP/AJAX calls
  */
-(function (define) {
-    define(["./the-object"], function ($the) {
+    define(["the-object"], function ($the) {
         return $the(function ($root, $privates) {
 
             var excast = $the.object.ExtendOptions.ExtendedCast;
@@ -216,4 +215,3 @@
 
         });
     });
-})(typeof define === "function" ? define : require('amdefine')(module));

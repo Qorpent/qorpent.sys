@@ -1,8 +1,7 @@
 /**
  * Action/Action builder module to wrapp HTTP/AJAX calls
  */
-(function (define) {
-    define(["./the-http"], function ($the) {
+    define(["the-http"], function ($the) {
         return $the(function ($root) {
 
             var h = $root.http;
@@ -42,4 +41,3 @@
             };
         });
     });
-})(typeof define === "function" ? define : require('amdefine')(module));

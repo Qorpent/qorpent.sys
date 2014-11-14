@@ -1,9 +1,7 @@
 /**
  * Action/Action builder module to wrapp HTTP/AJAX calls
  */
-(function (define) {
-    var dependency = ["./the-jsonify", "./the-http"];
-    define(dependency, function ($the) {
+    define(["the-jsonify", "the-http"], function ($the) {
         return $the(function ($root, $privates) {
             var cast = $the.cast;
             var extend = $the.extend;
@@ -340,4 +338,3 @@
 
         });
     });
-})(typeof define === "function" ? define : require('amdefine')(module));

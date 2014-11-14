@@ -1,8 +1,7 @@
 /**
  * Created by comdiv on 26.09.14.
  */
-(function (define) {
-    define(["./the-collections-core"], function ($the) {
+  define(["the-collections-core"], function ($the) {
         return $the(function ($root) {
 
             var $cast = $root.object.cast;
@@ -227,4 +226,3 @@
 
         });
     });
-})(typeof define === "function" ? define : require('amdefine')(module));

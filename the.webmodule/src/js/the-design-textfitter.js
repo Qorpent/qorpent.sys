@@ -2,8 +2,8 @@
  * Created by comdiv on 26.09.14.
  * @description расширение для подгона размера шрифта текста под заданный размер целевого элемента
  */
-(function (define) {
-    define(["./the-root"], function ($the) {
+
+    define(["the-root"], function ($the) {
         return $the(function ($root) {
             $root.design = $root.design || {};
             var textFitStyles = ["fontFamily", "fontWeight", "textAlign", "textIndent", "padding", "margin", "border", "verticalAlign"];
@@ -87,4 +87,3 @@
             }
         });
     });
-})(typeof define === "function" ? define : require('amdefine')(module));

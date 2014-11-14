@@ -1,7 +1,7 @@
 /**
  * Created by comdiv on 26.09.14.
  */
-(function (define) {
+
     define([], function () {
         //incapsulation of internal $the manager
         var privates = {};
@@ -38,4 +38,3 @@
 
         return the;
     });
-})(typeof define === "function" ? define : require('amdefine')(module));

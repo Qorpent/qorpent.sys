@@ -1,5 +1,4 @@
-(function (define) {
-    define(["./the-object"], function ($the) {
+    define(["the-object"], function ($the) {
         return $the(function (root, privates) {
             var EndOfEnumeration = {};
             var StartOfEnumeration = {};
@@ -237,4 +236,3 @@
         })
 
     });
-})(typeof define === "function" ? define : require('amdefine')(module));

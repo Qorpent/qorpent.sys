@@ -17,6 +17,13 @@
       "deps": ["the"]
     },
     {
+      "condition":"new",
+      "deps": [
+          "../src/js2/the2",
+          "../src/js2/the2-object"
+      ]
+    },
+    {
       "condition":"debug",
       "deps": [
         "?the-root",
@@ -29,8 +36,12 @@
       "name":"the-object-tests"
     },
     {
+      "condition":"new",
+      "name":"the2-object-tests"
+    },
+    {
       "name" : "the-http-tests",
-      "deps" : ["../src/js/the-http-test"]
+      "deps" : ["?the-http-test"]
     }
   ],
   "webModuleDependency": {},

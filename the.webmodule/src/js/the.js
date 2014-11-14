@@ -1,3 +1,4 @@
+
 define([
     "the-root",
     "the-object",
@@ -10,7 +11,12 @@ define([
     "the-collections-linked",
     "the-collections-linq",
     "the-action",
-    'the-angular-all'
+    'the-angular-unsafe',
+    'the-wiki',
+    'the-menu',
+    'the-settings',
+    'the-errorcatcher',
+    'the-refresh'
 ], function ($the) {
     return $the;
 });
