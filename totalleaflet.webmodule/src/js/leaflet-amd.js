@@ -1,24 +1,14 @@
 define([],function(){
-if ( typeof window === 'undefined' ) return null;
+if ( typeof window === 'undefined' ) {console.error('no window  (leaflet)');return null;}
 /*
  Leaflet, a JavaScript library for mobile-friendly interactive maps. http://leafletjs.com
  (c) 2010-2013, Vladimir Agafonkin
  (c) 2010-2011, CloudMade
 */
-(function (window, document, undefined) {
 var oldL = window.L,
     L = {};
 
 L.version = '0.7.2';
-
-// define Leaflet for Node module pattern loaders, including Browserify
-if (typeof module === 'object' && typeof module.exports === 'object') {
-	module.exports = L;
-
-// define Leaflet as an AMD module
-} else if (typeof define === 'function' && define.amd) {
-	define(L);
-}
 
 // define Leaflet as a global L variable, saving the original L to restore later if needed
 
@@ -9172,8 +9162,5 @@ L.Map.include({
 		this.fire('locationfound', data);
 	}
 });
-
-
-}(window, document));
-return L;
+return window.L;
 });

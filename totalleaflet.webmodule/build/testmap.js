@@ -83,9 +83,11 @@ define(["package"],function(package) {
                 }
             });
         }
+        console.log(paths);
         require.config({
             paths: paths
         });
+
         return result;
     }
 });

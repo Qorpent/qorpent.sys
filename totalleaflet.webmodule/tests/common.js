@@ -1,7 +1,7 @@
 /**
  * Created by comdiv on 15.11.2014.
  */
-define(["leaflet-full","chai"],function($l,$c){
+define(["totalleaflet","chai"],function($l,$c){
     var should = $c.Should();
    describe("Common leaflet accessibility",function(){
        it("Leaflet with global window.L",function(){

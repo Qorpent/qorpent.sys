@@ -1,5 +1,6 @@
-define(['leaflet-amd'],function(){
-if ( typeof window === 'undefined' ) return null;
+define(['leaflet-amd'],function($l){
+	if ( null==$l ) {console.error('no leaflet  (draw)');return null;}
+var L = $l;
 /*
 	Leaflet.draw, a plugin that adds drawing and editing tools to Leaflet powered maps.
 	(c) 2012-2013, Jacob Toye, Smartrak
@@ -8,9 +9,6 @@ if ( typeof window === 'undefined' ) return null;
 	http://leafletjs.com
 	https://github.com/jacobtoye
 */
-(function (window, document, undefined) {/*
- * Leaflet.draw assumes that you have already included the Leaflet library.
- */
 
 L.drawVersion = '0.2.4-dev';
 
@@ -2910,8 +2908,5 @@ L.EditToolbar.Delete = L.Handler.extend({
 		return this._deletableLayers.getLayers().length !== 0;
 	}
 });
-
-
-}(window, document));
-return L;
+return $l;
 });

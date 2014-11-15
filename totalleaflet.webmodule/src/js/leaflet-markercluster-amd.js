@@ -1,13 +1,12 @@
-define(['leaflet-amd'],function(){
-if ( typeof window === 'undefined' ) return null;
+define(['leaflet-amd'],function($l){
+	if ( null==$l ) {console.error('no leaflet  (markercluster)');return null;}
+	var L = $l;
 /*
  Leaflet.markercluster, Provides Beautiful Animated Marker Clustering functionality for Leaflet, a JS library for interactive maps.
  https://github.com/Leaflet/Leaflet.markercluster
  (c) 2012-2013, Dave Leaver, smartrak
 */
-(function (window, document, undefined) {/*
- * L.MarkerClusterGroup extends L.FeatureGroup by clustering the markers contained within
- */
+
 
 L.MarkerClusterGroup = L.FeatureGroup.extend({
 
@@ -2160,8 +2159,5 @@ L.MarkerClusterGroup.include({
 		}
 	}
 });
-
-
-}(window, document));
-return L;
+return $l;
 });

@@ -5,7 +5,7 @@ define([
     "leaflet-amd",
     "leaflet-awesome-amd",
     "leaflet-draw-amd",
-    "leaflet-markercluster-amd",
+    "leaflet-markercluster-amd"
 ],function($l){
     //preserving license info
     $l.__licenseInfo = "Leaflet, a JavaScript library for mobile-friendly interactive maps. http://leafletjs.com\
@@ -25,6 +25,7 @@ define([
     \
     Leaflet.markercluster, Provides Beautiful Animated Marker Clustering functionality for Leaflet, a JS library for interactive maps.\
     https://github.com/Leaflet/Leaflet.markercluster\
-    (c) 2012-2013, Dave Leaver, smartrak";
-    return $l;
+    (c) 2012-20\
+    13, Dave Leaver, smartrak";
+    return window.L;
 });

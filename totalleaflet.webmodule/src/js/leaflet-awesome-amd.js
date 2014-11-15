@@ -1,5 +1,6 @@
-define(['leaflet-amd'],function(){
-if ( typeof window === 'undefined' ) return null;
+define(['leaflet-amd'],function($l){
+if ( null==$l ) {console.error('no leaflet  (awesome)');return null;}
+    var L = $l;
 /*
   Leaflet.AwesomeMarkers, a plugin that adds colorful iconic markers for Leaflet, based on the Font Awesome icons
   (c) 2012-2013, Lennard Voogdt
@@ -10,11 +11,6 @@ if ( typeof window === 'undefined' ) return null;
 
 /*global L*/
 
-(function (window, document, undefined) {
-    "use strict";
-    /*
-     * Leaflet.AwesomeMarkers assumes that you have already included the Leaflet library.
-     */
 
     L.AwesomeMarkers = {};
 
@@ -121,10 +117,5 @@ if ( typeof window === 'undefined' ) return null;
         return new L.AwesomeMarkers.Icon(options);
     };
 
-}(this, document));
-
-
-
-
-return L;
+return window.L;
 });
