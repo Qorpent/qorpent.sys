@@ -218,5 +218,17 @@ namespace Qorpent {
 		/// Not defined message
 		/// </summary>
 		public const string NODEF = "Не определено";
+		/// <summary>
+		///		Default log format (BXL-like)
+		/// </summary>
+		public const string DefaultLogFormat = "${Level} dateTime='${Time}' message='''${Message}'''";
+		/// <summary>
+		///		Success state
+		/// </summary>
+		public const int Success = 0;
+		/// <summary>
+		///		Failure state
+		/// </summary>
+		public const int Failure = -1;
 	}
 }
