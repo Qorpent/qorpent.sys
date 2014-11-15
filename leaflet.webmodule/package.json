@@ -1,0 +1,22 @@
+{
+	"description": "My Best Module",
+	"moduleName": "leaflet",
+	"defaultNamespace": "leaflet",
+	"name": "leaflet",
+	"devDependencies": {
+		"requirejs": ">=2.1.15",
+		"amdefine": ">=0.1.0"
+	},
+	"compile": {},
+	"tests": [
+	  {"deps":["leaflet-full"]},
+	  {"name":"common", "condition":"browser"}
+	],
+	"webModuleDependency": {},
+	"optimizer":{
+	  "optimizeCss" : "default",
+	  "cssIn": "./src/css/merge._css",
+	  "out": "./dist/css/leaflet-full.css"
+	},
+	"version": "0.1.0"
+}

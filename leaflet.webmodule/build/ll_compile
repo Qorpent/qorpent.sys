@@ -1,0 +1,11 @@
+#!/bin/sh
+rm -rf ./dist/js/*
+echo "define([],function(){" > ./dist/js/leaflet-full.js
+echo "if ( typeof window === 'undefined' ) return null;" >> ./dist/js/leaflet-full.js
+cat ./src/js/leaflet.js >> ./dist/js/leaflet-full.js
+cat ./src/js/leaflet.awesome-markers.min.js >> ./dist/js/leaflet-full.js
+cat ./src/js/leaflet.draw.js >> ./dist/js/leaflet-full.js
+cat ./src/js/leaflet.markercluster.js >> ./dist/js/leaflet-full.js
+echo "" >> ./dist/js/leaflet-full.js
+echo "return L;" >> ./dist/js/leaflet-full.js
+echo "});" >> ./dist/js/leaflet-full.js

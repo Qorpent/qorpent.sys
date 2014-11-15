@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Utils.Sql
+﻿using System.Data;
+
+namespace Qorpent.Utils.Sql
 {
     /// <summary>
     /// Позволяет формировать полноценные полнотекстовые запросы для SQL в упрощенной нотации
@@ -60,6 +62,8 @@
                     e.Type = SimpleExpressionItemType.Operator;
                     e.Value = "&!";
                 }
+
+              
                 
                 
                 if (e.Type==SimpleExpressionItemType.Literal && !e.IsQuoted) {

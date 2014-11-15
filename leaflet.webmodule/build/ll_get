@@ -1,0 +1,10 @@
+#!/bin/sh
+root=../..
+mkdir
+for d in ${root}/Leaflet* ; do
+    src=${d}/dist
+    echo "copying ${src}"
+    cp ${src}/*.js ./src/js
+    cp ${src}/*.css ./src/css
+    cp -rf ${src}/images/*.png ./dist/css/images
+done
