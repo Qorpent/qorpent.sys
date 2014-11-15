@@ -312,7 +312,7 @@ var requirejs, require, define;
                         for (j = baseParts.length; j > 0; j -= 1) {
                             mapValue = getOwn(map, baseParts.slice(0, j).join('/'));
 
-                            //baseName segment has config, getByKey if it has one for
+                            //baseName segment has config, find if it has one for
                             //this name.
                             if (mapValue) {
                                 mapValue = getOwn(mapValue, nameSegment);
@@ -1636,9 +1636,17 @@ var requirejs, require, define;
                     url = (url.charAt(0) === '/' || url.match(/^[\w\+\.\-]+:/) ? '' : config.baseUrl) + url;
                 }
 
-                return config.urlArgs ? url +
+                var result = config.urlArgs ? url +
                                         ((url.indexOf('?') === -1 ? '?' : '&') +
                                          config.urlArgs) : url;
+
+                if(!!req.globalUrlHook){
+                    var hooked = req.globalUrlHook(url);
+                    if(!!hooked){
+                        url = hooked;
+                    }
+                }
+                return url;
             },
 
             //Delegates to req.load. Broken out as a separate function to
@@ -1835,7 +1843,7 @@ var requirejs, require, define;
      * Make this a separate function to allow other environments
      * to override it.
      *
-     * @param {Object} context the require context to getByKey state.
+     * @param {Object} context the require context to find state.
      * @param {String} moduleName the name of the module.
      * @param {Object} url the URL to the module.
      */
@@ -1861,7 +1869,7 @@ var requirejs, require, define;
                     //Check if node.attachEvent is artificially added by custom script or
                     //natively supported by browser
                     //read https://github.com/jrburke/requirejs/issues/187
-                    //if we can NOT getByKey [native code] then it must NOT natively supported.
+                    //if we can NOT find [native code] then it must NOT natively supported.
                     //in IE8, node.attachEvent does not have toString()
                     //Note the test for "[native code" with no closing brace, see:
                     //https://github.com/jrburke/requirejs/issues/273

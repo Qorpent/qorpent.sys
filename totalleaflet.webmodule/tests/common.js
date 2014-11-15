@@ -20,5 +20,9 @@ define(["totalleaflet","chai"],function($l,$c){
        it("Leaflet.markercluster accessible",function(){
            should.exist(L.MarkerClusterGroup);
        });
+       it("Leaflet LMAP angular directive accessible",function(){
+          var tlmap = angular.injector(["ng","totalleaflet"]).get("lmapDirective");
+           should.exist(tlmap);
+       });
    }) ;
 });

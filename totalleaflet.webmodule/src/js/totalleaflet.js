@@ -5,7 +5,8 @@ define([
     "leaflet-amd",
     "leaflet-awesome-amd",
     "leaflet-draw-amd",
-    "leaflet-markercluster-amd"
+    "leaflet-markercluster-amd",
+    "totalleaflet-angular"
 ],function($l){
     //preserving license info
     $l.__licenseInfo = "Leaflet, a JavaScript library for mobile-friendly interactive maps. http://leafletjs.com\

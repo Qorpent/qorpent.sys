@@ -10,6 +10,13 @@ var oldL = window.L,
 
 L.version = '0.7.2';
 
+// define Leaflet for Node module pattern loaders, including Browserify
+if (typeof module === 'object' && typeof module.exports === 'object') {
+
+// define Leaflet as an AMD module
+} else if (typeof define === 'function' && define.amd) {
+}
+
 // define Leaflet as a global L variable, saving the original L to restore later if needed
 
 L.noConflict = function () {
@@ -9162,5 +9169,8 @@ L.Map.include({
 		this.fire('locationfound', data);
 	}
 });
+
+
+
 return window.L;
 });
