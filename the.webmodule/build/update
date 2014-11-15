@@ -1,0 +1,4 @@
+#!/bin/sh
+cp -f ../../Qorpent.Kernel/template.webmodule/build/* ./build
+cp -R -u -p ../../Qorpent.Kernel/template.webmodule/build/hooks/* ./build/hooks
+cp -R -u -p ../../Qorpent.Kernel/template.webmodule/tests/* ./tests
