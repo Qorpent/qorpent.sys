@@ -1,0 +1,19 @@
+#!/bin/sh
+CALL="node node.js"
+FILTER='testFailed'
+MESSAGE="# testing with NODE.JS"
+if [ "$1" == "phantom" ] || [ "$2" == "phantom"  ]; then
+    CALL="phantomjs phantom.js"
+    MESSAGE="# testing with PHANTOME.JS"
+fi
+if [ "$1" == "full" ] || [ "$2" == "full"  ]; then
+    FILTER=""
+fi
+if [[ -n $( find ./tests -name \*.js ) ]]; then
+    echo $MESSAGE
+    cd build
+    ${CALL} | grep -E "${FILTER}"
+    cd ..
+else
+    echo NO TESTS found
+fi

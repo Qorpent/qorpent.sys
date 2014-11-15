@@ -22,12 +22,12 @@ namespace Qorpent.Host.Static {
         /// <param name="server"></param>
         public HostFileNameResolver(IHostServer server) {
             _cfg = server.Config;
-            _resolvers.Add(new FileNameResolver(){Root = _cfg.RootFolder});
+            _resolvers.Add(new FileNameResolver(){Root = EnvironmentInfo.ResolvePath( _cfg.RootFolder)});
             foreach (var contentFolder in _cfg.ContentFolders) {
-                _resolvers.Add(new FileNameResolver{Root =contentFolder});
+                _resolvers.Add(new FileNameResolver{Root =EnvironmentInfo.ResolvePath(contentFolder)});
             }
             foreach (var extendedContentFolder in _cfg.ExtendedContentFolders) {
-                _resolvers.Add(new FileNameResolver { Root = extendedContentFolder });
+                _resolvers.Add(new FileNameResolver { Root = EnvironmentInfo.ResolvePath(extendedContentFolder) });
             }
         }
 

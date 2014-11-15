@@ -70,6 +70,10 @@
     <Compile Include="ConsoleSupport\ProcessSafeStart.cs" />
     <Compile Include="DateRange.cs" />
     <Compile Include="DateRangeResolver.cs" />
+    <Compile Include="SimpleExpressionItem.cs" />
+    <Compile Include="SimpleExpressionItemType.cs" />
+    <Compile Include="SimpleExpressionParser.cs" />
+    <Compile Include="Sql\SqlFullTextSearchAdapter.cs" />
     <Compile Include="WebDateTimeParser.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />
     <Compile Include="Extensions\ConfigExtensions.cs" />

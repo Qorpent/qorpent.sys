@@ -210,5 +210,8 @@
     <EmbeddedResource Include="Resources\wiki\wiki.html" />
     <EmbeddedResource Include="Resources\wiki\wiki.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\common-min.js" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

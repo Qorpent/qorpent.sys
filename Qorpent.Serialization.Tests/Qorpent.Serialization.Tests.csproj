@@ -165,4 +165,7 @@
       <Name>Qorpent.Utils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Sql\" />
+  </ItemGroup>
 </Project>
