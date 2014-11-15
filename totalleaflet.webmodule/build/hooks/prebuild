@@ -1,0 +1,3 @@
+#!/bin/sh
+./build/ll_get
+./build/ll_compile

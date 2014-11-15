@@ -1,6 +1,0 @@
-#!/bin/sh
-make.sh ll_get
-make.sh optimize
-make.sh ll_compile
-rm -rf ./src/js/*.js
-rm -rf ./src/css/*.css
