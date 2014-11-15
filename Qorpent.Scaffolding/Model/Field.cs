@@ -148,6 +148,26 @@ namespace Qorpent.Scaffolding.Model{
 		///     Приоритет при резолюции
 		/// </summary>
 		public int ResolvePriority { get; set; }
+        /// <summary>
+        /// Ссылка на внешнюю таблицу корпент
+        /// </summary>
+	    public bool IsExternal {
+	        get { return Definition.Attr("external").ToBool(); }
+	    }
+        /// <summary>
+        /// Признак NullAble поля
+        /// </summary>
+	    public bool IsNullable {
+	        get {
+	            if (Definition.Attr("not-null").ToBool()) return true;
+	            if (IsReference) {
+	                if (null == ReferenceClass || null == ReferenceClass.TargetClass) {
+	                    return !IsExternal;
+	                }
+	            }
+	            return false;
+	        }
+	    }
 
 		/// <summary>
 		/// </summary>
@@ -261,10 +281,16 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		/// <param name="suffix"></param>
 		/// <returns></returns>
-		public string GetConstraintName(string suffix){
+		public string GetConstraintName(string suffix) {
+		    
 			if (suffix == "FK"){
+                var refclassName = ReferenceTable.Replace(".", "_");
+                if (null != ReferenceClass)
+                {
+                    refclassName = ReferenceClass.Name;
+                }
 				return
-					(Table.FullSqlName.Replace(".", "_").Replace("\"", "") + "_" + Name + "_" + ReferenceClass.Name + "_" +
+					(Table.FullSqlName.Replace(".", "_").Replace("\"", "") + "_" + Name + "_" + refclassName + "_" +
 					 ReferenceField + "_" + suffix).ToLowerInvariant();
 			}
 			return (Table.FullSqlName.Replace(".", "_").Replace("\"", "") + "_" + Name + "_" + suffix).ToLowerInvariant();

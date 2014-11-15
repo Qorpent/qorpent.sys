@@ -16,7 +16,7 @@ namespace Qorpent.Scaffolding.Model.Compiler
 		/// <returns></returns>
 		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses)
 		{
-			foreach (var cls in Model.Classes.Values.ToArray())
+			foreach (var cls in Model.Classes.Values.Where(_=>!_.NoSql).ToArray())
 			{
 				yield return new Production
 				{
