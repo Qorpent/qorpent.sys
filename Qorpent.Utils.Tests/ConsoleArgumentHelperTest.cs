@@ -77,5 +77,13 @@ namespace Qorpent.Utils.Tests {
 			Assert.AreEqual("B", _dict["arg8"]);
 			Assert.AreEqual("C", _dict["arg9"]);
 		}
+
+        [Test]
+	    public void ShortCutParametersTest() {
+            var dict = new ConsoleArgumentHelper().ParseDictionary(new[] {"-x", "a", "-y", "-z"});
+            Assert.AreEqual("1",dict["~z"]);
+            Assert.AreEqual("1",dict["~y"]);
+            Assert.AreEqual("a",dict["~x"]);
+        }
 	}
 }

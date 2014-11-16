@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Bxl;
 using Qorpent.Config;
@@ -13,6 +14,10 @@ namespace Qorpent.Utils{
 	/// Базовые параметры консольных приложений
 	/// </summary>
 	public class ConsoleApplicationParameters:ConfigBase{
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool ShadowByDefault { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>
@@ -45,8 +50,10 @@ namespace Qorpent.Utils{
 		/// Уровень журнала
 		/// </summary>
 		public LogLevel LogLevel{
-			get{
-				return Get("loglevel", LogLevel.Info);
+			get {
+			    var val = ResolveBest("loglevel", "~ll");
+			    if (string.IsNullOrWhiteSpace(val)) return LogLevel.Info;
+			    return val.To<LogLevel>();
 			}
 			set { Set("loglevel", value); }
 		}
@@ -75,7 +82,7 @@ namespace Qorpent.Utils{
 		/// </summary>
 		public string WorkingDirectory
 		{
-			get { return Get("workingdirectory", ""); }
+            get { return ResolveBest("workingdirectory", "~wd"); }
 			set { Set("workingdirectory", value); }
 		}
 		/// <summary>
@@ -85,12 +92,22 @@ namespace Qorpent.Utils{
 			get { return Get("shadowevidence", ""); }
 			set { Set("shadowevidence", value); }
 		}
+        /// <summary>
+        /// Происхождение из другой директории (для BIN)
+        /// </summary>
+        public string ConfigExtension
+        {
+            get { return Get("configextension", "bsconf"); }
+            set { Set("configextension", value); }
+        }
+
+
 		/// <summary>
 		/// Путь к репозиторию
 		/// </summary>
 		public string RepositoryPath
 		{
-			get { return Get("repositorypath", ""); }
+            get { return ResolveBest("repositorypath", "~rp"); }
 			set { Set("repositorypath", value); }
 		}
 
@@ -99,7 +116,7 @@ namespace Qorpent.Utils{
 		/// </summary>
 		public string ManifestPath
 		{
-			get { return Get("manifestpath", ""); }
+            get { return ResolveBest("manifestpath", "mp"); }
 			set { Set("manifestpath", value); }
 		}
 		/// <summary>
@@ -117,13 +134,27 @@ namespace Qorpent.Utils{
 			get { return Get("shadow", false); }
 			set { Set("shadow", value); }
 		}
+        /// <summary>
+        /// Проверка что это либо запуск без тени либо сама тень
+        /// </summary>
+	    public bool IsReal {
+            get {
+                if (NoShadow) return true;
+                if (ShadowByDefault && string.IsNullOrWhiteSpace(ShadowEvidence)) return false;
+                return true;
+            }
+	    }
 
 		/// <summary>
 		/// Отложенный конструктор, логика подготовки 
 		/// </summary>
-		public virtual void Initialize(params string[] arguments){
+		public virtual ConsoleApplicationParameters Initialize(params string[] arguments) {
+		    
 			var helper = new ConsoleArgumentHelper();
 			helper.Apply(arguments, this);
+		    if (!string.IsNullOrWhiteSpace(ShadowEvidence)) {
+		        EnvironmentInfo.ShadowEvidence = ShadowEvidence;
+		    }
 			Log = ConsoleLogWriter.CreateLog("main", LogLevel.Info, LogFormat);
 			if (!string.IsNullOrWhiteSpace(WorkingDirectory)) {
 				var workingDirectory = Path.GetFullPath(WorkingDirectory);
@@ -134,7 +165,7 @@ namespace Qorpent.Utils{
 				EnvironmentInfo.RootDirectory = Environment.CurrentDirectory;
 
 			}
-			if (TreatAnonymousAsBSharpProjectReference && !string.IsNullOrWhiteSpace(Arg1)){
+			if (TreatAnonymousAsBSharpProjectReference && !string.IsNullOrWhiteSpace(Arg1) && IsReal){
 				try{
 					LoadFromBSharp(); // загружаем параметры из B#
 					LogFormat = LogFormat.Replace("@{", "${");
@@ -174,6 +205,7 @@ namespace Qorpent.Utils{
 
 
             DebugPrintArguments();
+		    return this;
 		}
         /// <summary>
         /// выводит отладочную информацию о параметрах
@@ -233,18 +265,7 @@ namespace Qorpent.Utils{
 		protected virtual void InternalInitialize(string[] args){
 			
 		}
-        /// <summary>
-        /// Определяет первый не пустой параметр из списка
-        /// </summary>
-        /// <param name="names"></param>
-        /// <returns></returns>
-	    public string Resolve(params string[] names) {
-            foreach (var name in names) {
-                var val = Get(name, "");
-                if (!string.IsNullOrWhiteSpace(val)) return val;
-            }
-            return "";
-        }
+        
 
 	    /// <summary>
 	    /// Определяет файловый параметр с приведением его к полной нормализованной форме
@@ -253,7 +274,7 @@ namespace Qorpent.Utils{
 	    /// <param name="names"></param>
 	    /// <returns></returns>
 	    public string ResolveFileName(string defaultExtension, params string[] names) {
-            var result = Resolve(names);
+            var result = ResolveBest(names);
             if (string.IsNullOrWhiteSpace(result)) return result;
             result = EnvironmentInfo.ResolvePath(result);
             if (!string.IsNullOrWhiteSpace(defaultExtension)) {
@@ -270,9 +291,9 @@ namespace Qorpent.Utils{
 		/// Производит загрузку из проекта B#
 		/// </summary>
 		protected virtual void LoadFromBSharp(){
-			var bsconfigs = Directory.GetFiles(Environment.CurrentDirectory, "*.bsconf");
+			var bsconfigs = Directory.GetFiles(GetBSharpRoot(), "*."+ConfigExtension);
 			if (0 == bsconfigs.Length){
-				throw new Exception("No bsconf file found");
+				throw new Exception("No "+ConfigExtension+" file found");
 			}
 			var compiler = WellKnownHelper.Create<IBSharpCompiler>();
 			var bxl = WellKnownHelper.Create<IBxlParser>();
@@ -282,6 +303,7 @@ namespace Qorpent.Utils{
 			if (null == cls){
 				throw new Exception("cannot find config with name "+Arg1);
 			}
+		    this.Definition = cls.Compiled;
 			cls.Compiled.Apply(this);
 			foreach (var x in cls.Compiled.Attributes())
 			{
@@ -304,9 +326,38 @@ namespace Qorpent.Utils{
 			
 		}
 
-		/// <summary>
+	    /// <summary>
+	    /// Определение на B#
+	    /// </summary>
+	    public XElement Definition {
+	        get { return Ensure("defintion", new XElement("stub")); }
+	        set {
+                Set("defintion", value);
+	        }
+	    }
+
+	    /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+	    protected virtual string GetBSharpRoot() {
+	        return Environment.CurrentDirectory;
+	    }
+
+	    /// <summary>
 		/// В случае наличия - первый анонимный атрибут будет восприниматься как ссылка на код проекта B# в текущей директории
 		/// </summary>
 		public bool TreatAnonymousAsBSharpProjectReference { get; set; }
+
+	    /// <summary>
+	    /// Суффикс теневой копии
+	    /// </summary>
+	    public string ShadowSuffix {
+            get { return Get("shadowsuffix", ""); }
+            set
+            {
+                Set("shadowsuffix", value);
+            }
+	    }
 	}
 }

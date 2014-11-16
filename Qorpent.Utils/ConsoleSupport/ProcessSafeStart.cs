@@ -20,14 +20,18 @@ namespace Qorpent.Utils{
 			get { return _log ??(_log = StubUserLog.Default); }
 			set { _log = value; }
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+	    public ConsoleApplicationParameters Parameters { get; set; }
 
-		/// <summary>
+	    /// <summary>
 		/// Проверка, что  процесс - тень, по умолчанию - текущий процесс
 		/// </summary>
 		/// <returns></returns>
 		public  bool IsShadow(Process process = null){
 			process = process ?? Process.GetCurrentProcess();
-			var root = EnvironmentInfo.GetShadowDirectory();
+			var root = EnvironmentInfo.GetShadowDirectory(Parameters.ShadowSuffix);
 			return process.MainModule.FileName.NormalizePath().StartsWith(root);
 		}
 		/// <summary>
@@ -35,9 +39,15 @@ namespace Qorpent.Utils{
 		/// </summary>
 		/// <returns></returns>
 		public  Process[] FindCopies(){
-			return
+
+			var result = 
 				Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName)
 				       .Where(_ => _.Id != Process.GetCurrentProcess().Id).ToArray();
+		    if (!string.IsNullOrWhiteSpace(Parameters.ShadowSuffix)) {
+		        result = result.Where(_ => _.MainModule.FileName.NormalizePath().StartsWith(
+                    EnvironmentInfo.GetShadowDirectory(Parameters.ShadowSuffix).NormalizePath())).ToArray();
+		    }
+		    return result;
 		}
 
 		/// <summary>
@@ -60,7 +70,7 @@ namespace Qorpent.Utils{
 			Log.Warn("It's not shadow copy, require upgrade and restart");
 
 			Log.Trace("upgrade start");
-			var targetDirectory = EnvironmentInfo.GetShadowDirectory();
+			var targetDirectory = EnvironmentInfo.GetShadowDirectory(Parameters.ShadowSuffix);
 			Directory.CreateDirectory(targetDirectory);
 			foreach (var file in Directory.GetFiles(targetDirectory,"*.*",SearchOption.AllDirectories)){
 				Log.Debug("delete "+file);

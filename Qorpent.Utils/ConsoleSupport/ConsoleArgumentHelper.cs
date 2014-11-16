@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using Qorpent.Config;
 
 namespace Qorpent.Utils {
@@ -51,30 +52,41 @@ namespace Qorpent.Utils {
 			var namedparameteropened = false; //flag that parameter Value is awaiting
 			foreach (var str in args) {
 				var argname = ""; // temporal for argname
-				if (str.StartsWith("--")) {
-					// it's named parameter start
-					argname = str.Substring(2); //-- cropped
-					result[argname] = "1";
-					//store default arg Value in result to indicate that parameter persists
-					// we use '1' Value to indicate that without Value it's 'true'
-					lastname = argname; //set point to last parameter name (for storing Value thurther)
-					namedparameteropened = true; //set flag that next string can be parsed as Value
-					argnumber++; //increase argument's counter
-				}
-				else {
-					// we se Value or not-named parameter
-					if (namedparameteropened) {
-						//if parameter was opened, it's Value
-						result[lastname] = str; //set Value
-						namedparameteropened = false; //close parameter
-					}
-					else {
-						// we see not named parameter, must store as argN=str
-						argname = "arg" + argnumber;
-						result[argname] = str;
-						argnumber++;
-					}
-				}
+			    if (str.StartsWith("-")) {
+			        if (str.StartsWith("--")) {
+			            // it's named parameter start
+			            argname = str.Substring(2); //-- cropped
+			            result[argname] = "1";
+			            //store default arg Value in result to indicate that parameter persists
+			            // we use '1' Value to indicate that without Value it's 'true'
+			            lastname = argname; //set point to last parameter name (for storing Value thurther)
+			            namedparameteropened = true; //set flag that next string can be parsed as Value
+			            argnumber++; //increase argument's counter
+			        }
+			        else { //support for short names
+			            argname = "~"+str.Substring(1);
+                        result[argname] = "1";
+                        //store default arg Value in result to indicate that parameter persists
+                        // we use '1' Value to indicate that without Value it's 'true'
+                        lastname = argname; //set point to last parameter name (for storing Value thurther)
+                        namedparameteropened = true; //set flag that next string can be parsed as Value
+                        argnumber++; //increase argument's counter
+			        }
+			    }
+			    else {
+			        // we se Value or not-named parameter
+			        if (namedparameteropened) {
+			            //if parameter was opened, it's Value
+			            result[lastname] = str; //set Value
+			            namedparameteropened = false; //close parameter
+			        }
+			        else {
+			            // we see not named parameter, must store as argN=str
+			            argname = "arg" + argnumber;
+			            result[argname] = str;
+			            argnumber++;
+			        }
+			    }
 			}
 			return result;
 		}
