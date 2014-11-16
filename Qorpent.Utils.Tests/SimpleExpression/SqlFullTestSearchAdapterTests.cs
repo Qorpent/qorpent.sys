@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Qorpent.Utils.Sql;
 
@@ -25,7 +26,12 @@ namespace Qorpent.Utils.Tests.SimpleExpression {
             Assert.AreEqual(result,new SqlFullTextSearchAdapter().Convert(source));    
         }
 
-
+        [Test]
+        public void Bug_In_AndQuery() {
+            var sqlquey = new SqlFullTextSearchAdapter().Convert("נמיחלאם + ךףיגארוג");
+            Console.WriteLine(sqlquey);
+            Assert.AreEqual("FORMSOF( INFLECTIONAL, נמיחלאם ) & FORMSOF( INFLECTIONAL, ךףיגארוג )",sqlquey);
+        }
        
         
       

@@ -101,10 +101,13 @@ namespace Qorpent.Host.Utils
 			{
 				var parts = queryItem.Split('=');
 				var name = Uri.UnescapeDataString(parts[0]);
-				var value = Uri.UnescapeDataString(parts[1]);
-				if (isqueryString){
-					value = value.Replace("+", " ");
-				}
+			    var value = parts[1];
+                if (isqueryString)
+                {
+                    value = value.Replace("+", " ");
+                }
+                value = Uri.UnescapeDataString(value);
+				
 				if (target.ContainsKey(name))
 				{
 					target[name] += "," + value;
