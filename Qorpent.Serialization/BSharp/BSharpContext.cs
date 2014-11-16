@@ -200,7 +200,12 @@ namespace Qorpent.BSharp{
 				return Working.Where(_ => _.Namespace.StartsWith(query.Substring(0, query.Length - 2)));
 			}
 			if (null != PrototypeMap && query.SmartSplit(false, true, '|').Any(_ => PrototypeMap.ContainsKey(_))) {
-				return query.SmartSplit(false, true, '|').SelectMany(_ => PrototypeMap[_]).ToArray();
+				return query.SmartSplit(false, true, '|').SelectMany(_ => {
+				    if (PrototypeMap.ContainsKey(_)) {
+				        return PrototypeMap[_];
+				    }
+				    return new BSharpClass[] {};
+				}).ToArray();
 			}
 			if (null != Dictionaries && Dictionaries.ContainsKey(query)){
 				return Dictionaries[query].Select(_ => _.cls);

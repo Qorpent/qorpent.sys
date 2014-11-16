@@ -28,6 +28,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Qorpent.Data;
 
 namespace Qorpent.Utils.Extensions
 {
@@ -216,7 +217,9 @@ namespace Qorpent.Utils.Extensions
 			    query.CommandText = realcommand;
 				Debug.Assert(!string.IsNullOrWhiteSpace(query.CommandText), "2");
 			    if (null != parameters) {
-				    
+			        if (parameters is ISqlParametersSource) {
+			            ((ISqlParametersSource) parameters).SetupSqlParameters(query);
+			        }
 						PrepareParameters(realcommand, parameters.ToDict(), query);
 				    
 			    }
@@ -597,6 +600,7 @@ namespace Qorpent.Utils.Extensions
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
             var result = new List<T>();
+           
 	        var cmd = connection.CreateCommand(command, parameters, timeout);
 	        cmd.CommandTimeout = 0;
             var reader = cmd.ExecuteReader();
