@@ -116,7 +116,14 @@ namespace Qorpent.Host{
 		[Serialize]
 		public string RootFolder{
 			get { return _rootFolder; }
-			set { _rootFolder = Path.GetFullPath(value); }
+		    set {
+		        if (value.Contains("@")) {
+		            _rootFolder = EnvironmentInfo.ResolvePath(value);
+		        }
+		        else {
+		            _rootFolder = Path.GetFullPath(value);
+		        }
+		    }
 		}
 
 		/// <summary>
@@ -239,18 +246,21 @@ namespace Qorpent.Host{
 	    /// </summary>
 	    /// <param name="xml"></param>
 	    public void LoadXmlConfig(XElement xml){
-			RootFolder = ResolveConfigWithXml(xml, RootFolder, HostConstants.RootFolderXmlName);
-			ConfigFolder = ResolveConfigWithXml(xml, ConfigFolder, HostConstants.ConfigFolderXmlName);
-			DllFolder = ResolveConfigWithXml(xml, DllFolder, HostConstants.DllFolderXmlName);
-			LogFolder = ResolveConfigWithXml(xml, LogFolder, HostConstants.LogFolderXmlName);
-			TmpFolder = ResolveConfigWithXml(xml, TmpFolder, HostConstants.TmpFolderXmlName);
-			LogLevel = ResolveConfigWithXml(xml, "Info", HostConstants.LogLevelXmlName).To<LogLevel>();
-			UseApplicationName = ResolveConfigWithXml(xml, "false", HostConstants.UseApplicationName).To<bool>();
-			AuthCookieName = ResolveConfigWithXml(xml, AuthCookieName, HostConstants.AuthCookieName);
-			AuthCookieDomain = ResolveConfigWithXml(xml, AuthCookieDomain, HostConstants.AuthCookieDomain);
-			EncryptBasis = ResolveConfigWithXml(xml, Guid.NewGuid().ToString(), HostConstants.EncryptBasis);
-			DefaultPage = ResolveConfigWithXml(xml, "default.html", HostConstants.DefaultPage);
-			foreach (XElement bind in xml.Elements(HostConstants.BindingXmlName)){
+            RootFolder = xml.ResolveValue("root", RootFolder);
+	        RootFolder = xml.ResolveValue(HostConstants.RootFolderXmlName, RootFolder);
+	       
+
+	        ConfigFolder = xml.ResolveValue(HostConstants.ConfigFolderXmlName, ConfigFolder);
+	        DllFolder = xml.ResolveValue(HostConstants.DllFolderXmlName, DllFolder);
+	        LogFolder = xml.ResolveValue(HostConstants.LogFolderXmlName, LogFolder);
+	        TmpFolder = xml.ResolveValue(HostConstants.TmpFolderXmlName, TmpFolder);
+	        LogLevel = xml.ResolveValue(HostConstants.LogLevelXmlName, "Info").To<LogLevel>();
+			UseApplicationName = xml.ResolveValue(HostConstants.UseApplicationName, "false").To<bool>();
+	        AuthCookieName = xml.ResolveValue(HostConstants.AuthCookieName, AuthCookieName);
+	        AuthCookieDomain = xml.ResolveValue(HostConstants.AuthCookieDomain, AuthCookieDomain);
+	        EncryptBasis = xml.ResolveValue(HostConstants.EncryptBasis, Guid.NewGuid().ToString());
+	        DefaultPage = xml.ResolveValue(HostConstants.DefaultPage, "default.html");
+	        foreach (XElement bind in xml.Elements(HostConstants.BindingXmlName)){
 				var hostbind = new HostBinding();
 				hostbind.Port = bind.Attr(HostConstants.PortXmlName).ToInt();
 				hostbind.Interface = bind.Attr(HostConstants.InterfaceXmlName);
@@ -275,6 +285,41 @@ namespace Qorpent.Host{
 				
 				ContentFolders.Add(e.Attr("code"));
 			}
+            foreach (XElement e in xml.Elements("module")) {
+                var fname = e.Attr("code");
+
+                if (Regex.IsMatch(fname, @"^[\w\d\-]+$")) {
+                    //name only
+                    bool found = false;
+                    foreach (var d in Directory.GetDirectories(EnvironmentInfo.GetRepositoryRoot())) {
+                        var test = Path.Combine(d, fname + ".webmodule", "dist");
+                        if (Directory.Exists(test)) {
+                            fname = test;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        throw new Exception("module " + fname + " not found");
+                    }
+                }
+                else {
+                    if (!fname.StartsWith("~")) {
+                        fname = "@repos@/" + fname.Substring(1) + ".webmodule/dist";
+                    }
+                    else {
+                        fname = fname.Substring(1);
+                    }
+
+                }
+
+                if (fname.Contains("@")) {
+                    fname = EnvironmentInfo.ResolvePath(fname);
+                }
+ 
+                
+                ContentFolders.Add(fname);
+            }
 			foreach (XElement e in xml.Elements(HostConstants.ExContentFolder))
 			{
 
@@ -290,7 +335,12 @@ namespace Qorpent.Host{
 				Cached.Add(e.Value);
 			}
 			ForceNoCache = xml.Attr("forcenocache").ToBool();
-		}
+
+	        var appid = xml.ResolveValue("appid", "0").ToInt();
+	        if (appid != 0) {
+	            AddQorpentBinding(appid);
+	        }
+	    }
 
 		/// <summary>
 		/// </summary>
@@ -306,18 +356,7 @@ namespace Qorpent.Host{
 			return true;
 		}
 
-		private string ResolveConfigWithXml(XElement xml, string current, string attributeOrElementName){
-			if (null == xml) return current;
-			if (null != xml.Attribute(attributeOrElementName)){
-				return xml.Attribute(attributeOrElementName).Value;
-			}
-			if (null != xml.Element(attributeOrElementName)){
-				return xml.Element(attributeOrElementName).Value;
-			}
-			return current;
-		}
-
-		private string NormalizeFolder(string current, string def){
+	    private string NormalizeFolder(string current, string def){
 			if (!string.IsNullOrWhiteSpace(current) && Path.IsPathRooted(current)) return current;
 			return Path.Combine(RootFolder, def);
 		}

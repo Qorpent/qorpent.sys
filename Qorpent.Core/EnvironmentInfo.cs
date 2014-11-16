@@ -392,8 +392,11 @@ namespace Qorpent {
 		/// Возвращает глобальный путь к Shadow-директории данного процесса
 		/// </summary>
 		/// <returns></returns>
-		public static string GetShadowDirectory(){
+		public static string GetShadowDirectory(string suffix = null){
 			var name = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
+		    if (!string.IsNullOrWhiteSpace(suffix)) {
+		        name += "_" + suffix;
+		    }
 			return NormalizePath( Path.Combine(GetShadowRoot(), name));
 		}
 

@@ -682,7 +682,7 @@ namespace Qorpent.Utils.Extensions {
             if (!returnDefaultIfEmpty) {
                 return value ?? defaultvalue;
             }
-            return string.IsNullOrWhiteSpace(value) ? defaultvalue : value;
+            return String.IsNullOrWhiteSpace(value) ? defaultvalue : value;
 	    }
 
 
@@ -705,7 +705,7 @@ namespace Qorpent.Utils.Extensions {
 			if (!returnDefaultIfEmpty) {
 				return value ?? defaultvalue;
 			}
-			return string.IsNullOrWhiteSpace(value) ? defaultvalue : value;
+			return String.IsNullOrWhiteSpace(value) ? defaultvalue : value;
 		}
 		/// <summary>
 		/// Производит резолюцию значений атрибутов, имен атрибутов и возвращает максимально валидный результат
@@ -722,8 +722,62 @@ namespace Qorpent.Utils.Extensions {
 					return "1";
 				}	
 			}
+            foreach (var name in names) {
+                var els = e.Elements(name).ToArray();
+                if (els.Length == 1) {
+                    var els_ = els[0];
+                    if (!String.IsNullOrWhiteSpace(els_.Value)) {
+                        return els_.Value;
+                    }
+                    return els_.Attr("code");
+                }
+                
+            }
 			return "";
 
 		}
+
+	    /// <summary>
+	    /// Эффективное определение значения
+	    /// </summary>
+	    /// <param name="e"></param>
+	    /// <param name="code"></param>
+	    /// <param name="def"></param>
+	    /// <returns>Приоритет - атрибут-элемент-ик_атрибут-ик_елемент</returns>
+	    public static string ResolveValue(this XElement e, string code, string def = "") {
+	        if (null == e) return def??"";
+	        //first priority - attribute by full name
+	        XAttribute a = e.Attribute(code);
+	        if (null != a) return a.Value;
+	        //second priority - single element by full name
+	        var es = e.Elements(code).ToArray();
+	        if (es.Length == 1)
+	        {
+	            //причем если элемент пустой - возвращаем код
+	            if (String.IsNullOrWhiteSpace(es[0].Value))
+	            {
+	                return es[0].Attr("code");
+	            }
+	            return es[0].Value;
+	        }
+	        //third priority ignore-case attribute
+	        var ats = e.Attributes().Where(_ => _.Name.LocalName.ToLowerInvariant() == code.ToLowerInvariant()).ToArray();
+	        if (ats.Length == 1)
+	        {
+	            return ats[0].Value;
+	        }
+	        //forth priority - single element ignorecase namevar es= e.Elements(code).ToArray();
+	        es = e.Elements().Where(_ => _.Name.LocalName.ToLowerInvariant() == code.ToLowerInvariant()).ToArray();
+	        if (es.Length == 1)
+	        {
+	            //причем если элемент пустой - возвращаем код
+	            if (String.IsNullOrWhiteSpace(es[0].Value))
+	            {
+	                return es[0].Attr("code");
+	            }
+	            return es[0].Value;
+	        }
+	        return def ?? "";
+	    }
 	}
 }

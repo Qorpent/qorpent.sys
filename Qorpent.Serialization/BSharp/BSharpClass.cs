@@ -252,37 +252,7 @@ namespace Qorpent.BSharp{
 		/// <param name="code"></param>
 		/// <returns></returns>
 		public string this[string code]{
-			get{
-                //first priority - attribute by full name
-				XAttribute a = Compiled.Attribute(code);
-			    if (null != a) return a.Value;
-                //second priority - single element by full name
-			    var es= Compiled.Elements(code).ToArray();
-			    if (es.Length == 1) {
-                    //причем если элемент пустой - возвращаем код
-			        if (string.IsNullOrWhiteSpace(es[0].Value)) {
-			            return es[0].Attr("code");
-			        }
-			        return es[0].Value;
-			    }
-                //third priority ignore-case attribute
-			    var ats = Compiled.Attributes().Where(_ => _.Name.LocalName.ToLowerInvariant() == code.ToLowerInvariant()).ToArray();
-			    if (ats.Length == 1) {
-			        return ats[0].Value;
-			    }
-                //forth priority - single element ignorecase namevar es= Compiled.Elements(code).ToArray();
-                es = Compiled.Elements().Where(_=>_.Name.LocalName.ToLowerInvariant()==code.ToLowerInvariant()).ToArray();
-                if (es.Length == 1)
-                {
-                    //причем если элемент пустой - возвращаем код
-                    if (string.IsNullOrWhiteSpace(es[0].Value))
-                    {
-                        return es[0].Attr("code");
-                    }
-                    return es[0].Value;
-                }
-			    return "";
-			}
+			get { return this.Compiled.ResolveValue(code); }
 		}
 
 

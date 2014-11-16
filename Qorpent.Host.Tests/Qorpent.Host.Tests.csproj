@@ -21,10 +21,13 @@
     <Compile Include="AuthProtocolTest.cs" />
     <Compile Include="BasicServerTests.cs" />
     <Compile Include="RequestDataRetrieverTest.cs" />
+    <Compile Include="ServerParametersTest.cs" />
     <Compile Include="SimpleSocketTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\qorpent.sys\Qorpent.IoC\Qorpent.IoC.csproj">
@@ -34,6 +37,10 @@
     <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
       <Project>{880f65ea-1a22-4672-a137-ffc91290a209}</Project>
       <Name>Qorpent.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
+      <Name>Qorpent.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />

@@ -30,6 +30,7 @@
   <ItemGroup>
     <Compile Include="DefaultRequestHandlerFactory.cs" />
     <Compile Include="Handlers\WikiHandler.cs" />
+    <Compile Include="Server\ServerParameters.cs" />
     <Compile Include="Static\HostFileNameResolver.cs" />
     <Compile Include="Static\HostServerStaticResolver.cs" />
     <Compile Include="Security\AuthProtocolClient.cs" />
