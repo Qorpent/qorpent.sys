@@ -220,8 +220,10 @@ namespace Qorpent.Utils.Extensions
 			        if (parameters is ISqlParametersSource) {
 			            ((ISqlParametersSource) parameters).SetupSqlParameters(query);
 			        }
-						PrepareParameters(realcommand, parameters.ToDict(), query);
-				    
+			        else {
+			            PrepareParameters(realcommand, parameters.ToDict(), query);
+			        }
+
 			    }
 				Debug.Assert(!string.IsNullOrWhiteSpace(query.CommandText), "3");
 			    return query;
