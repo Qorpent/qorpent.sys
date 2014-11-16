@@ -358,7 +358,9 @@ namespace Qorpent.BSharp{
 		private IEnumerable<XElement> GetSourcesWithRequireProcessing(IEnumerable<XElement> sources, IBSharpContext context){
 			Dictionary<string, XElement> filenames =
 				sources.ToDictionary(_ => Path.GetFullPath(_.Describe().File).NormalizePath(), _ => _);
-			filenames.ToArray().AsParallel().ForAll(src => ProcessRequires(src.Value, src.Key, filenames, context));
+		    foreach (var basefiles in filenames.ToArray()) {
+		        ProcessRequires(basefiles.Value, basefiles.Key, filenames, context);
+		    }
 			return filenames.Values.ToArray();
 		}
 
@@ -387,11 +389,20 @@ namespace Qorpent.BSharp{
 				return;
 			}
 			string dir = Path.GetDirectoryName(filename);
-			string file = require.Attr("code") + ".bxls";
+		    string file = require.Attr("code");
 
 			if (!Path.IsPathRooted(file)){
-				file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
+			    if (file.Contains("@")) {
+			        file = EnvironmentInfo.ResolvePath(file);
+			    }
+			    else {
+			        file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
+			    }
 			}
+		    if (!File.Exists(file)) {
+                file +=".bxls";
+		    }
+           
 
 			if (filenames.ContainsKey(file)) return;
 			if (File.Exists(file)){
