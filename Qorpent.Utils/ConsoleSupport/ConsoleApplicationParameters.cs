@@ -125,6 +125,15 @@ namespace Qorpent.Utils{
 			var helper = new ConsoleArgumentHelper();
 			helper.Apply(arguments, this);
 			Log = ConsoleLogWriter.CreateLog("main", LogLevel.Info, LogFormat);
+			if (!string.IsNullOrWhiteSpace(WorkingDirectory)) {
+				var workingDirectory = Path.GetFullPath(WorkingDirectory);
+				if (!Directory.Exists(workingDirectory)) {
+					Directory.CreateDirectory(workingDirectory);
+				}
+				Environment.CurrentDirectory = workingDirectory;
+				EnvironmentInfo.RootDirectory = Environment.CurrentDirectory;
+
+			}
 			if (TreatAnonymousAsBSharpProjectReference && !string.IsNullOrWhiteSpace(Arg1)){
 				try{
 					LoadFromBSharp(); // загружаем параметры из B#
@@ -136,15 +145,6 @@ namespace Qorpent.Utils{
 					Log.Fatal(ex.Message,ex,this);
 					throw;
 				}
-			}
-			if (!string.IsNullOrWhiteSpace(WorkingDirectory)) {
-				var workingDirectory = Path.GetFullPath(WorkingDirectory);
-				if (!Directory.Exists(workingDirectory)) {
-					Directory.CreateDirectory(workingDirectory);
-				}
-				Environment.CurrentDirectory = workingDirectory;
-				EnvironmentInfo.RootDirectory = Environment.CurrentDirectory;
-
 			}
 			if (!string.IsNullOrWhiteSpace(RepositoryPath)){
 				EnvironmentInfo.LocalRepositoryDirectory = RepositoryPath;
