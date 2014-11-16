@@ -1,14 +1,4 @@
-define(['leaflet-amd'],function($l){
-	if ( null==$l ) {console.error('no leaflet  (draw)');return null;}
-var L = $l;
-/*
-	Leaflet.draw, a plugin that adds drawing and editing tools to Leaflet powered maps.
-	(c) 2012-2013, Jacob Toye, Smartrak
-
-	https://github.com/Leaflet/Leaflet.draw
-	http://leafletjs.com
-	https://github.com/jacobtoye
-*/
+define(['leaflet-amd'],function(){
 
 L.drawVersion = '0.2.4-dev';
 
@@ -2908,5 +2898,8 @@ L.EditToolbar.Delete = L.Handler.extend({
 		return this._deletableLayers.getLayers().length !== 0;
 	}
 });
-return $l;
+
+
+
+return window.L;
 });

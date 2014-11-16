@@ -5,6 +5,7 @@ using System.Text;
 using Qorpent.BSharp;
 using Qorpent.BSharp.Builder;
 using Qorpent.Integration.BSharp.Builder.Tasks;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding{
 	/// <summary>
@@ -82,7 +83,7 @@ namespace Qorpent.Scaffolding{
 
 		private string GetOutDir(){
 			if (string.IsNullOrWhiteSpace(DefaultOutputName)) return Project.GetOutputDirectory();
-			var basedir = Project.Get(DefaultOutputName + "Dir", DefaultOutputName);
+			var basedir = Project.Definition.GetSmartValue(DefaultOutputName + "Dir");
 			if (Project.ContainsKey("_" + DefaultOutputName + "Dir")){
 				basedir = Project.Get<string>("_" + DefaultOutputName + "Dir");
 			}

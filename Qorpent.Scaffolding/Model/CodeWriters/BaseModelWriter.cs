@@ -31,6 +31,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		private void GenerateReferenceBehaviorMarkers(){
 			IOrderedEnumerable<PersistentClass> tables = Model.Classes.Values.OrderBy(_ => _.Name);
 			foreach (PersistentClass t in tables){
+                if(t.NoSql)continue;
 				foreach (Field reference in t.GetOrderedFields().Where(_ => _.IsReference)){
 					if (null == reference.ReferenceClass.TargetClass) continue; //reference to outer
 					SetupDirectMarker(t, reference);

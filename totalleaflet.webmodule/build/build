@@ -1,5 +1,6 @@
 #!/bin/sh
-./build/hooks/prebuild
+args=$*
+./build/hooks/prebuild ${args}
 ALL=1
 COMPASS=0
 BSC=0
@@ -66,3 +67,5 @@ fi
 if ( [ "$ALL" == 1 ] && [ "$TESTS" != 2 ] ) || [ "$TESTS" == 1 ]; then
 	${call}test ${REST}
 fi
+
+./build/hooks/afterbuild ${args}

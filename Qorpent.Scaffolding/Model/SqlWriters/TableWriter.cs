@@ -140,7 +140,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				sb.AppendLine("\t-- " + field.Comment);
 			}
 			string notnull="NOT NULL";
-			if (field.IsReference && field.ReferenceClass.TargetClass == null){
+			if (field.IsNullable){
 				notnull = "";
 			}
 
@@ -152,7 +152,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				WritePrimaryKey(field, sb);
 				WriteUnique(field, sb);
 				WriteForeignKey(field, sb);
-				if (!(field.IsReference && null == field.ReferenceClass.TargetClass)){
+				if (!field.IsNullable){
 					WriteDefaultValue(dialect, field, sb); //not model references - only exception to get default value	
 				}
 				else{

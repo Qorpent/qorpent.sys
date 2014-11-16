@@ -1,13 +1,4 @@
-define(['leaflet-amd'],function($l){
-	if ( null==$l ) {console.error('no leaflet  (markercluster)');return null;}
-	var L = $l;
-/*
- Leaflet.markercluster, Provides Beautiful Animated Marker Clustering functionality for Leaflet, a JS library for interactive maps.
- https://github.com/Leaflet/Leaflet.markercluster
- (c) 2012-2013, Dave Leaver, smartrak
-*/
-
-
+define(['leaflet-amd'],function(){
 L.MarkerClusterGroup = L.FeatureGroup.extend({
 
 	options: {
@@ -2159,5 +2150,8 @@ L.MarkerClusterGroup.include({
 		}
 	}
 });
-return $l;
+
+
+
+return window.L;
 });

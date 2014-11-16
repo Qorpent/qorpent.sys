@@ -15,6 +15,7 @@ namespace Qorpent.Host.Lib.Tests
 		[TestCase("http://x/?a=3%2C2&y=3","a=3,2;y=3")]
 		[TestCase("http://x/?a=2&y=3","a=2;y=3")]
 		[TestCase("http://x/?a=2&y=3&y=4","a=2;y=3,4")]
+		[TestCase("http://x/?a=2+%2B+3","a=2 + 3")]
 		public void UrlGetTest(string url, string test)
 		{
 			var result = new RequestDataRetriever("text/plain", Encoding.UTF8, 0, new Uri(url), null, "GET").GetRequestData();

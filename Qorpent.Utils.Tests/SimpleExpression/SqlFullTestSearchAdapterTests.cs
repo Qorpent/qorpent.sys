@@ -1,3 +1,4 @@
+Ôªøusing System;
 using NUnit.Framework;
 using Qorpent.Utils.Sql;
 
@@ -5,27 +6,32 @@ namespace Qorpent.Utils.Tests.SimpleExpression {
     [TestFixture]
     public class SqlFullTestSearchAdapterTests {
 
-        [TestCase("‡* Ë ·", "\"‡*\" & ·")]
-        [TestCase("‡ Ë ·", "‡ & ·")]
-        [TestCase("‡ ·", "‡ | ·")]
-        [TestCase("(‡ ·) + (‚ „)", "( ‡ | · ) & ( ‚ | „ )")]
-        [TestCase("aaa Ë ···!", "FORMSOF( INFLECTIONAL, aaa ) & ···")]
-        [TestCase("‡% Ë ·", "FORMSOF( THESAURUS, ‡ ) & ·")]
-        [TestCase("‡ + ·", "‡ & ·")]
-        [TestCase("‡+·", "‡ & ·")]
-        [TestCase("‡*+·*", "\"‡*\" & \"·*\"")]
-        [TestCase("‡ ËÎË ·", "‡ | ·")]
-        [TestCase("‡ ? ·", "‡ | ·")]
-        [TestCase("‡?·", "‡ | ·")]
-        [TestCase("‡ ÌÂ ·", "‡ &! ·")]
-        [TestCase("‡ - ·", "‡ &! ·")]
-        [TestCase("‡-·", "‡ &! ·")]
-        [TestCase("\"‡-·\"+(\"‡+·\"?\"‡?·\")", "\"‡-·\" & ( \"‡+·\" | \"‡?·\" )")]
+        [TestCase("–∞* –∏ –±", "\"–∞*\" & –±")]
+        [TestCase("–∞ –∏ –±", "–∞ & –±")]
+        [TestCase("–∞ –±", "–∞ | –±")]
+        [TestCase("(–∞ –±) + (–≤ –≥)", "( –∞ | –± ) & ( –≤ | –≥ )")]
+        [TestCase("aaa –∏ –±–±–±!", "FORMSOF( INFLECTIONAL, aaa ) & –±–±–±")]
+        [TestCase("–∞% –∏ –±", "FORMSOF( THESAURUS, –∞ ) & –±")]
+        [TestCase("–∞ + –±", "–∞ & –±")]
+        [TestCase("–∞+–±", "–∞ & –±")]
+        [TestCase("–∞*+–±*", "\"–∞*\" & \"–±*\"")]
+        [TestCase("–∞ –∏–ª–∏ –±", "–∞ | –±")]
+        [TestCase("–∞ ? –±", "–∞ | –±")]
+        [TestCase("–∞?–±", "–∞ | –±")]
+        [TestCase("–∞ –Ω–µ –±", "–∞ &! –±")]
+        [TestCase("–∞ - –±", "–∞ &! –±")]
+        [TestCase("–∞-–±", "–∞ &! –±")]
+        [TestCase("\"–∞-–±\"+(\"–∞+–±\"?\"–∞?–±\")", "\"–∞-–±\" & ( \"–∞+–±\" | \"–∞?–±\" )")]
         public void MainTest(string source, string result) {
             Assert.AreEqual(result,new SqlFullTextSearchAdapter().Convert(source));    
         }
 
-
+        [Test]
+        public void Bug_In_AndQuery() {
+            var sqlquey = new SqlFullTextSearchAdapter().Convert("—Ä–æ–π–∑–º–∞–Ω + –∫—É–π–≤–∞—à–µ–≤");
+            Console.WriteLine(sqlquey);
+            Assert.AreEqual("FORMSOF( INFLECTIONAL, —Ä–æ–π–∑–º–∞–Ω ) & FORMSOF( INFLECTIONAL, –∫—É–π–≤–∞—à–µ–≤ )",sqlquey);
+        }
        
         
       

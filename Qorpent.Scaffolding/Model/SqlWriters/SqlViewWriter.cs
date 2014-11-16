@@ -105,14 +105,24 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				Field fld = table.Fields[refname.ToLowerInvariant()];
 				if (fld.NoSql) continue;
 				PersistentClass rtable = fld.ReferenceClass;
-				foreach (string fname in fields){
-					if (!rtable.Fields.ContainsKey(fname.ToLowerInvariant())){
-						if (free){
-							continue;
-						}
-						throw new Exception("referenced table " + rtable.Name + " doesn't contains field " + fname);
-					}
-					Field rfld = rtable.Fields[fname.ToLowerInvariant()];
+				foreach (string fname in fields) {
+				    Field rfld = null;
+				    if (!rtable.Fields.ContainsKey(fname.ToLowerInvariant())) {
+				        if (free) {
+				            continue;
+				        }
+				        if (fld.IsExternal) {
+				            rfld = new Field {Name = fname};
+				            rfld.DataType = DataType.GetDefaultMapping()["string"];
+				        }
+				        else {
+				            throw new Exception("referenced table " + rtable.Name + " doesn't contains field " + fname);
+				        }
+				    }
+				    else {
+				        rfld= rtable.Fields[fname.ToLowerInvariant()];
+				        
+				    } 
 					if (rfld.NoSql) continue;
 					sb.AppendLine(
 						string.Format("(select x.{1} from {0} x where x.{5} = {2}.{3}.{4}) as {6}{7},",

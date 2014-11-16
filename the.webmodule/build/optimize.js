@@ -16,6 +16,8 @@ var config = {
     optimize: "uglify2"
 };
 
+
+
 config.paths = config.paths || {};
 config.paths[manifest.moduleName] = "../../build/main";
 
@@ -61,7 +63,7 @@ if (!!manifest.compile){
     }
     if(!!manifest.compile.include){
         manifest.compile.include.forEach(function(_){
-           config.include.push(_);
+            config.include.push(_);
         });
     }
 }
@@ -110,6 +112,10 @@ requirejs.optimize(config, function () {
         }
     }
 
-    requirejs.optimize(config);
+    requirejs.optimize(config,function(){
+        if(!!manifest.optimizer){
+            requirejs.optimize(manifest.optimizer);
+        }
+    });
 });
 
