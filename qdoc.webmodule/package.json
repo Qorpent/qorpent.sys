@@ -1,0 +1,13 @@
+{
+  "description": "Qorpent.Doc",
+  "moduleName": "qdoc",
+  "defaultNamespace": "Qorpent.Doc",
+  "name": "the",
+  "devDependencies": {
+    "requirejs": ">=2.1.15",
+    "amdefine": ">=0.1.0"
+  },
+
+  "webModuleDependency": {},
+  "version": "0.1.0"
+}

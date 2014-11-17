@@ -43,7 +43,7 @@ namespace Qorpent.Utils{
 			var result = 
 				Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName)
 				       .Where(_ => _.Id != Process.GetCurrentProcess().Id).ToArray();
-		    if (!string.IsNullOrWhiteSpace(Parameters.ShadowSuffix)) {
+		    if (null!=Parameters && !string.IsNullOrWhiteSpace(Parameters.ShadowSuffix)) {
 		        result = result.Where(_ => _.MainModule.FileName.NormalizePath().StartsWith(
                     EnvironmentInfo.GetShadowDirectory(Parameters.ShadowSuffix).NormalizePath())).ToArray();
 		    }

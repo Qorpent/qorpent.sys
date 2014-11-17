@@ -7,8 +7,14 @@ rm -rf ./dist/css/**/*.css
 rm -rf ./dist/css/*.map
 rm -rf ./dist/css/**/*.map
 rm -rf npm-debug.log
-rm -rf ./dist/js/*.js
-rm -rf ./dist/js/*.map
+
+for f in $( find ./dist/js -name *.js ); do
+    if [[ -e "${f}.map" ]] ; then
+        rm -rf "${f}"
+        rm -rf "${f}.map"
+    fi
+done
+
 rm -rf ./src/js/*_types.js
 rm -rf ./src/js/*_api.js
 rm -rf src/cs/auto

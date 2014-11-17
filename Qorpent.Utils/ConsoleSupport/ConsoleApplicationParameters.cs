@@ -197,7 +197,6 @@ namespace Qorpent.Utils{
 			Log.Level = LogLevel;
 			if (Debug){
 				Log.Debug("debugger launched");
-				Debugger.Launch();
 			}
 			InternalInitialize(arguments);
 			

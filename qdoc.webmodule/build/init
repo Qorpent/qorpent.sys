@@ -1,0 +1,13 @@
+#!/bin/sh
+this=$(pwd)
+target=$1/$2.webmodule
+make.sh clean
+mkdir $target
+cp -rf . $target
+cd $target
+rm -rf .idea
+rm -rf .sass-cache
+make.sh install-deps localonly
+make.sh setup $2 $3 $4
+bld
+cd $this

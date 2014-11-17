@@ -285,41 +285,18 @@ namespace Qorpent.Host{
 				
 				ContentFolders.Add(e.Attr("code"));
 			}
-            foreach (XElement e in xml.Elements("module")) {
-                var fname = e.Attr("code");
-
-                if (Regex.IsMatch(fname, @"^[\w\d\-]+$")) {
-                    //name only
-                    bool found = false;
-                    foreach (var d in Directory.GetDirectories(EnvironmentInfo.GetRepositoryRoot())) {
-                        var test = Path.Combine(d, fname + ".webmodule", "dist");
-                        if (Directory.Exists(test)) {
-                            fname = test;
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        throw new Exception("module " + fname + " not found");
-                    }
-                }
-                else {
-                    if (!fname.StartsWith("~")) {
-                        fname = "@repos@/" + fname.Substring(1) + ".webmodule/dist";
-                    }
-                    else {
-                        fname = fname.Substring(1);
-                    }
-
-                }
-
-                if (fname.Contains("@")) {
-                    fname = EnvironmentInfo.ResolvePath(fname);
-                }
- 
-                
-                ContentFolders.Add(fname);
-            }
+            ReadModules(xml);
+	        foreach (var e in xml.Elements("static")) {
+	            var name = e.Attr("code");
+	            var folder = EnvironmentInfo.ResolvePath(e.Attr("name"));
+	            if (!name.StartsWith("/")) {
+	                name = "/" + name;
+	            }
+	            if (!name.EndsWith("/")) {
+	                name += "/";
+	            }
+	            this.StaticContentMap[name] = folder;
+	        }
 			foreach (XElement e in xml.Elements(HostConstants.ExContentFolder))
 			{
 
@@ -342,7 +319,44 @@ namespace Qorpent.Host{
 	        }
 	    }
 
-		/// <summary>
+	    private void ReadModules(XElement xml) {
+	        foreach (XElement e in xml.Elements("module")) {
+	            var fname = e.Attr("code");
+
+	            if (Regex.IsMatch(fname, @"^[\w\d\-]+$")) {
+	                //name only
+	                bool found = false;
+	                foreach (var d in Directory.GetDirectories(EnvironmentInfo.GetRepositoryRoot())) {
+	                    var test = Path.Combine(d, fname + ".webmodule", "dist");
+	                    if (Directory.Exists(test)) {
+	                        fname = test;
+	                        found = true;
+	                        break;
+	                    }
+	                }
+	                if (!found) {
+	                    throw new Exception("module " + fname + " not found");
+	                }
+	            }
+	            else {
+	                if (!fname.StartsWith("~")) {
+	                    fname = "@repos@/" + fname.Substring(1) + ".webmodule/dist";
+	                }
+	                else {
+	                    fname = fname.Substring(1);
+	                }
+	            }
+
+	            if (fname.Contains("@")) {
+	                fname = EnvironmentInfo.ResolvePath(fname);
+	            }
+
+
+	            ContentFolders.Add(fname);
+	        }
+	    }
+
+	    /// <summary>
 		/// </summary>
 		/// <param name="filename"></param>
 		/// <returns></returns>

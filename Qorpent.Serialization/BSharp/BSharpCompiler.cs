@@ -384,10 +384,11 @@ namespace Qorpent.BSharp{
 		private void ProcessRequiresWithFileReference(XElement source, Dictionary<string, XElement> filenames,
 		                                              IBSharpContext context, XElement require, string filename){
 			
-			if (require.Attr("code").EndsWith("/")){
+			if (require.Attr("code").EndsWith("/") || require.Attr("code").Contains("*")){
 				ProcessRequiresDirectory(source, filenames, context, require, filename);
 				return;
 			}
+         
 			string dir = Path.GetDirectoryName(filename);
 		    string file = require.Attr("code");
 
@@ -425,11 +426,19 @@ namespace Qorpent.BSharp{
 		private void ProcessRequiresDirectory(XElement source, Dictionary<string, XElement> filenames, IBSharpContext context, XElement require, string filename){
 			string curdir = Path.GetDirectoryName(filename);
 			string otherdir = require.Attr("code");
+		    var mask = "*.bxls";
+		    if (otherdir.Contains("*")) {
+		        mask = Path.GetFileName(otherdir);
+		        otherdir = Path.GetDirectoryName(otherdir);
+		    }
+		    if (otherdir.Contains("@")) {
+		        otherdir = EnvironmentInfo.ResolvePath(otherdir);
+		    }
 			if (!Path.IsPathRooted(otherdir)){
 				otherdir = Path.GetFullPath(Path.Combine(curdir, otherdir)).NormalizePath();
 			}
-			if (Directory.Exists(otherdir)){
-				foreach (var file in Directory.GetFiles(otherdir,"*.bxls")){
+			if (Directory.Exists(otherdir)) {
+				foreach (var file in Directory.GetFiles(otherdir,mask)){
 					if (filenames.ContainsKey(file)) continue;
 	
 						XElement src = _requireBxl.Parse(File.ReadAllText(file), file);
