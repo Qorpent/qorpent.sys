@@ -88,7 +88,7 @@ namespace Qorpent.PortableHtml{
 
 	    private void JoinFollowingSameInlines(XElement result) {
            var inlines =
-                  result.Descendants().Where(_ => -1 != Array.IndexOf(PortableHtmlSchema.InlineElements, _.Name.LocalName));
+                  result.Descendants().Where(_ => _.Name.LocalName!="img" && -1 != Array.IndexOf(PortableHtmlSchema.InlineElements, _.Name.LocalName));
 	        var invalid = inlines.Where(_ => {
 	            var e = _.NextNode as XElement;	         
 	            if (null == e) return false;
