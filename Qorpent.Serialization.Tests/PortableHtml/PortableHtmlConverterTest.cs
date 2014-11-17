@@ -248,5 +248,19 @@ r <a href=""http://example.com/i.jpg"">link</a>]]></r>";
 
 		}
 
+	    [Test]
+	    public void Q295_InvalidInlinesInRow() {
+	        var xml = XElement.Parse("<div>Бла бла <strong>Сергей</strong>\r\n\r\n\r\n<strong>Иванов</strong></div>");
+            var ctx = PortableHtmlSchema.Validate(xml, PortableHtmlStrictLevel.TrustAllImages | PortableHtmlStrictLevel.TrustAllLinks);
+            Assert.False(ctx.Ok);
+	        var converted = new PortableHtmlConverter().Convert(xml);
+            var x = XElement.Parse("<div><p>Бла бла <strong>Сергей Иванов</strong></p></div>");
+            Console.WriteLine(x.ToString(SaveOptions.DisableFormatting));
+            Assert.AreEqual(x.ToString(SaveOptions.DisableFormatting).Replace("\u00A0", " "), converted.ToString(SaveOptions.DisableFormatting).Replace("\u00A0", " "));
+           
+	    }
+
+    
+
 	}
 }

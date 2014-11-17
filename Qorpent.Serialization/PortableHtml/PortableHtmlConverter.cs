@@ -76,6 +76,7 @@ namespace Qorpent.PortableHtml{
 			CollapseParas(result);
 			ProcessRootNodes(result);
 			ProcessTextTrimming(result);
+		    JoinFollowingSameInlines(result);
 			if (!KeepFormatting){
 				RemoveFormatsFromTotallyFormattedParagraphs(result);
 			}
@@ -85,7 +86,22 @@ namespace Qorpent.PortableHtml{
 			return result;
 		}
 
-		private void ExpandInlines(XElement result){
+	    private void JoinFollowingSameInlines(XElement result) {
+           var inlines =
+                  result.Descendants().Where(_ => -1 != Array.IndexOf(PortableHtmlSchema.InlineElements, _.Name.LocalName));
+	        var invalid = inlines.Where(_ => {
+	            var e = _.NextNode as XElement;	         
+	            if (null == e) return false;
+	            return e.Name.LocalName == _.Name.LocalName;
+	        }).Reverse().ToArray();
+	        foreach (var inline in invalid) {
+	            var i = inline.NextNode as XElement;
+	            inline.Value += " " + i.Value;
+                i.Remove();
+	        }
+	    }
+
+	    private void ExpandInlines(XElement result){
 			var inlines =
 				result.Descendants().Where(_ => -1 != Array.IndexOf(PortableHtmlSchema.InlineElements, _.Name.LocalName));
 			var badinlines = inlines.Where(_ => _.Descendants("p").Any());

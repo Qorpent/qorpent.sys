@@ -85,5 +85,12 @@ namespace Qorpent.Utils.Tests {
             Assert.AreEqual("1",dict["~y"]);
             Assert.AreEqual("a",dict["~x"]);
         }
+
+        [Test]
+        public void Q305_Nagative_Numbers()
+        {
+            var dict = new ConsoleArgumentHelper().ParseDictionary(new[] { "-x", "-1" });
+            Assert.AreEqual("-1", dict["~x"]);
+        }
 	}
 }
