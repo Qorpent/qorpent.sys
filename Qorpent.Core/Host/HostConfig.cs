@@ -311,6 +311,10 @@ namespace Qorpent.Host{
 			foreach (XElement e in xml.Elements("cache")){
 				Cached.Add(e.Value);
 			}
+            foreach (XElement e in xml.Elements("lib"))
+            {
+                AutoconfigureAssemblies.Add(e.AttrOrValue("code"));
+            }
 			ForceNoCache = xml.Attr("forcenocache").ToBool();
 
 	        var appid = xml.ResolveValue("appid", "0").ToInt();

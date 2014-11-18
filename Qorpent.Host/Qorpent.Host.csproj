@@ -214,5 +214,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\common-min.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\extras\text.js" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

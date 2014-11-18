@@ -1,7 +1,10 @@
 /**
  * Created by comdiv on 24.09.14.
  */
-(function (describe, it, before) {
+define(["the","chai","the-http-test"],function($the,chai){
+    var should = chai.Should();
+    var $ = $the.interpolate;
+    $l = $the.collections.LayeredDictionary;
     describe("the.interpolation", function () {
         this.timeout(5000);
 
@@ -106,32 +109,6 @@
 
 
 
-        var $ = null;
-        var $l = null;
-        var should = null;
-        before(function (done) {
-            var requirejs = null;
-            try {
-                if (!!define) { //cause exception
-                    requirejs = require;
-                }
-            } catch (e) {
-                requirejs = require("requirejs");
-                requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
-            }
-            try {
-                requirejs(["./lib/chai", "../the-interpolation","../the-collections-layered"], function ($should, $the) {
-                    should = $should.Should();
-                    $ = $the.interpolate;
-                    $l = $the.collections.LayeredDictionary;
-                    done();
-                });
-            } catch (e) {
-                console.log(e);
-                done();
-            }
-        });
-
 
     });
-})(describe, it, before);
+});

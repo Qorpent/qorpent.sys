@@ -1,7 +1,9 @@
 /**
  * Created by comdiv on 24.09.14.
  */
-(function (describe, it, before) {
+define(["the","chai"],function($the,chai){
+    var should = chai.Should();
+    var $ = $the.expression;
     describe("the.expression", function () {
         this.timeout(5000);
         it("proxise prepared functions",function(){
@@ -13,6 +15,8 @@
             should.not.exist($(undefined));
             should.not.exist($(null));
         });
+
+
         if(typeof window!=="undefined" && !!window.phantomCallback){
             it("can detect 'comparer signature' - SOME PHANTOM ISSUES");
         }else{
@@ -20,6 +24,12 @@
                 var f = $(function(a,b){},{annotate:true});
                 should.exist(f.annotation.comparer);
                 var f = $(function(arg){},{annotate:true});
+                should.not.exist(f.annotation.comparer);
+            });
+            it("can detect 'comparer signature BUG check'",function(){
+                var f = $(function (a, b){},{annotate:true});
+                should.exist(f.annotation.comparer);
+                var f = $(function (arg){},{annotate:true});
                 should.not.exist(f.annotation.comparer);
             });
         }
@@ -87,33 +97,5 @@
             });
         });
 
-
-
-
-        var $ = null;
-        var should = null;
-        before(function (done) {
-            var requirejs = null;
-            try {
-                if (!!define) { //cause exception
-                    requirejs = require;
-                }
-            } catch (e) {
-                requirejs = require("requirejs");
-                requirejs.config({baseurbaseUrl: '.', nodeRequire: require});
-            }
-            try {
-                requirejs(["./lib/chai", "../the-expression"], function ($should, $the) {
-                    should = $should.Should();
-                    $ = $the.expression;
-                    done();
-                });
-            } catch (e) {
-                console.log(e);
-                done();
-            }
-        });
-
-
     });
-})(describe, it, before);
+});

@@ -13,9 +13,9 @@ namespace Qorpent.Host.Exe
 
 	    private static int Execute(ServerParameters arg) {
 	        var config = arg.BuildServerConfig();
+	        config.DllFolder = EnvironmentInfo.ResolvePath("@repos@/.build/bin/all");
 	        var hostServer = new HostServer(config);
             LogHostInfo(arg, config);
-
 	        hostServer.Start();
 	        try {
 	            Console.ReadLine();
@@ -27,12 +27,19 @@ namespace Qorpent.Host.Exe
 	    }
 
 	    private static void LogHostInfo(ServerParameters arg, HostConfig config) {
+            Console.WriteLine("BinRoot: "+config.DllFolder);
+	        foreach (var assembly in config.AutoconfigureAssemblies) {
+	            Console.WriteLine("Lib: "+assembly);
+	        }
 	        foreach (var hostBinding in config.Bindings) {
 	            Console.WriteLine("Binding: "+hostBinding);
 	        }
 	        arg.Log.Trace("RootFolder: " + config.RootFolder);
 	        foreach (var contentFolder in config.ContentFolders) {
 	            arg.Log.Trace("ContentFolder: " + contentFolder);
+	        }
+	        foreach (var map in config.StaticContentMap) {
+	            arg.Log.Trace("Map: "+map.Key+" : "+map.Value);
 	        }
 	    }
 	}

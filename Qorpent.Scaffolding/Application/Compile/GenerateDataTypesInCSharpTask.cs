@@ -84,7 +84,9 @@ namespace Qorpent.Scaffolding.Application{
 			
 			WriteMemberSummary(sb, comment);
 			sb.AppendLine("\t\t[" + attr + "]");
-
+		    if (type == "datetime") {
+		        type = "DateTime";
+		    }
 			if (type == "dictionary"){
 				var prefix = field.Attr("param-prefix",name+".");
 				sb.AppendLine("\t\t[Bind(ParameterPrefix=\"" + prefix + "\")]");

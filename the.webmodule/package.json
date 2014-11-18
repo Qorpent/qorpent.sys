@@ -28,13 +28,18 @@
       "deps": [
         "?the-root",
         "?the-object",
-        "?the-http"
+        "?the-http",
+        "?the-collections-core",
+        "?the-collections-linq",
+        "?the-expression",
+        "?the-interpolation"
       ],
       "into" : "the"
     },
-    {
-      "name":"the-object-tests"
-    },
+    "the-object-tests",
+    "the-collections-linq-tests",
+    "the-expression-tests",
+    "the-interpolation-tests",
     {
       "condition":"new",
       "name":"the2-object-tests"

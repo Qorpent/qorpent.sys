@@ -493,6 +493,6 @@ namespace Qorpent {
 			}
 			return path.Replace("\\", "/").Replace("//", "/").Replace("//", "/").ToLower();
 		}
-
+       
 	}
 }

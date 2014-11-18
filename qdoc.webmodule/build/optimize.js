@@ -13,8 +13,23 @@ var config = {
     include : [],
     generateSourceMaps: true,
     preserveLicenseComments: false,
-    optimize: "uglify2"
+    optimize: "uglify2",
+    uglify2 : {
+        compress : {
+            global_defs : {
+                "DEBUG" : true,
+                "PROFILE":true
+            }
+        }
+    }
 };
+
+if(!!manifest.defines){
+    for(var d in manifest.defines){
+        config.uglify2.compress.global_defs[d] = manifest.defines[d];
+    }
+}
+
 
 
 

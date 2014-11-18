@@ -18,6 +18,15 @@
                 }
                 return result;
             };
+            Enumeration.prototype.sum = function (expr) {
+                this.reset();
+                var result = 0;
+                var e = $ex(expr);
+                while (this.next()) {
+                    result+=!!e? e(this.current):this.current;
+                }
+                return result;
+            };
 
             Enumeration.prototype.first = function (condition) {
                 this.reset();

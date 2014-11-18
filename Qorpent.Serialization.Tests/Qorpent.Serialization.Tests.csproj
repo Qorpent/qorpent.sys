@@ -59,6 +59,7 @@
     <Compile Include="Json\InvalidXmlToJson.cs" />
     <Compile Include="Json\LexerTests.cs" />
     <Compile Include="Json\ParserTest.cs" />
+    <Compile Include="Json\ZippedToArrayGeneration.cs" />
     <Compile Include="json_serializer_test.cs" />
     <Compile Include="js_serializer_test.cs" />
     <Compile Include="BSharp\ErrorHandling.cs" />

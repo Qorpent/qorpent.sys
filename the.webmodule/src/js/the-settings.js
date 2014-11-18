@@ -1,5 +1,5 @@
-define([
-], function() {
+define(["the-root"
+], function($the) {
     if(typeof angular == "undefined")return;
     function Settings() {
         var self = this;
@@ -41,7 +41,7 @@ define([
     };
 
     angular.module('settings', [])
-        .factory('settings', function() {
+        .factory('settings', ["$rootScope",function($rs) {
             var settings = new Settings();
             var result = function($scope) {
                 $scope.settings = settings;
@@ -59,7 +59,17 @@ define([
             result.get = function(n) {
                 return  settings.get(n);
             }
+            result.setup = function(options){
+                var _ =  $the.extend(options.default ||{}, result.get(options.name));
+                $rs.$watch(function(){return _;},function(){
+                    result.set(options.name,_);
+                },true);
+                if(!!options.init){
+                    options.init(_);
+                }
+                return _;
+            }
             return result;
 
-        });
+        }]);
 });

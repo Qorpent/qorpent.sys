@@ -1,4 +1,5 @@
 #!/bin/sh
 cp -f ../../Qorpent.Kernel/template.webmodule/build/* ./build 2>/dev/null
+cp -f ../../Qorpent.Kernel/template.webmodule/lib/* ./lib 2>/dev/null
 cp -R -u -p ../../Qorpent.Kernel/template.webmodule/build/hooks/* ./build/hooks 2>/dev/null
 cp -R -u -p ../../Qorpent.Kernel/template.webmodule/tests/* ./tests 2>/dev/null

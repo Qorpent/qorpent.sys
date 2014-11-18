@@ -23,6 +23,7 @@ namespace Qorpent.Scaffolding.Application{
 		/// <returns></returns>
 		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses){
 			foreach (var targetclass in targetclasses){
+                if(targetclass.Compiled.Attr("nocode").ToBool())continue;
 				yield return GetActionClass(targetclass);
 			}
 		}
@@ -38,6 +39,9 @@ namespace Qorpent.Scaffolding.Application{
 				sb.AppendLine("using Qorpent.Mvc.Binding;");
 
 				var resultclass = new BSharpClassRef(e.Compiled.Attr("Result"));
+                if (string.IsNullOrWhiteSpace(resultclass.Name)) {
+                    resultclass.Name = "object";
+                }
 				var argumentclass = new BSharpClassRef(e.Compiled.Attr("Arguments"));
 				if (resultclass.Namespace != e.Namespace && !string.IsNullOrWhiteSpace(resultclass.Namespace)){
 					sb.AppendLine("using" + resultclass.Namespace + ";");

@@ -43,7 +43,7 @@
 
             e.annotateFunction = function (f) {
                 f.annotation = f.annotation || {};
-                if (f.toString().match(/^function\s*\(a\s*,b\s*\)/)) {
+                if (f.toString().match(/^function\s*\(a\s*,\s*b\s*\)/)) {
                     f.annotation.comparer = true;
                 }
             };
