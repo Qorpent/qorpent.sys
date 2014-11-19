@@ -7,3 +7,27 @@
   height: 100%;
   z-index: $index;
 }
+
+%tool {
+  position:absolute;
+  opacity: 0.5;
+  &.focused, &:hover {
+    opacity: 1;
+  }
+  border : solid 1px #ccc;
+  border-radius: 4px;
+  min-width: 50px;
+  min-height: 30px;
+  display: flex;
+  flex:1;
+  background-color: #ffffff;
+  input, select {
+    flex:1;
+  }
+}
+
+%noborder {
+  margin: 3px;
+  border : none;
+  outline: 0px;
+}
