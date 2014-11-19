@@ -154,7 +154,7 @@ define([], function () {
     }
 
     angular.module('Menu', [])
-        .directive('menu', function ($compile) {
+        .directive('menu', ["$compile",function ($compile) {
             var activateMenuGroup = function (menu, group) {
                 var items = menu.find('div:last-child>.menu__item');
                 var groups = menu.find('div:first-child>.menu__item');
@@ -226,8 +226,8 @@ define([], function () {
                     });
                 }
             }
-        })
-        .directive('menuItem', function ($compile) {
+        }])
+        .directive('menuItem', ["$compile", function ($compile) {
             var wrapMenuItem = function (m) {
                 if (!m.Type && !m.type) m.type = 'text';
             };
@@ -252,7 +252,7 @@ define([], function () {
                     }
                 }
             }
-        })
+        }])
         .directive('menuIcon', function () {
             return {
                 restrict: 'A',
@@ -275,7 +275,7 @@ define([], function () {
                 }
             }
         })
-        .directive('menuGroup', function ($compile) {
+        .directive('menuGroup', ["$compile",function ($compile) {
             return {
                 restrict: 'A',
                 link: function (scope, el, attrs) {
@@ -306,5 +306,5 @@ define([], function () {
                     }
                 }
             }
-        });
+        }]);
 });
