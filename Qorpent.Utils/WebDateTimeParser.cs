@@ -35,8 +35,8 @@ namespace Qorpent.Utils {
 		    "D.MM.yyyy",
 		    "HH:mm:ss D.MM.yy",
 		    "HH:mm, D MMM yyyy",
-		    "Вчера в HH:mm",
-		    "Сегодня в HH:mm",
+		    "вчера в HH:mm",
+		    "сегодня в HH:mm",
 		    "yyyyMMdd",
 		    "HH:mm dd.MM"
 	    };
@@ -55,6 +55,7 @@ namespace Qorpent.Utils {
 					.Replace("ss", @"(?<s>\d{2})")
 					.Replace("_TZ_",@"\+(?<tz>\d+)")
 					.Replace("|", "\\|")
+					.Replace(" в ", @"[\sв]+")
 					.Replace(" ", @"\s+");
 				regexes.Add(new Regex(regex,RegexOptions.Compiled|RegexOptions.IgnoreCase|RegexOptions.CultureInvariant|RegexOptions.ExplicitCapture));
 			}
@@ -74,7 +75,7 @@ namespace Qorpent.Utils {
 	    public static DateTime Parse(string dateTime, string sourceUrl= null , string locale = null, int? timeZone = null, DateTime? baseDate = null){
 		    var initalDateTime = dateTime;
 		    try{
-			    dateTime = PrepareDateTimeString(dateTime);
+			    dateTime = PrepareDateTimeString(dateTime).ToLowerInvariant();
 			    foreach (var regex in FormatRegexes){
 				    var match = regex.Match(dateTime);
 				    if (match.Success){
@@ -100,13 +101,13 @@ namespace Qorpent.Utils {
 					    if (match.Value.Contains("GMT")){
 						    isuniversal = true;
 					    }
-					    if (dateTime.ToLowerInvariant().Contains("вчера") && year == 0){
+					    if (dateTime.Contains("вчера") && year == 0){
 						    var yesterday = today.AddDays(-1);
 						    year = yesterday.Year;
 						    month = yesterday.Month;
 						    day = yesterday.Day;
 					    }
-					    if (dateTime.ToLowerInvariant().Contains("сегодня") && year == 0){
+					    if (dateTime.Contains("сегодня") && year == 0){
 						    var yesterday = today;
 						    year = yesterday.Year;
 						    month = yesterday.Month;

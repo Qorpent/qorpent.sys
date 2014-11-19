@@ -18,6 +18,7 @@ namespace Qorpent.Utils.Tests
 		[TestCase("15:17 25 декабря 2013", 2013, 12, 25, 15, 17, 0, '\0', '\0', "ru-RU", false, false)]
 		[TestCase("\n 15:17 25 декабря 2013  ", 2013, 12, 25, 15, 17, 0, '\0', '\0', "ru-RU", false, false)]
 		[TestCase("\n вчера в 15:17  ", -1, 12, 0, 15, 17, 0, ' ', '\0', "ru-RU", true, false)]
+		[TestCase("Сегодня 11:29", -1, 0, 0, 11, 29, 0, '\0', '\0', "ru-RU", true, true)]
 		[TestCase("сегодня в 13:12", -1, 0, 0, 13, 12, 0, '\0', '\0', "ru-RU", true, true)]
 		[TestCase("26/09/2013", 2013, 9, 26, 0, 0, 0, '/', '\0', "", false, false)]
 		[TestCase("25 сентября 2013, 17:21", 2013, 9, 25, 17, 21, 0, '\0', '\0', "ru-RU", false, false)]
