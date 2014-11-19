@@ -130,8 +130,18 @@ namespace Qorpent.Mvc.Binding {
 				SetDirectly(action, val);
 			}
 			else if (TargetType.IsArray) {
-				var val = context.GetArray(TargetType.GetElementType(), paramname);
-				SetDirectly(action, val);
+			    object val;
+			    if (_bindattribute.Split) {
+			        var str = context.Get(paramname);
+			        var a = str.SmartSplit().Select(_ => _.ToTargetType(TargetType.GetElementType())).ToArray();
+			        var t = Array.CreateInstance(TargetType.GetElementType(), a.Length);
+			        Array.Copy(a,t,a.Length);
+			        val = t;
+			    }
+			    else {
+			        val = context.GetArray(TargetType.GetElementType(), paramname);
+			    }
+			    SetDirectly(action, val);
 			}
 			else if (typeof (IDictionary<string, string>) == TargetType) {
 				var current = (IDictionary<string, string>) GetCurrent(action);

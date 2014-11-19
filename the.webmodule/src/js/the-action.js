@@ -17,7 +17,7 @@
                 this.emitter = null;
                 this.headers = null;
                 this.extensions = null;
-                this.method = "GET";
+                this.method = "";
                 this.withCredentials = null;
                 this.suppressDefault = false;
                 this.eventName = "";
