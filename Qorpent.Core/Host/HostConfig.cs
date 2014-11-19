@@ -245,7 +245,8 @@ namespace Qorpent.Host{
 	    ///     Загружает конфигурационный файл из XML
 	    /// </summary>
 	    /// <param name="xml"></param>
-	    public void LoadXmlConfig(XElement xml){
+	    public void LoadXmlConfig(XElement xml) {
+	        this.Definition = xml;
             RootFolder = xml.ResolveValue("root", RootFolder);
 	        RootFolder = xml.ResolveValue(HostConstants.RootFolderXmlName, RootFolder);
 	       
@@ -322,6 +323,10 @@ namespace Qorpent.Host{
 	            AddQorpentBinding(appid);
 	        }
 	    }
+        /// <summary>
+        /// Обратная ссылка на XML- определение
+        /// </summary>
+	    public XElement Definition { get; set; }
 
 	    private void ReadModules(XElement xml) {
 	        foreach (XElement e in xml.Elements("module")) {

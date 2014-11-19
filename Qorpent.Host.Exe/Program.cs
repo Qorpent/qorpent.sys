@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Qorpent.Host.Server;
 using Qorpent.Utils;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Exe
 {
 	internal static class Program
 	{
 		public static int Main(string[] args) {
+		    if (args.Contains("--debug")) {
+		        Debugger.Launch();
+		    }
 		    return ConsoleApplication.Execute<ServerParameters>(args, Execute, true);
 		}
 
 	    private static int Execute(ServerParameters arg) {
 	        var config = arg.BuildServerConfig();
+	        EnsureRequiredApplications(config);
 	        config.DllFolder = EnvironmentInfo.ResolvePath("@repos@/.build/bin/all");
 	        var hostServer = new HostServer(config);
+
             LogHostInfo(arg, config);
 	        hostServer.Start();
 	        try {
@@ -23,6 +30,25 @@ namespace Qorpent.Host.Exe
 	        }
 	        finally {
 	            hostServer.Stop();
+	        }
+	    }
+
+	    private static void EnsureRequiredApplications(HostConfig config) {
+	        var requires = config.Definition.Elements("require");
+	        foreach (var require in requires) {
+	            var name = require.IdCodeOrValue();
+	            var shadow = EnvironmentInfo.GetShadowDirectory(name);
+	            var processes = Process.GetProcessesByName("qh");
+                Console.WriteLine(string.Join("; ",processes.Select(_=>_.ProcessName)));
+	            var required =
+	                processes.FirstOrDefault(_ => _.MainModule.FileName.NormalizePath().StartsWith(shadow.NormalizePath()));
+	            if (null != required) {
+	                config.Log.Info("Required '" + name + "' found, PID: " + required.Id);
+	            }
+	            else {
+	                required = Process.Start(EnvironmentInfo.ResolvePath("@repos@/.build/bin/all/qh.exe"), name);
+                    config.Log.Info("Required '" + name + "' started, PID: " + required.Id);
+	            }
 	        }
 	    }
 
