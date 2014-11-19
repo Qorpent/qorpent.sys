@@ -1,9 +1,0 @@
-#!/bin/sh
-if [[ -n $( find ./src/css -name \*.scss ) ]]; then
-    echo COMPASS BUILD DEV
-    compass compile --config ./build/compass.rb
-    compass compile --config ./build/compass.rb -e production
-    echo OK
-else
-    echo NO FILES FO COMPASS TO COMPILE
-fi

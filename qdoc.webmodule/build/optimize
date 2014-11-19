@@ -1,8 +1,0 @@
-#!/bin/sh
-if  [[ -n $( find ./src/js -name \*.js ) ]]; then
-    echo JS OPTIMIZATION
-    node ./build/optimize.js
-    echo OK
-else
-    echo NO JS FILES TO OPTIMIZE
-fi

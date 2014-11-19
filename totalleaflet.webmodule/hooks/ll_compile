@@ -1,0 +1,36 @@
+#!/bin/sh
+
+rx="(\}\(this,)|(\}\(window, )|(\(function \(window,)|(module\.exports = L;)|(define\(L\);)"
+cat ./src/js/tmp-import/leaflet-src.js  | grep -vE "${rx}" > ./src/js/tmp-import/leaflet.f.js
+cat ./src/js/tmp-import/leaflet.awesome-markers.js  | grep -vE "${rx}" > ./src/js/tmp-import/leaflet-awesome.f.js
+cat ./src/js/tmp-import/leaflet.draw-src.js | tail -n+12 | grep -vE "${rx}" > ./src/js/tmp-import/leaflet-draw.f.js
+cat ./src/js/tmp-import/leaflet.markercluster-src.js | tail -n+10  | grep -vE "${rx}" > ./src/js/tmp-import/leaflet-cluster.f.js
+
+trg=./src/js/leaflet-amd.js
+echo "define([],function(){" > $trg
+echo "if ( typeof window === 'undefined' ) {console.error('no window  (leaflet)');return null;}" >> $trg
+cat ./src/js/tmp-import/leaflet.f.js >> $trg
+echo "" >> $trg
+echo "return window.L;" >> $trg
+echo "});" >> $trg
+
+trg=./src/js/leaflet-awesome-amd.js
+echo "define(['leaflet-amd'],function(){" > $trg
+cat ./src/js/tmp-import/leaflet-awesome.f.js >> $trg
+echo "" >> $trg
+echo "return window.L;" >> $trg
+echo "});" >> $trg
+
+trg=./src/js/leaflet-draw-amd.js
+echo "define(['leaflet-amd'],function(){" > $trg
+cat ./src/js/tmp-import/leaflet-draw.f.js >> $trg
+echo "" >> $trg
+echo "return window.L;" >> $trg
+echo "});" >> $trg
+
+trg=./src/js/leaflet-markercluster-amd.js
+echo "define(['leaflet-amd'],function(){" > $trg
+cat ./src/js/tmp-import/leaflet-cluster.f.js >> $trg
+echo "" >> $trg
+echo "return window.L;" >> $trg
+echo "});" >> $trg
