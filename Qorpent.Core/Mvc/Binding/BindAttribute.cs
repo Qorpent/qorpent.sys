@@ -224,8 +224,14 @@ namespace Qorpent.Mvc.Binding {
 		/// </summary>
 		[SerializeNotNullOnly]
 		public string Help { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        [SerializeNotNullOnly]
+	    public bool Split { get; set; }
 
-		private string _errorMessage;
+	    private string _errorMessage;
 		private string _parameterName;
 		private Type _targettype;
 	}
