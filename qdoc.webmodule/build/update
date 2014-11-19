@@ -1,5 +1,15 @@
 #!/bin/sh
 cp -f ../../Qorpent.Kernel/template.webmodule/build/* ./build 2>/dev/null
 cp -f ../../Qorpent.Kernel/template.webmodule/lib/* ./lib 2>/dev/null
-cp -R -u -p ../../Qorpent.Kernel/template.webmodule/build/hooks/* ./build/hooks 2>/dev/null
-cp -R -u -p ../../Qorpent.Kernel/template.webmodule/tests/* ./tests 2>/dev/null
+mkdir  ./hooks 2>/dev/null
+mkdir  ./tests 2>/dev/null
+for f in ../../Qorpent.Kernel/template.webmodule/hooks/*; do
+    if [[ ! -f ./hooks/${f#*/*/*/*/*/} ]]; then
+        cp -f $f ./hooks/${f#*/*/*/*/*/}
+    fi
+done
+for f in ../../Qorpent.Kernel/template.webmodule/tests/*; do
+    if [[ ! -f ./tests/${f#*/*/*/*/*/} ]]; then
+        cp -f $f ./tests/${f#*/*/*/*/*/}
+    fi
+done

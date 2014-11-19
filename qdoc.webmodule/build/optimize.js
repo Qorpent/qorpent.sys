@@ -4,7 +4,9 @@ var reposRoot = "../../../../"; //path to match repository root
 var fs = require("fs");
 var config = {
     baseUrl: './src/js',
-    paths: {},
+    paths: {
+        "text" : "../../lib/text"
+    },
     name: manifest.moduleName,
     out: './dist/js/' + manifest.moduleName + '.js',
     wrap: {

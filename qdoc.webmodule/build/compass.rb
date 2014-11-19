@@ -26,5 +26,5 @@ relative_assets = true
 # output_style = :expanded or :nested or :compact or :compressed
 output_style = (environment == :production) ? :compressed : :expanded
 
-require "./build/hooks/aftercompass.rb"
+require "./hooks/aftercompass.rb"
 __go()
