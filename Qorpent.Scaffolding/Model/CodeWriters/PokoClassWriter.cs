@@ -90,17 +90,20 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 
 			string sermode = fld.Definition.Attr("serialize");
 			string serattribute = null;
-			if (!string.IsNullOrWhiteSpace(sermode)){
-				if ("ignore" == sermode){
-					serattribute = "IgnoreSerialize";
-				}
-				else if ("notnull" == sermode){
-					serattribute = "SerializeNotNullOnly";
-				}
-				else{
-					serattribute = "Serialize";
-				}
-			}
+		    if (!string.IsNullOrWhiteSpace(sermode)) {
+		        if ("ignore" == sermode) {
+		            serattribute = "IgnoreSerialize";
+		        }
+		        else if ("notnull" == sermode) {
+		            serattribute = "SerializeNotNullOnly";
+		        }
+		        else {
+		            serattribute = "Serialize";
+		        }
+		    }
+		    else {
+		        serattribute = "SerializeNotNullOnly";
+		    }
 
 			o.WriteLine("\t\t///<summary>");
 			o.WriteLine("\t\t///" + fld.Comment + " " + subcomment);

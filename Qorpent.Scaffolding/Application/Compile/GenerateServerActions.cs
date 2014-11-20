@@ -50,6 +50,10 @@ namespace Qorpent.Scaffolding.Application{
 				    !string.IsNullOrWhiteSpace(argumentclass.Namespace)){
 					sb.AppendLine("using" + argumentclass.Namespace + ";");
 				}
+                foreach (var u in e.Compiled.Elements("using"))
+                {
+                    sb.AppendLine("using " + u.Attr("code") + ";");
+                }
 
 				if (resultclass.IsArray){
 					resultclass.Name = "ICollection<" + resultclass.Name + ">";
@@ -65,8 +69,10 @@ namespace Qorpent.Scaffolding.Application{
 			    }
 				sb.AppendLine(string.Format("\t[Action(\"{0}\")]", actionname));
 
+			    var baseClass = e.Compiled.Attr("baseclass", "ActionBase");
+                
 
-				sb.AppendLine("\tpublic partial class " + e.Name + ": ActionBase<" + resultclass.Name + "> {");
+				sb.AppendLine("\tpublic partial class " + e.Name + ": "+baseClass+"<" + resultclass.Name + "> {");
 				if (!string.IsNullOrWhiteSpace(argumentclass.Name)){
 					WriteMemberSummary(sb, "Call argumets due to specification");
 					sb.AppendLine("\t\t[Bind]");

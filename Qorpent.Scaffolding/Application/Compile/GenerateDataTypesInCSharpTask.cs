@@ -16,8 +16,8 @@ namespace Qorpent.Scaffolding.Application{
 		/// <param name="targetclasses"></param>
 		/// <returns></returns>
 		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses){
-			var enums = targetclasses.Where(_ => _.Compiled.Attr("enum").ToBool() ).ToArray();
-			var structs = targetclasses.Where(_ => _.Compiled.Attr("struct").ToBool()).ToArray();
+			var enums = targetclasses.Where(_ => _.Compiled.Attr("enum").ToBool() && !_.Compiled.Attr("nocode").ToBool() ).ToArray();
+            var structs = targetclasses.Where(_ => _.Compiled.Attr("struct").ToBool() && !_.Compiled.Attr("nocode").ToBool()).ToArray();
 			var refcache = targetclasses.ToDictionary(_ => _.Name, _=>_);
 			foreach (var @enum in enums){
 				if(@enum.Compiled.Attr("generate")=="false")continue;
@@ -45,7 +45,9 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("using System.Xml;");
 			sb.AppendLine("using System.Xml.Linq;");
 			sb.AppendLine("using System.Collections.Generic;");
-
+		    foreach (var u in e.Compiled.Elements("using")) {
+                sb.AppendLine("using "+u.Attr("code")+";");
+		    }
 			sb.AppendLine("namespace " + e.Namespace + " {");
 			sb.AppendLine("\t/// <summary>\r\n\t///\t" + e.Compiled.Attr("name") + "\r\n\t/// </summary>");
 			sb.AppendLine("\t[Serialize]");
