@@ -17,6 +17,7 @@ namespace Qorpent.Utils.Sql
         /// <param name="source"></param>
         /// <returns></returns>
         public string Convert(string source) {
+            if (string.IsNullOrWhiteSpace(source)) return string.Empty;
             var exp = parser.Parse(source);
             FixTypesAndValues(exp);
             FillGapsOfOperators(exp);

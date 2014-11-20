@@ -98,7 +98,7 @@ namespace Qorpent.Utils {
 					    if (0 != tz){
 						    timeZone = tz;
 					    }
-					    if (match.Value.Contains("GMT")){
+					    if (match.Value.ToLowerInvariant().Contains("gmt")){
 						    isuniversal = true;
 					    }
 					    if (dateTime.Contains("вчера") && year == 0){
