@@ -358,5 +358,16 @@ namespace Qorpent.Utils{
                 Set("shadowsuffix", value);
             }
 	    }
+        /// <summary>
+        /// True- при наличии уже ранее запущенной копии, новую не запускает
+        /// </summary>
+        public bool EnsureShadow
+        {
+            get { return Get("ensureshadow", false); }
+            set
+            {
+                Set("ensureshadow", value);
+            }
+        }
 	}
 }

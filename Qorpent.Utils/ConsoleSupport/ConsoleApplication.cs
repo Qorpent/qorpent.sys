@@ -38,7 +38,7 @@ namespace Qorpent.Utils{
 				parameters.Initialize(args);
 				log = parameters.Log;
 				if ((shadowByDefault || parameters.Shadow) && !parameters.NoShadow){
-					var shadower = new ProcessSafeStart {
+					var shadower = new ShadowRun {
                         Parameters = parameters,
 					    Log = log
 					};
