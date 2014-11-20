@@ -133,7 +133,7 @@ namespace Qorpent.Utils {
 						    if (isuniversal){
 							    dt = dt.ToLocalTime();
 						    }
-						    if (match.Value.Contains("Мск")){
+						    if (match.Value.Contains("мск")){
 							    dt = dt.AddHours(2);
 						    }
 						    if (null != timeZone){
