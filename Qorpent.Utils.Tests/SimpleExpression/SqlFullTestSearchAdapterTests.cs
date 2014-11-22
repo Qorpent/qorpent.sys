@@ -32,6 +32,14 @@ namespace Qorpent.Utils.Tests.SimpleExpression {
             Console.WriteLine(sqlquey);
             Assert.AreEqual("FORMSOF( INFLECTIONAL, ройзман ) & FORMSOF( INFLECTIONAL, куйвашев )",sqlquey);
         }
+
+        [Test]
+        public void Bug_With_Number()
+        {
+            var sqlquey = new SqlFullTextSearchAdapter().Convert("Пархоменко + 5");
+            Console.WriteLine(sqlquey);
+            Assert.AreEqual("FORMSOF( INFLECTIONAL, Пархоменко ) & 5", sqlquey);
+        }
        
         
       

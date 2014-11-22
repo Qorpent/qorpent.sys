@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>the-autocomplet</title>
+    <link rel="stylesheet" href="../lib/bootstrap.css">
+    <script type="text/javascript" src="./../lib/require.js"></script>
+</head>
+<body class="bootstrap">
+<style>
+    h2 {
+        font-size:12pt;
+        text-decoration: underline;
+        -moz-text-decoration-line: underline;
+        -moz-text-decoration-style: wavy;
+        -moz-text-decoration-color: blue;
+
+        -webkit-text-decoration-line: underline;
+        -webkit-text-decoration-style: wavy;
+        -webkit-text-decoration-color: blue;
+    }
+</style>
+<script type="text/javascript">
+    require.config({
+        paths: {
+            jquery: "./../lib/jquery",
+            angular: "./../lib/angular",
+            the: "./../dist/js/the",
+            "ui-bootstrap": "./../lib/ui-bootstrap"
+        },
+        shim: {
+            "ui-bootstrap": {
+                deps: ["jquery", "angular"]
+            },
+            the: {
+                deps: ["jquery", "angular", "ui-bootstrap"]
+            }
+        },
+        deps: ["the"],
+        callback: function () {
+            var items = ["Азбука", "Буквоежка", "Варежка", "Груздок", "Домик", "Ермолай", "Ё-не буква", "Жимолость", "Зайчик"];
+            var module = angular.module("examples", ["the-all"]);
+            module.controller("example1", function ($scope) {
+                $scope.isCollapsed = true;
+                $scope.selected = "";
+                $scope.doSearch = function (search, callback) {
+                    var selectedItems = [];
+                    items.forEach(function (_) {
+                        if (_.match(new RegExp(search, "i"))) {
+                            selectedItems.push(_);
+                        }
+                    });
+                    callback(selectedItems);
+                }
+                $scope.setResult = function (item) {
+                    $scope.selected = item;
+                }
+            }).controller("example2", function ($scope) {
+                $scope.isCollapsed = true;
+                $scope.selected = "";
+                $scope.context = {search: "начальный поиск"};
+                $scope.doSearch = function (search, callback) {
+                    var selectedItems = [];
+                    items.forEach(function (_) {
+                        if (_.match(new RegExp(search, "i"))) {
+                            selectedItems.push(_);
+                        }
+                    });
+                    callback(selectedItems);
+                }
+                $scope.setResult = function (item) {
+                    $scope.selected = item;
+                    $scope.context.search = item;
+                }
+            }).controller("example3", function ($scope) {
+                $scope.isCollapsed = true;
+                $scope.selected = "";
+                $scope.doSearch = function (search, callback) {
+                    var selectedItems = [];
+                    items.forEach(function (_, i) {
+                        if (_.match(new RegExp(search, "i"))) {
+                            selectedItems.push({number: i, value: _});
+                        }
+                    });
+                    callback(selectedItems);
+                }
+                $scope.setResult = function (item) {
+                    $scope.selected = item;
+                }
+            })
+            ;
+            angular.bootstrap(document, ["examples","ui.bootstrap"]);
+        }
+    });
+</script>
+<h1>Пример использования директивы the-autocomplete</h1>
+<blockquote>
+    Подключается как модуль ангуляра с именем "the-all" или "the-autocomplete",
+     для своего использования требует jQuery и ui-bootstrap
+</blockquote>
+<div ng-controller="example1">
+    <h2 ng-click="isCollapsed = !isCollapsed">Простая подстановка</h2>
+
+    <div collapse="isCollapsed">
+        <div>Тут будет результат:<strong>{{selected}}</strong></div>
+        <span the-autocomplete on-search="doSearch" on-result="setResult"/>
+    </div>
+</div>
+
+<div ng-controller="example1">
+    <h2 ng-click="isCollapsed = !isCollapsed">Ограничение на размер строки поиска</h2>
+
+    <div collapse="isCollapsed">
+        <blockquote>Наберите не менее 3-х символов</blockquote>
+        <blockquote>Работает атрибут <strong>min-lenght="3"</strong></blockquote>
+        <div>Тут будет результат:<strong>{{selected}}</strong></div>
+        <span the-autocomplete on-search="doSearch" on-result="setResult" min-length="3"/>
+    </div>
+</div>
+
+<div ng-controller="example1">
+    <h2 ng-click="isCollapsed = !isCollapsed">Ограничение на размер строки поиска == 0 (поиск всего при пустой
+        строке)</h2>
+
+    <div collapse="isCollapsed">
+        <blockquote>Наберите что-то в поиске, а потом сотрите</blockquote>
+        <blockquote>Работает атрибут <strong>min-lenght="0"</strong></blockquote>
+        <div>Тут будет результат:<strong>{{selected}}</strong></div>
+        <span the-autocomplete on-search="doSearch" on-result="setResult" min-length="0"/>
+    </div>
+</div>
+
+
+<div ng-controller="example1">
+    <h2 ng-click="isCollapsed = !isCollapsed">Ограничение на размер DIV результата</h2>
+
+    <div collapse="isCollapsed">
+        <blockquote>Наберите поиск, чтобы попало не менее 3-х результирующих элементов</blockquote>
+        <blockquote>Работает атрибут <strong>height</strong></blockquote>
+        <div>Тут будет результат:<strong>{{selected}}</strong></div>
+
+        <span the-autocomplete on-search="doSearch" on-result="setResult" height="100"/>
+    </div>
+</div>
+
+<div ng-controller="example2">
+    <h2 ng-click="isCollapsed = !isCollapsed">Биндинг поиска на объект в родительском скоупе</h2>
+
+    <div collapse="isCollapsed">
+        <blockquote>Работает атрибут <strong>ng-model="..."</strong></blockquote>
+        <div>Тут будет результат:<strong>{{selected}}</strong></div>
+        <span the-autocomplete on-search="doSearch" ng-model="context.search" on-result="setResult"/>
+    </div>
+</div>
+
+<div ng-controller="example3">
+    <h2 ng-click="isCollapsed = !isCollapsed">Работа с комплексным объектом через шаблон</h2>
+
+    <div collapse="isCollapsed">
+        <blockquote>Работает атрибут <strong>template="..."</strong></blockquote>
+        <div>Тут будет результат:<strong>{{selected}}</strong></div>
+        <span the-autocomplete on-search="doSearch" on-result="setResult"
+              template="{{i.number}} : <strong>{{i.value}}</strong>"/>
+    </div>
+</div>
+
+</body>
+</html>

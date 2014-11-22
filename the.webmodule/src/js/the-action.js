@@ -53,7 +53,7 @@
                 //#Q-270
                 this.targetWindow = "";
                 this.jsonifyOptions = {interpolate: false, defaults: false, stringify: true, evalfunctions: true, functions: false, privates: false};
-                this.__callMoniker = 0;
+                this.__callMoniker = null;
                 return this;
             };
 
@@ -75,13 +75,11 @@
                     window.open(fullUrl,request.targetWindow);
                 }else {
                     var self = this;
+                    clearTimeout(self.__callMoniker);
                     if (0 !== delay) {
-                        self.__callMoniker++;
                         var myMoniker = self.__callMoniker; //interlocked-like syncronization
-                        timeout(function () {
-                            if (self.__callMoniker == myMoniker) {
-                                $h(request);
-                            }
+                        self.__callMoniker =  timeout(function () {
+                            $h(request);
                         }, delay);
                         return null;
                     } else {

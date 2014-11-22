@@ -12,6 +12,7 @@ define([
     "the-collections-linq",
     "the-action",
     'the-angular-unsafe',
+    'the-angular-autocomplete',
     'the-wiki',
     'the-menu',
     'the-settings',
