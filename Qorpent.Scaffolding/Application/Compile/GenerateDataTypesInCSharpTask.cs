@@ -51,9 +51,15 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("namespace " + e.Namespace + " {");
 			sb.AppendLine("\t/// <summary>\r\n\t///\t" + e.Compiled.Attr("name") + "\r\n\t/// </summary>");
 			sb.AppendLine("\t[Serialize]");
-			sb.AppendLine("\tpublic partial class " + e.Name + " {");
+		    var implements = string.Join(", ", e.Compiled.Elements("implements").Select(_ => _.Attr("code")));
+		    if (!string.IsNullOrWhiteSpace(implements)) {
+		        implements = " : " + implements;
+		    }
+			sb.AppendLine("\tpublic partial class " + e.Name + implements +" {");
 
 			foreach (var field in e.Compiled.Elements()){
+                if (field.Name.LocalName == "using") continue;
+                if (field.Name.LocalName == "implements") continue;
 				GenerateField(e, field, refcache, sb);
 			}
 			sb.AppendLine("\t}");
@@ -89,13 +95,21 @@ namespace Qorpent.Scaffolding.Application{
 		    if (type == "datetime") {
 		        type = "DateTime";
 		    }
-			if (type == "dictionary"){
+			 if (type == "dictionary"){
 				var prefix = field.Attr("param-prefix",name+".");
 				sb.AppendLine("\t\t[Bind(ParameterPrefix=\"" + prefix + "\")]");
 				sb.AppendLine(string.Format("\t\tpublic IDictionary<string, string> {0} {{get{{return __{1};}}}}", name,name.ToLower()));
 				sb.AppendLine(string.Format("\t\tprivate IDictionary<string, string> __{0} = new Dictionary<string, string>();",
 											 name.ToLower()));
 			}
+            else if (type == "map")
+            {
+                var prefix = field.Attr("param-prefix", name + ".");
+                sb.AppendLine("\t\t[Bind(ParameterPrefix=\"" + prefix + "\")]");
+                sb.AppendLine(string.Format("\t\tpublic IDictionary<string, object> {0} {{get{{return __{1};}}}}", name, name.ToLower()));
+                sb.AppendLine(string.Format("\t\tprivate IDictionary<string, object> __{0} = new Dictionary<string, object>();",
+                                             name.ToLower()));
+            }
 			else{
 				sb.AppendLine(string.Format("\t\tpublic {0} {1} {{get;set;}}", type, name));
 			}

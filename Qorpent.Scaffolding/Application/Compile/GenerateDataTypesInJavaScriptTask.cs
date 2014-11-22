@@ -59,7 +59,9 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("\tvar "+e.Name+"= result." + e.Name + " = function(args){");
 			sb.AppendLine("\t\targs=args||{}");
 			sb.AppendLine("\t\tthis.__getClassInfo=function(){return {name:\""+e.FullName+"\"}};");
-			foreach (var field in e.Compiled.Elements()){
+			foreach (var field in e.Compiled.Elements()) {
+			    if (field.Name.LocalName == "using")continue;
+			    if (field.Name.LocalName == "implements")continue;
 				GenerateField(e, field, refcache,sb);
 			}
 			sb.AppendLine("\t};");
@@ -113,7 +115,7 @@ namespace Qorpent.Scaffolding.Application{
 					if (type == "string"){
 						val = "\"\"";
 					}
-					else if (type == "any"){
+					else if (type == "any" ||type == "map" || type=="dictionary"){
 						val = "{}";
 					}
 					else if (type == "int" || type == "decimal"){
@@ -125,6 +127,7 @@ namespace Qorpent.Scaffolding.Application{
 					else if (type == "datetime"){
 						val = "new Date(1900,0,1)";
 					}
+                
 					else{
 						val = "new result." + type + "()";
 					}
