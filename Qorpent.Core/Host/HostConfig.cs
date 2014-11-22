@@ -322,6 +322,10 @@ namespace Qorpent.Host{
 	        if (appid != 0) {
 	            AddQorpentBinding(appid);
 	        }
+                
+            this.AccessAllowOrigin = xml.ResolveValue("origin", "");
+
+
 	    }
         /// <summary>
         /// Обратная ссылка на XML- определение

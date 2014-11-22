@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using NUnit.Framework;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Lib.Tests
 {
@@ -68,6 +69,20 @@ namespace Qorpent.Host.Lib.Tests
 			Assert.AreEqual(4, resp.Headers.AllKeys.Count(_ => _.StartsWith("Access-Control")));
 			Assert.True(!string.IsNullOrWhiteSpace(resp.Headers["Allow"]));
 		}
+
+	    [Test]
+	    public void Q313_ReturnValidOrigin() {
+            srv.On("/test", "test");
+	        srv.Config.AccessAllowOrigin = "*";
+            var req = WebRequest.Create("http://127.0.0.1:8094/test");
+            req.Headers["Origin"] = "http://google.com";
+            var resp = (HttpWebResponse)req.GetResponse();
+	        var result =resp.GetResponseStream().ReadToEndAsString();
+            Assert.AreEqual("test",result);
+            Assert.AreEqual(HttpStatusCode.OK, resp.StatusCode);
+	        var accessControlOrigin = resp.Headers["Access-Control-Allow-Origin"];
+            Assert.AreEqual("http://google.com",accessControlOrigin);
+	    }
 
 		[Test]
 		public void Uson()

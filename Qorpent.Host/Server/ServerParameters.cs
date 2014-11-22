@@ -47,7 +47,9 @@ namespace Qorpent.Host.Server
         /// </summary>
         /// <returns></returns>
         public HostConfig BuildServerConfig() {
-           return new HostConfig(Definition) {Log = this.Log};
+           return new HostConfig(Definition) {
+               Log = this.Log,
+           };
         }
 
         /// <summary>

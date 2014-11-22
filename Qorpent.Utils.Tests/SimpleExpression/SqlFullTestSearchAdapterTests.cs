@@ -36,9 +36,9 @@ namespace Qorpent.Utils.Tests.SimpleExpression {
         [Test]
         public void Bug_With_Number()
         {
-            var sqlquey = new SqlFullTextSearchAdapter().Convert("Пархоменко + 5");
-            Console.WriteLine(sqlquey);
-            Assert.AreEqual("FORMSOF( INFLECTIONAL, Пархоменко ) & 5", sqlquey);
+            var sqlQuery = new SqlFullTextSearchAdapter().Convert("Пархоменко + 5");
+            Console.WriteLine(sqlQuery);
+            Assert.AreEqual("FORMSOF( INFLECTIONAL, Пархоменко ) & 5", sqlQuery);
         }
        
         

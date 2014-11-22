@@ -209,8 +209,14 @@ namespace Qorpent.Host{
 
 		private  void PrepareForCrossSiteScripting(Task<HttpListenerContext> task){
 			if (!string.IsNullOrWhiteSpace(Config.AccessAllowOrigin)){
-				task.Result.Response.AddHeader("Access-Control-Allow-Origin",Config.AccessAllowOrigin);
-				if (!string.IsNullOrWhiteSpace(Config.AccessAllowHeaders)){
+			    if (Config.AccessAllowOrigin == "*" && Config.AccessAllowCredentials) {
+			        var origin = task.Result.Request.Headers["Origin"];
+                    task.Result.Response.AddHeader("Access-Control-Allow-Origin", origin);
+			    }
+			    else {
+			        task.Result.Response.AddHeader("Access-Control-Allow-Origin", Config.AccessAllowOrigin);
+			    }
+			    if (!string.IsNullOrWhiteSpace(Config.AccessAllowHeaders)){
 					
 					if ("*" == Config.AccessAllowHeaders){
 						if (task.Result.Request.Headers.AllKeys.Contains("Access-Control-Request-Headers")){

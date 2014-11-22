@@ -50,6 +50,7 @@
                 this.eventName = "";
                 this.jsonify = true;
                 this.delay = 0;
+                this.appPath = "";
                 //#Q-270
                 this.targetWindow = "";
                 this.jsonifyOptions = {interpolate: false, defaults: false, stringify: true, evalfunctions: true, functions: false, privates: false};
@@ -102,7 +103,16 @@
                         }
                     }
                     url = url || "";
-                    return ("/" + baseUrl + "/" + url).replace(/\/+/, "/");
+                    url = ("/" + baseUrl + "/" + url);
+                    var appPath = callinfo.appPath || this.appPath || "";
+                    if(!!appPath){
+                        if(!!document) {
+                            appPath = $the.interpolate(appPath, document.location);
+                        }
+                        url = appPath + "/" +url;
+                    }
+                    url = url.replace(/\/+/g, "/").replace(/^(https?):\//,"$1://");
+                    return url;
                 } else {
                     throw "special urls are not supported for now"
                 }
