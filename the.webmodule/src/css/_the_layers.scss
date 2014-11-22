@@ -1,5 +1,5 @@
 
-@mixin the-layer ($index : 0){
+@mixin the-layer ($index : default){
   position: absolute;
   top: 0;
   left: 0;
@@ -19,6 +19,8 @@
   overflow: hidden;
 }
 
+
+
 %tool {
   position:absolute;
   opacity: 0.5;
@@ -30,7 +32,6 @@
   min-width: 50px;
   min-height: 30px;
   display: flex;
-  flex:1;
   background-color: #ffffff;
   input, select {
     flex:1;
