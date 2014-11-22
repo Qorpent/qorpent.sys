@@ -537,6 +537,8 @@ namespace Qorpent.Utils.Extensions {
         /// <param name="xName">Имя проверяемого элемента</param>
         /// <returns></returns>
         public static bool ContainsElement(this XElement xElement, string xName) {
+            if (null == xElement) return false;
+
             return xElement.Element(xName).IsNotNull();
         }
         /// <summary>
