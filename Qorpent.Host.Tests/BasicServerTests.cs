@@ -44,6 +44,7 @@ namespace Qorpent.Host.Lib.Tests
 		[Test]
 		public void SupportsCrossSite(){
 			srv.On("/test", "test");
+		    srv.Config.AccessAllowOrigin = "";
 			var req = WebRequest.Create("http://127.0.0.1:8094/test");
 			req.Headers["Access-Control-Request-Headers"] = "x-other";
 			var resp = req.GetResponse();
