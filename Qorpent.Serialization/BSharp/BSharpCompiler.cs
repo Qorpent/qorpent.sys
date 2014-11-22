@@ -605,6 +605,20 @@ namespace Qorpent.BSharp{
 			var buffer = new ConcurrentBag<IBSharpClass>();
 		    sources.AsParallel().ForAll(src =>{
 				Preprocess(src);
+		        var globalIfs = src.Elements("if").ToArray();
+		        foreach (var globalIf in globalIfs) {
+		            var cond = globalIf.Attr("code");
+		            var neg = cond.StartsWith("!");
+		            if (neg) {
+		                cond = cond.Substring(1);
+		            }
+		            var ex = _config.Conditions.ContainsKey(cond);
+		            if (ex) {
+		                ex = _config.Conditions[cond].ToBool();
+		            }
+                    if((neg && ex)||(!neg && !ex))return;
+		        }
+                globalIfs.Remove();
 				foreach (IBSharpClass e in IndexizeRawClasses(src, "")){
 					buffer.Add(e);
 				}
