@@ -62,6 +62,7 @@ namespace Qorpent.Scaffolding.Application{
 			foreach (var field in e.Compiled.Elements()) {
 			    if (field.Name.LocalName == "using")continue;
 			    if (field.Name.LocalName == "implements")continue;
+			    if (field.Name.LocalName == "interface")continue;
 				GenerateField(e, field, refcache,sb);
 			}
 			sb.AppendLine("\t};");

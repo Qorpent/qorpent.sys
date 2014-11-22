@@ -42,6 +42,10 @@ namespace Qorpent.Scaffolding.Application{
                 if (string.IsNullOrWhiteSpace(resultclass.Name)) {
                     resultclass.Name = "object";
                 }
+			    if (!string.IsNullOrWhiteSpace(e.Compiled.Attr("resultCSharpClass"))) {
+			        resultclass.Name = e.Compiled.Attr("resultCSharpClass");
+
+			    }
 				var argumentclass = new BSharpClassRef(e.Compiled.Attr("Arguments"));
 				if (resultclass.Namespace != e.Namespace && !string.IsNullOrWhiteSpace(resultclass.Namespace)){
 					sb.AppendLine("using" + resultclass.Namespace + ";");
