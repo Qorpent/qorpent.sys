@@ -1,0 +1,22 @@
+// Describes layered layout
+%layer{
+  width : 100%;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  overflow: hidden;
+  pointer-events: none !important;
+  background: none;
+  position:absolute;
+  flex-direction: column;
+  * {
+    pointer-events: all;
+  }
+}
+
+.the-layer {
+  @extend %layer;
+}
+
+
+

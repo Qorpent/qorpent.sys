@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html class="debug">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Демонстрация лэйаута на слоях</title>
+    <link rel="stylesheet" href="../dist/css/the-debug.css"/>
+</head>
+<body class="the-layer">
+<div class="the-layer" style="color:green">
+    Main Layer
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <div>
+        <button>Первая кнопка</button>
+    </div>
+    <div style="flex-grow:10;background-color: #0b97c4;overflow: auto">
+        <div class="the-layer">
+            Main Layer
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div>
+                <button>Первая кнопка</button>
+            </div>
+        </div>
+        <div class="the-layer">
+            Second Layer
+            <br/>
+            <br/>
+
+            <div>
+                <button>Вторая кнопка</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="the-layer" style="color:red">
+    Second Layer
+    <br/>
+    <br/>
+
+    <div>
+        <button>Вторая кнопка</button>
+    </div>
+
+</div>
+</body>
+</html>
