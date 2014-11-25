@@ -27,7 +27,9 @@ define(["leaflet-amd"],function(L){
                         console.error("Invalid bounds specification "+iAttrs["bounds"]);
                     }
                 }
-
+                if("zoomcontrol" in iAttrs){
+                    mapConfig.zoomControl = iAttrs["zoomcontrol"]!=="false";
+                }
                 var map = L.map(element[0],mapConfig);
 
                 if("tiles" in iAttrs) {

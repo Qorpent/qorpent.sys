@@ -17,7 +17,7 @@
                     "template" : attr["template"] || "{{i}}"
                 }
                 var eltext = $the.interpolate('\
-                        <input class="dropdown-toggle"  ng-model="${bindQuery}" ng-change="__acChange()"/>\
+                        <input class="dropdown-toggle form-control" ng-focus="__acFocus()"  ng-model="${bindQuery}" ng-change="__acChange()"/>\
                         <ul class="dropdown-menu">\
                             <li ng-repeat="i in __data" >\
                                  <a ng-click="__acClick($event,i)">${template}</a>\
@@ -61,6 +61,13 @@
                     $(window).on("mousedown",__winHider);
                     $(e).addClass("open");
                 }
+
+                scope.__acFocus = function(){
+                    if(!$(e).hasClass("open") && scope.__data.length!=0){
+                        __acShow();
+                    }
+                }
+
                 scope.__onData = function(data){
                     scope.$apply(function(){
                         scope.__data = data;

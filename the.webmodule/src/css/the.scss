@@ -6,4 +6,8 @@
   @include box-sizing(border-box);
 }
 
-
+form {
+  span.validate {
+    font-size: xx-small;
+  }
+}

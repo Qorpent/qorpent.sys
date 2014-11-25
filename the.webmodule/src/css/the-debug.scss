@@ -2,14 +2,15 @@
 
 $bgc : darkgreen;
 
-.debug {
-  body.the-layer {
+.debug.the {
+  .layer {
     border: solid 4px $bgc;
-    & > .the-layer {
+    & > .layer {
       border: solid 3px lighten($bgc, 5);
     }
-    .the-layer {
-      border: solid 2px lighten($bgc, 6);
-    }
+      .layer,.box {
+        border: solid 2px lighten($bgc, 6);
+      }
+
   }
 }

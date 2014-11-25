@@ -1,21 +1,47 @@
 // Describes layered layout
-%layer{
+%the-fill {
   width : 100%;
   height: 100%;
-  margin: 0;
+}
+%the-box {
   display: flex;
   overflow: hidden;
-  pointer-events: none !important;
   background: none;
-  position:absolute;
-  flex-direction: column;
+  pointer-events: none !important;
   * {
     pointer-events: all;
   }
+  &.row{
+    flex-direction: row;
+
+  }
+  &.col{
+    flex-direction: column;
+  }
+  &.rest {
+    flex-grow: 10;
+  }
+  .scroll {
+    overflow-y: auto;
+  }
+  .content {
+    background-color:#ffffff;
+  }
+}
+%the-layer{
+  @extend %the-box;
+  @extend %the-fill;
+  margin: 0;
+  position:absolute;
 }
 
-.the-layer {
-  @extend %layer;
+.the {
+  .layer {
+    @extend %the-layer;
+  }
+  .box {
+    @extend %the-box;
+  }
 }
 
 

@@ -13,6 +13,7 @@ define([
     "the-action",
     'the-angular-unsafe',
     'the-angular-autocomplete',
+    'the-angular-controlgroup',
     'the-wiki',
     'the-menu',
     'the-settings',
