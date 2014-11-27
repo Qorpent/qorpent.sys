@@ -14,6 +14,7 @@ define([
     'the-angular-unsafe',
     'the-angular-autocomplete',
     'the-angular-controlgroup',
+    'the-angular-viewcontext',
     'the-wiki',
     'the-menu',
     'the-settings',
