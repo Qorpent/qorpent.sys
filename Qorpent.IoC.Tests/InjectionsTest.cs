@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Qorpent.IoC.Tests {
-	[TestFixture]
+    [TestFixture]
 	public class InjectionsTest {
 		[SetUp]
 		public void Setup() {

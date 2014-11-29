@@ -47,5 +47,14 @@ namespace Qorpent.IoC {
         /// Sygnals that this Injection MUST be resolved anyway , exception must be thrown otherwise
         /// </summary>
         public bool Required { get; set; }
+
+        /// <summary>
+        /// Маска для сверки имен при связывании коллекций
+        /// </summary>
+	    public string NameMask { get; set; }
+        /// <summary>
+        /// Тип для создания по умолчанию
+        /// </summary>
+	    public Type DefaultType { get; set; }
 	}
 }
