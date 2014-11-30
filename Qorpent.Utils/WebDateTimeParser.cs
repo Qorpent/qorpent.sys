@@ -38,7 +38,9 @@ namespace Qorpent.Utils {
 		    "вчера в HH:mm",
 		    "сегодня в HH:mm",
 		    "yyyyMMdd",
-		    "HH:mm dd.MM"
+		    "HH:mm dd.MM",
+            "РУЧИСЛО дня назад в HH:mm"
+            
 	    };
 
 	    private static readonly Regex[] FormatRegexes = null;
@@ -56,6 +58,7 @@ namespace Qorpent.Utils {
 					.Replace("_TZ_",@"\+(?<tz>\d+)")
 					.Replace("|", "\\|")
 					.Replace(" в ", @"[\sв]+")
+                    .Replace("РУЧИСЛО","(два|три)")
 					.Replace(" ", @"\s+");
 				regexes.Add(new Regex(regex,RegexOptions.Compiled|RegexOptions.IgnoreCase|RegexOptions.CultureInvariant|RegexOptions.ExplicitCapture));
 			}
@@ -113,6 +116,18 @@ namespace Qorpent.Utils {
 						    month = yesterday.Month;
 						    day = yesterday.Day;
 					    }
+				        if (dateTime.Contains("дня назад") && year == 0) {
+				            var d = today;
+				            if (dateTime.Contains("два")) {
+				                d = d.AddDays(-2);
+				            }
+                            else if (dateTime.Contains("три")) {
+                                d = d.AddDays(-3);
+                            }
+				            year = d.Year;
+				            month = d.Month;
+				            day = d.Day;
+				        }
 
 					    if (year == 0){
 						    year = DateTime.Today.Year;
