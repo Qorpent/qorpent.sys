@@ -72,10 +72,22 @@ namespace Qorpent.Utils.Tests
 
 		[Test]
 		public void MI_344_Invalid_DateParsing(){
-			var parser = new WebDateTimeParser();
 			var date = WebDateTimeParser.Parse("Автор: Роман Слюнов, 2014-06-18 01:28:01");
 			Assert.AreEqual(new DateTime(2014,6,18,1,28,0),date);
 		}
+
+        [Test]
+        public void MI_481_Mk_Date()
+        {
+            var date = WebDateTimeParser.Parse("Два дня назад в 18:37");
+            var day2b = DateTime.Today.AddDays(-2);
+            Assert.AreEqual(new DateTime(day2b.Year, day2b.Month, day2b.Day, 18, 37, 0), date);
+
+            date = WebDateTimeParser.Parse("Три дня назад в 18:37");
+            var day3b = DateTime.Today.AddDays(-3);
+            Assert.AreEqual(new DateTime(day3b.Year, day3b.Month, day3b.Day, 18, 37, 0), date);
+        }
+
 		[Test]
 		public void ZU_261_Nakanune_MSK()
 		{

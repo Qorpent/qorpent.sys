@@ -693,17 +693,33 @@ namespace Qorpent.IoC {
 			}
 		}
 
-		private void ProcessAttributedInjections(object result) {
+		private void ProcessAttributedInjections(object result, int nestlevel = 0) {
+		    if (nestlevel >= 3) {
+		        Log.Error("Invalid Nesting on Instance of "+result.GetType());
+		    };
 			var injections = from p in result.GetType().FindAllValueMembers(typeof (InjectAttribute))
 			                 let inja = p.Member.GetFirstAttribute<InjectAttribute>()
-			                 select new {prop = p, type = p.Type, name = inja.Name, factoryType = inja.FactoryType, required =inja.Required};
+			                 select new {
+			                     prop = p, 
+                                 type = p.Type, 
+                                 name = inja.Name, 
+                                 factoryType = inja.FactoryType, 
+                                 required =inja.Required,
+                                 nameMask = inja.NameMask,
+                                 defaultType = inja.DefaultType
+			                 };
 
 			foreach (var i in injections) {
 				var current = i.prop.Get(result);
-
+			    var name = i.name;
+			    if (string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(i.nameMask)) {
+			        name = "~" + i.nameMask;
+			    }
+					
 				object val;
 				if (i.type.IsArray) {
-					var instances = All(i.type.GetElementType(), i.name).OfType<object>().ToArray();
+				    var instances = All(i.type.GetElementType(), name).OfType<object>().ToArray();
+				    
 					val = Array.CreateInstance(i.type.GetElementType(), instances.Length);
 					Array.Copy(instances, val as Array, instances.Length);
 				}
@@ -711,7 +727,7 @@ namespace Qorpent.IoC {
 				         ((i.type.GetGenericTypeDefinition() == typeof (List<object>).GetGenericTypeDefinition())
 				          || ((i.type.GetGenericTypeDefinition() == typeof (IList<object>).GetGenericTypeDefinition())))
 					) {
-					var instances = All(i.type.GetGenericArguments()[0], i.name).OfType<object>().ToArray();
+					var instances = All(i.type.GetGenericArguments()[0], name).OfType<object>().ToArray();
 
 					if (null == current) {
 						val =
@@ -737,14 +753,31 @@ namespace Qorpent.IoC {
 					throw new ContainerException("cannot inject property " + i.prop.Member.Name + " of type " + i.type);
 				}
                 if (!i.type.IsValueType && null == val) {
+
                     if (null != i.factoryType) {
                         var factory = (IFactory) Activator.CreateInstance(i.factoryType);
                         val = factory.Get(i.type);
+
                     }
+                    else if(null!=i.defaultType) {
+                        val = Activator.CreateInstance(i.defaultType);
+                    }
+                    if (null != val) {
+                        ProcessAttributedInjections(val,nestlevel+1);
+                    }
+                    if(val is IContainerBound) {
+                            var cb = val as IContainerBound;
+
+                            cb.SetContainerContext(this, null);
+
+                            cb.OnContainerCreateInstanceFinished();
+                    }
+                    
                     if (null == val && i.required) {
                         throw new ContainerException("cannot inject required member "+i.name+" of type "+i.type);
                     }
                 }
+               
 				i.prop.Set(result, val);
 			}
 		}
@@ -829,20 +862,25 @@ namespace Qorpent.IoC {
 						&&
 						(null!=x.Tag && regex.IsMatch(x.Tag))
 						).Reverse().ToArray();
-			}
-			else {
-				if (!ByNameCache.ContainsKey(name))
-				{
-					return new IComponentDefinition[] { };
-				}
-				return ByNameCache[name].Where(
-					x =>
-					type.IsAssignableFrom(x.ServiceType) &&
-					((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0
-					).Reverse().ToArray();	
-			}
-
-			
+            }
+            if (name.StartsWith("~")) {
+                var regex = new Regex(name.Substring(1));
+                return Components.Where(
+                   x =>
+                        ((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0
+                        &&
+                        (null!=x.Name && regex.IsMatch(x.Name))
+                    ).Reverse().ToArray();
+            }
+		    if (!ByNameCache.ContainsKey(name))
+		    {
+		        return new IComponentDefinition[] { };
+		    }
+		    return ByNameCache[name].Where(
+		        x =>
+		            type.IsAssignableFrom(x.ServiceType) &&
+		            ((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0
+		        ).Reverse().ToArray();
 		}
 
 		/// <summary>

@@ -25,6 +25,7 @@
     <Optimize>false</Optimize>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AdvancedInjectionsTests.cs" />
     <Compile Include="ComponentDefinitionTest.cs" />
     <Compile Include="ComponentManifestTest.cs" />
     <Compile Include="ContainerExtendedLifecycleTest.cs" />
