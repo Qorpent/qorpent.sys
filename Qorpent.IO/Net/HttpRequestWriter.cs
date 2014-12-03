@@ -33,6 +33,7 @@ namespace Qorpent.IO.Net{
 				bwriter.Write("\r\n".ToCharArray());
 				bool cookiesWasWritten = false;
 				foreach (var header in request.Headers.OrderBy(_ => _.Key)){
+					if (null == header.Value) continue;
 					bwriter.Write(header.Key.ToCharArray());
 					bwriter.Write(": ".ToCharArray());
 					bwriter.Write(header.Value.ToCharArray());
