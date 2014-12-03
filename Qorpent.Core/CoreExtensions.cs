@@ -779,5 +779,67 @@ namespace Qorpent.Utils.Extensions {
 	        }
 	        return def ?? "";
 	    }
+
+	    /// <summary>
+	    /// —читывает строку как набор ключ-значение
+	    /// </summary>
+	    /// <param name="source">строка - источник</param>
+	    /// <param name="itemDelimiter">разделитель между отдельными элементами словар€</param>
+	    /// <param name="valueDelimiter">разделитель имени и значени€</param>
+	    /// <param name="trim">триммирование значений</param>
+	    /// <param name="escape">экранирующий символ</param>
+	    /// <returns>словарь ключ-значение</returns>
+	    /// <remarks>при совпадающих ключах выигрывает последний</remarks>
+	    public static IDictionary<string, string> ReadAsDictionary(this string source, char itemDelimiter = ';',
+	        char valueDelimiter = '=', bool trim = true, char escape = '\\') {
+	        var result = new Dictionary<string, string>();
+	        if (!string.IsNullOrWhiteSpace(source)) {
+	            var nameBuffer = new StringBuilder();
+	            var valBuffer = new StringBuilder();
+	            char c = '\0';
+	            bool inName = false;
+	            bool inEscape = false;
+	            for (var i = 0; i < source.Length; i++) {
+	                c = source[i];
+	                if (inEscape) {
+	                    if (inName) {
+	                        valBuffer.Append(c);
+	                    }
+	                    else {
+	                        nameBuffer.Append(c);
+	                    }
+	                    inEscape = false;
+	                    continue;                  
+	                }
+	                if (c == escape) {
+	                    inEscape = true;
+	                    continue;
+	                }
+	                if (c == itemDelimiter) {
+	                    result[nameBuffer.ToString().Trim()] = trim ? valBuffer.ToString().Trim() : valBuffer.ToString();
+	                    inName = false;
+	                    nameBuffer.Clear();
+	                    valBuffer.Clear();
+	                    continue;
+	                }
+	                if (c == valueDelimiter) {
+	                    inName = true;
+	                    continue;
+	                }
+	                if (inName)
+	                {
+	                    valBuffer.Append(c);
+	                }
+	                else
+	                {
+	                    nameBuffer.Append(c);
+	                }
+	            }
+	            if (inName) {
+	                result[nameBuffer.ToString().Trim()] = trim ? valBuffer.ToString().Trim() : valBuffer.ToString();
+	            }
+	        }
+	        return result;
+	    }
 	}
 }
