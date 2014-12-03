@@ -55,10 +55,10 @@ namespace Qorpent.Host.Exe
 	    private static void LogHostInfo(ServerParameters arg, HostConfig config) {
             Console.WriteLine("BinRoot: "+config.DllFolder);
 	        foreach (var assembly in config.AutoconfigureAssemblies) {
-	            Console.WriteLine("Lib: "+assembly);
+                arg.Log.Trace("Lib: " + assembly);
 	        }
 	        foreach (var hostBinding in config.Bindings) {
-	            Console.WriteLine("Binding: "+hostBinding);
+                arg.Log.Info("Binding: " + hostBinding);
 	        }
 	        arg.Log.Trace("RootFolder: " + config.RootFolder);
 	        foreach (var contentFolder in config.ContentFolders) {
@@ -67,6 +67,10 @@ namespace Qorpent.Host.Exe
 	        foreach (var map in config.StaticContentMap) {
 	            arg.Log.Trace("Map: "+map.Key+" : "+map.Value);
 	        }
+            foreach (var map in config.Proxize)
+            {
+                arg.Log.Trace("Proxize: " + map.Key + " : " + map.Value);
+            }
 	    }
 	}
 }

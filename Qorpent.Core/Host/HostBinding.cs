@@ -8,8 +8,8 @@
 		public HostBinding(){
 			AppName = "/";
             Schema = HostSchema.Http;
-		    Interface = HostConstants.DefaultBindingInterface;
-		    Port = HostConstants.DefaultBindingPort;
+		    Interface = HostUtils.DefaultBindingInterface;
+		    Port = HostUtils.DefaultBindingPort;
 		}
 
 		/// <summary>

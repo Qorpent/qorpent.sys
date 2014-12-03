@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Qorpent.BSharp;
 using Qorpent.Config;
 using Qorpent.Log;
 using Qorpent.Serialization;
@@ -27,12 +28,13 @@ namespace Qorpent.Host{
 	    private IUserLog _log;
 
 	    /// <summary>
-		///     Формирует конфиг из XML
-		/// </summary>
-		/// <param name="xml"></param>
-		public HostConfig(XElement xml) : this(){
+	    ///     Формирует конфиг из XML
+	    /// </summary>
+	    /// <param name="xml"></param>
+	    /// <param name="context"></param>
+	    public HostConfig(XElement xml,IBSharpContext context = null) : this(){
 			if (null != xml){
-				LoadXmlConfig(xml);
+				LoadXmlConfig(xml,context);
 			}
 		}
 
@@ -56,6 +58,7 @@ namespace Qorpent.Host{
 			AccessAllowMethods = "GET, POST, OPTIONS";
 			AccessAllowCredentials = true;
 			StaticContentMap = new Dictionary<string, string>();
+            Proxize = new Dictionary<string, string>();
             
 		}
 		/// <summary>
@@ -131,7 +134,7 @@ namespace Qorpent.Host{
 		/// </summary>
 		[Serialize]
 		public string ConfigFolder{
-			get { return _configFolder = NormalizeFolder(_configFolder, HostConstants.DefaultConfigFolder); }
+			get { return _configFolder = NormalizeFolder(_configFolder, HostUtils.DefaultConfigFolder); }
 			set { _configFolder = value; }
 		}
 
@@ -140,7 +143,7 @@ namespace Qorpent.Host{
 		/// </summary>
 		[Serialize]
 		public string DllFolder{
-			get { return _dllFolder = NormalizeFolder(_dllFolder, HostConstants.DefaultDllFolder); }
+			get { return _dllFolder = NormalizeFolder(_dllFolder, HostUtils.DefaultDllFolder); }
 			set { _dllFolder = value; }
 		}
 
@@ -149,7 +152,7 @@ namespace Qorpent.Host{
 		/// </summary>
 		[Serialize]
 		public string TmpFolder{
-			get { return _tmpFolder = NormalizeFolder(_tmpFolder, HostConstants.DefaultTmpFolder); }
+			get { return _tmpFolder = NormalizeFolder(_tmpFolder, HostUtils.DefaultTmpFolder); }
 			set { _tmpFolder = value; }
 		}
 
@@ -158,7 +161,7 @@ namespace Qorpent.Host{
 		/// </summary>
 		[Serialize]
 		public string LogFolder{
-			get { return _logFolder = NormalizeFolder(_logFolder, HostConstants.DefaultLogFolder); }
+			get { return _logFolder = NormalizeFolder(_logFolder, HostUtils.DefaultLogFolder); }
 			set { _logFolder = value; }
 		}
 
@@ -185,7 +188,7 @@ namespace Qorpent.Host{
 		public int ThreadCount{
 			get{
 				if (0 >= _threadCount){
-					_threadCount = HostConstants.DefaultThreadCount;
+					_threadCount = HostUtils.DefaultThreadCount;
 				}
 				return _threadCount;
 			}
@@ -245,43 +248,42 @@ namespace Qorpent.Host{
 	    ///     Загружает конфигурационный файл из XML
 	    /// </summary>
 	    /// <param name="xml"></param>
-	    public void LoadXmlConfig(XElement xml) {
+	    /// <param name="context"></param>
+	    public void LoadXmlConfig(XElement xml,IBSharpContext context = null) {
 	        this.Definition = xml;
             RootFolder = xml.ResolveValue("root", RootFolder);
-	        RootFolder = xml.ResolveValue(HostConstants.RootFolderXmlName, RootFolder);
-	       
-
-	        ConfigFolder = xml.ResolveValue(HostConstants.ConfigFolderXmlName, ConfigFolder);
-	        DllFolder = xml.ResolveValue(HostConstants.DllFolderXmlName, DllFolder);
-	        LogFolder = xml.ResolveValue(HostConstants.LogFolderXmlName, LogFolder);
-	        TmpFolder = xml.ResolveValue(HostConstants.TmpFolderXmlName, TmpFolder);
-	        LogLevel = xml.ResolveValue(HostConstants.LogLevelXmlName, "Info").To<LogLevel>();
-			UseApplicationName = xml.ResolveValue(HostConstants.UseApplicationName, "false").To<bool>();
-	        AuthCookieName = xml.ResolveValue(HostConstants.AuthCookieName, AuthCookieName);
-	        AuthCookieDomain = xml.ResolveValue(HostConstants.AuthCookieDomain, AuthCookieDomain);
-	        EncryptBasis = xml.ResolveValue(HostConstants.EncryptBasis, Guid.NewGuid().ToString());
-	        DefaultPage = xml.ResolveValue(HostConstants.DefaultPage, "default.html");
-	        foreach (XElement bind in xml.Elements(HostConstants.BindingXmlName)){
+	        RootFolder = xml.ResolveValue(HostUtils.RootFolderXmlName, RootFolder);	      
+	        ConfigFolder = xml.ResolveValue(HostUtils.ConfigFolderXmlName, ConfigFolder);
+	        DllFolder = xml.ResolveValue(HostUtils.DllFolderXmlName, DllFolder);
+	        LogFolder = xml.ResolveValue(HostUtils.LogFolderXmlName, LogFolder);
+	        TmpFolder = xml.ResolveValue(HostUtils.TmpFolderXmlName, TmpFolder);
+	        LogLevel = xml.ResolveValue(HostUtils.LogLevelXmlName, "Info").To<LogLevel>();
+			UseApplicationName = xml.ResolveValue(HostUtils.UseApplicationName, "false").To<bool>();
+	        AuthCookieName = xml.ResolveValue(HostUtils.AuthCookieName, AuthCookieName);
+	        AuthCookieDomain = xml.ResolveValue(HostUtils.AuthCookieDomain, AuthCookieDomain);
+	        EncryptBasis = xml.ResolveValue(HostUtils.EncryptBasis, Guid.NewGuid().ToString());
+	        DefaultPage = xml.ResolveValue(HostUtils.DefaultPage, "default.html");
+	        foreach (XElement bind in xml.Elements(HostUtils.BindingXmlName)){
 				var hostbind = new HostBinding();
-				hostbind.Port = bind.Attr(HostConstants.PortXmlName).ToInt();
-				hostbind.Interface = bind.Attr(HostConstants.InterfaceXmlName);
-				string schema = bind.Attr(HostConstants.SchemaXmlName);
+				hostbind.Port = bind.Attr(HostUtils.PortXmlName).ToInt();
+				hostbind.Interface = bind.Attr(HostUtils.InterfaceXmlName);
+				string schema = bind.Attr(HostUtils.SchemaXmlName);
 				if (!string.IsNullOrWhiteSpace(schema)){
-					if (schema == HostConstants.HttpsXmlValue){
+					if (schema == HostUtils.HttpsXmlValue){
 						hostbind.Schema = HostSchema.Https;
 					}
 				}
 				if (hostbind.Port == 0){
-					hostbind.Port = HostConstants.DefaultBindingPort;
+					hostbind.Port = HostUtils.DefaultBindingPort;
 				}
 				if (string.IsNullOrWhiteSpace(hostbind.Interface)){
-					hostbind.Interface = HostConstants.DefaultBindingInterface;
+					hostbind.Interface = HostUtils.DefaultBindingInterface;
 				}
 				Bindings.Add(hostbind);
 				
 			}
 
-			foreach (XElement e in xml.Elements(HostConstants.ContentFolder))
+			foreach (XElement e in xml.Elements(HostUtils.ContentFolder))
 			{
 				
 				ContentFolders.Add(e.Attr("code"));
@@ -298,20 +300,38 @@ namespace Qorpent.Host{
 	            }
 	            this.StaticContentMap[name] = folder;
 	        }
-			foreach (XElement e in xml.Elements(HostConstants.ExContentFolder))
+			foreach (XElement e in xml.Elements(HostUtils.ExContentFolder))
 			{
 
 				ExtendedContentFolders.Add(e.Attr("code"));
 			}
-			foreach (XElement e in xml.Elements(HostConstants.IncludeConfigXmlName)){
+			foreach (XElement e in xml.Elements(HostUtils.IncludeConfigXmlName)){
 				IncludeConfigMasks.Add(e.Describe().GetEfficienValue());
 			}
-			foreach (XElement e in xml.Elements(HostConstants.ExcludeConfigXmlName)){
+			foreach (XElement e in xml.Elements(HostUtils.ExcludeConfigXmlName)){
 				ExcludeConfigMasks.Add(e.Describe().GetEfficienValue());
 			}
 			foreach (XElement e in xml.Elements("cache")){
 				Cached.Add(e.Value);
 			}
+            foreach (XElement e in xml.Elements("proxize")) {
+                var key = e.Attr("code");
+                var url = e.Attr("url");
+                if (string.IsNullOrWhiteSpace(url)) {
+                    if (!string.IsNullOrWhiteSpace(e.Attr("appid"))) {
+                        url += "appid=" + e.Attr("appid")+";";
+                    }
+                    if (!string.IsNullOrWhiteSpace(e.Attr("secure")))
+                    {
+                        url += "secure=" + e.Attr("secure")+";";
+                    }
+                    if (!string.IsNullOrWhiteSpace(e.Attr("server")))
+                    {
+                        url += "server=" + e.Attr("server") + ";";
+                    }
+                }
+                Proxize[key] = url;
+            }
             foreach (XElement e in xml.Elements("lib"))
             {
                 AutoconfigureAssemblies.Add(e.AttrOrValue("code"));
@@ -325,12 +345,38 @@ namespace Qorpent.Host{
                 
             this.AccessAllowOrigin = xml.ResolveValue("origin", "");
 
+	        foreach (var e in xml.Elements("require")) {
+	            var appname = e.Attr("code");
+	            var proxize = e.GetSmartValue("proxize").ToBool() || e.Attr("name")=="proxize";
+	            if (proxize) {
+                    if (null == context)
+                    {
+                        this.Log.Error("context not provi " + appname);
+                    }
+	                var cls = context[appname];
+	                if (null == cls) {
+	                    this.Log.Error("cannot find application for proxize " + appname);
+	                }
+	                else {
+	                    var sappid = cls.Compiled.ResolveValue("appid");
+	                    var services = cls.Compiled.Elements("service");
+	                    foreach (var srv in services) {
+	                        var root = srv.Attr("code");
+	                        this.Proxize[root] = "appid=" + sappid+";";
+	                    }
 
+	                }
+	            }
+	        }
 	    }
         /// <summary>
         /// Обратная ссылка на XML- определение
         /// </summary>
 	    public XElement Definition { get; set; }
+        /// <summary>
+        /// Мапинг прокси адресов для их обработки на другом хосте
+        /// </summary>
+	    public IDictionary<string,string> Proxize { get; private set; }
 
 	    private void ReadModules(XElement xml) {
 	        foreach (XElement e in xml.Elements("module")) {
@@ -393,14 +439,14 @@ namespace Qorpent.Host{
 		public void AddDefaultBinding(){
 			_bindings.Add(
 				new HostBinding{
-					Interface = HostConstants.DefaultBindingInterface,
-					Port = HostConstants.DefaultBindingPort,
+					Interface = HostUtils.DefaultBindingInterface,
+					Port = HostUtils.DefaultBindingPort,
 					Schema = HostSchema.Http
 				}
 				);
 			//_bindings.Add(
 
-			//			new HostBinding { Interface = HostConstants.DefaultBindingInterface, Port = HostConstants.DefaultBindingPort+1, Schema = HostSchema.Https }
+			//			new HostBinding { Interface = HostUtils.DefaultBindingInterface, Port = HostUtils.DefaultBindingPort+1, Schema = HostSchema.Https }
 			//	);
 		}
 
@@ -409,8 +455,7 @@ namespace Qorpent.Host{
         /// </summary>
         /// <param name="appId"></param>
 	    public void AddQorpentBinding(int appId) {
-            var baseport = HostConstants.DefaultQorpentStartPort +
-                           appId*HostConstants.DefaultQorpentApplicationPortOffset;
+            var baseport = HostUtils.GetBasePort(appId);
             Bindings.Add(new HostBinding { Port = baseport });
             Bindings.Add(new HostBinding { Port = baseport+1, Schema = HostSchema.Https });
             Bindings.Add(new HostBinding { Interface = "127.0.0.1", Port = baseport + 5 });

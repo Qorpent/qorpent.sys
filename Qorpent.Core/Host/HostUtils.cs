@@ -1,10 +1,12 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host{
 	/// <summary>
 	///     Константы настройки хоста
 	/// </summary>
-	public static class HostConstants{
+	public static class HostUtils{
 		/// <summary>
 		///     Папка с конфигурацией по умолчанию
 		/// </summary>
@@ -151,5 +153,51 @@ namespace Qorpent.Host{
         /// </summary>
 	    public const int DefaultQorpentApplicationPortOffset = 10;
 
+	    /// <summary>
+	    /// Рассчитать базовый порт для приложения
+	    /// </summary>
+	    /// <param name="appId"></param>
+	    /// <returns></returns>
+	    public static int GetBasePort(int appId) {
+	        var baseport = DefaultQorpentStartPort +
+	                       appId*DefaultQorpentApplicationPortOffset;
+	        return baseport;
+	    }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="src"></param>
+        /// <returns></returns>
+	    public static string ParseUrl(string src) {
+	        if (!src.Contains("://")) {
+	            return ParseConnecitonString(src);
+	        }
+            return src;
+        }
+
+	    private static string ParseConnecitonString(string src) {
+	        var parts = src.ReadAsDictionary();
+	        if (!parts.ContainsKey("appid")) {
+	            throw new Exception("appid is required connection field");
+	        }
+	        bool secure = parts.ContainsKey("secure") && parts["secure"].ToBool();
+	        string server;
+	        if (parts.ContainsKey("server")) {
+	            var srv = parts["server"];
+	            if (srv == ".") {
+	                server = "127.0.0.1";
+	            }
+	            else {
+	                server = srv;
+	            }
+	        }
+	        else {
+	            server = "127.0.0.1";
+	        }
+	        var port = GetBasePort(parts["appid"].ToInt());
+	        if (secure) port++;
+           
+	        return string.Format("http{0}://{1}:{2}",secure?"s":"",server,port);
+	    }
 	}
 }

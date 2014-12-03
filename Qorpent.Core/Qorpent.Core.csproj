@@ -127,7 +127,7 @@
     <Compile Include="Host\HostApplicationMode.cs" />
     <Compile Include="Host\HostBinding.cs" />
     <Compile Include="Host\HostConfig.cs" />
-    <Compile Include="Host\HostConstants.cs" />
+    <Compile Include="Host\HostUtils.cs" />
     <Compile Include="Host\HostSchema.cs" />
     <Compile Include="Host\HostServerState.cs" />
     <Compile Include="Host\IAuthenticationProvider.cs" />

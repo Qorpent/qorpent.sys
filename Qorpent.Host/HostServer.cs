@@ -207,7 +207,8 @@ namespace Qorpent.Host{
 			}
 		}
 
-		private  void PrepareForCrossSiteScripting(Task<HttpListenerContext> task){
+		private  void PrepareForCrossSiteScripting(Task<HttpListenerContext> task) {
+		    if (!string.IsNullOrWhiteSpace(task.Result.Request.Headers["QHPROXYORIGIN"])) return;
 			if (!string.IsNullOrWhiteSpace(Config.AccessAllowOrigin)){
 			    if (Config.AccessAllowOrigin == "*" && Config.AccessAllowCredentials) {
 			        var origin = task.Result.Request.Headers["Origin"];
