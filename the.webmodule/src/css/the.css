@@ -9,37 +9,100 @@
   display: flex;
   overflow: hidden;
   background: none;
+  padding-left: 2px;
   pointer-events: none !important;
 }
-/* line 11, the/layouts/_layered.scss */
+/* line 12, the/layouts/_layered.scss */
 .the .layer *, .the .box * {
   pointer-events: all;
 }
-/* line 14, the/layouts/_layered.scss */
+/* line 15, the/layouts/_layered.scss */
 .the .row.layer, .the .row.box {
   flex-direction: row;
+  margin: 0 !important;
 }
-/* line 18, the/layouts/_layered.scss */
+/* line 19, the/layouts/_layered.scss */
 .the .col.layer, .the .col.box {
   flex-direction: column;
+  margin: 0 !important;
 }
-/* line 21, the/layouts/_layered.scss */
+/* line 24, the/layouts/_layered.scss */
 .the .rest.layer, .the .rest.box {
   flex-grow: 10;
 }
-/* line 24, the/layouts/_layered.scss */
+/* line 27, the/layouts/_layered.scss */
 .the .layer .scroll, .the .box .scroll {
   overflow-y: auto;
 }
-/* line 27, the/layouts/_layered.scss */
+/* line 30, the/layouts/_layered.scss */
 .the .layer .content, .the .box .content {
   background-color: #ffffff;
 }
 
-/* line 31, the/layouts/_layered.scss */
+/* line 34, the/layouts/_layered.scss */
 .the .layer {
   margin: 0;
   position: absolute;
+}
+
+/* line 48, the/layouts/_layered.scss */
+.the body.layer, .the body > .layer, .the html.layer, .the html > .layer {
+  top: 0;
+  left: 0;
+}
+
+/* line 2, the/tools/_labels.scss */
+.the .tool.labeled {
+  padding: 5px;
+  display: flex;
+  flex-direction: inherit;
+  border-radius: 3px;
+  border: 1px ridge #000000;
+  margin: 5px;
+  background: #fefeeb;
+  background: -moz-linear-gradient(left, #fefeeb 0%, #fff1cc 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, #fefeeb), color-stop(100%, #fff1cc));
+  background: -webkit-linear-gradient(left, #fefeeb 0%, #fff1cc 100%);
+  background: -o-linear-gradient(left, #fefeeb 0%, #fff1cc 100%);
+  background: -ms-linear-gradient(left, #fefeeb 0%, #fff1cc 100%);
+  background: linear-gradient(to right, #fefeeb 0%, #fff1cc 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefeeb', endColorstr='#fff1cc', GradientType=1 );
+  -webkit-box-shadow: 3px 3px 26px 1px rgba(0, 0, 0, 0.71);
+  -moz-box-shadow: 3px 3px 26px 1px rgba(0, 0, 0, 0.71);
+  box-shadow: 3px 3px 26px 1px rgba(0, 0, 0, 0.71);
+}
+/* line 24, the/tools/_labels.scss */
+.the .tool.labeled > label:first-child {
+  text-align: center;
+  background: #93cede;
+  background: -moz-linear-gradient(left, #93cede 0%, #75bdd1 41%, #49a5bf 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, #93cede), color-stop(41%, #75bdd1), color-stop(100%, #49a5bf));
+  background: -webkit-linear-gradient(left, #93cede 0%, #75bdd1 41%, #49a5bf 100%);
+  background: -o-linear-gradient(left, #93cede 0%, #75bdd1 41%, #49a5bf 100%);
+  background: -ms-linear-gradient(left, #93cede 0%, #75bdd1 41%, #49a5bf 100%);
+  background: linear-gradient(to right, #93cede 0%, #75bdd1 41%, #49a5bf 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#93cede', endColorstr='#49a5bf', GradientType=1 );
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+/* line 36, the/tools/_labels.scss */
+.the .tool.labeled .controls {
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+/* line 40, the/tools/_labels.scss */
+.the .tool.labeled i.active {
+  font-weight: bold;
+  color: #33aa4c;
+}
+/* line 44, the/tools/_labels.scss */
+.the .tool.labeled i.disabled {
+  font-weight: lighter;
+  color: lightgray !important;
 }
 
 /* line 5, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
@@ -107,16 +170,36 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   display: block;
 }
 
-/* line 5, the.scss */
+/* line 6, the.scss */
 * {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-/* line 10, the.scss */
-form span.validate {
+/* line 13, the.scss */
+.the form span.validate {
   font-size: xx-small;
+}
+/* line 24, the.scss */
+.the [ng\:cloak], .the [ng-cloak], .the [data-ng-cloak], .the [x-ng-cloak], .the .ng-cloak, .the .x-ng-cloak {
+  display: none !important;
+}
+/* line 28, the.scss */
+.the ::-webkit-scrollbar {
+  width: 12px;
+  background-color: #eeeeee;
+  border: dashed 1px darkblue;
+}
+/* line 34, the.scss */
+.the ::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+/* line 39, the.scss */
+.the ::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
 /*# sourceMappingURL=the.css.map */

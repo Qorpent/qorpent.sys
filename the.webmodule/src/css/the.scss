@@ -1,4 +1,5 @@
 @import "the/layouts/layered";
+@import "the/tools/labels";
 @import "compass/css3";
 @import "compass/reset";
 
@@ -11,6 +12,12 @@
   form {
     span.validate {
       font-size: xx-small;
+    }
+  }
+
+  .tool {
+    &.labeled{
+      @extend %label-tool;
     }
   }
 
