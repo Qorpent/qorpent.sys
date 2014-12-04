@@ -4,6 +4,7 @@
     define(["the-angular"], function ($the) {
         return $the(function(root, privates)
         {
+
             if(null==root.modules)return;
             var prepareElement = function(e,attr){
                 var el = $(e);
@@ -18,6 +19,7 @@
                 }
                 var eltext = $the.interpolate('\
                         <input class="dropdown-toggle form-control" ng-focus="__acFocus()"  ng-model="${bindQuery}" ng-change="__acChange()"/>\
+                        <div class="posmarker"></div>\
                         <ul class="dropdown-menu">\
                             <li ng-repeat="i in __data" >\
                                  <a ng-click="__acClick($event,i)">${template}</a>\
@@ -25,6 +27,7 @@
                         </ul>'
                     ,data);
                 var input = $(eltext);
+
                 input.appendTo(el);
 
                 if(!!attr["height"]){
@@ -47,7 +50,7 @@
                 var __winHider = function(event){
                     var current = event.target;
                     while(!!current){
-                        if(current==_e)return;
+                        if(current==ul[0])return;
                         current = current.parentNode;
                     }
                     __acHide();
@@ -55,11 +58,24 @@
                 var __acHide = function(){
                     $(window).off("mousedown",__winHider);
                     $(e).removeClass("open");
+                    if(!!ul){
+                        ul.hide();
+                    }
                 }
-
+                var ul = null;
                 var __acShow = function(){
                     $(window).on("mousedown",__winHider);
                     $(e).addClass("open");
+                    if(!ul){
+                        ul = $(e).find("ul");
+                        ul.appendTo(document.body);
+                    }
+                    var posmarker=$(e).find(".posmarker");
+                    var top = posmarker.offset().top;
+                    var left= posmarker.offset().left;
+                    ul.css("top", top+"px");
+                    ul.css("left",left+"px");
+                    ul.show();
                 }
 
                 scope.__acFocus = function(){
@@ -71,8 +87,8 @@
                 scope.__onData = function(data){
                     scope.$apply(function(){
                         scope.__data = data;
-                        __acShow();
                     });
+                    __acShow();
                 };
                 scope.__acChange = function(){
                     clearTimeout(timeout);
@@ -90,6 +106,7 @@
                     }
                 };
                 scope.__acClick = function ($event, i) {
+                    console.log("here");
                     $event.preventDefault();
                     $event.stopPropagation();
                     __acHide();
