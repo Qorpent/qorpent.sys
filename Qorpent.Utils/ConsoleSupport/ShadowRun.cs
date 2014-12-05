@@ -106,7 +106,11 @@ namespace Qorpent.Utils{
 	        Log.Debug("adapted args " + safedArgs);
 	        var exeName = Path.Combine(targetDirectory, Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName));
 	        Log.Trace("start " + exeName);
-	        Process.Start(exeName, safedArgs);
+	        var startInfo = new ProcessStartInfo(exeName, safedArgs);
+	        if (null != Parameters && Parameters.Get("hidden", false)) {
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+	        }
+	        Process.Start(startInfo);
 	        Thread.Sleep(100);
 	        Log.Debug("started");
 	        return false;

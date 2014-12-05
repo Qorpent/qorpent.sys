@@ -18,7 +18,7 @@ namespace Qorpent.Host.Exe
 
 	    private static int Execute(ServerParameters arg) {
 	        var config = arg.BuildServerConfig();
-	        EnsureRequiredApplications(config);
+	        EnsureRequiredApplications(arg,config);
 	        config.DllFolder = EnvironmentInfo.ResolvePath("@repos@/.build/bin/all");
 	        var hostServer = new HostServer(config);
 
@@ -33,7 +33,7 @@ namespace Qorpent.Host.Exe
 	        }
 	    }
 
-	    private static void EnsureRequiredApplications(HostConfig config) {
+	    private static void EnsureRequiredApplications(ServerParameters serverParameters, HostConfig config) {
 	        var requires = config.Definition.Elements("require");
 	        foreach (var require in requires) {
 	            var name = require.IdCodeOrValue();
@@ -46,7 +46,11 @@ namespace Qorpent.Host.Exe
 	                config.Log.Info("Required '" + name + "' found, PID: " + required.Id);
 	            }
 	            else {
-	                required = Process.Start(EnvironmentInfo.ResolvePath("@repos@/.build/bin/all/qh.exe"), name);
+	                var args = name;
+	                if (serverParameters.Get("hidden", false)) {
+	                    args += " --hidden";
+	                }
+	                required = Process.Start(EnvironmentInfo.ResolvePath("@repos@/.build/bin/all/qh.exe"), args);
                     config.Log.Info("Required '" + name + "' started, PID: " + required.Id);
 	            }
 	        }
