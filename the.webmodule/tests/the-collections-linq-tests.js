@@ -18,6 +18,13 @@ define(["the","chai"],function($the,chai) {
                     return _ == 1
                 }).should.equal(true);
             });
+            it("supports any(function)", function () {
+                var i = $([{Id:1}, {Id:2}, {Id:3}]);
+                i.any().should.equal(true);
+                i.any(function(_){return _.Id==2}).should.equal(true);
+                i.any(function(_){return _.Id==4}).should.equal(false);
+
+            });
             it("supports toArray([condition])", function () {
                 var i = $(4);
                 i.toArray().should.eql([0, 1, 2, 3]);

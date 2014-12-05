@@ -86,20 +86,21 @@
   -ms-user-select: none;
   -webkit-user-select: none;
   user-select: none;
+  min-height: 20px;
 }
-/* line 36, the/tools/_labels.scss */
+/* line 37, the/tools/_labels.scss */
 .the .tool.labeled .controls {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
   -webkit-user-select: none;
   user-select: none;
 }
-/* line 40, the/tools/_labels.scss */
+/* line 41, the/tools/_labels.scss */
 .the .tool.labeled i.active {
   font-weight: bold;
   color: #33aa4c;
 }
-/* line 44, the/tools/_labels.scss */
+/* line 45, the/tools/_labels.scss */
 .the .tool.labeled i.disabled {
   font-weight: lighter;
   color: lightgray !important;
