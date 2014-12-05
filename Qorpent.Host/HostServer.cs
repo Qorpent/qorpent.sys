@@ -279,7 +279,7 @@ namespace Qorpent.Host{
 	    private string BuildPluginsModule() {
 	        var result = new StringBuilder();
             
-            var plugins = this.Config.Definition.Elements("plugin");
+            var plugins = (this.Config.Definition?? new XElement("_stub")).Elements("plugin");
 	        var pluginlist = string.Join(" , ",new[]{"'angular'","'jquery'"}.Union(plugins.Select(_ => "'" + _.Attr("code") + "'")));
             var arglist = string.Join(" , ", new[] { "angular", "$" }.Union(plugins.Select(_ => _.Attr("code").Replace("/","_").Replace("-","_"))));
 	        result.Append("define([");
