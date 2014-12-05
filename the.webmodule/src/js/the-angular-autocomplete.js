@@ -4,6 +4,7 @@
     define(["the-angular"], function ($the) {
         return $the(function(root, privates)
         {
+
             if(null==root.modules)return;
             var prepareElement = function(e,attr){
                 var el = $(e);
@@ -18,6 +19,7 @@
                 }
                 var eltext = $the.interpolate('\
                         <input class="dropdown-toggle form-control" ng-focus="__acFocus()"  ng-model="${bindQuery}" ng-change="__acChange()"/>\
+                        <div class="posmarker"></div>\
                         <ul class="dropdown-menu">\
                             <li ng-repeat="i in __data" >\
                                  <a ng-click="__acClick($event,i)">${template}</a>\
@@ -25,6 +27,7 @@
                         </ul>'
                     ,data);
                 var input = $(eltext);
+
                 input.appendTo(el);
 
                 if(!!attr["height"]){
@@ -47,7 +50,7 @@
                 var __winHider = function(event){
                     var current = event.target;
                     while(!!current){
-                        if(current==_e)return;
+                        if(current==ul[0])return;
                         current = current.parentNode;
                     }
                     __acHide();
@@ -55,24 +58,45 @@
                 var __acHide = function(){
                     $(window).off("mousedown",__winHider);
                     $(e).removeClass("open");
+                    if(!!ul){
+                        ul.hide();
+                    }
                 }
-
-                var __acShow = function(){
+                var ul = null;
+                var __acShow = function(cached){
+                    if(!ul){
+                        ul = $(e).find("ul");
+                        ul.appendTo(document.body);
+                    }
+                    //allow override showStage
+                    var func = scope.$eval(attr["onShow"]);
+                    if (!!func) {
+                        if(!func(scope.__data,cached,ul,e)){
+                            return;
+                        }
+                    }
                     $(window).on("mousedown",__winHider);
                     $(e).addClass("open");
+
+                    var posmarker=$(e).find(".posmarker");
+                    var top = posmarker.offset().top;
+                    var left= posmarker.offset().left;
+                    ul.css("top", top+"px");
+                    ul.css("left",left+"px");
+                    ul.show();
                 }
 
                 scope.__acFocus = function(){
                     if(!$(e).hasClass("open") && scope.__data.length!=0){
-                        __acShow();
+                        __acShow(true);
                     }
                 }
 
                 scope.__onData = function(data){
                     scope.$apply(function(){
                         scope.__data = data;
-                        __acShow();
                     });
+                    __acShow();
                 };
                 scope.__acChange = function(){
                     clearTimeout(timeout);

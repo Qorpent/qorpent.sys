@@ -41,6 +41,16 @@ namespace Qorpent.Utils.Tests {
 			Assert.AreEqual("1,2,3", result);
 		}
 
+	    [Test]
+	    public void ReadAsDictionaryTest() {
+	        var str = @" A b c= x y z; Trust_Buf=lala ; E\\s\=cape = \;scape ; strong=";
+	        var dict = str.ReadAsDictionary();
+            Assert.AreEqual(4,dict.Count);
+            Assert.AreEqual("x y z",dict["A b c"]);
+            Assert.AreEqual("lala", dict["Trust_Buf"]);
+            Assert.AreEqual(";scape", dict[@"E\s=cape"]);
+	    }
+
 		[Test]
 		public void CanConcat_NullString() {
 			var result = new object[] {1, null, "2", 3m}.ConcatString(",", nullstring: "NULL");

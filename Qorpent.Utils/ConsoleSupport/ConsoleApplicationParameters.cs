@@ -302,6 +302,7 @@ namespace Qorpent.Utils{
 			var bxl = WellKnownHelper.Create<IBxlParser>();
 			var sources = bsconfigs.Select(_ => bxl.Parse(File.ReadAllText(_), _)).ToArray();
 			var context = compiler.Compile(sources);
+		    this.BSharpContext = context;
 			var cls = context.Get(Arg1);
 			if (null == cls){
 				throw new Exception("cannot find config with name "+Arg1);
@@ -328,6 +329,17 @@ namespace Qorpent.Utils{
 			}
 			
 		}
+        /// <summary>
+        /// Контекст B# при загрузке
+        /// </summary>
+        public IBSharpContext BSharpContext
+        {
+            get { return Get("bsharpcontext",(IBSharpContext)null); }
+            set
+            {
+                Set("bsharpcontext", value);
+            }
+        }
 
 	    /// <summary>
 	    /// Определение на B#

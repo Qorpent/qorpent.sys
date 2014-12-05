@@ -1,4 +1,5 @@
 @import "the/layouts/layered";
+@import "the/tools/labels";
 @import "compass/css3";
 @import "compass/reset";
 
@@ -6,8 +7,37 @@
   @include box-sizing(border-box);
 }
 
-form {
-  span.validate {
-    font-size: xx-small;
+.the {
+
+  form {
+    span.validate {
+      font-size: xx-small;
+    }
+  }
+
+  .tool {
+    &.labeled{
+      @extend %label-tool;
+    }
+  }
+
+  [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+    background-color: #eeeeee;
+    border: dashed 1px darkblue;
+  }
+
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
   }
 }

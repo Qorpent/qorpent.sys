@@ -1,0 +1,50 @@
+@import "compass/css3";
+%label-tool {
+  padding: 5px;
+
+  display:flex;
+  flex-direction: inherit;
+  border-radius: 3px;
+  border: 1px ridge #000000;
+
+  margin : 5px;
+  background: rgba(254,254,235,1);
+  background: -moz-linear-gradient(left, rgba(254,254,235,1) 0%, rgba(255,241,204,1) 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, rgba(254,254,235,1)), color-stop(100%, rgba(255,241,204,1)));
+  background: -webkit-linear-gradient(left, rgba(254,254,235,1) 0%, rgba(255,241,204,1) 100%);
+  background: -o-linear-gradient(left, rgba(254,254,235,1) 0%, rgba(255,241,204,1) 100%);
+  background: -ms-linear-gradient(left, rgba(254,254,235,1) 0%, rgba(255,241,204,1) 100%);
+  background: linear-gradient(to right, rgba(254,254,235,1) 0%, rgba(255,241,204,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefeeb', endColorstr='#fff1cc', GradientType=1 );
+
+  -webkit-box-shadow: 3px 3px 26px 1px rgba(0,0,0,0.71);
+  -moz-box-shadow: 3px 3px 26px 1px rgba(0,0,0,0.71);
+  box-shadow: 3px 3px 26px 1px rgba(0,0,0,0.71);
+
+  &>label:first-child {
+    text-align: center;
+    background: rgba(147,206,222,1);
+    background: -moz-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(147,206,222,1)), color-stop(41%, rgba(117,189,209,1)), color-stop(100%, rgba(73,165,191,1)));
+    background: -webkit-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+    background: -o-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+    background: -ms-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+    background: linear-gradient(to right, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#93cede', endColorstr='#49a5bf', GradientType=1 );
+    @include user-select(none);
+    min-height:20px;
+  }
+  .controls {
+    @include user-select(none);
+  }
+  i {
+    &.active  {
+      font-weight: bold;
+      color : #33aa4c;
+    }
+    &.disabled {
+       font-weight: lighter;
+        color : lightgray !important;
+    }
+  }
+}

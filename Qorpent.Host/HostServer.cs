@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -17,6 +18,7 @@ using Qorpent.IO;
 using Qorpent.IoC;
 using Qorpent.Log;
 using Qorpent.Mvc;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host{
 	/// <summary>
@@ -207,7 +209,8 @@ namespace Qorpent.Host{
 			}
 		}
 
-		private  void PrepareForCrossSiteScripting(Task<HttpListenerContext> task){
+		private  void PrepareForCrossSiteScripting(Task<HttpListenerContext> task) {
+		    if (!string.IsNullOrWhiteSpace(task.Result.Request.Headers["QHPROXYORIGIN"])) return;
 			if (!string.IsNullOrWhiteSpace(Config.AccessAllowOrigin)){
 			    if (Config.AccessAllowOrigin == "*" && Config.AccessAllowCredentials) {
 			        var origin = task.Result.Request.Headers["Origin"];
@@ -270,9 +273,45 @@ namespace Qorpent.Host{
 			this.OnContext("/logon", _ => Auth.Logon(_));
 			this.OnContext("/logout", _ => Auth.Logout(_));
 			this.OnContext("/isauth", _ => Auth.IsAuth(_));
+		    this.On("/js/_plugins.js", BuildPluginsModule(), "text/javascript");
 		}
 
-		/// <summary>
+	    private string BuildPluginsModule() {
+	        var result = new StringBuilder();
+            
+            var plugins = (this.Config.Definition?? new XElement("_stub")).Elements("plugin");
+	        var pluginlist = string.Join(" , ",new[]{"'angular'","'jquery'"}.Union(plugins.Select(_ => "'" + _.Attr("code") + "'")));
+            var arglist = string.Join(" , ", new[] { "angular", "$" }.Union(plugins.Select(_ => _.Attr("code").Replace("/","_").Replace("-","_"))));
+	        result.Append("define([");
+	        result.Append(pluginlist);
+	        result.Append("], function(");
+	        result.AppendLine();
+	        result.Append("\t");
+	        result.Append(arglist);
+            result.Append(") {");
+	        result.AppendLine();
+	        result.AppendLine("\tvar plugins={ _set : [], _map: {}, execute : function( name, args, context) {");
+	        result.AppendLine("\t\targs = args || [];");
+	        result.AppendLine("\t\tthis._set.forEach(function(_){");
+	        result.AppendLine("\t\t\tif(name in _){");
+            result.AppendLine("\t\tvar _this = context || _;");
+            result.AppendLine("\t\t\t\t_[name].apply(_this,args);");
+            result.AppendLine("\t\t\t}");
+            result.AppendLine("\t\t});");
+            result.AppendLine("\t} }");
+	        foreach (var element in plugins) {
+	            var name = element.Attr("code").Replace("/", "_").Replace("-", "_");
+	            result.AppendLine("\tplugins._map['" + name + "'] = " + name + ";");
+	            result.AppendLine("\tplugins._set.push(" + name + ");");
+	        }
+	        result.AppendLine("\tvar module = angular.module('plugins',[]);");
+	        result.AppendLine("\tmodule.factory('plugins',function(){return plugins;});");
+	        result.AppendLine("\treturn plugins;");
+	        result.AppendLine("});");
+	        return result.ToString();
+	    }
+
+	    /// <summary>
 		///     Загружает библиотеки
 		/// </summary>
 		private void InitializeLibraries(){

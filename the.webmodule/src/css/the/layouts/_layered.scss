@@ -7,16 +7,19 @@
   display: flex;
   overflow: hidden;
   background: none;
+  padding-left:2px;
   pointer-events: none !important;
   * {
     pointer-events: all;
   }
   &.row{
     flex-direction: row;
-
+    margin: 0 !important;
   }
   &.col{
     flex-direction: column;
+    margin: 0 !important;
+
   }
   &.rest {
     flex-grow: 10;
@@ -33,16 +36,25 @@
   @extend %the-fill;
   margin: 0;
   position:absolute;
+
 }
 
 .the {
   .layer {
     @extend %the-layer;
+
+  }
+  body, html {
+    &.layer, &>.layer {
+      top: 0;
+      left: 0;
+    }
   }
   .box {
     @extend %the-box;
   }
 }
+
 
 
 
