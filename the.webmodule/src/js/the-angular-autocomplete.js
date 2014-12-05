@@ -63,13 +63,21 @@
                     }
                 }
                 var ul = null;
-                var __acShow = function(){
-                    $(window).on("mousedown",__winHider);
-                    $(e).addClass("open");
+                var __acShow = function(cached){
                     if(!ul){
                         ul = $(e).find("ul");
                         ul.appendTo(document.body);
                     }
+                    //allow override showStage
+                    var func = scope.$eval(attr["onShow"]);
+                    if (!!func) {
+                        if(!func(scope.__data,cached,ul,e)){
+                            return;
+                        }
+                    }
+                    $(window).on("mousedown",__winHider);
+                    $(e).addClass("open");
+
                     var posmarker=$(e).find(".posmarker");
                     var top = posmarker.offset().top;
                     var left= posmarker.offset().left;
@@ -80,7 +88,7 @@
 
                 scope.__acFocus = function(){
                     if(!$(e).hasClass("open") && scope.__data.length!=0){
-                        __acShow();
+                        __acShow(true);
                     }
                 }
 
@@ -106,7 +114,6 @@
                     }
                 };
                 scope.__acClick = function ($event, i) {
-                    console.log("here");
                     $event.preventDefault();
                     $event.stopPropagation();
                     __acHide();
