@@ -111,9 +111,13 @@ namespace Qorpent.Utils {
 		/// <param name="result"></param>
 		public void Apply<TArgs>(string[] args, TArgs result) where TArgs : new(){
 			var parseresult = ParseDictionary(args);
+			var argCount = 0;
 			foreach (var parameter in parseresult){
 				var name = parameter.Key.Replace("-", "");
 				var value = parameter.Value;
+				if (string.IsNullOrWhiteSpace(name)) {
+					name = "Arg" + (++ argCount);
+				}
 				_reflectionhelper.SetValue(result, name, value, ignoreNotFound: true, publicOnly: false);
 				if (result is IConfig){
 					var cfg = result as IConfig;
