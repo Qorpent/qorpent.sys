@@ -7,6 +7,32 @@ define(["leaflet-amd"],function(L){
         return null;
     }
     var mod = angular.module("totalleaflet",[]);
+    mod.factory("llutils",[function(){
+        return {
+            getBounds : function(data, latname, lonname){
+                latname = latname||"Lat";
+                lonname = lonname||"Lon";
+                minlat = 500;
+                maxlat = -500;
+                minlon = 500;
+                maxlon = -500;
+                data.forEach(function(_){
+                    var lat = Number(_[latname]);
+                    var lon = Number(_[lonname]);
+                    if(lat==NaN || lon==NaN)return;
+                    minlat = Math.min(minlat,lat);
+                    minlon = Math.min(minlon,lon);
+                    maxlat = Math.max(maxlat,lat);
+                    maxlon = Math.max(maxlon,lon);
+                });
+                if(minlat<=-180||maxlat>=180||minlon<=-180||maxlon>=180)return null;
+                var southWest = L.latLng(minlat,minlon),
+                    northEast = L.latLng(maxlat, maxlon),
+                    bounds = L.latLngBounds(southWest, northEast);
+                return bounds;
+            }
+        }
+    }]);
     mod.directive("lmap",[function(){
         return {
             priority:100,
