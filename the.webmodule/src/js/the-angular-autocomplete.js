@@ -1,7 +1,7 @@
 /**
  * Created by comdiv on 04.11.2014.
  */
-    define(["the-angular"], function ($the) {
+    define(["the-angular","text!autocomplete.html"], function ($the,template) {
         return $the(function(root, privates)
         {
 
@@ -17,19 +17,10 @@
                     "bindQuery" : attr["ngModel"] || "__acSearch",
                     "template" : attr["template"] || "{{i}}"
                 }
-                var eltext = $the.interpolate('\
-                        <input class="dropdown-toggle form-control" ng-focus="__acFocus()"  ng-model="${bindQuery}" ng-change="__acChange()"/>\
-                        <div class="posmarker"></div>\
-                        <ul class="dropdown-menu">\
-                            <li ng-repeat="i in __data" >\
-                                 <a ng-click="__acClick($event,i)">${template}</a>\
-                            </li>\
-                        </ul>'
-                    ,data);
+                var eltext = $the.interpolate(template,data);
                 var input = $(eltext);
 
                 input.appendTo(el);
-
                 if(!!attr["height"]){
                     el.find("ul").css("max-height",""+attr["height"]+"px");
                     el.find("ul").css("overflow-y","auto");
@@ -46,7 +37,9 @@
                 var timeout = null;
                 var _e = $(e)[0];
                 scope.__data = [];
+                scope.__fixdata = [];
                 scope.__acSearch = "";
+                scope.firstRun = true;
                 var __winHider = function(event){
                     var current = event.target;
                     while(!!current){
@@ -78,17 +71,31 @@
                     $(window).on("mousedown",__winHider);
                     $(e).addClass("open");
 
-                    var posmarker=$(e).find(".posmarker");
-                    var top = posmarker.offset().top;
-                    var left= posmarker.offset().left;
+                    var posmarker=$(e).find("input");
+                    var pos = posmarker[0].getBoundingClientRect();
+                    var top = pos.bottom;
+                    var left= pos.left;
                     ul.css("top", top+"px");
                     ul.css("left",left+"px");
                     ul.show();
                 }
 
                 scope.__acFocus = function(){
-                    if(!$(e).hasClass("open") && scope.__data.length!=0){
+
+                    if(!$(e).hasClass("open") && (scope.__data.length!=0 || scope.__fixdata.length!=0)){
+                            console.log("here1");
                         __acShow(true);
+                    }else if(!$(e).hasClass("open") && scope.firstRun){
+
+                            scope.firstRun = false;
+                        var onFix = scope.$eval(attr["onFixData"]);
+                        if(typeof onFix=="function"){
+                            onFix(function(fixdata){
+                               scope.__fixdata = fixdata;
+
+                                __acShow(true);
+                            });
+                        }
                     }
                 }
 

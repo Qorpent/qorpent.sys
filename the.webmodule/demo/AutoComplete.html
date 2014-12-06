@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html class="the">
 <head lang="en">
     <meta charset="UTF-8">
     <title>the-autocomplet</title>
+    <link rel="stylesheet" href="../dist/css/the.css">
     <link rel="stylesheet" href="../lib/bootstrap.css">
+
     <script type="text/javascript" src="./../lib/require.js"></script>
+
 </head>
 <body class="bootstrap">
 <style>
@@ -88,6 +91,31 @@
                     $scope.selected = item;
                 }
             })
+                    .controller("example4", function ($scope) {
+                        $scope.isCollapsed = true;
+                        $scope.selected = "";
+                        $scope.doSearch = function (search, callback) {
+                            var selectedItems = [];
+                            items.forEach(function (_) {
+                                if (_.match(new RegExp(search, "i"))) {
+                                    selectedItems.push(_);
+                                }
+                            });
+                            callback(selectedItems);
+                        }
+                        $scope.getFix = function(callback){
+                            var selectedItems = [];
+                            items.forEach(function (_) {
+                                if (_.match(new RegExp("ка", "i"))) {
+                                    selectedItems.push(_);
+                                }
+                            });
+                            callback(selectedItems);
+                        }
+                        $scope.setResult = function (item) {
+                            $scope.selected = item;
+                        }
+                    })
             ;
             angular.bootstrap(document, ["examples","ui.bootstrap"]);
         }
@@ -161,6 +189,15 @@
         <div>Тут будет результат:<strong>{{selected}}</strong></div>
         <span the-autocomplete on-search="doSearch" on-result="setResult"
               template="{{i.number}} : <strong>{{i.value}}</strong>"/>
+    </div>
+</div>
+
+<div ng-controller="example4">
+    <h2 ng-click="isCollapsed = !isCollapsed">Значения по умолчанию</h2>
+
+    <div collapse="isCollapsed">
+        <div>Тут будет результат:<strong>{{selected}}</strong></div>
+        <span the-autocomplete on-search="doSearch" on-result="setResult" on-fix-data="getFix"/>
     </div>
 </div>
 

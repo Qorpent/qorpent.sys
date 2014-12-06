@@ -36,6 +36,7 @@
   }
   .controls {
     @include user-select(none);
+    min-height: 20px;
   }
   i {
     &.active  {

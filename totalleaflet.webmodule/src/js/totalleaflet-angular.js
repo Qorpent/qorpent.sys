@@ -25,7 +25,7 @@ define(["leaflet-amd"],function(L){
                     maxlat = Math.max(maxlat,lat);
                     maxlon = Math.max(maxlon,lon);
                 });
-                if(minlat<=-180||maxlat>=180||minlon<=-180||maxlon>=180)return null;
+                if(Math.abs(minlat)>=180||Math.abs(maxlat)>=180||Math.abs(minlon)>=180||Math.abs(maxlon)>=180)return null;
                 var southWest = L.latLng(minlat,minlon),
                     northEast = L.latLng(maxlat, maxlon),
                     bounds = L.latLngBounds(southWest, northEast);
