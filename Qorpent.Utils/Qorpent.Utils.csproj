@@ -73,6 +73,7 @@
     <Compile Include="SimpleExpressionItem.cs" />
     <Compile Include="SimpleExpressionItemType.cs" />
     <Compile Include="SimpleExpressionParser.cs" />
+    <Compile Include="GeoProjectionHelper.cs" />
     <Compile Include="Sql\SqlFullTextSearchAdapter.cs" />
     <Compile Include="WebDateTimeParser.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />
