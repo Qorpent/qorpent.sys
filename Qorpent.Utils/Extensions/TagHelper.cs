@@ -38,6 +38,20 @@ namespace Qorpent.Utils.Extensions{
             return result.ToString().Trim();
         }
         /// <summary>
+        /// Конвертирует словарь в таг-строку
+        /// </summary>
+        /// <param name="tags"></param>
+        /// <returns></returns>
+        public static string ToString(IDictionary<string, object> tags)
+        {
+            var result = new StringBuilder();
+            foreach (var tag in tags)
+            {
+                result.Append(" /" + tag.Key + ":" + Escape(tag.Value.ToStr()) + "/");
+            }
+            return result.ToString().Trim();
+        }
+        /// <summary>
         /// Производит экранизаци
         /// </summary>
         /// <param name="val"></param>

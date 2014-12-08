@@ -12,6 +12,15 @@ namespace Qorpent.Mvc.Tests
 	[TestFixture]
 	public class BindingTest
 	{
+	    public class SubClass {
+            public SubClass()
+            {
+		        Extensions=  new Dictionary<string, object>();
+		    }
+            public int Id { get; set; }
+            public IDictionary<string, object> Extensions { get; set; } 
+	    }
+
 		public class ComdivClass{
 		    public ComdivClass() {
 		        Extensions=  new Dictionary<string, object>();
@@ -48,6 +57,8 @@ namespace Qorpent.Mvc.Tests
             Assert.AreEqual("2", action.Param.Extensions["b"].ToString());
             
 	    }
+
+     
 
        
 

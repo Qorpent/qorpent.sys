@@ -127,7 +127,10 @@ namespace Qorpent.Scaffolding.Application{
 					}
 					else if (type == "datetime"){
 						val = "new Date(1900,0,1)";
-					}
+                    }
+                    else if (type.StartsWith("I") && char.ToUpper(type[1])==type[1]) { //interface
+                        val = "{}";
+                    }
                 
 					else{
 						val = "new result." + type + "()";
