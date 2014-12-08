@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Qorpent.BSharp;
@@ -27,6 +31,7 @@ namespace Qorpent.Host.Tests
                 h1.Start();
                 h2.Start();
                 result = new HttpClient().GetString("http://127.0.0.1:14720/call1");
+                
             }
             finally {
                 h1.Stop();
@@ -51,7 +56,7 @@ namespace Qorpent.Host.Tests
             try
             {
                 h1.Start();
-                h2.Start();
+                h2.Start(); 
                 result = new HttpClient().GetString("http://127.0.0.1:14720/call1");
             }
             finally
@@ -61,6 +66,43 @@ namespace Qorpent.Host.Tests
 
             }
             Assert.AreEqual("hello!", result);
+        }
+
+
+        [Test]
+        public void CanProxisePost()
+        {
+            var aconfig1 = new HostConfig();
+            aconfig1.AddQorpentBinding(73);
+            var aconfig2 = new HostConfig();
+            aconfig2.AddQorpentBinding(74);
+            aconfig2.Proxize["/call1"] = "appid=73";
+            var h1 = new HostServer(aconfig1);
+            var h2 = new HostServer(aconfig2);
+            h1.OnContext("/call1", _ => {
+                if (_.Request.HttpMethod == "POST") {
+                    _.Response.Finish(new StreamReader(_.Request.InputStream).ReadToEnd());
+                }
+                else {
+                    _.Response.Finish("hello!");    
+                }
+                
+            });
+            var result = "";
+            try
+            {
+                h1.Start();
+                h2.Start();
+                result = new HttpClient().GetString("http://127.0.0.1:14740/call1", "hello2");
+            }
+            finally
+            {
+                h1.Stop();
+                h2.Stop();
+
+            }
+            Console.WriteLine(result);
+            Assert.AreEqual("hello2", result);
         }
 
         [TestCase("appid=15","http://127.0.0.1:14150")]

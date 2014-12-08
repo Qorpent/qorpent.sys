@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host {
     /// <summary>
@@ -19,11 +20,15 @@ namespace Qorpent.Host {
         /// <param name="cancel"></param>
         public void Run(IHostServer server, HttpListenerContext callcontext, string callbackEndPoint,
             CancellationToken cancel) {
+                try
+                {
+
+                    
             string path = callcontext.Request.Url.AbsolutePath;
             var srvDef = server.Config.Proxize.FirstOrDefault(_ => path.StartsWith(_.Key)).Value;
             var srv = HostUtils.ParseUrl(srvDef);
             var req = (HttpWebRequest) WebRequest.Create(new Uri(new Uri(srv), callcontext.Request.Url.PathAndQuery));
-
+             
             foreach (var header in callcontext.Request.Headers.AllKeys) {
                 var v = callcontext.Request.Headers[header];
                 if (header == "Host") {
@@ -51,25 +56,37 @@ namespace Qorpent.Host {
                     else if (v == "Close") {
                         continue;
                     }
-                    
+
+                }
+                else if (header == "Content-Length") {
+                   // req.ContentLength = v.ToInt();
+                    continue;
+                }
+                else if (header == "Expect")
+                {
+                    // req.ContentLength = v.ToInt();
+                    continue;
                 }
                 
                 else {
                     req.Headers[header] = callcontext.Request.Headers[header];
                 }
             }
+            req.Method = callcontext.Request.HttpMethod;
             req.Headers["QHPROXYORIGIN"] = Uri.EscapeDataString(callcontext.Request.Url.ToString());
 
-            try {
+       
                 ServicePointManager.ServerCertificateValidationCallback += ServerCertificateValidationCallback;
                 byte[] buffer = new byte[1024];
                 int bytesRead = 0;
                 if (req.Method == "POST") {
+
                     using (var reqStream = req.GetRequestStream()) {
                         while ((bytesRead = callcontext.Request.InputStream.Read(buffer, 0, buffer.Length)) != 0) {
                             reqStream.Write(buffer, 0, bytesRead);
                         }
                         reqStream.Flush();
+                        reqStream.Close();
                     }
                 }
                 var resp = req.GetResponse();

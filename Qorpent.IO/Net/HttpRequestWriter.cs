@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.IO.Net{
 	/// <summary>
@@ -54,7 +56,24 @@ namespace Qorpent.IO.Net{
 					}
 					
 				}
+
+			    if (request.Method == "POST") {
+			        if (null == request.PostData) request.PostData = "";
+			        var realpost = Uri.EscapeDataString(request.PostData);
+                    var len = realpost.Length;
+                   
+                    bwriter.Write("Content-Type: ".ToCharArray());
+                    bwriter.Write("application/x-www-form-urlencoded".ToCharArray());
+                    bwriter.Write("\r\n".ToCharArray());
+                    bwriter.Write("Content-Length: ".ToCharArray());
+                    bwriter.Write(len.ToString().ToCharArray());
+                    bwriter.Write("\r\n".ToCharArray());
+                    bwriter.Write("\r\n".ToCharArray());
+	                bwriter.Write(realpost.ToCharArray());
+			    }
+
 				bwriter.Write("\r\n".ToCharArray());
+
 				bwriter.Flush();
 			}
 		}

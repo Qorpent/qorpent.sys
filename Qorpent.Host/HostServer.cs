@@ -179,7 +179,7 @@ namespace Qorpent.Host{
 		}
 
 		internal void StartRequestThread(){
-			_listener.GetContextAsync().ContinueWith(OnRequest);
+			_listener.GetContextAsync().ContinueWith(OnRequest, _cancel);
 		}
 
 		private void OnRequest(Task<HttpListenerContext> task){

@@ -159,7 +159,7 @@ namespace Qorpent.Security {
 
 			//OTHERWISE ALL MUST BE AUTHENTICATED (IF NOT GENERIC)
 			if (!(principal.Identity is GenericIdentity)) {
-				if (!principal.Identity.IsAuthenticated) {
+				if (principal.Identity.IsAuthenticated) {
 					return true;
 				}
 			}
