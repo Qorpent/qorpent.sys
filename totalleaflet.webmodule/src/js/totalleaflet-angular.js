@@ -9,6 +9,16 @@ define(["leaflet-amd"],function(L){
     var mod = angular.module("totalleaflet",[]);
     mod.factory("llutils",[function(){
         return {
+            getMarkerXY : function(marker){
+                var point = marker.getLatLng();
+                var xy = L.Projection.SphericalMercator.project(point);
+                var result = {};
+                result.X = (xy.x * 6378137).toFixed(0);
+                result.Y = (xy.y * 6378137).toFixed(0);
+                result.x = result.X;
+                result.y = result.Y;
+                return result;
+            },
             getBounds : function(data, latname, lonname){
                 latname = latname||"Lat";
                 lonname = lonname||"Lon";

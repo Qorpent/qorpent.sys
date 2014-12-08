@@ -19,7 +19,8 @@ define([
     'the-menu',
     'the-settings',
     'the-errorcatcher',
-    'the-refresh'
+    'the-refresh',
+    'autocomplete-html'
 ], function ($the) {
     return $the;
 });

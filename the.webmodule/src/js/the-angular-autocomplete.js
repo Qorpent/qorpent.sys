@@ -1,7 +1,7 @@
 /**
  * Created by comdiv on 04.11.2014.
  */
-    define(["the-angular","text!autocomplete.html"], function ($the,template) {
+    define(["the-angular","autocomplete-html"], function ($the,template) {
         return $the(function(root, privates)
         {
 
@@ -26,7 +26,7 @@
                     el.find("ul").css("overflow-y","auto");
                 }
             };
-            var prepareScope = function(scope,e, attr){
+            var prepareScope = function(scope,e, attr, $rootScope){
 
                 var data = {
                     "bindQuery" : attr["ngModel"] || "__acSearch",
@@ -55,6 +55,7 @@
                         ul.hide();
                     }
                 }
+                $rootScope.$on("HIDEMENUES",function(){__acHide()});
                 var ul = null;
                 var __acShow = function(cached){
                     if(!ul){
@@ -83,7 +84,6 @@
                 scope.__acFocus = function(){
 
                     if(!$(e).hasClass("open") && (scope.__data.length!=0 || scope.__fixdata.length!=0)){
-                            console.log("here1");
                         __acShow(true);
                     }else if(!$(e).hasClass("open") && scope.firstRun){
 
@@ -133,14 +133,14 @@
                     }
                 }
             }
-            var autoComplete =function(){
+            var autoComplete =function($rootScope){
                 return {
                     scope : true,
                     compile : function(e,attr) {
                         prepareElement(e,attr);
                         return                   {
                             pre : function(scope,e, attr) {
-                                prepareScope(scope,e,attr);
+                                prepareScope(scope,e,attr,$rootScope);
                             }
 
                         }
@@ -149,8 +149,8 @@
                 }
             };
             root.modules.d_autocomplete =
-                root.$angular.module("the-autocomplete",[]).directive("theAutocomplete",[autoComplete]);
-            root.modules.all.directive('theAutocomplete', autoComplete);
+                root.$angular.module("the-autocomplete",[]).directive("theAutocomplete",["$rootScope",autoComplete]);
+            root.modules.all.directive('theAutocomplete', ["$rootScope",autoComplete]);
 
             root.modules.autoCompleteSet = {
                 compile : prepareElement,
