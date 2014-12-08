@@ -14,6 +14,10 @@ namespace Qorpent.Utils{
 	/// Базовые параметры консольных приложений
 	/// </summary>
 	public class ConsoleApplicationParameters:ConfigBase{
+		/// <summary>
+		///		Исходный массив аргументов
+		/// </summary>
+		public string[] SourceArgs { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -149,7 +153,7 @@ namespace Qorpent.Utils{
 		/// Отложенный конструктор, логика подготовки 
 		/// </summary>
 		public virtual ConsoleApplicationParameters Initialize(params string[] arguments) {
-		    
+			SourceArgs = arguments;
 			var helper = new ConsoleArgumentHelper();
 			helper.Apply(arguments, this);
 		    if (!string.IsNullOrWhiteSpace(ShadowEvidence)) {
