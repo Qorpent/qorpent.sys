@@ -13,16 +13,43 @@ namespace Qorpent.Mvc.Tests
 	public class BindingTest
 	{
 		public class ComdivClass{
+		    public ComdivClass() {
+		        Extensions=  new Dictionary<string, object>();
+		        Extensions2=  new Dictionary<string, string>();
+		    }
 			public int A { get; set; }
 			public string B { get; set; }
+            public IDictionary<string, object> Extensions { get; set; } 
+            public IDictionary<string, string> Extensions2 { get; set; } 
 		}
 		public class ComdivAction:ActionBase{
 			[Bind]
 			public ComdivClass Param { get; set; }
 			[Bind(ParameterPrefix = "val.")]
 			public ComdivClass Param2 { get; set; }
-
+            
 		}
+
+        [TestCase(@"{""a"":1,""b"":""2""}")]
+        [TestCase(@"/a:1//b:2/")]
+	    public void CanBindDictionaryFromJson(string def) {
+            var mvccontext = new MvcContext(@"http://comdiv/my?Extensions2="+def);
+            var action = new ComdivAction();
+            var binder = new DefaultActionBinder();
+            binder.Bind(new ActionDescriptor(action), mvccontext);
+            Assert.AreEqual("1", action.Param.Extensions2["a"]);
+            Assert.AreEqual("2", action.Param.Extensions2["b"]);
+
+            mvccontext = new MvcContext(@"http://comdiv/my?Extensions=" + def);
+            action = new ComdivAction();
+            binder = new DefaultActionBinder();
+            binder.Bind(new ActionDescriptor(action), mvccontext);
+            Assert.AreEqual("1", action.Param.Extensions["a"].ToString());
+            Assert.AreEqual("2", action.Param.Extensions["b"].ToString());
+            
+	    }
+
+       
 
 		[Test]
 		public void CanBindStructureComplex()

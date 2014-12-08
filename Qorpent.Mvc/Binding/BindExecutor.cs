@@ -20,7 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web.UI.HtmlControls;
 using System.Xml.Linq;
+using Qorpent.Uson;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
@@ -190,7 +192,7 @@ namespace Qorpent.Mvc.Binding {
 				}
 				converted = s;
 			}else if (TargetType.IsClass) {
-			    var prefix = this.Name;
+			    var prefix = Name;
 			    var obj = Activator.CreateInstance(TargetType);
 			    
                 if (string.IsNullOrWhiteSpace(prefix)) {
@@ -203,20 +205,12 @@ namespace Qorpent.Mvc.Binding {
                     var clsdict = obj.ToDict();
                     foreach (var p in clsdict) {
 	                    if (p.Value is IDictionary<string, string>){
-		                    var _prefix = ".";
-		                    var bind =
-			                    obj.GetType()
-			                       .GetProperty(p.Key)
-			                       .GetCustomAttributes(typeof (BindAttribute), true)
-			                       .FirstOrDefault() as BindAttribute;
-							
-							var parameters = context.GetAll(_prefix );
-		                    var dict = p.Value as IDictionary<string, string>;
-		                    
-							foreach (var valuePair in parameters){
-								dict[valuePair.Key] = valuePair.Value;
-							}
+		                    SetupDictionary<string>(context, obj, p);
 	                    }
+                        else if (p.Value is IDictionary<string, object>)
+                        {
+                            SetupDictionary<object>(context, obj, p);
+                        }
 	                    else{
 		                    var pname = p.Key;
 							
@@ -236,7 +230,52 @@ namespace Qorpent.Mvc.Binding {
 			
 		}
 
-		private object GetCurrent(object action) {
+	    private static void SetupDictionary<T>(IMvcContext context, object obj, KeyValuePair<string, object> p) {
+	        var name = p.Key;
+	        var dict = p.Value as IDictionary<string, T>;
+	        var stringDefinition = context.Get(name);
+	        if (!string.IsNullOrWhiteSpace(stringDefinition)) { //try to parse json or tag
+	            stringDefinition = stringDefinition.Trim();
+	            if (stringDefinition.StartsWith("/") && stringDefinition.EndsWith("/")) { //is tag notation
+	                var srcdict = TagHelper.Parse(stringDefinition);
+	                foreach (var sp in srcdict) {
+	                    dict[sp.Key] = sp.Value.To<T>();
+	                }
+                }
+                else if ((stringDefinition.StartsWith("{") && stringDefinition.EndsWith("}")) ||
+                         (stringDefinition.StartsWith("[") && stringDefinition.EndsWith("]"))) { //json marker
+                    var uson = stringDefinition.ToUson();
+                    if (uson.UObjMode == UObjMode.Array) {
+                        for (var i = 0; i < uson.Array.Count; i++) {
+                            dict[i.ToStr()] = uson.Array[i].ToStr().To<T>();
+                        }
+                    }
+                    else {
+                        foreach (var up in uson.Properties) {
+                            dict[up.Key] = up.Value.ToStr().To<T>();
+                        }
+                    }
+                }
+	        }
+	        else {
+                //bind with all notation
+	            var _prefix = ".";
+	            /* RESERVED FOR MAY-BE CUSTOM BIND
+             * var bind =
+	            obj.GetType()
+	                .GetProperty(p.Key)
+	                .GetCustomAttributes(typeof (BindAttribute), true)
+	                .FirstOrDefault() as BindAttribute;
+	        */
+	            var parameters = context.GetAll(_prefix);
+	            
+	            foreach (var valuePair in parameters) {
+	                dict[valuePair.Key] = valuePair.Value.To<T>();
+	            }
+	        }
+	    }
+
+	    private object GetCurrent(object action) {
 			return _memberinfo.Get(action);
 		}
 
