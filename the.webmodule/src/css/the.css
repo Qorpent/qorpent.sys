@@ -94,13 +94,14 @@
   -ms-user-select: none;
   -webkit-user-select: none;
   user-select: none;
+  min-height: 20px;
 }
-/* line 41, the/tools/_labels.scss */
+/* line 42, the/tools/_labels.scss */
 .the .tool.labeled i.active {
   font-weight: bold;
   color: #33aa4c;
 }
-/* line 45, the/tools/_labels.scss */
+/* line 46, the/tools/_labels.scss */
 .the .tool.labeled i.disabled {
   font-weight: lighter;
   color: lightgray !important;
@@ -201,6 +202,15 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 .the ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+/* line 45, the.scss */
+.the .dropdown-menu .default a {
+  font-weight: bold;
+}
+/* line 48, the.scss */
+.the .dropdown-menu .delimiter {
+  height: 1px;
+  border-top: solid 1px gray;
 }
 
 /*# sourceMappingURL=the.css.map */
