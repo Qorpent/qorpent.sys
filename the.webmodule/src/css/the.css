@@ -212,5 +212,9 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   height: 1px;
   border-top: solid 1px gray;
 }
+/* line 54, the.scss */
+.the i.disabled {
+  color: lightgray;
+}
 
 /*# sourceMappingURL=the.css.map */
