@@ -100,6 +100,10 @@
                 }
 
                 scope.__onData = function(data){
+                    var searchEnd = scope.$eval(attr["onEndSearch"]);
+                    if(typeof searchEnd=="function"){
+                       data =  searchEnd(data) || data;
+                    }
                     scope.$apply(function(){
                         scope.__data = data;
                     });
@@ -110,7 +114,14 @@
                     __acHide();
                     var search = scope.$eval(data.bindQuery);
                     if(search.length>=minLength) {
+
                         timeout = setTimeout(function () {
+                            var searchStart = scope.$eval(attr["onStartSearch"]);
+                            if(typeof searchStart=="function"){
+                                scope.$apply(function(){
+                                    search = searchStart(search) || search; //allow override search
+                                });
+                            }
                             if (!!attr["onSearch"]) {
                                 var func = scope.$eval(attr["onSearch"]);
                                 if (!!func) {
@@ -131,6 +142,11 @@
                             func(i,search,$event);
                         }
                     }
+                }
+
+                var init = scope.$eval(attr["onInit"]);
+                if(typeof init == "function"){
+                    init (scope,e, attr);
                 }
             }
             var autoComplete =function($rootScope){
