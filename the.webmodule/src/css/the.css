@@ -183,36 +183,24 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 .the form span.validate {
   font-size: xx-small;
 }
-/* line 24, the.scss */
+/* line 19, the.scss */
+.the .tool.labeled {
+  max-height: 3000px;
+}
+/* line 25, the.scss */
 .the [ng\:cloak], .the [ng-cloak], .the [data-ng-cloak], .the [x-ng-cloak], .the .ng-cloak, .the .x-ng-cloak {
   display: none !important;
 }
-/* line 28, the.scss */
-.the ::-webkit-scrollbar {
-  width: 12px;
-  background-color: #eeeeee;
-  border: dashed 1px darkblue;
-}
-/* line 34, the.scss */
-.the ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-}
-/* line 39, the.scss */
-.the ::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-}
-/* line 45, the.scss */
+/* line 32, the.scss */
 .the .dropdown-menu .default a {
   font-weight: bold;
 }
-/* line 48, the.scss */
+/* line 35, the.scss */
 .the .dropdown-menu .delimiter {
   height: 1px;
   border-top: solid 1px gray;
 }
-/* line 54, the.scss */
+/* line 41, the.scss */
 .the i.disabled {
   color: lightgray;
 }
