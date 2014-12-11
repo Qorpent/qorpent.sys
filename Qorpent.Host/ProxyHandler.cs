@@ -32,7 +32,7 @@ namespace Qorpent.Host {
             foreach (var header in callcontext.Request.Headers.AllKeys) {
                 var v = callcontext.Request.Headers[header];
                 if (header == "Host") {
-                    req.Host = v;
+                    req.Host = "127.0.0.1";
                 }
                 else if (header == "User-Agent") {
                     req.UserAgent = v;
