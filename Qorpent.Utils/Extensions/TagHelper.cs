@@ -16,7 +16,10 @@
 // 
 // PROJECT ORIGIN: Qorpent.Utils/TagHelper.cs
 #endregion
+
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -68,8 +71,75 @@ namespace Qorpent.Utils.Extensions{
         public static string UnEscape(string val) {
             return val.Replace("~", ":").Replace("`", "/");
         }
+        /// <summary>
+        /// Производит сопоставление тега с маской
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="tagmask"></param>
+        /// <returns></returns>
+        public static bool Match(string tag, string tagmask) {
+            var srcdict = Parse(tag);
+            var maskdict = Parse(tagmask);
+            
+            foreach (var md in maskdict) {
+                var key = md.Key;
+                var testval = md.Value;
+                var negateKey = key.StartsWith("!");
+                key = negateKey ? key.Substring(1):key;
+                var negateValue = testval.StartsWith("!");
+                testval = negateValue ? testval.Substring(1) : testval;
+                var found = false;
+                if (key.StartsWith("*")) {
+                    found = MatchWithRegexKey(srcdict, key.Substring(1),testval,negateKey,negateValue);
+                }
+                else {
+                    if (negateKey) {
+                        found = !srcdict.ContainsKey(key);
+                    }
+                    else {
+                        if (srcdict.ContainsKey(key)) {
+                            var val = srcdict[key];
+                            found = TestValue(val, testval, negateValue);
+                        }
+                    }
+                }
+                if(!found)return false;
+            }
+            return true;
+        }
 
-		/// <summary>
+        private static bool TestValue(string val, string testval, bool negate) {
+            bool valtested;
+            if (val == "*") {
+                valtested = true;
+            }
+            else if (testval.StartsWith("*")) {
+                valtested = Regex.IsMatch(val, testval.Substring(1));
+            }
+            else {
+                valtested = val == testval;
+            }
+            return negate?!valtested:valtested;
+        }
+
+        private static bool MatchWithRegexKey(IEnumerable<KeyValuePair<string, string>> srcdict, string key,string value, bool negatekey,bool negatevalue) {
+            var found = false;
+            if (negatekey) {
+                found = srcdict.All(_ => !Regex.IsMatch(_.Key, key));
+            }
+            else {
+                foreach (var pair in srcdict) {
+                    if (Regex.IsMatch(pair.Key, key)) {
+                        found = TestValue(pair.Value, value, negatevalue);
+                    }
+                    if (found) break;
+                }
+            }
+
+            return found;
+        }
+
+        /// <summary>
 		/// Убирает таг из строки
 		/// </summary>
 		/// <param name="tags"></param>

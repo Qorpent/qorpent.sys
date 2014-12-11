@@ -29,6 +29,7 @@
     <Compile Include="RegexFunctions.cs" />
     <Compile Include="SpatialFunctions.cs" />
     <Compile Include="SqlRegexMatch.cs" />
+    <Compile Include="TagFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Data" />
@@ -39,5 +40,8 @@
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="qpt-sqlext-clr.sql" />
   </ItemGroup>
 </Project>
