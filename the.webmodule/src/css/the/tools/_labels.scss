@@ -21,6 +21,8 @@
   -moz-box-shadow: 3px 3px 26px 1px rgba(0,0,0,0.71);
   box-shadow: 3px 3px 26px 1px rgba(0,0,0,0.71);
 
+  overflow: hidden;
+
   &>label:first-child {
     text-align: center;
     background: rgba(147,206,222,1);

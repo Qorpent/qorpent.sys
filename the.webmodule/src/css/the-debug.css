@@ -70,8 +70,9 @@
   -webkit-box-shadow: 3px 3px 26px 1px rgba(0, 0, 0, 0.71);
   -moz-box-shadow: 3px 3px 26px 1px rgba(0, 0, 0, 0.71);
   box-shadow: 3px 3px 26px 1px rgba(0, 0, 0, 0.71);
+  overflow: hidden;
 }
-/* line 24, the/tools/_labels.scss */
+/* line 26, the/tools/_labels.scss */
 .the .tool.labeled > label:first-child {
   text-align: center;
   background: #93cede;
@@ -88,7 +89,7 @@
   user-select: none;
   min-height: 20px;
 }
-/* line 37, the/tools/_labels.scss */
+/* line 39, the/tools/_labels.scss */
 .the .tool.labeled .controls {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -96,12 +97,12 @@
   user-select: none;
   min-height: 20px;
 }
-/* line 42, the/tools/_labels.scss */
+/* line 44, the/tools/_labels.scss */
 .the .tool.labeled i.active {
   font-weight: bold;
   color: #33aa4c;
 }
-/* line 46, the/tools/_labels.scss */
+/* line 48, the/tools/_labels.scss */
 .the .tool.labeled i.disabled {
   font-weight: lighter;
   color: lightgray !important;
@@ -183,24 +184,20 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 .the form span.validate {
   font-size: xx-small;
 }
-/* line 19, the.scss */
-.the .tool.labeled {
-  max-height: 3000px;
-}
-/* line 25, the.scss */
+/* line 24, the.scss */
 .the [ng\:cloak], .the [ng-cloak], .the [data-ng-cloak], .the [x-ng-cloak], .the .ng-cloak, .the .x-ng-cloak {
   display: none !important;
 }
-/* line 32, the.scss */
+/* line 31, the.scss */
 .the .dropdown-menu .default a {
   font-weight: bold;
 }
-/* line 35, the.scss */
+/* line 34, the.scss */
 .the .dropdown-menu .delimiter {
   height: 1px;
   border-top: solid 1px gray;
 }
-/* line 41, the.scss */
+/* line 40, the.scss */
 .the i.disabled {
   color: lightgray;
 }
