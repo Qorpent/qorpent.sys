@@ -29,7 +29,8 @@
     <Compile Include="RegexFunctions.cs" />
     <Compile Include="SpatialFunctions.cs" />
     <Compile Include="SqlRegexMatch.cs" />
-    <Compile Include="TagFunctions.cs" />
+    <Compile Include="StringListFunctions.cs" />
+    <Compile Include="XmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Data" />
@@ -44,4 +45,7 @@
   <ItemGroup>
     <Content Include="qpt-sqlext-clr.sql" />
   </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>d:\repos\.build\bin\all\sqlext.exe $(TargetDir)$(TargetFileName) --generate-script --schema qorpent &gt; $(ProjectDir)qpt-sqlext-clr.sql</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -49,7 +49,41 @@ namespace Qorpent.Integration.SqlExtensions {
         public static SqlDouble GetLat(SqlDouble y) {
             return  180 / Math.PI * (2 * Math.Atan(Math.Exp((double) ((y / Pole) * Math.PI))) - Math.PI / 2);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="bx"></param>
+        /// <param name="by"></param>
+        /// <param name="tx"></param>
+        /// <param name="ty"></param>
+        /// <param name="distance"></param>
+        /// <returns></returns>
+        [SqlFunction(IsDeterministic = true, SystemDataAccess = SystemDataAccessKind.None,
+            DataAccess = DataAccessKind.None)]
+        public static SqlBoolean InBounds(SqlDouble x, SqlDouble y, SqlDouble bx, SqlDouble by, SqlDouble tx,
+            SqlDouble ty, SqlDouble distance) {
+            if (x.IsNull ||x.Value==0) return SqlBoolean.False;
+            if (y.IsNull || y.Value == 0) return SqlBoolean.False;
+            if (bx.IsNull || bx.Value == 0) return SqlBoolean.False;
+            if (by.IsNull || bx.Value == 0) return SqlBoolean.False;
 
+            if (tx.IsNull || tx.Value == 0)
+            {
+                if (distance.IsNull || distance.Value == 0) {
+                    return SqlBoolean.False;
+                }
+                return Math.Sqrt(Math.Pow(bx.Value - x.Value, 2) + Math.Pow(@by.Value - y.Value, 2)) <=
+                       distance.Value;
+            }
+            if (ty.IsNull || ty.Value == 0) return SqlBoolean.False;
+            var minx = Math.Min(bx.Value, tx.Value);
+            var miny = Math.Min(@by.Value, ty.Value);
+            var maxx = Math.Max(bx.Value, tx.Value);
+            var maxy = Math.Max(@by.Value, ty.Value);
+            return x.Value >= minx && x.Value <= maxx && y.Value >= miny && y.Value <= maxy;
+        }
 
     }
 }

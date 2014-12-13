@@ -220,6 +220,21 @@
             collections.KeyValuePair = KeyValuePair;
             collections.EndOfEnumeration = EndOfEnumeration;
             collections.StartOfEnumeration = StartOfEnumeration;
+            collections.remove = function(array,item){
+                var index = array.indexOf(item);
+                if(-1!=index){
+                    array.splice(index,1);
+                }
+            }
+            collections.removeClone = function(array,item){
+                var resultArray = [];
+                array.forEach(function(_){
+                    if(_!==item){
+                        resultArray.push(_);
+                    }
+                });
+                return resultArray;
+            }
 
             if (root.collections) {
                 var oldcollections = root.collections;
