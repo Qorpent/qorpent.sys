@@ -59,7 +59,7 @@ namespace Qorpent.Host{
 			AccessAllowCredentials = true;
 			StaticContentMap = new Dictionary<string, string>();
             Proxize = new Dictionary<string, string>();
-            
+            ConnectionStrings = new Dictionary<string, string>();
 		}
 		/// <summary>
 		/// Разрешение Cookie при работе с Cross-Site
@@ -233,7 +233,10 @@ namespace Qorpent.Host{
 		/// Мапинг юрлов в диретории для Static Handler
 		/// </summary>
 		public IDictionary<string, string> StaticContentMap { get; private set; }
-
+		/// <summary>
+		///		Набор строк подключения
+		/// </summary>
+		public IDictionary<string, string> ConnectionStrings { get; private set; } 
 	    /// <summary>
 	    /// Журнал
 	    /// </summary>
@@ -289,6 +292,13 @@ namespace Qorpent.Host{
 				ContentFolders.Add(e.Attr("code"));
 			}
             ReadModules(xml);
+		    foreach (var e in xml.Elements("connection")) {
+			    var name = e.Attr("code");
+			    var cstr = e.Attr("name");
+				if (string.IsNullOrWhiteSpace(name)) continue;
+				if (string.IsNullOrWhiteSpace(cstr)) continue;
+			    ConnectionStrings[name] = cstr;
+		    }
 	        foreach (var e in xml.Elements("static")) {
 	            var name = e.Attr("code");
 	            var folder = EnvironmentInfo.ResolvePath(e.Attr("name"));
