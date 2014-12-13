@@ -238,7 +238,7 @@ r <a href=""http://example.com/i.jpg"">link</a>]]></r>";
 		}
 		[Test]
 		public void IsCorrectMessageWhenOnlyImages() {
-			Assert.AreEqual("(Документ состоит из изображений)", new PortableHtmlConverter().GetDigest(XElement.Parse("<div><p><img src='xxx'/></p></div> ")));
+			Assert.AreEqual("(Документ состоит только из изображений)", new PortableHtmlConverter().GetDigest(XElement.Parse("<div><p><img src='xxx'/></p></div> ")));
 		}
 
 		[Test]

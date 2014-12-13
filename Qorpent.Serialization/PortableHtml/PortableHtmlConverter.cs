@@ -427,7 +427,7 @@ namespace Qorpent.PortableHtml{
 			var html = Convert(src);
 			var pars = html.Elements().ToArray();
 			if (pars.Length == 0) {
-				return images.Length == 0 ? "(Документ не содержит текста)" : "(Документ состоит из изображений)";
+				return images.Length == 0 ? "(Документ не содержит текста)" : "(Документ состоит только из изображений)";
 			}
 			var strings = CollectSourceParasForDigest(size, pars);
 			var full = string.Join("... ", strings);
