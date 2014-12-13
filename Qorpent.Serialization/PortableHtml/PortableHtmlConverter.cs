@@ -422,11 +422,12 @@ namespace Qorpent.PortableHtml{
 		/// <param name="size"></param>
 		/// <returns></returns>
 		public string GetDigest(XElement src, int size = 400){
-			src.Descendants("img").ToArray().Remove();
+			var images = src.Descendants("img").ToArray();
+			images.Remove();
 			var html = Convert(src);
 			var pars = html.Elements().ToArray();
-			if (pars.Length == 0){
-				return "(Документ не содержит текста)";
+			if (pars.Length == 0) {
+				return images.Length == 0 ? "(Документ не содержит текста)" : "(Документ состоит из изображений)";
 			}
 			var strings = CollectSourceParasForDigest(size, pars);
 			var full = string.Join("... ", strings);

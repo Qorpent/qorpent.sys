@@ -230,11 +230,15 @@ r <a href=""http://example.com/i.jpg"">link</a>]]></r>";
 		public void BugDigest(){
 			Assert.AreEqual("(Документ не содержит текста)", new PortableHtmlConverter().GetDigest(XElement.Parse("<div/> ")));
 		}
-
+		[Ignore("#K-304")]
 		[Test]
 		public void BugDigestNoText()
 		{
 			Assert.AreEqual("(Документ не содержит текста)", new PortableHtmlConverter().GetDigest(XElement.Parse("<div><p><img src='xxx'/></p></div> ")));
+		}
+		[Test]
+		public void IsCorrectMessageWhenOnlyImages() {
+			Assert.AreEqual("(Документ состоит из изображений)", new PortableHtmlConverter().GetDigest(XElement.Parse("<div><p><img src='xxx'/></p></div> ")));
 		}
 
 		[Test]
