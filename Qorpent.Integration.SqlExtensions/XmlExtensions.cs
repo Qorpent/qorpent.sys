@@ -21,6 +21,7 @@ namespace Qorpent.Integration.SqlExtensions
             DataAccess = DataAccessKind.None
             )]
         public static SqlString sxaString(SqlString xml,SqlString name) {
+            if (xml.IsNull) return "";
             return ConvertToXml(xml).Attr(name.Value);
         }
         /// <summary>
@@ -31,8 +32,8 @@ namespace Qorpent.Integration.SqlExtensions
             SystemDataAccess = SystemDataAccessKind.None,
             DataAccess = DataAccessKind.None
             )]
-        public static SqlString xaString(SqlXml xml, SqlString name)
-        {
+        public static SqlString xaString(SqlXml xml, SqlString name) {
+            if (xml.IsNull) return "";
             return ConvertToXml(xml).Attr(name.Value);
         }
 
@@ -46,6 +47,7 @@ namespace Qorpent.Integration.SqlExtensions
             )]
         public static SqlXml xGet(SqlString xml)
         {
+            if (xml.IsNull) return null;
             return new SqlXml(ConvertToXml(xml).CreateReader());
         }
        
@@ -80,6 +82,7 @@ namespace Qorpent.Integration.SqlExtensions
             )]
         public static SqlInt32 sxaInt(SqlString xml, SqlString name)
         {
+            if (xml.IsNull) return 0;
             return ConvertToXml(xml).Attr(name.Value).ToInt();
         }
 
@@ -93,6 +96,7 @@ namespace Qorpent.Integration.SqlExtensions
             )]
         public static SqlInt32 xaInt(SqlXml xml, SqlString name)
         {
+            if (xml.IsNull) return 0;
             return ConvertToXml(xml).Attr(name.Value).ToInt();
         }
 
@@ -106,6 +110,7 @@ namespace Qorpent.Integration.SqlExtensions
             )]
         public static SqlBoolean sxaBool(SqlString xml, SqlString name)
         {
+            if (xml.IsNull) return false;
             return ConvertToXml(xml).Attr(name.Value).ToBool();
         }
 
@@ -119,6 +124,7 @@ namespace Qorpent.Integration.SqlExtensions
             )]
         public static SqlBoolean xaBool(SqlXml xml, SqlString name)
         {
+            if (xml.IsNull) return false;
             return ConvertToXml(xml).Attr(name.Value).ToBool();
         }
 
@@ -132,6 +138,7 @@ namespace Qorpent.Integration.SqlExtensions
             )]
         public static SqlDecimal sxaDecimal(SqlString xml, SqlString name)
         {
+            if (xml.IsNull) return 0;
             return ConvertToXml(xml).Attr(name.Value).ToDecimal();
         }
 
@@ -145,6 +152,7 @@ namespace Qorpent.Integration.SqlExtensions
             )]
         public static SqlDecimal xaDecimal(SqlXml xml, SqlString name)
         {
+            if (xml.IsNull) return 0;
             return ConvertToXml(xml).Attr(name.Value).ToDecimal();
         }
 
@@ -158,6 +166,7 @@ namespace Qorpent.Integration.SqlExtensions
             )]
         public static SqlDateTime sxaDate(SqlString xml, SqlString name)
         {
+            if (xml.IsNull) return QorpentConst.Date.Begin;
             return ConvertToXml(xml).Attr(name.Value).ToDate();
         }
 
@@ -171,6 +180,7 @@ namespace Qorpent.Integration.SqlExtensions
             )]
         public static SqlDateTime xaDate(SqlXml xml, SqlString name)
         {
+            if (xml.IsNull) return QorpentConst.Date.Begin;
             return ConvertToXml(xml).Attr(name.Value).ToDate();
         }
     }
