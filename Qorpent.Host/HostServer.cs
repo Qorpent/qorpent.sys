@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using Qorpent.Applications;
 using Qorpent.BSharp.Preprocessor;
 using Qorpent.Bxl;
+using Qorpent.Data;
 using Qorpent.Host.Handlers;
 using Qorpent.Host.Qweb;
 using Qorpent.Host.Security;
@@ -432,7 +433,14 @@ namespace Qorpent.Host{
 				}
 				loader.LoadManifest(xml, true);
 			}
-			
+			foreach (var cs in Config.ConnectionStrings) {
+				var dsc = new ConnectionDescriptor {
+					ConnectionString = cs.Value,
+					Name = cs.Key,
+					PresereveCleanup = true
+				};
+				Application.DatabaseConnections.Register(dsc, true);
+			}
 			
 			foreach (string assemblyName in Config.AutoconfigureAssemblies)
 			{
