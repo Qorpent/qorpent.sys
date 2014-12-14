@@ -39,11 +39,24 @@
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <ItemGroup>
-    <None Include="*.import" />
+    <None Include="Qorpent.Bxl.import" />
+    <None Include="Qorpent.Core.import" />
+    <None Include="Qorpent.Serialization.import" />
+    <None Include="Qorpent.Utils.import" />
     <None Include="*.export" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="qpt-sqlext-clr.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Tools.SqlExtensionsInstallerLib\Qorpent.Tools.SqlExtensionsInstallerLib.csproj">
+      <Project>{820af793-eecc-418d-91cd-e40e8597bc09}</Project>
+      <Name>Qorpent.Tools.SqlExtensionsInstallerLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Tools.SqlExtensionsInstaller\Qorpent.Tools.SqlExtensionsInstaller.csproj">
+      <Project>{9156ee53-0eed-4467-b5ef-4583f9dc3645}</Project>
+      <Name>Qorpent.Tools.SqlExtensionsInstaller</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>$(OutDir)..\all\sqlext.exe $(TargetDir)$(TargetFileName) --generate-script --schema qorpent &gt; $(ProjectDir)qpt-sqlext-clr.sql</PostBuildEvent>
