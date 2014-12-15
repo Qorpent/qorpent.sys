@@ -1,0 +1,102 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "commons", "commons", "{C2A79FDB-910A-44E8-9B99-710642104C7E}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		build = build
+		commons\default-log.ioc-manifest.bxl = commons\default-log.ioc-manifest.bxl
+		commons\default-template.build = commons\default-template.build
+		install = install
+		commons\log.ioc-template = commons\log.ioc-template
+		commons\ndoc3ext.xslt = commons\ndoc3ext.xslt
+		commons\notes.txt = commons\notes.txt
+		PackageAssemblyInfo.cs = PackageAssemblyInfo.cs
+		README.md = README.md
+		commons\webapp.build = commons\webapp.build
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3C9D25F6-1BEE-4E53-9FA3-CD7DCB0FD03B}"
+	ProjectSection(SolutionItems) = preProject
+		Qorpent.BSharp.Builder\Qorpent.BSharp.Builder.csproj = Qorpent.BSharp.Builder\Qorpent.BSharp.Builder.csproj
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Bridge", "Qorpent.Bridge\Qorpent.Bridge.csproj", "{DF09AF72-CE9E-439C-B584-CF8B5B603F5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Bridge.Tests", "Qorpent.Bridge.Tests\Qorpent.Bridge.Tests.csproj", "{BC3BD1AA-228E-4E9C-BBFF-41C823989B39}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OldSys", "OldSys", "{2659C1C2-D4C7-478D-A831-A0F86D7C64AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Core", "Qorpent.Core\Qorpent.Core.csproj", "{880F65EA-1A22-4672-A137-FFC91290A209}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Utils", "Qorpent.Utils\Qorpent.Utils.csproj", "{880F65EA-1A22-4672-A137-FFC912902112}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Host", "Qorpent.Host\Qorpent.Host.csproj", "{E31B62A2-2FEF-4EF9-AADC-21B24885E035}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Serialization", "Qorpent.Serialization\Qorpent.Serialization.csproj", "{21971F28-8ED8-4F50-B623-E9DB2658AF54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Mvc", "Qorpent.Mvc\Qorpent.Mvc.csproj", "{96885C8F-AD20-41B4-86EE-BC9B3D47D9F9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		SQL2008|Any CPU = SQL2008|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF09AF72-CE9E-439C-B584-CF8B5B603F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF09AF72-CE9E-439C-B584-CF8B5B603F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF09AF72-CE9E-439C-B584-CF8B5B603F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF09AF72-CE9E-439C-B584-CF8B5B603F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF09AF72-CE9E-439C-B584-CF8B5B603F5E}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{DF09AF72-CE9E-439C-B584-CF8B5B603F5E}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{BC3BD1AA-228E-4E9C-BBFF-41C823989B39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3BD1AA-228E-4E9C-BBFF-41C823989B39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3BD1AA-228E-4E9C-BBFF-41C823989B39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3BD1AA-228E-4E9C-BBFF-41C823989B39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3BD1AA-228E-4E9C-BBFF-41C823989B39}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{BC3BD1AA-228E-4E9C-BBFF-41C823989B39}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{880F65EA-1A22-4672-A137-FFC91290A209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{880F65EA-1A22-4672-A137-FFC91290A209}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{880F65EA-1A22-4672-A137-FFC91290A209}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{880F65EA-1A22-4672-A137-FFC91290A209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{880F65EA-1A22-4672-A137-FFC91290A209}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{880F65EA-1A22-4672-A137-FFC91290A209}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{880F65EA-1A22-4672-A137-FFC912902112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{880F65EA-1A22-4672-A137-FFC912902112}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{880F65EA-1A22-4672-A137-FFC912902112}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{880F65EA-1A22-4672-A137-FFC912902112}.Release|Any CPU.Build.0 = Release|Any CPU
+		{880F65EA-1A22-4672-A137-FFC912902112}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{880F65EA-1A22-4672-A137-FFC912902112}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{21971F28-8ED8-4F50-B623-E9DB2658AF54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21971F28-8ED8-4F50-B623-E9DB2658AF54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21971F28-8ED8-4F50-B623-E9DB2658AF54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21971F28-8ED8-4F50-B623-E9DB2658AF54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21971F28-8ED8-4F50-B623-E9DB2658AF54}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{21971F28-8ED8-4F50-B623-E9DB2658AF54}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{96885C8F-AD20-41B4-86EE-BC9B3D47D9F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96885C8F-AD20-41B4-86EE-BC9B3D47D9F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96885C8F-AD20-41B4-86EE-BC9B3D47D9F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96885C8F-AD20-41B4-86EE-BC9B3D47D9F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96885C8F-AD20-41B4-86EE-BC9B3D47D9F9}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{96885C8F-AD20-41B4-86EE-BC9B3D47D9F9}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{880F65EA-1A22-4672-A137-FFC91290A209} = {2659C1C2-D4C7-478D-A831-A0F86D7C64AA}
+		{880F65EA-1A22-4672-A137-FFC912902112} = {2659C1C2-D4C7-478D-A831-A0F86D7C64AA}
+		{E31B62A2-2FEF-4EF9-AADC-21B24885E035} = {2659C1C2-D4C7-478D-A831-A0F86D7C64AA}
+		{21971F28-8ED8-4F50-B623-E9DB2658AF54} = {2659C1C2-D4C7-478D-A831-A0F86D7C64AA}
+		{96885C8F-AD20-41B4-86EE-BC9B3D47D9F9} = {2659C1C2-D4C7-478D-A831-A0F86D7C64AA}
+	EndGlobalSection
+EndGlobal
