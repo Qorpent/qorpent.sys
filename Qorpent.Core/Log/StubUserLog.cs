@@ -120,11 +120,12 @@ namespace Qorpent.Log {
 			}
 		}
 
+		private LogLevel _level = LogLevel.Fatal;
 		/// <summary>
 		/// </summary>
 		public LogLevel Level {
-			get { return LogLevel.Fatal; }
-			set { }
+			get { return _level; }
+			set { _level = value; }
 		}
 
 		/// <summary>
