@@ -635,6 +635,52 @@ namespace Qorpent.Utils.Extensions
         }
 
 	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="connection"></param>
+	    /// <param name="script"></param>
+	    /// <param name="haltonerror">ѕрерывать выполнение при обнаружении ошибок</param>
+	    /// <returns></returns>
+	    public static string[] ExecuteScript(this IDbConnection connection, string script, bool haltonerror = false) {
+            if (string.IsNullOrWhiteSpace(script)) return new string[]{};
+            var messages = new List<string>();
+            SqlInfoMessageEventHandler onMessage = (s, a) => {
+                messages.Add(a.Message);
+                messages.AddRange(from object e in a.Errors select "ERROR: " + e.ToString());
+            };
+            var commands =
+                Regex.Split(script, @"\sGO(\s|$)")
+                    .Cast<Match>()
+                    .Select(_ => _.Value.Trim())
+                    .Where(_ => !string.IsNullOrWhiteSpace(_))
+                        .ToArray();
+            if(commands.Length==0)return new string[]{};
+            connection.WellOpen();
+            try {
+                if (connection is SqlConnection) {
+                    (connection as SqlConnection).InfoMessage += onMessage;
+                }
+                foreach (var command in commands) {
+                    try {
+                        connection.ExecuteNonQuery(command);
+                    }
+                    catch {
+                        if (haltonerror) {
+                            break;
+                        }
+                    }
+                }
+            }
+            finally {
+                if (connection is SqlConnection)
+                {
+                    (connection as SqlConnection).InfoMessage -= onMessage;
+                }
+            }
+	        return messages.ToArray();
+	    } 
+
+	    /// <summary>
 	    /// ¬озвращает все строки запроса как словарь - первое поле- ключ, второе - значение
 	    /// </summary>
 	    /// <param name="connection"></param>
