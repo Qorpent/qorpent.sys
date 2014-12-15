@@ -439,7 +439,7 @@ namespace Qorpent.Host{
 					Name = cs.Key,
 					PresereveCleanup = true
 				};
-				Application.DatabaseConnections.Register(dsc, true);
+				Application.DatabaseConnections.Register(dsc, false);
 			}
 			
 			foreach (string assemblyName in Config.AutoconfigureAssemblies)
