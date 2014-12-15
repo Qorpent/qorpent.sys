@@ -565,6 +565,7 @@ namespace Qorpent.BSharp{
 	    }
 
 	    private void SetupGlobals(){
+            _global = _global ?? _config.Global ?? new ConfigBase { UseInheritance = false };
 			bool requireInterpolation = false;
 			foreach (var baseglobal in _overlobals){
 				if (!_global.ContainsKey(baseglobal.Key)){

@@ -11,6 +11,9 @@ define(["leaflet-amd"],function(L){
         return {
             getMarkerXY : function(marker){
                 var point = marker.getLatLng();
+                return this.getXY(point);
+            },
+            getXY : function(point){
                 var xy = L.Projection.SphericalMercator.project(point);
                 var result = {};
                 result.X = (xy.x * 6378137).toFixed(0);

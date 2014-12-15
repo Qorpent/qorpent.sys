@@ -167,7 +167,7 @@ namespace Qorpent.Integration.SqlExtensions
         public static SqlDateTime sxaDate(SqlString xml, SqlString name)
         {
             if (xml.IsNull) return QorpentConst.Date.Begin;
-            return ConvertToXml(xml).Attr(name.Value).ToDate();
+            return ConvertToXml(xml).Attr(name.Value).ToDate(true);
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Qorpent.Integration.SqlExtensions
         public static SqlDateTime xaDate(SqlXml xml, SqlString name)
         {
             if (xml.IsNull) return QorpentConst.Date.Begin;
-            return ConvertToXml(xml).Attr(name.Value).ToDate();
+            return ConvertToXml(xml).Attr(name.Value).ToDate(true);
         }
     }
 }

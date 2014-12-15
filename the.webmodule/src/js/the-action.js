@@ -21,7 +21,7 @@
                 this.withCredentials = null;
                 this.suppressDefault = false;
                 this.eventName = "";
-                this.castResult = null;
+                this.castresult = null;
                 this.rawResult = false;
                 this.parameters = {};
                 this.delay = 0;
@@ -40,7 +40,7 @@
                 this.method = "GET";
                 this.arguments = null; //ctor function for arguments
                 this.result = null; //ctor function for result
-                this.castResult = true;
+                this.castresult = true;
                 this.headers = null;
                 this.extensions = null;
                 this.useparams = true;
@@ -210,12 +210,12 @@
                     if (emits === "disable")emits = null;
                     var emitter = callinfo.emitter || this.emitter;
                     var resultCtor = callinfo.result || this.result;
-                    var castResult = (callinfo.castResult || this.castResult) && !!resultCtor && !callinfo.rawResult;
+                    var castresult = (callinfo.castresult || this.castresult) && !!resultCtor && !callinfo.rawResult;
                     var emit = !!emitter ? (emitter.emit || emitter.$broadcast) : null;
 
                     var success = function (data, resp) {
                         var realdata = data;
-                        if (castResult) {
+                        if (castresult) {
                             if (Array.isArray(data)) {
                                 realdata = [];
                                 for (var i = 0; i < data.length; i++) {

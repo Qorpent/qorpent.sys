@@ -16,6 +16,8 @@
 // 
 // PROJECT ORIGIN: Qorpent.Serialization/xmlSerializer.cs
 #endregion
+
+using System.Collections.Specialized;
 using System.IO;
 using System.Xml.Linq;
 using Qorpent.IoC;
@@ -66,6 +68,16 @@ namespace Qorpent.Serialization {
 			}
 		}
 
+        static XmlSerializer Default = new XmlSerializer();
 
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="obj"></param>
+	    /// <param name="name"></param>
+	    /// <returns></returns>
+	    public static string GetString(object obj,string name = "root") {
+	        return Default.Serialize(name ?? "root", obj);
+	    }
 	}
 }
