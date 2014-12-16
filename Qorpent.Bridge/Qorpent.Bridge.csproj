@@ -4,13 +4,19 @@
     <Configuration>Debug</Configuration>
     <ProjectGuid>{DF09AF72-CE9E-439C-B584-CF8B5B603F5E}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Qorpent.Bridge</RootNamespace>
+    <RootNamespace>Qorpent</RootNamespace>
     <AssemblyName>Qorpent.Bridge</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
     <EmbeddedResource Include=".\**\*.*resource" />
+    <None Include="Extensions\Qorpent.Extensions.bswiki" />
+    <None Include="Utils\Qorpent.Utils.bswiki" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Utils\TypeConverter.cs" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

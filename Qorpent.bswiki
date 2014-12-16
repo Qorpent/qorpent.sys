@@ -1,0 +1,2 @@
+class doc "Базовый класс документации" prototype=doc abstract
+namepspace Qorpent
