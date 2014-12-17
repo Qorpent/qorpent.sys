@@ -36,7 +36,7 @@ namespace Qorpent.Host.Exe
 	    private static void EnsureRequiredApplications(ServerParameters serverParameters, HostConfig config) {
 	        var requires = config.Definition.Elements("require");
 	        foreach (var require in requires) {
-	            var name = require.IdCodeOrValue();
+	            var name = require.IdCodeOrValue()+require.Attr("suffix");
 	            var shadow = EnvironmentInfo.GetShadowDirectory(name);
 	            var processes = Process.GetProcessesByName("qh");
                 Console.WriteLine(string.Join("; ",processes.Select(_=>_.ProcessName)));

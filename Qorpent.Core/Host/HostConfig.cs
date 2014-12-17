@@ -356,7 +356,8 @@ namespace Qorpent.Host{
             this.AccessAllowOrigin = xml.ResolveValue("origin", "");
 
 	        foreach (var e in xml.Elements("require")) {
-	            var appname = e.Attr("code");
+	            var appname = e.Attr("code")+e.Attr("suffix");
+    
 	            var proxize = e.GetSmartValue("proxize").ToBool() || e.Attr("name")=="proxize";
 	            if (proxize) {
                     if (null == context)
