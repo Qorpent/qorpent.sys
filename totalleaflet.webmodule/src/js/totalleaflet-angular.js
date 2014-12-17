@@ -72,7 +72,11 @@ define(["leaflet-amd"],function(L){
                 var map = L.map(element[0],mapConfig);
 
                 if("tiles" in iAttrs) {
-                    var url = iAttrs["tiles"].replace(/\{hostname\}/, document.location.hostname);
+                    var url = iAttrs["tiles"];
+                    if(!url.match(/\./)){
+                        url = $scope[url];
+                    }
+                    url = url.replace(/\{hostname\}/, document.location.hostname);
                     L.tileLayer(url, {
                         reuseTiles: true,
                         updateWhenIdle: false
