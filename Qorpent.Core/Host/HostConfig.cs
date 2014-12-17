@@ -356,7 +356,8 @@ namespace Qorpent.Host{
             this.AccessAllowOrigin = xml.ResolveValue("origin", "");
 
 	        foreach (var e in xml.Elements("require")) {
-	            var appname = e.Attr("code");
+	            var appname = e.Attr("code")+e.Attr("suffix");
+    
 	            var proxize = e.GetSmartValue("proxize").ToBool() || e.Attr("name")=="proxize";
 	            if (proxize) {
                     if (null == context)
@@ -372,7 +373,12 @@ namespace Qorpent.Host{
 	                    var services = cls.Compiled.Elements("service");
 	                    foreach (var srv in services) {
 	                        var root = srv.Attr("code");
-	                        this.Proxize[root] = "appid=" + sappid+";";
+	                        var server = e.Attr("server");
+	                        var cp = "appid=" + sappid + ";";
+	                        if (!string.IsNullOrWhiteSpace(server)) {
+	                            cp += "server=" + server;
+	                        }
+	                        this.Proxize[root] = cp;
 	                    }
 
 	                }

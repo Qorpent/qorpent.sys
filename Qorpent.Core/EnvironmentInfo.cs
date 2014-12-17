@@ -385,7 +385,7 @@ namespace Qorpent {
 		/// Возвращает путь к теневым копиям приложений
 		/// </summary>
 		public static string GetShadowRoot(){
-			var result = Path.Combine(Path.GetTempPath(), ".qptshadow");
+			var result = Path.Combine(GetRepositoryRoot(), ".qptshadow");
 			return result;
 		}
 		/// <summary>
