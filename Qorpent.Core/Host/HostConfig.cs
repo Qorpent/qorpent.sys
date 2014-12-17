@@ -373,7 +373,12 @@ namespace Qorpent.Host{
 	                    var services = cls.Compiled.Elements("service");
 	                    foreach (var srv in services) {
 	                        var root = srv.Attr("code");
-	                        this.Proxize[root] = "appid=" + sappid+";";
+	                        var server = e.Attr("server");
+	                        var cp = "appid=" + sappid + ";";
+	                        if (!string.IsNullOrWhiteSpace(server)) {
+	                            cp += "server=" + server;
+	                        }
+	                        this.Proxize[root] = cp;
 	                    }
 
 	                }
