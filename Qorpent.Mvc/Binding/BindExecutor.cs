@@ -16,11 +16,11 @@
 // 
 // PROJECT ORIGIN: Qorpent.Mvc/BindExecutor.cs
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web.UI.HtmlControls;
 using System.Xml.Linq;
 using Qorpent.Uson;
 using Qorpent.Utils;
@@ -202,7 +202,7 @@ namespace Qorpent.Mvc.Binding {
                     }
                 }
                 else {
-                    var clsdict = obj.ToDict();
+                    var clsdict = CoreExtensions.ToDict(obj);
                     foreach (var p in clsdict) {
 	                    if (p.Value is IDictionary<string, string>){
 		                    SetupDictionary<string>(context, obj, p);

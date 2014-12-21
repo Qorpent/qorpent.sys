@@ -6,11 +6,7 @@
     <RootNamespace>Qorpent</RootNamespace>
     <AssemblyName>Qorpent.Core</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DocumentationFile>
-    </DocumentationFile>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -21,6 +17,12 @@
     <When Condition="'$(Configuration)'!='SQL2008'" />
   </Choose>
   <ItemGroup>
+    <Compile Include="..\Qorpent.Bridge\Utils\Constants.cs">
+      <Link>BridgeImport\Constants.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Bridge\Utils\TypeConverter.cs">
+      <Link>BridgeImport\TypeConverter.cs</Link>
+    </Compile>
     <Compile Include="Applications\IHttpContextWrapper.cs" />
     <Compile Include="Applications\StubHttpContextWrapper.cs" />
     <Compile Include="Applications\TaskWrapper.cs" />
@@ -469,4 +471,10 @@
     <Folder Include="Serialization\IntermediateFormat\" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DocumentationFile>
+    </DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DefineConstants>TRACE;DEBUG;Windows_NT EXBRIDGE</DefineConstants>
+  </PropertyGroup>
 </Project>

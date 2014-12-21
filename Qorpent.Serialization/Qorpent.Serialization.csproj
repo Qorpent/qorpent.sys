@@ -213,6 +213,7 @@
     <EmbeddedResource Include="BSharp\Preprocessor\preprocessor.bxls" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="IoC\" />
     <Folder Include="Sql\" />
   </ItemGroup>
 </Project>

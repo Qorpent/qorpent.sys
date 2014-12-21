@@ -15,6 +15,8 @@
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Utils\ReadAsStringsTest.cs" />
+    <Compile Include="Utils\TryUnsafe.cs" />
     <Compile Include="Utils\TypeConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -22,9 +24,14 @@
       <Project>{880f65ea-1a22-4672-a137-ffc91290a209}</Project>
       <Name>Qorpent.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
+      <Name>Qorpent.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <DefineConstants>TRACE;DEBUG;Windows_NT OLDSYS</DefineConstants>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
 </Project>

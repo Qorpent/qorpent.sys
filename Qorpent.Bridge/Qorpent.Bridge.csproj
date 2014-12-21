@@ -7,16 +7,50 @@
     <RootNamespace>Qorpent</RootNamespace>
     <AssemblyName>Qorpent.Bridge</AssemblyName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
     <EmbeddedResource Include=".\**\*.*resource" />
-    <None Include="Extensions\Qorpent.Extensions.bswiki" />
-    <None Include="Utils\Qorpent.Utils.bswiki" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Compile Include="Utils\TypeConverter.cs" />
+    <Compile Include="Experiments\StringUtils.cs" />
+    <Compile Include="Experiments\TypeConverter.cs" />
+    <Compile Include="Experiments\Constants.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Qorpent.Core\**\*.cs" Exclude="..\Qorpent.Core\**\Temporary*.cs;..\Qorpent.Core\**\AssemblyInfo.cs;..\Qorpent.Core\**\ContainerInfo.cs">
+      <Link>Import.Core\%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.IoC\**\*.cs" Exclude="..\Qorpent.IoC\**\Temporary*.cs;..\Qorpent.IoC\**\AssemblyInfo.cs;..\Qorpent.IoC\**\ContainerInfo.cs">
+      <Link>Import.IoC\%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.IO\**\*.cs" Exclude="..\Qorpent.IO\**\Temporary*.cs;..\Qorpent.IO\**\AssemblyInfo.cs;..\Qorpent.IO\**\ContainerInfo.cs">
+      <Link>Import.IO\%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\**\*.cs" Exclude="..\Qorpent.Utils\**\Temporary*.cs;..\Qorpent.Utils\**\AssemblyInfo.cs;..\Qorpent.Utils\**\ContainerInfo.cs">
+      <Link>Import.Utils\%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\**\*.cs" Exclude="..\Qorpent.Serialization\**\Temporary*.cs;..\Qorpent.Serialization\**\AssemblyInfo.cs;..\Qorpent.Serialization\**\ContainerInfo.cs">
+      <Link>Import.Serialization\%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Mvc\**\*.cs" Exclude="..\Qorpent.Mvc\**\Temporary*.cs;..\Qorpent.Mvc\**\AssemblyInfo.cs;..\Qorpent.Mvc\**\ContainerInfo.cs">
+      <Link>Import.Mvc\%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Host\**\*.cs" Exclude="..\Qorpent.Host\**\Temporary*.cs;..\Qorpent.Host\**\AssemblyInfo.cs;..\Qorpent.Host\**\ContainerInfo.cs">
+      <Link>Import.Host\%(Filename)%(Extension)</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>
