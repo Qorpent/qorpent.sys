@@ -21,6 +21,7 @@ namespace Qorpent.Utils {
 		    "HH:mm | D.MM.yyyy",
 		    "yyyy-MM-dd HH:mm",
 		    "yyyy-MM-dd HH:mm:ss",
+		    "yyyyMMdd",
 		    "yyyyMMdd HH:mm",
 		    "yyyyMMdd HH:mm:ss",
 		    "yyyy-MM-dd",

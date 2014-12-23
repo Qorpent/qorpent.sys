@@ -8,6 +8,7 @@ namespace Qorpent.Utils {
 	///		Резольвер промежутка даты/времени
 	/// </summary>
 	public static  class DateRangeResolver {
+        static readonly DateRange Any = new DateRange{Start = QorpentConst.Date.Begin,Finish = QorpentConst.Date.End};
 		///  <summary>
 		/// 		Разрешение промежутка даты/времени
 		///  </summary>
@@ -16,6 +17,9 @@ namespace Qorpent.Utils {
 		/// <param name="holidays"></param>
 		/// <returns>Разрешённая дата/время</returns>
 		public static DateRange CalculateRange(this DateTime baseDate, string expression, params DateTime[] holidays){
+		    if (expression == "any") {
+		        return Any;
+		    }
 			expression = (expression ?? "").Trim().ToLowerInvariant();
 			var result = new DateRange{Base = baseDate, Expression = expression};
 			//сначала разбираем стандартные периоды
