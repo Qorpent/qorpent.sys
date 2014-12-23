@@ -1,7 +1,7 @@
 ﻿using System.Net;
 
 namespace Qorpent.Host{
-	/// <summary>
+    /// <summary>
 	/// </summary>
 	public interface IAuthenticationProvider{
 		/// <summary>

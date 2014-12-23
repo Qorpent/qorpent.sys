@@ -132,6 +132,7 @@
     <Compile Include="Host\HostServerState.cs" />
     <Compile Include="Host\IAuthenticationProvider.cs" />
     <Compile Include="Host\IEncryptProvider.cs" />
+    <Compile Include="Host\IHostConfigProvider.cs" />
     <Compile Include="Host\ISimpleSocketRequest.cs" />
     <Compile Include="IO\IBinarySerializable.cs" />
     <Compile Include="Host\IHostServer.cs" />
