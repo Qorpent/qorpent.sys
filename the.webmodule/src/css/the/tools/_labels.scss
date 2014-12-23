@@ -39,8 +39,12 @@
   .controls {
     @include user-select(none);
     min-height: 20px;
+    align-items: center;
   }
   i {
+    min-width: 20px;
+    text-align: center;
+
     &.active  {
       font-weight: bold;
       color : #33aa4c;
