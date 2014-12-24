@@ -96,13 +96,19 @@
   -webkit-user-select: none;
   user-select: none;
   min-height: 20px;
+  align-items: center;
 }
 /* line 44, the/tools/_labels.scss */
+.the .tool.labeled i {
+  min-width: 20px;
+  text-align: center;
+}
+/* line 48, the/tools/_labels.scss */
 .the .tool.labeled i.active {
   font-weight: bold;
   color: #33aa4c;
 }
-/* line 48, the/tools/_labels.scss */
+/* line 52, the/tools/_labels.scss */
 .the .tool.labeled i.disabled {
   font-weight: lighter;
   color: lightgray !important;

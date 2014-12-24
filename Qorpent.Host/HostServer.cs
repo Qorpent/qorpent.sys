@@ -25,7 +25,7 @@ namespace Qorpent.Host{
 	/// <summary>
 	///     Http сервер Qorpent
 	/// </summary>
-	public class HostServer : IHostServer{
+	public class HostServer : IHostServer,IHostConfigProvider{
 		private IAuthenticationProvider _auth;
 		internal CancellationToken _cancel;
 		private CancellationTokenSource _cancelSrc;
@@ -53,8 +53,14 @@ namespace Qorpent.Host{
 			cfg.Bindings[0].Port = port;
 			Config = cfg;
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+	    public HostServer() {
+	        throw new NotImplementedException();
+	    }
 
-		/// <summary>
+	    /// <summary>
 		///     Суммарное время обработки
 		/// </summary>
 		public TimeSpan RequestTime { get; set; }
@@ -382,6 +388,7 @@ namespace Qorpent.Host{
 				_container.Register(_container.NewComponent<IMvcContext, HostMvcContext>());
 				_container.Unregister(_container.FindComponent(typeof (IAction), "_sys.login.action"));
 				_container.Unregister(_container.FindComponent(typeof (IAction), "_sys.logout.action"));
+                _container.Register(_container.NewComponent<IHostConfigProvider, HostServer>(implementation: this));
 
 				var logger = (BaseLogger) ConsoleLogWriter.CreateLogger(
 					level: Config.LogLevel,
@@ -476,5 +483,13 @@ namespace Qorpent.Host{
 		public string GetStatisticsString(){
 			return string.Format("Request Count: {0}\r\nRequest Time: {1}", RequestCount, RequestTime);
 		}
+
+	    /// <summary>
+	    /// Получить конфигурацию
+	    /// </summary>
+	    /// <returns></returns>
+	    public HostConfig GetConfig() {
+	        return Config;
+	    }
 	}
 }
