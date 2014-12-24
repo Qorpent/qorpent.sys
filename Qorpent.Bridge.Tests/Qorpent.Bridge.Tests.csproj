@@ -15,19 +15,15 @@
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Utils\Json2Test.cs" />
     <Compile Include="Utils\ReadAsStringsTest.cs" />
     <Compile Include="Utils\TryUnsafe.cs" />
     <Compile Include="Utils\TypeConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
-      <Project>{880f65ea-1a22-4672-a137-ffc91290a209}</Project>
-      <Name>Qorpent.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
-      <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
-      <Name>Qorpent.Utils</Name>
-    </ProjectReference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>C:\Users\comdiv\Downloads\Json60r7\Bin\Net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

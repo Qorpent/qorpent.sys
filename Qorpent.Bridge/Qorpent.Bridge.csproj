@@ -16,6 +16,23 @@
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CachedOld\Json\CType.cs" />
+    <Compile Include="CachedOld\Json\IJsonParser.cs" />
+    <Compile Include="CachedOld\Json\JsonArray.cs" />
+    <Compile Include="CachedOld\Json\JsonItem.cs" />
+    <Compile Include="CachedOld\Json\JsonObject.cs" />
+    <Compile Include="CachedOld\Json\JsonParser.cs" />
+    <Compile Include="CachedOld\Json\JsonParserException.cs" />
+    <Compile Include="CachedOld\Json\JsonToken.cs" />
+    <Compile Include="CachedOld\Json\JsonTokenType.cs" />
+    <Compile Include="CachedOld\Json\JsonTuple.cs" />
+    <Compile Include="CachedOld\Json\JsonValue.cs" />
+    <Compile Include="CachedOld\Json\Lexer.cs" />
+    <Compile Include="CachedOld\Json\Tokenizer.cs" />
+    <Compile Include="Experiments\Json2\IJsonSerializable.cs" />
+    <Compile Include="Experiments\Json2\ISerializationAnnotator.cs" />
+    <Compile Include="Experiments\Json2\Json.cs" />
+    <Compile Include="Experiments\Json2\SerializeMode.cs" />
     <Compile Include="Experiments\StringUtils.cs" />
     <Compile Include="Experiments\TypeConverter.cs" />
     <Compile Include="Experiments\Constants.cs" />
@@ -42,8 +59,539 @@
     <Compile Include="..\Qorpent.Utils\**\*.cs" Exclude="..\Qorpent.Utils\**\Temporary*.cs;..\Qorpent.Utils\**\AssemblyInfo.cs;..\Qorpent.Utils\**\ContainerInfo.cs">
       <Link>Import.Utils\%(Filename)%(Extension)</Link>
     </Compile>
-    <Compile Include="..\Qorpent.Serialization\**\*.cs" Exclude="..\Qorpent.Serialization\**\Temporary*.cs;..\Qorpent.Serialization\**\AssemblyInfo.cs;..\Qorpent.Serialization\**\ContainerInfo.cs">
-      <Link>Import.Serialization\%(Filename)%(Extension)</Link>
+    <Compile Include="..\Qorpent.Serialization\AbstractCanvas\Canvas.cs">
+      <Link>Import.Serialization\Canvas.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\AbstractCanvas\CanvasAxis.cs">
+      <Link>Import.Serialization\CanvasAxis.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\AbstractCanvas\CanvasPoint.cs">
+      <Link>Import.Serialization\CanvasPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\AbstractCanvas\ICanvas.cs">
+      <Link>Import.Serialization\ICanvas.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\AbstractCanvas\ICanvasAxis.cs">
+      <Link>Import.Serialization\ICanvasAxis.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\AbstractCanvas\ICanvasElement.cs">
+      <Link>Import.Serialization\ICanvasElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\AbstractCanvas\ICanvasPoint.cs">
+      <Link>Import.Serialization\ICanvasPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\AbstractCanvas\ICanvasPrimitive.cs">
+      <Link>Import.Serialization\ICanvasPrimitive.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BSharpClass.cs">
+      <Link>Import.Serialization\BSharpClass.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BSharpClassBuilder.cs">
+      <Link>Import.Serialization\BSharpClassBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BSharpCodeBuilder.cs">
+      <Link>Import.Serialization\BSharpCodeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BSharpCompiler.cs">
+      <Link>Import.Serialization\BSharpCompiler.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BSharpConfig.cs">
+      <Link>Import.Serialization\BSharpConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BSharpContext.cs">
+      <Link>Import.Serialization\BSharpContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BSharpElement.cs">
+      <Link>Import.Serialization\BSharpElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BSharpErrors.cs">
+      <Link>Import.Serialization\BSharpErrors.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BSharpImport.cs">
+      <Link>Import.Serialization\BSharpImport.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BSharpJsonCompiler.cs">
+      <Link>Import.Serialization\BSharpJsonCompiler.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BSharpSqlAdapter.cs">
+      <Link>Import.Serialization\BSharpSqlAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Builder\BSharpBuilderBase.cs">
+      <Link>Import.Serialization\BSharpBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Builder\BSharpBuilderDefaults.cs">
+      <Link>Import.Serialization\BSharpBuilderDefaults.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Builder\BSharpBuilderExtensionBase.cs">
+      <Link>Import.Serialization\BSharpBuilderExtensionBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Builder\BSharpBuilderTargetExtensions.cs">
+      <Link>Import.Serialization\BSharpBuilderTargetExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Builder\BSharpBuilderTaskBase.cs">
+      <Link>Import.Serialization\BSharpBuilderTaskBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Builder\BSharpProject.cs">
+      <Link>Import.Serialization\BSharpProject.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Builder\BSharpProjectSerializer.cs">
+      <Link>Import.Serialization\BSharpProjectSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\BuildPhase.cs">
+      <Link>Import.Serialization\BuildPhase.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\ExportRecord.cs">
+      <Link>Import.Serialization\ExportRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Matcher\ConditionGroup.cs">
+      <Link>Import.Serialization\ConditionGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Matcher\ConditionType.cs">
+      <Link>Import.Serialization\ConditionType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Matcher\SingleCondition.cs">
+      <Link>Import.Serialization\SingleCondition.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Matcher\XmlTemplateMatcher.cs">
+      <Link>Import.Serialization\XmlTemplateMatcher.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\BindGlobalOperation.cs">
+      <Link>Import.Serialization\BindGlobalOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\CleanupElementOperation.cs">
+      <Link>Import.Serialization\CleanupElementOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\DataCompilerExtensions.cs">
+      <Link>Import.Serialization\DataCompilerExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\ElementToAttributeOperation.cs">
+      <Link>Import.Serialization\ElementToAttributeOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\ExecuteCodeGenerator.cs">
+      <Link>Import.Serialization\ExecuteCodeGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\ExtendedPreprocessorTask.cs">
+      <Link>Import.Serialization\ExtendedPreprocessorTask.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\ISourceCodeGenerator.cs">
+      <Link>Import.Serialization\ISourceCodeGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\PreprocessOperation.cs">
+      <Link>Import.Serialization\PreprocessOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\PreprocessorCommand.cs">
+      <Link>Import.Serialization\PreprocessorCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\PreprocessorCommandBase.cs">
+      <Link>Import.Serialization\PreprocessorCommandBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\PreprocessorSourcePackageForBSharp.cs">
+      <Link>Import.Serialization\PreprocessorSourcePackageForBSharp.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\ProcessorScript.cs">
+      <Link>Import.Serialization\ProcessorScript.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\PushToGlobalOperation.cs">
+      <Link>Import.Serialization\PushToGlobalOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\RemoveAttributeOperation.cs">
+      <Link>Import.Serialization\RemoveAttributeOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\RenameAttributeOperation.cs">
+      <Link>Import.Serialization\RenameAttributeOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\RenameElementOperation.cs">
+      <Link>Import.Serialization\RenameElementOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\SetAttributeOperation.cs">
+      <Link>Import.Serialization\SetAttributeOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Preprocessor\StringReplaceOperation.cs">
+      <Link>Import.Serialization\StringReplaceOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\ResourceBasedSrcBSharpProvider.cs">
+      <Link>Import.Serialization\ResourceBasedSrcBSharpProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Runtime\BSharpClassProviderBase.cs">
+      <Link>Import.Serialization\BSharpClassProviderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Runtime\BSharpFileBasedClassProvider.cs">
+      <Link>Import.Serialization\BSharpFileBasedClassProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Runtime\BSharpGenericClassProvider.cs">
+      <Link>Import.Serialization\BSharpGenericClassProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\BSharp\Runtime\BSharpLibraryClassProvider.cs">
+      <Link>Import.Serialization\BSharpLibraryClassProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Bxl\BxlGenerator.cs">
+      <Link>Import.Serialization\BxlGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Bxl\BxlParser.cs">
+      <Link>Import.Serialization\BxlParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Bxl\BxlService.cs">
+      <Link>Import.Serialization\BxlService.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Bxl\MyBxl.cs">
+      <Link>Import.Serialization\MyBxl.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Bxl\ReadMode.cs">
+      <Link>Import.Serialization\ReadMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\ApiExtended.cs">
+      <Link>Import.Serialization\ApiExtended.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\API_auto.cs">
+      <Link>Import.Serialization\API_auto.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\Api_dict_auto.cs">
+      <Link>Import.Serialization\Api_dict_auto.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\ChartNormalized.cs">
+      <Link>Import.Serialization\ChartNormalized.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\FusionChartApi.cs">
+      <Link>Import.Serialization\FusionChartApi.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\FusionChartAttributeDescriptor.cs">
+      <Link>Import.Serialization\FusionChartAttributeDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\FusionChartChartAttributes.cs">
+      <Link>Import.Serialization\FusionChartChartAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\FusionChartColor.cs">
+      <Link>Import.Serialization\FusionChartColor.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\FusionChartDataType.cs">
+      <Link>Import.Serialization\FusionChartDataType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\FusionChartElementType.cs">
+      <Link>Import.Serialization\FusionChartElementType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\FusionChartExtensions.cs">
+      <Link>Import.Serialization\FusionChartExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\FusionChartGroupedType.cs">
+      <Link>Import.Serialization\FusionChartGroupedType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\FusionChartType.cs">
+      <Link>Import.Serialization\FusionChartType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts.FusionCharts\FusionChartWrapper.cs">
+      <Link>Import.Serialization\FusionChartWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\Chart.cs">
+      <Link>Import.Serialization\Chart.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartBuilder.cs">
+      <Link>Import.Serialization\ChartBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartCategories.cs">
+      <Link>Import.Serialization\ChartCategories.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartCategory.cs">
+      <Link>Import.Serialization\ChartCategory.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartConfig.cs">
+      <Link>Import.Serialization\ChartConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartDataset.cs">
+      <Link>Import.Serialization\ChartDataset.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartDatasets.cs">
+      <Link>Import.Serialization\ChartDatasets.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartElement.cs">
+      <Link>Import.Serialization\ChartElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartElementList.cs">
+      <Link>Import.Serialization\ChartElementList.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartExtensions.cs">
+      <Link>Import.Serialization\ChartExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartLineSet.cs">
+      <Link>Import.Serialization\ChartLineSet.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartLineSetItem.cs">
+      <Link>Import.Serialization\ChartLineSetItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartRenderResult.cs">
+      <Link>Import.Serialization\ChartRenderResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartSet.cs">
+      <Link>Import.Serialization\ChartSet.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartTrendLine.cs">
+      <Link>Import.Serialization\ChartTrendLine.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartTrendLines.cs">
+      <Link>Import.Serialization\ChartTrendLines.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\ChartVLine.cs">
+      <Link>Import.Serialization\ChartVLine.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Charts\Chart_default_attributes.cs">
+      <Link>Import.Serialization\Chart_default_attributes.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Fc\Chart.cs">
+      <Link>Import.Serialization\Chart.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Fc\ChartTypes\LabelDisplayType.cs">
+      <Link>Import.Serialization\LabelDisplayType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\Builder\DotEdgeBuilder.cs">
+      <Link>Import.Serialization\DotEdgeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\Builder\DotGraphBuilder.cs">
+      <Link>Import.Serialization\DotGraphBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\Builder\DotGraphElementBuilderBase.cs">
+      <Link>Import.Serialization\DotGraphElementBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\Builder\DotNodeBuilder.cs">
+      <Link>Import.Serialization\DotNodeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\Builder\DotSubgraphBuilder.cs">
+      <Link>Import.Serialization\DotSubgraphBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\Builder\DotSubgraphBuilderBase.cs">
+      <Link>Import.Serialization\DotSubgraphBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\Cluster.cs">
+      <Link>Import.Serialization\Cluster.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\DotGenerator.cs">
+      <Link>Import.Serialization\DotGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\DotGraphProvider.cs">
+      <Link>Import.Serialization\DotGraphProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\DotLanguageUtils.cs">
+      <Link>Import.Serialization\DotLanguageUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\Edge.cs">
+      <Link>Import.Serialization\Edge.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\Graph.cs">
+      <Link>Import.Serialization\Graph.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\GraphElementBase.cs">
+      <Link>Import.Serialization\GraphElementBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\GraphRender.cs">
+      <Link>Import.Serialization\GraphRender.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\Node.cs">
+      <Link>Import.Serialization\Node.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Graphs.Dot\SubGraph.cs">
+      <Link>Import.Serialization\SubGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\IntermediateFormat\IntermediateFormatDocument.cs">
+      <Link>Import.Serialization\IntermediateFormatDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\IntermediateFormat\IntermediateFormatException.cs">
+      <Link>Import.Serialization\IntermediateFormatException.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\IntermediateFormat\IntermediateFormatInvalidQueryException.cs">
+      <Link>Import.Serialization\IntermediateFormatInvalidQueryException.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\IntermediateFormat\IntermediateFormatLayer.cs">
+      <Link>Import.Serialization\IntermediateFormatLayer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\IntermediateFormat\IntermediateFormatOutputType.cs">
+      <Link>Import.Serialization\IntermediateFormatOutputType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\IntermediateFormat\IntermediateFormatQuery.cs">
+      <Link>Import.Serialization\IntermediateFormatQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\IntermediateFormat\IntermediateFormatSyntax.cs">
+      <Link>Import.Serialization\IntermediateFormatSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Json\CType.cs">
+      <Link>Import.Serialization\CType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Json\JsonArray.cs">
+      <Link>Import.Serialization\JsonArray.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Json\JsonObject.cs">
+      <Link>Import.Serialization\JsonObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Json\JsonParser.cs">
+      <Link>Import.Serialization\JsonParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Json\JsonParserException.cs">
+      <Link>Import.Serialization\JsonParserException.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Json\JsonToken.cs">
+      <Link>Import.Serialization\JsonToken.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Json\JsonTuple.cs">
+      <Link>Import.Serialization\JsonTuple.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Json\JsonValue.cs">
+      <Link>Import.Serialization\JsonValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Json\JsonValueType.cs">
+      <Link>Import.Serialization\JsonValueType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Json\Lexer.cs">
+      <Link>Import.Serialization\Lexer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Json\Tokenizer.cs">
+      <Link>Import.Serialization\Tokenizer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\PortableHtml\PortableHtmlContext.cs">
+      <Link>Import.Serialization\PortableHtmlContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\PortableHtml\PortableHtmlConverter.cs">
+      <Link>Import.Serialization\PortableHtmlConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\PortableHtml\PortableHtmlSchema.cs">
+      <Link>Import.Serialization\PortableHtmlSchema.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\PortableHtml\PortableHtmlSchemaErorr.cs">
+      <Link>Import.Serialization\PortableHtmlSchemaErorr.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\PortableHtml\PortableHtmlSchemaErorrDescription.cs">
+      <Link>Import.Serialization\PortableHtmlSchemaErorrDescription.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\PortableHtml\PortableHtmlStrictLevel.cs">
+      <Link>Import.Serialization\PortableHtmlStrictLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\PortableHtml\PortableHtmlVerificationStrategy.cs">
+      <Link>Import.Serialization\PortableHtmlVerificationStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Qxi\XmlIncludeProcessor.cs">
+      <Link>Import.Serialization\XmlIncludeProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Qxi\XmlInterpolationPreprocessor.cs">
+      <Link>Import.Serialization\XmlInterpolationPreprocessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Report\ColumnTitleFormatter.cs">
+      <Link>Import.Serialization\ColumnTitleFormatter.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Report\ContentItemExtensions.cs">
+      <Link>Import.Serialization\ContentItemExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Report\ContentItemQuery.cs">
+      <Link>Import.Serialization\ContentItemQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Report\IContentItem.cs">
+      <Link>Import.Serialization\IContentItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Report\IContentItemProvider.cs">
+      <Link>Import.Serialization\IContentItemProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Report\IContentItemQuery.cs">
+      <Link>Import.Serialization\IContentItemQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Report\IReportFactory.cs">
+      <Link>Import.Serialization\IReportFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Report\ReportFactory.cs">
+      <Link>Import.Serialization\ReportFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Report\ReportFactoryConfig.cs">
+      <Link>Import.Serialization\ReportFactoryConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Report\ReportQuery.cs">
+      <Link>Import.Serialization\ReportQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Report\TitleParams.cs">
+      <Link>Import.Serialization\TitleParams.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Selector\DefaultSelector.cs">
+      <Link>Import.Serialization\DefaultSelector.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Selector\Implementations\CssSelectorImpl.cs">
+      <Link>Import.Serialization\CssSelectorImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Selector\Implementations\RegexSelectorImpl.cs">
+      <Link>Import.Serialization\RegexSelectorImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Selector\Implementations\XPathSelectorImpl.cs">
+      <Link>Import.Serialization\XPathSelectorImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Selector\ProcessingSelectorException.cs">
+      <Link>Import.Serialization\ProcessingSelectorException.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Selector\SelectorFactory.cs">
+      <Link>Import.Serialization\SelectorFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\bxlSerializer.cs">
+      <Link>Import.Serialization\bxlSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\bxlSerializerImpl.cs">
+      <Link>Import.Serialization\bxlSerializerImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\DotScriptSerializer.cs">
+      <Link>Import.Serialization\DotScriptSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\DotSvgSerializer.cs">
+      <Link>Import.Serialization\DotSvgSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\ISerializerImpl.cs">
+      <Link>Import.Serialization\ISerializerImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\jsonSerializer.cs">
+      <Link>Import.Serialization\jsonSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\jsonSerializerImpl.cs">
+      <Link>Import.Serialization\jsonSerializerImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\JsRaw.cs">
+      <Link>Import.Serialization\JsRaw.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\JsSerializer.cs">
+      <Link>Import.Serialization\JsSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\jsSerializerImpl.cs">
+      <Link>Import.Serialization\jsSerializerImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\md5serializer.cs">
+      <Link>Import.Serialization\md5serializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\objectSerializerState.cs">
+      <Link>Import.Serialization\objectSerializerState.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\serializableItem.cs">
+      <Link>Import.Serialization\serializableItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\serializer.cs">
+      <Link>Import.Serialization\serializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\WikiSerializer.cs">
+      <Link>Import.Serialization\WikiSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\xmlSerializer.cs">
+      <Link>Import.Serialization\xmlSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\xmlSerializerImpl.cs">
+      <Link>Import.Serialization\xmlSerializerImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Serialization\XmlToJsonConverter.cs">
+      <Link>Import.Serialization\XmlToJsonConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Startup.cs">
+      <Link>Import.Serialization\Startup.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Uson\UObj.cs">
+      <Link>Import.Serialization\UObj.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Uson\UObjMode.cs">
+      <Link>Import.Serialization\UObjMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Uson\UObjSerializeMode.cs">
+      <Link>Import.Serialization\UObjSerializeMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Uson\UObjSerializerSupport.cs">
+      <Link>Import.Serialization\UObjSerializerSupport.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\Uson\UsonExtensions.cs">
+      <Link>Import.Serialization\UsonExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Qorpent.Mvc\**\*.cs" Exclude="..\Qorpent.Mvc\**\Temporary*.cs;..\Qorpent.Mvc\**\AssemblyInfo.cs;..\Qorpent.Mvc\**\ContainerInfo.cs">
       <Link>Import.Mvc\%(Filename)%(Extension)</Link>
