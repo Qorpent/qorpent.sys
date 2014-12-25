@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IsTool>True</IsTool>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{9156EE53-0EED-4467-B5EF-4583F9DC3645}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Qorpent.Tools.SqlExtensionsInstaller</RootNamespace>
+    <AssemblyName>sqlext</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Qorpent.Tools.SqlExtensionsInstaller.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SQL2008|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\SQL2008\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NV3</DefineConstants>
+    <DocumentationFile>\Qorpent.Tools.SqlExtensionsInstaller.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Tools.SqlExtensionsInstallerLib\Qorpent.Tools.SqlExtensionsInstallerLib.csproj">
+      <Project>{820af793-eecc-418d-91cd-e40e8597bc09}</Project>
+      <Name>Qorpent.Tools.SqlExtensionsInstallerLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Tools.SqlExtensionsInstallerLib\Qorpent.Tools.SqlExtensionsInstallerLib.csproj">
+      <Project>{820af793-eecc-418d-91cd-e40e8597bc09}</Project>
+      <Name>Qorpent.Tools.SqlExtensionsInstallerLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

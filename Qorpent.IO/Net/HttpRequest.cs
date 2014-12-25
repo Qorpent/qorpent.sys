@@ -21,6 +21,10 @@ namespace Qorpent.IO.Net
 			Method = "GET";
 			UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0";
 		}
+        /// <summary>
+        /// Строковое представление POST
+        /// </summary>
+        public string PostData { get; set; }
 		/// <summary>
 		/// Коллекция куки
 		/// </summary>

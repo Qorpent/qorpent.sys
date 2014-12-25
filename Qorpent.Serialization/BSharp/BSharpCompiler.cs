@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -357,7 +358,9 @@ namespace Qorpent.BSharp{
 		private IEnumerable<XElement> GetSourcesWithRequireProcessing(IEnumerable<XElement> sources, IBSharpContext context){
 			Dictionary<string, XElement> filenames =
 				sources.ToDictionary(_ => Path.GetFullPath(_.Describe().File).NormalizePath(), _ => _);
-			filenames.ToArray().AsParallel().ForAll(src => ProcessRequires(src.Value, src.Key, filenames, context));
+		    foreach (var basefiles in filenames.ToArray()) {
+		        ProcessRequires(basefiles.Value, basefiles.Key, filenames, context);
+		    }
 			return filenames.Values.ToArray();
 		}
 
@@ -381,16 +384,26 @@ namespace Qorpent.BSharp{
 		private void ProcessRequiresWithFileReference(XElement source, Dictionary<string, XElement> filenames,
 		                                              IBSharpContext context, XElement require, string filename){
 			
-			if (require.Attr("code").EndsWith("/")){
+			if (require.Attr("code").EndsWith("/") || require.Attr("code").Contains("*")){
 				ProcessRequiresDirectory(source, filenames, context, require, filename);
 				return;
 			}
+         
 			string dir = Path.GetDirectoryName(filename);
-			string file = require.Attr("code") + ".bxls";
+		    string file = require.Attr("code");
 
 			if (!Path.IsPathRooted(file)){
-				file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
+			    if (file.Contains("@")) {
+			        file = EnvironmentInfo.ResolvePath(file);
+			    }
+			    else {
+			        file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
+			    }
 			}
+		    if (!File.Exists(file)) {
+                file +=".bxls";
+		    }
+           
 
 			if (filenames.ContainsKey(file)) return;
 			if (File.Exists(file)){
@@ -413,11 +426,19 @@ namespace Qorpent.BSharp{
 		private void ProcessRequiresDirectory(XElement source, Dictionary<string, XElement> filenames, IBSharpContext context, XElement require, string filename){
 			string curdir = Path.GetDirectoryName(filename);
 			string otherdir = require.Attr("code");
+		    var mask = "*.bxls";
+		    if (otherdir.Contains("*")) {
+		        mask = Path.GetFileName(otherdir);
+		        otherdir = Path.GetDirectoryName(otherdir);
+		    }
+		    if (otherdir.Contains("@")) {
+		        otherdir = EnvironmentInfo.ResolvePath(otherdir);
+		    }
 			if (!Path.IsPathRooted(otherdir)){
 				otherdir = Path.GetFullPath(Path.Combine(curdir, otherdir)).NormalizePath();
 			}
-			if (Directory.Exists(otherdir)){
-				foreach (var file in Directory.GetFiles(otherdir,"*.bxls")){
+			if (Directory.Exists(otherdir)) {
+				foreach (var file in Directory.GetFiles(otherdir,mask)){
 					if (filenames.ContainsKey(file)) continue;
 	
 						XElement src = _requireBxl.Parse(File.ReadAllText(file), file);
@@ -517,15 +538,34 @@ namespace Qorpent.BSharp{
 		/// <returns></returns>
 		protected virtual IBSharpContext BuildIndex(IEnumerable<XElement> sources){
 			CurrentBuildContext = new BSharpContext(this);
-			IBSharpClass[] baseindex = IndexizeRawClasses(sources).ToArray();
-			SetupGlobals();
+			var baseindex = IndexizeRawClasses(sources).ToArray();
+		    SetupDefaultNamespace(baseindex);
+		    SetupGlobals();
 			CurrentBuildContext.Setup(baseindex);
 			CurrentBuildContext.ExecuteGenerators();
 			CurrentBuildContext.Build();
 			return CurrentBuildContext;
 		}
 
-		private void SetupGlobals(){
+	    private void SetupDefaultNamespace(IBSharpClass[] baseindex) {
+	        var defaultNamespace = GetConfig().DefaultNamespace ?? "";
+	        foreach (var cls in baseindex) {
+	            if (string.IsNullOrWhiteSpace(cls.Namespace) && !string.IsNullOrWhiteSpace(defaultNamespace)) {
+	                cls.Namespace = defaultNamespace;
+	            }
+	            else if (cls.Namespace.StartsWith(".")) {
+	                if (string.IsNullOrWhiteSpace(defaultNamespace)) {
+	                    cls.Namespace = cls.Namespace.Substring(1);
+	                }
+	                else {
+	                    cls.Namespace = defaultNamespace + cls.Namespace;
+	                }
+	            }
+	        }
+	    }
+
+	    private void SetupGlobals(){
+            _global = _global ?? _config.Global ?? new ConfigBase { UseInheritance = false };
 			bool requireInterpolation = false;
 			foreach (var baseglobal in _overlobals){
 				if (!_global.ContainsKey(baseglobal.Key)){
@@ -564,8 +604,22 @@ namespace Qorpent.BSharp{
 
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(IEnumerable<XElement> sources){
 			var buffer = new ConcurrentBag<IBSharpClass>();
-			sources.AsParallel().ForAll(src =>{
+		    sources.AsParallel().ForAll(src =>{
 				Preprocess(src);
+		        var globalIfs = src.Elements("if").ToArray();
+		        foreach (var globalIf in globalIfs) {
+		            var cond = globalIf.Attr("code");
+		            var neg = cond.StartsWith("!");
+		            if (neg) {
+		                cond = cond.Substring(1);
+		            }
+		            var ex = _config.Conditions.ContainsKey(cond);
+		            if (ex) {
+		                ex = _config.Conditions[cond].ToBool();
+		            }
+                    if((neg && ex)||(!neg && !ex))return;
+		        }
+                globalIfs.Remove();
 				foreach (IBSharpClass e in IndexizeRawClasses(src, "")){
 					buffer.Add(e);
 				}

@@ -1,0 +1,16 @@
+@import "the";
+
+$bgc : darkgreen;
+
+.debug.the {
+  .layer {
+    border: solid 4px $bgc;
+    & > .layer {
+      border: solid 3px lighten($bgc, 5);
+    }
+      .layer,.box {
+        border: solid 2px lighten($bgc, 6);
+      }
+
+  }
+}

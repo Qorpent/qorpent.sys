@@ -35,10 +35,12 @@ namespace Qorpent.Utils {
 		    "D.MM.yyyy",
 		    "HH:mm:ss D.MM.yy",
 		    "HH:mm, D MMM yyyy",
-		    "Вчера в HH:mm",
-		    "Сегодня в HH:mm",
+		    "вчера в HH:mm",
+		    "сегодня в HH:mm",
 		    "yyyyMMdd",
-		    "HH:mm dd.MM"
+		    "HH:mm dd.MM",
+            "РУЧИСЛО дня назад в HH:mm"
+            
 	    };
 
 	    private static readonly Regex[] FormatRegexes = null;
@@ -55,6 +57,8 @@ namespace Qorpent.Utils {
 					.Replace("ss", @"(?<s>\d{2})")
 					.Replace("_TZ_",@"\+(?<tz>\d+)")
 					.Replace("|", "\\|")
+					.Replace(" в ", @"[\sв]+")
+                    .Replace("РУЧИСЛО","(два|три)")
 					.Replace(" ", @"\s+");
 				regexes.Add(new Regex(regex,RegexOptions.Compiled|RegexOptions.IgnoreCase|RegexOptions.CultureInvariant|RegexOptions.ExplicitCapture));
 			}
@@ -74,7 +78,7 @@ namespace Qorpent.Utils {
 	    public static DateTime Parse(string dateTime, string sourceUrl= null , string locale = null, int? timeZone = null, DateTime? baseDate = null){
 		    var initalDateTime = dateTime;
 		    try{
-			    dateTime = PrepareDateTimeString(dateTime);
+			    dateTime = PrepareDateTimeString(dateTime).ToLowerInvariant();
 			    foreach (var regex in FormatRegexes){
 				    var match = regex.Match(dateTime);
 				    if (match.Success){
@@ -97,21 +101,33 @@ namespace Qorpent.Utils {
 					    if (0 != tz){
 						    timeZone = tz;
 					    }
-					    if (match.Value.Contains("GMT")){
+					    if (match.Value.ToLowerInvariant().Contains("gmt")){
 						    isuniversal = true;
 					    }
-					    if (dateTime.ToLowerInvariant().Contains("вчера") && year == 0){
+					    if (dateTime.Contains("вчера") && year == 0){
 						    var yesterday = today.AddDays(-1);
 						    year = yesterday.Year;
 						    month = yesterday.Month;
 						    day = yesterday.Day;
 					    }
-					    if (dateTime.ToLowerInvariant().Contains("сегодня") && year == 0){
+					    if (dateTime.Contains("сегодня") && year == 0){
 						    var yesterday = today;
 						    year = yesterday.Year;
 						    month = yesterday.Month;
 						    day = yesterday.Day;
 					    }
+				        if (dateTime.Contains("дня назад") && year == 0) {
+				            var d = today;
+				            if (dateTime.Contains("два")) {
+				                d = d.AddDays(-2);
+				            }
+                            else if (dateTime.Contains("три")) {
+                                d = d.AddDays(-3);
+                            }
+				            year = d.Year;
+				            month = d.Month;
+				            day = d.Day;
+				        }
 
 					    if (year == 0){
 						    year = DateTime.Today.Year;
@@ -132,7 +148,7 @@ namespace Qorpent.Utils {
 						    if (isuniversal){
 							    dt = dt.ToLocalTime();
 						    }
-						    if (match.Value.Contains("Мск")){
+						    if (match.Value.Contains("мск")){
 							    dt = dt.AddHours(2);
 						    }
 						    if (null != timeZone){

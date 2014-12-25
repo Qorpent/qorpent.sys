@@ -16,9 +16,13 @@ namespace Qorpent.Scaffolding.Application{
 		/// </summary>
 		/// <param name="targetclasses"></param>
 		/// <returns></returns>
-		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses){
+		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses) {
+		    var modulename = Project.ModuleName;
+		    if (string.IsNullOrWhiteSpace(modulename)) {
+		        modulename = Project.ProjectName;
+		    }
 			var production = new Production{
-				FileName = Project.ProjectName + "_types" + ".js",
+				FileName = modulename + "_types" + ".js",
 				GetContent = () => GenerateInternal(targetclasses)
 			};
 			yield return production;
@@ -55,7 +59,10 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("\tvar "+e.Name+"= result." + e.Name + " = function(args){");
 			sb.AppendLine("\t\targs=args||{}");
 			sb.AppendLine("\t\tthis.__getClassInfo=function(){return {name:\""+e.FullName+"\"}};");
-			foreach (var field in e.Compiled.Elements()){
+			foreach (var field in e.Compiled.Elements()) {
+			    if (field.Name.LocalName == "using")continue;
+			    if (field.Name.LocalName == "implements")continue;
+			    if (field.Name.LocalName == "interface")continue;
 				GenerateField(e, field, refcache,sb);
 			}
 			sb.AppendLine("\t};");
@@ -109,7 +116,7 @@ namespace Qorpent.Scaffolding.Application{
 					if (type == "string"){
 						val = "\"\"";
 					}
-					else if (type == "any"){
+					else if (type == "any" ||type == "map" || type=="dictionary"){
 						val = "{}";
 					}
 					else if (type == "int" || type == "decimal"){
@@ -120,7 +127,11 @@ namespace Qorpent.Scaffolding.Application{
 					}
 					else if (type == "datetime"){
 						val = "new Date(1900,0,1)";
-					}
+                    }
+                    else if (type.StartsWith("I") && char.ToUpper(type[1])==type[1]) { //interface
+                        val = "{}";
+                    }
+                
 					else{
 						val = "new result." + type + "()";
 					}

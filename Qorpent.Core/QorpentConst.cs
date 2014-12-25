@@ -98,7 +98,7 @@ namespace Qorpent {
 			public static readonly string[] StandardDateFormats = new[]
 				{
 					"dd.MM.yyyy HH:mm:ss","dd.MM.yyyy HH:mm", "dd.MM.yyyy", "yyyy-MM-dd HH:mm","yyyy-MM-dd HH:mm:ss","yyyyMMdd HH:mm","yyyyMMdd","yyyyMMdd HH:mm:ss",
-					"yyyy-MM-dd", "yyyyMMddHHmm", "yyyyMMddHHmmss", "yyyy-MM-ddTHH:mm:ss.fffZ"
+					"yyyy-MM-dd", "yyyyMMddHHmm", "yyyyMMddHHmmss", "yyyy-MM-ddTHH:mm:ss.fffZ", "dd-MM-yyyy"
 				};
 		}
 
@@ -218,5 +218,17 @@ namespace Qorpent {
 		/// Not defined message
 		/// </summary>
 		public const string NODEF = "Не определено";
+		/// <summary>
+		///		Default log format (BXL-like)
+		/// </summary>
+		public const string DefaultLogFormat = "${Level} dateTime='${Time}' message='''${Message}'''";
+		/// <summary>
+		///		Success state
+		/// </summary>
+		public const int Success = 0;
+		/// <summary>
+		///		Failure state
+		/// </summary>
+		public const int Failure = -1;
 	}
 }

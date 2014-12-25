@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using Qorpent.Log;
 
 namespace Qorpent.Utils{
@@ -14,6 +16,9 @@ namespace Qorpent.Utils{
 		/// <param name="shadowByDefault"></param>
 		/// <returns></returns>
 		public static int Execute(string[] args, Func<ConsoleApplicationParameters, int> executor, bool shadowByDefault = false){
+		    if (args.Contains("--debug")) {
+		        Debugger.Launch();
+		    }
 			return Execute<ConsoleApplicationParameters>(args, executor,shadowByDefault);
 		}
 
@@ -29,10 +34,14 @@ namespace Qorpent.Utils{
 			var log = ConsoleLogWriter.CreateLog();
 			try{
 				var parameters = new TArgs();
+			    parameters.ShadowByDefault = shadowByDefault;
 				parameters.Initialize(args);
 				log = parameters.Log;
 				if ((shadowByDefault || parameters.Shadow) && !parameters.NoShadow){
-					var shadower = new ProcessSafeStart{Log = log};
+					var shadower = new ShadowRun {
+                        Parameters = parameters,
+					    Log = log
+					};
 					if (!shadower.EnsureShadow()){
 						return -3; //shadow restart
 					}

@@ -18,6 +18,7 @@ namespace Qorpent.Utils.Tests
 		[TestCase("15:17 25 декабря 2013", 2013, 12, 25, 15, 17, 0, '\0', '\0', "ru-RU", false, false)]
 		[TestCase("\n 15:17 25 декабря 2013  ", 2013, 12, 25, 15, 17, 0, '\0', '\0', "ru-RU", false, false)]
 		[TestCase("\n вчера в 15:17  ", -1, 12, 0, 15, 17, 0, ' ', '\0', "ru-RU", true, false)]
+		[TestCase("Сегодня 11:29", -1, 0, 0, 11, 29, 0, '\0', '\0', "ru-RU", true, true)]
 		[TestCase("сегодня в 13:12", -1, 0, 0, 13, 12, 0, '\0', '\0', "ru-RU", true, true)]
 		[TestCase("26/09/2013", 2013, 9, 26, 0, 0, 0, '/', '\0', "", false, false)]
 		[TestCase("25 сентября 2013, 17:21", 2013, 9, 25, 17, 21, 0, '\0', '\0', "ru-RU", false, false)]
@@ -71,10 +72,22 @@ namespace Qorpent.Utils.Tests
 
 		[Test]
 		public void MI_344_Invalid_DateParsing(){
-			var parser = new WebDateTimeParser();
 			var date = WebDateTimeParser.Parse("Автор: Роман Слюнов, 2014-06-18 01:28:01");
 			Assert.AreEqual(new DateTime(2014,6,18,1,28,0),date);
 		}
+
+        [Test]
+        public void MI_481_Mk_Date()
+        {
+            var date = WebDateTimeParser.Parse("Два дня назад в 18:37");
+            var day2b = DateTime.Today.AddDays(-2);
+            Assert.AreEqual(new DateTime(day2b.Year, day2b.Month, day2b.Day, 18, 37, 0), date);
+
+            date = WebDateTimeParser.Parse("Три дня назад в 18:37");
+            var day3b = DateTime.Today.AddDays(-3);
+            Assert.AreEqual(new DateTime(day3b.Year, day3b.Month, day3b.Day, 18, 37, 0), date);
+        }
+
 		[Test]
 		public void ZU_261_Nakanune_MSK()
 		{

@@ -7,12 +7,16 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
 	public class CompileTestBase {
-		protected BSharpContext Compile(string code, IDictionary<string,string> conditions=null, object globals =null ) {
+		protected BSharpContext Compile(string code, IDictionary<string,string> conditions=null, object globals =null , BSharpConfig _cfg = null) {
 			var cfg = new BSharpConfig();
 			cfg.Conditions = conditions;
 			if (null != globals){
 				cfg.Global = new ConfigBase(globals.ToDict()){UseInheritance = false};
 			}
+		    if (null != _cfg) {
+		        _cfg.SetParent(cfg);
+		        cfg = _cfg;
+		    }
 			return (BSharpContext) BSharpCompiler.Compile(code, cfg);
 		}
 

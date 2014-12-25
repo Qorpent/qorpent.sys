@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.Remoting.Contexts;
 using Qorpent.Host.Handlers;
 using Qorpent.Host.Qweb;
+using Qorpent.IO.Net;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host{
@@ -34,6 +36,11 @@ namespace Qorpent.Host{
 		/// <returns></returns>
 		public IRequestHandler GetHandler(IHostServer server, Uri uri, string callbackEndPoint){
 			string path = uri.AbsolutePath;
+
+		    if (server.Config.Proxize.Keys.Any(_ => path.StartsWith(_))) {
+		        return new ProxyHandler();
+		    }
+
 			if (path.IsEmpty() || path.Equals("/")){
 				return new StaticFileHandler();
 			}

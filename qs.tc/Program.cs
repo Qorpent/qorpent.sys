@@ -13,6 +13,10 @@ namespace qs.tc
 	static class Program
 	{
 		static int Main(string[] args){
+            if (args.Contains("--debug"))
+            {
+                Debugger.Launch();
+            }
 			var dict = new ConsoleArgumentHelper().ParseDictionary(args);
 
 			var outstring = dict.SafeGet("out", "hello");
@@ -23,11 +27,7 @@ namespace qs.tc
 			var timeout = dict.SafeGet("timeout", 0);
 			var interactive = dict.SafeGet("interactive", false);
 			var passread = dict.SafeGet("passread", false);
-			var debug = dict.SafeGet("debug", false);
-			if (debug){
-				Debugger.Launch();
-			}
-
+			
 			if (!string.IsNullOrWhiteSpace(outstring)){
 				Console.Out.WriteLine(outstring);
 			}

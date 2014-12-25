@@ -49,6 +49,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("\t\t}");
 
 			foreach (PersistentClass t in Tables){
+                if(t.NoSql)continue;
 				Field[] ownrefs = t.GetOrderedFields().Where(_ => _.IsReference && !_.NoCode && !_.NoSql).ToArray();
 				Field[] incomes =
 					t.GetOrderedReverse()

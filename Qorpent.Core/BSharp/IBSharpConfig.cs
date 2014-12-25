@@ -44,5 +44,9 @@ namespace Qorpent.BSharp {
 		/// Признак сохранения исходно лексической информации
 		/// </summary>
 		bool KeepLexInfo { get; set; }
+        /// <summary>
+        /// Базовое пространство имен
+        /// </summary>
+	    string DefaultNamespace { get; set; }
 	}
 }

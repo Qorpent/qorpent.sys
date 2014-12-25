@@ -76,6 +76,7 @@ namespace Qorpent.PortableHtml{
 			CollapseParas(result);
 			ProcessRootNodes(result);
 			ProcessTextTrimming(result);
+		    JoinFollowingSameInlines(result);
 			if (!KeepFormatting){
 				RemoveFormatsFromTotallyFormattedParagraphs(result);
 			}
@@ -85,7 +86,22 @@ namespace Qorpent.PortableHtml{
 			return result;
 		}
 
-		private void ExpandInlines(XElement result){
+	    private void JoinFollowingSameInlines(XElement result) {
+           var inlines =
+                  result.Descendants().Where(_ => _.Name.LocalName!="img" && -1 != Array.IndexOf(PortableHtmlSchema.InlineElements, _.Name.LocalName));
+	        var invalid = inlines.Where(_ => {
+	            var e = _.NextNode as XElement;	         
+	            if (null == e) return false;
+	            return e.Name.LocalName == _.Name.LocalName;
+	        }).Reverse().ToArray();
+	        foreach (var inline in invalid) {
+	            var i = inline.NextNode as XElement;
+	            inline.Value += " " + i.Value;
+                i.Remove();
+	        }
+	    }
+
+	    private void ExpandInlines(XElement result){
 			var inlines =
 				result.Descendants().Where(_ => -1 != Array.IndexOf(PortableHtmlSchema.InlineElements, _.Name.LocalName));
 			var badinlines = inlines.Where(_ => _.Descendants("p").Any());
@@ -406,11 +422,12 @@ namespace Qorpent.PortableHtml{
 		/// <param name="size"></param>
 		/// <returns></returns>
 		public string GetDigest(XElement src, int size = 400){
-			src.Descendants("img").ToArray().Remove();
+			var images = src.Descendants("img").ToArray();
+			images.Remove();
 			var html = Convert(src);
 			var pars = html.Elements().ToArray();
-			if (pars.Length == 0){
-				return "(Документ не содержит текста)";
+			if (pars.Length == 0) {
+				return images.Length == 0 ? "(Документ не содержит текста)" : "(Документ состоит только из изображений)";
 			}
 			var strings = CollectSourceParasForDigest(size, pars);
 			var full = string.Join("... ", strings);

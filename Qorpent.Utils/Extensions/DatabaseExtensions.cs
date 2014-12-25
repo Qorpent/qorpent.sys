@@ -28,6 +28,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Qorpent.Data;
 
 namespace Qorpent.Utils.Extensions
 {
@@ -216,9 +217,13 @@ namespace Qorpent.Utils.Extensions
 			    query.CommandText = realcommand;
 				Debug.Assert(!string.IsNullOrWhiteSpace(query.CommandText), "2");
 			    if (null != parameters) {
-				    
-						PrepareParameters(realcommand, parameters.ToDict(), query);
-				    
+			        if (parameters is ISqlParametersSource) {
+			            ((ISqlParametersSource) parameters).SetupSqlParameters(query);
+			        }
+			        else {
+			            PrepareParameters(realcommand, parameters.ToDict(), query);
+			        }
+
 			    }
 				Debug.Assert(!string.IsNullOrWhiteSpace(query.CommandText), "3");
 			    return query;
@@ -597,6 +602,7 @@ namespace Qorpent.Utils.Extensions
             if (null == connection) throw new ArgumentNullException("connection");
             connection.WellOpen();
             var result = new List<T>();
+           
 	        var cmd = connection.CreateCommand(command, parameters, timeout);
 	        cmd.CommandTimeout = 0;
             var reader = cmd.ExecuteReader();
@@ -627,6 +633,52 @@ namespace Qorpent.Utils.Extensions
             }
             return result.ToArray();
         }
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="connection"></param>
+	    /// <param name="script"></param>
+	    /// <param name="haltonerror">ѕрерывать выполнение при обнаружении ошибок</param>
+	    /// <returns></returns>
+	    public static string[] ExecuteScript(this IDbConnection connection, string script, bool haltonerror = false) {
+            if (string.IsNullOrWhiteSpace(script)) return new string[]{};
+            var messages = new List<string>();
+            SqlInfoMessageEventHandler onMessage = (s, a) => {
+                messages.Add(a.Message);
+                messages.AddRange(from object e in a.Errors select "ERROR: " + e.ToString());
+            };
+            var commands =
+                Regex.Split(script, @"\sGO(\s|$)")
+                    .Cast<Match>()
+                    .Select(_ => _.Value.Trim())
+                    .Where(_ => !string.IsNullOrWhiteSpace(_))
+                        .ToArray();
+            if(commands.Length==0)return new string[]{};
+            connection.WellOpen();
+            try {
+                if (connection is SqlConnection) {
+                    (connection as SqlConnection).InfoMessage += onMessage;
+                }
+                foreach (var command in commands) {
+                    try {
+                        connection.ExecuteNonQuery(command);
+                    }
+                    catch {
+                        if (haltonerror) {
+                            break;
+                        }
+                    }
+                }
+            }
+            finally {
+                if (connection is SqlConnection)
+                {
+                    (connection as SqlConnection).InfoMessage -= onMessage;
+                }
+            }
+	        return messages.ToArray();
+	    } 
 
 	    /// <summary>
 	    /// ¬озвращает все строки запроса как словарь - первое поле- ключ, второе - значение

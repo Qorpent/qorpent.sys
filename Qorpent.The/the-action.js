@@ -25,7 +25,10 @@
                 this.eventName = "";
                 this.castResult = null;
                 this.rawResult = false;
+                this.parameters = {};
                 this.delay = 0;
+                //#Q-270
+                this.targetWindow = "";
             };
 
             var Action = function () {
@@ -49,6 +52,8 @@
                 this.eventName = "";
                 this.jsonify = true;
                 this.delay = 0;
+                //#Q-270
+                this.targetWindow = "";
                 this.jsonifyOptions = {interpolate: false, defaults: false, stringify: true, evalfunctions: true, functions: false, privates: false};
                 this.__callMoniker = 0;
                 return this;
@@ -59,18 +64,31 @@
                 var a = this.normalizeParameters(arguments);
                 var delay = Math.max(this.delay, a.callinfo.delay);
                 var request = this.createRequest(a.args, a.callinfo);
-                var self = this;
-                if (0 !== delay) {
-                    self.__callMoniker++;
-                    var myMoniker = self.__callMoniker; //interlocked-like syncronization
-                    timeout(function () {
+                if(request.popup) {
+                    var fullUrl = request.url;
+                    if(!$root.isDefaultValue(request.params)){
+                        if(fullUrl.match(/\?/)){
+                            fullUrl+="&";
+                        }else{
+                            fullUrl+="?";
+                        }
+                        fullUrl+= $.param(request.params);
+                    }
+                    window.open(fullUrl,request.targetWindow);
+                }else {
+                    var self = this;
+                    if (0 !== delay) {
+                        self.__callMoniker++;
+                        var myMoniker = self.__callMoniker; //interlocked-like syncronization
+                        timeout(function () {
                             if (self.__callMoniker == myMoniker) {
                                 $h(request);
                             }
                         }, delay);
-                    return null;
-                } else {
-                    return $h(request);
+                        return null;
+                    } else {
+                        return $h(request);
+                    }
                 }
             };
 
@@ -144,6 +162,7 @@
                 if (!!this.useparams) {
                     result.params  = !!this.arguments ? new this.arguments() : {};
                     extend(result.params, this.parameters, {filter: extensionsFalseFilter});
+                    extend(result.params, callinfo.parameters, {filter: extensionsFalseFilter});
                     extend(result.params, args || {}, {filter: extensionsFalseFilter,ignoreCase:true});
                     if (this.jsonify) {
                         var opts = this.jsonifyOptions;
@@ -156,86 +175,99 @@
                     }
                 }
 
-                result.method = callinfo.method || this.method;
 
-                applyHttpExtensions(result, this);
+                var targetWindow = callinfo.targetWindow || this.targetWindow;
 
-                extend(result.headers, this.headers);
-                extend(result.headers, callinfo.headers);
-                extend(result.extensions, this.extensions);
-                extend(result.extensions, callinfo.extensions);
+                if(!!targetWindow) {
+                    result.popup = true;
+                    result.targetWindow = targetWindow;
+                }
+                if(result.popup){
+                   result.method = "GET";
+                }else {
 
-                applyHttpExtensions(result, args);
+                    result.method = callinfo.method || this.method;
 
-                var self = this;
-                var eventName = callinfo.eventName || this.eventName;
-                if(eventName==="disable")eventName = null;
-                var emits = callinfo.emits || this.emits;
-                if(emits==="disable")emits = null;
-                var emitter = callinfo.emitter || this.emitter;
-                var resultCtor = callinfo.result || this.result;
-                var castResult = (callinfo.castResult || this.castResult) && !!resultCtor && !callinfo.rawResult;
-                var emit = !!emitter?  (emitter.emit || emitter.$broadcast) :null;
+                    applyHttpExtensions(result, this);
 
-                var success = function (data, resp) {
-                    var realdata = data;
-                    if (castResult) {
-                        if (Array.isArray(data)) {
-                            realdata = [];
-                            for (var i = 0; i < data.length; i++) {
-                                realdata.push(cast(resultCtor, data[i], excast));
+                    extend(result.headers, this.headers);
+                    extend(result.headers, callinfo.headers);
+                    extend(result.extensions, this.extensions);
+                    extend(result.extensions, callinfo.extensions);
+
+                    applyHttpExtensions(result, args);
+
+                    var self = this;
+                    var eventName = callinfo.eventName || this.eventName;
+                    if (eventName === "disable")eventName = null;
+                    var emits = callinfo.emits || this.emits;
+                    if (emits === "disable")emits = null;
+                    var emitter = callinfo.emitter || this.emitter;
+                    var resultCtor = callinfo.result || this.result;
+                    var castResult = (callinfo.castResult || this.castResult) && !!resultCtor && !callinfo.rawResult;
+                    var emit = !!emitter ? (emitter.emit || emitter.$broadcast) : null;
+
+                    var success = function (data, resp) {
+                        var realdata = data;
+                        if (castResult) {
+                            if (Array.isArray(data)) {
+                                realdata = [];
+                                for (var i = 0; i < data.length; i++) {
+                                    realdata.push(cast(resultCtor, data[i], excast));
+                                }
+                            } else if (typeof  data === "object") {
+                                realdata = cast(resultCtor, data, excast);
                             }
-                        } else if (typeof  data === "object") {
-                            realdata = cast(resultCtor, data, excast);
                         }
-                    }
-                    if (!!callinfo.success) {
-                        callinfo.success(realdata, resp);
-                    }
-                    if (!!self.success && !callinfo.suppressDefault) {
-                        self.success(realdata, resp);
-                    }
-                    if (!!eventName && !!emitter && !callinfo.suppressDefault) {
-                        emit.call(emitter,eventName, [realdata, resp, self]);
-                    }
-                    if (emits && !!emitter) {
-                       emits.forEach(function(_){
-                           emit.call(emitter,_,[realdata, resp, self])
-                       })
-                    }
-                };
-                var error = function (error, resp) {
-                    if (!!callinfo.error) {
-                        callinfo.error(error, resp);
-                    }
-                    if (!!self.error && !callinfo.suppressDefault) {
-                        self.error(error, resp);
-                    }
-                    if (!!eventName && !!emitter && !callinfo.suppressDefault) {
-                        emit.call(emitter,"ERROR:" + eventName, [error, resp, this]);
-                    }
-                    if (emits && !!emitter) {
-                        emits.forEach(function(_){
-                            emit.call(emitter,"ERROR:"+_,[error, resp, self])
-                        })
-                    }
-                };
-                result.success = success;
-                result.error = error;
+                        if (!!callinfo.success) {
+                            callinfo.success(realdata, resp);
+                        }
+                        if (!!self.success && !callinfo.suppressDefault) {
+                            self.success(realdata, resp);
+                        }
+                        if (!!eventName && !!emitter && !callinfo.suppressDefault) {
+                            emit.call(emitter, eventName, [realdata, resp, self]);
+                        }
+                        if (emits && !!emitter) {
+                            emits.forEach(function (_) {
+                                emit.call(emitter, _, [realdata, resp, self])
+                            })
+                        }
+                    };
+                    var error = function (error, resp) {
+                        if (!!callinfo.error) {
+                            callinfo.error(error, resp);
+                        }
+                        if (!!self.error && !callinfo.suppressDefault) {
+                            self.error(error, resp);
+                        }
+                        if (!!eventName && !!emitter && !callinfo.suppressDefault) {
+                            emit.call(emitter, "ERROR:" + eventName, [error, resp, this]);
+                        }
+                        if (emits && !!emitter) {
+                            emits.forEach(function (_) {
+                                emit.call(emitter, "ERROR:" + _, [error, resp, self])
+                            })
+                        }
+                    };
+                    result.success = success;
+                    result.error = error;
 
-                var withCredentials = this.withCredentials;
-                if (null != callinfo.withCredentials) {
-                    withCredentials = callinfo.withCredentials;
-                }
-                if (withCredentials) {
-                    result.withCredentials = withCredentials;
-                }
+                    var withCredentials = this.withCredentials;
+                    if (null != callinfo.withCredentials) {
+                        withCredentials = callinfo.withCredentials;
+                    }
+                    if (withCredentials) {
+                        result.withCredentials = withCredentials;
+                    }
 
-                if ($the.isDefaultValue(result.headers)) {
-                    delete result.headers;
-                }
-                if ($the.isDefaultValue(result.extensions)) {
-                    delete result.extensions;
+                    if ($the.isDefaultValue(result.headers)) {
+                        delete result.headers;
+                    }
+                    if ($the.isDefaultValue(result.extensions)) {
+                        delete result.extensions;
+                    }
+
                 }
 
                 return result;

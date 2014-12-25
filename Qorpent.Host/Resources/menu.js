@@ -291,9 +291,20 @@ define([
                         });
                     }
                     if (attrs.type == 'icon_with_text' || attrs.type == 'icon') {
-                        var c = getRandomHsl();
-                        el.find('.icon').first().css('background',
-                                'linear-gradient(to top, hsl(' + c.h + ',' + c.s + '%,' + c.l + '%),hsl(' + (c.h + 10) + ',' + c.s + '%,' + (c.l - 20) + '%))');
+                    	var color = attrs.color;
+                    	if (!color && el.parent()) {
+                    		color = el.parent().attr('color');
+                    	}
+                    	if (!!color) {
+                    		var startcolor, endcolor;
+                    		startcolor = color.indexOf('#') == 0 ? color : '#' + color;
+                    		endcolor = colorLuminance(startcolor, -0.5);
+                    		el.find('.icon').first().css('background', 'linear-gradient(to top, ' + startcolor + ',' + endcolor + ')');
+                    	} else {
+                    		var c = getRandomHsl();
+                    		el.find('.icon').first().css('background',
+									'linear-gradient(to top, hsl(' + c.h + ',' + c.s + '%,' + c.l + '%),hsl(' + (c.h + 10) + ',' + c.s + '%,' + (c.l - 20) + '%))');
+                    	}
                     }
                 }
             }

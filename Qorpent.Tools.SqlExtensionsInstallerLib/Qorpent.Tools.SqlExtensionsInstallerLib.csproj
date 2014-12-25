@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<IsTool>True</IsTool>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{820AF793-EECC-418D-91CD-E40E8597BC09}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Tools.SqlExtensionsInstallerLib</RootNamespace>
+    <AssemblyName>Qorpent.Tools.SqlExtensionsInstallerLib</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SQL2008|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\SQL2008\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NV3</DefineConstants>
+    <DocumentationFile>\Qorpent.Tools.SqlExtensionsInstallerLib.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AggregatorWrapper.cs" />
+    <Compile Include="FunctionSqlWrapper.cs" />
+    <Compile Include="FunctionWrapper.cs" />
+    <Compile Include="ProcedureWrapper.cs" />
+    <Compile Include="QueryGeneratorHelper.cs" />
+    <Compile Include="SqlExportMemberWrapper.cs" />
+    <Compile Include="SqlInstallerConsoleProgram.cs" />
+    <Compile Include="SqlInstallerConsoleProgramArgs.cs" />
+    <Compile Include="SqlInstallerException.cs" />
+    <Compile Include="UserTypeWrapper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+   <Import Project="..\..\qorpent.kernel\build.targets" />
+  
+<ItemGroup><None Include="*.import" /><None Include="*.export" /></ItemGroup></Project>

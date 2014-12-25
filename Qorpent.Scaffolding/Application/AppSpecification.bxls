@@ -31,7 +31,7 @@ namespace Qorpent.Scaffolding
 		element any "Произвольный объект"
 		element xml "XML"
 		
-	Struct Item "Единица чего-то"
+	Struct Item "Единица чего-то" if="!NO_DEFAULT_APP"
 		int Id "Идентификатор элемента" 
 		string Code "Код элемента"
 		string Name "Полное имя" 
@@ -40,7 +40,7 @@ namespace Qorpent.Scaffolding
 		
 	class Action "Действие" abstract prototype=ui-action
 
-	Enum LogLevel "Тип сообщения лога"
+	Enum LogLevel "Тип сообщения лога"  if="!NO_DEFAULT_APP"
 		item All "Все" : 0
 		item Debug "Отладка" : 1
 		item Trace "Трассировка" : 2
@@ -50,20 +50,20 @@ namespace Qorpent.Scaffolding
 		item Fatal "Фатальная ошибка" : 32
 		item None "Никакой" : 64
 		
-	Struct SearchString "Строка поиска"
+	Struct SearchString "Строка поиска"  if="!NO_DEFAULT_APP"
 		string Pattern "Паттерн поиска"
 		string Type "Тип поиска"
 		
-	Struct AcceptCall "Запрос на фиксацию задачи"
+	Struct AcceptCall "Запрос на фиксацию задачи"  if="!NO_DEFAULT_APP"
 		int Id "Идентификатор задачи"
 		
-	Struct LogQuery "Запрос журнала сообщений"
+	Struct LogQuery "Запрос журнала сообщений"  if="!NO_DEFAULT_APP"
 		int Timestamp "Начальный таймстэмп" : 0
 		LogLevel Level "Уровень сообщения" : LogLevel.All
 		bool NotAcceptedOnly "Только не обработанные" : false
 		bool AcceptedOnly "Только обработанные" : false
 	
-	Struct LogMessage "Сообщение журнала"
+	Struct LogMessage "Сообщение журнала"  if="!NO_DEFAULT_APP"
 		int Timestamp "Начальный таймстэмп"
 		int Id "Идентификатор сообщения" 
 		string Code "Код сообщения"

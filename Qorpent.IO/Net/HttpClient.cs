@@ -16,34 +16,45 @@ namespace Qorpent.IO.Net{
 		///  Коллекция куки
 		/// </summary>
 		public CookieCollection Cookies { get; set; }
-		/// <summary>
-		/// Вызов запроса по URL
-		/// </summary>
-		/// <param name="url"></param>
-		/// <returns></returns>
-		public HttpResponse Call(string url){
-			return Call(new HttpRequest{Uri = new Uri(url)});
+
+	    /// <summary>
+	    /// Вызов запроса по URL
+	    /// </summary>
+	    /// <param name="url"></param>
+	    /// <param name="post"></param>
+	    /// <returns></returns>
+	    public HttpResponse Call( string url,string post = null) {
+	        var req = new HttpRequest {Uri = new Uri(url)};
+	        if (null != post) {
+	            req.Method = "POST";
+	            req.PostData = post;
+	        }
+			return Call(req);
 		}
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="url"></param>
-		/// <returns></returns>
-		public string GetString(string url){
-			var resp = Call(url);
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="url"></param>
+	    /// <param name="post"></param>
+	    /// <returns></returns>
+	    public string GetString(string url,string post = null){
+			var resp = Call(url,post);
 			if (resp.Success){
 				return resp.StringData;
 			}
 			throw new IOException("error in response",resp.Error);
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="url"></param>
-		/// <returns></returns>
-		public byte[] GetData(string url){
-			var resp = Call(url);
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="url"></param>
+	    /// <param name="post"></param>
+	    /// <returns></returns>
+	    public byte[] GetData(string url,string post=null){
+			var resp = Call(url,post);
 			if (resp.Success)
 			{
 				return resp.Data;

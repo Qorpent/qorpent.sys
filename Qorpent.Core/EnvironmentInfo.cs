@@ -31,7 +31,7 @@ namespace Qorpent {
 	public static class EnvironmentInfo {
 		private static bool? _isWeb;
 
-
+		
 		private static bool? _isWebUtility;
 
 		private static string _rootDirectory;
@@ -101,6 +101,17 @@ namespace Qorpent {
 			set { _isWebUtility = value; }
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+	    public static string GetResolvedRootDirectory() {
+            if (IsShadow) {
+                return ShadowEvidence;
+            }
+            return RootDirectory;
+        }
+
 		/// <summary>
 		/// 	Filename resolution base directory
 		/// </summary>
@@ -108,7 +119,8 @@ namespace Qorpent {
 			get {
 				if (null == _rootDirectory) {
 					lock (Sync) {
-						if (IsWeb) {
+						
+						 if (IsWeb) {
 							try {
 #if !SQL2008
 								_rootDirectory = GetHttpWrapper().GetAppDomainAppPath();
@@ -142,7 +154,7 @@ namespace Qorpent {
 				if (null == _binDirectory) {
 					lock (Sync) {
 						if (IsWeb || IsWebUtility) {
-							_binDirectory = Path.Combine(RootDirectory, "bin");
+							_binDirectory = Path.Combine(Environment.CurrentDirectory, "bin");
 						}
 						else {
 							_binDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -373,15 +385,18 @@ namespace Qorpent {
 		/// Возвращает путь к теневым копиям приложений
 		/// </summary>
 		public static string GetShadowRoot(){
-			var result = Path.Combine(Path.GetTempPath(), ".qptshadow");
+			var result = Path.Combine(GetRepositoryRoot(), ".qptshadow");
 			return result;
 		}
 		/// <summary>
 		/// Возвращает глобальный путь к Shadow-директории данного процесса
 		/// </summary>
 		/// <returns></returns>
-		public static string GetShadowDirecroty(){
+		public static string GetShadowDirectory(string suffix = null){
 			var name = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
+		    if (!string.IsNullOrWhiteSpace(suffix)) {
+		        name += "_" + suffix;
+		    }
 			return NormalizePath( Path.Combine(GetShadowRoot(), name));
 		}
 
@@ -391,7 +406,7 @@ namespace Qorpent {
 		public static bool IsShadow{
 			get{
 				if (null == _isShadow){
-					return !string.IsNullOrWhiteSpace(ShadowEvidence) || NormalizePath(BinDirectory).StartsWith(GetShadowDirecroty());
+					return !string.IsNullOrWhiteSpace(ShadowEvidence) || NormalizePath(BinDirectory).StartsWith(GetShadowDirectory());
 
 				}
 				return _isShadow.Value;
@@ -478,6 +493,6 @@ namespace Qorpent {
 			}
 			return path.Replace("\\", "/").Replace("//", "/").Replace("//", "/").ToLower();
 		}
-
+       
 	}
 }

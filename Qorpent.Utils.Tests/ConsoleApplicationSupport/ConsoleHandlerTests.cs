@@ -27,10 +27,12 @@ namespace Qorpent.Utils.Tests.ConsoleApplicationSupport
 		public void CanWorkWithBothOutputAndErrorStreamAndExitCode(){
 			h.StandardArguments["error"] = "error";
 			h.StandardArguments["state"] = "-1";
+			//h.StandardArguments["debug"] = "1";
 			var r = h.Run();
+            Assert.AreEqual("error\r\n\r\n", r.Error);
+            Assert.AreEqual("hello\r\n\r\n", r.Output);
 			Assert.AreEqual(-1, r.State);
-			Assert.AreEqual("error\r\n\r\n", r.Error);
-			Assert.AreEqual("hello\r\n\r\n", r.Output);
+			
 		}
 
 		[Test]

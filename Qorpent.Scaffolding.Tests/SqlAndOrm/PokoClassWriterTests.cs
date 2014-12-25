@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Qorpent.Scaffolding.Model;
 using Qorpent.Scaffolding.Model.CodeWriters;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 	[TestFixture]
@@ -37,6 +38,9 @@ namespace  {
 		///<summary>
 		/// 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual Int32 Id {get {return NativeId;} set{NativeId=value;}}
 
 		///<summary>Direct access to Id</summary>
@@ -46,6 +50,9 @@ namespace  {
 		///<summary>
 		///DateTime 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual System.DateTime Date {get {return NativeDate;} set{NativeDate=value;}}
 
 		///<summary>Direct access to Date</summary>
@@ -53,7 +60,7 @@ namespace  {
 
 
 	}
-}".Trim(), code.Trim());
+}".Trim().LfOnly(), code.Trim().LfOnly());
 
 		}
 		[Test]
@@ -87,6 +94,9 @@ namespace  {
 		///<summary>
 		/// 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual Int32 Id {get {return NativeId;} set{NativeId=value;}}
 
 		///<summary>Direct access to Id</summary>
@@ -94,7 +104,7 @@ namespace  {
 
 
 	}
-}".Trim(), code.Trim());
+}".Trim().LfOnly(), code.Trim().LfOnly());
 
 		}
 
@@ -135,6 +145,9 @@ namespace  {
 		///<summary>
 		/// 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual Int32 Id {get {return NativeId;} set{NativeId=value;}}
 
 		///<summary>Direct access to Id</summary>
@@ -192,6 +205,9 @@ namespace  {
 		///<summary>
 		///serialize 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual String X {get {return NativeX;} set{NativeX=value;}}
 
 		///<summary>Direct access to X</summary>
@@ -223,7 +239,7 @@ namespace  {
 
 
 	}
-}".Trim(), code.Trim());
+}".Trim().LfOnly(), code.Trim().LfOnly());
 
 		}
 
@@ -261,6 +277,9 @@ namespace  {
 		///<summary>
 		/// 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual Int32 Id {get {return NativeId;} set{NativeId=value;}}
 
 		///<summary>Direct access to Id</summary>
@@ -270,6 +289,9 @@ namespace  {
 		///<summary>
 		///Код 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual String Code {get {return NativeCode;} set{NativeCode=value;}}
 
 		///<summary>Direct access to Code</summary>
@@ -278,7 +300,7 @@ namespace  {
 
 	}
 }
-".Trim(), code.Trim());
+".Trim().LfOnly(), code.Trim().LfOnly());
 
 		}
 
@@ -315,6 +337,9 @@ namespace  {
 		///<summary>
 		/// 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual Int32 Id {get {return NativeId;} set{NativeId=value;}}
 
 		///<summary>Direct access to Id</summary>
@@ -324,6 +349,9 @@ namespace  {
 		///<summary>
 		///Код 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public override String Code {get {return NativeCode;} set{NativeCode=value;}}
 
 		///<summary>Direct access to Code</summary>
@@ -332,7 +360,7 @@ namespace  {
 
 	}
 }
-".Trim(), code.Trim());
+".Trim().LfOnly(), code.Trim().LfOnly());
 
 		}
 
@@ -369,6 +397,9 @@ namespace  {
 		///<summary>
 		/// 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual Int32 Id {get {return NativeId;} set{NativeId=value;}}
 
 		///<summary>Direct access to Id</summary>
@@ -377,7 +408,7 @@ namespace  {
 
 	}
 }
-".Trim(), code.Trim());
+".Trim().LfOnly(), code.Trim().LfOnly());
 
 		}
 
@@ -414,6 +445,9 @@ namespace  {
 		///<summary>
 		/// 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual Int32 Id {get {return NativeId;} set{NativeId=value;}}
 
 		///<summary>Direct access to Id</summary>
@@ -423,6 +457,9 @@ namespace  {
 		///<summary>
 		/// (Идентификатор)
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual Int32 bId {get {return NativebId;} set{NativebId=value;}}
 
 		///<summary>Direct access to bId</summary>
@@ -432,6 +469,9 @@ namespace  {
 		///<summary>
 		/// 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual b b {get {return ((null!=Nativeb as b.Lazy )?( Nativeb = ((b.Lazy) Nativeb ).GetLazy(Nativeb) ): Nativeb );} set{Nativeb=value;}}
 
 		///<summary>Direct access to b</summary>
@@ -440,7 +480,7 @@ namespace  {
 
 	}
 }
-".Trim(), code.Trim());
+".Trim().LfOnly(), code.Trim().LfOnly());
 
 		}
 
@@ -477,6 +517,9 @@ namespace  {
 		///<summary>
 		/// 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual Int32 Id {get {return NativeId;} set{NativeId=value;}}
 
 		///<summary>Direct access to Id</summary>
@@ -486,6 +529,9 @@ namespace  {
 		///<summary>
 		///reverse (a  привязка )
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual ICollection<b> bs {get {return Nativebs?? (Nativebs = new List<b>());} set{Nativebs=value;}}
 
 		///<summary>Direct access to bs</summary>
@@ -494,7 +540,7 @@ namespace  {
 
 	}
 }
-".Trim(), code.Trim());
+".Trim().LfOnly(), code.Trim().LfOnly());
 
 		}
 
@@ -533,6 +579,9 @@ namespace  {
 		///<summary>
 		/// 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual Int32 Id {get {return NativeId;} set{NativeId=value;}}
 
 		///<summary>Direct access to Id</summary>
@@ -542,6 +591,9 @@ namespace  {
 		///<summary>
 		/// 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual String x {get {return Nativex;} set{Nativex=value;}}
 
 		///<summary>Direct access to x</summary>
@@ -551,6 +603,9 @@ namespace  {
 		///<summary>
 		///nosql 
 		///</summary>
+#if !NOQORPENT
+		[SerializeNotNullOnly]
+#endif
 		public virtual String y {get {return Nativey;} set{Nativey=value;}}
 
 		///<summary>Direct access to y</summary>
@@ -559,7 +614,7 @@ namespace  {
 
 	}
 }
-".Trim(), code.Trim());
+".Trim().LfOnly(), code.Trim().LfOnly());
 
 		}
 	}

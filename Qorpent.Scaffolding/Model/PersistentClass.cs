@@ -78,6 +78,11 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		public string Namespace { get; set; }
 
+        /// <summary>
+        /// Признак того, что объект не требует генерации в SQL
+        /// </summary>
+        public bool NoSql { get; set; }
+
 		/// <summary>
 		///     Полное имя для SQL
 		/// </summary>

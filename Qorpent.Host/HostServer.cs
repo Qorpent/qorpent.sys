@@ -3,12 +3,14 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Applications;
 using Qorpent.BSharp.Preprocessor;
 using Qorpent.Bxl;
+using Qorpent.Data;
 using Qorpent.Host.Handlers;
 using Qorpent.Host.Qweb;
 using Qorpent.Host.Security;
@@ -17,6 +19,7 @@ using Qorpent.IO;
 using Qorpent.IoC;
 using Qorpent.Log;
 using Qorpent.Mvc;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host{
 	/// <summary>
@@ -177,7 +180,7 @@ namespace Qorpent.Host{
 		}
 
 		internal void StartRequestThread(){
-			_listener.GetContextAsync().ContinueWith(OnRequest);
+			_listener.GetContextAsync().ContinueWith(OnRequest, _cancel);
 		}
 
 		private void OnRequest(Task<HttpListenerContext> task){
@@ -207,10 +210,17 @@ namespace Qorpent.Host{
 			}
 		}
 
-		private  void PrepareForCrossSiteScripting(Task<HttpListenerContext> task){
+		private  void PrepareForCrossSiteScripting(Task<HttpListenerContext> task) {
+		    if (!string.IsNullOrWhiteSpace(task.Result.Request.Headers["QHPROXYORIGIN"])) return;
 			if (!string.IsNullOrWhiteSpace(Config.AccessAllowOrigin)){
-				task.Result.Response.AddHeader("Access-Control-Allow-Origin",Config.AccessAllowOrigin);
-				if (!string.IsNullOrWhiteSpace(Config.AccessAllowHeaders)){
+			    if (Config.AccessAllowOrigin == "*" && Config.AccessAllowCredentials) {
+			        var origin = task.Result.Request.Headers["Origin"];
+                    task.Result.Response.AddHeader("Access-Control-Allow-Origin", origin);
+			    }
+			    else {
+			        task.Result.Response.AddHeader("Access-Control-Allow-Origin", Config.AccessAllowOrigin);
+			    }
+			    if (!string.IsNullOrWhiteSpace(Config.AccessAllowHeaders)){
 					
 					if ("*" == Config.AccessAllowHeaders){
 						if (task.Result.Request.Headers.AllKeys.Contains("Access-Control-Request-Headers")){
@@ -264,9 +274,45 @@ namespace Qorpent.Host{
 			this.OnContext("/logon", _ => Auth.Logon(_));
 			this.OnContext("/logout", _ => Auth.Logout(_));
 			this.OnContext("/isauth", _ => Auth.IsAuth(_));
+		    this.On("/js/_plugins.js", BuildPluginsModule(), "text/javascript");
 		}
 
-		/// <summary>
+	    private string BuildPluginsModule() {
+	        var result = new StringBuilder();
+            
+            var plugins = (this.Config.Definition?? new XElement("_stub")).Elements("plugin");
+	        var pluginlist = string.Join(" , ",new[]{"'angular'","'jquery'"}.Union(plugins.Select(_ => "'" + _.Attr("code") + "'")));
+            var arglist = string.Join(" , ", new[] { "angular", "$" }.Union(plugins.Select(_ => _.Attr("code").Replace("/","_").Replace("-","_"))));
+	        result.Append("define([");
+	        result.Append(pluginlist);
+	        result.Append("], function(");
+	        result.AppendLine();
+	        result.Append("\t");
+	        result.Append(arglist);
+            result.Append(") {");
+	        result.AppendLine();
+	        result.AppendLine("\tvar plugins={ _set : [], _map: {}, execute : function( name, args, context) {");
+	        result.AppendLine("\t\targs = args || [];");
+	        result.AppendLine("\t\tthis._set.forEach(function(_){");
+	        result.AppendLine("\t\t\tif(name in _){");
+            result.AppendLine("\t\tvar _this = context || _;");
+            result.AppendLine("\t\t\t\t_[name].apply(_this,args);");
+            result.AppendLine("\t\t\t}");
+            result.AppendLine("\t\t});");
+            result.AppendLine("\t} }");
+	        foreach (var element in plugins) {
+	            var name = element.Attr("code").Replace("/", "_").Replace("-", "_");
+	            result.AppendLine("\tplugins._map['" + name + "'] = " + name + ";");
+	            result.AppendLine("\tplugins._set.push(" + name + ");");
+	        }
+	        result.AppendLine("\tvar module = angular.module('plugins',[]);");
+	        result.AppendLine("\tmodule.factory('plugins',function(){return plugins;});");
+	        result.AppendLine("\treturn plugins;");
+	        result.AppendLine("});");
+	        return result.ToString();
+	    }
+
+	    /// <summary>
 		///     Загружает библиотеки
 		/// </summary>
 		private void InitializeLibraries(){
@@ -331,14 +377,12 @@ namespace Qorpent.Host{
 
 		private void _InitializeForStandaloneApplication(){
 			if (Config.ApplicationMode != HostApplicationMode.Shared){
+                _container.Unregister(_container.FindComponent(typeof(IFileNameResolver),""));
+                _container.Register(_container.NewComponent<IFileNameResolver, HostFileNameResolver>(implementation: new HostFileNameResolver(this)));
 				_container.Register(_container.NewComponent<IMvcContext, HostMvcContext>());
 				_container.Unregister(_container.FindComponent(typeof (IAction), "_sys.login.action"));
 				_container.Unregister(_container.FindComponent(typeof (IAction), "_sys.logout.action"));
-				try{
-					_container.FindComponent(typeof (IFileNameResolver), null).Parameters["Root"] = Config.RootFolder;
-				}
-				catch{
-				}
+
 				var logger = (BaseLogger) ConsoleLogWriter.CreateLogger(
 					level: Config.LogLevel,
 					customFormat: "${Level} ${Time} ${Message}"
@@ -389,7 +433,14 @@ namespace Qorpent.Host{
 				}
 				loader.LoadManifest(xml, true);
 			}
-			
+			foreach (var cs in Config.ConnectionStrings) {
+				var dsc = new ConnectionDescriptor {
+					ConnectionString = cs.Value,
+					Name = cs.Key,
+					PresereveCleanup = true
+				};
+				Application.DatabaseConnections.Register(dsc, false);
+			}
 			
 			foreach (string assemblyName in Config.AutoconfigureAssemblies)
 			{

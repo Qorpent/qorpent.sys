@@ -50,8 +50,8 @@ namespace Qorpent.Mvc{
         /// </summary>
         /// <returns></returns>
         /// <exception cref="ValidationException"></exception>
-        public ValidationResult Throw(){
-           
+        public ValidationResult Throw() {
+            if (IsValid) return this;
             throw new ValidationException(string.Join("\r\n",messages.ToArray()),Error);
             
         }

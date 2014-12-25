@@ -39,6 +39,8 @@
     <Compile Include="ConvertExtensionsTest.cs" />
     <Compile Include="DatabaseExtensionsTest.cs" />
     <Compile Include="DateRangeResolverTest.cs" />
+    <Compile Include="SimpleExpression\SimpleExpressionParserTests.cs" />
+    <Compile Include="SimpleExpression\SqlFullTestSearchAdapterTests.cs" />
     <Compile Include="WebDateTimeParserTest.cs" />
     <Compile Include="EnumerableExtensionsTest.cs" />
     <Compile Include="Git\FileRecordTest.cs" />

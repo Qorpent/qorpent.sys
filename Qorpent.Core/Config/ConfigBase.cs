@@ -218,7 +218,20 @@ namespace Qorpent.Config {
 				}
 			}
 		}
-
+        /// <summary>
+        /// Получает первый не пустой вариант
+        /// </summary>
+        /// <param name="names"></param>
+        /// <returns></returns>
+	    public string ResolveBest(params string[] names) {
+            foreach (var name in names) {
+                var subresult = Get(name, "");
+                if (!string.IsNullOrWhiteSpace(subresult)) {
+                    return subresult;
+                }
+            }
+            return "";
+        }
 	    /// <summary>
 	    /// Получить приведенную типизированную опцию
 	    /// </summary>

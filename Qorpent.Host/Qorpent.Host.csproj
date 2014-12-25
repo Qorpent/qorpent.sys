@@ -13,23 +13,26 @@
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
-    <EmbeddedResource Include=".\**\*.*resource" />
-    <EmbeddedResource Include="Resources\glyphicons-halflings-regular.ttf" />
-    <EmbeddedResource Include="Resources\glyphicons-halflings-regular.woff" />
-    <EmbeddedResource Include="Resources\angular-min-js.map" />
-    <EmbeddedResource Include="Resources\actionBuilder.wiki" />
-    <EmbeddedResource Include="Resources\qObject.wiki" />
-    <EmbeddedResource Include="Resources\bootstrap-theme-css.map" />
+    <EmbeddedResource Include="Resources\extras\angular-min-js.map" />
+    <EmbeddedResource Include="Resources\extras\bootstrap-theme-css.map" />
+    <EmbeddedResource Include="Resources\extras\fontawesome-webfont.eot" />
+    <EmbeddedResource Include="Resources\extras\fontawesome-webfont.ttf" />
+    <EmbeddedResource Include="Resources\extras\fontawesome-webfont.woff" />
+    <EmbeddedResource Include="Resources\extras\FontAwesome.otf" />
+    <EmbeddedResource Include="Resources\extras\glyphicons-halflings-regular.ttf" />
+    <EmbeddedResource Include="Resources\extras\glyphicons-halflings-regular.woff" />
+    <EmbeddedResource Include="Resources\extras\OpenSans-Light-webfont.woff" />
+    <EmbeddedResource Include="Resources\obsolete\actionBuilder.wiki" />
+    <EmbeddedResource Include="Resources\obsolete\qObject.wiki" />
     <EmbeddedResource Include="Resources\manifest.cache" />
-    <EmbeddedResource Include="Resources\fontawesome-webfont.eot" />
-    <EmbeddedResource Include="Resources\fontawesome-webfont.ttf" />
-    <EmbeddedResource Include="Resources\fontawesome-webfont.woff" />
-    <EmbeddedResource Include="Resources\FontAwesome.otf" />
-    <EmbeddedResource Include="Resources\OpenSans-Light-webfont.woff" />
+    <EmbeddedResource Include="Resources\syntax.wiki" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestHandlerFactory.cs" />
     <Compile Include="Handlers\WikiHandler.cs" />
+    <Compile Include="ProxyHandler.cs" />
+    <Compile Include="Server\ServerParameters.cs" />
+    <Compile Include="Static\HostFileNameResolver.cs" />
     <Compile Include="Static\HostServerStaticResolver.cs" />
     <Compile Include="Security\AuthProtocolClient.cs" />
     <Compile Include="Security\AuthProtocolRequestType.cs" />
@@ -97,123 +100,123 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\angular.js" />
-    <EmbeddedResource Include="Resources\bootstrap.css" />
-    <EmbeddedResource Include="Resources\require.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\app.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\jquery.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\starter.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\glyphicons-halflings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\bootstrap-custom.css" />
-    <EmbeddedResource Include="Resources\bootstrap.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\wiki.html" />
-    <EmbeddedResource Include="Resources\wiki.css" />
-    <EmbeddedResource Include="Resources\wiki.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\syntax.wiki" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\actionBuilder.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\qObject.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\bootstrap-theme.css" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\moment.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\empty.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\refresh.js" />
-    <EmbeddedResource Include="Resources\settings.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\app.css" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\template.app.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\template.starter.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\layout.css" />
-    <EmbeddedResource Include="Resources\layout.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\font-awesome.css" />
-    <EmbeddedResource Include="Resources\errorcatcher.js" />
-    <EmbeddedResource Include="Resources\menu.css" />
-    <EmbeddedResource Include="Resources\menu.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\fontawesome-webfont.svg" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="..\Qorpent.The\the-action.js">
-      <Link>Resources\the-action.js</Link>
+      <Link>Resources\the\the-action.js</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Qorpent.The\the-collections-core.js">
-      <Link>Resources\the-collections-core.js</Link>
+      <Link>Resources\the\the-collections-core.js</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Qorpent.The\the-collections-layered.js">
-      <Link>Resources\the-collections-layered.js</Link>
+      <Link>Resources\the\the-collections-layered.js</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Qorpent.The\the-collections-linked.js">
-      <Link>Resources\the-collections-linked.js</Link>
+      <Link>Resources\the\the-collections-linked.js</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Qorpent.The\the-collections-linq.js">
-      <Link>Resources\the-collections-linq.js</Link>
+      <Link>Resources\the\the-collections-linq.js</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Qorpent.The\the-expression.js">
-      <Link>Resources\the-expression.js</Link>
+      <Link>Resources\the\the-expression.js</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Qorpent.The\the-http-test.js">
-      <Link>Resources\the-http-test.js</Link>
+      <Link>Resources\the\the-http-test.js</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Qorpent.The\the-http.js">
-      <Link>Resources\the-http.js</Link>
+      <Link>Resources\the\the-http.js</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Qorpent.The\the-interpolation.js">
-      <Link>Resources\the-interpolation.js</Link>
+      <Link>Resources\the\the-interpolation.js</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Qorpent.The\the-jsonify.js">
-      <Link>Resources\the-jsonify.js</Link>
+      <Link>Resources\the\the-jsonify.js</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Qorpent.The\the-object.js">
-      <Link>Resources\the-object.js</Link>
+      <Link>Resources\the\the-object.js</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Qorpent.The\the.js">
-      <Link>Resources\the.js</Link>
+      <Link>Resources\the\the.js</Link>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Qorpent.The\the-design-textfitter.js">
-      <Link>Resources\the-design-textfitter.js</Link>
+      <Link>Resources\the\the-design-textfitter.js</Link>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\common-main.js" />
+    <EmbeddedResource Include="..\Qorpent.The\the-angular-all.js">
+      <Link>Resources\the\the-angular-all.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-angular-leaflet.js">
+      <Link>Resources\the\the-angular-leaflet.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-angular-unsafe.js">
+      <Link>Resources\the\the-angular-unsafe.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Qorpent.The\the-angular.js">
+      <Link>Resources\the\the-angular.js</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\ui-bootstrap.js" />
+    <EmbeddedResource Include="Resources\extras\angular.js" />
+    <EmbeddedResource Include="Resources\extras\bootstrap-custom.css" />
+    <EmbeddedResource Include="Resources\extras\bootstrap-theme.css" />
+    <EmbeddedResource Include="Resources\extras\bootstrap.css" />
+    <EmbeddedResource Include="Resources\extras\bootstrap.js" />
+    <EmbeddedResource Include="Resources\extras\font-awesome.css" />
+    <EmbeddedResource Include="Resources\extras\font-awesome.min.css" />
+    <EmbeddedResource Include="Resources\extras\fontawesome-webfont.svg" />
+    <EmbeddedResource Include="Resources\extras\glyphicons-halflings.png" />
+    <EmbeddedResource Include="Resources\extras\jquery.js" />
+    <EmbeddedResource Include="Resources\extras\leaflet-awesome-markers.css" />
+    <EmbeddedResource Include="Resources\extras\leaflet-awesome-markers.js" />
+    <EmbeddedResource Include="Resources\extras\leaflet.css" />
+    <EmbeddedResource Include="Resources\extras\leaflet.js" />
+    <EmbeddedResource Include="Resources\extras\moment.js" />
+    <EmbeddedResource Include="Resources\extras\require.js" />
+    <EmbeddedResource Include="Resources\extras\ui-bootstrap.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\images\layers-2x.png" />
+    <EmbeddedResource Include="Resources\images\layers.png" />
+    <EmbeddedResource Include="Resources\images\marker-icon-2x.png" />
+    <EmbeddedResource Include="Resources\images\marker-icon.png" />
+    <EmbeddedResource Include="Resources\images\marker-shadow.png" />
+    <EmbeddedResource Include="Resources\images\markers-matte%402x.png" />
+    <EmbeddedResource Include="Resources\images\markers-matte.png" />
+    <EmbeddedResource Include="Resources\images\markers-plain.png" />
+    <EmbeddedResource Include="Resources\images\markers-shadow%402x.png" />
+    <EmbeddedResource Include="Resources\images\markers-shadow.png" />
+    <EmbeddedResource Include="Resources\images\markers-soft%402x.png" />
+    <EmbeddedResource Include="Resources\images\markers-soft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\obsolete\actionBuilder.js" />
+    <EmbeddedResource Include="Resources\obsolete\layout.css" />
+    <EmbeddedResource Include="Resources\obsolete\layout.js" />
+    <EmbeddedResource Include="Resources\obsolete\qObject.js" />
+    <EmbeddedResource Include="Resources\obsolete\starter.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\app.css" />
+    <EmbeddedResource Include="Resources\app.html" />
+    <EmbeddedResource Include="Resources\common-main.js" />
+    <EmbeddedResource Include="Resources\empty.html" />
+    <EmbeddedResource Include="Resources\errorcatcher.js" />
+    <EmbeddedResource Include="Resources\menu.css" />
+    <EmbeddedResource Include="Resources\menu.js" />
+    <EmbeddedResource Include="Resources\refresh.js" />
+    <EmbeddedResource Include="Resources\settings.js" />
+    <EmbeddedResource Include="Resources\template.app.html" />
+    <EmbeddedResource Include="Resources\template.starter.js" />
+    <EmbeddedResource Include="Resources\wiki\wiki.css" />
+    <EmbeddedResource Include="Resources\wiki\wiki.html" />
+    <EmbeddedResource Include="Resources\wiki\wiki.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\common-min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\extras\text.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\images\layers-2x.png" />

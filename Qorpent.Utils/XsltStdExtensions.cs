@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Xml.XPath;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils
 {
@@ -57,6 +60,30 @@ namespace Qorpent.Utils
             var result = Regex.Match(input, pattern, RegexOptions.Compiled);
             if (result.Success) return result.Groups[group].Value;
             return "";
+        }
+        /// <summary>
+        /// Возвращает форматированный диапазон даты-времени
+        /// </summary>
+        /// <param name="baseDateTime"></param>
+        /// <param name="range"></param>
+        /// <returns></returns>
+        public string dt_range(string baseDateTime, string range) {
+            var resultRange = baseDateTime.ToDate().CalculateRange(range);
+            return string.Format("{0} - {1}", resultRange.Start.ToString("dd.MM.yyyy HH:mm:ss"),
+                resultRange.Finish.ToString("dd.MM.yyyy HH:mm:ss"));
+        }
+        /// <summary>
+        /// выбор уникальных значений
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="xpath"></param>
+        /// <returns></returns>
+        public XPathNodeIterator distinct_values(XPathNodeIterator iter, string xpath) {
+            var values = iter.OfType<XPathNavigator>().Select(_ => _.Evaluate(xpath).ToStr()).Distinct();
+            var xe = new XElement("x");
+            xe.Add(values.Select(_=>new XElement("v",_)));
+            var nav = xe.CreateNavigator();
+            return nav.Select("//v");
         }
     }
 }

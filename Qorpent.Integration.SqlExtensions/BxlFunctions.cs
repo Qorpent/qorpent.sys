@@ -37,7 +37,7 @@ namespace Qorpent.Integration.SqlExtensions {
 		/// 	Converts given BXL code to XML
 		/// </summary>
 		[SqlFunction(
-			IsDeterministic = false,
+			IsDeterministic = true,
 			SystemDataAccess = SystemDataAccessKind.None,
 			DataAccess = DataAccessKind.None
 			)]
@@ -53,7 +53,7 @@ namespace Qorpent.Integration.SqlExtensions {
 		/// 	Converts given XML code to BXL
 		/// </summary>
 		[SqlFunction(
-			IsDeterministic = false,
+            IsDeterministic = true,
 			SystemDataAccess = SystemDataAccessKind.None,
 			DataAccess = DataAccessKind.None
 			)]

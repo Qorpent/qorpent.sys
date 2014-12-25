@@ -120,10 +120,6 @@
       <Project>{880f65ea-1a22-4672-a137-ffc91290a209}</Project>
       <Name>Qorpent.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Qorpent.IoC.Tests\Qorpent.IoC.Tests.csproj">
-      <Project>{0403B026-5047-41A4-98EE-62F2D92B812C}</Project>
-      <Name>Qorpent.IoC.Tests</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
       <Project>{21971f28-8ed8-4f50-b623-e9db2658af54}</Project>
       <Name>Qorpent.Serialization</Name>

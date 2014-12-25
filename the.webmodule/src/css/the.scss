@@ -1,0 +1,43 @@
+@import "the/layouts/layered";
+@import "the/tools/labels";
+@import "compass/css3";
+@import "compass/reset";
+
+* {
+  @include box-sizing(border-box);
+}
+
+.the {
+
+  form {
+    span.validate {
+      font-size: xx-small;
+    }
+  }
+
+  .tool {
+    &.labeled {
+      @extend %label-tool;
+    }
+  }
+
+  [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+  }
+
+
+
+  .dropdown-menu {
+    .default a {
+      font-weight: bold;
+    }
+    .delimiter {
+      height: 1px;
+      border-top:solid 1px gray;
+    }
+  }
+
+  i.disabled {
+    color :lightgray;
+  }
+}

@@ -212,5 +212,7 @@
     <None Include="*.export" />
     <EmbeddedResource Include="BSharp\Preprocessor\preprocessor.bxls" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Sql\" />
+  </ItemGroup>
 </Project>

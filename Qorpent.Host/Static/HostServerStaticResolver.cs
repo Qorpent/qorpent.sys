@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Qorpent.IO;
 
 namespace Qorpent.Host.Static{
-	/// <summary>
+    /// <summary>
 	/// </summary>
 	public class HostServerStaticResolver : IHostServerStaticResolver{
 		private readonly ConcurrentDictionary<string, IWebFileRecord> _cache =
@@ -51,10 +52,20 @@ namespace Qorpent.Host.Static{
 		/// <returns></returns>
 		public IWebFileRecord Get(string name, object context = null, bool withextended = false){
 			IWebFileRecord result;
+			
 			if (_cache.TryGetValue(name, out result)){
 				return result;
 			}
 			lock (this){
+				if (masks.Count != 0) {
+				foreach (var mask in masks) {
+					if (name.StartsWith(mask.Key)) {
+						var resolvedName = name.Substring(mask.Key.Length);
+						var file = Path.Combine(mask.Value, resolvedName);
+						return _cache[name] = File.Exists(file)? new FileSystemWebFileRecord { Name = name, FileSystemName = file, FullName = file }: null;
+					}
+				}
+				}
 				IWebFileRecord resolved = Resolve(name, context, withextended);
 				if (null != resolved){
 					_cache[name] = resolved;

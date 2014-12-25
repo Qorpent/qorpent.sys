@@ -59,6 +59,7 @@ namespace Qorpent.Scaffolding.Model{
 				}
 				else if (source is PersistentClass){
 					if (!Model.GenerationOptions.Supports(SqlObjectType.Table)) continue;
+                    if ((source as PersistentClass).NoSql)continue;
 					yield return new TableWriter(source as PersistentClass){Dialect = Dialect, Mode = Mode, Model = Model};
 				}
 				else if (source is Field){

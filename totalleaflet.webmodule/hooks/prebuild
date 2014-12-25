@@ -1,0 +1,4 @@
+#!/bin/sh
+./hooks/ll_get
+./hooks/ll_compile
+

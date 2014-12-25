@@ -236,6 +236,18 @@ namespace Qorpent.Scaffolding.Model{
 				}
 			};
 
+            result["xml"] = new DataType
+            {
+                Code = "xml",
+                CSharpDataType = "XElement",
+                SqlDataTypes ={
+					{SqlDialect.Ansi, new SqlDataType{Name = "varchar", Size = 8000}},
+					{SqlDialect.SqlServer, new SqlDataType{Name = "xml", Size = -1}},
+					{SqlDialect.PostGres, new SqlDataType{Name = "xml"}},
+				}
+            };
+
+
 			return result;
 		}
 

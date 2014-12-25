@@ -42,8 +42,12 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
                 UseInterpolation = true,
 				IgnoreElements = Project.IgnoreElements.SmartSplit().ToArray(),
 				Global = Project.Global,
-				
+			    DefaultNamespace = Project.DefaultNamespace
             };
+            if (null != Project.Definition)
+            {
+                config.DefaultNamespace = Project.Definition.ChooseAttr("defaultNamespace", "DefaultNamespace");
+            }
 			if (null != Project && null != Project.SrcClass){
 				config.KeepLexInfo = Project.SrcClass.Compiled.Attr("KeepLexInfo").ToBool();
 			}

@@ -59,6 +59,7 @@
     <Compile Include="Json\InvalidXmlToJson.cs" />
     <Compile Include="Json\LexerTests.cs" />
     <Compile Include="Json\ParserTest.cs" />
+    <Compile Include="Json\ZippedToArrayGeneration.cs" />
     <Compile Include="json_serializer_test.cs" />
     <Compile Include="js_serializer_test.cs" />
     <Compile Include="BSharp\ErrorHandling.cs" />
@@ -164,5 +165,8 @@
       <Project>{880f65ea-1a22-4672-a137-ffc912902112}</Project>
       <Name>Qorpent.Utils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Sql\" />
   </ItemGroup>
 </Project>

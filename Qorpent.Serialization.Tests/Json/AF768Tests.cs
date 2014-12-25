@@ -8,7 +8,7 @@ using Qorpent.Json;
 
 namespace Qorpent.Serialization.Tests.Json
 {
-	/// <summary>
+    /// <summary>
 	/// Ошибка связанная с неправильной сериализацией Json в XML
 	/// </summary>
 	[TestFixture]

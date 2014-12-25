@@ -22,13 +22,16 @@ namespace Qorpent.Integration.BSharp.Builder.Tasks {
             CleanDirectory(Project.GetLogDirectory());
             Project.Log.Trace("output cleaned");
         }
+
         /// <summary>
         ///     Зачищает директорию путём удаление и создания
         /// </summary>
         /// <param name="target">Целевая директория</param>
         private void CleanDirectory(string target) {
-            BSharpBuilderFsUtils.DeleteDirectory(target);
-            Directory.CreateDirectory(target);
+            if (Directory.Exists(target)) {
+                BSharpBuilderFsUtils.DeleteDirectory(target);
+                Directory.CreateDirectory(target);
+            }
         }
     }
 }

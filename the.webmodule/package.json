@@ -1,0 +1,54 @@
+{
+  "description": "My Best Module",
+  "moduleName": "the",
+  "defaultNamespace": "Qorpent.The",
+  "name": "the",
+  "devDependencies": {
+    "requirejs": ">=2.1.15",
+    "amdefine": ">=0.1.0"
+  },
+  "compile": {
+    "type": "api",
+    "root": "the"
+  },
+  "tests": [
+    {
+      "condition":"!debug",
+      "deps": ["the"]
+    },
+    {
+      "condition":"new",
+      "deps": [
+          "../src/js2/the2",
+          "../src/js2/the2-object"
+      ]
+    },
+    {
+      "condition":"debug",
+      "deps": [
+        "?the-root",
+        "?the-object",
+        "?the-http",
+        "?the-collections-core",
+        "?the-collections-linq",
+        "?the-expression",
+        "?the-interpolation"
+      ],
+      "into" : "the"
+    },
+    "the-object-tests",
+    "the-collections-linq-tests",
+    "the-expression-tests",
+    "the-interpolation-tests",
+    {
+      "condition":"new",
+      "name":"the2-object-tests"
+    },
+    {
+      "name" : "the-http-tests",
+      "deps" : ["?the-http-test"]
+    }
+  ],
+  "webModuleDependency": {},
+  "version": "0.1.0"
+}

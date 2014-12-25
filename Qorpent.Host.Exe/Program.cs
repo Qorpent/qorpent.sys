@@ -1,103 +1,81 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Qorpent.BSharp;
-using Qorpent.Bxl;
+using Qorpent.Host.Server;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Host
+namespace Qorpent.Host.Exe
 {
 	internal static class Program
 	{
-		public static void Main(string[] args)
-		{
-			var cfg = PrepareHostConfig(args);
-			var srv = new HostServer(cfg);
-			Console.WriteLine("Конфигурация");
-			Console.WriteLine(cfg);
-			
-			srv.Start();
-			var cmd = "";
-			while ((cmd = Console.ReadLine()) != "exit")
-			{
-				if (cmd == "stat")
-				{
-					Console.WriteLine(srv.GetStatisticsString());
-				}
-			}
-			srv.Stop();
-
+		public static int Main(string[] args) {
+		    if (args.Contains("--debug")) {
+		        Debugger.Launch();
+		    }
+		    return ConsoleApplication.Execute<ServerParameters>(args, Execute, true);
 		}
 
-		private static HostConfig PrepareHostConfig(string[] args)
-		{
-			var cfg = new HostConfig();
-			cfg.ApplicationMode = HostApplicationMode.Standalone;
-			var argdicts = new ConsoleArgumentHelper().ParseDictionary(args);
-			if (argdicts.ContainsKey("config"))
-			{
-				var configFile = argdicts["config"];
-				XElement configXml = null;
-				if (configFile.EndsWith(".xml"))
-				{
-					configXml = XElement.Load(configFile);
-				}
-				else if (configFile.EndsWith(".bxl")){
-					configXml = new BxlParser().Parse(File.ReadAllText(configFile), configFile);
-				}
-				else{
-					Environment.CurrentDirectory = Path.GetDirectoryName(configFile);
-					configXml = BSharpCompiler.Compile(configFile)[Path.GetFileNameWithoutExtension(configFile)].Compiled;
-				}
+	    private static int Execute(ServerParameters arg) {
+	        var config = arg.BuildServerConfig();
+	        EnsureRequiredApplications(arg,config);
+	        config.DllFolder = EnvironmentInfo.ResolvePath("@repos@/.build/bin/all");
+	        var hostServer = new HostServer(config);
 
-				cfg.LoadXmlConfig(configXml);
-			}
-			else if (argdicts.Count == 1 && argdicts.ContainsKey("arg1")){
-				var configFile = argdicts["arg1"];
-				if (!configFile.EndsWith(".bxls")) configFile += ".bxls";
-				Environment.CurrentDirectory = Path.GetDirectoryName(Path.GetFullPath(configFile));
-				var configXml = BSharpCompiler.Compile(configFile)[Path.GetFileNameWithoutExtension(configFile)].Compiled;
-				cfg.LoadXmlConfig(configXml);
-			}
-			if (argdicts.ContainsKey("root"))
-			{
-				cfg.RootFolder = Path.GetFullPath(argdicts["root"]);
-			}
-			if (cfg.Bindings.Count == 0)
-			{
-				cfg.AddDefaultBinding();
-			}
+            LogHostInfo(arg, config);
+	        hostServer.Start();
+	        try {
+	            Console.ReadLine();
+	            return 0;
+	        }
+	        finally {
+	            hostServer.Stop();
+	        }
+	    }
 
-			if (argdicts.ContainsKey("port")){
-				cfg.Bindings[0].Port = argdicts["port"].ToInt();
+	    private static void EnsureRequiredApplications(ServerParameters serverParameters, HostConfig config) {
+	        var requires = config.Definition.Elements("require");
+	        foreach (var require in requires) {
+                if(!string.IsNullOrWhiteSpace(require.Attr("server")))continue; //external service
+	            var name = require.IdCodeOrValue()+require.Attr("suffix");
+	            var shadow = EnvironmentInfo.GetShadowDirectory(name);
+	            var processes = Process.GetProcessesByName("qh");
+                Console.WriteLine(string.Join("; ",processes.Select(_=>_.ProcessName)));
+	            var required =
+	                processes.FirstOrDefault(_ => _.MainModule.FileName.NormalizePath().StartsWith(shadow.NormalizePath()));
+	            if (null != required) {
+	                config.Log.Info("Required '" + name + "' found, PID: " + required.Id);
+	            }
+	            else {
+	                var args = name;
+	                if (serverParameters.Get("hidden", false)) {
+	                    args += " --hidden";
+	                }
+	                required = Process.Start(EnvironmentInfo.ResolvePath("@repos@/.build/bin/all/qh.exe"), args);
+                    config.Log.Info("Required '" + name + "' started, PID: " + required.Id);
+	            }
+	        }
+	    }
 
-			}
-
-			if (argdicts.ContainsKey("content")){
-				var folders = argdicts["content"].SmartSplit(false, true, ';');
-				foreach (var folder in folders){
-					cfg.ContentFolders.Add(folder);	
-				}
-
-				
-			}
-
-			if (argdicts.ContainsKey("appname"))
-			{
-				foreach (var hostBinding in cfg.Bindings)
-				{
-					if (hostBinding.AppName == "/")
-					{
-						hostBinding.AppName = argdicts["appname"];
-					}
-				}
-			}
-			return cfg;
-		}
+	    private static void LogHostInfo(ServerParameters arg, HostConfig config) {
+            Console.WriteLine("BinRoot: "+config.DllFolder);
+	        foreach (var assembly in config.AutoconfigureAssemblies) {
+                arg.Log.Trace("Lib: " + assembly);
+	        }
+	        foreach (var hostBinding in config.Bindings) {
+                arg.Log.Info("Binding: " + hostBinding);
+	        }
+	        arg.Log.Trace("RootFolder: " + config.RootFolder);
+	        foreach (var contentFolder in config.ContentFolders) {
+	            arg.Log.Trace("ContentFolder: " + contentFolder);
+	        }
+	        foreach (var map in config.StaticContentMap) {
+	            arg.Log.Trace("Map: "+map.Key+" : "+map.Value);
+	        }
+            foreach (var map in config.Proxize)
+            {
+                arg.Log.Trace("Proxize: " + map.Key + " : " + map.Value);
+            }
+	    }
 	}
 }

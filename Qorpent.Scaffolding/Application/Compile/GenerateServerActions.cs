@@ -14,7 +14,7 @@ namespace Qorpent.Scaffolding.Application{
 		/// </summary>
 		public GenerateServerActions(){
 			ClassSearchCriteria = "ui-action";
-			DefaultOutputName = "CSharp/Actions";
+			DefaultOutputName = "CSharp";
 		}
 		/// <summary>
 		/// 
@@ -23,12 +23,13 @@ namespace Qorpent.Scaffolding.Application{
 		/// <returns></returns>
 		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] targetclasses){
 			foreach (var targetclass in targetclasses){
+                if(targetclass.Compiled.Attr("nocode").ToBool())continue;
 				yield return GetActionClass(targetclass);
 			}
 		}
 
 		private Production GetActionClass(IBSharpClass e){
-			var result = new Production { FileName = e.FullName + ".cs" };
+			var result = new Production { FileName = "Actions/"+ e.FullName + ".cs" };
 			result.GetContent = () =>{
 				var sb = new StringBuilder();
 				sb.AppendLine(CommonHeader);
@@ -38,14 +39,25 @@ namespace Qorpent.Scaffolding.Application{
 				sb.AppendLine("using Qorpent.Mvc.Binding;");
 
 				var resultclass = new BSharpClassRef(e.Compiled.Attr("Result"));
+                if (string.IsNullOrWhiteSpace(resultclass.Name)) {
+                    resultclass.Name = "object";
+                }
+			    if (!string.IsNullOrWhiteSpace(e.Compiled.Attr("resultCSharpClass"))) {
+			        resultclass.Name = e.Compiled.Attr("resultCSharpClass");
+
+			    }
 				var argumentclass = new BSharpClassRef(e.Compiled.Attr("Arguments"));
 				if (resultclass.Namespace != e.Namespace && !string.IsNullOrWhiteSpace(resultclass.Namespace)){
-					sb.AppendLine("using" + resultclass.Namespace + ";");
+					sb.AppendLine("using " + resultclass.Namespace + ";");
 				}
 				if (argumentclass.Namespace != e.Namespace && argumentclass.Namespace != resultclass.Namespace &&
 				    !string.IsNullOrWhiteSpace(argumentclass.Namespace)){
-					sb.AppendLine("using" + argumentclass.Namespace + ";");
+					sb.AppendLine("using " + argumentclass.Namespace + ";");
 				}
+                foreach (var u in e.Compiled.Elements("using"))
+                {
+                    sb.AppendLine("using " + u.Attr("code") + ";");
+                }
 
 				if (resultclass.IsArray){
 					resultclass.Name = "ICollection<" + resultclass.Name + ">";
@@ -61,8 +73,10 @@ namespace Qorpent.Scaffolding.Application{
 			    }
 				sb.AppendLine(string.Format("\t[Action(\"{0}\")]", actionname));
 
+			    var baseClass = e.Compiled.Attr("baseclass", "ActionBase");
+                
 
-				sb.AppendLine("\tpublic partial class " + e.Name + ": ActionBase<" + resultclass.Name + "> {");
+				sb.AppendLine("\tpublic partial class " + e.Name + ": "+baseClass+"<" + resultclass.Name + "> {");
 				if (!string.IsNullOrWhiteSpace(argumentclass.Name)){
 					WriteMemberSummary(sb, "Call argumets due to specification");
 					sb.AppendLine("\t\t[Bind]");

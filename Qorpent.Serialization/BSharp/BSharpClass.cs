@@ -252,11 +252,7 @@ namespace Qorpent.BSharp{
 		/// <param name="code"></param>
 		/// <returns></returns>
 		public string this[string code]{
-			get{
-				XAttribute a = Compiled.Attribute(code);
-				if (null == a) return string.Empty;
-				return a.Value;
-			}
+			get { return this.Compiled.ResolveValue(code); }
 		}
 
 
