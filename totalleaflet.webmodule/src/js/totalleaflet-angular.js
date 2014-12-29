@@ -1,12 +1,16 @@
 /**
  * Created by comdiv on 15.11.2014.
  */
-define(["leaflet-amd"],function(L){
+define(["leaflet-amd","totalleaflet-circlelayer"],function(L,ttc){
     if(typeof angular === "undefined"){
         console.warn("angular required for totalleaflet-angular");
         return null;
     }
+    if(!!L) {
+        L.Icon.Default.imagePath = "/css/image/marker-icon.png";
+    }
     var mod = angular.module("totalleaflet",[]);
+    mod.factory("tl-circle",[function(){return ttc;}])
     mod.factory("llutils",[function(){
         return {
             getMarkerXY : function(marker){
