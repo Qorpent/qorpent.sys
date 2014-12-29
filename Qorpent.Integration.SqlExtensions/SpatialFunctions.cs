@@ -2,6 +2,7 @@ using System;
 using System.Data.SqlTypes;
 using System.Linq;
 using Microsoft.SqlServer.Server;
+using Microsoft.SqlServer.Types;
 
 namespace Qorpent.Integration.SqlExtensions {
     /// <summary>
@@ -84,6 +85,31 @@ namespace Qorpent.Integration.SqlExtensions {
             var maxy = Math.Max(@by.Value, ty.Value);
             return x.Value >= minx && x.Value <= maxx && y.Value >= miny && y.Value <= maxy;
         }
+        /// <summary>
+        /// Формирует точку в проекции 4236 с резолюцией X,Y или Lon , Lat на входе
+        /// </summary>
+        /// <param name="xOrLon"></param>
+        /// <param name="yOrLat"></param>
+        /// <returns></returns>
+        [SqlFunction(IsDeterministic = true, SystemDataAccess = SystemDataAccessKind.None,
+            DataAccess = DataAccessKind.None)]
+        public static SqlGeography GetPoint(SqlDouble xOrLon, SqlDouble yOrLat) {
+            if (xOrLon.IsNull || yOrLat.IsNull) return SqlGeography.Null;
+            var builder = new SqlGeographyBuilder();
+            builder.SetSrid(4236);
+            builder.BeginGeography(OpenGisGeographyType.Point);
+            
 
+            if (Math.Abs(xOrLon.Value) <= 180 && Math.Abs(yOrLat.Value) <= 180) {
+                builder.BeginFigure(yOrLat.Value, xOrLon.Value);
+
+            }
+            else {
+                builder.BeginFigure(GetLat(yOrLat).Value,GetLon(xOrLon).Value);
+            }
+            builder.EndFigure();
+            builder.EndGeography();
+            return builder.ConstructedGeography;
+        }
     }
 }

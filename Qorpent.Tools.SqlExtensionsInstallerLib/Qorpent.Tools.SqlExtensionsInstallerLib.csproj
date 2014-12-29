@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-	<IsTool>True</IsTool>
+    <IsTool>True</IsTool>
     <Configuration>Debug</Configuration>
     <ProjectGuid>{820AF793-EECC-418D-91CD-E40E8597BC09}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -34,9 +34,16 @@
     <Compile Include="UserTypeWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\qorpent.kernel\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.XML" />
   </ItemGroup>
-   <Import Project="..\..\qorpent.kernel\build.targets" />
-  
-<ItemGroup><None Include="*.import" /><None Include="*.export" /></ItemGroup></Project>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+  </ItemGroup>
+</Project>
