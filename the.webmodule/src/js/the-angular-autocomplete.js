@@ -108,7 +108,10 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
                 });
                 __acShow();
             };
-            scope.__acChange = function () {
+            scope.__acChange = function (type) {
+                if(!!attr["onEnterOnly"]){
+                    if(type==1)return;
+                }
                 clearTimeout(timeout);
                 __acHide();
                 var search = scope.$eval(data.bindQuery);

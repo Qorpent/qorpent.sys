@@ -72,7 +72,11 @@
   box-shadow: 3px 3px 26px 1px rgba(0, 0, 0, 0.71);
   overflow: hidden;
 }
-/* line 26, the/tools/_labels.scss */
+/* line 25, the/tools/_labels.scss */
+.the .tool.labeled > div {
+  margin: 2px;
+}
+/* line 29, the/tools/_labels.scss */
 .the .tool.labeled > label:first-child {
   text-align: center;
   background: #93cede;
@@ -89,7 +93,7 @@
   user-select: none;
   min-height: 20px;
 }
-/* line 39, the/tools/_labels.scss */
+/* line 42, the/tools/_labels.scss */
 .the .tool.labeled .controls {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -98,20 +102,29 @@
   min-height: 20px;
   align-items: center;
 }
-/* line 44, the/tools/_labels.scss */
+/* line 47, the/tools/_labels.scss */
 .the .tool.labeled i {
   min-width: 20px;
   text-align: center;
+  margin-right: 1px;
 }
-/* line 48, the/tools/_labels.scss */
+/* line 51, the/tools/_labels.scss */
 .the .tool.labeled i.active {
   font-weight: bold;
   color: #33aa4c;
 }
-/* line 52, the/tools/_labels.scss */
+/* line 55, the/tools/_labels.scss */
 .the .tool.labeled i.disabled {
   font-weight: lighter;
   color: lightgray !important;
+}
+/* line 59, the/tools/_labels.scss */
+.the .tool.labeled i.md-icon {
+  font-size: 16pt;
+  padding-top: 3px;
+  padding-right: 3px;
+  padding-left: 3px;
+  min-width: 28px;
 }
 
 /* line 5, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */

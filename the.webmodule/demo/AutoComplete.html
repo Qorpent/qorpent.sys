@@ -201,5 +201,14 @@
     </div>
 </div>
 
+<div ng-controller="example1">
+    <h2 ng-click="isCollapsed = !isCollapsed">Реакция только на Enter</h2>
+
+    <div collapse="isCollapsed">
+        <div>Тут будет результат:<strong>{{selected}}</strong></div>
+        <span the-autocomplete on-search="doSearch" on-enter-only="true" on-result="setResult"/>
+    </div>
+</div>
+
 </body>
 </html>

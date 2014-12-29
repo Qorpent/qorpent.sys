@@ -1,5 +1,6 @@
 define([],function(){
-    return '<input class="dropdown-toggle form-control" ng-focus="__acFocus()" ng-model="${bindQuery}" ng-change="__acChange()"/> \
+    return '<input class="dropdown-toggle form-control" ng-focus="__acFocus()" ng-model="${bindQuery}" ng-change="__acChange(1)"\
+    on-enter="__acChange(2)"/> \
 <ul class="dropdown-menu"> \
     <li class="default"  ng-repeat="i in __fixdata"> \
         <a ng-click="__acClick($event,i)">${template}</a> \

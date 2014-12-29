@@ -15,6 +15,7 @@ define([
     'the-angular-autocomplete',
     'the-angular-controlgroup',
     'the-angular-viewcontext',
+    'the-angular-onenter',
     'the-wiki',
     'the-menu',
     'the-settings',
