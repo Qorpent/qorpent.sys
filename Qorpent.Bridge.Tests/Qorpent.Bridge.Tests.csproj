@@ -15,10 +15,12 @@
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Utils\ReflectionUtilsHelp.cs" />
     <Compile Include="Utils\Json2Test.cs" />
     <Compile Include="Utils\ReadAsStringsTest.cs" />
     <Compile Include="Utils\TryUnsafe.cs" />
     <Compile Include="Utils\TypeConverterTests.cs" />
+    <Compile Include="Utils\ExDateTimeConversion.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

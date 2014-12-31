@@ -29,6 +29,7 @@
     <Compile Include="CachedOld\Json\JsonValue.cs" />
     <Compile Include="CachedOld\Json\Lexer.cs" />
     <Compile Include="CachedOld\Json\Tokenizer.cs" />
+    <Compile Include="Experiments\ReflectionUtils.cs" />
     <Compile Include="Experiments\Json2\IJsonSerializable.cs" />
     <Compile Include="Experiments\Json2\ISerializationAnnotator.cs" />
     <Compile Include="Experiments\Json2\Json.cs" />
@@ -601,4 +602,7 @@
     </Compile>
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>TRACE;DEBUG;Windows_NT;OLDSYS;BRIDGE</DefineConstants>
+  </PropertyGroup>
 </Project>

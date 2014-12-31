@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.Utils;
+using System.Linq.Expressions;
 #if OLDSYS
 using Qorpent.Utils.Extensions;
 #endif
@@ -87,6 +88,16 @@ namespace Qorpent.Bridge.Tests.Utils
         public void DateTimeToIntResolving(string date, int result) {
             var dt = DateTime.Parse(date);
            Assert.AreEqual(result,TypeConverter.ToInt(dt));
+        }
+
+
+        [TestCase(2678400,"1970-02-01")]
+        [TestCase("1970-02-01", "1970-02-01")]
+        [TestCase(1264982400, "2010-02-01")]
+        [TestCase(0, "1900-01-01",Description = "Это точка неоднозначного преобразования, старайтесь избегать преобразований число-дата и обратно")]
+        public void DateTimeConversion(object date, string result)
+        {
+            Assert.AreEqual(DateTime.ParseExact(result,new []{"yyyy-MM-dd HH:mm:ss","yyyy-MM-dd"},CultureInfo.InvariantCulture,DateTimeStyles.AllowWhiteSpaces), TypeConverter.ToDate(date));
         }
 
         private const int timestampSize = 1000000;
@@ -386,6 +397,15 @@ namespace Qorpent.Bridge.Tests.Utils
             public int Y;
         }
 
+
+        [Test]
+        [Explicit]
+        public void DoesExpressionsRecompile() {
+            var ex1 = Expression.Lambda(Expression.Constant(1)).Compile();
+            var ex2 = Expression.Lambda(Expression.Constant(1)).Compile();
+            Assert.AreEqual(ex1.Method,ex2.Method);
+        }
+
         [Test]
         public void ToBooleanWithStruct() {
             Assert.True(TypeConverter.ToBool(new X()));
@@ -525,6 +545,110 @@ namespace Qorpent.Bridge.Tests.Utils
             sw.Stop();
             Console.WriteLine("Parallel OLDSYS: " + sw.ElapsedMilliseconds);
 #endif
+        }
+
+
+        
+        [Test]
+        public void CanUnifyAllDictionariesToStrToObj() {
+            var dict = new Dictionary<int, decimal> {{10, 10.4m}, {20, 20.5m}};
+            var udict = TypeConverter.ToDict(dict);
+            Assert.AreEqual(10.4m,udict["10"]);
+            Assert.AreEqual(20.5m,udict["20"]);
+        }
+
+        [Test]
+        public void CanConvertStringToDictionary() {
+            var dict = "10=10.4;20=20.5";
+            var udict = TypeConverter.ToDict(dict);
+            Assert.AreEqual("10.4", udict["10"]);
+            Assert.AreEqual("20.5", udict["20"]);
+        }
+
+        [Test]
+        public void CanConvertStringToDictionaryUrlEncode()
+        {
+            var dict = "10=%2C+%2B&20=20.5";
+            var udict = TypeConverter.ToDict(dict,itemdelimiter:'&',escapechar:'\0',urlescape:true);
+            Assert.AreEqual(", +", udict["10"]);
+            Assert.AreEqual("20.5", udict["20"]);
+        }
+
+
+        [Test]
+        public void CanConvertClassToDict() {
+            var dict = new {x = 1, y = 2};
+            var udict = TypeConverter.ToDict(dict);
+            Assert.AreEqual(1, udict["x"]);
+            Assert.AreEqual(2, udict["y"]);
+        }
+
+        [Test]
+        public void CanConvertArrayToDict()
+        {
+            var dict = new []{ "a","b" };
+            var udict = TypeConverter.ToDict(dict);
+            Assert.AreEqual("a", udict["0"]);
+            Assert.AreEqual("b", udict["1"]);
+        }
+
+        [Explicit]
+        [Test]
+        public void ToDictPerformance() {
+            var dict = new {x = 1, y = 2, z = 3};
+            var sw = Stopwatch.StartNew();
+            for (var i = 0; i < 1000000; i++) {
+                var d = dict.ToDict();
+            }
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed);
+            sw = Stopwatch.StartNew();
+            for (var i = 0; i < 1000000; i++)
+            {
+                var d = TypeConverter.ToDict(dict);
+            }
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed);
+        }
+
+        [Explicit]
+        [Test]
+        public void ToDictSSPerformance() {
+            var dict = new Dictionary<string, string>() {{"x", "1"}, {"y", "2"}, {"z", "3"}};
+            var sw = Stopwatch.StartNew();
+            for (var i = 0; i < 1000000; i++)
+            {
+                var d = dict.ToDict();
+            }
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed);
+            sw = Stopwatch.StartNew();
+            for (var i = 0; i < 1000000; i++)
+            {
+                var d = TypeConverter.ToDict(dict);
+            }
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed);
+        }
+        [Explicit]
+        [Test]
+        public void ToDictSOPerformance()
+        {
+            var dict = new Dictionary<string, object>() { { "x", "1" }, { "y", "2" }, { "z", "3" } };
+            var sw = Stopwatch.StartNew();
+            for (var i = 0; i < 1000000; i++)
+            {
+                var d = dict.ToDict();
+            }
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed);
+            sw = Stopwatch.StartNew();
+            for (var i = 0; i < 1000000; i++)
+            {
+                var d = TypeConverter.ToDict(dict);
+            }
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed);
         }
     }
 }

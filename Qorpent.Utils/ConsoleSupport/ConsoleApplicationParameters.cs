@@ -298,10 +298,15 @@ namespace Qorpent.Utils{
 			if (0 == bsconfigs.Length){
 				throw new Exception("No "+ConfigExtension+" file found");
 			}
+#if BRIDGE
+		    var compiler = new BSharpCompiler();
+		    var bxl = new BxlParser();
+#else
 			var compiler = WellKnownHelper.Create<IBSharpCompiler>();
 			var bxl = WellKnownHelper.Create<IBxlParser>();
+#endif
 			var sources = bsconfigs.Select(_ => bxl.Parse(File.ReadAllText(_), _)).ToArray();
-			var context = compiler.Compile(sources);
+			var context = compiler.Compile(sources,(IBSharpContext)null);
 		    this.BSharpContext = context;
 			var cls = context.Get(Arg1);
 			if (null == cls){
