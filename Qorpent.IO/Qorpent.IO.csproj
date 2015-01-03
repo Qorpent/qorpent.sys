@@ -10,6 +10,8 @@
   <ItemGroup>
     <Compile Include="ContainerInfo.cs" />
     <Compile Include="DirtyVersion\Storage\NetworkCredentialsHashedDirectory.cs" />
+    <Compile Include="FileCache\FileCacheResolver.cs" />
+    <Compile Include="FileCache\FileCacheSource.cs" />
     <Compile Include="FileDescriptors\FileDirtyVersionBased.cs" />
     <Compile Include="DirtyVersion\Const.cs" />
     <Compile Include="DirtyVersion\DirtyVersionStorage.cs" />
@@ -94,4 +96,5 @@
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
+  <ItemGroup />
 </Project>

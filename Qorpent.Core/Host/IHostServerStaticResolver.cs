@@ -1,4 +1,5 @@
-﻿using Qorpent.IO;
+﻿using System.Xml.Linq;
+using Qorpent.IO;
 
 namespace Qorpent.Host{
 	/// <summary>
@@ -28,5 +29,11 @@ namespace Qorpent.Host{
 		/// <param name="mask"></param>
 		/// <param name="rootdirectory"></param>
 		void SetRoot(string mask, string rootdirectory);
+        /// <summary>
+        /// Установить источник в виде кэша, завязанного на другие источники
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="config"></param>
+	    void SetCachedRoot(string key, XElement config);
 	}
 }

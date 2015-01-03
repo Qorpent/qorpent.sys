@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Config;
+using Qorpent.IO;
 using Qorpent.Log;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
@@ -50,6 +52,7 @@ namespace Qorpent.Host{
 			LogLevel = LogLevel.Info;
 			ContentFolders = new List<string>();
 			ExtendedContentFolders = new List<string>();
+            StaticContentCacheMap  = new ConcurrentDictionary<string, XElement>();
 			Cached = new List<string>();
 			AuthCookieName = "QHAUTH";
 			AuthCookieDomain = "";
@@ -308,7 +311,12 @@ namespace Qorpent.Host{
 	            if (!name.EndsWith("/")) {
 	                name += "/";
 	            }
-	            this.StaticContentMap[name] = folder;
+	            if (e.Attr("cache").ToBool()) {
+	                this.StaticContentCacheMap[name] = e;
+	            }
+	            else {
+	                this.StaticContentMap[name] = folder;
+	            }
 	        }
 			foreach (XElement e in xml.Elements(HostUtils.ExContentFolder))
 			{
@@ -393,6 +401,10 @@ namespace Qorpent.Host{
         /// Мапинг прокси адресов для их обработки на другом хосте
         /// </summary>
 	    public IDictionary<string,string> Proxize { get; private set; }
+        /// <summary>
+        /// Мапинг локальных кэшей (в виде файлов конфигурации)
+        /// </summary>
+	    public IDictionary<string,XElement> StaticContentCacheMap { get; private set; }
 
 	    private void ReadModules(XElement xml) {
 	        foreach (XElement e in xml.Elements("module")) {
