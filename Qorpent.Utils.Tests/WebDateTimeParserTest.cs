@@ -5,8 +5,40 @@ using Qorpent.Log;
 namespace Qorpent.Utils.Tests
 {
 	[TestFixture]
-	public class WebDateTimeParserTest
-	{
+	public class WebDateTimeParserTest {
+		[TestFixture]
+		public class HumanReadableCases {
+			[TestCase("34 минуты назад", 34)]
+			[TestCase("56 минут назад", 56)]
+			[TestCase("1 минуту назад", 1)]
+			[TestCase("минуту назад", 1)]
+			[TestCase("десять минут назад", 10)]
+			[TestCase("двадцать минут назад", 20)]
+			[TestCase("пятнадцать минут назад", 15)]
+			public void IsCorrectParsingNMinutesAgo(string str, int o) {
+				var n = new DateTime(2015, 1, 1, 12, o, 0);
+				var p = WebDateTimeParser.Parse(str, baseDate: n);
+				Assert.AreEqual(2015, p.Year);
+				Assert.AreEqual(1, p.Month);
+				Assert.AreEqual(1, p.Day);
+				Assert.AreEqual(12, p.Hour);
+				Assert.AreEqual(0, p.Minute);
+				Assert.AreEqual(0, p.Second);
+			}
+			[TestCase("час назад", 1)]
+			[TestCase("10 часов назад", 10)]
+			[TestCase("десять часов назад", 10)]
+			public void IsCorrectParsingNHoursAgo(string str, int o) {
+				var n = new DateTime(2015, 1, 1, o, 0, 0);
+				var p = WebDateTimeParser.Parse(str, baseDate: n);
+				Assert.AreEqual(2015, p.Year);
+				Assert.AreEqual(1, p.Month);
+				Assert.AreEqual(1, p.Day);
+				Assert.AreEqual(0, p.Hour);
+				Assert.AreEqual(0, p.Minute);
+				Assert.AreEqual(0, p.Second);
+			}
+		}
 		[TestCase("22.12.2013 22:40:52", 2013, 12, 22, 22, 40, 52, '\0', '\0', "", false, false)]
 		[TestCase("22:40:52 22.12.2013", 2013, 12, 22, 22, 40, 52, '\0', '\0', "", false, false)]
 		[TestCase("22:40:52 22.12.13", 2013, 12, 22, 22, 40, 52, '\0', '\0', "", false, false)]
