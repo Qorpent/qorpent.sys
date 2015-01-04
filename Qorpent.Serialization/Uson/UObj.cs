@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using Qorpent.Json;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Uson
@@ -115,7 +116,15 @@ namespace Qorpent.Uson
 		{
 			get
 			{
-				return _uObjMode;
+				var result =  _uObjMode;
+			    if (result == UObjMode.Default) {
+			        if (_srctype == typeof (JsonArray)) {
+			            return UObjMode.Array;
+                    } else if (_srctype.IsValueType) {
+                        return UObjMode.Value;
+                    }
+			    }
+			    return result;
 			}
 			set
 			{
@@ -259,7 +268,10 @@ namespace Qorpent.Uson
 		/// <returns></returns>
 		public override bool TryGetMember(GetMemberBinder binder, out object result)
 		{
-			
+		    if (UObjMode==UObjMode.Array && binder.Name == "length") {
+		        result = Array.Count;
+                return true;
+		    }
 			if (!Properties.ContainsKey(binder.Name))
 			{
                 if (IgnoreCase) {
