@@ -1,4 +1,5 @@
 ﻿using Qorpent.Applications;
+using Qorpent.IoC;
 
 namespace Qorpent.Host{
 	/// <summary>
@@ -9,6 +10,11 @@ namespace Qorpent.Host{
 		///     Состояние сервера
 		/// </summary>
 		HostServerState State { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        IContainer Container { get; }
 
 		/// <summary>
 		///     Конфигурация
