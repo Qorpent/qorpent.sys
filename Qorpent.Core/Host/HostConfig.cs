@@ -64,8 +64,14 @@ namespace Qorpent.Host{
             Proxize = new Dictionary<string, string>();
             ConnectionStrings = new Dictionary<string, string>();
             Modules = new Dictionary<string, string>();
+		    Initializers = new List<string>();
 		}
         /// <summary>
+        /// Перечень классов для инициализации
+        /// </summary>
+	    public IList<string> Initializers { get; set; }
+
+	    /// <summary>
         /// 
         /// </summary>
 	    public IDictionary<string, string> Modules { get; private set; }
@@ -323,7 +329,12 @@ namespace Qorpent.Host{
 	            else {
 	                this.StaticContentMap[name] = folder;
 	            }
-	        }
+            } 
+            foreach (var e in xml.Elements("startup"))
+            {
+                var name = e.Attr("code");
+                Initializers.Add(name);
+            }
 			foreach (XElement e in xml.Elements(HostUtils.ExContentFolder))
 			{
 

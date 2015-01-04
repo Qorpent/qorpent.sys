@@ -375,9 +375,21 @@ namespace Qorpent.Host{
 			if (Config.ApplicationMode != HostApplicationMode.Shared){
 				_InitializeForStandaloneApplication();
 			}
+		    
 			foreach (IHostServerInitializer i in _container.All<IHostServerInitializer>()){
 				i.Initialize(this);
 			}
+            foreach (var initializer in Config.Initializers) {
+                var type = Type.GetType(initializer);
+                if (null == type) {
+                    throw new Exception("cannot find initializator "+initializer);
+                }
+                var init = Activator.CreateInstance(type) as IHostServerInitializer;
+                if (null == init) {
+                    throw new Exception("invalid class to use as initializer: "+initializer);
+                }
+                init.Initialize(this);
+            }
             
 		}
 
