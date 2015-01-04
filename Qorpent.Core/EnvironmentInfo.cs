@@ -166,6 +166,10 @@ namespace Qorpent {
 			set { _binDirectory = Path.GetFullPath(value); }
 		}
 		/// <summary>
+		///		Прямой путь к манифесту
+		/// </summary>
+		public static string ManifestPath { get; set; }
+		/// <summary>
 		/// Директория для конфигов
 		/// </summary>
 		public static string ConfigDirectory

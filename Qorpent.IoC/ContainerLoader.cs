@@ -115,7 +115,9 @@ namespace Qorpent.IoC {
 					_result.Add(f);
 				}
 			}
-			if (Directory.Exists(EnvironmentInfo.ConfigDirectory)){
+			if (!string.IsNullOrWhiteSpace(EnvironmentInfo.ManifestPath) && File.Exists(EnvironmentInfo.ManifestPath)) {
+				_result.Add(EnvironmentInfo.ManifestPath);
+			} else if (Directory.Exists(EnvironmentInfo.ConfigDirectory)){
 				foreach (var f in Directory.GetFiles(EnvironmentInfo.ConfigDirectory, "*.ioc-manifest.*"))
 				{
 					_result.Add(f);

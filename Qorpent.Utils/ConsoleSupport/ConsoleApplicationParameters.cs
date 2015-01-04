@@ -189,7 +189,11 @@ namespace Qorpent.Utils{
 			}
 			
 			if (!string.IsNullOrWhiteSpace(ManifestPath)){
-				EnvironmentInfo.ConfigDirectory = ManifestPath;
+				if (File.Exists(ManifestPath)) {
+					EnvironmentInfo.ManifestPath = ManifestPath;
+				} else {
+					EnvironmentInfo.ConfigDirectory = ManifestPath;
+				}
 			}
 			if (string.IsNullOrWhiteSpace(LogFormat)){
 				LogFormat = "${Time} ${Message}";
