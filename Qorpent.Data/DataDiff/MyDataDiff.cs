@@ -127,7 +127,7 @@ namespace Qorpent.Data.DataDiff
             {
                 codes = " code IN (" + codes + ") ";
             }
-            var flds = string.Join(",", fields);
+            var flds = string.Join(",", fields.Select(_=>"\""+_+"\""));
             var q  = string.Format( 
 @"declare @s nvarchar(max) set @s = (select {0} from {1} where {2} or {3} for xml raw ('{4}'))
 declare @x xml set @x = '<root>'+@s+'</root>'
