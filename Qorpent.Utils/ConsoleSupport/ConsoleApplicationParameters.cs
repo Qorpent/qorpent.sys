@@ -84,9 +84,8 @@ namespace Qorpent.Utils{
 		/// <summary>
 		/// Параметр изменения текущей директории
 		/// </summary>
-		public string WorkingDirectory
-		{
-            get { return ResolveBest("workingdirectory", "~wd"); }
+		public string WorkingDirectory {
+            get { return ResolveBest("workingdirectory", "~wd", "workingdir"); }
 			set { Set("workingdirectory", value); }
 		}
 		/// <summary>
