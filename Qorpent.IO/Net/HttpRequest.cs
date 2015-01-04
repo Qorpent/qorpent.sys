@@ -85,5 +85,10 @@ namespace Qorpent.IO.Net
 		/// Метод HTTP
 		/// </summary>
 		public string Method { get; set; }
+
+	    /// <summary>
+	    /// Запретить редирект 
+	    /// </summary>
+	    public bool PreventRedirect { get; set; }
 	}
 }

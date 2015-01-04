@@ -45,7 +45,7 @@ namespace Qorpent.IO.Net{
 					}
 				}
 				if (null != request.Cookies && !cookiesWasWritten){
-					var cookies = string.Join(", ",
+					var cookies = string.Join("; ",
 											  request.Cookies.OfType<Cookie>()
 													 .Where(_ => HttpUtils.IsCookieMatch(_, request.Uri))
 													 .Select(_ => _.ToString()));
@@ -59,7 +59,7 @@ namespace Qorpent.IO.Net{
 
 			    if (request.Method == "POST") {
 			        if (null == request.PostData) request.PostData = "";
-			        var realpost = Uri.EscapeDataString(request.PostData);
+			        var realpost = request.PostData;
                     var len = realpost.Length;
                    
                     bwriter.Write("Content-Type: ".ToCharArray());
