@@ -52,6 +52,18 @@ namespace Qorpent.IO.Net
 			}
 		}
 		/// <summary>
+		///		Принимаемый язык
+		/// </summary>
+		public string AcceptLanguage {
+			get {
+				if (!Headers.ContainsKey("Accept-Language")) {
+					Headers["Accept-Language"] = "en-US";
+				}
+				return Headers["Accept-Language"];
+			}
+			set { Headers["Accept-Language"] = value; }
+		}
+		/// <summary>
 		/// Принимаемые типы кодирования
 		/// </summary>
 		public string UserAgent
