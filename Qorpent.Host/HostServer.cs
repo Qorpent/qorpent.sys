@@ -425,6 +425,9 @@ namespace Qorpent.Host{
 			foreach (var map in Config.StaticContentMap){
 				Static.SetRoot(map.Key,map.Value);
 			}
+		    foreach (var map in Config.StaticContentCacheMap) {
+		        Static.SetCachedRoot(map.Key, map.Value);
+		    }
 		}
 
 		private void LoadContainer(){

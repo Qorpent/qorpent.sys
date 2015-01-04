@@ -477,6 +477,9 @@ namespace Qorpent {
 				newPath = _newPath;
 
 			}
+		    if (givenPath.StartsWith("http:") || givenPath.StartsWith("https:")) {
+		        return newPath;
+		    }
 			return NormalizePath(Path.GetFullPath(newPath));
 		}
 
