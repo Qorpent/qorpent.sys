@@ -151,7 +151,8 @@ IF OBJECT_ID('{0}.{1}')  IS NOT NULL or TYPE_ID('{0}.{1}')  IS NOT NULL  DROP {2
 			foreach (var parameterInfo in (method??_info).GetParameters()) {
 				var type = QueryGeneratorHelper.GetSqlType(parameterInfo.ParameterType, _schema);
 				var def = " = null";
-				if (type.Contains("max") || type == "xml") {
+                if (type.Contains("max") || type == "xml" || type == "geography" || type == "geometry")
+                {
 					def = "";
 				}
 				args.Add(string.Format("@{0} {1}{2}", parameterInfo.Name,
