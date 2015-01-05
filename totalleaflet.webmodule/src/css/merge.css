@@ -3,3 +3,13 @@
 @import "tmp-import/leaflet.draw.css";
 @import "tmp-import/MarkerCluster.css";
 @import "tmp-import/MarkerCluster.Default.css";
+.tlicon {
+    margin-right:1px;
+    margin-left:1px;
+    background: #fefeeb;
+    padding:3px;
+    border:solid 1px gray;
+    min-height: 20px;
+    max-height: 20px;
+    border-radius: 3%;
+}

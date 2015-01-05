@@ -38,14 +38,19 @@
 .the .layer .content, .the .box .content {
   background-color: #ffffff;
 }
+/* line 33, the/layouts/_layered.scss */
+.the .layer .statusbar, .the .box .statusbar {
+  min-height: 40px;
+  max-height: 40px;
+}
 
-/* line 34, the/layouts/_layered.scss */
+/* line 38, the/layouts/_layered.scss */
 .the .layer {
   margin: 0;
   position: absolute;
 }
 
-/* line 48, the/layouts/_layered.scss */
+/* line 52, the/layouts/_layered.scss */
 .the body.layer, .the body > .layer, .the html.layer, .the html > .layer {
   top: 0;
   left: 0;
