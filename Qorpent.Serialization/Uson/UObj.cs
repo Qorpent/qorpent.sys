@@ -118,11 +118,13 @@ namespace Qorpent.Uson
 			{
 				var result =  _uObjMode;
 			    if (result == UObjMode.Default) {
-			        if (_srctype == typeof (JsonArray)) {
-			            return UObjMode.Array;
-                    } else if (_srctype.IsValueType) {
-                        return UObjMode.Value;
-                    }
+			    	if(null!=_srctype){
+				        if (_srctype == typeof (JsonArray)) {
+				            return UObjMode.Array;
+	                    } else if (_srctype.IsValueType) {
+	                        return UObjMode.Value;
+	                    }
+                	}
 			    }
 			    return result;
 			}
