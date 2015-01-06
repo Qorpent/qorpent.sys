@@ -97,7 +97,7 @@ namespace Qorpent.IO.Net{
 								return Call(request);
 							}
 							response.Cookies = response.Cookies ?? Cookies;
-							if (response.RawCookies.Count!=0){
+							if (null!=response.Cookies && response.RawCookies.Count!=0){
 							    foreach (var cookie in response.RawCookies) {
 							        var realcookie = HttpUtils.ParseCookies(cookie).First();
                                     response.Cookies.Add(realcookie);

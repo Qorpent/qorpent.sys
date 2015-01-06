@@ -75,7 +75,7 @@ BEGIN TRY
 	--test fk_binding
 		update @t1 set parent = isnull((select id from test where test.code = parent_code ),-1) where parent is null and parent_code is not null 
 	--test main update
-		update test set name = isnull(x.name,test.name), parent = isnull(x.parent,test.parent)from @t1 x join test on x.id = test.id 
+		update test set name = isnull(x.name,test.name), parent = isnull(x.parent,test.parent), version=getdate() from @t1 x join test on x.id = test.id 
 	-- return of foreign keys contraints
 	alter table test check constraint all
 	insert @c (t,c,w) exec sp_executesql N'DBCC CHECKCONSTRAINTS (''test'')'
@@ -141,7 +141,7 @@ BEGIN TRY
 			update @t1 set id = this.id, code=this.code, _exists =1 from test this join @t1 temp on (temp.code = this.code or temp.id=this.id)
 	--test fk_binding
 	--test main update
-		update test set name = isnull(x.name,test.name)from @t1 x join test on x.id = test.id 
+		update test set name = isnull(x.name,test.name), version=getdate() from @t1 x join test on x.id = test.id 
 	-- return of foreign keys contraints
 	alter table test check constraint all
 	insert @c (t,c,w) exec sp_executesql N'DBCC CHECKCONSTRAINTS (''test'')'
@@ -208,7 +208,7 @@ BEGIN TRY
 			update @t1 set id = this.id, code=this.code, _exists =1 from test this join @t1 temp on (temp.code = this.code or temp.id=this.id)
 	--test fk_binding
 	--test main update
-		update test set name = isnull(x.name,test.name)from @t1 x join test on x.id = test.id 
+		update test set name = isnull(x.name,test.name), version=getdate() from @t1 x join test on x.id = test.id 
 	-- return of foreign keys contraints
 	alter table test check constraint all
 	insert @c (t,c,w) exec sp_executesql N'DBCC CHECKCONSTRAINTS (''test'')'
@@ -277,7 +277,7 @@ BEGIN TRY
 			update @t1 set id = this.id, code=this.code, _exists =1 from test this join @t1 temp on (temp.code = this.code or temp.id=this.id)
 	--test fk_binding
 	--test main update
-		update test set name = isnull(x.name,test.name), x = isnull(x.x,test.x), y = isnull(x.y,test.y)from @t1 x join test on x.id = test.id 
+		update test set name = isnull(x.name,test.name), x = isnull(x.x,test.x), y = isnull(x.y,test.y), version=getdate() from @t1 x join test on x.id = test.id 
 	-- return of foreign keys contraints
 	alter table test check constraint all
 	insert @c (t,c,w) exec sp_executesql N'DBCC CHECKCONSTRAINTS (''test'')'
@@ -345,7 +345,7 @@ BEGIN TRY
 			update @t1 set id = this.id, code=this.code, _exists =1 from test this join @t1 temp on (temp.code = this.code or temp.id=this.id)
 	--test fk_binding
 	--test main update
-		update test set code = isnull(x.set_code,test.code), id = isnull(x.set_id,test.id), x = isnull(x.x,test.x), y = isnull(x.y,test.y)from @t1 x join test on x.id = test.id 
+		update test set code = isnull(x.set_code,test.code), id = isnull(x.set_id,test.id), x = isnull(x.x,test.x), y = isnull(x.y,test.y), version=getdate() from @t1 x join test on x.id = test.id 
 	-- return of foreign keys contraints
 	alter table test check constraint all
 	insert @c (t,c,w) exec sp_executesql N'DBCC CHECKCONSTRAINTS (''test'')'
@@ -433,9 +433,9 @@ BEGIN TRY
 	--i fk_binding
 	--j fk_binding
 	--i main update
-		update i set name = isnull(x.name,i.name)from @t1 x join i on x.id = i.id 
+		update i set name = isnull(x.name,i.name), version=getdate() from @t1 x join i on x.id = i.id 
 	--j main update
-		update j set name = isnull(x.name,j.name)from @t2 x join j on x.id = j.id 
+		update j set name = isnull(x.name,j.name), version=getdate() from @t2 x join j on x.id = j.id 
 	-- return of foreign keys contraints
 	alter table i check constraint all
 	alter table j check constraint all

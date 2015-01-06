@@ -143,7 +143,7 @@ namespace Qorpent.Data.DataDiff{
 				
 			}
             _output.Write(", ");
-            _output.Write("version =getdate()");
+            _output.Write("version=getdate() ");
 			_output.WriteLine("from @{0} x join {1} on x.id = {1}.id ",tn,table.TableName);
 		}
 
