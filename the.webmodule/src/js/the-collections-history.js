@@ -6,18 +6,24 @@
 
             var $digest = $root.object.digest;
             var ls = typeof( localStorage ) == "undefined" ?  $the.localStorage : localStorage;
-            var History =  function(size, lskey){
-                this.size = size || 20;
+            var HistoryOptions = function(){
+                this.size = 20;
+                this.lskey = "";
+                this.fixedOrder = true;
+                this.jsonify = true;
+                this.jsonifyOptions = {};
+            };
+            var History =  function(options){
+                this.options = $the.cast(HistoryOptions, options);
                 this.items = [];
                 this.index = {};
                 this.version = 0;
-                this.lskey = lskey;
-                if(!!lskey){
-                    var items = ls.getItem(this.lskey);
+                if(!!this.options.lskey){
+                    var items = ls.getItem(this.options.lskey);
                     if(!!items){
                         items  = JSON.parse(items);
                         for(var i=items.length-1;i>=0;i--){
-                            this.add(items[i.item]);
+                            this.add(items[i.item],true);
                         }
                     }
                 }
@@ -26,6 +32,7 @@
             $root.collections = $root.collections || {};
 
             $root.collections.History = History;
+            $root.collections.HistoryOptions = HistoryOptions;
 
             History.prototype = Object.create($root.collections.Enumeration.prototype);
 
@@ -46,14 +53,20 @@
             };
 
 
-            History.prototype.add = function(object){
+            History.prototype.add = function(object, nowritels){
+                if(this.options.fixedOrder){
+                    object = $the.object.fixedOrder(object);
+                }
+                if(this.options.jsonify){
+                    object = $the.jsonify(object,this.options.jsonifyOptions);
+                }
                 var digest = $digest(object);
                 var handler = this.index[digest];
                 if(!handler){
                     handler = this.index[digest] =  {item:object};
-                    if(this.items.length==this.size){
-                        var todelete = this.items[this.size-1];
-                        delete this.items[this.size-1];
+                    if(this.items.length==this.options.size){
+                        var todelete = this.items[this.options.size-1];
+                        delete this.items[this.options.size-1];
                         var digest = $digest(todelete.item);
                         delete this.index[digest];
                     }
@@ -69,8 +82,8 @@
                     }
                     return 0;
                 });
-                if(!!this.lskey){
-                    ls.setItem(this.lskey,JSON.stringify(this.items));
+                if(!!this.options.lskey && !nowritels){
+                    ls.setItem(this.options.lskey,JSON.stringify(this.items));
                 }
             }
 
