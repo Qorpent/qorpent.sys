@@ -297,7 +297,7 @@ namespace Qorpent.Host{
 					var config = context[target];
 					if (config == null) throw new Exception("Cannot resolve machine-related config");
 					xml = config.Compiled;
-					Log.Info("Usage config " + target +" because machine name is " + MachineName);
+					Log.Info("Usage config " + target +" because machine name is " + (not ? "not " : "") + MachineName);
 					break;
 				}
 		    }
