@@ -17,7 +17,11 @@ define([],function(){
             return result;
         },
         getLatLng : function(any){
-
+            var x = any.x || any.X;
+            var y = any.y || any.Y;
+            if(x && y){
+                return L.Projection.SphericalMercator.unproject(L.point(x/6378137,y/6378137));
+            }
             var lat =  any.lat ||any.Lat || any.lt;
             var lon =  any.lng || any.Lng || any.Lon || any.ln;
             if(lat && lon){
