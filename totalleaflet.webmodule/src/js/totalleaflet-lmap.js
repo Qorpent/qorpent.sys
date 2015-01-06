@@ -62,7 +62,6 @@ define(["totalleaflet-utils"],function(utils){
 
             map.goHome = function(animate,uselocal){
                 var homeCoordinates = getHomeCoordinates(uselocal);
-                console.log(homeCoordinates);
                 if(animate){
                     map.panTo(homeCoordinates.center);
                     map.setZoom(homeCoordinates.zoom);
