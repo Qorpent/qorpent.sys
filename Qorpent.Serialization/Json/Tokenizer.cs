@@ -189,6 +189,10 @@ namespace Qorpent.Json {
 					currentbuffer += "'";
 					inescape = false;
 				}
+                else if (c == '/') {
+                    currentbuffer += "/";
+                    inescape = false;
+                }
 				else {
 					throw new Exception("unknown esc "+c);
 				}

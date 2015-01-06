@@ -358,14 +358,14 @@ namespace Qorpent.BSharp{
 		private IEnumerable<XElement> GetSourcesWithRequireProcessing(IEnumerable<XElement> sources, IBSharpContext context){
 			Dictionary<string, XElement> filenames =
 				sources.ToDictionary(_ => Path.GetFullPath(_.Describe().File).NormalizePath(), _ => _);
-		    foreach (var basefiles in filenames.ToArray()) {
-		        ProcessRequires(basefiles.Value, basefiles.Key, filenames, context);
-		    }
+			foreach (var basefiles in filenames.ToArray()) {
+				ProcessRequires(basefiles.Value, basefiles.Key, filenames, context);
+			}
 			return filenames.Values.ToArray();
 		}
 
 		private void ProcessRequires(XElement source, string filename, Dictionary<string, XElement> filenames,
-		                             IBSharpContext context){
+									 IBSharpContext context){
 			XElement[] requires = source.Elements(BSharpSyntax.Require).ToArray();
 			foreach (XElement require in requires){
 				string name = require.GetCode();
@@ -382,28 +382,28 @@ namespace Qorpent.BSharp{
 		}
 
 		private void ProcessRequiresWithFileReference(XElement source, Dictionary<string, XElement> filenames,
-		                                              IBSharpContext context, XElement require, string filename){
+													  IBSharpContext context, XElement require, string filename){
 			
 			if (require.Attr("code").EndsWith("/") || require.Attr("code").Contains("*")){
 				ProcessRequiresDirectory(source, filenames, context, require, filename);
 				return;
 			}
-         
+		 
 			string dir = Path.GetDirectoryName(filename);
-		    string file = require.Attr("code");
+			string file = require.Attr("code");
 
 			if (!Path.IsPathRooted(file)){
-			    if (file.Contains("@")) {
-			        file = EnvironmentInfo.ResolvePath(file);
-			    }
-			    else {
-			        file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
-			    }
+				if (file.Contains("@")) {
+					file = EnvironmentInfo.ResolvePath(file);
+				}
+				else {
+					file = Path.GetFullPath(Path.Combine(dir, file)).NormalizePath();
+				}
 			}
-		    if (!File.Exists(file)) {
-                file +=".bxls";
-		    }
-           
+			if (!File.Exists(file)) {
+				file +=".bxls";
+			}
+		   
 
 			if (filenames.ContainsKey(file)) return;
 			if (File.Exists(file)){
@@ -426,14 +426,14 @@ namespace Qorpent.BSharp{
 		private void ProcessRequiresDirectory(XElement source, Dictionary<string, XElement> filenames, IBSharpContext context, XElement require, string filename){
 			string curdir = Path.GetDirectoryName(filename);
 			string otherdir = require.Attr("code");
-		    var mask = "*.bxls";
-		    if (otherdir.Contains("*")) {
-		        mask = Path.GetFileName(otherdir);
-		        otherdir = Path.GetDirectoryName(otherdir);
-		    }
-		    if (otherdir.Contains("@")) {
-		        otherdir = EnvironmentInfo.ResolvePath(otherdir);
-		    }
+			var mask = "*.bxls";
+			if (otherdir.Contains("*")) {
+				mask = Path.GetFileName(otherdir);
+				otherdir = Path.GetDirectoryName(otherdir);
+			}
+			if (otherdir.Contains("@")) {
+				otherdir = EnvironmentInfo.ResolvePath(otherdir);
+			}
 			if (!Path.IsPathRooted(otherdir)){
 				otherdir = Path.GetFullPath(Path.Combine(curdir, otherdir)).NormalizePath();
 			}
@@ -460,7 +460,7 @@ namespace Qorpent.BSharp{
 		}
 
 		private void ProcessRequiresWithSourcePackage(Dictionary<string, XElement> filenames, string name,
-		                                              IBSharpSourceCodeProvider pkgservice){
+													  IBSharpSourceCodeProvider pkgservice){
 			filenames[name] = new XElement("stub");
 			foreach (XElement element in pkgservice.GetSources(this, null).ToArray()){
 				string fn = element.Describe().File;
@@ -476,18 +476,18 @@ namespace Qorpent.BSharp{
 			if (name == "data"){
 				pkgservice =
 					Type.GetType("Qorpent.Scaffolding.Model.Compiler.DataObjectsSourcePackageForBShart, Qorpent.Scaffolding", false)
-					    .Create<IBSharpSourceCodeProvider>();
+						.Create<IBSharpSourceCodeProvider>();
 			}
 			else if (name == "app"){
 				pkgservice =
 					Type.GetType("Qorpent.Scaffolding.Application.AppSpecificationBSharpSource, Qorpent.Scaffolding", false)
-					    .Create<IBSharpSourceCodeProvider>();
+						.Create<IBSharpSourceCodeProvider>();
 			}
 
 			else if (name == "preprocessor"){
 				pkgservice =
 					Type.GetType("Qorpent.BSharp.Preprocessor.PreprocessorSourcePackageForBSharp, Qorpent.Serialization", false)
-					    .Create<IBSharpSourceCodeProvider>();
+						.Create<IBSharpSourceCodeProvider>();
 			}
 			if (null == pkgservice){
 				//fallback to IoC resolution of pkg
@@ -539,33 +539,33 @@ namespace Qorpent.BSharp{
 		protected virtual IBSharpContext BuildIndex(IEnumerable<XElement> sources){
 			CurrentBuildContext = new BSharpContext(this);
 			var baseindex = IndexizeRawClasses(sources).ToArray();
-		    SetupDefaultNamespace(baseindex);
-		    SetupGlobals();
+			SetupDefaultNamespace(baseindex);
+			SetupGlobals();
 			CurrentBuildContext.Setup(baseindex);
 			CurrentBuildContext.ExecuteGenerators();
 			CurrentBuildContext.Build();
 			return CurrentBuildContext;
 		}
 
-	    private void SetupDefaultNamespace(IBSharpClass[] baseindex) {
-	        var defaultNamespace = GetConfig().DefaultNamespace ?? "";
-	        foreach (var cls in baseindex) {
-	            if (string.IsNullOrWhiteSpace(cls.Namespace) && !string.IsNullOrWhiteSpace(defaultNamespace)) {
-	                cls.Namespace = defaultNamespace;
-	            }
-	            else if (cls.Namespace.StartsWith(".")) {
-	                if (string.IsNullOrWhiteSpace(defaultNamespace)) {
-	                    cls.Namespace = cls.Namespace.Substring(1);
-	                }
-	                else {
-	                    cls.Namespace = defaultNamespace + cls.Namespace;
-	                }
-	            }
-	        }
-	    }
+		private void SetupDefaultNamespace(IBSharpClass[] baseindex) {
+			var defaultNamespace = GetConfig().DefaultNamespace ?? "";
+			foreach (var cls in baseindex) {
+				if (string.IsNullOrWhiteSpace(cls.Namespace) && !string.IsNullOrWhiteSpace(defaultNamespace)) {
+					cls.Namespace = defaultNamespace;
+				}
+				else if (cls.Namespace.StartsWith(".")) {
+					if (string.IsNullOrWhiteSpace(defaultNamespace)) {
+						cls.Namespace = cls.Namespace.Substring(1);
+					}
+					else {
+						cls.Namespace = defaultNamespace + cls.Namespace;
+					}
+				}
+			}
+		}
 
-	    private void SetupGlobals(){
-            _global = _global ?? _config.Global ?? new ConfigBase { UseInheritance = false };
+		private void SetupGlobals(){
+			_global = _global ?? _config.Global ?? new ConfigBase { UseInheritance = false };
 			bool requireInterpolation = false;
 			foreach (var baseglobal in _overlobals){
 				if (!_global.ContainsKey(baseglobal.Key)){
@@ -604,22 +604,22 @@ namespace Qorpent.BSharp{
 
 		private IEnumerable<IBSharpClass> IndexizeRawClasses(IEnumerable<XElement> sources){
 			var buffer = new ConcurrentBag<IBSharpClass>();
-		    sources.AsParallel().ForAll(src =>{
+			sources.AsParallel().ForAll(src =>{
 				Preprocess(src);
-		        var globalIfs = src.Elements("if").ToArray();
-		        foreach (var globalIf in globalIfs) {
-		            var cond = globalIf.Attr("code");
-		            var neg = cond.StartsWith("!");
-		            if (neg) {
-		                cond = cond.Substring(1);
-		            }
-		            var ex = _config.Conditions.ContainsKey(cond);
-		            if (ex) {
-		                ex = _config.Conditions[cond].ToBool();
-		            }
-                    if((neg && ex)||(!neg && !ex))return;
-		        }
-                globalIfs.Remove();
+				var globalIfs = src.Elements("if").ToArray();
+				foreach (var globalIf in globalIfs) {
+					var cond = globalIf.Attr("code");
+					var neg = cond.StartsWith("!");
+					if (neg) {
+						cond = cond.Substring(1);
+					}
+					var ex = _config.Conditions.ContainsKey(cond);
+					if (ex) {
+						ex = _config.Conditions[cond].ToBool();
+					}
+					if((neg && ex)||(!neg && !ex))return;
+				}
+				globalIfs.Remove();
 				foreach (IBSharpClass e in IndexizeRawClasses(src, "")){
 					buffer.Add(e);
 				}
@@ -689,8 +689,8 @@ namespace Qorpent.BSharp{
 					}
 				}
 				else if (e.Name.LocalName == BSharpSyntax.ConstantDefinition ||
-				         e.Name.LocalName == BSharpSyntax.ConstantOverrideDefinition ||
-				         e.Name.LocalName == BSharpSyntax.ConstantDefaultDefinition){
+						 e.Name.LocalName == BSharpSyntax.ConstantOverrideDefinition ||
+						 e.Name.LocalName == BSharpSyntax.ConstantDefaultDefinition){
 					PrepareGlobals(e);
 				}
 
@@ -839,7 +839,7 @@ namespace Qorpent.BSharp{
 
 		private bool IsOverrideMatch(BSharpClass def){
 			if (def.Source.Name.LocalName == BSharpSyntax.ClassOverrideKeyword ||
-			    def.Source.Name.LocalName == BSharpSyntax.ClassExtensionKeyword){
+				def.Source.Name.LocalName == BSharpSyntax.ClassExtensionKeyword){
 				string ifa = def.Source.Attr("if");
 				if (!string.IsNullOrWhiteSpace(ifa)){
 					def.Source.Attribute("if").Remove();
@@ -938,17 +938,17 @@ namespace Qorpent.BSharp{
 				cls.Value.PrepareForCompilation();
 			}
 			context.MetaClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Patch) && _.PatchPhase == BSharpPatchPhase.Before)
-			       .OrderBy(_ => _.Priority)
-			       .Select(
-				       _ =>{
-					       try{
-						       BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
-					       }
-					       catch (Exception ex){
-						       _.Error = ex;
-					       }
-					       return "";
-				       }).ToArray()
+				   .OrderBy(_ => _.Priority)
+				   .Select(
+					   _ =>{
+						   try{
+							   BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
+						   }
+						   catch (Exception ex){
+							   _.Error = ex;
+						   }
+						   return "";
+					   }).ToArray()
 				;
 
 			//статические классы нужно строить до всех остальных
@@ -982,68 +982,68 @@ namespace Qorpent.BSharp{
 			bool requirepostprocess = context.RequrePostProcess();
 			context.MetaClasses.Values.Where(
 				_ => _.Is(BSharpClassAttributes.Patch) && _.PatchPhase == BSharpPatchPhase.AfterBuild)
-			       .OrderBy(_ => _.Priority)
-			       .Select(
-				       _ =>{
-					       try{
-						       BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
-					       }
-					       catch (Exception ex){
-						       _.Error = ex;
-					       }
-					       return "";
-				       }).ToArray()
+				   .OrderBy(_ => _.Priority)
+				   .Select(
+					   _ =>{
+						   try{
+							   BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
+						   }
+						   catch (Exception ex){
+							   _.Error = ex;
+						   }
+						   return "";
+					   }).ToArray()
 				;
 
 
 			if (requirelink){
 				context.Get(BSharpContextDataType.Working)
-				       .Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
-				       .AsParallel()
-				       .ForAll(
-					       _ =>{
-						       try{
-							       BSharpClassBuilder.Build(BuildPhase.AutonomeLink, this, _, context);
-						       }
-						       catch (Exception ex){
-							       _.Error = ex;
-						       }
-					       })
+					   .Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
+					   .AsParallel()
+					   .ForAll(
+						   _ =>{
+							   try{
+								   BSharpClassBuilder.Build(BuildPhase.AutonomeLink, this, _, context);
+							   }
+							   catch (Exception ex){
+								   _.Error = ex;
+							   }
+						   })
 					;
 				context.Get(BSharpContextDataType.Working)
-				       .Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
-				       .AsParallel()
-				       .ForAll(
-					       _ =>{
-						       try{
-							       BSharpClassBuilder.Build(BuildPhase.CrossClassLink, this, _, context);
-						       }
-						       catch (Exception ex){
-							       _.Error = ex;
-						       }
-					       })
+					   .Where(_ => _.Is(BSharpClassAttributes.RequireLinking))
+					   .AsParallel()
+					   .ForAll(
+						   _ =>{
+							   try{
+								   BSharpClassBuilder.Build(BuildPhase.CrossClassLink, this, _, context);
+							   }
+							   catch (Exception ex){
+								   _.Error = ex;
+							   }
+						   })
 					;
 			}
 
 			context.MetaClasses.Values.Where(_ => _.Is(BSharpClassAttributes.Patch) && _.PatchPhase == BSharpPatchPhase.After)
-			       .OrderBy(_ => _.Priority)
-			       .Select(
-				       _ =>{
-					       try{
-						       BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
-					       }
-					       catch (Exception ex){
-						       _.Error = ex;
-					       }
-					       return "";
-				       }).ToArray()
+				   .OrderBy(_ => _.Priority)
+				   .Select(
+					   _ =>{
+						   try{
+							   BSharpClassBuilder.Build(BuildPhase.ApplyPatch, this, _, context);
+						   }
+						   catch (Exception ex){
+							   _.Error = ex;
+						   }
+						   return "";
+					   }).ToArray()
 				;
 
 
 			if (requirepostprocess){
 				context.Get(BSharpContextDataType.Working)
-				       .AsParallel()
-				       .ForAll(_ => BSharpClassBuilder.Build(BuildPhase.PostProcess, this, _, context));
+					   .AsParallel()
+					   .ForAll(_ => BSharpClassBuilder.Build(BuildPhase.PostProcess, this, _, context));
 			}
 		}
 	}

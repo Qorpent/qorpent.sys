@@ -68,6 +68,8 @@ namespace Qorpent.Host{
 			StaticContentMap = new Dictionary<string, string>();
             Proxize = new Dictionary<string, string>();
             ConnectionStrings = new Dictionary<string, string>();
+			Modules = new Dictionary<string, string>();
+			Initializers = new List<string>();
 			MachineName = Environment.MachineName;
 		}
 		/// <summary>
@@ -80,7 +82,17 @@ namespace Qorpent.Host{
 				_machineName = value;
 			}
 		}
-		/// <summary>
+        /// <summary>
+        /// Перечень классов для инициализации
+        /// </summary>
+	    public IList<string> Initializers { get; set; }
+
+	    /// <summary>
+        /// 
+        /// </summary>
+	    public IDictionary<string, string> Modules { get; private set; }
+
+	    /// <summary>
 		/// Разрешение Cookie при работе с Cross-Site
 		/// </summary>
 		public bool AccessAllowCredentials { get; set; }
@@ -350,7 +362,12 @@ namespace Qorpent.Host{
 	            else {
 	                this.StaticContentMap[name] = folder;
 	            }
-	        }
+            } 
+            foreach (var e in xml.Elements("startup"))
+            {
+                var name = e.Attr("code");
+                Initializers.Add(name);
+            }
 			foreach (XElement e in xml.Elements(HostUtils.ExContentFolder))
 			{
 
@@ -426,6 +443,7 @@ namespace Qorpent.Host{
 	            }
 	        }
 	    }
+
         /// <summary>
         /// Обратная ссылка на XML- определение
         /// </summary>
@@ -442,7 +460,7 @@ namespace Qorpent.Host{
 	    private void ReadModules(XElement xml) {
 	        foreach (XElement e in xml.Elements("module")) {
 	            var fname = e.Attr("code");
-
+	            var code = fname;
 	            if (Regex.IsMatch(fname, @"^[\w\d\-]+$")) {
 	                //name only
 	                bool found = false;
@@ -470,7 +488,7 @@ namespace Qorpent.Host{
 	            if (fname.Contains("@")) {
 	                fname = EnvironmentInfo.ResolvePath(fname);
 	            }
-
+	            Modules[code] = fname;
 
 	            ContentFolders.Add(fname);
 	        }

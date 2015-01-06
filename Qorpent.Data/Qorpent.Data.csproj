@@ -24,6 +24,7 @@
     <Compile Include="DataDiff\DiffExecutor.cs" />
     <Compile Include="DataDiff\DiffPair.cs" />
     <Compile Include="DataDiff\DiffPairGenerator.cs" />
+    <Compile Include="DataDiff\MyDataDiff.cs" />
     <Compile Include="DataDiff\SqlDiffGenerator.cs" />
     <Compile Include="DataDiff\SqlSourceRevisionRetriever.cs" />
     <Compile Include="DataDiff\SqlUpdateApplyer.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Qorpent.IO.Net;
@@ -13,7 +14,17 @@ namespace Qorpent.IO.Tests.Net{
 			return new MemoryStream(enc.GetBytes(http));
 			
 		}
-		
+
+	    [Test]
+	    public void CookieParsedWell() {
+            var cookiestr = "p=99aee31d64ef04c3b049c19ffff99c5943800e05475d4c8fd97a3; expires=Tue, 05 Jan 2016 21:51:10 GMT; path=/; domain=login.vk.com; secure; HttpOnly";
+	        var cookies = HttpUtils.ParseCookies(cookiestr);
+            Assert.AreEqual(1,cookies.Count());
+	        var cookie = cookies.First();
+            Assert.AreEqual("p",cookie.Name);
+            Assert.AreEqual("99aee31d64ef04c3b049c19ffff99c5943800e05475d4c8fd97a3", cookie.Value);
+	    }
+
 		[Test]
 		[Explicit]
 		public void KnowlegeBase_ASCII_Encoding_Against_CharCast(){

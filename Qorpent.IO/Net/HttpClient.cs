@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -91,15 +92,16 @@ namespace Qorpent.IO.Net{
 							var writer = new HttpRequestWriter(rs);
 							writer.Write(request);
 							var response = _reader.Read(rs);
-							if (response.IsRedirect){
+							if (response.IsRedirect && !request.PreventRedirect){
 								request.Uri = response.RedirectUri;
 								return Call(request);
 							}
 							response.Cookies = response.Cookies ?? Cookies;
-							if (response.Headers.ContainsKey("Cookie")){
-								foreach (var cookie in HttpUtils.ParseCookies(response.Headers["Cookie"])){
-									response.Cookies.Add(cookie);
-								}
+							if (response.RawCookies.Count!=0){
+							    foreach (var cookie in response.RawCookies) {
+							        var realcookie = HttpUtils.ParseCookies(cookie).First();
+                                    response.Cookies.Add(realcookie);
+							    }
 							}
 							response.Request = request;
 							return response;

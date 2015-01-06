@@ -135,11 +135,15 @@ namespace Qorpent.Data.DataDiff{
 				if (name == "set_parent"){
 					name = "parent";
 				}
-				_output.Write("{0} = isnull(x.{2}{0},{1}.{0})", name, table.TableName, (name == "id" || name == "code") ? "set_" : "");
+				
+				_output.Write("{0} = isnull(x.{2}{0},{1}.{0})", EscapeFieldName(name), table.TableName, (name == "id" || name == "code") ? "set_" : "");
 				if (i != allfields.Length - 1){
 					_output.Write(", ");
 				}
+				
 			}
+            _output.Write(", ");
+            _output.Write("version =getdate()");
 			_output.WriteLine("from @{0} x join {1} on x.id = {1}.id ",tn,table.TableName);
 		}
 
@@ -226,7 +230,8 @@ namespace Qorpent.Data.DataDiff{
 					_output.Write(",parent ,parent_code");
 				}
 				else{
-					_output.Write(",{0}", allfield);
+					
+					_output.Write(",{0}", EscapeFieldName(allfield));
 				}
 			}
 			_output.WriteLine(") values");
@@ -273,6 +278,14 @@ namespace Qorpent.Data.DataDiff{
 				}
 			}
 			return !last;
+		}
+
+		private string EscapeFieldName(string name) {
+			if (name == "group" || name == "index" || name == "table")
+			{
+				return "\"" + name + "\"";
+			}
+			return name;
 		}
 
 		private void OutMappedField(DataDiffItem def, string allfield){
@@ -351,8 +364,8 @@ namespace Qorpent.Data.DataDiff{
 			_output.Write("\tdeclare @" + tn + " table ( id int, "+(table.NoCode?"":"code nvarchar(255),")+" _exists bit default 0 ");
 			foreach (var fld in allfields){
 				if (table.Mappings.ContainsKey(fld)){
-					_output.Write(", " + fld + " int");
-					_output.Write(", " + fld + "_code nvarchar(255)");
+					_output.Write(", " + EscapeFieldName(fld) + " int");
+					_output.Write(", " + EscapeFieldName(fld) + "_code nvarchar(255)");
 				}
 				else if (fld == "set_parent"){
 					_output.Write(", parent int");
@@ -364,7 +377,7 @@ namespace Qorpent.Data.DataDiff{
 					_output.Write(", parent_code nvarchar(255)");
 				}
 				else{
-					_output.Write(", " + fld + " nvarchar(max)");
+					_output.Write(", " + EscapeFieldName(fld) + " nvarchar(max)");
 				}
 			}
 			_output.WriteLine(")");
