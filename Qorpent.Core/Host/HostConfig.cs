@@ -22,6 +22,7 @@ namespace Qorpent.Host{
 		private string _configFolder;
 		private string _dllFolder;
 		private string _logFolder;
+		private string _machineName;
 		private ConfigBase _parameters;
 		private string _rootFolder;
 		private int _threadCount;
@@ -34,7 +35,11 @@ namespace Qorpent.Host{
 	    /// </summary>
 	    /// <param name="xml"></param>
 	    /// <param name="context"></param>
-	    public HostConfig(XElement xml,IBSharpContext context = null) : this(){
+	    /// <param name="machineName"></param>
+	    /// <param name="log"></param>
+	    public HostConfig(XElement xml,IBSharpContext context = null, string machineName = null, IUserLog log = null) : this() {
+		    if (!string.IsNullOrWhiteSpace(machineName)) MachineName = machineName;
+		    if (null != log) Log = log;
 			if (null != xml){
 				LoadXmlConfig(xml,context);
 			}
@@ -63,8 +68,19 @@ namespace Qorpent.Host{
 			StaticContentMap = new Dictionary<string, string>();
             Proxize = new Dictionary<string, string>();
             ConnectionStrings = new Dictionary<string, string>();
-            Modules = new Dictionary<string, string>();
-		    Initializers = new List<string>();
+			Modules = new Dictionary<string, string>();
+			Initializers = new List<string>();
+			MachineName = Environment.MachineName;
+		}
+		/// <summary>
+		///		Имя машины
+		/// </summary>
+		public string MachineName {
+			get { return _machineName; }
+			set {
+				if (value != null) value = value.ToLowerInvariant();
+				_machineName = value;
+			}
 		}
         /// <summary>
         /// Перечень классов для инициализации
@@ -80,7 +96,7 @@ namespace Qorpent.Host{
 		/// Разрешение Cookie при работе с Cross-Site
 		/// </summary>
 		public bool AccessAllowCredentials { get; set; }
-
+		
 		/// <summary>
 		/// Методы, разрешнные для Cross-Site-Scripting
 		/// </summary>
@@ -268,6 +284,23 @@ namespace Qorpent.Host{
 	    /// <param name="xml"></param>
 	    /// <param name="context"></param>
 	    public void LoadXmlConfig(XElement xml,IBSharpContext context = null) {
+			foreach (var condition in xml.Elements("machine")) {
+			    var machine = condition.Attr("code").ToLowerInvariant();
+				var not = false;
+				if (machine == "not" && !string.IsNullOrWhiteSpace(condition.Attr("name"))) {
+					not = true;
+					machine = condition.Attr("name").ToLowerInvariant();
+				}
+				if ((machine == MachineName && !not) || (not && machine != MachineName )) {
+					var target = condition.Attr("use");
+					if (context == null) throw new Exception("Cannot resolve machine-related config cause context is null");
+					var config = context[target];
+					if (config == null) throw new Exception("Cannot resolve machine-related config");
+					xml = config.Compiled;
+					Log.Info("Usage config " + target +" because machine name is " + (not ? "not " : "") + MachineName);
+					break;
+				}
+		    }
 	        this.Definition = xml;
             RootFolder = xml.ResolveValue("root", RootFolder);
 	        RootFolder = xml.ResolveValue(HostUtils.RootFolderXmlName, RootFolder);	      
