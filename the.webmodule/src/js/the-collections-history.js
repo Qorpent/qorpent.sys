@@ -23,7 +23,9 @@
                     if(!!items){
                         items  = JSON.parse(items);
                         for(var i=items.length-1;i>=0;i--){
-                            this.add(items[i.item],true);
+                            if(!!items[i]) {
+                                this.add(items[i].item, true);
+                            }
                         }
                     }
                 }
@@ -54,6 +56,7 @@
 
 
             History.prototype.add = function(object, nowritels){
+                if(null==object)return ;
                 if(this.options.fixedOrder){
                     object = $the.object.fixedOrder(object);
                 }
@@ -66,11 +69,12 @@
                     handler = this.index[digest] =  {item:object};
                     if(this.items.length==this.options.size){
                         var todelete = this.items[this.options.size-1];
-                        delete this.items[this.options.size-1];
                         var digest = $digest(todelete.item);
                         delete this.index[digest];
+                        this.items[this.options.size-1] = handler;
+                    }else {
+                        this.items.push(handler);
                     }
-                    this.items.push(handler);
                 }
                 handler.version = this.version++;
                 this.items.sort(function(a,b){
