@@ -97,8 +97,11 @@ namespace Qorpent.Host.Handlers
 				if (server.Config.Cached.Contains(Path.GetFileName(staticdescriptor.FullName))){
 					callcontext.Response.AddHeader("Cache-Control","public, max-age=86400");
 				}
-				else if (server.Config.ForceNoCache){
-					callcontext.Response.AddHeader("Cache-Control", "no-cache, must-revalidate");
+				else if (server.Config.ForceNoCache) {
+				    callcontext.Response.AddHeader("Cache-Control", "no-cache, must-revalidate");
+				}
+				else {
+                    callcontext.Response.AddHeader("Cache-Control", "public");
 				}
 				if (staticdescriptor.IsFixedContent){
 					if (null != staticdescriptor.FixedData){
