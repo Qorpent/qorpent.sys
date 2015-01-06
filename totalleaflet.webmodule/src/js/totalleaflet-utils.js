@@ -16,6 +16,15 @@ define([],function(){
             result.y = result.Y;
             return result;
         },
+        getLatLng : function(any){
+
+            var lat =  any.lat ||any.Lat || any.lt;
+            var lon =  any.lng || any.Lng || any.Lon || any.ln;
+            if(lat && lon){
+                return  L.latLng(lat,lon);
+            }
+            return null;
+        },
         getBounds : function(data, latname, lonname){
             latname = latname||"Lat";
             lonname = lonname||"Lon";

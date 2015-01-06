@@ -1,7 +1,7 @@
 /**
  * Created by comdiv on 05.01.2015.
  */
-define([],function(){
+define(["totalleaflet-utils"],function(utils){
     return {
         priority:100,
         replace:true,
@@ -79,12 +79,67 @@ define([],function(){
                 url += "&lat="+map.getCenter().lat+"&lon="+map.getCenter().lng+"&zoom="+map.getZoom();
                 window.open(url,"_blank");
             }
+            var dotrackposition = !("notrackposition" in iAttrs);
+            var dotrackdataset = !("notrackdataset" in iAttrs);
+
             map.on("moveend",function(){
-                localStorage.setItem("mapposition",JSON.stringify({
-                    center : map.getCenter(),
-                    zoom : map.getZoom()
-                }));
+                if(dotrackposition) {
+                    localStorage.setItem("mapposition", JSON.stringify({
+                        center: map.getCenter(),
+                        zoom: map.getZoom()
+                    }));
+                }
+                if(dotrackdataset){
+                    map.updateDataset();
+                }
             });
+
+
+
+
+            map.dataset = {
+                data : null,
+                options : {},
+                total : 0,
+                current : 0
+            };
+
+            map.updateDataset = function(newdata,newoptions){
+                var total = 0;
+                var current = 0;
+                var data = newdata || map.dataset.data;
+                var options = newoptions || map.dataset.options;
+
+                if(!!data) {
+                    var bounds = map.getBounds();
+                    data.forEach(function(_){
+                        var latlng = utils.getLatLng(_);
+                        if(!!options.count){
+                            total+=_[options.count];
+                        }else {
+                            total++;
+                        }
+                        if(!!latlng && bounds.contains(latlng)){
+                            if(!!options.count){
+                                current+=_[options.count];
+                            }else {
+                                current++;
+                            }
+                        }
+                    });
+                }
+                var update = function(){
+                    return [
+                        !!newoptions?map.dataset.options=newoptions:null,
+                        !!newdata?map.dataset.data=data:null,
+                        map.dataset.total = total,
+                        map.dataset.current = current
+                    ];
+                }
+
+                return root.$$phase ? update() : root.$apply(update);
+            }
+
 
             root.myMap = root.myMap || map;
 
