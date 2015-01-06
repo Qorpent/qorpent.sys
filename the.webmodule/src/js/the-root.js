@@ -35,6 +35,20 @@
             }
         };
 
+        the.localStorage = {
+            map : {},
+            setItem : function(name,value){
+                this.map[name] = value;
+            },
+            getItem : function(name){
+                return this.map[name];
+            },
+            clear :function(){
+                this.map = {};
+            }
+
+        }
+
 
         return the;
     });

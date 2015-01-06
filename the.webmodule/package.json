@@ -38,6 +38,7 @@
     },
     "the-object-tests",
     "the-collections-linq-tests",
+    "the-collections-history-tests",
     "the-expression-tests",
     "the-interpolation-tests",
     {

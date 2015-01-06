@@ -9,6 +9,7 @@ define([
     "the-collections-core",
     "the-collections-layered",
     "the-collections-linked",
+    "the-collections-history",
     "the-collections-linq",
     "the-action",
     'the-angular-unsafe',
