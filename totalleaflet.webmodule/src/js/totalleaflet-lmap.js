@@ -30,6 +30,19 @@ define(["totalleaflet-utils"],function(utils){
                     center : [ iAttrs["lat"]||lat , iAttrs["lon"]||0],
                     zoom : iAttrs["zoom"]||13
                 };
+            };
+
+            var getHomeBounds = function(){
+                var hash = document.location.hash.match(/swlat=(\d+\.\d+)&swlon=(\d+\.\d+)&nelat=(\d+\.\d+)&nelon=(\d+\.\d+)/);
+
+                if(hash){
+                    return L.latLngBounds(
+                        L.latLng(hash[1],hash[2]),
+                        L.latLng(hash[3],hash[4])
+                    );
+                }
+
+                return null;
             }
 
             var mapConfig = {
@@ -61,6 +74,12 @@ define(["totalleaflet-utils"],function(utils){
             map.getHomeCoordinates = getHomeCoordinates;
 
             map.goHome = function(animate,uselocal){
+                var homeBounds = getHomeBounds();
+                if(!!homeBounds){
+                    map.fitBounds(homeBounds);
+
+                    return;
+                }
                 var homeCoordinates = getHomeCoordinates(uselocal);
                 if(animate){
                     map.panTo(homeCoordinates.center);
@@ -69,6 +88,7 @@ define(["totalleaflet-utils"],function(utils){
                     map.setView(homeCoordinates.center, homeCoordinates.zoom);
                 }
             };
+
             map.goToPersistentUrl = function () {
                 var url = document.location.href;
                 url = url.replace(/&?lat=(\d+\.\d+)&lon=(\d+\.\d+)&zoom=(\d+)/,"");
@@ -82,6 +102,7 @@ define(["totalleaflet-utils"],function(utils){
             var dotrackdataset = !("notrackdataset" in iAttrs);
 
             map.on("moveend",function(){
+
                 if(dotrackposition) {
                     localStorage.setItem("mapposition", JSON.stringify({
                         center: map.getCenter(),
@@ -169,6 +190,11 @@ define(["totalleaflet-utils"],function(utils){
                     $scope[iAttrs["onload"]](map, element, iAttrs);
                 }
             }
+
+
+            window.setTimeout(function(){
+                map.goHome(false,true);
+            })
         }
     }
 });

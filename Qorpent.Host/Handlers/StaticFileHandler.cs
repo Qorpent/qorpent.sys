@@ -16,20 +16,20 @@ namespace Qorpent.Host.Handlers
 	/// </summary>
 	public class StaticFileHandler : IRequestHandler
 	{
-        /// <summary>
-        /// 
-        /// </summary>
-        public StaticFileHandler() {
-            DefaultPage = "/app.html";
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		public StaticFileHandler() {
+			DefaultPage = "/app.html";
+		}
 		/// <summary>
 		/// 
 		/// </summary>
 		public static readonly DateTime ResourceVersion = new DateTime(2014,2,4);
-        /// <summary>
-        /// 
-        /// </summary>
-        public string DefaultPage { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public string DefaultPage { get; set; }
 
 		/// <summary>
 		/// 
@@ -40,14 +40,14 @@ namespace Qorpent.Host.Handlers
 		/// <param name="cancel"></param>
 		public void Run(IHostServer server, HttpListenerContext callcontext, string callbackEndPoint, CancellationToken cancel){
 			var abspath = callcontext.Request.Url.AbsolutePath;
-            if (string.IsNullOrWhiteSpace(abspath) || abspath == "/") {
-	            if (!string.IsNullOrWhiteSpace(server.Config.DefaultPage)){
-		            abspath = server.Config.DefaultPage;
-	            }
-	            else{
-		            abspath = DefaultPage;
-	            }
-            }
+			if (string.IsNullOrWhiteSpace(abspath) || abspath == "/") {
+				if (!string.IsNullOrWhiteSpace(server.Config.DefaultPage)){
+					abspath = server.Config.DefaultPage;
+				}
+				else{
+					abspath = DefaultPage;
+				}
+			}
 			var staticdescriptor = server.Static.Get(abspath, callcontext);
 			//в случае, если запрошен HTML и он отсутствует, то в качестве результата возвращаем стартуовую страницу 
 			//указанного в начале имени приложения (для этого в видимости должен находится скрипт с контроллерами приложения
@@ -98,10 +98,10 @@ namespace Qorpent.Host.Handlers
 					callcontext.Response.AddHeader("Cache-Control","public, max-age=86400");
 				}
 				else if (server.Config.ForceNoCache) {
-				    callcontext.Response.AddHeader("Cache-Control", "no-cache, must-revalidate");
+					callcontext.Response.AddHeader("Cache-Control", "no-cache, must-revalidate");
 				}
 				else {
-                    callcontext.Response.AddHeader("Cache-Control", "public");
+					callcontext.Response.AddHeader("Cache-Control", "public");
 				}
 				if (staticdescriptor.IsFixedContent){
 					if (null != staticdescriptor.FixedData){

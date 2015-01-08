@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace Qorpent.IO.FileCache {
     public class FileCacheResolver : IFileCacheResolver {
         private string _root;
         private readonly IList<IFileCacheSource> _sources = new List<IFileCacheSource>();
+        private IList<IFileFilter> _filters= new List<IFileFilter>();
+
         /// <summary>
         /// 
         /// </summary>
@@ -52,6 +55,14 @@ namespace Qorpent.IO.FileCache {
                     source.IsMaster = true;
                 }
                 Sources.Add(source);
+            }
+            foreach (var filter in config.Elements("filter")) {
+                var t = filter.Attr("code");
+                var type = Type.GetType(t);
+                if(null==type)throw new Exception("cannot find filter "+t);
+                var inst = Activator.CreateInstance(type) as IFileFilter;
+                if(null==inst)throw new Exception("not IFileFilter "+t);
+                this.Filters.Add(inst);
             }
         }
 
@@ -91,6 +102,11 @@ namespace Qorpent.IO.FileCache {
         /// <summary>
         /// 
         /// </summary>
+        public IList<IFileFilter> Filters { get { return _filters; } }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         public string Resolve(string name, bool forceUpdate = false) {
             var result =  InternalResolve(name, forceUpdate);
@@ -114,8 +130,14 @@ namespace Qorpent.IO.FileCache {
                                     s.CopyTo(fs);
                                     fs.Flush();
                                 }
+                                foreach (var filter in Filters) {
+                                    filter.Convert(path);
+                                }
                                 s.Close();
                             }
+
+                            return path;
+
                         }
                     }
                 }
@@ -136,6 +158,10 @@ namespace Qorpent.IO.FileCache {
                             {
                                 s.CopyTo(fs);
                                 fs.Flush();
+                            }
+                            foreach (var filter in Filters)
+                            {
+                                filter.Convert(path);
                             }
                             s.Close();
                         }

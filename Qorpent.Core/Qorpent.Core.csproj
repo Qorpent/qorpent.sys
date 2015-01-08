@@ -156,6 +156,7 @@
     <Compile Include="IO\IContentSource.cs" />
     <Compile Include="IO\IFileCacheResolver.cs" />
     <Compile Include="IO\IFileCacheSource.cs" />
+    <Compile Include="IO\IFileFilter.cs" />
     <Compile Include="IO\IFileSource.cs" />
     <Compile Include="IO\IFileDescriptor.cs" />
     <Compile Include="IO\IFileStorage.cs" />

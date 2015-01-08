@@ -21,6 +21,11 @@ namespace Qorpent.IO {
         string Fallback { get; set; }
 
         /// <summary>
+        /// Фильтры
+        /// </summary>
+        IList<IFileFilter> Filters { get; }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>

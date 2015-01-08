@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Xml.Linq;
 using Qorpent.IO;
@@ -79,8 +80,9 @@ namespace Qorpent.Host.Static {
         /// <returns></returns>
         public IWebFileRecord Get(string name, object context = null, bool withextended = false) {
             IWebFileRecord result;
-
-            if (_cache.TryGetValue(name, out result)) {
+            var ctx = context as HttpListenerContext;
+            bool forced = null != ctx && ctx.Request.Url.ToString().Contains("__forced");
+            if (!forced  && _cache.TryGetValue(name, out result)) {
                 return result;
             }
             lock (this) {
@@ -91,7 +93,8 @@ namespace Qorpent.Host.Static {
                 if (caches.Count != 0)
                 {
                     IWebFileRecord record;
-                    if (GetByCache(name, false, out record)) return record;
+                    
+                    if (GetByCache(name, forced, out record)) return record;
                 }
                 var resolved = Resolve(name, context, withextended);
                 if (null != resolved) {
