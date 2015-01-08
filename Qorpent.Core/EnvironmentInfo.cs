@@ -462,8 +462,9 @@ namespace Qorpent {
 		/// Возвращает интерполированную версию файла
 		/// </summary>
 		/// <param name="givenPath"></param>
+		/// <param name="preventNormalize"></param>
 		/// <returns></returns>
-		public static string ResolvePath(string givenPath){
+		public static string ResolvePath(string givenPath, bool preventNormalize = false){
 			if (string.IsNullOrWhiteSpace(givenPath)) return givenPath;
 			givenPath = givenPath.ToLowerInvariant();
 			if (givenPath.Contains("@")){ //expand EnvironmentInfo macroses
@@ -484,6 +485,7 @@ namespace Qorpent {
 		    if (givenPath.StartsWith("http:") || givenPath.StartsWith("https:")) {
 		        return newPath;
 		    }
+			if (preventNormalize) return newPath;
 			return NormalizePath(Path.GetFullPath(newPath));
 		}
 
