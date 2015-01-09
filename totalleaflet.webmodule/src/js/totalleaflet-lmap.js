@@ -111,6 +111,7 @@ define(["totalleaflet-utils"],function(utils){
                 }
                 if(dotrackdataset){
                     map.updateDataset();
+                    root.$broadcast("MAPDATASETUPDATED",map);
                 }
             });
 
@@ -119,6 +120,7 @@ define(["totalleaflet-utils"],function(utils){
 
             map.dataset = {
                 data : null,
+                currentData : null,
                 options : {},
                 total : 0,
                 current : 0
@@ -128,6 +130,7 @@ define(["totalleaflet-utils"],function(utils){
                 var total = 0;
                 var current = 0;
                 var data = newdata || map.dataset.data;
+                var currentData= [];
                 var options = newoptions || map.dataset.options;
 
                 if(!!data) {
@@ -141,6 +144,7 @@ define(["totalleaflet-utils"],function(utils){
                         }
                         if(!!latlng && bounds.contains(latlng)){
                             if(!!options.count){
+                                currentData.push(_);
                                 current+=_[options.count];
                             }else {
                                 current++;
@@ -153,10 +157,10 @@ define(["totalleaflet-utils"],function(utils){
                         !!newoptions?map.dataset.options=newoptions:null,
                         !!newdata?map.dataset.data=data:null,
                         map.dataset.total = total,
-                        map.dataset.current = current
+                        map.dataset.current = current,
+                        map.dataset.currentData = currentData
                     ];
                 }
-
                 return root.$$phase ? update() : root.$apply(update);
             }
 
