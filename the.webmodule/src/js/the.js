@@ -22,7 +22,8 @@ define([
     'the-settings',
     'the-errorcatcher',
     'the-refresh',
-    'autocomplete-html'
+    'autocomplete-html',
+    'the-print'
 ], function ($the) {
     return $the;
 });

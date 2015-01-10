@@ -46,4 +46,10 @@
     <None Include="*.import" />
     <None Include="*.export" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
+      <Project>{880f65ea-1a22-4672-a137-ffc912902112}</Project>
+      <Name>Qorpent.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

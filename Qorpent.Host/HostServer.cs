@@ -271,11 +271,29 @@ namespace Qorpent.Host{
 				InitializeApplication();
 				InitializeHttpServer();
 				InitializeDefaultHandlers();
+			    InitializeCommands();
 				State = HostServerState.Initalized;
 			}
 		}
 
-		private void InitializeDefaultHandlers(){
+	    private void InitializeCommands() {
+	        var commands = Config.Definition.Elements("command").ToArray();
+	        foreach (var element in commands) {
+	            var commandname = element.Attr("code");
+	            var type = element.Attr("name");
+	            var htype = Type.GetType(type);
+	            if (null == htype) {
+	                throw new Exception("cannot find command "+type);
+	            }
+	            var handler = Activator.CreateInstance(htype) as IRequestHandler;
+	            if (null == handler) {
+	                throw new Exception("Is not IRequestHandler "+type);
+	            }
+                Factory.Register("/"+commandname,handler);
+	        }
+	    }
+
+	    private void InitializeDefaultHandlers(){
 			this.OnContext("/_stat",
 						   _ => _.Response.Finish(string.Format("{{\"requestCount\":{0}}}", RequestCount), "application/json"));
 			this.OnContext("/_static/cache/drop", _ => { });
