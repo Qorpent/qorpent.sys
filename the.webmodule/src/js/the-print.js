@@ -2,7 +2,7 @@ define(["the-root"
 ], function ($the) {
     return $the(function (root) {
         var printer = root.printer = root.printer || {};
-        var PrintOptions = root.printer.PrinterOptions = function () {
+        var ServerPrinterOptions = root.printer.ServerPrinterOptions = function () {
             this.TargetUrl = "";
             this.LocalizeUrl = true;
             this.UrlParam = "reporturl";
@@ -16,8 +16,46 @@ define(["the-root"
             this.Title = "";
             this.Target ="_blank";
         };
-        printer.print = function (options) {
-            options = $the.cast(PrintOptions, options);
+        var PrinterOptions = root.printer.PrinterOptions = function(){
+            this.PrinterName= "Bullzip PDF Printer";
+            this.MarginTop= 0;
+            this.MarginBottom= 0;
+            this.MarginLeft= 0;
+            this.MarginRight= 0;
+            this.HeaderStrLeft = "";
+            this.HeaderStrCenter = "";
+            this.HeaderStrRight = "";
+            this.FooterStrLeft = "";
+            this.FooterStrCenter = "";
+            this.FooterStrRight = "";
+            this.ShrinkToFit = 0;
+            this.PrintBGColors = 1;
+            this.PrintBGImages = 1;
+
+        }
+        printer.print = function(options){
+            options = $the.cast(PrinterOptions,options);
+            jsPrintSetup.setPrinter(options.PrinterName);
+            jsPrintSetup.clearSilentPrint();
+            jsPrintSetup.setSilentPrint(true);
+            jsPrintSetup.setOption('marginTop', options.MarginTop);
+            jsPrintSetup.setOption('marginBottom', options.MarginBottom);
+            jsPrintSetup.setOption('marginLeft', options.MarginLeft);
+            jsPrintSetup.setOption('marginRight', options.MarginRight);
+            jsPrintSetup.setOption('headerStrLeft', options.HeaderStrLeft);
+            jsPrintSetup.setOption('headerStrCenter', options.HeaderStrCenter);
+            jsPrintSetup.setOption('headerStrRight', options.HeaderStrRight);
+            jsPrintSetup.setOption('footerStrLeft', options.FooterStrLeft);
+            jsPrintSetup.setOption('footerStrCenter',options.FooterStrCenter);
+            jsPrintSetup.setOption('footerStrRight', options.FooterStrRight);
+            jsPrintSetup.setOption('footerStrRight', options.FooterStrRight);
+            jsPrintSetup.setOption('shrinkToFit', options.ShrinkToFit);
+            jsPrintSetup.setOption('printBGColors', options.PrintBGColors);
+            jsPrintSetup.setOption('printBGImages', options.PrintBGImages);
+            jsPrintSetup.print();
+        }
+        printer.serverPrint = function (options) {
+            options = $the.cast(ServerPrinterOptions, options);
 
             var title = options.Title || document.title;
             var url = options.TargetUrl;
