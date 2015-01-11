@@ -74,7 +74,7 @@ namespace Qorpent.Host.Handlers {
                 var pseudofileName = title.ToSafeFileName() + ".pdf";
 
        
-                callcontext.Response.AddHeader("Content-Disposition", "attachment; filename=\"" + Uri.EscapeDataString(pseudofileName) + "\"");
+                callcontext.Response.AddHeader("Content-Disposition", "attachment; filename*=UTF-8''" + Uri.EscapeDataString(pseudofileName));
 
                 using (var s = File.OpenRead(hashFileName))
                 {
