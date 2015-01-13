@@ -17,6 +17,7 @@ define([
     'the-angular-controlgroup',
     'the-angular-viewcontext',
     'the-angular-onenter',
+    'the-design-stackedbutton',
     'the-wiki',
     'the-menu',
     'the-settings',

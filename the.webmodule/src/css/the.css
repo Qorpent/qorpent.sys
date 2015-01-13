@@ -112,24 +112,95 @@
   min-width: 20px;
   text-align: center;
   margin-right: 1px;
+  margin-left: 1px;
 }
-/* line 51, the/tools/_labels.scss */
+/* line 52, the/tools/_labels.scss */
 .the .tool.labeled i.active {
   font-weight: bold;
   color: #33aa4c;
 }
-/* line 55, the/tools/_labels.scss */
+/* line 56, the/tools/_labels.scss */
 .the .tool.labeled i.disabled {
   font-weight: lighter;
   color: lightgray !important;
 }
-/* line 59, the/tools/_labels.scss */
+/* line 60, the/tools/_labels.scss */
 .the .tool.labeled i.md-icon {
   font-size: 16pt;
   padding-top: 3px;
   padding-right: 3px;
   padding-left: 3px;
   min-width: 28px;
+}
+
+/* line 1, the/tools/_stackedbutton.scss */
+.stackedbutton {
+  display: block;
+  border: solid 1px gray;
+  background-color: white;
+  width: 50px !important;
+  height: 50px !important;
+  border: none;
+  background: none;
+  border-radius: 5%;
+  cursor: pointer;
+}
+/* line 12, the/tools/_stackedbutton.scss */
+.stackedbutton .back {
+  font-size: 32pt !important;
+  transition: all 0.5s ease;
+  color: white;
+}
+/* line 16, the/tools/_stackedbutton.scss */
+.stackedbutton .back .front {
+  color: gray;
+  font-size: 32pt !important;
+  font-weight: 100;
+}
+/* line 20, the/tools/_stackedbutton.scss */
+.stackedbutton .back .front.fa-file-pdf-o:hover {
+  color: #ffffff !important;
+}
+/* line 24, the/tools/_stackedbutton.scss */
+.stackedbutton .back:hover {
+  transform: rotate(-1deg) scale(1.05, 1.05);
+  color: aliceblue !important;
+}
+/* line 27, the/tools/_stackedbutton.scss */
+.stackedbutton .back:hover.pdf {
+  color: #CF1312 !important;
+}
+/* line 30, the/tools/_stackedbutton.scss */
+.stackedbutton .back:hover .help {
+  font-size: 10pt !important;
+  border: solid 1px gray;
+  background-color: #ffffff;
+  border-radius: 20%;
+}
+/* line 38, the/tools/_stackedbutton.scss */
+.stackedbutton .back .inner {
+  font-size: 10pt !important;
+  left: 2px;
+  top: -1px;
+  color: green;
+  width: 18px;
+  height: 18px;
+  border: solid 1px gray;
+  background-color: #ffffff;
+  border-radius: 20%;
+}
+/* line 50, the/tools/_stackedbutton.scss */
+.stackedbutton .back .help {
+  font-size: 6pt !important;
+  left: 28px;
+  top: 30px;
+  color: #0B97C4;
+  width: 18px;
+  height: 18px;
+}
+/* line 61, the/tools/_stackedbutton.scss */
+.stackedbutton.unchecked .inner {
+  color: #CF1312 !important;
 }
 
 /* line 5, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
@@ -197,31 +268,31 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   display: block;
 }
 
-/* line 6, the.scss */
+/* line 7, the.scss */
 * {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-/* line 13, the.scss */
+/* line 14, the.scss */
 .the form span.validate {
   font-size: xx-small;
 }
-/* line 24, the.scss */
+/* line 25, the.scss */
 .the [ng\:cloak], .the [ng-cloak], .the [data-ng-cloak], .the [x-ng-cloak], .the .ng-cloak, .the .x-ng-cloak {
   display: none !important;
 }
-/* line 31, the.scss */
+/* line 32, the.scss */
 .the .dropdown-menu .default a {
   font-weight: bold;
 }
-/* line 34, the.scss */
+/* line 35, the.scss */
 .the .dropdown-menu .delimiter {
   height: 1px;
   border-top: solid 1px gray;
 }
-/* line 40, the.scss */
+/* line 41, the.scss */
 .the i.disabled {
   color: lightgray;
 }

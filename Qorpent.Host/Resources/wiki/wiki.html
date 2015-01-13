@@ -3,23 +3,32 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
-    <link rel="stylesheet" href="bootstrap.css" type="text/css"/>
-    <link rel="stylesheet" href="wiki.css"/>
-    <script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="wiki.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="css/wiki.css" />
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/wiki.js"></script>
     <script type="text/javascript">
-        $(function() {
-           $('#wikiresult').html(qwiki.toHTML($('#wikisource').html().replace(/&gt;/g,'>').replace(/&lt;/g,'<').replace(/&amp;/g,'&')));
+        $(function () {
+            $('#wikiresult').html(qwiki.toHTML($('#wikisource').html().replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&')));
+            if (document.location.hash.match("nosyntax")) {
+                $('#syntax').hide();
+            }
+            $('#copyright').text('Qorpent WIKI © ООО "Би Ай Ти" 2011-' + (new Date().getFullYear()));
         });
     </script>
 </head>
-    <body style="padding: 20px">
-        <div style="display:none" id="wikisource">
-            ${wikipage}
-        </div>
-        <div>Qorpent WIKI © Comdiv 2011-2014 <a href="wiki?syntax">справка по синтаксису</a> </div>
-        <div id="wikiresult">
-            
-        </div>
-    </body>
+<body style="padding: 20px">
+    <div style="display:none" id="wikisource">
+        ${wikipage}
+    </div>
+
+    <div id="wikiresult">
+
+    </div>
+
+    <div id="footer">
+        <span id="copyright">  </span>
+        <a id="syntax" href="wiki?syntax">справка по синтаксису</a>
+    </div>
+</body>
 </html>
