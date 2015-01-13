@@ -1,0 +1,50 @@
+.stackedbutton {
+  display: block;
+  border: solid 1px gray;
+  background-color: white;
+  width: 50px !important;
+  height: 50px !important;
+  border: none;
+  background: none;
+  border-radius: 5%;
+  cursor: pointer;
+
+  .back {
+    font-size: 32pt !important;
+    transition: all 0.5s ease;
+    color: white;
+    .front {
+      color: gray;
+      font-size: 32pt !important;
+      font-weight: 100;
+      &.fa-file-pdf-o:hover {
+        color: #ffffff !important;
+      }
+    }
+    &:hover {
+      transform: rotate(2deg) scale(1.05, 1.05);
+      color: aliceblue !important;
+      &.pdf {
+        color: #CF1312 !important;
+      }
+    }
+
+    .inner {
+      font-size: 10pt !important;
+      left: 2px;
+      top : -1px;
+      color : green;
+      width:18px;
+      height: 18px;
+      border:solid 1px gray;
+      background-color: #ffffff;
+      border-radius: 20%;
+
+    }
+  }
+  &.unchecked {
+    .inner {
+      color: #CF1312 !important;
+    }
+  }
+}
