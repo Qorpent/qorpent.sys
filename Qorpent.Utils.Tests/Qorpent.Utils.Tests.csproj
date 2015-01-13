@@ -29,6 +29,7 @@
     <Compile Include="BrickScale\DataColonNormalizer\DataColonLabelHelperOrderTests.cs" />
     <Compile Include="BrickScale\DataColonNormalizer\DataColonTemperatureTests.cs" />
     <Compile Include="BrickScale\DataColonNormalizer\DataColonTestBase.cs" />
+    <Compile Include="BSharpDocumentStorageTests.cs" />
     <Compile Include="BTreeTest.cs" />
     <Compile Include="CombinationalTest.cs" />
     <Compile Include="ComplexStringHelperTest.cs" />

@@ -46,6 +46,7 @@
     <Compile Include="BrickScaleNormalizer\ScaleType.cs" />
     <Compile Include="BrickScaleNormalizer\SeriaCalcMode.cs" />
     <Compile Include="BrickScaleNormalizer\UserPreferences.cs" />
+    <Compile Include="BSharpDocumentStorage.cs" />
     <Compile Include="Collections\BTreeIndex\BTreeBucket.cs" />
     <Compile Include="Collections\BTreeIndex\BTreeIndex.cs" />
     <Compile Include="Collections\BTreeIndex\BTreeUtils.cs" />
