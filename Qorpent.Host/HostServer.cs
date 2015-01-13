@@ -277,19 +277,21 @@ namespace Qorpent.Host{
 		}
 
 	    private void InitializeCommands() {
-	        var commands = Config.Definition.Elements("command").ToArray();
-	        foreach (var element in commands) {
-	            var commandname = element.Attr("code");
-	            var type = element.Attr("name");
-	            var htype = Type.GetType(type);
-	            if (null == htype) {
-	                throw new Exception("cannot find command "+type);
+	        if (null != Config.Definition) {
+	            var commands = Config.Definition.Elements("command").ToArray();
+	            foreach (var element in commands) {
+	                var commandname = element.Attr("code");
+	                var type = element.Attr("name");
+	                var htype = Type.GetType(type);
+	                if (null == htype) {
+	                    throw new Exception("cannot find command " + type);
+	                }
+	                var handler = Activator.CreateInstance(htype) as IRequestHandler;
+	                if (null == handler) {
+	                    throw new Exception("Is not IRequestHandler " + type);
+	                }
+	                Factory.Register("/" + commandname, handler);
 	            }
-	            var handler = Activator.CreateInstance(htype) as IRequestHandler;
-	            if (null == handler) {
-	                throw new Exception("Is not IRequestHandler "+type);
-	            }
-                Factory.Register("/"+commandname,handler);
 	        }
 	    }
 
