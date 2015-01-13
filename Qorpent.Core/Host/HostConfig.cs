@@ -68,6 +68,7 @@ namespace Qorpent.Host{
 			StaticContentMap = new Dictionary<string, string>();
             Proxize = new Dictionary<string, string>();
             ConnectionStrings = new Dictionary<string, string>();
+			Constants = new Dictionary<string, string>();
 			Modules = new Dictionary<string, string>();
 			Initializers = new List<string>();
 			MachineName = Environment.MachineName;
@@ -261,6 +262,10 @@ namespace Qorpent.Host{
 		/// </summary>
 		public string EncryptBasis { get; set; }
 		/// <summary>
+		///		Набор констант
+		/// </summary>
+		public IDictionary<string, string> Constants { get; private set; }
+		/// <summary>
 		/// Мапинг юрлов в диретории для Static Handler
 		/// </summary>
 		public IDictionary<string, string> StaticContentMap { get; private set; }
@@ -333,7 +338,10 @@ namespace Qorpent.Host{
 				Bindings.Add(hostbind);
 				
 			}
-
+		    foreach (var constant in xml.Elements("constant")) {
+				if (string.IsNullOrWhiteSpace(constant.Attr("code"))) continue;
+			    Constants[constant.Attr("code").ToLowerInvariant()] = constant.Attr("name");
+		    }
 			foreach (XElement e in xml.Elements(HostUtils.ContentFolder))
 			{
 				

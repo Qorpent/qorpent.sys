@@ -165,7 +165,7 @@ namespace Qorpent.Utils {
 		/// <returns>Настроенный экземпляр <see cref="BSharpDocumentStorage"/></returns>
 		public static void SetContext(BSharpDocumentStorage storage, string path, string pattern = "*.bxls", bool recursive = true, bool resolve = true) {
 			if (resolve) path = EnvironmentInfo.ResolvePath(path);
-			if (!Directory.Exists(path)) {
+			if (Directory.Exists(path)) {
 				var opts = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 				var files = Directory.GetFiles(path, pattern, opts).Select(File.ReadAllText).ToArray();
 				storage.SetContext(files);
