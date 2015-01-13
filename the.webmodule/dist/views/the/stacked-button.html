@@ -3,12 +3,12 @@
         checked : useCheck && check(),
         unchecked : useCheck && !check()
     }">
-        <i class="fa {{backtype()}} fa-stack-2x back "
-           ng-class="{'pdf':isPdf()}"
-                >
-            <i class="fa {{fronttype()}} fa-stack-2x front">
-                <i ng-show="useinner()" class="fa-stack-1x fa {{innertype()}} inner"></i>
-                <i ng-show="usehelp" ng-click="showHelp($event)" title="Показать справку" class="fa-stack-1x fa fa-question-circle help"></i>
-            </i>
+    <i class="fa {{backtype()}} fa-stack-2x back "
+       ng-class="{'pdf':isPdf()}">
+        <i class="fa {{fronttype()}} fa-stack-2x front">
+            <i ng-show="useinner()" class="fa-stack-1x fa {{innertype()}} inner"></i>
+            <i ng-show="usehelp" ng-click="showHelp($event)" title="Показать справку"
+               class="fa-stack-1x fa fa-question-circle help"></i>
         </i>
-    </span>
+    </i>
+</span>

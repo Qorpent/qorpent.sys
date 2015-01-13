@@ -56,6 +56,56 @@
   left: 0;
 }
 
+@page {
+  margin-left: 15mm;
+  margin-right: 10mm;
+  margin-bottom: 20mm;
+  margin-top: 15mm;
+}
+/* line 8, the/layouts/_a4.scss */
+html.theA4 {
+  font-family: consolas, 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+}
+@media screen {
+  /* line 8, the/layouts/_a4.scss */
+  html.theA4 {
+    margin: 0;
+    padding: 0;
+    padding-top: 1cm;
+    background-color: lightgray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+}
+/* line 20, the/layouts/_a4.scss */
+html.theA4 body {
+  background-color: #ffffff;
+  font-size: 90%;
+  hyphens: auto;
+  -moz-hyphens: auto;
+}
+@media print {
+  /* line 20, the/layouts/_a4.scss */
+  html.theA4 body {
+    padding: 0px !important;
+    width: 17.2cm !important;
+  }
+}
+@media screen {
+  /* line 20, the/layouts/_a4.scss */
+  html.theA4 body {
+    background-color: #ffffff;
+    border: solid 2px #000000;
+    width: 21cm !important;
+    padding-left: 15mm !important;
+    padding-right: 10mm !important;
+    padding-top: 15mm !important;
+    padding-bottom: 20mm !important;
+  }
+}
+
 /* line 2, the/tools/_labels.scss */
 .the .tool.labeled {
   padding: 5px;
@@ -150,34 +200,40 @@
   font-size: 32pt !important;
   transition: all 0.5s ease;
   color: white;
+  left: 0;
+  top: 0;
+  position: absolute;
 }
-/* line 16, the/tools/_stackedbutton.scss */
+/* line 19, the/tools/_stackedbutton.scss */
 .stackedbutton .back .front {
   color: gray;
+  left: 0;
+  top: 0;
+  position: absolute;
   font-size: 32pt !important;
   font-weight: 100;
 }
-/* line 20, the/tools/_stackedbutton.scss */
+/* line 26, the/tools/_stackedbutton.scss */
 .stackedbutton .back .front.fa-file-pdf-o:hover {
   color: #ffffff !important;
 }
-/* line 24, the/tools/_stackedbutton.scss */
+/* line 30, the/tools/_stackedbutton.scss */
 .stackedbutton .back:hover {
   transform: rotate(-1deg) scale(1.05, 1.05);
   color: aliceblue !important;
 }
-/* line 27, the/tools/_stackedbutton.scss */
+/* line 33, the/tools/_stackedbutton.scss */
 .stackedbutton .back:hover.pdf {
   color: #CF1312 !important;
 }
-/* line 30, the/tools/_stackedbutton.scss */
+/* line 36, the/tools/_stackedbutton.scss */
 .stackedbutton .back:hover .help {
   font-size: 10pt !important;
   border: solid 1px gray;
   background-color: #ffffff;
   border-radius: 20%;
 }
-/* line 38, the/tools/_stackedbutton.scss */
+/* line 44, the/tools/_stackedbutton.scss */
 .stackedbutton .back .inner {
   font-size: 10pt !important;
   left: 2px;
@@ -189,7 +245,7 @@
   background-color: #ffffff;
   border-radius: 20%;
 }
-/* line 50, the/tools/_stackedbutton.scss */
+/* line 56, the/tools/_stackedbutton.scss */
 .stackedbutton .back .help {
   font-size: 6pt !important;
   left: 28px;
@@ -198,7 +254,7 @@
   width: 18px;
   height: 18px;
 }
-/* line 61, the/tools/_stackedbutton.scss */
+/* line 67, the/tools/_stackedbutton.scss */
 .stackedbutton.unchecked .inner {
   color: #CF1312 !important;
 }
@@ -268,31 +324,31 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   display: block;
 }
 
-/* line 7, the.scss */
+/* line 9, the.scss */
 * {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-/* line 14, the.scss */
+/* line 16, the.scss */
 .the form span.validate {
   font-size: xx-small;
 }
-/* line 25, the.scss */
+/* line 27, the.scss */
 .the [ng\:cloak], .the [ng-cloak], .the [data-ng-cloak], .the [x-ng-cloak], .the .ng-cloak, .the .x-ng-cloak {
   display: none !important;
 }
-/* line 32, the.scss */
+/* line 34, the.scss */
 .the .dropdown-menu .default a {
   font-weight: bold;
 }
-/* line 35, the.scss */
+/* line 37, the.scss */
 .the .dropdown-menu .delimiter {
   height: 1px;
   border-top: solid 1px gray;
 }
-/* line 41, the.scss */
+/* line 43, the.scss */
 .the i.disabled {
   color: lightgray;
 }

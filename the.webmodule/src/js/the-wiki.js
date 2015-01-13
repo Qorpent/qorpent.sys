@@ -303,11 +303,12 @@ qwiki.create = function(text, logwriter){
 					continue;
 				}
 				if (curline=="[[code]]") {
-				    this.codeblock = true;
-				    this.lastcode = "";
+					this.codeblock = true;
+					this.lastcode = "";
 					this.processed.push("<div class='wiki-code'>");
 					continue;
 				}
+
 				
 				if (this.codeblock) {
 				    this.lastcode += curline.replace(/(&nbsp;)|(\[BR\])/g, "\n") + "\r\n";

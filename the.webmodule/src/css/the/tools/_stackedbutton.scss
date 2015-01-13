@@ -13,8 +13,14 @@
     font-size: 32pt !important;
     transition: all 0.5s ease;
     color: white;
+    left:0;
+    top:0;
+    position: absolute;
     .front {
       color: gray;
+      left:0;
+      top:0;
+      position: absolute;
       font-size: 32pt !important;
       font-weight: 100;
       &.fa-file-pdf-o:hover {

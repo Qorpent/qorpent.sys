@@ -1,33 +1,7 @@
-﻿@page {
-	margin-left: 15mm;
-	margin-right: 10mm;
-	margin-bottom: 20mm;
-	margin-top: 15mm;
-}
+﻿@import url('the.css?v=1');
+@import url('font-awesome.css?v=1');
+/*@import url('bootstrap.css?v=1');*/
 
-@media screen{
-	html {
-		padding-top:2cm;
-		background-color: lightgray;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		width:100%;
-	}
-	body{
-		border:solid 1px black;
-		padding:2cm !important;
-		padding-right:1cm !important;
-	}
-}
-
-body{
-	font-family: consolas, 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
-
-
-	min-width:21cm;
-	max-width:21cm;
-}
 #footer {
 	margin-top: 1cm;
 	text-align: right;
@@ -81,13 +55,15 @@ error:before {
 	counter-reset : wiki-list-1 0;
 	text-align : justify;
 	text-indent : 30px;
+	margin: 0px 0px 10px;
 
 }
 
 .wiki p, .wiki-list {
 	margin-top : 6pt;
-	min-width: 17.5cm;
-	max-width: 17.5cm;
+	min-width: 17.2cm;
+	max-width: 17.2cm;
+
 }
 
 
@@ -96,16 +72,16 @@ error:before {
 	background-color: #fafacc;
 	border : solid 1px gray;
 	padding : 5px;
-	min-width: 17.5cm;
-	max-width: 17.5cm;
+	min-width: 17.2cm;
+	max-width: 17.2cm;
 }
 
 
 .wiki table {
 	counter-increment : wiki-table;
 	border-collapse : collapse;
-	min-width: 17.5cm;
-	max-width: 17.5cm;
+	min-width: 17.2cm;
+	max-width: 17.2cm;
 }
 
 .wiki .wiki-link { 	
@@ -127,12 +103,12 @@ error:before {
 
 .wiki h1 {
 	margin-top : 6px;
-	margin-bottom : 3px;
+	margin-bottom : 20px;
 	font-size : 18pt;	
 	counter-increment : wiki-head-1;
 	counter-reset : wiki-head-2;
-	max-width: 17.5cm;
-	min-width: 17.5cm;
+	max-width: 17.2cm;
+	min-width: 17.2cm;
 }
 
 .wiki .sample h1, .wiki .sample h2, .wiki .sample h3,.wiki .sample h4,.wiki .sample h5,.wiki .sample h6 {
@@ -303,8 +279,8 @@ error:before {
 	padding : 5pt;
 	font-family : consolas;
 	font-size:8pt;
-    max-width: 17.5cm;
-    min-width: 17.5cm;
+    max-width: 17.2cm;
+    min-width: 17.2cm;
 	border :  solid 1px #000000;
 }
 
@@ -459,10 +435,11 @@ error:before {
     border-left: solid 10px cornflowerblue;
     margin-top: 5px;
     margin-bottom: 5px;
+	page-break-inside: avoid;
 }
 
 .bxl {
-	width: 17.5cm;
+	width: 17.2cm;
 }
 
 .wiki .xml-element, .wiki .xml-attr , .wiki.xml-op{
