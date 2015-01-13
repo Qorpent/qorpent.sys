@@ -9,7 +9,7 @@
             var stackedbutton = function(e,iAttr){
                 return {
                     scope : true,
-                    templateUrl: 'views/the/stacked-button.html',
+                    templateUrl: 'views/the/stacked-button.html?ver='+$the.ver,
                     link : function(scope,e,iAttr){
                         scope.useCheck = ("checker" in iAttr);
                         var type = iAttr.type;
@@ -39,6 +39,21 @@
                             scope.check = function(){
                                 return scope.$eval(iAttr.checker);
                             }
+                        }
+                        scope.usehelp = ("help" in iAttr);
+                        scope.serverPrint = scope.serverPrint || function(){
+                            $the.printer.serverPrint({Target:"_blank"});
+                        }
+                        scope.canPrint =  typeof jsPrintSetup != "undefined";
+                        scope.doPrint = scope.doPrint || function(){
+                            setTimeout(function(){
+                                $the.printer.print();
+                            },1000);
+                        }
+                        scope.showHelp = function(event){
+                            event.preventDefault();
+                            event.stopPropagation();
+                            window.open("wiki?"+iAttr.help);
                         }
                     }
                 };

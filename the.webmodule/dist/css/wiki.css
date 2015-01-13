@@ -141,7 +141,7 @@ error:before {
 }
 
 .wiki h1:before {
-	content : counter(wiki-head-1) " " ;
+	/*content : counter(wiki-head-1) " " ;*/
 }
 
 .wiki h2 {

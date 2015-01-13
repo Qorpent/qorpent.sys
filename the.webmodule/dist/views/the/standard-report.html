@@ -1,0 +1,35 @@
+<span
+        the-stacked-button
+        ng-click="setShowComments(!state.showComments)"
+        type="file-text-o"
+        checker="state.showComments"
+        title="Комментарии"
+        >
+    </span>
+<span
+        the-stacked-button
+        ng-click="setShowExtensions(!state.showExtensions)"
+        type="file-o"
+        checker="state.showExtensions"
+        title="Поля для ручного ввода"
+        >
+    </span>
+<span
+        the-stacked-button
+        ng-click="serverPrint()"
+        type="file-pdf-o"
+        marker="download"
+        title="Загрузить PDF"
+        help="the-download-pdf#nosyntax"
+        >
+    </span>
+<span
+        the-stacked-button
+        ng-click="doPrint()"
+        type="file-pdf-o"
+        marker="save"
+        title="Сформировать PDF"
+        ng-show="canPrint"
+        help="the-generate-pdf#nosyntax"
+        >
+    </span>

@@ -22,10 +22,16 @@
       }
     }
     &:hover {
-      transform: rotate(2deg) scale(1.05, 1.05);
+      transform: rotate(-1deg) scale(1.05, 1.05);
       color: aliceblue !important;
       &.pdf {
         color: #CF1312 !important;
+      }
+      .help {
+        font-size: 10pt !important;
+        border:solid 1px gray;
+        background-color: #ffffff;
+        border-radius: 20%;
       }
     }
 
@@ -39,6 +45,15 @@
       border:solid 1px gray;
       background-color: #ffffff;
       border-radius: 20%;
+
+    }
+    .help {
+      font-size: 6pt !important;
+      left: 28px;
+      top : 30px;
+      color : #0B97C4;
+      width:18px;
+      height: 18px;
 
     }
   }
