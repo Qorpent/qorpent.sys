@@ -37,12 +37,18 @@ namespace Qorpent {
 		private static string _rootDirectory;
 
 		private static string _binDirectory;
-
+		private static IDictionary<string, string> _constants; 
 		/// <summary>
 		/// 	Type-wide static lock object
 		/// </summary>
 		public static object Sync = new object();
-
+		/// <summary>
+		///		
+		/// </summary>
+		public static IDictionary<string, string> Constants {
+			get { return _constants ?? (_constants = new Dictionary<string, string>()); }
+			set { _constants = value; }
+		} 
 		/// <summary>
 		/// 	True if we are under web context
 		/// </summary>

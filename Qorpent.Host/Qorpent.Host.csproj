@@ -219,5 +219,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\extras\text.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\extras\textAngular-sanitize.js" />
+    <EmbeddedResource Include="Resources\extras\textAngular.js" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

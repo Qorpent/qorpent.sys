@@ -369,7 +369,7 @@ namespace Qorpent.Host{
 			Application = Config.ApplicationMode == HostApplicationMode.Shared
 							  ? Applications.Application.Current
 							  : new Application();
-
+			EnvironmentInfo.Constants = Config.Constants;
 			if (Config.ApplicationMode == HostApplicationMode.Standalone){
 				Applications.Application.Current = Application;
 				EnvironmentInfo.RootDirectory = Config.RootFolder;

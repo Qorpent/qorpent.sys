@@ -11,7 +11,10 @@
         /// Лимит результатов
         /// </summary>
         public int Limit { get; set; }
-
+		/// <summary>
+		///		Коллекция или пространство имён
+		/// </summary>
+		public string Collection { get; set; }
         /// <summary>
         /// Преобразует массив строк в опции запроса на поля
         /// </summary>

@@ -5,6 +5,11 @@ namespace Qorpent.Data {
     /// 
     /// </summary>
     public interface IDocumentStorage {
+		/// <summary>
+		///		Определяет текущий контекст
+		/// </summary>
+		/// <returns>Контекст</returns>
+	    IContext GetContext();
         /// <summary>
         /// Выполнить запрос
         /// </summary>
@@ -12,12 +17,11 @@ namespace Qorpent.Data {
         /// <param name="options"></param>
         /// <returns></returns>
         XElement ExecuteQuery(string query, DocumentStorageOptions options = null);
-
-        /// <summary>
-        /// Установить контекст работы
-        /// </summary>
-        /// <param name="database"></param>
-        /// <param name="collection"></param>
-        IDocumentStorage SetContext(string database, string collection);
+		/// <summary>
+		///		Установка контекста работа
+		/// </summary>
+		/// <param name="context">Контекст</param>
+		/// <returns>Замыкание на <see cref="IDocumentStorage"/></returns>
+	    IDocumentStorage SetContext(IContext context);
     }
 }

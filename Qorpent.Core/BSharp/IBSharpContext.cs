@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Qorpent.Config;
+using Qorpent.Data;
 
 namespace Qorpent.BSharp {
 	/// <summary>
 	/// Интерфейс результирующего контекста BSharp
 	/// </summary>
-	public interface IBSharpContext: IXmlConfigSource{
+	public interface IBSharpContext: IXmlConfigSource, IContext {
 		/// <summary>
 		/// Загружает исходные определения классов
 		/// </summary>
