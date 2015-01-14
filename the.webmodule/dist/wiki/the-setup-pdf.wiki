@@ -1,0 +1,13 @@
+= Настройка компьютера пользователя для полноценной печати PDF
+
+Установить виртуальный принтер "Bullzip PDF Printer"
+% [http://www.bullzip.com/products/pdf/info.php Ссылка на сайт программы]
+% [http://bullzip-website.bullzip.netdna-cdn.com/download/pdf_free/Setup_BullzipPDFPrinter_10_10_0_2307_FREE.exe Ссылка на дистрибутив бесплатной версии]
+
+В [/img/firefox.png FireFox | width=16 height=16] FireFox установить дополнение JS Printer Setup
+% [https://addons.mozilla.org/ru/firefox/addon/js-print-setup/ Ссылка на страницу дополнения]
+% нажать "Add to FireFox"
+% подтвердить согласие на установку
+% перезапустить FireFix
+% станет доступна кнопка [the-generate-pdf формирования PDF]
+

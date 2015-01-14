@@ -101,12 +101,14 @@ error:before {
 	background-color: #eeeeee;
 }
 
+
+
 .wiki h1 {
 	margin-top : 6px;
 	margin-bottom : 20px;
 	font-size : 18pt;	
 	counter-increment : wiki-head-1;
-	counter-reset : wiki-head-2;
+	counter-reset : wiki-head-2 wiki-list-1 wiki-list-2 wiki-list-3;
 	max-width: 17.2cm;
 	min-width: 17.2cm;
 }
@@ -126,7 +128,7 @@ error:before {
 	font-size : 16pt;
 	padding-left : 10px;
 	counter-increment : wiki-head-2;
-	counter-reset : wiki-head-3;
+	counter-reset : wiki-head-3 wiki-list-1 wiki-list-2 wiki-list-3;
 }
 
 .wiki h2:before {
@@ -139,7 +141,7 @@ error:before {
 	font-size : 14pt;
 	padding-left : 20px;
 	counter-increment : wiki-head-3;
-	counter-reset : wiki-head-4;
+	counter-reset : wiki-head-4 wiki-list-1 wiki-list-2 wiki-list-3;
 }
 
 .wiki h3:before {
@@ -154,12 +156,16 @@ error:before {
 	font-style :italic;
 	padding-left : 30px;
 	counter-increment : wiki-head-4;
-	counter-reset : wiki-head-5;
+	counter-reset : wiki-head-5 wiki-list-1 wiki-list-2 wiki-list-3;
 }
 .wiki h4:before {
 	content : counter(wiki-head-1) "." counter(wiki-head-2) "." counter(wiki-head-3) "." counter(wiki-head-4) " " ;
 }
 
+
+strong {
+	font-weight: 800 !important;
+}
 
 
 .wiki h5 {
@@ -436,6 +442,7 @@ error:before {
     margin-top: 5px;
     margin-bottom: 5px;
 	page-break-inside: avoid;
+	text-align: justify;
 }
 
 .bxl {
