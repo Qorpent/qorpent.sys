@@ -30,6 +30,9 @@
                            if(type.match(/^file-?.*-o$/)){
                                return "fa-file";
                            }
+                            if(type=="question-circle"){
+                                return "fa-question";
+                            }
                         }
                         scope.fronttype = function(){
                             return "fa-"+type;
@@ -51,9 +54,13 @@
                             },1000);
                         }
                         scope.showHelp = function(event){
-                            event.preventDefault();
-                            event.stopPropagation();
-                            window.open("wiki?"+iAttr.help);
+                            if(typeof(event)=="object") {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                window.open("wiki?" + iAttr.help);
+                            }else{
+                                window.open("wiki?" + event);
+                            }
                         }
                     }
                 };

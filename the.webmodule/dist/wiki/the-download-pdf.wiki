@@ -1,11 +1,11 @@
-= Команда "загрузить как PDF"
+= Команда "Загрузить как PDF"
 [[html]]
 <div style="float:left;">
-<span the-stacked-button="" ng-click="serverPrint()" type="file-pdf-o" marker="download" title="Загрузить PDF" help="the-download-pdf#nosyntax" class="ng-scope"><span class="stackedbutton fa-stack fa-3x">
-        <i class="fa fa-file fa-stack-2x back pdf" ng-class="{'pdf':isPdf()}">
+<span ><span class="stackedbutton fa-stack fa-3x">
+        <i class="fa fa-file fa-stack-2x back pdf">
             <i class="fa fa-file-pdf-o fa-stack-2x front">
-                <i ng-show="useinner()" class="fa-stack-1x fa fa-download inner"></i>
-                <i ng-show="usehelp" ng-click="showHelp($event)" title="Показать справку" class="fa-stack-1x fa fa-question-circle help"></i>
+                <i class="fa-stack-1x fa fa-download inner"></i>
+                <i class="fa-stack-1x fa fa-question-circle help"></i>
             </i>
         </i>
     </span></span>
@@ -17,7 +17,7 @@
 
 Данную команду не следует путать с командой [the-generate-pdf#nosyntax Cформировать файл PDF]
 
-В отличие от [the-generate-pdf#nosyntax Cформировать файл PDF] и  от [the-print-pdf#nosyntax Печать в PDF файл], "Загрузить как PDF"
+В отличие от [the-generate-pdf#nosyntax Cформировать файл PDF], "Загрузить как PDF":
 
 № Достоинства
 №№ Не требует никакого дополнительного програмного обеспечения на компьютере пользователя

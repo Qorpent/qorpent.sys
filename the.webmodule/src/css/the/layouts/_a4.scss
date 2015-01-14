@@ -6,12 +6,36 @@
 }
 
 html.theA4 {
+  .report-toolbar {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    padding: 10px;
+    border-radius: 3%;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width:100%;
+    height:60px;
+    z-index: 10000;
+    background: -moz-linear-gradient(top, #72baea 0%, #c7d8e5 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#72baea), color-stop(100%,#c7d8e5)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #72baea 0%,#c7d8e5 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #72baea 0%,#c7d8e5 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #72baea 0%,#c7d8e5 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #72baea 0%,#c7d8e5 100%); /* W3C */
+
+    box-shadow: darkgray;
+    @media print {
+        display: none !important;
+    }
+  }
   font-family: consolas, 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
   @media screen {
     margin: 0;
     padding: 0;
-    padding-top:1cm;
-    background-color: lightgray;
+    padding-top:2cm;
+    background-color: #C7D8E5;
     display: flex;
     flex-direction: column;
     align-items: center;

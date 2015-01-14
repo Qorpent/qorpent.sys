@@ -3,7 +3,8 @@
         ng-click="setShowComments(!state.showComments)"
         type="file-text-o"
         checker="state.showComments"
-        title="Комментарии"
+        title="Полная информация"
+        help="the-report-full#nosyntax"
         >
     </span>
 <span
@@ -12,6 +13,7 @@
         type="file-o"
         checker="state.showExtensions"
         title="Поля для ручного ввода"
+        help="the-report-manual#nosyntax"
         >
     </span>
 <span
@@ -31,5 +33,14 @@
         title="Сформировать PDF"
         ng-show="canPrint"
         help="the-generate-pdf#nosyntax"
+        >
+    </span>
+<span style="flex:1"></span>
+<span
+        the-stacked-button
+        ng-click="showHelp('the-report#nosyntax')"
+        type="question-circle"
+        title="Справка по формированию отчетов"
+
         >
     </span>

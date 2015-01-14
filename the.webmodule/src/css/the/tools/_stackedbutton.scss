@@ -26,6 +26,12 @@
       &.fa-file-pdf-o:hover {
         color: #ffffff !important;
       }
+      &.fa-question-circle {
+        color: lighten(#0B97C4,10%) !important;
+        &:hover {
+          color: #0B97C4 !important;
+        }
+      }
     }
     &:hover {
       transform: rotate(-1deg) scale(1.05, 1.05);

@@ -66,20 +66,53 @@
 html.theA4 {
   font-family: consolas, 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
 }
+/* line 9, the/layouts/_a4.scss */
+html.theA4 .report-toolbar {
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+  padding: 10px;
+  border-radius: 3%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 60px;
+  z-index: 10000;
+  background: -moz-linear-gradient(top, #72baea 0%, #c7d8e5 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #72baea), color-stop(100%, #c7d8e5));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #72baea 0%, #c7d8e5 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #72baea 0%, #c7d8e5 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #72baea 0%, #c7d8e5 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #72baea 0%, #c7d8e5 100%);
+  /* W3C */
+  box-shadow: darkgray;
+}
+@media print {
+  /* line 9, the/layouts/_a4.scss */
+  html.theA4 .report-toolbar {
+    display: none !important;
+  }
+}
 @media screen {
   /* line 8, the/layouts/_a4.scss */
   html.theA4 {
     margin: 0;
     padding: 0;
-    padding-top: 1cm;
-    background-color: lightgray;
+    padding-top: 2cm;
+    background-color: #C7D8E5;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
   }
 }
-/* line 20, the/layouts/_a4.scss */
+/* line 44, the/layouts/_a4.scss */
 html.theA4 body {
   background-color: #ffffff;
   font-size: 90%;
@@ -87,14 +120,14 @@ html.theA4 body {
   -moz-hyphens: auto;
 }
 @media print {
-  /* line 20, the/layouts/_a4.scss */
+  /* line 44, the/layouts/_a4.scss */
   html.theA4 body {
     padding: 0px !important;
     width: 17.2cm !important;
   }
 }
 @media screen {
-  /* line 20, the/layouts/_a4.scss */
+  /* line 44, the/layouts/_a4.scss */
   html.theA4 body {
     background-color: #ffffff;
     border: solid 2px #000000;
@@ -217,23 +250,31 @@ html.theA4 body {
 .stackedbutton .back .front.fa-file-pdf-o:hover {
   color: #ffffff !important;
 }
-/* line 30, the/tools/_stackedbutton.scss */
+/* line 29, the/tools/_stackedbutton.scss */
+.stackedbutton .back .front.fa-question-circle {
+  color: #10bbf2 !important;
+}
+/* line 31, the/tools/_stackedbutton.scss */
+.stackedbutton .back .front.fa-question-circle:hover {
+  color: #0B97C4 !important;
+}
+/* line 36, the/tools/_stackedbutton.scss */
 .stackedbutton .back:hover {
   transform: rotate(-1deg) scale(1.05, 1.05);
   color: aliceblue !important;
 }
-/* line 33, the/tools/_stackedbutton.scss */
+/* line 39, the/tools/_stackedbutton.scss */
 .stackedbutton .back:hover.pdf {
   color: #CF1312 !important;
 }
-/* line 36, the/tools/_stackedbutton.scss */
+/* line 42, the/tools/_stackedbutton.scss */
 .stackedbutton .back:hover .help {
   font-size: 10pt !important;
   border: solid 1px gray;
   background-color: #ffffff;
   border-radius: 20%;
 }
-/* line 44, the/tools/_stackedbutton.scss */
+/* line 50, the/tools/_stackedbutton.scss */
 .stackedbutton .back .inner {
   font-size: 10pt !important;
   left: 2px;
@@ -245,7 +286,7 @@ html.theA4 body {
   background-color: #ffffff;
   border-radius: 20%;
 }
-/* line 56, the/tools/_stackedbutton.scss */
+/* line 62, the/tools/_stackedbutton.scss */
 .stackedbutton .back .help {
   font-size: 6pt !important;
   left: 28px;
@@ -254,7 +295,7 @@ html.theA4 body {
   width: 18px;
   height: 18px;
 }
-/* line 67, the/tools/_stackedbutton.scss */
+/* line 73, the/tools/_stackedbutton.scss */
 .stackedbutton.unchecked .inner {
   color: #CF1312 !important;
 }

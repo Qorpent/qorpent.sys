@@ -1,0 +1,37 @@
+= Команда "Полная информация"
+
+
+Отчеты можно отобразить (и напечатать)  как в полном, так и сокращенном варианте.
+Данная команда переключает режим отображения отчета.
+
+Вид кнопки при включенном выводе полной информации:
+
+[[html]]
+<div>
+<span ><span class="stackedbutton fa-stack fa-3x">
+        <i class="fa fa-file fa-stack-2x back">
+            <i class="fa fa-file-text-o fa-stack-2x front">
+                <i class="fa-stack-1x fa fa-check inner"></i>
+                <i  class="fa-stack-1x fa fa-question-circle help"></i>
+            </i>
+        </i>
+    </span></span>
+</div>
+[[/html]]
+
+Вид кнопки при выключенном выводе полной информации :
+
+
+[[html]]
+<div>
+<span ><span class="stackedbutton fa-stack fa-3x ischecker unchecked">
+        <i class="fa fa-file fa-stack-2x back">
+            <i class="fa fa-file-text-o fa-stack-2x front">
+                <i class="fa-stack-1x fa fa-remove inner "></i>
+                <i  class="fa-stack-1x fa fa-question-circle help"></i>
+            </i>
+        </i>
+    </span></span>
+</div>
+[[/html]]
+
