@@ -53,6 +53,7 @@ define(["the-root"
             jsPrintSetup.setOption('printBGColors', options.PrintBGColors);
             jsPrintSetup.setOption('printBGImages', options.PrintBGImages);
             jsPrintSetup.print();
+            jsPrintSetup.setSilentPrint(false);
         }
         printer.serverPrint = function (options) {
             options = $the.cast(ServerPrinterOptions, options);
