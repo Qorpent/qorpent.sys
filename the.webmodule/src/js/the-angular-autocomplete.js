@@ -11,20 +11,21 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
             el.addClass("the-autocomplete");
             el.attr("dropdown", "dropdown");
             el.attr("is-open", "__isopen");
-            console.log(attr);
+
             var data = {
                 "bindQuery": attr["ngModel"] || "__acSearch",
                 "template": attr["template"] || "{{i}}",
-                "templateUrl": attr["templateUrl"] || ""
+                "templateUrl": attr["templateUrl"] || "",
+                "ddClass": attr["ddClass"] || ""
             }
-            console.log(data);
             var eltext = $the.interpolate(template, data);
             var input = $(eltext);
 
             input.appendTo(el);
+            el.find("ul").css("overflow-y", "auto");
             if (!!attr["height"]) {
                 el.find("ul").css("max-height", "" + attr["height"] + "px");
-                el.find("ul").css("overflow-y", "auto");
+
             }
         };
         var prepareScope = function (scope, e, attr, $rootScope) {
@@ -32,7 +33,8 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
             var data = {
                 "bindQuery": attr["ngModel"] || "__acSearch",
                 "template": attr["template"] || "{{i}}",
-                "templateUrl": attr["templateUrl"] || ""
+                "templateUrl": attr["templateUrl"] || "",
+                "ddClass": attr["ddClass"] || ""
             }
             var minLength = ("minLength" in attr) ? attr["minLength"] : 1;
 
@@ -90,13 +92,17 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
                     __acShow(true);
                 } else if (!$(e).hasClass("open") && scope.firstRun) {
                     scope.firstRun = false;
-                    var onFix = scope.$eval(attr["onFixData"]);
-                    if (typeof onFix == "function") {
-                        onFix(function (fixdata) {
-                            scope.__fixdata = fixdata;
+                    if(!!attr["emptySearch"]){
+                        scope.__acChange(2);
+                    }else {
+                        var onFix = scope.$eval(attr["bld"]);
+                        if (typeof onFix == "function") {
+                            onFix(function (fixdata) {
+                                scope.__fixdata = fixdata;
 
-                            __acShow(true);
-                        });
+                                __acShow(true);
+                            });
+                        }
                     }
                 }
             }
@@ -118,7 +124,7 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
                 clearTimeout(timeout);
                 __acHide();
                 var search = scope.$eval(data.bindQuery);
-                if (search.length >= minLength) {
+                if ((search=="" && !!attr["emptySearch"]) || search.length >= minLength) {
 
                     timeout = setTimeout(function () {
                         var searchStart = scope.$eval(attr["onStartSearch"]);

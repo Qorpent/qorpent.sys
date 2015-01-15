@@ -1,7 +1,7 @@
 define([],function(){
-    return '<input class="dropdown-toggle form-control" ng-focus="__acFocus()" ng-model="${bindQuery}" ng-change="__acChange(1)"\
+    return '<input class="dropdown-toggle form-control " ng-focus="__acFocus()" ng-model="${bindQuery}" ng-change="__acChange(1)"\
     on-enter="__acChange(2)"/> \
-<ul  ng-if="!(\'${templateUrl}\')" class="dropdown-menu"> \
+<ul  ng-if="!(\'${templateUrl}\')" class="dropdown-menu ${ddClass}"> \
     <li class="default"  ng-repeat="i in __fixdata"> \
         <a ng-click="__acClick($event,i)">${template}</a> \
     </li> \
@@ -10,6 +10,6 @@ define([],function(){
         <a ng-click="__acClick($event,i)">${template}</a> \
     </li> \
 </ul>\
-<ul ng-if="(\'${templateUrl}\')" class="dropdown-menu" ng-include="\'${templateUrl}\'"> \
+<ul ng-if="(\'${templateUrl}\')" class="dropdown-menu ${ddClass}" ng-include="\'${templateUrl}\'"> \
 </ul>'
 });
