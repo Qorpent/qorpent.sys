@@ -11,11 +11,13 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
             el.addClass("the-autocomplete");
             el.attr("dropdown", "dropdown");
             el.attr("is-open", "__isopen");
-
+            console.log(attr);
             var data = {
                 "bindQuery": attr["ngModel"] || "__acSearch",
-                "template": attr["template"] || "{{i}}"
+                "template": attr["template"] || "{{i}}",
+                "templateUrl": attr["templateUrl"] || ""
             }
+            console.log(data);
             var eltext = $the.interpolate(template, data);
             var input = $(eltext);
 
@@ -29,7 +31,8 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
 
             var data = {
                 "bindQuery": attr["ngModel"] || "__acSearch",
-                "template": attr["template"] || "{{i}}"
+                "template": attr["template"] || "{{i}}",
+                "templateUrl": attr["templateUrl"] || ""
             }
             var minLength = ("minLength" in attr) ? attr["minLength"] : 1;
 
