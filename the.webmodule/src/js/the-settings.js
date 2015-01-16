@@ -67,6 +67,9 @@ define(["the-root"
                 if(!!options.init){
                     options.init(_);
                 }
+                if(!!_.initialize){
+                    _.initialize();
+                }
                 return _;
             }
             return result;
