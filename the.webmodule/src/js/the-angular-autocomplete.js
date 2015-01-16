@@ -92,9 +92,9 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
                     __acShow(true);
                 } else if (!$(e).hasClass("open") && scope.firstRun) {
                     scope.firstRun = false;
-                    if(!!attr["emptySearch"]){
+                    if (!!attr["emptySearch"]) {
                         scope.__acChange(2);
-                    }else {
+                    } else {
                         var onFix = scope.$eval(attr["bld"]);
                         if (typeof onFix == "function") {
                             onFix(function (fixdata) {
@@ -118,13 +118,13 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
                 __acShow();
             };
             scope.__acChange = function (type) {
-                if(!!attr["onEnterOnly"]){
-                    if(type==1)return;
+                if (!!attr["onEnterOnly"]) {
+                    if (type == 1)return;
                 }
                 clearTimeout(timeout);
                 __acHide();
                 var search = scope.$eval(data.bindQuery);
-                if ((search=="" && !!attr["emptySearch"]) || search.length >= minLength) {
+                if ((search == "" && !!attr["emptySearch"]) || search.length >= minLength) {
 
                     timeout = setTimeout(function () {
                         var searchStart = scope.$eval(attr["onStartSearch"]);
@@ -134,10 +134,11 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
                             });
                         }
                         if (!!attr["onSearch"]) {
-                            var func = scope.$eval(attr["onSearch"]);
-                            if (!!func) {
-                                func(search, scope.__onData);
+                            var call = attr["onSearch"];
+                            if (!call.match(/\(/)) {
+                                call += "(search,callback)";
                             }
+                            scope.$eval(call, {search: search, callback: scope.__onData});
                         }
                     }, 300);
                 }
@@ -148,10 +149,12 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
                 __acHide();
                 if (!!attr["onResult"]) {
                     var search = scope.$eval(data.bindQuery);
-                    var func = scope.$eval(attr["onResult"]);
-                    if (!!func) {
-                        func(i, search, $event);
+                    var call = attr["onResult"];
+                    if (!call.match(/\(/)) {
+                        call = call + "(i,search,e)";
                     }
+                    scope.$eval(call, {search: search, i: i, e: $event});
+
                 }
             }
 
