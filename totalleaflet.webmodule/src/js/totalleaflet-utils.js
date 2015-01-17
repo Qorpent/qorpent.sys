@@ -30,6 +30,15 @@ define([],function(){
             return null;
         },
         getBounds : function(data, latname, lonname){
+            if(!!data.x && !!data.y && !!data.d){
+                var x1 = data.x - data.d * 1.5;
+                var y1 = data.y - data.d * 1.5;
+                var x2 = Number(data.x) + Number(data.d) * 1.5;
+                var y2 = Number(data.y) + Number(data.d) * 1.5;
+                var bound = L.latLngBounds(this.getLatLng({x:x1,y:y1}),this.getLatLng({x:x2,y:y2}));
+                return bound;
+            }
+
             latname = latname||"Lat";
             lonname = lonname||"Lon";
             minlat = 500;

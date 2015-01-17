@@ -18,14 +18,27 @@ define(["leaflet-amd","the"], function (L,the) {
                         color:"green"
                     };
                     the.extend(opts,options);
-                    this.layer = L.circle(position, radius,opts).addTo(map);
+                    this.layer = L.featureGroup();
+                    this.layer.circle = L.circle(position, radius,opts).addTo(this.layer);
+                    this.layer.marker = L.circleMarker(position,{
+                        fill:true,
+                        fillColor:"red",
+                        color:"green",
+                        radius:5,
+                        opacity:1,
+                        fillOpacity:1
+                    }).addTo(this.layer);
+                    map.circleLayer = this.layer;
                 }
-                this.layer.setLatLng(position);
-                this.layer.setRadius(radius);
+                this.layer.circle.setLatLng(position);
+                this.layer.circle.setRadius(radius);
+                this.layer.marker.setLatLng(position);
+                this.layer.addTo(map);
+                console.log("circle");
             },
             hide: function () {
                 if (!!this.layer) {
-                    this.show([0,0],1);
+                    map.removeLayer(this.layer);
                 }
             }
         }
