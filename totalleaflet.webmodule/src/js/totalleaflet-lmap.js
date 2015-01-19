@@ -73,6 +73,16 @@ define(["totalleaflet-utils"],function(utils){
             var map = L.map(element[0],mapConfig);
             map.getHomeCoordinates = getHomeCoordinates;
 
+            if(iAttrs.hasOwnProperty("noninteractive")){
+                map.dragging.disable();
+                map.touchZoom.disable();
+                map.doubleClickZoom.disable();
+                map.scrollWheelZoom.disable();
+                map.boxZoom.disable();
+                map.keyboard.disable();
+
+            }
+
             map.goHome = function(animate,uselocal){
                 var homeBounds = getHomeBounds();
                 if(!!homeBounds){

@@ -24,7 +24,10 @@ define([
     'the-errorcatcher',
     'the-refresh',
     'autocomplete-html',
-    'the-print'
+    'the-print',
+    'the-dates',
+    'the-report',
+    'the-hash',
 ], function ($the) {
     return $the;
 });

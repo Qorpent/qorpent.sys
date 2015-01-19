@@ -37,6 +37,8 @@
       "into" : "the"
     },
     "the-object-tests",
+    "the-dates-tests",
+    "the-hash-tests",
     "the-collections-linq-tests",
     "the-collections-history-tests",
     "the-expression-tests",
