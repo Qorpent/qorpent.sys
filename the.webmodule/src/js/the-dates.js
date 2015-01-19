@@ -149,7 +149,7 @@ define(["the-object", "moment"], function ($the, $m) {
                 UseRange : "userange",
                 Range : "range",
                 Start : "start",
-                Finish : "end",
+                Finish : "finish",
                 Basis : "today"
             },options);
             var userange = Boolean(getHash(options.UseRange,hash));
