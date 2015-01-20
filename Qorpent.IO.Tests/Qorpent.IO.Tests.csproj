@@ -40,6 +40,7 @@
     <Compile Include="Net\HttpRequestWriterTest.cs" />
     <Compile Include="Net\HttpResponseReaderTests.cs" />
     <Compile Include="Net\HttpReaderTimingTests.cs" />
+    <Compile Include="Net\HttpResponseTests.cs" />
     <Compile Include="StreamProxyTests.cs" />
     <Compile Include="SynchronizeWellKnownDirectory.cs" />
     <Compile Include="VcsStorageTests.cs" />
