@@ -124,7 +124,8 @@ define(["the-object", "moment"], function ($the, $m) {
             var subst = {
                 b: $m(this.Basis).format(format),
                 s: this.formatStart(format),
-                f : this.formatFinish(format)
+                f : this.formatFinish(format),
+                r : this.getRangeName()
             };
             var wtempl = templates.ranged;
             if(this.SingleDate && !format.match(/HH/)){
@@ -135,6 +136,19 @@ define(["the-object", "moment"], function ($the, $m) {
             }
             return $the.interpolate(wtempl,subst);
 
+        }
+        DateRange.GetRangeName = function(r){
+            if(r=="any")return "за весь период";
+            if(r=="today")return "за сегодня";
+            if(r=="yesterday")return "за вчера";
+            if(r=="-2d")return "за два дня";
+            if(r=="-1w")return "за неделю";
+            if(r=="-1m")return "за месяц";
+            if(r=="-2m")return "за два месяца";
+            return r;
+        }
+        DateRange.prototype.getRangeName = function(){
+            return DateRange.GetRangeName(this.Range);
         }
         DateRange.create = function (range, basis) {
             basis = toDate(basis || new Date());
