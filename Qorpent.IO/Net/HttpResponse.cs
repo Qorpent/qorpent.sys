@@ -35,7 +35,13 @@ namespace Qorpent.IO.Net{
 		///		Адрес перенаправления
 		/// </summary>
 		public Uri RedirectUri {
-			get { return new Uri(Headers["Location"]); }
+			get {
+				if (Headers["Location"] == null) return  null;
+				if (Uri == null) return null;
+				Uri redirectUri;
+				Uri.TryCreate(Uri, Headers["Location"], out redirectUri);
+				return redirectUri;
+			}
 		}
 		/// <summary>
 		///     Название статуса

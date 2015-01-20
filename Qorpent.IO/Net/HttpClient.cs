@@ -92,6 +92,7 @@ namespace Qorpent.IO.Net{
 							var writer = new HttpRequestWriter(rs);
 							writer.Write(request);
 							var response = _reader.Read(rs);
+							response.Request = request;
 							if (response.IsRedirect && !request.PreventRedirect){
 								request.Uri = response.RedirectUri;
 								return Call(request);
