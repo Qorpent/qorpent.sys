@@ -2,6 +2,13 @@
  * Created by comdiv on 05.01.2015.
  */
 define(["totalleaflet-utils"],function(utils){
+    var getQorpentTilesUrl = function(){
+        var result = "http://{hostname}:14060/map/{z}/{x}/{y}.png";
+        if (document.location.href.match(/(map144)|(\:148)/) && !document.location.href.match(/maplocal/)) {
+            result = "http://144.76.82.130:14060/map/{z}/{x}/{y}.png";
+        }
+        return result;
+    }
     return {
         priority:100,
         replace:true,
@@ -56,7 +63,11 @@ define(["totalleaflet-utils"],function(utils){
             mapConfig.zoom = homeCoordinates.zoom;
 
             if (!!iAttrs["bounds"]){
-                var coords = iAttrs["bounds"].match(/[\d\.]+/g);
+                var coords = iAttrs["bounds"];
+                if(coords=="EKB"){
+                    coords = "56.600,60.300,57.000,60.900";
+                }
+                coords = coords.match(/[\d\.]+/g);
                 if(coords.length==4) {
                     mapConfig.maxBounds = new L.LatLngBounds(new L.LatLng(coords[0],coords[1]), new L.LatLng(coords[2],coords[3]));
                 }else{
@@ -174,6 +185,23 @@ define(["totalleaflet-utils"],function(utils){
                 return root.$$phase ? update() : root.$apply(update);
             }
 
+            map.fitToData = function(data,context){
+                context = context || {};
+                var options = {
+                    paddingTopLeft:[context.PaddingLeft||300,context.PaddingTop||0],
+                    paddingBottomRight:[context.PaddingRight||100,context.PaddingBottom||0]
+                };
+                if(!!context.X && !!context.Y && !!context.Distance){
+                    map.fitBounds(utils.getBounds({x:context.X,y:context.Y,d:context.Distance}),options);
+                }
+                else {
+                    if(!!data && data.length!=0) {
+                        map.fitBounds(utils.getBounds(data), options);
+                    }
+                }
+
+            }
+
 
             root.myMap = root.myMap || map;
 
@@ -187,17 +215,21 @@ define(["totalleaflet-utils"],function(utils){
                 }
             });
 
-            if("tiles" in iAttrs) {
-                var url = iAttrs["tiles"];
-                if(!url.match(/\./)){
-                    url = $scope[url];
-                }
-                url = url.replace(/\{hostname\}/, document.location.hostname);
-                L.tileLayer(url, {
-                    reuseTiles: true,
-                    updateWhenIdle: false
-                }).addTo(map);
+
+            var url = iAttrs["tiles"] || getQorpentTilesUrl();
+            if(url=='qorpent')url = getQorpentTilesUrl();
+
+            if(!url.match(/\./)){
+                url = $scope[url];
             }
+
+            url = url.replace(/\{hostname\}/, document.location.hostname);
+
+            L.tileLayer(url, {
+                reuseTiles: true,
+                updateWhenIdle: false
+            }).addTo(map);
+
 
             if(!!iAttrs["onload"]) {
                 if (iAttrs["onload"] in $scope) {

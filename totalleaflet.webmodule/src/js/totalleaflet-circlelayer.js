@@ -1,11 +1,16 @@
 /**
  * Created by comdiv on 15.11.2014.
  */
-define(["leaflet-amd","the"], function (L,the) {
+define(["leaflet-amd","the","totalleaflet-utils"], function (L,the,utils) {
     return function (map,scope,options) {
         return {
             layer: null,
             show: function (position, radius) {
+                if(position.hasOwnProperty("Distance")){
+                    if(!position.X || !position.Distance)return;
+                    radius= position.Distance;
+                    position = utils.getLatLng(position);
+                }
                 if (!this.layer) {
                     var opts = {
                         stroke:true,
@@ -34,7 +39,6 @@ define(["leaflet-amd","the"], function (L,the) {
                 this.layer.circle.setRadius(radius);
                 this.layer.marker.setLatLng(position);
                 this.layer.addTo(map);
-                console.log("circle");
             },
             hide: function () {
                 if (!!this.layer) {
