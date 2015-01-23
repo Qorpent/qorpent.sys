@@ -86,7 +86,7 @@ namespace Qorpent.Integration.SqlExtensions {
             return x.Value >= minx && x.Value <= maxx && y.Value >= miny && y.Value <= maxy;
         }
         /// <summary>
-        /// Формирует точку в проекции 4236 с резолюцией X,Y или Lon , Lat на входе
+        /// Формирует точку в проекции 4326 с резолюцией X,Y или Lon , Lat на входе
         /// </summary>
         /// <param name="xOrLon"></param>
         /// <param name="yOrLat"></param>
@@ -96,7 +96,7 @@ namespace Qorpent.Integration.SqlExtensions {
         public static SqlGeography GetPoint(SqlDouble xOrLon, SqlDouble yOrLat) {
             if (xOrLon.IsNull || yOrLat.IsNull) return SqlGeography.Null;
             var builder = new SqlGeographyBuilder();
-            builder.SetSrid(4236);
+            builder.SetSrid(4326);
             builder.BeginGeography(OpenGisGeographyType.Point);
             
 
@@ -113,7 +113,7 @@ namespace Qorpent.Integration.SqlExtensions {
         }
 
         /// <summary>
-        /// Формирует точку в проекции 4236 с резолюцией X,Y или Lon , Lat на входе
+        /// Формирует прямоугольную область 4326
         /// </summary>
         /// <param name="xOrLon"></param>
         /// <param name="yOrLat"></param>
@@ -126,7 +126,7 @@ namespace Qorpent.Integration.SqlExtensions {
         {
             if (xOrLon.IsNull || yOrLat.IsNull) return SqlGeography.Null;
             var builder = new SqlGeographyBuilder();
-            builder.SetSrid(4236);
+            builder.SetSrid(4326);
             builder.BeginGeography(OpenGisGeographyType.Polygon);
             double x = xOrLon.Value;
             double x2 = xOrLon2.Value;
