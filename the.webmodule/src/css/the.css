@@ -394,4 +394,9 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   color: lightgray;
 }
 
+/* line 48, the.scss */
+.copyright {
+  font-family: Consolas, Menlo, Monaco, "Courier New", monospace;
+}
+
 /*# sourceMappingURL=the.css.map */
