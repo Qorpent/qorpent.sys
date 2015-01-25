@@ -6,8 +6,10 @@ define(["leaflet-amd","the","totalleaflet-utils"], function (L,the,utils) {
         return {
             layer: null,
             show: function (position, radius) {
-                if(position.hasOwnProperty("Distance")){
+                if(position.hasOwnProperty("Distance") || !radius){
+
                     if(!position.X || !position.Distance)return;
+
                     radius= position.Distance;
                     position = utils.getLatLng(position);
                 }
