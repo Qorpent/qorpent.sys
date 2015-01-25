@@ -34,7 +34,7 @@ define(["totalleaflet-utils"],function(utils){
                     }
                 }
                 return {
-                    center : [ iAttrs["lat"]||lat , iAttrs["lon"]||0],
+                    center : [ iAttrs["lat"]||0 , iAttrs["lon"]||0],
                     zoom : iAttrs["zoom"]||13
                 };
             };
