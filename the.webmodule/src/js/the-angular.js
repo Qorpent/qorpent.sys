@@ -16,6 +16,10 @@
                         }
                         $rootScope.$tryApply = function(scope,f){
                             scope = scope || $rootScope;
+                            if(null==f){
+                                f=scope;
+                                scope = $rootScope;
+                            }
                             if(scope.$$phase){
                                 f();
                             }else{

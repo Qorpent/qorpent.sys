@@ -76,7 +76,7 @@ define(["totalleaflet-utils"],function(utils){
             }
 
             if("zoomcontrol" in iAttrs || iAttrs.hasOwnProperty("noninteractive")){
-                mapConfig.zoomControl = iAttrs["zoomcontrol"]!=="false";
+                mapConfig.zoomControl = false;//iAttrs["zoomcontrol"]!=="false";
             }
 
             mapConfig.attributionControl = false;
