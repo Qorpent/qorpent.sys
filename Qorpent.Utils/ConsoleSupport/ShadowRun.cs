@@ -56,14 +56,29 @@ namespace Qorpent.Utils{
 		/// </summary>
 		/// <returns></returns>
 		public  bool EnsureShadow() {
-		    var copies = FindCopies();
-		    if (copies.Length != 0) {
-		        if (this.Parameters.EnsureShadow) {
-                    Log.Info("Already run");
-		            return false;
+		    var trys = 3;
+		    while (trys>0) {
+		        trys--;
+		        try {
+		            var copies = FindCopies();
+		            if (copies.Length != 0) {
+		                if (this.Parameters.EnsureShadow) {
+		                    Log.Info("Already run");
+		                    return false;
+		                }
+		            }
+		            return RestartShadow(copies);
+		        }
+		        catch {
+		            if (trys > 0) {
+		                Thread.Sleep(500);
+		            }
+		            else {
+		                throw;
+		            }
 		        }
 		    }
-		    return RestartShadow(copies);
+		    throw new Exception("Cannot restart due to general issue");
 		}
 
 	    private bool RestartShadow(Process[] copies) {

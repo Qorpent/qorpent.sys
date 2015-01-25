@@ -16,7 +16,11 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
                 "bindQuery": attr["ngModel"] || "__acSearch",
                 "template": attr["template"] || "{{i}}",
                 "templateUrl": attr["templateUrl"] || "",
-                "ddClass": attr["ddClass"] || ""
+                "ddClass": attr["ddClass"] || "",
+                "hasTemplateUrl" : !!attr["templateUrl"]
+            }
+            if(data.templateUrl && !data.templateUrl.match(/\(/)){
+                data.templateUrl = "'"+data.templateUrl+"'";
             }
             var eltext = $the.interpolate(template, data);
             var input = $(eltext);
