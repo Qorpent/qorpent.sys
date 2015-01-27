@@ -13,8 +13,6 @@
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
-    <EmbeddedResource Include="Resources\extras\angular-min-js.map" />
-    <EmbeddedResource Include="Resources\extras\bootstrap-theme-css.map" />
     <EmbeddedResource Include="Resources\extras\fontawesome-webfont.eot" />
     <EmbeddedResource Include="Resources\extras\fontawesome-webfont.ttf" />
     <EmbeddedResource Include="Resources\extras\fontawesome-webfont.woff" />

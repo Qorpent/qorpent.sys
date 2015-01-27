@@ -1,6 +1,6 @@
 define(["the-object","the-hash"], function ($the, $m) {
     return $the(function (root, privates) {
-
+        var $hash = root.hash;
         var report = root.report = (root.report || {});
         report.getDefaultContext = function(options,doParse,hash,decode){
             var getHash = $the.hash.get;

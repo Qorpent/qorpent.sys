@@ -68,7 +68,7 @@ namespace Qorpent.Host.Handlers {
                 }
 
                 if (!File.Exists(hashFileName)) {
-                    throw new Exception("some errors in report generation");
+                    throw new Exception("some errors in report generation "+hashFileName);
                 }
 
                 var pseudofileName = title.ToSafeFileName() + ".pdf";
