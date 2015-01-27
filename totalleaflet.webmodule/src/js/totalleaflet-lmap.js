@@ -79,6 +79,7 @@ define(["totalleaflet-utils"],function(utils){
                 mapConfig.zoomControl = false;//iAttrs["zoomcontrol"]!=="false";
             }
 
+
             mapConfig.attributionControl = false;
 
             var map = L.map(element[0],mapConfig);
@@ -92,6 +93,10 @@ define(["totalleaflet-utils"],function(utils){
                 map.boxZoom.disable();
                 map.keyboard.disable();
 
+            }
+
+            if("dblclickzoom" in iAttrs){
+                map.doubleClickZoom.disable();
             }
 
             map.goHome = function(animate,uselocal){
