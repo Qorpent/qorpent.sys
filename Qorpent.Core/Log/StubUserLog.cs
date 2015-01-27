@@ -162,18 +162,20 @@ namespace Qorpent.Log {
 	    /// <summary>
 	    /// Синхронизатор журнала
 	    /// </summary>
-	    public void Synchronize()
-	    {
-	        throw new System.NotImplementedException();
+	    public void Synchronize() {
+		    foreach (var subLogger in SubLoggers) {
+			    subLogger.Synchronize();
+		    }
 	    }
 
 	    /// <summary>
 	    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 	    /// </summary>
 	    /// <filterpriority>2</filterpriority>
-	    public void Dispose()
-	    {
-	        throw new System.NotImplementedException();
+	    public void Dispose() {
+		    foreach (var subLogger in SubLoggers) {
+			    subLogger.Dispose();
+		    }
 	    }
 	}
 }
