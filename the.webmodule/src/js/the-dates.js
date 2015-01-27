@@ -192,6 +192,7 @@ define(["the-object", "moment"], function ($the, $m) {
                 var b = $m(range.Basis);
                 range.Finish = b.clone().endOf('day').toDate();
                 range.Start = b.clone().startOf('day').toDate();
+                range.SingleDate = true;
                 return;
             }
             if ("yesterday" == range.Range) {
@@ -199,6 +200,7 @@ define(["the-object", "moment"], function ($the, $m) {
                 var b = $m(range.Basis).add(-1, 'days');
                 range.Start = b.clone().startOf('day').toDate();
                 range.Finish = b.clone().endOf('day').toDate();
+                range.SingleDate = true;
                 return;
             }
             var match = range.Range.match(/^\s*((-?)\d+)([hdmyw])\s*$/);
@@ -213,28 +215,37 @@ define(["the-object", "moment"], function ($the, $m) {
                 else if(type=="y")type="year";
                 else if(type=="w")type="week";
                 range.Finish = range.Basis;
+
                 if(count!=0) {
                     range.Start = $m(range.Finish).add(count, type).toDate();
                 }else{
+                    var subtype = "day";
+                    if(type=="hour"){
+                        subtype = "hour";
+                    }
                     if(minus){
-                        range.Start = $m(range.Finish).startOf(type);
+                        range.Finish = $m(range.Finish).endOf(subtype).toDate();
+                        range.Start = $m(range.Finish).startOf(type).toDate();
+
                     }else{
-                        range.Start = $m(range.Finish).endOf(type);
+                        range.Start = $m(range.Finish).startOf(subtype).toDate();
+                        range.Finish = $m(range.Finish).endOf(type).toDate();
                     }
                 }
                 if(range.Finish <  range.Start){
                     range.Finish = range.Start;
                     range.Start = range.Basis;
                 }
-                if(type!='hour'){
-                    range.Start = $m(range.Start).startOf('day').toDate();
-                    range.Finish = $m(range.Finish).endOf('day').toDate();
+                if(type!='hour' && count!=0){
+                    range.Start = $m(range.Start).add(minus?1:0,'day').startOf('day').toDate();
+                    range.Finish = $m(range.Finish).add(minus?0:-1,'day').endOf('day').toDate();
                 }
-
                 if($m(range.Start).format("YYYYMMDD")==$m(range.Finish).format("YYYYMMDD")){
                     range.SingleDate = true;
                 }
+
             }
+
         };
 
 

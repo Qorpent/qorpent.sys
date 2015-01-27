@@ -65,7 +65,7 @@ define(["the","chai","moment"],function($the,chai,$m) {
             it("#r:delted on day",function(){
                 range = $the.dates.DateRange.create("-2d", new Date(2015,0,12,15,44,22));
                 range.IsValid.should.eq(true);
-                var s = new Date(2015,0,10,00,00,00);
+                var s = new Date(2015,0,11,00,00,00);
                 var f = new Date(2015,0,12,23,59,59);
                 s.toString().should.eq(range.Start.toString());
                 f.toString().should.eq(range.Finish.toString());
@@ -73,7 +73,7 @@ define(["the","chai","moment"],function($the,chai,$m) {
                 range = $the.dates.DateRange.create("2d", new Date(2015,0,12,15,44,22));
                 range.IsValid.should.eq(true);
                 var s = new Date(2015,0,12,00,00,00);
-                var f = new Date(2015,0,14,23,59,59);
+                var f = new Date(2015,0,13,23,59,59);
                 s.toString().should.eq(range.Start.toString());
                 f.toString().should.eq(range.Finish.toString());
             });
@@ -81,7 +81,7 @@ define(["the","chai","moment"],function($the,chai,$m) {
             it("#r:delted on month",function(){
                 range = $the.dates.DateRange.create("-2m", new Date(2015,0,12,15,44,22));
                 range.IsValid.should.eq(true);
-                var s = new Date(2014,10,12,00,00,00);
+                var s = new Date(2014,10,13,00,00,00);
                 var f = new Date(2015,0,12,23,59,59);
                 s.toString().should.eq(range.Start.toString());
                 f.toString().should.eq(range.Finish.toString());
@@ -89,23 +89,23 @@ define(["the","chai","moment"],function($the,chai,$m) {
                 range = $the.dates.DateRange.create("2m", new Date(2015,0,12,15,44,22));
                 range.IsValid.should.eq(true);
                 var s = new Date(2015,0,12,00,00,00);
-                var f = new Date(2015,2,12,23,59,59);
+                var f = new Date(2015,2,11,23,59,59);
                 s.toString().should.eq(range.Start.toString());
                 f.toString().should.eq(range.Finish.toString());
             });
 
             it("#r:delted ZERO on month",function(){
-                range = $the.dates.DateRange.create("-0m", new Date(2015,0,12,15,44,22));
+                range = $the.dates.DateRange.create("-0m", new Date(2015,4,12,15,44,22));
                 range.IsValid.should.eq(true);
-                var s = new Date(2015,0,1,00,00,00);
-                var f = new Date(2015,0,12,23,59,59);
+                var s = new Date(2015,4,1,00,00,00);
+                var f = new Date(2015,4,12,23,59,59);
                 s.toString().should.eq(range.Start.toString());
                 f.toString().should.eq(range.Finish.toString());
 
-                range = $the.dates.DateRange.create("0m", new Date(2015,0,12,15,44,22));
+                range = $the.dates.DateRange.create("0m", new Date(2015,4,12,15,44,22));
                 range.IsValid.should.eq(true);
-                var s = new Date(2015,0,12,00,00,00);
-                var f = new Date(2015,0,31,23,59,59);
+                var s = new Date(2015,4,12,00,00,00);
+                var f = new Date(2015,4,31,23,59,59);
                 s.toString().should.eq(range.Start.toString());
                 f.toString().should.eq(range.Finish.toString());
             });
@@ -132,6 +132,11 @@ define(["the","chai","moment"],function($the,chai,$m) {
                 r = $the.dates.DateRange.create("-2h", new Date(2015,0,12,15,44,22));
                 formated = r.format('RU');
                 formated.should.eq("с 12.01.2015 13:44:22 по 12.01.2015 15:44:22");
+            });
+
+            it("today is singledate",function(){
+               var r = $the.dates.DateRange.create("today");
+                r.SingleDate.should.eq(true);
             });
         });
     });
