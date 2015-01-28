@@ -115,8 +115,8 @@ namespace Qorpent.Utils{
 	        }
 	        Log.Trace("upgrade complete");
 	        var args = Environment.GetCommandLineArgs();
-			var safedArgs = string.Join(" ", args.Skip(1).Select(_ => "\"" + (_.StartsWith("--shadow") && _ != "--shadow" ? "--" + _.Substring(8) : _) + "\""));
-	        safedArgs += " --shadowevidence \"" + binDir + "\"";
+			var safedArgs = string.Join(" ", args.Skip(1).Select(_ => "\"" + (_.StartsWith("--shadow") && !_.IsIn("--shadow", "--shadowsuffix") ? "--" + _.Substring(8) : _) + "\""));
+	        safedArgs += " --shadowevidence \"" + binDir;
 	        Log.Debug("adapted args " + safedArgs);
 	        var exeName = Path.Combine(targetDirectory, Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName));
 	        Log.Trace("start " + exeName);
