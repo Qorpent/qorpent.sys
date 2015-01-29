@@ -193,11 +193,15 @@ namespace Qorpent.Host{
 		}
 
 		private void OnRequest(Task<HttpListenerContext> task){
+			try{
 			StartWaitNextRequest();
 			if (CheckInvalidStartupConditions(task)) return;
 			PrepareForCrossSiteScripting(task);
 			if (CheckOptionsMethodIsCalled(task)) return;
 			new HostRequestHandler(this, task.Result).Execute();
+			}catch(Exception ex){
+			  task.Result.Response.Finish("some error occured "+ex.ToString(),status:500);
+			}
 		}
 
 

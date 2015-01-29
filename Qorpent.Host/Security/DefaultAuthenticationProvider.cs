@@ -29,7 +29,12 @@ namespace Qorpent.Host.Security{
 		private readonly FieldInfo m_User = typeof (HttpListenerContext).GetField("m_User",
 		                                                                          BindingFlags.SetField |
 		                                                                          BindingFlags.NonPublic |
-		                                                                          BindingFlags.Instance);
+		                                                                          BindingFlags.Instance) ?? 
+		                                                                          
+		                                   typeof (HttpListenerContext).GetField("user",   // IN MONO
+		                                                                          BindingFlags.SetField |
+		                                                                          BindingFlags.NonPublic |
+		                                                                          BindingFlags.Instance) ;
 
 		private IHostServer _server;
 
@@ -65,6 +70,7 @@ namespace Qorpent.Host.Security{
 			}
 			var principal = new QorpentHostPrincipal(result);
 			m_User.SetValue(context, principal);
+			
 		}
 
 		/// <summary>
