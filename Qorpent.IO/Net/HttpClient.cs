@@ -82,7 +82,7 @@ namespace Qorpent.IO.Net{
 				var secure = request.Uri.Scheme.StartsWith("https");
 				request.Cookies = request.Cookies ?? Cookies;
 				var endpoint = GetEndpoint(request.Uri);
-				using (var socket = new Socket(SocketType.Stream, ProtocolType.Tcp)){
+				using (var socket = new Socket(AddressFamily.Unspecified, SocketType.Stream, ProtocolType.Tcp)){
 					socket.Connect(endpoint);
 					using (var ns = new NetworkStream(socket)){
 						using (var rs = secure ? (Stream) new SslStream(ns, false, UserCertificateValidationCallback) : ns){

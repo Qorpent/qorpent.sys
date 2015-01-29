@@ -232,7 +232,6 @@ namespace Qorpent.IO.Net{
 					}
 					normalizedLfIndex = nextLfIndex + lengthBasis;
 					if (normalizedLfIndex == LastLFIndex + 2){
-						HeaderTerminalIndex = nextLfIndex;
 						TrailDataCount = chunkSize - nextLfIndex - 1;
 						// it means that it's end of headers
 						headerTerminalDeteced = true;
@@ -267,7 +266,6 @@ namespace Qorpent.IO.Net{
 			}
 		}
 
-		private int HeaderTerminalIndex;
 		private int TrailDataCount;
 		private int[] _hLineTerminals;
 		private int chunkSize;

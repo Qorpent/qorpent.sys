@@ -5,7 +5,8 @@ namespace Qorpent.Scaffolding.Application {
     /// 
     /// </summary>
     public abstract class AppObjectWriterBase<T> where T:AppObject<T> {
-        private T _obj;
+    ///<summary></summary>
+        protected T _obj;
 
         /// <summary>
         /// 

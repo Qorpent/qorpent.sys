@@ -56,6 +56,7 @@ namespace Qorpent.Host.Handlers
 
 		private void RunTrace(HttpListenerContext callcontext) {
             try {
+#pragma warning disable 219
                 var sb = new StringBuilder();
                 var sw = Stopwatch.StartNew();
                 var parameters = PrepareParameters(callcontext);
@@ -82,7 +83,7 @@ namespace Qorpent.Host.Handlers
                 callcontext.Finish(ex.ToString(), "text/plain", 500);
             }
 	    }
-
+ #pragma warning restore 219
 	    private void AsynchronousEnd(HttpListenerContext callcontext){
 			if (null == currentAsyncCall)
 			{
