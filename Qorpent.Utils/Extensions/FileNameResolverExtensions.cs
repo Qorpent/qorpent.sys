@@ -422,12 +422,15 @@ namespace Qorpent.Utils.Extensions {
 		/// 	Removes illegal folder delimiters, converts to single '/' style
 		/// </summary>
 		/// <param name="path"> </param>
+		///<param name="ignorecase"></param>
 		/// <returns> </returns>
-		public static string NormalizePath(this string path) {
+		public static string NormalizePath(this string path, bool ignorecase = true) {
 			if (null == path) {
 				return null;
 			}
-			return path.Replace("\\", "/").Replace("//", "/").Replace("//", "/").ToLower();
+			var result = path.Replace("\\", "/").Replace("//", "/").Replace("//", "/");
+			if(ignorecase) result = result.ToLower();
+			return result;
 		}
 
 		/// <summary>
