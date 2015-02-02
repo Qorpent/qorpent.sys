@@ -159,7 +159,7 @@ namespace Test.ObjectCaches {
 		public Test.Adapters.Model Model {get;set;}
 
 		///<summary>Тест TF (Id notation)</summary>
-		public A[] GetA (int bId) {
+		public A[] GetA (long bId) {
 			return Model.A.GetAll (""select id from \""dbo\"".\""bGetA\"" ( '""+bId+""')"");
 		}
 
