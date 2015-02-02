@@ -1,0 +1,38 @@
+= Команда "Поля для ручного заполнения"
+
+
+Отчеты можно отобразить (и напечатать) с отображением пустых полей, в которые можно вставить свои пометки и/или комментарии
+вручную (на бумажном носителе).
+Данная команда переключает режим включения или не включения данных полей в отчет.
+
+Вид кнопки при включенном выводе полей для ручного заполнения:
+
+[[html]]
+<div>
+<span ><span class="stackedbutton fa-stack fa-3x">
+        <i class="fa fa-file fa-stack-2x back">
+            <i class="fa fa-file-o fa-stack-2x front">
+                <i class="fa-stack-1x fa fa-check inner"></i>
+                <i  class="fa-stack-1x fa fa-question-circle help"></i>
+            </i>
+        </i>
+    </span></span>
+</div>
+[[/html]]
+
+Вид кнопки при выключенном выводе полей для ручного заполнения:
+
+
+[[html]]
+<div>
+<span ><span class="stackedbutton fa-stack fa-3x ischecker unchecked">
+        <i class="fa fa-file fa-stack-2x back">
+            <i class="fa fa-file-o fa-stack-2x front">
+                <i class="fa-stack-1x fa fa-remove inner "></i>
+                <i  class="fa-stack-1x fa fa-question-circle help"></i>
+            </i>
+        </i>
+    </span></span>
+</div>
+[[/html]]
+

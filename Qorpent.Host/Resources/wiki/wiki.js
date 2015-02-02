@@ -327,6 +327,22 @@ qwiki.create = function(text, logwriter){
 					continue;
 				}
 
+				if (curline == "[[/html]]") {
+				    this.html = false;
+				    continue;
+				}
+				if (curline == "[[html]]") {
+				    this.html = true;
+				    continue;
+				}
+				if (this.html) {
+				    console.log(curline);
+				    var consoled = curline.replace(/&nbsp;/g, " ").replace("[BR]", "<br/>");
+				    this.processed.push(consoled);
+				    console.log(consoled);
+				    continue;
+				}
+
 			    //WIKI IGNORANCE SUPPORT WITH BLOCK AND INLINE
 				if (curline == "[[/script]]") {
 				    this.scriptblock = false;

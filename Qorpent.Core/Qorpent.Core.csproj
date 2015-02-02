@@ -114,6 +114,7 @@
     <Compile Include="Config\TreeConfigBaseElementsList.cs" />
     <Compile Include="CoreExtensions.cs" />
     <Compile Include="Data\DocumentStorageOptions.cs" />
+    <Compile Include="Data\IContext.cs" />
     <Compile Include="Data\IDocumentStorage.cs" />
     <Compile Include="Data\IObjectDataAdapter.cs" />
     <Compile Include="Data\IObjectDataCache.cs" />
@@ -156,6 +157,9 @@
     <Compile Include="IO\FileStorageExtensions.cs" />
     <Compile Include="IO\HashedDirectoryRecord.cs" />
     <Compile Include="IO\IContentSource.cs" />
+    <Compile Include="IO\IFileCacheResolver.cs" />
+    <Compile Include="IO\IFileCacheSource.cs" />
+    <Compile Include="IO\IFileFilter.cs" />
     <Compile Include="IO\IFileSource.cs" />
     <Compile Include="IO\IFileDescriptor.cs" />
     <Compile Include="IO\IFileStorage.cs" />

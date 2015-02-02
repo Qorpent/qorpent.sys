@@ -28,6 +28,7 @@ using System.Data.SqlTypes;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using Microsoft.SqlServer.Types;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Tools.SqlExtensionsInstallerLib {
@@ -115,6 +116,14 @@ namespace Qorpent.Tools.SqlExtensionsInstallerLib {
 			if (typeof (SqlXml) == nettype) {
 				return "xml";
 			}
+            if (typeof(SqlGeometry) == nettype)
+            {
+                return "geometry";
+            }
+            if (typeof(SqlGeography) == nettype)
+            {
+                return "geography";
+            }
 			return schema + "." + nettype.Name;
 		}
 

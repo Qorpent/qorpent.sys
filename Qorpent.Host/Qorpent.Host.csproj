@@ -13,8 +13,6 @@
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
-    <EmbeddedResource Include="Resources\extras\angular-min-js.map" />
-    <EmbeddedResource Include="Resources\extras\bootstrap-theme-css.map" />
     <EmbeddedResource Include="Resources\extras\fontawesome-webfont.eot" />
     <EmbeddedResource Include="Resources\extras\fontawesome-webfont.ttf" />
     <EmbeddedResource Include="Resources\extras\fontawesome-webfont.woff" />
@@ -29,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestHandlerFactory.cs" />
+    <Compile Include="Handlers\ServerPrint.cs" />
     <Compile Include="Handlers\WikiHandler.cs" />
     <Compile Include="ProxyHandler.cs" />
     <Compile Include="Server\ServerParameters.cs" />
@@ -219,22 +218,8 @@
     <EmbeddedResource Include="Resources\extras\text.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\images\layers-2x.png" />
-    <EmbeddedResource Include="Resources\images\layers.png" />
-    <EmbeddedResource Include="Resources\images\marker-icon-2x.png" />
-    <EmbeddedResource Include="Resources\images\marker-icon.png" />
-    <EmbeddedResource Include="Resources\images\marker-shadow.png" />
-    <EmbeddedResource Include="Resources\images\markers-matte%402x.png" />
-    <EmbeddedResource Include="Resources\images\markers-matte.png" />
-    <EmbeddedResource Include="Resources\images\markers-plain.png" />
-    <EmbeddedResource Include="Resources\images\markers-shadow%402x.png" />
-    <EmbeddedResource Include="Resources\images\markers-shadow.png" />
-    <EmbeddedResource Include="Resources\images\markers-soft%402x.png" />
-    <EmbeddedResource Include="Resources\images\markers-soft.png" />
-    <EmbeddedResource Include="Resources\leaflet.awesome-markers.css" />
-    <EmbeddedResource Include="Resources\leaflet.awesome-markers.js" />
-    <EmbeddedResource Include="Resources\leaflet.css" />
-    <EmbeddedResource Include="Resources\leaflet.js" />
+    <EmbeddedResource Include="Resources\extras\textAngular-sanitize.js" />
+    <EmbeddedResource Include="Resources\extras\textAngular.js" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

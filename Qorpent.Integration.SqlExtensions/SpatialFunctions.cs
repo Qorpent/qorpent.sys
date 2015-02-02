@@ -2,6 +2,7 @@ using System;
 using System.Data.SqlTypes;
 using System.Linq;
 using Microsoft.SqlServer.Server;
+using Microsoft.SqlServer.Types;
 
 namespace Qorpent.Integration.SqlExtensions {
     /// <summary>
@@ -84,6 +85,68 @@ namespace Qorpent.Integration.SqlExtensions {
             var maxy = Math.Max(@by.Value, ty.Value);
             return x.Value >= minx && x.Value <= maxx && y.Value >= miny && y.Value <= maxy;
         }
+        /// <summary>
+        /// Формирует точку в проекции 4326 с резолюцией X,Y или Lon , Lat на входе
+        /// </summary>
+        /// <param name="xOrLon"></param>
+        /// <param name="yOrLat"></param>
+        /// <returns></returns>
+        [SqlFunction(IsDeterministic = true, SystemDataAccess = SystemDataAccessKind.None,
+            DataAccess = DataAccessKind.None)]
+        public static SqlGeography GetPoint(SqlDouble xOrLon, SqlDouble yOrLat) {
+            if (xOrLon.IsNull || yOrLat.IsNull) return SqlGeography.Null;
+            var builder = new SqlGeographyBuilder();
+            builder.SetSrid(4326);
+            builder.BeginGeography(OpenGisGeographyType.Point);
+            
 
+            if (Math.Abs(xOrLon.Value) <= 180 && Math.Abs(yOrLat.Value) <= 180) {
+                builder.BeginFigure(yOrLat.Value, xOrLon.Value);
+
+            }
+            else {
+                builder.BeginFigure(GetLat(yOrLat).Value,GetLon(xOrLon).Value);
+            }
+            builder.EndFigure();
+            builder.EndGeography();
+            return builder.ConstructedGeography;
+        }
+
+        /// <summary>
+        /// Формирует прямоугольную область 4326
+        /// </summary>
+        /// <param name="xOrLon"></param>
+        /// <param name="yOrLat"></param>
+        /// <param name="xOrLon2"></param>
+        /// <param name="yOrLat2"></param>
+        /// <returns></returns>
+        [SqlFunction(IsDeterministic = true, SystemDataAccess = SystemDataAccessKind.None,
+            DataAccess = DataAccessKind.None)]
+        public static SqlGeography GetBounds(SqlDouble xOrLon, SqlDouble yOrLat, SqlDouble xOrLon2, SqlDouble yOrLat2)
+        {
+            if (xOrLon.IsNull || yOrLat.IsNull) return SqlGeography.Null;
+            var builder = new SqlGeographyBuilder();
+            builder.SetSrid(4326);
+            builder.BeginGeography(OpenGisGeographyType.Polygon);
+            double x = xOrLon.Value;
+            double x2 = xOrLon2.Value;
+            double y = yOrLat.Value;
+            double y2 = yOrLat2.Value;
+            if (Math.Abs(x) > 180 && Math.Abs(y) > 180) {
+                x = GetLon(xOrLon).Value;
+                x2 = GetLon(xOrLon2).Value;
+                y = GetLat(yOrLat).Value;
+                y2 = GetLat(yOrLat2).Value;
+            }
+
+            builder.BeginFigure(y,x);
+            builder.AddLine(y,x2);
+            builder.AddLine(y2,x2);
+            builder.AddLine(y2,x);
+            builder.AddLine(y,x);
+            builder.EndFigure();
+            builder.EndGeography();
+            return builder.ConstructedGeography;
+        }
     }
 }

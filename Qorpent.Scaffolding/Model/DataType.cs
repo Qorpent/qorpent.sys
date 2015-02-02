@@ -140,6 +140,16 @@ namespace Qorpent.Scaffolding.Model{
 					{SqlDialect.PostGres, new SqlDataType{Name = "float"}},
 				}
             };
+            result["double"] = new DataType
+            {
+                Code = "double",
+                CSharpDataType = "double",
+                SqlDataTypes ={
+					{SqlDialect.Ansi, new SqlDataType{Name = "double"}},
+					{SqlDialect.SqlServer, new SqlDataType{Name = "double"}},
+					{SqlDialect.PostGres, new SqlDataType{Name = "double"}},
+				}
+            };
             result["long"] = new DataType {
 				Code = "long",
 				CSharpDataType = "Int64",

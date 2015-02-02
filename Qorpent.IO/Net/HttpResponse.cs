@@ -35,7 +35,13 @@ namespace Qorpent.IO.Net{
 		///		Адрес перенаправления
 		/// </summary>
 		public Uri RedirectUri {
-			get { return new Uri(Headers["Location"]); }
+			get {
+				if (Headers["Location"] == null) return  null;
+				if (Uri == null) return null;
+				Uri redirectUri;
+				Uri.TryCreate(Uri, Headers["Location"], out redirectUri);
+				return redirectUri;
+			}
 		}
 		/// <summary>
 		///     Название статуса
@@ -52,6 +58,14 @@ namespace Qorpent.IO.Net{
 				return _headers;
 			}
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+	    public IList<string> RawCookies {
+	        get {
+	            return _cookies;
+	        }
+	    } 
 
 		/// <summary>
 		///     Коллекция куки
@@ -106,8 +120,9 @@ namespace Qorpent.IO.Net{
 
 		private string _directdata;
 		private Uri _uri;
+	    private IList<string> _cookies = new List<string>();
 
-		/// <summary>
+	    /// <summary>
 		///     Возвращает строчное значение
 		/// </summary>
 		public string StringData
@@ -156,6 +171,7 @@ namespace Qorpent.IO.Net{
 		private const string HEADER_CONTENT_LENGTH = "Content-Length";
 		private const string HEADER_CONTENT_TYPE = "Content-Type";
 		private const string HEADER_CONTENT_ENCODING = "Content-Encoding";
+		private const string HEADER_SETCOOKIE = "Set-Cookie";
 		private const string GZIP_MARK = "gzip";
 		private const string DEFLATE_MARK = "deflate";
 
@@ -179,7 +195,10 @@ namespace Qorpent.IO.Net{
 			}else if (headerName == HEADER_CONTENT_ENCODING){
 				GZip = headerValue.Contains("gzip");
 				Deflate = headerValue.Contains("deflate");
-			}
+            } else if (headerName == HEADER_SETCOOKIE) {
+                RawCookies.Add(headerValue);
+            }
+
 			Headers[headerName] = headerValue;
 		}
 	}

@@ -1,6 +1,7 @@
 define([],function(){
-    return '<input class="dropdown-toggle form-control" ng-focus="__acFocus()" ng-model="${bindQuery}" ng-change="__acChange()"/> \
-<ul class="dropdown-menu"> \
+    return '<input class="dropdown-toggle form-control " ng-focus="__acFocus()" ng-model="${bindQuery}" ng-change="__acChange(1)"\
+    on-enter="__acChange(2)"/> \
+<ul  ng-if="!${hasTemplateUrl}" class="dropdown-menu ${ddClass}"> \
     <li class="default"  ng-repeat="i in __fixdata"> \
         <a ng-click="__acClick($event,i)">${template}</a> \
     </li> \
@@ -8,5 +9,7 @@ define([],function(){
     <li ng-repeat="i in __data"> \
         <a ng-click="__acClick($event,i)">${template}</a> \
     </li> \
+</ul>\
+<ul ng-if="${hasTemplateUrl}" class="dropdown-menu ${ddClass}" ng-include="${templateUrl}"> \
 </ul>'
 });

@@ -11,6 +11,15 @@ namespace Qorpent.Utils {
     /// </summary>
     /// <remarks>Класс построен по принципу прецедента а не системного анализа дат</remarks>
     public class WebDateTimeParser{
+		private static readonly Dictionary<string, int> IntLiterals = new Dictionary<string, int> {
+			{"десять", 10}, {"одиннадцать", 11}, {"двенадцать", 12},
+			{"тринадцать", 13}, {"четырнадцать", 14}, {"пятнадцать", 15}, {"шестнадцать", 16},
+			{"семнадцать", 17}, {"восемнадцать", 18}, {"девятнадцать", 19}, {"двадцать", 20},
+			{"двадцатьодин", 21}, {"двадцатьдва", 22}, {"двадцатьтри", 23}, {"двадцатьчетыре", 24},
+			{"один", 1}, {"два", 2}, {"три", 3}, {"четыре", 4},
+			{"пять", 5}, {"шесть", 6}, {"семь", 7}, {"восемь", 8},
+			{"девять", 9}
+		};
 	    private static readonly string[] Formats = new[]{
 		    "yyyy-MM-ddTHH:mm(:ss)?_TZ_",
 			"dd.MM.yyyy HH:mm Мск",
@@ -39,8 +48,10 @@ namespace Qorpent.Utils {
 		    "сегодня в HH:mm",
 		    "yyyyMMdd",
 		    "HH:mm dd.MM",
-            "РУЧИСЛО дня назад в HH:mm"
-            
+            "РУЧИСЛО дня назад в HH:mm",
+			"mm минут(у{|}ы)? назад",
+            "(минуту{|}час) назад",
+			"HH час(а{|}ов)? назад"
 	    };
 
 	    private static readonly Regex[] FormatRegexes = null;
@@ -52,11 +63,12 @@ namespace Qorpent.Utils {
 					.Replace("MM", @"(?<m>\d{2})")
 					.Replace("dd", @"(?<d>\d\d?)")
 					.Replace("D", @"(?<d>\d\d?)")
-					.Replace("HH", @"(?<h>\d{2})")
-					.Replace("mm", @"(?<mm>\d{2})")
+					.Replace("HH", @"(?<h>\d{1,2})")
+					.Replace("mm", @"(?<mm>\d{1,2})")
 					.Replace("ss", @"(?<s>\d{2})")
 					.Replace("_TZ_",@"\+(?<tz>\d+)")
 					.Replace("|", "\\|")
+					.Replace("{\\|}", "|")
 					.Replace(" в ", @"[\sв]+")
                     .Replace("РУЧИСЛО","(два|три)")
 					.Replace(" ", @"\s+");
@@ -152,17 +164,31 @@ namespace Qorpent.Utils {
 				            day = d.Day;
 				        }
 
-					    if (year == 0){
-						    year = DateTime.Today.Year;
-					    }
-					    if (month == 0){
-						    month = DateTime.Today.Month;
-					    }
-					    if (day == 0){
-						    day = DateTime.Today.Day;
-					    }
+						if (dateTime.Contains("минут") && dateTime.Contains("назад")) {
+							var d = (baseDate ?? DateTime.Now);
+							d = min != 0 ? d.AddMinutes(-min) : d.AddMinutes(-1);
+							year = d.Year;
+							month = d.Month;
+							day = d.Day;
+							hour = d.Hour;
+							min = d.Minute;
+							sec = d.Second;
+						}
 
-
+						if (dateTime.Contains("час") && dateTime.Contains("назад")) {
+							var d = (baseDate ?? DateTime.Now);
+							d = hour != 0 ? d.AddHours(-hour) : d.AddHours(-1);
+							year = d.Year;
+							month = d.Month;
+							day = d.Day;
+							hour = d.Hour;
+							min = d.Minute;
+							sec = d.Second;
+						}
+						if (year == 0) year = today.Year;
+						if (month == 0) month = today.Month;
+						if (day == 0) day = today.Day;
+						
 					    if (null != Log){
 						    Log.Debug(string.Format("Matched {0} {1} {2} {3} {4} {5}", year, month, day, hour, min, sec));
 					    }
@@ -275,6 +301,9 @@ namespace Qorpent.Utils {
 		    dateTime1 = dateTime1.Trim();
 		    dateTime1 = Regex.Replace(dateTime1, @"20\s+[1234]\d\s+", "2014 ");
 		    dateTime1 = Regex.Replace(dateTime1, @"(20[1234]\d)(\d{2}:)", "$1 $2");
+		    foreach (var literal in IntLiterals) {
+			    dateTime1 = dateTime1.Replace(literal.Key, literal.Value.ToString(CultureInfo.InvariantCulture));
+		    }
 		    return dateTime1;
 	    }
 

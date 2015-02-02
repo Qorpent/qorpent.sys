@@ -33,7 +33,7 @@
 
             $(base).should.eql(base);
             $(base,{nulls:false}).should.eql(del(base,["b1"]));
-            $(base,{defaults:false}).should.eql(del(base,["b1","b2","b3","b4","b5","b6"]));
+                $(base,{defaults:false}).should.eql(del(base,["b1","b2","b3","b4","b5","b6"]));
         });
         it("does not remove 0,false,'' if only null option",function(){
 

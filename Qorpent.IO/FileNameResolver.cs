@@ -214,7 +214,7 @@ namespace Qorpent.IO {
 				if (null != query.ProbeFiles.FirstOrDefault(x => x.Contains(".."))) {
 					throw new ArgumentException("cannot use .. path modifiers in files");
 				}
-				query.ProbeFiles = query.ProbeFiles.Select(FileNameResolverExtensions.NormalizePath).ToArray();
+				query.ProbeFiles = query.ProbeFiles.Select(p=>FileNameResolverExtensions.NormalizePath(p)).ToArray();
 				if (null == query.ProbePaths) {
 					var ext = Path.GetExtension(query.ProbeFiles.First());
 					query.ProbePaths = FileNameResolverExtensions.GetDefaultProbesPaths(ext);
@@ -223,7 +223,7 @@ namespace Qorpent.IO {
 					if (null != query.ProbePaths.FirstOrDefault(x => x.Contains(".."))) {
 						throw new ArgumentException("cannot use .. path modifiers in dirs");
 					}
-					query.ProbePaths = query.ProbePaths.Select(FileNameResolverExtensions.NormalizePath).ToArray();
+					query.ProbePaths = query.ProbePaths.Select(p=>FileNameResolverExtensions.NormalizePath(p)).ToArray();
 				}
 
 				var key = query.ToString();

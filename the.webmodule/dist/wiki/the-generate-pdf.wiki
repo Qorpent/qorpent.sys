@@ -1,0 +1,20 @@
+= Команда "Сформировать в формате PDF"
+[[html]]
+<div style="float:left;">
+<span  ><span class="stackedbutton fa-stack fa-3x">
+        <i class="fa fa-file fa-stack-2x back pdf">
+            <i class="fa fa-file-pdf-o fa-stack-2x front">
+                <i class="fa-stack-1x fa fa-save inner"></i>
+                <i class="fa-stack-1x fa fa-question-circle help"></i>
+            </i>
+        </i>
+    </span></span>
+</div>
+[[/html]]
+Данная команда позволяет вам быстро сформировать файл PDF, используя настройки принтера PDF,
+настроенные на компьютере пользователя (без изменения стандартных настроек печати, установленных в Firefox)
+
+/Внимание! Работает только в браузере Mozilla Firefox, требует установки специального програмного обеспечения - [the-setup-pdf#nosyntax Установка ПО]
+
+В случае, если требуется генерация обычного PDF со стандартными настройками, рекомендуем использовать
+команду [the-download-pdf#nosyntax Загрузить в формате PDF].

@@ -30,6 +30,7 @@ namespace Qorpent.Host.Tests
             try {
                 h1.Start();
                 h2.Start();
+                Thread.Sleep(100);
                 result = new HttpClient().GetString("http://127.0.0.1:14720/call1");
                 
             }
@@ -57,6 +58,7 @@ namespace Qorpent.Host.Tests
             {
                 h1.Start();
                 h2.Start(); 
+                Thread.Sleep(100);
                 result = new HttpClient().GetString("http://127.0.0.1:14720/call1");
             }
             finally
@@ -89,10 +91,14 @@ namespace Qorpent.Host.Tests
                 
             });
             var result = "";
+            var resultDirect = "";
+
             try
             {
                 h1.Start();
                 h2.Start();
+                Thread.Sleep(100);
+                resultDirect = new HttpClient().GetString("http://127.0.0.1:14730/call1", "hello2");
                 result = new HttpClient().GetString("http://127.0.0.1:14740/call1", "hello2");
             }
             finally
@@ -102,6 +108,8 @@ namespace Qorpent.Host.Tests
 
             }
             Console.WriteLine(result);
+
+            Assert.AreEqual("hello2", resultDirect);
             Assert.AreEqual("hello2", result);
         }
 

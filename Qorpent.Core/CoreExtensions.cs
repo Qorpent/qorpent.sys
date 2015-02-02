@@ -238,6 +238,12 @@ namespace Qorpent.Utils.Extensions {
 				converted = true;
 				return x;
 			}
+		    if (type == typeof (XElement)) {
+		        if (x is string) {
+		            return XElement.Parse(x as string);
+		        }
+		        return null;
+		    }
 			/*var xElement = x as XElement;
 			if (xElement != null) {
 				converted = true;

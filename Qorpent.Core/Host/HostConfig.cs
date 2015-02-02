@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Config;
+using Qorpent.IO;
 using Qorpent.Log;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
@@ -20,6 +22,7 @@ namespace Qorpent.Host{
 		private string _configFolder;
 		private string _dllFolder;
 		private string _logFolder;
+		private string _machineName;
 		private ConfigBase _parameters;
 		private string _rootFolder;
 		private int _threadCount;
@@ -32,7 +35,11 @@ namespace Qorpent.Host{
 	    /// </summary>
 	    /// <param name="xml"></param>
 	    /// <param name="context"></param>
-	    public HostConfig(XElement xml,IBSharpContext context = null) : this(){
+	    /// <param name="machineName"></param>
+	    /// <param name="log"></param>
+	    public HostConfig(XElement xml,IBSharpContext context = null, string machineName = null, IUserLog log = null) : this() {
+		    if (!string.IsNullOrWhiteSpace(machineName)) MachineName = machineName;
+		    if (null != log) Log = log;
 			if (null != xml){
 				LoadXmlConfig(xml,context);
 			}
@@ -50,6 +57,7 @@ namespace Qorpent.Host{
 			LogLevel = LogLevel.Info;
 			ContentFolders = new List<string>();
 			ExtendedContentFolders = new List<string>();
+            StaticContentCacheMap  = new ConcurrentDictionary<string, XElement>();
 			Cached = new List<string>();
 			AuthCookieName = "QHAUTH";
 			AuthCookieDomain = "";
@@ -60,12 +68,36 @@ namespace Qorpent.Host{
 			StaticContentMap = new Dictionary<string, string>();
             Proxize = new Dictionary<string, string>();
             ConnectionStrings = new Dictionary<string, string>();
+			Constants = new Dictionary<string, string>();
+			Modules = new Dictionary<string, string>();
+			Initializers = new List<string>();
+			MachineName = Environment.MachineName;
 		}
 		/// <summary>
+		///		Имя машины
+		/// </summary>
+		public string MachineName {
+			get { return _machineName; }
+			set {
+				if (value != null) value = value.ToLowerInvariant();
+				_machineName = value;
+			}
+		}
+        /// <summary>
+        /// Перечень классов для инициализации
+        /// </summary>
+	    public IList<string> Initializers { get; set; }
+
+	    /// <summary>
+        /// 
+        /// </summary>
+	    public IDictionary<string, string> Modules { get; private set; }
+
+	    /// <summary>
 		/// Разрешение Cookie при работе с Cross-Site
 		/// </summary>
 		public bool AccessAllowCredentials { get; set; }
-
+		
 		/// <summary>
 		/// Методы, разрешнные для Cross-Site-Scripting
 		/// </summary>
@@ -230,6 +262,10 @@ namespace Qorpent.Host{
 		/// </summary>
 		public string EncryptBasis { get; set; }
 		/// <summary>
+		///		Набор констант
+		/// </summary>
+		public IDictionary<string, string> Constants { get; private set; }
+		/// <summary>
 		/// Мапинг юрлов в диретории для Static Handler
 		/// </summary>
 		public IDictionary<string, string> StaticContentMap { get; private set; }
@@ -253,6 +289,23 @@ namespace Qorpent.Host{
 	    /// <param name="xml"></param>
 	    /// <param name="context"></param>
 	    public void LoadXmlConfig(XElement xml,IBSharpContext context = null) {
+			foreach (var condition in xml.Elements("machine")) {
+			    var machine = condition.Attr("code").ToLowerInvariant();
+				var not = false;
+				if (machine == "not" && !string.IsNullOrWhiteSpace(condition.Attr("name"))) {
+					not = true;
+					machine = condition.Attr("name").ToLowerInvariant();
+				}
+				if ((machine == MachineName && !not) || (not && machine != MachineName )) {
+					var target = condition.Attr("use");
+					if (context == null) throw new Exception("Cannot resolve machine-related config cause context is null");
+					var config = context[target];
+					if (config == null) throw new Exception("Cannot resolve machine-related config");
+					xml = config.Compiled;
+					Log.Info("Usage config " + target +" because machine name is " + (not ? "not " : "") + MachineName);
+					break;
+				}
+		    }
 	        this.Definition = xml;
             RootFolder = xml.ResolveValue("root", RootFolder);
 	        RootFolder = xml.ResolveValue(HostUtils.RootFolderXmlName, RootFolder);	      
@@ -285,7 +338,10 @@ namespace Qorpent.Host{
 				Bindings.Add(hostbind);
 				
 			}
-
+		    foreach (var constant in xml.Elements("constant")) {
+				if (string.IsNullOrWhiteSpace(constant.Attr("code"))) continue;
+			    Constants[constant.Attr("code").ToLowerInvariant()] = constant.Attr("name");
+		    }
 			foreach (XElement e in xml.Elements(HostUtils.ContentFolder))
 			{
 				
@@ -308,8 +364,18 @@ namespace Qorpent.Host{
 	            if (!name.EndsWith("/")) {
 	                name += "/";
 	            }
-	            this.StaticContentMap[name] = folder;
-	        }
+	            if (e.Attr("cache").ToBool()) {
+	                this.StaticContentCacheMap[name] = e;
+	            }
+	            else {
+	                this.StaticContentMap[name] = folder;
+	            }
+            } 
+            foreach (var e in xml.Elements("startup"))
+            {
+                var name = e.Attr("code");
+                Initializers.Add(name);
+            }
 			foreach (XElement e in xml.Elements(HostUtils.ExContentFolder))
 			{
 
@@ -385,6 +451,7 @@ namespace Qorpent.Host{
 	            }
 	        }
 	    }
+
         /// <summary>
         /// Обратная ссылка на XML- определение
         /// </summary>
@@ -393,11 +460,15 @@ namespace Qorpent.Host{
         /// Мапинг прокси адресов для их обработки на другом хосте
         /// </summary>
 	    public IDictionary<string,string> Proxize { get; private set; }
+        /// <summary>
+        /// Мапинг локальных кэшей (в виде файлов конфигурации)
+        /// </summary>
+	    public IDictionary<string,XElement> StaticContentCacheMap { get; private set; }
 
 	    private void ReadModules(XElement xml) {
 	        foreach (XElement e in xml.Elements("module")) {
 	            var fname = e.Attr("code");
-
+	            var code = fname;
 	            if (Regex.IsMatch(fname, @"^[\w\d\-]+$")) {
 	                //name only
 	                bool found = false;
@@ -425,7 +496,7 @@ namespace Qorpent.Host{
 	            if (fname.Contains("@")) {
 	                fname = EnvironmentInfo.ResolvePath(fname);
 	            }
-
+	            Modules[code] = fname;
 
 	            ContentFolders.Add(fname);
 	        }

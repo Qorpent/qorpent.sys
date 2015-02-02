@@ -48,12 +48,22 @@ namespace Qorpent.IO.Net{
 				else if (part[0].ToLowerInvariant() == "path"){
 					current.Path = part[1];
 				}
-				else if (part[0].ToLowerInvariant() == "domain"){
-					current.Domain = part[1];
+				else if (part[0].ToLowerInvariant() == "domain") {
+				    current.Domain = part[1];
+				}
+				else if(part[0].ToLowerInvariant()=="httponly") {
+				    current.HttpOnly = true;
+				} else if (part[0].ToLowerInvariant() == "secure") {
+				    current.Secure = true;
 				}
 				else{
 					current.Name = part[0];
-					current.Value = part[1];
+				    if (part.Count == 1) {
+				        current.Value = "";
+				    }
+				    else {
+				        current.Value = part[1];
+				    }
 				}
 			}
 			yield return current;

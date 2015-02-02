@@ -1,0 +1,46 @@
+<span
+        the-stacked-button
+        ng-click="setShowComments(!state.showComments)"
+        type="file-text-o"
+        checker="state.showComments"
+        title="Полная информация"
+        help="the-report-full#nosyntax"
+        >
+    </span>
+<span
+        the-stacked-button
+        ng-click="setShowExtensions(!state.showExtensions)"
+        type="file-o"
+        checker="state.showExtensions"
+        title="Поля для ручного ввода"
+        help="the-report-manual#nosyntax"
+        >
+    </span>
+<span
+        the-stacked-button
+        ng-click="serverPrint()"
+        type="file-pdf-o"
+        marker="download"
+        title="Загрузить PDF"
+        help="the-download-pdf#nosyntax"
+        >
+    </span>
+<span
+        the-stacked-button
+        ng-click="doPrint()"
+        type="file-pdf-o"
+        marker="save"
+        title="Сформировать PDF"
+        ng-show="canPrint"
+        help="the-generate-pdf#nosyntax"
+        >
+    </span>
+<span style="flex:1"></span>
+<span
+        the-stacked-button
+        ng-click="showHelp('the-report#nosyntax')"
+        type="question-circle"
+        title="Справка по формированию отчетов"
+
+        >
+    </span>

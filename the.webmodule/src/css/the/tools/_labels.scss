@@ -22,6 +22,9 @@
   box-shadow: 3px 3px 26px 1px rgba(0,0,0,0.71);
 
   overflow: hidden;
+  &>div {
+    margin: 2px;
+  }
 
   &>label:first-child {
     text-align: center;
@@ -44,7 +47,8 @@
   i {
     min-width: 20px;
     text-align: center;
-
+    margin-right: 1px;
+    margin-left:1px;
     &.active  {
       font-weight: bold;
       color : #33aa4c;
@@ -52,6 +56,13 @@
     &.disabled {
        font-weight: lighter;
         color : lightgray !important;
+    }
+    &.md-icon{
+      font-size:16pt;
+      padding-top:3px;
+      padding-right:3px;
+      padding-left: 3px;
+      min-width: 28px;
     }
   }
 }

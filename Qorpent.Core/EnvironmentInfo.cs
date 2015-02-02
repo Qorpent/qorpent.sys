@@ -37,12 +37,18 @@ namespace Qorpent {
 		private static string _rootDirectory;
 
 		private static string _binDirectory;
-
+		private static IDictionary<string, string> _constants; 
 		/// <summary>
 		/// 	Type-wide static lock object
 		/// </summary>
 		public static object Sync = new object();
-
+		/// <summary>
+		///		
+		/// </summary>
+		public static IDictionary<string, string> Constants {
+			get { return _constants ?? (_constants = new Dictionary<string, string>()); }
+			set { _constants = value; }
+		} 
 		/// <summary>
 		/// 	True if we are under web context
 		/// </summary>
@@ -165,6 +171,10 @@ namespace Qorpent {
 			}
 			set { _binDirectory = Path.GetFullPath(value); }
 		}
+		/// <summary>
+		///		Прямой путь к манифесту
+		/// </summary>
+		public static string ManifestPath { get; set; }
 		/// <summary>
 		/// Директория для конфигов
 		/// </summary>
@@ -458,8 +468,9 @@ namespace Qorpent {
 		/// Возвращает интерполированную версию файла
 		/// </summary>
 		/// <param name="givenPath"></param>
+		/// <param name="preventNormalize"></param>
 		/// <returns></returns>
-		public static string ResolvePath(string givenPath){
+		public static string ResolvePath(string givenPath, bool preventNormalize = false){
 			if (string.IsNullOrWhiteSpace(givenPath)) return givenPath;
 			givenPath = givenPath.ToLowerInvariant();
 			if (givenPath.Contains("@")){ //expand EnvironmentInfo macroses
@@ -477,6 +488,10 @@ namespace Qorpent {
 				newPath = _newPath;
 
 			}
+		    if (givenPath.StartsWith("http:") || givenPath.StartsWith("https:")) {
+		        return newPath;
+		    }
+			if (preventNormalize) return newPath;
 			return NormalizePath(Path.GetFullPath(newPath));
 		}
 

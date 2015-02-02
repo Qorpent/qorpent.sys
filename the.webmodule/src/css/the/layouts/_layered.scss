@@ -30,6 +30,10 @@
   .content {
     background-color:#ffffff;
   }
+  .statusbar{
+    min-height: 40px;
+    max-height: 40px;
+  }
 }
 %the-layer{
   @extend %the-box;

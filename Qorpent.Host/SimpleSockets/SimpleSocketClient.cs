@@ -31,7 +31,7 @@ namespace Qorpent.Host.SimpleSockets{
 		/// <param name="data"></param>
 		/// <returns></returns>
 		public async Task<R> CallAsync(T data){
-			var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+			var socket = new Socket(AddressFamily.Unspecified, SocketType.Stream, ProtocolType.Tcp);
 			socket.Connect(_config.GetEndPoint());
 			await socket.SendDataAsync(data);
 			//return default(R);

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -81,7 +82,7 @@ namespace Qorpent.IO.Net{
 				var secure = request.Uri.Scheme.StartsWith("https");
 				request.Cookies = request.Cookies ?? Cookies;
 				var endpoint = GetEndpoint(request.Uri);
-				using (var socket = new Socket(SocketType.Stream, ProtocolType.Tcp)){
+				using (var socket = new Socket(AddressFamily.Unspecified, SocketType.Stream, ProtocolType.Tcp)){
 					socket.Connect(endpoint);
 					using (var ns = new NetworkStream(socket)){
 						using (var rs = secure ? (Stream) new SslStream(ns, false, UserCertificateValidationCallback) : ns){
@@ -91,15 +92,17 @@ namespace Qorpent.IO.Net{
 							var writer = new HttpRequestWriter(rs);
 							writer.Write(request);
 							var response = _reader.Read(rs);
-							if (response.IsRedirect){
+							response.Request = request;
+							if (response.IsRedirect && !request.PreventRedirect){
 								request.Uri = response.RedirectUri;
 								return Call(request);
 							}
 							response.Cookies = response.Cookies ?? Cookies;
-							if (response.Headers.ContainsKey("Cookie")){
-								foreach (var cookie in HttpUtils.ParseCookies(response.Headers["Cookie"])){
-									response.Cookies.Add(cookie);
-								}
+							if (null!=response.Cookies && response.RawCookies.Count!=0){
+							    foreach (var cookie in response.RawCookies) {
+							        var realcookie = HttpUtils.ParseCookies(cookie).First();
+                                    response.Cookies.Add(realcookie);
+							    }
 							}
 							response.Request = request;
 							return response;

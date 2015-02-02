@@ -41,7 +41,6 @@ namespace Qorpent.Utils {
             char prefix = '\0';
             bool quoted = false;
             bool literal = false;
-            var openerIdx = new Stack<int>();
             Action newItem = () => {
                 var newitem = new SimpleExpressionItem {Prefix = prefix};
                 prefix = '\0';

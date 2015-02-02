@@ -53,7 +53,8 @@
                 this.appPath = "";
                 //#Q-270
                 this.targetWindow = "";
-                this.jsonifyOptions = {interpolate: false, defaults: false, stringify: true, evalfunctions: true, functions: false, privates: false};
+                this.evalFunctions = false;
+                this.jsonifyOptions = {interpolate: false, defaults: false, stringify: true, evalfunctions: this.evalFunctions, functions: false, privates: false};
                 this.__callMoniker = null;
                 return this;
             };

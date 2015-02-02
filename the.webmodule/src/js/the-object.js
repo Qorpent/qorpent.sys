@@ -44,6 +44,54 @@ define(["the-root"], function ($the) {
         $root.object = $root.object || {};
         $root.object.ExtendOptions = ExtendOptions;
 
+        var toHex = $root.object.toHex = function (i) {
+            var ret = ((i<0?0x8:0)+((i >> 28) & 0x7)).toString(16) + (i & 0xfffffff).toString(16);
+            while (ret.length < 8) ret = '0'+ret;
+            return ret;
+        };
+
+        var fixedOrder = $root.object.fixedOrder = function(object){
+            if(null==object)return null;
+            if(Array.isArray(object))return object;
+            if(typeof(object)=="function")return object;
+            if(typeof(object)!="object")return object;
+            var result = {};
+            var props = [];
+            for(var i in object){
+                if(object.hasOwnProperty(i)){
+                    props.push(i);
+                }
+            }
+            props.sort();
+            for(var i=0;i<props.length;i++){
+                result[props[i]] = object[props[i]];
+            }
+            return result;
+        }
+
+        var equal =$root.object.equal = function(obj1,obj2){
+            return $root.object.digest(obj1)==$root.object.digest(obj2);
+        }
+
+        $root.object.digest = function(object){
+
+            var r = [];
+            for (var i=0; i<2; i++)
+                r.push(i*268803292);
+            var o = JSON.stringify(fixedOrder(object));
+            for (i=0; i<o.length; i++) {
+                for (c=0; c<r.length; c++) {
+                    r[c] = (r[c] << 13)-(r[c] >> 19);
+                    r[c] += o.charCodeAt(i) << (r[c] % 24);
+                    r[c] = r[c] & r[c];
+                }
+            }
+            for (i=0; i<r.length; i++) {
+                r[i] = toHex(r[i]);
+            }
+            return r.join('');
+        }
+
         $root.object.extend = function (target, source, options) {
             options = ExtendOptions(options) || ExtendOptions.Default;
             if (options.clone) {
@@ -198,5 +246,6 @@ define(["the-root"], function ($the) {
         $root.extend = $root.object.extend;
         $root.create = $root.object.create;
         $root.clone = $root.object.clone;
+        $root.digest = $root.object.digest;
     });
 });

@@ -35,6 +35,35 @@
             }
         };
 
+        the.localStorage = {
+            map : {},
+            setItem : function(name,value){
+                this.map[name] = value;
+            },
+            getItem : function(name){
+                return this.map[name];
+            },
+            clear :function(){
+                this.map = {};
+            }
+
+        }
+
+        var dt = new Date();
+        var defver = "DT."+dt.getFullYear()+"."+dt.getMonth()+"."+dt.getDate()+"."+dt.getHours();
+        the.ver = defver;
+
+        if(typeof document!="undefined"){
+            var myScript = document.querySelector('head script[data-main]');
+            if (myScript) {
+                var myUrl = myScript.getAttribute("data-main");
+                if (myUrl) {
+
+                    the.ver = myUrl.match(/\?(.+)$/) || the.ver;
+                }
+            }
+        }
+
 
         return the;
     });

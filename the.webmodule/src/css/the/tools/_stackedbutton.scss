@@ -1,0 +1,77 @@
+.stackedbutton {
+  display: block;
+  border: solid 1px gray;
+  background-color: white;
+  width: 50px !important;
+  height: 50px !important;
+  border: none;
+  background: none;
+  border-radius: 5%;
+  cursor: pointer;
+
+  .back {
+    font-size: 32pt !important;
+    transition: all 0.5s ease;
+    color: white;
+    left:0;
+    top:0;
+    position: absolute;
+    .front {
+      color: gray;
+      left:0;
+      top:0;
+      position: absolute;
+      font-size: 32pt !important;
+      font-weight: 100;
+      &.fa-file-pdf-o:hover {
+        color: #ffffff !important;
+      }
+      &.fa-question-circle {
+        color: lighten(#0B97C4,10%) !important;
+        &:hover {
+          color: #0B97C4 !important;
+        }
+      }
+    }
+    &:hover {
+      transform: rotate(-1deg) scale(1.05, 1.05);
+      color: aliceblue !important;
+      &.pdf {
+        color: #CF1312 !important;
+      }
+      .help {
+        font-size: 10pt !important;
+        border:solid 1px gray;
+        background-color: #ffffff;
+        border-radius: 20%;
+      }
+    }
+
+    .inner {
+      font-size: 10pt !important;
+      left: 2px;
+      top : -1px;
+      color : green;
+      width:18px;
+      height: 18px;
+      border:solid 1px gray;
+      background-color: #ffffff;
+      border-radius: 20%;
+
+    }
+    .help {
+      font-size: 6pt !important;
+      left: 28px;
+      top : 30px;
+      color : #0B97C4;
+      width:18px;
+      height: 18px;
+
+    }
+  }
+  &.unchecked {
+    .inner {
+      color: #CF1312 !important;
+    }
+  }
+}

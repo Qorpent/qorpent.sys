@@ -1,7 +1,10 @@
 @import "the/layouts/layered";
+@import "the/layouts/a4";
 @import "the/tools/labels";
+@import "the/tools/stackedbutton";
 @import "compass/css3";
 @import "compass/reset";
+
 
 * {
   @include box-sizing(border-box);
@@ -40,4 +43,8 @@
   i.disabled {
     color :lightgray;
   }
+}
+
+.copyright {
+  font-family: Consolas, Menlo, Monaco, "Courier New", monospace;
 }

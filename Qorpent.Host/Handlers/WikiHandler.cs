@@ -3,9 +3,7 @@ using System.Net;
 using System.Threading;
 
 namespace Qorpent.Host.Handlers{
-	
-
-	/// <summary>
+    /// <summary>
 	/// Хэндлер для вики-страниц
 	/// </summary>
 	public class WikiHandler:IRequestHandler{
@@ -38,7 +36,7 @@ namespace Qorpent.Host.Handlers{
 							wikicode = "[[code]]\r\n" + wikicode + "\r\n[[/code]]\r\n[[script-last type=bxl]]";
 						}
 						else if (wikidesc.FullName.EndsWith(".js") || wikidesc.FullName.EndsWith(".css") ||
-						         wikidesc.FullName.EndsWith(".cs")){
+								 wikidesc.FullName.EndsWith(".cs")){
 							wikicode = "[[code]]\r\n" + wikicode + "\r\n[[/code]]";
 						}
 						else{

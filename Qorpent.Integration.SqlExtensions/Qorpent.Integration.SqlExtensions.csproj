@@ -33,6 +33,10 @@
     <Compile Include="XmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\qorpent.kernel\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />

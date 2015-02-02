@@ -12,7 +12,7 @@
                     compile : function(element,attr){
                         var el =$(element);
                         el.addClass("control-group");
-                        var input = el.find('input, textarea');
+                        var input = el.find('input, textarea, select');
                         input.addClass("form-control");
                         var formname = el.parent().attr("name");
                         var name = input.attr("name");

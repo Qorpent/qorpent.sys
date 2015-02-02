@@ -1,26 +1,40 @@
 {
-	"description": "Merged leaflet with most wanted plugins and angular integration",
-	"moduleName": "totalleaflet",
-	"defaultNamespace": "leaflet",
-	"name": "leaflet",
-	"devDependencies": {
-		"requirejs": ">=2.1.15",
-		"amdefine": ">=0.1.0"
-	},
-	"compile": {
-    	"type": "api",
-    	"root": "totalleaflet"
-  	},
-	"tests": [
-	  {"deps":["totalleaflet"],"condition":"!debug"},
-	  {"deps":["~(/tests/(.*leaflet))~/src/js/$2"],"condition":"debug"},
-	  {"names":["common", "simplemap"], "condition":"browser"}
-	],
-	"webModuleDependency": {},
-	"optimizer":{
-	  "optimizeCss" : "default",
-	  "cssIn": "./src/css/merge.css",
-	  "out": "./dist/css/totalleaflet.css"
-	},
-	"version": "0.1.0"
+  "description": "Merged leaflet with most wanted plugins and angular integration",
+  "moduleName": "totalleaflet",
+  "defaultNamespace": "leaflet",
+  "name": "leaflet",
+  "devDependencies": {
+    "requirejs": ">=2.1.15",
+    "amdefine": ">=0.1.0"
+  },
+  "compile": {
+    "type": "api",
+    "root": "totalleaflet"
+  },
+  "tests": [
+    {
+      "deps": ["totalleaflet"],
+      "condition": "!debug"
+    },
+    {
+      "deps": ["~(/tests/(.*leaflet))~/src/js/$2"],
+      "condition": "debug"
+    },
+    {
+      "names": [
+        "common",
+        "simplemap"
+      ],
+      "condition": "browser"
+    }
+  ],
+  "webModuleDependency": {
+    "the": "Qorpent.Sys/the"
+  },
+  "optimizer": {
+    "optimizeCss": "default",
+    "cssIn": "./src/css/merge.css",
+    "out": "./dist/css/totalleaflet.css"
+  },
+  "version": "0.1.0"
 }

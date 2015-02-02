@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html class="the">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>the-autocomplet</title>
+    <link rel="stylesheet" href="../dist/css/the.css">
+    <link rel="stylesheet" href="../lib/bootstrap.css">
+
+    <script type="text/javascript" src="./../lib/require.js"></script>
+
+</head>
+<body class="bootstrap">
+<style>
+    h2 {
+        font-size:12pt;
+        text-decoration: underline;
+        -moz-text-decoration-line: underline;
+        -moz-text-decoration-style: wavy;
+        -moz-text-decoration-color: blue;
+
+        -webkit-text-decoration-line: underline;
+        -webkit-text-decoration-style: wavy;
+        -webkit-text-decoration-color: blue;
+    }
+</style>
+<script type="text/javascript">
+    require.config({
+        paths: {
+            jquery: "./../lib/jquery",
+            angular: "./../lib/angular",
+            the: "./../dist/js/the",
+            "ui-bootstrap": "./../lib/ui-bootstrap"
+        },
+        shim: {
+            "ui-bootstrap": {
+                deps: ["jquery", "angular"]
+            },
+            the: {
+                deps: ["jquery", "angular", "ui-bootstrap"]
+            }
+        },
+        deps: ["the"],
+        callback: function () {
+            var module = angular.module("examples", ["the-all"]);
+            module.controller("enter", function ($scope) {
+                $scope.pressed = 0;
+                $scope.onEnter = function(){
+                    $scope.pressed++;
+                }
+            });
+            module.controller("escape", function ($scope) {
+                $scope.pressed = 0;
+                $scope.onEscape = function(){
+                    $scope.pressed++;
+                }
+            });
+            angular.bootstrap(document, ["examples","ui.bootstrap"]);
+        }
+    });
+</script>
+<h1>Пример использования директивы on-enter</h1>
+<blockquote>
+    Подключается на INPUT
+</blockquote>
+<div ng-controller="enter">
+    <h2>Собирает Enter</h2>
+    <div>Нажатий Enter: {{pressed}}</div>
+
+    <input on-enter="onEnter()"/>
+</div>
+
+<div ng-controller="escape">
+    <h2>Собирает ESCAPE</h2>
+    <div>Нажатий Escape: {{pressed}}</div>
+    <input on-escape="onEscape()"/>
+
+</div>
+
+<div ng-controller="enter">
+    <h2>Собирает Enter на уровне обрамляющего DIV</h2>
+    <div>Нажатий Enter: {{pressed}}</div>
+    <div on-enter="onEnter()">
+        <input/>
+        br
+        <input/>
+        br
+        <input/>
+        br
+        <input type="checkbox"/>
+    </div>
+
+</div>
+
+
+</body>
+</html>

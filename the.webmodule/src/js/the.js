@@ -9,18 +9,25 @@ define([
     "the-collections-core",
     "the-collections-layered",
     "the-collections-linked",
+    "the-collections-history",
     "the-collections-linq",
     "the-action",
     'the-angular-unsafe',
     'the-angular-autocomplete',
     'the-angular-controlgroup',
     'the-angular-viewcontext',
+    'the-angular-onenter',
+    'the-design-stackedbutton',
     'the-wiki',
     'the-menu',
     'the-settings',
     'the-errorcatcher',
     'the-refresh',
-    'autocomplete-html'
+    'autocomplete-html',
+    'the-print',
+    'the-dates',
+    'the-report',
+    'the-hash',
 ], function ($the) {
     return $the;
 });

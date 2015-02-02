@@ -52,6 +52,7 @@
                 if (null === obj)return (options.nulls && options.defaults) ? obj : undefined;
                 if (!options.defaults && root.isDefaultValue(obj))return undefined;
                 if (typeof obj === "function") {
+                    if(name.match(/^__/) && !options.privates)return undefined;
                     if (options.evalfunctions) {
                         return jsonify(obj.apply(context, []))
                     }

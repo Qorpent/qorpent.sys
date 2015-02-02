@@ -233,17 +233,21 @@ namespace Qorpent.Scaffolding.Application{
 			bool wasreserved = false;
 			foreach (var item in items){
 				sb.AppendLine();
+			    var selfValue = item.Value;
+			    if (string.IsNullOrWhiteSpace(selfValue)) {
+			        selfValue = val.ToString();
+			        val *= 2;
+			    }
 				var code = item.Attr("code");
 				summary = item.Attr("name");
 				WriteMemberSummary(sb, summary);
-				sb.AppendLine("\t\t" + code + " = " + val + ",");
+				sb.AppendLine("\t\t" + code + " = " + selfValue + ",");
 				if (code == "Custom"){
 					wascustom = true;
 				}
 				else if (code == "Reserved"){
 					wasreserved = true;
 				}
-				val *= 2;
 			}
 			if (!wascustom){
 				sb.AppendLine();
