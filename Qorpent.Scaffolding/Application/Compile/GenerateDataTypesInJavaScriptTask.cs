@@ -122,7 +122,7 @@ namespace Qorpent.Scaffolding.Application{
 					else if (type == "any" ||type == "map" || type=="dictionary"){
 						val = "{}";
 					}
-					else if (type == "int" || type == "decimal"){
+					else if (type == "int" || type == "decimal" || type=="long"){
 						val = "0";
 					}
 					else if (type == "bool"){
