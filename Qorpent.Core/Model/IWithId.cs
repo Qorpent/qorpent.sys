@@ -24,6 +24,6 @@ namespace Qorpent.Model {
 		/// <summary>
 		/// PK ID in database terms
 		/// </summary>
-		int Id { get; set; }
+		long Id { get; set; }
 	}
 }

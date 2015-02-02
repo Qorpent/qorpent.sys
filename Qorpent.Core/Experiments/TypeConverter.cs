@@ -276,7 +276,7 @@ namespace Qorpent.Utils
 			}
 			if (dbl != double.MinValue) {
 				if (dbl >= (double) decimal.MinValue && dbl <= (double) decimal.MaxValue) {
-					return (decimal) Math.Round(dbl);
+					return (decimal) dbl;
 				}
 				if (safe) {
 					return defaultValue;

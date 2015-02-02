@@ -50,7 +50,7 @@ namespace Qorpent.Db
 
 	class IWithId "Сущность с идентификатором" abstract
 		implements IWithId
-		int Id "Идентификатор" primarykey identity idx=10  override=Entity
+		long Id "Идентификатор" primarykey identity idx=10  override=Entity
 		datetime Version "Версия записи" default=(CURRENT_TIMESTAMP) idx=980  override=Entity
 		int ImportId "Идентификатор старой сущности при миграции" idx=990 nocode
 

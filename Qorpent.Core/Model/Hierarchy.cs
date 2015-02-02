@@ -11,7 +11,7 @@ namespace Qorpent.Model {
 		/// 
 		/// </summary>
 		protected ICollection<T> _children;
-		private int? _parentId;
+		private long? _parentId;
 		private T _parent;
 		private string _path;
 		private string _parentCode;
@@ -20,7 +20,7 @@ namespace Qorpent.Model {
 		/// 	Прямой идентификатор родителя
 		/// </summary>
 		/// <exception cref="Exception">cannot set ParentId when <see cref="Parent"/> is defined</exception>
-		public int? ParentId {
+		public long? ParentId {
 			get {
 				return null != _parent ? _parent.Id : _parentId;
 			}

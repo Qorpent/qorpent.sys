@@ -67,7 +67,7 @@ namespace Qorpent.Data.DataCache
 		/// <summary>
 		/// Кэш на основе ID
 		/// </summary>
-		protected IDictionary<int, T> _nativeCache = new Dictionary<int, T>();
+		protected IDictionary<long, T> _nativeCache = new Dictionary<long, T>();
 		/// <summary>
 		/// Кэш на основе Code
 		/// </summary>
@@ -193,7 +193,7 @@ namespace Qorpent.Data.DataCache
 		/// </summary>
 		/// <param name="value"></param>
 		public void Set(T value){
-			var id = 0;
+			long id = 0;
 			string code = "";
 			var vid = value as IWithId;
 			
@@ -265,11 +265,11 @@ namespace Qorpent.Data.DataCache
 		/// <param name="query"></param>
 		/// <param name="options"></param>
 		/// <param name="connection"></param>
-		protected int[] UpdateCache(string query, ObjectDataCacheHints options = null, IDbConnection connection = null){
+		protected long[] UpdateCache(string query, ObjectDataCacheHints options = null, IDbConnection connection = null){
 			
 			lock (_nativeCache){
 				
-				var allids = new List<int>();
+				var allids = new List<long>();
 				bool cascade = true;
 				if (null == connection){
 					if (string.IsNullOrWhiteSpace(ConnectionString)){
@@ -296,7 +296,7 @@ namespace Qorpent.Data.DataCache
 		/// <summary>
 		/// 
 		/// </summary>
-		public IDictionary<int,T> NativeCache{
+		public IDictionary<long,T> NativeCache{
 			get { return _nativeCache; }
 		}
 
@@ -308,7 +308,7 @@ namespace Qorpent.Data.DataCache
 		/// <param name="c"></param>
 		/// <param name="allids"></param>
 		/// <param name="cascade"></param>
-		public List<int> UpdateSingleQuery(string query, ObjectDataCacheHints options, IDbConnection c, List<int> allids, bool cascade){
+		public List<long> UpdateSingleQuery(string query, ObjectDataCacheHints options, IDbConnection c, List<long> allids, bool cascade){
 			options = options ?? ObjectDataCacheHints.Empty;
 			object eq = query;
 			if (options.KeyQuery){
@@ -340,7 +340,7 @@ namespace Qorpent.Data.DataCache
 			
 			
 
-			allids = allids ?? new List<int>();
+			allids = allids ?? new List<long>();
 			if (null == c) return allids;
 			var q = query;
 			if (!q.Contains("from")){
@@ -355,7 +355,7 @@ namespace Qorpent.Data.DataCache
 			}
 			c.WellOpen();
 			var cmd = c.CreateCommand(q);
-			var ids = new List<int>();
+			var ids = new List<long>();
 			SqlLog.Trace(q);
 			using (var idsReader = cmd.ExecuteReader()){
 				while (idsReader.Read()){
@@ -408,7 +408,7 @@ namespace Qorpent.Data.DataCache
 		/// <param name="ids"></param>
 		/// <param name="dbConnection"></param>
 		/// <param name="context"></param>
-		protected virtual void AfterUpdateCache(IList<int> ids, IDbConnection dbConnection, ObjectDataCacheHints context){
+		protected virtual void AfterUpdateCache(IList<long> ids, IDbConnection dbConnection, ObjectDataCacheHints context){
 			if (null != OnAfterUpdateCache){
 				OnAfterUpdateCache.Invoke(this,ids,dbConnection,context);
 			}
@@ -417,6 +417,6 @@ namespace Qorpent.Data.DataCache
 		/// <summary>
 		/// Событие обработки кастомного обновления кэша после прокачки из БД
 		/// </summary>
-		public event Action<object, IList<int>, IDbConnection,ObjectDataCacheHints> OnAfterUpdateCache;
+		public event Action<object, IList<long>, IDbConnection,ObjectDataCacheHints> OnAfterUpdateCache;
 	}
 }

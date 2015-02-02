@@ -35,7 +35,7 @@ namespace Qorpent.Model {
 		/// <summary>
 		/// PK ID in database terms
 		/// </summary>
-		public virtual int Id { get; set; }
+		public virtual long Id { get; set; }
 
 		/// <summary>
 		/// Unique memo-code

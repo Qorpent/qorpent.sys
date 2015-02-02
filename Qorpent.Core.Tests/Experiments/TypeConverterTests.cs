@@ -64,6 +64,11 @@ namespace Qorpent.Bridge.Tests.Utils
         }
 
         [Test]
+        public void DecimalsNotRounded() {
+            Assert.AreEqual(52.45m,TypeConverter.ToDecimal("52.45"));
+        }
+
+        [Test]
         public void ValidZeroParsing() {
             Assert.AreEqual(303,TypeConverter.ToInt("303"));
         }

@@ -6,7 +6,7 @@ namespace Qorpent.MetaDataSync
 	dbobj MetaDataSyncDbObject "Базовый объект данных для схема qptmds" schema=qptmds abstract file="${_file}"
 	# элементарная таблица
 	MetaDataSyncDbObject Table "Базовая таблица данных для qptmds" abstract prototype=dbtable
-		int Id "Идентификатор" primarykey identity idx=10
+		long Id "Идентификатор" primarykey identity idx=10
 		datetime Version "Версия записи" default=(CURRENT_TIMESTAMP) idx=980
 	
 	Table FileBase "Реестр файлов" abstract

@@ -42,7 +42,7 @@ namespace Qorpent.Model {
 		/// <summary>
 		/// 	Прямой идентификатор родителя
 		/// </summary>
-		int? ParentId { get; set; }
+		long? ParentId { get; set; }
 		/// <summary>
 		///		CODE of parent
 		/// </summary>
