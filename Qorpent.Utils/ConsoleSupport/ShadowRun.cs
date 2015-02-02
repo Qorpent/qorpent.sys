@@ -103,20 +103,20 @@ namespace Qorpent.Utils{
 	            Log.Debug("ok");
 	        }
 	        Thread.Sleep(30);
-	        var binDir = EnvironmentInfo.BinDirectory.NormalizePath();
+	        var binDir = EnvironmentInfo.BinDirectory.NormalizePath(false);
 	        foreach (var file in Directory.GetFiles(binDir, "*.*", SearchOption.AllDirectories)) {
-	            var f = file.NormalizePath().Replace(binDir, "");
-	            var trg = Path.Combine(targetDirectory, f);
+	            var f = file.NormalizePath(false).Replace(binDir, "");
+	            var trg = (targetDirectory+"/"+f).NormalizePath(false);
 	            var trgDir = Path.GetDirectoryName(trg);
 	            Directory.CreateDirectory(trgDir);
-	            Log.Debug("copy " + file);
+	            Log.Debug("copy " + f + " to " + trg);
 	            File.Copy(file, trg, true);
 	            Log.Debug("ok");
 	        }
 	        Log.Trace("upgrade complete");
 	        var args = Environment.GetCommandLineArgs();
 			var safedArgs = string.Join(" ", args.Skip(1).Select(_ => "\"" + (_.StartsWith("--shadow") && !_.IsIn("--shadow", "--shadowsuffix") ? "--" + _.Substring(8) : _) + "\""));
-	        safedArgs += " --shadowevidence \"" + binDir;
+	        safedArgs += " --shadowevidence \"" + binDir +"\"" + " &";
 	        Log.Debug("adapted args " + safedArgs);
 	        var exeName = Path.Combine(targetDirectory, Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName));
 	        Log.Trace("start " + exeName);

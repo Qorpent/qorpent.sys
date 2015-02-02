@@ -217,7 +217,7 @@ namespace Qorpent.Utils.Extensions {
 			return def;
 		}
 
-
+       
 		/// <summary>
 		/// Резолюция атрибута Code
 		/// </summary>

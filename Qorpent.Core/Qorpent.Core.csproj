@@ -6,11 +6,6 @@
     <RootNamespace>Qorpent</RootNamespace>
     <AssemblyName>Qorpent.Core</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DocumentationFile>
-    </DocumentationFile>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -121,6 +116,14 @@
     <Compile Include="Data\ObjectDataCacheHints.cs" />
     <Compile Include="Data\ParamAttribute.cs" />
     <Compile Include="Dsl\ReplaceDescriptor.cs" />
+    <Compile Include="Experiments\Constants.cs" />
+    <Compile Include="Experiments\IJsonSerializable.cs" />
+    <Compile Include="Experiments\ISerializationAnnotator.cs" />
+    <Compile Include="Experiments\Json.cs" />
+    <Compile Include="Experiments\ReflectionUtils.cs" />
+    <Compile Include="Experiments\SerializeMode.cs" />
+    <Compile Include="Experiments\TypeConverter.cs" />
+    <Compile Include="Experiments\WebDateTimeParser.cs" />
     <Compile Include="FilterExtensions.cs" />
     <Compile Include="FilterState.cs" />
     <Compile Include="Graphs\Dot\BuilderExtensions.cs" />
@@ -474,4 +477,11 @@
     <Folder Include="Serialization\IntermediateFormat\" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DocumentationFile>
+    </DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DefineConstants>TRACE;DEBUG;Windows_NT EXBRIDGE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
 </Project>

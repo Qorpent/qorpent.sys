@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Qorpent.Experiments.Utils;
 using Qorpent.Log;
 using Qorpent.Utils.Extensions;
 
@@ -76,6 +77,29 @@ namespace Qorpent.Utils {
 			}
 			FormatRegexes = regexes.ToArray();
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="dateTime"></param>
+        /// <param name="sourceUrl"></param>
+        /// <param name="locale"></param>
+        /// <param name="timeZone"></param>
+        /// <param name="baseDate"></param>
+        /// <returns></returns>
+        public static bool TryParse(out DateTime result, string dateTime, string sourceUrl = null, string locale = null, int? timeZone = null,
+            DateTime? baseDate = null) {
+            try {
+                result = Parse(dateTime, sourceUrl, locale, timeZone, baseDate);
+                return true;
+            }
+            catch {
+                result = Constants.MinDateTime;
+                return false;
+            }
+
+        }
 
 	    /// <summary>
 	    ///     Парсинг сроки дата-время произвольного формата, возвращает ЛОКАЛЬНУЮ дату-время

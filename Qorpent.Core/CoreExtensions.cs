@@ -16,6 +16,7 @@
 // 
 // PROJECT ORIGIN: Qorpent.Utils/ConvertExtensions.cs
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
+using Qorpent.Experiments.Utils;
 
 namespace Qorpent.Utils.Extensions {
 	///<summary>
@@ -147,9 +149,12 @@ namespace Qorpent.Utils.Extensions {
 			}
 			var convertible = x as IConvertible;
 			if (convertible != null) {
+			    if (x is DateTime) {
+			        return ((DateTime) x) > QorpentConst.Date.Begin && ((DateTime) x) < QorpentConst.Date.End;
+			    }
 				return (convertible).ToBoolean(CultureInfo.InvariantCulture);
 			}
-			return !x.GetType().IsValueType || Convert.ToBoolean(x);
+		    return true; //!x.GetType().IsValueType || Convert.ToBoolean(x);
 		}
 
 		/// <summary>
@@ -399,32 +404,33 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="x"> </param>
 		/// <returns> </returns>
 		public static int ToInt(this object x) {
-			if (null == x) {
-				return 0;
-			}
-			if (Equals(String.Empty, x)) {
-				return 0;
-			}
-			if (x is int) {
-				return (int) x;
-			}
-			if (x is long)
-			{
-				return Convert.ToInt32(x);
-			}
-			if (x is decimal || x is double || x is Single) {
-				return Convert.ToInt32(x);
-			}
-			return Convert.ToInt32(x.ToDecimal(true));
+		    return TypeConverter.ToInt(x);
+		    //if (null == x) {
+		    //    return 0;
+		    //}
+		    //if (Equals(String.Empty, x)) {
+		    //    return 0;
+		    //}
+		    //if (x is int) {
+		    //    return (int) x;
+		    //}
+		    //if (x is long)
+		    //{
+		    //    return Convert.ToInt32(x);
+		    //}
+		    //if (x is decimal || x is double || x is Single) {
+		    //    return Convert.ToInt32(x);
+		    //}
+		    //return Convert.ToInt32(x.ToDecimal(true));
 		}
 		/// <summary>
 		/// 	converts object to Int32 null safe
 		/// </summary>
 		/// <param name="x"> </param>
 		/// <returns> </returns>
-		public static long ToLong(this object x)
-		{
-			if (null == x)
+		public static long ToLong(this object x) {
+		    return TypeConverter.ToLong(x);
+		    /*if (null == x)
 			{
 				return 0;
 			}
@@ -444,7 +450,7 @@ namespace Qorpent.Utils.Extensions {
 			{
 				return Convert.ToInt64(x);
 			}
-			return Convert.ToInt64(x.ToDecimal(true));
+			return Convert.ToInt64(x.ToDecimal(true));*/
 		}
 
 		/// <summary>
@@ -455,37 +461,44 @@ namespace Qorpent.Utils.Extensions {
 		/// <returns> </returns>
 		/// <exception cref="Exception"></exception>
 		public static decimal ToDecimal(this object x, bool safe = false) {
-			try {
-				if (null == x) {
-					return 0;
-				}
-				if (Equals(String.Empty, x)) {
-					return 0;
-				}
-				if (x is decimal) {
-					return (decimal) x;
-				}
-				var s = x as string;
-				if (s != null) {
-					if ("-" == s || "--" == s || "" == s || "error" == s) {
-						return 0;
-					}
-					var cleandedString = (s).Replace(" ", String.Empty).Replace(",", ".");
-					try {
-						return Decimal.Parse(cleandedString, NumberFormatInfo.InvariantInfo);
-					}
-					catch (FormatException) {
-						throw new Exception("format of '" + cleandedString + "' cannot be parsed as decimal");
-					}
-				}
-				return Convert.ToDecimal(x);
-			}
-			catch {
-				if (safe) {
-					return 0;
-				}
-				throw;
-			}
+		    return TypeConverter.ToDecimal(x);
+		    //try {
+		    //    if (null == x) {
+		    //        return 0;
+		    //    }
+		    //    if (Equals(String.Empty, x)) {
+		    //        return 0;
+		    //    }
+		    //    if (x is decimal) {
+		    //        return (decimal) x;
+		    //    }
+		    //    var s = x as string;
+		    //    if (s != null) {
+		    //        if ("-" == s || "--" == s || "" == s || "error" == s) {
+		    //            return 0;
+		    //        }
+		    //        var cleandedString = (s).Replace(" ", String.Empty).Replace(",", ".");
+		    //        try {
+		    //            return Decimal.Parse(cleandedString, NumberFormatInfo.InvariantInfo);
+		    //        }
+		    //        catch (FormatException) {
+		    //            throw new Exception("format of '" + cleandedString + "' cannot be parsed as decimal");
+		    //        }
+		    //    }
+		    //    if (x is DateTime) {
+		    //        return  (decimal)((DateTime) x).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+		    //    }
+		    //    if (!(x.GetType().IsValueType)) {
+		    //        return 0;
+		    //    }
+		    //    return Convert.ToDecimal(x);
+		    //}
+		    //catch {
+		    //    if (safe) {
+		    //        return 0;
+		    //    }
+		    //    throw;
+		    //}
 		}
 
 		/// <summary>

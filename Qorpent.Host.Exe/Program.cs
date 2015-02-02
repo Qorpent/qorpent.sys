@@ -25,8 +25,16 @@ namespace Qorpent.Host.Exe
             LogHostInfo(arg, config);
 	        hostServer.Start();
 	        try {
-	            Console.ReadLine();
-	            return 0;
+		    while(true){
+		      try{
+			var command = Console.ReadLine();
+			if(command=="quit" || command=="exit"){
+			  return 0;
+			}
+		      }catch{
+			
+		      }
+	            }
 	        }
 	        finally {
 	            hostServer.Stop();

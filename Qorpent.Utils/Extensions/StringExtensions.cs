@@ -25,7 +25,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Qorpent.Utils.Extensions {
-	/// <summary>
+    /// <summary>
 	/// 	C# extensions for StringHelper
 	/// </summary>
 	public static class StringExtensions {
