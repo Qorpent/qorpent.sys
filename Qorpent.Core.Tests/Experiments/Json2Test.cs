@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using Qorpent.CachedOld.Json;
 using Qorpent.Experiments;
 
 namespace Qorpent.Bridge.Tests.Utils
@@ -76,39 +73,7 @@ namespace Qorpent.Bridge.Tests.Utils
             var json = " [ 12.3, true, false , \"hello\", null, [ 1, 3, 4] ] ";
             CollectionAssert.AreEquivalent(new object[] { 12.3, true, false, "hello", null, new object[]{1,3,4} }, Experiments.Json.Parse(json) as object[]);
         }
-
-
-        [Explicit]
-        [Test]
-        public void ArrayParsePerformanceTest() {
-            var json = " [ 12.3, true, false , \"hello\", null, [ 1, 3, 4] ] ";
-            var sw = Stopwatch.StartNew();
-            for (var i = 0; i < 1000000; i++) {
-                var o = Experiments.Json.Parse(json);
-            }
-            sw.Stop();
-            Console.WriteLine("Bridge: "+sw.Elapsed);
-            
-
-            sw = Stopwatch.StartNew();
-            for (var i = 0; i < 1000000; i++)
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                var o = (JObject)serializer.Deserialize(new JsonTextReader(new StringReader(json)));
-            }
-            sw.Stop();
-            Console.WriteLine("Newton: " + sw.Elapsed);
-
-            var p = new JsonParser();
-            sw = Stopwatch.StartNew();
-            for (var i = 0; i < 1000000; i++)
-            {
-                var o = p.Parse(json);
-            }
-            sw.Stop();
-            Console.WriteLine("Old: " + sw.Elapsed);
-        }
-
+        
         [Test]
         public void CanParseSimpleObject() {
             var res = Experiments.Json.Parse("{}") as IDictionary<string,object>;
@@ -156,39 +121,7 @@ namespace Qorpent.Bridge.Tests.Utils
         }
 
 
-        [Explicit]
-        [Test]
-        public void ComplexObjectParsePerformanceTest() {
-            var json = complexJson.Replace("'", "\"");
-            var sw = Stopwatch.StartNew();
-            for (var i = 0; i < 1000000; i++)
-            {
-                var o = Experiments.Json.Parse(json);
-            }
-            sw.Stop();
-            Console.WriteLine("Bridge: " + sw.Elapsed);
-
-
-            sw = Stopwatch.StartNew();
-            for (var i = 0; i < 1000000; i++)
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                var o = (JObject)serializer.Deserialize(new JsonTextReader(new StringReader(json)));
-            }
-            sw.Stop();
-            Console.WriteLine("Newton: " + sw.Elapsed);
-
-
-            var p = new JsonParser();
-            sw = Stopwatch.StartNew();
-            for (var i = 0; i < 1000000; i++)
-            {
-                var o = p.Parse(json);
-            }
-            sw.Stop();
-            Console.WriteLine("Old: " + sw.Elapsed);
-        }
-
+        
         [Test]
         public void CanGenerateJson() {
             var obj = new {a = 1, aa=0, b = "c", d = new object[] {1, null, "e"}, f = new {g = true, h=false},i=new object[]{},k=new Dictionary<string,string>(),l=new Dictionary<string,string>{{"m","n"}}};
