@@ -23,7 +23,6 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>TRACE;DEBUG; </DefineConstants>
   </PropertyGroup>
   <ItemGroup>
@@ -169,4 +168,8 @@
   <ItemGroup>
     <Folder Include="Config\" />
   </ItemGroup>
+
+ <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
 </Project>
