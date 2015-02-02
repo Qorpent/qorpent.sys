@@ -37,7 +37,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		private void WriteSqlMethod(SqlFunction method){
 			o.WriteLine();
 			o.Write("\t\t///<summary>{0} (Id notation)</summary>\r\n", method.Comment);
-			o.Write("\t\tpublic {0}[] {1} (int {2}Id) {{\r\n", method.ReturnType.TargetType.Name, method.Name, Cls.Name.ToLowerInvariant());
+			o.Write("\t\tpublic {0}[] {1} (long {2}Id) {{\r\n", method.ReturnType.TargetType.Name, method.Name, Cls.Name.ToLowerInvariant());
 			o.Write(@"			return Model.{0}.GetAll (""select id from {1} ( '""+{2}Id+""')"");
 ", method.ReturnType.TargetType.Name, method.FullName.Replace("\"", "\\\""), Cls.Name.ToLowerInvariant());
 			o.WriteLine("\t\t}");
