@@ -188,7 +188,14 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				if (ormField.IsReference && ormField.ReferenceClass.TargetClass == null){
 					cond = "if(!reader.IsDBNull("+i+"))";
 				}
-				o.WriteLine("\t\t\t\t"+cond+"result." + name + " = " + cast + "reader.Get" + type + "(" + i + ");");
+			    if (type == "Int64" && name.ToLowerInvariant() == "id") {
+
+                    o.WriteLine("\t\t\t\t" + cond + "result." + name + " = Convert.To" + type + "(reader.GetValue("+i+"));");
+			    }
+			    else {
+
+                    o.WriteLine("\t\t\t\t" + cond + "result." + name + " = " + cast + "reader.Get" + type + "(" + i + ");");   
+			    }
 				i++;
 			}
 			o.WriteLine("\t\t\t}else{");
