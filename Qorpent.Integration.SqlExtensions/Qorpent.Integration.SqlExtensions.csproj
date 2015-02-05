@@ -22,7 +22,397 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickCatalog.cs">
+      <Link>ImportCode\BrickCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickChart.cs">
+      <Link>ImportCode\BrickChart.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickChartApplication.cs">
+      <Link>ImportCode\BrickChartApplication.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickChartStyle.cs">
+      <Link>ImportCode\BrickChartStyle.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickDataSet.cs">
+      <Link>ImportCode\BrickDataSet.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickDataSetExtensions.cs">
+      <Link>ImportCode\BrickDataSetExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickDataSetHelper.cs">
+      <Link>ImportCode\BrickDataSetHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickDataSetSeria.cs">
+      <Link>ImportCode\BrickDataSetSeria.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickRequest.cs">
+      <Link>ImportCode\BrickRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickVariant.cs">
+      <Link>ImportCode\BrickVariant.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickVariantComparer.cs">
+      <Link>ImportCode\BrickVariantComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\DataItem.cs">
+      <Link>ImportCode\DataItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\DataItemColon.cs">
+      <Link>ImportCode\DataItemColon.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\DataItemExtensions.cs">
+      <Link>ImportCode\DataItemExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\DataRow.cs">
+      <Link>ImportCode\DataRow.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\LabelPosition.cs">
+      <Link>ImportCode\LabelPosition.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\LabelPositionVariants.cs">
+      <Link>ImportCode\LabelPositionVariants.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\MiniamlScaleBehavior.cs">
+      <Link>ImportCode\MiniamlScaleBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\NumericDataItem.cs">
+      <Link>ImportCode\NumericDataItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\Scale.cs">
+      <Link>ImportCode\Scale.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\ScaleType.cs">
+      <Link>ImportCode\ScaleType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\SeriaCalcMode.cs">
+      <Link>ImportCode\SeriaCalcMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\UserPreferences.cs">
+      <Link>ImportCode\UserPreferences.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\BSharpDocumentStorage.cs">
+      <Link>ImportCode\BSharpDocumentStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Collections\BTreeIndex\BTreeBucket.cs">
+      <Link>ImportCode\BTreeBucket.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Collections\BTreeIndex\BTreeIndex.cs">
+      <Link>ImportCode\BTreeIndex.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Collections\BTreeIndex\BTreeUtils.cs">
+      <Link>ImportCode\BTreeUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Collections\BTreeIndex\BTreeValue.cs">
+      <Link>ImportCode\BTreeValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Collections\BTreeIndex\IBTreeStorage.cs">
+      <Link>ImportCode\IBTreeStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Collections\BTreeIndex\StubBTreeStorage.cs">
+      <Link>ImportCode\StubBTreeStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Collections\IMap.cs">
+      <Link>ImportCode\IMap.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Collections\IMapItem.cs">
+      <Link>ImportCode\IMapItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Collections\Map.cs">
+      <Link>ImportCode\Map.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Collections\MapItem.cs">
+      <Link>ImportCode\MapItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Collections\StringMap.cs">
+      <Link>ImportCode\StringMap.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ComplexStringExtension.cs">
+      <Link>ImportCode\ComplexStringExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ComplexStringHelper.cs">
+      <Link>ImportCode\ComplexStringHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ConsoleSupport\ConsoleApplication.cs">
+      <Link>ImportCode\ConsoleApplication.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ConsoleSupport\ConsoleApplicationHandler.cs">
+      <Link>ImportCode\ConsoleApplicationHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ConsoleSupport\ConsoleApplicationListener.cs">
+      <Link>ImportCode\ConsoleApplicationListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ConsoleSupport\ConsoleApplicationParameters.cs">
+      <Link>ImportCode\ConsoleApplicationParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ConsoleSupport\ConsoleApplicationResult.cs">
+      <Link>ImportCode\ConsoleApplicationResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ConsoleSupport\ConsoleArgumentHelper.cs">
+      <Link>ImportCode\ConsoleArgumentHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ConsoleSupport\ConsoleRenderHelper.cs">
+      <Link>ImportCode\ConsoleRenderHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ConsoleSupport\IConsoleApplicationListener.cs">
+      <Link>ImportCode\IConsoleApplicationListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ConsoleSupport\ShadowRun.cs">
+      <Link>ImportCode\ShadowRun.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\DateRange.cs">
+      <Link>ImportCode\DateRange.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\DateRangeResolver.cs">
+      <Link>ImportCode\DateRangeResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Experiments\StringUtils.cs">
+      <Link>ImportCode\StringUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\ApplicationExtensions.cs">
+      <Link>ImportCode\ApplicationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\ConfigExtensions.cs">
+      <Link>ImportCode\ConfigExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\ContainerExtensions.cs">
+      <Link>ImportCode\ContainerExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\DatabaseEngineType.cs">
+      <Link>ImportCode\DatabaseEngineType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\DatabaseExtensions.cs">
+      <Link>ImportCode\DatabaseExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\DateExtensions.cs">
+      <Link>ImportCode\DateExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\EnumerableExtensions.cs">
+      <Link>ImportCode\EnumerableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\FileNameResolverExtensions.cs">
+      <Link>ImportCode\FileNameResolverExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\HierarchyExtensions.cs">
+      <Link>ImportCode\HierarchyExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\HierarchyPropagation.cs">
+      <Link>ImportCode\HierarchyPropagation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\Html\XmlHtmlExtensions.cs">
+      <Link>ImportCode\XmlHtmlExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\LinqExtensions.cs">
+      <Link>ImportCode\LinqExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\LogExtensions.cs">
+      <Link>ImportCode\LogExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\MathExtensions.cs">
+      <Link>ImportCode\MathExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\OsExtensions.cs">
+      <Link>ImportCode\OsExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\ReflectionExtensions.cs">
+      <Link>ImportCode\ReflectionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\SecurityExtensions.cs">
+      <Link>ImportCode\SecurityExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\SlashListHelper.cs">
+      <Link>ImportCode\SlashListHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\SqlCommandType.cs">
+      <Link>ImportCode\SqlCommandType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\StreamExtensions.cs">
+      <Link>ImportCode\StreamExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\StringExtensions.cs">
+      <Link>ImportCode\StringExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\TagHelper.cs">
+      <Link>ImportCode\TagHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\TaskExtensions.cs">
+      <Link>ImportCode\TaskExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\UniSqlConst.cs">
+      <Link>ImportCode\UniSqlConst.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\UniSqlQuery.cs">
+      <Link>ImportCode\UniSqlQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Extensions\XmlExtensions.cs">
+      <Link>ImportCode\XmlExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\FileSystemHelper.cs">
+      <Link>ImportCode\FileSystemHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\FuzzyLogic\FuzzySet.cs">
+      <Link>ImportCode\FuzzySet.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\GeoProjectionHelper.cs">
+      <Link>ImportCode\GeoProjectionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Git\FileRecord.cs">
+      <Link>ImportCode\FileRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Git\FileState.cs">
+      <Link>ImportCode\FileState.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Git\GirFileState.cs">
+      <Link>ImportCode\GirFileState.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Git\GitCommitInfo.cs">
+      <Link>ImportCode\GitCommitInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Git\GitHelper.cs">
+      <Link>ImportCode\GitHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Git\GitUtils.cs">
+      <Link>ImportCode\GitUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Git\MergeStrategyOption.cs">
+      <Link>ImportCode\MergeStrategyOption.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Git\RevisionDistance.cs">
+      <Link>ImportCode\RevisionDistance.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Hex.cs">
+      <Link>ImportCode\Hex.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Iterator.cs">
+      <Link>ImportCode\Iterator.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ListUtils.cs">
+      <Link>ImportCode\ListUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\LogicalExpressions\ConjunctionNode.cs">
+      <Link>ImportCode\ConjunctionNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\LogicalExpressions\DisjunctionNode.cs">
+      <Link>ImportCode\DisjunctionNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\LogicalExpressions\EqualNode.cs">
+      <Link>ImportCode\EqualNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\LogicalExpressions\EqualValueNode.cs">
+      <Link>ImportCode\EqualValueNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\LogicalExpressions\LiteralNode.cs">
+      <Link>ImportCode\LiteralNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\LogicalExpressions\LogicalExpressionEvaluator.cs">
+      <Link>ImportCode\LogicalExpressionEvaluator.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\LogicalExpressions\LogicalExpressionParser.cs">
+      <Link>ImportCode\LogicalExpressionParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs">
+      <Link>ImportCode\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs">
+      <Link>ImportCode\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs">
+      <Link>ImportCode\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ParamMappingHelper.cs">
+      <Link>ImportCode\ParamMappingHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ReflectionExtensionsException.cs">
+      <Link>ImportCode\ReflectionExtensionsException.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ReflectionHelper.cs">
+      <Link>ImportCode\ReflectionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Scaling\ScaleApproximated.cs">
+      <Link>ImportCode\ScaleApproximated.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Scaling\ScaleNormalizeCache.cs">
+      <Link>ImportCode\ScaleNormalizeCache.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Scaling\ScaleNormalizeClause.cs">
+      <Link>ImportCode\ScaleNormalizeClause.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Scaling\ScaleNormalized.cs">
+      <Link>ImportCode\ScaleNormalized.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Scaling\ScaleNormalizedVariant.cs">
+      <Link>ImportCode\ScaleNormalizedVariant.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Scaling\ScaleNormalizer.cs">
+      <Link>ImportCode\ScaleNormalizer.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Scaling\ScaleNormalizerImproved.cs">
+      <Link>ImportCode\ScaleNormalizerImproved.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Scaling\SlickNumbers.cs">
+      <Link>ImportCode\SlickNumbers.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Scaling\Table.cs">
+      <Link>ImportCode\Table.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\SimpleExpressionItem.cs">
+      <Link>ImportCode\SimpleExpressionItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\SimpleExpressionItemType.cs">
+      <Link>ImportCode\SimpleExpressionItemType.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\SimpleExpressionParser.cs">
+      <Link>ImportCode\SimpleExpressionParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Sql\SqlFullTextSearchAdapter.cs">
+      <Link>ImportCode\SqlFullTextSearchAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\StringHelper.cs">
+      <Link>ImportCode\StringHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\StringInterpolation.cs">
+      <Link>ImportCode\StringInterpolation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\Tagged.cs">
+      <Link>ImportCode\Tagged.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\ValueMember.cs">
+      <Link>ImportCode\ValueMember.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\WellKnownHelper.cs">
+      <Link>ImportCode\WellKnownHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\XDiff\XDiffAction.cs">
+      <Link>ImportCode\XDiffAction.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\XDiff\XDiffExtensions.cs">
+      <Link>ImportCode\XDiffExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\XDiff\XDiffGenerator.cs">
+      <Link>ImportCode\XDiffGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\XDiff\XDiffItem.cs">
+      <Link>ImportCode\XDiffItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\XDiff\XDiffOptions.cs">
+      <Link>ImportCode\XDiffOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\XmlInterpolation.cs">
+      <Link>ImportCode\XmlInterpolation.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Utils\XsltStdExtensions.cs">
+      <Link>ImportCode\XsltStdExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\**\*.cs" Exclude="..\Qorpent.Core\**\AssemblyInfo.cs">
+      <Link>ImportCode\%(Filename).cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Serialization\**\*.cs" Exclude="..\Qorpent.Serialization\**\AssemblyInfo.cs">
+      <Link>ImportCode\%(Filename).cs</Link>
+    </Compile>
     <Compile Include="BxlFunctions.cs" />
     <Compile Include="GeneratorFunctions.cs" />
     <Compile Include="HtmlFunctions.cs" />
@@ -33,20 +423,18 @@
     <Compile Include="XmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\qorpent.kernel\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <ItemGroup>
-    <None Include="Qorpent.Bxl.import" />
-    <None Include="Qorpent.Core.import" />
-    <None Include="Qorpent.Serialization.import" />
-    <None Include="Qorpent.Utils.import" />
     <None Include="*.export" />
   </ItemGroup>
   <ItemGroup>
@@ -62,7 +450,8 @@
       <Name>Qorpent.Tools.SqlExtensionsInstaller</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
-    <PostBuildEvent>REM $(OutDir)..\all\sqlext.exe $(TargetDir)$(TargetFileName) --generate-script --schema qorpent &gt; $(ProjectDir)qpt-sqlext-clr.sql</PostBuildEvent>
+    <PostBuildEvent>$(OutDir)..\all\sqlext.exe $(TargetDir)$(TargetFileName) --generate-script --schema qorpent &gt; $(ProjectDir)qpt-sqlext-clr.sql</PostBuildEvent>
   </PropertyGroup>
 </Project>

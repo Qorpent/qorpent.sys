@@ -3,13 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using Qorpent.Utils;
+using Qorpent.Experiments;
 
-#if EXBRIDGE
-namespace Qorpent.Experiments.Utils
-#else
 namespace Qorpent.Utils
-#endif
 {
 	/// <summary>
 	/// Adds some relax/force logic for system-defined Convert 
@@ -499,27 +495,27 @@ namespace Qorpent.Utils
 		}
 
 
-	    /// <summary>
-	    /// 	Converts object properties and values to dictionary
-	    /// </summary>
-	    /// <param name="obj"> </param>
-	    /// <param name="existed"></param>
-	    /// <param name="nullsafe"></param>
-	    /// <param name="itemdelimiter"></param>
-	    /// <param name="valdelimiter"></param>
-	    /// <param name="escapechar"></param>
-	    /// <param name="trim"></param>
-	    /// <param name="urlescape"></param>
-	    /// <returns> </returns>
-	    public static IDictionary<string, object> ToDict(this object obj, IDictionary<string,object> existed = null,  bool nullsafe = true, char itemdelimiter= ';',char valdelimiter='=', char escapechar = '\\', bool trim = true, bool urlescape = false) {
+		/// <summary>
+		/// 	Converts object properties and values to dictionary
+		/// </summary>
+		/// <param name="obj"> </param>
+		/// <param name="existed"></param>
+		/// <param name="nullsafe"></param>
+		/// <param name="itemdelimiter"></param>
+		/// <param name="valdelimiter"></param>
+		/// <param name="escapechar"></param>
+		/// <param name="trim"></param>
+		/// <param name="urlescape"></param>
+		/// <returns> </returns>
+		public static IDictionary<string, object> ToDict(this object obj, IDictionary<string,object> existed = null,  bool nullsafe = true, char itemdelimiter= ';',char valdelimiter='=', char escapechar = '\\', bool trim = true, bool urlescape = false) {
 			if (null == obj) {
 				if(nullsafe)return new Dictionary<string, object>();
 				return null;
 			}
 			var result = existed ?? new Dictionary<string, object>();
 			var str = obj as string;
-           
-            if (null != str) {
+		   
+			if (null != str) {
 				ReadAsDictionary(str,itemdelimiter,valdelimiter,trim,escapechar,urlescape,result);
 				return result;
 			}
@@ -527,10 +523,10 @@ namespace Qorpent.Utils
 			if (null != convertible) {
 				result[DictValueName] = convertible;               
 			}
-            var collection = obj as ICollection;
+			var collection = obj as ICollection;
 			if (null != collection) {
-                if (CheckDictionary<string, object>(obj, result)) return result;
-                if (CheckDictionary<string, string>(obj, result)) return result;
+				if (CheckDictionary<string, object>(obj, result)) return result;
+				if (CheckDictionary<string, string>(obj, result)) return result;
 				if (ReflectionUtils.IsGenericCompatible<IEnumerable<KeyValuePair<object, object>>>(collection)) {
 					Func<object, object> keyGetter = null;
 					Func<object, object> valGetter = null;
@@ -560,7 +556,7 @@ namespace Qorpent.Utils
 			
 			foreach (var p in type.GetProperties()) {
 				//result.Add(p.Name, ReflectionUtils.BuildGetter(p)(obj));
-                result[p.Name]= p.GetValue(obj);
+				result[p.Name]= p.GetValue(obj);
 			}
 			return result;
 		}
@@ -569,7 +565,7 @@ namespace Qorpent.Utils
 			var dss = obj as IEnumerable<KeyValuePair<K,V>> ;
 			if (null != dss) {
 				foreach (var pair in dss) {
-				        result[pair.Key.ToString()] = pair.Value;			    
+						result[pair.Key.ToString()] = pair.Value;			    
 				}
 				return true;
 			}
@@ -636,14 +632,14 @@ namespace Qorpent.Utils
 					if (c == itemDelimiter) {
 						var val = trim ? valBuffer.ToString().Trim() : valBuffer.ToString();
 						var key = nameBuffer.ToString().Trim();
-                        if (urlescape) {
-						    val = Uri.UnescapeDataString(val.Replace('+',' '));
-						    key = Uri.UnescapeDataString(key.Replace('+',' '));
-                            if (trim) {
-                                val = val.Trim();
-                                key = key.Trim();
-                            }
-					    }
+						if (urlescape) {
+							val = Uri.UnescapeDataString(val.Replace('+',' '));
+							key = Uri.UnescapeDataString(key.Replace('+',' '));
+							if (trim) {
+								val = val.Trim();
+								key = key.Trim();
+							}
+						}
 						if (typeof (T) == typeof (string)) {
 							(result as IDictionary<string, string>)[key] = val;
 						}
@@ -678,13 +674,13 @@ namespace Qorpent.Utils
 					var val = trim ? valBuffer.ToString().Trim() : valBuffer.ToString();
 					var key = nameBuffer.ToString().Trim();
 					if (urlescape) {
-                        val = Uri.UnescapeDataString(val.Replace('+', ' '));
-                        key = Uri.UnescapeDataString(key.Replace('+', ' '));
-                        if (trim)
-                        {
-                            val = val.Trim();
-                            key = key.Trim();
-                        }
+						val = Uri.UnescapeDataString(val.Replace('+', ' '));
+						key = Uri.UnescapeDataString(key.Replace('+', ' '));
+						if (trim)
+						{
+							val = val.Trim();
+							key = key.Trim();
+						}
 					}
 					if (typeof(T) == typeof(string))
 					{

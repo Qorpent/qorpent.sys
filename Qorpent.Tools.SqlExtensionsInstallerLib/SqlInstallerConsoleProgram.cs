@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -110,8 +111,11 @@ namespace Qorpent.Tools.SqlExtensionsInstallerLib {
 			var assembly = args.LoadAssembly();
 			var sysdepends =
 				(assembly.GetReferencedAssemblies().Where(
-					x => x.Name.StartsWith("System.") && x.Name != "System.Data" && x.Name != "System.Xml" && x.Name != "System" && x.Name!="System.Web")).
+					x => (x.Name.StartsWith("System.") || x.Name.StartsWith("Microsoft.")) && x.Name != "Microsoft.SqlServer.Types" && x.Name != "System.Data" && x.Name != "System.Xml" && x.Name != "System" && x.Name != "System.Web")).
 					ToList();
+			if (sysdepends.Any(_ => _.Name == "Microsoft.CSharp")) {
+				sysdepends.Insert(0, new AssemblyName("system.dynamic"));
+			}
 			var customdepends =
 				assembly.GetReferencedAssemblies().Where(
 					x => !(x.Name.StartsWith("System") || x.Name == "mscorlib" || x.Name.StartsWith("Microsoft."))).ToList();
@@ -188,8 +192,8 @@ if SCHEMA_ID('{0}') is null {1}
 		}
 
 		private static IEnumerable<string> GetCreateCustomLibrariesScripts(SqlInstallerConsoleProgramArgs args,
-		                                                                   List<AssemblyName> customdepends,
-		                                                                   Assembly assembly) {
+																		   List<AssemblyName> customdepends,
+																		   Assembly assembly) {
 			var dir = Path.GetDirectoryName(Path.GetFullPath(args.AssemblyName + ".dll"));
 			foreach (var dep in customdepends) {
 				yield return
@@ -234,8 +238,8 @@ WITH PERMISSION_SET = {2}
 		}
 
 		private IEnumerable<string> GetCleanupAssembliesScripts(IEnumerable<AssemblyName> sysdepends,
-		                                                        IEnumerable<AssemblyName> customdepends,
-		                                                        Assembly assembly) {
+																IEnumerable<AssemblyName> customdepends,
+																Assembly assembly) {
 			yield return
 				string.Format(
 					@"
@@ -260,12 +264,12 @@ drop assembly [{0}]
 				foreach (var sysasm in sysdepends) {
 					yield return
 						string.Format(
-							@"
+                            @"
 --SQLINSTALL: Recreate system lib {0}
 begin try
 if not exists(select assembly_id from sys.assemblies where name='{0}') 
 Create assembly [{0}] 
-from 'C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\{0}.dll' 
+from 'C:\Windows\Microsoft.NET\Framework\v4.0.30319\{0}.dll' 
 with permission_set = unsafe 
 end try
 begin catch
