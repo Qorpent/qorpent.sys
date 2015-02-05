@@ -81,7 +81,6 @@ define(["totalleaflet-utils"],function(utils){
 
 
             mapConfig.attributionControl = false;
-
             var map = L.map(element[0],mapConfig);
             map.getHomeCoordinates = getHomeCoordinates;
 
@@ -237,15 +236,16 @@ define(["totalleaflet-utils"],function(utils){
 
 
             if(!!iAttrs["onload"]) {
-                if (iAttrs["onload"] in $scope) {
-                    $scope[iAttrs["onload"]](map, element, iAttrs);
+				if (iAttrs["onload"] in $scope) {
+				    $scope[iAttrs["onload"]](map, element, iAttrs);
                 }
             }
 
 
             window.setTimeout(function(){
                 map.goHome(false,true);
-            })
+				map.invalidateSize(true);
+            },4);
 
             map.infoLevels =false;
             map.toggleInfoLayer  = function(){
