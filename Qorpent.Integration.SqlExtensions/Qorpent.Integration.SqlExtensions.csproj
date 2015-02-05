@@ -22,9 +22,7 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+  
   <ItemGroup>
     <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickCatalog.cs">
       <Link>ImportCode\BrickCatalog.cs</Link>
@@ -443,6 +441,9 @@
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
-    <PostBuildEvent>$(OutDir)..\all\sqlext.exe $(TargetDir)$(TargetFileName) --generate-script --schema qorpent &gt; $(ProjectDir)qpt-sqlext-clr.sql</PostBuildEvent>
+    <PostBuildEvent>REM $(OutDir)..\all\sqlext.exe $(TargetDir)$(TargetFileName) --generate-script --schema qorpent &gt; $(ProjectDir)qpt-sqlext-clr.sql</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 </Project>
