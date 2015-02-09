@@ -191,6 +191,7 @@
     <Compile Include="Serialization\xmlSerializer.cs" />
     <Compile Include="Serialization\xmlSerializerImpl.cs" />
     <Compile Include="Serialization\XmlToJsonConverter.cs" />
+    <Compile Include="Sql\SqlUtils.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Uson\UObj.cs" />
     <Compile Include="Uson\UObjMode.cs" />
@@ -214,6 +215,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IoC\" />
-    <Folder Include="Sql\" />
   </ItemGroup>
 </Project>
