@@ -4,7 +4,7 @@ define(["the-root"
         var printer = root.printer = root.printer || {};
         var ServerPrinterOptions = root.printer.ServerPrinterOptions = function () {
             this.TargetUrl = "";
-            this.LocalizeUrl = true;
+            this.LocalizeUrl = false;
             this.UrlParam = "reporturl";
             this.PrintHash = "print";
             this.CacheParam = "cached";
@@ -65,7 +65,7 @@ define(["the-root"
                 var issecure = document.location.protocol == "https:";
                 var port = options.BasePort;
                 if (issecure) port += 1;
-                if (islocal) port -= 5;
+                if (!islocal) port -= 5;
                 var url =
                     document.location.protocol + "//" +
                     document.location.hostname + ":" + port + "/" +

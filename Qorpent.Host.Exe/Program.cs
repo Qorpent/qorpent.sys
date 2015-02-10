@@ -84,6 +84,9 @@ namespace Qorpent.Host.Exe
             {
                 arg.Log.Trace("Proxize: " + map.Key + " : " + map.Value);
             }
+	        foreach (var e in config.StaticContentCacheMap) {
+	            arg.Log.Trace(e.Value.ToString());
+	        }
 	    }
 	}
 }
