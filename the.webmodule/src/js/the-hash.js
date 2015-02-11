@@ -33,16 +33,18 @@ define(["the-object"], function ($the) {
             }else{
                 value = null;
             }
-            return this.set(name,value,userhash,encode);
+                return this.set(name,value,userhash,encode);
         }
 
         hash.set=function(name,value,userhash,encode){
+
             var setlocation = false;
             if(typeof userhash == "undefined"){
                 userhash = document.location.hash;
                 encode = true;
                 setlocation = true;
             }
+
             var remove = (null==value || typeof(value)=="undefined");
             name= name || "__value";
             userhash = userhash || "";
@@ -58,7 +60,13 @@ define(["the-object"], function ($the) {
                 searchName = searchName.replace(/%20/g,'(\\+|%20)')
             }
             var regex = new RegExp("&" + searchName + "=([^&]*)","i");
-            userhash = userhash.replace(regex,value.replace("$","$$"));
+            if(userhash.match(regex)){
+                userhash = userhash.replace(regex,value.replace("$","$$"));
+            }else{
+                userhash+=value;
+            }
+
+
             if(setlocation){
                 if(userhash.length==0)userhash = "#";
                 if(userhash[0]!="#")userhash = "#"+userhash;

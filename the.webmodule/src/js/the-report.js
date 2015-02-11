@@ -44,11 +44,11 @@ define(["the-object","the-hash"], function ($the, $m) {
             $scope.changed = function(name){$hash.set(name,s[name]);}
             $scope.setShowComments = function (val) {
                 $scope.state.showComments = val;
-                $hash.setFlag("noComments",val);
+                $hash.setFlag("noComments",!val);
             }
             $scope.setShowExtensions = function (val) {
                 $scope.state.showExtensions = val;
-                $hash.setFlag("noExt",val);
+                $hash.setFlag("noExt",!val);
             }
 
             $scope.serverPrint = function(){
