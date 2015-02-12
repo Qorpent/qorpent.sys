@@ -24,6 +24,7 @@
     <EmbeddedResource Include="Resources\obsolete\qObject.wiki" />
     <EmbeddedResource Include="Resources\manifest.cache" />
     <EmbeddedResource Include="Resources\syntax.wiki" />
+    <EmbeddedResource Include="Resources\extras\fontawesome-webfont.woff2" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestHandlerFactory.cs" />
