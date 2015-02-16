@@ -169,7 +169,9 @@ namespace Qorpent.Experiments {
                 }
                 if (c == '}') {
                     if (wascomma) {
-                        throw new Exception("invalid trail comma at " + (cur - basis));
+                        defined = true;
+                        break;
+                       //throw new Exception("invalid trail comma at " + (cur - basis)); HACK:
                     }
                     if (wascolon) {
                         throw new Exception("invalid end after colon");
@@ -282,9 +284,9 @@ namespace Qorpent.Experiments {
             while (true) {
                 var c = *cur;
                 if (c == ']') {
-                    if (wascomma) {
-                        throw new Exception("invalid trail comma at " + (cur - basis));
-                    }
+                    //if (wascomma) {
+                    //    throw new Exception("invalid trail comma at " + (cur - basis));
+                    //}
                     defined = true;
                     break;
                 }
