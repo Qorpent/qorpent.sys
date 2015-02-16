@@ -8,7 +8,7 @@ if ( typeof window === 'undefined' ) {console.error('no window  (leaflet)');retu
 var oldL = window.L,
     L = {};
 
-L.version = '0.7.2';
+L.version = '0.7.3';
 
 // define Leaflet for Node module pattern loaders, including Browserify
 if (typeof module === 'object' && typeof module.exports === 'object') {
@@ -1631,14 +1631,15 @@ L.Map = L.Class.extend({
 		var paddingTL = L.point(options.paddingTopLeft || options.padding || [0, 0]),
 		    paddingBR = L.point(options.paddingBottomRight || options.padding || [0, 0]),
 
-		    zoom = this.getBoundsZoom(bounds, false, paddingTL.add(paddingBR)),
-		    paddingOffset = paddingBR.subtract(paddingTL).divideBy(2),
+		    zoom = this.getBoundsZoom(bounds, false, paddingTL.add(paddingBR));
+
+		zoom = (options.maxZoom) ? Math.min(options.maxZoom, zoom) : zoom;
+
+		var paddingOffset = paddingBR.subtract(paddingTL).divideBy(2),
 
 		    swPoint = this.project(bounds.getSouthWest(), zoom),
 		    nePoint = this.project(bounds.getNorthEast(), zoom),
 		    center = this.unproject(swPoint.add(nePoint).divideBy(2).add(paddingOffset), zoom);
-
-		zoom = options && options.maxZoom ? Math.min(options.maxZoom, zoom) : zoom;
 
 		return this.setView(center, zoom, options);
 	},
@@ -2103,12 +2104,12 @@ L.Map = L.Class.extend({
 		var loading = !this._loaded;
 		this._loaded = true;
 
+		this.fire('viewreset', {hard: !preserveMapOffset});
+
 		if (loading) {
 			this.fire('load');
 			this.eachLayer(this._layerAdd, this);
 		}
-
-		this.fire('viewreset', {hard: !preserveMapOffset});
 
 		this.fire('move');
 
@@ -2435,7 +2436,8 @@ L.TileLayer = L.Class.extend({
 		attribution: '',
 		zoomOffset: 0,
 		opacity: 1,
-		/* (undefined works too)
+		/*
+		maxNativeZoom: null,
 		zIndex: null,
 		tms: false,
 		continuousWorld: false,
@@ -2483,9 +2485,6 @@ L.TileLayer = L.Class.extend({
 
 		// create a container div for tiles
 		this._initContainer();
-
-		// create an image to clone for tiles
-		this._createTileProto();
 
 		// set up events
 		map.on({
@@ -2706,9 +2705,10 @@ L.TileLayer = L.Class.extend({
 
 		if (!this._map) { return; }
 
-		var bounds = this._map.getPixelBounds(),
-		    zoom = this._map.getZoom(),
-		    tileSize = this.options.tileSize;
+		var map = this._map,
+		    bounds = map.getPixelBounds(),
+		    zoom = map.getZoom(),
+		    tileSize = this._getTileSize();
 
 		if (zoom > this.options.maxZoom || zoom < this.options.minZoom) {
 			return;
@@ -2869,12 +2869,14 @@ L.TileLayer = L.Class.extend({
 			zoom = options.maxZoom - zoom;
 		}
 
-		return zoom + options.zoomOffset;
+		zoom += options.zoomOffset;
+
+		return options.maxNativeZoom ? Math.min(zoom, options.maxNativeZoom) : zoom;
 	},
 
 	_getTilePos: function (tilePoint) {
 		var origin = this._map.getPixelOrigin(),
-		    tileSize = this.options.tileSize;
+		    tileSize = this._getTileSize();
 
 		return tilePoint.multiplyBy(tileSize).subtract(origin);
 	},
@@ -2917,12 +2919,6 @@ L.TileLayer = L.Class.extend({
 		return this.options.subdomains[index];
 	},
 
-	_createTileProto: function () {
-		var img = this._tileImg = L.DomUtil.create('img', 'leaflet-tile');
-		img.style.width = img.style.height = this.options.tileSize + 'px';
-		img.galleryimg = 'no';
-	},
-
 	_getTile: function () {
 		if (this.options.reuseTiles && this._unusedTiles.length > 0) {
 			var tile = this._unusedTiles.pop();
@@ -2936,7 +2932,10 @@ L.TileLayer = L.Class.extend({
 	_resetTile: function (/*tile*/) {},
 
 	_createTile: function () {
-		var tile = this._tileImg.cloneNode(false);
+		var tile = L.DomUtil.create('img', 'leaflet-tile');
+		tile.style.width = tile.style.height = this._getTileSize() + 'px';
+		tile.galleryimg = 'no';
+
 		tile.onselectstart = tile.onmousemove = L.Util.falseFn;
 
 		if (L.Browser.ielt9 && this.options.opacity !== undefined) {
@@ -3139,13 +3138,9 @@ L.TileLayer.Canvas = L.TileLayer.extend({
 		this.drawTile(tile, tile._tilePoint, this._map._zoom);
 	},
 
-	_createTileProto: function () {
-		var proto = this._canvasProto = L.DomUtil.create('canvas', 'leaflet-tile');
-		proto.width = proto.height = this.options.tileSize;
-	},
-
 	_createTile: function () {
-		var tile = this._canvasProto.cloneNode(false);
+		var tile = L.DomUtil.create('canvas', 'leaflet-tile');
+		tile.width = tile.height = this.options.tileSize;
 		tile.onselectstart = tile.onmousemove = L.Util.falseFn;
 		return tile;
 	},
@@ -3573,7 +3568,9 @@ L.Marker = L.Class.extend({
 	update: function () {
 		if (this._icon) {
 			var pos = this._map.latLngToLayerPoint(this._latlng).round();
-			this._setPos(pos);
+			L.Util.requestAnimFrame(function () {
+				this._setPos(pos);
+			}, this);
 		}
 
 		return this;
@@ -5088,7 +5085,8 @@ L.Path = (L.Path.SVG && !window.L_PREFER_CANVAS) || !L.Browser.canvas ? L.Path :
 		}
 
 		this._requestUpdate();
-
+		
+		this.fire('remove');
 		this._map = null;
 	},
 
@@ -5117,6 +5115,13 @@ L.Path = (L.Path.SVG && !window.L_PREFER_CANVAS) || !L.Browser.canvas ? L.Path :
 		}
 		if (options.fill) {
 			this._ctx.fillStyle = options.fillColor || options.color;
+		}
+
+		if (options.lineCap) {
+			this._ctx.lineCap = options.lineCap;
+		}
+		if (options.lineJoin) {
+			this._ctx.lineJoin = options.lineJoin;
 		}
 	},
 
@@ -6610,12 +6615,12 @@ L.DomEvent = {
 		var timeStamp = (e.timeStamp || e.originalEvent.timeStamp),
 			elapsed = L.DomEvent._lastClick && (timeStamp - L.DomEvent._lastClick);
 
-		// are they closer together than 1000ms yet more than 100ms?
+		// are they closer together than 500ms yet more than 100ms?
 		// Android typically triggers them ~300ms apart while multiple listeners
 		// on the same event should be triggered far faster;
 		// or check if click is simulated on the element, and if it is, reject any non-simulated events
 
-		if ((elapsed && elapsed > 100 && elapsed < 1000) || (e.target._simulatedClick && !e._simulated)) {
+		if ((elapsed && elapsed > 100 && elapsed < 500) || (e.target._simulatedClick && !e._simulated)) {
 			L.DomEvent.stop(e);
 			return;
 		}
@@ -6713,6 +6718,7 @@ L.Draggable = L.Class.extend({
 		    offset = newPoint.subtract(this._startPoint);
 
 		if (!offset.x && !offset.y) { return; }
+		if (L.Browser.touch && Math.abs(offset.x) + Math.abs(offset.y) < 3) { return; }
 
 		L.DomEvent.preventDefault(e);
 
@@ -6723,7 +6729,8 @@ L.Draggable = L.Class.extend({
 			this._startPos = L.DomUtil.getPosition(this._element).subtract(offset);
 
 			L.DomUtil.addClass(document.body, 'leaflet-dragging');
-			L.DomUtil.addClass((e.target || e.srcElement), 'leaflet-drag-target');
+			this._lastTarget = e.target || e.srcElement;
+			L.DomUtil.addClass(this._lastTarget, 'leaflet-drag-target');
 		}
 
 		this._newPos = this._startPos.add(offset);
@@ -6739,9 +6746,13 @@ L.Draggable = L.Class.extend({
 		this.fire('drag');
 	},
 
-	_onUp: function (e) {
+	_onUp: function () {
 		L.DomUtil.removeClass(document.body, 'leaflet-dragging');
-		L.DomUtil.removeClass((e.target || e.srcElement), 'leaflet-drag-target');
+
+		if (this._lastTarget) {
+			L.DomUtil.removeClass(this._lastTarget, 'leaflet-drag-target');
+			this._lastTarget = null;
+		}
 
 		for (var i in L.Draggable.MOVE) {
 			L.DomEvent
@@ -7396,7 +7407,7 @@ L.Map.TouchZoom = L.Handler.extend({
 		    center = map.layerPointToLatLng(origin),
 		    zoom = map.getScaleZoom(this._scale);
 
-		map._animateZoom(center, zoom, this._startCenter, this._scale, this._delta);
+		map._animateZoom(center, zoom, this._startCenter, this._scale, this._delta, false, true);
 	},
 
 	_onTouchEnd: function () {
@@ -8381,8 +8392,8 @@ L.Control.Layers = L.Control.extend({
 
 	onRemove: function (map) {
 		map
-		    .off('layeradd', this._onLayerChange)
-		    .off('layerremove', this._onLayerChange);
+		    .off('layeradd', this._onLayerChange, this)
+		    .off('layerremove', this._onLayerChange, this);
 	},
 
 	addBaseLayer: function (layer, name) {
@@ -8923,9 +8934,11 @@ L.Map.include(!L.DomUtil.TRANSITION ? {} : {
 		return true;
 	},
 
-	_animateZoom: function (center, zoom, origin, scale, delta, backwards) {
+	_animateZoom: function (center, zoom, origin, scale, delta, backwards, forTouchZoom) {
 
-		this._animatingZoom = true;
+		if (!forTouchZoom) {
+			this._animatingZoom = true;
+		}
 
 		// put transform transition on all layers with leaflet-zoom-animated class
 		L.DomUtil.addClass(this._mapPane, 'leaflet-zoom-anim');
@@ -8939,14 +8952,16 @@ L.Map.include(!L.DomUtil.TRANSITION ? {} : {
 			L.Draggable._disabled = true;
 		}
 
-		this.fire('zoomanim', {
-			center: center,
-			zoom: zoom,
-			origin: origin,
-			scale: scale,
-			delta: delta,
-			backwards: backwards
-		});
+		L.Util.requestAnimFrame(function () {
+			this.fire('zoomanim', {
+				center: center,
+				zoom: zoom,
+				origin: origin,
+				scale: scale,
+				delta: delta,
+				backwards: backwards
+			});
+		}, this);
 	},
 
 	_onZoomTransitionEnd: function () {
