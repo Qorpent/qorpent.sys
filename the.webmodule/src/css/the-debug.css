@@ -196,16 +196,15 @@ html.theA4 body {
   text-align: center;
   margin-right: 1px;
   margin-left: 1px;
+  /*&.disabled {
+     font-weight: lighter;
+     color : lightgray !important;
+  }*/
 }
 /* line 52, the/tools/_labels.scss */
 .the .tool.labeled i.active {
   font-weight: bold;
   color: #33aa4c;
-}
-/* line 56, the/tools/_labels.scss */
-.the .tool.labeled i.disabled {
-  font-weight: lighter;
-  color: lightgray !important;
 }
 /* line 60, the/tools/_labels.scss */
 .the .tool.labeled i.md-icon {
@@ -372,6 +371,13 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   box-sizing: border-box;
 }
 
+/* line 13, the.scss */
+.the {
+  /*
+    i.disabled {
+      color :lightgray;
+    }*/
+}
 /* line 16, the.scss */
 .the form span.validate {
   font-size: xx-small;
@@ -388,10 +394,6 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 .the .dropdown-menu .delimiter {
   height: 1px;
   border-top: solid 1px gray;
-}
-/* line 43, the.scss */
-.the i.disabled {
-  color: lightgray;
 }
 
 /* line 48, the.scss */
