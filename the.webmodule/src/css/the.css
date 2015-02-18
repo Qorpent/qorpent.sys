@@ -369,34 +369,35 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  line-height: 1.4 !important;
 }
 
-/* line 13, the.scss */
+/* line 14, the.scss */
 .the {
   /*
     i.disabled {
       color :lightgray;
     }*/
 }
-/* line 16, the.scss */
+/* line 17, the.scss */
 .the form span.validate {
   font-size: xx-small;
 }
-/* line 27, the.scss */
+/* line 28, the.scss */
 .the [ng\:cloak], .the [ng-cloak], .the [data-ng-cloak], .the [x-ng-cloak], .the .ng-cloak, .the .x-ng-cloak {
   display: none !important;
 }
-/* line 34, the.scss */
+/* line 35, the.scss */
 .the .dropdown-menu .default a {
   font-weight: bold;
 }
-/* line 37, the.scss */
+/* line 38, the.scss */
 .the .dropdown-menu .delimiter {
   height: 1px;
   border-top: solid 1px gray;
 }
 
-/* line 48, the.scss */
+/* line 49, the.scss */
 .copyright {
   font-family: Consolas, Menlo, Monaco, "Courier New", monospace;
 }
