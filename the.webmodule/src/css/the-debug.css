@@ -196,16 +196,15 @@ html.theA4 body {
   text-align: center;
   margin-right: 1px;
   margin-left: 1px;
+  /*&.disabled {
+     font-weight: lighter;
+     color : lightgray !important;
+  }*/
 }
 /* line 52, the/tools/_labels.scss */
 .the .tool.labeled i.active {
   font-weight: bold;
   color: #33aa4c;
-}
-/* line 56, the/tools/_labels.scss */
-.the .tool.labeled i.disabled {
-  font-weight: lighter;
-  color: lightgray !important;
 }
 /* line 60, the/tools/_labels.scss */
 .the .tool.labeled i.md-icon {
@@ -370,31 +369,35 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  line-height: 1.4 !important;
 }
 
-/* line 16, the.scss */
+/* line 14, the.scss */
+.the {
+  /*
+    i.disabled {
+      color :lightgray;
+    }*/
+}
+/* line 17, the.scss */
 .the form span.validate {
   font-size: xx-small;
 }
-/* line 27, the.scss */
+/* line 28, the.scss */
 .the [ng\:cloak], .the [ng-cloak], .the [data-ng-cloak], .the [x-ng-cloak], .the .ng-cloak, .the .x-ng-cloak {
   display: none !important;
 }
-/* line 34, the.scss */
+/* line 35, the.scss */
 .the .dropdown-menu .default a {
   font-weight: bold;
 }
-/* line 37, the.scss */
+/* line 38, the.scss */
 .the .dropdown-menu .delimiter {
   height: 1px;
   border-top: solid 1px gray;
 }
-/* line 43, the.scss */
-.the i.disabled {
-  color: lightgray;
-}
 
-/* line 48, the.scss */
+/* line 49, the.scss */
 .copyright {
   font-family: Consolas, Menlo, Monaco, "Courier New", monospace;
 }

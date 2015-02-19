@@ -8,6 +8,7 @@
 
 * {
   @include box-sizing(border-box);
+  line-height: 1.4 !important;
 }
 
 .the {
@@ -39,10 +40,10 @@
       border-top:solid 1px gray;
     }
   }
-
+/*
   i.disabled {
     color :lightgray;
-  }
+  }*/
 }
 
 .copyright {

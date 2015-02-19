@@ -307,10 +307,13 @@ namespace Qorpent.Host{
 			this.OnContext("/logon", _ => Auth.Logon(_));
 			this.OnContext("/logout", _ => Auth.Logout(_));
 			this.OnContext("/isauth", _ => Auth.IsAuth(_));
+	        this.OnContext("/save", _ => new SaveHandler().Run(this,_,null,CancellationToken.None));
+            this.OnContext("/load", _ => new LoadHandler().Run(this, _, null, CancellationToken.None));
 			this.On("/js/_plugins.js", BuildPluginsModule(), "text/javascript");
 		}
 
-		private string BuildPluginsModule() {
+	   
+	    private string BuildPluginsModule() {
 			var result = new StringBuilder();
 			
 			var plugins = (this.Config.Definition?? new XElement("_stub")).Elements("plugin");
