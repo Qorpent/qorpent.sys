@@ -13,6 +13,7 @@ define(["the-object","the-hash"], function ($the, $m) {
                 addr3:"",
                 addr4:"",
                 num : "",
+                num2 : "",
                 advcomment:"",
                 day : "",
                 month : $the.dates.toRusMonth(null,'r').toLowerCase()
@@ -30,6 +31,7 @@ define(["the-object","the-hash"], function ($the, $m) {
                 s.addr3 = getHash("addr3",hash,decode);
                 s.addr4 = getHash("addr4",hash,decode);
                 s.num = getHash("num",hash,decode);
+                s.num2 = getHash("num2",hash,decode);
                 s.advcomment = getHash("advcomment",hash,decode);
                 s.day = getHash("day",hash,decode) || moment().date();
                 s.month = getHash("month",hash,decode) || s.month;
@@ -41,14 +43,14 @@ define(["the-object","the-hash"], function ($the, $m) {
         }
         report.setupDefaultScope = function($scope){
             $scope.state = $the.report.getDefaultContext();
-            $scope.changed = function(name){$hash.set(name,s[name]);}
+            $scope.changed = function(name){$hash.set(name,$scope.state[name]);}
             $scope.setShowComments = function (val) {
                 $scope.state.showComments = val;
-                $hash.setFlag("noComments",val);
+                $hash.setFlag("noComments",!val);
             }
             $scope.setShowExtensions = function (val) {
                 $scope.state.showExtensions = val;
-                $hash.setFlag("noExt",val);
+                $hash.setFlag("noExt",!val);
             }
 
             $scope.serverPrint = function(){

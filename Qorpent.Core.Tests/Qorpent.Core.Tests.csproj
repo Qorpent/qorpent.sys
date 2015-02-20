@@ -65,6 +65,7 @@
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
+    <EmbeddedResource Include="Experiments\testperformance.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.IoC\Qorpent.IoC.csproj">

@@ -3,15 +3,86 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using Qorpent.Utils;
+using Qorpent.Wiki;
 
 namespace Qorpent.Experiments {
     /// <summary>
     /// 
     /// </summary>
-    public static class Json
-    {
+    public static class Json {
+
+        private static char[] seps = new[] {'.', '['};
+        /// <summary>
+        /// Получить значение из объекта по пути
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static object Get(object json, string path) {
+            if (null == json) return null;
+            
+            var parts = path.Split(seps);
+            for (var i = 0; i < parts.Length; i++) {
+                var p = parts[i];
+                if (p[p.Length-1]==']') {
+                    if (p.StartsWith("\"")) {
+                        parts[i] = p.Substring(1, p.Length - 3);
+
+                    }
+                    else {
+                        parts[i] = "[" + parts[i];
+                    }
+                }
+            }
+            return GetInternal(json,parts);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static IEnumerable<object> Select(object json, string path) {
+            var result = Get(json, path);
+            if (result is IEnumerable<object>) {
+                var res =  (IEnumerable<object>) result;
+                foreach (var re in res) {
+                    yield return re;
+                }
+            }
+            yield break;
+        }
+
+        private static object GetInternal(object json, string[] pathParts) {
+            var current = json;
+            foreach(var pp in pathParts) {
+                current = GetInternal(current, pp);
+                if (null == current) return null;
+            }
+            return current;
+        }
+        private static object GetInternal(object json, string pathPart) {
+            if (json is Array) {
+                var a = json as object[];
+                if (pathPart.ToLowerInvariant() == "length") return a.Length;
+                if (pathPart.StartsWith("[") && pathPart.EndsWith("]")) {
+                    var pos = Convert.ToInt32(pathPart.Substring(1, pathPart.Length - 2));
+                    if (a.Length <= pos) return null;
+                    return a[pos];
+                }
+                return null;
+            }
+            if (json is IDictionary<string, object>) {
+                var d = json as IDictionary<string, object>;
+                if (d.ContainsKey(pathPart)) return d[pathPart];
+                return null;
+            }
+            return null;
+        }
+
         /// <summary>
         /// Retrives null, object[] or IDictionary&lt;string,object&gt;
         /// </summary>
@@ -169,7 +240,9 @@ namespace Qorpent.Experiments {
                 }
                 if (c == '}') {
                     if (wascomma) {
-                        throw new Exception("invalid trail comma at " + (cur - basis));
+                        defined = true;
+                        break;
+                       //throw new Exception("invalid trail comma at " + (cur - basis)); HACK:
                     }
                     if (wascolon) {
                         throw new Exception("invalid end after colon");
@@ -282,9 +355,9 @@ namespace Qorpent.Experiments {
             while (true) {
                 var c = *cur;
                 if (c == ']') {
-                    if (wascomma) {
-                        throw new Exception("invalid trail comma at " + (cur - basis));
-                    }
+                    //if (wascomma) {
+                    //    throw new Exception("invalid trail comma at " + (cur - basis));
+                    //}
                     defined = true;
                     break;
                 }

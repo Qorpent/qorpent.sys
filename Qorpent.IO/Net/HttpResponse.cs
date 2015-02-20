@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.IO.Net{
 	/// <summary>
@@ -201,5 +202,23 @@ namespace Qorpent.IO.Net{
 
 			Headers[headerName] = headerValue;
 		}
+
+	    
+	    /// <summary>
+	    /// Строковое представление Headers
+	    /// </summary>
+	    /// <returns></returns>
+	    public string StringHeaders() {
+	        var sb = new StringBuilder();
+	        foreach (var header in Headers) {
+	            sb.Append(header.Key);
+	            sb.Append("=");
+	            sb.Append(header.Value);
+	        }
+	        return sb.ToString();
+	    }
+
+
+
 	}
 }

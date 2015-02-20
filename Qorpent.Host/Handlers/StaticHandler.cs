@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace Qorpent.Host.Handlers
 {
-	/// <summary>
+    /// <summary>
 	/// Возвращает статический контет
 	/// </summary>
 	public class StaticHandler:IRequestHandler

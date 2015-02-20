@@ -28,7 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestHandlerFactory.cs" />
+    <Compile Include="Handlers\LoadHandler.cs" />
     <Compile Include="Handlers\ServerPrint.cs" />
+    <Compile Include="Handlers\SaveHandler.cs" />
     <Compile Include="Handlers\WikiHandler.cs" />
     <Compile Include="ProxyHandler.cs" />
     <Compile Include="Server\ServerParameters.cs" />
