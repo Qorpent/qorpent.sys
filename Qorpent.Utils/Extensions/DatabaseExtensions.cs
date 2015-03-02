@@ -92,14 +92,15 @@ namespace Qorpent.Utils.Extensions
 		/// <param name="timeout"></param>
 		/// <param name="close"></param>
 		/// <exception cref="Exception"></exception>
-		public static void ExecuteNonQuery(this IDbConnection connection, object command,
+		public static int ExecuteNonQuery(this IDbConnection connection, object command,
 										   object parameters = null, int timeout=30, bool close = false)
 		{
 			connection.WellOpen();
 			IDbCommand cmd = connection.CreateCommand(command, parameters,timeout);
 			cmd.CommandTimeout = timeout;
+			int r;
 			try{
-				cmd.ExecuteNonQuery();
+				r = cmd.ExecuteNonQuery();
 			}
 			catch (Exception ex){
 				throw new Exception("error in query:" + cmd.CommandText, ex);
@@ -109,6 +110,7 @@ namespace Qorpent.Utils.Extensions
 					connection.Close();
 				}
 			}
+			return r;
 		}
 
 

@@ -27,7 +27,7 @@ namespace Qorpent.Experiments {
             var parts = path.Split(seps);
             for (var i = 0; i < parts.Length; i++) {
                 var p = parts[i];
-                if (p.EndsWith("]")) {
+                if (p[p.Length-1]==']') {
                     if (p.StartsWith("\"")) {
                         parts[i] = p.Substring(1, p.Length - 3);
 
@@ -64,7 +64,6 @@ namespace Qorpent.Experiments {
             }
             return current;
         }
-
         private static object GetInternal(object json, string pathPart) {
             if (json is Array) {
                 var a = json as object[];
