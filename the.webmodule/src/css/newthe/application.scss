@@ -1,0 +1,100 @@
+@import "awesome";
+@import "tools";
+@mixin application() {
+  margin: 0px;
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+  body {
+    margin: 0px;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    flex:1;
+    background: skin(application body-back,color(l_default));
+  }
+  .workplace {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    margin: skin(application wp-margin,0px);
+    padding: skin(application wp-padding,0px);
+    background-color: skin(application wp-back,color(light));
+    border: skin(application wp-border,solid 1px color(default));
+    @include border-radius(skin(application wp-b-radius,0px));
+    @media#{$medialg} {
+      margin: skin(application lg-wp-margin,skin(application wp-margin,0px));
+      padding: skin(application lg-wp-padding,skin(application wp-padding,0px));
+    }
+    @media#{$mediasm} {
+      margin: skin(application sm-wp-margin,skin(application wp-margin,0px));
+      padding: skin(application sm-wp-padding,skin(application wp-paddings,0px));
+    }
+    &>.left, &>.main{
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: skin(application wp-in-padding, 0px 5px 5px 5px);
+    }
+    &>.left{
+      &>label.title {
+        @include tooltitle();
+      }
+      min-width: skin(application left-min-width,150px);
+      @media#{$medialg} {
+        min-width: skin(application lg-left-min-width,skin(application left-min-width,150px));
+      }
+      @media#{$mediasm} {
+        min-width: skin(application sm-left-min-width,skin(application left-min-width,150px));
+      }
+      border-right: skin(application left-b-right, solid 1px color(default));
+
+      &>.collapser {
+        width:20px;
+        height: 3000px;
+        top:0px;
+        left:0px;
+        display: none;
+        writing-mode: vertical-lr ;
+        -webkit-writing-mode: vertical-lr ;
+        transform: rotate(180deg);
+        text-align: right;
+        background-color: color(l_primary);
+        color:  color(primary,text);
+        text-align: center;
+        cursor:pointer;
+        &:after{
+          @include awesome(chevron-circle-left);
+        }
+        &:hover {
+          background-color: color(primary);
+          color:color(primary,text);
+        }
+      }
+      &.collapsed {
+        padding: 0px;
+        * {
+          display: none;
+        }
+        border:none;
+        .collapser {
+          display: block;
+        }
+        min-width: skin(application left-c-minwidth,20px);
+      }
+    }
+    &>.main{
+      flex:1;
+      min-width: skin(application main-min-width,400px);
+      @media#{$medialg} {
+        min-width: skin(application lg-main-min-width,skin(application lg-min-width,skin(application main-min-width,400px)+200px));
+      }
+      @media#{$mediasm} {
+        min-width: skin(application sm-main-min-width,skin(application sm-min-width,skin(application main-min-width,400px)-100px));
+      }
+    }
+  }
+}
+

@@ -1,0 +1,68 @@
+@import "title";
+@mixin tooltitle(){
+  position: relative;
+  @include title(tool title, true);
+  border-left: none !important;
+  border-right: none !important;
+
+  .tbt {
+    float:right;
+    display: flex;
+    align-items: center;
+  }
+}
+@mixin button(){
+  position:relative;
+  display: inline-block;
+  @include title(tool button, true, true,true);
+  &.tab {
+    border-radius: 3px 3px 0px 0px;
+    &.checked {
+      color: color(d_primary);
+      background: color(l_default);
+
+        border-bottom: solid 1px color(l_default) !important;
+        top:1px;
+    }
+  }
+}
+@mixin maintoolbar(){
+  padding-bottom: 0px;
+  padding-top:5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  background-color: color(primary);
+  &.top {
+    .button {
+      border: none !important;
+    }
+  }
+  &.tab{
+    background-color: color(l_default);
+    padding-bottom: 1px;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+   // margin-top: -1px;
+  }
+}
+
+@mixin tools(){
+  button, .button, .menuitem {
+    @include colorschema((schema:light), false, false);
+  }
+  .tooltitle {
+    @include tooltitle();
+  }
+  button, .button {
+    @include button();
+  }
+  .maintoolbar{
+    @include  maintoolbar();
+
+  }
+}
