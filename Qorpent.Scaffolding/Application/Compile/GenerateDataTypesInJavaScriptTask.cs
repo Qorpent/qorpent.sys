@@ -78,8 +78,8 @@ namespace Qorpent.Scaffolding.Application{
 			{
 				return;
 			}
-			
 			var type = field.Name.LocalName;
+			if (type == "text") type = "string";
 			if (type == "object" || type=="dictionary"){
 				type = "any";
 			}else if (type == "xml"){
