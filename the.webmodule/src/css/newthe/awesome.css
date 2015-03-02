@@ -1,0 +1,80 @@
+@charset "UTF-8";
+@font-face {
+  font-family: 'FontAwesome';
+  src: url("../fonts/fontawesome-webfont.eot?v=4.2.0");
+  src: url("../fonts/fontawesome-webfont.eot?#iefix&v=4.2.0") format("embedded-opentype"), url("../fonts/fontawesome-webfont.woff?v=4.2.0") format("woff"), url("../fonts/fontawesome-webfont.ttf?v=4.2.0") format("truetype"), url("../fonts/fontawesome-webfont.svg?v=4.2.0#fontawesomeregular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* line 26, awesome.scss */
+.fa:before {
+  font-family: FontAwesome;
+}
+/* line 29, awesome.scss */
+.fa:after {
+  font-family: FontAwesome;
+}
+
+/* line 35, awesome.scss */
+.fa-remove:before {
+  content: "";
+}
+
+/* line 35, awesome.scss */
+.fa-refresh:before {
+  content: "";
+}
+
+/* line 35, awesome.scss */
+.fa-caret-down:before {
+  content: "";
+}
+
+/* line 35, awesome.scss */
+.fa-caret-right:before {
+  content: "";
+}
+
+/* line 35, awesome.scss */
+.fa-chevron-right:before {
+  content: "";
+}
+
+/* line 35, awesome.scss */
+.fa-chevron-circle-left:before {
+  content: "";
+}
+
+/* line 35, awesome.scss */
+.fa-chevron-circle-right:before {
+  content: "";
+}
+
+/* line 46, awesome.scss */
+.fa-spin:after, .fa-spin:before {
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
+}
+
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+/*# sourceMappingURL=awesome.css.map */

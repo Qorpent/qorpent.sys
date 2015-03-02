@@ -1,0 +1,134 @@
+@import "colorizer";
+@mixin title($basis,$bordered:false,$active:false,$embedschemas:false,$hdelta:0px) {
+        $height : skin(append($basis,height),30px);
+        $vpadding : skin(append($basis,vpadding),skin(append($basis,padding),5px));
+        $hpadding : skin(append($basis,hpadding),skin(append($basis,padding),5px));
+        $fontsize : skin(append($basis,fontsize),$height - ($vpadding*2) ) - 1px;
+        $xlgfactor : skin(vars xlgfactor,1.6);
+        $lgfactor : skin(vars lgfactor,1.2);
+        $smfactor : skin(vars smfactor,0.8);
+        $xsmfactor : skin(vars xsmfactor,0.4);
+        $lgsfactor : skin(vars lgsfactor,1.2);
+        $smsfactor : skin(vars smsfactor,0.8);
+
+        $usecolorize : skin(append($basis,color),false)
+        or skin(append($basis,backcolor),false)
+        or skin(append($basis,schema),false);
+
+       /* @debug $usecolorize;
+        @if $usecolorize {
+             @include  colorschema(skin($basis),$bordered,$active);
+        }
+        @if $embedschemas{
+                @include  defaultschemas($bordered,$active,"&");
+        }*/
+
+        //height : $height+$hdelta;
+        padding-left: $hpadding;
+        padding-right: $hpadding;
+        font-size: $fontsize;
+        line-height: $height+$hdelta;
+        &:before,&:after,*:before,*:after{
+                font-family: FontAwesome;
+                font-size: 90%;
+        }
+        &.xlg {
+               // height: ceil($height * $xlgfactor)+$hdelta;
+                padding-left: ceil($hpadding * $xlgfactor);
+                padding-right: ceil($hpadding * $xlgfactor);
+                font-size: ceil($height * $xlgfactor)+$hdelta - (ceil($vpadding * $xlgfactor)*2) - 1px;
+                line-height: ceil($height * $xlgfactor)+$hdelta;
+        }
+        &.lg {
+               // height: ceil($height * $lgfactor)+$hdelta;
+                padding-left: ceil($hpadding * $lgfactor);
+                padding-right: ceil($hpadding * $lgfactor);
+                font-size: ceil($height * $lgfactor)+$hdelta - (ceil($vpadding * $lgfactor)*2) - 1px;
+                line-height: ceil($height * $lgfactor)+$hdelta;
+        }
+        &.sm {
+               // height: ceil($height * $smfactor)+$hdelta;
+                padding-left: ceil($hpadding * $smfactor);
+                padding-right: ceil($hpadding * $smfactor);
+                font-size: ceil($height * $smfactor)+$hdelta - (ceil($vpadding * $smfactor)*2) - 1px;
+                line-height: ceil($height * $smfactor)+$hdelta;
+        }
+        &.xsm {
+              //  height: ceil($height * $xsmfactor)+$hdelta;
+                padding-left: ceil($hpadding * $xsmfactor);
+                padding-right: ceil($hpadding * $xsmfactor);
+                font-size: ceil($height * $xsmfactor)+$hdelta - (ceil($vpadding * $xsmfactor)*2) - 1px;
+                line-height: ceil($height * $xsmfactor)+$hdelta;
+        }
+        @media#{$medialg}  {
+               // height: ceil($height  * $lgsfactor)+$hdelta;
+                padding-left: ceil($hpadding  * $lgsfactor);
+                padding-right: ceil($hpadding  * $lgsfactor);
+                font-size: ceil($height  * $lgsfactor) + $hdelta - (ceil($vpadding  * $lgsfactor)*2) - 1px;
+                line-height: ceil($height  * $lgsfactor)+$hdelta;
+                &.xlg {
+                //        height: ceil($height * $xlgfactor * $lgsfactor)+$hdelta;
+                        padding-left: ceil($hpadding * $xlgfactor * $lgsfactor);
+                        padding-right: ceil($hpadding * $xlgfactor * $lgsfactor);
+                        font-size: ceil($height * $xlgfactor * $lgsfactor)+$hdelta - (ceil($vpadding * $xlgfactor * $lgsfactor)*2)  - 1px;
+                        line-height: ceil($height * $xlgfactor * $lgsfactor)+$hdelta;
+                }
+                &.lg {
+                  //      height: ceil($height * $lgfactor * $lgsfactor)+$hdelta;
+                        padding-left: ceil($hpadding * $lgfactor * $lgsfactor);
+                        padding-right: ceil($hpadding * $lgfactor * $lgsfactor);
+                        font-size: ceil($height * $lgfactor * $lgsfactor)+$hdelta - (ceil($vpadding * $lgfactor * $lgsfactor)*2) - 1px;
+                        line-height: ceil($height * $lgfactor * $lgsfactor)+$hdelta;
+                }
+                &.sm {
+                  //      height: ceil($height * $smfactor * $lgsfactor)+$hdelta;
+                        padding-left: ceil($hpadding * $smfactor * $lgsfactor);
+                        padding-right: ceil($hpadding * $smfactor * $lgsfactor);
+                        font-size: ceil($height * $smfactor * $lgsfactor)+ $hdelta - (ceil($vpadding * $smfactor * $lgsfactor)*2) - 1px;
+                        line-height: ceil($height * $smfactor * $lgsfactor)+ $hdelta;
+                }
+                &.xsm {
+                   //     height: ceil($height * $xsmfactor * $lgsfactor)+$hdelta;
+                        padding-left: ceil($hpadding * $xsmfactor * $lgsfactor);
+                        padding-right: ceil($hpadding * $xsmfactor * $lgsfactor);
+                        font-size: ceil($height * $xsmfactor * $lgsfactor)+ $hdelta - (ceil($vpadding * $xsmfactor * $lgsfactor)*2) - 1px;
+                        line-height: ceil($height * $xsmfactor * $lgsfactor)+ $hdelta;
+                }
+        }
+        @media#{$mediasm}  {
+               // height: ceil($height  * $smsfactor) + $hdelta;
+                padding-left: ceil($hpadding  * $smsfactor);
+                padding-right: ceil($hpadding  * $smsfactor);
+                font-size: ceil($height  * $smsfactor) + $hdelta - (ceil($vpadding  * $smsfactor)*2) - 1px;
+                line-height: ceil($height  * $smsfactor) + $hdelta;
+                &.xlg {
+                      //  height: ceil($height * $xlgfactor * $smsfactor) + $hdelta;
+                        padding-left: ceil($hpadding * $xlgfactor * $smsfactor);
+                        padding-right: ceil($hpadding * $xlgfactor * $smsfactor);
+                        font-size: ceil($height * $xlgfactor * $smsfactor) + $hdelta - (ceil($vpadding * $xlgfactor * $smsfactor)*2) - 1px;
+                        line-height: ceil($height * $xlgfactor * $smsfactor) + $hdelta;
+                }
+                &.lg {
+                       // height: ceil($height * $lgfactor * $smsfactor) + $hdelta;
+                        padding-left: ceil($hpadding * $lgfactor * $smsfactor);
+                        padding-right: ceil($hpadding * $lgfactor * $smsfactor);
+                        font-size: ceil($height * $lgfactor * $smsfactor) + $hdelta - (ceil($vpadding * $lgfactor * $smsfactor)*2) - 1px;
+                        line-height: ceil($height * $lgfactor * $smsfactor) + $hdelta;
+                }
+                &.sm {
+                       // height: ceil($height * $smfactor * $smsfactor) + $hdelta;
+                        padding-left: ceil($hpadding * $smfactor * $smsfactor);
+                        padding-right: ceil($hpadding * $smfactor * $smsfactor);
+                        font-size: ceil($height * $smfactor * $smsfactor) + $hdelta - (ceil($vpadding * $smfactor * $smsfactor)*2) - 1px;
+                        line-height: ceil($height * $smfactor * $smsfactor) + $hdelta;
+                }
+                &.xsm {
+                      //  height: ceil($height * $xsmfactor * $smsfactor) + $hdelta;
+                        padding-left: ceil($hpadding * $xsmfactor * $smsfactor);
+                        padding-right: ceil($hpadding * $xsmfactor * $smsfactor);
+                        font-size: ceil($height * $xsmfactor * $smsfactor) + $hdelta - (ceil($vpadding * $xsmfactor * $smsfactor)*2) - 1px;
+                        line-height: ceil($height * $xsmfactor * $smsfactor) + $hdelta;
+                }
+        }
+
+}

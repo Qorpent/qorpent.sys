@@ -1,0 +1,45 @@
+@import "application";
+@import "tools";
+@import "dropdown";
+@mixin page() {
+  body {
+    @include hyphens(auto);
+    text-align: justify;
+    color: color(dark);
+    background-color: color(light);
+    line-height: skin(page line-height, 1.4);
+    font-family: skin(page font-family, (Arial, sans-serif));
+    font-size: skin(page md-font-size, 16px);
+    ::selection {
+      color: color(primary, text);
+      background-color: color(primary);
+    }
+    @media screen and (max-width: skin(page lg-screen-width, 2000px)) and (min-width: skin(page md-screen-width, 1600px)) {
+      font-size: skin(page lg-font-size, 20px);
+    }
+    @media screen and (max-width: skin(page sm-screen-width, 1100px)) {
+      font-size: skin(page sm-font-size, 14px);
+    }
+    @media print {
+      color:#000000;
+      background-color: #ffffff;
+      font-size: skin(pr-font-size, 10pt);
+    }
+  }
+
+}
+
+@if global_variable_exists(root) {
+  html.#{$root} {
+    @include page();
+    @include application();
+    @include tools();
+    @include dropdown();
+    @include defaultschemas(false,false,"");
+
+
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .hidden {
+      display: none !important;
+    }
+  }
+}

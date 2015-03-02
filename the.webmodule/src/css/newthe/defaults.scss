@@ -1,0 +1,92 @@
+$skin: (
+        colors : (
+                dark : #2B2B2B,
+                light : #FDFDFD,
+                primary : #4C81AF,
+                default : #D7D7D7,//#B5B5B5,
+                success : #5E994B,//#67B34E,
+                info : #F9D264,//#FFF68E,
+                danger :#E7582E,
+                warn :  #FA9357//#FFAC51
+        ),
+        schemas : (
+                light : (
+                        backcolor : light,
+                        hoverback  :l_primary
+                ),
+                l_light : (
+                        backcolor : l_light,
+                        hoverback  :l3_primary
+                ),
+                d_light : (
+                        backcolor : d_light,
+                        hoverback  : l1_primary
+                )
+        ),
+
+        vars : (
+                ldstep : 10%,
+                lmain : 20%,
+                dmain : 10%,
+                contrastlimit :70%,
+
+                xlgfactor : 1.6,
+                lgfactor : 1.3,
+                smfactor : 0.7,
+                xsmfactor : 0.4,
+
+                lgsfactor : 1.2,
+                smsfactor : 0.8,
+        ),
+        page : (
+                line-height : 1.2,
+                font-family : (Arial,sans-serif),
+                md-font-size : 16px,
+                lg-font-size : 18px,
+                sm-font-size : 14px,
+                pr-font-size: 10pt,
+        ),
+        application : (
+                wp-margin : 10px,
+                sm-wp-margin :3px,
+                wp-padding: 3px,
+                sm-wp-padding: 1px,
+                wp-b-radius: 3px,
+                left-min-width:250px,
+                sm-left-min-width:200px,
+                lg-left-min-width:300px,
+                main-min-width:500px,
+                sm-main-min-width:800px,
+                lg-main-min-width:400px,
+        ),
+        screen : (
+                sm : 1100px,
+                md : 1400px,
+        ),
+        tool : (
+                title : (
+                        height: 26px,
+                        vpadding: 3px,
+                        hpadding: 5px,
+                        color: primary,
+                        backcolor : light,// (to bottom , primary, l_primary),
+                        border : true
+                ),
+                button : (
+                        height: 32px,
+                        vpadding: 6px,
+                        hpadding: 12px,
+                        schema :default
+                ),
+                menu : (
+                        height: 24px,
+                        vpadding: 5px,
+                        hpadding: 12px,
+                        schema :light
+                )
+        )
+) !global;
+
+
+
+

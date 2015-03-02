@@ -1,0 +1,61 @@
+@mixin dropdown() {
+  $backindex : 2000;
+  $dropdownindex: $backindex+100;
+
+  .dropdown {
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+    z-index: -$dropdownindex;
+
+    &.shown {
+       visibility: visible;
+       z-index: $dropdownindex
+    }
+
+    position: absolute;
+    &.menu {
+      border: solid 1px color(default);
+      background-color: color(l2_default);
+      padding:3px;
+      box-shadow: 2px 2px 4px color(l_primary);
+
+
+    }
+
+    .menuitem {
+      @include title(tool menu,false,true,false);
+      border-top: solid 1px color(l_default);
+      &.submenu {
+        font-weight: bold !important;
+        *{
+          font-weight: normal;
+        }
+        &:after{
+          text-align: right;
+          float:right;
+          @include awesome(caret-right);
+        }
+
+      }
+
+      &:first-child {
+        border-top:none;
+      }
+    }
+
+    &.debug {
+      background: color(primary);
+      color: color(primary,text);
+      border: solid 2px color(d1_primary);
+      padding:20px;
+    }
+  }
+
+  body.isdropdown {
+    .dropdownback {
+      display: block;
+    }
+
+  }
+}
