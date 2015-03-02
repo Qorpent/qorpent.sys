@@ -184,6 +184,7 @@ namespace Qorpent.Scaffolding.Application{
 		    if (type == "datetime") {
 		        type = "DateTime";
 		    }
+			if (type == "text") type = "string";
 			 if (type == "dictionary"){
 				var prefix = field.Attr("param-prefix",name+".");
 				sb.AppendLine("\t\t[Bind(ParameterPrefix=\"" + prefix + "\")]");
