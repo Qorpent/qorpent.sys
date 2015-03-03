@@ -19,6 +19,19 @@ define([
     var module = root.modules.all;
     var uistate = root.uistate;
 
+
+    module.filter("activeobjects",function(){
+        return function(o){
+            var result = [];
+            for(var i in o){
+                if(!o[i].system){
+                    result.push(o[i]);
+                }
+            }
+            return result;
+        }
+    });
+
     module.directive('theLeft', [
         "dropdownService",
         "$compile",
