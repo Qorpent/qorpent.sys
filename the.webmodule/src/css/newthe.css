@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* line 5, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 5, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -21,45 +21,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
@@ -141,14 +141,14 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     transform: rotate(359deg);
   }
 }
-/* line 33, newthe/page.scss */
+/* line 34, newthe/page.scss */
 html.the {
   margin: 0px;
   display: flex;
   overflow: hidden;
   height: 100%;
 }
-/* line 5, newthe/page.scss */
+/* line 6, newthe/page.scss */
 html.the body {
   -moz-hyphens: auto;
   -ms-hyphens: auto;
@@ -161,25 +161,25 @@ html.the body {
   font-family: Arial, sans-serif;
   font-size: 16px;
 }
-/* line 13, newthe/page.scss */
+/* line 14, newthe/page.scss */
 html.the body ::selection {
   color: #FDFDFD;
   background-color: #4C81AF;
 }
 @media screen and (max-width: 2000px) and (min-width: 1600px) {
-  /* line 5, newthe/page.scss */
+  /* line 6, newthe/page.scss */
   html.the body {
     font-size: 18px;
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 5, newthe/page.scss */
+  /* line 6, newthe/page.scss */
   html.the body {
     font-size: 14px;
   }
 }
 @media print {
-  /* line 5, newthe/page.scss */
+  /* line 6, newthe/page.scss */
   html.the body {
     color: #000000;
     background-color: #ffffff;
@@ -845,7 +845,7 @@ html.the button.tab.checked, html.the .button.tab.checked {
 /* line 89, newthe/tools.scss */
 html.the .maintoolbar {
   padding-bottom: 0px;
-  padding-top: 5px;
+  padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
   display: flex;
@@ -4010,7 +4010,7 @@ html.the .warn.strong.active:hover:active.bordered, html.the .warn.strong.button
   border-top-color: #f8630d;
   border-bottom-color: #f97325;
 }
-/* line 41, newthe/page.scss */
+/* line 42, newthe/page.scss */
 html.the [ng\:cloak], html.the [ng-cloak], html.the [data-ng-cloak], html.the [x-ng-cloak], html.the .ng-cloak, html.the .x-ng-cloak, html.the .hidden {
   display: none !important;
 }

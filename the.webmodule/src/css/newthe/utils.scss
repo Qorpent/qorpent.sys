@@ -1,0 +1,113 @@
+
+@function skin($nameorlist, $default:false, $depth: 10){
+  @if type_of($nameorlist) == 'string'{
+    @if map_has_key($skin,$nameorlist) {
+      @return map_get($skin,$nameorlist);
+    }
+    @return $default;
+  }
+  $current : $skin;
+  @for $i from 1 through length($nameorlist) - 1 {
+
+    $n  : nth($nameorlist,$i);
+    @if $n == "__END__" {
+      @return $current;
+     }
+
+    @if map_has_key($current,$n) {
+      $current : map_get($current,$n);
+
+      @if type_of($current)!='map'{
+        @return $default;
+      }
+      @if $i >= $depth {
+
+        @return $current;
+      }
+    }@else  {
+      @return $default;
+    }
+
+  }
+  $n : nth($nameorlist,length($nameorlist));
+  @if map_has_key($current,$n) {
+    @return map_get($current,$n);
+  }
+  @return $default;
+}
+@function updskin($name, $update){
+  @if type_of($name)=='list' {
+
+    $current : map_merge(skin($name),$update);
+    @if length($name)>1 {
+      @for $i from 0 through length($name)-2 {
+        $thename: nth($name, length($name)-$i);
+        $target : skin($name,false,length($name) - $i - 1 );
+        $source : ($thename:$current);
+        $current: map_merge($target,$source);
+       }
+    }
+    @return map_merge($skin,(nth($name,1):$current));
+  }@else {
+    @return map_merge($skin, ($name:map_merge(skin($name), $update)));
+  }
+}
+@function color ($name, $goal:false, $default: false){
+  @if type_of($name)=='color' {
+    @return $name;
+  }
+  @if not $default {
+    $default : skin(colors $name)
+  }
+
+  @if $goal {
+    $name : #{$name}_#{$goal};
+  }
+
+  @return skin(colors $name, $default);
+}
+
+@function gradient ($gradientlist) {
+  $result : "linear-gradient(";
+  $result : $result + nth($gradientlist,1) + ",";
+  @for $i from 2 through length($gradientlist) {
+    $result : $result + color(nth($gradientlist,$i),nth($gradientlist,$i));
+    @if $i != length($gradientlist) {
+      $result : $result + ",  ";
+    }
+  }
+  $result : $result+")";
+  @return unquote($result);
+}
+
+@function map_safe($map,$n,$default:false){
+  @return if(map_has_key($map,$n),map_get($map,$n  ),$default);
+}
+@function isyellow($color){
+  @return ((red($color) / (blue($color)+0.01)   ) >= 2)
+  and ((green($color) /(blue($color)+0.01) ) >=2)
+  and (abs(red($color)- green($color))  < 40);
+}
+
+
+@function requiredark($color){
+  @return isyellow($color) or lightness($color) > skin(vars contrastlimit, 60) ;
+}
+
+@function iswhite($color){
+  @return red($color) >=247 and blue($color) >=247 and green($color) >=247;
+}
+
+@function slighten($color,$percent) {
+  $result : lighten($color,$percent);
+  @if not iswhite($result) {
+    @return $result;
+  }
+  @each $i in (0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.025) {
+    $result : lighten($color,$percent * $i);
+    @if  not iswhite($result) {
+      @return $result;
+    }
+  }
+  @return $result;
+}

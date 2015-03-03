@@ -78,6 +78,10 @@ $skin: (
                         hpadding: 12px,
                         schema :default
                 ),
+                toolbar : (
+                        padding-top :10px,
+                        padding-size : 20px
+                ),
                 menu : (
                         height: 24px,
                         vpadding: 5px,
@@ -86,6 +90,8 @@ $skin: (
                 )
         )
 ) !global;
+
+
 
 
 
