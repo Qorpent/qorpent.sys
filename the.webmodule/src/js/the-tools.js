@@ -155,7 +155,7 @@ define([
         return {
             restrict: 'A',
             template : '<div class="messages">\
-        <div class="message soft  bordered info" style="min-height: 100%" ng-click="log.hideAll()" ng-if="log.activemessages.length > 1">\
+        <div class="message soft  bordered info" style="min-height: 40px" ng-click="log.hideAll()" ng-if="log.activemessages.length > 1">\
         <i  class="title success" >Скрыть все сообщения</i>\
         <i class=" title success fa fa-remove"></i>\
         </div>\
