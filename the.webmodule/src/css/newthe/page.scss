@@ -1,6 +1,7 @@
 @import "application";
 @import "tools";
 @import "dropdown";
+@import "scroller";
 @mixin page() {
   body {
     @include hyphens(auto);
@@ -36,7 +37,7 @@
     @include tools();
     @include dropdown();
     @include defaultschemas(false,false,"");
-
+    @include scroller();
 
     [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .hidden {
       display: none !important;

@@ -28,9 +28,9 @@
 }
 @mixin maintoolbar(){
   padding-bottom: 0px;
-  padding-top:5px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-top:skin(tool toolbar padding-top,skin(tool toolbar padding,5px));
+  padding-left:skin(tool toolbar padding-left,skin(tool toolbar padding-side,skin(tool toolbar padding,10px)));
+  padding-right:skin(tool toolbar padding-right,skin(tool toolbar padding-side,skin(tool toolbar padding,10px)));
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
