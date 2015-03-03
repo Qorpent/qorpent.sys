@@ -1,5 +1,5 @@
 
-@mixin colorize($schema,$bordered : false, $active:false){
+@mixin colorize($schema,$bordered : false, $active:false, $progressable:false){
         $cl : skin(vars contrastlimit);
         $backcolconfig : map_safe($schema,backcolor,light);
         $backcolorname : $backcolconfig;
@@ -15,79 +15,80 @@
         @if $color ==  false {
                 @debug  ($schema,$defcolor,$backcolorname);
         }
-        $hovercolor : color( map_safe($schema,hoverback,slighten($backcolor,$ldstep * 2)));
-        $d : $backcolor;
-        $l : $hovercolor;
-        $l1 : lighten($l,2%);
-        $l2 : lighten($l,4%);
-        $l3 : lighten($l,8%);
-        $l4 : lighten($l,10%);
-        $l5 : lighten($l,12%);
-        $l6 : lighten($l,14%);
-        @include keyframes (progress_#{$backcolorname}) {
-                $d : $backcolor;
-                $l : $hovercolor;
-                $l1 : lighten($l,2%);
-                $l2 : lighten($l,4%);
-                $l3 : lighten($l,8%);
-                $l4 : lighten($l,10%);
-                $l5 : lighten($l,12%);
-                $l6 : lighten($l,14%);
-                0% {
-                        background: linear-gradient(to right, $l,$l)   ;
-                }
-                7% {
-                        background: linear-gradient(to right, $d 0%, $d 5%, $l1  6%)      ;
-                }
-                14% {
-                        background: linear-gradient(to right,  $d 0%, $d 10%, $l2  11%)      ;
-                }
-                21% {
-                        background: linear-gradient(to right,  $d 0%, $d 20%, $l3  21%)      ;
-                }
-                28% {
-                        background: linear-gradient(to right, $l4 0%, $l4 9%, $d 10%, $d 30%, $l4 31%)
-                }
-                35% {
-                        background: linear-gradient(to right, $l5 0%, $l5 19%, $d 20%, $d 40%, $l5 41%)
-                }
-                42% {
-                        background: linear-gradient(to right, $l6 0%, $l6 29%, $d 30%, $d 50%, $l6 51%)
-                }
-                49% {
-                        background: linear-gradient(to right, $l6 0%, $l6 39%, $d 40%, $d 60%, $l6 61%)
-                }
-                56% {
-                        background: linear-gradient(to right, $l6 0%, $l6 49%, $d 50%, $d 70%, $l6 71%)
-                }
-                63% {
-                        background: linear-gradient(to right, $l5 0%, $l5 59%, $d 60%, $d 80%, $l5 81%)
-                }
-                70% {
-                        background: linear-gradient(to right, $l4 0%, $l4 69%, $d 70%, $d 90%, $l4 91%)
-                }
-                77% {
-                        background: linear-gradient(to right, $l3 0%, $l3 79%, $d 80%)
-                }
-                84% {
-                        background: linear-gradient(to right, $l2 0%, $l2 89%, $d 90%)
-                }
-                93% {
-                        background: linear-gradient(to right, $l1 0%, $l1 94%, $d 95%)
-                }
-                100% {
-                        background: linear-gradient(to right, $l,$l)   ;
-                }
-        }
-
-
-        &.progress {
-                color: color(light) !important;
-                @if requiredark($l) {
-                        color: color(dark) !important;
+        @if $progressable {
+                $hovercolor: color(map_safe($schema, hoverback, slighten($backcolor, $ldstep * 2)));
+                $d: $backcolor;
+                $l: $hovercolor;
+                $l1: lighten($l, 2%);
+                $l2: lighten($l, 4%);
+                $l3: lighten($l, 8%);
+                $l4: lighten($l, 10%);
+                $l5: lighten($l, 12%);
+                $l6: lighten($l, 14%);
+                @include keyframes(progress_#{$backcolorname}) {
+                        $d: $backcolor;
+                        $l: $hovercolor;
+                        $l1: lighten($l, 2%);
+                        $l2: lighten($l, 4%);
+                        $l3: lighten($l, 8%);
+                        $l4: lighten($l, 10%);
+                        $l5: lighten($l, 12%);
+                        $l6: lighten($l, 14%);
+                        0% {
+                                background: linear-gradient(to right, $l, $l);
+                        }
+                        7% {
+                                background: linear-gradient(to right, $d 0%, $d 5%, $l1 6%);
+                        }
+                        14% {
+                                background: linear-gradient(to right, $d 0%, $d 10%, $l2 11%);
+                        }
+                        21% {
+                                background: linear-gradient(to right, $d 0%, $d 20%, $l3 21%);
+                        }
+                        28% {
+                                background: linear-gradient(to right, $l4 0%, $l4 9%, $d 10%, $d 30%, $l4 31%)
+                        }
+                        35% {
+                                background: linear-gradient(to right, $l5 0%, $l5 19%, $d 20%, $d 40%, $l5 41%)
+                        }
+                        42% {
+                                background: linear-gradient(to right, $l6 0%, $l6 29%, $d 30%, $d 50%, $l6 51%)
+                        }
+                        49% {
+                                background: linear-gradient(to right, $l6 0%, $l6 39%, $d 40%, $d 60%, $l6 61%)
+                        }
+                        56% {
+                                background: linear-gradient(to right, $l6 0%, $l6 49%, $d 50%, $d 70%, $l6 71%)
+                        }
+                        63% {
+                                background: linear-gradient(to right, $l5 0%, $l5 59%, $d 60%, $d 80%, $l5 81%)
+                        }
+                        70% {
+                                background: linear-gradient(to right, $l4 0%, $l4 69%, $d 70%, $d 90%, $l4 91%)
+                        }
+                        77% {
+                                background: linear-gradient(to right, $l3 0%, $l3 79%, $d 80%)
+                        }
+                        84% {
+                                background: linear-gradient(to right, $l2 0%, $l2 89%, $d 90%)
+                        }
+                        93% {
+                                background: linear-gradient(to right, $l1 0%, $l1 94%, $d 95%)
+                        }
+                        100% {
+                                background: linear-gradient(to right, $l, $l);
+                        }
                 }
 
-                @include animation( progress_#{$backcolorname} 1.2s linear 0.5s infinite);
+                &.progress {
+                        color: color(light) !important;
+                        @if requiredark($l) {
+                                color: color(dark) !important;
+                        }
+
+                        @include animation(progress_#{$backcolorname} 1.2s linear 0.5s infinite);
+                }
         }
 
         color :$color;
@@ -180,26 +181,26 @@
 
 
 }
-@mixin colorschema($basis,$bordered:false,$active:false) {
+@mixin colorschema($basis,$bordered:false,$active:false,$gradient:false) {
         $schema : $basis;
         $schemaname : if(map_has_key($schema,schema),map_get($schema,schema),false);
         @if $schemaname {
                 $schema : skin((schemas, $schemaname),(backcolor : $schemaname));
         }
-        @include colorize($schema,$bordered,$active);
+        @include colorize($schema,$bordered,$active,$gradient);
 }
 
 @mixin defaultschemas($bordered:false,$active:false,$prefix:"") {
 
         @each $n in $basecolors {
                 #{$prefix}.#{$n} {
-                        @include colorschema((schema:$n),$bordered,$active);
+                        @include colorschema((schema:$n),$bordered,$active,true);
                 }
                 #{$prefix}.#{$n}.soft {
-                        @include colorschema((schema:l_#{$n}),$bordered,$active);
+                        @include colorschema((schema:l_#{$n}),$bordered,$active,false);
                 }
                 #{$prefix}.#{$n}.strong {
-                        @include colorschema((schema:d_#{$n}),$bordered,$active);
+                        @include colorschema((schema:d_#{$n}),$bordered,$active,false);
                 }
         }
 }

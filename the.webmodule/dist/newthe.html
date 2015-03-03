@@ -1,0 +1,44 @@
+<html lang="Ru-ru" class="the application">
+    <head>
+        <meta charset="UTF-8">
+        <title>Верстка для приложений THE</title>
+        <script data-main="/js/newthe-auto-main.js" src="/js/require.js"></script>
+        <link rel="stylesheet" href="./css/newthe.css">
+    </head>
+    <body ng-controller="newthe">
+        <div class="maintoolbar top">
+            <i class="button success">Домой</i>
+            <i the-tab-button="allcolors" title="На панели - примеры кнопок разного цвета, размещенных на 2-м уровне">
+                Цвета кнопок</i>
+            <i the-tab-button="allsizes" title="На панели - примеры кнопок, размещенных на 2-м уровне всех размеров">
+                Размеры кнопок</i>
+            <i the-tab-button="switch" title="На панели - примеры переключателя, размещенных на 2-м уровне">Переключатель</i>
+            <i the-tab-button="progress" title="Примеры кнопок с показом прогресса">Прогресс</i>
+        </div>
+        <div the-tab="allcolors">
+            <i class="button sm {{i.color}} {{i.type}}" ng-repeat="i in panel1Buttons()">{{i.title}}</i>
+        </div>
+        <div the-tab="allsizes">
+            <i class="button {{i}} primary" ng-repeat="i in ['xsm','sm','','lg','xlg']">{{i||"(md)"}}</i>
+        </div>
+        <div the-tab="progress">
+            <i class="button {{i}}"
+               ng-class="{progress:uistate.isActive('progress'+$index,$index)}"
+               ng-click="{progress:uistate.activate('progress'+$index,$index)}"
+               ng-repeat="i in ['default','primary','success','info','warn','danger']">Нажми</i>
+        </div>
+        <div the-tab="switch">
+
+            <i ng-repeat="i in [1,2,3,4,5]"
+               class="button success checker"
+               ng-class="{checked: uistate.isActive('switch','s'+i)}"
+               ng-click="uistate.activate('switch','s'+i)"
+                    >Опция {{i}}</i>
+        </div>
+        <div class="workplace">
+            <div class="left" ng-show="uistate.left.visible">
+                <label class="title primary bordered">Содержание документации</label>
+            </div>
+        </div>
+    </body>
+</html>

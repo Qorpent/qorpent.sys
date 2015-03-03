@@ -10,12 +10,15 @@
                 root.modules = root.modules || {};
                 root.modules.all = root.$angular
                     .module("the-all", [])
-                    .run(["$rootScope",function($rootScope){
+                    .run(["$rootScope","dropdownService",function($rootScope,dds){
                         $rootScope.$uiVersion = $('html').attr("ui-version") || "0.1";
 
                         $rootScope.moment = function () {
                             return  window.moment.apply(null,arguments);
                         }
+
+                        $rootScope.uistate = root.uistate;
+                        $rootScope.dropdown = dds;
 
                         $rootScope.$getView = function(url){
                             if(url.match(/^http/))return url;
