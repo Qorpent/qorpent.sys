@@ -112,6 +112,7 @@ define([
                     the.uistate.getGroup('left').get('log').title = "Журнал ошибок";
                     if (the.uistate.left.activeObject == 'default'||the.uistate.left.activeObject=='null'||the.uistate.left.activeObject=='none'){
                         the.uistate.left.activate('log');
+                        the.uistate.left.visible = false;
                     }
 
                     var menu = element.children('ul');
