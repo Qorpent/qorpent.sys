@@ -228,24 +228,22 @@ html.the .workplace > .left, html.the .workplace > .main {
   position: relative;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: auto;
   padding: 0px 5px 5px 5px;
 }
-/* line 41, newthe/application.scss */
+/* line 40, newthe/application.scss */
+html.the .workplace > .left > div, html.the .workplace > .main > div {
+  overflow-y: inherit;
+}
+/* line 44, newthe/application.scss */
 html.the .workplace > .left {
   min-width: 250px;
   border-right: solid 1px #D7D7D7;
 }
-/* line 42, newthe/application.scss */
+/* line 45, newthe/application.scss */
 html.the .workplace > .left > label.title {
   position: relative;
-  /* @debug $usecolorize;
-   @if $usecolorize {
-        @include  colorschema(skin($basis),$bordered,$active);
-   }
-   @if $embedschemas{
-           @include  defaultschemas($bordered,$active,"&");
-   }*/
+  min-height: 26px;
   padding-left: 5px;
   padding-right: 5px;
   font-size: 19px;
@@ -253,70 +251,79 @@ html.the .workplace > .left > label.title {
   border-left: none !important;
   border-right: none !important;
 }
-/* line 31, newthe/title.scss */
+/* line 26, newthe/title.scss */
 html.the .workplace > .left > label.title:before, html.the .workplace > .left > label.title:after, html.the .workplace > .left > label.title *:before, html.the .workplace > .left > label.title *:after {
   font-family: FontAwesome;
   font-size: 90%;
 }
-/* line 35, newthe/title.scss */
+/* line 30, newthe/title.scss */
 html.the .workplace > .left > label.title.xlg {
+  min-height: 42px;
   padding-left: 8px;
   padding-right: 8px;
   font-size: 31px;
   line-height: 42px;
 }
-/* line 42, newthe/title.scss */
+/* line 37, newthe/title.scss */
 html.the .workplace > .left > label.title.lg {
+  min-height: 34px;
   padding-left: 7px;
   padding-right: 7px;
   font-size: 25px;
   line-height: 34px;
 }
-/* line 49, newthe/title.scss */
+/* line 44, newthe/title.scss */
 html.the .workplace > .left > label.title.sm {
+  min-height: 19px;
   padding-left: 4px;
   padding-right: 4px;
   font-size: 12px;
   line-height: 19px;
 }
-/* line 56, newthe/title.scss */
+/* line 51, newthe/title.scss */
 html.the .workplace > .left > label.title.xsm {
+  min-height: 11px;
   padding-left: 2px;
   padding-right: 2px;
   font-size: 6px;
   line-height: 11px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 42, newthe/application.scss */
+  /* line 45, newthe/application.scss */
   html.the .workplace > .left > label.title {
+    min-height: 32px;
     padding-left: 6px;
     padding-right: 6px;
     font-size: 23px;
     line-height: 32px;
   }
-  /* line 69, newthe/title.scss */
+  /* line 64, newthe/title.scss */
   html.the .workplace > .left > label.title.xlg {
+    min-height: 50px;
     padding-left: 10px;
     padding-right: 10px;
     font-size: 37px;
     line-height: 50px;
   }
-  /* line 76, newthe/title.scss */
+  /* line 71, newthe/title.scss */
   html.the .workplace > .left > label.title.lg {
+    min-height: 41px;
     padding-left: 8px;
     padding-right: 8px;
     font-size: 30px;
     line-height: 41px;
   }
-  /* line 83, newthe/title.scss */
+  /* line 78, newthe/title.scss */
   html.the .workplace > .left > label.title.sm {
+    min-height: 22px;
     padding-left: 5px;
     padding-right: 5px;
     font-size: 15px;
     line-height: 22px;
   }
-  /* line 90, newthe/title.scss */
+  /* line 85, newthe/title.scss */
   html.the .workplace > .left > label.title.xsm {
+    min-height: 13px;
     padding-left: 3px;
     padding-right: 3px;
     font-size: 8px;
@@ -324,36 +331,41 @@ html.the .workplace > .left > label.title.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 42, newthe/application.scss */
+  /* line 45, newthe/application.scss */
   html.the .workplace > .left > label.title {
+    min-height: 21px;
     padding-left: 4px;
     padding-right: 4px;
     font-size: 14px;
     line-height: 21px;
   }
-  /* line 104, newthe/title.scss */
+  /* line 99, newthe/title.scss */
   html.the .workplace > .left > label.title.xlg {
+    min-height: 34px;
     padding-left: 7px;
     padding-right: 7px;
     font-size: 25px;
     line-height: 34px;
   }
-  /* line 111, newthe/title.scss */
+  /* line 106, newthe/title.scss */
   html.the .workplace > .left > label.title.lg {
+    min-height: 28px;
     padding-left: 6px;
     padding-right: 6px;
     font-size: 19px;
     line-height: 28px;
   }
-  /* line 118, newthe/title.scss */
+  /* line 113, newthe/title.scss */
   html.the .workplace > .left > label.title.sm {
+    min-height: 15px;
     padding-left: 3px;
     padding-right: 3px;
     font-size: 10px;
     line-height: 15px;
   }
-  /* line 125, newthe/title.scss */
+  /* line 120, newthe/title.scss */
   html.the .workplace > .left > label.title.xsm {
+    min-height: 9px;
     padding-left: 2px;
     padding-right: 2px;
     font-size: 6px;
@@ -367,18 +379,18 @@ html.the .workplace > .left > label.title .tbt {
   align-items: center;
 }
 @media screen and (min-width: 1400px) {
-  /* line 41, newthe/application.scss */
+  /* line 44, newthe/application.scss */
   html.the .workplace > .left {
     min-width: 300px;
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 41, newthe/application.scss */
+  /* line 44, newthe/application.scss */
   html.the .workplace > .left {
     min-width: 200px;
   }
 }
-/* line 54, newthe/application.scss */
+/* line 57, newthe/application.scss */
 html.the .workplace > .left > .collapser {
   width: 20px;
   height: 3000px;
@@ -394,43 +406,43 @@ html.the .workplace > .left > .collapser {
   text-align: center;
   cursor: pointer;
 }
-/* line 68, newthe/application.scss */
+/* line 71, newthe/application.scss */
 html.the .workplace > .left > .collapser:after {
   font-family: FontAwesome;
   content: "";
 }
-/* line 71, newthe/application.scss */
+/* line 74, newthe/application.scss */
 html.the .workplace > .left > .collapser:hover {
   background-color: #4C81AF;
   color: #FDFDFD;
 }
-/* line 76, newthe/application.scss */
+/* line 79, newthe/application.scss */
 html.the .workplace > .left.collapsed {
   padding: 0px;
   border: none;
   min-width: 20px;
 }
-/* line 78, newthe/application.scss */
+/* line 81, newthe/application.scss */
 html.the .workplace > .left.collapsed * {
   display: none;
 }
-/* line 82, newthe/application.scss */
+/* line 85, newthe/application.scss */
 html.the .workplace > .left.collapsed .collapser {
   display: block;
 }
-/* line 88, newthe/application.scss */
+/* line 91, newthe/application.scss */
 html.the .workplace > .main {
   flex: 1;
   min-width: 500px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 88, newthe/application.scss */
+  /* line 91, newthe/application.scss */
   html.the .workplace > .main {
     min-width: 400px;
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 88, newthe/application.scss */
+  /* line 91, newthe/application.scss */
   html.the .workplace > .main {
     min-width: 800px;
   }
@@ -512,13 +524,7 @@ html.the button.active:hover:active.bordered, html.the button.button:hover:activ
 /* line 58, newthe/tools.scss */
 html.the .tooltitle {
   position: relative;
-  /* @debug $usecolorize;
-   @if $usecolorize {
-        @include  colorschema(skin($basis),$bordered,$active);
-   }
-   @if $embedschemas{
-           @include  defaultschemas($bordered,$active,"&");
-   }*/
+  min-height: 26px;
   padding-left: 5px;
   padding-right: 5px;
   font-size: 19px;
@@ -526,34 +532,38 @@ html.the .tooltitle {
   border-left: none !important;
   border-right: none !important;
 }
-/* line 31, newthe/title.scss */
+/* line 26, newthe/title.scss */
 html.the .tooltitle:before, html.the .tooltitle:after, html.the .tooltitle *:before, html.the .tooltitle *:after {
   font-family: FontAwesome;
   font-size: 90%;
 }
-/* line 35, newthe/title.scss */
+/* line 30, newthe/title.scss */
 html.the .tooltitle.xlg {
+  min-height: 42px;
   padding-left: 8px;
   padding-right: 8px;
   font-size: 31px;
   line-height: 42px;
 }
-/* line 42, newthe/title.scss */
+/* line 37, newthe/title.scss */
 html.the .tooltitle.lg {
+  min-height: 34px;
   padding-left: 7px;
   padding-right: 7px;
   font-size: 25px;
   line-height: 34px;
 }
-/* line 49, newthe/title.scss */
+/* line 44, newthe/title.scss */
 html.the .tooltitle.sm {
+  min-height: 19px;
   padding-left: 4px;
   padding-right: 4px;
   font-size: 12px;
   line-height: 19px;
 }
-/* line 56, newthe/title.scss */
+/* line 51, newthe/title.scss */
 html.the .tooltitle.xsm {
+  min-height: 11px;
   padding-left: 2px;
   padding-right: 2px;
   font-size: 6px;
@@ -562,34 +572,39 @@ html.the .tooltitle.xsm {
 @media screen and (min-width: 1400px) {
   /* line 58, newthe/tools.scss */
   html.the .tooltitle {
+    min-height: 32px;
     padding-left: 6px;
     padding-right: 6px;
     font-size: 23px;
     line-height: 32px;
   }
-  /* line 69, newthe/title.scss */
+  /* line 64, newthe/title.scss */
   html.the .tooltitle.xlg {
+    min-height: 50px;
     padding-left: 10px;
     padding-right: 10px;
     font-size: 37px;
     line-height: 50px;
   }
-  /* line 76, newthe/title.scss */
+  /* line 71, newthe/title.scss */
   html.the .tooltitle.lg {
+    min-height: 41px;
     padding-left: 8px;
     padding-right: 8px;
     font-size: 30px;
     line-height: 41px;
   }
-  /* line 83, newthe/title.scss */
+  /* line 78, newthe/title.scss */
   html.the .tooltitle.sm {
+    min-height: 22px;
     padding-left: 5px;
     padding-right: 5px;
     font-size: 15px;
     line-height: 22px;
   }
-  /* line 90, newthe/title.scss */
+  /* line 85, newthe/title.scss */
   html.the .tooltitle.xsm {
+    min-height: 13px;
     padding-left: 3px;
     padding-right: 3px;
     font-size: 8px;
@@ -599,34 +614,39 @@ html.the .tooltitle.xsm {
 @media screen and (max-width: 1100px) {
   /* line 58, newthe/tools.scss */
   html.the .tooltitle {
+    min-height: 21px;
     padding-left: 4px;
     padding-right: 4px;
     font-size: 14px;
     line-height: 21px;
   }
-  /* line 104, newthe/title.scss */
+  /* line 99, newthe/title.scss */
   html.the .tooltitle.xlg {
+    min-height: 34px;
     padding-left: 7px;
     padding-right: 7px;
     font-size: 25px;
     line-height: 34px;
   }
-  /* line 111, newthe/title.scss */
+  /* line 106, newthe/title.scss */
   html.the .tooltitle.lg {
+    min-height: 28px;
     padding-left: 6px;
     padding-right: 6px;
     font-size: 19px;
     line-height: 28px;
   }
-  /* line 118, newthe/title.scss */
+  /* line 113, newthe/title.scss */
   html.the .tooltitle.sm {
+    min-height: 15px;
     padding-left: 3px;
     padding-right: 3px;
     font-size: 10px;
     line-height: 15px;
   }
-  /* line 125, newthe/title.scss */
+  /* line 120, newthe/title.scss */
   html.the .tooltitle.xsm {
+    min-height: 9px;
     padding-left: 2px;
     padding-right: 2px;
     font-size: 6px;
@@ -640,49 +660,45 @@ html.the .tooltitle .tbt {
   align-items: center;
 }
 /* line 61, newthe/tools.scss */
-html.the button, html.the .button {
-  position: relative;
-  display: inline-block;
-  /* @debug $usecolorize;
-   @if $usecolorize {
-        @include  colorschema(skin($basis),$bordered,$active);
-   }
-   @if $embedschemas{
-           @include  defaultschemas($bordered,$active,"&");
-   }*/
+html.the .button, html.the .title {
+  min-height: 32px;
   padding-left: 12px;
   padding-right: 12px;
   font-size: 19px;
   line-height: 32px;
 }
-/* line 31, newthe/title.scss */
-html.the button:before, html.the button:after, html.the button *:before, html.the button *:after, html.the .button:before, html.the .button:after, html.the .button *:before, html.the .button *:after {
+/* line 26, newthe/title.scss */
+html.the .button:before, html.the .button:after, html.the .button *:before, html.the .button *:after, html.the .title:before, html.the .title:after, html.the .title *:before, html.the .title *:after {
   font-family: FontAwesome;
   font-size: 90%;
 }
-/* line 35, newthe/title.scss */
-html.the button.xlg, html.the .button.xlg {
+/* line 30, newthe/title.scss */
+html.the .button.xlg, html.the .title.xlg {
+  min-height: 52px;
   padding-left: 20px;
   padding-right: 20px;
   font-size: 31px;
   line-height: 52px;
 }
-/* line 42, newthe/title.scss */
-html.the button.lg, html.the .button.lg {
+/* line 37, newthe/title.scss */
+html.the .button.lg, html.the .title.lg {
+  min-height: 42px;
   padding-left: 16px;
   padding-right: 16px;
   font-size: 25px;
   line-height: 42px;
 }
-/* line 49, newthe/title.scss */
-html.the button.sm, html.the .button.sm {
+/* line 44, newthe/title.scss */
+html.the .button.sm, html.the .title.sm {
+  min-height: 23px;
   padding-left: 9px;
   padding-right: 9px;
   font-size: 12px;
   line-height: 23px;
 }
-/* line 56, newthe/title.scss */
-html.the button.xsm, html.the .button.xsm {
+/* line 51, newthe/title.scss */
+html.the .button.xsm, html.the .title.xsm {
+  min-height: 13px;
   padding-left: 5px;
   padding-right: 5px;
   font-size: 6px;
@@ -690,35 +706,40 @@ html.the button.xsm, html.the .button.xsm {
 }
 @media screen and (min-width: 1400px) {
   /* line 61, newthe/tools.scss */
-  html.the button, html.the .button {
+  html.the .button, html.the .title {
+    min-height: 39px;
     padding-left: 15px;
     padding-right: 15px;
     font-size: 22px;
     line-height: 39px;
   }
-  /* line 69, newthe/title.scss */
-  html.the button.xlg, html.the .button.xlg {
+  /* line 64, newthe/title.scss */
+  html.the .button.xlg, html.the .title.xlg {
+    min-height: 62px;
     padding-left: 24px;
     padding-right: 24px;
     font-size: 37px;
     line-height: 62px;
   }
-  /* line 76, newthe/title.scss */
-  html.the button.lg, html.the .button.lg {
+  /* line 71, newthe/title.scss */
+  html.the .button.lg, html.the .title.lg {
+    min-height: 50px;
     padding-left: 19px;
     padding-right: 19px;
     font-size: 29px;
     line-height: 50px;
   }
-  /* line 83, newthe/title.scss */
-  html.the button.sm, html.the .button.sm {
+  /* line 78, newthe/title.scss */
+  html.the .button.sm, html.the .title.sm {
+    min-height: 27px;
     padding-left: 11px;
     padding-right: 11px;
     font-size: 14px;
     line-height: 27px;
   }
-  /* line 90, newthe/title.scss */
-  html.the button.xsm, html.the .button.xsm {
+  /* line 85, newthe/title.scss */
+  html.the .button.xsm, html.the .title.xsm {
+    min-height: 16px;
     padding-left: 6px;
     padding-right: 6px;
     font-size: 9px;
@@ -727,40 +748,50 @@ html.the button.xsm, html.the .button.xsm {
 }
 @media screen and (max-width: 1100px) {
   /* line 61, newthe/tools.scss */
-  html.the button, html.the .button {
+  html.the .button, html.the .title {
+    min-height: 26px;
     padding-left: 10px;
     padding-right: 10px;
     font-size: 15px;
     line-height: 26px;
   }
-  /* line 104, newthe/title.scss */
-  html.the button.xlg, html.the .button.xlg {
+  /* line 99, newthe/title.scss */
+  html.the .button.xlg, html.the .title.xlg {
+    min-height: 41px;
     padding-left: 16px;
     padding-right: 16px;
     font-size: 24px;
     line-height: 41px;
   }
-  /* line 111, newthe/title.scss */
-  html.the button.lg, html.the .button.lg {
+  /* line 106, newthe/title.scss */
+  html.the .button.lg, html.the .title.lg {
+    min-height: 34px;
     padding-left: 13px;
     padding-right: 13px;
     font-size: 19px;
     line-height: 34px;
   }
-  /* line 118, newthe/title.scss */
-  html.the button.sm, html.the .button.sm {
+  /* line 113, newthe/title.scss */
+  html.the .button.sm, html.the .title.sm {
+    min-height: 18px;
     padding-left: 7px;
     padding-right: 7px;
     font-size: 9px;
     line-height: 18px;
   }
-  /* line 125, newthe/title.scss */
-  html.the button.xsm, html.the .button.xsm {
+  /* line 120, newthe/title.scss */
+  html.the .button.xsm, html.the .title.xsm {
+    min-height: 11px;
     padding-left: 4px;
     padding-right: 4px;
     font-size: 6px;
     line-height: 11px;
   }
+}
+/* line 64, newthe/tools.scss */
+html.the button, html.the .button {
+  position: relative;
+  display: inline-block;
 }
 /* line 18, newthe/tools.scss */
 html.the button.tab, html.the .button.tab {
@@ -773,7 +804,7 @@ html.the button.tab.checked, html.the .button.tab.checked {
   border-bottom: solid 1px #f6f6f6 !important;
   top: 1px;
 }
-/* line 64, newthe/tools.scss */
+/* line 67, newthe/tools.scss */
 html.the .maintoolbar {
   padding-bottom: 0px;
   padding-top: 5px;
@@ -819,47 +850,45 @@ html.the .dropdown.menu {
 }
 /* line 26, newthe/dropdown.scss */
 html.the .dropdown .menuitem {
-  /* @debug $usecolorize;
-   @if $usecolorize {
-        @include  colorschema(skin($basis),$bordered,$active);
-   }
-   @if $embedschemas{
-           @include  defaultschemas($bordered,$active,"&");
-   }*/
+  min-height: 24px;
   padding-left: 12px;
   padding-right: 12px;
   font-size: 13px;
   line-height: 24px;
   border-top: solid 1px #f6f6f6;
 }
-/* line 31, newthe/title.scss */
+/* line 26, newthe/title.scss */
 html.the .dropdown .menuitem:before, html.the .dropdown .menuitem:after, html.the .dropdown .menuitem *:before, html.the .dropdown .menuitem *:after {
   font-family: FontAwesome;
   font-size: 90%;
 }
-/* line 35, newthe/title.scss */
+/* line 30, newthe/title.scss */
 html.the .dropdown .menuitem.xlg {
+  min-height: 39px;
   padding-left: 20px;
   padding-right: 20px;
   font-size: 22px;
   line-height: 39px;
 }
-/* line 42, newthe/title.scss */
+/* line 37, newthe/title.scss */
 html.the .dropdown .menuitem.lg {
+  min-height: 32px;
   padding-left: 16px;
   padding-right: 16px;
   font-size: 17px;
   line-height: 32px;
 }
-/* line 49, newthe/title.scss */
+/* line 44, newthe/title.scss */
 html.the .dropdown .menuitem.sm {
+  min-height: 17px;
   padding-left: 9px;
   padding-right: 9px;
   font-size: 8px;
   line-height: 17px;
 }
-/* line 56, newthe/title.scss */
+/* line 51, newthe/title.scss */
 html.the .dropdown .menuitem.xsm {
+  min-height: 10px;
   padding-left: 5px;
   padding-right: 5px;
   font-size: 5px;
@@ -868,34 +897,39 @@ html.the .dropdown .menuitem.xsm {
 @media screen and (min-width: 1400px) {
   /* line 26, newthe/dropdown.scss */
   html.the .dropdown .menuitem {
+    min-height: 29px;
     padding-left: 15px;
     padding-right: 15px;
     font-size: 16px;
     line-height: 29px;
   }
-  /* line 69, newthe/title.scss */
+  /* line 64, newthe/title.scss */
   html.the .dropdown .menuitem.xlg {
+    min-height: 47px;
     padding-left: 24px;
     padding-right: 24px;
     font-size: 26px;
     line-height: 47px;
   }
-  /* line 76, newthe/title.scss */
+  /* line 71, newthe/title.scss */
   html.the .dropdown .menuitem.lg {
+    min-height: 38px;
     padding-left: 19px;
     padding-right: 19px;
     font-size: 21px;
     line-height: 38px;
   }
-  /* line 83, newthe/title.scss */
+  /* line 78, newthe/title.scss */
   html.the .dropdown .menuitem.sm {
+    min-height: 21px;
     padding-left: 11px;
     padding-right: 11px;
     font-size: 10px;
     line-height: 21px;
   }
-  /* line 90, newthe/title.scss */
+  /* line 85, newthe/title.scss */
   html.the .dropdown .menuitem.xsm {
+    min-height: 12px;
     padding-left: 6px;
     padding-right: 6px;
     font-size: 5px;
@@ -905,34 +939,39 @@ html.the .dropdown .menuitem.xsm {
 @media screen and (max-width: 1100px) {
   /* line 26, newthe/dropdown.scss */
   html.the .dropdown .menuitem {
+    min-height: 20px;
     padding-left: 10px;
     padding-right: 10px;
     font-size: 11px;
     line-height: 20px;
   }
-  /* line 104, newthe/title.scss */
+  /* line 99, newthe/title.scss */
   html.the .dropdown .menuitem.xlg {
+    min-height: 31px;
     padding-left: 16px;
     padding-right: 16px;
     font-size: 16px;
     line-height: 31px;
   }
-  /* line 111, newthe/title.scss */
+  /* line 106, newthe/title.scss */
   html.the .dropdown .menuitem.lg {
+    min-height: 25px;
     padding-left: 13px;
     padding-right: 13px;
     font-size: 12px;
     line-height: 25px;
   }
-  /* line 118, newthe/title.scss */
+  /* line 113, newthe/title.scss */
   html.the .dropdown .menuitem.sm {
+    min-height: 14px;
     padding-left: 7px;
     padding-right: 7px;
     font-size: 7px;
     line-height: 14px;
   }
-  /* line 125, newthe/title.scss */
+  /* line 120, newthe/title.scss */
   html.the .dropdown .menuitem.xsm {
+    min-height: 8px;
     padding-left: 4px;
     padding-right: 4px;
     font-size: 3px;

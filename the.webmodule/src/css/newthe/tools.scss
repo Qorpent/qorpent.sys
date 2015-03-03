@@ -14,7 +14,7 @@
 @mixin button(){
   position:relative;
   display: inline-block;
-  @include title(tool button, true, true,true);
+
   &.tab {
     border-radius: 3px 3px 0px 0px;
     &.checked {
@@ -47,7 +47,6 @@
     padding-top: 5px;
     padding-left: 10px;
     padding-right: 10px;
-   // margin-top: -1px;
   }
 }
 
@@ -58,11 +57,13 @@
   .tooltitle {
     @include tooltitle();
   }
+  .button, .title {
+    @include title(tool button, true, true,true);
+  }
   button, .button {
     @include button();
   }
   .maintoolbar{
     @include  maintoolbar();
-
   }
 }

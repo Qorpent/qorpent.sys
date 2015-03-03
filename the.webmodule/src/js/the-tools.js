@@ -3,7 +3,7 @@
  */
 define([
     "the-root"
-], function (the,ddutils) {
+], function (the, ddutils) {
 
     var $ = the.$jQuery;
     var root = the;
@@ -14,23 +14,105 @@ define([
     }
 
 
-    if(null==root.modules)return;
+    if (null == root.modules)return;
 
     var module = root.modules.all;
+    var uistate = root.uistate;
 
-    module.directive('theTab', [function() {
+    module.directive('theLeft', [
+        function () {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    element = $(element[0]);
+                    element.addClass('left');
+
+                    var label = element.children('label');
+
+                    var labelInternal = null;
+                    var customLabel = false;
+                    if (label.length == 0) {
+                        customLabel = true;
+                        label = $('<label class="title primary bordered"><i></i></label>').prependTo(element);
+                        labelInternal = label.children('i');
+                        label.find('.fa-remove').on('click', function () {
+                            scope.$apply(function () {
+                                uistate.left.visible = false;
+                            })
+                        })
+                    }
+
+                    var tbt = label.find('.tbt');
+                    if (tbt.length == 0) {
+                        tbt = $('<div class="tbt"></div>').appendTo(label);
+                    }
+
+                    var remover = tbt.children('.fa-remove');
+                    if (remover.length == 0) {
+                        remover = $('<i title="Скрыть панель" class="fa fa-remove"></i>').appendTo(tbt);
+                        remover.on('click', function () {
+                            scope.$apply(function () {
+                                uistate.left.visible = false;
+                            })
+                        })
+                    }
+
+                    var collapser = element.children('.collapser');
+                    var customCollapser = false;
+                    if (collapser.length == 0) {
+                        customCollapser = true;
+                        collapser = $('<div class="collapser"/>').prependTo(element);
+                        collapser.on('click', function () {
+                            scope.$apply(function () {
+                                uistate.left.visible = true;
+                            })
+                        });
+                    }
+
+                    scope.$watch(function () {
+                        return uistate.left.visible;
+                    }, function (value) {
+                        element.toggleClass('collapsed', !value);
+                        if (customCollapser) {
+                            collapser.toggle(!value);
+                        }
+                    });
+
+
+                    scope.$watch(function () {
+                        return uistate.left.getActive();
+                    }, function (value) {
+                        if (customCollapser) {
+                            collapser.text(value.title);
+                        }
+                        if (customLabel) {
+                            labelInternal.text(value.title);
+                        }
+                        setTimeout(function(){
+                            element.children('[tool]').each(function(idx,e){
+                                $(e).toggle($(e).attr('tool')==value.code);
+                            });
+                        },100);
+                    });
+
+                }
+            }
+        }
+    ]);
+
+    module.directive('theTab', [function () {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 var tabname = attrs["theTab"];
                 element.addClass('maintoolbar');
                 element.addClass('tab');
-                scope.$watch(function(){
+                scope.$watch(function () {
                     return the.uistate.toolbar.isActive(tabname)
-                },function(v){
-                    if(v){
+                }, function (v) {
+                    if (v) {
                         $(element).show();
-                    }else{
+                    } else {
                         $(element).hide();
                     }
                 });
@@ -38,54 +120,58 @@ define([
         };
     }]);
 
-    module.directive('theMenu',["dropdownService",function(dd){
-            function setupItem(e,level){
+    module.directive('theMenu', ["dropdownService", function (dd) {
+            function setupItem(e, level) {
                 e.addClass('menuitem');
-                if(e.children('ul').exists()){
+                if (e.children('ul').exists()) {
                     e.addClass('submenu');
-                    e.on('mouseenter',function(event){
-                        var options ={timeout:level==200,menu:true,positions: ['RD','RU','LD','LU']};
-                        dd(e,options);
+                    e.on('mouseenter', function (event) {
+                        var options = {timeout: level == 200, menu: true, positions: ['RD', 'RU', 'LD', 'LU']};
+                        dd(e, options);
                     });
-                    e.children('ul').each(function(idx,sm){
-                        setupMenu($(sm),level+1);
+                    e.children('ul').each(function (idx, sm) {
+                        setupMenu($(sm), level + 1);
                     });
                 }
             }
-            function setupMenu(e,level){
+
+            function setupMenu(e, level) {
                 e = $(e);
-                if(e[0].tagName.toUpperCase()=='UL') {
+                if (e[0].tagName.toUpperCase() == 'UL') {
                     e.addClass('dropdown');
                     e.addClass('menu');
-                }else{
-                    e.on('mouseenter',function(event){
-                        var options ={menu:true};
-                        dd(e,options);
+                } else {
+                    e.on('mouseenter', function (event) {
+                        var options = {menu: true};
+                        dd(e, options);
                     });
                 }
-                $(e).children('li').each(function(idx,i){
-                    setupItem($(i),level);
+                $(e).children('li').each(function (idx, i) {
+                    setupItem($(i), level);
                 });
-                $(e).children('ul').each(function(idx,i){
-                    setupMenu($(i),level);
+                $(e).children('ul').each(function (idx, i) {
+                    setupMenu($(i), level);
                 });
-                if(e[0].tagName.toUpperCase()=='UL') {
+                if (e[0].tagName.toUpperCase() == 'UL') {
                     e.removeClass('hidden');
                 }
             }
+
             return {
                 restrict: 'A',
-                compile: function(element, attributes){
+                compile: function (element, attributes) {
 
                     return {
-                        pre: function(scope, element, attributes, controller, transcludeFn){
+                        pre: function (scope, element, attributes, controller, transcludeFn) {
 
                         },
-                        post: function(scope, element, attributes, controller, transcludeFn){
-                            if(element[0].tagName.toUpperCase()=='UL') {
+                        post: function (scope, element, attributes, controller, transcludeFn) {
+                            if (element[0].tagName.toUpperCase() == 'UL') {
                                 element.addClass('hidden');
                             }
-                            setTimeout( function(){setupMenu(element,0);},100);
+                            setTimeout(function () {
+                                setupMenu(element, 0);
+                            }, 100);
                         }
                     }
                 }
@@ -93,25 +179,25 @@ define([
         }]
     );
 
-    module.directive('theTabButton',  [function() {
+    module.directive('theTabButton', [function () {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 var tabname = attrs["theTabButton"];
                 element.addClass('button');
                 element.addClass('tab');
                 element.addClass('primary');
-                scope.$watch(function(){
+                scope.$watch(function () {
                     return the.uistate.toolbar.isActive(tabname)
-                },function(v){
-                    if(v){
+                }, function (v) {
+                    if (v) {
                         element.addClass("checked");
-                    }else{
+                    } else {
                         element.removeClass("checked");
                     }
                 });
-                element.on('click',function(){
-                    scope.$apply(function(){
+                element.on('click', function () {
+                    scope.$apply(function () {
                         the.uistate.toolbar.activate(tabname);
                     });
                 });

@@ -35,8 +35,11 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      overflow: auto;
       padding: skin(application wp-in-padding, 0px 5px 5px 5px);
+      > div {
+        overflow-y: inherit;
+      }
     }
     &>.left{
       &>label.title {
