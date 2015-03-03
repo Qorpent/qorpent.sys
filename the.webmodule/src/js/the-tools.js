@@ -180,7 +180,7 @@ define([
         <i  class="title success" >Скрыть все сообщения</i>\
         <i class=" title success fa fa-remove"></i>\
         </div>\
-        <div ng-click="m.expanded = !!!m.expanded" class="message bordered soft" ng-class="{expanded:m.expanded,warn:m.level==\'error\',info:m.level==\'info\'}" ng-repeat="m in log.activemessages">\
+        <div ng-click="m.expanded = !!!m.expanded" ng-dblclick="m.hide()" class="message bordered soft" ng-class="{expanded:m.expanded,warn:m.level==\'error\',info:m.level==\'info\'}" ng-repeat="m in log.activemessages">\
         Время: {{m.time}}, Действие: {{m.action.url}}, Ошибка: {{m.text}}\
         <i class="closer" ng-click="m.hide()"></i>\
         </div>\

@@ -34,7 +34,7 @@ define(["the-object","the-hash"], function ($the, $m) {
         log.add = function(text,level,type,code){
             var message = null;
             if(text instanceof Message){
-                log.messages.push(text);
+                log.messages.unshift(text);
                 message = text;
             }else {
                 level = level || "info";
