@@ -56,6 +56,21 @@
   flex-wrap: wrap;
   align-items: flex-end;
   background-color: color(primary);
+  .logo {
+    background-image: url('img/logo-toolbar.png');
+    background-size:cover;
+    height:30px;
+    width:56px;
+    @media#{$mediasm}{
+      height:24px;
+      width:46px;
+    }
+    @media#{$medialg}{
+      height:34px;
+      width:64px;
+    }
+    align-self: flex-start;
+  }
   &.top {
     .button {
       border: none !important;

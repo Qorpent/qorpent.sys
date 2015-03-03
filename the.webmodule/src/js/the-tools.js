@@ -130,9 +130,9 @@ define([
 
 
                     logtool = $('<div tool="log" style="max-width: 400px;overflow-y: auto">\
-                    <label class="info bordered">В случае необходимости скопируйте текст из поля внизу для пересылки администраторам</label>\
+                    <label class="info soft bordered">В случае необходимости скопируйте текст из поля внизу для пересылки администраторам</label>\
                 <textarea style="width: 90%;height: 50px">{{getlogjson()}}</textarea>\
-            <div class="message bordered soft"  ng-class="{warn:m.level==\'error\',info:m.level==\'info\'}" ng-repeat="m in log.messages">\
+            <div class="message light bordered soft"   ng-repeat="m in log.messages">\
             Время: {{m.time}}, Действие: {{m.action.url}}, Ошибка: {{m.text}}\
             </div>\
             </div>');

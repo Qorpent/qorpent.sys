@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* line 5, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 5, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -21,45 +21,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../Ruby21/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../bin/ruby/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
@@ -460,7 +460,7 @@ html.the .workplace > .main {
     min-width: 800px;
   }
 }
-/* line 74, newthe/tools.scss */
+/* line 89, newthe/tools.scss */
 html.the button, html.the .button, html.the .menuitem {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -534,7 +534,7 @@ html.the button.active:hover:active.bordered, html.the button.button:hover:activ
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 77, newthe/tools.scss */
+/* line 92, newthe/tools.scss */
 html.the .tooltitle {
   position: relative;
   min-height: 26px;
@@ -583,7 +583,7 @@ html.the .tooltitle.xsm {
   line-height: 11px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 77, newthe/tools.scss */
+  /* line 92, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 32px;
     padding-left: 6px;
@@ -625,7 +625,7 @@ html.the .tooltitle.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 77, newthe/tools.scss */
+  /* line 92, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 21px;
     padding-left: 4px;
@@ -672,7 +672,7 @@ html.the .tooltitle .tbt {
   display: flex;
   align-items: center;
 }
-/* line 80, newthe/tools.scss */
+/* line 95, newthe/tools.scss */
 html.the .button, html.the .title {
   min-height: 32px;
   padding-left: 12px;
@@ -718,7 +718,7 @@ html.the .button.xsm, html.the .title.xsm {
   line-height: 13px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 80, newthe/tools.scss */
+  /* line 95, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 39px;
     padding-left: 15px;
@@ -760,7 +760,7 @@ html.the .button.xsm, html.the .title.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 80, newthe/tools.scss */
+  /* line 95, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 26px;
     padding-left: 10px;
@@ -801,7 +801,7 @@ html.the .button.xsm, html.the .title.xsm {
     line-height: 11px;
   }
 }
-/* line 83, newthe/tools.scss */
+/* line 98, newthe/tools.scss */
 html.the .message {
   position: relative;
   display: flex;
@@ -826,7 +826,7 @@ html.the .message .closer:before {
   font-family: FontAwesome;
   content: "";
 }
-/* line 86, newthe/tools.scss */
+/* line 101, newthe/tools.scss */
 html.the button, html.the .button {
   position: relative;
   display: inline-block;
@@ -842,7 +842,7 @@ html.the button.tab.checked, html.the .button.tab.checked {
   border-bottom: solid 1px #f6f6f6 !important;
   top: 1px;
 }
-/* line 89, newthe/tools.scss */
+/* line 104, newthe/tools.scss */
 html.the .maintoolbar {
   padding-bottom: 0px;
   padding-top: 10px;
@@ -854,11 +854,33 @@ html.the .maintoolbar {
   align-items: flex-end;
   background-color: #4C81AF;
 }
-/* line 60, newthe/tools.scss */
+/* line 59, newthe/tools.scss */
+html.the .maintoolbar .logo {
+  background-image: url("img/logo-toolbar.png");
+  background-size: cover;
+  height: 30px;
+  width: 56px;
+  align-self: flex-start;
+}
+@media screen and (max-width: 1100px) {
+  /* line 59, newthe/tools.scss */
+  html.the .maintoolbar .logo {
+    height: 24px;
+    width: 46px;
+  }
+}
+@media screen and (min-width: 1400px) {
+  /* line 59, newthe/tools.scss */
+  html.the .maintoolbar .logo {
+    height: 34px;
+    width: 64px;
+  }
+}
+/* line 75, newthe/tools.scss */
 html.the .maintoolbar.top .button {
   border: none !important;
 }
-/* line 64, newthe/tools.scss */
+/* line 79, newthe/tools.scss */
 html.the .maintoolbar.tab {
   background-color: #f6f6f6;
   padding-bottom: 1px;

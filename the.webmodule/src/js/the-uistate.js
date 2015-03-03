@@ -28,6 +28,7 @@ define(["the-root"],function($the){
             this.parent = parent;
             this.code = code;
             this.activeObject = active || 'null';
+            this.toggleable = true;
             this.defaultObject = def || 'default';
             this.__visible= true;
             this.get = function(code){
@@ -41,7 +42,11 @@ define(["the-root"],function($the){
                 return this.get(this.activeObject);
             },
             this.activate = function(code){
-                this.activeObject = code;
+                if(this.toggleable && this.activeObject==code){
+                    this.activeObject = "none";
+                }else {
+                    this.activeObject = code;
+                }
             }
             this.isActive = function(code){
                 return this.activeObject == code;
