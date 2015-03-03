@@ -50,6 +50,13 @@ define([
 
 
                     label.on('click',function(e){
+                        e.stopPropagation();
+                        e.preventDefault();
+                        dropdown(e,{menu:true});
+                    });
+                    label.on('contextmenu',function(e){
+                        e.stopPropagation();
+                        e.preventDefault();
                         dropdown(e,{menu:true});
                     })
 
