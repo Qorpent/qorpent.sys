@@ -20,7 +20,9 @@ define([
     var uistate = root.uistate;
 
     module.directive('theLeft', [
-        function () {
+        "dropdownService",
+        "$compile",
+        function (dropdown,$compile) {
             return {
                 restrict: 'A',
                 link: function (scope, element, attrs) {
@@ -29,18 +31,33 @@ define([
 
                     var label = element.children('label');
 
+
+
                     var labelInternal = null;
                     var customLabel = false;
                     if (label.length == 0) {
                         customLabel = true;
-                        label = $('<label class="title primary bordered"><i></i></label>').prependTo(element);
-                        labelInternal = label.children('i');
-                        label.find('.fa-remove').on('click', function () {
-                            scope.$apply(function () {
-                                uistate.left.visible = false;
-                            })
-                        })
+                        label = $('<label class="title primary bordered"></label>').prependTo(element);
+
                     }
+
+
+                    labelInternal = label.children('i');
+                    if(labelInternal.length==0){
+                        customLabel = true;
+                        labelInternal = $('<i/>').prependTo(label);
+                    }
+
+
+                    label.on('click',function(e){
+                        dropdown(e,{menu:true});
+                    })
+
+                    label.find('.fa-remove').on('click', function () {
+                        scope.$apply(function () {
+                            uistate.left.visible = false;
+                        })
+                    })
 
                     var tbt = label.find('.tbt');
                     if (tbt.length == 0) {
@@ -50,7 +67,9 @@ define([
                     var remover = tbt.children('.fa-remove');
                     if (remover.length == 0) {
                         remover = $('<i title="Скрыть панель" class="fa fa-remove"></i>').appendTo(tbt);
-                        remover.on('click', function () {
+                        remover.on('click', function (e) {
+                            e.stopPropagation();
+                            e.preventDefault();
                             scope.$apply(function () {
                                 uistate.left.visible = false;
                             })
@@ -68,6 +87,32 @@ define([
                             })
                         });
                     }
+
+
+                    the.uistate.getGroup('left').get('log').title = "Журнал ошибок";
+
+                    var menu = element.children('ul');
+                    if(menu.length==0){
+                        menu = $('<ul class="hidden" the-menu >\
+                        <li  ng-click="uistate.left.activate(o.code)" ng-repeat="o in uistate.left.objects | activeobjects ">\
+                        {{o.title}}\
+                    </li>\
+                    </ul>');
+                        menu.appendTo(label);
+                       var compiled = $compile(menu);
+                        compiled(scope);
+                    }
+
+
+                    logtool = $('<div tool="log" style="max-width: 400px;overflow-y: auto">\
+                    <label class="info bordered">В случае необходимости скопируйте текст из поля внизу для пересылки администраторам</label>\
+                <textarea style="width: 90%;height: 50px">{{getlogjson()}}</textarea>\
+            <div class="message bordered soft"  ng-class="{warn:m.level==\'error\',info:m.level==\'info\'}" ng-repeat="m in log.messages">\
+            Время: {{m.time}}, Действие: {{m.action.url}}, Ошибка: {{m.text}}\
+            </div>\
+            </div>');
+                    logtool.appendTo(element);
+                    $compile(logtool)(scope);
 
                     scope.$watch(function () {
                         return uistate.left.visible;
@@ -99,6 +144,22 @@ define([
             }
         }
     ]);
+
+    module.directive('theErrors',[function(){
+        return {
+            restrict: 'A',
+            template : '<div class="messages">\
+        <div class="message soft  bordered info" ng-click="log.hideAll()" ng-if="log.activemessages.length > 1">\
+        <i  class="title success" >Скрыть все сообщения</i>\
+        <i class=" title success fa fa-remove"></i>\
+        </div>\
+        <div ng-click="m.expanded = !!!m.expanded" class="message bordered soft" ng-class="{expanded:m.expanded,warn:m.level==\'error\',info:m.level==\'info\'}" ng-repeat="m in log.activemessages">\
+        Время: {{m.time}}, Действие: {{m.action.url}}, Ошибка: {{m.text}}\
+        <i class="closer" ng-click="m.hide()"></i>\
+        </div>\
+        </div>'
+        }
+    }])
 
     module.directive('theTab', [function () {
         return {

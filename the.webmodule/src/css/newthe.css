@@ -196,6 +196,14 @@ html.the body {
   background: #f6f6f6;
 }
 /* line 16, newthe/application.scss */
+html.the .messages {
+  display: flex;
+  flex-direction: column;
+  background-color: #FDFDFD;
+  max-height: 150px;
+  overflow-y: auto;
+}
+/* line 23, newthe/application.scss */
 html.the .workplace {
   flex: 1;
   display: flex;
@@ -210,20 +218,20 @@ html.the .workplace {
   border-radius: 3px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 16, newthe/application.scss */
+  /* line 23, newthe/application.scss */
   html.the .workplace {
     margin: 10px;
     padding: 3px;
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 16, newthe/application.scss */
+  /* line 23, newthe/application.scss */
   html.the .workplace {
     margin: 3px;
     padding: 1px;
   }
 }
-/* line 34, newthe/application.scss */
+/* line 41, newthe/application.scss */
 html.the .workplace > .left, html.the .workplace > .main {
   position: relative;
   display: flex;
@@ -231,16 +239,21 @@ html.the .workplace > .left, html.the .workplace > .main {
   overflow: auto;
   padding: 0px 5px 5px 5px;
 }
-/* line 40, newthe/application.scss */
+/* line 47, newthe/application.scss */
 html.the .workplace > .left > div, html.the .workplace > .main > div {
   overflow-y: inherit;
 }
-/* line 44, newthe/application.scss */
+/* line 51, newthe/application.scss */
 html.the .workplace > .left {
   min-width: 250px;
   border-right: solid 1px #D7D7D7;
 }
-/* line 45, newthe/application.scss */
+/* line 52, newthe/application.scss */
+html.the .workplace > .left > [tool] {
+  flex-direction: column;
+  overflow-y: auto;
+}
+/* line 57, newthe/application.scss */
 html.the .workplace > .left > label.title {
   position: relative;
   min-height: 26px;
@@ -289,7 +302,7 @@ html.the .workplace > .left > label.title.xsm {
   line-height: 11px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 45, newthe/application.scss */
+  /* line 57, newthe/application.scss */
   html.the .workplace > .left > label.title {
     min-height: 32px;
     padding-left: 6px;
@@ -331,7 +344,7 @@ html.the .workplace > .left > label.title.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 45, newthe/application.scss */
+  /* line 57, newthe/application.scss */
   html.the .workplace > .left > label.title {
     min-height: 21px;
     padding-left: 4px;
@@ -379,18 +392,18 @@ html.the .workplace > .left > label.title .tbt {
   align-items: center;
 }
 @media screen and (min-width: 1400px) {
-  /* line 44, newthe/application.scss */
+  /* line 51, newthe/application.scss */
   html.the .workplace > .left {
     min-width: 300px;
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 44, newthe/application.scss */
+  /* line 51, newthe/application.scss */
   html.the .workplace > .left {
     min-width: 200px;
   }
 }
-/* line 57, newthe/application.scss */
+/* line 69, newthe/application.scss */
 html.the .workplace > .left > .collapser {
   width: 20px;
   height: 3000px;
@@ -406,48 +419,48 @@ html.the .workplace > .left > .collapser {
   text-align: center;
   cursor: pointer;
 }
-/* line 71, newthe/application.scss */
+/* line 83, newthe/application.scss */
 html.the .workplace > .left > .collapser:after {
   font-family: FontAwesome;
   content: "";
 }
-/* line 74, newthe/application.scss */
+/* line 86, newthe/application.scss */
 html.the .workplace > .left > .collapser:hover {
   background-color: #4C81AF;
   color: #FDFDFD;
 }
-/* line 79, newthe/application.scss */
+/* line 91, newthe/application.scss */
 html.the .workplace > .left.collapsed {
   padding: 0px;
   border: none;
   min-width: 20px;
 }
-/* line 81, newthe/application.scss */
+/* line 93, newthe/application.scss */
 html.the .workplace > .left.collapsed * {
   display: none;
 }
-/* line 85, newthe/application.scss */
+/* line 97, newthe/application.scss */
 html.the .workplace > .left.collapsed .collapser {
   display: block;
 }
-/* line 91, newthe/application.scss */
+/* line 103, newthe/application.scss */
 html.the .workplace > .main {
   flex: 1;
   min-width: 500px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 91, newthe/application.scss */
+  /* line 103, newthe/application.scss */
   html.the .workplace > .main {
     min-width: 400px;
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 91, newthe/application.scss */
+  /* line 103, newthe/application.scss */
   html.the .workplace > .main {
     min-width: 800px;
   }
 }
-/* line 55, newthe/tools.scss */
+/* line 74, newthe/tools.scss */
 html.the button, html.the .button, html.the .menuitem {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -521,7 +534,7 @@ html.the button.active:hover:active.bordered, html.the button.button:hover:activ
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 58, newthe/tools.scss */
+/* line 77, newthe/tools.scss */
 html.the .tooltitle {
   position: relative;
   min-height: 26px;
@@ -570,7 +583,7 @@ html.the .tooltitle.xsm {
   line-height: 11px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 58, newthe/tools.scss */
+  /* line 77, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 32px;
     padding-left: 6px;
@@ -612,7 +625,7 @@ html.the .tooltitle.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 58, newthe/tools.scss */
+  /* line 77, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 21px;
     padding-left: 4px;
@@ -659,7 +672,7 @@ html.the .tooltitle .tbt {
   display: flex;
   align-items: center;
 }
-/* line 61, newthe/tools.scss */
+/* line 80, newthe/tools.scss */
 html.the .button, html.the .title {
   min-height: 32px;
   padding-left: 12px;
@@ -705,7 +718,7 @@ html.the .button.xsm, html.the .title.xsm {
   line-height: 13px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 61, newthe/tools.scss */
+  /* line 80, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 39px;
     padding-left: 15px;
@@ -747,7 +760,7 @@ html.the .button.xsm, html.the .title.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 61, newthe/tools.scss */
+  /* line 80, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 26px;
     padding-left: 10px;
@@ -788,23 +801,48 @@ html.the .button.xsm, html.the .title.xsm {
     line-height: 11px;
   }
 }
-/* line 64, newthe/tools.scss */
+/* line 83, newthe/tools.scss */
+html.the .message {
+  position: relative;
+  display: flex;
+  padding: 10px;
+  min-height: 20px;
+  overflow-y: auto;
+  flex-direction: row;
+  justify-content: center;
+}
+/* line 22, newthe/tools.scss */
+html.the .message.expanded {
+  min-height: 100%;
+}
+/* line 25, newthe/tools.scss */
+html.the .message .closer {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+/* line 29, newthe/tools.scss */
+html.the .message .closer:before {
+  font-family: FontAwesome;
+  content: "";
+}
+/* line 86, newthe/tools.scss */
 html.the button, html.the .button {
   position: relative;
   display: inline-block;
 }
-/* line 18, newthe/tools.scss */
+/* line 38, newthe/tools.scss */
 html.the button.tab, html.the .button.tab {
   border-radius: 3px 3px 0px 0px;
 }
-/* line 20, newthe/tools.scss */
+/* line 40, newthe/tools.scss */
 html.the button.tab.checked, html.the .button.tab.checked {
   color: #3d678b;
   background: #f6f6f6;
   border-bottom: solid 1px #f6f6f6 !important;
   top: 1px;
 }
-/* line 67, newthe/tools.scss */
+/* line 89, newthe/tools.scss */
 html.the .maintoolbar {
   padding-bottom: 0px;
   padding-top: 5px;
@@ -816,11 +854,11 @@ html.the .maintoolbar {
   align-items: flex-end;
   background-color: #4C81AF;
 }
-/* line 40, newthe/tools.scss */
+/* line 60, newthe/tools.scss */
 html.the .maintoolbar.top .button {
   border: none !important;
 }
-/* line 44, newthe/tools.scss */
+/* line 64, newthe/tools.scss */
 html.the .maintoolbar.tab {
   background-color: #f6f6f6;
   padding-bottom: 1px;

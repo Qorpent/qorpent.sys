@@ -13,6 +13,13 @@
     flex:1;
     background: skin(application body-back,color(l_default));
   }
+  .messages {
+    display: flex;
+    flex-direction: column;
+    background-color: skin(application wp-back,color(light));
+    max-height: 150px;
+    overflow-y: auto;
+  }
   .workplace {
     flex: 1;
     display: flex;
@@ -42,6 +49,11 @@
       }
     }
     &>.left{
+      &>[tool]{
+       // display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
       &>label.title {
         @include tooltitle();
       }

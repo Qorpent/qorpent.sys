@@ -1,7 +1,7 @@
 /**
  * Action/Action builder module to wrapp HTTP/AJAX calls
  */
-    define(["the-jsonify", "the-http"], function ($the) {
+    define(["the-jsonify", "the-http","the-log"], function ($the) {
         return $the(function ($root, $privates) {
             var cast = $the.cast;
             var extend = $the.extend;
@@ -242,6 +242,11 @@
                         }
                     };
                     var error = function (error, resp) {
+                        var message = new $root.log.Message(error,'error','ajax','EA001');
+                        message.action = self;
+                        message.request = result;
+                        message.response = resp;
+                        $root.log.add(message);
                         if (!!callinfo.error) {
                             callinfo.error(error, resp);
                         }

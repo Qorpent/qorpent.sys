@@ -32,6 +32,7 @@ define([
     'the-dates',
     'the-report',
     'the-hash',
+    'the-log'
 ], function ($the) {
     return $the;
 });

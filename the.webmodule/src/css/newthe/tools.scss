@@ -11,6 +11,26 @@
     align-items: center;
   }
 }
+@mixin message(){
+  position: relative;
+  display: flex;
+  padding:10px;
+  min-height: 20px;
+  overflow-y: auto;
+  flex-direction: row;
+  justify-content: center;
+  &.expanded {
+    min-height: 100%;
+  }
+  .closer {
+    position: absolute;
+    top:3px;
+    right: 3px;
+    &:before {
+      @include awesome(remove);
+    }
+  }
+}
 @mixin button(){
   position:relative;
   display: inline-block;
@@ -59,6 +79,9 @@
   }
   .button, .title {
     @include title(tool button, true, true,true);
+  }
+  .message {
+    @include message();
   }
   button, .button {
     @include button();

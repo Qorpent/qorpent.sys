@@ -11,6 +11,7 @@
                 root.modules.all = root.$angular
                     .module("the-all", [])
                     .run(["$rootScope","dropdownService",function($rootScope,dds){
+                        root.$rootScope = $rootScope;
                         $rootScope.$uiVersion = $('html').attr("ui-version") || "0.1";
 
                         $rootScope.moment = function () {

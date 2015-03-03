@@ -5,9 +5,10 @@ define(["the-root"],function($the){
     return $the(function(root){
         var state = root.uistate = root.uistate || {};
         state.groups = state.groups || {};
-        var stateObject = root.uistate.StateObject = function(code,group){
+        var stateObject = root.uistate.StateObject = function(code,group,system){
             this.code = code;
             this.group = group;
+            this.system = !!system;
 
         };
         Object.defineProperty(stateObject.prototype,'active',{
@@ -47,8 +48,8 @@ define(["the-root"],function($the){
             }
 
             this.objects = {
-                "null" : new stateObject('null',this),
-                "default" : new stateObject('default',this)
+                "null" : new stateObject('null',this,true),
+                "default" : new stateObject('default',this,true)
             };
             this.objects.default.active = true;
 
