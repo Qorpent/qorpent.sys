@@ -20,6 +20,7 @@
 
                         $rootScope.uistate = root.uistate;
                         $rootScope.dropdown = dds;
+                        $rootScope.log = root.log;
 
                         $rootScope.$getView = function(url){
                             if(url.match(/^http/))return url;
