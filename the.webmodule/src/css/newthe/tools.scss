@@ -99,6 +99,9 @@
         background-color : color(primary);
         border : solid 1px color(primary) !important;
         color : color(light);
+        &:hover {
+          background-color : color(l_primary);
+        }
         &.checked{
           border :solid 1px color(light) !important;
           border-radius: 5px 5px 5px 5px !important;

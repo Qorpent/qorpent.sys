@@ -11,6 +11,9 @@
     line-height: skin(page line-height, 1.4);
     font-family: skin(page font-family, (Arial, sans-serif));
     font-size: skin(page md-font-size, 16px);
+    .fa {
+      font-family: skin(page font-family, (Arial, sans-serif)) !important;
+    }
     input {
       font-size: inherit;
       padding-left: 5px;

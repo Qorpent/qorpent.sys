@@ -471,7 +471,7 @@ html.the .workplace > .main {
     min-width: 800px;
   }
 }
-/* line 119, newthe/tools.scss */
+/* line 122, newthe/tools.scss */
 html.the button, html.the .button, html.the .menuitem {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -545,7 +545,7 @@ html.the button.active:hover:active.bordered, html.the button.button:hover:activ
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 122, newthe/tools.scss */
+/* line 125, newthe/tools.scss */
 html.the .tooltitle {
   position: relative;
   min-height: 24px;
@@ -594,7 +594,7 @@ html.the .tooltitle.xsm {
   line-height: 10px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 122, newthe/tools.scss */
+  /* line 125, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 29px;
     padding-left: 6px;
@@ -636,7 +636,7 @@ html.the .tooltitle.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 122, newthe/tools.scss */
+  /* line 125, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 20px;
     padding-left: 4px;
@@ -683,7 +683,7 @@ html.the .tooltitle .tbt {
   display: flex;
   align-items: center;
 }
-/* line 125, newthe/tools.scss */
+/* line 128, newthe/tools.scss */
 html.the .button, html.the .title {
   min-height: 32px;
   padding-left: 12px;
@@ -729,7 +729,7 @@ html.the .button.xsm, html.the .title.xsm {
   line-height: 13px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 125, newthe/tools.scss */
+  /* line 128, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 39px;
     padding-left: 15px;
@@ -771,7 +771,7 @@ html.the .button.xsm, html.the .title.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 125, newthe/tools.scss */
+  /* line 128, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 26px;
     padding-left: 10px;
@@ -812,7 +812,7 @@ html.the .button.xsm, html.the .title.xsm {
     line-height: 11px;
   }
 }
-/* line 129, newthe/tools.scss */
+/* line 132, newthe/tools.scss */
 html.the .input {
   min-height: 20px;
   padding-left: 3px;
@@ -858,7 +858,7 @@ html.the .input.xsm {
   line-height: 8px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 129, newthe/tools.scss */
+  /* line 132, newthe/tools.scss */
   html.the .input {
     min-height: 24px;
     padding-left: 4px;
@@ -900,7 +900,7 @@ html.the .input.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 129, newthe/tools.scss */
+  /* line 132, newthe/tools.scss */
   html.the .input {
     min-height: 16px;
     padding-left: 3px;
@@ -941,11 +941,11 @@ html.the .input.xsm {
     line-height: 7px;
   }
 }
-/* line 133, newthe/tools.scss */
+/* line 136, newthe/tools.scss */
 html.the input.block {
   box-sizing: border-box;
 }
-/* line 138, newthe/tools.scss */
+/* line 141, newthe/tools.scss */
 html.the .subtitle {
   color: #4C81AF;
   background: transparent;
@@ -953,7 +953,7 @@ html.the .subtitle {
   margin-top: 10px;
   padding-bottom: 2px;
 }
-/* line 145, newthe/tools.scss */
+/* line 148, newthe/tools.scss */
 html.the .message {
   position: relative;
   display: flex;
@@ -978,7 +978,7 @@ html.the .message .closer:before {
   font-family: FontAwesome;
   content: "";
 }
-/* line 148, newthe/tools.scss */
+/* line 151, newthe/tools.scss */
 html.the button, html.the .button {
   position: relative;
   display: inline-block;
@@ -994,7 +994,7 @@ html.the button.tab.checked, html.the .button.tab.checked {
   border-bottom: solid 1px #f6f6f6 !important;
   top: 1px;
 }
-/* line 151, newthe/tools.scss */
+/* line 154, newthe/tools.scss */
 html.the .maintoolbar {
   padding-bottom: 0px;
   padding-top: 5px;
@@ -1062,11 +1062,15 @@ html.the .maintoolbar.top .button.checker.primary {
   color: #FDFDFD;
 }
 /* line 102, newthe/tools.scss */
+html.the .maintoolbar.top .button.checker.primary:hover {
+  background-color: #92b3cf;
+}
+/* line 105, newthe/tools.scss */
 html.the .maintoolbar.top .button.checker.primary.checked {
   border: solid 1px #FDFDFD !important;
   border-radius: 5px 5px 5px 5px !important;
 }
-/* line 109, newthe/tools.scss */
+/* line 112, newthe/tools.scss */
 html.the .maintoolbar.tab {
   background-color: #f6f6f6;
   padding-bottom: 1px;

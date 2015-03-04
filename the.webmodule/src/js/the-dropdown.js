@@ -123,7 +123,7 @@ define([
 
         openDropdown :  function(elementOrEvent, options){
             var containerelement = (!!elementOrEvent.currentTarget)? elementOrEvent.currentTarget : elementOrEvent;
-
+            console.debug(containerelement);
             if( $(containerelement).children('.dropdown').length==0){
                 return this.openDropdown($(containerelement).parent()[0]);
             }
@@ -150,6 +150,8 @@ define([
     $.closeDropdown = function(){
        result.close();
     };
+
+    root.dropdown = result;
 
     var ddservice =  function () {
 
