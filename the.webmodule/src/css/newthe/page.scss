@@ -51,12 +51,31 @@
     &.row{
       flex-direction: row;
     }
+
+    .collapsed {
+      flex-grow: 0 !important;
+      >.content {
+        display: none !important;
+      }
+    }
+
+    .content {
+      overflow-x: hidden;
+      overflow-y: scroll;
+      flex: 1;
+    }
   }
   .block {
     display: block;
   }
   .filler {
     width: 100%;
+  }
+
+  @each $i in (1,2,3,4,5,6,7,8,9,10) {
+    .flex#{$i} {
+      flex-grow : $i;
+    }
   }
 }
 

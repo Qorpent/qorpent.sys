@@ -141,7 +141,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     transform: rotate(359deg);
   }
 }
-/* line 68, newthe/page.scss */
+/* line 90, newthe/page.scss */
 html.the {
   margin: 0px;
   display: flex;
@@ -162,17 +162,21 @@ html.the body {
   font-size: 18px;
 }
 /* line 14, newthe/page.scss */
+html.the body .fa {
+  font-family: Arial, sans-serif !important;
+}
+/* line 17, newthe/page.scss */
 html.the body input {
   font-size: inherit;
   padding-left: 5px;
   outline: none;
   margin-top: 10px;
 }
-/* line 19, newthe/page.scss */
+/* line 22, newthe/page.scss */
 html.the body input:focus {
   outline: none;
 }
-/* line 23, newthe/page.scss */
+/* line 26, newthe/page.scss */
 html.the body ::selection {
   color: #FDFDFD;
   background-color: #4C81AF;
@@ -4254,31 +4258,85 @@ html.the .warn.strong.active:hover:active.bordered, html.the .warn.strong.button
   border-top-color: #f8630d;
   border-bottom-color: #f97325;
 }
-/* line 43, newthe/page.scss */
+/* line 46, newthe/page.scss */
 html.the .box {
   display: flex;
 }
-/* line 45, newthe/page.scss */
+/* line 48, newthe/page.scss */
 html.the .box.col {
   flex-direction: column;
 }
-/* line 48, newthe/page.scss */
+/* line 51, newthe/page.scss */
 html.the .box.row {
   flex-direction: row;
 }
-/* line 52, newthe/page.scss */
+/* line 55, newthe/page.scss */
+html.the .box .collapsed {
+  flex-grow: 0 !important;
+}
+/* line 57, newthe/page.scss */
+html.the .box .collapsed > .content {
+  display: none !important;
+}
+/* line 62, newthe/page.scss */
+html.the .box .content {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  flex: 1;
+}
+/* line 68, newthe/page.scss */
 html.the .block {
   display: block;
 }
-/* line 55, newthe/page.scss */
+/* line 71, newthe/page.scss */
 html.the .filler {
   width: 100%;
 }
 /* line 76, newthe/page.scss */
+html.the .flex1 {
+  flex-grow: 1;
+}
+/* line 76, newthe/page.scss */
+html.the .flex2 {
+  flex-grow: 2;
+}
+/* line 76, newthe/page.scss */
+html.the .flex3 {
+  flex-grow: 3;
+}
+/* line 76, newthe/page.scss */
+html.the .flex4 {
+  flex-grow: 4;
+}
+/* line 76, newthe/page.scss */
+html.the .flex5 {
+  flex-grow: 5;
+}
+/* line 76, newthe/page.scss */
+html.the .flex6 {
+  flex-grow: 6;
+}
+/* line 76, newthe/page.scss */
+html.the .flex7 {
+  flex-grow: 7;
+}
+/* line 76, newthe/page.scss */
+html.the .flex8 {
+  flex-grow: 8;
+}
+/* line 76, newthe/page.scss */
+html.the .flex9 {
+  flex-grow: 9;
+}
+/* line 76, newthe/page.scss */
+html.the .flex10 {
+  flex-grow: 10;
+}
+/* line 98, newthe/page.scss */
 html.the [ng\:cloak], html.the [ng-cloak], html.the [data-ng-cloak], html.the [x-ng-cloak], html.the .ng-cloak, html.the .x-ng-cloak, html.the .hidden {
   display: none !important;
 }
-/* line 61, newthe/page.scss */
+/* line 83, newthe/page.scss */
 html.the label {
   margin-top: 5px;
   margin-bottom: 5px;
