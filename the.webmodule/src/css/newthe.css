@@ -475,7 +475,7 @@ html.the .workplace > .main {
     min-width: 800px;
   }
 }
-/* line 122, newthe/tools.scss */
+/* line 125, newthe/tools.scss */
 html.the button, html.the .button, html.the .menuitem {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -537,19 +537,16 @@ html.the button.active:hover.bordered, html.the button.button:hover.bordered, ht
 }
 /* line 162, newthe/colorizer.scss */
 html.the button.active:hover:active, html.the button.button:hover:active, html.the button.menuitem:hover:active, html.the .button.active:hover:active, html.the .button.button:hover:active, html.the .button.menuitem:hover:active, html.the .menuitem.active:hover:active, html.the .menuitem.button:hover:active, html.the .menuitem.menuitem:hover:active {
-  background: linear-gradient(to bottom, #fdfdfd, #fefefe);
+  background: #D7D7D7;
+  color: #FDFDFD;
+  color: #2B2B2B;
 }
-/* line 168, newthe/colorizer.scss */
-html.the button.active:hover:active.title, html.the button.button:hover:active.title, html.the button.menuitem:hover:active.title, html.the .button.active:hover:active.title, html.the .button.button:hover:active.title, html.the .button.menuitem:hover:active.title, html.the .menuitem.active:hover:active.title, html.the .menuitem.button:hover:active.title, html.the .menuitem.menuitem:hover:active.title {
-  color: #fefefe !important;
-  background-color: inherit !important;
-}
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the button.active:hover:active.bordered, html.the button.button:hover:active.bordered, html.the button.menuitem:hover:active.bordered, html.the .button.active:hover:active.bordered, html.the .button.button:hover:active.bordered, html.the .button.menuitem:hover:active.bordered, html.the .menuitem.active:hover:active.bordered, html.the .menuitem.button:hover:active.bordered, html.the .menuitem.menuitem:hover:active.bordered {
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 125, newthe/tools.scss */
+/* line 128, newthe/tools.scss */
 html.the .tooltitle {
   position: relative;
   min-height: 24px;
@@ -598,7 +595,7 @@ html.the .tooltitle.xsm {
   line-height: 10px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 125, newthe/tools.scss */
+  /* line 128, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 29px;
     padding-left: 6px;
@@ -640,7 +637,7 @@ html.the .tooltitle.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 125, newthe/tools.scss */
+  /* line 128, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 20px;
     padding-left: 4px;
@@ -687,7 +684,7 @@ html.the .tooltitle .tbt {
   display: flex;
   align-items: center;
 }
-/* line 128, newthe/tools.scss */
+/* line 131, newthe/tools.scss */
 html.the .button, html.the .title {
   min-height: 32px;
   padding-left: 12px;
@@ -733,7 +730,7 @@ html.the .button.xsm, html.the .title.xsm {
   line-height: 13px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 128, newthe/tools.scss */
+  /* line 131, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 39px;
     padding-left: 15px;
@@ -775,7 +772,7 @@ html.the .button.xsm, html.the .title.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 128, newthe/tools.scss */
+  /* line 131, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 26px;
     padding-left: 10px;
@@ -816,7 +813,7 @@ html.the .button.xsm, html.the .title.xsm {
     line-height: 11px;
   }
 }
-/* line 132, newthe/tools.scss */
+/* line 135, newthe/tools.scss */
 html.the .input {
   min-height: 20px;
   padding-left: 3px;
@@ -862,7 +859,7 @@ html.the .input.xsm {
   line-height: 8px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 132, newthe/tools.scss */
+  /* line 135, newthe/tools.scss */
   html.the .input {
     min-height: 24px;
     padding-left: 4px;
@@ -904,7 +901,7 @@ html.the .input.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 132, newthe/tools.scss */
+  /* line 135, newthe/tools.scss */
   html.the .input {
     min-height: 16px;
     padding-left: 3px;
@@ -945,11 +942,11 @@ html.the .input.xsm {
     line-height: 7px;
   }
 }
-/* line 136, newthe/tools.scss */
+/* line 139, newthe/tools.scss */
 html.the input.block {
   box-sizing: border-box;
 }
-/* line 141, newthe/tools.scss */
+/* line 144, newthe/tools.scss */
 html.the .subtitle {
   color: #4C81AF;
   background: transparent;
@@ -957,7 +954,7 @@ html.the .subtitle {
   margin-top: 10px;
   padding-bottom: 2px;
 }
-/* line 148, newthe/tools.scss */
+/* line 151, newthe/tools.scss */
 html.the .message {
   position: relative;
   display: flex;
@@ -982,7 +979,7 @@ html.the .message .closer:before {
   font-family: FontAwesome;
   content: "";
 }
-/* line 151, newthe/tools.scss */
+/* line 154, newthe/tools.scss */
 html.the button, html.the .button {
   position: relative;
   display: inline-block;
@@ -998,7 +995,7 @@ html.the button.tab.checked, html.the .button.tab.checked {
   border-bottom: solid 1px #f6f6f6 !important;
   top: 1px;
 }
-/* line 154, newthe/tools.scss */
+/* line 157, newthe/tools.scss */
 html.the .maintoolbar {
   padding-bottom: 0px;
   padding-top: 5px;
@@ -1078,9 +1075,13 @@ html.the .maintoolbar.top .button.checker.primary.checked {
 html.the .maintoolbar.tab {
   background-color: #f6f6f6;
   padding-bottom: 1px;
-  padding-top: 5px;
+  padding-top: 9px;
   padding-left: 10px;
   padding-right: 10px;
+}
+/* line 118, newthe/tools.scss */
+html.the .maintoolbar.tab .button {
+  margin-right: 4px;
 }
 /* line 5, newthe/dropdown.scss */
 html.the .dropdown {
@@ -1262,11 +1263,11 @@ html.the .dropdown.debug {
 html.the body.isdropdown .dropdownback {
   display: block;
 }
-/* line 196, newthe/colorizer.scss */
+/* line 203, newthe/colorizer.scss */
 html.the .idark {
   color: #2B2B2B;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 206, newthe/colorizer.scss */
 html.the .dark {
   color: #FDFDFD;
   background-color: #2B2B2B;
@@ -1478,17 +1479,17 @@ html.the .dark.active:hover.bordered, html.the .dark.button:hover.bordered, html
 html.the .dark.active:hover:active, html.the .dark.button:hover:active, html.the .dark.menuitem:hover:active {
   background: linear-gradient(to bottom, #383838, #454545);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .dark.active:hover:active.title, html.the .dark.button:hover:active.title, html.the .dark.menuitem:hover:active.title {
   color: #454545 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .dark.active:hover:active.bordered, html.the .dark.button:hover:active.bordered, html.the .dark.menuitem:hover:active.bordered {
   border-top-color: #1e1e1e;
   border-bottom-color: #2b2b2b;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 209, newthe/colorizer.scss */
 html.the .dark.soft {
   color: #FDFDFD;
   background-color: #5e5e5e;
@@ -1552,17 +1553,17 @@ html.the .dark.soft.active:hover.bordered, html.the .dark.soft.button:hover.bord
 html.the .dark.soft.active:hover:active, html.the .dark.soft.button:hover:active, html.the .dark.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #6b6b6b, #777777);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .dark.soft.active:hover:active.title, html.the .dark.soft.button:hover:active.title, html.the .dark.soft.menuitem:hover:active.title {
   color: #777777 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .dark.soft.active:hover:active.bordered, html.the .dark.soft.button:hover:active.bordered, html.the .dark.soft.menuitem:hover:active.bordered {
   border-top-color: #515151;
   border-bottom-color: #5e5e5e;
 }
-/* line 205, newthe/colorizer.scss */
+/* line 212, newthe/colorizer.scss */
 html.the .dark.strong {
   color: #FDFDFD;
   background-color: #121212;
@@ -1626,21 +1627,21 @@ html.the .dark.strong.active:hover.bordered, html.the .dark.strong.button:hover.
 html.the .dark.strong.active:hover:active, html.the .dark.strong.button:hover:active, html.the .dark.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #1e1e1e, #2b2b2b);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .dark.strong.active:hover:active.title, html.the .dark.strong.button:hover:active.title, html.the .dark.strong.menuitem:hover:active.title {
   color: #2b2b2b !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .dark.strong.active:hover:active.bordered, html.the .dark.strong.button:hover:active.bordered, html.the .dark.strong.menuitem:hover:active.bordered {
   border-top-color: #050505;
   border-bottom-color: #121212;
 }
-/* line 196, newthe/colorizer.scss */
+/* line 203, newthe/colorizer.scss */
 html.the .ilight {
   color: #FDFDFD;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 206, newthe/colorizer.scss */
 html.the .light {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -1850,19 +1851,16 @@ html.the .light.active:hover.bordered, html.the .light.button:hover.bordered, ht
 }
 /* line 162, newthe/colorizer.scss */
 html.the .light.active:hover:active, html.the .light.button:hover:active, html.the .light.menuitem:hover:active {
-  background: linear-gradient(to bottom, #fdfdfd, #fefefe);
+  background: #D7D7D7;
+  color: #FDFDFD;
+  color: #2B2B2B;
 }
-/* line 168, newthe/colorizer.scss */
-html.the .light.active:hover:active.title, html.the .light.button:hover:active.title, html.the .light.menuitem:hover:active.title {
-  color: #fefefe !important;
-  background-color: inherit !important;
-}
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .light.active:hover:active.bordered, html.the .light.button:hover:active.bordered, html.the .light.menuitem:hover:active.bordered {
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 209, newthe/colorizer.scss */
 html.the .light.soft {
   color: #2B2B2B;
   background-color: #fefefe;
@@ -1924,19 +1922,16 @@ html.the .light.soft.active:hover.bordered, html.the .light.soft.button:hover.bo
 }
 /* line 162, newthe/colorizer.scss */
 html.the .light.soft.active:hover:active, html.the .light.soft.button:hover:active, html.the .light.soft.menuitem:hover:active {
-  background: linear-gradient(to bottom, #ffffff, #ffffff);
+  background: #D7D7D7;
+  color: #FDFDFD;
+  color: #2B2B2B;
 }
-/* line 168, newthe/colorizer.scss */
-html.the .light.soft.active:hover:active.title, html.the .light.soft.button:hover:active.title, html.the .light.soft.menuitem:hover:active.title {
-  color: white !important;
-  background-color: inherit !important;
-}
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .light.soft.active:hover:active.bordered, html.the .light.soft.button:hover:active.bordered, html.the .light.soft.menuitem:hover:active.bordered {
   border-top-color: #e5e5e5;
   border-bottom-color: #e5e5e5;
 }
-/* line 205, newthe/colorizer.scss */
+/* line 212, newthe/colorizer.scss */
 html.the .light.strong {
   color: #2B2B2B;
   background-color: #e4e4e4;
@@ -1998,23 +1993,20 @@ html.the .light.strong.active:hover.bordered, html.the .light.strong.button:hove
 }
 /* line 162, newthe/colorizer.scss */
 html.the .light.strong.active:hover:active, html.the .light.strong.button:hover:active, html.the .light.strong.menuitem:hover:active {
-  background: linear-gradient(to bottom, #f0f0f0, #f5f5f5);
+  background: #D7D7D7;
+  color: #FDFDFD;
+  color: #2B2B2B;
 }
-/* line 168, newthe/colorizer.scss */
-html.the .light.strong.active:hover:active.title, html.the .light.strong.button:hover:active.title, html.the .light.strong.menuitem:hover:active.title {
-  color: whitesmoke !important;
-  background-color: inherit !important;
-}
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .light.strong.active:hover:active.bordered, html.the .light.strong.button:hover:active.bordered, html.the .light.strong.menuitem:hover:active.bordered {
   border-top-color: #d7d7d7;
   border-bottom-color: gainsboro;
 }
-/* line 196, newthe/colorizer.scss */
+/* line 203, newthe/colorizer.scss */
 html.the .iprimary {
   color: #4C81AF;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 206, newthe/colorizer.scss */
 html.the .primary {
   color: #FDFDFD;
   background-color: #4C81AF;
@@ -2226,17 +2218,17 @@ html.the .primary.active:hover.bordered, html.the .primary.button:hover.bordered
 html.the .primary.active:hover:active, html.the .primary.button:hover:active, html.the .primary.menuitem:hover:active {
   background: linear-gradient(to bottom, #5c8eb8, #6e9ac0);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .primary.active:hover:active.title, html.the .primary.button:hover:active.title, html.the .primary.menuitem:hover:active.title {
   color: #6e9ac0 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .primary.active:hover:active.bordered, html.the .primary.button:hover:active.bordered, html.the .primary.menuitem:hover:active.bordered {
   border-top-color: #44749d;
   border-bottom-color: #4c81af;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 209, newthe/colorizer.scss */
 html.the .primary.soft {
   color: #FDFDFD;
   background-color: #92b3cf;
@@ -2300,17 +2292,17 @@ html.the .primary.soft.active:hover.bordered, html.the .primary.soft.button:hove
 html.the .primary.soft.active:hover:active, html.the .primary.soft.button:hover:active, html.the .primary.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #a3bfd7, #b5cbdf);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .primary.soft.active:hover:active.title, html.the .primary.soft.button:hover:active.title, html.the .primary.soft.menuitem:hover:active.title {
   color: #b5cbdf !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .primary.soft.active:hover:active.bordered, html.the .primary.soft.button:hover:active.bordered, html.the .primary.soft.menuitem:hover:active.bordered {
   border-top-color: #80a6c8;
   border-bottom-color: #92b3cf;
 }
-/* line 205, newthe/colorizer.scss */
+/* line 212, newthe/colorizer.scss */
 html.the .primary.strong {
   color: #FDFDFD;
   background-color: #3d678b;
@@ -2374,21 +2366,21 @@ html.the .primary.strong.active:hover.bordered, html.the .primary.strong.button:
 html.the .primary.strong.active:hover:active, html.the .primary.strong.button:hover:active, html.the .primary.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #44749d, #4c81af);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .primary.strong.active:hover:active.title, html.the .primary.strong.button:hover:active.title, html.the .primary.strong.menuitem:hover:active.title {
   color: #4c81af !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .primary.strong.active:hover:active.bordered, html.the .primary.strong.button:hover:active.bordered, html.the .primary.strong.menuitem:hover:active.bordered {
   border-top-color: #355a7a;
   border-bottom-color: #3d678b;
 }
-/* line 196, newthe/colorizer.scss */
+/* line 203, newthe/colorizer.scss */
 html.the .idefault {
   color: #D7D7D7;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 206, newthe/colorizer.scss */
 html.the .default {
   color: #2B2B2B;
   background-color: #D7D7D7;
@@ -2601,17 +2593,17 @@ html.the .default.active:hover.bordered, html.the .default.button:hover.bordered
 html.the .default.active:hover:active, html.the .default.button:hover:active, html.the .default.menuitem:hover:active {
   background: linear-gradient(to bottom, #e4e4e4, #f1f1f1);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .default.active:hover:active.title, html.the .default.button:hover:active.title, html.the .default.menuitem:hover:active.title {
   color: #f1f1f1 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .default.active:hover:active.bordered, html.the .default.button:hover:active.bordered, html.the .default.menuitem:hover:active.bordered {
   border-top-color: #cacaca;
   border-bottom-color: #d7d7d7;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 209, newthe/colorizer.scss */
 html.the .default.soft {
   color: #2B2B2B;
   background-color: #f6f6f6;
@@ -2658,34 +2650,31 @@ html.the .default.soft.active, html.the .default.soft.button, html.the .default.
 }
 /* line 149, newthe/colorizer.scss */
 html.the .default.soft.active:hover, html.the .default.soft.button:hover, html.the .default.soft.menuitem:hover {
-  color: #2B2B2B;
-  background-color: #f7f7f7;
+  color: #FDFDFD;
+  background-color: #92b3cf;
 }
 /* line 154, newthe/colorizer.scss */
 html.the .default.soft.active:hover.title, html.the .default.soft.button:hover.title, html.the .default.soft.menuitem:hover.title {
   background-color: inherit;
-  color: #f7f7f7;
+  color: #92b3cf;
 }
 /* line 158, newthe/colorizer.scss */
 html.the .default.soft.active:hover.bordered, html.the .default.soft.button:hover.bordered, html.the .default.soft.menuitem:hover.bordered {
-  border-top-color: #dddddd;
+  border-top-color: #6e9ac0;
   border-bottom-color: #c3c3c3;
 }
 /* line 162, newthe/colorizer.scss */
 html.the .default.soft.active:hover:active, html.the .default.soft.button:hover:active, html.the .default.soft.menuitem:hover:active {
-  background: linear-gradient(to bottom, #f6f6f6, #f6f6f6);
+  background: #D7D7D7;
+  color: #FDFDFD;
+  color: #2B2B2B;
 }
-/* line 168, newthe/colorizer.scss */
-html.the .default.soft.active:hover:active.title, html.the .default.soft.button:hover:active.title, html.the .default.soft.menuitem:hover:active.title {
-  color: #f6f6f6 !important;
-  background-color: inherit !important;
-}
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .default.soft.active:hover:active.bordered, html.the .default.soft.button:hover:active.bordered, html.the .default.soft.menuitem:hover:active.bordered {
   border-top-color: #dddddd;
   border-bottom-color: #dddddd;
 }
-/* line 205, newthe/colorizer.scss */
+/* line 212, newthe/colorizer.scss */
 html.the .default.strong {
   color: #2B2B2B;
   background-color: #bebebe;
@@ -2749,21 +2738,21 @@ html.the .default.strong.active:hover.bordered, html.the .default.strong.button:
 html.the .default.strong.active:hover:active, html.the .default.strong.button:hover:active, html.the .default.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #cacaca, #d7d7d7);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .default.strong.active:hover:active.title, html.the .default.strong.button:hover:active.title, html.the .default.strong.menuitem:hover:active.title {
   color: #d7d7d7 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .default.strong.active:hover:active.bordered, html.the .default.strong.button:hover:active.bordered, html.the .default.strong.menuitem:hover:active.bordered {
   border-top-color: #b1b1b1;
   border-bottom-color: #bebebe;
 }
-/* line 196, newthe/colorizer.scss */
+/* line 203, newthe/colorizer.scss */
 html.the .isuccess {
   color: #5E994B;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 206, newthe/colorizer.scss */
 html.the .success {
   color: #FDFDFD;
   background-color: #5E994B;
@@ -2975,17 +2964,17 @@ html.the .success.active:hover.bordered, html.the .success.button:hover.bordered
 html.the .success.active:hover:active, html.the .success.button:hover:active, html.the .success.menuitem:hover:active {
   background: linear-gradient(to bottom, #69aa53, #77b364);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .success.active:hover:active.title, html.the .success.button:hover:active.title, html.the .success.menuitem:hover:active.title {
   color: #77b364 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .success.active:hover:active.bordered, html.the .success.button:hover:active.bordered, html.the .success.menuitem:hover:active.bordered {
   border-top-color: #538843;
   border-bottom-color: #5e994b;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 209, newthe/colorizer.scss */
 html.the .success.soft {
   color: #FDFDFD;
   background-color: #95c486;
@@ -3049,17 +3038,17 @@ html.the .success.soft.active:hover.bordered, html.the .success.soft.button:hove
 html.the .success.soft.active:hover:active, html.the .success.soft.button:hover:active, html.the .success.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #a4cc97, #b3d5a8);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .success.soft.active:hover:active.title, html.the .success.soft.button:hover:active.title, html.the .success.soft.menuitem:hover:active.title {
   color: #b3d5a8 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .success.soft.active:hover:active.bordered, html.the .success.soft.button:hover:active.bordered, html.the .success.soft.menuitem:hover:active.bordered {
   border-top-color: #86bb75;
   border-bottom-color: #95c486;
 }
-/* line 205, newthe/colorizer.scss */
+/* line 212, newthe/colorizer.scss */
 html.the .success.strong {
   color: #FDFDFD;
   background-color: #49773a;
@@ -3123,21 +3112,21 @@ html.the .success.strong.active:hover.bordered, html.the .success.strong.button:
 html.the .success.strong.active:hover:active, html.the .success.strong.button:hover:active, html.the .success.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #538843, #5e994b);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .success.strong.active:hover:active.title, html.the .success.strong.button:hover:active.title, html.the .success.strong.menuitem:hover:active.title {
   color: #5e994b !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .success.strong.active:hover:active.bordered, html.the .success.strong.button:hover:active.bordered, html.the .success.strong.menuitem:hover:active.bordered {
   border-top-color: #3e6632;
   border-bottom-color: #49773a;
 }
-/* line 196, newthe/colorizer.scss */
+/* line 203, newthe/colorizer.scss */
 html.the .iinfo {
   color: #F9D264;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 206, newthe/colorizer.scss */
 html.the .info {
   color: #2B2B2B;
   background-color: #F9D264;
@@ -3350,17 +3339,17 @@ html.the .info.active:hover.bordered, html.the .info.button:hover.bordered, html
 html.the .info.active:hover:active, html.the .info.button:hover:active, html.the .info.menuitem:hover:active {
   background: linear-gradient(to bottom, #fad97d, #fbe095);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .info.active:hover:active.title, html.the .info.button:hover:active.title, html.the .info.menuitem:hover:active.title {
   color: #fbe095 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .info.active:hover:active.bordered, html.the .info.button:hover:active.bordered, html.the .info.menuitem:hover:active.bordered {
   border-top-color: #f8cb4b;
   border-bottom-color: #f9d264;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 209, newthe/colorizer.scss */
 html.the .info.soft {
   color: #2B2B2B;
   background-color: #fdefc6;
@@ -3424,17 +3413,17 @@ html.the .info.soft.active:hover.bordered, html.the .info.soft.button:hover.bord
 html.the .info.soft.active:hover:active, html.the .info.soft.button:hover:active, html.the .info.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #fef6df, #fffbf2);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .info.soft.active:hover:active.title, html.the .info.soft.button:hover:active.title, html.the .info.soft.menuitem:hover:active.title {
   color: #fffbf2 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .info.soft.active:hover:active.bordered, html.the .info.soft.button:hover:active.bordered, html.the .info.soft.menuitem:hover:active.bordered {
   border-top-color: #fce7ae;
   border-bottom-color: #fdedc1;
 }
-/* line 205, newthe/colorizer.scss */
+/* line 212, newthe/colorizer.scss */
 html.the .info.strong {
   color: #FDFDFD;
   background-color: #f7c433;
@@ -3498,21 +3487,21 @@ html.the .info.strong.active:hover.bordered, html.the .info.strong.button:hover.
 html.the .info.strong.active:hover:active, html.the .info.strong.button:hover:active, html.the .info.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #f8cb4b, #f9d264);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .info.strong.active:hover:active.title, html.the .info.strong.button:hover:active.title, html.the .info.strong.menuitem:hover:active.title {
   color: #f9d264 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .info.strong.active:hover:active.bordered, html.the .info.strong.button:hover:active.bordered, html.the .info.strong.menuitem:hover:active.bordered {
   border-top-color: #f6bd1a;
   border-bottom-color: #f7c433;
 }
-/* line 196, newthe/colorizer.scss */
+/* line 203, newthe/colorizer.scss */
 html.the .idanger {
   color: #E7582E;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 206, newthe/colorizer.scss */
 html.the .danger {
   color: #FDFDFD;
   background-color: #E7582E;
@@ -3725,17 +3714,17 @@ html.the .danger.active:hover.bordered, html.the .danger.button:hover.bordered, 
 html.the .danger.active:hover:active, html.the .danger.button:hover:active, html.the .danger.menuitem:hover:active {
   background: linear-gradient(to bottom, #ea6a45, #ec7d5c);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .danger.active:hover:active.title, html.the .danger.button:hover:active.title, html.the .danger.menuitem:hover:active.title {
   color: #ec7d5c !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .danger.active:hover:active.bordered, html.the .danger.button:hover:active.bordered, html.the .danger.menuitem:hover:active.bordered {
   border-top-color: #e2471a;
   border-bottom-color: #e7582e;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 209, newthe/colorizer.scss */
 html.the .danger.soft {
   color: #2B2B2B;
   background-color: #f2a189;
@@ -3799,17 +3788,17 @@ html.the .danger.soft.active:hover.bordered, html.the .danger.soft.button:hover.
 html.the .danger.soft.active:hover:active, html.the .danger.soft.button:hover:active, html.the .danger.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #f4b3a0, #f7c6b7);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .danger.soft.active:hover:active.title, html.the .danger.soft.button:hover:active.title, html.the .danger.soft.menuitem:hover:active.title {
   color: #f7c6b7 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .danger.soft.active:hover:active.bordered, html.the .danger.soft.button:hover:active.bordered, html.the .danger.soft.menuitem:hover:active.bordered {
   border-top-color: #ef8f73;
   border-bottom-color: #f2a189;
 }
-/* line 205, newthe/colorizer.scss */
+/* line 212, newthe/colorizer.scss */
 html.the .danger.strong {
   color: #FDFDFD;
   background-color: #cb4017;
@@ -3873,21 +3862,21 @@ html.the .danger.strong.active:hover.bordered, html.the .danger.strong.button:ho
 html.the .danger.strong.active:hover:active, html.the .danger.strong.button:hover:active, html.the .danger.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #e2471a, #e7582e);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .danger.strong.active:hover:active.title, html.the .danger.strong.button:hover:active.title, html.the .danger.strong.menuitem:hover:active.title {
   color: #e7582e !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .danger.strong.active:hover:active.bordered, html.the .danger.strong.button:hover:active.bordered, html.the .danger.strong.menuitem:hover:active.bordered {
   border-top-color: #b43915;
   border-bottom-color: #cb4017;
 }
-/* line 196, newthe/colorizer.scss */
+/* line 203, newthe/colorizer.scss */
 html.the .iwarn {
   color: #FA9357;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 206, newthe/colorizer.scss */
 html.the .warn {
   color: #FDFDFD;
   background-color: #FA9357;
@@ -4100,17 +4089,17 @@ html.the .warn.active:hover.bordered, html.the .warn.button:hover.bordered, html
 html.the .warn.active:hover:active, html.the .warn.button:hover:active, html.the .warn.menuitem:hover:active {
   background: linear-gradient(to bottom, #fba370, #fbb389);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .warn.active:hover:active.title, html.the .warn.button:hover:active.title, html.the .warn.menuitem:hover:active.title {
   color: #fbb389 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .warn.active:hover:active.bordered, html.the .warn.button:hover:active.bordered, html.the .warn.menuitem:hover:active.bordered {
   border-top-color: #f9833e;
   border-bottom-color: #fa9357;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 209, newthe/colorizer.scss */
 html.the .warn.soft {
   color: #2B2B2B;
   background-color: #fdd3ba;
@@ -4174,17 +4163,17 @@ html.the .warn.soft.active:hover.bordered, html.the .warn.soft.button:hover.bord
 html.the .warn.soft.active:hover:active, html.the .warn.soft.button:hover:active, html.the .warn.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #fee3d3, #fef3ec);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .warn.soft.active:hover:active.title, html.the .warn.soft.button:hover:active.title, html.the .warn.soft.menuitem:hover:active.title {
   color: #fef3ec !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .warn.soft.active:hover:active.bordered, html.the .warn.soft.button:hover:active.bordered, html.the .warn.soft.menuitem:hover:active.bordered {
   border-top-color: #fcc3a1;
   border-bottom-color: #fdd3ba;
 }
-/* line 205, newthe/colorizer.scss */
+/* line 212, newthe/colorizer.scss */
 html.the .warn.strong {
   color: #FDFDFD;
   background-color: #f97325;
@@ -4248,12 +4237,12 @@ html.the .warn.strong.active:hover.bordered, html.the .warn.strong.button:hover.
 html.the .warn.strong.active:hover:active, html.the .warn.strong.button:hover:active, html.the .warn.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #f9833e, #fa9357);
 }
-/* line 168, newthe/colorizer.scss */
+/* line 173, newthe/colorizer.scss */
 html.the .warn.strong.active:hover:active.title, html.the .warn.strong.button:hover:active.title, html.the .warn.strong.menuitem:hover:active.title {
   color: #fa9357 !important;
   background-color: inherit !important;
 }
-/* line 173, newthe/colorizer.scss */
+/* line 180, newthe/colorizer.scss */
 html.the .warn.strong.active:hover:active.bordered, html.the .warn.strong.button:hover:active.bordered, html.the .warn.strong.menuitem:hover:active.bordered {
   border-top-color: #f8630d;
   border-bottom-color: #f97325;

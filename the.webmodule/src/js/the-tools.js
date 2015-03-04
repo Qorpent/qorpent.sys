@@ -62,7 +62,7 @@ define([
                         labelInternal = $('<i/>').prependTo(label);
                     }
 
-
+/*
                     label.on('click',function(e){
                         e.stopPropagation();
                         e.preventDefault();
@@ -74,7 +74,7 @@ define([
                         e.preventDefault();
                         dropdown(e,{menu:true});
                     })
-
+*/
                     label.find('.fa-remove').on('click', function () {
                         scope.$apply(function () {
                             uistate.left.visible = false;
@@ -110,13 +110,13 @@ define([
                         });
                     }
 
-
+/*
                     the.uistate.getGroup('left').get('log').title = "Журнал ошибок";
                     if (the.uistate.left.activeObject == 'default'||the.uistate.left.activeObject=='null'||the.uistate.left.activeObject=='none'){
                         the.uistate.left.activate('log');
                         the.uistate.left.visible = false;
                     }
-
+*/
                     var menu = element.children('ul');
                     if(menu.length==0){
                         menu = $('<ul class="hidden" the-menu >\
@@ -129,7 +129,7 @@ define([
                         compiled(scope);
                     }
 
-
+/*
 
                     logtool = $('<div tool="log" style="max-width: 400px;overflow-y: auto">\
                     <label class="info soft bordered">В случае необходимости скопируйте текст из поля внизу для пересылки администраторам</label>\
@@ -140,7 +140,7 @@ define([
             </div>');
                     logtool.appendTo(element);
                     $compile(logtool)(scope);
-
+*/
 
 
                     scope.$watch(function () {

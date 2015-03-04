@@ -47,6 +47,10 @@ define(["the-root"],function($the){
                 }else {
                     this.activeObject = code;
                 }
+                console.debug(code,this.code,this.parent.sync);
+                if(this.code=='toolbar' && this.parent.sync){
+                    this.parent.left.activate(code);
+                }
             }
             this.isActive = function(code){
                 return this.activeObject == code;
@@ -70,7 +74,8 @@ define(["the-root"],function($the){
                 }
                 return !!this.__visible;
             }
-        })
+        });
+        state.sync = false;
         state.getGroup = function(group){
             if(!state.groups.hasOwnProperty(group)){
                 state.groups[group] = new stateGroup(group,state);

@@ -160,14 +160,21 @@
                                 border-bottom-color : darken(darken($backcolor,$ldstep ),$ldstep);
                         }
                         &:active {
-                                background: linear-gradient(to bottom,
-                                        slighten($backcolor,$ldstep /2)
+                                @if (map_safe($schema,activeback)){
+                                        background: color(map_safe($schema,activeback));
+                                        color : color(light);
+                                        @if requiredark(color(map_safe($schema,activeback))){
+                                                color : color(dark);
+                                        }
+                                }@else {
+                                        background: linear-gradient(to bottom,
+                                                slighten($backcolor, $ldstep /2) slighten($backcolor, $ldstep)
+                                        );
+                                        &.title {
+                                                color: slighten($backcolor,$ldstep ) !important;
+                                                background-color: inherit !important;
+                                        }
 
-                                        slighten($backcolor,$ldstep )
-                                );
-                                &.title {
-                                        color: slighten($backcolor,$ldstep ) !important;
-                                        background-color: inherit !important;
                                 }
 
                                 &#{$bsuffix}{

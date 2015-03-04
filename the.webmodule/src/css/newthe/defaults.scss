@@ -12,16 +12,27 @@ $skin: (
         schemas : (
                 light : (
                         backcolor : light,
-                        hoverback  :l_primary
+                        hoverback  :l_primary,
+                        activeback : default
                 ),
                 l_light : (
                         backcolor : l_light,
-                        hoverback  :l3_primary
+                        hoverback  :l3_primary,
+                        activeback : default
                 ),
                 d_light : (
                         backcolor : d_light,
-                        hoverback  : l1_primary
-                )
+                        hoverback  : l1_primary,
+                        activeback : default
+
+                ),
+
+                l_default : (
+                        backcolor : l_default,
+                        hoverback  :l1_primary,
+                        activeback : default
+                ),
+
         ),
 
         vars : (

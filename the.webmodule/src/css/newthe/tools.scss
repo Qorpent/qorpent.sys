@@ -112,9 +112,12 @@
   &.tab{
     background-color: color(l_default);
     padding-bottom: 1px;
-    padding-top: 5px;
+    padding-top: 9px;
     padding-left: 10px;
     padding-right: 10px;
+    .button{
+      margin-right: 4px;
+    }
   }
 }
 
