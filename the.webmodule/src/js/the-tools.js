@@ -36,6 +36,7 @@ define([
         "dropdownService",
         "$compile",
         function (dropdown,$compile) {
+
             return {
                 restrict: 'A',
                 link: function (scope, element, attrs) {
@@ -65,6 +66,7 @@ define([
                     label.on('click',function(e){
                         e.stopPropagation();
                         e.preventDefault();
+
                         dropdown(e,{menu:true});
                     });
                     label.on('contextmenu',function(e){

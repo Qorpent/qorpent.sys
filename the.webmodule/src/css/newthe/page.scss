@@ -11,6 +11,15 @@
     line-height: skin(page line-height, 1.4);
     font-family: skin(page font-family, (Arial, sans-serif));
     font-size: skin(page md-font-size, 16px);
+    input {
+      font-size: inherit;
+      padding-left: 5px;
+      outline: none;
+      margin-top:10px;
+      &:focus{
+        outline: none;
+      }
+    }
     ::selection {
       color: color(primary, text);
       background-color: color(primary);
@@ -30,6 +39,31 @@
 
 }
 
+@mixin boxes(){
+  .box {
+    display: flex;
+    &.col {
+      flex-direction: column;
+    }
+    &.row{
+      flex-direction: row;
+    }
+  }
+  .block {
+    display: block;
+  }
+  .filler {
+    width: 100%;
+  }
+}
+
+@mixin labels (){
+  label {
+    margin-top:5px;
+    margin-bottom: 5px;
+  }
+}
+
 @if global_variable_exists(root) {
   html.#{$root} {
     @include page();
@@ -38,9 +72,10 @@
     @include dropdown();
     @include defaultschemas(false,false,"");
     @include scroller();
-
+    @include boxes();
     [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .hidden {
       display: none !important;
     }
+    @include labels();
   }
 }

@@ -123,6 +123,10 @@ define([
 
         openDropdown :  function(elementOrEvent, options){
             var containerelement = (!!elementOrEvent.currentTarget)? elementOrEvent.currentTarget : elementOrEvent;
+
+            if( $(containerelement).children('.dropdown').length==0){
+                return this.openDropdown($(containerelement).parent()[0]);
+            }
             return this.openDropdownElement(containerelement,options);
         }
 
@@ -132,7 +136,7 @@ define([
         return service.openDropdown(elementOrEvent,options);
     };
     result.close = function(){
-        $('.dropdown.shown').each(function(i,e){
+        $('.dropdown').each(function(i,e){
             service.__closeDropDownContainer($(e).parent());
         });
     }
@@ -147,7 +151,10 @@ define([
        result.close();
     };
 
-    var ddservice =  function () { return result; };
+    var ddservice =  function () {
+
+        return result;
+    };
     root.modules.ddservice = root.$angular.module("the-ddservice",[]).factory('dropdownService',ddservice);
     root.modules.all.factory('dropdownService', ddservice);
 })

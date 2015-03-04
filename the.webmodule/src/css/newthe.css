@@ -141,7 +141,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     transform: rotate(359deg);
   }
 }
-/* line 34, newthe/page.scss */
+/* line 68, newthe/page.scss */
 html.the {
   margin: 0px;
   display: flex;
@@ -159,9 +159,20 @@ html.the body {
   background-color: #FDFDFD;
   line-height: 1.2;
   font-family: Arial, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
 }
 /* line 14, newthe/page.scss */
+html.the body input {
+  font-size: inherit;
+  padding-left: 5px;
+  outline: none;
+  margin-top: 10px;
+}
+/* line 19, newthe/page.scss */
+html.the body input:focus {
+  outline: none;
+}
+/* line 23, newthe/page.scss */
 html.the body ::selection {
   color: #FDFDFD;
   background-color: #4C81AF;
@@ -169,13 +180,13 @@ html.the body ::selection {
 @media screen and (max-width: 2000px) and (min-width: 1600px) {
   /* line 6, newthe/page.scss */
   html.the body {
-    font-size: 18px;
+    font-size: 20px;
   }
 }
 @media screen and (max-width: 1100px) {
   /* line 6, newthe/page.scss */
   html.the body {
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 @media print {
@@ -256,11 +267,11 @@ html.the .workplace > .left > [tool] {
 /* line 57, newthe/application.scss */
 html.the .workplace > .left > label.title {
   position: relative;
-  min-height: 26px;
+  min-height: 24px;
   padding-left: 5px;
   padding-right: 5px;
   font-size: 19px;
-  line-height: 26px;
+  line-height: 24px;
   border-left: none !important;
   border-right: none !important;
 }
@@ -271,118 +282,118 @@ html.the .workplace > .left > label.title:before, html.the .workplace > .left > 
 }
 /* line 30, newthe/title.scss */
 html.the .workplace > .left > label.title.xlg {
-  min-height: 42px;
+  min-height: 39px;
   padding-left: 8px;
   padding-right: 8px;
-  font-size: 31px;
-  line-height: 42px;
+  font-size: 30px;
+  line-height: 39px;
 }
 /* line 37, newthe/title.scss */
 html.the .workplace > .left > label.title.lg {
-  min-height: 34px;
+  min-height: 32px;
   padding-left: 7px;
   padding-right: 7px;
   font-size: 25px;
-  line-height: 34px;
+  line-height: 32px;
 }
 /* line 44, newthe/title.scss */
 html.the .workplace > .left > label.title.sm {
-  min-height: 19px;
+  min-height: 17px;
   padding-left: 4px;
   padding-right: 4px;
   font-size: 12px;
-  line-height: 19px;
+  line-height: 17px;
 }
 /* line 51, newthe/title.scss */
 html.the .workplace > .left > label.title.xsm {
-  min-height: 11px;
+  min-height: 10px;
   padding-left: 2px;
   padding-right: 2px;
-  font-size: 6px;
-  line-height: 11px;
+  font-size: 7px;
+  line-height: 10px;
 }
 @media screen and (min-width: 1400px) {
   /* line 57, newthe/application.scss */
   html.the .workplace > .left > label.title {
-    min-height: 32px;
+    min-height: 29px;
     padding-left: 6px;
     padding-right: 6px;
-    font-size: 23px;
-    line-height: 32px;
+    font-size: 22px;
+    line-height: 29px;
   }
   /* line 64, newthe/title.scss */
   html.the .workplace > .left > label.title.xlg {
-    min-height: 50px;
+    min-height: 47px;
     padding-left: 10px;
     padding-right: 10px;
-    font-size: 37px;
-    line-height: 50px;
+    font-size: 38px;
+    line-height: 47px;
   }
   /* line 71, newthe/title.scss */
   html.the .workplace > .left > label.title.lg {
-    min-height: 41px;
+    min-height: 38px;
     padding-left: 8px;
     padding-right: 8px;
-    font-size: 30px;
-    line-height: 41px;
+    font-size: 29px;
+    line-height: 38px;
   }
   /* line 78, newthe/title.scss */
   html.the .workplace > .left > label.title.sm {
-    min-height: 22px;
+    min-height: 21px;
     padding-left: 5px;
     padding-right: 5px;
-    font-size: 15px;
-    line-height: 22px;
+    font-size: 16px;
+    line-height: 21px;
   }
   /* line 85, newthe/title.scss */
   html.the .workplace > .left > label.title.xsm {
-    min-height: 13px;
+    min-height: 12px;
     padding-left: 3px;
     padding-right: 3px;
-    font-size: 8px;
-    line-height: 13px;
+    font-size: 9px;
+    line-height: 12px;
   }
 }
 @media screen and (max-width: 1100px) {
   /* line 57, newthe/application.scss */
   html.the .workplace > .left > label.title {
-    min-height: 21px;
+    min-height: 20px;
     padding-left: 4px;
     padding-right: 4px;
-    font-size: 14px;
-    line-height: 21px;
+    font-size: 15px;
+    line-height: 20px;
   }
   /* line 99, newthe/title.scss */
   html.the .workplace > .left > label.title.xlg {
-    min-height: 34px;
+    min-height: 31px;
     padding-left: 7px;
     padding-right: 7px;
-    font-size: 25px;
-    line-height: 34px;
+    font-size: 24px;
+    line-height: 31px;
   }
   /* line 106, newthe/title.scss */
   html.the .workplace > .left > label.title.lg {
-    min-height: 28px;
+    min-height: 25px;
     padding-left: 6px;
     padding-right: 6px;
-    font-size: 19px;
-    line-height: 28px;
+    font-size: 18px;
+    line-height: 25px;
   }
   /* line 113, newthe/title.scss */
   html.the .workplace > .left > label.title.sm {
-    min-height: 15px;
+    min-height: 14px;
     padding-left: 3px;
     padding-right: 3px;
-    font-size: 10px;
-    line-height: 15px;
+    font-size: 9px;
+    line-height: 14px;
   }
   /* line 120, newthe/title.scss */
   html.the .workplace > .left > label.title.xsm {
-    min-height: 9px;
+    min-height: 8px;
     padding-left: 2px;
     padding-right: 2px;
-    font-size: 6px;
-    line-height: 9px;
+    font-size: 5px;
+    line-height: 8px;
   }
 }
 /* line 8, newthe/tools.scss */
@@ -460,7 +471,7 @@ html.the .workplace > .main {
     min-width: 800px;
   }
 }
-/* line 89, newthe/tools.scss */
+/* line 119, newthe/tools.scss */
 html.the button, html.the .button, html.the .menuitem {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -534,14 +545,14 @@ html.the button.active:hover:active.bordered, html.the button.button:hover:activ
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 92, newthe/tools.scss */
+/* line 122, newthe/tools.scss */
 html.the .tooltitle {
   position: relative;
-  min-height: 26px;
+  min-height: 24px;
   padding-left: 5px;
   padding-right: 5px;
   font-size: 19px;
-  line-height: 26px;
+  line-height: 24px;
   border-left: none !important;
   border-right: none !important;
 }
@@ -552,118 +563,118 @@ html.the .tooltitle:before, html.the .tooltitle:after, html.the .tooltitle *:bef
 }
 /* line 30, newthe/title.scss */
 html.the .tooltitle.xlg {
-  min-height: 42px;
+  min-height: 39px;
   padding-left: 8px;
   padding-right: 8px;
-  font-size: 31px;
-  line-height: 42px;
+  font-size: 30px;
+  line-height: 39px;
 }
 /* line 37, newthe/title.scss */
 html.the .tooltitle.lg {
-  min-height: 34px;
+  min-height: 32px;
   padding-left: 7px;
   padding-right: 7px;
   font-size: 25px;
-  line-height: 34px;
+  line-height: 32px;
 }
 /* line 44, newthe/title.scss */
 html.the .tooltitle.sm {
-  min-height: 19px;
+  min-height: 17px;
   padding-left: 4px;
   padding-right: 4px;
   font-size: 12px;
-  line-height: 19px;
+  line-height: 17px;
 }
 /* line 51, newthe/title.scss */
 html.the .tooltitle.xsm {
-  min-height: 11px;
+  min-height: 10px;
   padding-left: 2px;
   padding-right: 2px;
-  font-size: 6px;
-  line-height: 11px;
+  font-size: 7px;
+  line-height: 10px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 92, newthe/tools.scss */
+  /* line 122, newthe/tools.scss */
   html.the .tooltitle {
-    min-height: 32px;
+    min-height: 29px;
     padding-left: 6px;
     padding-right: 6px;
-    font-size: 23px;
-    line-height: 32px;
+    font-size: 22px;
+    line-height: 29px;
   }
   /* line 64, newthe/title.scss */
   html.the .tooltitle.xlg {
-    min-height: 50px;
+    min-height: 47px;
     padding-left: 10px;
     padding-right: 10px;
-    font-size: 37px;
-    line-height: 50px;
+    font-size: 38px;
+    line-height: 47px;
   }
   /* line 71, newthe/title.scss */
   html.the .tooltitle.lg {
-    min-height: 41px;
+    min-height: 38px;
     padding-left: 8px;
     padding-right: 8px;
-    font-size: 30px;
-    line-height: 41px;
+    font-size: 29px;
+    line-height: 38px;
   }
   /* line 78, newthe/title.scss */
   html.the .tooltitle.sm {
-    min-height: 22px;
+    min-height: 21px;
     padding-left: 5px;
     padding-right: 5px;
-    font-size: 15px;
-    line-height: 22px;
+    font-size: 16px;
+    line-height: 21px;
   }
   /* line 85, newthe/title.scss */
   html.the .tooltitle.xsm {
-    min-height: 13px;
+    min-height: 12px;
     padding-left: 3px;
     padding-right: 3px;
-    font-size: 8px;
-    line-height: 13px;
+    font-size: 9px;
+    line-height: 12px;
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 92, newthe/tools.scss */
+  /* line 122, newthe/tools.scss */
   html.the .tooltitle {
-    min-height: 21px;
+    min-height: 20px;
     padding-left: 4px;
     padding-right: 4px;
-    font-size: 14px;
-    line-height: 21px;
+    font-size: 15px;
+    line-height: 20px;
   }
   /* line 99, newthe/title.scss */
   html.the .tooltitle.xlg {
-    min-height: 34px;
+    min-height: 31px;
     padding-left: 7px;
     padding-right: 7px;
-    font-size: 25px;
-    line-height: 34px;
+    font-size: 24px;
+    line-height: 31px;
   }
   /* line 106, newthe/title.scss */
   html.the .tooltitle.lg {
-    min-height: 28px;
+    min-height: 25px;
     padding-left: 6px;
     padding-right: 6px;
-    font-size: 19px;
-    line-height: 28px;
+    font-size: 18px;
+    line-height: 25px;
   }
   /* line 113, newthe/title.scss */
   html.the .tooltitle.sm {
-    min-height: 15px;
+    min-height: 14px;
     padding-left: 3px;
     padding-right: 3px;
-    font-size: 10px;
-    line-height: 15px;
+    font-size: 9px;
+    line-height: 14px;
   }
   /* line 120, newthe/title.scss */
   html.the .tooltitle.xsm {
-    min-height: 9px;
+    min-height: 8px;
     padding-left: 2px;
     padding-right: 2px;
-    font-size: 6px;
-    line-height: 9px;
+    font-size: 5px;
+    line-height: 8px;
   }
 }
 /* line 8, newthe/tools.scss */
@@ -672,7 +683,7 @@ html.the .tooltitle .tbt {
   display: flex;
   align-items: center;
 }
-/* line 95, newthe/tools.scss */
+/* line 125, newthe/tools.scss */
 html.the .button, html.the .title {
   min-height: 32px;
   padding-left: 12px;
@@ -718,7 +729,7 @@ html.the .button.xsm, html.the .title.xsm {
   line-height: 13px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 95, newthe/tools.scss */
+  /* line 125, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 39px;
     padding-left: 15px;
@@ -760,7 +771,7 @@ html.the .button.xsm, html.the .title.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 95, newthe/tools.scss */
+  /* line 125, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 26px;
     padding-left: 10px;
@@ -801,7 +812,148 @@ html.the .button.xsm, html.the .title.xsm {
     line-height: 11px;
   }
 }
-/* line 98, newthe/tools.scss */
+/* line 129, newthe/tools.scss */
+html.the .input {
+  min-height: 20px;
+  padding-left: 3px;
+  padding-right: 3px;
+  font-size: 15px;
+  line-height: 20px;
+}
+/* line 26, newthe/title.scss */
+html.the .input:before, html.the .input:after, html.the .input *:before, html.the .input *:after {
+  font-family: FontAwesome;
+  font-size: 90%;
+}
+/* line 30, newthe/title.scss */
+html.the .input.xlg {
+  min-height: 32px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 23px;
+  line-height: 32px;
+}
+/* line 37, newthe/title.scss */
+html.the .input.lg {
+  min-height: 26px;
+  padding-left: 4px;
+  padding-right: 4px;
+  font-size: 19px;
+  line-height: 26px;
+}
+/* line 44, newthe/title.scss */
+html.the .input.sm {
+  min-height: 14px;
+  padding-left: 3px;
+  padding-right: 3px;
+  font-size: 9px;
+  line-height: 14px;
+}
+/* line 51, newthe/title.scss */
+html.the .input.xsm {
+  min-height: 8px;
+  padding-left: 2px;
+  padding-right: 2px;
+  font-size: 5px;
+  line-height: 8px;
+}
+@media screen and (min-width: 1400px) {
+  /* line 129, newthe/tools.scss */
+  html.the .input {
+    min-height: 24px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 17px;
+    line-height: 24px;
+  }
+  /* line 64, newthe/title.scss */
+  html.the .input.xlg {
+    min-height: 39px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 30px;
+    line-height: 39px;
+  }
+  /* line 71, newthe/title.scss */
+  html.the .input.lg {
+    min-height: 32px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 23px;
+    line-height: 32px;
+  }
+  /* line 78, newthe/title.scss */
+  html.the .input.sm {
+    min-height: 17px;
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 12px;
+    line-height: 17px;
+  }
+  /* line 85, newthe/title.scss */
+  html.the .input.xsm {
+    min-height: 10px;
+    padding-left: 2px;
+    padding-right: 2px;
+    font-size: 7px;
+    line-height: 10px;
+  }
+}
+@media screen and (max-width: 1100px) {
+  /* line 129, newthe/tools.scss */
+  html.the .input {
+    min-height: 16px;
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  /* line 99, newthe/title.scss */
+  html.the .input.xlg {
+    min-height: 26px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 19px;
+    line-height: 26px;
+  }
+  /* line 106, newthe/title.scss */
+  html.the .input.lg {
+    min-height: 21px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 14px;
+    line-height: 21px;
+  }
+  /* line 113, newthe/title.scss */
+  html.the .input.sm {
+    min-height: 12px;
+    padding-left: 2px;
+    padding-right: 2px;
+    font-size: 7px;
+    line-height: 12px;
+  }
+  /* line 120, newthe/title.scss */
+  html.the .input.xsm {
+    min-height: 7px;
+    padding-left: 1px;
+    padding-right: 1px;
+    font-size: 4px;
+    line-height: 7px;
+  }
+}
+/* line 133, newthe/tools.scss */
+html.the input.block {
+  box-sizing: border-box;
+}
+/* line 138, newthe/tools.scss */
+html.the .subtitle {
+  color: #4C81AF;
+  background: transparent;
+  border-bottom: solid 1px #D7D7D7;
+  margin-top: 10px;
+  padding-bottom: 2px;
+}
+/* line 145, newthe/tools.scss */
 html.the .message {
   position: relative;
   display: flex;
@@ -826,7 +978,7 @@ html.the .message .closer:before {
   font-family: FontAwesome;
   content: "";
 }
-/* line 101, newthe/tools.scss */
+/* line 148, newthe/tools.scss */
 html.the button, html.the .button {
   position: relative;
   display: inline-block;
@@ -842,10 +994,10 @@ html.the button.tab.checked, html.the .button.tab.checked {
   border-bottom: solid 1px #f6f6f6 !important;
   top: 1px;
 }
-/* line 104, newthe/tools.scss */
+/* line 151, newthe/tools.scss */
 html.the .maintoolbar {
   padding-bottom: 0px;
-  padding-top: 10px;
+  padding-top: 5px;
   padding-left: 10px;
   padding-right: 10px;
   display: flex;
@@ -858,29 +1010,63 @@ html.the .maintoolbar {
 html.the .maintoolbar .logo {
   background-image: url("img/logo-toolbar.png");
   background-size: cover;
-  height: 30px;
-  width: 56px;
+  height: 36px;
+  width: 60px;
+  margin-right: 10px;
   align-self: flex-start;
 }
 @media screen and (max-width: 1100px) {
   /* line 59, newthe/tools.scss */
   html.the .maintoolbar .logo {
-    height: 24px;
-    width: 46px;
+    height: 30px;
+    width: 50px;
+    margin-right: 6px;
   }
 }
 @media screen and (min-width: 1400px) {
   /* line 59, newthe/tools.scss */
   html.the .maintoolbar .logo {
-    height: 34px;
-    width: 64px;
+    height: 40px;
+    width: 70px;
+    margin-right: 16px;
   }
 }
-/* line 75, newthe/tools.scss */
-html.the .maintoolbar.top .button {
-  border: none !important;
+/* line 77, newthe/tools.scss */
+html.the .maintoolbar input {
+  display: inline-block;
+  font-size: 20px;
+  align-self: center;
+  padding-left: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
-/* line 79, newthe/tools.scss */
+/* line 88, newthe/tools.scss */
+html.the .maintoolbar.top .button {
+  align-self: center;
+  border: none !important;
+  margin-right: 1px;
+  margin-left: 1px;
+}
+/* line 93, newthe/tools.scss */
+html.the .maintoolbar.top .button.tab {
+  align-self: flex-end;
+  margin-right: 0px;
+  margin-left: 0px;
+}
+/* line 98, newthe/tools.scss */
+html.the .maintoolbar.top .button.checker.primary {
+  background-color: #4C81AF;
+  border: solid 1px #4C81AF !important;
+  color: #FDFDFD;
+}
+/* line 102, newthe/tools.scss */
+html.the .maintoolbar.top .button.checker.primary.checked {
+  border: solid 1px #FDFDFD !important;
+  border-radius: 5px 5px 5px 5px !important;
+}
+/* line 109, newthe/tools.scss */
 html.the .maintoolbar.tab {
   background-color: #f6f6f6;
   padding-bottom: 1px;
@@ -1069,6 +1255,10 @@ html.the body.isdropdown .dropdownback {
   display: block;
 }
 /* line 196, newthe/colorizer.scss */
+html.the .idark {
+  color: #2B2B2B;
+}
+/* line 199, newthe/colorizer.scss */
 html.the .dark {
   color: #FDFDFD;
   background-color: #2B2B2B;
@@ -1290,7 +1480,7 @@ html.the .dark.active:hover:active.bordered, html.the .dark.button:hover:active.
   border-top-color: #1e1e1e;
   border-bottom-color: #2b2b2b;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 202, newthe/colorizer.scss */
 html.the .dark.soft {
   color: #FDFDFD;
   background-color: #5e5e5e;
@@ -1364,7 +1554,7 @@ html.the .dark.soft.active:hover:active.bordered, html.the .dark.soft.button:hov
   border-top-color: #515151;
   border-bottom-color: #5e5e5e;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 205, newthe/colorizer.scss */
 html.the .dark.strong {
   color: #FDFDFD;
   background-color: #121212;
@@ -1439,6 +1629,10 @@ html.the .dark.strong.active:hover:active.bordered, html.the .dark.strong.button
   border-bottom-color: #121212;
 }
 /* line 196, newthe/colorizer.scss */
+html.the .ilight {
+  color: #FDFDFD;
+}
+/* line 199, newthe/colorizer.scss */
 html.the .light {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -1660,7 +1854,7 @@ html.the .light.active:hover:active.bordered, html.the .light.button:hover:activ
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 202, newthe/colorizer.scss */
 html.the .light.soft {
   color: #2B2B2B;
   background-color: #fefefe;
@@ -1734,7 +1928,7 @@ html.the .light.soft.active:hover:active.bordered, html.the .light.soft.button:h
   border-top-color: #e5e5e5;
   border-bottom-color: #e5e5e5;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 205, newthe/colorizer.scss */
 html.the .light.strong {
   color: #2B2B2B;
   background-color: #e4e4e4;
@@ -1809,6 +2003,10 @@ html.the .light.strong.active:hover:active.bordered, html.the .light.strong.butt
   border-bottom-color: gainsboro;
 }
 /* line 196, newthe/colorizer.scss */
+html.the .iprimary {
+  color: #4C81AF;
+}
+/* line 199, newthe/colorizer.scss */
 html.the .primary {
   color: #FDFDFD;
   background-color: #4C81AF;
@@ -2030,7 +2228,7 @@ html.the .primary.active:hover:active.bordered, html.the .primary.button:hover:a
   border-top-color: #44749d;
   border-bottom-color: #4c81af;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 202, newthe/colorizer.scss */
 html.the .primary.soft {
   color: #FDFDFD;
   background-color: #92b3cf;
@@ -2104,7 +2302,7 @@ html.the .primary.soft.active:hover:active.bordered, html.the .primary.soft.butt
   border-top-color: #80a6c8;
   border-bottom-color: #92b3cf;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 205, newthe/colorizer.scss */
 html.the .primary.strong {
   color: #FDFDFD;
   background-color: #3d678b;
@@ -2179,6 +2377,10 @@ html.the .primary.strong.active:hover:active.bordered, html.the .primary.strong.
   border-bottom-color: #3d678b;
 }
 /* line 196, newthe/colorizer.scss */
+html.the .idefault {
+  color: #D7D7D7;
+}
+/* line 199, newthe/colorizer.scss */
 html.the .default {
   color: #2B2B2B;
   background-color: #D7D7D7;
@@ -2401,7 +2603,7 @@ html.the .default.active:hover:active.bordered, html.the .default.button:hover:a
   border-top-color: #cacaca;
   border-bottom-color: #d7d7d7;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 202, newthe/colorizer.scss */
 html.the .default.soft {
   color: #2B2B2B;
   background-color: #f6f6f6;
@@ -2475,7 +2677,7 @@ html.the .default.soft.active:hover:active.bordered, html.the .default.soft.butt
   border-top-color: #dddddd;
   border-bottom-color: #dddddd;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 205, newthe/colorizer.scss */
 html.the .default.strong {
   color: #2B2B2B;
   background-color: #bebebe;
@@ -2550,6 +2752,10 @@ html.the .default.strong.active:hover:active.bordered, html.the .default.strong.
   border-bottom-color: #bebebe;
 }
 /* line 196, newthe/colorizer.scss */
+html.the .isuccess {
+  color: #5E994B;
+}
+/* line 199, newthe/colorizer.scss */
 html.the .success {
   color: #FDFDFD;
   background-color: #5E994B;
@@ -2771,7 +2977,7 @@ html.the .success.active:hover:active.bordered, html.the .success.button:hover:a
   border-top-color: #538843;
   border-bottom-color: #5e994b;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 202, newthe/colorizer.scss */
 html.the .success.soft {
   color: #FDFDFD;
   background-color: #95c486;
@@ -2845,7 +3051,7 @@ html.the .success.soft.active:hover:active.bordered, html.the .success.soft.butt
   border-top-color: #86bb75;
   border-bottom-color: #95c486;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 205, newthe/colorizer.scss */
 html.the .success.strong {
   color: #FDFDFD;
   background-color: #49773a;
@@ -2920,6 +3126,10 @@ html.the .success.strong.active:hover:active.bordered, html.the .success.strong.
   border-bottom-color: #49773a;
 }
 /* line 196, newthe/colorizer.scss */
+html.the .iinfo {
+  color: #F9D264;
+}
+/* line 199, newthe/colorizer.scss */
 html.the .info {
   color: #2B2B2B;
   background-color: #F9D264;
@@ -3142,7 +3352,7 @@ html.the .info.active:hover:active.bordered, html.the .info.button:hover:active.
   border-top-color: #f8cb4b;
   border-bottom-color: #f9d264;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 202, newthe/colorizer.scss */
 html.the .info.soft {
   color: #2B2B2B;
   background-color: #fdefc6;
@@ -3216,7 +3426,7 @@ html.the .info.soft.active:hover:active.bordered, html.the .info.soft.button:hov
   border-top-color: #fce7ae;
   border-bottom-color: #fdedc1;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 205, newthe/colorizer.scss */
 html.the .info.strong {
   color: #FDFDFD;
   background-color: #f7c433;
@@ -3291,6 +3501,10 @@ html.the .info.strong.active:hover:active.bordered, html.the .info.strong.button
   border-bottom-color: #f7c433;
 }
 /* line 196, newthe/colorizer.scss */
+html.the .idanger {
+  color: #E7582E;
+}
+/* line 199, newthe/colorizer.scss */
 html.the .danger {
   color: #FDFDFD;
   background-color: #E7582E;
@@ -3513,7 +3727,7 @@ html.the .danger.active:hover:active.bordered, html.the .danger.button:hover:act
   border-top-color: #e2471a;
   border-bottom-color: #e7582e;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 202, newthe/colorizer.scss */
 html.the .danger.soft {
   color: #2B2B2B;
   background-color: #f2a189;
@@ -3587,7 +3801,7 @@ html.the .danger.soft.active:hover:active.bordered, html.the .danger.soft.button
   border-top-color: #ef8f73;
   border-bottom-color: #f2a189;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 205, newthe/colorizer.scss */
 html.the .danger.strong {
   color: #FDFDFD;
   background-color: #cb4017;
@@ -3662,6 +3876,10 @@ html.the .danger.strong.active:hover:active.bordered, html.the .danger.strong.bu
   border-bottom-color: #cb4017;
 }
 /* line 196, newthe/colorizer.scss */
+html.the .iwarn {
+  color: #FA9357;
+}
+/* line 199, newthe/colorizer.scss */
 html.the .warn {
   color: #FDFDFD;
   background-color: #FA9357;
@@ -3884,7 +4102,7 @@ html.the .warn.active:hover:active.bordered, html.the .warn.button:hover:active.
   border-top-color: #f9833e;
   border-bottom-color: #fa9357;
 }
-/* line 199, newthe/colorizer.scss */
+/* line 202, newthe/colorizer.scss */
 html.the .warn.soft {
   color: #2B2B2B;
   background-color: #fdd3ba;
@@ -3958,7 +4176,7 @@ html.the .warn.soft.active:hover:active.bordered, html.the .warn.soft.button:hov
   border-top-color: #fcc3a1;
   border-bottom-color: #fdd3ba;
 }
-/* line 202, newthe/colorizer.scss */
+/* line 205, newthe/colorizer.scss */
 html.the .warn.strong {
   color: #FDFDFD;
   background-color: #f97325;
@@ -4032,9 +4250,34 @@ html.the .warn.strong.active:hover:active.bordered, html.the .warn.strong.button
   border-top-color: #f8630d;
   border-bottom-color: #f97325;
 }
-/* line 42, newthe/page.scss */
+/* line 43, newthe/page.scss */
+html.the .box {
+  display: flex;
+}
+/* line 45, newthe/page.scss */
+html.the .box.col {
+  flex-direction: column;
+}
+/* line 48, newthe/page.scss */
+html.the .box.row {
+  flex-direction: row;
+}
+/* line 52, newthe/page.scss */
+html.the .block {
+  display: block;
+}
+/* line 55, newthe/page.scss */
+html.the .filler {
+  width: 100%;
+}
+/* line 76, newthe/page.scss */
 html.the [ng\:cloak], html.the [ng-cloak], html.the [data-ng-cloak], html.the [x-ng-cloak], html.the .ng-cloak, html.the .x-ng-cloak, html.the .hidden {
   display: none !important;
+}
+/* line 61, newthe/page.scss */
+html.the label {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 /*# sourceMappingURL=newthe.css.map */

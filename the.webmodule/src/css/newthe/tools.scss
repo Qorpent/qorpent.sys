@@ -47,7 +47,7 @@
   }
 }
 @mixin maintoolbar(){
-  padding-bottom: 0px;
+  padding-bottom: skin(tool toolbar padding-bottom,0px);
   padding-top:skin(tool toolbar padding-top,skin(tool toolbar padding,5px));
   padding-left:skin(tool toolbar padding-left,skin(tool toolbar padding-side,skin(tool toolbar padding,10px)));
   padding-right:skin(tool toolbar padding-right,skin(tool toolbar padding-side,skin(tool toolbar padding,10px)));
@@ -59,21 +59,51 @@
   .logo {
     background-image: url('img/logo-toolbar.png');
     background-size:cover;
-    height:30px;
-    width:56px;
+    height:36px;
+    width:60px;
+    margin-right:10px;
     @media#{$mediasm}{
-      height:24px;
-      width:46px;
+      height:30px;
+      width:50px;
+      margin-right:6px;
     }
     @media#{$medialg}{
-      height:34px;
-      width:64px;
+      height:40px;
+      width:70px;
+      margin-right:16px;
     }
     align-self: flex-start;
   }
+  input {
+    display: inline-block;
+    font-size: 20px;
+    align-self: center;
+    padding-left:5px;
+    margin-left:5px;
+    margin-right: 5px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
   &.top {
     .button {
+      align-self: center;
       border: none !important;
+      margin-right: 1px;
+      margin-left: 1px;
+      &.tab{
+        align-self: flex-end;
+        margin-right: 0px;
+        margin-left: 0px;
+      }
+      &.checker.primary {
+        background-color : color(primary);
+        border : solid 1px color(primary) !important;
+        color : color(light);
+        &.checked{
+          border :solid 1px color(light) !important;
+          border-radius: 5px 5px 5px 5px !important;
+        }
+      }
     }
   }
   &.tab{
@@ -94,6 +124,23 @@
   }
   .button, .title {
     @include title(tool button, true, true,true);
+  }
+
+  .input {
+    @include title(tool input, true, true,true);
+  }
+
+  input.block {
+    box-sizing: border-box;
+
+  }
+
+  .subtitle {
+    color : color(primary);
+    background: transparent;
+    border-bottom:  solid 1px color(default);
+    margin-top: skin(subtitle margin,10px);
+    padding-bottom: skin(subtitle padding,2px);
   }
   .message {
     @include message();

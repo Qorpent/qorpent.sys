@@ -193,6 +193,9 @@
 @mixin defaultschemas($bordered:false,$active:false,$prefix:"") {
 
         @each $n in $basecolors {
+                .i#{$n}{
+                        color : color($n);
+                }
                 #{$prefix}.#{$n} {
                         @include colorschema((schema:$n),$bordered,$active,true);
                 }

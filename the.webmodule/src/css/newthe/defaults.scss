@@ -41,9 +41,9 @@ $skin: (
         page : (
                 line-height : 1.2,
                 font-family : (Arial,sans-serif),
-                md-font-size : 16px,
-                lg-font-size : 18px,
-                sm-font-size : 14px,
+                md-font-size : 18px,
+                lg-font-size : 20px,
+                sm-font-size : 16px,
                 pr-font-size: 10pt,
         ),
         application : (
@@ -65,9 +65,17 @@ $skin: (
         ),
         tool : (
                 title : (
-                        height: 26px,
-                        vpadding: 3px,
+                        height: 24px,
+                        vpadding: 2px,
                         hpadding: 5px,
+                        color: primary,
+                        backcolor : light,// (to bottom , primary, l_primary),
+                        border : true
+                ),
+                input : (
+                        height: 20px,
+                        vpadding: 2px,
+                        hpadding: 3px,
                         color: primary,
                         backcolor : light,// (to bottom , primary, l_primary),
                         border : true
@@ -79,7 +87,7 @@ $skin: (
                         schema :default
                 ),
                 toolbar : (
-                        padding-top :10px,
+                        padding-top :5px,
                         padding-size : 20px
                 ),
                 menu : (
