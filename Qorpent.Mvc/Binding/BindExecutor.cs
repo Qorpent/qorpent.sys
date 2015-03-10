@@ -192,38 +192,47 @@ namespace Qorpent.Mvc.Binding {
 				}
 				converted = s;
 			}else if (TargetType.IsClass) {
-			    var prefix = Name;
+			    var prefix = _bindattribute.ParameterPrefix ?? "";
 			    var obj = Activator.CreateInstance(TargetType);
-			    
-                if (string.IsNullOrWhiteSpace(prefix)) {
-                    var parameters = context.GetAll(prefix+".");
-                    foreach (var valuePair in parameters) {
-                        obj.SetValue(valuePair.Key, valuePair.Value, true, true, false, true, true);
+
+                var clsdict = CoreExtensions.ToDict(obj);
+                foreach (var cp in context.Parameters) {
+                    if (string.IsNullOrWhiteSpace(cp.Value)) continue;
+                    
+                    var pname = cp.Key;
+                    if (string.IsNullOrWhiteSpace(prefix) || pname.StartsWith(prefix)) {
+                        if (!string.IsNullOrWhiteSpace(prefix)) {
+                            pname = pname.Substring(prefix.Length);
+                        }
                     }
-                }
-                else {
-                    var clsdict = CoreExtensions.ToDict(obj);
-                    foreach (var p in clsdict) {
-	                    if (p.Value is IDictionary<string, string>){
-		                    SetupDictionary<string>(context, obj, p);
-	                    }
-                        else if (p.Value is IDictionary<string, object>)
-                        {
+                    else {
+                        continue;
+                        
+                    }
+                    if(pname.Contains('.'))continue;
+
+                    var p = clsdict.FirstOrDefault(_ => _.Key.ToUpperInvariant() == pname.ToUpperInvariant());
+                    
+                    if (!string.IsNullOrWhiteSpace(p.Key)) {
+                        if (p.Value is IDictionary<string, string>) {
+                            SetupDictionary<string>(context, obj, p);
+                        }
+                        else if (p.Value is IDictionary<string, object>) {
                             SetupDictionary<object>(context, obj, p);
                         }
-	                    else{
-		                    var pname = p.Key;
-							
-							if (!string.IsNullOrWhiteSpace(this._bindattribute.ParameterPrefix)){
-								pname = this._bindattribute.ParameterPrefix + pname;
-							}
-		                    var v = context.Get(pname, null);
-		                    if (!string.IsNullOrWhiteSpace(v)){
-			                    obj.SetValue(p.Key, v, true, true, false, true, true);
-		                    }
-	                    }
+                        else {
+                            
+                             obj.SetValue(pname,cp.Value, true, true, false, true, true);
+                                                  }
+                    }
+                    else {
+                        
+                            obj.SetValue(pname, cp.Value, true, true, false, true, true);
+                        
                     }
                 }
+
+                
 			    converted = obj;
 			}
 			SetDirectly(action, converted);

@@ -21,6 +21,15 @@ namespace Qorpent.Mvc.Tests
             public IDictionary<string, object> Extensions { get; set; } 
 	    }
 
+        public enum MyEnum {
+            None = 0,
+            Val1 = 1,
+            Val2 = 2
+        }
+	    public class ClassWithEnum {
+	        public MyEnum TheEnum;
+	    }
+
 		public class ComdivClass{
 		    public ComdivClass() {
 		        Extensions=  new Dictionary<string, object>();
@@ -36,8 +45,26 @@ namespace Qorpent.Mvc.Tests
 			public ComdivClass Param { get; set; }
 			[Bind(ParameterPrefix = "val.")]
 			public ComdivClass Param2 { get; set; }
-            
-		}
+
+          
+
+        }
+
+	    public class ActionWithEnum : ActionBase {
+	        [Bind] public ClassWithEnum MyArgs;
+	    }
+
+
+        [Test]
+        public void CanBindEnums()
+        {
+            var mvccontext = new MvcContext("http://comdiv/my?theenum=Val1");
+            var action = new ActionWithEnum();
+            var binder = new DefaultActionBinder();
+            binder.Bind(new ActionDescriptor(action), mvccontext);
+            Assert.AreEqual(MyEnum.Val1, action.MyArgs.TheEnum);
+
+        }
 
         [TestCase(@"{""a"":1,""b"":""2""}")]
         [TestCase(@"/a:1//b:2/")]
