@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -72,6 +73,12 @@ namespace Qorpent.Host{
 			Modules = new Dictionary<string, string>();
 			Initializers = new List<string>();
 			MachineName = Environment.MachineName;
+            // HACK:
+            Trace.Listeners.Add(new UpdTraceListener("ip=234.5.5.1;port=5555;"));
+            Trace.WriteLine("Info Udp trace listener from HostConfig");
+            Trace.TraceWarning("Warning Udp trace listener from HostConfig");
+            Debug.WriteLine("Debug Udp trace listener from HostConfig");
+
 		}
 		/// <summary>
 		///		Имя машины

@@ -128,6 +128,7 @@
     <Compile Include="FilterState.cs" />
     <Compile Include="Graphs\Dot\BuilderExtensions.cs" />
     <Compile Include="HelpAttribute.cs" />
+    <Compile Include="Host\UdpHelper.cs" />
     <Compile Include="Host\HostApplicationMode.cs" />
     <Compile Include="Host\HostBinding.cs" />
     <Compile Include="Host\HostConfig.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Host\IEncryptProvider.cs" />
     <Compile Include="Host\IHostConfigProvider.cs" />
     <Compile Include="Host\ISimpleSocketRequest.cs" />
+    <Compile Include="Host\UdpListener.cs" />
     <Compile Include="IO\IBinarySerializable.cs" />
     <Compile Include="Host\IHostServer.cs" />
     <Compile Include="Host\IHostServerInitializer.cs" />
