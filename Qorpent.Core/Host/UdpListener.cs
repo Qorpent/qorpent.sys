@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 namespace Qorpent.Host {
     public class UpdTraceListener : TraceListener {
         readonly IPEndPoint _endPoint;
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="initializeData"></param>
         public UpdTraceListener(string initializeData) {
             try {
                 IPAddress addressGroup = null;
@@ -43,7 +46,10 @@ namespace Qorpent.Host {
                     "initializeData", e);
             }
         }
-      
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="message"></param>
         public override void Write(string message) {
             // HACK:
             message = message.Replace("{", "<").Replace("}", ">");
@@ -51,6 +57,10 @@ namespace Qorpent.Host {
             byte[] data = Encoding.Default.GetBytes(message);
             UdpHelper.SendToMulticastGroup(_endPoint, data);
         }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="message"></param>
         public override void WriteLine(string message) {
             string newMessage = message + Environment.NewLine;
             Write(newMessage);
