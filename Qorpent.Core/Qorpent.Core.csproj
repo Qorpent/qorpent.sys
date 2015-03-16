@@ -128,7 +128,7 @@
     <Compile Include="FilterState.cs" />
     <Compile Include="Graphs\Dot\BuilderExtensions.cs" />
     <Compile Include="HelpAttribute.cs" />
-    <Compile Include="Host\UdpHelper.cs" />
+    <Compile Include="Host\UdpTraceListener.cs" />
     <Compile Include="Host\HostApplicationMode.cs" />
     <Compile Include="Host\HostBinding.cs" />
     <Compile Include="Host\HostConfig.cs" />

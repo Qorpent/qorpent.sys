@@ -10,6 +10,9 @@ using System.Xml;
 using System.Reflection;
 
 namespace Qorpent.Host {
+    /// <summary>
+    /// 
+    /// </summary>
     public class UdpTraceListener : TraceListener {
         private UdpClient _udpClient;
         private ConcurrentStack<string> _messageBuffer;
@@ -18,16 +21,28 @@ namespace Qorpent.Host {
         private static readonly string _xmlPrefix = "log4j";
         private static readonly string _xmlNamespace = "http://jakarta.apache.org/log4j/";
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override bool IsThreadSafe {
             get {
                 return true;
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public UdpTraceListener()
             : this("localhost", 7071, "UdpTraceListener") {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="host"></param>
+        /// <param name="port"></param>
+        /// <param name="loggerName"></param>
         public UdpTraceListener(string host, int port, string loggerName) {
             _loggerName = loggerName;
             _messageBuffer = new ConcurrentStack<string>();
@@ -35,20 +50,38 @@ namespace Qorpent.Host {
             _udpClient.Connect(host, port);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
         public override void Write(string message) {
             Write(message, "info");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
         public override void WriteLine(string message) {
             Write(message, "info");
             Flush();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="category"></param>
         public override void WriteLine(string message, string category) {
             _messageBuffer.Push(GetEventXml(message, category));
             Flush();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="category"></param>
         public override void Write(string message, string category) {
             _messageBuffer.Push(GetEventXml(message, category));
         }
@@ -158,6 +191,9 @@ namespace Qorpent.Host {
             return Math.Floor(sinceEpoch.TotalMilliseconds);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override void Flush() {
             foreach (string xmlMessage in _messageBuffer) {
                 byte[] payload = Encoding.UTF8.GetBytes(xmlMessage);
@@ -168,12 +204,26 @@ namespace Qorpent.Host {
             base.Flush();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing) {
             Flush();
             _udpClient.Close();
 
             base.Dispose(disposing);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventCache"></param>
+        /// <param name="source"></param>
+        /// <param name="eventType"></param>
+        /// <param name="id"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
 
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string format, params object[] args) {
             switch (eventType) {
