@@ -55,8 +55,12 @@ namespace Qorpent.Host {
             message = message.Replace("{", "<").Replace("}", ">");
 
             byte[] data = Encoding.Default.GetBytes(message);
-            UdpHelper.SendToMulticastGroup(_endPoint, data);
-        }
+			try {
+				UdpHelper.SendToMulticastGroup(_endPoint, data);
+			} catch {
+				
+			}
+		}
 		/// <summary>
 		/// 
 		/// </summary>
