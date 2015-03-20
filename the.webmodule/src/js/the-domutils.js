@@ -221,6 +221,7 @@ define([
     var PlaceAsideOptions = result.PlaceAsideOptions = function () {
         this.fitwidth = true;
         this.target = null;
+        this.detach =false;
         this.apply = true;
         this.cache = false;
         this.reset = false;
@@ -231,7 +232,7 @@ define([
         this.minWidth = 50;
         this.fitWidthStep = 10;
         this.fixedContent = false;
-        this.padding = 5;
+        this.padding = 20;
     };
 
     var __getFittedRectangle = function (e, options) {
@@ -254,10 +255,11 @@ define([
 
     var paEvalSpace = function(variant, rect, win, options){
         var h = 0;
+
         if(variant.v==up){
-            h = variant.side==top ? (rect.top - win.scroll) : (rect.bottom - win.scroll);
+            h = variant.side==top ? rect.top : rect.bottom;
         }else{
-            h = variant.side==bottom ? (win.height + win.scroll - rect.bottom) : (win.height + win.scroll - rect.top);
+            h = variant.side==bottom ? (win.height  - rect.bottom) : (win.height  - rect.top);
         }
         var w= 0;
         if(variant.h==right){
@@ -286,7 +288,7 @@ define([
     }
 
     var paGetBestVariant = function(selfRect,targetrect,options){
-        var win = {width: $(window).width(),height:$(window).height(),scroll:$(window).scrollTop()};
+        var win = {width: $(window).width(),height:$(window).height()};
         var variants = [];
         if(!options.positions || options.positions.length==0){
             options.positions = PlaceAsidePositions.Default;
@@ -424,6 +426,8 @@ define([
         paSetPosition(e,targetrect,relative,variant,options);
 
         var resultRect = e.fst().getBoundingClientRect();
+
+
 
         var result = {
             base : selfRect,
