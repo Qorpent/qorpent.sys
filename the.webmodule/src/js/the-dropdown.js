@@ -52,6 +52,7 @@ define([
                 _.css("top", e.oldtop );
                 _.css("left", e.oldleft);
                 _.css("z-index", e.oldindex);
+                e.placeholder.hide();
             }
 
         },
@@ -145,7 +146,18 @@ define([
 
                 if (!!options.detach && !this.isNestedContainer(containerelement)) {
                     var rect = containerelement.getBoundingClientRect();
+                    var p = containerelement.placeholder;
+                    if(!p){
+                        p = containerelement.placeholder = $('<div/>');
+                        p.insertAfter(containerelement);
+                        p.hide();
+                    }
                     var _ = $(containerelement);
+                    p.css("min-width", _.outerWidth());
+                    p.css("min-height", _.outerHeight());
+                    p.css("margin", _.css("margin"));
+
+
                     containerelement.oldposition = _.css("position");
                     containerelement.oldtop = _.css("top");
                     containerelement.oldleft = _.css("left");
@@ -154,6 +166,7 @@ define([
                     _.css("top", rect.top);
                     _.css("left", rect.left);
                     _.css("z-index", 10000);
+                    containerelement.placeholder.show();
                 }
 
 
