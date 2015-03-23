@@ -133,7 +133,7 @@ define([
                     this.__compileDropDown(dropdown, options);
                 }
                 dropdown.__ddoptions = options;
-                $(dropdown).fitWidth();
+                //$(dropdown).fitWidth();
                 $(dropdown).placeAside(options);
 
                 $(dropdown).addClass('shown');

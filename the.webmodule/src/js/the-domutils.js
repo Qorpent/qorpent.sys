@@ -119,7 +119,8 @@ define([
     var FitWidthOptions = result.FitWidthOptions = function () {
         this.min = 50;
         this.max = ($(window).width() / 2);;
-        this.step = 10;
+        this.step = 100;
+        this.corrector=10;
         this.cache = false;
         this.reset = false;
         this.apply = true;
@@ -133,6 +134,8 @@ define([
 
 
     var fitWidth = result.fitWidth = function (e, options) {
+        //console.debug("fit called");
+        //console.trace();
         e = $(e);
         if (!e.exists())return;
         options = the.cast(FitWidthOptions, options);
@@ -154,7 +157,17 @@ define([
         while (currentSize > min) {
             e.width(currentSize - options.step);
             if (e.height() > height) {
-                e.width(currentSize);
+               // console.debug(currentSize);
+                var size= currentSize - options.step + options.corrector;
+                while(size <=currentSize){
+                    //console.debug(size);
+                    e.width(size);
+                   if(e.height()<=height){
+                       e.width(size);
+                       break;
+                   }
+                   size = size  +options.corrector;
+                }
                 break;
             }
             currentSize = currentSize - options.step;
@@ -229,13 +242,14 @@ define([
         this.positions = defaultPositions;
         this.defaultDisplay = 'flex';
         this.maxWidth = $(window).width() / 2;
-        this.minWidth = 50;
-        this.fitWidthStep = 10;
+        this.minWidth = 100;
+        this.fitWidthStep = 100;
         this.fixedContent = false;
         this.padding = 20;
     };
 
     var __getFittedRectangle = function (e, options) {
+        //console.debug("in __getFittedRectangle");
         el = e.fst();
         var vs = ensureVisibility(e, options.defaultDisplay, true);
         var selfRect = the.extend({},el.getBoundingClientRect());
