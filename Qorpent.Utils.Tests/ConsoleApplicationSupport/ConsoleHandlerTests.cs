@@ -39,10 +39,10 @@ namespace Qorpent.Utils.Tests.ConsoleApplicationSupport
 		public void CanCatchTimeout()
 		{
 			h.StandardArguments["timeout"] = "5";
-			h.Timeout = 1000;
+			h.Timeout = 2000;
 			var r = h.Run();
 			Assert.True(r.Timeouted);
-			//Assert.AreEqual("hello", r.Output.Trim());
+			Assert.AreEqual("hello", r.Output.Trim());
             //we commment it due to some issues on TC server machine
 		}
 

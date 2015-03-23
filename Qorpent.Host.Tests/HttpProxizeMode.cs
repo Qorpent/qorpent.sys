@@ -97,7 +97,7 @@ namespace Qorpent.Host.Tests
             {
                 h1.Start();
                 h2.Start();
-                Thread.Sleep(100);
+                Thread.Sleep(1000);
                 resultDirect = new HttpClient().GetString("http://127.0.0.1:14730/call1", "hello2");
                 result = new HttpClient().GetString("http://127.0.0.1:14740/call1", "hello2");
             }
