@@ -88,7 +88,7 @@ TableBase TheTable
 Script sys:support_for_filegroups_begin (C,S,R)
 FileGroup SECONDARY (C,S,R)
 Sequence ""dbo"".""thetable_seq"" (C,S,O)
-Table ""dbo"".""thetable"" (Id, Code, Name, Idx, Start, Finish, Tag, Version, ImportId, Active) (C,S,R)
+Table ""dbo"".""thetable"" (Id, Code, Name, Idx, Start, Finish, Tag, Version, ImportId, Active, Comment) (C,S,R)
 FUNCTION ""dbo"".""thetableIsActive"" (C,S,R)
 FUNCTION ""dbo"".""thetableGetCode"" (C,S,R)
 FUNCTION ""dbo"".""thetableGetId"" (C,S,R)

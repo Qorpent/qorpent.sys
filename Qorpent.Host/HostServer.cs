@@ -522,7 +522,9 @@ namespace Qorpent.Host{
 		/// </summary>
 		private void Close(){
 			CancellationTokenSource.Cancel();
-			_listener.Stop();
+		    if (_listener.IsListening) {
+		        _listener.Stop();
+		    }
 		}
 
 

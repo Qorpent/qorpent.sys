@@ -67,6 +67,7 @@ namespace Qorpent.Scaffolding.Application{
 				if (field.Name.LocalName == "using")continue;
 				if (field.Name.LocalName == "implements")continue;
 				if (field.Name.LocalName == "datatype")continue;
+				if (field.Name.LocalName == "trigger")continue;
 				if (field.Name.LocalName == "interface")continue;
                 if(!string.IsNullOrWhiteSpace(field.Value) && field.Value.Trim().StartsWith("(") && field.Value.Trim().EndsWith(")"))continue;
 			    

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Policy;
 using Qorpent.BSharp;
 using Qorpent.BSharp.Builder;
 using Qorpent.Utils.Extensions;
@@ -35,10 +36,15 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 					gopts.IncludeSqlObjectTypes = SqlObjectType.None;
 					gopts.ExcludeSqlObjectTypes = SqlObjectType.All;
 				}
+				if (conds.ContainsKey("DO_DYN")) {
+					gopts.IncludeSqlObjectTypes = SqlObjectType.Function|SqlObjectType.ClrTrigger|SqlObjectType.Procedure;
+					gopts.ExcludeSqlObjectTypes = SqlObjectType.All;
+				}
 				foreach (var c in context.Compiler.GetConditions())
 				{
 					if (c.Key.StartsWith("DO_")||c.Key.StartsWith("EX_")){
 						if(c.Key=="EX_ALL")continue;
+						if(c.Key=="DO_DYN")continue;
 						var type = c.Key.Substring(3);
 						var tp = type.To<SqlObjectType>(true);
 						if (tp != SqlObjectType.None){
