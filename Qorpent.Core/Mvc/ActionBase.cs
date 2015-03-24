@@ -17,7 +17,10 @@
 // PROJECT ORIGIN: Qorpent.Core/ActionBase.cs
 #endregion
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Security.Principal;
+using System.Text;
 using System.Xml.Linq;
 using Qorpent.Events;
 using Qorpent.IO;
@@ -164,6 +167,12 @@ namespace Qorpent.Mvc {
 				return result;
 			}
 			catch (Exception ex) {
+                var paramsSb = new StringBuilder();
+			    foreach (var parameter in context.Parameters) {
+			        paramsSb.Append(parameter.Key).Append("=").Append(parameter.Value).Append(", ");
+			    }
+                var message = string.Concat("ActionBase.Process action name [", context.ActionName, "] with params [", paramsSb.ToString(), "] error [", ex.Message, "]");
+                Trace.WriteLine(message, "error");
 				Log.Error("error", ex);
 				throw;
 			}
