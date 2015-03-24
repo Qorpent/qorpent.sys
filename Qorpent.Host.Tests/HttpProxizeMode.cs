@@ -19,10 +19,10 @@ namespace Qorpent.Host.Tests
         [Test]
         public void CanProxiseBasics() {
             var aconfig1 = new HostConfig();
-            aconfig1.AddQorpentBinding(71);
+            aconfig1.AddQorpentBinding(98);
             var aconfig2 = new HostConfig();
-            aconfig2.AddQorpentBinding(72);
-            aconfig2.Proxize["/call1"] = "http://127.0.0.1:14710";
+            aconfig2.AddQorpentBinding(99);
+            aconfig2.Proxize["/call1"] = "http://127.0.0.1:14980";
             var h1 = new HostServer(aconfig1);
             var h2 = new HostServer(aconfig2);
             h1.On("/call1", "hello!");
@@ -31,7 +31,7 @@ namespace Qorpent.Host.Tests
                 h1.Start();
                 h2.Start();
                 Thread.Sleep(100);
-                result = new HttpClient().GetString("http://127.0.0.1:14720/call1");
+                result = new HttpClient().GetString("http://127.0.0.1:14990/call1");
                 
             }
             finally {
@@ -46,10 +46,10 @@ namespace Qorpent.Host.Tests
         public void CanProxiseByAppid()
         {
             var aconfig1 = new HostConfig();
-            aconfig1.AddQorpentBinding(71);
+            aconfig1.AddQorpentBinding(98);
             var aconfig2 = new HostConfig();
-            aconfig2.AddQorpentBinding(72);
-            aconfig2.Proxize["/call1"] = "appid=71";
+            aconfig2.AddQorpentBinding(99);
+            aconfig2.Proxize["/call1"] = "appid=98";
             var h1 = new HostServer(aconfig1);
             var h2 = new HostServer(aconfig2);
             h1.On("/call1", "hello!");
@@ -59,7 +59,7 @@ namespace Qorpent.Host.Tests
                 h1.Start();
                 h2.Start(); 
                 Thread.Sleep(100);
-                result = new HttpClient().GetString("http://127.0.0.1:14720/call1");
+                result = new HttpClient().GetString("http://127.0.0.1:14990/call1");
             }
             finally
             {
@@ -75,10 +75,10 @@ namespace Qorpent.Host.Tests
         public void CanProxisePost()
         {
             var aconfig1 = new HostConfig();
-            aconfig1.AddQorpentBinding(73);
+            aconfig1.AddQorpentBinding(98);
             var aconfig2 = new HostConfig();
-            aconfig2.AddQorpentBinding(74);
-            aconfig2.Proxize["/call1"] = "appid=73";
+            aconfig2.AddQorpentBinding(99);
+            aconfig2.Proxize["/call1"] = "appid=98";
             var h1 = new HostServer(aconfig1);
             var h2 = new HostServer(aconfig2);
             h1.OnContext("/call1", _ => {
@@ -97,9 +97,9 @@ namespace Qorpent.Host.Tests
             {
                 h1.Start();
                 h2.Start();
-                Thread.Sleep(100);
-                resultDirect = new HttpClient().GetString("http://127.0.0.1:14730/call1", "hello2");
-                result = new HttpClient().GetString("http://127.0.0.1:14740/call1", "hello2");
+                Thread.Sleep(1000);
+                resultDirect = new HttpClient().GetString("http://127.0.0.1:14980/call1", "hello2");
+                result = new HttpClient().GetString("http://127.0.0.1:14990/call1", "hello2");
             }
             finally
             {

@@ -18,11 +18,19 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 		/// <returns></returns>
 		protected override IEnumerable<Production> InternalGenerate(IBSharpClass[] dbobjectclasses){
 			var model = (PersistentModel) _context.ExtendedData[PrepareModelTask.DefaultModelName];
-			string nsafetsqlf = Project.ProjectName + ".MSSQL.sql";
-			string dropsqlf = Project.ProjectName + ".MSSQL.drop.sql";
-			string nsafetsqlfpg = Project.ProjectName + ".PG.sql";
-			string dropsqlfpg = Project.ProjectName + ".PG.drop.sql";
+            var prefix = Project.ProjectName;
+            if (model.GenerationOptions.IncludeSqlObjectTypes != SqlObjectType.All || model.GenerationOptions.ExcludeSqlObjectTypes != SqlObjectType.None) {
+                prefix += "."+string.Format("IN_{0}_EX_{1}", model.GenerationOptions.IncludeSqlObjectTypes,
+                    model.GenerationOptions.ExcludeSqlObjectTypes).Replace(", ","_");
 
+            }
+
+            string nsafetsqlf = prefix + ".MSSQL.sql";
+            string dropsqlf = prefix + ".MSSQL.drop.sql";
+            string nsafetsqlfpg = prefix + ".PG.sql";
+            string dropsqlfpg = prefix + ".PG.drop.sql";
+
+		    
 
 			yield return
 				new Production{

@@ -30,6 +30,7 @@ namespace qs.tc
 			
 			if (!string.IsNullOrWhiteSpace(outstring)){
 				Console.Out.WriteLine(outstring);
+                Console.Out.Flush();
 			}
 			if (doreadln){
 				Console.WriteLine(Console.ReadLine());

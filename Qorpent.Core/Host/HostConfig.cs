@@ -74,11 +74,10 @@ namespace Qorpent.Host{
 			Initializers = new List<string>();
 			MachineName = Environment.MachineName;
             // HACK:
-            Trace.Listeners.Add(new UpdTraceListener("ip=234.5.5.1;port=5555;"));
-            Trace.WriteLine("Info Udp trace listener from HostConfig");
-            Trace.TraceWarning("Warning Udp trace listener from HostConfig");
-            Debug.WriteLine("Debug Udp trace listener from HostConfig");
-
+            Trace.Listeners.Add(new UdpTraceListener());
+            Trace.WriteLine("Info Udp trace listener from HostConfig", "info");
+            Trace.WriteLine("Warning Udp trace listener from HostConfig", "warning");
+            Debug.WriteLine("Debug Udp trace listener from HostConfig", "debug");
 		}
 		/// <summary>
 		///		Имя машины

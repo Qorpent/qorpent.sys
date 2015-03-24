@@ -54,6 +54,10 @@ namespace Qorpent.Db
 		datetime Version "Версия записи" default=(CURRENT_TIMESTAMP) idx=980  override=Entity
 		int ImportId "Идентификатор старой сущности при миграции" idx=990 nocode
 
+	class IWithComment "Сущность с комментарием" abstract
+		implements IWithComment
+		string Comment override=Entity
+
 	class IWithCode "Сущность с кодом" abstract
 		implements IWithCode
 		string Code "Уникальный запоминаемый бизнес-код" unique idx=200 override=Entity
@@ -112,6 +116,7 @@ namespace Qorpent.Db
 		import IWithName
 		import IWithActivity
 		import IWithTag
+		import IWithComment
 
 	class IWithProperties  "Интерфейс класс с локальными свойствами на уровне объектного кода"
 		implements IWithProperties

@@ -30,12 +30,14 @@ namespace Qorpent.Scaffolding.Application{
 
 			foreach (var @enum in enums){
 				if(@enum.Compiled.Attr("generate")=="false")continue;
+				if(@enum.Compiled.Attr("generate-app-cs")=="false")continue;
 				yield return GenerateEnum(@enum, refcache);
 			}
 
 			foreach (var @struct in structs)
 			{
 				if (@struct.Compiled.Attr("generate") == "false") continue;
+                if (@struct.Compiled.Attr("generate-app-cs") == "false") continue;
 				yield return GenerateStruct(@struct, refcache);
 			}
 
@@ -84,8 +86,9 @@ namespace Qorpent.Scaffolding.Application{
             return sb.ToString();
 	    }
 
-	    private Production GenerateStruct(IBSharpClass e, Dictionary<string, IBSharpClass> refcache){
-			var result = new Production{FileName = "DataTypes/" + e.FullName + ".cs", GetContent = () => GenerateInternal(e, refcache)};
+	    private Production GenerateStruct(IBSharpClass e, Dictionary<string, IBSharpClass> refcache) {
+	        var usenames = this.Project.Definition.Attr("NoFullNames").ToBool();
+			var result = new Production{FileName = "DataTypes/" + (usenames?e.Name:e.FullName) + ".cs", GetContent = () => GenerateInternal(e, refcache)};
 			return result;
 		}
 
@@ -274,7 +277,7 @@ namespace Qorpent.Scaffolding.Application{
 		public GenerateDataTypesInCSharpTask()
 			: base()
 		{
-			ClassSearchCriteria = "ui-data";
+			ClassSearchCriteria = "ui-data;attr:struct";
 			DefaultOutputName = "CSharp";
 		}
 
