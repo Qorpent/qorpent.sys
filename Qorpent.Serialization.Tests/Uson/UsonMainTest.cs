@@ -56,6 +56,22 @@ namespace Qorpent.Serialization.Tests.Uson
 			Console.WriteLine(x.ToJson());
 			Assert.AreEqual("{\"$query\":{\"x\":1}}", x.ToJson());
 		}
+
+		[Test]
+		public void KeepNumberLikeStringsAsStrings() {
+			var obj = new {x = "2.3", y = "2,3"};
+			var uobj = obj.ToUson();
+			Assert.AreEqual(@"{""x"":2.3,""y"":""2,3""}",uobj.ToJson());
+		}
+
+		[Test]
+		public void PreventLongsToBeTreatedAsNumbersDueToJavascriptOverflow() {
+			var l = 88888888888888888;
+			var obj = new { x = l, y = l.ToString() };
+			var uobj = obj.ToUson();
+			Assert.AreEqual(@"{""x"":""88888888888888888"",""y"":""88888888888888888""}", uobj.ToJson());
+		}
+
 		void t(string data, bool data2){
 			Console.WriteLine(data,data2);	
 		}
@@ -129,9 +145,9 @@ namespace Qorpent.Serialization.Tests.Uson
 @"<result a=""1"">
   <b x=""x"" c=""2012-01-01T12:00:00"" />
   <d _array=""true"">
-    <item />
-    <item>1</item>
-    <item>z</item>
+	<item />
+	<item>1</item>
+	<item>z</item>
   </d>
 </result>", xe.ToString());
 		}
