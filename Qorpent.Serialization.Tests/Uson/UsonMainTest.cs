@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Qorpent.Uson;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.Uson
 {
@@ -149,7 +150,7 @@ namespace Qorpent.Serialization.Tests.Uson
 	<item>1</item>
 	<item>z</item>
   </d>
-</result>", xe.ToString());
+</result>".Replace("\t", "").Replace(" ", "").LfOnly(), xe.ToString().Replace("\t", "").Replace(" ", "").LfOnly());
 		}
 
 		[Test]

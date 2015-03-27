@@ -349,6 +349,7 @@ end
 			}
 			string tname = Table == null ? TableName.SqlQuoteName() : Table.FullSqlName;
 			result = Regex.Replace(result, @"@this\.([\w_]+)\s*\(",  tname.Substring(0,tname.Length-1) + "$1\"(");
+			result = Regex.Replace(result, @"@this\.(_SEQ)",  tname.Substring(0,tname.Length-1) + "$1\"");
 			result = Regex.Replace(result, @"(?i)exec\s+@this\.([\w_]+)","exec "+ tname.Substring(0, tname.Length - 1) + "$1\"");
 			result = Regex.Replace(result, @"((^)|(\s))@this(($)|(\W))", "$1" + tname + "$4");
 			return result;
