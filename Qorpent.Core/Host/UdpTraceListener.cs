@@ -142,7 +142,7 @@ namespace Qorpent.Host {
             writer.WriteAttributeString("timestamp", XmlConvert.ToString(ConvertToUnixTimestamp(DateTime.Now)));
 
             WriteLog4jElement(writer, "message");
-            writer.WriteCData(RemoveInvalidXmlChars(message));
+            writer.WriteCData(Only30KBytes(RemoveInvalidXmlChars(message)));
             writer.WriteEndElement();
             WriteLog4jElementString(writer, "NDC", "");
             WriteLog4jElementString(writer, "throwable", "");
@@ -170,6 +170,15 @@ namespace Qorpent.Host {
 
             writer.Flush();
             return builder.ToString();
+        }
+
+        private string Only30KBytes(string message) {
+            if (message.Length > 30000) {
+                message = message.Substring(0, 30000) + "...";
+            }
+            return message;
+
+
         }
 
         private string RemoveInvalidXmlChars(string text) {

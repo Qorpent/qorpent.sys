@@ -18,7 +18,7 @@ namespace Qorpent.Host{
 	///     Конфигурация хоста
 	/// </summary>
 	[Serialize]
-	public class HostConfig{
+    public partial class HostConfig{
 		private readonly IList<HostBinding> _bindings;
 		private string _configFolder;
 		private string _dllFolder;
@@ -39,14 +39,27 @@ namespace Qorpent.Host{
 	    /// <param name="machineName"></param>
 	    /// <param name="log"></param>
 	    public HostConfig(XElement xml,IBSharpContext context = null, string machineName = null, IUserLog log = null) : this() {
+
 		    if (!string.IsNullOrWhiteSpace(machineName)) MachineName = machineName;
 		    if (null != log) Log = log;
 			if (null != xml){
 				LoadXmlConfig(xml,context);
 			}
-		}
+            CreateLogger();
+	    }
 
-		/// <summary>
+	    private void CreateLogger() {
+	        if (LoggerHost != "" && LoggerPort != 0 && LoggerName != "") {
+	            Trace.Listeners.Add(new UdpTraceListener(LoggerHost, LoggerPort, LoggerName));
+	        }
+	        LogDebug("Debug Test");
+	        LogInfo("Info Test");
+	        LogWarning("Warning Test");
+	        LogError("Error Test");
+	        LogFatal("Fatal Test");
+	    }
+
+	    /// <summary>
 		///     Формирует конфиг по умолчанию
 		/// </summary>
 		public HostConfig(){
@@ -73,11 +86,6 @@ namespace Qorpent.Host{
 			Modules = new Dictionary<string, string>();
 			Initializers = new List<string>();
 			MachineName = Environment.MachineName;
-            // HACK:
-            Trace.Listeners.Add(new UdpTraceListener());
-            Trace.WriteLine("Info Udp trace listener from HostConfig", "info");
-            Trace.WriteLine("Warning Udp trace listener from HostConfig", "warning");
-            Debug.WriteLine("Debug Udp trace listener from HostConfig", "debug");
 		}
 		/// <summary>
 		///		Имя машины
@@ -118,6 +126,18 @@ namespace Qorpent.Host{
 		/// Настройка доступа для Cross-Site-Scripting по происхождению запроса
 		/// </summary>
 		public string AccessAllowOrigin { get; set; }
+		/// <summary>
+		/// Имя логгера
+		/// </summary>
+        public string LoggerName { get; set; }
+		/// <summary>
+		/// Хост логгера
+		/// </summary>
+        public string LoggerHost { get; set; }
+		/// <summary>
+		/// Порт логгера
+		/// </summary>
+        public int LoggerPort { get; set; }
 
 		/// <summary>
 		/// </summary>
@@ -423,8 +443,13 @@ namespace Qorpent.Host{
 	        var appid = xml.ResolveValue("appid", "0").ToInt();
 	        if (appid != 0) {
 	            AddQorpentBinding(appid);
+                LogInfo(string.Concat("AppId is [", appid , "]"));
 	        }
-                
+
+            LoggerName = xml.ResolveValue("loggername", "").ToStr();
+            LoggerHost = xml.ResolveValue("loggerhost", "").ToStr();
+            LoggerPort = xml.ResolveValue("loggerport", "0").ToInt();
+
             this.AccessAllowOrigin = xml.ResolveValue("origin", "");
 
 	        foreach (var e in xml.Elements("require")) {
