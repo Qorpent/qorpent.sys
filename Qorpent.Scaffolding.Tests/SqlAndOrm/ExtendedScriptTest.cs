@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model;
 
 namespace Qorpent.Scaffolding.Tests.SqlAndOrm{

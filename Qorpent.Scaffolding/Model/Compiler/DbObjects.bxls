@@ -64,8 +64,17 @@ namespace Qorpent.Db
 		string GetCode @id=int : (
 			return (select Code from @this where Id = @id )
 		)
-		string GetId @code=string  : (
+		long GetId @code=string  : (
 			return (select Id from @this where Code = @code )
+		)
+		long Get @id=string : (
+			DECLARE @result INT;
+			IF ISNUMERIC(@id) BEGIN 
+				SELECT @result = Id FROM @this WHERE Id = @id;
+			END ELSE
+				SELECT @result = Id FROM @this WHERE Code = @id;
+			END
+			RETURN @result;
 		)
 		
 	class IWithName "Сущность с именем" abstract

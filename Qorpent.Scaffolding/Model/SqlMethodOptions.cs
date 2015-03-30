@@ -18,5 +18,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// Признак того, что результат запроса является кэшируемым
 		/// </summary>
 		Cacheable =2 ,
+
+       
 	}
 }

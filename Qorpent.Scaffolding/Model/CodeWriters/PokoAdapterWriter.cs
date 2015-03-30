@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Qorpent.Data;
 using Qorpent.Model;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model.CodeWriters{
 	/// <summary>
@@ -15,19 +17,56 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		/// <param name="output"></param>
 		public PokoAdapterWriter(PersistentClass cls, TextWriter output = null) : base(cls, output){
 		}
+        /// <summary>
+        /// Forced to generate only wrapper part
+        /// null - generate, no block others,
+        /// false - no wrappers generated
+        /// true - only wrappers
+        /// </summary>
+	    public bool? Wrappers { get; set; }
 
-		/// <summary>
+	    /// <summary>
 		/// </summary>
 		protected override void InternalRun(){
 			WriteStartClass();
-			WriteGetTableQuery();
-			WriteGetSelectQuery();
-			WriteSingleRecordProcessor();
-			WriteEnumerableReaderProcessor();
-			WriteWriteAccessors();
-			WriteEndClass();
+	        if (null == Wrappers || !Wrappers.Value) {
+	            WriteGetTableQuery();
+	            WriteGetSelectQuery();
+	            WriteSingleRecordProcessor();
+	            WriteEnumerableReaderProcessor();
+	            WriteWriteAccessors();
+	        }
+	        if (null == Wrappers || Wrappers.Value) {
+	            WriteWrappers();
+	        }
+	        WriteEndClass();
 		}
-		private void WriteWriteAccessors() {
+
+	    private void WriteWrappers() {
+	        var wrappers = Cls.FindObjects<SqlFunction>("cs-wrap");
+	        foreach (var function in wrappers) {
+	            WriteWrapper(function);
+	        }
+	    }
+
+	    private void WriteWrapper(SqlFunction function) {
+	        if (function.IsProcedure) {
+	            WriteProcedureWrapper(function);
+	        }
+	        else {
+	            WriteFunctionWrapper(function);
+	        }
+	    }
+
+	    private void WriteFunctionWrapper(SqlFunction function) {
+	        throw new System.NotImplementedException();
+	    }
+
+	    private void WriteProcedureWrapper(SqlFunction function) {
+	        throw new System.NotImplementedException();
+	    }
+
+	    private void WriteWriteAccessors() {
 			var fields = Cls.GetOrderedFields().Where(_ => !_.NoSql && !_.NoCode).ToArray();
 			if (Cls.AccessMode.HasFlag(DbAccessMode.Write)) {
 				WriteSummary("Insert a record", 2, "Affected rows");

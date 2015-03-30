@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Scaffolding.Model.SqlWriters;
 using Qorpent.Utils;

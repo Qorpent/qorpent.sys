@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using Qorpent.BSharp;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model{
-	/// <summary>
+    /// <summary>
 	///     Описывает целостную промежуточную модель данных
 	/// </summary>
 	public class PersistentModel{

@@ -1,4 +1,5 @@
-﻿using Qorpent.Serialization;
+﻿using Qorpent.Data;
+using Qorpent.Serialization;
 
 namespace Qorpent.Scaffolding.Model.SqlWriters{
 	/// <summary>

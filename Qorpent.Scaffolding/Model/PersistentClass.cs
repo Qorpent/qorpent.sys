@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.BSharp;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
@@ -78,10 +79,10 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		public string Namespace { get; set; }
 
-        /// <summary>
-        /// Признак того, что объект не требует генерации в SQL
-        /// </summary>
-        public bool NoSql { get; set; }
+		/// <summary>
+		/// Признак того, что объект не требует генерации в SQL
+		/// </summary>
+		public bool NoSql { get; set; }
 
 		/// <summary>
 		///     Полное имя для SQL
@@ -185,7 +186,7 @@ namespace Qorpent.Scaffolding.Model{
 
 		private void ReadInterfaces(IBSharpClass c, XElement xml){
 			foreach (string e in xml.Elements("implements").Select(_ => _.Attr("code")).Distinct()
-			                        .OrderBy(_ => _.StartsWith("I") ? "ZZZ" + _ : _)){
+									.OrderBy(_ => _.StartsWith("I") ? "ZZZ" + _ : _)){
 				CSharpInterfaces.Add(e);
 			}
 		}
@@ -273,7 +274,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <param name="onlyforeigns"></param>
 		/// <returns></returns>
 		public IEnumerable<PersistentClass> GetAccessibleClasses(IList<PersistentClass> visited = null,
-		                                                         bool onlyforeigns = false){
+																 bool onlyforeigns = false){
 			visited = visited ?? new List<PersistentClass>();
 			foreach (PersistentClass cls in GetReferencedClasses().ToArray()){
 				if (onlyforeigns && cls == this) continue;
@@ -299,5 +300,53 @@ namespace Qorpent.Scaffolding.Model{
 				dep.UpgadeRank(i + 1, visited);
 			}
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+	    public IEnumerable<SqlObject> FindObjects(string search) {
+	        foreach (var sqlObject in SqlObjects) {
+	            if (sqlObject.FullName.ToLowerInvariant().Contains(search.ToLowerInvariant())) yield return sqlObject;
+	            if (null!=sqlObject.Definition && sqlObject.Definition.ToString().ToLowerInvariant().Contains(search.ToLowerInvariant())) yield return sqlObject;
+	        }
+	    }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSql"></typeparam>
+        /// <param name="search"></param>
+        /// <returns></returns>
+	    public IEnumerable<TSql> FindObjects<TSql>(string search) {
+            return FindObjects(search).OfType<TSql>();
+        } 
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public SqlObject GetObject(string name) {
+		    return
+		        SqlObjects.FirstOrDefault(
+		            _ =>
+		                _.Name.ToLowerInvariant() == name.ToLowerInvariant() ||
+		                _.FullName.ToLowerInvariant() == name.ToLowerInvariant());
+		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <typeparam name="TSql"></typeparam>
+        /// <returns></returns>
+        public TSql GetObject<TSql>(string name) where TSql : SqlObject
+        {
+            return
+		        SqlObjects.OfType<TSql>().FirstOrDefault(
+		            _ =>
+		                _.Name.ToLowerInvariant() == name.ToLowerInvariant() ||
+		                _.FullName.ToLowerInvariant() == name.ToLowerInvariant());
+		
+        }
 	}
 }

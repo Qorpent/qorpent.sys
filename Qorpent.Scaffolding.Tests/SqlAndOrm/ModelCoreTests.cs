@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Qorpent.BSharp;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model;
 using Qorpent.Serialization;
 
@@ -35,6 +37,44 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 			Assert.AreEqual("Int32", pk.DataType.CSharpDataType);
 			Assert.True(cls.Fields.ContainsKey("id"),"field must be regestered in cls with lowercase");
 		}
+
+	    [Test]
+	    public void CanFindSqlObjectByPartialName() {
+            var code = @"
+require data
+class a prototype=dbtable
+    void X cs-wrap=select-id
+        @id=long : (
+            RETURN 101;
+        )";
+	        var table = PersistentModel.Compile(code)["a"];
+	        var func = table.GetObject("x") as SqlFunction;
+	        var funcgen = table.GetObject<SqlFunction>("x");
+	        var funcfind = table.FindObjects<SqlFunction>("cs-Wrap").First();
+            Assert.NotNull(func);
+            Assert.AreSame(func,funcgen);
+            Assert.AreSame(func,funcfind);
+            Assert.True(func.Body.Contains("101"));
+	    }
+
+        [Test]
+        public void ValidWrapperTypeAndReturnDetection()
+        {
+            var code = @"
+require data
+class a prototype=dbtable
+    void X cs-wrap=scalar returns=int
+        @id=long : (
+            RETURN 101;
+        )";
+            var table = PersistentModel.Compile(code)["a"];
+            var func = table.GetObject("x") as SqlFunction;
+            Assert.True(func.IsProcedure);
+           
+            Assert.AreEqual("int",func.ReturnType.Code);
+            
+        }
+
 
 		[Test]
 		public void DetectsImplicitReferences(){

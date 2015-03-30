@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Scaffolding.Model.SqlWriters;
 

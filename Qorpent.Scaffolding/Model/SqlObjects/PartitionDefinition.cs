@@ -1,5 +1,6 @@
 ﻿using System.Xml.Linq;
 using Qorpent.BSharp;
+using Qorpent.Data;
 
 namespace Qorpent.Scaffolding.Model.SqlObjects{
 	/// <summary>

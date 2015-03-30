@@ -150,6 +150,32 @@ class a prototype=dbtable qorpent-access=ReadWrite
 			Console.WriteLine(code);
 			Assert.AreEqual(expected.Trim(), code.Trim());
 		}
+
+       
+
+	    [Test]
+	    public void SqlCallsWrapper() {
+            var code = @"
+require data
+class a prototype=dbtable
+    void X cs-wrap=select-id
+        @id=long : (
+            RETURN 1;
+        )";
+	        var model = PersistentModel.Compile(code);
+	        var table = model["a"];
+	        var function = table.GetObject<SqlFunction>("X");
+            Assert.NotNull(function);
+	        var writer = new PokoAdapterWriter(table) {
+	            WithHeader = false,
+                Wrappers = true
+	        };
+	        var result = writer.ToString();
+            Console.WriteLine(result);
+            Assert.True(result.Contains("zzz"));
+	    }
+
+
 		[Test]
 		public void SimplestTable(){
 			var model = PersistentModel.Compile(@"

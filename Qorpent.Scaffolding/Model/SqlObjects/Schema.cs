@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Scaffolding.Model.SqlObjects{
+﻿using Qorpent.Data;
+
+namespace Qorpent.Scaffolding.Model.SqlObjects{
 	/// <summary>
 	///     Схема
 	/// </summary>
