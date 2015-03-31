@@ -10,8 +10,8 @@ using Qorpent.Utils.Extensions;
 namespace Qorpent.Core.Tests.Data {
     [TestFixture]
     public class QueryExecutorTest {
-        private SqlQueryExecutor E;
-        private SqlCallInfo C;
+        private DbCommandExecutor E;
+        private DbCommandWrapper C;
         TraceListener L = new ConsoleTraceListener();
         private const string Connection = "Server=(local);Database=tempdb;Trusted_Connection=true;";
         [TestFixtureSetUp]
@@ -52,8 +52,8 @@ END;
 
         [SetUp]
         public void Setup() {
-            E = new SqlQueryExecutor();
-            C = new SqlCallInfo {ConnectionString = Connection, ObjectName = "test"};
+            E = new DbCommandExecutor();
+            C = new DbCommandWrapper {ConnectionString = Connection, ObjectName = "test"};
         }
 
         [Test]
@@ -71,7 +71,7 @@ END;
 
         [Test]
         public void Scalar() {
-            C.Notation = SqlCallNotation.Scalar;
+            C.Notation = DbCallNotation.Scalar;
             C.ParametersSoruce = new {id = 2, type = "SCALAR"};
             E.Execute(C).Wait();
             Assert.AreEqual(4,C.Result);
@@ -80,7 +80,7 @@ END;
         [Test]
         public void ClonedPreparedVersionSupport()
         {
-            C.Notation = SqlCallNotation.Scalar;
+            C.Notation = DbCallNotation.Scalar;
             C.ParametersSoruce = new { id = 2, type = "SCALAR" };
             E.Execute(C).Wait();
             Assert.AreEqual(4, C.Result);
@@ -92,7 +92,7 @@ END;
         [Test]
         public void SingleRow()
         {
-            C.Notation = SqlCallNotation.SingleRow;
+            C.Notation = DbCallNotation.SingleRow;
             C.ParametersSoruce = new { id = 2, str="x", type = "SINGLE" };
             E.Execute(C).Wait();
             Assert.IsInstanceOf<Dictionary<string,object>>(C.Result);
@@ -114,7 +114,7 @@ END;
         [Test]
         public void SingleObject()
         {
-            C.Notation = SqlCallNotation.SingleObject;
+            C.Notation = DbCallNotation.SingleObject;
             C.TargetType = typeof (A);
             C.ParametersSoruce = new { id = 2, str = "x", type = "SINGLE" };
             E.Execute(C).Wait();
@@ -126,7 +126,7 @@ END;
 
         [Test]
         public void Reader() {
-            C.Notation = SqlCallNotation.Reader;
+            C.Notation = DbCallNotation.Reader;
             C.ParametersSoruce = new { id = 2, str = "x", type = "READER" };
             E.Execute(C).Wait();
             Assert.IsInstanceOf<object[]>(C.Result);
@@ -140,7 +140,7 @@ END;
         [Test]
         public void ObjectReader()
         {
-            C.Notation = SqlCallNotation.ObjectReader;
+            C.Notation = DbCallNotation.ObjectReader;
             C.TargetType = typeof(A);
             C.ParametersSoruce = new { id = 2, str = "x", type = "READER" };
             E.Execute(C).Wait();
@@ -156,7 +156,7 @@ END;
         [Test]
         public void MultipleReader()
         {
-            C.Notation = SqlCallNotation.MultipleReader;
+            C.Notation = DbCallNotation.MultipleReader;
             C.ParametersSoruce = new { id = 2, str = "x", type = "MULTIPLE" };
             E.Execute(C).Wait();
             Assert.IsInstanceOf<object[]>(C.Result);
@@ -169,7 +169,7 @@ END;
         }
         [Test]
         public void MultipleObject() {
-            C.Notation = SqlCallNotation.MultipleObject;
+            C.Notation = DbCallNotation.MultipleObject;
             C.TargetTypes = new[] {typeof (A), typeof (A2)};
             C.ParametersSoruce = new { id = 2, str = "x", type = "MULTIPLE" };
             E.Execute(C).Wait();

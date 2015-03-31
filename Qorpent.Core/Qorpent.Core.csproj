@@ -106,9 +106,9 @@
     <Compile Include="Config\TreeConfigBase.cs" />
     <Compile Include="Config\TreeConfigBaseElementsList.cs" />
     <Compile Include="CoreExtensions.cs" />
-    <Compile Include="Data\ISqlQueryExecutor.cs" />
-    <Compile Include="Data\SqlQueryExecutor.cs" />
-    <Compile Include="Data\SqlCallNotation.cs" />
+    <Compile Include="Data\IDbCommandExecutor.cs" />
+    <Compile Include="Data\DbCommandExecutor.cs" />
+    <Compile Include="Data\DbCallNotation.cs" />
     <Compile Include="Data\DocumentStorageOptions.cs" />
     <Compile Include="Data\IContext.cs" />
     <Compile Include="Data\IDocumentStorage.cs" />
@@ -118,8 +118,8 @@
     <Compile Include="Data\ISqlParametersSource.cs" />
     <Compile Include="Data\ObjectDataCacheHints.cs" />
     <Compile Include="Data\ParamAttribute.cs" />
-    <Compile Include="Data\SqlCallInfo.cs" />
-    <Compile Include="Data\SqlCallParameter.cs" />
+    <Compile Include="Data\DbCommandWrapper.cs" />
+    <Compile Include="Data\DbParameter.cs" />
     <Compile Include="Data\SqlDialect.cs" />
     <Compile Include="Data\SqlObjectType.cs" />
     <Compile Include="Dsl\ReplaceDescriptor.cs" />

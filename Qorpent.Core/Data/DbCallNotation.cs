@@ -5,7 +5,7 @@ namespace Qorpent.Data {
     /// Вариант вызова обертки
     /// </summary>
     [Flags]
-    public enum SqlCallNotation {
+    public enum DbCallNotation {
         /// <summary>
         /// void, noquery
         /// </summary>

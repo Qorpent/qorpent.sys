@@ -12,14 +12,14 @@ namespace Qorpent.Core.Tests.Data
     [TestFixture]
     public class NoDbQueryExecutorTest {
         protected FakeConnectionProvider Cp;
-        protected SqlQueryExecutor E;
-        protected SqlCallInfo C;
+        protected DbCommandExecutor E;
+        protected DbCommandWrapper C;
 
         [SetUp]
         public void Setup() {
             Cp = new FakeConnectionProvider();
-            E = new SqlQueryExecutor {ConnectionProvider = Cp};
-            C = new SqlCallInfo {Query = "/**/", NoExecute = true};
+            E = new DbCommandExecutor {ConnectionProvider = Cp};
+            C = new DbCommandWrapper {Query = "/**/", NoExecute = true};
         }
 
         [Test]
@@ -116,8 +116,8 @@ namespace Qorpent.Core.Tests.Data
             C.ObjectName = "test";
             C.ObjectType = SqlObjectType.Procedure;
             C.Parameters = new[] {
-                new SqlCallParameter {Name = "id"},
-                new SqlCallParameter {Name = "name"},
+                new DbParameter {Name = "id"},
+                new DbParameter {Name = "name"},
             };
             E.Execute(C).Wait();
             Assert.AreEqual("EXEC test @id=@id, @name=@name",C.Query);
@@ -130,8 +130,8 @@ namespace Qorpent.Core.Tests.Data
             C.ObjectName = "test";
             C.ObjectType = SqlObjectType.Function;
             C.Parameters = new[] {
-                new SqlCallParameter {Name = "id"},
-                new SqlCallParameter {Name = "name"},
+                new DbParameter {Name = "id"},
+                new DbParameter {Name = "name"},
             };
             E.Execute(C).Wait();
             Assert.AreEqual("SELECT test(@id, @name)", C.Query);
@@ -143,15 +143,15 @@ namespace Qorpent.Core.Tests.Data
             C.ObjectName = "test";
             C.ObjectType = SqlObjectType.TableFunction;
             C.Parameters = new[] {
-                new SqlCallParameter {Name = "id"},
-                new SqlCallParameter {Name = "name"},
+                new DbParameter {Name = "id"},
+                new DbParameter {Name = "name"},
             };
             E.Execute(C).Wait();
             Assert.AreEqual("SELECT * FROM test(@id, @name)", C.Query);
         }
 
-        public class ParametersProxy : ISqlQueryExecutor {
-            public async Task<SqlCallInfo> Execute(SqlCallInfo info) {
+        public class ParametersProxy : IDbCommandExecutor {
+            public async Task<DbCommandWrapper> Execute(DbCommandWrapper info) {
                 info.Result = new object[] {
                     new Dictionary<string, object> {{"name", "id"}, {"type", "int"}},
                     new Dictionary<string, object> {{"name", "name"}, {"type", "nvarchar"}},
@@ -173,9 +173,9 @@ namespace Qorpent.Core.Tests.Data
         }
 
 
-        public class ObjectTypeProxy : ISqlQueryExecutor
+        public class ObjectTypeProxy : IDbCommandExecutor
         {
-            public async Task<SqlCallInfo> Execute(SqlCallInfo info) {
+            public async Task<DbCommandWrapper> Execute(DbCommandWrapper info) {
                 info.Result = "TF";
                 return info;
             }
@@ -187,8 +187,8 @@ namespace Qorpent.Core.Tests.Data
             C.Query = "";
             C.ObjectName = "test";
             C.Parameters = new[] {
-                new SqlCallParameter {Name = "id"},
-                new SqlCallParameter {Name = "name"},
+                new DbParameter {Name = "id"},
+                new DbParameter {Name = "name"},
             };
             E.Execute(C).Wait();
             Assert.AreEqual(SqlObjectType.TableFunction,C.ObjectType);

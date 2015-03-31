@@ -5,7 +5,7 @@ namespace Qorpent.Data {
     /// <summary>
     /// Унифицированный описатель вызова объекта
     /// </summary>
-    public class SqlCallInfo {
+    public class DbCommandWrapper {
         /// <summary>
         /// строка подключения
         /// </summary>
@@ -29,7 +29,7 @@ namespace Qorpent.Data {
         /// <summary>
         /// calling notation
         /// </summary>
-        public SqlCallNotation Notation { get; set; }
+        public DbCallNotation Notation { get; set; }
         /// <summary>
         /// type of object to be call
         /// </summary>
@@ -37,7 +37,7 @@ namespace Qorpent.Data {
         /// <summary>
         /// definition of parameters in valid order
         /// </summary>
-        public SqlCallParameter[] Parameters { get; set; }
+        public DbParameter[] Parameters { get; set; }
         /// <summary>
         /// Object to get parameter values from
         /// </summary>
@@ -53,11 +53,11 @@ namespace Qorpent.Data {
         /// <summary>
         /// Callback for handling Exceptions
         /// </summary>
-        public Action<SqlCallInfo, Exception> OnError { get; set; }
+        public Action<DbCommandWrapper, Exception> OnError { get; set; }
         /// <summary>
         /// Callback for log messages from connection
         /// </summary>
-        public Action<SqlCallInfo, string> OnMessage { get; set; }
+        public Action<DbCommandWrapper, string> OnMessage { get; set; }
         /// <summary>
         /// True - caller will send trace information
         /// </summary>
@@ -87,8 +87,8 @@ namespace Qorpent.Data {
         /// Копия исходного контекста за исключением самого запроса и его результата
         /// </summary>
         /// <returns></returns>
-        public SqlCallInfo CloneNoQuery() {
-            var result = new SqlCallInfo {
+        public DbCommandWrapper CloneNoQuery() {
+            var result = new DbCommandWrapper {
                 Connection = Connection,
                 ConnectionString = ConnectionString,
                 Trace = Trace,
@@ -112,14 +112,14 @@ namespace Qorpent.Data {
         /// </summary>
         /// <param name="parametersSource"></param>
         /// <returns></returns>
-        public SqlCallInfo Clone(object parametersSource = null) {
+        public DbCommandWrapper Clone(object parametersSource = null) {
             var noexecute = NoExecute;
             if (!IsPrepared) {
                 NoExecute = true;
-                SqlQueryExecutor.Default.Execute(this).Wait();
+                DbCommandExecutor.Default.Execute(this).Wait();
             }
             NoExecute = noexecute;
-            var result = (SqlCallInfo) MemberwiseClone();
+            var result = (DbCommandWrapper) MemberwiseClone();
             result.Result = null;
             result.PreparedCommand = null;
             if (null != parametersSource) {

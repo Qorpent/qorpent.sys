@@ -14,8 +14,8 @@ namespace Qorpent.Data {
 	/// <summary>
 	///     Asynchronous wrapper for Executing Sql Queries
 	/// </summary>
-	[ContainerComponent(Lifestyle.Transient, Name="main.queryexecutor", ServiceType = typeof (ISqlQueryExecutor))]
-	public class SqlQueryExecutor : ServiceBase, ISqlQueryExecutor {
+	[ContainerComponent(Lifestyle.Transient, Name="main.dbxecutor", ServiceType = typeof (IDbCommandExecutor))]
+	public class DbCommandExecutor : ServiceBase, IDbCommandExecutor {
 		private const string PrepareParametersQueryTemplate = @"
  select PARAMETER_NAME as name, DATA_TYPE as type from information_schema.parameters
 where specific_name='{1}' and specific_schema = '{0}'
@@ -25,15 +25,15 @@ order by ORDINAL_POSITION
 		private const string GetObjectTypeInfoQueryTemplate =
 			@"select type from sys.objects where schema_id=SCHEMA_ID('{0}') and name = '{1}'";
 
-	    private static ISqlQueryExecutor _default;
-	    public static ISqlQueryExecutor Default {
+	    private static IDbCommandExecutor _default;
+	    public static IDbCommandExecutor Default {
 	        get {
 	            if (null == _default) {
 	                if (Applications.Application.HasCurrent) {
-	                    _default = Applications.Application.Current.Container.Get<ISqlQueryExecutor>("main.queryexecutor");
+	                    _default = Applications.Application.Current.Container.Get<IDbCommandExecutor>("main.dbexecutor");
 	                }
 	                else {
-                        _default = new SqlQueryExecutor();
+                        _default = new DbCommandExecutor();
 	                    
 	                }
 	            }
@@ -47,14 +47,14 @@ order by ORDINAL_POSITION
 		/// <summary>
 		///     Setup for custom override - test or filtering propose
 		/// </summary>
-		public ISqlQueryExecutor ProxyExecutor { get; set; }
+		public IDbCommandExecutor ProxyExecutor { get; set; }
 
 		/// <summary>
 		///     Производит асинхронный вызов Sql
 		/// </summary>
 		/// <param name="info"></param>
 		/// <returns></returns>
-		public async Task<SqlCallInfo> Execute(SqlCallInfo info) {
+		public async Task<DbCommandWrapper> Execute(DbCommandWrapper info) {
 			try {
 				if (null == info.PreparedCommand) {
 					PrepareConnection(info);
@@ -90,7 +90,7 @@ order by ORDINAL_POSITION
 			return info;
 		}
 
-		private Task<SqlCallInfo> InternalExecute(SqlCallInfo info) {
+		private Task<DbCommandWrapper> InternalExecute(DbCommandWrapper info) {
 			if (null != ProxyExecutor) {
 				if (info.Trace) {
 					Trace.TraceInformation("redirect execution to proxy: " + info);
@@ -100,7 +100,7 @@ order by ORDINAL_POSITION
 			return Task.Run(() => InternalExecuteSync(info));
 		}
 
-		private SqlCallInfo InternalExecuteSync(SqlCallInfo info) {
+		private DbCommandWrapper InternalExecuteSync(DbCommandWrapper info) {
 			if (info.Trace) {
 				Trace.TraceInformation("begin execution: " + info);
 			}
@@ -130,30 +130,30 @@ order by ORDINAL_POSITION
 			return info;
 		}
 
-		private void ExecuteCommand(SqlCallInfo info) {
-			if (info.Notation == SqlCallNotation.None) {
+		private void ExecuteCommand(DbCommandWrapper info) {
+			if (info.Notation == DbCallNotation.None) {
 				info.PreparedCommand.ExecuteNonQuery();
 			}
-			else if (info.Notation == SqlCallNotation.Scalar) {
+			else if (info.Notation == DbCallNotation.Scalar) {
 				var result = info.PreparedCommand.ExecuteScalar();
 				info.Result = result;
 			}
-			else if (0 != (info.Notation & SqlCallNotation.ReaderBased)) {
+			else if (0 != (info.Notation & DbCallNotation.ReaderBased)) {
 				using (var reader = info.PreparedCommand.ExecuteReader()) {
-					if (info.Notation == SqlCallNotation.SingleRow || info.Notation == SqlCallNotation.SingleObject) {
+					if (info.Notation == DbCallNotation.SingleRow || info.Notation == DbCallNotation.SingleObject) {
 						if (reader.Read()) {
 							info.Result = SetupSingleResult(info, reader);
 						}
 					}
-					else if (info.Notation == SqlCallNotation.Reader || info.Notation == SqlCallNotation.ObjectReader) {
+					else if (info.Notation == DbCallNotation.Reader || info.Notation == DbCallNotation.ObjectReader) {
 						var result = new List<object>();
 						while (reader.Read()) {
 							result.Add(SetupSingleResult(info,reader));
 						}
 						info.Result = result.ToArray();
 					}
-					else if (info.Notation == SqlCallNotation.MultipleReader ||
-							 info.Notation == SqlCallNotation.MultipleObject) {
+					else if (info.Notation == DbCallNotation.MultipleReader ||
+							 info.Notation == DbCallNotation.MultipleObject) {
 						var resultNumber = 0;
 						var resultAdvanced = false;
 						var result = new List<object>();
@@ -176,7 +176,7 @@ order by ORDINAL_POSITION
 			}
 		}
 
-		private object SetupSingleResult(SqlCallInfo info, IDataReader reader, int resultNumber = 0) {
+		private object SetupSingleResult(DbCommandWrapper info, IDataReader reader, int resultNumber = 0) {
 			var result = new Dictionary<string, object>();
 			for (var i = 0; i < reader.FieldCount; i++)
 			{
@@ -188,10 +188,10 @@ order by ORDINAL_POSITION
 				}
 				result[name] = value;
 			}
-			if (info.Notation == SqlCallNotation.ObjectReader || info.Notation == SqlCallNotation.SingleObject ||
-				info.Notation == SqlCallNotation.MultipleObject) {
+			if (info.Notation == DbCallNotation.ObjectReader || info.Notation == DbCallNotation.SingleObject ||
+				info.Notation == DbCallNotation.MultipleObject) {
 				var type = info.TargetType;
-				if (info.Notation == SqlCallNotation.MultipleObject) {
+				if (info.Notation == DbCallNotation.MultipleObject) {
 					if (null != info.TargetTypes && 0 != info.TargetTypes.Length) {
 						if (resultNumber < info.TargetTypes.Length) {
 							type = info.TargetTypes[resultNumber];
@@ -224,7 +224,7 @@ order by ORDINAL_POSITION
 			return result;
 		}
 
-		private void PrepareQuery(SqlCallInfo info) {
+		private void PrepareQuery(DbCommandWrapper info) {
 			if (info.Trace) {
 				Trace.TraceInformation("begin prepare query: " + info);
 			}
@@ -271,7 +271,7 @@ order by ORDINAL_POSITION
 			}
 		}
 
-		private void PrepareTSqlObjectQuery(SqlCallInfo info) {
+		private void PrepareTSqlObjectQuery(DbCommandWrapper info) {
 			if (info.ObjectType == SqlObjectType.None) {
 				DetectObjectType(info);
 			}
@@ -315,7 +315,7 @@ order by ORDINAL_POSITION
 			info.Query = q.ToString();
 		}
 
-		private void DetectObjectType(SqlCallInfo info) {
+		private void DetectObjectType(DbCommandWrapper info) {
 			var schema = "dbo";
 			var name = info.ObjectName;
 			if (name.Contains(".")) {
@@ -329,13 +329,13 @@ order by ORDINAL_POSITION
 			else {
 				var callProxy = info.CloneNoQuery();
 				callProxy.Query = query;
-				callProxy.Notation = SqlCallNotation.Scalar;
+				callProxy.Notation = DbCallNotation.Scalar;
 				ProxyExecutor.Execute(callProxy).Wait();
 				SetupObjectTypeValue(info, callProxy.Result);
 			}
 		}
 
-		private void PrepareParameters(SqlCallInfo info) {
+		private void PrepareParameters(DbCommandWrapper info) {
 			if (info.Trace) {
 				Trace.TraceInformation("begin prepare parameters: " + info);
 			}
@@ -357,7 +357,7 @@ order by ORDINAL_POSITION
 			}
 		}
 
-		private void StoreParametersFromSource(SqlCallInfo info) {
+		private void StoreParametersFromSource(DbCommandWrapper info) {
             if (info.ParametersBinded) return;
 		    if (null == info.ParametersSoruce) return;
 			var dictionary = info.ParametersSoruce.ToDict();
@@ -373,7 +373,7 @@ order by ORDINAL_POSITION
 		    info.ParametersBinded = true;
 		}
 
-		private void PrepareParametersByObject(SqlCallInfo info) {
+		private void PrepareParametersByObject(DbCommandWrapper info) {
          
 		    
 			if (info.Dialect != SqlDialect.SqlServer) {
@@ -396,15 +396,15 @@ order by ORDINAL_POSITION
 
 		}
 
-		private void SetupByProxy(SqlCallInfo info, string query) {
+		private void SetupByProxy(DbCommandWrapper info, string query) {
 			var proxyCall = info.CloneNoQuery();
 			proxyCall.Query = query;
-			proxyCall.Notation = SqlCallNotation.Reader;
+			proxyCall.Notation = DbCallNotation.Reader;
 
 			ProxyExecutor.Execute(proxyCall).Wait();
 			if (proxyCall.Ok) {
 				var result = (object[]) proxyCall.Result;
-				var parameters = new List<SqlCallParameter>();
+				var parameters = new List<DbParameter>();
 				foreach (IDictionary<string, object> record in result) {
 					parameters.Add(SetupParameter(record["name"].ToStr(), record["type"].ToStr()));
 				}
@@ -415,7 +415,7 @@ order by ORDINAL_POSITION
 			}
 		}
 
-		private static void DetectTypeByOwnConnection(SqlCallInfo info, string query) {
+		private static void DetectTypeByOwnConnection(DbCommandWrapper info, string query) {
 			var connecitonIsOpened = info.Connection.State == ConnectionState.Open;
 			try {
 				if (!connecitonIsOpened) {
@@ -433,7 +433,7 @@ order by ORDINAL_POSITION
 			}
 		}
 
-		private static void SetupObjectTypeValue(SqlCallInfo info, object result) {
+		private static void SetupObjectTypeValue(DbCommandWrapper info, object result) {
 			if (null == result || DBNull.Value == result) {
 				throw new Exception("cannot detect object type for " + info.ObjectName);
 			}
@@ -449,7 +449,7 @@ order by ORDINAL_POSITION
 			}
 		}
 
-		private static void SetupByOwnConnection(SqlCallInfo info, string query) {
+		private static void SetupByOwnConnection(DbCommandWrapper info, string query) {
 			var connecitonIsOpened = info.Connection.State == ConnectionState.Open;
 			try {
 				if (!connecitonIsOpened) {
@@ -457,7 +457,7 @@ order by ORDINAL_POSITION
 				}
 				var cmd = info.Connection.CreateCommand();
 				cmd.CommandText = query;
-				var parameters = new List<SqlCallParameter>();
+				var parameters = new List<DbParameter>();
 				using (var reader = cmd.ExecuteReader()) {
 					while (reader.Read()) {
 						var name = reader.GetString(0);
@@ -474,8 +474,8 @@ order by ORDINAL_POSITION
 			}
 		}
 
-		private static SqlCallParameter SetupParameter(string name, string type) {
-			var parameter = new SqlCallParameter {Name = name};
+		private static DbParameter SetupParameter(string name, string type) {
+			var parameter = new DbParameter {Name = name};
 			if (parameter.Name.StartsWith("@")) {
 				parameter.Name = parameter.Name.Substring(1);
 			}
@@ -494,17 +494,17 @@ order by ORDINAL_POSITION
 			return parameter;
 		}
 
-		private void PrepareParametersByQuery(SqlCallInfo info) {
+		private void PrepareParametersByQuery(DbCommandWrapper info) {
 			if (info.Dialect != SqlDialect.SqlServer) {
 				throw new Exception("cannot setup parameters for non-TSql query");
 			}
 
 			var references = Regex.Matches(info.Query, @"@[\w\d]+").OfType<Match>().Select(_ => _.Value.Substring(1))
 				.Distinct();
-			info.Parameters = references.Select(_ => new SqlCallParameter {Name = _}).ToArray();
+			info.Parameters = references.Select(_ => new DbParameter {Name = _}).ToArray();
 		}
 
-		private void PrepareConnection(SqlCallInfo info) {
+		private void PrepareConnection(DbCommandWrapper info) {
 			if (info.Trace) {
 				Trace.TraceInformation("begin prepare connection: " + info);
 			}
