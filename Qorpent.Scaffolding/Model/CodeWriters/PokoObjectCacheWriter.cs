@@ -79,7 +79,17 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
             o.Write("\t\t///<summary>{0}</summary>\r\n", function.Comment);
             o.WriteLine("\t\tpublic {0} {1}Generic (object parameters) {{",type,name);
             o.WriteLine("\t\t\tvar command = {0}.Clone(parameters,GetConnection());",privateCommandName);
-            o.WriteLine("\t\t\treturn DbCommandExecutor.Default.GetResultSync(command);");
+            o.WriteLine("\t\t\tvar result = DbCommandExecutor.Default.GetResultSync(command);");
+            if (type != "void") {
+                if (type != "object") {
+                    o.WriteLine("\t\t\tvar convertedResult = result.To<{0}>();", type);
+                    o.WriteLine("\t\t\treturn convertedResult;");
+                }
+                else {
+                    o.WriteLine("\t\t\treturn result;");
+                }
+                
+            }
             o.WriteLine("\t\t}");
             o.Write("\t\t///<summary>{0}</summary>\r\n", function.Comment);
             o.Write("\t\tpublic {0} {1} (", type, name);
@@ -209,6 +219,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			    o.WriteLine("using System.Data;");
 			    o.WriteLine("using Qorpent.Data;");
 			    o.WriteLine("using Qorpent.Data.DataCache;");
+                o.WriteLine("using Qorpent.Utils.Extensions;");
 			
 			    o.Write("using {0}.Adapters;\r\n", Cls.Namespace);
 			    o.Write("namespace {0}.ObjectCaches {{\r\n", Cls.Namespace);

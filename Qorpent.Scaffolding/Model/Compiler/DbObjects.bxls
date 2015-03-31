@@ -69,9 +69,9 @@ namespace Qorpent.Db
 		)
 		long Get @id=string : (
 			DECLARE @result INT;
-			IF ISNUMERIC(@id) BEGIN 
+			IF ISNUMERIC(@id) = 1 BEGIN 
 				SELECT @result = Id FROM @this WHERE Id = @id;
-			END ELSE
+			END ELSE BEGIN
 				SELECT @result = Id FROM @this WHERE Code = @id;
 			END
 			RETURN @result;

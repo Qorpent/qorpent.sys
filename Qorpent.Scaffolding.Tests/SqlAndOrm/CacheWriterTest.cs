@@ -12,8 +12,8 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm {
         {
             var code = @"
 require data
-class a prototype=dbtable cs-return=long
-    void X 'Bla-bla' cs-wrap=scalar
+class a prototype=dbtable 
+    void X 'Bla-bla' cs-wrap=scalar cs-return=long
         @id=long : (
             SELECT 1;
         )
@@ -38,26 +38,29 @@ class a prototype=dbtable cs-return=long
             var result = writer.ToString();
             Console.WriteLine(result);
             var simpleResult = Regex.Replace(result, @"\s", "").Replace("\"","'");
-            Assert.AreEqual(simpleResult,Regex.Replace( @"private DbCommandWrapper _XWrapper = new DbCommandWrapper{ObjectName='X',Notation=DbCallNotation.Scalar};
+            Assert.AreEqual(simpleResult, Regex.Replace(@"		private DbCommandWrapper _XWrapper = new DbCommandWrapper{ObjectName='X',Notation=DbCallNotation.Scalar};
 		///<summary>Bla-bla</summary>
-		public object XGeneric (object parameters) {
+		public Int64 XGeneric (object parameters) {
 			var command = _XWrapper.Clone(parameters,GetConnection());
-			return DbCommandExecutor.Default.GetResultSync(command);
+			var result = DbCommandExecutor.Default.GetResultSync(command);
+			var convertedResult = result.To<Int64>();
+			return convertedResult;
 		}
 		///<summary>Bla-bla</summary>
-		public object X (Int64 id = default(Int64)){
+		public Int64 X (Int64 id = default(Int64)){
 			return XGeneric (new{id});
 		}
 		private DbCommandWrapper _YWrapper = new DbCommandWrapper{ObjectName='Y',Notation=DbCallNotation.MultipleReader};
 		///<summary>Ta-da</summary>
 		public object YGeneric (object parameters) {
 			var command = _YWrapper.Clone(parameters,GetConnection());
-			return DbCommandExecutor.Default.GetResultSync(command);
+			var result = DbCommandExecutor.Default.GetResultSync(command);
+			return result;
 		}
 		///<summary>Ta-da</summary>
 		public object Y (Int64 id = default(Int64)){
 			return YGeneric (new{id});
-		}",@"\s",""));
+		}", @"\s", ""));
         }
     }
 }

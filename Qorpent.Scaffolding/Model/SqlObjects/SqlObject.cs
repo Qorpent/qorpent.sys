@@ -336,7 +336,10 @@ end
 			}
 			else if (name == "function" || name == "void" || !string.IsNullOrWhiteSpace(e.Value)){
 				yield return new SqlFunction().Setup(null, cls, null, e);
-			}
+            }
+            else if (name == "script") {
+                yield return new SqlScript().Setup(cls.Model,cls.TargetClass, e);
+            }
 		}
 
 		/// <summary>

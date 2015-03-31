@@ -105,6 +105,8 @@ namespace Qorpent.Data{
         /// 
         /// </summary>
         TableFunction = 1<<19,
+
+       
 		/// <summary>
 		///     Все
 		/// </summary>
