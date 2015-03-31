@@ -57,25 +57,7 @@ class a prototype=dbtable
             Assert.True(func.Body.Contains("101"));
 	    }
 
-        [Test]
-        public void ValidWrapperTypeAndReturnDetection()
-        {
-            var code = @"
-require data
-class a prototype=dbtable
-    void X cs-wrap=scalar returns=int
-        @id=long : (
-            RETURN 101;
-        )";
-            var table = PersistentModel.Compile(code)["a"];
-            var func = table.GetObject("x") as SqlFunction;
-            Assert.True(func.IsProcedure);
-           
-            Assert.AreEqual("int",func.ReturnType.Code);
-            
-        }
-
-
+      
 		[Test]
 		public void DetectsImplicitReferences(){
 			var model = PersistentModel.Compile(@"
@@ -132,6 +114,7 @@ Table ""dbo"".""thetable"" (Id, Code, Name, Idx, Start, Finish, Tag, Version, Im
 FUNCTION ""dbo"".""thetableIsActive"" (C,S,R)
 FUNCTION ""dbo"".""thetableGetCode"" (C,S,R)
 FUNCTION ""dbo"".""thetableGetId"" (C,S,R)
+FUNCTION ""dbo"".""thetableGet"" (C,S,R)
 VIEW ""dbo"".""thetableFull"" (C,S,R)
 TRIGGER ""dbo"".""thetablePreventDeletionOfSystemDefinedRows"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), create.Trim());

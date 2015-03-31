@@ -147,6 +147,7 @@ using System.Text;
 using System.Data;
 using Qorpent.Data;
 using Qorpent.Data.DataCache;
+using Qorpent.Utils.Extensions;
 using Test.Adapters;
 namespace Test.ObjectCaches {
 	///<summary>

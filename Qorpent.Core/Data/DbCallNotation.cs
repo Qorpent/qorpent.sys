@@ -43,7 +43,7 @@ namespace Qorpent.Data {
         /// <summary>
         /// multiple Orm set
         /// </summary>
-        MultipleObject=Object | Multiple,
+        MultipleObject=Object | Multiple | Reader,
         /// <summary>
         /// single row as dictionary
         /// </summary>
