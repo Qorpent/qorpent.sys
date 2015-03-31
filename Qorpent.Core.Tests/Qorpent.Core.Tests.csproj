@@ -30,9 +30,9 @@
     <Compile Include="BSharp\Runtime\BSharpRuntimeTestBase.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptorTests.cs" />
     <Compile Include="ConfigBaseTest.cs" />
-    <Compile Include="Data\QueryExecutorTest.cs" />
+    <Compile Include="Data\DbCommandExecutorTest.cs" />
     <Compile Include="Data\FakeConnectionProvider.cs" />
-    <Compile Include="Data\NoDbQueryExecutorTest.cs" />
+    <Compile Include="Data\OfflineDbCommandExecutorTest.cs" />
     <Compile Include="Dsl\LexInfoTest.cs" />
     <Compile Include="EnvironmentInfoTest.cs" />
     <Compile Include="Events\ResetEventDataTest.cs" />

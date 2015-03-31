@@ -51,6 +51,10 @@ namespace Qorpent.Data.DataCache
 				_sqlLog = value;
 			}
 		}
+        /// <summary>
+        /// Признак трассирования команд враппера
+        /// </summary>
+        public bool Trace { get; set; }
 
 		private const int COMMONIDBASE = -100;
 		private const int COMMONIDSTEP = -10;
@@ -94,6 +98,14 @@ namespace Qorpent.Data.DataCache
 			}
 			
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+	    public IDbConnection GetConnection() {
+	        return ConnectionProvider.GetConnection(ConnectionString);
+	    }
+
 		/// <summary>
 		/// 
 		/// </summary>

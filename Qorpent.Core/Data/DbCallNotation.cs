@@ -15,32 +15,43 @@ namespace Qorpent.Data {
         /// </summary>
         Reader = 1,
         /// <summary>
-        /// multiple reader
+        /// Множественный результат
         /// </summary>
-        MultipleReader = 2,
+        Multiple = 2,
+        /// <summary>
+        /// Строго единичный запрос
+        /// </summary>
+        Single = 4,
+        /// <summary>
+        /// Объектный результат
+        /// </summary>
+        Object = 8,
+
         /// <summary>
         /// scalar
         /// </summary>
-        Scalar = 4,
+        Scalar = 16,
         /// <summary>
-        /// automatic Orm
+        /// Simple object reader
         /// </summary>
-        ObjectReader = 8,
+        ObjectReader = Reader | Object,
+        /// <summary>
+        /// multiple reader
+        /// </summary>
+        MultipleReader = Reader | Multiple,
+        
         /// <summary>
         /// multiple Orm set
         /// </summary>
-        MultipleObject=16,
+        MultipleObject=Object | Multiple,
         /// <summary>
         /// single row as dictionary
         /// </summary>
-        SingleRow = 32,
+        SingleRow = Reader | Single,
         /// <summary>
         /// single object with Orm
         /// </summary>
-        SingleObject = 64,
-        /// <summary>
-        /// признак того, что предполагается чтение в табличном виде
-        /// </summary>
-        ReaderBased = Reader | MultipleReader | ObjectReader | SingleRow | MultipleObject | SingleObject
+        SingleObject = Reader | Single |Object,
+       
     }
 }

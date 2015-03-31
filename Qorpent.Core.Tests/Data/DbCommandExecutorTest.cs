@@ -9,7 +9,7 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Core.Tests.Data {
     [TestFixture]
-    public class QueryExecutorTest {
+    public class DbCommandExecutorTest {
         private DbCommandExecutor E;
         private DbCommandWrapper C;
         TraceListener L = new ConsoleTraceListener();

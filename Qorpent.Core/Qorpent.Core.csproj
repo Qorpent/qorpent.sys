@@ -106,6 +106,7 @@
     <Compile Include="Config\TreeConfigBase.cs" />
     <Compile Include="Config\TreeConfigBaseElementsList.cs" />
     <Compile Include="CoreExtensions.cs" />
+    <Compile Include="Data\DbCommandExecutorExtesions.cs" />
     <Compile Include="Data\IDbCommandExecutor.cs" />
     <Compile Include="Data\DbCommandExecutor.cs" />
     <Compile Include="Data\DbCallNotation.cs" />

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-using System.Web.UI.HtmlControls;
 using NUnit.Framework;
 using Qorpent.Data;
 
 namespace Qorpent.Core.Tests.Data
 {
     [TestFixture]
-    public class NoDbQueryExecutorTest {
+    public class OfflineDbCommandExecutorTest {
         protected FakeConnectionProvider Cp;
         protected DbCommandExecutor E;
         protected DbCommandWrapper C;

@@ -11,7 +11,7 @@ using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data {
-	/// <summary>
+    /// <summary>
 	///     Asynchronous wrapper for Executing Sql Queries
 	/// </summary>
 	[ContainerComponent(Lifestyle.Transient, Name="main.dbxecutor", ServiceType = typeof (IDbCommandExecutor))]
@@ -138,22 +138,15 @@ order by ORDINAL_POSITION
 				var result = info.PreparedCommand.ExecuteScalar();
 				info.Result = result;
 			}
-			else if (0 != (info.Notation & DbCallNotation.ReaderBased)) {
+			else if (info.Notation.HasFlag(DbCallNotation.Reader)) {
 				using (var reader = info.PreparedCommand.ExecuteReader()) {
-					if (info.Notation == DbCallNotation.SingleRow || info.Notation == DbCallNotation.SingleObject) {
+					if (info.Notation.HasFlag(DbCallNotation.Single)) {
 						if (reader.Read()) {
 							info.Result = SetupSingleResult(info, reader);
 						}
 					}
-					else if (info.Notation == DbCallNotation.Reader || info.Notation == DbCallNotation.ObjectReader) {
-						var result = new List<object>();
-						while (reader.Read()) {
-							result.Add(SetupSingleResult(info,reader));
-						}
-						info.Result = result.ToArray();
-					}
-					else if (info.Notation == DbCallNotation.MultipleReader ||
-							 info.Notation == DbCallNotation.MultipleObject) {
+					
+					else if (info.Notation.HasFlag(DbCallNotation.Multiple)) {
 						var resultNumber = 0;
 						var resultAdvanced = false;
 						var result = new List<object>();
@@ -172,6 +165,15 @@ order by ORDINAL_POSITION
 						result.Add(current.ToArray());
 						info.Result = result.ToArray();
 					}
+                    else
+                    {
+                        var result = new List<object>();
+                        while (reader.Read())
+                        {
+                            result.Add(SetupSingleResult(info, reader));
+                        }
+                        info.Result = result.ToArray();
+                    }
 				}
 			}
 		}

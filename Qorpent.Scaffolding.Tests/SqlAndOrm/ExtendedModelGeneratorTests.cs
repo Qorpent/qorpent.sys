@@ -5,7 +5,7 @@ using Qorpent.Scaffolding.Model.CodeWriters;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
-	[TestFixture]
+    [TestFixture]
 	public class ExtendedModelGeneratorTests
 	{
 		[Test]

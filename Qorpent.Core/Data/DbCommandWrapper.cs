@@ -107,25 +107,33 @@ namespace Qorpent.Data {
         /// </summary>
         public bool ParametersBinded { get; set; }
 
+        
+
         /// <summary>
         /// Формирует копию запроса с применением новых параметров
         /// </summary>
         /// <param name="parametersSource"></param>
+        /// <param name="connection"></param>
         /// <returns></returns>
-        public DbCommandWrapper Clone(object parametersSource = null) {
+        public DbCommandWrapper Clone(object parametersSource = null, IDbConnection connection = null)  {
             var noexecute = NoExecute;
+            if (null != connection && null==this.Connection)
+            {
+                Connection = connection;
+            }
             if (!IsPrepared) {
                 NoExecute = true;
                 DbCommandExecutor.Default.Execute(this).Wait();
             }
             NoExecute = noexecute;
-            var result = (DbCommandWrapper) MemberwiseClone();
+            var result = (DbCommandWrapper)MemberwiseClone();
             result.Result = null;
             result.PreparedCommand = null;
             if (null != parametersSource) {
                 result.ParametersSoruce = parametersSource;
                 result.ParametersBinded = false;
             }
+            
             return result;
         }
     }
