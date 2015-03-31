@@ -1,5 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Core", "Qorpent.Core\Qorpent.Core.csproj", "{880F65EA-1A22-4672-A137-FFC91290A209}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{690AA1DD-503E-47C0-AA58-53529331D847}"
@@ -120,6 +122,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bstimetest", "bstimetest\bstimetest.csproj", "{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.XDiffDataUpdater", "Qorpent.XDiffDataUpdater\Qorpent.XDiffDataUpdater.csproj", "{89E22910-D2AA-41E2-9717-FC7B27DEC865}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Integration.SqlExtensions", "Qorpent.Integration.SqlExtensions\Qorpent.Integration.SqlExtensions.csproj", "{91E303FD-01E0-4F79-A6DC-E68BF24B2B04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -325,6 +329,12 @@ Global
 		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
+		{91E303FD-01E0-4F79-A6DC-E68BF24B2B04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91E303FD-01E0-4F79-A6DC-E68BF24B2B04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91E303FD-01E0-4F79-A6DC-E68BF24B2B04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91E303FD-01E0-4F79-A6DC-E68BF24B2B04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91E303FD-01E0-4F79-A6DC-E68BF24B2B04}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
+		{91E303FD-01E0-4F79-A6DC-E68BF24B2B04}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

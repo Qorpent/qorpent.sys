@@ -14,7 +14,7 @@
     <OutputPath>bin\SQL2008\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NV3</DefineConstants>
     <DocumentationFile>\Qorpent.Integration.SqlExtensions.XML</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
