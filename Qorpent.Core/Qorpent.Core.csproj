@@ -107,7 +107,7 @@
     <Compile Include="Config\TreeConfigBaseElementsList.cs" />
     <Compile Include="CoreExtensions.cs" />
     <Compile Include="Data\ISqlQueryExecutor.cs" />
-    <Compile Include="Data\QueryExecutor.cs" />
+    <Compile Include="Data\SqlQueryExecutor.cs" />
     <Compile Include="Data\SqlCallNotation.cs" />
     <Compile Include="Data\DocumentStorageOptions.cs" />
     <Compile Include="Data\IContext.cs" />

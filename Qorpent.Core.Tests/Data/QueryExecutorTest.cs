@@ -78,6 +78,18 @@ END;
         }
 
         [Test]
+        public void ClonedPreparedVersionSupport()
+        {
+            C.Notation = SqlCallNotation.Scalar;
+            C.ParametersSoruce = new { id = 2, type = "SCALAR" };
+            E.Execute(C).Wait();
+            Assert.AreEqual(4, C.Result);
+            C = C.Clone(new {id = 4, type = "SCALAR"});
+            E.Execute(C).Wait();
+            Assert.AreEqual(8,C.Result);
+        }
+
+        [Test]
         public void SingleRow()
         {
             C.Notation = SqlCallNotation.SingleRow;

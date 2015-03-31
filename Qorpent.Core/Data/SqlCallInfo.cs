@@ -1,7 +1,5 @@
 using System;
 using System.Data;
-using System.Text;
-using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data {
     /// <summary>
@@ -28,8 +26,6 @@ namespace Qorpent.Data {
         public bool Ok {
             get { return null == Error; }
         }
-
-
         /// <summary>
         /// calling notation
         /// </summary>
@@ -91,7 +87,7 @@ namespace Qorpent.Data {
         /// Копия исходного контекста за исключением самого запроса и его результата
         /// </summary>
         /// <returns></returns>
-        public SqlCallInfo GetNoQueryCopy() {
+        public SqlCallInfo CloneNoQuery() {
             var result = new SqlCallInfo {
                 Connection = Connection,
                 ConnectionString = ConnectionString,
@@ -100,6 +96,36 @@ namespace Qorpent.Data {
                 OnError = OnError,
                 OnMessage = OnMessage
             };
+            return result;
+        }
+
+        public bool IsPrepared {
+            get { return null != PreparedCommand; }
+        }
+        /// <summary>
+        /// флаг, что парамтеры из внешнего источника уже привязаны
+        /// </summary>
+        public bool ParametersBinded { get; set; }
+
+        /// <summary>
+        /// Формирует копию запроса с применением новых параметров
+        /// </summary>
+        /// <param name="parametersSource"></param>
+        /// <returns></returns>
+        public SqlCallInfo Clone(object parametersSource = null) {
+            var noexecute = NoExecute;
+            if (!IsPrepared) {
+                NoExecute = true;
+                SqlQueryExecutor.Default.Execute(this).Wait();
+            }
+            NoExecute = noexecute;
+            var result = (SqlCallInfo) MemberwiseClone();
+            result.Result = null;
+            result.PreparedCommand = null;
+            if (null != parametersSource) {
+                result.ParametersSoruce = parametersSource;
+                result.ParametersBinded = false;
+            }
             return result;
         }
     }

@@ -14,7 +14,7 @@ namespace Qorpent.Data {
 	/// <summary>
 	///     Asynchronous wrapper for Executing Sql Queries
 	/// </summary>
-	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISqlQueryExecutor))]
+	[ContainerComponent(Lifestyle.Transient, Name="main.queryexecutor", ServiceType = typeof (ISqlQueryExecutor))]
 	public class SqlQueryExecutor : ServiceBase, ISqlQueryExecutor {
 		private const string PrepareParametersQueryTemplate = @"
  select PARAMETER_NAME as name, DATA_TYPE as type from information_schema.parameters
@@ -24,6 +24,23 @@ order by ORDINAL_POSITION
 
 		private const string GetObjectTypeInfoQueryTemplate =
 			@"select type from sys.objects where schema_id=SCHEMA_ID('{0}') and name = '{1}'";
+
+	    private static ISqlQueryExecutor _default;
+	    public static ISqlQueryExecutor Default {
+	        get {
+	            if (null == _default) {
+	                if (Applications.Application.HasCurrent) {
+	                    _default = Applications.Application.Current.Container.Get<ISqlQueryExecutor>("main.queryexecutor");
+	                }
+	                else {
+                        _default = new SqlQueryExecutor();
+	                    
+	                }
+	            }
+                return _default;
+	            
+	        }
+	    }
 
 		[Inject] public IDatabaseConnectionProvider ConnectionProvider;
 
@@ -224,6 +241,8 @@ order by ORDINAL_POSITION
 
 			var cmd = info.PreparedCommand = info.Connection.CreateCommand();
 			cmd.CommandText = info.Query;
+
+            StoreParametersFromSource(info);
 			foreach (var parameter in info.Parameters) {
 				var p = cmd.CreateParameter();
 			    
@@ -308,7 +327,7 @@ order by ORDINAL_POSITION
 				DetectTypeByOwnConnection(info, query);
 			}
 			else {
-				var callProxy = info.GetNoQueryCopy();
+				var callProxy = info.CloneNoQuery();
 				callProxy.Query = query;
 				callProxy.Notation = SqlCallNotation.Scalar;
 				ProxyExecutor.Execute(callProxy).Wait();
@@ -331,7 +350,7 @@ order by ORDINAL_POSITION
 				PrepareParametersByObject(info);
 			}
 
-			StoreParametersFromSource(info);
+            StoreParametersFromSource(info);
 
 			if (info.Trace) {
 				Trace.TraceInformation("end prepare parameters: " + info);
@@ -339,19 +358,24 @@ order by ORDINAL_POSITION
 		}
 
 		private void StoreParametersFromSource(SqlCallInfo info) {
+            if (info.ParametersBinded) return;
 		    if (null == info.ParametersSoruce) return;
 			var dictionary = info.ParametersSoruce.ToDict();
 			foreach (var o in dictionary.ToArray()) {
 				dictionary[o.Key.ToLowerInvariant()] = o.Value;
 			}
 			foreach (var pd in info.Parameters) {
+			    pd.Value = null;
 				if (dictionary.ContainsKey(pd.Name.ToLowerInvariant())) {
 					pd.Value = dictionary[pd.Name.ToLowerInvariant()];
 				}
 			}
+		    info.ParametersBinded = true;
 		}
 
 		private void PrepareParametersByObject(SqlCallInfo info) {
+         
+		    
 			if (info.Dialect != SqlDialect.SqlServer) {
 				throw new Exception("cannot setup parameters for non-TSql query");
 			}
@@ -369,10 +393,11 @@ order by ORDINAL_POSITION
 			else {
 				SetupByProxy(info, query);
 			}
+
 		}
 
 		private void SetupByProxy(SqlCallInfo info, string query) {
-			var proxyCall = info.GetNoQueryCopy();
+			var proxyCall = info.CloneNoQuery();
 			proxyCall.Query = query;
 			proxyCall.Notation = SqlCallNotation.Reader;
 
