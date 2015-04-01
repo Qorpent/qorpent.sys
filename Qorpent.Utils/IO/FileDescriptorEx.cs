@@ -10,11 +10,10 @@ using Qorpent.Utils.Git;
 
 namespace Qorpent.Utils.IO
 {
-
     /// <summary>
     /// Описывает файловый или условно файловый ресурс с дополнительными возможностями
     /// </summary>
-    public class FileDescriptorEx {
+    public class FileDescriptorEx : IVersionedDescriptor {
         private GitCommitInfo _commitInfo;
         private DateTime _version;
         private string _hash;

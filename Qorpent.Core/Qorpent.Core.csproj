@@ -179,6 +179,7 @@
     <Compile Include="IO\IHashedDirectory.cs" />
     <Compile Include="IO\IStreamProxy.cs" />
     <Compile Include="BSharp\BSharpProjectDescriptor.cs" />
+    <Compile Include="IO\IVersionedDescriptor.cs" />
     <Compile Include="IO\IWebFileProvider.cs" />
     <Compile Include="IO\IWebFileRecord.cs" />
     <Compile Include="IO\IWebFileResolver.cs" />
@@ -303,6 +304,8 @@
     <Compile Include="Serialization\XHtml5XmlWriter.cs" />
     <Compile Include="ServiceState.cs" />
     <Compile Include="TransactionAction.cs" />
+    <Compile Include="Updater\IUpdateModule.cs" />
+    <Compile Include="Updater\UpdateModule.cs" />
     <Compile Include="Verdict.cs" />
     <Compile Include="VerdictType.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
