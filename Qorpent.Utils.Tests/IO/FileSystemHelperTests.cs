@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using NUnit.Framework;
 
-namespace Qorpent.Utils.Tests
+namespace Qorpent.Utils.Tests.IO
 {
     [TestFixture]
     public class FileSystemHelperTests
@@ -30,6 +25,45 @@ namespace Qorpent.Utils.Tests
             Assert.True(dir.Replace("\\", "/").EndsWith("/FileSystemHelperTests_ResetTemporaryDirectory"));
             Assert.True(Directory.Exists(dir));
             FileSystemHelper.KillDirectory(dir);
+        }
+
+
+        [TestCase(
+            @"/*!hello
+    world */
+x
+
+",
+            @"hello
+    world "
+            )]
+         [TestCase(
+            @"<!--!hello
+    world -->
+x
+
+",
+            @"hello
+    world "
+            )]
+        [TestCase(
+            @"//!hello
+//!    world
+x
+",
+            @"hello
+    world"
+            )]
+        [TestCase(
+            @"#!hello
+#!    world
+x
+",
+            @"hello
+    world"
+            )]
+        public void ReadRawHeader(string src,string result) {
+            Assert.AreEqual(result,FileSystemHelper.ReadRawHeader(new StringReader(src)));
         }
     }
 }

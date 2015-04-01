@@ -4,8 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Qorpent.Bxl;
 
 namespace Qorpent.Utils
 {
@@ -22,11 +25,11 @@ namespace Qorpent.Utils
 	    /// <returns></returns>
 	    public static string ResetTemporaryDirectory(string name = null, string tmproot = null) {
             var root = Path.GetTempPath();
-            if (!string.IsNullOrWhiteSpace(tmproot)) {
+            if (!String.IsNullOrWhiteSpace(tmproot)) {
                 Directory.CreateDirectory(tmproot);
                 root = tmproot;
             }
-	        if (string.IsNullOrWhiteSpace(name)) {
+	        if (String.IsNullOrWhiteSpace(name)) {
 	            var method = new StackFrame(1, true).GetMethod();
 	            name = method.DeclaringType.Name + "_" + method.Name;
 	        }
@@ -61,5 +64,108 @@ namespace Qorpent.Utils
 
 
 		}
+
+	    /// <summary>
+	    /// Считывет заголовок исходного файла в формате BXL/XML
+	    /// </summary>
+	    /// <param name="fullname"></param>
+	    /// <returns></returns>
+	    public static XElement ReadXmlHeader(string fullname) {
+	        var result = new XElement("stub");
+	        if (!String.IsNullOrWhiteSpace(fullname) && File.Exists(fullname)) {
+	            var rawHeader = ReadRawHeader(fullname);
+	            result = GetXml(rawHeader);
+	        }
+	        return result;
+	    }
+
+	    private static XElement GetXml(string rawHeader) {
+	        XElement result = null;
+            if (!String.IsNullOrWhiteSpace(rawHeader)) {
+	            if (rawHeader.StartsWith("<")) {
+	                result = XElement.Parse(rawHeader);
+	            }
+	            else {
+	                result = WellKnownHelper.Create<IBxlParser>().Parse(rawHeader);
+	                if (result.Elements().Count() == 1) {
+	                    result = result.Elements().First();
+	                }
+	            }
+	        }
+	        return result;
+	    }
+
+	    /// <summary>
+        /// Считывет заголовок исходного файла в формате BXL/XML
+        /// </summary>
+        /// <param name="fullname"></param>
+        /// <returns></returns>
+        public static XElement ReadXmlHeader(TextReader input) {
+	        var raw = ReadRawHeader(input);
+	        return GetXml(raw);
+	    }
+
+	    /// <summary>
+	    /// Считывает спецальный хидер файла
+	    /// </summary>
+	    /// <param name="fileName"></param>
+	    /// <returns></returns>
+	    public static string ReadRawHeader(string fileName) {
+	        if (String.IsNullOrWhiteSpace(fileName)) return "";
+	        if (!File.Exists(fileName)) return "";	        
+	        using (var fr = new StreamReader(File.OpenRead(fileName)))
+            {
+                return ReadRawHeader(fr);
+	        }
+	    }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+	    public static string ReadRawHeader(TextReader input) {
+	        var header = "";
+	        bool starterRead = false;
+	        bool first = true;
+	        bool multiline = false;
+	        while (true) {
+                var line = input.ReadLine();
+                if(null==line) break;
+                if(string.IsNullOrWhiteSpace(line))continue;
+	            
+	            if (first) {
+	                if (line.Contains("#!") || line.Contains("//!") || line.Contains("<!--!") || line.Contains("/*!")) {
+	                    var value = Regex.Match(line, @"((\#)|(//)|(<!--)|(/\*))!(?<v>[\s\S]+)").Groups["v"].Value;
+	                    if (line.Contains("/*!") || line.Contains("<!--!")) {
+	                        multiline = true;
+	                    }
+	                    header += value;
+	                }
+	                else {
+	                    break;
+	                }
+	                first = false;
+	            }
+	            else {
+	                if (line.Contains("#!") || line.Contains("//!") ) {
+	                    var value =
+	                        Regex.Match(line, @"((\#)|(//))!(?<v>[\s\S]+)").Groups["v"].Value;
+	                    header += Environment.NewLine + value;
+	                }
+	                else if (multiline) {
+	                    header += Environment.NewLine + line;
+	                }
+	                else {
+	                    break;
+	                }
+	            }
+
+	            if (multiline && (header.Contains("*/")||header.Contains("-->"))) {
+	                header = Regex.Match(header, @"^([\s\S]+?)((\*/)|(-->))").Groups[1].Value;
+	                break;
+	            }
+	        }
+	        return header;
+	    }
 	}
 }

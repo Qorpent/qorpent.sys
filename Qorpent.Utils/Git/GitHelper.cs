@@ -983,5 +983,17 @@ namespace Qorpent.Utils.Git{
             if (null == realGit) return null;
             return new GitHelper {DirectoryName = realGit}.GetFileCommit(fileName);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+	    public static string CommitAll(string dir) {
+            var realGit = ResolveGitDirectory(dir);
+	        if (null != realGit) {
+                return new GitHelper { DirectoryName = realGit }.CommitAllChanges();
+	        }
+            return null;
+        }
 	}
 }

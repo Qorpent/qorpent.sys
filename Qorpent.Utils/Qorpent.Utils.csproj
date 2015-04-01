@@ -75,6 +75,7 @@
     <Compile Include="DateRange.cs" />
     <Compile Include="DateRangeResolver.cs" />
     <Compile Include="Experiments\StringUtils.cs" />
+    <Compile Include="IO\FileDescriptorEx.cs" />
     <Compile Include="SimpleExpressionItem.cs" />
     <Compile Include="SimpleExpressionItemType.cs" />
     <Compile Include="SimpleExpressionParser.cs" />
@@ -168,8 +169,7 @@
   <ItemGroup>
     <Folder Include="Config\" />
   </ItemGroup>
-
- <PropertyGroup>
+  <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 </Project>

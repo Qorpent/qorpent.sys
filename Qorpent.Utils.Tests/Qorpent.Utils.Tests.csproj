@@ -40,7 +40,8 @@
     <Compile Include="ConvertExtensionsTest.cs" />
     <Compile Include="DatabaseExtensionsTest.cs" />
     <Compile Include="DateRangeResolverTest.cs" />
-    <Compile Include="FileSystemHelperTests.cs" />
+    <Compile Include="IO\FileDescriptorExTest.cs" />
+    <Compile Include="IO\FileSystemHelperTests.cs" />
     <Compile Include="SimpleExpression\SimpleExpressionParserTests.cs" />
     <Compile Include="SimpleExpression\SqlFullTestSearchAdapterTests.cs" />
     <Compile Include="WebDateTimeParserTest.cs" />
