@@ -28,6 +28,75 @@ namespace Qorpent.Utils.Tests {
 			Assert.True(Directory.Exists(dirname+"\\.git"));
 		}
 
+        [Test]
+        public void StaticInit() {
+            var dir = FileSystemHelper.ResetTemporaryDirectory();
+            GitHelper.Init(dir);
+            Assert.True(Directory.Exists(Path.Combine(dir,".git")));
+        }
+
+        [Test]
+        public void GetLastFileCommit() {
+            var dir = FileSystemHelper.ResetTemporaryDirectory();
+            var gh = new GitHelper {DirectoryName = dir};
+            Directory.CreateDirectory(Path.Combine(dir, "a"));
+            var file = Path.Combine(dir, "a", "x");
+            File.WriteAllText(file, "zzz");
+            var file2 = Path.Combine(dir, "a", "y");
+            File.WriteAllText(file2, "zzz2");
+            gh.Init();
+            gh.CommitAllChanges();
+            var fstCommit = gh.GetCommitId();
+            File.WriteAllText(file2, "zzz3");
+            gh.CommitAllChanges();
+            var secCommit = gh.GetCommitId();
+            Assert.AreEqual(fstCommit,gh.GetFileCommit(file).Hash);
+            Assert.AreEqual(secCommit,gh.GetFileCommit(file2).Hash);
+        }
+
+        [Test]
+        public void StaticGetLastFileCommit() {
+            var dir = FileSystemHelper.ResetTemporaryDirectory();
+            var gh = new GitHelper { DirectoryName = dir };
+            Directory.CreateDirectory(Path.Combine(dir, "a"));
+            var file = Path.Combine(dir, "a", "x");
+            File.WriteAllText(file, "zzz");
+            var file2 = Path.Combine(dir, "a", "y");
+            File.WriteAllText(file2, "zzz2");
+            gh.Init();
+            gh.CommitAllChanges();
+            var fstCommit = gh.GetCommitId();
+            File.WriteAllText(file2, "zzz3");
+            gh.CommitAllChanges();
+            var secCommit = gh.GetCommitId();
+            Assert.AreEqual(fstCommit, GitHelper.GetLastCommit(file).Hash);
+            Assert.AreEqual(secCommit, GitHelper.GetLastCommit(file2).Hash);
+        }
+
+        [Test]
+        public void ResolveGitDirectory() {
+            var dir = FileSystemHelper.ResetTemporaryDirectory();
+            Directory.CreateDirectory(Path.Combine(dir, "a"));
+            var file = Path.Combine(dir, "a", "x");
+            File.WriteAllText(file, "zzz");
+            Assert.Null(GitHelper.ResolveGitDirectory(file));
+            GitHelper.Init(dir);
+            Assert.AreEqual(dir,GitHelper.ResolveGitDirectory(file));
+        }
+
+        [Test]
+        public void StaticGetCommit() {
+            var dir = FileSystemHelper.ResetTemporaryDirectory();
+            Directory.CreateDirectory(Path.Combine(dir, "a"));
+            var file = Path.Combine(dir, "a", "x");
+            File.WriteAllText(file,"zzz");
+            Assert.Null(GitHelper.GetCommit(file));
+            var gh = new GitHelper {DirectoryName = dir};
+            gh.Init();
+            var hash = gh.CommitAllChanges();
+            Assert.AreEqual(hash, GitHelper.GetCommit(file).Hash);
+        }
+
 		[Test]
 		public void CanReadTags(){
 			var githelper = new GitHelper { DirectoryName = dirname }.Connect();

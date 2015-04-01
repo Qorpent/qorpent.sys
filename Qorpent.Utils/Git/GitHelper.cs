@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Qorpent.Utils.Extensions;
 
@@ -248,7 +247,7 @@ namespace Qorpent.Utils.Git{
 				var uri = new Uri(RemoteUrl);
 				var host = uri.Host;
 				var port = uri.Port;
-				var cli = new System.Net.Sockets.TcpClient();
+				var cli = new TcpClient();
 				try{
 					var t = cli.ConnectAsync(host, port);
 					return t.Wait(500);
@@ -565,14 +564,14 @@ namespace Qorpent.Utils.Git{
 				throw;
 			}
 		}
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rev"></param>
-        /// <returns></returns>
-        public string GetParentCommit(string rev) {
-            return ExecuteCommand("log", "-2 " + rev + " --format=%h").Split('\r', '\n').Last().Trim();
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="rev"></param>
+		/// <returns></returns>
+		public string GetParentCommit(string rev) {
+			return ExecuteCommand("log", "-2 " + rev + " --format=%h").Split('\r', '\n').Last().Trim();
+		}
 		/// <summary>
 		/// 
 		/// </summary>
@@ -868,6 +867,21 @@ namespace Qorpent.Utils.Git{
 			var list = ExecuteCommand("ls-tree", "--name-only --full-name  -r " + refcode);
 			return list.SmartSplit(false, true, '\r', '\n').Select(GitUtils.ConvertToValidFileName).ToArray();
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+	    public GitCommitInfo GetFileCommit(string filename) {
+            if (Path.IsPathRooted(filename)) {
+                filename = filename.NormalizePath().Replace(DirectoryName.NormalizePath(), "");
+                if (filename.StartsWith("/")) {
+                    filename = filename.Substring(1);
+                }
+            }
+            var hash = ExecuteCommand("log", "-n 1 --format=%H -- " + filename).Trim();
+            return GetCommitInfo(hash);
+        }
 
 		/// <summary>
 		/// 
@@ -921,5 +935,53 @@ namespace Qorpent.Utils.Git{
 				ExecuteCommand("tag", "-d " + string.Join(" ", tags.Select(_ => _.Name)));
 			}
 		}
+        /// <summary>
+        /// Инициализирует репозиторий в указанной папке
+        /// </summary>
+        /// <param name="dir"></param>
+	    public static void Init(string dir) {
+            var gh = new GitHelper {DirectoryName = dir};
+            gh.Init();
+        }
+        /// <summary>
+        /// Позволяет идентифицировать реальный корень GIT
+        /// </summary>
+        /// <param name="directoryOrFileName"></param>
+        /// <returns></returns>
+	    public static string ResolveGitDirectory(string directoryOrFileName) {
+            var current = directoryOrFileName;
+            while (true) {
+                if (Directory.Exists(Path.Combine(current, ".git"))) {
+                    return current;                    
+                }
+                current = Path.GetDirectoryName(current);
+                if(string.IsNullOrWhiteSpace(current))break;
+            }
+            return null;
+        }
+        /// <summary>
+        /// Получить текущий коммит с резолюцией реального корня Git
+        /// </summary>
+        /// <param name="directoryOrFileName"></param>
+        /// <param name="refcode"></param>
+        /// <param name="returnNullIfNotExisted"></param>
+        /// <returns></returns>
+	    public static GitCommitInfo GetCommit(string directoryOrFileName, string refcode = null,
+	        bool returnNullIfNotExisted = true) {
+	        var realGit = ResolveGitDirectory(directoryOrFileName);
+            if (string.IsNullOrWhiteSpace(realGit)) return null;
+            return new GitHelper {DirectoryName = realGit}.GetCommitInfo(refcode, returnNullIfNotExisted);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+	    public static GitCommitInfo GetLastCommit(string fileName) {
+            if (!File.Exists(fileName)) return null;
+            var realGit = ResolveGitDirectory(fileName);
+            if (null == realGit) return null;
+            return new GitHelper {DirectoryName = realGit}.GetFileCommit(fileName);
+        }
 	}
 }
