@@ -247,7 +247,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <returns></returns>
 		public static IEnumerable<SqlObject> CreateDefaults(PersistentClass cls){
 			if (cls.PrimaryKey.IsAutoIncrement){
-				yield return new Sequence().Setup(null, cls, null, null);
+				yield return new Sequence().Setup(null, cls, null, cls.TargetClass.Compiled);
 			}
 			if (cls.Model.GenerationOptions.GeneratePartitions && cls.AllocationInfo.Partitioned){
 				yield return new PartitionDefinition().Setup(null, cls, null, null);
