@@ -11,7 +11,7 @@ using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data {
-    /// <summary>
+	/// <summary>
 	///     Asynchronous wrapper for Executing Sql Queries
 	/// </summary>
 	[ContainerComponent(Lifestyle.Transient, Name="main.dbxecutor", ServiceType = typeof (IDbCommandExecutor))]
@@ -25,22 +25,22 @@ order by ORDINAL_POSITION
 		private const string GetObjectTypeInfoQueryTemplate =
 			@"select type from sys.objects where schema_id=SCHEMA_ID('{0}') and name = '{1}'";
 
-	    private static IDbCommandExecutor _default;
-	    public static IDbCommandExecutor Default {
-	        get {
-	            if (null == _default) {
-	                if (Applications.Application.HasCurrent) {
-	                    _default = Applications.Application.Current.Container.Get<IDbCommandExecutor>("main.dbexecutor");
-	                }
-	                else {
-                        _default = new DbCommandExecutor();
-	                    
-	                }
-	            }
-                return _default;
-	            
-	        }
-	    }
+		private static IDbCommandExecutor _default;
+		public static IDbCommandExecutor Default {
+			get {
+				if (null == _default) {
+					if (Applications.Application.HasCurrent) {
+						_default = Applications.Application.Current.Container.Get<IDbCommandExecutor>("main.dbexecutor");
+					}
+					else {
+						_default = new DbCommandExecutor();
+						
+					}
+				}
+				return _default;
+				
+			}
+		}
 
 		[Inject] public IDatabaseConnectionProvider ConnectionProvider;
 
@@ -165,15 +165,15 @@ order by ORDINAL_POSITION
 						result.Add(current.ToArray());
 						info.Result = result.ToArray();
 					}
-                    else
-                    {
-                        var result = new List<object>();
-                        while (reader.Read())
-                        {
-                            result.Add(SetupSingleResult(info, reader));
-                        }
-                        info.Result = result.ToArray();
-                    }
+					else
+					{
+						var result = new List<object>();
+						while (reader.Read())
+						{
+							result.Add(SetupSingleResult(info, reader));
+						}
+						info.Result = result.ToArray();
+					}
 				}
 			}
 		}
@@ -244,10 +244,10 @@ order by ORDINAL_POSITION
 			var cmd = info.PreparedCommand = info.Connection.CreateCommand();
 			cmd.CommandText = info.Query;
 
-            StoreParametersFromSource(info);
+			StoreParametersFromSource(info);
 			foreach (var parameter in info.Parameters) {
 				var p = cmd.CreateParameter();
-			    
+				
 				var name = parameter.Name;
 				if (p is SqlParameter) {
 					name = "@" + parameter.Name;
@@ -352,7 +352,7 @@ order by ORDINAL_POSITION
 				PrepareParametersByObject(info);
 			}
 
-            StoreParametersFromSource(info);
+			StoreParametersFromSource(info);
 
 			if (info.Trace) {
 				Trace.TraceInformation("end prepare parameters: " + info);
@@ -360,24 +360,24 @@ order by ORDINAL_POSITION
 		}
 
 		private void StoreParametersFromSource(DbCommandWrapper info) {
-            if (info.ParametersBinded) return;
-		    if (null == info.ParametersSoruce) return;
+			if (info.ParametersBinded) return;
+			if (null == info.ParametersSoruce) return;
 			var dictionary = info.ParametersSoruce.ToDict();
 			foreach (var o in dictionary.ToArray()) {
 				dictionary[o.Key.ToLowerInvariant()] = o.Value;
 			}
 			foreach (var pd in info.Parameters) {
-			    pd.Value = null;
+				pd.Value = null;
 				if (dictionary.ContainsKey(pd.Name.ToLowerInvariant())) {
 					pd.Value = dictionary[pd.Name.ToLowerInvariant()];
 				}
 			}
-		    info.ParametersBinded = true;
+			info.ParametersBinded = true;
 		}
 
 		private void PrepareParametersByObject(DbCommandWrapper info) {
-         
-		    
+		 
+			
 			if (info.Dialect != SqlDialect.SqlServer) {
 				throw new Exception("cannot setup parameters for non-TSql query");
 			}
@@ -385,7 +385,7 @@ order by ORDINAL_POSITION
 			var name = info.ObjectName;
 			if (name.Contains(".")) {
 				schema = name.Split('.')[0];
-				name = name.Split('.')[0];
+				name = name.Split('.')[1];
 			}
 
 			var query = string.Format(PrepareParametersQueryTemplate, schema, name);
@@ -514,18 +514,18 @@ order by ORDINAL_POSITION
 				if (string.IsNullOrWhiteSpace(info.ConnectionString)) {
 					info.ConnectionString = "default";
 				}
-			    if (null == ConnectionProvider) {
-			        if (info.ConnectionString.Contains(";")) {
-			            info.Connection = new SqlConnection(info.ConnectionString);
-			        }
-			        else {
-			            throw new Exception("no connection provider setup");
-			        }
-			    }
-			    else {
-			        info.Connection = ConnectionProvider.GetConnection(info.ConnectionString);
-			    }
-			    if (null == info.Connection)
+				if (null == ConnectionProvider) {
+					if (info.ConnectionString.Contains(";")) {
+						info.Connection = new SqlConnection(info.ConnectionString);
+					}
+					else {
+						throw new Exception("no connection provider setup");
+					}
+				}
+				else {
+					info.Connection = ConnectionProvider.GetConnection(info.ConnectionString);
+				}
+				if (null == info.Connection)
 				{
 					throw new Exception("cannot retrieve connection for " + info.ConnectionString);
 				}
