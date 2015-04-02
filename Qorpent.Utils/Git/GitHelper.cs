@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -903,7 +904,7 @@ namespace Qorpent.Utils.Git{
 				File.SetLastWriteTime(GetFullPath(path),commitinfo.LocalRevisionTime);
 			}
 		}
-
+        static readonly IDictionary<string, GitCommitInfo> CommitInfoCache = new ConcurrentDictionary<string, GitCommitInfo>();
 		/// <summary>
 		/// Возвращает информацию о коммите
 		/// </summary>
@@ -912,11 +913,19 @@ namespace Qorpent.Utils.Git{
 		/// <returns></returns>
 		public GitCommitInfo GetCommitInfo(string refcode=null, bool returnNullIfNotExisted = true){
 			try{
+			    if (null!=refcode && refcode.Length == 40) { //IS full hash
+			        if (CommitInfoCache.ContainsKey(refcode)) return CommitInfoCache[refcode];
+			    }
 				if (string.IsNullOrWhiteSpace(refcode)){
 					refcode = "HEAD";
 				}
 				var data = ExecuteCommand("show", "--format=\"%H|%ct|%cN|%cE|%aN|%aE|%s\"  --quiet \"" + refcode + "\"");
-				return GitUtils.ParseGitCommitInfo(data);
+		        var result = GitUtils.ParseGitCommitInfo(data);
+			    if (refcode.Length == 40) {
+			        CommitInfoCache[refcode] = result;
+			    }
+			    return result;
+
 			}
 			catch(Exception ex){
 				if (ex.Message.Contains("unknown")){
