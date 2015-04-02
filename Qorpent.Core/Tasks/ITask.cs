@@ -14,22 +14,22 @@ namespace Qorpent.Tasks {
         Exception Error { get; set; }
 
         /// <summary>
-        /// Обший порядок выполнения
+        ///     Обший порядок выполнения
         /// </summary>
         int Idx { get; set; }
 
         /// <summary>
-        /// Логгер
+        ///     Логгер
         /// </summary>
         IUserLog Log { get; set; }
 
         /// <summary>
-        /// Обратная ссылка на пакет
+        ///     Обратная ссылка на пакет
         /// </summary>
-        IJob Package { get; set; }
+        IJob Job { get; set; }
 
         /// <summary>
-        /// Группировка в модуль
+        ///     Группировка в модуль
         /// </summary>
         string Group { get; set; }
 

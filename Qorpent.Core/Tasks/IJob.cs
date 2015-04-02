@@ -4,10 +4,10 @@ using Qorpent.Log;
 namespace Qorpent.Tasks {
     public interface IJob {
         IUserLog Log { get; set; }
-        IDictionary<string, ITask> Modules { get; }
+        IDictionary<string, ITask> Tasks { get; }
 
         /// <summary>
-        /// Максимальное число итераций
+        ///     Максимальное число итераций
         /// </summary>
         int MaxIteration { get; set; }
 
@@ -15,7 +15,7 @@ namespace Qorpent.Tasks {
         bool HasError { get; }
 
         /// <summary>
-        /// Выполнение 
+        ///     Выполнение
         /// </summary>
         void Execute();
 

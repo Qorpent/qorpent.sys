@@ -53,6 +53,9 @@
     <Compile Include="Security\StubRoleResolver.cs" />
     <Compile Include="ServiceStateTests.cs" />
     <Compile Include="Tasking\ScheduleTaskTest.cs" />
+    <Compile Include="Tasks\JobTest.cs" />
+    <Compile Include="Tasks\TaskInternalsTest.cs" />
+    <Compile Include="Tasks\TestTask.cs" />
     <Compile Include="TestSupport\QorpentFixture.cs" />
     <Compile Include="TestSupport\QorpentFixtureAttribute.cs" />
   </ItemGroup>

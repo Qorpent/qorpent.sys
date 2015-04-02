@@ -305,6 +305,7 @@
     <Compile Include="ServiceState.cs" />
     <Compile Include="Tasks\IJob.cs" />
     <Compile Include="Tasks\Job.cs" />
+    <Compile Include="Tasks\UpdateTaskBase.cs" />
     <Compile Include="TransactionAction.cs" />
     <Compile Include="Tasks\ITask.cs" />
     <Compile Include="Tasks\TaskBase.cs" />
