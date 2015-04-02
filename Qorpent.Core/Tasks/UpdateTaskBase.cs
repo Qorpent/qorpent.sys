@@ -14,6 +14,12 @@ namespace Qorpent.Tasks {
         /// </summary>
         public IVersionedDescriptor Target { get; set; }
 
+        public override void Refresh() {
+            base.Refresh();
+            Source.Refresh();
+            Target.Refresh();
+        }
+
         /// <summary>
         /// </summary>
         /// <returns></returns>
@@ -24,7 +30,7 @@ namespace Qorpent.Tasks {
             if (Target.Hash == Source.Hash) {
                 return false;
             }
-            return Target.Version > Source.Version;
+            return Source.Version > Target.Version;
         }
 
         protected override bool HasUpdatedOnce() {

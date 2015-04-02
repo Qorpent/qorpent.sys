@@ -19,7 +19,7 @@ namespace Qorpent.Utils.IO
         private DateTime _version;
         private string _hash;
         private bool _isGitBased;
-        private XElement _attributes;
+        private XElement _header;
 
 
         /// <summary>
@@ -81,12 +81,20 @@ namespace Qorpent.Utils.IO
         /// </summary>
         public XElement Header {
             get {
-                if (null == _attributes) {
+                if (null == _header) {
                     ReadAttributes();
                 }
-                return _attributes;
+                return _header;
             }
-            set { _attributes = value; }
+            set { _header = value; }
+        }
+
+        public void Refresh() {
+            if (!string.IsNullOrWhiteSpace(FullName)) {
+                Header = null;
+                Hash = null;
+                Version = DateTime.MinValue;
+            }
         }
 
         private void ReadAttributes() {
@@ -96,6 +104,9 @@ namespace Qorpent.Utils.IO
                 }
                 else {
                     Header = FileSystemHelper.ReadXmlHeader(FullName);
+                }
+                if (null == _header) {
+                    _header = new XElement("stub");
                 }
             }
         }
@@ -125,6 +136,10 @@ namespace Qorpent.Utils.IO
                 return result;
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool AllowNotExisted { get; set; }
 
         private void CheckoutVersions() {
             if (!string.IsNullOrWhiteSpace(_hash)) {
@@ -134,6 +149,11 @@ namespace Qorpent.Utils.IO
                 throw new Exception("FullName not setup");
             }
             if (!File.Exists(FullName)) {
+                if (AllowNotExisted) {
+                    Version = DateTime.MinValue;
+                    Hash = "INIT";
+                    return;
+                }
                 throw new Exception("file not exists "+FullName);
             }
             lock (this) {

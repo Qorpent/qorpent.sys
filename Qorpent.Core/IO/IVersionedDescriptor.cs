@@ -30,5 +30,12 @@ namespace Qorpent.Utils.IO {
         /// Расширенные атрибуты текстового файла
         /// </summary>
         XElement Header { get; set; }
+
+        bool AllowNotExisted { get; set; }
+
+        /// <summary>
+        /// Перезачищает состояние для повторной проверки параметров
+        /// </summary>
+        void Refresh();
     }
 }

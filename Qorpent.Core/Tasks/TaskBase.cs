@@ -75,6 +75,8 @@ namespace Qorpent.Tasks {
             get { return TaskState.Success == (State & TaskState.Success); }
         }
 
+        public int RunCount { get; set; }
+
         public bool Execute() {
             if (IsFinished) {
                 return true;
@@ -100,6 +102,10 @@ namespace Qorpent.Tasks {
 
             DoWork();
             return true;
+        }
+
+        public virtual void Refresh() {
+            this.State = TaskState.Pending;
         }
 
         public virtual void Initialize(IJob package = null) {

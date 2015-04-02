@@ -6,7 +6,7 @@ namespace Qorpent.Tasks {
     public interface ITask {
         string Name { get; set; }
         string[] Requirements { get; set; }
-        TaskState State { get; }
+        TaskState State { get;  }
         IList<ITask> RequiredModules { get; }
         bool IsFinished { get; }
         bool IsError { get; }
@@ -33,7 +33,10 @@ namespace Qorpent.Tasks {
         /// </summary>
         string Group { get; set; }
 
+        int RunCount { get; set; }
+
         bool Execute();
         void Initialize(IJob package);
+        void Refresh();
     }
 }

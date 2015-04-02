@@ -32,7 +32,9 @@ namespace Qorpent.Tasks {
         /// </summary>
         public void Execute() {
             Initialize();
+            Refresh();
             var workingQueue = new List<ITask>(Tasks.Values.OrderBy(_ => _.Idx));
+            
             var iterations = MaxIteration;
             while (iterations > 0) {
                 iterations --;
@@ -52,6 +54,16 @@ namespace Qorpent.Tasks {
                 throw new Exception("cannot finish due to max iteration counter reached, maybe cycle dependency");
             }
         }
+
+        private void Refresh() {
+            foreach (var value in Tasks.Values) {
+                if (value.RunCount != 0) {
+                    value.Refresh();
+                }
+                value.RunCount++;
+            }
+        }
+
         /// <summary>
         /// Инициализирует коллекцию задач
         /// </summary>
@@ -73,6 +85,7 @@ namespace Qorpent.Tasks {
                 }
                 wasInitialized = true;
             }
+            
         }
 
         public bool Success {
