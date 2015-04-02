@@ -53,7 +53,9 @@
       <Name>Qorpent.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Installer\" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Utils.import" />

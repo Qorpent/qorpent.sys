@@ -303,9 +303,12 @@
     <Compile Include="Serialization\SerializerExtensions.cs" />
     <Compile Include="Serialization\XHtml5XmlWriter.cs" />
     <Compile Include="ServiceState.cs" />
+    <Compile Include="Tasks\IJob.cs" />
+    <Compile Include="Tasks\Job.cs" />
     <Compile Include="TransactionAction.cs" />
-    <Compile Include="Updater\IUpdateModule.cs" />
-    <Compile Include="Updater\UpdateModule.cs" />
+    <Compile Include="Tasks\ITask.cs" />
+    <Compile Include="Tasks\TaskBase.cs" />
+    <Compile Include="Tasks\TaskState.cs" />
     <Compile Include="Verdict.cs" />
     <Compile Include="VerdictType.cs" />
     <Compile Include="Wiki\DefaultWikiSource.cs" />
