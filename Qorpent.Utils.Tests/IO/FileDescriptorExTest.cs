@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Security.Cryptography;
 using NUnit.Framework;
 using Qorpent.Utils.Git;
 using Qorpent.Utils.IO;
-
 namespace Qorpent.Utils.Tests.IO
 {
     [TestFixture]
@@ -52,6 +52,17 @@ data");
             var header = desc.Header.ToString().Replace("\"", "'");
             Console.WriteLine(header);
             Assert.AreEqual(@"<opts _file='code.bxl' _line='2' x='1' y='2' />", header);
+        }
+
+        [Test]
+        public void CanReadAssemblyVersionAndAttributes() {
+            var assembly = Assembly.GetExecutingAssembly();
+            var path = assembly.GetName().CodeBase.Replace("file:///", "");
+            var desc = new FileDescriptorEx {FullName = path};
+            Assert.True(desc.IsAssembly);
+            Console.WriteLine(desc.Hash);
+            Console.WriteLine(desc.Version);
+            Console.WriteLine(desc.Header);
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security;
 using System.Security.Cryptography;
-using System.Text.RegularExpressions;
+using System.Security.Policy;
 using System.Xml.Linq;
-using Qorpent.Bxl;
+using Qorpent.Utils.Extensions;
 using Qorpent.Utils.Git;
 
 namespace Qorpent.Utils.IO
@@ -90,7 +91,38 @@ namespace Qorpent.Utils.IO
 
         private void ReadAttributes() {
             lock (this) {
-                Header = FileSystemHelper.ReadXmlHeader(FullName);
+                if (IsAssembly) {
+                    Header = ReadAssemblyHeader();
+                }
+                else {
+                    Header = FileSystemHelper.ReadXmlHeader(FullName);
+                }
+            }
+        }
+
+        private XElement ReadAssemblyHeader() {
+            using (var a = new AssemblyUsage(FullName)) {
+                var assembly = a.Assembly;              
+                var result = new XElement("assembly");
+               
+                foreach (var attribute in assembly.GetCustomAttributes()) {
+                    var properties = attribute.GetType().GetProperties().Where(_ => _.Name != "TypeId").ToArray();
+                    if (properties.Length == 1) {
+                        result.SetAttributeValue(attribute.GetType().Name, properties[0].GetValue(attribute));
+                    }
+                    else {
+                     
+                    var e = new XElement(attribute.GetType().Name);
+                    foreach (var info in properties) {
+                        var val = info.GetValue(attribute).ToStr();
+                        e.SetAttributeValue(info.Name,val);
+
+                    }
+                    result.Add(e);   
+                    }
+                }
+
+                return result;
             }
         }
 
@@ -105,22 +137,77 @@ namespace Qorpent.Utils.IO
                 throw new Exception("file not exists "+FullName);
             }
             lock (this) {
-                var gitCommit = GitHelper.GetLastCommit(FullName);
-                if (null == gitCommit) {
-                    using (var s = File.Open(FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-                        var md5 = MD5.Create();
-                        var hash = md5.ComputeHash(s);
-                        Hash = Convert.ToBase64String(hash);
-                        Version = File.GetLastWriteTimeUtc(FullName);
+               
+                if (! CheckGitVersion()) {
+                    if (IsAssembly) {
+                        CheckAssemblyVersion();
                     }
+                    else {
+                        CheckTextFileVersion();
+                    }
+                    
                 }
-                else {
-                    IsGitBased = true;
-                    CommitInfo = gitCommit;
-                    Hash = gitCommit.Hash;
-                    Version = gitCommit.GlobalRevisionTime;
-                }
+                
             }
+        }
+
+        class AssemblyUsage : IDisposable {
+            public AssemblyUsage(string fullname) {
+                Evidence e = new Evidence();
+                e.AddHostEvidence(new Zone(SecurityZone.Trusted));
+                var ads = new AppDomainSetup { ApplicationBase = Path.GetDirectoryName(fullname) };
+                this.Sandbox = AppDomain.CreateDomain("test", e, ads, SecurityManager.GetStandardSandbox(e));
+                var assembly = Sandbox.Load(File.ReadAllBytes(fullname));
+                this.Assembly = assembly;
+            }
+
+            private AppDomain Sandbox { get; set; }
+
+            public Assembly Assembly { get; private set; }
+
+            public void Dispose() {
+                Assembly = null;
+                AppDomain.Unload(Sandbox);
+
+            }
+        }
+
+        private void CheckAssemblyVersion() {
+            using (var a = new AssemblyUsage(FullName)) {
+                var assembly = a.Assembly;
+                Version = File.GetLastWriteTimeUtc(FullName);
+                Hash = assembly.GetName().Version.ToString();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAssembly {
+            get { return Path.GetExtension(FullName).ToLowerInvariant() == ".dll"; }
+        }
+
+        private void CheckTextFileVersion() {
+            using (var s = File.Open(FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                var md5 = MD5.Create();
+                var hash = md5.ComputeHash(s);
+                Hash = Convert.ToBase64String(hash);
+                Version = File.GetLastWriteTimeUtc(FullName);
+            }
+        }
+
+        protected bool CheckGitVersion() {
+            var gitCommit = GitHelper.GetLastCommit(FullName);
+            if (null != gitCommit) {
+                IsGitBased = true;
+                CommitInfo = gitCommit;
+                Hash = gitCommit.Hash;
+                Version = gitCommit.GlobalRevisionTime;
+                return true;
+            }
+            return false;
         }
     }
 }

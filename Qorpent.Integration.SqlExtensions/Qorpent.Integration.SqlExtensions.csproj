@@ -423,6 +423,16 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
+  <PropertyGroup>
+    <!-- build version info -->
+    <MainVersion>1</MainVersion>
+    <MinorVersion>5</MinorVersion>
+    <Revision>0</Revision>
+    <BuildNumber>0</BuildNumber>
+
+    <!-- true to force .dll references in *.import files instead of project references -->
+    <NoProjRef>False</NoProjRef>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="*.export" />
   </ItemGroup>
