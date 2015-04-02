@@ -126,6 +126,39 @@ S:Success
 ");
         }
 
+
+        [Test]
+        public void OnceCopyTest()
+        {
+            var syncer = new Job();
+            uab.RunOnce = true;
+            uba.RunOnce = true;
+            syncer.Tasks["ab"] = uab;
+            syncer.Tasks["ba"] = uba;
+            writeA("y");
+            syncer.Execute();
+            writeA("y2");
+            syncer.Execute();
+            writeB("y3");
+            syncer.Execute();
+            check(@"
+ab - S:Pending
+ba - S:Pending
+ab - S:Executing
+ab - copy a.txt to b.txt
+ab - S:Success
+ba - S:SuccessOnce
+ab - S:Pending
+ba - S:Pending
+ab - S:SuccessOnce
+ba - S:SuccessOnce
+ab - S:Pending
+ba - S:Pending
+ab - S:SuccessOnce
+ba - S:SuccessOnce
+");
+        }
+
         [Test]
         public void SimpleSyncerJob() {
             var syncer = new Job();
