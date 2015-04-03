@@ -60,7 +60,7 @@ namespace Qorpent.Scaffolding.Application {
         private static XElement GenerateMenuDivider() {
             return new XElement("div", 
                 new XAttribute("class", "menu__item menu__item-divider"),
-                new XAttribute("type", "divider"));
+                new XAttribute("type", "divider")) {Value = string.Empty};
         }
 
         private static XElement GenerateDropdownGroup(XElement el) {
