@@ -13,6 +13,7 @@ namespace Qorpent.Tasks {
 
         bool Success { get; }
         bool HasError { get; }
+        IDictionary<string, object> Data { get; }
 
         /// <summary>
         ///     Выполнение

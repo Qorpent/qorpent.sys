@@ -34,6 +34,7 @@ namespace Qorpent.Tasks {
         string Group { get; set; }
 
         int RunCount { get; set; }
+        IDictionary<string, object> Data { get; }
 
         bool Execute();
         void Initialize(IJob package);

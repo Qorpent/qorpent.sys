@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using Qorpent.Log;
@@ -107,6 +108,15 @@ namespace Qorpent.Tasks {
         public virtual void Refresh() {
             this.State = TaskState.Pending;
         }
+        readonly IDictionary<string, object> _data = new ConcurrentDictionary<string, object>(); 
+
+
+
+        public IDictionary<string, object> Data
+        {
+            get { return _data; }
+        }
+
 
         public virtual void Initialize(IJob package = null) {
             if (State == TaskState.Init) {

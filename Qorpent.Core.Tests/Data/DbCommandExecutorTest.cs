@@ -28,6 +28,7 @@ CREATE PROCEDURE test @id int, @str nvarchar(255), @type nvarchar(255) AS BEGIN
     IF @str is not null print @str +' hella!';
     IF @type = 'SCALAR' SELECT @id * 2;
     IF @type = 'SINGLE' SELECT @id * 2 as id, @str + ' hella' as name;
+    IF @type = 'NULL' RETURN;
     IF @type = 'READER' 
         SELECT @id * 2 as id, @str + ' hella' as name UNION
         SELECT @id * 3 as id, @str + ' bella' ;
@@ -110,6 +111,16 @@ END;
             var dict = (Dictionary<string, object>) C.Result;
             Assert.AreEqual(4,dict["id"]);
             Assert.AreEqual("x hella", dict["name"]);
+        }
+
+        [Test]
+        public void NullSingleRow() {
+            C.Notation = DbCallNotation.SingleRow;
+            C.ParametersSoruce = new { id = 2, str = "x", type = "NULL" };
+            E.Execute(C).Wait();
+            Assert.Null(C.Error);
+            Assert.True(C.Ok);
+            Assert.Null(C.Result);
         }
 
         class A {

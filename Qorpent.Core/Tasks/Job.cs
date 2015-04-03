@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using Qorpent.Log;
 
 namespace Qorpent.Tasks {
@@ -26,6 +28,15 @@ namespace Qorpent.Tasks {
             get { return _maxIteration; }
             set { _maxIteration = value; }
         }
+
+        public XElement Definition {
+            get; set;
+            
+        }
+
+        readonly IDictionary<string,object> _data = new ConcurrentDictionary<string, object>(); 
+
+
 
         /// <summary>
         ///     Выполнение
@@ -94,6 +105,10 @@ namespace Qorpent.Tasks {
 
         public bool HasError {
             get { return Tasks.Values.Any(_ => _.IsError); }
+        }
+
+        public IDictionary<string, object> Data {
+            get { return _data; }
         }
 
         private void SetupLog() {

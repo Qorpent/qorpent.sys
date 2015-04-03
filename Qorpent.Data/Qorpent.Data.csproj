@@ -30,6 +30,9 @@
     <Compile Include="DataDiff\SqlUpdateApplyer.cs" />
     <Compile Include="DataDiff\TableDiffGeneratorContext.cs" />
     <Compile Include="DataDiff\TableMap.cs" />
+    <Compile Include="Installer\DbUpdateTaskBase.cs" />
+    <Compile Include="Installer\InitDatabaseTask.cs" />
+    <Compile Include="Installer\InitMetaTableTask.cs" />
     <Compile Include="REST\AddConnection.cs" />
     <Compile Include="REST\ConnectionsAction.cs" />
     <Compile Include="REST\RemoveConnection.cs" />
@@ -53,9 +56,7 @@
       <Name>Qorpent.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Installer\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Utils.import" />
