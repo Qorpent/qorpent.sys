@@ -1,3 +1,4 @@
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model.SqlObjects;
 
 namespace Qorpent.Scaffolding.Model.SqlWriters{

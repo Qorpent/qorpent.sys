@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Qorpent.Scaffolding.Model{
+namespace Qorpent.Data{
 	/// <summary>
 	///     Тип объекта DDL
 	/// </summary>
@@ -101,6 +101,12 @@ namespace Qorpent.Scaffolding.Model{
 		/// 
 		/// </summary>
 		Script = 1<<18,
+        /// <summary>
+        /// 
+        /// </summary>
+        TableFunction = 1<<19,
+
+       
 		/// <summary>
 		///     Все
 		/// </summary>

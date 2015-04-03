@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model;
 using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Scaffolding.Model.SqlWriters;

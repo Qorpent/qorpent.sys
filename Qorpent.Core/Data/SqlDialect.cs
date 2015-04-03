@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Qorpent.Scaffolding.Model{
+namespace Qorpent.Data{
 	/// <summary>
 	/// </summary>
 	[Flags]

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Qorpent.BSharp;
+using Qorpent.Data;
 
 namespace Qorpent.Scaffolding.Model.Compiler{
 	/// <summary>

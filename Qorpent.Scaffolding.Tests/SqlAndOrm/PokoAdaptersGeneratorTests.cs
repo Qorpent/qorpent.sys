@@ -150,6 +150,12 @@ class a prototype=dbtable qorpent-access=ReadWrite
 			Console.WriteLine(code);
 			Assert.AreEqual(expected.Trim(), code.Trim());
 		}
+
+       
+
+	   
+
+
 		[Test]
 		public void SimplestTable(){
 			var model = PersistentModel.Compile(@"

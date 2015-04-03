@@ -2,6 +2,7 @@
 using System.Security.Policy;
 using Qorpent.BSharp;
 using Qorpent.BSharp.Builder;
+using Qorpent.Data;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model.Compiler{

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model;
 using Qorpent.Scaffolding.Model.SqlObjects;
 

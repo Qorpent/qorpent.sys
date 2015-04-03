@@ -1,4 +1,6 @@
-﻿namespace Qorpent.Scaffolding.Model{
+﻿using Qorpent.Data;
+
+namespace Qorpent.Scaffolding.Model{
 	/// <summary>
 	/// </summary>
 	public class GenerationOptions{

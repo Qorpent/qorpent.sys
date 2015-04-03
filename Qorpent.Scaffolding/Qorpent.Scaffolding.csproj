@@ -88,14 +88,12 @@
     <Compile Include="Model\SqlObjects\SqlObject.cs" />
     <Compile Include="Model\SqlObjects\FileGroup.cs" />
     <Compile Include="Model\SqlObjects\Schema.cs" />
-    <Compile Include="Model\SqlObjectType.cs" />
     <Compile Include="Model\DefaultValue.cs" />
     <Compile Include="Model\Field.cs" />
     <Compile Include="Model\DataType.cs" />
     <Compile Include="Model\PersistentClass.cs" />
     <Compile Include="Model\PersistentModel.cs" />
     <Compile Include="Model\SqlDataType.cs" />
-    <Compile Include="Model\SqlDialect.cs" />
     <Compile Include="Model\SqlObjects\SqlScript.cs" />
     <Compile Include="Model\SqlWriters\SequenceWriter.cs" />
     <Compile Include="Model\SqlWriters\TableWriter.cs" />

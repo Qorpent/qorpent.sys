@@ -3,6 +3,10 @@
 	///		Хинты кэша объектов
 	/// </summary>
 	public class ObjectDataCacheHints {
+        /// <summary>
+        /// Форсирует обновление кэша
+        /// </summary>
+        public bool ForceUpdate { get; set; }
 		/// <summary>
 		///		Признак того, что не нужно вносить дочерние элементы в кэш
 		/// </summary>

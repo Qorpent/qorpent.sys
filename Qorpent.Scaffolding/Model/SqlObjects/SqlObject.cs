@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.BSharp;
+using Qorpent.Data;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
@@ -246,7 +247,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 		/// <returns></returns>
 		public static IEnumerable<SqlObject> CreateDefaults(PersistentClass cls){
 			if (cls.PrimaryKey.IsAutoIncrement){
-				yield return new Sequence().Setup(null, cls, null, null);
+				yield return new Sequence().Setup(null, cls, null, cls.TargetClass.Compiled);
 			}
 			if (cls.Model.GenerationOptions.GeneratePartitions && cls.AllocationInfo.Partitioned){
 				yield return new PartitionDefinition().Setup(null, cls, null, null);
@@ -335,7 +336,10 @@ end
 			}
 			else if (name == "function" || name == "void" || !string.IsNullOrWhiteSpace(e.Value)){
 				yield return new SqlFunction().Setup(null, cls, null, e);
-			}
+            }
+            else if (name == "script") {
+                yield return new SqlScript().Setup(cls.Model,cls.TargetClass, e);
+            }
 		}
 
 		/// <summary>
@@ -349,6 +353,7 @@ end
 			}
 			string tname = Table == null ? TableName.SqlQuoteName() : Table.FullSqlName;
 			result = Regex.Replace(result, @"@this\.([\w_]+)\s*\(",  tname.Substring(0,tname.Length-1) + "$1\"(");
+			result = Regex.Replace(result, @"@this\.(_SEQ)",  tname.Substring(0,tname.Length-1) + "$1\"");
 			result = Regex.Replace(result, @"(?i)exec\s+@this\.([\w_]+)","exec "+ tname.Substring(0, tname.Length - 1) + "$1\"");
 			result = Regex.Replace(result, @"((^)|(\s))@this(($)|(\W))", "$1" + tname + "$4");
 			return result;

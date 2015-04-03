@@ -2,13 +2,14 @@
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.BSharp;
+using Qorpent.Data;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model.SqlObjects{
 	/// <summary>
 	///     Описатель для скриптов
 	/// </summary>
-	public class SqlScript{
+	public class SqlScript:SqlObject{
 		/// <summary>
 		/// </summary>
 		public SqlScript(){
@@ -17,25 +18,13 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			SqlDialect = SqlDialect.Ansi;
 		}
 
-		/// <summary>
-		///     Название скрипта
-		/// </summary>
-		public string Name { get; set; }
 
-		/// <summary>
-		///     Комментарий к скрипту
-		/// </summary>
-		public string Comment { get; set; }
 
 		/// <summary>
 		///     Текст скрипта
 		/// </summary>
 		public string Text { get; set; }
 
-		/// <summary>
-		///     Дескриптор внешнего скрипта
-		/// </summary>
-		public string External { get; set; }
 
 		/// <summary>
 		///     Под-скрипты
@@ -69,15 +58,8 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 
 		/// <summary>
 		/// </summary>
-		public XElement Definition { get; set; }
-
-		/// <summary>
-		/// </summary>
 		protected IBSharpClass MyClass { get; set; }
 
-		/// <summary>
-		/// </summary>
-		protected PersistentModel Model { get; set; }
 
 		/// <summary>
 		///     Возвращает реальные скрипты н

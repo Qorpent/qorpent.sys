@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Text;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model.SqlObjects;
 
 namespace Qorpent.Scaffolding.Model.SqlWriters{

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Qorpent.BSharp;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model;
 using Qorpent.Serialization;
 
@@ -36,6 +38,26 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm
 			Assert.True(cls.Fields.ContainsKey("id"),"field must be regestered in cls with lowercase");
 		}
 
+	    [Test]
+	    public void CanFindSqlObjectByPartialName() {
+            var code = @"
+require data
+class a prototype=dbtable
+    void X cs-wrap=select-id
+        @id=long : (
+            RETURN 101;
+        )";
+	        var table = PersistentModel.Compile(code)["a"];
+	        var func = table.GetObject("x") as SqlFunction;
+	        var funcgen = table.GetObject<SqlFunction>("x");
+	        var funcfind = table.FindObjects<SqlFunction>("cs-Wrap").First();
+            Assert.NotNull(func);
+            Assert.AreSame(func,funcgen);
+            Assert.AreSame(func,funcfind);
+            Assert.True(func.Body.Contains("101"));
+	    }
+
+      
 		[Test]
 		public void DetectsImplicitReferences(){
 			var model = PersistentModel.Compile(@"
@@ -92,6 +114,7 @@ Table ""dbo"".""thetable"" (Id, Code, Name, Idx, Start, Finish, Tag, Version, Im
 FUNCTION ""dbo"".""thetableIsActive"" (C,S,R)
 FUNCTION ""dbo"".""thetableGetCode"" (C,S,R)
 FUNCTION ""dbo"".""thetableGetId"" (C,S,R)
+FUNCTION ""dbo"".""thetableGet"" (C,S,R)
 VIEW ""dbo"".""thetableFull"" (C,S,R)
 TRIGGER ""dbo"".""thetablePreventDeletionOfSystemDefinedRows"" (C,S,R)
 Script sys:support_for_filegroups_end (C,S,R)".Trim(), create.Trim());

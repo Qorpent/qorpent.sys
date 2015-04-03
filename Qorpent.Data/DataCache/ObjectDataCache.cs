@@ -51,6 +51,10 @@ namespace Qorpent.Data.DataCache
 				_sqlLog = value;
 			}
 		}
+        /// <summary>
+        /// Признак трассирования команд враппера
+        /// </summary>
+        public bool Trace { get; set; }
 
 		private const int COMMONIDBASE = -100;
 		private const int COMMONIDSTEP = -10;
@@ -94,6 +98,14 @@ namespace Qorpent.Data.DataCache
 			}
 			
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+	    public IDbConnection GetConnection() {
+	        return ConnectionProvider.GetConnection(ConnectionString);
+	    }
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -125,7 +137,7 @@ namespace Qorpent.Data.DataCache
 			int id; string code;
 			var isid = IsId(key, out id, out code);
 			if (isid){
-				if (!_nativeCache.ContainsKey(id)){
+				if (!_nativeCache.ContainsKey(id) || options.ForceUpdate){
 
 					UpdateCache("(Id = " + id + ")", connection: connection, options: new ObjectDataCacheHints{KeyQuery = true,Key = id});
 					
@@ -136,7 +148,7 @@ namespace Qorpent.Data.DataCache
 				return _nativeCache[id];
 			}
 			else{
-				if (!_nativeCodeCache.ContainsKey(code))
+                if (!_nativeCodeCache.ContainsKey(code) || options.ForceUpdate)
 				{
 					UpdateCache("(Code = '" + code.ToSqlString() + "')", connection: connection,options: new ObjectDataCacheHints { KeyQuery = true, Key = code });
 				}
@@ -359,7 +371,7 @@ namespace Qorpent.Data.DataCache
 			SqlLog.Trace(q);
 			using (var idsReader = cmd.ExecuteReader()){
 				while (idsReader.Read()){
-					var id = idsReader.GetInt32(0);
+					var id = (long)idsReader.GetValue(0);
 					if (!_nativeCache.ContainsKey(id)){
 						ids.Add(id);
 					}

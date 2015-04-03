@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model;
 using Qorpent.Scaffolding.Model.CodeWriters;
 using Qorpent.Scaffolding.Model.SqlWriters;
@@ -146,6 +147,7 @@ using System.Text;
 using System.Data;
 using Qorpent.Data;
 using Qorpent.Data.DataCache;
+using Qorpent.Utils.Extensions;
 using Test.Adapters;
 namespace Test.ObjectCaches {
 	///<summary>

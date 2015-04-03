@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Qorpent.Data;
 using Qorpent.Model;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model.CodeWriters{
 	/// <summary>
@@ -15,19 +17,23 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		/// <param name="output"></param>
 		public PokoAdapterWriter(PersistentClass cls, TextWriter output = null) : base(cls, output){
 		}
+      
 
-		/// <summary>
+	    /// <summary>
 		/// </summary>
 		protected override void InternalRun(){
 			WriteStartClass();
-			WriteGetTableQuery();
-			WriteGetSelectQuery();
-			WriteSingleRecordProcessor();
-			WriteEnumerableReaderProcessor();
-			WriteWriteAccessors();
-			WriteEndClass();
+	            WriteGetTableQuery();
+	            WriteGetSelectQuery();
+	            WriteSingleRecordProcessor();
+	            WriteEnumerableReaderProcessor();
+	            WriteWriteAccessors();
+	       
+	        WriteEndClass();
 		}
-		private void WriteWriteAccessors() {
+
+	  
+	    private void WriteWriteAccessors() {
 			var fields = Cls.GetOrderedFields().Where(_ => !_.NoSql && !_.NoCode).ToArray();
 			if (Cls.AccessMode.HasFlag(DbAccessMode.Write)) {
 				WriteSummary("Insert a record", 2, "Affected rows");

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Scaffolding.Model.SqlWriters;
 
@@ -78,6 +79,7 @@ namespace Qorpent.Scaffolding.Model{
 					if (!Model.GenerationOptions.Supports(SqlObjectType.View)) continue;
 					yield return new SqlViewWriter(source as SqlView){Dialect = Dialect, Mode = Mode, Model = Model};
 				}
+                
 			}
 		}
 	}

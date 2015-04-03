@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using Qorpent.BSharp;
+using Qorpent.Data;
 using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model{
-	/// <summary>
+    /// <summary>
 	///     Описывает целостную промежуточную модель данных
 	/// </summary>
 	public class PersistentModel{
@@ -507,9 +508,9 @@ namespace Qorpent.Scaffolding.Model{
 
 		private IEnumerable<object> GetCreateOrderedWriters(SqlDialect dialect, ScriptMode mode = ScriptMode.Create){
 			
-				foreach (SqlScript script in GetScripts(dialect, mode, ScriptPosition.Before)){
-					yield return script;
-				}
+			foreach (SqlScript script in GetScripts(dialect, mode, ScriptPosition.Before)){
+				yield return script;
+			}
 			
 			foreach (FileGroup fg in DatabaseSqlObjects.OfType<FileGroup>()){
 				yield return fg;
@@ -551,6 +552,11 @@ namespace Qorpent.Scaffolding.Model{
 				yield return trigger;
 			}
 
+            foreach (SqlScript script in Tables.SelectMany(_ => _.SqlObjects.OfType<SqlScript>()))
+            {
+                if (script.Dialect == SqlDialect.None || script.Dialect == dialect || script.Dialect == SqlDialect.Ansi)
+                    yield return script;
+            }
 
 			foreach (SqlScript script in GetScripts(dialect, mode, ScriptPosition.After)){
 				yield return script;

@@ -49,6 +49,7 @@
     <Compile Include="Application\AppLayoutTest.cs" />
     <Compile Include="Application\AppMenuTest.cs" />
     <Compile Include="SqlAndOrm\BaseModelGeneratorTests.cs" />
+    <Compile Include="SqlAndOrm\CacheWriterTest.cs" />
     <Compile Include="SqlAndOrm\CloneFacilityWriter.cs" />
     <Compile Include="SqlAndOrm\DataTypeTests.cs" />
     <Compile Include="SqlAndOrm\SqlScriptTests.cs" />

@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Linq;
+using Qorpent.Data;
 using Qorpent.Serialization;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Scaffolding.Model.CodeWriters{
 	/// <summary>
@@ -8,6 +10,13 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 	/// </summary>
 	public class PokoObjectCacheWriter : CodeWriterBase
 	{
+		private bool _doWriteTableQuery =true;
+		private bool _doWriteModelLink = true;
+		private bool _doWriteSqlMethods = true;
+		private bool _doWriteClassWrapper = true;
+		private bool _doWritePreamble = true;
+		private bool _doWriteObjectWrappers = true;
+
 		/// <summary>
 		/// </summary>
 		/// <param name="cls"></param>
@@ -15,17 +24,144 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		public PokoObjectCacheWriter(PersistentClass cls, TextWriter output = null)
 			: base(cls, output)
 		{
+			
 		}
 
 		/// <summary>
 		/// </summary>
 		protected override void InternalRun()
 		{
-			WriteStartClass();
-			WriteGetTableQuery();
-			WriteModelLink();
-			WriteSqlMethods();
-			WriteEndClass();
+			if (DoWriteClassWrapper) {
+				WriteStartClass();   
+			}
+			if (DoWriteTableQuery) {
+				WriteGetTableQuery();
+			}
+			if (DoWriteModelLink) {
+				WriteModelLink();
+			}
+			if (DoWriteSqlMethods) {
+				WriteSqlMethods();
+			}
+			if (DoWriteObjectWrappers) {
+				WriteWrappers();
+			}
+			if (DoWriteClassWrapper) {
+				WriteEndClass();
+			}
+		}
+
+		private void WriteWrappers()
+		{
+			var wrappers = Cls.FindObjects<SqlFunction>("cs-wrap");
+			foreach (var function in wrappers)
+			{
+				WriteWrapper(function);
+			}
+		}
+
+		private void WriteWrapper(SqlFunction function) {
+			var notation = function.Definition.Attr("cs-wrap").To<DbCallNotation>();
+			var name = function.Name;
+			var privateCommandName = "_" + name + "Wrapper";
+		    var sqlname = function.FullName.Replace("\"","");
+			o.WriteLine("\t\tprivate DbCommandWrapper {0} = new DbCommandWrapper{{ObjectName=\"{1}\",Notation=DbCallNotation.{2}}};", privateCommandName,sqlname,notation);
+			var type = "object";
+			if (notation == DbCallNotation.Scalar) {
+				var returntype = function.Definition.Attr("cs-return");
+				if (!string.IsNullOrWhiteSpace(returntype)) {
+					var datatype = Cls.DataTypeMap[returntype];
+					type = datatype.CSharpDataType;
+				}
+			}
+			else if (notation == DbCallNotation.None) {
+				type = "void";
+			}
+			o.Write("\t\t///<summary>{0}</summary>\r\n", function.Comment);
+			o.WriteLine("\t\tpublic {0} {1}Generic (object parameters) {{",type,name);
+			o.WriteLine("\t\t\tvar command = {0}.Clone(parameters,GetConnection());",privateCommandName);
+			o.WriteLine("\t\t\tvar result = DbCommandExecutor.Default.GetResultSync(command);");
+			if (type != "void") {
+				if (type != "object") {
+					o.WriteLine("\t\t\tvar convertedResult = result.To<{0}>();", type);
+					o.WriteLine("\t\t\treturn convertedResult;");
+				}
+				else {
+					o.WriteLine("\t\t\treturn result;");
+				}
+				
+			}
+			o.WriteLine("\t\t}");
+			o.Write("\t\t///<summary>{0}</summary>\r\n", function.Comment);
+			o.Write("\t\tpublic {0} {1} (", type, name);
+			var first = true;
+			foreach (var argument in function.Arguments) {
+				if (!first) {
+					o.Write(", ");
+				}
+				first = false;
+				o.Write(argument.Value.DataType.CSharpDataType);
+				o.Write(" ");
+				o.Write(argument.Value.Name);
+				o.Write(" = default({0})", argument.Value.DataType.CSharpDataType);
+			}
+			o.WriteLine("){");
+			o.Write("\t\t\treturn {0}Generic (new{{",name);
+			first = true;
+			foreach (var argument in function.Arguments)
+			{
+				if (!first)
+				{
+					o.Write(", ");
+				}
+				first = false;
+				o.Write(argument.Value.Name);
+			}
+			o.WriteLine("});");
+			o.WriteLine("\t\t}");
+
+		}
+
+		
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool DoWriteObjectWrappers {
+			get { return _doWriteObjectWrappers; }
+			set { _doWriteObjectWrappers = value; }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool DoWriteClassWrapper {
+			get { return _doWriteClassWrapper; }
+			set { _doWriteClassWrapper = value; }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool DoWriteSqlMethods   {
+			get { return _doWriteSqlMethods; }
+			set { _doWriteSqlMethods = value; }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool DoWriteModelLink {
+			get { return _doWriteModelLink; }
+			set { _doWriteModelLink = value; }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool DoWriteTableQuery {
+			get { return _doWriteTableQuery; }
+			set { _doWriteTableQuery = value; }
 		}
 
 		private void WriteSqlMethods(){
@@ -76,21 +212,33 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 
 		private void WriteStartClass()
 		{
-			WriteHeader();
-			o.WriteLine("using System;");
-			o.WriteLine("using System.Collections.Generic;");
-			o.WriteLine("using System.Text;");
-			o.WriteLine("using System.Data;");
-			o.WriteLine("using Qorpent.Data;");
-			o.WriteLine("using Qorpent.Data.DataCache;");
+			if (DoWritePreamble) { 
+				WriteHeader();
+				o.WriteLine("using System;");
+				o.WriteLine("using System.Collections.Generic;");
+				o.WriteLine("using System.Text;");
+				o.WriteLine("using System.Data;");
+				o.WriteLine("using Qorpent.Data;");
+				o.WriteLine("using Qorpent.Data.DataCache;");
+				o.WriteLine("using Qorpent.Utils.Extensions;");
 			
-			o.Write("using {0}.Adapters;\r\n", Cls.Namespace);
-			o.Write("namespace {0}.ObjectCaches {{\r\n", Cls.Namespace);
+				o.Write("using {0}.Adapters;\r\n", Cls.Namespace);
+				o.Write("namespace {0}.ObjectCaches {{\r\n", Cls.Namespace);
+			}
 			o.WriteLine("\t///<summary>");
 			o.WriteLine("\t/// Object cache for " + Cls.Name);
 			o.WriteLine("\t///</summary>");
+
 			o.Write("\tpublic partial class {0}DataCache : ObjectDataCache<{0}> {{\r\n", Cls.Name);
 			
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool DoWritePreamble {
+			get { return _doWritePreamble; }
+			set { _doWritePreamble = value; }
 		}
 	}
 }
