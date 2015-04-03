@@ -21,9 +21,7 @@ DROP DATABASE DbInitTest
                 DbCommandExecutor.Default.Execute(
                     cmd      
                     ).Wait();
-            if (null != cmd.Error) {
-                throw cmd.Error;
-            }
+         
            
         }
 
