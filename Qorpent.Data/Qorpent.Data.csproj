@@ -33,6 +33,7 @@
     <Compile Include="Installer\DbUpdateTaskBase.cs" />
     <Compile Include="Installer\InitDatabaseTask.cs" />
     <Compile Include="Installer\InitMetaTableTask.cs" />
+    <Compile Include="Installer\ScriptFileDbUpdateTask.cs" />
     <Compile Include="REST\AddConnection.cs" />
     <Compile Include="REST\ConnectionsAction.cs" />
     <Compile Include="REST\RemoveConnection.cs" />

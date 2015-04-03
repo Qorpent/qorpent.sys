@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Configuration;
 using System.Runtime.InteropServices;
 using Qorpent.Tasks;
 using Qorpent.Utils;
@@ -46,11 +47,11 @@ namespace Qorpent.Data.Installer
         private void SetupTargetDescriptor() {
             if(null==Source)return;
             var cmd = InitCommand(
-                "select Hash,Version from qorpent.meta where Code = @code",
+                "select hash,version from qorpent.meta where Code = @code",
                  DbCallNotation.SingleRow);
             cmd.ParametersSoruce = new {code = Source.Name};
             var result = (IDictionary<string,object>)DbExecutor.GetResultSync(cmd);
-            Target = null == result ? new FileDescriptorEx {Name = Source.Name, Hash = "INIT", Version = DateTime.MinValue} : new FileDescriptorEx { Name = Source.Name, Hash =result["Hash"].ToStr(), Version = result["Version"].ToDate() };
+            Target = null == result ? new FileDescriptorEx {Name = Source.Name, Hash = "INIT", Version = DateTime.MinValue} : new FileDescriptorEx { Name = Source.Name, Hash =result["hash"].ToStr(), Version = result["version"].ToDate() };
         }
 
         /// <summary>
@@ -187,6 +188,20 @@ namespace Qorpent.Data.Installer
                     if (!IgnoreErrors) {
                         throw;
                     }
+                }
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        protected override void FixSuccess() {
+            base.FixSuccess();
+            if (null != Source) {
+                var cmd = InitCommand("qorpent.metaupdate");
+                cmd.ParametersSoruce = new {code = Source.Name, hash = Source.Hash, version = Source.Version.AddSeconds(-1)};
+                DbExecutor.Execute(cmd).Wait();
+                if (!cmd.Ok) {
+                    throw cmd.Error;
                 }
             }
         }

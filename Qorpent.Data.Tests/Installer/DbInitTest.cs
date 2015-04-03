@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Qorpent.Data.Installer;
 using Qorpent.Tasks;
@@ -50,6 +51,7 @@ DROP DATABASE DbInitTest
             }
             Assert.AreEqual(TaskState.SuccessOnce, task.State);
         }
+
 
         [Test]
         public void CanCreateDatabase() {

@@ -506,6 +506,14 @@ order by ORDINAL_POSITION
 		}
 
 		private void PrepareParametersByQuery(DbCommandWrapper info) {
+
+		    
+		    if (Regex.IsMatch(info.Query, @"(?i)create\s+((proc)|(func))")) {
+		        info.Parameters = new DbParameter[] {};
+                return;
+		        
+		    }
+
 			if (info.Dialect != SqlDialect.SqlServer) {
 				throw new Exception("cannot setup parameters for non-TSql query");
 			}

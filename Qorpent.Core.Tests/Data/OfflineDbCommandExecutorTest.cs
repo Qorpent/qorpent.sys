@@ -98,6 +98,15 @@ namespace Qorpent.Core.Tests.Data
         }
 
         [Test]
+        public void DoNotRetrieveParametersFromCreateProcOrFuncQuery()
+        {
+            C.Query = "CREATE PROC x.x @id int as begin print @id end";
+            E.Execute(C).Wait();
+            Assert.NotNull(C.Parameters);
+            Assert.AreEqual(0, C.Parameters.Length);
+
+        }
+        [Test]
         public void BindParametersFromSource() {
             C.Query = "select * from x where Id = @id or Code = @id";
             C.ParametersSoruce = new{Id = 23};

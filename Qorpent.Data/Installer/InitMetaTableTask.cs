@@ -27,6 +27,13 @@ namespace Qorpent.Data.Installer {
     Hash nvarchar(255) not null default '',
     Version datetime not null default '19000101'
 )";
+            yield return @"IF OBJECT_ID('qorpent.metaupdate') IS NOT NULL DROP PROC qorpent.metaupdate";
+            yield return
+                @"CREATE PROCEDURE qorpent.metaupdate @code nvarchar(255), @hash nvarchar(255), @version datetime as begin
+    if not exists (select top 1 id from qorpent.meta where code = @code) 
+        insert qorpent.meta (code) values (@code)
+    update qorpent.meta set hash = @hash, version = @version where code = @code
+end";
         }
 
         /// <summary>
