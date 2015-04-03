@@ -30,8 +30,10 @@
     <Compile Include="DataDiff\SqlUpdateApplyer.cs" />
     <Compile Include="DataDiff\TableDiffGeneratorContext.cs" />
     <Compile Include="DataDiff\TableMap.cs" />
+    <Compile Include="Installer\DbJobBuilder.cs" />
     <Compile Include="Installer\DbUpdateTaskBase.cs" />
     <Compile Include="Installer\InitDatabaseTask.cs" />
+    <Compile Include="Installer\InitClrTask.cs" />
     <Compile Include="Installer\InitMetaTableTask.cs" />
     <Compile Include="Installer\ScriptFileDbUpdateTask.cs" />
     <Compile Include="REST\AddConnection.cs" />

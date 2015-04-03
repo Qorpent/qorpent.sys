@@ -4,6 +4,8 @@ using Qorpent.Utils.IO;
 
 namespace Qorpent.Tasks {
     public abstract class UpdateTaskBase : TaskBase {
+        protected bool ResetTargetLater;
+
         /// <summary>
         ///     Исходный дескриптор
         /// </summary>
@@ -16,6 +18,11 @@ namespace Qorpent.Tasks {
 
         public override void Refresh() {
             base.Refresh();
+            if (ResetTargetLater)
+            {
+                DoLateTargetReset();
+                ResetTargetLater = false;
+            }
             if (null != Source) {
                 Source.Refresh();
             }
@@ -28,6 +35,11 @@ namespace Qorpent.Tasks {
         /// </summary>
         /// <returns></returns>
         protected override bool RequireExecution() {
+            if (ResetTargetLater)
+            {
+                DoLateTargetReset();
+                ResetTargetLater = false;
+            }
             if (null != Target && null != Source) {
                 if (Target.Hash == "INIT") {
                     return true;
@@ -40,14 +52,29 @@ namespace Qorpent.Tasks {
             return base.RequireExecution();
         }
 
+        
+
         protected override bool HasUpdatedOnce() {
+            if (ResetTargetLater) {
+                DoLateTargetReset();
+                ResetTargetLater = false;
+            }
             if (null != Target) {
                 return Target.Hash != "INIT";
             }
             return base.HasUpdatedOnce();
         }
 
+        protected virtual void DoLateTargetReset() {
+           
+        }
+
         protected override void CheckoutParameters() {
+            if (ResetTargetLater)
+            {
+                DoLateTargetReset();
+                ResetTargetLater = false;
+            }
             if (null != Source) {
                 if (null == Requirements || 0 == Requirements.Length) {
                     var requirements = Source.Header.Elements("require").ToArray();

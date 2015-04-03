@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net.Configuration;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Qorpent.Tasks;
 using Qorpent.Utils;
@@ -39,19 +41,53 @@ namespace Qorpent.Data.Installer
             set { _databaseName = value; }
         }
 
+
+        public FileDescriptorEx GetMeta(string name = null) {
+            if (string.IsNullOrWhiteSpace(name)) {
+                name = Source.Name;
+            }
+            var cmd = InitCommand(
+               "select hash,version from qorpent.meta where Code = @code",
+                DbCallNotation.SingleRow);
+            cmd.ParametersSoruce = new { code = name };
+            var result = (IDictionary<string, object>)DbExecutor.GetResultSync(cmd);
+            var meta = null == result ? new FileDescriptorEx { Name = Source.Name, Hash = "INIT", Version = DateTime.MinValue } : new FileDescriptorEx { Name = Source.Name, Hash = result["hash"].ToStr(), Version = result["version"].ToDate() };
+            return meta;
+        }
+
         public override void Initialize(IJob package = null) {
             base.Initialize(package);
             SetupTargetDescriptor();
         }
 
+        protected override void DoLateTargetReset() {
+            Target = GetMeta();
+        }
+
         private void SetupTargetDescriptor() {
+            if (null == Source && !string.IsNullOrWhiteSpace(MetaName)) {
+                Source = GetSelfMetaDesc();
+            }
             if(null==Source)return;
-            var cmd = InitCommand(
-                "select hash,version from qorpent.meta where Code = @code",
-                 DbCallNotation.SingleRow);
-            cmd.ParametersSoruce = new {code = Source.Name};
-            var result = (IDictionary<string,object>)DbExecutor.GetResultSync(cmd);
-            Target = null == result ? new FileDescriptorEx {Name = Source.Name, Hash = "INIT", Version = DateTime.MinValue} : new FileDescriptorEx { Name = Source.Name, Hash =result["hash"].ToStr(), Version = result["version"].ToDate() };
+            try {
+                Target = GetMeta();
+            }
+            catch (SqlException) {
+                ResetTargetLater = true;
+            }
+        }
+
+        protected FileDescriptorEx GetSelfMetaDesc(string name = null) {
+            if (string.IsNullOrWhiteSpace(name)) {
+                name = MetaName;
+            }
+            var versionstring = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var hash = "INSTALLED_" + versionstring;
+            var version = new DateTime(2000, 1, 1);
+            var offset = versionstring.Replace(".", "").ToInt();
+            version = version.AddSeconds(offset);
+            var src = new FileDescriptorEx {Name = name, Hash = hash, Version = version};
+            return src;
         }
 
         /// <summary>
@@ -167,7 +203,9 @@ namespace Qorpent.Data.Installer
                 }
                 return _cmdParameters;
             }
-        } 
+        }
+
+        public string MetaName { get; set; }
 
         protected override void InternalWork() {
             internalLog = new StringWriter();
@@ -197,12 +235,17 @@ namespace Qorpent.Data.Installer
         protected override void FixSuccess() {
             base.FixSuccess();
             if (null != Source) {
-                var cmd = InitCommand("qorpent.metaupdate");
-                cmd.ParametersSoruce = new {code = Source.Name, hash = Source.Hash, version = Source.Version.AddSeconds(-1)};
-                DbExecutor.Execute(cmd).Wait();
-                if (!cmd.Ok) {
-                    throw cmd.Error;
-                }
+                SaveMeta(Source);
+            }
+            
+        }
+
+        protected void SaveMeta(IVersionedDescriptor src) {
+            var cmd = InitCommand("qorpent.metaupdate");
+            cmd.ParametersSoruce = new {code = src.Name, hash = src.Hash, version = src.Version.AddSeconds(-1)};
+            DbExecutor.Execute(cmd).Wait();
+            if (!cmd.Ok) {
+                throw cmd.Error;
             }
         }
 

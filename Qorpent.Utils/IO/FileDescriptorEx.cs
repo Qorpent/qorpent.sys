@@ -205,7 +205,10 @@ namespace Qorpent.Utils.IO
         /// </summary>
         /// <returns></returns>
         public bool IsAssembly {
-            get { return Path.GetExtension(FullName).ToLowerInvariant() == ".dll"; }
+            get {
+                if (string.IsNullOrWhiteSpace(FullName)) return false;
+                return Path.GetExtension(FullName).ToLowerInvariant() == ".dll";
+            }
         }
 
         private void CheckTextFileVersion() {

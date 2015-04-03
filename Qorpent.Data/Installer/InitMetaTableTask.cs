@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Qorpent.Utils.IO;
 
 namespace Qorpent.Data.Installer {
     /// <summary>
@@ -35,7 +37,11 @@ namespace Qorpent.Data.Installer {
     update qorpent.meta set hash = @hash, version = @version where code = @code
 end";
         }
-
+        protected override void FixSuccess()
+        {
+            base.FixSuccess();
+            SaveMeta(GetSelfMetaDesc("initmeta"));
+        }
         /// <summary>
         /// 
         /// </summary>
