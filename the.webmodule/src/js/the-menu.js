@@ -168,6 +168,7 @@ define([], function () {
                 restrict: 'A',
                 link: function (scope, el, attrs) {
                     el = $(el);
+
                     var settings = scope.settings.get(attrs.id);
                     if (!!attrs.model) {
                         scope.$watch(attrs.model, function() {
