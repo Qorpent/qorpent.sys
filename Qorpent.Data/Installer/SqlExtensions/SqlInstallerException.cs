@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 // Copyright 2007-2012 Comdiv (F. Sadykov) - http://code.google.com/u/fagim.sadykov/
 // Supported by Media Technology LTD 
@@ -16,38 +16,26 @@
 // limitations under the License.
 // 
 // Solution: Qorpent
-// Original file : Program.cs
-// Project: Qorpent.Tools.SqlExtensionsInstaller
+// Original file : SqlInstallerException.cs
+// Project: Qorpent.Tools.SqlExtensionsInstallerLib
 // 
 // ALL MODIFICATIONS MADE TO FILE MUST BE DOCUMENTED IN SVN
 
 #endregion
 
 using System;
-using Qorpent.Data.Installer.SqlExtensions;
-using Qorpent.Utils;
 
-namespace Qorpent.Tools.SqlExtensionsInstaller {
+namespace Qorpent.Data.Installer.SqlExtensions {
 	/// <summary>
-	/// 	runs sqlinstaller
+	/// 	General error of SqlInstaller
 	/// </summary>
-	public static class Program {
+	[Serializable]
+	public class SqlInstallerException : Exception {
 		/// <summary>
-		/// 	main method for Executable
+		/// 	creates new instance with message and possible inner exception
 		/// </summary>
-		/// <param name="args"> </param>
-		/// <returns> </returns>
-		public static int Main(string[] args) {
-			try {
-				var strongTypedArguments = new ConsoleArgumentHelper().Parse<SqlInstallerConsoleProgramArgs>(args);
-				return new SqlInstallerConsoleProgram().Run(strongTypedArguments);
-			}
-			catch (Exception ex) {
-				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine(ex.ToString());
-				Console.ResetColor();
-				return -1;
-			}
-		}
+		/// <param name="message"> </param>
+		/// <param name="inner"> </param>
+		public SqlInstallerException(string message, Exception inner = null) : base(message, inner) {}
 	}
 }

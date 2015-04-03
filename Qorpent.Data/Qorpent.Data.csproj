@@ -36,6 +36,16 @@
     <Compile Include="Installer\InitClrTask.cs" />
     <Compile Include="Installer\InitMetaTableTask.cs" />
     <Compile Include="Installer\ScriptFileDbUpdateTask.cs" />
+    <Compile Include="Installer\SqlExtensions\AggregatorWrapper.cs" />
+    <Compile Include="Installer\SqlExtensions\FunctionSqlWrapper.cs" />
+    <Compile Include="Installer\SqlExtensions\FunctionWrapper.cs" />
+    <Compile Include="Installer\SqlExtensions\ProcedureWrapper.cs" />
+    <Compile Include="Installer\SqlExtensions\QueryGeneratorHelper.cs" />
+    <Compile Include="Installer\SqlExtensions\SqlExportMemberWrapper.cs" />
+    <Compile Include="Installer\SqlExtensions\SqlInstallerConsoleProgram.cs" />
+    <Compile Include="Installer\SqlExtensions\SqlInstallerConsoleProgramArgs.cs" />
+    <Compile Include="Installer\SqlExtensions\SqlInstallerException.cs" />
+    <Compile Include="Installer\SqlExtensions\UserTypeWrapper.cs" />
     <Compile Include="REST\AddConnection.cs" />
     <Compile Include="REST\ConnectionsAction.cs" />
     <Compile Include="REST\RemoveConnection.cs" />
@@ -48,6 +58,10 @@
     <QorpentReference Include="Qorpent.Utils.import" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\qorpent.kernel\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />

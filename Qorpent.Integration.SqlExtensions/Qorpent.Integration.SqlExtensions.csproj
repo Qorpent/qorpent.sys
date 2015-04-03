@@ -22,7 +22,6 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
-  
   <ItemGroup>
     <Compile Include="..\Qorpent.Utils\BrickScaleNormalizer\BrickCatalog.cs">
       <Link>ImportCode\BrickCatalog.cs</Link>
@@ -429,7 +428,6 @@
     <MinorVersion>5</MinorVersion>
     <Revision>0</Revision>
     <BuildNumber>0</BuildNumber>
-
     <!-- true to force .dll references in *.import files instead of project references -->
     <NoProjRef>False</NoProjRef>
   </PropertyGroup>
@@ -440,10 +438,6 @@
     <Content Include="qpt-sqlext-clr.sql" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Qorpent.Tools.SqlExtensionsInstallerLib\Qorpent.Tools.SqlExtensionsInstallerLib.csproj">
-      <Project>{820af793-eecc-418d-91cd-e40e8597bc09}</Project>
-      <Name>Qorpent.Tools.SqlExtensionsInstallerLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Qorpent.Tools.SqlExtensionsInstaller\Qorpent.Tools.SqlExtensionsInstaller.csproj">
       <Project>{9156ee53-0eed-4467-b5ef-4583f9dc3645}</Project>
       <Name>Qorpent.Tools.SqlExtensionsInstaller</Name>
