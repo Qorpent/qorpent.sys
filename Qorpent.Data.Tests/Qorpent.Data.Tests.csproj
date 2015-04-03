@@ -13,6 +13,7 @@
     <Compile Include="ConnectionLoaderTest.cs" />
     <Compile Include="DataDiff\BasicDiffTest.cs" />
     <Compile Include="DataDiff\RealWorldExample.cs" />
+    <Compile Include="Installer\AssemblyInstallTest.cs" />
     <Compile Include="Installer\DbInitTest.cs" />
     <Compile Include="Installer\DbSciptTest.cs" />
     <None Include="*.import" />

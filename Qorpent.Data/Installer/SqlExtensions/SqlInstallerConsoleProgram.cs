@@ -48,6 +48,8 @@ namespace Qorpent.Data.Installer.SqlExtensions {
 			if (!args.IsValid(out argsvalidmessage)) {
 				throw new SqlInstallerException("invalid arguments : " + argsvalidmessage);
 			}
+            Scripts = GenerateScripts(args).ToArray();
+		    if (args.NoOutput) return 0;
 			if (args.GenerateScript) {
 				GenerateScript(args);
 			}
@@ -58,11 +60,10 @@ namespace Qorpent.Data.Installer.SqlExtensions {
 		}
 
 		private void UpdateDatabase(SqlInstallerConsoleProgramArgs args) {
-			var scripts = GenerateScripts(args);
 			using (var connection = args.CreateConnection()) {
 				connection.Open();
 				//using (var tr = connection.BeginTransaction()) {
-				foreach (var script in scripts) {
+				foreach (var script in Scripts) {
 					var command = connection.CreateCommand();
 					//command.Transaction = tr;
 					command.CommandText = script;
@@ -86,9 +87,12 @@ namespace Qorpent.Data.Installer.SqlExtensions {
 		}
 
 		private void GenerateScript(SqlInstallerConsoleProgramArgs args) {
-			var scripts = GenerateScripts(args);
+			
+            if(args.NoOutput)return;
+		    
 			var script = new StringBuilder();
-			foreach (var s in scripts) {
+            foreach (var s in Scripts)
+            {
 				script.AppendLine(s);
 				script.AppendLine("GO");
 			}
@@ -112,12 +116,11 @@ namespace Qorpent.Data.Installer.SqlExtensions {
 				(assembly.GetReferencedAssemblies().Where(
 					x => (x.Name.StartsWith("System.") || x.Name.StartsWith("Microsoft.")) && x.Name != "Microsoft.SqlServer.Types" && x.Name != "System.Data" && x.Name != "System.Xml" && x.Name != "System" && x.Name != "System.Web")).
 					ToList();
-			if (sysdepends.Any(_ => _.Name == "Microsoft.CSharp")) {
-				sysdepends.Insert(0, new AssemblyName("system.dynamic"));
-			}
+			
 			var customdepends =
 				assembly.GetReferencedAssemblies().Where(
 					x => !(x.Name.StartsWith("System") || x.Name == "mscorlib" || x.Name.StartsWith("Microsoft."))).ToList();
+		   
 			foreach (var assemblyName in customdepends.ToArray()) {
 				var a = Assembly.Load(assemblyName);
 				foreach (
@@ -128,6 +131,15 @@ namespace Qorpent.Data.Installer.SqlExtensions {
 						customdepends.Add(ccd);
 					}
 				}
+                var subsysdepends =
+                (a.GetReferencedAssemblies().Where(
+                    x => (x.Name.StartsWith("System.") || x.Name.StartsWith("Microsoft.")) && x.Name != "Microsoft.SqlServer.Types" && x.Name != "System.Data" && x.Name != "System.Xml" && x.Name != "System" && x.Name != "System.Web")).
+                    ToList();
+			    foreach (var subsysdepend in subsysdepends) {
+			        if (!sysdepends.Contains(subsysdepend)) {
+			            sysdepends.Add(subsysdepend);
+			        }
+			    }
 			}
 			foreach (var assemblyName in customdepends) {
 				var a = Assembly.Load(assemblyName);
@@ -140,6 +152,19 @@ namespace Qorpent.Data.Installer.SqlExtensions {
 					}
 				}
 			}
+            if (sysdepends.Any(_ => _.Name == "Microsoft.CSharp"))
+            {
+                sysdepends.Insert(0, new AssemblyName("system.dynamic"));
+            }
+            foreach (var customdepend in customdepends.ToArray())
+            {
+                if (customdepend.Name.Contains("WindowsBase"))
+                {
+                    sysdepends.Add( customdepend);
+                    customdepends.Remove(customdepend);
+                }
+            }
+		    sysdepends = sysdepends.GroupBy(_ => _.Name).Select(_ => _.First()).ToList();
 			customdepends.Sort((a, b) =>
 				{
 					var aa = Assembly.Load(a);
@@ -195,6 +220,10 @@ if SCHEMA_ID('{0}') is null {1}
 																		   Assembly assembly) {
 			var dir = Path.GetDirectoryName(Path.GetFullPath(args.AssemblyName + ".dll"));
 			foreach (var dep in customdepends) {
+			    var source = QueryGeneratorHelper.GetAssemblyBits(Path.Combine(dir, dep.Name + ".dll"));
+			    if (args.UseAssemblyPath) {
+			        source = "'" + Path.Combine(dir, dep.Name + ".dll") + "'";
+			    }
 				yield return
 					string.Format(
 						@"
@@ -220,9 +249,13 @@ else begin
 	end catch	
 end
 ",
-						dep.Name, QueryGeneratorHelper.GetAssemblyBits(Path.Combine(dir, dep.Name + ".dll")));
+						dep.Name,source);
 			}
-			
+		    var source2 = QueryGeneratorHelper.GetAssemblyBits(Path.Combine(dir, assembly.GetName().Name + ".dll"));
+            if (args.UseAssemblyPath)
+            {
+                source2 = "'" + Path.Combine(dir, assembly.GetName().Name + ".dll") + "'";
+            }
 			yield return
 				string.Format(
 					@"
@@ -232,7 +265,7 @@ AUTHORIZATION dbo
 FROM {1}
 WITH PERMISSION_SET = {2}
 ",
- assembly.GetName().Name, QueryGeneratorHelper.GetAssemblyBits(Path.Combine(dir, assembly.GetName().Name + ".dll")), args.Safe ? "SAFE" : "UNSAFE")
+ assembly.GetName().Name, source2, args.Safe ? "SAFE" : "UNSAFE")
 				;
 		}
 
@@ -261,6 +294,21 @@ drop assembly [{0}]
 			}
 			if (!_args.CleanOnly) {
 				foreach (var sysasm in sysdepends) {
+				    var codebase = sysasm.CodeBase;
+				    if (!string.IsNullOrWhiteSpace(codebase)) {
+				        codebase = codebase.Replace("file:///", "");
+				    }
+				    else {
+				        codebase = @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\" + sysasm.Name + ".dll";
+				        if (!File.Exists(codebase)) {
+				            codebase = @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\" +
+				                       sysasm.Name + ".dll";
+				        }
+				        if (!File.Exists(codebase)) {
+                            codebase = @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\" +
+                                       sysasm.Name + ".dll";
+				        }
+				    }
 					yield return
 						string.Format(
                             @"
@@ -268,13 +316,13 @@ drop assembly [{0}]
 begin try
 if not exists(select assembly_id from sys.assemblies where name='{0}') 
 Create assembly [{0}] 
-from 'C:\Windows\Microsoft.NET\Framework\v4.0.30319\{0}.dll' 
+from '{1}' 
 with permission_set = unsafe 
 end try
 begin catch
 end catch
 ",
-							sysasm.Name);
+							sysasm.Name,codebase);
 				}
 			}
 		}
@@ -331,5 +379,9 @@ ALTER AUTHORIZATION ON DATABASE::{0} to sa
 		}
 
 		private SqlInstallerConsoleProgramArgs _args;
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    public string[] Scripts;
 	}
 }

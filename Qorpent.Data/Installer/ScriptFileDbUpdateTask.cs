@@ -32,7 +32,7 @@ namespace Qorpent.Data.Installer {
         }
         protected override IEnumerable<string> GetScripts() {
             var srcScript = File.ReadAllText(Source.FullName);
-            var queries = Regex.Split(srcScript, @"[\r\n]+\s*GO\s*?[\r\n]+");
+            var queries = Regex.Split(srcScript, @"(?i)[\r\n]+\s*GO\s*?[\r\n]+");
             return queries.Select(query => query.Trim()).Where(q => !string.IsNullOrWhiteSpace(q));
         }
     }

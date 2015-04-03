@@ -42,8 +42,16 @@ namespace Qorpent.Data.Installer.SqlExtensions {
 			get { return _assemblyName.IsEmpty() ? Arg1 : _assemblyName; }
 			set { _assemblyName = value; }
 		}
+        /// <summary>
+        /// Требование использовать в скрипте путь к библиотеке вместо полного бинарного представления
+        /// </summary>
+	    public bool UseAssemblyPath { get; set; }
+        /// <summary>
+        /// Запретить выдачу в Console.Output
+        /// </summary>
+	    public bool NoOutput { get; set; }
 
-		/// <summary>
+	    /// <summary>
 		/// 	checkout that arguments are valid and returns message to display
 		/// </summary>
 		/// <param name="argsvalidmessage"> message to display </param>
@@ -108,7 +116,7 @@ namespace Qorpent.Data.Installer.SqlExtensions {
 				}
 				var fullpath = Path.GetFullPath(AssemblyName);
 				_dir = Path.GetDirectoryName(fullpath);
-				if (!fullpath.EndsWith(".dll")) {
+				if (!fullpath.ToLowerInvariant().EndsWith(".dll")) {
 					fullpath += ".dll";
 				}
 				if (!File.Exists(fullpath)) {

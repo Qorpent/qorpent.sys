@@ -106,6 +106,20 @@ namespace Qorpent.Core.Tests.Data
             Assert.AreEqual(0, C.Parameters.Length);
 
         }
+
+        [Test]
+        public void DoNotRetrieveParametersForLocalVariables()
+        {
+            C.Query = @"
+declare @x int
+set @x  = 2 + @y
+";
+            E.Execute(C).Wait();
+            Assert.NotNull(C.Parameters);
+            Assert.AreEqual(1, C.Parameters.Length);
+            Assert.AreEqual("y",C.Parameters[0].Name);
+
+        }
         [Test]
         public void BindParametersFromSource() {
             C.Query = "select * from x where Id = @id or Code = @id";

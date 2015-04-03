@@ -437,12 +437,6 @@
   <ItemGroup>
     <Content Include="qpt-sqlext-clr.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Qorpent.Tools.SqlExtensionsInstaller\Qorpent.Tools.SqlExtensionsInstaller.csproj">
-      <Project>{9156ee53-0eed-4467-b5ef-4583f9dc3645}</Project>
-      <Name>Qorpent.Tools.SqlExtensionsInstaller</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
     <PostBuildEvent>REM $(OutDir)..\all\sqlext.exe $(TargetDir)$(TargetFileName) --generate-script --schema qorpent &gt; $(ProjectDir)qpt-sqlext-clr.sql</PostBuildEvent>

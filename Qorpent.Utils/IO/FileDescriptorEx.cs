@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security;
 using System.Security.Cryptography;
+using System.Security.Permissions;
 using System.Security.Policy;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
@@ -170,16 +172,58 @@ namespace Qorpent.Utils.IO
                 
             }
         }
-
+        [Serializable]
         class AssemblyUsage : IDisposable {
+            [Serializable]
+            class Mapper {
+                private Dictionary<string, string> map;
+                private AppDomain domain;
+
+                public Mapper(AppDomain appdomain) {
+                    this.domain = appdomain;
+                    this.map = new Dictionary<string, string>();
+                    foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
+                    {
+                        map[a.GetName().Name.Split(',')[0].ToLowerInvariant()] = a.Location;
+                    }
+                    appdomain.AssemblyResolve += Resolve;
+                    appdomain.UnhandledException+=appdomain_UnhandledException;
+                }
+
+                private void appdomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
+                    Console.WriteLine(e.ExceptionObject);
+                }
+
+                public Assembly Resolve(object s, ResolveEventArgs a) {
+                    var localname = a.Name.Split(',')[0].ToLowerInvariant();
+                    if (map.ContainsKey(localname))
+                    {
+                        return domain.Load(File.ReadAllBytes(map[localname]));
+                    }
+
+                    return null;
+                }
+            }
             public AssemblyUsage(string fullname) {
                 Evidence e = new Evidence();
                 e.AddHostEvidence(new Zone(SecurityZone.Trusted));
                 var ads = new AppDomainSetup { ApplicationBase = Path.GetDirectoryName(fullname) };
-                this.Sandbox = AppDomain.CreateDomain("test", e, ads, SecurityManager.GetStandardSandbox(e));
-                var assembly = Sandbox.Load(File.ReadAllBytes(fullname));
-                this.Assembly = assembly;
+                this.Sandbox = AppDomain.CreateDomain("test", e, ads, new PermissionSet(PermissionState.Unrestricted));
+                new Mapper(Sandbox);
+
+
+                try {
+                    var assembly = Sandbox.Load(Path.GetFileNameWithoutExtension(fullname));
+                    this.Assembly = assembly;
+                }
+                catch (Exception ex) {
+                    this.Assembly = Assembly.Load(File.ReadAllBytes(fullname));
+                }
+               
+
             }
+
+            
 
             private AppDomain Sandbox { get; set; }
 

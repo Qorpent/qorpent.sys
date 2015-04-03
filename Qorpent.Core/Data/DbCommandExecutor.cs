@@ -519,8 +519,14 @@ order by ORDINAL_POSITION
 			}
 
 			var references = Regex.Matches(info.Query, @"@[\w\d]+").OfType<Match>().Select(_ => _.Value.Substring(1))
-				.Distinct();
+				.Distinct().ToList();
+		    foreach (var r in references.ToArray()) {
+		        if (Regex.IsMatch(info.Query, @"(?i)declare\s+@" + r + @"\s+")) {
+		            references.Remove(r);
+		        }
+		    }
 			info.Parameters = references.Select(_ => new DbParameter {Name = _}).ToArray();
+
 		}
 
 		private void PrepareConnection(DbCommandWrapper info) {
