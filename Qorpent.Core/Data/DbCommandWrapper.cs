@@ -11,6 +11,10 @@ namespace Qorpent.Data {
         /// </summary>
         public string ConnectionString { get; set; }
         /// <summary>
+        /// Название базы данных
+        /// </summary>
+        public string Database { get; set; }
+        /// <summary>
         /// prepared connection
         /// </summary>
         public IDbConnection Connection { get; set; }
@@ -91,6 +95,7 @@ namespace Qorpent.Data {
             var result = new DbCommandWrapper {
                 Connection = Connection,
                 ConnectionString = ConnectionString,
+                Database = Database,
                 Trace = Trace,
                 Dialect = Dialect,
                 OnError = OnError,

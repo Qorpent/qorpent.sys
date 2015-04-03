@@ -114,6 +114,9 @@ order by ORDINAL_POSITION
 				if (!wasOpened) {
 					info.Connection.Open();
 				}
+			    if (!string.IsNullOrWhiteSpace(info.Database)) {
+			        info.Connection.ChangeDatabase(info.Database);
+			    }
 				ExecuteCommand(info);
 			}
 			finally {
@@ -423,6 +426,9 @@ order by ORDINAL_POSITION
 				if (!connecitonIsOpened) {
 					info.Connection.Open();
 				}
+			    if (!string.IsNullOrWhiteSpace(info.Database)) {
+			        info.Connection.ChangeDatabase(info.Database);
+			    }
 				var cmd = info.Connection.CreateCommand();
 				cmd.CommandText = query;
 				var result = cmd.ExecuteScalar();
@@ -457,6 +463,9 @@ order by ORDINAL_POSITION
 				if (!connecitonIsOpened) {
 					info.Connection.Open();
 				}
+			    if (!string.IsNullOrWhiteSpace(info.Database)) {
+			        info.Connection.ChangeDatabase(info.Database);
+			    }
 				var cmd = info.Connection.CreateCommand();
 				cmd.CommandText = query;
 				var parameters = new List<DbParameter>();

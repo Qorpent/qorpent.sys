@@ -14,6 +14,7 @@ namespace Qorpent.Core.Tests.Data {
         private DbCommandWrapper C;
         TraceListener L = new ConsoleTraceListener();
         private const string Connection = "Server=(local);Database=tempdb;Trusted_Connection=true;";
+        private const string NoDatabaseNameConnection = "Server=(local);Trusted_Connection=true;";
         [TestFixtureSetUp]
         public void PrepareDatabase() {
             using (var c = new SqlConnection(Connection)) {
@@ -75,6 +76,16 @@ END;
             C.ParametersSoruce = new {id = 2, type = "SCALAR"};
             E.Execute(C).Wait();
             Assert.AreEqual(4,C.Result);
+        }
+
+        [Test]
+        public void DatabaseNameInContext() {
+            C.ConnectionString = NoDatabaseNameConnection;
+            C.Database = "tempdb";
+            C.Notation = DbCallNotation.Scalar;
+            C.ParametersSoruce = new { id = 2, type = "SCALAR" };
+            E.Execute(C).Wait();
+            Assert.AreEqual(4, C.Result);
         }
 
         [Test]
