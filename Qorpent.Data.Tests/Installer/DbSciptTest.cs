@@ -26,11 +26,7 @@ DROP DATABASE DbSciptTest
             DbCommandExecutor.Default.Execute(
                 cmd
                 ).Wait();
-            var job = new Job();
-            job.Tasks["initdb"] = new InitDatabaseTask();
-            job.Tasks["initmeta"] = new InitMetaTableTask();
-            job.Data["database"] = "DbSciptTest";
-            job.Execute();
+            DbInstallJobFactory.Create("DbSciptTest").Execute();
             this.dir = FileSystemHelper.ResetTemporaryDirectory();
             this.file = Path.Combine(dir, "a.sql");
         }

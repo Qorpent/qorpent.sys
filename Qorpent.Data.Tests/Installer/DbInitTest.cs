@@ -26,16 +26,48 @@ DROP DATABASE DbInitTest
            
         }
 
+        
         [Test]
-        public void CanCreateMetaTable() {
-            new InitDatabaseTask {Database = "DbInitTest"}.Execute();
-            var task = new InitMetaTableTask {Database = "DbInitTest"};
+        public void CanInitClr()
+        {
+            new InitDatabaseTask { Database = "DbInitTest" }.Execute();
+            new InitMetaTableTask { Database = "DbInitTest" }.Execute();
+            var task = new InitClrTask { Database = "DbInitTest" };
             task.Execute();
-            if (null != task.Error) {
+            if (null != task.Error)
+            {
                 Console.WriteLine(task.Error.ToString());
             }
-            Assert.AreEqual(TaskState.Success,task.State);
+            Assert.AreEqual(TaskState.Success, task.State);
         }
+
+
+        [Test]
+        public void WillNotInitClrTwice()
+        {
+            new InitDatabaseTask { Database = "DbInitTest" }.Execute();
+            new InitMetaTableTask { Database = "DbInitTest" }.Execute();
+            var task = new InitClrTask { Database = "DbInitTest" };
+            task.Execute();
+            Assert.AreEqual(TaskState.Success, task.State);
+            task = new InitClrTask { Database = "DbInitTest" };
+            task.Execute();
+            Assert.AreEqual(TaskState.SuccessOnce, task.State);
+        }
+
+        [Test]
+        public void CanCreateMetaTable()
+        {
+            new InitDatabaseTask { Database = "DbInitTest" }.Execute();
+            var task = new InitMetaTableTask { Database = "DbInitTest" };
+            task.Execute();
+            if (null != task.Error)
+            {
+                Console.WriteLine(task.Error.ToString());
+            }
+            Assert.AreEqual(TaskState.Success, task.State);
+        }
+
 
         [Test]
         public void WillNotCreateMetaTableTwice()
