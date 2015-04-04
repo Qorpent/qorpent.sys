@@ -143,6 +143,11 @@ namespace Qorpent.Utils.IO
         /// </summary>
         public bool AllowNotExisted { get; set; }
 
+        /// <summary>
+        /// Использовать версию репозитория, а не собственную
+        /// </summary>
+        public bool UseRepositoryCommit { get; set; }
+
         private void CheckoutVersions() {
             if (!string.IsNullOrWhiteSpace(_hash)) {
                 return;
@@ -273,16 +278,59 @@ namespace Qorpent.Utils.IO
             }
         }
 
+        public string[] RepositoryDependencies { get; set; }
+
         protected bool CheckGitVersion() {
-            var gitCommit = GitHelper.GetLastCommit(FullName);
+            if (null == GitHelper.ResolveGitDirectory(FullName)) return false;
+            if (Header.Attr("userepositorycommit").ToBool()) {
+                UseRepositoryCommit = true;
+            }
+            if (Header.Elements("repodependency").Any()) {
+                RepositoryDependencies = Header.Elements("repodependency").Select(_ => _.Attr("code")).ToArray();
+            }
+
+            var gitCommit = UseRepositoryCommit ? GitHelper.GetCommit(FullName) : GitHelper.GetLastCommit(FullName);
+            var hash = gitCommit.Hash;
+            var version = gitCommit.GlobalRevisionTime;
+            if (null != RepositoryDependencies && 0 != RepositoryDependencies.Length) {
+                var commits = CollectRepoDependencyCommits().ToArray();
+                hash += string.Join("", commits.Select(_ => _.Hash));
+                hash = hash.GetMd5();
+                foreach (var c in commits) {
+                    if (c.GlobalRevisionTime > version) {
+                        version = c.GlobalRevisionTime;
+                    }
+                }
+            }
+
             if (null != gitCommit) {
                 IsGitBased = true;
                 CommitInfo = gitCommit;
-                Hash = gitCommit.Hash;
-                Version = gitCommit.GlobalRevisionTime;
+                Hash = hash;
+                Version = version;
                 return true;
             }
             return false;
+        }
+
+        private IEnumerable<GitCommitInfo> CollectRepoDependencyCommits() {
+            foreach (var dep in RepositoryDependencies) {
+                var path = dep;
+                if (path.Contains("@repos@")) {
+                    path = EnvironmentInfo.ResolvePath(path);
+                }
+                else if (Path.IsPathRooted(path)) {
+                    path = Path.GetFullPath(path);
+                }
+                else {
+                    var basis = Path.GetDirectoryName(FullName);
+                    path = Path.GetFullPath(Path.Combine(basis, path));
+                }
+                var commit = GitHelper.GetCommit(path);
+                if (null != commit) {
+                    yield return commit;
+                }
+            }
         }
     }
 }

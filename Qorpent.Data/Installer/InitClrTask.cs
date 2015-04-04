@@ -16,7 +16,7 @@ namespace Qorpent.Data.Installer {
             MetaName = "initclr";
         }
 
-        protected override IEnumerable<string> GetScripts() {
+        public override IEnumerable<string> GetScripts() {
             yield return @"ALTER DATABASE [${database}] SET TRUSTWORTHY ON";
             yield return @"ALTER AUTHORIZATION ON database::[${database}] TO sa";
             yield return @"exec sp_configure 'show advanced options', 1";

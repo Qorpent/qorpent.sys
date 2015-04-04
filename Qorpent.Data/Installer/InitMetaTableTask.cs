@@ -15,7 +15,7 @@ namespace Qorpent.Data.Installer {
             Idx = Index;
         }
 
-        protected override IEnumerable<string> GetScripts() {
+        public override IEnumerable<string> GetScripts() {
             yield return @"IF SCHEMA_ID('qorpent') IS NULL EXEC sp_executesql N'CREATE SCHEMA qorpent'";
             yield return @"CREATE SEQUENCE qorpent.meta_seq AS bigint start with 100000 increment by 10";
             yield return @"CREATE TABLE qorpent.meta (

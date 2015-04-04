@@ -82,7 +82,7 @@ namespace Qorpent.Data.Installer {
         ///     Перекрыть для получения самих скриптов
         /// </summary>
         /// <returns></returns>
-        protected abstract IEnumerable<string> GetScripts();
+        public abstract IEnumerable<string> GetScripts();
 
         public FileDescriptorEx GetMeta(string name = null) {
             if (string.IsNullOrWhiteSpace(name)) {

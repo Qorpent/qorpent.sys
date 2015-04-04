@@ -47,7 +47,7 @@ namespace Qorpent.Data.Installer {
             set { Set("schema", value); }
         }
 
-        protected override IEnumerable<string> GetScripts() {
+        public override IEnumerable<string> GetScripts() {
             var generator = new SqlInstallerConsoleProgram();
             var parameters = new SqlInstallerConsoleProgramArgs {
                 AssemblyName = Source.FullName,

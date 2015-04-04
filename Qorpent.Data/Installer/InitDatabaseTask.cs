@@ -16,7 +16,7 @@ namespace Qorpent.Data.Installer {
             Idx = Index;
         }
 
-        protected override IEnumerable<string> GetScripts() {
+        public override IEnumerable<string> GetScripts() {
             yield return "CREATE DATABASE ${database}";
         }
 
