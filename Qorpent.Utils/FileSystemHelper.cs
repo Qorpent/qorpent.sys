@@ -134,8 +134,9 @@ namespace Qorpent.Utils
                 if(string.IsNullOrWhiteSpace(line))continue;
 	            
 	            if (first) {
-	                if (line.Contains("#!") || line.Contains("//!") || line.Contains("<!--!") || line.Contains("/*!")) {
-	                    var value = Regex.Match(line, @"((\#)|(//)|(<!--)|(/\*))!(?<v>[\s\S]+)").Groups["v"].Value;
+                    if (line.Contains("#!") || line.Contains("--!") || line.Contains("//!") || line.Contains("<!--!") || line.Contains("/*!"))
+                    {
+	                    var value = Regex.Match(line, @"((\#)|(//)|(<!--)|(/\*)|(--))!(?<v>[\s\S]+)").Groups["v"].Value;
 	                    if (line.Contains("/*!") || line.Contains("<!--!")) {
 	                        multiline = true;
 	                    }
@@ -147,9 +148,9 @@ namespace Qorpent.Utils
 	                first = false;
 	            }
 	            else {
-	                if (line.Contains("#!") || line.Contains("//!") ) {
+	                if (line.Contains("#!") || line.Contains("//!") || line.Contains("--!") ) {
 	                    var value =
-	                        Regex.Match(line, @"((\#)|(//))!(?<v>[\s\S]+)").Groups["v"].Value;
+	                        Regex.Match(line, @"((\#)|(//)|(--))!(?<v>[\s\S]+)").Groups["v"].Value;
 	                    header += Environment.NewLine + value;
 	                }
 	                else if (multiline) {

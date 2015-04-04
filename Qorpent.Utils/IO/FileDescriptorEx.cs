@@ -150,6 +150,7 @@ namespace Qorpent.Utils.IO
             if (string.IsNullOrWhiteSpace(FullName)) {
                 throw new Exception("FullName not setup");
             }
+
             if (!File.Exists(FullName)) {
                 if (AllowNotExisted) {
                     Version = DateTime.MinValue;
@@ -158,9 +159,14 @@ namespace Qorpent.Utils.IO
                 }
                 throw new Exception("file not exists "+FullName);
             }
+
+            
+
             lock (this) {
-               
-                if (! CheckGitVersion()) {
+                if (!IsAssembly && Header.Attr("hash").ToBool())
+                {
+                    Hash = Header.Attr("hash");
+                }else if (! CheckGitVersion()) {
                     if (IsAssembly) {
                         CheckAssemblyVersion();
                     }
@@ -169,6 +175,8 @@ namespace Qorpent.Utils.IO
                     }
                     
                 }
+
+               
                 
             }
         }

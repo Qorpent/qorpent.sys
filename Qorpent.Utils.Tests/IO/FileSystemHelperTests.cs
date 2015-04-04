@@ -27,7 +27,15 @@ namespace Qorpent.Utils.Tests.IO
             FileSystemHelper.KillDirectory(dir);
         }
 
+        [TestCase(
+            @"--!hello
+--!    world 
+x
 
+",
+            @"hello
+    world "
+            )]
         [TestCase(
             @"/*!hello
     world */

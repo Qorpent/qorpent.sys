@@ -86,6 +86,26 @@ DROP DATABASE DbSciptTest
         }
 
         [Test]
+        public void CanUseHeader() {
+            File.WriteAllText(file, @"
+/*!
+options runonce=1
+*/
+select 1 print '1 selected'
+");
+            var t = new ScriptFileDbUpdateTask(file) { Database = "DbSciptTest" };
+            t.Execute();
+            Assert.AreEqual(TaskState.Success, t.State);
+            File.WriteAllText(file, @"
+--!options runonce=1
+select 2 print '2 selected'
+");
+            t = new ScriptFileDbUpdateTask(file) { Database = "DbSciptTest" };
+            t.Execute();
+            Assert.AreEqual(TaskState.SuccessOnce, t.State);
+        }
+
+        [Test]
         public void CanUseGit()
         {
             GitHelper.Init(dir);

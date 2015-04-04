@@ -80,7 +80,7 @@ namespace Qorpent.Tasks {
                     var requirements = Source.Header.Elements("require").ToArray();
                     Requirements = requirements.Select(_ => _.Attr("code")).ToArray();
                 }
-                RunOnce = RunOnce || Source.Header.Attr("updateonce").ToBool();
+                RunOnce = RunOnce || Source.Header.Attr("runonce").ToBool();
                 IgnoreErrors = IgnoreErrors || Source.Header.Attr("ignoreerrors").ToBool();
                 var idx = Source.Header.Attr("idx").ToInt();
                 if (0 != idx) {
