@@ -1,25 +1,20 @@
-using System;
 using System.Collections.Generic;
-using Qorpent.Utils.IO;
 
 namespace Qorpent.Data.Installer {
     /// <summary>
-    /// 
     /// </summary>
     public class InitMetaTableTask : DbUpdateTaskBase {
         public const int Index = InitDatabaseTask.Index + 10;
 
         /// <summary>
-        /// 
         /// </summary>
-        public InitMetaTableTask()
-        {
+        public InitMetaTableTask() {
             Name = "initmeta";
             Group = "init";
             RunOnce = true;
             Idx = Index;
-
         }
+
         protected override IEnumerable<string> GetScripts() {
             yield return @"IF SCHEMA_ID('qorpent') IS NULL EXEC sp_executesql N'CREATE SCHEMA qorpent'";
             yield return @"CREATE SEQUENCE qorpent.meta_seq AS bigint start with 100000 increment by 10";
@@ -37,13 +32,13 @@ namespace Qorpent.Data.Installer {
     update qorpent.meta set hash = @hash, version = @version where code = @code
 end";
         }
-        protected override void FixSuccess()
-        {
+
+        protected override void FixSuccess() {
             base.FixSuccess();
             SaveMeta(GetSelfMetaDesc("initmeta"));
         }
+
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         protected override bool HasUpdatedOnce() {

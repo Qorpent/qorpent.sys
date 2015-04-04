@@ -28,34 +28,34 @@ using Microsoft.SqlServer.Server;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data.Installer.SqlExtensions {
-	internal class UserTypeWrapper : SqlExportMemberWrapper {
-		public UserTypeWrapper(SqlUserDefinedTypeAttribute typedef, Type usrtype, string schema)
-			: base(usrtype, schema) {
-			_typedef = typedef;
-		}
+    internal class UserTypeWrapper : SqlExportMemberWrapper {
+        private readonly SqlUserDefinedTypeAttribute _typedef;
 
-		public override string GetObjectName() {
-			if (_typedef.Name.IsEmpty()) {
-				return QueryGeneratorHelper.GetSafeSqlName(_type.Name);
-			}
-			return QueryGeneratorHelper.GetSafeSqlName(_typedef.Name);
-		}
+        public UserTypeWrapper(SqlUserDefinedTypeAttribute typedef, Type usrtype, string schema)
+            : base(usrtype, schema) {
+            _typedef = typedef;
+        }
 
-		public override string GetObjectType() {
-			return "TYPE";
-		}
+        public override string GetObjectName() {
+            if (_typedef.Name.IsEmpty()) {
+                return QueryGeneratorHelper.GetSafeSqlName(_type.Name);
+            }
+            return QueryGeneratorHelper.GetSafeSqlName(_typedef.Name);
+        }
 
-		public override string GetCreateScript() {
-			var assemblyname = "[" + _type.Assembly.GetName().Name + "]";
-			var name = _schema + "." + GetObjectName();
-			var typename = _type.FullName;
-			return string.Format(@"
+        public override string GetObjectType() {
+            return "TYPE";
+        }
+
+        public override string GetCreateScript() {
+            var assemblyname = "[" + _type.Assembly.GetName().Name + "]";
+            var name = _schema + "." + GetObjectName();
+            var typename = _type.FullName;
+            return string.Format(@"
 --SQLINSTALL: create type {0}
 CREATE TYPE {0}
 EXTERNAL NAME {1}.[{2}]", name, assemblyname, typename
-				);
-		}
-
-		private readonly SqlUserDefinedTypeAttribute _typedef;
-	}
+                );
+        }
+    }
 }

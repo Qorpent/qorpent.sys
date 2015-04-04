@@ -104,6 +104,7 @@ namespace Qorpent.IO.Tests.FileCache
             var qh = new HostServer(conf);
             qh.Start();
             try {
+                Thread.Sleep(200);
                 Assert.AreEqual("41", new HttpClient().GetString("http://127.0.0.1:14990/files/a.txt"));
                 cache.Sources.Add(new FileCacheSource("http://127.0.0.1:14990/files/"));
                 CheckFile("b/e/j.txt", 48);

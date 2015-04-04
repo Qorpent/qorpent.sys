@@ -15,7 +15,8 @@
     <Compile Include="DataDiff\RealWorldExample.cs" />
     <Compile Include="Installer\AssemblyInstallTest.cs" />
     <Compile Include="Installer\DbInitTest.cs" />
-    <Compile Include="Installer\DbSciptTest.cs" />
+    <Compile Include="Installer\DbScriptTest.cs" />
+    <Compile Include="Installer\SampleExt.cs" />
     <None Include="*.import" />
     <None Include="*.export" />
     <EmbeddedResource Include=".\**\*.*resource" />

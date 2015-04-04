@@ -28,37 +28,37 @@ using Microsoft.SqlServer.Server;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data.Installer.SqlExtensions {
-	internal class ProcedureWrapper : SqlExportMemberWrapper {
-		public ProcedureWrapper(SqlProcedureAttribute procdef, MethodInfo functionsygnature, string schema)
-			: base(functionsygnature, schema) {
-			_procdef = procdef;
-		}
+    internal class ProcedureWrapper : SqlExportMemberWrapper {
+        private readonly SqlProcedureAttribute _procdef;
 
-		public override string GetObjectName() {
-			if (_procdef.Name.IsEmpty()) {
-				return QueryGeneratorHelper.GetSafeSqlName(_info.Name);
-			}
-			return QueryGeneratorHelper.GetSafeSqlName(_procdef.Name);
-		}
+        public ProcedureWrapper(SqlProcedureAttribute procdef, MethodInfo functionsygnature, string schema)
+            : base(functionsygnature, schema) {
+            _procdef = procdef;
+        }
 
-		public override string GetObjectType() {
-			return "PROCEDURE";
-		}
+        public override string GetObjectName() {
+            if (_procdef.Name.IsEmpty()) {
+                return QueryGeneratorHelper.GetSafeSqlName(_info.Name);
+            }
+            return QueryGeneratorHelper.GetSafeSqlName(_procdef.Name);
+        }
 
-		public override string GetCreateScript() {
-			var assemblyname = "[" + _info.DeclaringType.Assembly.GetName().Name + "]";
-			var name = _schema + "." + GetObjectName();
-			var args = GetArguments();
-			var methodname = GetMethodFullName();
-			const string pattern = @"
+        public override string GetObjectType() {
+            return "PROCEDURE";
+        }
+
+        public override string GetCreateScript() {
+            var assemblyname = "[" + _info.DeclaringType.Assembly.GetName().Name + "]";
+            var name = _schema + "." + GetObjectName();
+            var args = GetArguments();
+            var methodname = GetMethodFullName();
+            const string pattern = @"
 --SQLINSTALL: CREATE PROCEDURE {0} ({2}.{3})
 CREATE PROCEDURE {0} {1}
  WITH EXECUTE AS CALLER
 AS 
 EXTERNAL NAME {2}.{3}";
-			return string.Format(pattern, name, args.IsEmpty() ? "" : ("(" + args + ")"), assemblyname, methodname);
-		}
-
-		private readonly SqlProcedureAttribute _procdef;
-	}
+            return string.Format(pattern, name, args.IsEmpty() ? "" : ("(" + args + ")"), assemblyname, methodname);
+        }
+    }
 }

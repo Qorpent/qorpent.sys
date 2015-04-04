@@ -11,9 +11,9 @@ namespace Qorpent.Core.Tests.Tasks {
         private string dir;
         private string dira;
         private string dirb;
-        private StringWriter sw;
         private string filea;
         private string fileb;
+        private StringWriter sw;
         private TestUpdater uab;
         private TestUpdater uba;
 
@@ -29,7 +29,6 @@ namespace Qorpent.Core.Tests.Tasks {
             Directory.CreateDirectory(dirb);
             uab = new TestUpdater(sw, filea, fileb);
             uba = new TestUpdater(sw, fileb, filea);
-
         }
 
         private void writeA(string content) {
@@ -60,12 +59,10 @@ S:Executing
 copy a.txt to b.txt
 S:Success
 ");
-
         }
 
         [Test]
-        public void WillNotCopyTwiceAfterRefresh()
-        {
+        public void WillNotCopyTwiceAfterRefresh() {
             writeB("x");
             writeA("y");
             uab.Execute();
@@ -79,12 +76,10 @@ S:Success
 S:Pending
 S:SuccessNotRun
 ");
-
         }
 
         [Test]
-        public void WillNotMirrorTwiceSame()
-        {
+        public void WillNotMirrorTwiceSame() {
             writeB("x");
             writeA("y");
             uab.Execute();
@@ -97,7 +92,6 @@ S:Success
 S:Pending
 S:SuccessNotRun
 ");
-
         }
 
         [Test]
@@ -113,8 +107,7 @@ S:SuccessNotRun
         }
 
         [Test]
-        public void WillCopyNotExisted()
-        {
+        public void WillCopyNotExisted() {
             writeA("y");
 
             uab.Execute();
@@ -126,10 +119,8 @@ S:Success
 ");
         }
 
-
         [Test]
-        public void OnceCopyTest()
-        {
+        public void OnceCopyTest() {
             var syncer = new Job();
             uab.RunOnce = true;
             uba.RunOnce = true;

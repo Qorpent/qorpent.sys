@@ -42,7 +42,7 @@ namespace Qorpent.Log.Tests {
 			var c = ContainerFactory.CreateEmpty();
 			c.Register(c.NewComponent<ILogManager, DefaultLogManager>(Lifestyle.Singleton));
 			var sw = new StringWriter();
-			var writeComponent = c.NewComponent<ILogWriter, BaseTextWriterLogWriter>(Lifestyle.Transient,
+			var writeComponent = c.NewComponent<ILogWriter, TextWriterLogWriter>(Lifestyle.Transient,
 			                                                                         "def.writer");
 			writeComponent.Parameters["_writer"] = sw;
 			writeComponent.Parameters["level"] = LogLevel.Error;

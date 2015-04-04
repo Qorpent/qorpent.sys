@@ -32,129 +32,124 @@ using Microsoft.SqlServer.Types;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data.Installer.SqlExtensions {
-	/// <summary>
-	/// 	Helper for building valid SQL string
-	/// </summary>
-	public static class QueryGeneratorHelper {
-		/// <summary>
-		/// 	generates varbinary string from assembly file
-		/// </summary>
-		/// <param name="assemblyPath"> </param>
-		/// <returns> </returns>
-		public static string GetAssemblyBits(string assemblyPath) {
-			var builder = new StringBuilder();
-			builder.Append("0x");
+    /// <summary>
+    ///     Helper for building valid SQL string
+    /// </summary>
+    public static class QueryGeneratorHelper {
+        /// <summary>
+        ///     generates varbinary string from assembly file
+        /// </summary>
+        /// <param name="assemblyPath"> </param>
+        /// <returns> </returns>
+        public static string GetAssemblyBits(string assemblyPath) {
+            var builder = new StringBuilder();
+            builder.Append("0x");
 
-			using (var stream = new FileStream(assemblyPath,
-			                                   FileMode.Open, FileAccess.Read, FileShare.Read)) {
-				var currentByte = stream.ReadByte();
-				while (currentByte > -1) {
-					builder.Append(currentByte.ToString("X2", CultureInfo.InvariantCulture));
-					currentByte = stream.ReadByte();
-				}
-			}
+            using (var stream = new FileStream(assemblyPath,
+                FileMode.Open, FileAccess.Read, FileShare.Read)) {
+                var currentByte = stream.ReadByte();
+                while (currentByte > -1) {
+                    builder.Append(currentByte.ToString("X2", CultureInfo.InvariantCulture));
+                    currentByte = stream.ReadByte();
+                }
+            }
 
-			return builder.ToString();
-		}
+            return builder.ToString();
+        }
 
-		/// <summary>
-		/// 	return SQL type name for given .NET type
-		/// </summary>
-		/// <param name="nettype"> </param>
-		/// <param name="schema"> </param>
-		/// <returns> </returns>
-		/// <exception cref="SqlInstallerException"></exception>
-		public static string GetSqlType(Type nettype, string schema) {
-            if (typeof(object) == nettype)
-            {
+        /// <summary>
+        ///     return SQL type name for given .NET type
+        /// </summary>
+        /// <param name="nettype"> </param>
+        /// <param name="schema"> </param>
+        /// <returns> </returns>
+        /// <exception cref="SqlInstallerException"></exception>
+        public static string GetSqlType(Type nettype, string schema) {
+            if (typeof (object) == nettype) {
                 return "sql_variant";
             }
             if (typeof (string) == nettype) {
-				return "nvarchar(max)";
-			}
-			if (typeof (SqlString) == nettype) {
-				return "nvarchar(max)";
-			}
-			if (typeof (decimal) == nettype) {
-				return "decimal(18,6)";
-			}
-			if (typeof (SqlDecimal) == nettype) {
-				return "decimal(18,6)";
-			}
-			if (typeof (int) == nettype) {
-				return "int";
-			}
-			if (typeof (SqlInt32) == nettype) {
-				return "int";
-			}
-			if (typeof (long) == nettype) {
-				return "bigint";
-			}
-			if (typeof (SqlInt64) == nettype) {
-				return "bigint";
-			}
-			if (typeof (bool) == nettype) {
-				return "bit";
-			}
-			if (typeof (SqlBoolean) == nettype) {
-				return "bit";
-			}
-			if (typeof (float) == nettype) {
-				return "float";
-			}
-			if (typeof (SqlDouble) == nettype) {
-				return "float";
-			}
-			if (typeof(DateTime) == nettype)
-			{
-				return "datetime";
-			}
-			if (typeof(SqlDateTime) == nettype)
-			{
-				return "datetime";
-			}
-			if (typeof (SqlXml) == nettype) {
-				return "xml";
-			}
-            if (typeof(SqlGeometry) == nettype)
-            {
+                return "nvarchar(max)";
+            }
+            if (typeof (SqlString) == nettype) {
+                return "nvarchar(max)";
+            }
+            if (typeof (decimal) == nettype) {
+                return "decimal(18,6)";
+            }
+            if (typeof (SqlDecimal) == nettype) {
+                return "decimal(18,6)";
+            }
+            if (typeof (int) == nettype) {
+                return "int";
+            }
+            if (typeof (SqlInt32) == nettype) {
+                return "int";
+            }
+            if (typeof (long) == nettype) {
+                return "bigint";
+            }
+            if (typeof (SqlInt64) == nettype) {
+                return "bigint";
+            }
+            if (typeof (bool) == nettype) {
+                return "bit";
+            }
+            if (typeof (SqlBoolean) == nettype) {
+                return "bit";
+            }
+            if (typeof (float) == nettype) {
+                return "float";
+            }
+            if (typeof (SqlDouble) == nettype) {
+                return "float";
+            }
+            if (typeof (DateTime) == nettype) {
+                return "datetime";
+            }
+            if (typeof (SqlDateTime) == nettype) {
+                return "datetime";
+            }
+            if (typeof (SqlXml) == nettype) {
+                return "xml";
+            }
+            if (typeof (SqlGeometry) == nettype) {
                 return "geometry";
             }
-            if (typeof(SqlGeography) == nettype)
-            {
+            if (typeof (SqlGeography) == nettype) {
                 return "geography";
             }
-			return schema + "." + nettype.Name;
-		}
+            return schema + "." + nettype.Name;
+        }
 
-		/// <summary>
-		/// 	converts given name into safe [] form
-		/// </summary>
-		/// <param name="name"> </param>
-		/// <returns> </returns>
-		public static string GetSafeSqlName(string name) {
-			name = name.Replace("[", "");
-			name = name.Replace("]", "");
-			var nameparts = name.Split('.');
-			name = "";
-			foreach (var namepart in nameparts) {
-				if (name.IsNotEmpty()) {
-					name += ".";
-				}
-				name += "[" + namepart + "]";
-			}
-			return name;
-		}
+        /// <summary>
+        ///     converts given name into safe [] form
+        /// </summary>
+        /// <param name="name"> </param>
+        /// <returns> </returns>
+        public static string GetSafeSqlName(string name) {
+            name = name.Replace("[", "");
+            name = name.Replace("]", "");
+            var nameparts = name.Split('.');
+            name = "";
+            foreach (var namepart in nameparts) {
+                if (name.IsNotEmpty()) {
+                    name += ".";
+                }
+                name += "[" + namepart + "]";
+            }
+            return name;
+        }
 
-		/// <summary>
-		/// 	Generates sp_executesql by pattern
-		/// </summary>
-		/// <param name="query"> </param>
-		/// <param name="parameters"> </param>
-		/// <returns> </returns>
-		public static string GenerateExecuteSql(string query, params object[] parameters) {
-			query = String.Format(query, parameters).Replace("'", "''");
-			return " exec sp_executesql N'" + query + "'";
-		}
-	}
+        /// <summary>
+        ///     Generates sp_executesql by pattern
+        /// </summary>
+        /// <param name="query"> </param>
+        /// <param name="parameters"> </param>
+        /// <returns> </returns>
+        public static string GenerateExecuteSql(string query, params object[] parameters) {
+            query = String.Format(query, parameters).Replace("'", "''");
+            return " exec sp_executesql N'" + query + "'";
+        }
+    }
 }

@@ -6,52 +6,45 @@ using Qorpent.Utils.IO;
 
 namespace Qorpent.Data.Installer {
     /// <summary>
-    /// 
     /// </summary>
     public class AssemblyDbUpdateTask : DbUpdateTaskBase {
         public const int Index = InitClrTask.Index + 10000;
         private string _schema;
 
         /// <summary>
-        /// 
         /// </summary>
         public AssemblyDbUpdateTask() {
             Idx = Index;
         }
+
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="filename"></param>
-        public AssemblyDbUpdateTask(string filename, string prefix = null)
-        {
-            if (!string.IsNullOrWhiteSpace(filename))
-            {
-                Source = new FileDescriptorEx { FullName = filename };
+        public AssemblyDbUpdateTask(string filename, string prefix = null) {
+            if (!string.IsNullOrWhiteSpace(filename)) {
+                Source = new FileDescriptorEx {FullName = filename};
                 Source.Name = Path.GetFileNameWithoutExtension(filename);
-                if (!string.IsNullOrWhiteSpace(prefix))
-                {
+                if (!string.IsNullOrWhiteSpace(prefix)) {
                     Source.Name = prefix + "." + Source.Name;
                 }
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string Schema {
             get {
-                if (!string.IsNullOrWhiteSpace(_schema)) return _schema;
+                if (options.ContainsKey("schema")) {
+                    return Get("schema", "qorpent");
+                }
                 if (null != Source && null != Source.Header) {
                     if (Source.Header.Attr("Schema").ToBool()) {
                         return Source.Header.Attr("Schema");
                     }
                 }
-                if (null != Job && Job.Data.ContainsKey("schema") && Job.Data["schema"].ToBool()) {
-                    return Job.Data["schema"].ToStr();
-                }
-                return "qorpent";
+                return Get("schema", "qorpent");
             }
-            set { _schema = value; }
+            set { Set("schema", value); }
         }
 
         protected override IEnumerable<string> GetScripts() {

@@ -26,16 +26,17 @@
 using System;
 
 namespace Qorpent.Data.Installer.SqlExtensions {
-	/// <summary>
-	/// 	General error of SqlInstaller
-	/// </summary>
-	[Serializable]
-	public class SqlInstallerException : Exception {
-		/// <summary>
-		/// 	creates new instance with message and possible inner exception
-		/// </summary>
-		/// <param name="message"> </param>
-		/// <param name="inner"> </param>
-		public SqlInstallerException(string message, Exception inner = null) : base(message, inner) {}
-	}
+    /// <summary>
+    ///     General error of SqlInstaller
+    /// </summary>
+    [Serializable]
+    public class SqlInstallerException : Exception {
+        /// <summary>
+        ///     creates new instance with message and possible inner exception
+        /// </summary>
+        /// <param name="message"> </param>
+        /// <param name="inner"> </param>
+        public SqlInstallerException(string message, Exception inner = null) : base(message, inner) {
+        }
+    }
 }

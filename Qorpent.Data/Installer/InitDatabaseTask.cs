@@ -1,15 +1,12 @@
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace Qorpent.Data.Installer {
     /// <summary>
-    /// 
     /// </summary>
     public class InitDatabaseTask : DbUpdateTaskBase {
         public const int Index = -1000000;
 
         /// <summary>
-        /// 
         /// </summary>
         public InitDatabaseTask() {
             Name = "initdb";
@@ -17,14 +14,13 @@ namespace Qorpent.Data.Installer {
             Group = "init";
             RunOnce = true;
             Idx = Index;
-
         }
+
         protected override IEnumerable<string> GetScripts() {
             yield return "CREATE DATABASE ${database}";
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         protected override bool HasUpdatedOnce() {

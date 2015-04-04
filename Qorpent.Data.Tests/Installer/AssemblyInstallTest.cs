@@ -1,32 +1,18 @@
 using System;
-using System.Data.SqlTypes;
 using System.IO;
 using System.Reflection;
-using Microsoft.SqlServer.Server;
 using NUnit.Framework;
 using Qorpent.Data.Installer;
-using Qorpent.Mvc;
 using Qorpent.Tasks;
 
 namespace Qorpent.Data.Tests.Installer {
-
-    public static class SampleExt {
-        [SqlFunction]
-        public static SqlInt32 Test(SqlInt32 id) {
-            if (id.IsNull) return -1;
-            return id.Value*4;
-        }
-    }
-
     [TestFixture]
     public class AssemblyInstallTest {
         private string dir;
 
         [SetUp]
-        public void Setup()
-        {
-            var cmd = new DbCommandWrapper
-            {
+        public void Setup() {
+            var cmd = new DbCommandWrapper {
                 ConnectionString = "Server=(local);Trusted_Connection=true",
                 Database = "master",
                 Query = @"
@@ -51,7 +37,7 @@ DROP DATABASE AssemblyInstallTest
             if (null != task.Error) {
                 Console.WriteLine(task.Error.ToString());
             }
-            Assert.AreEqual(TaskState.Success,task.State);
+            Assert.AreEqual(TaskState.Success, task.State);
         }
 
         [Test]
@@ -60,8 +46,7 @@ DROP DATABASE AssemblyInstallTest
             var task = new ScriptFileDbUpdateTask(path);
             task.Database = "AssemblyInstallTest";
             task.Execute();
-            if (null != task.Error)
-            {
+            if (null != task.Error) {
                 Console.WriteLine(task.Error.ToString());
             }
             Assert.AreEqual(TaskState.Success, task.State);

@@ -399,7 +399,7 @@
     <Compile Include=".\LicenseAttribute.cs" />
     <Compile Include=".\Log\BaseLogger.cs" />
     <Compile Include=".\Log\BaseLogWriter.cs" />
-    <Compile Include=".\Log\BaseTextWriterLogWriter.cs" />
+    <Compile Include="Log\TextWriterLogWriter.cs" />
     <Compile Include=".\Log\ConsoleLogWriter.cs" />
     <Compile Include=".\Log\DefaultLogManager.cs" />
     <Compile Include=".\Log\IExceptionRegistry.cs" />

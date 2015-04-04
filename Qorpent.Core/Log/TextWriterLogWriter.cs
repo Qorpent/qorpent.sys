@@ -24,16 +24,16 @@ namespace Qorpent.Log {
     /// <summary>
     ///     Ѕазовый класс менеджера записи в лог
     /// </summary>
-	public class BaseTextWriterLogWriter : BaseLogWriter {
+	public class TextWriterLogWriter : BaseLogWriter {
         /// <summary>
         /// 
         /// </summary>
-		public BaseTextWriterLogWriter() {}
+		public TextWriterLogWriter() {}
 		/// <summary>
         ///     Ѕазовый класс менеджера записи в лог
 		/// </summary>
         /// <param name="writer">Ёкземпл€р класса <see cref="TextWriter"/></param>
-		public BaseTextWriterLogWriter(TextWriter writer) {
+		public TextWriterLogWriter(TextWriter writer) {
 			_writer = writer;
 		}
         /// <summary>
@@ -49,23 +49,23 @@ namespace Qorpent.Log {
 			_writer.WriteLine(text);
 			_writer.Flush();
 		}
-		/// <summary>
+
+        /// <summary>
         ///     —оздаЄт экземпл€р класса, реализующего <see cref="IUserLog"/>, нацеленный на указанный <see cref="TextWriter"/>
-		/// </summary>
-		/// <param name="logname">„еловеко-пон€тное им€ лога</param>
-		/// <param name="writer">Ёкземпл€р класса <see cref="TextWriter"/></param>
+        /// </summary>
+        /// <param name="writer">Ёкземпл€р класса <see cref="TextWriter"/></param>
+        /// <param name="logname">„еловеко-пон€тное им€ лога</param>
         /// <param name="level">ћинимальный уровень логгировани€</param>
         /// <param name="synchronized"><see cref="bool"/> True, если синхронный</param>
         /// <param name="customFormat">ѕереопределение формата вывода</param>
-		/// <returns>Ёкземпл€р класса, реализующего <see cref="IUserLog"/></returns>
-		public static IUserLog CreateLog(string logname, TextWriter writer, LogLevel level = LogLevel.Trace,
-		                                 bool synchronized = true, string customFormat = "") {
+        /// <returns>Ёкземпл€р класса, реализующего <see cref="IUserLog"/></returns>
+        public static IUserLog CreateLog(TextWriter writer, string logname = "main", LogLevel level = LogLevel.Trace, bool synchronized = true, string customFormat = "") {
 			return new LoggerBasedUserLog(
 				new[]
 					{
 						new BaseLogger
 							{
-								Writers = new ILogWriter[] {new BaseTextWriterLogWriter(writer) {CustomFormat = customFormat}},
+								Writers = new ILogWriter[] {new TextWriterLogWriter(writer) {CustomFormat = customFormat}},
 								Synchronized = synchronized,
 							}
 					}, null, logname) {Level = level};
@@ -85,7 +85,7 @@ namespace Qorpent.Log {
 				{
 					Mask = regex,
 					Level = level,
-					Writers = new ILogWriter[] {new BaseTextWriterLogWriter(writer) {CustomFormat = customFormat}},
+					Writers = new ILogWriter[] {new TextWriterLogWriter(writer) {CustomFormat = customFormat}},
 					Synchronized = synchronized
 				};
 		}

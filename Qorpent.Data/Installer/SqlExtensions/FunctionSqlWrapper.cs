@@ -29,41 +29,43 @@ using Microsoft.SqlServer.Server;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data.Installer.SqlExtensions {
-	internal class FunctionSqlWrapper : SqlExportMemberWrapper {
-		public FunctionSqlWrapper(SqlFunctionAttribute functiondef, MethodInfo functionsygnature, string schema)
-			: base(functionsygnature, schema) {
-			_functiondef = functiondef;
-		}
+    internal class FunctionSqlWrapper : SqlExportMemberWrapper {
+        private readonly SqlFunctionAttribute _functiondef;
 
-		public override string GetObjectName() {
-			if (_functiondef.Name.IsEmpty()) {
-				return QueryGeneratorHelper.GetSafeSqlName(_info.Name);
-			}
-			return QueryGeneratorHelper.GetSafeSqlName(_functiondef.Name);
-		}
+        public FunctionSqlWrapper(SqlFunctionAttribute functiondef, MethodInfo functionsygnature, string schema)
+            : base(functionsygnature, schema) {
+            _functiondef = functiondef;
+        }
 
-		public override string GetObjectType() {
-			return "FUNCTION";
-		}
+        public override string GetObjectName() {
+            if (_functiondef.Name.IsEmpty()) {
+                return QueryGeneratorHelper.GetSafeSqlName(_info.Name);
+            }
+            return QueryGeneratorHelper.GetSafeSqlName(_functiondef.Name);
+        }
 
-		public override string GetCreateScript() {
-			var assemblyname = "[" + _info.DeclaringType.Assembly.GetName().Name + "]";
-			var clrname = _schema + "." + GetObjectName().Replace("[", "[Clr");
-			var name = _schema + "." + GetObjectName();
-			var args = GetArguments();
-			var argnames = GetArgumentNames();
-			var rettype = GetSqlReturnType();
-			var methodname = GetMethodFullName();
-			var tablefileds = "";
-			var pattern = @"
+        public override string GetObjectType() {
+            return "FUNCTION";
+        }
+
+        public override string GetCreateScript() {
+            var assemblyname = "[" + _info.DeclaringType.Assembly.GetName().Name + "]";
+            var clrname = _schema + "." + GetObjectName().Replace("[", "[Clr");
+            var name = _schema + "." + GetObjectName();
+            var args = GetArguments();
+            var argnames = GetArgumentNames();
+            var rettype = GetSqlReturnType();
+            var methodname = GetMethodFullName();
+            var tablefileds = "";
+            var pattern = @"
 --SQLINSTALL: CREATE FUNCTION {0} ({3}.{4})
 if OBJECT_ID('{0}') IS NULL exec sp_executesql N'
 CREATE FUNCTION {0} ({1})
 RETURNS {2} AS BEGIN
 	RETURN {5} ({6})
 END'";
-			if (_functiondef.TableDefinition.IsNotEmpty()) {
-				pattern = @"
+            if (_functiondef.TableDefinition.IsNotEmpty()) {
+                pattern = @"
 --SQLINSTALL: CREATE FUNCTION {0} ({3}.{4})
 if OBJECT_ID('{0}') IS NULL exec sp_executesql N'
 CREATE FUNCTION {0} ({1})
@@ -72,24 +74,20 @@ RETURNS @__result {2} AS BEGIN
 	return
 END'
 ";
-				tablefileds = GetTaleFieldList();
-			}
-			return string.Format(pattern, name, args, rettype, assemblyname, methodname, clrname, argnames, tablefileds);
-		}
+                tablefileds = GetTaleFieldList();
+            }
+            return string.Format(pattern, name, args, rettype, assemblyname, methodname, clrname, argnames, tablefileds);
+        }
 
-		private string GetTaleFieldList() {
-			return _functiondef.TableDefinition.SmartSplit().Select(x => x.Split(' ')[0]).ConcatString(", ");
-		}
+        private string GetTaleFieldList() {
+            return _functiondef.TableDefinition.SmartSplit().Select(x => x.Split(' ')[0]).ConcatString(", ");
+        }
 
-		private string GetSqlReturnType() {
-			if (_functiondef.TableDefinition.IsEmpty()) {
-				return QueryGeneratorHelper.GetSqlType(_info.ReturnType, _schema);
-			}
-			else {
-				return " TABLE ( \r\n" + _functiondef.TableDefinition + "\r\n)";
-			}
-		}
-
-		private readonly SqlFunctionAttribute _functiondef;
-	}
+        private string GetSqlReturnType() {
+            if (_functiondef.TableDefinition.IsEmpty()) {
+                return QueryGeneratorHelper.GetSqlType(_info.ReturnType, _schema);
+            }
+            return " TABLE ( \r\n" + _functiondef.TableDefinition + "\r\n)";
+        }
+    }
 }

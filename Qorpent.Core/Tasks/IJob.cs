@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.Tasks {
-    public interface IJob {
+    public interface IJob : IConfig {
         IUserLog Log { get; set; }
         IDictionary<string, ITask> Tasks { get; }
 
@@ -13,7 +14,6 @@ namespace Qorpent.Tasks {
 
         bool Success { get; }
         bool HasError { get; }
-        IDictionary<string, object> Data { get; }
 
         /// <summary>
         ///     Выполнение

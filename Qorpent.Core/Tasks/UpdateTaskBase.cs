@@ -18,8 +18,7 @@ namespace Qorpent.Tasks {
 
         public override void Refresh() {
             base.Refresh();
-            if (ResetTargetLater)
-            {
+            if (ResetTargetLater) {
                 DoLateTargetReset();
                 ResetTargetLater = false;
             }
@@ -35,8 +34,7 @@ namespace Qorpent.Tasks {
         /// </summary>
         /// <returns></returns>
         protected override bool RequireExecution() {
-            if (ResetTargetLater)
-            {
+            if (ResetTargetLater) {
                 DoLateTargetReset();
                 ResetTargetLater = false;
             }
@@ -52,8 +50,6 @@ namespace Qorpent.Tasks {
             return base.RequireExecution();
         }
 
-        
-
         protected override bool HasUpdatedOnce() {
             if (ResetTargetLater) {
                 DoLateTargetReset();
@@ -66,12 +62,10 @@ namespace Qorpent.Tasks {
         }
 
         protected virtual void DoLateTargetReset() {
-           
         }
 
         protected override void CheckoutParameters() {
-            if (ResetTargetLater)
-            {
+            if (ResetTargetLater) {
                 DoLateTargetReset();
                 ResetTargetLater = false;
             }

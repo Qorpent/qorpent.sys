@@ -28,37 +28,37 @@ using Microsoft.SqlServer.Server;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data.Installer.SqlExtensions {
-	internal class AggregatorWrapper : SqlExportMemberWrapper {
-		public AggregatorWrapper(SqlUserDefinedAggregateAttribute functiondef, Type aggregatesyg, string schema)
-			: base(aggregatesyg, schema) {
-			_functiondef = functiondef;
-		}
+    internal class AggregatorWrapper : SqlExportMemberWrapper {
+        private readonly SqlUserDefinedAggregateAttribute _functiondef;
 
-		public override string GetObjectName() {
-			if (_functiondef.Name.IsEmpty()) {
-				return QueryGeneratorHelper.GetSafeSqlName(_info.Name);
-			}
-			return QueryGeneratorHelper.GetSafeSqlName(_functiondef.Name);
-		}
+        public AggregatorWrapper(SqlUserDefinedAggregateAttribute functiondef, Type aggregatesyg, string schema)
+            : base(aggregatesyg, schema) {
+            _functiondef = functiondef;
+        }
 
-		public override string GetObjectType() {
-			return "AGGREGATE";
-		}
+        public override string GetObjectName() {
+            if (_functiondef.Name.IsEmpty()) {
+                return QueryGeneratorHelper.GetSafeSqlName(_info.Name);
+            }
+            return QueryGeneratorHelper.GetSafeSqlName(_functiondef.Name);
+        }
 
-		public override string GetCreateScript() {
-			var assemblyname = "[" + _type.Assembly.GetName().Name + "]";
-			var name = _schema + "." + GetObjectName();
-			var args = GetArguments(_type.GetMethod("Accumulate"));
-			var rettype = QueryGeneratorHelper.GetSqlType(_type.GetMethod("Terminate").ReturnType, _schema);
-			var classname = GetClassFullName();
-			const string pattern = @"
+        public override string GetObjectType() {
+            return "AGGREGATE";
+        }
+
+        public override string GetCreateScript() {
+            var assemblyname = "[" + _type.Assembly.GetName().Name + "]";
+            var name = _schema + "." + GetObjectName();
+            var args = GetArguments(_type.GetMethod("Accumulate"));
+            var rettype = QueryGeneratorHelper.GetSqlType(_type.GetMethod("Terminate").ReturnType, _schema);
+            var classname = GetClassFullName();
+            const string pattern = @"
 --SQLINSTALL: CREATE AGGREGATE {0} ({3}.{4})
 CREATE AGGREGATE {0} ({1})
 RETURNS {2}
 EXTERNAL NAME {3}.{4}";
-			return string.Format(pattern, name, args, rettype, assemblyname, classname);
-		}
-
-		private readonly SqlUserDefinedAggregateAttribute _functiondef;
-	}
+            return string.Format(pattern, name, args, rettype, assemblyname, classname);
+        }
+    }
 }

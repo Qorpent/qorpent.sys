@@ -28,47 +28,45 @@ using Microsoft.SqlServer.Server;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data.Installer.SqlExtensions {
-	internal class FunctionWrapper : SqlExportMemberWrapper {
-		public FunctionWrapper(SqlFunctionAttribute functiondef, MethodInfo functionsygnature, string schema)
-			: base(functionsygnature, schema) {
-			_functiondef = functiondef;
-		}
+    internal class FunctionWrapper : SqlExportMemberWrapper {
+        private readonly SqlFunctionAttribute _functiondef;
 
-		public override string GetObjectName() {
-			if (_functiondef.Name.IsEmpty()) {
-				return QueryGeneratorHelper.GetSafeSqlName("Clr" + _info.Name);
-			}
-			return QueryGeneratorHelper.GetSafeSqlName( "Clr" + _functiondef.Name);
-		}
+        public FunctionWrapper(SqlFunctionAttribute functiondef, MethodInfo functionsygnature, string schema)
+            : base(functionsygnature, schema) {
+            _functiondef = functiondef;
+        }
 
-		public override string GetObjectType() {
-			return "FUNCTION";
-		}
+        public override string GetObjectName() {
+            if (_functiondef.Name.IsEmpty()) {
+                return QueryGeneratorHelper.GetSafeSqlName("Clr" + _info.Name);
+            }
+            return QueryGeneratorHelper.GetSafeSqlName("Clr" + _functiondef.Name);
+        }
 
-		public override string GetCreateScript() {
-			var assemblyname = "[" + _info.DeclaringType.Assembly.GetName().Name + "]";
-			var name = _schema + "." + GetObjectName();
-			var args = GetArguments();
-			var rettype = GetSqlReturnType();
-			var methodname = GetMethodFullName();
-			const string pattern = @"
+        public override string GetObjectType() {
+            return "FUNCTION";
+        }
+
+        public override string GetCreateScript() {
+            var assemblyname = "[" + _info.DeclaringType.Assembly.GetName().Name + "]";
+            var name = _schema + "." + GetObjectName();
+            var args = GetArguments();
+            var rettype = GetSqlReturnType();
+            var methodname = GetMethodFullName();
+            const string pattern = @"
 --SQLINSTALL: CREATE FUNCTION {0} ({3}.{4})
 CREATE FUNCTION {0} ({1})
 RETURNS {2} WITH EXECUTE AS CALLER
 AS 
 EXTERNAL NAME {3}.{4}";
-			return string.Format(pattern, name, args, rettype, assemblyname, methodname);
-		}
+            return string.Format(pattern, name, args, rettype, assemblyname, methodname);
+        }
 
-		private string GetSqlReturnType() {
-			if (_functiondef.TableDefinition.IsEmpty()) {
-				return QueryGeneratorHelper.GetSqlType(_info.ReturnType, _schema);
-			}
-			else {
-				return " TABLE ( \r\n" + _functiondef.TableDefinition + "\r\n)";
-			}
-		}
-
-		private readonly SqlFunctionAttribute _functiondef;
-	}
+        private string GetSqlReturnType() {
+            if (_functiondef.TableDefinition.IsEmpty()) {
+                return QueryGeneratorHelper.GetSqlType(_info.ReturnType, _schema);
+            }
+            return " TABLE ( \r\n" + _functiondef.TableDefinition + "\r\n)";
+        }
+    }
 }

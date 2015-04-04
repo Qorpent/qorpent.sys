@@ -2,22 +2,18 @@ using System.Collections.Generic;
 
 namespace Qorpent.Data.Installer {
     /// <summary>
-    /// 
     /// </summary>
     public class InitClrTask : DbUpdateTaskBase {
         public const int Index = InitMetaTableTask.Index + 10;
 
         /// <summary>
-        /// 
         /// </summary>
-        public InitClrTask()
-        {
+        public InitClrTask() {
             Name = "initclr";
             Group = "init";
             RunOnce = true;
             Idx = Index;
             MetaName = "initclr";
-
         }
 
         protected override IEnumerable<string> GetScripts() {
@@ -27,8 +23,6 @@ namespace Qorpent.Data.Installer {
             yield return @"exec sp_executesql N'RECONFIGURE'";
             yield return @"exec sp_configure 'clr enabled', 1";
             yield return @"exec sp_executesql N'RECONFIGURE'";
-            
         }
-        
     }
 }

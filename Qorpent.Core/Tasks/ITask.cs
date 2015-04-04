@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.Tasks {
-    public interface ITask {
+    public interface ITask : IConfig {
         string Name { get; set; }
         string[] Requirements { get; set; }
-        TaskState State { get;  }
+        TaskState State { get; }
         IList<ITask> RequiredModules { get; }
         bool IsFinished { get; }
         bool IsError { get; }
@@ -34,8 +35,6 @@ namespace Qorpent.Tasks {
         string Group { get; set; }
 
         int RunCount { get; set; }
-        IDictionary<string, object> Data { get; }
-
         bool Execute();
         void Initialize(IJob package);
         void Refresh();

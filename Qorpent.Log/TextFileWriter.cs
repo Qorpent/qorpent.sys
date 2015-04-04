@@ -36,6 +36,24 @@ namespace Qorpent.Log {
 			CurrentNumber = -1;
 		}
 
+        /// <summary>
+        ///     Создаёт новый экземпляр <see cref="IUserLog"/> c экземпляром <see cref="ConsoleLogWriter"/>
+        /// </summary>
+        /// <param name="logname">Человеко-понятное имя лога</param>
+        /// <param name="level">Уровень логгирования</param>
+        /// <param name="customFormat">Переопределённый формат сообщения</param>
+        /// <returns>Экземпляр <see cref="IUserLog"/> c экземпляром <see cref="ConsoleLogWriter"/></returns>
+        public static IUserLog CreateLog(string filename  ,string logname = "main", LogLevel level = LogLevel.Trace, string customFormat = "${Time} ${Message}")
+        {
+            return new LoggerBasedUserLog(
+                new[]
+					{
+						new BaseLogger {Writers = new ILogWriter[] {
+							new TextFileWriter {CustomFormat = customFormat,FileName = filename},
+						},Level = level}
+					}, null, logname) { Level = level };
+        }
+
 		/// <summary>
 		/// 	Name of file (full or relative) to file where to write
 		/// </summary>
@@ -219,5 +237,7 @@ namespace Qorpent.Log {
 			var size = finfo.Length/1024.0m;
 			return size >= MaxSize;
 		}
+
+      
 	}
 }

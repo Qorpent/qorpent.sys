@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.Tasks {
     /// <summary>
     ///     Описывает абстракцию обновляемого модуля
     /// </summary>
-    public abstract class TaskBase : ITask {
+    public abstract class TaskBase : ConfigBase, ITask {
         private IUserLog _log = StubUserLog.Default;
         private TaskState _state;
         private readonly IList<ITask> _requiredModules = new List<ITask>();
-        
+
         /// <summary>
         ///     Признак одноразового применения модуля
         /// </summary>
@@ -106,17 +106,8 @@ namespace Qorpent.Tasks {
         }
 
         public virtual void Refresh() {
-            this.State = TaskState.Pending;
+            State = TaskState.Pending;
         }
-        readonly IDictionary<string, object> _data = new ConcurrentDictionary<string, object>(); 
-
-
-
-        public IDictionary<string, object> Data
-        {
-            get { return _data; }
-        }
-
 
         public virtual void Initialize(IJob package = null) {
             if (State == TaskState.Init) {
