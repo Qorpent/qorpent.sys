@@ -52,5 +52,9 @@
       <Name>Qorpent.Scaffolding</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

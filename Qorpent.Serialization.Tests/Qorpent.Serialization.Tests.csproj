@@ -13,6 +13,7 @@
     <Compile Include="BSharpJsonParserTests.cs" />
     <Compile Include="BSharp\AdvancedIncludeTest.cs" />
     <Compile Include="BSharp\AnonymousClassSupport.cs" />
+    <Compile Include="BSharp\BscHelperTest.cs" />
     <Compile Include="BSharp\BSharpCodeBuilderTest.cs" />
     <Compile Include="BSharp\ClassReference.cs" />
     <Compile Include="BSharp\ConstantsTest.cs" />

@@ -22,40 +22,39 @@ namespace Qorpent.Integration.BSharp.Builder {
             Tasks.Add(new CompileBSharpTask());
 			Tasks.Add(new CleanUpTask());
 
-		    if (project.WriteCompiled) {
-				Tasks.Add(new WriteWorkingOutputTask());    
-           //     Tasks.Add(new GenerateIndexTask());
+
+		    if (!project.NoOutput) {
+
+		        if (project.WriteCompiled) {
+		            Tasks.Add(new WriteWorkingOutputTask());
+		        }
+
+		        if (project.OutputAttributes.HasFlag(BSharpBuilderOutputAttributes.IncludeOrphans)) {
+		            Tasks.Add(new WriteOrphansOutputTask());
+		        }
+
+		        if (project.GenerateSrcPkg) {
+		            Tasks.Add(new GenerateSrcPackageTask());
+		        }
+
+
+		        if (project.GenerateLibPkg) {
+		            Tasks.Add(new GenerateLibPackageTask());
+		        }
+
+		        if (project.GenerateGraph) {
+		            Tasks.Add(new GenerateClassGraphTask());
+		        }
+
+		        if (project.GenerateJsonModule) {
+		            Tasks.Add(new GenerateJsonModuleTask());
+		        }
+
+		        Tasks.Add(new WriteErrorInfoTask());
+		        Tasks.Add(new WritePrettyErrorDigest());
 		    }
 
-			if (project.OutputAttributes.HasFlag(BSharpBuilderOutputAttributes.IncludeOrphans))
-			{
-				Tasks.Add(new WriteOrphansOutputTask());
-			}
-			
-			if (project.GenerateSrcPkg) {
-				Tasks.Add(new GenerateSrcPackageTask());
-			}
 
-
-            if (project.GenerateLibPkg)
-            {
-                Tasks.Add(new GenerateLibPackageTask());
-            }
-
-            if (project.GenerateGraph) {
-                Tasks.Add(new GenerateClassGraphTask());
-            }
-
-			if (project.GenerateJsonModule)
-			{
-				Tasks.Add(new GenerateJsonModuleTask());
-			}
-
-			Tasks.Add(new WriteErrorInfoTask());
-			Tasks.Add(new WritePrettyErrorDigest());
-
-
-		    
 		}
 		/// <summary>
 		/// 

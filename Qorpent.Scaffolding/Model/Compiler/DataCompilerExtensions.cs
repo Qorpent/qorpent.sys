@@ -11,17 +11,19 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 		/// </summary>
 		protected override void PrepareTasks(){
 			Tasks.Add(new PrepareModelTask());
-			Tasks.Add(new GenerateTsqlScriptsTask());
-			Tasks.Add(new GeneratePokoClassesTask());
-			Tasks.Add(new GeneratePokoClassDataAdapter());
-			Tasks.Add(new GenerateModel());
-			Tasks.Add(new GenerateExtendedCachedModel());
-			Tasks.Add(new GenerateCloneableFacility());
-			Tasks.Add(new GenerateResolveTagFacility());
-            if (!string.IsNullOrWhiteSpace(EnvironmentInfo.GetExecutablePath("dot"))) { 
-			    Tasks.Add(new GenerateTableStructureFileTask());
-            }
-		
-        }
+		    if (!Project.NoOutput) {
+		        Tasks.Add(new GenerateTsqlScriptsTask());
+		        Tasks.Add(new GeneratePokoClassesTask());
+		        Tasks.Add(new GeneratePokoClassDataAdapter());
+		        Tasks.Add(new GenerateModel());
+		        Tasks.Add(new GenerateExtendedCachedModel());
+		        Tasks.Add(new GenerateCloneableFacility());
+		        Tasks.Add(new GenerateResolveTagFacility());
+		        if (!string.IsNullOrWhiteSpace(EnvironmentInfo.GetExecutablePath("dot"))) {
+		            Tasks.Add(new GenerateTableStructureFileTask());
+		        }
+		    }
+
+		}
 	}
 }

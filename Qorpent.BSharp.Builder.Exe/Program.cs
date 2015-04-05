@@ -1,18 +1,22 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.BSharp.Builder;
 using Qorpent.Log;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Threading;
 
 namespace Qorpent.Integration.BSharp.Builder.Exe {
     class Program {
+        private static bool ConsoleMode;
         static int Main(string[] args) {
+            Console.OutputEncoding = Encoding.UTF8;
 	        try{
 		        if (null != args && 0 != args.Length){
 			        var wdir = Array.IndexOf(args, "--workdir");
@@ -20,7 +24,7 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
 				        Environment.CurrentDirectory = Path.GetFullPath(args[wdir + 1]);
 			        }
 		        }
-
+	            ConsoleMode = args.Contains("--console-mode");
 		        var builder = new BSharpBuilder();
 		        var adict = new ConsoleArgumentHelper().ParseDictionary(args);
 		        if (adict.ContainsKey("debug")){
@@ -28,19 +32,56 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
 		        }
 		        var log = SetupLog(adict);
 		        var project = SetupProject(adict, log, builder);
+	            project.NoOutput = ConsoleMode;
 		        builder.Log = log;
 		        builder.Initialize(project);
 		        var resultContext = builder.Build();
-		        WriteOutErrors(resultContext, log);
-		        return 0;
+	            if (ConsoleMode) {
+	                WriteOutConsoleMode(resultContext);
+
+	            }
+	            else {
+	                WriteOutErrors(resultContext, log);
+	            }
+	            return 0;
 	        }
 	        catch (Exception ex){
-		        Console.Error.WriteLine(ex.ToString());
-		        return -1;
+	            if (ConsoleMode) {
+                    Console.Error.WriteLine(new XElement("generic-error",ex.ToString()).ToString());
+	            }
+	            else {
+	                Console.Error.WriteLine(ex.ToString());
+	            }
+	            return -1;
 	        }
         }
 
-	    private static IUserLog SetupLog(IDictionary<string, string> adict) {
+        private static void WriteOutConsoleMode(IBSharpContext ctx) {
+            var result = new XElement("result");
+            foreach (var cls in ctx.Get(BSharpContextDataType.Working)) {
+                var clsElement = new XElement("cls");
+                clsElement.SetAttr("code", cls.FullName);
+                clsElement.SetAttr("name", cls.Name);
+                clsElement.SetAttr("ns", cls.Namespace);
+                clsElement.SetAttr("prototype", cls.Prototype);
+                clsElement.Add(cls.Compiled);
+                result.Add(clsElement);
+            }
+            foreach (var error in ctx.GetErrors()) {
+                    var errorElement = new XElement("error", new XAttribute("type",error.Type)) {Value = error.ToLogString()};
+                    if (null != error.LexInfo) {
+                        var lex = new XElement("lexinfo", new XAttribute("file", error.LexInfo.File),
+                            new XAttribute("line", error.LexInfo.Line));
+                        errorElement.Add(lex);
+                    }
+                    result.Add(errorElement);
+                
+            }
+
+            Console.WriteLine(result.ToString());
+        }
+
+        private static IUserLog SetupLog(IDictionary<string, string> adict) {
 			var level = LogLevel.Info;
 		    if (adict.ContainsKey("loglevel")) {
 			    level = (LogLevel) Enum.Parse(typeof (LogLevel), adict["loglevel"], true);
@@ -49,6 +90,10 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
 			{
 				level = (LogLevel)Enum.Parse(typeof(LogLevel), adict["log-level"], true);
 			}
+            //disable logging for console-mode
+	        if (adict.ContainsKey("console-mode")) {
+	            level = LogLevel.Fatal;
+	        }
 			var log = ConsoleLogWriter.CreateLog("main", customFormat: "${Message}",level:level);
 			log.Info("log level "+level);
 		    

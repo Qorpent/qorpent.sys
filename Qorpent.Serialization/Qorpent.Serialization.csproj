@@ -20,6 +20,7 @@
     <Compile Include="AbstractCanvas\ICanvasElement.cs" />
     <Compile Include="AbstractCanvas\ICanvasPoint.cs" />
     <Compile Include="AbstractCanvas\ICanvasPrimitive.cs" />
+    <Compile Include="BSharp\BscHelper.cs" />
     <Compile Include="BSharp\BSharpCodeBuilder.cs" />
     <Compile Include="BSharp\BSharpErrors.cs" />
     <Compile Include="BSharp\BSharpSqlAdapter.cs" />

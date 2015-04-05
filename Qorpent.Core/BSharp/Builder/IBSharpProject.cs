@@ -147,6 +147,10 @@ namespace Qorpent.BSharp.Builder {
 	    /// Имя модуля для Web-генерации
 	    /// </summary>
 	    string ModuleName { get; set; }
+        /// <summary>
+        /// Генерализованный запрет на какую либо Write продукцию - только компиляция и пост-обработка
+        /// </summary>
+	    bool NoOutput { get; set; }
 
 	    /// <summary>
 		/// Возвращает путь к целевой директории

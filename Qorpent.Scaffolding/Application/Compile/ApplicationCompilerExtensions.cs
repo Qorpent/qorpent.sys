@@ -15,19 +15,21 @@ namespace Qorpent.Scaffolding.Application{
 		/// </summary>
 		protected override void PrepareTasks()
 		{
-			Tasks.Add(new GenerateDataTypesInCSharpTask());
-			Tasks.Add(new GenerateServerActions());
-		//	Tasks.Add(new GenerateDataTypesInTypeScriptTask());
-			Tasks.Add(new GenerateDataTypesInJavaScriptTask());
-		//	Tasks.Add(new GenerateJsonUiSpecification());
-			Tasks.Add(new GenerateActionsInJavaScriptTask());
-		    if (null == this.Project.Definition.Element("NoLayouts")) {
-		        Tasks.Add(new GenerateLayoutsTask());
+		    if (!Project.NoOutput) {
+		        Tasks.Add(new GenerateDataTypesInCSharpTask());
+		        Tasks.Add(new GenerateServerActions());
+		        //	Tasks.Add(new GenerateDataTypesInTypeScriptTask());
+		        Tasks.Add(new GenerateDataTypesInJavaScriptTask());
+		        //	Tasks.Add(new GenerateJsonUiSpecification());
+		        Tasks.Add(new GenerateActionsInJavaScriptTask());
+		        if (null == this.Project.Definition.Element("NoLayouts")) {
+		            Tasks.Add(new GenerateLayoutsTask());
+		        }
+		        if (null == this.Project.Definition.Element("NoControllers")) {
+		            Tasks.Add(new GenerateControllersTask());
+		        }
+		        Tasks.Add(new GenerateMenuTask());
 		    }
-		    if (null == this.Project.Definition.Element("NoControllers")) {
-		        Tasks.Add(new GenerateControllersTask());
-		    }
-		    Tasks.Add(new GenerateMenuTask());
 		}
 	}
 }

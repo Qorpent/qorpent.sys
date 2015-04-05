@@ -160,6 +160,7 @@ namespace Qorpent.BSharp {
 				}
 				return _lexInfo;
 			}
+		    set { _lexInfo = value; }
 		}
 
 		/// <summary>

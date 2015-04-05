@@ -36,6 +36,7 @@ namespace Qorpent.BSharp.Builder{
 		private const string IGNORE_ELEMENTS = "ignore_elements";
         private const string DEFAULTNAMESPCE = "defaultnamespace";
         private const string MODULENAME = "modulename";
+        private const string NOOUTPUT = "nooutput";
 
 		private static readonly string[] overrideAttributes = new[]{
 			OUTPUT_ATTRIBUTES,
@@ -352,6 +353,11 @@ namespace Qorpent.BSharp.Builder{
             get { return Get<string>(MODULENAME); }
             set { Set(MODULENAME, value); }
         }
+
+	    public bool NoOutput {
+            get { return Get<bool>(NOOUTPUT); }
+            set { Set(NOOUTPUT, value); }
+	    }
 
 	    /// <summary>
 		///     Возвращает путь к целевой директории
