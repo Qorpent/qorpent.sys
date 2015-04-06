@@ -24,10 +24,6 @@
       <Project>{880F65EA-1A22-4672-A137-FFC91290A209}</Project>
       <Name>Qorpent.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
-      <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
-      <Name>Qorpent.Utils</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Xml" />
