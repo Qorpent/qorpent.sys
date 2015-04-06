@@ -8,6 +8,37 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 	[TestFixture]
 	public class PokoClassWriterTests{
 		[Test]
+		public void CanSetupFieldWithHash() {
+			const string bxl = @"class a prototype=dbtable
+	string SomeField hash=1";
+			var model = PersistentModel.Compile(bxl);
+			var cls = model["a"];
+			Assert.NotNull(cls);
+			var field = cls.Fields["somefield"];
+			Assert.NotNull(field);
+			Assert.IsTrue(field.IsHash);
+		}
+		[Test]
+		public void GetHashMethodSupports() {
+			const string bxl = @"class a prototype=dbtable
+	string SomeField hash=1";
+			var model = PersistentModel.Compile(bxl);
+			var code = new PokoClassWriter(model["a"]) {
+				ProcessFields = false,
+				ProcessFooter = false,
+				ProcessHeader = false,
+				ProcessReferences = false,
+				ProcessHashMethods = true
+			}.ToString();
+			Console.WriteLine(code);
+			Assert.AreEqual(@"		/// <summary>Biz hash code</summary>
+		public string GetHash() {
+			var src = string.Format(""{0}~"" , SomeField);
+			return src.GetMd5();
+		}
+", code);
+		}
+		[Test]
 		public void DefaultCSharpValueTest() {
 			var model = PersistentModel.Compile(@"
 class a prototype=dbtable
@@ -21,6 +52,7 @@ using System.Collections.Generic;
 #if !NOQORPENT
 using Qorpent.Serialization;
 using Qorpent.Model;
+using Qorpent.Utils.Extensions;
 #endif
 namespace  {
 	///<summary>
@@ -77,6 +109,7 @@ using System.Collections.Generic;
 #if !NOQORPENT
 using Qorpent.Serialization;
 using Qorpent.Model;
+using Qorpent.Utils.Extensions;
 #endif
 namespace  {
 	///<summary>
@@ -128,6 +161,7 @@ using System.Collections.Generic;
 #if !NOQORPENT
 using Qorpent.Serialization;
 using Qorpent.Model;
+using Qorpent.Utils.Extensions;
 #endif
 namespace  {
 	///<summary>
@@ -260,6 +294,7 @@ using System.Collections.Generic;
 #if !NOQORPENT
 using Qorpent.Serialization;
 using Qorpent.Model;
+using Qorpent.Utils.Extensions;
 #endif
 namespace  {
 	///<summary>
@@ -320,6 +355,7 @@ using System.Collections.Generic;
 #if !NOQORPENT
 using Qorpent.Serialization;
 using Qorpent.Model;
+using Qorpent.Utils.Extensions;
 #endif
 namespace  {
 	///<summary>
@@ -380,6 +416,7 @@ using System.Collections.Generic;
 #if !NOQORPENT
 using Qorpent.Serialization;
 using Qorpent.Model;
+using Qorpent.Utils.Extensions;
 #endif
 namespace  {
 	///<summary>
@@ -428,6 +465,7 @@ using System.Collections.Generic;
 #if !NOQORPENT
 using Qorpent.Serialization;
 using Qorpent.Model;
+using Qorpent.Utils.Extensions;
 #endif
 namespace  {
 	///<summary>
@@ -500,6 +538,7 @@ using System.Collections.Generic;
 #if !NOQORPENT
 using Qorpent.Serialization;
 using Qorpent.Model;
+using Qorpent.Utils.Extensions;
 #endif
 namespace  {
 	///<summary>
@@ -562,6 +601,7 @@ using System.Collections.Generic;
 #if !NOQORPENT
 using Qorpent.Serialization;
 using Qorpent.Model;
+using Qorpent.Utils.Extensions;
 #endif
 namespace  {
 	///<summary>

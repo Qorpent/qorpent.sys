@@ -13,17 +13,68 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 		/// </summary>
 		/// <param name="cls"></param>
 		/// <param name="output"></param>
-		public PokoClassWriter(PersistentClass cls, TextWriter output = null) : base(cls, output){
+		public PokoClassWriter(PersistentClass cls, TextWriter output = null) : base(cls, output) {
+			ProcessFields = true;
+			ProcessFooter = true;
+			ProcessHashMethods = true;
+			ProcessHeader = true;
+			ProcessReferences = true;
 		}
 
 		/// <summary>
 		/// </summary>
 		protected override void InternalRun(){
-			WriteStartClass();
-			GenerateOwnFields();
-			GenerateIncomeReferences();
-			WriteEndClass();
+			if (ProcessHeader) WriteStartClass();
+			if (ProcessFields) GenerateOwnFields();
+			if (ProcessReferences) GenerateIncomeReferences();
+			if (ProcessHashMethods) GenerateHashMethods();
+			if (ProcessFooter) WriteEndClass();
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		private void GenerateHashMethods() {
+			var fields = Cls.Fields.Values.Where(_ => _.IsHash).ToArray();
+			if (fields.Length == 0) return;
+			o.WriteLine("\t\t/// <summary>Biz hash code</summary>");
+			o.WriteLine("\t\tpublic string GetHash() {");
+			o.Write("\t\t\tvar src = string.Format(\"");
+			for (var i = 0; i < fields.Length; i++) {
+				o.Write("{" + i + "}~");
+			}
+			o.Write("\" ");
+			foreach (var field in fields) {
+				o.Write(", " + field.Name);
+			}
+			o.WriteLine(");");
+			o.WriteLine("\t\t\treturn src.GetMd5();");
+			o.WriteLine("\t\t}");
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool ProcessFooter { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool ProcessHashMethods { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool ProcessReferences { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool ProcessFields { get; set; }
+
+		/// <summary>
+		///		Признак обработки заголовков
+		/// </summary>
+		public bool ProcessHeader { get; set; }
 
 
 		private void GenerateIncomeReferences(){
@@ -182,6 +233,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			o.WriteLine("#if !NOQORPENT");
 			o.WriteLine("using Qorpent.Serialization;");
 			o.WriteLine("using Qorpent.Model;");
+			o.WriteLine("using Qorpent.Utils.Extensions;");
 			o.WriteLine("#endif");
 			o.Write("namespace {0} {{\r\n", Cls.Namespace);
 			o.WriteLine("\t///<summary>");

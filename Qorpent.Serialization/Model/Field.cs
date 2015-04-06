@@ -264,6 +264,7 @@ namespace Qorpent.Scaffolding.Model{
 		private void SetupCommon(IBSharpClass c, XElement e){
 			Name = e.Attr("code");
 			Comment = e.Attr("name");
+			IsHash = e.Attr("hash").ToBool();
 			Idx = e.Attr("idx").ToInt();
 			if (0 == Idx) Idx = 99999;
 			Resolve = e.GetSmartValue("resolve").ToBool();
@@ -362,6 +363,10 @@ namespace Qorpent.Scaffolding.Model{
 		/// Признак неявной ссылки
 		/// </summary>
 		public bool ImplicitRef { get; set; }
+		/// <summary>
+		///		Признак использования в хэше
+		/// </summary>
+		public bool IsHash { get; set; }
 
 		/// <summary>
 		///     Проверяет ссылеи на циркулярность и выставляет соответствующее свойство
