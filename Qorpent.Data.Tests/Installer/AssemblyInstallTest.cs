@@ -23,7 +23,7 @@ DROP DATABASE AssemblyInstallTest
             DbCommandExecutor.Default.Execute(
                 cmd
                 ).Wait();
-            DbInstallJobFactory.Create("AssemblyInstallTest").Execute();
+            DbInstallFactory.Create("AssemblyInstallTest").Execute();
         }
 
         [Test]

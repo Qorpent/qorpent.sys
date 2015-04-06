@@ -127,12 +127,12 @@ namespace Qorpent.Data.Installer {
             }
         }
 
-        protected FileDescriptorEx GetSelfMetaDesc(string name = null) {
+        protected FileDescriptorEx GetSelfMetaDesc(string name = null, string hash = null) {
             if (string.IsNullOrWhiteSpace(name)) {
                 name = MetaName;
             }
             var versionstring = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            var hash = "INSTALLED_" + versionstring;
+            if(string.IsNullOrWhiteSpace(hash))hash = "INSTALLED_" + versionstring;
             var version = new DateTime(2000, 1, 1);
             var offset = versionstring.Replace(".", "").ToInt();
             version = version.AddSeconds(offset);

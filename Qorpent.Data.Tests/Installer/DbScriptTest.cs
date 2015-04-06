@@ -17,18 +17,8 @@ namespace Qorpent.Data.Tests.Installer {
 
         [SetUp]
         public void Setup() {
-            var cmd = new DbCommandWrapper {
-                ConnectionString = "Server=(local);Trusted_Connection=true",
-                Database = "master",
-                Query = @"
-ALTER DATABASE DbScriptTest SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
-DROP DATABASE DbScriptTest
-"
-            };
-            DbCommandExecutor.Default.Execute(
-                cmd
-                ).Wait();
-            DbInstallJobFactory.Create(DbName).Execute();
+            
+            DbInstallFactory.InitTestDatabase(DbName);
             dir = FileSystemHelper.ResetTemporaryDirectory();
             file = Path.Combine(dir, "a.sql");
             file2 = Path.Combine(dir, "b.sql");
@@ -47,6 +37,37 @@ DROP DATABASE DbScriptTest
             Assert.AreEqual(t.Target.Hash, t.Source.Hash);
             var diff = Math.Floor((t.Target.Version - t.Source.Version).TotalSeconds);
             Assert.LessOrEqual(diff, 1);
+        }
+
+        [Test]
+        public void CanExecuteTextScript() {
+            var t = new ScriptTextDbUpdateTask("a", "select 1 print '1 selected'") { Database = DbName };
+            t.Execute();
+            if (null != t.Error)
+            {
+                Console.WriteLine(t.Error);
+            }
+            Assert.AreEqual(TaskState.Success, t.State);
+        }
+
+        [Test]
+        public void WillNotExectuteSameTextScriptTwice()
+        {
+            var t = new ScriptTextDbUpdateTask("a", "select 1 print '1 selected'") { Database = DbName };
+            t.Execute();
+            t = new ScriptTextDbUpdateTask("a", "select 1 print '1 selected'") { Database = DbName };
+            t.Execute();
+            Assert.AreEqual(TaskState.SuccessNotRun,t.State);
+        }
+
+        [Test]
+        public void WillExectuteUpdatedScriptTwice()
+        {
+            var t = new ScriptTextDbUpdateTask("a", "select 1 print '1 selected'") { Database = DbName };
+            t.Execute();
+            t = new ScriptTextDbUpdateTask("a", "select 1 print '1 selected' --rem") { Database = DbName };
+            t.Execute();
+            Assert.AreEqual(TaskState.Success, t.State);
         }
 
         [Test]

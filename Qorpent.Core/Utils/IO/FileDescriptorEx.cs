@@ -101,14 +101,19 @@ namespace Qorpent.Utils.IO
 
         private void ReadAttributes() {
             lock (this) {
-                if (IsAssembly) {
-                    Header = ReadAssemblyHeader();
-                }
-                else {
+                if (Directory.Exists(FullName)) {
                     Header = FileSystemHelper.ReadXmlHeader(FullName);
                 }
-                if (null == _header) {
-                    _header = new XElement("stub");
+                else {
+                    if (IsAssembly) {
+                        Header = ReadAssemblyHeader();
+                    }
+                    else {
+                        Header = FileSystemHelper.ReadXmlHeader(FullName);
+                    }
+                    if (null == _header) {
+                        _header = new XElement("stub");
+                    }
                 }
             }
         }
@@ -156,7 +161,9 @@ namespace Qorpent.Utils.IO
                 throw new Exception("FullName not setup");
             }
 
-            if (!File.Exists(FullName)) {
+
+
+            if (!File.Exists(FullName) && !Directory.Exists(FullName)) {
                 if (AllowNotExisted) {
                     Version = DateTime.MinValue;
                     Hash = "INIT";
@@ -168,21 +175,38 @@ namespace Qorpent.Utils.IO
             
 
             lock (this) {
-                if (!IsAssembly && Header.Attr("hash").ToBool())
-                {
-                    Hash = Header.Attr("hash");
-                }else if (! CheckGitVersion()) {
-                    if (IsAssembly) {
-                        CheckAssemblyVersion();
+
+                if (Directory.Exists(FullName)) {
+                    var git = GitHelper.GetCommit(FullName);
+                    if (null != git) {
+                        Hash = git.Hash;
+                        Version = git.GlobalRevisionTime;
                     }
                     else {
-                        CheckTextFileVersion();
+                        var files = Directory.GetFiles(FullName, "*.*", SearchOption.AllDirectories);
+                        var ver = files.Max(_ => File.GetLastWriteTimeUtc(_));
+                        Hash = ver.ToString("yyyyMMddHHmmss");
+                        Version = ver;
                     }
-                    
+
+                }
+                else {
+
+                    if (!IsAssembly && Header.Attr("hash").ToBool()) {
+                        Hash = Header.Attr("hash");
+                    }
+                    else if (!CheckGitVersion()) {
+                        if (IsAssembly) {
+                            CheckAssemblyVersion();
+                        }
+                        else {
+                            CheckTextFileVersion();
+                        }
+
+                    }
                 }
 
-               
-                
+
             }
         }
         [Serializable]

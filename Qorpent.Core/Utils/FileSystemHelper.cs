@@ -75,7 +75,10 @@ namespace Qorpent.Utils
 	        if (!String.IsNullOrWhiteSpace(fullname) && File.Exists(fullname)) {
 	            var rawHeader = ReadRawHeader(fullname);
 	            result = GetXml(rawHeader);
-	        }
+            }
+            else if (Directory.Exists(fullname) && File.Exists(Path.Combine(fullname,".header"))) {
+                result = GetXml(File.ReadAllText(Path.Combine(fullname, ".header")));
+            }
 	        return result;
 	    }
 

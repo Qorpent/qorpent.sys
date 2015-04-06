@@ -31,4 +31,30 @@ namespace Qorpent.Data.Installer {
             return null != id;
         }
     }
+
+    /// <summary>
+    /// </summary>
+    public class DropDatabaseTask : DbUpdateTaskBase
+    {
+        public const int Index = -2000000;
+
+        /// <summary>
+        /// </summary>
+        public DropDatabaseTask()
+        {
+            Name = "dropdb";
+            QueryDatabase = "master";
+            Group = "init";
+            Idx = Index;
+            IgnoreErrors = true;
+        }
+
+        public override IEnumerable<string> GetScripts()
+        {
+            yield return @"ALTER DATABASE ${database} SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
+DROP DATABASE ${database}";
+        }
+
+        
+    }
 }

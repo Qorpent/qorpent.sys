@@ -24,9 +24,19 @@ namespace Qorpent.Data.DataDiff
         /// <param name="fields"></param>
         public static TableDiffGeneratorContext Update(IDbConnection connection, XElement update, params string[] fields)
         {
-            
+            if (update.Name.LocalName == "batch") {
+                var updateList = new List<DiffPair>();
+                var i = 0;
+                foreach (var e in update.Elements()) {
+                    var name = "dynamic" + i++;
+                    var s = GetBaseXml(connection, e, fields);
+                    var diff = new DiffPair {FileName = name, Base = s, Updated = e};
+                    updateList.Add(diff);
+                }
+                return Update(connection, updateList.ToArray());
+            }
             var baseXml = GetBaseXml(connection, update, fields);
-            return Update(connection,baseXml,update);
+            return Update(connection, baseXml, update);
         }
         /// <summary>
         /// 
@@ -62,6 +72,19 @@ namespace Qorpent.Data.DataDiff
         /// <returns></returns>
         public static TableDiffGeneratorContext GenerateContext(IDbConnection connection, XElement update, params string[] fields)
         {
+            if (update.Name.LocalName == "batch")
+            {
+                var updateList = new List<DiffPair>();
+                var i = 0;
+                foreach (var e in update.Elements())
+                {
+                    var name = "dynamic" + i++;
+                    var s = GetBaseXml(connection, e, fields);
+                    var diff = new DiffPair { FileName = name, Base = s, Updated = e };
+                    updateList.Add(diff);
+                }
+                return GenerateContext(updateList.ToArray());
+            }
             var baseXml = GetBaseXml(connection, update, fields);
             return GenerateContext(baseXml, update);
         }
