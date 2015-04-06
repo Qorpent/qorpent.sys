@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using NUnit.Framework;
 using Qorpent.Data.Installer;
 using Qorpent.Tasks;
@@ -96,6 +97,7 @@ class c prototype = db-meta table=dbo.test2
             task.Execute();
             
             Assert.AreEqual(TaskState.Success, task.State);
+            Thread.Sleep(500);
             File.WriteAllText(file, @"
 class a prototype = db-meta table=dbo.test
     item id=10 code=X name=XX2
