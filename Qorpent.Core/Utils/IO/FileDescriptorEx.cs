@@ -197,7 +197,9 @@ namespace Qorpent.Utils.IO
                     this.map = new Dictionary<string, string>();
                     foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
                     {
-                        map[a.GetName().Name.Split(',')[0].ToLowerInvariant()] = a.Location;
+                        if (!a.IsDynamic) {
+                            map[a.GetName().Name.Split(',')[0].ToLowerInvariant()] = a.Location;
+                        }
                     }
                     appdomain.AssemblyResolve += Resolve;
                     appdomain.UnhandledException+=appdomain_UnhandledException;
