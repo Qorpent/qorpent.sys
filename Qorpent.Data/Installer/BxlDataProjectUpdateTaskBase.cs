@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using Qorpent.BSharp;
 using Qorpent.Scaffolding.Model;
@@ -27,11 +29,12 @@ namespace Qorpent.Data.Installer {
             else {
                 ProjectName = projectname;
             }
-            var name = Path.GetFileName(ResolvedFile);
-             Source = new FileDescriptorEx { FullName = ResolvedFile, Name = name, UseRepositoryCommit = true };
+      
         
             
         }
+
+        public string Suffix { get; set; }
 
         public string ProjectName {
             get { return Get("projectname", ""); }
@@ -44,16 +47,24 @@ namespace Qorpent.Data.Installer {
         }
 
         public override void Initialize(IJob package = null) {
+            var name = Path.GetFileName(ResolvedFile) + "_" + Suffix;
+            Source = new FileDescriptorEx { FullName = ResolvedFile, Name = name, UseRepositoryCommit = true };
             base.Initialize(package);
             Compile();
         }
+
+        static readonly IDictionary<string,IBSharpContext> _cache = new ConcurrentDictionary<string, IBSharpContext>();
 
         private void Compile() {
             var dir = ResolvedFile;
             if (!Directory.Exists(ResolvedFile)) {
                 dir = Path.GetDirectoryName(ResolvedFile);
             }
-            Context = BscHelper.Execute(dir, ProjectName);
+            var key = dir + "-" + ProjectName + "-" + Source.Hash;
+            if (!_cache.ContainsKey(key)) {
+                _cache[key] = BscHelper.Execute(dir, ProjectName);
+            }
+            Context = _cache[key];
             this.Model = new PersistentModel().Setup(Context);
         }
 

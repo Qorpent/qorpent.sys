@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Core", "Qorpent.Core\Qorpent.Core.csproj", "{880F65EA-1A22-4672-A137-FFC91290A209}"
 EndProject
@@ -50,8 +50,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Data.Tests", "Qorpe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.IO.Tests", "Qorpent.IO.Tests\Qorpent.IO.Tests.csproj", "{4F6F2194-F11D-4CC6-8BB1-7D20F97EC082}"
 EndProject
-Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "qorpent.sys.doc", "qorpent.sys.doc\qorpent.sys.doc.shfbproj", "{1BEEC5B3-2079-4C8F-8589-2543DAA9127F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.EmbedCode", "Qorpent.EmbedCode\Qorpent.EmbedCode.csproj", "{55E63174-CFA1-4555-BF3B-DA7AFAD92819}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Scaffolding", "Qorpent.Scaffolding\Qorpent.Scaffolding.csproj", "{6934ABA6-5D22-4C03-9591-211E9A930D40}"
@@ -66,8 +64,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.BSharp.Builder", "Qorpent.BSharp.Builder\Qorpent.BSharp.Builder.csproj", "{9F8A9B7F-0CAD-47A3-A3C7-F7AC3158864A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.BSharp.Builder.Exe", "Qorpent.BSharp.Builder.Exe\Qorpent.BSharp.Builder.Exe.csproj", "{CCB8EB2C-9F96-47F4-90E9-E6F7247EDF8E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "updateRemotes", "updateRemotes\updateRemotes.csproj", "{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "qs.tc", "qs.tc\qs.tc.csproj", "{6DBF93D0-8767-4052-8022-17087DAE8BDE}"
 EndProject
@@ -109,8 +105,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.BxlParser.Exe", "Qorpent.BxlParser.Exe\Qorpent.BxlParser.Exe.csproj", "{85E43634-91E4-4DB8-A3BC-E90FA681C24E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.Syncer", "Qorpent.Syncer\Qorpent.Syncer.csproj", "{2E0E024B-31C4-464F-9F7E-3E9169E0EAF0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bstimetest", "bstimetest\bstimetest.csproj", "{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qorpent.XDiffDataUpdater", "Qorpent.XDiffDataUpdater\Qorpent.XDiffDataUpdater.csproj", "{89E22910-D2AA-41E2-9717-FC7B27DEC865}"
 EndProject
@@ -221,11 +215,6 @@ Global
 		{4F6F2194-F11D-4CC6-8BB1-7D20F97EC082}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F6F2194-F11D-4CC6-8BB1-7D20F97EC082}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{4F6F2194-F11D-4CC6-8BB1-7D20F97EC082}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
-		{1BEEC5B3-2079-4C8F-8589-2543DAA9127F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1BEEC5B3-2079-4C8F-8589-2543DAA9127F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1BEEC5B3-2079-4C8F-8589-2543DAA9127F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1BEEC5B3-2079-4C8F-8589-2543DAA9127F}.SQL2008|Any CPU.ActiveCfg = Release|Any CPU
-		{1BEEC5B3-2079-4C8F-8589-2543DAA9127F}.SQL2008|Any CPU.Build.0 = Release|Any CPU
 		{55E63174-CFA1-4555-BF3B-DA7AFAD92819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{55E63174-CFA1-4555-BF3B-DA7AFAD92819}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55E63174-CFA1-4555-BF3B-DA7AFAD92819}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -256,12 +245,6 @@ Global
 		{CCB8EB2C-9F96-47F4-90E9-E6F7247EDF8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CCB8EB2C-9F96-47F4-90E9-E6F7247EDF8E}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{CCB8EB2C-9F96-47F4-90E9-E6F7247EDF8E}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
-		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.SQL2008|Any CPU.ActiveCfg = Release|Any CPU
-		{ADBF0408-2D3A-48D4-BB47-E76F9C65552A}.SQL2008|Any CPU.Build.0 = Release|Any CPU
 		{6DBF93D0-8767-4052-8022-17087DAE8BDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6DBF93D0-8767-4052-8022-17087DAE8BDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DBF93D0-8767-4052-8022-17087DAE8BDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -298,12 +281,6 @@ Global
 		{2E0E024B-31C4-464F-9F7E-3E9169E0EAF0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E0E024B-31C4-464F-9F7E-3E9169E0EAF0}.SQL2008|Any CPU.ActiveCfg = SQL2008|Any CPU
 		{2E0E024B-31C4-464F-9F7E-3E9169E0EAF0}.SQL2008|Any CPU.Build.0 = SQL2008|Any CPU
-		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.SQL2008|Any CPU.ActiveCfg = Release|Any CPU
-		{F829782D-8A3A-457A-BB0D-5FFB34C59ACE}.SQL2008|Any CPU.Build.0 = Release|Any CPU
 		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89E22910-D2AA-41E2-9717-FC7B27DEC865}.Release|Any CPU.ActiveCfg = Release|Any CPU

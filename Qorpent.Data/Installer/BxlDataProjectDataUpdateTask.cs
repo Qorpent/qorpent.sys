@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Data.DataDiff;
 
@@ -9,6 +10,7 @@ namespace Qorpent.Data.Installer {
         public const int Index = 10000;
         public BxlDataProjectDataUpdateTask(string projectfile, string projectname = null):base(projectfile,projectname) {
             this.Idx = Index;
+            Suffix = "Data";
         }
         public override IEnumerable<string> GetScripts()
         {
@@ -29,6 +31,9 @@ namespace Qorpent.Data.Installer {
             }
         }
 
-        
+        protected override bool RequireExecution() {
+            if (!base.RequireExecution()) return false;
+            return Context.ResolveAll("db-meta").Any();
+        }
     }
 }
