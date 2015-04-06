@@ -119,6 +119,10 @@
       <Project>{96885c8f-ad20-41b4-86ee-bc9b3d47d9f9}</Project>
       <Name>Qorpent.Mvc</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Security\Qorpent.Security.csproj">
+      <Project>{ecb429bc-3e76-4fcd-897e-235b546c8738}</Project>
+      <Name>Qorpent.Security</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
       <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
       <Name>Qorpent.Serialization</Name>

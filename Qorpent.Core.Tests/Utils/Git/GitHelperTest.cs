@@ -232,6 +232,10 @@ namespace Qorpent.Utils.Tests {
 		[Test]
 		public void CanGetFileList()
 		{
+            Assert.NotNull(Applications.Application.Current);
+            Assert.NotNull(Applications.Application.Current.Principal);
+            Assert.NotNull(Applications.Application.Current.Principal.CurrentUser);
+            Assert.NotNull(Applications.Application.Current.Principal.CurrentUser.Identity);
 			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = Applications.Application.Current.Principal.CurrentUser.Identity.Name };
 			githelper.Connect();
 			var initial = githelper.GetCommitId();
@@ -251,6 +255,7 @@ namespace Qorpent.Utils.Tests {
         [Explicit("На 144'ом валится, для TC помечаю эксплицитом")]
 		public void CanGetFileListUnicode()
 		{
+            
 			var githelper = new GitHelper { DirectoryName = dirname, AuthorName = Applications.Application.Current.Principal.CurrentUser.Identity.Name };
 			githelper.Connect();
 			var initial = githelper.GetCommitId();
