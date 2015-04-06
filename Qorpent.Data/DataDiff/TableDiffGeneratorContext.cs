@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Qorpent.BSharp;
 using Qorpent.Log;
 
 namespace Qorpent.Data.DataDiff{
@@ -147,5 +148,17 @@ namespace Qorpent.Data.DataDiff{
 		/// Признак восприятия сброса атрибута как сброса значения атрибута
 		/// </summary>
 		public bool EmptyAttributesAsUpdates { get; set; }
+        /// <summary>
+        /// Признак того, что регистрация не требуется
+        /// </summary>
+	    public bool NoRegister { get; set; }
+        /// <summary>
+        /// Заранее подготовленный контекст
+        /// </summary>
+	    public IBSharpContext PreparedContext { get; set; }
+        /// <summary>
+        /// Название базы данных
+        /// </summary>
+	    public string Database { get; set; }
 	}
 }

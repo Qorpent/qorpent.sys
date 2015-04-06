@@ -538,6 +538,9 @@ order by ORDINAL_POSITION
 					info.ConnectionString = "default";
 				}
 				if (null == ConnectionProvider) {
+				    if (info.ConnectionString == "default") {
+				        info.ConnectionString = "Server=(local);Trusted_Connection=true";
+				    }
 					if (info.ConnectionString.Contains(";")) {
 						info.Connection = new SqlConnection(info.ConnectionString);
 					}

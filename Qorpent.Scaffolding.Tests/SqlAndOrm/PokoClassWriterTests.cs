@@ -33,7 +33,7 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 			Console.WriteLine(code);
 			Assert.AreEqual(@"		/// <summary>Biz hash code</summary>
 		public string GetHash() {
-			var src = string.Format(""{0}~"" , SomeField);
+			var src = string.Empty + SomeField + ""~"";
 			return src.GetMd5();
 		}
 ", code);

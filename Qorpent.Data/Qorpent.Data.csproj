@@ -31,12 +31,16 @@
     <Compile Include="DataDiff\TableDiffGeneratorContext.cs" />
     <Compile Include="DataDiff\TableMap.cs" />
     <Compile Include="Installer\AssemblyDbUpdateTask.cs" />
-    <Compile Include="Installer\DbInstallJobFactory.cs" />
+    <Compile Include="Installer\BxlDataProjectDataUpdateTask.cs" />
+    <Compile Include="Installer\BxlDataProjectSchemaUpdateTask.cs" />
+    <Compile Include="Installer\BxlDataProjectUpdateTaskBase.cs" />
+    <Compile Include="Installer\DbInstallFactory.cs" />
     <Compile Include="Installer\DbUpdateTaskBase.cs" />
     <Compile Include="Installer\InitDatabaseTask.cs" />
     <Compile Include="Installer\InitClrTask.cs" />
     <Compile Include="Installer\InitMetaTableTask.cs" />
     <Compile Include="Installer\ScriptFileDbUpdateTask.cs" />
+    <Compile Include="Installer\ScriptTextDbUpdateTask.cs" />
     <Compile Include="Installer\SqlExtensions\AggregatorWrapper.cs" />
     <Compile Include="Installer\SqlExtensions\FunctionSqlWrapper.cs" />
     <Compile Include="Installer\SqlExtensions\FunctionWrapper.cs" />

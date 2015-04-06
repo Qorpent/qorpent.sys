@@ -38,15 +38,11 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 			if (fields.Length == 0) return;
 			o.WriteLine("\t\t/// <summary>Biz hash code</summary>");
 			o.WriteLine("\t\tpublic string GetHash() {");
-			o.Write("\t\t\tvar src = string.Format(\"");
-			for (var i = 0; i < fields.Length; i++) {
-				o.Write("{" + i + "}~");
-			}
-			o.Write("\" ");
+			o.Write("\t\t\tvar src = string.Empty");
 			foreach (var field in fields) {
-				o.Write(", " + field.Name);
+				o.Write(" + " + field.Name + " + \"~\"");
 			}
-			o.WriteLine(");");
+			o.WriteLine(";");
 			o.WriteLine("\t\t\treturn src.GetMd5();");
 			o.WriteLine("\t\t}");
 		}

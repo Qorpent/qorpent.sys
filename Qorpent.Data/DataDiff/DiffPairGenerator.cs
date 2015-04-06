@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Qorpent.BSharp;
+using Qorpent.BSharp.Runtime;
 using Qorpent.Log;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
@@ -29,28 +31,34 @@ namespace Qorpent.Data.DataDiff
 			if (null == _context.Log){
 				_context.Log = ConsoleLogWriter.CreateLog("main", customFormat: "${Message}", level: LogLevel.Trace);
 			}
-			if (string.IsNullOrWhiteSpace(_context.ProjectDirectory)){
-				throw new Exception("ProjectDirectory is required");
-			}
-			if (string.IsNullOrWhiteSpace(_context.GitBranch)){
-				_context.GitBranch = "master";
-			}
-
-			if (string.IsNullOrWhiteSpace(_context.BSharpPrototype)){
+		    if (null != _context.PreparedContext) {
+		        if (string.IsNullOrWhiteSpace(_context.ProjectDirectory)) {
+		            throw new Exception("ProjectDirectory is required");
+		        }
+		        if (string.IsNullOrWhiteSpace(_context.GitBranch)) {
+		            _context.GitBranch = "master";
+		        }
+                if (string.IsNullOrWhiteSpace(_context.RootDirectory))
+                {
+                    _context.RootDirectory = Path.GetTempFileName();
+                }
+                if (string.IsNullOrWhiteSpace(_context.GitUrl))
+                {
+                    if (!Directory.Exists(Path.Combine(_context.RootDirectory, ".git")))
+                    {
+                        throw new Exception("no valid repo directory, nor git URL was given");
+                    }
+                }
+                if (string.IsNullOrWhiteSpace(_context.GitUpdateRevision))
+                {
+                    _context.GitUpdateRevision = "HEAD";
+                }
+		    }
+		    if (string.IsNullOrWhiteSpace(_context.BSharpPrototype)){
 				_context.BSharpPrototype = "db-meta";
 			}
 
-			if (string.IsNullOrWhiteSpace(_context.RootDirectory)){
-				_context.RootDirectory = Path.GetTempFileName();
-			}
-			if (string.IsNullOrWhiteSpace(_context.GitUrl)){
-				if (!Directory.Exists(Path.Combine(_context.RootDirectory, ".git"))){
-					throw new Exception("no valid repo directory, nor git URL was given");
-				}
-			}
-			if (string.IsNullOrWhiteSpace(_context.GitUpdateRevision)){
-				_context.GitUpdateRevision = "HEAD";
-			}
+			
 		}
 		/// <summary>
 		/// Компилирует исходую и целевую версию проекта, сравнивает классы и формирует пары для сравнений
@@ -124,72 +132,105 @@ namespace Qorpent.Data.DataDiff
 			}
 		}
 
-		private IDictionary<string, XElement> GetBSharpClasses(string rev){
+
+
+		private IDictionary<string, XElement> GetBSharpClasses(string rev = null){
 
 			var result = new Dictionary<string, XElement>();
-			if (rev == "HEAD"){
-				rev = _context.GitBranch;
-			}
-			if (!string.IsNullOrWhiteSpace(rev)){
-				_context.Log.Trace("reset GIT pre "+rev);
-				_githelper.Reset(true);
-				_githelper.Clean(true);
-				_context.Log.Trace("begin checkout "+rev);
-				_githelper.Checkout(rev);
-				_context.ResolvedUpdateRevision = _githelper.GetCommitId();
-				
-				_context.Log.Trace("end checkout " + rev);
-				var bscStarter = new ConsoleApplicationHandler();
-				bscStarter.ExePath = "bsc";
-				bscStarter.WorkingDirectory = Path.Combine(_context.RootDirectory, _context.ProjectDirectory);
-				if (!string.IsNullOrWhiteSpace(_context.ProjectName)){
-					bscStarter.Arguments = _context.ProjectName;
-				}
-				_context.Log.Trace("start bsc");
-				var bscResult = bscStarter.RunSync();
-				_context.Log.Trace("finish bsc");
-				if (bscResult.IsOK){
-					_context.Log.Trace("ok bsc");
-					var clsProvider = new BSharp.Runtime.BSharpFileBasedClassProvider{
-						RootDirectory = Path.Combine(_context.RootDirectory, _context.OutputDirectory)
-					};
-					var dbclasses = clsProvider.FindClasses(prototype: _context.BSharpPrototype).ToArray();
-					foreach (var cls in dbclasses){
-						_context.Log.Trace("cls "+cls.Fullname+" detected");
-						var name = cls.Name;
-						var xml = cls.GetClassElement();
-						result[name] = xml;
-					}
-					var maps = clsProvider.FindClasses(prototype: _context.BSharpMapPrototype).ToArray();
-					foreach (var map in maps){
-						foreach (var r in map.Definition.Descendants("ref")){
-							var fromtable = r.ChooseAttr("table","code");
-							var fromfield = r.ChooseAttr("name","code");
-							var totable = r.Value;
-							if (string.IsNullOrWhiteSpace(totable)){
-								var cls = dbclasses.FirstOrDefault(_ => _.Fullname.EndsWith("." + fromfield));
-								if (null != cls){
-									totable = cls.Definition.Elements().First().Attr("table");
-								}
-							}
-							_context.Mappings.Add(new TableMap(fromtable, fromfield, totable));
-						}
-						foreach (var r in map.Definition.Descendants("disable")){
-							var fromtable = r.ChooseAttr("table","code");
-							var fromfield = r.ChooseAttr("name","code");
-							_context.Indexes.Add(new TableMap(fromtable, fromfield, fromfield));
-						}
-					}
-				}
-				else{
-					_context.Log.Error("error in bsc "+bscResult.Error,bscResult.Exception);
-					throw new Exception("bsharp compile exception "+bscResult.Error,bscResult.Exception);
-				}
-			}
-			return result;
+
+		    var clsProvider = null == this._context.PreparedContext ? GetOldStyleClsProvider(rev) : GetPrecompileClsProvider();
+            PrepareDbClasses(clsProvider,result);
+		    return result;
 		}
 
-		private void PrepareGitRepository(){
+	    private IBSharpRuntimeProvider GetPrecompileClsProvider() {
+	        var provider = new BSharpGenericClassProvider();
+	        foreach (var cls in _context.PreparedContext.Get(BSharpContextDataType.Working)) {
+	            var rcls = new BSharpRuntimeClass {
+	                Name = cls.Name,
+	                Namespace = cls.Namespace,
+	                PrototypeCode = cls.Prototype,
+	                Loaded = true,
+	                Definition = cls.Compiled
+	            };
+                provider.Set(rcls);
+	        }
+	        return provider;
+	    }
+
+	    private BSharpFileBasedClassProvider GetOldStyleClsProvider(string rev) {
+	        var clsProvider = new BSharpFileBasedClassProvider();
+	        if (rev == "HEAD") {
+	            rev = _context.GitBranch;
+	        }
+	        if (!string.IsNullOrWhiteSpace(rev)) {
+	            _context.Log.Trace("reset GIT pre " + rev);
+	            _githelper.Reset(true);
+	            _githelper.Clean(true);
+	            _context.Log.Trace("begin checkout " + rev);
+	            _githelper.Checkout(rev);
+	            _context.ResolvedUpdateRevision = _githelper.GetCommitId();
+
+	            _context.Log.Trace("end checkout " + rev);
+	            var bscStarter = new ConsoleApplicationHandler();
+	            bscStarter.ExePath = "bsc";
+	            bscStarter.WorkingDirectory = Path.Combine(_context.RootDirectory, _context.ProjectDirectory);
+	            if (!string.IsNullOrWhiteSpace(_context.ProjectName)) {
+	                bscStarter.Arguments = _context.ProjectName;
+	            }
+	            _context.Log.Trace("start bsc");
+	            var bscResult = bscStarter.RunSync();
+	            _context.Log.Trace("finish bsc");
+
+	            if (bscResult.IsOK) {
+	                _context.Log.Trace("ok bsc");
+
+	                clsProvider = new BSharpFileBasedClassProvider {
+	                    RootDirectory = Path.Combine(_context.RootDirectory, _context.OutputDirectory)
+	                };
+	            }
+	            else {
+	                _context.Log.Error("error in bsc " + bscResult.Error, bscResult.Exception);
+	                throw new Exception("bsharp compile exception " + bscResult.Error, bscResult.Exception);
+	            }
+	        }
+	        return clsProvider;
+	    }
+
+	    private void PrepareDbClasses(IBSharpRuntimeProvider provider, Dictionary<string, XElement> result)
+        {
+            var dbclasses = provider.FindClasses(prototype: _context.BSharpPrototype).ToArray();
+            var maps = provider.FindClasses(prototype: _context.BSharpMapPrototype).ToArray();
+	        foreach (var cls in dbclasses) {
+	            _context.Log.Trace("cls " + cls.Fullname + " detected");
+	            var name = cls.Name;
+	            var xml = cls.GetClassElement();
+	            result[name] = xml;
+	        }
+	        
+	       
+	        foreach (var map in maps) {
+	            foreach (var r in map.Definition.Descendants("ref")) {
+	                var fromtable = r.ChooseAttr("table", "code");
+	                var fromfield = r.ChooseAttr("name", "code");
+	                var totable = r.Value;
+	                if (string.IsNullOrWhiteSpace(totable)) {
+	                    var cls = dbclasses.FirstOrDefault(_ => _.Fullname.EndsWith("." + fromfield));
+	                    if (null != cls) {
+	                        totable = cls.Definition.Elements().First().Attr("table");
+	                    }
+	                }
+	                _context.Mappings.Add(new TableMap(fromtable, fromfield, totable));
+	            }
+	            foreach (var r in map.Definition.Descendants("disable")) {
+	                var fromtable = r.ChooseAttr("table", "code");
+	                var fromfield = r.ChooseAttr("name", "code");
+	                _context.Indexes.Add(new TableMap(fromtable, fromfield, fromfield));
+	            }
+	        }
+	    }
+
+	    private void PrepareGitRepository(){
 			this._githelper = new GitHelper{RemoteUrl = _context.GitUrl, DirectoryName = _context.RootDirectory, Branch = _context.GitBranch,NoAutoPush = true}.Connect();
 			try{
 				_githelper.FixBranchState();
