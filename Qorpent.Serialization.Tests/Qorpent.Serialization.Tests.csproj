@@ -127,7 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.Core.Tests\Qorpent.Core.Tests.csproj">
-      <Project>{880f65ea-1a22-4672-a137-ffc912902046}</Project>
+      <Project>{880F65EA-1A22-4672-A137-FFC912902046}</Project>
       <Name>Qorpent.Core.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">

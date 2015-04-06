@@ -35,10 +35,6 @@
       <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
       <Name>Qorpent.Serialization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Qorpent.Utils.Tests\Qorpent.Utils.Tests.csproj">
-      <Project>{880F65EA-1A22-4672-A137-FFC912902113}</Project>
-      <Name>Qorpent.Utils.Tests</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />

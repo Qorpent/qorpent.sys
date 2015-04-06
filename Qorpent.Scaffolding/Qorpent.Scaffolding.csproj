@@ -122,10 +122,6 @@
       <Project>{21971f28-8ed8-4f50-b623-e9db2658af54}</Project>
       <Name>Qorpent.Serialization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
-      <Project>{880f65ea-1a22-4672-a137-ffc912902112}</Project>
-      <Name>Qorpent.Utils</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />

@@ -27,10 +27,6 @@
       <Project>{E762ABB0-9982-444C-A2B5-23B5866954F3}</Project>
       <Name>Qorpent.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
-      <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
-      <Name>Qorpent.Utils</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

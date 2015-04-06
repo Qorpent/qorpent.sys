@@ -90,10 +90,6 @@
       <Project>{426C92DF-3C40-426C-B0BE-40A1DF9044C2}</Project>
       <Name>Qorpent.IO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
-      <Project>{880f65ea-1a22-4672-a137-ffc912902112}</Project>
-      <Name>Qorpent.Utils</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

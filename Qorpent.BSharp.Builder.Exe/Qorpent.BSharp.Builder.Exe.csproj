@@ -27,10 +27,6 @@
       <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
       <Name>Qorpent.Serialization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\qorpent.sys\Qorpent.Utils\Qorpent.Utils.csproj">
-      <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
-      <Name>Qorpent.Utils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Qorpent.BSharp.Builder\Qorpent.BSharp.Builder.csproj">
       <Project>{9f8a9b7f-0cad-47a3-a3c7-f7ac3158864a}</Project>
       <Name>Qorpent.BSharp.Builder</Name>

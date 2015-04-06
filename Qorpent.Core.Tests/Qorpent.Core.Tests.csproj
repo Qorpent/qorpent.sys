@@ -60,6 +60,45 @@
     <Compile Include="Tasks\TestUpdater.cs" />
     <Compile Include="TestSupport\QorpentFixture.cs" />
     <Compile Include="TestSupport\QorpentFixtureAttribute.cs" />
+    <Compile Include="Utils\BrickScale\BrickDataRecordMiniMaxTest.cs" />
+    <Compile Include="Utils\BrickScale\ComdivTests.cs" />
+    <Compile Include="Utils\BrickScale\DataColonNormalizer\DataColonBestVariantHelperTests.cs" />
+    <Compile Include="Utils\BrickScale\DataColonNormalizer\DataColonGetPossibleVariantsTests.cs" />
+    <Compile Include="Utils\BrickScale\DataColonNormalizer\DataColonLabelHelperOrderTests.cs" />
+    <Compile Include="Utils\BrickScale\DataColonNormalizer\DataColonTemperatureTests.cs" />
+    <Compile Include="Utils\BrickScale\DataColonNormalizer\DataColonTestBase.cs" />
+    <Compile Include="Utils\BSharpDocumentStorageTests.cs" />
+    <Compile Include="Utils\BTreeTest.cs" />
+    <Compile Include="Utils\CombinationalTest.cs" />
+    <Compile Include="Utils\ComplexStringHelperTest.cs" />
+    <Compile Include="Utils\ComplexStringTest.cs" />
+    <Compile Include="Utils\ConsoleApplicationSupport\ConsoleDefaultApplicationBehavior.cs" />
+    <Compile Include="Utils\ConsoleApplicationSupport\ConsoleHandlerTests.cs" />
+    <Compile Include="Utils\ConsoleArgumentHelperTest.cs" />
+    <Compile Include="Utils\ConvertExtensionsTest.cs" />
+    <Compile Include="Utils\DatabaseExtensionsTest.cs" />
+    <Compile Include="Utils\DateRangeResolverTest.cs" />
+    <Compile Include="Utils\EnumerableExtensionsTest.cs" />
+    <Compile Include="Utils\Git\FileRecordTest.cs" />
+    <Compile Include="Utils\Git\GitFuxtureInitializer.cs" />
+    <Compile Include="Utils\Git\GitHelperTest.cs" />
+    <Compile Include="Utils\HexTests.cs" />
+    <Compile Include="Utils\IO\FileDescriptorExTest.cs" />
+    <Compile Include="Utils\IO\FileSystemHelperTests.cs" />
+    <Compile Include="Utils\MathTests.cs" />
+    <Compile Include="Utils\ReflectionHelperTest.cs" />
+    <Compile Include="Utils\ScaleNormalizeTests\ComdivTests.cs" />
+    <Compile Include="Utils\SimpleExpression\SimpleExpressionParserTests.cs" />
+    <Compile Include="Utils\SimpleExpression\SqlFullTestSearchAdapterTests.cs" />
+    <Compile Include="Utils\StaticInstanceTest.cs" />
+    <Compile Include="Utils\StringExtensionsTest.cs" />
+    <Compile Include="Utils\StringInterpolationMainTests.cs" />
+    <Compile Include="Utils\TagHelperTest.cs" />
+    <Compile Include="Utils\UniSqlTest.cs" />
+    <Compile Include="Utils\WebDateTimeParserTest.cs" />
+    <Compile Include="Utils\XDiff\XDiffTest.cs" />
+    <Compile Include="Utils\XmlExtensionsTest.cs" />
+    <Compile Include="Utils\XmlInterpolationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -68,7 +107,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Utils\Properties\" />
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <!-- <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />-->
   <ItemGroup>
@@ -88,10 +129,6 @@
     <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
       <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
       <Name>Qorpent.Serialization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Qorpent.Utils\Qorpent.Utils.csproj">
-      <Project>{880F65EA-1A22-4672-A137-FFC912902112}</Project>
-      <Name>Qorpent.Utils</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
