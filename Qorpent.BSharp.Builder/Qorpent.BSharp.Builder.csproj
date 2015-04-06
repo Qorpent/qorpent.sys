@@ -45,5 +45,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Tasks\WriteTasks\errors.xslt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Charts\Qorpent.Charts.csproj">
+      <Project>{2D2D7E24-C82E-44F1-AF62-78A647570448}</Project>
+      <Name>Qorpent.Charts</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

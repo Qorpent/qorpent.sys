@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IsTest>True</IsTest>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{F67214B7-DBB5-4C04-BC13-690CFDB92965}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Charts.Tests</RootNamespace>
+    <AssemblyName>Qorpent.Charts.Tests</AssemblyName>
+    <AssemblyNameBase>Qorpent.Charts</AssemblyNameBase>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BrickScale\BrickDataRecordMiniMaxTest.cs" />
+    <Compile Include="BrickScale\ComdivTests.cs" />
+    <Compile Include="BrickScale\DataColonNormalizer\DataColonBestVariantHelperTests.cs" />
+    <Compile Include="BrickScale\DataColonNormalizer\DataColonGetPossibleVariantsTests.cs" />
+    <Compile Include="BrickScale\DataColonNormalizer\DataColonLabelHelperOrderTests.cs" />
+    <Compile Include="BrickScale\DataColonNormalizer\DataColonTemperatureTests.cs" />
+    <Compile Include="BrickScale\DataColonNormalizer\DataColonTestBase.cs" />
+    <Compile Include="ChartExtensionsTests.cs" />
+    <Compile Include="Charts\ChartExtensionsTests.cs" />
+    <Compile Include="ComdivTests.cs" />
+    <Compile Include="Dot\ColorTest.cs" />
+    <Compile Include="Dot\DotLanguageUtilsTest.cs" />
+    <Compile Include="Dot\DotRenderTest.cs" />
+    <Compile Include="Dot\TuningTest.cs" />
+    <Compile Include="FusionChartsScaleNormalizerTests.cs" />
+    <Compile Include="GraphTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC91290A209}</Project>
+      <Name>Qorpent.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>

@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{2D2D7E24-C82E-44F1-AF62-78A647570448}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Qorpent.Charts</RootNamespace>
+    <AssemblyName>Qorpent.Charts</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+    <None Include="BrickScaleNormalizer\Кирпичная нормализация шкал.docx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BrickScaleNormalizer\BrickCatalog.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickChart.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickChartApplication.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickChartStyle.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickDataSet.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickDataSetExtensions.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickDataSetHelper.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickDataSetSeria.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickRequest.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickVariant.cs" />
+    <Compile Include="BrickScaleNormalizer\BrickVariantComparer.cs" />
+    <Compile Include="BrickScaleNormalizer\DataItem.cs" />
+    <Compile Include="BrickScaleNormalizer\DataItemColon.cs" />
+    <Compile Include="BrickScaleNormalizer\DataItemExtensions.cs" />
+    <Compile Include="BrickScaleNormalizer\DataRow.cs" />
+    <Compile Include="BrickScaleNormalizer\LabelPosition.cs" />
+    <Compile Include="BrickScaleNormalizer\LabelPositionVariants.cs" />
+    <Compile Include="BrickScaleNormalizer\MiniamlScaleBehavior.cs" />
+    <Compile Include="BrickScaleNormalizer\NumericDataItem.cs" />
+    <Compile Include="BrickScaleNormalizer\Scale.cs" />
+    <Compile Include="BrickScaleNormalizer\ScaleType.cs" />
+    <Compile Include="BrickScaleNormalizer\SeriaCalcMode.cs" />
+    <Compile Include="BrickScaleNormalizer\UserPreferences.cs" />
+    <Compile Include="ChartAction.cs" />
+    <Compile Include="ChartRender.cs" />
+    <Compile Include="Charts.FusionCharts\ApiExtended.cs" />
+    <Compile Include="Charts.FusionCharts\API_auto.cs" />
+    <Compile Include="Charts.FusionCharts\Api_dict_auto.cs" />
+    <Compile Include="Charts.FusionCharts\ChartNormalized.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartApi.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartAttributeDescriptor.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartChartAttributes.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartColor.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartDataType.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartElementType.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartExtensions.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartGroupedType.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartType.cs" />
+    <Compile Include="Charts.FusionCharts\FusionChartWrapper.cs" />
+    <Compile Include="Charts\Chart.cs" />
+    <Compile Include="Charts\ChartBuilder.cs" />
+    <Compile Include="Charts\ChartCategories.cs" />
+    <Compile Include="Charts\ChartCategory.cs" />
+    <Compile Include="Charts\ChartConfig.cs" />
+    <Compile Include="Charts\ChartDataset.cs" />
+    <Compile Include="Charts\ChartDatasets.cs" />
+    <Compile Include="Charts\ChartElement.cs" />
+    <Compile Include="Charts\ChartElementList.cs" />
+    <Compile Include="Charts\ChartExtensions.cs" />
+    <Compile Include="Charts\ChartLineSet.cs" />
+    <Compile Include="Charts\ChartLineSetItem.cs" />
+    <Compile Include="Charts\ChartRenderResult.cs" />
+    <Compile Include="Charts\ChartSet.cs" />
+    <Compile Include="Charts\ChartTrendLine.cs" />
+    <Compile Include="Charts\ChartTrendLines.cs" />
+    <Compile Include="Charts\ChartVLine.cs" />
+    <Compile Include="Charts\Chart_default_attributes.cs" />
+    <Compile Include="Graphs.Dot\Builder\DotEdgeBuilder.cs" />
+    <Compile Include="Graphs.Dot\Builder\DotGraphBuilder.cs" />
+    <Compile Include="Graphs.Dot\Builder\DotGraphElementBuilderBase.cs" />
+    <Compile Include="Graphs.Dot\Builder\DotNodeBuilder.cs" />
+    <Compile Include="Graphs.Dot\Builder\DotSubgraphBuilder.cs" />
+    <Compile Include="Graphs.Dot\Builder\DotSubgraphBuilderBase.cs" />
+    <Compile Include="Graphs.Dot\Cluster.cs" />
+    <Compile Include="Graphs.Dot\DotGenerator.cs" />
+    <Compile Include="Graphs.Dot\DotGraphProvider.cs" />
+    <Compile Include="Graphs.Dot\DotLanguageUtils.cs" />
+    <Compile Include="Graphs.Dot\Edge.cs" />
+    <Compile Include="Graphs.Dot\Graph.cs" />
+    <Compile Include="Graphs.Dot\GraphElementBase.cs" />
+    <Compile Include="Graphs.Dot\GraphRender.cs" />
+    <Compile Include="Graphs.Dot\Node.cs" />
+    <Compile Include="Graphs.Dot\SubGraph.cs" />
+    <Compile Include="Graphs\Dot\BuilderExtensions.cs" />
+    <Compile Include="Graphs\Dot\DotConstants.cs" />
+    <Compile Include="Graphs\Dot\Types\Arrow.cs" />
+    <Compile Include="Graphs\Dot\Types\ArrowType.cs" />
+    <Compile Include="Graphs\Dot\Types\AttributeHelper.cs" />
+    <Compile Include="Graphs\Dot\Types\Color.cs" />
+    <Compile Include="Graphs\Dot\Types\ColorAttribute.cs" />
+    <Compile Include="Graphs\Dot\Types\ColorAttributeType.cs" />
+    <Compile Include="Graphs\Dot\Types\ColorList.cs" />
+    <Compile Include="Graphs\Dot\Types\ColorListItem.cs" />
+    <Compile Include="Graphs\Dot\Types\DirType.cs" />
+    <Compile Include="Graphs\Dot\Types\EdgeStyleType.cs" />
+    <Compile Include="Graphs\Dot\Types\GraphSplinesType.cs" />
+    <Compile Include="Graphs\Dot\Types\GraphStyleType.cs" />
+    <Compile Include="Graphs\Dot\Types\NodeShapeType.cs" />
+    <Compile Include="Graphs\Dot\Types\NodeStyleType.cs" />
+    <Compile Include="Graphs\Dot\Types\RankDirType.cs" />
+    <Compile Include="RenderDotAction.cs" />
+    <Compile Include="Tagged.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC91290A209}</Project>
+      <Name>Qorpent.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
+      <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
+      <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>

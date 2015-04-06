@@ -8,7 +8,6 @@
     <AssemblyName>Qorpent.Mvc</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Actions\ChartAction.cs" />
     <Compile Include="Actions\ContainerAction.cs" />
     <Compile Include="Actions\DoNothingAction.cs" />
     <Compile Include="Actions\GetClusterNodeLoad.cs" />
@@ -21,7 +20,6 @@
     <Compile Include="Actions\ImpersonateAction.cs" />
     <Compile Include="Actions\IsInRoleAction.cs" />
     <Compile Include="Actions\ListFilesAction.cs" />
-    <Compile Include="Actions\RenderDotAction.cs" />
     <Compile Include="Actions\SysInfoAction.cs" />
     <Compile Include="Actions\Wiki\WikiGetLockAction.cs" />
     <Compile Include="Actions\Wiki\WikiGetVersionsListAction.cs" />
@@ -67,7 +65,6 @@
     <Compile Include="HttpHandler\WaitApplicationStartupHandler.cs" />
     <Compile Include="MvcContext.cs" />
     <Compile Include="HttpApplicationReloader.cs" />
-    <Compile Include="Renders\ChartRender.cs" />
     <Compile Include="Renders\DotRender.cs" />
     <Compile Include="Renders\HtmlRender.cs" />
     <Compile Include="Renders\LoginViews\LoginView.cs" />
@@ -124,7 +121,6 @@
     <EmbeddedResource Include="Renders\ActionFormViews\ActionFormMain.1_ru_resb" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />

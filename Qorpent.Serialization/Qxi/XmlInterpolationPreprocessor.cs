@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Dsl/XmlInterpolationPreprocessor.cs
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -30,7 +31,8 @@ namespace Qorpent.Qxi {
 	/// </summary>
 	/// <isdefaultimpl cref="IXmlInterpolationPreprocessor" />
 	[ContainerComponent(Lifestyle.Transient)]
-	public class XmlInterpolationPreprocessor : IXmlInterpolationPreprocessor {
+    [Obsolete("no qxi no more ", true)]
+    public class XmlInterpolationPreprocessor : IXmlInterpolationPreprocessor {
 		/// <summary>
 		/// 	Выполняет замены в указанном элементе
 		/// </summary>

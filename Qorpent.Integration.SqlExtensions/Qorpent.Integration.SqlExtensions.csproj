@@ -212,6 +212,9 @@
     <Compile Include="..\Qorpent.Core\Charts\ChartState.cs">
       <Link>ImportCode\ChartState.cs</Link>
     </Compile>
+    <Compile Include="..\Qorpent.Core\Charts\GraphOptions.cs">
+      <Link>ImportCode\GraphOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Qorpent.Core\Charts\IChart.cs">
       <Link>ImportCode\IChart.cs</Link>
     </Compile>
@@ -283,6 +286,30 @@
     </Compile>
     <Compile Include="..\Qorpent.Core\Charts\IChartXmlSource.cs">
       <Link>ImportCode\IChartXmlSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Charts\IGraphBuilder.cs">
+      <Link>ImportCode\IGraphBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Charts\IGraphConvertible.cs">
+      <Link>ImportCode\IGraphConvertible.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Charts\IGraphEdgeBuilder.cs">
+      <Link>ImportCode\IGraphEdgeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Charts\IGraphElementBuilder.cs">
+      <Link>ImportCode\IGraphElementBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Charts\IGraphNodeBuilder.cs">
+      <Link>ImportCode\IGraphNodeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Charts\IGraphProvider.cs">
+      <Link>ImportCode\IGraphProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Charts\IGraphSource.cs">
+      <Link>ImportCode\IGraphSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Charts\IGraphSubGraphBuilder.cs">
+      <Link>ImportCode\IGraphSubGraphBuilder.cs</Link>
     </Compile>
     <Compile Include="..\Qorpent.Core\Config\ConfigBase.cs">
       <Link>ImportCode\ConfigBase.cs</Link>
@@ -517,84 +544,6 @@
     </Compile>
     <Compile Include="..\Qorpent.Core\FilterState.cs">
       <Link>ImportCode\FilterState.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\BuilderExtensions.cs">
-      <Link>ImportCode\BuilderExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\DotConstants.cs">
-      <Link>ImportCode\DotConstants.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\Arrow.cs">
-      <Link>ImportCode\Arrow.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\ArrowType.cs">
-      <Link>ImportCode\ArrowType.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\AttributeHelper.cs">
-      <Link>ImportCode\AttributeHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\Color.cs">
-      <Link>ImportCode\Color.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\ColorAttribute.cs">
-      <Link>ImportCode\ColorAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\ColorAttributeType.cs">
-      <Link>ImportCode\ColorAttributeType.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\ColorList.cs">
-      <Link>ImportCode\ColorList.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\ColorListItem.cs">
-      <Link>ImportCode\ColorListItem.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\DirType.cs">
-      <Link>ImportCode\DirType.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\EdgeStyleType.cs">
-      <Link>ImportCode\EdgeStyleType.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\GraphSplinesType.cs">
-      <Link>ImportCode\GraphSplinesType.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\GraphStyleType.cs">
-      <Link>ImportCode\GraphStyleType.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\NodeShapeType.cs">
-      <Link>ImportCode\NodeShapeType.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\NodeStyleType.cs">
-      <Link>ImportCode\NodeStyleType.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\Dot\Types\RankDirType.cs">
-      <Link>ImportCode\RankDirType.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\GraphOptions.cs">
-      <Link>ImportCode\GraphOptions.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\IGraphBuilder.cs">
-      <Link>ImportCode\IGraphBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\IGraphConvertible.cs">
-      <Link>ImportCode\IGraphConvertible.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\IGraphEdgeBuilder.cs">
-      <Link>ImportCode\IGraphEdgeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\IGraphElementBuilder.cs">
-      <Link>ImportCode\IGraphElementBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\IGraphNodeBuilder.cs">
-      <Link>ImportCode\IGraphNodeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\IGraphProvider.cs">
-      <Link>ImportCode\IGraphProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\IGraphSource.cs">
-      <Link>ImportCode\IGraphSource.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Graphs\IGraphSubGraphBuilder.cs">
-      <Link>ImportCode\IGraphSubGraphBuilder.cs</Link>
     </Compile>
     <Compile Include="..\Qorpent.Core\HelpAttribute.cs">
       <Link>ImportCode\HelpAttribute.cs</Link>
@@ -1175,6 +1124,15 @@
     <Compile Include="..\Qorpent.Core\Mvc\ViewNotFoundException.cs">
       <Link>ImportCode\ViewNotFoundException.cs</Link>
     </Compile>
+    <Compile Include="..\Qorpent.Core\obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs">
+      <Link>ImportCode\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs">
+      <Link>ImportCode\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs">
+      <Link>ImportCode\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs</Link>
+    </Compile>
     <Compile Include="..\Qorpent.Core\QorpentConst.cs">
       <Link>ImportCode\QorpentConst.cs</Link>
     </Compile>
@@ -1384,75 +1342,6 @@
     </Compile>
     <Compile Include="..\Qorpent.Core\TransactionAction.cs">
       <Link>ImportCode\TransactionAction.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\BrickCatalog.cs">
-      <Link>ImportCode\BrickCatalog.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\BrickChart.cs">
-      <Link>ImportCode\BrickChart.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\BrickChartApplication.cs">
-      <Link>ImportCode\BrickChartApplication.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\BrickChartStyle.cs">
-      <Link>ImportCode\BrickChartStyle.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\BrickDataSet.cs">
-      <Link>ImportCode\BrickDataSet.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\BrickDataSetExtensions.cs">
-      <Link>ImportCode\BrickDataSetExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\BrickDataSetHelper.cs">
-      <Link>ImportCode\BrickDataSetHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\BrickDataSetSeria.cs">
-      <Link>ImportCode\BrickDataSetSeria.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\BrickRequest.cs">
-      <Link>ImportCode\BrickRequest.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\BrickVariant.cs">
-      <Link>ImportCode\BrickVariant.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\BrickVariantComparer.cs">
-      <Link>ImportCode\BrickVariantComparer.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\DataItem.cs">
-      <Link>ImportCode\DataItem.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\DataItemColon.cs">
-      <Link>ImportCode\DataItemColon.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\DataItemExtensions.cs">
-      <Link>ImportCode\DataItemExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\DataRow.cs">
-      <Link>ImportCode\DataRow.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\LabelPosition.cs">
-      <Link>ImportCode\LabelPosition.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\LabelPositionVariants.cs">
-      <Link>ImportCode\LabelPositionVariants.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\MiniamlScaleBehavior.cs">
-      <Link>ImportCode\MiniamlScaleBehavior.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\NumericDataItem.cs">
-      <Link>ImportCode\NumericDataItem.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\Scale.cs">
-      <Link>ImportCode\Scale.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\ScaleType.cs">
-      <Link>ImportCode\ScaleType.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\SeriaCalcMode.cs">
-      <Link>ImportCode\SeriaCalcMode.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\BrickScaleNormalizer\UserPreferences.cs">
-      <Link>ImportCode\UserPreferences.cs</Link>
     </Compile>
     <Compile Include="..\Qorpent.Core\Utils\BSharpDocumentStorage.cs">
       <Link>ImportCode\BSharpDocumentStorage.cs</Link>
@@ -1729,9 +1618,6 @@
     </Compile>
     <Compile Include="..\Qorpent.Core\Utils\StringInterpolation.cs">
       <Link>ImportCode\StringInterpolation.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\Tagged.cs">
-      <Link>ImportCode\Tagged.cs</Link>
     </Compile>
     <Compile Include="..\Qorpent.Core\Utils\ValueMember.cs">
       <Link>ImportCode\ValueMember.cs</Link>

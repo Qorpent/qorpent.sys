@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Dsl/XmlIncludeProcessor.cs
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -36,6 +37,7 @@ namespace Qorpent.Qxi {
 	/// <remarks>
 	/// </remarks>
 	[ContainerComponent(Lifestyle.Transient)]
+    [Obsolete("no qxi no more ",true)]
 	public class XmlIncludeProcessor : ServiceBase, IXmlIncludeProcessor {
 		/// <summary>
 		/// 	Initializes a new instance of the <see cref="XmlIncludeProcessor" /> class. - for tests

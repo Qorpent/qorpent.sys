@@ -56,47 +56,10 @@
     <Compile Include="BSharpClassRef.cs" />
     <Compile Include="Application\Compile\GenerateDataTypesInCSharpTask.cs" />
     <Compile Include="CodeGeneratorTaskBase.cs" />
-    <Compile Include="Model\AllocationInfo.cs" />
     <Compile Include="Model\Compiler\GenerateResolveTagFacility.cs" />
     <Compile Include="Model\Compiler\CSharpModelGeneratorBase.cs" />
     <Compile Include="Model\Compiler\GenerateCloneableFacility.cs" />
     <Compile Include="Model\Compiler\GenerateTableStructureFileTask.cs" />
-    <Compile Include="Model\DbAccessMode.cs" />
-    <Compile Include="Model\DbDefaultValueType.cs" />
-    <Compile Include="Model\DefaultScripts.cs" />
-    <Compile Include="Model\GenerationOptions.cs" />
-    <Compile Include="Model\ResolveType.cs" />
-    <Compile Include="Model\SqlCommandWriterFactory.cs" />
-    <Compile Include="Model\SqlMethodOptions.cs" />
-    <Compile Include="Model\SqlObjects\SqlFunction.cs" />
-    <Compile Include="Model\SqlFunctionArgument.cs" />
-    <Compile Include="Model\SqlWriters\SqlFunctionWriter.cs" />
-    <Compile Include="Model\SqlObjects\PartitionDefinition.cs" />
-    <Compile Include="Model\SqlObjects\SqlTrigger.cs" />
-    <Compile Include="Model\SqlObjects\SqlView.cs" />
-    <Compile Include="Model\SqlWriters\SqlTriggerWriter.cs" />
-    <Compile Include="Model\SqlWriters\SqlViewWriter.cs" />
-    <Compile Include="Model\SqlWriters\LateForeignKeyWriter.cs" />
-    <Compile Include="Model\SqlObjects\Sequence.cs" />
-    <Compile Include="Model\SqlWriters\PartitionDefinitionWriter.cs" />
-    <Compile Include="Model\SqlWriters\ScriptWriter.cs" />
-    <Compile Include="Model\SqlWriters\FileGroupWriter.cs" />
-    <Compile Include="Model\SqlWriters\SchemaWriter.cs" />
-    <Compile Include="Model\ScriptMode.cs" />
-    <Compile Include="Model\ScriptPosition.cs" />
-    <Compile Include="Model\SqlCommandWriter.cs" />
-    <Compile Include="Model\SqlObjects\SqlObject.cs" />
-    <Compile Include="Model\SqlObjects\FileGroup.cs" />
-    <Compile Include="Model\SqlObjects\Schema.cs" />
-    <Compile Include="Model\DefaultValue.cs" />
-    <Compile Include="Model\Field.cs" />
-    <Compile Include="Model\DataType.cs" />
-    <Compile Include="Model\PersistentClass.cs" />
-    <Compile Include="Model\PersistentModel.cs" />
-    <Compile Include="Model\SqlDataType.cs" />
-    <Compile Include="Model\SqlObjects\SqlScript.cs" />
-    <Compile Include="Model\SqlWriters\SequenceWriter.cs" />
-    <Compile Include="Model\SqlWriters\TableWriter.cs" />
     <Compile Include="Model\Compiler\GenerateExtendedCachedModel.cs" />
     <Compile Include="Model\Compiler\GenerateModel.cs" />
     <Compile Include="Model\Compiler\GeneratePokoClassDataAdapter.cs" />
@@ -114,6 +77,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Charts\Qorpent.Charts.csproj">
+      <Project>{2D2D7E24-C82E-44F1-AF62-78A647570448}</Project>
+      <Name>Qorpent.Charts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
       <Project>{880f65ea-1a22-4672-a137-ffc91290a209}</Project>
       <Name>Qorpent.Core</Name>

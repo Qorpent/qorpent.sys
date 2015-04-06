@@ -60,13 +60,6 @@
     <Compile Include="Tasks\TestUpdater.cs" />
     <Compile Include="TestSupport\QorpentFixture.cs" />
     <Compile Include="TestSupport\QorpentFixtureAttribute.cs" />
-    <Compile Include="Utils\BrickScale\BrickDataRecordMiniMaxTest.cs" />
-    <Compile Include="Utils\BrickScale\ComdivTests.cs" />
-    <Compile Include="Utils\BrickScale\DataColonNormalizer\DataColonBestVariantHelperTests.cs" />
-    <Compile Include="Utils\BrickScale\DataColonNormalizer\DataColonGetPossibleVariantsTests.cs" />
-    <Compile Include="Utils\BrickScale\DataColonNormalizer\DataColonLabelHelperOrderTests.cs" />
-    <Compile Include="Utils\BrickScale\DataColonNormalizer\DataColonTemperatureTests.cs" />
-    <Compile Include="Utils\BrickScale\DataColonNormalizer\DataColonTestBase.cs" />
     <Compile Include="Utils\BSharpDocumentStorageTests.cs" />
     <Compile Include="Utils\BTreeTest.cs" />
     <Compile Include="Utils\CombinationalTest.cs" />
@@ -87,7 +80,6 @@
     <Compile Include="Utils\IO\FileSystemHelperTests.cs" />
     <Compile Include="Utils\MathTests.cs" />
     <Compile Include="Utils\ReflectionHelperTest.cs" />
-    <Compile Include="Utils\ScaleNormalizeTests\ComdivTests.cs" />
     <Compile Include="Utils\SimpleExpression\SimpleExpressionParserTests.cs" />
     <Compile Include="Utils\SimpleExpression\SqlFullTestSearchAdapterTests.cs" />
     <Compile Include="Utils\StaticInstanceTest.cs" />
@@ -109,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utils\Properties\" />
+    <Folder Include="Utils\ScaleNormalizeTests\" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <!-- <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />-->
