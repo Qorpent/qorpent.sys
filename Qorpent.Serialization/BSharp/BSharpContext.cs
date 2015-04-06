@@ -173,6 +173,13 @@ namespace Qorpent.BSharp{
 			BuildDictionaryIndex();
 		}
 
+        /// <summary>
+        /// Выполняет загрузку индексов при ручной комплектации контекста
+        /// </summary>
+	    public void BuildIndexes() {
+            PrototypeMap = Working.GroupBy(_ => _.Prototype).ToDictionary(_ => _.Key, _=>_.ToArray());
+        }
+
 		/// <summary>
 		///     Специальная индексация для модификатора all
 		/// </summary>

@@ -136,5 +136,10 @@ namespace Qorpent.BSharp {
 		/// </summary>
 		/// <returns></returns>
 		IBSharpClass this[string name, string ns = null] { get; }
+
+	    /// <summary>
+	    /// Выполняет загрузку индексов при ручной комплектации контекста
+	    /// </summary>
+	    void BuildIndexes();
 	}
 }

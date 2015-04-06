@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.BSharp;
+using Qorpent.Scaffolding.Model;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 
@@ -80,6 +81,33 @@ my A prototype=x
             Assert.AreEqual(3,error.LexInfo.Line);
             Console.WriteLine(error.Message);
             Assert.AreEqual(@"OrphanClass:SourceIndexing В коде обнаружен участок, похожий на класс, но который нельзя связать ни с одной из имеющихся базовых классов или ключевым словом class (A,)", error.Message);
+        }
+
+
+        [Test]
+        public void CanBeUsedAsBasisForPersistentModel() {
+            File.WriteAllText(bxls, @"
+require data
+TableBase mytable schema=test
+    import IEntity
+");
+            var ctx = BscHelper.Execute(dir);
+            Assert.AreEqual(0,ctx.GetErrors().Count());
+            var pm = new PersistentModel();
+            pm.Setup(ctx);
+            var table = pm["test.mytable"];
+            Assert.NotNull(table);
+            Assert.True(table.Fields["id"].DataType.Code == "long");
+        }
+
+        [Test]
+        public void BugInResolveAll() {
+            File.WriteAllText(bxls, @"
+class A prototype=xxx
+");
+            var ctx = BscHelper.Execute(dir);
+            var find = ctx.ResolveAll("xxx");
+            Assert.AreEqual(1,find.Count());
         }
     }
 }

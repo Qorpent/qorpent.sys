@@ -41,6 +41,7 @@ namespace Qorpent.BSharp {
                 }
                 result.RegisterError(e);
             }
+            result.BuildIndexes();
             return result;
         }
 
