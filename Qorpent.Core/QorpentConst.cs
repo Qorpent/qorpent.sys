@@ -135,48 +135,6 @@ namespace Qorpent {
 			/// </summary>
 			public const string SqlDslExtensionNameSpace = "http://qorpent/dsl/sql";
 
-			/// <summary>
-			/// 	name for qxi:include element - includes query result or full document instead if
-			/// 	self
-			/// </summary>
-			public static readonly XName XmlIncludeIncludeElementName = "{" + XmlIncludeNamespace + "}" + "include";
-
-			/// <summary>
-			/// 	name for qxi:import element - import behavior imports inner content of single element into containing element,
-			/// 	include attribute merging child-win
-			/// </summary>
-			public static readonly XName XmlIncludeImportElementName = "{" + XmlIncludeNamespace + "}" + "import";
-
-			/// <summary>
-			/// 	name for qxi:safeimport element - import behavior imports inner content of single element into containing element,
-			/// 	include attribute merging parent-win
-			/// </summary>
-			public static readonly XName XmlIncludeSafeImportElementName = "{" + XmlIncludeNamespace + "}" + "safeimport";
-
-			/// <summary>
-			/// 	name for qxi:template элемент - позволяет описывать шаблоны элементов по имени для последущей замены
-			/// </summary>
-			public static readonly XName XmlIncludeTemplateElementName = "{" + XmlIncludeNamespace + "}" + "template";
-
-			/// <summary>
-			/// 	name for qxi:replace element - описывает текстовые подстановки для имен атрибутов и для текстовых элементов
-			/// </summary>
-			public static readonly XName XmlIncludeReplaceElementName = "{" + XmlIncludeNamespace + "}" + "replace";
-
-			/// <summary>
-			/// 	name for qi:import|qi:include delay attribute
-			/// </summary>
-			public static readonly XName XmlIncludeDelayAttributeName = "delay";
-
-			/// <summary>
-			/// 	name for qi:import|qi:include href attribute
-			/// </summary>
-			public static readonly XName XmlIncludeHrefAttributeName = "href";
-
-			/// <summary>
-			/// 	name for qi:import|qi:include query attribute
-			/// </summary>
-			public static readonly XName XmlIncludeQueryAttributeName = "query";
 
 
 			/// <summary>
@@ -186,8 +144,7 @@ namespace Qorpent {
 				= new Dictionary<string, string>
 					{
 						{XsltNameSpace, "xsl"},
-						{XmlIncludeNamespace, "qxi"},
-						{SmartXsltNamespace, "qsx"},
+
 					};
 
 

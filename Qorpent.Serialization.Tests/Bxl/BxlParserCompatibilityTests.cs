@@ -83,45 +83,7 @@ test");
 </root>".LfOnly(), res.ToString().LfOnly());
 		}
 
-		[Test]
-		public void GeneratesNamespaceDeclarations_ImplicitWellknownNameSpace() {
-			var res = new BxlParser().Parse(@"
-e1 :
-	qxi::include direct//inclA
-	qxi::include direct//inclD delay
-	qxi::import direct//impA	
-	qxi::import direct//impD delay");
-			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<root xmlns:qxi=""http://qorpent/xml/include"" _file=""code.bxl"">
-  <e1 _file=""code.bxl"" _line=""2"">
-    <qxi:include _file=""code.bxl"" _line=""3"" code=""direct//inclA"" id=""direct//inclA"" />
-    <qxi:include _file=""code.bxl"" _line=""4"" code=""direct//inclD"" id=""direct//inclD"" name=""delay"" />
-    <qxi:import _file=""code.bxl"" _line=""5"" code=""direct//impA"" id=""direct//impA"" />
-    <qxi:import _file=""code.bxl"" _line=""6"" code=""direct//impD"" id=""direct//impD"" name=""delay"" />
-  </e1>
-</root>".LfOnly(), res.ToString().LfOnly());
-		}
 
-		[Test]
-		public void GeneratesNamespaceDeclarations_NotWorkingExample() {
-			var res = new BxlParser().Parse(@"
-qxi='http://qorpent/xml/include'
-e1 :
-	qxi::include direct//inclA
-	qxi::include direct//inclD delay
-	qxi::import direct//impA	
-	qxi::import direct//impD delay");
-
-			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<root xmlns:qxi=""http://qorpent/xml/include"" _file=""code.bxl"">
-  <e1 _file=""code.bxl"" _line=""3"">
-    <qxi:include _file=""code.bxl"" _line=""4"" code=""direct//inclA"" id=""direct//inclA"" />
-    <qxi:include _file=""code.bxl"" _line=""5"" code=""direct//inclD"" id=""direct//inclD"" name=""delay"" />
-    <qxi:import _file=""code.bxl"" _line=""6"" code=""direct//impA"" id=""direct//impA"" />
-    <qxi:import _file=""code.bxl"" _line=""7"" code=""direct//impD"" id=""direct//impD"" name=""delay"" />
-  </e1>
-</root>".LfOnly(), res.ToString().LfOnly());
-		}
 
 		[Test]
 		public void Implicit_Namespace_Generation() {

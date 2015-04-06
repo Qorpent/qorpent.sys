@@ -28,10 +28,7 @@ using System.IO;
 using System.Xml.Linq;
 using NUnit.Framework;
 using Qorpent.Bxl;
-using Qorpent.Dsl;
-using Qorpent.Dsl.XmlInclude;
 using Qorpent.IoC;
-using Qorpent.Qxi;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Log.Tests {
@@ -61,38 +58,5 @@ namespace Qorpent.Log.Tests {
 		}
 
 
-		[Test]
-		public void Load_Log_Config_From_Templated_Manifest() {
-			var c = ContainerFactory.CreateEmpty();
-			c.Register(c.NewComponent<ILogManager, DefaultLogManager>(Lifestyle.Singleton));
-			c.Register(c.NewComponent<IXmlIncludeProcessor, XmlIncludeProcessor>());
-			c.Register(c.NewComponent<IBxlParser, BxlParser>());
-			var tmpfile = Path.GetTempFileName();
-			var bxl = string.Format(@"
-qxi::template logfile
-	transient name='Qorpent.Log.TextFileWriter, Qorpent.Log' : 'Qorpent.Log.ILogWriter, Qorpent.Core'
-qxi::template logger
-	transient name='Qorpent.Log.Logger, Qorpent.Log' : 'Qorpent.Log.ILogger, Qorpent.Core'
-logfile def.writer, filename = '{0}'
-logger main
-	writer def.writer
-", tmpfile.Replace("\\", "\\\\"));
-			var bxlp = c.Get<IBxlParser>();
-			var includer = c.Get<IXmlIncludeProcessor>();
-			var xml = bxlp.Parse(bxl);
-			xml = includer.Include(xml, "test", true, BxlParserOptions.NoLexData);
-			c.GetLoader().LoadManifest(xml, false);
-
-
-			var logger = c.Get<ILogManager>().GetLog("any", this);
-			logger.Warn("x", new LogMessage {User = "test/test", Time = DateTime.MinValue, Server = "test"});
-			c.Get<ILogManager>().Join();
-			Console.WriteLine(File.ReadAllText(tmpfile).Trim());
-			Assert.AreEqual(@"logitem level=Warning, time='0001-01-01 00:00:00', user='test/test', server=test ,logger='any' 
-	host='''Qorpent.Log.Tests.LoadLoggerFromComponentDefinitionSource'''
-	message='''
-x
-	'''".LfOnly(), File.ReadAllText(tmpfile).Trim().LfOnly());
-		}
 	}
 }

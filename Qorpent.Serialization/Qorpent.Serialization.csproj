@@ -149,8 +149,6 @@
     <Compile Include="BSharp\BSharpClass.cs" />
     <Compile Include="BSharp\BSharpImport.cs" />
     <Compile Include="BSharp\BSharpElement.cs" />
-    <Compile Include="Qxi\XmlIncludeProcessor.cs" />
-    <Compile Include="Qxi\XmlInterpolationPreprocessor.cs" />
     <Compile Include="Selector\DefaultSelector.cs" />
     <Compile Include="Selector\Implementations\CssSelectorImpl.cs" />
     <Compile Include="Selector\Implementations\RegexSelectorImpl.cs" />

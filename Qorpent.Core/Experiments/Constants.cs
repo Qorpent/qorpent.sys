@@ -71,8 +71,7 @@ namespace Qorpent.Utils
             = new Dictionary<string, string>
 					{
 						{XsltNameSpace, "xsl"},
-						{XmlIncludeNamespace, "qxi"},
-						{SmartXsltNamespace, "qsx"},
+	
 					};
     }
 }

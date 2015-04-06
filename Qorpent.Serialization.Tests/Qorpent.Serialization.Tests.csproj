@@ -78,8 +78,6 @@
     <Compile Include="serialization_set_test.cs" />
     <Compile Include="Uson\UsonMainTest.cs" />
     <Compile Include="XHtml5XmlWriterTests.cs" />
-    <Compile Include="XmlInclude\Bug_XmlInterpolationInContainer.cs" />
-    <Compile Include="XmlInclude\XmlIncludeMainTest.cs" />
     <Compile Include="XmlJson2WayConversionTest.cs" />
     <Compile Include="xml_serializer_test.cs" />
   </ItemGroup>
@@ -95,26 +93,7 @@
   <ItemGroup>
     <None Include="*.import" />
     <None Include="*.export" />
-    <EmbeddedResource Include="XmlInclude\ext.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="XmlInclude\ext2.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="XmlInclude\import.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="XmlInclude\main.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="XmlInclude\near.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="XmlInclude\near2.bxl">
-      <LastGenOutput>main1.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Bxl\demo.import.forms.m600.bxls" />
-    <EmbeddedResource Include="Bxl\presentation_ocm_structure.hql" />
     <EmbeddedResource Include="BSharp\Runtime\demo.bslib" />
   </ItemGroup>
   <ItemGroup>

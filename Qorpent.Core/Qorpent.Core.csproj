@@ -426,14 +426,12 @@
     <Compile Include=".\Data\IDatabaseConnectionProviderExtension.cs" />
     <Compile Include=".\Data\IDatabaseConnectionRegistryExtension.cs" />
     <Compile Include=".\Dsl\ISpecialXmlParser.cs" />
-    <Compile Include=".\Dsl\IXmlInterpolationPreprocessor.cs" />
     <Compile Include=".\Dsl\LexInfo.cs" />
     <Compile Include=".\Dsl\LogicalExpressions\DictionaryTermSource.cs" />
     <Compile Include=".\Dsl\LogicalExpressions\ILogicalExpressionEvaluator.cs" />
     <Compile Include=".\Dsl\LogicalExpressions\ILogicTermSource.cs" />
     <Compile Include=".\Dsl\LogicalExpressions\LogicalExpressionNode.cs" />
     <Compile Include=".\Dsl\LogicalExpressions\LogicTermSource.cs" />
-    <Compile Include=".\Dsl\XmlInclude\IXmlIncludeProcessor.cs" />
     <Compile Include=".\EnvironmentInfo.cs" />
     <Compile Include=".\EnvironmentInfoTestObject.cs" />
     <Compile Include=".\ErrorLevel.cs" />

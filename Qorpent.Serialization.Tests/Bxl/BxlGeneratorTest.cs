@@ -55,15 +55,5 @@ x::root
 				);
 		}
 
-		[Test]
-		public void WellKnownNamespaceNotCreatedDirectly() {
-			Assert.AreEqual(
-				@"
-qxi::include
-".Trim().LfOnly(), MyBxl.Convert(
-					XElement.Parse("<root xmlns:qxi='http://qorpent/xml/include'><qxi:include /></root>"),
-					new BxlGeneratorOptions {NoRootElement = true}).Trim().LfOnly()
-				);
-		}
 	}
 }

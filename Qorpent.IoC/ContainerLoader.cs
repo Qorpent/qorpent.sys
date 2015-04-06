@@ -16,21 +16,20 @@
 // 
 // PROJECT ORIGIN: Qorpent.IoC/ContainerLoader.cs
 #endregion
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Qorpent.BSharp.Runtime;
 using Qorpent.Bxl;
-using Qorpent.Dsl.XmlInclude;
-using Qorpent.IO;
 using Qorpent.IoC.BSharp;
+using Qorpent.IO;
 using Qorpent.Mvc;
 using Qorpent.Utils.Extensions;
-using Qorpent.BSharp.Runtime;
 
 namespace Qorpent.IoC {
 	/// <summary>
@@ -94,9 +93,6 @@ namespace Qorpent.IoC {
 				}
 				manifestxml = _bxl.Parse(File.ReadAllText(manifestfile), manifestfile);
 			}
-			if (null != _includer) {
-				_includer.Include(manifestxml, manifestfile);
-			}
 			return manifestxml;
 		}
 
@@ -129,7 +125,6 @@ namespace Qorpent.IoC {
 
 		private void PrepareServices() {
 			_resolver = _container.Get<IFileNameResolver>();
-			_includer = _container.Get<IXmlIncludeProcessor>();
 			_bxl = _container.Get<IBxlParser>();
 		}
 
@@ -340,7 +335,6 @@ namespace Qorpent.IoC {
 
 		private readonly IContainer _container;
 		private IFileNameResolver _resolver;
-		private IXmlIncludeProcessor _includer;
 		private IBxlParser _bxl;
 		private List<string> _dlls;
 		private List<string> _namespaces;
