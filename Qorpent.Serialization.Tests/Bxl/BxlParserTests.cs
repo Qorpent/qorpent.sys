@@ -727,13 +727,6 @@ test1 c x=1 'anonymous'";
 		}
 
 
-		[TestCase("demo.import.forms.m600.bxls")]
-		[TestCase("presentation_ocm_structure.hql")]
-		public void HardTest(String filename) {
-
-			String bxl = GetType().Assembly.ReadManifestResource(filename);
-			var xml1 = new BxlParser().Parse(bxl);
-		}
 	
 
 		[Test]
