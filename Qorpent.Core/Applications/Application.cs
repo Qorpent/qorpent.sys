@@ -314,7 +314,7 @@ namespace Qorpent.Applications {
 			get {
 				if (null == _principals) {
 					lock (this) {
-						return _principals = ResolveService<IPrincipalSource>();
+						return _principals = ResolveService<IPrincipalSource>() ?? new DefaultPrincipalSource();
 					}
 				}
 				return _principals;

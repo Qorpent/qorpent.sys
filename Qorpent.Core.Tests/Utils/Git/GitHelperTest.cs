@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using NUnit.Framework;
 using Qorpent.Utils.Git;
 
@@ -233,6 +234,13 @@ namespace Qorpent.Utils.Tests {
 		public void CanGetFileList()
 		{
             Assert.NotNull(Applications.Application.Current);
+		    if (null == Applications.Application.Current.Principal) {
+		        var services = new StringBuilder();
+		        foreach (var componentDefinition in Applications.Application.Current.Container.GetComponents()) {
+		            services.AppendLine(string.Format("{0} {1}",componentDefinition.ServiceType.Name,componentDefinition.ImplementationType.Name));
+		        }
+                throw new Exception(services.ToString());
+		    }
             Assert.NotNull(Applications.Application.Current.Principal);
             Assert.NotNull(Applications.Application.Current.Principal.CurrentUser);
             Assert.NotNull(Applications.Application.Current.Principal.CurrentUser.Identity);
