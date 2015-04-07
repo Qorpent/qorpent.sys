@@ -102,7 +102,7 @@ namespace Qorpent.Utils.Extensions
 			int r;
 			try{
                 if (showCommandTextWithParams) {
-                    Trace.WriteLine("Sql: " + cmd.CommandAsSql(), "debug");
+                    Trace.WriteLine("Sql command: [\r\n" + cmd.CommandAsSql() + "\r\n]", "debug");
 			    }
 				r = cmd.ExecuteNonQuery();
 
@@ -139,7 +139,7 @@ namespace Qorpent.Utils.Extensions
                     break;
 
                 case SqlDbType.Bit:
-                    retval = (sp.Value.ToString());
+                    retval = (sp.Value.ToBooleanOrDefault(false)) ? "1" : "0";
                     break;
 
                 default:
@@ -148,6 +148,38 @@ namespace Qorpent.Utils.Extensions
             }
 
             return retval;
+        }
+
+
+        public static Boolean ToBooleanOrDefault(this String s, Boolean Default) {
+            return ToBooleanOrDefault((Object)s, Default);
+        }
+
+
+        public static Boolean ToBooleanOrDefault(this Object o, Boolean Default) {
+            Boolean ReturnVal = Default;
+            try {
+                if (o != null) {
+                    switch (o.ToString().ToLower()) {
+                        case "yes":
+                        case "true":
+                        case "ok":
+                        case "y":
+                            ReturnVal = true;
+                            break;
+                        case "no":
+                        case "false":
+                        case "n":
+                            ReturnVal = false;
+                            break;
+                        default:
+                            ReturnVal = Boolean.Parse(o.ToString());
+                            break;
+                    }
+                }
+            } catch {
+            }
+            return ReturnVal;
         }
 
         public static String CommandAsSql(this IDbCommand sc) {
@@ -195,6 +227,31 @@ namespace Qorpent.Utils.Extensions
                     break;
                 case CommandType.Text:
                     sql.AppendLine(sc.CommandText);
+                    sql.AppendLine("Parameters:");
+                    // show command parameters
+                    foreach (SqlParameter sp in sc.Parameters) {
+                        if (sp.Direction != ParameterDirection.ReturnValue) {
+                            sql.Append((FirstParam) ? "\t" : "\t, ");
+
+                            if (FirstParam) FirstParam = false;
+
+                            if (sp.Direction == ParameterDirection.Input)
+                                sql.AppendLine(sp.ParameterName + " = " + sp.ParameterValueForSQL());
+                            else
+
+                                sql.AppendLine(sp.ParameterName + " = " + sp.ParameterName + " output");
+                        }
+                    }
+                    sql.AppendLine(";");
+
+                    sql.AppendLine("select 'Return Value' = convert(varchar, @return_value);");
+
+                    foreach (SqlParameter sp in sc.Parameters) {
+                        if ((sp.Direction == ParameterDirection.InputOutput) || (sp.Direction == ParameterDirection.Output)) {
+                            sql.AppendLine("select '" + sp.ParameterName + "' = convert(varchar, " + sp.ParameterName + ");");
+                        }
+                    }
+
                     break;
             }
 
