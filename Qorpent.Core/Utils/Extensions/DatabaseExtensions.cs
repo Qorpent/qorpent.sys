@@ -622,8 +622,11 @@ namespace Qorpent.Utils.Extensions
 			    else {
 				    if (null == pair.Value) {
 					    parameter.Value = DBNull.Value;
-				    }
-				    else {
+				    } else if (pair.Value is DateTime && ((DateTime) pair.Value) < QorpentConst.Date.Begin) {
+					    parameter.Value = DBNull.Value;
+				    } else if (pair.Value is DateTime && ((DateTime) pair.Value) > QorpentConst.Date.End) {
+						parameter.Value = DBNull.Value;
+				    } else {
 					    parameter.Value = pair.Value;
 					    if (parameter.Value is XElement) {
 						    parameter.DbType = DbType.Xml;
