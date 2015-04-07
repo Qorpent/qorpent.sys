@@ -101,11 +101,11 @@ namespace Qorpent.Utils.Extensions
 			cmd.CommandTimeout = timeout;
 			int r;
 			try{
-                if (showCommandTextWithParams) {
-                    Trace.WriteLine("Sql: " + cmd.CommandAsSql(), "debug");
-			    }
+				if (showCommandTextWithParams) {
+					Trace.WriteLine("Sql: " + cmd.CommandAsSql(), "debug");
+				}
 				r = cmd.ExecuteNonQuery();
-
+		
 			}
 			catch (Exception ex){
 				throw new Exception("error in query:" + cmd.CommandText, ex);
@@ -156,7 +156,7 @@ namespace Qorpent.Utils.Extensions
 
             sql.AppendLine("use " + sc.Connection.Database + ";");
             switch (sc.CommandType) {
-                case CommandType.StoredProcedure:
+                case CommandType.Text:
                     sql.AppendLine("declare @return_value int;");
 
                     foreach (SqlParameter sp in sc.Parameters) {
@@ -193,9 +193,7 @@ namespace Qorpent.Utils.Extensions
                         }
                     }
                     break;
-                case CommandType.Text:
-                    sql.AppendLine(sc.CommandText);
-                    break;
+
             }
 
             return sql.ToString();
