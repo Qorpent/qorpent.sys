@@ -42,6 +42,7 @@
     <Compile Include="Model\CodeWriters\CodeWriterBase.cs" />
     <Compile Include="Model\CodeWriters\ExtendedModelWriter.cs" />
     <Compile Include="Model\CodeWriters\PokoAdapterWriter.cs" />
+    <Compile Include="Model\CodeWriters\SimpleComparerClassWriter.cs" />
     <Compile Include="Model\CodeWriters\PokoClassWriter.cs" />
     <Compile Include="Model\CodeWriters\PokoObjectCacheWriter.cs" />
     <Compile Include="Model\CodeWriters\ResolveTagFacilityWriter.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="BSharpClassRef.cs" />
     <Compile Include="Application\Compile\GenerateDataTypesInCSharpTask.cs" />
     <Compile Include="CodeGeneratorTaskBase.cs" />
+    <Compile Include="Model\Compiler\GeneratSimpleComparerClassesTask.cs" />
     <Compile Include="Model\Compiler\GenerateResolveTagFacility.cs" />
     <Compile Include="Model\Compiler\CSharpModelGeneratorBase.cs" />
     <Compile Include="Model\Compiler\GenerateCloneableFacility.cs" />

@@ -1,5 +1,6 @@
 ﻿using Qorpent.BSharp.Builder;
 using Qorpent.IoC;
+using Qorpent.Scaffolding.Model.CodeWriters;
 
 namespace Qorpent.Scaffolding.Model.Compiler{
 	/// <summary>
@@ -14,6 +15,7 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 		    if (!Project.NoOutput) {
 		        Tasks.Add(new GenerateTsqlScriptsTask());
 		        Tasks.Add(new GeneratePokoClassesTask());
+                Tasks.Add(new GeneratSimpleComparerClassesTask());
 		        Tasks.Add(new GeneratePokoClassDataAdapter());
 		        Tasks.Add(new GenerateModel());
 		        Tasks.Add(new GenerateExtendedCachedModel());
