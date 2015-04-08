@@ -470,16 +470,21 @@ namespace Qorpent {
 		/// <param name="givenPath"></param>
 		/// <param name="preventNormalize"></param>
 		/// <returns></returns>
-		public static string ResolvePath(string givenPath, bool preventNormalize = false){
+		public static string ResolvePath(string givenPath, bool preventNormalize = false, IDictionary<string,string> overrides =null ){
 			if (string.IsNullOrWhiteSpace(givenPath)) return givenPath;
-			givenPath = givenPath.ToLowerInvariant();
+		    Func<string, string, string> resolve = (s, d) => {
+		        if (null == overrides) return d;
+		        if (!overrides.ContainsKey(s)) return d;
+		        return overrides[s];
+		    };
+            givenPath = givenPath.ToLowerInvariant();
 			if (givenPath.Contains("@")){ //expand EnvironmentInfo macroses
-				givenPath = givenPath.Replace("@bin@", BinDirectory);
-				givenPath = givenPath.Replace("@cfg@", ConfigDirectory);
-				givenPath = givenPath.Replace("@root@", RootDirectory);
-				givenPath = givenPath.Replace("@abin@", GetAdaptedBinaryDirectory());
-				givenPath = givenPath.Replace("@repos@", GetRepositoryRoot());
-				givenPath = givenPath.Replace("@tmp@", TmpDirectory);
+				givenPath = givenPath.Replace("@bin@", resolve("bin",BinDirectory));
+				givenPath = givenPath.Replace("@cfg@", resolve("config",ConfigDirectory));
+				givenPath = givenPath.Replace("@root@", resolve("root",RootDirectory));
+				givenPath = givenPath.Replace("@abin@", resolve("abin",GetAdaptedBinaryDirectory()));
+				givenPath = givenPath.Replace("@repos@", resolve("repos", GetRepositoryRoot()));
+				givenPath = givenPath.Replace("@tmp@", resolve("tmp" ,TmpDirectory));
 			}
 			var newPath = givenPath;
 			while (newPath.Contains("%")){ //expand Environment variables
