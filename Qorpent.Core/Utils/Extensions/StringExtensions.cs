@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -229,6 +230,57 @@ namespace Qorpent.Utils.Extensions {
 			result = result.Replace("&#xA;&#xA;", "&#xA;");
 			return result;
 		}
+        /// <summary>
+        /// Упрощает строку для задач сравнения
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static string Simplify(this string src, SimplifyOptions options = SimplifyOptions.Default) {
+            if (string.IsNullOrEmpty(src)) return string.Empty;
+            if (SimplifyOptions.None == options) return src;
+            var result = src;
+            if (options.HasFlag(SimplifyOptions.Trim)) {
+                result = result.Trim();
+            }
+            if (options.HasFlag(SimplifyOptions.LowerCase)) {
+                result = result.Trim();
+            }
+            if (options.HasFlag(SimplifyOptions.LfOnly)) {
+                result = result.LfOnly();
+            }
+            var sb = new StringBuilder();
+            foreach(var c in result)
+            {
+                if (char.IsWhiteSpace(c)) {
+                    if (c == '\r' || c == '\n') {
+                        if (!options.HasFlag(SimplifyOptions.NoNewLines)) {
+                            sb.Append(c);
+                        }
+                    }
+                    else {
+                        if (!options.HasFlag(SimplifyOptions.NoInlineWs)) {
+                            sb.Append(c);
+                        }
+                        
+                    }
+                }
+                else if (c == '"' || c == '«' || c == '»') {
+                    if (options.HasFlag(SimplifyOptions.SingleQuotes)) {
+                        sb.Append('\'');
+                    }
+                    else {
+                        sb.Append(c);
+                    }
+                }
+                else {
+                    sb.Append(c);
+                }
+
+            }
+
+            return sb.ToString();
+        }
 
 		/// <summary>
 		/// 	Concatenates any given IEnumerable to joined string, null-ignorance

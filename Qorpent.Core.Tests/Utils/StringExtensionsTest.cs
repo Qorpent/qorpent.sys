@@ -35,6 +35,13 @@ namespace Qorpent.Utils.Tests {
 			Assert.AreEqual("1,,2,3", result);
 		}
 
+        [TestCase("  aaa  ",SimplifyOptions.Full,"aaa")]
+        [TestCase("  \r\na\r\naa  ",SimplifyOptions.Full,"aaa")]
+        [TestCase("  \r\n'a\r\na    a\"  ",SimplifyOptions.Full,"'aaa'")]
+	    public void Simplify(string src, SimplifyOptions opts, string result) {
+	        Assert.AreEqual(result,src.Simplify(opts));
+	    }
+
 		[Test]
 		public void CanConcat_IgnoreEmpties() {
 			var result = new object[] {1, null, "2", 3m}.ConcatString(",", empties: false);
