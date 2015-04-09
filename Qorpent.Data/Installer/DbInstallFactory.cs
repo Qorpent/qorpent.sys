@@ -167,9 +167,11 @@ namespace Qorpent.Data.Installer {
                 if (element.Name.LocalName == "script") {
                     SetupScript(job, definition, context);
                 }
+#if !UNIX
                 else if (element.Name.LocalName == "assembly") {
                     SetupAssembly(job, definition, context);
                 }
+#endif
                 else if (element.Name.LocalName == "model") {
                     SetupModel(job, definition, context, true, true);
                 }
@@ -196,13 +198,14 @@ namespace Qorpent.Data.Installer {
             }
 
         }
-
+#if !UNIX
         private static void SetupAssembly(IJob job, XElement definition, IConfig context) {
             var info = GetTaskInfo(job, definition);
             if(!info.Proceed)return;
             job.Tasks[info.Key] = new AssemblyDbUpdateTask(info.Name) {Job = job,Name=info.Key};
         }
 
+#endif
         class TaskInfo {
             public bool Proceed { get; set; }
             public string Code { get; set; }

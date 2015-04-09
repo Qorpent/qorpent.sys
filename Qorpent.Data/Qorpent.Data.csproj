@@ -30,7 +30,7 @@
     <Compile Include="DataDiff\SqlUpdateApplyer.cs" />
     <Compile Include="DataDiff\TableDiffGeneratorContext.cs" />
     <Compile Include="DataDiff\TableMap.cs" />
-    <Compile Include="Installer\AssemblyDbUpdateTask.cs" />
+    <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\AssemblyDbUpdateTask.cs" />
     <Compile Include="Installer\BxlDataProjectDataUpdateTask.cs" />
     <Compile Include="Installer\BxlDataProjectSchemaUpdateTask.cs" />
     <Compile Include="Installer\BxlDataProjectUpdateTaskBase.cs" />
@@ -41,16 +41,16 @@
     <Compile Include="Installer\InitMetaTableTask.cs" />
     <Compile Include="Installer\ScriptFileDbUpdateTask.cs" />
     <Compile Include="Installer\ScriptTextDbUpdateTask.cs" />
-    <Compile Include="Installer\SqlExtensions\AggregatorWrapper.cs" />
-    <Compile Include="Installer\SqlExtensions\FunctionSqlWrapper.cs" />
-    <Compile Include="Installer\SqlExtensions\FunctionWrapper.cs" />
-    <Compile Include="Installer\SqlExtensions\ProcedureWrapper.cs" />
-    <Compile Include="Installer\SqlExtensions\QueryGeneratorHelper.cs" />
-    <Compile Include="Installer\SqlExtensions\SqlExportMemberWrapper.cs" />
-    <Compile Include="Installer\SqlExtensions\SqlInstallerConsoleProgram.cs" />
-    <Compile Include="Installer\SqlExtensions\SqlInstallerConsoleProgramArgs.cs" />
-    <Compile Include="Installer\SqlExtensions\SqlInstallerException.cs" />
-    <Compile Include="Installer\SqlExtensions\UserTypeWrapper.cs" />
+    <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\SqlExtensions\AggregatorWrapper.cs" />
+    <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\SqlExtensions\FunctionSqlWrapper.cs" />
+    <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\SqlExtensions\FunctionWrapper.cs" />
+    <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\SqlExtensions\ProcedureWrapper.cs" />
+    <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\SqlExtensions\QueryGeneratorHelper.cs" />
+    <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\SqlExtensions\SqlExportMemberWrapper.cs" />
+    <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\SqlExtensions\SqlInstallerConsoleProgram.cs" />
+    <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\SqlExtensions\SqlInstallerConsoleProgramArgs.cs" />
+    <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\SqlExtensions\SqlInstallerException.cs" />
+    <Compile Condition="'$(OS)'!='UNIX'" Include="Installer\SqlExtensions\UserTypeWrapper.cs" />
     <Compile Include="REST\AddConnection.cs" />
     <Compile Include="REST\ConnectionsAction.cs" />
     <Compile Include="REST\RemoveConnection.cs" />
@@ -63,7 +63,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\qorpent.kernel\Microsoft.SqlServer.Types.dll</HintPath>
+      <HintPath>..\..\..\repos\Qorpent.Kernel\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -79,5 +79,5 @@
   <ItemGroup />
   <Import Project="..\..\qorpent.kernel\build.targets" />
   <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Core.import" />
-  <Import Condition="$(OS)=='UNIX'" Project="Qorpent.Utils.import" />
+
 </Project>
