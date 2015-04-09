@@ -76,6 +76,17 @@ namespace Qorpent.Tasks {
             get { return TaskState.Success == (State & TaskState.Success); }
         }
 
+        public  string ResolvePath(string src) {
+            return EnvironmentInfo.ResolvePath(src, false, ResolvePathOverrides);
+        }
+
+        public IDictionary<string, string> ResolvePathOverrides {
+            get { return Get<IDictionary<string, string>>("resolveoverrides", null); }
+            set {
+                Set("resolveoverrides",value);
+            }
+        } 
+
         public int RunCount { get; set; }
 
         public bool Execute() {

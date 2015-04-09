@@ -336,6 +336,7 @@
     <Compile Include="Utils\Extensions\OsExtensions.cs" />
     <Compile Include="Utils\Extensions\ReflectionExtensions.cs" />
     <Compile Include="Utils\Extensions\SecurityExtensions.cs" />
+    <Compile Include="Utils\Extensions\SimplifyOptions.cs" />
     <Compile Include="Utils\Extensions\SlashListHelper.cs" />
     <Compile Include="Utils\Extensions\SqlCommandType.cs" />
     <Compile Include="Utils\Extensions\StreamExtensions.cs" />
@@ -582,7 +583,6 @@
     <DocumentationFile>
     </DocumentationFile>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DefineConstants>TRACE;DEBUG;Windows_NT</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 </Project>

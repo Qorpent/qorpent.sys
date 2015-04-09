@@ -20,7 +20,7 @@ namespace Qorpent.Data.Installer {
         /// <param name="projectname"></param>
         protected BxlDataProjectUpdateTaskBase(string projectfile, string projectname = null)
         {
-            ResolvedFile = Path.GetFullPath(EnvironmentInfo.ResolvePath(projectfile));
+            ResolvedFile = Path.GetFullPath(ResolvePath(projectfile));
             if (string.IsNullOrWhiteSpace(projectname)) {
                 if (File.Exists(ResolvedFile) && Path.GetExtension(ResolvedFile).ToLowerInvariant() == ".bsproj") {
                     ProjectName = Path.GetFileNameWithoutExtension(ResolvedFile);
@@ -48,7 +48,7 @@ namespace Qorpent.Data.Installer {
 
         public override void Initialize(IJob package = null) {
             var name = Path.GetFileName(ResolvedFile) + "_" + Suffix;
-            Source = new FileDescriptorEx { FullName = ResolvedFile, Name = name, UseRepositoryCommit = true };
+            Source = new  FileDescriptorEx { FullName = ResolvedFile, Name = name, UseRepositoryCommit = true,Overrides = ResolvePathOverrides};
             base.Initialize(package);
             Compile();
         }
