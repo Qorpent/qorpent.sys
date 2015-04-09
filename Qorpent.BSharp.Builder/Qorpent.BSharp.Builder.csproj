@@ -50,6 +50,10 @@
       <Project>{2D2D7E24-C82E-44F1-AF62-78A647570448}</Project>
       <Name>Qorpent.Charts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
+      <Project>{21971f28-8ed8-4f50-b623-e9db2658af54}</Project>
+      <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>
