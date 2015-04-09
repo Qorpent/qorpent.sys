@@ -24,7 +24,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 			if (Mode == ScriptMode.Create){
 				if (Dialect == SqlDialect.SqlServer){
 					return "CREATE SEQUENCE ${FullName} AS " + Sequence.DataType.ResolveSqlDataType(Dialect) +
-					       " START WITH ${Start} INCREMENT BY ${Step};";
+					       " START WITH ${Start} INCREMENT BY ${Step}${Cycle};";
 				}
 				if (Dialect == SqlDialect.PostGres){
 					return "CREATE SEQUENCE ${FullName} INCREMENT BY ${Step} START WITH ${Start};";

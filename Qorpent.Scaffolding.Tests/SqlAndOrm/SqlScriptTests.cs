@@ -279,7 +279,12 @@ IF OBJECT_ID('__ensurefg') IS NOT NULL DROP PROC __ensurefg
 GO
 ".Trim(), digest);
 		}
-
+		[Test]
+		public void CyclycSequenceTest() {
+			var s = GetScript(@"class a prototype=dbtable cyclicid");
+			Console.WriteLine(s);
+			Assert.IsTrue(s.Contains(@"CREATE SEQUENCE ""dbo"".""a_seq"" AS int START WITH 10 INCREMENT BY 10 CYCLE;"));
+		}
 		[Test]
 		public void PartitionedDropScript()
 		{

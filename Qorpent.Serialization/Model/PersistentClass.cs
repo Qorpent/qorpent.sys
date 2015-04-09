@@ -142,7 +142,10 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// </summary>
 		public int Rank { get; set; }
-
+		/// <summary>
+		///		Цикличный идентификатор
+		/// </summary>
+		public bool CyclicId { get; set; }
 		/// <summary>
 		///     Признак сущности, подлежащей клонированию
 		/// </summary>
@@ -250,8 +253,8 @@ namespace Qorpent.Scaffolding.Model{
 			Comment = xml.Attr("name");
 			Cloneable = xml.GetSmartValue("cloneable").ToBool();
 			ResolveAble = xml.GetSmartValue("resolve").ToBool();
+			CyclicId = xml.GetSmartValue("cyclicid").ToBool();
 		}
-
 		/// <summary>
 		/// </summary>
 		/// <returns></returns>
