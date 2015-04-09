@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using NUnit.Framework;
 using Qorpent.Utils.Extensions;
 
@@ -9,7 +10,16 @@ namespace Qorpent.Utils.Tests {
 	/// </summary>
 	[TestFixture]
 	public class UniSqlTest {
-
+		[Test]
+		public void IsLogicalDateTimeNullSupports() {
+			var o = new {less = new DateTime(1700, 1, 1), greater = new DateTime(3001, 1, 1), normal = new DateTime(2000, 1, 1)};
+			var c = new SqlConnection();
+			var r = c.CreateCommand("insert into n.a (less,greater,normal) values (@less,@greater,@normal)", o);
+			Assert.AreEqual(3, r.Parameters.Count);
+			Assert.IsTrue(((SqlString) (((SqlParameter) r.Parameters["less"]).SqlValue)).IsNull);
+			Assert.IsTrue(((SqlString) (((SqlParameter) r.Parameters["greater"]).SqlValue)).IsNull);
+			Assert.IsFalse(((SqlDateTime) (((SqlParameter) r.Parameters["normal"]).SqlValue)).IsNull);
+		}
 		[TestCase(SqlCommandType.Select, DatabaseEngineType.MySql, "CALL ALL `x_y` ( ?x, ?b, 23, 'u' )")]
 		[TestCase(SqlCommandType.Select, DatabaseEngineType.Oracle, "SELECT * FROM \"x\".\"y\" ( a => :x, b => :b, c => 23, d => 'u' )")]
 		[TestCase(SqlCommandType.Select, DatabaseEngineType.Postgres, "SELECT * FROM \"x\".\"y\" ( a := :x, b := :b, c := 23, d := 'u' )")]
