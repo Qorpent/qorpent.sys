@@ -245,7 +245,6 @@ namespace Qorpent.Utils.IO
             }
             public AssemblyUsage(string fullname) {
                 Evidence e = new Evidence();
-                e.AddHostEvidence(new Zone(SecurityZone.Trusted));
                 var ads = new AppDomainSetup { ApplicationBase = Path.GetDirectoryName(fullname) };
                 this.Sandbox = AppDomain.CreateDomain("test", e, ads, new PermissionSet(PermissionState.Unrestricted));
                 new Mapper(Sandbox);
@@ -343,7 +342,7 @@ namespace Qorpent.Utils.IO
             foreach (var dep in RepositoryDependencies) {
                 var path = dep;
                 if (path.Contains("@repos@")) {
-                    path = EnvironmentInfo.ResolvePath(path);
+                    path = EnvironmentInfo.ResolvePath(path, false, Overrides);
                 }
                 else if (Path.IsPathRooted(path)) {
                     path = Path.GetFullPath(path);
@@ -358,5 +357,7 @@ namespace Qorpent.Utils.IO
                 }
             }
         }
+
+        public IDictionary<string, string> Overrides { get; set; }
     }
 }

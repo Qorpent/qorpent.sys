@@ -21,7 +21,7 @@ namespace Qorpent.Data.Installer {
             if (string.IsNullOrWhiteSpace(hash)) {
                 hash = Script.GetMd5();
             }
-            Source = new FileDescriptorEx {Name = name, Hash = hash, Version = DateTime.Now};
+            Source = new FileDescriptorEx {Name = name, Hash = hash, Version = DateTime.Now,Overrides = ResolvePathOverrides};
         }
         /// <summary>
         /// 
