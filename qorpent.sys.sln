@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "commons", "commons", "{C2A7
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		build = build
+		..\qorpent.kernel\build.targets = ..\qorpent.kernel\build.targets
 		commons\default-log.ioc-manifest.bxl = commons\default-log.ioc-manifest.bxl
 		commons\default-template.build = commons\default-template.build
 		install = install
