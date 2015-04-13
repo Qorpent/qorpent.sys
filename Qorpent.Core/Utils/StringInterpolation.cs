@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
+using Qorpent.Mvc;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils
@@ -171,9 +174,10 @@ namespace Qorpent.Utils
 		private bool _resolved;
 		private IDictionary<string, object> _source2;
 		private string _controlKey;
+	    private int _infun = 0;
 
 
-		private void Interpolate() {
+	    private void Interpolate() {
 			
 			for (_idx = 0; _idx < _sourceString.Length; _idx++) {
 				_currentChar = _sourceString[_idx];
@@ -229,10 +233,25 @@ namespace Qorpent.Utils
 								//иначе мы в блоке разбора кодов и тут есть 3 варианта - разделители-кодов и дефолта и символ кода
 								//при этом пробелы игнорируются!
 								if (!char.IsWhiteSpace(_currentChar)) {
-									if (_currentChar == CodeDelimiterSymbol) {
+								    if (_currentChar == '(') {
+								       
+								        _infun++;
+								        _currentCode.Append(_currentChar);
+                                        continue;
+								    }
+                                    if (_currentChar == ')') {
+                                        _infun--;
+                                        if (_infun<0)
+                                        {
+                                            throw new Exception("invalid close brace");
+                                        }
+                                        _currentCode.Append(_currentChar);
+                                        continue;
+                                    }
+									if (_currentChar == CodeDelimiterSymbol && _infun==0) {
 										_resolved = TryResolve();
 									}
-									else if (_currentChar == DefaultDelimiterSymbol) {
+									else if (_currentChar == DefaultDelimiterSymbol && _infun==0) {
 										_resolved = TryResolve();
 										_indefault = true;
 									}
@@ -266,6 +285,8 @@ namespace Qorpent.Utils
 			_wasOpen = false;
 			_resolved = false;
 			_indefault = false;
+		    _infun = 0;
+
 		}
 
 		private bool TryResolve() {
@@ -279,20 +300,13 @@ namespace Qorpent.Utils
 				format = fullcode.Split('%')[1];
 			}
 			_currentCode.Clear();
-			
-			if (!_source.ContainsKey(code)){
-				if (null != _source2 && _source2.ContainsKey(code))
-				{
-					_currentSubst.Append(_source2[code]);
-					return true;
-				}
-				return false;
-			}
-			if (!string.IsNullOrWhiteSpace(_controlKey) && _controlKey == code){
-				throw new Exception("Cyclic interpolation");
-			}
-			var val = _source[code];
-			if (null == val) return false;
+            if (!string.IsNullOrWhiteSpace(_controlKey) && _controlKey == code)
+            {
+                throw new Exception("Cyclic interpolation");
+            }
+		    
+		    var val = GetRawValue(code);
+		    if (null == val) return false;
 
 			string strval = null;
 			if (null == format)
@@ -324,5 +338,108 @@ namespace Qorpent.Utils
 			_currentCode.Clear();
 			return true;
 		}
+
+	    private object GetRawValue(string code) {
+	        var resolvedCode = code;
+	        string[] args = null;
+	        if (code.Contains("(") && code.EndsWith(")")) {
+	            resolvedCode = code.Substring(0, code.IndexOf('('));
+	            var _args = code.Substring(code.IndexOf('(') + 1);
+	            _args = _args.Substring(0, _args.Length - 1);
+	            args = _args.SmartSplit().ToArray();
+	        }
+	        object val = null;
+	        if (!_source.ContainsKey(resolvedCode)) {
+	            if (null != _source2 && _source2.ContainsKey(resolvedCode)) {
+	                val = _source2[resolvedCode];
+	            }
+	            else if(CoreFunctions.ContainsKey(resolvedCode )) {
+	                val = CoreFunctions[resolvedCode];
+                }
+                else if (code.Contains(".") && !code.StartsWith(".")) {
+                    val = TryGetStructureValue(resolvedCode);
+                }
+	        }
+	        else {
+                val = _source[resolvedCode];
+	        }
+	        if (null != args && val is Delegate) {
+                List<object> arguments = new List<object>();
+	            foreach (var a in args) {
+	                if ((a.StartsWith("\'") && a.EndsWith("\'")) || (a.StartsWith("\"") && a.EndsWith("\""))) {
+	                    arguments.Add(a.Substring(1,a.Length-2));
+                    }
+                    else if (a == "0" || a.ToDecimal() != 0) {
+                        if (a.Contains(".")) {
+                            arguments.Add(a.ToDecimal());
+                        }
+                        else {
+                            arguments.Add(a.ToInt());
+                        }
+                    }
+                    else if (a == "true" || a == "false") {
+                        arguments.Add(a.ToBool());
+                    }
+                    else {
+                        arguments.Add(GetRawValue(a));
+                    }
+	            }
+	            var d = (Delegate) val;
+	            var dargs = d.Method.GetParameters();
+	            for (var i = 0; i < dargs.Length; i++) {
+	                var darg = dargs[i];
+                    var t = darg.ParameterType;
+	                if (arguments.Count > i && null!=arguments[i]) {
+	                    var myarg = arguments[i];
+	                    if (!t.IsInstanceOfType(myarg)) {
+	                        arguments[i] = myarg.ToTargetType(t);
+	                    }
+	                }
+	                else {
+                        if (t.IsValueType)
+                        {
+                            arguments.Add(Activator.CreateInstance(t));
+                        }
+                        else
+                        {
+                            arguments.Add(null);
+                        }
+	                }
+	                
+	                
+	            }
+	            
+	            val = d.DynamicInvoke((object[]) arguments.ToArray());
+	        }
+	        return val;
+	    }
+
+	    private object TryGetStructureValue(string code) {
+	        var paths = code.Split('.');
+	        var result = GetRawValue(paths[0]);
+	        if (null == result) return null;
+	        for (var i = 1; i < paths.Length; i++) {
+	            var propInfo = result.GetType().GetProperty(paths[i], 
+                    BindingFlags.GetProperty | BindingFlags.IgnoreCase
+                    | BindingFlags.Instance | BindingFlags.Public
+                    );
+	            if (null == propInfo) return null;
+	            result = propInfo.GetValue(result);
+	        }
+	        return result;
+	    }
+
+	    static readonly Dictionary<string,object> CoreFunctions = new Dictionary<string, object> {
+	        {"upper",(Func<string,string>)(s=>s.ToUpperInvariant())},
+	        {"lower",(Func<string,string>)(s=>s.ToLowerInvariant())},
+	        {"trim",(Func<string,string>)(s=>s.Trim())},
+	        {"match",(Func<string,string,string,string>)((i,p,g) => {
+	            var match = Regex.Match(i, p);
+	            if (string.IsNullOrWhiteSpace(g)) return match.Value;
+	            if (g.ToInt() != 0) return match.Groups[g.ToInt()].Value;
+	            return match.Groups[g].Value;
+	        })},
+            {"replace",(Func<string,string,string,string>)(Regex.Replace)},
+	    };
 	}
 }
