@@ -30,6 +30,6 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// <param name="expression"> </param>
 		/// <param name="source"> </param>
 		/// <returns> </returns>
-		bool Eval(string expression, ILogicTermSource source);
+		bool Eval(string expression, object source);
 	}
 }

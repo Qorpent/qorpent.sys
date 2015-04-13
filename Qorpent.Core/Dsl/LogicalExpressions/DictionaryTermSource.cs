@@ -64,13 +64,17 @@ namespace Qorpent.LogicalExpressions {
 			return !string.IsNullOrWhiteSpace(val) && val != "0" && val.ToUpperInvariant() != "FALSE";
 		}
 
-		/// <summary>
-		/// 	returns equality checking of term with Value
-		/// </summary>
-		/// <param name="name"> </param>
-		/// <param name="value"> </param>
-		/// <returns> </returns>
-		public override bool Equal(string name, string value) {
+	    /// <summary>
+	    /// 	returns equality checking of term with Value
+	    /// </summary>
+	    /// <param name="name"> </param>
+	    /// <param name="value"> </param>
+	    /// <param name="isNumber"></param>
+	    /// <returns> </returns>
+	    public override bool Equal(string name, string value, bool isNumber) {
+	        if (isNumber) {
+                return _all.ContainsKey(name) && Equals(value.ToDecimal(), _all[name].ToDecimal(true));
+	        }
 			return _all.ContainsKey(name) && Equals(value, _all[name]);
 		}
 

@@ -31,13 +31,14 @@ namespace Qorpent.LogicalExpressions {
 		/// <returns> </returns>
 		bool Get(string name);
 
-		/// <summary>
-		/// 	returns equality checking of term with Value
-		/// </summary>
-		/// <param name="name"> </param>
-		/// <param name="value"> </param>
-		/// <returns> </returns>
-		bool Equal(string name, string value);
+	    /// <summary>
+	    /// 	returns equality checking of term with Value
+	    /// </summary>
+	    /// <param name="name"> </param>
+	    /// <param name="value"> </param>
+	    /// <param name="isNumber"></param>
+	    /// <returns> </returns>
+	    bool Equal(string name, string value, bool isNumber =false);
 
 		/// <summary>
 		/// 	returns string Value of term

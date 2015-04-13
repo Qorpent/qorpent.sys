@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Qorpent.Dsl.LogicalExpressions;
@@ -29,68 +30,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 	/// 	simple expression to node tree parser for logical expressions
 	/// </summary>
 	public class LogicalExpressionParser {
-		/// <summary>
-		/// 	tokens, available in logical expression
-		/// </summary>
-		public enum TokenType {
-			/// <summary>
-			/// 	undefined
-			/// </summary>
-			None,
-
-			/// <summary>
-			/// 	open brace (block of nodes)
-			/// </summary>
-			OpenBlock,
-
-			/// <summary>
-			/// 	close breace (end of block)
-			/// </summary>
-			CloseBlock,
-
-			/// <summary>
-			/// 	term reference
-			/// </summary>
-			Literal,
-
-			/// <summary>
-			/// 	Equal operator ==
-			/// </summary>
-			Eq,
-
-			/// <summary>
-			/// 	Not equal operator !=
-			/// </summary>
-			Neq,
-
-			/// <summary>
-			/// 	Negate operator ![LITERAL|BLOCK]
-			/// </summary>
-			Not,
-
-			/// <summary>
-			/// 	And operator - &amp;
-			/// </summary>
-			And,
-
-			/// <summary>
-			/// 	Or operator - |
-			/// </summary>
-			Or,
-
-			/// <summary>
-			/// 	Str const "..."
-			/// </summary>
-			String,
-
-			/// <summary>
-			/// 	Block of nodes
-			/// </summary>
-			Block,
-		}
-
-
-		/// <summary>
+	    /// <summary>
 		/// 	parses source str into node tree
 		/// </summary>
 		/// <param name="expression"> </param>
@@ -111,11 +51,16 @@ namespace Qorpent.Utils.LogicalExpressions {
 		}
 
 		private void processTokenToExpression(LogicalExpressionNode current, Token token) {
-			if (TokenType.Literal == token.Type) {
+			if (LETokenType.Literal == token.Type) {
 				current.Children.Add(new LiteralNode {Literal = token.Value, Negative = token.Negation});
 				return;
 			}
-			if (TokenType.And == token.Type || TokenType.Block == token.Type) {
+            if (LETokenType.Number == token.Type)
+            {
+                current.Children.Add(new LiteralNode { Literal = token.Value, IsNumber=true, Negative = token.Negation });
+                return;
+            }
+			if (LETokenType.And == token.Type || LETokenType.Block == token.Type) {
 				var conj = new ConjunctionNode {Negative = token.Negation};
 				current.Children.Add(conj);
 				foreach (var child in token.Children) {
@@ -123,7 +68,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 				}
 				return;
 			}
-			if (TokenType.Or == token.Type) {
+			if (LETokenType.Or == token.Type) {
 				var disj = new DisjunctionNode {Negative = token.Negation};
 				current.Children.Add(disj);
 				foreach (var child in token.Children) {
@@ -131,11 +76,25 @@ namespace Qorpent.Utils.LogicalExpressions {
 				}
 				return;
 			}
-			if (TokenType.Eq == token.Type || TokenType.Neq == token.Type) {
+			if (0!=(token.Type &  LETokenType.Compare)) {
 				var fst = token.Children[0];
 				var sec = token.Children[1];
 				LogicalExpressionNode n;
-				if (sec.Type == TokenType.Literal) {
+			    if (fst.Type == LETokenType.Number) {
+                    var eq = new EqualValueNode();
+                    n = eq;
+                    eq.Literal = sec.Value;
+                    eq.Value = fst.Value;
+			        eq.IsNumber = true;
+			    }
+                else if (sec.Type == LETokenType.Number) {
+                    var eq = new EqualValueNode();
+                    n = eq;
+                    eq.Literal = fst.Value;
+                    eq.Value = sec.Value;
+                    eq.IsNumber = true;
+                }
+				else if (sec.Type == LETokenType.Literal) {
 					var eq = new EqualNode();
 					n = eq;
 					eq.FirstLiteral = fst.Value;
@@ -146,9 +105,14 @@ namespace Qorpent.Utils.LogicalExpressions {
 					n = eq;
 					eq.Literal = fst.Value;
 					eq.Value = sec.Value;
+				    
 				}
 				n.Negative = token.Negation;
-				if (TokenType.Neq == token.Type) {
+			    n.Operation = token.Type;
+			    if (token.Type != LETokenType.Neq && token.Type != LETokenType.Eq) {
+			        n.IsNumber = true;
+			    }
+				if (LETokenType.Neq == token.Type) {
 					n.Negative = !n.Negative;
 				}
 				current.Children.Add(n);
@@ -158,7 +122,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 		private List<Token> Resolveblocks(List<Token> tokens) {
 			//remove not sign
 			foreach (var t in tokens.ToList()) {
-				if (TokenType.Not == t.Type) {
+				if (LETokenType.Not == t.Type) {
 					if (t.Next == null) {
 						throw new Exception("NOT cannot be last operator in expression");
 					}
@@ -169,7 +133,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 			}
 			//resolves eq and neq
 			foreach (var t in tokens.ToList()) {
-				if (TokenType.Neq == t.Type || TokenType.Eq == t.Type) {
+				if (0!=(t.Type & LETokenType.Compare )) {
 					if (t.Next == null || t.Prev == null) {
 						throw new Exception("NEQ/EQ cannot be non-binary");
 					}
@@ -194,11 +158,11 @@ namespace Qorpent.Utils.LogicalExpressions {
 				Token currentopen = null;
 				Token closer = null;
 				foreach (var t in tokens) {
-					if (t.Type == TokenType.OpenBlock) {
+					if (t.Type == LETokenType.OpenBlock) {
 						currentopen = t;
 						content.Clear();
 					}
-					else if (t.Type == TokenType.CloseBlock) {
+					else if (t.Type == LETokenType.CloseBlock) {
 						if (null == currentopen) {
 							throw new Exception("invalid brace structure");
 						}
@@ -226,7 +190,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 					var next = last.Next;
 					last.Next = null;
 					currentopen.Next = next;
-					currentopen.Type = TokenType.Block;
+					currentopen.Type = LETokenType.Block;
 					ResolveAndAndOr(currentopen.Children);
 				}
 			}
@@ -237,15 +201,15 @@ namespace Qorpent.Utils.LogicalExpressions {
 		}
 
 		private void ResolveAndAndOr(IList<Token> children) {
-			var currentoperation = TokenType.None;
+			var currentoperation = LETokenType.None;
 			var arguments = new List<Token>();
 			foreach (var a in children.ToArray()) {
 				children.Remove(a);
-				if (a.Type == TokenType.And || a.Type == TokenType.Or) {
+				if (a.Type == LETokenType.And || a.Type == LETokenType.Or) {
 					if (a.Type == currentoperation) {
 						continue;
 					}
-					if (TokenType.None == currentoperation) {
+					if (LETokenType.None == currentoperation) {
 						currentoperation = a.Type;
 						continue;
 					}
@@ -256,7 +220,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 
 				arguments.Add(a);
 			}
-			if (currentoperation == TokenType.None) {
+			if (currentoperation == LETokenType.None) {
 				if (arguments.Count == 1) {
 					children.Insert(0, arguments[0]);
 				}
@@ -268,7 +232,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 			ProcessBinary(children, currentoperation, arguments);
 		}
 
-		private static void ProcessBinary(IList<Token> children, TokenType currentoperation, List<Token> arguments) {
+		private static void ProcessBinary(IList<Token> children, LETokenType currentoperation, List<Token> arguments) {
 			if (2 > arguments.Count) {
 				throw new Exception("insuficient parameters count for binary operation");
 			}
@@ -292,8 +256,15 @@ namespace Qorpent.Utils.LogicalExpressions {
 			_currentvalue = "";
 			_opencount = 0;
 			_closecount = 0;
+		    _skipnext = 0;
+		    _idx = -1;
 			var idx = 0;
 			foreach (var c in expression) {
+			    _idx++;
+			    if (_skipnext>0) {
+			        _skipnext--;
+                    continue;
+			    }
 				switch (c) {
 					case '(':
 						if (State.InLiteral == _state) {
@@ -338,7 +309,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 							_state = State.AfterString;
 							break;
 						}
-						if (State.AfterEqOrNeq != _state) {
+						if (State.AfterBinaryOperator != _state) {
 							throw new Exception("QUOT is at wrong place " + idx);
 						}
 						_state = State.InString;
@@ -350,7 +321,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 						if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state) {
 							throw new Exception("& is at wrong place " + idx);
 						}
-						_tokenlist.Add(new Token {Type = TokenType.And});
+						_tokenlist.Add(new Token {Type = LETokenType.And});
 						_state = State.AfterAndOrOr;
 						break;
 					case '|':
@@ -360,21 +331,54 @@ namespace Qorpent.Utils.LogicalExpressions {
 						if (State.AfterLiteral != _state && State.AfterString != _state && State.None != _state) {
 							throw new Exception("| is at wrong place " + idx);
 						}
-						_tokenlist.Add(new Token {Type = TokenType.Or});
+						_tokenlist.Add(new Token {Type = LETokenType.Or});
 						_state = State.AfterAndOrOr;
 						break;
 					case '=':
 						if (State.AfterLiteral == _state) {
-							_tokenlist.Add(new Token {Type = TokenType.Eq});
-							_state = State.AfterEqOrNeq;
+							_tokenlist.Add(new Token {Type = LETokenType.Eq});
+							_state = State.AfterBinaryOperator;
 							break;
 						}
 						if (State.InNeq == _state) {
-							_tokenlist.Add(new Token {Type = TokenType.Neq});
-							_state = State.AfterEqOrNeq;
+							_tokenlist.Add(new Token {Type = LETokenType.Neq});
+							_state = State.AfterBinaryOperator;
 							break;
 						}
 						throw new Exception("= is at wrong place " + idx);
+                    case '>':
+                        if (State.AfterLiteral == _state) {
+                            var next = expression[_idx + 1];
+                            if (next == '=') {
+                                _tokenlist.Add(new Token { Type = LETokenType.GreaterOrEq });
+                                _skipnext = 1;
+                            }
+                            else {
+                                _tokenlist.Add(new Token { Type = LETokenType.Greater });
+                            }
+                            _state = State.AfterBinaryOperator;
+                            break;
+                        }
+                        
+                        throw new Exception("> is at wrong place " + idx);
+                    case '<':
+                        if (State.AfterLiteral == _state)
+                        {
+                            var next = expression[_idx + 1];
+                            if (next == '=')
+                            {
+                                _tokenlist.Add(new Token { Type = LETokenType.LowerOrEq });
+                                _skipnext = 1;
+                            }
+                            else
+                            {
+                                _tokenlist.Add(new Token { Type = LETokenType.Lower });
+                            }
+                            _state = State.AfterBinaryOperator;
+                            break;
+                        }
+
+                        throw new Exception("> is at wrong place " + idx);
 					case '!':
 						if (State.InLiteral == _state) {
 							Closeliteral();
@@ -384,13 +388,13 @@ namespace Qorpent.Utils.LogicalExpressions {
 							break;
 						}
 						if (State.None == _state || State.AfterAndOrOr == _state) {
-							_tokenlist.Add(new Token {Type = TokenType.Not});
+							_tokenlist.Add(new Token {Type = LETokenType.Not});
 							break;
 						}
 						throw new Exception("! is at wrong place " + idx);
 					default:
 						if (State.None == _state || State.AfterNot == _state || State.AfterAndOrOr == _state ||
-						    State.AfterEqOrNeq == _state) {
+						    State.AfterBinaryOperator == _state) {
 							_currentvalue = c.ToString(CultureInfo.InvariantCulture);
 							_state = State.InLiteral;
 							break;
@@ -423,25 +427,31 @@ namespace Qorpent.Utils.LogicalExpressions {
 		}
 
 		private void Closeblock() {
-			_tokenlist.Add(new Token {Type = TokenType.CloseBlock});
+			_tokenlist.Add(new Token {Type = LETokenType.CloseBlock});
 			_closecount++;
 			_state = State.None;
 		}
 
 		private void Openblock() {
-			_tokenlist.Add(new Token {Type = TokenType.OpenBlock});
+			_tokenlist.Add(new Token {Type = LETokenType.OpenBlock});
 			_opencount++;
 			_state = State.None;
 		}
 
 		private void Closeliteral() {
-			_tokenlist.Add(new Token {Type = TokenType.Literal, Value = _currentvalue});
+		    if (_currentvalue == "0" || 0 != _currentvalue.ToDecimal()) {
+                _tokenlist.Add(new Token { Type = LETokenType.Number, Value = _currentvalue });
+		    }
+		    else {
+                _tokenlist.Add(new Token { Type = LETokenType.Literal, Value = _currentvalue });
+		    }
+			
 			_currentvalue = "";
 			_state = State.AfterLiteral;
 		}
 
 		private void Closestring() {
-			_tokenlist.Add(new Token {Type = TokenType.String, Value = _currentvalue});
+			_tokenlist.Add(new Token {Type = LETokenType.String, Value = _currentvalue});
 			_currentvalue = "";
 			_state = State.AfterLiteral; // no differences in post processing
 		}
@@ -455,7 +465,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 			AfterAndOrOr,
 			AfterLiteral,
 			InNeq,
-			AfterEqOrNeq,
+			AfterBinaryOperator,
 			AfterNot,
 			AfterString,
 		}
@@ -483,7 +493,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 			/// <summary>
 			/// 	tokent type
 			/// </summary>
-			public TokenType Type { get; set; }
+			public LETokenType Type { get; set; }
 
 			/// <summary>
 			/// 	containing node
@@ -531,10 +541,10 @@ namespace Qorpent.Utils.LogicalExpressions {
 			/// <returns> A <see cref="T:System.Str" /> that represents the current <see cref="T:System.Object" /> . </returns>
 			/// <filterpriority>2</filterpriority>
 			public override string ToString() {
-				if (TokenType.Literal == Type) {
+				if (LETokenType.Literal == Type) {
 					return "Lit:" + Value;
 				}
-				if (TokenType.String == Type) {
+				if (LETokenType.String == Type) {
 					return "Str:" + Value;
 				}
 				return string.Format("{0}[{1}]", Type, Children.Select(x => x.ToString()).ConcatString());
@@ -549,5 +559,7 @@ namespace Qorpent.Utils.LogicalExpressions {
 		private int _opencount;
 		private State _state;
 		private List<Token> _tokenlist;
+	    private int _skipnext;
+	    private int _idx;
 	}
 }

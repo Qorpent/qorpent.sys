@@ -16,8 +16,12 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/LogicalExpressionNode.cs
 #endregion
+
+using System;
 using System.Collections.Generic;
 using Qorpent.LogicalExpressions;
+using Qorpent.Utils.Extensions;
+using Qorpent.Utils.LogicalExpressions;
 
 namespace Qorpent.Dsl.LogicalExpressions {
 	/// <summary>
@@ -40,7 +44,10 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// </summary>
 		public IList<LogicalExpressionNode> Children { get; private set; }
 
-		/// <summary>
+	    public bool IsNumber { get; set; }
+	    public LETokenType Operation { get; set; }
+
+	    /// <summary>
 		/// 	evaluates bool value of node
 		/// </summary>
 		/// <param name="source"> </param>
@@ -59,5 +66,26 @@ namespace Qorpent.Dsl.LogicalExpressions {
 		/// <param name="source"> </param>
 		/// <returns> </returns>
 		protected abstract bool InternalEval(ILogicTermSource source);
+
+	    protected bool AreMatched(string fst, string sec) {
+	      
+	        switch (Operation) {
+	            case LETokenType.Eq:
+	                goto case LETokenType.Neq;
+	            case LETokenType.Neq:
+	                return IsNumber ? fst.ToDecimal() == sec.ToDecimal() : fst == sec; //explicit negation
+	            case LETokenType.Greater:
+	                return fst.ToDecimal() > sec.ToDecimal();
+	            case LETokenType.GreaterOrEq:
+	                return fst.ToDecimal() >= sec.ToDecimal();
+	            case LETokenType.Lower:
+	                return fst.ToDecimal() < sec.ToDecimal();
+	            case LETokenType.LowerOrEq:
+	                return fst.ToDecimal() <= sec.ToDecimal();
+	            default:
+	                throw new Exception("invalid op "+Operation);
+                     
+	        }
+	    }
 	}
 }

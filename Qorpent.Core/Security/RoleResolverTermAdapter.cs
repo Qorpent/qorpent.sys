@@ -55,13 +55,14 @@ namespace Qorpent.Security {
 			return _resolver.IsInRole(_principal, name, exact, customcontext: _customcontext);
 		}
 
-		/// <summary>
-		/// 	Для данного источника не поддерживается
-		/// </summary>
-		/// <param name="name"> </param>
-		/// <param name="value"> </param>
-		/// <returns> </returns>
-		public bool Equal(string name, string value) {
+	    /// <summary>
+	    /// 	Для данного источника не поддерживается
+	    /// </summary>
+	    /// <param name="name"> </param>
+	    /// <param name="value"> </param>
+	    /// <param name="isNumber"></param>
+	    /// <returns> </returns>
+	    public bool Equal(string name, string value, bool isNumber) {
 			throw new NotSupportedException();
 		}
 
