@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Qorpent.Config {
 	/// <summary>
 	///     Ѕазовый класс дл€ конфигураций
 	/// </summary>
-	public partial class ConfigBase : IConfig {
+	public partial class ConfigBase : IConfig, ICollection {
         /// <summary>
         ///     ¬нутренний экземпл€р переменной, определ€ющий поддержку наследовани€
         /// </summary>
@@ -402,5 +403,21 @@ namespace Qorpent.Config {
 				_stornated = true;
 			}
 		}
+
+	    public void CopyTo(Array array, int index) {
+	        throw new NotImplementedException();
+	    }
+
+	    public int Count {
+	        get { return options.Count; }
+	    }
+
+	    public object SyncRoot {
+	        get { return ((ICollection) options).SyncRoot; }
+	    }
+
+	    public bool IsSynchronized {
+	        get { return ((ICollection) options).IsSynchronized; }
+	    }
 	}
 }
