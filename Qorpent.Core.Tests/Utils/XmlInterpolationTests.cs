@@ -114,7 +114,7 @@ root x=true
   <item code='3' id='3' x='false' />
   <item code='4' id='4' />
 </root>".Simplify(SimplifyOptions.Full), res.ToString().Simplify(SimplifyOptions.Full));
-            var res2 = x.Interpolate(new { a = true });
+            var res2 = x.Interpolate(new { a = false });
             Console.WriteLine(res2.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<root x='true'>
   <item code='4' id='4' />
