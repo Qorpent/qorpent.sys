@@ -103,8 +103,7 @@ namespace Qorpent.Scaffolding.Model{
 					Output.WriteLine(command);
 				}
 				else{
-					var i = new StringInterpolation();
-					Output.WriteLine(i.Interpolate(command, Parameters));
+                    Output.WriteLine(command.Interpolate(Parameters));
 				}
 				if (Optional){
 					WriteEndOptionalBlock();

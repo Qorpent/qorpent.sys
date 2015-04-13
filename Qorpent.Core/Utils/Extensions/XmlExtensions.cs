@@ -54,6 +54,16 @@ namespace Qorpent.Utils.Extensions {
             }
             throw new Exception("multiple instance");
         }
+
+	    public static XElement Interpolate(this XElement element,object context = null, bool nocopy = false, Action<XmlInterpolation> setup = null) {
+	        var e = nocopy ? element : new XElement(element);
+	        var xi = new XmlInterpolation();
+	        if (null != setup) {
+	            setup(xi);
+	        }
+	        return xi.Interpolate(e,context);
+	    }
+
 		/// <summary>
 		/// Возвращает полный путь от корня
 		/// </summary>

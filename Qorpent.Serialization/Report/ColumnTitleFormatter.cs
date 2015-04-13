@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using Qorpent.Utils;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Report {
 	/// <summary>
@@ -17,8 +18,7 @@ namespace Qorpent.Report {
 				return ResolveOrderedSubstitude(template, titleParams);
 			}
 #pragma warning restore 612,618
-			var i = new StringInterpolation();
-			return i.Interpolate(template, titleParams);
+		    return template.Interpolate(titleParams);
 		}
 		/// <summary>
 		///		Разрешение заголовка в старом формате

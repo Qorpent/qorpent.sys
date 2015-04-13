@@ -107,14 +107,14 @@ root x=true
     item 3 x=false xi-if='a | x'
     item 4 xi-if='a | x'
 ", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
-	        var res = new XmlInterpolation().Interpolate(new XElement(x), new {a = true});
+	        var res = x.Interpolate(new {a = true});
             Console.WriteLine(res.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<root x='true'>
   <item code='2' id='2' />
   <item code='3' id='3' x='false' />
   <item code='4' id='4' />
 </root>".Simplify(SimplifyOptions.Full), res.ToString().Simplify(SimplifyOptions.Full));
-            var res2 = new XmlInterpolation().Interpolate(new XElement(x), new { a = false });
+            var res2 = x.Interpolate(new { a = true });
             Console.WriteLine(res2.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<root x='true'>
   <item code='4' id='4' />
@@ -132,9 +132,8 @@ xi-dataset x
 e u=33
     i ${x}${x} ${y}${y} z=${u} xi-repeat=$x 
 ", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
-            _xi = new XmlInterpolation { UseExtensions = true };
             var ctx = new { data = new object[] { new { mycode = 2, myname = "Two" }, new { mycode = 3, myname = "Three" } } };
-            x = _xi.Interpolate(x, ctx);
+            x = x.Interpolate(ctx);
             Console.WriteLine(x.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<root>
   <xi-dataset code='x' id='x'>
@@ -157,9 +156,8 @@ e
         x-code ${mycode}
         x-name ${myname}   
 ", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
-            _xi = new XmlInterpolation { UseExtensions = true };
             var ctx = new { data = new object[] { new { mycode = 2, myname = "Two" }, new { mycode = 3, myname = "Three" } } };
-            x = _xi.Interpolate(x, ctx);
+            x = x.Interpolate(ctx);
             Console.WriteLine(x.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<e>
   <x-code code='2' id='2' />

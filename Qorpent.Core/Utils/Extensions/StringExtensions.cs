@@ -499,6 +499,17 @@ namespace Qorpent.Utils.Extensions {
 						RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
 		}
 
+        
+        public static string Interpolate(this string str, object ctx, IDictionary<string,object> ctx2 = null, string controlKey = null, Action<StringInterpolation> setup =null) {
+            var si = new StringInterpolation();
+            if (null != setup) {
+                setup(si);
+            }
+            return si.Interpolate(str, ctx,ctx2,controlKey);
+        }
+
+
+
 		/// <summary>
 		/// Оболочка над Regex.Match с возвратом найденного значения, игнорируется регистр и пробельные символы
 		/// </summary>

@@ -56,8 +56,7 @@ namespace Qorpent.Utils.Extensions {
 			var logMessage = new LogMessage {HostObject = host, Level = level};
 			var realMessage = message;
 			if (null != substitute) {
-				var si = new StringInterpolation();
-				realMessage = si.Interpolate(realMessage, substitute);
+			    realMessage = realMessage.Interpolate(substitute);
 			} else if (null != format) {
 				realMessage = string.Format(realMessage, (string[]) format);
 			}

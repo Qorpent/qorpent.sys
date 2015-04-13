@@ -153,8 +153,7 @@ namespace Qorpent.Data.Installer {
                 Notation = notation
             };
             if (!string.IsNullOrWhiteSpace(query)) {
-                var si = new StringInterpolation();
-                query = si.Interpolate(query, CmdParameters);
+                query = query.Interpolate(CmdParameters);
                 if (query.Contains(" ")) {
                     result.Query = query;
                 }

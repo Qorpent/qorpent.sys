@@ -148,7 +148,7 @@ namespace Qorpent.Bxl {
 			}
 
 			else if (options.HasFlag(BxlParserOptions.PerformInterpolation)) {
-				_root = new XmlInterpolation().Interpolate(_root);
+			    _root = _root.Interpolate();
 			}
 #endif
 			return _root;
