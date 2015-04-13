@@ -167,7 +167,7 @@ namespace Qorpent.Utils.Tests
                     decer = (Func<decimal,decimal>)(s=>s+2.1m),
                 });
             Console.WriteLine(result);
-            Assert.AreEqual("'2!', '3', '7', '2,1', '4,1'", result);
+            Assert.AreEqual("'2!', '3', '7', '2.1', '4.1'", result);
         }
 
 	    [Test]

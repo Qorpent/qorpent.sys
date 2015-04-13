@@ -311,7 +311,21 @@ namespace Qorpent.Utils
 			string strval = null;
 			if (null == format)
 			{
-				strval = val.ToString();
+                if (val is DateTime)
+                {
+                    strval = ((DateTime)val).ToString( CultureInfo.InvariantCulture);
+                }
+                else if (val is Decimal)
+                {
+                    strval = ((Decimal)val).ToString( CultureInfo.InvariantCulture);
+                }
+                else if (val is int)
+                {
+                    strval = ((int)val).ToString( CultureInfo.InvariantCulture);
+                }
+                else {
+                    strval = val.ToString();
+                }
 			}
 			else
 			{
