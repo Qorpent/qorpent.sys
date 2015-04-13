@@ -366,6 +366,7 @@
     <Compile Include="Utils\LogicalExpressions\DisjunctionNode.cs" />
     <Compile Include="Utils\LogicalExpressions\EqualNode.cs" />
     <Compile Include="Utils\LogicalExpressions\EqualValueNode.cs" />
+    <Compile Include="Utils\LogicalExpressions\LETokenType.cs" />
     <Compile Include="Utils\LogicalExpressions\LiteralNode.cs" />
     <Compile Include="Utils\LogicalExpressions\LogicalExpressionEvaluator.cs" />
     <Compile Include="Utils\LogicalExpressions\LogicalExpressionParser.cs" />
