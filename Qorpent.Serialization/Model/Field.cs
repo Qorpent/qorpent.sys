@@ -130,7 +130,6 @@ namespace Qorpent.Scaffolding.Model{
 		///     Поле требующее автоматического приращения
 		/// </summary>
 		public bool IsAutoIncrement { get; set; }
-
 		/// <summary>
 		///     Порядок поля при генерации таблиц и классов
 		/// </summary>

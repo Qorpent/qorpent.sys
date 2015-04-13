@@ -16,11 +16,19 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			Step = 10;
 			Start = 10;
 		}
-
+		/// <summary>
+		///		Признак цикличности
+		/// </summary>
+		public bool IsCyclic { get; set; }
 		/// <summary>
 		/// </summary>
 		public DataType DataType { get; set; }
-
+		/// <summary>
+		///		Строковое значение цикличности
+		/// </summary>
+		public string Cycle {
+			get { return IsCyclic ? " CYCLE" : ""; }
+		}
 		/// <summary>
 		///     Шаг приращения
 		/// </summary>
@@ -45,6 +53,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			}
 			Name = cls.Name + "_SEQ";
 			Schema = cls.Schema;
+			IsCyclic = cls.CyclicId;
 			if (null != cls.PrimaryKey){
 				DataType = cls.PrimaryKey.DataType;
 			}
