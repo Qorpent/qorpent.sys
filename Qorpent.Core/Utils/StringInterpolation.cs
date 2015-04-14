@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -403,11 +404,22 @@ namespace Qorpent.Utils
 	            for (var i = 0; i < dargs.Length; i++) {
 	                var darg = dargs[i];
                     var t = darg.ParameterType;
-	                if (arguments.Count > i && null!=arguments[i]) {
+	                if (arguments.Count > i) {
 	                    var myarg = arguments[i];
-	                    if (!t.IsInstanceOfType(myarg)) {
-	                        arguments[i] = myarg.ToTargetType(t);
-	                    }
+                        if (null != myarg)
+                        {
+                            if (!t.IsInstanceOfType(myarg))
+                            {
+                                arguments[i] = myarg.ToTargetType(t);
+                            }
+                        }
+                        else
+                        {
+                            if (t.IsValueType)
+                            {
+                                arguments[i] =Activator.CreateInstance(t);
+                            }
+                        }
 	                }
 	                else {
                         if (t.IsValueType)
@@ -442,18 +454,26 @@ namespace Qorpent.Utils
 	        }
 	        return result;
 	    }
-
 	    static readonly Dictionary<string,object> CoreFunctions = new Dictionary<string, object> {
-	        {"upper",(Func<string,string>)(s=>s.ToUpperInvariant())},
-	        {"lower",(Func<string,string>)(s=>s.ToLowerInvariant())},
-	        {"trim",(Func<string,string>)(s=>s.Trim())},
+	        {"len",(Func<string,int>)(s=>s==null?0:s.Length)},
+	        {"upper",(Func<string,string>)(s=>s==null?string.Empty:s.ToUpperInvariant())},
+	        {"lower",(Func<string,string>)(s=>s==null?string.Empty:s.ToLowerInvariant())},
+	        {"trim",(Func<string,string>)(s=>s==null?string.Empty:s.Trim())},
 	        {"match",(Func<string,string,string,string>)((i,p,g) => {
+	            if (null == i) return string.Empty;
+	            if (null == p) return string.Empty;
 	            var match = Regex.Match(i, p);
 	            if (string.IsNullOrWhiteSpace(g)) return match.Value;
 	            if (g.ToInt() != 0) return match.Groups[g.ToInt()].Value;
 	            return match.Groups[g].Value;
 	        })},
-            {"replace",(Func<string,string,string,string>)(Regex.Replace)},
+            {"replace",(Func<string,string,string,string>)((i, p, r) => {
+                if (null == i) return string.Empty;
+	            if (null == p) return string.Empty;
+                if (null == r) return string.Empty;
+                return Regex.Replace(i, p, r);
+            })},
+
 	    };
 	}
 }

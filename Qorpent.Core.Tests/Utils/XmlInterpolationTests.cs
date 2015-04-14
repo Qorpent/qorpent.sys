@@ -100,26 +100,33 @@ e mycode=1 myname=aa
 
 	    [Test]
 	    public void BasicXiIfTest() {
-            var x = new BxlParser().Parse(@"
+            var x = MyBxl.ParseSimple(@"
 root x=true
     item 1 x=false xi-if='a & x'
     item 2 xi-if='a & x'
     item 3 x=false xi-if='a | x'
     item 4 xi-if='a | x'
-", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
+");
 	        var res = x.Interpolate(new {a = true});
             Console.WriteLine(res.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<root x='true'>
-  <item code='2' id='2' />
-  <item code='3' id='3' x='false' />
-  <item code='4' id='4' />
+  <item code='2' />
+  <item code='3' x='false' />
+  <item code='4' />
 </root>".Simplify(SimplifyOptions.Full), res.ToString().Simplify(SimplifyOptions.Full));
             var res2 = x.Interpolate(new { a = false });
             Console.WriteLine(res2.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<root x='true'>
-  <item code='4' id='4' />
+  <item code='4' />
 </root>".Simplify(SimplifyOptions.Full), res2.ToString().Simplify(SimplifyOptions.Full));
             
+	    }
+
+	    [Test]
+	    public void ThisKeywordSupport() {
+	        var x = MyBxl.ParseSimple(@"x y=1 z='${len(this)}'").Interpolate();
+            Console.WriteLine(x.ToString().Simplify(SimplifyOptions.SingleQuotes));
+            Assert.AreEqual(@"<xy='1'z='28'/>".Simplify(SimplifyOptions.Full), x.ToString().Simplify(SimplifyOptions.Full));
 	    }
 
 
