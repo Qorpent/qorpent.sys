@@ -93,5 +93,21 @@ base c
 			Assert.AreEqual("8px", cls.Compiled.Elements("a").First().Element("x").Attr("width"));
 			Assert.AreEqual("9px", cls.Compiled.Elements("a").Last().Element("x").Attr("width"));
 		}
+
+	    [Test]
+	    public void SampleCountGapForIndex() {
+            var result = Compile(@"
+class x size=48
+	eval size for=(./i[@code='placeholder']) : (../@size - sum(../i[@code!='placeholder']/@size))
+	eval type for=(./i[not(@type)]) : ('string')
+	i typecode size=2 
+	i placeholder
+	i unqmarker size=4 
+");
+	        var cls = result["x"].Compiled;
+	        var f = cls.Elements("i").First(_ => _.Attr("code") == "placeholder");
+            Assert.AreEqual("42",f.Attr("size"));
+            Assert.AreEqual("string",f.Attr("type"));
+	    }
 	}
 }
