@@ -98,8 +98,8 @@ namespace Qorpent.Scaffolding.Model.CodeWriters {
             o.WriteLine("\t\t");
             var sb = new System.Text.StringBuilder(1168);
             o.WriteLine(@"  private bool StringEqual(string o, string n, string message) {");
-            o.WriteLine(@"            o = o.Norm();");
-            o.WriteLine(@"            n = n.Norm();");
+            o.WriteLine(@"            o = StringUtils.Norm(o);");
+            o.WriteLine(@"            n = StringUtils.Norm(n);");
             o.WriteLine(@"            ");
             o.WriteLine(@"            var action = """";");
             o.WriteLine(@"            if (o == """" && n != """") {");
@@ -113,7 +113,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters {
             o.WriteLine(@"            } else if (o == """" && n == """") {");
             o.WriteLine(@"                return true;");
             o.WriteLine(@"            }");
-            o.WriteLine(@"            var cm = new CompareMessage {Message = string.Concat(action, "" ["", message, ""]"") };");
+            o.WriteLine(@"            var cm = new CompareMessage {Message = string.Concat(action, "" ["", message, ""]""), OldValue = o, NewValue = n };");
             o.WriteLine(@"            _messages.Add(cm);");
             o.WriteLine(@"");
             o.WriteLine(@"            return false;");
@@ -126,7 +126,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters {
             o.WriteLine(@"            } else {");
             o.WriteLine(@"                return true;");
             o.WriteLine(@"            }");
-            o.WriteLine(@"            var cm = new CompareMessage {Message = string.Concat(action, "" ["", message, ""]"") };");
+            o.WriteLine(@"            var cm = new CompareMessage {Message = string.Concat(action, "" ["", message, ""]""), OldValue = o, NewValue = n };");
             o.WriteLine(@"            _messages.Add(cm);");
             o.WriteLine(@"            return false;");
             o.WriteLine(@"        }");
@@ -141,6 +141,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters {
             WriteHeader();
             o.WriteLine("using System;");
             o.WriteLine("using System.Collections.Generic;");
+            o.WriteLine("using Qorpent.Utils;");
             o.WriteLine("#if !NOQORPENT");
             o.WriteLine("using Qorpent.Serialization;");
             o.WriteLine("using Qorpent.Model;");
