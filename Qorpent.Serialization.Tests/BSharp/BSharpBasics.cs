@@ -615,5 +615,29 @@ custom Z 'zed' _x _y
 			Assert.AreEqual("123", result.Get("Z").Compiled.Attribute("test").Value);
 			Console.WriteLine(result.Working[2].Compiled);
 		}
+
+	    [Test]
+	    public void SequenceSupport() {
+	        var result = Compile(@"
+class enumerated abstract _seq='${initseq(_sname,_sstart,_sstep)}'
+    item 1 idx=${nextseq(_sname)} idx2=${nextseq()} #named and nonamed default sequence used
+    item 2 idx=${nextseq(_sname)} idx2=${nextseq()}
+
+enumerated e1 _sname=e1 _sstart=10 _sstep=10
+enumerated e2 _sname=e2 _sstart=5 _sstep=2
+enumerated e3 _sname=e1 _sstart=5 _sstep=3
+
+");
+	        Func<string, int> getidx = n => result[n].Compiled.Elements("item").Last().Attr("idx").ToInt();
+	        Func<string, int> getidx2 = n => result[n].Compiled.Elements("item").Last().Attr("idx2").ToInt();
+	        Assert.AreEqual(20,getidx("e1"));
+	        Assert.AreEqual(7,getidx("e2"));
+	        Assert.AreEqual(8,getidx("e3"));
+
+            Assert.AreEqual(1, getidx2("e1"));
+            Assert.AreEqual(1, getidx2("e2"));
+            Assert.AreEqual(1, getidx2("e3"));
+            
+	    }
 	}
 }

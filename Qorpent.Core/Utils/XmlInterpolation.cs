@@ -58,6 +58,7 @@ namespace Qorpent.Utils {
 
 		private XElement InternalInterpolate(XElement source, IConfig parentconfig,int level) {
 			var datasource = PrepareDataSource(source, parentconfig);
+
 			var processchild = InterpolateDataToElement(source, datasource);
 			if (processchild && level>=1){
 				level--;
@@ -163,7 +164,12 @@ namespace Qorpent.Utils {
 				bool changed = true;
 				while (changed){
 					changed = false;
-					foreach (var a in source.Attributes())
+					foreach (var a in source.Attributes().OrderBy(_ => {
+					    if (_.Value.Contains("${") && _.Value.Contains("(")) {
+					        return 1000;
+					    }
+					    return 0;
+					}))
 					{
 						var val = a.Value;
 						if (val.Contains(_stringInterpolation.AncorSymbol) && val.Contains(_stringInterpolation.StartSymbol))
@@ -235,9 +241,10 @@ namespace Qorpent.Utils {
                 if (!string.IsNullOrWhiteSpace(scope)) {
                     dict = dict.ToDictionary(_ => scope + "." + _.Key, _ => _.Value);
                 }
-                var cfg = new ConfigBase(dict);
-                
+                var cfg = new ConfigBase(dict);              
                 var clone = new XElement(source);
+                cfg.Set("this",clone);
+                cfg.Set("self",source);
                 cfg.SetParent(datasource);
                 if (!MatchCondition(clone, cfg,"where")) continue;
 	            
@@ -292,6 +299,7 @@ namespace Qorpent.Utils {
 				result.Set(a.Name.LocalName,a.Value);
 				
 			}
+            result.Set("this",source);
 			return result;
 
 

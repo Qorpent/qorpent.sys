@@ -108,6 +108,7 @@ namespace Qorpent.Scaffolding.Application{
 			sb.AppendLine("namespace " + e.Namespace + " {");
 			sb.AppendLine("\t/// <summary>\r\n\t///\t" + e.Compiled.Attr("name") + "\r\n\t/// </summary>");
 			sb.AppendLine("\t[Serialize]");
+            sb.AppendLine("\t[Serializable]");
 		    var implements = string.Join(", ", e.Compiled.Elements("implements").Select(_ => _.Attr("code")));
 		    if (!string.IsNullOrWhiteSpace(implements)) {
 		        implements = " : " + implements;

@@ -507,10 +507,32 @@ namespace Qorpent.BSharp{
 			CompileClasses(batch, context);
 			LinkClasses(batch, context);
 			ExecuteDefinitions(batch, context);
+		    Postprocess(batch, context);
 			return context;
 		}
 
-		private void ExecuteDefinitions(XElement[] batch, IBSharpContext context){
+	    private void Postprocess(XElement[] batch, IBSharpContext context) {
+	        foreach (var cls in context.Get(BSharpContextDataType.Working).ToArray()) {
+	            if (cls.Compiled.Attr("ordered").ToBool()) {
+	                var attr = cls.Compiled.Attr("ordered");
+	                if (attr == "1") attr = "idx";
+	                var elements = cls.Compiled.Elements().ToArray().OrderBy(_ => {
+	                    var val = _.Attr(attr);
+	                    var keybase = _.Name.LocalName+".";
+	                    if (string.IsNullOrWhiteSpace(val)) {
+	                        val = _.Attr("code");
+	                    }
+	                    if (val.ToInt() != 0) val = (100000000 + val.ToInt()).ToString();
+	                    return keybase + val;
+
+	                }).ToArray();
+                    cls.Compiled.Elements().ToArray().Remove();
+                    cls.Compiled.Add(elements);
+	            }
+	        }
+	    }
+
+	    private void ExecuteDefinitions(XElement[] batch, IBSharpContext context){
 			context.Get(BSharpContextDataType.Working).Where(_ => 0 != _.AllEvaluations.Count()).AsParallel().ForAll(_ =>{
 				try{
 					BSharpClassBuilder.Build(BuildPhase.Evaluate, this, _, context);

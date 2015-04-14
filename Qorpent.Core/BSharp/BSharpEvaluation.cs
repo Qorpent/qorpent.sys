@@ -64,7 +64,7 @@ namespace Qorpent.BSharp{
 			if (Target == "elements"){
 				return c.Elements().ToArray();
 			}
-			if (Target.StartsWith("./")){
+			if (Target.StartsWith("./")||Target.StartsWith("(./")){
 				return c.XPathSelectElements(Target).ToArray();
 			}
 			return c.Elements(Target).ToArray();
@@ -82,6 +82,9 @@ namespace Qorpent.BSharp{
 			if (!string.IsNullOrWhiteSpace(Value) && Value.Contains("${this}")){
 				expr = Value.Replace("${this}", curval);
 			}
+		    if (string.IsNullOrWhiteSpace(expr)) {
+		        expr = Value;
+		    }
 			if (string.IsNullOrWhiteSpace(expr)){
 				return;
 			}
