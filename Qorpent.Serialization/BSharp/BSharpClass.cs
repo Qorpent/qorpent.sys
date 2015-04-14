@@ -23,7 +23,10 @@ namespace Qorpent.BSharp{
 					_context;
 			}
 		}
-		private static int EXTCOUNTER = 1;
+
+	    public IConfig InterpolationContext { get; set; }
+
+	    private static int EXTCOUNTER = 1;
 		private readonly IBSharpContext _context;
 		private List<IBSharpElement> _allelements;
 
