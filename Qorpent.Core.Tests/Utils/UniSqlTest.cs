@@ -16,8 +16,8 @@ namespace Qorpent.Utils.Tests {
 			var c = new SqlConnection();
 			var r = c.CreateCommand("insert into n.a (less,greater,normal) values (@less,@greater,@normal)", o);
 			Assert.AreEqual(3, r.Parameters.Count);
-			Assert.IsTrue(((SqlString) (((SqlParameter) r.Parameters["less"]).SqlValue)).IsNull);
-			Assert.IsTrue(((SqlString) (((SqlParameter) r.Parameters["greater"]).SqlValue)).IsNull);
+			Assert.IsFalse(((SqlDateTime) (((SqlParameter) r.Parameters["less"]).SqlValue)).IsNull);
+			Assert.IsFalse(((SqlDateTime) (((SqlParameter) r.Parameters["greater"]).SqlValue)).IsNull);
 			Assert.IsFalse(((SqlDateTime) (((SqlParameter) r.Parameters["normal"]).SqlValue)).IsNull);
 		}
 		[TestCase(SqlCommandType.Select, DatabaseEngineType.MySql, "CALL ALL `x_y` ( ?x, ?b, 23, 'u' )")]
