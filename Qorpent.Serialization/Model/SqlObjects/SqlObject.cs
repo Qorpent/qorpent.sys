@@ -255,7 +255,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 					yield return GetAutoPartition(cls);
 				}
 			}
-			yield return PreventDeleteSysTrigger(cls);
+			if (!cls.NoDefaultRows) yield return PreventDeleteSysTrigger(cls);
 
 		}
 
