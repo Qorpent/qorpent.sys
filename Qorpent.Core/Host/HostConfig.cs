@@ -481,7 +481,7 @@ namespace Qorpent.Host{
             LoggerName = xml.ResolveValue("loggername", "");
             LoggerHost = xml.ResolveValue("loggerhost", "");
             LoggerPort = xml.ResolveValue("loggerport", "0").ToInt();
-            LoggerFormat = xml.ResolveValue("loggerformat", "");
+            LoggerFormat = xml.ResolveValue("loggerformat", "").Replace("%{","${");
 
             this.AccessAllowOrigin = xml.ResolveValue("origin", "");
 
