@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Qorpent.Log;
 
-namespace Qorpent.Core.Tests.Log.NewLogs {
+namespace Qorpent.Log.NewLog {
     public interface ILoggy : ILogAppender
     {
         string Name { get; set; }

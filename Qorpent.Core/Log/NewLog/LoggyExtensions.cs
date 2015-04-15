@@ -1,7 +1,4 @@
-using System.Linq;
-using Qorpent.Log;
-
-namespace Qorpent.Core.Tests.Log.NewLogs {
+namespace Qorpent.Log.NewLog {
     public static class LoggyExtensions {
         public static void Debug(this ILoggy loggy, params object[] args) {
             Write(loggy,LogLevel.Debug,(object[])args);

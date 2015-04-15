@@ -144,9 +144,6 @@
     <Compile Include="FilterExtensions.cs" />
     <Compile Include="FilterState.cs" />
     <Compile Include="HelpAttribute.cs" />
-    <Compile Include="Host\HostConfigLog.cs" />
-    <Compile Include="Host\UdpTraceListenerLog4j.cs" />
-    <Compile Include="Host\UdpTraceListener.cs" />
     <Compile Include="Host\HostApplicationMode.cs" />
     <Compile Include="Host\HostBinding.cs" />
     <Compile Include="Host\HostConfig.cs" />
@@ -194,6 +191,15 @@
     <Compile Include="IO\IWebFileResolver.cs" />
     <Compile Include="IO\WebFileSerachMode.cs" />
     <Compile Include="Log\CollectionBasedUserLog.cs" />
+    <Compile Include="Log\NewLog\DefaultLoggy.cs" />
+    <Compile Include="Log\NewLog\ILogAppender.cs" />
+    <Compile Include="Log\NewLog\ILoggy.cs" />
+    <Compile Include="Log\NewLog\ILoggyManager.cs" />
+    <Compile Include="Log\NewLog\Loggy.cs" />
+    <Compile Include="Log\NewLog\LoggyExtensions.cs" />
+    <Compile Include="Log\NewLog\LoggyManager.cs" />
+    <Compile Include="Log\NewLog\LoggyMessage.cs" />
+    <Compile Include="Log\NewLog\UdpAppender.cs" />
     <Compile Include="Log\SessionLog.cs" />
     <Compile Include="Log\SessionLogClearQuery.cs" />
     <Compile Include="Log\SessionLogQuery.cs" />

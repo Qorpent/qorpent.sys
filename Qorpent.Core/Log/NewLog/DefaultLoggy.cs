@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.UI.HtmlControls;
-using Qorpent.Log;
 
-namespace Qorpent.Core.Tests.Log.NewLogs {
+namespace Qorpent.Log.NewLog {
     public class DefaultLoggy : ILoggy {
         private readonly IList<ILogAppender> _appenders =new List<ILogAppender>();
         private IList<ILoggy> _subLoggers;

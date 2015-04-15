@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Qorpent.Log;
+using Qorpent.Log.NewLog;
 
 namespace Qorpent.Core.Tests.Log.NewLogs
 {

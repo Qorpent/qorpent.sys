@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,6 +11,7 @@ using Qorpent.BSharp;
 using Qorpent.Config;
 using Qorpent.IO;
 using Qorpent.Log;
+using Qorpent.Log.NewLog;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
@@ -50,13 +52,13 @@ namespace Qorpent.Host{
 
 	    private void CreateLogger() {
 	        if (LoggerHost != "" && LoggerPort != 0 && LoggerName != "") {
-	            Trace.Listeners.Add(new UdpTraceListener(LoggerHost, LoggerPort, LoggerName));
+	            var def = Loggy.Get();
+	            def.Level = LogLevel;
+                def.Appenders.Add(new UdpAppender(LoggerHost,LoggerPort){AutoFlushSize = 1});
+	            foreach (LogLevel level in Enum.GetValues(typeof(LogLevel))) {
+	                Loggy.Write(level,"test");
+	            }
 	        }
-	        LogDebug("Debug Test");
-	        LogInfo("Info Test");
-	        LogWarning("Warning Test");
-	        LogError("Error Test");
-	        LogFatal("Fatal Test");
 	    }
 
 	    /// <summary>
@@ -456,7 +458,7 @@ namespace Qorpent.Host{
 	        var appid = xml.ResolveValue("appid", "0").ToInt();
 	        if (appid != 0) {
 	            AddQorpentBinding(appid);
-                LogInfo(string.Concat("AppId is [", appid , "]"));
+                Loggy.Info(string.Concat("AppId is [", appid , "]"));
 	        }
 
             LoggerName = xml.ResolveValue("loggername", "").ToStr();

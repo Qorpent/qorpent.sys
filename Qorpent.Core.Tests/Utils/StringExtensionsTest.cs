@@ -36,6 +36,7 @@ namespace Qorpent.Utils.Tests {
 		}
 
         [TestCase("  aaa  ",SimplifyOptions.Full,"aaa")]
+        [TestCase("  AaA  ",SimplifyOptions.Full,"aaa")]
         [TestCase("  \r\na\r\naa  ",SimplifyOptions.Full,"aaa")]
         [TestCase("  \r\n'a\r\na    a\"  ",SimplifyOptions.Full,"'aaa'")]
 	    public void Simplify(string src, SimplifyOptions opts, string result) {

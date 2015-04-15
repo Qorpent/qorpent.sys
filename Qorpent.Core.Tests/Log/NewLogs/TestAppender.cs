@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Qorpent.Log;
+using Qorpent.Log.NewLog;
 
 namespace Qorpent.Core.Tests.Log.NewLogs {
     public class TestAppender:ILogAppender {

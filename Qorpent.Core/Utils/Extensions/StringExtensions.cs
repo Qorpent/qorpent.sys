@@ -244,7 +244,7 @@ namespace Qorpent.Utils.Extensions {
                 result = result.Trim();
             }
             if (options.HasFlag(SimplifyOptions.LowerCase)) {
-                result = result.Trim();
+                result = result.ToLowerInvariant();
             }
             if (options.HasFlag(SimplifyOptions.LfOnly)) {
                 result = result.LfOnly();

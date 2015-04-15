@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Qorpent.Log;
 
-namespace Qorpent.Core.Tests.Log.NewLogs {
+namespace Qorpent.Log.NewLog {
     public static class Loggy {
 
         private static ILoggyManager _manager;

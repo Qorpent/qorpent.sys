@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
-using Qorpent.Log;
 
-namespace Qorpent.Core.Tests.Log.NewLogs {
+namespace Qorpent.Log.NewLog {
     public class LoggyMessage {
         private LogLevel _level;
         private object[] _args;

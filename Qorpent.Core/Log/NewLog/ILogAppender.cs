@@ -1,7 +1,6 @@
 using System;
-using Qorpent.Log;
 
-namespace Qorpent.Core.Tests.Log.NewLogs {
+namespace Qorpent.Log.NewLog {
     public interface ILogAppender:IDisposable {
         void Write(LoggyMessage message);
         void Flush();

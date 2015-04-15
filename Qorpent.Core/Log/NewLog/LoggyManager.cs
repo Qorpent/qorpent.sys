@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Concurrent;
-using System.Runtime.InteropServices;
 
-namespace Qorpent.Core.Tests.Log.NewLogs {
+namespace Qorpent.Log.NewLog {
     public class LoggyManager:ILoggyManager {
         readonly ConcurrentDictionary<string, ILoggy> loggers = new ConcurrentDictionary<string, ILoggy>();
 
