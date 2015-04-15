@@ -192,7 +192,7 @@
     <Compile Include="IO\WebFileSerachMode.cs" />
     <Compile Include="Log\CollectionBasedUserLog.cs" />
     <Compile Include="Log\NewLog\AppenderBase.cs" />
-    <Compile Include="Log\NewLog\ConsoleLogWriter.cs" />
+    <Compile Include="Log\NewLog\ConsoleAppender.cs" />
     <Compile Include="Log\NewLog\DefaultLoggy.cs" />
     <Compile Include="Log\NewLog\ILogAppender.cs" />
     <Compile Include="Log\NewLog\ILoggy.cs" />
