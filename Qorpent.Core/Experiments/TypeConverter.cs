@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Qorpent.Experiments;
 
@@ -66,6 +67,10 @@ namespace Qorpent.Utils
 				if (string.IsNullOrWhiteSpace(s)) {
 					return defaultValue;
 				}
+                if (s.All(char.IsDigit))
+                {
+                    return int.Parse(s);
+                }
 				dbl = ParseToDouble(s, s.Length, defaultValue, safe);
 			}
 			else {
@@ -186,6 +191,9 @@ namespace Qorpent.Utils
 				if (string.IsNullOrWhiteSpace(s)) {
 					return defaultValue;
 				}
+			    if (s.All(char.IsDigit)) {
+			        return long.Parse(s);
+			    }
 				dbl = ParseToDouble(s, s.Length, defaultValue, safe);
 			}
 			else {
