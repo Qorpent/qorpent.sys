@@ -44,6 +44,18 @@
     <Compile Include="Experiments\TypeConverterTests.cs" />
     <Compile Include="Log\DefaultLogManagerTest.cs" />
     <Compile Include="Log\LoggerTest.cs" />
+    <Compile Include="Log\NewLogs\DefaultLoggy.cs" />
+    <Compile Include="Log\NewLogs\ILogAppender.cs" />
+    <Compile Include="Log\NewLogs\ILoggy.cs" />
+    <Compile Include="Log\NewLogs\ILoggyManager.cs" />
+    <Compile Include="Log\NewLogs\Loggy.cs" />
+    <Compile Include="Log\NewLogs\LoggyExtensions.cs" />
+    <Compile Include="Log\NewLogs\LoggyManager.cs" />
+    <Compile Include="Log\NewLogs\LoggyManagerTest.cs" />
+    <Compile Include="Log\NewLogs\LoggyMessage.cs" />
+    <Compile Include="Log\NewLogs\LoggyTest.cs" />
+    <Compile Include="Log\NewLogs\MainCaseTest.cs" />
+    <Compile Include="Log\NewLogs\TestAppender.cs" />
     <Compile Include="Log\SessionLogTest.cs" />
     <Compile Include="Model\EntityTagTest.cs" />
     <Compile Include="Model\HierarchyExtensionTest.cs" />
@@ -110,11 +122,16 @@
     <None Include="*.import" />
     <None Include="*.export" />
     <EmbeddedResource Include="Experiments\testperformance.json" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.IoC\Qorpent.IoC.csproj">
       <Project>{62f22ffa-a1cf-4a74-838c-9ab33a9442ea}</Project>
       <Name>Qorpent.IoC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Log\Qorpent.Log.csproj">
+      <Project>{77D47855-A3D4-4B92-9FC0-C2EDEE27A8A7}</Project>
+      <Name>Qorpent.Log</Name>
     </ProjectReference>
     <ProjectReference Include="..\Qorpent.Mvc\Qorpent.Mvc.csproj">
       <Project>{96885c8f-ad20-41b4-86ee-bc9b3d47d9f9}</Project>
