@@ -298,7 +298,20 @@ namespace Qorpent.Host{
 		/// <summary>
 		///		Набор строк подключения
 		/// </summary>
-		public IDictionary<string, string> ConnectionStrings { get; private set; } 
+		public IDictionary<string, string> ConnectionStrings { get; private set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public IEnumerable<string> SqlScripts {
+			get {
+				if (Definition == null) yield break;
+				var scripts = Definition.Elements("sqlscript");
+				var codes = scripts.Select(_ => _.Attr("code")).Where(_ => !string.IsNullOrWhiteSpace(_));
+				foreach (var code in codes) {
+					yield return EnvironmentInfo.ResolvePath(code);
+				}
+			}
+		}
 	    /// <summary>
 	    /// Журнал
 	    /// </summary>
