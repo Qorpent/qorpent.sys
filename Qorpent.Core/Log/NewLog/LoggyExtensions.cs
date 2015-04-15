@@ -13,7 +13,7 @@ namespace Qorpent.Log.NewLog {
         }
         public static void Warn(this ILoggy loggy, params object[] args)
         {
-            Write(loggy, LogLevel.Warning, (object[])args);
+            Write(loggy, LogLevel.Warn, (object[])args);
         }
         public static void Error(this ILoggy loggy, params object[] args)
         {
@@ -44,7 +44,7 @@ namespace Qorpent.Log.NewLog {
         }
         public static bool IsForWarn(this ILoggy loggy)
         {
-            return loggy.IsFor( LogLevel.Warning);
+            return loggy.IsFor( LogLevel.Warn);
         }
         public static bool IsForError(this ILoggy loggy)
         {

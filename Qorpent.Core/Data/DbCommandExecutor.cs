@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Qorpent.IoC;
+using Qorpent.Log.NewLog;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Data {
@@ -43,11 +44,29 @@ order by ORDINAL_POSITION
 		}
 
 		[Inject] public IDatabaseConnectionProvider ConnectionProvider;
+	    private ILoggy _logger;
 
-		/// <summary>
+	    /// <summary>
 		///     Setup for custom override - test or filtering propose
 		/// </summary>
 		public IDbCommandExecutor ProxyExecutor { get; set; }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject(Name = "dbcommandexecutor.logger")]
+        public ILoggy Logger {
+            get {
+                if (null == _logger) {
+                    _logger = Loggy.Get("dbcommandexecutor.logger");
+                }
+                return _logger;
+            }
+            set { _logger = value; }
+        }
+
+
 
 		/// <summary>
 		///     Производит асинхронный вызов Sql
@@ -62,12 +81,12 @@ order by ORDINAL_POSITION
 					PrepareQuery(info);
 				}
 				else if (info.Trace) {
-					Trace.TraceInformation("not required for prepare: " + info);
+					Logger.Info("not required for prepare: ");
 				}
 
 				if (info.NoExecute) {
 					if (info.Trace) {
-						Trace.TraceInformation("no execution required: " + info);
+						Logger.Info("no execution required: ");
 					}
 					return info;
 				}
@@ -80,7 +99,7 @@ order by ORDINAL_POSITION
 					if (len > 500) {
 						str = str.Substring(500);
 					}
-					Trace.TraceError("error in " + info + ": " + str);
+					Logger.Error("error in " + info + ": " + str, ex);
 				}
 				info.Error = ex;
 				if (null != info.OnError) {
@@ -93,7 +112,7 @@ order by ORDINAL_POSITION
 		private Task<DbCommandWrapper> InternalExecute(DbCommandWrapper info) {
 			if (null != ProxyExecutor) {
 				if (info.Trace) {
-					Trace.TraceInformation("redirect execution to proxy: " + info);
+					Logger.Info("redirect execution to proxy: " + info);
 				}
 				return ProxyExecutor.Execute(info);
 			}
@@ -102,7 +121,7 @@ order by ORDINAL_POSITION
 
 		private DbCommandWrapper InternalExecuteSync(DbCommandWrapper info) {
 			if (info.Trace) {
-				Trace.TraceInformation("begin execution: " + info);
+				Logger.Info("begin execution: " + info);
 			}
 			var wasOpened = info.Connection.State == ConnectionState.Open;
 			SqlInfoMessageEventHandler onMessage = null;
@@ -128,7 +147,8 @@ order by ORDINAL_POSITION
 				}
 			}
 			if (info.Trace) {
-				Trace.TraceInformation("end execution: " + info);
+				Logger.Info("end execution: " + info);
+                
 			}
 			return info;
 		}
@@ -231,7 +251,7 @@ order by ORDINAL_POSITION
 
 		private void PrepareQuery(DbCommandWrapper info) {
 			if (info.Trace) {
-				Trace.TraceInformation("begin prepare query: " + info);
+				Logger.Info("begin prepare query: " + info);
 			}
 
 			if (string.IsNullOrWhiteSpace(info.Query)) {
@@ -272,7 +292,7 @@ order by ORDINAL_POSITION
 
 
 			if (info.Trace) {
-				Trace.TraceInformation("end prepare query: " + info);
+				Logger.Info("end prepare query: " + info);
 			}
 		}
 
@@ -342,7 +362,7 @@ order by ORDINAL_POSITION
 
 		private void PrepareParameters(DbCommandWrapper info) {
 			if (info.Trace) {
-				Trace.TraceInformation("begin prepare parameters: " + info);
+				Logger.Info("begin prepare parameters: " + info);
 			}
 			//если набор парамтеров определен при вызове - не требуется подготавливать параметры
 			if (null != info.Parameters) {
@@ -358,7 +378,7 @@ order by ORDINAL_POSITION
 			StoreParametersFromSource(info);
 
 			if (info.Trace) {
-				Trace.TraceInformation("end prepare parameters: " + info);
+				Logger.Info("end prepare parameters: " + info);
 			}
 		}
 
@@ -531,7 +551,7 @@ order by ORDINAL_POSITION
 
 		private void PrepareConnection(DbCommandWrapper info) {
 			if (info.Trace) {
-				Trace.TraceInformation("begin prepare connection: " + info);
+				Logger.Info("begin prepare connection: " + info);
 			}
 			if (null == info.Connection) {
 				if (string.IsNullOrWhiteSpace(info.ConnectionString)) {
@@ -568,7 +588,7 @@ order by ORDINAL_POSITION
 				}
 			}
 			if (info.Trace) {
-				Trace.TraceInformation("end prepare connection: " + info);
+				Logger.Info("end prepare connection: " + info);
 			}
 		}
 	}

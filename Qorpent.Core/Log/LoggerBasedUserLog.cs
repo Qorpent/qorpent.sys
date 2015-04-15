@@ -110,7 +110,7 @@ namespace Qorpent.Log {
 		/// <param name="host"> </param>
 		public void Warn(string message, object context = null, object host = null) {
 			lock (this) {
-				Write(LogLevel.Warning, message, context, host);
+				Write(LogLevel.Warn, message, context, host);
 			}
 		}
 

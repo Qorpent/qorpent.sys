@@ -29,6 +29,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.Data;
+using Qorpent.IoC;
+using Qorpent.Log.NewLog;
 
 namespace Qorpent.Utils.Extensions
 {
@@ -83,6 +85,22 @@ namespace Qorpent.Utils.Extensions
 		}
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject(Name = "database.logger")]
+        public static ILoggy Log {
+            get {
+                if (null == _log) {
+                    _log = Loggy.Get("database.logger");
+                }
+                return _log;
+            }
+            set { _log = value; }
+        }
+
+
+
 	    /// <summary>
 	    /// Выполняет запрос без результатов
 	    /// </summary>
@@ -102,7 +120,7 @@ namespace Qorpent.Utils.Extensions
 			int r;
 			try{
                 if (showCommandTextWithParams) {
-                    Trace.WriteLine("Sql command: [\r\n" + cmd.CommandAsSql() + "\r\n]", "debug");
+                    Log.Debug("Sql command: [\r\n" + cmd.CommandAsSql() + "\r\n]");
 			    }
 				r = cmd.ExecuteNonQuery();
 
@@ -966,8 +984,9 @@ namespace Qorpent.Utils.Extensions
 
 		private static Assembly _npgsqlassembly = null;
 		private static Type _npgsqlconnectiontype;
+	    private static ILoggy _log;
 
-		private static Assembly NpgSQLAssembly {
+	    private static Assembly NpgSQLAssembly {
 			get {
 				if(null==_npgsqlassembly) {
 					_npgsqlassembly =

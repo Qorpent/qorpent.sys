@@ -22,6 +22,7 @@ using Qorpent.Applications;
 using Qorpent.Events;
 using Qorpent.IoC;
 using Qorpent.Log;
+using Qorpent.Log.NewLog;
 
 namespace Qorpent {
 	///<summary>
@@ -271,11 +272,12 @@ namespace Qorpent {
 		/// </summary>
 		protected IContainer SourceContainer;
 
-		private IUserLog _log;
 
 		///<summary>
 		///	Объект для синхронизации
 		///</summary>
 		protected object Sync = new object();
-	                                    }
+
+	    private IUserLog _log;
+	}
 }
