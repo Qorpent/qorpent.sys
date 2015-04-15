@@ -271,6 +271,7 @@ namespace Qorpent.Host{
 		/// </summary>
 		private void Initialize(){
 			if (State == HostServerState.Initial){
+                Config.Initialize();
 				InitializeLibraries();
 				InitializeApplication();
 				InitializeHttpServer();

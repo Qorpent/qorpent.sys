@@ -32,6 +32,7 @@ namespace Qorpent.Host{
 		private string _tmpFolder;
 		private bool _useApplicationName;
 	    private IUserLog _log;
+	    private bool _wasInitialized;
 
 	    /// <summary>
 	    ///     Формирует конфиг из XML
@@ -47,18 +48,32 @@ namespace Qorpent.Host{
 			if (null != xml){
 				LoadXmlConfig(xml,context);
 			}
-            CreateLogger();
+            
+	    }
+
+
+	    public void Initialize() {
+	        if (!_wasInitialized) {
+                CreateLogger();
+	            _wasInitialized = true;
+	        }
+	        
 	    }
 
 	    private void CreateLogger() {
 	        if (LoggerHost != "" && LoggerPort != 0 && LoggerName != "") {
+                Console.WriteLine("LOGLEVEL " + LogLevel);
 	            var def = Loggy.Get();
 	            def.Level = LogLevel;
                 def.Appenders.Add(new UdpAppender(LoggerHost,LoggerPort){AutoFlushSize = 1});
-	            foreach (LogLevel level in Enum.GetValues(typeof(LogLevel))) {
-	                Loggy.Write(level,"test");
-	            }
-	        }
+
+                Loggy.Debug("debug test");
+                Loggy.Trace("trace test");
+                Loggy.Info("info test");
+                Loggy.Warn("warning test");
+                Loggy.Error("error test", new Exception("Test exception"));
+                Loggy.Fatal("fatal test");
+            }
 	    }
 
 	    /// <summary>

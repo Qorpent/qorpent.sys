@@ -29,6 +29,7 @@ namespace Qorpent.Log.NewLog {
         /// <param name="host"></param>
         /// <param name="port"></param>
         public UdpAppender(string host, int port) {
+            Level = LogLevel.Debug;
             _messageBuffer = new ConcurrentStack<string>();
             _udpClient = new UdpClient();
             _udpClient.Connect(host, port);
@@ -117,16 +118,13 @@ namespace Qorpent.Log.NewLog {
 
             WriteLog4jElement(writer, "properties");
             WriteLog4jElement(writer, "data");
-            writer.WriteAttributeString("name", "log4jmachinename");
+            writer.WriteAttributeString("name", "log4netmachinename");
             writer.WriteAttributeString("value", Environment.MachineName);
             writer.WriteEndElement();
 
 
             writer.WriteEndElement();
-
-            if (level == "ERROR") {
-                writer.WriteElementString("exception", GetExceptionString(new NullReferenceException("fuck")));
-            }
+            if (_message.Exception != null) writer.WriteElementString("exception", GetExceptionString(_message.Exception));
 
             writer.WriteEndElement();
 
