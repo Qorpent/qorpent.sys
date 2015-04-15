@@ -67,6 +67,16 @@ namespace Qorpent.Bxl {
 			return result;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+	    public static XElement ParseSimple(string code) {
+            return new BxlParser().Parse(code, "code.bxl",
+                BxlParserOptions.NoLexData | BxlParserOptions.OnlyCodeAttribute | BxlParserOptions.ExtractSingle);
+        }
+
 		/// <summary>
 		/// 	Parses BXL code string inf XElement
 		/// </summary>

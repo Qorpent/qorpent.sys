@@ -153,8 +153,12 @@ namespace Qorpent.BSharp {
 		/// Контекст класса
 		/// </summary>
 		IBSharpContext Context { get;}
+        /// <summary>
+        /// Дополнительный связанный с классом контекст интерполяции
+        /// </summary>
+	    IConfig InterpolationContext { get; set; }
 
-		/// <summary>
+	    /// <summary>
 		/// Возвращает true при наличии флага
 		/// </summary>
 		/// <param name="attribute"></param>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1049,6 +1050,18 @@ namespace Qorpent.BSharp{
 			}
 		}
 
+	    class seq {
+	        public int Current;
+	        public int Start;
+	        public int Step;
+
+	        public int Next() {
+	            var result = Current;
+	            Current = Current + Step;
+	            return result;
+
+	        }
+	    }
 		private void InterpolateElements(char ancor = '\0', bool codeonly = false){
 			if (ancor == '\0'){
 				ancor = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$';
@@ -1061,20 +1074,58 @@ namespace Qorpent.BSharp{
 					CodeOnly = codeonly,
 					Level = codeonly ? 1 : 0
 				};
-				xi.Interpolate(_cls.Compiled); //,_compiler.Global);
+			    xi.Interpolate(_cls.Compiled,GetInterpolationContext());
 			}
 		}
 
+	    private IConfig GetInterpolationContext() {
+	        if (_cls.InterpolationContext != null) {
+	            return _cls.InterpolationContext;
+	        }
+	        IDictionary<string, seq> _sequences = new ConcurrentDictionary<string, seq>();
+	        var initseq = (Func<string, int, int, string>) ((n, start, step) => {
+	            if (0 == step) {
+	                step = 1;
+	            }
+	            _sequences[n] = new seq {Current = start, Start = start, Step = step};
+	            return n;
+	        });
+	        var advctx = new {
+	            mycls = _cls,
+	            initseq = initseq,
+	            nextseq = (Func<string, int>) (n => {
+	                if (string.IsNullOrWhiteSpace(n)) {
+	                    n = "default";
+	                }
+	                if (!_sequences.ContainsKey(n)) {
+	                    initseq(n, 0, 1);
+	                }
+	                return _sequences[n].Next();
+	            })
+	        };
+	        var result = new ConfigBase(advctx);
+            result.SetParent(_compiler.Global);
+	        _cls.InterpolationContext = result;
+	        return _cls.InterpolationContext;
+	    }
 
-		private void InterpolateFields(){
+
+	    private void InterpolateFields(){
 			// у генериков на этой фазе еще производится полная донастройка элементов по анкору ^
 
 			if (GetConfig().UseInterpolation){
 				var si = new StringInterpolation{AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$'};
+			    var global = GetInterpolationContext();
+
 				bool requireInterpolateNames = _cls.ParamIndex.Keys.Any(_ => _.Contains("__LBLOCK__"));
 				while (true){
 					bool changed = false;
-					foreach (var v in _cls.ParamIndex.ToArray()){
+					foreach (var v in _cls.ParamIndex.OrderBy(_ => {
+					    if (_.Value.ToStr().Contains("${") && _.Value.ToStr().Contains("(")) {
+					        return 1000;
+					    }
+					    return 0;
+					}).ToArray()){
 						string key = v.Key;
 						if (requireInterpolateNames){
 							string esckey = key.Unescape(EscapingType.XmlName);
@@ -1091,7 +1142,8 @@ namespace Qorpent.BSharp{
 						var s = v.Value as string;
 						if (null == s) continue;
 						if (-1 == s.IndexOf('{') || -1 == s.IndexOf(si.AncorSymbol)) continue;
-						string newval = si.Interpolate(s, _cls.ParamSourceIndex, _compiler.Global, key);
+					    var src = s.Contains("(") ? _cls.ParamIndex : _cls.ParamSourceIndex;
+						string newval = si.Interpolate(s,src, global, key);
 						if (newval != s){
 							changed = true;
 							_cls.ParamIndex.Set(key, newval);

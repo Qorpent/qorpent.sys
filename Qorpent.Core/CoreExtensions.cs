@@ -21,7 +21,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
@@ -67,6 +69,17 @@ namespace Qorpent.Utils.Extensions {
 			result.Append(sec);
 			return result.ToString();
 		}
+
+	    public static byte[] ConvertToByteArray(object src) {
+	        if(null==src)return new byte[]{};
+            // Convert an object to a byte array
+    BinaryFormatter bf = new BinaryFormatter();
+    using (var ms = new MemoryStream())
+    {
+        bf.Serialize(ms, src);
+        return ms.ToArray();
+    }
+	    }
 
 		/// <summary>
 		/// 	test if enumerable is not null and contains not null elements

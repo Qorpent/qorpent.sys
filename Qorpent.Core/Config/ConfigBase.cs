@@ -383,7 +383,23 @@ namespace Qorpent.Config {
 		}
 
 		private bool _stornated = false;
-		/// <summary>
+
+	    public ConfigBase(object advctx) {
+	        if (advctx is IConfig) {
+	            this.SetParent((IConfig) advctx);
+	        }
+	        else {
+	            var d = advctx as IDictionary<string, object>;
+	            if (null == d) d = advctx.ToDict();
+                foreach (var o in d)
+                {
+                    Set(o.Key,o.Value);
+                }
+	        }
+	        
+	    }
+
+	    /// <summary>
 		/// Выносит уникальные параметры на максимальный уровень вверх
 		/// </summary>
 		public void Stornate(){
