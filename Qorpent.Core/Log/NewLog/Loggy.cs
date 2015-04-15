@@ -45,7 +45,7 @@ namespace Qorpent.Log.NewLog {
         }
         public static bool IsForWarn()
         {
-            return IsFor(LogLevel.Warning);
+            return IsFor(LogLevel.Warn);
         }
         public static bool IsForError()
         {
@@ -68,7 +68,7 @@ namespace Qorpent.Log.NewLog {
 
         public static void Warn(params object[] test)
         {
-            Write(LogLevel.Warning, (object[])test);
+            Write(LogLevel.Warn, (object[])test);
         }
 
         public static void Error(params object[] test)

@@ -129,6 +129,8 @@ namespace Qorpent.Mvc {
 		}
 
 
+
+
 		///<summary>
 		/// Выполнение действия в заданном контексте и возвращение результата
 		///</summary>
@@ -172,7 +174,7 @@ namespace Qorpent.Mvc {
 			        paramsSb.Append(parameter.Key).Append("=").Append(parameter.Value).Append(", ");
 			    }
                 var message = string.Concat("ActionBase.Process action name [", context.ActionName, "] with params [", paramsSb.ToString(), "] error [", ex.Message, "]");
-                Trace.WriteLine(message, "error");
+                
 				Log.Error("error", ex);
 				throw;
 			}

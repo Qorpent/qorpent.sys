@@ -44,7 +44,7 @@ namespace Qorpent.Log.NewLog {
 					case LogLevel.Info:
 						Console.ForegroundColor = ConsoleColor.White;
 						break;
-					case LogLevel.Warning:
+					case LogLevel.Warn:
 						Console.ForegroundColor = ConsoleColor.Yellow;
 						break;
 					case LogLevel.Error:

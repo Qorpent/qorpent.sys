@@ -16,12 +16,12 @@ namespace Qorpent.Core.Tests.Log{
 			var sl = new SessionLog();
 			var time = DateTime.Now;
 			var m1 = sl.Register(new LogMessage{Code = "a", Level = LogLevel.Error,Time = time.AddSeconds(10),RequireAccept = true});
-			var m2 = sl.Register(new LogMessage { Code = "a", Level = LogLevel.Warning, Time = time.AddSeconds(20) });
+			var m2 = sl.Register(new LogMessage { Code = "a", Level = LogLevel.Warn, Time = time.AddSeconds(20) });
 			var m3 = sl.Register(new LogMessage { Code = "a", Level = LogLevel.Error, Time = time.AddSeconds(30) });
-			var m4 = sl.Register(new LogMessage { Code = "a", Level = LogLevel.Warning, Time = time.AddSeconds(40) ,RequireAccept = true,Accepted = true});
-			var m5 = sl.Register(new LogMessage { Code = "a", Level = LogLevel.Warning, Time = time.AddSeconds(50) ,RequireAccept = true, Active = false});
+			var m4 = sl.Register(new LogMessage { Code = "a", Level = LogLevel.Warn, Time = time.AddSeconds(40) ,RequireAccept = true,Accepted = true});
+			var m5 = sl.Register(new LogMessage { Code = "a", Level = LogLevel.Warn, Time = time.AddSeconds(50) ,RequireAccept = true, Active = false});
 			Assert.AreEqual(4,sl.Get().Count());
-			Assert.AreEqual(4,sl.Get(new SessionLogQuery{StartLevel = LogLevel.Warning}).Count());
+			Assert.AreEqual(4,sl.Get(new SessionLogQuery{StartLevel = LogLevel.Warn}).Count());
 			Assert.AreEqual(2,sl.Get(new SessionLogQuery{StartLevel = LogLevel.Error}).Count());
 			Assert.AreEqual(0,sl.Get(new SessionLogQuery{StartLevel = LogLevel.Fatal}).Count());
 			Assert.AreEqual(3,sl.Get(new SessionLogQuery{StartTimestamp = m1.Timestamp}).Count());

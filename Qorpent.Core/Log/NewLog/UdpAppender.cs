@@ -40,7 +40,8 @@ namespace Qorpent.Log.NewLog {
             lock (sync) {
                 _messageBuffer.Push(xml);
                 if (_messageBuffer.Count >= AutoFlushSize) {
-                    Task.Run(() => Flush());
+                    
+                    Flush();
                 }
             }
         }
@@ -49,7 +50,7 @@ namespace Qorpent.Log.NewLog {
             lock (sync) {
                 foreach (var xmlMessage in _messageBuffer) {
                     var payload = Encoding.UTF8.GetBytes(xmlMessage);
-                    _udpClient.Send(payload, payload.Length);
+                    _udpClient.SendAsync(payload, payload.Length);
                 }
 
                 _messageBuffer.Clear();
