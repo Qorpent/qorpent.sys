@@ -145,6 +145,7 @@
     <Compile Include="FilterState.cs" />
     <Compile Include="HelpAttribute.cs" />
     <Compile Include="Host\HostConfigLog.cs" />
+    <Compile Include="Host\UdpTraceListenerLog4j.cs" />
     <Compile Include="Host\UdpTraceListener.cs" />
     <Compile Include="Host\HostApplicationMode.cs" />
     <Compile Include="Host\HostBinding.cs" />
