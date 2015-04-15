@@ -65,7 +65,7 @@ namespace Qorpent.Host{
                 Console.WriteLine("LOGLEVEL " + LogLevel);
 	            var def = Loggy.Get();
 	            def.Level = LogLevel;
-                def.Appenders.Add(new UdpAppender(LoggerHost,LoggerPort){AutoFlushSize = 1});
+                def.Appenders.Add(new UdpAppender(LoggerHost,LoggerPort){AutoFlushSize = 1,Format = LoggerFormat});
 
                 Loggy.Debug("debug test");
                 Loggy.Trace("trace test");
@@ -75,6 +75,8 @@ namespace Qorpent.Host{
                 Loggy.Fatal("fatal test");
             }
 	    }
+
+	    public string LoggerFormat { get; set; }
 
 	    /// <summary>
 		///     Формирует конфиг по умолчанию
@@ -476,9 +478,10 @@ namespace Qorpent.Host{
                 Loggy.Info(string.Concat("AppId is [", appid , "]"));
 	        }
 
-            LoggerName = xml.ResolveValue("loggername", "").ToStr();
-            LoggerHost = xml.ResolveValue("loggerhost", "").ToStr();
+            LoggerName = xml.ResolveValue("loggername", "");
+            LoggerHost = xml.ResolveValue("loggerhost", "");
             LoggerPort = xml.ResolveValue("loggerport", "0").ToInt();
+            LoggerFormat = xml.ResolveValue("loggerformat", "");
 
             this.AccessAllowOrigin = xml.ResolveValue("origin", "");
 

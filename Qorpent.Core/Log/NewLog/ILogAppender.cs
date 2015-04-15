@@ -6,4 +6,5 @@ namespace Qorpent.Log.NewLog {
         void Flush();
         LogLevel Level { get; set; }
     }
+    
 }

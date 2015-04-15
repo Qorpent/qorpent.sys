@@ -12,7 +12,7 @@ using Qorpent.Security;
 namespace Qorpent.Log.NewLog {
     /// <summary>
     /// </summary>
-    public class UdpAppender : ILogAppender {
+    public class UdpAppender : AppenderBase {
         public int AutoFlushSize = 1;
         private readonly ConcurrentStack<string> _messageBuffer;
         private readonly UdpClient _udpClient;
@@ -35,7 +35,7 @@ namespace Qorpent.Log.NewLog {
             _udpClient.Connect(host, port);
         }
 
-        public void Write(LoggyMessage message) {
+        public override void Write(LoggyMessage message) {
             var xml = GetEventXml(message);
             lock (sync) {
                 _messageBuffer.Push(xml);
@@ -95,7 +95,7 @@ namespace Qorpent.Log.NewLog {
             //</log4j:event>
             var category = _message.Level.ToString();
             var level = category;
-            var message = _message.Message;
+            var message = GetText(_message);
             var loggername = _message.LoggerName;
 
 

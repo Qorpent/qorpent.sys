@@ -3,23 +3,31 @@ using System.Linq;
 
 namespace Qorpent.Log.NewLog {
     public class LoggyMessage {
-        private LogLevel _level;
         private object[] _args;
         private string _message;
         private Exception _exception;
+        private DateTime _timestamp;
+        private string _userName;
         public string LoggerName { get; set; }
 
         public LoggyMessage(LogLevel level, params object[] args) {
-            _level = level;
+            Level = level;
             _args = args;
         }
 
-        public LogLevel Level {
+        public LogLevel Level { get; set; }
+
+        public string UserName {
             get {
-                return _level;
-                
+                if (null == _userName) {
+                    _userName = "unknown";
+                    if (Applications.Application.HasCurrent) {
+                        _userName = Applications.Application.Current.Principal.CurrentUser.Identity.Name;
+                    }
+                }
+                return _userName;
             }
-            set { _level = value; }
+            set { _userName = value; }
         }
 
         public string Message {
@@ -31,7 +39,7 @@ namespace Qorpent.Log.NewLog {
             }
             set { _message = value; }
         }
-        static Exception Stub  = new Exception();
+        static readonly Exception Stub  = new Exception();
         public Exception Exception {
             get {
                 if (null == _exception) {
@@ -41,5 +49,51 @@ namespace Qorpent.Log.NewLog {
             }
             set { _exception = value; }
         }
+
+        public string ErrorMessage {
+            get { return null == Exception ? "" : Exception.Message; }
+        }
+
+        public DateTime Timestamp {
+            get {
+                if (_timestamp.Year <= 1900) {
+                    _timestamp = _args.OfType<DateTime>().FirstOrDefault();
+                    if (_timestamp.Year <= 1900) {
+                        _timestamp = DateTime.Now;
+                    }
+                }
+                return _timestamp;
+            }
+            set { _timestamp = value; }
+        }
+
+        public int Year {
+            get { return Timestamp.Year; }
+        }
+        public int Month
+        {
+            get { return Timestamp.Month; }
+        }
+        public int Day
+        {
+            get { return Timestamp.Day; }
+        }
+        public int Hour
+        {
+            get { return Timestamp.Hour; }
+        }
+        public int Minute
+        {
+            get { return Timestamp.Minute; }
+        }
+        public int Second
+        {
+            get { return Timestamp.Second; }
+        }
+        public int MSecond
+        {
+            get { return Timestamp.Millisecond; }
+        }
+
     }
 }
