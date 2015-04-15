@@ -63,7 +63,10 @@ namespace Qorpent.Scaffolding.Model{
 		///     Ссылка на исходный класс
 		/// </summary>
 		public IBSharpClass TargetClass { get; set; }
-
+		/// <summary>
+		///		Отключение дефолтных полей
+		/// </summary>
+		public bool NoDefaultRows { get; set; }
 		/// <summary>
 		///     Имя класса/таблицы
 		/// </summary>
@@ -254,6 +257,7 @@ namespace Qorpent.Scaffolding.Model{
 			Cloneable = xml.GetSmartValue("cloneable").ToBool();
 			ResolveAble = xml.GetSmartValue("resolve").ToBool();
 			CyclicId = xml.GetSmartValue("cyclicid").ToBool();
+			NoDefaultRows = xml.GetSmartValue("nodefaultrows").ToBool();
 		}
 		/// <summary>
 		/// </summary>

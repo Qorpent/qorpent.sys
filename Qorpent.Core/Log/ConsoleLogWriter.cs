@@ -29,6 +29,7 @@ namespace Qorpent.Log {
 		/// <param name="message"> </param>
 		protected override void InternalWrite(LogMessage message) {
 			var text = GetText(message);
+		    
 			try {
 				switch (message.Level) {
 					case LogLevel.Debug:

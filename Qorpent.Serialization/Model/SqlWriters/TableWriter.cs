@@ -38,8 +38,10 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				WriteAllocation(sb);
 				sb.Append(";");
 				sb.AppendLine();
-				GenerateDefaultRows(sb, 0, "/", "NULL/ROOT");
-				GenerateDefaultRows(sb, -1, "ERR", "ERROR/LOST", -1);
+				if (!Table.NoDefaultRows) {
+					GenerateDefaultRows(sb, 0, "/", "NULL/ROOT");
+					GenerateDefaultRows(sb, -1, "ERR", "ERROR/LOST", -1);
+				}
 				SetSqlComment(sb, Table, null);
 				foreach (Field f in fields){
 					SetSqlComment(sb, f.Table, f);

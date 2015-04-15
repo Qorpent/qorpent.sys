@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -14,10 +13,13 @@ namespace Qorpent.Host {
     /// <summary>
     /// 
     /// </summary>
-    public class UdpTraceListener : TraceListener {
+    public class UdpTraceListenerLog4j : TraceListener {
         private UdpClient _udpClient;
         private ConcurrentStack<string> _messageBuffer;
         private string _loggerName;
+
+        private static readonly string _xmlPrefix = "";
+        private static readonly string _xmlNamespace = "http://jakarta.apache.org/log4j/";
 
         /// <summary>
         /// 
@@ -28,15 +30,11 @@ namespace Qorpent.Host {
             }
         }
 
-        public string GetExceptionString(Exception ex) {
-            return ex.GetType().ToString() + ": " + ex.Message;
-        }
-
         /// <summary>
         /// 
         /// </summary>
-        public UdpTraceListener()
-            : this("localhost", 7071, "UdpTraceListener") {
+        public UdpTraceListenerLog4j()
+            : this("127.0.0.2", 7071, "UdpTraceListener") {
         }
 
         /// <summary>
@@ -45,7 +43,7 @@ namespace Qorpent.Host {
         /// <param name="host"></param>
         /// <param name="port"></param>
         /// <param name="loggerName"></param>
-        public UdpTraceListener(string host, int port, string loggerName) {
+        public UdpTraceListenerLog4j(string host, int port, string loggerName) {
             _loggerName = loggerName;
             _messageBuffer = new ConcurrentStack<string>();
             _udpClient = new UdpClient();
@@ -88,7 +86,94 @@ namespace Qorpent.Host {
             _messageBuffer.Push(GetEventXml(message, category));
         }
 
-        public string GetEventXml(string message, string category) {
+        private string GetEventXml(string message, string category) {
+            // The format:
+            //<log4j:event logger="{LOGGER}" level="{LEVEL}" thread="{THREAD}" timestamp="{TIMESTAMP}">
+            //  <log4j:message><![CDATA[{ERROR}]]></log4j:message>
+            //  <log4j:NDC><![CDATA[{MESSAGE}]]></log4j:NDC>
+            //  <log4j:throwable><![CDATA[{EXCEPTION}]]></log4j:throwable>
+            //  <log4j:locationInfo class="org.apache.log4j.chainsaw.Generator" method="run" file="Generator.java" line="94"/>
+            //  <log4j:properties>
+            //	<log4j:data name="log4jmachinename" value="{SOURCE}"/>
+            //	<log4j:data name="log4japp" value="{APP}"/>
+            //  </log4j:properties>
+            //</log4j:event>
+            string level = "INFO";
+            if (string.IsNullOrEmpty(category))
+                category = "info";
+
+            switch (category.ToLower()) {
+                case "fatal":
+                    level = "FATAL";
+                    break;
+
+                case "warning":
+                case "warn":
+                    level = "WARN";
+                    break;
+
+                case "error":
+                    level = "ERROR";
+                    break;
+
+                case "debug":
+                    level = "DEBUG";
+                    break;
+
+                case "trace":
+                    level = "TRACE";
+                    break;
+
+                default:
+                    break;
+            }
+
+            StringBuilder builder = new StringBuilder();
+
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+
+            XmlWriter writer = XmlWriter.Create(builder, settings);
+            WriteLog4jElement(writer, "event");
+            writer.WriteAttributeString("logger", _loggerName);
+            writer.WriteAttributeString("level", level);
+            writer.WriteAttributeString("thread", Thread.CurrentThread.ManagedThreadId.ToString());
+            writer.WriteAttributeString("timestamp", XmlConvert.ToString(ConvertToUnixTimestamp(DateTime.Now)));
+
+            WriteLog4jElement(writer, "message");
+            writer.WriteCData(Only30KBytes(RemoveInvalidXmlChars(message)));
+            writer.WriteEndElement();
+            WriteLog4jElementString(writer, "NDC", "");
+            WriteLog4jElementString(writer, "throwable", "");
+
+            WriteLog4jElement(writer, "locationInfo");
+            writer.WriteAttributeString("class", "");
+            writer.WriteAttributeString("run", "");
+            writer.WriteAttributeString("file", "");
+            writer.WriteAttributeString("line", "1");
+            writer.WriteEndElement();
+
+            WriteLog4jElement(writer, "properties");
+            WriteLog4jElement(writer, "data");
+            writer.WriteAttributeString("name", "log4jmachinename");
+            writer.WriteAttributeString("value", Environment.MachineName);
+            writer.WriteEndElement();
+
+            WriteLog4jElement(writer, "data");
+            writer.WriteAttributeString("name", "log4japp");
+            writer.WriteAttributeString("value", Assembly.GetCallingAssembly().FullName);
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+
+            writer.WriteEndElement();
+
+            writer.Flush();
+            return builder.ToString();
+        }
+
+
+
+        private string GetEventXmlLog4jFormat(string message, string category) {
             // The format:
             //<log4j:event logger="{LOGGER}" level="{LEVEL}" thread="{THREAD}" timestamp="{TIMESTAMP}">
             //  <log4j:message><![CDATA[{ERROR}]]></log4j:message>
@@ -140,14 +225,22 @@ namespace Qorpent.Host {
             XmlWriter writer = XmlWriter.Create(builder, settings);
             WriteLog4jElement(writer, "event");
             writer.WriteAttributeString("logger", _loggerName);
-            writer.WriteAttributeString("timestamp", DateTime.Now.ToString("o"));
-
             writer.WriteAttributeString("level", level);
             writer.WriteAttributeString("thread", Thread.CurrentThread.ManagedThreadId.ToString());
-            writer.WriteAttributeString("domain", "todo");
-            writer.WriteAttributeString("username", "todo\\username");
+            writer.WriteAttributeString("timestamp", XmlConvert.ToString(ConvertToUnixTimestamp(DateTime.Now)));
 
-            writer.WriteElementString("message", Only30KBytes(RemoveInvalidXmlChars(message)));
+            WriteLog4jElement(writer, "message");
+            writer.WriteCData(Only30KBytes(RemoveInvalidXmlChars(message)));
+            writer.WriteEndElement();
+            WriteLog4jElementString(writer, "NDC", "");
+            WriteLog4jElementString(writer, "throwable", "");
+
+            WriteLog4jElement(writer, "locationInfo");
+            writer.WriteAttributeString("class", "");
+            writer.WriteAttributeString("run", "");
+            writer.WriteAttributeString("file", "");
+            writer.WriteAttributeString("line", "1");
+            writer.WriteEndElement();
 
             WriteLog4jElement(writer, "properties");
             WriteLog4jElement(writer, "data");
@@ -155,14 +248,11 @@ namespace Qorpent.Host {
             writer.WriteAttributeString("value", Environment.MachineName);
             writer.WriteEndElement();
 
-
-            
-
+            WriteLog4jElement(writer, "data");
+            writer.WriteAttributeString("name", "log4japp");
+            writer.WriteAttributeString("value", Assembly.GetCallingAssembly().FullName);
             writer.WriteEndElement();
-
-            if (level == "ERROR") {
-                writer.WriteElementString("exception", GetExceptionString(new NullReferenceException("fuck")));
-            }
+            writer.WriteEndElement();
 
             writer.WriteEndElement();
 
@@ -185,13 +275,11 @@ namespace Qorpent.Host {
         }
 
         private void WriteLog4jElement(XmlWriter writer, string name) {
-            //writer.WriteStartElement(_xmlPrefix, name, _xmlNamespace);
-            writer.WriteStartElement(name);
+            writer.WriteStartElement(_xmlPrefix, name, _xmlNamespace);
         }
 
         private void WriteLog4jElementString(XmlWriter writer, string name, string value) {
-            //writer.WriteElementString(_xmlPrefix, name, _xmlNamespace, value);
-            writer.WriteElementString(name,value);
+            writer.WriteElementString(_xmlPrefix, name, _xmlNamespace, value);
         }
 
         private double ConvertToUnixTimestamp(DateTime date) {
