@@ -158,9 +158,9 @@ namespace Qorpent.Serialization.Tests {
 
 		[Test]
 		public void datetime_serialized() {
-			var d = new DateTime(2010, 1, 12, 13, 15, 36);
+			var d = new DateTime(2010, 1, 12, 13, 15, 36,DateTimeKind.Utc);
 			var utcOffset = TimeZone.CurrentTimeZone.GetUtcOffset(d);
-			test(d, ("\"2010-01-12T13:15:36" + ((utcOffset < TimeSpan.Zero) ? "-" : "+") + utcOffset.ToString("hhmm")) +"\"");
+		    test(d, "\"2010-01-12T13:15:36+0000\"");
 		}
 
 		[Test]
