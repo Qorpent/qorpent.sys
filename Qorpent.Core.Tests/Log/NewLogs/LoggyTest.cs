@@ -19,7 +19,7 @@ namespace Qorpent.Core.Tests.Log.NewLogs
         [SetUp]
         public void Setup() {
             this.logger = new DefaultLoggy();
-            logger.Appenders.Add(this.appender = new TestAppender());
+            logger.Appenders.Add(this.appender = new TestAppender{Level = LogLevel.Info});
 
         }
 
@@ -43,7 +43,6 @@ namespace Qorpent.Core.Tests.Log.NewLogs
         [Test]
         public void ValidlyDetectsLevel() {
             logger.Level = LogLevel.Debug;
-
             Assert.True(logger.IsForInfo());
             Assert.False(logger.IsForTrace());
             appender.Level = LogLevel.Trace;
