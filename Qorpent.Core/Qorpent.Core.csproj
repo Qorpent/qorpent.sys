@@ -296,6 +296,7 @@
     <Compile Include="Serialization\XHtml5XmlWriter.cs" />
     <Compile Include="ServiceState.cs" />
     <Compile Include="Tasks\IJob.cs" />
+    <Compile Include="Tasks\ITaskStateProvider.cs" />
     <Compile Include="Tasks\Job.cs" />
     <Compile Include="Tasks\UpdateTaskBase.cs" />
     <Compile Include="TransactionAction.cs" />
