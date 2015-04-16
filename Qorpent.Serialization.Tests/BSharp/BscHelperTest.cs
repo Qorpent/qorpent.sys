@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using Qorpent.BSharp;
 using Qorpent.Scaffolding.Model;
@@ -105,6 +106,7 @@ TableBase mytable schema=test
             File.WriteAllText(bxls, @"
 class A prototype=xxx
 ");
+            Thread.Sleep(100);
             var ctx = BscHelper.Execute(dir);
             var find = ctx.ResolveAll("xxx");
             Assert.AreEqual(1,find.Count());

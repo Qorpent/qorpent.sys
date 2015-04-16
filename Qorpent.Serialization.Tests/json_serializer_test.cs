@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml.Linq;
 using NUnit.Framework;
 
@@ -79,7 +80,7 @@ namespace Qorpent.Serialization.Tests {
         [TestCase('c',"\"c\"")]
         [TestCase(99999999999999L, "\"99999999999999\"")]
         [TestCase(99999L, "99999")]
-        [TestCase("1901-02-01", "\"1901-02-01T00:00:00+0500\"")]
+        [TestCase("1901-02-01T00:00:00+0300", "\"1901-01-31T21:00:00+0000\"")]
         public void ValueSerialized(object src, string result)
         {
             if (null!=src && src.Equals( 111.3)) {
@@ -88,7 +89,9 @@ namespace Qorpent.Serialization.Tests {
             if (null != src && src.ToString().StartsWith("19")) {
                 var d  = DateTime.Parse(src.ToString());
                 src = d;
+
             }
+           
             test(src, result);
         }
 
@@ -155,9 +158,9 @@ namespace Qorpent.Serialization.Tests {
 
 		[Test]
 		public void datetime_serialized() {
-			var d = new DateTime(2010, 1, 12, 13, 15, 36);
+			var d = new DateTime(2010, 1, 12, 13, 15, 36,DateTimeKind.Utc);
 			var utcOffset = TimeZone.CurrentTimeZone.GetUtcOffset(d);
-			test(d, ("\"2010-01-12T13:15:36" + ((utcOffset < TimeSpan.Zero) ? "-" : "+") + utcOffset.ToString("hhmm")) +"\"");
+		    test(d, "\"2010-01-12T13:15:36+0000\"");
 		}
 
 		[Test]
