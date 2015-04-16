@@ -161,7 +161,7 @@ class a prototype=dbtable qorpent-access=ReadWrite
 			var model = PersistentModel.Compile(@"
 class a prototype=dbtable
 ");
-			var code = new PokoAdapterWriter(model["a"]) { WithHeader = false }.ToString();
+			var code = new PokoAdapterWriter(model["a"]) { WithHeader = false, ProcessGetFields = false}.ToString();
 			Console.WriteLine(code.Replace("\"", "\"\""));
 			Assert.AreEqual(@"
 using System;
@@ -253,7 +253,7 @@ namespace .Adapters {
 class a prototype=dbtable
 	geometry gis
 ");
-			var code = new PokoAdapterWriter(model["a"]) { WithHeader = false }.ToString();
+			var code = new PokoAdapterWriter(model["a"]) { WithHeader = false, ProcessGetFields = false}.ToString();
 			Console.WriteLine(code.Replace("\"", "\"\""));
 			Assert.AreEqual(@"
 using System;
@@ -349,7 +349,7 @@ class a prototype=dbtable
 	ref b
 class b prototype=dbtable
 ");
-			var code = new PokoAdapterWriter(model["a"]) { WithHeader = false }.ToString();
+			var code = new PokoAdapterWriter(model["a"]) { WithHeader = false, ProcessGetFields = false}.ToString();
 			Console.WriteLine(code.Replace("\"", "\"\""));
 			Assert.AreEqual(@"
 using System;
@@ -446,7 +446,7 @@ class a prototype=dbtable
 	string y nosql
 	string z nocode
 ");
-			var code = new PokoAdapterWriter(model["a"]) { WithHeader = false }.ToString();
+			var code = new PokoAdapterWriter(model["a"]) { WithHeader = false, ProcessGetFields = false}.ToString();
 			Console.WriteLine(code.Replace("\"", "\"\""));
 			Assert.AreEqual(@"
 using System;

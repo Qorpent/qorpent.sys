@@ -48,7 +48,10 @@ namespace Qorpent.Log {
 		/// 	Warnings (4 level)
 		/// </summary>
 		Warn = 8,
-		
+		/// <summary>
+		/// 
+		/// </summary>
+		Warning = Warn,
 		/// <summary>
 		/// 	Errors (5 level)
 		/// </summary>
