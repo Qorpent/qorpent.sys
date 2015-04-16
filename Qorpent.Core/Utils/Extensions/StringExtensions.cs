@@ -53,6 +53,27 @@ namespace Qorpent.Utils.Extensions {
 			trace = Regex.Replace(trace, @"[\S]+?:строка\s\d+", " в <strong>$0</strong>");
 			return trace;
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static string UnescapeUrlData(string query) {
+            query = query.Replace("+", " ");
+            return Uri.UnescapeDataString(query);
+        }
+
+        public static IDictionary<string,string> ParseUrlQueryData(string query, bool unescape = true) {
+            var elements = query.SmartSplit(false, false, '&');
+            var result = new Dictionary<string, string>();
+            foreach (var element in elements) {
+                var pair = element.Split('=');
+                var name = unescape?UnescapeUrlData(pair[0]):pair[0];
+                var value = unescape?UnescapeUrlData(pair[1]):pair[1];
+                result[name] = value;
+            }
+            return result;
+        }
 		
 		/// <summary>
 		/// Замещает символы, не совместимые с именем файла

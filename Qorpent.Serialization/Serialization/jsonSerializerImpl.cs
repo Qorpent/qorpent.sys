@@ -80,8 +80,17 @@ namespace Qorpent.Serialization {
 				var utcOffset = TimeZone.CurrentTimeZone.GetUtcOffset(d);
 				Output.Write("\"" + d.ToString("yyyy-MM-ddTHH:mm:ss" + ((utcOffset < TimeSpan.Zero) ? "-" : "+") + utcOffset.ToString("hhmm")) + "\"");
 			}
-			else if (value is int || value is long) {
-				Output.Write(value.ToString());
+			else if (value is int) {
+			    Output.Write(value.ToString());
+			}
+			else if (value is long) {
+			    var l = (long) value;
+			    if (l <= int.MaxValue && l >= int.MinValue) {
+			        Output.Write(l.ToString());
+			    }
+			    else {
+			        Output.Write("\""+l.ToString()+"\"");
+			    }
 			}
 			else if (value is double || value is decimal || value is float) {
 				Output.Write(Convert.ToDouble(value).ToString("0.########", CultureInfo.InvariantCulture));
