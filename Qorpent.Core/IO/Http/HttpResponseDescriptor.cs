@@ -13,7 +13,9 @@ namespace Qorpent.IO.Http {
         public const string LastModifiedHeader = "Last-Modified";
 
         public static implicit operator HttpResponseDescriptor(HttpListenerContext context) {
-            return new HttpListenerResponseDescriptor(context.Response);
+            return new HttpListenerResponseDescriptor(context.Response) {
+                SupportGZip = ((HttpRequestDescriptor) context).GetHeader("Accept-Encoding").Contains("gzip")
+            };
         }
 
         public static implicit operator HttpResponseDescriptor(HttpListenerResponse response) {
@@ -49,6 +51,8 @@ namespace Qorpent.IO.Http {
             }
             return v;
         }
+
+        public bool SupportGZip { get; set; }
 
         public class HttpListenerResponseDescriptor : HttpResponseDescriptor {
             private readonly HttpListenerResponse _response;
@@ -104,32 +108,48 @@ namespace Qorpent.IO.Http {
             }
         }
 
-        public void Finish(object data, string mime = "application/json", int status = 200, bool useGzip = false) {
+        public void Finish(object data, string mime = "application/json", int status = 200) {
             StatusCode = status;
             ContentType = mime;
-            var buffer = GetBuffer(data);
-            if (useGzip) {
-                SetHeader("Content-Encoding","gzip");
-                var ms = new MemoryStream(buffer);
-                using (var g = new GZipStream(Stream, CompressionLevel.Optimal))
-                {
+            var sendobject = GetSendObject(data);
+            if (SupportGZip) {
+                SetHeader("Content-Encoding", "gzip");
+                var ms = EnsureStream(sendobject);
+                using (var g = new GZipStream(Stream, CompressionLevel.Optimal)) {
                     ms.CopyTo(g, 2 ^ 14);
 
                 }
             }
-            Stream.Write(buffer, 0, buffer.Length);         
+            else {
+                var bytes = sendobject as byte[];
+                if (null!=bytes) {
+                    Stream.Write(bytes, 0, bytes.Length);
+                }
+                else {
+                    ((Stream)sendobject).CopyTo(Stream);
+                }
+            }
+
             Close();
         }
 
-        private byte[] GetBuffer(object data) {
+        private Stream EnsureStream(object sendobject) {
+            if (sendobject is Stream) return sendobject as Stream;
+            return new MemoryStream(sendobject as byte[]);
+        }
+
+        private object GetSendObject(object data) {
+            
+            
             if(null==data)return new byte[]{};
+            if (data is Stream) return data;
             if (data is byte[]) return (byte[]) data;
             return Encoding.UTF8.GetBytes(data.ToString());
         }
 
         public virtual void Close() {
 
-            if (null != this.Stream) {
+            if (null != this.Stream && !NoCloseStream) {
                 this.Stream.Close();
             }
         }
@@ -144,6 +164,7 @@ namespace Qorpent.IO.Http {
 
         protected IDictionary<string, string> Headers { get; set; }
         public CookieCollection Cookies { get; set; }
+        public bool NoCloseStream { get; set; }
 
         public virtual string GetHeader(string name) {
             Headers = Headers ?? new ConcurrentDictionary<string, string>();

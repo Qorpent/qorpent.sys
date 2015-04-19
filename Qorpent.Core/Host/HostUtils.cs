@@ -1,5 +1,9 @@
 ﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading;
 using System.Xml.Linq;
+using Qorpent.IO.Http;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host{
@@ -186,6 +190,18 @@ namespace Qorpent.Host{
 	        return server.Factory.GetHandler(server, uri, null);
 
 	    }
+
+	    public static string Imitate(this IHostServer host, string command) {
+            var h = host.GetHandler(command);
+            var ms = new MemoryStream();
+            var rs = new HttpResponseDescriptor { Stream = ms, NoCloseStream = true };
+            var rq = new HttpRequestDescriptor { Uri = new Uri("http://localhost" + command) };
+            h.Run(host, rq, rs, null, new CancellationToken());
+            var len = ms.Position;
+            ms.Position = 0;
+            var result = Encoding.UTF8.GetString(ms.GetBuffer(), 0, (int)len);
+            return result;
+	    }   
 
 	    private static string ParseConnecitonString(string src) {
 	        var parts = src.ReadAsDictionary();
