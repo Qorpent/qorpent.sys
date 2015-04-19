@@ -16,7 +16,7 @@ namespace Qorpent.Host{
 		}
 
 		public void Execute(){
-			_server.Auth.Authenticate(_context);
+			_server.Auth.Authenticate(_context,_context);
 			string callbackEndPoint = _context.Request.Headers.Get("qorpent-callback-endpoint");
 			_context.Response.Headers["Server"] = "Qorpent RESTFull Server 0.1";
 			_context.Response.ContentType = "application/json; charset=utf-8";
@@ -75,8 +75,8 @@ namespace Qorpent.Host{
 
 		private void ProcessRequest(string callbackEndPoint){
 			_server.RequestCount++;
-			IRequestHandler handler = _server.Factory.GetHandler(_server, _context, callbackEndPoint);
-			handler.Run(_server, _context, callbackEndPoint, _cancel);
+			IRequestHandler handler = _server.Factory.GetHandler(_server, _context,_context, callbackEndPoint);
+			handler.Run(_server, _context,_context, callbackEndPoint, _cancel);
 		}
 	}
 }

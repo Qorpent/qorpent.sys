@@ -33,8 +33,8 @@ namespace Qorpent.Host.Lib.Tests
 		public void Delegate()
 		{
 			srv.OnContext("/echo", 
-				c => 
-					c.Response.Finish(c.Request.Url.Query.Substring(1))
+				(rq,rs) => 
+					rs.Finish(rq.Uri.Query.Substring(1))
 				);
 			var wcl = new WebClient();
 			var str = wcl.DownloadString("http://127.0.0.1:8094/echo?x");

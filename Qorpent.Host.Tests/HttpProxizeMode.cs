@@ -81,12 +81,12 @@ namespace Qorpent.Host.Tests
             aconfig2.Proxize["/call1"] = "appid=98";
             var h1 = new HostServer(aconfig1);
             var h2 = new HostServer(aconfig2);
-            h1.OnContext("/call1", _ => {
-                if (_.Request.HttpMethod == "POST") {
-                    _.Response.Finish(new StreamReader(_.Request.InputStream).ReadToEnd());
+            h1.OnContext("/call1", (rq,rs) => {
+                if (rq.Method == "POST") {
+                    rs.Finish(new StreamReader(rq.Stream).ReadToEnd());
                 }
                 else {
-                    _.Response.Finish("hello!");    
+                    rs.Finish("hello!");    
                 }
                 
             });

@@ -3,6 +3,7 @@ using System.Net;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
+using Qorpent.IO.Http;
 using Qorpent.Mvc;
 using Qorpent.Mvc.HttpHandler;
 using Qorpent.Security;
@@ -12,7 +13,7 @@ namespace Qorpent.Host.Qweb
 	/// <summary>
 	/// Qweb-handler для HostServer
 	/// </summary>
-	public class HostQwebHandler:IRequestHandler	
+	public class HostQwebHandler:RequestHandlerBase	
 	{
 		/// <summary>
 		/// Выполняет указанный запрос
@@ -55,7 +56,41 @@ namespace Qorpent.Host.Qweb
 
 		}
 
-		private static void SetCurrentUser(IHostServer server,IPrincipal user)
+	    public override void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint,
+	        CancellationToken cancel) {
+                SetCurrentUser(server, request.User);
+                response.ContentEncoding = Encoding.UTF8;
+            response.SetHeader("Content-Encoding","utf-8");
+                var context = server.Application.Container.Get<IMvcContext>(null, server, request,response, callbackEndPoint, cancel);
+                context.NotModified = false;
+                try
+                {
+                    BindContext(context);
+                    Execute(context);
+                    if (context.NotModified)
+                    {
+                        MvcHandler.ProcessNotModified(context);
+                        context.Output.Close();
+                    }
+                    else
+                    {
+                        MvcHandler.SetModifiedHeader(context);
+                        RenderResult(context);
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ProcessError(context, ex);
+                }
+                finally
+                {
+                    context.Release();
+                }
+
+	    }
+
+	    private static void SetCurrentUser(IHostServer server,IPrincipal user)
 		{
 			
 			server.Application.Principal.SetCurrentUser(user);

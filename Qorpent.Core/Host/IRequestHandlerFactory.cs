@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Qorpent.IO.Http;
 
 namespace Qorpent.Host{
 	/// <summary>
@@ -9,10 +10,9 @@ namespace Qorpent.Host{
 		///     Возвращает хэндлер, соответствующий запросу
 		/// </summary>
 		/// <param name="server"></param>
-		/// <param name="context"></param>
 		/// <param name="callbackEndPoint"></param>
 		/// <returns></returns>
-		IRequestHandler GetHandler(IHostServer server, HttpListenerContext context, string callbackEndPoint);
+		IRequestHandler GetHandler(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint);
 
 		/// <summary>
 		/// </summary>

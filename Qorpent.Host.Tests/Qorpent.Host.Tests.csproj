@@ -22,7 +22,6 @@
     <Compile Include="BasicServerTests.cs" />
     <Compile Include="HostConfigTests.cs" />
     <Compile Include="HttpProxizeMode.cs" />
-    <Compile Include="RequestDataRetrieverTest.cs" />
     <Compile Include="ServerParametersTest.cs" />
     <Compile Include="SimpleSocketTest.cs" />
   </ItemGroup>

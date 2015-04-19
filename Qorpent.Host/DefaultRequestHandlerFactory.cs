@@ -5,6 +5,7 @@ using System.Net;
 using System.Runtime.Remoting.Contexts;
 using Qorpent.Host.Handlers;
 using Qorpent.Host.Qweb;
+using Qorpent.IO.Http;
 using Qorpent.IO.Net;
 using Qorpent.Utils.Extensions;
 
@@ -18,12 +19,12 @@ namespace Qorpent.Host{
 		///     Возвращает хэндлер, соответствующий запросу
 		/// </summary>
 		/// <param name="server"></param>
-		/// <param name="context"></param>
+
 		/// <param name="callbackEndPoint"></param>
 		/// <returns></returns>
-		public IRequestHandler GetHandler(IHostServer server, HttpListenerContext context, string callbackEndPoint){
+		public IRequestHandler GetHandler(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint){
 			lock (this){
-				Uri uri = context.Request.Url;
+				Uri uri = request.Uri;
 				return GetHandler(server, uri, callbackEndPoint);
 			}
 		}

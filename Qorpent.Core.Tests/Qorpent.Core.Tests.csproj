@@ -42,6 +42,7 @@
     <Compile Include="Experiments\ReflectionUtilsHelp.cs" />
     <Compile Include="Experiments\TryUnsafe.cs" />
     <Compile Include="Experiments\TypeConverterTests.cs" />
+    <Compile Include="Http\RequestDataRetrieverTest.cs" />
     <Compile Include="Log\DefaultLogManagerTest.cs" />
     <Compile Include="Log\LoggerTest.cs" />
     <Compile Include="Log\NewLogs\LoggyManagerTest.cs" />

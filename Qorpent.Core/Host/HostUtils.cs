@@ -175,6 +175,18 @@ namespace Qorpent.Host{
             return src;
         }
 
+	    public static IRequestHandler GetHandler(this IHostServer server, string url) {
+	        Uri uri;
+	        if (!url.StartsWith("http")) {
+	            uri = new Uri(new Uri("http://localhost"), new Uri(url, UriKind.Relative));
+	        }
+	        else {
+	            uri=new Uri(url);
+	        }
+	        return server.Factory.GetHandler(server, uri, null);
+
+	    }
+
 	    private static string ParseConnecitonString(string src) {
 	        var parts = src.ReadAsDictionary();
 	        if (!parts.ContainsKey("appid")) {

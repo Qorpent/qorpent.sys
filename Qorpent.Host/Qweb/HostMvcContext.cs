@@ -12,7 +12,7 @@ using System.Web;
 using System.Xml.Linq;
 using Qorpent.Bxl;
 using Qorpent.Dsl;
-using Qorpent.Host.Utils;
+using Qorpent.IO.Http;
 using Qorpent.Mvc;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
@@ -76,23 +76,23 @@ namespace Qorpent.Host.Qweb
 			}
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="server"></param>
-		/// <param name="context"></param>
-		/// <param name="endpointCallBack"></param>
-		/// <param name="token"></param>
-		public HostMvcContext(IHostServer server, HttpListenerContext context, string endpointCallBack,
-		                      CancellationToken token)
-		{
+		
 
-			this.HostServer = server;
-			this.EndPointCallback = endpointCallBack;
-			this.CancelToken = token;
-			SetNativeContext(context);
-			
-		}
+	    class GenericContext {
+            public HttpRequestDescriptor Request { get; set; }
+            public HttpResponseDescriptor Response { get; set; }
+	    }
+
+        public HostMvcContext(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string endpointCallBack,
+                              CancellationToken token)
+        {
+
+            this.HostServer = server;
+            this.EndPointCallback = endpointCallBack;
+            this.CancelToken = token;
+            SetNativeContext(new GenericContext{Request = request,Response = response});
+
+        }
 
 		/// <summary>
 		/// Акцессор к токену отмены
@@ -176,17 +176,17 @@ namespace Qorpent.Host.Qweb
 		/// </summary>
 		public override string FileDisposition {
 			get {
-				if(null!=NativeListenerContext) {
+				if(null!=Response) {
 					//Берем хидер с удалением из него обвязки
-					return NativeListenerContext.Response.Headers["Content-Disposition"].Replace("filename=\"","").Replace("\"","").Replace("'","\"");
+					return Response.GetHeader("Content-Disposition").Replace("filename=\"","").Replace("\"","").Replace("'","\"");
 
 					 
 				}
 				return _fileDisposition;
 			}
 			set {
-				if(null!=NativeListenerContext) {
-					NativeListenerContext.Response.Headers["Content-Disposition"] = "filename=\"" + value.Replace("\"", "'")+"\"";
+				if(null!=Response) {
+					Response.SetHeader("Content-Disposition", "filename=\"" + value.Replace("\"", "'")+"\"");
 					return;
 				}
 				_fileDisposition = value;
@@ -197,27 +197,23 @@ namespace Qorpent.Host.Qweb
 		/// </summary>
 		/// <param name="sourceStream"></param>
 		public override void WriteOutStream(Stream sourceStream) {
-			if(null==NativeListenerContext) {
+			if(null==Response) {
 				throw new Exception("cannot write out stream without native context");
 			}
-			sourceStream.CopyTo(NativeListenerContext.Response.OutputStream);
+			sourceStream.CopyTo(Response.Stream);
 		}
 
 		/// <summary>
 		/// Выводит в исходящий поток данные
 		/// </summary>
 		public override void WriteOutBytes(byte[] data) {
-			if (null == NativeListenerContext)
+			if (null == Response)
 			{
 				throw new Exception("cannot write out stream without native context");
 			}
-			NativeListenerContext.Response.OutputStream.Write(data,0,data.Length);
+			Response.Stream.Write(data,0,data.Length);
 		}
 
-		/// <summary>
-		/// 	IIS-based HTTP context (mostly used)
-		/// </summary>
-		[IgnoreSerialize] public HttpListenerContext NativeListenerContext { get; protected set; }
 
 		/// <summary>
 		/// 	Retrievs xml-data parameter
@@ -263,8 +259,8 @@ namespace Qorpent.Host.Qweb
 			get {
 				if (null == _logonuser) {
 					_logonuser =
-						null != NativeListenerContext
-							? NativeListenerContext.User
+						null != Request
+							? Request.User
 							: new GenericPrincipal(new GenericIdentity("local\\guest"), new[] {"DEFAULT"});
 					if (null == _logonuser)
 					{
@@ -272,8 +268,8 @@ namespace Qorpent.Host.Qweb
 					}
 					//SETUP USER FROM APACHE BASIC AUTHORIZATION HEADER
 					if ((string.IsNullOrEmpty(_logonuser.Identity.Name) || _logonuser.Identity.Name == "local\\guest") &&
-					    NativeListenerContext != null && NativeListenerContext.Request.Headers.AllKeys.Any(x => x == "Authorization")) {
-						var auth = NativeListenerContext.Request.Headers["Authorization"];
+					    Request != null && Request.Headers.Keys.Any(x => x == "Authorization")) {
+						var auth = Request.Headers["Authorization"];
 						if (auth.StartsWith("Basic")) {
 							var namepass = auth.Split(' ')[1].Trim();
 
@@ -298,14 +294,14 @@ namespace Qorpent.Host.Qweb
 		/// </summary>
 		public override int StatusCode {
 			get {
-				if (null != NativeListenerContext) {
-					return NativeListenerContext.Response.StatusCode;
+				if (null != Response) {
+					return Response.StatusCode;
 				}
 				return _statusCode;
 			}
 			set {
-				if (null != NativeListenerContext) {
-					NativeListenerContext.Response.StatusCode = value;
+				if (null != Response) {
+					Response.StatusCode = value;
 				}
 				_statusCode = value;
 			}
@@ -330,8 +326,7 @@ namespace Qorpent.Host.Qweb
 				
 				
 				if (SupportHeaders) {
-					NativeListenerContext.Response.Headers["Last-Modified"] = v.ToUniversalTime().ToString("R",
-					                                                                                      CultureInfo.InvariantCulture);
+					Response.SetHeader("Last-Modified", v.ToUniversalTime().ToString("R",CultureInfo.InvariantCulture));
 				}
 			}
 		}
@@ -345,7 +340,7 @@ namespace Qorpent.Host.Qweb
 			set {
 				_etag = value ?? "";
 				if (SupportHeaders) {
-					NativeListenerContext.Response.Headers["Etag"] = value ?? "";
+					Response.SetETag(value??string.Empty);
 				}
 			}
 		}
@@ -357,8 +352,8 @@ namespace Qorpent.Host.Qweb
 			get {
 				if (_ifModifiedSince == DateTime.MinValue) {
 					_ifModifiedSince = new DateTime(1900, 1, 1);
-					if (NativeListenerContext != null) {
-						var header = NativeListenerContext.Request.Headers["If-Modified-Since"];
+					if (Request != null) {
+						var header = Request.Headers["If-Modified-Since"];
 						if (header.IsNotEmpty()) {
 							_ifModifiedSince =
 								DateTime.ParseExact(header, "R", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
@@ -380,7 +375,7 @@ namespace Qorpent.Host.Qweb
 				if (_ifNoneMatch == null) {
 					_ifNoneMatch = "";
 					if (SupportHeaders) {
-						var header = NativeListenerContext.Request.Headers["If-None-Match"];
+						var header = Request.Headers["If-None-Match"];
 						if (header.IsNotEmpty()) {
 							_ifNoneMatch = header;
 						}
@@ -397,8 +392,8 @@ namespace Qorpent.Host.Qweb
 		[SerializeNotNullOnly] public override string Language {
 			get {
 				if (null == _language) {
-					if (null != NativeListenerContext && SupportHeaders) {
-						_language = NativeListenerContext.Request.Headers["Accept-Language"];
+					if (null != Request && SupportHeaders) {
+						_language = Request.Headers["Accept-Language"];
 					}
 				}
 				return _language;
@@ -415,9 +410,9 @@ namespace Qorpent.Host.Qweb
             {
                 if (null == _userhostaddress)
                 {
-                    if (null != NativeListenerContext)
+                    if (null != Request)
                     {
-                        _userhostaddress = NativeListenerContext.Request.UserHostAddress;
+                        _userhostaddress = Request.UserHostAddress;
                     }
                 }
                 return _userhostaddress;
@@ -435,9 +430,9 @@ namespace Qorpent.Host.Qweb
             {
                 if (null == _userhostname)
                 {
-                    if (null != NativeListenerContext)
+                    if (null != Request)
                     {
-                        _userhostname = NativeListenerContext.Request.UserHostName;
+                        _userhostname = Request.UserHostName;
                     }
                 }
                 return _userhostname;
@@ -455,9 +450,9 @@ namespace Qorpent.Host.Qweb
             {
                 if (null == _useragent)
                 {
-                    if (null != NativeListenerContext)
+                    if (null != Request)
                     {
-                        _useragent = NativeListenerContext.Request.UserAgent;
+                        _useragent = Request.UserAgent;
                     }
                 }
                 return _useragent;
@@ -469,8 +464,8 @@ namespace Qorpent.Host.Qweb
 		/// </summary>
 		public override string ContentType {
 			get {
-				if (null != NativeListenerContext) {
-					return NativeListenerContext.Response.ContentType;
+				if (null != Response) {
+					return Response.ContentType;
 				}
 				return _contentType;
 			}
@@ -482,8 +477,8 @@ namespace Qorpent.Host.Qweb
 					v += "; charset=utf-8";
 				}
 				_contentType = v;
-				if (null != NativeListenerContext) {
-					NativeListenerContext.Response.ContentType = v;
+				if (null != Response) {
+					Response.ContentType = v;
 				}
 			}
 		}
@@ -498,7 +493,7 @@ namespace Qorpent.Host.Qweb
 			if (!localurl.StartsWith(prefix)) {
 				localurl = prefix + localurl;
 			}
-			NativeListenerContext.Response.Redirect(localurl);
+			Response.Redirect(localurl);
 			IsRedirected = true;
 		}
 
@@ -508,7 +503,7 @@ namespace Qorpent.Host.Qweb
 		/// <param name="filename"></param>
 		/// <returns></returns>
 		public override object GetFile(string filename) {
-			if(null==NativeListenerContext) return null;
+			if(null==Request) return null;
 			if (RequestData.Files.ContainsKey(filename))
 			{
 				return RequestData.Files[filename];
@@ -522,23 +517,27 @@ namespace Qorpent.Host.Qweb
 		/// <param name="filename"> </param>
 		/// <exception cref="NotSupportedException"></exception>
 		public override void WriteOutFile(string filename) {
-			if (null == NativeListenerContext) {
+			if (null == Response) {
 				throw new NotSupportedException("only for attached to native Context");
 			}
 			FileDisposition = filename;
 			using (var s = File.OpenRead(filename))
 			{
-				s.CopyTo(NativeListenerContext.Response.OutputStream);
+				s.CopyTo(Response.Stream);
 			}
-			NativeListenerContext.Response.Close();
+			Response.Close();
 		}
 
+        public HttpRequestDescriptor Request { get; set; }
+        public HttpResponseDescriptor Response { get; set; }
 		/// <summary>
 		/// 	Set system/server defined execution context
 		/// </summary>
 		/// <param name="nativecontext"> </param>
 		public override void SetNativeContext(object nativecontext) {
-			NativeListenerContext = (HttpListenerContext) nativecontext;
+            var ctx = (GenericContext)nativecontext;
+            Request = ctx.Request;
+            Response = ctx.Response;
 			SupportHeaders = true;
 			try {
 				//try call headers - here we see does underlined host support headers
@@ -547,7 +546,7 @@ namespace Qorpent.Host.Qweb
 				SupportHeaders = false;
 			}
 
-			Uri = NativeListenerContext.Request.Url;
+			Uri = Request.Uri;
 			if (Uri.AbsolutePath.EndsWith(".qweb"))
 			{
 				Uri = new Uri( 
@@ -559,17 +558,17 @@ namespace Qorpent.Host.Qweb
 				this.ApplicationName = Uri.AbsolutePath.SmartSplit().First();
 				Uri = new Uri(Regex.Replace(Uri.ToString(),"/"+this.ApplicationName+"/","/"));
 			}
-			Language = null != NativeListenerContext.Request.UserLanguages ? NativeListenerContext.Request.UserLanguages.FirstOrDefault() : CultureInfo.CurrentCulture.Name;
-			Output = new StreamWriter( NativeListenerContext.Response.OutputStream );
+			Language = null != Request.UserLanguages ? Request.UserLanguages.FirstOrDefault() : CultureInfo.CurrentCulture.Name;
+			Output = new StreamWriter( Response.Stream );
 		}
 
 
-		private RequestParameterSet RequestData
+		private RequestParameters RequestData
 		{
 			get
 			{
 				if (null != _requestData) return _requestData;
-				this._requestData = new RequestDataRetriever(NativeListenerContext.Request).GetRequestData();
+				this._requestData = RequestParameters.Create(Request);
 				return this._requestData;
 			}
 		}
@@ -580,7 +579,7 @@ namespace Qorpent.Host.Qweb
 		/// <returns> </returns>
 		protected override IDictionary<string, string> RetrieveParameters() {
 			var result = new Dictionary<string, string>();
-			if (null != NativeListenerContext) {
+			if (null != Request) {
 				foreach (var g in RequestData.Query)
 				{
 					result[g.Key] = g.Value;
@@ -756,14 +755,14 @@ namespace Qorpent.Host.Qweb
 		/// <returns> </returns>
 		public override bool IsLocalHost() {
 			try {
-				if (NativeListenerContext == null && Uri.Host == "localhost") {
+				if (Request == null && Uri.Host == "localhost") {
 					return true; //called in embeded mode - no role checking needed by default if specially local url used
 				}
-				if (NativeListenerContext != null
+				if (Request != null
 				    &&
 				    (
-					    NativeListenerContext.Request.UserHostAddress == "127.0.0.1" ||
-					    NativeListenerContext.Request.UserHostAddress == "::1"
+					    Request.UserHostAddress == "127.0.0.1" ||
+					    Request.UserHostAddress == "::1"
 				    )
 					) {
 					return true;
@@ -789,6 +788,6 @@ namespace Qorpent.Host.Qweb
 	    private string _userhostaddress;
 	    private string _userhostname;
 	    private string _useragent;
-		private RequestParameterSet _requestData;
+		private RequestParameters _requestData;
 	}
 }

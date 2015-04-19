@@ -60,7 +60,6 @@ namespace Qorpent.Host{
 		/// 
 		/// </summary>
 		public HostServer() {
-			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -269,7 +268,7 @@ namespace Qorpent.Host{
 		/// <summary>
 		///     Инициализирует сервер
 		/// </summary>
-		private void Initialize(){
+		public void Initialize(){
 			if (State == HostServerState.Initial){
                 Config.Initialize();
 				InitializeLibraries();
@@ -301,15 +300,15 @@ namespace Qorpent.Host{
 	    }
 
 	    private void InitializeDefaultHandlers(){
-			this.OnContext("/_stat",
-						   _ => _.Response.Finish(string.Format("{{\"requestCount\":{0}}}", RequestCount), "application/json"));
-			this.OnContext("/_static/cache/drop", _ => { });
-			this.OnContext("/toxml", _ => new SmartXmlHandler().Process(_));
-			this.OnContext("/logon", _ => Auth.Logon(_));
-			this.OnContext("/logout", _ => Auth.Logout(_));
-			this.OnContext("/isauth", _ => Auth.IsAuth(_));
-	        this.OnContext("/save", _ => new SaveHandler().Run(this,_,null,CancellationToken.None));
-            this.OnContext("/load", _ => new LoadHandler().Run(this, _, null, CancellationToken.None));
+			this.OnResponse("/_stat",
+						   _ => _.Finish(string.Format("{{\"requestCount\":{0}}}", RequestCount), "application/json"));
+            this.OnResponse("/_static/cache/drop", _ => { });
+			this.OnContext("/toxml", (rq,rs) => new SmartXmlHandler().Process(rq,rs));
+            this.OnContext("/logon", (rq, rs) => Auth.Logon(rq,rs));
+            this.OnContext("/logout", (rq, rs) => Auth.Logout(rq,rs));
+            this.OnContext("/isauth", (rq, rs) => Auth.IsAuth(rq,rs));
+            this.OnContext("/save", (rq, rs) => new SaveHandler().Run(this, rq,rs, null, CancellationToken.None));
+            this.OnContext("/load", (rq, rs) => new LoadHandler().Run(this, rq,rs, null, CancellationToken.None));
 			this.On("/js/_plugins.js", BuildPluginsModule(), "text/javascript");
 		}
 
