@@ -155,8 +155,13 @@
     <Compile Include="Host\IHostConfigProvider.cs" />
     <Compile Include="Host\ISimpleSocketRequest.cs" />
     <Compile Include="Host\RequestHandlerBase.cs" />
+    <Compile Include="IO\Http\WebContext.cs" />
+    <Compile Include="IO\Http\HttpListenerRequestDescriptor.cs" />
+    <Compile Include="IO\Http\HttpListenerResponseDescriptor.cs" />
     <Compile Include="IO\Http\HttpRequestDescriptor.cs" />
     <Compile Include="IO\Http\HttpResponseDescriptor.cs" />
+    <Compile Include="IO\Http\IHttpRequestDescriptor.cs" />
+    <Compile Include="IO\Http\IHttpResponseDescriptor.cs" />
     <Compile Include="IO\Http\MiltipartReadContext.cs" />
     <Compile Include="IO\Http\PostFile.cs" />
     <Compile Include="IO\Http\RequestParameters.cs" />

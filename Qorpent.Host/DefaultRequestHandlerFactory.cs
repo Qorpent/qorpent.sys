@@ -22,9 +22,9 @@ namespace Qorpent.Host{
 
 		/// <param name="callbackEndPoint"></param>
 		/// <returns></returns>
-		public IRequestHandler GetHandler(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint){
+		public IRequestHandler GetHandler(IHostServer server, WebContext context, string callbackEndPoint){
 			lock (this){
-				Uri uri = request.Uri;
+				Uri uri = context.Uri;
 				return GetHandler(server, uri, callbackEndPoint);
 			}
 		}

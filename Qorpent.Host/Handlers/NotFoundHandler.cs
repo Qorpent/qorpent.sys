@@ -20,9 +20,9 @@ namespace Qorpent.Host.Handlers
 	    /// <param name="response"></param>
 	    /// <param name="callbackEndPoint"></param>
 	    /// <param name="cancel"></param>
-	    public override void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint,
+	    public override void Run(IHostServer server, WebContext context, string callbackEndPoint,
 	        CancellationToken cancel) {
-                response.Finish("command not found","text/plain; charset=utf-8",404);
+                context.Finish("command not found","text/plain; charset=utf-8",404);
 
 	    }
 	}

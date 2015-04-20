@@ -20,10 +20,9 @@ namespace Qorpent.Host.Handlers{
 		/// <summary>
 		/// </summary>
 		/// <param name="context"></param>
-		public void Process(HttpRequestDescriptor request,HttpResponseDescriptor response){
-			var buffer = new byte[request.ContentLength];
-			Task<int> readdata = request.Stream.ReadAsync(buffer, 0, (int) request.ContentLength);
-		    var parameters = RequestParameters.Create(request);
+		public void Process(WebContext context) {
+			var readdata = context.ReadRequestStirngAsync();
+		    var parameters = RequestParameters.Create(context);
 		    string lang = parameters.Get("lang");
 		    string format = parameters.Get("format");
 
@@ -34,7 +33,7 @@ namespace Qorpent.Host.Handlers{
 			else{
 				executor = BSharpExecutor;
 			}
-			Action<XElement, HttpResponseDescriptor> render = null;
+			Action<XElement, WebContext> render = null;
 			if (format == "wiki"){
 				render = RenderAsWiki;
 			}
@@ -43,7 +42,7 @@ namespace Qorpent.Host.Handlers{
 			}
 			readdata.Wait();
 
-			string script = Encoding.UTF8.GetString(buffer, 0, readdata.Result);
+		    string script = readdata.Result;
 			_showroot = script.Contains("##showroot");
 			XElement xml = null;
 			try{
@@ -52,15 +51,15 @@ namespace Qorpent.Host.Handlers{
 			catch (Exception ex){
 				xml = new XElement("error", ex.ToString());
 			}
-			render(xml, response);
+			render(xml, context);
 		}
 
-        private void RenderAsNative(XElement x, HttpResponseDescriptor r)
+        private void RenderAsNative(XElement x, WebContext r)
         {
 			r.Finish(x.ToString(), "text/xml");
 		}
 
-		private void RenderAsWiki(XElement x, HttpResponseDescriptor r){
+		private void RenderAsWiki(XElement x, WebContext r){
 			var sb = new StringBuilder();
 			BuildWiki(sb, x);
 			r.Finish(sb.ToString(), "text/html");

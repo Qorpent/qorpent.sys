@@ -12,7 +12,7 @@ namespace Qorpent.Host{
 		/// <param name="server"></param>
 		/// <param name="callbackEndPoint"></param>
 		/// <returns></returns>
-		IRequestHandler GetHandler(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint);
+		IRequestHandler GetHandler(IHostServer server, WebContext context, string callbackEndPoint);
 
 		/// <summary>
 		/// </summary>

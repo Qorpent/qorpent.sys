@@ -1,4 +1,5 @@
 using System;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
@@ -14,20 +15,20 @@ namespace Qorpent.Host {
     public class ProxyHandler : RequestHandlerBase {
         
 
-        public override void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint,
+        public override void Run(IHostServer server, WebContext context, string callbackEndPoint,
             CancellationToken cancel) {
                 try
                 {
 
 
-                    string path = request.Uri.AbsolutePath;
+                    string path = context.Uri.AbsolutePath;
                     var srvDef = server.Config.Proxize.FirstOrDefault(_ => path.StartsWith(_.Key)).Value;
                     var srv = HostUtils.ParseUrl(srvDef);
-                    var req = (HttpWebRequest)WebRequest.Create(new Uri(new Uri(srv), request.Uri.PathAndQuery));
+                    var req = (HttpWebRequest)WebRequest.Create(new Uri(new Uri(srv), context.Uri.PathAndQuery));
 
-                    foreach (var header in request.Headers.Keys)
-                    {
-                        var v = request.Headers[header];
+                    foreach (var _header in context.Request.Headers) {
+                        var v = _header.Value;
+                        var header = _header.Key;
                         if (header == "Host")
                         {
                             //  req.Host = "127.0.0.1";
@@ -73,11 +74,11 @@ namespace Qorpent.Host {
 
                         else
                         {
-                            req.Headers[header] = request.Headers[header];
+                            req.Headers[header] = context.Request.Headers[header];
                         }
                     }
-                    req.Method = request.Method;
-                    req.Headers["QHPROXYORIGIN"] = Uri.EscapeDataString(request.Uri.ToString());
+                    req.Method = context.Method;
+                    req.Headers["QHPROXYORIGIN"] = Uri.EscapeDataString(context.Uri.ToString());
 
 
                     ServicePointManager.ServerCertificateValidationCallback += ServerCertificateValidationCallback;
@@ -88,7 +89,7 @@ namespace Qorpent.Host {
 
                         using (var reqStream = req.GetRequestStream())
                         {
-                            while ((bytesRead = request.Stream.Read(buffer, 0, buffer.Length)) != 0)
+                            while ((bytesRead = context.Request.Stream.Read(buffer, 0, buffer.Length)) != 0)
                             {
                                 reqStream.Write(buffer, 0, bytesRead);
                             }
@@ -106,23 +107,23 @@ namespace Qorpent.Host {
                         }
                         if (header == "Content-Type")
                         {
-                            response.ContentType = v;
+                            context.Response.ContentType = v;
                         }
-                        response.SetHeader(header,resp.Headers[header]);
+                        context.Response.SetHeader(header,resp.Headers[header]);
                     }
-                    using (var resstream = resp.GetResponseStream())
-                    {
-                        while ((bytesRead = resstream.Read(buffer, 0, buffer.Length)) != 0)
-                        {
-                            response.Stream.Write(buffer, 0, bytesRead);
-                            response.Stream.Flush();
+                    using (var resstream = resp.GetResponseStream()) {
+                        var stream = resstream;
+                        if (resp.Headers["Content-Encoding"].Contains("gzip")) {
+                            stream = new GZipStream(stream,CompressionLevel.Optimal);    
                         }
+                        stream.CopyTo(context.Response.Stream);
+                        
                     }
-                    response.Close();
+                    context.Response.Close();
                 }
                 catch (Exception ex)
                 {
-                    response.Finish("Error: " + ex, status: 500);
+                    context.Finish("Error: " + ex, status: 500);
                 }
                 finally
                 {

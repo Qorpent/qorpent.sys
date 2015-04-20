@@ -2,24 +2,25 @@
 using System.Net;
 using System.Text;
 using System.Threading;
+using Qorpent.IO.Http;
 
 namespace Qorpent.Host{
 	internal class HostRequestHandler{
 		private readonly CancellationToken _cancel;
-		private readonly HttpListenerContext _context;
+		private readonly WebContext _context;
 		private readonly HostServer _server;
 
-		public HostRequestHandler(HostServer server, HttpListenerContext context){
+		public HostRequestHandler(HostServer server, WebContext context){
 			_server = server;
 			_context = context;
 			_cancel = _server._cancel;
 		}
 
 		public void Execute(){
-			_server.Auth.Authenticate(_context,_context);
-			string callbackEndPoint = _context.Request.Headers.Get("qorpent-callback-endpoint");
-			_context.Response.Headers["Server"] = "Qorpent RESTFull Server 0.1";
-			_context.Response.ContentType = "application/json; charset=utf-8";
+			_server.Auth.Authenticate(_context);
+			string callbackEndPoint = _context.GetHeader("qorpent-callback-endpoint");
+			_context.SetHeader("Server", "Qorpent RESTFull Server 0.1");
+			_context.ContentType = "application/json; charset=utf-8";
 			CopyCookies();
 			if (String.IsNullOrWhiteSpace(callbackEndPoint)){
 				ProcessSyncRequest();
@@ -30,7 +31,7 @@ namespace Qorpent.Host{
 		}
 
 		private void CopyCookies(){
-			foreach (Cookie cookie in _context.Request.Cookies){
+			foreach (Cookie cookie in _context.Cookies){
 				if (cookie.Name == _server.Config.AuthCookieName){
 					continue;
 				}
@@ -51,17 +52,11 @@ namespace Qorpent.Host{
 
 
 		private void FinishAsyncRequest(){
-			_context.Response.StatusCode = 200;
-			byte[] content = Encoding.UTF8.GetBytes("OK");
-			_context.Response.OutputStream.Write(content, 0, content.Length);
-			_context.Response.Close();
+            _context.Finish("true");
 		}
 
 		private void FailRequest(Exception exception){
-			_context.Response.StatusCode = 500;
-			byte[] content = Encoding.UTF8.GetBytes(exception.ToString());
-			_context.Response.OutputStream.Write(content, 0, content.Length);
-			_context.Response.Close();
+            _context.Finish(exception.ToString(),"text/plain",500);
 		}
 
 		private void ProcessSyncRequest(){
@@ -75,8 +70,8 @@ namespace Qorpent.Host{
 
 		private void ProcessRequest(string callbackEndPoint){
 			_server.RequestCount++;
-			IRequestHandler handler = _server.Factory.GetHandler(_server, _context,_context, callbackEndPoint);
-			handler.Run(_server, _context,_context, callbackEndPoint, _cancel);
+			IRequestHandler handler = _server.Factory.GetHandler(_server, _context, callbackEndPoint);
+			handler.Run(_server, _context, callbackEndPoint, _cancel);
 		}
 	}
 }

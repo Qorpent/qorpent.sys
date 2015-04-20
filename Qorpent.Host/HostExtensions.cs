@@ -97,7 +97,7 @@ namespace Qorpent.Host{
 		/// <param name="path"></param>
 		/// <param name="handler"></param>
 		/// <returns></returns>
-		public static IHostServer OnResponse(this IHostServer server, string path, Action<HttpResponseDescriptor> handler){
+		public static IHostServer OnResponse(this IHostServer server, string path, Action<IHttpResponseDescriptor> handler){
 			server.Factory.OnResponse(path, handler);
 			return server;
 		}
@@ -110,8 +110,8 @@ namespace Qorpent.Host{
 		/// <param name="handler"></param>
 		/// <returns></returns>
 		public static IRequestHandlerFactory OnResponse(this IRequestHandlerFactory factory, string path,
-		                                                Action<HttpResponseDescriptor> handler){
-			factory.Register(path, new DelegateHandler((s, rq,rs, e, cn) => handler(rs)));
+		                                                Action<IHttpResponseDescriptor> handler){
+			factory.Register(path, new DelegateHandler((s, c, e, cn) => handler(c.Response)));
 			return factory;
 		}
 
@@ -121,7 +121,7 @@ namespace Qorpent.Host{
 		/// <param name="path"></param>
 		/// <param name="handler"></param>
 		/// <returns></returns>
-		public static IHostServer OnContext(this IHostServer server, string path, Action<HttpRequestDescriptor,HttpResponseDescriptor> handler){
+		public static IHostServer OnContext(this IHostServer server, string path, Action<WebContext> handler){
 			server.Factory.OnContext(path, handler);
 			return server;
 		}
@@ -133,8 +133,8 @@ namespace Qorpent.Host{
 		/// <param name="handler"></param>
 		/// <returns></returns>
 		public static IRequestHandlerFactory OnContext(this IRequestHandlerFactory factory, string path,
-		                                               Action<HttpRequestDescriptor,HttpResponseDescriptor> handler){
-			factory.Register(path, new DelegateHandler((s, rq,rs, e, cn) => handler(rq,rs)));
+		                                               Action<WebContext> handler){
+			factory.Register(path, new DelegateHandler((s, c, e, cn) => handler(c)));
 			return factory;
 		}
 

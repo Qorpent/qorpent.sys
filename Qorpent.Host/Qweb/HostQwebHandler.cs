@@ -56,12 +56,14 @@ namespace Qorpent.Host.Qweb
 
 		}
 
-	    public override void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint,
+	    public override void Run(IHostServer server, WebContext ctx, string callbackEndPoint,
 	        CancellationToken cancel) {
-                SetCurrentUser(server, request.User);
-                response.ContentEncoding = Encoding.UTF8;
-            response.SetHeader("Content-Encoding","utf-8");
-                var context = server.Application.Container.Get<IMvcContext>(null, server, request,response, callbackEndPoint, cancel);
+	        if (null != ctx.User) {
+                SetCurrentUser(server, ctx.User);
+	        }
+            ctx.ContentEncoding = Encoding.UTF8;
+            ctx.SetHeader("Content-Encoding", "utf-8");
+                var context = server.Application.Container.Get<IMvcContext>(null, server, ctx, callbackEndPoint, cancel);
                 context.NotModified = false;
                 try
                 {

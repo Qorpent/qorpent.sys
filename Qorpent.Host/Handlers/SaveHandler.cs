@@ -12,9 +12,9 @@ namespace Qorpent.Host.Handlers {
     public class SaveHandler : RequestHandlerBase {
         
 
-        public override void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint,
+        public override void Run(IHostServer server, WebContext context, string callbackEndPoint,
             CancellationToken cancel) {
-                var data = RequestParameters.Create(request);
+                var data = RequestParameters.Create(context);
                 var name = data.Get("name");
                 var content = data.Get("content");
                 if (data.PostData.StartsWith("{"))
@@ -31,7 +31,7 @@ namespace Qorpent.Host.Handlers {
                 var fileName = Path.Combine(root, name);
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
                 File.WriteAllText(fileName, content);
-                response.Finish("OK");
+                context.Finish("OK");
         }
     }
 }

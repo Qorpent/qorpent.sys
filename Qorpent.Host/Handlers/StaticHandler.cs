@@ -28,10 +28,10 @@ namespace Qorpent.Host.Handlers
 
 		
 
-        public override void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint,
+        public override void Run(IHostServer server, WebContext context, string callbackEndPoint,
             CancellationToken cancel) {
-                response.ContentEncoding = Encoding.UTF8;
-                response.Finish(_content, _mime, _status);
+                context.ContentEncoding = Encoding.UTF8;
+                context.Finish(_content, _mime, _status);
         }
     }
 }

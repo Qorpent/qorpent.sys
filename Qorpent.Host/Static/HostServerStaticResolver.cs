@@ -81,7 +81,7 @@ namespace Qorpent.Host.Static {
         /// <returns></returns>
         public IWebFileRecord Get(string name, object context = null, bool withextended = false) {
             IWebFileRecord result;
-            var ctx = context as HttpRequestDescriptor;
+            var ctx = context as WebContext;
             bool forced = null != ctx && ctx.Uri.ToString().Contains("__forced");
             if (!forced  && _cache.TryGetValue(name, out result)) {
                 return result;

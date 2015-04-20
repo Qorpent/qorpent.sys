@@ -17,6 +17,7 @@ using Qorpent.Host.Security;
 using Qorpent.Host.Static;
 using Qorpent.IO;
 using Qorpent.IoC;
+using Qorpent.IO.Http;
 using Qorpent.Log;
 using Qorpent.Mvc;
 using Qorpent.Utils.Extensions;
@@ -199,18 +200,18 @@ namespace Qorpent.Host{
 			if (CheckOptionsMethodIsCalled(task)) return;
 			new HostRequestHandler(this, task.Result).Execute();
 			}catch(Exception ex){
-			  task.Result.Response.Finish("some error occured "+ex.ToString(),status:500);
+			  ((WebContext)task.Result).Finish("some error occured "+ex,status:500);
 			}
 		}
 
 
 		private bool CheckInvalidStartupConditions(Task<HttpListenerContext> task){
 			if (Application.IsInStartup){
-				task.Result.Response.Finish("application is in startup", status: 500);
+                ((WebContext)task.Result).Finish("application is in startup", status: 500);
 				return true;
 			}
 			if (Application.StartupError != null){
-				task.Result.Response.Finish("startup error \r\n" + Application.StartupError, status: 500);
+                ((WebContext)task.Result).Finish("startup error \r\n" + Application.StartupError, status: 500);
 				return true;
 			}
 			return false;
@@ -301,14 +302,14 @@ namespace Qorpent.Host{
 
 	    private void InitializeDefaultHandlers(){
 			this.OnResponse("/_stat",
-						   _ => _.Finish(string.Format("{{\"requestCount\":{0}}}", RequestCount), "application/json"));
+						   _ => _.Finish(string.Format("{{\"requestCount\":{0}}}", RequestCount) ));
             this.OnResponse("/_static/cache/drop", _ => { });
-			this.OnContext("/toxml", (rq,rs) => new SmartXmlHandler().Process(rq,rs));
-            this.OnContext("/logon", (rq, rs) => Auth.Logon(rq,rs));
-            this.OnContext("/logout", (rq, rs) => Auth.Logout(rq,rs));
-            this.OnContext("/isauth", (rq, rs) => Auth.IsAuth(rq,rs));
-            this.OnContext("/save", (rq, rs) => new SaveHandler().Run(this, rq,rs, null, CancellationToken.None));
-            this.OnContext("/load", (rq, rs) => new LoadHandler().Run(this, rq,rs, null, CancellationToken.None));
+			this.OnContext("/toxml", _=> new SmartXmlHandler().Process(_));
+            this.OnContext("/logon", _=> Auth.Logon(_));
+            this.OnContext("/logout", _=> Auth.Logout(_));
+            this.OnContext("/isauth", _=> Auth.IsAuth(_));
+            this.OnContext("/save", _=> new SaveHandler().Run(this, _, null, CancellationToken.None));
+            this.OnContext("/load", _=> new LoadHandler().Run(this, _, null, CancellationToken.None));
 			this.On("/js/_plugins.js", BuildPluginsModule(), "text/javascript");
 		}
 

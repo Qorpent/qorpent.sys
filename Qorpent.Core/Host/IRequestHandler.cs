@@ -11,10 +11,8 @@ namespace Qorpent.Host{
 	    ///     Выполняет указанный запрос
 	    /// </summary>
 	    /// <param name="server"></param>
-	    /// <param name="response"></param>
 	    /// <param name="callbackEndPoint"></param>
 	    /// <param name="cancel"></param>
-	    /// <param name="request"></param>
-	    void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint, CancellationToken cancel);
+	    void Run(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel);
 	}
 }

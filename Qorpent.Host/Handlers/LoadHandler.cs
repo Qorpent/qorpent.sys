@@ -12,9 +12,9 @@ namespace Qorpent.Host.Handlers {
     {
        
 
-        public override void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint,
+        public override void Run(IHostServer server, WebContext context, string callbackEndPoint,
             CancellationToken cancel) {
-                var data = RequestParameters.Create(request);
+                var data = RequestParameters.Create(context);
 
                 var name = data.Get("name");
 
@@ -33,7 +33,7 @@ namespace Qorpent.Host.Handlers {
                 {
                     content = File.ReadAllText(fileName);
                 }
-                response.Finish(content, contentType);
+                context.Finish(content, contentType);
         }
     }
 }

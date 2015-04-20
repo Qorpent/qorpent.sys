@@ -29,7 +29,7 @@ namespace Qorpent.Security {
 	/// 	resolves principal or from QWebContext.Current or from Thread.CurrentPrincipal
 	/// </summary>
 	[ContainerComponent(Lifestyle.Singleton)]
-	public class DefaultPrincipalSource : ServiceBase, IPrincipalSource {
+	public class    DefaultPrincipalSource : ServiceBase, IPrincipalSource {
 		/// <summary>
 		/// </summary>
 		[ThreadStatic] protected static IPrincipal Current;

@@ -10,9 +10,9 @@ namespace Qorpent.Host.Handlers{
 	public class WikiHandler:RequestHandlerBase{
 		
 
-        public override void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint,
+        public override void Run(IHostServer server, WebContext context, string callbackEndPoint,
             CancellationToken cancel) {
-                var code = request.Uri.Query.Replace("?", "");
+                var code = context.Uri.Query.Replace("?", "");
                 string wikicode = "*** страница с данным кодом не найдена ***";
                 string tpl = "<html><body>${wikipage}</body></html>";
                 var wikidesc = server.Static.Get(code + ".wiki", withextensions: true);
@@ -61,7 +61,7 @@ namespace Qorpent.Host.Handlers{
                     }
                 }
                 var wikipage = tpl.Replace("${wikipage}", wikicode);
-                response.Finish(wikipage, "text/html");
+                context.Finish(wikipage, "text/html");
         }
     }
 }

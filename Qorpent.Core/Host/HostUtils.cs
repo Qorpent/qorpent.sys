@@ -191,12 +191,13 @@ namespace Qorpent.Host{
 
 	    }
 
-	    public static string Imitate(this IHostServer host, string command) {
+	    public static string Call(this IHostServer host, string command) {
             var h = host.GetHandler(command);
             var ms = new MemoryStream();
             var rs = new HttpResponseDescriptor { Stream = ms, NoCloseStream = true };
             var rq = new HttpRequestDescriptor { Uri = new Uri("http://localhost" + command) };
-            h.Run(host, rq, rs, null, new CancellationToken());
+	        var ctx = new WebContext{Request = rq,Response=rs};
+            h.Run(host, ctx, null, new CancellationToken());
             var len = ms.Position;
             ms.Position = 0;
             var result = Encoding.UTF8.GetString(ms.GetBuffer(), 0, (int)len);

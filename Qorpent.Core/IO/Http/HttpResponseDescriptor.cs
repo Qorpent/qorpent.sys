@@ -8,10 +8,9 @@ using System.Net;
 using System.Text;
 
 namespace Qorpent.IO.Http {
-    public class HttpResponseDescriptor {
+    public class HttpResponseDescriptor : IHttpResponseDescriptor {
         public const string ETagHeader = "Etag";
         public const string LastModifiedHeader = "Last-Modified";
-
         public static implicit operator HttpResponseDescriptor(HttpListenerContext context) {
             return new HttpListenerResponseDescriptor(context.Response) {
                 SupportGZip = ((HttpRequestDescriptor) context).GetHeader("Accept-Encoding").Contains("gzip")
@@ -20,6 +19,10 @@ namespace Qorpent.IO.Http {
 
         public static implicit operator HttpResponseDescriptor(HttpListenerResponse response) {
             return new HttpListenerResponseDescriptor(response);
+        }
+
+        public static implicit operator HttpResponseDescriptor(WebContext context) {
+            return (HttpResponseDescriptor) context.Response;
         }
 
         public virtual void SetHeader(string name, string value) {
@@ -54,83 +57,46 @@ namespace Qorpent.IO.Http {
 
         public bool SupportGZip { get; set; }
 
-        public class HttpListenerResponseDescriptor : HttpResponseDescriptor {
-            private readonly HttpListenerResponse _response;
-
-            public HttpListenerResponseDescriptor(HttpListenerResponse response) {
-                _response = response;
-                Cookies = _response.Cookies;
-            }
-
-            public override void SetHeader(string name, string value) {
-                _response.Headers[name] = value ?? string.Empty;
-            }
-
-            public override string GetETag() {
-                return _response.Headers[ETagHeader] ?? "";
-            }
-
-            public override void Close() {
-                _response.Close();
-            }
-
-            public override string ContentType {
-                get { return _response.ContentType; }
-                set { _response.ContentType = value; }
-            }
-
-            public override Stream Stream {
-                get { return _response.OutputStream; }
-                set { }
-            }
-
-            public override int StatusCode {
-                get { return _response.StatusCode; }
-                set { _response.StatusCode = value; }
-            }
-
-            public override string StatusDescription {
-                get { return _response.StatusDescription; }
-                set { _response.StatusDescription = value; }
-            }
-
-            public override Encoding ContentEncoding {
-                get { return _response.ContentEncoding; }
-                set { _response.ContentEncoding = value; }
-            }
-
-            public override string GetHeader(string name) {
-                return _response.Headers[name];
-            }
-
-            public override void Redirect(string localurl) {
-                _response.Redirect(localurl);
-            }
-        }
-
         public void Finish(object data, string mime = "application/json", int status = 200) {
             StatusCode = status;
             ContentType = mime;
+            Write(data,true);
+
+            Close();
+        }
+
+        public void Write(object data, bool allowZip) {
             var sendobject = GetSendObject(data);
-            if (SupportGZip) {
+            if (allowZip && SupportGZip && IsRequiredGZip(sendobject)) {
                 SetHeader("Content-Encoding", "gzip");
                 var ms = EnsureStream(sendobject);
                 using (var g = new GZipStream(Stream, CompressionLevel.Optimal)) {
                     ms.CopyTo(g, 2 ^ 14);
-
                 }
             }
             else {
                 var bytes = sendobject as byte[];
-                if (null!=bytes) {
+                if (null != bytes) {
                     Stream.Write(bytes, 0, bytes.Length);
                 }
                 else {
-                    ((Stream)sendobject).CopyTo(Stream);
+                    ((Stream) sendobject).CopyTo(Stream);
                 }
             }
+        }
 
-            Close();
+        private bool IsRequiredGZip(object sendobject) {
+            if(ContentType.Contains("image"))return false;
+            if (sendobject is byte[]) {
+                return ((byte[]) sendobject).Length >= 640;
+            }
+            var s = sendobject as Stream;
+            try {
+                return s.Length >= 640;
+            }
+            catch {
+                return true;
+            }
         }
 
         private Stream EnsureStream(object sendobject) {

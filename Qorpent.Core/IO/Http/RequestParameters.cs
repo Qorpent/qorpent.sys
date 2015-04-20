@@ -124,42 +124,46 @@ namespace Qorpent.IO.Http
 			return result;
 		}
 
+	    public static RequestParameters Create(IHttpRequestDescriptor request) {
+	        return Create(new WebContext {Request = request});
+
+	    }
 	    /// <summary>
 	    /// 
 	    /// </summary>
 	    /// <returns></returns>
-	    public static RequestParameters Create(HttpRequestDescriptor request)
-	    {
-	        var result = new RequestParameters {QueryData = Unescape(request.Uri.Query, true)};
-	        if (IsJson(result.QueryData)) {
-	            result.QueryJson = Experiments.Json.Parse(result.QueryData);
-	        }
-	        if (IsDictionary(result.QueryData)) {
-	            PrepareDictionaryData(result.Query, result.QueryData, false);
-	        }
-	        if (request.Method.ToUpper() == "POST")
-	        {
-	            if (null!=request.ContentType && request.ContentType.Contains("multipart/form-data"))
-	            {
-	                ReadMultipartForm(result,request);
-	            }
-	            else
-	            {
-	                var buffer = new byte[request.ContentLength];
-	                request.Stream.Read(buffer, 0, (int)request.ContentLength);
-	                var str = request.Encoding.GetString(buffer);
-	                str = Unescape(str, false);
-	                result.PostData = str;
-	                if (IsJson(str)) {
-	                    result.FormJson = Experiments.Json.Parse(result.PostData);
-	                }
-	                else if (IsDictionary(str)) {
-	                    PrepareDictionaryData(result.Form, str, request.ContentType != null && request.ContentType.Contains("application/x-www-form-urlencoded"));
-	                }
-					
-	            }
-	        }
-	        return result;
+	    public static RequestParameters Create(WebContext context) {
+	        var result = new RequestParameters { QueryData = Unescape(context.Uri.Query, true) };
+            if (IsJson(result.QueryData))
+            {
+                result.QueryJson = Experiments.Json.Parse(result.QueryData);
+            }
+            if (IsDictionary(result.QueryData))
+            {
+                PrepareDictionaryData(result.Query, result.QueryData, false);
+            }
+            if (context.IsPost)
+            {
+                if (context.IsMultipartForm)
+                {
+                    ReadMultipartForm(result, context);
+                }
+                else {
+                    var str = context.ReadRequestString();
+                    str = Unescape(str, false);
+                    result.PostData = str;
+                    if (IsJson(str))
+                    {
+                        result.FormJson = Experiments.Json.Parse(result.PostData);
+                    }
+                    else if (IsDictionary(str))
+                    {
+                        PrepareDictionaryData(result.Form, str, context.InContentType != null && context.InContentType.Contains("application/x-www-form-urlencoded"));
+                    }
+
+                }
+            }
+            return result;
 	    }
 
 	    private static string Unescape(string q, bool pluses) {
@@ -188,13 +192,13 @@ namespace Qorpent.IO.Http
 	        return false;
 	    }
 
-	    private static void ReadMultipartForm(RequestParameters result,HttpRequestDescriptor request)
+	    private static void ReadMultipartForm(RequestParameters result,WebContext context)
 	    {
 
 	        var mainbufferStream = new MemoryStream();
-	        request.Stream.CopyTo(mainbufferStream);
-	        var context = new MiltipartReadContext( mainbufferStream.GetBuffer(), request.ContentType,request.Encoding,result);
-	        context.Read();
+            context.ReadRequest(mainbufferStream);
+	        var mrcontext = new MiltipartReadContext( mainbufferStream.GetBuffer(), context.Request.ContentType,context.Request.Encoding,result);
+            mrcontext.Read();
 	    }
 
 	    private static void PrepareDictionaryData(IDictionary<string,string> target, string query, bool isqueryString)

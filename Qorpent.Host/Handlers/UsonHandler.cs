@@ -33,33 +33,33 @@ namespace Qorpent.Host.Handlers
 		}
 
 
-	    public override void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint,
+	    public override void Run(IHostServer server, WebContext context, string callbackEndPoint,
 	        CancellationToken cancel) {
-                var path = request.Uri.AbsolutePath;
+                var path = context.Uri.AbsolutePath;
                 if (path.StartsWith("/~"))
                 {
-                    AsynchronousBegin(request,response);
+                    AsynchronousBegin(context);
                 }
                 else if (path.StartsWith("/!"))
                 {
-                    AsynchronousEnd(request, response);
+                    AsynchronousEnd(context);
                 }
                 else if (path.StartsWith("/-"))
                 {
-                    RunTrace(request, response);
+                    RunTrace(context);
                 }
                 else
                 {
-                    RunSynchronous(request, response);
+                    RunSynchronous(context);
                 }
 	    }
 
-	    private void RunTrace(HttpRequestDescriptor request, HttpResponseDescriptor response) {
+	    private void RunTrace(WebContext context) {
             try {
 #pragma warning disable 219
                 var sb = new StringBuilder();
                 var sw = Stopwatch.StartNew();
-                var parameters = PrepareParameters(request,response);
+                var parameters = PrepareParameters(context);
                 sw.Stop();
                 sb.AppendLine("Prepare: " + sw.Elapsed);
                 sw = Stopwatch.StartNew();
@@ -78,51 +78,51 @@ namespace Qorpent.Host.Handlers
                 json = new JsonSerializer().Serialize("", result);
                 sw.Stop();
                 sb.AppendLine("Jsonify 2: " + sw.Elapsed);
-               response.Finish(sb.ToString());
+               context.Finish(sb.ToString());
             } catch (Exception ex) {
-                response.Finish(ex.ToString(), "text/plain", 500);
+                context.Finish(ex.ToString(), "text/plain", 500);
             }
 	    }
  #pragma warning restore 219
-	    private void AsynchronousEnd(HttpRequestDescriptor request, HttpResponseDescriptor response){
+	    private void AsynchronousEnd(WebContext context){
 			if (null == currentAsyncCall)
 			{
-				response.Finish("no asynchronous task ever started", "text/plain", 500);
+				context.Finish("no asynchronous task ever started", "text/plain", 500);
 			}
 			currentAsyncCall.Wait();
 			if (currentAsyncCall.IsFaulted)
 			{
-				response.Finish("last call to async fail with " + currentAsyncCall.Exception, "text/plain", 500);
+				context.Finish("last call to async fail with " + currentAsyncCall.Exception, "text/plain", 500);
 			}
 			else if (currentAsyncCall.IsCanceled)
 			{
-				response.Finish("last call to async was cancelled", "text/plain", 500);
+				context.Finish("last call to async was cancelled", "text/plain", 500);
 			}
 			else
 			{
-				if (request.Uri.AbsolutePath.EndsWith("/xml"))
+				if (context.Uri.AbsolutePath.EndsWith("/xml"))
 				{
-					response.Finish(((UObj)currentAsyncCall.Result).ToXmlString(), "text/xml");
+					context.Finish(((UObj)currentAsyncCall.Result).ToXmlString(), "text/xml");
 				}
 				else
 				{
-					response.Finish(((UObj)currentAsyncCall.Result).ToJson(), "application/json");
+					context.Finish(((UObj)currentAsyncCall.Result).ToJson(), "application/json");
 				}
 			}
 		}
 
-		private void AsynchronousBegin(HttpRequestDescriptor request, HttpResponseDescriptor response){
+		private void AsynchronousBegin(WebContext context){
 			
 			if (null != currentAsyncCall){
 				if (!currentAsyncCall.IsCompleted){
-					response.Finish("{\"state\":\"run\"}");
+					context.Finish("{\"state\":\"run\"}");
 					return;
 				}
 			}
-			var parameters = PrepareParameters(request,response);
+			var parameters = PrepareParameters(context);
 			currentAsyncCall = Task.Run(() => _handler(parameters));
 
-			response.Finish("{\"state\":\"start\"}");
+			context.Finish("{\"state\":\"start\"}");
 		}
 
 		private static UObj PrepareParameters(Uri uri){
@@ -140,8 +140,8 @@ namespace Qorpent.Host.Handlers
 			return parameters;
 		}
 
-		private static UObj PrepareParameters(HttpRequestDescriptor request, HttpResponseDescriptor response){
-			var uri = request.Uri;
+		private static UObj PrepareParameters(WebContext context){
+			var uri = context.Uri;
 			UObj parameters = null;
 		    
 			var q = "";
@@ -152,7 +152,7 @@ namespace Qorpent.Host.Handlers
 				parameters = q.ToUson();
 			}
 			else{
-				var ps = RequestParameters.Create(request).GetParameters();
+				var ps = RequestParameters.Create(context).GetParameters();
 				if (ps.ContainsKey("__postdata")){
 					var pd = ps["__postdata"].Trim();
 					if (pd.StartsWith("{") && pd.EndsWith("}")){
@@ -199,21 +199,21 @@ namespace Qorpent.Host.Handlers
 			parameters.IgnoreCase = true;
 		}
 
-		private void RunSynchronous(HttpRequestDescriptor request, HttpResponseDescriptor response){
+		private void RunSynchronous(WebContext context){
 			try{
-				var parameters = PrepareParameters(request,response);
+				var parameters = PrepareParameters(context);
 			    var obj = _handler(parameters);
                 var result = obj.ToUson();
-				if (request.Uri.AbsolutePath.EndsWith("/xml")){
+				if (context.Uri.AbsolutePath.EndsWith("/xml")){
                    
-					response.Finish(result.ToXmlString(), "text/xml");
+					context.Finish(result.ToXmlString(), "text/xml");
 				}
 				else{
-					response.Finish(result.ToJson());
+					context.Finish(result.ToJson());
 				}
 			}
 			catch (Exception ex){
-				response.Finish(ex.ToString(), "text/plain", 500);
+				context.Finish(ex.ToString(), "text/plain", 500);
 			}
 		}
 	}

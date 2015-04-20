@@ -48,16 +48,16 @@ namespace Qorpent.Host.Security{
 		/// <summary>
 		/// </summary>
 		/// <param name="context"></param>
-        public void Authenticate(HttpRequestDescriptor request, HttpResponseDescriptor response)
+        public void Authenticate(WebContext context)
         {
-			string ticket = GetTicket(request,response);
+			string ticket = GetTicket(context);
 			UserInfo result = guest;
 			bool auth = false;
 			if (!string.IsNullOrWhiteSpace(ticket)){
 				result = CheckTicket(ticket);
 				if (null != result && IsValid(result)){
 					auth = true;
-					SetTicketCookie(response, ticket);
+					SetTicketCookie(context, ticket);
 				}
 				else{
 					if (null == result){
@@ -67,38 +67,38 @@ namespace Qorpent.Host.Security{
 				}
 			}
 			if (!auth){
-				SetTicketCookie(response, null);
+				SetTicketCookie(context, null);
 			}
 			var principal = new QorpentHostPrincipal(result);
-		    request.User = principal;
+		    context.User = principal;
 
 		}
 
 		
 
-        public void Authenticate(HttpRequestDescriptor request,HttpResponseDescriptor response, string username, string password)
+        public void Authenticate(WebContext context, string username, string password)
         {
             bool isauth = _logon.Logon(username, password);
             if (isauth)
             {
                 string ticket = RegisterTicket(username);
-                SetTicketCookie(response, ticket);
+                SetTicketCookie(context, ticket);
                 UserInfo result = _ticketCache[ticket];
                 var principal = new QorpentHostPrincipal(result);
-                m_User.SetValue(response, principal);
+                m_User.SetValue(context, principal);
             }
             else
             {
-                SetTicketCookie(response, null);
-                m_User.SetValue(response, new QorpentHostPrincipal(error));
+                SetTicketCookie(context, null);
+                m_User.SetValue(context, new QorpentHostPrincipal(error));
             }
         }
 
         
 
 
-	    public void Logon(HttpRequestDescriptor request, HttpResponseDescriptor response) {
-            RequestParameters data = RequestParameters.Create(request);
+	    public void Logon(WebContext context) {
+            RequestParameters data = RequestParameters.Create(context);
             string login = data.Get("login");
             string elogin = data.Get("elogin");
             string pass = data.Get("pass");
@@ -113,29 +113,30 @@ namespace Qorpent.Host.Security{
             }
             if (string.IsNullOrWhiteSpace(login))
             {
-                response.Finish("no login", status: 500);
+                context.Finish("no login", status: 500);
                 return;
             }
             if (string.IsNullOrWhiteSpace(pass))
             {
-                response.Finish("no pass", status: 500);
+                context.Finish("no pass", status: 500);
                 return;
             }
-            Authenticate(request,response, login, pass);
-            UserInfo result = (request.User as QorpentHostPrincipal).Info;
+            Authenticate(context, login, pass);
+            
+            UserInfo result = (context.User as QorpentHostPrincipal).Info;
             if (result.Ok && result != guest)
             {
-                response.Finish("true", "application/json");
+                context.Finish("true");
             }
             else
             {
                 if (result == guest)
                 {
-                    response.Finish("false", "application/json");
+                    context.Finish("false");
                 }
                 else
                 {
-                    response.Finish("'error'", "application/json", 500);
+                    context.Finish("'error'", "application/json", 500);
                 }
             }
 	    }
@@ -144,14 +145,14 @@ namespace Qorpent.Host.Security{
 		///     Выполняет выход из контекста
 		/// </summary>
 		/// <param name="context"></param>
-        public void Logout(HttpRequestDescriptor request, HttpResponseDescriptor response)
+        public void Logout(WebContext context)
         {
-			string currentTicket = GetTicket(request,response);
+			string currentTicket = GetTicket(context);
 			if (!string.IsNullOrWhiteSpace(currentTicket) && _ticketCache.ContainsKey(currentTicket)){
 				_ticketCache.Remove(currentTicket);
 			}
-			SetTicketCookie(response, null);
-			response.Finish("true", "application/json");
+			SetTicketCookie(context, null);
+			context.Finish("true");
 		}
 
 		private bool IsValid(UserInfo user){
@@ -179,7 +180,7 @@ namespace Qorpent.Host.Security{
 			return ticket;
 		}
 
-		private void SetTicketCookie(HttpResponseDescriptor response, string ticket){
+		private void SetTicketCookie(WebContext context, string ticket){
 			ticket = ticket ?? "";
 			var cookie = new Cookie(_server.Config.AuthCookieName, ticket);
 			if (string.IsNullOrWhiteSpace(ticket)){
@@ -188,7 +189,7 @@ namespace Qorpent.Host.Security{
 			else{
 				cookie.Expires = DateTime.Today.AddDays(1);
 			}
-			response.Cookies.Add(cookie);
+			context.Response.Cookies.Add(cookie);
 		}
 
 		
@@ -214,15 +215,15 @@ namespace Qorpent.Host.Security{
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-        public bool IsAuth(HttpRequestDescriptor request, HttpResponseDescriptor response)
+        public bool IsAuth(WebContext context)
         {
-			var result = !string.IsNullOrWhiteSpace(GetTicket(request,response));
-			response.Finish(result.ToString().ToLowerInvariant());
+			var result = !string.IsNullOrWhiteSpace(GetTicket(context));
+			context.Finish(result.ToString().ToLowerInvariant());
 			return result;
 		}
-        private string GetTicket(HttpRequestDescriptor request, HttpResponseDescriptor response)
+        private string GetTicket(WebContext context)
         {
-			Cookie cookie = request.Cookies[_server.Config.AuthCookieName];
+			Cookie cookie = context.Cookies[_server.Config.AuthCookieName];
 			if (null == cookie) return null;
 			return cookie.Value;
 		}

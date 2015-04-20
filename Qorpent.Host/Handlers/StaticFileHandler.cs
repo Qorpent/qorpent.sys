@@ -28,9 +28,9 @@ namespace Qorpent.Host.Handlers
 		public string DefaultPage { get; set; }
 
 
-	    public override void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint,
+	    public override void Run(IHostServer server, WebContext context, string callbackEndPoint,
 	        CancellationToken cancel) {
-                var abspath = request.Uri.AbsolutePath;
+                var abspath = context.Uri.AbsolutePath;
                 if (string.IsNullOrWhiteSpace(abspath) || abspath == "/")
                 {
                     if (!string.IsNullOrWhiteSpace(server.Config.DefaultPage))
@@ -42,35 +42,35 @@ namespace Qorpent.Host.Handlers
                         abspath = DefaultPage;
                     }
                 }
-                var staticdescriptor = server.Static.Get(abspath, request);
+                var staticdescriptor = server.Static.Get(abspath, context);
                 //в случае, если запрошен HTML и он отсутствует, то в качестве результата возвращаем стартуовую страницу 
                 //указанного в начале имени приложения (для этого в видимости должен находится скрипт с контроллерами приложения
                 if (null == staticdescriptor && abspath.EndsWith(".html"))
                 {
-                    RunApplication(server, request,response, callbackEndPoint, cancel, abspath);
+                    RunApplication(server, context, callbackEndPoint, cancel, abspath);
                     return;
                 }
                 if (null == staticdescriptor && abspath.EndsWith("-starter.js"))
                 {
-                    RunApplicationStarter(server, request, response, callbackEndPoint, cancel, abspath);
+                    RunApplicationStarter(server, context, callbackEndPoint, cancel, abspath);
                     return;
                 }
                 if (null == staticdescriptor)
                 {
-                    FinishWirh404(response);
+                    FinishWirh404(context);
                     return;
                 }
-                Finish200(server, request, response, staticdescriptor);
+                Finish200(server, context, staticdescriptor);
 	    }
 
-	    private void RunApplicationStarter(IHostServer server, HttpRequestDescriptor request,HttpResponseDescriptor response, string callbackEndPoint, CancellationToken cancel, string abspath){
+	    private void RunApplicationStarter(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel, string abspath){
 			if (!_applicationCache.ContainsKey(abspath)){
 				var appname = Path.GetFileNameWithoutExtension(abspath).Split('-')[0];
 				var appexists = server.Static.Get(appname + "_controllers.js") != null;
 				if (appexists)
 				{
 
-					var template = server.Static.Get("template.starter.js", request).Read();
+					var template = server.Static.Get("template.starter.js", context).Read();
 
 					var apphtml = template.Replace("__APPNAME__", appname);
 					_applicationCache[abspath] = new FixedWebFileRecord(abspath, "text/javascript", apphtml);
@@ -80,63 +80,59 @@ namespace Qorpent.Host.Handlers
 					_applicationCache[abspath] = null;
 				}
 			}
-			Finish(server,request,response,abspath);
+			Finish(server,context,abspath);
 		}
 
-        private static void Finish200(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, IWebFileRecord staticdescriptor)
-        {
-			var filetime = response.SetLastModified(staticdescriptor.Version);
-            if (filetime <= request.GetIfModifiedSince())
+        private static void Finish200(IHostServer server, WebContext context, IWebFileRecord staticdescriptor) {
+
+			var filetime = context.SetLastModified(staticdescriptor.Version);
+            if (filetime <= context.GetIfModifiedSince())
             {
-				response.Finish("", status: 304);
+				context.Finish("", status: 304);
 			}
 			else{
-				response.SetHeader("Qorpent-Disposition", staticdescriptor.FullName);
+				context.SetHeader("Qorpent-Disposition", staticdescriptor.FullName);
 				if (server.Config.Cached.Contains(Path.GetFileName(staticdescriptor.FullName))){
-                    response.SetHeader("Cache-Control", "public, max-age=86400");
+                    context.SetHeader("Cache-Control", "public, max-age=86400");
 				}
 				else if (server.Config.ForceNoCache) {
-                    response.SetHeader("Cache-Control", "no-cache, must-revalidate");
+                    context.SetHeader("Cache-Control", "no-cache, must-revalidate");
 				}
 				else {
-                    response.SetHeader("Cache-Control", "public");
+                    context.SetHeader("Cache-Control", "public");
 				}
 				if (staticdescriptor.IsFixedContent){
 					if (null != staticdescriptor.FixedData){
-						response.StatusCode = 200;
-                        response.StatusDescription = "OK";
-                        response.ContentType = staticdescriptor.MimeType;
-                        response.Stream.Write(staticdescriptor.FixedData, 0, staticdescriptor.FixedData.Length);
-
+                        context.Finish(staticdescriptor.FixedData,staticdescriptor.MimeType);
 					}
 					else{
-						response.Finish(staticdescriptor.FixedContent, staticdescriptor.MimeType + "; charset=utf-8");
+						context.Finish(staticdescriptor.FixedContent, staticdescriptor.MimeType + "; charset=utf-8");
 					}
 				}
 				else{
 					using (var s = staticdescriptor.Open()){
-						response.Finish(s, staticdescriptor.MimeType + "; charset=utf-8");
+						context.Finish(s, staticdescriptor.MimeType + "; charset=utf-8");
 						s.Close();
 					}
 				}
 			}
 		}
 
-        private static void FinishWirh404(HttpResponseDescriptor response)
+        private static void FinishWirh404(WebContext context)
         {
-			response.Finish("no file found", "text/plain; charset=utf-8", 404);
+			context.Finish("no file found", "text/plain; charset=utf-8", 404);
 		}
 
 		//кэш страниц, являющихся приложениями
 		static IDictionary<string, IWebFileRecord> _applicationCache = new Dictionary<string, IWebFileRecord>();
-        private void RunApplication(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint, CancellationToken cancel, string abspath)
+        private void RunApplication(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel, string abspath)
         {
 			if (!_applicationCache.ContainsKey(abspath)){
 				var appname = Path.GetFileNameWithoutExtension(abspath);
 				var appexists = server.Static.Get(appname + "_controllers.js") != null;
 				if (appexists){
 
-					var template = server.Static.Get("template.app.html", request).Read();
+					var template = server.Static.Get("template.app.html", context).Read();
 
 					var apphtml = string.Format(template, appname);
 					_applicationCache[abspath] = new FixedWebFileRecord(abspath,"text/html",apphtml);
@@ -146,16 +142,16 @@ namespace Qorpent.Host.Handlers
 				}
 			}
 
-			Finish(server,request,response, abspath);
+			Finish(server,context, abspath);
 		}
 
-        private static void Finish(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string abspath)
+        private static void Finish(IHostServer server, WebContext context, string abspath)
         {
 			if (null == _applicationCache[abspath]){
-				FinishWirh404(response);
+				FinishWirh404(context);
 			}
 			else{
-				Finish200(server, request,response, _applicationCache[abspath]);
+				Finish200(server, context, _applicationCache[abspath]);
 			}
 		}
 	}

@@ -17,7 +17,7 @@ namespace Qorpent.Host.Handlers {
     public class ServerPrint:RequestHandlerBase {
         static  object sync = new object();
         
-        public override void Run(IHostServer server, HttpRequestDescriptor request, HttpResponseDescriptor response, string callbackEndPoint,
+        public override void Run(IHostServer server, WebContext context, string callbackEndPoint,
             CancellationToken cancel) {
                 lock (sync)
                 {
@@ -29,7 +29,7 @@ namespace Qorpent.Host.Handlers {
                         EnvironmentInfo.ResolvePath(config.Attr("mozillapath", "@repos@/../bin/firefox/firefox.exe"));
                     var reportpath = EnvironmentInfo.ResolvePath(config.Attr("reportpath", "@repos@/.reports"));
                     Directory.CreateDirectory(reportpath);
-                    var dict = request.Uri.Query.Split('&')
+                    var dict = context.Uri.Query.Split('&')
                         .Select(_ => _.Split('='))
                         .ToDictionary(_ => _[0], _ => Uri.UnescapeDataString(_.Length == 1 ? "1" : _[1]));
                     var reporturl = dict["reporturl"];
@@ -76,11 +76,11 @@ namespace Qorpent.Host.Handlers {
                     var pseudofileName = title.ToSafeFileName() + ".pdf";
 
 
-                    response.SetHeader("Content-Disposition", "attachment; filename*=UTF-8''" + Uri.EscapeDataString(pseudofileName));
+                    context.SetHeader("Content-Disposition", "attachment; filename*=UTF-8''" + Uri.EscapeDataString(pseudofileName));
 
                     using (var s = File.OpenRead(hashFileName))
                     {
-                        response.Finish(s, "application/pdf; charset=utf-8");
+                        context.Finish(s, "application/pdf; charset=utf-8");
                         s.Close();
                     }
 
