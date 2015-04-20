@@ -19,7 +19,6 @@ namespace Qorpent.IO.Http {
             var result = new WebContext { Request = request, Response = response };
             result.Cookies = result.Cookies ?? context.Request.Cookies;
             request.Cookies = result.Cookies;
-            response.Cookies = result.Cookies;
             result.User = context.User;
             return result;
         }
