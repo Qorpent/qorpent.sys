@@ -113,7 +113,7 @@ namespace Qorpent.Host {
                     }
                     using (var resstream = resp.GetResponseStream()) {
                         var stream = resstream;
-                        if (resp.Headers["Content-Encoding"].Contains("gzip")) {
+                        if ((resp.Headers["Content-Encoding"]??"").Contains("gzip")) {
                             stream = new GZipStream(stream,CompressionLevel.Optimal);    
                         }
                         stream.CopyTo(context.Response.Stream);

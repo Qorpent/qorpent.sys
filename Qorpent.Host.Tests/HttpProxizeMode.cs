@@ -39,6 +39,7 @@ namespace Qorpent.Host.Tests
                 h2.Stop();
                 
             }
+            Console.WriteLine(result);
             Assert.AreEqual("hello!",result);
         }
 
