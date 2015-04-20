@@ -11,32 +11,7 @@ namespace Qorpent.Host{
 	///     Расширения фабрики хэндлеров
 	/// </summary>
 	public static class HostExtensions{
-		/// <summary>
-		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="content"></param>
-		/// <param name="mimeType"></param>
-		/// <param name="status"></param>
-		public static void Finish(this HttpListenerContext context, string content, string mimeType = "text/plain",
-		                          int status = 200){
-			HttpListenerResponse response = context.Response;
-			Finish(response, content, mimeType, status);
-		}
-
-		/// <summary>
-		/// </summary>
-		/// <param name="response"></param>
-		/// <param name="content"></param>
-		/// <param name="mimeType"></param>
-		/// <param name="status"></param>
-		public static void Finish(this HttpListenerResponse response, string content, string mimeType = "text/plain",
-		                          int status = 200){
-			response.StatusCode = status;
-			response.ContentType = mimeType;
-			byte[] buffer = Encoding.UTF8.GetBytes(content);
-			response.OutputStream.Write(buffer, 0, buffer.Length);
-			response.Close();
-		}
+		
 
 		/// <summary>
 		///     Регистрирует статический хэндлер со статусом
@@ -138,34 +113,6 @@ namespace Qorpent.Host{
 			return factory;
 		}
 
-		/// <summary>
-		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="stream"></param>
-		/// <param name="mimeType"></param>
-		/// <param name="status"></param>
-		public static void Finish(this HttpListenerContext context, Stream stream, string mimeType = "application/json",
-		                          int status = 200){
-			Finish(context.Response, stream, mimeType, status);
-		}
-
-		/// <summary>
-		/// </summary>
-		/// <param name="response"></param>
-		/// <param name="stream"></param>
-		/// <param name="mimeType"></param>
-		/// <param name="status"></param>
-		public static void Finish(this HttpListenerResponse response, Stream stream, string mimeType, int status){
-			response.StatusCode = status;
-			response.ContentType = mimeType;
-			response.Headers["Content-Encoding"] = "gzip";
-			using (var g = new GZipStream(response.OutputStream,CompressionLevel.Optimal)){
-				stream.CopyTo(g, 2 ^ 14);
-				
-			}
-			response.Close();
-			
-			
-		}
+		
 	}
 }

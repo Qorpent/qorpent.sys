@@ -15,46 +15,7 @@ namespace Qorpent.Host.Qweb
 	/// </summary>
 	public class HostQwebHandler:RequestHandlerBase	
 	{
-		/// <summary>
-		/// Выполняет указанный запрос
-		/// </summary>
-		/// <param name="server"></param>
-		/// <param name="callcontext"></param>
-		/// <param name="callbackEndPoint"></param>
-		/// <param name="cancel"></param>
-		public void Run(IHostServer server, HttpListenerContext callcontext, string callbackEndPoint, CancellationToken cancel)
-		{
-			SetCurrentUser(server, callcontext.User);
-			callcontext.Response.ContentEncoding = Encoding.UTF8;
-			callcontext.Response.Headers["Content-Encoding"] = "utf-8";
-			var context = server.Application.Container.Get<IMvcContext>(null,server, callcontext, callbackEndPoint, cancel);
-			context.NotModified = false;
-			try
-			{
-				BindContext(context);
-				Execute(context);
-				if (context.NotModified)
-				{
-					MvcHandler.ProcessNotModified(context);
-					context.Output.Close();
-				}
-				else
-				{
-					MvcHandler.SetModifiedHeader(context);
-					RenderResult(context);
-					
-				}
-			}
-			catch (Exception ex)
-			{
-				ProcessError(context, ex);
-			}
-			finally
-			{
-				context.Release();
-			}
-
-		}
+		
 
 	    public override void Run(IHostServer server, WebContext ctx, string callbackEndPoint,
 	        CancellationToken cancel) {

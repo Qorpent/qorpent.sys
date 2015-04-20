@@ -26,15 +26,6 @@ namespace Qorpent.Host.Security{
 			Principal = new GenericPrincipal(new GenericIdentity("local\\guest"), null)
 		};
 
-		private readonly FieldInfo m_User = typeof (HttpListenerContext).GetField("m_User",
-		                                                                          BindingFlags.SetField |
-		                                                                          BindingFlags.NonPublic |
-		                                                                          BindingFlags.Instance) ?? 
-		                                                                          
-		                                   typeof (HttpListenerContext).GetField("user",   // IN MONO
-		                                                                          BindingFlags.SetField |
-		                                                                          BindingFlags.NonPublic |
-		                                                                          BindingFlags.Instance) ;
 
 		private IHostServer _server;
 
@@ -85,12 +76,12 @@ namespace Qorpent.Host.Security{
                 SetTicketCookie(context, ticket);
                 UserInfo result = _ticketCache[ticket];
                 var principal = new QorpentHostPrincipal(result);
-                m_User.SetValue(context, principal);
+                context.User = principal;
             }
             else
             {
                 SetTicketCookie(context, null);
-                m_User.SetValue(context, new QorpentHostPrincipal(error));
+                context.User = new QorpentHostPrincipal(error);
             }
         }
 
