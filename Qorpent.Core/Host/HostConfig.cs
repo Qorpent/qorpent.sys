@@ -66,12 +66,12 @@ namespace Qorpent.Host{
 	            var def = Loggy.Get();
 	            def.Level = LogLevel;
                 def.Appenders.Add(new UdpAppender(LoggerHost,LoggerPort){AutoFlushSize = 1,Format = LoggerFormat});
-                def.Debug("debug test");
-                def.Trace("trace test");
-                def.Info("info test");
-                def.Warn("warning test");
-                def.Error("error test", new Exception("Test exception"));
-                def.Fatal("fatal test");
+                def.Debug("debug test тест");
+                def.Trace("trace test тест");
+                def.Info("info test тест");
+                def.Warn("warning test тест");
+                def.Error("error test тест", new Exception("Test exception"));
+                def.Fatal("fatal test тест");
             }
 	    }
 
