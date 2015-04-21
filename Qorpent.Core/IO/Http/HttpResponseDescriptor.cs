@@ -27,6 +27,8 @@ namespace Qorpent.IO.Http {
 
         public virtual void SetHeader(string name, string value) {
             if (null != Headers) {
+
+                
                 Headers[name] = value;
             }
         }
@@ -59,7 +61,11 @@ namespace Qorpent.IO.Http {
 
         public void Finish(object data, string mime = "application/json", int status = 200) {
             StatusCode = status;
+            if (mime.Contains("text") || mime.Contains("json")) {
+                mime += "; charset=utf-8";
+            }
             ContentType = mime;
+            
             Write(data,true);
 
             Close();
@@ -68,6 +74,7 @@ namespace Qorpent.IO.Http {
         public void Write(object data, bool allowZip) {
             var sendobject = GetSendObject(data);
             if (allowZip && SupportGZip && IsRequiredGZip(sendobject)) {
+
                 SetHeader("Content-Encoding", "gzip");
                 var ms = EnsureStream(sendobject);
                 using (var g = new GZipStream(Stream, CompressionLevel.Optimal)) {
