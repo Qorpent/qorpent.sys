@@ -1,0 +1,47 @@
+@mixin title($color:false){
+  @if not $color {
+    $color : skin(item title color);
+  }
+  font-weight: skin(item title weight);
+  text-align: skin(item title align);
+  @if skin(contact title invertcolor) {
+    color: slighten($color, 30%);
+    background-color: darken(color($color), 30%);
+  }@else {
+    background-color: slighten($color, 30%);
+    color: darken(color($color), 30%);
+  }
+  font-size : skin(item title size);
+  $vpad : skin(item title vpad);
+  $hpad : skin(item title hpad);
+  padding: $vpad $hpad $vpad $hpad;
+  border-radius: skin(item title borderradius);
+  margin-top: 0px;
+}
+@mixin item($border:true,$titlecolor:false){
+  @if(skin(item bordercolor) and $border) {
+    $bl : $titlecolor;
+    @if not $bl {
+      $bl : skin(item bordercolor);
+    }@else {
+      $bl : slighten($bl,10%);
+    }
+    border: solid 1px color($bl);
+  }
+  i {
+    margin-left: 3px;
+    margin-right: 3px;
+    color : color(primary);
+  }
+  padding: skin(item padding);
+  margin-top: skin(item space);
+  border-radius: skin(item borderradius);
+  > article > h2, > h2{
+    @include title($titlecolor);
+    border-bottom: none;
+  }
+}
+
+
+
+

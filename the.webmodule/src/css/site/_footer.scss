@@ -1,0 +1,54 @@
+.footer {
+        background-color: slighten(default,30%);
+        box-shadow: none;
+        border:none;
+        color : color(primary);
+        @include flex(row);
+        min-height: 100px;
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+        align-content: stretch;
+        align-items: flex-start;
+        -webkit-box-pack: justify;
+        margin-top : 25px;
+        >div {
+                flex-shrink: 0;
+        }
+        .counters{
+                @include flex(row);
+                justify-content: flex-end;
+                align-items: flex-start;
+                flex-grow: 1;
+        }
+        .info {
+                @media screen and (max-width:500px) {
+                        & {
+                               max-width: 300px;
+                        }
+                }
+                @include flex(column);
+                flex-wrap: wrap;
+                nav {
+                        @include flex(row);
+                        justify-content: flex-start;
+                        flex-wrap: wrap;
+                        a {
+                                text-decoration: none;
+                                margin-right: 10px;
+                                font-size: 14px;
+                                padding-bottom: 0px;
+                                cursor: pointer;
+                                border-bottom: none;
+                                &.active {
+                                        border-bottom: solid 1px color(primary);
+                                }
+                        }
+                }
+                .copyright {
+                        font-size: 80%;
+                        margin-top:10px;
+
+                }
+        }
+}

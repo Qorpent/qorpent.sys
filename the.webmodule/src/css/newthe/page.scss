@@ -2,6 +2,7 @@
 @import "tools";
 @import "dropdown";
 @import "scroller";
+@import "toolwindow";
 @mixin page() {
   body {
     @include hyphens(auto);
@@ -100,4 +101,8 @@
     }
     @include labels();
   }
+}
+
+.tlicon {
+  color : color(primary);
 }

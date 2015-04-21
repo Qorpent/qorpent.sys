@@ -1,0 +1,83 @@
+.header {
+        $logoheight  : skin(header logoheight);
+        $toppad : skin(header toppad);
+        $botpad : skin(header botpad);
+        $height : $logoheight + $toppad+$botpad;
+        background-color: color(primary);
+        color : colormode(primary,text);
+        @include flex(row);
+        min-height: $height;
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+        align-content: stretch;
+        align-items: skin(header align);
+        justify-content: skin(header justify);
+        -webkit-box-pack: justify;
+        padding-top : $toppad;
+        padding-bottom : $botpad;
+        padding-left: skin(header sidepad);
+        padding-right: skin(header sidepad);
+        >* {
+                display: block;
+        }
+        >.logo {
+                min-width: 150px;
+                text-align: left;
+                order : skin(order logo,10);
+        }
+        >.name {
+
+                order : skin(order name,20);
+                padding-left: 30px;
+                flex:1 0 auto;
+                @include flex(column);
+                align-items: flex-start;
+                text-align: center;
+
+                @if skin(uplangpanel,false) {
+                        align-items: flex-end;
+                        @if skin(centername,true) {
+                                & > * {
+                                        width: 270px;
+                                }
+                                text-align: center;
+                        }@else {
+                                text-align: right;
+                        }
+                }
+                @media screen and (max-width:799px) {
+                        & {
+                                text-align: center !important;
+                                align-items: center !important;
+                                padding-left:0px !important;
+                        }
+                }
+                .main {
+                        font-size: skin(name fontsize,150%);
+                }
+                .slogan {
+                        font-size:  skin(slogan fontsize,105%);
+                }
+        }
+        >.ext {
+                order : skin(order ext,30);
+        }
+
+        .phone {
+                color: color(light);
+                font-size: 120%;
+                a {
+                        color : color(light) !important;
+                        text-decoration: none;
+                }
+        }
+        @media screen and (max-width:799px) {
+                -webkit-box-orient: vertical;
+                -webkit-box-align: center;
+                >div {
+                        flex: 1 0 auto;
+                        text-align: center !important;
+                }
+        }
+}

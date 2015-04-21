@@ -141,14 +141,63 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     transform: rotate(359deg);
   }
 }
-/* line 90, newthe/page.scss */
+/* line 1, newthe/toolwindow.scss */
+.toolwindow {
+  display: flex;
+  flex-direction: column;
+  background-color: #FDFDFD;
+  border: solid 1px #4C81AF;
+  padding: 0px;
+  margin-top: 3px;
+  margin-right: 3px;
+  box-shadow: 3px 2px 2px #a4bfd6;
+}
+/* line 12, newthe/toolwindow.scss */
+.toolwindow > label:first-child {
+  background-color: #4C81AF;
+  color: #ffffff;
+  margin: 0px;
+  display: flex;
+  min-height: 30px;
+  max-height: 30px;
+  line-height: 28px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px;
+}
+/* line 24, newthe/toolwindow.scss */
+.toolwindow > label:first-child .tbt {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+/* line 28, newthe/toolwindow.scss */
+.toolwindow > label:first-child .tbt i {
+  margin-left: 5px;
+}
+/* line 30, newthe/toolwindow.scss */
+.toolwindow > label:first-child .tbt i:last-child {
+  margin-left: 20px;
+}
+/* line 37, newthe/toolwindow.scss */
+.toolwindow .item {
+  padding: 5px;
+}
+/* line 39, newthe/toolwindow.scss */
+.toolwindow .item a {
+  text-decoration: none;
+  color: #4C81AF;
+}
+
+/* line 91, newthe/page.scss */
 html.the {
   margin: 0px;
   display: flex;
   overflow: hidden;
   height: 100%;
 }
-/* line 6, newthe/page.scss */
+/* line 7, newthe/page.scss */
 html.the body {
   -moz-hyphens: auto;
   -ms-hyphens: auto;
@@ -161,40 +210,40 @@ html.the body {
   font-family: Arial, sans-serif;
   font-size: 18px;
 }
-/* line 14, newthe/page.scss */
+/* line 15, newthe/page.scss */
 html.the body .fa {
   font-family: Arial, sans-serif !important;
 }
-/* line 17, newthe/page.scss */
+/* line 18, newthe/page.scss */
 html.the body input {
   font-size: inherit;
   padding-left: 5px;
   outline: none;
   margin-top: 10px;
 }
-/* line 22, newthe/page.scss */
+/* line 23, newthe/page.scss */
 html.the body input:focus {
   outline: none;
 }
-/* line 26, newthe/page.scss */
+/* line 27, newthe/page.scss */
 html.the body ::selection {
   color: #FDFDFD;
   background-color: #4C81AF;
 }
 @media screen and (max-width: 2000px) and (min-width: 1600px) {
-  /* line 6, newthe/page.scss */
+  /* line 7, newthe/page.scss */
   html.the body {
     font-size: 20px;
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 6, newthe/page.scss */
+  /* line 7, newthe/page.scss */
   html.the body {
     font-size: 16px;
   }
 }
 @media print {
-  /* line 6, newthe/page.scss */
+  /* line 7, newthe/page.scss */
   html.the body {
     color: #000000;
     background-color: #ffffff;
@@ -480,39 +529,49 @@ html.the button, html.the .button, html.the .menuitem {
   color: #2B2B2B;
   background-color: #FDFDFD;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the button.title, html.the .button.title, html.the .menuitem.title {
   color: #FDFDFD;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the button.bordered, html.the button.button, html.the .button.bordered, html.the .button.button, html.the .menuitem.bordered, html.the .menuitem.button {
   border: solid 1px #e4e4e4;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the button.bordered.title, html.the button.button.title, html.the .button.bordered.title, html.the .button.button.title, html.the .menuitem.bordered.title, html.the .menuitem.button.title {
   border: none;
   border-bottom: solid 1px #e4e4e4;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the button.bordered.checker, html.the button.button.checker, html.the .button.bordered.checker, html.the .button.button.checker, html.the .menuitem.bordered.checker, html.the .menuitem.button.checker {
   border: solid 1px #f2f2f2;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the button.bordered.checked, html.the button.button.checked, html.the .button.bordered.checked, html.the .button.button.checked, html.the .menuitem.bordered.checked, html.the .menuitem.button.checked {
   border: solid 1px #e4e4e4;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the button.checker, html.the .button.checker, html.the .menuitem.checker {
-  color: #5e5e5e;
-  background-color: white;
-}
-/* line 134, newthe/colorizer.scss */
-html.the button.checked, html.the .button.checked, html.the .menuitem.checked {
   color: #2B2B2B;
   background-color: #FDFDFD;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the button.checker.semaphore, html.the .button.checker.semaphore, html.the .menuitem.checker.semaphore {
+  color: #5e5e5e;
+  background-color: white;
+}
+/* line 105, newthe/colorizer.scss */
+html.the button.checked, html.the .button.checked, html.the .menuitem.checked {
+  color: #5e5e5e;
+  background-color: white;
+}
+/* line 108, newthe/colorizer.scss */
+html.the button.checked.semaphore, html.the .button.checked.semaphore, html.the .menuitem.checked.semaphore {
+  color: #2B2B2B;
+  background-color: #FDFDFD;
+}
+/* line 119, newthe/colorizer.scss */
 html.the button.active, html.the button.button, html.the button.menuitem, html.the .button.active, html.the .button.button, html.the .button.menuitem, html.the .menuitem.active, html.the .menuitem.button, html.the .menuitem.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -520,28 +579,28 @@ html.the button.active, html.the button.button, html.the button.menuitem, html.t
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the button.active:hover, html.the button.button:hover, html.the button.menuitem:hover, html.the .button.active:hover, html.the .button.button:hover, html.the .button.menuitem:hover, html.the .menuitem.active:hover, html.the .menuitem.button:hover, html.the .menuitem.menuitem:hover {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the button.active:hover.title, html.the button.button:hover.title, html.the button.menuitem:hover.title, html.the .button.active:hover.title, html.the .button.button:hover.title, html.the .button.menuitem:hover.title, html.the .menuitem.active:hover.title, html.the .menuitem.button:hover.title, html.the .menuitem.menuitem:hover.title {
   background-color: inherit;
   color: #92b3cf;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the button.active:hover.bordered, html.the button.button:hover.bordered, html.the button.menuitem:hover.bordered, html.the .button.active:hover.bordered, html.the .button.button:hover.bordered, html.the .button.menuitem:hover.bordered, html.the .menuitem.active:hover.bordered, html.the .menuitem.button:hover.bordered, html.the .menuitem.menuitem:hover.bordered {
   border-top-color: #6e9ac0;
   border-bottom-color: #cacaca;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the button.active:hover:active, html.the button.button:hover:active, html.the button.menuitem:hover:active, html.the .button.active:hover:active, html.the .button.button:hover:active, html.the .button.menuitem:hover:active, html.the .menuitem.active:hover:active, html.the .menuitem.button:hover:active, html.the .menuitem.menuitem:hover:active {
   background: #D7D7D7;
   color: #FDFDFD;
   color: #2B2B2B;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the button.active:hover:active.bordered, html.the button.button:hover:active.bordered, html.the button.menuitem:hover:active.bordered, html.the .button.active:hover:active.bordered, html.the .button.button:hover:active.bordered, html.the .button.menuitem:hover:active.bordered, html.the .menuitem.active:hover:active.bordered, html.the .menuitem.button:hover:active.bordered, html.the .menuitem.menuitem:hover:active.bordered {
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
@@ -1263,196 +1322,107 @@ html.the .dropdown.debug {
 html.the body.isdropdown .dropdownback {
   display: block;
 }
-/* line 203, newthe/colorizer.scss */
+/* line 176, newthe/colorizer.scss */
 html.the .idark {
   color: #2B2B2B;
 }
-/* line 206, newthe/colorizer.scss */
+/* line 179, newthe/colorizer.scss */
 html.the .dark {
   color: #FDFDFD;
   background-color: #2B2B2B;
 }
 @-moz-keyframes progress_dark {
   0% {
-    background: linear-gradient(to right, #5e5e5e, #5e5e5e);
-  }
-  7% {
-    background: linear-gradient(to right, #2b2b2b 0%, #2b2b2b 5%, #636363 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #2b2b2b 0%, #2b2b2b 10%, #686868 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #2b2b2b 0%, #2b2b2b 20%, #727272 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #777777 0%, #777777 9%, #2b2b2b 10%, #2b2b2b 30%, #777777 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #7d7d7d 0%, #7d7d7d 19%, #2b2b2b 20%, #2b2b2b 40%, #7d7d7d 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #828282 0%, #828282 29%, #2b2b2b 30%, #2b2b2b 50%, #828282 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #828282 0%, #828282 39%, #2b2b2b 40%, #2b2b2b 60%, #828282 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #828282 0%, #828282 49%, #2b2b2b 50%, #2b2b2b 70%, #828282 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #7d7d7d 0%, #7d7d7d 59%, #2b2b2b 60%, #2b2b2b 80%, #7d7d7d 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #777777 0%, #777777 69%, #2b2b2b 70%, #2b2b2b 90%, #777777 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #727272 0%, #727272 79%, #2b2b2b 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #686868 0%, #686868 89%, #2b2b2b 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #636363 0%, #636363 94%, #2b2b2b 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #5e5e5e, #5e5e5e);
+    background-position: 1000px 0%;
   }
 }
 @-webkit-keyframes progress_dark {
   0% {
-    background: linear-gradient(to right, #5e5e5e, #5e5e5e);
-  }
-  7% {
-    background: linear-gradient(to right, #2b2b2b 0%, #2b2b2b 5%, #636363 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #2b2b2b 0%, #2b2b2b 10%, #686868 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #2b2b2b 0%, #2b2b2b 20%, #727272 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #777777 0%, #777777 9%, #2b2b2b 10%, #2b2b2b 30%, #777777 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #7d7d7d 0%, #7d7d7d 19%, #2b2b2b 20%, #2b2b2b 40%, #7d7d7d 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #828282 0%, #828282 29%, #2b2b2b 30%, #2b2b2b 50%, #828282 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #828282 0%, #828282 39%, #2b2b2b 40%, #2b2b2b 60%, #828282 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #828282 0%, #828282 49%, #2b2b2b 50%, #2b2b2b 70%, #828282 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #7d7d7d 0%, #7d7d7d 59%, #2b2b2b 60%, #2b2b2b 80%, #7d7d7d 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #777777 0%, #777777 69%, #2b2b2b 70%, #2b2b2b 90%, #777777 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #727272 0%, #727272 79%, #2b2b2b 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #686868 0%, #686868 89%, #2b2b2b 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #636363 0%, #636363 94%, #2b2b2b 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #5e5e5e, #5e5e5e);
+    background-position: 1000px 0%;
   }
 }
 @keyframes progress_dark {
   0% {
-    background: linear-gradient(to right, #5e5e5e, #5e5e5e);
-  }
-  7% {
-    background: linear-gradient(to right, #2b2b2b 0%, #2b2b2b 5%, #636363 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #2b2b2b 0%, #2b2b2b 10%, #686868 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #2b2b2b 0%, #2b2b2b 20%, #727272 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #777777 0%, #777777 9%, #2b2b2b 10%, #2b2b2b 30%, #777777 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #7d7d7d 0%, #7d7d7d 19%, #2b2b2b 20%, #2b2b2b 40%, #7d7d7d 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #828282 0%, #828282 29%, #2b2b2b 30%, #2b2b2b 50%, #828282 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #828282 0%, #828282 39%, #2b2b2b 40%, #2b2b2b 60%, #828282 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #828282 0%, #828282 49%, #2b2b2b 50%, #2b2b2b 70%, #828282 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #7d7d7d 0%, #7d7d7d 59%, #2b2b2b 60%, #2b2b2b 80%, #7d7d7d 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #777777 0%, #777777 69%, #2b2b2b 70%, #2b2b2b 90%, #777777 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #727272 0%, #727272 79%, #2b2b2b 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #686868 0%, #686868 89%, #2b2b2b 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #636363 0%, #636363 94%, #2b2b2b 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #5e5e5e, #5e5e5e);
+    background-position: 1000px 0%;
   }
 }
-/* line 84, newthe/colorizer.scss */
+/* line 32, newthe/colorizer.scss */
 html.the .dark.progress {
-  color: #FDFDFD !important;
-  -moz-animation: progress_dark 1.2s linear 0.5s infinite;
-  -webkit-animation: progress_dark 1.2s linear 0.5s infinite;
-  animation: progress_dark 1.2s linear 0.5s infinite;
+  position: relative;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 35, newthe/colorizer.scss */
+html.the .dark.progress::after {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  content: " ";
+  display: block;
+  background-image: url("progress.png");
+  background-repeat: repeat;
+  animation-name: progress_dark;
+  -webkit-animation-name: progress_dark;
+  opacity: 0.4;
+  animation-duration: 15s;
+  -webkit-animation-duration: 15s;
+  animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+/* line 65, newthe/colorizer.scss */
 html.the .dark.title {
   color: #2B2B2B;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .dark.bordered, html.the .dark.button {
   border: solid 1px #121212;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .dark.bordered.title, html.the .dark.button.title {
   border: none;
   border-bottom: solid 1px #121212;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .dark.bordered.checker, html.the .dark.button.checker {
   border: solid 1px #848484;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .dark.bordered.checked, html.the .dark.button.checked {
   border: solid 1px #121212;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .dark.checker {
-  color: #2B2B2B;
-  background-color: #919191;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .dark.checked {
   color: #FDFDFD;
   background-color: #2B2B2B;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .dark.checker.semaphore {
+  color: #2B2B2B;
+  background-color: #919191;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .dark.checked {
+  color: #2B2B2B;
+  background-color: #919191;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .dark.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #2B2B2B;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .dark.active, html.the .dark.button, html.the .dark.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1460,73 +1430,83 @@ html.the .dark.active, html.the .dark.button, html.the .dark.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .dark.active:hover, html.the .dark.button:hover, html.the .dark.menuitem:hover {
   color: #FDFDFD;
   background-color: #5e5e5e;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .dark.active:hover.title, html.the .dark.button:hover.title, html.the .dark.menuitem:hover.title {
   background-color: inherit;
   color: #5e5e5e;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .dark.active:hover.bordered, html.the .dark.button:hover.bordered, html.the .dark.menuitem:hover.bordered {
   border-top-color: #454545;
   border-bottom-color: black;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .dark.active:hover:active, html.the .dark.button:hover:active, html.the .dark.menuitem:hover:active {
   background: linear-gradient(to bottom, #383838, #454545);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .dark.active:hover:active.title, html.the .dark.button:hover:active.title, html.the .dark.menuitem:hover:active.title {
   color: #454545 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .dark.active:hover:active.bordered, html.the .dark.button:hover:active.bordered, html.the .dark.menuitem:hover:active.bordered {
   border-top-color: #1e1e1e;
   border-bottom-color: #2b2b2b;
 }
-/* line 209, newthe/colorizer.scss */
+/* line 182, newthe/colorizer.scss */
 html.the .dark.soft {
   color: #FDFDFD;
   background-color: #5e5e5e;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .dark.soft.title {
   color: #5e5e5e;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .dark.soft.bordered, html.the .dark.soft.button {
   border: solid 1px #454545;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .dark.soft.bordered.title, html.the .dark.soft.button.title {
   border: none;
   border-bottom: solid 1px #454545;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .dark.soft.bordered.checker, html.the .dark.soft.button.checker {
   border: solid 1px #b7b7b7;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .dark.soft.bordered.checked, html.the .dark.soft.button.checked {
   border: solid 1px #454545;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .dark.soft.checker {
-  color: #5e5e5e;
-  background-color: #c4c4c4;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .dark.soft.checked {
   color: #FDFDFD;
   background-color: #5e5e5e;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .dark.soft.checker.semaphore {
+  color: #5e5e5e;
+  background-color: #c4c4c4;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .dark.soft.checked {
+  color: #5e5e5e;
+  background-color: #c4c4c4;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .dark.soft.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #5e5e5e;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .dark.soft.active, html.the .dark.soft.button, html.the .dark.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1534,73 +1514,83 @@ html.the .dark.soft.active, html.the .dark.soft.button, html.the .dark.soft.menu
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .dark.soft.active:hover, html.the .dark.soft.button:hover, html.the .dark.soft.menuitem:hover {
   color: #FDFDFD;
   background-color: #919191;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .dark.soft.active:hover.title, html.the .dark.soft.button:hover.title, html.the .dark.soft.menuitem:hover.title {
   background-color: inherit;
   color: #919191;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .dark.soft.active:hover.bordered, html.the .dark.soft.button:hover.bordered, html.the .dark.soft.menuitem:hover.bordered {
   border-top-color: #777777;
   border-bottom-color: #2b2b2b;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .dark.soft.active:hover:active, html.the .dark.soft.button:hover:active, html.the .dark.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #6b6b6b, #777777);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .dark.soft.active:hover:active.title, html.the .dark.soft.button:hover:active.title, html.the .dark.soft.menuitem:hover:active.title {
   color: #777777 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .dark.soft.active:hover:active.bordered, html.the .dark.soft.button:hover:active.bordered, html.the .dark.soft.menuitem:hover:active.bordered {
   border-top-color: #515151;
   border-bottom-color: #5e5e5e;
 }
-/* line 212, newthe/colorizer.scss */
+/* line 185, newthe/colorizer.scss */
 html.the .dark.strong {
   color: #FDFDFD;
   background-color: #121212;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .dark.strong.title {
   color: #121212;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .dark.strong.bordered, html.the .dark.strong.button {
   border: solid 1px black;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .dark.strong.bordered.title, html.the .dark.strong.button.title {
   border: none;
   border-bottom: solid 1px black;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .dark.strong.bordered.checker, html.the .dark.strong.button.checker {
   border: solid 1px #6b6b6b;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .dark.strong.bordered.checked, html.the .dark.strong.button.checked {
   border: solid 1px black;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .dark.strong.checker {
-  color: #121212;
-  background-color: #777777;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .dark.strong.checked {
   color: #FDFDFD;
   background-color: #121212;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .dark.strong.checker.semaphore {
+  color: #121212;
+  background-color: #777777;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .dark.strong.checked {
+  color: #121212;
+  background-color: #777777;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .dark.strong.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #121212;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .dark.strong.active, html.the .dark.strong.button, html.the .dark.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1608,225 +1598,136 @@ html.the .dark.strong.active, html.the .dark.strong.button, html.the .dark.stron
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .dark.strong.active:hover, html.the .dark.strong.button:hover, html.the .dark.strong.menuitem:hover {
   color: #FDFDFD;
   background-color: #454545;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .dark.strong.active:hover.title, html.the .dark.strong.button:hover.title, html.the .dark.strong.menuitem:hover.title {
   background-color: inherit;
   color: #454545;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .dark.strong.active:hover.bordered, html.the .dark.strong.button:hover.bordered, html.the .dark.strong.menuitem:hover.bordered {
   border-top-color: #2b2b2b;
   border-bottom-color: black;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .dark.strong.active:hover:active, html.the .dark.strong.button:hover:active, html.the .dark.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #1e1e1e, #2b2b2b);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .dark.strong.active:hover:active.title, html.the .dark.strong.button:hover:active.title, html.the .dark.strong.menuitem:hover:active.title {
   color: #2b2b2b !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .dark.strong.active:hover:active.bordered, html.the .dark.strong.button:hover:active.bordered, html.the .dark.strong.menuitem:hover:active.bordered {
   border-top-color: #050505;
   border-bottom-color: #121212;
 }
-/* line 203, newthe/colorizer.scss */
+/* line 176, newthe/colorizer.scss */
 html.the .ilight {
   color: #FDFDFD;
 }
-/* line 206, newthe/colorizer.scss */
+/* line 179, newthe/colorizer.scss */
 html.the .light {
   color: #2B2B2B;
   background-color: #FDFDFD;
 }
 @-moz-keyframes progress_light {
   0% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
-  }
-  7% {
-    background: linear-gradient(to right, #fdfdfd 0%, #fdfdfd 5%, #99b8d3 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #fdfdfd 0%, #fdfdfd 10%, #a0bdd6 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #fdfdfd 0%, #fdfdfd 20%, #aec7dc 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 9%, #fdfdfd 10%, #fdfdfd 30%, #b5cbdf 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 19%, #fdfdfd 20%, #fdfdfd 40%, #bcd0e2 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 29%, #fdfdfd 30%, #fdfdfd 50%, #c3d5e5 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 39%, #fdfdfd 40%, #fdfdfd 60%, #c3d5e5 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 49%, #fdfdfd 50%, #fdfdfd 70%, #c3d5e5 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 59%, #fdfdfd 60%, #fdfdfd 80%, #bcd0e2 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 69%, #fdfdfd 70%, #fdfdfd 90%, #b5cbdf 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #aec7dc 0%, #aec7dc 79%, #fdfdfd 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #a0bdd6 0%, #a0bdd6 89%, #fdfdfd 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #99b8d3 0%, #99b8d3 94%, #fdfdfd 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
+    background-position: 1000px 0%;
   }
 }
 @-webkit-keyframes progress_light {
   0% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
-  }
-  7% {
-    background: linear-gradient(to right, #fdfdfd 0%, #fdfdfd 5%, #99b8d3 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #fdfdfd 0%, #fdfdfd 10%, #a0bdd6 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #fdfdfd 0%, #fdfdfd 20%, #aec7dc 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 9%, #fdfdfd 10%, #fdfdfd 30%, #b5cbdf 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 19%, #fdfdfd 20%, #fdfdfd 40%, #bcd0e2 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 29%, #fdfdfd 30%, #fdfdfd 50%, #c3d5e5 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 39%, #fdfdfd 40%, #fdfdfd 60%, #c3d5e5 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 49%, #fdfdfd 50%, #fdfdfd 70%, #c3d5e5 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 59%, #fdfdfd 60%, #fdfdfd 80%, #bcd0e2 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 69%, #fdfdfd 70%, #fdfdfd 90%, #b5cbdf 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #aec7dc 0%, #aec7dc 79%, #fdfdfd 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #a0bdd6 0%, #a0bdd6 89%, #fdfdfd 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #99b8d3 0%, #99b8d3 94%, #fdfdfd 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
+    background-position: 1000px 0%;
   }
 }
 @keyframes progress_light {
   0% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
-  }
-  7% {
-    background: linear-gradient(to right, #fdfdfd 0%, #fdfdfd 5%, #99b8d3 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #fdfdfd 0%, #fdfdfd 10%, #a0bdd6 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #fdfdfd 0%, #fdfdfd 20%, #aec7dc 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 9%, #fdfdfd 10%, #fdfdfd 30%, #b5cbdf 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 19%, #fdfdfd 20%, #fdfdfd 40%, #bcd0e2 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 29%, #fdfdfd 30%, #fdfdfd 50%, #c3d5e5 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 39%, #fdfdfd 40%, #fdfdfd 60%, #c3d5e5 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 49%, #fdfdfd 50%, #fdfdfd 70%, #c3d5e5 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 59%, #fdfdfd 60%, #fdfdfd 80%, #bcd0e2 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 69%, #fdfdfd 70%, #fdfdfd 90%, #b5cbdf 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #aec7dc 0%, #aec7dc 79%, #fdfdfd 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #a0bdd6 0%, #a0bdd6 89%, #fdfdfd 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #99b8d3 0%, #99b8d3 94%, #fdfdfd 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
+    background-position: 1000px 0%;
   }
 }
-/* line 84, newthe/colorizer.scss */
+/* line 32, newthe/colorizer.scss */
 html.the .light.progress {
-  color: #FDFDFD !important;
-  -moz-animation: progress_light 1.2s linear 0.5s infinite;
-  -webkit-animation: progress_light 1.2s linear 0.5s infinite;
-  animation: progress_light 1.2s linear 0.5s infinite;
+  position: relative;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 35, newthe/colorizer.scss */
+html.the .light.progress::after {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  content: " ";
+  display: block;
+  background-image: url("progress.png");
+  background-repeat: repeat;
+  animation-name: progress_light;
+  -webkit-animation-name: progress_light;
+  opacity: 0.4;
+  animation-duration: 15s;
+  -webkit-animation-duration: 15s;
+  animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+/* line 65, newthe/colorizer.scss */
 html.the .light.title {
   color: #FDFDFD;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .light.bordered, html.the .light.button {
   border: solid 1px #e4e4e4;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .light.bordered.title, html.the .light.button.title {
   border: none;
   border-bottom: solid 1px #e4e4e4;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .light.bordered.checker, html.the .light.button.checker {
   border: solid 1px #f2f2f2;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .light.bordered.checked, html.the .light.button.checked {
   border: solid 1px #e4e4e4;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .light.checker {
-  color: #5e5e5e;
-  background-color: white;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .light.checked {
   color: #2B2B2B;
   background-color: #FDFDFD;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .light.checker.semaphore {
+  color: #5e5e5e;
+  background-color: white;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .light.checked {
+  color: #5e5e5e;
+  background-color: white;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .light.checked.semaphore {
+  color: #2B2B2B;
+  background-color: #FDFDFD;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .light.active, html.the .light.button, html.the .light.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1834,70 +1735,80 @@ html.the .light.active, html.the .light.button, html.the .light.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .light.active:hover, html.the .light.button:hover, html.the .light.menuitem:hover {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .light.active:hover.title, html.the .light.button:hover.title, html.the .light.menuitem:hover.title {
   background-color: inherit;
   color: #92b3cf;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .light.active:hover.bordered, html.the .light.button:hover.bordered, html.the .light.menuitem:hover.bordered {
   border-top-color: #6e9ac0;
   border-bottom-color: #cacaca;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .light.active:hover:active, html.the .light.button:hover:active, html.the .light.menuitem:hover:active {
   background: #D7D7D7;
   color: #FDFDFD;
   color: #2B2B2B;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .light.active:hover:active.bordered, html.the .light.button:hover:active.bordered, html.the .light.menuitem:hover:active.bordered {
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 209, newthe/colorizer.scss */
+/* line 182, newthe/colorizer.scss */
 html.the .light.soft {
   color: #2B2B2B;
   background-color: #fefefe;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .light.soft.title {
   color: #fefefe;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .light.soft.bordered, html.the .light.soft.button {
   border: solid 1px #e5e5e5;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .light.soft.bordered.title, html.the .light.soft.button.title {
   border: none;
   border-bottom: solid 1px #e5e5e5;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .light.soft.bordered.checker, html.the .light.soft.button.checker {
   border: solid 1px #f2f2f2;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .light.soft.bordered.checked, html.the .light.soft.button.checked {
   border: solid 1px #e5e5e5;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .light.soft.checker {
-  color: #5e5e5e;
-  background-color: white;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .light.soft.checked {
   color: #2B2B2B;
   background-color: #fefefe;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .light.soft.checker.semaphore {
+  color: #5e5e5e;
+  background-color: white;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .light.soft.checked {
+  color: #5e5e5e;
+  background-color: white;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .light.soft.checked.semaphore {
+  color: #2B2B2B;
+  background-color: #fefefe;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .light.soft.active, html.the .light.soft.button, html.the .light.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1905,70 +1816,80 @@ html.the .light.soft.active, html.the .light.soft.button, html.the .light.soft.m
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .light.soft.active:hover, html.the .light.soft.button:hover, html.the .light.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #d9e4ee;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .light.soft.active:hover.title, html.the .light.soft.button:hover.title, html.the .light.soft.menuitem:hover.title {
   background-color: inherit;
   color: #d9e4ee;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .light.soft.active:hover.bordered, html.the .light.soft.button:hover.bordered, html.the .light.soft.menuitem:hover.bordered {
   border-top-color: #b5cbdf;
   border-bottom-color: #cbcbcb;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .light.soft.active:hover:active, html.the .light.soft.button:hover:active, html.the .light.soft.menuitem:hover:active {
   background: #D7D7D7;
   color: #FDFDFD;
   color: #2B2B2B;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .light.soft.active:hover:active.bordered, html.the .light.soft.button:hover:active.bordered, html.the .light.soft.menuitem:hover:active.bordered {
   border-top-color: #e5e5e5;
   border-bottom-color: #e5e5e5;
 }
-/* line 212, newthe/colorizer.scss */
+/* line 185, newthe/colorizer.scss */
 html.the .light.strong {
   color: #2B2B2B;
   background-color: #e4e4e4;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .light.strong.title {
   color: #e4e4e4;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .light.strong.bordered, html.the .light.strong.button {
   border: solid 1px #cacaca;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .light.strong.bordered.title, html.the .light.strong.button.title {
   border: none;
   border-bottom: solid 1px #cacaca;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .light.strong.bordered.checker, html.the .light.strong.button.checker {
   border: solid 1px #e1e1e1;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .light.strong.bordered.checked, html.the .light.strong.button.checked {
   border: solid 1px #cacaca;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .light.strong.checker {
-  color: #5e5e5e;
-  background-color: #eeeeee;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .light.strong.checked {
   color: #2B2B2B;
   background-color: #e4e4e4;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .light.strong.checker.semaphore {
+  color: #5e5e5e;
+  background-color: #eeeeee;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .light.strong.checked {
+  color: #5e5e5e;
+  background-color: #eeeeee;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .light.strong.checked.semaphore {
+  color: #2B2B2B;
+  background-color: #e4e4e4;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .light.strong.active, html.the .light.strong.button, html.the .light.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1976,222 +1897,133 @@ html.the .light.strong.active, html.the .light.strong.button, html.the .light.st
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .light.strong.active:hover, html.the .light.strong.button:hover, html.the .light.strong.menuitem:hover {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .light.strong.active:hover.title, html.the .light.strong.button:hover.title, html.the .light.strong.menuitem:hover.title {
   background-color: inherit;
   color: #92b3cf;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .light.strong.active:hover.bordered, html.the .light.strong.button:hover.bordered, html.the .light.strong.menuitem:hover.bordered {
   border-top-color: #6e9ac0;
   border-bottom-color: #b1b1b1;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .light.strong.active:hover:active, html.the .light.strong.button:hover:active, html.the .light.strong.menuitem:hover:active {
   background: #D7D7D7;
   color: #FDFDFD;
   color: #2B2B2B;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .light.strong.active:hover:active.bordered, html.the .light.strong.button:hover:active.bordered, html.the .light.strong.menuitem:hover:active.bordered {
   border-top-color: #d7d7d7;
   border-bottom-color: gainsboro;
 }
-/* line 203, newthe/colorizer.scss */
+/* line 176, newthe/colorizer.scss */
 html.the .iprimary {
   color: #4C81AF;
 }
-/* line 206, newthe/colorizer.scss */
+/* line 179, newthe/colorizer.scss */
 html.the .primary {
   color: #FDFDFD;
   background-color: #4C81AF;
 }
 @-moz-keyframes progress_primary {
   0% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
-  }
-  7% {
-    background: linear-gradient(to right, #4c81af 0%, #4c81af 5%, #99b8d3 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #4c81af 0%, #4c81af 10%, #a0bdd6 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #4c81af 0%, #4c81af 20%, #aec7dc 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 9%, #4c81af 10%, #4c81af 30%, #b5cbdf 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 19%, #4c81af 20%, #4c81af 40%, #bcd0e2 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 29%, #4c81af 30%, #4c81af 50%, #c3d5e5 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 39%, #4c81af 40%, #4c81af 60%, #c3d5e5 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 49%, #4c81af 50%, #4c81af 70%, #c3d5e5 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 59%, #4c81af 60%, #4c81af 80%, #bcd0e2 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 69%, #4c81af 70%, #4c81af 90%, #b5cbdf 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #aec7dc 0%, #aec7dc 79%, #4c81af 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #a0bdd6 0%, #a0bdd6 89%, #4c81af 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #99b8d3 0%, #99b8d3 94%, #4c81af 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
+    background-position: 1000px 0%;
   }
 }
 @-webkit-keyframes progress_primary {
   0% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
-  }
-  7% {
-    background: linear-gradient(to right, #4c81af 0%, #4c81af 5%, #99b8d3 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #4c81af 0%, #4c81af 10%, #a0bdd6 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #4c81af 0%, #4c81af 20%, #aec7dc 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 9%, #4c81af 10%, #4c81af 30%, #b5cbdf 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 19%, #4c81af 20%, #4c81af 40%, #bcd0e2 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 29%, #4c81af 30%, #4c81af 50%, #c3d5e5 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 39%, #4c81af 40%, #4c81af 60%, #c3d5e5 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 49%, #4c81af 50%, #4c81af 70%, #c3d5e5 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 59%, #4c81af 60%, #4c81af 80%, #bcd0e2 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 69%, #4c81af 70%, #4c81af 90%, #b5cbdf 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #aec7dc 0%, #aec7dc 79%, #4c81af 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #a0bdd6 0%, #a0bdd6 89%, #4c81af 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #99b8d3 0%, #99b8d3 94%, #4c81af 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
+    background-position: 1000px 0%;
   }
 }
 @keyframes progress_primary {
   0% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
-  }
-  7% {
-    background: linear-gradient(to right, #4c81af 0%, #4c81af 5%, #99b8d3 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #4c81af 0%, #4c81af 10%, #a0bdd6 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #4c81af 0%, #4c81af 20%, #aec7dc 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 9%, #4c81af 10%, #4c81af 30%, #b5cbdf 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 19%, #4c81af 20%, #4c81af 40%, #bcd0e2 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 29%, #4c81af 30%, #4c81af 50%, #c3d5e5 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 39%, #4c81af 40%, #4c81af 60%, #c3d5e5 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #c3d5e5 0%, #c3d5e5 49%, #4c81af 50%, #4c81af 70%, #c3d5e5 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #bcd0e2 0%, #bcd0e2 59%, #4c81af 60%, #4c81af 80%, #bcd0e2 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #b5cbdf 0%, #b5cbdf 69%, #4c81af 70%, #4c81af 90%, #b5cbdf 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #aec7dc 0%, #aec7dc 79%, #4c81af 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #a0bdd6 0%, #a0bdd6 89%, #4c81af 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #99b8d3 0%, #99b8d3 94%, #4c81af 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #92b3cf, #92b3cf);
+    background-position: 1000px 0%;
   }
 }
-/* line 84, newthe/colorizer.scss */
+/* line 32, newthe/colorizer.scss */
 html.the .primary.progress {
-  color: #FDFDFD !important;
-  -moz-animation: progress_primary 1.2s linear 0.5s infinite;
-  -webkit-animation: progress_primary 1.2s linear 0.5s infinite;
-  animation: progress_primary 1.2s linear 0.5s infinite;
+  position: relative;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 35, newthe/colorizer.scss */
+html.the .primary.progress::after {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  content: " ";
+  display: block;
+  background-image: url("progress.png");
+  background-repeat: repeat;
+  animation-name: progress_primary;
+  -webkit-animation-name: progress_primary;
+  opacity: 0.4;
+  animation-duration: 15s;
+  -webkit-animation-duration: 15s;
+  animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+/* line 65, newthe/colorizer.scss */
 html.the .primary.title {
   color: #4C81AF;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .primary.bordered, html.the .primary.button {
   border: solid 1px #3d678b;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .primary.bordered.title, html.the .primary.button.title {
   border: none;
   border-bottom: solid 1px #3d678b;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .primary.bordered.checker, html.the .primary.button.checker {
   border: solid 1px #c7d8e7;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .primary.bordered.checked, html.the .primary.button.checked {
   border: solid 1px #3d678b;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .primary.checker {
-  color: #4C81AF;
-  background-color: #d9e4ee;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .primary.checked {
   color: #FDFDFD;
   background-color: #4C81AF;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .primary.checker.semaphore {
+  color: #4C81AF;
+  background-color: #d9e4ee;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .primary.checked {
+  color: #4C81AF;
+  background-color: #d9e4ee;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .primary.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #4C81AF;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .primary.active, html.the .primary.button, html.the .primary.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2199,73 +2031,83 @@ html.the .primary.active, html.the .primary.button, html.the .primary.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .primary.active:hover, html.the .primary.button:hover, html.the .primary.menuitem:hover {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .primary.active:hover.title, html.the .primary.button:hover.title, html.the .primary.menuitem:hover.title {
   background-color: inherit;
   color: #92b3cf;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .primary.active:hover.bordered, html.the .primary.button:hover.bordered, html.the .primary.menuitem:hover.bordered {
   border-top-color: #6e9ac0;
   border-bottom-color: #2d4d68;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .primary.active:hover:active, html.the .primary.button:hover:active, html.the .primary.menuitem:hover:active {
   background: linear-gradient(to bottom, #5c8eb8, #6e9ac0);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .primary.active:hover:active.title, html.the .primary.button:hover:active.title, html.the .primary.menuitem:hover:active.title {
   color: #6e9ac0 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .primary.active:hover:active.bordered, html.the .primary.button:hover:active.bordered, html.the .primary.menuitem:hover:active.bordered {
   border-top-color: #44749d;
   border-bottom-color: #4c81af;
 }
-/* line 209, newthe/colorizer.scss */
+/* line 182, newthe/colorizer.scss */
 html.the .primary.soft {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .primary.soft.title {
   color: #92b3cf;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .primary.soft.bordered, html.the .primary.soft.button {
   border: solid 1px #6e9ac0;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .primary.soft.bordered.title, html.the .primary.soft.button.title {
   border: none;
   border-bottom: solid 1px #6e9ac0;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .primary.soft.bordered.checker, html.the .primary.soft.button.checker {
   border: solid 1px #e3ecf3;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .primary.soft.bordered.checked, html.the .primary.soft.button.checked {
   border: solid 1px #6e9ac0;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .primary.soft.checker {
-  color: #92b3cf;
-  background-color: #f5f8fb;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .primary.soft.checked {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .primary.soft.checker.semaphore {
+  color: #92b3cf;
+  background-color: #f5f8fb;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .primary.soft.checked {
+  color: #92b3cf;
+  background-color: #f5f8fb;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .primary.soft.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #92b3cf;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .primary.soft.active, html.the .primary.soft.button, html.the .primary.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2273,73 +2115,83 @@ html.the .primary.soft.active, html.the .primary.soft.button, html.the .primary.
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .primary.soft.active:hover, html.the .primary.soft.button:hover, html.the .primary.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #d9e4ee;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .primary.soft.active:hover.title, html.the .primary.soft.button:hover.title, html.the .primary.soft.menuitem:hover.title {
   background-color: inherit;
   color: #d9e4ee;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .primary.soft.active:hover.bordered, html.the .primary.soft.button:hover.bordered, html.the .primary.soft.menuitem:hover.bordered {
   border-top-color: #b5cbdf;
   border-bottom-color: #4c81af;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .primary.soft.active:hover:active, html.the .primary.soft.button:hover:active, html.the .primary.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #a3bfd7, #b5cbdf);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .primary.soft.active:hover:active.title, html.the .primary.soft.button:hover:active.title, html.the .primary.soft.menuitem:hover:active.title {
   color: #b5cbdf !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .primary.soft.active:hover:active.bordered, html.the .primary.soft.button:hover:active.bordered, html.the .primary.soft.menuitem:hover:active.bordered {
   border-top-color: #80a6c8;
   border-bottom-color: #92b3cf;
 }
-/* line 212, newthe/colorizer.scss */
+/* line 185, newthe/colorizer.scss */
 html.the .primary.strong {
   color: #FDFDFD;
   background-color: #3d678b;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .primary.strong.title {
   color: #3d678b;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .primary.strong.bordered, html.the .primary.strong.button {
   border: solid 1px #2d4d68;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .primary.strong.bordered.title, html.the .primary.strong.button.title {
   border: none;
   border-bottom: solid 1px #2d4d68;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .primary.strong.bordered.checker, html.the .primary.strong.button.checker {
   border: solid 1px #a3bfd7;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .primary.strong.bordered.checked, html.the .primary.strong.button.checked {
   border: solid 1px #2d4d68;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .primary.strong.checker {
-  color: #3d678b;
-  background-color: #b5cbdf;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .primary.strong.checked {
   color: #FDFDFD;
   background-color: #3d678b;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .primary.strong.checker.semaphore {
+  color: #3d678b;
+  background-color: #b5cbdf;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .primary.strong.checked {
+  color: #3d678b;
+  background-color: #b5cbdf;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .primary.strong.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #3d678b;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .primary.strong.active, html.the .primary.strong.button, html.the .primary.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2347,226 +2199,136 @@ html.the .primary.strong.active, html.the .primary.strong.button, html.the .prim
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .primary.strong.active:hover, html.the .primary.strong.button:hover, html.the .primary.strong.menuitem:hover {
   color: #FDFDFD;
   background-color: #6e9ac0;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .primary.strong.active:hover.title, html.the .primary.strong.button:hover.title, html.the .primary.strong.menuitem:hover.title {
   background-color: inherit;
   color: #6e9ac0;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .primary.strong.active:hover.bordered, html.the .primary.strong.button:hover.bordered, html.the .primary.strong.menuitem:hover.bordered {
   border-top-color: #4c81af;
   border-bottom-color: #1e3244;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .primary.strong.active:hover:active, html.the .primary.strong.button:hover:active, html.the .primary.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #44749d, #4c81af);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .primary.strong.active:hover:active.title, html.the .primary.strong.button:hover:active.title, html.the .primary.strong.menuitem:hover:active.title {
   color: #4c81af !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .primary.strong.active:hover:active.bordered, html.the .primary.strong.button:hover:active.bordered, html.the .primary.strong.menuitem:hover:active.bordered {
   border-top-color: #355a7a;
   border-bottom-color: #3d678b;
 }
-/* line 203, newthe/colorizer.scss */
+/* line 176, newthe/colorizer.scss */
 html.the .idefault {
   color: #D7D7D7;
 }
-/* line 206, newthe/colorizer.scss */
+/* line 179, newthe/colorizer.scss */
 html.the .default {
   color: #2B2B2B;
   background-color: #D7D7D7;
 }
 @-moz-keyframes progress_default {
   0% {
-    background: linear-gradient(to right, #f6f6f6, #f6f6f6);
-  }
-  7% {
-    background: linear-gradient(to right, #d7d7d7 0%, #d7d7d7 5%, #fbfbfb 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #d7d7d7 0%, #d7d7d7 10%, #ffffff 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #d7d7d7 0%, #d7d7d7 20%, #ffffff 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 9%, #d7d7d7 10%, #d7d7d7 30%, #ffffff 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 19%, #d7d7d7 20%, #d7d7d7 40%, #ffffff 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 29%, #d7d7d7 30%, #d7d7d7 50%, #ffffff 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 39%, #d7d7d7 40%, #d7d7d7 60%, #ffffff 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 49%, #d7d7d7 50%, #d7d7d7 70%, #ffffff 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 59%, #d7d7d7 60%, #d7d7d7 80%, #ffffff 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 69%, #d7d7d7 70%, #d7d7d7 90%, #ffffff 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 79%, #d7d7d7 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 89%, #d7d7d7 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #fbfbfb 0%, #fbfbfb 94%, #d7d7d7 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #f6f6f6, #f6f6f6);
+    background-position: 1000px 0%;
   }
 }
 @-webkit-keyframes progress_default {
   0% {
-    background: linear-gradient(to right, #f6f6f6, #f6f6f6);
-  }
-  7% {
-    background: linear-gradient(to right, #d7d7d7 0%, #d7d7d7 5%, #fbfbfb 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #d7d7d7 0%, #d7d7d7 10%, #ffffff 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #d7d7d7 0%, #d7d7d7 20%, #ffffff 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 9%, #d7d7d7 10%, #d7d7d7 30%, #ffffff 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 19%, #d7d7d7 20%, #d7d7d7 40%, #ffffff 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 29%, #d7d7d7 30%, #d7d7d7 50%, #ffffff 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 39%, #d7d7d7 40%, #d7d7d7 60%, #ffffff 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 49%, #d7d7d7 50%, #d7d7d7 70%, #ffffff 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 59%, #d7d7d7 60%, #d7d7d7 80%, #ffffff 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 69%, #d7d7d7 70%, #d7d7d7 90%, #ffffff 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 79%, #d7d7d7 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 89%, #d7d7d7 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #fbfbfb 0%, #fbfbfb 94%, #d7d7d7 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #f6f6f6, #f6f6f6);
+    background-position: 1000px 0%;
   }
 }
 @keyframes progress_default {
   0% {
-    background: linear-gradient(to right, #f6f6f6, #f6f6f6);
-  }
-  7% {
-    background: linear-gradient(to right, #d7d7d7 0%, #d7d7d7 5%, #fbfbfb 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #d7d7d7 0%, #d7d7d7 10%, #ffffff 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #d7d7d7 0%, #d7d7d7 20%, #ffffff 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 9%, #d7d7d7 10%, #d7d7d7 30%, #ffffff 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 19%, #d7d7d7 20%, #d7d7d7 40%, #ffffff 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 29%, #d7d7d7 30%, #d7d7d7 50%, #ffffff 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 39%, #d7d7d7 40%, #d7d7d7 60%, #ffffff 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 49%, #d7d7d7 50%, #d7d7d7 70%, #ffffff 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 59%, #d7d7d7 60%, #d7d7d7 80%, #ffffff 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 69%, #d7d7d7 70%, #d7d7d7 90%, #ffffff 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 79%, #d7d7d7 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 89%, #d7d7d7 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #fbfbfb 0%, #fbfbfb 94%, #d7d7d7 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #f6f6f6, #f6f6f6);
+    background-position: 1000px 0%;
   }
 }
-/* line 84, newthe/colorizer.scss */
+/* line 32, newthe/colorizer.scss */
 html.the .default.progress {
-  color: #FDFDFD !important;
-  color: #2B2B2B !important;
-  -moz-animation: progress_default 1.2s linear 0.5s infinite;
-  -webkit-animation: progress_default 1.2s linear 0.5s infinite;
-  animation: progress_default 1.2s linear 0.5s infinite;
+  position: relative;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 35, newthe/colorizer.scss */
+html.the .default.progress::after {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  content: " ";
+  display: block;
+  background-image: url("progress.png");
+  background-repeat: repeat;
+  animation-name: progress_default;
+  -webkit-animation-name: progress_default;
+  opacity: 0.4;
+  animation-duration: 15s;
+  -webkit-animation-duration: 15s;
+  animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+/* line 65, newthe/colorizer.scss */
 html.the .default.title {
   color: #D7D7D7;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .default.bordered, html.the .default.button {
   border: solid 1px #bebebe;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .default.bordered.title, html.the .default.button.title {
   border: none;
   border-bottom: solid 1px #bebebe;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .default.bordered.checker, html.the .default.button.checker {
   border: solid 1px #e9e9e9;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .default.bordered.checked, html.the .default.button.checked {
   border: solid 1px #bebebe;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .default.checker {
-  color: #5e5e5e;
-  background-color: #f6f6f6;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .default.checked {
   color: #2B2B2B;
   background-color: #D7D7D7;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .default.checker.semaphore {
+  color: #5e5e5e;
+  background-color: #f6f6f6;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .default.checked {
+  color: #5e5e5e;
+  background-color: #f6f6f6;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .default.checked.semaphore {
+  color: #2B2B2B;
+  background-color: #D7D7D7;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .default.active, html.the .default.button, html.the .default.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2574,73 +2336,83 @@ html.the .default.active, html.the .default.button, html.the .default.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .default.active:hover, html.the .default.button:hover, html.the .default.menuitem:hover {
   color: #2B2B2B;
   background-color: #f6f6f6;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .default.active:hover.title, html.the .default.button:hover.title, html.the .default.menuitem:hover.title {
   background-color: inherit;
   color: #f6f6f6;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .default.active:hover.bordered, html.the .default.button:hover.bordered, html.the .default.menuitem:hover.bordered {
   border-top-color: gainsboro;
   border-bottom-color: #a4a4a4;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .default.active:hover:active, html.the .default.button:hover:active, html.the .default.menuitem:hover:active {
   background: linear-gradient(to bottom, #e4e4e4, #f1f1f1);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .default.active:hover:active.title, html.the .default.button:hover:active.title, html.the .default.menuitem:hover:active.title {
   color: #f1f1f1 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .default.active:hover:active.bordered, html.the .default.button:hover:active.bordered, html.the .default.menuitem:hover:active.bordered {
   border-top-color: #cacaca;
   border-bottom-color: #d7d7d7;
 }
-/* line 209, newthe/colorizer.scss */
+/* line 182, newthe/colorizer.scss */
 html.the .default.soft {
   color: #2B2B2B;
   background-color: #f6f6f6;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .default.soft.title {
   color: #f6f6f6;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .default.soft.bordered, html.the .default.soft.button {
   border: solid 1px gainsboro;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .default.soft.bordered.title, html.the .default.soft.button.title {
   border: none;
   border-bottom: solid 1px gainsboro;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .default.soft.bordered.checker, html.the .default.soft.button.checker {
   border: solid 1px #ebebeb;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .default.soft.bordered.checked, html.the .default.soft.button.checked {
   border: solid 1px gainsboro;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .default.soft.checker {
-  color: #5e5e5e;
-  background-color: #f8f8f8;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .default.soft.checked {
   color: #2B2B2B;
   background-color: #f6f6f6;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .default.soft.checker.semaphore {
+  color: #5e5e5e;
+  background-color: #f8f8f8;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .default.soft.checked {
+  color: #5e5e5e;
+  background-color: #f8f8f8;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .default.soft.checked.semaphore {
+  color: #2B2B2B;
+  background-color: #f6f6f6;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .default.soft.active, html.the .default.soft.button, html.the .default.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2648,70 +2420,80 @@ html.the .default.soft.active, html.the .default.soft.button, html.the .default.
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .default.soft.active:hover, html.the .default.soft.button:hover, html.the .default.soft.menuitem:hover {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .default.soft.active:hover.title, html.the .default.soft.button:hover.title, html.the .default.soft.menuitem:hover.title {
   background-color: inherit;
   color: #92b3cf;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .default.soft.active:hover.bordered, html.the .default.soft.button:hover.bordered, html.the .default.soft.menuitem:hover.bordered {
   border-top-color: #6e9ac0;
   border-bottom-color: #c3c3c3;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .default.soft.active:hover:active, html.the .default.soft.button:hover:active, html.the .default.soft.menuitem:hover:active {
   background: #D7D7D7;
   color: #FDFDFD;
   color: #2B2B2B;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .default.soft.active:hover:active.bordered, html.the .default.soft.button:hover:active.bordered, html.the .default.soft.menuitem:hover:active.bordered {
   border-top-color: #dddddd;
   border-bottom-color: #dddddd;
 }
-/* line 212, newthe/colorizer.scss */
+/* line 185, newthe/colorizer.scss */
 html.the .default.strong {
   color: #2B2B2B;
   background-color: #bebebe;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .default.strong.title {
   color: #bebebe;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .default.strong.bordered, html.the .default.strong.button {
   border: solid 1px #a4a4a4;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .default.strong.bordered.title, html.the .default.strong.button.title {
   border: none;
   border-bottom: solid 1px #a4a4a4;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .default.strong.bordered.checker, html.the .default.strong.button.checker {
   border: solid 1px #e4e4e4;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .default.strong.bordered.checked, html.the .default.strong.button.checked {
   border: solid 1px #a4a4a4;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .default.strong.checker {
-  color: #bebebe;
-  background-color: #f1f1f1;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .default.strong.checked {
   color: #2B2B2B;
   background-color: #bebebe;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .default.strong.checker.semaphore {
+  color: #bebebe;
+  background-color: #f1f1f1;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .default.strong.checked {
+  color: #bebebe;
+  background-color: #f1f1f1;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .default.strong.checked.semaphore {
+  color: #2B2B2B;
+  background-color: #bebebe;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .default.strong.active, html.the .default.strong.button, html.the .default.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2719,225 +2501,136 @@ html.the .default.strong.active, html.the .default.strong.button, html.the .defa
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .default.strong.active:hover, html.the .default.strong.button:hover, html.the .default.strong.menuitem:hover {
   color: #2B2B2B;
   background-color: #f1f1f1;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .default.strong.active:hover.title, html.the .default.strong.button:hover.title, html.the .default.strong.menuitem:hover.title {
   background-color: inherit;
   color: #f1f1f1;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .default.strong.active:hover.bordered, html.the .default.strong.button:hover.bordered, html.the .default.strong.menuitem:hover.bordered {
   border-top-color: #d7d7d7;
   border-bottom-color: #8b8b8b;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .default.strong.active:hover:active, html.the .default.strong.button:hover:active, html.the .default.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #cacaca, #d7d7d7);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .default.strong.active:hover:active.title, html.the .default.strong.button:hover:active.title, html.the .default.strong.menuitem:hover:active.title {
   color: #d7d7d7 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .default.strong.active:hover:active.bordered, html.the .default.strong.button:hover:active.bordered, html.the .default.strong.menuitem:hover:active.bordered {
   border-top-color: #b1b1b1;
   border-bottom-color: #bebebe;
 }
-/* line 203, newthe/colorizer.scss */
+/* line 176, newthe/colorizer.scss */
 html.the .isuccess {
   color: #5E994B;
 }
-/* line 206, newthe/colorizer.scss */
+/* line 179, newthe/colorizer.scss */
 html.the .success {
   color: #FDFDFD;
   background-color: #5E994B;
 }
 @-moz-keyframes progress_success {
   0% {
-    background: linear-gradient(to right, #95c486, #95c486);
-  }
-  7% {
-    background: linear-gradient(to right, #5e994b 0%, #5e994b 5%, #9bc78d 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #5e994b 0%, #5e994b 10%, #a1cb94 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #5e994b 0%, #5e994b 20%, #add1a2 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #b3d5a8 0%, #b3d5a8 9%, #5e994b 10%, #5e994b 30%, #b3d5a8 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #b9d8af 0%, #b9d8af 19%, #5e994b 20%, #5e994b 40%, #b9d8af 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #bfdbb6 0%, #bfdbb6 29%, #5e994b 30%, #5e994b 50%, #bfdbb6 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #bfdbb6 0%, #bfdbb6 39%, #5e994b 40%, #5e994b 60%, #bfdbb6 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #bfdbb6 0%, #bfdbb6 49%, #5e994b 50%, #5e994b 70%, #bfdbb6 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #b9d8af 0%, #b9d8af 59%, #5e994b 60%, #5e994b 80%, #b9d8af 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #b3d5a8 0%, #b3d5a8 69%, #5e994b 70%, #5e994b 90%, #b3d5a8 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #add1a2 0%, #add1a2 79%, #5e994b 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #a1cb94 0%, #a1cb94 89%, #5e994b 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #9bc78d 0%, #9bc78d 94%, #5e994b 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #95c486, #95c486);
+    background-position: 1000px 0%;
   }
 }
 @-webkit-keyframes progress_success {
   0% {
-    background: linear-gradient(to right, #95c486, #95c486);
-  }
-  7% {
-    background: linear-gradient(to right, #5e994b 0%, #5e994b 5%, #9bc78d 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #5e994b 0%, #5e994b 10%, #a1cb94 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #5e994b 0%, #5e994b 20%, #add1a2 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #b3d5a8 0%, #b3d5a8 9%, #5e994b 10%, #5e994b 30%, #b3d5a8 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #b9d8af 0%, #b9d8af 19%, #5e994b 20%, #5e994b 40%, #b9d8af 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #bfdbb6 0%, #bfdbb6 29%, #5e994b 30%, #5e994b 50%, #bfdbb6 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #bfdbb6 0%, #bfdbb6 39%, #5e994b 40%, #5e994b 60%, #bfdbb6 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #bfdbb6 0%, #bfdbb6 49%, #5e994b 50%, #5e994b 70%, #bfdbb6 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #b9d8af 0%, #b9d8af 59%, #5e994b 60%, #5e994b 80%, #b9d8af 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #b3d5a8 0%, #b3d5a8 69%, #5e994b 70%, #5e994b 90%, #b3d5a8 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #add1a2 0%, #add1a2 79%, #5e994b 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #a1cb94 0%, #a1cb94 89%, #5e994b 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #9bc78d 0%, #9bc78d 94%, #5e994b 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #95c486, #95c486);
+    background-position: 1000px 0%;
   }
 }
 @keyframes progress_success {
   0% {
-    background: linear-gradient(to right, #95c486, #95c486);
-  }
-  7% {
-    background: linear-gradient(to right, #5e994b 0%, #5e994b 5%, #9bc78d 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #5e994b 0%, #5e994b 10%, #a1cb94 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #5e994b 0%, #5e994b 20%, #add1a2 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #b3d5a8 0%, #b3d5a8 9%, #5e994b 10%, #5e994b 30%, #b3d5a8 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #b9d8af 0%, #b9d8af 19%, #5e994b 20%, #5e994b 40%, #b9d8af 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #bfdbb6 0%, #bfdbb6 29%, #5e994b 30%, #5e994b 50%, #bfdbb6 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #bfdbb6 0%, #bfdbb6 39%, #5e994b 40%, #5e994b 60%, #bfdbb6 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #bfdbb6 0%, #bfdbb6 49%, #5e994b 50%, #5e994b 70%, #bfdbb6 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #b9d8af 0%, #b9d8af 59%, #5e994b 60%, #5e994b 80%, #b9d8af 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #b3d5a8 0%, #b3d5a8 69%, #5e994b 70%, #5e994b 90%, #b3d5a8 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #add1a2 0%, #add1a2 79%, #5e994b 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #a1cb94 0%, #a1cb94 89%, #5e994b 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #9bc78d 0%, #9bc78d 94%, #5e994b 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #95c486, #95c486);
+    background-position: 1000px 0%;
   }
 }
-/* line 84, newthe/colorizer.scss */
+/* line 32, newthe/colorizer.scss */
 html.the .success.progress {
-  color: #FDFDFD !important;
-  -moz-animation: progress_success 1.2s linear 0.5s infinite;
-  -webkit-animation: progress_success 1.2s linear 0.5s infinite;
-  animation: progress_success 1.2s linear 0.5s infinite;
+  position: relative;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 35, newthe/colorizer.scss */
+html.the .success.progress::after {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  content: " ";
+  display: block;
+  background-image: url("progress.png");
+  background-repeat: repeat;
+  animation-name: progress_success;
+  -webkit-animation-name: progress_success;
+  opacity: 0.4;
+  animation-duration: 15s;
+  -webkit-animation-duration: 15s;
+  animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+/* line 65, newthe/colorizer.scss */
 html.the .success.title {
   color: #5E994B;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .success.bordered, html.the .success.button {
   border: solid 1px #49773a;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .success.bordered.title, html.the .success.button.title {
   border: none;
   border-bottom: solid 1px #49773a;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .success.bordered.checker, html.the .success.button.checker {
   border: solid 1px #c2ddba;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .success.bordered.checked, html.the .success.button.checked {
   border: solid 1px #49773a;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .success.checker {
-  color: #5E994B;
-  background-color: #d1e5cb;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .success.checked {
   color: #FDFDFD;
   background-color: #5E994B;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .success.checker.semaphore {
+  color: #5E994B;
+  background-color: #d1e5cb;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .success.checked {
+  color: #5E994B;
+  background-color: #d1e5cb;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .success.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #5E994B;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .success.active, html.the .success.button, html.the .success.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2945,73 +2638,83 @@ html.the .success.active, html.the .success.button, html.the .success.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .success.active:hover, html.the .success.button:hover, html.the .success.menuitem:hover {
   color: #FDFDFD;
   background-color: #95c486;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .success.active:hover.title, html.the .success.button:hover.title, html.the .success.menuitem:hover.title {
   background-color: inherit;
   color: #95c486;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .success.active:hover.bordered, html.the .success.button:hover.bordered, html.the .success.menuitem:hover.bordered {
   border-top-color: #77b364;
   border-bottom-color: #345529;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .success.active:hover:active, html.the .success.button:hover:active, html.the .success.menuitem:hover:active {
   background: linear-gradient(to bottom, #69aa53, #77b364);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .success.active:hover:active.title, html.the .success.button:hover:active.title, html.the .success.menuitem:hover:active.title {
   color: #77b364 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .success.active:hover:active.bordered, html.the .success.button:hover:active.bordered, html.the .success.menuitem:hover:active.bordered {
   border-top-color: #538843;
   border-bottom-color: #5e994b;
 }
-/* line 209, newthe/colorizer.scss */
+/* line 182, newthe/colorizer.scss */
 html.the .success.soft {
   color: #FDFDFD;
   background-color: #95c486;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .success.soft.title {
   color: #95c486;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .success.soft.bordered, html.the .success.soft.button {
   border: solid 1px #77b364;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .success.soft.bordered.title, html.the .success.soft.button.title {
   border: none;
   border-bottom: solid 1px #77b364;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .success.soft.bordered.checker, html.the .success.soft.button.checker {
   border: solid 1px #e6f1e3;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .success.soft.bordered.checked, html.the .success.soft.button.checked {
   border: solid 1px #77b364;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .success.soft.checker {
-  color: #95c486;
-  background-color: #f5f9f4;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .success.soft.checked {
   color: #FDFDFD;
   background-color: #95c486;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .success.soft.checker.semaphore {
+  color: #95c486;
+  background-color: #f5f9f4;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .success.soft.checked {
+  color: #95c486;
+  background-color: #f5f9f4;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .success.soft.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #95c486;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .success.soft.active, html.the .success.soft.button, html.the .success.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3019,73 +2722,83 @@ html.the .success.soft.active, html.the .success.soft.button, html.the .success.
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .success.soft.active:hover, html.the .success.soft.button:hover, html.the .success.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #d1e5cb;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .success.soft.active:hover.title, html.the .success.soft.button:hover.title, html.the .success.soft.menuitem:hover.title {
   background-color: inherit;
   color: #d1e5cb;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .success.soft.active:hover.bordered, html.the .success.soft.button:hover.bordered, html.the .success.soft.menuitem:hover.bordered {
   border-top-color: #b3d5a8;
   border-bottom-color: #5e994b;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .success.soft.active:hover:active, html.the .success.soft.button:hover:active, html.the .success.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #a4cc97, #b3d5a8);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .success.soft.active:hover:active.title, html.the .success.soft.button:hover:active.title, html.the .success.soft.menuitem:hover:active.title {
   color: #b3d5a8 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .success.soft.active:hover:active.bordered, html.the .success.soft.button:hover:active.bordered, html.the .success.soft.menuitem:hover:active.bordered {
   border-top-color: #86bb75;
   border-bottom-color: #95c486;
 }
-/* line 212, newthe/colorizer.scss */
+/* line 185, newthe/colorizer.scss */
 html.the .success.strong {
   color: #FDFDFD;
   background-color: #49773a;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .success.strong.title {
   color: #49773a;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .success.strong.bordered, html.the .success.strong.button {
   border: solid 1px #345529;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .success.strong.bordered.title, html.the .success.strong.button.title {
   border: none;
   border-bottom: solid 1px #345529;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .success.strong.bordered.checker, html.the .success.strong.button.checker {
   border: solid 1px #a4cc97;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .success.strong.bordered.checked, html.the .success.strong.button.checked {
   border: solid 1px #345529;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .success.strong.checker {
-  color: #49773a;
-  background-color: #b3d5a8;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .success.strong.checked {
   color: #FDFDFD;
   background-color: #49773a;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .success.strong.checker.semaphore {
+  color: #49773a;
+  background-color: #b3d5a8;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .success.strong.checked {
+  color: #49773a;
+  background-color: #b3d5a8;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .success.strong.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #49773a;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .success.strong.active, html.the .success.strong.button, html.the .success.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3093,226 +2806,136 @@ html.the .success.strong.active, html.the .success.strong.button, html.the .succ
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .success.strong.active:hover, html.the .success.strong.button:hover, html.the .success.strong.menuitem:hover {
   color: #FDFDFD;
   background-color: #77b364;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .success.strong.active:hover.title, html.the .success.strong.button:hover.title, html.the .success.strong.menuitem:hover.title {
   background-color: inherit;
   color: #77b364;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .success.strong.active:hover.bordered, html.the .success.strong.button:hover.bordered, html.the .success.strong.menuitem:hover.bordered {
   border-top-color: #5e994b;
   border-bottom-color: #1f3219;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .success.strong.active:hover:active, html.the .success.strong.button:hover:active, html.the .success.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #538843, #5e994b);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .success.strong.active:hover:active.title, html.the .success.strong.button:hover:active.title, html.the .success.strong.menuitem:hover:active.title {
   color: #5e994b !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .success.strong.active:hover:active.bordered, html.the .success.strong.button:hover:active.bordered, html.the .success.strong.menuitem:hover:active.bordered {
   border-top-color: #3e6632;
   border-bottom-color: #49773a;
 }
-/* line 203, newthe/colorizer.scss */
+/* line 176, newthe/colorizer.scss */
 html.the .iinfo {
   color: #F9D264;
 }
-/* line 206, newthe/colorizer.scss */
+/* line 179, newthe/colorizer.scss */
 html.the .info {
   color: #2B2B2B;
   background-color: #F9D264;
 }
 @-moz-keyframes progress_info {
   0% {
-    background: linear-gradient(to right, #fdefc6, #fdefc6);
-  }
-  7% {
-    background: linear-gradient(to right, #f9d264 0%, #f9d264 5%, #fdf1d0 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #f9d264 0%, #f9d264 10%, #fef4da 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #f9d264 0%, #f9d264 20%, #fefaed 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #fffdf7 0%, #fffdf7 9%, #f9d264 10%, #f9d264 30%, #fffdf7 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 19%, #f9d264 20%, #f9d264 40%, #ffffff 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 29%, #f9d264 30%, #f9d264 50%, #ffffff 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 39%, #f9d264 40%, #f9d264 60%, #ffffff 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 49%, #f9d264 50%, #f9d264 70%, #ffffff 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 59%, #f9d264 60%, #f9d264 80%, #ffffff 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #fffdf7 0%, #fffdf7 69%, #f9d264 70%, #f9d264 90%, #fffdf7 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #fefaed 0%, #fefaed 79%, #f9d264 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #fef4da 0%, #fef4da 89%, #f9d264 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #fdf1d0 0%, #fdf1d0 94%, #f9d264 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #fdefc6, #fdefc6);
+    background-position: 1000px 0%;
   }
 }
 @-webkit-keyframes progress_info {
   0% {
-    background: linear-gradient(to right, #fdefc6, #fdefc6);
-  }
-  7% {
-    background: linear-gradient(to right, #f9d264 0%, #f9d264 5%, #fdf1d0 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #f9d264 0%, #f9d264 10%, #fef4da 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #f9d264 0%, #f9d264 20%, #fefaed 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #fffdf7 0%, #fffdf7 9%, #f9d264 10%, #f9d264 30%, #fffdf7 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 19%, #f9d264 20%, #f9d264 40%, #ffffff 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 29%, #f9d264 30%, #f9d264 50%, #ffffff 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 39%, #f9d264 40%, #f9d264 60%, #ffffff 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 49%, #f9d264 50%, #f9d264 70%, #ffffff 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 59%, #f9d264 60%, #f9d264 80%, #ffffff 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #fffdf7 0%, #fffdf7 69%, #f9d264 70%, #f9d264 90%, #fffdf7 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #fefaed 0%, #fefaed 79%, #f9d264 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #fef4da 0%, #fef4da 89%, #f9d264 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #fdf1d0 0%, #fdf1d0 94%, #f9d264 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #fdefc6, #fdefc6);
+    background-position: 1000px 0%;
   }
 }
 @keyframes progress_info {
   0% {
-    background: linear-gradient(to right, #fdefc6, #fdefc6);
-  }
-  7% {
-    background: linear-gradient(to right, #f9d264 0%, #f9d264 5%, #fdf1d0 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #f9d264 0%, #f9d264 10%, #fef4da 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #f9d264 0%, #f9d264 20%, #fefaed 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #fffdf7 0%, #fffdf7 9%, #f9d264 10%, #f9d264 30%, #fffdf7 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 19%, #f9d264 20%, #f9d264 40%, #ffffff 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 29%, #f9d264 30%, #f9d264 50%, #ffffff 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 39%, #f9d264 40%, #f9d264 60%, #ffffff 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 49%, #f9d264 50%, #f9d264 70%, #ffffff 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 59%, #f9d264 60%, #f9d264 80%, #ffffff 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #fffdf7 0%, #fffdf7 69%, #f9d264 70%, #f9d264 90%, #fffdf7 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #fefaed 0%, #fefaed 79%, #f9d264 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #fef4da 0%, #fef4da 89%, #f9d264 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #fdf1d0 0%, #fdf1d0 94%, #f9d264 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #fdefc6, #fdefc6);
+    background-position: 1000px 0%;
   }
 }
-/* line 84, newthe/colorizer.scss */
+/* line 32, newthe/colorizer.scss */
 html.the .info.progress {
-  color: #FDFDFD !important;
-  color: #2B2B2B !important;
-  -moz-animation: progress_info 1.2s linear 0.5s infinite;
-  -webkit-animation: progress_info 1.2s linear 0.5s infinite;
-  animation: progress_info 1.2s linear 0.5s infinite;
+  position: relative;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 35, newthe/colorizer.scss */
+html.the .info.progress::after {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  content: " ";
+  display: block;
+  background-image: url("progress.png");
+  background-repeat: repeat;
+  animation-name: progress_info;
+  -webkit-animation-name: progress_info;
+  opacity: 0.4;
+  animation-duration: 15s;
+  -webkit-animation-duration: 15s;
+  animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+/* line 65, newthe/colorizer.scss */
 html.the .info.title {
   color: #F9D264;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .info.bordered, html.the .info.button {
   border: solid 1px #f7c433;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .info.bordered.title, html.the .info.button.title {
   border: none;
   border-bottom: solid 1px #f7c433;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .info.bordered.checker, html.the .info.button.checker {
   border: solid 1px #fdf3d5;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .info.bordered.checked, html.the .info.button.checked {
   border: solid 1px #f7c433;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .info.checker {
-  color: #F9D264;
-  background-color: #fefaed;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .info.checked {
   color: #2B2B2B;
   background-color: #F9D264;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .info.checker.semaphore {
+  color: #F9D264;
+  background-color: #fefaed;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .info.checked {
+  color: #F9D264;
+  background-color: #fefaed;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .info.checked.semaphore {
+  color: #2B2B2B;
+  background-color: #F9D264;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .info.active, html.the .info.button, html.the .info.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3320,73 +2943,83 @@ html.the .info.active, html.the .info.button, html.the .info.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .info.active:hover, html.the .info.button:hover, html.the .info.menuitem:hover {
   color: #2B2B2B;
   background-color: #fdefc6;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .info.active:hover.title, html.the .info.button:hover.title, html.the .info.menuitem:hover.title {
   background-color: inherit;
   color: #fdefc6;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .info.active:hover.bordered, html.the .info.button:hover.bordered, html.the .info.menuitem:hover.bordered {
   border-top-color: #fbe095;
   border-bottom-color: #eeb209;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .info.active:hover:active, html.the .info.button:hover:active, html.the .info.menuitem:hover:active {
   background: linear-gradient(to bottom, #fad97d, #fbe095);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .info.active:hover:active.title, html.the .info.button:hover:active.title, html.the .info.menuitem:hover:active.title {
   color: #fbe095 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .info.active:hover:active.bordered, html.the .info.button:hover:active.bordered, html.the .info.menuitem:hover:active.bordered {
   border-top-color: #f8cb4b;
   border-bottom-color: #f9d264;
 }
-/* line 209, newthe/colorizer.scss */
+/* line 182, newthe/colorizer.scss */
 html.the .info.soft {
   color: #2B2B2B;
   background-color: #fdefc6;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .info.soft.title {
   color: #fdefc6;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .info.soft.bordered, html.the .info.soft.button {
   border: solid 1px #fbe095;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .info.soft.bordered.title, html.the .info.soft.button.title {
   border: none;
   border-bottom: solid 1px #fbe095;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .info.soft.bordered.checker, html.the .info.soft.button.checker {
   border: solid 1px #fdf3d5;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .info.soft.bordered.checked, html.the .info.soft.button.checked {
   border: solid 1px #fbe095;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .info.soft.checker {
-  color: #5e5e5e;
-  background-color: #fefaed;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .info.soft.checked {
   color: #2B2B2B;
   background-color: #fdefc6;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .info.soft.checker.semaphore {
+  color: #5e5e5e;
+  background-color: #fefaed;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .info.soft.checked {
+  color: #5e5e5e;
+  background-color: #fefaed;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .info.soft.checked.semaphore {
+  color: #2B2B2B;
+  background-color: #fdefc6;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .info.soft.active, html.the .info.soft.button, html.the .info.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3394,73 +3027,83 @@ html.the .info.soft.active, html.the .info.soft.button, html.the .info.soft.menu
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .info.soft.active:hover, html.the .info.soft.button:hover, html.the .info.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #fefaed;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .info.soft.active:hover.title, html.the .info.soft.button:hover.title, html.the .info.soft.menuitem:hover.title {
   background-color: inherit;
   color: #fefaed;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .info.soft.active:hover.bordered, html.the .info.soft.button:hover.bordered, html.the .info.soft.menuitem:hover.bordered {
   border-top-color: #fcecbc;
   border-bottom-color: #f9d264;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .info.soft.active:hover:active, html.the .info.soft.button:hover:active, html.the .info.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #fef6df, #fffbf2);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .info.soft.active:hover:active.title, html.the .info.soft.button:hover:active.title, html.the .info.soft.menuitem:hover:active.title {
   color: #fffbf2 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .info.soft.active:hover:active.bordered, html.the .info.soft.button:hover:active.bordered, html.the .info.soft.menuitem:hover:active.bordered {
   border-top-color: #fce7ae;
   border-bottom-color: #fdedc1;
 }
-/* line 212, newthe/colorizer.scss */
+/* line 185, newthe/colorizer.scss */
 html.the .info.strong {
   color: #FDFDFD;
   background-color: #f7c433;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .info.strong.title {
   color: #f7c433;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .info.strong.bordered, html.the .info.strong.button {
   border: solid 1px #eeb209;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .info.strong.bordered.title, html.the .info.strong.button.title {
   border: none;
   border-bottom: solid 1px #eeb209;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .info.strong.bordered.checker, html.the .info.strong.button.checker {
   border: solid 1px #fdf0cb;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .info.strong.bordered.checked, html.the .info.strong.button.checked {
   border: solid 1px #eeb209;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .info.strong.checker {
-  color: #f7c433;
-  background-color: #fef7e4;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .info.strong.checked {
   color: #FDFDFD;
   background-color: #f7c433;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .info.strong.checker.semaphore {
+  color: #f7c433;
+  background-color: #fef7e4;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .info.strong.checked {
+  color: #f7c433;
+  background-color: #fef7e4;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .info.strong.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #f7c433;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .info.strong.active, html.the .info.strong.button, html.the .info.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3468,226 +3111,136 @@ html.the .info.strong.active, html.the .info.strong.button, html.the .info.stron
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .info.strong.active:hover, html.the .info.strong.button:hover, html.the .info.strong.menuitem:hover {
   color: #2B2B2B;
   background-color: #fbe095;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .info.strong.active:hover.title, html.the .info.strong.button:hover.title, html.the .info.strong.menuitem:hover.title {
   background-color: inherit;
   color: #fbe095;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .info.strong.active:hover.bordered, html.the .info.strong.button:hover.bordered, html.the .info.strong.menuitem:hover.bordered {
   border-top-color: #f9d264;
   border-bottom-color: #bd8d07;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .info.strong.active:hover:active, html.the .info.strong.button:hover:active, html.the .info.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #f8cb4b, #f9d264);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .info.strong.active:hover:active.title, html.the .info.strong.button:hover:active.title, html.the .info.strong.menuitem:hover:active.title {
   color: #f9d264 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .info.strong.active:hover:active.bordered, html.the .info.strong.button:hover:active.bordered, html.the .info.strong.menuitem:hover:active.bordered {
   border-top-color: #f6bd1a;
   border-bottom-color: #f7c433;
 }
-/* line 203, newthe/colorizer.scss */
+/* line 176, newthe/colorizer.scss */
 html.the .idanger {
   color: #E7582E;
 }
-/* line 206, newthe/colorizer.scss */
+/* line 179, newthe/colorizer.scss */
 html.the .danger {
   color: #FDFDFD;
   background-color: #E7582E;
 }
 @-moz-keyframes progress_danger {
   0% {
-    background: linear-gradient(to right, #f2a189, #f2a189);
-  }
-  7% {
-    background: linear-gradient(to right, #e7582e 0%, #e7582e 5%, #f3a893 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #e7582e 0%, #e7582e 10%, #f4b09c 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #e7582e 0%, #e7582e 20%, #f6beae 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #f7c6b7 0%, #f7c6b7 9%, #e7582e 10%, #e7582e 30%, #f7c6b7 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #f8cdc0 0%, #f8cdc0 19%, #e7582e 20%, #e7582e 40%, #f8cdc0 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #f9d4ca 0%, #f9d4ca 29%, #e7582e 30%, #e7582e 50%, #f9d4ca 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #f9d4ca 0%, #f9d4ca 39%, #e7582e 40%, #e7582e 60%, #f9d4ca 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #f9d4ca 0%, #f9d4ca 49%, #e7582e 50%, #e7582e 70%, #f9d4ca 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #f8cdc0 0%, #f8cdc0 59%, #e7582e 60%, #e7582e 80%, #f8cdc0 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #f7c6b7 0%, #f7c6b7 69%, #e7582e 70%, #e7582e 90%, #f7c6b7 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #f6beae 0%, #f6beae 79%, #e7582e 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #f4b09c 0%, #f4b09c 89%, #e7582e 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #f3a893 0%, #f3a893 94%, #e7582e 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #f2a189, #f2a189);
+    background-position: 1000px 0%;
   }
 }
 @-webkit-keyframes progress_danger {
   0% {
-    background: linear-gradient(to right, #f2a189, #f2a189);
-  }
-  7% {
-    background: linear-gradient(to right, #e7582e 0%, #e7582e 5%, #f3a893 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #e7582e 0%, #e7582e 10%, #f4b09c 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #e7582e 0%, #e7582e 20%, #f6beae 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #f7c6b7 0%, #f7c6b7 9%, #e7582e 10%, #e7582e 30%, #f7c6b7 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #f8cdc0 0%, #f8cdc0 19%, #e7582e 20%, #e7582e 40%, #f8cdc0 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #f9d4ca 0%, #f9d4ca 29%, #e7582e 30%, #e7582e 50%, #f9d4ca 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #f9d4ca 0%, #f9d4ca 39%, #e7582e 40%, #e7582e 60%, #f9d4ca 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #f9d4ca 0%, #f9d4ca 49%, #e7582e 50%, #e7582e 70%, #f9d4ca 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #f8cdc0 0%, #f8cdc0 59%, #e7582e 60%, #e7582e 80%, #f8cdc0 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #f7c6b7 0%, #f7c6b7 69%, #e7582e 70%, #e7582e 90%, #f7c6b7 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #f6beae 0%, #f6beae 79%, #e7582e 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #f4b09c 0%, #f4b09c 89%, #e7582e 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #f3a893 0%, #f3a893 94%, #e7582e 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #f2a189, #f2a189);
+    background-position: 1000px 0%;
   }
 }
 @keyframes progress_danger {
   0% {
-    background: linear-gradient(to right, #f2a189, #f2a189);
-  }
-  7% {
-    background: linear-gradient(to right, #e7582e 0%, #e7582e 5%, #f3a893 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #e7582e 0%, #e7582e 10%, #f4b09c 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #e7582e 0%, #e7582e 20%, #f6beae 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #f7c6b7 0%, #f7c6b7 9%, #e7582e 10%, #e7582e 30%, #f7c6b7 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #f8cdc0 0%, #f8cdc0 19%, #e7582e 20%, #e7582e 40%, #f8cdc0 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #f9d4ca 0%, #f9d4ca 29%, #e7582e 30%, #e7582e 50%, #f9d4ca 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #f9d4ca 0%, #f9d4ca 39%, #e7582e 40%, #e7582e 60%, #f9d4ca 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #f9d4ca 0%, #f9d4ca 49%, #e7582e 50%, #e7582e 70%, #f9d4ca 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #f8cdc0 0%, #f8cdc0 59%, #e7582e 60%, #e7582e 80%, #f8cdc0 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #f7c6b7 0%, #f7c6b7 69%, #e7582e 70%, #e7582e 90%, #f7c6b7 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #f6beae 0%, #f6beae 79%, #e7582e 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #f4b09c 0%, #f4b09c 89%, #e7582e 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #f3a893 0%, #f3a893 94%, #e7582e 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #f2a189, #f2a189);
+    background-position: 1000px 0%;
   }
 }
-/* line 84, newthe/colorizer.scss */
+/* line 32, newthe/colorizer.scss */
 html.the .danger.progress {
-  color: #FDFDFD !important;
-  color: #2B2B2B !important;
-  -moz-animation: progress_danger 1.2s linear 0.5s infinite;
-  -webkit-animation: progress_danger 1.2s linear 0.5s infinite;
-  animation: progress_danger 1.2s linear 0.5s infinite;
+  position: relative;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 35, newthe/colorizer.scss */
+html.the .danger.progress::after {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  content: " ";
+  display: block;
+  background-image: url("progress.png");
+  background-repeat: repeat;
+  animation-name: progress_danger;
+  -webkit-animation-name: progress_danger;
+  opacity: 0.4;
+  animation-duration: 15s;
+  -webkit-animation-duration: 15s;
+  animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+/* line 65, newthe/colorizer.scss */
 html.the .danger.title {
   color: #E7582E;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .danger.bordered, html.the .danger.button {
   border: solid 1px #cb4017;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .danger.bordered.title, html.the .danger.button.title {
   border: none;
   border-bottom: solid 1px #cb4017;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .danger.bordered.checker, html.the .danger.button.checker {
   border: solid 1px #f9d8ce;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .danger.bordered.checked, html.the .danger.button.checked {
   border: solid 1px #cb4017;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .danger.checker {
-  color: #E7582E;
-  background-color: #fceae5;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .danger.checked {
   color: #FDFDFD;
   background-color: #E7582E;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .danger.checker.semaphore {
+  color: #E7582E;
+  background-color: #fceae5;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .danger.checked {
+  color: #E7582E;
+  background-color: #fceae5;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .danger.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #E7582E;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .danger.active, html.the .danger.button, html.the .danger.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3695,73 +3248,83 @@ html.the .danger.active, html.the .danger.button, html.the .danger.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .danger.active:hover, html.the .danger.button:hover, html.the .danger.menuitem:hover {
   color: #2B2B2B;
   background-color: #f2a189;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .danger.active:hover.title, html.the .danger.button:hover.title, html.the .danger.menuitem:hover.title {
   background-color: inherit;
   color: #f2a189;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .danger.active:hover.bordered, html.the .danger.button:hover.bordered, html.the .danger.menuitem:hover.bordered {
   border-top-color: #ec7d5c;
   border-bottom-color: #9d3212;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .danger.active:hover:active, html.the .danger.button:hover:active, html.the .danger.menuitem:hover:active {
   background: linear-gradient(to bottom, #ea6a45, #ec7d5c);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .danger.active:hover:active.title, html.the .danger.button:hover:active.title, html.the .danger.menuitem:hover:active.title {
   color: #ec7d5c !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .danger.active:hover:active.bordered, html.the .danger.button:hover:active.bordered, html.the .danger.menuitem:hover:active.bordered {
   border-top-color: #e2471a;
   border-bottom-color: #e7582e;
 }
-/* line 209, newthe/colorizer.scss */
+/* line 182, newthe/colorizer.scss */
 html.the .danger.soft {
   color: #2B2B2B;
   background-color: #f2a189;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .danger.soft.title {
   color: #f2a189;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .danger.soft.bordered, html.the .danger.soft.button {
   border: solid 1px #ec7d5c;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .danger.soft.bordered.title, html.the .danger.soft.button.title {
   border: none;
   border-bottom: solid 1px #ec7d5c;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .danger.soft.bordered.checker, html.the .danger.soft.button.checker {
   border: solid 1px #f9d8ce;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .danger.soft.bordered.checked, html.the .danger.soft.button.checked {
   border: solid 1px #ec7d5c;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .danger.soft.checker {
-  color: #f2a189;
-  background-color: #fceae5;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .danger.soft.checked {
   color: #2B2B2B;
   background-color: #f2a189;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .danger.soft.checker.semaphore {
+  color: #f2a189;
+  background-color: #fceae5;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .danger.soft.checked {
+  color: #f2a189;
+  background-color: #fceae5;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .danger.soft.checked.semaphore {
+  color: #2B2B2B;
+  background-color: #f2a189;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .danger.soft.active, html.the .danger.soft.button, html.the .danger.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3769,73 +3332,83 @@ html.the .danger.soft.active, html.the .danger.soft.button, html.the .danger.sof
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .danger.soft.active:hover, html.the .danger.soft.button:hover, html.the .danger.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #fceae5;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .danger.soft.active:hover.title, html.the .danger.soft.button:hover.title, html.the .danger.soft.menuitem:hover.title {
   background-color: inherit;
   color: #fceae5;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .danger.soft.active:hover.bordered, html.the .danger.soft.button:hover.bordered, html.the .danger.soft.menuitem:hover.bordered {
   border-top-color: #f7c6b7;
   border-bottom-color: #e7582e;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .danger.soft.active:hover:active, html.the .danger.soft.button:hover:active, html.the .danger.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #f4b3a0, #f7c6b7);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .danger.soft.active:hover:active.title, html.the .danger.soft.button:hover:active.title, html.the .danger.soft.menuitem:hover:active.title {
   color: #f7c6b7 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .danger.soft.active:hover:active.bordered, html.the .danger.soft.button:hover:active.bordered, html.the .danger.soft.menuitem:hover:active.bordered {
   border-top-color: #ef8f73;
   border-bottom-color: #f2a189;
 }
-/* line 212, newthe/colorizer.scss */
+/* line 185, newthe/colorizer.scss */
 html.the .danger.strong {
   color: #FDFDFD;
   background-color: #cb4017;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .danger.strong.title {
   color: #cb4017;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .danger.strong.bordered, html.the .danger.strong.button {
   border: solid 1px #9d3212;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .danger.strong.bordered.title, html.the .danger.strong.button.title {
   border: none;
   border-bottom: solid 1px #9d3212;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .danger.strong.bordered.checker, html.the .danger.strong.button.checker {
   border: solid 1px #f4b3a0;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .danger.strong.bordered.checked, html.the .danger.strong.button.checked {
   border: solid 1px #9d3212;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .danger.strong.checker {
-  color: #cb4017;
-  background-color: #f7c6b7;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .danger.strong.checked {
   color: #FDFDFD;
   background-color: #cb4017;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .danger.strong.checker.semaphore {
+  color: #cb4017;
+  background-color: #f7c6b7;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .danger.strong.checked {
+  color: #cb4017;
+  background-color: #f7c6b7;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .danger.strong.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #cb4017;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .danger.strong.active, html.the .danger.strong.button, html.the .danger.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3843,226 +3416,136 @@ html.the .danger.strong.active, html.the .danger.strong.button, html.the .danger
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .danger.strong.active:hover, html.the .danger.strong.button:hover, html.the .danger.strong.menuitem:hover {
   color: #FDFDFD;
   background-color: #ec7d5c;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .danger.strong.active:hover.title, html.the .danger.strong.button:hover.title, html.the .danger.strong.menuitem:hover.title {
   background-color: inherit;
   color: #ec7d5c;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .danger.strong.active:hover.bordered, html.the .danger.strong.button:hover.bordered, html.the .danger.strong.menuitem:hover.bordered {
   border-top-color: #e7582e;
   border-bottom-color: #6f230d;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .danger.strong.active:hover:active, html.the .danger.strong.button:hover:active, html.the .danger.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #e2471a, #e7582e);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .danger.strong.active:hover:active.title, html.the .danger.strong.button:hover:active.title, html.the .danger.strong.menuitem:hover:active.title {
   color: #e7582e !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .danger.strong.active:hover:active.bordered, html.the .danger.strong.button:hover:active.bordered, html.the .danger.strong.menuitem:hover:active.bordered {
   border-top-color: #b43915;
   border-bottom-color: #cb4017;
 }
-/* line 203, newthe/colorizer.scss */
+/* line 176, newthe/colorizer.scss */
 html.the .iwarn {
   color: #FA9357;
 }
-/* line 206, newthe/colorizer.scss */
+/* line 179, newthe/colorizer.scss */
 html.the .warn {
   color: #FDFDFD;
   background-color: #FA9357;
 }
 @-moz-keyframes progress_warn {
   0% {
-    background: linear-gradient(to right, #fdd3ba, #fdd3ba);
-  }
-  7% {
-    background: linear-gradient(to right, #fa9357 0%, #fa9357 5%, #fdd9c4 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #fa9357 0%, #fa9357 10%, #fedfce 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #fa9357 0%, #fa9357 20%, #feece2 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #fef3ec 0%, #fef3ec 9%, #fa9357 10%, #fa9357 30%, #fef3ec 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #fff9f5 0%, #fff9f5 19%, #fa9357 20%, #fa9357 40%, #fff9f5 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 29%, #fa9357 30%, #fa9357 50%, #ffffff 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 39%, #fa9357 40%, #fa9357 60%, #ffffff 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 49%, #fa9357 50%, #fa9357 70%, #ffffff 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #fff9f5 0%, #fff9f5 59%, #fa9357 60%, #fa9357 80%, #fff9f5 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #fef3ec 0%, #fef3ec 69%, #fa9357 70%, #fa9357 90%, #fef3ec 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #feece2 0%, #feece2 79%, #fa9357 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #fedfce 0%, #fedfce 89%, #fa9357 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #fdd9c4 0%, #fdd9c4 94%, #fa9357 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #fdd3ba, #fdd3ba);
+    background-position: 1000px 0%;
   }
 }
 @-webkit-keyframes progress_warn {
   0% {
-    background: linear-gradient(to right, #fdd3ba, #fdd3ba);
-  }
-  7% {
-    background: linear-gradient(to right, #fa9357 0%, #fa9357 5%, #fdd9c4 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #fa9357 0%, #fa9357 10%, #fedfce 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #fa9357 0%, #fa9357 20%, #feece2 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #fef3ec 0%, #fef3ec 9%, #fa9357 10%, #fa9357 30%, #fef3ec 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #fff9f5 0%, #fff9f5 19%, #fa9357 20%, #fa9357 40%, #fff9f5 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 29%, #fa9357 30%, #fa9357 50%, #ffffff 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 39%, #fa9357 40%, #fa9357 60%, #ffffff 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 49%, #fa9357 50%, #fa9357 70%, #ffffff 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #fff9f5 0%, #fff9f5 59%, #fa9357 60%, #fa9357 80%, #fff9f5 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #fef3ec 0%, #fef3ec 69%, #fa9357 70%, #fa9357 90%, #fef3ec 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #feece2 0%, #feece2 79%, #fa9357 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #fedfce 0%, #fedfce 89%, #fa9357 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #fdd9c4 0%, #fdd9c4 94%, #fa9357 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #fdd3ba, #fdd3ba);
+    background-position: 1000px 0%;
   }
 }
 @keyframes progress_warn {
   0% {
-    background: linear-gradient(to right, #fdd3ba, #fdd3ba);
-  }
-  7% {
-    background: linear-gradient(to right, #fa9357 0%, #fa9357 5%, #fdd9c4 6%);
-  }
-  14% {
-    background: linear-gradient(to right, #fa9357 0%, #fa9357 10%, #fedfce 11%);
-  }
-  21% {
-    background: linear-gradient(to right, #fa9357 0%, #fa9357 20%, #feece2 21%);
-  }
-  28% {
-    background: linear-gradient(to right, #fef3ec 0%, #fef3ec 9%, #fa9357 10%, #fa9357 30%, #fef3ec 31%);
-  }
-  35% {
-    background: linear-gradient(to right, #fff9f5 0%, #fff9f5 19%, #fa9357 20%, #fa9357 40%, #fff9f5 41%);
-  }
-  42% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 29%, #fa9357 30%, #fa9357 50%, #ffffff 51%);
-  }
-  49% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 39%, #fa9357 40%, #fa9357 60%, #ffffff 61%);
-  }
-  56% {
-    background: linear-gradient(to right, #ffffff 0%, #ffffff 49%, #fa9357 50%, #fa9357 70%, #ffffff 71%);
-  }
-  63% {
-    background: linear-gradient(to right, #fff9f5 0%, #fff9f5 59%, #fa9357 60%, #fa9357 80%, #fff9f5 81%);
-  }
-  70% {
-    background: linear-gradient(to right, #fef3ec 0%, #fef3ec 69%, #fa9357 70%, #fa9357 90%, #fef3ec 91%);
-  }
-  77% {
-    background: linear-gradient(to right, #feece2 0%, #feece2 79%, #fa9357 80%);
-  }
-  84% {
-    background: linear-gradient(to right, #fedfce 0%, #fedfce 89%, #fa9357 90%);
-  }
-  93% {
-    background: linear-gradient(to right, #fdd9c4 0%, #fdd9c4 94%, #fa9357 95%);
+    background-position: 0% 0%;
   }
   100% {
-    background: linear-gradient(to right, #fdd3ba, #fdd3ba);
+    background-position: 1000px 0%;
   }
 }
-/* line 84, newthe/colorizer.scss */
+/* line 32, newthe/colorizer.scss */
 html.the .warn.progress {
-  color: #FDFDFD !important;
-  color: #2B2B2B !important;
-  -moz-animation: progress_warn 1.2s linear 0.5s infinite;
-  -webkit-animation: progress_warn 1.2s linear 0.5s infinite;
-  animation: progress_warn 1.2s linear 0.5s infinite;
+  position: relative;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 35, newthe/colorizer.scss */
+html.the .warn.progress::after {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  content: " ";
+  display: block;
+  background-image: url("progress.png");
+  background-repeat: repeat;
+  animation-name: progress_warn;
+  -webkit-animation-name: progress_warn;
+  opacity: 0.4;
+  animation-duration: 15s;
+  -webkit-animation-duration: 15s;
+  animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+/* line 65, newthe/colorizer.scss */
 html.the .warn.title {
   color: #FA9357;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .warn.bordered, html.the .warn.button {
   border: solid 1px #f97325;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .warn.bordered.title, html.the .warn.button.title {
   border: none;
   border-bottom: solid 1px #f97325;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .warn.bordered.checker, html.the .warn.button.checker {
   border: solid 1px #fee9dd;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .warn.bordered.checked, html.the .warn.button.checked {
   border: solid 1px #f97325;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .warn.checker {
-  color: #FA9357;
-  background-color: #fff9f5;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .warn.checked {
   color: #FDFDFD;
   background-color: #FA9357;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .warn.checker.semaphore {
+  color: #FA9357;
+  background-color: #fff9f5;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .warn.checked {
+  color: #FA9357;
+  background-color: #fff9f5;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .warn.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #FA9357;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .warn.active, html.the .warn.button, html.the .warn.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -4070,73 +3553,83 @@ html.the .warn.active, html.the .warn.button, html.the .warn.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .warn.active:hover, html.the .warn.button:hover, html.the .warn.menuitem:hover {
   color: #2B2B2B;
   background-color: #fdd3ba;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .warn.active:hover.title, html.the .warn.button:hover.title, html.the .warn.menuitem:hover.title {
   background-color: inherit;
   color: #fdd3ba;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .warn.active:hover.bordered, html.the .warn.button:hover.bordered, html.the .warn.menuitem:hover.bordered {
   border-top-color: #fbb389;
   border-bottom-color: #e45807;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .warn.active:hover:active, html.the .warn.button:hover:active, html.the .warn.menuitem:hover:active {
   background: linear-gradient(to bottom, #fba370, #fbb389);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .warn.active:hover:active.title, html.the .warn.button:hover:active.title, html.the .warn.menuitem:hover:active.title {
   color: #fbb389 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .warn.active:hover:active.bordered, html.the .warn.button:hover:active.bordered, html.the .warn.menuitem:hover:active.bordered {
   border-top-color: #f9833e;
   border-bottom-color: #fa9357;
 }
-/* line 209, newthe/colorizer.scss */
+/* line 182, newthe/colorizer.scss */
 html.the .warn.soft {
   color: #2B2B2B;
   background-color: #fdd3ba;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .warn.soft.title {
   color: #fdd3ba;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .warn.soft.bordered, html.the .warn.soft.button {
   border: solid 1px #fbb389;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .warn.soft.bordered.title, html.the .warn.soft.button.title {
   border: none;
   border-bottom: solid 1px #fbb389;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .warn.soft.bordered.checker, html.the .warn.soft.button.checker {
   border: solid 1px #fee9dd;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .warn.soft.bordered.checked, html.the .warn.soft.button.checked {
   border: solid 1px #fbb389;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .warn.soft.checker {
-  color: #5e5e5e;
-  background-color: #fff9f5;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .warn.soft.checked {
   color: #2B2B2B;
   background-color: #fdd3ba;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .warn.soft.checker.semaphore {
+  color: #5e5e5e;
+  background-color: #fff9f5;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .warn.soft.checked {
+  color: #5e5e5e;
+  background-color: #fff9f5;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .warn.soft.checked.semaphore {
+  color: #2B2B2B;
+  background-color: #fdd3ba;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .warn.soft.active, html.the .warn.soft.button, html.the .warn.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -4144,73 +3637,83 @@ html.the .warn.soft.active, html.the .warn.soft.button, html.the .warn.soft.menu
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .warn.soft.active:hover, html.the .warn.soft.button:hover, html.the .warn.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #fff9f5;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .warn.soft.active:hover.title, html.the .warn.soft.button:hover.title, html.the .warn.soft.menuitem:hover.title {
   background-color: inherit;
   color: #fff9f5;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .warn.soft.active:hover.bordered, html.the .warn.soft.button:hover.bordered, html.the .warn.soft.menuitem:hover.bordered {
   border-top-color: #fdd9c4;
   border-bottom-color: #fa9357;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .warn.soft.active:hover:active, html.the .warn.soft.button:hover:active, html.the .warn.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #fee3d3, #fef3ec);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .warn.soft.active:hover:active.title, html.the .warn.soft.button:hover:active.title, html.the .warn.soft.menuitem:hover:active.title {
   color: #fef3ec !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .warn.soft.active:hover:active.bordered, html.the .warn.soft.button:hover:active.bordered, html.the .warn.soft.menuitem:hover:active.bordered {
   border-top-color: #fcc3a1;
   border-bottom-color: #fdd3ba;
 }
-/* line 212, newthe/colorizer.scss */
+/* line 185, newthe/colorizer.scss */
 html.the .warn.strong {
   color: #FDFDFD;
   background-color: #f97325;
 }
-/* line 101, newthe/colorizer.scss */
+/* line 65, newthe/colorizer.scss */
 html.the .warn.strong.title {
   color: #f97325;
   background-color: inherit;
 }
-/* line 111, newthe/colorizer.scss */
+/* line 75, newthe/colorizer.scss */
 html.the .warn.strong.bordered, html.the .warn.strong.button {
   border: solid 1px #e45807;
 }
-/* line 113, newthe/colorizer.scss */
+/* line 77, newthe/colorizer.scss */
 html.the .warn.strong.bordered.title, html.the .warn.strong.button.title {
   border: none;
   border-bottom: solid 1px #e45807;
 }
-/* line 117, newthe/colorizer.scss */
+/* line 81, newthe/colorizer.scss */
 html.the .warn.strong.bordered.checker, html.the .warn.strong.button.checker {
   border: solid 1px #fee3d3;
 }
-/* line 120, newthe/colorizer.scss */
+/* line 84, newthe/colorizer.scss */
 html.the .warn.strong.bordered.checked, html.the .warn.strong.button.checked {
   border: solid 1px #e45807;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 91, newthe/colorizer.scss */
 html.the .warn.strong.checker {
-  color: #f97325;
-  background-color: #fef3ec;
-}
-/* line 134, newthe/colorizer.scss */
-html.the .warn.strong.checked {
   color: #FDFDFD;
   background-color: #f97325;
 }
-/* line 146, newthe/colorizer.scss */
+/* line 99, newthe/colorizer.scss */
+html.the .warn.strong.checker.semaphore {
+  color: #f97325;
+  background-color: #fef3ec;
+}
+/* line 105, newthe/colorizer.scss */
+html.the .warn.strong.checked {
+  color: #f97325;
+  background-color: #fef3ec;
+}
+/* line 108, newthe/colorizer.scss */
+html.the .warn.strong.checked.semaphore {
+  color: #FDFDFD;
+  background-color: #f97325;
+}
+/* line 119, newthe/colorizer.scss */
 html.the .warn.strong.active, html.the .warn.strong.button, html.the .warn.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -4218,117 +3721,122 @@ html.the .warn.strong.active, html.the .warn.strong.button, html.the .warn.stron
   user-select: none;
   cursor: pointer;
 }
-/* line 149, newthe/colorizer.scss */
+/* line 122, newthe/colorizer.scss */
 html.the .warn.strong.active:hover, html.the .warn.strong.button:hover, html.the .warn.strong.menuitem:hover {
   color: #2B2B2B;
   background-color: #fbb389;
 }
-/* line 154, newthe/colorizer.scss */
+/* line 127, newthe/colorizer.scss */
 html.the .warn.strong.active:hover.title, html.the .warn.strong.button:hover.title, html.the .warn.strong.menuitem:hover.title {
   background-color: inherit;
   color: #fbb389;
 }
-/* line 158, newthe/colorizer.scss */
+/* line 131, newthe/colorizer.scss */
 html.the .warn.strong.active:hover.bordered, html.the .warn.strong.button:hover.bordered, html.the .warn.strong.menuitem:hover.bordered {
   border-top-color: #fa9357;
   border-bottom-color: #b34505;
 }
-/* line 162, newthe/colorizer.scss */
+/* line 135, newthe/colorizer.scss */
 html.the .warn.strong.active:hover:active, html.the .warn.strong.button:hover:active, html.the .warn.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #f9833e, #fa9357);
 }
-/* line 173, newthe/colorizer.scss */
+/* line 146, newthe/colorizer.scss */
 html.the .warn.strong.active:hover:active.title, html.the .warn.strong.button:hover:active.title, html.the .warn.strong.menuitem:hover:active.title {
   color: #fa9357 !important;
   background-color: inherit !important;
 }
-/* line 180, newthe/colorizer.scss */
+/* line 153, newthe/colorizer.scss */
 html.the .warn.strong.active:hover:active.bordered, html.the .warn.strong.button:hover:active.bordered, html.the .warn.strong.menuitem:hover:active.bordered {
   border-top-color: #f8630d;
   border-bottom-color: #f97325;
 }
-/* line 46, newthe/page.scss */
+/* line 47, newthe/page.scss */
 html.the .box {
   display: flex;
 }
-/* line 48, newthe/page.scss */
+/* line 49, newthe/page.scss */
 html.the .box.col {
   flex-direction: column;
 }
-/* line 51, newthe/page.scss */
+/* line 52, newthe/page.scss */
 html.the .box.row {
   flex-direction: row;
 }
-/* line 55, newthe/page.scss */
+/* line 56, newthe/page.scss */
 html.the .box .collapsed {
   flex-grow: 0 !important;
 }
-/* line 57, newthe/page.scss */
+/* line 58, newthe/page.scss */
 html.the .box .collapsed > .content {
   display: none !important;
 }
-/* line 62, newthe/page.scss */
+/* line 63, newthe/page.scss */
 html.the .box .content {
   overflow-x: hidden;
   overflow-y: auto;
   flex: 1;
 }
-/* line 68, newthe/page.scss */
+/* line 69, newthe/page.scss */
 html.the .block {
   display: block;
 }
-/* line 71, newthe/page.scss */
+/* line 72, newthe/page.scss */
 html.the .filler {
   width: 100%;
 }
-/* line 76, newthe/page.scss */
+/* line 77, newthe/page.scss */
 html.the .flex1 {
   flex-grow: 1;
 }
-/* line 76, newthe/page.scss */
+/* line 77, newthe/page.scss */
 html.the .flex2 {
   flex-grow: 2;
 }
-/* line 76, newthe/page.scss */
+/* line 77, newthe/page.scss */
 html.the .flex3 {
   flex-grow: 3;
 }
-/* line 76, newthe/page.scss */
+/* line 77, newthe/page.scss */
 html.the .flex4 {
   flex-grow: 4;
 }
-/* line 76, newthe/page.scss */
+/* line 77, newthe/page.scss */
 html.the .flex5 {
   flex-grow: 5;
 }
-/* line 76, newthe/page.scss */
+/* line 77, newthe/page.scss */
 html.the .flex6 {
   flex-grow: 6;
 }
-/* line 76, newthe/page.scss */
+/* line 77, newthe/page.scss */
 html.the .flex7 {
   flex-grow: 7;
 }
-/* line 76, newthe/page.scss */
+/* line 77, newthe/page.scss */
 html.the .flex8 {
   flex-grow: 8;
 }
-/* line 76, newthe/page.scss */
+/* line 77, newthe/page.scss */
 html.the .flex9 {
   flex-grow: 9;
 }
-/* line 76, newthe/page.scss */
+/* line 77, newthe/page.scss */
 html.the .flex10 {
   flex-grow: 10;
 }
-/* line 98, newthe/page.scss */
+/* line 99, newthe/page.scss */
 html.the [ng\:cloak], html.the [ng-cloak], html.the [data-ng-cloak], html.the [x-ng-cloak], html.the .ng-cloak, html.the .x-ng-cloak, html.the .hidden {
   display: none !important;
 }
-/* line 83, newthe/page.scss */
+/* line 84, newthe/page.scss */
 html.the label {
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+/* line 106, newthe/page.scss */
+.tlicon {
+  color: #4C81AF;
 }
 
 /*# sourceMappingURL=newthe.css.map */
