@@ -150,7 +150,7 @@ namespace Qorpent.IO.Http
                 }
                 else {
                     var str = context.ReadRequestString();
-                    str = Unescape(str, false);
+                    str = Unescape(str, true);
                     result.PostData = str;
                     if (IsJson(str))
                     {

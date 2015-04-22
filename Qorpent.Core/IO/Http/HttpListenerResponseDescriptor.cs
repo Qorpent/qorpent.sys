@@ -21,6 +21,8 @@ namespace Qorpent.IO.Http {
         }
 
         public override void Close() {
+            if(NoCloseStream)return;
+            
             _response.Close();
         }
 

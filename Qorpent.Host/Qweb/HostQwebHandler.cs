@@ -33,7 +33,7 @@ namespace Qorpent.Host.Qweb
                     if (context.NotModified)
                     {
                         MvcHandler.ProcessNotModified(context);
-                        context.Output.Close();
+                       ctx.Response.Close();
                     }
                     else
                     {
@@ -63,7 +63,7 @@ namespace Qorpent.Host.Qweb
 		{
 			context.Render();
 			context.Output.Flush();
-			context.Output.Close();
+            ((HostMvcContext)context).WebContext.Response.Close();
 		}
 
 		private void Execute(IMvcContext context)
@@ -83,7 +83,7 @@ namespace Qorpent.Host.Qweb
 			context.StatusCode = 500;
 			context.Error = ex;
 			context.RenderError(ex);
-			context.Output.Close();
+            ((HostMvcContext)context).WebContext.Response.Close();
 		}
 
 		private void ExecuteWithoutResult(IMvcContext context)

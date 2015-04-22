@@ -87,7 +87,7 @@
   margin-right: 3px;
   box-shadow: 3px 2px 2px color(primarylight);
 }
-/* line 12, toolwindow.scss */
+/* line 13, toolwindow.scss */
 .toolwindow > label:first-child {
   background-color: color(primary);
   color: #ffffff;
@@ -102,37 +102,42 @@
   justify-content: space-between;
   padding: 3px;
 }
-/* line 25, toolwindow.scss */
+/* line 26, toolwindow.scss */
 .toolwindow > label:first-child span.tbt {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-/* line 29, toolwindow.scss */
+/* line 30, toolwindow.scss */
 .toolwindow > label:first-child span.tbt i {
   font-size: 18px;
   margin-left: 5px;
 }
-/* line 32, toolwindow.scss */
+/* line 33, toolwindow.scss */
 .toolwindow > label:first-child span.tbt i:last-child {
   margin-left: 20px;
 }
-/* line 37, toolwindow.scss */
+/* line 38, toolwindow.scss */
 .toolwindow > label:first-child i.tbt {
   font-size: 18px;
   margin-left: 20px;
 }
-/* line 43, toolwindow.scss */
-.toolwindow .item {
-  padding: 5px;
-}
 /* line 45, toolwindow.scss */
-.toolwindow .item a {
+.toolwindow form > .button {
+  margin-top: 5px;
+}
+/* line 50, toolwindow.scss */
+.toolwindow .item, .toolwindow form {
+  padding: 5px;
+  color: color(black);
+}
+/* line 53, toolwindow.scss */
+.toolwindow .item a, .toolwindow form a {
   text-decoration: none;
   color: color(primary);
 }
 
-/* line 106, page.scss */
+/* line 110, page.scss */
 .tlicon {
   color: color(primary);
 }

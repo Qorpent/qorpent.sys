@@ -28,6 +28,10 @@ namespace Qorpent.Host.Qweb
 		/// 
 		/// </summary>
 		public HostMvcContext(){}
+
+	    public WebContext WebContext {
+	        get { return context; }
+	    }
 		/// <summary>
 		/// 
 		/// </summary>
@@ -558,29 +562,8 @@ namespace Qorpent.Host.Qweb
 		/// </summary>
 		/// <returns> </returns>
 		protected override IDictionary<string, string> RetrieveParameters() {
-			var result = new Dictionary<string, string>();
-			if (null != context) {
-				foreach (var g in RequestData.Query)
-				{
-					result[g.Key] = g.Value;
-				}
-				foreach (var g in RequestData.Form)
-				{
-					result[g.Key] = g.Value;
-				}
-			}
-			else {
-				if (null != Uri) {
-					var srcctring = Uri.Query;
-					var parameters = Regex.Matches(srcctring, @"([^&=\?]+)=([^&=\?]+)", RegexOptions.Compiled);
-					foreach (Match parameter in parameters) {
-						var name = Uri.UnescapeDataString(parameter.Groups[1].Value);
-						var value = Uri.UnescapeDataString(parameter.Groups[2].Value);
-						result[name] = value;
-					}
-				}
-			}
-			return result;
+		    var result = RequestParameters.Create(context).GetParameters();
+		    return result;
 		}
 
 		/// <summary>

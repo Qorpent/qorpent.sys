@@ -28,5 +28,6 @@ define([
     https://github.com/Leaflet/Leaflet.markercluster\
     (c) 2012-20\
     13, Dave Leaver, smartrak";
+    L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
     return window.L;
 });

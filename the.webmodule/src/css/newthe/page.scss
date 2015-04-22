@@ -3,6 +3,7 @@
 @import "dropdown";
 @import "scroller";
 @import "toolwindow";
+
 @mixin page() {
   body {
     @include hyphens(auto);
@@ -51,6 +52,9 @@
     }
     &.row{
       flex-direction: row;
+    }
+    &.right {
+      align-items: flex-end;
     }
 
     .collapsed {

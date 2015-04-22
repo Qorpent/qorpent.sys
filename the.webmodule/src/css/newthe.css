@@ -152,7 +152,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   margin-right: 3px;
   box-shadow: 3px 2px 2px #a4bfd6;
 }
-/* line 12, newthe/toolwindow.scss */
+/* line 13, newthe/toolwindow.scss */
 .toolwindow > label:first-child {
   background-color: #4C81AF;
   color: #ffffff;
@@ -167,44 +167,49 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   justify-content: space-between;
   padding: 3px;
 }
-/* line 25, newthe/toolwindow.scss */
+/* line 26, newthe/toolwindow.scss */
 .toolwindow > label:first-child span.tbt {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-/* line 29, newthe/toolwindow.scss */
+/* line 30, newthe/toolwindow.scss */
 .toolwindow > label:first-child span.tbt i {
   font-size: 18px;
   margin-left: 5px;
 }
-/* line 32, newthe/toolwindow.scss */
+/* line 33, newthe/toolwindow.scss */
 .toolwindow > label:first-child span.tbt i:last-child {
   margin-left: 20px;
 }
-/* line 37, newthe/toolwindow.scss */
+/* line 38, newthe/toolwindow.scss */
 .toolwindow > label:first-child i.tbt {
   font-size: 18px;
   margin-left: 20px;
 }
-/* line 43, newthe/toolwindow.scss */
-.toolwindow .item {
-  padding: 5px;
-}
 /* line 45, newthe/toolwindow.scss */
-.toolwindow .item a {
+.toolwindow form > .button {
+  margin-top: 5px;
+}
+/* line 50, newthe/toolwindow.scss */
+.toolwindow .item, .toolwindow form {
+  padding: 5px;
+  color: black;
+}
+/* line 53, newthe/toolwindow.scss */
+.toolwindow .item a, .toolwindow form a {
   text-decoration: none;
   color: #4C81AF;
 }
 
-/* line 91, newthe/page.scss */
+/* line 95, newthe/page.scss */
 html.the {
   margin: 0px;
   display: flex;
   overflow: hidden;
   height: 100%;
 }
-/* line 7, newthe/page.scss */
+/* line 8, newthe/page.scss */
 html.the body {
   -moz-hyphens: auto;
   -ms-hyphens: auto;
@@ -217,40 +222,40 @@ html.the body {
   font-family: Arial, sans-serif;
   font-size: 18px;
 }
-/* line 15, newthe/page.scss */
+/* line 16, newthe/page.scss */
 html.the body .fa {
   font-family: Arial, sans-serif !important;
 }
-/* line 18, newthe/page.scss */
+/* line 19, newthe/page.scss */
 html.the body input {
   font-size: inherit;
   padding-left: 5px;
   outline: none;
   margin-top: 10px;
 }
-/* line 23, newthe/page.scss */
+/* line 24, newthe/page.scss */
 html.the body input:focus {
   outline: none;
 }
-/* line 27, newthe/page.scss */
+/* line 28, newthe/page.scss */
 html.the body ::selection {
   color: #FDFDFD;
   background-color: #4C81AF;
 }
 @media screen and (max-width: 2000px) and (min-width: 1600px) {
-  /* line 7, newthe/page.scss */
+  /* line 8, newthe/page.scss */
   html.the body {
     font-size: 20px;
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 7, newthe/page.scss */
+  /* line 8, newthe/page.scss */
   html.the body {
     font-size: 16px;
   }
 }
 @media print {
-  /* line 7, newthe/page.scss */
+  /* line 8, newthe/page.scss */
   html.the body {
     color: #000000;
     background-color: #ffffff;
@@ -531,7 +536,7 @@ html.the .workplace > .main {
     min-width: 800px;
   }
 }
-/* line 125, newthe/tools.scss */
+/* line 140, newthe/tools.scss */
 html.the button, html.the .button, html.the .menuitem {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -612,7 +617,13 @@ html.the button.active:hover:active.bordered, html.the button.button:hover:activ
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 128, newthe/tools.scss */
+/* line 157, newthe/colorizer.scss */
+html.the button.active:hover:active[disabled='disabled'], html.the button.button:hover:active[disabled='disabled'], html.the button.menuitem:hover:active[disabled='disabled'], html.the .button.active:hover:active[disabled='disabled'], html.the .button.button:hover:active[disabled='disabled'], html.the .button.menuitem:hover:active[disabled='disabled'], html.the .menuitem.active:hover:active[disabled='disabled'], html.the .menuitem.button:hover:active[disabled='disabled'], html.the .menuitem.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 143, newthe/tools.scss */
 html.the .tooltitle {
   position: relative;
   min-height: 24px;
@@ -661,7 +672,7 @@ html.the .tooltitle.xsm {
   line-height: 10px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 128, newthe/tools.scss */
+  /* line 143, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 29px;
     padding-left: 6px;
@@ -703,7 +714,7 @@ html.the .tooltitle.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 128, newthe/tools.scss */
+  /* line 143, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 20px;
     padding-left: 4px;
@@ -750,7 +761,7 @@ html.the .tooltitle .tbt {
   display: flex;
   align-items: center;
 }
-/* line 131, newthe/tools.scss */
+/* line 146, newthe/tools.scss */
 html.the .button, html.the .title {
   min-height: 28px;
   padding-left: 12px;
@@ -796,7 +807,7 @@ html.the .button.xsm, html.the .title.xsm {
   line-height: 12px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 131, newthe/tools.scss */
+  /* line 146, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 34px;
     padding-left: 15px;
@@ -838,7 +849,7 @@ html.the .button.xsm, html.the .title.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 131, newthe/tools.scss */
+  /* line 146, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 23px;
     padding-left: 10px;
@@ -879,7 +890,7 @@ html.the .button.xsm, html.the .title.xsm {
     line-height: 9px;
   }
 }
-/* line 135, newthe/tools.scss */
+/* line 150, newthe/tools.scss */
 html.the .input {
   min-height: 20px;
   padding-left: 3px;
@@ -925,7 +936,7 @@ html.the .input.xsm {
   line-height: 8px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 135, newthe/tools.scss */
+  /* line 150, newthe/tools.scss */
   html.the .input {
     min-height: 24px;
     padding-left: 4px;
@@ -967,7 +978,7 @@ html.the .input.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 135, newthe/tools.scss */
+  /* line 150, newthe/tools.scss */
   html.the .input {
     min-height: 16px;
     padding-left: 3px;
@@ -1008,11 +1019,11 @@ html.the .input.xsm {
     line-height: 7px;
   }
 }
-/* line 139, newthe/tools.scss */
+/* line 154, newthe/tools.scss */
 html.the input.block {
   box-sizing: border-box;
 }
-/* line 144, newthe/tools.scss */
+/* line 159, newthe/tools.scss */
 html.the .subtitle {
   color: #4C81AF;
   background: transparent;
@@ -1020,7 +1031,7 @@ html.the .subtitle {
   margin-top: 10px;
   padding-bottom: 2px;
 }
-/* line 151, newthe/tools.scss */
+/* line 166, newthe/tools.scss */
 html.the .message {
   position: relative;
   display: flex;
@@ -1045,23 +1056,36 @@ html.the .message .closer:before {
   font-family: FontAwesome;
   content: "";
 }
-/* line 154, newthe/tools.scss */
+/* line 169, newthe/tools.scss */
 html.the button, html.the .button {
   position: relative;
   display: inline-block;
+  text-align: center;
 }
 /* line 38, newthe/tools.scss */
+html.the button[disabled='disabled'], html.the .button[disabled='disabled'] {
+  background-color: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 43, newthe/tools.scss */
+html.the button[disabled='disabled']:hover:active, html.the .button[disabled='disabled']:hover:active {
+  background-color: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 50, newthe/tools.scss */
 html.the button.tab, html.the .button.tab {
   border-radius: 3px 3px 0px 0px;
 }
-/* line 40, newthe/tools.scss */
+/* line 52, newthe/tools.scss */
 html.the button.tab.checked, html.the .button.tab.checked {
   color: #3d678b;
   background: #f6f6f6;
   border-bottom: solid 1px #f6f6f6 !important;
   top: 1px;
 }
-/* line 157, newthe/tools.scss */
+/* line 172, newthe/tools.scss */
 html.the .maintoolbar {
   padding-bottom: 0px;
   padding-top: 3px;
@@ -1073,7 +1097,7 @@ html.the .maintoolbar {
   align-items: flex-end;
   background-color: #4C81AF;
 }
-/* line 59, newthe/tools.scss */
+/* line 74, newthe/tools.scss */
 html.the .maintoolbar .logo {
   background-image: url("img/logo-toolbar.png");
   background-size: cover;
@@ -1083,7 +1107,7 @@ html.the .maintoolbar .logo {
   align-self: flex-start;
 }
 @media screen and (max-width: 1100px) {
-  /* line 59, newthe/tools.scss */
+  /* line 74, newthe/tools.scss */
   html.the .maintoolbar .logo {
     height: 30px;
     width: 50px;
@@ -1091,14 +1115,14 @@ html.the .maintoolbar .logo {
   }
 }
 @media screen and (min-width: 1400px) {
-  /* line 59, newthe/tools.scss */
+  /* line 74, newthe/tools.scss */
   html.the .maintoolbar .logo {
     height: 40px;
     width: 70px;
     margin-right: 16px;
   }
 }
-/* line 77, newthe/tools.scss */
+/* line 92, newthe/tools.scss */
 html.the .maintoolbar input {
   display: inline-block;
   font-size: 20px;
@@ -1109,35 +1133,35 @@ html.the .maintoolbar input {
   margin-top: 0px;
   margin-bottom: 0px;
 }
-/* line 88, newthe/tools.scss */
+/* line 103, newthe/tools.scss */
 html.the .maintoolbar.top .button {
   align-self: center;
   border: none !important;
   margin-right: 1px;
   margin-left: 1px;
 }
-/* line 93, newthe/tools.scss */
+/* line 108, newthe/tools.scss */
 html.the .maintoolbar.top .button.tab {
   align-self: flex-end;
   margin-right: 0px;
   margin-left: 0px;
 }
-/* line 98, newthe/tools.scss */
+/* line 113, newthe/tools.scss */
 html.the .maintoolbar.top .button.checker.primary {
   background-color: #4C81AF;
   border: solid 1px #4C81AF !important;
   color: #FDFDFD;
 }
-/* line 102, newthe/tools.scss */
+/* line 117, newthe/tools.scss */
 html.the .maintoolbar.top .button.checker.primary:hover {
   background-color: #92b3cf;
 }
-/* line 105, newthe/tools.scss */
+/* line 120, newthe/tools.scss */
 html.the .maintoolbar.top .button.checker.primary.checked {
   border: solid 1px #FDFDFD !important;
   border-radius: 5px 5px 5px 5px !important;
 }
-/* line 112, newthe/tools.scss */
+/* line 127, newthe/tools.scss */
 html.the .maintoolbar.tab {
   background-color: #f6f6f6;
   padding-bottom: 1px;
@@ -1145,7 +1169,7 @@ html.the .maintoolbar.tab {
   padding-left: 10px;
   padding-right: 10px;
 }
-/* line 118, newthe/tools.scss */
+/* line 133, newthe/tools.scss */
 html.the .maintoolbar.tab .button {
   margin-right: 4px;
 }
@@ -1329,11 +1353,11 @@ html.the .dropdown.debug {
 html.the body.isdropdown .dropdownback {
   display: block;
 }
-/* line 176, newthe/colorizer.scss */
+/* line 181, newthe/colorizer.scss */
 html.the .idark {
   color: #2B2B2B;
 }
-/* line 179, newthe/colorizer.scss */
+/* line 184, newthe/colorizer.scss */
 html.the .dark {
   color: #FDFDFD;
   background-color: #2B2B2B;
@@ -1466,7 +1490,13 @@ html.the .dark.active:hover:active.bordered, html.the .dark.button:hover:active.
   border-top-color: #1e1e1e;
   border-bottom-color: #2b2b2b;
 }
-/* line 182, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .dark.active:hover:active[disabled='disabled'], html.the .dark.button:hover:active[disabled='disabled'], html.the .dark.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 187, newthe/colorizer.scss */
 html.the .dark.soft {
   color: #FDFDFD;
   background-color: #5e5e5e;
@@ -1550,7 +1580,13 @@ html.the .dark.soft.active:hover:active.bordered, html.the .dark.soft.button:hov
   border-top-color: #515151;
   border-bottom-color: #5e5e5e;
 }
-/* line 185, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .dark.soft.active:hover:active[disabled='disabled'], html.the .dark.soft.button:hover:active[disabled='disabled'], html.the .dark.soft.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 190, newthe/colorizer.scss */
 html.the .dark.strong {
   color: #FDFDFD;
   background-color: #121212;
@@ -1634,11 +1670,17 @@ html.the .dark.strong.active:hover:active.bordered, html.the .dark.strong.button
   border-top-color: #050505;
   border-bottom-color: #121212;
 }
-/* line 176, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .dark.strong.active:hover:active[disabled='disabled'], html.the .dark.strong.button:hover:active[disabled='disabled'], html.the .dark.strong.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 181, newthe/colorizer.scss */
 html.the .ilight {
   color: #FDFDFD;
 }
-/* line 179, newthe/colorizer.scss */
+/* line 184, newthe/colorizer.scss */
 html.the .light {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -1768,7 +1810,13 @@ html.the .light.active:hover:active.bordered, html.the .light.button:hover:activ
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 182, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .light.active:hover:active[disabled='disabled'], html.the .light.button:hover:active[disabled='disabled'], html.the .light.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 187, newthe/colorizer.scss */
 html.the .light.soft {
   color: #2B2B2B;
   background-color: #fefefe;
@@ -1849,7 +1897,13 @@ html.the .light.soft.active:hover:active.bordered, html.the .light.soft.button:h
   border-top-color: #e5e5e5;
   border-bottom-color: #e5e5e5;
 }
-/* line 185, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .light.soft.active:hover:active[disabled='disabled'], html.the .light.soft.button:hover:active[disabled='disabled'], html.the .light.soft.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 190, newthe/colorizer.scss */
 html.the .light.strong {
   color: #2B2B2B;
   background-color: #e4e4e4;
@@ -1930,11 +1984,17 @@ html.the .light.strong.active:hover:active.bordered, html.the .light.strong.butt
   border-top-color: #d7d7d7;
   border-bottom-color: gainsboro;
 }
-/* line 176, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .light.strong.active:hover:active[disabled='disabled'], html.the .light.strong.button:hover:active[disabled='disabled'], html.the .light.strong.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 181, newthe/colorizer.scss */
 html.the .iprimary {
   color: #4C81AF;
 }
-/* line 179, newthe/colorizer.scss */
+/* line 184, newthe/colorizer.scss */
 html.the .primary {
   color: #FDFDFD;
   background-color: #4C81AF;
@@ -2067,7 +2127,13 @@ html.the .primary.active:hover:active.bordered, html.the .primary.button:hover:a
   border-top-color: #44749d;
   border-bottom-color: #4c81af;
 }
-/* line 182, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .primary.active:hover:active[disabled='disabled'], html.the .primary.button:hover:active[disabled='disabled'], html.the .primary.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 187, newthe/colorizer.scss */
 html.the .primary.soft {
   color: #FDFDFD;
   background-color: #92b3cf;
@@ -2151,7 +2217,13 @@ html.the .primary.soft.active:hover:active.bordered, html.the .primary.soft.butt
   border-top-color: #80a6c8;
   border-bottom-color: #92b3cf;
 }
-/* line 185, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .primary.soft.active:hover:active[disabled='disabled'], html.the .primary.soft.button:hover:active[disabled='disabled'], html.the .primary.soft.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 190, newthe/colorizer.scss */
 html.the .primary.strong {
   color: #FDFDFD;
   background-color: #3d678b;
@@ -2235,11 +2307,17 @@ html.the .primary.strong.active:hover:active.bordered, html.the .primary.strong.
   border-top-color: #355a7a;
   border-bottom-color: #3d678b;
 }
-/* line 176, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .primary.strong.active:hover:active[disabled='disabled'], html.the .primary.strong.button:hover:active[disabled='disabled'], html.the .primary.strong.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 181, newthe/colorizer.scss */
 html.the .idefault {
   color: #D7D7D7;
 }
-/* line 179, newthe/colorizer.scss */
+/* line 184, newthe/colorizer.scss */
 html.the .default {
   color: #2B2B2B;
   background-color: #D7D7D7;
@@ -2372,7 +2450,13 @@ html.the .default.active:hover:active.bordered, html.the .default.button:hover:a
   border-top-color: #cacaca;
   border-bottom-color: #d7d7d7;
 }
-/* line 182, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .default.active:hover:active[disabled='disabled'], html.the .default.button:hover:active[disabled='disabled'], html.the .default.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 187, newthe/colorizer.scss */
 html.the .default.soft {
   color: #2B2B2B;
   background-color: #f6f6f6;
@@ -2453,7 +2537,13 @@ html.the .default.soft.active:hover:active.bordered, html.the .default.soft.butt
   border-top-color: #dddddd;
   border-bottom-color: #dddddd;
 }
-/* line 185, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .default.soft.active:hover:active[disabled='disabled'], html.the .default.soft.button:hover:active[disabled='disabled'], html.the .default.soft.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 190, newthe/colorizer.scss */
 html.the .default.strong {
   color: #2B2B2B;
   background-color: #bebebe;
@@ -2537,11 +2627,17 @@ html.the .default.strong.active:hover:active.bordered, html.the .default.strong.
   border-top-color: #b1b1b1;
   border-bottom-color: #bebebe;
 }
-/* line 176, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .default.strong.active:hover:active[disabled='disabled'], html.the .default.strong.button:hover:active[disabled='disabled'], html.the .default.strong.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 181, newthe/colorizer.scss */
 html.the .isuccess {
   color: #5E994B;
 }
-/* line 179, newthe/colorizer.scss */
+/* line 184, newthe/colorizer.scss */
 html.the .success {
   color: #FDFDFD;
   background-color: #5E994B;
@@ -2674,7 +2770,13 @@ html.the .success.active:hover:active.bordered, html.the .success.button:hover:a
   border-top-color: #538843;
   border-bottom-color: #5e994b;
 }
-/* line 182, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .success.active:hover:active[disabled='disabled'], html.the .success.button:hover:active[disabled='disabled'], html.the .success.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 187, newthe/colorizer.scss */
 html.the .success.soft {
   color: #FDFDFD;
   background-color: #95c486;
@@ -2758,7 +2860,13 @@ html.the .success.soft.active:hover:active.bordered, html.the .success.soft.butt
   border-top-color: #86bb75;
   border-bottom-color: #95c486;
 }
-/* line 185, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .success.soft.active:hover:active[disabled='disabled'], html.the .success.soft.button:hover:active[disabled='disabled'], html.the .success.soft.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 190, newthe/colorizer.scss */
 html.the .success.strong {
   color: #FDFDFD;
   background-color: #49773a;
@@ -2842,11 +2950,17 @@ html.the .success.strong.active:hover:active.bordered, html.the .success.strong.
   border-top-color: #3e6632;
   border-bottom-color: #49773a;
 }
-/* line 176, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .success.strong.active:hover:active[disabled='disabled'], html.the .success.strong.button:hover:active[disabled='disabled'], html.the .success.strong.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 181, newthe/colorizer.scss */
 html.the .iinfo {
   color: #F9D264;
 }
-/* line 179, newthe/colorizer.scss */
+/* line 184, newthe/colorizer.scss */
 html.the .info {
   color: #2B2B2B;
   background-color: #F9D264;
@@ -2979,7 +3093,13 @@ html.the .info.active:hover:active.bordered, html.the .info.button:hover:active.
   border-top-color: #f8cb4b;
   border-bottom-color: #f9d264;
 }
-/* line 182, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .info.active:hover:active[disabled='disabled'], html.the .info.button:hover:active[disabled='disabled'], html.the .info.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 187, newthe/colorizer.scss */
 html.the .info.soft {
   color: #2B2B2B;
   background-color: #fdefc6;
@@ -3063,7 +3183,13 @@ html.the .info.soft.active:hover:active.bordered, html.the .info.soft.button:hov
   border-top-color: #fce7ae;
   border-bottom-color: #fdedc1;
 }
-/* line 185, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .info.soft.active:hover:active[disabled='disabled'], html.the .info.soft.button:hover:active[disabled='disabled'], html.the .info.soft.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 190, newthe/colorizer.scss */
 html.the .info.strong {
   color: #FDFDFD;
   background-color: #f7c433;
@@ -3147,11 +3273,17 @@ html.the .info.strong.active:hover:active.bordered, html.the .info.strong.button
   border-top-color: #f6bd1a;
   border-bottom-color: #f7c433;
 }
-/* line 176, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .info.strong.active:hover:active[disabled='disabled'], html.the .info.strong.button:hover:active[disabled='disabled'], html.the .info.strong.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 181, newthe/colorizer.scss */
 html.the .idanger {
   color: #E7582E;
 }
-/* line 179, newthe/colorizer.scss */
+/* line 184, newthe/colorizer.scss */
 html.the .danger {
   color: #FDFDFD;
   background-color: #E7582E;
@@ -3284,7 +3416,13 @@ html.the .danger.active:hover:active.bordered, html.the .danger.button:hover:act
   border-top-color: #e2471a;
   border-bottom-color: #e7582e;
 }
-/* line 182, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .danger.active:hover:active[disabled='disabled'], html.the .danger.button:hover:active[disabled='disabled'], html.the .danger.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 187, newthe/colorizer.scss */
 html.the .danger.soft {
   color: #2B2B2B;
   background-color: #f2a189;
@@ -3368,7 +3506,13 @@ html.the .danger.soft.active:hover:active.bordered, html.the .danger.soft.button
   border-top-color: #ef8f73;
   border-bottom-color: #f2a189;
 }
-/* line 185, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .danger.soft.active:hover:active[disabled='disabled'], html.the .danger.soft.button:hover:active[disabled='disabled'], html.the .danger.soft.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 190, newthe/colorizer.scss */
 html.the .danger.strong {
   color: #FDFDFD;
   background-color: #cb4017;
@@ -3452,11 +3596,17 @@ html.the .danger.strong.active:hover:active.bordered, html.the .danger.strong.bu
   border-top-color: #b43915;
   border-bottom-color: #cb4017;
 }
-/* line 176, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .danger.strong.active:hover:active[disabled='disabled'], html.the .danger.strong.button:hover:active[disabled='disabled'], html.the .danger.strong.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 181, newthe/colorizer.scss */
 html.the .iwarn {
   color: #FA9357;
 }
-/* line 179, newthe/colorizer.scss */
+/* line 184, newthe/colorizer.scss */
 html.the .warn {
   color: #FDFDFD;
   background-color: #FA9357;
@@ -3589,7 +3739,13 @@ html.the .warn.active:hover:active.bordered, html.the .warn.button:hover:active.
   border-top-color: #f9833e;
   border-bottom-color: #fa9357;
 }
-/* line 182, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .warn.active:hover:active[disabled='disabled'], html.the .warn.button:hover:active[disabled='disabled'], html.the .warn.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 187, newthe/colorizer.scss */
 html.the .warn.soft {
   color: #2B2B2B;
   background-color: #fdd3ba;
@@ -3673,7 +3829,13 @@ html.the .warn.soft.active:hover:active.bordered, html.the .warn.soft.button:hov
   border-top-color: #fcc3a1;
   border-bottom-color: #fdd3ba;
 }
-/* line 185, newthe/colorizer.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .warn.soft.active:hover:active[disabled='disabled'], html.the .warn.soft.button:hover:active[disabled='disabled'], html.the .warn.soft.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 190, newthe/colorizer.scss */
 html.the .warn.strong {
   color: #FDFDFD;
   background-color: #f97325;
@@ -3757,93 +3919,133 @@ html.the .warn.strong.active:hover:active.bordered, html.the .warn.strong.button
   border-top-color: #f8630d;
   border-bottom-color: #f97325;
 }
-/* line 47, newthe/page.scss */
+/* line 157, newthe/colorizer.scss */
+html.the .warn.strong.active:hover:active[disabled='disabled'], html.the .warn.strong.button:hover:active[disabled='disabled'], html.the .warn.strong.menuitem:hover:active[disabled='disabled'] {
+  background: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 48, newthe/page.scss */
 html.the .box {
   display: flex;
 }
-/* line 49, newthe/page.scss */
+/* line 50, newthe/page.scss */
 html.the .box.col {
   flex-direction: column;
 }
-/* line 52, newthe/page.scss */
+/* line 53, newthe/page.scss */
 html.the .box.row {
   flex-direction: row;
 }
 /* line 56, newthe/page.scss */
+html.the .box.right {
+  align-items: flex-end;
+}
+/* line 60, newthe/page.scss */
 html.the .box .collapsed {
   flex-grow: 0 !important;
 }
-/* line 58, newthe/page.scss */
+/* line 62, newthe/page.scss */
 html.the .box .collapsed > .content {
   display: none !important;
 }
-/* line 63, newthe/page.scss */
+/* line 67, newthe/page.scss */
 html.the .box .content {
   overflow-x: hidden;
   overflow-y: auto;
   flex: 1;
 }
-/* line 69, newthe/page.scss */
+/* line 73, newthe/page.scss */
 html.the .block {
   display: block;
 }
-/* line 72, newthe/page.scss */
+/* line 76, newthe/page.scss */
 html.the .filler {
   width: 100%;
 }
-/* line 77, newthe/page.scss */
+/* line 81, newthe/page.scss */
 html.the .flex1 {
   flex-grow: 1;
 }
-/* line 77, newthe/page.scss */
+/* line 81, newthe/page.scss */
 html.the .flex2 {
   flex-grow: 2;
 }
-/* line 77, newthe/page.scss */
+/* line 81, newthe/page.scss */
 html.the .flex3 {
   flex-grow: 3;
 }
-/* line 77, newthe/page.scss */
+/* line 81, newthe/page.scss */
 html.the .flex4 {
   flex-grow: 4;
 }
-/* line 77, newthe/page.scss */
+/* line 81, newthe/page.scss */
 html.the .flex5 {
   flex-grow: 5;
 }
-/* line 77, newthe/page.scss */
+/* line 81, newthe/page.scss */
 html.the .flex6 {
   flex-grow: 6;
 }
-/* line 77, newthe/page.scss */
+/* line 81, newthe/page.scss */
 html.the .flex7 {
   flex-grow: 7;
 }
-/* line 77, newthe/page.scss */
+/* line 81, newthe/page.scss */
 html.the .flex8 {
   flex-grow: 8;
 }
-/* line 77, newthe/page.scss */
+/* line 81, newthe/page.scss */
 html.the .flex9 {
   flex-grow: 9;
 }
-/* line 77, newthe/page.scss */
+/* line 81, newthe/page.scss */
 html.the .flex10 {
   flex-grow: 10;
 }
-/* line 99, newthe/page.scss */
+/* line 103, newthe/page.scss */
 html.the [ng\:cloak], html.the [ng-cloak], html.the [data-ng-cloak], html.the [x-ng-cloak], html.the .ng-cloak, html.the .x-ng-cloak, html.the .hidden {
   display: none !important;
 }
-/* line 84, newthe/page.scss */
+/* line 88, newthe/page.scss */
 html.the label {
   margin-top: 5px;
   margin-bottom: 5px;
 }
 
-/* line 106, newthe/page.scss */
+/* line 110, newthe/page.scss */
 .tlicon {
   color: #4C81AF;
+}
+
+/* line 1, newthe/_extensions.scss */
+.mapstat {
+  padding: 5px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 16px;
+  margin-top: 2px;
+  color: #4C81AF;
+}
+
+/* line 11, newthe/_extensions.scss */
+.queryhistory .item {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+/* line 17, newthe/_extensions.scss */
+.dropdown-menu {
+  display: none;
+  position: absolute !important;
+  background-color: #FDFDFD !important;
+  border: solid 1px #D7D7D7 !important;
+  padding: 5px !important;
+  min-width: 200px;
+}
+/* line 23, newthe/_extensions.scss */
+.dropdown-menu li {
+  font-size: 14px;
 }
 
 /*# sourceMappingURL=newthe.css.map */
