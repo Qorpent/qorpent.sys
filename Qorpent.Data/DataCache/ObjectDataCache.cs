@@ -371,7 +371,7 @@ namespace Qorpent.Data.DataCache
 			SqlLog.Trace(q);
 			using (var idsReader = cmd.ExecuteReader()){
 				while (idsReader.Read()){
-					var id = (long)idsReader.GetValue(0);
+					var id = Convert.ToInt64(idsReader.GetValue(0));
 					if (!_nativeCache.ContainsKey(id)){
 						ids.Add(id);
 					}

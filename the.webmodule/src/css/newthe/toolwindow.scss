@@ -19,18 +19,24 @@
     line-height: 28px;
     flex-direction: row;
     align-items: center;
+    text-indent: 5px;
     justify-content: space-between;
     padding:3px;
-    .tbt {
+    span.tbt {
       display: flex;
       flex-direction: row;
       align-items: center;
       i {
+        font-size: 18px;
         margin-left: 5px;
         &:last-child {
           margin-left: 20px;
         }
       }
+    }
+    i.tbt {
+      font-size: 18px;
+      margin-left: 20px;
     }
   }
 

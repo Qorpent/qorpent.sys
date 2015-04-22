@@ -163,28 +163,35 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   line-height: 28px;
   flex-direction: row;
   align-items: center;
+  text-indent: 5px;
   justify-content: space-between;
   padding: 3px;
 }
-/* line 24, newthe/toolwindow.scss */
-.toolwindow > label:first-child .tbt {
+/* line 25, newthe/toolwindow.scss */
+.toolwindow > label:first-child span.tbt {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-/* line 28, newthe/toolwindow.scss */
-.toolwindow > label:first-child .tbt i {
+/* line 29, newthe/toolwindow.scss */
+.toolwindow > label:first-child span.tbt i {
+  font-size: 18px;
   margin-left: 5px;
 }
-/* line 30, newthe/toolwindow.scss */
-.toolwindow > label:first-child .tbt i:last-child {
+/* line 32, newthe/toolwindow.scss */
+.toolwindow > label:first-child span.tbt i:last-child {
   margin-left: 20px;
 }
 /* line 37, newthe/toolwindow.scss */
+.toolwindow > label:first-child i.tbt {
+  font-size: 18px;
+  margin-left: 20px;
+}
+/* line 43, newthe/toolwindow.scss */
 .toolwindow .item {
   padding: 5px;
 }
-/* line 39, newthe/toolwindow.scss */
+/* line 45, newthe/toolwindow.scss */
 .toolwindow .item a {
   text-decoration: none;
   color: #4C81AF;
