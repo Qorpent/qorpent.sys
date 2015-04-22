@@ -1,0 +1,28 @@
+.property {
+  @include flex(row);
+  font-size:95%;
+  margin: 5px 10px 0px 10px;
+  @media screen and (max-width:499px) {
+    @include flex(column);
+  }
+  border-bottom: solid 1px color(default);
+  &:last-child {
+    border-bottom: none;
+  }
+  .name {
+    min-width: 33%;
+    max-width: 33%;
+    font-size: 80%;
+    font-weight: bold;
+    color : color(dark);
+    @media screen and (max-width:499px) {
+      min-width: auto;
+      max-width: auto;
+
+    }
+  }
+  .value {
+    min-width: 67%;
+    max-width: 67%;
+  }
+}

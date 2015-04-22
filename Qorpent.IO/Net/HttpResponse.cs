@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.IO.Net{
@@ -112,7 +113,13 @@ namespace Qorpent.IO.Net{
 					}
 					else
 					{
-						_encoding = Encoding.GetEncoding(Charset);
+					    if (Charset.Contains("charset=")) {
+					        _encoding = Encoding.GetEncoding(Regex.Match(Charset, "charset=(.+)").Groups[1].Value);
+					    }
+					    else {
+                            _encoding = Encoding.GetEncoding(Charset);    
+					    }
+						
 					}
 				}
 				return _encoding;

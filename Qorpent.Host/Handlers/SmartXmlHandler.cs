@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Bxl;
+using Qorpent.IO.Http;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Handlers{
@@ -19,11 +20,11 @@ namespace Qorpent.Host.Handlers{
 		/// <summary>
 		/// </summary>
 		/// <param name="context"></param>
-		public void Process(HttpListenerContext context){
-			var buffer = new byte[context.Request.ContentLength64];
-			Task<int> readdata = context.Request.InputStream.ReadAsync(buffer, 0, (int) context.Request.ContentLength64);
-			string lang = context.Request.QueryString["lang"];
-			string format = context.Request.QueryString["format"];
+		public void Process(WebContext context) {
+			var readdata = context.ReadRequestStirngAsync();
+		    var parameters = RequestParameters.Create(context);
+		    string lang = parameters.Get("lang");
+		    string format = parameters.Get("format");
 
 			Func<string, XElement> executor = null;
 			if (lang == "bxl"){
@@ -32,7 +33,7 @@ namespace Qorpent.Host.Handlers{
 			else{
 				executor = BSharpExecutor;
 			}
-			Action<XElement, HttpListenerResponse> render = null;
+			Action<XElement, WebContext> render = null;
 			if (format == "wiki"){
 				render = RenderAsWiki;
 			}
@@ -41,7 +42,7 @@ namespace Qorpent.Host.Handlers{
 			}
 			readdata.Wait();
 
-			string script = Encoding.UTF8.GetString(buffer, 0, readdata.Result);
+		    string script = readdata.Result;
 			_showroot = script.Contains("##showroot");
 			XElement xml = null;
 			try{
@@ -50,14 +51,15 @@ namespace Qorpent.Host.Handlers{
 			catch (Exception ex){
 				xml = new XElement("error", ex.ToString());
 			}
-			render(xml, context.Response);
+			render(xml, context);
 		}
 
-		private void RenderAsNative(XElement x, HttpListenerResponse r){
+        private void RenderAsNative(XElement x, WebContext r)
+        {
 			r.Finish(x.ToString(), "text/xml");
 		}
 
-		private void RenderAsWiki(XElement x, HttpListenerResponse r){
+		private void RenderAsWiki(XElement x, WebContext r){
 			var sb = new StringBuilder();
 			BuildWiki(sb, x);
 			r.Finish(sb.ToString(), "text/html");

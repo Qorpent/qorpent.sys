@@ -54,5 +54,10 @@ namespace Qorpent.Host{
 		///     Завершает работу веб-сервера
 		/// </summary>
 		void Stop();
+
+	    /// <summary>
+	    ///     Инициализирует сервер
+	    /// </summary>
+	    void Initialize();
 	}
 }

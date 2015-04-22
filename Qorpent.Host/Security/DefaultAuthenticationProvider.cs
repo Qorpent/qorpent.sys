@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Security.Principal;
-using Qorpent.Host.Utils;
+using Qorpent.IO.Http;
 
 namespace Qorpent.Host.Security{
 	/// <summary>
@@ -26,15 +26,6 @@ namespace Qorpent.Host.Security{
 			Principal = new GenericPrincipal(new GenericIdentity("local\\guest"), null)
 		};
 
-		private readonly FieldInfo m_User = typeof (HttpListenerContext).GetField("m_User",
-		                                                                          BindingFlags.SetField |
-		                                                                          BindingFlags.NonPublic |
-		                                                                          BindingFlags.Instance) ?? 
-		                                                                          
-		                                   typeof (HttpListenerContext).GetField("user",   // IN MONO
-		                                                                          BindingFlags.SetField |
-		                                                                          BindingFlags.NonPublic |
-		                                                                          BindingFlags.Instance) ;
 
 		private IHostServer _server;
 
@@ -48,7 +39,8 @@ namespace Qorpent.Host.Security{
 		/// <summary>
 		/// </summary>
 		/// <param name="context"></param>
-		public void Authenticate(HttpListenerContext context){
+        public void Authenticate(WebContext context)
+        {
 			string ticket = GetTicket(context);
 			UserInfo result = guest;
 			bool auth = false;
@@ -69,81 +61,89 @@ namespace Qorpent.Host.Security{
 				SetTicketCookie(context, null);
 			}
 			var principal = new QorpentHostPrincipal(result);
-			m_User.SetValue(context, principal);
-			
+		    context.User = principal;
+
 		}
 
-		/// <summary>
-		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="username"></param>
-		/// <param name="password"></param>
-		/// <returns></returns>
-		public void Authenticate(HttpListenerContext context, string username, string password){
-			bool isauth = _logon.Logon(username, password);
-			if (isauth){
-				string ticket = RegisterTicket(username);
-				SetTicketCookie(context, ticket);
-				UserInfo result = _ticketCache[ticket];
-				var principal = new QorpentHostPrincipal(result);
-				m_User.SetValue(context, principal);
-			}
-			else{
-				SetTicketCookie(context, null);
-				m_User.SetValue(context, new QorpentHostPrincipal(error));
-			}
-		}
+		
 
-		/// <summary>
-		///     Выполняет разбор параметров и осуществляет вход
-		/// </summary>
-		/// <param name="context"></param>
-		public void Logon(HttpListenerContext context){
-			RequestParameterSet data = new RequestDataRetriever(context.Request).GetRequestData();
-			string login = data.Get("login");
-			string elogin = data.Get("elogin");
-			string pass = data.Get("pass");
-			string epass = data.Get("epass");
-			if (!string.IsNullOrWhiteSpace(elogin)){
-				login = _server.Encryptor.Decrypt(elogin);
-			}
-			if (!string.IsNullOrWhiteSpace(epass)){
-				pass = _server.Encryptor.Decrypt(epass);
-			}
-			if (string.IsNullOrWhiteSpace(login)){
-				context.Finish("no login", status: 500);
-				return;
-			}
-			if (string.IsNullOrWhiteSpace(pass)){
-				context.Finish("no pass", status: 500);
-				return;
-			}
-			Authenticate(context, login, pass);
-			UserInfo result = (context.User as QorpentHostPrincipal).Info;
-			if (result.Ok && result != guest){
-				context.Finish("true", "application/json");
-			}
-			else{
-				if (result == guest){
-					context.Finish("false", "application/json");
-				}
-				else{
-					context.Finish("'error'", "application/json", 500);
-				}
-			}
-		}
+        public void Authenticate(WebContext context, string username, string password)
+        {
+            bool isauth = _logon.Logon(username, password);
+            if (isauth)
+            {
+                string ticket = RegisterTicket(username);
+                SetTicketCookie(context, ticket);
+                UserInfo result = _ticketCache[ticket];
+                var principal = new QorpentHostPrincipal(result);
+                context.User = principal;
+            }
+            else
+            {
+                SetTicketCookie(context, null);
+                context.User = new QorpentHostPrincipal(error);
+            }
+        }
 
-		/// <summary>
+        
+
+
+	    public void Logon(WebContext context) {
+            RequestParameters data = RequestParameters.Create(context);
+            string login = data.Get("login");
+            string elogin = data.Get("elogin");
+            string pass = data.Get("pass");
+            string epass = data.Get("epass");
+            if (!string.IsNullOrWhiteSpace(elogin))
+            {
+                login = _server.Encryptor.Decrypt(elogin);
+            }
+            if (!string.IsNullOrWhiteSpace(epass))
+            {
+                pass = _server.Encryptor.Decrypt(epass);
+            }
+            if (string.IsNullOrWhiteSpace(login))
+            {
+                context.Finish("no login", status: 500);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(pass))
+            {
+                context.Finish("no pass", status: 500);
+                return;
+            }
+            Authenticate(context, login, pass);
+            
+            UserInfo result = (context.User as QorpentHostPrincipal).Info;
+            if (result.Ok && result != guest)
+            {
+                context.Finish("true");
+            }
+            else
+            {
+                if (result == guest)
+                {
+                    context.Finish("false");
+                }
+                else
+                {
+                    context.Finish("'error'", "application/json", 500);
+                }
+            }
+	    }
+
+	    /// <summary>
 		///     Выполняет выход из контекста
 		/// </summary>
 		/// <param name="context"></param>
-		public void Logout(HttpListenerContext context){
+        public void Logout(WebContext context)
+        {
 			string currentTicket = GetTicket(context);
 			if (!string.IsNullOrWhiteSpace(currentTicket) && _ticketCache.ContainsKey(currentTicket)){
 				_ticketCache.Remove(currentTicket);
 			}
 			SetTicketCookie(context, null);
-			context.Response.Finish("true", "application/json");
+			context.Finish("true");
 		}
 
 		private bool IsValid(UserInfo user){
@@ -171,7 +171,7 @@ namespace Qorpent.Host.Security{
 			return ticket;
 		}
 
-		private void SetTicketCookie(HttpListenerContext context, string ticket){
+		private void SetTicketCookie(WebContext context, string ticket){
 			ticket = ticket ?? "";
 			var cookie = new Cookie(_server.Config.AuthCookieName, ticket);
 			if (string.IsNullOrWhiteSpace(ticket)){
@@ -206,13 +206,15 @@ namespace Qorpent.Host.Security{
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		public bool IsAuth(HttpListenerContext context){
+        public bool IsAuth(WebContext context)
+        {
 			var result = !string.IsNullOrWhiteSpace(GetTicket(context));
-			context.Finish(result.ToString().ToLowerInvariant(),mimeType:"application/json");
+			context.Finish(result.ToString().ToLowerInvariant());
 			return result;
 		}
-		private string GetTicket(HttpListenerContext context){
-			Cookie cookie = context.Request.Cookies[_server.Config.AuthCookieName];
+        private string GetTicket(WebContext context)
+        {
+			Cookie cookie = context.Cookies[_server.Config.AuthCookieName];
 			if (null == cookie) return null;
 			return cookie.Value;
 		}

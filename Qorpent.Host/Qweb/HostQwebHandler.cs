@@ -3,6 +3,7 @@ using System.Net;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
+using Qorpent.IO.Http;
 using Qorpent.Mvc;
 using Qorpent.Mvc.HttpHandler;
 using Qorpent.Security;
@@ -12,50 +13,47 @@ namespace Qorpent.Host.Qweb
 	/// <summary>
 	/// Qweb-handler для HostServer
 	/// </summary>
-	public class HostQwebHandler:IRequestHandler	
+	public class HostQwebHandler:RequestHandlerBase	
 	{
-		/// <summary>
-		/// Выполняет указанный запрос
-		/// </summary>
-		/// <param name="server"></param>
-		/// <param name="callcontext"></param>
-		/// <param name="callbackEndPoint"></param>
-		/// <param name="cancel"></param>
-		public void Run(IHostServer server, HttpListenerContext callcontext, string callbackEndPoint, CancellationToken cancel)
-		{
-			SetCurrentUser(server, callcontext.User);
-			callcontext.Response.ContentEncoding = Encoding.UTF8;
-			callcontext.Response.Headers["Content-Encoding"] = "utf-8";
-			var context = server.Application.Container.Get<IMvcContext>(null,server, callcontext, callbackEndPoint, cancel);
-			context.NotModified = false;
-			try
-			{
-				BindContext(context);
-				Execute(context);
-				if (context.NotModified)
-				{
-					MvcHandler.ProcessNotModified(context);
-					context.Output.Close();
-				}
-				else
-				{
-					MvcHandler.SetModifiedHeader(context);
-					RenderResult(context);
-					
-				}
-			}
-			catch (Exception ex)
-			{
-				ProcessError(context, ex);
-			}
-			finally
-			{
-				context.Release();
-			}
+		
 
-		}
+	    public override void Run(IHostServer server, WebContext ctx, string callbackEndPoint,
+	        CancellationToken cancel) {
+	        if (null != ctx.User) {
+                SetCurrentUser(server, ctx.User);
+	        }
+            ctx.ContentEncoding = Encoding.UTF8;
+            ctx.SetHeader("Content-Encoding", "utf-8");
+                var context = server.Application.Container.Get<IMvcContext>(null, server, ctx, callbackEndPoint, cancel);
+                context.NotModified = false;
+                try
+                {
+                    BindContext(context);
+                    Execute(context);
+                    if (context.NotModified)
+                    {
+                        MvcHandler.ProcessNotModified(context);
+                        context.Output.Close();
+                    }
+                    else
+                    {
+                        MvcHandler.SetModifiedHeader(context);
+                        RenderResult(context);
 
-		private static void SetCurrentUser(IHostServer server,IPrincipal user)
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ProcessError(context, ex);
+                }
+                finally
+                {
+                    context.Release();
+                }
+
+	    }
+
+	    private static void SetCurrentUser(IHostServer server,IPrincipal user)
 		{
 			
 			server.Application.Principal.SetCurrentUser(user);

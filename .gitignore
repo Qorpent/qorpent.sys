@@ -39,3 +39,9 @@ UpgradeLog*
 /the.webmodule/build/browser.html
 /*.DotSettings
 /design/dbinstall.vpp
+/the.webmodule/dist/css/font-awesome/font-awesome.css
+/the.webmodule/dist/css/newthe/toolwindow.css
+/the.webmodule/src/css/font-awesome/font-awesome.css
+/the.webmodule/src/css/newthe/toolwindow.css
+/the.webmodule/src/css/site.css
+/the.webmodule/src/css/wiki.css

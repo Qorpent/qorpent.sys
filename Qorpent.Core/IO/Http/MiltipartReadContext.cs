@@ -2,25 +2,25 @@
 using System.Text.RegularExpressions;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Host.Utils
+namespace Qorpent.IO.Http
 {
 	/// <summary>
 	///Вспомогоательный класс обхода MultipartForm данных
 	/// </summary>
 	internal class MiltipartReadContext
 	{
-		private byte[] _buffer;
-		private byte[] _boundaryBytes;
+		private readonly byte[] _buffer;
+		private readonly byte[] _boundaryBytes;
 		private int _start;
 		private int _idx;
 		private int _end;
 		private string _currentName;
 		private string _currentFileName;
 		private string _currentType;
-		private RequestParameterSet _result;
-		private Encoding _encoding;
+		private readonly RequestParameters _result;
+		private readonly Encoding _encoding;
 
-		public MiltipartReadContext(byte[] buffer, string contentType, Encoding contentEncoding, RequestParameterSet result)
+		public MiltipartReadContext(byte[] buffer, string contentType, Encoding contentEncoding, RequestParameters result)
 		{
 			_buffer = buffer;
 			_encoding = contentEncoding;

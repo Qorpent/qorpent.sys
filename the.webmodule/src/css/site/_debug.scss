@@ -1,0 +1,17 @@
+@import "utils";
+.debug {
+  body {
+    border: solid 2px red;
+  }
+  .toolbar {
+    border :solid 2px blue;
+    >div {
+      border: solid 1px green;
+      &.active {
+        border: solid 2px black;
+        background-color: color(primary);
+        color : color(light);
+      }
+    }
+  }
+}

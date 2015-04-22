@@ -1,0 +1,50 @@
+.toolwindow{
+  display: flex;
+  flex-direction: column;
+  background-color: color(light);
+  border : solid 1px color(primary);
+  padding:0px;
+  margin-top:3px;
+  margin-right: 3px;
+  box-shadow: 3px 2px 2px color(primarylight);
+
+
+  > label:first-child {
+    background-color: color(primary);
+    color : #ffffff;
+    margin: 0px;
+    display: flex;
+    min-height: 30px;
+    max-height: 30px;
+    line-height: 28px;
+    flex-direction: row;
+    align-items: center;
+    text-indent: 5px;
+    justify-content: space-between;
+    padding:3px;
+    span.tbt {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      i {
+        font-size: 18px;
+        margin-left: 5px;
+        &:last-child {
+          margin-left: 20px;
+        }
+      }
+    }
+    i.tbt {
+      font-size: 18px;
+      margin-left: 20px;
+    }
+  }
+
+  .item {
+    padding: 5px;
+    a {
+      text-decoration: none;
+      color : color(primary);
+    }
+  }
+}

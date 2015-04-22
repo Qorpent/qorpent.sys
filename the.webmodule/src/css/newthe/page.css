@@ -76,5 +76,65 @@
     transform: rotate(359deg);
   }
 }
+/* line 1, toolwindow.scss */
+.toolwindow {
+  display: flex;
+  flex-direction: column;
+  background-color: color(light);
+  border: solid 1px color(primary);
+  padding: 0px;
+  margin-top: 3px;
+  margin-right: 3px;
+  box-shadow: 3px 2px 2px color(primarylight);
+}
+/* line 12, toolwindow.scss */
+.toolwindow > label:first-child {
+  background-color: color(primary);
+  color: #ffffff;
+  margin: 0px;
+  display: flex;
+  min-height: 30px;
+  max-height: 30px;
+  line-height: 28px;
+  flex-direction: row;
+  align-items: center;
+  text-indent: 5px;
+  justify-content: space-between;
+  padding: 3px;
+}
+/* line 25, toolwindow.scss */
+.toolwindow > label:first-child span.tbt {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+/* line 29, toolwindow.scss */
+.toolwindow > label:first-child span.tbt i {
+  font-size: 18px;
+  margin-left: 5px;
+}
+/* line 32, toolwindow.scss */
+.toolwindow > label:first-child span.tbt i:last-child {
+  margin-left: 20px;
+}
+/* line 37, toolwindow.scss */
+.toolwindow > label:first-child i.tbt {
+  font-size: 18px;
+  margin-left: 20px;
+}
+/* line 43, toolwindow.scss */
+.toolwindow .item {
+  padding: 5px;
+}
+/* line 45, toolwindow.scss */
+.toolwindow .item a {
+  text-decoration: none;
+  color: color(primary);
+}
+
+/* line 106, page.scss */
+.tlicon {
+  color: color(primary);
+}
 
 /*# sourceMappingURL=page.css.map */
