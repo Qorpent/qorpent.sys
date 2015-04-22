@@ -365,7 +365,7 @@ namespace Qorpent.Mvc {
 		}
 
 		private void PushActionToPool(ActionDescriptor action) {
-			var name = NormalizeRenderName(action.Name);
+			var name = NormalizeActionName(action.Name);
 			if (!_actionPool.ContainsKey(name)) {
 				_actionPool[name] = new Stack<ActionDescriptor>();
 			}
