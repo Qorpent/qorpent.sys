@@ -97,8 +97,13 @@
                         background : gradient($backcolorname);
                 }
                 &.semaphore {
-                        color : if(iswhite(lighten($backcolor,20%)), color(l_dark),$backcolor);
-                        background-color: slighten($backcolor,40%);
+                        color : if(iswhite(lighten($backcolor,10%)), color(l_dark),$backcolor);
+                        background-color: slighten($backcolor,30%);
+                        &:before {
+                                font-family: FontAwesome;
+                                content: "\f096";
+                                font-size:12px;
+                        }
                 }
         }
 
@@ -111,6 +116,11 @@
                                 background-color: $backcolor;
                         }@else {
                                 background : gradient($backcolorname);
+                        }
+                        &:before {
+                                font-family: FontAwesome;
+                                content: "\f046";
+                                font-size:12px;
                         }
                 }
         }
