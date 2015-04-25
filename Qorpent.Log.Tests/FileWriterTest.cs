@@ -44,7 +44,7 @@ namespace Qorpent.Log.Tests {
 				};
 
 			var message1 = new LogMessage
-				{Time = new DateTime(2010, 5, 2), HostObject = "host1", Level = LogLevel.Warning, Message = "this is a message"};
+				{Time = new DateTime(2010, 5, 2), HostObject = "host1", Level = LogLevel.Warn, Message = "this is a message"};
 			for (var i = 0; i <= 10; i++) {
 				writer.Write(message1);
 			}
@@ -81,11 +81,11 @@ namespace Qorpent.Log.Tests {
 				};
 
 			var message1 = new LogMessage
-				{Time = new DateTime(2010, 5, 2), HostObject = "host1", Level = LogLevel.Warning, Message = "message1"};
+				{Time = new DateTime(2010, 5, 2), HostObject = "host1", Level = LogLevel.Warn, Message = "message1"};
 			writer.Write(message1);
 
 			message1 = new LogMessage
-				{Time = new DateTime(2010, 5, 2), HostObject = "host1", Level = LogLevel.Warning, Message = "message1_2"};
+				{Time = new DateTime(2010, 5, 2), HostObject = "host1", Level = LogLevel.Warn, Message = "message1_2"};
 			writer.Write(message1);
 			var message2 = new LogMessage
 				{Time = new DateTime(2010, 5, 3), HostObject = "host2", Level = LogLevel.Error, Message = "message2"};

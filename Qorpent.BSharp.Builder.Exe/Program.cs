@@ -179,7 +179,7 @@ namespace Qorpent.Integration.BSharp.Builder.Exe {
 		    foreach (var e in resultContext.GetErrors()) {
 			    var el = LogLevel.Error;
 			    if (e.Level == ErrorLevel.Warning) {
-				    el = LogLevel.Warning;
+				    el = LogLevel.Warn;
 			    }
 			    else if (e.Level == ErrorLevel.Fatal) {
 				    el = LogLevel.Fatal;
