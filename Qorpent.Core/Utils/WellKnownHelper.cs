@@ -21,7 +21,7 @@ namespace Qorpent.Utils
 		public static T Create<T>() where T:class{
 			Type type = null;
 			if (typeof (T) == typeof (IBxlParser)){
-				type = Type.GetType("Qorpent.Bxl.BxlParser, Qorpent.Serialization");
+				type = Type.GetType("Qorpent.Bxl.BxlParser, Qorpent.Core");
 			}else if (typeof (T) == typeof (IBSharpCompiler)){
 				type = Type.GetType("Qorpent.BSharp.BSharpCompiler, Qorpent.Serialization");
 			}

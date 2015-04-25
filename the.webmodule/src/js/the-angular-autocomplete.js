@@ -7,7 +7,7 @@ define(["the-angular", "autocomplete-html"], function ($the, template) {
         if (null == root.modules)return;
         var prepareElement = function (e, attr) {
             var el = $(e);
-            el.addClass("dropdown");
+            el.addClass("ac-dropdown");
             el.addClass("the-autocomplete");
             el.attr("dropdown", "dropdown");
             el.attr("is-open", "__isopen");

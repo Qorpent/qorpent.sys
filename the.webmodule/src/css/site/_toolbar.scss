@@ -1,0 +1,91 @@
+body>nav {
+  $height: skin(toolbar height, 40px);
+  $butheight: $height - skin(toolbar toppad,0px) - skin(toolbar botpad, 0px);
+  @include flex(row,justify);
+  min-height: $height;
+  @media screen and (max-width:499px) {
+    -webkit-box-orient: vertical;
+  }
+  flex-grow: 0;
+  flex-shrink: 0;
+
+  align-items: skin(toolbar align);
+  padding-top: skin(toolbar toppad);
+  padding-bottom: skin(toolbar botpad);
+  padding-left: skin(toolbar sidepad);
+  padding-right: skin(toolbar sidepad);
+  @media screen and (max-width:799px) {
+    flex-wrap: wrap;
+    min-height: 20px;
+    padding-top: 5px;
+  }
+  @media screen and (max-width:499px) {
+    flex-wrap: wrap;
+  }
+  @if skin(toolbar button activebotborder,false) {
+
+    padding-bottom: 10px;
+  }
+
+  > a {
+    display: block;
+
+    &:hover {
+      color : color(skin(toolbar button hover, lighten(color(primary),10%)))
+    }
+
+    $distribution: skin(toolbar distribution, full);
+    @if $distribution==full {
+      flex-basis: auto;
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+
+    @include button($butheight, skin(toolbar button minwidth, 160px), skin(toolbar button toppad, 5px),
+            skin(toolbar button botpad, 3px));
+
+    @media screen and (max-width:799px) {
+        @include button($butheight / 2, 98px, 5px,
+                5px);
+    }
+
+
+
+    //          border : dashed 1px color(default);
+    @if skin(toolbar button topborder,true) {
+      border-top: solid 1px color(default);
+    }
+    $br : skin(toolbar button radius, 5px);
+    @if not skin(toolbar button border, true){
+      border: none !important;
+    }
+    border-bottom: solid 1px color(primary);
+    &:nth-child(2) {
+      border-left: none !important;
+      margin-left: 5px;
+      &.active {
+        margin-left: 0px;
+        border-radius: 0px $br 0px 0px;
+      }
+    }
+    &:last-child {
+      border-right: none !important;
+      margin-right: 5px;
+      &.active {
+        margin-right: 0px;
+        border-radius: $br 0px 0px 0px;
+      }
+    }
+
+    &.active {
+
+      border: solid 2px color(primary);
+      border-bottom: none;
+      border-radius: $br $br 0px 0px;
+
+      @if skin(toolbar button activebotborder,false) {
+        border-bottom: solid 4px color(primary) !important;
+      }
+    }
+  }
+}

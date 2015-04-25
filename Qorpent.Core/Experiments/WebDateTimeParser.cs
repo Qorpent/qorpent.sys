@@ -117,9 +117,7 @@ namespace Qorpent.Utils {
 			    foreach (var regex in FormatRegexes){
 				    var match = regex.Match(dateTime);
 				    if (match.Success){
-					    if (null != Log){
-						    Log.Debug("Used pattern " + regex);
-					    }
+
 					    int month = match.Groups["m"].Value.ToInt();
 					    if (!string.IsNullOrWhiteSpace(match.Groups["mn"].Value) && 0 == month){
 						    var monthName = match.Groups["mn"].Value;
@@ -189,9 +187,7 @@ namespace Qorpent.Utils {
 						if (month == 0) month = today.Month;
 						if (day == 0) day = today.Day;
 						
-					    if (null != Log){
-						    Log.Debug(string.Format("Matched {0} {1} {2} {3} {4} {5}", year, month, day, hour, min, sec));
-					    }
+
 					    try{
 						    var dt = new DateTime(year, month, day, hour, min, sec);
 						    if (isuniversal){
@@ -306,10 +302,5 @@ namespace Qorpent.Utils {
 		    }
 		    return dateTime1;
 	    }
-
-	    /// <summary>
-		/// Журнал для отладки
-		/// </summary>
-		public static IUserLog Log { get; set; }
     }
 }

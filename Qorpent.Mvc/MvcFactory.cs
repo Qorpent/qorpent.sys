@@ -306,6 +306,13 @@ namespace Qorpent.Mvc {
 		}
 
 
+	    public object GetMetric(string name) {
+	        if (name == "action.pool.count") {
+	            return _actionPool.Values.Sum(_=>_.Count);
+	        }
+	        return null;
+	    }
+
 		private ActionDescriptor GenerateNewActionDescriptor(string actionName) {
 			var name = NormalizeActionName(actionName);
 			var implementation = ResolveService<IAction>(name);
@@ -365,7 +372,7 @@ namespace Qorpent.Mvc {
 		}
 
 		private void PushActionToPool(ActionDescriptor action) {
-			var name = NormalizeRenderName(action.Name);
+			var name = NormalizeActionName(action.Name);
 			if (!_actionPool.ContainsKey(name)) {
 				_actionPool[name] = new Stack<ActionDescriptor>();
 			}

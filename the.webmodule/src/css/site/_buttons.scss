@@ -1,0 +1,15 @@
+@mixin button ($height:35px,$minwidth:100px,$toppad:5px,$botpad:2px) {
+        $delted : $height - $toppad - $botpad - 3px;
+        min-width: $minwidth;
+        min-height: $height;
+        max-height: $height;
+        text-align: center;
+        line-height: $delted;
+        padding-top: $toppad;
+        padding-bottom: $botpad;
+        font-size: $delted;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -user-select: none;
+        cursor: pointer;
+}

@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Qorpent.Host.Utils;
+using Qorpent.IO.Http;
 
 namespace Qorpent.Host.Lib.Tests
 {
@@ -18,10 +18,31 @@ namespace Qorpent.Host.Lib.Tests
 		[TestCase("http://x/?a=2+%2B+3","a=2 + 3")]
 		public void UrlGetTest(string url, string test)
 		{
-			var result = new RequestDataRetriever("text/plain", Encoding.UTF8, 0, new Uri(url), null, "GET").GetRequestData();
+			var result = RequestParameters.Create(url);
 			var str = string.Join(";", result.Query.OrderBy(_ => _.Key).Select(_ => string.Format("{0}={1}",_.Key,_.Value)));
 			Assert.AreEqual(test,str);
 		}
+
+	    [Test]
+	    public void CanGetJsonFromQuery() {
+	        var result = RequestParameters.Create(@"http://localhost/test?{""my"":""test""}");
+            Assert.AreEqual("test",result.Get("my"));
+            Assert.NotNull(result.QueryJson);
+	    }
+
+        [Test]
+        public void CanGetJsonFromForm() {
+            var str = new MemoryStream();
+            var strw = new StreamWriter(str);
+            strw.Write(@"{""my"":""test""}");
+            strw.Flush();
+            str.Position = 0;
+            var req = new HttpRequestDescriptor {Uri = new Uri(@"http://localhost/test"), Method = "POST", Stream = str, ContentLength = str.Length};
+            var result = RequestParameters.Create(req);
+            Assert.AreEqual("test", result.Get("my"));
+            Assert.NotNull(result.FormJson);
+        }
+
 
 		[Test]
 		public void MultipartFormTest()
@@ -51,7 +72,7 @@ namespace Qorpent.Host.Lib.Tests
 			w(boundary);
 			w("--");
 			stream.Position = 0;
-			var result = new RequestDataRetriever("multipart/form-data; boundary=Asrf456BGe4h", Encoding.UTF8, 0, new Uri("http://best/test"),stream, "POST").GetRequestData();
+            var result = RequestParameters.Create(new HttpRequestDescriptor { Uri = new Uri("http://localhost/test"), Stream = stream, Method = "POST", ContentType = "multipart/form-data;boundary=Asrf456BGe4h" });
 			Assert.AreEqual("Тест строка",result.Get("test1"));
 			var file = result.Files["test2"];
 			Assert.AreEqual("test2.h",file.FileName);

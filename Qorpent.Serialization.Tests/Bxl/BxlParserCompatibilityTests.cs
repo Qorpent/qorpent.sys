@@ -31,36 +31,7 @@ test x='1' y=3
 </root>", res.ToString());
 		}
 
-		[Test]
-		public void CanUseBSharpDuringParse() {
-			var res = new BxlParser().Parse(@"
-class A abstract
-	x=1
-class B
-	import A
-	y='${x}'
-	", "", BxlParserOptions.BSharp);
-			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<bsharp>
-  <class code=""B"" y=""${x}"" fullcode=""B"" x=""1"" />
-</bsharp>", res.ToString());
-		}
-
-		[Test]
-		public void CanUseBSharpWithInterpolationsDuringParse() {
-			var res = new BxlParser().Parse(@"
-class A abstract
-	x=1
-class B
-	import A
-	y='${x}'
-	", "", BxlParserOptions.BSharp | BxlParserOptions.PerformInterpolation);
-			Console.WriteLine(res.ToString());
-			Assert.AreEqual(@"<bsharp>
-  <class code=""B"" y=""1"" fullcode=""B"" x=""1"" />
-</bsharp>", res.ToString());
-		}
-
+		
 		[Test]
 		public void CanParseAttribuesAfterElements() {
 			var res = new BxlParser().Parse(@"

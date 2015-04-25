@@ -22,6 +22,9 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\Embed\GeometryUtils.cs">
+      <Link>Utils\GeometryEmbedTest\GeometryUtils.cs</Link>
+    </Compile>
     <Compile Include="BSharp\ProjectDescriptorTest.cs" />
     <Compile Include="BSharp\Runtime\BSharpGenericProviderTest.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeActivatorTest.cs" />
@@ -42,6 +45,7 @@
     <Compile Include="Experiments\ReflectionUtilsHelp.cs" />
     <Compile Include="Experiments\TryUnsafe.cs" />
     <Compile Include="Experiments\TypeConverterTests.cs" />
+    <Compile Include="Http\RequestDataRetrieverTest.cs" />
     <Compile Include="Log\DefaultLogManagerTest.cs" />
     <Compile Include="Log\LoggerTest.cs" />
     <Compile Include="Log\NewLogs\LoggyManagerTest.cs" />
@@ -76,6 +80,7 @@
     <Compile Include="Utils\DatabaseExtensionsTest.cs" />
     <Compile Include="Utils\DateRangeResolverTest.cs" />
     <Compile Include="Utils\EnumerableExtensionsTest.cs" />
+    <Compile Include="Utils\GeometryEmbedTest\GeometryUtilsTest.cs" />
     <Compile Include="Utils\Git\FileRecordTest.cs" />
     <Compile Include="Utils\Git\GitFuxtureInitializer.cs" />
     <Compile Include="Utils\Git\GitHelperTest.cs" />

@@ -1,4 +1,4 @@
-﻿namespace Qorpent.Host.Utils
+﻿namespace Qorpent.IO.Http
 {
 	/// <summary>
 	/// Скаченный файл

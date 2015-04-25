@@ -1,0 +1,49 @@
+$hpad : 40px;
+p, li {
+        text-align: justify;
+        line-height: 1.4;
+
+
+        padding : 0px $hpad 0px $hpad;
+
+
+
+}
+
+a {
+  color : color(primary);
+  &:hover {
+    color  :lighten(color(primary),10%)
+  }
+  text-decoration : none;
+  border-bottom: solid 1px color(primary);
+}
+
+p {
+  margin-top: 20px;
+
+}
+li {
+  margin-top: 5px;
+
+}
+p,li {
+  i.fa {
+    color: color(primary);
+    margin-left: 5px;
+    margin-right: 1px;
+  }
+}
+ul > li {
+     padding-left: $hpad+20px;
+     padding-right: $hpad+20px;
+     &:before {
+             content: skin(listsymbol, '\25CF');
+             color:color(primary);
+             margin-right: 10px;
+     }
+}
+
+h1 + p {
+        font-size: 110%;
+}

@@ -1,0 +1,77 @@
+@mixin  lang() {
+        .lang {
+                display: block;
+                $back: colormode(danger, lightest);
+                $color: colormode($back, text);
+                border: solid 1px darken($back, 5%);
+                background-color: $back;
+                color: $color;
+                @include button(
+                        skin(header lang height, 22px),
+                        skin(header lang width, 40px),
+                        skin(header lang toppad, 0px),
+                        skin(header lang botpad, 0px)
+                );
+
+                &.active {
+                        color: color(light);
+                        background-color: color(danger);
+                        border: solid 1px darken(color(danger), 10%);
+                }
+                &.ru, &.en, &.zh {
+                        font-size: 0px;
+                        max-width: 40px;
+                        border: solid 1px color(primary);
+                        background-image: url(../img/flags.png) !important;
+                        opacity: 0.4;
+                        &.active {
+                                opacity: 1;
+                                border-bottom: solid 1px color(primary);
+                        }
+                }
+                &.ru {
+                        background-position: 0% 0%;
+                }
+                &.en {
+                        background-position: 50% 0%;
+                }
+                &.zh {
+                        background-position: 100% 0%;
+                }
+        }
+}
+
+.uplangpanel {
+        padding: 0px 10px 0px 10px;
+        @include lang();
+        background: transparent;
+        -webkit-box-align: center;
+        min-height: 30px;
+        @include flex(row,justify);
+        box-shadow: none !important;
+        border:none !important;
+        a {
+                margin-right: 10px;
+        }
+        .phone {
+                flex: 1;
+                text-align: right;
+                i {
+                        color : color(primary);
+                        margin-right: 5px;
+                }
+                font-size: 120%;
+
+        }
+}
+
+.langpanel {
+
+        @include lang();
+        @include flex(row,justify);
+        justify-content: space-between;
+        margin-top: 5px;
+
+}
+
+

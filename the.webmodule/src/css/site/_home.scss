@@ -1,0 +1,178 @@
+.main.home {
+  @include flex(column);
+  flex-wrap: wrap;
+  justify-content: space-around;
+  & > .about {
+    order: skin(order about,10);
+    article {
+      //padding-bottom: 20px;
+    }
+    em {
+      display: block;
+    }
+  }
+  & > .facts {
+    order: skin(order facts,20);
+    @media screen and (max-width: 499px) {
+      -webkit-box-orient: vertical;
+      -webkit-box-align: center;
+    }
+    .fact{
+      i  {
+        display: block;
+      }
+    }
+  }
+  & > .advantages {
+    order: skin(order advantages,30);
+    @media screen and (max-width:799px) {
+      @include flex(column);
+      align-items: center;
+      -webkit-box-align: center;
+    }
+  }
+  section {
+    p, li {
+      text-align: left;
+    }
+    &.about {
+
+      > h2 + article {
+        max-width: 510px;
+        &.downmap {
+          min-width: 100% !important;
+          max-width: 100% !important;
+        }
+      }
+
+      .text {
+        font-size: 100%;
+      }
+
+      @media screen and (max-width: 799px) {
+        @include flex(column);
+        align-items: center;
+        -webkit-box-align  : center;
+        > div {
+          margin-top: 5px;
+        }
+        > div:first-child {
+          margin-top: 0px;
+        }
+      }
+
+
+    }
+    .address {
+      text-align: center !important;
+    }
+    article.advantages {
+      font-size: 120%;
+      padding-left: 20px;
+      padding-right: 20px;
+
+    }
+
+    article.whereweare {
+      max-width: 270px !important;
+      min-width: 270px !important;
+      flex : 0 0 auto !important;
+    }
+
+    &.facts {
+      justify-content: space-around;
+      -webkit-box-pack: justify;
+      -webkit-padding-start: 30px;
+      -webkit-padding-end: 30px;
+      .fact {
+        @include flex(column);
+        i {
+          font-size: 500%;
+          margin-bottom: 10px;
+          color: color(skin(fact color , slighten(primary, 20%)));
+        }
+        font-size: 80%;
+        flex-grow: 0;
+        text-align: center !important;
+
+        min-width: 0px;
+        > div {
+          max-width: 100px !important;
+        }
+      }
+    }
+
+    .whereweare {
+      background-color: color(light);
+    }
+    @include flex(row);
+    flex: 0 0 auto;
+    align-items: stretch;
+    justify-content: space-between;
+
+
+    > article {
+      @include flex(column);
+      flex: 1 1 auto;
+      min-width: 270px;
+      -webkit-box-pack: justify;
+      &.aboutus {
+        -webkit-box-pack: start;
+      }
+      @if skin(home bordered,false){
+        border : solid 1px color(default);
+        margin-right: 5px;
+        border-radius: 5px;
+      }
+      > a {
+        display: block;
+      }
+
+    //  border : none !important;
+    //  margin: 0px;
+   //   padding: 0px;
+    }
+    .map {
+      margin-top: 8px;
+    }
+    
+    .address {
+      padding: 3px 10px 3px 10px;
+      font-size: 80%;
+      text-align: justify;
+    }
+    margin: 5px;
+    @include item(false, slighten(primary, 30%));
+    margin-top: skin(main outerpadding)*2;
+
+    @media screen and (max-width: 499px) {
+      min-width: 270px;
+      max-width: 290px;
+    }
+    > article > a:last-child {
+      @include title(slighten(primary, 30%));
+      text-align: right;
+      border: none;
+      font-size: 80%;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  }
+
+}
+
+
+@if skin(home background) {
+  .main.home {
+    background-image: url(skin(home background url));
+    background-position: skin(home background position);
+    background-repeat: no-repeat;
+    @if (skin(home backgroun smallposition)) {
+      @media screen and (max-width: 499px) {
+        background-position: skin(home background smallposition);
+      }
+    }
+  }
+}
+
+

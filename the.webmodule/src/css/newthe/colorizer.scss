@@ -26,68 +26,32 @@
                 $l5: lighten($l, 12%);
                 $l6: lighten($l, 14%);
                 @include keyframes(progress_#{$backcolorname}) {
-                        $d: $backcolor;
-                        $l: $hovercolor;
-                        $l1: lighten($l, 2%);
-                        $l2: lighten($l, 4%);
-                        $l3: lighten($l, 8%);
-                        $l4: lighten($l, 10%);
-                        $l5: lighten($l, 12%);
-                        $l6: lighten($l, 14%);
-                        0% {
-                                background: linear-gradient(to right, $l, $l);
-                        }
-                        7% {
-                                background: linear-gradient(to right, $d 0%, $d 5%, $l1 6%);
-                        }
-                        14% {
-                                background: linear-gradient(to right, $d 0%, $d 10%, $l2 11%);
-                        }
-                        21% {
-                                background: linear-gradient(to right, $d 0%, $d 20%, $l3 21%);
-                        }
-                        28% {
-                                background: linear-gradient(to right, $l4 0%, $l4 9%, $d 10%, $d 30%, $l4 31%)
-                        }
-                        35% {
-                                background: linear-gradient(to right, $l5 0%, $l5 19%, $d 20%, $d 40%, $l5 41%)
-                        }
-                        42% {
-                                background: linear-gradient(to right, $l6 0%, $l6 29%, $d 30%, $d 50%, $l6 51%)
-                        }
-                        49% {
-                                background: linear-gradient(to right, $l6 0%, $l6 39%, $d 40%, $d 60%, $l6 61%)
-                        }
-                        56% {
-                                background: linear-gradient(to right, $l6 0%, $l6 49%, $d 50%, $d 70%, $l6 71%)
-                        }
-                        63% {
-                                background: linear-gradient(to right, $l5 0%, $l5 59%, $d 60%, $d 80%, $l5 81%)
-                        }
-                        70% {
-                                background: linear-gradient(to right, $l4 0%, $l4 69%, $d 70%, $d 90%, $l4 91%)
-                        }
-                        77% {
-                                background: linear-gradient(to right, $l3 0%, $l3 79%, $d 80%)
-                        }
-                        84% {
-                                background: linear-gradient(to right, $l2 0%, $l2 89%, $d 90%)
-                        }
-                        93% {
-                                background: linear-gradient(to right, $l1 0%, $l1 94%, $d 95%)
-                        }
-                        100% {
-                                background: linear-gradient(to right, $l, $l);
-                        }
+                        0% {background-position: 0% 0%;}
+                        100% {background-position: 1000px 0%;}
                 }
+                &.progress{
+                        position: relative;
+                }
+                &.progress::after  {
+                                position: absolute;
+                        top:0px;
+                        left: 0px;
+                        width:100%;
+                        height: 100%;
+                        content:" ";
+                                display: block;
+                        background-image: url('progress.png');
+                                background-repeat: repeat;
+                                animation-name: progress_#{$backcolorname};
+                                -webkit-animation-name: progress_#{$backcolorname};
+                                opacity: 0.4;
+                                animation-duration: 15s;
+                                -webkit-animation-duration: 15s;
+                                animation-timing-function: linear;
+                                -webkit-animation-timing-function: linear;
+                                animation-iteration-count: infinite;
+                                -webkit-animation-iteration-count: infinite;
 
-                &.progress {
-                        color: color(light) !important;
-                        @if requiredark($l) {
-                                color: color(dark) !important;
-                        }
-
-                        @include animation(progress_#{$backcolorname} 1.2s linear 0.5s infinite);
                 }
         }
 
@@ -115,7 +79,7 @@
                         border-bottom: $border;
                 }
                 &.checker{
-                        border : $lborder;
+                        border :  $lborder ;
                 }
                 &.checked{
                         border :$border;
@@ -125,13 +89,6 @@
 
 
         &.checker {
-                color : if(iswhite(lighten($backcolor,20%)), color(l_dark),$backcolor);
-                background-color: slighten($backcolor,40%);
-
-
-        }
-
-        &.checked {
 
                 color :$color;
                 @if type_of($backcolorname)=="string" {
@@ -139,7 +96,33 @@
                 }@else {
                         background : gradient($backcolorname);
                 }
+                &.semaphore {
+                        color : if(iswhite(lighten($backcolor,10%)), color(l_dark),$backcolor);
+                        background-color: slighten($backcolor,30%);
+                      /*  &:before {
+                                font-family: FontAwesome;
+                                content: "\f096";
+                                font-size:12px;
+                        }*/
+                }
+        }
 
+        &.checked {
+                color : if(iswhite(lighten($backcolor,20%)), color(l_dark),$backcolor);
+                background-color: slighten($backcolor,40%);
+                &.semaphore {
+                        color :$color;
+                        @if type_of($backcolorname)=="string" {
+                                background-color: $backcolor;
+                        }@else {
+                                background : gradient($backcolorname);
+                        }
+                       /* &:before {
+                                font-family: FontAwesome;
+                                content: "\f046";
+                                font-size:12px;
+                        }*/
+                }
         }
 
         $asuffix :if(map_safe($schema,active) or $active, "",".active");
@@ -180,6 +163,11 @@
                                 &#{$bsuffix}{
                                         border-top-color : darken(slighten($backcolor,$ldstep /2),$ldstep);
                                         border-bottom-color : darken(slighten($backcolor,$ldstep ),$ldstep);
+                                }
+                                &[disabled='disabled'] {
+                                        background: color(defaultlight) !important;
+                                        border: dotted 1px color(default) !important;
+                                        color: color(default) !important;
                                 }
                         }
                 }

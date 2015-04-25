@@ -6,7 +6,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Qorpent.Utils;
-using Qorpent.Wiki;
 
 namespace Qorpent.Experiments {
     /// <summary>

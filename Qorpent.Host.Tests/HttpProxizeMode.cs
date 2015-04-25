@@ -39,6 +39,7 @@ namespace Qorpent.Host.Tests
                 h2.Stop();
                 
             }
+            Console.WriteLine(result);
             Assert.AreEqual("hello!",result);
         }
 
@@ -82,11 +83,11 @@ namespace Qorpent.Host.Tests
             var h1 = new HostServer(aconfig1);
             var h2 = new HostServer(aconfig2);
             h1.OnContext("/call1", _ => {
-                if (_.Request.HttpMethod == "POST") {
-                    _.Response.Finish(new StreamReader(_.Request.InputStream).ReadToEnd());
+                if (_.Method == "POST") {
+                    _.Finish(new StreamReader(_.Request.Stream).ReadToEnd());
                 }
                 else {
-                    _.Response.Finish("hello!");    
+                    _.Finish("hello!");    
                 }
                 
             });

@@ -1,0 +1,87 @@
+.main.contacts {
+  .contacts {
+    @include flex(column);
+    .contact {
+      .data {
+        -webkit-box-pack:justify;
+        justify-content: space-between;
+        @media screen and (max-width:799px) {
+          -webkit-box-orient: vertical;
+          -webkit-box-pack: center;
+        }
+      }
+      .properties{
+        max-width: 800px - 290px;
+        flex : 100 10 auto;
+        > div {
+          font-size: skin(contact fontsize);
+          @include flex(row);
+
+          align-items: center;
+          margin: 10px;
+          .title {
+            display: block;
+           // min-width: 110px;
+            font-weight: bold;
+            font-size: 80%;
+          }
+          .title{
+            min-width: 25%;
+            max-width: 25%;
+          }
+          i {
+            margin-right: 10px;
+          }
+          .address {
+            min-width: 70%;
+            max-width: 70%;
+          }
+          @media screen and (max-width:799px) {
+            .title{
+              min-width: 25%;
+              max-width: 25%;
+            }
+            i {
+              margin-right: 3px;
+            }
+            .address {
+              min-width: 70%;
+              max-width: 70%;
+            }
+          }
+          i  {
+            margin-right: 10px;
+          }
+          .local {
+            $localtimecolor : color(skin(contact localtimecolor));
+            padding: 3px;
+            margin-left: 10px;
+            background-color: slighten($localtimecolor,30%);
+            border:solid 1px slighten($localtimecolor,10%);
+            border-radius: 5px;
+            color : darken(color($localtimecolor),20%);
+          }
+
+
+          &.name {
+            display: block;
+            font-weight: skin(contact name weight);
+            font-size: skin(contact name fontsize);
+          }
+          .address {
+            display: block;
+          }
+        }
+      }
+      .extensions  {
+        flex: 1 0 261px;
+        .map {
+          -webkit-box-align: center;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+        }
+      }
+
+    }
+  }
+}

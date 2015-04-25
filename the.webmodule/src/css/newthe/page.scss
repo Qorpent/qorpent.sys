@@ -2,6 +2,8 @@
 @import "tools";
 @import "dropdown";
 @import "scroller";
+@import "toolwindow";
+
 @mixin page() {
   body {
     @include hyphens(auto);
@@ -18,7 +20,7 @@
       font-size: inherit;
       padding-left: 5px;
       outline: none;
-      margin-top:10px;
+      margin-top:3px;
       &:focus{
         outline: none;
       }
@@ -50,6 +52,9 @@
     }
     &.row{
       flex-direction: row;
+    }
+    &.right {
+      align-items: flex-end;
     }
 
     .collapsed {
@@ -100,4 +105,8 @@
     }
     @include labels();
   }
+}
+
+.tlicon {
+  color : color(primary);
 }

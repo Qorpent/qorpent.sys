@@ -37,6 +37,7 @@ define([
             var self = this;
             if (!e.__ddcopened)return;
             e.__ddcopened = false;
+            options = options || e.__options;
             $(e).children(".dropdown").each(function (i, dd) {
                 self.__closeDropDown(dd);
             });
@@ -52,7 +53,9 @@ define([
                 _.css("top", e.oldtop );
                 _.css("left", e.oldleft);
                 _.css("z-index", e.oldindex);
-                e.placeholder.hide();
+                if(!!e.placeholder) {
+                    e.placeholder.hide();
+                }
             }
 
         },
@@ -140,6 +143,7 @@ define([
                 $(dropdown).addClass('isdropdown');
                 dropdown.__ddopened = true;
                 containerelement.__ddcopened = true;
+                containerelement.__options = options;
                 if (!!options.onopen) {
                     options.onopen(dropdown, options);
                 }

@@ -34,7 +34,19 @@
 @mixin button(){
   position:relative;
   display: inline-block;
-
+  text-align: center;
+  &[disabled='disabled']{
+    background-color: color(defaultlight) !important;
+    border: dotted 1px color(default) !important;
+    color : color(default) !important;
+    &:hover {
+      &:active {
+        background-color: color(defaultlight) !important;
+        border: dotted 1px color(default) !important;
+        color: color(default) !important;
+      }
+    }
+  }
   &.tab {
     border-radius: 3px 3px 0px 0px;
     &.checked {
@@ -46,6 +58,9 @@
     }
   }
 }
+
+
+
 @mixin maintoolbar(){
   padding-bottom: skin(tool toolbar padding-bottom,0px);
   padding-top:skin(tool toolbar padding-top,skin(tool toolbar padding,5px));

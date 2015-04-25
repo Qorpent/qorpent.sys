@@ -58,8 +58,7 @@ namespace Qorpent.Utils.Tests
 		[TestCase("2014-02-09T14:45:18+06:00", 2014, 2, 9, 14, 45, 18, '\0', '\0', "", false, false)]
 		public void CanParse(string input, int y, int m, int d, int h, int min, int s, char dd, char td, string cult, bool dyn = false, bool istoday = false)
 		{
-			WebDateTimeParser.Log = ConsoleLogWriter.CreateLog("main", LogLevel.Debug, customFormat: "${Message}");
-
+			
 			var parsed = WebDateTimeParser.Parse(input);
 
 			if (dyn)

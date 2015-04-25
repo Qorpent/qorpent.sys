@@ -62,10 +62,7 @@ namespace Qorpent.Bxl {
 		/// ‘лаг применени€ интерпол€ции
 		/// </summary>
 		PerformInterpolation = 64,
-		/// <summary>
-		/// –ассматривать результат как файл BxlSharp и применить к нему компил€цию
-		/// </summary>
-		BSharp = 128,
+
 		/// <summary>
 		/// —пециальное расширение BSharp дл€ преобразование в DOT
 		/// </summary>

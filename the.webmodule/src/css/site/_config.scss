@@ -1,0 +1,85 @@
+@import "utils";
+
+$config: (
+        color : (
+                dark : #2B2B2B,
+                light : #FDFDFD,
+                primary : #4C81AF,
+                default : #D7D7D7,
+                success : #5E994B,
+                info : #F9D264,
+                danger :#E7582E,
+                warn : #FA9357
+        ),
+        maxwidth : 1024px,
+        minwidth : 1024px,
+        sizes : (
+                md : 800px,
+                sm : 500px,
+                xsm : 300px
+        ),
+        font: (Arial, sans-serif),
+        font-size : 16px,
+        toolbar : (
+                height : 66px,
+                align: flex-end,
+                justify : center,
+                distribution : full,
+                toppad : 15px,
+                botpad : 0px,
+                sidepad : 0px,
+                button : (
+                        minwidth: 158px,
+                        toppad : 16px,
+                        botpad : 16px,
+                )
+        ),
+        header : (
+                toppad : 15px,
+                botpad : 10px,
+                logoheight: 50px,
+                sidepad:10px,
+                align :center,
+                justify :stretch
+
+        ),
+        main : (
+                outerpadding : 5px,
+
+        ),
+        item : (
+                padding : 5px,
+                space : 5px,
+                shadow  :true,
+                shadowsize : 2px,
+                bordercolor : default,
+                borderradius : 5px,
+                title : (
+                        color : default,
+                        invertcolor : false,
+                        align : left,
+                        weight : bold,
+                        size : 100%,
+                        vpad : 3px,
+                        hpad : 10px,
+                        borderradius: 5px
+                )
+        ),
+        contact : (
+                localtimecolor :  warn,
+                fontsize : 95%,
+                name : (
+                        fontsize : 120%,
+                        weight : bold
+                )
+        )
+) !global;
+@if variable_exists(skin) {
+  $config: map-merge-deep($config, $skin);
+}
+
+@if function_exists(skinsetup) {
+  $config: skinsetup($config);
+}
+
+
