@@ -18,12 +18,12 @@ html.theA4 {
     width:100%;
     height:60px;
     z-index: 10000;
-    background: -moz-linear-gradient(top, #72baea 0%, #c7d8e5 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#72baea), color-stop(100%,#c7d8e5)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #72baea 0%,#c7d8e5 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #72baea 0%,#c7d8e5 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #72baea 0%,#c7d8e5 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #72baea 0%,#c7d8e5 100%); /* W3C */
+    background: -moz-linear-gradient(top, #4C81AF 0%, lighten(#4C81AF,20%) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4C81AF), color-stop(100%,lighten(#4C81AF,20%))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #4C81AF 0%,lighten(#4C81AF,20%) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #4C81AF 0%,lighten(#4C81AF,20%) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #4C81AF 0%,lighten(#4C81AF,20%) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #4C81AF 0%,lighten(#4C81AF,20%) 100%); /* W3C */
 
     box-shadow: darkgray;
     @media print {
@@ -35,7 +35,7 @@ html.theA4 {
     margin: 0;
     padding: 0;
     padding-top:2cm;
-    background-color: #C7D8E5;
+    background-color: lighten(#4C81AF,20%);
     display: flex;
     flex-direction: column;
     align-items: center;
