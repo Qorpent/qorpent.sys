@@ -16,6 +16,7 @@
 // 
 // PROJECT ORIGIN: Qorpent.Utils/XmlExtensions.cs
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +25,6 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Qorpent.Applications;
 using Qorpent.Bxl;
 using Qorpent.Json;
 using Qorpent.Serialization;
@@ -375,7 +375,6 @@ namespace Qorpent.Utils.Extensions {
 
 			return result;
 		}
-
 		/// <summary>
 		/// 	converts given object to xml due it's type - XElement, XmlReader, TextReader, Stream, string are supported
 		/// </summary>
@@ -394,23 +393,21 @@ namespace Qorpent.Utils.Extensions {
 			}
 			var str = xmlsource as string;
 			if (null != str) {
-				if (str.Contains("<") && str.Contains(">")) {
+			    if (str.Contains("<") && str.Contains(">")) {
 					//it's xml string
 					return XElement.Parse(str);
 				}
-				else if (str.Contains("\r") || str.Contains("\n")) //bxl like mark)
-				{
-					return Application.Current.Container.Get<IBxlParser>().Parse(str, "main", options);
-				}
-					//it's filename/url
-				else if (IsBxlFileName(str)) {
-					return Application.Current.Container.Get<IBxlParser>().Parse(File.ReadAllText(str), str);
-				}
-				else {
-					return XElement.Load(str);
-				}
+			    if (str.Contains("\r") || str.Contains("\n")) //bxl like mark)
+			    {
+			        return new BxlParser().Parse(str, "main", options);
+			    }
+			    //it's filename/url
+			    if (IsBxlFileName(str)) {
+			        return new BxlParser().Parse(File.ReadAllText(str), str);
+			    }
+			    return XElement.Load(str);
 			}
-			var xmlreader = xmlsource as XmlReader;
+		    var xmlreader = xmlsource as XmlReader;
 			if (null != xmlreader) {
 				return XElement.Load(xmlreader);
 			}

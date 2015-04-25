@@ -89,7 +89,7 @@ namespace Qorpent.Utils
 	                result = XElement.Parse(rawHeader);
 	            }
 	            else {
-	                result = WellKnownHelper.Create<IBxlParser>().Parse(rawHeader);
+	                result = new BxlParser().Parse(rawHeader);
 	                if (result.Elements().Count() == 1) {
 	                    result = result.Elements().First();
 	                }

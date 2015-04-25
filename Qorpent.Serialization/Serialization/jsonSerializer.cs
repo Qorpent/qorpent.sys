@@ -20,8 +20,9 @@
 using System.Xml.Linq;
 using Qorpent.IoC;
 using Qorpent.Json;
+#if !EMBEDQPT
 using Qorpent.Uson;
-
+#endif
 namespace Qorpent.Serialization {
 	/// <summary>
 	/// </summary>
@@ -58,13 +59,15 @@ namespace Qorpent.Serialization {
             if (value is XElement && null!=((XElement)value).Attribute(JsonItem.JsonTypeAttributeName)) {
                 output.Write(converter.ConvertToJson((XElement)value));
                 return;
-                
+
             }
+#if !EMBEDQPT
 			if (value is UObj)
 			{
 				output.Write(((UObj)value).ToJson());
 				return;
 			}
+#endif
             base.Serialize(name, value, output, options);
         }
 	}
