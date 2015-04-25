@@ -572,18 +572,28 @@ html.the button.checker, html.the .button.checker, html.the .menuitem.checker {
 html.the button.checker.semaphore, html.the .button.checker.semaphore, html.the .menuitem.checker.semaphore {
   color: #5e5e5e;
   background-color: white;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the button.checked, html.the .button.checked, html.the .menuitem.checked {
   color: #5e5e5e;
   background-color: white;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the button.checked.semaphore, html.the .button.checked.semaphore, html.the .menuitem.checked.semaphore {
   color: #2B2B2B;
   background-color: #FDFDFD;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the button.active, html.the button.button, html.the button.menuitem, html.the .button.active, html.the .button.button, html.the .button.menuitem, html.the .menuitem.active, html.the .menuitem.button, html.the .menuitem.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -591,33 +601,33 @@ html.the button.active, html.the button.button, html.the button.menuitem, html.t
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the button.active:hover, html.the button.button:hover, html.the button.menuitem:hover, html.the .button.active:hover, html.the .button.button:hover, html.the .button.menuitem:hover, html.the .menuitem.active:hover, html.the .menuitem.button:hover, html.the .menuitem.menuitem:hover {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the button.active:hover.title, html.the button.button:hover.title, html.the button.menuitem:hover.title, html.the .button.active:hover.title, html.the .button.button:hover.title, html.the .button.menuitem:hover.title, html.the .menuitem.active:hover.title, html.the .menuitem.button:hover.title, html.the .menuitem.menuitem:hover.title {
   background-color: inherit;
   color: #92b3cf;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the button.active:hover.bordered, html.the button.button:hover.bordered, html.the button.menuitem:hover.bordered, html.the .button.active:hover.bordered, html.the .button.button:hover.bordered, html.the .button.menuitem:hover.bordered, html.the .menuitem.active:hover.bordered, html.the .menuitem.button:hover.bordered, html.the .menuitem.menuitem:hover.bordered {
   border-top-color: #6e9ac0;
   border-bottom-color: #cacaca;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the button.active:hover:active, html.the button.button:hover:active, html.the button.menuitem:hover:active, html.the .button.active:hover:active, html.the .button.button:hover:active, html.the .button.menuitem:hover:active, html.the .menuitem.active:hover:active, html.the .menuitem.button:hover:active, html.the .menuitem.menuitem:hover:active {
   background: #D7D7D7;
   color: #FDFDFD;
   color: #2B2B2B;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the button.active:hover:active.bordered, html.the button.button:hover:active.bordered, html.the button.menuitem:hover:active.bordered, html.the .button.active:hover:active.bordered, html.the .button.button:hover:active.bordered, html.the .button.menuitem:hover:active.bordered, html.the .menuitem.active:hover:active.bordered, html.the .menuitem.button:hover:active.bordered, html.the .menuitem.menuitem:hover:active.bordered {
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the button.active:hover:active[disabled='disabled'], html.the button.button:hover:active[disabled='disabled'], html.the button.menuitem:hover:active[disabled='disabled'], html.the .button.active:hover:active[disabled='disabled'], html.the .button.button:hover:active[disabled='disabled'], html.the .button.menuitem:hover:active[disabled='disabled'], html.the .menuitem.active:hover:active[disabled='disabled'], html.the .menuitem.button:hover:active[disabled='disabled'], html.the .menuitem.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
@@ -1353,11 +1363,11 @@ html.the .dropdown.debug {
 html.the body.isdropdown .dropdownback {
   display: block;
 }
-/* line 181, newthe/colorizer.scss */
+/* line 191, newthe/colorizer.scss */
 html.the .idark {
   color: #2B2B2B;
 }
-/* line 184, newthe/colorizer.scss */
+/* line 194, newthe/colorizer.scss */
 html.the .dark {
   color: #FDFDFD;
   background-color: #2B2B2B;
@@ -1441,19 +1451,29 @@ html.the .dark.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .dark.checker.semaphore {
   color: #2B2B2B;
-  background-color: #919191;
+  background-color: #777777;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .dark.checked {
   color: #2B2B2B;
   background-color: #919191;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .dark.checked.semaphore {
   color: #FDFDFD;
   background-color: #2B2B2B;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .dark.active, html.the .dark.button, html.the .dark.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1461,42 +1481,42 @@ html.the .dark.active, html.the .dark.button, html.the .dark.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .dark.active:hover, html.the .dark.button:hover, html.the .dark.menuitem:hover {
   color: #FDFDFD;
   background-color: #5e5e5e;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .dark.active:hover.title, html.the .dark.button:hover.title, html.the .dark.menuitem:hover.title {
   background-color: inherit;
   color: #5e5e5e;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .dark.active:hover.bordered, html.the .dark.button:hover.bordered, html.the .dark.menuitem:hover.bordered {
   border-top-color: #454545;
   border-bottom-color: black;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .dark.active:hover:active, html.the .dark.button:hover:active, html.the .dark.menuitem:hover:active {
   background: linear-gradient(to bottom, #383838, #454545);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .dark.active:hover:active.title, html.the .dark.button:hover:active.title, html.the .dark.menuitem:hover:active.title {
   color: #454545 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .dark.active:hover:active.bordered, html.the .dark.button:hover:active.bordered, html.the .dark.menuitem:hover:active.bordered {
   border-top-color: #1e1e1e;
   border-bottom-color: #2b2b2b;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .dark.active:hover:active[disabled='disabled'], html.the .dark.button:hover:active[disabled='disabled'], html.the .dark.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 187, newthe/colorizer.scss */
+/* line 197, newthe/colorizer.scss */
 html.the .dark.soft {
   color: #FDFDFD;
   background-color: #5e5e5e;
@@ -1531,19 +1551,29 @@ html.the .dark.soft.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .dark.soft.checker.semaphore {
   color: #5e5e5e;
-  background-color: #c4c4c4;
+  background-color: #ababab;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .dark.soft.checked {
   color: #5e5e5e;
   background-color: #c4c4c4;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .dark.soft.checked.semaphore {
   color: #FDFDFD;
   background-color: #5e5e5e;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .dark.soft.active, html.the .dark.soft.button, html.the .dark.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1551,42 +1581,42 @@ html.the .dark.soft.active, html.the .dark.soft.button, html.the .dark.soft.menu
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .dark.soft.active:hover, html.the .dark.soft.button:hover, html.the .dark.soft.menuitem:hover {
   color: #FDFDFD;
   background-color: #919191;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .dark.soft.active:hover.title, html.the .dark.soft.button:hover.title, html.the .dark.soft.menuitem:hover.title {
   background-color: inherit;
   color: #919191;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .dark.soft.active:hover.bordered, html.the .dark.soft.button:hover.bordered, html.the .dark.soft.menuitem:hover.bordered {
   border-top-color: #777777;
   border-bottom-color: #2b2b2b;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .dark.soft.active:hover:active, html.the .dark.soft.button:hover:active, html.the .dark.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #6b6b6b, #777777);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .dark.soft.active:hover:active.title, html.the .dark.soft.button:hover:active.title, html.the .dark.soft.menuitem:hover:active.title {
   color: #777777 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .dark.soft.active:hover:active.bordered, html.the .dark.soft.button:hover:active.bordered, html.the .dark.soft.menuitem:hover:active.bordered {
   border-top-color: #515151;
   border-bottom-color: #5e5e5e;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .dark.soft.active:hover:active[disabled='disabled'], html.the .dark.soft.button:hover:active[disabled='disabled'], html.the .dark.soft.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 190, newthe/colorizer.scss */
+/* line 200, newthe/colorizer.scss */
 html.the .dark.strong {
   color: #FDFDFD;
   background-color: #121212;
@@ -1621,19 +1651,29 @@ html.the .dark.strong.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .dark.strong.checker.semaphore {
   color: #121212;
-  background-color: #777777;
+  background-color: #5e5e5e;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .dark.strong.checked {
   color: #121212;
   background-color: #777777;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .dark.strong.checked.semaphore {
   color: #FDFDFD;
   background-color: #121212;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .dark.strong.active, html.the .dark.strong.button, html.the .dark.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1641,46 +1681,46 @@ html.the .dark.strong.active, html.the .dark.strong.button, html.the .dark.stron
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .dark.strong.active:hover, html.the .dark.strong.button:hover, html.the .dark.strong.menuitem:hover {
   color: #FDFDFD;
   background-color: #454545;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .dark.strong.active:hover.title, html.the .dark.strong.button:hover.title, html.the .dark.strong.menuitem:hover.title {
   background-color: inherit;
   color: #454545;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .dark.strong.active:hover.bordered, html.the .dark.strong.button:hover.bordered, html.the .dark.strong.menuitem:hover.bordered {
   border-top-color: #2b2b2b;
   border-bottom-color: black;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .dark.strong.active:hover:active, html.the .dark.strong.button:hover:active, html.the .dark.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #1e1e1e, #2b2b2b);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .dark.strong.active:hover:active.title, html.the .dark.strong.button:hover:active.title, html.the .dark.strong.menuitem:hover:active.title {
   color: #2b2b2b !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .dark.strong.active:hover:active.bordered, html.the .dark.strong.button:hover:active.bordered, html.the .dark.strong.menuitem:hover:active.bordered {
   border-top-color: #050505;
   border-bottom-color: #121212;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .dark.strong.active:hover:active[disabled='disabled'], html.the .dark.strong.button:hover:active[disabled='disabled'], html.the .dark.strong.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 181, newthe/colorizer.scss */
+/* line 191, newthe/colorizer.scss */
 html.the .ilight {
   color: #FDFDFD;
 }
-/* line 184, newthe/colorizer.scss */
+/* line 194, newthe/colorizer.scss */
 html.the .light {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -1765,18 +1805,28 @@ html.the .light.checker {
 html.the .light.checker.semaphore {
   color: #5e5e5e;
   background-color: white;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .light.checked {
   color: #5e5e5e;
   background-color: white;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .light.checked.semaphore {
   color: #2B2B2B;
   background-color: #FDFDFD;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .light.active, html.the .light.button, html.the .light.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1784,39 +1834,39 @@ html.the .light.active, html.the .light.button, html.the .light.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .light.active:hover, html.the .light.button:hover, html.the .light.menuitem:hover {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .light.active:hover.title, html.the .light.button:hover.title, html.the .light.menuitem:hover.title {
   background-color: inherit;
   color: #92b3cf;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .light.active:hover.bordered, html.the .light.button:hover.bordered, html.the .light.menuitem:hover.bordered {
   border-top-color: #6e9ac0;
   border-bottom-color: #cacaca;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .light.active:hover:active, html.the .light.button:hover:active, html.the .light.menuitem:hover:active {
   background: #D7D7D7;
   color: #FDFDFD;
   color: #2B2B2B;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .light.active:hover:active.bordered, html.the .light.button:hover:active.bordered, html.the .light.menuitem:hover:active.bordered {
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .light.active:hover:active[disabled='disabled'], html.the .light.button:hover:active[disabled='disabled'], html.the .light.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 187, newthe/colorizer.scss */
+/* line 197, newthe/colorizer.scss */
 html.the .light.soft {
   color: #2B2B2B;
   background-color: #fefefe;
@@ -1852,18 +1902,28 @@ html.the .light.soft.checker {
 html.the .light.soft.checker.semaphore {
   color: #5e5e5e;
   background-color: white;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .light.soft.checked {
   color: #5e5e5e;
   background-color: white;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .light.soft.checked.semaphore {
   color: #2B2B2B;
   background-color: #fefefe;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .light.soft.active, html.the .light.soft.button, html.the .light.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1871,39 +1931,39 @@ html.the .light.soft.active, html.the .light.soft.button, html.the .light.soft.m
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .light.soft.active:hover, html.the .light.soft.button:hover, html.the .light.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #d9e4ee;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .light.soft.active:hover.title, html.the .light.soft.button:hover.title, html.the .light.soft.menuitem:hover.title {
   background-color: inherit;
   color: #d9e4ee;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .light.soft.active:hover.bordered, html.the .light.soft.button:hover.bordered, html.the .light.soft.menuitem:hover.bordered {
   border-top-color: #b5cbdf;
   border-bottom-color: #cbcbcb;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .light.soft.active:hover:active, html.the .light.soft.button:hover:active, html.the .light.soft.menuitem:hover:active {
   background: #D7D7D7;
   color: #FDFDFD;
   color: #2B2B2B;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .light.soft.active:hover:active.bordered, html.the .light.soft.button:hover:active.bordered, html.the .light.soft.menuitem:hover:active.bordered {
   border-top-color: #e5e5e5;
   border-bottom-color: #e5e5e5;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .light.soft.active:hover:active[disabled='disabled'], html.the .light.soft.button:hover:active[disabled='disabled'], html.the .light.soft.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 190, newthe/colorizer.scss */
+/* line 200, newthe/colorizer.scss */
 html.the .light.strong {
   color: #2B2B2B;
   background-color: #e4e4e4;
@@ -1938,19 +1998,29 @@ html.the .light.strong.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .light.strong.checker.semaphore {
   color: #5e5e5e;
-  background-color: #eeeeee;
+  background-color: #f3f3f3;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .light.strong.checked {
   color: #5e5e5e;
   background-color: #eeeeee;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .light.strong.checked.semaphore {
   color: #2B2B2B;
   background-color: #e4e4e4;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .light.strong.active, html.the .light.strong.button, html.the .light.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -1958,43 +2028,43 @@ html.the .light.strong.active, html.the .light.strong.button, html.the .light.st
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .light.strong.active:hover, html.the .light.strong.button:hover, html.the .light.strong.menuitem:hover {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .light.strong.active:hover.title, html.the .light.strong.button:hover.title, html.the .light.strong.menuitem:hover.title {
   background-color: inherit;
   color: #92b3cf;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .light.strong.active:hover.bordered, html.the .light.strong.button:hover.bordered, html.the .light.strong.menuitem:hover.bordered {
   border-top-color: #6e9ac0;
   border-bottom-color: #b1b1b1;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .light.strong.active:hover:active, html.the .light.strong.button:hover:active, html.the .light.strong.menuitem:hover:active {
   background: #D7D7D7;
   color: #FDFDFD;
   color: #2B2B2B;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .light.strong.active:hover:active.bordered, html.the .light.strong.button:hover:active.bordered, html.the .light.strong.menuitem:hover:active.bordered {
   border-top-color: #d7d7d7;
   border-bottom-color: gainsboro;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .light.strong.active:hover:active[disabled='disabled'], html.the .light.strong.button:hover:active[disabled='disabled'], html.the .light.strong.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 181, newthe/colorizer.scss */
+/* line 191, newthe/colorizer.scss */
 html.the .iprimary {
   color: #4C81AF;
 }
-/* line 184, newthe/colorizer.scss */
+/* line 194, newthe/colorizer.scss */
 html.the .primary {
   color: #FDFDFD;
   background-color: #4C81AF;
@@ -2078,19 +2148,29 @@ html.the .primary.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .primary.checker.semaphore {
   color: #4C81AF;
-  background-color: #d9e4ee;
+  background-color: #b5cbdf;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .primary.checked {
   color: #4C81AF;
   background-color: #d9e4ee;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .primary.checked.semaphore {
   color: #FDFDFD;
   background-color: #4C81AF;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .primary.active, html.the .primary.button, html.the .primary.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2098,42 +2178,42 @@ html.the .primary.active, html.the .primary.button, html.the .primary.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .primary.active:hover, html.the .primary.button:hover, html.the .primary.menuitem:hover {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .primary.active:hover.title, html.the .primary.button:hover.title, html.the .primary.menuitem:hover.title {
   background-color: inherit;
   color: #92b3cf;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .primary.active:hover.bordered, html.the .primary.button:hover.bordered, html.the .primary.menuitem:hover.bordered {
   border-top-color: #6e9ac0;
   border-bottom-color: #2d4d68;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .primary.active:hover:active, html.the .primary.button:hover:active, html.the .primary.menuitem:hover:active {
   background: linear-gradient(to bottom, #5c8eb8, #6e9ac0);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .primary.active:hover:active.title, html.the .primary.button:hover:active.title, html.the .primary.menuitem:hover:active.title {
   color: #6e9ac0 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .primary.active:hover:active.bordered, html.the .primary.button:hover:active.bordered, html.the .primary.menuitem:hover:active.bordered {
   border-top-color: #44749d;
   border-bottom-color: #4c81af;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .primary.active:hover:active[disabled='disabled'], html.the .primary.button:hover:active[disabled='disabled'], html.the .primary.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 187, newthe/colorizer.scss */
+/* line 197, newthe/colorizer.scss */
 html.the .primary.soft {
   color: #FDFDFD;
   background-color: #92b3cf;
@@ -2168,19 +2248,29 @@ html.the .primary.soft.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .primary.soft.checker.semaphore {
   color: #92b3cf;
-  background-color: #f5f8fb;
+  background-color: #f2f6f9;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .primary.soft.checked {
   color: #92b3cf;
   background-color: #f5f8fb;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .primary.soft.checked.semaphore {
   color: #FDFDFD;
   background-color: #92b3cf;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .primary.soft.active, html.the .primary.soft.button, html.the .primary.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2188,42 +2278,42 @@ html.the .primary.soft.active, html.the .primary.soft.button, html.the .primary.
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .primary.soft.active:hover, html.the .primary.soft.button:hover, html.the .primary.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #d9e4ee;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .primary.soft.active:hover.title, html.the .primary.soft.button:hover.title, html.the .primary.soft.menuitem:hover.title {
   background-color: inherit;
   color: #d9e4ee;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .primary.soft.active:hover.bordered, html.the .primary.soft.button:hover.bordered, html.the .primary.soft.menuitem:hover.bordered {
   border-top-color: #b5cbdf;
   border-bottom-color: #4c81af;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .primary.soft.active:hover:active, html.the .primary.soft.button:hover:active, html.the .primary.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #a3bfd7, #b5cbdf);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .primary.soft.active:hover:active.title, html.the .primary.soft.button:hover:active.title, html.the .primary.soft.menuitem:hover:active.title {
   color: #b5cbdf !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .primary.soft.active:hover:active.bordered, html.the .primary.soft.button:hover:active.bordered, html.the .primary.soft.menuitem:hover:active.bordered {
   border-top-color: #80a6c8;
   border-bottom-color: #92b3cf;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .primary.soft.active:hover:active[disabled='disabled'], html.the .primary.soft.button:hover:active[disabled='disabled'], html.the .primary.soft.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 190, newthe/colorizer.scss */
+/* line 200, newthe/colorizer.scss */
 html.the .primary.strong {
   color: #FDFDFD;
   background-color: #3d678b;
@@ -2258,19 +2348,29 @@ html.the .primary.strong.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .primary.strong.checker.semaphore {
   color: #3d678b;
-  background-color: #b5cbdf;
+  background-color: #92b3cf;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .primary.strong.checked {
   color: #3d678b;
   background-color: #b5cbdf;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .primary.strong.checked.semaphore {
   color: #FDFDFD;
   background-color: #3d678b;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .primary.strong.active, html.the .primary.strong.button, html.the .primary.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2278,46 +2378,46 @@ html.the .primary.strong.active, html.the .primary.strong.button, html.the .prim
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .primary.strong.active:hover, html.the .primary.strong.button:hover, html.the .primary.strong.menuitem:hover {
   color: #FDFDFD;
   background-color: #6e9ac0;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .primary.strong.active:hover.title, html.the .primary.strong.button:hover.title, html.the .primary.strong.menuitem:hover.title {
   background-color: inherit;
   color: #6e9ac0;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .primary.strong.active:hover.bordered, html.the .primary.strong.button:hover.bordered, html.the .primary.strong.menuitem:hover.bordered {
   border-top-color: #4c81af;
   border-bottom-color: #1e3244;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .primary.strong.active:hover:active, html.the .primary.strong.button:hover:active, html.the .primary.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #44749d, #4c81af);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .primary.strong.active:hover:active.title, html.the .primary.strong.button:hover:active.title, html.the .primary.strong.menuitem:hover:active.title {
   color: #4c81af !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .primary.strong.active:hover:active.bordered, html.the .primary.strong.button:hover:active.bordered, html.the .primary.strong.menuitem:hover:active.bordered {
   border-top-color: #355a7a;
   border-bottom-color: #3d678b;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .primary.strong.active:hover:active[disabled='disabled'], html.the .primary.strong.button:hover:active[disabled='disabled'], html.the .primary.strong.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 181, newthe/colorizer.scss */
+/* line 191, newthe/colorizer.scss */
 html.the .idefault {
   color: #D7D7D7;
 }
-/* line 184, newthe/colorizer.scss */
+/* line 194, newthe/colorizer.scss */
 html.the .default {
   color: #2B2B2B;
   background-color: #D7D7D7;
@@ -2400,20 +2500,30 @@ html.the .default.checker {
 }
 /* line 99, newthe/colorizer.scss */
 html.the .default.checker.semaphore {
-  color: #5e5e5e;
+  color: #D7D7D7;
   background-color: #f6f6f6;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .default.checked {
   color: #5e5e5e;
   background-color: #f6f6f6;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .default.checked.semaphore {
   color: #2B2B2B;
   background-color: #D7D7D7;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .default.active, html.the .default.button, html.the .default.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2421,42 +2531,42 @@ html.the .default.active, html.the .default.button, html.the .default.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .default.active:hover, html.the .default.button:hover, html.the .default.menuitem:hover {
   color: #2B2B2B;
   background-color: #f6f6f6;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .default.active:hover.title, html.the .default.button:hover.title, html.the .default.menuitem:hover.title {
   background-color: inherit;
   color: #f6f6f6;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .default.active:hover.bordered, html.the .default.button:hover.bordered, html.the .default.menuitem:hover.bordered {
   border-top-color: gainsboro;
   border-bottom-color: #a4a4a4;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .default.active:hover:active, html.the .default.button:hover:active, html.the .default.menuitem:hover:active {
   background: linear-gradient(to bottom, #e4e4e4, #f1f1f1);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .default.active:hover:active.title, html.the .default.button:hover:active.title, html.the .default.menuitem:hover:active.title {
   color: #f1f1f1 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .default.active:hover:active.bordered, html.the .default.button:hover:active.bordered, html.the .default.menuitem:hover:active.bordered {
   border-top-color: #cacaca;
   border-bottom-color: #d7d7d7;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .default.active:hover:active[disabled='disabled'], html.the .default.button:hover:active[disabled='disabled'], html.the .default.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 187, newthe/colorizer.scss */
+/* line 197, newthe/colorizer.scss */
 html.the .default.soft {
   color: #2B2B2B;
   background-color: #f6f6f6;
@@ -2492,18 +2602,28 @@ html.the .default.soft.checker {
 html.the .default.soft.checker.semaphore {
   color: #5e5e5e;
   background-color: #f8f8f8;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .default.soft.checked {
   color: #5e5e5e;
   background-color: #f8f8f8;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .default.soft.checked.semaphore {
   color: #2B2B2B;
   background-color: #f6f6f6;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .default.soft.active, html.the .default.soft.button, html.the .default.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2511,39 +2631,39 @@ html.the .default.soft.active, html.the .default.soft.button, html.the .default.
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .default.soft.active:hover, html.the .default.soft.button:hover, html.the .default.soft.menuitem:hover {
   color: #FDFDFD;
   background-color: #92b3cf;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .default.soft.active:hover.title, html.the .default.soft.button:hover.title, html.the .default.soft.menuitem:hover.title {
   background-color: inherit;
   color: #92b3cf;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .default.soft.active:hover.bordered, html.the .default.soft.button:hover.bordered, html.the .default.soft.menuitem:hover.bordered {
   border-top-color: #6e9ac0;
   border-bottom-color: #c3c3c3;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .default.soft.active:hover:active, html.the .default.soft.button:hover:active, html.the .default.soft.menuitem:hover:active {
   background: #D7D7D7;
   color: #FDFDFD;
   color: #2B2B2B;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .default.soft.active:hover:active.bordered, html.the .default.soft.button:hover:active.bordered, html.the .default.soft.menuitem:hover:active.bordered {
   border-top-color: #dddddd;
   border-bottom-color: #dddddd;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .default.soft.active:hover:active[disabled='disabled'], html.the .default.soft.button:hover:active[disabled='disabled'], html.the .default.soft.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 190, newthe/colorizer.scss */
+/* line 200, newthe/colorizer.scss */
 html.the .default.strong {
   color: #2B2B2B;
   background-color: #bebebe;
@@ -2578,19 +2698,29 @@ html.the .default.strong.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .default.strong.checker.semaphore {
   color: #bebebe;
-  background-color: #f1f1f1;
+  background-color: #f3f3f3;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .default.strong.checked {
   color: #bebebe;
   background-color: #f1f1f1;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .default.strong.checked.semaphore {
   color: #2B2B2B;
   background-color: #bebebe;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .default.strong.active, html.the .default.strong.button, html.the .default.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2598,46 +2728,46 @@ html.the .default.strong.active, html.the .default.strong.button, html.the .defa
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .default.strong.active:hover, html.the .default.strong.button:hover, html.the .default.strong.menuitem:hover {
   color: #2B2B2B;
   background-color: #f1f1f1;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .default.strong.active:hover.title, html.the .default.strong.button:hover.title, html.the .default.strong.menuitem:hover.title {
   background-color: inherit;
   color: #f1f1f1;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .default.strong.active:hover.bordered, html.the .default.strong.button:hover.bordered, html.the .default.strong.menuitem:hover.bordered {
   border-top-color: #d7d7d7;
   border-bottom-color: #8b8b8b;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .default.strong.active:hover:active, html.the .default.strong.button:hover:active, html.the .default.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #cacaca, #d7d7d7);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .default.strong.active:hover:active.title, html.the .default.strong.button:hover:active.title, html.the .default.strong.menuitem:hover:active.title {
   color: #d7d7d7 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .default.strong.active:hover:active.bordered, html.the .default.strong.button:hover:active.bordered, html.the .default.strong.menuitem:hover:active.bordered {
   border-top-color: #b1b1b1;
   border-bottom-color: #bebebe;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .default.strong.active:hover:active[disabled='disabled'], html.the .default.strong.button:hover:active[disabled='disabled'], html.the .default.strong.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 181, newthe/colorizer.scss */
+/* line 191, newthe/colorizer.scss */
 html.the .isuccess {
   color: #5E994B;
 }
-/* line 184, newthe/colorizer.scss */
+/* line 194, newthe/colorizer.scss */
 html.the .success {
   color: #FDFDFD;
   background-color: #5E994B;
@@ -2721,19 +2851,29 @@ html.the .success.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .success.checker.semaphore {
   color: #5E994B;
-  background-color: #d1e5cb;
+  background-color: #b3d5a8;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .success.checked {
   color: #5E994B;
   background-color: #d1e5cb;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .success.checked.semaphore {
   color: #FDFDFD;
   background-color: #5E994B;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .success.active, html.the .success.button, html.the .success.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2741,42 +2881,42 @@ html.the .success.active, html.the .success.button, html.the .success.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .success.active:hover, html.the .success.button:hover, html.the .success.menuitem:hover {
   color: #FDFDFD;
   background-color: #95c486;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .success.active:hover.title, html.the .success.button:hover.title, html.the .success.menuitem:hover.title {
   background-color: inherit;
   color: #95c486;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .success.active:hover.bordered, html.the .success.button:hover.bordered, html.the .success.menuitem:hover.bordered {
   border-top-color: #77b364;
   border-bottom-color: #345529;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .success.active:hover:active, html.the .success.button:hover:active, html.the .success.menuitem:hover:active {
   background: linear-gradient(to bottom, #69aa53, #77b364);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .success.active:hover:active.title, html.the .success.button:hover:active.title, html.the .success.menuitem:hover:active.title {
   color: #77b364 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .success.active:hover:active.bordered, html.the .success.button:hover:active.bordered, html.the .success.menuitem:hover:active.bordered {
   border-top-color: #538843;
   border-bottom-color: #5e994b;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .success.active:hover:active[disabled='disabled'], html.the .success.button:hover:active[disabled='disabled'], html.the .success.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 187, newthe/colorizer.scss */
+/* line 197, newthe/colorizer.scss */
 html.the .success.soft {
   color: #FDFDFD;
   background-color: #95c486;
@@ -2811,19 +2951,29 @@ html.the .success.soft.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .success.soft.checker.semaphore {
   color: #95c486;
-  background-color: #f5f9f4;
+  background-color: #eff6ed;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .success.soft.checked {
   color: #95c486;
   background-color: #f5f9f4;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .success.soft.checked.semaphore {
   color: #FDFDFD;
   background-color: #95c486;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .success.soft.active, html.the .success.soft.button, html.the .success.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2831,42 +2981,42 @@ html.the .success.soft.active, html.the .success.soft.button, html.the .success.
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .success.soft.active:hover, html.the .success.soft.button:hover, html.the .success.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #d1e5cb;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .success.soft.active:hover.title, html.the .success.soft.button:hover.title, html.the .success.soft.menuitem:hover.title {
   background-color: inherit;
   color: #d1e5cb;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .success.soft.active:hover.bordered, html.the .success.soft.button:hover.bordered, html.the .success.soft.menuitem:hover.bordered {
   border-top-color: #b3d5a8;
   border-bottom-color: #5e994b;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .success.soft.active:hover:active, html.the .success.soft.button:hover:active, html.the .success.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #a4cc97, #b3d5a8);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .success.soft.active:hover:active.title, html.the .success.soft.button:hover:active.title, html.the .success.soft.menuitem:hover:active.title {
   color: #b3d5a8 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .success.soft.active:hover:active.bordered, html.the .success.soft.button:hover:active.bordered, html.the .success.soft.menuitem:hover:active.bordered {
   border-top-color: #86bb75;
   border-bottom-color: #95c486;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .success.soft.active:hover:active[disabled='disabled'], html.the .success.soft.button:hover:active[disabled='disabled'], html.the .success.soft.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 190, newthe/colorizer.scss */
+/* line 200, newthe/colorizer.scss */
 html.the .success.strong {
   color: #FDFDFD;
   background-color: #49773a;
@@ -2901,19 +3051,29 @@ html.the .success.strong.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .success.strong.checker.semaphore {
   color: #49773a;
-  background-color: #b3d5a8;
+  background-color: #95c486;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .success.strong.checked {
   color: #49773a;
   background-color: #b3d5a8;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .success.strong.checked.semaphore {
   color: #FDFDFD;
   background-color: #49773a;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .success.strong.active, html.the .success.strong.button, html.the .success.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -2921,46 +3081,46 @@ html.the .success.strong.active, html.the .success.strong.button, html.the .succ
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .success.strong.active:hover, html.the .success.strong.button:hover, html.the .success.strong.menuitem:hover {
   color: #FDFDFD;
   background-color: #77b364;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .success.strong.active:hover.title, html.the .success.strong.button:hover.title, html.the .success.strong.menuitem:hover.title {
   background-color: inherit;
   color: #77b364;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .success.strong.active:hover.bordered, html.the .success.strong.button:hover.bordered, html.the .success.strong.menuitem:hover.bordered {
   border-top-color: #5e994b;
   border-bottom-color: #1f3219;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .success.strong.active:hover:active, html.the .success.strong.button:hover:active, html.the .success.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #538843, #5e994b);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .success.strong.active:hover:active.title, html.the .success.strong.button:hover:active.title, html.the .success.strong.menuitem:hover:active.title {
   color: #5e994b !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .success.strong.active:hover:active.bordered, html.the .success.strong.button:hover:active.bordered, html.the .success.strong.menuitem:hover:active.bordered {
   border-top-color: #3e6632;
   border-bottom-color: #49773a;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .success.strong.active:hover:active[disabled='disabled'], html.the .success.strong.button:hover:active[disabled='disabled'], html.the .success.strong.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 181, newthe/colorizer.scss */
+/* line 191, newthe/colorizer.scss */
 html.the .iinfo {
   color: #F9D264;
 }
-/* line 184, newthe/colorizer.scss */
+/* line 194, newthe/colorizer.scss */
 html.the .info {
   color: #2B2B2B;
   background-color: #F9D264;
@@ -3044,19 +3204,29 @@ html.the .info.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .info.checker.semaphore {
   color: #F9D264;
-  background-color: #fefaed;
+  background-color: #fef8e9;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .info.checked {
   color: #F9D264;
   background-color: #fefaed;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .info.checked.semaphore {
   color: #2B2B2B;
   background-color: #F9D264;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .info.active, html.the .info.button, html.the .info.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3064,42 +3234,42 @@ html.the .info.active, html.the .info.button, html.the .info.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .info.active:hover, html.the .info.button:hover, html.the .info.menuitem:hover {
   color: #2B2B2B;
   background-color: #fdefc6;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .info.active:hover.title, html.the .info.button:hover.title, html.the .info.menuitem:hover.title {
   background-color: inherit;
   color: #fdefc6;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .info.active:hover.bordered, html.the .info.button:hover.bordered, html.the .info.menuitem:hover.bordered {
   border-top-color: #fbe095;
   border-bottom-color: #eeb209;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .info.active:hover:active, html.the .info.button:hover:active, html.the .info.menuitem:hover:active {
   background: linear-gradient(to bottom, #fad97d, #fbe095);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .info.active:hover:active.title, html.the .info.button:hover:active.title, html.the .info.menuitem:hover:active.title {
   color: #fbe095 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .info.active:hover:active.bordered, html.the .info.button:hover:active.bordered, html.the .info.menuitem:hover:active.bordered {
   border-top-color: #f8cb4b;
   border-bottom-color: #f9d264;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .info.active:hover:active[disabled='disabled'], html.the .info.button:hover:active[disabled='disabled'], html.the .info.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 187, newthe/colorizer.scss */
+/* line 197, newthe/colorizer.scss */
 html.the .info.soft {
   color: #2B2B2B;
   background-color: #fdefc6;
@@ -3134,19 +3304,29 @@ html.the .info.soft.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .info.soft.checker.semaphore {
   color: #5e5e5e;
-  background-color: #fefaed;
+  background-color: #fffbf2;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .info.soft.checked {
   color: #5e5e5e;
   background-color: #fefaed;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .info.soft.checked.semaphore {
   color: #2B2B2B;
   background-color: #fdefc6;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .info.soft.active, html.the .info.soft.button, html.the .info.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3154,42 +3334,42 @@ html.the .info.soft.active, html.the .info.soft.button, html.the .info.soft.menu
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .info.soft.active:hover, html.the .info.soft.button:hover, html.the .info.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #fefaed;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .info.soft.active:hover.title, html.the .info.soft.button:hover.title, html.the .info.soft.menuitem:hover.title {
   background-color: inherit;
   color: #fefaed;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .info.soft.active:hover.bordered, html.the .info.soft.button:hover.bordered, html.the .info.soft.menuitem:hover.bordered {
   border-top-color: #fcecbc;
   border-bottom-color: #f9d264;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .info.soft.active:hover:active, html.the .info.soft.button:hover:active, html.the .info.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #fef6df, #fffbf2);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .info.soft.active:hover:active.title, html.the .info.soft.button:hover:active.title, html.the .info.soft.menuitem:hover:active.title {
   color: #fffbf2 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .info.soft.active:hover:active.bordered, html.the .info.soft.button:hover:active.bordered, html.the .info.soft.menuitem:hover:active.bordered {
   border-top-color: #fce7ae;
   border-bottom-color: #fdedc1;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .info.soft.active:hover:active[disabled='disabled'], html.the .info.soft.button:hover:active[disabled='disabled'], html.the .info.soft.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 190, newthe/colorizer.scss */
+/* line 200, newthe/colorizer.scss */
 html.the .info.strong {
   color: #FDFDFD;
   background-color: #f7c433;
@@ -3224,19 +3404,29 @@ html.the .info.strong.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .info.strong.checker.semaphore {
   color: #f7c433;
-  background-color: #fef7e4;
+  background-color: #fdefc6;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .info.strong.checked {
   color: #f7c433;
   background-color: #fef7e4;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .info.strong.checked.semaphore {
   color: #FDFDFD;
   background-color: #f7c433;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .info.strong.active, html.the .info.strong.button, html.the .info.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3244,46 +3434,46 @@ html.the .info.strong.active, html.the .info.strong.button, html.the .info.stron
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .info.strong.active:hover, html.the .info.strong.button:hover, html.the .info.strong.menuitem:hover {
   color: #2B2B2B;
   background-color: #fbe095;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .info.strong.active:hover.title, html.the .info.strong.button:hover.title, html.the .info.strong.menuitem:hover.title {
   background-color: inherit;
   color: #fbe095;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .info.strong.active:hover.bordered, html.the .info.strong.button:hover.bordered, html.the .info.strong.menuitem:hover.bordered {
   border-top-color: #f9d264;
   border-bottom-color: #bd8d07;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .info.strong.active:hover:active, html.the .info.strong.button:hover:active, html.the .info.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #f8cb4b, #f9d264);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .info.strong.active:hover:active.title, html.the .info.strong.button:hover:active.title, html.the .info.strong.menuitem:hover:active.title {
   color: #f9d264 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .info.strong.active:hover:active.bordered, html.the .info.strong.button:hover:active.bordered, html.the .info.strong.menuitem:hover:active.bordered {
   border-top-color: #f6bd1a;
   border-bottom-color: #f7c433;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .info.strong.active:hover:active[disabled='disabled'], html.the .info.strong.button:hover:active[disabled='disabled'], html.the .info.strong.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 181, newthe/colorizer.scss */
+/* line 191, newthe/colorizer.scss */
 html.the .idanger {
   color: #E7582E;
 }
-/* line 184, newthe/colorizer.scss */
+/* line 194, newthe/colorizer.scss */
 html.the .danger {
   color: #FDFDFD;
   background-color: #E7582E;
@@ -3367,19 +3557,29 @@ html.the .danger.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .danger.checker.semaphore {
   color: #E7582E;
-  background-color: #fceae5;
+  background-color: #f7c6b7;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .danger.checked {
   color: #E7582E;
   background-color: #fceae5;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .danger.checked.semaphore {
   color: #FDFDFD;
   background-color: #E7582E;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .danger.active, html.the .danger.button, html.the .danger.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3387,42 +3587,42 @@ html.the .danger.active, html.the .danger.button, html.the .danger.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .danger.active:hover, html.the .danger.button:hover, html.the .danger.menuitem:hover {
   color: #2B2B2B;
   background-color: #f2a189;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .danger.active:hover.title, html.the .danger.button:hover.title, html.the .danger.menuitem:hover.title {
   background-color: inherit;
   color: #f2a189;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .danger.active:hover.bordered, html.the .danger.button:hover.bordered, html.the .danger.menuitem:hover.bordered {
   border-top-color: #ec7d5c;
   border-bottom-color: #9d3212;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .danger.active:hover:active, html.the .danger.button:hover:active, html.the .danger.menuitem:hover:active {
   background: linear-gradient(to bottom, #ea6a45, #ec7d5c);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .danger.active:hover:active.title, html.the .danger.button:hover:active.title, html.the .danger.menuitem:hover:active.title {
   color: #ec7d5c !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .danger.active:hover:active.bordered, html.the .danger.button:hover:active.bordered, html.the .danger.menuitem:hover:active.bordered {
   border-top-color: #e2471a;
   border-bottom-color: #e7582e;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .danger.active:hover:active[disabled='disabled'], html.the .danger.button:hover:active[disabled='disabled'], html.the .danger.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 187, newthe/colorizer.scss */
+/* line 197, newthe/colorizer.scss */
 html.the .danger.soft {
   color: #2B2B2B;
   background-color: #f2a189;
@@ -3457,19 +3657,29 @@ html.the .danger.soft.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .danger.soft.checker.semaphore {
   color: #f2a189;
-  background-color: #fceae5;
+  background-color: #fdeeea;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .danger.soft.checked {
   color: #f2a189;
   background-color: #fceae5;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .danger.soft.checked.semaphore {
   color: #2B2B2B;
   background-color: #f2a189;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .danger.soft.active, html.the .danger.soft.button, html.the .danger.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3477,42 +3687,42 @@ html.the .danger.soft.active, html.the .danger.soft.button, html.the .danger.sof
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .danger.soft.active:hover, html.the .danger.soft.button:hover, html.the .danger.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #fceae5;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .danger.soft.active:hover.title, html.the .danger.soft.button:hover.title, html.the .danger.soft.menuitem:hover.title {
   background-color: inherit;
   color: #fceae5;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .danger.soft.active:hover.bordered, html.the .danger.soft.button:hover.bordered, html.the .danger.soft.menuitem:hover.bordered {
   border-top-color: #f7c6b7;
   border-bottom-color: #e7582e;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .danger.soft.active:hover:active, html.the .danger.soft.button:hover:active, html.the .danger.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #f4b3a0, #f7c6b7);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .danger.soft.active:hover:active.title, html.the .danger.soft.button:hover:active.title, html.the .danger.soft.menuitem:hover:active.title {
   color: #f7c6b7 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .danger.soft.active:hover:active.bordered, html.the .danger.soft.button:hover:active.bordered, html.the .danger.soft.menuitem:hover:active.bordered {
   border-top-color: #ef8f73;
   border-bottom-color: #f2a189;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .danger.soft.active:hover:active[disabled='disabled'], html.the .danger.soft.button:hover:active[disabled='disabled'], html.the .danger.soft.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 190, newthe/colorizer.scss */
+/* line 200, newthe/colorizer.scss */
 html.the .danger.strong {
   color: #FDFDFD;
   background-color: #cb4017;
@@ -3547,19 +3757,29 @@ html.the .danger.strong.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .danger.strong.checker.semaphore {
   color: #cb4017;
-  background-color: #f7c6b7;
+  background-color: #f2a189;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .danger.strong.checked {
   color: #cb4017;
   background-color: #f7c6b7;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .danger.strong.checked.semaphore {
   color: #FDFDFD;
   background-color: #cb4017;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .danger.strong.active, html.the .danger.strong.button, html.the .danger.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3567,46 +3787,46 @@ html.the .danger.strong.active, html.the .danger.strong.button, html.the .danger
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .danger.strong.active:hover, html.the .danger.strong.button:hover, html.the .danger.strong.menuitem:hover {
   color: #FDFDFD;
   background-color: #ec7d5c;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .danger.strong.active:hover.title, html.the .danger.strong.button:hover.title, html.the .danger.strong.menuitem:hover.title {
   background-color: inherit;
   color: #ec7d5c;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .danger.strong.active:hover.bordered, html.the .danger.strong.button:hover.bordered, html.the .danger.strong.menuitem:hover.bordered {
   border-top-color: #e7582e;
   border-bottom-color: #6f230d;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .danger.strong.active:hover:active, html.the .danger.strong.button:hover:active, html.the .danger.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #e2471a, #e7582e);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .danger.strong.active:hover:active.title, html.the .danger.strong.button:hover:active.title, html.the .danger.strong.menuitem:hover:active.title {
   color: #e7582e !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .danger.strong.active:hover:active.bordered, html.the .danger.strong.button:hover:active.bordered, html.the .danger.strong.menuitem:hover:active.bordered {
   border-top-color: #b43915;
   border-bottom-color: #cb4017;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .danger.strong.active:hover:active[disabled='disabled'], html.the .danger.strong.button:hover:active[disabled='disabled'], html.the .danger.strong.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 181, newthe/colorizer.scss */
+/* line 191, newthe/colorizer.scss */
 html.the .iwarn {
   color: #FA9357;
 }
-/* line 184, newthe/colorizer.scss */
+/* line 194, newthe/colorizer.scss */
 html.the .warn {
   color: #FDFDFD;
   background-color: #FA9357;
@@ -3690,19 +3910,29 @@ html.the .warn.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .warn.checker.semaphore {
   color: #FA9357;
-  background-color: #fff9f5;
+  background-color: #fef3ec;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .warn.checked {
   color: #FA9357;
   background-color: #fff9f5;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .warn.checked.semaphore {
   color: #FDFDFD;
   background-color: #FA9357;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .warn.active, html.the .warn.button, html.the .warn.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3710,42 +3940,42 @@ html.the .warn.active, html.the .warn.button, html.the .warn.menuitem {
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .warn.active:hover, html.the .warn.button:hover, html.the .warn.menuitem:hover {
   color: #2B2B2B;
   background-color: #fdd3ba;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .warn.active:hover.title, html.the .warn.button:hover.title, html.the .warn.menuitem:hover.title {
   background-color: inherit;
   color: #fdd3ba;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .warn.active:hover.bordered, html.the .warn.button:hover.bordered, html.the .warn.menuitem:hover.bordered {
   border-top-color: #fbb389;
   border-bottom-color: #e45807;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .warn.active:hover:active, html.the .warn.button:hover:active, html.the .warn.menuitem:hover:active {
   background: linear-gradient(to bottom, #fba370, #fbb389);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .warn.active:hover:active.title, html.the .warn.button:hover:active.title, html.the .warn.menuitem:hover:active.title {
   color: #fbb389 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .warn.active:hover:active.bordered, html.the .warn.button:hover:active.bordered, html.the .warn.menuitem:hover:active.bordered {
   border-top-color: #f9833e;
   border-bottom-color: #fa9357;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .warn.active:hover:active[disabled='disabled'], html.the .warn.button:hover:active[disabled='disabled'], html.the .warn.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 187, newthe/colorizer.scss */
+/* line 197, newthe/colorizer.scss */
 html.the .warn.soft {
   color: #2B2B2B;
   background-color: #fdd3ba;
@@ -3779,20 +4009,30 @@ html.the .warn.soft.checker {
 }
 /* line 99, newthe/colorizer.scss */
 html.the .warn.soft.checker.semaphore {
-  color: #5e5e5e;
+  color: #fdd3ba;
   background-color: #fff9f5;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .warn.soft.checked {
   color: #5e5e5e;
   background-color: #fff9f5;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .warn.soft.checked.semaphore {
   color: #2B2B2B;
   background-color: #fdd3ba;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .warn.soft.active, html.the .warn.soft.button, html.the .warn.soft.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3800,42 +4040,42 @@ html.the .warn.soft.active, html.the .warn.soft.button, html.the .warn.soft.menu
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .warn.soft.active:hover, html.the .warn.soft.button:hover, html.the .warn.soft.menuitem:hover {
   color: #2B2B2B;
   background-color: #fff9f5;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .warn.soft.active:hover.title, html.the .warn.soft.button:hover.title, html.the .warn.soft.menuitem:hover.title {
   background-color: inherit;
   color: #fff9f5;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .warn.soft.active:hover.bordered, html.the .warn.soft.button:hover.bordered, html.the .warn.soft.menuitem:hover.bordered {
   border-top-color: #fdd9c4;
   border-bottom-color: #fa9357;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .warn.soft.active:hover:active, html.the .warn.soft.button:hover:active, html.the .warn.soft.menuitem:hover:active {
   background: linear-gradient(to bottom, #fee3d3, #fef3ec);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .warn.soft.active:hover:active.title, html.the .warn.soft.button:hover:active.title, html.the .warn.soft.menuitem:hover:active.title {
   color: #fef3ec !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .warn.soft.active:hover:active.bordered, html.the .warn.soft.button:hover:active.bordered, html.the .warn.soft.menuitem:hover:active.bordered {
   border-top-color: #fcc3a1;
   border-bottom-color: #fdd3ba;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .warn.soft.active:hover:active[disabled='disabled'], html.the .warn.soft.button:hover:active[disabled='disabled'], html.the .warn.soft.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 190, newthe/colorizer.scss */
+/* line 200, newthe/colorizer.scss */
 html.the .warn.strong {
   color: #FDFDFD;
   background-color: #f97325;
@@ -3870,19 +4110,29 @@ html.the .warn.strong.checker {
 /* line 99, newthe/colorizer.scss */
 html.the .warn.strong.checker.semaphore {
   color: #f97325;
-  background-color: #fef3ec;
+  background-color: #fdd3ba;
+  /*  &:before {
+            font-family: FontAwesome;
+            content: "\f096";
+            font-size:12px;
+    }*/
 }
-/* line 105, newthe/colorizer.scss */
+/* line 110, newthe/colorizer.scss */
 html.the .warn.strong.checked {
   color: #f97325;
   background-color: #fef3ec;
 }
-/* line 108, newthe/colorizer.scss */
+/* line 113, newthe/colorizer.scss */
 html.the .warn.strong.checked.semaphore {
   color: #FDFDFD;
   background-color: #f97325;
+  /* &:before {
+           font-family: FontAwesome;
+           content: "\f046";
+           font-size:12px;
+   }*/
 }
-/* line 119, newthe/colorizer.scss */
+/* line 129, newthe/colorizer.scss */
 html.the .warn.strong.active, html.the .warn.strong.button, html.the .warn.strong.menuitem {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -3890,36 +4140,36 @@ html.the .warn.strong.active, html.the .warn.strong.button, html.the .warn.stron
   user-select: none;
   cursor: pointer;
 }
-/* line 122, newthe/colorizer.scss */
+/* line 132, newthe/colorizer.scss */
 html.the .warn.strong.active:hover, html.the .warn.strong.button:hover, html.the .warn.strong.menuitem:hover {
   color: #2B2B2B;
   background-color: #fbb389;
 }
-/* line 127, newthe/colorizer.scss */
+/* line 137, newthe/colorizer.scss */
 html.the .warn.strong.active:hover.title, html.the .warn.strong.button:hover.title, html.the .warn.strong.menuitem:hover.title {
   background-color: inherit;
   color: #fbb389;
 }
-/* line 131, newthe/colorizer.scss */
+/* line 141, newthe/colorizer.scss */
 html.the .warn.strong.active:hover.bordered, html.the .warn.strong.button:hover.bordered, html.the .warn.strong.menuitem:hover.bordered {
   border-top-color: #fa9357;
   border-bottom-color: #b34505;
 }
-/* line 135, newthe/colorizer.scss */
+/* line 145, newthe/colorizer.scss */
 html.the .warn.strong.active:hover:active, html.the .warn.strong.button:hover:active, html.the .warn.strong.menuitem:hover:active {
   background: linear-gradient(to bottom, #f9833e, #fa9357);
 }
-/* line 146, newthe/colorizer.scss */
+/* line 156, newthe/colorizer.scss */
 html.the .warn.strong.active:hover:active.title, html.the .warn.strong.button:hover:active.title, html.the .warn.strong.menuitem:hover:active.title {
   color: #fa9357 !important;
   background-color: inherit !important;
 }
-/* line 153, newthe/colorizer.scss */
+/* line 163, newthe/colorizer.scss */
 html.the .warn.strong.active:hover:active.bordered, html.the .warn.strong.button:hover:active.bordered, html.the .warn.strong.menuitem:hover:active.bordered {
   border-top-color: #f8630d;
   border-bottom-color: #f97325;
 }
-/* line 157, newthe/colorizer.scss */
+/* line 167, newthe/colorizer.scss */
 html.the .warn.strong.active:hover:active[disabled='disabled'], html.the .warn.strong.button:hover:active[disabled='disabled'], html.the .warn.strong.menuitem:hover:active[disabled='disabled'] {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;

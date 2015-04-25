@@ -38,7 +38,7 @@ namespace Qorpent.Utils {
 		///		Используемый парсер BXL
 		/// </summary>
 		public IBxlParser BxlParser {
-			get { return _bxlParser ?? (_bxlParser = WellKnownHelper.Create<IBxlParser>()); }
+			get { return _bxlParser ?? (_bxlParser = new BxlParser()); }
 			set { _bxlParser = value; }
 		}
 		/// <summary>

@@ -35,7 +35,6 @@ using System.Threading;
 using System.Xml.Linq;
 using Microsoft.SqlServer.Server;
 using Qorpent.Utils.Extensions;
-using IOException = Qorpent.IO.IOException;
 
 namespace Qorpent.Integration.SqlExtensions {
 	/// <summary>
@@ -88,7 +87,7 @@ namespace Qorpent.Integration.SqlExtensions {
 
 			var filename = Path.Combine(GeneratorsDirectory, code.Value + ".xml");
 			if (File.Exists(filename)) {
-				throw new IOException("generator with given code already existed");
+				throw new Exception("generator with given code already existed");
 			}
 			using (var f = new FileLock(filename)) {
 				f.WriteFile(DefineGeneratorXml(seed.Value, offset.Value).ToString());
@@ -113,7 +112,7 @@ namespace Qorpent.Integration.SqlExtensions {
 			var filename = Path.Combine(GeneratorsDirectory, code.Value + ".xml");
 
 			if (!File.Exists(filename)) {
-				throw new IOException("generator not existed");
+				throw new Exception("generator not existed");
 			}
 			long result = 0;
 			using (var f = new FileLock(filename)) {
@@ -131,14 +130,14 @@ namespace Qorpent.Integration.SqlExtensions {
 			Directory.CreateDirectory(GeneratorsDirectory);
 			var syslocker = Path.Combine(GeneratorsDirectory, SysLockFileName + ".lock");
 			if (File.Exists(syslocker)) {
-				throw new IOException("generator's file system is locked");
+				throw new Exception("generator's file system is locked");
 			}
 		}
 
 		private static void CheckAnyFileLock() {
 			Directory.CreateDirectory(GeneratorsDirectory);
 			if (Directory.GetFiles(GeneratorsDirectory, "*.lock").Length != 0) {
-				throw new IOException("generators are busy");
+				throw new Exception("generators are busy");
 			}
 		}
 
@@ -287,7 +286,7 @@ end
 					trycount--;
 				}
 				if (0 == trycount) {
-					throw new IOException("cannot lock generator file, retry , but may be U need call to GeneratorUnlock to fix it");
+					throw new Exception("cannot lock generator file, retry , but may be U need call to GeneratorUnlock to fix it");
 				}
 
 				dropblockondispose = true;
@@ -320,7 +319,7 @@ end
 					Thread.Sleep(10);
 				}
 				if (0 == trycount) {
-					throw new IOException("cannot wait while lock file have to be free");
+					throw new Exception("cannot wait while lock file have to be free");
 				}
 				File.WriteAllText(locker, mylock);
 				var checkstillmy = File.ReadAllText(locker);

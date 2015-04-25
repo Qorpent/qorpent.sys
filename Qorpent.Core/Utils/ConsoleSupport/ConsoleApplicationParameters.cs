@@ -306,7 +306,7 @@ namespace Qorpent.Utils{
 		    var bxl = new BxlParser();
 #else
 			var compiler = WellKnownHelper.Create<IBSharpCompiler>();
-			var bxl = WellKnownHelper.Create<IBxlParser>();
+			var bxl = new BxlParser();
 #endif
 			var sources = bsconfigs.Select(_ => bxl.Parse(File.ReadAllText(_), _)).ToArray();
 			var context = compiler.Compile(sources,(IBSharpContext)null);

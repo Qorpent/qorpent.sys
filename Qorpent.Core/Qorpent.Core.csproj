@@ -132,6 +132,11 @@
     <Compile Include="Data\DbParameter.cs" />
     <Compile Include="Data\SqlDialect.cs" />
     <Compile Include="Data\SqlObjectType.cs" />
+    <Compile Include="Dsl\Bxl\BxlGenerator.cs" />
+    <Compile Include="Dsl\Bxl\BxlParser.cs" />
+    <Compile Include="Dsl\Bxl\BxlService.cs" />
+    <Compile Include="Dsl\Bxl\MyBxl.cs" />
+    <Compile Include="Dsl\Bxl\ReadMode.cs" />
     <Compile Include="Dsl\ReplaceDescriptor.cs" />
     <Compile Include="Experiments\Constants.cs" />
     <Compile Include="Experiments\IJsonSerializable.cs" />

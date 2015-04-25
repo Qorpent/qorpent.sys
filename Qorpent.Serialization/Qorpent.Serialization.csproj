@@ -59,8 +59,6 @@
     <Compile Include="BSharp\Runtime\BSharpFileBasedClassProvider.cs" />
     <Compile Include="BSharp\Runtime\BSharpGenericClassProvider.cs" />
     <Compile Include="BSharp\Runtime\BSharpLibraryClassProvider.cs" />
-    <Compile Include="Bxl\BxlParser.cs" />
-    <Compile Include="Bxl\ReadMode.cs" />
     <Compile Include="IntermediateFormat\IntermediateFormatDocument.cs" />
     <Compile Include="IntermediateFormat\IntermediateFormatException.cs" />
     <Compile Include="IntermediateFormat\IntermediateFormatInvalidQueryException.cs" />
@@ -159,9 +157,6 @@
     <Compile Include="BSharp\BSharpJsonCompiler.cs" />
     <Compile Include="Serialization\bxlSerializer.cs" />
     <Compile Include="Serialization\bxlSerializerImpl.cs" />
-    <Compile Include="Bxl\BxlGenerator.cs" />
-    <Compile Include="Bxl\BxlService.cs" />
-    <Compile Include="Bxl\MyBxl.cs" />
     <Compile Include="Serialization\ContainerInfo.cs" />
     <Compile Include="Serialization\ISerializerImpl.cs" />
     <Compile Include="Serialization\jsonSerializer.cs" />
@@ -200,6 +195,7 @@
     <EmbeddedResource Include="BSharp\Preprocessor\preprocessor.bxls" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Bxl\" />
     <Folder Include="CodeGen\" />
   </ItemGroup>
 </Project>

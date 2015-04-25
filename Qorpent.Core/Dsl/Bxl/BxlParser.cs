@@ -142,15 +142,11 @@ namespace Qorpent.Bxl {
 			if (!options.HasFlag(BxlParserOptions.NoLexData)){
 				_root.SetAttr("_file", filename);
 			}
-#if !EMBEDQPT
-			if (options.HasFlag(BxlParserOptions.BSharp)) {
-				_root = CompileWithBSharp(options, _root);
-			}
 
-			else if (options.HasFlag(BxlParserOptions.PerformInterpolation)) {
+            if (options.HasFlag(BxlParserOptions.PerformInterpolation)) {
 			    _root = _root.Interpolate();
 			}
-#endif
+
 			return _root;
 		}
 #if !EMBEDQPT
@@ -199,34 +195,7 @@ namespace Qorpent.Bxl {
 			_current = _root;
 			_mode = ReadMode.Start;
 		}
-#if !EMBEDQPT
-		private static XElement CompileWithBSharp(BxlParserOptions options, XElement result) {
-			var compileroptions = new BSharpConfig {
-				UseInterpolation = options.HasFlag(BxlParserOptions.PerformInterpolation),
-				SingleSource =  true
-			};
-			var compileresult = BSharpCompiler.Compile(new[] { result },compileroptions);
-			var newresult = new XElement("bsharp");
 
-			foreach (var w in compileresult.Get(BSharpContextDataType.Working)) {
-				var copy = new XElement(w.Compiled);
-				if (null != w.Error) {
-					copy.AddFirst(new XElement("error", new XText(w.Error.ToString())));
-				}
-				newresult.Add(copy);
-			}
-			var e = new XElement("errors");
-			foreach (var er in compileresult.GetErrors()) {
-				e.Add(XElement.Parse(new XmlSerializer().Serialize("error", er)).Element("error"));
-			}
-			if (e.HasElements) {
-				newresult.Add(e);
-			}
-			result = newresult;
-			return result;
-		}
-
-#endif
 
 		//		processing current state
 
