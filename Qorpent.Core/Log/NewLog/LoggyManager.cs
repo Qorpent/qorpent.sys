@@ -17,6 +17,7 @@ namespace Qorpent.Log.NewLog {
                 var l = new DefaultLoggy {Name = n};
                 if (n != "default") {
                     l.SubLoggers.Add(Get());
+                    l.Level = Get().Level;
                 }
                 else {
                     l.Isolated = true;
