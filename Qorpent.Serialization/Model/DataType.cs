@@ -134,21 +134,22 @@ namespace Qorpent.Scaffolding.Model{
 			};
             result["float"] = new DataType {
                 Code = "float",
-                CSharpDataType = "double",
+                CSharpDataType = "Double",
                 SqlDataTypes ={
 					{SqlDialect.Ansi, new SqlDataType{Name = "float"}},
 					{SqlDialect.SqlServer, new SqlDataType{Name = "float"}},
 					{SqlDialect.PostGres, new SqlDataType{Name = "float"}},
 				}
             };
+           
             result["double"] = new DataType
             {
                 Code = "double",
-                CSharpDataType = "double",
+                CSharpDataType = "Double",
                 SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "double"}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "double"}},
-					{SqlDialect.PostGres, new SqlDataType{Name = "double"}},
+					{SqlDialect.Ansi, new SqlDataType{Name = "float"}},
+					{SqlDialect.SqlServer, new SqlDataType{Name = "float"}},
+					{SqlDialect.PostGres, new SqlDataType{Name = "float"}},
 				}
             };
             result["long"] = new DataType {

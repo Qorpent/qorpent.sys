@@ -200,7 +200,7 @@ namespace Qorpent.Scaffolding.Model.CodeWriters{
 				if (ormField.IsReference && ormField.ReferenceClass.TargetClass == null){
 					cond = "if(!reader.IsDBNull("+i+"))";
 				}
-			    if (type == "Int64" && name.ToLowerInvariant() == "id") {
+			    if (type == "Int64") {
 
                     o.WriteLine("\t\t\t\t" + cond + "result." + name + " = Convert.To" + type + "(reader.GetValue("+i+"));");
 			    }
