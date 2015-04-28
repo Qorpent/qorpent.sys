@@ -34,7 +34,7 @@ namespace Qorpent.Data.Installer {
         /// </summary>
         public string Schema {
             get {
-                if (options.ContainsKey("schema")) {
+                if (ContainsKey("schema")) {
                     return Get("schema", "qorpent");
                 }
                 if (null != Source && null != Source.Header) {

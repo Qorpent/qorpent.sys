@@ -22,7 +22,7 @@ namespace Qorpent.IO.Http {
 
         public override void Close() {
             if(NoCloseStream)return;
-            
+            WasClosed = true;
             _response.Close();
         }
 

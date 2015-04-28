@@ -1,0 +1,381 @@
+using System;
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+using Qorpent.Utils.Extensions;
+
+namespace Qorpent.Config {
+    public class Scope : IScope {
+
+        public Scope() {
+            
+        }
+        public Scope(params object[] sources) {
+            foreach (var source in sources) {
+                if (source is IScope)
+                {
+                    if (!_parents.Contains(source)) {
+                        _parents.InsertFirst((IScope)source);
+                    }
+                }
+                else if (source is XElement)
+                {
+                    var x = (XElement)source;
+                    this["__xmlname"] = x.Name.LocalName;
+                    if (!x.HasElements && !string.IsNullOrEmpty(x.Value))
+                    {
+                        this["__xmlvalue"] = x.Value;
+                    }
+                    foreach (var attribute in x.Attributes())
+                    {
+                        this[attribute.Name.LocalName] = attribute.Value;
+                    }
+                }
+                else
+                {
+                    var dict = source.ToDict();
+                    foreach (var o in dict)
+                    {
+                        this[o.Key] = o.Value;
+                    }
+                }
+            }
+           
+        }
+        private ScopeOptions _options = new ScopeOptions();
+        private readonly IList<IScope> _parents = new List<IScope>();
+        private readonly IDictionary<string, object> _storage = new ConcurrentDictionary<string, object>();
+        private bool _useInheritance =true;
+
+        public ScopeOptions Options {
+            get { return _options; }
+            set { _options = value; }
+        }
+
+        public T Get<T>(string key, T def = default(T), ScopeOptions options = null) {
+            var result = Get(key, options);
+            if (null == result) {
+                return def;
+            }
+            return result.To<T>();
+        }
+
+        public IEnumerator<KeyValuePair<string, object>> GetEnumerator() {
+            IList<string> processedKeys = new List<string>();
+            foreach (var pair in _storage) {
+                processedKeys.Add(pair.Key);
+                yield return pair;
+            }
+            if (UseInheritance) {
+                foreach (var parent in _parents) {
+                    foreach (var pair in parent) {
+                        if (processedKeys.Contains(pair.Key)) {
+                            continue;
+                        }
+                        processedKeys.Add(pair.Key);
+                        yield return pair;
+                    }
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
+        }
+
+        public void Add(KeyValuePair<string, object> item) {
+            _storage.Add(item);
+        }
+
+        public void Clear() {
+            _storage.Clear();
+        }
+
+        public bool Contains(KeyValuePair<string, object> item) {
+            if (_storage.Contains(item)) {
+                return true;
+            }
+            if (UseInheritance) {
+                return _parents.Any(_ => _.Contains(item));
+            }
+            return false;
+        }
+
+        public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex) {
+            if (null == array) {
+                throw new ArgumentNullException("array");
+            }
+            var idx = arrayIndex;
+            if (idx < 0) {
+                throw new ArgumentOutOfRangeException("arrayIndex");
+            }
+            foreach (var item in this) {
+                if (idx >= array.Length) {
+                    throw new ArgumentException("source size exceed given array", "array");
+                }
+                array[idx] = item;
+                idx++;
+            }
+        }
+
+        public bool Remove(KeyValuePair<string, object> item) {
+            if (_storage.Remove(item)) {
+                return true;
+            }
+
+            if (UseInheritance) {
+                return _parents.Any(parent => parent.Remove(item));
+            }
+
+            return false;
+        }
+
+        public int Count {
+            get {
+                IList<string> processedKeys = _storage.Select(pair => pair.Key).ToList();
+                if (UseInheritance) {
+                    foreach (var pair in 
+                        _parents.SelectMany(parent => parent.Where(pair => !processedKeys.Contains(pair.Key)))) {
+                        processedKeys.Add(pair.Key);
+                    }
+                }
+                return processedKeys.Count;
+            }
+        }
+
+        public bool IsReadOnly {
+            get { return false; }
+        }
+
+        public bool ContainsKey(string key) {
+            return ContainsKey(key, Options);
+        }
+
+        public void Add(string key, object value) {
+            Set(key, value);
+        }
+
+        public bool Remove(string key) {
+            return _storage.Remove(key);
+        }
+
+        public bool TryGetValue(string key, out object value) {
+            value = null;
+            if (ContainsKey(key)) {
+                value = Get(key, Options);
+                return true;
+            }
+            return false;
+        }
+
+        public object this[string key] {
+            get { return Get(key, Options); }
+            set { Set(key, value); }
+        }
+
+        public ICollection<string> Keys {
+            get {
+                IList<string> processedKeys = _storage.Select(pair => pair.Key).ToList();
+                if (UseInheritance) {
+                    foreach (
+                        var pair in
+                            _parents.SelectMany(parent => parent.Where(pair => !processedKeys.Contains(pair.Key)))) {
+                        processedKeys.Add(pair.Key);
+                    }
+                }
+                return processedKeys;
+            }
+        }
+
+        public ICollection<object> Values {
+            get {
+                IList<string> processedKeys = new List<string>();
+                IList<object> result = new List<object>();
+                foreach (var pair in _storage) {
+                    processedKeys.Add(pair.Key);
+                    result.Add(pair.Value);
+                }
+                if (UseInheritance) {
+                    foreach (
+                        var pair in
+                            _parents.SelectMany(parent => parent.Where(pair => !processedKeys.Contains(pair.Key)))) {
+                        processedKeys.Add(pair.Key);
+                        result.Add(pair.Value);
+                    }
+                }
+                return result;
+            }
+        }
+
+        public bool UseInheritance {
+            get { return _useInheritance; }
+            set { _useInheritance = value; }
+        }
+
+        public void Set(string key, object value) {
+            if (null == key) {
+                throw new ArgumentNullException("key");
+            }
+            _storage[key] = value;
+        }
+
+        public object Get(string key, ScopeOptions options = null) {
+            options = options ?? Options;
+            if (NativeContainsKey(key, options)) {
+                return NativeGet(key, options);
+            }
+            if (-1 != key.IndexOfAny(new[] {'.', '^'})) {
+                options = options.Copy();
+                var skips = 0;
+                foreach (var c in key) {
+                    if (c == '.') {
+                        options.SkipResults++;
+                        skips++;
+                    }
+                    else if (c == '^') {
+                        options.SkipLevels++;
+                        skips++;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                var correctedkey = key.Substring(skips);
+                return NativeGet(correctedkey, options);
+            }
+            return null;
+        }
+
+        public bool ContainsKey(string key, ScopeOptions options) {
+            if (null == key) {
+                return false;
+            }
+            var result = NativeContainsKey(key, options);
+            if(!result && (key.StartsWith(".") || key.StartsWith("^")))
+            {
+                var eval = Get(key, options);
+                if (null != eval) return true;
+            }
+            return result;
+        }
+
+        private bool NativeContainsKey(string key, ScopeOptions options) {
+            options = options ?? Options;
+            key = key.Simplify(options.KeySimplification);
+
+            return  GetKeys(options).Any(_ => key == _.Simplify(options.KeySimplification));
+            
+        }
+
+        public IEnumerable<string> GetKeys(ScopeOptions options = null) {
+            options = options ?? Options;
+            IList<string> processedkeys = new List<string>();
+            if (options.SkipLevels == 0) {
+                foreach (var o in _storage.Keys) {
+                    processedkeys.Add(o);
+                    yield return o;
+                }
+            }
+            if (options.UseInheritance && UseInheritance) {
+                foreach (var parent in _parents) {
+                    foreach (var key in parent.GetKeys(options)) {
+                        if (processedkeys.Contains(key)) {
+                            continue;
+                        }
+                        processedkeys.Add(key);
+                        yield return key;
+                    }
+                }
+            }
+        }
+
+        public void AddParent(IScope parent) {
+            
+            if (null != parent && !_parents.Contains(parent) && this!=parent) {
+                _parents.Add(parent);
+            }
+        }
+
+        public void RemoveParent(IScope parent) {
+            _parents.Remove(parent);
+        }
+
+        public IEnumerable<IScope> GetParents() {
+            return _parents.ToArray();
+        }
+
+        public void ClearParents() {
+            _parents.Clear();
+        }
+
+        public void Stornate() {
+
+            foreach (
+                var pair in
+                    _parents.Reverse()
+                        .ToArray()
+                        .SelectMany(parent => parent.Where(pair => !_storage.ContainsKey(pair.Key)))) {
+                _storage[pair.Key] = pair.Value;
+            }
+        }
+
+        object IScope.this[string key, ScopeOptions options] {
+            get { return Get(key, options); }
+        }
+
+        private object NativeGet(string key, ScopeOptions options) {
+            if (null == key) {
+                return null;
+            }
+            options = options ?? Options;
+            var resultCount = options.ResultCount;
+            object result = null;
+            if (options.SkipLevels == 0) {
+                var localkey = FindKey(key, options);
+                if (null != localkey) {
+                    result = _storage[localkey];
+                    resultCount ++;
+                }
+            }
+            if (result != null && options.SkipResults < resultCount) {
+                return result;
+            }
+            if (options.UseInheritance && UseInheritance) {
+                var parentOptions = options.LevelUp(resultCount);
+                var usableParent = _parents.FirstOrDefault(_ => _.ContainsKey(key, parentOptions));
+                if (null != usableParent) {
+                    result = usableParent.Get(key, parentOptions);
+                    if (null != result) {
+                        return result;
+                    }
+                }
+            }
+            if (null != result && options.LastOnSkipOverflow) {
+                return result;
+            }
+            return null;
+        }
+
+        private string FindKey(string key, ScopeOptions options) {
+            if (null == key) {
+                return null;
+            }
+            key = key.Simplify(options.KeySimplification);
+            return _storage.Keys.FirstOrDefault(_ => key == _.Simplify(options.KeySimplification));
+        }
+        /// <summary>
+        /// ConfigBase - compatible set parent method
+        /// </summary>
+        /// <param name="cfgbase"></param>
+        public void SetParent(IScope parentScope) {
+            ClearParents();
+            AddParent(parentScope);
+        }
+
+        public IScope GetParent() {
+            return _parents.FirstOrDefault();
+        }
+    }
+}

@@ -12,7 +12,8 @@ namespace Qorpent.Config {
 	/// <summary>
 	///     Базовый класс для конфигураций
 	/// </summary>
-	public partial class ConfigBase : IConfig, ICollection {
+    [Obsolete("Use Scope instead")]
+    public partial class ConfigBase : IConfig, ICollection {
         /// <summary>
         ///     Внутренний экземпляр переменной, определяющий поддержку наследования
         /// </summary>
@@ -277,22 +278,6 @@ namespace Qorpent.Config {
 		/// <returns></returns>
 		public IConfig GetParent() {
 			return _parent;
-		}
-		/// <summary>
-		/// Возвращает имена всех опций
-		/// </summary>
-		/// <param name="withParent"></param>
-		/// <returns></returns>
-		public IEnumerable<string> GetNames(bool withParent = false) {
-			if (!withParent || null == _parent) {
-			    return options.Keys;
-			}
-
-		    if (_useInheritance) {
-		        return options.Keys.Union(_parent.GetNames(true)).Distinct();
-		    }
-
-            return new List<string>();
 		}
 
 		/// <summary>

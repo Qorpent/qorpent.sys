@@ -1,10 +1,12 @@
+using System;
 using System.Collections.Generic;
 
 namespace Qorpent.Config {
 	/// <summary>
 	///     Описатель абстрактного конфига
 	/// </summary>
-	public interface IConfig : IDictionary<string, object> {
+	[Obsolete("Use IScope instead")]
+    public interface IConfig : IDictionary<string, object> {
 		/// <summary>
 		///     Устанавливает родительский конфиг
 		/// </summary>
@@ -29,18 +31,7 @@ namespace Qorpent.Config {
 		/// </summary>
 		/// <returns></returns>
 		IConfig GetParent();
-		/// <summary>
-		///     Возвращает имена всех опций
-		/// </summary>
-		/// <param name="withParent"></param>
-		/// <returns></returns>
-		IEnumerable<string> GetNames(bool withParent = false);
-		/// <summary>
-		///     Сериализация конфига в заданном формате
-		/// </summary>
-		/// <param name="rendertype"></param>
-		/// <returns></returns>
-		string ToString(ConfigRenderType rendertype);
+
 
 		/// <summary>
 		/// Заморозка
@@ -51,9 +42,5 @@ namespace Qorpent.Config {
 		/// </summary>
 		void Stornate();
 
-		/// <summary>
-		/// Сброс родительского конфига
-		/// </summary>
-		void RemoveParent();
 	}
 }

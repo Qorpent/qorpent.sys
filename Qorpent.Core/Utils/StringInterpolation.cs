@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils
@@ -60,13 +61,12 @@ namespace Qorpent.Utils
 		/// <param name="source2"></param>
 		/// <param name="controlkey"></param>
 		/// <returns></returns>
-		public string Interpolate(string target, object source = null, IDictionary<string,object> source2 = null, string controlkey = null){
+		public string Interpolate(string target, object source = null, IDictionary<string,object> source2 = null, string controlkey = null) {
 			if (string.IsNullOrEmpty(target)) return target;
 			if (-1 == target.IndexOf(AncorSymbol)) return target;
 			if (-1 == target.IndexOf('{')) return target;
 			if (-1 == target.IndexOf('}')) return target;
-			//оптимизация возврата исходной строки где нет вообще контента
-			_source2 = source2;
+		
 			if (string.IsNullOrWhiteSpace(target)) {
 				return target;
 			}

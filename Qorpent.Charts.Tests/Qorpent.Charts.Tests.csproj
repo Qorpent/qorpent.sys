@@ -24,7 +24,6 @@
     <Compile Include="BrickScale\DataColonNormalizer\DataColonTestBase.cs" />
     <Compile Include="ChartExtensionsTests.cs" />
     <Compile Include="Charts\ChartExtensionsTests.cs" />
-    <Compile Include="ComdivTests.cs" />
     <Compile Include="Dot\ColorTest.cs" />
     <Compile Include="Dot\DotLanguageUtilsTest.cs" />
     <Compile Include="Dot\DotRenderTest.cs" />

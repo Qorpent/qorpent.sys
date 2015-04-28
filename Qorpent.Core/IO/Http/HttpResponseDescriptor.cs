@@ -25,6 +25,8 @@ namespace Qorpent.IO.Http {
             return (HttpResponseDescriptor) context.Response;
         }
 
+        public bool WasClosed { get; set; }
+
         public virtual void SetHeader(string name, string value) {
             if (null != Headers) {
 
@@ -124,6 +126,7 @@ namespace Qorpent.IO.Http {
 
             if (null != this.Stream && !NoCloseStream) {
                 this.Stream.Close();
+                WasClosed = true;
             }
         }
 

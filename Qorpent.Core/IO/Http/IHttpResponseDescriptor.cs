@@ -14,6 +14,7 @@ namespace Qorpent.IO.Http {
         Encoding ContentEncoding { get; set; }
         CookieCollection Cookies { get; set; }
         bool NoCloseStream { get; set; }
+        bool WasClosed { get; set; }
         void SetHeader(string name, string value);
         string GetETag();
         void SetETag(string etag);

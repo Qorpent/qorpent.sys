@@ -6,7 +6,7 @@ using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.Tasks {
-    public class Job : ConfigBase, IJob {
+    public class Job : Scope, IJob {
         private IUserLog _log = StubUserLog.Default;
         private int _maxIteration = 3;
         protected bool wasInitialized;

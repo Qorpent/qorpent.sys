@@ -271,8 +271,7 @@ namespace Qorpent.Utils.Extensions {
                 result = result.LfOnly();
             }
             var sb = new StringBuilder();
-            foreach(var c in result)
-            {
+            foreach(var c in result) {
                 if (char.IsWhiteSpace(c)) {
                     if (c == '\r' || c == '\n') {
                         if (!options.HasFlag(SimplifyOptions.NoNewLines)) {
@@ -283,7 +282,19 @@ namespace Qorpent.Utils.Extensions {
                         if (!options.HasFlag(SimplifyOptions.NoInlineWs)) {
                             sb.Append(c);
                         }
-                        
+
+                    }
+                }
+                else if (c == '_') {
+                    if (!options.HasFlag(SimplifyOptions.NoUndescores)) {
+                        sb.Append(c);
+                    }
+                }
+                else if (c == '-')
+                {
+                    if (!options.HasFlag(SimplifyOptions.NoDashes))
+                    {
+                        sb.Append(c);
                     }
                 }
                 else if (c == '"' || c == '«' || c == '»') {

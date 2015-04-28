@@ -20,6 +20,7 @@
   <ItemGroup>
     <Compile Include="AuthProtocolTest.cs" />
     <Compile Include="BasicServerTests.cs" />
+    <Compile Include="DistinctContextPerformance.cs" />
     <Compile Include="HostConfigTests.cs" />
     <Compile Include="HttpProxizeMode.cs" />
     <Compile Include="MemoryQWebTest.cs" />

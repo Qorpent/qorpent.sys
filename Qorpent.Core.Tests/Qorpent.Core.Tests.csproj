@@ -30,6 +30,7 @@
     <Compile Include="BSharp\Runtime\BSharpRuntimeTestBase.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptorTests.cs" />
     <Compile Include="ConfigBaseTest.cs" />
+    <Compile Include="ScopeConfigBaseEqualityTest.cs" />
     <Compile Include="Data\DbCommandExecutorTest.cs" />
     <Compile Include="Data\FakeConnectionProvider.cs" />
     <Compile Include="Data\OfflineDbCommandExecutorTest.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Model\EntityTagTest.cs" />
     <Compile Include="Model\HierarchyExtensionTest.cs" />
     <Compile Include="Mvc\MvcCallInfoTest.cs" />
+    <Compile Include="ScopeImprovementsTest.cs" />
     <Compile Include="Security\StubIWithRole.cs" />
     <Compile Include="Security\StubPrincipalSource.cs" />
     <Compile Include="Security\StubRoleResolver.cs" />

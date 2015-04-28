@@ -127,8 +127,6 @@
     <Compile Include="Report\ReportFactoryConfig.cs" />
     <Compile Include="Report\ReportQuery.cs" />
     <Compile Include="Report\TitleParams.cs" />
-    <Compile Include="Serialization\DotScriptSerializer.cs" />
-    <Compile Include="Serialization\DotSvgSerializer.cs" />
     <Compile Include="Json\CType.cs" />
     <Compile Include="Json\JsonArray.cs" />
     <Compile Include="Json\JsonObject.cs" />

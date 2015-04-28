@@ -580,10 +580,7 @@ class custom abstract
 			Assert.AreEqual(2, result.Working.Count);
 			var xml = result.Get("A").Compiled;
 			Console.WriteLine(xml);
-			Console.WriteLine("=================================");
-			Console.WriteLine(result.Get("A").ParamSourceIndex.ToString(ConfigRenderType.SimpleBxl));
-			Console.WriteLine("=====================================");
-			Console.WriteLine(result.Get("A").ParamIndex.ToString(ConfigRenderType.SimpleBxl));
+			
 			Assert.AreEqual("34ZZZ2", xml.Attr("x"));
 			Assert.AreEqual("34ZZZ234ZZZ2", xml.Attr("y"));
 			Assert.AreEqual("34ZZZ234ZZZ2!", xml.Attr("z"));

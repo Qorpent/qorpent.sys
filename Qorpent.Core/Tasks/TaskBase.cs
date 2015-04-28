@@ -8,7 +8,7 @@ namespace Qorpent.Tasks {
     /// <summary>
     ///     Описывает абстракцию обновляемого модуля
     /// </summary>
-    public abstract class TaskBase : ConfigBase, ITask {
+    public abstract class TaskBase : Scope, ITask {
         private IUserLog _log = StubUserLog.Default;
         private TaskState _state;
         private readonly IList<ITask> _requiredModules = new List<ITask>();

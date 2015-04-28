@@ -14,6 +14,10 @@ namespace Qorpent.Utils.Extensions {
         LowerCase = 32,
         Default = Trim | LfOnly ,
 
-        Full = Trim | NoWs | SingleQuotes | LowerCase
+        NoUndescores = 64,
+        NoDashes = 128,
+
+        Full = Trim | NoWs | SingleQuotes | LowerCase | NoUndescores | NoDashes,
+        
     }
 }

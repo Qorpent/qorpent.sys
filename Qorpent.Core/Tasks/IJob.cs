@@ -3,7 +3,7 @@ using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.Tasks {
-    public interface IJob : IConfig {
+    public interface IJob : IScope {
         IUserLog Log { get; set; }
         IDictionary<string, ITask> Tasks { get; }
 

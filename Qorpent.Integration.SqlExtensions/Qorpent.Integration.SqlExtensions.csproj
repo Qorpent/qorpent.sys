@@ -41,12 +41,6 @@
     <Compile Include="..\Qorpent.Core\Config\IXmlConfigSource.cs">
       <Link>ImportCode\IXmlConfigSource.cs</Link>
     </Compile>
-    <Compile Include="..\Qorpent.Core\Config\TreeConfigBase.cs">
-      <Link>ImportCode\TreeConfigBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Config\TreeConfigBaseElementsList.cs">
-      <Link>ImportCode\TreeConfigBaseElementsList.cs</Link>
-    </Compile>
     <Compile Include="..\Qorpent.Core\CoreExtensions.cs">
       <Link>UsedCode\CoreExtensions.cs</Link>
     </Compile>
@@ -331,9 +325,6 @@
     </Compile>
     <Compile Include="..\Qorpent.Core\Utils\Experiments\StringUtils.cs">
       <Link>ImportCode\StringUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Utils\Extensions\ConfigExtensions.cs">
-      <Link>ImportCode\ConfigExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Qorpent.Core\Utils\Extensions\DatabaseEngineType.cs">
       <Link>ImportCode\DatabaseEngineType.cs</Link>

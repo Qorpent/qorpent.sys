@@ -104,8 +104,8 @@ namespace Qorpent.Data.Installer {
             }
         }
 
-        private static IConfig InitializeBaseConfig(XElement serverDefinition, IBSharpContext context, string logicalServerName) {
-            var result = new ConfigBase();
+        private static IScope InitializeBaseConfig(XElement serverDefinition, IBSharpContext context, string logicalServerName) {
+            var result = new Scope();
             result["definition"] = serverDefinition;
             result["baseservername"] = serverDefinition.ChooseAttr("server", "code");
             result["servername"] = logicalServerName;
@@ -147,7 +147,7 @@ namespace Qorpent.Data.Installer {
         /// </summary>
         /// <param name="definition"></param>
         /// <returns></returns>
-        public static IJob CreateDatabaseInstallation(XElement definition, IConfig context = null) {
+        public static IJob CreateDatabaseInstallation(XElement definition, IScope context = null) {
             var dbname = definition.ChooseAttr("dbname", "code");
             var job = Create(dbname);
             if(null!=context)job.SetParent(context);
@@ -160,7 +160,8 @@ namespace Qorpent.Data.Installer {
         /// <param name="job"></param>
         /// <param name="definition"></param>
         /// <param name="context"></param>
-        public static void Setup(IJob job, XElement definition, IConfig context) {
+        public static void Setup(IJob job, XElement definition, IScope context)
+        {
             Setup(job); //apply initial setup
             job["database"] = definition.ChooseAttr("dbname", "code");
             foreach (var element in definition.Elements()) {
@@ -184,7 +185,8 @@ namespace Qorpent.Data.Installer {
             }
         }
 
-        private static void SetupModel(IJob job, XElement definition, IConfig context, bool schema, bool data) {
+        private static void SetupModel(IJob job, XElement definition, IScope context, bool schema, bool data)
+        {
             var info = GetTaskInfo(job, definition);
             if (!info.Proceed) return;
             if (schema) {
@@ -199,7 +201,8 @@ namespace Qorpent.Data.Installer {
 
         }
 #if !UNIX
-        private static void SetupAssembly(IJob job, XElement definition, IConfig context) {
+        private static void SetupAssembly(IJob job, XElement definition, IScope context)
+        {
             var info = GetTaskInfo(job, definition);
             if(!info.Proceed)return;
             job.Tasks[info.Key] = new AssemblyDbUpdateTask(info.Name) {Job = job,Name=info.Key};
@@ -236,7 +239,8 @@ namespace Qorpent.Data.Installer {
                 Value = definition.Value
             };
         }
-        private static void SetupScript(IJob job, XElement definition, IConfig context) {
+        private static void SetupScript(IJob job, XElement definition, IScope context)
+        {
             var info = GetTaskInfo(job, definition);
             if (!info.Proceed) return;
             ITask task;
