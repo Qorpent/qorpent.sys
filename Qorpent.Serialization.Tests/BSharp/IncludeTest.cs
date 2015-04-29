@@ -41,7 +41,7 @@ class B
 			var @code = @"
 class a
 	include all t
-		where g&+=""default ${..code}""
+		where g&+=""default ${.code}""
 class _t prototype=t abstract
 _t X g='default'
 _t Y g='a'

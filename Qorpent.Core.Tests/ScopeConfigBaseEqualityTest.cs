@@ -78,6 +78,43 @@ namespace Qorpent.Core.Tests
             Assert.IsNull(cfgchild.Get<object>("a"));
         }
 
+        [Test]
+        public void DefaultOneDotBehaviorOn3DLevel() {
+            var s1 = new Scope(new {code = 1});
+            var s2 = new Scope(new {code = 2},s1);
+            var s3 = new Scope(new {}, s2);
+            Assert.AreEqual(2,s3["code"]);
+            Assert.AreEqual(1,s3[".code"]);
+        }
+
+        [Test]
+        public void DefaultOneDotBehaviorOn2DLevel()
+        {
+            var s2 = new Scope(new { code = 2 });
+            var s3 = new Scope(new { }, s2);
+
+            Assert.AreEqual(2, s3[".code"]);
+        }
+
+        [Test]
+        public void DefaultZeroOnNonCompatibleNestWithOption()
+        {
+            var s2 = new Scope(new { });
+            var s3 = new Scope(new {code=1 }, s2);
+            Assert.AreEqual(1, s3["code"]);
+            Assert.AreEqual(null, s3[".code"]);
+        }
+
+
+        [Test]
+        public void DefaultZeroOnNonCompatibleNestWithNonDefaultOption()
+        {
+            var s2 = new Scope(new { });
+            var s3 = new Scope(new { code = 1 }, s2);
+            Assert.AreEqual(1, s3["code"]);
+            Assert.AreEqual(1, s3.Get("code",new ScopeOptions{TreatFirstDotAsLevelUp = false}));
+        }
+
 	    [Test]
 	    public void CanBeUsedInInterpolation() {
 	        var parent = new Scope(new {a = 1});
@@ -100,6 +137,7 @@ namespace Qorpent.Core.Tests
 			childcfg.SetParent(basecfg);
 			childcfg.Set("a", 2);
 			childcfg.Set("b", 3);
+           
 			IDictionary<string, object> dict = childcfg;
 			CollectionAssert.AreEquivalent(new[]{"a","b","c"},dict.Keys);
 			CollectionAssert.AreEquivalent(new[]{2,4,3},dict.Values);

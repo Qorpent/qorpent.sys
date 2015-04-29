@@ -250,17 +250,10 @@ namespace Qorpent {
             if (-1 != key.IndexOfAny(new[] {'.', '^'})) {
                 options = options.Copy();
                 var skips = 0;
-                bool wasdot = false;
                 foreach (var c in key) {
                     if (c == '.') {
-                        if (!wasdot && options.TreatFirstDotAsLevelUp) {
-                            options.SkipLevels++;
-                        }
-                        else {
-                            options.SkipResults++; 
-                        }
-                        wasdot = true;
-                        
+
+                        options.SkipResults++;                     
                         skips++;
                     }
                     else if (c == '^') {
@@ -382,6 +375,7 @@ namespace Qorpent {
             }
             if (options.UseInheritance && UseInheritance) {
                 var parentOptions = options.LevelUp(resultCount);
+                
                 var usableParent = _parents.FirstOrDefault(_ => _.ContainsKey(key, parentOptions));
                 if (null != usableParent) {
                     result = usableParent.Get(key, parentOptions);
@@ -391,6 +385,9 @@ namespace Qorpent {
                 }
             }
             if (null != result && options.LastOnSkipOverflow) {
+                if (options.TreatFirstDotAsLevelUp && resultCount == 1 && options.Level==0) {
+                    return null;
+                }
                 return result;
             }
             return null;

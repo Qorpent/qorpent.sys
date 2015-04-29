@@ -24,11 +24,14 @@ namespace Qorpent {
                     result.UseInheritance = false;
                 }
             }
+            result.Level++;
            
             result.ResultCount = resultCount;
 
             return result;
         }
+
+        public int Level;
 
         public ScopeOptions Copy() {
             return (ScopeOptions) MemberwiseClone();

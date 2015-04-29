@@ -301,6 +301,14 @@ e
 			Assert.AreEqual("111z111", x.Element("b").Attribute("z").Value);
 
 		}
+
+        [Test]
+        public void BUG_InterpolateParentedWithNoOverhead2()
+        {
+            var result = XElement.Parse("<a code='2'><x code='1'><b x='${.code}'/></x></a>").Interpolate();
+            Console.WriteLine(result);
+            Assert.AreEqual(@"<acode='2'><xcode='1'><bx='2'/></x></a>", result.ToString().Simplify(SimplifyOptions.Full));
+        }
 		/// <summary>
 		/// Простой проброс интрполяции вниз с явной ссылкой на родительский атрибут
 		/// </summary>
