@@ -65,7 +65,16 @@ namespace Qorpent.Log.NewLog {
         }
 
         public string GetExceptionString(Exception ex) {
-            return ex.GetType() + ": " + ex.Message;
+			var result = ex.GetType() + ": " + ex.Message;
+	        var aggregate = ex as AggregateException;
+			if (aggregate != null) {
+				result += "\n";
+				foreach (var exception in aggregate.InnerExceptions) {
+					var message = exception.ToString();
+					result += "\t" + message.Replace("\r\n", "\n").Replace("\n", "\n\t") + "\n";
+				}
+			}
+	        return result;
         }
 
         [Inject]
