@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
@@ -19,9 +20,7 @@ namespace Qorpent {
                         continue;
                     }
                     if (source is IScope) {
-                        if (!_parents.Contains(source)) {
-                            _parents.InsertFirst((IScope) source);
-                        }
+                        AddParent(source as IScope);
                     }
                     else if (source is XElement) {
                         var x = (XElement) source;
@@ -244,7 +243,7 @@ namespace Qorpent {
 
         public object Get(string key, ScopeOptions options = null) {
             options = options ?? Options;
-            if (NativeContainsKey(key, options)) {
+            if (SimplifiedContainsKey(key, options)) {
                 return PreparedValue(key, options);
             }
             if (-1 != key.IndexOfAny(new[] {'.', '^'})) {
@@ -283,19 +282,31 @@ namespace Qorpent {
             if (null == key) {
                 return false;
             }
-            var result = NativeContainsKey(key, options);
-            if(!result && (key.StartsWith(".") || key.StartsWith("^")))
-            {
-                var eval = Get(key, options);
-                if (null != eval) return true;
+            var directMatch = GetDirectMatch(key);
+            if (directMatch || options.DirectMatchOnly) return directMatch;
+            if (options.KeySimplification != SimplifyOptions.None) {
+                if (SimplifiedContainsKey(key, options)) return true;
             }
-            return result;
+            if ( (key.StartsWith(".") || key.StartsWith("^"))) {
+
+                var rekey = Regex.Match(key, @"^[\.\^]+([\s\S]+)$").Groups[1].Value;
+                return ContainsKey(rekey,options);
+            }
+            return false;
         }
 
-        private bool NativeContainsKey(string key, ScopeOptions options) {
+        private bool GetDirectMatch(string key) {
+            if (this._storage.ContainsKey(key)) return true;
+            foreach (var parent in _parents) {
+                var result = parent.ContainsKey(key, ScopeOptions.DirectMatch);
+                if (result) return true;
+            }
+            return false;
+        }
+
+        private bool SimplifiedContainsKey(string key, ScopeOptions options) {
             options = options ?? Options;
             key = key.Simplify(options.KeySimplification);
-
             return  GetKeys(options).Any(_ => key == _.Simplify(options.KeySimplification));
             
         }

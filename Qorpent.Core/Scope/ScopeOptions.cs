@@ -11,7 +11,10 @@ namespace Qorpent {
         public SimplifyOptions KeySimplification = SimplifyOptions.None;
 
         public int SkipResults;
+        public bool DirectMatchOnly;
 
+        public readonly static ScopeOptions DirectMatch = new ScopeOptions {DirectMatchOnly = true};
+           
         public ScopeOptions LevelUp(int resultCount) {
             var result = Copy();
             if (result.SkipLevels > 0) {

@@ -125,6 +125,14 @@ namespace Qorpent.Core.Tests
             Assert.AreEqual("2 - 1",result);
 	    }
 
+        [Test]
+        public void CanGetContainsKeyOfParent() {
+            var parent = new Scope(new { a = 1 });
+            var child = new Scope(new { a = 2 }, parent);
+            Assert.True(child.ContainsKey(".a"));
+        }
+    
+
         /// <summary>
         /// 
         /// </summary>

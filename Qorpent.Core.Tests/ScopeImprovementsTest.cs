@@ -35,6 +35,16 @@ namespace Qorpent.Core.Tests {
         }
 
         [Test]
+        public void MultipleSources() {
+            var scopeA = new Scope(new {a = 1, b = 1});
+            var scopeB = new Scope(new {a = 2, c = 2});
+            var scope = new Scope(new {a = 3, b = 3, c = 3}, scopeA, scopeB);
+            Assert.AreEqual(1,scope[".a"]);
+            Assert.AreEqual(1,scope[".b"]);
+            Assert.AreEqual(2,scope[".c"]);
+        }
+
+        [Test]
         public void DisableLastReturnOnSkips()
         {
             Assert.AreEqual(3,scope[".....a"]);
