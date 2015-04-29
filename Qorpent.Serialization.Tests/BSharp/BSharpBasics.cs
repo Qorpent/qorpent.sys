@@ -68,6 +68,23 @@ namespace .B #partial
 
 	    }
 
+        [Test]
+        public void BUG_CannotInheritTwoStatics()
+        {
+
+            var code = @"
+class a static
+a b	static
+	";
+            var result = BSharpCompiler.Compile(code);
+            foreach (var error in result.GetErrors())
+            {
+                Console.WriteLine(error.ToLogString());
+            }
+            Assert.AreEqual(0, result.GetErrors().Count());
+
+        }
+
 		[Test]
 		public void CanCompileSingleClass() {
 			var result = Compile(@"class A");

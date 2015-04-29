@@ -1030,6 +1030,9 @@ namespace Qorpent.BSharp{
 				selfconfig.SetParent(current);
 				current = selfconfig;
 				if (i.Is(BSharpClassAttributes.Static) && _cls != i){
+				    while (null == i.ParamIndex) {
+				        Thread.Sleep(5);
+				    }
 					foreach (var p in i.ParamIndex){
 						current.Set(p.Key, p.Value);
 					}
