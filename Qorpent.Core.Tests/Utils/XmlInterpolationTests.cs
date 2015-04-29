@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Xml.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using Qorpent.Bxl;
 using Qorpent.Config;
 using Qorpent.Utils.Extensions;
@@ -43,6 +45,13 @@ namespace Qorpent.Utils.Tests {
 			Assert.AreEqual("112", x.Attribute("y").Value);
 			Assert.AreEqual("11213", x.Attribute("z").Value);
 		}
+
+	    [Test]
+	    public void BUG_InterpolateParentedWithNoOverhead() {
+	        var result = XElement.Parse("<a><b x='${.z}'/></a>").Interpolate();
+            Console.WriteLine(result);
+            Assert.False(result.ToString().Contains(".z"));
+	    }
 
 	    [Test]
 	    public void RepeatExtension() {
