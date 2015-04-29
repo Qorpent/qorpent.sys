@@ -1033,7 +1033,8 @@ namespace Qorpent.BSharp{
 				selfconfig.SetParent(current);
 				current = selfconfig;
 				if (i.Is(BSharpClassAttributes.Static) && _cls != i){
-				    while (null == i.ParamIndex) {
+                    while (null == i.ParamIndex || !i.ParamIndex.ContainsKey("____merged"))
+                    {
 				        Thread.Sleep(5);
 				    }
 					foreach (var p in i.ParamIndex){
@@ -1118,7 +1119,7 @@ namespace Qorpent.BSharp{
 
 	    private void InterpolateFields(){
 			// у генериков на этой фазе еще производится полная донастройка элементов по анкору ^
-
+            
 			if (GetConfig().UseInterpolation){
 				var si = new StringInterpolation{AncorSymbol = _cls.Is(BSharpClassAttributes.Generic) ? '`' : '$'};
 			    var global = GetInterpolationContext();
@@ -1158,6 +1159,7 @@ namespace Qorpent.BSharp{
 					if (!changed) break;
 				}
 			}
-		}
+            _cls.ParamIndex["____merged"] = true;
+	    }
 	}
 }
