@@ -394,15 +394,15 @@ namespace Qorpent.BSharp{
 
 
 		private void InternalBuild(){
-            Console.WriteLine("enter "+_cls.Name);
+         //   Console.WriteLine("enter "+_cls.Name);
 			GetInheritedSourceIndex();
-            Console.WriteLine("GetInheritedSourceIndex " + _cls.Name);
+         //   Console.WriteLine("GetInheritedSourceIndex " + _cls.Name);
 			SupplyClassAttributesForEvaluations();
-            Console.WriteLine("SupplyClassAttributesForEvaluations " + _cls.Name);
+          //  Console.WriteLine("SupplyClassAttributesForEvaluations " + _cls.Name);
 			InitializeBuildIndexes();
-            Console.WriteLine("InitializeBuildIndexes " + _cls.Name);
+           // Console.WriteLine("InitializeBuildIndexes " + _cls.Name);
 			DownFallEmbedAttribute();
-            Console.WriteLine("DownFallEmbedAttribute " + _cls.Name);
+          //  Console.WriteLine("DownFallEmbedAttribute " + _cls.Name);
 			IntializeMergeIndexes();
 			InterpolateFields();
 			BindParametersToCompiledClass();
@@ -1033,7 +1033,7 @@ namespace Qorpent.BSharp{
 				selfconfig.SetParent(current);
 				current = selfconfig;
 				if (i.Is(BSharpClassAttributes.Static) && _cls != i){
-                    while (null == i.ParamIndex || !i.ParamIndex.ContainsKey("____merged"))
+                    while (!i.Is(BSharpClassAttributes.Built))
                     {
 				        Thread.Sleep(5);
 				    }
@@ -1159,7 +1159,7 @@ namespace Qorpent.BSharp{
 					if (!changed) break;
 				}
 			}
-            _cls.ParamIndex["____merged"] = true;
+           
 	    }
 	}
 }

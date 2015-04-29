@@ -7,6 +7,7 @@ namespace Qorpent {
         public int MaxLevel = -1;
         public int SkipLevels;
         public int ResultCount;
+        public bool TreatFirstDotAsLevelUp = true;
         public SimplifyOptions KeySimplification = SimplifyOptions.None;
 
         public int SkipResults;

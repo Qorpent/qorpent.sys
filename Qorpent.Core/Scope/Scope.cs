@@ -250,9 +250,17 @@ namespace Qorpent {
             if (-1 != key.IndexOfAny(new[] {'.', '^'})) {
                 options = options.Copy();
                 var skips = 0;
+                bool wasdot = false;
                 foreach (var c in key) {
                     if (c == '.') {
-                        options.SkipResults++;
+                        if (!wasdot && options.TreatFirstDotAsLevelUp) {
+                            options.SkipLevels++;
+                        }
+                        else {
+                            options.SkipResults++; 
+                        }
+                        wasdot = true;
+                        
                         skips++;
                     }
                     else if (c == '^') {
