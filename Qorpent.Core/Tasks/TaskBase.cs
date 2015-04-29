@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.Tasks {

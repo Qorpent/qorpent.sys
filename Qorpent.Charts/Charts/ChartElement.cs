@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Qorpent.Charts.FusionCharts;
-using Qorpent.Config;
 
 namespace Qorpent.Charts {
 
@@ -8,7 +7,7 @@ namespace Qorpent.Charts {
     /// <summary>
     ///     Элемент чарта
     /// </summary>
-    public abstract class ChartElement<P> : ConfigBase, IChartElement<P> where P : IChartElement {
+    public abstract class ChartElement<P> : Scope, IChartElement<P> where P : IChartElement {
         /// <summary>
         /// Элементы чарта не наследуют атрибутов друг друга
         /// </summary>

@@ -91,6 +91,9 @@ class x
 
 
 		var result = Compile(code);
+	    foreach (var error in result.Errors) {
+	        Console.WriteLine(error.ToLogString());
+	    }
 			var xml = result.Get("x").Compiled.ToString().Replace("\"", "'");
 			Console.WriteLine(xml);
 			Assert.AreEqual(@"<class code='x' fullcode='x'>

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Qorpent.Config;
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
@@ -12,7 +11,7 @@ namespace Qorpent.BSharp{
 	/// <summary>
 	///     Внутренний индекс компилятора
 	/// </summary>
-	public class BSharpContext : ConfigBase, IBSharpContext{
+	public class BSharpContext : Scope, IBSharpContext{
 		private const string RAWCLASSES = "rawclasses";
 		private const string METACLASSES = "metaclasses";
 		private const string ORPHANED = "orphaned";
@@ -983,7 +982,7 @@ namespace Qorpent.BSharp{
 			foreach (
 				IBSharpClass c in
 					RawClasses.Values.Where(_ => null != _.Source.Attribute(BSharpSyntax.ConditionalAttribute)).ToArray()){
-				IConfig options = null == Compiler ? new ConfigBase() : Compiler.GetConditions();
+				IScope options = null == Compiler ? new Scope() : Compiler.GetConditions();
 				foreach (XAttribute a in c.Source.Attributes()){
 					if (!options.ContainsKey(a.Name.LocalName)){
 						options.Set(a.Name.LocalName, a.Value);
@@ -1094,14 +1093,6 @@ namespace Qorpent.BSharp{
 			}
 		}
 
-		XElement IXmlConfigSource.Get(string code) {
-			var result = Get(code, "");
-			if (null == result) return null;
-			return result.Compiled;
-		}
-
-		IEnumerable<XElement> IXmlConfigSource.Find(string query) {
-			return ResolveAll(query).Select(_ => _.Compiled);
-		}
+		
 	}
 }

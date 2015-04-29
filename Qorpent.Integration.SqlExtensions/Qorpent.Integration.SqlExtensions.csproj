@@ -23,24 +23,6 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\Qorpent.Core\Config\ConfigBase.cs">
-      <Link>ImportCode\ConfigBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Config\ConfigRenderType.cs">
-      <Link>ImportCode\ConfigRenderType.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Config\DictionaryCompatibleConfig.cs">
-      <Link>ImportCode\DictionaryCompatibleConfig.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Config\IConfig.cs">
-      <Link>ImportCode\IConfig.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Config\IConfigurableFromDictionary.cs">
-      <Link>ImportCode\IConfigurableFromDictionary.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Config\IXmlConfigSource.cs">
-      <Link>ImportCode\IXmlConfigSource.cs</Link>
-    </Compile>
     <Compile Include="..\Qorpent.Core\CoreExtensions.cs">
       <Link>UsedCode\CoreExtensions.cs</Link>
     </Compile>
@@ -226,6 +208,27 @@
     </Compile>
     <Compile Include="..\Qorpent.Core\QorpentException.cs">
       <Link>ImportCode\QorpentException.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\IScope.cs">
+      <Link>ImportCode\IScope.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\IScopeBound.cs">
+      <Link>ImportCode\IScopeBound.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\Scope.cs">
+      <Link>ImportCode\Scope.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\ScopeAppend.cs">
+      <Link>ImportCode\ScopeAppend.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\ScopeExtensions.cs">
+      <Link>ImportCode\ScopeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\ScopeNull.cs">
+      <Link>ImportCode\ScopeNull.cs</Link>
+    </Compile>
+    <Compile Include="..\Qorpent.Core\Scope\ScopeOptions.cs">
+      <Link>ImportCode\ScopeOptions.cs</Link>
     </Compile>
     <Compile Include="..\Qorpent.Core\Serialization\ContentCleanerOperations.cs">
       <Link>ImportCode\ContentCleanerOperations.cs</Link>

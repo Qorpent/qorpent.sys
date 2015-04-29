@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Qorpent.Bxl;
-using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Log;
 using Qorpent.LogicalExpressions;
@@ -36,7 +35,7 @@ namespace Qorpent.BSharp{
 		protected IBSharpContext CurrentBuildContext;
 
 		private IBSharpConfig _config;
-		private IConfig _global;
+		private IScope _global;
 		private IBSharpSqlAdapter _sqlAdapter;
 
 		/// <summary>
@@ -78,8 +77,8 @@ namespace Qorpent.BSharp{
 		///     Возвращает условия компиляции
 		/// </summary>
 		/// <returns></returns>
-		public IConfig GetConditions(){
-			return new ConfigBase(_config.Conditions);
+		public IScope GetConditions(){
+			return new Scope(_config.Conditions);
 		}
 
 		/// <summary>
@@ -100,7 +99,7 @@ namespace Qorpent.BSharp{
 		/// <param name="compilerConfig"></param>
 		public void Initialize(IBSharpConfig compilerConfig){
 			_config = compilerConfig;
-			_global = _config.Global ?? new ConfigBase{UseInheritance = false};
+			_global = _config.Global ?? new Scope{UseInheritance = false};
 			if (null != compilerConfig.Conditions){
 				foreach (var cond in compilerConfig.Conditions){
 					_global[cond.Key] = cond.Value;
@@ -140,7 +139,7 @@ namespace Qorpent.BSharp{
 
 		/// <summary>
 		/// </summary>
-		public IConfig Global{
+		public IScope Global{
 			get { return _global; }
 		}
 
@@ -587,7 +586,7 @@ namespace Qorpent.BSharp{
 		}
 
 		private void SetupGlobals(){
-			_global = _global ?? _config.Global ?? new ConfigBase { UseInheritance = false };
+			_global = _global ?? _config.Global ?? new Scope { UseInheritance = false };
 			bool requireInterpolation = false;
 			foreach (var baseglobal in _overlobals){
 				if (!_global.ContainsKey(baseglobal.Key)){

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Qorpent.Config;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
@@ -24,7 +23,7 @@ namespace Qorpent.BSharp{
 			}
 		}
 
-	    public IConfig InterpolationContext { get; set; }
+	    public IScope InterpolationContext { get; set; }
 
 	    private static int EXTCOUNTER = 1;
 		private readonly IBSharpContext _context;
@@ -348,13 +347,13 @@ namespace Qorpent.BSharp{
 		///     Элемент хранящий данные об индексе параметров
 		/// </summary>
 		[IgnoreSerialize]
-		public IConfig ParamSourceIndex { get; set; }
+		public IScope ParamSourceIndex { get; set; }
 
 		/// <summary>
 		///     Сведенный словарь параметров
 		/// </summary>
 		[IgnoreSerialize]
-		public IConfig ParamIndex { get; set; }
+		public IScope ParamIndex { get; set; }
 
 		/// <summary>
 		///     Список всех определений мержа
@@ -403,7 +402,7 @@ namespace Qorpent.BSharp{
 			get{
 				if (null != _cachedImports) return _cachedImports;
 				lock (this){
-					_cachedImports = GetAllImports(FullName, new ConfigBase()).Distinct().ToArray();
+					_cachedImports = GetAllImports(FullName, new Scope()).Distinct().ToArray();
 					return _cachedImports;
 				}
 			}
@@ -446,8 +445,8 @@ namespace Qorpent.BSharp{
 		///     Метод построения собственного индекса параметров
 		/// </summary>
 		/// <returns></returns>
-		private IConfig BuildSelfParametesSource(){
-			var result = new ConfigBase();
+		private IScope BuildSelfParametesSource(){
+			var result = new Scope();
 			foreach (XAttribute a in Source.Attributes()){
 				result.Set(a.Name.LocalName, a.Value);
 			}
@@ -545,7 +544,7 @@ namespace Qorpent.BSharp{
 		}
 
 
-		private IEnumerable<IBSharpClass> GetAllImports(string root, IConfig config){
+		private IEnumerable<IBSharpClass> GetAllImports(string root, IScope config){
 			var dict = ((IDictionary<string, object>) config);
 			var self = ((IDictionary<string, object>) BuildSelfParametesSource());
 			foreach (var p in self.Where(_ => _.Value != null)){

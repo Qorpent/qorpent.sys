@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
-using Qorpent.Config;
 using Qorpent.Log;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.BSharp.Builder{
 	/// <summary>
 	/// </summary>
-	public class BSharpProject : ConfigBase, IBSharpProject{
+	public class BSharpProject : Scope, IBSharpProject{
 		private const string TARGET_NAMES = "target_names";
 		private const string FULLY_QUALIFIED = "fully_qualified";
 		private const string OUTPUT_ATTRIBUTES = "output_attrbutes";
@@ -54,7 +53,7 @@ namespace Qorpent.BSharp.Builder{
 
 		private readonly IList<IBSharpCompilerExtension> _compilerExtensions = new List<IBSharpCompilerExtension>();
 		private readonly IUserLog _log = new StubUserLog();
-		private IConfig _global;
+		private IScope _global;
 
 		/// <summary>
 		/// </summary>
@@ -78,8 +77,8 @@ namespace Qorpent.BSharp.Builder{
 		/// <param name="target"></param>
 		public IBSharpProject SafeOverrideProject(IBSharpProject target){
 			foreach (string overrideAttribute in overrideAttributes){
-				if (options.ContainsKey(overrideAttribute) && options[overrideAttribute].ToBool()){
-					target.Set(overrideAttribute, options[overrideAttribute]);
+				if (ContainsKey(overrideAttribute) && this[overrideAttribute].ToBool()){
+					target.Set(overrideAttribute, this[overrideAttribute]);
 				}
 			}
 			return target;
@@ -321,8 +320,8 @@ namespace Qorpent.BSharp.Builder{
 
 		/// <summary>
 		/// </summary>
-		public IConfig Global{
-			get { return _global ?? (_global = new ConfigBase{UseInheritance = false}); }
+		public IScope Global{
+			get { return _global ?? (_global = new Scope{UseInheritance = false}); }
 		}
 
 		/// <summary>

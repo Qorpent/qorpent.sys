@@ -5,7 +5,6 @@ using System.Linq;
 using System.Xml.Linq;
 using Qorpent.BSharp;
 using Qorpent.Bxl;
-using Qorpent.Config;
 using Qorpent.Log;
 using Qorpent.Utils.Extensions;
 
@@ -13,7 +12,7 @@ namespace Qorpent.Utils{
 	/// <summary>
 	/// Базовые параметры консольных приложений
 	/// </summary>
-	public class ConsoleApplicationParameters:ConfigBase{
+	public class ConsoleApplicationParameters:Scope{
 		/// <summary>
 		///		Исходный массив аргументов
 		/// </summary>
@@ -55,7 +54,7 @@ namespace Qorpent.Utils{
 		/// </summary>
 		public LogLevel LogLevel{
 			get {
-			    var val = ResolveBest("loglevel", "~ll");
+			    var val = this.ResolveBest("loglevel", "~ll").ToStr();
 			    if (string.IsNullOrWhiteSpace(val)) return LogLevel.Info;
 			    return val.To<LogLevel>();
 			}
@@ -85,7 +84,7 @@ namespace Qorpent.Utils{
 		/// Параметр изменения текущей директории
 		/// </summary>
 		public string WorkingDirectory {
-            get { return ResolveBest("workingdirectory", "~wd", "workingdir"); }
+            get { return this.ResolveBestString("workingdirectory", "~wd", "workingdir"); }
 			set { Set("workingdirectory", value); }
 		}
 		/// <summary>
@@ -110,7 +109,7 @@ namespace Qorpent.Utils{
 		/// </summary>
 		public string RepositoryPath
 		{
-            get { return ResolveBest("repositorypath", "~rp"); }
+            get { return this.ResolveBestString("repositorypath", "~rp"); }
 			set { Set("repositorypath", value); }
 		}
 
@@ -119,7 +118,7 @@ namespace Qorpent.Utils{
 		/// </summary>
 		public string ManifestPath
 		{
-            get { return ResolveBest("manifestpath", "mp"); }
+            get { return this.ResolveBestString("manifestpath", "mp"); }
 			set { Set("manifestpath", value); }
 		}
 		/// <summary>
@@ -280,7 +279,7 @@ namespace Qorpent.Utils{
 	    /// <param name="names"></param>
 	    /// <returns></returns>
 	    public string ResolveFileName(string defaultExtension, params string[] names) {
-            var result = ResolveBest(names);
+            var result = this.ResolveBestString(names);
             if (string.IsNullOrWhiteSpace(result)) return result;
             result = EnvironmentInfo.ResolvePath(result);
             if (!string.IsNullOrWhiteSpace(defaultExtension)) {
@@ -321,13 +320,13 @@ namespace Qorpent.Utils{
 			{
 				
 				var name = x.Name.LocalName;
-				if (!this.options.ContainsKey(name)){
+				if (!ContainsKey(name)){
 					Set(name, x.Value);
 				}
 			}
 			foreach (var x in cls.Compiled.Elements()){
 				var name = x.Name.LocalName;
-				if (!options.ContainsKey(name)){
+				if (!ContainsKey(name)){
 					var val = x.Attr("code");
 					if (string.IsNullOrWhiteSpace(val)){
 						val = x.Value;
@@ -353,7 +352,7 @@ namespace Qorpent.Utils{
 	    /// Определение на B#
 	    /// </summary>
 	    public XElement Definition {
-	        get { return Ensure("defintion", new XElement("stub")); }
+	        get { return this.Ensure("defintion", new XElement("stub")); }
 	        set {
                 Set("defintion", value);
 	        }

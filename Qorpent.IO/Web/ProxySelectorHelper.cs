@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
-using Qorpent.Config;
 using Qorpent.IO.Resources;
 using Qorpent.Utils.Extensions;
 
@@ -24,7 +23,7 @@ namespace Qorpent.IO.Web {
 		/// <param name="uri"></param>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		public static WebProxy Select(Uri uri, IConfig config = null) {
+		public static WebProxy Select(Uri uri, IScope config = null) {
 			config = config ?? ResourceConfig.Default;
 			return Select(uri,
 			              config.Get(ResourceConfig.PROXY_USAGE, ProxyUsage.Default),

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Qorpent.Config;
 
 namespace Qorpent{
 	/// <summary>
@@ -15,10 +14,10 @@ namespace Qorpent{
 		/// <param name="target"></param>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		public static T Apply<T>(this IEnumerable<IFilter<T>> filters, T target, IConfig context = null)where T:class{
+		public static T Apply<T>(this IEnumerable<IFilter<T>> filters, T target, IScope context = null)where T:class{
 			if (null == target) return null;
 			if (null == filters) return target;
-			context = context ?? new ConfigBase();
+			context = context ?? new Scope();
 			foreach (var filter in filters.OrderBy(_=>_.Idx)){
 				if (filter.IsMatch(target, context)){
 					var state = filter.Apply(target, context);

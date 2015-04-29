@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.BSharp{
 	/// <summary>
 	///     Конфигурация для компилятора BxlSharp
 	/// </summary>
-	public class BSharpConfig : ConfigBase, IBSharpConfig{
+	public class BSharpConfig : Scope, IBSharpConfig{
 		/// <summary>
 		///     Флаг использования интерполяций
 		/// </summary>
@@ -99,7 +98,7 @@ namespace Qorpent.BSharp{
 		/// <summary>
 		///     Глобальные константы
 		/// </summary>
-		public IConfig Global { get; set; }
+		public IScope Global { get; set; }
 
 		/// <summary>
 		///     Признак необходимости выполнять Require

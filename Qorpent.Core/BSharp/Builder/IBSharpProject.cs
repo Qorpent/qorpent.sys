@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
-using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.BSharp.Builder {
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface IBSharpProject : IConfig {
+	public interface IBSharpProject : IScope {
         /// <summary>
         ///     Цели проекта
         /// </summary>
@@ -123,7 +122,7 @@ namespace Qorpent.BSharp.Builder {
 		/// <summary>
 		/// 
 		/// </summary>
-		IConfig Global { get;  }
+		IScope Global { get;  }
 		/// <summary>
 		/// 
 		/// </summary>

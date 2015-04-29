@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Qorpent.BSharp;
-using Qorpent.Config;
 using Qorpent.IO;
 using Qorpent.Log;
 using Qorpent.Log.NewLog;
@@ -26,7 +25,7 @@ namespace Qorpent.Host{
 		private string _dllFolder;
 		private string _logFolder;
 		private string _machineName;
-		private ConfigBase _parameters;
+		private Scope _parameters;
 		private string _rootFolder;
 		private int _threadCount;
 		private string _tmpFolder;
@@ -252,8 +251,8 @@ namespace Qorpent.Host{
 		///     Дополнительные параметры
 		/// </summary>
 		[Serialize]
-		public ConfigBase Parameters{
-			get { return _parameters ?? (_parameters = new ConfigBase()); }
+		public Scope Parameters{
+			get { return _parameters ?? (_parameters = new Scope()); }
 			set { _parameters = value; }
 		}
 

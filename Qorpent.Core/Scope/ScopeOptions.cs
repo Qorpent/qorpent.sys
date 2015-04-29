@@ -1,6 +1,6 @@
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Config {
+namespace Qorpent {
     public class ScopeOptions {
         public bool LastOnSkipOverflow = true;
         public bool UseInheritance = true;

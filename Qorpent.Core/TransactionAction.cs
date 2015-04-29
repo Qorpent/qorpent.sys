@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Qorpent.Config;
 
 namespace Qorpent {
 	/// <summary>
@@ -12,18 +11,18 @@ namespace Qorpent {
 		/// <summary>
 		/// Производит выполнение операции обновления (может генерировать ошибки)
 		/// </summary>
-		public abstract void Execute(IConfig context);
+		public abstract void Execute(IScope context);
 
 		/// <summary>
 		/// Выполняет операцию применения (для транзакций)
 		/// </summary>
 		/// <param name="context"></param>
-		public abstract void Commit(IConfig context);
+		public abstract void Commit(IScope context);
 		/// <summary>
 		/// Осуществляет откат
 		/// </summary>
 		/// <param name="context"></param>
-		public abstract void Rollback(IConfig context);
+		public abstract void Rollback(IScope context);
 	}
 	/// <summary>
 	/// Расширение для работы с транзакционными действиями
@@ -34,10 +33,10 @@ namespace Qorpent {
 		/// </summary>
 		/// <param name="actions"></param>
 		/// <param name="context"></param>
-		public static void ExecuteTransaction(this IEnumerable<TransactionAction> actions, IConfig context = null) {
+		public static void ExecuteTransaction(this IEnumerable<TransactionAction> actions, IScope context = null) {
 			if (actions == null) throw new ArgumentNullException("actions");
 			actions = actions.ToArray();
-			context = context ?? new ConfigBase();
+			context = context ?? new Scope();
 			try
 			{
 				foreach (var a in actions)
@@ -64,9 +63,9 @@ namespace Qorpent {
 		/// </summary>
 		/// <param name="actions"></param>
 		/// <param name="context"></param>
-		public static void Imitate(this IEnumerable<TransactionAction> actions,IConfig context = null) {
+		public static void Imitate(this IEnumerable<TransactionAction> actions,IScope context = null) {
 			if (actions == null) throw new ArgumentNullException("actions");
-			context = context ?? new ConfigBase();
+			context = context ?? new Scope();
 			try
 			{
 				foreach (var a in actions)

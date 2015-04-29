@@ -12,14 +12,6 @@
     </NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AbstractCanvas\Canvas.cs" />
-    <Compile Include="AbstractCanvas\CanvasAxis.cs" />
-    <Compile Include="AbstractCanvas\CanvasPoint.cs" />
-    <Compile Include="AbstractCanvas\ICanvas.cs" />
-    <Compile Include="AbstractCanvas\ICanvasAxis.cs" />
-    <Compile Include="AbstractCanvas\ICanvasElement.cs" />
-    <Compile Include="AbstractCanvas\ICanvasPoint.cs" />
-    <Compile Include="AbstractCanvas\ICanvasPrimitive.cs" />
     <Compile Include="BSharp\BscHelper.cs" />
     <Compile Include="BSharp\BSharpCodeBuilder.cs" />
     <Compile Include="BSharp\BSharpErrors.cs" />
@@ -116,17 +108,6 @@
     <Compile Include="PortableHtml\PortableHtmlSchemaErorrDescription.cs" />
     <Compile Include="PortableHtml\PortableHtmlStrictLevel.cs" />
     <Compile Include="PortableHtml\PortableHtmlVerificationStrategy.cs" />
-    <Compile Include="Report\ColumnTitleFormatter.cs" />
-    <Compile Include="Report\ContentItemExtensions.cs" />
-    <Compile Include="Report\ContentItemQuery.cs" />
-    <Compile Include="Report\IContentItem.cs" />
-    <Compile Include="Report\IContentItemProvider.cs" />
-    <Compile Include="Report\IContentItemQuery.cs" />
-    <Compile Include="Report\IReportFactory.cs" />
-    <Compile Include="Report\ReportFactory.cs" />
-    <Compile Include="Report\ReportFactoryConfig.cs" />
-    <Compile Include="Report\ReportQuery.cs" />
-    <Compile Include="Report\TitleParams.cs" />
     <Compile Include="Json\CType.cs" />
     <Compile Include="Json\JsonArray.cs" />
     <Compile Include="Json\JsonObject.cs" />

@@ -6,43 +6,42 @@ using System.Linq;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
-namespace Qorpent.Config {
-    public class Scope : IScope {
+namespace Qorpent {
+    public class Scope : IScope,ICollection {
 
         public Scope() {
             
         }
         public Scope(params object[] sources) {
-            foreach (var source in sources) {
-                if (source is IScope)
-                {
-                    if (!_parents.Contains(source)) {
-                        _parents.InsertFirst((IScope)source);
+            if (null != sources) {
+                foreach (var source in sources) {
+                    if (null == source) {
+                        continue;
                     }
-                }
-                else if (source is XElement)
-                {
-                    var x = (XElement)source;
-                    this["__xmlname"] = x.Name.LocalName;
-                    if (!x.HasElements && !string.IsNullOrEmpty(x.Value))
-                    {
-                        this["__xmlvalue"] = x.Value;
+                    if (source is IScope) {
+                        if (!_parents.Contains(source)) {
+                            _parents.InsertFirst((IScope) source);
+                        }
                     }
-                    foreach (var attribute in x.Attributes())
-                    {
-                        this[attribute.Name.LocalName] = attribute.Value;
+                    else if (source is XElement) {
+                        var x = (XElement) source;
+                        this["__xmlname"] = x.Name.LocalName;
+                        if (!x.HasElements && !string.IsNullOrEmpty(x.Value)) {
+                            this["__xmlvalue"] = x.Value;
+                        }
+                        foreach (var attribute in x.Attributes()) {
+                            this[attribute.Name.LocalName] = attribute.Value;
+                        }
                     }
-                }
-                else
-                {
-                    var dict = source.ToDict();
-                    foreach (var o in dict)
-                    {
-                        this[o.Key] = o.Value;
+                    else {
+                        var dict = source.ToDict();
+                        foreach (var o in dict) {
+                            this[o.Key] = o.Value;
+                        }
                     }
                 }
             }
-           
+
         }
         private ScopeOptions _options = new ScopeOptions();
         private readonly IList<IScope> _parents = new List<IScope>();
@@ -132,6 +131,20 @@ namespace Qorpent.Config {
             return false;
         }
 
+        public void CopyTo(Array array, int index) {
+            if (null == array)
+            {
+                throw new ArgumentNullException("array");
+            }
+            var idx = index;
+            if (idx < 0)
+            {
+                throw new ArgumentOutOfRangeException("index");
+            }
+            var myarray = this.ToArray();
+            myarray.CopyTo(array,index);
+        }
+
         public int Count {
             get {
                 IList<string> processedKeys = _storage.Select(pair => pair.Key).ToList();
@@ -143,6 +156,14 @@ namespace Qorpent.Config {
                 }
                 return processedKeys.Count;
             }
+        }
+
+        public object SyncRoot {
+            get { return ((ICollection) _storage).SyncRoot; }
+        }
+
+        public bool IsSynchronized {
+            get { return ((ICollection) _storage).IsSynchronized; }
         }
 
         public bool IsReadOnly {
@@ -224,7 +245,7 @@ namespace Qorpent.Config {
         public object Get(string key, ScopeOptions options = null) {
             options = options ?? Options;
             if (NativeContainsKey(key, options)) {
-                return NativeGet(key, options);
+                return PreparedValue(key, options);
             }
             if (-1 != key.IndexOfAny(new[] {'.', '^'})) {
                 options = options.Copy();
@@ -243,10 +264,19 @@ namespace Qorpent.Config {
                     }
                 }
                 var correctedkey = key.Substring(skips);
-                return NativeGet(correctedkey, options);
+                return PreparedValue(correctedkey,options);
             }
             return null;
         }
+
+        private object PreparedValue(string key, ScopeOptions options) {
+            var result = NativeGet(key, options);
+            if (result is IScopeBound) {
+                return ((IScopeBound) result).Get(this, key, options);
+            }
+            return result;
+        }
+
 
         public bool ContainsKey(string key, ScopeOptions options) {
             if (null == key) {
@@ -366,16 +396,22 @@ namespace Qorpent.Config {
             return _storage.Keys.FirstOrDefault(_ => key == _.Simplify(options.KeySimplification));
         }
         /// <summary>
-        /// ConfigBase - compatible set parent method
+        /// Scope - compatible set parent method
         /// </summary>
         /// <param name="cfgbase"></param>
         public void SetParent(IScope parentScope) {
-            ClearParents();
+            _parents.Clear();
             AddParent(parentScope);
         }
 
         public IScope GetParent() {
             return _parents.FirstOrDefault();
+        }
+
+        public static readonly IScopeBound Null = new ScopeNull();
+
+        public static IScopeBound Append(object extension, string delimiter = " ", string refKey="") {
+            return new ScopeAppend(extension,delimiter,refKey);
         }
     }
 }

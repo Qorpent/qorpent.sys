@@ -7,6 +7,7 @@ namespace Qorpent.Serialization.Tests.BSharp {
 	/// 
 	/// </summary>
 	[TestFixture]
+    [Explicit("No more much require to keep compatibility")]
 	public class TbxlSamples : CompileTestBase {
 
 		[Test]
@@ -106,6 +107,10 @@ colset b1_and_pd
 	
 
 		}
+
+
+
+      
 
 		[Test]
 		[Explicit("timing")]

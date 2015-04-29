@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using NUnit.Framework;
-using Qorpent.Config;
 using Qorpent.Mvc;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Core.Tests
 {
     [TestFixture]
-	public class ScopeConfigBaseEqualityTest
+	public class ScopeScopeEqualityTest
 	{
 		[Test]
 		public void OverridesParent() {
@@ -18,6 +18,14 @@ namespace Qorpent.Core.Tests
 			cfgchild.Set("a", 2);
 			Assert.AreEqual(2,cfgchild.Get<object>("a"));
 		}
+
+        [Test]
+        public void CanWorkWithDots() {
+            var scope = new Scope();
+            scope["a.x"] = 1;
+            Assert.AreEqual(1,scope["a.x"]);
+                
+        }
 
 		[Test]
 		public void CanResolveFromParentImplicitly() {
@@ -124,6 +132,11 @@ namespace Qorpent.Core.Tests
             IDictionary<string, object> dict = childcfg;
             Assert.False(dict.ContainsKey(".b"));
 	    }
+
+        [Test]
+        public void BugMustCreateWithNulls() {
+            var scope = new Scope(null);
+        }
 
 	}
 }

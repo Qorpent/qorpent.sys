@@ -26,7 +26,7 @@ namespace Qorpent.Host.Server
         /// </summary>
         public string WebFarmRoot {
             get {
-                var result = ResolveBest("farmroot", "~fr");
+                var result = this.ResolveBestString("farmroot", "~fr");
                 if (string.IsNullOrWhiteSpace(result)) {
                     return EnvironmentInfo.ResolvePath("@repos@/.www");
                 }

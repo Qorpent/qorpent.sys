@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Qorpent.Config;
 using Qorpent.Log;
 
 namespace Qorpent.Tasks {
@@ -71,7 +70,7 @@ namespace Qorpent.Tasks {
             if (!wasInitialized || forced) {
                 Log.Debug("Start initialization", "Job", this);
                 foreach (var module in Tasks) {
-                    module.Value.SetParent(this);
+                    module.Value.AddParent(this);
                     if (string.IsNullOrWhiteSpace(module.Value.Name)) {
                         module.Value.Name = module.Key;
                     }

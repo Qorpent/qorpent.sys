@@ -3,7 +3,6 @@ using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
 using Qorpent.Bxl;
-using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils.Tests {
@@ -52,7 +51,7 @@ e u=33
 ",options:BxlParserOptions.NoLexData|BxlParserOptions.ExtractSingle);
 	        _xi = new XmlInterpolation {UseExtensions = true};
 	        var ctx = new {data = new object[] {new {mycode = 2, myname = "Two"}, new {mycode = 3, myname = "Three"}}};
-	        var cfg = new ConfigBase(ctx.ToDict());
+	        var cfg = new Scope(ctx.ToDict());
 	        x = _xi.Interpolate(x, cfg);
             Console.WriteLine(x.ToString().Replace("\"","'"));
             Assert.AreEqual(@"<e u='33'>
@@ -70,7 +69,7 @@ e mycode=1 myname=2
 ", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
             _xi = new XmlInterpolation { UseExtensions = true };
             var ctx = new { data = new object[] { new { mycode = 2, myname = "Two" }, new { mycode = 3, myname = "Three" } } };
-            var cfg = new ConfigBase(ctx.ToDict());
+            var cfg = new Scope(ctx.ToDict());
             x = _xi.Interpolate(x, cfg);
             Console.WriteLine(x.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<e mycode='1' myname='2'>
@@ -88,7 +87,7 @@ e mycode=1 myname=aa
 ", options: BxlParserOptions.NoLexData | BxlParserOptions.ExtractSingle);
             _xi = new XmlInterpolation { UseExtensions = true };
             var ctx = new { data = new object[] { new { mycode = 2, myname = "Two" }, new { mycode = 3, myname = "Three" } } };
-            var cfg = new ConfigBase(ctx.ToDict());
+            var cfg = new Scope(ctx.ToDict());
             cfg["upper"] = (Func<string, string>) (s => s.ToUpper());
             x = _xi.Interpolate(x, cfg);
             Console.WriteLine(x.ToString().Replace("\"", "'"));
@@ -193,7 +192,7 @@ e b=true
                 new { mycode = 0, myname = "Four", include=true },
                 new { mycode = 5, myname = "", include=true }
             } };
-            var cfg = new ConfigBase(ctx.ToDict());
+            var cfg = new Scope(ctx.ToDict());
             x = _xi.Interpolate(x, cfg);
             Console.WriteLine(x.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<e b='true'>
@@ -223,7 +222,7 @@ e
                 new { mycode = 5, myname = "", include=false }
             }
             };
-            var cfg = new ConfigBase(ctx.ToDict());
+            var cfg = new Scope(ctx.ToDict());
             x = _xi.Interpolate(x, cfg);
             Console.WriteLine(x.ToString().Replace("\"", "'"));
             Assert.AreEqual(@"<e>

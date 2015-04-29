@@ -8,7 +8,6 @@ using System.Threading;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Qorpent.BSharp.Matcher;
-using Qorpent.Config;
 using Qorpent.Log;
 using Qorpent.LogicalExpressions;
 using Qorpent.Serialization;
@@ -395,14 +394,18 @@ namespace Qorpent.BSharp{
 
 
 		private void InternalBuild(){
+            Console.WriteLine("enter "+_cls.Name);
 			GetInheritedSourceIndex();
+            Console.WriteLine("GetInheritedSourceIndex " + _cls.Name);
 			SupplyClassAttributesForEvaluations();
+            Console.WriteLine("SupplyClassAttributesForEvaluations " + _cls.Name);
 			InitializeBuildIndexes();
+            Console.WriteLine("InitializeBuildIndexes " + _cls.Name);
 			DownFallEmbedAttribute();
+            Console.WriteLine("DownFallEmbedAttribute " + _cls.Name);
 			IntializeMergeIndexes();
 			InterpolateFields();
 			BindParametersToCompiledClass();
-			//CleanupElementsWithConditions();
 			MergeInternals();
 			SupplyEvaluationsForElements();
 			InterpolateElements(codeonly: true);
@@ -960,8 +963,8 @@ namespace Qorpent.BSharp{
 			}
 			//мы должны пропускать интерполяции, так как сверить их все равно нельзя пока
 			if (cond.Contains("${")) return true;
-			IConfig compilerOptions = _compiler.GetConditions();
-			IConfig srcp = _cls.ParamIndex;
+			IScope compilerOptions = _compiler.GetConditions();
+			IScope srcp = _cls.ParamIndex;
 			if (null != compilerOptions){
 				compilerOptions.SetParent(srcp);
 				srcp = compilerOptions;
@@ -1009,7 +1012,7 @@ namespace Qorpent.BSharp{
 		}
 
 		private void InitializeBuildIndexes(){
-			_cls.ParamIndex = new ConfigBase();
+			_cls.ParamIndex = new Scope();
 			_cls.Compiled.SetAttributeValue(BSharpSyntax.ClassFullNameAttribute, _cls.FullName);
 			foreach (var p in _cls.ParamSourceIndex){
 				_cls.ParamIndex.Set(p.Key, p.Value);
@@ -1021,15 +1024,18 @@ namespace Qorpent.BSharp{
 		///     Возвращает XML для резолюции атрибутов
 		/// </summary>
 		/// <returns></returns>
-		private IConfig BuildParametersConfig(){
-			var result = new ConfigBase();
-			ConfigBase current = result;
+		private IScope BuildParametersConfig(){
+			var result = new Scope();
+			Scope current = result;
 			foreach (IBSharpClass i in _cls.AllImports.Union(new[]{_cls})){
-				var selfconfig = new ConfigBase();
+				var selfconfig = new Scope();
 				selfconfig.Set("_class_", _cls.FullName);
 				selfconfig.SetParent(current);
 				current = selfconfig;
 				if (i.Is(BSharpClassAttributes.Static) && _cls != i){
+				    while (null == i.ParamIndex) {
+				        Thread.Sleep(10);
+				    }
 					foreach (var p in i.ParamIndex){
 						current.Set(p.Key, p.Value);
 					}
@@ -1078,7 +1084,7 @@ namespace Qorpent.BSharp{
 			}
 		}
 
-	    private IConfig GetInterpolationContext() {
+	    private IScope GetInterpolationContext() {
 	        if (_cls.InterpolationContext != null) {
 	            return _cls.InterpolationContext;
 	        }
@@ -1103,7 +1109,7 @@ namespace Qorpent.BSharp{
 	                return _sequences[n].Next();
 	            })
 	        };
-	        var result = new ConfigBase(advctx);
+	        var result = new Scope(advctx);
             result.SetParent(_compiler.Global);
 	        _cls.InterpolationContext = result;
 	        return _cls.InterpolationContext;

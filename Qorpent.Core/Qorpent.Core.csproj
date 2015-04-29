@@ -66,16 +66,13 @@
     <Compile Include="BSharp\Runtime\IBSharpRuntimeService.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptor.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassResolutionType.cs" />
-    <Compile Include="Config\ConfigBase.cs" />
-    <Compile Include="Config\ConfigRenderType.cs" />
-    <Compile Include="Config\DictionaryCompatibleConfig.cs" />
-    <Compile Include="Config\HierarchyElement.cs" />
-    <Compile Include="Config\IConfig.cs" />
-    <Compile Include="Config\IConfigurableFromDictionary.cs" />
-    <Compile Include="Config\IScope.cs" />
-    <Compile Include="Config\IXmlConfigSource.cs" />
-    <Compile Include="Config\Scope.cs" />
-    <Compile Include="Config\ScopeOptions.cs" />
+    <Compile Include="Scope\IScope.cs" />
+    <Compile Include="Scope\IScopeBound.cs" />
+    <Compile Include="Scope\Scope.cs" />
+    <Compile Include="Scope\ScopeAppend.cs" />
+    <Compile Include="Scope\ScopeExtensions.cs" />
+    <Compile Include="Scope\ScopeNull.cs" />
+    <Compile Include="Scope\ScopeOptions.cs" />
     <Compile Include="CoreExtensions.cs" />
     <Compile Include="Data\DbCommandExecutorExtesions.cs" />
     <Compile Include="Data\IDbCommandExecutor.cs" />
@@ -553,7 +550,6 @@
     <QorpentReference Include="*.import" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Charts\" />
     <Folder Include="Serialization\IntermediateFormat\" />
     <Folder Include="Utils\Config\" />
   </ItemGroup>

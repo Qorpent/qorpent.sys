@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text.RegularExpressions;
-using Qorpent.Config;
 
 namespace Qorpent.Utils {
 	/// <summary>
@@ -119,8 +118,8 @@ namespace Qorpent.Utils {
 					name = "Arg" + (++ argCount);
 				}
 				_reflectionhelper.SetValue(result, name, value, ignoreNotFound: true, publicOnly: false);
-				if (result is IConfig){
-					var cfg = result as IConfig;
+				if (result is IScope){
+					var cfg = result as IScope;
 					if (!cfg.ContainsKey(name)){
 						cfg.Set(name,value);
 					}

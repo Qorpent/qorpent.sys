@@ -1,10 +1,8 @@
-﻿using Qorpent.Config;
-
-namespace Qorpent.Charts {
+﻿namespace Qorpent.Charts {
     /// <summary>
     ///     Описание конфига чарта
     /// </summary>
-    public interface IChartConfig : IConfig {
+    public interface IChartConfig : IScope {
         /// <summary>
         /// Тип чарта
         /// </summary>

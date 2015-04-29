@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils
@@ -66,7 +65,7 @@ namespace Qorpent.Utils
 			if (-1 == target.IndexOf(AncorSymbol)) return target;
 			if (-1 == target.IndexOf('{')) return target;
 			if (-1 == target.IndexOf('}')) return target;
-		
+		    this._source2 = source2;
 			if (string.IsNullOrWhiteSpace(target)) {
 				return target;
 			}

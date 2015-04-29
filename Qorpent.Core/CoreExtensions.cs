@@ -519,6 +519,9 @@ namespace Qorpent.Utils.Extensions {
 		/// <param name="obj"> </param>
 		/// <returns> </returns>
 		public static IDictionary<string, object> ToDict(this object obj) {
+		    if (null == obj) {
+		        throw new ArgumentNullException("obj");
+		    }
 			if(obj is IDictionary<string, object>) {
 				return (IDictionary<string, object>) obj;
 			}

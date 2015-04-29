@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Xml.Schema;
 using NUnit.Framework;
 using Qorpent.BSharp;
-using Qorpent.Config;
 using Qorpent.Scaffolding.Model.SqlObjects;
 using Qorpent.Utils.Extensions;
 

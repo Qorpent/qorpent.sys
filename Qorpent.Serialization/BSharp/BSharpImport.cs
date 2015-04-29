@@ -1,5 +1,4 @@
 ﻿using System.Xml.Linq;
-using Qorpent.Config;
 using Qorpent.LogicalExpressions;
 using Qorpent.Serialization;
 using Qorpent.Utils.LogicalExpressions;
@@ -49,7 +48,7 @@ namespace Qorpent.BSharp{
 		/// </summary>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		public bool Match(IConfig config){
+		public bool Match(IScope config){
 			if (string.IsNullOrWhiteSpace(Condition)) return true;
 			if (null == config) return true;
 			var src = new DictionaryTermSource<object>(config);

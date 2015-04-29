@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Qorpent.BSharp;
-using Qorpent.Config;
 using Qorpent.Uson;
 using Qorpent.Utils.Extensions;
 
@@ -80,7 +79,7 @@ generator
 		item template=balans2011_corp_bank	reportname = 'Бухгалтерский баланс (Форма №1)'
 
 ";
-			var cfg = new BSharpConfig{Global = new ConfigBase()};
+			var cfg = new BSharpConfig{Global = new Scope()};
 			cfg.Global["tp.year"] = "2013";
 			cfg.Global["tp.period"] = "2";
 			var ctx = BSharpCompiler.Compile(code, cfg);

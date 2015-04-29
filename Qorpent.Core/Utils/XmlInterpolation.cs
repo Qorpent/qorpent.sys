@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Qorpent.Config;
 using Qorpent.Dsl.LogicalExpressions;
 using Qorpent.LogicalExpressions;
 using Qorpent.Utils.Extensions;
@@ -37,18 +36,18 @@ namespace Qorpent.Utils {
             {
                 level = int.MaxValue;
             }
-            baseconfig = baseconfig ?? new ConfigBase();
-            if (baseconfig is IConfig) {
-                return InternalInterpolate(source, (IConfig)baseconfig, level);
+            baseconfig = baseconfig ?? new Scope();
+            if (baseconfig is IScope) {
+                return InternalInterpolate(source, (IScope)baseconfig, level);
             }
-            return InternalInterpolate(source, new ConfigBase(baseconfig.ToDict()), level);
+            return InternalInterpolate(source, new Scope(baseconfig.ToDict()), level);
         }
 		/// <summary>
 		/// Выполняет интерполяцию атрибутов в строки по Xml элементу
 		/// рекурсивно по всей подветке
 		/// </summary>
 		/// <returns></returns>
-		public XElement Interpolate(XElement source, IConfig baseconfig= null){
+		public XElement Interpolate(XElement source, IScope baseconfig= null){
 			var level = Level;
 			if (level <= 0){
 				level = int.MaxValue;
@@ -56,7 +55,7 @@ namespace Qorpent.Utils {
 			return InternalInterpolate(source, baseconfig,level);
 		}
 
-		private XElement InternalInterpolate(XElement source, IConfig parentconfig,int level) {
+		private XElement InternalInterpolate(XElement source, IScope parentconfig,int level) {
 			var datasource = PrepareDataSource(source, parentconfig);
 
 			var processchild = InterpolateDataToElement(source, datasource);
@@ -80,9 +79,9 @@ namespace Qorpent.Utils {
 		public XElement Interpolate(XElement source, XElement baseelement){
 
 			var datasources = baseelement.AncestorsAndSelf().Reverse().ToArray();
-			ConfigBase cfg = null;
+			Scope cfg = null;
 			foreach (var element in datasources) {
-				cfg = new ConfigBase(cfg);
+				cfg = new Scope(cfg);
 				foreach (var attribute in element.Attributes()) {
 					cfg.Set(attribute.Name.LocalName,attribute.Value);
 				}
@@ -118,7 +117,7 @@ namespace Qorpent.Utils {
         /// </summary>
 	    public bool UseExtensions { get; set; }
 
-	    private bool InterpolateDataToElement(XElement source, IConfig datasource) {
+	    private bool InterpolateDataToElement(XElement source, IScope datasource) {
 	        if (UseExtensions) {
 	            if (!MatchCondition(source, datasource,"if")) return false;
 	            if (source.Attr("xi-repeat").ToBool()) {
@@ -204,7 +203,7 @@ namespace Qorpent.Utils {
 
 	    private ILogicalExpressionEvaluator le = null;
 
-	    private  bool MatchCondition(XElement e, IConfig ds, string suffix) {
+	    private  bool MatchCondition(XElement e, IScope ds, string suffix) {
 	        var attrname = "xi-" + suffix;
 	        le = le ?? new LogicalExpressionEvaluator();
             if (e.Attr(attrname).ToBool())
@@ -227,7 +226,7 @@ namespace Qorpent.Utils {
 	    }
 
 	    private XmlInterpolation repeater = null;
-	    private XElement[] ProcessRepeat(XElement source, IConfig datasource) {
+	    private XElement[] ProcessRepeat(XElement source, IScope datasource) {
 	        object[] a = GetDataSource(source, datasource);
 	        if (0 == a.Length) return null;
 
@@ -241,7 +240,7 @@ namespace Qorpent.Utils {
                 if (!string.IsNullOrWhiteSpace(scope)) {
                     dict = dict.ToDictionary(_ => scope + "." + _.Key, _ => _.Value);
                 }
-                var cfg = new ConfigBase(dict);              
+                var cfg = new Scope(dict);              
                 var clone = new XElement(source);
                 cfg.Set("this",clone);
                 cfg.Set("self",source);
@@ -264,7 +263,7 @@ namespace Qorpent.Utils {
 	        return result.ToArray();
 	    }
 
-	    private static object[] GetDataSource(XElement source, IConfig datasource) {
+	    private static object[] GetDataSource(XElement source, IScope datasource) {
 	        IEnumerable result = null;
 	        var name = source.Attr("xi-repeat");
 	        if (name.StartsWith("$")) {
@@ -289,8 +288,8 @@ namespace Qorpent.Utils {
 
 	    }
 
-	    private IConfig PrepareDataSource(XElement source, IConfig parent) {
-			var result = new ConfigBase();
+	    private IScope PrepareDataSource(XElement source, IScope parent) {
+			var result = new Scope();
 			if (null != parent) {
 				result.SetParent(parent);
 			}

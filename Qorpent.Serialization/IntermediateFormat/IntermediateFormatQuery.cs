@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Qorpent.Config;
 using Qorpent.Log;
 using Qorpent.Mvc;
 
@@ -7,7 +6,7 @@ namespace Qorpent.IntermediateFormat{
 	/// <summary>
 	/// Запрос на промежуточный формат
 	/// </summary>
-	public  class IntermediateFormatQuery : ConfigBase,IConfigurableFromDictionary{
+	public  class IntermediateFormatQuery : Scope{
 		/// <summary>
 		///		Определяет, является ли запрос корректным
 		/// </summary>
@@ -58,17 +57,5 @@ namespace Qorpent.IntermediateFormat{
 			set { Set("xslt", value); }
 		}
 
-		/// <summary>
-		/// Заносит недообработанные парамтеры в конфигурацию
-		/// </summary>
-		/// <param name="args"></param>
-		public virtual void Setup(IDictionary<string, string> args){
-			foreach (var arg in args){
-				var key = arg.Key.ToLowerInvariant();
-				if (!Exists(key)){
-					Set(key,arg.Value);
-				}
-			}
-		}
 	}
 }

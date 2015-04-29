@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using Qorpent.Config;
 
 namespace Qorpent.Charts {
     /// <summary>
     ///     Интерфейс нормализатора чартов
     /// </summary>
-    public interface IChartNormalizer : IConfig {
+    public interface IChartNormalizer : IScope {
         /// <summary>
         ///     Код нормалайзера
         /// </summary>

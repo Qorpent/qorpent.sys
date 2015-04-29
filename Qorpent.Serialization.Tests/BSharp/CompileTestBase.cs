@@ -2,7 +2,6 @@
 using System.Linq;
 using Qorpent.BSharp;
 using Qorpent.Bxl;
-using Qorpent.Config;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.BSharp {
@@ -11,7 +10,7 @@ namespace Qorpent.Serialization.Tests.BSharp {
 			var cfg = new BSharpConfig();
 			cfg.Conditions = conditions;
 			if (null != globals){
-				cfg.Global = new ConfigBase(globals.ToDict()){UseInheritance = false};
+				cfg.Global = new Scope(globals.ToDict()){UseInheritance = false};
 			}
 		    if (null != _cfg) {
 		        _cfg.SetParent(cfg);

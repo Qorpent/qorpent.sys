@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Include="BSharpJsonParserTests.cs" />
     <Compile Include="BSharp\AdvancedIncludeTest.cs" />
+    <Compile Include="BSharp\AfterScopeMigrationTest.cs" />
     <Compile Include="BSharp\AnonymousClassSupport.cs" />
     <Compile Include="BSharp\BscHelperTest.cs" />
     <Compile Include="BSharp\BSharpCodeBuilderTest.cs" />
@@ -72,7 +73,6 @@
     <Compile Include="Q48SerializeNotNullCollectionsTest.cs" />
     <Compile Include="Q51JsonXmlParserFail.cs" />
     <Compile Include="Q66EmbededXmlSerialization.cs" />
-    <Compile Include="Report\TitleFormatterTests.cs" />
     <Compile Include="Selector_Tests\CssSelectorImplTests.cs" />
     <Compile Include="Selector_Tests\RegexSelectorImplTest.cs" />
     <Compile Include="serialization_set_test.cs" />

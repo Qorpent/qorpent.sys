@@ -1,11 +1,9 @@
-﻿using Qorpent.Config;
-
-namespace Qorpent.Charts {
+﻿namespace Qorpent.Charts {
 
     /// <summary>
     /// 
     /// </summary>
-    public interface IChartElement:IConfig {
+    public interface IChartElement:IScope {
         /// <summary>
         ///     Устанавливает родительский элемент
         /// </summary>

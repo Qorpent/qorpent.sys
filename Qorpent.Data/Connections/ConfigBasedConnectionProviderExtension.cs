@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // 
-// PROJECT ORIGIN: Qorpent.Data/ConfigBasedConnectionProviderExtension.cs
+// PROJECT ORIGIN: Qorpent.Data/ScopedConnectionProviderExtension.cs
 #endregion
 using System.Collections.Generic;
 using System.Configuration;
@@ -26,7 +26,7 @@ namespace Qorpent.Data.Connections {
 	/// —читывает информацию из штатного конфига
 	/// </summary>
 	[ContainerComponent(Lifestyle.Extension, "config.based.connection.provider",ServiceType = typeof (IDatabaseConnectionProviderExtension))]
-	public class ConfigBasedConnectionProviderExtension : ServiceBase, IDatabaseConnectionProviderExtension {
+	public class ScopedConnectionProviderExtension : ServiceBase, IDatabaseConnectionProviderExtension {
 		/// <summary>
 		/// —читывает соединени€ из штатного конфига
 		/// </summary>

@@ -6,7 +6,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Xsl;
-using Qorpent.Config;
 using Qorpent.Model;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
@@ -15,7 +14,7 @@ namespace Qorpent.IntermediateFormat {
 	/// <summary>
 	/// Переносимая структура в формате IntermediateDocument
 	/// </summary>
-	public class IntermediateFormatDocument: ConfigBase,IWithCode,IWithName {
+	public class IntermediateFormatDocument: Scope,IWithCode,IWithName {
 		
 		/// <summary>
 		/// Ссылка на запрос - контейнер
@@ -122,7 +121,7 @@ namespace Qorpent.IntermediateFormat {
 			result.SetAttributeValue("name",Name);
 			result.SetAttributeValue("prototype",Prototype);
 			result.SetAttributeValue("layer",Layer);
-			foreach (var pair in options){
+			foreach (var pair in this){
 				var key = pair.Key;
 				
 				if(IsSystemDefined(key))continue;

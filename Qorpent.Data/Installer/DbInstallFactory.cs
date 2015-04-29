@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Qorpent.BSharp;
-using Qorpent.Config;
 using Qorpent.IoC;
 using Qorpent.Tasks;
 using Qorpent.Utils.Extensions;

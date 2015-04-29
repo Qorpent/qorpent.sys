@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Qorpent.Config {
+namespace Qorpent {
     /// <summary>
     ///     Интерфейс Scope коллекции
     /// </summary>
@@ -57,10 +57,7 @@ namespace Qorpent.Config {
         /// <returns></returns>
         IEnumerable<IScope> GetParents();
 
-        /// <summary>
-        ///     Зачищает все родительские скоупы
-        /// </summary>
-        void ClearParents();
+    
 
         /// <summary>
         ///     Изолирует скоуп от родительских с копированием всех параметров
@@ -76,17 +73,5 @@ namespace Qorpent.Config {
         /// <param name="options"></param>
         /// <returns></returns>
         T Get<T>(string key, T def = default(T), ScopeOptions options = null);
-
-        /// <summary>
-        ///     Устанавливает родительский конфиг
-        /// </summary>
-        /// <param name="config"></param>
-        void SetParent(IScope config);
-
-        /// <summary>
-        ///     Получение родителя
-        /// </summary>
-        /// <returns></returns>
-        IScope GetParent();
     }
 }
