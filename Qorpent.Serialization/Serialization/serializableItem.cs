@@ -257,7 +257,7 @@ namespace Qorpent.Serialization {
 					return !string.IsNullOrEmpty((string) Value);
 				}
 				if (typeof (DateTime) == Type) {
-					return DateTime.MinValue != (DateTime) Value;
+					return DateTime.MinValue != (DateTime) Value && !((DateTime)Value).IsDateNull();
 				}
 				if (Type.IsEnum) {
 					return (Value.ToInt())!=0;

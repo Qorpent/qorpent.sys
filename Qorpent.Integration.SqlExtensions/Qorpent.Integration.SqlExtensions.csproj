@@ -542,6 +542,7 @@
     <Compile Include="BxlFunctions.cs" />
     <Compile Include="GeneratorFunctions.cs" />
     <Compile Include="HtmlFunctions.cs" />
+    <Compile Include="ListAggregate.cs" />
     <Compile Include="RegexFunctions.cs" />
     <Compile Include="SpatialFunctions.cs" />
     <Compile Include="SqlRegexMatch.cs" />
@@ -577,7 +578,7 @@
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
-    <PostBuildEvent>REM $(OutDir)..\all\sqlext.exe $(TargetDir)$(TargetFileName) --generate-script --schema qorpent &gt; $(ProjectDir)qpt-sqlext-clr.sql</PostBuildEvent>
+    <PostBuildEvent>$(OutDir)..\all\sqlext.exe $(TargetDir)$(TargetFileName) --generate-script --schema qorpent &gt; $(ProjectDir)qpt-sqlext-clr.sql</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
