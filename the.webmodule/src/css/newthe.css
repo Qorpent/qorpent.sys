@@ -200,6 +200,86 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   text-decoration: none;
   color: #4C81AF;
 }
+/* line 59, newthe/toolwindow.scss */
+.toolwindow.dialog {
+  display: none;
+}
+/* line 61, newthe/toolwindow.scss */
+.toolwindow.dialog.active {
+  display: flex;
+}
+/* line 64, newthe/toolwindow.scss */
+.toolwindow.dialog.fixed {
+  position: fixed;
+  z-index: 10000;
+  min-width: 300px;
+  min-height: 100px;
+  max-width: 1024px;
+  max-height: 700px;
+}
+/* line 72, newthe/toolwindow.scss */
+.toolwindow.dialog .content {
+  padding: 20px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+/* line 77, newthe/toolwindow.scss */
+.toolwindow.dialog > label {
+  flex-shrink: 0;
+}
+/* line 80, newthe/toolwindow.scss */
+.toolwindow.dialog > nav {
+  flex-shrink: 0;
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+/* line 87, newthe/toolwindow.scss */
+.toolwindow.dialog > nav i {
+  margin-left: 3px;
+  margin-right: 3px;
+  min-width: 80px;
+}
+
+/* line 97, newthe/toolwindow.scss */
+.modalback {
+  display: none;
+  position: fixed;
+  width: 10000px;
+  height: 10000px;
+  top: 0px;
+  left: 0px;
+  z-index: 9990;
+  background-color: #4C81AF;
+  opacity: 0.4;
+}
+
+/* line 109, newthe/toolwindow.scss */
+table.props {
+  border-collapse: collapse;
+  font-size: 80%;
+}
+/* line 112, newthe/toolwindow.scss */
+table.props td, table.props th {
+  border: solid 1px #eaeaea;
+  padding: 5px;
+}
+/* line 116, newthe/toolwindow.scss */
+table.props td:first-child {
+  font-size: 90%;
+}
+/* line 119, newthe/toolwindow.scss */
+table.props th {
+  background-color: #eaeaea;
+  font-weight: bold;
+}
+
+/* line 125, newthe/toolwindow.scss */
+.ng-invalid {
+  border: solid 1px #E7582E;
+}
 
 /* line 95, newthe/page.scss */
 html.the {
@@ -535,7 +615,7 @@ html.the .workplace > .main {
     min-width: 800px;
   }
 }
-/* line 140, newthe/tools.scss */
+/* line 143, newthe/tools.scss */
 html.the button, html.the .button, html.the .menuitem {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -626,13 +706,13 @@ html.the button.active:hover:active.bordered, html.the button.button:hover:activ
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 167, newthe/colorizer.scss */
-html.the button.active:hover:active[disabled='disabled'], html.the button.button:hover:active[disabled='disabled'], html.the button.menuitem:hover:active[disabled='disabled'], html.the .button.active:hover:active[disabled='disabled'], html.the .button.button:hover:active[disabled='disabled'], html.the .button.menuitem:hover:active[disabled='disabled'], html.the .menuitem.active:hover:active[disabled='disabled'], html.the .menuitem.button:hover:active[disabled='disabled'], html.the .menuitem.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the button.active:hover[disabled='disabled'], html.the button.active:hover.disabled, html.the button.button:hover[disabled='disabled'], html.the button.button:hover.disabled, html.the button.menuitem:hover[disabled='disabled'], html.the button.menuitem:hover.disabled, html.the .button.active:hover[disabled='disabled'], html.the .button.active:hover.disabled, html.the .button.button:hover[disabled='disabled'], html.the .button.button:hover.disabled, html.the .button.menuitem:hover[disabled='disabled'], html.the .button.menuitem:hover.disabled, html.the .menuitem.active:hover[disabled='disabled'], html.the .menuitem.active:hover.disabled, html.the .menuitem.button:hover[disabled='disabled'], html.the .menuitem.button:hover.disabled, html.the .menuitem.menuitem:hover[disabled='disabled'], html.the .menuitem.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 143, newthe/tools.scss */
+/* line 146, newthe/tools.scss */
 html.the .tooltitle {
   position: relative;
   min-height: 24px;
@@ -681,7 +761,7 @@ html.the .tooltitle.xsm {
   line-height: 10px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 143, newthe/tools.scss */
+  /* line 146, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 29px;
     padding-left: 6px;
@@ -723,7 +803,7 @@ html.the .tooltitle.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 143, newthe/tools.scss */
+  /* line 146, newthe/tools.scss */
   html.the .tooltitle {
     min-height: 20px;
     padding-left: 4px;
@@ -770,7 +850,7 @@ html.the .tooltitle .tbt {
   display: flex;
   align-items: center;
 }
-/* line 146, newthe/tools.scss */
+/* line 149, newthe/tools.scss */
 html.the .button, html.the .title {
   min-height: 28px;
   padding-left: 12px;
@@ -816,7 +896,7 @@ html.the .button.xsm, html.the .title.xsm {
   line-height: 12px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 146, newthe/tools.scss */
+  /* line 149, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 34px;
     padding-left: 15px;
@@ -858,7 +938,7 @@ html.the .button.xsm, html.the .title.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 146, newthe/tools.scss */
+  /* line 149, newthe/tools.scss */
   html.the .button, html.the .title {
     min-height: 23px;
     padding-left: 10px;
@@ -899,7 +979,7 @@ html.the .button.xsm, html.the .title.xsm {
     line-height: 9px;
   }
 }
-/* line 150, newthe/tools.scss */
+/* line 153, newthe/tools.scss */
 html.the .input {
   min-height: 20px;
   padding-left: 3px;
@@ -945,7 +1025,7 @@ html.the .input.xsm {
   line-height: 8px;
 }
 @media screen and (min-width: 1400px) {
-  /* line 150, newthe/tools.scss */
+  /* line 153, newthe/tools.scss */
   html.the .input {
     min-height: 24px;
     padding-left: 4px;
@@ -987,7 +1067,7 @@ html.the .input.xsm {
   }
 }
 @media screen and (max-width: 1100px) {
-  /* line 150, newthe/tools.scss */
+  /* line 153, newthe/tools.scss */
   html.the .input {
     min-height: 16px;
     padding-left: 3px;
@@ -1028,11 +1108,11 @@ html.the .input.xsm {
     line-height: 7px;
   }
 }
-/* line 154, newthe/tools.scss */
+/* line 157, newthe/tools.scss */
 html.the input.block {
   box-sizing: border-box;
 }
-/* line 159, newthe/tools.scss */
+/* line 162, newthe/tools.scss */
 html.the .subtitle {
   color: #4C81AF;
   background: transparent;
@@ -1040,7 +1120,7 @@ html.the .subtitle {
   margin-top: 10px;
   padding-bottom: 2px;
 }
-/* line 166, newthe/tools.scss */
+/* line 169, newthe/tools.scss */
 html.the .message {
   position: relative;
   display: flex;
@@ -1065,36 +1145,42 @@ html.the .message .closer:before {
   font-family: FontAwesome;
   content: "";
 }
-/* line 169, newthe/tools.scss */
+/* line 172, newthe/tools.scss */
 html.the button, html.the .button {
   position: relative;
   display: inline-block;
   text-align: center;
 }
 /* line 38, newthe/tools.scss */
-html.the button[disabled='disabled'], html.the .button[disabled='disabled'] {
+html.the button[disabled='disabled'], html.the button.disabled, html.the .button[disabled='disabled'], html.the .button.disabled {
   background-color: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 43, newthe/tools.scss */
-html.the button[disabled='disabled']:hover:active, html.the .button[disabled='disabled']:hover:active {
+/* line 42, newthe/tools.scss */
+html.the button[disabled='disabled']:hover, html.the button.disabled:hover, html.the .button[disabled='disabled']:hover, html.the .button.disabled:hover {
   background-color: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 50, newthe/tools.scss */
+/* line 46, newthe/tools.scss */
+html.the button[disabled='disabled']:hover:active, html.the button.disabled:hover:active, html.the .button[disabled='disabled']:hover:active, html.the .button.disabled:hover:active {
+  background-color: #eaeaea !important;
+  border: dotted 1px #D7D7D7 !important;
+  color: #D7D7D7 !important;
+}
+/* line 53, newthe/tools.scss */
 html.the button.tab, html.the .button.tab {
   border-radius: 3px 3px 0px 0px;
 }
-/* line 52, newthe/tools.scss */
+/* line 55, newthe/tools.scss */
 html.the button.tab.checked, html.the .button.tab.checked {
   color: #3d678b;
   background: #f6f6f6;
   border-bottom: solid 1px #f6f6f6 !important;
   top: 1px;
 }
-/* line 172, newthe/tools.scss */
+/* line 175, newthe/tools.scss */
 html.the .maintoolbar {
   padding-bottom: 0px;
   padding-top: 3px;
@@ -1106,7 +1192,7 @@ html.the .maintoolbar {
   align-items: flex-end;
   background-color: #4C81AF;
 }
-/* line 74, newthe/tools.scss */
+/* line 77, newthe/tools.scss */
 html.the .maintoolbar .logo {
   background-image: url("img/logo-toolbar.png");
   background-size: cover;
@@ -1116,7 +1202,7 @@ html.the .maintoolbar .logo {
   align-self: flex-start;
 }
 @media screen and (max-width: 1100px) {
-  /* line 74, newthe/tools.scss */
+  /* line 77, newthe/tools.scss */
   html.the .maintoolbar .logo {
     height: 30px;
     width: 50px;
@@ -1124,14 +1210,14 @@ html.the .maintoolbar .logo {
   }
 }
 @media screen and (min-width: 1400px) {
-  /* line 74, newthe/tools.scss */
+  /* line 77, newthe/tools.scss */
   html.the .maintoolbar .logo {
     height: 40px;
     width: 70px;
     margin-right: 16px;
   }
 }
-/* line 92, newthe/tools.scss */
+/* line 95, newthe/tools.scss */
 html.the .maintoolbar input {
   display: inline-block;
   font-size: 20px;
@@ -1142,35 +1228,35 @@ html.the .maintoolbar input {
   margin-top: 0px;
   margin-bottom: 0px;
 }
-/* line 103, newthe/tools.scss */
+/* line 106, newthe/tools.scss */
 html.the .maintoolbar.top .button {
   align-self: center;
   border: none !important;
   margin-right: 1px;
   margin-left: 1px;
 }
-/* line 108, newthe/tools.scss */
+/* line 111, newthe/tools.scss */
 html.the .maintoolbar.top .button.tab {
   align-self: flex-end;
   margin-right: 0px;
   margin-left: 0px;
 }
-/* line 113, newthe/tools.scss */
+/* line 116, newthe/tools.scss */
 html.the .maintoolbar.top .button.checker.primary {
   background-color: #4C81AF;
   border: solid 1px #4C81AF !important;
   color: #FDFDFD;
 }
-/* line 117, newthe/tools.scss */
+/* line 120, newthe/tools.scss */
 html.the .maintoolbar.top .button.checker.primary:hover {
   background-color: #92b3cf;
 }
-/* line 120, newthe/tools.scss */
+/* line 123, newthe/tools.scss */
 html.the .maintoolbar.top .button.checker.primary.checked {
   border: solid 1px #FDFDFD !important;
   border-radius: 5px 5px 5px 5px !important;
 }
-/* line 127, newthe/tools.scss */
+/* line 130, newthe/tools.scss */
 html.the .maintoolbar.tab {
   background-color: #f6f6f6;
   padding-bottom: 1px;
@@ -1178,7 +1264,7 @@ html.the .maintoolbar.tab {
   padding-left: 10px;
   padding-right: 10px;
 }
-/* line 133, newthe/tools.scss */
+/* line 136, newthe/tools.scss */
 html.the .maintoolbar.tab .button {
   margin-right: 4px;
 }
@@ -1362,11 +1448,11 @@ html.the .dropdown.debug {
 html.the body.isdropdown .dropdownback {
   display: block;
 }
-/* line 191, newthe/colorizer.scss */
+/* line 192, newthe/colorizer.scss */
 html.the .idark {
   color: #2B2B2B;
 }
-/* line 194, newthe/colorizer.scss */
+/* line 195, newthe/colorizer.scss */
 html.the .dark {
   color: #FDFDFD;
   background-color: #2B2B2B;
@@ -1509,13 +1595,13 @@ html.the .dark.active:hover:active.bordered, html.the .dark.button:hover:active.
   border-top-color: #1e1e1e;
   border-bottom-color: #2b2b2b;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .dark.active:hover:active[disabled='disabled'], html.the .dark.button:hover:active[disabled='disabled'], html.the .dark.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .dark.active:hover[disabled='disabled'], html.the .dark.active:hover.disabled, html.the .dark.button:hover[disabled='disabled'], html.the .dark.button:hover.disabled, html.the .dark.menuitem:hover[disabled='disabled'], html.the .dark.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 197, newthe/colorizer.scss */
+/* line 198, newthe/colorizer.scss */
 html.the .dark.soft {
   color: #FDFDFD;
   background-color: #5e5e5e;
@@ -1609,13 +1695,13 @@ html.the .dark.soft.active:hover:active.bordered, html.the .dark.soft.button:hov
   border-top-color: #515151;
   border-bottom-color: #5e5e5e;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .dark.soft.active:hover:active[disabled='disabled'], html.the .dark.soft.button:hover:active[disabled='disabled'], html.the .dark.soft.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .dark.soft.active:hover[disabled='disabled'], html.the .dark.soft.active:hover.disabled, html.the .dark.soft.button:hover[disabled='disabled'], html.the .dark.soft.button:hover.disabled, html.the .dark.soft.menuitem:hover[disabled='disabled'], html.the .dark.soft.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 200, newthe/colorizer.scss */
+/* line 201, newthe/colorizer.scss */
 html.the .dark.strong {
   color: #FDFDFD;
   background-color: #121212;
@@ -1709,17 +1795,17 @@ html.the .dark.strong.active:hover:active.bordered, html.the .dark.strong.button
   border-top-color: #050505;
   border-bottom-color: #121212;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .dark.strong.active:hover:active[disabled='disabled'], html.the .dark.strong.button:hover:active[disabled='disabled'], html.the .dark.strong.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .dark.strong.active:hover[disabled='disabled'], html.the .dark.strong.active:hover.disabled, html.the .dark.strong.button:hover[disabled='disabled'], html.the .dark.strong.button:hover.disabled, html.the .dark.strong.menuitem:hover[disabled='disabled'], html.the .dark.strong.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 191, newthe/colorizer.scss */
+/* line 192, newthe/colorizer.scss */
 html.the .ilight {
   color: #FDFDFD;
 }
-/* line 194, newthe/colorizer.scss */
+/* line 195, newthe/colorizer.scss */
 html.the .light {
   color: #2B2B2B;
   background-color: #FDFDFD;
@@ -1859,13 +1945,13 @@ html.the .light.active:hover:active.bordered, html.the .light.button:hover:activ
   border-top-color: #e4e4e4;
   border-bottom-color: #e4e4e4;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .light.active:hover:active[disabled='disabled'], html.the .light.button:hover:active[disabled='disabled'], html.the .light.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .light.active:hover[disabled='disabled'], html.the .light.active:hover.disabled, html.the .light.button:hover[disabled='disabled'], html.the .light.button:hover.disabled, html.the .light.menuitem:hover[disabled='disabled'], html.the .light.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 197, newthe/colorizer.scss */
+/* line 198, newthe/colorizer.scss */
 html.the .light.soft {
   color: #2B2B2B;
   background-color: #fefefe;
@@ -1956,13 +2042,13 @@ html.the .light.soft.active:hover:active.bordered, html.the .light.soft.button:h
   border-top-color: #e5e5e5;
   border-bottom-color: #e5e5e5;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .light.soft.active:hover:active[disabled='disabled'], html.the .light.soft.button:hover:active[disabled='disabled'], html.the .light.soft.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .light.soft.active:hover[disabled='disabled'], html.the .light.soft.active:hover.disabled, html.the .light.soft.button:hover[disabled='disabled'], html.the .light.soft.button:hover.disabled, html.the .light.soft.menuitem:hover[disabled='disabled'], html.the .light.soft.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 200, newthe/colorizer.scss */
+/* line 201, newthe/colorizer.scss */
 html.the .light.strong {
   color: #2B2B2B;
   background-color: #e4e4e4;
@@ -2053,17 +2139,17 @@ html.the .light.strong.active:hover:active.bordered, html.the .light.strong.butt
   border-top-color: #d7d7d7;
   border-bottom-color: gainsboro;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .light.strong.active:hover:active[disabled='disabled'], html.the .light.strong.button:hover:active[disabled='disabled'], html.the .light.strong.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .light.strong.active:hover[disabled='disabled'], html.the .light.strong.active:hover.disabled, html.the .light.strong.button:hover[disabled='disabled'], html.the .light.strong.button:hover.disabled, html.the .light.strong.menuitem:hover[disabled='disabled'], html.the .light.strong.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 191, newthe/colorizer.scss */
+/* line 192, newthe/colorizer.scss */
 html.the .iprimary {
   color: #4C81AF;
 }
-/* line 194, newthe/colorizer.scss */
+/* line 195, newthe/colorizer.scss */
 html.the .primary {
   color: #FDFDFD;
   background-color: #4C81AF;
@@ -2206,13 +2292,13 @@ html.the .primary.active:hover:active.bordered, html.the .primary.button:hover:a
   border-top-color: #44749d;
   border-bottom-color: #4c81af;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .primary.active:hover:active[disabled='disabled'], html.the .primary.button:hover:active[disabled='disabled'], html.the .primary.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .primary.active:hover[disabled='disabled'], html.the .primary.active:hover.disabled, html.the .primary.button:hover[disabled='disabled'], html.the .primary.button:hover.disabled, html.the .primary.menuitem:hover[disabled='disabled'], html.the .primary.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 197, newthe/colorizer.scss */
+/* line 198, newthe/colorizer.scss */
 html.the .primary.soft {
   color: #FDFDFD;
   background-color: #92b3cf;
@@ -2306,13 +2392,13 @@ html.the .primary.soft.active:hover:active.bordered, html.the .primary.soft.butt
   border-top-color: #80a6c8;
   border-bottom-color: #92b3cf;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .primary.soft.active:hover:active[disabled='disabled'], html.the .primary.soft.button:hover:active[disabled='disabled'], html.the .primary.soft.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .primary.soft.active:hover[disabled='disabled'], html.the .primary.soft.active:hover.disabled, html.the .primary.soft.button:hover[disabled='disabled'], html.the .primary.soft.button:hover.disabled, html.the .primary.soft.menuitem:hover[disabled='disabled'], html.the .primary.soft.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 200, newthe/colorizer.scss */
+/* line 201, newthe/colorizer.scss */
 html.the .primary.strong {
   color: #FDFDFD;
   background-color: #3d678b;
@@ -2406,17 +2492,17 @@ html.the .primary.strong.active:hover:active.bordered, html.the .primary.strong.
   border-top-color: #355a7a;
   border-bottom-color: #3d678b;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .primary.strong.active:hover:active[disabled='disabled'], html.the .primary.strong.button:hover:active[disabled='disabled'], html.the .primary.strong.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .primary.strong.active:hover[disabled='disabled'], html.the .primary.strong.active:hover.disabled, html.the .primary.strong.button:hover[disabled='disabled'], html.the .primary.strong.button:hover.disabled, html.the .primary.strong.menuitem:hover[disabled='disabled'], html.the .primary.strong.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 191, newthe/colorizer.scss */
+/* line 192, newthe/colorizer.scss */
 html.the .idefault {
   color: #D7D7D7;
 }
-/* line 194, newthe/colorizer.scss */
+/* line 195, newthe/colorizer.scss */
 html.the .default {
   color: #2B2B2B;
   background-color: #D7D7D7;
@@ -2559,13 +2645,13 @@ html.the .default.active:hover:active.bordered, html.the .default.button:hover:a
   border-top-color: #cacaca;
   border-bottom-color: #d7d7d7;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .default.active:hover:active[disabled='disabled'], html.the .default.button:hover:active[disabled='disabled'], html.the .default.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .default.active:hover[disabled='disabled'], html.the .default.active:hover.disabled, html.the .default.button:hover[disabled='disabled'], html.the .default.button:hover.disabled, html.the .default.menuitem:hover[disabled='disabled'], html.the .default.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 197, newthe/colorizer.scss */
+/* line 198, newthe/colorizer.scss */
 html.the .default.soft {
   color: #2B2B2B;
   background-color: #f6f6f6;
@@ -2656,13 +2742,13 @@ html.the .default.soft.active:hover:active.bordered, html.the .default.soft.butt
   border-top-color: #dddddd;
   border-bottom-color: #dddddd;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .default.soft.active:hover:active[disabled='disabled'], html.the .default.soft.button:hover:active[disabled='disabled'], html.the .default.soft.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .default.soft.active:hover[disabled='disabled'], html.the .default.soft.active:hover.disabled, html.the .default.soft.button:hover[disabled='disabled'], html.the .default.soft.button:hover.disabled, html.the .default.soft.menuitem:hover[disabled='disabled'], html.the .default.soft.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 200, newthe/colorizer.scss */
+/* line 201, newthe/colorizer.scss */
 html.the .default.strong {
   color: #2B2B2B;
   background-color: #bebebe;
@@ -2756,17 +2842,17 @@ html.the .default.strong.active:hover:active.bordered, html.the .default.strong.
   border-top-color: #b1b1b1;
   border-bottom-color: #bebebe;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .default.strong.active:hover:active[disabled='disabled'], html.the .default.strong.button:hover:active[disabled='disabled'], html.the .default.strong.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .default.strong.active:hover[disabled='disabled'], html.the .default.strong.active:hover.disabled, html.the .default.strong.button:hover[disabled='disabled'], html.the .default.strong.button:hover.disabled, html.the .default.strong.menuitem:hover[disabled='disabled'], html.the .default.strong.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 191, newthe/colorizer.scss */
+/* line 192, newthe/colorizer.scss */
 html.the .isuccess {
   color: #5E994B;
 }
-/* line 194, newthe/colorizer.scss */
+/* line 195, newthe/colorizer.scss */
 html.the .success {
   color: #FDFDFD;
   background-color: #5E994B;
@@ -2909,13 +2995,13 @@ html.the .success.active:hover:active.bordered, html.the .success.button:hover:a
   border-top-color: #538843;
   border-bottom-color: #5e994b;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .success.active:hover:active[disabled='disabled'], html.the .success.button:hover:active[disabled='disabled'], html.the .success.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .success.active:hover[disabled='disabled'], html.the .success.active:hover.disabled, html.the .success.button:hover[disabled='disabled'], html.the .success.button:hover.disabled, html.the .success.menuitem:hover[disabled='disabled'], html.the .success.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 197, newthe/colorizer.scss */
+/* line 198, newthe/colorizer.scss */
 html.the .success.soft {
   color: #FDFDFD;
   background-color: #95c486;
@@ -3009,13 +3095,13 @@ html.the .success.soft.active:hover:active.bordered, html.the .success.soft.butt
   border-top-color: #86bb75;
   border-bottom-color: #95c486;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .success.soft.active:hover:active[disabled='disabled'], html.the .success.soft.button:hover:active[disabled='disabled'], html.the .success.soft.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .success.soft.active:hover[disabled='disabled'], html.the .success.soft.active:hover.disabled, html.the .success.soft.button:hover[disabled='disabled'], html.the .success.soft.button:hover.disabled, html.the .success.soft.menuitem:hover[disabled='disabled'], html.the .success.soft.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 200, newthe/colorizer.scss */
+/* line 201, newthe/colorizer.scss */
 html.the .success.strong {
   color: #FDFDFD;
   background-color: #49773a;
@@ -3109,17 +3195,17 @@ html.the .success.strong.active:hover:active.bordered, html.the .success.strong.
   border-top-color: #3e6632;
   border-bottom-color: #49773a;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .success.strong.active:hover:active[disabled='disabled'], html.the .success.strong.button:hover:active[disabled='disabled'], html.the .success.strong.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .success.strong.active:hover[disabled='disabled'], html.the .success.strong.active:hover.disabled, html.the .success.strong.button:hover[disabled='disabled'], html.the .success.strong.button:hover.disabled, html.the .success.strong.menuitem:hover[disabled='disabled'], html.the .success.strong.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 191, newthe/colorizer.scss */
+/* line 192, newthe/colorizer.scss */
 html.the .iinfo {
   color: #F9D264;
 }
-/* line 194, newthe/colorizer.scss */
+/* line 195, newthe/colorizer.scss */
 html.the .info {
   color: #2B2B2B;
   background-color: #F9D264;
@@ -3262,13 +3348,13 @@ html.the .info.active:hover:active.bordered, html.the .info.button:hover:active.
   border-top-color: #f8cb4b;
   border-bottom-color: #f9d264;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .info.active:hover:active[disabled='disabled'], html.the .info.button:hover:active[disabled='disabled'], html.the .info.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .info.active:hover[disabled='disabled'], html.the .info.active:hover.disabled, html.the .info.button:hover[disabled='disabled'], html.the .info.button:hover.disabled, html.the .info.menuitem:hover[disabled='disabled'], html.the .info.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 197, newthe/colorizer.scss */
+/* line 198, newthe/colorizer.scss */
 html.the .info.soft {
   color: #2B2B2B;
   background-color: #fdefc6;
@@ -3362,13 +3448,13 @@ html.the .info.soft.active:hover:active.bordered, html.the .info.soft.button:hov
   border-top-color: #fce7ae;
   border-bottom-color: #fdedc1;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .info.soft.active:hover:active[disabled='disabled'], html.the .info.soft.button:hover:active[disabled='disabled'], html.the .info.soft.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .info.soft.active:hover[disabled='disabled'], html.the .info.soft.active:hover.disabled, html.the .info.soft.button:hover[disabled='disabled'], html.the .info.soft.button:hover.disabled, html.the .info.soft.menuitem:hover[disabled='disabled'], html.the .info.soft.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 200, newthe/colorizer.scss */
+/* line 201, newthe/colorizer.scss */
 html.the .info.strong {
   color: #FDFDFD;
   background-color: #f7c433;
@@ -3462,17 +3548,17 @@ html.the .info.strong.active:hover:active.bordered, html.the .info.strong.button
   border-top-color: #f6bd1a;
   border-bottom-color: #f7c433;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .info.strong.active:hover:active[disabled='disabled'], html.the .info.strong.button:hover:active[disabled='disabled'], html.the .info.strong.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .info.strong.active:hover[disabled='disabled'], html.the .info.strong.active:hover.disabled, html.the .info.strong.button:hover[disabled='disabled'], html.the .info.strong.button:hover.disabled, html.the .info.strong.menuitem:hover[disabled='disabled'], html.the .info.strong.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 191, newthe/colorizer.scss */
+/* line 192, newthe/colorizer.scss */
 html.the .idanger {
   color: #E7582E;
 }
-/* line 194, newthe/colorizer.scss */
+/* line 195, newthe/colorizer.scss */
 html.the .danger {
   color: #FDFDFD;
   background-color: #E7582E;
@@ -3615,13 +3701,13 @@ html.the .danger.active:hover:active.bordered, html.the .danger.button:hover:act
   border-top-color: #e2471a;
   border-bottom-color: #e7582e;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .danger.active:hover:active[disabled='disabled'], html.the .danger.button:hover:active[disabled='disabled'], html.the .danger.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .danger.active:hover[disabled='disabled'], html.the .danger.active:hover.disabled, html.the .danger.button:hover[disabled='disabled'], html.the .danger.button:hover.disabled, html.the .danger.menuitem:hover[disabled='disabled'], html.the .danger.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 197, newthe/colorizer.scss */
+/* line 198, newthe/colorizer.scss */
 html.the .danger.soft {
   color: #2B2B2B;
   background-color: #f2a189;
@@ -3715,13 +3801,13 @@ html.the .danger.soft.active:hover:active.bordered, html.the .danger.soft.button
   border-top-color: #ef8f73;
   border-bottom-color: #f2a189;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .danger.soft.active:hover:active[disabled='disabled'], html.the .danger.soft.button:hover:active[disabled='disabled'], html.the .danger.soft.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .danger.soft.active:hover[disabled='disabled'], html.the .danger.soft.active:hover.disabled, html.the .danger.soft.button:hover[disabled='disabled'], html.the .danger.soft.button:hover.disabled, html.the .danger.soft.menuitem:hover[disabled='disabled'], html.the .danger.soft.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 200, newthe/colorizer.scss */
+/* line 201, newthe/colorizer.scss */
 html.the .danger.strong {
   color: #FDFDFD;
   background-color: #cb4017;
@@ -3815,17 +3901,17 @@ html.the .danger.strong.active:hover:active.bordered, html.the .danger.strong.bu
   border-top-color: #b43915;
   border-bottom-color: #cb4017;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .danger.strong.active:hover:active[disabled='disabled'], html.the .danger.strong.button:hover:active[disabled='disabled'], html.the .danger.strong.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .danger.strong.active:hover[disabled='disabled'], html.the .danger.strong.active:hover.disabled, html.the .danger.strong.button:hover[disabled='disabled'], html.the .danger.strong.button:hover.disabled, html.the .danger.strong.menuitem:hover[disabled='disabled'], html.the .danger.strong.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 191, newthe/colorizer.scss */
+/* line 192, newthe/colorizer.scss */
 html.the .iwarn {
   color: #FA9357;
 }
-/* line 194, newthe/colorizer.scss */
+/* line 195, newthe/colorizer.scss */
 html.the .warn {
   color: #FDFDFD;
   background-color: #FA9357;
@@ -3968,13 +4054,13 @@ html.the .warn.active:hover:active.bordered, html.the .warn.button:hover:active.
   border-top-color: #f9833e;
   border-bottom-color: #fa9357;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .warn.active:hover:active[disabled='disabled'], html.the .warn.button:hover:active[disabled='disabled'], html.the .warn.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .warn.active:hover[disabled='disabled'], html.the .warn.active:hover.disabled, html.the .warn.button:hover[disabled='disabled'], html.the .warn.button:hover.disabled, html.the .warn.menuitem:hover[disabled='disabled'], html.the .warn.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 197, newthe/colorizer.scss */
+/* line 198, newthe/colorizer.scss */
 html.the .warn.soft {
   color: #2B2B2B;
   background-color: #fdd3ba;
@@ -4068,13 +4154,13 @@ html.the .warn.soft.active:hover:active.bordered, html.the .warn.soft.button:hov
   border-top-color: #fcc3a1;
   border-bottom-color: #fdd3ba;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .warn.soft.active:hover:active[disabled='disabled'], html.the .warn.soft.button:hover:active[disabled='disabled'], html.the .warn.soft.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .warn.soft.active:hover[disabled='disabled'], html.the .warn.soft.active:hover.disabled, html.the .warn.soft.button:hover[disabled='disabled'], html.the .warn.soft.button:hover.disabled, html.the .warn.soft.menuitem:hover[disabled='disabled'], html.the .warn.soft.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
 }
-/* line 200, newthe/colorizer.scss */
+/* line 201, newthe/colorizer.scss */
 html.the .warn.strong {
   color: #FDFDFD;
   background-color: #f97325;
@@ -4168,8 +4254,8 @@ html.the .warn.strong.active:hover:active.bordered, html.the .warn.strong.button
   border-top-color: #f8630d;
   border-bottom-color: #f97325;
 }
-/* line 167, newthe/colorizer.scss */
-html.the .warn.strong.active:hover:active[disabled='disabled'], html.the .warn.strong.button:hover:active[disabled='disabled'], html.the .warn.strong.menuitem:hover:active[disabled='disabled'] {
+/* line 169, newthe/colorizer.scss */
+html.the .warn.strong.active:hover[disabled='disabled'], html.the .warn.strong.active:hover.disabled, html.the .warn.strong.button:hover[disabled='disabled'], html.the .warn.strong.button:hover.disabled, html.the .warn.strong.menuitem:hover[disabled='disabled'], html.the .warn.strong.menuitem:hover.disabled {
   background: #eaeaea !important;
   border: dotted 1px #D7D7D7 !important;
   color: #D7D7D7 !important;
@@ -4199,7 +4285,7 @@ html.the .box .collapsed > .content {
   display: none !important;
 }
 /* line 67, newthe/page.scss */
-html.the .box .content {
+html.the .box > .content {
   overflow-x: hidden;
   overflow-y: auto;
   flex: 1;

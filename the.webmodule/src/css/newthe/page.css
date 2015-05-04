@@ -135,6 +135,86 @@
   text-decoration: none;
   color: color(primary);
 }
+/* line 59, toolwindow.scss */
+.toolwindow.dialog {
+  display: none;
+}
+/* line 61, toolwindow.scss */
+.toolwindow.dialog.active {
+  display: flex;
+}
+/* line 64, toolwindow.scss */
+.toolwindow.dialog.fixed {
+  position: fixed;
+  z-index: 10000;
+  min-width: 300px;
+  min-height: 100px;
+  max-width: 1024px;
+  max-height: 700px;
+}
+/* line 72, toolwindow.scss */
+.toolwindow.dialog .content {
+  padding: 20px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+/* line 77, toolwindow.scss */
+.toolwindow.dialog > label {
+  flex-shrink: 0;
+}
+/* line 80, toolwindow.scss */
+.toolwindow.dialog > nav {
+  flex-shrink: 0;
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+/* line 87, toolwindow.scss */
+.toolwindow.dialog > nav i {
+  margin-left: 3px;
+  margin-right: 3px;
+  min-width: 80px;
+}
+
+/* line 97, toolwindow.scss */
+.modalback {
+  display: none;
+  position: fixed;
+  width: 10000px;
+  height: 10000px;
+  top: 0px;
+  left: 0px;
+  z-index: 9990;
+  background-color: color(primary);
+  opacity: 0.4;
+}
+
+/* line 109, toolwindow.scss */
+table.props {
+  border-collapse: collapse;
+  font-size: 80%;
+}
+/* line 112, toolwindow.scss */
+table.props td, table.props th {
+  border: solid 1px color(defaultlight);
+  padding: 5px;
+}
+/* line 116, toolwindow.scss */
+table.props td:first-child {
+  font-size: 90%;
+}
+/* line 119, toolwindow.scss */
+table.props th {
+  background-color: color(defaultlight);
+  font-weight: bold;
+}
+
+/* line 125, toolwindow.scss */
+.ng-invalid {
+  border: solid 1px color(danger);
+}
 
 /* line 110, page.scss */
 .tlicon {

@@ -35,11 +35,14 @@
   position:relative;
   display: inline-block;
   text-align: center;
-  &[disabled='disabled']{
+  &[disabled='disabled'],&.disabled{
     background-color: color(defaultlight) !important;
     border: dotted 1px color(default) !important;
     color : color(default) !important;
     &:hover {
+      background-color: color(defaultlight) !important;
+      border: dotted 1px color(default) !important;
+      color: color(default) !important;
       &:active {
         background-color: color(defaultlight) !important;
         border: dotted 1px color(default) !important;

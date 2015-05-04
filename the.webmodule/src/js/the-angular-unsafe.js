@@ -5,11 +5,11 @@
         return $the(function(root, privates)
         {
             if(null==root.modules)return;
-            var unsafe = function($sce) {
+            var unsafe = ["$sce",function($sce) {
                 return function (val) {
                     return $sce.trustAsHtml(val);
                 };
-            };
+            }];
             root.modules.f_unsafe = root.$angular.module("the-unsafe",[]).filter('unsafe',unsafe);
             root.modules.all.filter('unsafe', unsafe);
         });

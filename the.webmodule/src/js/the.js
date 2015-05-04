@@ -14,6 +14,7 @@ define([
     "the-action",
     'the-angular-unsafe',
     'the-angular-autocomplete',
+    'the-angular-dialog',
     'the-angular-controlgroup',
     'the-angular-viewcontext',
     'the-angular-onenter',

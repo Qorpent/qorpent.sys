@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html class="the">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>the-modal</title>
+    <link rel="stylesheet" href="../dist/css/newthe.css">
+    <link rel="stylesheet" type="text/css" href="../lib/mocha.css">
+    <script type="text/javascript" src="./../lib/require.js"></script>
+</head>
+<body class="box col">
+
+
+<div class="box row toolbar">
+    <input size="40" ng-model="vc.editObjectDef">
+
+    <div class="button primary" ng-click="vc.setObject()">Редактировать</div>
+</div>
+
+<h1>Auto scope mapping sample</h1>
+
+<div id="dialog1" class="fixed" the-dialog ng-controller="dialog1"> <!-- id attribute used only for test proposals -->
+
+</div>
+
+<div id="mocha"></div>
+<script type="text/javascript">
+    require.config({
+        paths: {
+            jquery: "./../lib/jquery",
+            angular: "./../lib/angular",
+            mocha: "./../lib/mocha",
+            chai: "./../lib/chai",
+            teamcity: "./../lib/teamcity",
+            the: "./../dist/js/the",
+            moment: "./../lib/moment",
+            tests: "./modal-tests",
+            sanitize:"./../lib/angular-sanitize.min"
+        },
+        shim: {
+            the: {
+                deps: ["jquery", "angular","sanitize"]
+            },
+            sanitize : {
+                deps : ["angular"]
+            },
+            mocha: {
+                exports: 'mocha',
+                deps: ["teamcity"],
+                init: function (tc) {
+                    mocha.setup({
+                        ui: "bdd", ignoreLeaks: true, reporter: function (runner) {
+                            new Mocha.reporters.HTML(runner);
+                            //   new tc(Mocha.reporters.Base, runner);
+                        }
+                    });
+                    return this.mocha;
+                }
+            },
+
+            chai: {
+                deps: ["mocha"]
+            },
+            tests: {
+                deps: ["the", "mocha", "chai"]
+            }
+        },
+        deps: ["the", "mocha", "chai"],
+        callback: function () {
+            var the = require('the');
+            var module = angular.module("examples", ["the-all","ngSanitize"]);
+            var vc = null;
+            module.factory('viewcontext', ['$rootScope', function ($rootScope) {
+                return  {
+                    editObject: null,
+                    editObjectDef: '{"name":"A"}',
+                    setObject: function (json) {
+                        json = json || this.editObjectDef;
+                        if(typeof(json)=="string") {
+                            this.editObject = JSON.parse(json);
+                        }else{
+                            this.editObject = json;
+                        }
+                        $rootScope.$broadcast('OBJECTCHANGED', this.editObject);
+                    }
+                };
+            }]);
+            module.run(['$rootScope', 'viewcontext', '$templateCache', function ($rootScope, viewcontext) {
+                $rootScope.vc = viewcontext;
+            }]);
+            module.controller('dialog1', ["$scope", "viewcontext", function ($scope, vc) {
+                var _handler = null;
+                $scope.initDialog = function (handler) {
+                    _handler = handler;
+                    handler.onSuccess = function () {
+                        vc.editObject = $scope.item;
+                        vc.editObjectDef = JSON.stringify(vc.editObject);
+                        return true;
+                    }
+                    handler.onValidate = function () {
+                        var result = true;
+                        handler.errorMessages = handler.errorMessages || {};
+                        if (!$scope.item.code) {
+                            handler.errorMessages["require_code"] = "Требуется поле code";
+                            result = false;
+                        } else {
+                            delete(handler.errorMessages.require_code);
+                        }
+                        return result;
+                    };
+                    handler.getLabel = function () {
+                        var name = (vc.editObject && vc.editObject.name) ? vc.editObject.name : "безымянный";
+                        return "Настройка объекта '" + name + "'";
+                    };
+                    handler.getView = function () {
+                        return "./dialogViews/dialog1.html";
+                    }
+                };
+
+                $scope.$on("OBJECTCHANGED", function () {
+                    if (null == vc.editObject)return;
+                    if (!_handler)return;
+                    $scope.$tryApply(function(){$scope.item = the.clone(vc.editObject)});
+                    _handler.execute();
+                });
+            }]);
+            module.controller('dialog2', ["$scope", function () {
+
+            }]);
+            angular.bootstrap(document, ["examples"]);
+            require(["mocha", "chai", "tests"], function (mocha) {
+                mocha.run();
+            });
+        }
+    });
+</script>
+</body>
+</html>

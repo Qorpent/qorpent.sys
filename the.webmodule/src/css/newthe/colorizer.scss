@@ -164,11 +164,12 @@
                                         border-top-color : darken(slighten($backcolor,$ldstep /2),$ldstep);
                                         border-bottom-color : darken(slighten($backcolor,$ldstep ),$ldstep);
                                 }
-                                &[disabled='disabled'] {
-                                        background: color(defaultlight) !important;
-                                        border: dotted 1px color(default) !important;
-                                        color: color(default) !important;
-                                }
+
+                        }
+                        &[disabled='disabled'],&.disabled {
+                                background: color(defaultlight) !important;
+                                border: dotted 1px color(default) !important;
+                                color: color(default) !important;
                         }
                 }
 

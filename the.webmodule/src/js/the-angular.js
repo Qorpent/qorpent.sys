@@ -7,6 +7,21 @@
         {
             root.checkEnvironment();
             if ( root.$angular) {
+                root.$angular.directiveCall = function(scope,attr, attrName, defVal, args){
+                    var  scopeFunctionName = attr[attrName] || defVal;
+                    if(scopeFunctionName.match(/\(/)){
+                        scope.$eval(scopeFunctionName,args);
+                    }else{
+                        var func = scope.$eval(scopeFunctionName);
+                        if(!!func){
+                            var _args = [];
+                            for(var i in args){
+                                _args.push(args[i]);
+                            }
+                            func.apply(null,_args);
+                        }
+                    }
+                }
                 root.modules = root.modules || {};
                 root.modules.all = root.$angular
                     .module("the-all", [])

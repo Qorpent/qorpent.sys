@@ -15,7 +15,7 @@ namespace Qorpent.Data {
 	/// <summary>
 	///     Asynchronous wrapper for Executing Sql Queries
 	/// </summary>
-	[ContainerComponent(Lifestyle.Transient, Name="main.dbxecutor", ServiceType = typeof (IDbCommandExecutor))]
+	[ContainerComponent(Lifestyle.Transient, Name="main.dbexecutor", ServiceType = typeof (IDbCommandExecutor))]
 	public class DbCommandExecutor : ServiceBase, IDbCommandExecutor {
 		private const string PrepareParametersQueryTemplate = @"
  select PARAMETER_NAME as name, DATA_TYPE as type from information_schema.parameters

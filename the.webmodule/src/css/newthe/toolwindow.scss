@@ -56,4 +56,73 @@
     }
   }
 
+  &.dialog {
+    display: none;
+    &.active {
+      display: flex;
+    }
+    &.fixed {
+      position: fixed;
+      z-index: 10000;
+      min-width : 300px;
+      min-height:100px;
+      max-width:1024px;
+      max-height:700px;
+    }
+    .content {
+      padding:20px;
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+    >label {
+      flex-shrink: 0;
+    }
+    > nav {
+      flex-shrink: 0;
+      margin-bottom:5px;
+      display:flex;
+      flex-direction:row;
+      justify-content: flex-end;
+      align-items: center;
+      i {
+        margin-left: 3px;
+        margin-right: 3px;
+        min-width: 80px;
+      }
+    }
+
+  }
 }
+
+.modalback {
+  display: none;
+  position: fixed;
+  width:10000px;
+  height: 10000px;
+  top:0px;
+  left:0px;
+  z-index: 10000 - 10;
+  background-color: color(primary);
+  opacity: 0.4;
+}
+
+table.props {
+  border-collapse: collapse;
+  font-size : 80%;
+  td,th {
+    border : solid 1px color(defaultlight);
+    padding : 5px;
+  }
+  td:first-child{
+    font-size:90%;
+  }
+  th {
+    background-color: color(defaultlight);
+    font-weight: bold;
+  }
+}
+
+.ng-invalid {
+  border : solid 1px color(danger);
+}
+
