@@ -56,6 +56,7 @@ namespace Qorpent.Utils {
 		}
 
 		private XElement InternalInterpolate(XElement source, IScope parentconfig,int level) {
+		    
 			var datasource = PrepareDataSource(source, parentconfig);
 
 			var processchild = InterpolateDataToElement(source, datasource);
@@ -243,7 +244,7 @@ namespace Qorpent.Utils {
                 var cfg = new Scope(dict);              
                 var clone = new XElement(source);
                 cfg.Set("this",clone);
-                cfg.Set("self",source);
+                cfg.Set("parent",source);
                 cfg.SetParent(datasource);
                 if (!MatchCondition(clone, cfg,"where")) continue;
 	            

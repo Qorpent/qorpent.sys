@@ -1043,6 +1043,7 @@ namespace Qorpent.BSharp{
 				}
 				else{
 					foreach (XAttribute a in i.Source.Attributes()){
+                        current.Set("_class_",i.Name);
 						current.Set(a.Name.LocalName, a.Value);
 					}
 				}
@@ -1081,9 +1082,21 @@ namespace Qorpent.BSharp{
 					CodeOnly = codeonly,
 					Level = codeonly ? 1 : 0
 				};
-			    xi.Interpolate(_cls.Compiled,GetInterpolationContext());
+			    var ctx = GetInterpolationContext();
+                ctx.Set("self",new Scope(_cls.Compiled));
+                var basescope = new Scope((object[])_cls.ParamSourceIndex.GetParents().ToArray());
+                basescope.Stornate();
+			    var p = _cls.ParamSourceIndex.GetParent();
+			    while (null != p) {
+                    basescope[p["_class_"].ToStr()] = p;
+			        p = p.GetParent();
+			    }
+                ctx.Set("base", basescope);
+			    xi.Interpolate(_cls.Compiled,ctx);
 			}
 		}
+
+	    
 
 	    private IScope GetInterpolationContext() {
 	        if (_cls.InterpolationContext != null) {
@@ -1111,8 +1124,10 @@ namespace Qorpent.BSharp{
 	            })
 	        };
 	        var result = new Scope(advctx);
-            result.SetParent(_compiler.Global);
+	        result.SetParent(_compiler.Global);
+
 	        _cls.InterpolationContext = result;
+
 	        return _cls.InterpolationContext;
 	    }
 
@@ -1134,10 +1149,12 @@ namespace Qorpent.BSharp{
 					    return 0;
 					}).ToArray()){
 						string key = v.Key;
-						if (requireInterpolateNames){
+						if (requireInterpolateNames) {
+						    var scope = new Scope(_cls.ParamSourceIndex);
+						    scope["self"] = _cls.ParamSourceIndex;
 							string esckey = key.Unescape(EscapingType.XmlName);
 							if (-1 != esckey.IndexOf('{')){
-								string _key = si.Interpolate(esckey, _cls.ParamSourceIndex).Escape(EscapingType.XmlName);
+								string _key = si.Interpolate(esckey, scope).Escape(EscapingType.XmlName);
 								if (_key != key){
 									changed = true;
 									_cls.ParamIndex.Remove(key);
@@ -1150,6 +1167,16 @@ namespace Qorpent.BSharp{
 						if (null == s) continue;
 						if (-1 == s.IndexOf('{') || -1 == s.IndexOf(si.AncorSymbol)) continue;
 					    var src = s.Contains("(") ? _cls.ParamIndex : _cls.ParamSourceIndex;
+					    src.Set("self",src);
+					    var basescope = new Scope((object[])src.GetParents().ToArray());
+                        basescope.Stornate();
+                        var p = _cls.ParamSourceIndex.GetParent();
+                        while (null != p)
+                        {
+                            basescope[p["_class_"].ToStr()] = p;
+                            p = p.GetParent();
+                        }
+                        src.Set("base",basescope);
 						string newval = si.Interpolate(s,src, global, key);
 						if (newval != s){
 							changed = true;

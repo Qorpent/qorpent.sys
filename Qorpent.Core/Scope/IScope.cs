@@ -33,6 +33,13 @@ namespace Qorpent {
         bool ContainsKey(string key, ScopeOptions options);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        bool ContainsOwnKey(string key);
+
+        /// <summary>
         ///     Возвращает все доступные ключи
         /// </summary>
         /// <param name="options"></param>

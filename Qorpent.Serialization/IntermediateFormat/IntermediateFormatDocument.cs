@@ -121,7 +121,7 @@ namespace Qorpent.IntermediateFormat {
 			result.SetAttributeValue("name",Name);
 			result.SetAttributeValue("prototype",Prototype);
 			result.SetAttributeValue("layer",Layer);
-			foreach (var pair in this){
+			foreach (var pair in this._storage){
 				var key = pair.Key;
 				
 				if(IsSystemDefined(key))continue;

@@ -84,6 +84,55 @@ a b	static
 
         }
 
+	    [Test]
+	    public void SelfKeywordSupport() {
+	        var code = @"
+class a abstract
+    e c=1
+        e2 c=2
+            e3 c='${.c}${self.c}'
+a b c=4 x=${self.c}
+";
+            var result = BSharpCompiler.Compile(code);
+	        var b = result["b"];
+            var x = b.Compiled;
+            Console.WriteLine(x.ToString().Replace("\"","'"));
+            Assert.AreEqual(@"<a code='b' c='4' x='4' fullcode='b'>
+  <e c='1'>
+    <e2 c='2'>
+      <e3 c='24' />
+    </e2>
+  </e>
+</a>".Simplify(SimplifyOptions.Full), x.ToString().Simplify(SimplifyOptions.Full));
+	    }
+
+        [Test]
+        public void BaseKeywordSupport()
+        {
+            var code = @"
+class a abstract
+    e c=1
+        e2 c=2
+            e3 c='1:${.c},2:${self.c},3:${self.x},4:${base.x},5:${base.c.x},6:${base.y},7:${self.y}'
+class c abstract x=1
+class d abstract y=2 x=5
+a b c=4 x=3 w=${base.c.x}
+    import c
+    import d
+";
+            var result = BSharpCompiler.Compile(code);
+            var b = result["b"];
+            var x = b.Compiled;
+            Console.WriteLine(x.ToString().Replace("\"", "'"));
+            Assert.AreEqual(@"<a code='b' c='4' x='3' w='1' fullcode='b' y='2'>
+  <e c='1'>
+    <e2 c='2'>
+      <e3 c='1:2,2:4,3:3,4:5,5:1,6:2,7:2' />
+    </e2>
+  </e>
+</a>".Simplify(SimplifyOptions.Full), x.ToString().Simplify(SimplifyOptions.Full));
+        }
+
 
         [Test]
         public void BUG_InvalidInterpolation()

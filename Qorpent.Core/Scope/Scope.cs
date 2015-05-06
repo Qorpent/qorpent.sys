@@ -44,7 +44,7 @@ namespace Qorpent {
         }
         private ScopeOptions _options = new ScopeOptions();
         private readonly IList<IScope> _parents = new List<IScope>();
-        private readonly IDictionary<string, object> _storage = new ConcurrentDictionary<string, object>();
+        protected readonly IDictionary<string, object> _storage = new ConcurrentDictionary<string, object>();
         private bool _useInheritance =true;
 
         public ScopeOptions Options {
@@ -295,20 +295,37 @@ namespace Qorpent {
             return false;
         }
 
-        private bool GetDirectMatch(string key) {
-            if (this._storage.ContainsKey(key)) return true;
-            foreach (var parent in _parents) {
-                var result = parent.ContainsKey(key, ScopeOptions.DirectMatch);
-                if (result) return true;
+        public bool ContainsOwnKey(string key) {
+            if (null == key) return false;
+            var directMatch = GetDirectMatch(key,false);
+            if (directMatch) return true;
+            if (this.Options.KeySimplification != SimplifyOptions.None)
+            {
+                if (SimplifiedContainsKey(key, this.Options,false)) return true;
             }
             return false;
         }
 
-        private bool SimplifiedContainsKey(string key, ScopeOptions options) {
+        private bool GetDirectMatch(string key,bool deep = true) {
+            if (this._storage.ContainsKey(key)) return true;
+            if (deep) {
+                foreach (var parent in _parents) {
+                    var result = parent.ContainsKey(key, ScopeOptions.DirectMatch);
+                    if (result) return true;
+                }
+            }
+            return false;
+        }
+
+        private bool SimplifiedContainsKey(string key, ScopeOptions options,bool deep =true) {
+
             options = options ?? Options;
             key = key.Simplify(options.KeySimplification);
-            return  GetKeys(options).Any(_ => key == _.Simplify(options.KeySimplification));
-            
+            if (deep) {
+                return GetKeys(options).Any(_ => key == _.Simplify(options.KeySimplification));
+            }
+            return _storage.Keys.Any(_ => key == _.Simplify(options.KeySimplification));
+
         }
 
         public IEnumerable<string> GetKeys(ScopeOptions options = null) {

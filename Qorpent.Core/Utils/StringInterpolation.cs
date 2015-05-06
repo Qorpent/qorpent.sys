@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using Qorpent.IO;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Utils
@@ -434,6 +437,13 @@ namespace Qorpent.Utils
 	            
 	            val = d.DynamicInvoke((object[]) arguments.ToArray());
 	        }
+	        if (val is XAttribute) {
+	            val = ((XAttribute) val).Value;
+            }
+            else if (val is XElement) {
+                val = ((XElement) val).Value;
+            }
+
 	        return val;
 	    }
 
@@ -442,11 +452,37 @@ namespace Qorpent.Utils
 	        var result = GetRawValue(paths[0]);
 	        if (null == result) return null;
 	        for (var i = 1; i < paths.Length; i++) {
+                
 	            var propInfo = result.GetType().GetProperty(paths[i], 
                     BindingFlags.GetProperty | BindingFlags.IgnoreCase
                     | BindingFlags.Instance | BindingFlags.Public
                     );
-	            if (null == propInfo) return null;
+	            if (null == propInfo) {
+	                var scope = result as Scope;
+	                if (null != scope) {
+	                    result = scope[paths[i]];
+	                    if (null == result) return null;
+                        continue;
+	                }
+	                var dict = result as IDictionary<string, object>;
+	                if (null != dict) {
+	                    if (dict.ContainsKey(paths[i])) {
+	                        result = dict[paths[i]];
+	                        if (null == result) return null;
+                            continue;
+	                        
+	                    }
+	                }
+	                var xelement = result as XElement;
+	                if (null != xelement) {
+	                    var attr = xelement.Attribute(paths[i]);
+	                    var el = xelement.Element(paths[i]);
+	                    result = i == paths.Length - 1 ? ((object)attr ?? el) : ((object)el ?? attr);
+	                    if (null == result) return null;
+                        continue;
+	                }
+	                return null;
+	            }
 	            result = propInfo.GetValue(result);
 	        }
 	        return result;

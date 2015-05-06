@@ -55,6 +55,13 @@ namespace Qorpent.Utils.Extensions {
             throw new Exception("multiple instance");
         }
 
+	    public static bool IsRealEmpty(this XElement e) {
+	        if (e.HasAttributes) return false;
+	        if (e.HasElements) return false;
+	        if (!string.IsNullOrWhiteSpace(e.Value)) return false;
+	        return true;
+	    }
+
 	    public static XElement Interpolate(this XElement element,object context = null, bool nocopy = false, Action<XmlInterpolation> setup = null) {
 	        var e = nocopy ? element : new XElement(element);
 	        var xi = new XmlInterpolation();

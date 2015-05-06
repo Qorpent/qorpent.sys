@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using NUnit.Framework;
 using Qorpent.Uson;
 
@@ -178,6 +179,35 @@ namespace Qorpent.Utils.Tests
             Console.WriteLine(result);
             Assert.AreEqual("2 { gotta = System.Func`1[System.String] } h", result);
 	    }
+
+        [Test]
+        public void StructureResolutionSupportScope()
+        {
+            var code = "${x.a.b}";
+            var ctx = new { x = new { a = new Scope(new{b=2})}};
+            var result = _si.Interpolate(code, ctx);
+            Console.WriteLine(result);
+            Assert.AreEqual("2", result);
+        }
+        [Test]
+        public void StructureResolutionSupportDictionary()
+        {
+            var code = "${x.a.b}";
+            var ctx = new { x = new { a = new Scope(new Dictionary<string,object> { {"b" ,2} }) } };
+            var result = _si.Interpolate(code, ctx);
+            Console.WriteLine(result);
+            Assert.AreEqual("2", result);
+        }
+        [Test]
+        public void StructureResolutionSupportXElement()
+        {
+            var code = "${x.a.b.c}${x.a.b}";
+            var ctx = new { x = new { a = XElement.Parse("<a><b c='2'>z</b></a>") } };
+            var result = _si.Interpolate(code, ctx);
+            Console.WriteLine(result);
+            Assert.AreEqual("2z", result);
+        }
+
 
         [Test]
         public void CanWorkWithPrefix()
