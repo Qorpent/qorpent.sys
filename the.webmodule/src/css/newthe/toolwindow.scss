@@ -10,7 +10,7 @@
 
 
 
-  > label:first-child {
+  > label:first-child, &> form >label:first-child {
     background-color: color(primary);
     color : #ffffff;
     margin: 0px;
@@ -57,6 +57,9 @@
   }
 
   &.dialog {
+    > form {
+      padding: 0px;
+    }
     display: none;
     &.active {
       display: flex;
@@ -74,10 +77,10 @@
       flex-grow: 1;
       overflow-y: auto;
     }
-    >label {
+    &>label, &> form >label  {
       flex-shrink: 0;
     }
-    > nav {
+    & > nav , &>form > nav{
       flex-shrink: 0;
       margin-bottom:5px;
       display:flex;

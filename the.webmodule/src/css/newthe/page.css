@@ -87,7 +87,7 @@
   margin-right: 3px;
 }
 /* line 13, toolwindow.scss */
-.toolwindow > label:first-child {
+.toolwindow > label:first-child, .toolwindow > form > label:first-child {
   background-color: color(primary);
   color: #ffffff;
   margin: 0px;
@@ -102,22 +102,22 @@
   padding: 3px;
 }
 /* line 26, toolwindow.scss */
-.toolwindow > label:first-child span.tbt {
+.toolwindow > label:first-child span.tbt, .toolwindow > form > label:first-child span.tbt {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 /* line 30, toolwindow.scss */
-.toolwindow > label:first-child span.tbt i {
+.toolwindow > label:first-child span.tbt i, .toolwindow > form > label:first-child span.tbt i {
   font-size: 18px;
   margin-left: 5px;
 }
 /* line 33, toolwindow.scss */
-.toolwindow > label:first-child span.tbt i:last-child {
+.toolwindow > label:first-child span.tbt i:last-child, .toolwindow > form > label:first-child span.tbt i:last-child {
   margin-left: 20px;
 }
 /* line 38, toolwindow.scss */
-.toolwindow > label:first-child i.tbt {
+.toolwindow > label:first-child i.tbt, .toolwindow > form > label:first-child i.tbt {
   font-size: 18px;
   margin-left: 20px;
 }
@@ -139,11 +139,15 @@
 .toolwindow.dialog {
   display: none;
 }
-/* line 61, toolwindow.scss */
+/* line 60, toolwindow.scss */
+.toolwindow.dialog > form {
+  padding: 0px;
+}
+/* line 64, toolwindow.scss */
 .toolwindow.dialog.active {
   display: flex;
 }
-/* line 64, toolwindow.scss */
+/* line 67, toolwindow.scss */
 .toolwindow.dialog.fixed {
   position: fixed;
   z-index: 10000;
@@ -152,18 +156,18 @@
   max-width: 1024px;
   max-height: 700px;
 }
-/* line 72, toolwindow.scss */
+/* line 75, toolwindow.scss */
 .toolwindow.dialog .content {
   padding: 20px;
   flex-grow: 1;
   overflow-y: auto;
 }
-/* line 77, toolwindow.scss */
-.toolwindow.dialog > label {
+/* line 80, toolwindow.scss */
+.toolwindow.dialog > label, .toolwindow.dialog > form > label {
   flex-shrink: 0;
 }
-/* line 80, toolwindow.scss */
-.toolwindow.dialog > nav {
+/* line 83, toolwindow.scss */
+.toolwindow.dialog > nav, .toolwindow.dialog > form > nav {
   flex-shrink: 0;
   margin-bottom: 5px;
   display: flex;
@@ -171,14 +175,14 @@
   justify-content: flex-end;
   align-items: center;
 }
-/* line 87, toolwindow.scss */
-.toolwindow.dialog > nav i {
+/* line 90, toolwindow.scss */
+.toolwindow.dialog > nav i, .toolwindow.dialog > form > nav i {
   margin-left: 3px;
   margin-right: 3px;
   min-width: 80px;
 }
 
-/* line 97, toolwindow.scss */
+/* line 100, toolwindow.scss */
 .modalback {
   display: none;
   position: fixed;
@@ -191,27 +195,27 @@
   opacity: 0.4;
 }
 
-/* line 109, toolwindow.scss */
+/* line 112, toolwindow.scss */
 table.props {
   border-collapse: collapse;
   font-size: 80%;
 }
-/* line 112, toolwindow.scss */
+/* line 115, toolwindow.scss */
 table.props td, table.props th {
   border: solid 1px color(defaultlight);
   padding: 5px;
 }
-/* line 116, toolwindow.scss */
+/* line 119, toolwindow.scss */
 table.props td:first-child {
   font-size: 90%;
 }
-/* line 119, toolwindow.scss */
+/* line 122, toolwindow.scss */
 table.props th {
   background-color: color(defaultlight);
   font-weight: bold;
 }
 
-/* line 125, toolwindow.scss */
+/* line 128, toolwindow.scss */
 .ng-invalid {
   border: solid 1px color(danger);
 }

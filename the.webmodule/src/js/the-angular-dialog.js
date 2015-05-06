@@ -11,10 +11,14 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                 var e = $(element);
                 e.addClass('toolwindow dialog');
                 e.addClass(attr['theDialog'] || 'modal');
+                var form = e.children('form');
+                if(0==form.length){
+                    form = $('<form name="handler.forms.dialog"></form>').appendTo(e);
+                }
+                e = form;
                 if (0 == e.children('.content').length) {
                         $("<div ng-show='handler.template||handler.getTemplate' class='content'></div>").appendTo(e);
                         $("<div ng-show='!(handler.template||handler.getTemplate)' class='content' ng-include='handler.getView()'></div>").appendTo(e);
-
                 }
                 if (0 == e.children('.title').length) {
                     $("<label class='title'><span ng-bind='handler.getLabel()'></span><div class='tbt'><i class='fa fa-remove closer' ng-click='handler.close()'></i></div></label>").prependTo(e);

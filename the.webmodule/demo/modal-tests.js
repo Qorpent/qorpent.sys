@@ -52,15 +52,15 @@ define(["the", "chai", "jquery", "angular"], function (the, chai) {
                 setTimeout(done, 100);
             });
             it("has title bar", function () {
-                var tb = e.children('.title')[0];
+                var tb = e.children('form').children('.title')[0];
                 expect(tb, 'title bar existed').exist;
             });
             it("has content zone", function () {
-                var tb = e.children('.content')[0];
+                var tb = e.children('form').children('.content')[0];
                 expect(tb, 'content zone existed').exist;
             });
             it("has nav bar", function () {
-                var tb = e.children('nav')[0];
+                var tb = e.children('form').children('nav')[0];
                 expect(tb, 'bottom zone existed').exist;
             });
 

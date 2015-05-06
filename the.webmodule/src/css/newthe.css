@@ -152,7 +152,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   margin-right: 3px;
 }
 /* line 13, newthe/toolwindow.scss */
-.toolwindow > label:first-child {
+.toolwindow > label:first-child, .toolwindow > form > label:first-child {
   background-color: #4C81AF;
   color: #ffffff;
   margin: 0px;
@@ -167,22 +167,22 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   padding: 3px;
 }
 /* line 26, newthe/toolwindow.scss */
-.toolwindow > label:first-child span.tbt {
+.toolwindow > label:first-child span.tbt, .toolwindow > form > label:first-child span.tbt {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 /* line 30, newthe/toolwindow.scss */
-.toolwindow > label:first-child span.tbt i {
+.toolwindow > label:first-child span.tbt i, .toolwindow > form > label:first-child span.tbt i {
   font-size: 18px;
   margin-left: 5px;
 }
 /* line 33, newthe/toolwindow.scss */
-.toolwindow > label:first-child span.tbt i:last-child {
+.toolwindow > label:first-child span.tbt i:last-child, .toolwindow > form > label:first-child span.tbt i:last-child {
   margin-left: 20px;
 }
 /* line 38, newthe/toolwindow.scss */
-.toolwindow > label:first-child i.tbt {
+.toolwindow > label:first-child i.tbt, .toolwindow > form > label:first-child i.tbt {
   font-size: 18px;
   margin-left: 20px;
 }
@@ -204,11 +204,15 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 .toolwindow.dialog {
   display: none;
 }
-/* line 61, newthe/toolwindow.scss */
+/* line 60, newthe/toolwindow.scss */
+.toolwindow.dialog > form {
+  padding: 0px;
+}
+/* line 64, newthe/toolwindow.scss */
 .toolwindow.dialog.active {
   display: flex;
 }
-/* line 64, newthe/toolwindow.scss */
+/* line 67, newthe/toolwindow.scss */
 .toolwindow.dialog.fixed {
   position: fixed;
   z-index: 10000;
@@ -217,18 +221,18 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   max-width: 1024px;
   max-height: 700px;
 }
-/* line 72, newthe/toolwindow.scss */
+/* line 75, newthe/toolwindow.scss */
 .toolwindow.dialog .content {
   padding: 20px;
   flex-grow: 1;
   overflow-y: auto;
 }
-/* line 77, newthe/toolwindow.scss */
-.toolwindow.dialog > label {
+/* line 80, newthe/toolwindow.scss */
+.toolwindow.dialog > label, .toolwindow.dialog > form > label {
   flex-shrink: 0;
 }
-/* line 80, newthe/toolwindow.scss */
-.toolwindow.dialog > nav {
+/* line 83, newthe/toolwindow.scss */
+.toolwindow.dialog > nav, .toolwindow.dialog > form > nav {
   flex-shrink: 0;
   margin-bottom: 5px;
   display: flex;
@@ -236,14 +240,14 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   justify-content: flex-end;
   align-items: center;
 }
-/* line 87, newthe/toolwindow.scss */
-.toolwindow.dialog > nav i {
+/* line 90, newthe/toolwindow.scss */
+.toolwindow.dialog > nav i, .toolwindow.dialog > form > nav i {
   margin-left: 3px;
   margin-right: 3px;
   min-width: 80px;
 }
 
-/* line 97, newthe/toolwindow.scss */
+/* line 100, newthe/toolwindow.scss */
 .modalback {
   display: none;
   position: fixed;
@@ -256,27 +260,27 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   opacity: 0.4;
 }
 
-/* line 109, newthe/toolwindow.scss */
+/* line 112, newthe/toolwindow.scss */
 table.props {
   border-collapse: collapse;
   font-size: 80%;
 }
-/* line 112, newthe/toolwindow.scss */
+/* line 115, newthe/toolwindow.scss */
 table.props td, table.props th {
   border: solid 1px #eaeaea;
   padding: 5px;
 }
-/* line 116, newthe/toolwindow.scss */
+/* line 119, newthe/toolwindow.scss */
 table.props td:first-child {
   font-size: 90%;
 }
-/* line 119, newthe/toolwindow.scss */
+/* line 122, newthe/toolwindow.scss */
 table.props th {
   background-color: #eaeaea;
   font-weight: bold;
 }
 
-/* line 125, newthe/toolwindow.scss */
+/* line 128, newthe/toolwindow.scss */
 .ng-invalid {
   border: solid 1px #E7582E;
 }
