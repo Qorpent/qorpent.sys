@@ -14,7 +14,13 @@ namespace Qorpent.IO.Tests.Net{
 			return new MemoryStream(enc.GetBytes(http));
 			
 		}
-
+		[Test]
+		public void GoogleCookie() {
+			const string q = @"PREF=ID=a1b2c3:FF=2:NW=3:TM=1234567890:LM=1234567890:S=T6tmQhwbZOOZ_y1y; expires=Tue, 09-May-2017 14:12:47 GMT; path=/; domain=.google.ru";
+			var cookie = HttpUtils.ParseCookies(q).First();
+			Assert.AreEqual("PREF", cookie.Name);
+			Assert.AreEqual("ID=a1b2c3:FF=2:NW=3:TM=1234567890:LM=1234567890:S=T6tmQhwbZOOZ_y1y", cookie.Value);
+		}
 	    [Test]
 	    public void CookieParsedWell() {
             var cookiestr = "p=99aee31d64ef04c3b049c19ffff99c5943800e05475d4c8fd97a3; expires=Tue, 05 Jan 2016 21:51:10 GMT; path=/; domain=login.vk.com; secure; HttpOnly";
