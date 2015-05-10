@@ -13,11 +13,6 @@ namespace Qorpent.IO.Net{
 	/// Обертка для работы с HTTP
 	/// </summary>
 	public class HttpClient:IContentSource{
-		/// <summary>
-		///  Коллекция куки
-		/// </summary>
-		public CookieCollection Cookies { get; set; }
-
 	    /// <summary>
 	    /// Вызов запроса по URL
 	    /// </summary>
@@ -80,7 +75,7 @@ namespace Qorpent.IO.Net{
 		public HttpResponse Call(HttpRequest request){
 			try{
 				var secure = request.Uri.Scheme.StartsWith("https");
-				request.Cookies = request.Cookies ?? Cookies;
+				request.Cookies = request.Cookies ?? new CookieCollection();
 				var endpoint = GetEndpoint(request.Uri);
 				using (var socket = new Socket(AddressFamily.Unspecified, SocketType.Stream, ProtocolType.Tcp)){
 					socket.Connect(endpoint);
@@ -97,7 +92,7 @@ namespace Qorpent.IO.Net{
 								request.Uri = response.RedirectUri;
 								return Call(request);
 							}
-							response.Cookies = response.Cookies ?? Cookies;
+							response.Cookies = request.Cookies;
 							if (null!=response.Cookies && response.RawCookies.Count!=0){
 							    foreach (var cookie in response.RawCookies) {
 							        var realcookie = HttpUtils.ParseCookies(cookie).First();

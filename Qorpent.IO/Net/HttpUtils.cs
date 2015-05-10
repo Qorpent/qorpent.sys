@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using Qorpent.Utils.Extensions;
 
@@ -62,7 +63,7 @@ namespace Qorpent.IO.Net{
 				        current.Value = "";
 				    }
 				    else {
-				        current.Value = part[1];
+				        current.Value = string.Join("=", part.Skip(1).ToArray());
 				    }
 				}
 			}
