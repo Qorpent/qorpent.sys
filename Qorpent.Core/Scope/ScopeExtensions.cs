@@ -4,6 +4,10 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent {
     public static class ScopeExtensions {
+		public static T SafeGet<T>(this IScope scope, string name, T def = default (T)) {
+			if (null == scope) return def;
+			return scope.Get(name, def);
+		}
         public static object ResolveBest(this IScope scope,params string[] names) {
             return names.Select(name => scope.Get(name)).FirstOrDefault(subresult => null != subresult);
         }
