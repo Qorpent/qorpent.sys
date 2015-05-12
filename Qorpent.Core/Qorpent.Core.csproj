@@ -89,7 +89,7 @@
     <Compile Include="Data\ParamAttribute.cs" />
     <Compile Include="Data\DbCommandWrapper.cs" />
     <Compile Include="Data\DbParameter.cs" />
-    <Compile Include="Data\SqlDialect.cs" />
+    <Compile Include="Data\DbDialect.cs" />
     <Compile Include="Data\SqlObjectType.cs" />
     <Compile Include="Dsl\Bxl\BxlGenerator.cs" />
     <Compile Include="Dsl\Bxl\BxlParser.cs" />
