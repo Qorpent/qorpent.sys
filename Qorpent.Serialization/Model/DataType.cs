@@ -16,7 +16,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		/// </summary>
 		public DataType(){
-			SqlDataTypes = new Dictionary<SqlDialect, SqlDataType>();
+			SqlDataTypes = new Dictionary<DbDialect, SqlDataType>();
 		}
 
 		/// <summary>
@@ -79,7 +79,7 @@ namespace Qorpent.Scaffolding.Model{
 
 		/// <summary>
 		/// </summary>
-		public IDictionary<SqlDialect, SqlDataType> SqlDataTypes { get; private set; }
+		public IDictionary<DbDialect, SqlDataType> SqlDataTypes { get; private set; }
 		/// <summary>
 		/// Признак булевого типа
 		/// </summary>
@@ -106,13 +106,13 @@ namespace Qorpent.Scaffolding.Model{
 		///     Определяет наиболее соответствующий тип данных для указанного диалекта
 		/// </summary>
 		/// <remarks>Использует приоритет - прямое укзание диалекта, потом ANSI, потом varchar(255)</remarks>
-		public SqlDataType ResolveSqlDataType(SqlDialect dialect = SqlDialect.Ansi){
+		public SqlDataType ResolveSqlDataType(DbDialect dialect = DbDialect.Ansi){
 			
 			if (SqlDataTypes.ContainsKey(dialect)){
 				return SqlDataTypes[dialect];
 			}
-			if (SqlDataTypes.ContainsKey(SqlDialect.Ansi)){
-				return SqlDataTypes[SqlDialect.Ansi];
+			if (SqlDataTypes.ContainsKey(DbDialect.Ansi)){
+				return SqlDataTypes[DbDialect.Ansi];
 			}
 			return SqlDataType.Default;
 		}
@@ -127,18 +127,18 @@ namespace Qorpent.Scaffolding.Model{
 				Code = "int",
 				CSharpDataType = "Int32",
 				SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "integer"}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "int"}},
-					{SqlDialect.PostGres, new SqlDataType{Name = "int"}},
+					{DbDialect.Ansi, new SqlDataType{Name = "integer"}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "int"}},
+					{DbDialect.PostGres, new SqlDataType{Name = "int"}},
 				}
 			};
             result["float"] = new DataType {
                 Code = "float",
                 CSharpDataType = "Double",
                 SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "float"}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "float"}},
-					{SqlDialect.PostGres, new SqlDataType{Name = "float"}},
+					{DbDialect.Ansi, new SqlDataType{Name = "float"}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "float"}},
+					{DbDialect.PostGres, new SqlDataType{Name = "float"}},
 				}
             };
            
@@ -147,24 +147,24 @@ namespace Qorpent.Scaffolding.Model{
                 Code = "double",
                 CSharpDataType = "Double",
                 SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "float"}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "float"}},
-					{SqlDialect.PostGres, new SqlDataType{Name = "float"}},
+					{DbDialect.Ansi, new SqlDataType{Name = "float"}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "float"}},
+					{DbDialect.PostGres, new SqlDataType{Name = "float"}},
 				}
             };
             result["long"] = new DataType {
 				Code = "long",
 				CSharpDataType = "Int64",
 				SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "bigint"}},
+					{DbDialect.Ansi, new SqlDataType{Name = "bigint"}},
 				}
 			};
 			result["bool"] = new DataType{
 				Code = "bool",
 				CSharpDataType = "Boolean",
 				SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "boolean"}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "bit"}},
+					{DbDialect.Ansi, new SqlDataType{Name = "boolean"}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "bit"}},
 				}
 			};
 
@@ -172,9 +172,9 @@ namespace Qorpent.Scaffolding.Model{
 				Code = "datetime",
 				CSharpDataType = "System.DateTime",
 				SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "time"}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "datetime"}},
-					{SqlDialect.PostGres, new SqlDataType{Name = "timestamp"}},
+					{DbDialect.Ansi, new SqlDataType{Name = "time"}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "datetime"}},
+					{DbDialect.PostGres, new SqlDataType{Name = "timestamp"}},
 				}
 			};
 
@@ -182,8 +182,8 @@ namespace Qorpent.Scaffolding.Model{
 				Code = "decimal",
 				CSharpDataType = "Decimal",
 				SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "numeric", Size = 18, Precession = 6}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "decimal", Size = 18, Precession = 6}},
+					{DbDialect.Ansi, new SqlDataType{Name = "numeric", Size = 18, Precession = 6}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "decimal", Size = 18, Precession = 6}},
 				}
 			};
 
@@ -191,8 +191,8 @@ namespace Qorpent.Scaffolding.Model{
 				Code = "string",
 				CSharpDataType = "String",
 				SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "varchar", Size = 255}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "nvarchar", Size = 255}},
+					{DbDialect.Ansi, new SqlDataType{Name = "varchar", Size = 255}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "nvarchar", Size = 255}},
 				}
 			};
 
@@ -201,8 +201,8 @@ namespace Qorpent.Scaffolding.Model{
 				Code = "geometry",
 				CSharpDataType = "String",
 				SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "varchar", Size = 255}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "geometry"}},
+					{DbDialect.Ansi, new SqlDataType{Name = "varchar", Size = 255}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "geometry"}},
 				}
 			};
 
@@ -212,8 +212,8 @@ namespace Qorpent.Scaffolding.Model{
 				CSharpDataType = "String",
                 
 				SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "varchar", Size = 255}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "geography"}},
+					{DbDialect.Ansi, new SqlDataType{Name = "varchar", Size = 255}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "geography"}},
                     
 				}
 			};
@@ -223,8 +223,8 @@ namespace Qorpent.Scaffolding.Model{
 				Code = "shortstring",
 				CSharpDataType = "String",
 				SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "varchar", Size = 20}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "nvarchar", Size = 20}},
+					{DbDialect.Ansi, new SqlDataType{Name = "varchar", Size = 20}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "nvarchar", Size = 20}},
 				}
 			};
 
@@ -233,8 +233,8 @@ namespace Qorpent.Scaffolding.Model{
 				Code = "longstring",
 				CSharpDataType = "String",
 				SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "varchar", Size = 400}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "nvarchar", Size = 400}},
+					{DbDialect.Ansi, new SqlDataType{Name = "varchar", Size = 400}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "nvarchar", Size = 400}},
 				}
 			};
 
@@ -242,9 +242,9 @@ namespace Qorpent.Scaffolding.Model{
 				Code = "text",
 				CSharpDataType = "String",
 				SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "varchar", Size = 8000}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "nvarchar", Size = -1}},
-					{SqlDialect.PostGres, new SqlDataType{Name = "text"}},
+					{DbDialect.Ansi, new SqlDataType{Name = "varchar", Size = 8000}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "nvarchar", Size = -1}},
+					{DbDialect.PostGres, new SqlDataType{Name = "text"}},
 				}
 			};
 
@@ -253,9 +253,9 @@ namespace Qorpent.Scaffolding.Model{
                 Code = "xml",
                 CSharpDataType = "XElement",
                 SqlDataTypes ={
-					{SqlDialect.Ansi, new SqlDataType{Name = "varchar", Size = 8000}},
-					{SqlDialect.SqlServer, new SqlDataType{Name = "xml", Size = -1}},
-					{SqlDialect.PostGres, new SqlDataType{Name = "xml"}},
+					{DbDialect.Ansi, new SqlDataType{Name = "varchar", Size = 8000}},
+					{DbDialect.SqlServer, new SqlDataType{Name = "xml", Size = -1}},
+					{DbDialect.PostGres, new SqlDataType{Name = "xml"}},
 				}
             };
 
@@ -275,14 +275,14 @@ namespace Qorpent.Scaffolding.Model{
 			string ansitype = dt.Attr("sql", Code);
 			int size = dt.Attr("size").ToInt();
 			int precession = dt.Attr("precession").ToInt();
-			SqlDataTypes[SqlDialect.Ansi] = new SqlDataType{Name = ansitype, Size = size, Precession = precession, Dialect = "ansi"};
-			foreach (string d in Enum.GetNames(typeof (SqlDialect))){
+			SqlDataTypes[DbDialect.Ansi] = new SqlDataType{Name = ansitype, Size = size, Precession = precession, Dialect = "ansi"};
+			foreach (string d in Enum.GetNames(typeof (DbDialect))){
 				string normaltype = d.ToLowerInvariant();
 				if (normaltype == "ansi") continue;
 				string dialecttype = dt.Attr(normaltype);
 				if (!string.IsNullOrWhiteSpace(dialecttype)){
 					var sqltype = new SqlDataType{Name = dialecttype, Size = size, Precession = precession, Dialect=normaltype};
-					SqlDataTypes[d.To<SqlDialect>()] = sqltype;
+					SqlDataTypes[d.To<DbDialect>()] = sqltype;
 				}
 			}
 			return this;

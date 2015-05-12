@@ -36,24 +36,24 @@ namespace Qorpent.Scaffolding.Model.Compiler{
 			yield return
 				new Production{
 					FileName = nsafetsqlf,
-					GetContent = () => model.GetScript(SqlDialect.SqlServer, ScriptMode.Create)
+					GetContent = () => model.GetScript(DbDialect.SqlServer, ScriptMode.Create)
 				};
 
 			yield return
 				new Production{
 					FileName = dropsqlf,
-					GetContent = () => model.GetScript(SqlDialect.SqlServer, ScriptMode.Drop)
+					GetContent = () => model.GetScript(DbDialect.SqlServer, ScriptMode.Drop)
 				};
 			yield return
 				new Production{
 					FileName = nsafetsqlfpg,
-					GetContent = () => model.GetScript(SqlDialect.PostGres, ScriptMode.Create)
+					GetContent = () => model.GetScript(DbDialect.PostGres, ScriptMode.Create)
 				};
 
 			yield return
 				new Production{
 					FileName = dropsqlfpg,
-					GetContent = () => model.GetScript(SqlDialect.PostGres, ScriptMode.Drop)
+					GetContent = () => model.GetScript(DbDialect.PostGres, ScriptMode.Drop)
 				};
 		}
 	}

@@ -16,7 +16,7 @@ namespace Qorpent.Data.Installer {
             IgnoreErrors = true;
         }
         public override IEnumerable<string> GetScripts() {
-            var writers = Model.GetWriters(SqlDialect.SqlServer, ScriptMode.Create);
+            var writers = Model.GetWriters(DbDialect.SqlServer, ScriptMode.Create);
             foreach (var writer in writers) {
                 var script = writer.ToString();
                 var queries = Regex.Split(script, @"(?i)[\r\n]+\s*GO\s*?[\r\n]+");

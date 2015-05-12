@@ -21,7 +21,7 @@ namespace Qorpent.Data {
         /// <summary>
         /// dialect of Sql to be used
         /// </summary>
-        public SqlDialect Dialect { get; set; }
+        public DbDialect Dialect { get; set; }
 
         public Exception Error { get; set; }
         /// <summary>

@@ -104,7 +104,7 @@ TableBase TheTable
 	import IEntity
 "
 				);
-			var create = model.GetDigest(SqlDialect.SqlServer, ScriptMode.Create);
+			var create = model.GetDigest(DbDialect.SqlServer, ScriptMode.Create);
 			Console.WriteLine(create.Replace("\"","\"\""));
 			Assert.AreEqual(@"
 Script sys:support_for_filegroups_begin (C,S,R)

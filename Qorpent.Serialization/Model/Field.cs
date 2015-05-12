@@ -227,7 +227,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// </summary>
 		/// <param name="dialect"></param>
 		/// <returns></returns>
-		public SqlDataType GetSqlType(SqlDialect dialect = SqlDialect.Ansi){
+		public SqlDataType GetSqlType(DbDialect dialect = DbDialect.Ansi){
 			SqlDataType result = DataType.ResolveSqlDataType(dialect);
 			if (0 == Size) return result;
 			return new SqlDataType{Name = result.Name, Size = Size, Precession = result.Precession};

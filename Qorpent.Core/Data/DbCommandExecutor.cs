@@ -258,7 +258,7 @@ order by ORDINAL_POSITION
 				if (string.IsNullOrWhiteSpace(info.ObjectName)) {
 					throw new Exception("cannot setup query - no query or objectname");
 				}
-				if (info.Dialect != SqlDialect.SqlServer) {
+				if (info.Dialect != DbDialect.SqlServer) {
 					throw new Exception("cannot setup query for non-TSql");
 				}
 				PrepareTSqlObjectQuery(info);
@@ -401,7 +401,7 @@ order by ORDINAL_POSITION
 		private void PrepareParametersByObject(DbCommandWrapper info) {
 		 
 			
-			if (info.Dialect != SqlDialect.SqlServer) {
+			if (info.Dialect != DbDialect.SqlServer) {
 				throw new Exception("cannot setup parameters for non-TSql query");
 			}
 			var schema = "dbo";
@@ -534,7 +534,7 @@ order by ORDINAL_POSITION
 		        
 		    }
 
-			if (info.Dialect != SqlDialect.SqlServer) {
+			if (info.Dialect != DbDialect.SqlServer) {
 				throw new Exception("cannot setup parameters for non-TSql query");
 			}
 
@@ -576,15 +576,15 @@ order by ORDINAL_POSITION
 					throw new Exception("cannot retrieve connection for " + info.ConnectionString);
 				}
 			}
-			if (info.Dialect == SqlDialect.None) {
+			if (info.Dialect == DbDialect.None) {
 				if (info.Connection is SqlConnection) {
-					info.Dialect = SqlDialect.SqlServer;
+					info.Dialect = DbDialect.SqlServer;
 				}
 				else if (info.Connection.GetType().Name.ToLowerInvariant().Contains("pg")) {
-					info.Dialect = SqlDialect.PostGres;
+					info.Dialect = DbDialect.PostGres;
 				}
 				else {
-					info.Dialect = SqlDialect.Ansi;
+					info.Dialect = DbDialect.Ansi;
 				}
 			}
 			if (info.Trace) {

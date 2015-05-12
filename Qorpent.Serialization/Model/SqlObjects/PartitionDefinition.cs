@@ -36,7 +36,7 @@ namespace Qorpent.Scaffolding.Model.SqlObjects{
 			Name = cls.FullSqlName.Replace(".", "_").Replace("\"","") + "_PARTITION";
 			Start = Allocation.PartitioningStart;
 			if (null != Allocation.PartitionField){
-				Type = Allocation.PartitionField.DataType.ResolveSqlDataType(SqlDialect.SqlServer);
+				Type = Allocation.PartitionField.DataType.ResolveSqlDataType(DbDialect.SqlServer);
 			}
 			else{
 				Type = "int";

@@ -10,7 +10,7 @@ using Qorpent.Scaffolding.Model.SqlObjects;
 namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 	[TestFixture]
 	public class SqlScriptTests{
-		string GetDigest(string code,ScriptMode mode =ScriptMode.Create, SqlDialect dialect = SqlDialect.SqlServer){
+		string GetDigest(string code,ScriptMode mode =ScriptMode.Create, DbDialect dialect = DbDialect.SqlServer){
 			var model = PersistentModel.Compile(code);
 			if(!model.IsValid)Assert.Fail("invalid model");
 			var sb = new StringBuilder();
@@ -25,7 +25,7 @@ namespace Qorpent.Scaffolding.Tests.SqlAndOrm{
 			Console.WriteLine(result.Replace("\"","\"\""));
 			return result.Trim();
 		}
-		string GetScript(string code, ScriptMode mode = ScriptMode.Create, SqlDialect dialect = SqlDialect.SqlServer, bool print = true)
+		string GetScript(string code, ScriptMode mode = ScriptMode.Create, DbDialect dialect = DbDialect.SqlServer, bool print = true)
 		{
 			var model = PersistentModel.Compile(code);
 			if (!model.IsValid) Assert.Fail("invalid model");
@@ -396,7 +396,7 @@ table a
 table b
 	partitioned with=ver start='19900101'
 	datetime ver
-",dialect:SqlDialect.PostGres);
+",dialect:DbDialect.PostGres);
 			Assert.AreEqual(@"
 Script sys:psql_start (C,P,R)
 Sequence ""dbo"".""a_seq"" (C,P,O)
@@ -482,7 +482,7 @@ GO
 		[Test]
 		public void BasicPostgrsqlServerScript()
 		{
-			var digest = GetScript("class a prototype=dbtable",dialect:SqlDialect.PostGres);
+			var digest = GetScript("class a prototype=dbtable",dialect:DbDialect.PostGres);
 			Assert.AreEqual(@"
 DROP FUNCTION IF EXISTS ___script();
 CREATE FUNCTION ___script () returns int as $$ BEGIN
@@ -1034,7 +1034,7 @@ class a prototype=dbtable
 		return 1
 	)
 ");
-			var script = model.GetScript(SqlDialect.SqlServer, ScriptMode.Create);
+			var script = model.GetScript(DbDialect.SqlServer, ScriptMode.Create);
 			Console.WriteLine(script.Replace("\"","\"\""));
 			Assert.AreEqual(@"
 -- begin command SqlFunctionWriter
@@ -1056,7 +1056,7 @@ class a prototype=dbtable
 		return 1
 	)
 ");
-			var script = model.GetScript(SqlDialect.SqlServer, ScriptMode.Create);
+			var script = model.GetScript(DbDialect.SqlServer, ScriptMode.Create);
 			Console.WriteLine(script.Replace("\"", "\"\""));
 			Assert.AreEqual(@"
 -- begin command ScriptWriter

@@ -26,7 +26,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 				                " FOREIGN KEY ("+CircularRef.Name.SqlQuoteName()+") REFERENCES " + CircularRef.ReferenceClass.FullSqlName + " (" +
 				                CircularRef.ReferenceField.SqlQuoteName() +
 				                ")";
-				if (Dialect == SqlDialect.PostGres){
+				if (Dialect == DbDialect.PostGres){
 					result += " DEFERRABLE";
 				}
 				result += ";";

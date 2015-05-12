@@ -4,7 +4,7 @@ namespace Qorpent.Data{
 	/// <summary>
 	/// </summary>
 	[Flags]
-	public enum SqlDialect{
+	public enum DbDialect{
 		/// <summary>
 		///     Условный тип - без генерации
 		/// </summary>

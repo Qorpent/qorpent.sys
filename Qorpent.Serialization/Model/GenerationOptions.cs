@@ -9,7 +9,7 @@ namespace Qorpent.Scaffolding.Model{
 		public GenerationOptions(){
 			IncludeSqlObjectTypes = SqlObjectType.All;
 			ExcludeSqlObjectTypes = SqlObjectType.None;
-			IncludeDialect = SqlDialect.SqlServer | SqlDialect.PostGres;
+			IncludeDialect = DbDialect.SqlServer | DbDialect.PostGres;
 			GenerateCreateScript = true;
 			GenerateDropScript = true;
 			GeneratePartitions = true;
@@ -28,7 +28,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		///     Диалекты генерации
 		/// </summary>
-		public SqlDialect IncludeDialect { get; set; }
+		public DbDialect IncludeDialect { get; set; }
 
 		/// <summary>
 		///     Признак генерации скрипта создания БД

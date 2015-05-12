@@ -15,7 +15,7 @@ namespace Qorpent.Scaffolding.Model{
 		/// <summary>
 		///     Целевой диалект
 		/// </summary>
-		public SqlDialect Dialect { get; set; }
+		public DbDialect Dialect { get; set; }
 
 		/// <summary>
 		///     Режим
@@ -34,7 +34,7 @@ namespace Qorpent.Scaffolding.Model{
 				}
 				else if (source is FileGroup){
 					if (!Model.GenerationOptions.Supports(SqlObjectType.FileGroup)) continue;
-					if (Dialect != SqlDialect.SqlServer) continue;
+					if (Dialect != DbDialect.SqlServer) continue;
 					if (Mode != ScriptMode.Create) continue;
 					yield return new FileGroupWriter(source as FileGroup){Dialect = Dialect, Mode = Mode, Model = Model};
 				}

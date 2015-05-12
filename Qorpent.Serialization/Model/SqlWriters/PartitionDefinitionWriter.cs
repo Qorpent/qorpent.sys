@@ -21,7 +21,7 @@ namespace Qorpent.Scaffolding.Model.SqlWriters{
 		/// </summary>
 		/// <returns></returns>
 		protected override string GetText(){
-			if (Dialect == SqlDialect.SqlServer){
+			if (Dialect == DbDialect.SqlServer){
 				if (Mode == ScriptMode.Create){
 					return @"
 CREATE PARTITION FUNCTION ${Name}Func (${Type})
@@ -43,7 +43,7 @@ DROP PARTITION FUNCTION ${Name}Func
 		/// </summary>
 		/// <returns></returns>
 		protected override string GetDigestFinisher(){
-			if (Dialect == SqlDialect.SqlServer){
+			if (Dialect == DbDialect.SqlServer){
 				return "PARTDEF " + Definition.Name;
 			}
 			return "";
