@@ -19,17 +19,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security;
+using System.Security.Principal;
 using System.Text;
 using Qorpent.IoC;
 
 namespace Qorpent.Security
 {
+
 	/// <summary>
 	/// Allows dynamically logon to underlined system (for now Windows - only)
 	/// </summary>
 	[ContainerComponent(Lifestyle.Singleton,ServiceType = typeof(ISysLogon))]
-	public  class SysLogon : ISysLogon {
+	[ContainerComponent(Lifestyle.Extension,ServiceType = typeof(ILogon),Name="win.logon")]
+	public  class SysLogon : ISysLogon,ILogon {
+
+	    public SysLogon() {
+	        Idx = 10000;
+	    }
 		/// <summary>
 		/// Execute system logon procedure and return true if proceed
 		/// </summary>
@@ -44,6 +52,11 @@ namespace Qorpent.Security
 				return Logon(username, password, ref token, logontype);
 			}
 		}
+
+        [DllImport("ADVAPI32.dll", EntryPoint =
+            "LogonUserW", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern bool LogonUserW(string lpszUsername, string lpszDomain,
+                                             string lpszPassword, int dwLogonType, int dwLogonProvider, ref IntPtr phToken);
 
 		/// <summary>
 		/// Execute system logon procedure and return true if proceed
@@ -71,10 +84,25 @@ namespace Qorpent.Security
 					name = username.Split('@')[0];
 				}
 
-				bool authenticated = NativeWindowsFunctions.LogonUserW(name, domain, password, logontype, 0, ref token);
+				bool authenticated = LogonUserW(name, domain, password, logontype, 0, ref token);
 				return authenticated;
 #endif
 			}
 		}
+
+	    public bool IsAuth(string username, string password) {
+	        return Logon(username, password, 3);
+	    }
+
+	    public IIdentity Logon(string username, string password) {
+	        lock (this) {
+	            var token = new IntPtr();
+	            var auth = Logon(username, password, ref token, 3);
+	            if (!auth) return null;
+	            return new WindowsIdentity(token);
+	        }
+	    }
+
+	    public int Idx { get; set; }
 	}
 }

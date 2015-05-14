@@ -16,8 +16,12 @@ namespace Qorpent.IO.Http {
             Stream = request.InputStream;
             Method = request.HttpMethod;
             Cookies = request.Cookies;
+            RemoteEndPoint = request.RemoteEndPoint;
+            LocalEndPoint = request.LocalEndPoint;
 
         }
+
+        
 
         public override IDictionary<string, string> Headers {
             get { return _headers ?? (_headers = ConvertToDict(_request.Headers)); }

@@ -30,7 +30,6 @@
     <Compile Include="FileBasedRoleProvider.cs" />
     <Compile Include="NativeWindowsFunctions.cs" />
     <Compile Include="Watchdog\ParanoidProvider.cs" />
-    <Compile Include="SysLogon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Xml" />

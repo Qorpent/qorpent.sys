@@ -48,7 +48,6 @@
     <Compile Include="Security\QorpentHostPrincipal.cs" />
     <Compile Include="Security\UserInfo.cs" />
     <Compile Include="Security\TokenType.cs" />
-    <Compile Include="Security\WinLogon.cs" />
     <Compile Include="SimpleSockets\SimpleSocket.cs" />
     <Compile Include="SimpleSockets\SimpleSocketClient.cs" />
     <Compile Include="SimpleSockets\SimpleSocketRequest.cs" />

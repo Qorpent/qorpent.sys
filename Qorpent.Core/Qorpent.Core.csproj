@@ -232,8 +232,12 @@
     <Compile Include="Mvc\ViewNotFoundException.cs" />
     <Compile Include="ScheduledTask.cs" />
     <Compile Include="Security\AccessProviderService.cs" />
+    <Compile Include="Security\DefaultLogonProvider.cs" />
     <Compile Include="Security\ICredentialStorage.cs" />
+    <Compile Include="Security\ILogon.cs" />
+    <Compile Include="Security\ILogonProvider.cs" />
     <Compile Include="Security\IWithRoleContext.cs" />
+    <Compile Include="Security\SysLogon.cs" />
     <Compile Include="Security\UserName.cs" />
     <Compile Include="Security\Watchdog\IParanoidProvider.cs" />
     <Compile Include="Security\ISysLogon.cs" />

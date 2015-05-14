@@ -473,7 +473,13 @@ namespace Qorpent.Host {
             }
         }
 
+        public event Action<IContainer> OnBeforeInitializeServices;
+        public event Action<IContainer> OnAfterInitializeSerives;
+
         private void _InitializeDefaultServices() {
+            if (null != OnBeforeInitializeServices) {
+                OnBeforeInitializeServices(Container);
+            }
             if (null == Container.FindComponent(typeof (IRequestHandlerFactory), null)) {
                 Container.Register(
                     Container.NewComponent<IRequestHandlerFactory, DefaultRequestHandlerFactory>(Lifestyle.Transient));
@@ -501,6 +507,10 @@ namespace Qorpent.Host {
                 Static.SetCachedRoot(map.Key, map.Value);
             }
             Container.Register(Container.NewExtension(Config.Log, "mainlog"));
+            if (null != OnAfterInitializeSerives)
+            {
+                OnAfterInitializeSerives(Container);
+            }
         }
 
         private void LoadContainer() {

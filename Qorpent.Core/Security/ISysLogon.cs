@@ -22,7 +22,8 @@ namespace Qorpent.Security {
 	/// <summary>
 	/// 	ѕозвол€ет осуществл€ть вход в систему от имени другого пользовател€ или провер€ть его валидность
 	/// </summary>
-	public interface ISysLogon {
+	[Obsolete]
+    public interface ISysLogon {
 		/// <summary>
 		/// 	Execute system logon procedure and return true if proceed
 		/// </summary>

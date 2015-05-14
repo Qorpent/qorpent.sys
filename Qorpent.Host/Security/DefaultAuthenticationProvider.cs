@@ -4,13 +4,15 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Security.Principal;
+using Qorpent.IoC;
 using Qorpent.IO.Http;
+using Qorpent.Security;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Security{
 	/// <summary>
 	/// </summary>
-	public class DefaultAuthenticationProvider : IAuthenticationProvider{
-		private readonly WinLogon _logon = new WinLogon();
+	public class DefaultAuthenticationProvider : ServiceBase, IAuthenticationProvider{
 
 		private readonly IDictionary<string, UserInfo> _ticketCache = new Dictionary<string, UserInfo>();
 
@@ -26,6 +28,9 @@ namespace Qorpent.Host.Security{
 			Principal = new GenericPrincipal(new GenericIdentity("local\\guest"), null)
 		};
 
+	    [Inject]
+	    public ILogonProvider LogonProvider { get; set; }
+
 
 		private IHostServer _server;
 
@@ -34,27 +39,32 @@ namespace Qorpent.Host.Security{
 		/// <param name="server"></param>
 		public void Initialize(IHostServer server){
 			_server = server;
+		    this.ExclusiveAuth = _server.Config.Definition.ResolveValue("exclusiveauth").ToBool();
+		    this.IgnoreAuth = _server.Config.Definition.ResolveValue("ignoreauth").ToBool();
 		}
 
-		/// <summary>
+	    public bool IgnoreAuth { get; set; }
+
+	    public bool ExclusiveAuth { get; set; }
+
+	    /// <summary>
 		/// </summary>
 		/// <param name="context"></param>
-        public void Authenticate(WebContext context)
-        {
-			string ticket = GetTicket(context);
+        public void Authenticate(WebContext context) {
+            if (IsIgnoreAuthentication(context)) return;
+	        string ticket = GetTicket(context);
 			UserInfo result = guest;
 			bool auth = false;
 			if (!string.IsNullOrWhiteSpace(ticket)){
-				result = CheckTicket(ticket);
-				if (null != result && IsValid(result)){
+				result = CheckTicket(ticket,context);
+				if (null != result){
 					auth = true;
 					SetTicketCookie(context, ticket);
 				}
 				else{
-					if (null == result){
-						result = guest;
-						_ticketCache.Remove(ticket);
-					}
+					result = guest;
+					_ticketCache.Remove(ticket);
+					
 				}
 			}
 			if (!auth){
@@ -65,14 +75,39 @@ namespace Qorpent.Host.Security{
 
 		}
 
-		
+	    private bool IsIgnoreAuthentication(WebContext context) {
+	        if (IgnoreAuth) {
+	            return true;
+	        }
+	        var path = context.Uri.AbsolutePath;
+	        if (path.EndsWith(".js")) {
+	            return true;
+	        }
+	        if (path.EndsWith(".css")) {
+	            return true;
+	        }
+	        if (path.EndsWith(".html")) {
+	            return true;
+	        }
+	        if (path.EndsWith(".css.map")) {
+	            return true;
+	        }
+	        if (path.EndsWith(".js.map")) {
+	            return true;
+	        }
+	        if (context.Uri.AbsolutePath == "/logout") {
+	            return true;
+	        }
+	        return false;
+	    }
 
-        public void Authenticate(WebContext context, string username, string password)
+
+	    public void Authenticate(WebContext context, string username, string password)
         {
-            bool isauth = _logon.Logon(username, password);
+            bool isauth = LogonProvider.IsAuth(username, password);
             if (isauth)
             {
-                string ticket = RegisterTicket(username);
+                string ticket = RegisterTicket(username,context);
                 SetTicketCookie(context, ticket);
                 UserInfo result = _ticketCache[ticket];
                 var principal = new QorpentHostPrincipal(result);
@@ -146,21 +181,43 @@ namespace Qorpent.Host.Security{
 			context.Finish("true");
 		}
 
-		private bool IsValid(UserInfo user){
+		private bool IsValid(UserInfo user, string ticket,WebContext context){
 			if (user == guest) return true;
 			if (user == error) return false;
 			if (DateTime.Now > user.Expire) return false;
+		    if (ExclusiveAuth && UserTicketMap[user.Login] != ticket) {
+                _server.Config.Log.Warn("Exclusive login required");
+		        return false;
+		    }
+		    var ua = context.Request.UserAgent.GetMd5(5);
+		    if (user.UserAgent != ua) {
+		        _server.Config.Log.Error("Invalid User Agent on Ticket");
+		        return false;
+		    }
+		    if (context.Request.LocalEndPoint.Address.ToString() != user.LocalAddress) {
+                _server.Config.Log.Error("Invalid Local endpoint on Ticket");
+                return false;
+		    }
+            if (context.Request.RemoteEndPoint.Address.ToString() != user.RemoteAddress)
+            {
+                _server.Config.Log.Error("Invalid Remote endpoint on Ticket");
+                return false;
+            }
 			return user.Ok;
 		}
 
-		private string RegisterTicket(string username){
+		private string RegisterTicket(string username, WebContext context){
 			var result = new UserInfo{
 				Expire = DateTime.Today.AddDays(1),
 				Login = username.ToLowerInvariant(),
 				Ok = true,
 				Principal = new GenericPrincipal(new GenericIdentity(username.ToLowerInvariant()), null),
 				Token = "",
-				Type = TokenType.Remote
+				Type = TokenType.Remote,
+                LoginTime = DateTime.Now,
+                UserAgent= context.Request.UserAgent.GetMd5(5),
+                LocalAddress = context.Request.LocalEndPoint.Address.ToString(),
+                RemoteAddress = context.Request.RemoteEndPoint.Address.ToString()
 			};
 			var str = new MemoryStream();
 			var wr = new BinaryWriter(str);
@@ -168,50 +225,70 @@ namespace Qorpent.Host.Security{
 			wr.Flush();
 			string ticket = _server.Encryptor.Encrypt(str.ToArray());
 			_ticketCache[ticket] = result;
+		    UserTicketMap[result.Login] = ticket;
 			return ticket;
 		}
 
 		private void SetTicketCookie(WebContext context, string ticket){
 			ticket = ticket ?? "";
 			var cookie = new Cookie(_server.Config.AuthCookieName, ticket);
+		    cookie.Path = "/";
 			if (string.IsNullOrWhiteSpace(ticket)){
 				cookie.Expires = DateTime.Now.AddYears(-1);
 			}
 			else{
 				cookie.Expires = DateTime.Today.AddDays(1);
 			}
+		    cookie.HttpOnly = true;
+		    cookie.Secure = true;
 			context.Response.Cookies.Add(cookie);
 		}
 
-		
+        IDictionary<string, string> UserTicketMap = new Dictionary<string, string>();
 
-		private UserInfo CheckTicket(string ticket){
-			if (_ticketCache.ContainsKey(ticket)) return _ticketCache[ticket];
-			try{
-				var data = new MemoryStream(_server.Encryptor.DecryptData(ticket));
-				data.Position = 0;
-				var reader = new BinaryReader(data);
-				var token = new UserInfo();
-				token.Read(reader);
-				_ticketCache[ticket] = token;
-				return token;
-			}
-			catch{
-				return null;
-			}
+		private UserInfo CheckTicket(string ticket,WebContext context) {
+		    var token = GetToken(ticket);
+		    if (null != token) {
+		        if (!IsValid(token,ticket,context)) return null;
+		    }
+		    return token;
 		}
 
-		/// <summary>
+	    private UserInfo GetToken(string ticket) {
+	        if (_ticketCache.ContainsKey(ticket)) {
+	            return _ticketCache[ticket];
+	        }
+	        try {
+	            var data = new MemoryStream(_server.Encryptor.DecryptData(ticket));
+	            data.Position = 0;
+	            var reader = new BinaryReader(data);
+	            var token = new UserInfo();
+	            token.Read(reader);
+	            _ticketCache[ticket] = token;
+	            if (!UserTicketMap.ContainsKey(token.Login)) {
+	                UserTicketMap[token.Login] = ticket;
+	            }
+	            return token;
+	        }
+	        catch {
+	            return null;
+	        }
+	    }
+
+	    /// <summary>
 		/// Проверка аутентифицированного контекста
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-        public bool IsAuth(WebContext context)
-        {
-			var result = !string.IsNullOrWhiteSpace(GetTicket(context));
-			context.Finish(result.ToString().ToLowerInvariant());
-			return result;
-		}
+        public bool IsAuth(WebContext context) {
+	        var principal = context.User;
+	        var result = false;
+	        if (null != principal) {
+                result = principal.Identity.IsAuthenticated;
+	        }
+            context.Finish(result.ToString().ToLowerInvariant());
+	        return result;
+	    }
         private string GetTicket(WebContext context)
         {
 			Cookie cookie = context.Cookies[_server.Config.AuthCookieName];

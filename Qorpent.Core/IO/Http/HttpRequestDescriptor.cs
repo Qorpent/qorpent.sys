@@ -14,7 +14,9 @@ namespace Qorpent.IO.Http {
         public const string IfModifiedSinceHeader = "If-Modified-Since";
         public const string IfNoneMatchHeader = "If-None-Match";
         public virtual IDictionary<string, string> Headers { get; set; }
+        public IPEndPoint LocalEndPoint { get; set; }
 
+        public IPEndPoint RemoteEndPoint { get; set; }
         public static implicit operator HttpRequestDescriptor(HttpListenerContext context) {
             return new HttpListenerRequestDescriptor(context.Request){User = context.User};
         }

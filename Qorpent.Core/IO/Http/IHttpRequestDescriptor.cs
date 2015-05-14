@@ -20,6 +20,8 @@ namespace Qorpent.IO.Http {
         string UserHostName { get; set; }
         string UserAgent { get; set; }
         CookieCollection Cookies { get; set; }
+        IPEndPoint LocalEndPoint { get; set; }
+        IPEndPoint RemoteEndPoint { get; set; }
         string GetHeader(string name);
         DateTime GetIfModifiedSince();
         string GetIfNoneMatch();

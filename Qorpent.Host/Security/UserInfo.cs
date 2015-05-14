@@ -37,7 +37,12 @@ namespace Qorpent.Host.Security{
 		/// </summary>
 		public TokenType Type;
 
-		/// <summary>
+	    public DateTime LoginTime { get; set; }
+	    public string UserAgent { get; set; }
+	    public string LocalAddress { get; set; }
+	    public string RemoteAddress { get; set; }
+
+	    /// <summary>
 		///     Считать объект из ридера
 		/// </summary>
 		/// <param name="reader"></param>
@@ -48,6 +53,11 @@ namespace Qorpent.Host.Security{
 				Token = reader.ReadString();
 				Expire = DateTime.FromOADate(reader.ReadDouble());
 				Type = (TokenType) reader.ReadByte();
+			    LoginTime = DateTime.FromOADate(reader.ReadDouble());
+			    UserAgent = reader.ReadString();
+			    LocalAddress = reader.ReadString();
+			    RemoteAddress = reader.ReadString();
+
 			}
 		}
 
@@ -61,6 +71,10 @@ namespace Qorpent.Host.Security{
 			writer.Write(Token);
 			writer.Write(Expire.ToOADate());
 			writer.Write((byte) Type);
+            writer.Write(LoginTime.ToOADate());
+            writer.Write(UserAgent);
+            writer.Write(LocalAddress);
+            writer.Write(RemoteAddress);
 		}
 	}
 }
