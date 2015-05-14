@@ -46,6 +46,9 @@ namespace Qorpent.IO.Net{
 				if (part[0].ToLowerInvariant() == "expires"){
 					current.Expires = DateTime.Parse(part[1]);
 				}
+                else if (part[0].ToLowerInvariant() == "max-age") {
+                    current.Expires = DateTime.Now.AddSeconds(part[1].ToInt());
+                }
 				else if (part[0].ToLowerInvariant() == "path"){
 					current.Path = part[1];
 				}
