@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Security.Principal;
+using Qorpent.Events;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
 using Qorpent.Security;
+using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Security{
@@ -28,8 +29,17 @@ namespace Qorpent.Host.Security{
 			Principal = new GenericPrincipal(new GenericIdentity("local\\guest"), null)
 		};
 
+
+        [Inject]
+        public IRoleResolver RoleResolver { get; set; }
+
 	    [Inject]
 	    public ILogonProvider LogonProvider { get; set; }
+
+        [Inject]
+        public ILoginSourceProvider LoginSourceProvider { get; set; }
+
+       
 
 
 		private IHostServer _server;
@@ -39,9 +49,100 @@ namespace Qorpent.Host.Security{
 		/// <param name="server"></param>
 		public void Initialize(IHostServer server){
 			_server = server;
-		    this.ExclusiveAuth = _server.Config.Definition.ResolveValue("exclusiveauth").ToBool();
-		    this.IgnoreAuth = _server.Config.Definition.ResolveValue("ignoreauth").ToBool();
+		    ExclusiveAuth = _server.Config.Definition.ResolveValue("exclusiveauth").ToBool();
+		    IgnoreAuth = _server.Config.Definition.ResolveValue("ignoreauth").ToBool();
+            server.OnContext("/logon", Logon);
+            server.OnContext("/logout", Logout);
+            server.OnContext("/isauth", IsAuth);
+            server.OnContext("/isrole", IsRole);
+		    server.OnContext("/mylogin", MyLogin);
+		    server.OnContext("/myinfo", MyInfo);
+            server.OnContext("/authreset", AuthReset);
 		}
+
+	    private void MyInfo(WebContext obj) {
+            if (!GetIsAuth(obj))
+            {
+                throw new Exception("need auth");
+            }
+            var data = RequestParameters.Create(obj);
+            var qhp = obj.User as QorpentHostPrincipal;
+
+	        var login = data.Get("login");
+	        if (string.IsNullOrWhiteSpace(login) || login == qhp.Identity.Name) {
+
+	            if (null != qhp) {
+	                var info = LoginSourceProvider.Get(qhp.Identity.Name);
+	                if (null != info) {
+	                    obj.Finish(JsonSerializer.Stringify(info));
+	                }
+	                else {
+	                    obj.Finish("null");
+	                }
+	            }
+	            else {
+	                throw new Exception("auth required");
+	            }
+	        }
+	        else {
+                var isadmin = RoleResolver.IsInRole(obj.User.Identity.Name, "ADMIN");
+                if (!isadmin)
+                {
+                    throw new Exception("not admin");
+                }
+	            var info = LoginSourceProvider.Get(login);
+                if (null != info)
+                {
+                    obj.Finish(JsonSerializer.Stringify(info));
+                }
+                else
+                {
+                    obj.Finish("null");
+                }
+	        }
+	    }
+
+	    private void MyLogin(WebContext obj) {
+            var qhp = obj.User as QorpentHostPrincipal;
+	        if (null != qhp) {
+	            obj.Finish(JsonSerializer.Stringify(qhp.Info));
+	        }
+	        else {
+	            throw new Exception("auth required");
+	        }
+	    }
+
+	    private void IsRole(WebContext context) {
+            var result = GetIsRole(context);
+            context.Finish(result.ToString().ToLowerInvariant());
+	    }
+
+
+	    private bool GetIsRole(WebContext context) {
+	        if (!GetIsAuth(context)) {
+	            throw new Exception("need auth");
+	        }
+	        var data = RequestParameters.Create(context);
+	        var username = data.Get("login");
+	        var role = data.Get("role");
+	        var exact = data.Get("exact").ToBool();
+	        if (string.IsNullOrWhiteSpace(role)) return false;
+	        if (string.IsNullOrWhiteSpace(username) || (username.ToLowerInvariant() == context.User.Identity.Name))
+	        {
+	            return RoleResolver.IsInRole(context.User.Identity.Name, role,exact);
+	        }
+	        var isadmin = RoleResolver.IsInRole(context.User.Identity.Name, "ADMIN");
+	        if (!isadmin) {
+	            throw new Exception("not admin");
+	        }
+	        return RoleResolver.IsInRole(username, role, exact);
+	    }
+
+	    private void AuthReset(WebContext ctx) {
+	        LoginSourceProvider.Reset(new ResetEventData(true));
+            _ticketCache.Clear();
+            UserTicketMap.Clear();
+	    }
 
 	    public bool IgnoreAuth { get; set; }
 
@@ -162,7 +263,7 @@ namespace Qorpent.Host.Security{
                 }
                 else
                 {
-                    context.Finish("'error'", "application/json", 500);
+                    context.Finish("\"error\"", "application/json", 500);
                 }
             }
 	    }
@@ -224,6 +325,7 @@ namespace Qorpent.Host.Security{
 			result.Write(wr);
 			wr.Flush();
 			string ticket = _server.Encryptor.Encrypt(str.ToArray());
+		    result.Token = ticket;
 			_ticketCache[ticket] = result;
 		    UserTicketMap[result.Login] = ticket;
 			return ticket;
@@ -280,16 +382,21 @@ namespace Qorpent.Host.Security{
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-        public bool IsAuth(WebContext context) {
+        public void IsAuth(WebContext context) {
+	        var result = GetIsAuth(context);
+	        context.Finish(result.ToString().ToLowerInvariant());
+	    }
+
+	    private static bool GetIsAuth(WebContext context) {
 	        var principal = context.User;
 	        var result = false;
 	        if (null != principal) {
-                result = principal.Identity.IsAuthenticated;
+	            result = principal.Identity.IsAuthenticated;
 	        }
-            context.Finish(result.ToString().ToLowerInvariant());
 	        return result;
 	    }
-        private string GetTicket(WebContext context)
+
+	    private string GetTicket(WebContext context)
         {
 			Cookie cookie = context.Cookies[_server.Config.AuthCookieName];
 			if (null == cookie) return null;

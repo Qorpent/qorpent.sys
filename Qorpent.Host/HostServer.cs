@@ -326,9 +326,6 @@ namespace Qorpent.Host {
                 _ => _.Finish(string.Format("{{\"requestCount\":{0}}}", RequestCount)));
             this.OnResponse("/_static/cache/drop", _ => { });
             this.OnContext("/toxml", _ => new SmartXmlHandler().Process(_));
-            this.OnContext("/logon", _ => Auth.Logon(_));
-            this.OnContext("/logout", _ => Auth.Logout(_));
-            this.OnContext("/isauth", _ => Auth.IsAuth(_));
             this.OnContext("/save", _ => new SaveHandler().Run(this, _, null, CancellationToken.None));
             this.OnContext("/load", _ => new LoadHandler().Run(this, _, null, CancellationToken.None));
             this.On("/js/_plugins.js", BuildPluginsModule(), "text/javascript");

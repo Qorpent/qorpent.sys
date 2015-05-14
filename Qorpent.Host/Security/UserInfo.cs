@@ -2,44 +2,55 @@
 using System.IO;
 using System.Security.Principal;
 using Qorpent.IO;
+using Qorpent.Serialization;
 
 namespace Qorpent.Host.Security{
 	/// <summary>
 	/// </summary>
-	public class UserInfo : IBinarySerializable{
+	[Serialize]
+    public class UserInfo : IBinarySerializable{
 		/// <summary>
 		///     Срок действия
 		/// </summary>
-		public DateTime Expire;
+		[SerializeNotNullOnly]
+        public DateTime Expire;
 
 		/// <summary>
 		///     Результирующий логин
 		/// </summary>
-		public string Login;
+		[SerializeNotNullOnly]
+        public string Login;
 
 		/// <summary>
 		///     Статус
 		/// </summary>
-		public bool Ok;
+		[IgnoreSerialize]
+        public bool Ok;
 
 		/// <summary>
 		///     Принципал
 		/// </summary>
-		public IPrincipal Principal;
+		[IgnoreSerialize]
+        public IPrincipal Principal;
 
 		/// <summary>
 		///     Токен
 		/// </summary>
-		public string Token;
+		[IgnoreSerialize]
+        public string Token;
 
 		/// <summary>
 		///     Базовый тип токена
 		/// </summary>
-		public TokenType Type;
-
+		[SerializeNotNullOnly]
+        public TokenType Type;
+        [SerializeNotNullOnly]
 	    public DateTime LoginTime { get; set; }
+        [IgnoreSerialize]
 	    public string UserAgent { get; set; }
+        [IgnoreSerialize]
 	    public string LocalAddress { get; set; }
+        [IgnoreSerialize]
 	    public string RemoteAddress { get; set; }
 
 	    /// <summary>

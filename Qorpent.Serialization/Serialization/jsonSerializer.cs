@@ -43,6 +43,12 @@ namespace Qorpent.Serialization {
 			return new JsonSerializerImpl();
 		}
 
+        static JsonSerializer _default = new JsonSerializer();
+	    public static string Stringify(object obj) {
+	        return _default.Serialize(obj);
+
+	    }
+
         private XmlToJsonConverter converter = new XmlToJsonConverter();
 
 	    /// <summary>

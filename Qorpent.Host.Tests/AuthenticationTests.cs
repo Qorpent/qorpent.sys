@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Security.Principal;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Qorpent.Host.Security;
 using Qorpent.IO.Net;
 using Qorpent.Security;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Tests
 {
@@ -20,19 +17,10 @@ namespace Qorpent.Host.Tests
         private HttpClient cl;
         private DefaultLogonProvider lp;
         private DefaultAuthenticationProvider auth;
+        private DefaultLoginSourceProvider ls;
 
-        class TestLogon:ILogon   {
-            public int Idx { get; set; }
+        
 
-            public bool IsAuth(string username, string password) {
-                return username == password;
-            }
-
-            public IIdentity Logon(string username, string password) {
-                if(username==password)return new GenericIdentity(username);
-                return null;
-            }
-        }
         [SetUp]
         public void Setup() {
             this.host = new HostServer(14990);
@@ -44,6 +32,8 @@ namespace Qorpent.Host.Tests
             Assert.NotNull(auth);
             Assert.NotNull(auth.LogonProvider);
             lp = auth.LogonProvider as DefaultLogonProvider;
+            ls = auth.LoginSourceProvider as DefaultLoginSourceProvider;
+            ls.Sources = new[] {new TestLoginSource()};
             Assert.True(lp.Logons.OfType<TestLogon>().Any()); //this code is just tests that Auth uses logons from IoC
             lp.Logons = new[] {new TestLogon()}; //we require just one logon extension
             this.cl = new HttpClient();
@@ -68,6 +58,82 @@ namespace Qorpent.Host.Tests
             var cookie = cl.Cookies["QHAUTH"];
             Assert.NotNull(cookie);
             Assert.AreEqual("true", cl.GetString("http://127.0.0.1:14990/isauth"));
+
+
+        }
+
+        [Test]
+        public void CanLogonThrowLoginSource() {
+
+            cl.Cookies = new CookieCollection();
+            Assert.AreEqual("true", cl.GetString("http://127.0.0.1:14990/logon?login=adm&pass=adm"));
+            Assert.AreEqual("true", cl.GetString("http://127.0.0.1:14990/isauth"));
+        }
+
+        [Test]
+        public void CanGetMyLoginInfo() {
+            cl.Cookies = new CookieCollection();
+            Assert.AreEqual("true", cl.GetString("http://127.0.0.1:14990/logon?login=adm&pass=adm"));
+            var str = cl.GetString("http://127.0.0.1:14990/mylogin").Simplify(SimplifyOptions.NoWs|SimplifyOptions.SingleQuotes);
+            Console.WriteLine(str);
+            Assert.True(str.Contains("'Login':'adm'"));
+        }
+
+        [Test]
+        public void AdminCanGetOtherLoginInfo()
+        {
+            cl.Cookies = new CookieCollection();
+            Assert.AreEqual("true", cl.GetString("http://127.0.0.1:14990/logon?login=adm&pass=adm"));
+            var str = cl.GetString("http://127.0.0.1:14990/myinfo?login=usr").Simplify(SimplifyOptions.NoWs | SimplifyOptions.SingleQuotes);
+            Console.WriteLine(str);
+            Assert.True(str.Contains("{'Login':'usr','Name':'UU','Groups':['y'],'Roles':['viewver','x.all'],'IsActive':true}"));
+        }
+
+        [Test]
+        public void UserCannotGetOtherLoginInfo()
+        {
+            cl.Cookies = new CookieCollection();
+            Assert.AreEqual("true", cl.GetString("http://127.0.0.1:14990/logon?login=usr&pass=usr"));
+            var str = cl.GetString("http://127.0.0.1:14990/myinfo?login=adm").Simplify(SimplifyOptions.NoWs | SimplifyOptions.SingleQuotes);
+            Console.WriteLine(str);
+            Assert.True(str.Contains("System.Exception:notadmin"));
+        }
+
+        [Test]
+        public void CanCheckRole()
+        {
+            cl.Cookies = new CookieCollection();
+            Assert.AreEqual("true", cl.GetString("http://127.0.0.1:14990/logon?login=usr&pass=usr"));
+            var str = cl.GetString("http://127.0.0.1:14990/isrole?role=viewver").Simplify(SimplifyOptions.NoWs | SimplifyOptions.SingleQuotes);
+            Assert.AreEqual("true",str);
+        }
+
+        [Test]
+        public void AdminCanCheckOtherRole()
+        {
+            cl.Cookies = new CookieCollection();
+            Assert.AreEqual("true", cl.GetString("http://127.0.0.1:14990/logon?login=adm&pass=adm"));
+            var str = cl.GetString("http://127.0.0.1:14990/isrole?login=usr&exact=true&role=viewver").Simplify(SimplifyOptions.NoWs | SimplifyOptions.SingleQuotes);
+            Assert.AreEqual("true", str);
+        }
+
+        [Test]
+        public void NonAdminCannotCheckOtherRole()
+        {
+            cl.Cookies = new CookieCollection();
+            Assert.AreEqual("true", cl.GetString("http://127.0.0.1:14990/logon?login=usr&pass=usr"));
+            var str = cl.GetString("http://127.0.0.1:14990/isrole?login=adm&exact=true&role=admin").Simplify(SimplifyOptions.NoWs | SimplifyOptions.SingleQuotes);
+            Assert.True(str.Contains("System.Exception:notadmin"));
+        }
+
+        [Test]
+        public void CanGetMyUserInfo()
+        {
+            cl.Cookies = new CookieCollection();
+            Assert.AreEqual("true", cl.GetString("http://127.0.0.1:14990/logon?login=usr&pass=usr"));
+            var str = cl.GetString("http://127.0.0.1:14990/myinfo").Simplify(SimplifyOptions.NoWs | SimplifyOptions.SingleQuotes);
+            Console.WriteLine(str);
+            Assert.True(str.Contains("{'Login':'usr','Name':'UU','Groups':['y'],'Roles':['viewver','x.all'],'IsActive':true}"));
         }
 
         [Test]
@@ -93,7 +159,7 @@ namespace Qorpent.Host.Tests
 
         [Test]
         public void CanPreventInvalidLogon() {
-            Assert.AreEqual("'error'", cl.GetString("http://127.0.0.1:14990/logon?login=a&pass=xxx"));
+            Assert.AreEqual("\"error\"", cl.GetString("http://127.0.0.1:14990/logon?login=a&pass=xxx"));
         }
 
         [Test]
@@ -187,5 +253,7 @@ namespace Qorpent.Host.Tests
            
 
         }
+
+       
     }
 }

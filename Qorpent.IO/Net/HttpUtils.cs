@@ -68,6 +68,9 @@ namespace Qorpent.IO.Net{
 				    else {
 				        current.Value = string.Join("=", part.Skip(1).ToArray());
 				    }
+				    if (c.EndsWith("=")) {
+				        current.Value += "="; //base 64 issue
+				    }
 				}
 			}
 			yield return current;

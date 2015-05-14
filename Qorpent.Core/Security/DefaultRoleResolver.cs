@@ -46,6 +46,9 @@ namespace Qorpent.Security {
 		/// </summary>
 		[Inject] public IRoleResolverExtension[] Extensions { get; set; }
 
+        [Inject]
+        public ILoginSourceProvider LoginSourceProvider { get; set; }
+
 
 		/// <summary>
 		/// 	Test given principal against role
@@ -126,6 +129,9 @@ namespace Qorpent.Security {
 
 		private bool EvaluateIsInRole(IPrincipal principal, string role, bool exact, IMvcContext callcontext,
 		                              object customcontext) {
+
+		   
+
 			//Q-32 fix
             if (string.IsNullOrWhiteSpace(role))
             {
@@ -135,16 +141,28 @@ namespace Qorpent.Security {
             callcontext = callcontext ?? MvcContextBase.Current;
             
 
+
 			//ALL ARE DEFAULTS AND GUESTS
 			if (InternalIsInRole(principal, role, callcontext, exact)) {
 				return true;
 			}
+
+           
 
 			if (null != Extensions) {
 				if (Extensions.Select(ext => ext.IsInRole(principal, role, exact, callcontext, customcontext)).Any(result => result)) {
 					return true;
 				}
 			}
+
+            var login = principal.Identity.Name;
+            var logininfo = LoginSourceProvider.Get(login);
+            if (null != logininfo)
+            {
+                if (logininfo.IsInRole(role, exact)) {
+                    return true;
+                };
+            }
 
 			return principal.IsInRole(role);
 		}
