@@ -29,6 +29,9 @@
     <Compile Include="..\Qorpent.Core\Data\DbCallNotation.cs">
       <Link>ImportCode\DbCallNotation.cs</Link>
     </Compile>
+    <Compile Include="..\Qorpent.Core\Data\DbDialect.cs">
+      <Link>ImportCode\DbDialect.cs</Link>
+    </Compile>
     <Compile Include="..\Qorpent.Core\Data\DbParameter.cs">
       <Link>ImportCode\DbParameter.cs</Link>
     </Compile>
@@ -46,9 +49,6 @@
     </Compile>
     <Compile Include="..\Qorpent.Core\Data\ParamAttribute.cs">
       <Link>ImportCode\ParamAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Qorpent.Core\Data\SqlDialect.cs">
-      <Link>ImportCode\SqlDialect.cs</Link>
     </Compile>
     <Compile Include="..\Qorpent.Core\Data\SqlObjectType.cs">
       <Link>ImportCode\SqlObjectType.cs</Link>

@@ -137,14 +137,18 @@
                 args = args || {};
                 callinfo = cast(ActionCallInfo, callinfo || {}, excast);
 
+
                 if (success && !error) {
                     error = function (error, resp) {
                         success(null, resp, error);
                     }
                 }
-                callinfo.success = success || callinfo.success;
-                callinfo.error = error || callinfo.error;
-                return {args: args, callinfo: callinfo};
+                callinfo.success = success || callinfo.success || args.success;
+                callinfo.error = error || callinfo.error || args.success;
+
+
+                var result =  {args: args, callinfo: callinfo};
+                return result;
             };
 
             Action.prototype.prepareEmitter = function(){

@@ -12,6 +12,7 @@ define([
     "the-collections-history",
     "the-collections-linq",
     "the-action",
+    "the-login",
     'the-angular-unsafe',
     'the-angular-autocomplete',
     'the-angular-dialog',
