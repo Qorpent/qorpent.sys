@@ -19,12 +19,16 @@ namespace Qorpent.IO.Net{
 	    /// <param name="url"></param>
 	    /// <param name="post"></param>
 	    /// <returns></returns>
-	    public HttpResponse Call( string url,string post = null) {
+	    public HttpResponse Call( string url,string post = null, Action<HttpRequest> setup = null) {
 	        var req = new HttpRequest {Uri = new Uri(url)};
+	        
 	        if (null != post) {
 	            req.Method = "POST";
 	            req.PostData = post;
 	        }
+            if (null != setup) {
+                setup(req);
+            }
 			return Call(req);
 		}
 
@@ -34,8 +38,19 @@ namespace Qorpent.IO.Net{
 	    /// <param name="url"></param>
 	    /// <param name="post"></param>
 	    /// <returns></returns>
-	    public string GetString(string url,string post = null){
-			var resp = Call(url,post);
+	    string IContentSource.GetString(string url, string post = null) {
+	        return GetString(url, post, null);
+	    }
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="url"></param>
+	    /// <param name="post"></param>
+	    /// <returns></returns>
+        public string GetString(string url, string post = null, Action<HttpRequest> setup = null)
+        {
+			var resp = Call(url,post,setup);
 			if (resp.Success){
 				return resp.StringData;
 			}
@@ -49,8 +64,19 @@ namespace Qorpent.IO.Net{
 	    /// <param name="url"></param>
 	    /// <param name="post"></param>
 	    /// <returns></returns>
-	    public byte[] GetData(string url,string post=null){
-			var resp = Call(url,post);
+	    byte[] IContentSource.GetData(string url, string post = null) {
+	        return GetData(url, post, null);
+	    }
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="url"></param>
+	    /// <param name="post"></param>
+	    /// <returns></returns>
+        public byte[] GetData(string url, string post = null, Action<HttpRequest> setup = null)
+        {
+			var resp = Call(url,post,setup);
 			if (resp.Success)
 			{
 				return resp.Data;
@@ -66,6 +92,9 @@ namespace Qorpent.IO.Net{
 			return uri;
 		}
 
+        public CookieCollection Cookies { get; set; }
+        
+
 		readonly HttpResponseReader _reader = new HttpResponseReader();
 		/// <summary>
 		/// Выполнить запрос
@@ -75,7 +104,7 @@ namespace Qorpent.IO.Net{
 		public HttpResponse Call(HttpRequest request){
 			try{
 				var secure = request.Uri.Scheme.StartsWith("https");
-				request.Cookies = request.Cookies ?? new CookieCollection();
+				request.Cookies = request.Cookies ?? this.Cookies ?? new CookieCollection();
 				var endpoint = GetEndpoint(request.Uri);
 				using (var socket = new Socket(AddressFamily.Unspecified, SocketType.Stream, ProtocolType.Tcp)){
 					socket.Connect(endpoint);
@@ -117,9 +146,11 @@ namespace Qorpent.IO.Net{
 
 		private readonly ConcurrentDictionary<string, IPEndPoint> _dnsCache = new ConcurrentDictionary<string, IPEndPoint>(); 
 		private IPEndPoint GetEndpoint(Uri uri){
+           
 			return _dnsCache.GetOrAdd(uri.ToString(), _ =>{
 				var host = uri.Host;
-				var ip = Dns.GetHostAddresses(host)[0];
+			    var ip = Dns.GetHostAddresses(host).First(addr => addr.AddressFamily == AddressFamily.InterNetwork);
+                
 				var port = uri.Port;
 				if (0 == port)
 				{
