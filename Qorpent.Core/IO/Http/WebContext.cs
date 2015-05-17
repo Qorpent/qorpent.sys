@@ -13,6 +13,9 @@ namespace Qorpent.IO.Http {
         private IHttpResponseDescriptor _response;
         private IPrincipal _user;
 
+        public object RequestParametersSync = new object();
+        public RequestParameters PreparedParameters = null;
+
         public static implicit operator WebContext(HttpListenerContext context) {
             var request = (HttpRequestDescriptor) context;
             var response = (HttpResponseDescriptor) context;

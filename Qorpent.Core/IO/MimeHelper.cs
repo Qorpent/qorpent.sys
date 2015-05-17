@@ -84,6 +84,8 @@ namespace Qorpent.IO {
 					return "application/x-font-woff";
 				case "json":
 					return "application/json";
+                case "mp4":
+			        return "video/mp4";
 			}
 
 			return "bin/unknown";

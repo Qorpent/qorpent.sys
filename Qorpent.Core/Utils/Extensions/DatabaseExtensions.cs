@@ -964,13 +964,9 @@ namespace Qorpent.Utils.Extensions
 				var parsematch = Regex.Match(connectionString, @"^ProviderName=([^;]+);([\s\S]+)$");
 				var providername = parsematch.Groups[1].Value;
 				var connstring = parsematch.Groups[2].Value;
-				if (providername.ToUpper() == "NPGSQL"){
-					if (File.Exists(Path.Combine(EnvironmentInfo.BinDirectory, "Npgsql.dll"))){
-						return GetPostGresConnection(connstring);
-					}
-					else{
-						throw new QorpentException("cannot connect to PostGres because Npgsql not exists in application");
-					}
+				if (providername.ToUpper() == "NPGSQL") {	    
+                    return GetPostGresConnection(connstring);
+				    
 				}
 				var provider = DbProviderFactories.GetFactory(providername);
 				var result = provider.CreateConnection();
@@ -989,11 +985,7 @@ namespace Qorpent.Utils.Extensions
 	    private static Assembly NpgSQLAssembly {
 			get {
 				if(null==_npgsqlassembly) {
-					_npgsqlassembly =
-						AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.ToLower().StartsWith("npgsql"));
-					if(null==_npgsqlassembly) {
-						_npgsqlassembly = Assembly.LoadFrom("Npgsql.dll");
-					}
+                   _npgsqlassembly = Assembly.LoadFile(EnvironmentInfo.ResolvePath("@repos@/qorpent.kernel/Npgsql.dll"));
 				}
 				return _npgsqlassembly;
 			}
@@ -1008,8 +1000,10 @@ namespace Qorpent.Utils.Extensions
 			}
 		}
 
-		private static IDbConnection GetPostGresConnection(string connstring) {
-			return (IDbConnection)Activator.CreateInstance(NpgSQLConnectionType, connstring);
-		}
+	   private static IDbConnection GetPostGresConnection(string connstring) {
+    	        return (IDbConnection) Activator.CreateInstance(NpgSQLConnectionType, connstring);
+    	}
+
+     
 	}
 }

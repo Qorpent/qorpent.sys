@@ -68,11 +68,21 @@ namespace Qorpent.IoC {
 					if (type.IsAbstract) {
 						continue; //cannot expose abstracts
 					}
-					var clsdef = new ManifestClassDefinition(type);
-					if (null != clsdef.Descriptor) {
-						ComponentDefinitions.Add(clsdef);
-						clsdef.AssemblyManifest = this;
-					}
+				    var attributes = type.GetCustomAttributes(true).Where(x => {
+				        var baseType = x.GetType().BaseType;
+				        return baseType != null && (x.GetType().Name == typeof (ContainerComponentAttribute).Name
+				                                    ||
+				                                    baseType.Name == typeof (ContainerComponentAttribute).Name);
+				    }).ToArray();
+				    foreach (var attribute in attributes) {
+                        var clsdef = new ManifestClassDefinition(type,attribute);
+                        if (null != clsdef.Descriptor)
+                        {
+                            ComponentDefinitions.Add(clsdef);
+                            clsdef.AssemblyManifest = this;
+                        }    
+				    }
+					
 				}
 			}
 		}

@@ -370,14 +370,22 @@ namespace Qorpent.Utils.Extensions {
 			if (String.IsNullOrWhiteSpace(s)) {
 				return new DateTime(1900, 1, 1);
 			}
-			try{
-				return DateTime.ParseExact(s, QorpentConst.Date.StandardDateFormats, CultureInfo.InvariantCulture,
-				                           DateTimeStyles.AllowWhiteSpaces);
-			}
-			catch (Exception ex){
-				if(safe)return new DateTime(1900,1,1);
-				throw ex;
-			}
+
+		
+		        try {
+		            return DateTime.ParseExact(s, QorpentConst.Date.StandardDateFormats, CultureInfo.InvariantCulture,
+		                DateTimeStyles.AllowWhiteSpaces);
+		        }
+		        catch (Exception ex) {
+		            try {
+		                return DateTime.Parse(s);
+		            }
+		            catch {
+		                if (safe) return new DateTime(1900, 1, 1);
+		                throw ex;
+		            }
+		        }
+		    
 
 		}
 

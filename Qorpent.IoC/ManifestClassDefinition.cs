@@ -30,10 +30,10 @@ namespace Qorpent.IoC {
 		/// 	generates container manifest of given type
 		/// </summary>
 		/// <param name="type"> </param>
-		public ManifestClassDefinition(Type type) {
+		public ManifestClassDefinition(Type type, object predesc = null) {
 			// we use indirect attribute usage to avoid msbuild context problems - we have to make compoents even in different versions of system
 			Type = type;
-			var predesc =
+			predesc = predesc ??
 				type.GetCustomAttributes(true).Where(x =>
 					{
 						var baseType = x.GetType().BaseType;

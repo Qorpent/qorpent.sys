@@ -39,6 +39,12 @@ namespace Qorpent.Utils
 	        return tmpdir;
 	    }
 
+	    public static void DeleteIfExists(string name) {
+	        if (File.Exists(name)) {
+	            File.Delete(name);
+	        }
+	    }
+
 		/// <summary>
 		/// Avoids Directory.Delete problem with ReadOnly files and checks directory existence
 		/// </summary>

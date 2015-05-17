@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Web;
 using Qorpent.Applications;
@@ -74,9 +75,26 @@ namespace Qorpent {
 			if (Environment.OSVersion.Platform == PlatformID.Unix) {
 				FULL_FILE_NAME_START = "file://";
 			}
+            AppDomain.CurrentDomain.AssemblyResolve+=  CurrentDomainOnAssemblyResolve;
 		}
 
-		/// <summary>
+	    private static Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args) {
+	        var dllname = args.Name.Split(',')[0] + ".dll";
+	        var probes = new[] {
+	            BinDirectory,
+	            ResolvePath("@repos@/lib"),
+	            ResolvePath("@repos@/qorpent.kernel")
+	        };
+	        foreach (var probe in probes) {
+	            var filename = Path.Combine(probe, dllname);
+	            if (File.Exists(filename)) {
+	                return Assembly.LoadFile(filename);
+	            }
+	        }
+	        return null;
+	    }
+
+	    /// <summary>
 		/// 	True if it's console exe, runed from WEBAPP/bin folder with WEBAPP/bin as CurrentDirectory folder
 		/// 	so it must have same root as web app itself
 		/// </summary>

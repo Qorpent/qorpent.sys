@@ -169,7 +169,7 @@ namespace Qorpent.IO.Http
 				}
 				Idx++;
 			}
-			if (cnt == 1)
+			if (cnt >= 1)
 			{
 				var ctb = new byte[100];
 				delt = Idx;

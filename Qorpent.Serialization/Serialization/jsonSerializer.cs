@@ -45,7 +45,7 @@ namespace Qorpent.Serialization {
 
         static JsonSerializer _default = new JsonSerializer();
 	    public static string Stringify(object obj) {
-	        return _default.Serialize(obj);
+	        return _default.Serialize("main",obj);
 
 	    }
 
