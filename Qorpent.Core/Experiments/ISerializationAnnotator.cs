@@ -1,3 +1,4 @@
+using System.IO;
 using System.Reflection;
 
 namespace Qorpent.Experiments {
@@ -12,5 +13,7 @@ namespace Qorpent.Experiments {
         /// <param name="info"></param>
         /// <returns></returns>
         SerializeMode GetMode(object target, PropertyInfo info);
+
+        bool Prepend(object data, TextWriter output);
     }
 }

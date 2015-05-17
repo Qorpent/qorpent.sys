@@ -60,6 +60,11 @@ namespace Qorpent.Bridge.Tests.Utils {
                 Experiments.Json.Parse(src);
             });
         }
+        [Test]
+        public void CanParseColonInString() {
+            Experiments.Json.Parse("\"fff:fff\"");
+            Experiments.Json.Parse("{\"a\":\"fff:fff\"}");
+        }
 
         [TestCase("[ 1 , 2 , 3 ]")]
         [TestCase("[1 ,2 ,3 ]")]

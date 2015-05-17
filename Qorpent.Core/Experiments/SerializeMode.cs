@@ -1,19 +1,27 @@
+using System;
+
 namespace Qorpent.Experiments {
     /// <summary>
     /// Режим сериализации
     /// </summary>
+    [Flags]
     public enum SerializeMode {
         /// <summary>
         /// Нет
         /// </summary>
-        None,
+        None =0,
         /// <summary>
         /// Только не пустые не нулевые
         /// </summary>
-        OnlyNotNull,
+        OnlyNotNull=1,
         /// <summary>
         /// Сериализовать в любом случае
         /// </summary>
-        Serialize
+        Serialize = 2,
+        /// <summary>
+        /// Неизвестный тип
+        /// </summary>
+        Unknown = 4,
+        LowerCase =8
     }
 }

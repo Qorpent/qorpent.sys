@@ -3,11 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Qorpent.Utils;
 
 namespace Qorpent.Experiments {
+
+   
+
     /// <summary>
     /// 
     /// </summary>
@@ -639,6 +643,7 @@ namespace Qorpent.Experiments {
 
         private static void WriteObject(object data, TextWriter output, SerializeMode defaultMode, ISerializationAnnotator annotator)
         {
+            
             if (data is IJsonSerializable) {
                 (data as IJsonSerializable).Write(output, annotator);
             }
@@ -646,13 +651,21 @@ namespace Qorpent.Experiments {
                 output.Write("{");
                 bool first = true;
                 var properties = data.GetType().GetProperties();
+                if (null != annotator) {
+                    first = !annotator.Prepend(data, output);
+                }
                 foreach (var property in properties) {
+                    if (null == property.GetGetMethod()) continue;
                     var mode = null == annotator ? defaultMode : annotator.GetMode(data, property);
+                    if (mode == SerializeMode.Unknown) {
+                        mode = defaultMode;
+                    }
                     if (mode == SerializeMode.None) {
                         continue;
                     }
+                    
                     var val = property.GetValue(data);
-                    if (mode != SerializeMode.Serialize && !TypeConverter.ToBool(val)) {
+                    if (mode.HasFlag( SerializeMode.OnlyNotNull ) && !TypeConverter.ToBool(val)) {
                         continue;
                     }
                     if (!first) {
@@ -661,7 +674,11 @@ namespace Qorpent.Experiments {
                     else {
                         first =false;
                     }
-                    WriteString(property.Name,output);
+                    var name = property.Name;
+                    if (mode.HasFlag(SerializeMode.LowerCase)) {
+                        name = name.ToLowerInvariant();
+                    }
+                    WriteString(name,output);
                     output.Write(":");
                     Write(val,output,defaultMode,annotator);
                 }
@@ -715,6 +732,7 @@ namespace Qorpent.Experiments {
                 output.Write(
                     d.ToString("yyyy-MM-ddTHH:mm:ss" + ((utcOffset < TimeSpan.Zero) ? "-" : "+") +
                                utcOffset.ToString("hhmm")));
+                output.Write("\"");
             }
             else if (data is bool) {
                 var b = (bool) data;
@@ -725,7 +743,22 @@ namespace Qorpent.Experiments {
                 output.Write(data.ToString());
                 output.Write("\"");
             }
+            else if (data is int) {
+                output.Write(data.ToString());
+            }
+            else if (data is long) {
+                var l = (long) data;
+                if (l < int.MinValue || l > int.MaxValue) {
+                    output.Write("\"");
+                    output.Write(l.ToString());
+                    output.Write("\"");
+                }
+                else {
+                    output.Write(l.ToString());
+                }
+            }
             else {
+                
                 output.Write((Convert.ToDouble( data)).ToString(CultureInfo.InvariantCulture));
             }
         }
@@ -738,6 +771,10 @@ namespace Qorpent.Experiments {
                 }
                 else if (c == '\n') {
                     output.Write("\\n");
+                }
+                else if (c == '\t')
+                {
+                    output.Write("\\t");
                 }
                 else if (c == '\f') {
                     output.Write("\\f");
