@@ -1,6 +1,7 @@
 
 @mixin colorize($schema,$bordered : false, $active:false, $progressable:false){
         $cl : skin(vars contrastlimit);
+
         $backcolconfig : map_safe($schema,backcolor,light);
         $backcolorname : $backcolconfig;
         $ldstep : skin(vars ldstep,10%);

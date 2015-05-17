@@ -61,3 +61,6 @@ UpgradeLog*
 /the.webmodule/dist/js/textAngular-sanitize.js
 /the.webmodule/dist/js/textAngular.js
 /the.webmodule/dist/js/ui-bootstrap.js
+/the.webmodule/demo/Video.html
+/the.webmodule/demo/dialogViews/videoView.html
+/the.webmodule/src/css/site/_colorize.scss

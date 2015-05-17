@@ -42,6 +42,8 @@
     }
   }
 
+
+
 }
 
 @mixin boxes(){
@@ -109,4 +111,19 @@
 
 .tlicon {
   color : color(primary);
+}
+
+html.site body {
+  max-width: 800px !important;
+  min-width: 800px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+a {
+  text-decoration: none;
+  color : color(primary);
+  :hover {
+    text-decoration: underline;
+  }
 }

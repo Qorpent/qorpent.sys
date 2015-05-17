@@ -128,4 +128,7 @@ table.props {
 .ng-invalid {
   border : solid 1px color(danger);
 }
+form.ng-invalid {
+  border : inherit;
+}
 

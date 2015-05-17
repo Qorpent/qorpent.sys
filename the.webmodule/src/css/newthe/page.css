@@ -220,9 +220,32 @@ table.props th {
   border: solid 1px color(danger);
 }
 
-/* line 110, page.scss */
+/* line 131, toolwindow.scss */
+form.ng-invalid {
+  border: inherit;
+}
+
+/* line 112, page.scss */
 .tlicon {
   color: color(primary);
+}
+
+/* line 116, page.scss */
+html.site body {
+  max-width: 800px !important;
+  min-width: 800px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* line 123, page.scss */
+a {
+  text-decoration: none;
+  color: color(primary);
+}
+/* line 126, page.scss */
+a :hover {
+  text-decoration: underline;
 }
 
 /*# sourceMappingURL=page.css.map */
