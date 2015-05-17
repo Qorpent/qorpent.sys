@@ -100,7 +100,7 @@ namespace Qorpent.IO.Tests.FileCache
         public void HttpCacheTest() {
             var conf = new HostConfig();
             conf.AddQorpentBinding(99);
-            conf.StaticContentMap["/files/"] = web;
+            conf.StaticContentMap["/files/"] = new StaticFolderDescriptor{Path = web};
             var qh = new HostServer(conf);
             qh.Start();
             try {

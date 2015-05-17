@@ -158,6 +158,7 @@
     <Compile Include="Uson\UObjSerializeMode.cs" />
     <Compile Include="Uson\UObjSerializerSupport.cs" />
     <Compile Include="Uson\UsonExtensions.cs" />
+    <Compile Include="Video\FFMpeg.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

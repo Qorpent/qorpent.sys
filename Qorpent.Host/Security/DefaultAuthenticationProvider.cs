@@ -11,6 +11,9 @@ using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Security{
+
+    
+
 	/// <summary>
 	/// </summary>
 	public class DefaultAuthenticationProvider : ServiceBase, IAuthenticationProvider{
@@ -28,6 +31,13 @@ namespace Qorpent.Host.Security{
 			Type = TokenType.Guest,
 			Principal = new GenericPrincipal(new GenericIdentity("local\\guest"), null)
 		};
+
+        private readonly UserInfo admin = new UserInfo
+        {
+            Ok = true,
+            Type = TokenType.Admin,
+            Principal = new GenericPrincipal(new GenericIdentity("local\\admin"), null)
+        };
 
 
         [Inject]
@@ -139,9 +149,16 @@ namespace Qorpent.Host.Security{
 	    }
 
 	    private void AuthReset(WebContext ctx) {
-	        LoginSourceProvider.Reset(new ResetEventData(true));
+	        Reset(new ResetEventData(true));
+            ctx.Finish("true");
+	    }
+
+	    public override object Reset(ResetEventData data) {
+            LoginSourceProvider.Reset(data);
             _ticketCache.Clear();
             UserTicketMap.Clear();
+            ((IResetable)RoleResolver).Reset(data);
+	        return true;
 	    }
 
 	    public bool IgnoreAuth { get; set; }
@@ -152,29 +169,43 @@ namespace Qorpent.Host.Security{
 		/// </summary>
 		/// <param name="context"></param>
         public void Authenticate(WebContext context) {
-            if (IsIgnoreAuthentication(context)) return;
-	        string ticket = GetTicket(context);
-			UserInfo result = guest;
-			bool auth = false;
-			if (!string.IsNullOrWhiteSpace(ticket)){
-				result = CheckTicket(ticket,context);
-				if (null != result){
-					auth = true;
-					SetTicketCookie(context, ticket);
-				}
-				else{
-					result = guest;
-					_ticketCache.Remove(ticket);
-					
-				}
-			}
-			if (!auth){
-				SetTicketCookie(context, null);
-			}
-			var principal = new QorpentHostPrincipal(result);
+            UserInfo result = guest;
+	        if (CheckFullTrustOrigin(context)) return;
+	        if (!IsIgnoreAuthentication(context)) {
+	            string ticket = GetTicket(context);
+
+	            bool auth = false;
+	            if (!string.IsNullOrWhiteSpace(ticket)) {
+	                result = CheckTicket(ticket, context);
+	                if (null != result) {
+	                    auth = true;
+	                    SetTicketCookie(context, ticket);
+	                }
+	                else {
+	                    result = guest;
+	                    _ticketCache.Remove(ticket);
+
+	                }
+	            }
+	            if (!auth) {
+	                SetTicketCookie(context, null);
+	            }
+	        }
+	        var principal = new QorpentHostPrincipal(result);
 		    context.User = principal;
 
 		}
+
+	    private bool CheckFullTrustOrigin(WebContext context) {
+	        if (context.Request.Headers.ContainsKey("Origin") &&
+	            _server.Config.Definition.Attr("grant-admin-origin") == context.Request.Headers["Origin"]) {
+	            if (context.Request.RemoteEndPoint.Address.ToString() == "127.0.0.1") {
+	                context.User = new QorpentHostPrincipal(admin);
+	                return true;
+	            }
+	        }
+	        return false;
+	    }
 
 	    private bool IsIgnoreAuthentication(WebContext context) {
 	        if (IgnoreAuth) {
@@ -187,7 +218,7 @@ namespace Qorpent.Host.Security{
 	        if (path.EndsWith(".css")) {
 	            return true;
 	        }
-	        if (path.EndsWith(".html")) {
+	        if (path.EndsWith(".html") && !_server.Config.RequireLogin) {
 	            return true;
 	        }
 	        if (path.EndsWith(".css.map")) {
@@ -240,12 +271,12 @@ namespace Qorpent.Host.Security{
             }
             if (string.IsNullOrWhiteSpace(login))
             {
-                context.Finish("no login", status: 500);
+                context.Finish("'no login'");
                 return;
             }
             if (string.IsNullOrWhiteSpace(pass))
             {
-                context.Finish("no pass", status: 500);
+                context.Finish("'no pass'");
                 return;
             }
             Authenticate(context, login, pass);
@@ -263,7 +294,7 @@ namespace Qorpent.Host.Security{
                 }
                 else
                 {
-                    context.Finish("\"error\"", "application/json", 500);
+                    context.Finish("\"invalid user name  or password\"");
                 }
             }
 	    }

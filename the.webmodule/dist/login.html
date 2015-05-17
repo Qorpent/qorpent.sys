@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html class="the site">
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/newthe.css">
+    <script data-main="js/login-start.js" type="text/javascript" src="./../lib/require.js"></script>
+    <title>Вход в приложение</title>
+</head>
+<body ng-controller="root">
+<style type="text/css">
+    .maintoolbar {
+        justify-content: space-between;
+    }
+    .main {
+        padding-left: 100px;
+        padding-right: 100px;
+        align-items: center;
+    }
+    .main div {
+        max-width: 750px;
+    }
+
+    form {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 360px;
+        min-width: 360px;
+        border: solid 1px lightgray !important;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 40px;
+    }
+    form input {
+        font-size: 110%;
+        padding:5px;
+        margin:5px;
+        min-width: 200px;
+        border-radius: 3px;
+    }
+    form i {
+        min-width: 140px;
+        margin-top: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 120%;
+    }
+    p, h1 {
+        margin-top: 20px;
+    }
+    .login-comment {
+        margin-top: 10px;
+        padding:4px;
+    }
+    p, li, h1 {
+        text-align: center;
+    }
+    li {
+        max-width: 600px;
+        min-width: 600px;
+        border: solid 1px gray;
+        border-radius: 5px;
+        margin: 10px;
+        padding:10px;
+    }
+</style>
+<div class="maintoolbar top">
+    <img ng-src="{{appinfo.logo}}" height="35"/>
+    <label class="primary">{{appinfo.title}}</label>
+</div>
+<div class="workplace">
+
+    <div class="main">
+
+        <div ng-if="user.auth" ng-cloak>
+            <h1 class="iprimary">Уважаемый(ая) {{user.info.Name}}!</h1>
+            <p>Вы уже осуществили вход в систему под учетной записью "{{user.info.Login}}"</p>
+            <p>Вы можете перейти по следующим ссылкам:</p>
+            <ul>
+                <a href="/accident-search.html"><li>Поиск и просмотр происшествий </li></a>
+                <a href="/accident-create.html"> <li>Добавить новое происшестиве </li></a>
+                <a href="/accident-profile.html"><li>Личный кабинет</li></a>
+                <a href="/accident-feedback.html"><li>Форма обратной связи</li></a>
+                <a href="/accident-information.html"><li>Информация о системе</li></a>
+            </ul>
+            <p>Вы также можете покинуть систему нажав кнопку  <i class="button warn soft" ng-click="logout()">Выход из системы</i></p>
+        </div>
+
+        <div ng-if="!user.auth && !user.restorepass" ng-cloak >
+        <h1 class="iprimary">Вход в систему <span ng-if="user.auth">(повторный или от имени другого аккаунта)</span></h1>
+        <form  name="loginForm" class="login box col default soft" ng-controller="loginform" ng-submit="loginForm.$valid && login()">
+
+
+            <input type="text" size="10" placeholder="учетная запись" name="login" ng-model="req.login" ng-required="true" ng-change="[lasterror='',lastwaslogin=false]"/>
+            <input type="password" placeholder="пароль" size="10" name="pass" ng-model="req.pass" ng-required="true"  ng-change="[lasterror='',lastwaslogin=false]"/>
+            <i class="button" ng-class="{primary: loginForm.$valid, warn: !loginForm.$valid, disabled: !loginForm.$valid}"
+               ng-click="loginForm.$valid && login()">Войти</i>
+            <input type="submit" value="true" style="display: none"/>
+            <div ng-if="lasterror" class="danger login-comment" ng-cloak ng-bind="lasterror"></div>
+            <div ng-if="lastwaslogin" class="success login-comment" ng-cloak>Вход выполнен успешно</div>
+            <i ng-if="!user.restorepass" ng-click="user.restorepass = true" class="button default" >Я забыл пароль</i>
+
+        </form>
+
+        </div>
+
+        <div ng-if="user.restorepass" ng-cloak >
+            <p class="iwarn">Внимание! В случае если вы не помните учетной записи и пароля при регистрации или не уверены в самом факте регистрации, то обратитесь к администрации системы.</p>
+            <h1 class="iprimary">Восстановление пароля</h1>
+            <form  name="resetPassForm" class="login box col default soft" ng-controller="loginform" ng-submit="resetPassForm.$valid && resetPass()">
+
+                <input type="text" size="10" placeholder="учетная запись" name="login" ng-model="req.login" ng-required="true" />
+                <input type="text" placeholder="email" size="10" name="email" ng-model="req.email" ng-required="true" />
+                <i class="button" ng-class="{primary: resetPassForm.$valid, warn: !resetPassForm.$valid, disabled: !resetPassForm.$valid}"
+                   ng-click="resetPassForm.$valid && resetPass()">Выслать код сброса пароля</i>
+
+                <i ng-if="user.restorepass" class="button info"  ng-click="user.restorepass = false">Я вспомнил пароль</i>
+                <input type="submit" value="true" style="display: none"/>
+                <div ng-if="lasterror" class="danger login-comment" ng-cloak ng-bind="lasterror"></div>
+                <div ng-if="lastwaslogin" class="success login-comment" ng-cloak>Вход выполнен успешно</div>
+                <i ng-if="!user.restorepass" ng-click="user.restorepass = true" class="button default" >Я забыл пароль</i>
+
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

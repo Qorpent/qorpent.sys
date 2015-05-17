@@ -123,5 +123,7 @@ namespace Qorpent.IO{
 		/// Фиксированные бинарные данные
 		/// </summary>
 		public byte[] FixedData { get; set; }
+
+	    public string Role { get; set; }
 	}
 }

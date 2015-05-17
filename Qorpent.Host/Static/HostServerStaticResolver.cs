@@ -19,11 +19,12 @@ namespace Qorpent.Host.Static {
             new ConcurrentDictionary<string, IWebFileRecord>();
 
         private readonly IDictionary<string, IFileCacheResolver> caches = new Dictionary<string, IFileCacheResolver>();
-        private readonly IDictionary<string, string> masks = new Dictionary<string, string>();
+        private readonly IDictionary<string, StaticFolderDescriptor> masks = new Dictionary<string, StaticFolderDescriptor>();
 
         /// <summary>
         /// </summary>
-        public IDictionary<string, string> Masks {
+        public IDictionary<string, StaticFolderDescriptor> Masks
+        {
             get { return masks; }
         }
 
@@ -136,14 +137,15 @@ namespace Qorpent.Host.Static {
             foreach (var mask in masks) {
                 if (name.StartsWith(mask.Key)) {
                     var resolvedName = name.Substring(mask.Key.Length);
-                    var file = Path.Combine(mask.Value, resolvedName);
+                    var file = Path.Combine(mask.Value.Path, resolvedName);
                     
                         record = _cache[name] =
                             File.Exists(file)
                                 ? new FileSystemWebFileRecord {
                                     Name = name,
                                     FileSystemName = file,
-                                    FullName = file
+                                    FullName = file,
+                                    Role = mask.Value.Role
                                 }
                                 : null;
                         return true;
@@ -166,7 +168,7 @@ namespace Qorpent.Host.Static {
         /// </summary>
         /// <param name="mask"></param>
         /// <param name="rootdirectory"></param>
-        public void SetRoot(string mask, string rootdirectory) {
+        public void SetRoot(string mask, StaticFolderDescriptor rootdirectory) {
             masks[mask] = rootdirectory;
         }
 

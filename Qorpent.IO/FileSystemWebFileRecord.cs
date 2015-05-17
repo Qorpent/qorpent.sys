@@ -10,7 +10,8 @@ namespace Qorpent.IO{
 		/// Имя файла в файловой системе
 		/// </summary>
 		public string FileSystemName { get; set; }
-		/// <summary>
+
+	    /// <summary>
 		/// Получение версии из файла
 		/// </summary>
 		/// <returns></returns>

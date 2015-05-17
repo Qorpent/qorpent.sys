@@ -41,7 +41,7 @@ namespace Qorpent.Host.Tests {
         public void CheckExpiration()
         {
             var info = ls.Get("adm");
-            info.Expired = DateTime.Now-TimeSpan.FromMinutes(10);
+            info.Expire = DateTime.Now-TimeSpan.FromMinutes(10);
             Assert.AreEqual(LogonAuthenticationResult.Expired, info.Logon("adm"));
         }
 

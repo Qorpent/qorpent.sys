@@ -55,7 +55,7 @@ namespace Qorpent.Host.Tests {
             RolesList = "reporter y",
         };
 
-        public IEnumerable<LoginInfo> Query(LoginInfo match = null)
+        public IEnumerable<LoginInfo> Query(object match = null)
         {
             return new[] { a, u, yg };
         }
@@ -66,6 +66,10 @@ namespace Qorpent.Host.Tests {
             if (login == "usr") return u;
             if (login == "y@groups") return yg;
             return null;
+        }
+
+        public void Save(LoginInfo login, bool forced = false) {
+            
         }
     }
 }

@@ -133,37 +133,38 @@ namespace Qorpent.IO.Http
 	    /// </summary>
 	    /// <returns></returns>
 	    public static RequestParameters Create(WebContext context) {
-	        var result = new RequestParameters { QueryData = Unescape(context.Uri.Query, true) };
-            if (IsJson(result.QueryData))
-            {
-                result.QueryJson = Experiments.Json.Parse(result.QueryData);
-            }
-            if (IsDictionary(result.QueryData))
-            {
-                PrepareDictionaryData(result.Query, result.QueryData, false);
-            }
-            if (context.IsPost)
-            {
-                if (context.IsMultipartForm)
-                {
-                    ReadMultipartForm(result, context);
-                }
-                else {
-                    var str = context.ReadRequestString();
-                    str = Unescape(str, true);
-                    result.PostData = str;
-                    if (IsJson(str))
-                    {
-                        result.FormJson = Experiments.Json.Parse(result.PostData);
-                    }
-                    else if (IsDictionary(str))
-                    {
-                        PrepareDictionaryData(result.Form, str, context.InContentType != null && context.InContentType.Contains("application/x-www-form-urlencoded"));
-                    }
+	        if (null != context.PreparedParameters) return context.PreparedParameters;
+	        lock (context.RequestParametersSync) {
+                if (null != context.PreparedParameters) return context.PreparedParameters;
+	            var result = new RequestParameters {QueryData = Unescape(context.Uri.Query, true)};
+	            if (IsJson(result.QueryData)) {
+	                result.QueryJson = Experiments.Json.Parse(result.QueryData);
+	            }
+	            if (IsDictionary(result.QueryData)) {
+	                PrepareDictionaryData(result.Query, result.QueryData, false);
+	            }
+	            if (context.IsPost) {
+	                if (context.IsMultipartForm) {
+	                    ReadMultipartForm(result, context);
+	                }
+	                else {
+	                    var str = context.ReadRequestString();
+	                    str = Unescape(str, !str.Contains(" ") && str.Contains("+"));
+	                    result.PostData = str;
+	                    if (IsJson(str)) {
+	                        result.FormJson = Experiments.Json.Parse(result.PostData);
+	                    }
+	                    else if (IsDictionary(str)) {
+	                        PrepareDictionaryData(result.Form, str,
+	                            context.InContentType != null &&
+	                            context.InContentType.Contains("application/x-www-form-urlencoded"));
+	                    }
 
-                }
-            }
-            return result;
+	                }
+	            }
+	            context.PreparedParameters = result;
+	            return result;
+	        }
 	    }
 
 	    private static string Unescape(string q, bool pluses) {

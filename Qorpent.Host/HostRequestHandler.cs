@@ -17,7 +17,7 @@ namespace Qorpent.Host{
 		}
 
 		public void Execute(){
-			_server.Auth.Authenticate(_context);
+            
 			string callbackEndPoint = _context.GetHeader("qorpent-callback-endpoint");
 			_context.SetHeader("Server", "Qorpent RESTFull Server 0.1");
 			_context.ContentType = "application/json; charset=utf-8";

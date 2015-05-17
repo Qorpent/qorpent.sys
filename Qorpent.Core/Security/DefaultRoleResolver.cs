@@ -193,16 +193,30 @@ namespace Qorpent.Security {
 
 
 			//HACK FOR QUICK TEST AGAINST "local web admin"
-			if (null != callcontext) {
-				if (callcontext.IsLocalHost()) {
-					var windowsIdentity = WindowsIdentity.GetCurrent();
-					if (windowsIdentity != null && principal.Identity.Name.Replace("local\\",Environment.MachineName+"\\").ToLower() == windowsIdentity.Name.ToLower()) {
-						{
-							return !exact;
-						}
-					}
-				}
-			}
+		    if (null != callcontext) {
+		        if (callcontext.IsLocalHost()) {
+		            var windowsIdentity = WindowsIdentity.GetCurrent();
+		            if (windowsIdentity != null &&
+		                principal.Identity.Name.Replace("local\\", Environment.MachineName + "\\").ToLower() ==
+		                windowsIdentity.Name.ToLower()) {
+		                    {
+		                        return !exact;
+		                    }
+		            }
+		        }
+		    }
+		    else {
+                var windowsIdentity = WindowsIdentity.GetCurrent();
+                if (windowsIdentity != null &&
+                    principal.Identity.Name.Replace("local\\", Environment.MachineName + "\\").ToLower() ==
+                    windowsIdentity.Name.ToLower())
+                {
+                    {
+                        return !exact;
+                    }
+                }
+		    }
+
 			return false;
 		}
 
@@ -227,6 +241,7 @@ namespace Qorpent.Security {
 				resetable.Reset(data);
 				resetedextensions.Add(extension.GetType().Name);
 			}
+		    LoginSourceProvider.Reset(data);
 			return new {dropped = cachesize, reseted = resetedextensions.ToArray()};
 		}
 

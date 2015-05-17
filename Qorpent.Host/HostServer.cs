@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Xml.Linq;
 using Qorpent.Applications;
 using Qorpent.Bxl;
@@ -234,6 +235,17 @@ namespace Qorpent.Host {
                 if (CheckOptionsMethodIsCalled(task)) {
                     return;
                 }
+                if (wc.Request.ContentLength > Config.MaxRequestSize) {
+                    throw    new Exception("Exceed max request size");
+                }
+                Auth.Authenticate(wc);
+                if (BeforeHandlerProcessed(wc)) {
+                    if (!wc.Response.WasClosed) {
+                        wc.Response.Close();
+                    }
+                    return;
+                }
+
                 new HostRequestHandler(this, wc).Execute();
             }
             catch (Exception ex) {
@@ -241,6 +253,27 @@ namespace Qorpent.Host {
                     wc.Finish("some error occured " + ex, status: 500);
                 }
             }
+        }
+
+     
+        private bool BeforeHandlerProcessed(WebContext wc) {
+            if (CheckFormAuthentication(wc)) return true;
+
+            return false;
+        }
+
+        private bool CheckFormAuthentication(WebContext wc) {
+            if (Config.RequireLogin) {
+                var path = wc.Uri.AbsolutePath;
+                
+                if (path.EndsWith(".html") && path != Config.LoginPage) {
+                    if (!wc.User.Identity.IsAuthenticated) {
+                        wc.Redirect(Config.LoginPage + "?referer=" + wc.Request.Uri.PathAndQuery);
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private bool CheckInvalidStartupConditions(WebContext ctx) {
@@ -332,6 +365,7 @@ namespace Qorpent.Host {
             this.OnContext("/save", _ => new SaveHandler().Run(this, _, null, CancellationToken.None));
             this.OnContext("/load", _ => new LoadHandler().Run(this, _, null, CancellationToken.None));
             this.On("/js/_plugins.js", BuildPluginsModule(), "text/javascript");
+
         }
 
         private string BuildPluginsModule() {
@@ -480,6 +514,9 @@ namespace Qorpent.Host {
             if (null != OnBeforeInitializeServices) {
                 OnBeforeInitializeServices(Container);
             }
+            if (null == Container.FindComponent(typeof (IHostConfigProvider), null)) {
+                Container.Register(Container.NewComponent<IHostConfigProvider, HostServer>(implementation: this));
+            }
             if (null == Container.FindComponent(typeof (IRequestHandlerFactory), null)) {
                 Container.Register(
                     Container.NewComponent<IRequestHandlerFactory, DefaultRequestHandlerFactory>(Lifestyle.Transient));
@@ -534,7 +571,7 @@ namespace Qorpent.Host {
                 };
                 Application.DatabaseConnections.Register(dsc, false);
             }
-
+            loader.LoadAssembly(typeof (HostServer).Assembly);
             foreach (var assemblyName in Config.AutoconfigureAssemblies) {
                 var assembly = Assembly.Load(assemblyName);
                 loader.LoadAssembly(assembly);

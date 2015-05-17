@@ -9,7 +9,7 @@ define(["the-angular", "the-action"], function ($the, template) {
         if (null == root.modules)return;
         var loginResult = function (result, error, redirect) {
             this.result = result || false;
-            this.error = result || "";
+            this.error = error || "";
             this.redirect = redirect || "";
         };
         var loginRequest = function(login,pass,resource,redirect){
@@ -21,11 +21,15 @@ define(["the-angular", "the-action"], function ($the, template) {
         var logonAction = new $the.action({url: "/logon", result: loginResult, arguments:loginRequest});
         var logoutAction = new $the.action({url: "/logout"});
         var isauthAction = new $the.action({url: "/isauth"});
+        var myinfoAction = new $the.action({url: "/myinfo"});
+        var infoApp = new $the.action({url: "/info/app"});
         var login = $the.login || ($the.login = {});
         var loginActions = login.actions || (login.actions = {});
         loginActions.login = logonAction;
         loginActions.logout = logoutAction;
         loginActions.isauth = isauthAction;
+        loginActions.appinfo = infoApp;
+        loginActions.myinfo = myinfoAction;
 
         login.isauth = function (callback) { //callback(result, error)
             login.actions.isauth({
@@ -47,17 +51,69 @@ define(["the-angular", "the-action"], function ($the, template) {
                 req,
                 {
                     success : function(data){
+                        var result = new loginResult(data===true,data===true?"":data);
                         if(!!callback){
-                            callback(data);
+                            callback(result);
                         }
                     },
-                    error : function(e){
+                    error : function(e,native){
                         if(!!callback){
                             callback(new loginResult(false,e));
                         }
                     }
                 }
             );
+        }
+
+        login.logout = function(callback){
+            login.actions.logout(
+                {
+                    success: function (result) {
+                        if (!!callback) {
+                            callback(result);
+                        }
+                    },
+                    error: function (error) {
+                        if (!!callback) {
+                            callback(false, error);
+                        }
+                    }
+                }
+            )
+        }
+
+        login.appinfo = function(callback){
+            login.actions.appinfo(
+                {
+                    success: function (result) {
+                        if (!!callback) {
+                            callback(result);
+                        }
+                    },
+                    error: function (error) {
+                        if (!!callback) {
+                            callback(false, error);
+                        }
+                    }
+                }
+            )
+        }
+
+        login.myinfo = function(callback){
+            login.actions.myinfo(
+                {
+                    success: function (result) {
+                        if (!!callback) {
+                            callback(result);
+                        }
+                    },
+                    error: function (error) {
+                        if (!!callback) {
+                            callback(false, error);
+                        }
+                    }
+                }
+            )
         }
 
 

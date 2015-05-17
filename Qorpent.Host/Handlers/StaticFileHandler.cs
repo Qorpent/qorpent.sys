@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security;
 using System.Threading;
 using Qorpent.IO;
 using Qorpent.IO.Http;
+using Qorpent.Security;
 
 namespace Qorpent.Host.Handlers
 {
@@ -43,6 +45,7 @@ namespace Qorpent.Host.Handlers
                     }
                 }
                 var staticdescriptor = server.Static.Get(abspath, context);
+	            
                 //в случае, если запрошен HTML и он отсутствует, то в качестве результата возвращаем стартуовую страницу 
                 //указанного в начале имени приложения (для этого в видимости должен находится скрипт с контроллерами приложения
                 if (null == staticdescriptor && abspath.EndsWith(".html"))
@@ -59,6 +62,12 @@ namespace Qorpent.Host.Handlers
                 {
                     FinishWirh404(context);
                     return;
+                }
+                if (!string.IsNullOrWhiteSpace(staticdescriptor.Role)) {
+                    var roles = server.Container.Get<IRoleResolver>();
+                    if (!roles.IsInRole(context.User, staticdescriptor.Role)) {
+                        throw new SecurityException("access denied");
+                    }
                 }
                 Finish200(server, context, staticdescriptor);
 	    }

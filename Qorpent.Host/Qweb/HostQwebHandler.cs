@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Security;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
@@ -7,6 +8,7 @@ using Qorpent.IO.Http;
 using Qorpent.Mvc;
 using Qorpent.Mvc.HttpHandler;
 using Qorpent.Security;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Qweb
 {
@@ -28,7 +30,8 @@ namespace Qorpent.Host.Qweb
                 context.NotModified = false;
                 try
                 {
-                    BindContext(context);
+                    if (!Authorize(server, context)) return;
+                    BindContext(context);                  
                     Execute(context);
                     if (context.NotModified)
                     {
@@ -51,6 +54,34 @@ namespace Qorpent.Host.Qweb
                     context.Release();
                 }
 
+	    }
+
+	    private bool Authorize(IHostServer server, IMvcContext context) {
+	        if (!string.IsNullOrWhiteSpace(context.ActionDescriptor.Role)) {
+	            if (!context.ActionDescriptor.Role.Contains("GUEST")) {
+                   
+	                var roles = context.ActionDescriptor.Role.SmartSplit();
+                    var rr = server.Container.Get<IRoleResolver>();
+	                if (rr.IsInRole(context.User, "ADMIN")) return true;
+                    foreach (var role in roles) {
+                        if (role.StartsWith("!")) {
+                            if (rr.IsInRole(context.User, role.Substring(1))) {
+                                ProcessError(context, new SecurityException("access denied"));
+                                return false;
+                            }
+                        }
+                        else {
+                            if (!rr.IsInRole(context.User, role)) {
+                                ProcessError(context, new SecurityException("access denied"));
+                                return false;
+                            }
+                        }
+                    }
+	                
+	                
+	            }
+	        }
+	        return true;
 	    }
 
 	    private static void SetCurrentUser(IHostServer server,IPrincipal user)

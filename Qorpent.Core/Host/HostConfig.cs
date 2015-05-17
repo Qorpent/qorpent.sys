@@ -13,8 +13,20 @@ using Qorpent.Log;
 using Qorpent.Log.NewLog;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
+using Qorpent.Utils.Extensions.Html;
 
 namespace Qorpent.Host{
+
+    public class StaticFolderDescriptor {
+        public string Key {
+            get; set; 
+            
+        }
+
+        public string Path { get; set; }
+        public string Role { get; set; }
+    }
+
 	/// <summary>
 	///     Конфигурация хоста
 	/// </summary>
@@ -75,6 +87,8 @@ namespace Qorpent.Host{
 	    }
 
 	    public string LoggerFormat { get; set; }
+        public bool RequireLogin { get; set; }
+        public string LoginPage { get; set; }
 
 	    /// <summary>
 		///     Формирует конфиг по умолчанию
@@ -96,14 +110,16 @@ namespace Qorpent.Host{
 			AccessAllowHeaders = "*";
 			AccessAllowMethods = "GET, POST, OPTIONS";
 			AccessAllowCredentials = true;
-			StaticContentMap = new Dictionary<string, string>();
+			StaticContentMap = new Dictionary<string, StaticFolderDescriptor>();
             Proxize = new Dictionary<string, string>();
             ConnectionStrings = new Dictionary<string, string>();
 			Constants = new Dictionary<string, string>();
 			Modules = new Dictionary<string, string>();
 			Initializers = new List<string>();
 			MachineName = Environment.MachineName;
-		}
+	        MaxRequestSize = 10000000;
+	        LoginPage = "/login.html";
+	    }
 		/// <summary>
 		///		Имя машины
 		/// </summary>
@@ -314,7 +330,7 @@ namespace Qorpent.Host{
 		/// <summary>
 		/// Мапинг юрлов в диретории для Static Handler
 		/// </summary>
-		public IDictionary<string, string> StaticContentMap { get; private set; }
+		public IDictionary<string, StaticFolderDescriptor> StaticContentMap { get; private set; }
 		/// <summary>
 		///		Набор строк подключения
 		/// </summary>
@@ -378,6 +394,8 @@ namespace Qorpent.Host{
 	        AuthCookieDomain = xml.ResolveValue(HostUtils.AuthCookieDomain, AuthCookieDomain);
 	        EncryptBasis = xml.ResolveValue(HostUtils.EncryptBasis, Guid.NewGuid().ToString());
 	        DefaultPage = xml.ResolveValue(HostUtils.DefaultPage, "default.html");
+	        MaxRequestSize = xml.ResolveValue("maxrequestsize", "10000000").ToInt();
+	        RequireLogin = xml.ResolveValue("requirelogin").ToBool();
 	        foreach (XElement bind in xml.Elements(HostUtils.BindingXmlName)){
 				var hostbind = new HostBinding();
 				hostbind.Port = bind.Attr(HostUtils.PortXmlName).ToInt();
@@ -417,6 +435,7 @@ namespace Qorpent.Host{
 	        foreach (var e in xml.Elements("static")) {
 	            var name = e.Attr("code");
 	            var folder = EnvironmentInfo.ResolvePath(e.Attr("name"));
+	            var role = e.Attr("role");
 	            if (!name.StartsWith("/")) {
 	                name = "/" + name;
 	            }
@@ -427,7 +446,7 @@ namespace Qorpent.Host{
 	                this.StaticContentCacheMap[name] = e;
 	            }
 	            else {
-	                this.StaticContentMap[name] = folder;
+	                this.StaticContentMap[name] = new StaticFolderDescriptor{Key=name,Path=folder,Role=role};
 	            }
             } 
             foreach (var e in xml.Elements("startup"))
@@ -517,7 +536,9 @@ namespace Qorpent.Host{
 	        }
 	    }
 
-        /// <summary>
+	    public int MaxRequestSize { get; set; }
+
+	    /// <summary>
         /// Обратная ссылка на XML- определение
         /// </summary>
 	    public XElement Definition { get; set; }

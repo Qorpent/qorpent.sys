@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using Qorpent.IoC;
 namespace Qorpent.Security {
     [ContainerComponent(Lifestyle.Singleton, ServiceType = typeof(ILoginSourceProvider))]
     public class DefaultLoginSourceProvider : ILoginSourceProvider {
-        public IEnumerable<LoginInfo> Query(LoginInfo match = null) {
+        public IEnumerable<LoginInfo> Query(object match = null) {
             IList<LoginInfo> result = new List<LoginInfo>();
             foreach (var source in Sources) {
                 foreach (var loginInfo in source.Query(match)) {
@@ -40,9 +41,23 @@ namespace Qorpent.Security {
             });            
         }
 
+        public void Save(LoginInfo login, bool forced = false) {
+            _cache[login.Login] = login;
+            foreach (var loginSource in Sources) {
+                    loginSource.Save(login, forced);
+           
+            }
+        }
+
+        public void Add(ILoginSource loginSource) {
+            if (!this.Sources.Contains(loginSource)) {
+                this.Sources.Add(loginSource);
+            }
+        }
+
         readonly ConcurrentDictionary<string, LoginInfo> _cache = new ConcurrentDictionary<string, LoginInfo>();
         [Inject]
-        public ILoginSource[] Sources { get; set; }
+        public IList<ILoginSource> Sources { get; set; }
 
         public object Reset(ResetEventData data) {
             if (data.All || data.IsSet("login-source")) {

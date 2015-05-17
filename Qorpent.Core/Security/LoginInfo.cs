@@ -8,19 +8,95 @@ using Qorpent.Utils.Extensions;
 namespace Qorpent.Security {
     [Serialize]
     public class LoginInfo {
+        public LoginInfo Clone() {
+            var result = (LoginInfo) this.MemberwiseClone();
+            result.Roles = new List<string>();
+            result.Groups = new List<string>();
+            result.Tags = new Dictionary<string, string>();
+            foreach (var role in this.Roles) {
+                result.Roles.Add(role);
+            }
+            foreach (var @group in Groups) {
+                result.Groups.Add(@group);
+            }
+            foreach (var tag in Tags) {
+                result.Tags[tag.Key] = tag.Value;
+            }
+            return result;
+        }
+
+        protected bool Equals(LoginInfo other) {
+            var result = string.Equals(Login, other.Login) && Version == other.Version &&
+                         string.Equals(Name, other.Name) && IsGroup.Equals(other.IsGroup) &&
+                         string.Equals(Email, other.Email) && string.Equals(Salt, other.Salt) &&
+                         string.Equals(Hash, other.Hash) && IsAdmin.Equals(other.IsAdmin) && Expire.Equals(other.Expire) &&
+                         string.Equals(ResetPasswordKey, other.ResetPasswordKey) &&
+                         ResetPasswordExpire.Equals(other.ResetPasswordExpire) && string.Equals(Id, other.Id);
+            
+            if (!result) return false;
+            if (IsActive != other.IsActive) return false;
+            if (other.Roles.Count != Roles.Count) return false;
+            if (other.Tags.Count != Tags.Count) return false;
+            if (other.Groups.Count != Groups.Count) return false;
+
+
+            if (Roles.Any(role => !other.Roles.Contains(role))) {
+                return false;
+            }
+
+            
+            if (Groups.Any(role => !other.Groups.Contains(role)))
+            {
+                return false;
+            }
+
+            
+            foreach (var tag in Tags) {
+                if (!other.Tags.ContainsKey(tag.Key)) return false;
+                if (!Object.Equals(other.Tags[tag.Key], tag.Value)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public override int GetHashCode() {
+            unchecked {
+                var hashCode = (_groups != null ? _groups.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Login != null ? Login.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ Version;
+                hashCode = (hashCode*397) ^ (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ IsGroup.GetHashCode();
+                hashCode = (hashCode*397) ^ (Email != null ? Email.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Salt != null ? Salt.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Hash != null ? Hash.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ IsAdmin.GetHashCode();
+                hashCode = (hashCode*397) ^ Expire.GetHashCode();
+                hashCode = (hashCode*397) ^ (ResetPasswordKey != null ? ResetPasswordKey.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ ResetPasswordExpire.GetHashCode();
+                hashCode = (hashCode*397) ^ (Id != null ? Id.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ RawIsActive.GetHashCode();
+                return hashCode;
+            }
+        }
+
         private IList<string> _groups;
         private IList<string> _roles;
         private IDictionary<string, string> _tags;
         private readonly ConcurrentDictionary<string, bool> _roleCache = new ConcurrentDictionary<string, bool>();
 
         public LoginInfo() {
-            Expired = new DateTime(3000, 1, 1);
+            Expire = new DateTime(3000, 1, 1);
+            Version = -1;
         }
 
         [IgnoreSerialize]
         public ILoginSourceProvider Provider { get; set; }
 
         public string Login { get; set; }
+
+        [IgnoreSerialize]
+        public int Version { get; set; }
 
         [SerializeNotNullOnly]
         public string Name { get; set; }
@@ -40,11 +116,11 @@ namespace Qorpent.Security {
         [SerializeNotNullOnly]
         public bool IsAdmin { get; set; }
 
-        [SerializeNotNullOnly]
+        [IgnoreSerialize]
         public bool? RawIsActive { get; set; }
 
         [SerializeNotNullOnly]
-        public DateTime Expired { get; set; }
+        public DateTime Expire { get; set; }
 
         [IgnoreSerialize]
         public string ResetPasswordKey { get; set; }
@@ -93,6 +169,8 @@ namespace Qorpent.Security {
         public string Password {
             set { SetPassword(value); }
         }
+        [IgnoreSerialize]
+        public string Id { get; set; }
 
         public LogonAuthenticationResult Logon(string password) {
             if (IsGroup) {
@@ -101,7 +179,7 @@ namespace Qorpent.Security {
             if (RawIsActive.HasValue && !RawIsActive.Value) {
                 return LogonAuthenticationResult.Inactive;
             }
-            if (Expired <= DateTime.Now) {
+            if (Expire <= DateTime.Now) {
                 return LogonAuthenticationResult.Expired;
             }
             if (string.IsNullOrWhiteSpace(Hash) || string.IsNullOrWhiteSpace(Salt)) {
@@ -115,6 +193,13 @@ namespace Qorpent.Security {
         }
 
         public void ResetPassword(string newpassword, string validationkey) {
+            CheckValidationKey(validationkey);
+            SetPassword(newpassword);
+            ResetPasswordKey = null;
+            ResetPasswordExpire = DateTime.MinValue;
+        }
+
+        public void CheckValidationKey(string validationkey) {
             if (string.IsNullOrWhiteSpace(ResetPasswordKey)) {
                 throw new Exception("password not pending to reset");
             }
@@ -127,9 +212,6 @@ namespace Qorpent.Security {
             if (ResetPasswordExpire < DateTime.Now) {
                 throw new Exception("Reset password timeout expired");
             }
-            SetPassword(newpassword);
-            ResetPasswordKey = null;
-            ResetPasswordExpire = DateTime.MinValue;
         }
 
         public void InitResetPassword(TimeSpan timespan = default (TimeSpan)) {
@@ -187,6 +269,19 @@ namespace Qorpent.Security {
             });
         }
 
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) {
+                return false;
+            }
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+            if (obj.GetType() != this.GetType()) {
+                return false;
+            }
+            return Equals((LoginInfo) obj);
+        }
+
         public void Merge(LoginInfo other) {
             if (string.IsNullOrWhiteSpace(Name)) {
                 Name = other.Name;
@@ -209,8 +304,8 @@ namespace Qorpent.Security {
                 IsAdmin = other.IsAdmin;
             }
 
-            if (other.Expired < Expired) {
-                Expired = other.Expired;
+            if (other.Expire < Expire) {
+                Expire = other.Expire;
             }
 
             foreach (var grp in other.Groups) {

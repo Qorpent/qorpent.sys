@@ -28,7 +28,7 @@ namespace Qorpent.Host{
 		/// </summary>
 		/// <param name="mask"></param>
 		/// <param name="rootdirectory"></param>
-		void SetRoot(string mask, string rootdirectory);
+		void SetRoot(string mask, StaticFolderDescriptor rootdirectory);
         /// <summary>
         /// Установить источник в виде кэша, завязанного на другие источники
         /// </summary>

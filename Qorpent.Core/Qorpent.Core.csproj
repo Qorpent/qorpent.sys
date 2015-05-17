@@ -66,6 +66,7 @@
     <Compile Include="BSharp\Runtime\IBSharpRuntimeService.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptor.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassResolutionType.cs" />
+    <Compile Include="Experiments\JsonWriter.cs" />
     <Compile Include="Scope\IScope.cs" />
     <Compile Include="Scope\IScopeBound.cs" />
     <Compile Include="Scope\Scope.cs" />
