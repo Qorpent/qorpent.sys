@@ -23,8 +23,10 @@ using System.Security.Principal;
 using System.Text;
 using System.Xml.Linq;
 using Qorpent.Events;
+using Qorpent.Host;
 using Qorpent.IO;
 using Qorpent.IoC;
+using Qorpent.IO.Http;
 using Qorpent.Model;
 using Qorpent.Security;
 using Qorpent.Serialization;
@@ -257,8 +259,12 @@ namespace Qorpent.Mvc {
 			set { throw new NotSupportedException(); }
 		}
 
+	    public IHostServer HostServer { get; set; }
+	    public WebContext WebContext { get; set; }
+	    public RequestParameters WebContextParameters { get; set; }
 
-		/// <summary>
+
+	    /// <summary>
 		/// 	Быстрый метод для доступа к системе <see cref="IAccessProvider" />
 		/// </summary>
 		/// <param name="obj"> </param>

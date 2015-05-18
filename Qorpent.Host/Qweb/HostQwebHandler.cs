@@ -31,7 +31,13 @@ namespace Qorpent.Host.Qweb
                 try
                 {
                     if (!Authorize(server, context)) return;
-                    BindContext(context);                  
+                    BindContext(context);
+                    var action = context.ActionDescriptor.Action as ActionBase;
+                    if (null != action) {
+                        action.HostServer = server;
+                        action.WebContext = ctx;
+                        action.WebContextParameters = RequestParameters.Create(ctx);
+                    }
                     Execute(context);
                     if (context.NotModified)
                     {
