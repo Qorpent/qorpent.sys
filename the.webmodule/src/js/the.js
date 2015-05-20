@@ -15,6 +15,8 @@ define([
     "the-login",
     'the-angular-unsafe',
     'the-angular-autocomplete',
+    'the-angular-autoselect',
+    'the-angular-datetimepicker',
     'the-angular-dialog',
     'the-angular-controlgroup',
     'the-angular-viewcontext',

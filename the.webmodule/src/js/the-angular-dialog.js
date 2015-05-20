@@ -153,6 +153,38 @@ define(["the-angular","the-angular-unsafe"], function ($the, template) {
                 return d;
             }
 
+            dialog.confirm = function(message,label,callback,createOnly){
+
+                if(typeof(message)=="object"){
+                    label = message.label;
+                    callback = message.callback;
+                    createOnly= message.createOnly;
+                    message = message.message;
+                }
+                var d = dialog.create({
+                    message : message,
+                    label : label,
+                    view : '--message-dialog.html',
+                    autoremove:true,
+                    onSuccess : function(){
+                        if(!!callback){
+                            callback(true,this.value);
+                        }
+                        return true;
+                    },
+                    onCancel : function(){
+                        if(!!callback){
+                            callback(false);
+                        }
+                        return true;
+                    }
+                });
+                if(!createOnly) {
+                    d.execute();
+                }
+                return d;
+            }
+
             dialog.show = function (element) {
                 dialog.init();
                 var je = $(element);

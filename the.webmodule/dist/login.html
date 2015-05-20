@@ -77,18 +77,9 @@
 
     <div class="main">
 
-        <div ng-if="user.auth" ng-cloak>
-            <h1 class="iprimary">Уважаемый(ая) {{user.info.Name}}!</h1>
-            <p>Вы уже осуществили вход в систему под учетной записью "{{user.info.Login}}"</p>
-            <p>Вы можете перейти по следующим ссылкам:</p>
-            <ul>
-                <a href="/accident-search.html"><li>Поиск и просмотр происшествий </li></a>
-                <a href="/accident-create.html"> <li>Добавить новое происшестиве </li></a>
-                <a href="/accident-profile.html"><li>Личный кабинет</li></a>
-                <a href="/accident-feedback.html"><li>Форма обратной связи</li></a>
-                <a href="/accident-information.html"><li>Информация о системе</li></a>
-            </ul>
-            <p>Вы также можете покинуть систему нажав кнопку  <i class="button warn soft" ng-click="logout()">Выход из системы</i></p>
+        <div ng-if="user.auth" ng-cloak ng-include="'views/applogin.html'">
+
+
         </div>
 
         <div ng-if="!user.auth && !user.restorepass" ng-cloak >

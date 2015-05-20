@@ -4364,18 +4364,23 @@ html.the label {
 
 /* line 116, newthe/page.scss */
 html.site body {
-  max-width: 800px !important;
-  min-width: 800px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+  max-width: 800px;
+  min-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* line 121, newthe/page.scss */
+html.site body.lg {
+  max-width: 1024px;
+  min-width: 1024px;
 }
 
-/* line 123, newthe/page.scss */
+/* line 128, newthe/page.scss */
 a {
   text-decoration: none;
   color: #4C81AF;
 }
-/* line 126, newthe/page.scss */
+/* line 131, newthe/page.scss */
 a :hover {
   text-decoration: underline;
 }

@@ -232,18 +232,23 @@ form.ng-invalid {
 
 /* line 116, page.scss */
 html.site body {
-  max-width: 800px !important;
-  min-width: 800px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+  max-width: 800px;
+  min-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* line 121, page.scss */
+html.site body.lg {
+  max-width: 1024px;
+  min-width: 1024px;
 }
 
-/* line 123, page.scss */
+/* line 128, page.scss */
 a {
   text-decoration: none;
   color: color(primary);
 }
-/* line 126, page.scss */
+/* line 131, page.scss */
 a :hover {
   text-decoration: underline;
 }
