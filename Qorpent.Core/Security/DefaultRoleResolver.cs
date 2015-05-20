@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using Qorpent.Events;
+using Qorpent.Host.Security;
 using Qorpent.IoC;
 using Qorpent.Mvc;
 
@@ -77,7 +78,7 @@ namespace Qorpent.Security {
 				}
 					
 #endif
-                
+			    if (principal.Identity.Name == "local\\admin") return true;
 				if(!exact && role!="ADMIN") {
 					if(IsInRole(principal,"ADMIN",true,callcontext,customcontext)) {
 						return true;
@@ -176,7 +177,7 @@ namespace Qorpent.Security {
 
 
 			//OTHERWISE ALL MUST BE AUTHENTICATED (IF NOT GENERIC)
-			if (!(principal.Identity is GenericIdentity)) {
+			if (!(principal.Identity is GenericIdentity) && !(principal.Identity is QorpentHostIdentity)) {
 				if (principal.Identity.IsAuthenticated) {
 					return true;
 				}

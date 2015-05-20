@@ -47,10 +47,7 @@
     <Compile Include="Security\DefaultAuthenticationProvider.cs" />
     <Compile Include="Security\DefaultAuthHandler.cs" />
     <Compile Include="Security\Encryptor.cs" />
-    <Compile Include="Security\QorpentHostIdentity.cs" />
     <Compile Include="Security\QorpentHostPrincipal.cs" />
-    <Compile Include="Security\UserInfo.cs" />
-    <Compile Include="Security\TokenType.cs" />
     <Compile Include="SimpleSockets\SimpleSocket.cs" />
     <Compile Include="SimpleSockets\SimpleSocketClient.cs" />
     <Compile Include="SimpleSockets\SimpleSocketRequest.cs" />

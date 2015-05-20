@@ -356,7 +356,7 @@ namespace Qorpent.Video
             var sb = new StringBuilder();
             sb.Append(" -i ");
             sb.Append(task.SourceFile);
-            sb.Append(" -acodec libfaac -b:a 128k -vcodec libx264 -b:v 1200k -y ");
+            sb.Append(" -acodec aac -strict -2 -b:a 128k -vcodec libx264 -b:v 1200k -y ");
             if (task.Height != 0 && task.Width != 0)
             {
                 sb.Append(" -s ");

@@ -175,6 +175,17 @@ namespace Qorpent.Bridge.Tests.Utils {
         public void GetJson(string path, object result) {
             Assert.AreEqual(result,Experiments.Json.Get(json,path));
         }
+
+        [Test]
+        public void ExtendTest() {
+            var x = Experiments.Json.Jsonify(new {z=1,
+                a = new {b = new object[] {1, 2, 3,new{_id=1,a=2},new{_id=2,b=4}}}});
+            var y = Experiments.Json.Jsonify(new {b = 1,  z="_remove_", 
+                a = new {c = 2, b = new object[] {4, 5 , new{_remove=1}, new{_id=1,b=3},new{_remove=new{_id=2}}}}});
+            var merged = Experiments.Json.Stringify(JsonExtend.Extend(x, y)).Simplify(SimplifyOptions.SingleQuotes);
+            Console.WriteLine(merged);
+            Assert.AreEqual(@"{'a':{'b':[2,3,4,5,{'_id':1,'a':2,'b':3}],'c':2},'b':1}", merged);
+        }
         
     }
 }

@@ -36,6 +36,7 @@ namespace Qorpent.Host.Security{
         {
             Ok = true,
             Type = TokenType.Admin,
+            Login = "local\\admin",
             Principal = new GenericPrincipal(new GenericIdentity("local\\admin"), null)
         };
 
@@ -171,27 +172,32 @@ namespace Qorpent.Host.Security{
         public void Authenticate(WebContext context) {
             UserInfo result = guest;
 	        if (CheckFullTrustOrigin(context)) return;
-	        if (!IsIgnoreAuthentication(context)) {
+	      
 	            string ticket = GetTicket(context);
 
 	            bool auth = false;
 	            if (!string.IsNullOrWhiteSpace(ticket)) {
-	                result = CheckTicket(ticket, context);
-	                if (null != result) {
+	                if (IsIgnoreAuthentication(context)) {
 	                    auth = true;
-	                    SetTicketCookie(context, ticket);
+                        SetTicketCookie(context, ticket);
 	                }
 	                else {
-	                    result = guest;
-	                    _ticketCache.Remove(ticket);
+	                    result = CheckTicket(ticket, context);
+	                    if (null != result) {
+	                        auth = true;
+	                        SetTicketCookie(context, ticket);
+	                    }
+	                    else {
+	                        result = guest;
+	                        _ticketCache.Remove(ticket);
 
+	                    }
 	                }
 	            }
 	            if (!auth) {
 	                SetTicketCookie(context, null);
 	            }
-	        }
-	        var principal = new QorpentHostPrincipal(result);
+	        	        var principal = new QorpentHostPrincipal(result);
 		    context.User = principal;
 
 		}

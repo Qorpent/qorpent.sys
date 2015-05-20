@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+using Qorpent.Experiments;
 
 namespace Qorpent.IO.Net{
 	/// <summary>
@@ -20,7 +21,16 @@ namespace Qorpent.IO.Net{
 	    /// <param name="post"></param>
 	    /// <returns></returns>
 	    public HttpResponse Call( string url,string post = null, Action<HttpRequest> setup = null) {
-	        var req = new HttpRequest {Uri = new Uri(url)};
+	        var uri = new Uri(url, UriKind.RelativeOrAbsolute);
+	        if (!uri.IsAbsoluteUri) {
+	            if (null != BaseUri) {
+	                uri = new Uri(BaseUri, uri);
+	            }
+	            else {
+	                throw new Exception("relative url given without base set");
+	            }
+	        }
+	        var req = new HttpRequest {Uri = uri};
 	        
 	        if (null != post) {
 	            req.Method = "POST";
@@ -56,6 +66,26 @@ namespace Qorpent.IO.Net{
 			}
 			throw new IOException("error in response",resp.Error);
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="post"></param>
+        /// <returns></returns>
+        public string GetString(string url, object post , Action<HttpRequest> setup = null) {
+            if (post is string) return GetString(url, (string) post, setup);
+            return GetString(url, post.stringify(), setup);
+        }
+
+	    public object GetObject(string url, object post, Action<HttpRequest> setup = null) {
+	        return GetString(url, post, setup).jsonify();
+	    }
+
+        public object GetObject(string url, string post = null, Action<HttpRequest> setup = null)
+        {
+            return GetString(url, post, setup).jsonify();
+        }
 
 
 	    /// <summary>
@@ -93,9 +123,10 @@ namespace Qorpent.IO.Net{
 		}
 
         public CookieCollection Cookies { get; set; }
-        
+	    public Uri BaseUri { get; set; }
 
-		readonly HttpResponseReader _reader = new HttpResponseReader();
+
+	    readonly HttpResponseReader _reader = new HttpResponseReader();
 		/// <summary>
 		/// Выполнить запрос
 		/// </summary>

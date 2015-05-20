@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Experiments;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
@@ -13,6 +14,7 @@ namespace Qorpent.Security {
             result.Roles = new List<string>();
             result.Groups = new List<string>();
             result.Tags = new Dictionary<string, string>();
+            result.Custom = new Dictionary<string, object>();
             foreach (var role in this.Roles) {
                 result.Roles.Add(role);
             }
@@ -22,8 +24,11 @@ namespace Qorpent.Security {
             foreach (var tag in Tags) {
                 result.Tags[tag.Key] = tag.Value;
             }
+            JsonExtend.Extend(result.Custom, this.Custom);
             return result;
         }
+
+        
 
         protected bool Equals(LoginInfo other) {
             var result = string.Equals(Login, other.Login) && Version == other.Version &&
@@ -39,7 +44,9 @@ namespace Qorpent.Security {
             if (other.Tags.Count != Tags.Count) return false;
             if (other.Groups.Count != Groups.Count) return false;
 
-
+            if (Experiments.Json.Stringify(Custom) != Experiments.Json.Stringify(other.Custom)) {
+                return false;
+            }
             if (Roles.Any(role => !other.Roles.Contains(role))) {
                 return false;
             }
@@ -171,6 +178,9 @@ namespace Qorpent.Security {
         }
         [IgnoreSerialize]
         public string Id { get; set; }
+
+        [SerializeNotNullOnly]
+        public IDictionary<string, object> Custom { get; set; }
 
         public LogonAuthenticationResult Logon(string password) {
             if (IsGroup) {
@@ -325,6 +335,9 @@ namespace Qorpent.Security {
                     Tags[tag.Key] = tag.Value;
                 }
             }
+
+            JsonExtend.Extend(Custom, other.Custom);
+
         }
     }
 }

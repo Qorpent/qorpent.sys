@@ -127,6 +127,8 @@ namespace Qorpent.Mvc.Binding {
 
 		private void SetupValue(IAction action, IMvcContext context) {
 			var paramname = Name;
+            if(TargetType.IsAbstract)return;
+		    
 			if (TargetType == typeof (XElement)) {
 				var val = context.GetXml(Name);
 				SetDirectly(action, val);

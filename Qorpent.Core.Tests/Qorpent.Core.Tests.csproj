@@ -29,7 +29,6 @@
     <Compile Include="BSharp\Runtime\BSharpRuntimeServiceTest.cs" />
     <Compile Include="BSharp\Runtime\BSharpRuntimeTestBase.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptorTests.cs" />
-    <Compile Include="Experiments\JsonWriter.cs" />
     <Compile Include="Experiments\JsonWriterTests.cs" />
     <Compile Include="ScopeConfigBaseEqualityTest.cs" />
     <Compile Include="Data\DbCommandExecutorTest.cs" />

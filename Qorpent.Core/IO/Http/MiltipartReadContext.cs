@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 using Qorpent.Utils.Extensions;
 
@@ -150,7 +151,15 @@ namespace Qorpent.IO.Http
 				cdb[Idx - delt] = Buffer[Idx];
 				Idx++;
 			}
-			var disposstring = _encoding.GetString(cdb, 0, Idx - delt);
+		    var disposstring = "";
+		    try {
+		        disposstring = Encoding.UTF8.GetString(cdb, 0, Idx - delt);
+		    }
+		    catch (Exception) {
+                disposstring = _encoding.GetString(cdb, 0, Idx - delt);    
+		        throw;
+		    }
+            
 			var dispmatch = Regex.Match(disposstring,
 			                            "Content-Disposition:[^;]+;\\s*name\\s*=\\s*\"(?<n>[^\"]+)\"(;\\s*filename\\s*=\\s*\"(?<fn>[^\"]+)\")?");
 			CurrentName = dispmatch.Groups["n"].Value;

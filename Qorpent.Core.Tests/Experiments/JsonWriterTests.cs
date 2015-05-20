@@ -27,7 +27,7 @@ namespace Qorpent.Core.Tests.Experiments {
         [TestCase("\"test\"", "\"\\\"test\\\"\"")]
         [TestCase("\"te\tst\"", "\"\\\"te\\tst\\\"\"")]
         public void CanWriteValue(object obj, string result) {
-            jw.Write(obj);
+            jw.WriteValue(obj);
             jw.Flush();
             Console.WriteLine(sw.ToString());
             Assert.AreEqual(result,sw.ToString());
@@ -36,8 +36,8 @@ namespace Qorpent.Core.Tests.Experiments {
         [Test]
         public void CanWriteObject() {
             jw.OpenObject();
-            jw.Write("a","b");
-            jw.Write("b",new{c="d"});
+            jw.WriteProperty("a","b");
+            jw.WriteProperty("b",new{c="d"});
             jw.Flush();
             jw.Close();
             var result = sw.ToString().Simplify(SimplifyOptions.SingleQuotes);
@@ -48,9 +48,9 @@ namespace Qorpent.Core.Tests.Experiments {
         public void CanWriteArray()
         {
             jw.OpenArray();
-            jw.Write(1);
-            jw.Write(new { c = "d" });
-            jw.Write(new[]{1,2});
+            jw.WriteValue(1);
+            jw.WriteValue(new { c = "d" });
+            jw.WriteValue(new[]{1,2});
             jw.Flush();
             jw.Close();
             var result = sw.ToString().Simplify(SimplifyOptions.SingleQuotes);

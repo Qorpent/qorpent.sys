@@ -65,7 +65,9 @@ namespace Qorpent.Host.Qweb
 	    private bool Authorize(IHostServer server, IMvcContext context) {
 	        if (!string.IsNullOrWhiteSpace(context.ActionDescriptor.Role)) {
 	            if (!context.ActionDescriptor.Role.Contains("GUEST")) {
-                   
+	                if (!context.User.Identity.IsAuthenticated) {
+                        ProcessError(context, new SecurityException("guest permitted"));
+	                }
 	                var roles = context.ActionDescriptor.Role.SmartSplit();
                     var rr = server.Container.Get<IRoleResolver>();
 	                if (rr.IsInRole(context.User, "ADMIN")) return true;
@@ -76,14 +78,17 @@ namespace Qorpent.Host.Qweb
                                 return false;
                             }
                         }
-                        else {
-                            if (!rr.IsInRole(context.User, role)) {
-                                ProcessError(context, new SecurityException("access denied"));
-                                return false;
-                            }
-                        }
                     }
-	                
+	                foreach (var role in roles) {
+	                    if (role.StartsWith("!")) continue;
+	                    if (rr.IsInRole(context.User, role)) {
+	                        return true;
+	                    }
+
+	                }
+	                ProcessError(context, new SecurityException("access denied"));
+                    return false;
+
 	                
 	            }
 	        }

@@ -66,7 +66,11 @@
     <Compile Include="BSharp\Runtime\IBSharpRuntimeService.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassDescriptor.cs" />
     <Compile Include="BSharp\Runtime\RuntimeClassResolutionType.cs" />
+    <Compile Include="Experiments\JsonExtend.cs" />
     <Compile Include="Experiments\JsonWriter.cs" />
+    <Compile Include="Host\QorpentHostIdentity.cs" />
+    <Compile Include="Host\TokenType.cs" />
+    <Compile Include="Host\UserInfo.cs" />
     <Compile Include="Scope\IScope.cs" />
     <Compile Include="Scope\IScopeBound.cs" />
     <Compile Include="Scope\Scope.cs" />

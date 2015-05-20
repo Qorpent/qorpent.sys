@@ -62,6 +62,8 @@ namespace Qorpent.IO {
                     return "image/svg+xml";
 				case "jpg":
 					return "image/jpeg";
+                case "bmp":
+                    return "image/bmp";
 				case "jpeg":
 					return "image/jpeg";
 				case "gif":

@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Qorpent.Utils;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Experiments {
 
@@ -99,6 +100,12 @@ namespace Qorpent.Experiments {
                 }
             }
             return null;
+        }
+
+        public static object Jsonify(object src) {
+            if (src is string) return Parse(src as string);
+            var json = Stringify(src);
+            return Parse(json);
         }
 
         private static unsafe object ReadDocument(char* cur, char* basis) {
@@ -594,6 +601,30 @@ namespace Qorpent.Experiments {
             var sw = new StringWriter();
             Write(data,sw,defaultMode, annotator);
             return sw.ToString();
+        }
+
+        public static string stringify(this object data) {
+            return Stringify(data);
+        }
+
+        public static object jsonify(this object data) {
+            if (data is string) {
+                return Parse(data as string);
+            }
+            return Jsonify(data);
+        }
+
+        public static IEnumerable<object> select(this object data,string path) {
+            return Select(data, path);
+        }
+
+        public static string str(this object data, string path) {
+            return Get(data, path).ToStr();
+        }
+
+        public static int num(this object data, string path)
+        {
+            return Get(data, path).ToInt();
         }
 
         /// <summary>

@@ -4,7 +4,7 @@ namespace Qorpent.Host.Security{
 	/// <summary>
 	///     Внутренний идент Qorpent.Host
 	/// </summary>
-	internal class QorpentHostIdentity : IIdentity{
+	public class QorpentHostIdentity : IIdentity{
 		private readonly string _authenticationType;
 		private readonly bool _isAuthenticated;
 		private readonly string _name;

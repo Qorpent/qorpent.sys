@@ -373,12 +373,21 @@ namespace Qorpent.Utils.Extensions {
 
 		
 		        try {
-		            return DateTime.ParseExact(s, QorpentConst.Date.StandardDateFormats, CultureInfo.InvariantCulture,
-		                DateTimeStyles.AllowWhiteSpaces);
+		            var result = DateTime.ParseExact(s, QorpentConst.Date.StandardDateFormats, CultureInfo.InvariantCulture,
+		                DateTimeStyles.AllowWhiteSpaces);//.ToLocalTime();
+		            if ((s.Contains("+") || s.Contains("-"))) {
+		                result = result.ToUniversalTime();
+		            }
+		            return result;
 		        }
 		        catch (Exception ex) {
 		            try {
-		                return DateTime.Parse(s);
+		                var result = DateTime.Parse(s);//.ToLocalTime();
+                        if ((s.Contains("+") || s.Contains("-")))
+                        {
+                            result = result.ToUniversalTime();
+                        }
+                        return result;
 		            }
 		            catch {
 		                if (safe) return new DateTime(1900, 1, 1);

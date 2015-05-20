@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Serialization/jsonSerializer.cs
 #endregion
 
+using Qorpent.Experiments;
 using System.Xml.Linq;
 using Qorpent.IoC;
 using Qorpent.Json;
@@ -74,6 +75,10 @@ namespace Qorpent.Serialization {
 				return;
 			}
 #endif
+	        if (value is IJsonSerializable) {
+	            ((IJsonSerializable)value).Write(output,null);
+                return;
+	        }
             base.Serialize(name, value, output, options);
         }
 	}

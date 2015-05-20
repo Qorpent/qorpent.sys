@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Qorpent.Utils.Extensions;
 
@@ -74,6 +75,11 @@ namespace Qorpent.IO.Http
 		        String.Empty;
 
 		}
+        public object GetObject (string name) {
+            if (null == Json) return Get(name);
+            return Experiments.Json.Get(Json, name);
+        }
+
 
 	    private string Get<V>(string name, IDictionary<string, V> src, bool ignorecase) {
 	        if (null == src) return null;
@@ -202,7 +208,7 @@ namespace Qorpent.IO.Http
             mrcontext.Read();
 	    }
 
-	    private static void PrepareDictionaryData(IDictionary<string,string> target, string query, bool isqueryString)
+	    private static void PrepareDictionaryData(IDictionary<string, string> target, string query, bool isqueryString)
 	    {
 	        if(String.IsNullOrWhiteSpace(query))return;
 
@@ -233,11 +239,50 @@ namespace Qorpent.IO.Http
         /// <returns></returns>
 	    public string GetOrFullText(string id) {
 	        var dictbased = Get(id);
-	        if (string.IsNullOrWhiteSpace(dictbased)) {
-	            if (!string.IsNullOrWhiteSpace(PostData)) return PostData;
-	            if (!string.IsNullOrWhiteSpace(QueryData)) return QueryData;
+	        if (String.IsNullOrWhiteSpace(dictbased)) {
+	            if (!String.IsNullOrWhiteSpace(PostData)) return PostData;
+	            if (!String.IsNullOrWhiteSpace(QueryData)) return QueryData;
 	        }
-            return string.Empty;
+            return String.Empty;
+        }
+
+	    public  IDictionary<string, object> ReadDict(string name) {
+	        IDictionary<string, object> _result = null;
+	        var __custom = GetObject(name);
+	        if (__custom is string) {
+	            var _custom = __custom as string;
+	            if (!String.IsNullOrWhiteSpace(_custom)) {
+	                if (_custom.StartsWith("{")) {
+	                    _result = (IDictionary<string, object>) Experiments.Json.Parse(_custom);
+	                }
+	                else {
+	                    _result = TagHelper.Parse(_custom).ToDictionary(_ => _.Key, _ => (object) _.Value);
+	                }
+	            }
+	        }
+	        else if (__custom is IDictionary<string, object>) {
+	            _result = (IDictionary<string, object>) __custom;
+	        }
+	        return _result ?? new Dictionary<string, object>();
+	    }
+
+        public object[] ReadArray(string name)
+        {
+            object[] _result = null;
+            var __custom = GetObject(name);
+            if (__custom is string)
+            {
+                var _custom = __custom as string;
+                if (!String.IsNullOrWhiteSpace(_custom))
+                {
+                    _result = _custom.SmartSplit(false, true, ',', '|', ' ').Select(_=>(object)_).ToArray();
+                }
+            }
+            else if (__custom is object[])
+            {
+                _result = (object[])__custom;
+            }
+            return _result ?? new object[]{};
         }
 	}
 }

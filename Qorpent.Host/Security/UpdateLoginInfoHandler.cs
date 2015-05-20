@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security;
 using System.Threading;
 using Qorpent.Events;
+using Qorpent.Experiments;
 using Qorpent.IO.Http;
 using Qorpent.Security;
 using Qorpent.Utils.Extensions;
@@ -45,6 +46,7 @@ namespace Qorpent.Host.Security {
             private bool noadmin;
             private IDictionary<string, string> tags;
             private bool isgroup;
+            private IDictionary<string, object> custom; 
 
             public UpdateRequest(WebContext context, RequestParameters data, IRoleResolver _roles, ILoginSourceProvider _logins) {
                 login = data.Get("login");
@@ -75,14 +77,15 @@ namespace Qorpent.Host.Security {
                 isgroup = data.Get("isgroup").ToBool() || login.EndsWith("@groups");
                 var _active = data.Get("active");
                 active = string.IsNullOrWhiteSpace(_active) || _active.ToBool();
-                var roles = data.Get("roles").SmartSplit(false, true, ',', '|', ' ');
+                var roles = data.ReadArray("roles").Select(_=>_.ToStr()).ToArray();
                 removeroles = roles.Where(_ => _.StartsWith("-")).Select(_ => _.Substring(1)).ToArray();
                 addroles = roles.Where(_ => !_.StartsWith("-")).ToArray();
-                var groups = data.Get("groups").SmartSplit(false, true, ',', '|', ' ');
+                var groups = data.ReadArray("groups").Select(_ => _.ToStr()).ToArray();
                 removegroups = groups.Where(_ => _.StartsWith("-")).Select(_ => _.Substring(1)).ToArray();
                 addgroups = groups.Where(_ => !_.StartsWith("-")).ToArray();
-                tags = TagHelper.Parse(data.Get("tags"));
-                
+                tags = data.ReadDict("tags").ToDictionary(_ => _.Key, _ => _.Value.ToStr());
+                custom = data.ReadDict("custom");
+
             }
 
             public void Authorize() {
@@ -122,6 +125,12 @@ namespace Qorpent.Host.Security {
                     if(info.IsGroup || isgroup)throw new SecurityException("only admins can deal with groups");
                     if(0!=addroles.Length)throw new SecurityException("only admins can add roles");
                     if(0!=addgroups.Length)throw new SecurityException("only admins can add groups");
+                    if (null != custom && 0 != custom.Count) {
+                        var j = Experiments.Json.Stringify(custom);
+                        if (j.Contains("secure_")) {
+                            throw new SecurityException("only admins can deal with secure_ customs");
+                        }
+                    }
                     if (!string.IsNullOrWhiteSpace(email) && info.Email != email) {
                         throw new SecurityException("only admins can change emails");
                     }
@@ -162,7 +171,7 @@ namespace Qorpent.Host.Security {
 
             private bool? _hasdelta;
             private bool isauth;
-            public bool rolesupdated;
+            public bool resetrequired;
 
             public bool HasDelta() {
                 if (null == _hasdelta) {
@@ -184,11 +193,11 @@ namespace Qorpent.Host.Security {
                     return true;
                 }
                 if (setadmin && !info.IsAdmin) {
-                    this.rolesupdated = true;
+                    this.resetrequired = true;
                     return true;
                 }
                 if (noadmin && info.IsAdmin) {
-                    this.rolesupdated = true;
+                    this.resetrequired = true;
                     return true;
                 }
                 if (!string.IsNullOrWhiteSpace(email) && email != info.Email) {
@@ -198,19 +207,19 @@ namespace Qorpent.Host.Security {
                     return true;
                 }
                 if (info.Groups.Any(_ => -1 != Array.IndexOf(removegroups, _))) {
-                    this.rolesupdated = true;
+                    this.resetrequired = true;
                     return true;
                 }
                 if (info.Roles.Any(_ => -1 != Array.IndexOf(removeroles, _))) {
-                    this.rolesupdated = true;
+                    this.resetrequired = true;
                     return true;
                 }
                 if (addgroups.Any(_ => !info.Groups.Contains(_))) {
-                    this.rolesupdated = true;
+                    this.resetrequired = true;
                     return true;
                 }
                 if (addroles.Any(_ => !info.Roles.Contains(_))) {
-                    this.rolesupdated = true;
+                    this.resetrequired = true;
                     return true;
                 }
                 foreach (var tag in tags) {
@@ -224,6 +233,19 @@ namespace Qorpent.Host.Security {
                         if (info.Tags[tag.Key] != tag.Value) return true;
                     }
                 }
+
+                if (custom != null && custom.Count != 0) {
+                    if (info.Custom == null || info.Custom.Count == 0) return true;
+                    var basis = Experiments.Json.Stringify(info.Custom);
+                    var restored = Experiments.Json.Parse(basis);
+                    JsonExtend.Extend(restored,custom);
+                    var newj = Experiments.Json.Stringify(restored);
+                    if (basis != newj) {
+                        resetrequired = true;
+                        return true;
+                    }
+                }
+
                 return false;
             }
 
@@ -287,7 +309,11 @@ namespace Qorpent.Host.Security {
                 if (noadmin) {
                     info.IsAdmin = false;
                 }
-                    
+
+                if (null != custom && 0 != custom.Count) {
+                    info.Custom = info.Custom ?? new Dictionary<string, object>();
+                    JsonExtend.Extend(info.Custom, custom);
+                }
             }
         }
 
@@ -299,7 +325,7 @@ namespace Qorpent.Host.Security {
                 context.Finish("\"no updates required\"",status:201);
             };
             request.Update();
-            if (request.rolesupdated) {
+            if (request.resetrequired) {
                 ((DefaultAuthenticationProvider) _server.Auth).Reset(new ResetEventData(true));
             }
             var info = request.GetInfo();

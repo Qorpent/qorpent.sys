@@ -38,7 +38,7 @@ namespace Qorpent.Core.Tests.Experiments {
             }
         }
 
-        public void Write(object obj, bool ignorechecking = false) {
+        public void WriteValue(object obj, bool ignorechecking = false) {
             if (!ignorechecking) {
                 if (InArray) {
                     if (ArrayCount > 0) {
@@ -54,7 +54,7 @@ namespace Qorpent.Core.Tests.Experiments {
             Qorpent.Experiments.Json.Write(obj, _out, _options);
         }
 
-        public void Write(string name, object value, bool notnullonly = false) {
+        public void WriteProperty(string name, object value, bool notnullonly = false) {
             if(notnullonly && !value.ToBool())return;
             if (!InObj) {
                 throw new Exception("invalid state");
@@ -65,7 +65,7 @@ namespace Qorpent.Core.Tests.Experiments {
             PropCount++;
             _out.Write("\""+name.Escape(EscapingType.JsonValue)+"\"");
             _out.Write(":");
-            Write(value,true);
+            WriteValue(value,true);
         }
 
         public bool InObj {
@@ -82,7 +82,15 @@ namespace Qorpent.Core.Tests.Experiments {
 
 
         public void OpenObject() {
-         
+            if (InArray)
+            {
+                if (ArrayCount > 0)
+                {
+                    _out.Write(",");
+
+                }
+                ArrayCount++;
+            }
             this._out.Write("{");
             scope = new Scope(scope);
             scope.Set("pc",0);
@@ -133,6 +141,24 @@ namespace Qorpent.Core.Tests.Experiments {
 
         public void CloseProperty() {
             scope = scope.GetParent();
+        }
+
+        public void WriteNative(string stringify) {
+            
+                if (InArray)
+                {
+                    if (ArrayCount > 0)
+                    {
+                        _out.Write(",");
+
+                    }
+                    ArrayCount++;
+                }
+                if (InObj)
+                {
+                    throw new Exception("invalid state");
+                }
+            _out.Write(stringify);
         }
     }
 }
