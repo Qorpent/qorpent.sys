@@ -139,7 +139,7 @@ namespace Qorpent.IO.Http {
         public virtual Encoding ContentEncoding { get; set; }
 
         protected IDictionary<string, string> Headers { get; set; }
-        public CookieCollection Cookies { get; set; }
+        public virtual CookieCollection Cookies { get; set; }
         public bool NoCloseStream { get; set; }
 
         public virtual string GetHeader(string name) {

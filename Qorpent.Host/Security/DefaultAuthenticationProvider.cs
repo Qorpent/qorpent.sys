@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Security.Principal;
 using Qorpent.Events;
@@ -380,6 +381,7 @@ namespace Qorpent.Host.Security{
 			}
 		    cookie.HttpOnly = true;
 		    cookie.Secure = true;
+		    context.Response.Cookies = new CookieCollection();
 			context.Response.Cookies.Add(cookie);
 		}
 

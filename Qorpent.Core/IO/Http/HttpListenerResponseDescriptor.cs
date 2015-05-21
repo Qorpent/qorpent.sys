@@ -9,7 +9,11 @@ namespace Qorpent.IO.Http {
 
         public HttpListenerResponseDescriptor(HttpListenerResponse response) {
             _response = response;
-            Cookies = _response.Cookies;
+        }
+
+        public override CookieCollection Cookies {
+            get { return _response.Cookies; }
+            set { _response.Cookies = value; }
         }
 
         public override void SetHeader(string name, string value) {
