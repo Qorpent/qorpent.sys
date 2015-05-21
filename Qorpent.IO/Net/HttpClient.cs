@@ -35,6 +35,7 @@ namespace Qorpent.IO.Net{
 	        if (null != post) {
 	            req.Method = "POST";
 	            req.PostData = post;
+	        
 	        }
             if (null != setup) {
                 setup(req);

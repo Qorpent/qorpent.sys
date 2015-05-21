@@ -17,6 +17,7 @@ define([
     'the-angular-autocomplete',
     'the-angular-autoselect',
     'the-angular-datetimepicker',
+    'the-uploader',
     'the-angular-dialog',
     'the-angular-controlgroup',
     'the-angular-viewcontext',

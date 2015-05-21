@@ -253,4 +253,9 @@ a :hover {
   text-decoration: underline;
 }
 
+/* line 136, page.scss */
+i {
+  box-sizing: border-box;
+}
+
 /*# sourceMappingURL=page.css.map */

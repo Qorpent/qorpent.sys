@@ -4385,6 +4385,11 @@ a :hover {
   text-decoration: underline;
 }
 
+/* line 136, newthe/page.scss */
+i {
+  box-sizing: border-box;
+}
+
 /* line 1, newthe/_extensions.scss */
 .mapstat {
   padding: 5px;

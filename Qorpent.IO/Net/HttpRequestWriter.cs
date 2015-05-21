@@ -24,7 +24,7 @@ namespace Qorpent.IO.Net{
 		/// </summary>
 		/// <param name="request"></param>
 		public void Write(HttpRequest request){
-			using (var bwriter = new BinaryWriter(_stream, Encoding.ASCII, true)){
+			using (var bwriter = new BinaryWriter(_stream, Encoding.UTF8, true)){
 				bwriter.Write(request.Method.ToCharArray());
 				bwriter.Write(' ');
 				bwriter.Write(request.Uri.PathAndQuery.ToCharArray());
@@ -60,10 +60,10 @@ namespace Qorpent.IO.Net{
 			    if (request.Method == "POST") {
 			        if (null == request.PostData) request.PostData = "";
 			        var realpost = request.PostData;
-                    var len = realpost.Length;
+			        var len = Encoding.UTF8.GetByteCount(realpost);
                    
                     bwriter.Write("Content-Type: ".ToCharArray());
-                    bwriter.Write("application/x-www-form-urlencoded".ToCharArray());
+                    bwriter.Write("application/x-www-form-urlencoded; charset=UTF-8".ToCharArray());
                     bwriter.Write("\r\n".ToCharArray());
                     bwriter.Write("Content-Length: ".ToCharArray());
                     bwriter.Write(len.ToString().ToCharArray());

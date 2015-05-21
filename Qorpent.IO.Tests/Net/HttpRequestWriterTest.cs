@@ -20,7 +20,7 @@ namespace Qorpent.IO.Tests.Net{
 			ms.Position = 0;
 			var buffer = new byte[size];
 			ms.Read(buffer, 0, (int)size);
-			return Encoding.ASCII.GetString(buffer);
+			return Encoding.UTF8.GetString(buffer);
 		}
 
 		[TestCase("http://a.com/x", "GET /x HTTP/1.1\r\nHost: a.com\r\nAccept-Encoding: gzip, deflate\r\nUser-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0\r\n\r\n")]
@@ -31,6 +31,24 @@ namespace Qorpent.IO.Tests.Net{
 			Console.Write(test.Replace("\r","\\r").Replace("\n","\\n"));
 			Assert.AreEqual(result,test);
 		}
+
+	    [Test]
+	    public void Utf8Post() {
+	        var call = "{\"name\":\"Жопа\"}";
+	        var req = new HttpRequest {Method = "POST",Uri = new Uri("http://a"), PostData = call};
+	        var res = Execute(req);
+            Console.WriteLine(res);
+            Assert.AreEqual(@"POST / HTTP/1.1
+Host: a
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Content-Length: 15
+
+{""name"":""Жопа""}
+",res);
+	    }
+
 
 		[Test]
 		public void SupportCookies(){

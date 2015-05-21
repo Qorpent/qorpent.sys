@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
+using Map = System.Collections.Generic.IDictionary<string,object>;  
+using Arr = System.Array;  
 
 namespace Qorpent.Experiments {
 
@@ -614,17 +616,58 @@ namespace Qorpent.Experiments {
             return Jsonify(data);
         }
 
-        public static IEnumerable<object> select(this object data,string path) {
+        public static IEnumerable<object> sel(this object data,string path) {
             return Select(data, path);
         }
 
         public static string str(this object data, string path) {
-            return Get(data, path).ToStr();
+            var result = Get(data, path);
+            if(null==result)return null;
+            return result.ToStr();
         }
 
         public static int num(this object data, string path)
         {
             return Get(data, path).ToInt();
+        }
+        public static object get(this object data, string path)
+        {
+            return Get(data, path);
+        }
+
+        public static object[] arr(this object data, string path) {
+            return (Get(data, path) as object[]);
+        }
+
+        public static Map map(this object data, string path)
+        {
+            return Get(data, path) as Map;
+        }
+
+        public static object clone(this object data) {
+            if (data is Map) {
+                var result = new Dictionary<string, object>();
+                foreach (var p in (Map)data) {
+                    result[p.Key] = p.Value.clone();
+                }
+                return result;
+            }
+            if (data is Arr) {
+                var a = data as object[];
+                var result = new object[a.Length];
+                for (var i = 0; i < a.Length; i++) {
+                    result[i] = a[i].clone();
+                }
+                return result;
+            }
+            return data;
+        }
+
+        public static bool has(this object data, string name) {
+            if (data is IDictionary<string, object>) {
+                return ((IDictionary<string, object>) data).ContainsKey(name);
+            }
+            return false;
         }
 
         /// <summary>
