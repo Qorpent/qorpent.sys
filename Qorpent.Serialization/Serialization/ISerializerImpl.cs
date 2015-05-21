@@ -55,6 +55,8 @@ namespace Qorpent.Serialization {
 		/// </remarks>
 		void BeginObject(string name);
 
+        bool CustomWrite { get; set; }
+
 		/// <summary>
 		/// 	Ends the object.
 		/// </summary>

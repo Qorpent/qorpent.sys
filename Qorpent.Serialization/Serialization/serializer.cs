@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Xml.Linq;
 using Qorpent.Utils.Extensions;
 
@@ -282,19 +283,26 @@ namespace Qorpent.Serialization {
 		/// <remarks>
 		/// </remarks>
 		private void SerializeClass(string name, object value) {
-			var items = SerializableItem.GetSerializableItems(value).ToArray();
-			_s.BeginObject(name);
-			var c = items.Count();
-			foreach (var i in items) {
-				_s.BeginObjectItem(i.Name, i.IsFinal);
-				InternalSerialize(i.Name, i.Value, i.ItemName, i.NoIndex);
-				_s.EndObjectItem(c == 1);
-				c--;
-			}
-			_s.EndObject();
+		    if (!SerializeClassCustom(name, value,_s)) {
+		        var items = SerializableItem.GetSerializableItems(value).ToArray();
+		        _s.BeginObject(name);
+		        var c = items.Count();
+		        foreach (var i in items) {
+		            _s.BeginObjectItem(i.Name, i.IsFinal);
+		            InternalSerialize(i.Name, i.Value, i.ItemName, i.NoIndex);
+		            _s.EndObjectItem(c == 1);
+		            c--;
+		        }
+		        _s.EndObject();
+		    }
+
 		}
 
-		/// <summary>
+	    protected virtual bool SerializeClassCustom(string name, object value,ISerializerImpl i) {
+	        return false;
+	    }
+
+	    /// <summary>
 		/// 	Serializes the dictionary.
 		/// </summary>
 		/// <param name="name"> The name. </param>

@@ -90,7 +90,12 @@ namespace Qorpent.Serialization {
 			_stack.Push(e);
 		}
 
-		/// <summary>
+	    public bool CustomWrite {
+	        get { throw new NotImplementedException(); }
+	        set { throw new NotImplementedException(); }
+	    }
+
+	    /// <summary>
 		/// 	Ends the object.
 		/// </summary>
 		/// <remarks>

@@ -37,17 +37,22 @@ namespace Qorpent.Serialization {
 
 		public void BeginObject(string name) {
 			_statestack.Push(ObjectSerializerState.Obj);
-
-			Output.Write("{");
+		    if (!CustomWrite) {
+		        Output.Write("{");
+		    }
 		}
 
-		public void EndObject() {
+	    public bool CustomWrite { get; set; }
+
+	    public void EndObject() {
 			var s = _statestack.Pop();
 			if (s != ObjectSerializerState.Obj) {
 				throw new Exception("cannot close object here");
 			}
-			Output.Write("}");
-		}
+	        if (!CustomWrite) {
+	            Output.Write("}");
+	        }
+	    }
 
 		public void BeginObjectItem(string name, bool isfinal) {
 			if (Current == ObjectSerializerState.Obj) {

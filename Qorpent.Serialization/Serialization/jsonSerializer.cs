@@ -44,7 +44,20 @@ namespace Qorpent.Serialization {
 			return new JsonSerializerImpl();
 		}
 
-        static JsonSerializer _default = new JsonSerializer();
+	    protected override bool SerializeClassCustom(string name, object value, ISerializerImpl i) {
+	        var js = value as IJsonSerializable;
+	        if (null != js) {
+	            i.CustomWrite = true;
+                i.BeginObject("");
+	            js.Write(i.Output,null);
+                i.EndObject();
+	            i.CustomWrite = false;
+	            return true;
+	        }
+	        return false;
+	    }
+
+	    static JsonSerializer _default = new JsonSerializer();
 	    public static string Stringify(object obj) {
 	        return _default.Serialize("main",obj);
 
