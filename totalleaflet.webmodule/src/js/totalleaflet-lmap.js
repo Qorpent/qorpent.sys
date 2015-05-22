@@ -229,7 +229,7 @@ define(["totalleaflet-utils"],function(utils){
 
             url = url.replace(/\{hostname\}/, document.location.hostname);
 
-            L.tileLayer(url, {
+            map.tiles = L.tileLayer(url, {
                 reuseTiles: true,
                 updateWhenIdle: false
             }).addTo(map);
@@ -237,7 +237,7 @@ define(["totalleaflet-utils"],function(utils){
 
             if(!!iAttrs["onload"]) {
 				if (iAttrs["onload"] in $scope) {
-				    $scope[iAttrs["onload"]](map, element, iAttrs);
+				    $scope[iAttrs["onload"]](map, element, iAttrs, $scope);
                 }
             }
 
