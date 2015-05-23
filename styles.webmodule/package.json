@@ -1,0 +1,19 @@
+{
+	"description": "My Best Module",
+	"moduleName": "styles",
+	"defaultNamespace": "styles",
+	"name": "styles",
+	"devDependencies": {
+		"requirejs": ">=2.1.15",
+		"amdefine": ">=0.1.0"
+	},
+	"compile": {},
+	"tests": [],
+	"webModuleDependency": {},
+	"defines": {
+		"DEBUG": true,
+		"PROFILE": true
+	},
+	"__optimizer": {},
+	"version": "0.1.0"
+}

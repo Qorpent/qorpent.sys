@@ -1,0 +1,7 @@
+@import "index";
+@mixin all() {
+  @include debug();
+  @include global();
+  @include site();
+  @include app();
+}

@@ -1,0 +1,3 @@
+@mixin body-shadow() {
+  box-shadow: 0 0 15px darken(color(default), 5%);
+}

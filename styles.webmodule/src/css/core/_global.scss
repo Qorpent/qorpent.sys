@@ -1,0 +1,77 @@
+@import "colorizer";
+
+@mixin global() {
+  * {
+    box-sizing: border-box;
+  }
+  @include std-colors();
+  html {
+    background: {
+      color: skin(default-background, color(default));
+    }
+  }
+  body {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    background: {
+      color: color(light);
+    }
+    font: {
+      family: skin(font);
+    }
+    color: color(dark);
+    @include in-size(font-size);
+    > header {
+      background: {
+        color: color(primary);
+      }
+      color: color(light);
+    }
+    > footer {
+      font: {
+        size: 90%;
+      }
+    }
+    > main {
+      p {
+        text-indent: 25px;
+      }
+      p, li {
+        margin-top: 5px;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      ul {
+        padding-left: 25px;
+        > li {
+          &:before {
+            content: '-';
+            margin-right: 10px;
+          }
+        }
+        > ul, > li > ul {
+          padding-left: 25px;
+          > ul, > li > ul {
+            padding-left: 25px;
+          }
+        }
+      }
+      @each $k, $v in skin(heading) {
+        $selector: $k;
+        @if $selector == 'default' {
+          $selector: h1, h2, h3, h4, h5, h6;
+        }
+        #{$selector} {
+          @each $z, $i in $v {
+            @if $z == 'color' {
+              $i: color($i);
+            }
+            #{$z}: $i;
+          }
+        }
+      }
+    }
+  }
+}

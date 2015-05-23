@@ -1,0 +1,26 @@
+@mixin site-body() {
+  body {
+    @include size();
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 10px;
+    @include flex(column);
+    flex-grow: 1;
+    @if skin(body-shadow) {
+      @include body-shadow();
+    }
+    @if skin(rounded-body-corners) {
+      @include body-down-rounded-corners();
+    }
+    > header, > footer {
+      flex-shrink: 0;
+    }
+    > footer {
+      padding: skin(footer padding);
+    }
+    > main {
+      flex-grow: 1;
+      padding: skin(main padding)
+    }
+  }
+}

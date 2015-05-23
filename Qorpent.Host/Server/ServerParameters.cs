@@ -21,6 +21,17 @@ namespace Qorpent.Host.Server
             ConfigExtension = "hostconf";
             
         }
+		/// <summary>
+		///		Порт
+		/// </summary>
+	    public int Port {
+		    get {
+			    return Get<int>("port");
+		    }
+			set {
+				Set("port", value);
+			}
+	    }
         /// <summary>
         /// Корень настройки веб-фермы
         /// </summary>
@@ -48,7 +59,7 @@ namespace Qorpent.Host.Server
         /// </summary>
         /// <returns></returns>
         public HostConfig BuildServerConfig() {
-	        return new HostConfig(Definition, BSharpContext, log: Log){LogLevel = this.LogLevel};
+	        return new HostConfig(Definition, BSharpContext, log: Log){LogLevel = this.LogLevel, Port = Port};
         }
 
         /// <summary>

@@ -1,0 +1,10 @@
+@import "app/_index";
+
+@mixin app() {
+  html.app {
+    box-sizing: border-box;
+    height: 100%;
+    overflow: hidden;
+    @include app-body();
+  }
+}

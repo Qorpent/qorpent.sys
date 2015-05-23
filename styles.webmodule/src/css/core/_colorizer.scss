@@ -1,0 +1,48 @@
+@mixin colored-background($color) {
+  background-color: color($color);
+  @if requiredark($color) {
+    color: color(dark);
+  } @else  {
+    color: color(light);
+  }
+}
+
+@mixin inverse-colored-background($color) {
+  color: color($color);
+  @if requiredark($color) {
+    background-color: color(dark);
+  } @else  {
+    background-color: color(light);
+  }
+}
+
+@mixin std-colors() {
+  @each $k, $v in skin(color) {
+
+    .#{$k} {
+      @include colored-background($v);
+    }
+    .#{$k}-light {
+      @include colored-background(slighten($v, 20%));
+      &.same-color {
+        color: darken($v, 20%);
+      }
+    }
+    .#{$k}-darken {
+      @include colored-background(darken($v, 20%));
+    }
+
+    .inverse-#{$k} {
+      @include inverse-colored-background($v);
+    }
+    .inverse-#{$k}-light {
+      @include inverse-colored-background(slighten($v, 20%));
+    }
+    .inverse-#{$k}-darken {
+      @include inverse-colored-background(darken($v, 20%));
+      &.same-color {
+        background-color: slighten($v, 20%);
+      }
+    }
+  }
+}

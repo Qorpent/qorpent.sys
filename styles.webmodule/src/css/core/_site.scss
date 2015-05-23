@@ -1,0 +1,9 @@
+@import "site/_index";
+
+@mixin site() {
+  html.site {
+    @include flex(column);
+    min-height: 100%;
+    @include site-body();
+  }
+}

@@ -1,0 +1,105 @@
+<label>
+    <input ng-change="changeHtmlClass()" ng-model="htmlClass.app" type="checkbox" /> Application
+</label>
+<label>
+    <input ng-change="changeHtmlClass()" ng-model="htmlClass.site" type="checkbox" /> Site
+</label>
+<label>
+    <input ng-model="bodyClass.debug" type="checkbox" /> Debug Body
+</label>
+<label>
+    <input ng-model="showLargeText" type="checkbox" /> Large text
+</label>
+<div ng-if="showLargeText">
+    <h1>Lighten</h1>
+    <p class="danger-light">Lorem ipsum dolor.</p>
+    <p class="info-light">Lorem ipsum dolor sit amet.</p>
+    <p class="warn-light">Lorem ipsum dolor sit amet, consectetur.</p>
+    <p class="default-light">Lorem ipsum dolor.</p>
+    <p class="primary-light">Lorem ipsum dolor sit amet.</p>
+    <p class="success-light">Lorem ipsum dolor sit amet.</p>
+    <h1>Lighten same color</h1>
+    <p class="danger-light same-color">Lorem ipsum dolor.</p>
+    <p class="info-light same-color">Lorem ipsum dolor sit amet.</p>
+    <p class="warn-light same-color">Lorem ipsum dolor sit amet, consectetur.</p>
+    <p class="default-light same-color">Lorem ipsum dolor.</p>
+    <p class="primary-light same-color">Lorem ipsum dolor sit amet.</p>
+    <p class="success-light same-color">Lorem ipsum dolor sit amet.</p>
+    <h1>Standard</h1>
+    <p class="danger">Lorem ipsum dolor.</p>
+    <p class="info">Lorem ipsum dolor sit amet.</p>
+    <p class="warn">Lorem ipsum dolor sit amet, consectetur.</p>
+    <p class="default">Lorem ipsum dolor.</p>
+    <p class="primary">Lorem ipsum dolor sit amet.</p>
+    <p class="success">Lorem ipsum dolor sit amet.</p>
+    <h1>Darken</h1>
+    <p class="danger-darken">Lorem ipsum dolor.</p>
+    <p class="info-darken">Lorem ipsum dolor sit amet.</p>
+    <p class="warn-darken">Lorem ipsum dolor sit amet, consectetur.</p>
+    <p class="default-darken">Lorem ipsum dolor.</p>
+    <p class="primary-darken">Lorem ipsum dolor sit amet.</p>
+    <p class="success-darken">Lorem ipsum dolor sit amet.</p>
+    <h1>Lighten</h1>
+    <p class="inverse-danger-light">Lorem ipsum dolor.</p>
+    <p class="inverse-info-light">Lorem ipsum dolor sit amet.</p>
+    <p class="inverse-warn-light">Lorem ipsum dolor sit amet, consectetur.</p>
+    <p class="inverse-default-light">Lorem ipsum dolor.</p>
+    <p class="inverse-primary-light">Lorem ipsum dolor sit amet.</p>
+    <p class="inverse-success-light">Lorem ipsum dolor sit amet.</p>
+    <h1>Lighten same color</h1>
+    <p class="inverse-danger-light">Lorem ipsum dolor.</p>
+    <p class="inverse-info-light">Lorem ipsum dolor sit amet.</p>
+    <p class="inverse-warn-light">Lorem ipsum dolor sit amet, consectetur.</p>
+    <p class="inverse-default-light">Lorem ipsum dolor.</p>
+    <p class="inverse-primary-light">Lorem ipsum dolor sit amet.</p>
+    <p class="inverse-success-light">Lorem ipsum dolor sit amet.</p>
+    <h1>Standard</h1>
+    <p class="inverse-danger">Lorem ipsum dolor.</p>
+    <p class="inverse-info">Lorem ipsum dolor sit amet.</p>
+    <p class="inverse-warn">Lorem ipsum dolor sit amet, consectetur.</p>
+    <p class="inverse-default">Lorem ipsum dolor.</p>
+    <p class="inverse-primary">Lorem ipsum dolor sit amet.</p>
+    <p class="inverse-success">Lorem ipsum dolor sit amet.</p>
+    <h1>Darken</h1>
+    <p class="inverse-danger-darken same-color">Lorem ipsum dolor.</p>
+    <p class="inverse-info-darken same-color">Lorem ipsum dolor sit amet.</p>
+    <p class="inverse-warn-darken same-color">Lorem ipsum dolor sit amet, consectetur.</p>
+    <p class="inverse-default-darken same-color">Lorem ipsum dolor.</p>
+    <p class="inverse-primary-darken same-color">Lorem ipsum dolor sit amet.</p>
+    <p class="inverse-success-darken same-color">Lorem ipsum dolor sit amet.</p>
+    <h1>Text and list samples</h1>
+    <h1>Lorem ipsum dolor sit amet.</h1>
+    <h1>Lorem ipsum dolor sit amet.</h1>
+    <h1>Lorem ipsum dolor sit amet.</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias at dolorem doloribus maiores nulla omnis quas recusandae tempore voluptate!</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, nisi.</p>
+    <h1>Lorem ipsum dolor sit amet.</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias at dolorem doloribus maiores nulla omnis quas recusandae tempore voluptate!</p>
+    <h2>Lorem ipsum dolor sit amet.</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias at dolorem doloribus maiores nulla omnis quas recusandae tempore voluptate!</p>
+    <h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias at dolorem doloribus maiores nulla omnis quas recusandae tempore voluptate!</h3>
+    <p>-- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci architecto, aspernatur at corporis culpa dolorum eaque iure, magnam necessitatibus perspiciatis quae quaerat, quia quidem veniam voluptas! A cumque debitis dolorum ducimus, exercitationem explicabo facilis fugit in ipsum iste natus nulla possimus quam quas quasi quidem reprehenderit tenetur voluptas voluptate voluptatibus. Consequatur dolore ducimus fugit inventore laboriosam, laudantium maiores natus nesciunt, nihil, officia perferendis porro praesentium qui quibusdam quo quod similique tempore. Aliquam at atque blanditiis consectetur debitis distinctio doloribus eaque enim ipsum iusto laudantium nisi nostrum nulla officiis praesentium quisquam repellendus sit, tenetur voluptatem voluptatum. Eveniet officia officiis quibusdam tempore?</p>
+    <ul>
+        <li>Lorem ipsum dolor sit amet.</li>
+        <li>Lorem ipsum dolor sit.</li>
+        <li>Lorem ipsum dolor sit amet, consectetur.</li>
+        <li>Lorem ipsum dolor sit.</li>
+        <li>
+            <ul>
+                <li>Lorem ipsum dolor.</li>
+                <li>Lorem ipsum dolor sit amet, consectetur.</li>
+                <li>Lorem ipsum.</li>
+            </ul>
+        </li>
+        <ul>
+            <li>Lorem ipsum dolor sit.</li>
+            <li>Lorem ipsum dolor sit amet, consectetur.</li>
+            <li>Lorem ipsum dolor.</li>
+            <ul>
+                <li>Lorem ipsum dolor.</li>
+                <li>Lorem ipsum dolor sit amet, consectetur.</li>
+                <li>Lorem ipsum.</li>
+            </ul>
+        </ul>
+    </ul>
+</div>

@@ -204,6 +204,9 @@ namespace Qorpent.Host {
         private void Run() {
             CancellationTokenSource = new CancellationTokenSource();
             _cancel = CancellationTokenSource.Token;
+	        foreach (var prefix in _listener.Prefixes) {
+		        Console.WriteLine("Prefix: " + prefix);
+	        }
             Task.Run(
                 () => {
                     _listener.Start();

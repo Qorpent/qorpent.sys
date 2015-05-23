@@ -300,7 +300,10 @@ namespace Qorpent.Host{
 		///     Имя куки аутентификации
 		/// </summary>
 		public string AuthCookieName { get; set; }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Port { get; set; }
 		/// <summary>
 		/// </summary>
 		public string EncryptBasis { get; set; }
@@ -589,7 +592,7 @@ namespace Qorpent.Host{
 			_bindings.Add(
 				new HostBinding{
 					Interface = HostUtils.DefaultBindingInterface,
-					Port = HostUtils.DefaultBindingPort,
+					Port = Port == 0 ? HostUtils.DefaultBindingPort : Port,
 					Schema = HostSchema.Http
 				}
 				);
