@@ -1,0 +1,4 @@
+@mixin rounded-bottom-corners($size: 3px) {
+  border-bottom-left-radius: $size;
+  border-bottom-right-radius: $size;
+}

@@ -10,7 +10,7 @@
       @include body-shadow();
     }
     @if skin(rounded-body-corners) {
-      @include body-down-rounded-corners();
+      @include rounded-bottom-corners();
     }
     > header, > footer {
       flex-shrink: 0;
