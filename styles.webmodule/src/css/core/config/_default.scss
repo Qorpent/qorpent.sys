@@ -1,4 +1,10 @@
 $config: (
+  nav: (
+    border-bottom-color: #D7D7D7,
+    border-bottom-width: 1px,
+    border-bottom-style: solid,
+    font-family: Verdana
+  ),
         color : (
                 dark : #333333,
                 light : #fafafa,
@@ -14,6 +20,7 @@ $config: (
         body-shadow: true,
         rounded-body-corners: true,
         rounded-tabs-corners: true,
+        input-rounded-corners: true,
         sizes : (
                 default : (
                   max-width: 1024px,

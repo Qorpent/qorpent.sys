@@ -28,9 +28,27 @@
     }
     font: {
       family: skin(font);
+      size: skin(font-size);
     }
     color: color(dark);
     @include in-size(font-size);
+    input[type=text] {
+      width: 100%;
+      margin: 0;
+      border: 1px solid color(primary);
+      padding: 3px;
+      @include in-size(font-size);
+      @if skin(input-rounded-corners) {
+        @include rounded-corners();
+      }
+    }
+    a, a:visited {
+      color: color(primary);
+      text-decoration: underline;
+      &:hover {
+        color: slighten(color(primary), 10%);
+      }
+    }
     > header {
       $header-background-color: color(primary);
       color: color(light);
@@ -39,6 +57,13 @@
       }
       padding: {
         top: skin(header padding-top)
+      }
+      &.with-logo {
+        background-image: url("/img/logo-toolbar.png");
+        background-position: left center;
+        background-repeat: no-repeat;
+        background-size: 80px 60px;
+        padding-left: 100px!important;
       }
       > .tab {
         color: color(light);
@@ -64,6 +89,7 @@
         }
         &:not(.active):hover {
           background: slighten($header-background-color, 10%);
+          color: color(light)!important;
         }
         @if skin(rounded-tabs-corners) {
           @include rounded-top-corners();
@@ -77,7 +103,15 @@
     }
     > nav {
       padding: 10px;
+      border-bottom: {
+        width: skin(nav border-bottom-width);
+        style: skin(nav border-bottom-style);
+        color: skin(nav border-bottom-color);
+      }
       a {
+        font: {
+          family: skin(nav font-family);
+        }
         &:not(:last-child) {
           margin-right: 10px;
           &:after {
