@@ -1,0 +1,7 @@
+@mixin square($size: 100px) {
+  min-width: $size;
+  max-width: $size;
+  min-height: $size;
+  max-height: $size;
+  overflow: hidden;
+}

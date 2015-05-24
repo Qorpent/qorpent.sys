@@ -1,0 +1,7 @@
+@import "rounded-bottom-corners";
+@import "rounded-top-corners";
+
+@mixin rounded-corners($size: 3px) {
+  @include rounded-top-corners($size);
+  @include rounded-bottom-corners($size);
+}

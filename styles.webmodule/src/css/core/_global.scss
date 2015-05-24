@@ -5,6 +5,15 @@
     box-sizing: border-box;
   }
   @include std-colors();
+  .box {
+    display: flex;
+    &.col {
+      flex-direction: column;
+    }
+    &.row {
+      flex-direction: row;
+    }
+  }
   html {
     background: {
       color: skin(default-background, color(default));
