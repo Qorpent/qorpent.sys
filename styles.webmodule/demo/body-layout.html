@@ -7,7 +7,16 @@
     <title></title>
 </head>
 <body ng-controller="body-layout-example" ng-class="bodyClass">
-    <header>Тут хидер</header>
+    <header>
+        <a href="#" class="tab active">Active tab</a>
+        <a href="#" class="tab">First tab</a>
+        <a href="#" class="tab">Second tab</a>
+    </header>
+    <nav>
+        <a href="#">Первый пункт</a>
+        <a href="#">Второй пункт</a>
+        <a href="#">Третий пункт</a>
+    </nav>
     <main ng-include="'body-layout-main.html'"></main>
     <footer>Тут футер</footer>
 </body>

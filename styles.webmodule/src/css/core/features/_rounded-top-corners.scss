@@ -1,0 +1,4 @@
+@mixin rounded-top-corners($round-size: 3px) {
+  border-top-left-radius: $round-size;
+  border-top-right-radius: $round-size;
+}

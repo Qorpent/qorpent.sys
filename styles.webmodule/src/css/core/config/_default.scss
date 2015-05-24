@@ -13,6 +13,7 @@ $config: (
         minwidth : 1024px,
         body-shadow: true,
         rounded-body-corners: true,
+        rounded-tabs-corners: true,
         sizes : (
                 default : (
                   max-width: 1024px,
@@ -66,15 +67,20 @@ $config: (
             font-size: 110%
           )
         ),
-        header : (
-                toppad : 15px,
-                botpad : 10px,
-                logoheight: 50px,
-                sidepad:10px,
-                align :center,
-                justify :stretch
-
-        ),
+  header : (
+    padding-top: 5px,
+    tabs: (
+      font-size: 18px,
+      font-family: Arial,
+      font-weight: bold,
+      text-decoration: none,
+      padding-top: 10px,
+      padding-right: 10px,
+      padding-left: 10px,
+      padding-bottom: 5px,
+      first-tab-left-margin: 10px
+    )
+  ),
         item : (
                 padding : 5px,
                 space : 5px,

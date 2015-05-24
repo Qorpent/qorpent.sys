@@ -13,8 +13,9 @@
   body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
+    $body-background-color: color(light);
     background: {
-      color: color(light);
+      color: $body-background-color;
     }
     font: {
       family: skin(font);
@@ -22,14 +23,62 @@
     color: color(dark);
     @include in-size(font-size);
     > header {
-      background: {
-        color: color(primary);
-      }
+      $header-background-color: color(primary);
       color: color(light);
+      background: {
+        color: $header-background-color;
+      }
+      padding: {
+        top: skin(header padding-top)
+      }
+      > .tab {
+        color: color(light);
+        text-decoration: skin(header tabs text-decoration);
+        display: inline-block;
+        font: {
+          size: skin(header tabs font-size);
+          weight: skin(header tabs font-weight);
+          family: skin(header tabs font-family);
+        }
+        padding: {
+          top: skin(header tabs padding-top);
+          right: skin(header tabs padding-right);
+          bottom: skin(header tabs padding-bottom);
+          left: skin(header tabs padding-left);
+        }
+        &:first-child {
+          margin-left: skin(header tabs first-tab-left-margin);
+        }
+        &.active {
+          background: $body-background-color;
+          color: $header-background-color;
+        }
+        &:not(.active):hover {
+          background: slighten($header-background-color, 10%);
+        }
+        @if skin(rounded-tabs-corners) {
+          @include rounded-top-corners();
+        }
+      }
     }
     > footer {
       font: {
         size: 90%;
+      }
+    }
+    > nav {
+      padding: 10px;
+      a {
+        &:not(:last-child) {
+          margin-right: 10px;
+          &:after {
+            display: inline-block;
+            content: '\2192';
+            margin-left: 10px;
+            text-decoration: none!important;
+            color: color(dark);
+          }
+        }
       }
     }
     > main {

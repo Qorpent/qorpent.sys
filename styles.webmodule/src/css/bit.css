@@ -462,55 +462,100 @@ body {
     font-size: 11px;
   }
 }
-/* line 24, core/_global.scss */
+/* line 25, core/_global.scss */
 body > header {
-  background-color: #4C81AF;
   color: #fafafa;
+  background-color: #4C81AF;
+  padding-top: 5px;
 }
-/* line 30, core/_global.scss */
+/* line 34, core/_global.scss */
+body > header > .tab {
+  color: #fafafa;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: Arial;
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+/* line 49, core/_global.scss */
+body > header > .tab:first-child {
+  margin-left: 10px;
+}
+/* line 52, core/_global.scss */
+body > header > .tab.active {
+  background: #fafafa;
+  color: #4C81AF;
+}
+/* line 56, core/_global.scss */
+body > header > .tab:not(.active):hover {
+  background: #6e9ac0;
+}
+/* line 64, core/_global.scss */
 body > footer {
   font-size: 90%;
 }
-/* line 36, core/_global.scss */
+/* line 69, core/_global.scss */
+body > nav {
+  padding: 10px;
+}
+/* line 72, core/_global.scss */
+body > nav a:not(:last-child) {
+  margin-right: 10px;
+}
+/* line 74, core/_global.scss */
+body > nav a:not(:last-child):after {
+  display: inline-block;
+  content: '\2192';
+  margin-left: 10px;
+  text-decoration: none !important;
+  color: #333333;
+}
+/* line 85, core/_global.scss */
 body > main p {
   text-indent: 25px;
 }
-/* line 39, core/_global.scss */
+/* line 88, core/_global.scss */
 body > main p, body > main li {
   margin-top: 5px;
 }
-/* line 42, core/_global.scss */
+/* line 91, core/_global.scss */
 body > main h1, body > main h2, body > main h3, body > main h4, body > main h5, body > main h6 {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-/* line 46, core/_global.scss */
+/* line 95, core/_global.scss */
 body > main ul {
   padding-left: 25px;
 }
-/* line 49, core/_global.scss */
+/* line 98, core/_global.scss */
 body > main ul > li:before {
   content: '-';
   margin-right: 10px;
 }
-/* line 54, core/_global.scss */
+/* line 103, core/_global.scss */
 body > main ul > ul, body > main ul > li > ul {
   padding-left: 25px;
 }
-/* line 56, core/_global.scss */
+/* line 105, core/_global.scss */
 body > main ul > ul > ul, body > main ul > ul > li > ul, body > main ul > li > ul > ul, body > main ul > li > ul > li > ul {
   padding-left: 25px;
 }
-/* line 66, core/_global.scss */
+/* line 115, core/_global.scss */
 body > main h1, body > main h2, body > main h3, body > main h4, body > main h5, body > main h6 {
   font-size: 105%;
   color: #4C81AF;
 }
-/* line 66, core/_global.scss */
+/* line 115, core/_global.scss */
 body > main h1 {
   font-size: 120%;
 }
-/* line 66, core/_global.scss */
+/* line 115, core/_global.scss */
 body > main h2 {
   font-size: 110%;
 }
