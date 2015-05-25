@@ -20,6 +20,13 @@ namespace Qorpent.IO{
 			this.FixedContent = content;
 			this.FixedData = data;
 			this.IsFixedContent = true;
+		    this.Length = 0;
+		    if (null != data) {
+		        Length = data.Length;
+            }
+            else if (null != content) {
+                Length = System.Text.Encoding.UTF8.GetByteCount(content);
+            }
 		}
 		/// <summary>
 		/// 

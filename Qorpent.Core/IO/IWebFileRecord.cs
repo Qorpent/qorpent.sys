@@ -68,6 +68,7 @@ namespace Qorpent.IO{
 		string MimeType { get; set; }
 
 	    string Role { get; set; }
+	    long Length { get; set; }
 
 	    /// <summary>
 		/// Открытие потока на чтение

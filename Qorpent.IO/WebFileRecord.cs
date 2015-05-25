@@ -55,7 +55,10 @@ namespace Qorpent.IO{
 		/// </summary>
 		/// <param name="output"></param>
 		public abstract long Write(Stream output);
-		/// <summary>
+
+	    public virtual long Length { get; set; }
+
+	    /// <summary>
 		/// Открытие потока на чтение
 		/// </summary>
 		/// <returns></returns>

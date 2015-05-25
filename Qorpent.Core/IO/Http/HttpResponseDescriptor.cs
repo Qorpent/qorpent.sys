@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
+using System.Security;
 using System.Text;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.IO.Http {
     public class HttpResponseDescriptor : IHttpResponseDescriptor {
@@ -34,7 +37,16 @@ namespace Qorpent.IO.Http {
                 Headers[name] = value;
             }
         }
-
+        
+        public virtual void AddHeader(string name, string value) {
+            if (Headers.ContainsKey(name)) {
+                Headers[name] = Headers[name] + "," + value;
+            }
+            else {
+                Headers[name] = value;
+            }
+            //invalid behavior
+        }
         public virtual string GetETag() {
             return string.Empty;
         }
@@ -61,41 +73,116 @@ namespace Qorpent.IO.Http {
 
         public bool SupportGZip { get; set; }
 
-        public void Finish(object data, string mime = "application/json", int status = 200) {
+        public void Finish(object data, string mime = "application/json", int status = 200, RangeDescriptor range = null) {
             StatusCode = status;
             if (mime.Contains("text") || mime.Contains("json")) {
                 mime += "; charset=utf-8";
             }
             ContentType = mime;
+            if (null != range) {
+                StatusCode = 206;
+                AddHeader("Content-Range",string.Format("bytes {0}-{1}/{2}",range.Start,range.Finish,range.Total));
+                var length = range.Finish - range.Start + 1;
+                SetHeader("Content-Length",length.ToString());
+            }
             
-            Write(data,true);
-
+            ConvertCookies();
+            
+            Write(data, true, range);
             Close();
         }
 
-        public void Write(object data, bool allowZip) {
+        private void ConvertCookies()
+        {
+            if (Cookies.Count > 0)
+            {
+                var cookies = Cookies;
+                Cookies = null;
+                IList<string> _visited = new List<string>();
+                var cooks = cookies.OfType<Cookie>().Reverse().ToArray();
+                foreach (var cookie in cooks)
+                {
+                    if (_visited.Contains(cookie.Name)) continue;
+                    _visited.Add(cookie.Name);
+                    AddHeader("Set-Cookie", GetCookieString(cookie));
+                }
+            }
+        }
+
+        private string GetCookieString(Cookie cookie) {
+            var maxage = -1;
+            if (cookie.Expires > DateTime.Now) {
+                maxage = (cookie.Expires - DateTime.Now).TotalSeconds.ToInt();
+            }
+            var result= string.Format("{0}={1}; Path={2}; Max-Age={3};", cookie.Name, cookie.Value, cookie.Path,maxage);
+            if (cookie.HttpOnly) {
+                result += "HttpOnly;";
+            }
+            if (cookie.Secure) {
+                result += "Secure;";
+            }
+            return result;
+        }
+
+
+        public void Write(object data, bool allowZip, RangeDescriptor range) {
             var sendobject = GetSendObject(data);
             if (allowZip && SupportGZip && IsRequiredGZip(sendobject)) {
-
                 SetHeader("Content-Encoding", "gzip");
                 var ms = EnsureStream(sendobject);
+                
                 using (var g = new GZipStream(Stream, CompressionLevel.Optimal)) {
-                    ms.CopyTo(g, 2 ^ 14);
+                    if (null == range) {
+                        ms.CopyTo(g, 4096);
+                    }
+                    else {
+                        CopyRanged(range, ms, g);
+                    }
                 }
             }
             else {
                 var bytes = sendobject as byte[];
                 if (null != bytes) {
-                    Stream.Write(bytes, 0, bytes.Length);
+                    var start = null == range ? 0 : range.Start;
+                    var length = null == range ? bytes.Length : range.Finish - range.Start + 1;
+                    Stream.Write(bytes, (int)start, (int)length);
                 }
                 else {
-                    ((Stream) sendobject).CopyTo(Stream);
+                    if (null != range) {
+                        CopyRanged(range, (Stream) sendobject, Stream);
+                    }
+                    else {
+                        ((Stream)sendobject).CopyTo(Stream);    
+                    }
+                    
                 }
+            }
+        }
+
+        private static void CopyRanged(RangeDescriptor range, Stream source, Stream target) {
+            source.Seek(range.Start, SeekOrigin.Current);
+            var totalLength = range.Finish - range.Start + 1;
+            var currentLength = 0;
+            var buffer = new byte[4096];
+            while (true) {
+                if (currentLength >= totalLength) {
+                    break;
+                }
+                ;
+                var readsize = Math.Min(4096, totalLength - currentLength);
+                var currentChunk = source.Read(buffer, 0, (int)readsize);
+                if (currentChunk <= 0) {
+                    break;
+                }
+                currentLength += currentChunk;
+                target.Write(buffer, 0, currentChunk);
+                target.Flush();
             }
         }
 
         private bool IsRequiredGZip(object sendobject) {
             if(ContentType.Contains("image"))return false;
+            if(ContentType.Contains("video"))return false;
             if (sendobject is byte[]) {
                 return ((byte[]) sendobject).Length >= 640;
             }
@@ -113,12 +200,30 @@ namespace Qorpent.IO.Http {
             return new MemoryStream(sendobject as byte[]);
         }
 
+     
         private object GetSendObject(object data) {
             
-            
-            if(null==data)return new byte[]{};
-            if (data is Stream) return data;
-            if (data is byte[]) return (byte[]) data;
+            object realdata = GetDataInternal(data);
+            if (string.IsNullOrWhiteSpace(Range)) {
+                
+            }
+
+            return realdata;
+
+        }
+
+        public string Range { get; set; }
+
+        private static object GetDataInternal(object data) {
+            if (null == data) {
+                return new byte[] {};
+            }
+            if (data is Stream) {
+                return data;
+            }
+            if (data is byte[]) {
+                return (byte[]) data;
+            }
             return Encoding.UTF8.GetBytes(data.ToString());
         }
 
@@ -153,5 +258,11 @@ namespace Qorpent.IO.Http {
         public virtual void Redirect(string localurl) {
             throw new NotImplementedException();
         }
+    }
+
+    public class RangeDescriptor {
+        public long Start { get; set; }
+        public long Finish { get; set; }
+        public long Total { get; set; }
     }
 }

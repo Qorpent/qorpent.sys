@@ -15,14 +15,16 @@ namespace Qorpent.IO.Http {
         CookieCollection Cookies { get; set; }
         bool NoCloseStream { get; set; }
         bool WasClosed { get; set; }
+        string Range { get; set; }
         void SetHeader(string name, string value);
         string GetETag();
         void SetETag(string etag);
         DateTime SetLastModified(DateTime time);
-        void Finish(object data, string mime = "application/json", int status = 200);
+        void Finish(object data, string mime = "application/json", int status = 200, RangeDescriptor range = null);
         void Close();
         string GetHeader(string name);
         void Redirect(string localurl);
-        void Write(object data, bool allowZip);
+        void Write(object data, bool allowZip, RangeDescriptor range = null);
+        void AddHeader(string name, string value);
     }
 }

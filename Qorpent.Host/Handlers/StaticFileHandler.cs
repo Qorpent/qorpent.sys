@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Security;
+using System.Security.Cryptography;
 using System.Threading;
 using Qorpent.IO;
 using Qorpent.IO.Http;
 using Qorpent.Security;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Handlers
 {
@@ -69,6 +71,7 @@ namespace Qorpent.Host.Handlers
                         throw new SecurityException("access denied");
                     }
                 }
+             //   context.Response.AddHeader("Accept-Ranges","bytes");
                 Finish200(server, context, staticdescriptor);
 	    }
 
@@ -110,21 +113,50 @@ namespace Qorpent.Host.Handlers
 				else {
                     context.SetHeader("Cache-Control", "public");
 				}
-				if (staticdescriptor.IsFixedContent){
-					if (null != staticdescriptor.FixedData){
-                        context.Finish(staticdescriptor.FixedData,staticdescriptor.MimeType);
-					}
-					else{
-						context.Finish(staticdescriptor.FixedContent, staticdescriptor.MimeType + "; charset=utf-8");
-					}
-				}
-				else{
-					using (var s = staticdescriptor.Open()){
-						context.Finish(s, staticdescriptor.MimeType + "; charset=utf-8");
-						s.Close();
-					}
-				}
-			}
+
+                RangeDescriptor range = null;
+                if (0 < staticdescriptor.Length && (staticdescriptor.MimeType.StartsWith("image/")||staticdescriptor.MimeType.StartsWith("video/"))) {
+                    context.Response.SetHeader("Content-Length",staticdescriptor.Length.ToString());
+                    if (staticdescriptor.Length > 4096) {
+                        context.Response.SetHeader("Accept-Ranges","bytes");
+                    }
+                    var rangeHeader = context.Request.GetHeader("Range");
+                    if (!string.IsNullOrWhiteSpace(rangeHeader)) {
+                        var rangeparts = rangeHeader.Substring(6).SmartSplit(false,true,'-');
+                        range = new RangeDescriptor {Total = staticdescriptor.Length};
+                        range.Finish = range.Total - 1;
+                        range.Start = rangeparts[0].ToInt();
+                        if (rangeparts.Count > 1) {
+                            range.Finish = rangeparts[1].ToInt();
+                        }
+
+                    }
+                }
+
+                try {
+
+                    if (staticdescriptor.IsFixedContent) {
+                        if (null != staticdescriptor.FixedData) {
+                            context.Finish(staticdescriptor.FixedData, staticdescriptor.MimeType, range: range);
+                        }
+                        else {
+                            context.Finish(staticdescriptor.FixedContent, staticdescriptor.MimeType, range: range);
+                        }
+                    }
+                    else {
+                        using (var s = staticdescriptor.Open()) {
+                            context.Finish(s, staticdescriptor.MimeType, range: range);
+
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e.GetType().Name);
+                }
+                finally {
+                    context.Response.Close();
+                }
+            }
 		}
 
         private static void FinishWirh404(WebContext context)

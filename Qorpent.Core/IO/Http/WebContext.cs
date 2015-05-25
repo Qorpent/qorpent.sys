@@ -19,6 +19,7 @@ namespace Qorpent.IO.Http {
         public static implicit operator WebContext(HttpListenerContext context) {
             var request = (HttpRequestDescriptor) context;
             var response = (HttpResponseDescriptor) context;
+            response.Range = request.GetHeader("Range");
             var result = new WebContext { Request = request, Response = response };
             result.Cookies = result.Cookies ?? context.Request.Cookies;
             request.Cookies = result.Cookies;
@@ -61,8 +62,8 @@ namespace Qorpent.IO.Http {
             set { Request.Method = value; }
         }
 
-        public void Finish(object data, string mime = "application/json", int status = 200) {
-            Response.Finish(data,mime,status);
+        public void Finish(object data, string mime = "application/json", int status = 200, RangeDescriptor range = null) {
+            Response.Finish(data,mime,status,range);
         }
 
         public void Write(object data, bool allowzip = false) {

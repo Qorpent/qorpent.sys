@@ -11,6 +11,11 @@ namespace Qorpent.IO{
 		/// </summary>
 		public string FileSystemName { get; set; }
 
+	    public override long Length {
+	        get { return new FileInfo(FileSystemName).Length; }
+	        set { throw new NotImplementedException(); }
+	    }
+
 	    /// <summary>
 		/// Получение версии из файла
 		/// </summary>
@@ -36,7 +41,7 @@ namespace Qorpent.IO{
 		/// </summary>
 		/// <returns></returns>
 		public override Stream Open(){
-			return File.OpenRead(FileSystemName);
+			return File.Open(FileSystemName,FileMode.Open,FileAccess.Read,FileShare.ReadWrite);
 		}
 	}
 }

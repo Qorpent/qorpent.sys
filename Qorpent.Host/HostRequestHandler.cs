@@ -21,7 +21,6 @@ namespace Qorpent.Host{
 			string callbackEndPoint = _context.GetHeader("qorpent-callback-endpoint");
 			_context.SetHeader("Server", "Qorpent RESTFull Server 0.1");
 			_context.ContentType = "application/json; charset=utf-8";
-			CopyCookies();
 			if (String.IsNullOrWhiteSpace(callbackEndPoint)){
 				ProcessSyncRequest();
 			}
@@ -30,14 +29,7 @@ namespace Qorpent.Host{
 			}
 		}
 
-		private void CopyCookies(){
-			foreach (Cookie cookie in _context.Cookies){
-				if (cookie.Name == _server.Config.AuthCookieName){
-					continue;
-				}
-				_context.Response.Cookies.Add(cookie);
-			}
-		}
+		
 
 
 		private void ProcessAsyncRequest(string callbackEndPoint){

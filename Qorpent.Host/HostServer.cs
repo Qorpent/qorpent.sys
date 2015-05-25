@@ -238,6 +238,7 @@ namespace Qorpent.Host {
                 if (wc.Request.ContentLength > Config.MaxRequestSize) {
                     throw    new Exception("Exceed max request size");
                 }
+                CopyCookies(wc);
                 Auth.Authenticate(wc);
                 if (BeforeHandlerProcessed(wc)) {
                     if (!wc.Response.WasClosed) {
@@ -255,7 +256,19 @@ namespace Qorpent.Host {
             }
         }
 
-     
+        private void CopyCookies(WebContext _context)
+        {
+            foreach (Cookie cookie in _context.Cookies)
+            {
+                cookie.Path = "/";
+                cookie.HttpOnly = true;
+                cookie.Secure = true;
+                _context.Response.Cookies.Add(cookie);
+            }
+            _context.Response.Cookies = _context.Request.Cookies;
+        }
+
+
         private bool BeforeHandlerProcessed(WebContext wc) {
             if (CheckFormAuthentication(wc)) return true;
 
@@ -266,7 +279,7 @@ namespace Qorpent.Host {
             if (Config.RequireLogin) {
                 var path = wc.Uri.AbsolutePath;
                 
-                if (path.EndsWith(".html") && path != Config.LoginPage) {
+                if (path.EndsWith(".html") && path != Config.LoginPage && !path.StartsWith("/views")) {
                     if (!wc.User.Identity.IsAuthenticated) {
                         wc.Redirect(Config.LoginPage + "?referer=" + wc.Request.Uri.PathAndQuery);
                         return true;

@@ -29,7 +29,8 @@ namespace Qorpent.Host.Security{
 		/// <param name="data"></param>
 		/// <returns></returns>
 		public string Encrypt(byte[] data){
-			return Convert.ToBase64String(Transform(data, _cryptoService.CreateEncryptor(Key, Vector)));
+			var result = Uri.EscapeDataString(Convert.ToBase64String(Transform(data, _cryptoService.CreateEncryptor(Key, Vector))));
+		    return result;
 		}
 
 		// vector and key have to match between encryption and decryption
@@ -42,8 +43,10 @@ namespace Qorpent.Host.Security{
 		/// </summary>
 		/// <param name="text"></param>
 		/// <returns></returns>
-		public byte[] DecryptData(string text){
-			byte[] data = Transform(Convert.FromBase64String(text), _cryptoService.CreateDecryptor(Key, Vector));
+		public byte[] DecryptData(string text) {
+		    var str = Convert.FromBase64String(Uri.UnescapeDataString(text));
+		    
+			byte[] data = Transform(str, _cryptoService.CreateDecryptor(Key, Vector));
 			return data;
 		}
 

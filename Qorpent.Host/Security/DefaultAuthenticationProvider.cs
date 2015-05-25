@@ -6,6 +6,7 @@ using System.Net;
 using System.Security.Principal;
 using Qorpent.Events;
 using Qorpent.IoC;
+using Qorpent.IO;
 using Qorpent.IO.Http;
 using Qorpent.Security;
 using Qorpent.Serialization;
@@ -380,9 +381,11 @@ namespace Qorpent.Host.Security{
 				cookie.Expires = DateTime.Today.AddDays(1);
 			}
 		    cookie.HttpOnly = true;
-		    cookie.Secure = true;
-		    context.Response.Cookies = new CookieCollection();
+		   // cookie.Secure = true;
+
+		 
 			context.Response.Cookies.Add(cookie);
+           
 		}
 
         IDictionary<string, string> UserTicketMap = new Dictionary<string, string>();
@@ -411,7 +414,7 @@ namespace Qorpent.Host.Security{
 	            }
 	            return token;
 	        }
-	        catch {
+	        catch(Exception e) {
 	            return null;
 	        }
 	    }
@@ -435,11 +438,19 @@ namespace Qorpent.Host.Security{
 	        return result;
 	    }
 
-	    private string GetTicket(WebContext context)
-        {
-			Cookie cookie = context.Cookies[_server.Config.AuthCookieName];
-			if (null == cookie) return null;
-			return cookie.Value;
-		}
+	    private string GetTicket(WebContext context) {
+	        var header = context.GetHeader("Cookie");
+	        var headerStart = header.IndexOf(_server.Config.AuthCookieName);
+	        if (headerStart == -1) return string.Empty;
+	        var eq = header.IndexOf('=', headerStart);
+	        if (eq == -1) return string.Empty;
+	        if (eq == header.Length - 1) return string.Empty;
+	        var finish = header.IndexOfAny(new[] {',', ' ',';'}, eq);
+	        if (finish == -1) {
+	            finish = header.Length;
+	        }
+	        var result = header.Substring(eq + 1, finish - (eq+1));
+	        return Uri.UnescapeDataString(result);
+	    }
 	}
 }
