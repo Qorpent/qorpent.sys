@@ -42,6 +42,29 @@
         @include rounded-corners();
       }
     }
+    table {
+      width: 100%;
+      thead, tbody {
+        line-height: 180%;
+      }
+      thead {
+        border-bottom: 1px solid color(primary);
+        th {
+        }
+      }
+      tbody {
+        color: color(dark);
+        tr:nth-child(2n) {
+          background: #ededed;
+        }
+      }
+      td, th {
+        padding: 2px 3px 2px 3px;
+        .not-important {
+          opacity: 0.5;
+        }
+      }
+    }
     a, a:visited {
       color: color(primary);
       text-decoration: underline;
