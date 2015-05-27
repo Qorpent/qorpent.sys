@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Qorpent.BSharp;
 using Qorpent.Utils.Extensions;
@@ -71,7 +72,11 @@ namespace Qorpent.Scaffolding.Application{
 			        var url = e.Compiled.Attr("url").SmartSplit(false,true,'/');
 			        actionname = url[0] + "." + url[1];
 			    }
-				sb.AppendLine(string.Format("\t[Action(\"{0}\")]", actionname));
+				var role = string.Join(",", e.Compiled.Elements("Role").Select(_ => _.Attr("code")));
+				if (!string.IsNullOrWhiteSpace(role)) {
+					role = ", Role = \"" + role + "\"";
+				}
+				sb.AppendLine(string.Format("\t[Action(\"{0}\"{1})]", actionname, role));
 
 			    var baseClass = e.Compiled.Attr("baseclass", "ActionBase");
                 
