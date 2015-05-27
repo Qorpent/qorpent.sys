@@ -54,6 +54,9 @@
       }
       tbody {
         color: color(dark);
+        tr.hidden {
+          display: none;
+        }
         tr:nth-child(2n) {
           background: #ededed;
         }
