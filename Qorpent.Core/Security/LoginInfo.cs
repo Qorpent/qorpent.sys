@@ -2,13 +2,38 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Qorpent.Experiments;
 using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Security {
+    public interface ILoginInfo {
+        string Login { get; set; }
+        int Version { get; set; }
+        string Name { get; set; }
+        bool IsGroup { get; set; }
+        string Email { get; set; }
+        string Salt { get; set; }
+        string Hash { get; set; }
+        DateTime Expire { get; set; }
+        string ResetPasswordKey { get; set; }
+        DateTime ResetPasswordExpire { get; set; }
+        IList<string> Groups { get; set; }
+        IList<string> Roles { get; set; }
+        IDictionary<string, string> Tags { get; set; }
+        bool IsActive { get; set; }
+        string MasterGroup { get; set; }
+        string Id { get; set; }
+        bool IsAdmin { get; set; }
+        IDictionary<string, object> Custom { get; set; }
+    }
+
+
+    
+
     [Serialize]
-    public class LoginInfo {
+    public class LoginInfo : ILoginInfo {
         public LoginInfo Clone() {
             var result = (LoginInfo) this.MemberwiseClone();
             result.Roles = new List<string>();
@@ -43,7 +68,7 @@ namespace Qorpent.Security {
             if (other.Roles.Count != Roles.Count) return false;
             if (other.Tags.Count != Tags.Count) return false;
             if (other.Groups.Count != Groups.Count) return false;
-
+            if (other.MasterGroup != this.MasterGroup) return false;
             if (Experiments.Json.Stringify(Custom) != Experiments.Json.Stringify(other.Custom)) {
                 return false;
             }
@@ -170,12 +195,17 @@ namespace Qorpent.Security {
                 }
                 return true;
             }
+            set { RawIsActive = value; }
         }
 
         [IgnoreSerialize]
         public string Password {
             set { SetPassword(value); }
         }
+
+        [SerializeNotNullOnly]
+        public string MasterGroup { get; set; }
+
         [IgnoreSerialize]
         public string Id { get; set; }
 
@@ -198,6 +228,20 @@ namespace Qorpent.Security {
             var hash = (Salt + password + Salt).GetMd5();
             if (hash != Hash) {
                 return LogonAuthenticationResult.InvalidLoginInfo;
+            }
+            if (!string.IsNullOrWhiteSpace(MasterGroup)) {
+                var group = Provider.Get(MasterGroup + "@groups");
+
+                if (null != group) {
+                    if (!group.IsActive) return LogonAuthenticationResult.GroupInactive;
+                    if (group.Expire < DateTime.Now) {
+                        return LogonAuthenticationResult.GroupExpired;
+                    }
+                }
+                else {
+                    return LogonAuthenticationResult.InvalidMasterGroup;
+
+                }
             }
             return LogonAuthenticationResult.Ok;
         }

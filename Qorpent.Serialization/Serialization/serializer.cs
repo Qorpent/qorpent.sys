@@ -52,9 +52,9 @@ namespace Qorpent.Serialization {
 		/// <param name="name"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public string Serialize(string name, object value) {
+		public string Serialize(string name, object value, string usermode="") {
 			var sw = new StringWriter();
-			Serialize(name,value,sw);
+			Serialize(name,value,sw,usermode);
 			return sw.ToString();
 		}
 
@@ -67,8 +67,8 @@ namespace Qorpent.Serialization {
 	    /// <param name="options">Опции сериализации, используются при создании имепдлементации</param>
 	    /// <remarks>
 	    /// </remarks>
-	    public virtual void Serialize(string name, object value, TextWriter output, object options = null) {
-			_s = CreateImpl(name, value, options);
+	    public virtual void Serialize(string name, object value, TextWriter output, string usermode="", object options = null) {
+			_s = CreateImpl(name, value, usermode, options);
 			if (null == output) {
 				throw new ArgumentNullException("output");
 			}
@@ -81,7 +81,7 @@ namespace Qorpent.Serialization {
 			}
 			else {
 				_s.Begin(name);
-				InternalSerialize(name, value, "item", false);
+				InternalSerialize(name, value, "item", false,usermode);
 				_s.End();
 				_s.Flush();
 			}
@@ -202,13 +202,14 @@ namespace Qorpent.Serialization {
 	    /// </summary>
 	    /// <param name="name">Имя объекта сериализации</param>
 	    /// <param name="value">Объект сериализации</param>
+	    /// <param name="usermode"></param>
 	    /// <param name="options">Опции создания имплементации</param>
 	    /// <returns> </returns>
 	    /// <remarks>
 	    /// В реализации можно предусмотреть донастройкуна конкретный объект
 	    /// в стандартных реализациях <paramref name="name"/> и <paramref name="value"/> игнорируется
 	    /// </remarks>
-	    protected abstract ISerializerImpl CreateImpl(string name, object value,object options);
+	    protected abstract ISerializerImpl CreateImpl(string name, object value, string usermode, object options);
 
 		/// <summary>
 		/// 	_serializes the specified name.
@@ -219,7 +220,7 @@ namespace Qorpent.Serialization {
 		/// <param name="noindex"></param>
 		/// <remarks>
 		/// </remarks>
-		private void InternalSerialize(string name, object value, string itemName, bool noindex) {
+		private void InternalSerialize(string name, object value, string itemName, bool noindex, string usermode) {
 			name = name ?? (null == value ? "null" : value.GetType().Name);
 			if (null == value) {
 				_s.WriteFinal(null);
@@ -232,7 +233,7 @@ namespace Qorpent.Serialization {
 			}
 			else if (value is Exception) {
 				SerializeClass(name,
-				               new {type = value.GetType().Name, message = ((Exception) value).Message, text = value.ToString()});
+				               new {type = value.GetType().Name, message = ((Exception) value).Message, text = value.ToString()},usermode);
 			}
 			else if (value is XElement) {
 				_s.BeginObject(name);
@@ -240,31 +241,31 @@ namespace Qorpent.Serialization {
 				_s.EndObject();
 			}
 			else if (typeof (Array).IsAssignableFrom(value.GetType())) {
-				SerializeArray(name, (Array) value, itemName, noindex);
+				SerializeArray(name, (Array) value, itemName, noindex,usermode);
 			}
 			else if (typeof (IDictionary).IsAssignableFrom(value.GetType())) {
-				SerializeDictionary(name, (IDictionary) value);
+				SerializeDictionary(name, (IDictionary) value,usermode);
 			}
 			else if (typeof (IEnumerable).IsAssignableFrom(value.GetType())) {
 				if (IsEnumerableIgnoring(value)) {
 					if (_refcache.Contains(value)) {
-						SerializeClass("SERIALIZEPROBLEM", new { SERIALIZEPROBLEM = "pcircular reference" });
+						SerializeClass("SERIALIZEPROBLEM", new { SERIALIZEPROBLEM = "pcircular reference" },usermode);
 						return;
 					}
 					_refcache.Add(value);
-					SerializeClass(name, value);
+					SerializeClass(name, value,usermode);
 					_refcache.Remove(value);
 				} else {
-					SerializeArray(name, ((IEnumerable) value).OfType<object>().ToArray(), itemName, noindex);
+					SerializeArray(name, ((IEnumerable) value).OfType<object>().ToArray(), itemName, noindex,usermode);
 				}
 			}
 			else {
 				if (_refcache.Contains(value)) {
-					SerializeClass("SERIALIZEPROBLEM", new {SERIALIZEPROBLEM = "pcircular reference"});
+					SerializeClass("SERIALIZEPROBLEM", new {SERIALIZEPROBLEM = "pcircular reference"},usermode);
 					return;
 				}
 				_refcache.Add(value);
-				SerializeClass(name, value);
+				SerializeClass(name, value,usermode);
 				_refcache.Remove(value);
 			}
 		}
@@ -282,14 +283,14 @@ namespace Qorpent.Serialization {
 		/// <param name="value"> The value. </param>
 		/// <remarks>
 		/// </remarks>
-		private void SerializeClass(string name, object value) {
-		    if (!SerializeClassCustom(name, value,_s)) {
+		private void SerializeClass(string name, object value,string usermode) {
+		    if (!SerializeClassCustom(name, value,_s,usermode)) {
 		        var items = SerializableItem.GetSerializableItems(value).ToArray();
 		        _s.BeginObject(name);
 		        var c = items.Count();
 		        foreach (var i in items) {
 		            _s.BeginObjectItem(i.Name, i.IsFinal);
-		            InternalSerialize(i.Name, i.Value, i.ItemName, i.NoIndex);
+		            InternalSerialize(i.Name, i.Value, i.ItemName, i.NoIndex,usermode);
 		            _s.EndObjectItem(c == 1);
 		            c--;
 		        }
@@ -298,7 +299,7 @@ namespace Qorpent.Serialization {
 
 		}
 
-	    protected virtual bool SerializeClassCustom(string name, object value,ISerializerImpl i) {
+	    protected virtual bool SerializeClassCustom(string name, object value,ISerializerImpl i,string usermode) {
 	        return false;
 	    }
 
@@ -309,12 +310,12 @@ namespace Qorpent.Serialization {
 		/// <param name="value"> The value. </param>
 		/// <remarks>
 		/// </remarks>
-		private void SerializeDictionary(string name, IDictionary value) {
+		private void SerializeDictionary(string name, IDictionary value,string usermode) {
 			_s.BeginDictionary(name);
 			var c = value.Keys.Count;
 			foreach (var k in value.Keys) {
 				_s.BeginDictionaryEntry(k.ToString());
-				InternalSerialize("value", value[k], "item", false);
+				InternalSerialize("value", value[k], "item", false,usermode);
 				_s.EndDictionaryEntry(c == 1);
 				c--;
 			}
@@ -330,13 +331,13 @@ namespace Qorpent.Serialization {
 		/// <param name="noindex"></param>
 		/// <remarks>
 		/// </remarks>
-		private void SerializeArray(string name, Array value, string itemName, bool noindex) {
+		private void SerializeArray(string name, Array value, string itemName, bool noindex,string usermode) {
 			_s.BeginArray(name,value.Length);
 			var i = -1;
 			foreach (var val in value) {
 				i++;
 				_s.BeginArrayEntry(i, itemName, noindex);
-				InternalSerialize(itemName, val, itemName, noindex);
+				InternalSerialize(itemName, val, itemName, noindex,usermode);
 				_s.EndArrayEntry(i == value.Length - 1, noindex);
 				
 			}
@@ -364,5 +365,6 @@ namespace Qorpent.Serialization {
 		/// <summary>
 		/// </summary>
 		private ISerializerImpl _s;
+
 	}
 }

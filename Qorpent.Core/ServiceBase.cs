@@ -18,6 +18,7 @@
 #endregion
 using System;
 using System.Linq;
+using System.Reflection;
 using Qorpent.Applications;
 using Qorpent.Events;
 using Qorpent.IoC;
@@ -178,17 +179,32 @@ namespace Qorpent {
 			set { _log = value; }
 		}
 
+	    [Inject]
+	    public ILoggyManager LoggyManager {
+	        get { return _loggyManager ?? Loggy.Manager; }
+	        set { _loggyManager = value; }
+	    }
 
-		/// <summary>
-		/// 	Вызывается при вызове Reset
-		/// </summary>
-		/// <param name="data"> </param>
-		/// <returns> любой объект - будет включен в состав результатов <see cref="ResetEventResult" /> </returns>
-		/// <remarks>
-		/// 	При использовании стандартной настройки из <see cref="ServiceBase" /> не требует фильтрации опций,
-		/// 	настраивается на основе атрибута <see cref="RequireResetAttribute" />
-		/// </remarks>
-		public virtual object Reset(ResetEventData data) {
+	    public ILoggy Logg {
+	        get { return _logg ?? (_logg=LoggyManager.Get(GetLoggerNameSuffix(),SetupLoggy)); }
+	        set { _logg = value; }
+	    }
+
+	    protected virtual void SetupLoggy(ILoggy obj) {
+	        
+	    }
+
+
+	    /// <summary>
+	    /// 	Вызывается при вызове Reset
+	    /// </summary>
+	    /// <param name="data"> </param>
+	    /// <returns> любой объект - будет включен в состав результатов <see cref="ResetEventResult" /> </returns>
+	    /// <remarks>
+	    /// 	При использовании стандартной настройки из <see cref="ServiceBase" /> не требует фильтрации опций,
+	    /// 	настраивается на основе атрибута <see cref="RequireResetAttribute" />
+	    /// </remarks>
+	    public virtual object Reset(ResetEventData data) {
 			return null;
 		}
 
@@ -279,5 +295,7 @@ namespace Qorpent {
 		protected object Sync = new object();
 
 	    private IUserLog _log;
+	    private ILoggyManager _loggyManager;
+	    private ILoggy _logg;
 	}
 }

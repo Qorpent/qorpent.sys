@@ -323,5 +323,23 @@ namespace Qorpent.Utils.Extensions {
 			}
 			return result;
 		}
+
+
+        /// <summary>
+        /// Shortcut to read data from named resource as string
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <param name="pathpart"></param>
+        /// <returns></returns>
+        public static byte[] ReadManifestResourceBytes(this Assembly assembly, string pathpart)
+        {
+            var ms = new MemoryStream();
+            using (var src = assembly.OpenManifestResource(pathpart))
+            {
+                src.CopyTo(ms);
+                ms.Flush();
+            }
+            return ms.GetBuffer();
+        }
 	}
 }

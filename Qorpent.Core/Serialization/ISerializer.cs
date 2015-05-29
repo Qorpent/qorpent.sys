@@ -38,7 +38,7 @@ namespace Qorpent.Serialization {
 	    /// но при этом мы не предполагаем бинарной сериализации, так как бинарная сериализация
 	    /// не является типовым сценарием для коммутриуемх API
 	    /// </remarks>
-	    void Serialize(string name, object value, TextWriter output, object options = null);
+	    void Serialize(string name, object value, TextWriter output, string usermode="", object options = null);
 
 	}
 }

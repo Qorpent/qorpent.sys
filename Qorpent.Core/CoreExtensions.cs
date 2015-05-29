@@ -145,6 +145,7 @@ namespace Qorpent.Utils.Extensions {
 			if (x is bool) {
 				return (bool) x;
 			}
+		   
 			var s = x as string;
 			if (s != null) {
 				if (String.IsNullOrWhiteSpace(s)) {
@@ -361,7 +362,7 @@ namespace Qorpent.Utils.Extensions {
 		/// <returns> </returns>
 		public static DateTime ToDate(this object obj,bool safe = false) {
 			if (null == obj) {
-				return new DateTime(1900, 1, 1);
+				return new DateTime(1900, 1, 1,0,0,0,DateTimeKind.Utc);
 			}
 			if (obj is DateTime) {
 				return (DateTime) obj;

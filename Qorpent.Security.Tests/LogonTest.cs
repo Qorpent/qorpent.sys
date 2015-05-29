@@ -13,7 +13,7 @@ namespace Qorpent.Security.Tests
 		[Test]
 		public void TestValidLogon() {
 			IntPtr token = IntPtr.Zero;
-			var auth = new SysLogon().Logon("testusr", "xsw2@WSX",ref token);
+			var auth = new SysHostLogon().Logon("testusr", "xsw2@WSX",ref token);
 			Assert.True(auth);
 			Assert.AreNotEqual(token,IntPtr.Zero);
 		}
@@ -22,7 +22,7 @@ namespace Qorpent.Security.Tests
 		public void TestInValidLogon()
 		{
 			IntPtr token = IntPtr.Zero;
-			var auth = new SysLogon().Logon("testusr", "xsw2@WSX...", ref token);
+			var auth = new SysHostLogon().Logon("testusr", "xsw2@WSX...", ref token);
 			Assert.False(auth);
 			Assert.AreEqual(token, IntPtr.Zero);
 		}

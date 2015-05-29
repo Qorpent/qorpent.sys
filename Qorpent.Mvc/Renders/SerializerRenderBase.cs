@@ -102,7 +102,7 @@ namespace Qorpent.Mvc.Renders {
         /// <param name="context"></param>
         /// <param name="objectToRender"></param>
 	    protected virtual void SendOutput(IMvcContext context, object objectToRender) {
-	        GetMainSerializer().Serialize("result", objectToRender, context.Output);
+	        GetMainSerializer().Serialize("result", objectToRender, context.Output, context.RenderMode);
 	    }
 
 	    private object PrepareRenderObject(IMvcContext context) {

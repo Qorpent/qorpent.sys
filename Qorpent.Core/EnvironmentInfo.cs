@@ -515,7 +515,16 @@ namespace Qorpent {
 		        return newPath;
 		    }
 			if (preventNormalize) return newPath;
-			return NormalizePath(Path.GetFullPath(newPath));
+		    bool replaced = false;
+		    if (newPath.Contains("*")) {
+		        newPath = newPath.Replace("*", "___star___");
+		        replaced = true;
+		    }
+			newPath =  NormalizePath(Path.GetFullPath(newPath));
+		    if (replaced) {
+                newPath = newPath.Replace("___star___", "*");
+		    }
+		    return newPath;
 		}
 
 		/// <summary>

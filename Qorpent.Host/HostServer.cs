@@ -27,7 +27,7 @@ namespace Qorpent.Host {
     ///     Http сервер Qorpent
     /// </summary>
     public class HostServer : IHostServer, IHostConfigProvider {
-        private IAuthenticationProvider _auth;
+        private IHostAuthenticationProvider _auth;
         internal CancellationToken _cancel;
         private IEncryptProvider _encryptor;
         private IRequestHandlerFactory _factory;
@@ -126,7 +126,7 @@ namespace Qorpent.Host {
 
         /// <summary>
         /// </summary>
-        public IAuthenticationProvider Auth {
+        public IHostAuthenticationProvider Auth {
             get { return _auth; }
             private set {
                 if (null != value && _auth != value) {
@@ -539,16 +539,16 @@ namespace Qorpent.Host {
                     Container.NewComponent<IHostServerStaticResolver, HostServerStaticResolver>(Lifestyle.Transient));
             }
 
-            if (null == Container.FindComponent(typeof (IAuthenticationProvider), null)) {
+            if (null == Container.FindComponent(typeof (IHostAuthenticationProvider), null)) {
                 Container.Register(
-                    Container.NewComponent<IAuthenticationProvider, DefaultAuthenticationProvider>(Lifestyle.Transient));
+                    Container.NewComponent<IHostAuthenticationProvider, DefaultHostAuthenticationProvider>(Lifestyle.Transient));
             }
             if (null == Container.FindComponent(typeof (IEncryptProvider), null)) {
                 Container.Register(Container.NewComponent<IEncryptProvider, Encryptor>(Lifestyle.Transient));
             }
             Factory = Container.Get<IRequestHandlerFactory>();
             Static = Container.Get<IHostServerStaticResolver>();
-            Auth = Container.Get<IAuthenticationProvider>();
+            Auth = Container.Get<IHostAuthenticationProvider>();
             Encryptor = Container.Get<IEncryptProvider>();
             foreach (var map in Config.StaticContentMap) {
                 Static.SetRoot(map.Key, map.Value);

@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Xml.Linq;
+using Qorpent.Json;
 using Qorpent.Utils;
 using Qorpent.Utils.Extensions;
 using Map = System.Collections.Generic.IDictionary<string,object>;  
@@ -95,6 +99,7 @@ namespace Qorpent.Experiments {
         /// <param name="json"></param>
         /// <returns></returns>
         public static unsafe object Parse(string json) {
+            buffer = buffer ?? new StringBuilder();
             if (!string.IsNullOrWhiteSpace(json)) {
                 fixed (char* j = json) {
                     var cur = j;
@@ -511,8 +516,11 @@ namespace Qorpent.Experiments {
             return result;
         }
 
+        [ThreadStatic]
+        private static StringBuilder buffer;
         private static unsafe string ReadString(char* cur, char* basis, out char* pos) {
-            var buffer = new StringBuilder();
+            var b = buffer;
+            b.Clear();
             bool closed = false;
             while (true) {
                 cur += 1;
@@ -534,28 +542,28 @@ namespace Qorpent.Experiments {
                     cur += 1;
                     var next = *cur;
                     if (next == '\\') {
-                        buffer.Append('\\');
+                        b.Append('\\');
                     }
                     else if (next == '"') {
-                        buffer.Append('"');
+                        b.Append('"');
                     }
                     else if (next == 'r') {
-                        buffer.Append('\r');
+                        b.Append('\r');
                     }
                     else if (next == 'n') {
-                        buffer.Append('\n');
+                        b.Append('\n');
                     }
                     else if (next == 'b') {
-                        buffer.Append('\b');
+                        b.Append('\b');
                     }
                     else if (next == 't') {
-                        buffer.Append('\t');
+                        b.Append('\t');
                     }
                     else if (next == 'f') {
-                        buffer.Append('\f');
+                        b.Append('\f');
                     }
                     else if (next == '/') {
-                        buffer.Append('/');
+                        b.Append('/');
                     }
                     else if (next == 'u') {
                         var code = 0;
@@ -575,21 +583,21 @@ namespace Qorpent.Experiments {
                                 throw new Exception("invalid hex char code at " + (cur - basis));
                             }
                         }
-                        buffer.Append((char) code);
+                        b.Append((char) code);
                     }
                     else {
                         throw new Exception("invalid escape at " + (cur - basis));
                     }
                 }
                 else {
-                    buffer.Append(c);
+                    b.Append(c);
                 }
             }
             pos = cur + 1;
             if (!closed) {
                 throw new Exception("not terminated string at " + (cur - basis));
             }
-            return buffer.ToString();
+            return  b.ToString();
         }
 
         /// <summary>
@@ -599,9 +607,9 @@ namespace Qorpent.Experiments {
         /// <param name="defaultMode"></param>
         /// <param name="annotator"></param>
         /// <returns></returns>
-        public static string Stringify(object data, SerializeMode defaultMode = SerializeMode.Serialize, ISerializationAnnotator annotator=null) {
+        public static string Stringify(object data, string jsonmode="", SerializeMode defaultMode = SerializeMode.Serialize, ISerializationAnnotator annotator=null) {
             var sw = new StringWriter();
-            Write(data,sw,defaultMode, annotator);
+            Write(data,sw,jsonmode,defaultMode, annotator);
             return sw.ToString();
         }
 
@@ -613,7 +621,27 @@ namespace Qorpent.Experiments {
             if (data is string) {
                 return Parse(data as string);
             }
+            if (data is XElement) {
+                return JsonifyXml((XElement) data);
+            }
             return Jsonify(data);
+        }
+
+        private static object JsonifyXml(XElement data) {
+            var result = new Dictionary<string, object>();
+            foreach (var attribute in data.Attributes()) {
+                result[attribute.Name.LocalName] = attribute.Value;
+            }
+            var value = string.Join("\r\n", data.Nodes().OfType<XText>().Select(_ => _.Value));
+            if (!string.IsNullOrWhiteSpace(value)) {
+                result["__value"] = value;
+            }
+            var elements = data.Elements().ToArray();
+            if (elements.Length > 0) {
+                var _elements = elements.Select(JsonifyXml).ToArray();
+                result["__elements"] = _elements;
+            }
+            return result;
         }
 
         public static IEnumerable<object> sel(this object data,string path) {
@@ -629,6 +657,14 @@ namespace Qorpent.Experiments {
         public static int num(this object data, string path)
         {
             return Get(data, path).ToInt();
+        }
+        public static bool bul(this object data, string path)
+        {
+            return Get(data, path).ToBool();
+        }
+        public static DateTime date(this object data, string path)
+        {
+            return Get(data, path).ToDate();
         }
         public static object get(this object data, string path)
         {
@@ -677,7 +713,7 @@ namespace Qorpent.Experiments {
         /// <param name="output"></param>
         /// <param name="defaultMode"></param>
         /// <param name="annotator"></param>
-        public static void Write(object data, TextWriter output, SerializeMode defaultMode = SerializeMode.Serialize, ISerializationAnnotator annotator = null)
+        public static void Write(object data, TextWriter output, string jsonmode, SerializeMode defaultMode = SerializeMode.Serialize, ISerializationAnnotator annotator = null)
         {
             if (null == data) {
                 output.Write("null");
@@ -696,35 +732,35 @@ namespace Qorpent.Experiments {
             var collection = data as ICollection;
             if (null != collection) {
                 if (collection is IDictionary<string, string>) {
-                    WriteObject(collection as IDictionary<string, string>, output,defaultMode, annotator);
+                    WriteObject(collection as IDictionary<string, string>, output,jsonmode,defaultMode, annotator);
                 }
                 else if (collection is IDictionary<string, object>) {
-                    WriteObject(collection as IDictionary<string, object>, output,defaultMode, annotator);
+                    WriteObject(collection as IDictionary<string, object>, output,jsonmode,defaultMode, annotator);
                 }
                 else if (collection is IDictionary<int, object>)
                 {
-                    WriteObject(collection as IDictionary<int, object>, output,defaultMode, annotator);
+                    WriteObject(collection as IDictionary<int, object>, output,jsonmode,defaultMode, annotator);
                 }
                 else {
-                    WriteArray(collection, output,defaultMode, annotator);
+                    WriteArray(collection, output,jsonmode,defaultMode, annotator);
                 }
                 return;
                 
             }
 
-            WriteObject(data, output,defaultMode, annotator);
+            WriteObject(data, output,defaultMode, jsonmode,annotator);
         }
 
-        private static void WriteObject(object data, TextWriter output, SerializeMode defaultMode, ISerializationAnnotator annotator)
+        private static void WriteObject(object data, TextWriter output, SerializeMode defaultMode, string jsonmode, ISerializationAnnotator annotator)
         {
             
             if (data is IJsonSerializable) {
-                (data as IJsonSerializable).Write(output, annotator);
+                (data as IJsonSerializable).Write(output,jsonmode, annotator);
             }
             else {
                 output.Write("{");
                 bool first = true;
-                var properties = data.GetType().GetProperties();
+                var properties = data.GetType().GetProperties().OrderBy(_=>_.Name);
                 if (null != annotator) {
                     first = !annotator.Prepend(data, output);
                 }
@@ -754,13 +790,13 @@ namespace Qorpent.Experiments {
                     }
                     WriteString(name,output);
                     output.Write(":");
-                    Write(val,output,defaultMode,annotator);
+                    Write(val,output,jsonmode,defaultMode,annotator);
                 }
                 output.Write("}");
             }
         }
 
-        private static void WriteArray(ICollection collection, TextWriter output, SerializeMode defaultMode, ISerializationAnnotator annotator)
+        private static void WriteArray(ICollection collection, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator)
         {
            output.Write("[");
             bool first = true;
@@ -771,12 +807,12 @@ namespace Qorpent.Experiments {
                 else {
                     first = false;
                 }
-                Write(i,output,defaultMode,annotator);
+                Write(i,output,jsonmode,defaultMode,annotator);
             }
             output.Write("]");
         }
 
-        private static void WriteObject<T, TV>(IDictionary<T, TV> dict, TextWriter output, SerializeMode defaultMode, ISerializationAnnotator annotator)
+        private static void WriteObject<T, TV>(IDictionary<T, TV> dict, TextWriter output, string jsonmode, SerializeMode defaultMode, ISerializationAnnotator annotator)
         {
             output.Write("{");
             bool first = true;
@@ -792,7 +828,7 @@ namespace Qorpent.Experiments {
                 }
                 WriteString(i.Key.ToString(),output);
                 output.Write(":");
-                Write(i.Value,output,defaultMode,annotator);
+                Write(i.Value,output,jsonmode,defaultMode,annotator);
             }
             output.Write("}");
         }
@@ -837,33 +873,39 @@ namespace Qorpent.Experiments {
             }
         }
 
+        private static char[] escaperequire = new[] {'\\', '\r', '\t', '\n', '\f', '\b', '"'};
         private static void WriteString(string data, TextWriter output) {
             output.Write("\"");
-            foreach (var c in data) {
-                if (c == '\r') {
-                    output.Write("\\r");
-                }
-                else if (c == '\n') {
-                    output.Write("\\n");
-                }
-                else if (c == '\t')
-                {
-                    output.Write("\\t");
-                }
-                else if (c == '\f') {
-                    output.Write("\\f");
-                }
-                else if (c == '\b') {
-                    output.Write("\\b");
-                }
-                else if (c == '\\') {
-                    output.Write("\\\\");
-                }
-                else if (c == '"') {
-                    output.Write("\\\"");
-                }
-                else {
-                    output.Write(c);
+            if (-1 == data.IndexOfAny(escaperequire)) {
+                output.Write(data);
+            }
+            else {
+
+                foreach (var c in data) {
+                    if (c == '\r') {
+                        output.Write("\\r");
+                    }
+                    else if (c == '\n') {
+                        output.Write("\\n");
+                    }
+                    else if (c == '\t') {
+                        output.Write("\\t");
+                    }
+                    else if (c == '\f') {
+                        output.Write("\\f");
+                    }
+                    else if (c == '\b') {
+                        output.Write("\\b");
+                    }
+                    else if (c == '\\') {
+                        output.Write("\\\\");
+                    }
+                    else if (c == '"') {
+                        output.Write("\\\"");
+                    }
+                    else {
+                        output.Write(c);
+                    }
                 }
             }
             output.Write("\"");

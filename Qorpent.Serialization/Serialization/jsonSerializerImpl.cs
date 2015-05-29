@@ -42,6 +42,7 @@ namespace Qorpent.Serialization {
 		}
 
 	    public bool CustomWrite { get; set; }
+	    public string UserMode { get; set; }
 
 	    public void EndObject() {
 			var s = _statestack.Pop();

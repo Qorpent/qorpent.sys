@@ -142,22 +142,7 @@ namespace Qorpent.Applications {
 			set { _bxl = value; }
 		}
 
-		/// <summary>
-		/// 	Access to Bxl service
-		/// </summary>
-		/// <remarks>
-		/// </remarks>
-		public ISysLogon SysLogon {
-			get {
-				if (null == _syslogon) {
-					lock (this) {
-						return _syslogon = ResolveService<ISysLogon>();
-					}
-				}
-				return _syslogon;
-			}
-			set { _syslogon = value; }
-		}
+		
 
 		/// <summary>
 		/// Служба доступа к ресурсам
@@ -624,7 +609,6 @@ namespace Qorpent.Applications {
 
 		private ISerializerFactory _serializerfactory;
 		private IDatabaseConnectionProvider _dbconnecitons;
-		private ISysLogon _syslogon;
 		private IResourceProvider _resources;
 	}
 }

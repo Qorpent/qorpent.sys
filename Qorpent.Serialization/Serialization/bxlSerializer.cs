@@ -42,11 +42,12 @@ namespace Qorpent.Serialization {
 	    /// </summary>
 	    /// <param name="name">Имя объекта сериализации</param>
 	    /// <param name="value">Объект сериализации</param>
+	    /// <param name="usermode"></param>
 	    /// <param name="options">Игнорируется</param>
 	    /// <returns> </returns>
 	    /// <remarks>
 	    /// </remarks>
-	    protected override ISerializerImpl CreateImpl(string name, object value, object options) {
+	    protected override ISerializerImpl CreateImpl(string name, object value, string usermode, object options) {
 			return new BxlSerializerImpl();
 		}
 
@@ -59,7 +60,7 @@ namespace Qorpent.Serialization {
 	    /// <param name="options">Игнорируется</param>
 	    /// <remarks>
 	    /// </remarks>
-	    public override void Serialize(string name, object value, TextWriter output,object options = null) {
+	    public override void Serialize(string name, object value, TextWriter output,string usermode,object options = null) {
 			if (null == value) {
 				output.Write(name + " : null");
 			}

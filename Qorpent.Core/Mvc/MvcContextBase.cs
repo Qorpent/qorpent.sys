@@ -441,12 +441,22 @@ namespace Qorpent.Mvc {
 	    [SerializeNotNullOnly]
 	    public virtual string UserAgent { get; set; }
 
+	    public string RenderMode {
+	        get {
+	            if (string.IsNullOrWhiteSpace(_renderMode)) {
+	                _renderMode = "ui";
+	            }
+	            return _renderMode;
+	        }
+	        set { _renderMode = value; }
+	    }
+
 
 	    /// <summary>
-		/// 	Generates parameters from underlined context
-		/// </summary>
-		/// <returns> </returns>
-		protected abstract IDictionary<string, string> RetrieveParameters();
+	    /// 	Generates parameters from underlined context
+	    /// </summary>
+	    /// <returns> </returns>
+	    protected abstract IDictionary<string, string> RetrieveParameters();
 
 		private ActionDescriptor _action;
 		/// <summary>
@@ -489,8 +499,9 @@ namespace Qorpent.Mvc {
 
 		private bool _isbinded = false;
 		private string _applicationName;
+	    private string _renderMode;
 
-		/// <summary>
+	    /// <summary>
 		/// Выполнить настройку действия на контекст
 		/// </summary>
 		public void Bind() {

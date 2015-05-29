@@ -1,4 +1,5 @@
 using System.IO;
+using Qorpent.Core.Tests.Experiments;
 
 namespace Qorpent.Experiments {
     /// <summary>
@@ -10,6 +11,15 @@ namespace Qorpent.Experiments {
         /// </summary>
         /// <param name="output"></param>
         /// <param name="annotator"></param>
-        void Write(TextWriter output, ISerializationAnnotator annotator);
+        void Write(TextWriter output, string mode, ISerializationAnnotator annotator);
+    }
+
+    public interface IJsonDeserializable {
+        void LoadFromJson(object jsonsrc);
+    }
+
+    public interface IJsonSerializationExtension {
+        void WriteExtensions(JsonWriter writer, string mode, ISerializationAnnotator annotator);
+        void ReadExtensions(object jsonsrc);
     }
 }

@@ -3,26 +3,26 @@ using System.Security.Principal;
 using Qorpent.IoC;
 
 namespace Qorpent.Security {
-    [ContainerComponent(Lifestyle.Singleton,ServiceType = typeof(ILogonProvider))]
-    public class DefaultLogonProvider : ServiceBase, ILogonProvider {
+    [ContainerComponent(Lifestyle.Singleton,ServiceType = typeof(IHostLogonProvider))]
+    public class DefaultHostLogonProvider : ServiceBase, IHostLogonProvider {
         public int Idx { get; set; }
 
         [Inject]
         public ILoginSourceProvider LoginSourceProvider { get; set; }
 
         [Inject]
-        public ILogon[] Logons { get; set; }
+        public IHostLogon[] HostLogons { get; set; }
 
-        public bool IsAuth(string username, string password) {
+        public bool IsAuth(string username, string password, IScope scope = null) {
             var logininfo = LoginSourceProvider.Get(username);
             if (null != logininfo) {
                 return logininfo.Logon(password) == LogonAuthenticationResult.Ok;
             }
-            if (null == Logons || 0 == Logons.Length) return false;
-            return Logons.OrderBy(_=>_.Idx).Any(logon => logon.IsAuth(username, password));
+            if (null == HostLogons || 0 == HostLogons.Length) return false;
+            return HostLogons.OrderBy(_=>_.Idx).Any(logon => logon.IsAuth(username, password));
         }
 
-        public IIdentity Logon(string username, string password)
+        public IIdentity Logon(string username, string password, IScope context = null)
         {
             var logininfo = LoginSourceProvider.Get(username);
             if (null != logininfo)
@@ -32,8 +32,8 @@ namespace Qorpent.Security {
                 }
                 return new GenericIdentity(logininfo.Login);
             }
-            if (null == Logons || 0 == Logons.Length) return null;
-            return Logons.OrderBy(_ => _.Idx).Select(_ => _.Logon(username, password)).FirstOrDefault(_ => null != _);
+            if (null == HostLogons || 0 == HostLogons.Length) return null;
+            return HostLogons.OrderBy(_ => _.Idx).Select(_ => _.Logon(username, password)).FirstOrDefault(_ => null != _);
         }
     }
 }

@@ -159,7 +159,7 @@ namespace Qorpent.Bridge.Tests.Utils {
                     k = new Dictionary<string, string>(),
                     l = new Dictionary<string, string> {{"m", "n"}}
                 };
-            var json = Experiments.Json.Stringify(obj, SerializeMode.OnlyNotNull).Replace("\"", "'");
+            var json = Experiments.Json.Stringify(obj, "", SerializeMode.OnlyNotNull).Replace("\"", "'");
             Console.WriteLine(json);
             Assert.AreEqual("{'a':1,'b':'c','d':[1,null,'e'],'f':{'g':true},'l':{'m':'n'}}", json);
         }

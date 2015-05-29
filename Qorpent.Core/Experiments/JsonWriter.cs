@@ -6,7 +6,7 @@ using Qorpent.Serialization;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Core.Tests.Experiments {
-    public class JsonWriter
+    public class JsonWriter:IDisposable
     {
         private TextWriter _out;
         private SerializeMode _options;
@@ -51,7 +51,7 @@ namespace Qorpent.Core.Tests.Experiments {
                     throw new Exception("invalid state");
                 }
             }
-            Qorpent.Experiments.Json.Write(obj, _out, _options);
+            Qorpent.Experiments.Json.Write(obj, _out,"", _options);
         }
 
         public void WriteProperty(string name, object value, bool notnullonly = false) {
@@ -98,6 +98,15 @@ namespace Qorpent.Core.Tests.Experiments {
         }
 
         public void OpenArray() {
+            if (InArray)
+            {
+                if (ArrayCount > 0)
+                {
+                    _out.Write(",");
+
+                }
+                ArrayCount++;
+            }
             this._out.Write("[");
             scope = new Scope(scope);
             scope.Set("ac",0);
@@ -159,6 +168,10 @@ namespace Qorpent.Core.Tests.Experiments {
                     throw new Exception("invalid state");
                 }
             _out.Write(stringify);
+        }
+
+        public void Dispose() {
+            Flush();
         }
     }
 }

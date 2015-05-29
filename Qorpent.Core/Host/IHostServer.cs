@@ -38,7 +38,7 @@ namespace Qorpent.Host{
 
 		/// <summary>
 		/// </summary>
-		IAuthenticationProvider Auth { get; }
+		IHostAuthenticationProvider Auth { get; }
 
 		/// <summary>
 		/// </summary>

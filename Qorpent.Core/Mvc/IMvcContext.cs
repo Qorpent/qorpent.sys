@@ -202,6 +202,8 @@ namespace Qorpent.Mvc {
 	    [SerializeNotNullOnly]
 	    string UserAgent { get;  }
 
+	    string RenderMode { get; set; }
+
 	    /// <summary>
 		/// 	Extract call only information from context (for serialization propose)
 		/// </summary>

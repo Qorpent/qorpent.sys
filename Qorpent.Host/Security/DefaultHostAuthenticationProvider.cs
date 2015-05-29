@@ -18,7 +18,7 @@ namespace Qorpent.Host.Security{
 
 	/// <summary>
 	/// </summary>
-	public class DefaultAuthenticationProvider : ServiceBase, IAuthenticationProvider{
+	public class DefaultHostAuthenticationProvider : ServiceBase, IHostAuthenticationProvider{
 
 		private readonly IDictionary<string, UserInfo> _ticketCache = new Dictionary<string, UserInfo>();
 
@@ -47,7 +47,7 @@ namespace Qorpent.Host.Security{
         public IRoleResolver RoleResolver { get; set; }
 
 	    [Inject]
-	    public ILogonProvider LogonProvider { get; set; }
+	    public IHostLogonProvider HostLogonProvider { get; set; }
 
         [Inject]
         public ILoginSourceProvider LoginSourceProvider { get; set; }
@@ -244,7 +244,7 @@ namespace Qorpent.Host.Security{
 
 	    public void Authenticate(WebContext context, string username, string password)
         {
-            bool isauth = LogonProvider.IsAuth(username, password);
+            bool isauth = HostLogonProvider.IsAuth(username, password);
             if (isauth)
             {
                 string ticket = RegisterTicket(username,context);

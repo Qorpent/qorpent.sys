@@ -9,12 +9,12 @@ namespace Qorpent.Host.Security{
 	/// <summary>
 	/// </summary>
 	public class DefaultAuthHandler : ISimpleSocketHandler<AuthProtocol, AuthProtocol>{
-		private readonly ILogonProvider _logon;
+		private readonly IHostLogonProvider _hostLogon;
 
 		/// <summary>
 		/// </summary>
 		public DefaultAuthHandler() {
-		    _logon = new DefaultLogonProvider {Logons = new[] {new SysLogon()}};
+		    _hostLogon = new DefaultHostLogonProvider {HostLogons = new[] {new SysHostLogon()}};
 		}
 
 		/// <summary>
@@ -37,7 +37,7 @@ namespace Qorpent.Host.Security{
 		}
 
 		private void Auth(AuthProtocol req, AuthProtocol result){
-			if (_logon.IsAuth(req.Login, req.PassOrDigest)){
+			if (_hostLogon.IsAuth(req.Login, req.PassOrDigest)){
 				result.Response = AuthProtocolResponseType.True | AuthProtocolResponseType.Token;
 				result.Login = req.Login.ToLowerInvariant();
 				result.Expire = DateTime.Today.AddDays(1);

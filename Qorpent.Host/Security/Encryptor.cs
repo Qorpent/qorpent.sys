@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 
 namespace Qorpent.Host.Security{
-	internal class Encryptor : IEncryptProvider{
+    public class Encryptor : IEncryptProvider{
 		private readonly SymmetricAlgorithm _cryptoService = new TripleDESCryptoServiceProvider();
 		public byte[] Key;
 		public byte[] Vector;
@@ -60,7 +60,6 @@ namespace Qorpent.Host.Security{
 			    keysrc = Guid.NewGuid().ToString();
 			}
             keysrc += Environment.MachineName + DateTime.Today.ToLongDateString();
-            Console.WriteLine("keysrc: "+keysrc);
 			while (keysrc.Length <= 32){
 				keysrc += keysrc;
 			}

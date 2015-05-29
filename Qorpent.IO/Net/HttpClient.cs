@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using Qorpent.Experiments;
 
 namespace Qorpent.IO.Net{
@@ -125,6 +126,7 @@ namespace Qorpent.IO.Net{
 
         public CookieCollection Cookies { get; set; }
 	    public Uri BaseUri { get; set; }
+	    public int ConnectionTimeout { get; set; }
 
 
 	    readonly HttpResponseReader _reader = new HttpResponseReader();
@@ -138,8 +140,17 @@ namespace Qorpent.IO.Net{
 				var secure = request.Uri.Scheme.StartsWith("https");
 				request.Cookies = request.Cookies ?? this.Cookies ?? new CookieCollection();
 				var endpoint = GetEndpoint(request.Uri);
-				using (var socket = new Socket(AddressFamily.Unspecified, SocketType.Stream, ProtocolType.Tcp)){
-					socket.Connect(endpoint);
+				using (var socket = new Socket(AddressFamily.Unspecified, SocketType.Stream, ProtocolType.Tcp)) {
+				    if (ConnectionTimeout <= 0) {
+				        socket.Connect(endpoint);
+				    }
+				    else {
+				        var waiter = Task.Run(() => socket.Connect(endpoint));
+				        var finished = waiter.Wait(ConnectionTimeout);
+				        if (!finished) {
+				            throw new IOException("timeouted");
+				        }
+				    }
 					using (var ns = new NetworkStream(socket)){
 						using (var rs = secure ? (Stream) new SslStream(ns, false, UserCertificateValidationCallback) : ns){
 							if (secure){

@@ -892,7 +892,11 @@ namespace Qorpent.IoC {
 		/// <remarks>
 		/// </remarks>
 		protected internal int CompareComponents(IComponentDefinition a, IComponentDefinition b) {
-			var result = a.Priority.CompareTo(b.Priority); // if priority not equal- less - first
+		    var ap = a.Priority;
+		    var bp = b.Priority;
+		    if (ap == -1) ap = 10000;
+		    if (bp == -1) bp = 10000;
+			var result = ap.CompareTo(bp); // if priority not equal- less - first
 			if (0 == result) {
 				result = - a.ContainerId.CompareTo(b.ContainerId); //otherwise last (by containerId) is in priority
 			}

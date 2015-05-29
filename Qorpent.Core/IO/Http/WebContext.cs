@@ -146,7 +146,12 @@ namespace Qorpent.IO.Http {
 
         public byte[] ReadRequest() {
             var buffer = new byte[Request.ContentLength];
-            Request.Stream.Read(buffer, 0, (int)Request.ContentLength);
+            var length = 0;
+            while (length < Request.ContentLength) {
+                var readbytes = Request.Stream.Read(buffer, length, (int) Request.ContentLength - length);
+                if(readbytes==-1)throw new Exception("cannot read to end of request");
+                length += readbytes;
+            }
             return buffer;
         }
 

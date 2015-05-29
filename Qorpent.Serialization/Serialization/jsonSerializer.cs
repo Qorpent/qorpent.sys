@@ -31,25 +31,26 @@ namespace Qorpent.Serialization {
 	/// </remarks>
 	[ContainerComponent(Lifestyle.Transient, ServiceType = typeof (ISerializer), Name = "json.serializer")]
 	public class JsonSerializer : Serializer {
-		/// <summary>
-		/// 	Creates the impl.
-		/// </summary>
-		/// <param name="name"> The name. </param>
-		/// <param name="value"> The value. </param>
-        /// <param name="options">Дополнительные опции при создании</param>
-		/// <returns> </returns>
-		/// <remarks>
-		/// </remarks>
-		protected override ISerializerImpl CreateImpl(string name, object value, object options) {
-			return new JsonSerializerImpl();
+	    /// <summary>
+	    /// 	Creates the impl.
+	    /// </summary>
+	    /// <param name="name"> The name. </param>
+	    /// <param name="value"> The value. </param>
+	    /// <param name="usermode"></param>
+	    /// <param name="options">Дополнительные опции при создании</param>
+	    /// <returns> </returns>
+	    /// <remarks>
+	    /// </remarks>
+	    protected override ISerializerImpl CreateImpl(string name, object value, string usermode, object options) {
+			return new JsonSerializerImpl{UserMode=usermode};
 		}
 
-	    protected override bool SerializeClassCustom(string name, object value, ISerializerImpl i) {
+	    protected override bool SerializeClassCustom(string name, object value, ISerializerImpl i,string usermode) {
 	        var js = value as IJsonSerializable;
 	        if (null != js) {
 	            i.CustomWrite = true;
                 i.BeginObject("");
-	            js.Write(i.Output,null);
+	            js.Write(i.Output,usermode,null);
                 i.EndObject();
 	            i.CustomWrite = false;
 	            return true;
@@ -74,7 +75,7 @@ namespace Qorpent.Serialization {
 	    /// <param name="options">Опции сериализации, используются при создании имепдлементации</param>
 	    /// <remarks>
 	    /// </remarks>
-	    public override void Serialize(string name, object value, System.IO.TextWriter output, object options = null)
+	    public override void Serialize(string name, object value, System.IO.TextWriter output,string usermode= null, object options = null)
         {
             if (value is XElement && null!=((XElement)value).Attribute(JsonItem.JsonTypeAttributeName)) {
                 output.Write(converter.ConvertToJson((XElement)value));
@@ -89,10 +90,10 @@ namespace Qorpent.Serialization {
 			}
 #endif
 	        if (value is IJsonSerializable) {
-	            ((IJsonSerializable)value).Write(output,null);
+	            ((IJsonSerializable)value).Write(output,usermode,null);
                 return;
 	        }
-            base.Serialize(name, value, output, options);
+            base.Serialize(name, value, output,usermode, options);
         }
 	}
 }

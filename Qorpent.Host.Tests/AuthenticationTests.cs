@@ -15,8 +15,8 @@ namespace Qorpent.Host.Tests
     {
         private HostServer host;
         private HttpClient cl;
-        private DefaultLogonProvider lp;
-        private DefaultAuthenticationProvider auth;
+        private DefaultHostLogonProvider lp;
+        private DefaultHostAuthenticationProvider auth;
         private DefaultLoginSourceProvider ls;
 
         
@@ -25,17 +25,17 @@ namespace Qorpent.Host.Tests
         public void Setup() {
             this.host = new HostServer(14990);
             host.OnBeforeInitializeServices += c => {
-                c.Register(c.NewComponent<ILogon,TestLogon>());
+                c.Register(c.NewComponent<IHostLogon,TestHostLogon>());
             };
             host.Initialize();
-            auth = host.Auth as DefaultAuthenticationProvider;
+            auth = host.Auth as DefaultHostAuthenticationProvider;
             Assert.NotNull(auth);
-            Assert.NotNull(auth.LogonProvider);
-            lp = auth.LogonProvider as DefaultLogonProvider;
+            Assert.NotNull(auth.HostLogonProvider);
+            lp = auth.HostLogonProvider as DefaultHostLogonProvider;
             ls = auth.LoginSourceProvider as DefaultLoginSourceProvider;
             ls.Sources = new[] {new TestLoginSource()};
-            Assert.True(lp.Logons.OfType<TestLogon>().Any()); //this code is just tests that Auth uses logons from IoC
-            lp.Logons = new[] {new TestLogon()}; //we require just one logon extension
+            Assert.True(lp.HostLogons.OfType<TestHostLogon>().Any()); //this code is just tests that Auth uses logons from IoC
+            lp.HostLogons = new[] {new TestHostLogon()}; //we require just one logon extension
             this.cl = new HttpClient();
             host.Start();
             Thread.Sleep(200);

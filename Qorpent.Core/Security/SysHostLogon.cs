@@ -31,11 +31,10 @@ namespace Qorpent.Security
 	/// <summary>
 	/// Allows dynamically logon to underlined system (for now Windows - only)
 	/// </summary>
-	[ContainerComponent(Lifestyle.Singleton,ServiceType = typeof(ISysLogon))]
-	[ContainerComponent(Lifestyle.Extension,ServiceType = typeof(ILogon),Name="win.logon")]
-	public  class SysLogon : ISysLogon,ILogon {
+	[ContainerComponent(Lifestyle.Extension,ServiceType = typeof(IHostLogon),Name="win.logon")]
+	public  class SysHostLogon : IHostLogon {
 
-	    public SysLogon() {
+	    public SysHostLogon() {
 	        Idx = 10000;
 	    }
 		/// <summary>
@@ -90,11 +89,11 @@ namespace Qorpent.Security
 			}
 		}
 
-	    public bool IsAuth(string username, string password) {
+	    public bool IsAuth(string username, string password, IScope scope= null) {
 	        return Logon(username, password, 3);
 	    }
 
-	    public IIdentity Logon(string username, string password) {
+	    public IIdentity Logon(string username, string password,IScope scope = null) {
 	        lock (this) {
 	            var token = new IntPtr();
 	            var auth = Logon(username, password, ref token, 3);

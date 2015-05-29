@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IsTest>True</IsTest>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{2A4B5398-1C8C-46F3-994A-4D66AB77C56F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>qorpent.v2.security.Tests</RootNamespace>
+    <AssemblyName>qorpent.v2.security.Tests</AssemblyName>
+    <AssemblyNameBase>qorpent.v2.security</AssemblyNameBase>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+    <EmbeddedResource Include="encryption\public.cer" />
+    <EmbeddedResource Include="encryption\private.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="encryption\EncryptorMainTest.cs" />
+    <Compile Include="logon\hash\HashSecureLogonTest.cs" />
+    <Compile Include="logon\LogonProviderTests.cs" />
+    <Compile Include="BaseFixture.cs" />
+    <Compile Include="logon\services\SecureLogonServiceTest.cs" />
+    <Compile Include="user\StateCheckerTest.cs" />
+    <Compile Include="user\storage\providers\ElasticUserSource.cs" />
+    <Compile Include="user\storage\providers\FileUserSourceTest.cs" />
+    <Compile Include="user\UserSerializationTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="authorization\" />
+    <Folder Include="management\" />
+    <Folder Include="storage\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC91290A209}</Project>
+      <Name>Qorpent.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IoC\Qorpent.IoC.csproj">
+      <Project>{62f22ffa-a1cf-4a74-838c-9ab33a9442ea}</Project>
+      <Name>Qorpent.IoC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IO\Qorpent.IO.csproj">
+      <Project>{426C92DF-3C40-426C-B0BE-40A1DF9044C2}</Project>
+      <Name>Qorpent.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>

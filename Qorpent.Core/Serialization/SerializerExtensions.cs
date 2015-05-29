@@ -21,12 +21,13 @@ namespace Qorpent.Serialization {
         /// <param name="name">имя для сериализуемого объекта</param>
         /// <param name="options">Опции сериализации</param>
         /// <returns></returns>
-        public static string Serialize(this ISerializer serializer, object value, string name = DefaultObjectName, object options = null) {
+        public static string Serialize(this ISerializer serializer, object value, string name = DefaultObjectName, string usermode = "", object options = null)
+        {
             if (string.IsNullOrWhiteSpace(name)) {
                 name = DefaultObjectName;
             }
             var sw = new StringWriter();
-            serializer.Serialize(name, value, sw);
+            serializer.Serialize(name, value, sw, usermode);
             return sw.ToString();
         }
 
@@ -39,14 +40,14 @@ namespace Qorpent.Serialization {
         /// <param name="objectname">имя для сериализуемого объекта</param>
         /// <param name="options">Опции сериализации</param>
         public static void SerializeToFormat(this object value, SerializationFormat format, TextWriter output,
-                                             string objectname = DefaultObjectName, object options = null)
+                                             string objectname = DefaultObjectName,string usermode="", object options = null)
         {
             if (null==output) throw new SerializationException("output not given");
             var serializer = Applications.Application.Current.Serialization.GetSerializer(format);
             if (string.IsNullOrWhiteSpace(objectname)) {
                 objectname = DefaultObjectName;
             }
-            serializer.Serialize(objectname, value, output);
+            serializer.Serialize(objectname, value, output,usermode);
         }
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace Qorpent.Serialization {
         /// <param name="objectname">имя для сериализуемого объекта</param>
         /// <param name="options">Опции сериализации</param>
         public static void SerializeToFormat(this object value, SerializationFormat format, string filename,
-                                             string objectname = DefaultObjectName, object options = null)
+                                             string objectname = DefaultObjectName, string usermode ="", object options = null)
         {
             if(string.IsNullOrWhiteSpace(filename))throw new SerializationException("filename not given");
             var serializer = Applications.Application.Current.Serialization.GetSerializer(format);
@@ -71,7 +72,7 @@ namespace Qorpent.Serialization {
                 Directory.CreateDirectory(Path.GetDirectoryName(filename));
             }
             using (var sw = new StreamWriter(filename)) {
-                serializer.Serialize(objectname, value, sw);    
+                serializer.Serialize(objectname, value, sw,usermode);    
                 sw.Flush();
             }
             

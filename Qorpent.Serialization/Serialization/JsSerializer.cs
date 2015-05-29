@@ -30,11 +30,12 @@ namespace Qorpent.Serialization {
 	    /// </summary>
 	    /// <param name="name"> The name. </param>
 	    /// <param name="value"> The value. </param>
+	    /// <param name="usermode"></param>
 	    /// <param name="options">Дополнительные опции при создании</param>
 	    /// <returns> </returns>
 	    /// <remarks>
 	    /// </remarks>
-	    protected override ISerializerImpl CreateImpl(string name, object value,object options) {
+	    protected override ISerializerImpl CreateImpl(string name, object value, string usermode, object options) {
 			return new JsSerializerImpl();
 		}
 	}

@@ -24,6 +24,7 @@ using System.Web;
 using System.Web.Security;
 using Qorpent.Mvc.Binding;
 using Qorpent.Mvc.Security;
+using Qorpent.Security;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc.Actions {
@@ -31,7 +32,8 @@ namespace Qorpent.Mvc.Actions {
 	/// 	Login simple action
 	/// </summary>
 	[Action("_sys.login", Help = "EN: used to authenticate with form based method", Role = "DEFAULT")]
-	public class LoginAction : ActionBase {
+	[Obsolete("new qh auth support is prefered")]
+    public class LoginAction : ActionBase {
 		/// <summary>
 		/// 	processing of execution - main method of action
 		/// </summary>
@@ -54,13 +56,12 @@ namespace Qorpent.Mvc.Actions {
 #if PARANOID
 				if (!login.StartsWith("qorpent-sys\\")) {
 #endif
-					var authenticator = Context.Application.Container.Get<IFormAuthenticationProvider>() ??
-					                    new SysLogonAuthenticationProvider();
-					bool authenticated = 
-						authenticator.IsAuthenticated(plogin, Pass, Context) 
-						||
-						authenticator.IsAuthenticated("local\\"+plogin.Split('\\')[1], Pass, Context) 
-						;
+				    var authenticator = Context.Application.Container.Get<IHostLogonProvider>();
+				    var identity = authenticator.Logon(plogin, Pass, null);
+				    if (!identity.IsAuthenticated) {
+				        identity = authenticator.Logon("local\\" + plogin.Split('\\')[1], Pass);
+				    }
+				    bool authenticated = identity.IsAuthenticated;
 #if PARANOID
 				}
 #endif

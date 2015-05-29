@@ -259,7 +259,7 @@ namespace Qorpent.IoC {
 				throw new ArgumentException("tService must be interface or reference class");
 			}
 			if (!tService.IsAssignableFrom(tImplementation)) {
-				throw new ArgumentException("tImplementation must be descendant of tService");
+				throw new ArgumentException("tImplementation must be descendant of tService "+tImplementation.FullName+"::"+tService.FullName);
 			}
 			if (tImplementation.IsAbstract) {
 				throw new ArgumentException("tImplementation cannot be abstract");

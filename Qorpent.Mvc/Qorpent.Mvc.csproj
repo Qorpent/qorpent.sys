@@ -108,7 +108,6 @@
     <Compile Include="Actions\ResetHandlersAction.cs" />
     <Compile Include="Remoting\RemoteConnection.cs" />
     <Compile Include="Renders\StringRender.cs" />
-    <Compile Include="Security\SysLogonAuthenticationProvider.cs" />
     <Compile Include="Renders\ViewRender.cs" />
   </ItemGroup>
   <ItemGroup>

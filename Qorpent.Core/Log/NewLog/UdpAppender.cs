@@ -46,7 +46,7 @@ namespace Qorpent.Log.NewLog {
             }
         }
 
-        public void Flush() {
+        public override void Flush() {
             lock (sync) {
                 foreach (var xmlMessage in _messageBuffer) {
                     var payload = Encoding.UTF8.GetBytes(xmlMessage);
@@ -57,9 +57,8 @@ namespace Qorpent.Log.NewLog {
             }
         }
 
-        public LogLevel Level { get; set; }
 
-        public void Dispose() {
+        public override void Dispose() {
             Flush();
             _udpClient.Close();
         }

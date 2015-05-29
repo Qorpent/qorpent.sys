@@ -36,6 +36,7 @@
     <Compile Include="Qweb\AppInfoAction.cs" />
     <Compile Include="Security\SecurityManagementInitializer.cs" />
     <Compile Include="Security\UpdateLoginInfoHandler.cs" />
+    <Compile Include="Security\UpdateLoginInfoRequest.cs" />
     <Compile Include="Server\ServerParameters.cs" />
     <Compile Include="Static\HostFileNameResolver.cs" />
     <Compile Include="Static\HostServerStaticResolver.cs" />
@@ -44,7 +45,7 @@
     <Compile Include="Security\AuthProtocolResponseType.cs" />
     <Compile Include="Security\AuthProtocolStatus.cs" />
     <Compile Include="Security\AuthProtocol.cs" />
-    <Compile Include="Security\DefaultAuthenticationProvider.cs" />
+    <Compile Include="Security\DefaultHostAuthenticationProvider.cs" />
     <Compile Include="Security\DefaultAuthHandler.cs" />
     <Compile Include="Security\Encryptor.cs" />
     <Compile Include="Security\QorpentHostPrincipal.cs" />

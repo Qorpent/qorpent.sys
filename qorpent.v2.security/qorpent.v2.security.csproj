@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ProjectGuid>{5B887177-D99B-4505-B9CD-592363E9AB51}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>qorpent.v2.security</RootNamespace>
+    <AssemblyName>qorpent.v2.security</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="*.import" />
+    <None Include="*.export" />
+    <EmbeddedResource Include=".\**\*.*resource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="user\Identity.cs" />
+    <Compile Include="user\IUser.cs" />
+    <Compile Include="encryption\Encryptor.cs" />
+    <Compile Include="logon\ILogon.cs" />
+    <Compile Include="logon\ILogonProvider.cs" />
+    <Compile Include="logon\ILogonService.cs" />
+    <Compile Include="logon\IPasswordLogon.cs" />
+    <Compile Include="logon\ISecureLogon.cs" />
+    <Compile Include="logon\LogonService.cs" />
+    <Compile Include="user\services\IUserStateChecker.cs" />
+    <Compile Include="user\services\UserStateChecker.cs" />
+    <Compile Include="user\storage\IUserCache.cs" />
+    <Compile Include="user\storage\IUserCacheLease.cs" />
+    <Compile Include="user\storage\IUserService.cs" />
+    <Compile Include="user\storage\IUserServiceBound.cs" />
+    <Compile Include="user\storage\IUserSource.cs" />
+    <Compile Include="user\storage\IUserSourceBound.cs" />
+    <Compile Include="user\storage\IWriteableUserSource.cs" />
+    <Compile Include="user\storage\providers\ElasticUserSource.cs" />
+    <Compile Include="user\storage\UserCache.cs" />
+    <Compile Include="user\storage\UserService.cs" />
+    <Compile Include="user\User.cs" />
+    <Compile Include="logon\providers\SecureLogon.cs" />
+    <Compile Include="logon\providers\PasswordLogon.cs" />
+    <Compile Include="user\storage\providers\FileUserSource.cs" />
+    <Compile Include="logon\services\ISecureLogonClient.cs" />
+    <Compile Include="logon\services\ISecureLogonService.cs" />
+    <Compile Include="logon\services\SecureLogonClient.cs" />
+    <Compile Include="logon\services\SecureLogonInfo.cs" />
+    <Compile Include="logon\services\SecureLogonService.cs" />
+    <Compile Include="logon\providers\WinLogon.cs" />
+    <Compile Include="user\UserActivityState.cs" />
+    <Compile Include="user\UserSerializer.cs" />
+    <Compile Include="v1migration\logon\LogonService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="authorization\" />
+    <Folder Include="management\" />
+    <Folder Include="storage\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">
+      <Project>{880F65EA-1A22-4672-A137-FFC91290A209}</Project>
+      <Name>Qorpent.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.IO\Qorpent.IO.csproj">
+      <Project>{426C92DF-3C40-426C-B0BE-40A1DF9044C2}</Project>
+      <Name>Qorpent.IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Qorpent.Serialization\Qorpent.Serialization.csproj">
+      <Project>{21971F28-8ED8-4F50-B623-E9DB2658AF54}</Project>
+      <Name>Qorpent.Serialization</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Import Project="..\..\qorpent.kernel\build.targets" />
+</Project>

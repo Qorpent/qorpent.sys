@@ -29,7 +29,7 @@
     <Compile Include="ServerParametersTest.cs" />
     <Compile Include="SimpleSocketTest.cs" />
     <Compile Include="TestLoginSource.cs" />
-    <Compile Include="TestLogon.cs" />
+    <Compile Include="TestHostLogon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

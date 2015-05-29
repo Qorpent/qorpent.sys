@@ -187,12 +187,7 @@ namespace Qorpent.Applications {
 		/// </remarks>
 		IDatabaseConnectionProvider DatabaseConnections { get; set; }
 
-		/// <summary>
-		/// 	Access to Bxl service
-		/// </summary>
-		/// <remarks>
-		/// </remarks>
-		ISysLogon SysLogon { get; set; }
+	
 		/// <summary>
 		/// Служба доступа к ресурсам
 		/// </summary>

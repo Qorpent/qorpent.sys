@@ -4,7 +4,7 @@ using Qorpent.IO.Http;
 namespace Qorpent.Host{
     /// <summary>
 	/// </summary>
-	public interface IAuthenticationProvider{
+	public interface IHostAuthenticationProvider{
 		/// <summary>
 		///     Инициализирует провайдер аутентификации
 		/// </summary>
