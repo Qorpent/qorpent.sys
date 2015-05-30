@@ -24,10 +24,8 @@ namespace qorpent.v2.security.authentication {
         }
 
         public HttpDefaultIdentitySource() {
-            AllowGuest = false;
-            AllowLocalGuest = false;
-            LocalGuestIsAdmin = false;
-            AnyGuestIsAdmin = false;
+            //by default we use full-trust schema
+            ApplyFullTrustSchema();
             TrustedOrigins = new List<TrustedOrigin>();
             AnyGuestName = "guest";
             LocalGuestName = "localguest";
@@ -76,6 +74,11 @@ namespace qorpent.v2.security.authentication {
                 {
                     ApplyFullTrustSchema();
                     
+                }
+                else if ("secure" == schema)
+                {
+                    ApplySecureSchema();
+
                 }
             }
             AllowGuest = element.Attr("guest", AllowGuest.ToString()).ToBool();
@@ -147,6 +150,13 @@ namespace qorpent.v2.security.authentication {
         private void ApplyAnyGuestSchema() {
             AllowGuest = true;
             AllowLocalGuest = true;
+            LocalGuestIsAdmin = false;
+            AnyGuestIsAdmin = false;
+        }
+        private void ApplySecureSchema()
+        {
+            AllowGuest = false;
+            AllowLocalGuest = false;
             LocalGuestIsAdmin = false;
             AnyGuestIsAdmin = false;
         }

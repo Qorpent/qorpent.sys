@@ -27,7 +27,7 @@ namespace Qorpent.Host.Security {
             };
             request.Update();
             if (request.resetrequired) {
-                ((DefaultHostAuthenticationProvider) _server.Auth).Reset(new ResetEventData(true));
+            //    ((DefaultHostAuthenticationProvider) _server.Auth).Reset(new ResetEventData(true));
             }
             var info = request.GetInfo();
             _logins.Save(info,request.Forced);

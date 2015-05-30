@@ -50,7 +50,7 @@ user login1 name1 hash=hash1 salt=salt1 publickey=key1
             Assert.AreEqual("hash1", u.Hash);
             Assert.AreEqual("salt1", u.Salt);
             Assert.AreEqual("key1", u.PublicKey);
-            Assert.AreEqual("master1", u.MasterGroup);
+            Assert.AreEqual("master1", u.Domain);
             Assert.AreEqual("role1",u.Roles[0]);
             Assert.AreEqual("role2", u.Roles[1]);
             Assert.AreEqual("grp1", u.Groups[0]);

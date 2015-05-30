@@ -82,6 +82,10 @@ namespace qorpent.v2.security.user.storage {
             return realuser;
         }
 
+        public void Clear() {
+            _userCache.Clear();
+        }
+
         private IWriteableUserSource ResolveWriteableStore(IUser user) {
             var usrvb = user as IUserSourceBound;
             if (usrvb != null) {

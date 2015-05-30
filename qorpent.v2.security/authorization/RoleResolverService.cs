@@ -7,6 +7,29 @@ using Qorpent;
 using Qorpent.IoC;
 
 namespace qorpent.v2.security.authorization {
+
+    public static class RoleResolverExtensions {
+        public static bool IsInRole(this IRoleResolverService service, IPrincipal principal, string role,
+            bool exact = false) {
+            return service.IsInRole(principal.Identity, role, exact);
+        }
+
+        public static bool IsInRole(this IRoleResolverService service, string login, string role,
+           bool exact = false) {
+            var srv = service as RoleResolverService;
+            var us = srv.Users.GetUser(login);
+            if (null == us) return false;
+            var id = new Identity {
+                Name = us.Name,
+                IsAuthenticated = true,
+                IsAdmin = us.IsAdmin,
+                User = us
+            };
+            return service.IsInRole(id, role, exact);
+
+        }
+    }
+
     [ContainerComponent(Lifestyle.Singleton, "roleresolver.service", ServiceType = typeof(IRoleResolverService))]
     public class RoleResolverService : ExtensibleServiceBase<IRoleResolver>, IRoleResolverService {
         private IRoleResolverCache _cache;
@@ -68,6 +91,10 @@ namespace qorpent.v2.security.authorization {
             /// so it's true if user IsAdmin and role not ADMIN and exact mode
             var key = identity.Name + "::" + role + "::" + exact;
             return Cache.Get(key, _ => InternalIsInRole(identity, role,exact));
+        }
+
+        public void Clear() {
+            _cache.Clear();
         }
 
         private bool InternalIsInRole(IIdentity identity, string role,bool exact) {

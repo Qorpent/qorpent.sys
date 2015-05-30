@@ -86,5 +86,9 @@ namespace qorpent.v2.security.Tests.logon.hash
         public IUser Store(IUser user) {
             throw new NotImplementedException();
         }
+
+        public void Clear() {
+            throw new NotImplementedException();
+        }
     }
 }

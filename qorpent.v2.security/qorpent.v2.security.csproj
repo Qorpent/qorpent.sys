@@ -29,13 +29,35 @@
     <Compile Include="authorization\IRoleResolverCache.cs" />
     <Compile Include="authorization\IRoleResolverCacheLease.cs" />
     <Compile Include="authorization\IRoleResolverService.cs" />
+    <Compile Include="authorization\NotAuthProcessProvider.cs" />
     <Compile Include="authorization\RoleResolverCache.cs" />
     <Compile Include="authorization\RoleResolverService.cs" />
     <Compile Include="authorization\RoleResolver.cs" />
+    <Compile Include="handlers\DefineUserHandler.cs" />
+    <Compile Include="handlers\IDefineUserHandler.cs" />
+    <Compile Include="handlers\IIsAuthHandler.cs" />
+    <Compile Include="handlers\IIsInRoleHandler.cs" />
+    <Compile Include="handlers\ILogonHandler.cs" />
+    <Compile Include="handlers\ILogoutHandler.cs" />
+    <Compile Include="handlers\IMyInfoHandler.cs" />
+    <Compile Include="handlers\IsAuthHandler.cs" />
+    <Compile Include="handlers\IsInRoleHandler.cs" />
+    <Compile Include="handlers\LogonHandler.cs" />
+    <Compile Include="handlers\LogoutHandler.cs" />
+    <Compile Include="handlers\MyInfoHandler.cs" />
+    <Compile Include="handlers\SecurityHandlerSetup.cs" />
     <Compile Include="logon\services\IPasswordManager.cs" />
     <Compile Include="logon\services\IPasswordPolicy.cs" />
     <Compile Include="logon\services\PasswordManager.cs" />
     <Compile Include="logon\services\PasswordPolicy.cs" />
+    <Compile Include="management\IUpdateUserChecker.cs" />
+    <Compile Include="management\IUpdateUserProcessor.cs" />
+    <Compile Include="management\UpdateResult.cs" />
+    <Compile Include="management\UpdateUserChecker.cs" />
+    <Compile Include="management\UpdateUserProcessor.cs" />
+    <Compile Include="management\UpdateUserProcessorExtensions.cs" />
+    <Compile Include="management\UserUpdateInfo.cs" />
+    <Compile Include="management\UserUpdateInfoSerializer.cs" />
     <Compile Include="user\Identity.cs" />
     <Compile Include="user\IUser.cs" />
     <Compile Include="encryption\Encryptor.cs" />
@@ -72,7 +94,6 @@
     <Compile Include="v1migration\logon\LogonService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="management\" />
     <Folder Include="storage\" />
   </ItemGroup>
   <ItemGroup>

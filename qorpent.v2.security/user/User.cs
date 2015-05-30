@@ -65,7 +65,7 @@ namespace qorpent.v2.security.user
         }
 
         public bool Active { get; set; }
-        public string MasterGroup { get; set; }
+        public string Domain { get; set; }
         public string Id { get; set; }
 
         public IDictionary<string, object> Custom {

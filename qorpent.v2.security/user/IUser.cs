@@ -19,7 +19,7 @@ namespace qorpent.v2.security.user {
         IList<string> Roles { get; set; }
         IDictionary<string, string> Tags { get; set; }
         bool Active { get; set; }
-        string MasterGroup { get; set; }
+        string Domain { get; set; }
         string Id { get; set; }
         IDictionary<string, object> Custom { get; set; }
         string GetToken();

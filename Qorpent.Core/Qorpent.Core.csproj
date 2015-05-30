@@ -125,7 +125,6 @@
     <Compile Include="Host\HostUtils.cs" />
     <Compile Include="Host\HostSchema.cs" />
     <Compile Include="Host\HostServerState.cs" />
-    <Compile Include="Host\IHostAuthenticationProvider.cs" />
     <Compile Include="Host\IEncryptProvider.cs" />
     <Compile Include="Host\IHostConfigProvider.cs" />
     <Compile Include="Host\ISimpleSocketRequest.cs" />

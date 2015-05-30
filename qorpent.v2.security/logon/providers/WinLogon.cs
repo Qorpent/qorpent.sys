@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using qorpent.v2.security.user;
@@ -7,12 +8,13 @@ using Qorpent;
 using Qorpent.Events;
 using Qorpent.IoC;
 using Qorpent.Security;
+using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.logon.providers
 {
 
     [ContainerComponent(Lifestyle.Transient,"winlogon.passlogon",ServiceType=typeof(ILogonProvider))]
-    public class WinLogon: ILogonProvider,IPasswordLogon
+    public class WinLogon:ServiceBase,ILogonProvider,IPasswordLogon
     {
         public const int WINLOGONIDX = 10000;
 
@@ -22,6 +24,8 @@ namespace qorpent.v2.security.logon.providers
 
         [Inject]
         public IUserService UserService { get; set; }
+        [Inject]
+        public IConfigProvider ConfigProvider { get; set; }
 
 
 
@@ -39,6 +43,25 @@ namespace qorpent.v2.security.logon.providers
                 IntPtr token = new IntPtr();
                 return Logon(username, password, ref token, logontype);
             }
+        }
+
+        public bool GoodDog { get; set; }
+
+        public override void OnContainerCreateInstanceFinished() {
+            base.OnContainerCreateInstanceFinished();
+            Initialize();
+        }
+
+        public void Initialize() {
+            if (null != ConfigProvider) {
+                var e = ConfigProvider.GetConfig();
+                if (null != e) {
+                    e = e.Element("logon");
+                }
+                if (null != e) {
+                    GoodDog = e.Attr("gooddog").ToBool();
+                }
+            } 
         }
 
         [DllImport("ADVAPI32.dll", EntryPoint =
@@ -88,11 +111,20 @@ namespace qorpent.v2.security.logon.providers
                 var auth = Logon(username, password, ref token, 3);
                 if (!auth) return null;
                  var native =  new WindowsIdentity(token);
+                bool isadmin = false;
+                if (GoodDog) {
+                    var currentUser = Environment.UserName;
+                    if (currentUser.Equals(username, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        isadmin = true;
+                    }
+                }
                 var result = new Identity {
                     Name = native.Name.ToLowerInvariant(),
                     IsAuthenticated = true,
                     AuthenticationType = "win",
-                    Native = native
+                    Native = native,
+                    IsAdmin = isadmin
                 };
                 if (null != UserService) {
                     result.User = UserService.GetUser(result.Name);

@@ -74,7 +74,8 @@ namespace qorpent.v2.security.authentication {
                     ImUser = j.str("ImUser"),
                     Created = j.date("Created"),
                     Expire = j.date("Expire"),
-                    Metrics = j.str("Metrics")
+                    Metrics = j.str("Metrics"),
+                    IsAdmin =  j.bul("IsAdmin")
                 };
                 return result;
             }

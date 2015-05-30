@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -12,6 +13,7 @@ using qorpent.v2.security.logon.services;
 using qorpent.v2.security.user.storage;
 using qorpent.v2.security.user.storage.providers;
 using Qorpent;
+using Qorpent.Utils;
 
 namespace qorpent.v2.security.Tests
 {
@@ -41,6 +43,8 @@ namespace qorpent.v2.security.Tests
         public void FileUserSourceWellConfigured() {
             var pwd = new PasswordManager();
             var fsrc = _container.Get<IUserService>().GetExtensions().OfType<FileUserSource>().First();
+            Assert.NotNull(fsrc.ResolvedFilePath);
+            Assert.NotNull(mainpwd);
             Assert.AreEqual(EnvironmentInfo.ResolvePath( mainpwd),fsrc.ResolvedFilePath);
             var user = fsrc.GetUser("fuser");
             Assert.NotNull(user);

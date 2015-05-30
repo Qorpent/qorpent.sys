@@ -18,7 +18,6 @@
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthenticationTests.cs" />
     <Compile Include="AuthProtocolTest.cs" />
     <Compile Include="BasicServerTests.cs" />
     <Compile Include="DistinctContextPerformance.cs" />

@@ -111,8 +111,8 @@ namespace Qorpent.IO.Http {
 
         private string GetCookieString(Cookie cookie) {
             var maxage = -1;
-            if (cookie.Expires > DateTime.Now) {
-                maxage = (cookie.Expires - DateTime.Now).TotalSeconds.ToInt();
+            if (cookie.Expires.ToUniversalTime() > DateTime.Now.ToUniversalTime()) {
+                maxage = (cookie.Expires.ToUniversalTime() - DateTime.Now.ToUniversalTime()).TotalSeconds.ToInt();
             }
             var result= string.Format("{0}={1}; Path={2}; Max-Age={3};", cookie.Name, cookie.Value, cookie.Path,maxage);
             if (cookie.HttpOnly) {

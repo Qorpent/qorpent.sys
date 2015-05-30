@@ -27,7 +27,9 @@ namespace qorpent.v2.security.Tests
         protected const string Epass = "B123456$";
         protected static bool _envinitialized = false;
         protected Container _container;
-        protected string mainpwd;
+
+        protected static string mainpwd;
+
         protected string esindex = "v2securetest";
         protected bool ignoreelastic = false;
         protected static XElement config = null;
@@ -39,19 +41,21 @@ namespace qorpent.v2.security.Tests
         }
         [SetUp]
         public virtual void Setup() {
-            if (!_envinitialized) {
-                InitializeEnvironment();
-                _envinitialized = true;
-            }
-            _container = new Container();
-            _container.GetLoader().LoadAssembly(typeof (ILogonService).Assembly);
-            _container.Register(_container.NewComponent<IConfigProvider,configprovider>());
-            Loggy.Default.Level = LogLevel.All;
-            if (Loggy.Default.Appenders.Count == 0) {
-                Loggy.Default.Appenders.Add(new ConsoleAppender {
-                    Format = "${Minute}:${Second} ${Message}",
-                    Level = LogLevel.All
-                });
+            lock (this) {
+                if (!_envinitialized) {
+                    InitializeEnvironment();
+                    _envinitialized = true;
+                }
+                _container = new Container();
+                _container.GetLoader().LoadAssembly(typeof (ILogonService).Assembly);
+                _container.Register(_container.NewComponent<IConfigProvider, configprovider>());
+                Loggy.Default.Level = LogLevel.All;
+                if (Loggy.Default.Appenders.Count == 0) {
+                    Loggy.Default.Appenders.Add(new ConsoleAppender {
+                        Format = "${Minute}:${Second} ${Message}",
+                        Level = LogLevel.All
+                    });
+                }
             }
         }
 
@@ -138,7 +142,7 @@ class app
                 IsAdmin = idx%5 == 0,
                 Logable = idx%3 == 0,
                 IsGroup = idx%4 == 0,
-                MasterGroup = "master" + idx,
+                Domain = "master" + idx,
                 Roles = new[] {"role1_" + idx, "role2_" + idx},
                 Groups = new[] {"grp1_" + idx, "grp2_" + idx},
                 Email = "email" + idx,

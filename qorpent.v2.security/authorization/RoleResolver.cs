@@ -23,8 +23,8 @@ namespace qorpent.v2.security.authorization {
                 return true;
             }
             if (exact) return false;
-            if (!string.IsNullOrWhiteSpace(user.MasterGroup)) {
-                var master = Users.GetUser(user.MasterGroup + "@groups");
+            if (!string.IsNullOrWhiteSpace(user.Domain)) {
+                var master = Users.GetUser(user.Domain + "@groups");
                 if (HasRole(master, role)) {
                     return true;
                 }

@@ -13,5 +13,6 @@ namespace qorpent.v2.security.authentication
         public DateTime Expire { get; set; }
         public string ImUser { get; set; }
         public string Metrics { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

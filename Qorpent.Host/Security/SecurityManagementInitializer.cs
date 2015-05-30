@@ -9,7 +9,7 @@ using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Host.Security
 {
-    [ContainerComponent(ServiceType = typeof(IHostServerInitializer),Name = "security.manager.initializer")]
+    //[ContainerComponent(ServiceType = typeof(IHostServerInitializer),Name = "security.manager.initializer")]
     public class SecurityManagementInitializer:IHostServerInitializer
     {
         /// <summary>

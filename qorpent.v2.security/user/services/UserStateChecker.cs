@@ -51,7 +51,7 @@ namespace qorpent.v2.security.user.services
                 result |= UserActivityState.MasterNotChecked;
             }
             else {
-                var grp = usersrv.GetUser(user.MasterGroup + "@groups");
+                var grp = usersrv.GetUser(user.Domain + "@groups");
                 if (null == grp) {
                     result |= UserActivityState.InvalidMaster;
                 }
@@ -68,7 +68,7 @@ namespace qorpent.v2.security.user.services
         }
 
         private static bool RequireMasterChecking(IUser user) {
-            return !user.IsGroup && !string.IsNullOrWhiteSpace(user.MasterGroup);
+            return !user.IsGroup && !string.IsNullOrWhiteSpace(user.Domain);
         }
 
         private static UserActivityState CheckSelf(IUser user, UserActivityState result) {

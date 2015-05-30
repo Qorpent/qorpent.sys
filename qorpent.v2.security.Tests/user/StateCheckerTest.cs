@@ -79,7 +79,7 @@ namespace qorpent.v2.security.Tests.user
         public void MasterNotCheckedState()
         {
             var checker = new UserStateChecker();
-            var user = new User { Logable = true, Active = true, Expire = DateTime.Now.AddDays(10),MasterGroup = "m1"};
+            var user = new User { Logable = true, Active = true, Expire = DateTime.Now.AddDays(10),Domain = "m1"};
             Assert.AreEqual(UserActivityState.MasterNotChecked, checker.GetActivityState(user));
         }
 
@@ -104,7 +104,7 @@ namespace qorpent.v2.security.Tests.user
         public void InvalidMasterState() {
             var us = new UserService();
             var checker = new UserStateChecker{UserService = us };
-            var user = new User { Logable = true, Active = true, Expire = DateTime.Now.AddDays(10), MasterGroup = "m1" };
+            var user = new User { Logable = true, Active = true, Expire = DateTime.Now.AddDays(10), Domain = "m1" };
             Assert.AreEqual(UserActivityState.InvalidMaster, checker.GetActivityState(user));
         }
 
@@ -115,7 +115,7 @@ namespace qorpent.v2.security.Tests.user
             var us = new UserService();
             us.RegisterExtension(new UserSource(new User{Login = "m1@groups",IsGroup = true,Active = true,Expire = DateTime.Now.AddDays(10)}));
             var checker = new UserStateChecker { UserService = us };
-            var user = new User { Logable = true, Active = true, Expire = DateTime.Now.AddDays(10), MasterGroup = "m1" };
+            var user = new User { Logable = true, Active = true, Expire = DateTime.Now.AddDays(10), Domain = "m1" };
             Assert.AreEqual(UserActivityState.Ok, checker.GetActivityState(user));
         }
 
@@ -125,7 +125,7 @@ namespace qorpent.v2.security.Tests.user
             var us = new UserService();
             us.RegisterExtension(new UserSource(new User { Login = "m1@groups", IsGroup = true, Active = false, Expire = DateTime.Now.AddDays(10) }));
             var checker = new UserStateChecker { UserService = us };
-            var user = new User { Logable = true, Active = true, Expire = DateTime.Now.AddDays(10), MasterGroup = "m1" };
+            var user = new User { Logable = true, Active = true, Expire = DateTime.Now.AddDays(10), Domain = "m1" };
             Assert.AreEqual(UserActivityState.MasterBaned, checker.GetActivityState(user));
         }
         [Test]
@@ -134,7 +134,7 @@ namespace qorpent.v2.security.Tests.user
             var us = new UserService();
             us.RegisterExtension(new UserSource(new User { Login = "m1@groups", IsGroup = true, Active = true, Expire = DateTime.Now.AddDays(-10) }));
             var checker = new UserStateChecker { UserService = us };
-            var user = new User { Logable = true, Active = true, Expire = DateTime.Now.AddDays(10), MasterGroup = "m1" };
+            var user = new User { Logable = true, Active = true, Expire = DateTime.Now.AddDays(10), Domain = "m1" };
             Assert.AreEqual(UserActivityState.MasterExpired, checker.GetActivityState(user));
         }
     }

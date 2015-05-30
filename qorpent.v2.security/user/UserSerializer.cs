@@ -59,7 +59,7 @@ namespace qorpent.v2.security.user
             user.Logable = j.bul("logable");
             
 
-            user.MasterGroup = j.str("mastergroup");
+            user.Domain = j.str("domain");
             user.Roles = j.arr("roles").OfType<string>().ToList();
             user.Groups = j.arr("groups").OfType<string>().ToList();
             user.Custom = j.map("custom");
@@ -80,7 +80,7 @@ namespace qorpent.v2.security.user
             user.Active = element.Attr("active", "1").ToBool();
             user.Email = element.Attr("email");
             user.Expire = element.Attr("expire").ToDate();
-            user.MasterGroup = element.Attr("master");
+            user.Domain = element.Attr("domain");
             user.Roles = element.Elements("role").Select(_ => _.Attr("code")).ToArray();
             user.Groups = element.Elements("group").Select(_ => _.Attr("code")).ToArray();
             user.Logable = element.Attr("logable").ToBool();
@@ -155,7 +155,7 @@ namespace qorpent.v2.security.user
                 jw.WriteProperty("logable", user.Logable, notnullonly);
 
             }
-            jw.WriteProperty("mastergroup", user.MasterGroup, notnullonly);
+            jw.WriteProperty("domain", user.Domain, notnullonly);
             jw.WriteProperty("roles", user.Roles.OrderBy(_ => _).ToArray(), notnullonly);
             jw.WriteProperty("groups", user.Groups.OrderBy(_ => _).ToArray(), notnullonly);
             jw.WriteProperty("custom", user.Custom, notnullonly);

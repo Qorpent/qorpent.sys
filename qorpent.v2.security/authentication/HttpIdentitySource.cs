@@ -43,10 +43,12 @@ namespace qorpent.v2.security.authentication {
                 Token = token,
                 Name = token.User,
                 IsAuthenticated = true,
-                AuthenticationType = "form"
+                AuthenticationType = "form",
+                IsAdmin = token.IsAdmin
             };
             var errormessage = "";
             var user = UserService.GetUser(token.User);
+
             if (null != user)
             {
                 result.User = user;
@@ -57,6 +59,7 @@ namespace qorpent.v2.security.authentication {
                     result.IsError = true;
                     errormessage += userstate.ToStr() + "; ";
                 }
+                
             }
             if (!string.IsNullOrWhiteSpace(token.ImUser))
             {

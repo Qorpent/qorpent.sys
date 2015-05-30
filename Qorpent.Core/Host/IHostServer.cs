@@ -36,9 +36,7 @@ namespace Qorpent.Host{
 		/// </summary>
 		IHostServerStaticResolver Static { get; }
 
-		/// <summary>
-		/// </summary>
-		IHostAuthenticationProvider Auth { get; }
+		
 
 		/// <summary>
 		/// </summary>

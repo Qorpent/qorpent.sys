@@ -8,9 +8,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Xml.Linq;
+using qorpent.v2.security.authentication;
+using qorpent.v2.security.authorization;
 using Qorpent.Applications;
 using Qorpent.Bxl;
 using Qorpent.Data;
+using Qorpent.Experiments;
 using Qorpent.Host.Handlers;
 using Qorpent.Host.Qweb;
 using Qorpent.Host.Security;
@@ -27,12 +30,13 @@ namespace Qorpent.Host {
     ///     Http сервер Qorpent
     /// </summary>
     public class HostServer : IHostServer, IHostConfigProvider,IConfigProvider {
-        private IHostAuthenticationProvider _auth;
         internal CancellationToken _cancel;
         private IEncryptProvider _encryptor;
         private IRequestHandlerFactory _factory;
         private HttpListener _listener;
         private IHostServerStaticResolver _static;
+        private IHttpAuthenticator _auth;
+        private INotAuthProcessProvider _notAuth;
 
         /// <summary>
         ///     Создает новый экземпляр сервера
@@ -108,6 +112,22 @@ namespace Qorpent.Host {
         public HostServerState State { get; private set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public IHttpAuthenticator Auth {
+            get { return _auth ??(_auth=Container.Get<IHttpAuthenticator>()); }
+            set { _auth = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public INotAuthProcessProvider NotAuth {
+            get { return _notAuth ?? (_notAuth = Container.Get<INotAuthProcessProvider>()); }
+            set { _notAuth = value; }
+        }
+
+        /// <summary>
         ///     Конфигурация
         /// </summary>
         public HostConfig Config { get; set; }
@@ -124,17 +144,7 @@ namespace Qorpent.Host {
             }
         }
 
-        /// <summary>
-        /// </summary>
-        public IHostAuthenticationProvider Auth {
-            get { return _auth; }
-            private set {
-                if (null != value && _auth != value) {
-                    _auth = value;
-                    _auth.Initialize(this);
-                }
-            }
-        }
+        
 
         /// <summary>
         ///     Запускает сервер
@@ -239,7 +249,8 @@ namespace Qorpent.Host {
                     throw    new Exception("Exceed max request size");
                 }
                 CopyCookies(wc);
-                Auth.Authenticate(wc);
+                Auth.Authenticate(wc.Request,wc.Response);
+                
                 if (BeforeHandlerProcessed(wc)) {
                     if (!wc.Response.WasClosed) {
                         wc.Response.Close();
@@ -270,23 +281,15 @@ namespace Qorpent.Host {
 
 
         private bool BeforeHandlerProcessed(WebContext wc) {
-            if (CheckFormAuthentication(wc)) return true;
-
-            return false;
-        }
-
-        private bool CheckFormAuthentication(WebContext wc) {
-            if (Config.RequireLogin) {
-                var path = wc.Uri.AbsolutePath;
-                
-                if (path.EndsWith(".html") && path != Config.LoginPage && !path.StartsWith("/views")) {
-                    if (!wc.User.Identity.IsAuthenticated) {
-                        wc.Redirect(Config.LoginPage + "?referer=" + wc.Request.Uri.PathAndQuery);
-                        return true;
-                    }
-                }
+            if (wc.User.Identity.IsAuthenticated) return false;
+            var suggest = NotAuth.GetReaction(wc.User.Identity,wc.Request);
+            if (suggest.Process) return false;
+            if (!string.IsNullOrWhiteSpace(suggest.Redirect)) {
+                wc.Redirect(suggest.Redirect);
+                return true;
             }
-            return false;
+            wc.Finish(new{error="not auth"}.stringify(),status:500);
+            return true;
         }
 
         private bool CheckInvalidStartupConditions(WebContext ctx) {
@@ -527,6 +530,7 @@ namespace Qorpent.Host {
             if (null != OnBeforeInitializeServices) {
                 OnBeforeInitializeServices(Container);
             }
+           
             if (null == Container.FindComponent(typeof (IHostConfigProvider), null)) {
                 Container.Register(Container.NewComponent<IHostConfigProvider, HostServer>(implementation: this));
             }
@@ -543,16 +547,12 @@ namespace Qorpent.Host {
                     Container.NewComponent<IHostServerStaticResolver, HostServerStaticResolver>(Lifestyle.Transient));
             }
 
-            if (null == Container.FindComponent(typeof (IHostAuthenticationProvider), null)) {
-                Container.Register(
-                    Container.NewComponent<IHostAuthenticationProvider, DefaultHostAuthenticationProvider>(Lifestyle.Transient));
-            }
+
             if (null == Container.FindComponent(typeof (IEncryptProvider), null)) {
                 Container.Register(Container.NewComponent<IEncryptProvider, Encryptor>(Lifestyle.Transient));
             }
             Factory = Container.Get<IRequestHandlerFactory>();
             Static = Container.Get<IHostServerStaticResolver>();
-            Auth = Container.Get<IHostAuthenticationProvider>();
             Encryptor = Container.Get<IEncryptProvider>();
             foreach (var map in Config.StaticContentMap) {
                 Static.SetRoot(map.Key, map.Value);
@@ -589,6 +589,7 @@ namespace Qorpent.Host {
                 Application.DatabaseConnections.Register(dsc, false);
             }
             loader.LoadAssembly(typeof (HostServer).Assembly);
+            loader.LoadAssembly(typeof (HttpAuthenticator).Assembly);
             foreach (var assemblyName in Config.AutoconfigureAssemblies) {
                 var assembly = Assembly.Load(assemblyName);
                 loader.LoadAssembly(assembly);

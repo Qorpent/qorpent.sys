@@ -141,6 +141,7 @@ namespace qorpent.v2.security.authentication {
                 }
             }
             result.Created = DateTime.Now.ToUniversalTime();
+            result.IsAdmin = qid.IsAdmin;
             if (LeaseTime == -1) {
                 result.Expire = DateTime.Today.AddDays(1).AddSeconds(-1).ToUniversalTime();
             }
@@ -148,6 +149,9 @@ namespace qorpent.v2.security.authentication {
                 result.Expire = DateTime.Now.AddMinutes(LeaseTime).ToUniversalTime();
             }
             result.Metrics = GetMetrics(request);
+            if (null != qid.ImpersonationSource) {
+                result.ImUser = qid.ImpersonationSource.Name;
+            }
             return result;
         }
 

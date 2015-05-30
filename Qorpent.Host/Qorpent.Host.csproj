@@ -34,7 +34,6 @@
     <Compile Include="Handlers\WikiHandler.cs" />
     <Compile Include="ProxyHandler.cs" />
     <Compile Include="Qweb\AppInfoAction.cs" />
-    <Compile Include="Security\SecurityManagementInitializer.cs" />
     <Compile Include="Security\UpdateLoginInfoHandler.cs" />
     <Compile Include="Security\UpdateLoginInfoRequest.cs" />
     <Compile Include="Server\ServerParameters.cs" />
@@ -45,7 +44,6 @@
     <Compile Include="Security\AuthProtocolResponseType.cs" />
     <Compile Include="Security\AuthProtocolStatus.cs" />
     <Compile Include="Security\AuthProtocol.cs" />
-    <Compile Include="Security\DefaultHostAuthenticationProvider.cs" />
     <Compile Include="Security\DefaultAuthHandler.cs" />
     <Compile Include="Security\Encryptor.cs" />
     <Compile Include="Security\QorpentHostPrincipal.cs" />
@@ -84,6 +82,10 @@
     <ProjectReference Include="..\Qorpent.IO\Qorpent.IO.csproj">
       <Project>{426C92DF-3C40-426C-B0BE-40A1DF9044C2}</Project>
       <Name>Qorpent.IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\qorpent.v2.security\qorpent.v2.security.csproj">
+      <Project>{5b887177-d99b-4505-b9cd-592363e9ab51}</Project>
+      <Name>qorpent.v2.security</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
