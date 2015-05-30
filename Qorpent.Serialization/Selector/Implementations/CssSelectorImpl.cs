@@ -119,8 +119,10 @@ namespace Qorpent.Selector.Implementations {
 					}
 				}
 			}
-
-			var result = (onelevel?"/":"//") + tag;
+		    if (tag!="*") {
+		        subconditions.Insert(0,"local-name()='"+tag+"'");
+		    }
+			var result = (onelevel?"/":"//") + "*";
 			if (0 != subconditions.Count) {
 				result += "[" + string.Join(" and ", subconditions) + "]";
 			}
