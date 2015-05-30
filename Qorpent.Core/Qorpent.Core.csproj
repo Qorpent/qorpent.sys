@@ -70,6 +70,7 @@
     <Compile Include="Experiments\JsonExtend.cs" />
     <Compile Include="Experiments\JsonWriter.cs" />
     <Compile Include="ExtensibleServiceBase.cs" />
+    <Compile Include="IConfigProvider.cs" />
     <Compile Include="Host\QorpentHostIdentity.cs" />
     <Compile Include="Host\TokenType.cs" />
     <Compile Include="Host\UserInfo.cs" />

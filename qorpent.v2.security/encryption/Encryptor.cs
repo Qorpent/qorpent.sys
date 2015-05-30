@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -11,15 +12,19 @@ namespace qorpent.v2.security.encryption{
 		private readonly SymmetricAlgorithm _cryptoService = new TripleDESCryptoServiceProvider();
 		public byte[] Key;
 		public byte[] Vector;
+        
 
 	    public Encryptor():this(Guid.NewGuid().ToString()){
 		}
 
-		public Encryptor(string keysrc){
-			InitializeKey(keysrc);
+		public Encryptor(string keysrc, bool withmachineanddate = true) {
+		    this.KeySource = keysrc;
+			InitializeKey(keysrc,withmachineanddate);
 		}
 
-		// maybe use AesCryptoServiceProvider instead?
+	    public string KeySource { get;private set; }
+
+	    // maybe use AesCryptoServiceProvider instead?
 
 		// vector and key have to match between encryption and decryption
 		public string Encrypt(string text){
@@ -82,17 +87,20 @@ namespace qorpent.v2.security.encryption{
 			InitializeKey(server.Config.EncryptBasis);
 		}
 
-		private void InitializeKey(string keysrc){
+		private void InitializeKey(string keysrc, bool withmachineanddate = true){
            
 			if (string.IsNullOrWhiteSpace(keysrc)) {
 			    keysrc = Guid.NewGuid().ToString();
 			}
-		    keysrc += Environment.MachineName + DateTime.Today.ToLongDateString();
-			while (keysrc.Length <= 32){
+		    if (withmachineanddate) {
+		        keysrc += Environment.MachineName + DateTime.Today.ToLongDateString();
+		    }
+		    while (keysrc.Length <= 32){
 				keysrc += keysrc;
 			}
-			Key = Encoding.UTF8.GetBytes(keysrc.Substring(0, 16));
-			Vector = Encoding.UTF8.GetBytes(keysrc.Substring(16));
+		    var bytes = Encoding.UTF8.GetBytes(keysrc);
+		    Key = bytes.Take(16).ToArray();
+		    Vector = bytes.Skip(16).ToArray();
 		}
 
 		private byte[] Transform(byte[] input, ICryptoTransform cryptoTransform){

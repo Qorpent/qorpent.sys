@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using qorpent.v2.security.authorization;
 using Qorpent;
 using Qorpent.BSharp;
 using Qorpent.Events;
@@ -10,20 +11,24 @@ using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.user.storage.providers {
-    [ContainerComponent(Lifestyle.Singleton,"file.usersource",ServiceType=typeof(IUserSource))]
-    [ContainerComponent(Lifestyle.Singleton,"file.usercachelease",ServiceType=typeof(IUserCacheLease))]
-    public class FileUserSource : ServiceBase, IUserSource,IUserCacheLease
+    [ContainerComponent(Lifestyle.Singleton, "file.usersource", ServiceType = typeof(IUserSource))]
+    public class FileUserSource : 
+        ServiceBase, 
+        IUserSource, 
+        IUserCacheLease,
+        IRoleResolverCacheLease
     {
         private const string DEFAULTFILEPATH = "@repos@/.app/pwd.bxls";
 
         [Inject]
-        public IHostConfigProvider ConfigProvider { get; set; }
+        public IConfigProvider ConfigProvider { get; set; }
 
 
         public FileUserSource() {
             DefaultFilePath = DEFAULTFILEPATH;
             CheckRate = 5000;
             Idx = 200;
+            Enabled = true;
         }
         public override void OnContainerCreateInstanceFinished() {
             base.OnContainerCreateInstanceFinished();
@@ -32,9 +37,9 @@ namespace qorpent.v2.security.user.storage.providers {
 
         private void Initialize() {
             lock (this) {
-                var file = ResolvePathToFile();
-                if (File.Exists(file)) {
-                    _file = file;
+                Setup();
+                if (File.Exists(ResolvedFilePath)) {
+                    _file = ResolvedFilePath;
                     var bsharpresult = BSharpCompiler.CompileFile(_file);
                     foreach (
                         var cls in
@@ -52,24 +57,35 @@ namespace qorpent.v2.security.user.storage.providers {
         }
 
         public string DefaultFilePath { get; set; }
+        public string ResolvedFilePath { get; set; }
 
-        private string ResolvePathToFile() {
+        private void Setup() {
+            Enabled = true;
             var file = DefaultFilePath;
             if (null != ConfigProvider) {
                 var conf = ConfigProvider.GetConfig();
-                if (null != conf.Definition) {
-                    file = conf.Definition.Attr("pwdfile", file);
+                if (null != conf) {
+                    var element = conf.Element("logon");
+                    if (null != element) {
+                        element = element.Element("file");
+                    }
+                    if (null != element) {
+                        file = element.Attr("path", file);
+                        Enabled = element.Attr("active", "true").ToBool();
+                    }
                 }
             }
-            file = EnvironmentInfo.ResolvePath(file);
-            return file;
+           ResolvedFilePath = EnvironmentInfo.ResolvePath(file);
+           
         }
+
+        public bool Enabled { get; set; }
 
         IDictionary<string, IUser> _cache = new Dictionary<string, IUser>();
         private string _file;
 
-        public IUser GetUser(string username)
-        {
+        public IUser GetUser(string username) {
+            if (!Enabled) return null;
             lock (this) {
                 CheckCache();
                 if (_cache.ContainsKey(username.ToLowerInvariant())) return _cache[username];
@@ -84,9 +100,9 @@ namespace qorpent.v2.security.user.storage.providers {
                 _initialized = true;
             }
             if (string.IsNullOrWhiteSpace(_file)) {
-                var f = ResolvePathToFile();
-                if (File.Exists(f)) {
-                    _file = f;
+                Setup();
+                if (File.Exists(ResolvedFilePath)) {
+                    _file = ResolvedFilePath;
                 }
                 else {
                     return;
@@ -128,6 +144,12 @@ namespace qorpent.v2.security.user.storage.providers {
                 }
                 return LastFileTime;
             }
+        }
+
+        public void Clear() {
+            _cache.Clear();
+            _initialized = false;
+            Initialize();
         }
     }
 }

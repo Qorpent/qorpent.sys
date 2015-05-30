@@ -79,6 +79,10 @@ namespace qorpent.v2.security.Tests.logon.hash
             get { throw new NotImplementedException(); }
         }
 
+        public bool WriteUsersEnabled {
+            get { throw new NotImplementedException(); }
+        }
+
         public IUser Store(IUser user) {
             throw new NotImplementedException();
         }

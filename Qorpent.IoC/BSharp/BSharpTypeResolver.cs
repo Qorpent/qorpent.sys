@@ -105,5 +105,9 @@ namespace Qorpent.IoC.BSharp
 		public void Release(object obj) {
 			
 		}
+
+	    public IEnumerable All2(Type type, string name, params object[] ctorArguments) {
+	        return All(type, name, (object[]) ctorArguments);
+	    }
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System.Security;
 using System.Security.Principal;
+using qorpent.v2.security.logon.services;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.services;
 using qorpent.v2.security.user.storage;
@@ -25,7 +26,19 @@ namespace qorpent.v2.security.logon.providers
 
         [Inject]
         public IUserService UserService { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject]
+        public IPasswordManager PasswordManager {
+            get { return _passwordManager??(_passwordManager=new PasswordManager()); }
+            set { _passwordManager = value; }
+        }
+
         private IUserStateChecker _stateChecker;
+        private IPasswordManager _passwordManager;
+
         /// <summary>
         /// 
         /// </summary>
@@ -50,8 +63,8 @@ namespace qorpent.v2.security.logon.providers
                 result.Error = new SecurityException(state.ToStr());
             }
             else {
-                var hash = (username + password + user.Salt).GetMd5();
-                if (hash == user.Hash) {
+                
+                if (PasswordManager.MatchPassword(user,password)) {
                     result.IsAuthenticated = true;
                     result.IsAdmin = user.IsAdmin;
                     result.User = user;

@@ -134,7 +134,11 @@ namespace Qorpent.IoC {
 		/// <param name="obj"> </param>
 		public void Release(object obj) {}
 
-		/// <summary>
+	    public IEnumerable All2(Type type, string name, params object[] ctorArguments) {
+	        return All(type, name, (object[]) ctorArguments);
+	    }
+
+	    /// <summary>
 		/// 	Register new component
 		/// </summary>
 		/// <param name="component"> </param>

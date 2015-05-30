@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using NUnit.Framework;
 using qorpent.v2.security.user;
@@ -61,6 +62,27 @@ namespace qorpent.v2.security.Tests.user.storage.providers
         }
 
         [Test]
+        [Explicit]
+        public void PerformanceTest() {
+            CheckRate(i =>
+            {
+                if (0 == i%100) {
+                    _es.Refresh();
+                    _es.Clear();
+                }
+                var u = _es.GetUser("login0");
+                Assert.NotNull(u);
+            }, 10000, "1/100 refresh");
+            CheckRate(i => {
+                _es.Refresh();
+                _es.Clear();
+               var u = _es.GetUser("login0");
+                Assert.NotNull(u);
+            },10000,"1/1 refresh");
+          
+        }
+
+        [Test]
         public void WorkWithBadConnection() {
             //we emulate broken connection - change url to bad and restore it
             //it's same as es gain lost
@@ -107,28 +129,5 @@ namespace qorpent.v2.security.Tests.user.storage.providers
             Assert.False(_es.InvalidConnection);
             Assert.Null(_es.LastError);
         }
-
-        private string ExecuteCommand(string url, string post = null,string method = "")
-        {
-            string json;
-            try
-            {
-                var cli = new HttpClient();
-                json = cli.GetString(url, post, _ => {
-                    if (!string.IsNullOrWhiteSpace(method)) {
-                        _.Method = method;
-                    }
-                });
-              
-                return json;
-            }
-            catch (IOException e)
-            {
-              
-               
-                return null;
-            }
-        }
-
     }
 }

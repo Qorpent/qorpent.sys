@@ -134,4 +134,7 @@
   <ItemGroup>
     <Folder Include="Sql\" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Selector_Tests\zu608.html" />
+  </ItemGroup>
 </Project>

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using qorpent.v2.security.user.storage.providers;
 using Qorpent.Utils;
@@ -12,7 +8,7 @@ using Qorpent.Utils;
 namespace qorpent.v2.security.Tests.user.storage.providers
 {
     [TestFixture]
-    public class FileUserSourceTest
+    public class FileUserSourceTest:BaseFixture
     {
         private FileUserSource _fus;
 
@@ -83,6 +79,30 @@ class main prototype=pwd
             _fus = fus;
         }
 
+
+        [Test]
+        [Explicit]
+        public void PerformanceTest()
+        {
+            CheckRate(i =>
+            {
+                if (0 == i % 100)
+                {
+                    _fus.Refresh();
+                    _fus.Clear();
+                }
+                var u = _fus.GetUser("u1");
+                Assert.NotNull(u);
+            }, 10000, "1/100 refresh");
+            CheckRate(i =>
+            {
+                _fus.Refresh();
+                _fus.Clear();
+                var u = _fus.GetUser("u1");
+                Assert.NotNull(u);
+            }, 10000, "1/1 refresh");
+
+        }
         
     }
 }

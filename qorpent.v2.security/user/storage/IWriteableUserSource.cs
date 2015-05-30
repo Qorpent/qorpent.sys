@@ -3,7 +3,8 @@
     /// 
     /// </summary>
     public interface IWriteableUserSource {
-        bool IsDefault { get;  }
+        bool IsDefault { get; }
+        bool WriteUsersEnabled { get; }
         IUser Store(IUser user);
     }
 }

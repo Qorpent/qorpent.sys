@@ -21,6 +21,7 @@ namespace qorpent.v2.security.logon {
     [ContainerComponent(Lifestyle.Singleton, "logon.v2", ServiceType = typeof (ILogon))]
     [ContainerComponent(Lifestyle.Singleton, "logonprovider.v2", ServiceType = typeof (ILogonService))]
     [ContainerComponent(Lifestyle.Singleton, "securelogon.v2", ServiceType = typeof (ISecureLogon))]
+    [ContainerComponent(Lifestyle.Singleton, "passlogon.v2", ServiceType = typeof (IPasswordLogon))]
     public partial class LogonService : ExtensibleServiceBase<ILogonProvider>, ILogonService {
         private const string PWDLOGONOPID = "lgn_pl_";
         private const string SECLOGONOPID = "lgn_sl_";
@@ -28,21 +29,23 @@ namespace qorpent.v2.security.logon {
         private int logonid;
 
         public IIdentity Logon(string username, string password, IScope context = null) {
-            if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("username");
-            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
-            var opid = PWDLOGONOPID + Interlocked.Increment(ref logonid);
-            LogStart(username, password, context, opid);
-            IIdentity result = null;
-            try {
-                result = ResolveByExtensions(username, password, context, result)
-                         ?? GetDefaultLogon(username);
+            lock (this) {
+                if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("username");
+                if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
+                var opid = PWDLOGONOPID + Interlocked.Increment(ref logonid);
+                LogStart(username, password, context, opid);
+                IIdentity result = null;
+                try {
+                    result = ResolveByExtensions(username, password, context, result)
+                             ?? GetDefaultLogon(username);
+                }
+                catch (Exception ex) {
+                    LogError(username, password, context, opid, ex);
+                    result = GetErrorLogon(username, ex);
+                }
+                LogResult(result, opid);
+                return result;
             }
-            catch (Exception ex) {
-                LogError(username, password, context, opid, ex);
-                result = GetErrorLogon(username, ex);
-            }
-            LogResult(result, opid);
-            return result;
         }
 
         /// <summary>
@@ -157,7 +160,7 @@ namespace qorpent.v2.security.logon {
         private IIdentity ResolveByExtensions(string username, string password, IScope context, IIdentity result) {
             result = Extensions.OfType<IPasswordLogon>()
                 .Select(_ => _.Logon(username, password, context))
-                .FirstOrDefault(_ => _.IsAuthenticated);
+                .FirstOrDefault(_ => null!=_ && _.IsAuthenticated);
             return result;
         }
 

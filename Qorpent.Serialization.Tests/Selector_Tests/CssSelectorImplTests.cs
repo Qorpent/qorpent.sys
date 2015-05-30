@@ -1,10 +1,16 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Qorpent.Selector.Implementations;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
+using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Serialization.Tests.Selector_Tests {
+
+
+
     [TestFixture]
     public class CssSelectorImplTests {
         private const string _case1 = @"<root>
@@ -58,5 +64,28 @@ namespace Qorpent.Serialization.Tests.Selector_Tests {
 			Assert.AreEqual(4,selectresult.Length);
 			Assert.AreEqual("abcd",string.Join("",selectresult.Select(_=>_.Value)));
 		}
+
+        [Test]
+        public void ZU608_Bug_Test() {
+            var html = Assembly.GetExecutingAssembly().ReadManifestResource("zu608.html");
+            var selector = ".cl-center h1";
+            var xml = XElement.Parse(html);
+            var center = xml.DescendantsAndSelf().Where(_ => _.Attr("class").Contains("cl-center")).ToArray();
+            //for (var i = 0; i < center.Length; i++) {
+            //    Console.WriteLine(".cl-center "+i);
+            //    Console.WriteLine("===========================================");
+            //    Console.WriteLine(center[i]);
+            //    Console.WriteLine("===========================================");
+            //}
+            Assert.True(center.Any(_=>_.Descendants().Any(__=>__.Name.LocalName=="h1")));
+            var css = new CssSelectorImpl();
+            var xpath = css.BuildXpath(selector);
+            Console.WriteLine(xpath);
+            var selectresult = new CssSelectorImpl().Select(xml, selector).ToArray();
+            Assert.AreEqual(1,selectresult.Length);
+            Console.WriteLine(selectresult[0].Value);
+        }
+
+       
     }
 }

@@ -17,18 +17,25 @@
     <EmbeddedResource Include="encryption\private.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="authentication\DefaultIdentirySourceTest.cs" />
+    <Compile Include="authentication\TokenEncryptorTest.cs" />
+    <Compile Include="authorization\DefaultRoleResolverTest.cs" />
     <Compile Include="encryption\EncryptorMainTest.cs" />
+    <Compile Include="EnvironmentCheck.cs" />
     <Compile Include="logon\hash\HashSecureLogonTest.cs" />
     <Compile Include="logon\LogonProviderTests.cs" />
     <Compile Include="BaseFixture.cs" />
+    <Compile Include="logon\OverallLogonPerfomanceTest.cs" />
+    <Compile Include="logon\services\PasswordManagerTest.cs" />
+    <Compile Include="logon\services\PasswordPolicyTest.cs" />
     <Compile Include="logon\services\SecureLogonServiceTest.cs" />
+    <Compile Include="PerformaceCheck.cs" />
     <Compile Include="user\StateCheckerTest.cs" />
-    <Compile Include="user\storage\providers\ElasticUserSource.cs" />
+    <Compile Include="user\storage\providers\ElasticUserSourceTest.cs" />
     <Compile Include="user\storage\providers\FileUserSourceTest.cs" />
     <Compile Include="user\UserSerializationTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="authorization\" />
     <Folder Include="management\" />
     <Folder Include="storage\" />
   </ItemGroup>

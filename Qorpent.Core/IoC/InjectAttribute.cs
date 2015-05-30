@@ -56,5 +56,7 @@ namespace Qorpent.IoC {
         /// Тип для создания по умолчанию
         /// </summary>
 	    public Type DefaultType { get; set; }
+
+	    public bool IncludeAll { get; set; }
 	}
 }

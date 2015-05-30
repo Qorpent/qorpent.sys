@@ -13,6 +13,29 @@
     <EmbeddedResource Include=".\**\*.*resource" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="authentication\HttpAuthenticator.cs" />
+    <Compile Include="authentication\HttpDefaultIdentitySource.cs" />
+    <Compile Include="authentication\HttpIdentitySource.cs" />
+    <Compile Include="authentication\HttpTokenService.cs" />
+    <Compile Include="authentication\IHttpAuthenticator.cs" />
+    <Compile Include="authentication\IHttpDefaultIdentitySource.cs" />
+    <Compile Include="authentication\IHttpIdentitySource.cs" />
+    <Compile Include="authentication\IHttpTokenService.cs" />
+    <Compile Include="authentication\ITokenEncryptor.cs" />
+    <Compile Include="authentication\Token.cs" />
+    <Compile Include="authentication\TokenEncryptor.cs" />
+    <Compile Include="authentication\TrustedOrigin.cs" />
+    <Compile Include="authorization\IRoleResolver.cs" />
+    <Compile Include="authorization\IRoleResolverCache.cs" />
+    <Compile Include="authorization\IRoleResolverCacheLease.cs" />
+    <Compile Include="authorization\IRoleResolverService.cs" />
+    <Compile Include="authorization\RoleResolverCache.cs" />
+    <Compile Include="authorization\RoleResolverService.cs" />
+    <Compile Include="authorization\RoleResolver.cs" />
+    <Compile Include="logon\services\IPasswordManager.cs" />
+    <Compile Include="logon\services\IPasswordPolicy.cs" />
+    <Compile Include="logon\services\PasswordManager.cs" />
+    <Compile Include="logon\services\PasswordPolicy.cs" />
     <Compile Include="user\Identity.cs" />
     <Compile Include="user\IUser.cs" />
     <Compile Include="encryption\Encryptor.cs" />
@@ -49,7 +72,6 @@
     <Compile Include="v1migration\logon\LogonService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="authorization\" />
     <Folder Include="management\" />
     <Folder Include="storage\" />
   </ItemGroup>

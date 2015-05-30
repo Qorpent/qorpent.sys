@@ -26,7 +26,7 @@ namespace Qorpent.Host {
     /// <summary>
     ///     Http сервер Qorpent
     /// </summary>
-    public class HostServer : IHostServer, IHostConfigProvider {
+    public class HostServer : IHostServer, IHostConfigProvider,IConfigProvider {
         private IHostAuthenticationProvider _auth;
         internal CancellationToken _cancel;
         private IEncryptProvider _encryptor;
@@ -530,6 +530,10 @@ namespace Qorpent.Host {
             if (null == Container.FindComponent(typeof (IHostConfigProvider), null)) {
                 Container.Register(Container.NewComponent<IHostConfigProvider, HostServer>(implementation: this));
             }
+            if (null == Container.FindComponent(typeof(IConfigProvider), null))
+            {
+                Container.Register(Container.NewComponent<IConfigProvider, HostServer>(implementation: this));
+            }
             if (null == Container.FindComponent(typeof (IRequestHandlerFactory), null)) {
                 Container.Register(
                     Container.NewComponent<IRequestHandlerFactory, DefaultRequestHandlerFactory>(Lifestyle.Transient));
@@ -620,6 +624,10 @@ namespace Qorpent.Host {
         /// <returns></returns>
         public string GetStatisticsString() {
             return string.Format("Request Count: {0}\r\nRequest Time: {1}", RequestCount, RequestTime);
+        }
+
+        XElement IConfigProvider.GetConfig() {
+            return Config.Definition;
         }
     }
 }

@@ -346,74 +346,94 @@ namespace Qorpent.IoC {
 		}
 
 
-		/// <summary>
-		/// 	Возвращает все объекты указаннго типа (прямое указание типа)
-		/// </summary>
-		/// <param name="ctorArguments"> Параметры для вызова конструктора, если не указано - будет использован конструктор по умолчанию. </param>
-		/// <param name="type"> тип сервиса </param>
-		/// <param name="name"> опциональное имя компонента, если указано - поиск будет производиться только среди с компонентов с указаным именем </param>
-		/// <returns> Все экземпляры указанного сервиса </returns>
-		/// <remarks>
-		/// 	<invariant>Метод All применим только для компонентов с циклом жизни
-		/// 		<see cref="Lifestyle.Transient" />
-		/// 		и
-		/// 		<see cref="Lifestyle.Extension" />
-		/// 		.
-		/// 		<note>Не пытайтесь таким образом получить все экземпляры сервисов с другим циклом жизни</note>
-		/// 	</invariant>
-		/// </remarks>
-		public IEnumerable All(Type type, string name = null, params object[] ctorArguments) {
-			lock (this) {
-				if (null == type) {
-					throw new ArgumentNullException("type");
-				}
-				if (type.IsValueType) {
-					throw new ArgumentException("type must be interface or reference type");
-				}
+	    /// <summary>
+	    /// 	Возвращает все объекты указаннго типа (прямое указание типа)
+	    /// </summary>
+	    /// <param name="ctorArguments"> Параметры для вызова конструктора, если не указано - будет использован конструктор по умолчанию. </param>
+	    /// <param name="type"> тип сервиса </param>
+	    /// <param name="name"> опциональное имя компонента, если указано - поиск будет производиться только среди с компонентов с указаным именем </param>
+	    /// <returns> Все экземпляры указанного сервиса </returns>
+	    /// <remarks>
+	    /// 	<invariant>Метод All применим только для компонентов с циклом жизни
+	    /// 		<see cref="Lifestyle.Transient" />
+	    /// 		и
+	    /// 		<see cref="Lifestyle.Extension" />
+	    /// 		.
+	    /// 		<note>Не пытайтесь таким образом получить все экземпляры сервисов с другим циклом жизни</note>
+	    /// 	</invariant>
+	    /// </remarks>
+	    public IEnumerable All(Type type, string name = null, params object[] ctorArguments) {
+            foreach (var p in GetAllInternal(type, name, ctorArguments, false)) yield return p;
+        }
+        public IEnumerable All2(Type type, string name, params object[] ctorArguments)
+        {
+            foreach (var p in GetAllInternal(type, name, ctorArguments, true)) yield return p;
+        }
 
-				foreach (var typeResolver in SubResolvers.Where(x=>x.Idx<=this.Idx).OrderBy(x=>x.Idx)) {
-					foreach (var obj in typeResolver.All(type,name,(object[])ctorArguments)) {
-						yield return obj;
-					}
-				}
+	    private IEnumerable GetAllInternal(Type type, string name, object[] ctorArguments, bool all) {
+	        lock (this) {
+	            if (null == type) {
+	                throw new ArgumentNullException("type");
+	            }
+	            if (type.IsValueType) {
+	                throw new ArgumentException("type must be interface or reference type");
+	            }
 
-				var extensions = FindExtensions(type, name);
-				if (typeof (IWithIndex).IsAssignableFrom(type)) {
+	            foreach (var typeResolver in SubResolvers.Where(x => x.Idx <= this.Idx).OrderBy(x => x.Idx)) {
+	                if (all) {
+	                    foreach (var obj in typeResolver.All2(type, name, (object[]) ctorArguments)) {
+	                        yield return obj;
+	                    }
+	                }
+	                else {
+	                    foreach (var obj in typeResolver.All(type, name, (object[]) ctorArguments)) {
+	                        yield return obj;
+	                    }
+	                }
+	            }
+
+	            var extensions = FindExtensions(type, name, all);
+	            if (typeof (IWithIndex).IsAssignableFrom(type)) {
 //have to order result
-					var result = new List<object>();
-					foreach (var component in extensions) {
-						component.ActivationCount++;
-						result.Add(component.Implementation ?? CreateInstance(component, ctorArguments));
-					}
-					foreach (var obj in result.OfType<IWithIndex>().OrderBy(x => x.Idx)) {
-						yield return obj;
-					}
-				}
-				else {
-					foreach (var component in extensions) {
-						component.ActivationCount++;
-						if (component.Implementation != null) {
-							yield return component.Implementation;
-						}
-						else {
-							yield return CreateInstance(component, null);
-						}
-					}
-				}
+	                var result = new List<object>();
+	                foreach (var component in extensions) {
+	                    component.ActivationCount++;
+	                    result.Add(component.Implementation ?? CreateInstance(component, ctorArguments));
+	                }
+	                foreach (var obj in result.OfType<IWithIndex>().OrderBy(x => x.Idx)) {
+	                    yield return obj;
+	                }
+	            }
+	            else {
+	                foreach (var component in extensions) {
+	                    component.ActivationCount++;
+	                    if (component.Implementation != null) {
+	                        yield return component.Implementation;
+	                    }
+	                    else {
+	                        yield return CreateInstance(component, null);
+	                    }
+	                }
+	            }
 
 
-				foreach (var typeResolver in SubResolvers.Where(x => x.Idx > this.Idx).OrderBy(x => x.Idx))
-				{
-					foreach (var obj in typeResolver.All(type, name, (object[])ctorArguments))
-					{
-						yield return obj;
-					}
-				}
-			}
-		}
+	            foreach (var typeResolver in SubResolvers.Where(x => x.Idx > this.Idx).OrderBy(x => x.Idx)) {
+	                if (all) {
+	                    foreach (var obj in typeResolver.All2(type, name, (object[]) ctorArguments)) {
+	                        yield return obj;
+	                    }
+	                }
+	                else {
+	                    foreach (var obj in typeResolver.All(type, name, (object[]) ctorArguments)) {
+	                        yield return obj;
+	                    }
+	                }
+	            }
+	        }
+	    }
 
 
-		/// <summary>
+	    /// <summary>
 		/// 	Возвращает объект контейнеру
 		/// </summary>
 		/// <param name="obj"> Объект, ранее созданнй контейнером </param>
@@ -706,7 +726,8 @@ namespace Qorpent.IoC {
                                  factoryType = inja.FactoryType, 
                                  required =inja.Required,
                                  nameMask = inja.NameMask,
-                                 defaultType = inja.DefaultType
+                                 defaultType = inja.DefaultType,
+                                 includeall = inja.IncludeAll
 			                 };
 
 			foreach (var i in injections) {
@@ -718,7 +739,9 @@ namespace Qorpent.IoC {
 					
 				object val;
 				if (i.type.IsArray) {
-				    var instances = All(i.type.GetElementType(), name).OfType<object>().ToArray();
+				    var instances = i.includeall?
+                        All2(i.type.GetElementType(), name).OfType<object>().ToArray():
+                        All(i.type.GetElementType(), name).OfType<object>().ToArray();
 				    
 					val = Array.CreateInstance(i.type.GetElementType(), instances.Length);
 					Array.Copy(instances, val as Array, instances.Length);
@@ -727,7 +750,9 @@ namespace Qorpent.IoC {
 				         ((i.type.GetGenericTypeDefinition() == typeof (List<object>).GetGenericTypeDefinition())
 				          || ((i.type.GetGenericTypeDefinition() == typeof (IList<object>).GetGenericTypeDefinition())))
 					) {
-					var instances = All(i.type.GetGenericArguments()[0], name).OfType<object>().ToArray();
+					var instances =i.includeall?
+                        All2(i.type.GetGenericArguments()[0], name).OfType<object>().ToArray():
+                        All(i.type.GetGenericArguments()[0], name).OfType<object>().ToArray();
 
 					if (null == current) {
 						val =
@@ -843,22 +868,23 @@ namespace Qorpent.IoC {
 		/// <exception cref="NotImplementedException"></exception>
 		/// <remarks>
 		/// </remarks>
-		public IEnumerable<IComponentDefinition> FindExtensions(Type type, string name) {
+		public IEnumerable<IComponentDefinition> FindExtensions(Type type, string name, bool includeall = false) {
 			if (name.IsEmpty()) {
 				if (!ByTypeCache.ContainsKey(type)) {
 					return new IComponentDefinition[] {};
 				}
-				return
+                return
 					ByTypeCache[type].Where(
 						x =>
-						((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0).Reverse().ToArray();
+						includeall ||((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0).Reverse().ToArray();
+                
 			}
 			//поддержка поиска по тегам
 			if (name.StartsWith("tag:")) {
 				var regex = new Regex(name.Substring(4));
 				return Components.Where(
 						x =>
-						((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0
+						(includeall||((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0)
 						&&
 						(null!=x.Tag && regex.IsMatch(x.Tag))
 						).Reverse().ToArray();
@@ -867,7 +893,7 @@ namespace Qorpent.IoC {
                 var regex = new Regex(name.Substring(1));
                 return Components.Where(
                    x =>
-                        ((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0
+                        (includeall||((Lifestyle.Transient | Lifestyle.Extension | Lifestyle.Default) & x.Lifestyle) != 0)
                         &&
                         (null!=x.Name && regex.IsMatch(x.Name))
                     ).Reverse().ToArray();

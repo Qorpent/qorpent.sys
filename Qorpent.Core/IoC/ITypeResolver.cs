@@ -181,7 +181,7 @@ namespace Qorpent.IoC {
 		/// 	</invariant>
 		/// </remarks>
 		IEnumerable All(Type type, string name = null, params object[] ctorArguments);
-
+		
 		/// <summary>
 		/// 	Возвращает объект контейнеру
 		/// </summary>
@@ -197,5 +197,7 @@ namespace Qorpent.IoC {
 		/// 		, для остальных данный метод игнорируется</invariant>
 		/// </remarks>
 		void Release(object obj);
+
+	    IEnumerable All2(Type type, string name, params object[] ctorArguments);
 	}
 }

@@ -21,6 +21,23 @@ namespace qorpent.v2.security.user.storage {
             return UserCache.Get(key, InternalGetUser);
         }
 
+        public override void OnContainerCreateInstanceFinished() {
+            base.OnContainerCreateInstanceFinished();
+            InitializeLeases();
+        }
+
+        private void InitializeLeases() {
+            var cacheleases = UserCache.GetExtensions().ToList();
+            foreach (var userSource in Extensions) {
+                var lease = userSource as IUserCacheLease;
+                if (null != lease) {
+                    if (!cacheleases.Contains(lease)) {
+                        UserCache.RegisterExtension(lease);
+                    }
+                }
+            }
+        }
+
         private IUser InternalGetUser(string key) {
             foreach (var userSource in Extensions) {
                 var result = userSource.GetUser(key);
@@ -43,12 +60,23 @@ namespace qorpent.v2.security.user.storage {
             get { return true; }
         }
 
+        public bool WriteUsersEnabled {
+            get { return Extensions.OfType<IWriteableUserSource>().Any(_ => _.WriteUsersEnabled); }
+        }
+
         public IUser Store(IUser user) {
+            if (!WriteUsersEnabled) {
+                throw new Exception("Storing not enabled");
+            }
             IWriteableUserSource writeable = ResolveWriteableStore(user);
             if (null == writeable) {
                 throw new Exception("no target source to use as store");
             }
+            if (!writeable.WriteUsersEnabled) {
+                throw new Exception("requested storage not enabled");
+            }
             var realuser = writeable.Store(user);
+
             _userCache.Clear();
             _userCache.Refresh();
             return realuser;
@@ -67,7 +95,7 @@ namespace qorpent.v2.security.user.storage {
                     }
                 }
             }
-            var writeables = Extensions.OfType<IWriteableUserSource>().ToArray();
+            var writeables = Extensions.OfType<IWriteableUserSource>().Where(_=>_.WriteUsersEnabled).ToArray();
             if (0 == writeables.Length) return null;
             var def = writeables.FirstOrDefault(_ => _.IsDefault);
             if (null != def) return def;

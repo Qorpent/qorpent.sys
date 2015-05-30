@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using qorpent.v2.security.authorization;
 using Qorpent;
 using Qorpent.Experiments;
 using Qorpent.Host;
 using Qorpent.IoC;
+using Qorpent.IO;
 using Qorpent.IO.Net;
 using Qorpent.Log.NewLog;
 using Qorpent.Utils.Extensions;
@@ -15,10 +13,12 @@ using Qorpent.Utils.Extensions;
 namespace qorpent.v2.security.user.storage.providers
 {
     [ContainerComponent(Lifestyle.Singleton, "elastic.usersource", ServiceType = typeof(IUserSource))]
-    [ContainerComponent(Lifestyle.Singleton, "elastic.usercachelease", ServiceType = typeof(IUserCacheLease))]
-    public class ElasticUserSource : ServiceBase, IUserSource, IUserCacheLease, IWriteableUserSource
-    {
-
+    public class ElasticUserSource : 
+        ServiceBase, 
+        IUserSource, 
+        IUserCacheLease, 
+        IWriteableUserSource,
+        IRoleResolverCacheLease{
         public ElasticUserSource() {
             Idx = 100;
             Urls = new List<string>{"http://127.0.0.1:9200"};
@@ -27,10 +27,12 @@ namespace qorpent.v2.security.user.storage.providers
             LogId = "elastic.usersource";
             PingRate = 10000;
             CacheRate = 5000;
+            WriteUsersEnabled = true;
+            
         }
 
         [Inject]
-        public IHostConfigProvider ConfigProvider { get; set; }
+        public IConfigProvider ConfigProvider { get; set; }
 
         public IList<string> Urls { get; set; }
         public string Index { get; set; }
@@ -52,18 +54,25 @@ namespace qorpent.v2.security.user.storage.providers
         }
 
         private bool _initialized = false;
+        public bool WriteUsersEnabled { get; set; }
         public void Initialize(bool forced = false) {
             if (_initialized && !forced) return;
-            
+            WriteUsersEnabled = true;
             if (null != ConfigProvider) {
-                var xml = ConfigProvider.GetConfig().Definition;
+                var xml = ConfigProvider.GetConfig();
                 if (null != xml) {
-                    var element = xml.Element("elasticUserSource");
+                    var element = xml.Element("logon");
                     if (null != element) {
+                        element = element.Element("elastic");
+                        
+                    }
+                    if (null != element) {
+                        
                         var _urls = element.Attr("urls","");
                         if (!string.IsNullOrWhiteSpace(_urls)) {
                             Urls = _urls.SmartSplit(false, true, ';', ',');
                         }
+                        WriteUsersEnabled = element.Attr("active", "true").ToBool();
                         Index = element.Attr("index", Index);
                         Type = element.Attr("type", Type);
                         LogId = element.Attr("logid", LogId);
@@ -74,12 +83,16 @@ namespace qorpent.v2.security.user.storage.providers
                 }
             }
             Logg = LoggyManager.Get(LogId);
+            if (WriteUsersEnabled) {
+                ExecuteCommand("/" + Index, method: "PUT");
+            }
             _initialized = true;
         }
 
         public int Idx { get; set; }
 
         public IUser GetUser(string login) {
+            if (!WriteUsersEnabled) return null;
             lock (this) {
                 CheckCache();
                 if (InvalidConnection) return null;
@@ -91,20 +104,18 @@ namespace qorpent.v2.security.user.storage.providers
                 if (null == json) {
                     return null;
                 }
+                var j = json.jsonify();
+                var found = j.bul("found");
+                if (found) {
+                    var version = j.num("_version");
+                    var src = j.map("_source");
+                    var user = UserSerializer.CreateFromJson(src);
+                    user.Id = id;
+                    user.Version = version;
+                    _cache[login] = user;
+                }
                 else {
-                    var j = json.jsonify();
-                    var found = j.bul("found");
-                    if (found) {
-                        var version = j.num("_version");
-                        var src = j.map("_source");
-                        var user = UserSerializer.CreateFromJson(src);
-                        user.Id = id;
-                        user.Version = version;
-                        _cache[login] = user;
-                    }
-                    else {
-                        _cache[login] = null;
-                    }
+                    _cache[login] = null;
                 }
                 return _cache[login];
             }
@@ -148,13 +159,18 @@ namespace qorpent.v2.security.user.storage.providers
             return "/" + Index + "/" + Type + "/";
         }
 
-        private string ExecuteCommand(string cmd, string post = null) {
+        private string ExecuteCommand(string cmd, string post = null,string method= "") {
+            lock (this) { 
             string json;
             for (var i = 0; i < Urls.Count; i++) {
                 var url = Urls[i] + cmd;
                 try {
                     var cli = new HttpClient{ConnectionTimeout = 100};
-                    json = cli.GetString(url, post);
+                    json = cli.GetString(url, post, _ => {
+                        if (!string.IsNullOrWhiteSpace(method)) {
+                            _.Method = method;
+                        }
+                    });
                     InvalidConnection = false;
                     if (i != 0) {
                         var best = Urls[i];
@@ -163,9 +179,9 @@ namespace qorpent.v2.security.user.storage.providers
                     }
                     return json;
                 }
-                catch (Qorpent.IO.IOException e) {
+                catch (IOException e) {
                     if(i<Urls.Count-1)continue;
-                    Logg.Error("Invalid Elastic Search Login ", e);
+                    Logg.Error("Invalid Elastic Search Login "+e.Message, e);
                     InvalidConnection = true;
                     LastError = e;
                     return null;
@@ -175,6 +191,7 @@ namespace qorpent.v2.security.user.storage.providers
                 }
             }
             return null;
+                }
         }
 
         public Exception LastError { get; set; }
@@ -210,6 +227,9 @@ namespace qorpent.v2.security.user.storage.providers
         public bool IsDefault { get; set; }
 
         public IUser Store(IUser user) {
+            if (!WriteUsersEnabled) {
+                throw new Exception("not enabled");
+            }
             lock (this) {
                 if (InvalidConnection) {
                     throw new Exception("cannot store due to invalid connection");
@@ -234,6 +254,11 @@ namespace qorpent.v2.security.user.storage.providers
                 _cache[user.Login] = user;
                 return user;
             }
+        }
+
+        public void Clear() {
+            _cache.Clear();
+            
         }
     }
 }

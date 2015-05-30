@@ -9,7 +9,7 @@ namespace Qorpent {
     public abstract class ExtensibleServiceBase<TExtensionType> :ServiceBase, IExtensibleService<TExtensionType> {
         private IList<TExtensionType> _extensions;
 
-        [Inject]
+        [Inject(IncludeAll=true)]
         protected IList<TExtensionType> Extensions {
             get { return _extensions ?? (_extensions = new List<TExtensionType>()); }
             set { _extensions = value; }

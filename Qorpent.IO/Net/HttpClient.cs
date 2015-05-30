@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -145,8 +147,8 @@ namespace Qorpent.IO.Net{
 				        socket.Connect(endpoint);
 				    }
 				    else {
-				        var waiter = Task.Run(() => socket.Connect(endpoint));
-				        var finished = waiter.Wait(ConnectionTimeout);
+				        var async = socket.BeginConnect(endpoint,_ => { }, null);
+				        var finished = async.AsyncWaitHandle.WaitOne(ConnectionTimeout);
 				        if (!finished) {
 				            throw new IOException("timeouted");
 				        }
