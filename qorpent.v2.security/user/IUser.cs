@@ -22,9 +22,9 @@ namespace qorpent.v2.security.user {
         string Domain { get; set; }
         string Id { get; set; }
         IDictionary<string, object> Custom { get; set; }
-        string GetToken();
         bool Logable { get; set; }
         DateTime CreateTime { get; set; }
         DateTime UpdateTime { get; set; }
+        string GetToken();
     }
 }

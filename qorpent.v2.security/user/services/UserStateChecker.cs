@@ -2,35 +2,47 @@
 using qorpent.v2.security.user.storage;
 using Qorpent.IoC;
 
-namespace qorpent.v2.security.user.services
-{
-    [ContainerComponent(Lifestyle.Transient,"user.statechecker",ServiceType=typeof(IUserStateChecker))]
-    public class UserStateChecker:IUserStateChecker
-    {
-
+namespace qorpent.v2.security.user.services {
+    [ContainerComponent(Lifestyle.Transient, "user.statechecker", ServiceType = typeof (IUserStateChecker))]
+    public class UserStateChecker : IUserStateChecker {
         [Inject]
         public IUserService UserService { get; set; }
 
         public bool IsLogable(IUser user) {
-            if (null == user) return false;
-            if (!user.Logable) return false;
-            if (user.IsGroup) return false;
+            if (null == user) {
+                return false;
+            }
+            if (!user.Logable) {
+                return false;
+            }
+            if (user.IsGroup) {
+                return false;
+            }
             return true;
         }
 
         public bool IsPasswordLogable(IUser user) {
-            if (!IsLogable(user)) return false;
-            if (string.IsNullOrWhiteSpace(user.Hash)) return false;
-            if (string.IsNullOrWhiteSpace(user.Salt)) return false;
+            if (!IsLogable(user)) {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(user.Hash)) {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(user.Salt)) {
+                return false;
+            }
             return true;
         }
 
         public bool IsSecureLogable(IUser user) {
-            if (!IsLogable(user)) return false;
-            if (string.IsNullOrWhiteSpace(user.PublicKey)) return false;
+            if (!IsLogable(user)) {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(user.PublicKey)) {
+                return false;
+            }
             return true;
         }
-
 
         public UserActivityState GetActivityState(IUser user) {
             var result = UserActivityState.Ok;
@@ -43,7 +55,7 @@ namespace qorpent.v2.security.user.services
 
         private UserActivityState CheckMaster(IUser user, UserActivityState result) {
             var usrvb = user as IUserServiceBound;
-            IUserService usersrv = UserService;
+            var usersrv = UserService;
             if (null != usrvb) {
                 usersrv = usrvb.UserService ?? usersrv;
             }
@@ -78,7 +90,7 @@ namespace qorpent.v2.security.user.services
             if (user.Expire < DateTime.Now) {
                 result |= UserActivityState.Expired;
             }
-            
+
             return result;
         }
     }

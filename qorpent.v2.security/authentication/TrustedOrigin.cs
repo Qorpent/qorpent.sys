@@ -17,13 +17,19 @@ namespace qorpent.v2.security.authentication {
                 }
             }
             if (null != LocalAddress) {
-                if (!local.Address.Equals(LocalAddress)) return false;
+                if (!local.Address.Equals(LocalAddress)) {
+                    return false;
+                }
             }
             if (null != RemoteAddress) {
-                if (!remote.Address.Equals(RemoteAddress)) return false;
+                if (!remote.Address.Equals(RemoteAddress)) {
+                    return false;
+                }
             }
             if (0 != LocalPort) {
-                if (local.Port != LocalPort) return false;
+                if (local.Port != LocalPort) {
+                    return false;
+                }
             }
             return true;
         }

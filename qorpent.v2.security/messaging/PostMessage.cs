@@ -7,7 +7,7 @@ namespace qorpent.v2.security.messaging {
         public string[] Addresses { get; set; }
         public string From { get; set; }
         public string Subject { get; set; }
-        public IDictionary<string,object> Tags { get; set; } 
+        public IDictionary<string, object> Tags { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime SentTime { get; set; }
         public bool WasSent { get; set; }

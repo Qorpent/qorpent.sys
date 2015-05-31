@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
+using System.Xml.Linq;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.storage;
 using Qorpent;
@@ -10,12 +10,9 @@ using Qorpent.IoC;
 using Qorpent.Security;
 using Qorpent.Utils.Extensions;
 
-namespace qorpent.v2.security.logon.providers
-{
-
-    [ContainerComponent(Lifestyle.Transient,"winlogon.passlogon",ServiceType=typeof(ILogonProvider))]
-    public class WinLogon:ServiceBase,ILogonProvider,IPasswordLogon
-    {
+namespace qorpent.v2.security.logon.providers {
+    [ContainerComponent(Lifestyle.Transient, "winlogon.passlogon", ServiceType = typeof (ILogonProvider))]
+    public class WinLogon : InitializeAbleService, ILogonProvider, IPasswordLogon {
         public const int WINLOGONIDX = 10000;
 
         public WinLogon() {
@@ -24,98 +21,30 @@ namespace qorpent.v2.security.logon.providers
 
         [Inject]
         public IUserService UserService { get; set; }
-        [Inject]
-        public IConfigProvider ConfigProvider { get; set; }
-
-
-
-        /// <summary>
-        /// Execute system logon procedure and return true if proceed
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <param name="logontype"></param>
-        /// <returns></returns>
-        public bool Logon(string username, string password, int logontype = WinLogonType.Logon32LogonNetwork)
-        {
-            lock (this)
-            {
-                IntPtr token = new IntPtr();
-                return Logon(username, password, ref token, logontype);
-            }
-        }
 
         public bool GoodDog { get; set; }
+        public int Idx { get; set; }
 
-        public override void OnContainerCreateInstanceFinished() {
-            base.OnContainerCreateInstanceFinished();
-            Initialize();
+        public object Reset(ResetEventData data) {
+            return null;
         }
 
-        public void Initialize() {
-            if (null != ConfigProvider) {
-                var e = ConfigProvider.GetConfig();
-                if (null != e) {
-                    e = e.Element("logon");
-                }
-                if (null != e) {
-                    GoodDog = e.Attr("gooddog").ToBool();
-                }
-            } 
+        public object GetPreResetInfo() {
+            return null;
         }
 
-        [DllImport("ADVAPI32.dll", EntryPoint =
-            "LogonUserW", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool LogonUserW(string lpszUsername, string lpszDomain,
-                                             string lpszPassword, int dwLogonType, int dwLogonProvider, ref IntPtr phToken);
-
-        /// <summary>
-        /// Execute system logon procedure and return true if proceed
-        /// can return system token of logon (windows only)
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <param name="token"></param>
-        /// <param name="logontype"></param>
-        /// <returns></returns>
-        public bool Logon(string username, string password, ref IntPtr token, int logontype = WinLogonType.Logon32LogonNetwork)
-        {
-            lock (this)
-            {
-
-                var name = username;
-                var domain = ".";
-                username = username.Replace("\\", "/");
-                if (username.Contains("/"))
-                {
-                    domain = username.Split('/')[0];
-                    name = username.Split('/')[1];
-                }
-                else if (username.Contains("@"))
-                {
-                    domain = username.Split('@')[1];
-                    name = username.Split('@')[0];
-                }
-
-                bool authenticated = LogonUserW(name, domain, password, logontype, 0, ref token);
-                return authenticated;
-
-            }
-        }
-
-        public IIdentity Logon(string username, string password, IScope scope = null)
-        {
-            lock (this)
-            {
+        public IIdentity Logon(string username, string password, IScope scope = null) {
+            lock (this) {
                 var token = new IntPtr();
                 var auth = Logon(username, password, ref token, 3);
-                if (!auth) return null;
-                 var native =  new WindowsIdentity(token);
-                bool isadmin = false;
+                if (!auth) {
+                    return null;
+                }
+                var native = new WindowsIdentity(token);
+                var isadmin = false;
                 if (GoodDog) {
                     var currentUser = Environment.UserName;
-                    if (currentUser.Equals(username, StringComparison.InvariantCultureIgnoreCase))
-                    {
+                    if (currentUser.Equals(username, StringComparison.InvariantCultureIgnoreCase)) {
                         isadmin = true;
                     }
                 }
@@ -130,17 +59,65 @@ namespace qorpent.v2.security.logon.providers
                     result.User = UserService.GetUser(result.Name);
                 }
                 return result;
-
             }
         }
 
-        public int Idx { get; set; }
-        public object Reset(ResetEventData data) {
-            return null;
+        /// <summary>
+        ///     Execute system logon procedure and return true if proceed
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="logontype"></param>
+        /// <returns></returns>
+        public bool Logon(string username, string password, int logontype = WinLogonType.Logon32LogonNetwork) {
+            lock (this) {
+                var token = new IntPtr();
+                return Logon(username, password, ref token, logontype);
+            }
         }
 
-        public object GetPreResetInfo() {
-            return null;
+        public override void InitializeFromXml(XElement e) {
+            base.InitializeFromXml(e);
+            if (null != e) {
+                e = e.Element("logon");
+            }
+            if (null != e) {
+                GoodDog = e.Attr("gooddog").ToBool();
+            }
+        }
+
+        [DllImport("ADVAPI32.dll", EntryPoint =
+            "LogonUserW", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern bool LogonUserW(string lpszUsername, string lpszDomain,
+            string lpszPassword, int dwLogonType, int dwLogonProvider, ref IntPtr phToken);
+
+        /// <summary>
+        ///     Execute system logon procedure and return true if proceed
+        ///     can return system token of logon (windows only)
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="token"></param>
+        /// <param name="logontype"></param>
+        /// <returns></returns>
+        public bool Logon(string username, string password, ref IntPtr token,
+            int logontype = WinLogonType.Logon32LogonNetwork) {
+            lock (this) {
+                var name = username;
+                var domain = ".";
+                username = username.Replace("\\", "/");
+                if (username.Contains("/")) {
+                    domain = username.Split('/')[0];
+                    name = username.Split('/')[1];
+                }
+                else if (username.Contains("@")) {
+                    domain = username.Split('@')[1];
+                    name = username.Split('@')[0];
+                }
+
+                var authenticated = LogonUserW(name, domain, password, logontype, 0, ref token);
+                return authenticated;
+            }
         }
     }
 }

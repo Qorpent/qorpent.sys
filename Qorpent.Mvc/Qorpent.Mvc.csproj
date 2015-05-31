@@ -18,7 +18,6 @@
     <Compile Include="Actions\Helpers\FileListEntry.cs" />
     <Compile Include="Actions\Helpers\FileListEntryType.cs" />
     <Compile Include="Actions\ImpersonateAction.cs" />
-    <Compile Include="Actions\IsInRoleAction.cs" />
     <Compile Include="Actions\ListFilesAction.cs" />
     <Compile Include="Actions\SysInfoAction.cs" />
     <Compile Include="Actions\Wiki\WikiGetLockAction.cs" />
@@ -97,8 +96,6 @@
     <Compile Include="IViewEngine.cs" />
     <Compile Include="Renders\JsRender.cs" />
     <Compile Include="Remoting\LocalConnection.cs" />
-    <Compile Include="Actions\LoginAction.cs" />
-    <Compile Include="Actions\LogoutAction.cs" />
     <Compile Include="Actions\EchoAction.cs" />
     <Compile Include="MvcFactory.cs" />
     <Compile Include="Actions\FileResolveAction.cs" />

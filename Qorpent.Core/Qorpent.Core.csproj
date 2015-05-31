@@ -77,6 +77,7 @@
     <Compile Include="ICacheLease.cs" />
     <Compile Include="ICacheService.cs" />
     <Compile Include="IExtensibleService.cs" />
+    <Compile Include="InitializeAbleService.cs" />
     <Compile Include="Scope\IScope.cs" />
     <Compile Include="Scope\IScopeBound.cs" />
     <Compile Include="Scope\Scope.cs" />
@@ -242,17 +243,9 @@
     <Compile Include="Mvc\ViewNotFoundException.cs" />
     <Compile Include="ScheduledTask.cs" />
     <Compile Include="Security\AccessProviderService.cs" />
-    <Compile Include="Security\DefaultLoginSourceProvider.cs" />
-    <Compile Include="Security\DefaultHostLogonProvider.cs" />
     <Compile Include="Security\ICredentialStorage.cs" />
-    <Compile Include="Security\ILoginSource.cs" />
-    <Compile Include="Security\ILoginSourceProvider.cs" />
-    <Compile Include="Security\IHostLogon.cs" />
-    <Compile Include="Security\IHostLogonProvider.cs" />
     <Compile Include="Security\IWithRoleContext.cs" />
-    <Compile Include="Security\LoginInfo.cs" />
     <Compile Include="Security\LogonAuthenticationResult.cs" />
-    <Compile Include="Security\SysHostLogon.cs" />
     <Compile Include="Security\UserName.cs" />
     <Compile Include="Security\Watchdog\IParanoidProvider.cs" />
     <Compile Include="Security\Watchdog\ParanoidException.cs" />
@@ -546,7 +539,6 @@
     <Compile Include=".\Security\AuthorizationResult.cs" />
     <Compile Include=".\Security\DefaultImpersonationProvider.cs" />
     <Compile Include=".\Security\DefaultPrincipalSource.cs" />
-    <Compile Include=".\Security\DefaultRoleResolver.cs" />
     <Compile Include=".\Security\IAccessProvider.cs" />
     <Compile Include=".\Security\IAccessProviderExtension.cs" />
     <Compile Include=".\Security\IAccessProviderService.cs" />

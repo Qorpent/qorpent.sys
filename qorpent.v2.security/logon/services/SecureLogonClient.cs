@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting;
 using System.Text;
-using System.Threading.Tasks;
 using qorpent.v2.security.encryption;
 using Qorpent.IoC;
-using Qorpent.Utils.Extensions;
 
-namespace qorpent.v2.security.logon.services
-{
-    [ContainerComponent(Lifestyle.Transient, "securelogon.client", ServiceType = typeof(ISecureLogonClient))]
+namespace qorpent.v2.security.logon.services {
+    [ContainerComponent(Lifestyle.Transient, "securelogon.client", ServiceType = typeof (ISecureLogonClient))]
     public class SecureLogonClient : ISecureLogonClient {
         public SecureLogonInfo GetLogonInfo(string salt, byte[] certificate) {
             if (string.IsNullOrWhiteSpace(salt)) {

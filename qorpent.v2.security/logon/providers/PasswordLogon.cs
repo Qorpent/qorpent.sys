@@ -8,39 +8,31 @@ using Qorpent;
 using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
-namespace qorpent.v2.security.logon.providers
-{
+namespace qorpent.v2.security.logon.providers {
     /// <summary>
-    /// Allows to configure 
+    ///     Allows to configure
     /// </summary>
-    [ContainerComponent(Lifestyle.Transient,"hash.logonservice",ServiceType = typeof(ILogonProvider))]
-    public class PasswordLogon : ServiceBase, ILogonProvider,IPasswordLogon
-    {
-        
-
+    [ContainerComponent(Lifestyle.Transient, "hash.logonservice", ServiceType = typeof (ILogonProvider))]
+    public class PasswordLogon : ServiceBase, ILogonProvider, IPasswordLogon {
+        private IPasswordManager _passwordManager;
+        private IUserStateChecker _stateChecker;
 
         public PasswordLogon() {
             Idx = WinLogon.WINLOGONIDX - 10;
         }
 
-
         [Inject]
         public IUserService UserService { get; set; }
 
         /// <summary>
-        /// 
         /// </summary>
         [Inject]
         public IPasswordManager PasswordManager {
-            get { return _passwordManager??(_passwordManager=new PasswordManager()); }
+            get { return _passwordManager ?? (_passwordManager = new PasswordManager()); }
             set { _passwordManager = value; }
         }
 
-        private IUserStateChecker _stateChecker;
-        private IPasswordManager _passwordManager;
-
         /// <summary>
-        /// 
         /// </summary>
         [Inject]
         public IUserStateChecker StateChecker {
@@ -48,11 +40,16 @@ namespace qorpent.v2.security.logon.providers
             set { _stateChecker = value; }
         }
 
+        public int Idx { get; set; }
 
         public IIdentity Logon(string username, string password, IScope context = null) {
-            if (null == UserService) return null;
+            if (null == UserService) {
+                return null;
+            }
             var user = UserService.GetUser(username);
-            if (!StateChecker.IsPasswordLogable(user)) return null;
+            if (!StateChecker.IsPasswordLogable(user)) {
+                return null;
+            }
             var result = new Identity {
                 Name = username,
                 AuthenticationType = "hash"
@@ -63,8 +60,7 @@ namespace qorpent.v2.security.logon.providers
                 result.Error = new SecurityException(state.ToStr());
             }
             else {
-                
-                if (PasswordManager.MatchPassword(user,password)) {
+                if (PasswordManager.MatchPassword(user, password)) {
                     result.IsAuthenticated = true;
                     result.IsAdmin = user.IsAdmin;
                     result.User = user;
@@ -73,10 +69,8 @@ namespace qorpent.v2.security.logon.providers
                     result.IsError = true;
                     result.Error = new SecurityException("invalid hash");
                 }
-            }        
+            }
             return result;
         }
-
-        public int Idx { get; set; }
     }
 }

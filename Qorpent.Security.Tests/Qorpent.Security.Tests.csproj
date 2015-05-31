@@ -27,7 +27,6 @@
     <Compile Include="Cryptography\ICryptoProviderResult.cs" />
     <Compile Include="Cryptography\ICryptoSource.cs" />
     <Compile Include="Cryptography\Sources\CryptoSourceExternalOpenSsl.cs" />
-    <Compile Include="LogonTest.cs" />
     <Compile Include="RoleResolverRoleExtensionTest.cs" />
     <Compile Include="XmlRoleResolverTest.cs" />
   </ItemGroup>

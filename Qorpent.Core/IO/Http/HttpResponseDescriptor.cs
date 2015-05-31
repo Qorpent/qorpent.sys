@@ -114,7 +114,7 @@ namespace Qorpent.IO.Http {
             if (cookie.Expires.ToUniversalTime() > DateTime.Now.ToUniversalTime()) {
                 maxage = (cookie.Expires.ToUniversalTime() - DateTime.Now.ToUniversalTime()).TotalSeconds.ToInt();
             }
-            var result= string.Format("{0}={1}; Path={2}; Max-Age={3};", cookie.Name, cookie.Value, cookie.Path,maxage);
+            var result= string.Format("{0}={1}; Path={2}; Max-Age={3}; Domain={4};", cookie.Name, cookie.Value, cookie.Path,maxage,cookie.Domain);
             if (cookie.HttpOnly) {
                 result += "HttpOnly;";
             }

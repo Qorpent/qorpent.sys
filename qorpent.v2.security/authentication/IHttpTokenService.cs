@@ -8,6 +8,5 @@ namespace qorpent.v2.security.authentication {
         void Store(IHttpResponseDescriptor response, Uri requestUri, Token token);
         Token Create(IHttpRequestDescriptor request);
         Token Prolongate(Token existedToken);
-
     }
 }

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html class="the site">
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/newthe.css">
+    <script data-main="js/login-start.js" type="text/javascript" src="./../lib/require.js"></script>
+    <title>Вход в приложение</title>
+</head>
+<body ng-controller="root">
+<style type="text/css">
+    .maintoolbar {
+        justify-content: space-between;
+    }
+    .main {
+        padding-left: 100px;
+        padding-right: 100px;
+        align-items: center;
+    }
+    .main div {
+        max-width: 750px;
+    }
+
+    form {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 360px;
+        min-width: 360px;
+        border: solid 1px lightgray !important;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 40px;
+    }
+    form input {
+        font-size: 110%;
+        padding:5px;
+        margin:5px;
+        min-width: 200px;
+        border-radius: 3px;
+    }
+    form i {
+        min-width: 140px;
+        margin-top: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 120%;
+    }
+    p, h1 {
+        margin-top: 20px;
+    }
+    .login-comment {
+        margin-top: 10px;
+        padding:4px;
+    }
+    p,  h1 {
+        text-align: center;
+    }
+h2 {
+    font-size:110%;
+
+}
+    li
+    {
+        text-align: left;
+        font-size:80%;
+    }
+
+</style>
+<div class="maintoolbar top">
+    <img ng-src="{{appinfo.logo}}" height="35"/>
+    <label class="primary">{{appinfo.title}}</label>
+</div>
+<div class="workplace">
+
+    <div class="main" ng-cloak>
+
+        <h1 class="iprimary">Сброс пароля</h1>
+        <form  name="loginForm" class="login box col default soft" ng-controller="loginform" ng-submit="loginForm.$valid && resetpass()">
+            <h2>Требования к паролю</h2>
+            <ul>
+                <li>Длина пароля не менее 8 символов</li>
+                <li>Символы должны быть различными (не менее 6 разных)</li>
+                <li>Должна быть хотя бы 1 маленькая буква</li>
+                <li>Должна быть хотя бы 1 большая буква</li>
+                <li>Должна быть хотя бы 1 цифра</li>
+                <li>Должен быть хотя бы 1 символ (не буква не цифра)</li>
+            </ul>
+            <p>При удачной смене пароля система перейдет стартовую страницу</p>
+            <h2>Укажите пароль</h2>
+            <input type="password" placeholder="пароль" size="10" name="pass" ng-model="req.pass" password-policy="" ng-required="true"   ng-change="[lasterror='',lastwaslogin=false]"/>
+            <h2>Повторите пароль</h2>
+            <input type="password" placeholder="пароль" size="10" name="pass" ng-model="pass2" compare-to="req.pass" ng-required="true"  ng-change="[lasterror='',lastwaslogin=false]"/>
+            <i class="button" ng-class="{primary: loginForm.$valid, warn: !loginForm.$valid, disabled: !loginForm.$valid}"
+               ng-click="loginForm.$valid && resetpass()">Установить пароль</i>
+            <input type="submit" value="true" style="display: none"/>
+            <div ng-if="lasterror" class="danger login-comment" ng-cloak ng-bind="lasterror"></div>
+            <div ng-if="lasterror" class="info soft">
+                <p>Если что-то идет не так, то можете попробовать перезапросить сброс пароля по ссылке
+                    <a href="resetpwdreq.html">Запрос сброса пароля</a>
+                </p>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

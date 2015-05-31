@@ -18,6 +18,8 @@ namespace qorpent.v2.security.messaging.senders {
             set { _smtpClient = value; }
         }
 
+        public string Name { get; set; }
+
         private SmtpClient BuildSmtpClient() {
             var result = new SmtpClient {
                 Host = Host,

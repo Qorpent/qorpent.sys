@@ -8,60 +8,33 @@ using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.messaging {
-    [ContainerComponent(Lifestyle.Singleton,"usermessage.service",ServiceType=typeof(IUserMessagingService))]
-    public class UserMessageService : ServiceBase, IUserMessagingService {
+    [ContainerComponent(Lifestyle.Singleton, "usermessage.service", ServiceType = typeof (IUserMessagingService))]
+    public class UserMessageService : InitializeAbleService, IUserMessagingService {
+        private IDictionary<string, string> _templateCache = new Dictionary<string, string>();
 
         public UserMessageService() {
             AppInfo = new Dictionary<string, object>();
         }
+
         [Inject]
         public IMessageQueue MessageQueue { get; set; }
-        [Inject]
-        public IConfigProvider ConfigProvider { get; set; }
 
-        public void SendWelcome(IUser target) {
-            SendTemplated(target,"ref:wellcome","support","Регистрация на ресурсе \"${resource.name}\"",null);
+        public IDictionary<string, object> AppInfo { get; set; }
+
+        public IDictionary<string, string> TemplateCache {
+            get { return _templateCache; }
+            set { _templateCache = value; }
         }
 
-        public IDictionary<string, object> AppInfo { get; set; } 
-
-
-        public override void OnContainerCreateInstanceFinished() {
-            base.OnContainerCreateInstanceFinished();
-            Initialize();
+        public PostMessage SendWelcome(IUser target) {
+            return SendTemplated(target, "ref:wellcome", "support", "Регистрация на ресурсе \"${resource.name}\"", null);
         }
 
-        public void Initialize() {
-            if (null != ConfigProvider)
-            {
-                var cfg = ConfigProvider.GetConfig();
-                if (null != cfg)
-                {
-                    var e = cfg.Element("appinfo");
-                    if (null != e)
-                    {
-                        var dict = e.ToDict();
-                        if (null == AppInfo) {
-                            AppInfo = dict;
-
-                        }
-                        else {
-                            foreach (var o in dict) {
-                                if (!AppInfo.ContainsKey(o.Key)) {
-                                    AppInfo[o.Key] = o.Value;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        public PostMessage SendPasswordReset(IUser target) {
+            return SendTemplated(target, "ref:pwdreset", "support", "Сброс пароля на ресурсе \"${resource.name}\"", null);
         }
 
-        public void SendPasswordReset(IUser target) {
-            SendTemplated(target,"ref:pwdreset","support","Сброс пароля на ресурсе \"${resource.name}\"" ,null);
-        }
-
-        public void SendTemplated(IUser target, string template, string from, string subject, IScope scope) {
+        public PostMessage SendTemplated(IUser target, string template, string from, string subject, IScope scope) {
             if (string.IsNullOrWhiteSpace(template)) {
                 throw new Exception("invalid template");
             }
@@ -69,14 +42,31 @@ namespace qorpent.v2.security.messaging {
                 throw new Exception("not email defined");
             }
             var pm = CompoundMessage(target, template, from, subject, scope);
-            MessageQueue.PushMessage(pm);
+            return MessageQueue.PushMessage(pm);
+        }
+
+        public override void InitializeFromXml(XElement e) {
+            e = e.Element("appinfo");
+            if (null != e) {
+                var dict = e.ToDict();
+                if (null == AppInfo) {
+                    AppInfo = dict;
+                }
+                else {
+                    foreach (var o in dict) {
+                        if (!AppInfo.ContainsKey(o.Key)) {
+                            AppInfo[o.Key] = o.Value;
+                        }
+                    }
+                }
+            }
         }
 
         public PostMessage CompoundMessage(IUser target, string template, string @from, string subject, IScope scope) {
             var workingtemplate = ResolveTemplate(template);
             scope = scope ?? new Scope();
             scope.Set("user", target);
-            scope.Set("resource",AppInfo);
+            scope.Set("resource", AppInfo);
             var resultmessage = workingtemplate.Interpolate(scope);
             subject = (subject ?? "").Interpolate(scope);
             var email = target.Email;
@@ -84,7 +74,7 @@ namespace qorpent.v2.security.messaging {
                 Addresses = new[] {email},
                 From = @from,
                 CanUseDefault = true,
-                Subject =  subject,
+                Subject = subject,
                 Message = resultmessage.ToString(),
                 Tags = new Dictionary<string, object>()
             };
@@ -111,10 +101,10 @@ namespace qorpent.v2.security.messaging {
             ;
         }
 
-        private IDictionary<string,string> _templateCache  = new Dictionary<string,string>();
-
         private string LoadTemplate(string name) {
-            if (TemplateCache.ContainsKey(name)) return TemplateCache[name];
+            if (TemplateCache.ContainsKey(name)) {
+                return TemplateCache[name];
+            }
             var templatePath = EnvironmentInfo.ResolvePath("@repos@/.www/messagetemplates/" + name + ".xml");
             if (File.Exists(templatePath)) {
                 TemplateCache[name] = File.ReadAllText(templatePath);
@@ -126,12 +116,6 @@ namespace qorpent.v2.security.messaging {
                 return TemplateCache[name];
             }
             throw new Exception("cannot find template");
-
-        }
-
-        public IDictionary<string, string> TemplateCache {
-            get { return _templateCache; }
-            set { _templateCache = value; }
         }
     }
 }

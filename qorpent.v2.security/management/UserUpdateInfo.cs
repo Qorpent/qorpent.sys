@@ -7,10 +7,10 @@ using Qorpent.Experiments;
 
 namespace qorpent.v2.security.management {
     public class UserUpdateInfo {
-        private string[] _addRoles;
-        private string[] _removeRoles;
         private string[] _addGroups;
+        private string[] _addRoles;
         private string[] _removeGroups;
+        private string[] _removeRoles;
         public string Login { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
@@ -26,7 +26,6 @@ namespace qorpent.v2.security.management {
         public object Custom { get; set; }
 
         /// <summary>
-        /// 
         /// </summary>
         public string[] AddRoles {
             get {
@@ -35,7 +34,7 @@ namespace qorpent.v2.security.management {
                         _addRoles = Roles.Where(_ => !_.StartsWith("-")).ToArray();
                     }
                     else {
-                        _addRoles = new string[]{};
+                        _addRoles = new string[] {};
                     }
                 }
                 return _addRoles;
@@ -44,19 +43,15 @@ namespace qorpent.v2.security.management {
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string[] RemoveRoles {
             get {
-                if (_removeRoles == null)
-                {
-                    if (null != Roles)
-                    {
-                        _removeRoles = Roles.Where(_ => _.StartsWith("-")).Select(_=>_.Substring(1)).ToArray();
+                if (_removeRoles == null) {
+                    if (null != Roles) {
+                        _removeRoles = Roles.Where(_ => _.StartsWith("-")).Select(_ => _.Substring(1)).ToArray();
                     }
-                    else
-                    {
-                        _removeRoles = new string[] { };
+                    else {
+                        _removeRoles = new string[] {};
                     }
                 }
                 return _removeRoles;
@@ -65,19 +60,15 @@ namespace qorpent.v2.security.management {
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string[] AddGroups {
             get {
-                if (_addGroups == null)
-                {
-                    if (null != Groups)
-                    {
+                if (_addGroups == null) {
+                    if (null != Groups) {
                         _addGroups = Groups.Where(_ => !_.StartsWith("-")).ToArray();
                     }
-                    else
-                    {
-                        _addGroups = new string[] { };
+                    else {
+                        _addGroups = new string[] {};
                     }
                 }
                 return _addGroups;
@@ -86,19 +77,15 @@ namespace qorpent.v2.security.management {
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string[] RemoveGroups {
             get {
-                if (_removeGroups == null)
-                {
-                    if (null != Groups)
-                    {
+                if (_removeGroups == null) {
+                    if (null != Groups) {
                         _removeGroups = Groups.Where(_ => _.StartsWith("-")).Select(_ => _.Substring(1)).ToArray();
                     }
-                    else
-                    {
-                        _removeGroups = new string[] { };
+                    else {
+                        _removeGroups = new string[] {};
                     }
                 }
                 return _removeGroups;
@@ -106,28 +93,53 @@ namespace qorpent.v2.security.management {
             set { _removeGroups = value; }
         }
 
-
-
-
         public bool HasDelta(IUser targetUser) {
-            if (null == targetUser) return true;
-            if (ChangedName(targetUser)) return true;
-            if (ChangedEmail(targetUser)) return true;
-            if (ChangedActive(targetUser)) return true;
-            if (ChangedIsAdmin(targetUser)) return true;
-            if (ChangedLogable(targetUser)) return true;
-            if (ChangedIsGroup(targetUser)) return true;
-            if (ChangedExpire(targetUser)) return true;
-            if (ChangedDomain(targetUser)) return true;
-            if (ChangedRoles(targetUser)) return true;
-            if (ChangedGroups(targetUser)) return true;
-            if (ChangedPassword(targetUser)) return true;
-            if (ChangedCustom(targetUser)) return true;
+            if (null == targetUser) {
+                return true;
+            }
+            if (ChangedName(targetUser)) {
+                return true;
+            }
+            if (ChangedEmail(targetUser)) {
+                return true;
+            }
+            if (ChangedActive(targetUser)) {
+                return true;
+            }
+            if (ChangedIsAdmin(targetUser)) {
+                return true;
+            }
+            if (ChangedLogable(targetUser)) {
+                return true;
+            }
+            if (ChangedIsGroup(targetUser)) {
+                return true;
+            }
+            if (ChangedExpire(targetUser)) {
+                return true;
+            }
+            if (ChangedDomain(targetUser)) {
+                return true;
+            }
+            if (ChangedRoles(targetUser)) {
+                return true;
+            }
+            if (ChangedGroups(targetUser)) {
+                return true;
+            }
+            if (ChangedPassword(targetUser)) {
+                return true;
+            }
+            if (ChangedCustom(targetUser)) {
+                return true;
+            }
             return false;
         }
 
         public bool IsExpireIncreased(IUser targetUser) {
-            if (!ChangedExpire(targetUser)) return false;
+            if (!ChangedExpire(targetUser)) {
+                return false;
+            }
             return Expire.Value.ToUniversalTime() > targetUser.Expire.ToUniversalTime();
         }
 
@@ -142,8 +154,12 @@ namespace qorpent.v2.security.management {
 
         public bool ChangedPassword(IUser targetUser) {
             if (!string.IsNullOrWhiteSpace(Password)) {
-                if (string.IsNullOrWhiteSpace(targetUser.Salt)) return true;
-                if (string.IsNullOrWhiteSpace(targetUser.Hash)) return true;
+                if (string.IsNullOrWhiteSpace(targetUser.Salt)) {
+                    return true;
+                }
+                if (string.IsNullOrWhiteSpace(targetUser.Hash)) {
+                    return true;
+                }
                 var pwd = new PasswordManager();
                 if (!pwd.MatchPassword(targetUser, Password)) {
                     return true;
@@ -215,12 +231,10 @@ namespace qorpent.v2.security.management {
             }
             return false;
         }
-        public bool ChangedLogable(IUser targetUser)
-        {
-            if (null != Logable)
-            {
-                if (Logable.Value != targetUser.Logable)
-                {
+
+        public bool ChangedLogable(IUser targetUser) {
+            if (null != Logable) {
+                if (Logable.Value != targetUser.Logable) {
                     return true;
                 }
             }
@@ -255,7 +269,6 @@ namespace qorpent.v2.security.management {
         }
 
         public void Apply(IUser targetUser) {
-            
             if (ChangedActive(targetUser)) {
                 targetUser.Active = Active.Value;
             }
@@ -281,15 +294,12 @@ namespace qorpent.v2.security.management {
                     targetUser.Groups.Remove(item);
                 }
             }
-            if (ChangedRoles(targetUser))
-            {
-                foreach (var item in AddRoles)
-                {
+            if (ChangedRoles(targetUser)) {
+                foreach (var item in AddRoles) {
                     targetUser.Roles.Remove(item);
                     targetUser.Roles.Add(item);
                 }
-                foreach (var item in RemoveRoles)
-                {
+                foreach (var item in RemoveRoles) {
                     targetUser.Roles.Remove(item);
                 }
             }
@@ -306,7 +316,7 @@ namespace qorpent.v2.security.management {
             }
             if (ChangedPassword(targetUser)) {
                 var pwd = new PasswordManager();
-                pwd.SetPassword(targetUser,Password,true);
+                pwd.SetPassword(targetUser, Password, true);
             }
 
             if (ChangedName(targetUser)) {

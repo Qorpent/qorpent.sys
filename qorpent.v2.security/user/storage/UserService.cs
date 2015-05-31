@@ -4,13 +4,13 @@ using Qorpent;
 using Qorpent.IoC;
 
 namespace qorpent.v2.security.user.storage {
-    [ContainerComponent(Lifestyle.Singleton, "user.service", ServiceType = typeof(IUserService))]
+    [ContainerComponent(Lifestyle.Singleton, "user.service", ServiceType = typeof (IUserService))]
     public class UserService : ExtensibleServiceBase<IUserSource>, IUserService {
         private IUserCache _userCache;
 
         [Inject]
         public IUserCache UserCache {
-            get { return _userCache ??(_userCache = new UserCache()); }
+            get { return _userCache ?? (_userCache = new UserCache()); }
             set { _userCache = value; }
         }
 
@@ -19,6 +19,36 @@ namespace qorpent.v2.security.user.storage {
         public IUser GetUser(string login) {
             var key = login.ToLowerInvariant();
             return UserCache.Get(key, InternalGetUser);
+        }
+
+        public bool IsDefault {
+            get { return true; }
+        }
+
+        public bool WriteUsersEnabled {
+            get { return Extensions.OfType<IWriteableUserSource>().Any(_ => _.WriteUsersEnabled); }
+        }
+
+        public IUser Store(IUser user) {
+            if (!WriteUsersEnabled) {
+                throw new Exception("Storing not enabled");
+            }
+            var writeable = ResolveWriteableStore(user);
+            if (null == writeable) {
+                throw new Exception("no target source to use as store");
+            }
+            if (!writeable.WriteUsersEnabled) {
+                throw new Exception("requested storage not enabled");
+            }
+            var realuser = writeable.Store(user);
+
+            _userCache.Clear();
+            _userCache.Refresh();
+            return realuser;
+        }
+
+        public void Clear() {
+            _userCache.Clear();
         }
 
         public override void OnContainerCreateInstanceFinished() {
@@ -56,36 +86,6 @@ namespace qorpent.v2.security.user.storage {
             return null;
         }
 
-        public bool IsDefault {
-            get { return true; }
-        }
-
-        public bool WriteUsersEnabled {
-            get { return Extensions.OfType<IWriteableUserSource>().Any(_ => _.WriteUsersEnabled); }
-        }
-
-        public IUser Store(IUser user) {
-            if (!WriteUsersEnabled) {
-                throw new Exception("Storing not enabled");
-            }
-            IWriteableUserSource writeable = ResolveWriteableStore(user);
-            if (null == writeable) {
-                throw new Exception("no target source to use as store");
-            }
-            if (!writeable.WriteUsersEnabled) {
-                throw new Exception("requested storage not enabled");
-            }
-            var realuser = writeable.Store(user);
-
-            _userCache.Clear();
-            _userCache.Refresh();
-            return realuser;
-        }
-
-        public void Clear() {
-            _userCache.Clear();
-        }
-
         private IWriteableUserSource ResolveWriteableStore(IUser user) {
             var usrvb = user as IUserSourceBound;
             if (usrvb != null) {
@@ -94,15 +94,17 @@ namespace qorpent.v2.security.user.storage {
                     if (src is IWriteableUserSource) {
                         return (IWriteableUserSource) src;
                     }
-                    else {
-                        return null; //if it was loaded from somewhere but it's not writeable  we cannot save
-                    }
+                    return null; //if it was loaded from somewhere but it's not writeable  we cannot save
                 }
             }
-            var writeables = Extensions.OfType<IWriteableUserSource>().Where(_=>_.WriteUsersEnabled).ToArray();
-            if (0 == writeables.Length) return null;
+            var writeables = Extensions.OfType<IWriteableUserSource>().Where(_ => _.WriteUsersEnabled).ToArray();
+            if (0 == writeables.Length) {
+                return null;
+            }
             var def = writeables.FirstOrDefault(_ => _.IsDefault);
-            if (null != def) return def;
+            if (null != def) {
+                return def;
+            }
             return writeables[0];
         }
     }

@@ -25,33 +25,36 @@
     <Compile Include="authentication\Token.cs" />
     <Compile Include="authentication\TokenEncryptor.cs" />
     <Compile Include="authentication\TrustedOrigin.cs" />
+    <Compile Include="authorization\INotAuthProcessProvider.cs" />
     <Compile Include="authorization\IRoleResolver.cs" />
     <Compile Include="authorization\IRoleResolverCache.cs" />
     <Compile Include="authorization\IRoleResolverCacheLease.cs" />
     <Compile Include="authorization\IRoleResolverService.cs" />
     <Compile Include="authorization\NotAuthProcessProvider.cs" />
+    <Compile Include="authorization\NotAuthReaction.cs" />
     <Compile Include="authorization\RoleResolverCache.cs" />
+    <Compile Include="authorization\RoleResolverExtensions.cs" />
     <Compile Include="authorization\RoleResolverService.cs" />
     <Compile Include="authorization\RoleResolver.cs" />
-    <Compile Include="handlers\DefineUserHandler.cs" />
-    <Compile Include="handlers\IDefineUserHandler.cs" />
-    <Compile Include="handlers\IIsAuthHandler.cs" />
-    <Compile Include="handlers\IIsInRoleHandler.cs" />
-    <Compile Include="handlers\ILogonHandler.cs" />
-    <Compile Include="handlers\ILogoutHandler.cs" />
-    <Compile Include="handlers\IMyInfoHandler.cs" />
-    <Compile Include="handlers\IRequireResetPasswordHandler.cs" />
-    <Compile Include="handlers\IResetPasswordHandler.cs" />
-    <Compile Include="handlers\IsAuthHandler.cs" />
-    <Compile Include="handlers\ISendMailHandler.cs" />
-    <Compile Include="handlers\IsInRoleHandler.cs" />
-    <Compile Include="handlers\LogonHandler.cs" />
-    <Compile Include="handlers\LogoutHandler.cs" />
-    <Compile Include="handlers\MyInfoHandler.cs" />
-    <Compile Include="handlers\RequireResetPasswordHandler.cs" />
-    <Compile Include="handlers\ResetPasswordHandler.cs" />
-    <Compile Include="handlers\SecurityHandlerSetup.cs" />
-    <Compile Include="handlers\SendMailHandler.cs" />
+    <Compile Include="handlers\management\DefineUserHandler.cs" />
+    <Compile Include="handlers\management\IDefineUserHandler.cs" />
+    <Compile Include="handlers\logon\IIsAuthHandler.cs" />
+    <Compile Include="handlers\userinfo\IIsInRoleHandler.cs" />
+    <Compile Include="handlers\logon\ILogonHandler.cs" />
+    <Compile Include="handlers\logon\ILogoutHandler.cs" />
+    <Compile Include="handlers\userinfo\IMyInfoHandler.cs" />
+    <Compile Include="handlers\logon\IRequireResetPasswordHandler.cs" />
+    <Compile Include="handlers\logon\IResetPasswordHandler.cs" />
+    <Compile Include="handlers\logon\IsAuthHandler.cs" />
+    <Compile Include="handlers\management\ISendMailHandler.cs" />
+    <Compile Include="handlers\userinfo\IsInRoleHandler.cs" />
+    <Compile Include="handlers\logon\LogonHandler.cs" />
+    <Compile Include="handlers\logon\LogoutHandler.cs" />
+    <Compile Include="handlers\userinfo\MyInfoHandler.cs" />
+    <Compile Include="handlers\logon\RequireResetPasswordHandler.cs" />
+    <Compile Include="handlers\logon\ResetPasswordHandler.cs" />
+    <Compile Include="handlers\HandlerInitializer.cs" />
+    <Compile Include="handlers\management\SendMailHandler.cs" />
     <Compile Include="logon\services\IPasswordManager.cs" />
     <Compile Include="logon\services\IPasswordPolicy.cs" />
     <Compile Include="logon\services\PasswordManager.cs" />
@@ -109,7 +112,6 @@
     <Compile Include="user\UserActivityState.cs" />
     <Compile Include="user\UserSerializer.cs" />
     <Compile Include="utils\ElasticSearchClient.cs" />
-    <Compile Include="v1migration\logon\LogonService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="messaging\resources\message_template_wellcome.xml" />
@@ -131,6 +133,9 @@
   <ItemGroup>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="messaging\resources\message_template_pwdreset.xml" />
   </ItemGroup>
   <Import Project="..\..\qorpent.kernel\build.targets" />
 </Project>

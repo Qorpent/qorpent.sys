@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Security.Policy;
 
 namespace qorpent.v2.security.messaging {
     public interface IMessageQueue {
@@ -9,5 +8,4 @@ namespace qorpent.v2.security.messaging {
         IEnumerable<PostMessage> SearchMessages(object query);
         IEnumerable<PostMessage> GetRequireSendMessages(int count = -1);
     }
-
 }

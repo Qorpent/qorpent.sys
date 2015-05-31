@@ -22,15 +22,12 @@ namespace qorpent.v2.security.user {
         /// </summary>
         public Exception Error { get; set; }
 
-        public string Name { get; set; }
-        public string AuthenticationType { get; set; }
-        public bool IsAuthenticated { get; set; }
         public IIdentity Native { get; set; }
         public IUser User { get; set; }
         public IIdentity ImpersonationSource { get; set; }
         public Token Token { get; set; }
-
-
-        
+        public string Name { get; set; }
+        public string AuthenticationType { get; set; }
+        public bool IsAuthenticated { get; set; }
     }
 }

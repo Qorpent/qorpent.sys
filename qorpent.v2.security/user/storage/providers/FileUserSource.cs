@@ -2,27 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using qorpent.v2.security.authorization;
 using Qorpent;
 using Qorpent.BSharp;
 using Qorpent.Events;
-using Qorpent.Host;
 using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.user.storage.providers {
-    [ContainerComponent(Lifestyle.Singleton, "file.usersource", ServiceType = typeof(IUserSource))]
-    public class FileUserSource : 
-        ServiceBase, 
-        IUserSource, 
+    [ContainerComponent(Lifestyle.Singleton, "file.usersource", ServiceType = typeof (IUserSource))]
+    public class FileUserSource :
+        InitializeAbleService,
+        IUserSource,
         IUserCacheLease,
-        IRoleResolverCacheLease
-    {
+        IRoleResolverCacheLease {
         private const string DEFAULTFILEPATH = "@repos@/.app/pwd.bxls";
-
-        [Inject]
-        public IConfigProvider ConfigProvider { get; set; }
-
+        private string _file;
+        private bool _initialized;
+        private readonly IDictionary<string, IUser> _cache = new Dictionary<string, IUser>();
 
         public FileUserSource() {
             DefaultFilePath = DEFAULTFILEPATH;
@@ -30,12 +28,48 @@ namespace qorpent.v2.security.user.storage.providers {
             Idx = 200;
             Enabled = true;
         }
-        public override void OnContainerCreateInstanceFinished() {
-            base.OnContainerCreateInstanceFinished();
-            Initialize();
+
+        public string DefaultFilePath { get; set; }
+        public string ResolvedFilePath { get; set; }
+        public bool Enabled { get; set; }
+        public DateTime LastFileTime { get; set; }
+        public DateTime LastCheck { get; set; }
+        public int CheckRate { get; set; }
+
+        public bool Refresh() {
+            CheckCache(true);
+            return true;
         }
 
-        private void Initialize() {
+        public string ETag {
+            get { return "fls"; }
+        }
+
+        public DateTime Version {
+            get {
+                if (string.IsNullOrWhiteSpace(_file)) {
+                    return DateTime.MinValue;
+                }
+                return LastFileTime;
+            }
+        }
+
+        public IUser GetUser(string username) {
+            if (!Enabled) {
+                return null;
+            }
+            lock (this) {
+                CheckCache();
+                if (_cache.ContainsKey(username.ToLowerInvariant())) {
+                    return _cache[username];
+                }
+                return null;
+            }
+        }
+
+        public int Idx { get; set; }
+
+        public override void Initialize() {
             lock (this) {
                 Setup();
                 if (File.Exists(ResolvedFilePath)) {
@@ -43,7 +77,7 @@ namespace qorpent.v2.security.user.storage.providers {
                     var bsharpresult = BSharpCompiler.CompileFile(_file);
                     foreach (
                         var cls in
-                            bsharpresult.ResolveAll("pwd").OrderBy(_ => CoreExtensions.Attr(_.Compiled, "idx").ToInt())) {
+                            bsharpresult.ResolveAll("pwd").OrderBy(_ => _.Compiled.Attr("idx").ToInt())) {
                         foreach (var element in cls.Compiled.Elements("usr")) {
                             var record = new User();
                             UserSerializer.ReadXml(record, element);
@@ -56,44 +90,35 @@ namespace qorpent.v2.security.user.storage.providers {
             }
         }
 
-        public string DefaultFilePath { get; set; }
-        public string ResolvedFilePath { get; set; }
-
         private void Setup() {
             Enabled = true;
             var file = DefaultFilePath;
+
             if (null != ConfigProvider) {
                 var conf = ConfigProvider.GetConfig();
                 if (null != conf) {
-                    var element = conf.Element("logon");
-                    if (null != element) {
-                        element = element.Element("file");
-                    }
-                    if (null != element) {
-                        file = element.Attr("path", file);
-                        Enabled = element.Attr("active", "true").ToBool();
-                    }
+                    InitializeFromXml(conf);
                 }
             }
-           ResolvedFilePath = EnvironmentInfo.ResolvePath(file);
-           
-        }
-
-        public bool Enabled { get; set; }
-
-        IDictionary<string, IUser> _cache = new Dictionary<string, IUser>();
-        private string _file;
-
-        public IUser GetUser(string username) {
-            if (!Enabled) return null;
-            lock (this) {
-                CheckCache();
-                if (_cache.ContainsKey(username.ToLowerInvariant())) return _cache[username];
-                return null;
+            else {
+                ResolvedFilePath = EnvironmentInfo.ResolvePath(file);
             }
         }
 
-        private bool _initialized = false;
+        public override void InitializeFromXml(XElement e) {
+            var file = DefaultFilePath;
+            base.InitializeFromXml(e);
+            var element = e.Element("logon");
+            if (null != element) {
+                element = element.Element("file");
+            }
+            if (null != element) {
+                file = element.Attr("path", file);
+                Enabled = element.Attr("active", "true").ToBool();
+            }
+            ResolvedFilePath = EnvironmentInfo.ResolvePath(file);
+        }
+
         private void CheckCache(bool forced = false) {
             if (!_initialized) {
                 Initialize();
@@ -121,29 +146,6 @@ namespace qorpent.v2.security.user.storage.providers {
             _cache.Clear();
             Initialize();
             return null;
-        }
-
-        public DateTime LastFileTime { get; set; }
-        public DateTime LastCheck { get; set; }
-        public int CheckRate { get; set; }
-
-        public int Idx { get; set; }
-        public bool Refresh() {
-            CheckCache(true);
-            return true;
-        }
-
-        public string ETag {
-            get { return "fls"; }
-        }
-
-        public DateTime Version {
-            get {
-                if (string.IsNullOrWhiteSpace(_file)) {
-                    return DateTime.MinValue;
-                }
-                return LastFileTime;
-            }
         }
 
         public void Clear() {

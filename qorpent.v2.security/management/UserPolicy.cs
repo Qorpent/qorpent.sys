@@ -24,7 +24,7 @@ namespace qorpent.v2.security.management {
                 if (RequestMinutes <= 0) {
                     RequestMinutes = 60*24;
                 }
-                new PasswordManager().MakeRequest(user,RequestMinutes);
+                new PasswordManager().MakeRequest(user, RequestMinutes);
             }
         }
     }

@@ -22,6 +22,8 @@ define(["the-angular", "the-action"], function ($the, template) {
         var logoutAction = new $the.action({url: "/logout"});
         var isauthAction = new $the.action({url: "/isauth"});
         var myinfoAction = new $the.action({url: "/myinfo"});
+        var requestKeyAction = new $the.action({url: "/resetpwdreq"});
+        var resetPassAction = new $the.action({url: "/resetpwd"});
         var infoApp = new $the.action({url: "/info/app"});
         var login = $the.login || ($the.login = {});
         var loginActions = login.actions || (login.actions = {});
@@ -30,6 +32,8 @@ define(["the-angular", "the-action"], function ($the, template) {
         loginActions.isauth = isauthAction;
         loginActions.appinfo = infoApp;
         loginActions.myinfo = myinfoAction;
+        loginActions.requestkey = requestKeyAction;
+        loginActions.resetpass = resetPassAction;
 
         login.isauth = function (callback) { //callback(result, error)
             login.actions.isauth({
@@ -46,10 +50,51 @@ define(["the-angular", "the-action"], function ($the, template) {
             });
         }
 
+
+        login.requestkey = function (req,callback) { //callback(result, error)
+            login.actions.requestkey(
+                req,
+                {
+                    method:"POST",
+                success: function (result) {
+                    if (!!callback) {
+                        callback(result);
+                    }
+                },
+                error: function (error,response) {
+
+                    if (!!callback) {
+                        callback(false, error, response.nativeResult.responseJSON);
+                    }
+                }
+            });
+        }
+
+        login.resetpass = function (req,callback) { //callback(result, error)
+            login.actions.resetpass(
+                req,
+                {
+                    method:"POST",
+                    success: function (result) {
+                        if (!!callback) {
+                            callback(result);
+                        }
+                    },
+                    error: function (error,response) {
+                        if (!!callback) {
+                            callback(false, error,response.nativeResult.responseJSON);
+                        }
+                    }
+                });
+        }
+
+
+
         login.logon = function(req,callback){ //
             login.actions.login(
                 req,
                 {
+                    method:"POST",
                     success : function(data){
                         var result = new loginResult(data===true,data===true?"":data);
                         if(!!callback){

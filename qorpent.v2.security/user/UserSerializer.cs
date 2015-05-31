@@ -7,37 +7,35 @@ using Qorpent.Core.Tests.Experiments;
 using Qorpent.Experiments;
 using Qorpent.Utils.Extensions;
 
-namespace qorpent.v2.security.user
-{
+namespace qorpent.v2.security.user {
     /// <summary>
-    /// Extensions for user serialization
+    ///     Extensions for user serialization
     /// </summary>
-    public static class UserSerializer
-    {
-
+    public static class UserSerializer {
         public static IUser CreateFromJson(object jsonsrc, bool alreadyJsonified = false) {
             var j = alreadyJsonified ? jsonsrc : jsonsrc.jsonify();
             var jtype = j.str("class") ?? j.str("_type") ?? "user";
-            if (jtype != "user") return null;
-            var netcls = j.str("netclass") ?? (typeof (User).FullName+", "+typeof(User).Assembly.GetName().Name);
+            if (jtype != "user") {
+                return null;
+            }
+            var netcls = j.str("netclass") ?? (typeof (User).FullName + ", " + typeof (User).Assembly.GetName().Name);
             var type = Type.GetType(netcls);
             if (null == type) {
-                throw new Exception("invalid type "+netcls);
+                throw new Exception("invalid type " + netcls);
             }
             var instance = Activator.CreateInstance(type) as IUser;
             if (null == instance) {
-                throw new Exception("invalid class not IUser "+netcls );
+                throw new Exception("invalid class not IUser " + netcls);
             }
-            ReadJson(instance,j,true);
+            ReadJson(instance, j, true);
             return instance;
         }
 
-        public static void ReadJson(IUser user, object jsonsrc, bool alreadyJsonified = false)
-        {
+        public static void ReadJson(IUser user, object jsonsrc, bool alreadyJsonified = false) {
             if (jsonsrc is XElement) {
                 ReadXml(user, (XElement) jsonsrc);
             }
-            var j = alreadyJsonified?jsonsrc:jsonsrc.jsonify();
+            var j = alreadyJsonified ? jsonsrc : jsonsrc.jsonify();
             user.Id = j.str("_id");
             user.Version = j.num("_version");
             user.CreateTime = j.date("createtime");
@@ -57,15 +55,14 @@ namespace qorpent.v2.security.user
             user.ResetExpire = j.date("resetexpire");
             user.PublicKey = j.str("publickey");
             user.Logable = j.bul("logable");
-            
+
 
             user.Domain = j.str("domain");
             user.Roles = j.arr("roles").OfType<string>().ToList();
             user.Groups = j.arr("groups").OfType<string>().ToList();
             user.Custom = j.map("custom");
             var extensions = user as IJsonSerializationExtension;
-            if (null != extensions)
-            {
+            if (null != extensions) {
                 extensions.ReadExtensions(j);
             }
         }
@@ -89,15 +86,14 @@ namespace qorpent.v2.security.user
             user.UpdateTime = element.Attr("updatetime").ToDate();
             var custom = element.Element("custom");
 
-            if (null != custom)
-            {
-                user.Custom = (IDictionary<string, object>)custom.jsonify();
+            if (null != custom) {
+                user.Custom = (IDictionary<string, object>) custom.jsonify();
             }
         }
 
         public static string GetJson(IUser user, string usermode = "") {
             var sw = new StringWriter();
-            WriteJson(user,sw,usermode);
+            WriteJson(user, sw, usermode);
             return sw.ToString();
         }
 
@@ -107,9 +103,18 @@ namespace qorpent.v2.security.user
             }
             return GetId(user.Login);
         }
+
         public static string GetId(string login) {
-            if (string.IsNullOrWhiteSpace(login)) return "0";
-            return login.ToLowerInvariant().Replace("/", "_rs_").Replace("\\", "_ls_").Replace("@", "_at_").Replace(".","_").Replace("-","_");
+            if (string.IsNullOrWhiteSpace(login)) {
+                return "0";
+            }
+            return
+                login.ToLowerInvariant()
+                    .Replace("/", "_rs_")
+                    .Replace("\\", "_ls_")
+                    .Replace("@", "_at_")
+                    .Replace(".", "_")
+                    .Replace("-", "_");
         }
 
         public static void WriteJson(IUser user, TextWriter output, string usermode = "") {
@@ -123,10 +128,10 @@ namespace qorpent.v2.security.user
                 return;
             }
             jw.OpenObject();
-            jw.WriteProperty("_id", user.Id,notnullonly);
-            jw.WriteProperty("_version", user.Version,notnullonly);
-            jw.WriteProperty("createtime", user.CreateTime.ToUniversalTime(),notnullonly);
-            jw.WriteProperty("updatetime", user.UpdateTime.ToUniversalTime(),notnullonly);
+            jw.WriteProperty("_id", user.Id, notnullonly);
+            jw.WriteProperty("_version", user.Version, notnullonly);
+            jw.WriteProperty("createtime", user.CreateTime.ToUniversalTime(), notnullonly);
+            jw.WriteProperty("updatetime", user.UpdateTime.ToUniversalTime(), notnullonly);
 
             if (usermode == "admin" || usermode == "store") {
                 jw.WriteProperty("class", "user");
@@ -141,10 +146,8 @@ namespace qorpent.v2.security.user
             jw.WriteProperty("email", user.Email, notnullonly);
             jw.WriteProperty("admin", user.IsAdmin, notnullonly);
 
-   
 
-            if (usermode == "store" || usermode == "admin")
-            {
+            if (usermode == "store" || usermode == "admin") {
                 jw.WriteProperty("active", user.Active, notnullonly);
                 jw.WriteProperty("expire", user.Expire.ToUniversalTime(), notnullonly);
                 jw.WriteProperty("hash", user.Hash, notnullonly);
@@ -153,7 +156,6 @@ namespace qorpent.v2.security.user
                 jw.WriteProperty("resetexpire", user.ResetExpire.ToUniversalTime(), notnullonly);
                 jw.WriteProperty("publickey", user.PublicKey, notnullonly);
                 jw.WriteProperty("logable", user.Logable, notnullonly);
-
             }
             jw.WriteProperty("domain", user.Domain, notnullonly);
             jw.WriteProperty("roles", user.Roles.OrderBy(_ => _).ToArray(), notnullonly);
@@ -162,7 +164,7 @@ namespace qorpent.v2.security.user
 
             var extensions = user as IJsonSerializationExtension;
             if (null != extensions) {
-                extensions.WriteExtensions(jw,usermode,null);
+                extensions.WriteExtensions(jw, usermode, null);
             }
 
             jw.CloseObject();

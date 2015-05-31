@@ -10,14 +10,24 @@ using Qorpent;
 using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
-namespace qorpent.v2.security.logon.providers
-{
+namespace qorpent.v2.security.logon.providers {
     /// <summary>
-    /// Allows to configure 
+    ///     Allows to configure
     /// </summary>
-    [ContainerComponent(Lifestyle.Transient,"hash.logonservice",ServiceType = typeof(ILogonProvider))]
-    public class SecureLogon : ServiceBase, ILogonProvider,ISecureLogon
-    {
+    [ContainerComponent(Lifestyle.Transient, "hash.logonservice", ServiceType = typeof (ILogonProvider))]
+    public class SecureLogon : ServiceBase, ILogonProvider, ISecureLogon {
+        private ISecureLogonService _secureLogon;
+        private IUserStateChecker _stateChecker;
+
+        /// <summary>
+        ///     MS timeout to logon with given salt, 1 minute by default
+        /// </summary>
+        public int LogonTimeout = 60000;
+
+        public SecureLogon() {
+            Idx = 9990;
+            Encryptor = new Encryptor(Guid.NewGuid().ToString());
+        }
 
         [Inject]
         public ISecureLogonService SecureLogonService {
@@ -25,46 +35,30 @@ namespace qorpent.v2.security.logon.providers
             set { _secureLogon = value; }
         }
 
-        public SecureLogon()
-        {
-            Idx = 9990;
-            this.Encryptor = new Encryptor(Guid.NewGuid().ToString());
-        }
-
         public Encryptor Encryptor { get; set; }
 
         [Inject]
         public IUserService UserService { get; set; }
 
-        private IUserStateChecker _stateChecker;
         /// <summary>
-        /// 
         /// </summary>
         [Inject]
-        public IUserStateChecker StateChecker
-        {
+        public IUserStateChecker StateChecker {
             get { return _stateChecker ?? (_stateChecker = new UserStateChecker()); }
             set { _stateChecker = value; }
         }
 
-
-
-        /// <summary>
-        /// MS timeout to logon with given salt, 1 minute by default
-        /// </summary>
-        public int LogonTimeout = 60000;
-
-        private ISecureLogonService _secureLogon;
-
-
         public int Idx { get; set; }
 
         public IIdentity Logon(string username, SecureLogonInfo info, IScope context = null) {
-            if (null == UserService) return null;
+            if (null == UserService) {
+                return null;
+            }
             var user = UserService.GetUser(username);
-            if (!StateChecker.IsSecureLogable(user)) return null;
-            var result = new Identity
-            {
+            if (!StateChecker.IsSecureLogable(user)) {
+                return null;
+            }
+            var result = new Identity {
                 Name = username,
                 AuthenticationType = "secure"
             };
@@ -80,7 +74,7 @@ namespace qorpent.v2.security.logon.providers
                     result.User = user;
                     result.IsAdmin = user.IsAdmin;
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     result.IsError = true;
                     result.Error = e;
                 }
@@ -89,19 +83,17 @@ namespace qorpent.v2.security.logon.providers
             return result;
         }
 
-       
-
         public string GetSalt(string username, IScope context = null) {
-            if (null == UserService) return null;
+            if (null == UserService) {
+                return null;
+            }
             var user = UserService.GetUser(username);
-            
+
             if (!StateChecker.IsSecureLogable(user)) {
                 return null;
             }
 
-            return SecureLogonService.GetSalt(user,context);
+            return SecureLogonService.GetSalt(user, context);
         }
-
-       
     }
 }

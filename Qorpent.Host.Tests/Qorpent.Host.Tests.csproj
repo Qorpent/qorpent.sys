@@ -23,12 +23,9 @@
     <Compile Include="DistinctContextPerformance.cs" />
     <Compile Include="HostConfigTests.cs" />
     <Compile Include="HttpProxizeMode.cs" />
-    <Compile Include="LoginSoruceProviderTest.cs" />
     <Compile Include="MemoryQWebTest.cs" />
     <Compile Include="ServerParametersTest.cs" />
     <Compile Include="SimpleSocketTest.cs" />
-    <Compile Include="TestLoginSource.cs" />
-    <Compile Include="TestHostLogon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

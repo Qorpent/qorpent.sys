@@ -82,7 +82,7 @@
 
         </div>
 
-        <div ng-if="!user.auth && !user.restorepass" ng-cloak >
+        <div ng-if="!user.auth " ng-cloak >
         <h1 class="iprimary">Вход в систему <span ng-if="user.auth">(повторный или от имени другого аккаунта)</span></h1>
         <form  name="loginForm" class="login box col default soft" ng-controller="loginform" ng-submit="loginForm.$valid && login()">
 
@@ -94,32 +94,13 @@
             <input type="submit" value="true" style="display: none"/>
             <div ng-if="lasterror" class="danger login-comment" ng-cloak ng-bind="lasterror"></div>
             <div ng-if="lastwaslogin" class="success login-comment" ng-cloak>Вход выполнен успешно</div>
-            <i ng-if="!user.restorepass" ng-click="user.restorepass = true" class="button default" >Я забыл пароль</i>
+            <a href="resetpwdreq.html">Я забыл пароль</a>
 
         </form>
 
         </div>
 
-        <div ng-if="user.restorepass" ng-cloak >
-            <p class="iwarn">Внимание! В случае если вы не помните учетной записи и пароля при регистрации или не уверены в самом факте регистрации, то обратитесь к администрации системы.</p>
-            <h1 class="iprimary">Восстановление пароля</h1>
-            <form  name="resetPassForm" class="login box col default soft" ng-controller="loginform" ng-submit="resetPassForm.$valid && resetPass()">
 
-                <input type="text" size="10" placeholder="учетная запись" name="login" ng-model="req.login" ng-required="true" />
-                <input type="text" placeholder="email" size="10" name="email" ng-model="req.email" ng-required="true" />
-                <i class="button" ng-class="{primary: resetPassForm.$valid, warn: !resetPassForm.$valid, disabled: !resetPassForm.$valid}"
-                   ng-click="resetPassForm.$valid && resetPass()">Выслать код сброса пароля</i>
-
-                <i ng-if="user.restorepass" class="button info"  ng-click="user.restorepass = false">Я вспомнил пароль</i>
-                <input type="submit" value="true" style="display: none"/>
-                <div ng-if="lasterror" class="danger login-comment" ng-cloak ng-bind="lasterror"></div>
-                <div ng-if="lastwaslogin" class="success login-comment" ng-cloak>Вход выполнен успешно</div>
-                <i ng-if="!user.restorepass" ng-click="user.restorepass = true" class="button default" >Я забыл пароль</i>
-
-            </form>
-
-
-        </div>
     </div>
 </div>
 

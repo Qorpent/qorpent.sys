@@ -30,8 +30,12 @@ namespace qorpent.v2.security.logon {
 
         public IIdentity Logon(string username, string password, IScope context = null) {
             lock (this) {
-                if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("username");
-                if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
+                if (string.IsNullOrWhiteSpace(username)) {
+                    throw new ArgumentException("username");
+                }
+                if (string.IsNullOrWhiteSpace(password)) {
+                    throw new ArgumentException("password");
+                }
                 var opid = PWDLOGONOPID + Interlocked.Increment(ref logonid);
                 LogStart(username, password, context, opid);
                 IIdentity result = null;
@@ -58,10 +62,18 @@ namespace qorpent.v2.security.logon {
         int IWithIndex.Idx { get; set; }
 
         public IIdentity Logon(string username, SecureLogonInfo info, IScope context = null) {
-            if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("username");
-            if(null==info)throw new ArgumentException("info");
-            if (string.IsNullOrWhiteSpace(info.Salt)) throw new ArgumentException("info.salt");
-            if (string.IsNullOrWhiteSpace(info.Sign)) throw new ArgumentException("info.sign");
+            if (string.IsNullOrWhiteSpace(username)) {
+                throw new ArgumentException("username");
+            }
+            if (null == info) {
+                throw new ArgumentException("info");
+            }
+            if (string.IsNullOrWhiteSpace(info.Salt)) {
+                throw new ArgumentException("info.salt");
+            }
+            if (string.IsNullOrWhiteSpace(info.Sign)) {
+                throw new ArgumentException("info.sign");
+            }
             var opid = SECLOGONOPID + Interlocked.Increment(ref logonid);
             LogStart(username, info, context, opid);
             var securelogon = Extensions.OfType<ISecureLogon>().FirstOrDefault();
@@ -85,7 +97,9 @@ namespace qorpent.v2.security.logon {
         }
 
         public string GetSalt(string username, IScope context = null) {
-            if(string.IsNullOrWhiteSpace(username))throw new ArgumentException("username");
+            if (string.IsNullOrWhiteSpace(username)) {
+                throw new ArgumentException("username");
+            }
             var opid = GETSALTOPID + Interlocked.Increment(ref logonid);
             if (Logg.IsForDebug()) {
                 Logg.Debug(new {opid, username, context});
@@ -104,6 +118,14 @@ namespace qorpent.v2.security.logon {
                 Logg.Debug(new {opid, username, salt = result});
             }
             return result;
+        }
+
+        public object Reset(ResetEventData data) {
+            Logg.Info(new {logon = "reset was called"});
+            foreach (var logonProvider in Extensions) {
+                logonProvider.Reset(data);
+            }
+            return null;
         }
 
         protected override string GetLoggerNameSuffix() {
@@ -149,8 +171,8 @@ namespace qorpent.v2.security.logon {
                     new {
                         opid,
                         username,
-                        salt=info.Salt,
-                        sign=info.Sign,
+                        salt = info.Salt,
+                        sign = info.Sign,
                         context,
                         logonerror = ex.Message
                     });
@@ -160,7 +182,7 @@ namespace qorpent.v2.security.logon {
         private IIdentity ResolveByExtensions(string username, string password, IScope context, IIdentity result) {
             result = Extensions.OfType<IPasswordLogon>()
                 .Select(_ => _.Logon(username, password, context))
-                .FirstOrDefault(_ => null!=_ && _.IsAuthenticated);
+                .FirstOrDefault(_ => null != _ && _.IsAuthenticated);
             return result;
         }
 
@@ -172,7 +194,7 @@ namespace qorpent.v2.security.logon {
 
         private void LogStart(string username, SecureLogonInfo info, IScope context, string opid) {
             if (Logg.IsForDebug()) {
-                Logg.Debug(new {opid, username, salt=info.Salt,sign=info.Sign, context});
+                Logg.Debug(new {opid, username, salt = info.Salt, sign = info.Sign, context});
             }
         }
 
@@ -192,14 +214,6 @@ namespace qorpent.v2.security.logon {
                 AuthenticationType = "undefined",
                 IsAuthenticated = false
             };
-        }
-
-        public object Reset(ResetEventData data) {
-            Logg.Info(new{logon="reset was called"});
-            foreach (var logonProvider in Extensions) {
-                logonProvider.Reset(data);
-            }
-            return null;
         }
     }
 }

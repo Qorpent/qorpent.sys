@@ -7,9 +7,8 @@ using Qorpent;
 using Qorpent.IoC;
 
 namespace qorpent.v2.security.authorization {
-    [ContainerComponent(Lifestyle.Singleton,"userbased.roleresolver",ServiceType=typeof(IRoleResolver))]
+    [ContainerComponent(Lifestyle.Singleton, "userbased.roleresolver", ServiceType = typeof (IRoleResolver))]
     public class RoleResolver : ServiceBase, IRoleResolver {
-
         [Inject]
         public IUserService Users { get; set; }
 
@@ -22,7 +21,9 @@ namespace qorpent.v2.security.authorization {
             if (HasRole(user, role)) {
                 return true;
             }
-            if (exact) return false;
+            if (exact) {
+                return false;
+            }
             if (!string.IsNullOrWhiteSpace(user.Domain)) {
                 var master = Users.GetUser(user.Domain + "@groups");
                 if (HasRole(master, role)) {
@@ -39,7 +40,9 @@ namespace qorpent.v2.security.authorization {
         }
 
         private static bool HasRole(IUser user, string role) {
-            if (null == user) return false;
+            if (null == user) {
+                return false;
+            }
             return user.Roles.Any(_ => _.Equals(role, StringComparison.InvariantCultureIgnoreCase));
         }
     }

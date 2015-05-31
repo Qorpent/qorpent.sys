@@ -1,13 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using Qorpent.Security;
+﻿using System.Security.Principal;
 
-namespace qorpent.v2.security.authorization
-{
+namespace qorpent.v2.security.authorization {
     public interface IRoleResolver {
-        bool IsInRole(IIdentity identity, string role, bool exact =false);
+        bool IsInRole(IIdentity identity, string role, bool exact = false);
     }
 }

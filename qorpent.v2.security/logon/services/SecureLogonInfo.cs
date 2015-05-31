@@ -2,6 +2,5 @@
     public class SecureLogonInfo {
         public string Salt { get; set; }
         public string Sign { get; set; }
-        
     }
 }

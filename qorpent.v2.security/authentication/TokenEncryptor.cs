@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using qorpent.v2.security.encryption;
 using Qorpent;
 using Qorpent.Experiments;
@@ -7,15 +8,11 @@ using Qorpent.IoC;
 using Qorpent.Utils.Extensions;
 
 namespace qorpent.v2.security.authentication {
-    [ContainerComponent(Lifestyle.Singleton,"token.encryptor",ServiceType=typeof(ITokenEncryptor))]
-    public class TokenEncryptor:ServiceBase,ITokenEncryptor {
+    [ContainerComponent(Lifestyle.Singleton, "token.encryptor", ServiceType = typeof (ITokenEncryptor))]
+    public class TokenEncryptor : InitializeAbleService, ITokenEncryptor {
         private Encryptor _encryptor;
 
-        [Inject]
-        public IConfigProvider ConfigProvider { get; set; }
-
         /// <summary>
-        /// 
         /// </summary>
         public Encryptor Encryptor {
             get {
@@ -31,41 +28,12 @@ namespace qorpent.v2.security.authentication {
             set { _encryptor = value; }
         }
 
-        private Encryptor GetEncryptor() {
-            string key = "";
-            bool setmachine = true;
-            bool setdate = true;
-            if (null != ConfigProvider) {
-                var e = ConfigProvider.GetConfig();
-                if (null != e) {
-                    e = e.Element("logon");
-                }
-                if (null != e) {
-                    e = e.Element("token");
-                }
-                if (null != e) {
-                    key = e.Attr("key");
-                    var defval = string.IsNullOrWhiteSpace(key) ? "true" : "false";
-                    setmachine = e.Attr("machine", defval).ToBool();
-                    setdate = e.Attr("date", defval).ToBool();
-                }
-            }
-            var strings = new List<string>();
-            if (!string.IsNullOrWhiteSpace(key)) {
-                strings.Add(key);
-            }
-            if (setmachine) {
-                strings.Add(Environment.MachineName);
-            }
-            if (setdate) {
-                strings.Add(DateTime.Today.ToString("yyyyMMdd"));
-            }
-            var fullkey = string.Join("-", strings);
-            return new Encryptor(fullkey);
-        }
+        public bool SetDate { get; set; }
+        public bool SetMachine { get; set; }
+        public string BaseKey { get; set; }
 
         public Token Decrypt(string srctoken) {
-            string json = "";
+            var json = "";
             try {
                 json = Encryptor.Decrypt(srctoken);
                 var j = json.jsonify();
@@ -75,20 +43,46 @@ namespace qorpent.v2.security.authentication {
                     Created = j.date("Created"),
                     Expire = j.date("Expire"),
                     Metrics = j.str("Metrics"),
-                    IsAdmin =  j.bul("IsAdmin")
+                    IsAdmin = j.bul("IsAdmin")
                 };
                 return result;
             }
             catch (Exception e) {
                 return null;
             }
-
         }
 
         public string Encrypt(Token token) {
             return Encryptor.Encrypt(token.stringify());
         }
 
-        
+        public override void InitializeFromXml(XElement e) {
+            base.InitializeFromXml(e);
+            e = e.Element("logon");
+            if (null != e) {
+                e = e.Element("token");
+            }
+            if (null != e) {
+                BaseKey = e.Attr("key");
+                var defval = string.IsNullOrWhiteSpace(BaseKey) ? "true" : "false";
+                SetMachine = e.Attr("machine", defval).ToBool();
+                SetDate = e.Attr("date", defval).ToBool();
+            }
+        }
+
+        private Encryptor GetEncryptor() {
+            var strings = new List<string>();
+            if (!string.IsNullOrWhiteSpace(BaseKey)) {
+                strings.Add(BaseKey);
+            }
+            if (SetMachine) {
+                strings.Add(Environment.MachineName);
+            }
+            if (SetDate) {
+                strings.Add(DateTime.Today.ToString("yyyyMMdd"));
+            }
+            var fullkey = string.Join("-", strings);
+            return new Encryptor(fullkey);
+        }
     }
 }

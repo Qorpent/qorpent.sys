@@ -2,7 +2,7 @@
 using Qorpent.Experiments;
 
 namespace qorpent.v2.security.logon.services {
-    public class PasswordPolicy:IPasswordPolicy {
+    public class PasswordPolicy : IPasswordPolicy {
         public PasswordPolicy(string password) {
             password = password ?? "";
             Size = password.Length;
@@ -12,25 +12,29 @@ namespace qorpent.v2.security.logon.services {
             HasDigit = password.Any(char.IsDigit);
             HasSign = password.Any(_ => !char.IsLetter(_) && !char.IsDigit(_));
         }
+
         public int Size { get; set; }
-
         public int Distinct { get; set; }
-
         public bool HasUpper { get; set; }
-
         public bool HasDigit { get; set; }
-
         public bool HasLower { get; set; }
-
         public bool HasSign { get; set; }
 
         public int DifferentRate {
             get {
                 var result = 0;
-                if (HasUpper) result++;
-                if (HasLower) result++;
-                if (HasDigit) result++;
-                if (HasSign) result++;
+                if (HasUpper) {
+                    result++;
+                }
+                if (HasLower) {
+                    result++;
+                }
+                if (HasDigit) {
+                    result++;
+                }
+                if (HasSign) {
+                    result++;
+                }
                 return result;
             }
         }
@@ -44,7 +48,7 @@ namespace qorpent.v2.security.logon.services {
         }
 
         public bool DistinctOk {
-            get { return ((double) Distinct/(double) Size) > 0.8; }
+            get { return (Distinct/(double) Size) > 0.8; }
         }
 
         public bool DistinctGood {
@@ -59,10 +63,20 @@ namespace qorpent.v2.security.logon.services {
             get { return DifferentRate >= 4; }
         }
 
-       
+        public int Rate {
+            get {
+                if (Good) {
+                    return 2;
+                }
+                if (Ok) {
+                    return 1;
+                }
+                return 0;
+            }
+        }
+
         public bool Ok {
             get { return SizeOk && DistinctOk && DifferenceOk; }
-           
         }
 
         public bool Good {
@@ -71,14 +85,6 @@ namespace qorpent.v2.security.logon.services {
 
         public override string ToString() {
             return this.stringify();
-        }
-
-        public int Rate {
-            get {
-                if (Good) return 2;
-                if (Ok) return 1;
-                return 0;
-            }
         }
     }
 }
