@@ -36,6 +36,7 @@ namespace Qorpent.Host.Tests
             var mvc= (MvcFactory)hs.Container.Get<IMvcFactory>();
             mvc.Register(typeof (TestAction).Assembly);
             var result = hs.Call("/test/best");
+            Console.WriteLine(result);
             Assert.AreEqual("0",result);
             Assert.AreEqual(1,mvc.GetMetric("action.pool.count"));
             result = hs.Call("/test/best");

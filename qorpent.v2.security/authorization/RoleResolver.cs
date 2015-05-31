@@ -15,7 +15,7 @@ namespace qorpent.v2.security.authorization {
         public bool IsInRole(IIdentity identity, string role, bool exact) {
             var id = identity as Identity;
             if (null == id) {
-                throw new Exception("only qorpent identities are allowed");
+                id =new Identity(identity);
             }
             var user = id.User ?? (id.User = Users.GetUser(id.Name));
             if (HasRole(user, role)) {

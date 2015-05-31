@@ -55,6 +55,7 @@ namespace Qorpent.Core.Tests {
 		}
 
 		[Test]
+        [Ignore("Not more actual and cause errors due to classes was removed")]
 		public void IsWeb() {
 			var tempdir = Path.GetTempFileName();
 			File.Delete(tempdir);
@@ -81,9 +82,6 @@ namespace Qorpent.Core.Tests {
 				var isweb = infotester.IsWeb;
 				var iswebutility = infotester.IsWebUtility;
 				var root = infotester.RootDirectory;
-				//bool isweb = (bool)infotester.GetType().GetProperty("IsWeb").GetValue(infotester,null);
-				//bool iswebutility = (bool)infotester.GetType().GetProperty("IsWebUtility").GetValue(infotester, null);
-				//string root = (string)infotester.GetType().GetProperty("RootDirectory").GetValue(infotester, null);
 				AppDomain.Unload(domain);
 				Assert.True(isweb);
 				Assert.False(iswebutility);

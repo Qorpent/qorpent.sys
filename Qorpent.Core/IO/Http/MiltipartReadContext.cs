@@ -180,15 +180,16 @@ namespace Qorpent.IO.Http
 			}
 			if (cnt >= 1)
 			{
-				var ctb = new byte[100];
-				delt = Idx;
-				while (Buffer[Idx] != '\r' && Buffer[Idx] != '\n')
-				{
-					ctb[Idx - delt] = Buffer[Idx];
-					Idx++;
-				}
-				var ctypestring = _encoding.GetString(ctb, 0, Idx - delt);
-				CurrentType = ctypestring.Split(':')[1].Trim();
+			    if (!string.IsNullOrWhiteSpace(CurrentFileName)) {
+			        var ctb = new byte[100];
+			        delt = Idx;
+			        while (Buffer[Idx] != '\r' && Buffer[Idx] != '\n') {
+			            ctb[Idx - delt] = Buffer[Idx];
+			            Idx++;
+			        }
+			        var ctypestring = _encoding.GetString(ctb, 0, Idx - delt);
+			        CurrentType = ctypestring.Split(':')[1].Trim();
+			    }
 			}
 			while (Buffer[Idx] == '\r' || Buffer[Idx] == '\n') Idx++;
 

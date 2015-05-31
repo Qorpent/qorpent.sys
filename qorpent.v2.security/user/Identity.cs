@@ -9,6 +9,18 @@ namespace qorpent.v2.security.user {
     /// <summary>
     /// </summary>
     public class Identity : IIdentity,IJsonSerializable {
+        public Identity(IIdentity identity) {
+            this.Name = identity.Name;
+            this.AuthenticationType = identity.AuthenticationType;
+            this.Native = identity;
+            this.IsAuthenticated = identity.IsAuthenticated;
+            this.User = new User {Login = Name};
+        }
+
+        public Identity() {
+            
+        }
+
         /// <summary>
         /// </summary>
         public bool IsAdmin { get; set; }

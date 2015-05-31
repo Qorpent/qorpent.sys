@@ -23,21 +23,23 @@ namespace qorpent.v2.security.Tests.messaging
             Console.WriteLine(message.Message.Simplify(SimplifyOptions.SingleQuotes));
             Assert.AreEqual(@"<div>
   <h1>Уважаемый Иванов!</h1>
-  <p>Данным письмом мы уведомляем Вас о том, что вы зарегистрированы на 
-  ресурсе '<a href='https://super.puper.com/login.html?referer=/home.html'>Супер-Пупер</a>'
+  <p>
+    Данным письмом мы уведомляем Вас о том, что вы зарегистрированы на
+    ресурсе '<a href='https://super.puper.com/login.html?referer=/home.html'>Супер-Пупер</a>'
     под учетной записью <strong>test</strong></p>
   <p>
     Для активации вашей учетной записи и регистрации Вашего пароля просим
-    вас перейти по ссылке <a href='https://super.puper.com/resetpwd.html?login=test&amp;key=[KEY]'>Активация пользователя</a></p>
+    вас перейти по ссылке
+    <a href='https://super.puper.com/resetpwd.html?login=test&amp;key=[KEY]'>Активация пользователя</a></p>
   <p>
     В случае, если Вы не уверены, что данная регистрация предназначается Вам,
-    вы можете уточнить этот вопрос, послав соответствующий запрос 
+    вы можете уточнить этот вопрос, послав соответствующий запрос
     ответным письмом
   </p>
   <p>
     C Уважением, адмнистрация ресурса 'Супер-Пупер'
   </p>
-</div>".Replace("[KEY]",u.ResetKey), message.Message.Simplify(SimplifyOptions.SingleQuotes));
+</div>".Replace("[KEY]", u.ResetKey), message.Message.Simplify(SimplifyOptions.SingleQuotes));
         }
 
         [Test]

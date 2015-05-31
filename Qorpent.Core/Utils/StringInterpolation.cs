@@ -440,9 +440,10 @@ namespace Qorpent.Utils
 	        if (val is XAttribute) {
 	            val = ((XAttribute) val).Value;
             }
+                /*
             else if (val is XElement) {
                 val = ((XElement) val).Value;
-            }
+            }*/
 
 	        return val;
 	    }
@@ -475,6 +476,13 @@ namespace Qorpent.Utils
 	                }
 	                var xelement = result as XElement;
 	                if (null != xelement) {
+	                    if ("value()" == paths[i]) {
+	                        return xelement.Value;
+	                    }
+	                    if ("name()" == paths[i]) {
+	                        return xelement.Name.LocalName;
+	                    }
+
 	                    var attr = xelement.Attribute(paths[i]);
 	                    var el = xelement.Element(paths[i]);
 	                    result = i == paths.Length - 1 ? ((object)attr ?? el) : ((object)el ?? attr);

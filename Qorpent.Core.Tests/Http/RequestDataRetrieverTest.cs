@@ -57,7 +57,6 @@ namespace Qorpent.Host.Lib.Tests
 				};
 			w(boundary);
 			w("Content-Disposition: form-data; name=\"test1\"\n");
-			w("\n");
 			w("Тест строка\n");
 			w(boundary);
 			w("Content-Disposition: form-data; name=\"test2\"; filename=\"test2.h\"\n");

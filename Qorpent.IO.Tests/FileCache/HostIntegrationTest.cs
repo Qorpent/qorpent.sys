@@ -57,7 +57,7 @@ class tiles
 	        try {
 	            var response = new HttpClient().Call("http://127.0.0.1:14990/map/8/173/76.png");
                 Assert.AreEqual(200,response.State);
-                Assert.AreEqual("image/png; charset=utf-8", response.ContentType);
+                Assert.AreEqual("image/png", response.ContentType);
 	            var png = (Bitmap)Image.FromStream(new MemoryStream(response.Data));
                 Assert.AreEqual(ImageFormat.Png, png.RawFormat);
 	            var pixel = png.GetPixel(70, 40);

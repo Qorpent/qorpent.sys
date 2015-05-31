@@ -184,7 +184,7 @@ if(typeof(T)==typeof(c))return (new cDataCache{Model=this}) as ObjectDataCache<T
 		/// Служба генерации соединений
 		/// </summary>
 		[Inject]
-		protected  IDatabaseConnectionProvider ConnectionProvider{
+		public  IDatabaseConnectionProvider ConnectionProvider{
 			get { return _connectionProvider??(_connectionProvider =new DatabaseConnectionProvider{IgnoreDefaultApplication = true}); }
 			set { _connectionProvider = value; }
 		}

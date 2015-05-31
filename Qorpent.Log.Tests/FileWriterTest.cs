@@ -93,11 +93,13 @@ namespace Qorpent.Log.Tests {
 			message2 = new LogMessage
 				{Time = new DateTime(2010, 5, 3), HostObject = "host2", Level = LogLevel.Error, Message = "message2_1"};
 			writer.Write(message2);
+           
+            
 
-			Assert.True(File.Exists(Path.Combine(Tmpdir, "2010-05-02-host1-Warning.log")));
+			Assert.True(File.Exists(Path.Combine(Tmpdir, "2010-05-02-host1-Warn.log")));
 			Assert.True(File.Exists(Path.Combine(Tmpdir, "2010-05-03-host2-Error.log")));
 
-			var fstlog = File.ReadAllText(Path.Combine(Tmpdir, "2010-05-02-host1-Warning.log"));
+			var fstlog = File.ReadAllText(Path.Combine(Tmpdir, "2010-05-02-host1-Warn.log"));
 			var seclog = File.ReadAllText(Path.Combine(Tmpdir, "2010-05-03-host2-Error.log"));
 
 			Console.WriteLine(fstlog);

@@ -27,7 +27,6 @@
     <Compile Include="Cryptography\ICryptoProviderResult.cs" />
     <Compile Include="Cryptography\ICryptoSource.cs" />
     <Compile Include="Cryptography\Sources\CryptoSourceExternalOpenSsl.cs" />
-    <Compile Include="FileBasedRoleProvider.cs" />
     <Compile Include="NativeWindowsFunctions.cs" />
     <Compile Include="Watchdog\ParanoidProvider.cs" />
   </ItemGroup>

@@ -47,7 +47,7 @@ namespace qorpent.v2.security.Tests
                     _envinitialized = true;
                 }
                 _container = new Container();
-                _container.GetLoader().LoadAssembly(typeof (ILogonService).Assembly);
+                _container.GetLoader().LoadAssembly(typeof (LogonService).Assembly);
                 _container.Register(_container.NewComponent<IConfigProvider, configprovider>());
                 Loggy.Default.Level = LogLevel.All;
                 if (Loggy.Default.Appenders.Count == 0) {

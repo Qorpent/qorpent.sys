@@ -201,7 +201,7 @@ namespace Qorpent.Utils.Tests
         [Test]
         public void StructureResolutionSupportXElement()
         {
-            var code = "${x.a.b.c}${x.a.b}";
+            var code = "${x.a.b.c}${x.a.b.value()}";
             var ctx = new { x = new { a = XElement.Parse("<a><b c='2'>z</b></a>") } };
             var result = _si.Interpolate(code, ctx);
             Console.WriteLine(result);

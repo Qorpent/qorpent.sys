@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Qorpent.Log;
 
@@ -41,10 +42,10 @@ namespace Qorpent.Utils.Tests
 			[TestCase("день назад", 1)]
 			[TestCase("1 день назад", 1)]
 			[TestCase("один день назад", 1)]
-			[TestCase("2 дня назад", 1)]
-			[TestCase("два дня назад", 1)]
+			[TestCase("2 дня назад", 2)]
+			[TestCase("два дня назад", 2)]
 			[TestCase("7 дней назад", 7)]
-			[TestCase("неделю назад", 1)]
+			[TestCase("неделю назад", 7)]
 			[TestCase("позавчера", 2)]
 			public void IscorrectPArsingNDaysAgo(string str, int o) {
 				var n = new DateTime(2015, 1, o + 1, 0, 0, 0);
@@ -57,6 +58,8 @@ namespace Qorpent.Utils.Tests
 				Assert.AreEqual(0, p.Second);
 			}
 		}
+
+
 		[TestCase("22.12.2013 22:40:52", 2013, 12, 22, 22, 40, 52, '\0', '\0', "", false, false)]
 		[TestCase("22:40:52 22.12.2013", 2013, 12, 22, 22, 40, 52, '\0', '\0', "", false, false)]
 		[TestCase("22:40:52 22.12.13", 2013, 12, 22, 22, 40, 52, '\0', '\0', "", false, false)]

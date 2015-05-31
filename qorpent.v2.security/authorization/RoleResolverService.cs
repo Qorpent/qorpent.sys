@@ -31,7 +31,7 @@ namespace qorpent.v2.security.authorization {
             }
             var id = identity as Identity;
             if (null == id) {
-                throw new NotSupportedException("only prepared qorpent Identity supported");
+               id = new Identity(identity);
             }
             role = role.ToUpperInvariant().Trim();
             //first rule - GUEST role is allowed for all authenticated users - allow

@@ -31,7 +31,7 @@ namespace Qorpent.Serialization.Tests {
 	public class coverage_only_tests {
 		[Test]
 		public void serializer_throws_nullarg_for_output() {
-			Assert.Throws<ArgumentNullException>(() => new JsonSerializer().Serialize("x", 1, null));
+			Assert.Throws<ArgumentNullException>(() => new JsonSerializer().Serialize("x", 1, null,null));
 		}
 	}
 }
