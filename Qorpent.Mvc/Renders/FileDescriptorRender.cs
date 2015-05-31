@@ -18,6 +18,7 @@
 #endregion
 using System;
 using System.IO;
+using System.Web.Security;
 using Qorpent.IO;
 using Qorpent.Security;
 using Qorpent.Utils.Extensions;
@@ -38,7 +39,7 @@ namespace Qorpent.Mvc.Renders {
 				throw new QorpentException("Тип результата NULL или не совместим с FileDescriptorRender");
 			}
 			if (descriptor.Role.IsNotEmpty()) {
-				var auth = Application.Access.IsAccessible(descriptor);
+			    var auth = Application.Roles.IsInRole(context.User.Identity, descriptor.Role);
 				if (!auth) {
 					throw new QorpentSecurityException("Доступ к файлу не авторизован " + auth);
 				}

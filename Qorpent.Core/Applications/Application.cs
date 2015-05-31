@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using qorpent.v2.security.authorization;
 using Qorpent.Bxl;
 using Qorpent.Data;
 using Qorpent.Dsl;
@@ -159,22 +160,7 @@ namespace Qorpent.Applications {
 			set { _resources = value; }
 		}
 
-		/// <summary>
-		/// 	Access to <see cref="IAccessProviderService" /> service
-		/// </summary>
-		/// <remarks>
-		/// </remarks>
-		public IAccessProviderService Access {
-			get {
-				if (null == _access) {
-					lock (this) {
-						return _access = ResolveService<IAccessProviderService>();
-					}
-				}
-				return _access;
-			}
-			set { _access = value; }
-		}
+		
 
 
 		/// <summary>
@@ -311,11 +297,11 @@ namespace Qorpent.Applications {
 		/// </summary>
 		/// <remarks>
 		/// </remarks>
-		public IRoleResolver Roles {
+		public IRoleResolverService Roles {
 			get {
 				if (null == _roles) {
 					lock (this) {
-						return _roles = ResolveService<IRoleResolver>();
+                        return _roles = ResolveService<IRoleResolverService>();
 					}
 				}
 				return _roles;
@@ -561,7 +547,6 @@ namespace Qorpent.Applications {
 		/// </summary>
 		private readonly object _appsync = new object();
 
-		private IAccessProviderService _access;
 		private string _applicationName;
 
 		/// <summary>
@@ -601,7 +586,7 @@ namespace Qorpent.Applications {
 
 		private IMvcFactory _mvcfactory;
 		private IPrincipalSource _principals;
-		private IRoleResolver _roles;
+		private IRoleResolverService _roles;
 
 		/// <summary>
 		/// </summary>

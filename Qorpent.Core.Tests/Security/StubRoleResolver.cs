@@ -26,11 +26,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
+using qorpent.v2.security.authorization;
 using Qorpent.Mvc;
 using Qorpent.Security;
 
 namespace Qorpent.Core.Tests.Security {
-	public class StubRoleResolver : IRoleResolver {
+	public class StubRoleResolver : IRoleResolverService {
 		public StubRoleResolver(IEnumerable<string> roles) {
 			rolemaps = new List<string>(roles.Select(x => x.Replace("\\", "/").ToUpperInvariant()));
 		}
@@ -40,21 +41,24 @@ namespace Qorpent.Core.Tests.Security {
 		}
 
 
-		public bool IsInRole(IPrincipal principal, string role, bool exact = false, IMvcContext callcontext = null,
-		                     object customcontext = null) {
-			var test_string = (principal.Identity.Name + "_" + role).Replace("\\", "/").ToUpperInvariant();
+		public bool IsInRole(IIdentity identity, string role, bool exact = false) {
+			var test_string = (identity.Name + "_" + role).Replace("\\", "/").ToUpperInvariant();
 			var result = rolemaps.Contains(test_string);
 			if (!result && !exact) {
-				test_string = (principal.Identity.Name + "_ADMIN").Replace("\\", "/").ToUpperInvariant();
+				test_string = (identity.Name + "_ADMIN").Replace("\\", "/").ToUpperInvariant();
 				return rolemaps.Contains(test_string);
 			}
 			return result;
 		}
 
-		public bool IsInRole(string username, string role, bool exact = false, IMvcContext callcontext = null,
+	    public void Clear() {
+	        throw new System.NotImplementedException();
+	    }
+
+	    public bool IsInRole(string username, string role, bool exact = false, IMvcContext callcontext = null,
 		                     object customcontext = null) {
 			var principal = new GenericPrincipal(new GenericIdentity(username), null);
-			return IsInRole(principal, role, exact, callcontext, customcontext);
+			return IsInRole(principal.Identity, role, exact);
 		}
 
 	    public IEnumerable<string> GetRoles(IPrincipal principal, IMvcContext callcontext = null, object customcontext = null) {
@@ -62,5 +66,20 @@ namespace Qorpent.Core.Tests.Security {
 	    }
 
 	    private readonly List<string> rolemaps;
+	    public IEnumerable<IRoleResolver> GetExtensions() {
+	        throw new System.NotImplementedException();
+	    }
+
+	    public void RegisterExtension(IRoleResolver extension) {
+	        throw new System.NotImplementedException();
+	    }
+
+	    public void RemoveExtension(IRoleResolver extension) {
+	        throw new System.NotImplementedException();
+	    }
+
+	    public void ClearExtensions() {
+	        throw new System.NotImplementedException();
+	    }
 	}
 }

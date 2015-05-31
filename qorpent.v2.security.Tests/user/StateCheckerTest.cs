@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.services;
 using qorpent.v2.security.user.storage;
-using Qorpent.Mvc.QView;
 
 namespace qorpent.v2.security.Tests.user
 {

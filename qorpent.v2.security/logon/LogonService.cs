@@ -108,14 +108,14 @@ namespace qorpent.v2.security.logon {
             var securelogon = Extensions.OfType<ISecureLogon>().FirstOrDefault();
             if (null == securelogon) {
                 if (Logg.IsForError()) {
-                    Logg.Error(new {opid, message = "not secure login confugured"});
+                    Logg.Error(new {opid, message = "not secure login confugured"}.stringify());
                 }
             }
             else {
                 result = securelogon.GetSalt(username);
             }
             if (Logg.IsForDebug()) {
-                Logg.Debug(new {opid, username, salt = result});
+                Logg.Debug(new {opid, username, salt = result}.stringify());
             }
             return result;
         }
@@ -142,12 +142,12 @@ namespace qorpent.v2.security.logon {
         private void LogResult(IIdentity result, string opid) {
             if (!result.IsAuthenticated) {
                 if (Logg.IsForWarn()) {
-                    Logg.Warn(new {logonid = opid, auth = false, result = result.stringify()});
+                    Logg.Warn(new {logonid = opid, auth = false, result }.stringify());
                 }
             }
             else {
                 if (Logg.IsForInfo()) {
-                    Logg.Warn(new {logonid = opid, auth = true, result = result.stringify()});
+                    Logg.Info(new {logonid = opid, auth = true, result}.stringify());
                 }
             }
         }
@@ -161,7 +161,7 @@ namespace qorpent.v2.security.logon {
                         password = password.GetMd5(),
                         context,
                         logonerror = ex.Message
-                    });
+                    }.stringify());
             }
         }
 
@@ -175,7 +175,7 @@ namespace qorpent.v2.security.logon {
                         sign = info.Sign,
                         context,
                         logonerror = ex.Message
-                    });
+                    }.stringify());
             }
         }
 
@@ -188,13 +188,13 @@ namespace qorpent.v2.security.logon {
 
         private void LogStart(string username, string password, IScope context, string opid) {
             if (Logg.IsForDebug()) {
-                Logg.Debug(new {opid, username, pass = password.GetMd5(), context});
+                Logg.Debug(new {opid, username, pass = password.GetMd5(), context}.stringify());
             }
         }
 
         private void LogStart(string username, SecureLogonInfo info, IScope context, string opid) {
             if (Logg.IsForDebug()) {
-                Logg.Debug(new {opid, username, salt = info.Salt, sign = info.Sign, context});
+                Logg.Debug(new {opid, username, salt = info.Salt, sign = info.Sign, context}.stringify());
             }
         }
 

@@ -43,7 +43,8 @@ namespace Qorpent.Mvc.Renders {
 				context.ContentType = resoleMimeType(extension.Substring(1));
 			}
 			if (context.ContentType == "application/bin") {
-				if (!Application.Roles.IsInRole(context.User, "DEVELOPER")) {
+                if (!Application.Roles.IsInRole(context.User.Identity, "DEVELOPER"))
+                {
 					throw new SecurityException("only developers can access this file");
 				}
 				context.WriteOutFile(filename);

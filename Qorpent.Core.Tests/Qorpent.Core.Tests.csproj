@@ -58,7 +58,6 @@
     <Compile Include="Security\StubIWithRole.cs" />
     <Compile Include="Security\StubPrincipalSource.cs" />
     <Compile Include="Security\StubRoleResolver.cs" />
-    <Compile Include="ServiceStateTests.cs" />
     <Compile Include="Tasking\ScheduleTaskTest.cs" />
     <Compile Include="Tasks\JobTest.cs" />
     <Compile Include="Tasks\SimpleUpdaterTest.cs" />

@@ -4,6 +4,7 @@ using System.IO;
 using System.Security;
 using System.Security.Cryptography;
 using System.Threading;
+using qorpent.v2.security.authorization;
 using Qorpent.IO;
 using Qorpent.IO.Http;
 using Qorpent.Security;
@@ -66,7 +67,7 @@ namespace Qorpent.Host.Handlers
 					return;
 				}
 				if (!string.IsNullOrWhiteSpace(staticdescriptor.Role)) {
-					var roles = server.Container.Get<IRoleResolver>();
+					var roles = server.Container.Get<IRoleResolverService>();
 					if (!roles.IsInRole(context.User, staticdescriptor.Role)) {
 						throw new SecurityException("access denied");
 					}

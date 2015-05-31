@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Net;
 using System.Security;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
+using qorpent.v2.security.authorization;
 using Qorpent.IO.Http;
 using Qorpent.Mvc;
-using Qorpent.Mvc.HttpHandler;
 using Qorpent.Security;
 using Qorpent.Utils.Extensions;
 
@@ -39,14 +38,13 @@ namespace Qorpent.Host.Qweb
                         action.WebContextParameters = RequestParameters.Create(ctx);
                     }
                     Execute(context);
-                    if (context.NotModified)
-                    {
-                        MvcHandler.ProcessNotModified(context);
+                    if (context.NotModified) {
+                        context.StatusCode = 304;
                        ctx.Response.Close();
                     }
                     else
                     {
-                        MvcHandler.SetModifiedHeader(context);
+                        SetModifiedHeader(context);
                         RenderResult(context);
 
                     }
@@ -62,6 +60,30 @@ namespace Qorpent.Host.Qweb
 
 	    }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        public static void SetModifiedHeader(IMvcContext context)
+        {
+            INotModifiedStateProvider cp = null;
+            if (null != context.RenderDescriptor && context.RenderDescriptor.SupportNotModifiedState)
+            {
+                cp = context.RenderDescriptor;
+            }
+            else if (null == context.ActionDescriptor)
+            {
+                return;
+            }
+            cp = cp ?? context.ActionDescriptor;
+            if (!cp.SupportNotModifiedState)
+            {
+                return;
+            }
+            context.LastModified = cp.LastModified;
+            context.Etag = cp.ETag;
+        }
+
 	    private bool Authorize(IHostServer server, IMvcContext context) {
 	        if (!string.IsNullOrWhiteSpace(context.ActionDescriptor.Role)) {
 	            if (!context.ActionDescriptor.Role.Contains("GUEST")) {
@@ -69,7 +91,7 @@ namespace Qorpent.Host.Qweb
                         ProcessError(context, new SecurityException("guest permitted"));
 	                }
 	                var roles = context.ActionDescriptor.Role.SmartSplit();
-                    var rr = server.Container.Get<IRoleResolver>();
+                    var rr = server.Container.Get<IRoleResolverService>();
 	                if (rr.IsInRole(context.User, "ADMIN")) return true;
                     foreach (var role in roles) {
                         if (role.StartsWith("!")) {
@@ -147,8 +169,45 @@ namespace Qorpent.Host.Qweb
 		private void CheckNotModified(IMvcContext context)
 		{
 
-			context.NotModified = MvcHandler.CanReturnNotModifiedStatus(context);
+			context.NotModified = CanReturnNotModifiedStatus(context);
 		}
+
+
+        public static bool CanReturnNotModifiedStatus(IMvcContext context)
+        {
+            if (context.IfModifiedSince.Year <= 1900 && string.IsNullOrWhiteSpace(context.IfNoneMatch))
+            {
+                return false;
+            }
+            if (null != context.RenderDescriptor && context.RenderDescriptor.SupportNotModifiedState)
+            {
+                var rcp = (INotModifiedStateProvider)context.RenderDescriptor;
+                return CheckbyLastModAndEtag(context, rcp.LastModified, rcp.ETag);
+            }
+            if (null == context.ActionDescriptor)
+            {
+                return false;
+            }
+            var cp = (INotModifiedStateProvider)context.ActionDescriptor;
+            if (!cp.SupportNotModifiedState)
+            {
+                return false;
+            }
+            return CheckbyLastModAndEtag(context, cp.LastModified, cp.ETag);
+        }
+
+        private static bool CheckbyLastModAndEtag(IMvcContext context, DateTime lastmod, string etag)
+        {
+            if (context.IfModifiedSince < lastmod)
+            {
+                return false;
+            }
+            if (etag != context.IfNoneMatch)
+            {
+                return false;
+            }
+            return true;
+        }
 
 		
 

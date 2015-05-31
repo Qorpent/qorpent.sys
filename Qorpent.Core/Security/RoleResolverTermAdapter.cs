@@ -19,12 +19,13 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Principal;
+using qorpent.v2.security.authorization;
 using Qorpent.Dsl.LogicalExpressions;
 using Qorpent.LogicalExpressions;
 
 namespace Qorpent.Security {
 	/// <summary>
-	/// 	Вспомогательный класс для использования в качестве обертки <see cref="IRoleResolver" />
+    /// 	Вспомогательный класс для использования в качестве обертки <see cref="IRoleResolverService" />
 	/// </summary>
 	public class RoleResolverTermAdapter : ILogicTermSource {
 		/// <summary>
@@ -32,7 +33,7 @@ namespace Qorpent.Security {
 		/// <param name="resolver"> </param>
 		/// <param name="principal"> </param>
 		/// <param name="customcontext"> </param>
-		public RoleResolverTermAdapter(IRoleResolver resolver, IPrincipal principal, string customcontext) {
+		public RoleResolverTermAdapter(IRoleResolverService resolver, IPrincipal principal, string customcontext) {
 			_resolver = resolver;
 			_principal = principal;
 			_customcontext = customcontext;
@@ -52,7 +53,7 @@ namespace Qorpent.Security {
 				exact = true;
 				name = name.Substring(8);
 			}
-			return _resolver.IsInRole(_principal, name, exact, customcontext: _customcontext);
+			return _resolver.IsInRole(_principal.Identity, name, exact);
 		}
 
 	    /// <summary>
@@ -85,6 +86,6 @@ namespace Qorpent.Security {
 		private readonly string _customcontext;
 
 		private readonly IPrincipal _principal;
-		private readonly IRoleResolver _resolver;
+        private readonly IRoleResolverService _resolver;
 	}
 }

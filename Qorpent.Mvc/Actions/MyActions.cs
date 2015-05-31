@@ -51,9 +51,9 @@ namespace Qorpent.Mvc.Actions {
             }
 
             if (
-                Application.Roles.IsInRole(Context.User, "DEVELOPER")
+                Application.Roles.IsInRole(Context.User.Identity, "DEVELOPER")
                     ||
-                Application.Roles.IsInRole(Context.User, "MASTERUSER")
+                Application.Roles.IsInRole(Context.User.Identity, "MASTERUSER")
             ) {
                 return GetAllActions();
             }
@@ -73,7 +73,7 @@ namespace Qorpent.Mvc.Actions {
             var dict = new Dictionary<string, IDictionary<string, object>>();
 
             foreach (var action in actions) {
-                if (!Application.Roles.IsInRole(Context.User, action.DirectRole)) {
+                if (!Application.Roles.IsInRole(Context.User.Identity, action.DirectRole)) {
                         continue;
                 }
 
@@ -114,7 +114,7 @@ namespace Qorpent.Mvc.Actions {
                     (IAction)Activator.CreateInstance(x.ImplementationType)
                 )
             ).Where(
-                x => IsAccessible(x)
+                x => string.IsNullOrWhiteSpace(x.Role) || Roles.IsInRole(User.Identity,x.Role)
             ).ToArray();
         }
 	}

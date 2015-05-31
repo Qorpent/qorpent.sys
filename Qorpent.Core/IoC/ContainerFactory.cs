@@ -197,8 +197,14 @@ namespace Qorpent.IoC {
 			var defaultAttribute =
 				assembly.GetCustomAttributes(typeof (ContainerAttribute), false).OfType<ContainerAttribute>().FirstOrDefault();
 			defaultAttribute = defaultAttribute ?? new ContainerComponentAttribute(Lifestyle.Transient);
-			var types = assembly.GetTypes();
-			types.AsParallel().ForAll(_ =>{
+		    Type[] types = null;
+		    try {
+                types = assembly.GetTypes();
+		    }
+		    catch (Exception e) {
+		        throw new Exception("erorr while loading "+assembly.GetName().Name ,e);
+		    }
+		    types.AsParallel().ForAll(_ =>{
 			//		foreach (var _ in types){
 				try{
 					if (_.IsAbstract) return;

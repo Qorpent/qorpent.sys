@@ -16,10 +16,10 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/IMvcFactory.cs
 #endregion
+
 using System;
 using System.Reflection;
 using Qorpent.Mvc.Binding;
-using Qorpent.Mvc.QView;
 
 namespace Qorpent.Mvc {
 	/// <summary>
@@ -58,19 +58,6 @@ namespace Qorpent.Mvc {
 		/// <returns> </returns>
 		IActionBinder GetBinder();
 
-		/// <summary>
-		/// 	Get IQView instance for given context
-		/// </summary>
-		/// <param name="viewname"> </param>
-		/// <returns> </returns>
-		IQView GetView(string viewname);
-
-		/// <summary>
-		/// 	Releases used IQView
-		/// </summary>
-		/// <param name="viewname"> </param>
-		/// <param name="view"> </param>
-		void ReleaseView(string viewname, IQView view);
 
 		/// <summary>
 		/// 	clears all resolution caches
@@ -104,11 +91,5 @@ namespace Qorpent.Mvc {
 		/// <returns> </returns>
 		IMvcContext CreateContext(string url = null);
 
-		/// <summary>
-		/// 	Проверяет наличие вида и кэширует его экземпляр
-		/// </summary>
-		/// <param name="viewname"> </param>
-		/// <returns> </returns>
-		bool ViewExists(string viewname);
 	}
 }

@@ -41,13 +41,16 @@ namespace Qorpent.Mvc.Actions {
 			if (Target.IsEmpty()) {
 				return;
 			}
-			if (Application.Roles.IsInRole(Context.LogonUser, "ADMIN")) {
+            if (Application.Roles.IsInRole(Context.LogonUser.Identity, "ADMIN"))
+            {
 				return;
 			}
-			if (Application.Roles.IsInRole(Context.LogonUser, "DEVELOPER")) {
+            if (Application.Roles.IsInRole(Context.LogonUser.Identity, "DEVELOPER"))
+            {
 				return;
 			}
-			if (Application.Roles.IsInRole(Context.LogonUser, "DATAMASTER")) {
+            if (Application.Roles.IsInRole(Context.LogonUser.Identity, "DATAMASTER"))
+            {
 				return;
 			}
 			throw new QorpentSecurityException("Вы не имеете право на имперсонацию или переимперсонацию " +

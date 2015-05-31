@@ -136,7 +136,7 @@ namespace Qorpent.Events {
 				             ? _handlers[eventType].ToArray()
 				             : new IEventHandler[] {};
 			if (user != null) {
-				result = result.Where(x => Application.Access.IsAccessible(x, AccessRole.Execute, user)).ToArray();
+				result = result.ToArray();
 			}
 			return result;
 		}

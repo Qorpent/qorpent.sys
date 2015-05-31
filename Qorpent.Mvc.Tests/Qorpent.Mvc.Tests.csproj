@@ -16,13 +16,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingTest.cs" />
-    <Compile Include="DefaultLayoutTest.cs" />
     <Compile Include="Loader\BxlLoadingTest.cs" />
     <Compile Include="Loader\NormalizerTest.cs" />
     <Compile Include="Loader\PackageGenerator.cs" />
     <Compile Include="Loader\ScriptGeneratorTest.cs" />
     <Compile Include="MvcContextTest.cs" />
-    <Compile Include="SimpleMvcProcessing.cs" />
     <Compile Include="SystemBasicConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>

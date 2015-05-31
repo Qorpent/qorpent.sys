@@ -22,13 +22,13 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Xml.Linq;
+using qorpent.v2.security.authorization;
 using Qorpent.Events;
 using Qorpent.Host;
 using Qorpent.IO;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
 using Qorpent.Model;
-using Qorpent.Security;
 using Qorpent.Serialization;
 
 namespace Qorpent.Mvc {
@@ -81,7 +81,7 @@ namespace Qorpent.Mvc {
 		/// <summary>
 		/// 	Доступ к системе ролей
 		/// </summary>
-		[Inject] public IRoleResolver Roles {
+		[Inject] public IRoleResolverService Roles {
 			get {
 				if (null != _roles) {
 					return _roles;
@@ -264,25 +264,7 @@ namespace Qorpent.Mvc {
 	    public RequestParameters WebContextParameters { get; set; }
 
 
-	    /// <summary>
-		/// 	Быстрый метод для доступа к системе <see cref="IAccessProvider" />
-		/// </summary>
-		/// <param name="obj"> </param>
-		/// <param name="role"> </param>
-		/// <returns> </returns>
-		public AccessResult IsAccessible(object obj, AccessRole role = AccessRole.Access) {
-			IAccessProvider provider;
-			IPrincipal principal;
-			if (null != Context) {
-				provider = Context.Application.Access;
-				principal = Context.User;
-			}
-			else {
-				provider = Application.Access;
-				principal = Application.Principal.CurrentUser;
-			}
-			return provider.IsAccessible(obj, role, principal, Roles);
-		}
+	  
 
 		/// <summary>
 		/// 	В качестве суффикса возвращается имя действия
@@ -300,8 +282,8 @@ namespace Qorpent.Mvc {
 		/// <param name="exact">Точное указание роли</param>
 		/// <param name="customContext">контекст</param>
 		/// <returns>true или false в зависимости от наличие роли у пользователя</returns>
-		public bool IsInRole(string role, bool exact = false, object customContext = null) {
-			return Roles.IsInRole(User, role, exact, Context, customContext);
+		public bool IsInRole(string role, bool exact = false) {
+			return Roles.IsInRole(User.Identity, role, exact);
 		}
 
 
@@ -436,7 +418,7 @@ namespace Qorpent.Mvc {
 
 		private IFileNameResolver _fileNameResolver;
 		private DateTime _lastmodified;
-		private IRoleResolver _roles;
+		private IRoleResolverService _roles;
 		private bool? _supportnmd;
 	}
 

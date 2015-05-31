@@ -58,41 +58,23 @@
     <Compile Include="Actions\WhoAmIAction.cs" />
     <Compile Include="Binding\BindExecutor.cs" />
     <Compile Include="Actions\BxlParseAction.cs" />
-    <Compile Include="HttpHandler\ErrorApplicationStartupHandler.cs" />
-    <Compile Include="HttpHandler\MvcHandlerFactory.cs" />
-    <Compile Include="HttpHandler\StubHandlerBase.cs" />
-    <Compile Include="HttpHandler\WaitApplicationStartupHandler.cs" />
     <Compile Include="MvcContext.cs" />
     <Compile Include="HttpApplicationReloader.cs" />
     <Compile Include="Renders\HtmlRender.cs" />
-    <Compile Include="Renders\LoginViews\LoginView.cs" />
     <Compile Include="Renders\WikiRender.cs" />
     <Compile Include="ServiceStateBuilder.cs" />
-    <Compile Include="UI\ButtonSize.cs" />
-    <Compile Include="UI\DefaultLayout.cs" />
-    <Compile Include="QView\QViewBase.cs" />
-    <Compile Include="QView\QViewBinder.cs" />
-    <Compile Include="QView\QViewContext.cs" />
     <Compile Include="ContainerInfo.cs" />
-    <Compile Include="UI\Widget.cs" />
-    <Compile Include="UI\WidgetType.cs" />
-    <Compile Include="Renders\ActionFormViews\ActionFormMain.cs" />
-    <Compile Include="Renders\ActionFormViews\ActionFormParameter.cs" />
     <Compile Include="Renders\BxlRender.cs" />
     <Compile Include="Renders\FileDescriptorRender.cs" />
-    <Compile Include="Renders\FormRender.cs" />
     <Compile Include="Renders\JsonRender.cs" />
     <Compile Include="Renders\Md5Render.cs" />
-    <Compile Include="Renders\QViewRender.cs" />
     <Compile Include="Renders\SerializerRenderBase.cs" />
     <Compile Include="Renders\XmlRender.cs" />
-    <Compile Include="Security\DefaultActionAuthorizer.cs" />
     <Compile Include="Binding\DefaultActionBinder.cs" />
     <Compile Include="Renders\EmbedJsonRender.cs" />
     <Compile Include="Renders\EmbedJsRender.cs" />
     <Compile Include="Renders\EmptyRender.cs" />
     <Compile Include="Renders\FileRender.cs" />
-    <Compile Include="Security\IFormAuthenticationProvider.cs" />
     <Compile Include="IViewEngine.cs" />
     <Compile Include="Renders\JsRender.cs" />
     <Compile Include="Remoting\LocalConnection.cs" />
@@ -100,20 +82,11 @@
     <Compile Include="MvcFactory.cs" />
     <Compile Include="Actions\FileResolveAction.cs" />
     <Compile Include="Actions\GetResourceUrlAction.cs" />
-    <Compile Include="HttpHandler\MvcHandler.cs" />
     <Compile Include="Actions\ResetAction.cs" />
     <Compile Include="Actions\ResetHandlersAction.cs" />
     <Compile Include="Remoting\RemoteConnection.cs" />
     <Compile Include="Renders\StringRender.cs" />
     <Compile Include="Renders\ViewRender.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Renders\ActionFormViews\qvexr_actionform.css" />
-    <EmbeddedResource Include="Renders\ActionFormViews\qvexr_actionform.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Renders\ActionFormViews\ActionFormMain.0_en_resb" />
-    <EmbeddedResource Include="Renders\ActionFormViews\ActionFormMain.1_ru_resb" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />

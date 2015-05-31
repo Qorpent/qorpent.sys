@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Core/IApplication.cs
 #endregion
 using System;
+using qorpent.v2.security.authorization;
 using Qorpent.Bxl;
 using Qorpent.Data;
 using Qorpent.Dsl;
@@ -137,7 +138,7 @@ namespace Qorpent.Applications {
 		/// </summary>
 		/// <remarks>
 		/// </remarks>
-        IRoleResolver Roles { get; set; }
+        IRoleResolverService Roles { get; set; }
 
 		/// <summary>
 		/// 	Indicates that application is in startup mode
@@ -161,12 +162,7 @@ namespace Qorpent.Applications {
 		/// </remarks>
 		IMvcFactory MvcFactory { get; }
 
-		/// <summary>
-		/// 	Access to <see cref="IAccessProviderService" /> service
-		/// </summary>
-		/// <remarks>
-		/// </remarks>
-		IAccessProviderService Access { get; set; }
+	
 
 		/// <summary>
 		/// 	Access to <see cref="IAccessProviderService" /> service

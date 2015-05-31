@@ -16,6 +16,7 @@
 // 
 // PROJECT ORIGIN: Qorpent.Mvc/MvcFactory.cs
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,7 +25,6 @@ using System.Reflection;
 using Qorpent.Events;
 using Qorpent.IoC;
 using Qorpent.Mvc.Binding;
-using Qorpent.Mvc.QView;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent.Mvc {
@@ -52,9 +52,8 @@ namespace Qorpent.Mvc {
 				var types = from t in assembly.GetTypes()
 				            where
 					            (typeof (IAction).IsAssignableFrom(t) ||
-					             typeof (IRender).IsAssignableFrom(t) ||
-					             typeof (IQView).IsAssignableFrom(t)) &&
-					            !t.IsAbstract
+					             typeof (IRender).IsAssignableFrom(t) &&
+					            !t.IsAbstract)
 				            select t;
 				foreach (var type in types) {
 				    if (null != type.GetCustomAttribute<ContainerComponentAttribute>(true)) {
@@ -97,9 +96,7 @@ namespace Qorpent.Mvc {
 			else if (typeof (IRender).IsAssignableFrom(type)) {
 				RegisterRender(type);
 			}
-			else if (typeof (IQView).IsAssignableFrom(type)) {
-				RegisterView(type);
-			}
+		
 			else {
 				throw new MvcExecption("not supported type " + type);
 			}
@@ -127,19 +124,7 @@ namespace Qorpent.Mvc {
 						_renderPool.Clear();
 					}
 				}
-				if (0 != (type | MvcObjectType.View)) {
-					if (name.IsNotEmpty()) {
-						Debug.Assert(name != null, "name != null");
-						if (_viewPool.ContainsKey(name)) {
-							_viewPool.Remove(name);
-						}
-						_viewContainerNameCache.Remove(name);
-					}
-					else {
-						_viewPool.Clear();
-						_viewContainerNameCache.Clear();
-					}
-				}
+				
 			}
 		}
 
@@ -201,67 +186,8 @@ namespace Qorpent.Mvc {
 			return ResolveService<IActionBinder>() ?? new DefaultActionBinder();
 		}
 
-		/// <summary>
-		/// 	Get IQView instance for given name
-		/// </summary>
-		/// <param name="name"> </param>
-		/// <returns> </returns>
-		public IQView GetView(string name) {
-			lock (Sync) {
-				name = NormalizeQviewName(name);
-				var result = TryResolveViewPool(name) ?? GenerateNewView(name);
-
-				return result;
-			}
-		}
-
-		/// <summary>
-		/// 	Releases used IQView
-		/// </summary>
-		/// <param name="viewname"> </param>
-		/// <param name="view"> </param>
-		public void ReleaseView(string viewname, IQView view) {
-			PushViewToPool(viewname, view);
-		}
-
-		/// <summary>
-		/// 	Проверяет наличие вида и кэширует его экземпляр
-		/// </summary>
-		/// <param name="viewname"> </param>
-		/// <returns> </returns>
-		public bool ViewExists(string viewname) {
-			if (viewname.IsEmpty()) {
-				return false;
-			}
-			var name = NormalizeQviewName(viewname);
-			if (_viewContainerNameCache.ContainsKey(name)) {
-				return true;
-			}
-			foreach (var viewLevel in ViewLevels) {
-				var componentname = name + "." + viewLevel + ".view";
-				var view = ResolveService<IQView>(componentname);
-				if (null != view) {
-					ReleaseView(name, view);
-					_viewContainerNameCache[viewname] = name;
-					return true;
-				}
-			}
-			return false;
-		}
 
 
-		private void RegisterView(Type type) {
-			var name = QViewAttribute.GetName(type);
-			var level = QViewAttribute.GetLevel(type);
-			var componentname = name.ToLower() + "." + level.ToStr().ToLower() + ".view";
-			var component = Container.EmptyComponent();
-			component.ServiceType = typeof (IQView);
-			component.ImplementationType = type;
-			component.Name = componentname;
-			component.Lifestyle = Lifestyle.Transient;
-			Container.Register(component);
-			ClearCaches(MvcObjectType.View, name);
-		}
 
 		private void RegisterRender(Type type) {
 			var name = NormalizeRenderName(RenderAttribute.GetName(type));
@@ -302,7 +228,7 @@ namespace Qorpent.Mvc {
 		/// </summary>
 		/// <returns> </returns>
 		public override object GetPreResetInfo() {
-			return new {actions = _actionPool.Count, renders = _renderPool.Count, views = _viewPool.Count};
+			return new {actions = _actionPool.Count, renders = _renderPool.Count};
 		}
 
 
@@ -327,28 +253,6 @@ namespace Qorpent.Mvc {
 			return result;
 		}
 
-		private IQView GenerateNewView(string viewname) {
-			IQView view = null;
-			if (_viewContainerNameCache.ContainsKey(viewname)) {
-				view = ResolveService<IQView>(_viewContainerNameCache[viewname]);
-			}
-			else {
-				foreach (var viewLevel in ViewLevels) {
-					var name = viewname + "." + viewLevel + ".view";
-					view = ResolveService<IQView>(name);
-					if (null != view) {
-						_viewContainerNameCache[viewname] = name;
-						break;
-					}
-				}
-			}
-			if (null == view) {
-				throw new ViewNotFoundException(viewname);
-			}
-
-			return view;
-		}
-
 		private ActionDescriptor TryResolveActionFromPool(string actionName) {
 			var name = NormalizeActionName(actionName);
 			if (_actionPool.ContainsKey(name) && _actionPool[name].Count != 0) {
@@ -357,19 +261,6 @@ namespace Qorpent.Mvc {
 			return null;
 		}
 
-		private IQView TryResolveViewPool(string viewname) {
-			if (_viewPool.ContainsKey(viewname) && _viewPool[viewname].Count != 0) {
-				return _viewPool[viewname].Pop();
-			}
-			return null;
-		}
-
-		private void PushViewToPool(string viewname, IQView view) {
-			if (!_viewPool.ContainsKey(viewname)) {
-				_viewPool[viewname] = new Stack<IQView>();
-			}
-			_viewPool[viewname].Push(view);
-		}
 
 		private void PushActionToPool(ActionDescriptor action) {
 			var name = NormalizeActionName(action.Name);
@@ -455,6 +346,6 @@ namespace Qorpent.Mvc {
 			new Dictionary<string, Stack<RenderDescriptor>>();
 
 		private readonly IDictionary<string, string> _viewContainerNameCache = new Dictionary<string, string>();
-		private readonly IDictionary<string, Stack<IQView>> _viewPool = new Dictionary<string, Stack<IQView>>();
+		
 	}
 }

@@ -25,13 +25,7 @@
     <Compile Include="authentication\Token.cs" />
     <Compile Include="authentication\TokenEncryptor.cs" />
     <Compile Include="authentication\TrustedOrigin.cs" />
-    <Compile Include="authorization\INotAuthProcessProvider.cs" />
-    <Compile Include="authorization\IRoleResolver.cs" />
-    <Compile Include="authorization\IRoleResolverCache.cs" />
-    <Compile Include="authorization\IRoleResolverCacheLease.cs" />
-    <Compile Include="authorization\IRoleResolverService.cs" />
     <Compile Include="authorization\NotAuthProcessProvider.cs" />
-    <Compile Include="authorization\NotAuthReaction.cs" />
     <Compile Include="authorization\RoleResolverCache.cs" />
     <Compile Include="authorization\RoleResolverExtensions.cs" />
     <Compile Include="authorization\RoleResolverService.cs" />

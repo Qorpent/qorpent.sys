@@ -35,14 +35,14 @@ namespace Qorpent.Mvc.Actions {
 
 			var logonname = Context.LogonUser.Identity.Name;
 			var impersonation = Application.Impersonation.GetImpersonation(Context.LogonUser).Identity.Name;
-			var logonadmin = Application.Roles.IsInRole(logon, "ADMIN");
+			var logonadmin = Application.Roles.IsInRole(logon.Identity, "ADMIN");
 
-			var logondeveloper = Application.Roles.IsInRole(logon, "DEVELOPER");
-			var logondatamaster = Application.Roles.IsInRole(logon, "DATAMASTER");
-			var logondesigner = Application.Roles.IsInRole(logon, "DESIGNER");
-			var logontester = Application.Roles.IsInRole(logon, "TESTER");
-			var logonbudget = Application.Roles.IsInRole(logon, "BUDGET");
-			var logondocwriter = Application.Roles.IsInRole(logon, "DOCWRITER");
+            var logondeveloper = Application.Roles.IsInRole(logon.Identity, "DEVELOPER");
+            var logondatamaster = Application.Roles.IsInRole(logon.Identity, "DATAMASTER");
+            var logondesigner = Application.Roles.IsInRole(logon.Identity, "DESIGNER");
+            var logontester = Application.Roles.IsInRole(logon.Identity, "TESTER");
+            var logonbudget = Application.Roles.IsInRole(logon.Identity, "BUDGET");
+            var logondocwriter = Application.Roles.IsInRole(logon.Identity, "DOCWRITER");
 
 
 			if (imp == logon) {
@@ -59,12 +59,12 @@ namespace Qorpent.Mvc.Actions {
 					};
 			}
 
-			var impadmin = Application.Roles.IsInRole(imp, "ADMIN");
-			var impdeveloper = Application.Roles.IsInRole(imp, "DEVELOPER");
-			var impdatamaster = Application.Roles.IsInRole(imp, "DATAMASTER");
-			var impdatatester = Application.Roles.IsInRole(imp, "TESTER");
-			var impbudget = Application.Roles.IsInRole(imp, "BUDGET");
-			var impdocwriter = Application.Roles.IsInRole(imp, "DOCWRITER");
+            var impadmin = Application.Roles.IsInRole(imp.Identity, "ADMIN");
+            var impdeveloper = Application.Roles.IsInRole(imp.Identity, "DEVELOPER");
+            var impdatamaster = Application.Roles.IsInRole(imp.Identity, "DATAMASTER");
+            var impdatatester = Application.Roles.IsInRole(imp.Identity, "TESTER");
+            var impbudget = Application.Roles.IsInRole(imp.Identity, "BUDGET");
+            var impdocwriter = Application.Roles.IsInRole(imp.Identity, "DOCWRITER");
 
 			return
 				new

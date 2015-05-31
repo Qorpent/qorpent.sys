@@ -766,6 +766,7 @@ namespace Qorpent.Experiments {
                 }
                 foreach (var property in properties) {
                     if (null == property.GetGetMethod()) continue;
+                    if (property.GetIndexParameters().Length != 0) continue;
                     var mode = null == annotator ? defaultMode : annotator.GetMode(data, property);
                     if (mode == SerializeMode.Unknown) {
                         mode = defaultMode;

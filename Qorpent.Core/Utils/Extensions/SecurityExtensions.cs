@@ -17,6 +17,7 @@
 // PROJECT ORIGIN: Qorpent.Utils/SecurityExtensions.cs
 #endregion
 using System.Security.Principal;
+using qorpent.v2.security.authorization;
 using Qorpent.Applications;
 using Qorpent.IoC;
 using Qorpent.Model;
@@ -60,7 +61,7 @@ namespace Qorpent.Utils.Extensions{
             principal = principal ?? Application.Current.Principal.CurrentUser;
             if(Application.Current.Roles.IsAdmin(principal)) return true;
             foreach (var role in roles.Role.SmartSplit()) {
-                if(Application.Current.Roles.IsInRole(principal,role)) return true;
+                if(Application.Current.Roles.IsInRole(principal.Identity,role)) return true;
             }
             return false;
         }
@@ -99,7 +100,7 @@ namespace Qorpent.Utils.Extensions{
         /// </summary>
         /// <param name="resolver"></param>
         /// <returns></returns>
-        public static bool IsAdmin(this IRoleResolver resolver){
+        public static bool IsAdmin(this IRoleResolverService resolver){
             return IsAdmin(resolver, getCurrent());
         }
 
@@ -109,8 +110,8 @@ namespace Qorpent.Utils.Extensions{
 	    /// <param name="resolver"></param>
 	    /// <param name="user"> </param>
 	    /// <returns></returns>
-	    public static bool IsAdmin(this IRoleResolver resolver, IPrincipal user){
-            return resolver.IsInRole(user, "ADMIN");
+	    public static bool IsAdmin(this IRoleResolverService resolver, IPrincipal user){
+            return resolver.IsInRole(user.Identity, "ADMIN");
         }
 
           /// <summary>
@@ -120,8 +121,8 @@ namespace Qorpent.Utils.Extensions{
           /// <param name="role"></param>
           /// <param name="adminanyrole"></param>
           /// <returns></returns>
-          public static bool IsInRole(this IRoleResolver resolver, string role, bool adminanyrole = true ){
-            return resolver.IsInRole(getCurrent(), role,adminanyrole);
+          public static bool IsInRole(this IRoleResolverService resolver, string role, bool adminanyrole = true ){
+            return resolver.IsInRole(getCurrent().Identity, role,adminanyrole);
         }
 
 	    private const string lSlash = "\\";
