@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using qorpent.v2.security.encryption;
@@ -35,6 +36,30 @@ namespace qorpent.v2.security.logon.services
             var hash = GetHash(target, password);
             target.Hash = hash;
 
+        }
+
+        public void ResetPassword(IUser target, string password, string key) {
+            if (string.IsNullOrWhiteSpace(target.ResetKey)) {
+                throw new Exception("no reset requested");
+            }
+            if (DateTime.Now.ToUniversalTime() > target.ResetExpire) {
+                throw new Exception("expire reseting");
+            }
+            if (key != target.ResetKey) {
+                throw new Exception("invalid key");
+            }
+            SetPassword(target,password);
+            target.ResetExpire = DateTime.MinValue.ToUniversalTime();
+            target.ResetKey = null;
+        }
+
+        public void MakeRequest(IUser target, int expireminutes) {
+            if (string.IsNullOrWhiteSpace(target.Email)) {
+                throw new Exception("email must be set for targets");
+            }
+            var resetkey = (Guid.NewGuid() + target.Login + DateTime.Now).GetMd5();
+            target.ResetKey = resetkey;
+            target.ResetExpire = DateTime.Now.ToUniversalTime().AddMinutes(expireminutes);
         }
 
         private static string GetHash(IUser target, string password) {

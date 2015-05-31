@@ -10,6 +10,8 @@ using NUnit.Framework;
 using qorpent.v2.security.authentication;
 using qorpent.v2.security.logon;
 using qorpent.v2.security.logon.services;
+using qorpent.v2.security.messaging;
+using qorpent.v2.security.messaging.queues;
 using qorpent.v2.security.user.storage;
 using qorpent.v2.security.user.storage.providers;
 using Qorpent;
@@ -114,6 +116,17 @@ namespace qorpent.v2.security.Tests
             var logon = _container.Get<ILogonService>();
             var identity = logon.Logon("esuser", "B123456$");
             Assert.True(identity.IsAuthenticated);
+        }
+
+
+        [Test]
+        public void MessageQueueEnabled() {
+            var mq = _container.Get<IMessageQueue>();
+            Assert.NotNull(mq);
+            var emq = mq as ElasticSearchMessageQueue;
+            Assert.NotNull(emq);
+            Assert.True(emq.Enabled);
+            Assert.AreEqual("v2securetest", emq.Index);
         }
 
         [Test]

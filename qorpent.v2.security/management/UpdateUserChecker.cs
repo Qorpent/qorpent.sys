@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using qorpent.v2.security.authorization;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.storage;
@@ -126,7 +127,10 @@ namespace qorpent.v2.security.management {
                 return new UpdateResult { IsError = true, ErrorMessage = "cannot manage groups" };
             }
 
-            
+            if (!string.IsNullOrWhiteSpace(update.Email) && !Regex.IsMatch(update.Email, @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"))
+            {
+                return new UpdateResult { IsError = true, ErrorMessage = "mailformed email" };
+            }
 
             return null;
         }
@@ -173,6 +177,10 @@ namespace qorpent.v2.security.management {
             if (!string.IsNullOrWhiteSpace(update.Password)) {
                 return new UpdateResult { IsError = true, ErrorMessage = "cannot set password for new user" };
             }
+            if (string.IsNullOrWhiteSpace(update.Email)) {
+                return new UpdateResult { IsError = true, ErrorMessage = "email required for new users" };
+            }
+            
             return new UpdateResult {Ok = true};
         }
     }

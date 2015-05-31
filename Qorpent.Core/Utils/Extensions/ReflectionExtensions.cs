@@ -305,12 +305,20 @@ namespace Qorpent.Utils.Extensions {
 		/// <returns></returns>
 		/// <exception cref="Exception"></exception>
 		public static Stream OpenManifestResource(this Assembly assembly, string pathpart) {
-			var resourcename = assembly.GetManifestResourceNames().FirstOrDefault(_ => _.ToUpper().EndsWith(pathpart.ToUpper()));
+			var resourcename = FindManifestResource(assembly, pathpart);
 			if(null==resourcename)throw new Exception("resource for "+pathpart+" not found");
 			return assembly.GetManifestResourceStream(resourcename);
 		}
 
-		/// <summary>
+        public static bool ExistsManifestResource(this Assembly assembly, string pathpart) {
+            return null != FindManifestResource(assembly, pathpart);
+        }
+
+	    public static string FindManifestResource(this Assembly assembly, string pathpart) {
+	        return assembly.GetManifestResourceNames().FirstOrDefault(_ => _.ToUpper().EndsWith(pathpart.ToUpper()));
+	    }
+
+	    /// <summary>
 		/// Shortcut to read data from named resource as string
 		/// </summary>
 		/// <param name="assembly"></param>

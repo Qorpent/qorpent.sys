@@ -40,16 +40,28 @@
     <Compile Include="handlers\ILogonHandler.cs" />
     <Compile Include="handlers\ILogoutHandler.cs" />
     <Compile Include="handlers\IMyInfoHandler.cs" />
+    <Compile Include="handlers\IRequireResetPasswordHandler.cs" />
+    <Compile Include="handlers\IResetPasswordHandler.cs" />
     <Compile Include="handlers\IsAuthHandler.cs" />
+    <Compile Include="handlers\ISendMailHandler.cs" />
     <Compile Include="handlers\IsInRoleHandler.cs" />
     <Compile Include="handlers\LogonHandler.cs" />
     <Compile Include="handlers\LogoutHandler.cs" />
     <Compile Include="handlers\MyInfoHandler.cs" />
+    <Compile Include="handlers\RequireResetPasswordHandler.cs" />
+    <Compile Include="handlers\ResetPasswordHandler.cs" />
     <Compile Include="handlers\SecurityHandlerSetup.cs" />
+    <Compile Include="handlers\SendMailHandler.cs" />
     <Compile Include="logon\services\IPasswordManager.cs" />
     <Compile Include="logon\services\IPasswordPolicy.cs" />
     <Compile Include="logon\services\PasswordManager.cs" />
     <Compile Include="logon\services\PasswordPolicy.cs" />
+    <Compile Include="messaging\IMessageSender.cs" />
+    <Compile Include="messaging\IMessageQueue.cs" />
+    <Compile Include="messaging\IUserMessagingService.cs" />
+    <Compile Include="management\UserPolicy.cs" />
+    <Compile Include="management\UserPolicyService.cs" />
+    <Compile Include="management\IUserPolicyService.cs" />
     <Compile Include="management\IUpdateUserChecker.cs" />
     <Compile Include="management\IUpdateUserProcessor.cs" />
     <Compile Include="management\UpdateResult.cs" />
@@ -58,6 +70,11 @@
     <Compile Include="management\UpdateUserProcessorExtensions.cs" />
     <Compile Include="management\UserUpdateInfo.cs" />
     <Compile Include="management\UserUpdateInfoSerializer.cs" />
+    <Compile Include="messaging\PostMessage.cs" />
+    <Compile Include="messaging\queues\ElasticSearchMessageQueue.cs" />
+    <Compile Include="messaging\senders\SmtpConfig.cs" />
+    <Compile Include="messaging\senders\SmtpMessageSender.cs" />
+    <Compile Include="messaging\UserMessageService.cs" />
     <Compile Include="user\Identity.cs" />
     <Compile Include="user\IUser.cs" />
     <Compile Include="encryption\Encryptor.cs" />
@@ -91,10 +108,11 @@
     <Compile Include="logon\providers\WinLogon.cs" />
     <Compile Include="user\UserActivityState.cs" />
     <Compile Include="user\UserSerializer.cs" />
+    <Compile Include="utils\ElasticSearchClient.cs" />
     <Compile Include="v1migration\logon\LogonService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="storage\" />
+    <EmbeddedResource Include="messaging\resources\message_template_wellcome.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Qorpent.Core\Qorpent.Core.csproj">

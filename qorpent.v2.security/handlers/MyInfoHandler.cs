@@ -3,6 +3,7 @@ using Qorpent.Experiments;
 using Qorpent.Host;
 using Qorpent.IoC;
 using Qorpent.IO.Http;
+using Qorpent.Mvc;
 
 namespace qorpent.v2.security.handlers {
     [ContainerComponent(Lifestyle.Singleton, "myinfo.handler", ServiceType = typeof(IMyInfoHandler))]

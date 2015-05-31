@@ -17,6 +17,9 @@ namespace qorpent.v2.security.handlers
         private IIsInRoleHandler _isInRoleHandler;
         private IMyInfoHandler _myInfoHandler;
         private IDefineUserHandler _defineUserHandler;
+        private IRequireResetPasswordHandler _requireResetPasswordHandler;
+        private IResetPasswordHandler _resetPasswordHandler;
+        private ISendMailHandler _sendMailHandler;
 
         [Inject]
         public ILogonHandler LogonHandler {
@@ -53,6 +56,22 @@ namespace qorpent.v2.security.handlers
             get { return _defineUserHandler??(_defineUserHandler = new DefineUserHandler()); }
             set { _defineUserHandler = value; }
         }
+        [Inject]
+        public IRequireResetPasswordHandler RequireResetPasswordHandler {
+            get { return _requireResetPasswordHandler??(_requireResetPasswordHandler = new RequireResetPasswordHandler()); }
+            set { _requireResetPasswordHandler = value; }
+        }
+        [Inject]
+        public IResetPasswordHandler ResetPasswordHandler {
+            get { return _resetPasswordHandler ??(_resetPasswordHandler =new ResetPasswordHandler()); }
+            set { _resetPasswordHandler = value; }
+        }
+
+        [Inject]
+        public ISendMailHandler SendMailHandler {
+            get { return _sendMailHandler??(_sendMailHandler = new SendMailHandler()); }
+            set { _sendMailHandler = value; }
+        }
 
         public void Initialize(IHostServer server) {
            server.Factory.Register("/logon",LogonHandler);
@@ -61,6 +80,9 @@ namespace qorpent.v2.security.handlers
            server.Factory.Register("/isrole",IsInRoleHandler);
            server.Factory.Register("/myinfo",MyInfoHandler);
            server.Factory.Register("/defusr",DefineUserHandler);
+           server.Factory.Register("/resetpwd",ResetPasswordHandler);
+           server.Factory.Register("/resetpwdreq",RequireResetPasswordHandler);
+           server.Factory.Register("/sendmail",SendMailHandler);
         }
     }
 }

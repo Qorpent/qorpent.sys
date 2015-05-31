@@ -540,6 +540,13 @@ namespace Qorpent.Utils.Extensions {
 		    if (null == obj) {
 		        throw new ArgumentNullException("obj");
 		    }
+		    if (obj is XElement) {
+		        var r = new Dictionary<string, object>();
+		        foreach (var a in ((XElement)obj).Attributes()) {
+		            r[a.Name.LocalName] = a.Value;
+		        }
+		        return r;
+		    }
 			if(obj is IDictionary<string, object>) {
 				return (IDictionary<string, object>) obj;
 			}

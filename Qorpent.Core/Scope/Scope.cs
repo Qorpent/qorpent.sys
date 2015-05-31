@@ -23,25 +23,34 @@ namespace Qorpent {
                         AddParent(source as IScope);
                     }
                     else if (source is XElement) {
-                        var x = (XElement) source;
-                        this["__xmlname"] = x.Name.LocalName;
-                        if (!x.HasElements && !string.IsNullOrEmpty(x.Value)) {
-                            this["__xmlvalue"] = x.Value;
-                        }
-                        foreach (var attribute in x.Attributes()) {
-                            this[attribute.Name.LocalName] = attribute.Value;
-                        }
+                        ApplyXml(source);
                     }
                     else {
-                        var dict = source.ToDict();
-                        foreach (var o in dict) {
-                            this[o.Key] = o.Value;
-                        }
+                        ApplySource(source);
                     }
                 }
             }
 
         }
+
+        public void ApplySource(object source) {
+            var dict = source.ToDict();
+            foreach (var o in dict) {
+                this[o.Key] = o.Value;
+            }
+        }
+
+        public void ApplyXml(object source) {
+            var x = (XElement) source;
+            this["__xmlname"] = x.Name.LocalName;
+            if (!x.HasElements && !string.IsNullOrEmpty(x.Value)) {
+                this["__xmlvalue"] = x.Value;
+            }
+            foreach (var attribute in x.Attributes()) {
+                this[attribute.Name.LocalName] = attribute.Value;
+            }
+        }
+
         private ScopeOptions _options = new ScopeOptions();
         private readonly IList<IScope> _parents = new List<IScope>();
         protected readonly IDictionary<string, object> _storage = new ConcurrentDictionary<string, object>();

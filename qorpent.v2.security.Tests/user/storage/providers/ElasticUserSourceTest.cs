@@ -91,15 +91,15 @@ namespace qorpent.v2.security.Tests.user.storage.providers
                 Assert.Ignore("invalid ES environment");
             }
             _es.PingRate = 200;
-            _es.Urls = new []{"http://127.0.0.1:9201"};
+            _es.EsClient.Urls = new []{"http://127.0.0.1:9201"};
             var u = _es.GetUser("login0");
             Assert.Throws<Exception>(() => {
                 _es.Store(GetUser(0));
             });
             Assert.Null(u);
-            Assert.True(_es.InvalidConnection);
-            Assert.NotNull(_es.LastError);
-            _es.Urls = new []{ "http://127.0.0.1:9200"};
+            Assert.True(_es.EsClient.InvalidConnection);
+            Assert.NotNull(_es.EsClient.LastError);
+            _es.EsClient.Urls = new []{ "http://127.0.0.1:9200"};
             u = _es.GetUser("login0");
             Assert.Null(u);
             Thread.Sleep(201);
@@ -116,18 +116,18 @@ namespace qorpent.v2.security.Tests.user.storage.providers
             {
                 Assert.Ignore("invalid ES environment");
             }
-            _es.Urls = new List<string> { "http://127.0.0.1:9201","http://localhost:9200" };
+            _es.EsClient.Urls = new List<string> { "http://127.0.0.1:9201","http://localhost:9200" };
             var u = _es.GetUser("login0");
-            Assert.AreEqual("http://localhost:9200",_es.Urls[0]);
+            Assert.AreEqual("http://localhost:9200",_es.EsClient.Urls[0]);
             Assert.NotNull(u);
-            Assert.False(_es.InvalidConnection);
-            Assert.Null(_es.LastError);
+            Assert.False(_es.EsClient.InvalidConnection);
+            Assert.Null(_es.EsClient.LastError);
             _es.Refresh();
-            _es.Urls = new List<string> { "http://127.0.0.1:9200", "http://localhost:9201" };
+            _es.EsClient.Urls = new List<string> { "http://127.0.0.1:9200", "http://localhost:9201" };
             u = _es.GetUser("login0");
             Assert.NotNull(u);
-            Assert.False(_es.InvalidConnection);
-            Assert.Null(_es.LastError);
+            Assert.False(_es.EsClient.InvalidConnection);
+            Assert.Null(_es.EsClient.LastError);
         }
     }
 }

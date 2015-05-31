@@ -1,6 +1,8 @@
 using System;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using qorpent.v2.security.authorization;
+using qorpent.v2.security.messaging;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.storage;
 using Qorpent;
@@ -27,6 +29,10 @@ namespace qorpent.v2.security.management {
         public IUserService Users { get; set; }
         [Inject]
         public IRoleResolverService Roles { get; set; }
+        [Inject]
+        public IUserPolicyService UserPolicy { get; set; }
+        [Inject]
+        public IUserMessagingService Messendger { get; set; }
 
         public override void OnContainerCreateInstanceFinished() {
             base.OnContainerCreateInstanceFinished();
@@ -46,6 +52,7 @@ namespace qorpent.v2.security.management {
                 updateinfo.Login = actor.Name;
             }
             target = target ?? Users.GetUser(updateinfo.Login);
+            bool newuser = target == null;
             if (!updateinfo.HasDelta(target)) return new UpdateResult() ;
             
             var canupdate = Checker.ValidateUpdate(actor, updateinfo, target);
@@ -58,8 +65,21 @@ namespace qorpent.v2.security.management {
                 target = new User {Login = updateinfo.Login};
             }
             updateinfo.Apply(target);
+            UserPolicy policy = null;
+            if (newuser) {
+                policy = UserPolicy.GetNewUserPolicy(updateinfo);
+            }
+            if (null != policy) {
+                policy.Apply(target);
+            }
             if (store) {
                 Users.Store(target);
+            }
+            if (null != policy && policy.MakePassRequest && null!=Messendger) {
+                if (newuser) {
+                    Messendger.SendWelcome(target);
+                }
+                
             }
             Logg.Info(new { updateusr = "finish", result=target, usr = actor.Name, info = updateinfo }.stringify());
             Users.Clear();

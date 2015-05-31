@@ -82,6 +82,14 @@ namespace qorpent.v2.security.authorization
             {
                 return true;
             }
+            if (uri.AbsolutePath == "/resetpwd")
+            {
+                return true;
+            }
+            if (uri.AbsolutePath == "/resetpwdreq")
+            {
+                return true;
+            }
             return false;
         }
     }

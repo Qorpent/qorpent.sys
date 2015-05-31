@@ -102,6 +102,20 @@ class u1 prototype=pwd
             var configbxl = @"
 class app
     cluster
+    elastic
+        default index=v2securetest
+	appinfo
+		domain='https://super.puper.com'
+        home='home.html'
+        name ='Супер-Пупер'
+	messaging
+		smtp support ivannovozhilov81@gmail.com default
+			host=smtp.gmail.com
+			port=587
+			user=ivannovozhilov81@gmail.com
+			pass=a1234567!
+			ssl=true
+		queue elastic ref=default type=message
     logon
         default schema=localtrust guest 
             trusted sense local=192.168.0.3 origin='http://127.0.0.1:9200' port=3450
