@@ -16,9 +16,9 @@
 // 
 // PROJECT ORIGIN: Qorpent.Core/ServiceBase.cs
 #endregion
+
 using System;
 using System.Linq;
-using System.Reflection;
 using Qorpent.Applications;
 using Qorpent.Events;
 using Qorpent.IoC;
@@ -133,7 +133,12 @@ namespace Qorpent {
 		/// Событие, вызываемое после выполнения инициализации при помощи контейнера
 		/// </summary>
 		public virtual void OnContainerCreateInstanceFinished() {
-			
+		    if (string.IsNullOrWhiteSpace(LoggyName)) {
+		        if (null != Component && !string.IsNullOrWhiteSpace(Component.Name)) {
+		            LoggyName = Component.Name;
+		        }
+		        
+		    }
 		}
 
 
@@ -180,15 +185,17 @@ namespace Qorpent {
 		}
 
 	    [Inject]
-	    public ILoggyManager LoggyManager {
+	    protected ILoggyManager LoggyManager {
 	        get { return _loggyManager ?? Loggy.Manager; }
 	        set { _loggyManager = value; }
 	    }
 
 	    public ILoggy Logg {
-	        get { return _logg ?? (_logg=LoggyManager.Get(GetLoggerNameSuffix(),SetupLoggy)); }
+	        get { return _logg ?? (_logg=LoggyManager.Get(LoggyName,SetupLoggy)); }
 	        set { _logg = value; }
 	    }
+
+        public string LoggyName { get; set; }
 
 	    protected virtual void SetupLoggy(ILoggy obj) {
 	        

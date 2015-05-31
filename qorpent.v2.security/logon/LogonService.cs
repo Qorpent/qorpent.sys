@@ -18,10 +18,7 @@ namespace qorpent.v2.security.logon {
     ///     Wraps both IPasswordLogon and ISecureLogon over unified facade,
     ///     works on set of ILogonService, support logging to Loggy
     /// </summary>
-    [ContainerComponent(Lifestyle.Singleton, "logon.v2", ServiceType = typeof (ILogon))]
-    [ContainerComponent(Lifestyle.Singleton, "logonprovider.v2", ServiceType = typeof (ILogonService))]
-    [ContainerComponent(Lifestyle.Singleton, "securelogon.v2", ServiceType = typeof (ISecureLogon))]
-    [ContainerComponent(Lifestyle.Singleton, "passlogon.v2", ServiceType = typeof (IPasswordLogon))]
+    [ContainerComponent(Lifestyle.Singleton, "loginservice.v2", ServiceType = typeof (ILogonService))]
     public partial class LogonService : ExtensibleServiceBase<ILogonProvider>, ILogonService {
         private const string PWDLOGONOPID = "lgn_pl_";
         private const string SECLOGONOPID = "lgn_sl_";

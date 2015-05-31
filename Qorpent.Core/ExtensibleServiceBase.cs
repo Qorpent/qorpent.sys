@@ -16,6 +16,7 @@ namespace Qorpent {
         }
 
         public override void OnContainerCreateInstanceFinished() {
+            base.OnContainerCreateInstanceFinished();
             OnChangeExtensions();
         }
 

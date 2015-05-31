@@ -35,9 +35,7 @@ namespace qorpent.v2.security.management {
         [Inject]
         public IUserMessagingService Messendger { get; set; }
 
-        /// <summary>
-        /// </summary>
-        public string LoggyName { get; set; }
+
 
         public UpdateResult DefineUser(IIdentity actor, UserUpdateInfo updateinfo, IUser target = null,
             bool store = true) {
@@ -83,9 +81,5 @@ namespace qorpent.v2.security.management {
             return new UpdateResult {Ok = true, ResultUser = target};
         }
 
-        public override void OnContainerCreateInstanceFinished() {
-            base.OnContainerCreateInstanceFinished();
-            Logg = LoggyManager.Get(LoggyName);
-        }
     }
 }

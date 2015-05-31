@@ -815,7 +815,7 @@ namespace Qorpent.BSharp{
 		private void PerformMergingWithElements(){
 			foreach (IBSharpElement root in _cls.AllElements.Where(_ => _.Type == BSharpElementType.Define).ToArray()){
 				try{
-					XElement[] allroots = _cls.Compiled.Descendants(root.Name).ToArray();
+					XElement[] allroots = _cls.Compiled.Elements(root.Name).ToArray();
 					IEnumerable<IGrouping<string, XElement>> groupedroots = allroots.GroupBy(_ => _.GetCode());
 					foreach (var doublers in groupedroots.Where(_ => _.Count() > 1)){
 						doublers.Skip(1).Remove();

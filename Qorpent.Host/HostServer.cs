@@ -467,7 +467,6 @@ namespace Qorpent.Host {
             if (Config.ApplicationMode != HostApplicationMode.Shared) {
                 Container = ContainerFactory.CreateEmpty();
                 ContainerFactory.SetupWellKnownContainerServices(Container);
-                Application.Container = Container;
             }
             else {
                 Container = Application.Container;
@@ -498,6 +497,12 @@ namespace Qorpent.Host {
                 }
                 init.Initialize(this);
             }
+            /*
+            if (Config.ApplicationMode != HostApplicationMode.Shared)
+            {
+                Application.Container = Container;
+            }
+             */
         }
 
         private void _InitializeForStandaloneApplication() {
