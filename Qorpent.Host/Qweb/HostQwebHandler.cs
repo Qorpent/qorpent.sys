@@ -25,7 +25,7 @@ namespace Qorpent.Host.Qweb
 	        }
             ctx.ContentEncoding = Encoding.UTF8;
             ctx.SetHeader("Content-Encoding", "utf-8");
-                var context = server.Application.Container.Get<IMvcContext>(null, server, ctx, callbackEndPoint, cancel);
+                var context = server.Container.Get<IMvcContext>(null, server, ctx, callbackEndPoint, cancel);
                 context.NotModified = false;
                 try
                 {

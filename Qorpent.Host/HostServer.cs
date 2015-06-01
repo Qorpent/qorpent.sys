@@ -585,13 +585,17 @@ namespace Qorpent.Host {
                 }
                 loader.LoadManifest(xml, true);
             }
+	        var connections = Container.Get<IDatabaseConnectionProvider>();
+			if (null == connections) {
+				throw new Exception("No connection provider");
+			}
             foreach (var cs in Config.ConnectionStrings) {
                 var dsc = new ConnectionDescriptor {
                     ConnectionString = cs.Value,
                     Name = cs.Key,
                     PresereveCleanup = true
                 };
-                Application.DatabaseConnections.Register(dsc, false);
+                connections.Register(dsc, false);
             }
             loader.LoadAssembly(typeof (HostServer).Assembly);
             loader.LoadAssembly(typeof (HttpAuthenticator).Assembly);
