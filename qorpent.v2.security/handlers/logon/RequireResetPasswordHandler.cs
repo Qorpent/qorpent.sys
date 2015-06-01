@@ -30,6 +30,9 @@ namespace qorpent.v2.security.handlers.logon {
         [Inject]
         public IMessageSender Sender { get; set; }
 
+        [Inject]
+        public IPasswordManager PasswordManager { get; set; }
+
         public void Run(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel) {
             var p = RequestParameters.Create(context);
             var login = p.Get("login");
@@ -58,8 +61,7 @@ namespace qorpent.v2.security.handlers.logon {
                 Error(context, "invalid email");
                 return;
             }
-            var pwdmanager = new PasswordManager();
-            pwdmanager.MakeRequest(user, 10, email);
+            PasswordManager.MakeRequest(user, 10, email);
             Users.Store(user);
             var message = UserMessagingService.SendPasswordReset(user);
             //try force

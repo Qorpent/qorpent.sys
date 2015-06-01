@@ -4,7 +4,9 @@ using System.Security.Principal;
 using qorpent.v2.security.user;
 using qorpent.v2.security.user.storage;
 using Qorpent;
+using Qorpent.Experiments;
 using Qorpent.IoC;
+using Qorpent.Log.NewLog;
 
 namespace qorpent.v2.security.authorization {
     [ContainerComponent(Lifestyle.Singleton, "roleresolver.service", ServiceType = typeof (IRoleResolverService))]
@@ -61,6 +63,7 @@ namespace qorpent.v2.security.authorization {
         }
 
         public void Clear() {
+            Logg.Trace(new{roles="clear called"}.stringify());
             _cache.Clear();
         }
 

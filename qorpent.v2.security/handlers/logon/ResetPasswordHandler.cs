@@ -18,6 +18,8 @@ namespace qorpent.v2.security.handlers.logon {
 
         [Inject]
         public IUserStateChecker CheckState { get; set; }
+        [Inject]
+        public IPasswordManager PasswordManager { get; set; }
 
         public void Run(IHostServer server, WebContext context, string callbackEndPoint, CancellationToken cancel) {
             var parameters = RequestParameters.Create(context);
@@ -51,9 +53,9 @@ namespace qorpent.v2.security.handlers.logon {
                 return;
             }
 
-            var pwdmanager = new PasswordManager();
+  
             try {
-                pwdmanager.ResetPassword(user, pass, key);
+                PasswordManager.ResetPassword(user, pass, key);
             }
             catch (Exception e) {
                 Error(context, "pwd error " + e.Message);

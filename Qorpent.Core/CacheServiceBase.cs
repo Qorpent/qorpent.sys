@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Qorpent.Experiments;
+using Qorpent.Log.NewLog;
 using Qorpent.Utils.Extensions;
 
 namespace Qorpent {
@@ -9,6 +11,7 @@ namespace Qorpent {
         
         public CacheServiceBase() {
             InternalCache = new Dictionary<string, TItem>();
+            RefreshRate = 10000;
         }
 
         public override void OnContainerCreateInstanceFinished() {
@@ -18,6 +21,8 @@ namespace Qorpent {
 
         public bool Refresh() {
             if (DateTime.Now.AddMilliseconds(-RefreshRate) > LastRefresh) {
+                Logg.Debug(new { cache = "begin refresh" }.stringify());
+                LastRefresh = DateTime.Now;
                 lock (this) {
                     var currentEtag = ETag;
                     var currentVersion = Version;
@@ -25,8 +30,9 @@ namespace Qorpent {
                         extension.Refresh();
                     }
                     if (currentEtag == ETag && currentVersion == Version) return false;
+                    Logg.Trace(new{cache="refreshed"}.stringify());
                     Clear();
-                    LastRefresh = DateTime.Now;
+                    
                     return true;
                 }
             }
