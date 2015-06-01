@@ -3,7 +3,12 @@ $config: (
     border-bottom-color: #D7D7D7,
     border-bottom-width: 1px,
     border-bottom-style: solid,
-    font-family: Verdana
+    font-family: Verdana,
+    link: (
+      after: (
+        content: ''
+      )
+    )
   ),
         color : (
                 dark : #333333,

@@ -537,28 +537,29 @@ body table tbody tr:nth-child(2n) {
 }
 /* line 64, core/_global.scss */
 body table td, body table th {
+  vertical-align: top;
   padding: 2px 3px 2px 3px;
 }
-/* line 66, core/_global.scss */
+/* line 67, core/_global.scss */
 body table td .not-important, body table th .not-important {
   opacity: 0.5;
 }
-/* line 71, core/_global.scss */
+/* line 72, core/_global.scss */
 body a, body a:visited {
   color: #4C81AF;
   text-decoration: underline;
 }
-/* line 74, core/_global.scss */
+/* line 75, core/_global.scss */
 body a:hover, body a:visited:hover {
   color: #6e9ac0;
 }
-/* line 78, core/_global.scss */
+/* line 79, core/_global.scss */
 body > header {
   color: #fafafa;
   background-color: #4C81AF;
   padding-top: 5px;
 }
-/* line 87, core/_global.scss */
+/* line 88, core/_global.scss */
 body > header.with-logo {
   background-image: url("/img/logo-toolbar.png");
   background-position: left center;
@@ -566,7 +567,7 @@ body > header.with-logo {
   background-size: 80px 60px;
   padding-left: 100px !important;
 }
-/* line 94, core/_global.scss */
+/* line 95, core/_global.scss */
 body > header > .tab {
   color: #fafafa;
   text-decoration: none;
@@ -581,87 +582,87 @@ body > header > .tab {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
-/* line 109, core/_global.scss */
+/* line 110, core/_global.scss */
 body > header > .tab:first-child {
   margin-left: 10px;
 }
-/* line 112, core/_global.scss */
+/* line 113, core/_global.scss */
 body > header > .tab.active {
   background: #fafafa;
   color: #4C81AF;
 }
-/* line 116, core/_global.scss */
+/* line 117, core/_global.scss */
 body > header > .tab:not(.active):hover {
   background: #6e9ac0;
   color: #fafafa !important;
 }
-/* line 125, core/_global.scss */
+/* line 126, core/_global.scss */
 body > footer {
   font-size: 90%;
 }
-/* line 130, core/_global.scss */
+/* line 131, core/_global.scss */
 body > nav {
   padding: 10px;
   border-bottom-width: 1px;
   border-bottom-style: solid;
   border-bottom-color: #D7D7D7;
 }
-/* line 137, core/_global.scss */
+/* line 138, core/_global.scss */
 body > nav a {
   font-family: Verdana;
 }
-/* line 141, core/_global.scss */
+/* line 142, core/_global.scss */
 body > nav a:not(:last-child) {
   margin-right: 10px;
 }
-/* line 143, core/_global.scss */
+/* line 144, core/_global.scss */
 body > nav a:not(:last-child):after {
   display: inline-block;
-  content: '\2192';
+  content: "";
   margin-left: 10px;
   text-decoration: none !important;
   color: #333333;
 }
-/* line 154, core/_global.scss */
+/* line 155, core/_global.scss */
 body > main p {
   text-indent: 25px;
 }
-/* line 157, core/_global.scss */
+/* line 158, core/_global.scss */
 body > main p, body > main li {
   margin-top: 5px;
 }
-/* line 160, core/_global.scss */
+/* line 161, core/_global.scss */
 body > main h1, body > main h2, body > main h3, body > main h4, body > main h5, body > main h6 {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-/* line 164, core/_global.scss */
+/* line 165, core/_global.scss */
 body > main ul {
   padding-left: 25px;
 }
-/* line 167, core/_global.scss */
+/* line 168, core/_global.scss */
 body > main ul > li:before {
   content: '-';
   margin-right: 10px;
 }
-/* line 172, core/_global.scss */
+/* line 173, core/_global.scss */
 body > main ul > ul, body > main ul > li > ul {
   padding-left: 25px;
 }
-/* line 174, core/_global.scss */
+/* line 175, core/_global.scss */
 body > main ul > ul > ul, body > main ul > ul > li > ul, body > main ul > li > ul > ul, body > main ul > li > ul > li > ul {
   padding-left: 25px;
 }
-/* line 184, core/_global.scss */
+/* line 185, core/_global.scss */
 body > main h1, body > main h2, body > main h3, body > main h4, body > main h5, body > main h6 {
   font-size: 105%;
   color: #4C81AF;
 }
-/* line 184, core/_global.scss */
+/* line 185, core/_global.scss */
 body > main h1 {
   font-size: 120%;
 }
-/* line 184, core/_global.scss */
+/* line 185, core/_global.scss */
 body > main h2 {
   font-size: 110%;
 }
