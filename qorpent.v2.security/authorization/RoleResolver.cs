@@ -24,6 +24,9 @@ namespace qorpent.v2.security.authorization {
             if (exact) {
                 return false;
             }
+            if (null == user) {
+                return false;
+            }
             if (!string.IsNullOrWhiteSpace(user.Domain)) {
                 var master = Users.GetUser(user.Domain + "@groups");
                 if (HasRole(master, role)) {
