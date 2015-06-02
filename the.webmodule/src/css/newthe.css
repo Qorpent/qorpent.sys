@@ -150,8 +150,9 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   padding: 0px;
   margin-top: 3px;
   margin-right: 3px;
+  overflow-y: hidden;
 }
-/* line 13, newthe/toolwindow.scss */
+/* line 14, newthe/toolwindow.scss */
 .toolwindow > label:first-child, .toolwindow > form > label:first-child {
   background-color: #4C81AF;
   color: #ffffff;
@@ -166,53 +167,53 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   justify-content: space-between;
   padding: 3px;
 }
-/* line 26, newthe/toolwindow.scss */
+/* line 27, newthe/toolwindow.scss */
 .toolwindow > label:first-child span.tbt, .toolwindow > form > label:first-child span.tbt {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-/* line 30, newthe/toolwindow.scss */
+/* line 31, newthe/toolwindow.scss */
 .toolwindow > label:first-child span.tbt i, .toolwindow > form > label:first-child span.tbt i {
   font-size: 18px;
   margin-left: 5px;
 }
-/* line 33, newthe/toolwindow.scss */
+/* line 34, newthe/toolwindow.scss */
 .toolwindow > label:first-child span.tbt i:last-child, .toolwindow > form > label:first-child span.tbt i:last-child {
   margin-left: 20px;
 }
-/* line 38, newthe/toolwindow.scss */
+/* line 39, newthe/toolwindow.scss */
 .toolwindow > label:first-child i.tbt, .toolwindow > form > label:first-child i.tbt {
   font-size: 18px;
   margin-left: 20px;
 }
-/* line 45, newthe/toolwindow.scss */
+/* line 46, newthe/toolwindow.scss */
 .toolwindow form > .button {
   margin-top: 5px;
 }
-/* line 50, newthe/toolwindow.scss */
+/* line 51, newthe/toolwindow.scss */
 .toolwindow .item, .toolwindow form {
   padding: 5px;
   color: black;
 }
-/* line 53, newthe/toolwindow.scss */
+/* line 54, newthe/toolwindow.scss */
 .toolwindow .item a, .toolwindow form a {
   text-decoration: none;
   color: #4C81AF;
 }
-/* line 59, newthe/toolwindow.scss */
+/* line 60, newthe/toolwindow.scss */
 .toolwindow.dialog {
   display: none;
 }
-/* line 60, newthe/toolwindow.scss */
+/* line 61, newthe/toolwindow.scss */
 .toolwindow.dialog > form {
   padding: 0px;
 }
-/* line 64, newthe/toolwindow.scss */
+/* line 65, newthe/toolwindow.scss */
 .toolwindow.dialog.active {
   display: flex;
 }
-/* line 67, newthe/toolwindow.scss */
+/* line 68, newthe/toolwindow.scss */
 .toolwindow.dialog.fixed {
   position: fixed;
   z-index: 10000;
@@ -221,17 +222,17 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   max-width: 1024px;
   max-height: 700px;
 }
-/* line 75, newthe/toolwindow.scss */
+/* line 76, newthe/toolwindow.scss */
 .toolwindow.dialog .content {
   padding: 20px;
   flex-grow: 1;
   overflow-y: auto;
 }
-/* line 80, newthe/toolwindow.scss */
+/* line 81, newthe/toolwindow.scss */
 .toolwindow.dialog > label, .toolwindow.dialog > form > label {
   flex-shrink: 0;
 }
-/* line 83, newthe/toolwindow.scss */
+/* line 84, newthe/toolwindow.scss */
 .toolwindow.dialog > nav, .toolwindow.dialog > form > nav {
   flex-shrink: 0;
   margin-bottom: 5px;
@@ -240,14 +241,14 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   justify-content: flex-end;
   align-items: center;
 }
-/* line 90, newthe/toolwindow.scss */
+/* line 91, newthe/toolwindow.scss */
 .toolwindow.dialog > nav i, .toolwindow.dialog > form > nav i {
   margin-left: 3px;
   margin-right: 3px;
   min-width: 80px;
 }
 
-/* line 100, newthe/toolwindow.scss */
+/* line 101, newthe/toolwindow.scss */
 .modalback {
   display: none;
   position: fixed;
@@ -260,32 +261,32 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   opacity: 0.4;
 }
 
-/* line 112, newthe/toolwindow.scss */
+/* line 113, newthe/toolwindow.scss */
 table.props {
   border-collapse: collapse;
   font-size: 80%;
 }
-/* line 115, newthe/toolwindow.scss */
+/* line 116, newthe/toolwindow.scss */
 table.props td, table.props th {
   border: solid 1px #eaeaea;
   padding: 5px;
 }
-/* line 119, newthe/toolwindow.scss */
+/* line 120, newthe/toolwindow.scss */
 table.props td:first-child {
   font-size: 90%;
 }
-/* line 122, newthe/toolwindow.scss */
+/* line 123, newthe/toolwindow.scss */
 table.props th {
   background-color: #eaeaea;
   font-weight: bold;
 }
 
-/* line 128, newthe/toolwindow.scss */
+/* line 129, newthe/toolwindow.scss */
 .ng-invalid {
   border: solid 1px #E7582E;
 }
 
-/* line 131, newthe/toolwindow.scss */
+/* line 132, newthe/toolwindow.scss */
 form.ng-invalid {
   border: inherit;
 }
